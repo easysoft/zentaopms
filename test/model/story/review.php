@@ -9,6 +9,10 @@ title=测试 storyModel->review();
 cid=1
 pid=1
 
+评审ID为2的需求，不传入评审意见，给出没有选择评审意见的提示 >> 必须选择评审意见
+评审一个草稿的需求，传入评审意见为通过，状态变为激活 >> active
+评审一个草稿的需求，传入评审意见为拒绝，状态变为关闭 >> closed
+
 */
 
 $story = new storyTest();

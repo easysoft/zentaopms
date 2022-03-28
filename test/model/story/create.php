@@ -9,6 +9,11 @@ title=测试 storyModel->create();
 cid=1
 pid=1
 
+不勾选由谁评审并且不传入评审人的情况，报错 >> 『由谁评审』不能为空。
+不勾选由谁评审传入评审人的情况，正常插入 >> 0,projected,1
+勾选由谁评审，不传入executionID的情况，阶段为wait >> 测试需求3,2,wait
+勾选由谁评审，传入executionID和fromBug的情况，阶段为projected >> 『研发需求名称』不能为空。
+
 */
 
 $story  = new storyTest();

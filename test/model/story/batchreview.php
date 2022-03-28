@@ -9,6 +9,13 @@ title=测试 storyModel->batchReview();
 cid=1
 pid=1
 
+批量评审传入三个ID，查看被评审的需求数量 >> 2
+批量评审需求，查看被评审后的需求状态、阶段等信息 >> active,projected,done
+批量评审传入三个ID，查看被评审的需求数量 >> 2
+批量评审需求，查看被评审后的需求状态、阶段等信息 >> closed,closed,bydesign
+批量评审传入三个ID，查看被评审的需求数量 >> 2
+批量评审需求，查看被评审后的需求状态、阶段等信息 >> active,projected,cancel
+
 */
 
 $story = new storyTest();

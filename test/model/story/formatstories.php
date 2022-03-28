@@ -9,6 +9,8 @@ title=测试 storyModel->formatStories();
 cid=1
 pid=1
 
+
+
 */
 
 $story = new storyTest();

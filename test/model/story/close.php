@@ -9,6 +9,13 @@ title=测试 storyModel->close();
 cid=1
 pid=1
 
+关闭一个用户需求，查看变更的字段1 >> assigedTo,,closed
+关闭一个用户需求，查看变更的字段2 >> status,active,closed
+关闭一个用户需求，查看变更的字段3 >> stage,wait,closed
+关闭一个软件需求，查看变更的字段1 >> closedReason,subdivided,willnotdo
+关闭一个软件需求，查看变更的字段2 >> assignedTo,,closed
+关闭一个软件需求，查看变更的字段3 >> status,active,closed
+
 */
 
 $story = new storyTest();

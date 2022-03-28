@@ -8,6 +8,9 @@ title=测试 storyModel->recall();
 cid=1
 pid=1
 
+撤回评审之前的状态信息 >> 2,用户需求版本一62,active
+撤回评审之后的状态信息 >> 2,用户需求版本一62,draft
+
 */
 
 global $tester;
