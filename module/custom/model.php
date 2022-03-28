@@ -250,7 +250,7 @@ class customModel extends model
                 {
                     foreach($item['subMenu'] as $subMenu)
                     {
-                        if(!isset($subMenu['link'])) continue;
+                        if(!isset($subMenu['link']) or strpos($subMenu['link'], '|') === false) continue;
                         list($subLabel, $module, $method) = explode('|', $subMenu['link']);
                         $hasPriv = commonModel::hasPriv($module, $method);
                         if($hasPriv) break;
