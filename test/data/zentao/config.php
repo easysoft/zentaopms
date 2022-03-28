@@ -12,9 +12,10 @@ $builder->userview    = array('rows' => 400, 'extends' => array('userview'));
 $builder->dept        = array('rows' => 100,  'extends' => array('dept'));
 $builder->action      = array('rows' => 100,  'extends' => array('action'));
 
-$builder->program       = array('rows' => 10, 'extends' => array('project', 'program'));
-$builder->project       = array('rows' => 90, 'extends' => array('project', 'project'));
-$builder->sprint        = array('rows' => 600, 'extends' => array('project', 'execution'));
+$builder->program      = array('rows' => 10, 'extends' => array('project', 'program'));
+$builder->project      = array('rows' => 90, 'extends' => array('project', 'project'));
+$builder->projectalone = array('rows' => 20, 'extends' => array('project', 'projectalone'));
+$builder->sprint       = array('rows' => 600, 'extends' => array('project', 'execution'));
 
 $builder->story        = array('rows' => 400, 'extends' => array('story'));
 $builder->childstory   = array('rows' => 50, 'extends' => array('story','childstory'));
@@ -39,13 +40,15 @@ $builder->testtask   = array('rows' => 10, 'extends' => array('testtask'));
 $builder->testresult = array('rows' => 40, 'extends' => array('testresult'));
 $builder->testrun    = array('rows' => 40, 'extends' => array('testrun'));
 
-$builder->product        = array('rows' => 100, 'extends' => array('product'));
-$builder->productline    = array('rows' => 20,  'extends' => array('module', 'productline'));
-$builder->productplan    = array('rows' => 70, 'extends' => array('productplan'));
-$builder->branch         = array('rows' => 240, 'extends' => array('branch'));
-$builder->projectproduct = array('rows' => 200, 'extends' => array('projectproduct'));
-$builder->projectstory   = array('rows' => 200, 'extends' => array('projectstory'));
-$builder->executionstory = array('rows' => 180, 'extends' => array('projectstory','executionstory'));
+$builder->product             = array('rows' => 100, 'extends' => array('product'));
+$builder->productalone        = array('rows' => 20, 'extends' => array('product','productalone'));
+$builder->productline         = array('rows' => 20,  'extends' => array('module', 'productline'));
+$builder->productplan         = array('rows' => 70, 'extends' => array('productplan'));
+$builder->branch              = array('rows' => 240, 'extends' => array('branch'));
+$builder->projectproduct      = array('rows' => 200, 'extends' => array('projectproduct'));
+$builder->projectproductalone = array('rows' => 28, 'extends' => array('projectproduct','projectproductalone'));
+$builder->projectstory        = array('rows' => 200, 'extends' => array('projectstory'));
+$builder->executionstory      = array('rows' => 180, 'extends' => array('projectstory','executionstory'));
 
 $builder->kanbanspace  = array('rows' => 50, 'extends' => array('kanbanspace'));
 $builder->kanban       = array('rows' => 100, 'extends' => array('kanban'));
@@ -74,6 +77,9 @@ $builder->doccontent = array('rows' => 900, 'extends' => array('doccontent'));
 
 $builder->build   = array('rows' => 20, 'extends' => array('build'));
 $builder->release = array('rows' => 8, 'extends' => array('release'));
+
+$builder->webhook = array('rows' => 7, 'extends' => array('webhook'));
+$builder->entry   = array('rows' => 1, 'extends' => array('entry'));
 
 $builder->pipeline = array('rows' => 2,  'extends' => array('pipeline'));
 $builder->repo     = array('rows' => 1,  'extends' => array('repo'));

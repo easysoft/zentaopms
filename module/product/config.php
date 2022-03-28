@@ -13,7 +13,7 @@ if($config->systemMode == 'new') $config->product->custom->batchEditFields .= ',
 $config->product->list = new stdclass();
 $config->product->list->exportFields = 'id,program,line,name,activeRequirements,changedRequirements,draftRequirements,closedRequirements,requireCompleteRate,activeStories,changedStories,draftStories,closedStories,storyCompleteRate,plans,releases,bugs,unResolvedBugs,assignToNullBugs,closedBugs,bugFixedRate';
 
-$config->product->showBranchMethod = 'browse,project,roadmap';
+$config->product->showBranchMethod = 'browse,project';
 
 global $lang, $app;
 $app->loadLang('story');

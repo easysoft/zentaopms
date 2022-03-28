@@ -15,7 +15,7 @@ pid=1
 
 */
 
-$product = new Product('admin');
+$product = new productTest('admin');
 
 $t_project25 = array('id'=>'25');
 $t_project38 = array('id'=>'38');

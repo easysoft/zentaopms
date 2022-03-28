@@ -927,6 +927,19 @@ class storyModel extends model
                 if(empty($oldStory->plan) or empty($story->plan)) $this->setStage($storyID); // Set new stage for this story.
             }
 
+            if($oldStory->stage != $story->stage)
+            {
+                $executionIdList = $this->dao->select('t1.project')->from(TABLE_PROJECTSTORY)->alias('t1')
+                    ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
+                    ->where('t1.story')->eq($storyID)
+                    ->andWhere('t2.deleted')->eq(0)
+                    ->andWhere('t2.type')->in('sprint,stage,kanban')
+                    ->fetchPairs();
+
+                $this->loadModel('kanban');
+                foreach($executionIdList as $executionID) $this->kanban->updateLane($executionID, 'story', $storyID);
+            }
+
             unset($oldStory->parent);
             unset($story->parent);
             return common::createChanges($oldStory, $story);
@@ -1374,6 +1387,7 @@ class storyModel extends model
         $reviewerList = $this->dao->select('story,reviewer,result,version')->from(TABLE_STORYREVIEW)->where('story')->in($storyIdList)->orderBy('version')->fetchGroup('story', 'reviewer');
         foreach($storyIdList as $storyID)
         {
+            if(!$storyID) continue;
             $oldStory = $oldStories[$storyID];
             $isSuperReviewer = strpos(',' . trim(zget($this->config->story, 'superReviewers', ''), ',') . ',', ',' . $this->app->user->account . ',');
 
@@ -1702,17 +1716,20 @@ class storyModel extends model
             if($this->session->currentProductType != 'normal' and empty($story->branch) and $planID != 0) $story->plan = $oldStory->plan ? $oldStory->plan . ",$planID" : ",$planID";
 
             /* Change stage. */
-            if($planID and $oldStory->stage == 'wait') $story->stage = 'planned';
-            if($planID and $this->session->currentProductType != 'normal' and $oldStory->branch == 0)
+            if($planID)
             {
-                if(!isset($oldStoryStages[$storyID][$plan->branch]))
+                if($oldStory->stage == 'wait') $story->stage = 'planned';
+                if($this->session->currentProductType and $this->session->currentProductType != 'normal' and $oldStory->branch == 0)
                 {
-                    $story->stage = 'planned';
-                    $newStoryStage = new stdclass();
-                    $newStoryStage->story  = $storyID;
-                    $newStoryStage->branch = $plan->branch;
-                    $newStoryStage->stage  = $story->stage;
-                    $this->dao->insert(TABLE_STORYSTAGE)->data($newStoryStage)->autoCheck()->exec();
+                    if(!isset($oldStoryStages[$storyID][$plan->branch]))
+                    {
+                        $story->stage = 'planned';
+                        $newStoryStage = new stdclass();
+                        $newStoryStage->story  = $storyID;
+                        $newStoryStage->branch = $plan->branch;
+                        $newStoryStage->stage  = $story->stage;
+                        $this->dao->insert(TABLE_STORYSTAGE)->data($newStoryStage)->autoCheck()->exec();
+                    }
                 }
             }
 

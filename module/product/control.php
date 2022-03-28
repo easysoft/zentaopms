@@ -50,8 +50,6 @@ class product extends control
      */
     public function index($locate = 'auto', $productID = 0, $status = 'noclosed', $orderBy = 'order_desc', $recTotal = 0, $recPerPage = 10, $pageID = 1)
     {
-        $this->lang->product->switcherMenu = $this->product->getSwitcher();
-
         if($locate == 'yes') $this->locate($this->createLink($this->moduleName, 'browse'));
 
         if($this->app->getViewType() != 'mhtml') unset($this->lang->product->menu->index);
@@ -591,7 +589,6 @@ class product extends control
      */
     public function batchEdit($programID = 0)
     {
-        $this->lang->product->switcherMenu = '';
         if($this->post->names)
         {
             $allChanges = $this->product->batchUpdate();
@@ -629,9 +626,6 @@ class product extends control
             $appendQdUsers[$product->QD] = $product->QD;
             $appendRdUsers[$product->RD] = $product->RD;
         }
-
-        /* Navigation remains under the program. */
-        $this->lang->program->switcherMenu = $this->loadModel('program')->getSwitcher($programID, true);
 
         $this->loadModel('user');
         $poUsers = $this->user->getPairs('nodeleted|noclosed|pofirst', $appendPoUsers);
@@ -798,12 +792,8 @@ class product extends control
      * @access public
      * @return void
      */
-    public function roadmap($productID, $branch = '')
+    public function roadmap($productID, $branch = 'all')
     {
-        $branch = ($this->cookie->preBranch !== '' and $branch === '') ? $this->cookie->preBranch : $branch;
-        setcookie('preBranch', $branch, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, true);
-
-        $this->lang->product->switcherMenu = $this->product->getSwitcher($productID, '', $branch);
         $this->product->setMenu($productID, $branch);
 
         $this->session->set('releaseList',     $this->app->getURI(true), 'product');
@@ -874,8 +864,6 @@ class product extends control
         $this->view->title      = $this->products[$productID] . $this->lang->colon . $this->lang->product->dynamic;
         $this->view->position[] = html::a($this->createLink($this->moduleName, 'browse'), $this->products[$productID]);
         $this->view->position[] = $this->lang->product->dynamic;
-
-        $this->lang->product->switcherMenu = $this->product->getSwitcher($productID, $type);
 
         $this->view->userIdPairs  = $this->loadModel('user')->getPairs('noletter|nodeleted|noclosed|useid');
         $this->view->accountPairs = $this->user->getPairs('noletter|nodeleted|noclosed');
@@ -1322,7 +1310,6 @@ class product extends control
      */
     public function whitelist($productID = 0, $module = 'product', $objectType = 'product', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
-        $this->lang->product->switcherMenu = $this->product->getSwitcher($productID, '', 0);
         $this->product->setMenu($productID, 0);
         $this->lang->modulePageNav = '';
 

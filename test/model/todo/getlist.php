@@ -20,7 +20,7 @@ pid=1
 获取type为thisyear 当前用户的代办数量   >> 2
 获取type为future 当前用户的代办数量     >> 0
 获取type为before 当前用户的代办数量     >> 2
-获取type为cycle 当前用户的代办数量      >> 0
+获取type为cycle 当前用户的代办数量      >> 1
 获取type为today user1的代办数量         >> 0
 获取type为yesterday user1的代办数量     >> 0
 获取type为thisweek user1的代办数量      >> 0
@@ -31,7 +31,7 @@ pid=1
 获取type为thisyear user1的代办数量      >> 2
 获取type为future user1的代办数量        >> 0
 获取type为before user1的代办数量        >> 2
-获取type为cycle user1的代办数量         >> 0
+获取type为cycle user1的代办数量         >> 1
 
 */
 
@@ -50,7 +50,7 @@ r($todo->getListTest($typeList[6]))            && p() && e('2'); // 获取type�
 r($todo->getListTest($typeList[7]))            && p() && e('2'); // 获取type为thisyear 当前用户的代办数量
 r($todo->getListTest($typeList[8]))            && p() && e('0'); // 获取type为future 当前用户的代办数量
 r($todo->getListTest($typeList[9]))            && p() && e('2'); // 获取type为before 当前用户的代办数量
-r($todo->getListTest($typeList[10]))           && p() && e('0'); // 获取type为cycle 当前用户的代办数量
+r($todo->getListTest($typeList[10]))           && p() && e('1'); // 获取type为cycle 当前用户的代办数量
 r($todo->getListTest($typeList[0], $account))  && p() && e('0'); // 获取type为today user1的代办数量
 r($todo->getListTest($typeList[1], $account))  && p() && e('0'); // 获取type为yesterday user1的代办数量
 r($todo->getListTest($typeList[2], $account))  && p() && e('0'); // 获取type为thisweek user1的代办数量
@@ -61,4 +61,4 @@ r($todo->getListTest($typeList[6], $account))  && p() && e('2'); // 获取type�
 r($todo->getListTest($typeList[7], $account))  && p() && e('2'); // 获取type为thisyear user1的代办数量
 r($todo->getListTest($typeList[8], $account))  && p() && e('0'); // 获取type为future user1的代办数量
 r($todo->getListTest($typeList[9], $account))  && p() && e('2'); // 获取type为before user1的代办数量
-r($todo->getListTest($typeList[10], $account)) && p() && e('0'); // 获取type为cycle user1的代办数量
+r($todo->getListTest($typeList[10], $account)) && p() && e('1'); // 获取type为cycle user1的代办数量

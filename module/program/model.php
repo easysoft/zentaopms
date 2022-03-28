@@ -81,7 +81,7 @@ class programModel extends model
         }
 
         /* When mode equals assign and programID equals 0, you can query the standalone product. */
-        if(!empty($append) and is_array($append)) $append = implode($append, ',');
+        if(!empty($append) and is_array($append)) $append = implode(',', $append);
 
         $views    = empty($append) ? $this->app->user->view->products : $this->app->user->view->products . ",$append";
         $products = $this->dao->select('*')->from(TABLE_PRODUCT)
@@ -598,6 +598,7 @@ class programModel extends model
             ->setIF($this->post->acl == 'open', 'whitelist', '')
             ->setIF($this->post->delta == 999, 'end', LONG_TIME)
             ->setIF($this->post->budget != 0, 'budget', round((float)$this->post->budget, 2))
+            ->setIF(!isset($_POST['whitelist']), 'whitelist', '')
             ->add('type', 'program')
             ->join('whitelist', ',')
             ->stripTags($this->config->program->editor->create['id'], $this->config->allowedTags)
@@ -684,6 +685,7 @@ class programModel extends model
             ->setIF($this->post->future, 'budget', 0)
             ->setIF($this->post->budget != 0, 'budget', round($this->post->budget, 2))
             ->setIF(!isset($_POST['budgetUnit']), 'budgetUnit', $oldProgram->budgetUnit)
+            ->setIF(!isset($_POST['whitelist']), 'whitelist', '')
             ->join('whitelist', ',')
             ->stripTags($this->config->program->editor->edit['id'], $this->config->allowedTags)
             ->remove('uid,delta,future,syncPRJUnit,exchangeRate,contactListMenu')

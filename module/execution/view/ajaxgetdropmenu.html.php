@@ -5,28 +5,21 @@
 #navTabs {position: sticky; top: 0; background: #fff; z-index: 950;}
 #navTabs>li {padding: 0px 10px; display: inline-block}
 #navTabs>li>span {display: inline-block;}
-#navTabs>li>a {padding: 8px 0px; display: inline-block}
-#navTabs>li.active>a {font-weight: 700; color: #0c64eb;}
-#navTabs>li.active>a:before {position: absolute; right: 0; bottom: -1px; left: 0; display: block; height: 2px; content: ' '; background: #0c64eb; }
-#navTabs>li.active>a, .nav-tabs>li.active>a:focus, .nav-tabs>li.active>a:hover {border: none;}
+#navTabs>li>a {margin: 0!important; padding: 8px 0px; display: inline-block}
 
-#tabContent {margin-top: 10px; z-index: 900;}
+#tabContent {margin-top: 5px; z-index: 900; max-width: 220px}
 .executionTree ul {list-style: none; margin: 0}
-.executionTree .executions>ul {padding-left: 7px;}
 .executionTree .executions>ul>li>div {display: flex; flex-flow: row nowrap; justify-content: flex-start; align-items: center;}
 .executionTree .executions>ul>li label {background: rgba(255,255,255,0.5); line-height: unset; color: #838a9d; border: 1px solid #d8d8d8; border-radius: 2px; padding: 1px 4px;}
 .executionTree li a i.icon {font-size: 15px !important;}
 .executionTree li a i.icon:before {min-width: 16px !important;}
 .executionTree li .label {position: unset; margin-bottom: 0;}
 .executionTree li>a, div.hide-in-search>a {display: block; padding: 2px 10px 2px 5px; overflow: hidden; line-height: 20px; text-overflow: ellipsis; white-space: nowrap; border-radius: 4px;}
-.executionTree li>a.selected {color: #e9f2fb; background-color: #0c64eb;}
 .executionTree .tree li>.list-toggle {line-height: 24px;}
 .executionTree .tree li.has-list.open:before {content: unset;}
 
 #swapper li>div.hide-in-search>a:focus, #swapper li>div.hide-in-search>a:hover {color: #838a9d; cursor: default;}
-a.executionName:focus, a.executionName:hover {background: #0c64eb; color: #fff !important;}
-
-#swapper li > a {padding-top: 4px; padding-bottom: 4px;}
+#swapper li > a {margin-top: 4px; margin-bottom: 4px;}
 #swapper li {padding-top: 0; padding-bottom: 0;}
 #swapper .tree li>.list-toggle {top: -1px;}
 </style>
@@ -80,7 +73,7 @@ foreach($executions as $projectID => $projectExecutions)
         $selected = $execution->id == $executionID ? 'selected' : '';
         if($execution->status != 'done' and $execution->status != 'closed' and ($execution->PM == $this->app->user->account or isset($execution->teams[$this->app->user->account])))
         {
-            $myExecutionsHtml .= '<li>' . html::a(sprintf($link, $execution->id), $execution->name, '', "class='$selected executionName' title='{$execution->name}' data-key='" . zget($executionsPinYin, $execution->name, '') . "' data-app='{$this->app->tab}'") . '</li>';
+            $myExecutionsHtml .= '<li>' . html::a(sprintf($link, $execution->id), $execution->name, '', "class='$selected clickable' title='{$execution->name}' data-key='" . zget($executionsPinYin, $execution->name, '') . "' data-app='{$this->app->tab}'") . '</li>';
 
             if($selected == 'selected') $tabActive = 'myExecution';
 
@@ -88,7 +81,7 @@ foreach($executions as $projectID => $projectExecutions)
         }
         else if($execution->status != 'done' and $execution->status != 'closed' and $execution->PM != $this->app->user->account and !isset($execution->teams[$this->app->user->account]))
         {
-            $normalExecutionsHtml .= '<li>' . html::a(sprintf($link, $execution->id), $execution->name, '', "class='$selected executionName' title='{$execution->name}' data-key='" . zget($executionsPinYin, $execution->name, '') . "' data-app='{$this->app->tab}'") . '</li>';
+            $normalExecutionsHtml .= '<li>' . html::a(sprintf($link, $execution->id), $execution->name, '', "class='$selected clickable' title='{$execution->name}' data-key='" . zget($executionsPinYin, $execution->name, '') . "' data-app='{$this->app->tab}'") . '</li>';
 
             if($selected == 'selected') $tabActive = 'other';
 
@@ -96,7 +89,7 @@ foreach($executions as $projectID => $projectExecutions)
         }
         else if($execution->status == 'done' or $execution->status == 'closed')
         {
-            $closedExecutionsHtml .= '<li>' . html::a(sprintf($link, $execution->id), $execution->name, '', "class='$selected executionName' title='$execution->name' data-key='" . zget($executionsPinYin, $execution->name, '') . "' data-app='{$this->app->tab}'") . '</li>';
+            $closedExecutionsHtml .= '<li>' . html::a(sprintf($link, $execution->id), $execution->name, '', "class='$selected clickable' title='$execution->name' data-key='" . zget($executionsPinYin, $execution->name, '') . "' data-app='{$this->app->tab}'") . '</li>';
 
             if($selected == 'selected') $tabActive = 'closed';
         }
@@ -119,7 +112,7 @@ $closedExecutionsHtml .= '</ul>';
     <div class='list-group'>
       <?php $tabActive = ($myExecutions and ($tabActive == 'closed' or $tabActive == 'myExecution')) ? 'myExecution' : 'other';?>
       <?php if($myExecutions): ?>
-      <ul class="nav nav-tabs" id="navTabs">
+      <ul class="nav nav-tabs nav-tabs-primary" id="navTabs">
         <li class="<?php if($tabActive == 'myExecution') echo 'active';?>"><?php echo html::a('#myExecution', $lang->execution->involved, '', "data-toggle='tab' class='not-list-item not-clear-menu'");?><span class="label label-light label-badge"><?php echo $myExecutions;?></span><li>
         <li class="<?php if($tabActive == 'other') echo 'active';?>"><?php echo html::a('#other', $lang->project->other, '', "data-toggle='tab' class='not-list-item not-clear-menu'")?><span class="label label-light label-badge"><?php echo $others;?></span><li>
       </ul>

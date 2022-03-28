@@ -152,8 +152,6 @@ class executionModel extends model
             $output  = "<div class='btn-group header-btn' id='swapper'><button data-toggle='dropdown' type='button' class='btn' id='currentItem' title='{$currentExecutionName}'><span class='text'><i class='icon icon-sprint'></i> {$currentExecutionName}</span> <span class='caret'></span></button><div id='dropMenu' class='dropdown-menu search-list' data-ride='searchList' data-url='$dropMenuLink'>";
             $output .= '<div class="input-control search-box has-icon-left has-icon-right search-example"><input type="search" class="form-control search-input" /><label class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label><a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a></div>';
             $output .= "</div></div>";
-
-            $this->lang->execution->switcherMenu = $output;
         }
 
         $output  = "<div class='btn-group angle-btn'><div class='btn-group'><button data-toggle='dropdown' type='button' class='btn btn-limit' id='currentItem' title='{$currentExecutionName}'><span class='text'><i class='icon icon-{$this->lang->icons[$currentExecution->type]}'></i> {$currentExecutionName}</span> <span class='caret'></span></button><div id='dropMenu' class='dropdown-menu search-list' data-ride='searchList' data-url='$dropMenuLink'>";
@@ -327,6 +325,7 @@ class executionModel extends model
             ->setDefault('lastEditedBy', $this->app->user->account)
             ->setDefault('lastEditedDate', helper::now())
             ->setDefault('team', substr($this->post->name, 0, 30))
+            ->setIF(!isset($_POST['whitelist']), 'whitelist', '')
             ->setIF($this->config->systemMode == 'new', 'parent', $this->post->project)
             ->setIF($this->post->acl == 'open', 'whitelist', '')
             ->join('whitelist', ',')
@@ -466,6 +465,7 @@ class executionModel extends model
             ->setDefault('lastEditedDate', helper::now())
             ->setIF(helper::isZeroDate($this->post->begin), 'begin', '')
             ->setIF(helper::isZeroDate($this->post->end), 'end', '')
+            ->setIF(!isset($_POST['whitelist']), 'whitelist', '')
             ->setDefault('team', $this->post->name)
             ->join('whitelist', ',')
             ->stripTags($this->config->execution->editor->edit['id'], $this->config->allowedTags)

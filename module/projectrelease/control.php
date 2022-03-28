@@ -41,8 +41,6 @@ class projectrelease extends control
      */
     public function commonAction($projectID = 0, $productID = 0, $branch = 0)
     {
-        $this->lang->product->switcherMenu = $this->product->getSwitcher($productID);
-
         /* Get product and product list by project. */
         $this->products = $this->product->getProductPairsByProject($projectID);
         if(empty($this->products)) return print($this->locate($this->createLink('product', 'showErrorNone', 'moduleName=project&activeMenu=projectrelease&projectID=' . $projectID)));
@@ -121,7 +119,7 @@ class projectrelease extends control
         $this->commonAction($projectID);
 
         /* Get the builds that can select. */
-        $builds         = $this->build->getBuildPairs(array_keys($this->products), 0, 'notrunk,withbranch', $projectID, 'project');
+        $builds         = $this->build->getBuildPairs(array_keys($this->products), 'all', 'notrunk,withbranch', $projectID, 'project');
         $releasedBuilds = $this->projectrelease->getReleasedBuilds($projectID);
         foreach($releasedBuilds as $build) unset($builds[$build]);
         unset($builds['trunk']);

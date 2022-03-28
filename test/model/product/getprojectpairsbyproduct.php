@@ -17,12 +17,12 @@ pid=1
 
 */
 
-$tester = new Product('admin');
+$product = new productTest('admin');
 
 $t_return = array('1', '101', '15', '7010');
 
-r($tester->getProjectPairsByProductID($t_return[0]))   && p('11') && e('项目1');    // 返回产品1关联的项目11名字
-r($tester->getProjectPairsByProductID($t_return[0]))   && p('21') && e('项目11');   // 返回产品1关联的项目21名字
-r($tester->getProjectPairsByProductID($t_return[1]))   && p()     && e('没有数据'); // 传入不存在的产品
-r($tester->getAppendProject($t_return[2]))             && p('15') && e('项目5');    // 返回id为15的项目名
-r($tester->getAppendProject($t_return[3]))             && p()     && e('没有数据'); // 传入不存在的项目id
+r($product->getProjectPairsByProductID($t_return[0]))   && p('11') && e('项目1');    // 返回产品1关联的项目11名字
+r($product->getProjectPairsByProductID($t_return[0]))   && p('21') && e('项目11');   // 返回产品1关联的项目21名字
+r($product->getProjectPairsByProductID($t_return[1]))   && p()     && e('没有数据'); // 传入不存在的产品
+r($product->getAppendProject($t_return[2]))             && p('15') && e('项目5');    // 返回id为15的项目名
+r($product->getAppendProject($t_return[3]))             && p()     && e('没有数据'); // 传入不存在的项目id

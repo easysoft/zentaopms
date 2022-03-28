@@ -24,6 +24,7 @@ class productsEntry extends entry
         if(strpos(strtolower(",{$fields},"), ',dropmenu,') !== false) return $this->getDropMenu();
 
         if(!$programID) $programID = $this->param('program', 0);
+        if(!$projectID) $projectID = $this->param('project', 0);
         $mergeChildren = $this->param('mergeChildren', '');
 
         if($programID)
@@ -38,6 +39,18 @@ class productsEntry extends entry
 
             $products = $data->data->products;
 
+        }
+        elseif($projectID)
+        {
+            $control = $this->loadController('project', 'manageProducts');
+            $control->manageProducts($projectID);
+
+            /* Response */
+            $data = $this->getData();
+            if(!$data or !isset($data->status)) return $this->sendError(400, 'error');
+            if(isset($data->status) and $data->status == 'fail') return $this->sendError(zget($data, 'code', 400), $data->message);
+
+            $products = $data->data->linkedProducts;
         }
         else
         {

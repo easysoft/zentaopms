@@ -120,13 +120,13 @@ $(document).on('mousedown', 'select', function()
 
 $(document).keydown(function(event)
 {
-    if(event.ctrlKey && event.keyCode == 38)
+    if((event.ctrlKey || event.altKey) && event.keyCode == 38)
     {
         event.stopPropagation();
         event.preventDefault();
         selectFocusJump('up');
     }
-    else if(event.ctrlKey && event.keyCode == 40)
+    else if((event.ctrlKey || event.altKey) && event.keyCode == 40)
     {
         event.stopPropagation();
         event.preventDefault();

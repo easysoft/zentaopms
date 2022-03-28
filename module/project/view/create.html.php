@@ -19,6 +19,7 @@
 <?php js::set('weekend', $config->execution->weekend);?>
 <?php js::set('errorSameProducts', $lang->project->errorSameProducts);?>
 <?php js::set('errorSameBranches', $lang->project->errorSameBranches);?>
+<?php js::set('errorSamePlans', $lang->project->errorSamePlans);?>
 <?php js::set('longTime', $lang->project->longTime);?>
 <?php js::set('multiBranchProducts', $multiBranchProducts);?>
 <?php js::set('selectedProductID', $productID);?>
@@ -118,7 +119,9 @@
               <div class='col-sm-4 <?php if($programID) echo 'required';?>' style="padding-right: 6px;">
                 <div class='input-group'>
                   <?php echo html::select("products[$i]", $allProducts, '', "class='form-control chosen' onchange='loadBranches(this)'");?>
+                  <?php if(common::hasPriv('product', 'create')):?>
                   <span class='input-group-addon'><?php echo html::checkBox('newProduct', $lang->project->addProduct, '', "onchange=addNewProduct(this);");?></span>
+                  <?php endif;?>
                 </div>
               </div>
             </div>

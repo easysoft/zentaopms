@@ -131,34 +131,6 @@
     </form>
   </div>
 </div>
-<div class='modal fade modal-scroll-inside' id='copyProjectModal'>
-  <div class='modal-dialog mw-900px'>
-    <div class='modal-header'>
-      <button type='button' class='close' data-dismiss='modal'><i class="icon icon-close"></i></button>
-      <h4 class='modal-title' id='myModalLabel'><?php echo $lang->project->copyTitle;?></h4>
-    </div>
-    <div class='modal-body'>
-      <?php if(count($programs) == 1):?>
-      <div class='alert with-icon'>
-        <i class='icon-exclamation-sign'></i>
-        <div class='content'><?php echo $lang->project->copyNoProject;?></div>
-      </div>
-      <?php else:?>
-      <div id='copyProjects' class='row'>
-      <?php foreach ($programs as $id => $name):?>
-      <?php if(empty($id)):?>
-      <?php if($copyProgramID != 0):?>
-      <div class='col-md-4 col-sm-6'><a href='javascript:;' data-id='' class='cancel'><?php echo html::icon($lang->icons['cancel']) . ' ' . $lang->project->cancelCopy;?></a></div>
-      <?php endif;?>
-      <?php else: ?>
-      <div class='col-md-4 col-sm-6'><a href='javascript:;' data-id='<?php echo $id;?>' class='nobr <?php echo ($copyProgramID == $id) ? ' active' : '';?>'><?php echo html::icon($lang->icons['project'], 'text-muted') . ' ' . $name;?></a></div>
-      <?php endif; ?>
-      <?php endforeach;?>
-      </div>
-      <?php endif;?>
-    </div>
-  </div>
-</div>
 <div id='PGMAcl' class='hidden'>
   <?php echo nl2br(html::radio('acl', $lang->program->aclList, 'private', "onclick='setWhite(this.value);'", 'block'));?>
 </div>

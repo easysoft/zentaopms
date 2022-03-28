@@ -282,7 +282,7 @@ class productModel extends model
     {
         if(defined('TUTORIAL')) return $this->loadModel('tutorial')->getProductPairs();
 
-        if(!empty($append) and is_array($append)) $append = implode($append, ',');
+        if(!empty($append) and is_array($append)) $append = implode(',', $append);
 
         $views    = empty($append) ? $this->app->user->view->products : $this->app->user->view->products . ",$append";
         $orderBy  = !empty($this->config->product->orderBy) ? $this->config->product->orderBy : 'isClosed';
@@ -358,7 +358,7 @@ class productModel extends model
             return $this->loadModel('tutorial')->getExecutionProducts();
         }
 
-        if(!empty($append) and is_array($append)) $append = implode($append, ',');
+        if(!empty($append) and is_array($append)) $append = implode(',', $append);
 
         $views           = empty($append) ? $this->app->user->view->products : $this->app->user->view->products . ",$append";
         $projectProducts = $this->dao->select('t1.branch, t1.plan, t2.*')
@@ -590,36 +590,14 @@ class productModel extends model
             ->setDefault('createdDate', helper::now())
             ->setDefault('createdVersion', $this->config->version)
             ->setIF($this->post->acl == 'open', 'whitelist', '')
+            ->setIF(!isset($_POST['whitelist']), 'whitelist', '')
             ->stripTags($this->config->product->editor->create['id'], $this->config->allowedTags)
             ->join('whitelist', ',')
             ->join('reviewer', ',')
             ->remove('uid,newLine,lineName,contactListMenu')
             ->get();
 
-        if(!empty($_POST['lineName']))
-        {
-            /* Insert product line. */
-            $maxOrder = $this->dao->select("max(`order`) as maxOrder")->from(TABLE_MODULE)->where('type')->eq('line')->fetch('maxOrder');
-            $maxOrder = $maxOrder ? $maxOrder + 10 : 0;
-
-            $line = new stdClass();
-            $line->type   = 'line';
-            $line->parent = 0;
-            $line->grade  = 1;
-            $line->name   = $this->post->lineName;
-            $line->root   = $this->config->systemMode == 'new' ? $product->program : 0;
-            $line->order  = $maxOrder;
-            $this->dao->insert(TABLE_MODULE)->data($line)->exec();
-
-            $lineID = $this->dao->lastInsertID();
-            $path   = ",$lineID,";
-            $this->dao->update(TABLE_MODULE)->set('path')->eq($path)->where('id')->eq($lineID)->exec();
-
-            if(dao::isError()) return false;
-            $product->line = $lineID;
-        }
-
-        $product        = $this->loadModel('file')->processImgURL($product, $this->config->product->editor->create['id'], $this->post->uid);
+        $product   = $this->loadModel('file')->processImgURL($product, $this->config->product->editor->create['id'], $this->post->uid);
         $programID = isset($product->program) ? $product->program : '';
         $this->dao->insert(TABLE_PRODUCT)->data($product)->autoCheck()
             ->batchCheck($this->config->product->create->requiredFields, 'notempty')
@@ -630,6 +608,33 @@ class productModel extends model
         if(!dao::isError())
         {
             $productID = $this->dao->lastInsertID();
+
+            if(!empty($_POST['lineName']))
+            {
+                /* Create product line. */
+                $maxOrder = $this->dao->select("max(`order`) as maxOrder")->from(TABLE_MODULE)->where('type')->eq('line')->fetch('maxOrder');
+                $maxOrder = $maxOrder ? $maxOrder + 10 : 0;
+
+                $line = new stdClass();
+                $line->type   = 'line';
+                $line->parent = 0;
+                $line->grade  = 1;
+                $line->name   = $this->post->lineName;
+                $line->root   = $this->config->systemMode == 'new' ? $product->program : 0;
+                $line->order  = $maxOrder;
+                $this->dao->insert(TABLE_MODULE)->data($line)->exec();
+
+                if(!dao::isError())
+                {
+                    $lineID = $this->dao->lastInsertID();
+                    $path   = ",$lineID,";
+
+                    $this->dao->update(TABLE_MODULE)->set('path')->eq($path)->where('id')->eq($lineID)->exec();
+
+                    $this->dao->update(TABLE_PRODUCT)->set('line')->eq($laneID)->where('id')->eq($productID)->exec();
+                }
+            }
+
             $this->file->updateObjectID($this->post->uid, $productID, 'product');
             $this->dao->update(TABLE_PRODUCT)->set('`order`')->eq($productID * 5)->where('id')->eq($productID)->exec();
 
@@ -667,6 +672,7 @@ class productModel extends model
         $product = fixer::input('post')
             ->callFunc('name', 'trim')
             ->setDefault('line', 0)
+            ->setIF(!isset($_POST['whitelist']), 'whitelist', '')
             ->join('whitelist', ',')
             ->join('reviewer', ',')
             ->stripTags($this->config->product->editor->edit['id'], $this->config->allowedTags)
@@ -775,7 +781,7 @@ class productModel extends model
             if(dao::isError()) return print(js::error('product#' . $productID . dao::getError(true)));
 
             /* When acl is open, white list set empty. When acl is private,update user view. */
-            if($product->acl == 'open') $this->loadModel('personnel')->updateWhitelist('', 'product', $productID);
+            if($product->acl == 'open') $this->loadModel('personnel')->updateWhitelist(array(), 'product', $productID);
             if($product->acl != 'open') $this->loadModel('user')->updateUserView($productID, 'product');
             if($product->type == 'normal' and $oldProduct->type != 'normal') $unlinkProducts[] = $productID;
             if($product->type != 'normal' and $oldProduct->type == 'normal') $linkProducts[] = $productID;
@@ -1424,6 +1430,7 @@ class productModel extends model
             $projects = $this->dao->select('t1.project, t1.product')->from(TABLE_PROJECTPRODUCT)->alias('t1')
                 ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
                 ->where('t2.deleted')->eq(0)
+                ->andWhere('t2.type')->eq('project')
                 ->fetchGroup('product', 'project');
         }
         if(empty($teams))
