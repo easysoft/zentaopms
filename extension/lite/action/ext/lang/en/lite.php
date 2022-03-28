@@ -2,7 +2,18 @@
 $lang->action->label->execution = "Kanban|execution|task|executionID=%s";
 $lang->action->label->task      = 'Task|task|view|taskID=%s';
 
-$lang->action->objectTypes['task'] = 'Task';
+/* Object type. */
+$lang->action->objectTypes['execution'] = 'Project' . $lang->executionCommon;
+
+$lang->action->search = new stdclass();
+$lang->action->search->objectTypeList['']            = '';
+$lang->action->search->objectTypeList['project']     = 'Project';
+$lang->action->search->objectTypeList['execution']   = 'Kanban';
+$lang->action->search->objectTypeList['story']       = "$lang->SRCommon/$lang->URCommon";
+$lang->action->search->objectTypeList['task']        = 'Task';
+$lang->action->search->objectTypeList['user']        = 'User';
+$lang->action->search->objectTypeList['doc']         = 'Doc';
+$lang->action->search->objectTypeList['todo']        = 'Todo';
 
 unset($lang->action->dynamicAction->program);
 unset($lang->action->dynamicAction->product);
