@@ -57,7 +57,7 @@ $lang->project->unlinkMember       = 'Remove Member';
 $lang->project->copyTeamTitle      = 'Select a project team to copy';
 $lang->project->daysGreaterProject = 'Days cannot be greater than days of project『%s』';
 $lang->project->errorHours         = 'Hours/Day cannot be greater than『24』';
-$lang->project->workdaysExceed     = 'Days must not exceed『%s』days';
+$lang->project->workdaysExceed     = 'No more than『%s』working days';
 
 /* Fields. */
 $lang->project->common             = 'Project';

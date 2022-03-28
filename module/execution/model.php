@@ -305,7 +305,7 @@ class executionModel extends model
             $type    = 'sprint';
             if($project) $type = zget($this->config->execution->modelList, $project->model, 'sprint');
 
-            /*Judge workdays is legitimate. */
+            /* Judge workdays is legitimate. */
             $workdays = helper::diffDate($_POST['end'], $_POST['begin']);
             if(isset($_POST['days']) and $_POST['days'] > $workdays)
             {
@@ -459,7 +459,7 @@ class executionModel extends model
             return false;
         }
 
-        /*Judge workdays is legitimate. */
+        /* Judge workdays is legitimate. */
         $this->app->loadLang('project');
         $workdays = helper::diffDate($_POST['end'], $_POST['begin']);
         if(isset($_POST['days']) and $_POST['days'] > $workdays)
@@ -659,7 +659,7 @@ class executionModel extends model
                 $codeList[$executionCode] = $executionCode;
             }
 
-            /*Judge workdays is legitimate. */
+            /* Judge workdays is legitimate. */
             $workdays = helper::diffDate($data->ends[$executionID], $data->begins[$executionID]);
             if(isset($data->dayses[$executionID]) and $data->dayses[$executionID] > $workdays)
             {

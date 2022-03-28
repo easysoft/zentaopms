@@ -524,7 +524,7 @@ class baseHelper
         $date2 = new DateTime($date2);
         $date1 = date_format($date1, "U");
         $date2 = date_format($date2, "U");
-        return round(($date1 - $date2) / 86400, 0);
+        return round(($date1 - $date2) / 86400 + 1, 0);
     }
 
     /**

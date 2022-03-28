@@ -847,7 +847,7 @@ class projectModel extends model
             }
         }
 
-        /*Judge workdays is legitimate. */
+        /* Judge workdays is legitimate. */
         $workdays = helper::diffDate($project->end, $project->begin);
         if(isset($project->days) and $project->days > $workdays)
         {
@@ -1095,7 +1095,7 @@ class projectModel extends model
             return false;
         }
 
-        /*Judge workdays is legitimate. */
+        /* Judge workdays is legitimate. */
         $workdays = helper::diffDate($project->end, $project->begin);
         if(isset($project->days) and $project->days > $workdays)
         {

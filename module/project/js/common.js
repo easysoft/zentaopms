@@ -117,11 +117,7 @@ function computeEndDate(delta)
         $('#days').val(0);
         return false;
     }
-    else
-    {
-        $('#daysBox').removeClass('hidden');
-    }
-
+    $('#daysBox').removeClass('hidden');
     beginDate = convertStringToDate(beginDate);
     if((delta == 7 || delta == 14) && (beginDate.getDay() == 1))
     {
