@@ -1249,7 +1249,7 @@ class project extends control
                 }
                 else
                 {
-                    if($project->model == 'scrum' and $module == 'projectstory') $this->config->project->excludedPriv[$module][] = 'track';
+                    if($project->model == 'scrum' and $module == 'projectstory') unset($this->lang->resource->projectstory->track);
 
                     foreach($methods as $method => $label)
                     {
