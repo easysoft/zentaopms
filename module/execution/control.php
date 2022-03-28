@@ -3285,9 +3285,11 @@ class execution extends control
         {
             $projects  = $this->project->getPairsByProgram();
             $projectID = $this->project->saveState($projectID, $projects);
-            $project = $this->loadModel('project')->getByID($projectID);
+            $project   = $this->loadModel('project')->getByID($projectID);
             $this->view->project = $project;
             $this->project->setMenu($projectID);
+
+            if(!empty($project->model) and $project->model == 'kanban') return $this->locate($this->createLink('project', 'index', "projectID=$projectID"));
         }
 
         if($this->app->viewType == 'mhtml')
