@@ -33,7 +33,10 @@
 #kanbanList .no-flex .kanban-lane > .kanban-sub-lanes[data-sub-lanes-count="2"] > .kanban-sub-lane {min-height: 45px;}
 
 .kanban-affixed {padding-top: 72px;}
-.kanban-affixed > .kanban-header {position: fixed!important; top: 0; background: rgba(80,80,80,.9); color: #fff; z-index: 100;}
+.kanban-affixed > .kanban-header {position: fixed!important; top: 0; color: #fff; z-index: 100; overflow: hidden; min-width: 0; background: none;}
+.kanban-affixed > .kanban-header > .kanban-header-cols {position: absolute; height: 100%; top: 0; background: rgba(80,80,80,.9);}
+.kanban-affixed > .kanban-header > .kanban-group-header {display: none;}
+.kanban-affixed > .kanban-header > .kanban-header-cols:before {display: block; content: ' '; position: absolute; left: -20px; top: 0; bottom: 0; background-color: inherit; width: 20px;}
 
 #kanbanList .kanban-col[data-type="unclosedProduct"] .kanban-item {padding: 0;}
 #kanbanList .kanban-col[data-type="unclosedProduct"] .kanban-lane-items {height: 100%; display: flex; flex-direction: column; justify-content: center; padding: 0; overflow: hidden;}
@@ -380,16 +383,22 @@ function renderKanbanItem(item, $item, col, lane, kanban)
 function affixKanbanHeader($kanbanBoard, affixed)
 {
     var $header = $kanbanBoard.children('.kanban-header');
-    var headerStyle = {width: '', left: ''};
+    var $headerCols = $header.children('.kanban-header-cols');
+    var headerStyle = {width: '', left: 0};
+    var headerColsStyle = {width: '', marginLeft: ''};
     if(affixed)
     {
-        headerStyle.width = $kanbanBoard.width();
-        if($kanbanBoard[0].getBoundingClientRect)
-        {
-            headerStyle.left = $kanbanBoard[0].getBoundingClientRect().left;
-        }
+        var $kanban = $kanbanBoard.closest('.kanban');
+        var kanbanBounding = $kanban[0].getBoundingClientRect();
+        var kanbanBoardBounding = $kanbanBoard[0].getBoundingClientRect();
+        var laneNameWidth = +$headerCols.css('left').replace('px', '');
+        headerStyle.width = kanbanBounding.width;
+        headerStyle.left = kanbanBounding.left;
+        headerColsStyle.width = kanbanBoardBounding.width - laneNameWidth;
+        headerColsStyle.marginLeft = kanbanBoardBounding.left - kanbanBounding.left;
     }
     $header.css(headerStyle);
+    $headerCols.css(headerColsStyle);
     $kanbanBoard.toggleClass('kanban-affixed', !!affixed);
     $kanbanBoard.css('padding-top', affixed ? $header.outerHeight() : '');
 }
