@@ -25,3 +25,4 @@ $lang->execution->icons['grouptask'] = 'sitemap';
 $lang->execution->aclList['private'] = "私有（团队成员和项目负责人可访问）";
 
 $lang->execution->common = '项目看板';
+$lang->execution->gantt  = '甘特图';
