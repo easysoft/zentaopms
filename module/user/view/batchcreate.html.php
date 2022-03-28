@@ -38,7 +38,7 @@
           if(strpos(",{$config->user->availableBatchCreateFields},", ",{$field},") !== false) $visibleFields[$field] = '';
       }
   }
-  $minWidth = (count($visibleFields) > 5) ? 'w-150px' : '';
+  $minWidth = (count($visibleFields) > 3) ? 'w-150px' : '';
   $showVisionList = count($visionList) > 1;
   ?>
   <form method='post' class='load-indicator main-form' enctype='multipart/form-data' target='hiddenwin' id="batchCreateForm">
