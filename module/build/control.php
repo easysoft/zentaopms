@@ -240,8 +240,8 @@ class build extends control
 
         /* Get stories and stages. */
         $storyPager = new pager($type == 'story' ? $recTotal : 0, $recPerPage, $type == 'story' ? $pageID : 1);
-        $stories    = $this->dao->select('t1.*,t2.stage')->from(TABLE_STORY)->alias('t1')
-            ->leftJoin(TABLE_STORYSTAGE)->alias('t2')->on('t1.id=t2.story')
+        $stories    = $this->dao->select('t1.*, t2.stage')->from(TABLE_STORY)->alias('t1')
+            ->leftJoin(TABLE_STORYSTAGE)->alias('t2')->on('t1.id = t2.story')
             ->where('t1.id')->in($build->stories)
             ->andWhere('t1.deleted')->eq(0)
             ->beginIF($type == 'story')->orderBy("t1.$orderBy")->fi()
