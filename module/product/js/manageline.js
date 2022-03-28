@@ -4,6 +4,7 @@ function addItem(obj)
     var $newRow = $('#insertItemBox').children('.row-module').clone().insertAfter($inputRow).addClass('highlight');
     $newRow.find("input[type!='hidden']").val('');
     $newRow.find("select[name^='programs']").chosen();
+    $newRow.find('div[class="table-col col-programs"]').addClass('required');
     setTimeout(function()
     {
         $newRow.removeClass('highlight');
