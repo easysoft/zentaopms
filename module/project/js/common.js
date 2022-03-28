@@ -58,7 +58,6 @@ function computeDaysDelta(date1, date2)
  * @return void
  */
 function computeWorkDays(currentID)
-
 {
     isBactchEdit = false;
     if(currentID)
