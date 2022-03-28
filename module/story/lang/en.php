@@ -124,6 +124,7 @@ $lang->story->closedDate     = 'ClosedDate';
 $lang->story->closedReason   = 'Reason';
 $lang->story->rejectedReason = 'Reject Reason';
 $lang->story->reviewedBy     = 'ReviewedBy';
+$lang->story->reviewer       = $lang->story->reviewedBy;
 $lang->story->reviewers      = 'Reviewers';
 $lang->story->reviewedDate   = 'ReviewedDate';
 $lang->story->activatedDate  = 'Activated Date';
