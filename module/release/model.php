@@ -117,7 +117,6 @@ class releaseModel extends model
         /* Init vars. */
         $productID = $this->post->product ? $this->post->product : (int)$productID;
         $branch    = $this->post->branch ? $this->post->branch : (int)$branch;
-        $buildID   = $this->post->build ? $this->post->build : 0;
 
         /* Check build if build is required. */
         if(strpos($this->config->release->create->requiredFields, 'build') !== false and $this->post->build == false) return dao::$errors[] = sprintf($this->lang->error->notempty, $this->lang->release->build);
@@ -129,7 +128,7 @@ class releaseModel extends model
             ->add('product', (int)$productID)
             ->add('branch',  (int)$branch)
             ->setIF($projectID, 'project', $projectID)
-            ->setIF($buildID, 'build', $buildID)
+            ->setIF($this->post->build == false, 'build', 0)
             ->setDefault('stories', '')
             ->join('stories', ',')
             ->join('bugs', ',')
