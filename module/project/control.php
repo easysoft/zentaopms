@@ -482,6 +482,12 @@ class project extends control
 
         $topProgramID = $this->program->getTopByID($programID);
 
+        if($model == 'kanban')
+        {
+            $this->lang->project->aclList    = $this->lang->project->kanbanAclList;
+            $this->lang->project->subAclList = $this->lang->project->kanbanSubAclList;
+        }
+
         $this->view->title      = $this->lang->project->create;
         $this->view->position[] = $this->lang->project->create;
 
@@ -534,7 +540,12 @@ class project extends control
         $project   = $this->project->getByID($projectID);
         $programID = $project->parent;
         $this->project->setMenu($projectID);
-        if($project->model == 'kanban') unset($this->lang->project->authList['reset']);
+        if($project->model == 'kanban')
+        {
+            unset($this->lang->project->authList['reset']);
+            $this->lang->project->aclList    = $this->lang->project->kanbanAclList;
+            $this->lang->project->subAclList = $this->lang->project->kanbanSubAclList;
+        }
 
         if($_POST)
         {
