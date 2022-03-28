@@ -17,7 +17,7 @@
       <?php echo $lang->bug->batchCreate;?>
     </h2>
     <div class="pull-right btn-toolbar">
-      <?php if(common::hasPriv('file', 'uploadImages')) echo html::a($this->createLink('file', 'uploadImages', 'module=bug&params=' . helper::safe64Encode("productID=$productID&executionID=$executionID&moduleID=$moduleID")), $lang->uploadImages, '', "data-toggle='modal' data-type='iframe' class='btn btn-primary' data-width='70%'")?>
+      <?php if(common::hasPriv('file', 'uploadImages')) echo html::a($this->createLink('file', 'uploadImages', 'module=bug&params=' . helper::safe64Encode("productID=$productID&branch=$branch&executionID=$executionID&moduleID=$moduleID")), $lang->uploadImages, '', "data-toggle='modal' data-type='iframe' class='btn btn-primary' data-width='70%'")?>
       <button type='button' data-toggle='modal' data-target="#importLinesModal" class="btn btn-primary"><?php echo $lang->pasteText;?></button>
       <?php $customLink = $this->createLink('custom', 'ajaxSaveCustomFields', 'module=bug&section=custom&key=batchCreateFields')?>
       <?php include '../../common/view/customfield.html.php';?>
@@ -219,5 +219,20 @@
   </tbody>
 </table>
 <?php js::set('branch', $branch)?>
+<?php if(isonlybody()):?>
+<style>
+.body-modal .main-header {padding-right: 0px;}
+.btn-toolbar > .dropdown {margin: 0px;}
+</style>
+<?php $html = '<div class="divider"></div><button id="closeModal" type="button" class="btn btn-link" data-dismiss="modal"><i class="icon icon-close"></i></button>';?>
+<script>
+$(function()
+{
+    parent.$('#triggerModal .modal-content .modal-header .close').hide();
+    $('#mainContent .main-header .pull-right.btn-toolbar').append(<?php echo json_encode($html)?>);
+    $('#closeModal').on('click', function(){window.parent.$.closeModal();})
+})
+</script>
+<?php endif;?>
 <?php include '../../common/view/pastetext.html.php';?>
 <?php include '../../common/view/footer.html.php';?>
