@@ -787,7 +787,7 @@ class projectModel extends model
      * @access public
      * @return int|bool
      */
-    public function create($model)
+    public function create()
     {
         $project = fixer::input('post')
             ->callFunc('name', 'trim')
@@ -849,7 +849,7 @@ class projectModel extends model
 
         /*Judge workdays is legitimate. */
         $workdays = helper::diffDate($project->end, $project->begin);
-        if($model == 'scrum' and $project->days > $workdays)
+        if(isset($project->days) and $project->days > $workdays)
         {
             dao::$errors['days'] = sprintf($this->lang->project->workdaysExceed, $workdays);
             return false;
@@ -1097,7 +1097,7 @@ class projectModel extends model
 
         /*Judge workdays is legitimate. */
         $workdays = helper::diffDate($project->end, $project->begin);
-        if($project->days > $workdays)
+        if(isset($project->days) and $project->days > $workdays)
         {
             dao::$errors['days'] = sprintf($this->lang->project->workdaysExceed, $workdays);
             return false;

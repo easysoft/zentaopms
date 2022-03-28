@@ -307,7 +307,7 @@ class executionModel extends model
 
             /*Judge workdays is legitimate. */
             $workdays = helper::diffDate($_POST['end'], $_POST['begin']);
-            if($_POST['days'] > $workdays)
+            if(isset($_POST['days']) and $_POST['days'] > $workdays)
             {
                 dao::$errors['days'] = sprintf($this->lang->project->workdaysExceed, $workdays);
                 return false;
@@ -462,7 +462,7 @@ class executionModel extends model
         /*Judge workdays is legitimate. */
         $this->app->loadLang('project');
         $workdays = helper::diffDate($_POST['end'], $_POST['begin']);
-        if($_POST['days'] > $workdays)
+        if(isset($_POST['days']) and $_POST['days'] > $workdays)
         {
             dao::$errors['days'] = sprintf($this->lang->project->workdaysExceed, $workdays);
             return false;
@@ -661,7 +661,7 @@ class executionModel extends model
 
             /*Judge workdays is legitimate. */
             $workdays = helper::diffDate($data->ends[$executionID], $data->begins[$executionID]);
-            if($data->dayses[$executionID] > $workdays)
+            if(isset($data->dayses[$executionID]) and $data->dayses[$executionID] > $workdays)
             {
                 $this->app->loadLang('project');
                 dao::$errors['days'][] = 'execution#' . $executionID . sprintf($this->lang->project->workdaysExceed, $workdays);
