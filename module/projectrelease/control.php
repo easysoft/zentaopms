@@ -95,7 +95,7 @@ class projectrelease extends control
      * @access public
      * @return void
      */
-    public function create($productID = 0, $branch = 0, $projectID = 0)
+    public function create($projectID)
     {
         /* Load module and config. */
         $this->loadModel('build');

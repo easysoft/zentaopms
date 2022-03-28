@@ -22,7 +22,7 @@
     ?>
   </div>
   <div class="btn-toolbar pull-right">
-    <?php common::printLink('projectrelease', 'create', "productID=0&branch=0&projectID=$projectID", "<i class='icon icon-plus'></i> {$lang->release->create}", '', "class='btn btn-primary'");?>
+    <?php common::printLink('projectrelease', 'create', "projectID=$projectID", "<i class='icon icon-plus'></i> {$lang->release->create}", '', "class='btn btn-primary'");?>
   </div>
 </div>
 <div id="mainContent" class='main-table'>
@@ -31,7 +31,7 @@
     <p>
       <span class="text-muted"><?php echo $lang->release->noRelease;?></span>
       <?php if(common::hasPriv('projectrelease', 'create')):?>
-      <?php echo html::a($this->createLink('projectrelease', 'create', "productID=0&branch=0&projectID=$projectID"), "<i class='icon icon-plus'></i> " . $lang->release->create, '', "class='btn btn-info'");?>
+      <?php echo html::a($this->createLink('projectrelease', 'create', "projectID=$projectID"), "<i class='icon icon-plus'></i> " . $lang->release->create, '', "class='btn btn-info'");?>
       <?php endif;?>
     </p>
   </div>

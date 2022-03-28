@@ -116,7 +116,7 @@ class releaseModel extends model
     {
         /* Init vars. */
         $productID = $this->post->product ? $this->post->product : (int)$productID;
-        $branch    = $this->post->product ? $this->post->product : (int)$branch;
+        $branch    = $this->post->branch ? $this->post->branch : (int)$branch;
         $buildID   = $this->post->build ? $this->post->build : 0;
 
         /* Check build if build is required. */
