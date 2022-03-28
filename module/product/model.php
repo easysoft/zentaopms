@@ -1786,7 +1786,7 @@ class productModel extends model
      *
      * @param  int    $programID
      * @access public
-     * @return void
+     * @return array
      */
     public function getLinePairs($programID = 0)
     {
@@ -1795,6 +1795,16 @@ class productModel extends model
             ->beginIF($programID)->andWhere('root')->eq($programID)->fi()
             ->andWhere('deleted')->eq(0)
             ->fetchPairs();
+    }
+
+    /*
+     * Get all lines.
+     * @access public
+     * @return array
+     */
+    public function getLines()
+    {
+        return $this->dao->select('*')->from(TABLE_MODULE)->where('type')->eq('line')->andWhere('deleted')->eq(0)->orderBy('`order`')->fetchAll();
     }
 
     /**
