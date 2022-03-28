@@ -641,8 +641,7 @@ class product extends control
         $unauthorizedPrograms = array();
         if($this->config->systemMode == 'new')
         {
-            $this->loadModel('program');
-            $programs = $this->program->getTopPairs();
+            $programs = $this->loadModel('program')->getTopPairs();
 
             /* Get unauthorized programs. */
             $programIDList = array();
