@@ -39,6 +39,7 @@ $builder->morebug      = array('rows' => 15, 'extends' => array('bug','morebug')
 $builder->testtask   = array('rows' => 10, 'extends' => array('testtask'));
 $builder->testresult = array('rows' => 40, 'extends' => array('testresult'));
 $builder->testrun    = array('rows' => 40, 'extends' => array('testrun'));
+$builder->testreport = array('rows' => 10, 'extends' => array('testreport'));
 
 $builder->product             = array('rows' => 100, 'extends' => array('product'));
 $builder->productalone        = array('rows' => 20, 'extends' => array('product','productalone'));
@@ -76,7 +77,7 @@ $builder->doc        = array('rows' => 900, 'extends' => array('doc'));
 $builder->doccontent = array('rows' => 900, 'extends' => array('doccontent'));
 
 $builder->build   = array('rows' => 20, 'extends' => array('build'));
-$builder->release = array('rows' => 8, 'extends' => array('release'));
+$builder->release = array('rows' => 10, 'extends' => array('release'));
 
 $builder->webhook = array('rows' => 7, 'extends' => array('webhook'));
 $builder->entry   = array('rows' => 1, 'extends' => array('entry'));

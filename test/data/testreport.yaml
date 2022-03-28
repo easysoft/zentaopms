@@ -1,0 +1,161 @@
+title: table zt_testreport
+desc: "测试报告"
+author: automated export
+version: "1.0"
+fields:
+  - field: id
+    note: "ID"
+    range: 1-10000
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: execution
+    note: "所属执行"
+    range: 101-110
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: product
+    note: "所属产品"
+    range: 1-10
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: project
+    note: "所属项目"
+    range: 11-20
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: tasks
+    note: "测试版本"
+    range: 1-10
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: builds
+    note: "版本信息"
+    range: 11-20
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: title
+    note: "标题"
+    fields:
+      - field: title1
+        range: "(M)-(w)"
+        type: timestamp
+        format: "YYYY-MM-DD"
+      - field: title2
+        range: 101-110
+        prefix: "EXECUTION#"
+      - field: title3
+        range: 1-10000
+        prefix: " 迭代"
+        postfix: " 测试报告"
+  - field: begin
+    note: "开始时间"
+    range: "(M)-(w):1D"
+    type: timestamp
+    prefix: ""
+    postfix: "\t"
+    format: "YYYY-MM-DD"
+  - field: end
+    note: "结束时间"
+    range: "(+1w)-(M)"
+    type: timestamp
+    prefix: ""
+    postfix: "\t"
+    format: "YY/MM/DD"
+  - field: owner
+    note: "负责人"
+    range: 3-12
+    prefix: "user"
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: members
+    note: "参与人员"
+    fields:
+      - field: members1
+        range: admin
+        postfix: ","
+      - field: members2
+        range: 1-10
+        prefix: "dev"
+  - field: stories
+    note: "测试的需求"
+    range: ""
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: bugs
+    note: "测试的Bug"
+    range: ""
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: cases
+    note: "用例"
+    fields:
+      - field: cases1
+        range: 1-100:4
+        postfix: ","
+      - field: cases2
+        range: 2-100:4
+        postfix: ","
+      - field: cases3
+        range: 3-100:4
+        postfix: ","
+      - field: cases4
+        range: 4-100:4
+  - field: report
+    note: "总结"
+    range: 1-10000
+    prefix: "这里是报告总结"
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: objectType
+    note: "对象类型"
+    range: execution
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: objectID
+    note: "对象ID"
+    range: 101-110
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: createdBy
+    note: "由谁创建"
+    range: admin
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: createdDate
+    note: "创建日期"
+    range: "(M)-(w):60"
+    type: timestamp
+    prefix: ""
+    postfix: ""
+    format: "YYYY-MM-DD hh:mm:ss"
+  - field: deleted
+    note: "是否删除"
+    range: 0
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
