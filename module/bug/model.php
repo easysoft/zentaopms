@@ -235,7 +235,8 @@ class bugModel extends model
                 $field = trim($field);
                 if($field and empty($bug->$field))
                 {
-                    return print(js::alert(sprintf($this->lang->error->notempty, $this->lang->bug->$field)));
+                    dao::$errors['message'][] = sprintf($this->lang->error->notempty, $this->lang->bug->$field);
+                    return false;
                 }
             }
 
@@ -282,7 +283,7 @@ class bugModel extends model
                 ->autoCheck()
                 ->batchCheck($this->config->bug->create->requiredFields, 'notempty')
                 ->exec();
-            if(dao::isError()) return print(js::error(dao::getError()));
+            if(dao::isError()) return false;
 
             $bugID = $this->dao->lastInsertID();
 
@@ -309,7 +310,11 @@ class bugModel extends model
                 unset($file);
             }
 
-            if(dao::isError()) return print(js::error('bug#' . ($i) . dao::getError(true)));
+            if(dao::isError())
+            {
+                dao::$errors['message'][] = 'bug#' . ($i) . dao::getError(true);
+                return false;
+            }
             $actions[$bugID] = $this->action->create('bug', $bugID, 'Opened');
         }
 

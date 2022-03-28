@@ -572,16 +572,17 @@ class project extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $locateLink));
         }
 
-        $linkedBranches   = array();
-        $linkedBranchList = array();
-        $productPlans     = array(0 => '');
-        $allProducts      = $this->program->getProductPairs($project->parent, 'assign', 'noclosed');
-        $linkedProducts   = $this->loadModel('product')->getProducts($projectID);
-        $parentProject    = $this->program->getByID($project->parent);
-        $branches         = $this->project->getBranchesByProject($projectID);
-        $plans            = $this->productplan->getGroupByProduct(array_keys($linkedProducts), 'skipParent|unexpired');
-        $projectStories   = $this->project->getStoriesByProject($projectID);
-        $projectBranches  = $this->project->getBranchGroupByProject($projectID, array_keys($linkedProducts));
+        $linkedBranches      = array();
+        $linkedBranchList    = array();
+        $productPlans        = array(0 => '');
+        $branches            = $this->project->getBranchesByProject($projectID);
+        $linkedProductIdList = empty($branches) ? '' : array_keys($branches);
+        $allProducts         = $this->program->getProductPairs($project->parent, 'assign', 'noclosed', $linkedProductIdList);
+        $linkedProducts      = $this->loadModel('product')->getProducts($projectID, 'all', '', true, $linkedProductIdList);
+        $parentProject       = $this->program->getByID($project->parent);
+        $plans               = $this->productplan->getGroupByProduct(array_keys($linkedProducts), 'skipParent|unexpired');
+        $projectStories      = $this->project->getStoriesByProject($projectID);
+        $projectBranches     = $this->project->getBranchGroupByProject($projectID, array_keys($linkedProducts));
 
         /* If the story of the product which linked the project, you don't allow to remove the product. */
         $unmodifiableProducts     = array();
@@ -1806,12 +1807,13 @@ class project extends control
             $this->project->setMenu($projectID);
         }
 
-        $linkedBranches  = array();
-        $allProducts     = $this->program->getProductPairs($project->parent, 'assign', 'noclosed');
-        $linkedProducts  = $this->product->getProducts($projectID);
-        $branches        = $this->project->getBranchesByProject($projectID);
-        $projectStories  = $this->project->getStoriesByProject($projectID);
-        $projectBranches = $this->project->getBranchGroupByProject($projectID, array_keys($linkedProducts));
+        $linkedBranches      = array();
+        $branches            = $this->project->getBranchesByProject($projectID);
+        $linkedProductIdList = empty($branches) ? '' : array_keys($branches);
+        $allProducts         = $this->program->getProductPairs($project->parent, 'assign', 'noclosed', $linkedProductIdList);
+        $linkedProducts      = $this->product->getProducts($projectID, 'all', '', true, $linkedProductIdList);
+        $projectStories      = $this->project->getStoriesByProject($projectID);
+        $projectBranches     = $this->project->getBranchGroupByProject($projectID, array_keys($linkedProducts));
 
         /* If the story of the product which linked the project, you don't allow to remove the product. */
         $unmodifiableProducts     = array();

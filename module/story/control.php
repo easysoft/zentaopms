@@ -402,8 +402,6 @@ class story extends control
      */
     public function batchCreate($productID = 0, $branch = 0, $moduleID = 0, $storyID = 0, $executionID = 0, $plan = 0, $type = 'story', $extra = '')
     {
-        $this->lang->product->switcherMenu = $this->product->getSwitcher($productID);
-
         /* Set menu. */
         if($executionID)
         {
@@ -650,7 +648,6 @@ class story extends control
         $moduleOptionMenu = $this->tree->getOptionMenu($product->id, $viewType = 'story', 0, $story->branch);
 
         /* Set menu. */
-        $this->lang->product->switcherMenu = $this->product->getSwitcher($product->id);
         if($this->app->tab == 'project')
         {
             $this->loadModel('project')->setMenu($this->session->project);
@@ -794,7 +791,6 @@ class story extends control
      */
     public function batchEdit($productID = 0, $executionID = 0, $branch = 0, $storyType = 'story', $from = '')
     {
-        $this->lang->product->switcherMenu = $this->product->getSwitcher($productID);
         $this->story->replaceURLang($storyType);
 
         if($this->app->tab == 'product')
@@ -1243,8 +1239,6 @@ class story extends control
      */
     public function review($storyID, $from = 'product')
     {
-        $this->lang->product->switcherMenu = $this->product->getSwitcher($this->session->product);
-
         if(!empty($_POST))
         {
             $changes = $this->story->review($storyID);
@@ -2230,7 +2224,6 @@ class story extends control
 
         $this->story->replaceURLang($storyType);
         $this->products = $this->product->getPairs();
-        $this->lang->product->switcherMenu = $this->product->getSwitcher($productID, $storyType, $branchID);
         $this->product->setMenu($productID, $branchID);
 
         $this->view->title         = $this->products[$productID] . $this->lang->colon . $this->lang->story->reportChart;

@@ -62,13 +62,14 @@ class programModel extends model
     /**
      * Get the product associated with the program.
      *
-     * @param  int     $programID
-     * @param  string  $mode       all|assign
-     * @param  string  $status     all|noclosed
+     * @param  int          $programID
+     * @param  string       $mode       all|assign
+     * @param  string       $status     all|noclosed
+     * @param  string|array $append
      * @access public
      * @return array
      */
-    public function getProductPairs($programID = 0, $mode = 'assign', $status = 'all')
+    public function getProductPairs($programID = 0, $mode = 'assign', $status = 'all', $append = '')
     {
         /* Get the top programID. */
         if($programID)
@@ -80,12 +81,15 @@ class programModel extends model
         }
 
         /* When mode equals assign and programID equals 0, you can query the standalone product. */
+        if(!empty($append) and is_array($append)) $append = implode(',', $append);
+
+        $views    = empty($append) ? $this->app->user->view->products : $this->app->user->view->products . ",$append";
         $products = $this->dao->select('*')->from(TABLE_PRODUCT)
             ->where('deleted')->eq(0)
             ->andWhere('vision')->eq($this->config->vision)
             ->beginIF($mode == 'assign')->andWhere('program')->eq($programID)->fi()
             ->beginIF(strpos($status, 'noclosed') !== false)->andWhere('status')->ne('closed')->fi()
-            ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->products)->fi()
+            ->beginIF(!$this->app->user->admin)->andWhere('id')->in($views)->fi()
             ->fetchPairs('id', 'name');
         return $products;
     }
@@ -594,6 +598,7 @@ class programModel extends model
             ->setIF($this->post->acl == 'open', 'whitelist', '')
             ->setIF($this->post->delta == 999, 'end', LONG_TIME)
             ->setIF($this->post->budget != 0, 'budget', round((float)$this->post->budget, 2))
+            ->setIF(!isset($_POST['whitelist']), 'whitelist', '')
             ->add('type', 'program')
             ->join('whitelist', ',')
             ->stripTags($this->config->program->editor->create['id'], $this->config->allowedTags)
@@ -680,6 +685,7 @@ class programModel extends model
             ->setIF($this->post->future, 'budget', 0)
             ->setIF($this->post->budget != 0, 'budget', round($this->post->budget, 2))
             ->setIF(!isset($_POST['budgetUnit']), 'budgetUnit', $oldProgram->budgetUnit)
+            ->setIF(!isset($_POST['whitelist']), 'whitelist', '')
             ->join('whitelist', ',')
             ->stripTags($this->config->program->editor->edit['id'], $this->config->allowedTags)
             ->remove('uid,delta,future,syncPRJUnit,exchangeRate,contactListMenu')

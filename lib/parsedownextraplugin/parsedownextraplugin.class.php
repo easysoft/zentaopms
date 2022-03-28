@@ -1,5 +1,4 @@
 <?php
-
 #
 #
 # Parsedown Extra Plugin
@@ -15,6 +14,9 @@
 # with this source code.
 #
 #
+
+require 'parsedown.php';
+require 'parsedownextra.php';
 
 class parsedownextraplugin extends parsedownextra {
 

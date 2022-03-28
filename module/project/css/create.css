@@ -12,3 +12,4 @@
 #budget {border-right: 0px;}
 #budgetUnit {border-left: 0px;}
 #projectName {display: inline-block; width: 32%;}
+#productsBox a {border-radius: 2px !important;}

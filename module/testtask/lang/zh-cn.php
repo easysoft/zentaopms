@@ -183,14 +183,6 @@ $lang->testtask->report->charts['testTaskPerRunResult'] = '按用例结果统计
 $lang->testtask->report->charts['testTaskPerType']      = '按用例类型统计';
 $lang->testtask->report->charts['testTaskPerModule']    = '按用例模块统计';
 $lang->testtask->report->charts['testTaskPerRunner']    = '按用例执行人统计';
-$lang->testtask->report->charts['bugSeverityGroups']    = 'Bug严重级别分布';
-$lang->testtask->report->charts['bugStatusGroups']      = 'Bug状态分布';
-$lang->testtask->report->charts['bugOpenedByGroups']    = 'Bug创建者分布';
-$lang->testtask->report->charts['bugResolvedByGroups']  = 'Bug解决者分布';
-$lang->testtask->report->charts['bugResolutionGroups']  = 'Bug解决方案分布';
-$lang->testtask->report->charts['bugModuleGroups']      = 'Bug模块分布';
-$lang->testtask->report->charts['bugStageGroups']       = 'Bug重要程度阶段分布';
-$lang->testtask->report->charts['bugHandleGroups']      = 'Bug每日处理情况分布';
 
 $lang->testtask->report->options = new stdclass();
 $lang->testtask->report->options->graph  = new stdclass();

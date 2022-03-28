@@ -1,5 +1,5 @@
 <?php
-class Product
+class productTest
 {
 
     /**
@@ -13,15 +13,16 @@ class Product
     {
         global $tester;
         su($user);
-        $this->product = $tester->loadModel('product');
+        $this->objectModel = $tester->loadModel('product');
+         $tester->app->loadClass('dao');
     }
 
     /**
-     * createObject
+     * Test create a product.
      *
      * @param  array  $param
      * @access public
-     * @return void
+     * @return object
      */
     public function createObject($param = array())
     {
@@ -32,10 +33,7 @@ class Product
         foreach($createFields as $field => $defaultValue) $_POST[$field] = $defaultValue;
         foreach($param as $key => $value) $_POST[$key] = $value;
 
-        //global $tester;
-        //$objectModel = $tester->loadModel($module);
-        //$objectID = $this->objectModel->create();
-        $objectID = $this->product->create();
+        $objectID = $this->objectModel->create();
         unset($_POST);
 
         if(dao::isError())
@@ -44,43 +42,43 @@ class Product
         }
         else
         {
-            $object = $this->product->getByID($objectID);
+            $object = $this->objectModel->getByID($objectID);
             return $object;
         }
     }
 
     /**
-     * testGetLatestProject
+     * Test get the latest project of the product.
      *
      * @param  mixed  $productID
      * @access public
-     * @return void
+     * @return object
      */
     public function testGetLatestProject($productID)
     {
-        $project = $this->product->getLatestProject($productID);
+        $project = $this->objectModel->getLatestProject($productID);
         if($project == false) return '没有数据';
         return $project;
     }
 
     /**
-     * getAllProducts
+     * Test get all products.
      *
-     * @param  int    mixed $programID
+     * @param  int    $programID
      * @access public
-     * @return void
+     * @return array
      */
     public function getAllProducts($programID)
     {
-        return $this->product->getList($programID);
+        return $this->objectModel->getList($programID);
     }
 
     /**
-     * getAllProductsCount
+     * Test get all products count.
      *
-     * @param  int    mixed $programID
+     * @param  int    $programID
      * @access public
-     * @return void
+     * @return int
      */
     public function getAllProductsCount($programID)
     {
@@ -88,23 +86,23 @@ class Product
     }
 
     /**
-     * getNoclosedProducts
+     * Test get noclosed products.
      *
-     * @param  int    mixed $programID
+     * @param  int    $programID
      * @access public
-     * @return void
+     * @return array
      */
     public function getNoclosedProducts($programID)
     {
-        return $this->product->getList($programID, 'noclosed');
+        return $this->objectModel->getList($programID, 'noclosed');
     }
 
     /**
-     * getNoclosedProductsCount
+     * Test get noclosed products count.
      *
-     * @param  int    mixed $programID
+     * @param  int    $programID
      * @access public
-     * @return void
+     * @return int
      */
     public function getNoclosedProductsCount($programID)
     {
@@ -112,23 +110,23 @@ class Product
     }
 
     /**
-     * getClosedProducts
+     * Test get closed products.
      *
-     * @param  int    mixed $programID
+     * @param  int    $programID
      * @access public
-     * @return void
+     * @return array
      */
     public function getClosedProducts($programID)
     {
-        return $this->product->getList($programID, 'closed');
+        return $this->objectModel->getList($programID, 'closed');
     }
 
     /**
-     * getClosedProductsCount
+     * Test get closed products count.
      *
-     * @param  int    mixed $programID
+     * @param  int    $programID
      * @access public
-     * @return void
+     * @return int
      */
     public function getClosedProductsCount($programID)
     {
@@ -136,23 +134,23 @@ class Product
     }
 
     /**
-     * getInvolvedProducts
+     * Test get involved products.
      *
-     * @param  int    mixed $programID
+     * @param  int    $programID
      * @access public
-     * @return void
+     * @return array
      */
     public function getInvolvedProducts($programID)
     {
-        return $this->product->getList($programID, 'involved');
+        return $this->objectModel->getList($programID, 'involved');
     }
 
     /**
-     * getInvolvedProductsCount
+     * Test get involved products count.
      *
-     * @param  int    mixed $programID
+     * @param  int    $programID
      * @access public
-     * @return void
+     * @return int
      */
     public function getInvolvedProductsCount($programID)
     {
@@ -160,25 +158,25 @@ class Product
     }
 
     /**
-     * getProductsByLine
+     * Test get products by line.
      *
-     * @param int    mixed $programID
-     * @param int    $line
+     * @param  int    $programID
+     * @param  int    $line
      * @access public
-     * @return void
+     * @return array
      */
     public function getProductsByLine($programID, $line = 0)
     {
-        return $this->product->getList($programID, 'all', 0, $line);
+        return $this->objectModel->getList($programID, 'all', 0, $line);
     }
 
     /**
-     * countProductsByLine
+     * Test get products count by line.
      *
-     * @param int    mixed $programID
-     * @param int    $line
+     * @param  int    $programID
+     * @param  int    $line
      * @access public
-     * @return void
+     * @return int
      */
     public function countProductsByLine($programID, $line = 0)
     {
@@ -186,51 +184,53 @@ class Product
     }
 
     /**
-     * getProductList
+     * Test get product list.
      *
-     * @param int    mixed $programID
-     * @param string $status
-     * @param int    $line
+     * @param  int    $programID
+     * @param  string $status
+     * @param  int    $line
      * @access public
-     * @return void
+     * @return array
      */
     public function getProductList($programID, $status = 'all', $line = 0)
     {
-        return $this->product->getList($programID, $status, 0, $line);
+        return $this->objectModel->getList($programID, $status, 0, $line);
     }
 
     /**
-     * getProductCount
+     * Test get product count.
      *
-     * @param int    mixed $programID
-     * @param string $status
-     * @param int    $line
+     * @param  int    $programID
+     * @param  string $status
+     * @param  int    $line
      * @access public
-     * @return void
+     * @return int
      */
     public function getProductCount($programID, $status = 'all', $line = 0)
     {
         return count($this->getProductList($programID, $status, $line));
     }
+
     /**
-     * getProductPairs
+     * Test get product pairs.
      *
-     * @param  int    mixed $programID
+     * @param  int    $programID
      * @access public
-     * @return void
+     * @return array
      */
     public function getProductPairs($programID)
     {
-        $pairs = $this->product->getPairs('', $programID);
+        $pairs = $this->objectModel->getPairs('', $programID);
         if($pairs == array()) return '没有数据';
         return $pairs;
     }
+
     /**
-     * getProductPairsCount
+     * Test get product pairs count.
      *
-     * @param  int    mixed $programID
+     * @param  int    $programID
      * @access public
-     * @return void
+     * @return int
      */
     public function getProductPairsCount($programID)
     {
@@ -240,24 +240,25 @@ class Product
     }
 
     /**
-     * getAllPairs
+     * Test get all product pairs.
      *
-     * @param  int    mixed $programID
+     * @param  int    $programID
      * @access public
      * @return void
      */
     public function getAllPairs($programID)
     {
-        $pairs = $this->product->getPairs('all', $programID);
+        $pairs = $this->objectModel->getPairs('all', $programID);
         if($pairs == array()) return '没有数据';
         return $pairs;
     }
+
     /**
-     * getAllPairsCount
+     * Test get all product count.
      *
-     * @param  int    mixed $programID
+     * @param  int    $programID
      * @access public
-     * @return void
+     * @return int
      */
     public function getAllPairsCount($programID)
     {
@@ -265,25 +266,26 @@ class Product
         if($pairsCount == '没有数据') return '0';
         return $pairsCount;
     }
+
     /**
-     * getNoclosedPairs
+     * Test get noclosed product pairs.
      *
-     * @param  int    mixed $programID
+     * @param  int    $programID
      * @access public
-     * @return void
+     * @return array
      */
     public function getNoclosedPairs($programID)
     {
-        $pairs = $this->product->getPairs('noclosed', $programID);
+        $pairs = $this->objectModel->getPairs('noclosed', $programID);
         if($pairs == array()) return '没有数据';
         return $pairs;
     }
     /**
-     * getNoclosedPairsCount
+     * Test get noclosed pairs count.
      *
-     * @param  int    mixed $programID
+     * @param  int    $programID
      * @access public
-     * @return void
+     * @return int
      */
     public function getNoclosedPairsCount($programID)
     {
@@ -293,101 +295,101 @@ class Product
     }
 
     /**
-     * getProductPairsByOrder
+     * Test get product pairs by order.
      *
-     * @param int    mixed $programID
-     * @param string $orderBy
-     * @param string $mode
+     * @param  int    $programID
+     * @param  string $orderBy
+     * @param  string $mode
      * @access public
-     * @return void
+     * @return array
      */
     public function getProductPairsByOrder($programID, $orderBy = 'id_desc', $mode = '')
     {
-        $this->product->orderBy = $orderBy;
-        $pairs = $this->product->getPairs($mode, $programID);
+        $this->objectModel->orderBy = $orderBy;
+        $pairs = $this->objectModel->getPairs($mode, $programID);
         return checkOrder($pairs, $orderBy);
     }
 
     /**
-     * getAllProjectsByProduct
+     * Test get all projects by product.
      *
-     * @param  int    mixed $productID
+     * @param  int    $productID
      * @access public
-     * @return void
+     * @return array
      */
     public function getAllProjectsByProduct($productID)
     {
-        $projects = $this->product->getProjectListByProduct($productID, 'all');
+        $projects = $this->objectModel->getProjectListByProduct($productID, 'all');
         if($projects == array()) return '没有数据';
         return $projects;
     }
 
     /**
-     * getProjectsByStatus
+     * Test get projects by status.
      *
-     * @param  int    mixed $productID
-     * @param  string mixed $status
+     * @param  int    $productID
+     * @param  string $status
      * @access public
-     * @return void
+     * @return array
      */
     public function getProjectsByStatus($productID, $status)
     {
-        $projects = $this->product->getProjectListByProduct($productID, $browseType);
+        $projects = $this->objectModel->getProjectListByProduct($productID, $browseType);
         if($projects == array()) return '没有数据';
         return $projects;
     }
 
     /**
-     * getProjectPairsByProductID
+     * Test get project pairs by product id.
      *
-     * @param  int    mixed $productID
+     * @param  int    $productID
      * @access public
-     * @return void
+     * @return array
      */
     public function getProjectPairsByProductID($productID)
     {
-        $projects = $this->product->getProjectPairsByProduct($productID, 0, 0);
+        $projects = $this->objectModel->getProjectPairsByProduct($productID, 0, 0);
         if($projects == array()) return '没有数据';
         return $projects;
     }
 
     /**
-     * getAppendProject
+     * Test get append project.
      *
-     * @param  int    mixed $projectID
+     * @param  int    $projectID
      * @access public
-     * @return void
+     * @return array
      */
     public function getAppendProject($projectID)
     {
-        $project = $this->product->getProjectPairsByProduct(10086, 0, $projectID);
+        $project = $this->objectModel->getProjectPairsByProduct(10086, 0, $projectID);
         if($project == array()) return '没有数据';
         return $project;
     }
 
     /**
-     * testIsClickable
+     * Test judge an action is clickable or not.
      *
-     * @param  int    mixed $productID
-     * @param  string mixed $status
+     * @param  int    $productID
+     * @param  string $status
      * @access public
-     * @return void
+     * @return string
      */
     public function testIsClickable($productID, $status)
     {
-        $product = $this->product->getById($productID);
-        $isClick = $this->product->isClickable($product, $status);
+        $product = $this->objectModel->getById($productID);
+        $isClick = $this->objectModel->isClickable($product, $status);
         return $isClick == false ? 'false' : 'true';
     }
 
     /**
-     * updateObject
+     * Test update a product.
      *
-     * @param  string mixed $module
-     * @param  int    mixed $objectID
+     * @param  string $module
+     * @param  int    $objectID
      * @param  array  $param
      * @access public
-     * @return void
+     * @return array
      */
     public function updateObject($module, $objectID, $param = array())
     {
@@ -418,6 +420,614 @@ class Product
         else
         {
             return $change;
+        }
+    }
+
+    /**
+     * Test check privilege.
+     *
+     * @param  int    $productID
+     * @access public
+     * @return int
+     */
+    public function checkPrivTest($productID)
+    {
+        $object = $this->objectModel->checkPriv($productID);
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return $object ? 1 : 2;
+        }
+    }
+
+    /**
+     * Test get product by id.
+     *
+     * @param  int    $productID
+     * @access public
+     * @return object
+     */
+    public function getByIdTest($productID)
+    {
+        $object = $this->objectModel->getById($productID);
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return $object;
+        }
+    }
+
+    /**
+     * Test get product by id list.
+     *
+     * @param  array  $productIDList
+     * @access public
+     * @return array
+     */
+    public function getByIdListTest($productIDList)
+    {
+        $objects = $this->objectModel->getByIdList($productIDList);
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return $objects;
+        }
+    }
+
+    /**
+     * Test get product pairs by project.
+     *
+     * @param  int    $productID
+     * @param  string $status
+     * @access public
+     * @return array
+     */
+    public function getProductPairsByProjectTest($projectID, $status = 'all')
+    {
+        $objects = $this->objectModel->getProductPairsByProject($projectID, $status);
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return $objects;
+        }
+    }
+
+    /**
+     * Test get product pairs by project model.
+     *
+     * @param  string $model
+     * @access public
+     * @return int
+     */
+    public function getPairsByProjectModelTest($model)
+    {
+        $objects = $this->objectModel->getPairsByProjectModel($model);
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return count($objects);
+        }
+    }
+
+    /**
+     * Test get products by project.
+     *
+     * @param  int    $projectID
+     * @param  string $status
+     * @access public
+     * @return array
+     */
+    public function getProductsTest($projectID, $status)
+    {
+        $objects = $this->objectModel->getProducts($projectID, $status);
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return $objects;
+        }
+    }
+
+    /**
+     * Test get product id by project.
+     *
+     * @param  int    $projectID
+     * @access public
+     * @return int
+     */
+    public function getProductIDByProjectTest($projectID)
+    {
+        $object = $this->objectModel->getProductIDByProject($projectID);
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return $object;
+        }
+    }
+
+    /**
+     * Test get ordered products.
+     *
+     * @param  string $status
+     * @access public
+     * @return int
+     */
+    public function getOrderedProductsTest($status)
+    {
+        $objects = $this->objectModel->getOrderedProducts($status);
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return count($objects);
+        }
+    }
+
+    /**
+     * Test get Multi-branch product pairs.
+     *
+     * @param  int    $programID
+     * @access public
+     * @return array
+     */
+    public function getMultiBranchPairsTest($programID)
+    {
+        $objects = $this->objectModel->getMultiBranchPairs($programID);
+
+        $title  = '';
+        foreach($objects as $object) $title .=  ',' . $object;
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return $title;
+        }
+    }
+
+    /**
+     * Test batch update products.
+     *
+     * @param  array  $param
+     * @param  int    $productID
+     * @access public
+     * @return void
+     */
+    public function batchUpdateTest($param, $productID)
+    {
+        $batchUpdateFields['productIDList'] = array('1' => '1', '2' => '2', '3' => '3');
+        $batchUpdateFields['programs']      = array('1' => '', '2' => '1', '3' => '2');
+        $batchUpdateFields['names']         = array('1' => '正常产品1', '2' => '正常产品2', '3' => '正常产品3');
+        $batchUpdateFields['lines']         = array('1' => '0', '2' => '1', '3' => '2');
+        $batchUpdateFields['POs']           = array('1' => 'po1', '2' => 'po2', '3' => 'po3');
+        $batchUpdateFields['QDs']           = array('1' => 'test1', '2' => 'test2', '3' => 'test3');
+        $batchUpdateFields['RDs']           = array('1' => 'dev1', '2' => 'dev2', '3' => 'dev3');
+        $batchUpdateFields['types']         = array('1' => 'normal', '2' => 'normal', '3' => 'normal');
+        $batchUpdateFields['statuses']      = array('1' => 'normal', '2' => 'normal', '3' => 'normal');
+        $batchUpdateFields['descs']         = array('1' => '&lt;div&gt; &lt;p&gt;&lt;h1&gt;一、禅道项目管理软件是做什么的？&lt;/h1&gt; 禅道由 青岛易软天创网络科技有限公司开发，国产开源项目管理软件。它集产品管理、项目管理、质量管理、文档管理、组织管理和事务管理于一体，是一款专业的研发项目管理软件，完整覆盖了研发项目管理的核心流程。禅道管理思想注重实效，功能完备丰富，操作简洁高效，界面美观大方，搜索功能强大，统计报表丰富多样，软件架构合理，扩展灵活，有完善的API可以调用。禅道，专注研发项目管理 &lt;/p&gt; &lt;p&gt;我是数字符号23@#$%#^$ &lt;/p&gt; &lt;p&gt;我是英文dashcuscbrewg &lt;/p&gt; &lt;/div&gt;', '2' => '&lt;div&gt; &lt;p&gt;&lt;h1&gt;一、禅道项目管理软件是做什么的？&lt;/h1&gt; 禅道由 青岛易软天创网络科技有限公司开发，国产开源项目管理软件。它集产品管理、项目管理、质量管理、文档管理、组织管理和事务管理于一体，是一款专业的研发项目管理软件，完整覆盖了研发项目管理的核心流程。禅道管理思想注重实效，功能完备丰富，操作简洁高效，界面美观大方，搜索功能强大，统计报表丰富多样，软件架构合理，扩展灵活，有完善的API可以调用。禅道，专注研发项目管理 &lt;/p&gt; &lt;p&gt;我是数字符号23@#$%#^$ &lt;/p&gt; &lt;p&gt;我是英文dashcuscbrewg &lt;/p&gt; &lt;/div&gt;', '3' => 'i&lt;div&gt; &lt;p&gt;&lt;h1&gt;一、禅道项目管理软件是做什么的？&lt;/h1&gt; 禅道由 青岛易软天创网络科技有限公司开发，国产开源项目管理软件。它集产品管理、项目管理、质量管理、文档管理、组织管理和事务管理于一体，是一款专业的研发项目管理软件，完整覆盖了研发项目管理的核心流程。禅道管理思想注重实效，功能完备丰富，操作简洁高效，界面美观大方，搜索功能强大，统计报表丰富多样，软件架构合理，扩展灵活，有完善的API可以调用。禅道，专注研发项目管理 &lt;/p&gt; &lt;p&gt;我是数字符号23@#$%#^$ &lt;/p&gt; &lt;p&gt;我是英文dashcuscbrewg &lt;/p&gt; &lt;/div&gt;');
+        $batchUpdateFields['acls']          = array('1' => 'open', '2' => 'open', '3' => 'open');
+
+        foreach($batchUpdateFields as $field => $defaultValue) $_POST[$field] = $defaultValue;
+
+        foreach($param as $key => $value) $_POST[$key] = $value;
+
+        $changes = $this->objectModel->batchUpdate();
+        unset($_POST);
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return $changes[$productID];
+        }
+    }
+
+    /**
+     * Test close a product.
+     *
+     * @param  int    $productID
+     * @access public
+     * @return array
+     */
+    public function closeTest($productID)
+    {
+        $changes = $this->objectModel->close($productID);
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return $changes;
+        }
+    }
+
+    /**
+     * Test manage line.
+     *
+     * @param  array  $param
+     * @access public
+     * @return void
+     */
+    public function manageLineTest($param, $moduleID = 0)
+    {
+        foreach($param as $key => $value) $_POST[$key] = $value;
+
+        $this->objectModel->manageLine();
+        unset($_POST);
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            global $tester;
+
+            $moduleID = $moduleID ? $moduleID : $tester->dao->select('id')->from(TABLE_MODULE)->orderby('id desc')->fetch()->id;
+            $object   = $tester->dao->select('*')->from(TABLE_MODULE)->where('id')->eq($moduleID)->fetch();
+
+            return $object;
+        }
+    }
+
+    /**
+     * Test get stories.
+     *
+     * @param  int    $productID
+     * @param  int    $branch
+     * @param  string $browseType
+     * @param  int    $queryID
+     * @param  int    $moduleID
+     * @access public
+     * @return array
+     */
+    public function getStoriesTest($productID, $branch, $browseType, $queryID, $moduleID)
+    {
+        $objects = $this->objectModel->getStories($productID, $branch, $browseType, $queryID, $moduleID);
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return count($objects);
+        }
+    }
+
+    /**
+     * Test batch get story stage.
+     *
+     * @param  array  $stories
+     * @access public
+     * @return array
+     */
+    public function batchGetStoryStageTest($stories)
+    {
+        $objects = $this->objectModel->batchGetStoryStage($stories);
+
+        foreach($objects as $id => $object) $stages[$id] = $object[0]->stage;
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return $stages;
+        }
+    }
+
+    /**
+     * Test get project stats by product.
+     *
+     * @param  int    $productID
+     * @param  string $browseType
+     * @access public
+     * @return array
+     */
+    public function getProjectStatsByProductTest($productID, $browseType = 'all')
+    {
+        $objects = $this->objectModel->getProjectStatsByProduct($productID, $browseType);
+
+        foreach($objects as $object) $projects[$object->id] = $object->name;
+
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return isset($projects) ? $projects : array();
+        }
+    }
+
+    /**
+     * Test get executions by product and project.
+     *
+     * @param  int    $productID
+     * @param  int    $projectID
+     * @access public
+     * @return array
+     */
+    public function getExecutionPairsByProductTest($productID, $projectID = 0)
+    {
+        $objects = $this->objectModel->getExecutionPairsByProduct($productID, 0, 'id_asc', $projectID);
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return $objects;
+        }
+    }
+
+    /**
+     * Test get all executions by product.
+     *
+     * @param  int    $productID
+     * @access public
+     * @return array
+     */
+    public function getAllExecutionPairsByProductTest($productID)
+    {
+        $objects = $this->objectModel->getAllExecutionPairsByProduct($productID);
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return $objects;
+        }
+    }
+
+    /**
+     * Test get roadmap of a proejct.
+     *
+     * @param  int    $productID
+     * @access public
+     * @return array
+     */
+    public function getRoadmapTest($productID)
+    {
+        $objects = $this->objectModel->getRoadmap($productID);
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return $objects;
+        }
+    }
+
+    /**
+     * Test process roadmap.
+     *
+     * @param  int    $productID
+     * @access public
+     * @return array
+     */
+    public function processRoadmapTest($productID)
+    {
+        global $tester;
+        $releases = $tester->loadModel('release')->getList($productID, '0');
+
+        $roadmapGroups = array('2022' => array($releases));
+
+        $objects = $this->objectModel->processRoadmap($roadmapGroups);
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return $objects;
+        }
+    }
+
+    /**
+     * Test get team members of a product from projects.
+     *
+     * @param  int    $productID
+     * @access public
+     * @return array
+     */
+    public function getTeamMemberPairsTest($productID)
+    {
+        $product = $this->objectModel->getByID($productID);
+        $objects = $this->objectModel->getTeamMemberPairs($product);
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return $objects;
+        }
+    }
+
+    /**
+     * Test get product stat by id.
+     *
+     * @param  int    $productID
+     * @access public
+     * @return array
+     */
+    public function getStatByIDTest($productID)
+    {
+        $objects = $this->objectModel->getStatByID($productID);
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return $objects;
+        }
+    }
+
+    /**
+     * Test get product stats.
+     *
+     * @access public
+     * @return array
+     */
+    public function getStatsTest()
+    {
+        $objects = $this->objectModel->getStats();
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return $objects;
+        }
+    }
+
+    /**
+     * Test stats for product kanban.
+     *
+     * @param  string $type
+     * @param  bool   $getCount
+     * @access public
+     * @return array
+     */
+    public function getStats4KanbanTest($type, $getCount = false)
+    {
+        $objects = $this->objectModel->getStats4Kanban();
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return $getCount ? count($objects[$type]) : $objects[$type];
+        }
+    }
+
+    /**
+     * Test get product line pairs.
+     *
+     * @param  int    $programID
+     * @access public
+     * @return array
+     */
+    public function getLinePairsTest($programID)
+    {
+        $objects = $this->objectModel->getLinePairs($programID);
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return $objects;
+        }
+    }
+
+    /**
+     * Test statistics program data.
+     *
+     * @param  object $productStats
+     * @param  int    $index
+     * @access public
+     * @return array
+     */
+    public function statisticProgramTest($productStats, $index)
+    {
+        $objects = $this->objectModel->statisticProgram($productStats);
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return $objects[$index][$index]['products'];
+        }
+    }
+
+    /**
+     * Test statistics product data.
+     *
+     * @param  object $product
+     * @access public
+     * @return array
+     */
+    public function statisticDataTest($product)
+    {
+        if($product->line)
+        {
+            /* Line name. */
+            $productStructure[$product->program][$product->line]['lineName'] = $product->lineName;
+            $data = $this->objectModel->statisticData('line', $productStructure, $product);
+        }
+
+        if($product->program)
+        {
+            /* Init vars. */
+            /* Program name. */
+            $productStructure[$product->program]['programName'] = $product->programName;
+            $data = $this->objectModel->statisticData('program', $productStructure, $product);
+        }
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return $data;
         }
     }
 }

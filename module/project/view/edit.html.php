@@ -16,6 +16,7 @@
 <?php js::set('weekend', $config->execution->weekend);?>
 <?php js::set('errorSameProducts', $lang->project->errorSameProducts);?>
 <?php js::set('errorSameBranches', $lang->project->errorSameBranches);?>
+<?php js::set('errorSamePlans', $lang->project->errorSamePlans);?>
 <?php js::set('oldParent', $project->parent);?>
 <?php js::set('projectID', $project->id);?>
 <?php js::set('longTime', $lang->project->longTime);?>

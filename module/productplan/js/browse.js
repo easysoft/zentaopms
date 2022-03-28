@@ -355,7 +355,7 @@ function renderKanbanItem(item, $item)
     var today = new Date();
     var begin = $.zui.createDate(item.begin);
     var end   = $.zui.createDate(item.end);
-    if(end.getTime() < today.getTime() && (item.status == 'wait' || item.status == 'doing'))
+    if(item.delay && (item.status == 'wait' || item.status == 'doing'))
     {
         $expired = $titleBox.children('.expired');
         if(!$expired.length)

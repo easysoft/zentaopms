@@ -822,8 +822,9 @@ function finishCard(cardID, kanbanID, regionID)
  * @access public
  * @return boolean
  */
-function updateRegion(regionID, regionData = [])
+function updateRegion(regionID, regionData)
 {
+    if(typeof(regionData) == 'undefined') regionData = [];
     if(!regionID) return false;
 
     var $region = $('#kanban'+ regionID).kanban();

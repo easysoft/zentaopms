@@ -586,3 +586,7 @@ $lang->block->zentaoapp->createEffort         = '记日志';
 $lang->block->zentaoapp->createDoc            = '建文档';
 $lang->block->zentaoapp->createTodo           = '建待办';
 $lang->block->zentaoapp->workbench            = '工作台';
+$lang->block->zentaoapp->notSupportKanban     = '移动端暂不支持研发看板模式';
+$lang->block->zentaoapp->notSupportVersion    = '移动端暂不支持该禅道版本';
+$lang->block->zentaoapp->incompatibleVersion  = '当前禅道版本较低，请升级至最新版本后再试';
+$lang->block->zentaoapp->canNotGetVersion     = '获取禅道版本失败，请确认网址是否正确';

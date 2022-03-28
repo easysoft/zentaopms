@@ -1495,28 +1495,28 @@ function calcColHeight(col, lane, colCards, colHeight, kanban)
          regionCount += 1;
          if(regionCount > 1) return false;
      }
- 
+
      var regionID   = Object.keys(regions)[0];
      var region     = regions[regionID].groups;
      var groupCount = 0;
- 
+
      if($.isEmptyObject(region)) return false;
      for(var j in region)
      {
          groupCount += 1;
          if(groupCount > 1) return false;
      }
- 
+
      var group     = region[0];
      var laneCount = 0;
- 
+
      if($.isEmptyObject(group.lanes)) return false;
      for(var h in group.lanes)
      {
          laneCount += 1;
          if(laneCount > 1) return false;
      }
- 
+
      var regionHeaderHeight = $('.region-header').outerHeight();
      if(fold == 'open')
      {
@@ -1528,7 +1528,7 @@ function calcColHeight(col, lane, colCards, colHeight, kanban)
          var height        = windowHeight - (parseInt(mainPadding) * 2) - (parseInt(bodyPadding) * 2) - headerHeight - (parseInt(panelBorder) * 2);
          var regionPadding = $('.kanban').css('padding-bottom');
          var columnHeight  = $('.kanban-header').outerHeight();
- 
+
          $('.region').css('height', height);
          $('.kanban-lane').css('height', height - regionHeaderHeight - parseInt(regionPadding) - columnHeight);
      }

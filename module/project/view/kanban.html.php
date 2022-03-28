@@ -11,6 +11,7 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/kanban.html.php';?>
+<?php js::set('kanbanGroup', $kanbanGroup);?>
 <?php if(empty($kanbanGroup)):?>
 <div class="table-empty-tip cell">
   <p class="text-muted"><?php echo $lang->project->empty;?></p>
@@ -40,7 +41,6 @@ $userPrivs['project']   = common::hasPriv('project', 'index');
 $userPrivs['execution'] = common::hasPriv('execution', 'task');
 js::set('kanbanColumns',    array_values($kanbanColumns));
 js::set('userPrivs',        $userPrivs);
-js::set('kanbanGroup',      $kanbanGroup);
 js::set('latestExecutions', $latestExecutions);
 js::set('programPairs',     $programPairs);
 js::set('doingText',        $lang->project->statusList['doing']);

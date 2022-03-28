@@ -381,6 +381,7 @@ function createKanban(kanbanID, data, options)
 
 function fullScreen()
 {
+    $('#kanbans .kanban-header').addClass('headerTop');
     var element       = document.getElementById('kanbanContainer');
     var requestMethod = element.requestFullScreen || element.webkitRequestFullScreen || element.mozRequestFullScreen || element.msRequestFullScreen;
     if(requestMethod)
@@ -434,6 +435,7 @@ function fullScreen()
  */
 function exitFullScreen()
 {
+    $('#kanbans .kanban-header').removeClass('headerTop');
     $('#kanbanContainer').removeClass('scrollbar-hover');
     $('.actions').show();
     $('#kanbanContainer a').each(function()

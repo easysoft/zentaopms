@@ -2,11 +2,12 @@
 /**
  * Get product pairs for lite.
  *
- * @param  string $mode
- * @param  string $programID
+ * @param  string       $mode
+ * @param  string       $programID
+ * @param  string|array $append
  * @return array
  */
-public function getPairs($mode = '', $programID = 0)
+public function getPairs($mode = '', $programID = 0, $append = '')
 {
     if(defined('TUTORIAL')) return $this->loadModel('tutorial')->getProductPairs();
 

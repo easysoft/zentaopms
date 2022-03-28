@@ -550,3 +550,24 @@ $lang->block->flowchart['project'] = array('Project Manager', 'Add projects and 
 if($config->systemMode == 'new') $lang->block->flowchart['project'] = array('Project Manager', 'Add ' . $lang->executionCommon . 's', 'Maintain Teams', 'Link Stories', 'Create Tasks', 'Track');
 $lang->block->flowchart['dev']     = array('Dev Team', 'Claim Tasks/Bugs', 'Design', 'Update Status', 'Finish Tasks/Bugs', 'Commit Code');
 $lang->block->flowchart['tester']  = array('Test Team', 'Write Cases', 'Run Cases', 'Report Bugs', 'Verify Bugs', 'Close Bugs');
+
+$lang->block->zentaoapp = new stdclass();
+$lang->block->zentaoapp->thisYearInvestment   = 'Investment The Year';
+$lang->block->zentaoapp->sinceTotalInvestment = 'Total Investment';
+$lang->block->zentaoapp->myStory              = 'My Story';
+$lang->block->zentaoapp->allStorySum          = 'Total Stories';
+$lang->block->zentaoapp->storyCompleteRate    = 'Story CompleteRate';
+$lang->block->zentaoapp->latestExecution      = 'Latest Execution';
+$lang->block->zentaoapp->involvedExecution    = 'Involved Execution';
+$lang->block->zentaoapp->mangedProduct        = 'Manged Product';
+$lang->block->zentaoapp->involvedProject      = 'Involved Project';
+$lang->block->zentaoapp->customIndexCard      = 'Custom Index Cards';
+$lang->block->zentaoapp->createStory          = 'Story Create';
+$lang->block->zentaoapp->createEffort         = 'Effort Create';
+$lang->block->zentaoapp->createDoc            = 'Doc Create';
+$lang->block->zentaoapp->createTodo           = 'Todo Create';
+$lang->block->zentaoapp->workbench            = 'Workbench';
+$lang->block->zentaoapp->notSupportKanban     = 'The mobile terminal does not support the R&D Kanban mode';
+$lang->block->zentaoapp->notSupportVersion    = 'This version of ZenTao is not currently supported on the mobile terminal';
+$lang->block->zentaoapp->incompatibleVersion  = 'The current version of ZenTao is lower, please upgrade to the latest version and try again';
+$lang->block->zentaoapp->canNotGetVersion     = 'Failed to get ZenTao version, please confirm if the URL is correct';
