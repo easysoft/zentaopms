@@ -11,4 +11,11 @@ $(function()
     }
 
     $('#main .main-content li.has-list').addClass('open in');
+
+    $('.menu-actions > a').click(function()
+    {
+        $(this).parent().hasClass('open') ? $(this).css('background', 'none') : $(this).css('background', '#f1f1f1');
+    })
+
+    $('.menu-actions > a').blur(function() {$(this).css('background', 'none');})
 })
