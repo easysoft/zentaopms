@@ -105,7 +105,7 @@ class projectrelease extends control
 
         if(!empty($_POST))
         {
-            $releaseID = $this->projectrelease->create($projectID);
+            $releaseID = $this->release->create(0, 0, $projectID);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             $this->loadModel('action')->create('release', $releaseID, 'opened');
 
