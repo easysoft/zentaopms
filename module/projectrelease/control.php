@@ -95,7 +95,7 @@ class projectrelease extends control
      * @access public
      * @return void
      */
-    public function create($projectID)
+    public function create($productID = 0, $branch = 0, $projectID = 0)
     {
         /* Load module and config. */
         $this->loadModel('build');
@@ -105,7 +105,7 @@ class projectrelease extends control
 
         if(!empty($_POST))
         {
-            $releaseID = $this->projectrelease->create($projectID);
+            $releaseID = $this->release->create(0, 0, $projectID);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             $this->loadModel('action')->create('release', $releaseID, 'opened');
 
