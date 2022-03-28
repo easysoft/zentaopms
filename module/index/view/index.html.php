@@ -82,7 +82,7 @@ js::set('showFeatures', $showFeatures);
   <ul id='bars' class='nav nav-default'></ul>
   <div id='poweredBy'>
     <div id="globalBarLogo">
-      <?php if($config->vision == 'lite'):?>
+      <?php if(trim($config->visions, ',') == 'lite'):?>
       <?php $version     = $config->liteVersion;?>
       <?php $versionName = $lang->liteName . $config->liteVersion;?>
       <?php else:?>
