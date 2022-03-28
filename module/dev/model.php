@@ -3,7 +3,7 @@ class devModel extends model
 {
     /**
      * Get All tables.
-     * 
+     *
      * @access public
      * @return array
      */
@@ -30,8 +30,8 @@ class devModel extends model
 
     /**
      * Get fields of table.
-     * 
-     * @param  string $table 
+     *
+     * @param  string $table
      * @access public
      * @return void
      */
@@ -69,7 +69,7 @@ class devModel extends model
             $type     = substr($rawField->type, 0, $firstPOS > 0 ? $firstPOS : strlen($rawField->type));
             $type     = str_replace(array('big', 'small', 'medium', 'tiny'), '', $type);
             $field    = array();
-            $field['name'] = isset($this->lang->$module->{$rawField->field}) ? $this->lang->$module->{$rawField->field} : '';
+            $field['name'] = isset($this->lang->$module->{$rawField->field}) ? sprintf($this->lang->$module->{$rawField->field}, $this->lang->dev->tableList[$module]) : '';
             if((empty($field['name']) or !is_string($field['name'])) and $aliasModule) $field['name'] = isset($this->lang->$aliasModule->{$rawField->field}) ? $this->lang->$aliasModule->{$rawField->field} : '';
             if($subLang) $field['name'] = isset($this->lang->$aliasModule->$subLang->{$rawField->field}) ? $this->lang->$aliasModule->$subLang->{$rawField->field} : $field['name'];
             if(!is_string($field['name'])) $field['name'] = '';
@@ -129,8 +129,8 @@ class devModel extends model
 
     /**
      * Get APIs of a module.
-     * 
-     * @param  string $module 
+     *
+     * @param  string $module
      * @access public
      * @return void
      */
@@ -256,8 +256,8 @@ class devModel extends model
 
     /**
      * Trim asterisks and whitespace from the beginning and whitespace from the end of lines.
-     * 
-     * @param  string    $line 
+     *
+     * @param  string    $line
      * @access public
      * @return string
      */
