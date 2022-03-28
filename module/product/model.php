@@ -631,7 +631,7 @@ class productModel extends model
 
                     $this->dao->update(TABLE_MODULE)->set('path')->eq($path)->where('id')->eq($lineID)->exec();
 
-                    $this->dao->update(TABLE_PRODUCT)->set('line')->eq($laneID)->where('id')->eq($productID)->exec();
+                    $this->dao->update(TABLE_PRODUCT)->set('line')->eq($lineID)->where('id')->eq($productID)->exec();
                 }
             }
 
