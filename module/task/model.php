@@ -1866,7 +1866,6 @@ class taskModel extends model
      */
     public function cancel($taskID, $extra = '')
     {
-        $this->loadModel('action');
         $extra = str_replace(array(',', ' '), array('&', ''), $extra);
         parse_str($extra, $output);
 
@@ -1889,19 +1888,17 @@ class taskModel extends model
         if($oldTask->parent > 0) $this->updateParentStatus($taskID);
         if($oldTask->parent == '-1')
         {
-            $oldChildrenTasks = $this->dao->select('*')->from(TABLE_TASK)->where('parent')->eq($taskID)->andWhere('deleted')->eq(0)->fetchAll('id');
+            $oldChildrenTasks = $this->dao->select('*')->from(TABLE_TASK)->where('parent')->eq($taskID)->fetchAll('id');
             unset($task->assignedTo);
             $this->dao->update(TABLE_TASK)->data($task)->autoCheck()->where('parent')->eq((int)$taskID)->exec();
             $this->dao->update(TABLE_TASK)->set('assignedTo=openedBy')->where('parent')->eq((int)$taskID)->exec();
-            if(!dao::isError())
+            if(!dao::isError() and count($oldChildrenTasks) > 0)
             {
-                if(count($oldChildrenTasks) > 0)
+                $this->loadModel('action');
+                foreach($oldChildrenTasks as $oldChildrenTask)
                 {
-                    foreach($oldChildrenTasks as $oldChildrenTask)
-                    {
-                        $actionID  = $this->action->create('task', $oldChildrenTask->id, 'Canceled', $this->post->comment);
-                        $this->action->logHistory($actionID, common::createChanges($oldChildrenTask, $task));
-                    }
+                    $actionID  = $this->action->create('task', $oldChildrenTask->id, 'Canceled', $this->post->comment);
+                    $this->action->logHistory($actionID, common::createChanges($oldChildrenTask, $task));
                 }
             }
         }
@@ -1924,7 +1921,6 @@ class taskModel extends model
      */
     public function activate($taskID, $extra)
     {
-        $this->loadModel('action');
         $extra = str_replace(array(',', ' '), array('&', ''), $extra);
         parse_str($extra, $output);
 
@@ -1975,19 +1971,17 @@ class taskModel extends model
         if($oldTask->parent > 0) $this->updateParentStatus($taskID);
         if($oldTask->parent == '-1')
         {
-            $oldChildrenTasks = $this->dao->select('*')->from(TABLE_TASK)->where('parent')->eq($taskID)->andWhere('deleted')->eq(0)->fetchAll('id');
+            $oldChildrenTasks = $this->dao->select('*')->from(TABLE_TASK)->where('parent')->eq($taskID)->fetchAll('id');
             unset($task->left);
             $this->dao->update(TABLE_TASK)->data($task)->autoCheck()->where('parent')->eq((int)$taskID)->exec();
             $this->computeWorkingHours($taskID);
-            if(!dao::isError())
+            if(!dao::isError() and count($oldChildrenTasks) > 0)
             {
-                if(count($oldChildrenTasks) > 0)
+                $this->loadModel('action');
+                foreach($oldChildrenTasks as $oldChildrenTask)
                 {
-                    foreach($oldChildrenTasks as $oldChildrenTask)
-                    {
-                        $actionID  = $this->action->create('task', $oldChildrenTask->id, 'Activated', $this->post->comment);
-                        $this->action->logHistory($actionID, common::createChanges($oldChildrenTask, $task));
-                    }
+                    $actionID  = $this->action->create('task', $oldChildrenTask->id, 'Activated', $this->post->comment);
+                    $this->action->logHistory($actionID, common::createChanges($oldChildrenTask, $task));
                 }
             }
         }
