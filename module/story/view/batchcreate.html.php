@@ -19,6 +19,10 @@
       <button type='button' data-toggle='modal' data-target="#importLinesModal" class="btn btn-primary"><?php echo $lang->pasteText;?></button>
       <?php $customLink = $this->createLink('custom', 'ajaxSaveCustomFields', 'module=story&section=custom&key=batchCreateFields')?>
       <?php include '../../common/view/customfield.html.php';?>
+      <?php if(isonlybody()):?>
+      <div class="divider"></div>
+      <button id="closeModal" type="button" class="btn btn-link" data-dismiss="modal"><i class="icon icon-close"></i></button>
+      <?php endif;?>
     </div>
   </div>
   <?php
@@ -150,7 +154,7 @@ $(function()
                     $select.next('.chosen-container').find('.chosen-drop').width($select.closest('td').width() + 50);
                 }, 200);
               });
-              var storyTitle = storyTitles && storyTitles[index];
+              var storyTitle = storyTitles && storyTitles[index - 1];
               if (storyTitle !== undefined && storyTitle !== null)
               {
                   $row.find('.input-story-title').val(storyTitle).after('<input type="hidden" name="uploadImage[' + index + ']" id="uploadImage[' + index + ']" value="' + imageTitles[storyTitle] + '">');
@@ -172,5 +176,18 @@ $(function()
 </script>
 <?php if(isset($execution)) js::set('execution', $execution);?>
 <?php js::set('storyType', $type);?>
+<?php if(isonlybody()):?>
+<style>
+.body-modal .main-header {padding-right: 0px;}
+.btn-toolbar > .dropdown {margin: 0px;}
+</style>
+<script>
+$(function()
+{
+    parent.$('#triggerModal .modal-content .modal-header .close').hide();
+    $('#closeModal').on('click', function(){window.parent.$.closeModal();})
+})
+</script>
+<?php endif;?>
 <?php include '../../common/view/pastetext.html.php';?>
 <?php include '../../common/view/footer.html.php';?>
