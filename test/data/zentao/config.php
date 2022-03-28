@@ -40,6 +40,7 @@ $builder->testtask   = array('rows' => 10, 'extends' => array('testtask'));
 $builder->testresult = array('rows' => 40, 'extends' => array('testresult'));
 $builder->testrun    = array('rows' => 40, 'extends' => array('testrun'));
 $builder->testreport = array('rows' => 10, 'extends' => array('testreport'));
+$builder->testsuite  = array('rows' => 201, 'extends' => array('testsuite'));
 
 $builder->product             = array('rows' => 100, 'extends' => array('product'));
 $builder->productalone        = array('rows' => 20, 'extends' => array('product','productalone'));
