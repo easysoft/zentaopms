@@ -17,8 +17,8 @@ pid=1
 
 $product = new productTest('admin');
 
-$t_retion = array('1', '1', '101');
+$t_retion = array('1', '1', '10001');
 
 r($product->getAllProjectsByProduct($t_retion[0]))   && p('11:name') && e('项目1');     // 返回产品1关联的项目11名字
 r($product->getAllProjectsByProduct($t_retion[1]))   && p('21:name') && e('项目11');    // 返回产品1关联的项目21名字
-r($product->getAllProjectsByProduct($t_retion[2]))   && p()           && e('没有数据');  // 传入不存在的产品
+r($product->getAllProjectsByProduct($t_retion[2]))   && p()          && e('没有数据');  // 传入不存在的产品

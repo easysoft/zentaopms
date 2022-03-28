@@ -19,7 +19,7 @@ $product = new productTest('admin');
 
 $t_project25 = array('id'=>'25');
 $t_project38 = array('id'=>'38');
-$t_project101 = array('id'=>'101');
+$t_project101 = array('id'=>'10001');
 
 r($product->testGetLatestProject($t_project25['id']))  && p('id') && e('395');      // 测试产品25关联的最后一个未关闭的项目,按begin字段排序
 r($product->testGetLatestProject($t_project38['id']))  && p('id') && e('688');      // 测试产品38关联的最后一个未关闭的项目,按begin字段排序
