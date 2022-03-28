@@ -742,6 +742,9 @@ class apiModel extends model
      */
     public function createDemoData($name, $baseUrl, $version = '16.0')
     {
+        /* Replace the doc lib name to api lib name. */
+        $this->lang->doclib->name = $this->lang->doclib->apiLibName;
+
         $firstAccount   = $this->dao->select('account')->from(TABLE_USER)->orderBy('id_asc')->limit(1)->fetch('account');
         $currentAccount = isset($this->app->user->account) ? $this->app->user->account : $firstAccount;
 
@@ -752,7 +755,10 @@ class apiModel extends model
         $lib->baseUrl = $baseUrl;
         $lib->acl     = 'open';
         $lib->users   = ',' . $currentAccount . ',';
-        $this->dao->insert(TABLE_DOCLIB)->data($lib)->exec();
+        $this->dao->insert(TABLE_DOCLIB)->data($lib)->autoCheck()
+            ->batchCheck($this->config->api->createlib->requiredFields, 'notempty')
+            ->check('name', 'unique', "`type` = 'api'")
+            ->exec();
 
         $libID = $this->dao->lastInsertID();
 

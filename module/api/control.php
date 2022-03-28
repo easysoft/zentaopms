@@ -319,21 +319,15 @@ class api extends control
     {
         if(!empty($_POST))
         {
-            if($type == 'demo')
-            {
-                $libID = $this->api->createDemoData($this->post->name, $this->post->baseUrl);
-                return $this->sendSuccess(array('locate' => $this->createLink('api', 'index', "libID=$libID")));
-            }
+            $libID = $type == 'demo' ? $this->api->createDemoData($this->post->name, $this->post->baseUrl) : $this->doc->createApiLib();
+            if(dao::isError())  return $this->sendError(dao::getError());
 
-            /* save api doc library */
-            $libID = $this->doc->createApiLib();
-            if(dao::isError())
-            {
-                return $this->sendError(dao::getError());
-            }
+            /* If the created api library of imported zentao api library, return directly. */
+            if($type == 'demo') return $this->sendSuccess(array('locate' => $this->createLink('api', 'index', "libID=$libID")));
+
+            /* Record action for create api library. */
             $this->action->create('docLib', $libID, 'Created');
 
-            /* save doc library success */
             return $this->sendSuccess(array('locate' => $this->createLink('api', 'index', "libID=$libID")));
         }
 
