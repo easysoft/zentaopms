@@ -19,6 +19,10 @@
       <button type='button' data-toggle='modal' data-target="#importLinesModal" class="btn btn-primary"><?php echo $lang->pasteText;?></button>
       <?php $customLink = $this->createLink('custom', 'ajaxSaveCustomFields', 'module=story&section=custom&key=batchCreateFields')?>
       <?php include '../../common/view/customfield.html.php';?>
+      <?php if(isonlybody()):?>
+      <div class="divider"></div>
+      <button id="closeModal" type="button" class="btn btn-link" data-dismiss="modal"><i class="icon icon-close"></i></button>
+      <?php endif;?>
     </div>
   </div>
   <?php
@@ -177,12 +181,10 @@ $(function()
 .body-modal .main-header {padding-right: 0px;}
 .btn-toolbar > .dropdown {margin: 0px;}
 </style>
-<?php $html = '<div class="divider"></div><button id="closeModal" type="button" class="btn btn-link" data-dismiss="modal"><i class="icon icon-close"></i></button>';?>
 <script>
 $(function()
 {
     parent.$('#triggerModal .modal-content .modal-header .close').hide();
-    $('#mainContent .main-header .pull-right.btn-toolbar').append(<?php echo json_encode($html)?>);
     $('#closeModal').on('click', function(){window.parent.$.closeModal();})
 })
 </script>
