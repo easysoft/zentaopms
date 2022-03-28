@@ -150,7 +150,7 @@ $(function()
                     $select.next('.chosen-container').find('.chosen-drop').width($select.closest('td').width() + 50);
                 }, 200);
               });
-              var storyTitle = storyTitles && storyTitles[index];
+              var storyTitle = storyTitles && storyTitles[index - 1];
               if (storyTitle !== undefined && storyTitle !== null)
               {
                   $row.find('.input-story-title').val(storyTitle).after('<input type="hidden" name="uploadImage[' + index + ']" id="uploadImage[' + index + ']" value="' + imageTitles[storyTitle] + '">');
