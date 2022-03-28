@@ -43,7 +43,7 @@
                     <div class="table-row row-module">
                       <div class="table-col col-module"><?php echo html::input("modules[id$line->id]", $line->name, 'class="form-control"');?></div>
                       <?php if($this->config->systemMode == 'new'):?>
-                      <div class="table-col col-programs"><?php echo html::select("programs[id$line->id]", $programs, $line->root, "class='form-control chosen'");?></div>
+                      <div class="table-col col-programs"><?php echo html::select("programs[id$line->id]", $programs, $line->root, "class='form-control chosen' required");?></div>
                       <?php endif;?>
                       <div class="table-col col-actions"> </div>
                     </div>
@@ -52,7 +52,7 @@
                     <div class="table-row row-module row-module-new">
                       <div class="table-col col-module"><?php echo html::input("modules[]", '', "class='form-control'");?></div>
                       <?php if($this->config->systemMode == 'new'):?>
-                      <div class="table-col col-programs"><?php echo html::select("programs[]", $programs, '', "class='form-control chosen'");?></div>
+                      <div class="table-col col-programs"><?php echo html::select("programs[]", $programs, '', "class='form-control chosen' required");?></div>
                       <?php endif;?>
                       <div class="table-col col-actions">
                         <button type="button" class="btn btn-link btn-icon btn-add" onclick="addItem(this)"><i class="icon icon-plus"></i></button>
@@ -60,12 +60,12 @@
                       </div>
                     </div>
                   <?php endfor;?>
-                  </div> 
+                  </div>
                   <div id="insertItemBox" class="template">
                     <div class="table-row row-module row-module-new">
                       <div class="table-col col-module"><?php echo html::input("modules[]", '', "class='form-control'");?></div>
                       <?php if($this->config->systemMode == 'new'):?>
-                      <div class="table-col col-programs"><?php echo html::select("programs[]", $programs, '', "class='form-control chosen'");?></div>
+                      <div class="table-col col-programs"><?php echo html::select("programs[]", $programs, '', "class='form-control chosen' required");?></div>
                       <?php endif;?>
                       <div class="table-col col-actions">
                         <button type="button" class="btn btn-link btn-icon btn-add" onclick="addItem(this)"><i class="icon icon-plus"></i></button>
