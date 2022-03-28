@@ -621,9 +621,9 @@ class programModel extends model
 
                 /* The budget of a child program cannot beyond the remaining budget of the parent program. */
                 $program->budgetUnit = $parentProgram->budgetUnit;
-                if(isset($program->budget) and $parentProgram->budget != 0)
+                if(isset($program->budget))
                 {
-                    $availableBudget = $this->getBudgetLeft($parentProgram);
+                    $availableBudget = $this->getProgramBudgetLeft($parentProgram);
                     if($program->budget > $availableBudget) dao::$errors['budget'] = $this->lang->program->beyondParentBudget;
                 }
 
@@ -722,9 +722,9 @@ class programModel extends model
 
             /* The budget of a child program cannot beyond the remaining budget of the parent program. */
             $program->budgetUnit = $parentProgram->budgetUnit;
-            if($program->budget != 0 and $parentProgram->budget != 0)
+            if($program->budget != 0)
             {
-                $availableBudget = $this->getBudgetLeft($parentProgram);
+                $availableBudget = $this->getProgramBudgetLeft($parentProgram);
                 if($program->budget > $availableBudget + $oldProgram->budget) dao::$errors['budget'] = $this->lang->program->beyondParentBudget;
             }
         }
@@ -1102,10 +1102,50 @@ class programModel extends model
         $childSumBudget = $this->dao->select("sum(budget) as sumBudget")->from(TABLE_PROGRAM)
             ->where('path')->like("%{$parentProgram->id}%")
             ->andWhere('grade')->eq($childGrade)
+            ->andWhere('deleted')->eq(0)
             ->fetch('sumBudget');
 
         return (float)$parentProgram->budget - (float)$childSumBudget;
     }
+
+    /**
+     * Get program budget left.
+     *
+     * @param  int    $program
+     * @access public
+     * @return int
+     */
+    public function getProgramBudgetLeft($program)
+    {
+        if(empty($program->id)) return;
+
+        if($program->budget > 0) return $this->getBudgetLeft($program);
+
+        $programList = array();
+        $programs = $this->dao->select('*')->from(TABLE_PROGRAM)
+            ->where('id')->in($program->path)
+            ->andWhere('deleted')->eq(0)
+            ->andWhere('type')->eq('program')
+            ->orderBy('id_asc')
+            ->fetchAll();
+
+        foreach($programs as $id => $program)
+        {
+            $left = $this->getBudgetLeft($program);
+            if(isset($programs[$id + 1]) and $programs[$id + 1]->budget <= 0)
+            {
+                $programs[$id + 1]->budget = $left;
+            }
+            elseif(!isset($programs[$id + 1]))
+            {
+                $budgetLeft = $left;
+                break;
+            }
+        }
+
+        return $budgetLeft > 0 ? $budgetLeft : 0;
+    }
+
 
     /**
      * Get program parent pairs

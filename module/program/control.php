@@ -176,7 +176,7 @@ class program extends control
         $this->view->parents        = $this->program->getParentPairs();
         $this->view->programList    = $this->program->getList();
         $this->view->budgetUnitList = $this->project->getBudgetUnitList();
-        $this->view->budgetLeft     = $this->program->getBudgetLeft($parentProgram);
+        $this->view->budgetLeft     = $this->program->getProgramBudgetLeft($parentProgram);
 
         $this->display();
     }
@@ -222,7 +222,7 @@ class program extends control
         $this->view->programList     = $this->program->getList();
         $this->view->budgetUnitList  = $this->program->getBudgetUnitList();
         $this->view->parentProgram   = $parentProgram;
-        $this->view->availableBudget = $this->program->getBudgetLeft($parentProgram) + (float)$program->budget;
+        $this->view->availableBudget = $this->program->getProgramBudgetLeft($parentProgram) + (float)$program->budget;
 
         $this->display();
     }
@@ -675,7 +675,7 @@ class program extends control
     public function ajaxGetBudgetLeft($programID)
     {
         $program    = $this->program->getByID($programID);
-        $budgetLeft = $this->program->getBudgetLeft($program);
+        $budgetLeft = $this->program->getProgramBudgetLeft($program);
         echo number_format($budgetLeft, 2);
     }
 
