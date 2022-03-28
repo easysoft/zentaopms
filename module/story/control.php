@@ -1374,7 +1374,8 @@ class story extends control
                 $execution = $this->execution->getByID($this->session->execution);
                 if($this->app->tab == 'execution' and $execution->type == 'kanban' and $this->app->tab == 'execution')
                 {
-                    $kanbanData = $this->loadModel('kanban')->getRDKanban($this->session->execution, $this->session->execLaneType ? $this->session->execLaneType : 'all');
+                    $this->loadModel('kanban')->updateLane($this->session->execution, 'story', $storyID);
+                    $kanbanData = $this->kanban->getRDKanban($this->session->execution, $this->session->execLaneType ? $this->session->execLaneType : 'all');
                     $kanbanData = json_encode($kanbanData);
 
                     return print(js::closeModal('parent.parent', '', "parent.parent.updateKanban($kanbanData)"));
