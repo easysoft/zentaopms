@@ -55,30 +55,13 @@ class storyEntry extends Entry
 
         $users = $this->loadModel('user')->getList();
 
-        $simplifyUsers = array();
-        foreach($users as $user)
-        {
-            $simplifyUser = new stdclass();
-            $simplifyUser->id       = $user->id;
-            $simplifyUser->account  = $user->account;
-            $simplifyUser->realname = $user->realname;
-            $simplifyUser->avatar   = $user->avatar;
-            $simplifyUsers[$user->account] = $simplifyUser;
-        }
-
         $storyTasks = array();
         foreach($story->tasks as $executionTasks)
         {
             foreach($executionTasks as $task)
             {
                 if(!isset($data->data->executions->{$task->execution})) continue;
-                $assignedTo = new stdClass();
-                $assignedTo->account  = $simplifyUsers[$task->assignedTo]->account;
-                $assignedTo->realname = $simplifyUsers[$task->assignedTo]->realname;
-                $assignedTo->avatar   = $simplifyUsers[$task->assignedTo]->avatar;
-
-                $task->assign = $assignedTo;
-                $storyTasks[] = $this->filterFields($task, 'id,name,type,status,assignedTo');
+                $storyTasks[] = $this->filterFields($task, 'id,name,type,status');
             }
         }
         $story->tasks = $storyTasks;
