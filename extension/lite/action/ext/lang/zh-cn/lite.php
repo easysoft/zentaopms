@@ -3,6 +3,8 @@ $lang->action->label->execution = "看板|execution|task|executionID=%s";
 $lang->action->label->task      = '任务|task|view|taskID=%s';
 
 /* Object type. */
+$lang->action->objectTypes['execution'] = '项目' . $lang->executionCommon;
+
 $lang->action->search = new stdclass();
 $lang->action->search->objectTypeList['']            = '';
 $lang->action->search->objectTypeList['project']     = '项目';
