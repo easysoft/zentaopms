@@ -4510,6 +4510,7 @@ class upgradeModel extends model
             $program->acl           = isset($data->programAcl) ? $data->programAcl : 'open';
             $program->days          = $this->computeDaysDelta($program->begin, $program->end);
             $program->PM            = $data->projectType == 'project' ? $data->PM : '';
+            $program->vision        = 'rnd';
 
             $this->app->loadLang('program');
             $this->app->loadLang('project');
@@ -4557,6 +4558,7 @@ class upgradeModel extends model
                 $line->order  = $maxOrder;
                 $this->dao->insert(TABLE_MODULE)->data($line)->exec();
                 $lineID = $this->dao->lastInsertID();
+
                 $path   = ",$lineID,";
                 $this->dao->update(TABLE_MODULE)->set('path')->eq($path)->where('id')->eq($lineID)->exec();
 

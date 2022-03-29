@@ -400,8 +400,8 @@ class upgrade extends control
         }
 
         /* Get no merged product and project count. */
-        $noMergedProductCount = $this->dao->select('count(*) as count')->from(TABLE_PRODUCT)->where('program')->eq(0)->fetch('count');
-        $noMergedSprintCount  = $this->dao->select('count(*) as count')->from(TABLE_PROJECT)->where('grade')->eq(0)->andWhere('path')->eq('')->andWhere('type')->ne('program')->andWhere('deleted')->eq(0)->fetch('count');
+        $noMergedProductCount = $this->dao->select('count(*) as count')->from(TABLE_PRODUCT)->where('program')->eq(0)->andWhere('vision')->eq('rnd')->fetch('count');
+        $noMergedSprintCount  = $this->dao->select('count(*) as count')->from(TABLE_PROJECT)->where('grade')->eq(0)->andWhere('vision')->eq('rnd')->andWhere('path')->eq('')->andWhere('type')->ne('program')->andWhere('deleted')->eq(0)->fetch('count');
 
         /* When all products and projects merged then finish and locate afterExec page. */
         if(empty($noMergedProductCount) and empty($noMergedSprintCount))
@@ -432,13 +432,14 @@ class upgrade extends control
         {
             $productlines = $this->dao->select('*')->from(TABLE_MODULE)->where('type')->eq('line')->andWhere('root')->eq(0)->orderBy('id_desc')->fetchAll('id');
 
-            $noMergedProducts = $this->dao->select('*')->from(TABLE_PRODUCT)->where('line')->in(array_keys($productlines))->orderBy('id_desc')->fetchAll('id');
+            $noMergedProducts = $this->dao->select('*')->from(TABLE_PRODUCT)->where('line')->in(array_keys($productlines))->andWhere('vision')->eq('rnd')->orderBy('id_desc')->fetchAll('id');
             if(empty($productlines) || empty($noMergedProducts)) $this->locate($this->createLink('upgrade', 'mergeProgram', "type=product&programID=0&projectType=$projectType"));
 
             $noMergedSprints = $this->dao->select('t1.*')->from(TABLE_PROJECT)->alias('t1')
                 ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t2')->on('t1.id=t2.project')
                 ->where('t1.project')->eq(0)
                 ->andWhere('t1.deleted')->eq(0)
+                ->andWhere('t1.vision')->eq('rnd')
                 ->andWhere('t1.type')->eq('sprint')
                 ->andWhere('t2.product')->in(array_keys($noMergedProducts))
                 ->orderBy('t1.id_desc')
@@ -483,6 +484,7 @@ class upgrade extends control
                 ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')
                 ->where('t2.model')->eq('')
                 ->andWhere('t2.project')->eq(0)
+                ->andWhere('t2.vision')->eq('rnd')
                 ->andWhere('t2.deleted')->eq(0)
                 ->andWhere('t2.type')->eq('sprint')
                 ->fetchAll('id');
@@ -503,10 +505,11 @@ class upgrade extends control
             $noMergedProducts = $this->dao->select('t1.*')->from(TABLE_PRODUCT)->alias('t1')
                 ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t2')->on('t1.id=t2.product')
                 ->where('t2.project')->in(array_keys($noMergedSprints))
+                ->andWhere('t1.vision')->eq('rnd')
                 ->fetchAll('id');
 
             /* Add products without sprints. */
-            $noMergedProducts += $this->dao->select('*')->from(TABLE_PRODUCT)->where('program')->eq(0)->fetchAll('id');
+            $noMergedProducts += $this->dao->select('*')->from(TABLE_PRODUCT)->where('program')->eq(0)->andWhere('vision')->eq('rnd')->fetchAll('id');
 
             if(empty($noMergedProducts)) $this->locate($this->createLink('upgrade', 'mergeProgram', "type=sprint&programID=0&projectType=$projectType"));
 
@@ -531,6 +534,7 @@ class upgrade extends control
             $noMergedSprints = $this->dao->select('*')->from(TABLE_PROJECT)
                 ->where('parent')->eq(0)
                 ->andWhere('path')->eq('')
+                ->andWhere('vision')->eq('rnd')
                 ->andWhere('deleted')->eq(0)
                 ->orderBy('id_desc')
                 ->fetchAll('id');
@@ -548,6 +552,7 @@ class upgrade extends control
         {
             $noMergedSprints = $this->dao->select('*')->from(TABLE_PROJECT)
                 ->where('parent')->eq(0)
+                ->andWhere('vision')->eq('rnd')
                 ->andWhere('path')->eq('')
                 ->andWhere('deleted')->eq(0)
                 ->orderBy('id_desc')
@@ -566,6 +571,7 @@ class upgrade extends control
             $projects = $this->dao->select('t1.*,t2.product as productID')->from(TABLE_PROJECT)->alias('t1')
                 ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t2')->on('t1.id=t2.project')
                 ->where('t2.product')->in($productPairs)
+                ->andWhere('t1.vision')->eq('rnd')
                 ->andWhere('t1.type')->eq('project')
                 ->fetchAll('productID');
 
@@ -578,7 +584,7 @@ class upgrade extends control
                     if($project) $sprint->projects[$project->id] = $project->name;
                 }
 
-                if(!isset($sprint->projects)) $sprint->projects = $this->dao->select('id,name')->from(TABLE_PROJECT)->where('type')->eq('project')->fetchPairs();
+                if(!isset($sprint->projects)) $sprint->projects = $this->dao->select('id,name')->from(TABLE_PROJECT)->where('type')->eq('project')->andWhere('vision')->eq('rnd')->fetchPairs();
             }
 
             $this->view->noMergedSprints = $noMergedSprints;
