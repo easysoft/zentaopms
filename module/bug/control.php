@@ -1259,7 +1259,14 @@ class bug extends control
                     return print(js::closeModal('parent.parent'));
                 }
             }
-            return print(js::locate($this->createLink('bug', 'view', "bugID=$bugID"), 'parent'));
+            if(defined('RUN_MODE') && RUN_MODE == 'api')
+            {    
+                return $this->send(array('status' => 'success', 'data' => $bugID));
+            }    
+            else 
+            {    
+                return print(js::locate($this->createLink('bug', 'view', "bugID=$bugID"), 'parent'));
+            }    
         }
 
         if($this->app->tab == 'project')
@@ -1711,7 +1718,7 @@ class bug extends control
             }
             if(defined('RUN_MODE') && RUN_MODE == 'api')
             {
-                return print(array('status' => 'success', 'data' => $bugID));
+                return $this->send(array('status' => 'success', 'data' => $bugID));
             }
             else
             {
