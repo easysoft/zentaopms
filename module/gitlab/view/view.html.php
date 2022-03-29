@@ -18,6 +18,9 @@
     <div class="page-title">
       <span class="label label-id"><?php echo $gitlab->id?></span>
       <span class="text" title="<?php echo $gitlab->name;?>" style='color: #3c4354'><?php echo $gitlab->name;?></span>
+      <?php if($gitlab->deleted):?>
+      <span class='label label-danger'><?php echo $lang->gitlab->deleted;?></span>
+      <?php endif; ?>
     </div>
   </div>
 </div>
