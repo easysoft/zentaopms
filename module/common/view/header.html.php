@@ -48,6 +48,10 @@ include 'chosen.html.php';
 <?php endif;?>
 <script>
 adjustMenuWidth();
+if(window.navigator.userAgent.indexOf('xuanxuan') > 0)
+{
+  $('li.user-tutorial').addClass('hide');
+}
 </script>
 <main id='main' <?php if(!empty($config->sso->redirect)) echo "class='ranzhiFixedTfootAction'";?> >
   <div class='container'>
