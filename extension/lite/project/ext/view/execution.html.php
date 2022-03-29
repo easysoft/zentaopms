@@ -37,8 +37,22 @@
   </div>
   <?php else:?>
     <div class='kanban-cards'>
+      <?php 
+        $kanbanview = 'kanban';
+        if($this->cookie->kanbanview)
+        {
+            $kanbanview = $this->cookie->kanbanview;
+        }
+        else
+        {
+            foreach (explode('|', 'kanban|task|calendar|gantt|tree|grouptask') as $view) 
+            {
+                if(common::hasPriv('execution', $view)) $kanbanview = 'kanban';
+            }
+        }
+      ?>
       <?php foreach($kanbanList as $index => $kanban):?>
-        <div id="kanban-<?php echo $kanban->id;?>" class='kanban-card col' data-url='<?php echo $this->createLink('execution', $this->cookie->kanbanview ? $this->cookie->kanbanview : 'kanban', "kanbanID=$kanban->id");?>'>
+        <div id="kanban-<?php echo $kanban->id;?>" class='kanban-card col' data-url='<?php echo $this->createLink('execution', $kanbanview, "kanbanID=$kanban->id");?>'>
           <div class="panel">
             <div class="panel-heading">
               <span class="label kanban-status-<?php echo $kanban->status;?>"><?php echo zget($lang->execution->statusList, $kanban->status);?></span>
