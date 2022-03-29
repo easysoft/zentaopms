@@ -305,14 +305,6 @@ class executionModel extends model
             $type    = 'sprint';
             if($project) $type = zget($this->config->execution->modelList, $project->model, 'sprint');
 
-            /* Judge workdays is legitimate. */
-            $workdays = helper::diffDate($_POST['end'], $_POST['begin']) + 1;
-            if(isset($_POST['days']) and $_POST['days'] > $workdays)
-            {
-                dao::$errors['days'] = sprintf($this->lang->project->workdaysExceed, $workdays);
-                return false;
-            }
-
             /* If the execution model is a stage, determine whether the product is linked. */
             $products = array_filter($this->post->products);
             if(empty($products))
@@ -322,6 +314,14 @@ class executionModel extends model
             }
 
             $this->config->execution->create->requiredFields .= ',project';
+        }
+
+        /* Judge workdays is legitimate. */
+        $workdays = helper::diffDate($_POST['end'], $_POST['begin']) + 1;
+        if(isset($_POST['days']) and $_POST['days'] > $workdays)
+        {
+            dao::$errors['days'] = sprintf($this->lang->project->workdaysExceed, $workdays);
+            return false;
         }
 
         /* Get the data from the post. */
