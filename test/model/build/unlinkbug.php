@@ -10,8 +10,19 @@ title=测试 buildModel->unlinkBug();
 cid=1
 pid=1
 
+项目版本解除bug >> ,311,11
+执行版本解除bug >> ,301,101
+不传入BugID >> 『对象ID』应当是数字。
+
 */
+
+$buildIDList = array('1', '11');
+$bugs        = array('301', '311');
 
 $build = new buildTest();
 
-r($build->unlinkBugTest()) && p() && e();
+r($build->unlinkBugTest($buildIDList[0],$bugs,$bugs[0])) && p('1:bugs,project')    && e(',311,11');               //项目版本解除bug
+r($build->unlinkBugTest($buildIDList[1],$bugs,$bugs[1])) && p('11:bugs,execution') && e(',301,101');              //执行版本解除bug
+r($build->unlinkBugTest($buildIDList[1],$bugs,''))       && p('objectID:0')        && e('『对象ID』应当是数字。');//不传入BugID
+
+system("./ztest init");

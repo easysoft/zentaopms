@@ -224,63 +224,205 @@ class buildTest
         return $objects;
     }
 
-    public function updateLinkedBugTest($build)
+    /**
+     * Function updateLinkedBug test by build
+     *
+     * @param  int   $buildID
+     * @param  array $param
+     * @access public
+     * @return array
+     */
+    public function updateLinkedBugTest($buildID, $param = array())
     {
-        $objects = $this->objectModel->updateLinkedBug($build);
+        global $tester;
+
+        $build = $this->objectModel->getByID($buildID);
+        $bugs  = array();
+
+        $createFields = array('bugs' => $bugs);
+
+        foreach($createFields as $field => $defaultValue) $_POST[$field] = $defaultValue;
+        foreach($param as $key => $value) $_POST[$key] = $value;
+
+        $build->bugs .= ',' . join(',', $_POST['bugs']);
+
+        $this->objectModel->updateLinkedBug($build);
+
+        $objects = $tester->dao->select('*')->from(TABLE_BUG)->where('id')->in(join(',', $_POST['bugs']))->fetchAll('id');
+
+        unset($_POST);
 
         if(dao::isError()) return dao::getError();
 
         return $objects;
     }
 
-    public function linkStoryTest($buildID)
+    /**
+     * Function linkStory test by build
+     *
+     * @param  int   $buildID
+     * @param  array $param
+     * @access public
+     * @return array
+     */
+    public function linkStoryTest($buildID, $param = array())
     {
-        $objects = $this->objectModel->linkStory($buildID);
+        global $tester;
+
+        $stories = array();
+
+        $createFields = array('stories' => $stories);
+
+        foreach($createFields as $field => $defaultValue) $_POST[$field] = $defaultValue;
+        foreach($param as $key => $value) $_POST[$key] = $value;
+
+        $this->objectModel->linkStory($buildID);
+
+        $objects = $tester->dao->select('*')->from(TABLE_BUILD)->where('id')->in($buildID)->fetchAll('id');
+
+        unset($_POST);
 
         if(dao::isError()) return dao::getError();
 
         return $objects;
     }
 
-    public function unlinkStoryTest($buildID, $storyID)
+    /**
+     * Function unlinkStory test by build
+     *
+     * @param  int   $buildID
+     * @param  array $stories
+     * @param  innt  $storyID
+     * @access public
+     * @return array
+     */
+    public function unlinkStoryTest($buildID, $stories = array(), $storyID)
     {
-        $objects = $this->objectModel->unlinkStory($buildID, $storyID);
+        global $tester;
+
+        $createFields = array('stories' => $stories);
+
+        foreach($createFields as $field => $defaultValue) $_POST[$field] = $defaultValue;
+
+        $this->objectModel->linkStory($buildID);
+        $this->objectModel->unlinkStory($buildID, $storyID);
+
+        $objects = $tester->dao->select('*')->from(TABLE_BUILD)->where('id')->in($buildID)->fetchAll('id');
+
+        unset($_POST);
 
         if(dao::isError()) return dao::getError();
 
         return $objects;
     }
 
-    public function batchUnlinkStoryTest($buildID)
+    /**
+     * Functtion batchUnlinkStory test by build
+     *
+     * @param  int $buildID
+     * @param  array $stories
+     * @access public
+     * @return array
+     */
+    public function batchUnlinkStoryTest($buildID, $stories = array())
     {
-        $objects = $this->objectModel->batchUnlinkStory($buildID);
+        global $tester;
+
+        $createFields = array('stories' => $stories);
+        foreach($createFields as $field => $defaultValue) $_POST[$field] = $defaultValue;
+        $this->objectModel->linkStory($buildID);
+
+        unset($_POST);
+
+        $newFields = array('unlinkStories' => $stories);
+        foreach($newFields as $field => $defaultValue) $_POST[$field] = $defaultValue;
+        $this->objectModel->batchUnlinkStory($buildID);
+
+        $objects = $tester->dao->select('*')->from(TABLE_BUILD)->where('id')->in($buildID)->fetchAll('id');
+
+        unset($_POST);
 
         if(dao::isError()) return dao::getError();
 
         return $objects;
     }
 
-    public function linkBugTest($buildID)
+    /**
+     * Function linkBug test by build
+     *
+     * @param  int $buildID
+     * @param  array $param
+     * @access public
+     * @return array
+     */
+    public function linkBugTest($buildID, $param = array())
     {
-        $objects = $this->objectModel->linkBug($buildID);
+        global $tester;
+
+        $bugs = array();
+
+        $createFields = array('bugs' => $bugs);
+
+        foreach($createFields as $field => $defaultValue) $_POST[$field] = $defaultValue;
+        foreach($param as $key => $value) $_POST[$key] = $value;
+
+        $this->objectModel->linkBug($buildID);
+
+        $objects = $tester->dao->select('*')->from(TABLE_BUILD)->where('id')->in($buildID)->fetchAll('id');
+
+        unset($_POST);
 
         if(dao::isError()) return dao::getError();
 
         return $objects;
     }
 
-    public function unlinkBugTest($buildID, $bugID)
+    /**
+     * Function unlinkBug test by build
+     *
+     * @param  int $buildID
+     * @param  array $bugs
+     * @param  int $bugID
+     * @access public
+     * @return array
+     */
+    public function unlinkBugTest($buildID, $bugs, $bugID)
     {
-        $objects = $this->objectModel->unlinkBug($buildID, $bugID);
+        global $tester;
+
+        $createFields = array('bugs' => $bugs);
+
+        foreach($createFields as $field => $defaultValue) $_POST[$field] = $defaultValue;
+
+        $this->objectModel->linkBug($buildID);
+        $this->objectModel->unlinkBug($buildID, $bugID);
+
+        $objects = $tester->dao->select('*')->from(TABLE_BUILD)->where('id')->in($buildID)->fetchAll('id');
+
+        unset($_POST);
 
         if(dao::isError()) return dao::getError();
 
         return $objects;
     }
 
-    public function batchUnlinkBugTest($buildID)
+    public function batchUnlinkBugTest($buildID, $bugs)
     {
-        $objects = $this->objectModel->batchUnlinkBug($buildID);
+        global $tester;
+
+        $createFields = array('bugs' => $bugs);
+        foreach($createFields as $field => $defaultValue) $_POST[$field] = $defaultValue;
+        $this->objectModel->linkBug($buildID);
+
+        unset($_POST);
+
+        $newFields = array('unlinkBugs' => $bugs);
+        foreach($newFields as $field => $defaultValue) $_POST[$field] = $defaultValue;
+        $this->objectModel->batchUnlinkBug($buildID);
+
+        $objects = $tester->dao->select('*')->from(TABLE_BUILD)->where('id')->in($buildID)->fetchAll('id');
+
+        unset($_POST);
 
         if(dao::isError()) return dao::getError();
 
