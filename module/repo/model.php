@@ -1151,6 +1151,12 @@ class repoModel extends model
         if(!$this->config->features->checkClient) return true;
         if(!$this->post->client) return true;
 
+        if(strpos($this->post->client, ' '))
+        {
+            dao::$errors['client'] = $this->lang->repo->error->clientPath;
+            return false;
+        }
+
         $clientVersionFile = $this->session->clientVersionFile;
         if(empty($clientVersionFile))
         {
