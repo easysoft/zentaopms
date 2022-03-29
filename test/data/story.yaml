@@ -236,8 +236,8 @@ fields:
     format: ""
   - field: closedReason
     note: "关闭原因"
-    range: 1-1000
-    prefix: "关闭原因"
+    range: done,subdivided,duplicate,postponed,willnotdo,cancel,bydesign
+    prefix: ""
     postfix: ""
     loop: 0
     format: ""

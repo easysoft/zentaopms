@@ -6,7 +6,6 @@ $lang->custom->notice->readOnlyOfExecution = "禁止修改后，已关闭{$lang-
 $lang->custom->moduleName['execution'] = $lang->custom->execution;
 
 $lang->custom->object = array();
-$lang->custom->object['project']   = '项目';
 $lang->custom->object['execution'] = $lang->custom->execution;
 $lang->custom->object['story']     = $lang->SRCommon;
 $lang->custom->object['task']      = '任务';

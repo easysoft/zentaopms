@@ -2279,6 +2279,16 @@ EOD;
         $module = strtolower($module);
         $method = strtolower($method);
 
+        /* If the user is doing a tutorial, have all tutorial privs. */
+        if(defined('TUTORIAL'))
+        {
+            $app->loadLang('tutorial');
+            foreach($lang->tutorial->tasks as $task)
+            {
+                if($task['nav']['module'] == $module and $task['nav']['method'] = $method) return true;
+            }
+        }
+
         /* Check the parent object is closed. */
         if(!empty($method) and strpos('close|batchclose', $method) === false and !commonModel::canBeChanged($module, $object)) return false;
 

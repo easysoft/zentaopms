@@ -77,6 +77,7 @@ $lang->gitlab->createSuccess = "创建成功";
 $lang->gitlab->mustBindUser  = '您还未绑定GitLab用户，请联系管理员进行绑定';
 $lang->gitlab->noAccess      = '权限不足';
 $lang->gitlab->notCompatible = '当前GitLab版本与禅道不兼容，请升级GitLab版本后重试';
+$lang->gitlab->deleted       = '已删除';
 
 $lang->gitlab->placeholder = new stdclass;
 $lang->gitlab->placeholder->name        = '';
