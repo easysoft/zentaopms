@@ -20,6 +20,7 @@
 <?php js::set('confirmChangeExecution', $lang->task->confirmChangeExecution);?>
 <?php js::set('changeExecutionConfirmed', false);?>
 <?php js::set('newRowCount', count($task->team) < 6 ? 6 - count($task->team) : 1);?>
+<?php js::set('teamMemberError', $lang->task->error->teamMember);?>
 <div class='main-content' id='mainContent'>
   <form method='post' enctype='multipart/form-data' target='hiddenwin' id='dataform'>
     <div class='main-header'>
@@ -191,7 +192,7 @@
               </tr>
               <tr>
                 <th><?php echo $lang->task->consumed;?></th>
-                <td><?php echo $task->consumed . ' '; common::printIcon('task', 'recordEstimate', "taskID=$task->id", $task, 'list', '', '', 'record-estimate-toggle btn-link', true);?></td>
+                <td><?php echo '<span id=consumedSpan>' . $task->consumed . '</span> '; common::printIcon('task', 'recordEstimate', "taskID=$task->id", $task, 'list', '', '', 'record-estimate-toggle btn-link', true);?></td>
               </tr>
               <tr>
                 <th><?php echo $lang->task->left;?></th>
@@ -298,7 +299,7 @@
               </tr>
             </tbody>
             <tfoot>
-              <tr><td colspan='3' class='text-center form-actions'><?php echo html::a('javascript:void(0)', $lang->confirm, '', "class='btn btn-primary btn-wide' data-dismiss='modal'");?></td></tr>
+              <tr><td colspan='3' class='text-center form-actions'><?php echo html::a('javascript:void(0)', $lang->confirm, '', "id='confirmButton' class='btn btn-primary btn-wide'");?></td></tr>
             </tfoot>
           </table>
         </div>
