@@ -3129,6 +3129,7 @@ class execution extends control
             foreach($projects as $project)
             {
                 $executions = zget($executionGroups, $project->id, array());
+                if(isset($project->model) and $project->model == 'waterfall') ksort($executions);
 
                 foreach($executions as $execution)
                 {
