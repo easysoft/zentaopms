@@ -61,7 +61,7 @@ class storyEntry extends Entry
             foreach($executionTasks as $task)
             {
                 if(!isset($data->data->executions->{$task->execution})) continue;
-                $storyTasks[] = $this->filterFields($task, 'id,name,type,status');
+                $storyTasks[] = $this->filterFields($task, 'id,name,type,status,assignedTo');
             }
         }
         $story->tasks = $storyTasks;
