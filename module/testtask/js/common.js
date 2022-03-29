@@ -98,7 +98,7 @@ function loadExecutionBuilds(executionID, selected)
     var selectedBuild = $('#build').val();
 
     if(!selectedBuild) selectedBuild = 0;
-    link = createLink('build', 'ajaxGetExecutionBuilds', 'executionID=' + executionID + '&productID=' + $('#product').val() + '&varName=testTaskBuild&build=' + selectedBuild);
+    var link = createLink('build', 'ajaxGetExecutionBuilds', 'executionID=' + executionID + '&productID=' + $('#product').val() + '&varName=testTaskBuild&build=' + selectedBuild);
     if(executionID == 0) link = createLink('build', 'ajaxGetProductBuilds', 'productID=' + $('#product').val() + '&varName=resolvedBuild&build=' + selectedBuild);
     $('#buildBox').load(link, function()
     {
