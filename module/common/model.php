@@ -2244,7 +2244,7 @@ EOD;
      */
     public function checkIframe()
     {
-        if($this->app->getViewType() != 'html' || helper::isAjaxRequest()) return;
+        if($this->app->getViewType() != 'html' || helper::isAjaxRequest() || isset($_GET['_single'])) return;
 
         if(isset($_SERVER['HTTP_SEC_FETCH_DEST']))
         {
@@ -2278,6 +2278,16 @@ EOD;
         global $app, $lang;
         $module = strtolower($module);
         $method = strtolower($method);
+
+        /* If the user is doing a tutorial, have all tutorial privs. */
+        if(defined('TUTORIAL'))
+        {
+            $app->loadLang('tutorial');
+            foreach($lang->tutorial->tasks as $task)
+            {
+                if($task['nav']['module'] == $module and $task['nav']['method'] = $method) return true;
+            }
+        }
 
         /* Check the parent object is closed. */
         if(!empty($method) and strpos('close|batchclose', $method) === false and !commonModel::canBeChanged($module, $object)) return false;

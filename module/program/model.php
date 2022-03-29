@@ -621,7 +621,7 @@ class programModel extends model
 
                 /* The budget of a child program cannot beyond the remaining budget of the parent program. */
                 $program->budgetUnit = $parentProgram->budgetUnit;
-                if(isset($program->budget) and $parentProgram->budget != 0)
+                if(isset($program->budget))
                 {
                     $availableBudget = $this->getBudgetLeft($parentProgram);
                     if($program->budget > $availableBudget) dao::$errors['budget'] = $this->lang->program->beyondParentBudget;
@@ -722,7 +722,7 @@ class programModel extends model
 
             /* The budget of a child program cannot beyond the remaining budget of the parent program. */
             $program->budgetUnit = $parentProgram->budgetUnit;
-            if($program->budget != 0 and $parentProgram->budget != 0)
+            if($program->budget != 0)
             {
                 $availableBudget = $this->getBudgetLeft($parentProgram);
                 if($program->budget > $availableBudget + $oldProgram->budget) dao::$errors['budget'] = $this->lang->program->beyondParentBudget;
@@ -1090,21 +1090,33 @@ class programModel extends model
     /**
      * Get budget left.
      *
-     * @param  object  $parentProgram
+     * @param  int    $parentProgram
+     * @param  int    $leftBudget
      * @access public
      * @return int
      */
-    public function getBudgetLeft($parentProgram)
+    public function getBudgetLeft($parentProgram, $leftBudget = 0)
     {
-        if(empty($parentProgram)) return;
+        if(empty($parentProgram->id)) return;
 
         $childGrade     = $parentProgram->grade + 1;
         $childSumBudget = $this->dao->select("sum(budget) as sumBudget")->from(TABLE_PROGRAM)
             ->where('path')->like("%{$parentProgram->id}%")
             ->andWhere('grade')->eq($childGrade)
+            ->andWhere('deleted')->eq('0')
             ->fetch('sumBudget');
 
-        return (float)$parentProgram->budget - (float)$childSumBudget;
+        $leftBudget += (float)$parentProgram->budget - (float)$childSumBudget;
+
+        if($parentProgram->budget == 0 and $parentProgram->parent)
+        {
+            $parentParent = $this->getById($parentProgram->parent);
+            return $this->getBudgetLeft($parentParent, $leftBudget);
+        }
+        else
+        {
+            return $leftBudget;
+        }
     }
 
     /**

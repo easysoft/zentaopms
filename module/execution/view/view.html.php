@@ -94,7 +94,6 @@
                 <div class="col-xs-6"><i class="icon icon-person icon-sm text-muted"></i> <?php echo zget($users, $execution->RD);?> <span class="text-muted">（<?php echo $lang->execution->RD;?>）</span></div>
                 <?php endif;?>
 
-                <?php if(common::hasPriv('execution', 'team')):?>
                 <?php foreach($teamMembers as $teamMember):?>
                 <?php if($j > $i) break;?>
                 <div class="col-xs-6"><i class="icon icon-person icon-sm text-muted"></i> <?php echo zget($users, $teamMember->account);?></div>
@@ -103,7 +102,6 @@
                 <div class="col-xs-6">
                   <?php if($canBeChanged) common::printLink('execution', 'manageMembers', "executionID=$execution->id", "<i class='icon icon-plus hl-primary text-primary'></i> &nbsp;" . $lang->execution->manageMembers, '', "class='text-muted'");?>
                 </div>
-                <?php endif;?>
               </div>
             </div>
           </div>

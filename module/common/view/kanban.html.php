@@ -33,7 +33,10 @@
 #kanbanList .no-flex .kanban-lane > .kanban-sub-lanes[data-sub-lanes-count="2"] > .kanban-sub-lane {min-height: 45px;}
 
 .kanban-affixed {padding-top: 72px;}
-.kanban-affixed > .kanban-header {position: fixed!important; top: 0; background: rgba(80,80,80,.9); color: #fff; z-index: 100;}
+.kanban-affixed > .kanban-header {position: fixed!important; top: 0; color: #fff; z-index: 100; overflow: hidden; min-width: 0; background: none;}
+.kanban-affixed > .kanban-header > .kanban-header-cols {position: absolute; height: 100%; top: 0; background: rgba(80,80,80,.9);}
+.kanban-affixed > .kanban-header > .kanban-group-header {display: none;}
+.kanban-affixed > .kanban-header > .kanban-header-cols:before {display: block; content: ' '; position: absolute; left: -20px; top: 0; bottom: 0; background-color: inherit; width: 20px;}
 
 #kanbanList .kanban-col[data-type="unclosedProduct"] .kanban-item {padding: 0;}
 #kanbanList .kanban-col[data-type="unclosedProduct"] .kanban-lane-items {height: 100%; display: flex; flex-direction: column; justify-content: center; padding: 0; overflow: hidden;}
@@ -60,6 +63,10 @@
 #kanbanList .kanban-item-span + .kanban-item-span > .project-row {border-top: 2px solid #fff;}
 #kanbanList .project-row > .project-col {float: left; width: 50%; padding: 10px;}
 #kanbanList .project-row > .execution-item {position: absolute!important; left: 100%; top: 0}
+
+.region-affixed-scrollbar {position: fixed; bottom: 0; overflow-x: auto; z-index: 100; background-color: rgba(255,255,255,.85); display: none;}
+.has-affixed-region .region-affixed-scrollbar {display: block;}
+.region-affixed-holder {height: 1px;}
 </style>
 <script>
 /**
@@ -376,18 +383,44 @@ function renderKanbanItem(item, $item, col, lane, kanban)
 function affixKanbanHeader($kanbanBoard, affixed)
 {
     var $header = $kanbanBoard.children('.kanban-header');
-    var headerStyle = {width: '', left: ''};
+    var $headerCols = $header.children('.kanban-header-cols');
+    var headerStyle = {width: '', left: 0};
+    var headerColsStyle = {width: '', marginLeft: ''};
     if(affixed)
     {
-        headerStyle.width = $kanbanBoard.width();
-        if($kanbanBoard[0].getBoundingClientRect)
-        {
-            headerStyle.left = $kanbanBoard[0].getBoundingClientRect().left;
-        }
+        var $kanban = $kanbanBoard.closest('.kanban');
+        var kanbanBounding = $kanban[0].getBoundingClientRect();
+        var kanbanBoardBounding = $kanbanBoard[0].getBoundingClientRect();
+        var laneNameWidth = +$headerCols.css('left').replace('px', '');
+        headerStyle.width = kanbanBounding.width;
+        headerStyle.left = kanbanBounding.left;
+        headerColsStyle.width = kanbanBoardBounding.width - laneNameWidth;
+        headerColsStyle.marginLeft = kanbanBoardBounding.left - kanbanBounding.left;
     }
     $header.css(headerStyle);
+    $headerCols.css(headerColsStyle);
     $kanbanBoard.toggleClass('kanban-affixed', !!affixed);
     $kanbanBoard.css('padding-top', affixed ? $header.outerHeight() : '');
+}
+
+function affixRegionScrollbar($region)
+{
+    $region.addClass('region-affixed');
+    var $container = $region.parent();
+    var $scrollbar = $container.find('.region-affixed-scrollbar');
+
+    if(!$scrollbar.length)
+    {
+        $scrollbar = $('<div class="region-affixed-scrollbar"><div class="region-affixed-holder"></div></div>').css('height', $.zui.getScrollbarSize() + 1).appendTo($container).on('scroll', function()
+        {
+            $('#kanban .region-affixed .kanban').scrollLeft($scrollbar.scrollLeft());
+        });
+    }
+    var $kanban = $region.find('.kanban');
+    $scrollbar.width($region.outerWidth());
+    $scrollbar.find('.region-affixed-holder').width($kanban[0].scrollWidth);
+    var scrollLeft = $kanban.scrollLeft();
+    if(scrollLeft !== $scrollbar.scrollLeft()) $scrollbar.scrollLeft(scrollLeft);
 }
 
 /** Update kanban affix state for all boards in page */
@@ -398,7 +431,7 @@ function updateKanbanAffixState()
     var containerTop      = window.kanbanAffixContainer ? $(window.kanbanAffixContainer)[0].getBoundingClientRect().top : 0;
     var $currentAffixedBoard;
 
-    $('.kanban-board').each(function()
+    $boards.each(function()
     {
         var $board = $(this);
         var bounds = $board[0].getBoundingClientRect();
@@ -414,6 +447,28 @@ function updateKanbanAffixState()
     }
 
     if($currentAffixedBoard) affixKanbanHeader($currentAffixedBoard, true);
+
+
+    var $kanban = $('#kanban');
+    var $regions = $kanban.children('.region');
+    if(!$regions.length) return;
+    var $lastAffixedRegion = $regions.filter('.region-affixed');
+    var $currentAffixedRegion = [];
+    var winHeight = $(window).height();
+    $regions.each(function()
+    {
+        var $region = $(this);
+        var bounds = this.getBoundingClientRect();
+        if(bounds.bottom > winHeight && bounds.top < (winHeight - 64))
+        {
+            $currentAffixedRegion = $region;
+            return false;
+        }
+    });
+
+    $kanban.toggleClass('has-affixed-region', !!$currentAffixedRegion.length);
+    if($lastAffixedRegion.length && $currentAffixedRegion[0] !== $lastAffixedRegion[0]) $lastAffixedRegion.removeClass('region-affixed');
+    if($currentAffixedRegion.length) affixRegionScrollbar($currentAffixedRegion);
 }
 
 /** Try to update kanban affix state */

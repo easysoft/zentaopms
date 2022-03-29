@@ -58,6 +58,7 @@ $lang->project->unlinkMember       = 'Remove Member';
 $lang->project->copyTeamTitle      = 'Select a project team to copy';
 $lang->project->daysGreaterProject = 'Days cannot be greater than days of project『%s』';
 $lang->project->errorHours         = 'Hours/Day cannot be greater than『24』';
+$lang->project->workdaysExceed     = 'No more than『%s』working days';
 
 /* Fields. */
 $lang->project->common             = 'Project';
@@ -242,6 +243,13 @@ $lang->project->acls['open']    = 'Open';
 $lang->project->subAclList['private'] = "Private (Only the project leader, team members and stakeholders can access)";
 $lang->project->subAclList['open']    = "Open (accessible with project view permissions)";
 $lang->project->subAclList['program'] = 'Open in the program (all upper-level program team leaders and stakeholders, the project leader, team members and stakeholders can access)';
+
+$lang->project->kanbanAclList['private'] = 'Private (For the project leader, team members only)';
+$lang->project->kanbanAclList['open']    = "Open (accessible with project view permissions)";
+
+$lang->project->kanbanSubAclList['private'] = "Private (Only the project leader, team members can access)";
+$lang->project->kanbanSubAclList['open']    = "Open (accessible with project view permissions)";
+$lang->project->kanbanSubAclList['program'] = 'Open in the program (all upper-level program team leaders and stakeholders, the project leader, team members can access)';
 
 $lang->project->authList['extend'] = 'Inherit (system privilege and project privilege)';
 $lang->project->authList['reset']  = 'Reset (project privilege only)';

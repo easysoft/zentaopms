@@ -20,7 +20,7 @@ class storyAssignToEntry extends Entry
      */
     public function post($storyID)
     {
-        $task = $this->loadModel('story')->getByID($storyID);
+        $story = $this->loadModel('story')->getByID($storyID);
 
         $fields = 'assignedTo';
         $this->batchSetPost($fields);

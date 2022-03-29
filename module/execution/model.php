@@ -316,6 +316,14 @@ class executionModel extends model
             $this->config->execution->create->requiredFields .= ',project';
         }
 
+        /* Judge workdays is legitimate. */
+        $workdays = helper::diffDate($_POST['end'], $_POST['begin']) + 1;
+        if(isset($_POST['days']) and $_POST['days'] > $workdays)
+        {
+            dao::$errors['days'] = sprintf($this->lang->project->workdaysExceed, $workdays);
+            return false;
+        }
+
         /* Get the data from the post. */
         $sprint = fixer::input('post')
             ->setDefault('status', 'wait')
@@ -452,6 +460,14 @@ class executionModel extends model
             return false;
         }
 
+        /* Judge workdays is legitimate. */
+        $this->app->loadLang('project');
+        $workdays = helper::diffDate($_POST['end'], $_POST['begin']) + 1;
+        if(isset($_POST['days']) and $_POST['days'] > $workdays)
+        {
+            dao::$errors['days'] = sprintf($this->lang->project->workdaysExceed, $workdays);
+            return false;
+        }
         $products = array_filter($this->post->products);
         $noLinkTip = $oldExecution->type != 'kanban' ? $this->lang->execution->noLinkProduct : $this->lang->execution->kanbanNoLinkProduct;
         if(empty($products))
@@ -643,6 +659,15 @@ class executionModel extends model
                     return false;
                 }
                 $codeList[$executionCode] = $executionCode;
+            }
+
+            /* Judge workdays is legitimate. */
+            $workdays = helper::diffDate($data->ends[$executionID], $data->begins[$executionID]) + 1;
+            if(isset($data->dayses[$executionID]) and $data->dayses[$executionID] > $workdays)
+            {
+                $this->app->loadLang('project');
+                dao::$errors['days'][] = 'execution#' . $executionID . sprintf($this->lang->project->workdaysExceed, $workdays);
+                return false;
             }
 
             foreach($extendFields as $extendField)

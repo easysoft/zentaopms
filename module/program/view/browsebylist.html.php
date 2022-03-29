@@ -119,15 +119,15 @@
           </div>
           <?php endif;?>
           <?php $class = $program->model == 'kanban' ? 'disabled' : '';?>
-          <?php common::printIcon('project', 'edit', "projectID=$program->id", $program, 'list', 'edit', '', 'iframe', true, '', '', $program->id);?>
-          <?php common::printIcon('project', 'manageMembers', "projectID=$program->id", $program, 'list', 'group', '', "$class", '', 'data-app="project"', '', $program->id);?>
-          <?php common::printIcon('project', 'group',         "projectID=$program->id", $program, 'list', 'lock', '', "$class", '', 'data-app="project"', '', $program->id);?>
+          <?php common::printIcon('project', 'edit', "projectID=$program->id", $program, 'list', 'edit', '', 'iframe', true);?>
+          <?php common::printIcon('project', 'team', "projectID=$program->id", $program, 'list', 'group', '', "$class", '', 'data-app="project"');?>
+          <?php common::printIcon('project', 'group',         "projectID=$program->id", $program, 'list', 'lock', '', "$class", '', 'data-app="project"');?>
           <?php if(common::hasPriv('project', 'manageProducts') || common::hasPriv('project', 'whitelist') || common::hasPriv('project', 'delete')):?>
           <div class='btn-group'>
             <button type='button' class='btn dropdown-toggle' data-toggle='dropdown' title="<?php echo $this->lang->more;?>"><i class='icon-more-alt'></i></button>
             <ul class='dropdown-menu pull-right text-center' role='menu'>
-              <?php common::printIcon('project', 'manageProducts', "projectID=$program->id&from=browse", $program, 'list', 'link', '', "$class", '', "data-app='project'", '', $program->id);?>
-              <?php common::printIcon('project', 'whitelist',      "projectID=$program->id&module=project&from=browse", $program, 'list', 'shield-check', '', "$class", '', "data-app='project'", '', $program->id);?>
+              <?php common::printIcon('project', 'manageProducts', "projectID=$program->id&from=browse", $program, 'list', 'link', '', "$class", '', "data-app='project'");?>
+              <?php common::printIcon('project', 'whitelist',      "projectID=$program->id&module=project&from=browse", $program, 'list', 'shield-check', '', "$class", '', "data-app='project'");?>
               <?php if(common::hasPriv('project','delete')) echo html::a($this->createLink("project", "delete", "projectID=$program->id"), "<i class='icon-trash'></i>", 'hiddenwin', "class='btn' title='{$this->lang->delete}' data-group='program'");?>
             </ul>
           </div>

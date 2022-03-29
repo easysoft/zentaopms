@@ -108,15 +108,15 @@ class releaseModel extends model
      *
      * @param  int    $productID
      * @param  int    $branch
+     * @param  int    $projectID
      * @access public
      * @return int
      */
-    public function create($productID, $branch = 0)
+    public function create($productID = 0, $branch = 0, $projectID = 0)
     {
         /* Init vars. */
-        $productID = (int)$productID;
-        $branch    = (int)$branch;
-        $buildID   = 0;
+        $productID = $this->post->product ? $this->post->product : (int)$productID;
+        $branch    = $this->post->branch ? $this->post->branch : (int)$branch;
 
         /* Check build if build is required. */
         if(strpos($this->config->release->create->requiredFields, 'build') !== false and $this->post->build == false) return dao::$errors[] = sprintf($this->lang->error->notempty, $this->lang->release->build);
@@ -127,11 +127,12 @@ class releaseModel extends model
         $release = fixer::input('post')
             ->add('product', (int)$productID)
             ->add('branch',  (int)$branch)
+            ->setIF($projectID, 'project', $projectID)
+            ->setIF($this->post->build == false, 'build', 0)
             ->setDefault('stories', '')
             ->join('stories', ',')
             ->join('bugs', ',')
             ->join('mailto', ',')
-            ->setIF($this->post->build == false, 'build', $buildID)
             ->stripTags($this->config->release->editor->create['id'], $this->config->allowedTags)
             ->remove('allchecker,files,labels,uid,sync')
             ->get();
@@ -152,6 +153,7 @@ class releaseModel extends model
             else
             {
                 $build = new stdclass();
+                $build->project   = $projectID;
                 $build->product   = (int)$productID;
                 $build->branch    = (int)$branch;
                 $build->name      = $release->name;

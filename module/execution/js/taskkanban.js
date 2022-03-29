@@ -988,6 +988,30 @@ function changeKanbanScaleSize(newScaleSize)
     return newScaleSize;
 }
 
+/** Affix kanban board header */
+window.affixKanbanHeader = function($kanbanBoard, affixed)
+{
+    var $header = $kanbanBoard.children('.kanban-header');
+    var $headerCols = $header.children('.kanban-header-cols');
+    var headerStyle = {width: '', left: 0};
+    var headerColsStyle = {width: '', marginLeft: ''};
+    if(affixed)
+    {
+        var $kanban = $('#kanbanContainer');
+        var kanbanBounding = $kanban[0].getBoundingClientRect();
+        var kanbanBoardBounding = $kanbanBoard[0].getBoundingClientRect();
+        var laneNameWidth = +$headerCols.css('left').replace('px', '');
+        headerStyle.width = kanbanBounding.width;
+        headerStyle.left = kanbanBounding.left;
+        headerColsStyle.width = kanbanBoardBounding.width - laneNameWidth;
+        headerColsStyle.marginLeft = kanbanBoardBounding.left - kanbanBounding.left;
+    }
+    $header.css(headerStyle);
+    $headerCols.css(headerColsStyle);
+    $kanbanBoard.toggleClass('kanban-affixed', !!affixed);
+    $kanbanBoard.css('padding-top', affixed ? $header.outerHeight() : '');
+}
+
 /* Example code: */
 $(function()
 {

@@ -53,18 +53,16 @@ class storyEntry extends Entry
         }
         $story->moduleTitle = $moduleTitle;
 
-        $users = $this->loadModel('user')->getList();
-
         $storyTasks = array();
         foreach($story->tasks as $executionTasks)
         {
             foreach($executionTasks as $task)
             {
                 if(!isset($data->data->executions->{$task->execution})) continue;
-                $storyTasks[] = $this->filterFields($task, 'id,name,type,status');
+                $storyTasks[] = $this->filterFields($task, 'id,name,type,status,assignedTo');
             }
         }
-        $story->tasks = $storyTasks;
+        $story->tasks = $this->format($storyTasks, 'assignedTo:user');
 
         $story->bugs = array();
         foreach($data->data->bugs as $bug) $story->bugs[] = $this->filterFields($bug, 'id,title,status,pri,severity');

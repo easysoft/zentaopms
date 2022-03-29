@@ -77,6 +77,7 @@ $lang->gitlab->createSuccess = "Create success";
 $lang->gitlab->mustBindUser  = 'You have not registered the GitLab account, please contact the administrator to register.';
 $lang->gitlab->noAccess      = 'Permission denied';
 $lang->gitlab->notCompatible = 'The current GitLab version is not compatible with ZenTao, please upgrade the GitLab version and try again';
+$lang->gitlab->deleted       = 'Deleted';
 
 $lang->gitlab->placeholder = new stdclass;
 $lang->gitlab->placeholder->name        = '';
