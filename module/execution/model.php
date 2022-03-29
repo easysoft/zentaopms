@@ -671,12 +671,12 @@ class executionModel extends model
             $projectID    = isset($execution->project) ? $execution->project : $oldExecution->project;
             $project      = $this->project->getByID($projectID);
 
-            if($execution->begin < $project->begin)
+            if($project  and $execution->begin < $project->begin)
             {
                 dao::$errors['begin'] = sprintf($this->lang->execution->errorLetterProject, $project->begin);
                 return false;
             }
-            if($execution->end > $project->end)
+            if($project and $execution->end > $project->end)
             {
                 dao::$errors['end'] = sprintf($this->lang->execution->errorGreaterProject, $project->end);
                 return false;

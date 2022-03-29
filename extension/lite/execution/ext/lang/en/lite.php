@@ -24,3 +24,4 @@ $lang->execution->icons['grouptask'] = 'sitemap';
 $lang->execution->aclList['private'] = "Private (Accessible to team members and project leaders)";
 
 $lang->execution->common = 'Project Execution';
+$lang->execution->gantt  = 'Gantt Chart';

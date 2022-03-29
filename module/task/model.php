@@ -258,7 +258,7 @@ class taskModel extends model
         parse_str($extra, $output);
 
         /* Judge whether the current task is a parent. */
-        $parentID = !empty($this->post->parent[0]) ? $this->post->parent[0] : 0;
+        $parentID = !empty($this->post->parent[1]) ? $this->post->parent[1] : 0;
 
         foreach($tasks->story as $key => $storyID)
         {

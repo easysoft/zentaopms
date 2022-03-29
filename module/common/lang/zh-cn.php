@@ -30,6 +30,7 @@ $lang->zentaoPMS      = '禅道';
 $lang->pmsName        = '开源版';
 $lang->proName        = '专业版';
 $lang->bizName        = '企业版';
+$lang->maxName        = '旗舰版';
 $lang->liteName       = '迅捷版';
 $lang->logoImg        = 'zt-logo.png';
 $lang->welcome        = "%s项目管理系统";
