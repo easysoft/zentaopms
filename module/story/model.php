@@ -650,6 +650,7 @@ class storyModel extends model
         }
 
         if(isset($_POST['reviewer'])) $_POST['reviewer'] = array_filter($_POST['reviewer']);
+        if(isset($_POST['needNotReview'])) $_POST['status'] = 'active';
         if(!$this->post->needNotReview and empty($_POST['reviewer']))
         {
             dao::$errors[] = $this->lang->story->errorEmptyReviewedBy;
