@@ -718,6 +718,8 @@ class project extends control
     {
         if(!defined('RUN_MODE') || RUN_MODE != 'api') $projectID = $this->project->saveState((int)$projectID, $this->project->getPairsByProgram());
 
+        $this->session->set('teamList', $this->app->getURI(true), 'project');
+
         $project = $this->project->getById($projectID);
         if(empty($project) || strpos('scrum,waterfall,kanban', $project->model) === false)
         {
@@ -1282,6 +1284,8 @@ class project extends control
      */
     public function team($projectID = 0)
     {
+        $this->session->set('teamList', $this->app->getURI(true), 'project');
+
         $this->app->loadLang('execution');
         $this->project->setMenu($projectID);
 
@@ -1358,7 +1362,7 @@ class project extends control
 
             $this->loadModel('action')->create('team', $projectID, 'ManagedTeam');
 
-            $link = $this->createLink('project', 'team', "projectID=$projectID");
+            $link = $this->session->teamList ? $this->session->teamList : $this->createLink('project', 'team', "projectID=$projectID");
             return $this->send(array('message' => $this->lang->saveSuccess, 'result' => 'success', 'locate' => $link));
         }
 

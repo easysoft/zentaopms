@@ -1230,6 +1230,8 @@ class execution extends control
      */
     public function team($executionID = 0)
     {
+        $this->app->session->set('teamList', $this->app->getURI(true), 'execution');
+
         $execution   = $this->commonAction($executionID);
         $executionID = $execution->id;
 
@@ -1976,6 +1978,8 @@ class execution extends control
      */
     public function view($executionID)
     {
+        $this->app->session->set('teamList', $this->app->getURI(true), 'execution');
+
         $executionID = $this->execution->saveState((int)$executionID, $this->executions);
         $execution   = $this->execution->getById($executionID, true);
         $type = $this->config->vision == 'lite' ? 'kanban' : 'stage,sprint,kanban';
@@ -2639,7 +2643,8 @@ class execution extends control
         {
             $this->execution->manageMembers($executionID);
             $this->loadModel('action')->create('team', $executionID, 'managedTeam');
-            return print(js::locate($this->createLink('execution', 'team', "executionID=$executionID"), 'parent'));
+            $link = $this->session->teamList ? $this->session->teamList : $this->createLink('execution', 'team', "executionID=$executionID");
+            return print(js::locate($link, 'parent'));
         }
 
         /* Load model. */
