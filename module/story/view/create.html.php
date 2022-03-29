@@ -105,10 +105,10 @@
             <th><?php echo $lang->story->reviewedBy;?></th>
             <td colspan='<?php echo $type == 'story' ? 4 : 2;?>' id='reviewerBox'>
               <div class="table-row">
+                <?php if(!$this->story->checkForceReview()):?>
                 <div class="table-col">
                   <?php echo html::select('reviewer[]', $reviewers, empty($needReview) ? $product->PO : '', "class='form-control chosen' multiple");?>
                 </div>
-                <?php if(!$this->story->checkForceReview()):?>
                 <div class="table-col w-130px">
                   <span class="input-group-addon" style="border: 1px solid #dcdcdc; border-left-width: 0px;">
                     <div class='checkbox-primary'>
@@ -116,6 +116,10 @@
                       <label for='needNotReview'><?php echo $lang->story->needNotReview;?></label>
                     </div>
                   </span>
+                </div>
+                <?php else:?>
+                <div class="table-col">
+                  <?php echo html::select('reviewer[]', $reviewers, empty($needReview) ? $product->PO : '', "class='form-control chosen' multiple required");?>
                 </div>
                 <?php endif;?>
               </div>
