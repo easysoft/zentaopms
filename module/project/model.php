@@ -853,6 +853,14 @@ class projectModel extends model
             }
         }
 
+        /* Judge workdays is legitimate. */
+        $workdays = helper::diffDate($project->end, $project->begin) + 1;
+        if(isset($project->days) and $project->days > $workdays)
+        {
+            dao::$errors['days'] = sprintf($this->lang->project->workdaysExceed, $workdays);
+            return false;
+        }
+
         /* When select create new product, product name cannot be empty and duplicate. */
         if(isset($_POST['newProduct']))
         {
@@ -1091,6 +1099,14 @@ class projectModel extends model
         if(empty($linkedProductsCount))
         {
             dao::$errors[] = $this->lang->project->errorNoProducts;
+            return false;
+        }
+
+        /* Judge workdays is legitimate. */
+        $workdays = helper::diffDate($project->end, $project->begin) + 1;
+        if(isset($project->days) and $project->days > $workdays)
+        {
+            dao::$errors['days'] = sprintf($this->lang->project->workdaysExceed, $workdays);
             return false;
         }
 
