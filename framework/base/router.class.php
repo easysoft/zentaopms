@@ -2405,6 +2405,7 @@ class baseRouter
         $view->systemMode    = $this->config->systemMode;
         $view->sprintConcept = zget($this->config->custom, 'sprintConcept', '0');
         $view->URAndSR       = zget($this->config->custom, 'URAndSR', '0');
+        $view->maxUploadSize = strtoupper(ini_get('upload_max_filesize'));
 
         $this->session->set('random', mt_rand(0, 10000));
         $view->sessionName = session_name();
