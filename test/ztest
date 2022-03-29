@@ -49,6 +49,9 @@ switch($argv[1])
     case 'dept':
         ztfRun('model/dept');
         break;
+    case 'build':
+        ztfRun('model/build');
+        break;
     case 'kanban':
         ztfRun('model/kanban');
         break;
