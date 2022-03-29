@@ -17,6 +17,7 @@
 .input-group>.chosen-container.required:after {top: 6px;}
 </style>
 <?php js::import($jsRoot . 'misc/date.js');?>
+<?php js::set('productID', $productID);?>
 <div id='mainContent' class='main-content'>
   <div class='center-block'>
     <div class='main-header'>
