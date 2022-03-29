@@ -266,7 +266,7 @@ $lang->createIcons['execution'] = 'kanban';
 
 /* Xuan */
 global $config;
-if(isset($config->xuanxuan))
+if(isset($config->xuanxuan) && strpos($config->visions, ',rnd,') === false)
 {
     $lang->xuanxuan = new stdclass();
     $lang->admin->menu->xuanxuan = array('link' => '聊天|admin|xuanxuan', 'subModule' => 'client,setting');
