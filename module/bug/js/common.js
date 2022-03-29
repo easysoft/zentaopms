@@ -504,7 +504,9 @@ function setStories(moduleID, productID, storyID)
 {
     var branch = $('#branch').val();
     if(typeof(branch) == 'undefined') branch = 0;
-    link = createLink('story', 'ajaxGetProductStories', 'productID=' + productID + '&branch=' + branch + '&moduleID=' + moduleID + '&storyID=' + storyID);
+    var executionID = $('#execution').val();
+    if(typeof(executionID) == 'undefined') executionID = 0;
+    link = createLink('story', 'ajaxGetProductStories', 'productID=' + productID + '&branch=' + branch + '&moduleID=' + moduleID + '&storyID=' + storyID + '&onlyOption=false&status=&limit=0&type=full&hasParent=1&executionID=' + executionID);
     $.get(link, function(stories)
     {
         if(!stories) stories = '<select id="story" name="story" class="form-control"></select>';

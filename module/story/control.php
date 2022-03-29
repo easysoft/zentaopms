@@ -2099,7 +2099,7 @@ class story extends control
             $stories = $this->story->getProductStoryPairs($productID, $branch, $moduleID, $storyStatus, 'id_desc', $limit, $type, 'story', $hasParent);
         }
 
-        if(empty($stories)) $stories = $this->story->getProductStoryPairs($productID, $branch, 0, $storyStatus, 'id_desc', $limit, $type, 'story', $hasParent);
+        if(!in_array($this->app->tab, array('execution', 'project')) and empty($stories)) $stories = $this->story->getProductStoryPairs($productID, $branch, 0, $storyStatus, 'id_desc', $limit, $type, 'story', $hasParent);
 
         $storyID = isset($stories[$storyID]) ? $storyID : 0;
         $select  = html::select('story' . $number, empty($stories) ? array('' => '') : $stories, $storyID, "class='form-control'");
