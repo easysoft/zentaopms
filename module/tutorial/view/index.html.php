@@ -76,7 +76,6 @@
         <?php
         if(isset($task['mode']) && $task['mode'] != $mode) continue;
         $nav = $task['nav'];
-        if(!commonModel::hasPriv($nav['module'], $nav['method'])) continue;
         $task['name'] = $name;
         $task['id']   = ++ $idx;
         $task['url']  = helper::createLink($nav['module'], $nav['method'], isset($nav['vars']) ? $nav['vars'] : '', 'tutorial');
