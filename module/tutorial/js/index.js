@@ -168,6 +168,8 @@ $(function()
             container = null;
         }
 
+        if($(ele).hasClass('create-bug-btn')) container = '.btn-toolbar.pull-right'; // Fix bug #21092.
+
         $e.closest('body').find('.tooltip-tutorial').tooltip('destroy');
         var offset   = $e.offset();
         var winWidth = $(window).width();
