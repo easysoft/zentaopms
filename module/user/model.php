@@ -37,11 +37,11 @@ class userModel extends model
      * @access public
      * @return void
      */
-    public function getList()
+    public function getList($undeleted = true)
     {
         return $this->dao->select('*')->from(TABLE_USER)
-            ->where('deleted')->eq(0)
-            ->andWhere('type')->eq('inside')
+            ->where('type')->eq('inside')
+            ->beginIF($undeleted == true)->andWhere('deleted')->eq(0)->fi()
             ->orderBy('account')
             ->fetchAll();
     }
@@ -146,10 +146,10 @@ class userModel extends model
      * @access public
      * @return array
      */
-    public function getAvatarPairs()
+    public function getAvatarPairs($undeleted = true)
     {
         $avatarPairs = array();
-        $userList    = $this->getList();
+        $userList    = $this->getList($undeleted);
         foreach($userList as $user) $avatarPairs[$user->account] = $user->avatar;
 
         return $avatarPairs;
