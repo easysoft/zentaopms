@@ -848,7 +848,7 @@ class projectModel extends model
         }
 
         /* Judge workdays is legitimate. */
-        $workdays = helper::diffDate($project->end, $project->begin);
+        $workdays = helper::diffDate($project->end, $project->begin) + 1;
         if(isset($project->days) and $project->days > $workdays)
         {
             dao::$errors['days'] = sprintf($this->lang->project->workdaysExceed, $workdays);
@@ -1096,7 +1096,7 @@ class projectModel extends model
         }
 
         /* Judge workdays is legitimate. */
-        $workdays = helper::diffDate($project->end, $project->begin);
+        $workdays = helper::diffDate($project->end, $project->begin) + 1;
         if(isset($project->days) and $project->days > $workdays)
         {
             dao::$errors['days'] = sprintf($this->lang->project->workdaysExceed, $workdays);

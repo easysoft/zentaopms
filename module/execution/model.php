@@ -306,7 +306,7 @@ class executionModel extends model
             if($project) $type = zget($this->config->execution->modelList, $project->model, 'sprint');
 
             /* Judge workdays is legitimate. */
-            $workdays = helper::diffDate($_POST['end'], $_POST['begin']);
+            $workdays = helper::diffDate($_POST['end'], $_POST['begin']) + 1;
             if(isset($_POST['days']) and $_POST['days'] > $workdays)
             {
                 dao::$errors['days'] = sprintf($this->lang->project->workdaysExceed, $workdays);
@@ -461,7 +461,7 @@ class executionModel extends model
 
         /* Judge workdays is legitimate. */
         $this->app->loadLang('project');
-        $workdays = helper::diffDate($_POST['end'], $_POST['begin']);
+        $workdays = helper::diffDate($_POST['end'], $_POST['begin']) + 1;
         if(isset($_POST['days']) and $_POST['days'] > $workdays)
         {
             dao::$errors['days'] = sprintf($this->lang->project->workdaysExceed, $workdays);
@@ -660,7 +660,7 @@ class executionModel extends model
             }
 
             /* Judge workdays is legitimate. */
-            $workdays = helper::diffDate($data->ends[$executionID], $data->begins[$executionID]);
+            $workdays = helper::diffDate($data->ends[$executionID], $data->begins[$executionID]) + 1;
             if(isset($data->dayses[$executionID]) and $data->dayses[$executionID] > $workdays)
             {
                 $this->app->loadLang('project');
