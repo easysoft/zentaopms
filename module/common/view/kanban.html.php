@@ -64,7 +64,7 @@
 #kanbanList .project-row > .project-col {float: left; width: 50%; padding: 10px;}
 #kanbanList .project-row > .execution-item {position: absolute!important; left: 100%; top: 0}
 
-.region-affixed-scrollbar {position: fixed; bottom: 0; overflow-x: auto; overflow-x: auto; z-index: 100; background-color: rgba(255,255,255,.85); display: none;}
+.region-affixed-scrollbar {position: fixed; bottom: 0; overflow-x: auto; z-index: 100; background-color: rgba(255,255,255,.85); display: none;}
 .has-affixed-region .region-affixed-scrollbar {display: block;}
 .region-affixed-holder {height: 1px;}
 </style>
