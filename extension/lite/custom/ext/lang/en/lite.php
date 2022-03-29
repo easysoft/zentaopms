@@ -6,7 +6,6 @@ $lang->custom->notice->readOnlyOfExecution = "If Change Forbidden, any change on
 $lang->custom->moduleName['execution'] = $lang->custom->execution;
 
 $lang->custom->object = array();
-$lang->custom->object['project']   = 'Project';
 $lang->custom->object['execution'] = $lang->custom->execution;
 $lang->custom->object['story']     = $lang->SRCommon;
 $lang->custom->object['task']      = 'Task';
@@ -15,7 +14,8 @@ $lang->custom->object['user']      = 'User';
 $lang->custom->object['block']     = 'Block';
 
 $lang->custom->task = new stdClass();
-$lang->custom->task->fields['priList'] = 'Priority';
+$lang->custom->task->fields['priList']  = 'Priority';
+$lang->custom->task->fields['typeList'] = 'Type';
 
 $lang->custom->story = new stdClass();
 $lang->custom->story->fields['priList']          = 'Priority';
