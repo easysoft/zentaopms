@@ -97,10 +97,9 @@ function loadExecutionBuilds(executionID, selected)
 {
     var selectedBuild = $('#build').val();
 
-    productID = config.currentMethod == 'importunitresult' ? productID : $('#product').val();
     if(!selectedBuild) selectedBuild = 0;
-    link = createLink('build', 'ajaxGetExecutionBuilds', 'executionID=' + executionID + '&productID=' + productID + '&varName=testTaskBuild&build=' + selectedBuild);
-    if(executionID == 0) link = createLink('build', 'ajaxGetProductBuilds', 'productID=' + productID + '&varName=resolvedBuild&build=' + selectedBuild);
+    link = createLink('build', 'ajaxGetExecutionBuilds', 'executionID=' + executionID + '&productID=' + $('#product').val() + '&varName=testTaskBuild&build=' + selectedBuild);
+    if(executionID == 0) link = createLink('build', 'ajaxGetProductBuilds', 'productID=' + $('#product').val() + '&varName=resolvedBuild&build=' + selectedBuild);
     $('#buildBox').load(link, function()
     {
         $('#resolvedBuild').attr('id', 'build').attr('name', 'build').find('option[value=trunk]').remove();
