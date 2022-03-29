@@ -156,3 +156,57 @@ $(document).ready(function()
         });
     });
 });
+
+$('#confirmButton').click(function()
+{
+    /* Unique team. */
+    $('select[name^=team]').each(function(i)
+    {
+        value = $(this).val();
+        if(value == '') return;
+        $('select[name^=team]').each(function(j)
+        {
+            if(i <= j) return;
+            if(value == $(this).val()) $(this).closest('tr').addClass('hidden');
+        })
+    })
+    $('select[name^=team]').closest('tr.hidden').remove();
+
+    var memberCount   = '';
+    var assignedTo    = '';
+    var totalEstimate = 0;
+    var totalConsumed = 0;
+    var totalLeft     = 0;
+    $('select[name^=team]').each(function()
+    {
+        if($(this).find('option:selected').text() == '') return;
+
+        var account  = $(this).find('option:selected').val();
+        var realName = $(this).find('option:selected').text();
+        assignedTo += "<option value='" + account + "' title='" + realName + "'>" + realName + "</option>";
+        memberCount++;
+
+        estimate = parseFloat($(this).parents('td').next('td').find('[name^=teamEstimate]').val());
+        if(!isNaN(estimate)) totalEstimate += estimate;
+
+        consumed = parseFloat($(this).parents('td').next('td').find('[name^=teamConsumed]').val());
+        if(!isNaN(consumed)) totalConsumed += consumed;
+
+        left = parseFloat($(this).parents('td').next('td').find('[name^=teamLeft]').val());
+        if(!isNaN(left)) totalLeft += left;
+    })
+    $('#estimate').val(totalEstimate);
+    $('#consumedSpan').html(totalConsumed);
+    $('#left').val(totalLeft);
+    $('#assignedTo').html(assignedTo);
+    $('#assignedTo').trigger('chosen:updated');
+
+    if(memberCount < 2)
+    {
+        alert(teamMemberError);
+    }
+    else
+    {
+        $('.close').click();
+    }
+});

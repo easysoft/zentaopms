@@ -201,7 +201,7 @@ class docModel extends model
      */
     public function createApiLib()
     {
-        /* replace doc library name */
+        /* Replace doc library name. */
         $this->lang->doclib->name = $this->lang->doclib->apiLibName;
 
         $data = fixer::input('post')

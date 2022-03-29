@@ -173,7 +173,7 @@
                 else
                 {
                     $disabled = ($execution->grade == 2) ? ' disabled' : '';
-                    echo html::a('javascript:alert("' . $this->lang->programplan->error->createdTask . '");', '<i class="icon-programplan-create icon-split"></i>', '', 'class="btn ' . $disabled . '"');
+                    echo common::hasPriv('programplan', 'create') ? html::a('javascript:alert("' . $this->lang->programplan->error->createdTask . '");', '<i class="icon-programplan-create icon-split"></i>', '', 'class="btn ' . $disabled . '"') : '';
                 }
 
                 common::printIcon('programplan', 'edit', "planID=$execution->id&projectID=$projectID", $execution, 'list', '', '', 'iframe', true);

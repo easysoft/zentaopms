@@ -83,7 +83,7 @@
       </tbody>
     </table>
     <?php if($gitlabProjectList):?>
-    <div class='table-footer'><?php $pager->show('right', 'pagerjs');?></div>
+    <div class='table-footer'><?php $pager->show('right', 'pagerjs', 100);?></div>
     <?php endif;?>
   </form>
 </div>

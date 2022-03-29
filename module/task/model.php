@@ -258,7 +258,7 @@ class taskModel extends model
         parse_str($extra, $output);
 
         /* Judge whether the current task is a parent. */
-        $parentID = !empty($this->post->parent[0]) ? $this->post->parent[0] : 0;
+        $parentID = !empty($this->post->parent[1]) ? $this->post->parent[1] : 0;
 
         foreach($tasks->story as $key => $storyID)
         {
@@ -1888,9 +1888,19 @@ class taskModel extends model
         if($oldTask->parent > 0) $this->updateParentStatus($taskID);
         if($oldTask->parent == '-1')
         {
+            $oldChildrenTasks = $this->dao->select('*')->from(TABLE_TASK)->where('parent')->eq($taskID)->fetchAll('id');
             unset($task->assignedTo);
             $this->dao->update(TABLE_TASK)->data($task)->autoCheck()->where('parent')->eq((int)$taskID)->exec();
             $this->dao->update(TABLE_TASK)->set('assignedTo=openedBy')->where('parent')->eq((int)$taskID)->exec();
+            if(!dao::isError() and count($oldChildrenTasks) > 0)
+            {
+                $this->loadModel('action');
+                foreach($oldChildrenTasks as $oldChildrenTask)
+                {
+                    $actionID = $this->action->create('task', $oldChildrenTask->id, 'Canceled', $this->post->comment);
+                    $this->action->logHistory($actionID, common::createChanges($oldChildrenTask, $task));
+                }
+            }
         }
         if($oldTask->story)  $this->loadModel('story')->setStage($oldTask->story);
         $this->loadModel('kanban');
@@ -1961,9 +1971,19 @@ class taskModel extends model
         if($oldTask->parent > 0) $this->updateParentStatus($taskID);
         if($oldTask->parent == '-1')
         {
+            $oldChildrenTasks = $this->dao->select('*')->from(TABLE_TASK)->where('parent')->eq($taskID)->fetchAll('id');
             unset($task->left);
             $this->dao->update(TABLE_TASK)->data($task)->autoCheck()->where('parent')->eq((int)$taskID)->exec();
             $this->computeWorkingHours($taskID);
+            if(!dao::isError() and count($oldChildrenTasks) > 0)
+            {
+                $this->loadModel('action');
+                foreach($oldChildrenTasks as $oldChildrenTask)
+                {
+                    $actionID = $this->action->create('task', $oldChildrenTask->id, 'Activated', $this->post->comment);
+                    $this->action->logHistory($actionID, common::createChanges($oldChildrenTask, $task));
+                }
+            }
         }
         if($oldTask->story)  $this->loadModel('story')->setStage($oldTask->story);
         $this->loadModel('kanban');

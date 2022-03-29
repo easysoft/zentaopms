@@ -44,6 +44,7 @@ class Processor
         $this->initRelease();
         $this->initStakeholder();
         $this->initUserquery();
+        $this->initMessage();
         $this->initUpdateKanban();
         $this->initStory();
         $this->initBug();
@@ -159,6 +160,7 @@ class Processor
         $this->dao->update(TABLE_STORY)->set('`status`')->eq('active')->where('id')->le('20')->exec();
         $this->dao->update(TABLE_STORY)->set('`status`')->eq('draft')->where('id')->ge('300')->andwhere('id')->le('400')->exec();
         $this->dao->update(TABLE_STORY)->set('`closedBy`')->eq('')->set('`closedReason`')->eq('')->where('status')->ne('closed')->exec();
+        $this->dao->update(TABLE_STORY)->set('`plan`')->eq('0')->where('id')->gt('300')->andwhere('id')->lt('321')->exec();
     }
 
     /**
@@ -318,6 +320,12 @@ class Processor
         $this->dao->query("INSERT INTO `zt_userquery` (`id`, `account`, `module`, `title`, `form`, `sql`, `shortcut`) VALUES (5, 'admin',    'executionBuild',   '执行版本搜索', 'a:37:{s:9:\"fieldname\";s:0:\"\";s:12:\"fieldproduct\";s:0:\"\";s:12:\"fieldscmPath\";s:0:\"\";s:13:\"fieldfilePath\";s:0:\"\";s:9:\"fielddate\";s:0:\"\";s:12:\"fieldbuilder\";s:0:\"\";s:9:\"fielddesc\";s:0:\"\";s:7:\"fieldid\";s:0:\"\";s:6:\"andOr1\";s:3:\"AND\";s:6:\"field1\";s:4:\"name\";s:9:\"operator1\";s:7:\"include\";s:6:\"value1\";s:8:\"版本17\";s:6:\"andOr2\";s:3:\"and\";s:6:\"field2\";s:2:\"id\";s:9:\"operator2\";s:1:\"=\";s:6:\"value2\";s:0:\"\";s:6:\"andOr3\";s:3:\"and\";s:6:\"field3\";s:7:\"product\";s:9:\"operator3\";s:1:\"=\";s:6:\"value3\";s:0:\"\";s:10:\"groupAndOr\";s:3:\"and\";s:6:\"andOr4\";s:3:\"AND\";s:6:\"field4\";s:7:\"scmPath\";s:9:\"operator4\";s:7:\"include\";s:6:\"value4\";s:0:\"\";s:6:\"andOr5\";s:3:\"and\";s:6:\"field5\";s:8:\"filePath\";s:9:\"operator5\";s:7:\"include\";s:6:\"value5\";s:0:\"\";s:6:\"andOr6\";s:3:\"and\";s:6:\"field6\";s:4:\"date\";s:9:\"operator6\";s:1:\"=\";s:6:\"value6\";s:0:\"\";s:6:\"module\";s:14:\"executionBuild\";s:9:\"actionURL\";s:78:\"/index.php?m=execution&f=build&executionID=101&type=bysearch&queryID=myQueryID\";s:10:\"groupItems\";s:1:\"3\";s:8:\"formType\";s:4:\"more\";}',    '(( 1   AND `name`  LIKE \'%版本17%\' ) AND ( 1  ))',   '0');");
     }
 
+    private function initMessage()
+    {
+        $this->dao->query("DELETE FROM `zt_config` where `key` = 'setting';");
+        $this->dao->query("INSERT INTO `zt_config` (`vision`, `owner`, `module`, `section`, `key`, `value`) VALUES
+            ('rnd',  'system',   'message',  '', 'setting',  '{\"mail\":{\"setting\":{\"story\":[\"opened\",\"edited\",\"commented\",\"frombug\",\"changed\",\"reviewed\",\"closed\",\"activated\",\"assigned\"],\"task\":[\"opened\",\"edited\",\"commented\",\"assigned\",\"confirmed\",\"started\",\"finished\",\"paused\",\"canceled\",\"restarted\",\"closed\",\"activated\"],\"testtask\":[\"opened\",\"edited\",\"closed\"],\"doc\":[\"created\",\"edited\"]}},\"message\":{\"setting\":{\"story\":[\"opened\",\"edited\",\"commented\",\"frombug\",\"changed\",\"reviewed\",\"closed\",\"activated\",\"assigned\"],\"task\":[\"opened\",\"edited\",\"commented\",\"assigned\",\"confirmed\",\"started\",\"finished\",\"paused\",\"canceled\",\"restarted\",\"closed\",\"activated\"],\"testtask\":[\"opened\",\"edited\",\"started\",\"blocked\",\"closed\",\"activated\"],\"todo\":[\"opened\",\"edited\"],\"doc\":[\"created\",\"edited\"]}}}');");
+    }
     private function initTodo()
     {
         $toDay  = date('y-m-d');

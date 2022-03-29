@@ -631,7 +631,7 @@ class productModel extends model
 
                     $this->dao->update(TABLE_MODULE)->set('path')->eq($path)->where('id')->eq($lineID)->exec();
 
-                    $this->dao->update(TABLE_PRODUCT)->set('line')->eq($laneID)->where('id')->eq($productID)->exec();
+                    $this->dao->update(TABLE_PRODUCT)->set('line')->eq($lineID)->where('id')->eq($productID)->exec();
                 }
             }
 
@@ -1314,7 +1314,7 @@ class productModel extends model
                 unset($plans[$planID]);
                 continue;
             }
-            if((!helper::isZeroDate($plan->end) and strtotime($plan->end) - time() <= 0) or $plan->end == '2030-01-01') continue;
+            if((!helper::isZeroDate($plan->end) and $plan->end < date('Y-m-d')) or $plan->end == '2030-01-01') continue;
             $orderedPlans[$plan->end][] = $plan;
         }
 

@@ -8629,7 +8629,7 @@ ALTER TABLE `zt_action` CHANGE `action` `action` varchar(80) NOT NULL DEFAULT ''
 ALTER TABLE `zt_action` CHANGE `extra` `extra` text;
 ALTER TABLE `zt_file` CHANGE `objectType` `objectType` char(30) NOT NULL;
 
-INSERT INTO `zt_workflowrule` VALUES (1,'system','必填','notempty','admin','2020-10-14 14:06:14','','0000-00-00 00:00:00'),(2,'system','唯一','unique','admin','2020-10-14 14:06:14','','0000-00-00 00:00:00'),(3,'system','日期','date','admin','2020-10-14 14:06:14','','0000-00-00 00:00:00'),(4,'system','email','email','admin','2020-10-14 14:06:14','','0000-00-00 00:00:00'),(5,'system','数字','float','admin','2020-10-14 14:06:14','','0000-00-00 00:00:00'),(6,'system','电话','phone','admin','2020-10-14 14:06:14','','0000-00-00 00:00:00'),(7,'system','IP','ip','admin','2020-10-14 14:06:14','','0000-00-00 00:00:00');
+REPLACE INTO `zt_workflowrule` VALUES (1,'system','必填','notempty','admin','2020-10-14 14:06:14','','0000-00-00 00:00:00'),(2,'system','唯一','unique','admin','2020-10-14 14:06:14','','0000-00-00 00:00:00'),(3,'system','日期','date','admin','2020-10-14 14:06:14','','0000-00-00 00:00:00'),(4,'system','email','email','admin','2020-10-14 14:06:14','','0000-00-00 00:00:00'),(5,'system','数字','float','admin','2020-10-14 14:06:14','','0000-00-00 00:00:00'),(6,'system','电话','phone','admin','2020-10-14 14:06:14','','0000-00-00 00:00:00'),(7,'system','IP','ip','admin','2020-10-14 14:06:14','','0000-00-00 00:00:00');
 
 REPLACE INTO `zt_grouppriv` VALUES
 (1,'apppriv','flow'),

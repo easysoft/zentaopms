@@ -113,9 +113,11 @@ function computeEndDate(delta)
     if(delta == 999)
     {
         $('#end').val(longTime);
+        $('#daysBox').addClass('hidden');
+        $('#days').val(0);
         return false;
     }
-
+    $('#daysBox').removeClass('hidden');
     beginDate = convertStringToDate(beginDate);
     if((delta == 7 || delta == 14) && (beginDate.getDay() == 1))
     {

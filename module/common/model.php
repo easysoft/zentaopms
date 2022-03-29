@@ -2237,6 +2237,34 @@ EOD;
     }
 
     /**
+     * Check current page whether is in iframe. If it is not iframe and not allowed to open independently, then redirect to index to open it in iframe
+     *
+     * @access public
+     * @return void
+     */
+    public function checkIframe()
+    {
+        if($this->app->getViewType() != 'html' || helper::isAjaxRequest() || isset($_GET['_single'])) return;
+
+        if(isset($_SERVER['HTTP_SEC_FETCH_DEST']))
+        {
+            if($_SERVER['HTTP_SEC_FETCH_DEST'] == 'iframe') return;
+        }
+        else if(isset($_SERVER['HTTP_REFERER']) && !empty($_SERVER['HTTP_REFERER']))
+        {
+            return;
+        }
+
+        $module = $this->app->getModuleName();
+        $method = $this->app->getMethodName();
+        if($module == 'index' || $module == 'tutorial' || $module == 'install' || $module == 'upgrade' || ($module == 'user' && ($method == 'login' || $method == 'deny')) || ($module == 'my' && $method == 'changepassword')) return;
+
+        $url = helper::safe64Encode($_SERVER['REQUEST_URI']);
+        $redirectUrl = helper::createLink('index', 'index', "open=$url");
+        die(header("location: $redirectUrl"));
+    }
+
+    /**
      * Check the user has permisson of one method of one module.
      *
      * @param  string $module
@@ -2250,6 +2278,16 @@ EOD;
         global $app, $lang;
         $module = strtolower($module);
         $method = strtolower($method);
+
+        /* If the user is doing a tutorial, have all tutorial privs. */
+        if(defined('TUTORIAL'))
+        {
+            $app->loadLang('tutorial');
+            foreach($lang->tutorial->tasks as $task)
+            {
+                if($task['nav']['module'] == $module and $task['nav']['method'] = $method) return true;
+            }
+        }
 
         /* Check the parent object is closed. */
         if(!empty($method) and strpos('close|batchclose', $method) === false and !commonModel::canBeChanged($module, $object)) return false;

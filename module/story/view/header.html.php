@@ -34,7 +34,8 @@ function loadProduct(productID)
     }
 
     oldProductID = $('#product').val();
-    loadProductBranches(productID)
+    loadProductBranches(productID);
+    loadProductReviewers(productID);
 }
 
 /**

@@ -335,7 +335,7 @@
             $actionLink = $this->createLink('story', 'batchEdit', "productID=0&executionID=$execution->id");
             echo html::commonButton($lang->edit, "data-form-action='$actionLink' $disabled");
             ?>
-            <button type='button' class='btn dropdown-toggle' data-toggle='dropdown'><span class='caret'></span></button>
+            <button type='button' <?php echo $canBatchToTask ? '' : "disabled='disabled'";?> class='btn dropdown-toggle' data-toggle='dropdown'><span class='caret'></span></button>
             <ul class='dropdown-menu'>
               <?php
               $class = $canBatchToTask ? '' : "class='hidden'";

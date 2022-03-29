@@ -482,6 +482,12 @@ class project extends control
 
         $topProgramID = $this->program->getTopByID($programID);
 
+        if($model == 'kanban')
+        {
+            $this->lang->project->aclList    = $this->lang->project->kanbanAclList;
+            $this->lang->project->subAclList = $this->lang->project->kanbanSubAclList;
+        }
+
         $this->view->title      = $this->lang->project->create;
         $this->view->position[] = $this->lang->project->create;
 
@@ -534,7 +540,12 @@ class project extends control
         $project   = $this->project->getByID($projectID);
         $programID = $project->parent;
         $this->project->setMenu($projectID);
-        if($project->model == 'kanban') unset($this->lang->project->authList['reset']);
+        if($project->model == 'kanban')
+        {
+            unset($this->lang->project->authList['reset']);
+            $this->lang->project->aclList    = $this->lang->project->kanbanAclList;
+            $this->lang->project->subAclList = $this->lang->project->kanbanSubAclList;
+        }
 
         if($_POST)
         {
@@ -706,6 +717,8 @@ class project extends control
     public function view($projectID = 0)
     {
         if(!defined('RUN_MODE') || RUN_MODE != 'api') $projectID = $this->project->saveState((int)$projectID, $this->project->getPairsByProgram());
+
+        $this->session->set('teamList', $this->app->getURI(true), 'project');
 
         $project = $this->project->getById($projectID);
         if(empty($project) || strpos('scrum,waterfall,kanban', $project->model) === false)
@@ -1249,11 +1262,11 @@ class project extends control
                 }
                 else
                 {
-                    if($project->model == 'scrum' and $module == 'projectstory') $this->config->project->excludedPriv[$module][] = 'track';
+                    if($project->model == 'scrum' and $module == 'projectstory') unset($this->lang->resource->projectstory->track);
 
                     foreach($methods as $method => $label)
                     {
-                        if(isset($this->config->project->excludedPriv[$module]) and in_array($method, $this->config->project->excludedPriv[$module])) unset($this->lang->resource->$module->$method);
+                        if(isset($this->config->project->includedPriv[$module]) and !in_array($method, $this->config->project->includedPriv[$module])) unset($this->lang->resource->$module->$method);
                     }
                 }
             }
@@ -1271,6 +1284,8 @@ class project extends control
      */
     public function team($projectID = 0)
     {
+        $this->session->set('teamList', $this->app->getURI(true), 'project');
+
         $this->app->loadLang('execution');
         $this->project->setMenu($projectID);
 
@@ -1347,7 +1362,7 @@ class project extends control
 
             $this->loadModel('action')->create('team', $projectID, 'ManagedTeam');
 
-            $link = $this->createLink('project', 'team', "projectID=$projectID");
+            $link = $this->session->teamList ? $this->session->teamList : $this->createLink('project', 'team', "projectID=$projectID");
             return $this->send(array('message' => $this->lang->saveSuccess, 'result' => 'success', 'locate' => $link));
         }
 

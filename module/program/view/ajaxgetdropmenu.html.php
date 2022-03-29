@@ -61,7 +61,7 @@ a.programName:focus, a.programName:hover {background: #0c64eb; color: #fff !impo
 $('#programTree').tree();
 $(function()
 {
-    $(document).on('change', 'input[name^="showClosed"]', function()
+    $("input[name^='showClosed']").change(function()
     {
         var showClosed = $(this).is(':checked') ? 1 : 0;
         $.cookie('showClosed', showClosed, {expires:config.cookieLife, path:config.webRoot});

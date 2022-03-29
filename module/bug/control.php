@@ -1259,7 +1259,14 @@ class bug extends control
                     return print(js::closeModal('parent.parent'));
                 }
             }
-            return print(js::locate($this->createLink('bug', 'view', "bugID=$bugID"), 'parent'));
+            if(defined('RUN_MODE') && RUN_MODE == 'api')
+            {    
+                return $this->send(array('status' => 'success', 'data' => $bugID));
+            }    
+            else 
+            {    
+                return print(js::locate($this->createLink('bug', 'view', "bugID=$bugID"), 'parent'));
+            }    
         }
 
         if($this->app->tab == 'project')
@@ -1627,7 +1634,8 @@ class bug extends control
 
             $files = $this->loadModel('file')->saveUpload('bug', $bugID);
 
-            $actionID = $this->action->create('bug', $bugID, 'Activated', $this->post->comment);
+            $fileAction = !empty($files) ? $this->lang->addFiles . join(',', $files) . "\n" : '';
+            $actionID   = $this->action->create('bug', $bugID, 'Activated', $fileAction . $this->post->comment);
             $this->action->logHistory($actionID, $changes);
 
             $this->executeHooks($bugID);
@@ -1710,7 +1718,7 @@ class bug extends control
             }
             if(defined('RUN_MODE') && RUN_MODE == 'api')
             {
-                return print(array('status' => 'success', 'data' => $bugID));
+                return $this->send(array('status' => 'success', 'data' => $bugID));
             }
             else
             {

@@ -69,6 +69,7 @@ if(!empty($_GET['display']) && $_GET['display'] == 'card') $config->default->vie
 
 $app->parseRequest();
 $common->checkPriv();
+$common->checkIframe();
 $app->loadModule();
 
 /* Flush the buffer. */

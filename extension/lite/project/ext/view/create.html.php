@@ -49,27 +49,6 @@
           <td><?php echo html::select('PM', $pmUsers, '', "class='form-control chosen'" . (strpos($requiredFields, 'PM') !== false ? ' required' : ''));?></td>
         </tr>
         <tr>
-          <th><?php echo $lang->project->budget;?></th>
-          <td>
-            <div class='input-group'>
-              <?php $placeholder = ($parentProgram and $parentProgram->budget != 0) ? 'placeholder=' . $lang->program->parentBudget . zget($lang->project->currencySymbol, $parentProgram->budgetUnit) . $availableBudget : '';?>
-              <?php echo html::input('budget', '', "class='form-control' maxlength='10' " . (strpos($requiredFields, 'budget') !== false ? 'required ' : '') . $placeholder);?>
-              <?php if($parentProgram):?>
-              <span class='input-group-addon'><?php echo zget($budgetUnitList, $parentProgram->budgetUnit);?></span>
-              <?php else:?>
-              <span class='input-group-addon'></span>
-              <?php echo html::select('budgetUnit', $budgetUnitList, $config->project->defaultCurrency, "class='form-control'");?>
-              <?php endif;?>
-            </div>
-          </td>
-          <td>
-            <div class='checkbox-primary'>
-              <input type='checkbox' id='future' name='future' value='1' />
-              <label for='future'><?php echo $lang->project->future;?></label>
-            </div>
-          </td>
-        </tr>
-        <tr>
           <th><?php echo $lang->project->dateRange;?></th>
           <td>
             <div class='input-group'>

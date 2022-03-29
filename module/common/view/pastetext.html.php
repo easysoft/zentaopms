@@ -50,7 +50,11 @@ $(function()
             {
                 line = $.trim(line);
                 if (!line.length) return;
-                if (!$lastRow) $row = $form.find('tbody>tr:first');
+                if (!$lastRow)
+                {
+                    $row = $form.find('tbody>tr .title-import').first().closest('tr');
+                    if(!$row && batchForm) $row = batchForm.createRow();
+                }
                 else $row = $lastRow.next();
                 while ($row.length && $row.find('.title-import').val().length)
                 {

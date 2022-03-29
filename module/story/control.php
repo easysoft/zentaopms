@@ -1122,9 +1122,9 @@ class story extends control
         $story->files = $this->loadModel('file')->getByObject($story->type, $storyID);
         $product      = $this->dao->findById($story->product)->from(TABLE_PRODUCT)->fields('name, id, type, status')->fetch();
         $plan         = $this->dao->findById($story->plan)->from(TABLE_PRODUCTPLAN)->fetch('title');
-        $bugs         = $this->dao->select('id,title')->from(TABLE_BUG)->where('story')->eq($storyID)->andWhere('deleted')->eq(0)->fetchAll();
+        $bugs         = $this->dao->select('id,title,status,pri,severity')->from(TABLE_BUG)->where('story')->eq($storyID)->andWhere('deleted')->eq(0)->fetchAll();
         $fromBug      = $this->dao->select('id,title')->from(TABLE_BUG)->where('toStory')->eq($storyID)->fetch();
-        $cases        = $this->dao->select('id,title')->from(TABLE_CASE)->where('story')->eq($storyID)->andWhere('deleted')->eq(0)->fetchAll();
+        $cases        = $this->dao->select('id,title,status,pri')->from(TABLE_CASE)->where('story')->eq($storyID)->andWhere('deleted')->eq(0)->fetchAll();
         $linkedMRs    = $this->loadModel('mr')->getLinkedMRPairs($storyID, 'story');
         $modulePath   = $this->tree->getParents($story->module);
         $storyModule  = empty($story->module) ? '' : $this->tree->getById($story->module);
@@ -1374,7 +1374,8 @@ class story extends control
                 $execution = $this->execution->getByID($this->session->execution);
                 if($this->app->tab == 'execution' and $execution->type == 'kanban' and $this->app->tab == 'execution')
                 {
-                    $kanbanData = $this->loadModel('kanban')->getRDKanban($this->session->execution, $this->session->execLaneType ? $this->session->execLaneType : 'all');
+                    $this->loadModel('kanban')->updateLane($this->session->execution, 'story', $storyID);
+                    $kanbanData = $this->kanban->getRDKanban($this->session->execution, $this->session->execLaneType ? $this->session->execLaneType : 'all');
                     $kanbanData = json_encode($kanbanData);
 
                     return print(js::closeModal('parent.parent', '', "parent.parent.updateKanban($kanbanData)"));
@@ -2098,7 +2099,7 @@ class story extends control
             $stories = $this->story->getProductStoryPairs($productID, $branch, $moduleID, $storyStatus, 'id_desc', $limit, $type, 'story', $hasParent);
         }
 
-        if(empty($stories)) $stories = $this->story->getProductStoryPairs($productID, $branch, 0, $storyStatus, 'id_desc', $limit, $type, 'story', $hasParent);
+        if(!in_array($this->app->tab, array('execution', 'project')) and empty($stories)) $stories = $this->story->getProductStoryPairs($productID, $branch, 0, $storyStatus, 'id_desc', $limit, $type, 'story', $hasParent);
 
         $storyID = isset($stories[$storyID]) ? $storyID : 0;
         $select  = html::select('story' . $number, empty($stories) ? array('' => '') : $stories, $storyID, "class='form-control'");

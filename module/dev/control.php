@@ -3,7 +3,7 @@
  * The control file of dev module of ZenTaoPMS.
  *
  * @copyright Copyright 2009-2010 QingDao Nature Easy Soft Network Technology Co,LTD (www.cnezsoft.com)
- * @author    chunsheng wang <chunsheng@cnezsoft.com> 
+ * @author    chunsheng wang <chunsheng@cnezsoft.com>
  * @package
  * @uses      control
  * @license   LGPL
@@ -54,7 +54,7 @@ class dev extends control
 
     /**
      * Editor.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -70,7 +70,7 @@ class dev extends control
 
     /**
      * Translate.
-     * 
+     *
      * @access public
      * @return void
      */

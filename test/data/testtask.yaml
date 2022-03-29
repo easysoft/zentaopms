@@ -69,7 +69,7 @@ fields:
     format: "YYYY-MM-DD"
   - field: end
     note: "结束日期"
-    range: "(M)-(+1w):60"
+    range: "(+1w)-(M)"
     type: timestamp
     prefix: ""
     postfix: ""

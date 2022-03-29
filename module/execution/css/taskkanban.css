@@ -60,3 +60,4 @@
 
 .createButton {margin-right: 5px;}
 .headerTop {top: 0px !important;}
+.kanban-header-col>.actions>a {padding: 0px !important;}

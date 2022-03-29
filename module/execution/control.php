@@ -1230,6 +1230,8 @@ class execution extends control
      */
     public function team($executionID = 0)
     {
+        $this->app->session->set('teamList', $this->app->getURI(true), 'execution');
+
         $execution   = $this->commonAction($executionID);
         $executionID = $execution->id;
 
@@ -1976,6 +1978,8 @@ class execution extends control
      */
     public function view($executionID)
     {
+        $this->app->session->set('teamList', $this->app->getURI(true), 'execution');
+
         $executionID = $this->execution->saveState((int)$executionID, $this->executions);
         $execution   = $this->execution->getById($executionID, true);
         $type = $this->config->vision == 'lite' ? 'kanban' : 'stage,sprint,kanban';
@@ -2639,7 +2643,8 @@ class execution extends control
         {
             $this->execution->manageMembers($executionID);
             $this->loadModel('action')->create('team', $executionID, 'managedTeam');
-            return print(js::locate($this->createLink('execution', 'team', "executionID=$executionID"), 'parent'));
+            $link = $this->session->teamList ? $this->session->teamList : $this->createLink('execution', 'team', "executionID=$executionID");
+            return print(js::locate($link, 'parent'));
         }
 
         /* Load model. */
@@ -3129,6 +3134,7 @@ class execution extends control
             foreach($projects as $project)
             {
                 $executions = zget($executionGroups, $project->id, array());
+                if(isset($project->model) and $project->model == 'waterfall') ksort($executions);
 
                 foreach($executions as $execution)
                 {
@@ -3285,9 +3291,11 @@ class execution extends control
         {
             $projects  = $this->project->getPairsByProgram();
             $projectID = $this->project->saveState($projectID, $projects);
-            $project = $this->loadModel('project')->getByID($projectID);
+            $project   = $this->loadModel('project')->getByID($projectID);
             $this->view->project = $project;
             $this->project->setMenu($projectID);
+
+            if(!empty($project->model) and $project->model == 'kanban' and !(defined('RUN_MODE') and RUN_MODE == 'api')) return $this->locate($this->createLink('project', 'index', "projectID=$projectID"));
         }
 
         if($this->app->viewType == 'mhtml')

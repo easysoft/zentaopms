@@ -58,6 +58,7 @@ $lang->project->unlinkMember       = '移除成员';
 $lang->project->copyTeamTitle      = '选择一个项目团队来复制';
 $lang->project->daysGreaterProject = '可用工日不能大于项目的可用工日『%s』';
 $lang->project->errorHours         = '可用工时/天不能大于『24』';
+$lang->project->workdaysExceed     = '可用工作日不能超过『%s』天';
 
 /* Fields. */
 $lang->project->common             = '项目';
@@ -242,6 +243,13 @@ $lang->project->acls['open']    = '公开';
 $lang->project->subAclList['private'] = "私有 (只有项目负责人、团队成员和干系人可访问)";
 $lang->project->subAclList['open']    = "公开 (有项目视图权限即可访问)";
 $lang->project->subAclList['program'] = '项目集内公开（所有上级项目集负责人和干系人、项目负责人、团队成员和干系人可访问）';
+
+$lang->project->kanbanAclList['private'] = "私有 (只有项目负责人、团队成员可访问)";
+$lang->project->kanbanAclList['open']    = "公开 (有项目视图权限即可访问)";
+
+$lang->project->kanbanSubAclList['private'] = "私有 (只有项目负责人、团队成员可访问)";
+$lang->project->kanbanSubAclList['open']    = "公开 (有项目视图权限即可访问)";
+$lang->project->kanbanSubAclList['program'] = '项目集内公开（所有上级项目集负责人和干系人、项目负责人、团队成员可访问）';
 
 $lang->project->authList['extend'] = '继承 (取系统权限与项目权限的合集)';
 $lang->project->authList['reset']  = '重新定义 (只取项目权限)';

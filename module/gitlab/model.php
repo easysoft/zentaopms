@@ -994,7 +994,7 @@ class gitlabModel extends model
      */
     public function apiGetSingleUser($gitlabID, $userID)
     {
-        $url = sprintf($this->getApiRoot($gitlabID), "/users/$userID");
+        $url = sprintf($this->getApiRoot($gitlabID, false), "/users/$userID");
         return json_decode(commonModel::http($url));
     }
 
