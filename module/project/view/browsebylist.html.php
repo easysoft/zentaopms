@@ -14,14 +14,14 @@
 .project-type-label.label-outline {width: 50px; min-width: 50px;}
 .project-type-label.label {overflow: unset !important; text-overflow: unset !important; white-space: unset !important;}
 
-#projectTableList .project-name {position: relative; display: flex; align-items: center;}
-#projectTableList .project-name > span,
-#projectTableList .project-name > span {flex: none;}
-#projectTableList .project-name > a {color: #0c60e1; display: inline-block; max-width: calc(100% - 50px);}
-#projectTableList .project-name.has-prefix > a,
-#projectTableList .project-name.has-suffix > a {max-width: calc(100% - 100px);}
-#projectTableList .project-name.has-prefix > a {padding-left: 5px;}
-#projectTableList .project-name.has-suffix > a {padding-right: 5px;}
+.project-name {position: relative; display: flex; align-items: center;}
+.project-name > span,
+.project-name > span {flex: none;}
+.project-name > a {color: #0c60e1; display: inline-block; max-width: calc(100% - 50px);}
+.project-name.has-prefix > a,
+.project-name.has-suffix > a {max-width: calc(100% - 100px);}
+.project-name.has-prefix > a {padding-left: 5px;}
+.project-name.has-suffix > a {padding-right: 5px;}
 .table-footer {z-index: 1;}
 </style>
 <div id="mainMenu" class="clearfix">
@@ -109,7 +109,7 @@
             ?>
           </tr>
         </thead>
-        <tbody class="sortable" id='projectTableList'>
+        <tbody class="sortable">
           <?php foreach($projectStats as $project):?>
           <?php $project->from = 'project';?>
           <tr data-id="<?php echo $project->id;?>">
