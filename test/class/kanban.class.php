@@ -43,13 +43,38 @@ class kanbanTest
         return $object;
     }
 
-    public function createRegionTest($kanban, $region = null, $copyRegionID = 0, $from = 'kanban')
+    /**
+     * Test create a region.
+     *
+     * @param  object $kanban
+     * @param  object $region
+     * @param  int    $copyRegionID
+     * @access public
+     * @return object
+     */
+    public function createRegionTest($kanban, $region = null, $copyRegionID = 0)
     {
-        $objects = $this->objectModel->createRegion($kanban, $region = null, $copyRegionID = 0, $from = 'kanban');
+        if(!is_null($region))
+        {
+            if(empty($copyRegionID))
+            {
+                foreach($region as $key => $value) $_POST[$key] = $value;
+                $region = null;
+            }
+
+            $objectID = $this->objectModel->createRegion($kanban, $region, $copyRegionID);
+        }
+        else
+        {
+            $objectID = $this->objectModel->createDefaultRegion($kanban);
+        }
+
+        unset($_POST);
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        $object = $this->objectModel->getRegionByID($objectID);
+        return $object;
     }
 
     /**
@@ -442,13 +467,30 @@ class kanbanTest
         return $objects;
     }
 
-    public function createLaneTest($kanbanID, $regionID, $lane = null)
+    /**
+     * Test create a lane.
+     *
+     * @param  object $object
+     * @param  int    $kanbanID
+     * @param  int    $regionID
+     * @access public
+     * @return object
+     */
+    public function createLaneTest($object, $kanbanID, $regionID)
     {
-        $objects = $this->objectModel->createLane($kanbanID, $regionID, $lane = null);
+        $lane = isset($object->id) ? $this->objectModel->getLaneByID($object->id) : null;
+        unset($object->id);
+        unset($lane->id);
+
+        foreach($object as $key => $value) $_POST[$key] = $value;
+
+        $objectID = $this->objectModel->createLane($kanbanID, $regionID, $lane);
+        unset($_POST);
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        $object = $this->objectModel->getLaneByID($objectID);
+        return $object;
     }
 
     /**
@@ -563,38 +605,75 @@ class kanbanTest
 
     public function createRDKanbanTest($execution)
     {
-        $objects = $this->objectModel->createRDKanban($execution);
+        $this->objectModel->createRDKanban($execution);
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        global $tester;
+        $regions = $tester->dao->select('*')->from(TABLE_KANBANREGION)->where('`kanban`')->eq($execution->id)->fetchAll('id');
+        $lanes   = $tester->dao->select('*')->from(TABLE_KANBANLANE)->where('`execution`')->eq($execution->id)->andWhere('`type`')->ne('common')->fetchAll('id');
+        $regionIDList = implode($regions, ',');
+        $columns = $tester->dao->select('*')->from(TABLE_KANBANCOLUMN)->where('`region`')->in($regionIDList)->fetchAll('id');
+        return count($regions) . ',' . count($lanes) . ',' . count($columns);
     }
 
+    /**
+     * Test create default RD region.
+     *
+     * @param  object $execution
+     * @access public
+     * @return object
+     */
     public function createRDRegionTest($execution)
     {
-        $objects = $this->objectModel->createRDRegion($execution);
+        $objectID = $this->objectModel->createRDRegion($execution);
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        $object = $this->objectModel->getRegionByID($objectID);
+        return $object;
     }
 
+    /**
+     *
+     * Test create default RD lanes.
+     *
+     * @param  int    $executionID
+     * @param  int    $regionID
+     * @access public
+     * @return int
+     */
     public function createRDLaneTest($executionID, $regionID)
     {
-        $objects = $this->objectModel->createRDLane($executionID, $regionID);
+        $this->objectModel->createRDLane($executionID, $regionID);
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        global $tester;
+        $objects = $tester->dao->select('*')->from(TABLE_KANBANLANE)->where('`region`')->eq($regionID)->andWhere('`execution`')->eq($executionID)->fetchAll();
+        return count($objects);
     }
 
+    /**
+     * Test create default RD columns.
+     *
+     * @param  int    $regionID
+     * @param  int    $groupID
+     * @param  int    $laneID
+     * @param  string $laneType
+     * @param  int    $executionID
+     * @access public
+     * @return int
+     */
     public function createRDColumnTest($regionID, $groupID, $laneID, $laneType, $executionID)
     {
-        $objects = $this->objectModel->createRDColumn($regionID, $groupID, $laneID, $laneType, $executionID);
+        $this->objectModel->createRDColumn($regionID, $groupID, $laneID, $laneType, $executionID);
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        global $tester;
+        $objects = $tester->dao->select('*')->from(TABLE_KANBANCOLUMN)->where('`region`')->eq($regionID)->andWhere('`group`')->eq($groupID)->fetchAll();
+        return count($objects);
     }
 
     public function updateRegionTest($regionID)
