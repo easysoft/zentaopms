@@ -998,6 +998,12 @@ class taskModel extends model
             $requiredFields = str_replace(',estimate,', ',', $requiredFields);
         }
 
+        if(strpos(',done,wait,cancel,closed,', $task->status) === false && empty($teams) && $task->left == 0)
+        {
+            dao::$errors[] = sprintf($this->lang->task->error->statusLeft, $this->lang->task->statusList[$task->status]);
+            return false;
+        }
+
         $requiredFields = trim($requiredFields, ',');
 
         $this->dao->update(TABLE_TASK)->data($task)
@@ -1008,7 +1014,6 @@ class taskModel extends model
             ->checkIF($task->estimate != false, 'estimate', 'float')
             ->checkIF($task->left     != false, 'left',     'float')
             ->checkIF($task->consumed != false, 'consumed', 'float')
-            ->checkIF($task->status   != 'wait' and empty($teams) and $task->left == 0 and $task->status != 'cancel' and $task->status != 'closed', 'status', 'equal', 'done')
 
             ->batchCheckIF($task->status == 'wait' or $task->status == 'doing', 'finishedBy, finishedDate,canceledBy, canceledDate, closedBy, closedDate, closedReason', 'empty')
 
