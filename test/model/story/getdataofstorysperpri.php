@@ -13,6 +13,12 @@ pid=1
 
 */
 
-$story = new storyTest();
+global $tester;
+$tester->loadModel('story');
+$tester->loadModel('report');
 
-r() && p() && e();
+$data = $tester->story->getDataOfStorysPerPri();
+
+r(count($data)) && p()                && e('4');     // 按照优先级分组，获取分组后的需求数量
+r($data)        && p('1:name,value')  && e('1,113'); // 按照优先级分组，获取各个优先级的需求数量，查看优先级1下的数据
+r($data)        && p('4:name,value')  && e('1,112'); // 按照优先级分组，获取各个优先级的需求数量，查看优先级4下的数据

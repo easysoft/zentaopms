@@ -1,6 +1,5 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
-include dirname(dirname(dirname(__FILE__))) . '/class/story.class.php';
 su('admin');
 
 /**
@@ -13,6 +12,11 @@ pid=1
 
 */
 
-$story = new storyTest();
+global $tester;
+$tester->loadModel('story');
 
-r() && p() && e();
+$data = $tester->story->getDataOfStorysPerChange();
+
+r(count($data)) && p()               && e('3');     // 按照需求版本号分组，获取分组后的需求数量
+r($data)        && p('1:name,value') && e('1,80');  // 按照需求版本号分组，获取各个版本号下的需求数量，查看admin下的数据
+r($data)        && p('2:name,value') && e('0,350'); // 按照需求版本号分组，获取各个版本号下的需求数量，查看admin下的数据

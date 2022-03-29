@@ -13,6 +13,10 @@ pid=1
 
 */
 
-$story = new storyTest();
+global $tester;
+$story1Tracks = $tester->loadModel('story')->getByID(1);
 
-r() && p() && e();
+r(count($story1Tracks->tasks)) && p()                    && e('6');                                    //获取用户需求1下面的所有任务数量
+r($story1Tracks->tasks[601])   && p('0:name')            && e('开发任务511');                          //获取用户需求1下面的任务601的名字
+r($story1Tracks->tasks[501])   && p('0:name')            && e('开发任务411');                          //获取用户需求1下面的任务501的名字
+r($story1Tracks)               && p('title,type,status') && e('软件需求版本一551,requirement,active'); //获取用户需求的信息
