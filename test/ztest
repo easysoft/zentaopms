@@ -31,6 +31,9 @@ switch($argv[1])
     case 'task':
         ztfRun('model/task');
         break;
+    case 'story':
+        ztfRun('model/story');
+        break;
     case 'execution':
         ztfRun('model/execution');
         break;

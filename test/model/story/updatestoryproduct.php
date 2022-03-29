@@ -9,6 +9,9 @@ title=测试 storyModel->updateStoryProduct();
 cid=1
 pid=1
 
+判断需求变更所属产品之前的产品ID >> 1
+判断需求变更所属产品之后的产品ID >> 2
+
 */
 
 $story = new storyTest();

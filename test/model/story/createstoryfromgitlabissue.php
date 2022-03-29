@@ -9,6 +9,10 @@ title=测试 storyModel->createStoryFromGitlabIssue();
 cid=1
 pid=1
 
+创建正常的需求，获取创建后的id、title、stage、product >> 401,测试需求1,projected,1
+需求名称为空，给出提示 >> 『研发需求名称』不能为空。
+创建正常的需求，获取创建后的id、title、stage、product >> 402,测试需求3,projected,2
+
 */
 
 $story = new storyTest();
