@@ -16,15 +16,13 @@ pid=1
 global $tester;
 $tester->loadModel('story');
 
-$skipProductIDList = array(1, 2, 3, 4, 5);
-$user2Stories      = $tester->story->getUserStoryPairs('user2', '10');
-$adminRequirements = $tester->story->getUserStoryPairs('admin', '50', 'requirement');
-$user2Stories      = $tester->story->getUserStoryPairs('user2', '10', 'story', $skipProductIDList);
-a($user2Stories);die;
+$skipProductIDList        = array(91, 92, 93);
+$user2Stories             = $tester->story->getUserStoryPairs('user2', '10');
+$adminRequirements        = $tester->story->getUserStoryPairs('admin', '50', 'requirement');
+$allUser2Stories          = $tester->story->getUserStoryPairs('user2', '0', 'story');
+$user2StoriesSkipProducts = $tester->story->getUserStoryPairs('user2', '0', 'story', $skipProductIDList);
 
-$openedByUser2Stories   = $tester->story->getUserStories('user2', 'openedBy', 'id_asc', $pager, 'story', true);
-$closedByTest3Stories   = $tester->story->getUserStories('test3', 'closedBy', 'id_asc', null, 'requirement', true);
-$emptyReviewedByStories = $tester->story->getUserStories('', 'reviewedBy');
-
-r(count($user2Stories))      && p() && e('10');   //获取指派给User2的需求数量，每页10条
-r(count($adminRequirements)) && p() && e('50');   //获取指派给admin的用户需求，每页50条
+r(count($user2Stories))             && p() && e('10');   //获取指派给User2的需求数量，每页10条
+r(count($adminRequirements))        && p() && e('50');   //获取指派给admin的用户需求，每页50条
+r(count($allUser2Stories))          && p() && e('100');  //获取指派给User2的所有需求总数
+r(count($user2StoriesSkipProducts)) && p() && e('97');   //获取指派给admin的、不在产品91/92/93里的用户需求，每页50条

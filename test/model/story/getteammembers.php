@@ -13,6 +13,9 @@ pid=1
 
 */
 
-$story = new storyTest();
+global $tester;
+$tester->loadModel('story');
+$members1 = $tester->story->getTeamMembers(20, '');
+$members2 = $tester->story->getTeamMembers(21, 'changed');
 
 r() && p() && e();
