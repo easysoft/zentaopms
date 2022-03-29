@@ -125,6 +125,7 @@ class upgradeModel extends model
                 $maxVersion = array_search($openVersion, $this->config->upgrade->maxVersion);
                 $this->saveLogs("Execute $maxVersion");
                 $this->execSQL($this->getUpgradeFile(str_replace('_', '.', $maxVersion)));
+                $this->executeMax($maxVersion);
             }
         }
 
@@ -442,6 +443,9 @@ class upgradeModel extends model
                     }
                 }
                 break;
+            case '15_5':
+                $this->addDefaultKanbanPri();
+                break;
             case '15_7_1':
                 $this->updateObjectBranch();
                 $this->updateProjectStories();
@@ -532,6 +536,9 @@ class upgradeModel extends model
             case 'pro10_0_2':
                 $this->fixReportLang();
                 break;
+            case 'pro10_2':
+                $this->addDefaultKanbanPri();
+                break;
         }
     }
 
@@ -615,6 +622,9 @@ class upgradeModel extends model
             case 'biz5_0_1':
                 $this->updateWorkflow4Execution();
                 break;
+            case 'biz5_2':
+                $this->addDefaultKanbanPri();
+                break;
             case 'biz5_3_1':
                 $this->processFeedbackField();
                 $this->addFileFields();
@@ -622,6 +632,23 @@ class upgradeModel extends model
                 break;
             case 'biz6_4':
                 $this->importLiteModules();
+                break;
+        }
+    }
+
+    /**
+     * Process data for max.
+     *
+     * @param  int   $maxVersion
+     * @access public
+     * @return void
+     */
+    public function executeMax($maxVersion)
+    {
+        switch($maxVersion)
+        {
+            case 'max2_2':
+                $this->addDefaultKanbanPri();
                 break;
         }
     }
@@ -6067,5 +6094,37 @@ class upgradeModel extends model
             $content = str_replace('helper::import(dirname(dirname(dirname(__FILE__))) . "/control.php");', "helper::importControl('$moduleName');", $content);
         }
         file_put_contents($filePath, $content);
+    }
+
+    /**
+     * Add groups default kanban private
+     *
+     * @access public
+     * @return void
+     */
+    public function addDefaultKanbanPri()
+    {
+        /* Fix bug #17954. */
+        $hasKanbanPri = $this->dao->select('*')->from(TABLE_GROUPPRIV)->where('module')->eq('kanban')->fetch();
+        if(!$hasKanbanPri)
+        {
+            $this->app->loadLang('group');
+            $groups = $this->dao->select('id')->from(TABLE_GROUP)->where('role')->in('admin,pm,po')->fetchPairs('id');
+            foreach($groups as $groupID)
+            {
+                foreach($this->lang->resource->kanban as $method => $name)
+                {
+                    if(stripos($method, 'delete') === false)
+                    {
+                        $groupPriv = new stdclass();
+                        $groupPriv->group  = $groupID;
+                        $groupPriv->module = 'kanban';
+                        $groupPriv->method = $method;
+
+                        $this->dao->insert(TABLE_GROUPPRIV)->data($groupPriv)->exec();
+                    }
+                }
+            }
+        }
     }
 }
