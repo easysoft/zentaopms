@@ -39,15 +39,13 @@
     <div class='kanban-cards'>
       <?php 
         $kanbanview = 'kanban';
-        if($this->cookie->kanbanview)
-        {
-            $kanbanview = $this->cookie->kanbanview;
-        }
-        else
+        if($this->cookie->kanbanview) $kanbanview = $this->cookie->kanbanview;
+        
+        if(!common::hasPriv('execution', $kanbanview))
         {
             foreach (explode('|', 'kanban|task|calendar|gantt|tree|grouptask') as $view) 
             {
-                if(common::hasPriv('execution', $view)) $kanbanview = 'kanban';
+                if(common::hasPriv('execution', $view)) $kanbanview = $view; break;
             }
         }
       ?>
