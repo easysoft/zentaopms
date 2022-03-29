@@ -2131,6 +2131,7 @@ class execution extends control
      */
     public function taskKanban($executionID, $browseType = '', $orderBy = 'order_asc', $groupBy = '')
     {
+        $execution = $this->loadModel('execution')->getById($executionID);
         if(empty($browseType)) $browseType = $this->session->kanbanType ? $this->session->kanbanType : 'all';
         if(empty($groupBy)) $groupBy = 'default';
 
@@ -2148,7 +2149,16 @@ class execution extends control
         /* Compatibility IE8. */
         if(strpos($this->server->http_user_agent, 'MSIE 8.0') !== false) header("X-UA-Compatible: IE=EmulateIE7");
 
-        $kanbanGroup = $this->loadModel('kanban')->getExecutionKanban($executionID, $browseType, $groupBy);
+        if($execution->lifetime == 'ops')
+        {
+            unset($this->lang->kanban->type['story']);
+            unset($this->lang->kanban->type['bug']);
+            $kanbanGroup = $this->loadModel('kanban')->getExecutionKanban($executionID, 'task', $groupBy);
+        }
+        else
+        {
+            $kanbanGroup = $this->loadModel('kanban')->getExecutionKanban($executionID, $browseType, $groupBy);
+        }
         if(empty($kanbanGroup))
         {
             $this->kanban->createExecutionLane($executionID, $browseType, $groupBy);

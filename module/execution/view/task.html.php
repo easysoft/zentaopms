@@ -132,11 +132,13 @@ body {margin-bottom: 25px;}
         $misc  = common::hasPriv('execution', 'importTask') ? "class='import'" : "class=disabled";
         $link  = common::hasPriv('execution', 'importTask') ? $this->createLink('execution', 'importTask', "execution=$execution->id") : '#';
         echo "<li $class>" . html::a($link, $lang->execution->importTask, '', $misc) . "</li>";
-
-        $class = common::hasPriv('execution', 'importBug') ? '' : "class=disabled";
-        $misc  = common::hasPriv('execution', 'importBug') ? "class='import'" : "class=disabled";
-        $link  = common::hasPriv('execution', 'importBug') ? $this->createLink('execution', 'importBug', "execution=$execution->id") : '#';
-        echo "<li $class>" . html::a($link, $lang->execution->importBug, '', $misc) . "</li>";
+        if($execution->lifetime != 'ops')
+        {
+            $class = common::hasPriv('execution', 'importBug') ? '' : "class=disabled";
+            $misc  = common::hasPriv('execution', 'importBug') ? "class='import'" : "class=disabled";
+            $link  = common::hasPriv('execution', 'importBug') ? $this->createLink('execution', 'importBug', "execution=$execution->id") : '#';
+            echo "<li $class>" . html::a($link, $lang->execution->importBug, '', $misc) . "</li>";
+        }
         ?>
       </ul>
     </div>
