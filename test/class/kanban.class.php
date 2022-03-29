@@ -7,22 +7,40 @@ class kanbanTest
          $this->objectModel = $tester->loadModel('kanban');
     }
 
+    /**
+     * Test create a kanban group.
+     *
+     * @param  int    $kanbanID
+     * @param  int    $regionID
+     * @access public
+     * @return object
+     */
     public function createGroupTest($kanbanID, $regionID)
     {
-        $objects = $this->objectModel->createGroup($kanbanID, $regionID);
+        $objectID = $this->objectModel->createGroup($kanbanID, $regionID);
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        global $tester;
+        $object = $tester->dao->findByID($objectID)->from(TABLE_KANBANGROUP)->fetch();
+        return $object;
     }
 
+    /**
+     * Test create a default kanban region.
+     *
+     * @param  int    $kanbanID
+     * @access public
+     * @return object
+     */
     public function createDefaultRegionTest($kanban)
     {
-        $objects = $this->objectModel->createDefaultRegion($kanban);
+        $objectID = $this->objectModel->createDefaultRegion($kanban);
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        $object = $this->objectModel->getRegionByID($objectID);
+        return $object;
     }
 
     public function createRegionTest($kanban, $region = null, $copyRegionID = 0, $from = 'kanban')
@@ -34,31 +52,65 @@ class kanbanTest
         return $objects;
     }
 
-    public function createDefaultLaneTest($kanban, $regionID, $groupID)
+    /**
+     * Test create default kanban lanes.
+     *
+     * @param  int    $regionID
+     * @param  int    $groupID
+     * @access public
+     * @return object
+     */
+    public function createDefaultLaneTest($regionID, $groupID)
     {
-        $objects = $this->objectModel->createDefaultLane($kanban, $regionID, $groupID);
+        $objectID = $this->objectModel->createDefaultLane(null, $regionID, $groupID);
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        $object = $this->objectModel->getLaneByID($objectID);
+        return $object;
     }
 
-    public function createDefaultColumnsTest($kanban, $regionID, $groupID)
+    /**
+     * Test create default kanban columns.
+     *
+     * @param  int    $regionID
+     * @param  int    $groupID
+     * @access public
+     * @return int
+     */
+    public function createDefaultColumnsTest($regionID, $groupID)
     {
-        $objects = $this->objectModel->createDefaultColumns($kanban, $regionID, $groupID);
+        $this->objectModel->createDefaultColumns(null, $regionID, $groupID);
+
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        global $tester;
+        $objects = $tester->dao->select('*')->from(TABLE_KANBANCOLUMN)->where('`region`')->eq($regionID)->andWhere('`group`')->eq($groupID)->andWhere('`type`')->like('column%')->fetchAll();
+        return count($objects);
     }
 
-    public function createColumnTest($regionID, $column = null, $order = 0, $parent = 0, $from = 'kanban')
+    /**
+     * Test create a column.
+     *
+     * @param  object $param
+     * @access public
+     * @return object
+     */
+    public function createColumnTest($param)
     {
-        $objects = $this->objectModel->createColumn($regionID, $column = null, $order = 0, $parent = 0, $from = 'kanban');
+        $regionID = 1;
+
+        foreach($param as $key => $value) $_POST[$key] = $value;
+
+        $objectID = $this->objectModel->createColumn($regionID, null, 0, $param->parent);
+
+        unset($_POST);
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        $object = $this->objectModel->getColumnByID($objectID);
+        return $object;
     }
 
     public function splitColumnTest($columnID)
@@ -70,13 +122,31 @@ class kanbanTest
         return $objects;
     }
 
-    public function createCardTest($kanbanID, $regionID, $groupID, $columnID)
+    /**
+     * Test create a card.
+     *
+     * @param  array  $param
+     * @access public
+     * @return object
+     */
+    public function createCardTest($param)
     {
-        $objects = $this->objectModel->createCard($kanbanID, $regionID, $groupID, $columnID);
+        $kanbanID = 1;
+        $regionID = 1;
+        $groupID  = 1;
+        $columnID = 1;
+
+        $_POST['lane']  = 1;
+        $_POST['begin'] = date('Y-m-d', strtotime("-3 day"));
+        $_POST['end']   = date('Y-m-d', strtotime("+3 day"));
+        foreach($param as $key => $value) $_POST[$key] = $value;
+
+        $objectID = $this->objectModel->createCard($kanbanID, $regionID, $groupID, $columnID);
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        $object = $this->objectModel->getCardByID($objectID);
+        return $object;
     }
 
     public function importCardTest($kanbanID, $regionID, $groupID, $columnID)
@@ -388,7 +458,7 @@ class kanbanTest
      * @access public
      * @return object
      */
-    public function createTest($param = array(), $field = '')
+    public function createTest($param = array())
     {
         foreach($param as $key => $value) $_POST[$key] = $value;
 
@@ -396,7 +466,7 @@ class kanbanTest
 
         unset($_POST);
 
-        if(dao::isError()) return dao::getError()[$field][0];
+        if(dao::isError()) return dao::getError();
 
         $object = $this->objectModel->getByID($objectID);
         return $object;
@@ -411,22 +481,52 @@ class kanbanTest
         return $objects;
     }
 
+    /**
+     * Test add execution Kanban lanes and columns.
+     *
+     * @param  int    $executionID
+     * @param  string $type
+     * @param  string $groupBy
+     * @access public
+     * @return int
+     */
     public function createExecutionLaneTest($executionID, $type = 'all', $groupBy = 'default')
     {
-        $objects = $this->objectModel->createExecutionLane($executionID, $type = 'all', $groupBy = 'default');
+        $this->objectModel->createExecutionLane($executionID, $type, $groupBy);
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        global $tester;
+        $objects = $tester->dao->select('*')->from(TABLE_KANBANLANE)
+            ->where('execution')->eq($executionID)
+            ->beginIF($type != 'all')->andWhere('type')->eq($type)->fi()
+            ->fetchAll();
+        return count($objects);
     }
 
+    /**
+     * Test create execution columns.
+     *
+     * @param  int    $laneID
+     * @param  string $type
+     * @param  int    $executionID
+     * @access public
+     * @return int
+     */
     public function createExecutionColumnsTest($laneID, $type, $executionID)
     {
-        $objects = $this->objectModel->createExecutionColumns($laneID, $type, $executionID);
+        $this->objectModel->createExecutionColumns($laneID, $type, $executionID);
+
+        global $tester;
+        $objects = $tester->dao->select('*')->from(TABLE_KANBANCELL)
+            ->where('kanban')->eq($executionID)
+            ->andWhere('lane')->eq($laneID)
+            ->andWhere('type')->eq($type)
+            ->fetchAll();
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        return count($objects);
     }
 
     /**
