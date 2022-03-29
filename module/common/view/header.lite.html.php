@@ -77,6 +77,8 @@ if($this->config->vision == 'lite')
     $extHookFiles = glob($extHookRule);
     if($extHookFiles) foreach($extHookFiles as $extHookFile) include $extHookFile;
 }
+$xuanExtFile = $extensionRoot . 'xuan/common/ext/view/header.xuanxuan.html.hook.php';
+if(file_exists($xuanExtFile)) include $xuanExtFile;
 ?>
 </head>
 <?php $singleClass = $this->app->getViewType() == 'xhtml' ? 'allow-self-open' : '';?>
