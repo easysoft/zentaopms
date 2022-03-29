@@ -305,14 +305,6 @@ class executionModel extends model
             $type    = 'sprint';
             if($project) $type = zget($this->config->execution->modelList, $project->model, 'sprint');
 
-            /* If the execution model is a stage, determine whether the product is linked. */
-            $products = array_filter($this->post->products);
-            if(empty($products))
-            {
-                dao::$errors['message'][] = $this->lang->execution->noLinkProduct;
-                return false;
-            }
-
             $this->config->execution->create->requiredFields .= ',project';
         }
 
