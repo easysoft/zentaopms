@@ -431,13 +431,25 @@ class kanbanTest
         return $objects;
     }
 
-    public function createSpaceTest()
+    /**
+     * Test create a space.
+     *
+     * @param  array   $param
+     * @access public
+     * @return object
+     */
+    public function createSpaceTest($param)
     {
-        $objects = $this->objectModel->createSpace();
+        foreach($param as $key => $value) $_POST[$key] = $value;
+
+        $objectID = $this->objectModel->createSpace();
+
+        unset($_POST);
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        $object = $this->objectModel->getSpaceByID($objectID);
+        return $object;
     }
 
     public function updateSpaceTest($spaceID, $type = '')

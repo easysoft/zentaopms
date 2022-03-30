@@ -41,7 +41,7 @@ $lane5->id = 2;
 $kanban = new kanbanTest();
 
 r($kanban->createLaneTest($lane1, $kanbanID, $regionID)) && p('name,region,group') && e('测试创建与其他泳道使用相同看板列的泳道,1,1'); //测试创建与其他泳道使用相同看板列的泳道
-r($kanban->createLaneTest($lane2, $kanbanID, $regionID)) && p('name,region,group') && e('测试创建使用独立看板列的泳道,1,646');         //测试创建使用独立看板列的泳道
+r($kanban->createLaneTest($lane2, $kanbanID, $regionID)) && p('name,region,group') && e('测试创建使用独立看板列的泳道,1,641');         //测试创建使用独立看板列的泳道
 r($kanban->createLaneTest($lane3, $kanbanID, $regionID)) && p('name:0')            && e('『泳道名称』不能为空。');                     //测试创建不填写名称的泳道
 r($kanban->createLaneTest($lane4, $kanbanID, $regionID)) && p('name,region,group') && e('默认泳道,1,1');                               //测试创建复用泳道1信息的泳道
 r($kanban->createLaneTest($lane5, $kanbanID, $regionID)) && p('name,region,group') && e('默认泳道,2,2');                               //测试创建复用泳道2信息的泳道
