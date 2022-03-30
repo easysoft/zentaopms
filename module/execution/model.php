@@ -460,13 +460,7 @@ class executionModel extends model
             dao::$errors['days'] = sprintf($this->lang->project->workdaysExceed, $workdays);
             return false;
         }
-        $products = array_filter($this->post->products);
-        $noLinkTip = $oldExecution->type != 'kanban' ? $this->lang->execution->noLinkProduct : $this->lang->execution->kanbanNoLinkProduct;
-        if(empty($products))
-        {
-            dao::$errors['message'][] = $noLinkTip;
-            return false;
-        }
+
         /* Get the data from the post. */
         $execution = fixer::input('post')
             ->setDefault('lastEditedBy', $this->app->user->account)
