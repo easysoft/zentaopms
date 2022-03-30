@@ -1,0 +1,44 @@
+title: table zt_storyestimate
+desc: "需求描述"
+author: automated export
+version: "1.0"
+fields:
+  - field: story
+    note: "需求ID"
+    range: 2-1000:2
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: round
+    note: "轮次"
+    range: 1
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: estimate
+    note: "估计"
+    range: 92-100
+    prefix: "user"
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: average
+    note: "平均值"
+    range: 1.5
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: openedBy
+    note: "验收标准"
+    range: admin
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: openedDate
+    range: "(M)-(w)"
+    type: timestamp
+    format: "YYYY-MM-DD"
