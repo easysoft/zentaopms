@@ -161,6 +161,13 @@ class Processor
         $this->dao->update(TABLE_STORY)->set('`status`')->eq('draft')->where('id')->ge('300')->andwhere('id')->le('400')->exec();
         $this->dao->update(TABLE_STORY)->set('`closedBy`')->eq('')->set('`closedReason`')->eq('')->where('status')->ne('closed')->exec();
         $this->dao->update(TABLE_STORY)->set('`plan`')->eq('0')->where('id')->gt('300')->andwhere('id')->lt('321')->exec();
+
+        $accounts = array('user92' => 'po82', 'user93' => 'po83', 'user94' => 'po84', 'user95' => 'po85', 'user96' => 'po86', 'user97' => 'po82');
+        foreach($accounts as $key => $value)
+        {
+            $this->dao->update(TABLE_STORYESTIMATE)->set('`estimate`')->eq("{\"$value\":{\"account\":\"$value\",\"estimate\":1},\"$key\":{\"account\":\"$key\",\"estimate\":2}")->where('estimate')->eq($key)->exec();
+        }
+
     }
 
     /**
@@ -404,5 +411,11 @@ class Processor
             $this->dao->update(TABLE_KANBANCELL)->data($value)->where('id')->eq($id)->exec();
         }
         $this->dao->query("update zt_kanbancell set `cards` = '' where  id > 400");
+        $this->dao->query("update zt_kanbancell set `cards` = ',244,' where id = 401");
+        $this->dao->query("update zt_kanbancell set `cards` = ',181,182,183,' where id = 412");
+        $this->dao->query("update zt_kanbancell set `cards` = ',61,' where id = 421");
+        $this->dao->query("update zt_kanbancell set `cards` = ',246,' where id = 428");
+        $this->dao->query("update zt_kanbancell set `cards` = ',184,185,186,' where id = 439");
+        $this->dao->query("update zt_kanbancell set `cards` = ',62,' where id = 448");
     }
 }

@@ -20,7 +20,7 @@ class bugCloseEntry extends Entry
      */
     public function post($bugID)
     {   
-        $story = $this->loadModel('bug')->getByID($bugID);
+        $bug = $this->loadModel('bug')->getByID($bugID);
 
         $fields = 'comment';
         $this->batchSetPost($fields);

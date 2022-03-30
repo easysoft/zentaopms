@@ -15,6 +15,7 @@
 <?php js::set('noProject', false);?>
 <?php js::set('programID', $programID);?>
 <?php js::set('systemMode', $this->config->systemMode);?>
+<?php js::set('manageLinePriv', common::hasPriv('product', 'manageLine'));?>
 <div id="mainContent" class="main-content">
   <div class="center-block">
     <div class="main-header">
@@ -31,7 +32,7 @@
           <?php endif;?>
           <tr>
             <th class='w-140px'><?php echo $lang->product->line;?></th>
-            <?php if($config->systemMode == 'classic' or $programID):?>
+            <?php if(common::hasPriv('product', 'manageLine') and ($config->systemMode == 'classic' or $programID)):?>
             <td>
               <div class='input-group'>
                 <?php echo html::select("line", $lines, '', "class='form-control hidden line-exist chosen'");?>
