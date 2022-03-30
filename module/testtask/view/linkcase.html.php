@@ -77,7 +77,7 @@
         <tr>
           <th class='c-id'>
             <?php if($cases):?>
-            <div class="checkbox-primary check-all" title="<?php echo $lang->selectAll?>">
+            <div class="checkbox-primary check-all tablesorter-noSort" title="<?php echo $lang->selectAll?>">
               <label></label>
             </div>
             <?php endif;?>
