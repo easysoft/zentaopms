@@ -1,6 +1,5 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
-include dirname(dirname(dirname(__FILE__))) . '/class/story.class.php';
 su('admin');
 
 /**
@@ -13,6 +12,11 @@ pid=1
 
 */
 
-$story = new storyTest();
+global $tester;
+$relations1 = $tester->loadModel('story')->getStoryRelation(25, 'requirement');
+$relations2 = $tester->story->getStoryRelation(26, 'story');
 
-r() && p() && e();
+r(count($relations1)) && p()                    && e('1');                            // 获取用户需求25关联的软件需求数量
+r(count($relations2)) && p()                    && e('1');                            // 获取软件需求26关联的用户需求数量
+r($relations1[0])     && p('title,type,status') && e('软件需求26,story,active');      // 获取用户需求25关联的软件需求详情
+r($relations2[0])     && p('title,type,status') && e('用户需求25,requirement,draft'); // 获取软件需求26关联的用户需求详情

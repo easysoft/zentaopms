@@ -1,6 +1,5 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
-include dirname(dirname(dirname(__FILE__))) . '/class/story.class.php';
 su('admin');
 
 /**
@@ -13,6 +12,8 @@ pid=1
 
 */
 
-$story = new storyTest();
+global $tester;
+$tester->loadModel('story');
+$storyInfo = $tester->story->getEstimateInfo(2);
 
 r() && p() && e();
