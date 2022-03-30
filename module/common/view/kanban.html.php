@@ -220,11 +220,13 @@ function renderExecutionItem(item, $item)
     var $title = $item.find('.title');
     if(!$title.length)
     {
-        if(window.userPrivs.project)
+        if((item.type == 'kanban' && window.userPrivs.kanban) || (item.type != 'kanban' && window.userPrivs.execution))
         {
+            var method = item.type == 'kanban' ? 'kanban' : 'task';
+
             $item.addClass('link-block');
             $title = $('<a class="title" />')
-                .attr('href', $.createLink('execution', 'task', 'executionID=' + item._id));
+                .attr('href', $.createLink('execution', method, 'executionID=' + item._id));
         }
         else
         {
