@@ -15,7 +15,7 @@
 <?php js::set('noProject', false);?>
 <?php js::set('programID', $programID);?>
 <?php js::set('systemMode', $this->config->systemMode);?>
-<?php js::set('manageLine', common::hasPriv('product', 'manageLine'));?>
+<?php js::set('manageLinePriv', common::hasPriv('product', 'manageLine'));?>
 <div id="mainContent" class="main-content">
   <div class="center-block">
     <div class="main-header">

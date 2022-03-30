@@ -3428,7 +3428,11 @@ class execution extends control
                 foreach($executionStats as $stage)
                 {
                     $stageList[] = $stage;
-                    foreach($stage->children as $child) $stageList[] = $child;
+                    foreach($stage->children as $child)
+                    {
+                        $child->name = $stage->name . '/' . $child->name;
+                        $stageList[] = $child;
+                    }
                 }
 
                 $executionStats = $stageList;
