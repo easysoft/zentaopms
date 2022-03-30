@@ -1260,13 +1260,13 @@ class bug extends control
                 }
             }
             if(defined('RUN_MODE') && RUN_MODE == 'api')
-            {    
+            {
                 return $this->send(array('status' => 'success', 'data' => $bugID));
-            }    
-            else 
-            {    
+            }
+            else
+            {
                 return print(js::locate($this->createLink('bug', 'view', "bugID=$bugID"), 'parent'));
-            }    
+            }
         }
 
         if($this->app->tab == 'project')
@@ -2235,7 +2235,7 @@ class bug extends control
     }
 
     /**
-     * Ajax get bug filed options for auto test.
+     * Ajax get bug field options for auto test.
      *
      * @param  int    $productID
      * @param  int    $executionID
