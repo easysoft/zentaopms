@@ -233,13 +233,20 @@ class kanbanTest
         return $object;
     }
 
+    /**
+     * Test get kanban by id.
+     *
+     * @param  int    $kanbanID
+     * @access public
+     * @return object
+     */
     public function getByIDTest($kanbanID)
     {
-        $objects = $this->objectModel->getByID($kanbanID);
+        $object = $this->objectModel->getByID($kanbanID);
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        return $object;
     }
 
     public function getKanbanDataTest($kanbanID)
@@ -296,13 +303,23 @@ class kanbanTest
         return $objects;
     }
 
+    /**
+     * Test get kanban group by regions.
+     *
+     * @param  string $regions
+     * @access public
+     * @return int
+     */
     public function getGroupGroupByRegionsTest($regions)
     {
         $objects = $this->objectModel->getGroupGroupByRegions($regions);
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        $count = 0;
+        foreach($objects as $object) $count += count($object);
+
+        return $count;
     }
 
     public function getLaneGroupByRegionsTest($regions, $browseType = 'all')
@@ -329,16 +346,25 @@ class kanbanTest
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        $count = 0;
+        foreach($objects as $object) $count += count($object);
+        return $count;
     }
 
+    /**
+     * Test get card group by kanban id.
+     *
+     * @param  int    $kanbanID
+     * @access public
+     * @return int
+     */
     public function getCardGroupByKanbanTest($kanbanID)
     {
         $objects = $this->objectModel->getCardGroupByKanban($kanbanID);
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        return count($objects);
     }
 
     public function getImportedCardsTest($kanbanID, $cards, $fromType)
@@ -359,31 +385,90 @@ class kanbanTest
         return $objects;
     }
 
+    /**
+     * Test get card group by execution id.
+     *
+     * @param  int    $executionID
+     * @param  string $browseType
+     * @param  string $orderBy
+     * @access public
+     * @return int
+     */
     public function getCardGroupByExecutionTest($executionID, $browseType = 'all', $orderBy = 'id_asc')
     {
-        $objects = $this->objectModel->getCardGroupByExecution($executionID, $browseType = 'all', $orderBy = 'id_asc');
+        $objects = $this->objectModel->getCardGroupByExecution($executionID, $browseType, $orderBy);
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        return count($objects);
     }
 
+    /**
+     * Test get Kanban by execution id.
+     *
+     * @param  int    $executionID
+     * @param  string $browseType
+     * @param  string $groupBy
+     * @access public
+     * @return string
+     */
     public function getExecutionKanbanTest($executionID, $browseType = 'all', $groupBy = 'default')
     {
-        $objects = $this->objectModel->getExecutionKanban($executionID, $browseType = 'all', $groupBy = 'default');
+        $objects = $this->objectModel->getExecutionKanban($executionID, $browseType, $groupBy);
+
+        if(empty($objects))
+        {
+            $this->objectModel->createExecutionLane($executionID, $browseType, $groupBy);
+            $objects = $this->objectModel->getExecutionKanban($executionID, $browseType, $groupBy);
+        }
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        $columnCount = 0;
+        $laneCount   = 0;
+        $cardCount   = 0;
+        foreach($objects as $types)
+        {
+            foreach($types['lanes'] as $lane)
+            {
+                foreach($lane['cards'] as $card)
+                {
+                    $cardCount += count($card);
+                }
+            }
+            $columnCount += count($types['columns']);
+            $laneCount += count($types['lanes']);
+        }
+        return 'columns:' . $columnCount . ', lanes:' . $laneCount . ', cards:' . $cardCount;
     }
 
+    /**
+     * Test get kanban for group view.
+     *
+     * @param  int    $executionID
+     * @param  string $browseType
+     * @param  string $groupBy
+     * @access public
+     * @return int
+     */
     public function getKanban4GroupTest($executionID, $browseType, $groupBy)
     {
         $objects = $this->objectModel->getKanban4Group($executionID, $browseType, $groupBy);
 
+        if(empty($objects))
+        {
+            $this->objectModel->createExecutionLane($executionID, $browseType, $groupBy);
+            $objects = $this->objectModel->getExecutionKanban($executionID, $browseType, $groupBy);
+        }
+
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        $laneCount   = 0;
+        foreach($objects as $types)
+        {
+            $laneCount += count($types['lanes']);
+        }
+        return 'lanes:' . $laneCount;
     }
 
     public function getLanes4GroupTest($executionID, $browseType, $groupBy, $cardList)
@@ -422,13 +507,23 @@ class kanbanTest
         return $objects;
     }
 
-    public function getCanViewObjectsTest($objectType = 'kanban', $param = '')
+    /**
+     * Test get can view objects.
+     *
+     * @param  string $user
+     * @param  string $objectType
+     * @param  string $param
+     * @access public
+     * @return void
+     */
+    public function getCanViewObjectsTest($user, $objectType = 'kanban', $param = '')
     {
-        $objects = $this->objectModel->getCanViewObjects($objectType = 'kanban', $param = '');
+        su($user);
+        $objects = $this->objectModel->getCanViewObjects($objectType, $param);
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        return count($objects);
     }
 
     /**
@@ -925,49 +1020,100 @@ class kanbanTest
         return $objects;
     }
 
+    /**
+     * Test get kanban group by space id list.
+     *
+     * @param  string $spaceIdList
+     * @param  string $kanbanIdList
+     * @access public
+     * @return int
+     */
     public function getGroupBySpaceListTest($spaceIdList, $kanbanIdList = '')
     {
-        $objects = $this->objectModel->getGroupBySpaceList($spaceIdList, $kanbanIdList = '');
+        $objects = $this->objectModel->getGroupBySpaceList($spaceIdList, $kanbanIdList);
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        $count = 0;
+        if(empty($kanbanIdList))
+        {
+            foreach($objects as $object) $count += count($object);
+        }
+        else
+        {
+            $count += count($objects);
+        }
+        return $count;
     }
 
+    /**
+     * Test get group list by region id.
+     *
+     * @param  int    $region
+     * @access public
+     * @return object
+     */
     public function getGroupListTest($region)
     {
         $objects = $this->objectModel->getGroupList($region);
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        $kanban = '';
+        foreach($objects as $object) $kanban .= ',' . $object->kanban;
+        return $kanban;
     }
 
+    /**
+     * Test get column by id.
+     *
+     * @param  int    $columnID
+     * @access public
+     * @return object
+     */
     public function getColumnByIDTest($columnID)
     {
-        $objects = $this->objectModel->getColumnByID($columnID);
+        $object = $this->objectModel->getColumnByID($columnID);
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        return $object;
     }
 
+    /**
+     * Test get columns by object id.
+     *
+     * @param  string $objectType
+     * @param  int    $objectID
+     * @param  int    $archived
+     * @param  string $deleted
+     * @access public
+     * @return int
+     */
     public function getColumnsByObjectTest($objectType = '', $objectID = 0, $archived = 0, $deleted = '0')
     {
-        $objects = $this->objectModel->getColumnsByObject($objectType = '', $objectID = 0, $archived = 0, $deleted = '0');
+        $objects = $this->objectModel->getColumnsByObject($objectType, $objectID, $archived, $deleted);
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        return count($objects);
     }
 
+    /**
+     * Test get column ID by lane ID.
+     *
+     * @param  int    $laneID
+     * @param  string $columnType
+     * @access public
+     * @return string
+     */
     public function getColumnIDByLaneIDTest($laneID, $columnType)
     {
-        $objects = $this->objectModel->getColumnIDByLaneID($laneID, $columnType);
+        $object = $this->objectModel->getColumnIDByLaneID($laneID, $columnType);
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        return $object;
     }
 
     public function getLaneByIdTest($laneID)
@@ -988,40 +1134,78 @@ class kanbanTest
         return $objects;
     }
 
+    /**
+     * Test get card by id.
+     *
+     * @param  int    $cardID
+     * @access public
+     * @return object
+     */
     public function getCardByIDTest($cardID)
     {
-        $objects = $this->objectModel->getCardByID($cardID);
+        $object = $this->objectModel->getCardByID($cardID);
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        return $object;
     }
 
+    /**
+     * Test get cards by object id.
+     *
+     * @param  string $objectType
+     * @param  int    $objectID
+     * @param  string $archived
+     * @param  string $deleted
+     * @access public
+     * @return int
+     */
     public function getCardsByObjectTest($objectType = '', $objectID = 0, $archived = '0', $deleted = '0')
     {
-        $objects = $this->objectModel->getCardsByObject($objectType = '', $objectID = 0, $archived = '0', $deleted = '0');
+        $objects = $this->objectModel->getCardsByObject($objectType, $objectID, $archived, $deleted);
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        return count($objects);
     }
 
+    /**
+     * Test get cards to import.
+     *
+     * @param  int     $kanbanID
+     * @param  int    $excludedID
+     * @param  object $pager
+     * @access public
+     * @return int
+     */
     public function getCards2ImportTest($kanbanID = 0, $excludedID = 0, $pager = null)
     {
-        $objects = $this->objectModel->getCards2Import($kanbanID = 0, $excludedID = 0, $pager = null);
+        $objects = $this->objectModel->getCards2Import($kanbanID, $excludedID, $pager);
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        return count($objects);
     }
 
-    public function getKanbanCardMenuTest($executionID, $objects, $objecType)
+    public function getKanbanCardMenuTest($executionID, $objecType)
     {
-        $objects = $this->objectModel->getKanbanCardMenu($executionID, $objects, $objecType);
+        global $tester;
+        /* Get group objects. */
+        if($objecType == 'story') $objectGroup['story'] = $tester->loadModel('story')->getExecutionStories($executionID, 0, 0, 't1.`order`_desc', 'allStory');
+        if($objecType == 'bug')   $objectGroup['bug']   = $tester->loadModel('bug')->getExecutionBugs($executionID);
+        if($objecType == 'task')  $objectGroup['task']  = $tester->loadModel('execution')->getKanbanTasks($executionID, "id");
+
+        $objects = array();
+        /* Get objects cards menus. */
+        if($objecType == 'story') $objects = $this->objectModel->getKanbanCardMenu($executionID, $objectGroup['story'], 'story');
+        if($objecType == 'bug')   $objects = $this->objectModel->getKanbanCardMenu($executionID, $objectGroup['bug'], 'bug');
+        if($objecType == 'task')  $objects = $this->objectModel->getKanbanCardMenu($executionID, $objectGroup['task'], 'task');
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        $count = 0;
+        foreach($objects as $object) $count += count($object);
+        return $count;
     }
 
     public function isClickableTest($object, $action)
