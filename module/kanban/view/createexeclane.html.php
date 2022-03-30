@@ -38,7 +38,7 @@
         </tr>
         <tr>
           <th><?php echo $lang->kanbanlane->WIPType;?></th>
-          <td id='laneTypeBox'><?php echo html::radio('laneType', $lang->kanban->laneTypeList, 'story');?></td>
+          <td id='laneTypeBox' colspan='3'><?php echo html::radio('laneType', $lang->kanban->laneTypeList, 'story');?></td>
         </tr>
         <tr>
           <th><?php echo $lang->kanbanlane->column;?></th>
