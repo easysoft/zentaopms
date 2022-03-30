@@ -464,6 +464,7 @@ class program extends control
      */
     public function stakeholder($programID = 0, $orderBy = 't1.id_desc', $recTotal = 0, $recPerPage = 15, $pageID = 1)
     {
+        $this->app->loadLang('stakeholder');
         $this->program->setMenu($programID);
 
         /* Load pager and get tasks. */
