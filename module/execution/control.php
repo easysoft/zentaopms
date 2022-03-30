@@ -3420,7 +3420,20 @@ class execution extends control
                 unset($fields[$key]);
             }
 
+            $project        = $this->project->getByID($projectID);
             $executionStats = $this->project->getStats($projectID, $status == 'byproduct' ? 'all' : $status, $productID, 0, 30, 'id_asc');
+            if(isset($project->model) and $project->model == 'waterfall')
+            {
+                $stageList = array();
+                foreach($executionStats as $stage)
+                {
+                    $stageList[] = $stage;
+                    foreach($stage->children as $child) $stageList[] = $child;
+                }
+
+                $executionStats = $stageList;
+            }
+
             $users = $this->loadModel('user')->getPairs('noletter');
             foreach($executionStats as $i => $execution)
             {
