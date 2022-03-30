@@ -35,7 +35,7 @@
         {
             $suiteName = $suite->name;
             if($suite->type == 'public') $suiteName .= " <span class='label label-info'>{$lang->testsuite->authorList[$suite->type]}</span>";
-            echo "<li>" . html::a(inlink('linkCase', "taskID=$taskID&type=bysuite&param=$suiteID"), $suiteName) . "</li>";
+            echo "<li>" . html::a(inlink('linkCase', "taskID=$taskID&type=bysuite&param=$suiteID"), $suiteName, '', "data-app='$app->tab'") . "</li>";
         }
     }
     else
@@ -53,7 +53,7 @@
     {
         foreach($testTask as $tmpID => $tmpTitle)
         {
-            echo "<li>" . html::a(inlink('linkCase', "taskID=$taskID&type=bybuild&param=$tmpID"), $tmpTitle) . "</li>";
+            echo "<li>" . html::a(inlink('linkCase', "taskID=$taskID&type=bybuild&param=$tmpID"), $tmpTitle, '', "data-app='{$app->tab}'") . "</li>";
         }
     }
     else
