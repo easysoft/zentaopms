@@ -2145,20 +2145,20 @@ class execution extends control
         $this->app->loadLang('story');
         $this->app->loadLang('task');
         $this->app->loadLang('bug');
+        $this->loadModel('kanban');
 
         /* Compatibility IE8. */
         if(strpos($this->server->http_user_agent, 'MSIE 8.0') !== false) header("X-UA-Compatible: IE=EmulateIE7");
 
         if($execution->lifetime == 'ops')
         {
+            $browseType = 'task';
             unset($this->lang->kanban->type['story']);
             unset($this->lang->kanban->type['bug']);
-            $kanbanGroup = $this->loadModel('kanban')->getExecutionKanban($executionID, 'task', $groupBy);
+            unset($this->lang->kanban->type['all']);
         }
-        else
-        {
-            $kanbanGroup = $this->loadModel('kanban')->getExecutionKanban($executionID, $browseType, $groupBy);
-        }
+
+        $kanbanGroup = $this->kanban->getExecutionKanban($executionID, $browseType, $groupBy);
         if(empty($kanbanGroup))
         {
             $this->kanban->createExecutionLane($executionID, $browseType, $groupBy);

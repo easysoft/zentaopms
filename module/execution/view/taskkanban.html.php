@@ -13,14 +13,7 @@
 <div id='mainMenu' class='clearfix'>
   <div class='btn-toolbar pull-left'>
     <div class="input-control space c-type">
-      <?php
-      if($execution->lifetime == 'ops')
-      {
-          unset($lang->kanban->type['story']);
-          unset($lang->kanban->type['bug']);
-      }
-      echo html::select('type', $lang->kanban->type, $browseType, 'class="form-control chosen" data-max_drop_width="215"');
-      ?>
+      <?php echo html::select('type', $lang->kanban->type, $browseType, 'class="form-control chosen" data-max_drop_width="215"');?>
     </div>
     <?php if($browseType != 'all'):?>
     <div class="input-control space c-group">
