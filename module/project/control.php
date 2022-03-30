@@ -267,7 +267,7 @@ class project extends control
         $this->view->title       = $this->lang->project->common . $this->lang->colon . $this->lang->project->index;
         $this->view->position[]  = $this->lang->project->index;
         $this->view->project     = $project;
-        $this->view->userIdPairs = $this->loadModel('user')->getPairs('nodeleted|showid');
+        $this->view->userIdPairs = $this->loadModel('user')->getPairs('nodeleted|showid|all');
 
         $this->display();
     }

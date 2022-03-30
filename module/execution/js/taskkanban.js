@@ -1222,19 +1222,19 @@ function resetKanbanHeight()
     $('.kanban-lane').each(function()
     {
         laneCount ++;
-        if(laneCount > 1) return true;
+        if(laneCount > 1) return;
     });
 
-    if(laneCount > 1) return true;
+    if(laneCount > 1) return;
 
-    var windowHeight  = $(window).height();
-    var headerHeight  = $('#mainHeader').outerHeight();
-    var mainPadding   = $('#main').css('padding-top');
-    var menuHeight    = $('#mainMenu').height();
-    var panelBorder   = $('.panel').css('border-top-width');
-    var bodyPadding   = $('.panel-body').css('padding-top');
-    var columnHeight  = $('.kanban-header').outerHeight();
-    var height        = windowHeight - headerHeight - (parseInt(mainPadding) * 2) - menuHeight - (parseInt(panelBorder) * 2) - (parseInt(bodyPadding) * 2) - columnHeight;
+    var windowHeight = $(window).height();
+    var headerHeight = $('#mainHeader').outerHeight();
+    var mainPadding  = $('#main').css('padding-top');
+    var menuHeight   = $('#mainMenu').height();
+    var panelBorder  = $('.panel').css('border-top-width');
+    var bodyPadding  = $('.panel-body').css('padding-top');
+    var columnHeight = $('.kanban-header').outerHeight();
+    var height       = windowHeight - headerHeight - (parseInt(mainPadding) * 2) - menuHeight - (parseInt(panelBorder) * 2) - (parseInt(bodyPadding) * 2) - columnHeight;
 
     $('.kanban-lane').css('height', height -2);
 }
