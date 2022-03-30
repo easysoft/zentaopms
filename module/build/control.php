@@ -32,6 +32,8 @@ class build extends control
             if(empty($executionID)) dao::$errors['execution'] = $this->lang->build->emptyExecution;
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
+            if(defined('TUTORIAL')) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true)); // Fix bug #21095.
+
             $buildID = $this->build->create($executionID);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             $this->loadModel('action')->create('build', $buildID, 'opened');
