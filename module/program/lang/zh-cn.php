@@ -13,6 +13,7 @@ $lang->program->begin        = '计划开始';
 $lang->program->end          = '计划完成';
 $lang->program->stage        = '阶段';
 $lang->program->type         = '类型';
+$lang->program->from         = '干系人类型';
 $lang->program->pri          = '优先级';
 $lang->program->parent       = '父项目集';
 $lang->program->exchangeRate = '汇率';
@@ -74,6 +75,10 @@ $lang->program->isStakeholderKey = '关键干系人';
 
 $lang->program->stakeholderTypeList['inside']  = '内部';
 $lang->program->stakeholderTypeList['outside'] = '外部';
+
+$lang->program->stakeholderFromList['team']    = '项目团队成员';
+$lang->program->stakeholderFromList['company'] = '公司同事';
+$lang->program->stakeholderFromList['outside'] = '外部人员';
 
 $lang->program->noProgram          = '暂时没有项目集';
 $lang->program->showClosed         = '显示已关闭';
