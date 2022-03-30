@@ -39,10 +39,11 @@
           <th class='c-pri' title=<?php echo $lang->execution->pri;?>><?php echo $lang->priAB;?></th>
           <th><?php echo $lang->bug->title;?></th>
           <th class='c-status'><?php echo $lang->bug->statusAB;?></th>
-          <th class='c-pri-box <?php echo in_array('pri',        $requiredFields) ? 'required' : ''?>'><?php echo $lang->task->pri;?></th>
+          <th class='c-pri-box <?php echo in_array('pri', $requiredFields) ? 'required' : ''?>'><?php echo $lang->task->pri;?></th>
           <th class='c-assigned-box <?php echo in_array('assignedTo', $requiredFields) ? 'required' : ''?>'><?php echo $lang->task->assignedTo;?></th>
-          <th class='c-estimate-box  <?php echo in_array('estimate',   $requiredFields) ? 'required' : ''?>'><?php echo $lang->task->estimate;?></th>
-          <th class='c-date-box <?php echo in_array('deadline',   $requiredFields) ? 'required' : ''?>'><?php echo $lang->task->deadline;?></th>
+          <th class='c-estimate-box  <?php echo in_array('estimate', $requiredFields) ? 'required' : ''?>'><?php echo $lang->task->estimate;?></th>
+          <th class='c-date-box <?php echo in_array('estStarted', $requiredFields) ? 'required' : ''?>'><?php echo $lang->task->estStarted;?></th>
+          <th class='c-date-box <?php echo in_array('deadline', $requiredFields) ? 'required' : ''?>'><?php echo $lang->task->deadline;?></th>
         </tr>
       </thead>
       <tbody>
@@ -62,6 +63,7 @@
           <td class='bug-pri'><?php echo html::select("pri[$bug->id]", $lang->task->priList, zget($lang->task->priList, $bug->pri ? $bug->pri : 3, 3), "class='form-control chosen'");?></td>
           <td style='overflow:visible'><?php echo html::select("assignedTo[$bug->id]", $users, zget($users, $bug->assignedTo, '', $bug->assignedTo), "class='form-control chosen'");?></td>
           <td><?php echo html::input("estimate[$bug->id]", '', 'size=4 class="form-control"');?></td>
+          <td><?php echo html::input("estStarted[$bug->id]", '0000-00-00', 'size=4 class="form-control form-date"');?></td>
           <?php $deadline = ($bug->deadline > helper::today() and $bug->deadline > $execution->begin) ? $bug->deadline : '0000-00-00';?>
           <td><?php echo html::input("deadline[$bug->id]", $deadline, 'size=4 class="form-control form-date"');?></td>
         </tr>
