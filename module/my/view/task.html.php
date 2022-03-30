@@ -205,8 +205,8 @@
                   }
                   else
                   {
-                      if($child->status != 'pause') common::printIcon('task', 'start', "taskID=$child->id", $child, 'list', '', '', 'iframe', true,);
-                      if($child->status == 'pause') common::printIcon('task', 'restart', "taskID=$child->id", $child, 'list', '', '', 'iframe', true,);
+                      if($child->status != 'pause') common::printIcon('task', 'start', "taskID=$child->id", $child, 'list', '', '', 'iframe', true);
+                      if($child->status == 'pause') common::printIcon('task', 'restart', "taskID=$child->id", $child, 'list', '', '', 'iframe', true);
                       common::printIcon('task', 'close',  "taskID=$child->id", $child, 'list', '', '', 'iframe', true);
                       common::printIcon('task', 'finish', "taskID=$child->id", $child, 'list', '', '', 'iframe', true);
 
