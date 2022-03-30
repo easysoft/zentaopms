@@ -247,7 +247,7 @@ $lang->task->error->finishedDateSmall = '实际完成不能小于实际开始';
 $lang->task->error->alreadyConsumed   = '当前选中的父任务已有消耗。';
 $lang->task->error->date              = '日期不能大于今天';
 $lang->task->error->leftEmpty         = '任务状态为%s时，预计剩余不能为0';
-$lang->task->error->leftEmptyAB       = 'task#%s任务状态为%s时，预计剩余不能为0';
+$lang->task->error->leftEmptyAB       = 'task#%s任务状态为%s时，剩余不能为0';
 
 /* Report. */
 $lang->task->report         = new stdclass();

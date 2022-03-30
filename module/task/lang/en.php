@@ -247,7 +247,7 @@ $lang->task->error->finishedDateSmall = '"Finished Date" should be > "Real Start
 $lang->task->error->alreadyConsumed   = 'The currently selected parent task has been consumed.';
 $lang->task->error->date              = 'The date should be >= today.';
 $lang->task->error->leftEmpty         = 'When the task status is %s, "Hours Left" cannot be 0';
-$lang->task->error->leftEmptyAB       = 'task#%sWhen the task status is %s, "Hours Left" cannot be 0';
+$lang->task->error->leftEmptyAB       = 'task#%sWhen the task status is %s, "Left" cannot be 0';
 
 /* Report. */
 $lang->task->report = new stdclass();
