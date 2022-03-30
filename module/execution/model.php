@@ -527,6 +527,8 @@ class executionModel extends model
             ->limit(1)
             ->exec();
 
+        if(dao::isError()) return false;
+
         /* Get team and language item. */
         $this->loadModel('user');
         $team    = $this->user->getTeamMemberPairs($executionID, 'execution');
