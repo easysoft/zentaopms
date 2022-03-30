@@ -1735,29 +1735,23 @@ INSERT INTO `zt_cron` (`m`, `h`, `dom`, `mon`, `dow`, `command`, `remark`, `type
 ('*/5',  '*',    '*',    '*',    '*',    'moduleName=ci&methodName=exec', '执行DevOps构建任务', 'zentao', 1, 'normal',   '0000-00-00 00:00:00'),
 ('*/5',  '*',    '*',    '*',    '*',    'moduleName=mr&methodName=syncMR', '定时同步GitLab合并数据到禅道数据库', 'zentao', 1, 'normal', '0000-00-00 00:00:00');
 
-INSERT INTO `zt_group` (`id`, `name`, `role`, `desc`) VALUES
-(1, 'ADMIN', 'admin', 'for administrator'),
-(2, 'DEV', 'dev', 'for developers.'),
-(3, 'QA', 'qa', 'for testers.'),
-(4, 'PM', 'pm', 'for project managers.'),
-(5, 'PO', 'po', 'for product owners.'),
-(6, 'TD', 'td', 'for technical director.'),
-(7, 'PD', 'pd', 'for product director.'),
-(8, 'QD', 'qd', 'for quality director.'),
-(9, 'TOP', 'top', 'for top manager.'),
-(10, 'OTHERS', 'others', 'for others.'),
-(11, 'guest', 'guest', 'For guest'),
-(12, 'LIMITED', 'limited', 'For limited user'),
-(13, 'PROJECTADMIN', 'projectAdmin', 'Project Admins manage project privileges');
-
 INSERT INTO `zt_group` (`id`, `vision`, `name`, `role`, `desc`) VALUES
-(14, 'lite', '管理员', 'liteUser', '迅捷版用户分组');
-
-INSERT INTO `zt_group` (`id`, `vision`, `name`, `role`, `desc`) VALUES
-(15, 'lite', '项目管理', 'liteUser', '迅捷版用户分组');
-
-INSERT INTO `zt_group` (`id`, `vision`, `name`, `role`, `desc`) VALUES
-(16, 'lite', '团队成员', 'liteUser', '迅捷版用户分组');
+(1, 'rnd', 'ADMIN', 'admin', 'for administrator'),
+(2, 'rnd', 'DEV', 'dev', 'for developers.'),
+(3, 'rnd', 'QA', 'qa', 'for testers.'),
+(4, 'rnd', 'PM', 'pm', 'for project managers.'),
+(5, 'rnd', 'PO', 'po', 'for product owners.'),
+(6, 'rnd', 'TD', 'td', 'for technical director.'),
+(7, 'rnd', 'PD', 'pd', 'for product director.'),
+(8, 'rnd', 'QD', 'qd', 'for quality director.'),
+(9, 'rnd', 'TOP', 'top', 'for top manager.'),
+(10, 'rnd', 'OTHERS', 'others', 'for others.'),
+(11, 'rnd', 'guest', 'guest', 'For guest'),
+(12, 'rnd', 'LIMITED', 'limited', 'For limited user'),
+(13, 'rnd', 'PROJECTADMIN', 'projectAdmin', 'Project Admins manage project privileges'),
+(14, 'lite', 'LITEADMIN', 'liteAdmin', 'for lite administrator'),
+(15, 'lite', 'LITEPROJECT', 'liteProject', 'for lite project managers.'),
+(16, 'lite', 'LITETEAM', 'liteTeam', 'for lite team.');
 
 INSERT INTO `zt_grouppriv` (`group`, `module`, `method`) VALUES
 (1,'action','comment'),
