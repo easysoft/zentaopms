@@ -13,6 +13,7 @@ $lang->program->begin        = 'Begin';
 $lang->program->end          = 'End';
 $lang->program->stage        = 'Stage';
 $lang->program->type         = 'Type';
+$lang->program->from         = 'Stakeholder Type';
 $lang->program->pri          = 'Priority';
 $lang->program->parent       = 'Parent';
 $lang->program->exchangeRate = 'Exchange Rate';
@@ -74,6 +75,10 @@ $lang->program->isStakeholderKey = 'Key stakeholder';
 
 $lang->program->stakeholderTypeList['inside']  = 'Inside';
 $lang->program->stakeholderTypeList['outside'] = 'Outside';
+
+$lang->program->stakeholderFromList['team']    = 'Project Team';
+$lang->program->stakeholderFromList['company'] = 'Internal';
+$lang->program->stakeholderFromList['outside'] = 'External';
 
 $lang->program->noProgram          = 'No program.';
 $lang->program->showClosed         = 'Closed';
