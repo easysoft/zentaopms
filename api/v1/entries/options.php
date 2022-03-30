@@ -31,7 +31,7 @@ class optionsEntry extends entry
                 $options['pri']      = $this->lang->bug->priList;
                 $options['severity'] = $this->lang->bug->severityList;
 
-                $options['modules'] = array();
+                $options['modules'] = new stdclass();
                 $product = $this->param('product', 0);
                 if($product) $options['modules'] = $this->loadModel('tree')->getOptionMenu($product, 'bug');
 
