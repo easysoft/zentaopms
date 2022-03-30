@@ -1412,13 +1412,31 @@ class project extends control
         }
 
         $group      = $this->group->getById($groupID);
+        $project    = $this->project->getByID($group->project);
         $groupUsers = $this->group->getUserPairs($groupID);
         $allUsers   = $this->loadModel('dept')->getDeptUserPairs($deptID);
         $otherUsers = array_diff_assoc($allUsers, $groupUsers);
 
+        if($project->acl != 'open')
+        {
+            $canViewMembers = $this->dao->select('account')->from(TABLE_USERVIEW)->where("CONCAT(',', projects, ',')")->like("%,$group->project,%")->fetchPairs();
+            foreach($otherUsers as $account => $otherUser)
+            {
+                if(!isset($canViewMembers[$account])) unset($otherUsers[$account]);
+            }
+        }
+
         if($this->config->systemMode == 'new')
         {
             $outsideUsers = $this->loadModel('user')->getPairs('outside|noclosed|noletter|noempty');
+            if($project->acl != 'open')
+            {
+                foreach($outsideUsers as $account => $outsideUser)
+                {
+                    if(!isset($canViewMembers[$account])) unset($outsideUsers[$account]);
+                }
+            }
+
             $this->view->outsideUsers = array_diff_assoc($outsideUsers, $groupUsers);
         }
 
