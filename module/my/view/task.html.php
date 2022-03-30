@@ -201,18 +201,18 @@
                   if($child->needConfirm)
                   {
                       $this->lang->task->confirmStoryChange = $this->lang->confirm;
-                      common::printIcon('task', 'confirmStoryChange', "taskid=$child->id", '', 'list', '', 'hiddenwin', '', '', '', '', $child->project);
+                      common::printIcon('task', 'confirmStoryChange', "taskid=$child->id", '', 'list', '', 'hiddenwin');
                   }
                   else
                   {
-                      if($child->status != 'pause') common::printIcon('task', 'start', "taskID=$child->id", $child, 'list', '', '', 'iframe', true, '', '', $child->project);
-                      if($child->status == 'pause') common::printIcon('task', 'restart', "taskID=$child->id", $child, 'list', '', '', 'iframe', true, '', '', $child->project);
-                      common::printIcon('task', 'close',  "taskID=$child->id", $child, 'list', '', '', 'iframe', true, '', '', $child->project);
-                      common::printIcon('task', 'finish', "taskID=$child->id", $child, 'list', '', '', 'iframe', true, '', '', $child->project);
+                      if($child->status != 'pause') common::printIcon('task', 'start', "taskID=$child->id", $child, 'list', '', '', 'iframe', true,);
+                      if($child->status == 'pause') common::printIcon('task', 'restart', "taskID=$child->id", $child, 'list', '', '', 'iframe', true,);
+                      common::printIcon('task', 'close',  "taskID=$child->id", $child, 'list', '', '', 'iframe', true);
+                      common::printIcon('task', 'finish', "taskID=$child->id", $child, 'list', '', '', 'iframe', true);
 
-                      common::printIcon('task', 'recordEstimate', "taskID=$child->id", $child, 'list', 'time', '', 'iframe', true, '', '', $child->project);
-                      common::printIcon('task', 'edit',   "taskID=$child->id", $child, 'list', '', '', 'iframe', true, "data-width='95%'", '', $child->project);
-                      common::printIcon('task', 'batchCreate', "executionID=$child->execution&storyID=$child->story&moduleID=$child->module&taskID=$child->id&iframe=true", $child, 'list', 'split', '', 'iframe', true, '', $this->lang->task->children, $child->project);
+                      common::printIcon('task', 'recordEstimate', "taskID=$child->id", $child, 'list', 'time', '', 'iframe', true);
+                      common::printIcon('task', 'edit', "taskID=$child->id", $child, 'list', '', '', 'iframe', true, "data-width='95%'");
+                      common::printIcon('task', 'batchCreate', "executionID=$child->execution&storyID=$child->story&moduleID=$child->module&taskID=$child->id&iframe=true", $child, 'list', 'split', '', 'iframe', true, '', $this->lang->task->children);
                   }
               }
               ?>
