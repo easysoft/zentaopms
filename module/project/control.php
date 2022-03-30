@@ -1129,7 +1129,7 @@ class project extends control
         $actionURL = $this->createLink('project', 'build', "projectID=$projectID&type=bysearch&queryID=myQueryID");
 
         $onlyCanBuild = $project->model == 'waterfall' ? true : false;
-        $executions = $this->loadModel('execution')->getByProject($projectID, 'all', '', true, $onlyCanBuild);
+        $executions   = $this->loadModel('execution')->getByProject($projectID, 'all', '', true, $onlyCanBuild);
         $this->config->build->search['fields']['execution'] = $this->project->lang->executionCommon;
         $this->config->build->search['params']['execution'] = array('operator' => '=', 'control' => 'select', 'values' => array('' => '') + $executions);
 
