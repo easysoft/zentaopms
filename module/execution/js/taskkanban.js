@@ -1222,10 +1222,8 @@ function resetKanbanHeight()
     $('.kanban-lane').each(function()
     {
         laneCount ++;
-        if(laneCount > 1) return;
+        if(laneCount > 1) return true;
     });
-
-    if(laneCount > 1) return;
 
     var windowHeight  = $(window).height();
     var headerHeight  = $('#mainHeader').outerHeight();
