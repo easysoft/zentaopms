@@ -2257,7 +2257,7 @@ EOD;
 
         $module = $this->app->getModuleName();
         $method = $this->app->getMethodName();
-        if($module == 'index' || $module == 'tutorial' || $module == 'install' || $module == 'upgrade' || ($module == 'user' && ($method == 'login' || $method == 'deny' || $method == 'logout')) || ($module == 'my' && $method == 'changepassword') || ($module == 'file' && $method == 'read') || ($module == 'file' && $method == 'download')) return;
+        if($module == 'index' || $module == 'tutorial' || $module == 'install' || $module == 'upgrade' || ($module == 'user' && ($method == 'login' || $method == 'deny' || $method == 'logout')) || ($module == 'my' && $method == 'changepassword') || ($module == 'file' && $method == 'read') || ($module == 'file' && $method == 'download') || ($module == 'file' && $method == 'uploadimages')) return;
 
         $url = helper::safe64Encode($_SERVER['REQUEST_URI']);
         $redirectUrl = helper::createLink('index', 'index', "open=$url");
