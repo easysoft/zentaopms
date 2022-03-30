@@ -1262,7 +1262,7 @@ class executionModel extends model
      * @access public
      * @return array
      */
-    public function getByProject($projectID, $status = 'all', $limit = 0, $pairs = false)
+    public function getByProject($projectID, $status = 'all', $limit = 0, $pairs = false, $devel = false)
     {
         if(defined('TUTORIAL')) return $this->loadModel('tutorial')->getExecutionPairs();
 
@@ -1276,6 +1276,7 @@ class executionModel extends model
             ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->sprints)->fi()
             ->beginIF($status == 'undone')->andWhere('status')->notIN('done,closed')->fi()
             ->beginIF($status != 'all' and $status != 'undone')->andWhere('status')->in($status)->fi()
+            ->beginIF($devel === true)->andWhere('attribute')->in('dev,qa,release')->fi()
             ->orderBy($orderBy)
             ->beginIF($limit)->limit($limit)->fi()
             ->fetchAll('id');
@@ -2080,9 +2081,8 @@ class executionModel extends model
         $showAllModule = isset($this->config->execution->task->allModule) ? $this->config->execution->task->allModule : '';
         $modules       = $this->loadModel('tree')->getTaskOptionMenu($executionID, 0, 0, $showAllModule ? 'allModule' : '');
 
-        $execution        = $this->getByID($executionID);
-        $requiredFields = ',' . $this->config->task->create->requiredFields . ',';
-        if($execution->type == 'ops') $requiredFields = str_replace(',story,', ',', $requiredFields);
+        $execution      = $this->getByID($executionID);
+        $requiredFields = str_replace(',story,', ',', ',' . $this->config->task->create->requiredFields . ',');
         $requiredFields = trim($requiredFields, ',');
 
         $bugToTasks = fixer::input('post')->get();
@@ -2103,6 +2103,7 @@ class executionModel extends model
             $task->name         = $bug->title;
             $task->type         = 'devel';
             $task->pri          = $bugToTasks->pri[$key];
+            $task->estStarted   = $bugToTasks->estStarted[$key];
             $task->deadline     = $bugToTasks->deadline[$key];
             $task->estimate     = $bugToTasks->estimate[$key];
             $task->consumed     = 0;
@@ -2112,6 +2113,7 @@ class executionModel extends model
             $task->openedBy     = $this->app->user->account;
 
             if($task->estimate !== '') $task->left = $task->estimate;
+            if(strpos($requiredFields, 'estStarted') !== false and helper::isZeroDate($task->estStarted)) $task->estStarted = '';
             if(strpos($requiredFields, 'deadline') !== false and helper::isZeroDate($task->deadline)) $task->deadline = '';
             if(!empty($bugToTasks->assignedTo[$key]))
             {

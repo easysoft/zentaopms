@@ -848,6 +848,24 @@ function scrollToSelected(id)
     }
 }
 
+/**
+ * Limit iframe levels up to 3.
+ *
+ * @access public
+ * @return void
+ */
+function limitIframeLevel()
+{
+    /* Fix bug #15325. */
+    if(window.parent != window.top)
+    {
+        $('body').find('a.iframe').each(function()
+        {
+            $(this).replaceWith($(this).clone().removeClass('iframe'));
+        });
+    }
+}
+
 /* Ping the server every some minutes to keep the session. */
 needPing = true;
 

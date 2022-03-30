@@ -68,7 +68,6 @@
 .kanban-col[data-type=ADD] {display: none;}
 .kanban-col[data-type=EMPTY] {display: none;}
 .kanban-col {padding-right: 0px !important;}
-.kanban-item:hover .title {padding-right: 10px;}
 .gray .actions {display:none;}
 
 .c-type {width: 150px !important; overflow: unset;}

@@ -5,3 +5,7 @@ function assign(taskID, assignedTo)
   $('.assign').load(createLink('user', 'ajaxGetUser', 'taskID=' + taskID + '&assignedTo=' + assignedTo));
 }
 
+$(document).ready(function()
+{
+    limitIframeLevel();
+});

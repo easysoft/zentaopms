@@ -260,14 +260,14 @@ class project extends control
             $this->view->kanbanList       = $kanbanList;
             $this->view->browseType       = $browseType;
             $this->view->memberGroup      = $this->execution->getMembersByIdList(array_keys($kanbanList));
-            $this->view->usersAvatar      = $this->loadModel('user')->getAvatarPairs();
+            $this->view->usersAvatar      = $this->loadModel('user')->getAvatarPairs('all');
             $this->view->executionActions = $executionActions;
         }
 
         $this->view->title       = $this->lang->project->common . $this->lang->colon . $this->lang->project->index;
         $this->view->position[]  = $this->lang->project->index;
         $this->view->project     = $project;
-        $this->view->userIdPairs = $this->loadModel('user')->getPairs('nodeleted|showid');
+        $this->view->userIdPairs = $this->loadModel('user')->getPairs('nodeleted|showid|all');
 
         $this->display();
     }
@@ -1128,7 +1128,8 @@ class project extends control
         $queryID   = ($type == 'bysearch') ? (int)$param : 0;
         $actionURL = $this->createLink('project', 'build', "projectID=$projectID&type=bysearch&queryID=myQueryID");
 
-        $executions = $this->loadModel('execution')->getByProject($projectID, 'all', '', true);
+        $devel = $project->model == 'waterfall' ? true : false;
+        $executions   = $this->loadModel('execution')->getByProject($projectID, 'all', '', true, $devel);
         $this->config->build->search['fields']['execution'] = $this->project->lang->executionCommon;
         $this->config->build->search['params']['execution'] = array('operator' => '=', 'control' => 'select', 'values' => array('' => '') + $executions);
 
@@ -1411,13 +1412,31 @@ class project extends control
         }
 
         $group      = $this->group->getById($groupID);
+        $project    = $this->project->getByID($group->project);
         $groupUsers = $this->group->getUserPairs($groupID);
         $allUsers   = $this->loadModel('dept')->getDeptUserPairs($deptID);
         $otherUsers = array_diff_assoc($allUsers, $groupUsers);
 
+        if($project->acl != 'open')
+        {
+            $canViewMembers = $this->dao->select('account')->from(TABLE_USERVIEW)->where("CONCAT(',', projects, ',')")->like("%,$group->project,%")->fetchPairs();
+            foreach($otherUsers as $account => $otherUser)
+            {
+                if(!isset($canViewMembers[$account])) unset($otherUsers[$account]);
+            }
+        }
+
         if($this->config->systemMode == 'new')
         {
             $outsideUsers = $this->loadModel('user')->getPairs('outside|noclosed|noletter|noempty');
+            if($project->acl != 'open')
+            {
+                foreach($outsideUsers as $account => $outsideUser)
+                {
+                    if(!isset($canViewMembers[$account])) unset($outsideUsers[$account]);
+                }
+            }
+
             $this->view->outsideUsers = array_diff_assoc($outsideUsers, $groupUsers);
         }
 

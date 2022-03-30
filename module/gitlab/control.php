@@ -550,10 +550,19 @@ class gitlab extends control
      */
     public function browseUser($gitlabID, $orderBy = 'id_desc')
     {
+        $isAdmin = true;
+        if(!$this->app->user->admin)
+        {
+            $userID = $this->gitlab->getUserIDByZentaoAccount($gitlabID, $this->app->user->account);
+            $user   = $this->gitlab->apiGetSingleUser($gitlabID, $userID);
+            if(!$user->is_admin) $isAdmin = false;
+        }
+
         $this->view->title          = $this->lang->gitlab->common . $this->lang->colon . $this->lang->gitlab->browseUser;
         $this->view->gitlabID       = $gitlabID;
         $this->view->gitlabUserList = $this->gitlab->apiGetUsers($gitlabID, false, $orderBy);
         $this->view->orderBy        = $orderBy;
+        $this->view->isAdmin        = $isAdmin;
         $this->display();
     }
 
