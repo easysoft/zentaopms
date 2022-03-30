@@ -27,7 +27,7 @@ UPDATE `zt_kanbancard` SET `progress`='100' WHERE `status` = 'done' and `fromtyp
 
 ALTER TABLE `zt_user` ADD `visions` varchar(20) NOT NULL DEFAULT 'rnd,lite' AFTER `visits`;
 UPDATE `zt_user` SET `visions`='rnd,lite';
-UPDATE `zt_group` SET `vision`='lite' WHERE `role` = 'feedback';
+UPDATE `zt_group` SET `vision`='lite', `project`='0' WHERE `role` = 'feedback';
 
 DELETE FROM `zt_group` WHERE `vision` = 'lite' AND `role` IN ('liteAdmin','liteProject','liteTeam');
 
