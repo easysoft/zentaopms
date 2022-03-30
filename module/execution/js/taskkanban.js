@@ -361,6 +361,7 @@ function updateKanban(kanbanID, data)
     if(!$kanban.length) return;
 
     $kanban.data('zui.kanban').render(data);
+    resetKanbanHeight();
 }
 
 /**
@@ -985,6 +986,7 @@ function changeKanbanScaleSize(newScaleSize)
         kanban.setOptions({cardsPerRow: newScaleSize, cardHeight: getCardHeight()});
     });
 
+    resetKanbanHeight();
     return newScaleSize;
 }
 
@@ -1159,6 +1161,7 @@ $(function()
             }
         });
     }, 10000);
+    resetKanbanHeight();
 });
 
 $('#type').change(function()
@@ -1206,3 +1209,32 @@ $('.panel-body').scroll(function()
 {
     $.zui.ContextMenu.hide();
 });
+
+/**
+ * Reset kanban height according to window height.
+ *
+ * @access public
+ * @return void
+ */
+function resetKanbanHeight()
+{
+    var laneCount = 0;
+    $('.kanban-lane').each(function()
+    {
+        laneCount ++;
+        if(laneCount > 1) return;
+    });
+
+    if(laneCount > 1) return;
+
+    var windowHeight  = $(window).height();
+    var headerHeight  = $('#mainHeader').outerHeight();
+    var mainPadding   = $('#main').css('padding-top');
+    var menuHeight    = $('#mainMenu').height();
+    var panelBorder   = $('.panel').css('border-top-width');
+    var bodyPadding   = $('.panel-body').css('padding-top');
+    var columnHeight  = $('.kanban-header').outerHeight();
+    var height        = windowHeight - headerHeight - (parseInt(mainPadding) * 2) - menuHeight - (parseInt(panelBorder) * 2) - (parseInt(bodyPadding) * 2) - columnHeight;
+
+    $('.kanban-lane').css('height', height -2);
+}
