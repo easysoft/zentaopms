@@ -144,6 +144,7 @@ body {margin-bottom: 25px;}
     <?php
     $checkObject = new stdclass();
     $checkObject->execution = $executionID;
+    $taskCreateLink = $this->createLink('task', 'create', "executionID=$executionID" . (isset($moduleID) ? "&storyID=0&moduleID=$moduleID" : ""));
     ?>
     <?php if(!common::checkNotCN()):?>
     <?php if($canBeChanged and (common::hasPriv('task', 'batchCreate', $checkObject) or common::hasPriv('task', 'create', $checkObject))):?>
@@ -153,10 +154,6 @@ body {margin-bottom: 25px;}
       {
           $wizardParams   = helper::safe64Encode("executionID=$executionID" . (isset($moduleID) ? "&storyID=0&moduleID=$moduleID" : ""));
           $taskCreateLink = $this->createLink('tutorial', 'wizard', "module=task&method=create&params=$wizardParams");
-      }
-      else
-      {
-          $taskCreateLink = $this->createLink('task', 'create', "executionID=$executionID" . (isset($moduleID) ? "&storyID=0&moduleID=$moduleID" : ""));
       }
       echo html::a($taskCreateLink, "<i class='icon icon-plus'></i> {$lang->task->create}", '', "class='btn btn-primary'");
       ?>
