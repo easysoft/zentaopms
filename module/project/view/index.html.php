@@ -93,7 +93,7 @@
                 <?php if($count > 2) break;?>
                 <?php $count ++;?>
                 <div title="<?php echo $member->realname;?>">
-                  <?php echo html::smallAvatar(array('avatar' => $usersAvatar[$member->account], 'account' => $member->account, 'name' => $member->realname), 'avatar-circle avatar-' . zget($userIdPairs, $member->account)); ?>
+                  <?php echo html::smallAvatar(array('avatar' => zget($usersAvatar, $member->account, ''), 'account' => $member->account, 'name' => $member->realname), 'avatar-circle avatar-' . zget($userIdPairs, $member->account, '')); ?>
                 </div>
                 <?php endforeach;?>
                 <?php if(count($members) > 4):?>

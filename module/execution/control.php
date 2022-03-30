@@ -2070,7 +2070,7 @@ class execution extends control
 
         $userList    = array();
         $users       = $this->loadModel('user')->getPairs('noletter|nodeleted');
-        $avatarPairs = $this->user->getAvatarPairs();
+        $avatarPairs = $this->user->getAvatarPairs('all');
         foreach($avatarPairs as $account => $avatar)
         {
             if(!isset($users[$account])) continue;

@@ -260,14 +260,14 @@ class project extends control
             $this->view->kanbanList       = $kanbanList;
             $this->view->browseType       = $browseType;
             $this->view->memberGroup      = $this->execution->getMembersByIdList(array_keys($kanbanList));
-            $this->view->usersAvatar      = $this->loadModel('user')->getAvatarPairs();
+            $this->view->usersAvatar      = $this->loadModel('user')->getAvatarPairs('all');
             $this->view->executionActions = $executionActions;
         }
 
         $this->view->title       = $this->lang->project->common . $this->lang->colon . $this->lang->project->index;
         $this->view->position[]  = $this->lang->project->index;
         $this->view->project     = $project;
-        $this->view->userIdPairs = $this->loadModel('user')->getPairs('nodeleted|showid');
+        $this->view->userIdPairs = $this->loadModel('user')->getPairs('nodeleted|showid|all');
 
         $this->display();
     }
