@@ -43,9 +43,9 @@ class taskBatchCreateEntry extends Entry
         $desc       = array();
         $pri        = array();
         $stories    = array();
-        $number     = 1;
-        foreach($this->request('tasks') as $task)
+        foreach($this->request('tasks') as $key => $task)
         {
+            $number = $key + 1;
             if(!isset($task->name) or !isset($task->type)) return $this->send400('Task must have name and type.');
 
             $modules[$number]    = isset($task->module)     ? $task->module     : $moduleID;
@@ -59,7 +59,6 @@ class taskBatchCreateEntry extends Entry
             $desc[$number]       = isset($task->desc)       ? $task->desc       : '';
             $pri[$number]        = isset($task->pri)        ? $task->pri        : 0;
             $stories[$number]    = isset($task->story)      ? $task->story      : $storyID;
-            $number += 1;
         }
         $this->setPost('module',     $modules);
         $this->setPost('parent',     $parents);
