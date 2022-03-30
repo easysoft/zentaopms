@@ -169,6 +169,7 @@ $(function()
         }
 
         if($(ele).hasClass('create-bug-btn') || $(ele).hasClass('create-story-btn')) container = '#mainMenu'; // Fix bug #21092.
+        if(!container && $(ele).hasClass('form-control')) container = '.table-form'; // Fix bug #21093
 
         $e.closest('body').find('.tooltip-tutorial').tooltip('destroy');
         var offset   = $e.offset();

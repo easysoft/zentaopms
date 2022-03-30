@@ -58,7 +58,7 @@
               <?php endforeach;?>
             </td>
           </tr>
-          <?php if($config->systemMode == 'new'):?>
+          <?php if($config->systemMode == 'new' and !empty($outsideUsers)):?>
           <tr>
             <th class='w-140px'>
               <div class="checkbox-primary checkbox-inline checkbox-right check-all">

@@ -151,8 +151,14 @@ class doc extends control
         }
 
         $products   = $this->product->getPairs();
-        $projects   = $this->project->getPairsByProgram();
-        $executions = $this->execution->getPairs();
+        $projects   = $this->project->getPairsByProgram('', 'all', true);
+        $executions = $this->execution->getList();
+
+        /* Splice project name. */
+        foreach($executions as $executionID => $execution) $executions[$executionID] = $projects[$execution->parent] . '/' . $execution->name;
+
+        /* Get the project that has permission to view. */
+        foreach($projects as $projectID => $project) if(!$this->app->user->admin and strpos(',' . $this->app->user->view->projects . ',', ',' . $projectID . ',') === false) unset($projects[$projectID]);
 
         if($type == 'execution')
         {

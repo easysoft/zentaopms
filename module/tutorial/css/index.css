@@ -76,3 +76,5 @@
 #taskModal.show-all > .finish {display: none;}
 #taskModal .btn-outline {background-color: transparent; border: 1px solid #fff; color: #fff}
 #taskModal .btn-outline:hover {background-color: #fff; color: #43a047}
+
+.icon-close:before {color: #fff;}

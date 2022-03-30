@@ -248,6 +248,12 @@ $lang->install->groupList['LIMITED']['name']      = 'Limited User';
 $lang->install->groupList['LIMITED']['desc']      = 'Users can only edit contents related to themselves.';
 $lang->install->groupList['PROJECTADMIN']['name'] = 'Project Admin';
 $lang->install->groupList['PROJECTADMIN']['desc'] = 'Project Admins manage project privileges';
+$lang->install->groupList['LITEADMIN']['name']    = 'LITEADMIN';
+$lang->install->groupList['LITEADMIN']['desc']    = 'Lite Admin';
+$lang->install->groupList['LITEPROJECT']['name']  = 'LITEPROJECT';
+$lang->install->groupList['LITEPROJECT']['desc']  = 'Lite Rroject';
+$lang->install->groupList['LITETEAM']['name']     = 'LITETEAM';
+$lang->install->groupList['LITETEAM']['desc']     = 'Lite Team';
 
 $lang->install->cronList[''] = 'Monitor Cron';
 $lang->install->cronList['moduleName=execution&methodName=computeBurn'] = 'Update Burndown Chart';

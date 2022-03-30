@@ -9,6 +9,11 @@ title=测试 storyModel->batchCreate();
 cid=1
 pid=1
 
+插入两条软件需求，判断返回的需求总量 >> 2
+插入两条用户需求，判断返回的需求总量 >> 2
+插入两条软件需求，判断返回的title、type等信息 >> 测试需求1,story,1,测试需求描述1,1,planned,2221
+插入两条用户需求，判断返回的title、type等信息 >> 测试需求2,requirement,2,测试需求描述2,2,planned,2222
+
 */
 
 $story = new storyTest();

@@ -9,6 +9,13 @@ title=测试 storyModel->subdivide();
 cid=1
 pid=1
 
+将用户需求1拆分三个软件需求，查看relation表记录的数量 >> 3
+将用户需求1拆分三个软件需求，查看relation表记录的关系 >> 1,2,subdivideinto
+将用户需求1拆分三个软件需求，查看relation表记录的关系 >> 1,6,subdivideinto
+将软件需求2拆分三个子需求，查看子需求的数量 >> 3
+将软件需求2拆分三个子需求，查看子需求8的parent、title等字段 >> 2,这里是需求来源备注8,8
+将软件需求2拆分三个子需求，查看子需求12的parent、title等字段 >> 2,这里是需求来源备注12,12
+
 */
 
 $story = new storyTest();

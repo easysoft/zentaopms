@@ -10,6 +10,12 @@ title=测试 buildModel->update();
 cid=1
 pid=1
 
+修改项目版本 >> name,项目版本版本1,修改版本一
+修改执行版本 >> name,执行版本版本11,修改执行版本一
+修改版本路径 >> scmPath,,http://www.baidu.com
+名称为空测试 >> 『名称编号』不能为空。
+构建者为空测试 >> 『构建者』不能为空。
+
 */
 
 $buildIDList = array('1', '11');

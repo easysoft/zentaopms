@@ -87,12 +87,12 @@
           <td class="c-pri"><span class='label-pri <?php echo 'label-pri-' . $task->pri;?>' title='<?php echo zget($lang->task->priList, $task->pri);?>'><?php echo zget($lang->task->priList, $task->pri);?></span></td>
           <td class='c-name <?php if(!empty($task->children)) echo 'has-child';?>' title='<?php echo $task->name?>'>
             <?php if(!empty($task->team))   echo '<span class="label label-badge label-light">' . $this->lang->task->multipleAB . '</span> ';?>
-            <?php 
+            <?php
             if($task->parent > 0)
             {
                 echo '<span class="label label-badge label-light">' . $this->lang->task->childrenAB . '</span> ' . html::a($this->createLink('task', 'view', "taskID=$task->id", '', '', $task->project), $task->parentName . ' / '. $task->name, '', "title='{$task->parentName} / {$task->name}'");
             }
-            else 
+            else
             {
                 echo html::a($this->createLink('task', 'view', "taskID=$task->id", '', '', $task->project), $task->name, null, "style='color: $task->color'");
             }
@@ -201,18 +201,18 @@
                   if($child->needConfirm)
                   {
                       $this->lang->task->confirmStoryChange = $this->lang->confirm;
-                      common::printIcon('task', 'confirmStoryChange', "taskid=$child->id", '', 'list', '', 'hiddenwin', '', '', '', '', $child->project);
+                      common::printIcon('task', 'confirmStoryChange', "taskid=$child->id", '', 'list', '', 'hiddenwin');
                   }
                   else
                   {
-                      if($child->status != 'pause') common::printIcon('task', 'start', "taskID=$child->id", $child, 'list', '', '', 'iframe', true, '', '', $child->project);
-                      if($child->status == 'pause') common::printIcon('task', 'restart', "taskID=$child->id", $child, 'list', '', '', 'iframe', true, '', '', $child->project);
-                      common::printIcon('task', 'close',  "taskID=$child->id", $child, 'list', '', '', 'iframe', true, '', '', $child->project);
-                      common::printIcon('task', 'finish', "taskID=$child->id", $child, 'list', '', '', 'iframe', true, '', '', $child->project);
+                      if($child->status != 'pause') common::printIcon('task', 'start', "taskID=$child->id", $child, 'list', '', '', 'iframe', true);
+                      if($child->status == 'pause') common::printIcon('task', 'restart', "taskID=$child->id", $child, 'list', '', '', 'iframe', true);
+                      common::printIcon('task', 'close',  "taskID=$child->id", $child, 'list', '', '', 'iframe', true);
+                      common::printIcon('task', 'finish', "taskID=$child->id", $child, 'list', '', '', 'iframe', true);
 
-                      common::printIcon('task', 'recordEstimate', "taskID=$child->id", $child, 'list', 'time', '', 'iframe', true, '', '', $child->project);
-                      common::printIcon('task', 'edit',   "taskID=$child->id", $child, 'list', '', '', '', '', '', '', $child->project);
-                      common::printIcon('task', 'batchCreate', "executionID=$child->execution&storyID=$child->story&moduleID=$child->module&taskID=$child->id&iframe=true", $child, 'list', 'split', '', 'iframe', true, '', $this->lang->task->children, $child->project);
+                      common::printIcon('task', 'recordEstimate', "taskID=$child->id", $child, 'list', 'time', '', 'iframe', true);
+                      common::printIcon('task', 'edit', "taskID=$child->id", $child, 'list', '', '', 'iframe', true, "data-width='95%'");
+                      common::printIcon('task', 'batchCreate', "executionID=$child->execution&storyID=$child->story&moduleID=$child->module&taskID=$child->id&iframe=true", $child, 'list', 'split', '', 'iframe', true, '', $this->lang->task->children);
                   }
               }
               ?>

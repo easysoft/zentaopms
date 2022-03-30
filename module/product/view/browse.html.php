@@ -401,8 +401,7 @@ $projectIDParam = $isProjectStory ? "projectID=$projectID&" : '';
               $misc = $canBatchClose ? "onclick=\"setFormAction('$actionLink', '', '#productStoryForm')\"" : '';
               echo "<li $class>" . html::a('#', $lang->close, '', $misc) . "</li>";
 
-              $class = $canBatchUnlink ? '' : "class='disabled'";
-              echo "<li $class>" . html::a('#', $lang->story->unlink, '', "id='batchUnlinkStory'") . "</li>";
+              if($canBatchUnlink) echo "<li $class>" . html::a('#', $lang->story->unlink, '', "id='batchUnlinkStory'") . "</li>";
 
               if($canBatchReview)
               {

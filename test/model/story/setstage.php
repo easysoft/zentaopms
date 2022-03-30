@@ -9,6 +9,12 @@ title=测试 storyModel->setStage();
 cid=1
 pid=1
 
+为需求2拆分几个任务. >> execution
+把需求2下面的任务都完成. >> story
+查看设置之后的需求状态 >> projected
+查看设置之后的需求状态 >> testing
+查看设置之后的需求状态 >> tested
+
 */
 
 $story = new storyTest();
