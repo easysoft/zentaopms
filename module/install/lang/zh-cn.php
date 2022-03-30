@@ -248,6 +248,12 @@ $lang->install->groupList['LIMITED']['name']      = '受限用户';
 $lang->install->groupList['LIMITED']['desc']      = '受限用户分组(只能编辑与自己相关的内容)';
 $lang->install->groupList['PROJECTADMIN']['name'] = '项目管理员';
 $lang->install->groupList['PROJECTADMIN']['desc'] = '项目管理员可以维护项目的权限';
+$lang->install->groupList['LITEADMIN']['name']    = '管理员';
+$lang->install->groupList['LITEADMIN']['desc']    = '迅捷版用户分组';
+$lang->install->groupList['LITEPROJECT']['name']  = '项目管理';
+$lang->install->groupList['LITEPROJECT']['desc']  = '迅捷版用户分组';
+$lang->install->groupList['LITETEAM']['name']     = '团队成员';
+$lang->install->groupList['LITETEAM']['desc']     = '迅捷版用户分组';
 
 $lang->install->cronList[''] = '监控定时任务';
 $lang->install->cronList['moduleName=execution&methodName=computeBurn'] = '更新燃尽图';
