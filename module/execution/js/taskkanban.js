@@ -1225,6 +1225,8 @@ function resetKanbanHeight()
         if(laneCount > 1) return true;
     });
 
+    if(laneCount > 1) return true;
+
     var windowHeight  = $(window).height();
     var headerHeight  = $('#mainHeader').outerHeight();
     var mainPadding   = $('#main').css('padding-top');

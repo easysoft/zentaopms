@@ -260,7 +260,7 @@ class project extends control
             $this->view->kanbanList       = $kanbanList;
             $this->view->browseType       = $browseType;
             $this->view->memberGroup      = $this->execution->getMembersByIdList(array_keys($kanbanList));
-            $this->view->usersAvatar      = $this->loadModel('user')->getAvatarPairs();
+            $this->view->usersAvatar      = $this->loadModel('user')->getAvatarPairs('all');
             $this->view->executionActions = $executionActions;
         }
 
