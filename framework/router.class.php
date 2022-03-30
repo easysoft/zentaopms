@@ -172,7 +172,7 @@ class router extends baseRouter
 
         $mode       = 'new';
         $score      = '0';
-        $projectKey = empty($this->config->isINT) ? ITERATION_KEY : SPRINT_KEY;
+        $projectKey = ITERATION_KEY;
 
         foreach($commonSettings as $setting)
         {
@@ -183,7 +183,7 @@ class router extends baseRouter
             if($setting->key == 'mode' and $setting->section == 'global') $mode = $setting->value;
             if($setting->key == 'scoreStatus' and $setting->section == 'global') $score = $setting->value;
         }
-        
+
         /* Lite Version is compatible with classic modes */
         if($config->vision == 'lite') $mode = 'new';
 
