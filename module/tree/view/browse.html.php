@@ -26,7 +26,7 @@ $name = $lang->tree->name;
 if($viewType == 'line') $name = $lang->tree->line;
 if($viewType == 'api')  $name = $lang->tree->dir;
 if($viewType == 'doc')  $name = $lang->doc->catalogName;
-if($viewType == 'feedback' or $viewType == 'trainskill' or $viewType == 'trainpost') $name = $lang->tree->dir;
+if($viewType == 'feedback' or $viewType == 'trainskill' or $viewType == 'trainpost') $name = $lang->tree->cate;
 
 $childTitle = $lang->tree->child;
 if(strpos($viewType, 'feedback') !== false) $childTitle = $lang->tree->subCategory;
