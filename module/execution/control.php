@@ -2131,7 +2131,6 @@ class execution extends control
      */
     public function taskKanban($executionID, $browseType = '', $orderBy = 'order_asc', $groupBy = '')
     {
-        $execution = $this->loadModel('execution')->getById($executionID);
         if(empty($browseType)) $browseType = $this->session->kanbanType ? $this->session->kanbanType : 'all';
         if(empty($groupBy)) $groupBy = 'default';
 
@@ -2150,6 +2149,8 @@ class execution extends control
         /* Compatibility IE8. */
         if(strpos($this->server->http_user_agent, 'MSIE 8.0') !== false) header("X-UA-Compatible: IE=EmulateIE7");
 
+        $this->execution->setMenu($executionID);
+        $execution = $this->execution->getById($executionID);
         if($execution->lifetime == 'ops')
         {
             $browseType = 'task';
@@ -2157,8 +2158,7 @@ class execution extends control
             unset($this->lang->kanban->type['bug']);
             unset($this->lang->kanban->type['all']);
         }
-
-        if($execution->type == 'stage' and $execution->attribute != 'dev')
+        elseif($execution->type == 'stage' and $execution->attribute != 'dev')
         {
             unset($this->lang->kanban->type['task']);
         }
@@ -2169,9 +2169,6 @@ class execution extends control
             $this->kanban->createExecutionLane($executionID, $browseType, $groupBy);
             $kanbanGroup = $this->kanban->getExecutionKanban($executionID, $browseType, $groupBy);
         }
-
-        $this->execution->setMenu($executionID);
-        $execution = $this->loadModel('execution')->getById($executionID);
 
         /* Determines whether an object is editable. */
         $canBeChanged = common::canModify('execution', $execution);

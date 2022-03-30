@@ -1316,10 +1316,9 @@ class kanbanModel extends model
      */
     public function getExecutionKanban($executionID, $browseType = 'all', $groupBy = 'default')
     {
-        $execution = $this->loadModel('execution')->getById($executionID);
-
         if($groupBy != 'default') return $this->getKanban4Group($executionID, $browseType, $groupBy);
 
+        $execution = $this->loadModel('execution')->getById($executionID);
         $lanes = $this->dao->select('*')->from(TABLE_KANBANLANE)
             ->where('execution')->eq($executionID)
             ->andWhere('deleted')->eq(0)
