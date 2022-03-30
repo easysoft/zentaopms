@@ -1260,7 +1260,7 @@ class executionModel extends model
      * @access public
      * @return array
      */
-    public function getByProject($projectID, $status = 'all', $limit = 0, $pairs = false)
+    public function getByProject($projectID, $status = 'all', $limit = 0, $pairs = false, $onlyCanBuild = false)
     {
         if(defined('TUTORIAL')) return $this->loadModel('tutorial')->getExecutionPairs();
 
@@ -1274,6 +1274,7 @@ class executionModel extends model
             ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->sprints)->fi()
             ->beginIF($status == 'undone')->andWhere('status')->notIN('done,closed')->fi()
             ->beginIF($status != 'all' and $status != 'undone')->andWhere('status')->in($status)->fi()
+            ->beginIF($onlyCanBuild === true)->andWhere('attribute')->in('dev,qa,release')->fi()
             ->orderBy($orderBy)
             ->beginIF($limit)->limit($limit)->fi()
             ->fetchAll('id');
