@@ -35,6 +35,30 @@ class taskModel extends model
 
         if($this->post->selectTestStory)
         {
+            /* Check required fields when create test task. */
+            foreach($this->post->testStory as $i => $storyID)
+            {
+                if(empty($storyID)) continue;
+
+                $task = new stdclass();
+                $task->pri        = $this->post->testPri[$i];
+                $task->estStarted = $this->post->testEstStarted[$i];
+                $task->deadline   = $this->post->testDeadline[$i];
+                $task->assignedTo = $this->post->testAssignedTo[$i];
+                $task->estimate   = $this->post->testEstimate[$i];
+                $task->left       = $this->post->testEstimate[$i];
+
+                $this->dao->insert(TABLE_TASK)->data($task)->batchCheck($requiredFields, 'notempty');
+                if(dao::isError())
+                {
+                    foreach(dao::getError() as $field => $error)
+                    {
+                        dao::$errors[] = $error;
+                        return false;
+                    }
+                }
+            }
+
             $requiredFields = str_replace(",estimate,", ',', "$requiredFields");
             $requiredFields = str_replace(",story,", ',', "$requiredFields");
             $requiredFields = str_replace(",estStarted,", ',', "$requiredFields");
