@@ -113,8 +113,11 @@ function setPreview(num)
         });
 
         storyLink  = createLink('story', 'view', "storyID=" + storyID);
-        var concat = config.requestType != 'GET' ? '?'  : '&';
-        storyLink  = storyLink + concat + 'onlybody=yes';
+        if(!isonlybody)
+        {
+            var concat = config.requestType != 'GET' ? '?'  : '&';
+            storyLink  = storyLink + concat + 'onlybody=yes';
+        }
         $('#preview' + num).removeAttr('disabled');
         $('#preview' + num).attr('href', storyLink);
     }

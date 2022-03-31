@@ -14,6 +14,7 @@
 <?php include '../../common/view/datepicker.html.php';?>
 <?php js::set('taskConsumed', $taskConsumed);?>
 <?php js::set('addChildTask', $lang->task->addChildTask);?>
+<?php js::set('isonlybody', isonlybody())?>
 <div id="mainContent" class="main-content fade">
   <div class="main-header clearfix">
     <h2 class="pull-left">
@@ -242,7 +243,11 @@
 .btn-toolbar > .dropdown {margin: 0px;}
 </style>
 <script>
-$(function(){parent.$('#triggerModal .modal-content .modal-header .close').hide();});
+$(function()
+{
+    parent.$('#triggerModal .modal-content .modal-header .close').hide();
+    $('#closeModal').on('click', function(){window.parent.$.closeModal();});
+});
 </script>
 <?php endif;?>
 <?php include '../../common/view/pastetext.html.php';?>
