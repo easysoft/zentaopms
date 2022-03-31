@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
-include dirname(dirname(dirname(__FILE__))) . '/class/program.class.php';
+su('admin');
 
 /**
 
@@ -16,12 +16,12 @@ pid=1
 
 */
 
-$program = new Program('admin');
+global $tester;
+$tester->loadModel('program');
+$stakeholders1 = $tester->program->getStakeholders(2, 'id_desc');
+$stakeholders2 = $tester->program->getStakeholders(2, 'id_asc');
 
-$t_Stakeholder = array(2, 'id_desc', 'id_asc', 2);
-
-//var_dump($program->getByID1($t_Stakeholder[0]));die;
-r($program->getByID1($t_Stakeholder[0]))   && p('0:realname') && e('测试17'); // 查看项目集2的干系人信息
-r($program->getByOrder($t_Stakeholder[1])) && p()             && e('1');      // 根据干系人id倒序排序
-r($program->getByOrder($t_Stakeholder[2])) && p()             && e('1');      // 根据干系人id正序排序
-r($program->getCount5($t_Stakeholder[3]))  && p()             && e('3');      // 查看项目集2的干系人个数
+r(count($stakeholders1)) && p()             && e('3');      // 获取干系人数量
+r(count($stakeholders2)) && p()             && e('3');      // 获取干系人数量
+r($stakeholders1)        && p('0:realname') && e('测试17'); // id倒序排，获取第一个干系人真实姓名
+r($stakeholders2)        && p('0:realname') && e('测试19'); // id正序排，获取第一个干系人真实姓名

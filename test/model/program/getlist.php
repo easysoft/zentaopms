@@ -17,14 +17,21 @@ pid=1
 
 */
 
-$program = new Program('admin');
+global $tester;
+$program = new programTest();
+$tester->app->loadClass('pager', $static = true);
+$pager = new pager(0, 10, 1);
 
-$t_checkout = array('all', 'wait', 'doing', 'suspended', 'closed', 'name_desc', 'id_asc');
+$allPorgrams       = $program->getList('all');
+$pagerPrograms     = $program->getList('all', 'id_asc', $pager);
+$closedPrograms    = $program->getList('closed');
+$suspendedPrograms = $program->getList('closed');
+$namedescPrograms  = $program->getList('all', 'name_desc');
+$idascPrograms     = $program->getList('all', 'id_asc');
 
-r($program->getListByStatus($t_checkout[0])) && p() && e('100'); // 查看所有项目和项目集的个数
-r($program->getListByStatus($t_checkout[1])) && p() && e('34');  // 查看所有'wait'的项目和项目集的个数
-r($program->getListByStatus($t_checkout[2])) && p() && e('44');  // 查看所有'doing'的项目和项目集的个数
-r($program->getListByStatus($t_checkout[3])) && p() && e('11');  // 查看所有'suspended'的项目和项目集的个数
-r($program->getListByStatus($t_checkout[4])) && p() && e('11');  // 查看所有'closed'的项目和项目集的个数
-r($program->getListByOrder($t_checkout[5]))  && p() && e(1);     // 按照项目和项目集名称倒序获取项目列表
-r($program->getListByOrder($t_checkout[6]))  && p() && e(1);     // 按照ID正序获取项目和项目集列表
+r(count($allPorgrams))       && p() && e('120'); // 查看所有项目和项目集的个数
+r(count($pagerPrograms))     && p() && e('10');  // 查看分页后项目集和项目的个数
+r(count($closedPrograms))    && p() && e('11');  // 查看所有'closed'的项目和项目集的个数
+r(count($suspendedPrograms)) && p() && e('11');  // 查看所有'suspended'的项目和项目集的个数
+r(key($namedescPrograms))    && p() && e('9');   // 按照项目和项目集名称倒序获取第一个ID
+r(key($idascPrograms))       && p() && e('1');   // 按照ID正序获取项目和项目集列表第一个ID
