@@ -51,7 +51,7 @@
           <?php $isKey = $stakeholder->key ? " <i class='icon icon-star-empty'></i>" : '';?>
           <?php $title = $stakeholder->key ? $lang->program->isStakeholderKey : '';?>
           <td title="<?php echo $title;?>"><?php echo $stakeholder->realname . $isKey;?></td>
-          <td title='<?php echo zget($lang->program->stakeholderTypeList, $stakeholder->type, '');?>'><?php echo zget($lang->program->stakeholderTypeList, $stakeholder->type, '');?></td>
+          <td title='<?php echo zget($lang->stakeholder->fromList, $stakeholder->from, '');?>'><?php echo zget($lang->stakeholder->fromList, $stakeholder->from, '');?></td>
           <td><?php echo zget($lang->user->roleList, $stakeholder->role, '');?></td>
           <td title="<?php echo $stakeholder->phone;?>"><?php echo $stakeholder->phone;?></td>
           <td title="<?php echo $stakeholder->qq;?>"><?php echo $stakeholder->qq;?></td>

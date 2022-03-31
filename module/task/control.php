@@ -1905,6 +1905,7 @@ class task extends control
                     $task->desc = htmlspecialchars_decode($task->desc);
                     $task->desc = str_replace("<br />", "\n", $task->desc);
                     $task->desc = str_replace('"', '""', $task->desc);
+                    $task->desc = str_replace('&nbsp;', ' ', $task->desc);
                 }
 
                 /* fill some field with useful value. */
