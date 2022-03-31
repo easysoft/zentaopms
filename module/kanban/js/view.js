@@ -1388,6 +1388,7 @@ function initSortable()
     {
         selector: '.region, .kanban-board, .kanban-lane, .kanban-col',
         trigger: '.region.sort > .region-header, .kanban-board.sort > .kanban-header > .kanban-group-header, .kanban-lane.sort > .kanban-lane-name, .kanban-header-col.sort',
+        dropOnMouseleave: true,
         container: function($ele)
         {
             return $ele.parent();
