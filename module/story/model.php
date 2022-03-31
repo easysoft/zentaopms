@@ -2663,6 +2663,8 @@ class storyModel extends model
             {
                 $storyQuery .= " AND `status` NOT IN ('draft', 'closed')";
             }
+
+            if($this->app->rawModule == 'build' and $this->app->rawMethod == 'linkstory') $storyQuery .= " AND `parent` != '-1'";
         }
         elseif(strpos($storyQuery, $allBranch) !== false)
         {
