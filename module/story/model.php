@@ -3202,7 +3202,7 @@ class storyModel extends model
     /**
      * Check need confirm.
      *
-     * @param  array|object    $dataList
+     * @param  array|object    $object
      * @access public
      * @return array|object
      */
