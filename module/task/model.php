@@ -35,6 +35,30 @@ class taskModel extends model
 
         if($this->post->selectTestStory)
         {
+            /* Check required fields when create test task. */
+            foreach($this->post->testStory as $i => $storyID)
+            {
+                if(empty($storyID)) continue;
+
+                $task = new stdclass();
+                $task->pri        = $this->post->testPri[$i];
+                $task->estStarted = $this->post->testEstStarted[$i];
+                $task->deadline   = $this->post->testDeadline[$i];
+                $task->assignedTo = $this->post->testAssignedTo[$i];
+                $task->estimate   = $this->post->testEstimate[$i];
+                $task->left       = $this->post->testEstimate[$i];
+
+                $this->dao->insert(TABLE_TASK)->data($task)->batchCheck($requiredFields, 'notempty');
+                if(dao::isError())
+                {
+                    foreach(dao::getError() as $field => $error)
+                    {
+                        dao::$errors[] = $error;
+                        return false;
+                    }
+                }
+            }
+
             $requiredFields = str_replace(",estimate,", ',', "$requiredFields");
             $requiredFields = str_replace(",story,", ',', "$requiredFields");
             $requiredFields = str_replace(",estStarted,", ',', "$requiredFields");
@@ -998,6 +1022,12 @@ class taskModel extends model
             $requiredFields = str_replace(',estimate,', ',', $requiredFields);
         }
 
+        if(strpos(',doing,pause,', $task->status) && empty($teams) && empty($task->left))
+        {
+            dao::$errors[] = sprintf($this->lang->task->error->leftEmptyAB, $this->lang->task->statusList[$task->status]);
+            return false;
+        }
+
         $requiredFields = trim($requiredFields, ',');
 
         $this->dao->update(TABLE_TASK)->data($task)
@@ -1008,7 +1038,6 @@ class taskModel extends model
             ->checkIF($task->estimate != false, 'estimate', 'float')
             ->checkIF($task->left     != false, 'left',     'float')
             ->checkIF($task->consumed != false, 'consumed', 'float')
-            ->checkIF($task->status   != 'wait' and empty($teams) and $task->left == 0 and $task->status != 'cancel' and $task->status != 'closed', 'status', 'equal', 'done')
 
             ->batchCheckIF($task->status == 'wait' or $task->status == 'doing', 'finishedBy, finishedDate,canceledBy, canceledDate, closedBy, closedDate, closedReason', 'empty')
 
@@ -1113,7 +1142,6 @@ class taskModel extends model
         {
             if(isset($data->modules[$taskID]) and ($data->modules[$taskID] == 'ditto')) $data->modules[$taskID] = isset($prev['module']) ? $prev['module'] : 0;
             if($data->types[$taskID]       == 'ditto') $data->types[$taskID]       = isset($prev['type'])       ? $prev['type']       : '';
-            if($data->statuses[$taskID]    == 'ditto') $data->statuses[$taskID]    = isset($prev['status'])     ? $prev['status']     : '';
             if($data->assignedTos[$taskID] == 'ditto') $data->assignedTos[$taskID] = isset($prev['assignedTo']) ? $prev['assignedTo'] : '';
             if($data->pris[$taskID]        == 'ditto') $data->pris[$taskID]        = isset($prev['pri'])        ? $prev['pri']        : 0;
             if($data->finishedBys[$taskID] == 'ditto') $data->finishedBys[$taskID] = isset($prev['finishedBy']) ? $prev['finishedBy'] : '';
@@ -1124,7 +1152,6 @@ class taskModel extends model
 
             $prev['module']     = $data->modules[$taskID];
             $prev['type']       = $data->types[$taskID];
-            $prev['status']     = $data->statuses[$taskID];
             $prev['assignedTo'] = $data->assignedTos[$taskID];
             $prev['pri']        = $data->pris[$taskID];
             $prev['finishedBy'] = $data->finishedBys[$taskID];
@@ -1145,7 +1172,7 @@ class taskModel extends model
             $task->name           = $data->names[$taskID];
             $task->module         = isset($data->modules[$taskID]) ? $data->modules[$taskID] : 0;
             $task->type           = $data->types[$taskID];
-            $task->status         = $data->statuses[$taskID];
+            $task->status         = isset($data->statuses[$taskID]) ? $data->statuses[$taskID] : $oldTask->status;
             $task->assignedTo     = $task->status == 'closed' ? 'closed' : $data->assignedTos[$taskID];
             $task->pri            = $data->pris[$taskID];
             $task->estimate       = isset($data->estimates[$taskID]) ? $data->estimates[$taskID] : $oldTask->estimate;
@@ -1180,11 +1207,12 @@ class taskModel extends model
                 if($message) return print(js::alert($message));
             }
 
-            if($data->consumeds[$taskID])
+            if(isset($data->consumeds[$taskID]))
             {
                 if($data->consumeds[$taskID] < 0)
                 {
-                    echo js::alert(sprintf($this->lang->task->error->consumed, $taskID));
+                    dao::$errors[] = sprintf($this->lang->task->error->consumed, $taskID);
+                    return false;
                 }
                 else
                 {
@@ -1256,9 +1284,19 @@ class taskModel extends model
         /* Check field not empty. */
         foreach($tasks as $taskID => $task)
         {
-            if($task->status == 'done' and $task->consumed == false) return print(js::error('task#' . $taskID . sprintf($this->lang->error->notempty, $this->lang->task->consumedThisTime)));
             if($task->status == 'cancel') continue;
-            if(!empty($task->deadline) and $task->estStarted > $task->deadline) return print(js::error('task#' . $taskID . $this->lang->task->error->deadlineSmall));
+            if($task->status == 'done' and $task->consumed == false)
+            {
+                dao::$errors[] = 'Task#' . $taskID . sprintf($this->lang->error->notempty, $this->lang->task->consumedThisTime);
+                return false;
+            }
+
+            if(!empty($task->deadline) and $task->estStarted > $task->deadline)
+            {
+                dao::$errors[] = 'Task#' . $taskID . $this->lang->task->error->deadlineSmall;
+                return false;
+            }
+
             foreach(explode(',', $this->config->task->edit->requiredFields) as $field)
             {
                 $field = trim($field);
@@ -1275,6 +1313,12 @@ class taskModel extends model
 
         foreach($tasks as $taskID => $task)
         {
+            if(strpos(',doing,pause,', $task->status) && empty($teams) && $task->parent >= 0 && empty($task->left))
+            {
+                dao::$errors[] = sprintf($this->lang->task->error->leftEmpty, $taskID, $this->lang->task->statusList[$task->status]);
+                return false;
+            }
+
             $oldTask = $oldTasks[$taskID];
             $this->dao->update(TABLE_TASK)->data($task)
                 ->autoCheck()
@@ -1282,7 +1326,6 @@ class taskModel extends model
                 ->checkIF($task->estimate != false, 'estimate', 'float')
                 ->checkIF($task->consumed != false, 'consumed', 'float')
                 ->checkIF($task->left     != false, 'left',     'float')
-                ->checkIF($task->parent > 0 and $task->left == 0 and $task->status != 'cancel' and $task->status != 'closed' and $task->status != 'wait' and $task->consumed != 0, 'status', 'equal', 'done')
 
                 ->batchCheckIF($task->status == 'wait' or $task->status == 'doing', 'finishedBy, finishedDate,canceledBy, canceledDate, closedBy, closedDate, closedReason', 'empty')
 
@@ -1294,6 +1337,11 @@ class taskModel extends model
                 ->batchCheckIF($task->closedReason == 'cancel', 'finishedBy, finishedDate', 'empty')
                 ->where('id')->eq((int)$taskID)
                 ->exec();
+            if(dao::isError())
+            {
+                dao::$errors[] = 'Task#' . $taskID . dao::getError(true);
+                return false;
+            }
 
             if($task->status == 'done' and $task->closedReason) $this->dao->update(TABLE_TASK)->set('status')->eq('closed')->where('id')->eq($taskID)->exec();
 
@@ -1323,10 +1371,6 @@ class taskModel extends model
                 if($task->status == 'closed') $this->loadModel('score')->create('task', 'close', $taskID);
                 if($task->status != $oldTask->status) $this->loadModel('kanban')->updateLane($oldTask->execution, 'task', $oldTask->id);
                 $allChanges[$taskID] = common::createChanges($oldTask, $task);
-            }
-            else
-            {
-                return print(js::error('task#' . $taskID . dao::getError(true)));
             }
         }
         if(!dao::isError()) $this->loadModel('score')->create('ajax', 'batchEdit');

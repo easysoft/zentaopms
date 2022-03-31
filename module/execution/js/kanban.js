@@ -393,17 +393,17 @@ function renderUserAvatar(user, objectType, objectID, size)
     if(objectType == 'task')
     {
         if(!priv.canAssignTask && !user) return $noPrivAndNoAssigned;
-        var link = createLink('task', 'assignto', 'executionID=' + executionID + '&id=' + objectID, '', true);
+        var link = createLink('task', 'assignto', 'executionID=' + executionID + '&id=' + objectID + '&kanbanGroup=' + groupBy, '', true);
     }
     if(objectType == 'story')
     {
         if(!priv.canAssignStory && !user) return $noPrivAndNoAssigned;
-        var link = createLink('story', 'assignto', 'id=' + objectID, '', true);
+        var link = createLink('story', 'assignto', 'id=' + objectID + '&kanbanGroup=' + groupBy, '', true);
     }
     if(objectType == 'bug')
     {
         if(!priv.canAssignBug && !user) return $noPrivAndNoAssigned;
-        var link = createLink('bug', 'assignto', 'id=' + objectID, '', true);
+        var link = createLink('bug', 'assignto', 'id=' + objectID + '&kanbanGroup=' + groupBy, '', true);
     }
 
     if(!user) return $('<a class="avatar has-text ' + avatarSizeClass + ' avatar-circle iframe" title="' + noAssigned + '" style="background: #ccc" href="' + link + '" data-toggle="modal" data-width="80%"><i class="icon icon-person"></i></a>');
@@ -1106,7 +1106,7 @@ function createStoryMenu(options)
     var items      = [];
     var showAction = story.$col.type == 'backlog' || story.$col.type == 'ready' || story.$col.type == 'developing' || story.$col.type == 'developed' || story.$col.type == 'testing' || story.$col.type == 'tested' || story.$col.type == 'verified' || story.$col.type == 'released';
 
-    if(priv.canEditStory) items.push({label: storyLang.edit, icon: 'edit', url: createLink('story', 'edit', 'storyID=' + story.id, '', 'true'), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width': '95%'}});
+    if(priv.canEditStory) items.push({label: storyLang.edit, icon: 'edit', url: createLink('story', 'edit', 'storyID=' + story.id + '&kanbanGroup=' + groupBy, '', 'true'), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width': '95%'}});
     if(priv.canChangeStory && showAction) items.push({label: storyLang.change, icon: 'change', url: createLink('story', 'change', 'storyID=' + story.id, '', 'true'), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width': '80%'}});
     if(priv.canCreateTask && showAction) items.push({label: executionLang.wbs, icon: 'plus', url: createLink('task', 'create', 'executionID=' + execution.id + '&storyID=' + story.id, '', 'true'), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width': '80%'}});
     if(priv.canBatchCreateTask && showAction) items.push({label: executionLang.batchWBS, icon: 'pluses', url: createLink('task', 'batchCreate', 'executionID=' + execution.id + '&storyID=' + story.id, '', 'true'), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width': '80%'}});
@@ -1125,7 +1125,7 @@ function createTaskMenu(options)
     var $card = options.$trigger.closest('.kanban-item');
     var task  = $card.data('item');
     var items = [];
-    if(priv.canEditTask) items.push({label: taskLang.edit, icon: 'edit', url: createLink('task', 'edit', 'taskID=' + task.id, '', 'true'), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width': '95%'}});
+    if(priv.canEditTask) items.push({label: taskLang.edit, icon: 'edit', url: createLink('task', 'edit', 'taskID=' + task.id + '&comment=&kanbanGroup=' + groupBy, '', 'true'), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width': '95%'}});
     if(priv.canRestartTask && task.$col.type == 'pause') items.push({label: taskLang.restart, icon: 'play', url: createLink('task', 'restart', 'taskID=' + task.id, '', 'true'), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width': '80%'}});
     if(priv.canPauseTask && task.$col.type == 'developing') items.push({label: taskLang.pause, icon: 'pause', url: createLink('task', 'pause', 'taskID=' + task.id, '', 'true'), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width': '80%'}});
     if(priv.canRecordEstimateTask) items.push({label: executionLang.effort, icon: 'time', url: createLink('task', 'recordEstimate', 'taskID=' + task.id, '', 'true'), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width': '80%'}});
@@ -1145,7 +1145,7 @@ function createBugMenu(options)
     var $card = options.$trigger.closest('.kanban-item');
     var bug   = $card.data('item');
     var items = [];
-    if(priv.canEditBug) items.push({label: bugLang.edit, icon: 'edit', url: createLink('bug', 'edit', 'bugID=' + bug.id, '', 'true'), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width': '95%'}});
+    if(priv.canEditBug) items.push({label: bugLang.edit, icon: 'edit', url: createLink('bug', 'edit', 'bugID=' + bug.id + '&comment=&kanbanGroup=' + groupBy, '', 'true'), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width': '95%'}});
     if(priv.canResolveBug && (bug.$col.type == 'unconfirmed' || bug.$col.type == 'confirmed' || bug.$col.type == 'fixing')) items.push({label: bugLang.resolve, icon: 'checked', url: createLink('bug', 'resolve', 'bugID=' + bug.id, '', 'true'), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width': '80%'}});
     if(priv.canConfirmBug && (bug.$col.type == 'fixed' || bug.$col.type == 'testing' || bug.$col.type == 'tested')) items.push({label: bugLang.close, icon: 'off', url: createLink('bug', 'close', 'bugID=' + bug.id, '', 'true'), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width': '80%'}});
     if(priv.canConfirmBug && bug.$col.type == 'unconfirmed') items.push({label: bugLang.confirmBug, icon: 'ok', url: createLink('bug', 'confirmbug', 'bugID=' + bug.id, '', 'true'), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width': '80%'}});
@@ -1338,6 +1338,7 @@ $(function()
     {
         selector: '.region, .kanban-board, .kanban-lane',
         trigger: '.region.sort > .region-header, .kanban-board.sort > .kanban-header > .kanban-group-header, .kanban-lane.sort > .kanban-lane-name',
+        dropOnMouseleave: true,
         container: function($ele)
         {
             return $ele.parent();

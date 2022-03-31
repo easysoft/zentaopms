@@ -497,7 +497,7 @@ class personnelModel extends model
         {
             $path     = $this->dao->select('path')->from(TABLE_PROJECT)->where('id')->eq($objectID)->fetch('path');
             $path     = explode(',', trim($path, ','));
-            $parentID = $path[0];
+            $parentID = $path[0] == $objectID ? 0 : $path[0];
             $objects  = $this->loadModel('project')->getPairsByProgram($parentID);
         }
         elseif($objectType == 'product')

@@ -305,14 +305,6 @@ class executionModel extends model
             $type    = 'sprint';
             if($project) $type = zget($this->config->execution->modelList, $project->model, 'sprint');
 
-            /* If the execution model is a stage, determine whether the product is linked. */
-            $products = array_filter($this->post->products);
-            if(empty($products))
-            {
-                dao::$errors['message'][] = $this->lang->execution->noLinkProduct;
-                return false;
-            }
-
             $this->config->execution->create->requiredFields .= ',project';
         }
 
@@ -468,13 +460,7 @@ class executionModel extends model
             dao::$errors['days'] = sprintf($this->lang->project->workdaysExceed, $workdays);
             return false;
         }
-        $products = array_filter($this->post->products);
-        $noLinkTip = $oldExecution->type != 'kanban' ? $this->lang->execution->noLinkProduct : $this->lang->execution->kanbanNoLinkProduct;
-        if(empty($products))
-        {
-            dao::$errors['message'][] = $noLinkTip;
-            return false;
-        }
+
         /* Get the data from the post. */
         $execution = fixer::input('post')
             ->setDefault('lastEditedBy', $this->app->user->account)
@@ -717,6 +703,8 @@ class executionModel extends model
                 ->where('id')->eq($executionID)
                 ->limit(1)
                 ->exec();
+
+            if(dao::isError()) return false;
 
             if(!empty($execution->project) and $oldExecution->project != $execution->project)
             {
@@ -974,6 +962,7 @@ class executionModel extends model
                 ->andWhere('t2.type')->eq('stage')
                 ->andWhere('t2.grade')->eq(1)
                 ->andWhere('t2.deleted')->eq(0)
+                ->andWhere('t2.parent')->eq($oldExecution->parent)
                 ->fetch('total');
 
             if($type == 'create') $percentTotal = $percent + $oldPercentTotal;
