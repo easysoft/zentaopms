@@ -47,7 +47,7 @@
             <?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?>
           </th>
           <th class="c-name"><?php echo $lang->stakeholder->name;?></th>
-          <th class="c-type"><?php echo $lang->stakeholder->common . $lang->stakeholder->type;?></th>
+          <th class="c-type"><?php echo $lang->stakeholder->from;?></th>
           <th class="c-phone"><?php echo $lang->stakeholder->phone;?></th>
           <th class="c-qq"><?php echo $lang->stakeholder->qq;?></th>
           <th class="c-weixin"><?php echo $lang->stakeholder->weixin;?></th>
@@ -69,7 +69,7 @@
           <?php else:?>
           <td title='<?php echo $stakeholder->name;?>'><?php echo $stakeholder->name . $isKey;?></td>
           <?php endif;?>
-          <td title='<?php echo zget($lang->stakeholder->typeList, $stakeholder->type, '');?>'><?php echo zget($lang->stakeholder->typeList, $stakeholder->type, '');?></td>
+          <td title='<?php echo zget($lang->stakeholder->fromList, $stakeholder->from, '');?>'><?php echo zget($lang->stakeholder->fromList, $stakeholder->from, '');?></td>
           <td title="<?php echo $stakeholder->phone;?>"><?php echo $stakeholder->phone;?></td>
           <td title="<?php echo $stakeholder->qq;?>"><?php echo $stakeholder->qq;?></td>
           <td title="<?php echo $stakeholder->weixin;?>"><?php echo $stakeholder->weixin;?></td>
