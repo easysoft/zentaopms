@@ -962,6 +962,7 @@ class executionModel extends model
                 ->andWhere('t2.type')->eq('stage')
                 ->andWhere('t2.grade')->eq(1)
                 ->andWhere('t2.deleted')->eq(0)
+                ->andWhere('t2.parent')->eq($oldExecution->parent)
                 ->fetch('total');
 
             if($type == 'create') $percentTotal = $percent + $oldPercentTotal;
