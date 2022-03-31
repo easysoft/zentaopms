@@ -2561,13 +2561,6 @@ class execution extends control
 
         if(!empty($_POST))
         {
-            /* Get executionType and determine whether a product is linked with the stage. */
-            $executionType = $this->dao->findById($executionID)->from(TABLE_EXECUTION)->fetch('type');
-            if($executionType == 'stage')
-            {
-                if(!isset($_POST['products'])) return print(js::alert($this->lang->execution->noLinkProduct) . js::locate($this->createLink('execution', 'manageProducts', "executionID=$executionID&from=$from")));
-            }
-
             $oldProducts = $this->product->getProducts($executionID);
 
             if($from == 'buildCreate' && $this->session->buildCreate) $browseExecutionLink = $this->session->buildCreate;
