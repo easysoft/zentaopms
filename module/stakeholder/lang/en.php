@@ -33,7 +33,7 @@ $lang->stakeholder->viewIssueAction = 'Issue List';
 /* Fields. */
 $lang->stakeholder->id          = 'ID';
 $lang->stakeholder->user        = 'User';
-$lang->stakeholder->type        = 'Type';
+$lang->stakeholder->type        = 'User Type';
 $lang->stakeholder->name        = 'Name';
 $lang->stakeholder->phone       = 'Mobile';
 $lang->stakeholder->qq          = 'QQ';
@@ -42,7 +42,7 @@ $lang->stakeholder->email       = 'EMail';
 $lang->stakeholder->isKey       = 'Key Stakeholder';
 $lang->stakeholder->inside      = 'Internal Stakeholder';
 $lang->stakeholder->outside     = 'External Stakeholder';
-$lang->stakeholder->from        = 'Type';
+$lang->stakeholder->from        = 'Stakeholder Type';
 $lang->stakeholder->company     = 'Company';
 $lang->stakeholder->nature      = 'Personality';
 $lang->stakeholder->analysis    = 'Impact Analysis';
