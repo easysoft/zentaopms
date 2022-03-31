@@ -703,7 +703,7 @@ class story extends control
             if(isonlybody())
             {
                 $execution = $this->execution->getByID($this->session->execution);
-                if($this->app->tab == 'execution' and $execution->type == 'kanban' and $this->app->tab == 'execution' and $kanbanGroup == 'default')
+                if($this->app->tab == 'execution' and $execution->type == 'kanban' and $kanbanGroup == 'default')
                 {
                     $kanbanData = $this->loadModel('kanban')->getRDKanban($this->session->execution, $this->session->execLaneType ? $this->session->execLaneType : 'all');
                     $kanbanData = json_encode($kanbanData);
@@ -1739,7 +1739,7 @@ class story extends control
             if(isonlybody())
             {
                 $execution = $this->execution->getByID($this->session->execution);
-                if($this->app->tab == 'execution' and $execution->type == 'kanban' and $this->app->tab == 'execution' and $kanbanGroup == 'default')
+                if($this->app->tab == 'execution' and $execution->type == 'kanban' and $kanbanGroup == 'default')
                 {
                     $kanbanData = $this->loadModel('kanban')->getRDKanban($this->session->execution, $this->session->execLaneType ? $this->session->execLaneType : 'all');
                     $kanbanData = json_encode($kanbanData);
