@@ -335,7 +335,7 @@ class tree extends control
         if($showProduct)
         {
             $product = $this->loadModel('product')->getById($module->root);
-            if($product->type != 'normal') $this->view->branches = $this->loadModel('branch')->getPairs($module->root);
+            if($product->type != 'normal') $this->view->branches = $this->loadModel('branch')->getPairs($module->root, 'active');
             $this->view->product  = $product;
             $this->view->products = $this->product->getPairs('', $product->program);
         }
