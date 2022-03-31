@@ -2526,6 +2526,7 @@ class kanbanModel extends model
             ->fetchPairs();
 
         if(empty($cardPairs)) return;
+        $sourceCards = $cardPairs;
 
         if($laneType == 'story')
         {
@@ -2624,13 +2625,17 @@ class kanbanModel extends model
             ->andWhere('t1.lane')->eq($lane->id)
             ->fetchPairs();
 
+        $updated = false;
         foreach($cardPairs as $colType => $cards)
         {
             if(!isset($colPairs[$colType])) continue;
+            if($sourceCards[$colType] == $cards) continue;
+
             $this->dao->update(TABLE_KANBANCELL)->set('cards')->eq($cards)->where('lane')->eq($lane->id)->andWhere('`column`')->eq($colPairs[$colType])->exec();
+            if(!$updated) $updated = true;
         }
 
-        $this->dao->update(TABLE_KANBANLANE)->set('lastEditedTime')->eq(helper::now())->where('id')->eq($lane->id)->exec();
+        if($updated) $this->dao->update(TABLE_KANBANLANE)->set('lastEditedTime')->eq(helper::now())->where('id')->eq($lane->id)->exec();
     }
 
     /**
