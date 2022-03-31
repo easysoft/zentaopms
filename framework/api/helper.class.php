@@ -162,7 +162,7 @@ class helper extends baseHelper
         /* The requestTypes are: GET, PATH_INFO2, PATH_INFO */
         if($config->requestType == 'GET')
         {
-            $link = '/index' . substr($link, $pos);
+            $link = $config->webRoot . 'index' . substr($link, $pos);
         }
         elseif($config->requestType == 'PATH_INFO2')
         {
@@ -204,7 +204,7 @@ function formatTime($time, $format = '')
 /**
  * Fix for session error.
  *
- * @param  int    $class 
+ * @param  int    $class
  * @access protected
  * @return void
  */

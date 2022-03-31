@@ -1162,6 +1162,7 @@ class executionModel extends model
         {
             return $this->dao->select('*, IF(INSTR(" done,closed", status) < 2, 0, 1) AS isDone')->from(TABLE_EXECUTION)
                 ->where('deleted')->eq(0)
+                ->andWhere('vision')->eq($this->config->vision)
                 ->beginIF($type == 'all')->andWhere('type')->in('sprint,stage,kanban')->fi()
                 ->beginIF($type != 'all')->andWhere('type')->eq($type)->fi()
                 ->beginIF($projectID)->andWhere('project')->eq($projectID)->fi()

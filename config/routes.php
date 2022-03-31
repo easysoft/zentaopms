@@ -158,4 +158,6 @@ $routes['/z/files/:id/content'] = 'zfileContent';
 
 $routes['/gitlab/webhook'] = 'gitlabWebhook';
 
+$routes['/ciresults'] = 'ciresults';
+
 $config->routes = $routes;
