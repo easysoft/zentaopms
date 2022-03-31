@@ -3,6 +3,18 @@
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/productplan.class.php';
 
+/**
+
+title=productpanModel->getLast();
+cid=1
+pid=1
+
+获取id为1的最后一个产品 >> 3
+获取id为2的最后一个产品 >> 6
+获取不存在的id返回布尔值 >> 0
+
+*/
+
 $plan = new productPlan('admin');
 
 $getLast = array();

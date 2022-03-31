@@ -3,6 +3,20 @@
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/productplan.class.php';
 
+/**
+
+title=productpanModel->batchUpdate();
+cid=1
+pid=1
+
+当product=1时,传入正常参数批量修改id=1,2,3的计划,打印id=1修改后的名字new >> list-1
+当product=1时,传入正常参数批量修改id=1,2,3的计划,打印id=2修改后的名字new >> list-2
+当product=1时,传入正常参数批量修改id=1,2,3的计划,打印id=3修改后的名字new >> list-3
+当product=2时,传入正常参数批量修改id=4,5,6的计划,打印id=4修改后的名字new >> list-4
+当product=2时,传入正常参数批量修改id=4,5,6的计划,打印id=5修改后的名字new >> list-5
+当product=2时,传入正常参数批量修改id=4,5,6的计划,打印id=6修改后的名字new >> list-6
+
+*/
 $plan = new productPlan('admin');
 
 $product = array();
@@ -30,10 +44,9 @@ $begin1[2] = '2021-04-12';
 $begin1[3] = '2021-04-01';
 
 $end1   = $end;
-$end1[1]   = '2021-10-31';
+$end1[1]   = '2021-11-30';
 $end1[2]   = '2021-10-25';
 $end1[3]   = '2021-10-23';
-
 
 $id2    = $id;
 $id2[4]    = 4;
@@ -51,9 +64,9 @@ $begin2[5] = '2021-06-12';
 $begin2[4] = '2021-06-01';
 
 $end2   = $end;
-$end2[6]   = '2021-10-31';
-$end2[5]   = '2021-10-25';
-$end2[4]   = '2021-10-23';
+$end2[6]   = '2021-11-30';
+$end2[5]   = '2021-11-28';
+$end2[4]   = '2021-11-23';
 
 $branch1 = array();
 $branch1['id']     = $id1;
@@ -68,6 +81,7 @@ $branch2['begin']  = $begin2;
 $branch2['end']    = $end2;
 
 $batchUpdate = $plan->batchUpdate($product[0], $branch1);
+
 $batchUpdate1 = $batchUpdate[1];
 $batchUpdate2 = $batchUpdate[2];
 $batchUpdate3 = $batchUpdate[3];
@@ -83,4 +97,5 @@ r($batchUpdate3) && p('0:new') && e('list-3'); //当product=1时,传入正常参
 r($batchUpdate4) && p('0:new') && e('list-4'); //当product=2时,传入正常参数批量修改id=4,5,6的计划,打印id=4修改后的名字new
 r($batchUpdate5) && p('0:new') && e('list-5'); //当product=2时,传入正常参数批量修改id=4,5,6的计划,打印id=5修改后的名字new
 r($batchUpdate6) && p('0:new') && e('list-6'); //当product=2时,传入正常参数批量修改id=4,5,6的计划,打印id=6修改后的名字new
+system("./ztest init");
 ?>

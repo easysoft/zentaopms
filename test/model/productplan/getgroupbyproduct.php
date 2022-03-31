@@ -3,6 +3,21 @@
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/productplan.class.php';
 
+/**
+
+title=productpanModel->getGroupByProduct();
+cid=1
+pid=1
+
+传入正常product 1，2； >> 2
+传入部分不存在product； >> 1
+传入不存在product >> 0
+传入正常product 1，2；未过期param >> 0
+传入部分不存在product；未过期param >> 0
+传入不存在product； 未过期param >> 0
+
+*/
+
 $plan = new productPlan('admin');
 
 $products = array();

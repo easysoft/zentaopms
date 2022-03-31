@@ -3,6 +3,19 @@
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/productplan.class.php';
 
+/**
+
+title=cid=1
+cid=1
+pid=1
+
+传入一个数组，取值id为3的数据 >> 3
+传入一个数组，取值id为1的数据 >> 1
+传入一个数值，正常取值 >> 1
+传入一个不存在的值返回布尔值 >> 0
+
+*/
+
 $plan = new productPlan('admin');
 
 $IDlist = array();
