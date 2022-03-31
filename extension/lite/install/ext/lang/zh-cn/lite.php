@@ -13,7 +13,7 @@ $lang->install->links    = <<<EOT
 新浪微博：<a href='https://weibo.com/easysoft' target='_blank'>https://weibo.com/easysoft</a>
 
 
-
+您现在正在安装的版本是 <strong class='text-danger'>%s</strong>。
 EOT;
 
 $lang->install->successLabel       = "<p>您已经成功安装禅道迅捷版%s。</p>";
