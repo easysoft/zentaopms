@@ -18,7 +18,6 @@
 <div id="mainMenu" class="clearfix">
   <div class="btn-toolbar pull-left">
     <?php
-    $productID = $productID == 0 ? key($this->product->getProductPairsByProject($project->id)) : $productID;
     $buildName = $build ? " <span class='label label-danger'>Build:{$build->name}</span>" : '';
     echo html::a($this->inlink('bug', "projectID={$project->id}&productID={$productID}&orderBy=status,id_desc&build=$buildID&type=all"), "<span class='text'>{$lang->bug->allBugs}</span>" . ($type == 'all' ? " <span class='label label-light label-badge'>{$pager->recTotal}</span>$buildName" : ''), '', "id='allTab' class='btn btn-link" . ('all' == $type ? ' btn-active-text' : '') . "'");
     echo html::a($this->inlink('bug', "projectID={$project->id}&productID={$productID}&orderBy=status,id_desc&build=$buildID&type=unresolved"), "<span class='text'>{$lang->bug->unResolved}</span>" . ($type == 'unresolved' ? " <span class='label label-light label-badge'>{$pager->recTotal}</span>$buildName" : ''), '', "id='unresolvedTab' class='btn btn-link" . ('unresolved' == $type ? ' btn-active-text' : '') . "'");
