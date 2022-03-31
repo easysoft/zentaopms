@@ -16,7 +16,10 @@ fields:
         - field: card1
           prefix: ","
           postfix: ","
-          range: 1-800:2
+          range: 1-1000:2
         - field: card2
           postfix: ","
-          range: 2-800:2
+          range: 2-1000:2
+        - field: card3
+          postfix: ","
+          range: 801-1000:2

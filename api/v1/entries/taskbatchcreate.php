@@ -43,21 +43,22 @@ class taskBatchCreateEntry extends Entry
         $desc       = array();
         $pri        = array();
         $stories    = array();
-        foreach($this->request('tasks') as $task)
+        foreach($this->request('tasks') as $key => $task)
         {
+            $number = $key + 1;
             if(!isset($task->name) or !isset($task->type)) return $this->send400('Task must have name and type.');
 
-            $modules[]    = isset($task->module)     ? $task->module     : $moduleID;
-            $parents[]    = isset($task->parent)     ? $task->parent     : $taskID;
-            $names[]      = $task->name;
-            $colors[]     = isset($task->color)      ? $task->color      : '';
-            $types[]      = $task->type;
-            $estimates[]  = isset($task->estimate)   ? $task->estimate   : 0;
-            $estStarted[] = isset($task->estStarted) ? $task->estStarted : 0;
-            $deadlines[]  = isset($task->deadline)   ? $task->deadline   : null;
-            $desc[]       = isset($task->desc)       ? $task->desc       : '';
-            $pri[]        = isset($task->pri)        ? $task->pri        : 0;
-            $stories[]    = isset($task->story)      ? $task->story      : $storyID;
+            $modules[$number]    = isset($task->module)     ? $task->module     : $moduleID;
+            $parents[$number]    = isset($task->parent)     ? $task->parent     : $taskID;
+            $names[$number]      = $task->name;
+            $colors[$number]     = isset($task->color)      ? $task->color      : '';
+            $types[$number]      = $task->type;
+            $estimates[$number]  = isset($task->estimate)   ? $task->estimate   : 0;
+            $estStarted[$number] = isset($task->estStarted) ? $task->estStarted : 0;
+            $deadlines[$number]  = isset($task->deadline)   ? $task->deadline   : null;
+            $desc[$number]       = isset($task->desc)       ? $task->desc       : '';
+            $pri[$number]        = isset($task->pri)        ? $task->pri        : 0;
+            $stories[$number]    = isset($task->story)      ? $task->story      : $storyID;
         }
         $this->setPost('module',     $modules);
         $this->setPost('parent',     $parents);
