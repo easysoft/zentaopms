@@ -678,10 +678,11 @@ class story extends control
      * Edit a story.
      *
      * @param  int    $storyID
+     * @param  string $kanbanGroup
      * @access public
      * @return void
      */
-    public function edit($storyID)
+    public function edit($storyID, $kanbanGroup = '')
     {
         if(!empty($_POST))
         {
@@ -699,7 +700,21 @@ class story extends control
 
             $this->executeHooks($storyID);
 
-            if(isonlybody()) return print(js::reload('parent.parent'));
+            if(isonlybody())
+            {
+                $execution = $this->execution->getByID($this->session->execution);
+                if($this->app->tab == 'execution' and $execution->type == 'kanban' and $this->app->tab == 'execution' and $kanbanGroup == 'default')
+                {
+                    $kanbanData = $this->loadModel('kanban')->getRDKanban($this->session->execution, $this->session->execLaneType ? $this->session->execLaneType : 'all');
+                    $kanbanData = json_encode($kanbanData);
+
+                    return print(js::closeModal('parent.parent', '', "parent.parent.updateKanban($kanbanData)"));
+                }
+                else
+                {
+                    return print(js::reload('parent.parent'));
+                }
+            }
             if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'success', 'data' => $storyID));
             return print(js::locate($this->createLink($this->app->rawModule, 'view', "storyID=$storyID"), 'parent'));
         }
@@ -1703,10 +1718,11 @@ class story extends control
      * Assign to.
      *
      * @param  int    $storyID
+     * @param  string $kanbanGroup
      * @access public
      * @return void
      */
-    public function assignTo($storyID)
+    public function assignTo($storyID, $kanbanGroup = '')
     {
         if(!empty($_POST))
         {
@@ -1723,7 +1739,7 @@ class story extends control
             if(isonlybody())
             {
                 $execution = $this->execution->getByID($this->session->execution);
-                if($this->app->tab == 'execution' and $execution->type == 'kanban' and $this->app->tab == 'execution')
+                if($this->app->tab == 'execution' and $execution->type == 'kanban' and $this->app->tab == 'execution' and $kanbanGroup == 'default')
                 {
                     $kanbanData = $this->loadModel('kanban')->getRDKanban($this->session->execution, $this->session->execLaneType ? $this->session->execLaneType : 'all');
                     $kanbanData = json_encode($kanbanData);
