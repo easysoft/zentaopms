@@ -498,7 +498,7 @@ $(document).ready(function()
         var extra    = $(this).prop('checked') ? 'allModule' : '';
         $('#moduleIdBox').load(createLink('tree', 'ajaxGetOptionMenu', "rootID=" + executionID + '&viewType=task&branch=0&rootModuleID=0&returnType=html&fieldID=&needManage=0&extra=' + extra), function()
         {
-            $('#moduleIdBox #module').val(moduleID).attr('onchange', "setStories(this.value, " + executionID + ")").chosen();
+            $('#moduleIdBox #module').val(moduleID).chosen();
         });
     });
 });
