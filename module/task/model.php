@@ -998,9 +998,9 @@ class taskModel extends model
             $requiredFields = str_replace(',estimate,', ',', $requiredFields);
         }
 
-        if(strpos(',done,wait,cancel,closed,', $task->status) === false && empty($teams) && empty($task->left))
+        if(strpos(',doing,pause,', $task->status) && empty($teams) && empty($task->left))
         {
-            dao::$errors[] = sprintf($this->lang->task->error->leftEmpty, $this->lang->task->statusList[$task->status]);
+            dao::$errors[] = sprintf($this->lang->task->error->leftEmptyAB, $this->lang->task->statusList[$task->status]);
             return false;
         }
 
@@ -1263,13 +1263,13 @@ class taskModel extends model
             if($task->status == 'cancel') continue;
             if($task->status == 'done' and $task->consumed == false)
             {
-                dao::$errors[] = 'task#' . $taskID . sprintf($this->lang->error->notempty, $this->lang->task->consumedThisTime);
+                dao::$errors[] = 'Task#' . $taskID . sprintf($this->lang->error->notempty, $this->lang->task->consumedThisTime);
                 return false;
             }
 
             if(!empty($task->deadline) and $task->estStarted > $task->deadline)
             {
-                dao::$errors[] = 'task#' . $taskID . $this->lang->task->error->deadlineSmall;
+                dao::$errors[] = 'Task#' . $taskID . $this->lang->task->error->deadlineSmall;
                 return false;
             }
 
@@ -1289,9 +1289,9 @@ class taskModel extends model
 
         foreach($tasks as $taskID => $task)
         {
-            if(strpos(',done,wait,cancel,closed,', $task->status) === false && empty($teams) && $task->parent >= 0 && empty($task->left))
+            if(strpos(',doing,pause,', $task->status) && empty($teams) && $task->parent >= 0 && empty($task->left))
             {
-                dao::$errors[] = sprintf($this->lang->task->error->leftEmptyAB, $taskID, $this->lang->task->statusList[$task->status]);
+                dao::$errors[] = sprintf($this->lang->task->error->leftEmpty, $taskID, $this->lang->task->statusList[$task->status]);
                 return false;
             }
 
@@ -1315,7 +1315,7 @@ class taskModel extends model
                 ->exec();
             if(dao::isError())
             {
-                dao::$errors[] = 'task#' . $taskID . dao::getError(true);
+                dao::$errors[] = 'Task#' . $taskID . dao::getError(true);
                 return false;
             }
 
