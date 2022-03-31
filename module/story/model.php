@@ -3202,28 +3202,41 @@ class storyModel extends model
     /**
      * Check need confirm.
      *
-     * @param  array    $dataList
+     * @param  array|object    $dataList
      * @access public
      * @return array
      */
     public function checkNeedConfirm($dataList)
     {
-        $storyIdList      = array();
-        $storyVersionList = array();
-        foreach($dataList as $key => $data)
+        if(gettype($dataList) == 'array')
         {
-            $data->needconfirm = false;
-            if($data->story)
+            $storyIdList      = array();
+            $storyVersionList = array();
+            foreach($dataList as $key => $data)
             {
-                $storyIdList[$key]      = $data->story;
-                $storyVersionList[$key] = $data->storyVersion;
+                $data->needconfirm = false;
+                if($data->story)
+                {
+                    $storyIdList[$key]      = $data->story;
+                    $storyVersionList[$key] = $data->storyVersion;
+                }
             }
-        }
 
-        $stories = $this->dao->select('id,version')->from(TABLE_STORY)->where('id')->in($storyIdList)->andWhere('status')->eq('active')->fetchPairs('id', 'version');
-        foreach($storyIdList as $key => $storyID)
+            $stories = $this->dao->select('id,version')->from(TABLE_STORY)->where('id')->in($storyIdList)->andWhere('status')->eq('active')->fetchPairs('id', 'version');
+            foreach($storyIdList as $key => $storyID)
+            {
+                if(isset($stories[$storyID]) and $stories[$storyID] > $storyVersionList[$key]) $dataList[$key]->needconfirm = true;
+            }
+        }else if(gettype($dataList) == 'object')
         {
-            if(isset($stories[$storyID]) and $stories[$storyID] > $storyVersionList[$key]) $dataList[$key]->needconfirm = true;
+            $dataList->needconfirm = false;
+            if($dataList->story)
+            {
+                $storyId      = $dataList->story;
+                $storyVersion = $dataList->storyVersion;
+                $story = $this->dao->select('id,version')->from(TABLE_STORY)->where('id')->eq($storyId)->andWhere('status')->eq('active')->fetch('version');
+                if(isset($story) and $story > $storyVersion) $dataList->needconfirm = true;
+            }
         }
 
         return $dataList;
