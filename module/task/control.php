@@ -442,10 +442,11 @@ class task extends control
      *
      * @param  int    $taskID
      * @param  bool   $comment
+     * @param  string $kanbanGroup
      * @access public
      * @return void
      */
-    public function edit($taskID, $comment = false)
+    public function edit($taskID, $comment = false, $kanbanGroup = '')
     {
         $this->commonAction($taskID);
 
@@ -494,7 +495,7 @@ class task extends control
             if(isonlybody())
             {
                 $execution = $this->execution->getByID($task->execution);
-                if($execution->type == 'kanban' and $this->app->tab == 'execution')
+                if($execution->type == 'kanban' and $this->app->tab == 'execution' and $kanbanGroup == 'default')
                 {
                     $kanbanData = $this->loadModel('kanban')->getRDKanban($task->execution, $this->session->execLaneType ? $this->session->execLaneType : 'all');
                     $kanbanData = json_encode($kanbanData);
@@ -681,10 +682,12 @@ class task extends control
      * Update assign of task
      *
      * @param  int    $requestID
+     * @param  int    $taskID
+     * @param  string $kanbanGroup
      * @access public
      * @return void
      */
-    public function assignTo($executionID, $taskID)
+    public function assignTo($executionID, $taskID, $kanbanGroup = '')
     {
         $this->commonAction($taskID);
 
@@ -709,7 +712,7 @@ class task extends control
             {
                 $task      = $this->task->getById($taskID);
                 $execution = $this->execution->getByID($task->execution);
-                if($execution->type == 'kanban' and $this->app->tab == 'execution')
+                if($execution->type == 'kanban' and $this->app->tab == 'execution' and $kanbanGroup == 'default')
                 {
                     $kanbanData = $this->loadModel('kanban')->getRDKanban($task->execution, $this->session->execLaneType ? $this->session->execLaneType : 'all');
                     $kanbanData = json_encode($kanbanData);
