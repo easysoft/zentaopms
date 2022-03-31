@@ -10,18 +10,21 @@ fields:
     - field: group
       range: 1-100{8}
     - field: fromID
-      range: "0"
+      range: 0{800},1-70,1-10,101-200,1-20
     - field: fromType
-      range: ""
+      range: []{800},productplan{70},release{10},execution{100},build{20}
     - field: name
-      range: 1-1000000
-      prefix: "卡片"
+      fields:
+        - field: name1
+          range: 卡片{800},[]{200}
+        - field: name2
+          range: 1-800,[]{200}
     - field: status
       range: doing,doing,done
     - field: pri
-      range: "3"
+      range: 3{800},0{200}
     - field: assignedTo
-      range: "admin"
+      range: admin{800},[]{200}
     - field: desc
       range: ""
     - field: begin
