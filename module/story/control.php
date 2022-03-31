@@ -2329,9 +2329,10 @@ class story extends control
                 }
             }
 
-            /* Get users, products and executions. */
-            $users    = $this->loadModel('user')->getPairs('noletter');
-            $products = $this->product->getPairs('nocode');
+            /* Get users, products and relations. */
+            $users     = $this->loadModel('user')->getPairs('noletter');
+            $products  = $this->product->getPairs('nocode');
+            $relations = $this->story->getStoryRelationByIDs($storyIdList, $type);
 
             /* Get related objects id lists. */
             $relatedProductIdList = array();
@@ -2346,6 +2347,8 @@ class story extends control
                 $relatedPlanIdList[$story->plan]       = $story->plan;
                 $relatedBranchIdList[$story->branch]   = $story->branch;
                 $relatedStoryIDs[$story->id]           = $story->id;
+
+                if(isset($relations[$story->id])) $story->linkStories = $story->linkStories . ',' . $relations[$story->id];
 
                 /* Process related stories. */
                 $relatedStories = $story->childStories . ',' . $story->linkStories . ',' . $story->duplicateStory;
@@ -2363,7 +2366,7 @@ class story extends control
             /* Get related objects title or names. */
             $productsType   = $this->dao->select('id, type')->from(TABLE_PRODUCT)->where('id')->in($relatedProductIdList)->fetchPairs();
             $relatedPlans   = $this->dao->select('id, title')->from(TABLE_PRODUCTPLAN)->where('id')->in(join(',', $relatedPlanIdList))->fetchPairs();
-            $relatedStories = $this->dao->select('id,title')->from(TABLE_STORY) ->where('id')->in($relatedStoryIdList)->fetchPairs();
+            $relatedStories = $this->dao->select('id,title')->from(TABLE_STORY)->where('id')->in($relatedStoryIdList)->fetchPairs();
             $relatedFiles   = $this->dao->select('id, objectID, pathname, title')->from(TABLE_FILE)->where('objectType')->eq('story')->andWhere('objectID')->in($storyIdList)->andWhere('extra')->ne('editor')->fetchGroup('objectID');
             $relatedSpecs   = $this->dao->select('*')->from(TABLE_STORYSPEC)->where('`story`')->in($storyIdList)->orderBy('version desc')->fetchGroup('story');
             $relatedBranch  = array('0' => $this->lang->branch->main) + $this->dao->select('id, name')->from(TABLE_BRANCH)->where('id')->in($relatedBranchIdList)->fetchPairs();
@@ -2432,10 +2435,12 @@ class story extends control
 
                 if($story->linkStories)
                 {
-                    $tmpLinkStories = array();
+                    $tmpLinkStories    = array();
                     $linkStoriesIdList = explode(',', $story->linkStories);
                     foreach($linkStoriesIdList as $linkStoryID)
                     {
+                        if(empty($linkStoryID)) continue;
+
                         $linkStoryID = trim($linkStoryID);
                         $tmpLinkStories[] = isset($relatedStories[$linkStoryID]) ? $relatedStories[$linkStoryID] : $linkStoryID;
                     }
