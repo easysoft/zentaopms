@@ -1,7 +1,6 @@
 #!/usr/bin/env php
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
-include dirname(dirname(dirname(__FILE__))) . '/class/program.class.php';
 
 /**
 
@@ -14,9 +13,10 @@ pid=1
 
 */
 
-$getIdName = new Program('admin');
+global $tester;
+$tester->loadModel('program');
+$program1 = $tester->program->getById(1);
+$program2 = $tester->program->getById(1000);
 
-$t_verification = array('1', '1000');
-
-r($getIdName->getById($t_verification[0]))    && p('name')    && e('项目集1');    // 通过id字段获取id=1的项目集并验证它的name。
-r($getIdName->getById($t_verification[1]))    && p('message') && e('Not Found');  // 通过id字段获取id=1000的项目集并验证它的name。
+r($program1) && p('name') && e('项目集1'); // 通过id字段获取id=1的项目集并验证它的name。
+r($program2) && p()       && e('0');       // 通过id字段获取id=1000的项目集，返回空

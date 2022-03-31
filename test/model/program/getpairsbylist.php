@@ -19,14 +19,14 @@ pid=1
 
 */
 
-$itemsetsName = new Program('admin');
+$program = new programTest();
 
-$t_getProName = array('1', '1,2,3', array(1), array(1,2,3), '', '0', '11');
+$programIdList = array('1', '1,2,3', array(1), array(1,2,3), '', '0', '11');
 
-r($itemsetsName->getPairsByList($t_getProName[0])) && p('1')       && e('项目集1');                 // 通过字符串'1'获取项目集名称
-r($itemsetsName->getPairsByList($t_getProName[1])) && p('1,2,3')   && e('项目集1,项目集2,项目集3'); // 通过字符串'1,2,3'获取项目集名称
-r($itemsetsName->getPairsByList($t_getProName[2])) && p('1')       && e('项目集1');                 //通过数组array(1)获取项目集名称
-r($itemsetsName->getPairsByList($t_getProName[3])) && p('1,2,3')   && e('项目集1,项目集2,项目集3'); //通过数组array(1,2,3)获取项目集名称
-r($itemsetsName->getPairsByList($t_getProName[4])) && p('message') && e('Not Found');               // 通过id为空获取项目集名称
-r($itemsetsName->getPairsByList($t_getProName[5])) && p('message') && e('Not Found');               // 通过id=0获取项目集名称
-r($itemsetsName->getPairsByList($t_getProName[6])) && p('message') && e('Not Found');               // 通过id=11获取项目集名称
+r($program->getPairsByList($programIdList[0])) && p('1')       && e('项目集1');                 // 通过字符串'1'获取项目集名称
+r($program->getPairsByList($programIdList[1])) && p('1,2,3')   && e('项目集1,项目集2,项目集3'); // 通过字符串'1,2,3'获取项目集名称
+r($program->getPairsByList($programIdList[2])) && p('1')       && e('项目集1');                 // 通过数组array(1)获取项目集名称
+r($program->getPairsByList($programIdList[3])) && p('1,2,3')   && e('项目集1,项目集2,项目集3'); // 通过数组array(1,2,3)获取项目集名称
+r($program->getPairsByList($programIdList[4])) && p('message') && e('Not Found');               // 通过id为空获取项目集名称
+r($program->getPairsByList($programIdList[5])) && p('message') && e('Not Found');               // 通过id=0获取项目集名称
+r($program->getPairsByList($programIdList[6])) && p('message') && e('Not Found');               // 通过id=11获取项目集名称
