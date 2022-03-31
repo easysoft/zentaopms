@@ -79,7 +79,7 @@ class bugsEntry extends entry
         if(!$productID and isset($this->requestBody->product)) $productID = $this->requestBody->product;
         if(!$productID) return $this->sendError(400, 'Need product id.');
 
-        $fields = 'title,project,execution,openedBuild,assignedTo,pri,module,severity,type,story,task,mailto,keywords,steps';
+        $fields = 'title,project,execution,openedBuild,assignedTo,pri,module,severity,type,story,task,mailto,keywords,steps,uid';
         $this->batchSetPost($fields);
 
         $this->setPost('product', $productID);
