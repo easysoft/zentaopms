@@ -120,18 +120,6 @@ class programTest
     }
 
     /**
-     * getInvolvedPrograms
-     *
-     * @param  string mixed $account
-     * @access public
-     * @return void
-     */
-    public function getInvolvedPrograms($account)
-    {
-        return $this->program->getInvolvedPrograms($account);
-    }
-
-    /**
      * Test get pairs by list.
      *
      * @param  string|array $programIDList
@@ -368,94 +356,6 @@ class programTest
         $program = $this->program->getById($programID);
 
         return $this->program->hasUnfinished($program);
-    }
-
-    /**
-     * getKanbanGroup
-     *
-     * @param  string $type
-     * @access public
-     * @return void
-     */
-    public function getKanbanGroup($type = '')
-    {
-        $program = $this->program->getKanbanGroup();
-        return $program;
-    }
-
-    /**
-     * getListByProgramID
-     *
-     * @param  int    $programID
-     * @access public
-     * @return void
-     */
-    public function getListByProgramID($programID = 0)
-    {
-        return count($this->program->getProjectList($programID));
-    }
-
-    /**
-     * getListByStatusNo
-     *
-     * @param  string $browseType
-     * @access public
-     * @return void
-     */
-    public function getListByStatusNo($browseType = 'all')
-    {
-        $projects = $this->program->getProjectList('0', $browseType);
-
-        if(!$projects) return 0;
-        foreach($projects as $project)
-        {
-            if($project->status != $browseType and $browseType != 'all' and $browseType != 'undone') return 0;
-            if($browseType == 'undone' and ($project->status != ('wait' or 'doing'))) return 0;
-        }
-
-        return count($projects);
-    }
-
-    /**
-     * getListByOrderId
-     *
-     * @param  string $orderBy
-     * @access public
-     * @return void
-     */
-    public function getListByOrderId($orderBy = 'id_desc')
-    {
-        $projects = $this->program->getProjectList('0', 'all', '0', $orderBy);
-
-        return checkOrder($projects, $orderBy);
-    }
-
-    /**
-     * getListAddProgramTitle
-     *
-     * @param  int    $programTitle
-     * @access public
-     * @return void
-     */
-    public function getListAddProgramTitle($programTitle = 0)
-    {
-        return $this->program->getProjectList('0', 'all', '0', 'id_desc', '', $programTitle);
-    }
-
-    /**
-     * getListByInvolved
-     *
-     * @param  int    $involved
-     * @param  string $count
-     * @access public
-     * @return void
-     */
-    public function getListByInvolved($involved = 0, $count = '')
-    {
-        $projects = $this->program->getProjectList('0', 'all', '0', 'id_desc', '', '0', $involved);
-
-        if($count == 'count') return count($projects);
-        return $projects;
     }
 
     /**
