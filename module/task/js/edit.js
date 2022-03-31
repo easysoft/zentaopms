@@ -70,19 +70,6 @@ function loadExecutionMembers(executionID)
     $('#assignedToIdBox').load(link, function(){$('#assignedToIdBox').find('select').chosen()});
 }
 
-/**
- * Load module related
- *
- * @access public
- * @return void
- */
-function loadModuleRelated()
-{
-    moduleID    = $('#module').val();
-    executionID = $('#execution').val();
-    loadExecutionStories(executionID, moduleID)
-}
-
 /* empty function. */
 function setPreview(){}
 

@@ -236,19 +236,6 @@ function loadStories(executionID)
 }
 
 /**
- * load stories of module.
- *
- * @access public
- * @return void
- */
-function loadModuleRelated()
-{
-    moduleID    = $('#module').val();
-    executionID = $('#execution').val();
-    setStories(moduleID, executionID);
-}
-
-/**
  * Set lane.
  *
  * @param  int $regionID
