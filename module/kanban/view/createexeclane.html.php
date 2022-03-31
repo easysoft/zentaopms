@@ -16,7 +16,7 @@
 <?php js::set('regionID', $regionID);?>
 <?php js::set('lanes', $lanes);?>
 <style>
-.table-form>tbody>tr>th {width: 150px;}
+.table-form>tbody>tr>th {width: 160px;}
 #otherLane_chosen {top: -8px;}
 .margin-bottom {margin-bottom: -6px;}
 </style>
@@ -38,7 +38,7 @@
         </tr>
         <tr>
           <th><?php echo $lang->kanbanlane->WIPType;?></th>
-          <td id='laneTypeBox'><?php echo html::radio('laneType', $lang->kanban->laneTypeList, 'story');?></td>
+          <td id='laneTypeBox' colspan='3'><?php echo html::radio('laneType', $lang->kanban->laneTypeList, 'story');?></td>
         </tr>
         <tr>
           <th><?php echo $lang->kanbanlane->column;?></th>

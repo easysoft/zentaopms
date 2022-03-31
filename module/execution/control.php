@@ -2148,19 +2148,27 @@ class execution extends control
         $this->app->loadLang('story');
         $this->app->loadLang('task');
         $this->app->loadLang('bug');
+        $this->loadModel('kanban');
 
         /* Compatibility IE8. */
         if(strpos($this->server->http_user_agent, 'MSIE 8.0') !== false) header("X-UA-Compatible: IE=EmulateIE7");
 
-        $kanbanGroup = $this->loadModel('kanban')->getExecutionKanban($executionID, $browseType, $groupBy);
+        $this->execution->setMenu($executionID);
+        $execution = $this->execution->getById($executionID);
+        if($execution->lifetime == 'ops')
+        {
+            $browseType = 'task';
+            unset($this->lang->kanban->type['story']);
+            unset($this->lang->kanban->type['bug']);
+            unset($this->lang->kanban->type['all']);
+        }
+
+        $kanbanGroup = $this->kanban->getExecutionKanban($executionID, $browseType, $groupBy);
         if(empty($kanbanGroup))
         {
             $this->kanban->createExecutionLane($executionID, $browseType, $groupBy);
             $kanbanGroup = $this->kanban->getExecutionKanban($executionID, $browseType, $groupBy);
         }
-
-        $this->execution->setMenu($executionID);
-        $execution = $this->loadModel('execution')->getById($executionID);
 
         /* Determines whether an object is editable. */
         $canBeChanged = common::canModify('execution', $execution);
@@ -2553,13 +2561,6 @@ class execution extends control
 
         if(!empty($_POST))
         {
-            /* Get executionType and determine whether a product is linked with the stage. */
-            $executionType = $this->dao->findById($executionID)->from(TABLE_EXECUTION)->fetch('type');
-            if($executionType == 'stage')
-            {
-                if(!isset($_POST['products'])) return print(js::alert($this->lang->execution->noLinkProduct) . js::locate($this->createLink('execution', 'manageProducts', "executionID=$executionID&from=$from")));
-            }
-
             $oldProducts = $this->product->getProducts($executionID);
 
             if($from == 'buildCreate' && $this->session->buildCreate) $browseExecutionLink = $this->session->buildCreate;
