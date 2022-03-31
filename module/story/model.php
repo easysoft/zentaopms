@@ -3204,7 +3204,7 @@ class storyModel extends model
      *
      * @param  array|object    $dataList
      * @access public
-     * @return array
+     * @return array|object
      */
     public function checkNeedConfirm($dataList)
     {
