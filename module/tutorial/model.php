@@ -271,6 +271,14 @@ class tutorialModel extends model
      */
     public function getExecution()
     {
+        /* Fix bug #21097. */
+        $hours = new stdclass();
+        $hours->totalEstimate = 52;
+        $hours->totalConsumed = 43;
+        $hours->totalLeft     = 7;
+        $hours->progress      = 86;
+        $hours->totalReal     = 50;
+
         $execution = new stdclass();
         $execution->id            = 3;
         $execution->project       = 2;
@@ -303,17 +311,8 @@ class tutorialModel extends model
         $execution->totalEstimate = 0;
         $execution->displayCards  = 0;
         $execution->fluidBoard    = 0;
-
-        /* Fix bug #21097. */
-        $hours = new stdclass();
-        $hours->totalEstimate = 52;
-        $hours->totalConsumed = 43;
-        $hours->totalLeft     = 7;
-        $hours->progress      = 86;
-        $hours->totalReal     = 50;
-
-        $execution->hours = $hours;
-        $execution->burns = array(35, 35);
+        $execution->hours         = $hours;
+        $execution->burns         = array(35, 35);
         return $execution;
     }
 
