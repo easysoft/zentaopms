@@ -22,7 +22,7 @@
       </tr>
       <tr>
         <td><?php echo $lang->weekly->project;?></td>
-        <td><?php echo $project->name;?></td>
+        <td class='projectName' title='<?php echo $project->name;?>'><?php echo $project->name;?></td>
         <td><?php echo $lang->weekly->staff;?></td>
         <td><?php echo $staff;?></td>
       </tr>
