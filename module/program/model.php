@@ -1259,7 +1259,7 @@ class programModel extends model
      */
     public function getProjectStats($programID = 0, $browseType = 'undone', $queryID = 0, $orderBy = 'id_desc', $pager = null, $programTitle = 0, $involved = 0, $queryAll = false)
     {
-        if(defined('TUTORIAL')) return $this->loadModel('tutorial')->getProjectStats();
+        if(defined('TUTORIAL')) return $this->loadModel('tutorial')->getProjectStats($browseType);
 
         /* Init vars. */
         $projects = $this->getProjectList($programID, $browseType, $queryID, $orderBy, $pager, $programTitle, $involved, $queryAll);
