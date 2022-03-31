@@ -153,16 +153,16 @@ class helper extends baseHelper
      * @access public
      * @return string
      */
-    static public function createLink($moduleName, $methodName = 'index', $vars = '', $viewType = '', $onlyBody = false)
+    static public function createLink($moduleName, $methodName = 'index', $vars = '', $viewType = 'json', $onlyBody = false)
     {
         global $config;
-        $link = parent::createLink($moduleName, $methodName, $vars, 'html');
+        $link = parent::createLink($moduleName, $methodName, $vars, $viewType);
         $pos  = strpos($link, '.php');
 
         /* The requestTypes are: GET, PATH_INFO2, PATH_INFO */
         if($config->requestType == 'GET')
         {
-            $link = '/index' . substr($link, $pos);
+            $link = $config->webRoot . 'index' . substr($link, $pos);
         }
         elseif($config->requestType == 'PATH_INFO2')
         {
