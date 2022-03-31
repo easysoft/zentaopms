@@ -2158,10 +2158,6 @@ class execution extends control
             unset($this->lang->kanban->type['bug']);
             unset($this->lang->kanban->type['all']);
         }
-        elseif($execution->type == 'stage' and $execution->attribute != 'dev')
-        {
-            unset($this->lang->kanban->type['task']);
-        }
 
         $kanbanGroup = $this->kanban->getExecutionKanban($executionID, $browseType, $groupBy);
         if(empty($kanbanGroup))
