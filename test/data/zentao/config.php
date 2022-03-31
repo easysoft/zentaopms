@@ -60,7 +60,7 @@ $builder->kanbanregion = array('rows' => 100, 'extends' => array('kanbanregion',
 $builder->kanbangroup  = array('rows' => 100, 'extends' => array('kanbangroup','kanbangroup'));
 $builder->kanbanlane   = array('rows' => 100, 'extends' => array('kanbanlane','kanbanlane'));
 $builder->kanbancolumn = array('rows' => 400, 'extends' => array('kanbancolumn','kanbancolumn'));
-$builder->kanbancard   = array('rows' => 800, 'extends' => array('kanbancard','kanbancard'));
+$builder->kanbancard   = array('rows' => 1000, 'extends' => array('kanbancard','kanbancard'));
 $builder->kanbancell   = array('rows' => 400, 'extends' => array('kanbancell','kanbancell'));
 
 $builder->kanbanregionproject = array('rows' => 180, 'extends' => array('kanbanregion','kanbanregionproject'));

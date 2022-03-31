@@ -61,6 +61,7 @@ fields:
       range: "0"
     - field: object
       range: ""
+      prefix: "plans,releases,builds,executions,cards"
     - field: createdBy
       range: "admin"
     - field: createdDate
