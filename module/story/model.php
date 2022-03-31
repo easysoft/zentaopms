@@ -650,7 +650,6 @@ class storyModel extends model
         }
 
         if(isset($_POST['reviewer'])) $_POST['reviewer'] = array_filter($_POST['reviewer']);
-        if(isset($_POST['needNotReview'])) $_POST['status'] = 'active';
         if(!$this->post->needNotReview and empty($_POST['reviewer']))
         {
             dao::$errors[] = $this->lang->story->errorEmptyReviewedBy;
@@ -671,7 +670,7 @@ class storyModel extends model
             ->add('lastEditedDate', $now)
             ->setIF($specChanged, 'version', $oldStory->version + 1)
             ->setIF($specChanged and $oldStory->status == 'active' and $this->post->needNotReview == false, 'status',  'changed')
-            ->setIF($specChanged and $oldStory->status == 'draft'  and $this->post->needNotReview, 'status', 'active')
+            ->setIF($oldStory->status == 'draft'  and $this->post->needNotReview, 'status', 'active')
             ->setIF($specChanged, 'reviewedBy',  '')
             ->setIF($specChanged, 'closedBy', '')
             ->setIF($specChanged, 'closedReason', '')
