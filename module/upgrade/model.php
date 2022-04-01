@@ -5226,8 +5226,9 @@ class upgradeModel extends model
         $projects = $this->dao->select('*')->from(TABLE_PROJECT)->where('acl')->eq('custom')->andWhere('type')->eq('sprint')->fetchAll();
         foreach($projects as $project)
         {
-            $groups   = explode(',', $project->whitelist);
-            $accounts = $this->dao->select('account')->from(TABLE_USERGROUP)->where('`group`')->in($groups)->fetchPairs('account');
+            $groups    = explode(',', $project->whitelist);
+            $accounts  = $this->dao->select('account')->from(TABLE_USERGROUP)->where('`group`')->in($groups)->fetchPairs('account');
+            $whitelist = '';
             foreach($accounts as $account)
             {
                 $acl = new stdclass();
@@ -5238,9 +5239,11 @@ class upgradeModel extends model
                 $acl->source     = 'upgrade';
 
                 $this->dao->insert(TABLE_ACL)->data($acl)->exec();
+
+                $whitelist .= ',' . $account;
             }
 
-            $this->dao->update(TABLE_PROJECT)->set('acl')->eq('private')->where('id')->eq($project->id)->exec();
+            $this->dao->update(TABLE_PROJECT)->set('acl')->eq('private')->set('whitelist')->eq($whitelist)->where('id')->eq($project->id)->exec();
         }
 
         return true;
@@ -5259,7 +5262,7 @@ class upgradeModel extends model
         {
             $groups    = explode(',', $product->whitelist);
             $accounts  = $this->dao->select('account')->from(TABLE_USERGROUP)->where('`group`')->in($groups)->fetchPairs('account');
-            $whiteList = '';
+            $whitelist = '';
             foreach($accounts as $account)
             {
                 $acl = new stdclass();
@@ -5271,10 +5274,10 @@ class upgradeModel extends model
 
                 $this->dao->insert(TABLE_ACL)->data($acl)->exec();
 
-                $whiteList .= ',' . $account;
+                $whitelist .= ',' . $account;
             }
 
-            $this->dao->update(TABLE_PRODUCT)->set('acl')->eq('private')->set('whitelist')->eq($whiteList)->where('id')->eq($product->id)->exec();
+            $this->dao->update(TABLE_PRODUCT)->set('acl')->eq('private')->set('whitelist')->eq($whitelist)->where('id')->eq($product->id)->exec();
         }
 
         return true;
