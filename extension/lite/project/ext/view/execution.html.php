@@ -45,7 +45,11 @@
         {
             foreach (explode('|', 'kanban|task|calendar|gantt|tree|grouptask') as $view) 
             {
-                if(common::hasPriv('execution', $view)) $kanbanview = $view; break;
+                if(common::hasPriv('execution', $view))
+                {
+                  $kanbanview = $view; 
+                  break;
+                }
             }
         }
       ?>
