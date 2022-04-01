@@ -3,7 +3,7 @@
 <?php $idx = 0; ?>
   <div class='row row-<?php echo $flowName?>'>
   <?php foreach ($flow as $flowItem):?>
-    <div class='flow-item flow-item-<?php echo $idx++ ?>'><div title='<?php echo $flowItem ?>'><?php echo $flowItem ?></div></div>
+    <div class='flow-item flow-item-<?php echo $idx++ ?>'><div title='<?php echo $flowItem ?>'><span style="display: flow-root; overflow: hidden;"><?php echo $flowItem ?></span></div></div>
   <?php endforeach; ?>
   </div>
 <?php endforeach; ?>
