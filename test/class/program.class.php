@@ -51,45 +51,6 @@ class programTest
     }
 
     /**
-     * getById
-     *
-     * @param  iont   mixed $programID
-     * @access public
-     * @return void
-     */
-    public function getById($programID)
-    {
-        if(empty($this->program->getById($programID)))
-        {
-            return array('code' => 'fail', 'message' => 'Not Found');
-        }
-        else
-        {
-            return $this->program->getById($programID);
-        }
-    }
-
-    /**
-     * getChildren
-     *
-     * @param  int    mixed $programID
-     * @access public
-     * @return void
-     */
-    public function getChildren($programID)
-    {
-        $programInfo = $this->program->getChildren($programID);
-        if(empty($programInfo))
-        {
-            return array('code' => 'fail' , 'message' => 'Not Found');
-        }
-        else
-        {
-            return $programInfo;
-        }
-    }
-
-    /**
      * Test get list.
      *
      * @param  mixed  $status
