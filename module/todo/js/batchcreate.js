@@ -26,4 +26,11 @@ $(function()
     });
     $('.main-header #date').change();
     parent.$('#triggerModal .modal-content .modal-header .close').hide();
+    
+    $("#select-all").on('click', function()
+    {
+        var isChecked = $("#select-all").hasClass('checked');
+        $("select[name^=begins]").attr("disabled", isChecked ? false : true).trigger('chosen:updated');
+        $("select[name^=ends]").attr("disabled", isChecked ? false : true).trigger('chosen:updated');
+    });
 });
