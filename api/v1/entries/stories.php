@@ -66,7 +66,7 @@ class storiesEntry extends entry
         $control = $this->loadController('story', 'create');
         $this->requireFields('title,spec,pri,category');
 
-        $control->create($productID);
+        $control->create($productID, $this->param('branch', 0), $this->param('moduleID', 0), $this->param('storyID', 0), $this->param('objectID', 0));
 
         $data = $this->getData();
         if(isset($data->status) and $data->status == 'fail') return $this->sendError(zget($data, 'code', 400), $data->message);
