@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
-include dirname(dirname(dirname(__FILE__))) . '/class/program.class.php';
+su('admin');
 
 /**
 
@@ -15,8 +15,10 @@ pid=1
 
 */
 
-$getItemsets = new Program('admin');
+global $tester;
+$tester->loadModel('program');
+$progressList = $tester->program->getProgressList();
 
-r($getItemsets->getCount3())       && p()     && e('100'); // 获取项目和项目集的个数
-r($getItemsets->getProgressList()) && p('1')  && e('0');   // 获取id=1的项目的进度
-r($getItemsets->getProgressList()) && p('11') && e('45');   // 获取id=11的项目集的进度
+r(count($progressList)) && p()     && e('120');  // 获取项目和项目集的个数
+r($progressList)        && p('1')  && e('41');   // 获取id=1的项目的进度
+r($progressList)        && p('11') && e('45');   // 获取id=11的项目集的进度
