@@ -57,6 +57,8 @@ switch($argv[1])
         break;
     case 'kanban':
         ztfRun('model/kanban');
+    case 'my':
+        ztfRun('model/my');
         break;
     case 'model':
         ztfRun('model');
