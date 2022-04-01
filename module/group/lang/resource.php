@@ -153,13 +153,11 @@ $lang->resource->personnel->accessible      = 'accessible';
 $lang->resource->personnel->invest          = 'invest';
 $lang->resource->personnel->whitelist       = 'whitelist';
 $lang->resource->personnel->addWhitelist    = 'addWhitelist';
-$lang->resource->personnel->unbindWhitelist = 'unbindWhitelist';
 
 $lang->personnel->methodOrder[5]  = 'accessible';
 $lang->personnel->methodOrder[10] = 'invest';
 $lang->personnel->methodOrder[15] = 'whitelist';
 $lang->personnel->methodOrder[20] = 'addWhitelist';
-$lang->personnel->methodOrder[25] = 'unbindWhitelist';
 
 global $config;
 if($config->systemMode == 'new')
