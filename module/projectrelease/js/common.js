@@ -27,7 +27,7 @@ function loadBranches(productID)
 {
     $('#branch').remove();
     $('#branch_chosen').remove();
-    $.get(createLink('branch', 'ajaxGetBranches', "productID=" + productID + '&oldBranch=0&params=active'), function(data)
+    $.get(createLink('branch', 'ajaxGetBranches', "productID=" + productID + '&oldBranch=0&params=active&projectID=' + projectID), function(data)
     {
         var $product = $('#product');
         var $inputGroup = $product.closest('.input-group');
