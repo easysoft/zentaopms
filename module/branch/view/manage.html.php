@@ -40,7 +40,7 @@
   <div class="table-empty-tip">
     <p>
       <span class="text-muted"><?php echo $lang->branch->noData;?></span>
-      <?php if($canCreate) echo html::a($this->createLink('branch', 'create', "productID=$productID", '', true), "<i class='icon icon-plus'></i> " . $lang->branch->create, '', "class='btn btn-info iframe'");?>
+      <?php if($canCreate and $browseType != 'closed') echo html::a($this->createLink('branch', 'create', "productID=$productID", '', true), "<i class='icon icon-plus'></i> " . $lang->branch->create, '', "class='btn btn-info iframe'");?>
     </p>
   </div>
   <?php else:?>
