@@ -227,7 +227,7 @@ class projectModel extends model
             $project->executions = $this->getStats($projectID, 'undone', 0, 0, 30, $orderBy, $pager);
             $project->teamCount  = isset($teams[$projectID]) ? $teams[$projectID]->count : 0;
             $project->estimate   = isset($estimates[$projectID]) ? round($estimates[$projectID]->estimate, 2) : 0;
-            $project->parentName = $this->getParentProgram($project->parent);
+            $project->parentName = $this->getParentProgram($project);
         }
         return $projects;
     }
@@ -239,12 +239,12 @@ class projectModel extends model
      * @access public
      * @return string
      */
-    public function getParentProgram($parentID)
+    public function getParentProgram($project)
     {
-        if($parentID == 0) return '';
+        if($project->parent == 0) return '';
 
-        $parentPath = $this->dao->select('path')->from(TABLE_PROGRAM)->where('id')->eq($parentID)->fetch('path');
-        $parentName = $this->dao->select('id,name')->from(TABLE_PROGRAM)->where('id')->in(trim($parentPath, ','))->fetchPairs();
+        $parentName = $this->dao->select('id,name')->from(TABLE_PROGRAM)->where('id')->in(trim($project->path, ','))->fetchPairs();
+        unset($parentName[$project->id]);
 
         $parentProgram = '';
         foreach($parentName as $name) $parentProgram .= $name . '/';
