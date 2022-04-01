@@ -1136,10 +1136,11 @@ class executionModel extends model
      * @param  int    $limit
      * @param  int    $productID
      * @param  int    $branch
+     * @param  object $pager
      * @access public
      * @return array
      */
-    public function getList($projectID = 0, $type = 'all', $status = 'all', $limit = 0, $productID = 0, $branch = 0)
+    public function getList($projectID = 0, $type = 'all', $status = 'all', $limit = 0, $productID = 0, $branch = 0, $pager = null)
     {
         if($status == 'involved') return $this->getInvolvedExecutionList($projectID, $status, $limit, $productID, $branch);
 
@@ -1157,6 +1158,7 @@ class executionModel extends model
                 ->beginIF($status != 'all' and $status != 'undone')->andWhere('status')->in($status)->fi()
                 ->beginIF(!$this->app->user->admin)->andWhere('t2.id')->in($this->app->user->view->sprints)->fi()
                 ->orderBy('order_desc')
+                ->page($pager)
                 ->beginIF($limit)->limit($limit)->fi()
                 ->fetchAll('id');
         }
@@ -1172,6 +1174,7 @@ class executionModel extends model
                 ->beginIF($status != 'all' and $status != 'undone')->andWhere('status')->in($status)->fi()
                 ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->sprints)->fi()
                 ->orderBy('order_desc')
+                ->page($pager)
                 ->beginIF($limit)->limit($limit)->fi()
                 ->fetchAll('id');
         }

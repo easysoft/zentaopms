@@ -15,7 +15,6 @@
 #cards > .col {width: 25%;}
 @media screen and (max-width: 1500px) {#cards > .col {width: 33.3333333%;}}
 #cards .panel {margin: 10px 0;  border: 1px solid #DCDCDC; border-radius: 4px; box-shadow: none; cursor: pointer; height: 190px;}
-#cards .pager .btn {padding-top: 4px;}
 #cards .panel:hover {border-color: #006AF1; box-shadow: 0 0 10px 0 rgba(0,0,100,.25);}
 #cards .panel .projectStatus .label{float: right;}
 #cards .panel-heading {padding: 12px 24px 10px 16px;}
@@ -30,8 +29,8 @@
 #cards .project-infos > .budget {max-width: 75px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;}
 #cards .project-detail {position: absolute; top: 75px; left: 16px; right: 16px; font-size: 12px;}
 #cards .project-footer {position: absolute; bottom: 10px; right: 10px; left: 15px;}
-#cards .pager {margin: 0; float: right;}
-#cards .pager .btn {border: none}
+#cardsFooter .pager {margin: 0; float: right;}
+#cardsFooter .pager .btn {border: none; padding-top: 4px;}
 #cards .panel .label-wait {background: #EFEFEF !important; color: #838A9D;}
 #cards .panel .label-doing {background: #E9F2FB !important; color: #2B80FF;}
 #cards .panel .label-suspended {background: #AAA !important; color: #FFF;}

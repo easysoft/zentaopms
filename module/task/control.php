@@ -832,6 +832,9 @@ class task extends control
             return print(js::error($this->lang->notFound) . js::locate($this->createLink('execution', 'all')));
         }
 
+        $execution = $this->execution->getById($task->execution);
+        if(!isonlybody() and $execution->type == 'kanban') return $this->locate($this->createLink('execution', 'kanban', "executionID=$execution->id"));
+
         $this->session->project = $task->project;
 
         if($task->fromBug != 0)
@@ -859,7 +862,6 @@ class task extends control
         if($task->assignedTo == $this->app->user->account) $this->loadModel('action')->read('task', $taskID);
 
         /* Set menu. */
-        $execution = $this->execution->getById($task->execution);
         if($this->app->tab == 'execution') $this->execution->setMenu($execution->id);
 
         $this->executeHooks($taskID);

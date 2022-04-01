@@ -28,3 +28,5 @@
 .kanbans .kanban-actions .dropdown-menu.pull-left {top:31px; right:-1px; left: auto;}
 
 .label-doing {background: #ff5d5d}
+#cardsFooter .pager {margin: 0; float: right;}
+#cardsFooter .pager .btn {padding-top: 4px; border: none;}

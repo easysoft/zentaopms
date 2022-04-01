@@ -2840,7 +2840,7 @@ class execution extends control
 
         /* Build the search form. */
         $actionURL    = $this->createLink($this->app->rawModule, 'linkStory', "objectID=$objectID&browseType=bySearch&queryID=myQueryID");
-        $branchGroups = $this->loadModel('branch')->getByProducts(array_keys($products), 'noclosed');
+        $branchGroups = $this->loadModel('branch')->getByProducts(array_keys($products));
         $this->execution->buildStorySearchForm($products, $branchGroups, $modules, $queryID, $actionURL, 'linkStory', $objectID);
 
         if($browseType == 'bySearch')
