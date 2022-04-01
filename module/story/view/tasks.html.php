@@ -35,7 +35,11 @@ include '../../common/view/chart.html.php';
           <td><?php echo $task->estimate;?></td>
           <td><?php echo $task->consumed;?></td>
           <td><?php echo $task->left;?></td>
-          <td><div class='progress-pie' title="<?php echo $task->progress?>%" data-value='<?php echo $task->progress;?>'></div></td>
+          <td>
+            <div class='progress-pie' data-doughnut-size='80' data-color='#00DA88' data-value='<?php echo $task->progress?>' data-width='26' data-height='26' data-back-color='#e8edf3'>
+               <div class='progress-info'><?php echo $task->progress;?></div>
+            </div>
+          </td>
         </tr>
           <?php if(!empty($task->children)):?>
           <?php $i = 0;?>
