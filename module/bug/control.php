@@ -543,6 +543,11 @@ class bug extends control
             $builds  = $this->loadModel('build')->getBuildPairs($productID, $branch, 'noempty,noterminate,nodone,withbranch');
             $stories = $this->story->getProductStoryPairs($productID, $branch);
         }
+        foreach($stories as $key => $value)
+        {
+            $story = $this->story->getByID($stories[$key]);
+            if(!empty($story->childStories)) unset($stories[$key]);
+        }
 
         $moduleOwner = $this->bug->getModuleOwner($moduleID, $productID);
 
