@@ -922,12 +922,7 @@ EOF;
         $sort = common::appendOrder($orderBy);
 
         /* Get users by dept. */
-        $deptID = 0;
-        if(!$this->app->user->admin)
-        {
-            $user   = $this->loadModel('user')->getById($this->app->user->account, 'account');
-            $deptID = $user->dept;
-        }
+        $deptID = $this->app->user->admin ? 0 : $this->app->user->dept;
         $users  = $this->loadModel('company')->getUsers('inside', 'bydept', 0, $deptID, $sort, $pager);
         foreach($users as $user) unset($user->password); // Remove passwd.
 
