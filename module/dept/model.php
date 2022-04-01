@@ -112,7 +112,7 @@ class deptModel extends model
 
         krsort($deptMenu);
         $topMenu = array_pop($deptMenu);
-        $topMenu = explode("\n", trim($topMenu));
+        $topMenu = explode("\n", trim((string)$topMenu));
         $lastMenu[] = '/';
         foreach($topMenu as $menu)
         {
