@@ -1263,24 +1263,7 @@ class execution extends control
      */
     public function create($projectID = '', $executionID = 0, $copyExecutionID = '', $planID = 0, $confirm = 'no', $productID = 0, $extra = '')
     {
-        /* Set menu. */
-        if($this->app->tab == 'project')
-        {
-            if(!empty($copyExecutionID)) $projectID = $this->dao->select('project')->from(TABLE_EXECUTION)->where('id')->eq($copyExecutionID)->fetch('project');
-
-            $projectID = $this->project->saveState($projectID, $this->project->getPairsByProgram());
-            $this->project->setMenu($projectID);
-        }
-        elseif($this->app->tab == 'execution')
-        {
-            $selectedExecutionID = $executionID;
-            if($this->config->systemMode == 'new') $selectedExecutionID = key($this->executions);
-            $this->execution->setMenu($selectedExecutionID);
-        }
-        elseif($this->app->tab == 'doc')
-        {
-            unset($this->lang->doc->menu->execution['subMenu']);
-        }
+        if($this->app->tab == 'doc') unset($this->lang->doc->menu->execution['subMenu']);
 
         $project = $this->project->getByID($projectID);
         if(!empty($project) and $project->model == 'kanban')
