@@ -233,9 +233,9 @@ try {
               </select>
           </td>
           <td class="w-80px">
-              <div class="checkbox">
+              <div class="checkbox-primary">
+                <input type="checkbox" v-model="value.required">
                 <label>
-                  <input type="checkbox" v-model="value.required">
                 </label>
               </div>
           </td>

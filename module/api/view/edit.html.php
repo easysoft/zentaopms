@@ -125,10 +125,9 @@ js::set('api', $api);
                         <input type="text" placeholder="<?php echo $lang->struct->field;?>" autocomplete="off" class="form-control" v-model="item.field">
                       </td>
                       <td class="w-50px">
-                        <div class="checkbox">
-                          <label>
-                            <input type="checkbox" v-model="item.required">
-                          </label>
+                        <div class="checkbox-primary">
+                          <input type="checkbox" v-model="item.required">
+                          <label></label>
                         </div>
                       </td>
                       <td class="w-500px">
@@ -160,8 +159,9 @@ js::set('api', $api);
                         <input type="text" placeholder="<?php echo $lang->struct->field;?>" autocomplete="off" class="form-control" v-model="queryP[key].field">
                       </td>
                       <td class="w-50px">
-                        <div class="checkbox">
-                          <label><input type="checkbox" v-model="item.required"></label>
+                        <div class="checkbox-primary">
+                          <input type="checkbox" v-model="item.required">
+                          <label></label>
                         </div>
                       </td>
                       <td class="w-500px">
