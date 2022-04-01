@@ -926,15 +926,38 @@ class kanbanTest
         return $object;
     }
 
+    /**
+     * Test remove kanban cell.
+     *
+     * @param  string $type
+     * @param  int    $removeCardID
+     * @param  array  $kanbanList
+     * @access public
+     * @return string
+     */
     public function removeKanbanCellTest($type, $removeCardID, $kanbanList)
     {
-        $objects = $this->objectModel->removeKanbanCell($type, $removeCardID, $kanbanList);
+        $this->objectModel->removeKanbanCell($type, $removeCardID, $kanbanList);
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        global $tester;
+        $objects = $tester->dao->select('*')->from(TABLE_KANBANCELL)->where('kanban')->in($kanbanList)->andWhere('type')->eq($type)->fetchAll();
+        $cards = '';
+        foreach($objects as $object) $cards .= $object->id . ':' . $object->cards . '; ';
+        $cards = trim($cards, '; ');
+        $cards = str_replace(':,', ':', $cards);
+        $cards = str_replace(':;', ';', $cards);
+        return $cards;
     }
 
+    /**
+     * Test create rd kanban.
+     *
+     * @param  object $execution
+     * @access public
+     * @return string
+     */
     public function createRDKanbanTest($execution)
     {
         $this->objectModel->createRDKanban($execution);
@@ -1026,13 +1049,29 @@ class kanbanTest
         return $objects;
     }
 
-    public function refreshCardsTest($lane)
+    /**
+     * Test refresh column cards.
+     *
+     * @param  int    $laneID
+     * @access public
+     * @return string
+     */
+    public function refreshCardsTest($laneID)
     {
-        $objects = $this->objectModel->refreshCards($lane);
+        $lane = $this->objectModel->getLaneByID($laneID);
+        $this->objectModel->refreshCards($lane);
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        global $tester;
+        $objects = $tester->dao->select('*')->from(TABLE_KANBANCELL)->where('`lane`')->eq($laneID)->fetchAll();
+
+        $cards = '';
+        foreach($objects as $object) $cards .= $object->id . ':' . $object->cards . '; ';
+        $cards = trim($cards, '; ');
+        $cards = str_replace(':,', ':', $cards);
+        $cards = str_replace(':;', ';', $cards);
+        return $cards;
     }
 
     public function updateLaneColumnTest($columnID, $column)
@@ -1085,40 +1124,102 @@ class kanbanTest
         return $objects;
     }
 
-    public function setWIPTest($columnID)
+    /**
+     * Test set WIP.
+     *
+     * @param  int    $columnID
+     * @param  int    $limit
+     * @param  int    $WIPCount
+     * @access public
+     * @return object
+     */
+    public function setWIPTest($columnID, $limit, $WIPCount)
     {
-        $objects = $this->objectModel->setWIP($columnID);
+        $_POST['limit'] = $limit;
+        if($WIPCount == '-1') $_POST['WIPCount'] = $WIPCount;
+        if($WIPCount == '-1') $_POST['noLimit']  = $WIPCount;
+
+        $this->objectModel->setWIP($columnID);
+
+        unset($_POST);
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        $object = $this->objectModel->getColumnByID($columnID);
+        return $object;
     }
 
-    public function setLaneTest($laneID)
+    /**
+     * Test set a lane.
+     *
+     * @param  int    $laneID
+     * @access public
+     * @return object
+     */
+    public function setLaneTest($laneID, $name, $color)
     {
-        $objects = $this->objectModel->setLane($laneID);
+        $_POST['name']  = $name;
+        $_POST['color'] = $color;
+
+        $this->objectModel->setLane($laneID);
+
+        unset($_POST);
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        $object = $this->objectModel->getLaneByID($laneID);
+        return $object;
     }
 
-    public function setLaneHeightTest($kanbanID, $from = 'kanban')
+    /**
+     * Test set kanban lane height.
+     *
+     * @param  int    $kanbanID
+     * @param  string $heightType
+     * @param  int    $displayCards
+     * @param  string $from
+     * @access public
+     * @return object
+     */
+    public function setLaneHeightTest($kanbanID, $heightType, $displayCards, $from = 'kanban')
     {
-        $objects = $this->objectModel->setLaneHeight($kanbanID, $from = 'kanban');
+        $_POST['heightType']   = $heightType;
+        $_POST['displayCards'] = $displayCards;
+
+        $this->objectModel->setLaneHeight($kanbanID, $from);
+
+        unset($_POST);
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        global $tester;
+        $table = $tester->config->objectTables[$from];
+        $object = $tester->dao->select('*')->from($table)->where('id')->eq($kanbanID)->fetch();
+        return $object;
     }
 
-    public function setColumnWidthTest($kanbanID, $from = 'kanban')
+    /**
+     * Test set column width.
+     *
+     * @param  int    $kanbanID
+     * @param  string $from
+     * @access public
+     * @return object
+     */
+    public function setColumnWidthTest($kanbanID, $fluidBoard, $from = 'kanban')
     {
-        $objects = $this->objectModel->setColumnWidth($kanbanID, $from = 'kanban');
+        $_POST['fluidBoard'] = $fluidBoard;
+
+        $this->objectModel->setColumnWidth($kanbanID, $from);
+
+        unset($_POST);
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        global $tester;
+        $table = $tester->config->objectTables[$from];
+        $object = $tester->dao->select('*')->from($table)->where('id')->eq($kanbanID)->fetch();
+        return $object;
     }
 
     public function setHeaderActionsTest($kanban)
@@ -1207,13 +1308,22 @@ class kanbanTest
         return $object;
     }
 
+    /**
+     * Test restore a column.
+     *
+     * @param  int    $columnID
+     * @access public
+     * @return object
+     */
     public function restoreColumnTest($columnID)
     {
-        $objects = $this->objectModel->restoreColumn($columnID);
+        $this->objectModel->restoreColumn($columnID);
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        global $tester;
+        $object = $tester->dao->select('*')->from(TABLE_KANBANCOLUMN)->where('`id`')->eq($columnID)->fetch();
+        return $object;
     }
 
     /**
@@ -1232,6 +1342,13 @@ class kanbanTest
         return $changes;
     }
 
+    /**
+     * Test restore a card.
+     *
+     * @param  int    $cardID
+     * @access public
+     * @return array
+     */
     public function restoreCardTest($cardID)
     {
         $objects = $this->objectModel->restoreCard($cardID);
@@ -1241,13 +1358,21 @@ class kanbanTest
         return $objects;
     }
 
-    public function processCardsTest($column)
+    public function processCardsTest($columnID)
     {
-        $objects = $this->objectModel->processCards($column);
+        $column  = $this->objectModel->getColumnByID($columnID);
+        $this->objectModel->processCards($column);
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        global $tester;
+        $nodes   = $tester->dao->select('id,id')->from(TABLE_KANBANCOLUMN)->where('`parent`')->eq($column->parent)->fetchPairs();
+        $objects = $tester->dao->select('*')->from(TABLE_KANBANCELL)->where('`column`')->in(array_keys($nodes))->fetchAll();
+
+        $cards = '';
+        foreach($objects as $object) $cards .= $object->id . ':' . $object->cards . '; ';
+        $cards = trim($cards, '; ');
+        return $cards;
     }
 
     /**
