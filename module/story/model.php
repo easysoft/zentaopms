@@ -679,7 +679,7 @@ class storyModel extends model
             ->stripTags($this->config->story->editor->change['id'], $this->config->allowedTags)
             ->remove('files,labels,reviewer,comment,needNotReview,uid')
             ->get();
-        if($specChanged and $story->status == 'active' and $this->checkForceReview()) $story->status = 'changed';
+        if($specChanged and isset($story->status) && $story->status == 'active' and $this->checkForceReview()) $story->status = 'changed';
         $story = $this->loadModel('file')->processImgURL($story, $this->config->story->editor->change['id'], $this->post->uid);
         $this->dao->update(TABLE_STORY)->data($story, 'spec,verify')
             ->autoCheck()
@@ -735,7 +735,7 @@ class storyModel extends model
 
             $this->file->updateObjectID($this->post->uid, $storyID, 'story');
 
-            $oldStory->reviewers = implode(',', array_keys($oldStroyReviewers));
+            $oldStory->reviewers = implode(',', array_keys($oldStoryReviewers));
             $story->reviewers    = implode(',', $_POST['reviewer']);
             return common::createChanges($oldStory, $story);
         }
