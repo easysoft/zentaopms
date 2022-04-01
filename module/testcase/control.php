@@ -893,12 +893,18 @@ class testcase extends control
             {
                 $branchTagOption[$branchInfo->id] = $branchInfo->name . ($branchInfo->status == 'closed' ? ' (' . $this->lang->branch->statusList['closed'] . ')' : '');
             }
+            $stories = $this->story->getProductStoryPairs($productID, $case->branch);
+            foreach($stories as $key => $value)
+            {
+                $story = $this->story->getByID($stories[$key]);
+                if(!empty($story->childStories)) unset($stories[$key]);
+            }
             $this->view->productID        = $productID;
             $this->view->product          = $product;
             $this->view->branchTagOption  = $branchTagOption;
             $this->view->productName      = $this->products[$productID];
             $this->view->moduleOptionMenu = $moduleOptionMenu;
-            $this->view->stories          = $this->story->getProductStoryPairs($productID, $case->branch);
+            $this->view->stories          = $stories;
         }
         $forceNotReview = $this->testcase->forceNotReview();
         if($forceNotReview) unset($this->lang->testcase->statusList['wait']);
