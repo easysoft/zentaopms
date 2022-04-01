@@ -413,7 +413,7 @@ class commonModel extends model
                 {
                     if(!commonModel::isTutorialMode())
                     {
-                        echo '<li>' . html::a(helper::createLink('tutorial', 'start'), "<i class='icon icon-guide'></i> " . $lang->tutorialAB, '', "class='iframe' data-class-name='modal-inverse' data-width='800' data-headerless='true' data-backdrop='true' data-keyboard='true'") . '</li>';
+                        echo '<li class="user-tutorial">' . html::a(helper::createLink('tutorial', 'start'), "<i class='icon icon-guide'></i> " . $lang->tutorialAB, '', "class='iframe' data-class-name='modal-inverse' data-width='800' data-headerless='true' data-backdrop='true' data-keyboard='true'") . '</li>';
                     }
 
                     echo '<li>' . html::a(helper::createLink('my', 'preference', '', '', true), "<i class='icon icon-controls'></i> " . $lang->preference, '', "class='iframe' data-width='700'") . '</li>';
@@ -2257,7 +2257,7 @@ EOD;
 
         $module = $this->app->getModuleName();
         $method = $this->app->getMethodName();
-        if($module == 'index' || $module == 'tutorial' || $module == 'install' || $module == 'upgrade' || ($module == 'user' && ($method == 'login' || $method == 'deny' || $method == 'logout')) || ($module == 'my' && $method == 'changepassword') || ($module == 'file' && $method == 'read') || ($module == 'file' && $method == 'download') || ($module == 'file' && $method == 'uploadimages')) return;
+        if($module == 'index' || $module == 'tutorial' || $module == 'install' || $module == 'upgrade' || ($module == 'user' && ($method == 'login' || $method == 'deny' || $method == 'logout')) || ($module == 'my' && ($method == 'changepassword' || $method == 'preference')) || ($module == 'file' && $method == 'read') || ($module == 'file' && $method == 'download') || ($module == 'file' && $method == 'uploadimages')) return;
 
         $url = helper::safe64Encode($_SERVER['REQUEST_URI']);
         $redirectUrl = helper::createLink('index', 'index', "open=$url");

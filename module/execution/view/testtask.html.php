@@ -86,7 +86,7 @@
             <?php printf('%03d', $task->id);?>
             <?php endif;?>
           </td>
-          <td class='text-left' title="<?php echo $task->name?>"><?php echo html::a($this->createLink('testtask', 'view', "taskID=$task->id"), $task->name, '', "data-app='execution'");?></td>
+          <td class='text-left' title="<?php echo $task->name?>"><?php echo html::a($this->createLink('testtask', 'cases', "taskID=$task->id"), $task->name, '', "data-app='execution'");?></td>
           <td title="<?php echo $task->buildName?>"><?php echo ($task->build == 'trunk' || empty($task->buildName)) ? $lang->trunk : html::a($this->createLink('build', 'view', "buildID=$task->build"), $task->buildName);?></td>
           <td><?php echo zget($users, $task->owner);?></td>
           <td><?php echo $task->begin?></td>

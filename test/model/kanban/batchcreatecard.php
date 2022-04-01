@@ -18,8 +18,8 @@ $endDitto   = array('1' => 'off', '2' => 'off', '3' => 'off', '4' => 'off');
 
 $kanban = new kanbanTest();
 
-r($kanban->batchCreateCardTest(array('name' => $no_name)))      && p('kanban,column,lane,type,cards') && e('1,1,1,common,,803,802,801,1,2,');                      // 批量创建卡片 其中一个没有名称
+r($kanban->batchCreateCardTest(array('name' => $no_name)))      && p('kanban,column,lane,type,cards') && e('1,1,1,common,,1003,1002,1001,1,2,801,');                      // 批量创建卡片 其中一个没有名称
 r($kanban->batchCreateCardTest(array('estimate' => $estimate))) && p()                                && e('预计不能为负数!');                                     // 批量创建卡片 预计为负数
 r($kanban->batchCreateCardTest(array(), true))                  && p()                                && e('"截止日期"不能小于"预计开始"!');                       // 批量创建看板 截止日期小于开始日期
-r($kanban->batchCreateCardTest())                               && p('kanban,column,lane,type,cards') && e('1,1,1,common,,810,809,808,807,804,803,802,801,1,2,');  // 批量创建看板
+r($kanban->batchCreateCardTest())                               && p('kanban,column,lane,type,cards') && e('1,1,1,common,,1010,1009,1008,1007,1004,1003,1002,1001,1,2,801,');  // 批量创建看板
 system("./ztest init");

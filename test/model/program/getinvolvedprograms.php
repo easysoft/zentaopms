@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
-include dirname(dirname(dirname(__FILE__))) . '/class/program.class.php';
+su('admin');
 
 /**
 
@@ -14,9 +14,12 @@ pid=1
 
 */
 
-$listOfId = new Program('admin');
+global $tester;
+$tester->loadModel('program');
+$adminPrograms = $tester->program->getInvolvedPrograms('admin');
+$test2Programs = $tester->program->getInvolvedPrograms('test2');
 
-$t_sulist = array('admin', 'test2');
-
-r($listOfId->getInvolvedPrograms($t_sulist[0])) && p('1') && e('1'); // 查看用户admin可以看到的项目和执行id列表
-r($listOfId->getInvolvedPrograms($t_sulist[1])) && p('1') && e('1'); // 查看用户test2可以看到的项目和执行id列表
+r(count($adminPrograms)) && p()     && e('2');  // 获取admin参与的项目集数量
+r(count($test2Programs)) && p()     && e('1');  // 获取test2参与的项目集数量
+r($adminPrograms)        && p('10') && e('10'); // 获取admin参与的项目集ID
+r($test2Programs)        && p('1')  && e('1');  // 获取test2参与的项目集ID

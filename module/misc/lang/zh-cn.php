@@ -97,6 +97,7 @@ $lang->misc->feature->themeDesc      = "<p>禅道15系列上线了全新的“�
 $lang->misc->feature->visionsDesc    = "<p>从16.5开始增加了界面概念，用户可以在<span style='color:#0c60e1'>[研发综合界面]</span>中处理研发事务、在<span style='color:#0c60e1'>[迅捷界面]</span>处理日常办公事务。</p><p>在头像右侧即可查看当前所处界面，点击当前界面名称可查看和切换其他的界面。</p>";
 $lang->misc->feature->visionsImage   = 'theme/default/images/main/visions.png';
 
+$lang->misc->releaseDate['16.5']        = '2022-03-24';
 $lang->misc->releaseDate['16.5.beta1']  = '2022-03-16';
 $lang->misc->releaseDate['16.4']        = '2022-02-15';
 $lang->misc->releaseDate['16.3']        = '2022-01-26';
@@ -172,6 +173,7 @@ $lang->misc->releaseDate['7.2.stable']  = '2015-05-22';
 $lang->misc->releaseDate['7.1.stable']  = '2015-03-07';
 $lang->misc->releaseDate['6.3.stable']  = '2014-11-07';
 
+$lang->misc->feature->all['16.5'][]       = array('title' => '修复Bug。', 'desc' => '');
 $lang->misc->feature->all['16.5.beta1'][] = array('title' => '将禅道收费版和开源版集成到一个包中，优化升级步骤。', 'desc' => '');
 $lang->misc->feature->all['16.4'][]       = array('title' => '实现JIRA导入功能，完善插件扩展机制。', 'desc' => '');
 $lang->misc->feature->all['16.3'][]       = array('title' => '看板增加关联计划/发布/版本/迭代功能，细节体验优化。', 'desc' => '');

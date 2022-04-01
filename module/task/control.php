@@ -44,7 +44,7 @@ class task extends control
         $extra = str_replace(array(',', ' '), array('&', ''), $extra);
         parse_str($extra, $output);
 
-        $executions  = $this->execution->getPairs();
+        $executions  = $this->execution->getPairs(0, 'all', !common::checkNotCN() ? 'noclosed' : '');
         $executionID = $this->execution->saveState($executionID, $executions);
         $this->execution->setMenu($executionID);
 
@@ -442,10 +442,11 @@ class task extends control
      *
      * @param  int    $taskID
      * @param  bool   $comment
+     * @param  string $kanbanGroup
      * @access public
      * @return void
      */
-    public function edit($taskID, $comment = false)
+    public function edit($taskID, $comment = false, $kanbanGroup = '')
     {
         $this->commonAction($taskID);
 
@@ -494,7 +495,7 @@ class task extends control
             if(isonlybody())
             {
                 $execution = $this->execution->getByID($task->execution);
-                if($execution->type == 'kanban' and $this->app->tab == 'execution')
+                if($execution->type == 'kanban' and $this->app->tab == 'execution' and $kanbanGroup == 'default')
                 {
                     $kanbanData = $this->loadModel('kanban')->getRDKanban($task->execution, $this->session->execLaneType ? $this->session->execLaneType : 'all');
                     $kanbanData = json_encode($kanbanData);
@@ -562,7 +563,7 @@ class task extends control
         if($this->post->names)
         {
             $allChanges = $this->task->batchUpdate();
-            if(dao::isError()) return print(js::error(dao::getError()));
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             if(!empty($allChanges))
             {
@@ -681,10 +682,12 @@ class task extends control
      * Update assign of task
      *
      * @param  int    $requestID
+     * @param  int    $taskID
+     * @param  string $kanbanGroup
      * @access public
      * @return void
      */
-    public function assignTo($executionID, $taskID)
+    public function assignTo($executionID, $taskID, $kanbanGroup = '')
     {
         $this->commonAction($taskID);
 
@@ -709,7 +712,7 @@ class task extends control
             {
                 $task      = $this->task->getById($taskID);
                 $execution = $this->execution->getByID($task->execution);
-                if($execution->type == 'kanban' and $this->app->tab == 'execution')
+                if($execution->type == 'kanban' and $this->app->tab == 'execution' and $kanbanGroup == 'default')
                 {
                     $kanbanData = $this->loadModel('kanban')->getRDKanban($task->execution, $this->session->execLaneType ? $this->session->execLaneType : 'all');
                     $kanbanData = json_encode($kanbanData);
@@ -829,6 +832,9 @@ class task extends control
             return print(js::error($this->lang->notFound) . js::locate($this->createLink('execution', 'all')));
         }
 
+        $execution = $this->execution->getById($task->execution);
+        if(!isonlybody() and $execution->type == 'kanban') return $this->locate($this->createLink('execution', 'kanban', "executionID=$execution->id"));
+
         $this->session->project = $task->project;
 
         if($task->fromBug != 0)
@@ -856,7 +862,6 @@ class task extends control
         if($task->assignedTo == $this->app->user->account) $this->loadModel('action')->read('task', $taskID);
 
         /* Set menu. */
-        $execution = $this->execution->getById($task->execution);
         if($this->app->tab == 'execution') $this->execution->setMenu($execution->id);
 
         $this->executeHooks($taskID);

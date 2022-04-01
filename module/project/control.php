@@ -53,7 +53,8 @@ class project extends control
                 unset($fields[$key]);
             }
 
-            $projects = $this->project->getInfoList($status, $orderBy);
+            $involved = $this->cookie->involved ? $this->cookie->involved : 0;
+            $projects = $this->project->getInfoList($status, $orderBy, '', $involved);
             $users    = $this->loadModel('user')->getPairs('noletter');
 
             $this->loadModel('product');
@@ -228,7 +229,7 @@ class project extends control
      * @access public
      * @return void
      */
-    public function index($projectID = 0, $browseType = 'all')
+    public function index($projectID = 0, $browseType = 'all', $recTotal = 0, $recPerPage = 15, $pageID = 1)
     {
         $projectID = $this->project->saveState($projectID, $this->project->getPairsByProgram());
 
@@ -245,7 +246,11 @@ class project extends control
 
         if($project->model == 'kanban' and $this->config->vision != 'lite')
         {
-            $kanbanList = $this->loadModel('execution')->getList($projectID, 'all', $browseType);
+            /* Load pager and get kanban list. */
+            $this->app->loadClass('pager', $static = true);
+            $pager = new pager($recTotal, $recPerPage, $pageID);
+
+            $kanbanList = $this->loadModel('execution')->getList($projectID, 'all', $browseType, 0, 0, 0, $pager);
 
             $executionActions = array();
             foreach($kanbanList as $kanbanID => $kanban)
@@ -262,6 +267,7 @@ class project extends control
             $this->view->memberGroup      = $this->execution->getMembersByIdList(array_keys($kanbanList));
             $this->view->usersAvatar      = $this->loadModel('user')->getAvatarPairs('all');
             $this->view->executionActions = $executionActions;
+            $this->view->pager            = $pager;
         }
 
         $this->view->title       = $this->lang->project->common . $this->lang->colon . $this->lang->project->index;
@@ -293,7 +299,7 @@ class project extends control
 
         $projectType = $this->cookie->projectType ? $this->cookie->projectType : 'bylist';
 
-        /* Load pager and get tasks. */
+        /* Load pager. */
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 

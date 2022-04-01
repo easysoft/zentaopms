@@ -1354,7 +1354,7 @@ class block extends control
         $this->app->loadClass('pager', $static = true);
         $pager = pager::init(0, $count, 1);
         $this->app->loadLang('execution');
-        $this->view->executionStats = $this->loadModel('project')->getStats($this->session->project, $type, 0, 0, 30, 'id_desc', $pager);
+        $this->view->executionStats = !defined('TUTORIAL') ? $this->loadModel('project')->getStats($this->session->project, $type, 0, 0, 30, 'id_desc', $pager) : array($this->loadModel('tutorial')->getExecution());
     }
 
     /**
@@ -1739,7 +1739,7 @@ class block extends control
                 ->orderBy($orderBy)
                 ->beginIF($limitCount)->limit($limitCount)->fi()
                 ->fetchAll();
-            
+
             if($objectType == 'todo')
             {
                 $this->app->loadClass('date');
@@ -1822,7 +1822,7 @@ class block extends control
         /* load pager. */
         $this->app->loadClass('pager', $static = true);
         $pager = new pager(0, 3, 1);
-        $this->view->projects = $this->loadModel('project')->getInfoList('all', 'id_desc', $pager);
+        $this->view->projects = $this->loadModel('project')->getInfoList('all', 'id_desc', $pager, 1);
     }
 
     /**

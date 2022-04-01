@@ -246,17 +246,22 @@ class executionModel extends model
             $executionID = (int)$this->cookie->lastExecution;
             $executionID = in_array($executionID, array_keys($executions)) ? $executionID : key($executions);
         }
-        if($executionID == 0 and $this->session->execution == '') $executionID = key($executions);
+
+        if($executionID == 0 and $this->session->execution) $executionID = $this->session->execution;
+        if($executionID == 0) $executionID = key($executions);
+
         $this->session->set('execution', (int)$executionID, $this->app->tab);
 
         if(!isset($executions[$executionID]))
         {
             $this->session->set('execution', key($executions), $this->app->tab);
 
-            $execution = $this->dao->select('*')->from(TABLE_EXECUTION)->where('id')->eq($executionID)->andWhere('type')->in('sprint,stage,kanban')->fetch();
-            if(empty($execution)) return js::error($this->lang->notFound);
-
-            if($executionID && strpos(",{$this->app->user->view->sprints},", ",{$executionID},") === false) $this->accessDenied();
+            if($executionID)
+            {
+                $execution = $this->dao->select('*')->from(TABLE_EXECUTION)->where('id')->eq($executionID)->andWhere('type')->in('sprint,stage,kanban')->fetch();
+                if(empty($execution)) return js::error($this->lang->notFound);
+                if(strpos(",{$this->app->user->view->sprints},", ",{$executionID},") === false) $this->accessDenied();
+            }
         }
 
         $this->setProjectSession($this->session->execution);
@@ -304,14 +309,6 @@ class executionModel extends model
             $project = $this->loadModel('project')->getByID($_POST['project']);
             $type    = 'sprint';
             if($project) $type = zget($this->config->execution->modelList, $project->model, 'sprint');
-
-            /* If the execution model is a stage, determine whether the product is linked. */
-            $products = array_filter($this->post->products);
-            if(empty($products))
-            {
-                dao::$errors['message'][] = $this->lang->execution->noLinkProduct;
-                return false;
-            }
 
             $this->config->execution->create->requiredFields .= ',project';
         }
@@ -468,13 +465,7 @@ class executionModel extends model
             dao::$errors['days'] = sprintf($this->lang->project->workdaysExceed, $workdays);
             return false;
         }
-        $products = array_filter($this->post->products);
-        $noLinkTip = $oldExecution->type != 'kanban' ? $this->lang->execution->noLinkProduct : $this->lang->execution->kanbanNoLinkProduct;
-        if(empty($products))
-        {
-            dao::$errors['message'][] = $noLinkTip;
-            return false;
-        }
+
         /* Get the data from the post. */
         $execution = fixer::input('post')
             ->setDefault('lastEditedBy', $this->app->user->account)
@@ -526,9 +517,9 @@ class executionModel extends model
             ->where('id')->eq($executionID)
             ->limit(1)
             ->exec();
-        
+
         if(dao::isError()) return false;
-        
+
         /* Get team and language item. */
         $this->loadModel('user');
         $team    = $this->user->getTeamMemberPairs($executionID, 'execution');
@@ -695,12 +686,12 @@ class executionModel extends model
             $projectID    = isset($execution->project) ? $execution->project : $oldExecution->project;
             $project      = $this->project->getByID($projectID);
 
-            if($execution->begin < $project->begin)
+            if($project  and $execution->begin < $project->begin)
             {
                 dao::$errors['begin'] = sprintf($this->lang->execution->errorLetterProject, $project->begin);
                 return false;
             }
-            if($execution->end > $project->end)
+            if($project and $execution->end > $project->end)
             {
                 dao::$errors['end'] = sprintf($this->lang->execution->errorGreaterProject, $project->end);
                 return false;
@@ -976,6 +967,7 @@ class executionModel extends model
                 ->andWhere('t2.type')->eq('stage')
                 ->andWhere('t2.grade')->eq(1)
                 ->andWhere('t2.deleted')->eq(0)
+                ->andWhere('t2.parent')->eq($oldExecution->parent)
                 ->fetch('total');
 
             if($type == 'create') $percentTotal = $percent + $oldPercentTotal;
@@ -1147,10 +1139,11 @@ class executionModel extends model
      * @param  int    $limit
      * @param  int    $productID
      * @param  int    $branch
+     * @param  object $pager
      * @access public
      * @return array
      */
-    public function getList($projectID = 0, $type = 'all', $status = 'all', $limit = 0, $productID = 0, $branch = 0)
+    public function getList($projectID = 0, $type = 'all', $status = 'all', $limit = 0, $productID = 0, $branch = 0, $pager = null)
     {
         if($status == 'involved') return $this->getInvolvedExecutionList($projectID, $status, $limit, $productID, $branch);
 
@@ -1168,6 +1161,7 @@ class executionModel extends model
                 ->beginIF($status != 'all' and $status != 'undone')->andWhere('status')->in($status)->fi()
                 ->beginIF(!$this->app->user->admin)->andWhere('t2.id')->in($this->app->user->view->sprints)->fi()
                 ->orderBy('order_desc')
+                ->page($pager)
                 ->beginIF($limit)->limit($limit)->fi()
                 ->fetchAll('id');
         }
@@ -1175,6 +1169,7 @@ class executionModel extends model
         {
             return $this->dao->select('*, IF(INSTR(" done,closed", status) < 2, 0, 1) AS isDone')->from(TABLE_EXECUTION)
                 ->where('deleted')->eq(0)
+                ->andWhere('vision')->eq($this->config->vision)
                 ->beginIF($type == 'all')->andWhere('type')->in('sprint,stage,kanban')->fi()
                 ->beginIF($type != 'all')->andWhere('type')->eq($type)->fi()
                 ->beginIF($projectID)->andWhere('project')->eq($projectID)->fi()
@@ -1182,6 +1177,7 @@ class executionModel extends model
                 ->beginIF($status != 'all' and $status != 'undone')->andWhere('status')->in($status)->fi()
                 ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->sprints)->fi()
                 ->orderBy('order_desc')
+                ->page($pager)
                 ->beginIF($limit)->limit($limit)->fi()
                 ->fetchAll('id');
         }
@@ -1839,7 +1835,7 @@ class executionModel extends model
             foreach($plans as $plan) $planPairs += $plan;
         }
         $this->config->product->search['params']['plan']['values']   = $planPairs;
-        $this->config->product->search['params']['module']['values'] = $modules;
+        $this->config->product->search['params']['module']['values'] = array('' => '') + $modules;
         if($productType == 'normal')
         {
             unset($this->config->product->search['fields']['branch']);

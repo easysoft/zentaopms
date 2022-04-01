@@ -540,27 +540,6 @@ class programplanModel extends model
                     ->where('id')->eq($stageID)
                     ->exec();
 
-                /* Add PM to stage teams and project teams. */
-                if(!empty($data->PM))
-                {
-                    $team = $this->user->getTeamMemberPairs($stageID, 'execution');
-                    if(isset($team[$data->PM])) continue;
-
-                    $roles  = $this->user->getUserRoles($data->PM);
-                    $member = new stdclass();
-                    $member->root    = $stageID;
-                    $member->account = $data->PM;
-                    $member->role    = zget($roles, $data->PM, '');
-                    $member->join    = $now;
-                    $member->type    = 'execution';
-                    $member->days    = $data->days;
-                    $member->hours   = $this->config->execution->defaultWorkhours;
-                    $this->dao->insert(TABLE_TEAM)->data($member)->exec();
-                    $this->execution->addProjectMembers($data->project, array($data->PM => $member));
-                }
-
-                if($data->acl != 'open') $this->user->updateUserView($stageID, 'sprint');
-
                 /* Record version change information. */
                 if($planChanged)
                 {
@@ -615,9 +594,10 @@ class programplanModel extends model
                     $teamMembers = array();
                     $members     = array($account, $data->PM);
                     $roles       = $this->user->getUserRoles(array_values($members));
+                    $team        = $this->user->getTeamMemberPairs($stageID, 'execution');
                     foreach($members as $account)
                     {
-                        if(empty($account)) continue;
+                        if(empty($account) or isset($team[$account]) or isset($teamMembers[$account])) continue;
 
                         $member = new stdclass();
                         $member->root    = $stageID;

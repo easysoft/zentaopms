@@ -178,10 +178,11 @@ class tutorialModel extends model
     /**
      * Get project stats for tutorial
      *
+     * @param  string $browseType
      * @access public
      * @return array
      */
-    public function getProjectStats()
+    public function getProjectStats($browseType = '')
     {
         $project   = $this->getProject();
         $emptyHour = array('totalEstimate' => 0, 'totalConsumed' => 0, 'totalLeft' => 0, 'progress' => 0);
@@ -190,6 +191,8 @@ class tutorialModel extends model
         $project->leftTasks   = '—';
         $project->teamMembers = array_keys($this->getTeamMembers());
         $project->teamCount   = count($project->teamMembers);
+
+        if($browseType and $browseType != 'all') $project->name .= '-' . $browseType; // Fix bug #21096
 
         $projectStat[$project->id] = $project;
         return $projectStat;
@@ -268,6 +271,14 @@ class tutorialModel extends model
      */
     public function getExecution()
     {
+        /* Fix bug #21097. */
+        $hours = new stdclass();
+        $hours->totalEstimate = 52;
+        $hours->totalConsumed = 43;
+        $hours->totalLeft     = 7;
+        $hours->progress      = 86;
+        $hours->totalReal     = 50;
+
         $execution = new stdclass();
         $execution->id            = 3;
         $execution->project       = 2;
@@ -300,6 +311,8 @@ class tutorialModel extends model
         $execution->totalEstimate = 0;
         $execution->displayCards  = 0;
         $execution->fluidBoard    = 0;
+        $execution->hours         = $hours;
+        $execution->burns         = array(35, 35);
         return $execution;
     }
 

@@ -4,6 +4,14 @@ $(function()
     {
         $('#reviewer').attr('disabled', $(this).is(':checked') ? 'disabled' : null).trigger('chosen:updated');
         getStatus('change', "storyID=" + storyID + ",changed=" + changed + ",needNotReview=" + ($(this).prop('checked') ? 1 : 0));
+        if($(this).is(':checked'))
+        {
+            $('.input-group-addon').removeClass('required');
+        }
+        else
+        {
+            $('.input-group-addon').addClass('required');
+        }
     });
     $('#needNotReview').change();
 

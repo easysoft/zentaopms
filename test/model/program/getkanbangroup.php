@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
-include dirname(dirname(dirname(__FILE__))) . '/class/program.class.php';
+su('admin');
 
 /**
 
@@ -13,9 +13,11 @@ pid=1
 
 */
 
-$t_getKanban = array('admin', 'my', 'others');
+global $tester;
+$tester->loadModel('program');
 
-$program = new Program($t_getKanban[0]);
+$kanbanGroup = $tester->program->getKanbanGroup();
 
-r($program->getKanbanGroup()[$t_getKanban[1]]) && p('0:name') && e(''); //查看当前用户看板的所属项目
-r($program->getKanbanGroup()[$t_getKanban[2]]) && p('0:name') && e('项目集1'); //查看当前用户看板的其它项目
+r(count($kanbanGroup['my']))     && p('')       && e('2');       //查看当前用户负责的项目集看板数量
+r(count($kanbanGroup['others'])) && p('')       && e('8');       //查看当前用户其他的项目集看板数量
+r($kanbanGroup['others'])        && p('0:name') && e('项目集2'); //查看当前用户其他的项目集看板详情

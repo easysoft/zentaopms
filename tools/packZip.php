@@ -51,9 +51,11 @@ foreach(array('zh-cn', 'en') as $langType)
         /* The commands of the shell. */
         $command  = "cd $workDir\n";
         $command .= "if [ ! -d ../$dirName ]; then unzip ../../$packPrefix.{$version}.zip -d ../ ; fi\n";
-        $command .= "cp -rf ../$dirName .\n";
-        $command .= "unzip ../../zentaobiz.php{$phpVersion}.zip -d $dirName/extension/\n";
-        $command .= "unzip ../../zentaomax.php{$phpVersion}.zip -d $dirName/extension/\n";
+        $command .= "cp -raf ../$dirName .\n";
+        $command .= "unzip ../../zentaobiz.php{$phpVersion}.zip\n";
+        $command .= "unzip ../../zentaomax.php{$phpVersion}.zip\n";
+        $command .= "cp -rf biz/* $dirName/\n";
+        $command .= "cp -rf max/* $dirName/\n";
         $command .= "zip -r ../../$packPrefix.{$version}.php{$phpVersion}.zip $dirName\n";
 
         if(!empty($liteVersion))
@@ -63,7 +65,7 @@ foreach(array('zh-cn', 'en') as $langType)
             $command .= "zip -r ../../$packPrefix.{$liteVersionAB}.php{$phpVersion}.zip $dirName\n";
         }
 
-        $command .= "rm -rf $dirName/\n";
+        $command .= "rm -rf $dirName/ biz/ max/\n";
 
         file_put_contents($shellName, $command);
 

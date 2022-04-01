@@ -970,7 +970,7 @@ class productModel extends model
             else
             {
                 $moduleList  = array();
-                $modules     = array('' => '/');
+                $modules     = array('/');
                 $branchGroup = $this->loadModel('execution')->getBranchByProduct(array_keys($products), $this->session->project, '');
                 foreach($products as $productID => $productName)
                 {
@@ -996,7 +996,7 @@ class productModel extends model
         {
             $modules = $this->tree->getOptionMenu($productID, 'story', 0, $branch);
         }
-        $this->config->product->search['params']['module']['values'] = $modules;
+        $this->config->product->search['params']['module']['values'] = array('' => '') + $modules;
 
         $productInfo = $this->getById($productID);
         if(!$productID or $productInfo->type == 'normal' or $this->app->tab == 'assetlib')
@@ -1786,7 +1786,7 @@ class productModel extends model
      *
      * @param  int    $programID
      * @access public
-     * @return void
+     * @return array
      */
     public function getLinePairs($programID = 0)
     {
@@ -1795,6 +1795,16 @@ class productModel extends model
             ->beginIF($programID)->andWhere('root')->eq($programID)->fi()
             ->andWhere('deleted')->eq(0)
             ->fetchPairs();
+    }
+
+    /*
+     * Get all lines.
+     * @access public
+     * @return array
+     */
+    public function getLines()
+    {
+        return $this->dao->select('*')->from(TABLE_MODULE)->where('type')->eq('line')->andWhere('deleted')->eq(0)->orderBy('`order`')->fetchAll();
     }
 
     /**

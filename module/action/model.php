@@ -917,6 +917,8 @@ class actionModel extends model
             ->beginIF($docs and !$this->app->user->admin)->andWhere("IF(objectType != 'doc' || (objectType = 'doc' && (action = 'approved' || action = 'removed')), '1=1', objectID " . helper::dbIN($docs) . ")")->fi()
             ->beginIF($libs and !$this->app->user->admin)->andWhere("IF(objectType != 'doclib', '1=1', objectID " . helper::dbIN(array_keys($libs)) . ') ')->fi()
             ->beginIF($actionCondition)->andWhere("($actionCondition)")->fi()
+            /* Filter out client login/logout actions. */
+            ->andWhere('action')->notin('disconnectxuanxuan,loginxuanxuan')
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll();
@@ -1008,13 +1010,13 @@ class actionModel extends model
         $actionQuery = str_replace("`product` = '$productID'", "`product` LIKE '%,$productID,%'", $actionQuery);
 
         if($date) $actionQuery = "($actionQuery) AND " . ('date' . ($direction == 'next' ? '<' : '>') . "'{$date}'");
-        
+
         /* If this vision is lite, delete product actions. */
         if($this->config->vision == 'lite') $actionQuery .= " AND objectType != 'product'";
-        
+
         $actionQuery .= " AND vision = '" . $this->config->vision . "'";
         $actions      = $this->getBySQL($actionQuery, $orderBy, $pager);
-        
+
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'action');
         if(!$actions) return array();
         return $this->transformActions($actions);

@@ -917,6 +917,8 @@ class upgradeModel extends model
                 }
 
                 $confirmContent .= file_get_contents($this->getUpgradeFile('16.4'));
+
+            case '16_5_beta1': $confirmContent .= file_get_contents($this->getUpgradeFile('16.5.beta1'));
         }
 
         return $confirmContent;
@@ -4535,6 +4537,7 @@ class upgradeModel extends model
             $program->acl           = isset($data->programAcl) ? $data->programAcl : 'open';
             $program->days          = $this->computeDaysDelta($program->begin, $program->end);
             $program->PM            = $data->projectType == 'project' ? $data->PM : '';
+            $program->vision        = 'rnd';
 
             $this->app->loadLang('program');
             $this->app->loadLang('project');
@@ -4582,6 +4585,7 @@ class upgradeModel extends model
                 $line->order  = $maxOrder;
                 $this->dao->insert(TABLE_MODULE)->data($line)->exec();
                 $lineID = $this->dao->lastInsertID();
+
                 $path   = ",$lineID,";
                 $this->dao->update(TABLE_MODULE)->set('path')->eq($path)->where('id')->eq($lineID)->exec();
 
@@ -5226,8 +5230,9 @@ class upgradeModel extends model
         $projects = $this->dao->select('*')->from(TABLE_PROJECT)->where('acl')->eq('custom')->andWhere('type')->eq('sprint')->fetchAll();
         foreach($projects as $project)
         {
-            $groups   = explode(',', $project->whitelist);
-            $accounts = $this->dao->select('account')->from(TABLE_USERGROUP)->where('`group`')->in($groups)->fetchPairs('account');
+            $groups    = explode(',', $project->whitelist);
+            $accounts  = $this->dao->select('account')->from(TABLE_USERGROUP)->where('`group`')->in($groups)->fetchPairs('account');
+            $whitelist = '';
             foreach($accounts as $account)
             {
                 $acl = new stdclass();
@@ -5238,9 +5243,11 @@ class upgradeModel extends model
                 $acl->source     = 'upgrade';
 
                 $this->dao->insert(TABLE_ACL)->data($acl)->exec();
+
+                $whitelist .= ',' . $account;
             }
 
-            $this->dao->update(TABLE_PROJECT)->set('acl')->eq('private')->where('id')->eq($project->id)->exec();
+            $this->dao->update(TABLE_PROJECT)->set('acl')->eq('private')->set('whitelist')->eq($whitelist)->where('id')->eq($project->id)->exec();
         }
 
         return true;
@@ -5257,8 +5264,9 @@ class upgradeModel extends model
         $products = $this->dao->select('*')->from(TABLE_PRODUCT)->where('acl')->eq('custom')->fetchAll();
         foreach($products as $product)
         {
-            $groups   = explode(',', $product->whitelist);
-            $accounts = $this->dao->select('account')->from(TABLE_USERGROUP)->where('`group`')->in($groups)->fetchPairs('account');
+            $groups    = explode(',', $product->whitelist);
+            $accounts  = $this->dao->select('account')->from(TABLE_USERGROUP)->where('`group`')->in($groups)->fetchPairs('account');
+            $whitelist = '';
             foreach($accounts as $account)
             {
                 $acl = new stdclass();
@@ -5269,9 +5277,11 @@ class upgradeModel extends model
                 $acl->source     = 'upgrade';
 
                 $this->dao->insert(TABLE_ACL)->data($acl)->exec();
+
+                $whitelist .= ',' . $account;
             }
 
-            $this->dao->update(TABLE_PRODUCT)->set('acl')->eq('private')->where('id')->eq($product->id)->exec();
+            $this->dao->update(TABLE_PRODUCT)->set('acl')->eq('private')->set('whitelist')->eq($whitelist)->where('id')->eq($product->id)->exec();
         }
 
         return true;

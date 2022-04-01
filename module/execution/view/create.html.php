@@ -11,7 +11,7 @@
  */
 ?>
 <?php if(isset($tips)):?>
-<?php $defaultURL = $this->createLink('execution', 'all');?>
+<?php $defaultURL = $this->createLink('execution', 'task', "execution=$executionID");?>
 <?php include '../../common/view/header.html.php';?>
 <body>
   <div class='modal-dialog mw-500px' id='tipsModal'>
@@ -144,8 +144,8 @@
               <?php endforeach;?>
               <?php endforeach;?>
               <div class='col-sm-4'>
-                <div class="input-group <?php if(in_array($project->model, array('kanban', 'waterfall'))) echo 'required';?>">
-                  <?php echo html::select("products[$i]", $allProducts, '', "class='form-control chosen'  required  onchange='loadBranches(this)'");?>
+                <div class="input-group">
+                  <?php echo html::select("products[$i]", $allProducts, '', "class='form-control chosen' onchange='loadBranches(this)'");?>
                   <span class='input-group-addon fix-border'></span>
                 </div>
               </div>

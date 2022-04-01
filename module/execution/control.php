@@ -2561,13 +2561,6 @@ class execution extends control
 
         if(!empty($_POST))
         {
-            /* Get executionType and determine whether a product is linked with the stage. */
-            $executionType = $this->dao->findById($executionID)->from(TABLE_EXECUTION)->fetch('type');
-            if($executionType == 'stage')
-            {
-                if(!isset($_POST['products'])) return print(js::alert($this->lang->execution->noLinkProduct) . js::locate($this->createLink('execution', 'manageProducts', "executionID=$executionID&from=$from")));
-            }
-
             $oldProducts = $this->product->getProducts($executionID);
 
             if($from == 'buildCreate' && $this->session->buildCreate) $browseExecutionLink = $this->session->buildCreate;
@@ -2847,7 +2840,7 @@ class execution extends control
 
         /* Build the search form. */
         $actionURL    = $this->createLink($this->app->rawModule, 'linkStory', "objectID=$objectID&browseType=bySearch&queryID=myQueryID");
-        $branchGroups = $this->loadModel('branch')->getByProducts(array_keys($products), 'noclosed');
+        $branchGroups = $this->loadModel('branch')->getByProducts(array_keys($products));
         $this->execution->buildStorySearchForm($products, $branchGroups, $modules, $queryID, $actionURL, 'linkStory', $objectID);
 
         if($browseType == 'bySearch')
