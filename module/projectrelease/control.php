@@ -125,6 +125,7 @@ class projectrelease extends control
         unset($builds['trunk']);
 
         $this->view->title       = $this->view->project->name . $this->lang->colon . $this->lang->release->create;
+        $this->view->projectID   = $projectID;
         $this->view->builds      = $builds;
         $this->view->lastRelease = $this->projectrelease->getLast($projectID);
         $this->view->users       = $this->loadModel('user')->getPairs('noletter|noclosed');
