@@ -81,6 +81,7 @@ $builder->doccontent = array('rows' => 900, 'extends' => array('doccontent'));
 
 $builder->build   = array('rows' => 20, 'extends' => array('build'));
 $builder->release = array('rows' => 10, 'extends' => array('release'));
+$builder->design  = array('rows' => 120, 'extends' => array('design'));
 
 $builder->webhook = array('rows' => 7, 'extends' => array('webhook'));
 $builder->entry   = array('rows' => 1, 'extends' => array('entry'));
