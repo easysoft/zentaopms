@@ -25,7 +25,7 @@
       <table class='table table-form'>
         <tr>
           <th class='thWidth'><?php echo $lang->story->reviewedDate;?></th>
-          <td class='w-p25-f'><?php echo html::input('reviewedDate', helper::today(), "class='form-control form-date'");?></td><td></td>
+          <td class='w-p25-f'><div class='datepicker-wrapper datepicker-date'><?php echo html::input('reviewedDate', helper::now(), "class='form-control form-datetime' data-picker-position='bottom-right'");?></div></td>
         </tr>
         <tr>
           <th><?php echo $lang->story->reviewResult;?></th>
