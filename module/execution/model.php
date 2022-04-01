@@ -246,7 +246,10 @@ class executionModel extends model
             $executionID = (int)$this->cookie->lastExecution;
             $executionID = in_array($executionID, array_keys($executions)) ? $executionID : key($executions);
         }
-        if($executionID == 0 and $this->session->execution == '') $executionID = key($executions);
+
+        if($executionID == 0 and $this->session->execution) $executionID = $this->session->execution;
+        if($executionID == 0) $executionID = key($executions);
+
         $this->session->set('execution', (int)$executionID, $this->app->tab);
 
         if(!isset($executions[$executionID]))
@@ -683,12 +686,12 @@ class executionModel extends model
             $projectID    = isset($execution->project) ? $execution->project : $oldExecution->project;
             $project      = $this->project->getByID($projectID);
 
-            if($execution->begin < $project->begin)
+            if($project  and $execution->begin < $project->begin)
             {
                 dao::$errors['begin'] = sprintf($this->lang->execution->errorLetterProject, $project->begin);
                 return false;
             }
-            if($execution->end > $project->end)
+            if($project and $execution->end > $project->end)
             {
                 dao::$errors['end'] = sprintf($this->lang->execution->errorGreaterProject, $project->end);
                 return false;

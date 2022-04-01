@@ -30,6 +30,7 @@
           <td><?php echo html::input('realBegan', helper::today(), "class='form-control form-date'");?></td>
           <td></td>
         </tr>
+        <?php $this->printExtendFields($project, 'table', 'columns=3');?>
         <tr>
           <th class='w-40px'><?php echo $lang->comment;?></th>
           <td colspan='2'><?php echo html::textarea('comment', '', "rows='6' class='form-control kindeditor' hidefocus='true'");?></td>

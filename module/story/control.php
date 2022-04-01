@@ -2502,7 +2502,7 @@ class story extends control
                 $story->reviewedBy = rtrim($story->reviewedBy, ',');
 
                 /* Set child story title. */
-                if($story->parent > 0 && strpos($story->title, htmlentities('>'), ENT_COMPAT | ENT_HTML401, 'UTF-8') !== 0) $story->title = '>' . $story->title;
+                if($story->parent > 0 && strpos($story->title, htmlentities('>', ENT_COMPAT | ENT_HTML401, 'UTF-8')) !== 0) $story->title = '>' . $story->title;
             }
 
             if($executionID)

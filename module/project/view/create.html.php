@@ -92,8 +92,8 @@
           </td>
           <td colspan='2'><?php echo html::radio('delta', $lang->project->endList , '', "onclick='computeEndDate(this.value)'");?></td>
         </tr>
-        <?php $hiddenDays = $model == 'scrum' ? '' : 'hidden';?>
-        <tr id='daysBox' class="<?php echo $hiddenDays;?>">
+        <?php if($model == 'scrum'):?>
+        <tr id='daysBox'>
           <th><?php echo $lang->execution->days;?></th>
           <td>
             <div class='input-group'>
@@ -102,6 +102,7 @@
             </div>
           </td><td></td><td></td>
         </tr>
+        <?php endif;?>
         <tr>
           <th id='productTitle'><?php echo $lang->project->manageProducts;?></th>
           <td class='text-left' id='productsBox' colspan="3">

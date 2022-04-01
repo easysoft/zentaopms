@@ -82,6 +82,11 @@
         </div>
       </div>
       <div class="col-sm-12">
+        <div class='panel'>
+          <?php $this->printExtendFields($project, 'div', "position=left&inForm=0");?>
+        </div>
+      </div>
+      <div class="col-sm-12">
         <?php $blockHistory = true;?>
         <?php $actionFormLink = $this->createLink('action', 'comment', "objectType=project&objectID=$project->id");?>
         <?php include '../../common/view/action.html.php';?>
@@ -235,8 +240,8 @@
               <p><?php echo $aclList[$project->acl];?></p>
             </div>
           </div>
-          <?php $this->printExtendFields($project, 'div', "position=right&inForm=0&inCell=1");?>
         </div>
+        <?php $this->printExtendFields($project, 'div', "position=right&inForm=0&inCell=1");?>
       </div>
     </div>
   </div>

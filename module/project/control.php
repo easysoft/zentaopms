@@ -53,7 +53,8 @@ class project extends control
                 unset($fields[$key]);
             }
 
-            $projects = $this->project->getInfoList($status, $orderBy);
+            $involved = $this->cookie->involved ? $this->cookie->involved : 0;
+            $projects = $this->project->getInfoList($status, $orderBy, '', $involved);
             $users    = $this->loadModel('user')->getPairs('noletter');
 
             $this->loadModel('product');

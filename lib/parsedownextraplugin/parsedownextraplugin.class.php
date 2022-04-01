@@ -1,5 +1,4 @@
 <?php
-
 #
 #
 # Parsedown Extra Plugin

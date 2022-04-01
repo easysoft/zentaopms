@@ -204,7 +204,8 @@ class company extends control
         $pager = new pager($recTotal, $recPerPage = 50, $pageID = 1);
 
         /* Append id for secend sort. */
-        $orderBy = $direction == 'next' ? 'date_desc' : 'date_asc';
+        if($direction == 'next') $orderBy = 'date_desc';
+        if($direction == 'pre')  $orderBy = 'date_asc';
 
         $queryID = ($browseType == 'bysearch') ? (int)$param : 0;
         $date    = empty($date) ? '' : date('Y-m-d', $date);
@@ -288,7 +289,6 @@ class company extends control
         $this->view->pager        = $pager;
         $this->view->userID       = $userID;
         $this->view->param        = $param;
-        $this->view->browseType   = $browseType;
         $this->view->dateGroups   = $this->action->buildDateGroup($actions, $direction, $browseType, $orderBy);
         $this->view->direction    = $direction;
         $this->display();
