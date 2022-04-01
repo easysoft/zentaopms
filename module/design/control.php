@@ -276,6 +276,7 @@ class design extends control
         $this->view->design  = $design;
         $this->view->project = $this->loadModel('project')->getByID($design->project);
         $this->view->stories = $this->loadModel('story')->getProductStoryPairs($design->product);
+        $this->view->users   = $this->loadModel('user')->getPairs('noclosed');
 
         $this->display();
     }
