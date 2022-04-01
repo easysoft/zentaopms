@@ -680,6 +680,7 @@ class testcase extends control
 
         $caseID = (int)$caseID;
         $case   = $this->testcase->getById($caseID, $version);
+        $case   = $this->loadModel('story')->checkNeedConfirm($case);
         if(!$case)
         {
             if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'fail', 'message' => '404 Not found'));
