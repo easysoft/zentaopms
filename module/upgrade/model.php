@@ -5257,8 +5257,9 @@ class upgradeModel extends model
         $products = $this->dao->select('*')->from(TABLE_PRODUCT)->where('acl')->eq('custom')->fetchAll();
         foreach($products as $product)
         {
-            $groups   = explode(',', $product->whitelist);
-            $accounts = $this->dao->select('account')->from(TABLE_USERGROUP)->where('`group`')->in($groups)->fetchPairs('account');
+            $groups    = explode(',', $product->whitelist);
+            $accounts  = $this->dao->select('account')->from(TABLE_USERGROUP)->where('`group`')->in($groups)->fetchPairs('account');
+            $whiteList = '';
             foreach($accounts as $account)
             {
                 $acl = new stdclass();
@@ -5269,9 +5270,11 @@ class upgradeModel extends model
                 $acl->source     = 'upgrade';
 
                 $this->dao->insert(TABLE_ACL)->data($acl)->exec();
+
+                $whiteList .= ',' . $account;
             }
 
-            $this->dao->update(TABLE_PRODUCT)->set('acl')->eq('private')->where('id')->eq($product->id)->exec();
+            $this->dao->update(TABLE_PRODUCT)->set('acl')->eq('private')->set('whitelist')->eq($whiteList)->where('id')->eq($product->id)->exec();
         }
 
         return true;

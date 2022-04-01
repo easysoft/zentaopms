@@ -22,7 +22,7 @@ class storyAssignToEntry extends Entry
     {
         $story = $this->loadModel('story')->getByID($storyID);
 
-        $fields = 'assignedTo';
+        $fields = 'assignedTo,comment';
         $this->batchSetPost($fields);
 
         $control = $this->loadController('story', 'assignTo');

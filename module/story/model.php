@@ -670,7 +670,7 @@ class storyModel extends model
             ->add('lastEditedDate', $now)
             ->setIF($specChanged, 'version', $oldStory->version + 1)
             ->setIF($specChanged and $oldStory->status == 'active' and $this->post->needNotReview == false, 'status',  'changed')
-            ->setIF($specChanged and $oldStory->status == 'draft'  and $this->post->needNotReview, 'status', 'active')
+            ->setIF($oldStory->status == 'draft'  and $this->post->needNotReview, 'status', 'active')
             ->setIF($specChanged, 'reviewedBy',  '')
             ->setIF($specChanged, 'closedBy', '')
             ->setIF($specChanged, 'closedReason', '')
@@ -679,7 +679,7 @@ class storyModel extends model
             ->stripTags($this->config->story->editor->change['id'], $this->config->allowedTags)
             ->remove('files,labels,reviewer,comment,needNotReview,uid')
             ->get();
-        if($specChanged and $story->status == 'active' and $this->checkForceReview()) $story->status = 'changed';
+        if($specChanged and isset($story->status) && $story->status == 'active' and $this->checkForceReview()) $story->status = 'changed';
         $story = $this->loadModel('file')->processImgURL($story, $this->config->story->editor->change['id'], $this->post->uid);
         $this->dao->update(TABLE_STORY)->data($story, 'spec,verify')
             ->autoCheck()
@@ -735,7 +735,7 @@ class storyModel extends model
 
             $this->file->updateObjectID($this->post->uid, $storyID, 'story');
 
-            $oldStory->reviewers = implode(',', array_keys($oldStroyReviewers));
+            $oldStory->reviewers = implode(',', array_keys($oldStoryReviewers));
             $story->reviewers    = implode(',', $_POST['reviewer']);
             return common::createChanges($oldStory, $story);
         }
@@ -1315,11 +1315,11 @@ class storyModel extends model
             ->setDefault('lastEditedBy', $this->app->user->account)
             ->setDefault('lastEditedDate', $now)
             ->setDefault('status', $oldStory->status)
+            ->setDefault('reviewedDate', $date)
             ->setIF($this->post->result == 'revert', 'version', $this->post->preVersion)
             ->removeIF($this->post->result != 'reject', 'closedReason, duplicateStory, childStories')
             ->removeIF($this->post->result == 'reject' and $this->post->closedReason != 'duplicate', 'duplicateStory')
             ->removeIF($this->post->result == 'reject' and $this->post->closedReason != 'subdivided', 'childStories')
-            ->add('reviewedDate', $date)
             ->add('reviewedBy', $oldStory->reviewedBy . ',' . $this->app->user->account)
             ->remove('result,preVersion,comment')
             ->get();
@@ -2663,6 +2663,8 @@ class storyModel extends model
             {
                 $storyQuery .= " AND `status` NOT IN ('draft', 'closed')";
             }
+
+            if($this->app->rawModule == 'build' and $this->app->rawMethod == 'linkstory') $storyQuery .= " AND `parent` != '-1'";
         }
         elseif(strpos($storyQuery, $allBranch) !== false)
         {

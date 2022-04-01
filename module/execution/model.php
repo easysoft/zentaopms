@@ -1829,7 +1829,7 @@ class executionModel extends model
             foreach($plans as $plan) $planPairs += $plan;
         }
         $this->config->product->search['params']['plan']['values']   = $planPairs;
-        $this->config->product->search['params']['module']['values'] = $modules;
+        $this->config->product->search['params']['module']['values'] = array('' => '') + $modules;
         if($productType == 'normal')
         {
             unset($this->config->product->search['fields']['branch']);

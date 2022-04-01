@@ -413,7 +413,7 @@
                 <?php endif;?>
                 <tr>
                   <th><?php echo $lang->story->reviewedDate;?></th>
-                  <td><?php if($story->reviewedBy) echo $story->reviewedDate;?></td>
+                  <td><?php if($story->reviewedBy) echo date('Y-m-d', strtotime($story->reviewedDate))?></td>
                 </tr>
                 <tr>
                   <th><?php echo $lang->story->closedBy;?></th>
