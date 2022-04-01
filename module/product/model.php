@@ -970,7 +970,7 @@ class productModel extends model
             else
             {
                 $moduleList  = array();
-                $modules     = array('' => '/');
+                $modules     = array('/');
                 $branchGroup = $this->loadModel('execution')->getBranchByProduct(array_keys($products), $this->session->project, '');
                 foreach($products as $productID => $productName)
                 {
@@ -996,7 +996,7 @@ class productModel extends model
         {
             $modules = $this->tree->getOptionMenu($productID, 'story', 0, $branch);
         }
-        $this->config->product->search['params']['module']['values'] = $modules;
+        $this->config->product->search['params']['module']['values'] = array('' => '') + $modules;
 
         $productInfo = $this->getById($productID);
         if(!$productID or $productInfo->type == 'normal' or $this->app->tab == 'assetlib')
