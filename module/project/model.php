@@ -2169,6 +2169,14 @@ class projectModel extends model
             ->andWhere('deleted')->eq(0)
             ->fetchGroup('execution', 'id');
 
+        $parentStage = array();
+        foreach($executions as $executionID => $execution)
+        {
+            if($execution->grade != 2) continue;
+            if(!isset($parentStage[$execution->parent])) $parentStage[$execution->parent] = array();
+            $parentStage[$execution->parent][$executionID] = $executionID;
+        }
+
         /* Compute totalEstimate, totalConsumed, totalLeft. */
         foreach($tasks as $executionID => $executionTasks)
         {
@@ -2182,6 +2190,21 @@ class projectModel extends model
             $hours[$executionID] = $hour;
         }
 
+        foreach($parentStage as $executionID => $subExecutionID)
+        {
+            $hours[$executionID] = (object)$emptyHour;
+            foreach($subExecutionID as $subExe)
+            {
+                if(isset($hours[$subExe]))
+                {
+                    $hours[$executionID]->totalEstimate += $hours[$subExe]->totalEstimate;
+                    $hours[$executionID]->totalConsumed += $hours[$subExe]->totalConsumed;
+                    $hours[$executionID]->totalLeft     += $hours[$subExe]->totalLeft;
+                    $hours[$executionID]->progress      += $hours[$subExe]->progress;
+                }
+            }
+        }
+
         /* Compute totalReal and progress. */
         foreach($hours as $hour)
         {
@@ -2191,7 +2214,6 @@ class projectModel extends model
             $hour->totalReal     = $hour->totalConsumed + $hour->totalLeft;
             $hour->progress      = $hour->totalReal ? round($hour->totalConsumed / $hour->totalReal * 100, 2) : 0;
         }
-
         return $hours;
     }
 
