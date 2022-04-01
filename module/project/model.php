@@ -227,27 +227,30 @@ class projectModel extends model
             $project->executions = $this->getStats($projectID, 'undone', 0, 0, 30, $orderBy, $pager);
             $project->teamCount  = isset($teams[$projectID]) ? $teams[$projectID]->count : 0;
             $project->estimate   = isset($estimates[$projectID]) ? round($estimates[$projectID]->estimate, 2) : 0;
-            $project->parentName = $this->getParentName($project->parent);
+            $project->parentName = $this->getParentProgram($project->parent);
         }
         return $projects;
     }
 
     /**
-     * Gets the top-level project name.
+     * Get all parent program of a program.
      *
-     * @param  int       $parentID
-     * @access private
+     * @param  int    $parentID
+     * @access public
      * @return string
      */
-    public function getParentName($parentID = 0)
+    public function getParentProgram($parentID)
     {
         if($parentID == 0) return '';
 
-        static $parent;
-        $parent = $this->dao->select('id,parent,name')->from(TABLE_PROJECT)->where('id')->eq($parentID)->fetch();
-        if($parent->parent) $this->getParentName($parent->parent);
+        $parentPath = $this->dao->select('path')->from(TABLE_PROGRAM)->where('id')->eq($parentID)->fetch('path');
+        $parentName = $this->dao->select('id,name')->from(TABLE_PROGRAM)->where('id')->in(trim($parentPath, ','))->fetchPairs();
 
-        return $parent->name;
+        $parentProgram = '';
+        foreach($parentName as $name) $parentProgram .= $name . '/';
+        $parentProgram = rtrim($parentProgram, '/');
+
+        return $parentProgram;
     }
 
     /**
