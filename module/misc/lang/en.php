@@ -28,27 +28,18 @@ $lang->misc->zentao->icons['service'] = 'heart';
 
 $lang->misc->zentao->about['bizversion']   = 'ZenTao Biz';
 $lang->misc->zentao->about['official']     = "Official Website";
-$lang->misc->zentao->about['changelog']    = "Change Log";
 $lang->misc->zentao->about['license']      = "License";
-
-
 
 $lang->misc->zentao->support['vip']        = "VIP Support";
 $lang->misc->zentao->support['manual']     = "User Manual";
-
-
-
-
 
 $lang->misc->zentao->cowin['reportbug']    = "Report Bug ";
 $lang->misc->zentao->cowin['feedback']     = "Feedback";
 $lang->misc->zentao->cowin['translate']    = "Translate";
 $lang->misc->zentao->cowin['recommend']    = "More";
 
-
 $lang->misc->zentao->service['idc']        = 'ZenTao Cloud';
 $lang->misc->zentao->service['custom']     = 'ZenTao Custom';
-$lang->misc->zentao->service['servicemore']= 'More';
 
 global $config;
 $lang->misc->zentao->others['chanzhi']  = "<img src='{$config->webRoot}theme/default/images/main/chanzhi.ico' /> Zsite";

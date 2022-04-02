@@ -120,7 +120,7 @@ class projectModel extends model
         if(defined('TUTORIAL')) return $projectID;
 
         if($projectID == 0 and $this->cookie->lastProject) $projectID = $this->cookie->lastProject;
-        if($projectID == 0 and $this->session->project == '') $projectID = key($projects);
+        if(($projectID == 0 and $this->session->project == '') or !isset($projects[$projectID])) $projectID = key($projects);
         $this->session->set('project', (int)$projectID, $this->app->tab);
 
         if(!isset($projects[$this->session->project]))
@@ -2187,6 +2187,20 @@ class projectModel extends model
                 if($task->status != 'cancel' and $task->status != 'closed') $hour->totalLeft += $task->left;
             }
             $hours[$executionID] = $hour;
+
+            if($executions[$executionID]->type == 'stage' and $executions[$executionID]->grade == 2)
+            {
+                $stageParent = $executions[$executionID]->parent;
+                if(!isset($hours[$stageParent]))
+                {
+                    $hours[$stageParent] = clone $hour;
+                    continue;
+                }
+
+                $hours[$stageParent]->totalEstimate += $hour->totalEstimate;
+                $hours[$stageParent]->totalConsumed += $hour->totalConsumed;
+                $hours[$stageParent]->totalLeft     += $hour->totalLeft;
+            }
         }
 
         /* Compute totalReal and progress. */

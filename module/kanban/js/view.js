@@ -1592,7 +1592,7 @@ function resetRegionHeight(fold)
     }
 }
 
-$('.dropdown-menu').click(function()
+$(document).on('click', '.dropdown-menu', function()
 {
     $.zui.ContextMenu.hide();
-})
+});

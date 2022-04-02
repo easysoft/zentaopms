@@ -146,7 +146,7 @@ $config->file->allowed     = 'txt,doc,docx,dot,wps,wri,pdf,ppt,pptx,xls,xlsx,ett
 $config->file->storageType = 'fs';         // fs or s3
 
 /* Upload settings. */
-$config->allowedTags = '<p><span><h1><h2><h3><h4><h5><em><u><strong><br><ol><ul><li><img><a><b><font><hr><pre><div><table><td><th><tr><tbody><embed><style>';
+$config->allowedTags = '<p><span><h1><h2><h3><h4><h5><em><u><strong><br><ol><ul><li><img><a><b><font><hr><pre><div><table><td><th><tr><tbody><embed><style><s>';
 $config->accountRule = '|^[a-zA-Z0-9_]{1}[a-zA-Z0-9_\.]{1,}[a-zA-Z0-9_]{1}$|';
 $config->checkVersion = true;              // Auto check for new version or not.
 
