@@ -126,7 +126,10 @@ class groupModel extends model
      */
     public function getPairs($projectID = 0)
     {
-        return $this->dao->select('id, name')->from(TABLE_GROUP)->where('project')->eq($projectID)->orderBy('id')->fetchPairs();
+        return $this->dao->select('id, name')->from(TABLE_GROUP)
+            ->where('project')->eq($projectID)
+            ->andWhere('vision')->eq($this->config->vision)
+            ->orderBy('id')->fetchPairs();
     }
 
     /**
