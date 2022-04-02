@@ -50,6 +50,7 @@ class Processor
         $this->initBug();
         $this->initTest();
         $this->initTodo();
+        $this->initSonPlan();
 
         $this->dao->commit();
     }
@@ -418,4 +419,17 @@ class Processor
         $this->dao->query("update zt_kanbancell set `cards` = ',184,185,186,' where id = 439");
         $this->dao->query("update zt_kanbancell set `cards` = ',62,' where id = 448");
     }
+
+    /**
+     * Init son plan
+     *
+     * @access public
+     * @return void
+     */
+    public function initSonPlan()
+    {
+        $this->dao->query("update zt_productplan set `parent` = '-1' where id < 10 and id > 0");
+
+    }
+
 }
