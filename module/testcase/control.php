@@ -893,12 +893,15 @@ class testcase extends control
             {
                 $branchTagOption[$branchInfo->id] = $branchInfo->name . ($branchInfo->status == 'closed' ? ' (' . $this->lang->branch->statusList['closed'] . ')' : '');
             }
+
+            /* Remove parent stories. */
             $stories = $this->story->getProductStoryPairs($productID, $case->branch);
             foreach($stories as $key => $value)
             {
                 $story = $this->story->getByID($value);
                 if(!empty($story->childStories)) unset($stories[$key]);
             }
+
             $this->view->productID        = $productID;
             $this->view->product          = $product;
             $this->view->branchTagOption  = $branchTagOption;
@@ -908,11 +911,8 @@ class testcase extends control
         }
         $forceNotReview = $this->testcase->forceNotReview();
         if($forceNotReview) unset($this->lang->testcase->statusList['wait']);
-        $position[]      = $this->lang->testcase->common;
-        $position[]      = $this->lang->testcase->edit;
 
         $this->view->title           = $title;
-        $this->view->position        = $position;
         $this->view->currentModuleID = $case->module;
         $this->view->users           = $this->user->getPairs('noletter');
         $this->view->case            = $case;

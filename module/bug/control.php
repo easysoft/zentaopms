@@ -543,6 +543,8 @@ class bug extends control
             $builds  = $this->loadModel('build')->getBuildPairs($productID, $branch, 'noempty,noterminate,nodone,withbranch');
             $stories = $this->story->getProductStoryPairs($productID, $branch);
         }
+
+        /* Remove parent stories. */
         foreach($stories as $key => $value)
         {
             $story = $this->story->getByID($value);
