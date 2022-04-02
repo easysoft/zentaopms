@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
-include dirname(dirname(dirname(__FILE__))) . '/class/program.class.php';
+su('admin');
 
 /**
 
@@ -13,8 +13,10 @@ pid=1
 
 */
 
-$program = new Program('admin');
+global $tester;
+$tester->loadModel('program');
+$program1 = $tester->program->getById(1);
+$program2 = $tester->program->getById(2);
 
-$unFinish = 1;
-
-r($program->getUnfinished($unFinish)) && p() && e('9'); // 获取项目集1下未完成的项目和项目集
+r($tester->program->hasUnfinished($program1)) && p() && e('9'); // 获取项目集1下未完成的项目和项目集数量
+r($tester->program->hasUnfinished($program2)) && p() && e('7'); // 获取项目集2下未完成的项目和项目集数量

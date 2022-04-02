@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
-include dirname(dirname(dirname(__FILE__))) . '/class/program.class.php';
+su('admin');
 
 /**
 
@@ -13,8 +13,11 @@ pid=1
 
 */
 
-$parentProjectSet = new Program('admin');
+global $tester;
+$tester->loadModel('program');
+$program1 = $tester->program->getById(11);
+$program2 = $tester->program->getById(12);
+$result1  = $tester->program->getBudgetLeft($program1);
+$result2  = $tester->program->getBudgetLeft($program2);
 
-$t_itemsid = array('1');
-
-r($parentProjectSet->getBudgetLeft($t_itemsid[0])) && p() && e('0');  // 查看父项目集id=1的预算剩余
+r($result) && p() && e('0');  // 查看父项目集id=1的预算剩余
