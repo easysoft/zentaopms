@@ -2362,6 +2362,7 @@ class storyModel extends model
      * Get stories pairs of a product.
      *
      * @param  int           $productID
+     * @param  string|int    $branch
      * @param  array|string  $moduleIdList
      * @param  string        $status
      * @param  string        $order

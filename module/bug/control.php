@@ -541,14 +541,7 @@ class bug extends control
         else
         {
             $builds  = $this->loadModel('build')->getBuildPairs($productID, $branch, 'noempty,noterminate,nodone,withbranch');
-            $stories = $this->story->getProductStoryPairs($productID, $branch);
-        }
-
-        /* Remove parent stories. */
-        foreach($stories as $key => $value)
-        {
-            $story = $this->story->getByID($value);
-            if(!empty($story->childStories)) unset($stories[$key]);
+            $stories = $this->story->getProductStoryPairs($productID, $branch, 0, 'all','id_desc', 0, 'full', 'story', false);
         }
 
         $moduleOwner = $this->bug->getModuleOwner($moduleID, $productID);
