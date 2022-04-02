@@ -3204,31 +3204,34 @@ class storyModel extends model
     /**
      * Check need confirm.
      *
-     * @param  array    $dataList
+     * @param  array|object    $object
      * @access public
-     * @return array
+     * @return array|object
      */
-    public function checkNeedConfirm($dataList)
+    public function checkNeedConfirm($data)
     {
+        $objectList = is_object($data) ? array($data->id => $data) : $data;
+
         $storyIdList      = array();
         $storyVersionList = array();
-        foreach($dataList as $key => $data)
+
+        foreach($objectList as $key => $object)
         {
-            $data->needconfirm = false;
-            if($data->story)
+            $object->needconfirm = false;
+            if($object->story)
             {
-                $storyIdList[$key]      = $data->story;
-                $storyVersionList[$key] = $data->storyVersion;
+                $storyIdList[$key]      = $object->story;
+                $storyVersionList[$key] = $object->storyVersion;
             }
         }
 
         $stories = $this->dao->select('id,version')->from(TABLE_STORY)->where('id')->in($storyIdList)->andWhere('status')->eq('active')->fetchPairs('id', 'version');
         foreach($storyIdList as $key => $storyID)
         {
-            if(isset($stories[$storyID]) and $stories[$storyID] > $storyVersionList[$key]) $dataList[$key]->needconfirm = true;
+            if(isset($stories[$storyID]) and $stories[$storyID] > $storyVersionList[$key]) $objectList[$key]->needconfirm = true;
         }
 
-        return $dataList;
+        return is_object($data) ? current($objectList) : $objectList;
     }
 
     /**

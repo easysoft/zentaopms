@@ -17,6 +17,8 @@ fields:
     range: []
   - field: type
     range: stage
+  - field: budget
+    range: 700000-1:100
   - field: status
     range: wait,doing
   - field: percent
