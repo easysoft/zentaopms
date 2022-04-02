@@ -89,7 +89,7 @@ js::set('docID', $doc->id);
       <div class="detail no-padding">
         <div class="detail-content article-content no-margin no-padding">
           <?php
-          if($doc->type == 'url' and $showPageDetails)
+          if($doc->type == 'url' and $autoloadPage)
           {
               $url = $doc->content;
               if(!preg_match('/^https?:\/\//', $doc->content)) $url = 'http://' . $url;

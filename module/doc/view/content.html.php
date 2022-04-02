@@ -74,7 +74,7 @@ $sessionString .= session_name() . '=' . session_id();
             </p>
             <?php endif;?>
             <?php
-            if($doc->type == 'url' and $showPageDetails)
+            if($doc->type == 'url' and $autoloadPage)
             {
                 $url = $doc->content;
                 if(!preg_match('/^https?:\/\//', $doc->content)) $url = 'http://' . $url;

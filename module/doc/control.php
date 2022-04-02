@@ -537,15 +537,15 @@ class doc extends control
         $this->view->position[] = html::a($this->createLink('doc', 'browse', "libID=$doc->lib"), $lib->name);
         $this->view->position[] = $this->lang->doc->view;
 
-        $this->view->doc             = $doc;
-        $this->view->lib             = $lib;
-        $this->view->type            = $type;
-        $this->view->version         = $version ? $version : $doc->version;
-        $this->view->actions         = $this->action->getList('doc', $docID);
-        $this->view->users           = $this->user->getPairs('noclosed,noletter');
-        $this->view->preAndNext      = $this->loadModel('common')->getPreAndNextObject('doc', $docID);
-        $this->view->keTableCSS      = $this->doc->extractKETableCSS($doc->content);
-        $this->view->showPageDetails = $this->doc->checkShowPageDetails($doc);
+        $this->view->doc          = $doc;
+        $this->view->lib          = $lib;
+        $this->view->type         = $type;
+        $this->view->version      = $version ? $version : $doc->version;
+        $this->view->actions      = $this->action->getList('doc', $docID);
+        $this->view->users        = $this->user->getPairs('noclosed,noletter');
+        $this->view->preAndNext   = $this->loadModel('common')->getPreAndNextObject('doc', $docID);
+        $this->view->keTableCSS   = $this->doc->extractKETableCSS($doc->content);
+        $this->view->autoloadPage = $this->doc->checkAutoloadPage($doc);
 
         $this->display();
     }
@@ -1052,22 +1052,22 @@ class doc extends control
         $this->view->title      = ($type == 'book' or $type == 'custom') ? $this->lang->doc->customAB : $object->name;
         $this->view->position[] = ($type == 'book' or $type == 'custom') ? $this->lang->doc->customAB : $object->name;
 
-        $this->view->docID           = $docID;
-        $this->view->doc             = $docID ? $doc : '';
-        $this->view->type            = $type;
-        $this->view->version         = $version;
-        $this->view->object          = $object;
-        $this->view->objectID        = $objectID;
-        $this->view->objectType      = $type;
-        $this->view->libID           = $libID;
-        $this->view->lib             = isset($libs[$libID]) ? $libs[$libID] : new stdclass();
-        $this->view->libs            = $this->doc->getLibsByObject($type, $objectID);
-        $this->view->moduleTree      = $moduleTree;
-        $this->view->canBeChanged    = common::canModify($type, $object); // Determines whether an object is editable.
-        $this->view->actions         = $docID ? $this->action->getList('doc', $docID) : array();
-        $this->view->users           = $this->user->getPairs('noclosed,noletter');
-        $this->view->preAndNext      = $this->doc->getPreAndNextDoc($docID, $libID);
-        $this->view->showPageDetails = $this->doc->checkShowPageDetails($doc);
+        $this->view->docID        = $docID;
+        $this->view->doc          = $docID ? $doc : '';
+        $this->view->type         = $type;
+        $this->view->version      = $version;
+        $this->view->object       = $object;
+        $this->view->objectID     = $objectID;
+        $this->view->objectType   = $type;
+        $this->view->libID        = $libID;
+        $this->view->lib          = isset($libs[$libID]) ? $libs[$libID] : new stdclass();
+        $this->view->libs         = $this->doc->getLibsByObject($type, $objectID);
+        $this->view->moduleTree   = $moduleTree;
+        $this->view->canBeChanged = common::canModify($type, $object); // Determines whether an object is editable.
+        $this->view->actions      = $docID ? $this->action->getList('doc', $docID) : array();
+        $this->view->users        = $this->user->getPairs('noclosed,noletter');
+        $this->view->preAndNext   = $this->doc->getPreAndNextDoc($docID, $libID);
+        $this->view->autoloadPage = $this->doc->checkAutoloadPage($doc);
 
         $this->display();
     }
