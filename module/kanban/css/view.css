@@ -41,9 +41,9 @@
 .region .kanban-header-col > .title > .count {opacity: .5; font-weight: bold; color: #8b91a2;}
 .region .kanban-header-col > .title > .error {color: #333333; padding-left: 2px; font-size: 10px; padding-top: 1px; padding-right: 2px;}
 .kanban-affixed .kanban-header-col > .title > .text {color: #fff!important}
-.region .kanban-header-col > .actions {position: inherit; top: 30%;}
-.region .kanban-header-parent-col > .actions {position: absolute; right: 0px; top: 0px !important;}
-.region .kanban-header-sub-cols .actions {position: absolute; right: 0px; top: 0px !important;}
+.region .kanban-header-col > .actions {position: inherit;}
+.region .kanban-header-parent-col > .actions {position: absolute; right: 0px;}
+.region .kanban-header-sub-cols .actions {position: absolute; right: 0px;}
 
 .region .kanban-lane {position: relative; border-bottom: none!important; min-height: 200px !important}
 
