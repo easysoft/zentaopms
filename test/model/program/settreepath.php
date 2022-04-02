@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
-include dirname(dirname(dirname(__FILE__))) . '/class/program.class.php';
+su('admin');
 
 /**
 
@@ -13,8 +13,13 @@ pid=1
 
 */
 
-$program = new Program('admin');
+global $tester;
+$tester->loadModel('program');
 
-$findId = array(12, 1000);
+$before = $tester->program->getById(12);
+$tester->program->setTreePath(12);
+$after  = $tester->program->getById(12);
 
-r($program->setTreePath($findId[0])) && p('path') && e(',2,12,'); // 查找id=12的项目集的path
+r($before) && p('path') && e(',2,12,'); // 设置之前的项目集的path
+r($after)  && p('path') && e(',2,12,'); // 设置之后的项目集的path
+system('./ztest init');
