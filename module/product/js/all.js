@@ -80,7 +80,4 @@ $(function()
     });
     $('#productListForm').on('checkChange', updateCheckboxes);
     updateCheckboxes();
-
-    /* Disable animation for large rows */
-    $('#productListForm').toggleClass('no-animation', $('#productTableList>tr').length > 40)
 });
