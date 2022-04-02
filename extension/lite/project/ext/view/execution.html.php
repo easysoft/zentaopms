@@ -47,8 +47,8 @@
             {
                 if(common::hasPriv('execution', $view))
                 {
-                  $kanbanview = $view; 
-                  break;
+                    $kanbanview = $view; 
+                    break;
                 }
             }
         }
