@@ -896,7 +896,7 @@ class testcase extends control
             $stories = $this->story->getProductStoryPairs($productID, $case->branch);
             foreach($stories as $key => $value)
             {
-                $story = $this->story->getByID($stories[$key]);
+                $story = $this->story->getByID($value);
                 if(!empty($story->childStories)) unset($stories[$key]);
             }
             $this->view->productID        = $productID;

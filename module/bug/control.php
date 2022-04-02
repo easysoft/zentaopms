@@ -545,7 +545,7 @@ class bug extends control
         }
         foreach($stories as $key => $value)
         {
-            $story = $this->story->getByID($stories[$key]);
+            $story = $this->story->getByID($value);
             if(!empty($story->childStories)) unset($stories[$key]);
         }
 
