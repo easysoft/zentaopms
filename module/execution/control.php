@@ -3279,6 +3279,7 @@ class execution extends control
             $this->view->project = $project;
             $this->project->setMenu($projectID);
 
+            if(!$projectID) return $this->locate($this->createLink('project', 'browse'));
             if(!empty($project->model) and $project->model == 'kanban' and !(defined('RUN_MODE') and RUN_MODE == 'api')) return $this->locate($this->createLink('project', 'index', "projectID=$projectID"));
         }
 
