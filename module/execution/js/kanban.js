@@ -999,22 +999,22 @@ function deleteCard(objectType, objectID, regionID)
     setTimeout(function()
     {
         var objectLang = objectType + 'Lang';
-        var result = confirm(window[objectLang].confirmDelete) ? true : false;
+        var result     = confirm(window[objectLang].confirmDelete) ? true : false;
 
         if(!result) return false;
         if(!objectID) return false;
 
         var url = createLink('kanban', 'deleteObjectCard', 'objectType=' + objectType + '&objectID=' + objectID + '&regionID=' + regionID);
         return $.ajax(
-                {
-                    method:   'post',
-                    dataType: 'json',
-                    url:      url,
-                    success: function(data)
-                    {
-                        updateRegion(regionID, data[regionID]);
-                    }
-                });
+        {
+            method:   'post',
+            dataType: 'json',
+            url:      url,
+            success: function(data)
+            {
+                updateRegion(regionID, data[regionID]);
+            }
+        });
     }, 200)
 }
 
