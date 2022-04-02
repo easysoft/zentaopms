@@ -2169,14 +2169,6 @@ class projectModel extends model
             ->andWhere('deleted')->eq(0)
             ->fetchGroup('execution', 'id');
 
-        $parentStage = array();
-        foreach($executions as $executionID => $execution)
-        {
-            if($execution->grade != 2) continue;
-            if(!isset($parentStage[$execution->parent])) $parentStage[$execution->parent] = array();
-            $parentStage[$execution->parent][$executionID] = $executionID;
-        }
-
         /* Compute totalEstimate, totalConsumed, totalLeft. */
         foreach($tasks as $executionID => $executionTasks)
         {
@@ -2188,20 +2180,19 @@ class projectModel extends model
                 if($task->status != 'cancel' and $task->status != 'closed') $hour->totalLeft += $task->left;
             }
             $hours[$executionID] = $hour;
-        }
 
-        foreach($parentStage as $executionID => $subExecutionID)
-        {
-            $hours[$executionID] = (object)$emptyHour;
-            foreach($subExecutionID as $subExe)
+            if($executions[$executionID]->type == 'stage' and $executions[$executionID]->grade == 2)
             {
-                if(isset($hours[$subExe]))
+                $stageParent = $executions[$executionID]->parent;
+                if(!isset($hours[$stageParent]))
                 {
-                    $hours[$executionID]->totalEstimate += $hours[$subExe]->totalEstimate;
-                    $hours[$executionID]->totalConsumed += $hours[$subExe]->totalConsumed;
-                    $hours[$executionID]->totalLeft     += $hours[$subExe]->totalLeft;
-                    $hours[$executionID]->progress      += $hours[$subExe]->progress;
+                    $hours[$stageParent] = clone $hour;
+                    continue;
                 }
+
+                $hours[$stageParent]->totalEstimate += $hour->totalEstimate;
+                $hours[$stageParent]->totalConsumed += $hour->totalConsumed;
+                $hours[$stageParent]->totalLeft     += $hour->totalLeft;
             }
         }
 
