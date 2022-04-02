@@ -1007,7 +1007,7 @@ function deleteCard(objectType, objectID, regionID)
         url:      url,
         success: function(data)
         {
-          updateRegion(regionID, data[regionID]);
+            updateRegion(regionID, data[regionID]);
         }
     });
 }
