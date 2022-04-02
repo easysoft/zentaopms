@@ -207,6 +207,11 @@ class task extends control
             elseif($this->post->after == 'toStoryList')
             {
                 $response['locate'] = $this->createLink('execution', 'story', "executionID=$executionID");
+                if($this->config->vision == 'lite')
+                {
+                    $projectID = $this->dao->select('project')->from(TABLE_EXECUTION)->where('id')->eq($executionID)->fetch('project');
+                    $response['locate'] = $this->createLink('projectstory', 'story', "projectID=$projectID");
+                }
                 return $this->send($response);
             }
             else
