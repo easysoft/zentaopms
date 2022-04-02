@@ -50,6 +50,7 @@ class Processor
         $this->initBug();
         $this->initTest();
         $this->initTodo();
+        $this->initBassicSql();
 
         $this->dao->commit();
     }
@@ -286,6 +287,20 @@ class Processor
     }
 
     /**
+     * init BassicSql.
+     *
+     * @access private
+     * @return void
+     */
+    private function initBassicSql()
+    {
+        global $app;
+        $sqlRoot = $app->getAppRoot();
+        $this->dao->exec(file_get_contents($sqlRoot . '/data/zt_lang.sql'));
+        $this->dao->exec(file_get_contents($sqlRoot . '/data/zt_cron.sql'));
+    }
+
+    /**
      *  Init Stakeholder.
      *
      *  @access public
@@ -417,5 +432,15 @@ class Processor
         $this->dao->query("update zt_kanbancell set `cards` = ',246,' where id = 428");
         $this->dao->query("update zt_kanbancell set `cards` = ',184,185,186,' where id = 439");
         $this->dao->query("update zt_kanbancell set `cards` = ',62,' where id = 448");
+        $this->dao->query("update zt_kanbancell set `cards` = ',247,' where id =  458");
+        $this->dao->query("update zt_kanbancell set `cards` = ',187,188,189,' where id = 469");
+        $this->dao->query("update zt_kanbancell set `cards` = ',63,' where id = 477");
+        $this->dao->query("update zt_kanbancell set `cards` = ',248,' where id = 485");
+        $this->dao->query("update zt_kanbancell set `cards` = ',190,191,192,' where id = 496");
+        $this->dao->query("update zt_kanbancell set `cards` = ',64,' where id = 504");
+        $this->dao->query("update zt_kanbancolumn set `parent` = '-1' where id = 202");
+        $this->dao->query("update zt_kanbancolumn set `parent` = '202' where id in ('203','204')");
+        $this->dao->query("update zt_kanbancolumn set `parent` = '-1' where id = 206");
+        $this->dao->query("update zt_kanbancolumn set `parent` = '206' where id in ('207','208')");
     }
 }

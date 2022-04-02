@@ -2189,6 +2189,20 @@ class projectModel extends model
                 if($task->status != 'cancel' and $task->status != 'closed') $hour->totalLeft += $task->left;
             }
             $hours[$executionID] = $hour;
+
+            if($executions[$executionID]->type == 'stage' and $executions[$executionID]->grade == 2)
+            {
+                $stageParent = $executions[$executionID]->parent;
+                if(!isset($hours[$stageParent]))
+                {
+                    $hours[$stageParent] = clone $hour;
+                    continue;
+                }
+
+                $hours[$stageParent]->totalEstimate += $hour->totalEstimate;
+                $hours[$stageParent]->totalConsumed += $hour->totalConsumed;
+                $hours[$stageParent]->totalLeft     += $hour->totalLeft;
+            }
         }
 
         /* Compute totalReal and progress. */

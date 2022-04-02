@@ -376,6 +376,12 @@ class todo extends control
             if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'fail', 'message' => '404 Not found'));
             return print(js::error($this->lang->notFound) . js::locate('back'));
         }
+
+        if($todo->private and $todo->account != $this->app->user->account)
+        {
+            return print(js::error($this->lang->todo->thisIsPrivate) . js::locate('back'));
+        }
+
         /* Save the session. */
         if(!isonlybody())
         {

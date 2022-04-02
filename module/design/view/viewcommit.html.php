@@ -11,10 +11,8 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<style>
-#mainContent .pull-right{margin-bottom: 10px}
-.table{border: 1px solid #ddd;}
-</style>
+<?php js::set('repos', $repos);?>
+<?php js::set('projectID', $design->project);?>
 <div id="mainContent">
   <div class='main-header'>
     <h2>
@@ -24,7 +22,7 @@
     </h2>
   </div>
   <div class='btn-toolbar pull-right'>
-    <?php common::printLink('design', 'linkCommit', "designID=$design->id", "<i class='icon icon-plus'></i>" . $lang->design->linkCommit, '_blank', "class='btn btn-primary'");?>
+    <?php common::printLink('design', 'linkCommit', "designID=$design->id", "<i class='icon icon-plus'></i>" . $lang->design->linkCommit, '', "class='btn btn-primary' id='linkCommit'");?>
   </div>
   <?php if(empty($design->commit)):?>
   <div class="table-empty-tip">

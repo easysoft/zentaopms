@@ -24,6 +24,6 @@ r($kanban->getCardGroupByExecutionTest($executionIDList[1]))                    
 r($kanban->getCardGroupByExecutionTest($executionIDList[1], $browseTypeList[0])) && p() && e('1'); // 测试查询execution162的task卡片
 r($kanban->getCardGroupByExecutionTest($executionIDList[1], $browseTypeList[1])) && p() && e('3'); // 测试查询execution162的bug卡片
 r($kanban->getCardGroupByExecutionTest($executionIDList[1], $browseTypeList[2])) && p() && e('1'); // 测试查询execution162的story卡片
-r($kanban->getCardGroupByExecutionTest($executionIDList[2]))                     && p() && e('0'); // 测试查询execution163的卡片
-r($kanban->getCardGroupByExecutionTest($executionIDList[3]))                     && p() && e('0'); // 测试查询execution164的卡片
+r($kanban->getCardGroupByExecutionTest($executionIDList[2]))                     && p() && e('4'); // 测试查询execution163的卡片
+r($kanban->getCardGroupByExecutionTest($executionIDList[3]))                     && p() && e('4'); // 测试查询execution164的卡片
 r($kanban->getCardGroupByExecutionTest($executionIDList[4]))                     && p() && e('0'); // 测试查询execution165的卡片

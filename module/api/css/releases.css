@@ -1,2 +1,4 @@
 .c-date {width: 150px;}
 .c-actions {width: 60px;}
+
+tbody tr td {white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
