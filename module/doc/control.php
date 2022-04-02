@@ -1,5 +1,4 @@
 <?php
-
 /**
  * The control file of doc module of ZenTaoPMS.
  *
@@ -530,15 +529,6 @@ class doc extends control
             $doc->digest  = commonModel::processMarkdown($doc->digest);
         }
 
-        $showPageDetails = true;
-        if(!empty($doc) and $doc->type == 'url')
-        {
-            $parsedUrl = parse_url($doc->content);
-            $urlPort   = isset($parsedUrl['port']) ? ':' . $parsedUrl['port'] : '';
-            $urlDomain = $parsedUrl['host'] . $urlPort;
-            if($urlDomain == $_SERVER['HTTP_HOST']) $showPageDetails = false;
-        }
-
         /* Check priv when lib is product or project. */
         $lib  = $this->doc->getLibByID($doc->lib);
         $type = $lib->type;
@@ -555,7 +545,7 @@ class doc extends control
         $this->view->users           = $this->user->getPairs('noclosed,noletter');
         $this->view->preAndNext      = $this->loadModel('common')->getPreAndNextObject('doc', $docID);
         $this->view->keTableCSS      = $this->doc->extractKETableCSS($doc->content);
-        $this->view->showPageDetails = $showPageDetails;
+        $this->view->showPageDetails = $this->doc->checkShowPageDetails($doc);
 
         $this->display();
     }
@@ -1056,15 +1046,6 @@ class doc extends control
             }
         }
 
-        $showPageDetails = true;
-        if(!empty($doc) and $doc->type == 'url')
-        {
-            $parsedUrl = parse_url($doc->content);
-            $urlPort   = isset($parsedUrl['port']) ? ':' . $parsedUrl['port'] : '';
-            $urlDomain = $parsedUrl['host'] . $urlPort;
-            if($urlDomain == $_SERVER['HTTP_HOST']) $showPageDetails = false;
-        }
-
         $this->view->customObjectLibs = $customObjectLibs;
         $this->view->showLibs         = $this->config->doc->custom->objectLibs;
 
@@ -1086,7 +1067,8 @@ class doc extends control
         $this->view->actions         = $docID ? $this->action->getList('doc', $docID) : array();
         $this->view->users           = $this->user->getPairs('noclosed,noletter');
         $this->view->preAndNext      = $this->doc->getPreAndNextDoc($docID, $libID);
-        $this->view->showPageDetails = $showPageDetails;
+        $this->view->showPageDetails = $this->doc->checkShowPageDetails($doc);
+
         $this->display();
     }
 
