@@ -3005,42 +3005,6 @@ class executionModel extends model
         }
         $parents = $this->dao->select('*')->from(TABLE_TASK)->where('id')->in($parents)->fetchAll('id');
 
-        if ($this->config->vision == 'lite') {
-            $lanes      = array();
-            $cardsWhere = '';
-            foreach($tasks as $task)
-            {
-                if(empty($cardsWhere))
-                {
-                    $cardsWhere = "cards like '%,{$task->id},%'";
-                }
-                else
-                {
-                    $cardsWhere .= " or cards like '%,{$task->id},%'";
-                }
-            }
-            $executionID = zget(array_column($tasks, 'execution'), 0, 0);
-            $lanes = $this->dao->select('t1.lane,t2.name,t1.cards')
-                ->from(TABLE_KANBANCELL)->alias('t1')
-                ->leftJoin(TABLE_KANBANLANE)->alias('t2')->on('t1.lane = t2.id')
-                ->where('t1.kanban')->eq($executionID)
-                ->andWhere('t2.deleted')->eq(0)
-                ->andWhere("($cardsWhere)")
-                ->fetchAll();
-
-            foreach($tasks as $task)
-            {
-                $task->lane = '';
-                if(!empty($lanes))
-                {
-                    foreach($lanes as $lane)
-                    {
-                        if(strpos($lane->cards, ",{$task->id},") !== false)  $task->lane = $lane->name;
-                    }
-                }
-            }
-        }
-
         foreach($tasks as $task)
         {
             if($task->parent > 0)
