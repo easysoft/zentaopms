@@ -2404,12 +2404,14 @@ EOD;
         /* Limited execution. */
         $limitedExecution = false;
         if(!empty($module) && $module == 'task' && !empty($object->execution) or
-            !empty($module) && $module == 'execution' && !empty($object->id)
+            !empty($module) && $module == 'execution' && !empty($object->id) or
+            !empty($module) && $module == 'story' && !empty($object->execution)
         )
         {
             $objectID = '';
             if($module == 'execution' and !empty($object->id))  $objectID = $object->id;
             if($module == 'task' and !empty($object->execution))$objectID = $object->execution;
+            if($module == 'story' and !empty($object->execution))$objectID = $object->execution;
 
             $limitedExecutions = !empty($_SESSION['limitedExecutions']) ? $_SESSION['limitedExecutions'] : '';
             if($objectID and strpos(",{$limitedExecutions},", ",$objectID,") !== false) $limitedExecution = true;
