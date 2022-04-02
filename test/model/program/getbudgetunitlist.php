@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
-include dirname(dirname(dirname(__FILE__))) . '/class/program.class.php';
+su('admin');
 
 /**
 
@@ -13,7 +13,7 @@ pid=1
 
 */
 
-$CurrencyType = new Program('admin');
+global $tester;
+$tester->loadModel('project');
 
-/* GetBudgetUnitList(). */
-r($CurrencyType->getBudgetUnitList()) && p('CNY;USD') && e('人民币;美元'); //获取货币类型列表
+r($tester->loadModel('program')->getBudgetUnitList()) && p('CNY;USD') && e('人民币;美元'); //获取货币类型列表

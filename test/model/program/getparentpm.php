@@ -16,9 +16,9 @@ GetParentPM(). >> 0
 global $tester;
 $tester->loadModel('program');
 
-$programIdList = array(1, 2, 3);
+$programIdList = array(11, 12, 13);
 $parentPM = $tester->program->getParentPM($programIdList);
-a($parentPM);die;
 
-/* GetParentPM($programIdList). */
-r($getPM->getParentPM('1')) && p() && e('0'); //
+r(count($parentPM)) && p()         && e('2');   // 获取父项目集的负责人数量
+r($parentPM)        && p('12:pm2') && e('pm2'); // 获取父项目集的负责人account
+r($parentPM)        && p('13:pm3') && e('pm3'); // 获取父项目集的负责人account
