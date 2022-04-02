@@ -1126,13 +1126,30 @@ class kanbanTest
         return $change;
     }
 
+    /**
+     * Test update kanban lane.
+     *
+     * @param  int    $executionID
+     * @param  string $laneType
+     * @param  int     $cardID
+     * @access public
+     * @return string
+     */
     public function updateLaneTest($executionID, $laneType, $cardID = 0)
     {
-        $objects = $this->objectModel->updateLane($executionID, $laneType, $cardID = 0);
+        global $tester;
+        $objects = $tester->dao->select('*')->from(TABLE_KANBANLANE)->where('type')->ne('common')->andWhere('execution')->eq($executionID)->fetch();
+        if(empty($objects)) $this->objectModel->createExecutionLane($executionID);
+
+        $this->objectModel->updateLane($executionID, $laneType, $cardID);
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        $objects = $tester->dao->select('*')->from(TABLE_KANBANCELL)->where('kanban')->eq($executionID)->andWhere('type')->eq($laneType)->fetchAll();
+        $cards = '';
+        foreach($objects as $object) $cards .= $object->cards;
+        $cards = preg_replace('#,+#', ',', $cards);
+        return $cards;
     }
 
     /**
@@ -1182,15 +1199,6 @@ class kanbanTest
         if(dao::isError()) return dao::getError();
 
         return $change;
-    }
-
-    public function updateLaneOrderTest($executionID, $currentType, $targetType)
-    {
-        $objects = $this->objectModel->updateLaneOrder($executionID, $currentType, $targetType);
-
-        if(dao::isError()) return dao::getError();
-
-        return $objects;
     }
 
     /**
@@ -1486,7 +1494,7 @@ class kanbanTest
         if(dao::isError()) return dao::getError();
 
         global $tester;
-        $nodes   = $tester->dao->select('id,id')->from(TABLE_KANBANCOLUMN)->where('`parent`')->eq($column->parent)->fetchPairs();
+        $nodes   = $tester->dao->select('*')->from(TABLE_KANBANCOLUMN)->where('`parent`')->eq($column->parent)->andWhere('`id`')->ne($columnID)->fetchAll('id');
         $objects = $tester->dao->select('*')->from(TABLE_KANBANCELL)->where('`column`')->in(array_keys($nodes))->fetchAll();
 
         $cards = '';
@@ -1623,6 +1631,15 @@ class kanbanTest
         return $object;
     }
 
+    /**
+     * Test get object group list.
+     *
+     * @param  int    $executionID
+     * @param  string $type
+     * @param  string $groupBy
+     * @access public
+     * @return array
+     */
     public function getObjectGroupTest($executionID, $type, $groupBy)
     {
         $objects = $this->objectModel->getObjectGroup($executionID, $type, $groupBy);
@@ -1686,6 +1703,14 @@ class kanbanTest
         return count($objects);
     }
 
+    /**
+     * Test get Kanban cards menus by execution id.
+     *
+     * @param  int    $executionID
+     * @param  string $objecType
+     * @access public
+     * @return int
+     */
     public function getKanbanCardMenuTest($executionID, $objecType)
     {
         global $tester;
