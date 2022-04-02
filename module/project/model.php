@@ -2205,6 +2205,7 @@ class projectModel extends model
             $hour->totalReal     = $hour->totalConsumed + $hour->totalLeft;
             $hour->progress      = $hour->totalReal ? round($hour->totalConsumed / $hour->totalReal * 100, 2) : 0;
         }
+
         return $hours;
     }
 
