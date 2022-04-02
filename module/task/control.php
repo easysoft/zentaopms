@@ -833,7 +833,7 @@ class task extends control
         }
 
         $execution = $this->execution->getById($task->execution);
-        if(!isonlybody() and $execution->type == 'kanban') return $this->locate($this->createLink('execution', 'kanban', "executionID=$execution->id"));
+        if(!isonlybody() and $execution->type == 'kanban') return print(js::locate($this->createLink('execution', 'kanban', "executionID=$execution->id")));
 
         $this->session->project = $task->project;
 
