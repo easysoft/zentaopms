@@ -2332,21 +2332,21 @@ class story extends control
             /* Get users, products and relations. */
             $users     = $this->loadModel('user')->getPairs('noletter');
             $products  = $this->product->getPairs('nocode');
-            $relations = $this->story->getStoryRelationByIDs($storyIdList, $type);
+            $relations = $this->story->getStoryRelationByIds($storyIdList, $type);
 
             /* Get related objects id lists. */
             $relatedProductIdList = array();
             $relatedStoryIdList   = array();
             $relatedPlanIdList    = array();
             $relatedBranchIdList  = array();
-            $relatedStoryIDs      = array();
+            $relatedStoryIds      = array();
 
             foreach($stories as $story)
             {
                 $relatedProductIdList[$story->product] = $story->product;
                 $relatedPlanIdList[$story->plan]       = $story->plan;
                 $relatedBranchIdList[$story->branch]   = $story->branch;
-                $relatedStoryIDs[$story->id]           = $story->id;
+                $relatedStoryIds[$story->id]           = $story->id;
 
                 if(isset($relations[$story->id])) $story->linkStories = $story->linkStories . ',' . $relations[$story->id];
 
@@ -2359,9 +2359,9 @@ class story extends control
                 }
             }
 
-            $storyTasks = $this->loadModel('task')->getStoryTaskCounts($relatedStoryIDs);
-            $storyBugs  = $this->loadModel('bug')->getStoryBugCounts($relatedStoryIDs);
-            $storyCases = $this->loadModel('testcase')->getStoryCaseCounts($relatedStoryIDs);
+            $storyTasks = $this->loadModel('task')->getStoryTaskCounts($relatedStoryIds);
+            $storyBugs  = $this->loadModel('bug')->getStoryBugCounts($relatedStoryIds);
+            $storyCases = $this->loadModel('testcase')->getStoryCaseCounts($relatedStoryIds);
 
             /* Get related objects title or names. */
             $productsType   = $this->dao->select('id, type')->from(TABLE_PRODUCT)->where('id')->in($relatedProductIdList)->fetchPairs();

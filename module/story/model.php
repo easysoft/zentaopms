@@ -4389,14 +4389,14 @@ class storyModel extends model
     }
 
     /**
-     * Get story relation by IDs.
+     * Get story relation by Ids.
      *
      * @param  array  $storyIdList
      * @param  string $storyType
      * @access public
      * @return array
      */
-    public function getStoryRelationByIDs($storyIdList, $storyType)
+    public function getStoryRelationByIds($storyIdList, $storyType)
     {
         $conditionField = $storyType == 'story' ? 'BID' : 'AID';
         $storyType      = $storyType == 'story' ? 'BID, GROUP_CONCAT(`AID` SEPARATOR ",")' : 'AID, GROUP_CONCAT(`BID` SEPARATOR ",")';
