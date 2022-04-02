@@ -515,6 +515,8 @@ function findDropColumns($element, $root)
     var kanbanID    = $root.data('id');
     var kanbanRules = window.kanbanDropRules ? window.kanbanDropRules[kanbanID] : null;
 
+    $.zui.ContextMenu.hide();
+
     if(!kanbanRules) return $root.find('.kanban-lane-col:not([data-type="' + col.type + '"])');
 
     var colRules = kanbanRules[col.type];

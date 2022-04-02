@@ -363,6 +363,8 @@ function findDropColumns($element, $root)
     var laneType    = $element.closest('.kanban-lane').data().lane.type;
     var kanbanRules = window.kanbanDropRules ? window.kanbanDropRules[laneType] : null;
 
+    hideKanbanAction();
+
     if(!kanbanRules) return $root.find('.kanban-lane-col:not([data-type="' + col.type + '"])');
 
     var colRules = kanbanRules[col.type];
