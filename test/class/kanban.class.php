@@ -1350,24 +1350,6 @@ class kanbanTest
         return $object;
     }
 
-    public function setHeaderActionsTest($kanban)
-    {
-        $objects = $this->objectModel->setHeaderActions($kanban);
-
-        if(dao::isError()) return dao::getError();
-
-        return $objects;
-    }
-
-    public function setSwitcherTest($kanban)
-    {
-        $objects = $this->objectModel->setSwitcher($kanban);
-
-        if(dao::isError()) return dao::getError();
-
-        return $objects;
-    }
-
     /**
      * Test sort kanban group;
      *
@@ -1426,15 +1408,6 @@ class kanbanTest
 
         $object = $this->objectModel->getCardByID($cardID);
         return $object;
-    }
-
-    public function resetLaneOrderTest($executionID, $type, $groupBy)
-    {
-        $objects = $this->objectModel->resetLaneOrder($executionID, $type, $groupBy);
-
-        if(dao::isError()) return dao::getError();
-
-        return $objects;
     }
 
     /**
