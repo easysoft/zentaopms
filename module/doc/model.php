@@ -2651,4 +2651,25 @@ EOT;
 
         return array($libs, $libID, $object, $objectID);
     }
+
+    /**
+     * Whether the url of link type documents needs to be autoloaded.
+     *
+     * @param  object  $doc
+     * @access public
+     * @return bool
+     */
+    public function checkAutoloadPage($doc)
+    {
+        $autoloadPage = true;
+        if(!empty($doc) and $doc->type == 'url')
+        {
+            $parsedUrl = parse_url($doc->content);
+            $urlPort   = isset($parsedUrl['port']) ? ':' . $parsedUrl['port'] : '';
+            $urlDomain = $parsedUrl['host'] . $urlPort;
+            if($urlDomain == $_SERVER['HTTP_HOST']) $autoloadPage = false;
+        }
+
+        return $autoloadPage;
+    }
 }
