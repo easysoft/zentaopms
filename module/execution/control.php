@@ -1263,24 +1263,7 @@ class execution extends control
      */
     public function create($projectID = '', $executionID = 0, $copyExecutionID = '', $planID = 0, $confirm = 'no', $productID = 0, $extra = '')
     {
-        /* Set menu. */
-        if($this->app->tab == 'project')
-        {
-            if(!empty($copyExecutionID)) $projectID = $this->dao->select('project')->from(TABLE_EXECUTION)->where('id')->eq($copyExecutionID)->fetch('project');
-
-            $projectID = $this->project->saveState($projectID, $this->project->getPairsByProgram());
-            $this->project->setMenu($projectID);
-        }
-        elseif($this->app->tab == 'execution')
-        {
-            $selectedExecutionID = $executionID;
-            if($this->config->systemMode == 'new') $selectedExecutionID = key($this->executions);
-            $this->execution->setMenu($selectedExecutionID);
-        }
-        elseif($this->app->tab == 'doc')
-        {
-            unset($this->lang->doc->menu->execution['subMenu']);
-        }
+        if($this->app->tab == 'doc') unset($this->lang->doc->menu->execution['subMenu']);
 
         $project = $this->project->getByID($projectID);
         if(!empty($project) and $project->model == 'kanban')
@@ -1988,7 +1971,7 @@ class execution extends control
         if($execution->type == 'kanban')
         {
             if(defined('RUN_MODE') && RUN_MODE == 'api') return print($this->fetch('execution', 'kanban', "executionID=$executionID"));
-            return $this->locate(inlink('kanban', "executionID=$executionID"));
+            return print(js::locate(inlink('kanban', "executionID=$executionID")));
         }
 
         $this->app->loadLang('program');
@@ -2058,7 +2041,7 @@ class execution extends control
 
         $this->lang->execution->menu = new stdclass();
         $execution = $this->commonAction($executionID);
-        if($execution->type != 'kanban') return $this->locate(inlink('view', "executionID=$executionID"));
+        if($execution->type != 'kanban') return print(js::locate(inlink('view', "executionID=$executionID")));
 
         $kanbanData       = $this->loadModel('kanban')->getRDKanban($executionID, $browseType, $orderBy, 0, $groupBy);
         $executionActions = array();
@@ -3296,7 +3279,8 @@ class execution extends control
             $this->view->project = $project;
             $this->project->setMenu($projectID);
 
-            if(!empty($project->model) and $project->model == 'kanban' and !(defined('RUN_MODE') and RUN_MODE == 'api')) return $this->locate($this->createLink('project', 'index', "projectID=$projectID"));
+            if(!$projectID) return print(js::locate($this->createLink('project', 'browse')));
+            if(!empty($project->model) and $project->model == 'kanban' and !(defined('RUN_MODE') and RUN_MODE == 'api')) return print(js::locate($this->createLink('project', 'index', "projectID=$projectID")));
         }
 
         if($this->app->viewType == 'mhtml')

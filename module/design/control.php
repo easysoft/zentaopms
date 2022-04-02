@@ -276,6 +276,7 @@ class design extends control
         $this->view->design  = $design;
         $this->view->project = $this->loadModel('project')->getByID($design->project);
         $this->view->stories = $this->loadModel('story')->getProductStoryPairs($design->product);
+        $this->view->users   = $this->loadModel('user')->getPairs('noclosed');
 
         $this->display();
     }
@@ -306,8 +307,6 @@ class design extends control
         /* Get the repository information through the repoID. */
         $repos  = $this->loadModel('repo')->getRepoPairs('project', $design->project);
         $repoID = $repoID ? $repoID : key($repos);
-
-        if(empty($repoID)) return print(js::locate(helper::createLink('repo', 'create', "objectID=$design->project")));
 
         $repo      = $this->loadModel('repo')->getRepoByID($repoID);
         $revisions = $this->repo->getCommits($repo, '', 'HEAD', '', '', $begin, $end);
@@ -398,12 +397,15 @@ class design extends control
         $this->app->loadClass('pager', $static = true);
         $pager   = pager::init(0, $recPerPage, $pageID);
 
+        $design = $this->design->getCommit($designID, $pager);
+
         $this->view->title      = $this->lang->design->common . $this->lang->colon . $this->lang->design->submission;
         $this->view->position[] = $this->lang->design->submission;
 
-        $this->view->design = $this->design->getCommit($designID, $pager);
+        $this->view->design = $design;
         $this->view->pager  = $pager;
         $this->view->users  = $this->loadModel('user')->getPairs('noletter');
+        $this->view->repos  = $this->loadModel('repo')->getRepoPairs('project', $design->project);
 
         $this->display();
     }

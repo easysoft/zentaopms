@@ -5,7 +5,9 @@ $(function()
         if(executions.length == 0)
         {
             alert(createExecution);
-            location.href = createLink('execution', 'create', 'projectID=' + projectID);
+            var link = createLink('execution', 'create', 'projectID=' + projectID);
+
+            window.parent.$.apps.open(link, 'execution');
             return false;
         }
     });

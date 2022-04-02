@@ -12,9 +12,14 @@ pid=1
 创建id=1的项目集的干系人dev1,dev2并查看。 >> dev2;dev1
 
 */
-$Stakeholder = new Program('admin');
 
-$t_Stakeholder = array('1');
+global $tester;
+$tester->loadModel('program');
 
-r($Stakeholder->createStakeholder($t_Stakeholder[0])) && p('0:account;1:account') && e('dev2;dev1'); // 创建id=1的项目集的干系人dev1,dev2并查看。
+$_POST['accounts'] = array('dev1', 'dev2');
+$tester->program->createStakeholder(1);
+$result = $tester->program->getStakeholdersByPrograms(1);
+
+r(count($result)) && p('')                    && e('2');         // 创建id=1的项目集的干系人并查看数量。
+r($result)        && p('0:account;1:account') && e('dev2;dev1'); // 创建id=1的项目集的干系人dev1,dev2并查看Account。
 system("./ztest init");

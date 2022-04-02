@@ -181,7 +181,7 @@ class group extends control
             if($type == 'byModule') $result = $this->group->updatePrivByModule();
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browse')));
+            return print(js::alert($this->lang->saveSuccess) . js::execute('window.parent.location.reload()'));
         }
 
         if($type == 'byGroup')

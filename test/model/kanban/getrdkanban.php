@@ -23,9 +23,9 @@ r($kanban->getRDKanbanTest($executionIDList[0], $browseTypeList[0], $regionIDLis
 r($kanban->getRDKanbanTest($executionIDList[0], $browseTypeList[0], $regionIDList[2])) && p() && e('columns:0, lanes:0, cards:0');  // 获取执行161 all region 102的执行看板
 r($kanban->getRDKanbanTest($executionIDList[1]))                                       && p() && e('columns:27, lanes:3, cards:5'); // 获取执行162的执行看板
 r($kanban->getRDKanbanTest($executionIDList[1], $browseTypeList[1], $regionIDList[2])) && p() && e('columns:11, lanes:1, cards:2'); // 获取执行162 story region 102的执行看板
-r($kanban->getRDKanbanTest($executionIDList[2]))                                       && p() && e('columns:27, lanes:3, cards:0'); // 获取执行163的执行看板
+r($kanban->getRDKanbanTest($executionIDList[2]))                                       && p() && e('columns:27, lanes:3, cards:4'); // 获取执行163的执行看板
 r($kanban->getRDKanbanTest($executionIDList[2], $browseTypeList[2], $regionIDList[3])) && p() && e('columns:7, lanes:1, cards:4');  // 获取执行163 task region 103的执行看板
-r($kanban->getRDKanbanTest($executionIDList[3]))                                       && p() && e('columns:27, lanes:3, cards:0'); // 获取执行164的执行看板
+r($kanban->getRDKanbanTest($executionIDList[3]))                                       && p() && e('columns:27, lanes:3, cards:4'); // 获取执行164的执行看板
 r($kanban->getRDKanbanTest($executionIDList[3], $browseTypeList[3], $regionIDList[4])) && p() && e('columns:9, lanes:1, cards:3');  // 获取执行164 bug region 104的执行看板
 r($kanban->getRDKanbanTest($executionIDList[4]))                                       && p() && e('columns:27, lanes:3, cards:0'); // 获取执行165的执行看板
 r($kanban->getRDKanbanTest($executionIDList[4], $browseTypeList[1], $regionIDList[5])) && p() && e('columns:11, lanes:1, cards:2'); // 获取执行165 story region 105的执行看板

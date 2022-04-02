@@ -95,7 +95,7 @@ $(function()
         <form class='form-condensed' method='post' target='hiddenwin' action='<?php echo $this->createLink('datatable', 'ajaxSave')?>'>
           <table class='table table-form'>
             <tr>
-              <td class='w-150px'><?php echo $lang->datatable->showModule;?></td>
+              <td class='w-160px'><?php echo $lang->datatable->showModule;?></td>
               <td><?php echo html::radio('showModule', $lang->datatable->showModuleList, isset($config->datatable->$datatableId->showModule) ? $config->datatable->$datatableId->showModule : '');?></td>
             </tr>
             <?php if($app->moduleName == 'execution' and $app->methodName == 'task' and $this->config->vision != 'lite'):?>

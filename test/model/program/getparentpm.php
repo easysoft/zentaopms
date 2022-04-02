@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
-include dirname(dirname(dirname(__FILE__))) . '/class/program.class.php';
+su('admin');
 
 /**
 
@@ -13,7 +13,12 @@ GetParentPM(). >> 0
 
 */
 
-$getPM = new Program('admin');
+global $tester;
+$tester->loadModel('program');
+
+$programIdList = array(1, 2, 3);
+$parentPM = $tester->program->getParentPM($programIdList);
+a($parentPM);die;
 
 /* GetParentPM($programIdList). */
 r($getPM->getParentPM('1')) && p() && e('0'); //

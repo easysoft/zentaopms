@@ -29,7 +29,7 @@ html[lang="en"] .product-info .type-info {color: #A6AAB8; text-align: center; po
 .product-info .type-label {font-size: 12px; overflow: visible; text-overflow: ellipsis; white-space: nowrap;}
 .product-info .type-value {font-size: 14px;}
 .product-info .type-value > strong {font-size: 20px; color: #3C4353;}
-.product-info .actions {position: absolute; left: 10px; top: 14px;}
+.product-info .actions {position: absolute; right: 90px; top: 14px;}
 .block-statistic .panel-body {padding-top: 0;}
 .block-statistic .panel-body {padding-top: 0;}
 .block-statistic .tile {margin-bottom: 30px;}

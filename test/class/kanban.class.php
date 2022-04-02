@@ -138,13 +138,27 @@ class kanbanTest
         return $object;
     }
 
-    public function splitColumnTest($columnID)
+    /**
+     * Test split column.
+     *
+     * @param  int    $columnID
+     * @param  array  $param
+     * @access public
+     * @return int
+     */
+    public function splitColumnTest($columnID, $param)
     {
+        foreach($param as $key => $value) $_POST[$key] = $value;
+
         $objects = $this->objectModel->splitColumn($columnID);
+
+        unset($_POST);
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        global $tester;
+        $childs = $tester->dao->select('*')->from(TABLE_KANBANCOLUMN)->where('`parent`')->eq($columnID)->fetchAll();
+        return count($childs);
     }
 
     /**
@@ -755,13 +769,42 @@ class kanbanTest
         return $object;
     }
 
-    public function updateSpaceTest($spaceID, $type = '')
+    /**
+     * Test update a space.
+     *
+     * @param  int    $spaceID
+     * @param  string $type
+     * @param  array  $param
+     * @access public
+     * @return array
+     */
+    public function updateSpaceTest($spaceID, $type = '', $param = array())
     {
-        $objects = $this->objectModel->updateSpace($spaceID, $type = '');
+        global $tester;
+        $object = $tester->dao->select('`type`,`name`,`owner`,`team`,`desc`,`whitelist`')->from(TABLE_KANBANSPACE)->where('`id`')->eq($spaceID)->fetch();
+        $object->team      = explode(',', $object->team);
+        $object->whitelist = explode(',', $object->whitelist);
+
+        foreach($object as $field => $value)
+        {
+            if(in_array($field, array_keys($param)))
+            {
+                $_POST[$field] = $param[$field];
+            }
+            else
+            {
+                $_POST[$field] = $value;
+            }
+        }
+
+        $change = $this->objectModel->updateSpace($spaceID, $type);
+        if($change == array()) $change = '没有数据更新';
+
+        unset($_POST);
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        return $change;
     }
 
     /**
@@ -774,6 +817,11 @@ class kanbanTest
      */
     public function getLanePairsByRegionTest($regionID, $type = 'all')
     {
+        global $tester;
+
+
+        foreach($param as $key => $value) $_POST[$key] = $value;
+
         $objects = $this->objectModel->getLanePairsByRegion($regionID, $type);
 
         if(dao::isError()) return dao::getError();
@@ -846,13 +894,39 @@ class kanbanTest
         return $object;
     }
 
-    public function updateTest($kanbanID)
+    /**
+     * Test update a kanban.
+     *
+     * @param  int    $kanbanID
+     * @param  array  $param
+     * @access public
+     * @return array
+     */
+    public function updateTest($kanbanID, $param)
     {
-        $objects = $this->objectModel->update($kanbanID);
+        global $tester;
+        $object = $tester->dao->select('`space`,`name`,`owner`,`team`,`desc`')->from(TABLE_KANBAN)->where('`id`')->eq($kanbanID)->fetch();
+        $object->team = explode(',', $object->team);
+
+        foreach($object as $field => $value)
+        {
+            if(in_array($field, array_keys($param)))
+            {
+                $_POST[$field] = $param[$field];
+            }
+            else
+            {
+                $_POST[$field] = $value;
+            }
+        }
+
+        $change = $this->objectModel->update($kanbanID);
+        if($change == array()) $change = '没有数据更新';
+        unset($_POST);
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        return $change;
     }
 
     /**
@@ -1031,22 +1105,51 @@ class kanbanTest
         return count($objects);
     }
 
-    public function updateRegionTest($regionID)
+    /**
+     * Test update a region.
+     *
+     * @param  int    $regionID
+     * @param  string $name
+     * @access public
+     * @return array
+     */
+    public function updateRegionTest($regionID, $name)
     {
-        $objects = $this->objectModel->updateRegion($regionID);
+        $_POST['name']  = $name;
 
+        $change = $this->objectModel->updateRegion($regionID);
+        if($change == array()) $change = '没有数据更新';
+
+        unset($_POST);
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        return $change;
     }
 
+    /**
+     * Test update kanban lane.
+     *
+     * @param  int    $executionID
+     * @param  string $laneType
+     * @param  int     $cardID
+     * @access public
+     * @return string
+     */
     public function updateLaneTest($executionID, $laneType, $cardID = 0)
     {
-        $objects = $this->objectModel->updateLane($executionID, $laneType, $cardID = 0);
+        global $tester;
+        $objects = $tester->dao->select('*')->from(TABLE_KANBANLANE)->where('type')->ne('common')->andWhere('execution')->eq($executionID)->fetch();
+        if(empty($objects)) $this->objectModel->createExecutionLane($executionID);
+
+        $this->objectModel->updateLane($executionID, $laneType, $cardID);
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        $objects = $tester->dao->select('*')->from(TABLE_KANBANCELL)->where('kanban')->eq($executionID)->andWhere('type')->eq($laneType)->fetchAll();
+        $cards = '';
+        foreach($objects as $object) $cards .= $object->cards;
+        $cards = preg_replace('#,+#', ',', $cards);
+        return $cards;
     }
 
     /**
@@ -1074,22 +1177,28 @@ class kanbanTest
         return $cards;
     }
 
-    public function updateLaneColumnTest($columnID, $column)
+    /**
+     * Test update a column.
+     *
+     * @param  int    $columnID
+     * @param  string $name
+     * @param  string $color
+     * @access public
+     * @return array
+     */
+    public function updateLaneColumnTest($columnID, $name, $color)
     {
-        $objects = $this->objectModel->updateLaneColumn($columnID, $column);
+        $_POST['name']  = $name;
+        $_POST['color'] = $color;
 
+        $column = $this->objectModel->getColumnByID($columnID);
+        $change = $this->objectModel->updateLaneColumn($columnID, $column);
+        if($change == array()) $change = '没有数据更新';
+
+        unset($_POST);
         if(dao::isError()) return dao::getError();
 
-        return $objects;
-    }
-
-    public function updateLaneOrderTest($executionID, $currentType, $targetType)
-    {
-        $objects = $this->objectModel->updateLaneOrder($executionID, $currentType, $targetType);
-
-        if(dao::isError()) return dao::getError();
-
-        return $objects;
+        return $change;
     }
 
     /**
@@ -1115,13 +1224,40 @@ class kanbanTest
         return $object;
     }
 
-    public function updateCardTest($cardID)
+    /**
+     * Test update a card.
+     *
+     * @param  int    $cardID
+     * @param  array  $param
+     * @access public
+     * @return array
+     */
+    public function updateCardTest($cardID, $param)
     {
-        $objects = $this->objectModel->updateCard($cardID);
+        global $tester;
+        $object = $tester->dao->select('`name`,`desc`,`assignedTo`,`begin`,`end`,`pri`,`estimate`, `progress`')->from(TABLE_KANBANCARD)->where('`id`')->eq($cardID)->fetch();
+        $object->assignedTo = explode(',', $object->assignedTo);
 
-        if(dao::isError()) return dao::getError();
+        foreach($object as $field => $value)
+        {
+            if(in_array($field, array_keys($param)))
+            {
+                $_POST[$field] = $param[$field];
+            }
+            else
+            {
+                $_POST[$field] = $value;
+            }
+        }
 
-        return $objects;
+        $change = $this->objectModel->updateCard($cardID);
+        if($change == array()) $change = '没有数据更新';
+        unset($_POST);
+
+
+        if(dao::isError()) return dao::getError()[0];
+
+        return $change;
     }
 
     /**
@@ -1222,31 +1358,23 @@ class kanbanTest
         return $object;
     }
 
-    public function setHeaderActionsTest($kanban)
-    {
-        $objects = $this->objectModel->setHeaderActions($kanban);
-
-        if(dao::isError()) return dao::getError();
-
-        return $objects;
-    }
-
-    public function setSwitcherTest($kanban)
-    {
-        $objects = $this->objectModel->setSwitcher($kanban);
-
-        if(dao::isError()) return dao::getError();
-
-        return $objects;
-    }
-
+    /**
+     * Test sort kanban group;
+     *
+     * @param  int    $region
+     * @param  array  $groups
+     * @access public
+     * @return string
+     */
     public function sortGroupTest($region, $groups)
     {
-        $objects = $this->objectModel->sortGroup($region, $groups);
+        $this->objectModel->sortGroup($region, $groups);
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        global $tester;
+        $objects = $tester->dao->select('*')->from(TABLE_KANBANGROUP)->where('region')->eq($region)->orderBy('order_asc')->fetchAll('id');
+        return implode(array_keys($objects), ',');
     }
 
     /**
@@ -1272,22 +1400,22 @@ class kanbanTest
         return $object;
     }
 
+    /**
+     * Test update a card's color.
+     *
+     * @param  int    $cardID
+     * @param  string $color
+     * @access public
+     * @return object
+     */
     public function updateCardColorTest($cardID, $color)
     {
-        $objects = $this->objectModel->updateCardColor($cardID, $color);
+        $this->objectModel->updateCardColor($cardID, $color);
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
-    }
-
-    public function resetLaneOrderTest($executionID, $type, $groupBy)
-    {
-        $objects = $this->objectModel->resetLaneOrder($executionID, $type, $groupBy);
-
-        if(dao::isError()) return dao::getError();
-
-        return $objects;
+        $object = $this->objectModel->getCardByID($cardID);
+        return $object;
     }
 
     /**
@@ -1366,7 +1494,7 @@ class kanbanTest
         if(dao::isError()) return dao::getError();
 
         global $tester;
-        $nodes   = $tester->dao->select('id,id')->from(TABLE_KANBANCOLUMN)->where('`parent`')->eq($column->parent)->fetchPairs();
+        $nodes   = $tester->dao->select('*')->from(TABLE_KANBANCOLUMN)->where('`parent`')->eq($column->parent)->andWhere('`id`')->ne($columnID)->fetchAll('id');
         $objects = $tester->dao->select('*')->from(TABLE_KANBANCELL)->where('`column`')->in(array_keys($nodes))->fetchAll();
 
         $cards = '';
@@ -1503,6 +1631,15 @@ class kanbanTest
         return $object;
     }
 
+    /**
+     * Test get object group list.
+     *
+     * @param  int    $executionID
+     * @param  string $type
+     * @param  string $groupBy
+     * @access public
+     * @return array
+     */
     public function getObjectGroupTest($executionID, $type, $groupBy)
     {
         $objects = $this->objectModel->getObjectGroup($executionID, $type, $groupBy);
@@ -1566,6 +1703,14 @@ class kanbanTest
         return count($objects);
     }
 
+    /**
+     * Test get Kanban cards menus by execution id.
+     *
+     * @param  int    $executionID
+     * @param  string $objecType
+     * @access public
+     * @return int
+     */
     public function getKanbanCardMenuTest($executionID, $objecType)
     {
         global $tester;
