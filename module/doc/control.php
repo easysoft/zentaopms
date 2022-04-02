@@ -530,6 +530,15 @@ class doc extends control
             $doc->digest  = commonModel::processMarkdown($doc->digest);
         }
 
+        $showPageDetails = true;
+        if(!empty($doc) and $doc->type == 'url')
+        {
+            $parsedUrl = parse_url($doc->content);
+            $urlPort   = isset($parsedUrl['port']) ? ':' . $parsedUrl['port'] : '';
+            $urlDomain = $parsedUrl['host'] . $urlPort;
+            if($urlDomain == $_SERVER['HTTP_HOST']) $showPageDetails = false;
+        }
+
         /* Check priv when lib is product or project. */
         $lib  = $this->doc->getLibByID($doc->lib);
         $type = $lib->type;
@@ -538,14 +547,15 @@ class doc extends control
         $this->view->position[] = html::a($this->createLink('doc', 'browse', "libID=$doc->lib"), $lib->name);
         $this->view->position[] = $this->lang->doc->view;
 
-        $this->view->doc        = $doc;
-        $this->view->lib        = $lib;
-        $this->view->type       = $type;
-        $this->view->version    = $version ? $version : $doc->version;
-        $this->view->actions    = $this->action->getList('doc', $docID);
-        $this->view->users      = $this->user->getPairs('noclosed,noletter');
-        $this->view->preAndNext = $this->loadModel('common')->getPreAndNextObject('doc', $docID);
-        $this->view->keTableCSS = $this->doc->extractKETableCSS($doc->content);
+        $this->view->doc             = $doc;
+        $this->view->lib             = $lib;
+        $this->view->type            = $type;
+        $this->view->version         = $version ? $version : $doc->version;
+        $this->view->actions         = $this->action->getList('doc', $docID);
+        $this->view->users           = $this->user->getPairs('noclosed,noletter');
+        $this->view->preAndNext      = $this->loadModel('common')->getPreAndNextObject('doc', $docID);
+        $this->view->keTableCSS      = $this->doc->extractKETableCSS($doc->content);
+        $this->view->showPageDetails = $showPageDetails;
 
         $this->display();
     }
