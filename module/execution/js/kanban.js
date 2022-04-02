@@ -993,23 +993,27 @@ function changeCardColType(cardID, fromColID, toColID, fromLaneID, toLaneID, car
  */
 function deleteCard(objectType, objectID, regionID)
 {
-    var objectLang = objectType + 'Lang';
-    var result = confirm(window[objectLang].confirmDelete) ? true : false;
-
-    if(!result) return false;
-    if(!objectID) return false;
-
-    var url = createLink('kanban', 'deleteObjectCard', 'objectType=' + objectType + '&objectID=' + objectID + '&regionID=' + regionID);
-    return $.ajax(
+    $.zui.ContextMenu.hide();
+    setTimeout(function()
     {
-        method:   'post',
-        dataType: 'json',
-        url:      url,
-        success: function(data)
-        {
-          updateRegion(regionID, data[regionID]);
-        }
-    });
+        var objectLang = objectType + 'Lang';
+        var result = confirm(window[objectLang].confirmDelete) ? true : false;
+
+        if(!result) return false;
+        if(!objectID) return false;
+
+        var url = createLink('kanban', 'deleteObjectCard', 'objectType=' + objectType + '&objectID=' + objectID + '&regionID=' + regionID);
+        return $.ajax(
+                {
+                    method:   'post',
+                    dataType: 'json',
+                    url:      url,
+                    success: function(data)
+                    {
+                        updateRegion(regionID, data[regionID]);
+                    }
+                });
+    }, 200)
 }
 
 /**

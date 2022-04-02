@@ -1238,3 +1238,8 @@ function resetKanbanHeight()
 
     $('.kanban-lane').css('height', height -2);
 }
+
+$(document).on('click', '.dropdown-menu', function()
+{
+    $.zui.ContextMenu.hide();
+});
