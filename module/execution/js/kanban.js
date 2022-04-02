@@ -363,6 +363,8 @@ function findDropColumns($element, $root)
     var laneType    = $element.closest('.kanban-lane').data().lane.type;
     var kanbanRules = window.kanbanDropRules ? window.kanbanDropRules[laneType] : null;
 
+    hideKanbanAction();
+
     if(!kanbanRules) return $root.find('.kanban-lane-col:not([data-type="' + col.type + '"])');
 
     var colRules = kanbanRules[col.type];
@@ -993,23 +995,27 @@ function changeCardColType(cardID, fromColID, toColID, fromLaneID, toLaneID, car
  */
 function deleteCard(objectType, objectID, regionID)
 {
-    var objectLang = objectType + 'Lang';
-    var result = confirm(window[objectLang].confirmDelete) ? true : false;
-
-    if(!result) return false;
-    if(!objectID) return false;
-
-    var url = createLink('kanban', 'deleteObjectCard', 'objectType=' + objectType + '&objectID=' + objectID + '&regionID=' + regionID);
-    return $.ajax(
+    $.zui.ContextMenu.hide();
+    setTimeout(function()
     {
-        method:   'post',
-        dataType: 'json',
-        url:      url,
-        success: function(data)
+        var objectLang = objectType + 'Lang';
+        var result     = confirm(window[objectLang].confirmDelete) ? true : false;
+
+        if(!result) return false;
+        if(!objectID) return false;
+
+        var url = createLink('kanban', 'deleteObjectCard', 'objectType=' + objectType + '&objectID=' + objectID + '&regionID=' + regionID);
+        return $.ajax(
         {
-            updateRegion(regionID, data[regionID]);
-        }
-    });
+            method:   'post',
+            dataType: 'json',
+            url:      url,
+            success: function(data)
+            {
+                updateRegion(regionID, data[regionID]);
+            }
+        });
+    }, 200)
 }
 
 /**
