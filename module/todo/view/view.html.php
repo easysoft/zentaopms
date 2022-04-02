@@ -13,7 +13,6 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
 <?php js::set('systemMode', $config->systemMode);?>
-<?php if(!$todo->private or ($todo->private and $todo->account == $app->user->account)):?>
 <style>.chosen-container .chosen-results{max-height: 170px; overflow-y: initial;}</style>
 <div id="mainMenu" class="clearfix">
   <div class="btn-toolbar pull-left">
@@ -302,9 +301,6 @@
 </div>
 <?php js::set('todoID', $todo->id);?>
 <?php js::set('selectExecution', $lang->execution->selectExecution);?>
-<?php else:?>
-<?php echo $lang->todo->thisIsPrivate;?>
-<?php endif;?>
 <script>
 $(function() {parent.$('body.hide-modal-close').removeClass('hide-modal-close'); })
 </script>
