@@ -67,12 +67,6 @@ switch($argv[1])
     case 'cron':
         ztfRun('model/cron');
         break;
-    case 'caselib':
-        ztfRun('model/caselib');
-        break;
-    case 'cron':
-        ztfRun('model/cron');
-        break;
     case 'model':
         ztfRun('model');
         break;
