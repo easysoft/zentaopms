@@ -7,6 +7,14 @@ class caselibTest
          $this->objectModel = $tester->loadModel('caselib');
     }
 
+    /**
+     * Set lib menu test.
+     * 
+     * @param mixed $libraries 
+     * @param mixed $libID 
+     * @access public
+     * @return void
+     */
     public function setLibMenuTest($libraries, $libID)
     {
         $objects = $this->objectModel->setLibMenu($libraries, $libID);
@@ -16,6 +24,14 @@ class caselibTest
         return $objects;
     }
 
+    /**
+     * Save lib state test.
+     * 
+     * @param int $libID 
+     * @param array $libraries 
+     * @access public
+     * @return void
+     */
     public function saveLibStateTest($libID = 0, $libraries = array())
     {
         $objects = $this->objectModel->saveLibState($libID, $libraries);
@@ -25,6 +41,14 @@ class caselibTest
         return $objects;
     }
 
+    /**
+     * Get by ID test.
+     * 
+     * @param mixed $libID 
+     * @param mixed $setImgSize 
+     * @access public
+     * @return void
+     */
     public function getByIdTest($libID, $setImgSize = false)
     {
         $objects = $this->objectModel->getById($libID, $setImgSize);
@@ -34,6 +58,13 @@ class caselibTest
         return $objects;
     }
 
+    /**
+     * Update test.
+     * 
+     * @param mixed $libID 
+     * @access public
+     * @return void
+     */
     public function updateTest($libID)
     {
         $objects = $this->objectModel->update($libID);
@@ -45,6 +76,14 @@ class caselibTest
         return $objects;
     }
 
+    /**
+     * Delete test.
+     * 
+     * @param mixed $libID 
+     * @param string $table 
+     * @access public
+     * @return void
+     */
     public function deleteTest($libID, $table = '')
     {
         $objects = $this->objectModel->delete($libID, $table);
@@ -56,6 +95,12 @@ class caselibTest
         return $objects;
     }
 
+    /**
+     * Get libraries test.
+     * 
+     * @access public
+     * @return void
+     */
     public function getLibrariesTest()
     {
         $objects = $this->objectModel->getLibraries();
@@ -65,6 +110,14 @@ class caselibTest
         return $objects;
     }
 
+    /**
+     * Get list test.
+     * 
+     * @param string $orderBy 
+     * @param mixed $pager 
+     * @access public
+     * @return void
+     */
     public function getListTest($orderBy = 'id_desc', $pager = null)
     {
         $objects = $this->objectModel->getList($orderBy, $pager);
@@ -74,6 +127,13 @@ class caselibTest
         return $objects;
     }
 
+    /**
+     * Create test.
+     * 
+     * @param mixed $param 
+     * @access public
+     * @return void
+     */
     public function createTest($param)
     {
         foreach($param as $k => $v) $_POST[$k] = $v;
@@ -87,6 +147,18 @@ class caselibTest
         return $objects;
     }
 
+    /**
+     * Get libcases test.
+     * 
+     * @param mixed $libID 
+     * @param mixed $browseType 
+     * @param int $queryID 
+     * @param int $moduleID 
+     * @param string $sort 
+     * @param mixed $pager 
+     * @access public
+     * @return void
+     */
     public function getLibCasesTest($libID, $browseType, $queryID = 0, $moduleID = 0, $sort = 'id_desc', $pager = null)
     {
         $objects = $this->objectModel->getLibCases($libID, $browseType, $queryID, $moduleID, $sort, $pager);
@@ -96,6 +168,16 @@ class caselibTest
         return $objects;
     }
 
+    /**
+     * Build searchform test.
+     * 
+     * @param mixed $libID 
+     * @param mixed $libraries 
+     * @param mixed $queryID 
+     * @param mixed $actionURL 
+     * @access public
+     * @return void
+     */
     public function buildSearchFormTest($libID, $libraries, $queryID, $actionURL)
     {
         $objects = $this->objectModel->buildSearchForm($libID, $libraries, $queryID, $actionURL);
@@ -105,6 +187,15 @@ class caselibTest
         return $objects;
     }
 
+    /**
+     * Get liblink test.
+     * 
+     * @param mixed $module 
+     * @param mixed $method 
+     * @param mixed $extra 
+     * @access public
+     * @return void
+     */
     public function getLibLinkTest($module, $method, $extra)
     {
         $objects = $this->objectModel->getLibLink($module, $method, $extra);
@@ -114,6 +205,13 @@ class caselibTest
         return $objects;
     }
 
+    /**
+     * Create from import test.
+     * 
+     * @param mixed $libID 
+     * @access public
+     * @return void
+     */
     public function createFromImportTest($libID)
     {
         $objects = $this->objectModel->createFromImport($libID);
@@ -123,6 +221,13 @@ class caselibTest
         return $objects;
     }
 
+    /**
+     * Batch create case test.
+     * 
+     * @param mixed $libID 
+     * @access public
+     * @return void
+     */
     public function batchCreateCaseTest($libID)
     {
         $objects = $this->objectModel->batchCreateCase($libID);

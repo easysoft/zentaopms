@@ -10,6 +10,11 @@ title=测试 caselibModel->getLibLink();
 cid=1
 pid=1
 
+测试参数情况1返回值 >> model/caselib/getliblink.php?m=caselib&f=browse&t=&libID=%s
+测试参数情况2返回值 >> model/caselib/getliblink.php?m=caselib&f=test&t=&libID=%s
+测试参数情况3返回值 >> model/caselib/getliblink.php?m=tree&f=&t=&libID=%s&type=caselib&currentModuleID=0
+测试参数情况4返回值 >> model/caselib/getliblink.php?m=caselib&f=browse&t=&libID=%s
+
 */
 
 $caselib = new caselibTest();
