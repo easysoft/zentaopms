@@ -111,7 +111,7 @@
           <td class="text-center"><span class='<?php echo $bug->confirmed == '1' ? 'confirmed' : 'unconfirmed';?>' title='<?php echo zget($lang->bug->confirmedList, $bug->confirmed);?>'><?php echo zget($lang->bug->confirmedList, $bug->confirmed)?></span></td>
           <td class='text-left nobr'>
             <?php echo html::a($this->createLink('bug', 'view', "bugID=$bug->id"), $bug->title, null, "style='color: $bug->color' title='{$bug->title}'");?>
-            <?php if($bug->case) echo html::a(helper::createLink('testcase', 'view', "caseID=$bug->case&version=$bug->caseVersion"), "[" . $this->lang->testcase->common  . "#$bug->case]", '', "class='bug' title='$bug->case'");?>
+            <?php if($bug->case) echo html::a(helper::createLink('testcase', 'view', "caseID=$bug->case&version=$bug->caseVersion"), "[" . $this->lang->testcase->common . "#$bug->case]", '', "class='bug' title='$bug->case'");?>
           </td>
           <?php $param = $config->productLink == 'product-all' ? '' : "productID=$bug->product";?>
           <td class='text-left nobr'>
