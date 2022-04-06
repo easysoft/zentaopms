@@ -75,14 +75,14 @@ zentaoxx:
 	cp -r xuan/xxb/db/*.sql zentaoxx/db/
 	cp -r xuan/xxb/module/im zentaoxx/extension/xuan/
 	cp -r xuan/xxb/module/client zentaoxx/extension/xuan/
-	cp -r xuan/xxb/module/license zentaoxx/extension/xuan/
 	cp -r xuan/xxb/module/conference zentaoxx/extension/xuan/
+	cp -r xuan/xxb/module/integration zentaoxx/extension/xuan/
+	cp -r xuan/xxb/module/license zentaoxx/extension/xuan/
 	mkdir -p zentaoxx/extension/xuan/common/view
 	cp -r xuan/xxb/module/common/view/header.modal.html.php zentaoxx/extension/xuan/common/view
 	cp -r xuan/xxb/module/common/view/marked.html.php zentaoxx/extension/xuan/common/view
 	cp -r xuan/xxb/module/common/view/footer.modal.html.php zentaoxx/extension/xuan/common/view
 	cp -r xuan/xxb/module/common/view/version.html.php zentaoxx/extension/xuan/common/view
-	cp -r xuan/xxb/module/license zentaoxx/extension/xuan/
 	mkdir -p zentaoxx/www/js/
 	cp -r xuan/xxb/www/js/markedjs zentaoxx/www/js/
 	cp -r xuan/xxb/www/js/version.js zentaoxx/www/js/
