@@ -2364,7 +2364,7 @@ class story extends control
                 $relatedBranchIdList[$story->branch]   = $story->branch;
                 $relatedStoryIds[$story->id]           = $story->id;
 
-                if(isset($relations[$story->id])) $story->linkStories = $story->linkStories . ',' . $relations[$story->id];
+                if(isset($relations[$story->id])) $story->childStories = $story->childStories . ',' . $relations[$story->id];
 
                 /* Process related stories. */
                 $relatedStories = $story->childStories . ',' . $story->linkStories . ',' . $story->duplicateStory;
@@ -2455,8 +2455,6 @@ class story extends control
                     $linkStoriesIdList = explode(',', $story->linkStories);
                     foreach($linkStoriesIdList as $linkStoryID)
                     {
-                        if(empty($linkStoryID)) continue;
-
                         $linkStoryID = trim($linkStoryID);
                         $tmpLinkStories[] = isset($relatedStories[$linkStoryID]) ? $relatedStories[$linkStoryID] : $linkStoryID;
                     }
@@ -2469,6 +2467,8 @@ class story extends control
                     $childStoriesIdList = explode(',', $story->childStories);
                     foreach($childStoriesIdList as $childStoryID)
                     {
+                        if(empty($childStoryID)) continue;
+
                         $childStoryID = trim($childStoryID);
                         $tmpChildStories[] = isset($relatedStories[$childStoryID]) ? $relatedStories[$childStoryID] : $childStoryID;
                     }
