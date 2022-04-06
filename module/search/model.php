@@ -545,15 +545,18 @@ class searchModel extends model
         {
             $splitedWords = $spliter->utf8Split($word);
 
-            $trimedWord     = trim($splitedWords['words']);
-            $against       .= '"' . $trimedWord . '" ';
-            $againstCond   .= '+"' . $trimedWord . '" ';
-            if(is_numeric($word) and strpos($word, '.') === false and strlen($word) == 5) $againstCond .= "-\" $word \" ";
+            $trimedWord   = trim($splitedWords['words']);
+            $against     .= '"' . $trimedWord . '" ';
+            $againstCond .= '+"' . $trimedWord . '" ';
 
-            $likeWord      = is_numeric($word) ? $word : $trimedWord;
+            $likeWord = is_numeric($word) ? $word : $trimedWord;
             if(is_numeric($word) and strpos($word, '.') === false and strlen($word) < 5) $likeWord = str_pad("|$likeWord|", 5, '_');
             $condition = "OR title like '%{$likeWord}%' OR content like '%{$likeWord}%'";
-            if(is_numeric($word) and strpos($word, '.') === false and strlen($word) == 5) $condition = "OR title REGEXP '[^ ]{$likeWord}[^ ]' OR content REGEXP '[^ ]{$likeWord}[^ ]'";
+            if(is_numeric($word) and strpos($word, '.') === false and strlen($word) == 5)
+            {
+                $againstCond .= "-\" $word \" ";
+                $condition    = "OR title REGEXP '[^ ]{$likeWord}[^ ]' OR content REGEXP '[^ ]{$likeWord}[^ ]'";
+            }
             $likeCondition .= $condition;
         }
 
