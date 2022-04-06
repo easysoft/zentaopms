@@ -242,13 +242,12 @@ class testtask extends control
         }
 
         /* Create testtask from testtask of test.*/
-        $productID   = $productID ? $productID : key($this->products);
-        $executions  = empty($productID) ? array() : $this->loadModel('product')->getExecutionPairsByProduct($productID, '', 'id_desc', $projectID);
-        $builds      = empty($productID) ? array() : $this->loadModel('build')->getBuildPairs($productID, 'all', 'notrunk');
-        $testreports = $this->testtask->getTestReportPairsByBuild($build);
+        $productID  = $productID ? $productID : key($this->products);
+        $executions = empty($productID) ? array() : $this->loadModel('product')->getExecutionPairsByProduct($productID, '', 'id_desc', $projectID);
+        $builds     = empty($productID) ? array() : $this->loadModel('build')->getBuildPairs($productID, 'all', 'notrunk');
 
         /* Set menu. */
-        $productID  = $this->product->saveState($productID, $this->products);
+        $productID = $this->product->saveState($productID, $this->products);
 
         $this->view->title      = $this->products[$productID] . $this->lang->colon . $this->lang->testtask->create;
         $this->view->position[] = html::a($this->createLink('testtask', 'browse', "productID=$productID"), $this->products[$productID]);
@@ -261,7 +260,7 @@ class testtask extends control
         $this->view->executions  = $executions;
         $this->view->builds      = $builds;
         $this->view->build       = $build;
-        $this->view->testreports = $testreports;
+        $this->view->testreports = array('') + $this->loadModel('testreport')->getPairs($productID);
         $this->view->users       = $this->loadModel('user')->getPairs('noclosed|qdfirst|nodeleted');
 
         $this->display();
@@ -758,12 +757,11 @@ class testtask extends control
         $executions  = empty($productID) ? array() : $this->product->getExecutionPairsByProduct($productID, 0, 'id_desc', $projectID);
         $executionID = $task->execution;
         $builds      = empty($productID) ? array() : $this->loadModel('build')->getBuildPairs($productID, 'all', 'noempty,notrunk', $executionID, 'execution');
-        $testreports = $this->loadModel('testreport')->getPairs($task->product);
 
         $this->view->task         = $task;
         $this->view->executions   = $executions;
         $this->view->builds       = $builds;
-        $this->view->testreports  = $testreports;
+        $this->view->testreports  = $this->loadModel('testreport')->getPairs($task->product, $task->testreport);
         $this->view->users        = $this->loadModel('user')->getPairs('nodeleted|noclosed', $task->owner);
         $this->view->contactLists = $this->user->getContactLists($this->app->user->account, 'withnote');
 
