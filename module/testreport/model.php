@@ -578,16 +578,16 @@ class testreportModel extends model
      * Get pairs.
      *
      * @param  int    $productID
-     * @param  int    $includedID
+     * @param  int    $appendID
      * @access public
      * @return array
      */
-    public function getPairs($productID = 0, $includedID = 0)
+    public function getPairs($productID = 0, $appendID = 0)
     {
         return $this->dao->select('id,title')->from(TABLE_TESTREPORT)
             ->where('deleted')->eq(0)
             ->beginIF($productID)->andWhere('product')->eq($productID)->fi()
-            ->beginIF($includedID)->orWhere('id')->eq($includedID)->fi()
+            ->beginIF($appendID)->orWhere('id')->eq($appendID)->fi()
             ->orderBy('id_desc')
             ->fetchPairs();
     }
