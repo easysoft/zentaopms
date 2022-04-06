@@ -429,7 +429,5 @@ class Processor
     public function initSonPlan()
     {
         $this->dao->query("update zt_productplan set `parent` = '-1' where id < 10 and id > 0");
-
     }
-
 }
