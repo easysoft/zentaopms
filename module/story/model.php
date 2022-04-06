@@ -3232,7 +3232,7 @@ class storyModel extends model
             if(isset($stories[$storyID]) and $stories[$storyID] > $storyVersionList[$key]) $objectList[$key]->needconfirm = true;
         }
 
-        return is_object($data) ? current($objectList) : $objectList;
+        return is_object($data) ? reset($objectList) : $objectList;
     }
 
     /**
