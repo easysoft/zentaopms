@@ -853,7 +853,7 @@ class taskModel extends model
                     {
                         $currentTask->status = 'done';
                         $currentTask->finishedBy   = $this->app->user->account;
-                        $currentTask->finishedDate = $now;
+                        $currentTask->finishedDate = $task->finishedDate;
                     }
                 }
 
@@ -1717,7 +1717,7 @@ class taskModel extends model
             ->setDefault('status', 'done')
             ->setDefault('finishedBy, lastEditedBy', $this->app->user->account)
             ->setDefault('finishedDate, lastEditedDate', $now)
-            ->removeIF(!empty($oldTask->team), 'finishedBy,finishedDate,status,left')
+            ->removeIF(!empty($oldTask->team), 'finishedBy,status,left')
             ->remove('comment,files,labels,currentConsumed')
             ->get();
 
