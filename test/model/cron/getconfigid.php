@@ -10,6 +10,8 @@ title=测试 cronModel->getConfigID();
 cid=1
 pid=1
 
+查询cron的configID,目前内置的是19 >> 19
+
 */
 
 $cron = new cronTest();

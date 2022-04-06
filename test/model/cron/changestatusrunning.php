@@ -10,6 +10,9 @@ title=测试 cronModel->changeStatusRunning();
 cid=1
 pid=1
 
+更新之后查看返回值是否是1 >> 1
+更新之后查看状态值是否是running >> running
+
 */
 
 $cron     = new cronTest();

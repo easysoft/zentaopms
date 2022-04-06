@@ -10,9 +10,11 @@ title=测试 cronModel->getLastTime();
 cid=1
 pid=1
 
+获取最后执行时间进行对比 >> 19
+
 */
 
 $cron     = new cronTest();
 $lastTime = $cron->getLastTimeTest();
 
-r($lastTime) && p() && e('2022-04-01 13:42:45');  //获取最后执行时间进行对比
+r(strlen($lastTime)) && p() && e('19');  //获取最后执行时间进行对比

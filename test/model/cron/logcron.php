@@ -10,10 +10,12 @@ title=测试 cronModel->logCron();
 cid=1
 pid=1
 
+调用日志方法查看日志文件该字符串位置 >> 14
+
 */
 
 $cron = new cronTest();
-$file = $tester->app->getLogRoot() . 'cron.' . date('Ymd') . '.log.php';
+$file = $tester->app->getLogRoot() . 'cron.' . date( 'Ymd') . '.log.php';
 if(is_file($file)) unlink($file);
 
 $cron->logCronTest('cronlogtest');

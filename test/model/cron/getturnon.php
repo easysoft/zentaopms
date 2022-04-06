@@ -10,6 +10,8 @@ title=测试 cronModel->getTurnon();
 cid=1
 pid=1
 
+查询定时任务配置是否开启 >> 1
+
 */
 
 $cron  = new cronTest();

@@ -10,6 +10,12 @@ title=测试 cronModel->runable();
 cid=1
 pid=1
 
+cron配置为空情况 >> 0
+cron配置存在,执行时间大于最大可执行时间情况 >> 1
+cron状态为空情况 >> 1
+cron状态是stop情况 >> 1
+cron状态存在不是stop情况 >> 0
+
 */
 
 $cron = new cronTest();

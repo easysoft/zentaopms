@@ -10,6 +10,10 @@ title=测试 cronModel->create();
 cid=1
 pid=1
 
+命令为空时候返回值 >> 『命令』不能为空
+添加之后对比添加数据信息 >> test comand,zentao
+添加之后对比添加数据信息 >> 55,23,30,12,6
+
 */
 
 $cron           = new cronTest();

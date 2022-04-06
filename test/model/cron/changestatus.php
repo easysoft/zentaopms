@@ -10,12 +10,15 @@ title=测试 cronModel->changeStatus();
 cid=1
 pid=1
 
+更新定时任务状态之后查看返回值 >> 1
+更新定时任务状态之后查看状态值 >> stop
+
 */
 
 $cron     = new cronTest();
 $cronID   = 1;
 $status   = 'stop';
-$result   = $cron->changeStatusTest($cronID,$status);
+$result   = $cron->changeStatusTest($cronID, $status);
 $cronInfo = $tester->cron->getById($cronID);
 
 r($result)   && p()         && e('1');    //更新定时任务状态之后查看返回值
