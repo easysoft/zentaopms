@@ -10,6 +10,8 @@ title=测试 caselibModel->delete();
 cid=1
 pid=1
 
+测试删除之后deleted值是否为1 >> 1
+
 */
 
 $caselib = new caselibTest();

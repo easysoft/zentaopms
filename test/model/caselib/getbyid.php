@@ -10,6 +10,10 @@ title=测试 caselibModel->getById();
 cid=1
 pid=1
 
+测试获取数据的名称信息 >> 这是测试套件名称201
+测试获取数据的描述信息 >> 这是测试套件的描述201
+测试获取数据的type类型 >> library
+
 */
 
 $caselib = new caselibTest();

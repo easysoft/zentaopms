@@ -69,8 +69,8 @@ $(function()
         var isPrev = $(this).is('.prev');
         var $activeItem = $nav.children('.active');
         var $next = $activeItem[isPrev ? 'prev' : 'next']('li:not(.switch-icon)');
-        if ($next.length) $next.find('a').trigger('click');
-        else $nav.children('li:not(.switch-icon)')[isPrev ? 'last' : 'first']().find('a').trigger('click');
+        if ($next.length) $next.find('a[data-toggle="tab"]').trigger('click');
+        else $nav.children('li:not(.switch-icon)')[isPrev ? 'last' : 'first']().find('a[data-toggle="tab"]').trigger('click');
         e.preventDefault();
     });
 

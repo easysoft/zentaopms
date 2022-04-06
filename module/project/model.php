@@ -1960,7 +1960,7 @@ class projectModel extends model
      * @param  string  $orderBy
      * @param  object  $pager
      * @access public
-     * @return void
+     * @return array
      */
     public function getStats($projectID = 0, $status = 'undone', $productID = 0, $branch = 0, $itemCounts = 30, $orderBy = 'id_asc', $pager = null)
     {

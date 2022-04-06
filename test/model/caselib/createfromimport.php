@@ -10,6 +10,10 @@ title=测试 caselibModel->createFromImport();
 cid=1
 pid=1
 
+添加两条数据之后查询数据条数是否正确 >> 12
+添加数据之后查询新加用例的名称，关键字 >> 测试导入添加1,keywords1
+添加数据之后查询新加用例的名称，关键字 >> 测试导入添加2,keywords2
+
 */
 
 $caselib = new caselibTest();
@@ -28,8 +32,8 @@ $_POST = array(
 
 $caselib->createFromImportTest(201);
 unset($_POST);
-$total = $tester->dao->select('count(*) total')->from(TABLE_CASE)->where('lib')->eq(201)->fetch('total');
-$cases = $tester->dao->select('*')->from(TABLE_CASE)->where('lib')->eq(201)->fetchAll('id');
+$total = $tester->dao->select('count(*) total')->from(TABLE_CASE)->where( 'lib')->eq(201)->fetch('total');
+$cases = $tester->dao->select('*')->from(TABLE_CASE)->where( 'lib')->eq(201)->fetchAll('id');
 
 r($total) && p()                     && e('12');                      //添加两条数据之后查询数据条数是否正确
 r($cases) && p('411:title,keywords') && e('测试导入添加1,keywords1'); //添加数据之后查询新加用例的名称，关键字
