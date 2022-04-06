@@ -1,5 +1,4 @@
 <?php
-
 /**
  * The control file of api of ZenTaoPMS.
  *
@@ -341,7 +340,7 @@ class api extends control
     /**
      * Edit an api doc library
      *
-     * @param $id
+     * @param  int     $id
      * @access public
      * @return void
      */
@@ -375,9 +374,12 @@ class api extends control
 
 
     /**
+     * Delete api library.
+     *
      * @param  int    $libID
      * @param  string $confirm
-     * @param  string $from
+     * @access public
+     * @return void
      */
     public function deleteLib($libID, $confirm = 'no')
     {
@@ -401,7 +403,7 @@ class api extends control
     /**
      * Edit library.
      *
-     * @param  int $apiID
+     * @param  int     $apiID
      * @access public
      * @return void
      */

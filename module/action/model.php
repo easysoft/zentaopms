@@ -1072,7 +1072,7 @@ class actionModel extends model
             /* Add name field to the actions. */
             $action->objectName = isset($objectNames[$action->objectType][$action->objectID]) ? $objectNames[$action->objectType][$action->objectID] : '';
 
-            if($action->objectType =='program' and strpos('syncexecution,syncproject,syncprogram', $action->action) !==false)
+            if($action->objectType == 'program' and strpos('syncexecution,syncproject,syncprogram', $action->action) !== false)
             {
                 $action->objectName .= $this->lang->action->label->startProgram;
             }
@@ -1319,9 +1319,9 @@ class actionModel extends model
                 {
                     $libID = $action->objectID;
                     $type  = 'custom';
-                    if($action->execution != 0)   $type = 'execution';
-                    if($action->project   != 0)   $type = 'project';
-                    if($action->product != ',0,') $type = 'product';
+                    if(!empty($action->project))   $type = 'project';
+                    if(!empty($action->execution)) $type = 'execution';
+                    if(!empty($action->product))   $type = 'product';
 
                     $libObjectID = $type != 'custom' ? $action->$type : '';
                     $libObjectID = trim($libObjectID, ',');
