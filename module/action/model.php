@@ -289,7 +289,7 @@ class actionModel extends model
             }
 
             if($actionType == 'unlinkedfromproject' or $actionType == 'linked2project') $record['project'] = (int)$extra ;
-            if($actionType == 'unlinkedfromexecution' or $actionType == 'linked2execution') $record['execution'] = (int)$extra;
+            if(in_array($actionType, array('unlinkedfromexecution', 'linked2execution', 'linked2kanban'))) $record['execution'] = (int)$extra;
 
             if($record)
             {
@@ -351,7 +351,7 @@ class actionModel extends model
             {
                 $action->actor = $commiters[$action->actor];
             }
-            elseif($actionName == 'linked2execution')
+            elseif($actionName == 'linked2execution' or $actionName == 'linked2kanban')
             {
                 $execution = $this->dao->select('name,type')->from(TABLE_PROJECT)->where('id')->eq($action->extra)->fetch();
                 $name      = $execution->name;
