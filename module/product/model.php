@@ -835,6 +835,25 @@ class productModel extends model
 
         $maxOrder = $this->dao->select("max(`order`) as maxOrder")->from(TABLE_MODULE)->where('type')->eq('line')->fetch('maxOrder');
         $maxOrder = $maxOrder ? $maxOrder : 0;
+
+        $lines = array();
+        foreach($data->modules as $id => $name)
+        {
+            if(empty($name)) continue;
+            $productLine = new stdclass();
+            $productLine->module = $name;
+            $productLine->program = $data->programs[$id];
+            if(in_array($productLine, $lines))
+            {
+                dao::$errors[] = sprintf($this->lang->product->nameIsDuplicate, $productLine->module);
+                return false;
+            }
+            else
+            {
+                $lines[] = $productLine;
+            }
+        }
+
         foreach($data->modules as $id => $name)
         {
             if(empty($name)) continue;
