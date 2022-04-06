@@ -179,12 +179,15 @@
         <thead>
           <tr>
           <?php
+          $checkObject = new stdclass();
+          $checkObject->execution = $execution->id;
+
           $totalEstimate       = 0;
           $canBatchEdit        = common::hasPriv('story', 'batchEdit');
           $canBatchClose       = common::hasPriv('story', 'batchClose');
           $canBatchChangeStage = common::hasPriv('story', 'batchChangeStage');
           $canBatchUnlink      = common::hasPriv('execution', 'batchUnlinkStory');
-          $canBatchToTask      = common::hasPriv('story', 'batchToTask');
+          $canBatchToTask      = common::hasPriv('story', 'batchToTask', $checkObject);
           $canBatchAction      = ($canBeChanged and ($canBatchEdit or $canBatchClose or $canBatchChangeStage or $canBatchUnlink or $canBatchToTask));
           ?>
           <?php $vars = "executionID={$execution->id}&orderBy=%s&type=$type&param=$param&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"; ?>
@@ -335,13 +338,14 @@
             $actionLink = $this->createLink('story', 'batchEdit', "productID=0&executionID=$execution->id");
             echo html::commonButton($lang->edit, "data-form-action='$actionLink' $disabled");
             ?>
-            <button type='button' <?php echo $canBatchToTask ? '' : "disabled='disabled'";?> class='btn dropdown-toggle' data-toggle='dropdown'><span class='caret'></span></button>
+            <?php if($canBatchToTask):?>
+            <button type='button' class='btn dropdown-toggle' data-toggle='dropdown'><span class='caret'></span></button>
             <ul class='dropdown-menu'>
               <?php
-              $class = $canBatchToTask ? '' : "class='hidden'";
-              echo "<li $class>" . html::a('#batchToTask', $lang->story->batchToTask, '', "data-toggle='modal' id='batchToTaskButton'") . "</li>";
+              echo "<li>" . html::a('#batchToTask', $lang->story->batchToTask, '', "data-toggle='modal' id='batchToTaskButton'") . "</li>";
               ?>
             </ul>
+            <?php endif;?>
           </div>
           <?php
           if($canBatchClose)

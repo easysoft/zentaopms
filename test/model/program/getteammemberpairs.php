@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
-include dirname(dirname(dirname(__FILE__))) . '/class/program.class.php';
+su('admin');
 
 /**
 
@@ -14,10 +14,12 @@ pid=1
 
 */
 
-$program = new Program('admin');
+global $tester;
+$tester->loadModel('program');
+$teams1 = $tester->program->getTeamMemberPairs(1);
+$teams2 = $tester->program->getTeamMemberPairs(2);
 
-$t_Tnumber = array(1);
-
-//var_dump($program->getById2($t_Tnumber[0]));die;
-r($program->getById2($t_Tnumber[0]))  && p('pm92') && e('P:产品经理92'); //获取项目集下所有团队成员
-r($program->getCount6($t_Tnumber[0])) && p()         && e('19');      // 获取项目集下所有团队成员
+r(count($teams1)) && p()         && e('19');           // 获取项目集1下所有团队成员数量
+r(count($teams2)) && p()         && e('19');           // 获取项目集2下所有团队成员数量
+r($teams1)        && p('pm92')   && e('P:产品经理92'); // 获取项目集1下所有团队成员真实姓名
+r($teams2)        && p('user83') && e('U:测试83');     // 获取项目集2下所有团队成员真实姓名
