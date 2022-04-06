@@ -134,8 +134,8 @@ js::set('api', $api);
                         <input type="text" placeholder="<?php echo $lang->struct->desc;?>" autocomplete="off" class="form-control" v-model="item.desc">
                       </td>
                       <td>
-                        <button class="btn btn-link" type="button" @click="add(header, key, 'header')"><?php echo $lang->struct->add;?></button>
-                        <button class="btn btn-link" type="button" @click="del(header, key)"><?php echo $lang->delete;?></button>
+                        <button class="btn btn-link btn-icon btn-add" type="button" @click="add(header, key, 'header')"><i class="icon icon-plus"></i></button>
+                        <button class="btn btn-link btn-icon btn-delete" type="button" @click="del(header, key)"><i class="icon icon-close"></i></button>
                       </td>
                   </tbody>
                 </table>
@@ -168,8 +168,8 @@ js::set('api', $api);
                         <input type="text" placeholder="<?php echo $lang->struct->desc;?>" autocomplete="off" class="form-control" v-model="item.desc">
                       </td>
                       <td>
-                        <button class="btn btn-link" type="button" @click="add(queryP, key, 'query')"><?php echo $lang->struct->add;?></button>
-                        <button class="btn btn-link" type="button" @click="del(queryP, key)"><?php echo $lang->delete;?></button>
+                        <button class="btn btn-link btn-icon btn-add" type="button" @click="add(queryP, key, 'query')"><i class="icon icon-plus"></i></button>
+                        <button class="btn btn-link btn-icon btn-delete" type="button" @click="del(queryP, key)"><i class="icon icon-close"></i></button>
                       </td>
                   </tbody>
                 </table>
