@@ -88,3 +88,8 @@ if(file_exists($xuanExtFile)) include $xuanExtFile;
 <?php else: ?>
 <body class='<?php echo $singleClass;?>'>
 <?php endif; ?>
+<?php if($this->app->getViewType() == 'xhtml'):?>
+  <style>
+    .main-actions-holder {display: none !important;}
+  </style>
+<?php endif;?>
