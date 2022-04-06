@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
-include dirname(dirname(dirname(__FILE__))) . '/class/project.class.php';
+su('admin');
 
 /**
 
@@ -13,8 +13,8 @@ pid=1
 
 */
 
-$t = new Project('admin');
-
+global $tester;
+$tester->loadModel('project');
 $projectIdList = array(11,12,13);
 
-r(($t->getByIdList($projectIdList, 3))) && p('11:name;12:name;13:name') && e('项目1;项目2;项目3'); //获取projectIdList对应的项目名称
+r(($tester->project->getByIdList($projectIdList))) && p('11:name;12:name;13:name') && e('项目1;项目2;项目3'); //获取projectIdList对应的项目名称
