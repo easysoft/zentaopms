@@ -33,8 +33,11 @@ fields:
     format: ""
   - field: actor
     note: "操作者"
-    from: common.user.v1.yaml
-    use: user
+    fields:
+      - field: actor1
+        range: admin,dev,test
+      - field: actor2
+        range: [],17-18
     prefix: ""
     postfix: ""
     loop: 0
