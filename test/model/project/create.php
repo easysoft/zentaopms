@@ -19,6 +19,8 @@ pid=1
 
 */
 
+global $tester;
+$tester->app->loadConfig('execution');
 $project = new Project();
 
 $data = array(
@@ -26,7 +28,7 @@ $data = array(
     'name'       => '测试新增项目一',
     'budget'     => '', 
     'budgetUnit' => 'CNY',
-    'begin'      => '2022-02-03',
+    'begin'      => '2022-02-07',
     'end'        => '2022-03-01',
     'desc'       => '测试项目描述',
     'acl'        => 'private',
