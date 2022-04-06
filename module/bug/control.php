@@ -406,7 +406,8 @@ class bug extends control
             if(isset($output['executionID']) and isonlybody())
             {
                 $executionID = $this->post->execution ? $this->post->execution : $output['executionID'];
-                if($executionID == $output['executionID'] and $this->app->tab == 'execution')
+                $execution   = $this->loadModel('execution')->getByID($executionID);
+                if($executionID == $output['executionID'] and $this->app->tab == 'execution' and $execution->type == 'kanban')
                 {
                     $kanbanData = $this->loadModel('kanban')->getRDKanban($executionID, $this->session->execLaneType ? $this->session->execLaneType : 'all');
                     $kanbanData = json_encode($kanbanData);
@@ -414,7 +415,7 @@ class bug extends control
                 }
                 else
                 {
-                    return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true));
+                    return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'locate' => 'parent'));
                 }
             }
 
