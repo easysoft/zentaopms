@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
-include dirname(dirname(dirname(__FILE__))) . '/class/program.class.php';
+su('admin');
 
 /**
 
@@ -15,10 +15,9 @@ pid=1
 
 */
 
-$SubprojectSet = new Program('admin');
+global $tester;
+$tester->loadModel('program');
 
-$t_findnu = array('1', '22', '221');
-
-r($SubprojectSet->getChildren($t_findnu[0])) && p()          && e('9');           // 通过id查找id=1的子项目集个数
-r($SubprojectSet->getChildren($t_findnu[1])) && p()          && e('7');           // 通过id查找id=22的子项目集个数
-r($SubprojectSet->getChildren($t_findnu[2])) && p('message') && e('Not Found');   // 通过id查找id=221的子项目集个数
+r($tester->program->getChildren(1))   && p() && e('9'); // 通过id查找id=1的子项目集个数
+r($tester->program->getChildren(22))  && p() && e('7'); // 通过id查找id=22的子项目集个数
+r($tester->program->getChildren(221)) && p() && e('0'); // 通过id查找id=221的子项目集个数

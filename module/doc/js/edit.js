@@ -82,6 +82,34 @@ $(function()
                 }
             }, 200);
         }
+        else
+        {
+            setTimeout(function()
+            {
+                if($('a[title="Fullscreen"]').hasClass('active'))
+                {
+                    $('.main-header').hide();
+                    $('#submit').addClass('markdown-fullscreen-save');
+                    $('#submit').removeClass('btn-wide');
+                    $('#mainContent .fullscreen').css('padding-top', '8px');
+                    $('#mainContent .fullscreen').css('height', '40px');
+                    $('.CodeMirror-fullscreen').css('top', '40px');
+                    $('.editor-preview-side').css('top', '40px');
+                    $('#submit').data('placement', 'left');
+                    parent.$('.modal-header > .close').addClass('fullscreen-close');
+                }
+                else
+                {
+                    $('.main-header').show();
+                    $('#submit').removeClass('markdown-fullscreen-save');
+                    $('#mainContent .editor-toolbar').css('padding', '1px');
+                    $('#mainContent .editor-toolbar').css('height', '30px');
+                    $('.CodeMirror').css('top', '0px');
+                    $('.editor-preview-side').css('top', '0px');
+                    parent.$('.modal-header > .close').removeClass('fullscreen-close');
+                }
+            }, 200);
+        }
     });
 })
 

@@ -22,7 +22,7 @@ fields:
   - field: lifetime
     range:
   - field: budget
-    range: 0
+    range: 900000-1:100
   - field: budgetUnit
     range: CNY,USD
   - field: attribute

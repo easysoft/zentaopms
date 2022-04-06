@@ -718,7 +718,7 @@ class upgrade extends control
         }
 
         $extFiles = $this->upgrade->getExtFiles();
-        if(!empty($extFiles) and $skipMoveFile == 'no') return $this->locate(inlink('moveExtFiles', "fromVersion=$fromVersion"));
+        if(!empty($extFiles) and $skipMoveFile == 'no') return print(js::locate(inlink('moveExtFiles', "fromVersion=$fromVersion")));
 
         $response = $this->upgrade->removeEncryptedDir();
         if($response['result'] == 'fail')

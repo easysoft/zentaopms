@@ -2362,6 +2362,7 @@ class storyModel extends model
      * Get stories pairs of a product.
      *
      * @param  int           $productID
+     * @param  string|int    $branch
      * @param  array|string  $moduleIdList
      * @param  string        $status
      * @param  string        $order
@@ -3231,7 +3232,7 @@ class storyModel extends model
             if(isset($stories[$storyID]) and $stories[$storyID] > $storyVersionList[$key]) $objectList[$key]->needconfirm = true;
         }
 
-        return is_object($data) ? current($objectList) : $objectList;
+        return is_object($data) ? reset($objectList) : $objectList;
     }
 
     /**
@@ -4391,6 +4392,30 @@ class storyModel extends model
             ->fetchAll();
 
         return $story;
+    }
+
+    /**
+     * Get story relation by Ids.
+     *
+     * @param  array  $storyIdList
+     * @param  string $storyType
+     * @access public
+     * @return array
+     */
+    public function getStoryRelationByIds($storyIdList, $storyType)
+    {
+        $conditionField = $storyType == 'story' ? 'BID' : 'AID';
+        $storyType      = $storyType == 'story' ? 'BID, GROUP_CONCAT(`AID` SEPARATOR ",")' : 'AID, GROUP_CONCAT(`BID` SEPARATOR ",")';
+
+        $relations = $this->dao->select($storyType)->from(TABLE_RELATION)
+            ->where('AType')->eq('requirement')
+            ->andWhere('BType')->eq('story')
+            ->andWhere('relation')->eq('subdivideinto')
+            ->andWhere($conditionField)->in($storyIdList)
+            ->groupBy($conditionField)
+            ->fetchPairs();
+
+        return $relations;
     }
 
     /**

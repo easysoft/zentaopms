@@ -10,6 +10,9 @@ title=测试 caselibModel->getList();
 cid=1
 pid=1
 
+测试获取列表的个数，目前只有一个 >> 1
+测试获取列表某个用例库的名称信息 >> 这是测试套件名称201
+
 */
 
 $caselib = new caselibTest();

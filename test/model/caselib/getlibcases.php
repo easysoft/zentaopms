@@ -10,6 +10,10 @@ title=测试 caselibModel->getLibCases();
 cid=1
 pid=1
 
+所有状态下，用例库下用例数量 >> 10
+搜索状态下，用例库下用例数量 >> 10
+分页状态下，用例库下用例数量 >> 5
+
 */
 global $tester;
 $tester->app->loadClass('pager', $static = true);

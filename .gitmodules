@@ -1,0 +1,3 @@
+[submodule "extension/qucheng"]
+	path = extension/qucheng
+	url = https://gitlab.zcorp.cc/easycorp/qucheng.git

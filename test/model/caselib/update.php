@@ -10,6 +10,10 @@ title=测试 caselibModel->update();
 cid=1
 pid=1
 
+测试更新名称为空时候返回 >> 『name』不能为空。
+测试更新之后名称信息 >> 测试修改名称
+测试更新之后描述信息 >> 测试修改描述
+
 */
 
 $caselib       = new caselibTest();

@@ -2345,23 +2345,26 @@ class story extends control
                 }
             }
 
-            /* Get users, products and executions. */
-            $users    = $this->loadModel('user')->getPairs('noletter');
-            $products = $this->product->getPairs('nocode');
+            /* Get users, products and relations. */
+            $users     = $this->loadModel('user')->getPairs('noletter');
+            $products  = $this->product->getPairs('nocode');
+            $relations = $this->story->getStoryRelationByIds($storyIdList, $type);
 
             /* Get related objects id lists. */
             $relatedProductIdList = array();
             $relatedStoryIdList   = array();
             $relatedPlanIdList    = array();
             $relatedBranchIdList  = array();
-            $relatedStoryIDs      = array();
+            $relatedStoryIds      = array();
 
             foreach($stories as $story)
             {
                 $relatedProductIdList[$story->product] = $story->product;
                 $relatedPlanIdList[$story->plan]       = $story->plan;
                 $relatedBranchIdList[$story->branch]   = $story->branch;
-                $relatedStoryIDs[$story->id]           = $story->id;
+                $relatedStoryIds[$story->id]           = $story->id;
+
+                if(isset($relations[$story->id])) $story->childStories = $story->childStories . ',' . $relations[$story->id];
 
                 /* Process related stories. */
                 $relatedStories = $story->childStories . ',' . $story->linkStories . ',' . $story->duplicateStory;
@@ -2372,14 +2375,14 @@ class story extends control
                 }
             }
 
-            $storyTasks = $this->loadModel('task')->getStoryTaskCounts($relatedStoryIDs);
-            $storyBugs  = $this->loadModel('bug')->getStoryBugCounts($relatedStoryIDs);
-            $storyCases = $this->loadModel('testcase')->getStoryCaseCounts($relatedStoryIDs);
+            $storyTasks = $this->loadModel('task')->getStoryTaskCounts($relatedStoryIds);
+            $storyBugs  = $this->loadModel('bug')->getStoryBugCounts($relatedStoryIds);
+            $storyCases = $this->loadModel('testcase')->getStoryCaseCounts($relatedStoryIds);
 
             /* Get related objects title or names. */
             $productsType   = $this->dao->select('id, type')->from(TABLE_PRODUCT)->where('id')->in($relatedProductIdList)->fetchPairs();
             $relatedPlans   = $this->dao->select('id, title')->from(TABLE_PRODUCTPLAN)->where('id')->in(join(',', $relatedPlanIdList))->fetchPairs();
-            $relatedStories = $this->dao->select('id,title')->from(TABLE_STORY) ->where('id')->in($relatedStoryIdList)->fetchPairs();
+            $relatedStories = $this->dao->select('id,title')->from(TABLE_STORY)->where('id')->in($relatedStoryIdList)->fetchPairs();
             $relatedFiles   = $this->dao->select('id, objectID, pathname, title')->from(TABLE_FILE)->where('objectType')->eq('story')->andWhere('objectID')->in($storyIdList)->andWhere('extra')->ne('editor')->fetchGroup('objectID');
             $relatedSpecs   = $this->dao->select('*')->from(TABLE_STORYSPEC)->where('`story`')->in($storyIdList)->orderBy('version desc')->fetchGroup('story');
             $relatedBranch  = array('0' => $this->lang->branch->main) + $this->dao->select('id, name')->from(TABLE_BRANCH)->where('id')->in($relatedBranchIdList)->fetchPairs();
@@ -2448,7 +2451,7 @@ class story extends control
 
                 if($story->linkStories)
                 {
-                    $tmpLinkStories = array();
+                    $tmpLinkStories    = array();
                     $linkStoriesIdList = explode(',', $story->linkStories);
                     foreach($linkStoriesIdList as $linkStoryID)
                     {
@@ -2464,6 +2467,8 @@ class story extends control
                     $childStoriesIdList = explode(',', $story->childStories);
                     foreach($childStoriesIdList as $childStoryID)
                     {
+                        if(empty($childStoryID)) continue;
+
                         $childStoryID = trim($childStoryID);
                         $tmpChildStories[] = isset($relatedStories[$childStoryID]) ? $relatedStories[$childStoryID] : $childStoryID;
                     }

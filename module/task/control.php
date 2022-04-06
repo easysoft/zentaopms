@@ -207,6 +207,11 @@ class task extends control
             elseif($this->post->after == 'toStoryList')
             {
                 $response['locate'] = $this->createLink('execution', 'story', "executionID=$executionID");
+                if($this->config->vision == 'lite')
+                {
+                    $projectID = $this->dao->select('project')->from(TABLE_EXECUTION)->where('id')->eq($executionID)->fetch('project');
+                    $response['locate'] = $this->createLink('projectstory', 'story', "projectID=$projectID");
+                }
                 return $this->send($response);
             }
             else
@@ -368,11 +373,11 @@ class task extends control
         if($story)
         {
             $moduleID = $story->module;
-            $stories  = $this->story->getExecutionStoryPairs($executionID, 0, 'all', $moduleID, 'short');
+            $stories  = $this->story->getExecutionStoryPairs($executionID, 0, 'all', $moduleID, 'short', 'unclosed');
         }
         else
         {
-            $stories = $this->story->getExecutionStoryPairs($executionID, 0, 'all', 0, 'short');
+            $stories = $this->story->getExecutionStoryPairs($executionID, 0, 'all', 0, 'short', 'unclosed');
         }
 
         $members       = $this->loadModel('user')->getTeamMemberPairs($executionID, 'execution', 'nodeleted');
@@ -833,7 +838,7 @@ class task extends control
         }
 
         $execution = $this->execution->getById($task->execution);
-        if(!isonlybody() and $execution->type == 'kanban') return $this->locate($this->createLink('execution', 'kanban', "executionID=$execution->id"));
+        if(!isonlybody() and $execution->type == 'kanban') return print(js::locate($this->createLink('execution', 'kanban', "executionID=$execution->id")));
 
         $this->session->project = $task->project;
 

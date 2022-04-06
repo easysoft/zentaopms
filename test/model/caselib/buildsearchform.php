@@ -10,6 +10,9 @@ title=测试 caselibModel->buildSearchForm();
 cid=1
 pid=1
 
+测试设置的url参数 >> model/caselib/buildsearchform.php?m=caselib&f=browse&t=&libID=201&browseType=bySearch&queryID=myQueryID
+测试设置的queryID值是否正确 >> 10
+
 */
 
 $caselib   = new caselibTest();

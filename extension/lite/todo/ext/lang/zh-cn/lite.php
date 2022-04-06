@@ -1,6 +1,7 @@
 <?php
 $lang->todo->typeList['task'] = '任务';
 
+if($this->config->visions == ',lite,') unset($lang->todo->typeList['feedback']);
 unset($lang->todo->typeList['bug']);
 unset($lang->todo->typeList['testtask']);
 unset($lang->todo->typeList['review']);

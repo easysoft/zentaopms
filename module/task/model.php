@@ -853,7 +853,7 @@ class taskModel extends model
                     {
                         $currentTask->status = 'done';
                         $currentTask->finishedBy   = $this->app->user->account;
-                        $currentTask->finishedDate = $now;
+                        $currentTask->finishedDate = $task->finishedDate;
                     }
                 }
 
@@ -1717,7 +1717,7 @@ class taskModel extends model
             ->setDefault('status', 'done')
             ->setDefault('finishedBy, lastEditedBy', $this->app->user->account)
             ->setDefault('finishedDate, lastEditedDate', $now)
-            ->removeIF(!empty($oldTask->team), 'finishedBy,finishedDate,status,left')
+            ->removeIF(!empty($oldTask->team), 'finishedBy,status,left')
             ->remove('comment,files,labels,currentConsumed')
             ->get();
 
@@ -2198,41 +2198,7 @@ class taskModel extends model
         }
         $parents = $this->dao->select('*')->from(TABLE_TASK)->where('id')->in($parents)->fetchAll('id');
 
-        if ($this->config->vision == 'lite') {
-            $lanes      = array();
-            $cardsWhere = '';
-            foreach($tasks as $task)
-            {
-                if(empty($cardsWhere))
-                {
-                    $cardsWhere = "cards like '%,{$task->id},%'";
-                }
-                else
-                {
-                    $cardsWhere .= " or cards like '%,{$task->id},%'";
-                }
-            }
-            $lanes = $this->dao->select('t1.lane,t2.name,t1.cards')
-                ->from(TABLE_KANBANCELL)->alias('t1')
-                ->leftJoin(TABLE_KANBANLANE)->alias('t2')->on('t1.lane = t2.id')
-                ->where('t1.kanban')->eq($executionID)
-                ->andWhere('t2.deleted')->eq(0)
-                ->andWhere("($cardsWhere)")
-                ->fetchAll();
-
-            foreach($tasks as $task)
-            {
-                $task->lane = '';
-                if(!empty($lanes))
-                {
-                    foreach($lanes as $lane)
-                    {
-                        if(strpos($lane->cards, ",{$task->id},") !== false)  $task->lane = $lane->name;
-                    }
-                }
-            }
-        }
-
+        if($this->config->vision == 'lite') $tasks = $this->appendLane($tasks);
         foreach($tasks as $task)
         {
             if($task->parent > 0)
@@ -2679,6 +2645,48 @@ class taskModel extends model
         $newTask->status   = $data->status;
 
         if(!dao::isError()) return common::createChanges($oldTask, $newTask);
+    }
+
+    /**
+     * Append lane field to tasks;
+     *
+     * @param  array  $tasks
+     * @access public
+     * @return array
+     */
+    public function appendLane($tasks)
+    {
+        $executionIdList = array();
+        foreach($tasks as $task)
+        {
+            $task->lane = '';
+            if(!isset($executionIdList[$task->execution])) $executionIdList[$task->execution] = $task->execution;
+        }
+
+        $lanes = $this->dao->select('t1.kanban,t1.lane,t2.name,t1.cards')->from(TABLE_KANBANCELL)->alias('t1')
+            ->leftJoin(TABLE_KANBANLANE)->alias('t2')->on('t1.lane = t2.id')
+            ->where('t1.kanban')->in($executionIdList)
+            ->andWhere('t2.deleted')->eq(0)
+            ->andWhere('t1.type')->eq('task')
+            ->andWhere("t1.cards")->ne('')
+            ->fetchAll();
+
+        if(empty($lanes)) return $tasks;
+
+        foreach($tasks as $task)
+        {
+            foreach($lanes as $lane)
+            {
+                if($lane->kanban != $task->execution) continue;
+                if(strpos(",{$lane->cards},", ",{$task->id},") !== false)
+                {
+                    $task->lane = $lane->name;
+                    break;
+                }
+            }
+        }
+
+        return $tasks;
     }
 
     /**

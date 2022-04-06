@@ -17,6 +17,8 @@ fields:
     range: []
   - field: type
     range: sprint{30},stage{30},kanban{30}
+  - field: budget
+    range: 800000-1:100
   - field: status
     range: wait,doing
   - field: percent
