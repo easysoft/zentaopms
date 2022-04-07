@@ -961,7 +961,7 @@ function changeCardColType(cardID, fromColID, toColID, fromLaneID, toLaneID, car
         {
             if(toColType == 'ready' && typeof(reviewStoryParis[objectID]) != 'undefined')
             {
-                alert(executionLang.storyDragError);
+                bootbox.alert(executionLang.storyDragError);
                 return false;
             }
 
