@@ -1326,6 +1326,7 @@ class execution extends control
             $acl           = $copyExecution->acl;
             $whitelist     = $copyExecution->whitelist;
             $projectID     = $copyExecution->project;
+            $project       = $this->project->getByID($projectID);
             $products      = $this->loadModel('product')->getProducts($copyExecutionID);
             $branches      = $this->project->getBranchesByProject($copyExecutionID);
             $plans         = $this->loadModel('productplan')->getGroupByProduct(array_keys($products), 'skipParent|unexpired');
