@@ -32,6 +32,7 @@ class Processor
     {
         $this->dao->begin();
 
+        $this->initBassicSql();
         $this->initDept();
         $this->initUser();
         $this->initProgram();
@@ -50,7 +51,6 @@ class Processor
         $this->initBug();
         $this->initTest();
         $this->initTodo();
-        $this->initBassicSql();
 
         $this->dao->commit();
     }
@@ -296,6 +296,7 @@ class Processor
     {
         global $app;
         $sqlRoot = $app->getAppRoot();
+        $this->dao->exec(file_get_contents($sqlRoot . '/data/zt_config.sql'));
         $this->dao->exec(file_get_contents($sqlRoot . '/data/zt_lang.sql'));
         $this->dao->exec(file_get_contents($sqlRoot . '/data/zt_cron.sql'));
     }

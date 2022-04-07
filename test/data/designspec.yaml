@@ -1,0 +1,35 @@
+title: table zt_designspec
+desc: ""
+author: automated export
+version: "1.0"
+fields:
+  - field: design
+    note: ""
+    range: 1-120
+    prefix: ""
+    postfix: ""
+    format: ""
+  - field: version
+    note: ""
+    range: 1
+    prefix: ""
+    postfix: ""
+    format: ""
+  - field: name
+    note: ""
+    range: 1-10000
+    prefix: "这是一个设计"
+    postfix: ""
+    format: ""
+  - field: desc
+    note: ""
+    range: 1-10000
+    prefix: "这是设计描述"
+    postfix: ""
+    format: ""
+  - field: files
+    note: ""
+    range: ""
+    prefix: ""
+    postfix: ""
+    format: ""
