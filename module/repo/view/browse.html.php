@@ -31,7 +31,7 @@
         foreach($branches as $id => $branchName)
         {
             $isSelected = $id == $branchID ? 'class="selected"' : '';
-            $base64BranchID = base64_encode($id);
+            $base64BranchID = urlencode(base64_encode($id));
             echo "<li $isSelected>" . html::a($this->createLink('repo', 'browse', "repoID=$repoID&branchID=$base64BranchID&objectID=$objectID"), $branchName, '', "title='{$branchName}' class='text-ellipsis' data-app='{$app->tab}'") . "</li>";
         }
         ?>

@@ -360,7 +360,7 @@ class repo extends control
     public function browse($repoID = 0, $branchID = '', $objectID = 0, $path = '', $revision = 'HEAD', $refresh = 0)
     {
         $repoID = $this->repo->saveState($repoID, $objectID);
-        if($branchID) $branchID = base64_decode($branchID);
+        if($branchID) $branchID = base64_decode(urldecode($branchID));
 
         /* Get path and refresh. */
         if($this->get->repoPath) $path = $this->get->repoPath;
