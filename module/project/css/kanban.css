@@ -23,4 +23,4 @@ table th, td {border: 2px solid #fff !important;}
 .kanban-item > a {cursor: move;}
 .kanban-item.execution-item > a {cursor: pointer;}
 
-.kanban.kanban-dragging {overflow: hidden;}
+.kanban.kanban-dragging {overflow: hidden!important;}
