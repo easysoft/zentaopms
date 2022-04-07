@@ -1,3 +1,4 @@
+.table-footer {z-index: 1;}
 .closed, .closed a {color: gray; text-decoration:line-through;}
 .resolved, .resolved a {color: #8EC21F; text-decoration: none;}
 .tree .closed, .tree .closed a {color: #003366; text-decoration: none;}

@@ -114,3 +114,5 @@ $lang->action->desc->unlinkchildrenstory = '$date, <strong>$actor</strong> Unlin
 $lang->action->desc->linkparentstory     = '$date, <strong>$actor</strong> Link from parent story <strong>$extra</strong>。' . "\n";
 $lang->action->desc->unlinkparentstory   = '$date, <strong>$actor</strong> From parent story<strong>$extra</strong>CanceledLink。' . "\n";
 $lang->action->desc->deletechildrenstory = '$date, <strong>$actor</strong> Deleted child story<strong>$extra</strong>。' . "\n";
+
+$lang->action->executionNoProject = 'The execution does not belong to a project,please restore the project first';
