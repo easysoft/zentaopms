@@ -137,7 +137,9 @@ class companyModel extends model
      */
     public function update()
     {
-        $company = fixer::input('post')->get();
+        $company = fixer::input('post')
+            ->stripTags('name')
+            ->get();
         if($company->website  == 'http://') $company->website  = '';
         if($company->backyard == 'http://') $company->backyard = '';
         $companyID = $this->app->company->id;
