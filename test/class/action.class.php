@@ -23,6 +23,7 @@ class actionTest
      */
     public function createTest($objectType, $objectID, $actionType, $comment = '', $extra = '', $actor = '', $autoDelete = true)
     {
+        $_SERVER['HTTP_HOST'] = 'pms.zentao.com';
         $_POST['uid'] = '';
         $objectID = $this->objectModel->create($objectType, $objectID, $actionType, $comment, $extra, $actor, $autoDelete);
 
@@ -48,15 +49,6 @@ class actionTest
 
         global $tester;
         $objects = $tester->dao->select('*')->from(TABLE_ACTION)->where('objectID')->eq($objectID)->andWhere('objectType')->eq($objectType)->fetchAll();
-        return $objects;
-    }
-
-    public function getUnreadActionsTest($actionID = 0)
-    {
-        $objects = $this->objectModel->getUnreadActions($actionID = 0);
-
-        if(dao::isError()) return dao::getError();
-
         return $objects;
     }
 
@@ -93,6 +85,9 @@ class actionTest
 
         if(dao::isError()) return dao::getError();
 
+        $dirname = dirname(__DIR__) . DS;
+
+        $objects[$objectID]->extra = str_replace($dirname, '', $objects[$objectID]->extra);
         $objects[$objectID]->extra = trim($objects[$objectID]->extra, "\n");
         return $objects[$objectID];
     }
@@ -218,24 +213,6 @@ class actionTest
         return count($objects);
     }
 
-    public function getActionConditionTest()
-    {
-        $objects = $this->objectModel->getActionCondition();
-
-        if(dao::isError()) return dao::getError();
-
-        return $objects;
-    }
-
-    public function getDynamicBySearchTest($products, $projects, $executions, $queryID, $orderBy = 'date_desc', $pager = null, $date = '', $direction = 'next')
-    {
-        $objects = $this->objectModel->getDynamicBySearch($products, $projects, $executions, $queryID, $orderBy = 'date_desc', $pager = null, $date = '', $direction = 'next');
-
-        if(dao::isError()) return dao::getError();
-
-        return $objects;
-    }
-
     /**
      * Test get actions by SQL.
      *
@@ -254,8 +231,18 @@ class actionTest
         return count($objects);
     }
 
+    /**
+     * Test transform the actions for display.
+     *
+     * @param  array  $actions
+     * @access public
+     * @return array
+     */
     public function transformActionsTest($actions)
     {
+        global $tester;
+        $actions = $tester->dao->select('*')->from(TABLE_ACTION)->where('id')->in($actions)->fetchAll('id');
+
         $objects = $this->objectModel->transformActions($actions);
 
         if(dao::isError()) return dao::getError();
@@ -321,6 +308,9 @@ class actionTest
 
         if(dao::isError()) return dao::getError();
 
+        $dirname = dirname(__DIR__) . DS;
+
+        $object->objectLink = str_replace($dirname, '', $object->objectLink);
         return $object;
     }
 
@@ -362,13 +352,21 @@ class actionTest
         return $objects;
     }
 
+    /**
+     * Test undelete a record.
+     *
+     * @param  int    $actionID
+     * @access public
+     * @return object
+     */
     public function undeleteTest($actionID)
     {
-        $objects = $this->objectModel->undelete($actionID);
+        $this->objectModel->undelete($actionID);
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        $object = $this->objectModel->getByID($actionID);
+        return $object;
     }
 
     /**
@@ -405,13 +403,25 @@ class actionTest
         return $objects;
     }
 
-    public function updateCommentTest($actionID)
+    /**
+     * Test update comment of a action.
+     *
+     * @param  int    $actionID
+     * @param  string $comment
+     * @access public
+     * @return object
+     */
+    public function updateCommentTest($actionID, $comment)
     {
-        $objects = $this->objectModel->updateComment($actionID);
+        $_POST['lastComment'] = $comment;
 
+        $this->objectModel->updateComment($actionID);
+
+        unset($_POST);
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        $object = $this->objectModel->getByID($actionID);
+        return $object;
     }
 
     /**
@@ -433,50 +443,5 @@ class actionTest
         $count = 0;
         foreach($objects as $object) $count += count($object);
         return $count;
-    }
-
-    public function hasPreOrNextTest($date, $direction = 'next')
-    {
-        $objects = $this->objectModel->hasPreOrNext($date, $direction = 'next');
-
-        if(dao::isError()) return dao::getError();
-
-        return $objects;
-    }
-
-    public function saveIndexTest($objectType, $objectID, $actionType)
-    {
-        $objects = $this->objectModel->saveIndex($objectType, $objectID, $actionType);
-
-        if(dao::isError()) return dao::getError();
-
-        return $objects;
-    }
-
-    public function printActionForGitLabTest($action)
-    {
-        $objects = $this->objectModel->printActionForGitLab($action);
-
-        if(dao::isError()) return dao::getError();
-
-        return $objects;
-    }
-
-    public function processActionForAPITest($actions, $users = array(), $objectLang = array())
-    {
-        $objects = $this->objectModel->processActionForAPI($actions, $users = array(), $objectLang = array());
-
-        if(dao::isError()) return dao::getError();
-
-        return $objects;
-    }
-
-    public function processDynamicForAPITest($dynamics)
-    {
-        $objects = $this->objectModel->processDynamicForAPI($dynamics);
-
-        if(dao::isError()) return dao::getError();
-
-        return $objects;
     }
 }

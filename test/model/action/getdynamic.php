@@ -13,7 +13,7 @@ pid=1
 */
 
 $accountList     = array('all', 'admin', 'dev17', 'test18');
-$typeList        = array('all', 'today', 'yesterday', 'thisweek', 'lastweek');
+$typeList        = array('all', 'today', 'yesterday', 'lastweek');
 $productIDList   = array('all', 1, 2, 3);
 $projectIDList   = array('all', 1, 2, 3);
 $executionIDList = array('all', 1, 2, 3);
@@ -28,8 +28,7 @@ r($action->getDynamicTest($accountList[2]))                                     
 r($action->getDynamicTest($accountList[3]))                                                                                        && p() && e('33');  // 查找用户test18动态
 r($action->getDynamicTest($accountList[0], $typeList[1]))                                                                          && p() && e('3');   // 查找今天的动态
 r($action->getDynamicTest($accountList[0], $typeList[2]))                                                                          && p() && e('3');   // 查找昨天的动态
-r($action->getDynamicTest($accountList[0], $typeList[3]))                                                                          && p() && e('9');   // 查找本周的动态
-r($action->getDynamicTest($accountList[0], $typeList[4]))                                                                          && p() && e('21');  // 查找上周的动态
+r($action->getDynamicTest($accountList[0], $typeList[3]))                                                                          && p() && e('21');  // 查找上周的动态
 r($action->getDynamicTest($accountList[0], $typeList[0], $productIDList[1]))                                                       && p() && e('1');   // 查找产品1的动态
 r($action->getDynamicTest($accountList[0], $typeList[0], $productIDList[2]))                                                       && p() && e('1');   // 查找产品2的动态
 r($action->getDynamicTest($accountList[0], $typeList[0], $productIDList[3]))                                                       && p() && e('1');   // 查找产品3的动态
