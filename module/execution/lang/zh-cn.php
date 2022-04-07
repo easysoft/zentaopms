@@ -222,6 +222,7 @@ $lang->execution->exportAction      = "导出{$lang->execution->common}";
 $lang->execution->computeBurnAction = "计算燃尽图";
 $lang->execution->create            = "添加{$lang->executionCommon}";
 $lang->execution->createExec        = "添加{$lang->execution->common}";
+$lang->execution->createAction      = "添加{$lang->execution->common}";
 $lang->execution->copyExec          = "复制{$lang->execution->common}";
 $lang->execution->copy              = "复制{$lang->executionCommon}";
 $lang->execution->delete            = "删除{$lang->executionCommon}";
