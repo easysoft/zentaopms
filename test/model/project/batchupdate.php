@@ -16,17 +16,17 @@ $project = new Project();
 $projectIdList = array(11, 12, 13);
 
 $data['names']         = array(11 => '批量修改项目11', 12 => '批量修改项目12', 13 => '批量修改项目13');
+$data['parents']       = array(11 => 1, 12 => 2, 13 => 3);
 $data['projectIdList'] = $projectIdList;
 $data['PMs']           = array(11 => 'admin', 12 => '', 13 => '');
-$data['begins']        = array(11 => '2022-01-03', 12 => '2022-03-05', 13 => '');
-$data['ends']          = array(11 => '2022-03-03', 12 => '2022-06-05', 13 => '2022-07-11');
+$data['begins']        = array(11 => '2022-02-08', 12 => '2022-03-05', 13 => '2022-02-19');
+$data['ends']          = array(11 => '2022-04-13', 12 => '2022-04-13', 13 => '2022-04-13');
+$data['dayses']        = array(11 => 10, 12 => 10, 13 => 14);
+$data['acls']          = array(11 => 'open', 12 => 'private', 13 => 'program');
 
-$name     = array( '7' => '批量修改任务一');
-$type     = array( '7' => 'devel');
-$statuses = array('7' =>'doing');
+$projects = $project->batchUpdate($data);
 
-$normal = array('names' => $name, 'types' => $type,'statuses'=> $statuses);
-
-$task = new taskTest();
-r($task->batchUpdateObject($normal, $taskID)) && p('1:field,old,new') && e('name,开发任务17,批量修改任务一'); // 测试批量修改任务
+r(count($projects)) && p()                              && e('3');                                      // 查看被编辑了的项目数量 
+r($projects)        && p('11:name,parent,PM,begin,acl') && e('批量修改项目11,1,admin,2022-02-08,open'); // 查看被编辑了的项目11详情
+r($projects)        && p('12:name,parent,PM,begin,acl') && e('批量修改项目12,2,,2022-03-05,private');   // 查看被编辑了的项目12详情
 system("./ztest init");

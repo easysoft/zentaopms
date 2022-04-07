@@ -136,22 +136,21 @@ class Project
     }
 
     /**
-     * checkStatusBegin
+     * Test start a project. 
      *
-     * @param  int    mixed $projectID
+     * @param  int    $projectID
      * @access public
      * @return void
      */
-    public function checkStatusBegin($projectID)
+    public function start($projectID)
     {
+        $_POST['realBegan'] = helper::today();
         $oldProject = $this->project->getById($projectID);
         if($oldProject->status != 'suspended' and $oldProject->status != 'wait') return false;
 
-        $change = $this->project->start($projectID);
-        $project = $this->project->getById($projectID);
-        if($project->status != 'doing') return false;
+        $changes = $this->project->start($projectID);
 
-        return true;
+        return $this->project->getById($projectID);
     }
 
     /**
@@ -302,6 +301,43 @@ class Project
         if(dao::isError()) return array('message' => dao::getError());
 
         return $this->project->getById($projectID);
+    }
+
+    /**
+     * Update a project.
+     *
+     * @param  int   $projectID
+     * @param  array $data
+     * @access public
+     * @return void
+     */
+    public function update($projectID, $data)
+    {
+        $_POST = $data;
+        $this->project->update($projectID);
+
+        unset($_POST);
+        if(dao::isError()) return array('message' => dao::getError());
+
+        return $this->project->getByID($projectID);
+    }
+
+    /**
+     * Batch update projects.
+     *
+     * @param  array $data
+     * @access public
+     * @return void
+     */
+    public function batchUpdate($data)
+    {
+        $_POST = $data;
+        $this->project->batchUpdate();
+
+        unset($_POST);
+        if(dao::isError()) return array('message' => dao::getError());
+
+        return $this->project->getByIdList($data['projectIdList']);
     }
 
     /**
