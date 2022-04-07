@@ -120,13 +120,13 @@
             if(!isonlybody()) echo "<div class='divider'></div>";
             if($this->app->getViewType() == 'xhtml')
             {
-              common::printIcon('testtask', 'runCase', "runID=$runID&caseID=$case->id&version=$case->currentVersion", $case, 'button', 'play', '', 'showinonlybody', false, "data-width='95%'");
-              common::printIcon('testtask', 'results', "runID=$runID&caseID=$case->id&version=$case->version", $case, 'button', '', '', 'showinonlybody', false, "data-width='95%'");
+                common::printIcon('testtask', 'runCase', "runID=$runID&caseID=$case->id&version=$case->currentVersion", $case, 'button', 'play', '', 'showinonlybody', false, "data-width='95%'");
+                common::printIcon('testtask', 'results', "runID=$runID&caseID=$case->id&version=$case->version", $case, 'button', '', '', 'showinonlybody', false, "data-width='95%'");
             }
             else
             {
-              common::printIcon('testtask', 'runCase', "runID=$runID&caseID=$case->id&version=$case->currentVersion", $case, 'button', 'play', '', 'showinonlybody iframe', false, "data-width='95%'");
-              common::printIcon('testtask', 'results', "runID=$runID&caseID=$case->id&version=$case->version", $case, 'button', '', '', 'showinonlybody iframe', false, "data-width='95%'");
+                common::printIcon('testtask', 'runCase', "runID=$runID&caseID=$case->id&version=$case->currentVersion", $case, 'button', 'play', '', 'showinonlybody iframe', false, "data-width='95%'");
+                common::printIcon('testtask', 'results', "runID=$runID&caseID=$case->id&version=$case->version", $case, 'button', '', '', 'showinonlybody iframe', false, "data-width='95%'");
             }
 
             if($caseFails > 0) common::printIcon('testcase', 'createBug', "product=$case->product&branch=$case->branch&extra=caseID=$case->id,version=$case->version,runID=$runID", $case, 'button', 'bug', '', 'iframe', '', "data-width='90%'");
