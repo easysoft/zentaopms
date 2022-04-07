@@ -294,6 +294,7 @@ class reportModel extends model
                 ->beginIF($dept)->andWhere('t1.account')->in(array_keys($deptUsers))->fi()
                 ->andWhere('t1.type')->eq('execution')
                 ->andWhere("t1.account NOT IN(SELECT `assignedTo` FROM " . TABLE_TASK . " WHERE `execution` = t1.`root` AND `status` NOT IN('cancel, closed, done, pause') AND assignedTo != '' GROUP BY assignedTo)")
+                ->andWhere('t2.deleted')->eq('0')
                 ->fetchGroup('account', 'name');
 
             $workload = array();
