@@ -289,7 +289,7 @@ class actionModel extends model
             }
 
             if($actionType == 'unlinkedfromproject' or $actionType == 'linked2project') $record['project'] = (int)$extra ;
-            if($actionType == 'unlinkedfromexecution' or $actionType == 'linked2execution') $record['execution'] = (int)$extra;
+            if(in_array($actionType, array('unlinkedfromexecution', 'linked2execution', 'linked2kanban'))) $record['execution'] = (int)$extra;
 
             if($record)
             {
@@ -351,7 +351,7 @@ class actionModel extends model
             {
                 $action->actor = $commiters[$action->actor];
             }
-            elseif($actionName == 'linked2execution')
+            elseif($actionName == 'linked2execution' or $actionName == 'linked2kanban')
             {
                 $execution = $this->dao->select('name,type')->from(TABLE_PROJECT)->where('id')->eq($action->extra)->fetch();
                 $name      = $execution->name;
@@ -917,6 +917,8 @@ class actionModel extends model
             ->beginIF($docs and !$this->app->user->admin)->andWhere("IF(objectType != 'doc' || (objectType = 'doc' && (action = 'approved' || action = 'removed')), '1=1', objectID " . helper::dbIN($docs) . ")")->fi()
             ->beginIF($libs and !$this->app->user->admin)->andWhere("IF(objectType != 'doclib', '1=1', objectID " . helper::dbIN(array_keys($libs)) . ') ')->fi()
             ->beginIF($actionCondition)->andWhere("($actionCondition)")->fi()
+            /* Filter out client login/logout actions. */
+            ->andWhere('action')->notin('disconnectxuanxuan,loginxuanxuan')
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll();
@@ -1008,13 +1010,13 @@ class actionModel extends model
         $actionQuery = str_replace("`product` = '$productID'", "`product` LIKE '%,$productID,%'", $actionQuery);
 
         if($date) $actionQuery = "($actionQuery) AND " . ('date' . ($direction == 'next' ? '<' : '>') . "'{$date}'");
-        
+
         /* If this vision is lite, delete product actions. */
         if($this->config->vision == 'lite') $actionQuery .= " AND objectType != 'product'";
-        
+
         $actionQuery .= " AND vision = '" . $this->config->vision . "'";
         $actions      = $this->getBySQL($actionQuery, $orderBy, $pager);
-        
+
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'action');
         if(!$actions) return array();
         return $this->transformActions($actions);

@@ -39,8 +39,9 @@
           <th class='thWidth'>
           <?php
           $fields = $this->custom->getFormFields($moduleName, $method);
-
+          if(empty($fields)) continue;
           if($moduleName == 'caselib' and $method == 'createcase') continue;
+
           $actionKey = $method . 'Action';
           if(isset($lang->$moduleName->$actionKey))
           {

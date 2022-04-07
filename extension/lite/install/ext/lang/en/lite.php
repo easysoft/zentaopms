@@ -19,7 +19,7 @@ Facebook: <a href='https://www.facebook.com/natureeasysoft' target='_blank'>Easy
 Twitter: <a href='https://twitter.com/ZentaoA' target='_blank'>ZenTao Lite</a>
 
 
-
+You are installing ZenTao <strong class='text-danger'>%s</strong>.
 EOT;
 
 $lang->install->successLabel       = "<p>You have installed ZenTao Lite %s.</p>";

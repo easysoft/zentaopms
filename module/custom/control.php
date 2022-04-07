@@ -20,7 +20,7 @@ class custom extends control
     public function index()
     {
         if($this->config->vision == 'lite') return print(js::locate(inlink('execution')));
-        
+
         if(($this->config->systemMode == 'new') and common::hasPriv('custom', 'set'))
         {
             return print(js::locate(inlink('set', "module=project&field=" . key($this->lang->custom->project->fields))));

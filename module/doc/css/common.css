@@ -99,3 +99,5 @@ ol, ul {margin-bottom: 0}
 
 .tree li.active > .tree-group a {font-weight: 700; color: #0c64eb;}
 .tree li>.list-toggle {left: -4px; top: 0;}
+
+.fullscreen-close {top: 8px !important;}

@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
-include dirname(dirname(dirname(__FILE__))) . '/class/program.class.php';
+su('admin');
 
 /**
 
@@ -14,9 +14,9 @@ pid=1
 
 */
 
-$program = new Program('admin');
+global $tester;
+$tester->loadModel('program');
 
-$t_checkId = 'count';
-
-r($program->getTopPairs())        && p('1') && e('项目集1'); // 查看id=1的父项目集
-r($program->getTopPairs($t_checkId)) && p()    && e('6'); // 查看父项目集的个数
+r(count($tester->program->getTopPairs()))               && p() && e('10'); // 获取系统中所有顶级项目集数量
+r(count($tester->program->getTopPairs('', 'noclosed'))) && p() && e('10'); // 获取系统中所有未关闭的顶级项目集数量
+r(count($tester->program->getTopPairs('', '', true)))   && p() && e('10'); // 获取系统中所有顶级项目集数量

@@ -335,7 +335,7 @@ class tree extends control
         if($showProduct)
         {
             $product = $this->loadModel('product')->getById($module->root);
-            if($product->type != 'normal') $this->view->branches = $this->loadModel('branch')->getPairs($module->root);
+            if($product->type != 'normal') $this->view->branches = $this->loadModel('branch')->getPairs($module->root, 'active');
             $this->view->product  = $product;
             $this->view->products = $this->product->getPairs('', $product->program);
         }
@@ -467,7 +467,7 @@ class tree extends control
             else
             {
                 $changeFunc = '';
-                if($viewType == 'task' or $viewType == 'bug' or $viewType == 'case') $changeFunc = "onchange='loadModuleRelated()'";
+                if($viewType == 'bug' or $viewType == 'case') $changeFunc = "onchange='loadModuleRelated()'";
                 $field = $fieldID ? "modules[$fieldID]" : 'module';
 
                 $currentModule   = $this->tree->getById($currentModuleID);

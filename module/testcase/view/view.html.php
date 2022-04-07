@@ -114,6 +114,7 @@
         <?php common::printBack($browseLink);?>
         <?php if(!$case->deleted):?>
         <?php if(!isonlybody()) echo "<div class='divider'></div>";?>
+        <?php if(!$case->needconfirm):?>
         <?php
         if(!$isLibCase)
         {
@@ -134,6 +135,9 @@
         if($isLibCase and common::hasPriv('caselib', 'createCase')) echo html::a($this->createLink('caselib', 'createCase', "libID=$case->lib&moduleID=$case->module&param=$case->id"), "<i class='icon-copy'></i>", '', "class='btn' title='{$lang->testcase->copy}'");
         common::printIcon('testcase', 'delete', "caseID=$case->id", $case, 'button', 'trash', 'hiddenwin', '');
         ?>
+        <?php elseif($case->needconfirm):?>
+        <?php common::printIcon('testcase', 'confirmstorychange',  "caseID=$case->id", $case, 'list', 'confirm', 'hiddenwin', '', '', '', $this->lang->confirm);?>
+        <?php endif;?>
         <?php endif;?>
       </div>
     </div>

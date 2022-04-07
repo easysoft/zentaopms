@@ -1,4 +1,7 @@
 <?php
+
+global $config;
+
 /* Module order. */
 $lang->moduleOrder = array();
 
@@ -35,7 +38,26 @@ $lang->moduleOrder[200] = 'backup';
 $lang->moduleOrder[205] = 'cron';
 $lang->moduleOrder[215] = 'message';
 
+/* Backup xuan related stuff. */
+if(isset($config->xuanxuan))
+{
+    $imResource      = $lang->resource->im;
+    $clientResource  = $lang->resource->client;
+    $settingResource = $lang->resource->setting;
+}
+
+/* Reset resource. */
 $lang->resource = new stdclass();
+
+/* Reapply xuan stuff. */
+if(isset($config->xuanxuan))
+{
+    $lang->resource->im      = $imResource;
+    $lang->resource->client  = $clientResource;
+    $lang->resource->setting = $settingResource;
+    $lang->admin->methodOrder[26]   = 'xuanxuan';
+    $lang->setting->methodOrder[26] = 'xuanxuan';
+}
 
 /* Index module. */
 $lang->resource->index = new stdclass();
@@ -127,7 +149,6 @@ $lang->personnel->methodOrder[15] = 'whitelist';
 $lang->personnel->methodOrder[20] = 'addWhitelist';
 $lang->personnel->methodOrder[25] = 'unbindWhitelist';
 
-global $config;
 if($config->systemMode == 'new')
 {
     $lang->resource->my->project = 'project';
@@ -444,6 +465,8 @@ $lang->resource->execution->unbindWhitelist   = 'unbindWhitelist';
 //$lang->resource->execution->storyEstimate     = 'storyEstimate';
 $lang->resource->execution->kanban            = 'kanban';
 //if($config->systemMode == 'classic') $lang->resource->project->list = 'list';
+if($config->edition != 'open') $lang->resource->execution->gantt    = 'ganttchart';
+if($config->edition != 'open') $lang->resource->execution->calendar = 'calendar';
 
 //$lang->execution->methodOrder[0]   = 'index';
 //if($config->systemMode == 'classic') $lang->project->methodOrder[1] = 'list';
@@ -498,6 +521,8 @@ $lang->execution->methodOrder[250] = 'addWhitelist';
 $lang->execution->methodOrder[255] = 'unbindWhitelist';
 $lang->execution->methodOrder[260] = 'storyEstimate';
 $lang->execution->methodOrder[270] = 'kanban';
+$lang->execution->methodOrder[280] = 'gantt';
+$lang->execution->methodOrder[285] = 'calendar';
 
 /* Task. */
 $lang->resource->task = new stdclass();
@@ -790,6 +815,11 @@ $lang->admin->methodOrder[15] = 'checkWeak';
 $lang->admin->methodOrder[20] = 'sso';
 $lang->admin->methodOrder[25] = 'register';
 $lang->admin->methodOrder[30] = 'ztCompany';
+
+if(isset($config->xuanxuan))
+{
+    $lang->resource->admin->xuanxuan = 'xuanxuan';
+}
 
 /* Extension. */
 $lang->resource->extension = new stdclass();

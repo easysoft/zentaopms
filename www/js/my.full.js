@@ -897,12 +897,13 @@ $(document).ready(function()
     $('.has-avatar').hover(function()
     {
         $(this).next().removeClass('open');
+        $(this).prev().removeClass('open');
     });
 
     /* Hide the avatar drop-down when hovering over the global create button. */
     $('#globalCreate').hover(function()
     {
-        $(this).prev().removeClass('open');
+        $(this).next().removeClass('open');
         $(this).addClass('dropdown-hover');
     });
 

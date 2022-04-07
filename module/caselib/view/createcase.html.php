@@ -41,7 +41,7 @@
               if(count($moduleOptionMenu) == 1)
               {
                   echo "<span class='input-group-btn'>";
-                  echo html::a($this->createLink('tree', 'browse', "rootID=$libID&view=caselib&currentModuleID=0", 'html', true), "<i class='icon icon-cog'></i>", '', "data-toggle='tooltip' class='btn iframe' title='{$lang->tree->manage}'");
+                  echo html::a($this->createLink('tree', 'browse', "rootID=$libID&view=caselib&currentModuleID=0", 'html', true), "<i class='icon icon-cog'></i>", '', "data-toggle='tooltip' class='btn iframe' data-width='95%' title='{$lang->tree->manage}'");
                   echo '</span>';
                   echo "<span class='input-group-btn'>";
                   echo html::a("javascript:void(0)", "<i class='icon icon-refresh'></i>", '', "class='btn refresh' title='{$lang->refresh}' onclick='loadLibModules($libID)'");

@@ -120,7 +120,9 @@ class projectModel extends model
         if(defined('TUTORIAL')) return $projectID;
 
         if($projectID == 0 and $this->cookie->lastProject) $projectID = $this->cookie->lastProject;
-        if($projectID == 0 and $this->session->project == '') $projectID = key($projects);
+        if($projectID == 0 and (int)$this->session->project == 0) $projectID = key($projects);
+        if($projectID == 0) $projectID = key($projects);
+
         $this->session->set('project', (int)$projectID, $this->app->tab);
 
         if(!isset($projects[$this->session->project]))
@@ -182,7 +184,11 @@ class projectModel extends model
     {
         if(defined('TUTORIAL')) return $this->loadModel('tutorial')->getProject();
 
-        $project = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($projectID)->andWhere('`type`')->in($type)->fetch();
+        $project = $this->dao->select('*')->from(TABLE_PROJECT)
+            ->where('id')->eq($projectID)
+            ->beginIF($this->config->system == 'new')->andWhere('`type`')->in($type)->fi()
+            ->fetch();
+
         if(!$project) return false;
 
         if($project->end == '0000-00-00') $project->end = '';
@@ -196,13 +202,14 @@ class projectModel extends model
      * @param  string    $status
      * @param  string    $orderBy
      * @param  int       $pager
+     * @param  int       $involved
      * @access public
      * @return array
      */
-    public function getInfoList($status = 'undone', $orderBy = 'order_desc', $pager = null)
+    public function getInfoList($status = 'undone', $orderBy = 'order_desc', $pager = null, $involved = 0)
     {
         /* Init vars. */
-        $projects = $this->loadModel('program')->getProjectList(0, $status, 0, $orderBy, $pager, 0, 1);
+        $projects = $this->loadModel('program')->getProjectList(0, $status, 0, $orderBy, $pager, 0, $involved);
         if(empty($projects)) return array();
 
         $projectIdList = array_keys($projects);
@@ -227,27 +234,29 @@ class projectModel extends model
             $project->executions = $this->getStats($projectID, 'undone', 0, 0, 30, $orderBy, $pager);
             $project->teamCount  = isset($teams[$projectID]) ? $teams[$projectID]->count : 0;
             $project->estimate   = isset($estimates[$projectID]) ? round($estimates[$projectID]->estimate, 2) : 0;
-            $project->parentName = $this->getParentName($project->parent);
+            $project->parentName = $this->getParentProgram($project);
         }
         return $projects;
     }
 
     /**
-     * Gets the top-level project name.
+     * Get all parent program of a program.
      *
-     * @param  int       $parentID
-     * @access private
+     * @param  int    $parentID
+     * @access public
      * @return string
      */
-    public function getParentName($parentID = 0)
+    public function getParentProgram($project)
     {
-        if($parentID == 0) return '';
+        if($project->parent == 0) return '';
 
-        static $parent;
-        $parent = $this->dao->select('id,parent,name')->from(TABLE_PROJECT)->where('id')->eq($parentID)->fetch();
-        if($parent->parent) $this->getParentName($parent->parent);
+        $parentName = $this->dao->select('id,name')->from(TABLE_PROGRAM)->where('id')->in(trim($project->path, ','))->andWhere('grade')->lt($project->grade)->fetchPairs();
 
-        return $parent->name;
+        $parentProgram = '';
+        foreach($parentName as $name) $parentProgram .= $name . '/';
+        $parentProgram = rtrim($parentProgram, '/');
+
+        return $parentProgram;
     }
 
     /**
@@ -842,7 +851,7 @@ class projectModel extends model
             if(isset($project->budget) and $program->budget != 0)
             {
                 $availableBudget = $this->loadModel('program')->getBudgetLeft($program);
-                if($project->budget > $availableBudget) dao::$errors['budget'] = $this->lang->program->beyondParentBudget;
+                if($availableBudget > 0 and $project->budget > $availableBudget) dao::$errors['budget'] = $this->lang->program->beyondParentBudget;
             }
 
             /* Judge products not empty. */
@@ -1951,7 +1960,7 @@ class projectModel extends model
      * @param  string  $orderBy
      * @param  object  $pager
      * @access public
-     * @return void
+     * @return array
      */
     public function getStats($projectID = 0, $status = 'undone', $productID = 0, $branch = 0, $itemCounts = 30, $orderBy = 'id_asc', $pager = null)
     {
@@ -2180,6 +2189,20 @@ class projectModel extends model
                 if($task->status != 'cancel' and $task->status != 'closed') $hour->totalLeft += $task->left;
             }
             $hours[$executionID] = $hour;
+
+            if(isset($executions[$executionID]) and $executions[$executionID]->type == 'stage' and $executions[$executionID]->grade == 2)
+            {
+                $stageParent = $executions[$executionID]->parent;
+                if(!isset($hours[$stageParent]))
+                {
+                    $hours[$stageParent] = clone $hour;
+                    continue;
+                }
+
+                $hours[$stageParent]->totalEstimate += $hour->totalEstimate;
+                $hours[$stageParent]->totalConsumed += $hour->totalConsumed;
+                $hours[$stageParent]->totalLeft     += $hour->totalLeft;
+            }
         }
 
         /* Compute totalReal and progress. */

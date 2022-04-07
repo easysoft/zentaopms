@@ -263,3 +263,35 @@ $lang->createObjects['execution'] = 'TaskKanban';
 $lang->createObjects['kanban']    = 'Kanban';
 
 $lang->createIcons['execution'] = 'kanban';
+
+/* Xuan */
+global $config;
+if(isset($config->xuanxuan) && strpos($config->visions, ',rnd,') === false)
+{
+    $lang->xuanxuan = new stdclass();
+    $lang->admin->menu->xuanxuan = array('link' => 'Chat|admin|xuanxuan', 'subModule' => 'client,setting');
+    $lang->admin->menuOrder[6]   = 'xuanxuan';
+
+    $lang->admin->menu->xuanxuan['subMenu'] = new stdclass();
+    $lang->admin->menu->xuanxuan['subMenu']->index   = array('link' => 'Home|admin|xuanxuan');
+    $lang->admin->menu->xuanxuan['subMenu']->setting = array('link' => 'Parameter|setting|xuanxuan');
+    $lang->admin->menu->xuanxuan['subMenu']->update  = array('link' => 'Update|client|browse', 'subModule' => 'client');
+
+    $lang->admin->menu->xuanxuan['menuOrder'][0]  = 'index';
+    $lang->admin->menu->xuanxuan['menuOrder'][5]  = 'setting';
+    $lang->admin->menu->xuanxuan['menuOrder'][10] = 'update';
+
+    if($config->edition != 'open')
+    {
+        $lang->admin->menu->xuanxuan['subModule']           = 'client,setting,conference';
+        $lang->admin->menu->xuanxuan['subMenu']->conference = array('link' => 'Conference|conference|admin');
+        $lang->admin->menu->xuanxuan['menuOrder'][7]        = 'conference';
+        $lang->navGroup->conference                         = 'admin';
+    }
+
+    $lang->navGroup->im      = 'admin';
+    $lang->navGroup->setting = 'admin';
+    $lang->navGroup->client  = 'admin';
+
+    $lang->confirmDelete = 'Do you want to delete it?';
+}

@@ -70,19 +70,6 @@ function loadExecutionMembers(executionID)
     $('#assignedToIdBox').load(link, function(){$('#assignedToIdBox').find('select').chosen()});
 }
 
-/**
- * Load module related
- *
- * @access public
- * @return void
- */
-function loadModuleRelated()
-{
-    moduleID    = $('#module').val();
-    executionID = $('#execution').val();
-    loadExecutionStories(executionID, moduleID)
-}
-
 /* empty function. */
 function setPreview(){}
 
@@ -152,7 +139,7 @@ $(document).ready(function()
         var extra    = $(this).prop('checked') ? 'allModule' : '';
         $('#moduleIdBox').load(createLink('tree', 'ajaxGetOptionMenu', "rootID=" + executionID + '&viewType=task&branch=0&rootModuleID=0&returnType=html&fieldID=&needManage=0&extra=' + extra), function()
         {
-            $('#moduleIdBox #module').val(moduleID).attr('onchange', "loadModuleRelated()").chosen();
+            $('#moduleIdBox #module').val(moduleID).chosen();
         });
     });
 });

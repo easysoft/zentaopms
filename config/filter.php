@@ -250,6 +250,7 @@ $filter->project->default->cookie['lastPRJ']             = 'int';
 $filter->project->default->cookie['projectMode']         = 'code';
 $filter->project->default->cookie['kanbanview']          = 'code';
 $filter->project->browse->cookie['involved']             = 'code';
+$filter->project->export->cookie['involved']             = 'code';
 $filter->project->browse->cookie['projectType']          = 'code';
 $filter->project->story->cookie['storyModuleParam']      = 'int';
 $filter->project->story->cookie['storyPreProjectID']     = 'int';

@@ -13,7 +13,7 @@ pid=1
 
 $kanban = new kanbanTest();
 
-$userList = array('admin', 'po1', 'po2', 'user1', 'user2', 'pm1', 'pm2');
+$userList   = array('admin', 'po1', 'po2', 'user1', 'user2', 'pm1', 'pm2');
 $objectType = array('kanban', 'kanbanspace');
 $paramList  = array('noclosed', 'private', 'cooperation', 'public', 'involved');
 

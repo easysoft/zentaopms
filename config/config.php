@@ -16,7 +16,7 @@ if(!class_exists('config')){class config{}}
 if(!function_exists('getWebRoot')){function getWebRoot(){}}
 
 /* 基本设置。Basic settings. */
-$config->version       = '16.5.beta1';         // ZenTaoPHP的版本。 The version of ZenTaoPHP. Don't change it.
+$config->version       = '16.5';               // ZenTaoPHP的版本。 The version of ZenTaoPHP. Don't change it.
 $config->liteVersion   = '1.0';                // 迅捷版版本。      The version of Lite.
 $config->charset       = 'UTF-8';              // ZenTaoPHP的编码。 The encoding of ZenTaoPHP.
 $config->cookieLife    = time() + 2592000;     // Cookie的生存时间。The cookie life time.
@@ -146,7 +146,7 @@ $config->file->allowed     = 'txt,doc,docx,dot,wps,wri,pdf,ppt,pptx,xls,xlsx,ett
 $config->file->storageType = 'fs';         // fs or s3
 
 /* Upload settings. */
-$config->allowedTags = '<p><span><h1><h2><h3><h4><h5><em><u><strong><br><ol><ul><li><img><a><b><font><hr><pre><div><table><td><th><tr><tbody><embed><style>';
+$config->allowedTags = '<p><span><h1><h2><h3><h4><h5><em><u><strong><br><ol><ul><li><img><a><b><font><hr><pre><div><table><td><th><tr><tbody><embed><style><s>';
 $config->accountRule = '|^[a-zA-Z0-9_]{1}[a-zA-Z0-9_\.]{1,}[a-zA-Z0-9_]{1}$|';
 $config->checkVersion = true;              // Auto check for new version or not.
 

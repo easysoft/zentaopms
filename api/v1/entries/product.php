@@ -58,7 +58,7 @@ class productEntry extends Entry
                     $product->moduleOptionMenu = $this->loadModel('tree')->getOptionMenu($productID, 'bug', 0, 'all');
                     break;
                 case 'builds':
-                    $product->builds = $this->loadModel('build')->getBuildPairs($productID, 'all', 'noempty,noterminate,nodone,withbranch');
+                    $product->builds = $this->loadModel('build')->getBuildPairs($productID, 'all', 'noempty,noterminate,nodone,withbranch', $this->param('object', 0), $this->param('objectType', 'execution'));
                     break;
                 case 'actions':
                     $product->addComment = common::hasPriv('action', 'comment') ? true : false;
@@ -68,7 +68,7 @@ class productEntry extends Entry
                     $product->actions = $this->loadModel('action')->processActionForAPI($actions, $users, $this->lang->product);
                     break;
                 case 'lastexecution':
-                    $execution = $this->dao->select('t2.id,t2.name')->from(TABLE_PROJECTPRODUCT)->alias('t1')
+                    $execution = $this->dao->select('t2.id,t2.name,t2.type')->from(TABLE_PROJECTPRODUCT)->alias('t1')
                         ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
                         ->where('t2.deleted')->eq(0)
                         ->andWhere('t1.product')->eq($productID)

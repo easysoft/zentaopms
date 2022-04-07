@@ -1,5 +1,5 @@
 <?php
-$lang->admin->xuanxuan        = 'Clien Home';
+$lang->admin->xuanxuan        = 'Chat Status';
 $lang->admin->blockStatus     = 'Status';
 $lang->admin->blockStatistics = 'Statistics';
 $lang->admin->xuanxuanSetting = 'Settings';
@@ -14,8 +14,8 @@ $lang->admin->xxdStartDate  = 'XXD Last Start';
 
 $lang->admin->message = array();
 $lang->admin->message['total'] = 'Total Messages';
-$lang->admin->message['hour']  = 'Last Hour Messages'; 
-$lang->admin->message['day']   = 'Last 24 Hours Messages'; 
+$lang->admin->message['hour']  = 'Last Hour Messages';
+$lang->admin->message['day']   = 'Last 24 Hours Messages';
 
 $lang->admin->sizeType = array();
 $lang->admin->sizeType['K'] = 1024;
