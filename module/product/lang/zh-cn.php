@@ -89,7 +89,7 @@ $lang->product->notChangeProgramTip  = "该{$lang->productCommon}的{$lang->SRCo
 $lang->product->confirmChangeProgram = "如下项目既关联了该{$lang->productCommon}又关联了其他{$lang->productCommon}，请确认是否继续关联该{$lang->productCommon}，勾选后将取消与其他{$lang->productCommon}的关联关系，同时转移至新项目集下。";
 $lang->product->changeProgramError   = "该{$lang->productCommon}的{$lang->SRCommon}已经关联到项目，请取消关联后再操作";
 $lang->product->programEmpty         = '项目集不能为空';
-$lang->product->nameIsDuplicate      = "'%s'产品线已经存在，请重新设置！";
+$lang->product->nameIsDuplicate      = "『%s』产品线已经存在，请重新设置！";
 
 $lang->product->id             = '编号';
 $lang->product->program        = "所属项目集";
