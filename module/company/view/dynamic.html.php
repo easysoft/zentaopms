@@ -22,6 +22,7 @@
     if($period == $browseType)
     {
         $active = 'btn-active-text';
+        $pager->recTotal = $recTotal ? $recTotal : $pager->recTotal;
         $label .= " <span class='label label-light label-badge'>{$pager->recTotal}</span>";
     }
     echo html::a(inlink('dynamic', "browseType=$period&param=&recTotal=0&date=&direction=next&userID=$userID&productID=$productID&projectID=$projectID&executionID=$executionID&orderBy=$orderBy"), $label, '', "class='btn btn-link $active' id='{$period}'")
