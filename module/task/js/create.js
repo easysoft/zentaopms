@@ -546,10 +546,19 @@ $('#modalTeam .btn').click(function()
     if(teamList.length <= 2)
     {
         alert(teamMemberError);
+        return false;
     }
     else
     {
-        $('.close').click();
+        if(config.onlybody == 'yes')
+        {
+            $('.close').parent().click();
+        }
+        else
+        {
+            $('.close').click();
+        }
+
     }
 });
 
