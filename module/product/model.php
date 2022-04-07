@@ -840,31 +840,28 @@ class productModel extends model
         foreach($data->modules as $id => $name)
         {
             if(empty($name)) continue;
-            $productLine = new stdclass();
-            $productLine->module = $name;
-            $productLine->program = $data->programs[$id];
-            if(in_array($productLine, $lines))
-            {
-                dao::$errors[] = sprintf($this->lang->product->nameIsDuplicate, $productLine->module);
-                return false;
-            }
-            else
-            {
-                $lines[] = $productLine;
-            }
-        }
-
-        foreach($data->modules as $id => $name)
-        {
-            if(empty($name)) continue;
             if($this->config->systemMode == 'new' and empty($data->programs[$id]))
             {
                 dao::$errors[] = $this->lang->product->programEmpty;
                 return false;
             }
 
-            $line->name  = strip_tags(trim($name));
-            $line->root  = $data->programs[$id];
+            $programID = $data->programs[$id];
+            if(!isset($lines[$programID])) $lines[$programID] = array();
+            if(in_array($name, $lines[$programID]))
+            {
+                dao::$errors[] = sprintf($this->lang->product->nameIsDuplicate, $name);
+                return false;
+            }
+            $lines[$programID][] = $name;
+        }
+
+        foreach($data->modules as $id => $name)
+        {
+            if(empty($name)) continue;
+
+            $line->name = strip_tags(trim($name));
+            $line->root = $data->programs[$id];
 
             if(is_numeric($id))
             {
