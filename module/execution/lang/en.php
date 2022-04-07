@@ -367,6 +367,7 @@ $lang->execution->unresolvedBug               = "[%s] unresolved bugs. ";
 $lang->execution->projectNotEmpty             = 'Project cannot be empty.';
 $lang->execution->confirmStoryToTask          = $lang->SRCommon . '%s are converted to tasks in the current. Do you want to convert them anyways?';
 $lang->execution->ge                          = "『%s』should be >= actual begin『%s』.";
+$lang->execution->storyDragError              = "The {$lang->SRCommon} is still a draft or has been changed, please drag it after the review";
 
 /* Statistics. */
 $lang->execution->charts = new stdclass();
