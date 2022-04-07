@@ -1616,6 +1616,7 @@ class block extends control
      */
     public function printExecutionOverviewBlock()
     {
+        $this->app->loadLang('project');
         $projectID  = $this->view->block->module == 'my' ? 0 : (int)$this->session->project;
         $executions = $this->loadModel('execution')->getList($projectID);
 
