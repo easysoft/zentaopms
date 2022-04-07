@@ -155,7 +155,7 @@ function loadBranches(product)
     var projectID = (typeof(systemMode) != 'undefined' && systemMode == 'new') ? $('#project').val() : 0;
 
     var index = $inputgroup.find('select:first').attr('id').replace('products' , '');
-    $.get(createLink('branch', 'ajaxGetBranches', "productID=" + $(product).val() + "&oldBranch=0&param=active&projectID=" + projectID), function(data)
+    $.get(createLink('branch', 'ajaxGetBranches', "productID=" + $(product).val() + "&oldBranch=0&param=active&projectID=" + projectID + "&withMainBranch="), function(data)
     {
         if(data)
         {
