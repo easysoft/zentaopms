@@ -7,15 +7,6 @@ class testcaseTest
          $this->objectModel = $tester->loadModel('testcase');
     }
 
-    public function setMenuTest($products, $productID, $branch = 0, $moduleID = 0, $suiteID = 0, $orderBy = 'id_desc')
-    {
-        $objects = $this->objectModel->setMenu($products, $productID, $branch = 0, $moduleID = 0, $suiteID = 0, $orderBy = 'id_desc');
-
-        if(dao::isError()) return dao::getError();
-
-        return $objects;
-    }
-
     /**
      * Test get cases of a module.
      *
@@ -146,15 +137,6 @@ class testcaseTest
     public function getTestCasesTest($productID, $branch, $browseType, $queryID, $moduleID, $sort, $pager, $auto = 'no')
     {
         $objects = $this->objectModel->getTestCases($productID, $branch, $browseType, $queryID, $moduleID, $sort, $pager, $auto = 'no');
-
-        if(dao::isError()) return dao::getError();
-
-        return $objects;
-    }
-
-    public function getBySearchTest($productID, $queryID, $orderBy, $pager = null, $branch = 0, $auto = 'no')
-    {
-        $objects = $this->objectModel->getBySearch($productID, $queryID, $orderBy, $pager = null, $branch = 0, $auto = 'no');
 
         if(dao::isError()) return dao::getError();
 
@@ -413,15 +395,6 @@ class testcaseTest
         return $objects;
     }
 
-    public function printCellTest($col, $case, $users, $branches, $modulePairs = array(), $browseType = '', $mode = 'datatable')
-    {
-        $objects = $this->objectModel->printCell($col, $case, $users, $branches, $modulePairs = array(), $browseType = '', $mode = 'datatable');
-
-        if(dao::isError()) return dao::getError();
-
-        return $objects;
-    }
-
     /**
      * Test append bugs and results.
      *
@@ -452,15 +425,6 @@ class testcaseTest
         if(dao::isError()) return dao::getError();
 
         return $object ? 1 : 2;
-    }
-
-    public function summaryTest($cases)
-    {
-        $objects = $this->objectModel->summary($cases);
-
-        if(dao::isError()) return dao::getError();
-
-        return $objects;
     }
 
     public function syncCase2ProjectTest($case, $caseID)
