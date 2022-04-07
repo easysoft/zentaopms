@@ -558,7 +558,6 @@ $('#modalTeam .btn').click(function()
         {
             $('.close').click();
         }
-
     }
 });
 
