@@ -44,6 +44,7 @@ $builder->testresult = array('rows' => 40, 'extends' => array('testresult'));
 $builder->testrun    = array('rows' => 40, 'extends' => array('testrun'));
 $builder->testreport = array('rows' => 10, 'extends' => array('testreport'));
 $builder->testsuite  = array('rows' => 201, 'extends' => array('testsuite'));
+$builder->suitecase  = array('rows' => 400, 'extends' => array('suitecase'));
 
 $builder->product             = array('rows' => 100, 'extends' => array('product'));
 $builder->productalone        = array('rows' => 20, 'extends' => array('product','productalone'));
@@ -54,6 +55,7 @@ $builder->branch              = array('rows' => 240, 'extends' => array('branch'
 $builder->projectproduct      = array('rows' => 200, 'extends' => array('projectproduct'));
 $builder->projectproductalone = array('rows' => 28, 'extends' => array('projectproduct','projectproductalone'));
 $builder->projectstory        = array('rows' => 200, 'extends' => array('projectstory'));
+$builder->projectcase         = array('rows' => 400, 'extends' => array('projectcase'));
 $builder->executionstory      = array('rows' => 180, 'extends' => array('projectstory','executionstory'));
 
 $builder->kanbanspace  = array('rows' => 50, 'extends' => array('kanbanspace'));

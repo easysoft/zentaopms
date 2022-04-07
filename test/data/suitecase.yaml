@@ -1,0 +1,33 @@
+title: table zt_suitecase
+desc: ""
+author: automated export
+version: "1.0"
+fields:
+  - field: suite
+    note: ""
+    range: 1-200{2}
+    prefix: ""
+    postfix: ""
+    format: ""
+  - field: product
+    note: ""
+    range: 1-100{4}
+    prefix: ""
+    postfix: ""
+    format: ""
+  - field: case
+    note: ""
+    range: 1-400
+    prefix: ""
+    postfix: ""
+    loop: 0
+    loopfix: ""
+    format: ""
+  - field: version
+    note: ""
+    range: 1
+    prefix: ""
+    postfix: ""
+    loop: 0
+    loopfix: ""
+    format: ""

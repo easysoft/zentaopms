@@ -299,6 +299,7 @@ class Processor
         global $app;
         $sqlRoot = $app->getAppRoot();
         $this->dao->exec(file_get_contents($sqlRoot . '/data/zt_config.sql'));
+        $this->dao->exec(file_get_contents($sqlRoot . '/data/zt_block.sql'));
         $this->dao->exec(file_get_contents($sqlRoot . '/data/zt_lang.sql'));
         $this->dao->exec(file_get_contents($sqlRoot . '/data/zt_cron.sql'));
     }
