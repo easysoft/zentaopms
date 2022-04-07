@@ -18,6 +18,7 @@
 <?php js::set('vision', $this->config->vision);?>
 <?php js::set('projectID', $projectID);?>
 <?php js::set('productID', $productID);?>
+<?php js::set('teamMemberError', $lang->task->error->teamMember);?>
 <?php if(!empty($storyID)):?>
 <style> .title-group.required > .required:after {right: 110px;}</style>
 <?php endif;?>

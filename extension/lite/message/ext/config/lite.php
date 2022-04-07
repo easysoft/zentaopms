@@ -2,7 +2,7 @@
 $config->message->objectTypes = array();
 $config->message->objectTypes['story']   = array('opened', 'edited', 'commented', 'changed', 'reviewed', 'closed', 'activated', 'assigned');
 $config->message->objectTypes['project'] = array('opened', 'edited', 'started', 'delayed', 'suspended', 'closed', 'activated', 'undeleted');
-$config->message->objectTypes['task']    = array('opened', 'edited', 'assigned', 'archived', 'finished', 'deleted');
+$config->message->objectTypes['task']    = array('opened', 'edited', 'assigned', 'finished', 'deleted');
 $config->message->objectTypes['todo']    = array('opened', 'edited');
 $config->message->objectTypes['doc']     = array('created', 'edited');
 
