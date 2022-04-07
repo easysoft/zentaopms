@@ -63,7 +63,7 @@
           <?php
           if($mode == 'new')
           {
-              echo html::select('users[]', $users, '', "multiple class='form-control chosen' data-drop_direction='down'");
+              echo html::select('users[]', $users, '', "multiple class='form-control picker' data-drop_direction='down'");
           }
           else
           {
@@ -99,3 +99,4 @@
   <?php endif;?>
 </div>
 <?php include '../../common/view/footer.html.php';?>
+
