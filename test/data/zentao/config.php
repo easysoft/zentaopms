@@ -44,6 +44,7 @@ $builder->testresult = array('rows' => 40, 'extends' => array('testresult'));
 $builder->testrun    = array('rows' => 40, 'extends' => array('testrun'));
 $builder->testreport = array('rows' => 10, 'extends' => array('testreport'));
 $builder->testsuite  = array('rows' => 201, 'extends' => array('testsuite'));
+$builder->suitecase  = array('rows' => 400, 'extends' => array('suitecase'));
 
 $builder->product             = array('rows' => 100, 'extends' => array('product'));
 $builder->productalone        = array('rows' => 20, 'extends' => array('product','productalone'));
@@ -54,6 +55,7 @@ $builder->branch              = array('rows' => 240, 'extends' => array('branch'
 $builder->projectproduct      = array('rows' => 200, 'extends' => array('projectproduct'));
 $builder->projectproductalone = array('rows' => 28, 'extends' => array('projectproduct','projectproductalone'));
 $builder->projectstory        = array('rows' => 200, 'extends' => array('projectstory'));
+$builder->projectcase         = array('rows' => 400, 'extends' => array('projectcase'));
 $builder->executionstory      = array('rows' => 180, 'extends' => array('projectstory','executionstory'));
 
 $builder->kanbanspace  = array('rows' => 50, 'extends' => array('kanbanspace'));
@@ -81,9 +83,10 @@ $builder->doclib     = array('rows' => 900, 'extends' => array('doclib'));
 $builder->doc        = array('rows' => 900, 'extends' => array('doc'));
 $builder->doccontent = array('rows' => 900, 'extends' => array('doccontent'));
 
-$builder->build   = array('rows' => 20, 'extends' => array('build'));
-$builder->release = array('rows' => 10, 'extends' => array('release'));
-$builder->design  = array('rows' => 120, 'extends' => array('design'));
+$builder->build      = array('rows' => 20, 'extends' => array('build'));
+$builder->release    = array('rows' => 10, 'extends' => array('release'));
+$builder->design     = array('rows' => 120, 'extends' => array('design'));
+$builder->designspec = array('rows' => 120, 'extends' => array('designspec'));
 
 $builder->webhook = array('rows' => 7, 'extends' => array('webhook'));
 $builder->entry   = array('rows' => 1, 'extends' => array('entry'));

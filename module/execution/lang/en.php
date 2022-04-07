@@ -222,6 +222,7 @@ $lang->execution->exportAction      = "Export Execution";
 $lang->execution->computeBurnAction = "Update Burndown";
 $lang->execution->create            = "Create {$lang->executionCommon}";
 $lang->execution->createExec        = "Create {$lang->execution->common}";
+$lang->execution->createAction      = "Create {$lang->execution->common}";
 $lang->execution->copyExec          = "Copy {$lang->execution->common}";
 $lang->execution->copy              = "Copy {$lang->executionCommon}";
 $lang->execution->delete            = "Delete {$lang->executionCommon}";

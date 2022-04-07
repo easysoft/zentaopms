@@ -114,3 +114,5 @@ $lang->action->desc->unlinkchildrenstory = '$date, 由 <strong>$actor</strong> �
 $lang->action->desc->linkparentstory     = '$date, 由 <strong>$actor</strong> 关联到父目标 <strong>$extra</strong>。' . "\n";
 $lang->action->desc->unlinkparentstory   = '$date, 由 <strong>$actor</strong> 从父目标<strong>$extra</strong>取消关联。' . "\n";
 $lang->action->desc->deletechildrenstory = '$date, 由 <strong>$actor</strong> 删除子目标<strong>$extra</strong>。' . "\n";
+
+$lang->action->executionNoProject = '该项目看板没有所属的项目，请先还原项目再还原项目看板';

@@ -28,6 +28,7 @@ a.removeModule:hover {color: red;}
 .table td.has-child > .story-toggle.collapsed > .icon {-ms-transform: rotate(90deg); -moz-transform: rotate(90deg); -o-transform: rotate(90deg); -webkit-transform: rotate(90deg); transform: rotate(90deg);}
 .table td.c-estimate {padding-right: 12px;}
 .main-table tbody > tr.table-children > td:first-child::before {width: 3px;}
+.table-footer {z-index: 1;}
 @-moz-document url-prefix() {.main-table tbody > tr.table-children > td:first-child::before {width: 4px;};}
 
 #batchUnlinkStoryTip .modal-body {padding-top: 10px; max-height: 400px; overflow: auto;}

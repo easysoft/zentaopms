@@ -29,7 +29,8 @@ class storyModel extends model
             ->andWhere('vision')->eq($this->config->vision)
             ->fetch();
         if(!$story) return false;
-        if(substr($story->closedDate, 0, 4) == '0000') $story->closedDate = '';
+
+        if(helper::isZeroDate($story->closedDate)) $story->closedDate = '';
         if($version == 0) $version = $story->version;
         $spec = $this->dao->select('title,spec,verify')->from(TABLE_STORYSPEC)->where('story')->eq($storyID)->andWhere('version')->eq($version)->fetch();
         $story->title  = isset($spec->title)  ? $spec->title  : '';
@@ -3775,20 +3776,16 @@ class storyModel extends model
     {
         if($isObject)
         {
-            $story = $stories;
+            $story   = $stories;
             $stories = (array)$stories;
             $stories[$story->id] = $story;
         }
 
         /* Set child story id into array. */
-        $storyIdList = array();
-        if(isset($stories['id']))
+        $storyIdList = isset($stories['id']) ? array($stories['id'] => $stories['id']) : array_keys($stories);
+        if(isset($stories['id']) and isset($story->children)) $storyIdList = array_merge($storyIdList, array_keys($story->children));
+        if(!isset($stories['id']))
         {
-            $storyIdList = array($stories['id'] => $stories['id']);
-        }
-        else
-        {
-            $storyIdList = array_keys($stories);
             foreach($stories as $story)
             {
                 if(isset($story->children)) $storyIdList = array_merge($storyIdList, array_keys($story->children));

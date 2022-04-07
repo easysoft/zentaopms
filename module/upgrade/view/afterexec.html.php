@@ -64,7 +64,13 @@ function updateFile(link)
 {
     $.getJSON(link, function(response)
     {
-        if(response.result == 'finished')
+        if(response == null)
+        {
+            updateFileFinish = true;
+            $.get('<?php echo inlink('afterExec', "fromVersion=$fromVersion&processed=yes")?>');
+            $('a#tohome').closest('.message').show();
+        }
+        else if(response.result == 'finished')
         {
             $('#resultBox li span.' + response.type + '-num').html(num + response.count);
             updateFileFinish = true;

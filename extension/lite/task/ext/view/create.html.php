@@ -42,17 +42,17 @@
         <?php if($execution->type != 'kanban' or $this->config->vision == 'lite'):?>
         <tr>
           <th><?php echo $lang->task->execution;?></th>
-          <td><?php echo html::select('execution', $executions, $execution->id, "class='form-control chosen' onchange='loadAll(this.value)' required");?></td><td></td><td></td>
+          <td><?php echo html::select('execution', $executions, $execution->id, "class='form-control chosen' onchange='loadPage(this.value)' required");?></td><td></td><td></td>
         </tr>
         <?php endif;?>
-        <?php if(count($regionList) > 1 or count($lanes) > 1 or empty($extra)):?>
+        <?php if(count($regionList) > 1 or count($laneList) > 1 or empty($extra)):?>
         <tr>
           <th><?php echo $lang->task->region;?></th>
           <td><?php echo html::select('region', $regionList, isset($regionID) ? $regionID : '', "class='form-control chosen' onchange='loadLaneGroup(this.value)' required");?>
         </tr>
         <tr>
           <th><?php echo $lang->task->lane;?></th>
-          <td class='required'><?php echo html::select('otherLane', $laneList, '', "class='form-control chosen' onchange='loadAll(this.value)' required");?>
+          <td class='required'><?php echo html::select('otherLane', '', '', "class='form-control chosen' required");?>
         </tr>
         <?php endif;?>
         <tr>
@@ -374,6 +374,12 @@ function loadLaneGroup(regionID)
             $('#otherLane').parent().parent().addClass('hide');
         }
     })
+}
+
+function loadPage(executionID)
+{
+    var link = createLink('task', 'create', 'executionID=' + executionID);
+    window.location.replace(link)
 }
 </script>
 <?php include $this->app->getModuleRoot() . '/common/view/footer.html.php';?>

@@ -39,6 +39,8 @@ class todoModel extends model
             ->setIF($this->post->date == false,  'date', '2030-01-01')
             ->setIF($this->post->begin == false, 'begin', '2400')
             ->setIF($this->post->begin == false or $this->post->end == false, 'end', '2400')
+            ->setIF($this->post->status == 'done', 'finishedBy', $this->app->user->account)
+            ->setIF($this->post->status == 'done', 'finishedDate', helper::now())
             ->stripTags($this->config->todo->editor->create['id'], $this->config->allowedTags)
             ->remove(implode(',', $this->config->todo->moduleList) . ',uid')
             ->get();
@@ -521,6 +523,7 @@ class todoModel extends model
             ->beginIF($type == 'assignedtoother')->andWhere('account', true)->eq($account)->fi()
             ->beginIF($type != 'assignedtoother')->andWhere('assignedTo', true)->eq($account)->fi()
             ->orWhere('finishedBy')->eq($account)
+            ->orWhere('closedBy')->eq($account)
             ->markRight(1)
             ->beginIF($begin)->andWhere('date')->ge($begin)->fi()
             ->beginIF($end)->andWhere('date')->le($end)->fi()
