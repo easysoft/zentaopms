@@ -61,6 +61,9 @@ switch($argv[1])
     case 'action':
         ztfRun('model/action');
         break;
+    case 'testcase':
+        ztfRun('model/testcase');
+        break;
     case 'my':
         ztfRun('model/my');
         break;
