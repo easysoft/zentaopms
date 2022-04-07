@@ -92,8 +92,8 @@ class upgrade extends control
             {
                 if(strpos($key, 'lite') === false) unset($this->lang->upgrade->fromVersions[$key]);
             }
-
-            $this->config->version = 'Lite' . $this->config->liteVersion;
+            
+            $this->config->version = ($this->config->edition == 'biz' ? 'LiteVIP' : 'Lite') . $this->config->liteVersion;
         }
 
         $this->view->title      = $this->lang->upgrade->common . $this->lang->colon . $this->lang->upgrade->selectVersion;
