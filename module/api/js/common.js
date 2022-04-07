@@ -243,9 +243,9 @@ try {
             <input type="text" :placeholder="langDesc" autocomplete="off" class="form-control" v-model="value.desc">
           </td>
           <td>
-              <button class="btn btn-link" type="button" @click="addSub" v-if="value.structType != 'formData' && ['object', 'array'].indexOf(value.paramsType) != -1">${addSubField}</button>
-              <button class="btn btn-link" type="button" @click="add">${structAdd}</button>
-              <button class="btn btn-link" type="button" @click="del">${structDelete}</button>
+              <button class="btn btn-link btn-icon" type="button" @click="addSub" v-if="value.structType != 'formData' && ['object', 'array'].indexOf(value.paramsType) != -1"><i class="icon icon-split"></i></button>
+              <button class="btn btn-link btn-icon" type="button" @click="add"><i class="icon icon-plus"></i></button>
+              <button class="btn btn-link btn-icon" type="button" @click="del"><i class="icon icon-close"></i></button>
            </td>
         </tr>
     `
