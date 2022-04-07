@@ -85,6 +85,14 @@ $sideWidth = common::checkNotCN() ? '270' : '238';
           nested: true,
           selector: 'li',
           dragCssClass: 'drop-here',
+          canMoveHere: function($ele, $target)
+          {
+              var maxTop = $('.side-col > .cell > ul').height() - $ele.height();
+              if(parseFloat($('.drag-shadow').css('top')) < 0) $('.drag-shadow').css('top', '0');
+              if(parseFloat($('.drag-shadow').css('left')) != 0) $('.drag-shadow').css('left', '0');
+              if(parseFloat($('.drag-shadow').css('top')) > maxTop) $('.drag-shadow').css('top', maxTop + 'px');
+              return true;
+          },
           targetSelector: function($ele, $root)
           {
               var $ul = $ele.closest('ul');
