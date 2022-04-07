@@ -1,5 +1,4 @@
 <?php
-
 /**
  * The control file of api of ZenTaoPMS.
  *
