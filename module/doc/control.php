@@ -1046,6 +1046,8 @@ class doc extends control
             }
         }
 
+        $doc = $docID ? $doc : '';
+
         $this->view->customObjectLibs = $customObjectLibs;
         $this->view->showLibs         = $this->config->doc->custom->objectLibs;
 
@@ -1053,7 +1055,7 @@ class doc extends control
         $this->view->position[] = ($type == 'book' or $type == 'custom') ? $this->lang->doc->customAB : $object->name;
 
         $this->view->docID        = $docID;
-        $this->view->doc          = $docID ? $doc : '';
+        $this->view->doc          = $doc;
         $this->view->type         = $type;
         $this->view->version      = $version;
         $this->view->object       = $object;
