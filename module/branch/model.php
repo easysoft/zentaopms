@@ -43,10 +43,11 @@ class branchModel extends model
      * @param  string $browseType
      * @param  string $orderBy
      * @param  object $pager
+     * @param  bool   $addMainBranch
      * @access public
      * @return array
      */
-    public function getList($productID, $executionID = 0, $browseType = 'active', $orderBy = 'order', $pager = null)
+    public function getList($productID, $executionID = 0, $browseType = 'active', $orderBy = 'order', $pager = null, $addMainBranch = true)
     {
         $executionBranches = array();
         if($executionID)
@@ -54,7 +55,8 @@ class branchModel extends model
             $executionBranches = $this->dao->select('branch')->from(TABLE_PROJECTPRODUCT)
                 ->where('project')->eq($executionID)
                 ->andWhere('product')->eq($productID)
-                ->fetchAll('branch');
+                ->fetchPairs('branch');
+            if(in_array(BRANCH_MAIN, $executionBranches)) $addMainBranch = true;
             if(empty($executionBranches)) return array();
         }
 
@@ -72,6 +74,8 @@ class branchModel extends model
         $product       = $this->loadModel('product')->getById($productID);
         $defaultBranch = BRANCH_MAIN;
         foreach($branchList as $branch) $defaultBranch = $branch->default ? $branch->id : $defaultBranch;
+
+        if(!$addMainBranch) return $branchList;
 
         /* Display the main branch under all and active page. */
         $mainBranch = new stdclass();

@@ -253,15 +253,16 @@ class branch extends control
      * @param  int    $oldBranch
      * @param  string $param
      * @param  int    $projectID
+     * @param  bool   $addMainBranch
      * @access public
      * @return void
      */
-    public function ajaxGetBranches($productID, $oldBranch = 0, $param = 'all', $projectID = 0)
+    public function ajaxGetBranches($productID, $oldBranch = 0, $param = 'all', $projectID = 0, $addMainBranch = true)
     {
         $product = $this->loadModel('product')->getById($productID);
         if(empty($product) or $product->type == 'normal') return;
 
-        $branches = $this->loadModel('branch')->getList($productID, $projectID, $param);
+        $branches = $this->loadModel('branch')->getList($productID, $projectID, $param, 'order', null, $addMainBranch);
         $branchOption    = array();
         $branchTagOption = array();
         foreach($branches as $branchInfo)
