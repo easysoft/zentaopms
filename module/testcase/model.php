@@ -264,13 +264,16 @@ class testcaseModel extends model
      */
     public function getModuleProjectCases($productID, $branch = 0, $moduleIdList = 0, $orderBy = 'id_desc', $pager = null, $browseType = '', $auto = 'no')
     {
+        $executions = $this->loadModel('execution')->getIdList($this->session->project);
+        array_push($executions, $this->session->project);
+
         return $this->dao->select('distinct t1.*, t2.*, t4.title as storyTitle')->from(TABLE_PROJECTCASE)->alias('t1')
             ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case=t2.id')
             ->leftJoin(TABLE_PROJECTSTORY)->alias('t3')->on('t3.story=t2.story')
             ->leftJoin(TABLE_STORY)->alias('t4')->on('t3.story=t4.id')
             ->where('1=1')
             ->beginIF(!empty($productID))->andWhere('t2.product')->eq((int)$productID)->fi()
-            ->beginIF($this->app->tab == 'project')->andWhere('t1.project')->eq($this->session->project)->fi()
+            ->beginIF($this->app->tab == 'project')->andWhere('t1.project')->in($executions)->fi()
             ->beginIF($branch !== 'all')->andWhere('t2.branch')->eq($branch)->fi()
             ->beginIF($moduleIdList)->andWhere('t2.module')->in($moduleIdList)->fi()
             ->beginIF($browseType == 'wait')->andWhere('t2.status')->eq($browseType)->fi()
