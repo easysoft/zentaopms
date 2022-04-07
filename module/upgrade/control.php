@@ -82,6 +82,20 @@ class upgrade extends control
     {
         $version = str_replace(array(' ', '.'), array('', '_'), $this->config->installedVersion);
         $version = strtolower($version);
+
+        if($this->config->visions == ',lite,') 
+        {
+            $installedVersion = str_replace('.', '_', $this->config->installedVersion);
+            $version = array_search($installedVersion, $this->config->upgrade->liteVersion);
+
+            foreach($this->lang->upgrade->fromVersions as $key => $value)
+            {
+                if(strpos($key, 'lite') === false) unset($this->lang->upgrade->fromVersions[$key]);
+            }
+
+            $this->config->version = 'Lite' . $this->config->liteVersion;
+        }
+
         $this->view->title      = $this->lang->upgrade->common . $this->lang->colon . $this->lang->upgrade->selectVersion;
         $this->view->position[] = $this->lang->upgrade->common;
         $this->view->version    = $version;
@@ -96,6 +110,8 @@ class upgrade extends control
      */
     public function confirm()
     {
+        if(strpos($this->post->fromVersion, 'lite') !== false) $this->post->fromVersion = $this->config->upgrade->liteVersion[$this->post->fromVersion];
+
         $this->session->set('step', '');
         $this->view->title       = $this->lang->upgrade->confirm;
         $this->view->position[]  = $this->lang->upgrade->common;
@@ -131,6 +147,7 @@ class upgrade extends control
         }
 
         $fromVersion = isset($_POST['fromVersion']) ? $this->post->fromVersion : $fromVersion;
+        if(strpos($fromVersion, 'lite') !== false) $fromVersion = $this->config->upgrade->liteVersion[$fromVersion];
         $this->upgrade->execute($fromVersion);
 
         if(!$this->upgrade->isError())
