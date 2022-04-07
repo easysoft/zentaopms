@@ -23,6 +23,8 @@ include '../../common/view/header.lite.html.php';
             $moduleName = isset($lang->$module->common)  ? $lang->$module->common  : $module;
             $methodName = isset($lang->$module->$method) ? $lang->$module->$method : $method;
 
+            if($module == 'execution' && $method == 'gantt') $methodName = $methodName->common;
+
             /* find method name if method is lowercase letter. */
             if(!isset($lang->$module->$method))
             {

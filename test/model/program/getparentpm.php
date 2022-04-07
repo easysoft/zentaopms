@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
-include dirname(dirname(dirname(__FILE__))) . '/class/program.class.php';
+su('admin');
 
 /**
 
@@ -13,7 +13,12 @@ GetParentPM(). >> 0
 
 */
 
-$getPM = new Program('admin');
+global $tester;
+$tester->loadModel('program');
 
-/* GetParentPM($programIdList). */
-r($getPM->getParentPM('1')) && p() && e('0'); //
+$programIdList = array(11, 12, 13);
+$parentPM = $tester->program->getParentPM($programIdList);
+
+r(count($parentPM)) && p()         && e('2');   // 获取父项目集的负责人数量
+r($parentPM)        && p('12:pm2') && e('pm2'); // 获取父项目集的负责人account
+r($parentPM)        && p('13:pm3') && e('pm3'); // 获取父项目集的负责人account

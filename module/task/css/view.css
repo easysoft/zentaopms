@@ -4,3 +4,4 @@
 .page-title{max-width: 80%; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;}
 .pull-left{max-width: 80%;}
 .MRThWidth {width: 90px !important;}
+.btn-edit-comment {z-index: 100;}

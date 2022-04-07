@@ -41,7 +41,7 @@
   }
   $columns = count($visibleFields) + 2;
   ?>
-  <form id='todoBatchAddForm' method='post' target='hiddenwin' action='<?php echo $this->createLink('todo', 'batchCreate');?>'>
+  <form id='todoBatchAddForm' method='post' target='hiddenwin' action='<?php echo $this->createLink('todo', 'batchCreate');?>' data-ride='table'>
     <table class='table table-form table-fixed with-border'>
       <thead>
         <tr>
@@ -51,7 +51,7 @@
           <th class='col-name required'><?php echo $lang->todo->name;?></th>
           <th class='col-desc<?php echo zget($visibleFields, 'desc', ' hidden');?>'><?php echo $lang->todo->desc;?></th>
           <th class='col-date<?php echo zget($visibleFields, 'beginAndEnd', ' hidden')?>'><?php echo $lang->todo->beginAndEnd;?></th>
-          <th class='col-pending'></th>
+          <th><div class="checkbox-primary check-all" id="select-all"><label><?php echo $lang->todo->periods['future']?></label></div></th>
         </tr>
       </thead>
       <tbody>

@@ -406,7 +406,8 @@ class bug extends control
             if(isset($output['executionID']) and isonlybody())
             {
                 $executionID = $this->post->execution ? $this->post->execution : $output['executionID'];
-                if($executionID == $output['executionID'] and $this->app->tab == 'execution')
+                $execution   = $this->loadModel('execution')->getByID($executionID);
+                if($executionID == $output['executionID'] and $this->app->tab == 'execution' and $execution->type == 'kanban')
                 {
                     $kanbanData = $this->loadModel('kanban')->getRDKanban($executionID, $this->session->execLaneType ? $this->session->execLaneType : 'all');
                     $kanbanData = json_encode($kanbanData);
@@ -414,7 +415,7 @@ class bug extends control
                 }
                 else
                 {
-                    return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true));
+                    return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'locate' => 'parent'));
                 }
             }
 
@@ -541,7 +542,7 @@ class bug extends control
         else
         {
             $builds  = $this->loadModel('build')->getBuildPairs($productID, $branch, 'noempty,noterminate,nodone,withbranch');
-            $stories = $this->story->getProductStoryPairs($productID, $branch);
+            $stories = $this->story->getProductStoryPairs($productID, $branch, 0, 'all','id_desc', 0, 'full', 'story', false);
         }
 
         $moduleOwner = $this->bug->getModuleOwner($moduleID, $productID);
@@ -895,10 +896,12 @@ class bug extends control
      * Edit a bug.
      *
      * @param  int    $bugID
+     * @param  bool   $comment
+     * @param  string $kanbanGroup
      * @access public
      * @return void
      */
-    public function edit($bugID, $comment = false)
+    public function edit($bugID, $comment = false, $kanbanGroup = '')
     {
         if(!empty($_POST))
         {
@@ -945,7 +948,21 @@ class bug extends control
                     }
                 }
             }
-            if(isonlybody()) return print(js::reload('parent.parent'));
+            if(isonlybody())
+            {
+                $execution = $this->loadModel('execution')->getByID($bug->execution);
+                if(isset($execution->type) and $execution->type == 'kanban' and $this->app->tab == 'execution' and $kanbanGroup == 'default')
+                {
+                    $kanbanData = $this->loadModel('kanban')->getRDKanban($bug->execution, $this->session->execLaneType ? $this->session->execLaneType : 'all');
+                    $kanbanData = json_encode($kanbanData);
+
+                    return print(js::closeModal('parent.parent', '', "parent.parent.updateKanban($kanbanData)"));
+                }
+                else
+                {
+                    return print(js::closeModal('parent.parent'));
+                }
+            }
             return print(js::locate($this->createLink('bug', 'view', "bugID=$bugID"), 'parent'));
         }
 
@@ -1222,10 +1239,11 @@ class bug extends control
      * Update assign of bug.
      *
      * @param  int    $bugID
+     * @parm   string $kanbanGroup
      * @access public
      * @return void
      */
-    public function assignTo($bugID)
+    public function assignTo($bugID, $kanbanGroup = '')
     {
         $bug = $this->bug->getById($bugID);
         $this->bug->checkBugExecutionPriv($bug);
@@ -1247,7 +1265,7 @@ class bug extends control
             {
                 $bug       = $this->bug->getById($bugID);
                 $execution = $this->loadModel('execution')->getByID($bug->execution);
-                if(isset($execution->type) and $execution->type == 'kanban' and $this->app->tab == 'execution')
+                if(isset($execution->type) and $execution->type == 'kanban' and $this->app->tab == 'execution' and $kanbanGroup == 'default')
                 {
                     $kanbanData = $this->loadModel('kanban')->getRDKanban($bug->execution, $this->session->execLaneType ? $this->session->execLaneType : 'all');
                     $kanbanData = json_encode($kanbanData);

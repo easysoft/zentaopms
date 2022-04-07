@@ -296,7 +296,7 @@ $lang->kanban->dividerMenu = '';
 
 /* Execution menu. */
 $lang->execution->homeMenu      = new stdclass();
-$lang->execution->homeMenu->all = array('link' => "{$lang->execution->all}|execution|all|", 'alias' => 'batchedit');
+$lang->execution->homeMenu->all = array('link' => "{$lang->execution->all}|execution|all|", 'alias' => 'create,batchedit');
 if($config->systemMode == 'new') $lang->execution->homeMenu->executionkanban = array('link' => "{$lang->execution->executionKanban}|execution|executionkanban|");
 
 $lang->execution->menu           = new stdclass();

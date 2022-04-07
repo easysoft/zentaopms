@@ -670,16 +670,16 @@ class storyModel extends model
             ->add('lastEditedDate', $now)
             ->setIF($specChanged, 'version', $oldStory->version + 1)
             ->setIF($specChanged and $oldStory->status == 'active' and $this->post->needNotReview == false, 'status',  'changed')
-            ->setIF($specChanged and $oldStory->status == 'draft'  and $this->post->needNotReview, 'status', 'active')
-            ->setIF($specChanged, 'reviewedBy',  '')
+            ->setIF($oldStory->status == 'draft' and $this->post->needNotReview, 'status', 'active')
+            ->setIF($specChanged, 'reviewedBy', '')
             ->setIF($specChanged, 'closedBy', '')
             ->setIF($specChanged, 'closedReason', '')
-            ->setIF($specChanged and $oldStory->reviewedBy, 'reviewedDate',  '0000-00-00')
-            ->setIF($specChanged and $oldStory->closedBy,   'closedDate',   '0000-00-00')
+            ->setIF($specChanged and $oldStory->reviewedBy, 'reviewedDate', '0000-00-00')
+            ->setIF($specChanged and $oldStory->closedBy, 'closedDate', '0000-00-00')
             ->stripTags($this->config->story->editor->change['id'], $this->config->allowedTags)
             ->remove('files,labels,reviewer,comment,needNotReview,uid')
             ->get();
-        if($specChanged and $story->status == 'active' and $this->checkForceReview()) $story->status = 'changed';
+        if($specChanged and isset($story->status) && $story->status == 'active' and $this->checkForceReview()) $story->status = 'changed';
         $story = $this->loadModel('file')->processImgURL($story, $this->config->story->editor->change['id'], $this->post->uid);
         $this->dao->update(TABLE_STORY)->data($story, 'spec,verify')
             ->autoCheck()
@@ -735,7 +735,7 @@ class storyModel extends model
 
             $this->file->updateObjectID($this->post->uid, $storyID, 'story');
 
-            $oldStory->reviewers = implode(',', array_keys($oldStroyReviewers));
+            $oldStory->reviewers = implode(',', array_keys($oldStoryReviewers));
             $story->reviewers    = implode(',', $_POST['reviewer']);
             return common::createChanges($oldStory, $story);
         }
@@ -1315,11 +1315,11 @@ class storyModel extends model
             ->setDefault('lastEditedBy', $this->app->user->account)
             ->setDefault('lastEditedDate', $now)
             ->setDefault('status', $oldStory->status)
+            ->setDefault('reviewedDate', $date)
             ->setIF($this->post->result == 'revert', 'version', $this->post->preVersion)
             ->removeIF($this->post->result != 'reject', 'closedReason, duplicateStory, childStories')
             ->removeIF($this->post->result == 'reject' and $this->post->closedReason != 'duplicate', 'duplicateStory')
             ->removeIF($this->post->result == 'reject' and $this->post->closedReason != 'subdivided', 'childStories')
-            ->add('reviewedDate', $date)
             ->add('reviewedBy', $oldStory->reviewedBy . ',' . $this->app->user->account)
             ->remove('result,preVersion,comment')
             ->get();
@@ -2362,6 +2362,7 @@ class storyModel extends model
      * Get stories pairs of a product.
      *
      * @param  int           $productID
+     * @param  string|int    $branch
      * @param  array|string  $moduleIdList
      * @param  string        $status
      * @param  string        $order
@@ -2663,6 +2664,8 @@ class storyModel extends model
             {
                 $storyQuery .= " AND `status` NOT IN ('draft', 'closed')";
             }
+
+            if($this->app->rawModule == 'build' and $this->app->rawMethod == 'linkstory') $storyQuery .= " AND `parent` != '-1'";
         }
         elseif(strpos($storyQuery, $allBranch) !== false)
         {
@@ -3202,31 +3205,34 @@ class storyModel extends model
     /**
      * Check need confirm.
      *
-     * @param  array    $dataList
+     * @param  array|object    $object
      * @access public
-     * @return array
+     * @return array|object
      */
-    public function checkNeedConfirm($dataList)
+    public function checkNeedConfirm($data)
     {
+        $objectList = is_object($data) ? array($data->id => $data) : $data;
+
         $storyIdList      = array();
         $storyVersionList = array();
-        foreach($dataList as $key => $data)
+
+        foreach($objectList as $key => $object)
         {
-            $data->needconfirm = false;
-            if($data->story)
+            $object->needconfirm = false;
+            if($object->story)
             {
-                $storyIdList[$key]      = $data->story;
-                $storyVersionList[$key] = $data->storyVersion;
+                $storyIdList[$key]      = $object->story;
+                $storyVersionList[$key] = $object->storyVersion;
             }
         }
 
         $stories = $this->dao->select('id,version')->from(TABLE_STORY)->where('id')->in($storyIdList)->andWhere('status')->eq('active')->fetchPairs('id', 'version');
         foreach($storyIdList as $key => $storyID)
         {
-            if(isset($stories[$storyID]) and $stories[$storyID] > $storyVersionList[$key]) $dataList[$key]->needconfirm = true;
+            if(isset($stories[$storyID]) and $stories[$storyID] > $storyVersionList[$key]) $objectList[$key]->needconfirm = true;
         }
 
-        return $dataList;
+        return is_object($data) ? reset($objectList) : $objectList;
     }
 
     /**
@@ -4386,6 +4392,30 @@ class storyModel extends model
             ->fetchAll();
 
         return $story;
+    }
+
+    /**
+     * Get story relation by Ids.
+     *
+     * @param  array  $storyIdList
+     * @param  string $storyType
+     * @access public
+     * @return array
+     */
+    public function getStoryRelationByIds($storyIdList, $storyType)
+    {
+        $conditionField = $storyType == 'story' ? 'BID' : 'AID';
+        $storyType      = $storyType == 'story' ? 'BID, GROUP_CONCAT(`AID` SEPARATOR ",")' : 'AID, GROUP_CONCAT(`BID` SEPARATOR ",")';
+
+        $relations = $this->dao->select($storyType)->from(TABLE_RELATION)
+            ->where('AType')->eq('requirement')
+            ->andWhere('BType')->eq('story')
+            ->andWhere('relation')->eq('subdivideinto')
+            ->andWhere($conditionField)->in($storyIdList)
+            ->groupBy($conditionField)
+            ->fetchPairs();
+
+        return $relations;
     }
 
     /**

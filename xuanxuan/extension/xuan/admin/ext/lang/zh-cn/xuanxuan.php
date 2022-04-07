@@ -1,5 +1,5 @@
 <?php
-$lang->admin->xuanxuan        = '客户端首页';
+$lang->admin->xuanxuan        = '聊天状态';
 $lang->admin->blockStatus     = '状态监控';
 $lang->admin->blockStatistics = '系统统计';
 $lang->admin->xuanxuanSetting = '参数设置';
@@ -13,9 +13,9 @@ $lang->admin->totalMessages = '消息数量';
 $lang->admin->xxdStartDate  = 'XXD上次启动时间';
 
 $lang->admin->message = array();
-$lang->admin->message['total'] = '总消息数'; 
-$lang->admin->message['hour']  = '最近一小时消息数'; 
-$lang->admin->message['day']   = '最近一天消息数'; 
+$lang->admin->message['total'] = '总消息数';
+$lang->admin->message['hour']  = '最近一小时消息数';
+$lang->admin->message['day']   = '最近一天消息数';
 
 $lang->admin->sizeType = array();
 $lang->admin->sizeType['K'] = 1024;

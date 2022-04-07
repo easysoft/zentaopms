@@ -413,7 +413,7 @@ class commonModel extends model
                 {
                     if(!commonModel::isTutorialMode())
                     {
-                        echo '<li>' . html::a(helper::createLink('tutorial', 'start'), "<i class='icon icon-guide'></i> " . $lang->tutorialAB, '', "class='iframe' data-class-name='modal-inverse' data-width='800' data-headerless='true' data-backdrop='true' data-keyboard='true'") . '</li>';
+                        echo '<li class="user-tutorial">' . html::a(helper::createLink('tutorial', 'start'), "<i class='icon icon-guide'></i> " . $lang->tutorialAB, '', "class='iframe' data-class-name='modal-inverse' data-width='800' data-headerless='true' data-backdrop='true' data-keyboard='true'") . '</li>';
                     }
 
                     echo '<li>' . html::a(helper::createLink('my', 'preference', '', '', true), "<i class='icon icon-controls'></i> " . $lang->preference, '', "class='iframe' data-width='700'") . '</li>';
@@ -2403,13 +2403,13 @@ EOD;
 
         /* Limited execution. */
         $limitedExecution = false;
-        if(!empty($module) && $module == 'task' && !empty($object->execution) or
-            !empty($module) && $module == 'execution' && !empty($object->id)
+        if(!empty($module) && in_array($module, array('task', 'story')) && !empty($object->execution) or
+           !empty($module) && $module == 'execution' && !empty($object->id)
         )
         {
             $objectID = '';
-            if($module == 'execution' and !empty($object->id))  $objectID = $object->id;
-            if($module == 'task' and !empty($object->execution))$objectID = $object->execution;
+            if($module == 'execution' and !empty($object->id)) $objectID = $object->id;
+            if(in_array($module, array('task', 'story')) and !empty($object->execution)) $objectID = $object->execution;
 
             $limitedExecutions = !empty($_SESSION['limitedExecutions']) ? $_SESSION['limitedExecutions'] : '';
             if($objectID and strpos(",{$limitedExecutions},", ",$objectID,") !== false) $limitedExecution = true;

@@ -424,7 +424,7 @@ class userModel extends model
                 $data[$i]->type     = 'inside';
                 $data[$i]->realname = $users->realname[$i];
                 $data[$i]->role     = $role;
-                $data[$i]->group    = in_array('ditto', $users->group[$i]) ? (isset($prev['group']) ? $prev['group'] : '') : $users->group[$i];
+                $data[$i]->group    = in_array('ditto', isset($users->group[$i]) ? $users->group[$i] : array()) ? (isset($prev['group']) ? $prev['group'] : '') : $users->group[$i];
                 $data[$i]->email    = $users->email[$i];
                 $data[$i]->gender   = $users->gender[$i];
                 $data[$i]->password = md5(trim($users->password[$i]));
@@ -2731,8 +2731,6 @@ class userModel extends model
     public function getVisionList()
     {
         $visionList = $this->lang->visionList;
-
-        if($this->config->systemMode != 'new') unset($visionList['lite']);
 
         foreach($visionList as $visionKey => $visionName)
         {

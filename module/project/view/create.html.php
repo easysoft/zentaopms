@@ -24,6 +24,8 @@
 <?php js::set('multiBranchProducts', $multiBranchProducts);?>
 <?php js::set('selectedProductID', $productID);?>
 <?php js::set('selectedBranchID', $branchID);?>
+<?php js::set('productName', $lang->product->name);?>
+<?php js::set('manageProducts', $lang->project->manageProducts);?>
 <?php $requiredFields = $config->project->create->requiredFields;?>
 <div id='mainContent' class='main-content'>
   <div class='center-block'>
@@ -90,8 +92,8 @@
           </td>
           <td colspan='2'><?php echo html::radio('delta', $lang->project->endList , '', "onclick='computeEndDate(this.value)'");?></td>
         </tr>
-        <?php $hiddenDays = $model == 'scrum' ? '' : 'hidden';?>
-        <tr id='daysBox' class="<?php echo $hiddenDays;?>">
+        <?php if($model == 'scrum'):?>
+        <tr id='daysBox'>
           <th><?php echo $lang->execution->days;?></th>
           <td>
             <div class='input-group'>
@@ -100,8 +102,9 @@
             </div>
           </td><td></td><td></td>
         </tr>
+        <?php endif;?>
         <tr>
-          <th><?php echo $lang->project->manageProducts;?></th>
+          <th id='productTitle'><?php echo $lang->project->manageProducts;?></th>
           <td class='text-left' id='productsBox' colspan="3">
             <div class='row'>
               <?php $i = 0;?>
@@ -125,11 +128,13 @@
                 </div>
               </div>
             </div>
+            <div class="col-sm-4 addProduct hidden <?php if($programID) echo 'required';?>">
+              <div class='input-group'>
+                <?php echo html::input('productName', '', "class='form-control'");?>
+                <span class='input-group-addon'><?php echo html::checkBox('newProduct', $lang->project->addProduct, '', "onchange=addNewProduct(this);");?></span>
+              </div>
+            </div>
           </td>
-        </tr>
-        <tr class='hidden'>
-          <th><?php echo $lang->product->name;?></th>
-          <td><?php echo html::input('productName', '', "class='form-control' required");?></td><td></td><td></td>
         </tr>
         <tr>
           <th><?php echo $lang->execution->linkPlan;?></th>

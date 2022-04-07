@@ -144,7 +144,7 @@
           </table>
           <?php endif;?>
           <?php if($api->responseExample):?>
-          <h3><?php echo $lang->api->responseExample;?></h3>
+          <h3 class='title'><?php echo $lang->api->responseExample;?></h3>
           <pre><code><?php echo $api->responseExample;?></code></pre>
           <?php endif;?>
         </div>

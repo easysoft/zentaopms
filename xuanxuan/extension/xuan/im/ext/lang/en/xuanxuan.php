@@ -31,3 +31,8 @@ $lang->im->xxServerConfirm = 'Go to User dropmenu  to download the ZenTao Deskto
 $lang->im->xxdServerTip   = 'XXD server address contains protocol, host and port，such as http://192.168.1.35 or http://domain. It should not be 127.0.0.1.';
 $lang->im->xxdServerEmpty = 'XXD server address is empty.';
 $lang->im->xxdServerError = 'XXD server address should not be 127.0.0.1.';
+
+$lang->im->xxd->aes  = 'Server-side AES';
+$lang->im->xxdAESTip = 'This only affects server-side AES encryption between XXB and XXD.';
+$lang->im->aesOptions['on']  = 'Enabled';
+$lang->im->aesOptions['off'] = 'Disabled';

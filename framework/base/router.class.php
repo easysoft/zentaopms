@@ -2076,7 +2076,7 @@ class baseRouter
         if($type != 'fetch')
         {
             /* 分割URI。 Spit the URI. */
-            $items     = explode($this->config->requestFix, $this->URI);
+            $items     = explode($this->config->requestFix, (string)$this->URI);
             $itemCount = count($items);
 
             /**

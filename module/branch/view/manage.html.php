@@ -40,7 +40,7 @@
   <div class="table-empty-tip">
     <p>
       <span class="text-muted"><?php echo $lang->branch->noData;?></span>
-      <?php if($canCreate) echo html::a($this->createLink('branch', 'create', "productID=$productID", '', true), "<i class='icon icon-plus'></i> " . $lang->branch->create, '', "class='btn btn-info iframe'");?>
+      <?php if($canCreate and $browseType != 'closed') echo html::a($this->createLink('branch', 'create', "productID=$productID", '', true), "<i class='icon icon-plus'></i> " . $lang->branch->create, '', "class='btn btn-info iframe'");?>
     </p>
   </div>
   <?php else:?>
@@ -82,17 +82,18 @@
           <td class='c-name flex branchName' title='<?php echo $branch->name;?>'>
             <span class="text-ellipsis"><?php echo $branch->name;?>&nbsp;</span>
             <?php
-            if($branch->default)
-            {
-                echo '<span class="label label-primary label-badge">' . $lang->branch->default . '</span>';
-            }
-            elseif($branch->status == 'active')
-            {
-                $setDefaultLink = helper::createLink('branch', 'setDefault', "productID=$productID&branchID=$branch->id", '', true);
-                $setDefaultHtml = html::a($setDefaultLink, "<span><i class='icon icon-hand-right'></i> {$lang->branch->setDefault}</span>", 'hiddenwin', "class='btn btn-icon-left btn-sm setDefault hidden'");
+            /* Fix bug#17342,由于默认分支的后续功能没做,暂时隐藏设置默认分支的功能 */
+            //if($branch->default)
+            //{
+            //    echo '<span class="label label-primary label-badge">' . $lang->branch->default . '</span>';
+            //}
+            //elseif($branch->status == 'active')
+            //{
+            //    $setDefaultLink = helper::createLink('branch', 'setDefault', "productID=$productID&branchID=$branch->id", '', true);
+            //    $setDefaultHtml = html::a($setDefaultLink, "<span><i class='icon icon-hand-right'></i> {$lang->branch->setDefault}</span>", 'hiddenwin', "class='btn btn-icon-left btn-sm setDefault hidden'");
 
-                echo common::hasPriv('branch', 'setDefault') ? $setDefaultHtml : '';
-            }
+            //    echo common::hasPriv('branch', 'setDefault') ? $setDefaultHtml : '';
+            //}
             ?>
           </td>
           <td><?php echo zget($lang->branch->statusList, $branch->status);?></td>

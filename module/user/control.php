@@ -560,6 +560,7 @@ class user extends control
     {
         $groups = $this->dao->select('id, name, role')
             ->from(TABLE_GROUP)
+            ->where('vision')->eq($this->config->vision)
             ->fetchAll();
         $groupList = array('' => '');
         $roleGroup = array();

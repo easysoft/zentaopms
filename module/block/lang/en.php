@@ -107,7 +107,25 @@ $lang->block->spent           = 'Has Been Spent';
 $lang->block->budget          = 'Budget';
 $lang->block->left            = 'Remain';
 
-$lang->block->default['waterfall']['project']['3']['title']  = 'Plan Gantt Chart';
+$lang->block->titleList['flowchart']      = 'Flow Chart';
+$lang->block->titleList['statistic']      = 'Statistic';
+$lang->block->titleList['recentproject']  = 'Recent Project';
+$lang->block->titleList['assigntome']     = 'Assign to me';
+$lang->block->titleList['projectteam']    = 'Project manpower input';
+$lang->block->titleList['project']        = 'Project List';
+$lang->block->titleList['dynamic']        = 'Dynamic';
+$lang->block->titleList['list']           = 'Todo List';
+$lang->block->titleList['contribute']     = 'Contribute';
+$lang->block->titleList['scrumoverview']  = 'Scrumoverview';
+$lang->block->titleList['scrumtest']      = 'Scrum Test';
+$lang->block->titleList['scrumlist']      = 'Scrum List';
+$lang->block->titleList['sprint']         = 'Sprint';
+$lang->block->titleList['projectdynamic'] = 'Project Dynamic';
+$lang->block->titleList['bug']            = 'Bug';
+$lang->block->titleList['case']           = 'Case';
+$lang->block->titleList['testtask']       = 'Test Task';
+
+$lang->block->default['waterfall']['project']['3']['title']  = "Plan Gantt Chart";
 $lang->block->default['waterfall']['project']['3']['block']  = 'waterfallgantt';
 $lang->block->default['waterfall']['project']['3']['source'] = 'project';
 $lang->block->default['waterfall']['project']['3']['grid']   = 8;
@@ -144,6 +162,7 @@ $lang->block->default['scrum']['project']['4']['grid']  = 4;
 $lang->block->default['scrum']['project']['5']['title'] = 'Dynamic';
 $lang->block->default['scrum']['project']['5']['block'] = 'projectdynamic';
 $lang->block->default['scrum']['project']['5']['grid']  = 4;
+$lang->block->default['kanban'] = $lang->block->default['scrum'];
 
 $lang->block->default['product']['1']['title'] = $lang->productCommon . ' Report';
 $lang->block->default['product']['1']['block'] = 'statistic';

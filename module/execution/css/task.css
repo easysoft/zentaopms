@@ -6,3 +6,4 @@ th.c-deadline {text-align: center;}
 .c-estimate {text-align: right;}
 .c-consumed {text-align: right;}
 .c-left {text-align: right;}
+.table-footer {z-index: 1;}

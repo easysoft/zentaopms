@@ -302,6 +302,7 @@ $lang->story->action->linked2plan           = array('main' => '$date, linked by 
 $lang->story->action->unlinkedfromplan      = array('main' => '$date, unlinked by <strong>$actor</strong> from Plan <strong>$extra</strong>.');
 $lang->story->action->linked2execution      = array('main' => '$date, linked by <strong>$actor</strong> to ' . $lang->executionCommon . ' <strong>$extra</strong>.');
 $lang->story->action->unlinkedfromexecution = array('main' => '$date, unlinked by <strong>$actor</strong> from ' . $lang->executionCommon . ' <strong>$extra</strong>.');
+$lang->story->action->linked2kanban         = array('main' => '$date, linked by <strong>$actor</strong> to Kanban <strong>$extra</strong>.');
 $lang->story->action->linked2project        = array('main' => '$date, linked by <strong>$actor</strong> to project <strong>$extra</strong>.');
 $lang->story->action->unlinkedfromproject   = array('main' => '$date, unlinked by <strong>$actor</strong> from project <strong>$extra</strong>.');
 $lang->story->action->linked2build          = array('main' => '$date, linked by <strong>$actor</strong> to Build <strong>$extra</strong>');

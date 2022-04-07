@@ -2665,7 +2665,14 @@ class bugModel extends model
         $bugs = $this->dao->select('*')->from(TABLE_BUG)->where($bugQuery)
             ->beginIF(!$this->app->user->admin)->andWhere('execution')->in('0,' . $this->app->user->view->sprints)->fi()
             ->beginIF($excludeBugs)->andWhere('id')->notIN($excludeBugs)->fi()
-            ->beginIF($projectID)->andWhere('project')->eq($projectID)->fi()
+
+            ->beginIF($projectID)
+            ->andWhere('project', true)->eq($projectID)
+            ->orWhere('project')->eq(0)
+            ->andWhere('openedBuild')->eq('trunk')
+            ->markRight(1)
+            ->fi()
+
             ->andWhere('deleted')->eq(0)
             ->orderBy($orderBy)->page($pager)->fetchAll();
         return $bugs;

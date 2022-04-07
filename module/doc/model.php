@@ -1530,9 +1530,9 @@ class docModel extends model
             {
                 $issueIdList   = $this->dao->select('id')->from(TABLE_ISSUE)->where('project')->eq($objectID)->andWhere('deleted')->eq('0')->andWhere('project')->in($this->app->user->view->projects)->get();
                 $meetingIdList = $this->dao->select('id')->from(TABLE_MEETING)->where('project')->eq($objectID)->andWhere('deleted')->eq('0')->andWhere('project')->in($this->app->user->view->projects)->get();
-                $designIdList  = $this->dao->select('id')->from(TABLE_DESIGN)->where('project')->eq($objectID)->andWhere('deleted')->eq('0')->andWhere('project')->in($this->app->user->view->projects)->get();
             }
 
+            $designIdList  = $this->dao->select('id')->from(TABLE_DESIGN)->where('project')->eq($objectID)->andWhere('deleted')->eq('0')->andWhere('project')->in($this->app->user->view->projects)->get();
             $executionIdList = $this->loadModel('execution')->getIdList($objectID);
             $taskPairs       = $this->dao->select('id')->from(TABLE_TASK)->where('execution')->in($executionIdList)->andWhere('deleted')->eq('0')->andWhere('execution')->in($this->app->user->view->sprints)->fetchPairs('id');
             if(!empty($taskPairs)) $taskIdList = implode(',', $taskPairs);
@@ -2650,5 +2650,26 @@ EOT;
         $this->lang->TRActions .= $this->buildCreateButton4Doc($type, $objectID, $libID);
 
         return array($libs, $libID, $object, $objectID);
+    }
+
+    /**
+     * Whether the url of link type documents needs to be autoloaded.
+     *
+     * @param  object  $doc
+     * @access public
+     * @return bool
+     */
+    public function checkAutoloadPage($doc)
+    {
+        $autoloadPage = true;
+        if(!empty($doc) and $doc->type == 'url')
+        {
+            $parsedUrl = parse_url($doc->content);
+            $urlPort   = isset($parsedUrl['port']) ? ':' . $parsedUrl['port'] : '';
+            $urlDomain = $parsedUrl['host'] . $urlPort;
+            if($urlDomain == $_SERVER['HTTP_HOST']) $autoloadPage = false;
+        }
+
+        return $autoloadPage;
     }
 }

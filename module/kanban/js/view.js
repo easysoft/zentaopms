@@ -1276,6 +1276,8 @@ $(function()
         initKanban($(this));
     });
 
+    if(navigator.userAgent.toLowerCase().indexOf("qqbrowser") > -1) $('.region .kanban-header-col > .actions').css('top', '30%');
+
     $('.icon-chevron-double-up,.icon-chevron-double-down').on('click', function()
     {
         $(this).toggleClass('icon-chevron-double-up icon-chevron-double-down');
@@ -1592,7 +1594,7 @@ function resetRegionHeight(fold)
     }
 }
 
-$('.dropdown-menu').click(function()
+$(document).on('click', '.dropdown-menu', function()
 {
     $.zui.ContextMenu.hide();
-})
+});

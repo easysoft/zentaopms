@@ -286,7 +286,7 @@ body {margin-bottom: 25px;}
         </thead>
         <tbody>
           <?php foreach($tasks as $task):?>
-          <tr data-id='<?php echo $task->id;?>' data-status='<?php echo $task->status?>' data-estimate='<?php echo $task->estimate?>' data-consumed='<?php echo $task->consumed?>' data-left='<?php echo $task->left?>'>
+          <tr <?php if(!empty($task->children)) echo 'class="table-parent" '; ?>data-id='<?php echo $task->id;?>' data-status='<?php echo $task->status?>' data-estimate='<?php echo $task->estimate?>' data-consumed='<?php echo $task->consumed?>' data-left='<?php echo $task->left?>'>
             <?php if($this->app->getViewType() == 'xhtml'):?>
             <?php
             foreach($customFields as $field)

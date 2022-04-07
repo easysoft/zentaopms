@@ -9,7 +9,13 @@
         <tr>
           <td class='text-center w-160px'>
             <img src='<?php echo $config->webRoot . 'theme/default/images/main/' . $lang->logoImg;?>' />
-            <h4><?php printf($lang->misc->zentao->version, $config->version);?></h4>
+            <h4>
+              <?php if(trim($config->visions, ',') == 'lite'):?>
+              <?php printf($lang->misc->zentao->version, $config->liteVersion); ?>
+              <?php else:?>
+              <?php printf($lang->misc->zentao->version, $config->version); ?>
+              <?php endif;?>
+            </h4>
           </td>
           <td><?php include './links.html.php';?></td>
         </tr>

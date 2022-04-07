@@ -127,13 +127,20 @@ public function getTRActions($currentMethod)
 
     foreach($subMenu as $key => $value)
     {
-        $tmpValue = explode('|', $value['link']);
-        $subMenu->{$key}['name']   = $tmpValue[0];
-        $subMenu->{$key}['module'] = $tmpValue[1];
-        $subMenu->{$key}['method'] = $tmpValue[2];
-        $subMenu->{$key}['vars']   = $tmpValue[3];
+        if(common::hasPriv('execution', $key))
+        {
+            $tmpValue = explode('|', $value['link']);
+            $subMenu->{$key}['name']   = $tmpValue[0];
+            $subMenu->{$key}['module'] = $tmpValue[1];
+            $subMenu->{$key}['method'] = $tmpValue[2];
+            $subMenu->{$key}['vars']   = $tmpValue[3];
+        }
+        else
+        {
+            unset($subMenu->$key);
+        }
     }
-
+    
     $TRActions  = '';
     $TRActions .= "<div class='btn-group dropdown'>";
     $TRActions .= html::a("javascript:;", "<i class='icon icon-" . $this->lang->execution->icons[$currentMethod]."'> </i>" . $subMenu->{$currentMethod}['name'] . " <span class='caret'></span>", '', "class='btn btn-link' data-toggle='dropdown'");

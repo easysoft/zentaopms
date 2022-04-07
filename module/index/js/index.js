@@ -645,6 +645,7 @@
         if(!defaultOpenUrl && location.hash.indexOf('#app=') === 0)
         {
             defaultOpenUrl = decodeURIComponent(location.hash.substr(5));
+            if(defaultOpenUrl.indexOf('#app=') < 0) defaultOpenUrl += '#app=' + ($.cookie('tab') ? $.cookie('tab') : defaultApp);
         }
 
         openTab(defaultOpenUrl ? defaultOpenUrl : defaultApp);

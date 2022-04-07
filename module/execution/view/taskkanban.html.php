@@ -78,9 +78,9 @@
     $checkObject->execution = $executionID;
     $canCreateTask       = common::hasPriv('task', 'create', $checkObject);
     $canBatchCreateTask  = common::hasPriv('task', 'batchCreate', $checkObject);
-    $canCreateBug        = common::hasPriv('bug', 'create');
-    $canBatchCreateBug   = common::hasPriv('bug', 'batchCreate');
-    $canImportBug        = common::hasPriv('execution', 'importBug');
+    $canCreateBug        = ($productID and common::hasPriv('bug', 'create'));
+    $canBatchCreateBug   = ($productID and common::hasPriv('bug', 'batchCreate'));
+    $canImportBug        = ($productID and common::hasPriv('execution', 'importBug'));
     $canCreateStory      = ($productID and common::hasPriv('story', 'create'));
     $canBatchCreateStory = ($productID and common::hasPriv('story', 'batchCreate'));
     $canLinkStory        = ($productID and common::hasPriv('execution', 'linkStory'));

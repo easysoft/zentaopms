@@ -102,19 +102,32 @@ function addNewProduct(obj)
 {
     if($(obj).attr('checked'))
     {
-        $('#productName').removeAttr('disabled', true);
-        $('#productName').closest('tr').removeClass('hidden');
-        $('#plansBox .col-sm-4').find('select').attr('disabled', true).trigger("chosen:updated");
+        /* Hide product and plan dropdown controls. */
+        $('#productsBox .row .col-sm-4').addClass('hidden');
+        $('#productsBox .row .col-sm-4 .input-group').find('select').attr('disabled', true).trigger("chosen:updated");
         $('#plansBox').closest('tr').addClass('hidden');
-        $('#productsBox .col-sm-4 .input-group').find('select').attr('disabled', true).trigger("chosen:updated");
+        $('#plansBox .col-sm-4').find('select').attr('disabled', true).trigger("chosen:updated");
+
+        /* Displays the input box for creating a product. */
+        $("[name^='newProduct']").prop('checked', true);
+        $('#productName').removeAttr('disabled', true);
+        $('#productsBox .addProduct').removeClass('hidden');
+        $('#productTitle').html(productName);
     }
     else
     {
-        $('#productName').attr('disabled', true);
-        $('#productName').closest('tr').addClass('hidden');
-        $('#plansBox .col-sm-4').find('select').removeAttr('disabled', true).trigger("chosen:updated");
+        /* Show product and product dropdown controls. */
+        $('#productsBox .row .col-sm-4').removeClass('hidden');
+        $('#productsBox .row .col-sm-4 .input-group').find('select').removeAttr('disabled').trigger("chosen:updated");
         $('#plansBox').closest('tr').removeClass('hidden');
-        $('#productsBox .col-sm-4 .input-group').find('select').removeAttr('disabled').trigger("chosen:updated");
+        $('#plansBox .col-sm-4').find('select').removeAttr('disabled', true).trigger("chosen:updated");
+
+        /* Hide the input box for creating a product. */
+        $("[name^='newProduct']").prop('checked', false);
+        $('#productName').attr('disabled', true);
+        $('#productsBox .addProduct').addClass('hidden');
+
+        $('#productTitle').html(manageProducts);
     }
 }
 
@@ -159,16 +172,16 @@ function loadBranches(product, branchID)
         }
     });
 
-    if($('#productsBox .input-group:last select:first').val() != 0)
+    if($('#productsBox .row .input-group:last select:first').val() != 0)
     {
-        var length = $('#productsBox .input-group').size();
-        var $html  = $('#productsBox .col-sm-4:last').html();
-        $('#productsBox .col-sm-4:last').find('.input-group-addon').remove();
+        var length = $('#productsBox .row .input-group').size();
+        var $html  = $('#productsBox .row .col-sm-4:last').html();
+        $('#productsBox .row .col-sm-4:last').find('.input-group-addon').remove();
         $('#productsBox .row').append('<div class="col-sm-4">' + $html + '</div>');
-        if($('#productsBox .input-group:last select').size() >= 2) $('#productsBox .input-group:last select:last').remove();
-        $('#productsBox .input-group:last .chosen-container').remove();
-        $('#productsBox .input-group:last select:first').attr('name', 'products[' + length + ']').attr('id', 'products' + length);
-        $('#productsBox .input-group:last .chosen').chosen();
+        if($('#productsBox .row .input-group:last select').size() >= 2) $('#productsBox .row .input-group:last select:last').remove();
+        $('#productsBox .row .input-group:last .chosen-container').remove();
+        $('#productsBox .row .input-group:last select:first').attr('name', 'products[' + length + ']').attr('id', 'products' + length);
+        $('#productsBox .row .input-group:last .chosen').chosen();
 
         adjustProductBoxMargin();
     }
@@ -235,7 +248,8 @@ function adjustProductBoxMargin()
     {
         for(i = 1; i <= productRows - 1; i++)
         {
-            $('#productsBox .col-sm-4:lt(' + (i * 3) + ')').css('margin-bottom', '10px');
+            $('#productsBox .row .col-sm-4:lt(' + (i * 3) + ')').css('margin-bottom', '10px');
+            $('#productsBox .row .col-sm-4').eq(i * 3).css('padding-right', '6px');
         }
     }
 }
@@ -254,6 +268,7 @@ function adjustPlanBoxMargin()
         for(j = 1; j <= planRows - 1; j++)
         {
             $('#plansBox .col-sm-4:lt(' + (j * 3) + ')').css('margin-bottom', '10px');
+            $('#plansBox .col-sm-4').eq(j * 3).css('padding-right', '6px');
         }
     }
 }

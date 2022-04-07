@@ -835,6 +835,8 @@ class productModel extends model
 
         $maxOrder = $this->dao->select("max(`order`) as maxOrder")->from(TABLE_MODULE)->where('type')->eq('line')->fetch('maxOrder');
         $maxOrder = $maxOrder ? $maxOrder : 0;
+
+        $lines = array();
         foreach($data->modules as $id => $name)
         {
             if(empty($name)) continue;
@@ -844,8 +846,22 @@ class productModel extends model
                 return false;
             }
 
-            $line->name  = strip_tags(trim($name));
-            $line->root  = $data->programs[$id];
+            $programID = $data->programs[$id];
+            if(!isset($lines[$programID])) $lines[$programID] = array();
+            if(in_array($name, $lines[$programID]))
+            {
+                dao::$errors[] = sprintf($this->lang->product->nameIsDuplicate, $name);
+                return false;
+            }
+            $lines[$programID][] = $name;
+        }
+
+        foreach($data->modules as $id => $name)
+        {
+            if(empty($name)) continue;
+
+            $line->name = strip_tags(trim($name));
+            $line->root = $data->programs[$id];
 
             if(is_numeric($id))
             {
@@ -970,7 +986,7 @@ class productModel extends model
             else
             {
                 $moduleList  = array();
-                $modules     = array('' => '/');
+                $modules     = array('/');
                 $branchGroup = $this->loadModel('execution')->getBranchByProduct(array_keys($products), $this->session->project, '');
                 foreach($products as $productID => $productName)
                 {
@@ -996,7 +1012,7 @@ class productModel extends model
         {
             $modules = $this->tree->getOptionMenu($productID, 'story', 0, $branch);
         }
-        $this->config->product->search['params']['module']['values'] = $modules;
+        $this->config->product->search['params']['module']['values'] = array('' => '') + $modules;
 
         $productInfo = $this->getById($productID);
         if(!$productID or $productInfo->type == 'normal' or $this->app->tab == 'assetlib')
@@ -1786,7 +1802,7 @@ class productModel extends model
      *
      * @param  int    $programID
      * @access public
-     * @return void
+     * @return array
      */
     public function getLinePairs($programID = 0)
     {
@@ -1795,6 +1811,16 @@ class productModel extends model
             ->beginIF($programID)->andWhere('root')->eq($programID)->fi()
             ->andWhere('deleted')->eq(0)
             ->fetchPairs();
+    }
+
+    /*
+     * Get all lines.
+     * @access public
+     * @return array
+     */
+    public function getLines()
+    {
+        return $this->dao->select('*')->from(TABLE_MODULE)->where('type')->eq('line')->andWhere('deleted')->eq(0)->orderBy('`order`')->fetchAll();
     }
 
     /**
