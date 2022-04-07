@@ -1,7 +1,6 @@
 #!/usr/bin/env php
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
-include dirname(dirname(dirname(__FILE__))) . '/class/project.class.php';
 
 /**
 
@@ -13,6 +12,7 @@ pid=1
 
 */
 
-$t = new Project('admin');
-/* GetBudgetUnitList(). */
-r($t->checkBudgetUnitList()) && p() && e('1'); //检查翻译
+global $tester;
+$tester->loadModel('project');
+
+r($tester->project->getBudgetUnitList()) && p('CNY,USD') && e('人民币,美元'); //获取系统中的货币单位

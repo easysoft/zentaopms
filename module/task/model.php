@@ -883,6 +883,8 @@ class taskModel extends model
      */
     public function update($taskID)
     {
+        if($taskID <= 0) return;
+
         $oldTask = $this->getByID($taskID);
         if($this->post->estimate < 0 or $this->post->left < 0 or $this->post->consumed < 0)
         {

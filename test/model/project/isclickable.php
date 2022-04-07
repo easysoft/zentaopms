@@ -1,6 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
+su('admin');
 
 /**
 
@@ -37,7 +38,7 @@ $waitProject    = $projectModel->getByID(11);
 $doingProject   = $projectModel->getByID(13);
 $suspendProject = $projectModel->getByID(17);
 $closedProject  = $projectModel->getByID(18);
-$status = array('start', 'finish', 'close', 'suspend', 'activate', );
+$status         = array('start', 'finish', 'close', 'suspend', 'activate', );
 
 r($projectModel->isClickable($waitProject, $status[0]))     && p() && e('1'); // 检查未开始项目的开始按钮
 r($projectModel->isClickable($waitProject, $status[1]))     && p() && e('1'); // 检查未开始项目的完成按钮
