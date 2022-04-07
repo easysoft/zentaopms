@@ -181,15 +181,6 @@ class actionTest
         return $objects;
     }
 
-    public function printActionTest($action, $desc = '')
-    {
-        $objects = $this->objectModel->printAction($action, $desc = '');
-
-        if(dao::isError()) return dao::getError();
-
-        return $objects;
-    }
-
     /**
      * Test get actions as dynamic.
      *
@@ -341,15 +332,6 @@ class actionTest
         extract(date::$func());
         if($period == 'thisweek')    return $date['begin'] == $begin and $date['end'] == $end . ' 23:59:59';
         if($period == 'lastweek')    return $date['begin'] == $begin and $date['end'] == $end . ' 23:59:59';
-    }
-
-    public function printChangesTest($objectType, $histories, $canChangeTag = true)
-    {
-        $objects = $this->objectModel->printChanges($objectType, $histories, $canChangeTag = true);
-
-        if(dao::isError()) return dao::getError();
-
-        return $objects;
     }
 
     /**
