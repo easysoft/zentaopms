@@ -4089,7 +4089,8 @@ class storyModel extends model
                 echo $story->version;
                 break;
             case 'actions':
-                $vars = "story={$story->id}";
+                $vars            = "story={$story->id}";
+                $executionParams = $this->config->vision == 'lite' ? "&executionID={$this->session->project}" : '';
                 if($canBeChanged)
                 {
                     if($story->URChanged)
@@ -4104,7 +4105,7 @@ class storyModel extends model
                     common::printIcon('story', 'close', $vars, $story, 'list', '', '', 'iframe', true);
                     common::printIcon('story', 'edit', $vars . "&from=$story->from", $story, 'list', '', '', '', false, "data-group=$story->from");
                     if($story->type != 'requirement' and $this->config->vision != 'lite') common::printIcon('story', 'createCase', "productID=$story->product&branch=$story->branch&module=0&from=&param=0&$vars", $story, 'list', 'sitemap', '', '', false, "data-app='qa'");
-                    if($this->app->rawModule != 'projectstory' OR $this->config->vision == 'lite') common::printIcon('story', 'batchCreate', "productID=$story->product&branch=$story->branch&module=$story->module&storyID=$story->id&executionID={$this->session->project}", $story, 'list', 'split', '', '', '', '', $this->lang->story->subdivide);
+                    if($this->app->rawModule != 'projectstory') common::printIcon('story', 'batchCreate', "productID=$story->product&branch=$story->branch&module=$story->module&storyID=$story->id" . $executionParams, $story, 'list', 'split', '', '', '', '', $this->lang->story->subdivide);
                     if($this->app->rawModule == 'projectstory' and $this->config->vision != 'lite') common::printIcon('projectstory', 'unlinkStory', "projectID={$this->session->project}&storyID=$story->id", '', 'list', 'unlink', 'hiddenwin');
                 }
                 else
