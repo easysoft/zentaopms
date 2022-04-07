@@ -43,11 +43,11 @@ class branchModel extends model
      * @param  string $browseType
      * @param  string $orderBy
      * @param  object $pager
-     * @param  bool   $addMainBranch
+     * @param  bool   $withMainBranch
      * @access public
      * @return array
      */
-    public function getList($productID, $executionID = 0, $browseType = 'active', $orderBy = 'order', $pager = null, $addMainBranch = true)
+    public function getList($productID, $executionID = 0, $browseType = 'active', $orderBy = 'order', $pager = null, $withMainBranch = true)
     {
         $executionBranches = array();
         if($executionID)
@@ -56,7 +56,7 @@ class branchModel extends model
                 ->where('project')->eq($executionID)
                 ->andWhere('product')->eq($productID)
                 ->fetchPairs('branch');
-            if(in_array(BRANCH_MAIN, $executionBranches)) $addMainBranch = true;
+            if(in_array(BRANCH_MAIN, $executionBranches)) $withMainBranch = true;
             if(empty($executionBranches)) return array();
         }
 
@@ -75,7 +75,7 @@ class branchModel extends model
         $defaultBranch = BRANCH_MAIN;
         foreach($branchList as $branch) $defaultBranch = $branch->default ? $branch->id : $defaultBranch;
 
-        if(!$addMainBranch) return $branchList;
+        if(!$withMainBranch) return $branchList;
 
         /* Display the main branch under all and active page. */
         $mainBranch = new stdclass();
