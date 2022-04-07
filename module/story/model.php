@@ -2872,7 +2872,7 @@ class storyModel extends model
      * @param  int           $branch
      * @param  array|string  $moduleIdList
      * @param  string        $type full|short
-     * @param  string        $status all|unclosed
+     * @param  string        $status all|unclosed|review
      * @access public
      * @return array
      */
