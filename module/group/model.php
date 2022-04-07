@@ -161,6 +161,7 @@ class groupModel extends model
             ->on('t1.`group` = t2.id')
             ->where('t1.account')->eq($account)
             ->andWhere('t2.project')->eq(0)
+            ->andWhere('t2.vision')->eq($this->config->vision)
             ->fetchAll('id');
     }
 
@@ -177,6 +178,7 @@ class groupModel extends model
             ->leftJoin(TABLE_GROUP)->alias('t2')
             ->on('t1.`group` = t2.id')
             ->where('t1.account')->in($accounts)
+            ->andWhere('t2.vision')->eq($this->config->vision)
             ->fetchGroup('account');
     }
 
