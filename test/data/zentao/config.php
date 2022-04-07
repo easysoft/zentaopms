@@ -11,6 +11,7 @@ $builder->usercontact = array('rows' => 61, 'extends' => array('usercontact'));
 $builder->userview    = array('rows' => 400, 'extends' => array('userview'));
 $builder->dept        = array('rows' => 100,  'extends' => array('dept'));
 $builder->action      = array('rows' => 100,  'extends' => array('action'));
+$builder->history     = array('rows' => 100,  'extends' => array('history'));
 
 $builder->program      = array('rows' => 10, 'extends' => array('project', 'program'));
 $builder->project      = array('rows' => 90, 'extends' => array('project', 'project'));
@@ -48,6 +49,7 @@ $builder->product             = array('rows' => 100, 'extends' => array('product
 $builder->productalone        = array('rows' => 20, 'extends' => array('product','productalone'));
 $builder->productline         = array('rows' => 20,  'extends' => array('module', 'productline'));
 $builder->productplan         = array('rows' => 70, 'extends' => array('productplan'));
+$builder->productsonplan      = array('rows' => 10, 'extends' => array('productplan', 'productsonplan'));
 $builder->branch              = array('rows' => 240, 'extends' => array('branch'));
 $builder->projectproduct      = array('rows' => 200, 'extends' => array('projectproduct'));
 $builder->projectproductalone = array('rows' => 28, 'extends' => array('projectproduct','projectproductalone'));

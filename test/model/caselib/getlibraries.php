@@ -10,6 +10,8 @@ title=测试 caselibModel->getLibraries();
 cid=1
 pid=1
 
+测试获取用例库的键值对 >> 这是测试套件名称201
+
 */
 
 $caselib = new caselibTest();

@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
-include dirname(dirname(dirname(__FILE__))) . '/class/project.class.php';
+su('admin');
 
 /**
 
@@ -9,10 +9,14 @@ title=测试 projectModel::getTotalStoriesByProject;
 cid=1
 pid=1
 
-
-
 */
 
-$project = new Project('admin');
+global $tester;
+$tester->loadModel('project');
 
-var_dump($project->getTotalStoriesByProject());die;
+$productIdList = array(1, 2, 3);
+$stories1 = $tester->project->getTotalStoriesByProject(11);
+$stories2 = $tester->project->getTotalStoriesByProject(11, $productIdList);
+
+r($stories1) && p() && e('0'); // 不传入产品ID列表，获取项目11下的所有需求数量
+r($stories2) && p() && e('2'); // 传入产品ID列表，获取项目11下的所有需求数量

@@ -1866,6 +1866,8 @@ class testcase extends control
         if($_POST)
         {
             $this->testcase->createFromImport($productID, (int)$branch);
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
             if($this->post->isEndPage)
             {
                 unlink($tmpFile);

@@ -125,7 +125,7 @@ class programplan extends control
             $this->programplan->create($projectID, $this->productID, $planID);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            $locate = $this->createLink('project', 'execution', "status=all&projectID=$projectID");
+            $locate = $this->createLink('project', 'execution', "status=all&projectID=$projectID&orderBy=order_asc&productID=$productID");
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $locate));
         }
 

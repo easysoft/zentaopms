@@ -910,7 +910,7 @@ class project extends control
      * @access public
      * @return void
      */
-    public function execution($status = 'all', $projectID = 0, $orderBy = 'order_asc', $productID = 0, $recTotal = 0, $recPerPage = 10, $pageID = 1)
+    public function execution($status = 'all', $projectID = 0, $orderBy = 'order_asc', $productID = 0, $recTotal = 0, $recPerPage = 100, $pageID = 1)
     {
         $uri = $this->app->getURI(true);
         $this->app->session->set('executionList', $uri, 'project');

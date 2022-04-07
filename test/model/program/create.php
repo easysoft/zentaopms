@@ -52,8 +52,6 @@ $moreThanParent['parent'] = '1';
 $moreThanParent['begin']  = '2018-01-01';
 $moreThanParent['end']    = '2022-02-10';
 
-$add_itemset = array('1', '2', '3', '4', '5', '6');
-
 r($program->create($normalProgram))     && p('name')                      && e('测试新增项目集一');                                                   // 创建新项目集
 r($program->create($emptyNameProgram))  && p('message[name]:0')           && e('『项目集名称』不能为空。');                                           // 项目集名称为空时
 r($program->create($emptyBeginProgram)) && p('message[begin]:0')          && e('『计划开始』不能为空。');                                             // 项目集的开始时间为空

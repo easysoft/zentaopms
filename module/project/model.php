@@ -120,7 +120,7 @@ class projectModel extends model
         if(defined('TUTORIAL')) return $projectID;
 
         if($projectID == 0 and $this->cookie->lastProject) $projectID = $this->cookie->lastProject;
-        if(($projectID == 0 and (int)$this->session->project == 0) or !isset($projects[$projectID])) $projectID = key($projects);
+        if($projectID == 0 and (int)$this->session->project == 0) $projectID = key($projects);
         if($projectID == 0) $projectID = key($projects);
 
         $this->session->set('project', (int)$projectID, $this->app->tab);
@@ -851,7 +851,7 @@ class projectModel extends model
             if(isset($project->budget) and $program->budget != 0)
             {
                 $availableBudget = $this->loadModel('program')->getBudgetLeft($program);
-                if($project->budget > $availableBudget) dao::$errors['budget'] = $this->lang->program->beyondParentBudget;
+                if($availableBudget > 0 and $project->budget > $availableBudget) dao::$errors['budget'] = $this->lang->program->beyondParentBudget;
             }
 
             /* Judge products not empty. */
@@ -1960,7 +1960,7 @@ class projectModel extends model
      * @param  string  $orderBy
      * @param  object  $pager
      * @access public
-     * @return void
+     * @return array
      */
     public function getStats($projectID = 0, $status = 'undone', $productID = 0, $branch = 0, $itemCounts = 30, $orderBy = 'id_asc', $pager = null)
     {
