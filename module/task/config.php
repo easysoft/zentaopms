@@ -35,7 +35,7 @@ $config->task->exportFields = '
     openedBy, openedDate, assignedTo, assignedDate,
     finishedBy, finishedDate, canceledBy, canceledDate,
     closedBy, closedDate, closedReason,
-    lastEditedBy, lastEditedDate, avtivatedDate, files
+    lastEditedBy, lastEditedDate, activatedDate, files
     ';
 
 $config->task->customCreateFields      = 'story,estStarted,deadline,mailto,pri,estimate';
