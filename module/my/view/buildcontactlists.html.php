@@ -10,7 +10,7 @@
  * @link        http://www.zentao.net
  */
 ?>
-<?php 
+<?php
 if($contactLists)
 {
     echo html::select('contactListMenu', $contactLists, '', "class='form-control chosen' onchange=\"setMailto('$dropdownName', this.value)\"");
