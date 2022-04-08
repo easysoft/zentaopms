@@ -1,1 +1,3 @@
 #mainContent td.projectName {white-space: nowrap; overflow-x: hidden;}
+.main-table tbody>tr:nth-child(odd) {background-color:#fff;}
+#pageNav .angle-btn:first-child a.btn {max-width: 300px; overflow: hidden;}
