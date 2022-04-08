@@ -10,6 +10,13 @@ title=测试 designModel->getPairs();
 cid=1
 pid=1
 
+查询不存在的产品 >> 0
+查询不存在的类型 >> 0
+查询HLDS设计 >> 1:这是一个设计1
+查询DDS设计 >> 2:这是一个设计2
+查询DBDS设计 >> 3:这是一个设计3
+查询ADS设计 >> 4:这是一个设计4
+
 */
 global $tester;
 $design = $tester->loadModel('design');

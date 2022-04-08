@@ -10,6 +10,8 @@ title=测试 designModel->assign();
 cid=1
 pid=1
 
+设置指派人 >> dev10
+
 */
 $designID = '17';
 
