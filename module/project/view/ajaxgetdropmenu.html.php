@@ -59,9 +59,9 @@ foreach($projects as $programID => $programProjects)
     {
         $programName = zget($programs, $programID);
 
-        if($projectCounts[$programID]['myProject']) $myProjectsHtml  .= '<li><div class="hide-in-search"><a class="text-muted" title="' . $programName . '">' . $programName . '</a> <label class="label">' . $lang->program->common . '</label></div><ul>';
-        if($projectCounts[$programID]['others']) $normalProjectsHtml .= '<li><div class="hide-in-search"><a class="text-muted" title="' . $programName . '">' . $programName . '</a> <label class="label">' . $lang->program->common . '</label></div><ul>';
-        if($projectCounts[$programID]['closed']) $closedProjectsHtml .= '<li><div class="hide-in-search"><a class="text-muted" title="' . $programName . '">' . $programName . '</a> <label class="label">' . $lang->program->common . '</label></div><ul>';
+        if($projectCounts[$programID]['myProject']) $myProjectsHtml  .= '<li><div class="hide-in-search"><a class="text-muted not-list-item" title="' . $programName . '">' . $programName . '</a> <label class="label">' . $lang->program->common . '</label></div><ul>';
+        if($projectCounts[$programID]['others']) $normalProjectsHtml .= '<li><div class="hide-in-search"><a class="text-muted not-list-item" title="' . $programName . '">' . $programName . '</a> <label class="label">' . $lang->program->common . '</label></div><ul>';
+        if($projectCounts[$programID]['closed']) $closedProjectsHtml .= '<li><div class="hide-in-search"><a class="text-muted not-list-item" title="' . $programName . '">' . $programName . '</a> <label class="label">' . $lang->program->common . '</label></div><ul>';
     }
 
     foreach($programProjects as $index => $project)
