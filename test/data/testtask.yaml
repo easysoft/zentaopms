@@ -14,7 +14,7 @@ fields:
     note: "测试单名称"
     fields:
       - field: name1
-        range: 测试单,单元测试
+        range: 测试单{50},单元测试{50}
       - field: name2
         range: 1-50,1-50
     prefix: ""
