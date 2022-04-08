@@ -43,3 +43,5 @@ ALTER TABLE `zt_opportunity` MODIFY COLUMN `prevention` mediumtext NOT NULL;
 ALTER TABLE `zt_opportunity` MODIFY COLUMN `resolution` mediumtext NOT NULL;
 ALTER TABLE `zt_trainplan` MODIFY COLUMN `summary` mediumtext NOT NULL;
 ALTER TABLE `zt_gapanalysis` MODIFY COLUMN `analysis` mediumtext NOT NULL;
+
+ALTER TABLE `zt_file` MODIFY COLUMN `title` varchar(255) NOT NULL;

@@ -570,7 +570,7 @@ CREATE TABLE IF NOT EXISTS `zt_extension` (
 CREATE TABLE IF NOT EXISTS `zt_file` (
   `id` mediumint(8) unsigned NOT NULL auto_increment,
   `pathname` char(50) NOT NULL,
-  `title` char(255) NOT NULL,
+  `title` varchar(255) NOT NULL,
   `extension` char(30) NOT NULL,
   `size` int(10) unsigned NOT NULL default '0',
   `objectType` char(30) NOT NULL,
