@@ -1130,7 +1130,8 @@ class story extends control
 
         $storyID = (int)$storyID;
         $story   = $this->story->getById($storyID, $version, true);
-        if(!$story) return print(js::error($this->lang->notFound) . js::locate($this->createLink('product', 'index')));
+        $linkModuleName = $this->config->vision == 'lite' ? 'project' : 'product';
+        if(!$story) return print(js::error($this->lang->notFound) . js::locate($this->createLink($linkModuleName, 'index')));
 
         $story = $this->story->mergeReviewer($story, true);
 

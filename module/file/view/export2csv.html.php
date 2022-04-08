@@ -22,4 +22,4 @@ foreach($rows as $row)
     }
     echo '"' . "\n";
 }
-if($this->post->kind == 'task') echo $this->lang->file->childTaskTips;
+if($this->post->kind == 'task' && $config->vision != 'lite') echo $this->lang->file->childTaskTips;
