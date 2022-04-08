@@ -12,14 +12,14 @@ fields:
     format: ""
   - field: task
     note: "测试单任务ID"
-    range: 1-10{4}
+    range: 1-10{4},51-60{3}
     prefix: ""
     postfix: ""
     loop: 0
     format: ""
   - field: case
     note: "用例ID"
-    range: 1-40
+    range: 1-40,411-440
     prefix: ""
     postfix: ""
     loop: 0
@@ -44,7 +44,7 @@ fields:
     format: ""
   - field: lastRunner
     note: "最后执行人"
-    use: admin
+    range: []{40},admin{30}
     prefix: ""
     postfix: ""
     loop: 0
@@ -59,14 +59,14 @@ fields:
     format: "YYYY-MM-DD"
   - field: lastRunResult
     note: "最后执行结果"
-    range: pass,fail
+    range: [pass,fail]{20!},[pass,pass,fail]{15!}
     prefix: ""
     postfix: ""
     loop: 0
     format: ""
   - field: status
     note: "状态"
-    range: normal
+    range: normal{40},done{30}
     prefix: ""
     postfix: ""
     loop: 0

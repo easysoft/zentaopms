@@ -12,34 +12,38 @@ fields:
     format: ""
   - field: name
     note: "测试单名称"
-    range: 1-10000
-    prefix: "测试单"
+    fields:
+      - field: name1
+        range: 测试单,单元测试
+      - field: name2
+        range: 1-50,1-50
+    prefix: ""
     postfix: ""
     loop: 0
     format: ""
   - field: product
     note: "所属产品"
-    range: 1-10
+    range: 1-50
     prefix: ""
     postfix: ""
     loop: 0
     format: ""
   - field: project
     note: "所属项目"
-    range: 11-20
+    range: 11-60
     prefix: ""
     postfix: ""
     loop: 0
     format: ""
   - field: execution
     note: "所属执行"
-    range: 101-110
+    range: 101-150
     prefix: ""
     postfix: ""
     loop: 0
     format: ""
   - field: build
-    range: 11-20
+    range: 11-20,0{40}
     note: "版本"
     prefix: ""
     postfix: ""
@@ -105,7 +109,7 @@ fields:
     format: ""
   - field: auto
     note: "自动"
-    range: no
+    range: no{50},unit{50}
     prefix: ""
     postfix: ""
     loop: 0
