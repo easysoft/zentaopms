@@ -51,15 +51,6 @@ class testcaseTest
         return $objects;
     }
 
-    public function getProjectCasesTest($projectID, $orderBy = 'id_desc', $pager = null, $browseType = '')
-    {
-        $objects = $this->objectModel->getProjectCases($projectID, $orderBy = 'id_desc', $pager = null, $browseType = '');
-
-        if(dao::isError()) return dao::getError();
-
-        return $objects;
-    }
-
     /**
      * Test get execution cases.
      *
@@ -134,9 +125,19 @@ class testcaseTest
         return $objects;
     }
 
-    public function getTestCasesTest($productID, $branch, $browseType, $queryID, $moduleID, $sort, $pager, $auto = 'no')
+    /**
+     * Test get test cases.
+     *
+     * @param  int    $productID
+     * @param  string $browseType
+     * @param  int    $queryID
+     * @param  string $auto
+     * @access public
+     * @return array
+     */
+    public function getTestCasesTest($productID, $browseType, $queryID, $auto = 'no')
     {
-        $objects = $this->objectModel->getTestCases($productID, $branch, $browseType, $queryID, $moduleID, $sort, $pager, $auto = 'no');
+        $objects = $this->objectModel->getTestCases($productID, 0, $browseType, $queryID, $moduleID, 'id_desc', null, $auto);
 
         if(dao::isError()) return dao::getError();
 
@@ -182,6 +183,20 @@ class testcaseTest
         return $objects;
     }
 
+    /**
+     * Test get cases by type.
+     *
+     * @param  int    $productID
+     * @param  int    $branch
+     * @param  string $type
+     * @param  string $status
+     * @param  int    $moduleID
+     * @param  string $orderBy
+     * @param  object $pager
+     * @param  string $auto
+     * @access public
+     * @return int
+     */
     public function getByStatusTest($productID = 0, $branch = 0, $type = 'all', $status = 'all', $moduleID = 0, $orderBy = 'id_desc', $pager = null, $auto = 'no')
     {
         $objects = $this->objectModel->getByStatus($productID, $branch, $type, $status, $moduleID, $orderBy, $pager, $auto);
@@ -191,6 +206,13 @@ class testcaseTest
         return count($objects);
     }
 
+    /**
+     * Test get stories' cases.
+     *
+     * @param  int    $storyID
+     * @access public
+     * @return array
+     */
     public function getStoryCasesTest($storyID)
     {
         $objects = $this->objectModel->getStoryCases($storyID);
@@ -216,18 +238,63 @@ class testcaseTest
         return $counts;
     }
 
-    public function updateTest($caseID)
+    /**
+     * Test update a case.
+     *
+     * @param  array $param
+     * @access public
+     * @return int
+     */
+    public function updateTest($param = array())
     {
-        $objects = $this->objectModel->update($caseID);
+        $caseId = 1;
+        $case = $this->objectModel->getById($caseId);
+
+        $_POST['title']          = $case->title;
+        $_POST['color']          = $case->color;
+        $_POST['precondition']   = $case->precondition;
+        $_POST['steps']          = array('用例步骤描述1');
+        $_POST['stepType']       = array('step');
+        $_POST['expects']        = array('这是用例预期结果1');
+        $_POST['comment']        = '';
+        $_POST['labels']         = '';
+        $_POST['lastEditedDate'] = $case->lastEditedDate;
+        $_POST['product']        = $case->product;
+        $_POST['module']         = $case->module;
+        $_POST['story']          = $case->story;
+        $_POST['type']           = $case->type;
+        $_POST['stage']          = $case->stage;
+        $_POST['pri']            = $case->pri;
+        $_POST['status']         = $case->status;
+        $_POST['keywords']       = $case->keywords;
+
+        foreach($param as $field => $value) $_POST[$field] = $value;
+
+        $change = $this->objectModel->update('1');
+        if($change == array()) $change = '没有数据更新';
+
+        unset($_POST);
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        return $change;
     }
 
-    public function reviewTest($caseID)
+    /**
+     * Test review case.
+     *
+     * @param  int    $caseID
+     * @param  object $case
+     * @access public
+     * @return array
+     */
+    public function reviewTest($caseID, $case)
     {
+        foreach($case as $field => $value) $_POST[$field] = $value;
+
         $objects = $this->objectModel->review($caseID);
+
+        unset($_POST);
 
         if(dao::isError()) return dao::getError();
 
@@ -251,15 +318,13 @@ class testcaseTest
         return $objects;
     }
 
-    public function getCases2LinkTest($caseID, $browseType = 'bySearch', $queryID = 0)
-    {
-        $objects = $this->objectModel->getCases2Link($caseID, $browseType = 'bySearch', $queryID = 0);
-
-        if(dao::isError()) return dao::getError();
-
-        return $objects;
-    }
-
+    /**
+     * Test batch update cases.
+     *
+     * @param  array  $param
+     * @access public
+     * @return array
+     */
     public function batchUpdateTest($param = array())
     {
         $batchUpdateField['caseIDList']   = array('1' => 1, '2' => 2, '3' => 3, '4' => 4);
@@ -343,22 +408,69 @@ class testcaseTest
         return $objects;
     }
 
-    public function joinStepTest($steps)
+    /**
+     * Test join steps to a string, thus can diff them.
+     *
+     * @param  array  $stepIDList
+     * @access public
+     * @return string
+     */
+    public function joinStepTest($stepIDList)
     {
-        $objects = $this->objectModel->joinStep($steps);
+        global $tester;
+        $steps = $tester->dao->select('*')->from(TABLE_CASESTEP)->where('id')->in($stepIDList)->fetchAll();
+
+        $string = $this->objectModel->joinStep($steps);
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        $string = str_replace("\n", ' ', $string);
+        return $string;
     }
 
-    public function createFromImportTest($productID, $branch = 0)
+    /**
+     * Test create from import.
+     *
+     * @param  int    $productID
+     * @param  array  $param
+     * @access public
+     * @return string
+     */
+    public function createFromImportTest($productID, $param = array())
     {
-        $objects = $this->objectModel->createFromImport($productID, $branch = 0);
+        global $tester;
+
+        $_POST['product']      = array('1' => '1', '2' => '1');
+        $_POST['keywords']     = array('1' => '这是关键词1', '2' => '这是关键词2');
+        $_POST['title']        = array('1' => '导入测试用例1', '2' => '导入测试用例2');
+        $_POST['module']       = array('1' => '0', '2' => '0');
+        $_POST['story']        = array('1' => '2', '2' => '2');
+        $_POST['pri']          = array('1' => '1', '2' => '2');
+        $_POST['type']         = array('1' => 'performance', '2' => 'feature');
+        $_POST['stage']        = array('1' => array('0' => 'feature'), '2' => array('0' => 'unittest'));
+        $_POST['precondition'] = array('1' => '这是前置条件1', '2' => '这是前置条件2');
+        $_POST['stepType']     = array('1' => array('1' => 'step'), '2' => array('1' => 'step'));
+        $_POST['desc']         = array('1' => array('1' => '用例步骤描述1'), '2' => array('1' => '用例步骤描述2'));
+        $_POST['expect']       = array('1' => array('1' => '这是用例预期结果1'), '2' => array('1' => '这是用例预期结果2'));
+        $_POST['isEndPage']    = '1';
+        $_POST['pagerID']      = '1';
+
+        foreach($param as $field => $value) $_POST[$field] = $value;
+
+        $fileName = __DIR__ . DS . 'a.txt';
+        fopen($fileName, 'a');
+        $tester->session->fileImport = $fileName;
+
+        $this->objectModel->createFromImport($productID, 0);
+
+
+        unset($_POST);
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        $objects = $tester->dao->select('*')->from(TABLE_CASE)->where('product')->eq(1)->andWhere('lib')->eq(0)->markLeft()->andWhere('id')->gt(560)->orWhere('id')->in('1,2')->markRight()->fetchAll('title');
+        $titles = implode(',', array_keys($objects));
+        return $titles;
     }
 
     /**
@@ -377,21 +489,27 @@ class testcaseTest
         return $object;
     }
 
-    public function importFromLibTest($productID)
+    /**
+     * Test import case from Lib.
+     *
+     * @param  int    $productID
+     * @param  array  $caseIdList
+     * @access public
+     * @return array
+     */
+    public function importFromLibTest($productID, $caseIdList = array())
     {
-        $objects = $this->objectModel->importFromLib($productID);
+        $_POST['module']     = array('410' => 0, '409' => 'ditto', '408' => 'ditto', '407' => 'ditto', '406' => 'ditto', '405' => 'ditto', '404' => 'ditto', '403' => 'ditto', '402' => 'ditto', '401' => 'ditto');
+        $_POST['caseIdList'] = $caseIdList;
+
+        $this->objectModel->importFromLib($productID);
+
+        unset($_POST);
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
-    }
-
-    public function buildSearchFormTest($productID, $products, $queryID, $actionURL, $projectID = 0)
-    {
-        $objects = $this->objectModel->buildSearchForm($productID, $products, $queryID, $actionURL, $projectID = 0);
-
-        if(dao::isError()) return dao::getError();
-
+        global $tester;
+        $objects = $tester->dao->select('*')->from(TABLE_CASE)->where('fromCaseID')->in($caseIdList)->orderBy('id_asc')->fetchAll();
         return $objects;
     }
 
@@ -427,29 +545,106 @@ class testcaseTest
         return $object ? 1 : 2;
     }
 
-    public function syncCase2ProjectTest($case, $caseID)
+    /**
+     * Test sync case to project.
+     *
+     * @param  int    $caseID
+     * @access public
+     * @return int
+     */
+    public function syncCase2ProjectTest($caseID)
     {
-        $objects = $this->objectModel->syncCase2Project($case, $caseID);
+        global $tester;
+        $tester->dao->delete()->from(TABLE_PROJECTCASE)->where('`case`')->eq($caseID)->exec();
+        $case = $this->objectModel->getByID($caseID);
+        $this->objectModel->syncCase2Project($case, $caseID);
 
         if(dao::isError()) return dao::getError();
 
+        $objects = $tester->dao->select('*')->from(TABLE_PROJECTCASE)->where('`case`')->eq($caseID)->fetchAll();
+        return count($objects);
+    }
+
+    /**
+     * Test deal with the relationship between the case and project when edit the case.
+     *
+     * @param  int    $caseID
+     * @param  string $objectType
+     * @param  int    $objectID
+     * @access public
+     * @return array
+     */
+    public function updateCase2ProjectTest($caseID, $objectType, $objectID)
+    {
+        $oldCase = $this->objectModel->getByID($caseID);
+
+        $case = new stdclass();
+        $case->title          = $oldCase->title;
+        $case->color          = $oldCase->color;
+        $case->precondition   = $oldCase->precondition;
+        $case->lastEditedDate = $oldCase->lastEditedDate;
+        $case->product        = $objectType == 'product' ? $objectID : $oldCase->product;
+        $case->module         = $oldCase->module;
+        $case->story          = $objectType == 'story' ? $objectID : $oldCase->story;
+        $case->type           = $oldCase->type;
+        $case->stage          = $oldCase->stage;
+        $case->pri            = $oldCase->pri;
+        $case->status         = $oldCase->status;
+        $case->keywords       = $oldCase->keywords;
+        $case->version        = $oldCase->version + 1;
+        $case->linkCase       = $oldCase->linkCase;
+        $case->lastEditedBy   = $oldCase->lastEditedBy;
+        $case->branch         = $oldCase->branch;
+
+        $this->objectModel->updateCase2Project($oldCase, $case, $caseID);
+
+        if(dao::isError()) return dao::getError();
+
+        global $tester;
+        $objects = $tester->dao->select('*')->from(TABLE_PROJECTCASE)->where('`case`')->eq($caseID)->fetchAll();
         return $objects;
     }
 
-    public function updateCase2ProjectTest($oldCase, $case, $caseID)
+    /**
+     * Test get status for different method.
+     *
+     * @param  string $methodName
+     * @param  object $case
+     * @param  array  $param
+     * @access public
+     * @return array
+     */
+    public function getStatusTest($methodName, $case = null, $param = array())
     {
-        $objects = $this->objectModel->updateCase2Project($oldCase, $case, $caseID);
+        if($methodName == 'update')
+        {
+            $case = $this->objectModel->getByID(1);
+            $_POST['title']          = $case->title;
+            $_POST['color']          = $case->color;
+            $_POST['precondition']   = $case->precondition;
+            $_POST['steps']          = array('用例步骤描述1');
+            $_POST['stepType']       = array('step');
+            $_POST['expects']        = array('这是用例预期结果1');
+            $_POST['comment']        = '';
+            $_POST['labels']         = '';
+            $_POST['lastEditedDate'] = $case->lastEditedDate;
+            $_POST['product']        = $case->product;
+            $_POST['module']         = $case->module;
+            $_POST['story']          = $case->story;
+            $_POST['type']           = $case->type;
+            $_POST['stage']          = $case->stage;
+            $_POST['pri']            = $case->pri;
+            $_POST['status']         = $case->status;
+            $_POST['keywords']       = $case->keywords;
 
-        if(dao::isError()) return dao::getError();
+            foreach($param as $field => $value) $_POST[$field] = $value;
+        }
 
-        return $objects;
-    }
+        $objects = $this->objectModel->getStatus($methodName, $case);
 
-    public function getStatusTest($methodName, $case = null)
-    {
-        $objects = $this->objectModel->getStatus($methodName, $case = null);
+        unset($_POST);
 
-        if(dao::isError()) return dao::getError();
+        if(dao::isError()) return dao::getError()[0];
 
         return $objects;
     }
