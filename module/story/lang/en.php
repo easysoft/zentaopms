@@ -284,6 +284,7 @@ $lang->story->estimateMustBeNumber = 'Estimate value must be number.';
 $lang->story->estimateMustBePlus   = 'Estimated value cannot be negative';
 $lang->story->confirmChangeBranch  = $lang->SRCommon . ' %s is linked to the plan of its linked branch. If the branch is edited, ' . $lang->SRCommon . ' will be removed from the plan of its linked branch. Do you want to continue edit ' . $lang->SRCommon . '?';
 $lang->story->confirmChangePlan    = $lang->SRCommon . ' %s is linked to the branch of its plan. If the branch is edited, ' . $lang->SRCommon . ' will be removed from the plan. Do you want to continue edit branch ?';
+$lang->story->errorDuplicateStory  = $lang->SRCommon . '%s not exist';
 
 $lang->story->form = new stdclass();
 $lang->story->form->area     = 'Scope';
