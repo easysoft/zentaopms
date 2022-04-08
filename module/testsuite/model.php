@@ -87,16 +87,17 @@ class testsuiteModel extends model
      * @param  int    $productID
      * @param  string $orderBy
      * @param  object $pager
+     * @param  string $param
      * @access public
      * @return array
      */
-    public function getSuites($productID, $orderBy = 'id_desc', $pager = null)
+    public function getSuites($productID, $orderBy = 'id_desc', $pager = null, $param = '')
     {
         return $this->dao->select("*")->from(TABLE_TESTSUITE)
             ->where('product')->eq((int)$productID)
             ->beginIF($this->config->systemMode == 'new' and $this->lang->navGroup->testsuite != 'qa')->andWhere('project')->eq($this->session->project)->fi()
             ->andWhere('deleted')->eq(0)
-            ->andWhere("(`type` = 'public' OR (`type` = 'private' and addedBy = '{$this->app->user->account}'))")
+            ->beginIF(strpos($param, 'all') === false)->andWhere("(`type` = 'public' OR (`type` = 'private' and addedBy = '{$this->app->user->account}'))")->fi()
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id');
