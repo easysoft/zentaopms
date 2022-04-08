@@ -157,6 +157,10 @@ $lang->upgrade->fromVersions['16_4']       = '16.4';
 $lang->upgrade->fromVersions['16_5_beta1'] = '16.5.beta1';
 $lang->upgrade->fromVersions['16_5']       = '16.5';
 
+/* Lite. */
+$lang->upgrade->fromVersions['lite1_0'] = 'Lite1.0';
+$lang->upgrade->fromVersions['lite1_1'] = 'Lite1.1';
+
 /* Pro. */
 $lang->upgrade->fromVersions['pro1_0']        = 'Pro1.0';
 $lang->upgrade->fromVersions['pro1_1']        = 'Pro1.1';
