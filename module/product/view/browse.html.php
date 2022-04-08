@@ -227,8 +227,8 @@ $projectIDParam = $isProjectStory ? "projectID=$projectID&" : '';
         }
     }
     ?>
-    <?php endif;?>
     </div>
+    <?php endif;?>
   </div>
   <?php endif;?>
 </div>
