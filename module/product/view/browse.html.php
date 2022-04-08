@@ -583,7 +583,6 @@ $projectIDParam = $isProjectStory ? "projectID=$projectID&" : '';
           <?php echo html::a('#batchImportToLib', $lang->story->importToLib, '', 'class="btn" data-toggle="modal" id="importToLib"');?>
           <?php endif;?>
         </div>
-        <div class="table-statistic"><?php echo $summary;?></div>
         <?php $pager->show('right', 'pagerjs');?>
       </div>
     </form>

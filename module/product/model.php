@@ -622,6 +622,13 @@ class productModel extends model
                 $line->name   = $this->post->lineName;
                 $line->root   = $this->config->systemMode == 'new' ? $product->program : 0;
                 $line->order  = $maxOrder;
+
+                $lines = $this->dao->select('name')->from(TABLE_MODULE)->where('type')->eq('line')->andWhere('root')->eq($line->root)->andWhere('name')->eq($line->name)->fetch();
+                if(!empty($lines))
+                {
+                    dao::$errors['lineName'] = sprintf($this->lang->product->nameIsDuplicated, $line->name);
+                    return false;
+                }
                 $this->dao->insert(TABLE_MODULE)->data($line)->exec();
 
                 if(!dao::isError())
