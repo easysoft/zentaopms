@@ -268,6 +268,7 @@ $lang->story->specTemplate          = "建议参考的模板：作为一名<某�
 $lang->story->needNotReview         = '不需要评审';
 $lang->story->successSaved          = "{$lang->SRCommon}成功添加，";
 $lang->story->confirmDelete         = "您确认删除该{$lang->SRCommon}吗?";
+$lang->story->confirmRecall         = "您确认撤销该{$lang->SRCommon}吗?";
 $lang->story->errorEmptyChildStory  = "『细分{$lang->SRCommon}』不能为空。";
 $lang->story->errorNotSubdivide     = "状态不是激活，或者阶段不是未开始的{$lang->SRCommon}，或者是子需求，则不能细分。";
 $lang->story->errorEmptyReviewedBy  = "『由谁评审』不能为空。";

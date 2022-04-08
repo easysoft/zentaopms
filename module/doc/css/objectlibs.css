@@ -47,3 +47,4 @@
 .tree-group .tree-actions {display: none; position: absolute; right: 0; top: 0; background-color: #fff; white-space: nowrap;}
 .tree-group:hover > .module-name {width: calc(100% - 20px);}
 .tree-group:hover .tree-actions {display: block}
+.tree li.has-list.open:before {left: 6px;}

@@ -685,6 +685,12 @@ function changeCardColType(cardID, fromColID, toColID, fromLaneID, toLaneID, car
     {
         if(toColType == 'ready' || toColType == 'backlog')
         {
+            if(toColType == 'ready' && typeof(reviewStoryParis[objectID]) != 'undefined')
+            {
+                bootbox.alert(executionLang.storyDragError);
+                return false;
+            }
+
             var link  = createLink('kanban', 'ajaxMoveCard', 'cardID=' + objectID + '&fromColID=' + fromColID + '&toColID=' + toColID + '&fromLaneID=' + fromLaneID + '&toLaneID=' + toLaneID + '&execitionID=' + executionID + '&browseType=' + browseType + '&groupBy=' + groupBy);
             $.get(link, function(data)
             {

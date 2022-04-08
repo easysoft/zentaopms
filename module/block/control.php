@@ -1628,6 +1628,7 @@ class block extends control
         }
 
         $overviewPercent = array();
+        $this->app->loadLang('project');
         foreach($this->lang->project->statusList as $statusKey => $statusName)
         {
             if(!isset($overview[$statusKey])) $overview[$statusKey] = 0;

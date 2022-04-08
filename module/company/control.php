@@ -278,6 +278,7 @@ class company extends control
         $this->loadModel('search')->setSearchParams($this->config->company->dynamic->search);
 
         /* Assign. */
+        $this->view->recTotal     = $recTotal;
         $this->view->browseType   = $browseType;
         $this->view->account      = $account;
         $this->view->accountPairs = $accountPairs;

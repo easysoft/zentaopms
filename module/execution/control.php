@@ -2036,7 +2036,8 @@ class execution extends control
     public function kanban($executionID, $browseType = 'all', $orderBy = 'id_asc', $groupBy = 'default')
     {
         $this->app->loadLang('bug');
-        $this->app->loadLang('story');
+        $this->loadModel('story');
+
         if(empty($groupBy)) $groupBy = 'default';
         $this->session->set('execLaneType', $browseType);
 
@@ -2104,6 +2105,7 @@ class execution extends control
         $this->view->kanbanData       = $kanbanData;
         $this->view->executionActions = $executionActions;
         $this->view->kanban           = $this->lang->execution->kanban;
+        $this->view->reviewStoryParis = $this->story->getExecutionStoryPairs($execution->id, 0, 'all', 0, 'full', 'review');
         $this->display();
     }
 
@@ -2129,9 +2131,9 @@ class execution extends control
         $this->app->session->set('kanbanType', $browseType, 'execution');
 
         /* Load language. */
-        $this->app->loadLang('story');
         $this->app->loadLang('task');
         $this->app->loadLang('bug');
+        $this->loadModel('story');
         $this->loadModel('kanban');
 
         /* Compatibility IE8. */
@@ -2176,23 +2178,22 @@ class execution extends control
         $userList['closed']['realname'] = 'Closed';
         $userList['closed']['avatar']   = '';
 
-        $this->view->title         = $this->lang->execution->kanban;
-        $this->view->position[]    = html::a($this->createLink('execution', 'browse', "executionID=$executionID"), $execution->name);
-        $this->view->position[]    = $this->lang->execution->kanban;
-        $this->view->realnames     = $this->loadModel('user')->getPairs('noletter');
-        $this->view->storyOrder    = $orderBy;
-        $this->view->orderBy       = 'id_asc';
-        $this->view->executionID   = $executionID;
-        $this->view->productID     = $productID;
-        $this->view->productNames  = $productNames;
-        $this->view->productNum    = count($products);
-        $this->view->allPlans      = $allPlans;
-        $this->view->browseType    = $browseType;
-        $this->view->kanbanGroup   = $kanbanGroup;
-        $this->view->execution     = $execution;
-        $this->view->groupBy       = $groupBy;
-        $this->view->canBeChanged  = $canBeChanged;
-        $this->view->userList      = $userList;
+        $this->view->title            = $this->lang->execution->kanban;
+        $this->view->realnames        = $this->loadModel('user')->getPairs('noletter');
+        $this->view->storyOrder       = $orderBy;
+        $this->view->orderBy          = 'id_asc';
+        $this->view->executionID      = $executionID;
+        $this->view->productID        = $productID;
+        $this->view->productNames     = $productNames;
+        $this->view->productNum       = count($products);
+        $this->view->allPlans         = $allPlans;
+        $this->view->browseType       = $browseType;
+        $this->view->kanbanGroup      = $kanbanGroup;
+        $this->view->execution        = $execution;
+        $this->view->groupBy          = $groupBy;
+        $this->view->canBeChanged     = $canBeChanged;
+        $this->view->userList         = $userList;
+        $this->view->reviewStoryParis = $this->story->getExecutionStoryPairs($execution->id, 0, 'all', 0, 'full', 'review');
 
         $this->display();
     }
