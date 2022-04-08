@@ -1469,7 +1469,7 @@ class testcase extends control
                     $row->id        = $caseID;
                 }
             }
-            if($taskID) $caseLang->statusList = $this->lang->testtask->statusList;
+            if($taskID) $caseLang->statusList = $this->lang->testcase->statusList;
 
             $stmt = $this->dao->select('t1.*')->from(TABLE_TESTRESULT)->alias('t1')
                 ->leftJoin(TABLE_TESTRUN)->alias('t2')->on('t1.run=t2.id')
