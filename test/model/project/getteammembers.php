@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
-include dirname(dirname(dirname(__FILE__))) . '/class/project.class.php';
+su('admin');
 
 /**
 
@@ -14,9 +14,10 @@ pid=1
 
 */
 
-$project = new Project('admin');
+global $tester;
+$tester->loadModel('project');
 
-$getNu = array(11, array('admin', 'pm92'), 11, array('admin'), true);
+$members = $tester->project->getTeamMembers(11);
 
-r($project->getTeamMembers($getNu[0], $getNu[1]))              && p() && e('2'); //获取id为11的项目团队成员个数
-r($project->getTeamMembers($getNu[2], $getNu[3], $getNu[4]))   && p() && e('1'); //获取id为11的项目团队成员个数，开启新手引导
+r(count($members)) && p()                                && e('2');                          // 获取id为11的项目团队成员个数
+r($members)        && p('pm92:role,totalHours,realname') && e('项目经理,343.0,产品经理92');  // 获取id为11的项目团队成员的详细信息
