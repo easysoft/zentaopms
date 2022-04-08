@@ -62,9 +62,9 @@ foreach($products as $programID => $programProducts)
     {
         $programName = zget($programs, $programID);
 
-        if($productCounts[$programID]['myProduct']) $myProductsHtml  .= '<li><div class="hide-in-search"><a class="text-muted" title="' . $programName . '">' . $programName . '</a> <label class="label">' . $lang->program->common . '</label></div><ul>';
-        if($productCounts[$programID]['others']) $normalProductsHtml .= '<li><div class="hide-in-search"><a class="text-muted" title="' . $programName . '">' . $programName . '</a> <label class="label">' . $lang->program->common . '</label></div><ul>';
-        if($productCounts[$programID]['closed']) $closedProductsHtml .= '<li><div class="hide-in-search"><a class="text-muted" title="' . $programName . '">' . $programName . '</a> <label class="label">' . $lang->program->common . '</label></div><ul>';
+        if($productCounts[$programID]['myProduct']) $myProductsHtml  .= '<li><div class="hide-in-search"><a class="text-muted not-list-item" title="' . $programName . '">' . $programName . '</a> <label class="label">' . $lang->program->common . '</label></div><ul>';
+        if($productCounts[$programID]['others']) $normalProductsHtml .= '<li><div class="hide-in-search"><a class="text-muted not-list-item" title="' . $programName . '">' . $programName . '</a> <label class="label">' . $lang->program->common . '</label></div><ul>';
+        if($productCounts[$programID]['closed']) $closedProductsHtml .= '<li><div class="hide-in-search"><a class="text-muted not-list-item" title="' . $programName . '">' . $programName . '</a> <label class="label">' . $lang->program->common . '</label></div><ul>';
     }
 
     foreach($programProducts as $index => $product)
