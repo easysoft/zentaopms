@@ -35,13 +35,14 @@ $builder->taskestimate  = array('rows' => 600, 'extends' => array('taskestimate'
 $builder->taskson       = array('rows' => 10,  'extends' => array('task', 'taskson'));
 $builder->case          = array('rows' => 400, 'extends' => array('case'));
 $builder->libcase       = array('rows' => 10, 'extends' => array('case','libcase'));
+$builder->unitcase      = array('rows' => 150, 'extends' => array('case','unitcase'));
 $builder->casestep      = array('rows' => 400, 'extends' => array('casestep'));
 $builder->bug           = array('rows' => 300, 'extends' => array('bug'));
 $builder->morebug       = array('rows' => 15, 'extends' => array('bug','morebug'));
 
-$builder->testtask   = array('rows' => 10, 'extends' => array('testtask'));
-$builder->testresult = array('rows' => 40, 'extends' => array('testresult'));
-$builder->testrun    = array('rows' => 40, 'extends' => array('testrun'));
+$builder->testtask   = array('rows' => 100, 'extends' => array('testtask'));
+$builder->testresult = array('rows' => 70, 'extends' => array('testresult'));
+$builder->testrun    = array('rows' => 70, 'extends' => array('testrun'));
 $builder->testreport = array('rows' => 10, 'extends' => array('testreport'));
 $builder->testsuite  = array('rows' => 201, 'extends' => array('testsuite'));
 $builder->suitecase  = array('rows' => 400, 'extends' => array('suitecase'));
