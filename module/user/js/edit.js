@@ -8,8 +8,8 @@ $(function()
     {
         if(!password1Encrypted && !password2Encrypted)
         {
-            var password1 = $('#password1').val();
-            var password2 = $('#password2').val();
+            var password1 = $('#password1').val().trim();
+            var password2 = $('#password2').val().trim();
             var passwordStrength = computePasswordStrength(password1);
 
             if($("form input[name=passwordStrength]").length == 0) $('#submit').after("<input type='hidden' name='passwordStrength' value='0' />");
