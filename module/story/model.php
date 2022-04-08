@@ -3034,6 +3034,7 @@ class storyModel extends model
         return $this->dao->select('id, title')
             ->from(TABLE_STORY)
             ->where('deleted')->eq(0)
+            ->andWhere('status')->ne('closed')
             ->andWhere('type')->eq($type)
             ->andWhere('vision')->eq($this->config->vision)
             ->andWhere('assignedTo')->eq($account)

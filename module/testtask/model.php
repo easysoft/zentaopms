@@ -1046,6 +1046,7 @@ class testtaskModel extends model
             ->from(TABLE_TESTTASK)->alias('t1')
             ->leftjoin(TABLE_EXTENSION)->alias('t2')->on('t1.execution = t2.id')
             ->where('t1.owner')->eq($account)
+            ->andWhere('t1.status')->ne('done')
             ->andWhere('t1.deleted')->eq(0)
             ->beginIF($status != 'all')->andWhere('t1.status')->in($status)->fi()
             ->beginIF(!empty($skipProductIDList))->andWhere('t1.product')->notin($skipProductIDList)->fi()
