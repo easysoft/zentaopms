@@ -988,6 +988,8 @@ class story extends control
             $version = $this->dao->findById($storyID)->from(TABLE_STORY)->fetch('version');
             $files   = $this->loadModel('file')->saveUpload($story->type, $storyID, $version);
 
+            if(empty($files) and $this->post->uid != '') $files = $this->file->getPairs($_SESSION['album']['used'][$this->post->uid]);
+
             if($this->post->comment != '' or !empty($changes) or !empty($files))
             {
                 $action = (!empty($changes) or !empty($files)) ? 'Changed' : 'Commented';
