@@ -1247,9 +1247,9 @@ class testcaseModel extends model
                 else
                 {
                     /* Compare every step. */
-                    foreach($oldStep as $id => $oldStep)
+                    foreach($oldStep as $id => $step)
                     {
-                        if(trim($oldStep->desc) != trim($steps[$id]->desc) or trim($oldStep->expect) != $steps[$id]->expect)
+                        if(trim($step->desc) != trim($steps[$id]->desc) or trim($step->expect) != $steps[$id]->expect)
                         {
                             $stepChanged = true;
                             break;
@@ -1388,10 +1388,14 @@ class testcaseModel extends model
             if($module != 'ditto') $prevModule = $module;
             if($module == 'ditto') $data->module[$i] = $prevModule;
         }
-        foreach($data->branch as $i => $branch)
+
+        if(isset($data->branch))
         {
-            if($branch != 'ditto') $prevBranch = $branch;
-            if($branch == 'ditto') $data->branch[$i] = $prevBranch;
+            foreach($data->branch as $i => $branch)
+            {
+                if($branch != 'ditto') $prevBranch = $branch;
+                if($branch == 'ditto') $data->branch[$i] = $prevBranch;
+            }
         }
 
         $libCases = $this->dao->select('*')->from(TABLE_CASE)->where('deleted')->eq(0)->andWhere('id')->in($data->caseIdList)->fetchAll('id');
@@ -1889,7 +1893,7 @@ class testcaseModel extends model
 
         if($methodName == 'review')
         {
-            $status = zget($case, 'status', $status);
+            $status = zget($case, 'status', '');
 
             if($this->post->result == 'pass') return 'normal';
 
