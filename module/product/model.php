@@ -626,7 +626,7 @@ class productModel extends model
                 $lines = $this->dao->select('name')->from(TABLE_MODULE)->where('type')->eq('line')->andWhere('root')->eq($line->root)->andWhere('name')->eq($line->name)->fetch();
                 if(!empty($lines))
                 {
-                    dao::$errors['lineName'] = sprintf($this->lang->product->nameIsDuplicated, $this->lang->product->line, $line->name);
+                    dao::$errors['lineName'] = sprintf($this->lang->product->nameIsDuplicated, $line->name);
                     return false;
                 }
                 $this->dao->insert(TABLE_MODULE)->data($line)->exec();

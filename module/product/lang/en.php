@@ -90,7 +90,7 @@ $lang->product->confirmChangeProgram = "The projects linked with this {$lang->pr
 $lang->product->changeProgramError   = "The {$lang->SRCommon} of this {$lang->productCommon} has been linked to the project, please unlink it before proceeding";
 $lang->product->programEmpty         = 'Program should not be empty!';
 $lang->product->nameIsDuplicate      = "『%s』 product line already exists, please reset!";
-$lang->product->nameIsDuplicated     = "『%s』『%s』 exists. Go to Admin->System->Data->Recycle Bin to restore it, if you are sure it is deleted.";
+$lang->product->nameIsDuplicated     = "『Product Line』『%s』 exists. Go to Admin->System->Data->Recycle Bin to restore it, if you are sure it is deleted.";
 
 $lang->product->id             = 'ID';
 $lang->product->program        = "Program";
