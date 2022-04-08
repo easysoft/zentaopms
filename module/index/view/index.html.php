@@ -26,6 +26,7 @@ js::set('showFeatures', $showFeatures);
 <style>
 #versionTitle {margin: 8px 3px 0px 0px; background-image: url(<?php echo $config->webRoot . 'theme/default/images/main/version-upgrade.svg';?>);}
 .icon-version {width: 20px; height: 24px; margin: -4px 3px 0px 0px; background-image: url(<?php echo $config->webRoot . 'theme/default/images/main/version-new.svg';?>);}
+.icon-version:before {content:"";}
 .version-hr {margin-top: 15px; margin-bottom: 15px;}
 
 <?php if(empty($latestVersionList)):?>
