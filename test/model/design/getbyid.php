@@ -11,7 +11,10 @@ cid=1
 pid=1
 
 */
+global $tester;
+$design = $tester->loadModel('design');
 
-$design = new designTest();
+$designIDList = array('0', '1');
 
-r($design->getByIDTest()) && p() && e();
+r($design->getByID($designIDList[1])) && p('name') && e('这是一个设计1');//正常根据id查询
+r($design->getByID($designIDList[0])) && p()       && e('0');            //查询不存在的设计id

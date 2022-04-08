@@ -98,6 +98,14 @@ class designTest
         return $objects;
     }
 
+    /**
+     * Function assign test by desgin
+     *
+     * @param  int $designID
+     * @param  array $param
+     * @access public
+     * @return array
+     */
     public function assignTest($designID, $param = array())
     {
         global $tester;
@@ -118,11 +126,24 @@ class designTest
         return $objects;
     }
 
-    public function linkCommitTest($designID = 0, $repoID = 0)
+    public function linkCommitTest($designID, $repoID, $param = array())
     {
-        $objects = $this->objectModel->linkCommit($designID = 0, $repoID = 0);
+        global $tester;
+
+        $revision = array();
+
+        $createFields = array('revision' => $revision);
+
+        foreach($createFields as $field => $defaultValue) $_POST[$field] = $defaultValue;
+        foreach($param as $key => $value) $_POST[$key] = $value;
+
+        $this->objectModel->linkCommit($designID, $repoID);
+
+        unset($_POST);
 
         if(dao::isError()) return dao::getError();
+
+        $objects = $tester->dao->select('*')->from(TABLE_DESIGN)->where('id')->eq($designID)->fetchAll();
 
         return $objects;
     }
@@ -130,24 +151,6 @@ class designTest
     public function unlinkCommitTest($designID = 0, $commitID = 0)
     {
         $objects = $this->objectModel->unlinkCommit($designID = 0, $commitID = 0);
-
-        if(dao::isError()) return dao::getError();
-
-        return $objects;
-    }
-
-    public function getByIDTest($designID = 0)
-    {
-        $objects = $this->objectModel->getByID($designID = 0);
-
-        if(dao::isError()) return dao::getError();
-
-        return $objects;
-    }
-
-    public function getPairsTest($productID = 0, $type = 'all')
-    {
-        $objects = $this->objectModel->getPairs($productID = 0, $type = 'all');
 
         if(dao::isError()) return dao::getError();
 
