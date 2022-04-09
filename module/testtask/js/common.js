@@ -67,7 +67,7 @@ function createBug(obj)
     }
     else
     {
-        window.open(link, '_parent');
+        window.open(link, '_blank');
     }
 
     config.onlybody = onlybody;
