@@ -1587,7 +1587,7 @@ class bug extends control
             }
         }
 
-        $projectID  = $this->lang->navGroup->bug == 'project' ? $this->session->project : 0;
+        $projectID  = $bug->project;
         $productID  = $bug->product;
         $users      = $this->user->getPairs('noclosed');
         $assignedTo = $bug->openedBy;
