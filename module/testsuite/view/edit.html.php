@@ -28,7 +28,7 @@
           <td><?php echo html::textarea('desc', htmlSpecialString($suite->desc), "rows=10 class='form-control'");?></td>
         </tr>
         <?php $this->printExtendFields($suite, 'table');?>
-        <?php if($suite->type != 'library'):?>
+        <?php if($suite->type != 'library' and $suite->type != 'unit'):?>
         <tr>
           <th><?php echo $lang->testsuite->author;?></th>
           <td><?php echo html::radio('type', $lang->testsuite->authorList, $suite->type);?></td>

@@ -1018,21 +1018,7 @@ class story extends control
 
             $module = $this->app->tab == 'project' ? 'projectstory' : 'story';
 
-            if(isonlybody())
-            {
-                $execution = $this->execution->getByID($this->session->execution);
-                if($this->app->tab == 'execution' and $execution->type == 'kanban' and $this->app->tab == 'execution')
-                {
-                    $kanbanData = $this->loadModel('kanban')->getRDKanban($this->session->execution, $this->session->execLaneType ? $this->session->execLaneType : 'all');
-                    $kanbanData = json_encode($kanbanData);
-
-                    return print(js::closeModal('parent.parent', '', "parent.parent.updateKanban($kanbanData)"));
-                }
-                else
-                {
-                    return print(js::reload('parent.parent'));
-                }
-            }
+            if(isonlybody()) return print(js::reload('parent.parent'));
 
             if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'success'));
             return print(js::locate($this->createLink($module, 'view', "storyID=$storyID"), 'parent'));
@@ -1130,7 +1116,8 @@ class story extends control
 
         $storyID = (int)$storyID;
         $story   = $this->story->getById($storyID, $version, true);
-        if(!$story) return print(js::error($this->lang->notFound) . js::locate($this->createLink('product', 'index')));
+        $linkModuleName = $this->config->vision == 'lite' ? 'project' : 'product';
+        if(!$story) return print(js::error($this->lang->notFound) . js::locate($this->createLink($linkModuleName, 'index')));
 
         $story = $this->story->mergeReviewer($story, true);
 

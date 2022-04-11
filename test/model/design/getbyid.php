@@ -10,6 +10,9 @@ title=测试 designModel->getByID();
 cid=1
 pid=1
 
+正常根据id查询 >> 这是一个设计1
+查询不存在的设计id >> 0
+
 */
 global $tester;
 $design = $tester->loadModel('design');

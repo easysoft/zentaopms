@@ -73,6 +73,9 @@ switch($argv[1])
     case 'cron':
         ztfRun('model/cron');
         break;
+    case 'design':
+        ztfRun('model/design');
+        break;
     case 'model':
         ztfRun('model');
         break;

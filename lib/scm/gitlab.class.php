@@ -66,7 +66,7 @@ class gitlab
             }
             else
             {
-                $commits = $this->getCommitsByPath($file->path);
+                $commits = $this->getCommitsByPath($file->path, '', '', 1);
                 if(empty($commits)) continue;
                 $commit = $commits[0];
 
@@ -108,7 +108,7 @@ class gitlab
         $file = $this->fetch($api, $param);
         if(!isset($file->file_name)) return false;
 
-        $commits = $this->getCommitsByPath($path);
+        $commits = $this->getCommitsByPath($path, '', '', 1);
         $file->revision = $file->commit_id;
         $file->size     = $this->formatBytes($file->size);
 
@@ -636,10 +636,13 @@ class gitlab
      * Get commits by path.
      *
      * @param  string    $path
+     * @param  string    $fromRevision
+     * @param  string    $toRevision
+     * @param  int       $perPage
      * @access public
      * @return array
      */
-    public function getCommitsByPath($path, $fromRevision = '', $toRevision = '')
+    public function getCommitsByPath($path, $fromRevision = '', $toRevision = '', $perPage = 0)
     {
         $path = ltrim($path, DIRECTORY_SEPARATOR);
         $api = "commits";
@@ -662,9 +665,10 @@ class gitlab
         {
             $since = $fromDate;
         }
-
         if($since) $param->since = $since;
         if($until) $param->until = $until;
+
+        if($perPage) $param->per_page = $perPage;
 
         return $this->fetch($api, $param);
     }
@@ -742,7 +746,7 @@ class gitlab
     {
         $params = (array) $params;
         $params['private_token'] = $this->token;
-        $params['per_page']      = 100;
+        $params['per_page']      = isset($params['per_page']) ? $params['per_page'] : 100;
 
         $api = ltrim($api, '/');
         $api = $this->root . $api . '?' . http_build_query($params);

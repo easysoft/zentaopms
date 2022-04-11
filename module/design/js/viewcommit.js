@@ -10,9 +10,7 @@ $(function()
             var link = createLink('repo', 'create', 'objectID=' + projectID);
 
             config.onlybody = onlybody;
-            window.parent.$.apps.open(link, 'devops');
-
-            parent.$('#triggerModal').modal('hide');
+            window.parent.$.apps.open(link, 'project');
 
             return false;
         }

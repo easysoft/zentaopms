@@ -157,63 +157,9 @@ class designTest
         return $objects;
     }
 
-    public function getAffectedScopeTest($design = 0)
-    {
-        $objects = $this->objectModel->getAffectedScope($design = 0);
-
-        if(dao::isError()) return dao::getError();
-
-        return $objects;
-    }
-
-    public function getListTest($projectID = 0, $productID = 0, $type = 'all', $param = 0, $orderBy = 'id_desc', $pager = null)
-    {
-        $objects = $this->objectModel->getList($projectID = 0, $productID = 0, $type = 'all', $param = 0, $orderBy = 'id_desc', $pager = null);
-
-        if(dao::isError()) return dao::getError();
-
-        return $objects;
-    }
-
     public function getCommitTest($designID = 0, $pager = null)
     {
         $objects = $this->objectModel->getCommit($designID = 0, $pager = null);
-
-        if(dao::isError()) return dao::getError();
-
-        return $objects;
-    }
-
-    public function getBySearchTest($projectID = 0, $productID = 0, $queryID = 0, $orderBy = 'id_desc', $pager = null)
-    {
-        $objects = $this->objectModel->getBySearch($projectID = 0, $productID = 0, $queryID = 0, $orderBy = 'id_desc', $pager = null);
-
-        if(dao::isError()) return dao::getError();
-
-        return $objects;
-    }
-
-    public function setMenuTest($projectID, $products, $productID = 0)
-    {
-        $objects = $this->objectModel->setMenu($projectID, $products, $productID = 0);
-
-        if(dao::isError()) return dao::getError();
-
-        return $objects;
-    }
-
-    public function buildSearchFormTest($queryID = 0, $actionURL = '')
-    {
-        $objects = $this->objectModel->buildSearchForm($queryID = 0, $actionURL = '');
-
-        if(dao::isError()) return dao::getError();
-
-        return $objects;
-    }
-
-    public function printAssignedHtmlTest($design = '', $users = '')
-    {
-        $objects = $this->objectModel->printAssignedHtml($design = '', $users = '');
 
         if(dao::isError()) return dao::getError();
 

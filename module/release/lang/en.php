@@ -89,3 +89,4 @@ $lang->release->notifyList['QD'] = 'QA Manager';
 $lang->release->notifyList['SC'] = 'Story Creator';
 $lang->release->notifyList['ET'] = "{$lang->execution->common} Team Members";
 $lang->release->notifyList['PT'] = "Project Team Members";
+$lang->release->notifyList['CT'] = "Copy To";

@@ -894,12 +894,12 @@ class testcaseModel extends model
         /* Process data if the value is 'ditto'. */
         foreach($caseIDList as $caseID)
         {
-            if($data->pris[$caseID]     == 'ditto') $data->pris[$caseID]     = isset($prev['pri'])    ? $prev['pri']    : 3;
-            if($data->branches[$caseID] == 'ditto') $data->branches[$caseID] = isset($prev['branch']) ? $prev['branch'] : 0;
-            if($data->modules[$caseID]  == 'ditto') $data->modules[$caseID]  = isset($prev['module']) ? $prev['module'] : 0;
-            if($data->story[$caseID]    == 'ditto') $data->story[$caseID]    = isset($prev['story'])  ? $prev['story']  : 0;
-            if($data->types[$caseID]    == 'ditto') $data->types[$caseID]    = isset($prev['type'])   ? $prev['type']   : '';
-            if($data->story[$caseID]  == '')      $data->story[$caseID]  = 0;
+            if($data->pris[$caseID]    == 'ditto') $data->pris[$caseID]    = isset($prev['pri'])    ? $prev['pri']    : 3;
+            if($data->modules[$caseID] == 'ditto') $data->modules[$caseID] = isset($prev['module']) ? $prev['module'] : 0;
+            if($data->types[$caseID]   == 'ditto') $data->types[$caseID]   = isset($prev['type'])   ? $prev['type']   : '';
+            if($data->story[$caseID]  == '') $data->story[$caseID] = 0;
+            if(isset($data->branches[$caseID]) and $data->branches[$caseID] == 'ditto') $data->branches[$caseID] = isset($prev['branch']) ? $prev['branch'] : 0;
+            if($data->story[$caseID] == 'ditto') $data->story[$caseID] = isset($prev['story']) ? $prev['story'] : 0;
 
             $prev['pri']    = $data->pris[$caseID];
             $prev['type']   = $data->types[$caseID];
@@ -953,8 +953,9 @@ class testcaseModel extends model
 
             if(!dao::isError())
             {
-                $isLibCase    = ($oldCase->lib and empty($oldCase->product));
-                $titleChanged = ($case->title != $oldCase->title);
+                $isLibCase     = ($oldCase->lib and empty($oldCase->product));
+                $titleChanged  = ($case->title != $oldCase->title);
+                $case->product = $oldCase->product;
                 if($isLibCase and $titleChanged) $this->dao->update(TABLE_CASE)->set('`title`')->eq($case->title)->where('`fromCaseID`')->eq($caseID)->exec();
 
                 $this->updateCase2Project($oldCase, $case, $caseID);
@@ -1247,9 +1248,9 @@ class testcaseModel extends model
                 else
                 {
                     /* Compare every step. */
-                    foreach($oldStep as $id => $oldStep)
+                    foreach($oldStep as $id => $step)
                     {
-                        if(trim($oldStep->desc) != trim($steps[$id]->desc) or trim($oldStep->expect) != $steps[$id]->expect)
+                        if(trim($step->desc) != trim($steps[$id]->desc) or trim($step->expect) != $steps[$id]->expect)
                         {
                             $stepChanged = true;
                             break;
@@ -1388,10 +1389,14 @@ class testcaseModel extends model
             if($module != 'ditto') $prevModule = $module;
             if($module == 'ditto') $data->module[$i] = $prevModule;
         }
-        foreach($data->branch as $i => $branch)
+
+        if(isset($data->branch))
         {
-            if($branch != 'ditto') $prevBranch = $branch;
-            if($branch == 'ditto') $data->branch[$i] = $prevBranch;
+            foreach($data->branch as $i => $branch)
+            {
+                if($branch != 'ditto') $prevBranch = $branch;
+                if($branch == 'ditto') $data->branch[$i] = $prevBranch;
+            }
         }
 
         $libCases = $this->dao->select('*')->from(TABLE_CASE)->where('deleted')->eq(0)->andWhere('id')->in($data->caseIdList)->fetchAll('id');
@@ -1889,7 +1894,7 @@ class testcaseModel extends model
 
         if($methodName == 'review')
         {
-            $status = zget($case, 'status', $status);
+            $status = zget($case, 'status', '');
 
             if($this->post->result == 'pass') return 'normal';
 
