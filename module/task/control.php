@@ -1455,7 +1455,7 @@ class task extends control
                 }
 
                 /* Skip parent task when batch close task. */
-                if(empty($parentTaskIdList) and ($task->parent == '-1'))
+                if($task->parent == '-1')
                 {
                     $parentTasks[$taskID] = $taskID;
                     continue;
@@ -1479,7 +1479,7 @@ class task extends control
                 return print(js::confirm(sprintf($this->lang->task->error->skipClose, $skipTasks), $confirmURL, $cancelURL, 'self', 'parent'));
             }
 
-            if(isset($parentTasks) and empty($parentTaskIdList))
+            if(isset($parentTasks))
             {
                 $parentTasks = join(',', $parentTasks);
                 return print(js::alert(sprintf($this->lang->task->error->closeParent, $parentTasks)) . js::reload('parent'));
