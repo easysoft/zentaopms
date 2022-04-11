@@ -556,6 +556,11 @@ class installModel extends model
             $this->dao->update(TABLE_CRON)->set('remark')->eq($remark)->where('command')->eq($command)->exec();
         }
 
+        foreach($this->lang->install->langList as $langInfo)
+        {
+            $this->dao->update(TABLE_LANG)->set('value')->eq($langInfo['value'])->where('module')->eq($langInfo['module'])->andWhere('`key`')->eq($langInfo['key'])->exec();
+        }
+
         /* Update lang,stage by lang. */
         $this->app->loadLang('stage');
         foreach($this->lang->stage->typeList as $key => $value)
@@ -585,6 +590,16 @@ class installModel extends model
             foreach($this->lang->install->processList as $id => $name)
             {
                 $this->dao->update(TABLE_PROCESS)->set('name')->eq($name)->where('id')->eq($id)->exec();
+            }
+
+            foreach($this->lang->install->activity as $id => $name)
+            {
+                $this->dao->update(TABLE_ACTIVITY)->set('name')->eq($name)->where('id')->eq($id)->exec();
+            }
+
+            foreach($this->lang->install->zoutput as $id => $name)
+            {
+                $this->dao->update(TABLE_ZOUTPUT)->set('name')->eq($name)->where('id')->eq($id)->exec();
             }
 
             /* Update basicmeas by lang. */

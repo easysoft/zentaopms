@@ -162,6 +162,10 @@ $lang->install->errorEmpty['company']  = "{$lang->install->company}不能为空"
 $lang->install->errorEmpty['account']  = "{$lang->install->account}不能为空";
 $lang->install->errorEmpty['password'] = "{$lang->install->password}不能为空";
 
+$lang->install->langList['1'] = array('module' => 'process', 'key' => 'support', 'value' => '支持过程');
+$lang->install->langList['2'] = array('module' => 'process', 'key' => 'engineering', 'value' => '工程支持');
+$lang->install->langList['3'] = array('module' => 'process', 'key' => 'project', 'value' => '项目管理');
+
 $lang->install->processList['11'] = '立项管理';
 $lang->install->processList['12'] = '项目规划';
 $lang->install->processList['13'] = '项目监控';

@@ -162,6 +162,10 @@ $lang->install->errorEmpty['company']  = "{$lang->install->company} should not b
 $lang->install->errorEmpty['account']  = "{$lang->install->account} should not be blank.";
 $lang->install->errorEmpty['password'] = "{$lang->install->password} should not be blank.";
 
+$lang->install->langList['1'] = array('module' => 'process', 'key' => 'support', 'value' => 'Support Process');
+$lang->install->langList['2'] = array('module' => 'process', 'key' => 'engineering', 'value' => 'Project Management');
+$lang->install->langList['3'] = array('module' => 'process', 'key' => 'project', 'value' => 'Engineering Process');
+
 $lang->install->processList['11'] = 'Project management';
 $lang->install->processList['12'] = 'Project planning';
 $lang->install->processList['13'] = 'Project monitoring';
