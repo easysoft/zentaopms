@@ -31,7 +31,7 @@ css::import($jsRoot . 'misc/highlight/styles/github.css');
     <div class="page-title">
       <strong>
         <?php
-        $base64BranchID = base64_encode($branchID);
+        $base64BranchID = helper::safe64Encode(base64_encode($branchID));
         echo html::a($this->repo->createLink('browse', "repoID=$repoID&branchID=$base64BranchID&objectID=$objectID"), $repo->name, '', "data-app='{$app->tab}'");
         $paths = explode('/', $entry);
         $fileName = array_pop($paths);

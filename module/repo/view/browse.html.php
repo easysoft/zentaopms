@@ -31,7 +31,7 @@
         foreach($branches as $id => $branchName)
         {
             $isSelected = $id == $branchID ? 'class="selected"' : '';
-            $base64BranchID = urlencode(base64_encode($id));
+            $base64BranchID = helper::safe64Encode(base64_encode($id));
             echo "<li $isSelected>" . html::a($this->createLink('repo', 'browse', "repoID=$repoID&branchID=$base64BranchID&objectID=$objectID"), $branchName, '', "title='{$branchName}' class='text-ellipsis' data-app='{$app->tab}'") . "</li>";
         }
         ?>
@@ -41,7 +41,7 @@
     <div class="page-title">
       <strong>
         <?php
-        $base64BranchID = base64_encode($branchID);
+        $base64BranchID = helper::safe64Encode(base64_encode($branchID));
         echo html::a($this->repo->createLink('browse', "repoID=$repoID&branchID=$base64BranchID&objectID=$objectID"), $repo->name, '', "data-app='{$app->tab}'");
         $paths= explode('/', $path);
         $fileName = array_pop($paths);
@@ -58,7 +58,7 @@
   </div>
   <div class="btn-toolbar pull-right">
     <span class='last-sync-time'><?php echo $lang->repo->notice->lastSyncTime . $cacheTime?></span>
-    <?php echo html::a($this->repo->createLink('browse', "repoID=$repoID&branchID=$base64BranchID&objectID=$objectID&path=" . $this->repo->encodePath($path) . "&revision=$revision&refresh=1"), "<i class='icon icon-refresh'></i> " . $lang->refresh, '', "class='btn btn-primary' data-app={$app->tab}");?>
+    <?php echo html::a($this->repo->createLink('browse', "repoID=$repoID&branchID=" . helper::safe64Encode($base64BranchID) . "&objectID=$objectID&path=" . $this->repo->encodePath($path) . "&revision=$revision&refresh=1"), "<i class='icon icon-refresh'></i> " . $lang->refresh, '', "class='btn btn-primary' data-app={$app->tab}");?>
     <?php if($repo->SCM == 'Gitlab' and common::hasPriv('gitlab', 'createBranch')) echo html::a($this->createLink('gitlab', 'createBranch', "gitlabID={$repo->gitlab}&projectID={$repo->project}"), "<i class='icon icon-sm icon-plus'></i> " . $lang->gitlab->createBranch, '', "class='btn btn-primary'");?>
   </div>
 </div>
