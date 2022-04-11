@@ -24,7 +24,8 @@
           <th class='required c-name'><?php echo sprintf($lang->branch->name, $lang->product->branchName[$product->type]);?></th>
           <th class='c-desc'><?php echo sprintf($lang->branch->desc, $lang->product->branchName[$product->type]);?></th>
           <th class='c-status'><?php echo $lang->branch->status;?></th>
-          <th class='c-default text-center'><?php echo $lang->branch->defaultBranch;?></th>
+          <!-- The default branch is hidden for the moment,until this demand has been completed -->
+          <th class='c-default text-center hidden'><?php echo $lang->branch->defaultBranch;?></th>
         </tr>
       </thead>
       <tbody>
@@ -35,7 +36,8 @@
           <td><?php echo html::input("name[$branch->id]", $branch->name,  "class='form-control chosen' $disabled");?></td>
           <td><?php echo html::input("desc[$branch->id]", $branch->desc, "class='form-control' $disabled");?></td>
           <td><?php echo html::select("status[$branch->id]", $lang->branch->statusList, $branch->status, "class='form-control' chosen $disabled onchange='canSetDefaultBranch(this)'");?></td>
-          <td class='text-center'><input type='radio' name='default' value='<?php echo $branch->id;?>' <?php if($branch->default) echo 'checked';?> <?php if($branch->status == 'closed' or !common::hasPriv('branch', 'setDefault')) echo 'disabled';?>></td>
+          <!-- The default branch is hidden for the moment,until this demand has been completed -->
+          <td class='text-center hidden'><input type='radio' name='default' value='<?php echo $branch->id;?>' <?php if($branch->default) echo 'checked';?> <?php if($branch->status == 'closed' or !common::hasPriv('branch', 'setDefault')) echo 'disabled';?>></td>
         </tr>
         <?php endforeach;?>
         <tr>
