@@ -47,7 +47,6 @@ $(document).ready(function()
     {
       $('#navbar li[data-id=caselib]').addClass('active');
       $('#navbar li[data-id=testcase]').removeClass('active');
-      console.log(isLibCase);
     }
 })
 
