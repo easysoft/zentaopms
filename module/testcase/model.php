@@ -899,7 +899,7 @@ class testcaseModel extends model
             if($data->types[$caseID]   == 'ditto') $data->types[$caseID]   = isset($prev['type'])   ? $prev['type']   : '';
             if($data->story[$caseID]  == '') $data->story[$caseID] = 0;
             if(isset($data->branches[$caseID]) and $data->branches[$caseID] == 'ditto') $data->branches[$caseID] = isset($prev['branch']) ? $prev['branch'] : 0;
-            if(!empty($data->story[$caseID]) and $data->story[$caseID] == 'ditto') $data->story[$caseID] = isset($prev['story']) ? $prev['story'] : 0;
+            if($data->story[$caseID] == 'ditto') $data->story[$caseID] = isset($prev['story']) ? $prev['story'] : 0;
 
             $prev['pri']    = $data->pris[$caseID];
             $prev['type']   = $data->types[$caseID];
