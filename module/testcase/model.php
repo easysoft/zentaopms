@@ -87,10 +87,7 @@ class testcaseModel extends model
                 if($step->type == 'step')  $parentStepID = 0;
             }
 
-            /* If the story is linked project, make the case link the project. */
-            $this->syncCase2Project($case, $caseID);
-
-            return array('status' => 'created', 'id' => $caseID);
+            return array('status' => 'created', 'id' => $caseID, 'caseInfo' => $case);
         }
     }
 
@@ -203,14 +200,13 @@ class testcaseModel extends model
             $caseID       = $this->dao->lastInsertID();
             $caseIDList[] = $caseID;
 
-            /* If the story is linked project, make the case link the project. */
-            $this->syncCase2Project($case, $caseID);
             $this->executeHooks($caseID);
 
             $this->loadModel('score')->create('testcase', 'create', $caseID);
             $actionID = $this->loadModel('action')->create('case', $caseID, 'Opened');
-            if($this->app->tab == 'project') $this->action->create('case', $caseID, 'linked2project', '', $this->session->project);
-            if($this->app->tab == 'execution') $this->action->create('case', $caseID, 'linked2execution', '', $this->session->execution);
+
+            /* If the story is linked project, make the case link the project. */
+            $this->syncCase2Project($case, $caseID);
         }
         if(!dao::isError()) $this->loadModel('score')->create('ajax', 'batchCreate');
         return $caseIDList;
@@ -1333,9 +1329,9 @@ class testcaseModel extends model
                         }
                     }
 
-                    $this->syncCase2Project($caseData, $caseID);
-
                     $this->action->create('case', $caseID, 'Opened');
+
+                    $this->syncCase2Project($caseData, $caseID);
                 }
             }
         }
@@ -1802,6 +1798,9 @@ class testcaseModel extends model
             $projects = array($this->session->execution);
         }
 
+        $this->loadModel('action');
+        $objectInfo = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->in($projects)->fetchAll('id');
+
         if(!empty($projects))
         {
             foreach($projects as $projectID)
@@ -1814,6 +1813,10 @@ class testcaseModel extends model
                 $data->version = 1;
                 $data->order   = ++ $lastOrder;
                 $this->dao->insert(TABLE_PROJECTCASE)->data($data)->exec();
+
+                $objectType = $objectInfo[$projectID]->type;
+                if($objectType == 'project') $this->action->create('case', $caseID, 'linked2project', '', $projectID);
+                if(in_array($objectType, array('sprint', 'stage'))) $this->action->create('case', $caseID, 'linked2execution', '', $projectID);
             }
         }
     }
