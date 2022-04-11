@@ -28,7 +28,7 @@
         <caption class='text-left text-muted'><?php echo $lang->user->basicInfo;?></caption>
         <tr>
           <th class='w-140px'><?php echo $lang->user->realname;?></th>
-          <td class='w-p40'><?php echo html::input('realname', $user->realname, "class='form-control' disabled");?></td>
+          <td class='w-p40'><?php echo html::input('realname', $user->realname, "class='form-control'");?></td>
           <th class='w-130px'><?php echo $lang->user->role;?></th>
           <td><?php echo html::select('role', $lang->user->roleList, $user->role, "class='form-control'");?></td>
         </tr>
@@ -59,7 +59,7 @@
         <caption class='text-left text-muted'><?php echo $lang->user->accountInfo;?></caption>
         <tr>
           <th class='w-140px'><?php echo $lang->user->account;?></th>
-          <td class='w-p40'><?php echo html::input('account', $user->account, "class='form-control'");?></td>
+          <td class='w-p40'><?php echo html::input('account', $user->account, "class='form-control' disabled");?></td>
           <th class='w-130px'><?php echo $lang->user->email;?></th>
           <td>
             <?php echo html::input('email', $user->email, "class='form-control'");?>
