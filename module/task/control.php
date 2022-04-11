@@ -1473,7 +1473,7 @@ class task extends control
             }
             if(isset($skipTasks) and empty($skipTaskIdList))
             {
-                $skipTasks = join(',', $skipTasks);
+                $skipTasks  = join(',', $skipTasks);
                 $confirmURL = $this->createLink('task', 'batchClose', "skipTaskIdList=$skipTasks");
                 $cancelURL  = $this->server->HTTP_REFERER;
                 return print(js::confirm(sprintf($this->lang->task->error->skipClose, $skipTasks), $confirmURL, $cancelURL, 'self', 'parent'));
