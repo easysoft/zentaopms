@@ -964,6 +964,10 @@ class testcase extends control
                 $libID     = $productID;
                 $libraries = $this->loadModel('caselib')->getLibraries();
 
+                /* Remove story custom fields from caselib */
+                $this->config->testcase->customBatchEditFields   = str_replace(',story', '', $this->config->testcase->customBatchEditFields);
+                $this->config->testcase->custom->batchEditFields = str_replace(',story', '', $this->config->testcase->custom->batchEditFields);
+
                 /* Set caselib menu. */
                 $this->caselib->setLibMenu($libraries, $libID);
 
@@ -1029,11 +1033,11 @@ class testcase extends control
             $productIdList = array();
             foreach($cases as $case) $productIdList[$case->product] = $case->product;
 
-            $branches        = 0;
             $branchTagOption = array();
             $products        = $this->product->getByIdList($productIdList);
             foreach($products as $product)
             {
+                $branches = 0;
                 if($product->type != 'normal')
                 {
                     $branches = $this->loadModel('branch')->getList($product->id, 0, 'all');
@@ -1054,6 +1058,9 @@ class testcase extends control
         $countInputVars  = count($cases) * (count(explode(',', $this->config->testcase->custom->batchEditFields)) + 3);
         $showSuhosinInfo = common::judgeSuhosinSetting($countInputVars);
         if($showSuhosinInfo) $this->view->suhosinInfo = extension_loaded('suhosin') ? sprintf($this->lang->suhosinInfo, $countInputVars) : sprintf($this->lang->maxVarsInfo, $countInputVars);
+
+        $stories = $this->loadModel('story')->getProductStoryPairs($productID, $branch);
+        $this->view->stories = array('' => '', 'ditto' => $this->lang->testcase->ditto) + $stories;
 
         /* Set custom. */
         foreach(explode(',', $this->config->testcase->customBatchEditFields) as $field) $customFields[$field] = $this->lang->testcase->$field;
