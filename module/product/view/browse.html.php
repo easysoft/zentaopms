@@ -340,7 +340,7 @@ $projectIDParam = $isProjectStory ? "projectID=$projectID&" : '';
         </thead>
         <tbody>
           <?php foreach($stories as $story):?>
-          <tr data-id='<?php echo $story->id?>' data-estimate='<?php echo $story->estimate?>' data-cases='<?php echo zget($storyCases, $story->id, 0);?>'>
+          <tr data-id='<?php echo $story->id?>' data-estimate='<?php echo $story->estimate?>' <?php if(!empty($story->children)) echo "data-children=" . count($story->children);?> data-cases='<?php echo zget($storyCases, $story->id, 0);?>'>
             <?php $story->from = $from;?>
             <?php if($this->app->getViewType() == 'xhtml'):?>
             <?php
@@ -361,7 +361,7 @@ $projectIDParam = $isProjectStory ? "projectID=$projectID&" : '';
           <?php $child->from = $from;?>
           <?php $class  = $i == 0 ? ' table-child-top' : '';?>
           <?php $class .= ($i + 1 == count($story->children)) ? ' table-child-bottom' : '';?>
-          <tr class='table-children<?php echo $class;?> parent-<?php echo $story->id;?>' data-id='<?php echo $child->id?>' data-status='<?php echo $child->status?>' data-estimate='<?php echo $child->estimate?>'>
+          <tr class='table-children<?php echo $class;?> parent-<?php echo $story->id;?>' data-id='<?php echo $child->id?>' data-status='<?php echo $child->status?>' data-estimate='<?php echo $child->estimate?>' data-cases='<?php echo zget($storyCases, $story->id, 0);?>'>
             <?php if($this->app->getViewType() == 'xhtml'):?>
             <?php
             foreach($setting as $key => $value)
@@ -695,18 +695,30 @@ $(function()
 
             var checkedEstimate = 0;
             var checkedCase     = 0;
+            var rateCount       = checkedTotal;
             $checkedRows.each(function()
             {
                 var $row = $(this);
-                if ($originTable)
+                if($originTable)
                 {
                     $row = $originTable.find('tbody>tr[data-id="' + $row.data('id') + '"]');
                 }
                 var data = $row.data();
                 checkedEstimate += data.estimate;
-                if(data.cases > 0) checkedCase += 1;
+
+                if(data.cases > 0)
+                {
+                    checkedCase += 1;
+                }
+                else if(data.children != undefined && data.children > 0)
+                {
+                    rateCount -= 1;
+                }
             });
-            var rate = Math.round(checkedCase / checkedTotal * 10000 / 100) + '' + '%';
+
+            var rate = '0%';
+            if(rateCount) rate = Math.round(checkedCase / rateCount * 10000 / 100) + '' + '%';
+
             return checkedSummary.replace('%total%', checkedTotal)
                   .replace('%estimate%', checkedEstimate.toFixed(1))
                   .replace('%rate%', rate);
