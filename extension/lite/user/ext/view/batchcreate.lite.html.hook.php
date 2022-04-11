@@ -37,7 +37,9 @@ $(function()
                 if($.inArray("ditto", visions) == '-1') lastVision = visions;
 
                 visions = lastVision;
-               
+                
+                if(visions == undefined) visions = ['lite'];               
+                
                 var index   = $.inArray('lite', visions);
               
                 if(index != '-1' && visions.length == '1')
@@ -51,8 +53,6 @@ $(function()
             }
         });
 
-        console.log(allLiteCount);
-        console.log(liteMaxCount);
         if(allUserCount > userMaxCount)
         {
             alert(noticeUserCreate.replace('%usercount%', allUserCount));
