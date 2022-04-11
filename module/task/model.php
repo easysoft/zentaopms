@@ -1196,7 +1196,7 @@ class taskModel extends model
 
             if(empty($task->closedReason))
             {
-                if($oldTask->status == 'done') $task->closedReason = 'done';
+                if($oldTask->status == 'done')   $task->closedReason = 'done';
                 if($oldTask->status == 'cancel') $task->closedReason = 'cancel';
             }
 
