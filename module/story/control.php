@@ -163,7 +163,8 @@ class story extends control
                 $object = $this->dao->findById((int)$objectID)->from(TABLE_PROJECT)->fetch();
                 if($object->type != 'project')
                 {
-                    $this->loadModel('action')->create('story', $storyID, 'linked2execution', '', $objectID);
+                    $actionType = $object->type == 'kanban' ? 'linked2kanban' : 'linked2execution';
+                    $this->loadModel('action')->create('story', $storyID, $actionType, '', $objectID);
                 }
                 else
                 {
