@@ -953,6 +953,7 @@ class testcase extends control
         if($this->app->tab == 'qa')        $this->testcase->setMenu($this->products, $productID, $branch);
         if($this->app->tab == 'execution') $this->loadModel('execution')->setMenu($this->session->execution);
 
+        $isLibCase = $type == 'lib' ? true : false;
         /* The cases of a product. */
         if($productID)
         {
@@ -1093,6 +1094,7 @@ class testcase extends control
         $this->view->cases          = $cases;
         $this->view->forceNotReview = $this->testcase->forceNotReview();
         $this->view->modulePairs    = $modulePairs;
+        $this->view->isLibCase      = $isLibCase;
 
         $this->display();
     }

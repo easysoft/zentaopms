@@ -40,6 +40,17 @@ function loadBranches(product, branch, caseID)
     loadStories(product, 0, caseID);
 }
 
+$(document).ready(function()
+{
+     /* Set secondary menu highlighting. */
+    if(isLibCase)
+    {
+      $('#navbar li[data-id=caselib]').addClass('active');
+      $('#navbar li[data-id=testcase]').removeClass('active');
+      console.log(isLibCase);
+    }
+})
+
 $(function()
 {
     removeDitto();  //Remove 'ditto' in first row.
