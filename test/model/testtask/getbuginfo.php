@@ -12,6 +12,16 @@ pid=1
 
 */
 
-$testtask = new testtaskTest();
+global $tester;
+$tester->loadModel('testtask');
 
-r($testtask->getBugInfoTest()) && p() && e();
+$task1 = $tester->testtask->getBugInfo(1, 1);
+$task2 = $tester->testtask->getBugInfo(2, 2);
+
+r(count($task1))               && p()                    && e('8');       // 查看根据测试单的ID获取到的数据数量
+r($task1['bugSeverityGroups']) && p('1:name,value')      && e('1,1');     // 查看根据测试单的ID获取到的数据数量
+r($task1['bugStatusGroups'])   && p('active:name,value') && e('激活,1');  // 查看根据测试单的ID获取到的数据数量
+
+r(count($task2))               && p()                    && e('8');       // 查看根据测试单的ID获取到的数据数量
+r($task2['bugSeverityGroups']) && p('2:name,value')      && e('2,1');     // 查看根据测试单的ID获取到的数据数量
+r($task2['bugOpenedByGroups']) && p('admin:name,value')  && e('admin,1'); // 查看根据测试单的ID获取到的数据数量

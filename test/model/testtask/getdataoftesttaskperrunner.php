@@ -12,6 +12,13 @@ pid=1
 
 */
 
-$testtask = new testtaskTest();
+global $tester;
+$tester->loadModel('testtask');
 
-r($testtask->getDataOfTestTaskPerRunnerTest()) && p() && e();
+$result0 = $tester->testtask->getDataOfTestTaskPerRunner(0);
+$result1 = $tester->testtask->getDataOfTestTaskPerRunner(1);
+$result2 = $tester->testtask->getDataOfTestTaskPerRunner(2);
+
+r($result0)          && p()             && e('0');        // 获取测试单0的执行人分组
+r(current($result1)) && p('name,value') && e('未执行,4'); // 获取测试单1执行人分组，查看各个执行人的执行数量
+r(current($result2)) && p('name,value') && e('未执行,4'); // 获取测试单2执行人分组，查看各个执行人的执行数量

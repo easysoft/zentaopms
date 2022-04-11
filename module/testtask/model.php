@@ -355,7 +355,6 @@ class testtaskModel extends model
      */
     public function getAllLinkableCases($task, $query, $linkedCases, $pager)
     {
-        a($query);
         return $this->dao->select('*')->from(TABLE_CASE)->where($query)
                 ->andWhere('id')->notIN($linkedCases)
                 ->andWhere('status')->ne('wait')

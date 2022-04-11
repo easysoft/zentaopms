@@ -15,9 +15,9 @@ global $tester;
 $tester->loadModel('testtask');
 $tester->app->loadClass('pager', $static = true);
 
-$task1       = $tester->testtask->getById(1);
-$task2       = $tester->testtask->getById(2);
-$pager       = new pager(0, 10, 1);
+$task1 = $tester->testtask->getById(1);
+$task2 = $tester->testtask->getById(2);
+$pager = new pager(0, 10, 1);
 
 $cases1 = $tester->testtask->getAllLinkableCases($task1, '1 = 1', '', $pager);
 $cases2 = $tester->testtask->getAllLinkableCases($task2, '1 = 1', '', null);
