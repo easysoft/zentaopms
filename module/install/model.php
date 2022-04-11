@@ -629,6 +629,9 @@ class installModel extends model
             $table = str_replace('`zt_', $this->config->db->name . '.`zt_', $table);
             $table = str_replace('zt_', $this->config->db->prefix, $table);
             if(!$this->dbh->query($table)) return false;
+
+            /* Make the deleted user of demo data undeleted.*/
+            if($this->config->edition == 'open') $this->dao->update(TABLE_USER)->set('deleted')->eq('0')->where('deleted')->eq('1')->exec();
         }
 
         $config->module  = 'common';
