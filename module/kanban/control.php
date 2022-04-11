@@ -1404,8 +1404,8 @@ class kanban extends control
         if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
         $kanbanID = $this->kanban->getKanbanIDByregion($regionID);
-        $$browseType = $this->config->vision == 'lite' ? 'task' : 'all';
-        $kanbanGroup = $this->kanban->getRDKanban($kanbanID, $$browseType);
+        $browseType = $this->config->vision == 'lite' ? 'task' : 'all';
+        $kanbanGroup = $this->kanban->getRDKanban($kanbanID, $browseType);
 
         return print(json_encode($kanbanGroup));
     }
