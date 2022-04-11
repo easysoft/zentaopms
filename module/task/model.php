@@ -1194,6 +1194,12 @@ class taskModel extends model
             $task->consumed       = $oldTask->consumed;
             $task->parent         = $oldTask->parent;
 
+            if(empty($task->closedReason))
+            {
+                if($oldTask->status == 'done')   $task->closedReason = 'done';
+                if($oldTask->status == 'cancel') $task->closedReason = 'cancel';
+            }
+
             if($oldTask->name != $task->name || $oldTask->estStarted != $task->estStarted || $oldTask->deadline != $task->deadline)
             {
                 $task->version = $oldTask->version + 1;
@@ -1335,7 +1341,6 @@ class taskModel extends model
                 ->checkIF($task->status == 'done' and $task->closedReason, 'closedReason', 'equal', 'done')
                 ->batchCheckIF($task->status == 'done', 'canceledBy, canceledDate', 'empty')
 
-                ->checkIF($task->status == 'closed', 'closedReason', 'notempty')
                 ->batchCheckIF($task->closedReason == 'cancel', 'finishedBy, finishedDate', 'empty')
                 ->where('id')->eq((int)$taskID)
                 ->exec();
