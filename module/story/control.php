@@ -1153,6 +1153,8 @@ class story extends control
             $this->product->setMenu($story->product, $story->branch);
         }
 
+        if($product->type != 'normal') $this->lang->product->branch = sprintf($this->lang->product->branch, $this->lang->product->branchName[$product->type]);
+
         $reviewers          = $this->story->getReviewerPairs($storyID, $story->version);
         $reviewedBy         = trim($story->reviewedBy, ',');
         $superReviewers     = trim(zget($this->config->story, 'superReviewers', ''), ',');
