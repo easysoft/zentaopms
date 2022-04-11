@@ -55,7 +55,11 @@ include '../../common/view/chart.html.php';
           <td><?php echo $child->estimate;?></td>
           <td><?php echo $child->consumed;?></td>
           <td><?php echo $child->left;?></td>
-          <td><div class='progress-pie' title="<?php echo $child->progress?>%" data-value='<?php echo $child->progress;?>'></div></td>
+          <td>
+            <div class='progress-pie' data-doughnut-size='80' data-color='#00DA88' data-value='<?php echo $child->progress?>' data-width='26' data-height='26' data-back-color='#e8edf3'>
+               <div class='progress-info'><?php echo $child->progress;?></div>
+            </div>
+          </td>
         </tr>
           <?php $i ++;?>
           <?php endforeach;?>
