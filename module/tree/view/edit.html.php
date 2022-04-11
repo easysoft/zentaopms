@@ -41,7 +41,7 @@ if(isset($pageCSS)) css::internal($pageCSS);
               <?php echo html::select('root', $products, $module->root, "class='form-control chosen' onchange='loadBranches(this)'");?>
               <?php if($product->type != 'normal'):?>
               <span class='input-group-addon fix-border fix-padding'></span>
-              <?php echo html::select('branch', $branches, $module->branch, "class='form-control chosen control-branch'");?>
+              <?php echo html::select('branch', $branches, $module->branch, "class='form-control chosen control-branch' onchange='loadModules(this)'");?>
               </div>
               <?php endif;?>
             </div>
@@ -166,8 +166,34 @@ function loadBranches(obj)
         {
             $inputGroup.append(data);
             $inputGroup.find('#branch').removeAttr('onchange');
+            $inputGroup.find('#branch').attr('onchange', 'loadModules(this)');
             $inputGroup.find('#branch').chosen();
         }
     })
+}
+
+/**
+ * Load modules by product and branch.
+ *
+ * @param  obj $branch
+ * @access public
+ * @return void
+ */
+function loadModules(branch)
+{
+    var productID = $('#root').val();
+    var branchID  = $(branch).val();
+    var moduleID  = $('#parent').val();
+    var moduleBox = $('#parent').closest('tr').children('td');
+
+    if(typeof(branchID) == 'undefined') branchID = 0;
+    if(typeof(moduleID) == 'undefined') moduleID = 0;
+
+    link = createLink('tree', 'ajaxGetOptionMenu', 'productID=' + productID + '&viewtype=story&branch=' + branchID + '&rootModuleID=0&returnType=html&fieldID=&needManage=true&extra=&currentModuleID=' + moduleID);
+    $(moduleBox).load(link, function()
+    {
+        $(this).children('select').attr('id', 'parent').attr('name', 'parent');
+        $(this).find('select').chosen()
+    });
 }
 </script>
