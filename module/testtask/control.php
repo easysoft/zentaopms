@@ -1085,7 +1085,14 @@ class testtask extends control
             $response['result']  = 'success';
             $response['message'] = '';
 
-            $testRun = $this->dao->select('task,`case`')->from(TABLE_TESTRUN)->where('id')->eq((int)$rowID)->fetch();
+            $testRun = $this->dao->select('t1.task,t1.`case`,t2.story')->from(TABLE_TESTRUN)->alias('t1')
+                ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case=t2.id')
+                ->where('t1.id')->eq((int)$rowID)
+                ->fetch();
+
+            $linkedProject = $this->dao->select('project')->from(TABLE_PROJECTSTORY)->where('story')->eq($testRun->story)->fetchPairs('project');
+            $this->dao->delete()->from(TABLE_PROJECTCASE)->where('`case`')->eq($testRun->case)->andWhere('project')->notin($linkedProject)->exec();
+
             $this->dao->delete()->from(TABLE_TESTRUN)->where('id')->eq((int)$rowID)->exec();
             if(dao::isError())
             {
