@@ -250,6 +250,7 @@ foreach($fieldParams as $fieldName => $param)
 </table>
 </form>
 <?php js::set('searchCustom', $lang->search->custom);?>
+<?php js::set('canSaveQuery', !empty($_SESSION[$module . 'Query']));?>
 <script>
 var dtOptions =
 {
@@ -277,6 +278,8 @@ function executeQuery(queryID)
 
 $(function()
 {
+    if(!canSaveQuery) $('.btn-save-form').attr('disabled', 'disabled');
+
     var $searchForm = $('#<?php echo $formId;?>');
     $searchForm.find('select.chosen').chosen().on('chosen:showing_dropdown', function()
     {
