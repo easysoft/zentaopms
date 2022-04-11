@@ -339,8 +339,9 @@ class testcase extends control
 
             $this->loadModel('action');
             $this->action->create('case', $caseID, 'Opened');
-            if($this->app->tab == 'project') $this->action->create('case', $caseID, 'linked2project', '', $this->session->project);
-            if($this->app->tab == 'execution') $this->action->create('case', $caseID, 'linked2execution', '', $this->session->execution);
+
+            /* If the story is linked project, make the case link the project. */
+            $this->testcase->syncCase2Project($caseResult['caseInfo'], $caseID);
 
             $this->executeHooks($caseID);
 
