@@ -108,7 +108,7 @@ js::set('confirmDelete', $lang->user->confirmDelete);
           <td class="c-url" title="<?php echo $user->email;?>"><?php echo html::mailto($user->email);?></td>
           <td class="c-type"><?php echo zget($lang->user->genderList, $user->gender, $user->gender);?></td>
           <?php if(!commonModel::isTutorialMode()): ?>
-          <td><?php echo $user->phone;?></td>
+          <td title="<?php echo $user->phone;?>"><?php echo $user->phone;?></td>
           <td><?php echo !empty($this->config->isINT) ? $user->skype : ($user->qq ? html::a("tencent://message/?uin=$user->qq", $user->qq) : '');?></td>
           <td class='c-date'><?php if($user->last) echo date('Y-m-d', $user->last);?></td>
           <td class='c-num text-center'><?php echo $user->visits;?></td>
