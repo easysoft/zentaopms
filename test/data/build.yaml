@@ -51,10 +51,22 @@ fields:
     format: "YYYY-MM-DD"
 
   - field: stories
-    range: ''
+    fields:
+      - field: story1
+        range: 2-400:4
+        prefix: ""
+        postfix: ","
+      - field: story2
+        range: 4-400:4
 
   - field: bugs
-    range: ' '
+    fields:
+      - field: bug1
+        range: 1-300:3
+        prefix: ""
+        postfix: ","
+      - field: bug2
+        range: 2-400:3
 
   - field: builder
     range: 1-8
