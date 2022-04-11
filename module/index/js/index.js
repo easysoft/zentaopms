@@ -656,8 +656,8 @@
         setTimeout(refreshMoreMenu, 500);
 
         /* Fix bug #21331. */
-        var vibibleState  ='';
-        var visibleChange ='';
+        var vibibleState  = '';
+        var visibleChange = '';
         if(typeof document.visibilityState != 'undefined')
         {
             visibleChange = 'visibilitychange';
