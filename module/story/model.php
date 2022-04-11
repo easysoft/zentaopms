@@ -3904,29 +3904,29 @@ class storyModel extends model
                 $title  = isset($story->planTitle) ? $story->planTitle : '';
                 $class .= ' text-ellipsis';
             }
-            else if($id == 'sourceNote')
+            elseif($id == 'sourceNote')
             {
                 $title  = $story->sourceNote;
                 $class .= ' text-ellipsis';
             }
-            else if($id == 'category')
+            elseif($id == 'category')
             {
                 $title  = zget($this->lang->story->categoryList, $story->category);
             }
-            else if($id == 'estimate')
+            elseif($id == 'estimate')
             {
                 $title = $story->estimate . ' ' . $this->lang->hourCommon;
             }
-            else if($id == 'reviewedBy')
+            elseif($id == 'reviewedBy')
             {
                 $reviewedBy = '';
                 foreach(explode(',', $story->reviewedBy) as $user) $reviewedBy .= zget($users, $user) . ' ';
-                $story->reviewedBy = $reviewedBy;
+                $story->reviewedBy = trim($reviewedBy);
 
                 $title  = $reviewedBy;
                 $class .= ' text-ellipsis';
             }
-            else if($id == 'stage')
+            elseif($id == 'stage')
             {
                 $style .= 'overflow: visible;';
                 if(isset($storyStages[$story->id]))
@@ -3937,15 +3937,15 @@ class storyModel extends model
                     }
                 }
             }
-            else if($id == 'feedbackBy')
+            elseif($id == 'feedbackBy')
             {
                 $title = $story->feedbackBy;
             }
-            else if($id == 'notifyEmail')
+            elseif($id == 'notifyEmail')
             {
                 $title = $story->notifyEmail;
             }
-            else if($id == 'actions')
+            elseif($id == 'actions')
             {
                 $class .= ' text-center';
             }
