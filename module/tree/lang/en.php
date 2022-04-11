@@ -43,6 +43,7 @@ $lang->tree->confirmDelCategory = 'Do you want to delete this category and its c
 $lang->tree->confirmDeleteLine  = "Do you want to delete this {$lang->productCommon} line?";
 $lang->tree->confirmRoot        = "Any changes to the {$lang->productCommon} will change the stories, bugs, cases of {$lang->productCommon} it belongs to, as well as the linkage of {$lang->executionCommon} and {$lang->productCommon}, which is dangerous. Do you want to change it?";
 $lang->tree->confirmRoot4Doc    = "Any changes to the library will change the document of library it belongs to, which is dangerous. Do you want to change it?";
+$lang->tree->alertCopy          = "There are no copyable submodules under the current module!";
 $lang->tree->successSave        = 'Saved.';
 $lang->tree->successFixed       = 'Fixed.';
 $lang->tree->repeatName         = 'The name "%s" exists!';
