@@ -1553,6 +1553,16 @@ class storyModel extends model
             ->removeIF($this->post->closedReason != 'subdivided', 'childStories')
             ->get();
 
+        if(!empty($story->duplicateStory))
+        {
+            $duplicateStoryID = $this->dao->select('id')->from(TABLE_STORY)->where('id')->eq($story->duplicateStory)->fetch();
+            if(empty($duplicateStoryID))
+            {
+                dao::$errors[] = sprintf($this->lang->story->errorDuplicateStory, $story->duplicateStory);
+                return false;
+            }
+        }
+
         $this->lang->story->comment = $this->lang->comment;
         $this->dao->update(TABLE_STORY)->data($story, 'comment')
             ->autoCheck()
