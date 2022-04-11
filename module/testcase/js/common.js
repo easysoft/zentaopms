@@ -361,7 +361,7 @@ function updateStepID()
  */
 function loadStories(productID, moduleID, num)
 {
-    var branchIDName = config.currentMethod == 'batchcreate' ? '#branch' : '#branches';
+    var branchIDName = (config.currentMethod == 'batchcreate' || config.currentMethod == 'showimport') ? '#branch' : '#branches';
     var branchID     = $(branchIDName + num).val();
     var storyLink    = createLink('story', 'ajaxGetProductStories', 'productID=' + productID + '&branch=' + branchID + '&moduleID=' + moduleID + '&storyID=0&onlyOption=false&status=noclosed&limit=50&type=full&hasParent=1&executionID=0&number=' + num);
     $.get(storyLink, function(stories)
