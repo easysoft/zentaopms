@@ -237,6 +237,7 @@ $lang->task->error->left              = 'Please enter "Hours Left"';
 $lang->task->error->work              = '"Comment" must be <  %d characters.';
 $lang->task->error->skipClose         = 'Task: %s is not “Finished” or “Cancelled”. Do you want to close it?';
 $lang->task->error->consumed          = 'Task: %s hour must be < 0. Ignore changes to this task.';
+$lang->task->error->closeParent       = 'Task: %s is the Parent Task, which is automatically closed after all subtasks under the Parent Task are closed and cannot be closed manually.';
 $lang->task->error->assignedTo        = 'Multi-user task in the current status cannot be assigned to a member who is not in the task team.';
 $lang->task->error->consumedEmpty     = '"Current Cost" should not be 0.';
 $lang->task->error->deadlineSmall     = '"Deadline" must be greater than "StartDate".';
