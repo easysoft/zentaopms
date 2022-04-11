@@ -1659,7 +1659,22 @@ class projectModel extends model
 
             if($id == 'budget')
             {
-                $projectBudget = in_array($this->app->getClientLang(), array('zh-cn','zh-tw')) ? round((float)$project->budget / 10000, 2) . $this->lang->project->tenThousand : round((float)$project->budget, 2);
+                if($project->budget < 10000)
+                {
+                    $budget = round((float)$project->budget, 2);
+                    $unit   = '';
+                }
+                elseif($project->budget < 100000000 and $project->budget >= 10000)
+                {
+                    $budget = round((float)$project->budget/10000, 2);
+                    $unit   = $this->lang->project->tenThousand;
+                }
+                else
+                {
+                    $budget = round((float)$project->budget/100000000, 2);
+                    $unit   = $this->lang->project->hundredMillion;
+                }
+                $projectBudget = in_array($this->app->getClientLang(), array('zh-cn','zh-tw')) ? $budget . $unit : round((float)$project->budget, 2);
                 $budgetTitle   = $project->budget != 0 ? zget($this->lang->project->currencySymbol, $project->budgetUnit) . ' ' . $projectBudget : $this->lang->project->future;
 
                 $title = "title='$budgetTitle'";
