@@ -230,6 +230,7 @@ class design extends control
         $this->view->stories = $this->loadModel('story')->getProductStoryPairs($design->product);
         $this->view->users   = $this->loadModel('user')->getPairs('noletter');
         $this->view->actions = $this->loadModel('action')->getList('design', $design->id);
+        $this->view->repos   = $this->loadModel('repo')->getRepoPairs('project', $design->project);
 
         $this->display();
     }

@@ -12,6 +12,8 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php js::set('type', $design->type);?>
+<?php js::set('repos', $repos);?>
+<?php js::set('projectID', $design->project);?>
 <div id="mainMenu" class="clearfix">
   <div class="btn-toolbar pull-left">
     <?php $browseLink = $app->session->designList != false ? $app->session->designList : $this->createLink('design', 'browse', "productID=$design->product");?>
@@ -45,7 +47,7 @@
         <?php if(!$design->deleted):?>
         <?php
         common::printIcon('design', 'assignTo',   "designID=$design->id", $design, 'button', '', '', 'iframe showinonlybody', true);
-        common::printIcon('design', 'linkCommit', "designID=$design->id", $design, 'button', 'link', '', 'iframe showinonlybody', true);
+        common::printIcon('design', 'linkCommit', "designID=$design->id", $design, 'button', 'link', '', 'iframe showinonlybody', true, "id='linkCommit'");
         common::printIcon('design', 'edit',       "designID=$design->id", $design, 'button', 'alter');
         common::printIcon('design', 'delete',     "designID=$design->id", $design, 'button', 'trash', 'hiddenwin');
         ?>
