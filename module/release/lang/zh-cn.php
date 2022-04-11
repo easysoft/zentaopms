@@ -89,3 +89,4 @@ $lang->release->notifyList['QD'] = '测试负责人';
 $lang->release->notifyList['SC'] = '需求提交人';
 $lang->release->notifyList['ET'] = "所在{$lang->execution->common}团队成员";
 $lang->release->notifyList['PT'] = "所在项目团队成员";
+$lang->release->notifyList['CT'] = "抄送给";
