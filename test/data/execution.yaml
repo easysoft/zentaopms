@@ -23,6 +23,8 @@ fields:
     range: wait,doing
   - field: percent
     range: 0
+  - field: milestone
+    range: 0{30},1{10},0{10},1{10},0{30}
   - field: auth
     range: "extend"
   - field: desc
