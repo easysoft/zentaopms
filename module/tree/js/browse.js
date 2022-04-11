@@ -8,7 +8,7 @@ function syncModule(rootID, type)
     {
         if(modules.length == 0)
         {
-            alert(alertCopy);
+            alert(noSubmodule);
             return false;
         }
 
