@@ -36,7 +36,7 @@ class storyReviewEntry extends Entry
 
         $story = $this->loadModel('story')->getByID($storyID);
 
-        $this->send(200, $story);
+        $this->send(200, $this->format($story, 'openedBy:user,openedDate:time,assignedTo:user,assignedDate:time,reviewedBy:user,reviewedDate:time,lastEditedBy:user,lastEditedDate:time,closedBy:user,closedDate:time,deleted:bool,mailto:userList'));
     }
 }
 
