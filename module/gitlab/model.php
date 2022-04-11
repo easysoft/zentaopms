@@ -492,6 +492,7 @@ class gitlabModel extends model
     {
         /* GitLab API '/users' can only return 20 users per page in default, so we use a loop to fetch all users. */
         $page     = 1;
+        $perPage  = 100;
         $response = array();
         $apiRoot  = $this->getApiRoot($gitlabID);
 
@@ -503,12 +504,14 @@ class gitlabModel extends model
         while(true)
         {
             /* Also use `per_page=20` to fetch users in API. Fetch active users only. */
-            $url    = sprintf($apiRoot, "/users") . "&order_by={$order}&sort={$sort}&page={$page}&per_page=20&active=true";
-            $result = json_decode(commonModel::http($url));
+            $url      = sprintf($apiRoot, "/users") . "&order_by={$order}&sort={$sort}&page={$page}&per_page={$perPage}&active=true";
+            $httpData = commonModel::httpWithHeader($url);
+            $result   = json_decode($httpData['body']);
             if(!empty($result))
             {
                 $response = array_merge($response, $result);
                 $page += 1;
+                if($httpData['header']['X-Page'] == $httpData['header']['X-Total-Pages']) break;
             }
             else
             {
