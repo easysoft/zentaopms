@@ -135,6 +135,8 @@ $closedProductsHtml .= '</ul>';
       <a class='pull-right toggle-right-col not-list-item'><?php echo $lang->product->closed?><i class='icon icon-angle-right'></i></a>
     </div>
   </div>
+  <div id="closed" hidden>已关闭</div>
+  <div id="gray-line"></div>
   <div class="table-col col-right productTree">
    <div class='list-group products'><?php echo $closedProductsHtml;?></div>
   </div>
@@ -169,6 +171,14 @@ $(function()
             $('div.hide-in-search').siblings('i').removeClass('hide-in-search');
             $('li.has-list div.hide-in-search').removeClass('hidden');
             $('.nav-tabs li.active').find('span').show();
+        }
+        if($('.form-control.search-input').val().length > 0)
+        {
+            $('#closed').attr("hidden",false);
+        }
+        else
+        {
+            $('#closed').attr("hidden",true);
         }
     });
 

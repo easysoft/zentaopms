@@ -1,3 +1,5 @@
 .c-pri {overflow: hidden;}
 #mainMenu .btn-toolbar .dropdown-menu li a.btn {text-align: left;}
 .c-estimate {text-align: right;}
+#closed {width: 49px; height: 25px; line-height:25px; background-color: #ddd; color: #3c495c; text-align: center; margin-left:15px; border-radius: 2px;}
+#gray-line { height: 1px; margin-left:10px; background-color: #ddd;}
