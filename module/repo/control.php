@@ -360,7 +360,7 @@ class repo extends control
     public function browse($repoID = 0, $branchID = '', $objectID = 0, $path = '', $revision = 'HEAD', $refresh = 0)
     {
         $repoID = $this->repo->saveState($repoID, $objectID);
-        if($branchID) $branchID = base64_decode(urldecode($branchID));
+        if($branchID) $branchID = base64_decode(helper::safe64Decode($branchID));
 
         /* Get path and refresh. */
         if($this->get->repoPath) $path = $this->get->repoPath;
@@ -909,7 +909,7 @@ class repo extends control
         $this->view->repoID     = $repoID;
         $this->view->objectID   = $objectID;
         $this->view->branch     = $branch;
-        $this->view->browseLink = $this->repo->createLink('browse', "repoID=" . ($this->app->tab == 'devops' ? $repoID : '') . "&branchID=" . base64_encode($branch) . "&objectID=$objectID", '', false);
+        $this->view->browseLink = $this->repo->createLink('browse', "repoID=" . ($this->app->tab == 'devops' ? $repoID : '') . "&branchID=" . helper::safe64Encode(base64_encode($branch)) . "&objectID=$objectID", '', false);
         $this->display();
     }
 

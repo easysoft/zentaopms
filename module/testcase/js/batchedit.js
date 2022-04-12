@@ -40,6 +40,16 @@ function loadBranches(product, branch, caseID)
     loadStories(product, 0, caseID);
 }
 
+$(document).ready(function()
+{
+     /* Set secondary menu highlighting. */
+    if(isLibCase)
+    {
+      $('#navbar li[data-id=caselib]').addClass('active');
+      $('#navbar li[data-id=testcase]').removeClass('active');
+    }
+})
+
 $(function()
 {
     removeDitto();  //Remove 'ditto' in first row.
@@ -57,7 +67,7 @@ $(function()
             var storyLink = createLink('story', 'ajaxGetProductStories', 'productID=' + productID + '&branch=' + branchID + '&moduleID=' + moduleID + '&storyID=0&onlyOption=false&status=noclosed&limit=50&type=full&hasParent=1&executionID=0&number=' + num);
             $.get(storyLink, function(stories)
             {
-                if(!stories) modules = '<select id="story' + num + '" name="story[' + num + ']" class="form-control"></select>';
+                if(!stories) stories = '<select id="story' + num + '" name="story[' + num + ']" class="form-control"></select>';
                 $('#story' + num).replaceWith(stories);
                 $('#story' + num + "_chosen").remove();
                 $('#story' + num).next('.picker').remove();

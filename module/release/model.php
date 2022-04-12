@@ -281,21 +281,18 @@ class releaseModel extends model
     /**
      * Get notify persons.
      *
-     * @param  string $notfiyList
-     * @param  int    $productID
-     * @param  int    $buildID
-     * @param  int    $releaseID
+     * @param  object $release
      * @access public
      * @return array
      */
-    public function getNotifyPersons($notifyList = '', $productID = 0, $buildID = 0, $releaseID = 0)
+    public function getNotifyPersons($release)
     {
-        if(empty($notifyList)) return array();
+        if(empty($release->notify)) return array();
 
         /* Init vars. */
         $notifyPersons = array();
         $managerFields = '';
-        $notifyList    = explode(',', $notifyList);
+        $notifyList    = explode(',', $release->notify);
 
         foreach($notifyList as $notify)
         {
@@ -303,10 +300,10 @@ class releaseModel extends model
             {
                 $managerFields .= $notify . ',';
             }
-            elseif($notify == 'SC' and !empty($buildID))
+            elseif($notify == 'SC' and !empty($release->build))
             {
-                $stories  = $this->dao->select('stories')->from(TABLE_BUILD)->where('id')->eq($buildID)->fetch('stories');
-                $stories .= $this->dao->select('stories')->from(TABLE_RELEASE)->where('id')->eq($releaseID)->fetch('stories');
+                $stories  = $this->dao->select('stories')->from(TABLE_BUILD)->where('id')->eq($release->build)->fetch('stories');
+                $stories .= $this->dao->select('stories')->from(TABLE_RELEASE)->where('id')->eq($release->id)->fetch('stories');
                 $stories  = trim($stories, ',');
 
                 if(empty($stories)) continue;
@@ -314,7 +311,7 @@ class releaseModel extends model
                 $openedByList   = $this->dao->select('openedBy')->from(TABLE_STORY)->where('id')->in($stories)->fetchPairs();
                 $notifyPersons += $openedByList;
             }
-            elseif(($notify == 'ET' or $notify == 'PT') and !empty($buildID))
+            elseif(($notify == 'ET' or $notify == 'PT') and !empty($release->build))
             {
                 $type    = $notify == 'ET' ? 'execution' : 'project';
                 $members = $this->dao->select('t2.account')->from(TABLE_BUILD)->alias('t1')
@@ -326,12 +323,16 @@ class releaseModel extends model
 
                 $notifyPersons += $members;
             }
+            elseif($notify == 'CT' and !empty($release->mailto))
+            {
+                $notifyPersons += explode(',', trim($release->mailto, ','));
+            }
         }
 
         if(!empty($managerFields))
         {
             $managerFields = trim($managerFields, ',');
-            $managerUsers  = $this->dao->select($managerFields)->from(TABLE_PRODUCT)->where('id')->eq($productID)->fetch();
+            $managerUsers  = $this->dao->select($managerFields)->from(TABLE_PRODUCT)->where('id')->eq($release->product)->fetch();
             foreach($managerUsers as $account)
             {
                 if(!isset($notifyPersons[$account])) $notifyPersons[$account] = $account;
@@ -577,7 +578,7 @@ class releaseModel extends model
 
         /* Get notifiy persons. */
         $notifyPersons = array();
-        if(!empty($release->notify)) $notifyPersons = $this->getNotifyPersons($release->notify, $release->product, $release->build, $release->id);
+        if(!empty($release->notify)) $notifyPersons = $this->getNotifyPersons($release);
 
         foreach($notifyPersons as $account)
         {

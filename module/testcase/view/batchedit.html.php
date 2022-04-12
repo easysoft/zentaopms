@@ -13,6 +13,7 @@
 <?php include '../../common/view/header.html.php';?>
 <?php js::set('dittoNotice', $this->lang->testcase->dittoNotice);?>
 <?php js::set('productID', $productID);?>
+<?php js::set('isLibCase', $isLibCase);?>
 <div id="mainContent" class="main-content">
   <div class="main-header">
     <h2><?php echo $lang->testcase->common . $lang->colon . $lang->testcase->batchEdit;?></h2>
@@ -52,6 +53,7 @@
             <th class='c-branch'><?php echo $lang->testcase->branch;?></th>
             <?php endif;?>
             <th class='c-module<?php echo zget($visibleFields, 'module', ' hidden')?>'><?php echo $lang->testcase->module;?></th>
+            <th class='c-story<?php echo zget($visibleFields, 'story', ' hidden') . zget($requiredFields, 'story', '', ' required');?>'><?php echo $lang->testcase->story;?></th>
             <th class='text-left c-title required'><?php echo $lang->testcase->title;?></th>
             <th class='c-type required'><?php echo $lang->testcase->type;?></th>
             <th class='<?php echo zget($visibleFields, 'precondition', 'hidden') . zget($requiredFields, 'precondition', '', ' required');?>'><?php echo $lang->testcase->precondition;?></th>
@@ -91,6 +93,7 @@
             </td>
             <?php endif;?>
             <td class='text-left<?php echo zget($visibleFields, 'module', ' hidden')?>' style='overflow:visible'><?php echo html::select("modules[$caseID]", zget($modulePairs, $caseID, array(0 => '/')), $cases[$caseID]->module, "class='form-control chosen' onchange='loadStories($productID, this.value, $caseID)'");?></td>
+            <td class='text-left<?php echo zget($visibleFields, 'story', ' hidden')?>' style='overflow:visible'><?php echo html::select("story[$caseID]", $stories, $cases[$caseID]->story, "class='form-control chosen'");?></td>
             <td style='overflow:visible' title='<?php echo $cases[$caseID]->title?>'>
               <div class='input-group'>
                 <div class="input-control has-icon-right">

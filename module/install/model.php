@@ -556,6 +556,11 @@ class installModel extends model
             $this->dao->update(TABLE_CRON)->set('remark')->eq($remark)->where('command')->eq($command)->exec();
         }
 
+        foreach($this->lang->install->langList as $langInfo)
+        {
+            $this->dao->update(TABLE_LANG)->set('value')->eq($langInfo['value'])->where('module')->eq($langInfo['module'])->andWhere('`key`')->eq($langInfo['key'])->exec();
+        }
+
         /* Update lang,stage by lang. */
         $this->app->loadLang('stage');
         foreach($this->lang->stage->typeList as $key => $value)
@@ -587,6 +592,16 @@ class installModel extends model
                 $this->dao->update(TABLE_PROCESS)->set('name')->eq($name)->where('id')->eq($id)->exec();
             }
 
+            foreach($this->lang->install->activity as $id => $name)
+            {
+                $this->dao->update(TABLE_ACTIVITY)->set('name')->eq($name)->where('id')->eq($id)->exec();
+            }
+
+            foreach($this->lang->install->zoutput as $id => $name)
+            {
+                $this->dao->update(TABLE_ZOUTPUT)->set('name')->eq($name)->where('id')->eq($id)->exec();
+            }
+
             /* Update basicmeas by lang. */
             foreach($this->lang->install->basicmeasList as $id => $basic)
             {
@@ -614,6 +629,9 @@ class installModel extends model
             $table = str_replace('`zt_', $this->config->db->name . '.`zt_', $table);
             $table = str_replace('zt_', $this->config->db->prefix, $table);
             if(!$this->dbh->query($table)) return false;
+
+            /* Make the deleted user of demo data undeleted.*/
+            if($this->config->edition == 'open') $this->dao->update(TABLE_USER)->set('deleted')->eq('0')->where('deleted')->eq('1')->exec();
         }
 
         $config->module  = 'common';

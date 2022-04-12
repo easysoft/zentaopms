@@ -32,7 +32,7 @@
       $paths          = explode('/', $entry);
       $fileName       = array_pop($paths);
       $postPath       = '';
-      $base64BranchID = base64_encode($branchID);
+      $base64BranchID = helper::safe64Encode(base64_encode($branchID));
       foreach($paths as $pathName)
       {
           $postPath .= $pathName . '/';

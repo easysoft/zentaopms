@@ -249,6 +249,7 @@ class product extends control
         {
             $stories = $this->product->getStories($productID, $branchID, $browseType, $queryID, $moduleID, $storyType, $sort, $pager);
         }
+        $queryCondition = $this->dao->get();
 
         /* Display status of branch. */
         $branchOption    = array();
@@ -264,7 +265,7 @@ class product extends control
         }
 
         /* Process the sql, get the conditon partion, save it to session. */
-        $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'story', ($browseType != 'bysearch' and $browseType != 'reviewbyme' and $this->app->rawModule != 'projectstory'));
+        $this->loadModel('common')->saveQueryCondition($queryCondition, 'story', ($browseType != 'bysearch' and $browseType != 'reviewbyme' and $this->app->rawModule != 'projectstory'));
 
         if(!empty($stories)) $stories = $this->story->mergeReviewer($stories);
 

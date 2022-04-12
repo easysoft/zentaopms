@@ -183,7 +183,7 @@ class messageModel extends model
         {
             /* Get notifiy persons. */
             $notifyPersons = array();
-            if(!empty($object->notify)) $notifyPersons = $this->loadModel('release')->getNotifyPersons($object->notify, $object->product, $object->build, $object->id);
+            if(!empty($object->notify)) $notifyPersons = $this->loadModel('release')->getNotifyPersons($object);
 
             if(!empty($notifyPersons)) $toList = implode(',', $notifyPersons);
         }

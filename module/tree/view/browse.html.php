@@ -19,6 +19,7 @@ li.tree-item-story > .tree-actions .tree-action[data-type=delete] {display: none
 </style>
 <?php endif;?>
 <?php js::set('viewType', $viewType);?>
+<?php js::set('noSubmodule', $lang->tree->noSubmodule);?>
 <?php $this->app->loadLang('doc');?>
 <?php $hasBranch = (strpos('story|bug|case', $viewType) !== false and (!empty($root->type) && $root->type != 'normal')) ? true : false;?>
 <?php

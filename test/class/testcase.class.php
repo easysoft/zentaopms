@@ -8,6 +8,90 @@ class testcaseTest
     }
 
     /**
+     * Test create a case.
+     *
+     * @param  array  $param
+     * @access public
+     * @return array
+     */
+    public function createTest($param)
+    {
+        $bugID = 0;
+
+        $_POST['product']      = '1';
+        $_POST['module']       = '1821';
+        $_POST['type']         = 'feature';
+        $_POST['stage']        = array('', 'unittest');
+        $_POST['story']        = '4';
+        $_POST['color']        = '';
+        $_POST['pri']          = '3';
+        $_POST['precondition'] = '前置条件';
+        $_POST['steps']        = array('1' => '1','1.1' => '1.1', '1.2' => '1.2', '2' => '2', '3' => '3', '4' => '');
+        $_POST['stepType']     = array('1' => 'group','1.1' => 'item', '1.2' => 'item', '2' => 'step', '3' => 'item', '4' => 'step');
+        $_POST['expects']      = array('1' => '','1.1' => '', '1.2' => '', '2' => '', '3' => '', '4' => '');
+        $_POST['keywords']     = '关键词1,关键词2';
+        $_POST['status']       = 'normal';
+        $_POST['labels']       = array('');
+        $_POST['files']        = array('');
+
+        foreach($param as $field => $value) $_POST[$field] = $value;
+
+        $objects = $this->objectModel->create($bugID);
+
+        unset($_POST);
+
+        if(dao::isError()) return isset($param['type']) ? dao::getError()['type'][0] : dao::getError()['title'][0];
+
+        return $objects;
+    }
+
+    /**
+     * Test batch create cases.
+     *
+     * @param  array  $param
+     * @access public
+     * @return int
+     */
+    function batchCreateTest($param)
+    {
+        $productID = 1;
+        $branch    = 0;
+        $storyID   = 0;
+
+        $module       = array(0, 0, 0);
+        $story        = array(0, 0, 0);
+        $title        = array('测试批量创建1', '测试批量创建2', '测试批量创建3');
+        $color        = array('#3da7f5', '', '#ffaf38');
+        $type         = array('performance', 'config', 'install');
+        $pri          = array('1', '2', '3');
+        $precondition = array('测试批量创建前置1', '测试批量创建前置2', '测试批量创建前置3');
+        $keywords     = array('测试批量创建关键词1', '测试批量创建关键词2', '测试批量创建关键词3');
+        $stage        = array(array('smoke'), array('bvt'), array('intergrate'));
+        $needReview   = array(0, 0, 0);
+
+        $_POST['module']       =  $module;
+        $_POST['story']        =  $story;
+        $_POST['title']        =  $title;
+        $_POST['color']        =  $color;
+        $_POST['type']         =  $type;
+        $_POST['pri']          =  $pri;
+        $_POST['precondition'] =  $precondition;
+        $_POST['keywords']     =  $keywords;
+        $_POST['stage']        =  $stage;
+        $_POST['needReview']   =  $needReview;
+
+        foreach($param as $field => $value) $_POST[$field] = $value;
+
+        $objects = $this->objectModel->batchCreate($productID, $branch, $storyID);
+
+        unset($_POST);
+
+        if(dao::isError()) return dao::getError();
+
+        return count($objects);
+    }
+
+    /**
      * Test get cases of a module.
      *
      * @param  int   $productID
@@ -325,14 +409,14 @@ class testcaseTest
      * @access public
      * @return array
      */
-    public function batchUpdateTest($param = array())
+    public function batchUpdateTest($index, $param = array())
     {
         $batchUpdateField['caseIDList']   = array('1' => 1, '2' => 2, '3' => 3, '4' => 4);
         $batchUpdateField['pris']         = array('1' => 1, '2' => 2, '3' => 3, '4' => 4);
         $batchUpdateField['statuses']     = array('1' => 'wait', '2' => 'normal', '3' => 'blocked', '4' => 'investigate');
         $batchUpdateField['modules']      = array('1' => 0, '2' => 0, '3' => 0, '4' => 0);
         $batchUpdateField['branches']     = array('1' => 0, '2' => 0, '3' => 0, '4' => 0);
-        $batchUpdateField['story']        = array('1' => 0, '2' => 0, '3' => 0, '4' => 0);
+        $batchUpdateField['story']        = array('1' => 2, '2' => 2, '3' => 2, '4' => 2);
         $batchUpdateField['product']      = array('1' => 1, '2' => 1, '3' => 1, '4' => 1);
         $batchUpdateField['title']        = array('1' => '这个是测试用例1', '2' => '这个是测试用例2', '3' => '这个是测试用例3', '4' => '这个是测试用例4');
         $batchUpdateField['color']        = array('1' => '#3da7f5', '2' => '#75c941', '3' => '#2dbdb2', '4' => '#797ec9');
@@ -351,7 +435,7 @@ class testcaseTest
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        return $objects[$index][0];
     }
 
     /**

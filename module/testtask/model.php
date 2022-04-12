@@ -883,18 +883,18 @@ class testtaskModel extends model
             /* When the cases linked the testtask, the cases link to the project. */
             if($this->app->tab != 'qa')
             {
+                $projectID = $this->app->tab == 'project' ? $this->session->project : $this->session->execution;
                 $lastOrder = (int)$this->dao->select('*')->from(TABLE_PROJECTCASE)->where('project')->eq($projectID)->orderBy('order_desc')->limit(1)->fetch('order');
-                $project   = $this->app->tab == 'project' ? $this->session->project : $this->session->execution;
 
                 $data = new stdclass();
-                $data->project = $project;
+                $data->project = $projectID;
                 $data->product = $this->session->product;
                 $data->case    = $caseID;
                 $data->version = 1;
                 $data->order   = ++ $lastOrder;
                 $this->dao->replace(TABLE_PROJECTCASE)->data($data)->exec();
-                $this->loadModel('action')->create('case', $caseID, 'linked2testtask', '', $taskID);
             }
+            $this->loadModel('action')->create('case', $caseID, 'linked2testtask', '', $taskID);
         }
     }
 
