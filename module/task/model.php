@@ -2333,6 +2333,7 @@ class taskModel extends model
      * @param  string $account
      * @param  string $status
      * @param  array  $skipExecutionIDList
+     * @param  int    $appendTaskID
      * @access public
      * @return array
      */

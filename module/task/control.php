@@ -1644,6 +1644,8 @@ class task extends control
      *
      * @param  int    $userID
      * @param  string $id
+     * @param  string $status
+     * @param  int    $appendID
      * @access public
      * @return string
      */

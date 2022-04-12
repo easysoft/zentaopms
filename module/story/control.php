@@ -2560,6 +2560,7 @@ class story extends control
      *
      * @param  int    $userID
      * @param  string $id       the id of the select control.
+     * @param  int    $appendID
      * @access public
      * @return string
      */

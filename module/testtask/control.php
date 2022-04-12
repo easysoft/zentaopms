@@ -1424,6 +1424,7 @@ class testtask extends control
      * @param  int    $userID
      * @param  string $id
      * @param  string $status
+     * @param  int    $appendID
      * @access public
      * @return void
      */
@@ -1433,7 +1434,7 @@ class testtask extends control
         $user    = $this->loadModel('user')->getById($userID, 'id');
         $account = $user->account;
 
-        $status    = empty($status) ? 'wait,doing' : $status;
+        $status    = empty($status) ? 'all' : $status;
         $testTasks = $this->testtask->getUserTestTaskPairs($account, 0, $status, '', '', $appendID);
 
         if($id) return print(html::select("testtasks[$id]", $testTasks, '', 'class="form-control"'));

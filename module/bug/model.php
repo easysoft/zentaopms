@@ -1563,6 +1563,7 @@ class bugModel extends model
      * @param  int    $limit
      * @param  array  $skipProductIDList
      * @param  array  $skipExecutionIDList
+     * @param  array  $appendBugID
      * @access public
      * @return array
      */

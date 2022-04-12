@@ -3026,6 +3026,7 @@ class storyModel extends model
      * @param  string  $limit
      * @param  string  $type requirement|story
      * @param  array   $skipProductIDList
+     * @param  int     $appendStoryID
      * @access public
      * @return array
      */
