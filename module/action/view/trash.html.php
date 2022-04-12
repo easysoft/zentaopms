@@ -76,10 +76,6 @@
             {
                 echo $action->objectName;
             }
-            elseif($action->objectType == 'program')
-            {
-                echo $action->objectName;
-            }
             else
             {
                 $tab = '';
