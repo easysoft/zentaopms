@@ -72,7 +72,7 @@
           <?php echo html::a($this->createLink('user', 'profile', "userID=$userID", '', true), $userName, '', "title='{$userName}' data-toggle='modal' data-type='iframe' data-width='600'");?>
           <?php endif;?>
         </td>
-        <?php $programBudget = $this->loadModel('project')->budgetUnit($program->budget);?>
+        <?php $programBudget = $this->loadModel('project')->getBudgetWithUnit($program->budget);?>
         <td class='text-right'><?php echo $program->budget != 0 ? zget($lang->project->currencySymbol, $program->budgetUnit) . ' ' . $programBudget : $lang->project->future;?></td>
         <td><?php echo $program->begin;?></td>
         <td><?php echo $program->end == LONG_TIME ? $lang->program->longTime : $program->end;?></td>

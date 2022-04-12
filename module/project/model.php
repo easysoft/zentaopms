@@ -1659,7 +1659,7 @@ class projectModel extends model
 
             if($id == 'budget')
             {
-                $projectBudget = $this->budgetUnit($project->budget);
+                $projectBudget = $this->getBudgetWithUnit($project->budget);
                 $budgetTitle   = $project->budget != 0 ? zget($this->lang->project->currencySymbol, $project->budgetUnit) . ' ' . $projectBudget : $this->lang->project->future;
 
                 $title = "title='$budgetTitle'";
@@ -1789,13 +1789,13 @@ class projectModel extends model
     }
 
     /**
-     * Conversion budget unit
+     * Convert budget unit.
      *
      * @param  int    $budget
      * @access public
      * @return void
      */
-    public function budgetUnit($budget)
+    public function getBudgetWithUnit($budget)
     {
         if($budget < 10000)
         {
