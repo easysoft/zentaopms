@@ -229,7 +229,9 @@ class story extends control
         /* Set products, users and module. */
         if($objectID != 0)
         {
-            $products        = $this->product->getProductPairsByProject($objectID);
+            global $config;
+            $onlyNoClosed    = empty($config->CRProduct) ? 'noclosed' : '';
+            $products        = $this->product->getProductPairsByProject($objectID, $onlyNoClosed);
             $productID       = empty($productID) ? key($products) : $productID;
             $product         = $this->product->getById(($productID and array_key_exists($productID, $products)) ? $productID : key($products));
             $productBranches = $product->type != 'normal' ? $this->loadModel('execution')->getBranchByProduct($productID, $objectID) : array();
