@@ -48,7 +48,8 @@ class programsEntry extends Entry
                 unset($program->desc);
                 $program->end = $program->end == LONG_TIME ? $this->lang->program->longTime : $program->end;
 
-                $programBudget = in_array($this->app->getClientLang(), array('zh-cn','zh-tw')) ? round((float)$program->budget / 10000, 2) . $this->lang->project->tenThousand : round((float)$program->budget, 2);
+                $programBudget = $this->loadModel('project')->budgetUnit($program->budget);
+
                 $program->labelBudget = $program->budget != 0 ? zget($this->lang->project->currencySymbol, $program->budgetUnit) . ' ' . $programBudget : $this->lang->project->future;
 
                 if(empty($program->parent)) $result[$program->id] = $program;

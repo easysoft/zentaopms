@@ -1659,22 +1659,7 @@ class projectModel extends model
 
             if($id == 'budget')
             {
-                if($project->budget < 10000)
-                {
-                    $budget = round((float)$project->budget, 2);
-                    $unit   = '';
-                }
-                elseif($project->budget < 100000000 and $project->budget >= 10000)
-                {
-                    $budget = round((float)$project->budget/10000, 2);
-                    $unit   = $this->lang->project->tenThousand;
-                }
-                else
-                {
-                    $budget = round((float)$project->budget/100000000, 2);
-                    $unit   = $this->lang->project->hundredMillion;
-                }
-                $projectBudget = in_array($this->app->getClientLang(), array('zh-cn','zh-tw')) ? $budget . $unit : round((float)$project->budget, 2);
+                $projectBudget = $this->budgetUnit($project->budget);
                 $budgetTitle   = $project->budget != 0 ? zget($this->lang->project->currencySymbol, $project->budgetUnit) . ' ' . $projectBudget : $this->lang->project->future;
 
                 $title = "title='$budgetTitle'";
@@ -1801,6 +1786,35 @@ class projectModel extends model
             }
             echo '</td>';
         }
+    }
+
+    /**
+     * Conversion budget unit
+     *
+     * @param  int    $budget
+     * @access public
+     * @return void
+     */
+    public function budgetUnit($budget)
+    {
+        if($budget < 10000)
+        {
+            $budget = round((float)$budget, 2);
+            $unit   = '';
+        }
+        elseif($budget < 100000000 and $budget >= 10000)
+        {
+            $budget = round((float)$budget/10000, 2);
+            $unit   = $this->lang->project->tenThousand;
+        }
+        else
+        {
+            $budget = round((float)$budget/100000000, 2);
+            $unit   = $this->lang->project->hundredMillion;
+        }
+
+        $projectBudget = in_array($this->app->getClientLang(), array('zh-cn','zh-tw')) ? $budget . $unit : round((float)$budget, 2);
+        return $projectBudget;
     }
 
     /**
