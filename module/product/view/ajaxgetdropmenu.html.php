@@ -26,6 +26,8 @@
 #swapper .tree li>.list-toggle {top: -1px;}
 
 #subHeader .tree ul {display: block;}
+#closed {width: 90px; height: 25px; line-height: 25px; background-color: #ddd; color: #3c495c; text-align: center; margin-left: 15px; border-radius: 2px;}
+#gray-line {height: 1px; margin-left: 10px; margin-bottom:2px; background-color: #ddd;}
 </style>
 <?php
 $productCounts      = array();
@@ -135,8 +137,8 @@ $closedProductsHtml .= '</ul>';
       <a class='pull-right toggle-right-col not-list-item'><?php echo $lang->product->closed?><i class='icon icon-angle-right'></i></a>
     </div>
   </div>
-  <div id="closed" hidden><?php echo $lang->product->closed?></div>
   <div id="gray-line"></div>
+  <div id="closed" hidden><?php echo $lang->product->closedProduct?></div>
   <div class="table-col col-right productTree">
    <div class='list-group products'><?php echo $closedProductsHtml;?></div>
   </div>
@@ -174,11 +176,11 @@ $(function()
         }
         if($('.form-control.search-input').val().length > 0)
         {
-            $('#closed').attr("hidden",false);
+            $('#closed').attr("hidden", false);
         }
         else
         {
-            $('#closed').attr("hidden",true);
+            $('#closed').attr("hidden", true);
         }
     });
 
