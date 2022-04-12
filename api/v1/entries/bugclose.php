@@ -34,7 +34,7 @@ class bugCloseEntry extends Entry
 
         $bug = $this->bug->getByID($bugID);
 
-        $this->send(200, $this->format($bug, 'openedBy:user,openedDate:time,assignedTo:user,assignedDate:time,reviewedBy:user,reviewedDate:time,lastEditedBy:user,lastEditedDate:time,closedBy:user,closedDate:time,deleted:bool,mailto:userList'));
+        $this->send(200, $this->format($bug, 'assignedTo:user,assignedDate:time,lastEditedBy:user,lastEditedDate:time,closedBy:user,closedDate:time'));
     }   
 }
 
