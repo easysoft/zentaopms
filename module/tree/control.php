@@ -321,7 +321,7 @@ class tree extends control
         }
         else
         {
-            $this->view->optionMenu = $this->tree->getOptionMenu($module->root, $module->type, 0, $branch);
+            $this->view->optionMenu = $this->tree->getOptionMenu($module->root, $module->type, 0, $module->branch);
         }
         if($type == 'doc') $this->view->libs = $this->loadModel('doc')->getLibs('all', $extra = 'withObject');
 
