@@ -162,17 +162,18 @@ $lang->testcase->lblTypeValue   = 'Type Value';
 $lang->testcase->lblStageValue  = 'Phase Value';
 $lang->testcase->lblStatusValue = 'Status Value';
 
-$lang->testcase->legendBasicInfo    = 'Basic Information';
-$lang->testcase->legendAttatch      = 'Files';
-$lang->testcase->legendLinkBugs     = 'Bugs';
-$lang->testcase->legendOpenAndEdit  = 'Create/Edit';
-$lang->testcase->legendComment      = 'Comment';
+$lang->testcase->legendBasicInfo       = 'Basic Information';
+$lang->testcase->legendAttatch         = 'Files';
+$lang->testcase->legendLinkBugs        = 'Bugs';
+$lang->testcase->legendOpenAndEdit     = 'Create/Edit';
+$lang->testcase->legendComment         = 'Comment';
 
-$lang->testcase->summary            = "Total <strong>%s</strong> cases on this page, and <strong>%s</strong> cases run.";
-$lang->testcase->confirmDelete      = 'Do you want to delete this case?';
-$lang->testcase->confirmBatchDelete = 'Do you want to batch delete cases?';
-$lang->testcase->ditto              = 'Ditto';
-$lang->testcase->dittoNotice        = 'This Case is not linked to the Product as the last one is!';
+$lang->testcase->summary               = "Total <strong>%s</strong> cases on this page, and <strong>%s</strong> cases run.";
+$lang->testcase->confirmDelete         = 'Do you want to delete this case?';
+$lang->testcase->confirmBatchDelete    = 'Do you want to batch delete cases?';
+$lang->testcase->ditto                 = 'Ditto';
+$lang->testcase->dittoNotice           = 'This Case is not linked to the Product as the last one is!';
+$lang->testcase->confirmUnlinkTesttask = 'The case [%s] is already associated in the testtask order of the previous branch/platform, after adjusting the branch/platform, it will be removed from the test list of the previous branch/platform, please confirm whether to continue to modify.';
 
 $lang->testcase->reviewList[0] = 'NO';
 $lang->testcase->reviewList[1] = 'YES';

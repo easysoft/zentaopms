@@ -1077,6 +1077,22 @@ class testtaskModel extends model
     }
 
     /**
+     * Get testtasks by case id list.
+     *
+     * @param  string|array $caseIDList
+     * @access public
+     * @return array
+     */
+    public function getGroupByCases($caseIDList)
+    {
+        return $this->dao->select('t1.case, t2.*, t3.branch')->from(TABLE_TESTRUN)->alias('t1')
+            ->leftJoin(TABLE_TESTTASK)->alias('t2')->on('t1.task=t2.id')
+            ->leftJoin(TABLE_BUILD)->alias('t3')->on('t2.build = t3.id')
+            ->where('t1.case')->in($caseIDList)
+            ->fetchGroup('case', 'id');
+    }
+
+    /**
      * Create test result
      *
      * @param  int   $runID

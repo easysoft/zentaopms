@@ -171,6 +171,7 @@ $lang->project->waitProjects    = '未开始的项目';
 $lang->project->doingProjects   = '进行中的项目';
 $lang->project->doingExecutions = '进行中的执行(最近1个)';
 $lang->project->closedProjects  = '已关闭的项目(最近2个)';
+$lang->project->closedProject   = '已关闭的项目';
 $lang->project->noProgram       = '无项目集归属项目';
 
 $lang->project->laneColorList = array('#32C5FF', '#006AF1', '#9D28B2', '#FF8F26', '#FFC20E', '#00A78E', '#7FBB00', '#424BAC', '#C0E9FF', '#EC2761');

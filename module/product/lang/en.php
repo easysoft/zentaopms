@@ -23,6 +23,7 @@ $lang->product->select          = "Select {$lang->productCommon}";
 $lang->product->mine            = 'Mine';
 $lang->product->other           = 'Others';
 $lang->product->closed          = 'Closed';
+$lang->product->closedProduct   = 'Closed Product';
 $lang->product->updateOrder     = 'Order';
 $lang->product->all             = "{$lang->productCommon} List";
 $lang->product->manageLine      = "Manage {$lang->productCommon} Line";
