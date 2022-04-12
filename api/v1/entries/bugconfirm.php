@@ -20,8 +20,6 @@ class bugConfirmEntry extends Entry
      **/
     public function post($bugID)
     {   
-        $bug = $this->loadModel('bug')->getById($bugID);
-
         $fields = 'assignedTo,mailto,comment,pri,type';
         $this->batchSetPost($fields);
 

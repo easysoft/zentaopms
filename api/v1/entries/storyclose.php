@@ -20,8 +20,6 @@ class storyCloseEntry extends Entry
      */
     public function post($storyID)
     {
-        $story = $this->loadModel('story')->getByID($storyID);
-
         $fields = 'closedReason,duplicateStory,childStories,comment';
         $this->batchSetPost($fields);
 

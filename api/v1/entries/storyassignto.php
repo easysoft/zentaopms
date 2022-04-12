@@ -20,8 +20,6 @@ class storyAssignToEntry extends Entry
      */
     public function post($storyID)
     {
-        $story = $this->loadModel('story')->getByID($storyID);
-
         $fields = 'assignedTo,comment';
         $this->batchSetPost($fields);
 

@@ -20,8 +20,6 @@ class bugAssignEntry extends Entry
      */
     public function post($bugID)
     {   
-        $bug = $this->loadModel('bug')->getByID($bugID);
-
         $fields = 'assignedTo,mailto,comment';
         $this->batchSetPost($fields);
 
