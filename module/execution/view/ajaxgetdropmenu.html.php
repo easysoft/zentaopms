@@ -24,7 +24,7 @@
 #swapper .tree li>.list-toggle {top: -1px;}
 
 #closed {width: 90px; height: 25px; line-height: 25px; background-color: #ddd; color: #3c495c; text-align: center; margin-left: 15px; border-radius: 2px;}
-#gray-line {height: 1px; margin-left: 10px; margin-bottom:2px; background-color: #ddd;}
+#gray-line {width: 230px;height: 1px; margin-left: 10px; margin-bottom:2px; background-color: #ddd;}
 </style>
 <?php
 $executionCounts      = array();
@@ -133,7 +133,7 @@ $closedExecutionsHtml .= '</ul>';
       <a class='pull-right toggle-right-col not-list-item'><?php echo $lang->execution->doneExecutions;?><i class='icon icon-angle-right'></i></a>
     </div>
   </div>
-  <div id="gray-line"></div>
+  <div id="gray-line" hidden></div>
   <div id="closed" hidden><?php echo $lang->execution->closedExecution?></div>
   <div class="table-col col-right executionTree">
    <div class='list-group executions'><?php echo $closedExecutionsHtml;?></div>

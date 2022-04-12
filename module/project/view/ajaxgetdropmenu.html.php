@@ -25,7 +25,7 @@
 #swapper .tree li>.list-toggle {top: -1px;}
 
 #closed {width: 90px; height: 25px; line-height: 25px; background-color: #ddd; color: #3c495c; text-align: center; margin-left: 15px; border-radius: 2px;}
-#gray-line {height: 1px; margin-left: 10px; margin-bottom:2px; background-color: #ddd;}
+#gray-line {width:230px; height: 1px; margin-left: 10px; margin-bottom:2px; background-color: #ddd;}
 </style>
 <?php
 $projectCounts      = array();
