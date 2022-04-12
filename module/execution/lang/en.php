@@ -75,6 +75,7 @@ $lang->execution->storyTitle          = "Story Name";
 $lang->execution->all                 = "All {$lang->executionCommon}s";
 $lang->execution->undone              = 'Unfinished ';
 $lang->execution->unclosed            = 'Unclosed';
+$lang->execution->closedExecution     = 'Closed Execution';
 $lang->execution->typeDesc            = "OPS {$lang->executionCommon} has no {$lang->SRCommon}, Bug, Build, or Test features.";
 $lang->execution->mine                = 'Mine: ';
 $lang->execution->involved            = 'Mine';

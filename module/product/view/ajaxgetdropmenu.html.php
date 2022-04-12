@@ -177,10 +177,12 @@ $(function()
         if($('.form-control.search-input').val().length > 0)
         {
             $('#closed').attr("hidden", false);
+            $('#gray-line').attr("hidden", false);
         }
         else
         {
             $('#closed').attr("hidden", true);
+            $('#gray-line').attr("hidden", true);
         }
     });
 
@@ -195,6 +197,11 @@ $(function()
         else if($("#other .clickable.search-list-item").not(".hidden").length > 0)
         {
             $("#navTabs a[href='#other']").tab('show');
+        }
+        if($('ul.tree-angles').height() == 0)
+        {
+            $('#closed').attr("hidden", true);
+            $('#gray-line').attr("hidden", true);
         }
     });
 })

@@ -171,6 +171,7 @@ $lang->project->waitProjects    = 'Waiting Projects';
 $lang->project->doingProjects   = 'Ongoing Projects';
 $lang->project->doingExecutions = 'Ongoing Executions';
 $lang->project->closedProjects  = 'Closed Projects(The recent two projects)';
+$lang->project->closedProject   = 'Closed Projects';
 $lang->project->noProgram       = 'Independent Projects';
 
 $lang->project->laneColorList = array('#32C5FF', '#006AF1', '#9D28B2', '#FF8F26', '#FFC20E', '#00A78E', '#7FBB00', '#424BAC', '#C0E9FF', '#EC2761');
