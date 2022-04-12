@@ -797,7 +797,7 @@ class personnelModel extends model
      */
     public function deleteExecutionWhitelist($executionID, $account = '')
     {
-        $execution = $this->dao->select('id,whitelist')->from(TABLE_EXECUTION)->where('id')->eq($executionID)->fetch();
+        $execution = $this->dao->select('id,whitelist,project')->from(TABLE_EXECUTION)->where('id')->eq($executionID)->fetch();
         if(empty($execution)) return false;
 
         $result = $this->dao->delete()->from(TABLE_ACL)
@@ -816,6 +816,7 @@ class personnelModel extends model
             $viewExecutions    = $this->dao->select('sprints')->from(TABLE_USERVIEW)->where('account')->eq($account)->fetch('sprints');
             $newViewExecutions = trim(str_replace(",$executionID,", '', ",$viewExecutions,"), ',');
             $this->dao->update(TABLE_USERVIEW)->set('sprints')->eq($newViewExecutions)->where('account')->eq($account)->exec();
+            $this->deleteProjectWhitelist($execution->project, $account);
         }
     }
 
