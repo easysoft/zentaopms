@@ -174,21 +174,6 @@ class apiModel extends model
     }
 
     /**
-     * Delete a struct.
-     *
-     * @param  int $id
-     * @access public
-     * @return void
-     */
-    public function deleteStruct($id)
-    {
-        $this->dao->update(TABLE_APISTRUCT)
-            ->set('deleted')->eq(1)
-            ->where('id')->eq($id)
-            ->exec();
-    }
-
-    /**
      * Update an api doc.
      *
      * @param  int $apiID
