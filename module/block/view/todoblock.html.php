@@ -161,10 +161,12 @@ if(!$selfCall) die(include('./todolist.html.php'));
           var isFinished = $liTag.hasClass('active');
           var todoID     = $liTag.data('id');
           var methodName = isFinished ? 'activate' : 'finish';
+          var $todoes    = $(this).closest('.block-todoes');
           $.get(createLink('todo', methodName, "todoID=" + todoID), function()
           {
               if(!isFinished) $liTag.addClass('active');
               if(isFinished) $liTag.removeClass('active');
+              refreshBlock($todoes.parents('div.panel[id^=block]'));
           });
       });
   });
