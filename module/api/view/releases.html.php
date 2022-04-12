@@ -19,6 +19,11 @@
         <h2><?php echo $lang->api->managePublish;?></h2>
       </div>
     </div>
+    <?php if(empty($releases)):?>
+    <div class="table-empty-tip">
+      <p><span class="text-muted"><?php echo $lang->noData;?></span></p>
+    </div>
+    <?php else:?>
     <form class='main-table table-user' data-ride='table' method='post' data-checkable='false' id='userListForm'>
       <table class='table has-sort-head' id='userList'>
         <thead>
@@ -48,6 +53,7 @@
         </tbody>
       </table>
     </form>
+    <?php endif;?>
   </div>
 </div>
 <script>
