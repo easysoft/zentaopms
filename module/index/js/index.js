@@ -654,6 +654,27 @@
         $(window).on('resize', refreshMoreMenu);
         refreshMoreMenu();
         setTimeout(refreshMoreMenu, 500);
+
+        /* Fix bug #21331. */
+        var vibibleState  = '';
+        var visibleChange = '';
+        if(typeof document.visibilityState != 'undefined')
+        {
+            visibleChange = 'visibilitychange';
+            vibibleState  = 'visibilityState';
+        }
+        else if(typeof document.webkitVisibilityState != 'undefined')
+        {
+            visibleChange = 'webkitvisibilitychange';
+            vibibleState  = 'webkitVisibilityState';
+        }
+        if(visibleChange)
+        {
+            document.addEventListener(visibleChange, function()
+            {
+                if(document[vibibleState] == 'visible') showTab($('#bars>li.active').data('app'));
+            });
+        }
     });
 }());
 

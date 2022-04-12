@@ -15,6 +15,7 @@
 <?php js::set('productID', $productID);?>
 <?php js::set('testtasks', $testtasks);?>
 <?php js::set('confirmUnlinkTesttask', $lang->testcase->confirmUnlinkTesttask);?>
+<?php js::set('isLibCase', $isLibCase);?>
 <div id="mainContent" class="main-content">
   <div class="main-header">
     <h2><?php echo $lang->testcase->common . $lang->colon . $lang->testcase->batchEdit;?></h2>

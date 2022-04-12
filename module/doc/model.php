@@ -223,13 +223,19 @@ class docModel extends model
     }
 
     /**
+     * Update api lib.
+     *
      * @param  int      $id
      * @param  stdClass $oldDoc
      * @param  array    $data
+     * @access public
      * @return array|int
      */
     public function updateApiLib($id, $oldDoc, $data)
     {
+        /* Replace doc library name. */
+        $this->lang->doclib->name = $this->lang->doclib->apiLibName;
+
         $data->type = static::DOC_TYPE_API;
         $this->dao->update(TABLE_DOCLIB)->data($data)->autoCheck()
             ->batchCheck($this->config->api->editlib->requiredFields, 'notempty')

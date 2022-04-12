@@ -23,6 +23,9 @@ class testcasesEntry extends entry
         if(empty($productID)) $productID = $this->param('product', 0);
         if(empty($productID)) return $this->sendError(400, 'Need product id.');
 
+        $this->app->cookie->caseModule = 0;
+        $this->app->cookie->caseSuite  = 0;
+
         $type     = 'all';
         $param    = 0;
         $moduleID = $this->param('module', 0);
