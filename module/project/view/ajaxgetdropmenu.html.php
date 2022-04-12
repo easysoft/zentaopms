@@ -194,6 +194,5 @@ $(function()
             $('#gray-line').attr("hidden", true);
         }
     });
-
 })
 </script>
