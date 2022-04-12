@@ -49,6 +49,14 @@ class stageTest
         return count($objects);
     }
 
+    /**
+     * Test update a stage.
+     *
+     * @param  int    $stageID
+     * @param  array  $param
+     * @access public
+     * @return array
+     */
     public function updateTest($stageID, $param)
     {
         foreach($param as $key => $value) $_POST[$key] = $value;
@@ -62,6 +70,13 @@ class stageTest
         return $objects;
     }
 
+    /**
+     * Test get stages.
+     *
+     * @param  string $orderBy
+     * @access public
+     * @return array
+     */
     public function getStagesTest($orderBy = 'id_desc')
     {
         $objects = $this->objectModel->getStages($orderBy = 'id_desc');
@@ -71,6 +86,12 @@ class stageTest
         return $objects;
     }
 
+    /**
+     * Test get pairs of stage.
+     *
+     * @access public
+     * @return array
+     */
     public function getPairsTest()
     {
         $objects = $this->objectModel->getPairs();
