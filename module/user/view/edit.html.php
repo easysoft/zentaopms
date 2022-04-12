@@ -59,7 +59,7 @@
         <caption class='text-left text-muted'><?php echo $lang->user->accountInfo;?></caption>
         <tr>
           <th class='w-140px'><?php echo $lang->user->account;?></th>
-          <td class='w-p40'><?php echo html::input('account', $user->account, "class='form-control' disabled");?></td>
+          <td class='w-p40'><?php echo html::input('account', $user->account, "class='form-control' readonly");?></td>
           <th class='w-130px'><?php echo $lang->user->email;?></th>
           <td>
             <?php echo html::input('email', $user->email, "class='form-control'");?>
