@@ -300,9 +300,8 @@ class api extends control
         }
         else
         {
-            $this->api->deleteStruct($structID);
+            $this->api->delete(TABLE_APISTRUCT, $structID);
             if(dao::isError()) return $this->sendError(dao::getError());
-            $this->action->create('apistruct', $structID, 'Deleted');
             return print(js::locate(inlink('struct', "libID=$libID"), 'parent'));
         }
     }
