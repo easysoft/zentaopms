@@ -22,7 +22,7 @@ fields:
   - field: status
     range: wait,doing
   - field: percent
-    range: 0
+    range: 0{30},10{30},0{30}
   - field: milestone
     range: 0{30},1{10},0{10},1{10},0{30}
   - field: auth
