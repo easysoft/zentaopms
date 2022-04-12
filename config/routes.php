@@ -63,6 +63,7 @@ $routes['/bugs/:id']            = 'bug';
 $routes['/bugs/:id/close']      = 'bugClose';
 $routes['/bugs/:id/assign']     = 'bugAssign';
 $routes['/bugs/:id/confirm']    = 'bugConfirm';
+$routes['/bugs/:id/resolve']    = 'bugResolve';
 
 $routes['/programs/:id/projects'] = 'projects';
 $routes['/products/:id/projects'] = 'productProjects';
