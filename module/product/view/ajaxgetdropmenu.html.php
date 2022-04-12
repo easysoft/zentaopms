@@ -135,7 +135,7 @@ $closedProductsHtml .= '</ul>';
       <a class='pull-right toggle-right-col not-list-item'><?php echo $lang->product->closed?><i class='icon icon-angle-right'></i></a>
     </div>
   </div>
-  <div id="closed" hidden>已关闭</div>
+  <div id="closed" hidden><?php echo $lang->product->closed?></div>
   <div id="gray-line"></div>
   <div class="table-col col-right productTree">
    <div class='list-group products'><?php echo $closedProductsHtml;?></div>
