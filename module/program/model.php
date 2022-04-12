@@ -247,6 +247,7 @@ class programModel extends model
                     return $planVal->title = htmlspecialchars_decode($planVal->title, ENT_QUOTES);
                 }, 
                 $product->plans);
+                $product->name = htmlspecialchars_decode($product->name, ENT_QUOTES);
                 
                 $product->releases = zget($releases, $product->id, array());
                 $projects          = zget($projectGroup, $product->id, array());
@@ -265,6 +266,9 @@ class programModel extends model
 
                     $project->execution = $execution;
                     $project->hours['progress']   = zget($projectHours, $project->id, array());
+
+                    /* Convert predefined HTML entities to characters. */
+                    $project->name = htmlspecialchars_decode($project->name, ENT_QUOTES);
                     $product->projects[$status][] = $project;
                 }
             }
@@ -1367,6 +1371,9 @@ class programModel extends model
             $project->teamCount   = isset($teams[$project->id]) ? $teams[$project->id]->teams : 0;
             $project->leftTasks   = isset($leftTasks[$project->id]) ? $leftTasks[$project->id]->tasks : '—';
             $project->teamMembers = isset($teamMembers[$project->id]) ? array_keys($teamMembers[$project->id]) : array();
+
+            /* Convert predefined HTML entities to characters. */
+            $project->name = htmlspecialchars_decode($project->name, ENT_QUOTES);
 
             $stats[$key] = $project;
         }
