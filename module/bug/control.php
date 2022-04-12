@@ -2056,7 +2056,6 @@ class bug extends control
 
             /* Create field lists. */
             $fields = $this->post->exportFields ? $this->post->exportFields : explode(',', $bugConfig->list->exportFields);
-
             foreach($fields as $key => $fieldName)
             {
                 $fieldName = trim($fieldName);
