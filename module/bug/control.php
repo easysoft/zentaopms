@@ -2045,8 +2045,6 @@ class bug extends control
      */
     public function export($productID, $orderBy, $browseType = '', $executionID = 0)
     {
-        if($this->config->systemMode == 'classic') $this->config->bug->list->exportFields =  str_replace(' project,', '', $this->config->bug->list->exportFields);
-
         if($_POST)
         {
             $this->loadModel('file');
