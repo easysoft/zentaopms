@@ -9,6 +9,39 @@
  * @version     $Id: zh-cn.php 824 2010-05-02 15:32:06Z wwccss $
  * @link        http://www.zentao.net
  */
+$lang->doclib = new stdclass();
+$lang->doclib->name       = '文档库名称';
+$lang->doclib->control    = '访问控制';
+$lang->doclib->group      = '分组';
+$lang->doclib->user       = '用户';
+$lang->doclib->files      = '附件库';
+$lang->doclib->all        = '所有文档库';
+$lang->doclib->select     = '选择文档库';
+$lang->doclib->execution  = $lang->executionCommon . '库';
+$lang->doclib->product    = $lang->productCommon . '库';
+$lang->doclib->apiLibName = '接口库名称';
+
+$lang->doclib->aclListA['default'] = '默认';
+$lang->doclib->aclListA['custom']  = '自定义';
+
+$lang->doclib->aclListB['open']    = '公开';
+$lang->doclib->aclListB['custom']  = '自定义';
+$lang->doclib->aclListB['private'] = '私有';
+
+$lang->doclib->create['product']   = '创建' . $lang->productCommon . '文档库';
+$lang->doclib->create['execution'] = '创建' . $lang->executionCommon . '文档库';
+$lang->doclib->create['custom']    = '创建自定义文档库';
+
+$lang->doclib->main['product']   = $lang->productCommon . '主库';
+$lang->doclib->main['project']   = '项目主库';
+$lang->doclib->main['execution'] = $lang->executionCommon . '主库';
+
+$lang->doclib->tabList['product']   = $lang->productCommon;
+$lang->doclib->tabList['execution'] = $lang->executionCommon;
+$lang->doclib->tabList['custom']    = '自定义';
+
+$lang->doclib->nameList['custom'] = '自定义文档库名称';
+
 /* 字段列表。*/
 $lang->doc->common       = '文档';
 $lang->doc->id           = '编号';
@@ -229,36 +262,3 @@ $lang->doc->placeholder->url = '相应的链接地址';
 $lang->doc->summary = "本页共 <strong>%s</strong> 个附件，共计 <strong>%s</strong>，其中<strong>%s</strong>。";
 $lang->doc->ge      = '个';
 $lang->doc->point   = '、';
-
-$lang->doclib = new stdclass();
-$lang->doclib->name       = '文档库名称';
-$lang->doclib->control    = '访问控制';
-$lang->doclib->group      = '分组';
-$lang->doclib->user       = '用户';
-$lang->doclib->files      = '附件库';
-$lang->doclib->all        = '所有文档库';
-$lang->doclib->select     = '选择文档库';
-$lang->doclib->execution  = $lang->executionCommon . '库';
-$lang->doclib->product    = $lang->productCommon . '库';
-$lang->doclib->apiLibName = '接口库名称';
-
-$lang->doclib->aclListA['default'] = '默认';
-$lang->doclib->aclListA['custom']  = '自定义';
-
-$lang->doclib->aclListB['open']    = '公开';
-$lang->doclib->aclListB['custom']  = '自定义';
-$lang->doclib->aclListB['private'] = '私有';
-
-$lang->doclib->create['product']   = '创建' . $lang->productCommon . '文档库';
-$lang->doclib->create['execution'] = '创建' . $lang->executionCommon . '文档库';
-$lang->doclib->create['custom']    = '创建自定义文档库';
-
-$lang->doclib->main['product']   = $lang->productCommon . '主库';
-$lang->doclib->main['project']   = '项目主库';
-$lang->doclib->main['execution'] = $lang->executionCommon . '主库';
-
-$lang->doclib->tabList['product']   = $lang->productCommon;
-$lang->doclib->tabList['execution'] = $lang->executionCommon;
-$lang->doclib->tabList['custom']    = '自定义';
-
-$lang->doclib->nameList['custom'] = '自定义文档库名称';
