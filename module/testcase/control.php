@@ -1094,6 +1094,7 @@ class testcase extends control
         $this->view->cases          = $cases;
         $this->view->forceNotReview = $this->testcase->forceNotReview();
         $this->view->modulePairs    = $modulePairs;
+        $this->view->isLibCase      = $type == 'lib' ? true : false;
 
         $this->display();
     }
