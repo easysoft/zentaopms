@@ -13,6 +13,8 @@
 <?php include '../../common/view/header.html.php';?>
 <?php js::set('dittoNotice', $this->lang->testcase->dittoNotice);?>
 <?php js::set('productID', $productID);?>
+<?php js::set('testtasks', $testtasks);?>
+<?php js::set('confirmUnlinkTesttask', $lang->testcase->confirmUnlinkTesttask);?>
 <div id="mainContent" class="main-content">
   <div class="main-header">
     <h2><?php echo $lang->testcase->common . $lang->colon . $lang->testcase->batchEdit;?></h2>
@@ -88,7 +90,7 @@
               <?php $branchProductID = $productID ? $productID : $cases[$caseID]->product;?>
               <?php $productType     = $productID ? $product->type : $products[$branchProductID]->type;?>
               <?php $disabled        = $productType != 'normal' ? '' : "disabled='disabled'";?>
-              <?php echo html::select("branches[$caseID]", !empty($disabled) ? array() : $branchTagOption[$branchProductID], $productType != 'normal' ? $cases[$caseID]->branch : '', "class='form-control chosen' onchange='loadBranches($branchProductID, this.value, $caseID)', $disabled");?>
+              <?php echo html::select("branches[$caseID]", !empty($disabled) ? array() : $branchTagOption[$branchProductID], $productType != 'normal' ? $cases[$caseID]->branch : '', "class='form-control chosen' onchange='loadBranches($branchProductID, this.value, $caseID, {$cases[$caseID]->branch})', $disabled");?>
             </td>
             <?php endif;?>
             <td class='text-left<?php echo zget($visibleFields, 'module', ' hidden')?>' style='overflow:visible'><?php echo html::select("modules[$caseID]", zget($modulePairs, $caseID, array(0 => '/')), $cases[$caseID]->module, "class='form-control chosen' onchange='loadStories($productID, this.value, $caseID)'");?></td>
