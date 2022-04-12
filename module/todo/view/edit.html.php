@@ -16,6 +16,7 @@
 <?php js::set('moduleList', $config->todo->moduleList)?>
 <?php js::set('objectsMethod', $config->todo->getUserObjectsMethod)?>
 <?php js::set('idvalue', $todo->idvalue);?>
+<?php js::set('defaultType', $todo->type);?>
 <?php js::set('nameBoxLabel', array('custom' => $lang->todo->name, 'idvalue' => $lang->todo->idvalue));?>
 <?php js::set('vision', $config->vision);?>
 <?php if(common::checkNotCN()):?>
@@ -124,7 +125,7 @@
       <div class="row form-group">
         <label class="col-sm-1"><?php echo $lang->todo->type;?></label>
         <div class="col-sm-2">
-          <?php echo html::select('type', $lang->todo->typeList, $todo->type, 'onchange="loadList(this.value);" class="form-control"');?>
+          <?php echo html::select('type', $lang->todo->typeList, $todo->type, "onchange='loadList(this.value, \"\", \"{$todo->type}\", {$todo->idvalue})' class='form-control'");?>
         </div>
       </div>
       <?php endif;?>

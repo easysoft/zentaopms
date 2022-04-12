@@ -3029,7 +3029,7 @@ class storyModel extends model
      * @access public
      * @return array
      */
-    public function getUserStoryPairs($account, $limit = 10, $type = 'story', $skipProductIDList = array())
+    public function getUserStoryPairs($account, $limit = 10, $type = 'story', $skipProductIDList = array(), $appendStoryID = '')
     {
         return $this->dao->select('id, title')
             ->from(TABLE_STORY)
@@ -3040,6 +3040,7 @@ class storyModel extends model
             ->andWhere('assignedTo')->eq($account)
             ->andWhere('product')->ne(0)
             ->beginIF(!empty($skipProductIDList))->andWhere('product')->notin($skipProductIDList)->fi()
+            ->beginIF(!empty($appendStoryID))->orWhere('id')->in($appendStoryID)->fi()
             ->orderBy('id_desc')
             ->limit($limit)
             ->fetchPairs('id', 'title');

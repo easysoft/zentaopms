@@ -10,7 +10,7 @@ function switchDateTodo(switcher)
     }
 }
 
-function loadList(type, id)
+function loadList(type, id, defaultType, idvalue)
 {
     if(id)
     {
@@ -23,8 +23,10 @@ function loadList(type, id)
         divID      = '#nameBox';
     }
 
-    var param = 'userID=' + userID;
-    if(id) param += '&id=' + id;
+    var param = 'userID=' + userID + '&id=' + id;
+    if(type == "task" || type == "testtask") param += '&status=';
+    if(type == defaultType && idvalue != 0) param += '&idvalue=' + idvalue;
+
     if(moduleList.indexOf(type) !== -1)
     {
         link = createLink(type, objectsMethod[type], param);

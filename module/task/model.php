@@ -2336,17 +2336,17 @@ class taskModel extends model
      * @access public
      * @return array
      */
-    public function getUserTaskPairs($account, $status = 'all', $skipExecutionIDList = array())
+    public function getUserTaskPairs($account, $status = 'all', $skipExecutionIDList = array(), $appendTaskID = '')
     {
         $stmt = $this->dao->select('t1.id, t1.name, t2.name as execution')
             ->from(TABLE_TASK)->alias('t1')
             ->leftjoin(TABLE_PROJECT)->alias('t2')->on('t1.execution = t2.id')
             ->where('t1.assignedTo')->eq($account)
             ->andWhere('t1.deleted')->eq(0)
-            ->andWhere('t1.status')->ne('closed')
             ->beginIF($this->config->vision)->andWhere('t1.vision')->eq($this->config->vision)->fi()
             ->beginIF($status != 'all')->andWhere('t1.status')->in($status)->fi()
             ->beginIF(!empty($skipExecutionIDList))->andWhere('t1.execution')->notin($skipExecutionIDList)->fi()
+            ->beginIF(!empty($appendTaskID))->orWhere('t1.id')->in($appendTaskID)->fi()
             ->query();
 
         $tasks = array();

@@ -1644,17 +1644,17 @@ class task extends control
      *
      * @param  int    $userID
      * @param  string $id
-     * @param  string $status
      * @access public
      * @return string
      */
-    public function ajaxGetUserTasks($userID = '', $id = '', $status = 'wait,doing')
+    public function ajaxGetUserTasks($userID = '', $id = '', $status = '', $appendID = '')
     {
         if($userID == '') $userID = $this->app->user->id;
         $user    = $this->loadModel('user')->getById($userID, 'id');
         $account = $user->account;
 
-        $tasks          = $this->task->getUserTaskPairs($account, $status);
+        $status         = empty($status) ? 'wait,doing' : $status;
+        $tasks          = $this->task->getUserTaskPairs($account, $status, '', $appendID);
         $suspendedTasks = $this->task->getUserSuspendedTasks($account);
         foreach($tasks as $taskid => $task)
         {

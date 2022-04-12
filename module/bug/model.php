@@ -1566,7 +1566,7 @@ class bugModel extends model
      * @access public
      * @return array
      */
-    public function getUserBugPairs($account, $appendProduct = true, $limit = 0, $skipProductIDList = array(), $skipExecutionIDList = array())
+    public function getUserBugPairs($account, $appendProduct = true, $limit = 0, $skipProductIDList = array(), $skipExecutionIDList = array(), $appendBugID = '')
     {
         $bugs = array();
         $stmt = $this->dao->select('t1.id, t1.title, t2.name as product')
@@ -1578,6 +1578,7 @@ class bugModel extends model
             ->beginIF(!empty($skipProductIDList))->andWhere('t1.product')->notin($skipProductIDList)->fi()
             ->beginIF(!empty($skipExecutionIDList))->andWhere('t1.execution')->notin($skipExecutionIDList)->fi()
             ->andWhere('t1.deleted')->eq(0)
+            ->beginIF(!empty($appendBugID))->orWhere('t1.id')->in($appendBugID)->fi()
             ->orderBy('id desc')
             ->beginIF($limit > 0)->limit($limit)->fi()
             ->query();
