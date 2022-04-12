@@ -180,7 +180,6 @@ $(function()
             $('#closed').attr("hidden", true);
             $('#gray-line').attr("hidden", true);
         }
-
     });
 
     $('#swapper #dropMenu').on('onSearchComplete', function(event, value)
