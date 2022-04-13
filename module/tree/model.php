@@ -320,7 +320,7 @@ class treeModel extends model
 
                 ksort($treeMenu);
                 $topMenu = @array_shift($treeMenu);
-                $topMenu = explode("\n", trim($topMenu));
+                $topMenu = explode("\n", trim((string)$topMenu));
                 foreach($topMenu as $menu)
                 {
                     if(!strpos($menu, '|')) continue;

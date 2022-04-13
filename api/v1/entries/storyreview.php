@@ -21,8 +21,6 @@ class storyReviewEntry extends Entry
      */
     public function post($storyID)
     {
-        $oldStory = $this->loadModel('story')->getByID($storyID);
-
         $fields = 'reviewedDate,result,closedReason,pri,estimate,comment';
         $this->batchSetPost($fields);
 

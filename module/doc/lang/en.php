@@ -9,6 +9,39 @@
  * @version     $Id: en.php 824 2010-05-02 15:32:06Z wwccss $
  * @link        http://www.zentao.net
  */
+$lang->doclib = new stdclass();
+$lang->doclib->name       = 'Name';
+$lang->doclib->control    = 'Access Control';
+$lang->doclib->group      = 'Group';
+$lang->doclib->user       = 'User';
+$lang->doclib->files      = 'Attachments';
+$lang->doclib->all        = 'All Libraries';
+$lang->doclib->select     = 'Select';
+$lang->doclib->execution  = $lang->executionCommon . ' Library';
+$lang->doclib->product    = $lang->productCommon . ' Library';
+$lang->doclib->apiLibName = 'Api Library Name';
+
+$lang->doclib->aclListA['default'] = 'Default';
+$lang->doclib->aclListA['custom']  = 'Custom';
+
+$lang->doclib->aclListB['open']    = 'Public';
+$lang->doclib->aclListB['custom']  = 'Custom';
+$lang->doclib->aclListB['private'] = 'Private';
+
+$lang->doclib->create['product']   = 'Create ' . $lang->productCommon . ' Library';
+$lang->doclib->create['execution'] = 'Create ' . $lang->executionCommon . ' Library';
+$lang->doclib->create['custom']    = 'Create Custom Library';
+
+$lang->doclib->main['product']   = 'Primary Library';
+$lang->doclib->main['project']   = 'Primary Library';
+$lang->doclib->main['execution'] = 'Primary Library';
+
+$lang->doclib->tabList['product']   = $lang->productCommon;
+$lang->doclib->tabList['execution'] = $lang->executionCommon;
+$lang->doclib->tabList['custom']    = 'Custom';
+
+$lang->doclib->nameList['custom'] = 'Custom Name';
+
 /* Fields. */
 $lang->doc->common       = 'Document';
 $lang->doc->id           = 'ID';
@@ -229,36 +262,3 @@ $lang->doc->placeholder->url = 'URL';
 $lang->doc->summary = "Total files on this page: <strong>%s</strong> , total size: <strong>%s</strong>, <strong>%s</strong>.";
 $lang->doc->ge      = ':';
 $lang->doc->point   = '.';
-
-$lang->doclib = new stdclass();
-$lang->doclib->name       = 'Name';
-$lang->doclib->control    = 'Access Control';
-$lang->doclib->group      = 'Group';
-$lang->doclib->user       = 'User';
-$lang->doclib->files      = 'Attachments';
-$lang->doclib->all        = 'All Libraries';
-$lang->doclib->select     = 'Select';
-$lang->doclib->execution  = $lang->executionCommon . ' Library';
-$lang->doclib->product    = $lang->productCommon . ' Library';
-$lang->doclib->apiLibName = 'Api Library Name';
-
-$lang->doclib->aclListA['default'] = 'Default';
-$lang->doclib->aclListA['custom']  = 'Custom';
-
-$lang->doclib->aclListB['open']    = 'Public';
-$lang->doclib->aclListB['custom']  = 'Custom';
-$lang->doclib->aclListB['private'] = 'Private';
-
-$lang->doclib->create['product']   = 'Create ' . $lang->productCommon . ' Library';
-$lang->doclib->create['execution'] = 'Create ' . $lang->executionCommon . ' Library';
-$lang->doclib->create['custom']    = 'Create Custom Library';
-
-$lang->doclib->main['product']   = 'Primary Library';
-$lang->doclib->main['project']   = 'Primary Library';
-$lang->doclib->main['execution'] = 'Primary Library';
-
-$lang->doclib->tabList['product']   = $lang->productCommon;
-$lang->doclib->tabList['execution'] = $lang->executionCommon;
-$lang->doclib->tabList['custom']    = 'Custom';
-
-$lang->doclib->nameList['custom'] = 'Custom Name';

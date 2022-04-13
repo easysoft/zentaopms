@@ -21,8 +21,6 @@ class storyActiveEntry extends Entry
      */
     public function post($storyID)
     {
-        $oldStory = $this->loadModel('story')->getByID($storyID);
-
         $fields = 'assignedTo,status,comment';
         $this->batchSetPost($fields);
 

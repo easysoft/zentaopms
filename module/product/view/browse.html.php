@@ -143,7 +143,6 @@ $projectIDParam = $isProjectStory ? "projectID=$projectID&" : '';
         ?>
       </ul>
     </div>
-    <?php if(common::canModify('product', $product)):?>
     <div class='btn-group dropdown'>
       <?php
       $createStoryLink = $this->createLink('story', 'create', "product=$productID&branch=$branch&moduleID=$moduleID&storyID=0&projectID=$projectID&bugID=0&planID=0&todoID=0&extra=&type=$storyType");
@@ -228,7 +227,6 @@ $projectIDParam = $isProjectStory ? "projectID=$projectID&" : '';
     }
     ?>
     </div>
-    <?php endif;?>
   </div>
   <?php endif;?>
 </div>

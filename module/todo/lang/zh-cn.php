@@ -114,7 +114,7 @@ $lang->todo->noAssignedTo   = '被指派人不能为空';
 $lang->todo->unfinishedTodo = '待办ID %s 不是完成状态，不能关闭。';
 $lang->todo->today          = '今日待办';
 
-$lang->todo->periods['all']             = '所有';
+$lang->todo->periods['all']             = '指派自己';
 $lang->todo->periods['before']          = '未完';
 $lang->todo->periods['future']          = '待定';
 $lang->todo->periods['thisWeek']        = '本周';
