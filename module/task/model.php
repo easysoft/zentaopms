@@ -2330,14 +2330,14 @@ class taskModel extends model
     /**
      * Get tasks pairs of a user.
      *
-     * @param  string $account
-     * @param  string $status
-     * @param  array  $skipExecutionIDList
-     * @param  int    $appendTaskID
+     * @param  string       $account
+     * @param  string       $status
+     * @param  array        $skipExecutionIDList
+     * @param  int|array    $appendTaskID
      * @access public
      * @return array
      */
-    public function getUserTaskPairs($account, $status = 'all', $skipExecutionIDList = array(), $appendTaskID = '')
+    public function getUserTaskPairs($account, $status = 'all', $skipExecutionIDList = array(), $appendTaskID = 0)
     {
         $stmt = $this->dao->select('t1.id, t1.name, t2.name as execution')
             ->from(TABLE_TASK)->alias('t1')

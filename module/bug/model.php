@@ -1558,16 +1558,16 @@ class bugModel extends model
     /**
      * Get bug pairs of a user.
      *
-     * @param  int    $account
-     * @param  bool   $appendProduct
-     * @param  int    $limit
-     * @param  array  $skipProductIDList
-     * @param  array  $skipExecutionIDList
-     * @param  array  $appendBugID
+     * @param  int        $account
+     * @param  bool       $appendProduct
+     * @param  int        $limit
+     * @param  array      $skipProductIDList
+     * @param  array      $skipExecutionIDList
+     * @param  int|array  $appendBugID
      * @access public
      * @return array
      */
-    public function getUserBugPairs($account, $appendProduct = true, $limit = 0, $skipProductIDList = array(), $skipExecutionIDList = array(), $appendBugID = '')
+    public function getUserBugPairs($account, $appendProduct = true, $limit = 0, $skipProductIDList = array(), $skipExecutionIDList = array(), $appendBugID = 0)
     {
         $bugs = array();
         $stmt = $this->dao->select('t1.id, t1.title, t2.name as product')

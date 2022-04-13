@@ -1032,16 +1032,16 @@ class testtaskModel extends model
     /**
      * Get testtask pairs of a user.
      *
-     * @param  string $account
-     * @param  int    $limit
-     * @param  string $status all|wait|doing|done|blocked
-     * @param  array  $skipProductIDList
-     * @param  array  $skipExecutionIDList
-     * @param  int    $appendTestTaskID
+     * @param  string       $account
+     * @param  int          $limit
+     * @param  string       $status all|wait|doing|done|blocked
+     * @param  array        $skipProductIDList
+     * @param  array        $skipExecutionIDList
+     * @param  int|array    $appendTestTaskID
      * @access public
      * @return array
      */
-    public function getUserTestTaskPairs($account, $limit = 0, $status = 'all', $skipProductIDList = array(), $skipExecutionIDList = array(), $appendTestTaskID = '')
+    public function getUserTestTaskPairs($account, $limit = 0, $status = 'all', $skipProductIDList = array(), $skipExecutionIDList = array(), $appendTestTaskID = 0)
     {
         $stmt = $this->dao->select('t1.id, t1.name, t2.name as execution')
             ->from(TABLE_TESTTASK)->alias('t1')

@@ -1941,12 +1941,12 @@ class bug extends control
      * @access public
      * @return string
      */
-    public function ajaxGetUserBugs($userID = '', $id = '' , $appendID = '')
+    public function ajaxGetUserBugs($userID = '', $id = '' , $appendID = 0)
     {
         if($userID == '') $userID = $this->app->user->id;
         $user    = $this->loadModel('user')->getById($userID, 'id');
         $account = $user->account;
-        $bugs    = $this->bug->getUserBugPairs($account, true, '', '', '', $appendID);
+        $bugs    = $this->bug->getUserBugPairs($account, true, 0, '', '', $appendID);
 
         if($id) return print(html::select("bugs[$id]", $bugs, '', 'class="form-control"'));
         return print(html::select('bug', $bugs, '', 'class=form-control'));

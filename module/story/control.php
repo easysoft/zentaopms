@@ -2564,7 +2564,7 @@ class story extends control
      * @access public
      * @return string
      */
-    public function ajaxGetUserStories($userID = '', $id = '', $appendID = '')
+    public function ajaxGetUserStories($userID = '', $id = '', $appendID = 0)
     {
         if($userID == '') $userID = $this->app->user->id;
         $user    = $this->loadModel('user')->getById($userID, 'id');

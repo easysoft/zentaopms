@@ -1649,7 +1649,7 @@ class task extends control
      * @access public
      * @return string
      */
-    public function ajaxGetUserTasks($userID = '', $id = '', $status = '', $appendID = '')
+    public function ajaxGetUserTasks($userID = '', $id = '', $status = '', $appendID = 0)
     {
         if($userID == '') $userID = $this->app->user->id;
         $user    = $this->loadModel('user')->getById($userID, 'id');

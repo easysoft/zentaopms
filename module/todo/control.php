@@ -215,9 +215,9 @@ class todo extends control
                  }
             }
 
-            $bugs      = $this->bug->getUserBugPairs($account, true, '', '', '', isset($objectIDList['bug']) ? $objectIDList['bug'] : '');
-            $tasks     = $this->task->getUserTaskPairs($account, 'wait,doing', '', isset($objectIDList['task']) ? $objectIDList['task'] : '');
-            $storys    = $this->loadModel('story')->getUserStoryPairs($account, 10, 'story', '', isset($objectIDList['story']) ? $objectIDList['story'] : '');
+            $bugs   = $this->bug->getUserBugPairs($account, true, 0, '', '', isset($objectIDList['bug']) ? $objectIDList['bug'] : '');
+            $tasks  = $this->task->getUserTaskPairs($account, 'wait,doing', '', isset($objectIDList['task']) ? $objectIDList['task'] : '');
+            $storys = $this->loadModel('story')->getUserStoryPairs($account, 10, 'story', '', isset($objectIDList['story']) ? $objectIDList['story'] : '');
             if($this->config->edition != 'open') $this->view->feedbacks = $this->loadModel('feedback')->getUserFeedbackPairs($account);
             if($this->config->edition == 'max')
             {
@@ -225,7 +225,7 @@ class todo extends control
                 $risks         = $this->loadmodel('risk')->getUserRiskPairs($account);
                 $opportunities = $this->loadmodel('opportunity')->getUserOpportunityPairs($account);
             }
-            $testtasks = $this->loadModel('testtask')->getUserTestTaskPairs($account, '', '', '', '', isset($objectIDList['testtask']) ? $objectIDList['testtask'] : '');
+            $testtasks = $this->loadModel('testtask')->getUserTestTaskPairs($account, 0, 'all', '', '', isset($objectIDList['testtask']) ? $objectIDList['testtask'] : '');
 
             /* Judge whether the edited todos is too large. */
             $countInputVars  = count($editedTodos) * $columns;

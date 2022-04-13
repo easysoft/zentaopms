@@ -3022,15 +3022,15 @@ class storyModel extends model
     /**
      * Get story pairs of a user.
      *
-     * @param  string  $account
-     * @param  string  $limit
-     * @param  string  $type requirement|story
-     * @param  array   $skipProductIDList
-     * @param  int     $appendStoryID
+     * @param  string        $account
+     * @param  string        $limit
+     * @param  string        $type requirement|story
+     * @param  array         $skipProductIDList
+     * @param  int|array     $appendStoryID
      * @access public
      * @return array
      */
-    public function getUserStoryPairs($account, $limit = 10, $type = 'story', $skipProductIDList = array(), $appendStoryID = '')
+    public function getUserStoryPairs($account, $limit = 10, $type = 'story', $skipProductIDList = array(), $appendStoryID = 0)
     {
         return $this->dao->select('id, title')
             ->from(TABLE_STORY)

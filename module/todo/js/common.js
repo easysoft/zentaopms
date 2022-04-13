@@ -29,6 +29,7 @@ function loadList(type, id, defaultType, idvalue)
         divID      = '#nameBox';
     }
 
+    id = id ? id : '';
     var param = 'userID=' + userID + '&id=' + id;
     if(type == "task" || type == "testtask") param += '&status=';
     if(type == defaultType && idvalue != 0) param += '&idvalue=' + idvalue;
