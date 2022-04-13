@@ -1421,6 +1421,16 @@ class actionModel extends model
             $action->objectLink = 'javascript:void(0)';
         }
 
+        if($action->objectType == 'module')
+        {
+            $moduleType = $this->dao->select('type')->from(TABLE_MODULE)->where('id')->eq($action->objectID)->fetch('type');
+            if($moduleType == 'doc')
+            {
+                $this->app->loadLang('doc');
+                $action->objectLabel = $this->lang->doc->menuTitle;
+            }
+        }
+
         return $action;
     }
 
