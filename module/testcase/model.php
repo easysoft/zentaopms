@@ -1819,6 +1819,7 @@ class testcaseModel extends model
      */
     public function syncCase2Project($case, $caseID)
     {
+        $projects = array();
         if(!empty($case->story))
         {
             $projects = $this->dao->select('project')->from(TABLE_PROJECTSTORY)->where('story')->eq($case->story)->fetchPairs();
@@ -1831,27 +1832,25 @@ class testcaseModel extends model
         {
             $projects = array($this->session->execution);
         }
+        if(empty($projects)) return;
 
         $this->loadModel('action');
         $objectInfo = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->in($projects)->fetchAll('id');
 
-        if(!empty($projects))
+        foreach($projects as $projectID)
         {
-            foreach($projects as $projectID)
-            {
-                $lastOrder = (int)$this->dao->select('*')->from(TABLE_PROJECTCASE)->where('project')->eq($projectID)->orderBy('order_desc')->limit(1)->fetch('order');
-                $data = new stdclass();
-                $data->project = $projectID;
-                $data->product = $case->product;
-                $data->case    = $caseID;
-                $data->version = 1;
-                $data->order   = ++ $lastOrder;
-                $this->dao->insert(TABLE_PROJECTCASE)->data($data)->exec();
+            $lastOrder = (int)$this->dao->select('*')->from(TABLE_PROJECTCASE)->where('project')->eq($projectID)->orderBy('order_desc')->limit(1)->fetch('order');
+            $data = new stdclass();
+            $data->project = $projectID;
+            $data->product = $case->product;
+            $data->case    = $caseID;
+            $data->version = 1;
+            $data->order   = ++ $lastOrder;
+            $this->dao->insert(TABLE_PROJECTCASE)->data($data)->exec();
 
-                $objectType = $objectInfo[$projectID]->type;
-                if($objectType == 'project') $this->action->create('case', $caseID, 'linked2project', '', $projectID);
-                if(in_array($objectType, array('sprint', 'stage'))) $this->action->create('case', $caseID, 'linked2execution', '', $projectID);
-            }
+            $objectType = $objectInfo[$projectID]->type;
+            if($objectType == 'project') $this->action->create('case', $caseID, 'linked2project', '', $projectID);
+            if(in_array($objectType, array('sprint', 'stage'))) $this->action->create('case', $caseID, 'linked2execution', '', $projectID);
         }
     }
 
