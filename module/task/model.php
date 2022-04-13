@@ -2330,10 +2330,10 @@ class taskModel extends model
     /**
      * Get tasks pairs of a user.
      *
-     * @param  string       $account
-     * @param  string       $status
-     * @param  array        $skipExecutionIDList
-     * @param  int|array    $appendTaskID
+     * @param  string    $account
+     * @param  string    $status
+     * @param  array     $skipExecutionIDList
+     * @param  int|array $appendTaskID
      * @access public
      * @return array
      */

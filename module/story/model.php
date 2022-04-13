@@ -3022,11 +3022,11 @@ class storyModel extends model
     /**
      * Get story pairs of a user.
      *
-     * @param  string        $account
-     * @param  string        $limit
-     * @param  string        $type requirement|story
-     * @param  array         $skipProductIDList
-     * @param  int|array     $appendStoryID
+     * @param  string    $account
+     * @param  string    $limit
+     * @param  string    $type requirement|story
+     * @param  array     $skipProductIDList
+     * @param  int|array $appendStoryID
      * @access public
      * @return array
      */
