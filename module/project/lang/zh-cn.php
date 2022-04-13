@@ -186,6 +186,7 @@ $lang->project->linkStoryByPlanTips    = "此操作会将所选计划下面的{$
 $lang->project->createExecution        = "该项目下没有{$lang->executionCommon}，请先创建{$lang->executionCommon}";
 $lang->project->unlinkExecutionMember  = "该用户参与了%s%s%s个{$lang->execution->common}，是否同时将其移除？（该用户所产生的数据不会受影响。）";
 $lang->project->unlinkExecutionMembers = "移除的团队成员还参与了项目下的执行，是否同步从执行团队中移除？";
+$lang->project->productTip             = '点击新建产品后，项目将不会关联已选中的产品。';
 
 $lang->project->tenThousand    = '万';
 $lang->project->hundredMillion = '亿';
