@@ -212,7 +212,7 @@ class todo extends control
                         if(!isset($objectIDList[$todo->type])) $objectIDList[$todo->type] = array();
                         $objectIDList[$todo->type][$todo->idvalue] = $todo->idvalue;
                     }
-                 }
+                }
             }
 
             $bugs   = $this->bug->getUserBugPairs($account, true, 0, '', '', isset($objectIDList['bug']) ? $objectIDList['bug'] : '');
