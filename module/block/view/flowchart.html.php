@@ -3,7 +3,7 @@
 <?php $idx = 0; ?>
   <div class='row row-<?php echo $flowName?>'>
   <?php foreach ($flow as $flowItem):?>
-    <div class='flow-item flow-item-<?php echo $idx++ ?>'><div title='<?php echo $flowItem ?>'><span><?php echo $flowItem ?></span></div></div>
+    <div class='flow-item flow-item-<?php echo $idx++ ?>'><div title='<?php echo $flowItem ?>'><span class='flow-item-display'><?php echo $flowItem ?></span></div></div>
   <?php endforeach; ?>
   </div>
 <?php endforeach; ?>
@@ -45,4 +45,6 @@
 .block-sm .flow-item > div:before, .block-sm .flow-item > div:after {border-width: 15px 0 15px 6px;}
 .block-sm .row-3 .flow-item-1, .block-sm .row-3 .flow-item-3 {width: 25%}
 .block-sm .flow-item > div:after {right: -6px;}
+
+.flow-item-display {overflow: hidden; white-space:nowrap; text-overflow: ellipsis;}
 </style>
