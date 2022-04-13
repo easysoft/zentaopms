@@ -63,9 +63,9 @@ $projectIDParam = $isProjectStory ? "projectID=$projectID&" : '';
       <ul class='dropdown-menu' style='max-height:240px; max-width: 300px; overflow-y:auto'>
         <?php
         echo "<li>" . html::a($this->createLink('projectstory', 'story', "projectID=$projectID"), $lang->product->all)  . "</li>";
-        foreach($projectProducts as $product)
+        foreach($projectProducts as $projectProduct)
         {
-            echo "<li>" . html::a($this->createLink('projectstory', 'story', "projectID=$projectID&productID=$product->id&branch=all"), $product->name, '', "title='{$product->name}' class='text-ellipsis'") . "</li>";
+            echo "<li>" . html::a($this->createLink('projectstory', 'story', "projectID=$projectID&productID=$projectProduct->id&branch=all"), $projectProduct->name, '', "title='{$projectProduct->name}' class='text-ellipsis'") . "</li>";
         }
         ?>
       </ul>
@@ -143,6 +143,7 @@ $projectIDParam = $isProjectStory ? "projectID=$projectID&" : '';
         ?>
       </ul>
     </div>
+    <?php if(common::canModify('product', $product)):?>
     <div class='btn-group dropdown'>
       <?php
       $createStoryLink = $this->createLink('story', 'create', "product=$productID&branch=$branch&moduleID=$moduleID&storyID=0&projectID=$projectID&bugID=0&planID=0&todoID=0&extra=&type=$storyType");
@@ -227,6 +228,7 @@ $projectIDParam = $isProjectStory ? "projectID=$projectID&" : '';
     }
     ?>
     </div>
+    <?php endif;?>
   </div>
   <?php endif;?>
 </div>

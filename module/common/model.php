@@ -2738,6 +2738,8 @@ EOD;
     {
         global $config;
 
+        if(empty($object)) return true;
+
         if($type == 'product'   and empty($config->CRProduct)   and $object->status == 'closed') return false;
         if($type == 'execution' and empty($config->CRExecution) and $object->status == 'closed') return false;
 
