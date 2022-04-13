@@ -684,7 +684,7 @@ class testcaseModel extends model
      * @access public
      * @return void
      */
-    public function update($caseID, $testtasks = '')
+    public function update($caseID, $testtasks = array())
     {
         $now     = helper::now();
         $oldCase = $this->getById($caseID);
@@ -897,7 +897,7 @@ class testcaseModel extends model
      * @access public
      * @return array
      */
-    public function batchUpdate($testtasks = '')
+    public function batchUpdate($testtasks = array())
     {
         $cases      = array();
         $allChanges = array();
