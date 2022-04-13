@@ -89,6 +89,7 @@ $builder->release    = array('rows' => 10, 'extends' => array('release'));
 $builder->design     = array('rows' => 120, 'extends' => array('design'));
 $builder->designspec = array('rows' => 120, 'extends' => array('designspec'));
 
+$builder->stage   = array('rows' => 6, 'extends' => array('stage'));
 $builder->webhook = array('rows' => 7, 'extends' => array('webhook'));
 $builder->entry   = array('rows' => 1, 'extends' => array('entry'));
 
