@@ -1037,11 +1037,10 @@ class testtaskModel extends model
      * @param  string       $status all|wait|doing|done|blocked
      * @param  array        $skipProductIDList
      * @param  array        $skipExecutionIDList
-     * @param  int|array    $appendTestTaskID
      * @access public
      * @return array
      */
-    public function getUserTestTaskPairs($account, $limit = 0, $status = 'all', $skipProductIDList = array(), $skipExecutionIDList = array(), $appendTestTaskID = 0)
+    public function getUserTestTaskPairs($account, $limit = 0, $status = 'all', $skipProductIDList = array(), $skipExecutionIDList = array())
     {
         $stmt = $this->dao->select('t1.id, t1.name, t2.name as execution')
             ->from(TABLE_TESTTASK)->alias('t1')
@@ -1051,7 +1050,6 @@ class testtaskModel extends model
             ->beginIF($status != 'all')->andWhere('t1.status')->in($status)->fi()
             ->beginIF(!empty($skipProductIDList))->andWhere('t1.product')->notin($skipProductIDList)->fi()
             ->beginIF(!empty($skipExecutionIDList))->andWhere('t1.execution')->notin($skipExecutionIDList)->fi()
-            ->beginIF(!empty($appendTestTaskID))->orWhere('t1.id')->in($appendTestTaskID)->fi()
             ->beginIF($limit)->limit($limit)->fi()
             ->query();
 

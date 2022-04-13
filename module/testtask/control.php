@@ -1424,18 +1424,16 @@ class testtask extends control
      * @param  int    $userID
      * @param  string $id
      * @param  string $status
-     * @param  int    $appendID
      * @access public
      * @return void
      */
-    public function ajaxGetUserTestTasks($userID = '', $id = '', $status = '', $appendID = 0)
+    public function ajaxGetUserTestTasks($userID = '', $id = '', $status = 'all')
     {
         if($userID == '') $userID = $this->app->user->id;
         $user    = $this->loadModel('user')->getById($userID, 'id');
         $account = $user->account;
 
-        $status    = empty($status) ? 'all' : $status;
-        $testTasks = $this->testtask->getUserTestTaskPairs($account, 0, $status, '', '', $appendID);
+        $testTasks = $this->testtask->getUserTestTaskPairs($account, 0, $status);
 
         if($id) return print(html::select("testtasks[$id]", $testTasks, '', 'class="form-control"'));
         return print(html::select('testtask', $testTasks, '', 'class="form-control"'));

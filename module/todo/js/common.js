@@ -31,7 +31,7 @@ function loadList(type, id, defaultType, idvalue)
 
     id = id ? id : '';
     var param = 'userID=' + userID + '&id=' + id;
-    if(type == "task" || type == "testtask") param += '&status=';
+    if(type == "task") param += '&status=';
     if(type == defaultType && idvalue != 0) param += '&idvalue=' + idvalue;
 
     if(moduleList.indexOf(type) !== -1)

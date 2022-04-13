@@ -225,7 +225,7 @@ class todo extends control
                 $risks         = $this->loadmodel('risk')->getUserRiskPairs($account);
                 $opportunities = $this->loadmodel('opportunity')->getUserOpportunityPairs($account);
             }
-            $testtasks = $this->loadModel('testtask')->getUserTestTaskPairs($account, 0, 'all', '', '', isset($objectIDList['testtask']) ? $objectIDList['testtask'] : '');
+            $testtasks = $this->loadModel('testtask')->getUserTestTaskPairs($account);
 
             /* Judge whether the edited todos is too large. */
             $countInputVars  = count($editedTodos) * $columns;
