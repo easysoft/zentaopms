@@ -1035,8 +1035,8 @@ class testtaskModel extends model
      * @param  string $account
      * @param  int    $limit
      * @param  string $status all|wait|doing|done|blocked
-     * @param  array $skipProductIDList
-     * @param  array $skipExecutionIDList
+     * @param  array  $skipProductIDList
+     * @param  array  $skipExecutionIDList
      * @access public
      * @return array
      */

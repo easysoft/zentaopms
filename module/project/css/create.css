@@ -15,3 +15,5 @@
 #productsBox a {border-radius: 2px !important;}
 #productsBox .addProduct {padding-left: 0px !important;}
 #productsBox > .required:after{right: -6px !important;}
+#productsBox .productTip {width: 80px; position: absolute; left: 350px; bottom: 6px;}
+#productsBox .required > .productTip {left: 360px;}

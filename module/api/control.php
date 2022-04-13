@@ -22,18 +22,21 @@ class api extends control
     /**
      * Api doc index page.
      *
-     * @param  int $libID
-     * @param  int $moduleID
-     * @param  int $apiID
-     * @param  int $version
-     * @param  int $release
+     * @param  int    $libID
+     * @param  int    $moduleID
+     * @param  int    $apiID
+     * @param  int    $version
+     * @param  int    $release
+     * @param  int    $appendLib
      * @access public
      * @return void
      */
-    public function index($libID = 0, $moduleID = 0, $apiID = 0, $version = 0, $release = 0)
+    public function index($libID = 0, $moduleID = 0, $apiID = 0, $version = 0, $release = 0, $appendLib = 0)
     {
         /* Get all api doc libraries. */
-        $libs = $this->doc->getApiLibs();
+        $lib       = $this->doc->getLibById($libID);
+        $appendLib = (!empty($lib) and $lib->deleted == '1') ? $libID : 0;
+        $libs      = $this->doc->getApiLibs($appendLib);
 
         /* Generate bread crumbs dropMenu. */
         if($libs)
