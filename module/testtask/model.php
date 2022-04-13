@@ -1032,11 +1032,11 @@ class testtaskModel extends model
     /**
      * Get testtask pairs of a user.
      *
-     * @param  string       $account
-     * @param  int          $limit
-     * @param  string       $status all|wait|doing|done|blocked
-     * @param  array        $skipProductIDList
-     * @param  array        $skipExecutionIDList
+     * @param  string $account
+     * @param  int    $limit
+     * @param  string status all|wait|doing|done|blocked
+     * @param  array  $skipProductIDList
+     * @param  array  $skipExecutionIDList
      * @access public
      * @return array
      */
