@@ -90,6 +90,7 @@ $routes['/tasks/:id/pause']      = 'taskPause';
 $routes['/tasks/:id/finish']     = 'taskFinish';
 $routes['/tasks/:id/close']      = 'taskClose';
 $routes['/tasks/:id/estimate']   = 'taskRecordEstimate';
+$routes['/tasks/:id/active']     = 'taskActive';
 
 $routes['/users']     = 'users';
 $routes['/users/:id'] = 'user';
