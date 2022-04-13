@@ -314,7 +314,7 @@ $lang->block->default['full']['my']['8']['params']['meetingCount'] = '20';
 
 if($config->systemMode == 'new')
 {
-    $lang->block->default['full']['my']['9']['title']  = 'Human Input';
+    $lang->block->default['full']['my']['9']['title']  = 'Manpower Input';
     $lang->block->default['full']['my']['9']['block']  = 'projectteam';
     $lang->block->default['full']['my']['9']['source'] = 'project';
     $lang->block->default['full']['my']['9']['grid']   = 8;
@@ -364,7 +364,7 @@ $lang->block->modules['project']->availableBlocks = new stdclass();
 $lang->block->modules['project']->availableBlocks->project       = 'Project List';
 $lang->block->modules['project']->availableBlocks->recentproject = 'Recent Project';
 $lang->block->modules['project']->availableBlocks->statistic     = 'Project Statistic';
-if($config->systemMode == 'new') $lang->block->modules['project']->availableBlocks->projectteam = 'Project Human Input';
+if($config->systemMode == 'new') $lang->block->modules['project']->availableBlocks->projectteam = 'Project Manpower Input';
 
 $lang->block->modules['scrum']['index'] = new stdclass();
 $lang->block->modules['scrum']['index']->availableBlocks = new stdclass();
