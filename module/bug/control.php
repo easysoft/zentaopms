@@ -1579,7 +1579,7 @@ class bug extends control
             }
             if(defined('RUN_MODE') && RUN_MODE == 'api')
             {
-                return print(array('status' => 'success', 'data' => $bugID));
+                return $this->send(array('status' => 'success', 'data' => $bugID));
             }
             else
             {
@@ -1587,7 +1587,7 @@ class bug extends control
             }
         }
 
-        $projectID  = $this->lang->navGroup->bug == 'project' ? $this->session->project : 0;
+        $projectID  = $bug->project;
         $productID  = $bug->product;
         $users      = $this->user->getPairs('noclosed');
         $assignedTo = $bug->openedBy;

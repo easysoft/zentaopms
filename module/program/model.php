@@ -136,14 +136,14 @@ class programModel extends model
     public function getList($status = 'all', $orderBy = 'id_asc', $pager = NULL)
     {
         return $this->dao->select('*')->from(TABLE_PROGRAM)
-            ->where('type')->in('program,project')
-            ->andWhere('deleted')->eq(0)
+            ->where('deleted')->eq(0)
             ->andWhere('vision')->eq($this->config->vision)
-            ->beginIF(!$this->app->user->admin)
-            ->andWhere('(id')->in($this->app->user->view->programs)
-            ->orWhere('id')->in($this->app->user->view->projects)
+            ->andWhere('((type')->eq('program')
+            ->beginIF(!$this->app->user->admin and $this->app->rawMethod != 'browse')->andWhere('id')->in($this->app->user->view->programs)->fi()
             ->markRight(1)
-            ->fi()
+            ->orWhere('(type')->eq('project')
+            ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->projects)->fi()
+            ->markRight(2)
             ->beginIF($status != 'all')->andWhere('status')->eq($status)->fi()
             ->beginIF(!$this->cookie->showClosed)->andWhere('status')->ne('closed')->fi()
             ->orderBy($orderBy)
@@ -247,6 +247,7 @@ class programModel extends model
                     return $planVal->title = htmlspecialchars_decode($planVal->title, ENT_QUOTES);
                 }, 
                 $product->plans);
+                $product->name = htmlspecialchars_decode($product->name, ENT_QUOTES);
                 
                 $product->releases = zget($releases, $product->id, array());
                 $projects          = zget($projectGroup, $product->id, array());
@@ -265,6 +266,9 @@ class programModel extends model
 
                     $project->execution = $execution;
                     $project->hours['progress']   = zget($projectHours, $project->id, array());
+
+                    /* Convert predefined HTML entities to characters. */
+                    $project->name = htmlspecialchars_decode($project->name, ENT_QUOTES);
                     $product->projects[$status][] = $project;
                 }
             }
@@ -1168,6 +1172,7 @@ class programModel extends model
 
         ksort($treeMenu);
         $topMenu = array_shift($treeMenu);
+        $topMenu = empty($topMenu) ? '' : $topMenu;
         $topMenu = explode("\n", trim($topMenu));
         $lastMenu[] = '/';
         foreach($topMenu as $menu)
@@ -1367,6 +1372,9 @@ class programModel extends model
             $project->teamCount   = isset($teams[$project->id]) ? $teams[$project->id]->teams : 0;
             $project->leftTasks   = isset($leftTasks[$project->id]) ? $leftTasks[$project->id]->tasks : '—';
             $project->teamMembers = isset($teamMembers[$project->id]) ? array_keys($teamMembers[$project->id]) : array();
+
+            /* Convert predefined HTML entities to characters. */
+            $project->name = htmlspecialchars_decode($project->name, ENT_QUOTES);
 
             $stats[$key] = $project;
         }

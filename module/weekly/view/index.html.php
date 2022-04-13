@@ -180,7 +180,4 @@
     </table>
   </div>
 </div>
-<style>
-.main-table tbody>tr:nth-child(odd){ background-color:#fff;}
-</style>
 <?php include '../../common/view/footer.html.php';?>

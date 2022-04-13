@@ -10,6 +10,14 @@ title=测试 designModel->update();
 cid=1
 pid=1
 
+修改设计类型 >> type,HLDS,DDS
+修改设计需求 >> story,0,17
+修改设计产品 >> product,31,21
+修改设计名称 >> name,这是一个设计1,修改设计
+修改设计详情 >> desc,这是设计描述1,详情修改
+设计名称不能为空 >> 『设计名称』不能为空。
+设计类型不能为空 >> 『设计类型』不能为空。
+
 */
 $designIDList = array('1', '2', '3');
 

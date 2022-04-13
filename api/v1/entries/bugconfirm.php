@@ -20,8 +20,6 @@ class bugConfirmEntry extends Entry
      **/
     public function post($bugID)
     {   
-        $bug = $this->loadModel('bug')->getById($bugID);
-
         $fields = 'assignedTo,mailto,comment,pri,type';
         $this->batchSetPost($fields);
 
@@ -32,9 +30,9 @@ class bugConfirmEntry extends Entry
         if(!$data) return $this->send400('error');
         if(isset($data->status) and $data->status == 'fail') return $this->sendError(zget($data, 'code', 400), $data->message);
 
-        $bug = $this->bug->getById($bugID);
+        $bug = this->loadModel('bug')->getByID($bugID);
 
-        $this->send(200, $this->format($story, 'openedBy:user,openedDate:time,assignedTo:user,assignedDate:time,reviewedBy:user,reviewedDate:time,lastEditedBy:user,lastEditedDate:time,closedBy:user,closedDate:time,deleted:bool,mailto:userList'));
+        $this->send(200, $this->format($bug, 'openedBy:user,openedDate:time,assignedTo:user,assignedDate:time,reviewedBy:user,reviewedDate:time,lastEditedBy:user,lastEditedDate:time,closedBy:user,closedDate:time,deleted:bool,mailto:userList'));
     }   
 }
 

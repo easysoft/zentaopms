@@ -40,11 +40,14 @@ fields:
     format: ""
   - field: path
     note: "ID路径"
-    range: 21-10000
-    prefix: ","
-    postfix: ","
-    loop: 0
-    format: ""
+    fields:
+      - field: path1
+        range: 21-1820
+        prefix: ","
+        postfix: ","
+      - field: path2
+        range: []
+        postfix: ""
   - field: grade
     note: "等级"
     range: 1

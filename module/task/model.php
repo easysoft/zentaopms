@@ -1194,6 +1194,12 @@ class taskModel extends model
             $task->consumed       = $oldTask->consumed;
             $task->parent         = $oldTask->parent;
 
+            if(empty($task->closedReason))
+            {
+                if($oldTask->status == 'done')   $task->closedReason = 'done';
+                if($oldTask->status == 'cancel') $task->closedReason = 'cancel';
+            }
+
             if($oldTask->name != $task->name || $oldTask->estStarted != $task->estStarted || $oldTask->deadline != $task->deadline)
             {
                 $task->version = $oldTask->version + 1;
@@ -1335,7 +1341,6 @@ class taskModel extends model
                 ->checkIF($task->status == 'done' and $task->closedReason, 'closedReason', 'equal', 'done')
                 ->batchCheckIF($task->status == 'done', 'canceledBy, canceledDate', 'empty')
 
-                ->checkIF($task->status == 'closed', 'closedReason', 'notempty')
                 ->batchCheckIF($task->closedReason == 'cancel', 'finishedBy, finishedDate', 'empty')
                 ->where('id')->eq((int)$taskID)
                 ->exec();
@@ -1619,7 +1624,7 @@ class taskModel extends model
             $consumed  += $estimate->consumed;
             $work       = $estimate->work;
             $estimateID = $this->dao->lastInsertID();
-            $actionID   = $this->action->create('task', $taskID, 'RecordEstimate', $work, $estimate->consumed);
+            $actionID   = $this->action->create('task', $taskID, 'RecordEstimate', $work, (float)$estimate->consumed);
 
             if(empty($lastDate) or $lastDate <= $estimate->date)
             {
@@ -2339,6 +2344,8 @@ class taskModel extends model
      */
     public function getUserTaskPairs($account, $status = 'all', $skipExecutionIDList = array(), $appendTaskID = 0)
     {
+        $deletedProjectIDList = $this->dao->select('*')->from(TABLE_PROJECT)->where('deleted')->eq(1)->fetchPairs('id', 'id');
+
         $stmt = $this->dao->select('t1.id, t1.name, t2.name as execution')
             ->from(TABLE_TASK)->alias('t1')
             ->leftjoin(TABLE_PROJECT)->alias('t2')->on('t1.execution = t2.id')
@@ -2348,6 +2355,7 @@ class taskModel extends model
             ->beginIF($status != 'all')->andWhere('t1.status')->in($status)->fi()
             ->beginIF(!empty($skipExecutionIDList))->andWhere('t1.execution')->notin($skipExecutionIDList)->fi()
             ->beginIF(!empty($appendTaskID))->orWhere('t1.id')->in($appendTaskID)->fi()
+            ->beginIF(!empty($deletedProjectIDList))->andWhere('t1.execution')->notin($deletedProjectIDList)->fi()
             ->query();
 
         $tasks = array();

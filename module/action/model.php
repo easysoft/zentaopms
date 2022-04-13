@@ -1366,7 +1366,7 @@ class actionModel extends model
                     $appendLib          = $docLib->deleted == '1' ? $action->objectID : 0;
                     if($docLib->type == 'api')
                     {
-                        $action->objectLink = helper::createLink('api', 'index', "libID={$action->objectID}");
+                        $action->objectLink = helper::createLink('api', 'index', "libID={$action->objectID}&moduleID=0&apiID=0&version=0&release=0&appendLib={$appendLib}");
                     }
                     else
                     {

@@ -86,7 +86,7 @@ class testcase extends control
      * @access public
      * @return void
      */
-    public function browse($productID = 0, $branch = 'all', $browseType = 'all', $param = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1, $projectID = 0)
+    public function browse($productID = 0, $branch = '', $browseType = 'all', $param = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1, $projectID = 0)
     {
         $this->loadModel('datatable');
 
@@ -339,8 +339,9 @@ class testcase extends control
 
             $this->loadModel('action');
             $this->action->create('case', $caseID, 'Opened');
-            if($this->app->tab == 'project') $this->action->create('case', $caseID, 'linked2project', '', $this->session->project);
-            if($this->app->tab == 'execution') $this->action->create('case', $caseID, 'linked2execution', '', $this->session->execution);
+
+            /* If the story is linked project, make the case link the project. */
+            $this->testcase->syncCase2Project($caseResult['caseInfo'], $caseID);
 
             $this->executeHooks($caseID);
 
@@ -783,13 +784,16 @@ class testcase extends control
     {
         $this->loadModel('story');
 
+        $testtasks = $this->loadModel('testtask')->getGroupByCases($caseID);
+        $testtasks = empty($testtasks[$caseID]) ? array() : $testtasks[$caseID];
+
         if(!empty($_POST))
         {
             $changes = array();
             $files   = array();
             if($comment == false or $comment == 'false')
             {
-                $changes = $this->testcase->update($caseID);
+                $changes = $this->testcase->update($caseID, $testtasks);
                 if(dao::isError()) return print(js::error(dao::getError()));
                 $files = $this->loadModel('file')->saveUpload('testcase', $caseID);
             }
@@ -912,6 +916,7 @@ class testcase extends control
         $this->view->actions         = $this->loadModel('action')->getList('case', $caseID);
         $this->view->isLibCase       = $isLibCase;
         $this->view->forceNotReview  = $forceNotReview;
+        $this->view->testtasks       = $testtasks;
 
         $this->display();
     }
@@ -928,9 +933,12 @@ class testcase extends control
      */
     public function batchEdit($productID = 0, $branch = 0, $type = 'case', $tab = '')
     {
+        if(!$this->post->caseIDList) return print(js::locate($this->session->caseList));
+        $caseIDList = array_unique($this->post->caseIDList);
+        $testtasks  = $this->loadModel('testtask')->getGroupByCases($caseIDList);
         if($this->post->title)
         {
-            $allChanges = $this->testcase->batchUpdate();
+            $allChanges = $this->testcase->batchUpdate($testtasks);
             if($allChanges)
             {
                 foreach($allChanges as $caseID => $changes )
@@ -945,8 +953,6 @@ class testcase extends control
             return print(js::locate($this->session->caseList, 'parent'));
         }
 
-        if(!$this->post->caseIDList) return print(js::locate($this->session->caseList));
-        $caseIDList    = array_unique($this->post->caseIDList);
         $branchProduct = false;
 
         if($this->app->tab == 'project')   $this->loadModel('project')->setMenu($this->session->project);
@@ -963,6 +969,10 @@ class testcase extends control
             {
                 $libID     = $productID;
                 $libraries = $this->loadModel('caselib')->getLibraries();
+
+                /* Remove story custom fields from caselib */
+                $this->config->testcase->customBatchEditFields   = str_replace(',story', '', $this->config->testcase->customBatchEditFields);
+                $this->config->testcase->custom->batchEditFields = str_replace(',story', '', $this->config->testcase->custom->batchEditFields);
 
                 /* Set caselib menu. */
                 $this->caselib->setLibMenu($libraries, $libID);
@@ -1029,11 +1039,11 @@ class testcase extends control
             $productIdList = array();
             foreach($cases as $case) $productIdList[$case->product] = $case->product;
 
-            $branches        = 0;
             $branchTagOption = array();
             $products        = $this->product->getByIdList($productIdList);
             foreach($products as $product)
             {
+                $branches = 0;
                 if($product->type != 'normal')
                 {
                     $branches = $this->loadModel('branch')->getList($product->id, 0, 'all');
@@ -1054,6 +1064,9 @@ class testcase extends control
         $countInputVars  = count($cases) * (count(explode(',', $this->config->testcase->custom->batchEditFields)) + 3);
         $showSuhosinInfo = common::judgeSuhosinSetting($countInputVars);
         if($showSuhosinInfo) $this->view->suhosinInfo = extension_loaded('suhosin') ? sprintf($this->lang->suhosinInfo, $countInputVars) : sprintf($this->lang->maxVarsInfo, $countInputVars);
+
+        $stories = $this->loadModel('story')->getProductStoryPairs($productID, $branch);
+        $this->view->stories = array('' => '', 'ditto' => $this->lang->testcase->ditto) + $stories;
 
         /* Set custom. */
         foreach(explode(',', $this->config->testcase->customBatchEditFields) as $field) $customFields[$field] = $this->lang->testcase->$field;
@@ -1086,6 +1099,8 @@ class testcase extends control
         $this->view->cases          = $cases;
         $this->view->forceNotReview = $this->testcase->forceNotReview();
         $this->view->modulePairs    = $modulePairs;
+        $this->view->testtasks      = $testtasks;
+        $this->view->isLibCase      = $type == 'lib' ? true : false;
 
         $this->display();
     }
@@ -1469,7 +1484,7 @@ class testcase extends control
                     $row->id        = $caseID;
                 }
             }
-            if($taskID) $caseLang->statusList = $this->lang->testtask->statusList;
+            if($taskID) $caseLang->statusList = $this->lang->testcase->statusList;
 
             $stmt = $this->dao->select('t1.*')->from(TABLE_TESTRESULT)->alias('t1')
                 ->leftJoin(TABLE_TESTRUN)->alias('t2')->on('t1.run=t2.id')

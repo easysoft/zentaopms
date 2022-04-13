@@ -6,3 +6,5 @@
 #kanbanList .kanban-lane-name > .text {display: none;}
 #kanbanList .kanban-item.link-block > a {cursor: move;}
 #kanbanList .kanban-lane + .kanban-lane {margin-top: 2px!important;}
+
+.kanban.kanban-dragging {overflow: hidden!important;}

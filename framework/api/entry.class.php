@@ -524,7 +524,7 @@ class baseEntry
             /* Format value. */
             if(!$isArray)
             {
-                $object->$key = $this->cast($object->$key, $type);
+                $object->$key = $this->cast(trim($object->$key, ','), $type);
                 continue;
             }
 

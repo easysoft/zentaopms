@@ -25,20 +25,67 @@ function setDuplicateAndChild(resolution, storyID)
     }
 }
 
-function loadBranches(product, branch, caseID)
+/**
+ * Load branches.
+ *
+ * @param  int    product
+ * @param  int    branch
+ * @param  int    caseID
+ * @param  int    oldBranch
+ * @access public
+ * @return void
+ */
+function loadBranches(product, branch, caseID, oldBranch)
 {
     if(typeof(branch) == 'undefined') branch = 0;
     if(!branch) branch = 0;
 
-    var currentModuleID = $('#modules' + caseID).val();
-    moduleLink = createLink('tree', 'ajaxGetOptionMenu', 'productID=' + product + '&viewtype=case&branch=' + branch + '&rootModuleID=0&returnType=html&fieldID=' + caseID + '&needManage=false&extra=&currentModuleID=' + currentModuleID);
-    $('#modules' + caseID).parent('td').load(moduleLink, function()
+    var result = true;
+    if(branch)
     {
-        $("#modules" + caseID).attr('onchange', "loadStories("+ product + ", this.value, " + caseID + ")").chosen();
-    });
+        var endLoop = false;
+        for(index in testtasks)
+        {
+            if(endLoop) break;
+            if(index == caseID)
+            {
+                endLoop = true;
+                for(taskID in testtasks[index])
+                {
+                    if(branch != oldBranch && testtasks[index][taskID]['branch'] != branch)
+                    {
+                        var tip = confirmUnlinkTesttask.replace("%s", caseID);
+                        result  = confirm(tip);
+                        if(!result) $('#branches' + caseID).val(oldBranch).trigger("chosen:updated");
+                        break;
+                    }
+                }
+            }
+        }
+    }
 
-    loadStories(product, 0, caseID);
+    if(result)
+    {
+        var currentModuleID = $('#modules' + caseID).val();
+        moduleLink          = createLink('tree', 'ajaxGetOptionMenu', 'productID=' + product + '&viewtype=case&branch=' + branch + '&rootModuleID=0&returnType=html&fieldID=' + caseID + '&needManage=false&extra=&currentModuleID=' + currentModuleID);
+        $('#modules' + caseID).parent('td').load(moduleLink, function()
+        {
+            $("#modules" + caseID).attr('onchange', "loadStories("+ product + ", this.value, " + caseID + ")").chosen();
+        });
+
+        loadStories(product, 0, caseID);
+    }
 }
+
+$(document).ready(function()
+{
+     /* Set secondary menu highlighting. */
+    if(isLibCase)
+    {
+      $('#navbar li[data-id=caselib]').addClass('active');
+      $('#navbar li[data-id=testcase]').removeClass('active');
+    }
+})
 
 $(function()
 {
@@ -57,7 +104,7 @@ $(function()
             var storyLink = createLink('story', 'ajaxGetProductStories', 'productID=' + productID + '&branch=' + branchID + '&moduleID=' + moduleID + '&storyID=0&onlyOption=false&status=noclosed&limit=50&type=full&hasParent=1&executionID=0&number=' + num);
             $.get(storyLink, function(stories)
             {
-                if(!stories) modules = '<select id="story' + num + '" name="story[' + num + ']" class="form-control"></select>';
+                if(!stories) stories = '<select id="story' + num + '" name="story[' + num + ']" class="form-control"></select>';
                 $('#story' + num).replaceWith(stories);
                 $('#story' + num + "_chosen").remove();
                 $('#story' + num).next('.picker').remove();

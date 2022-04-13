@@ -186,7 +186,13 @@ class blockModel extends model
             ->where('assignedTo')->eq($this->app->user->account)
             ->andWhere('deleted')->eq(0)
             ->fetch('count');
-        $data['stories']    = (int)$this->dao->select('count(*) AS count')->from(TABLE_STORY)->where('assignedTo')->eq($this->app->user->account)->andWhere('deleted')->eq(0)->andWhere('type')->eq('story')->fetch('count');
+        $data['stories']    = (int)$this->dao->select('count(*) AS count')->from(TABLE_STORY)->alias('t1')
+            ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product=t2.id')
+            ->where('t1.assignedTo')->eq($this->app->user->account)
+            ->andWhere('t1.deleted')->eq(0)
+            ->andWhere('t2.deleted')->eq(0)
+            ->andWhere('t1.type')->eq('story')
+            ->fetch('count');
         $data['executions'] = (int)$this->dao->select('count(*) AS count')->from(TABLE_EXECUTION)
             ->where('status')->notIN('done,closed')
             ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->sprints)->fi()

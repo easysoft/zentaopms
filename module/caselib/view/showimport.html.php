@@ -112,7 +112,7 @@ $(function()
             }
             echo html::hidden('isEndPage', $isEndPage ? 1 : 0);
             echo html::hidden('pagerID', $pagerID);
-            echo ' &nbsp; ' . html::backButton();
+            echo ' &nbsp; ' . html::a($this->createLink('caselib', 'browse', "libID=$libID"), $lang->goback, '', 'class="btn btn-wide"');
             echo ' &nbsp; ' . sprintf($lang->file->importPager, $allCount, $pagerID, $allPager);
             ?>
           </td>

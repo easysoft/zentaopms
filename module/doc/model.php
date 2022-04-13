@@ -38,14 +38,16 @@ class docModel extends model
     /**
      * Get api Libraries.
      *
+     * @param  int    $appendLib
      * @return array
      * @author thanatos thanatos915@163.com
      */
-    public function getApiLibs()
+    public function getApiLibs($appendLib = 0)
     {
         $libs = $this->dao->select('*')->from(TABLE_DOCLIB)
             ->where('deleted')->eq(0)
             ->andWhere('type')->eq('api')
+            ->beginIF(!empty($appendLib))->orWhere('id')->eq($appendLib)->fi()
             ->orderBy('id_desc')
             ->fetchAll('id');
         $libs = array_filter($libs, array($this, 'checkPrivLib'));
@@ -223,13 +225,19 @@ class docModel extends model
     }
 
     /**
+     * Update api lib.
+     *
      * @param  int      $id
      * @param  stdClass $oldDoc
      * @param  array    $data
+     * @access public
      * @return array|int
      */
     public function updateApiLib($id, $oldDoc, $data)
     {
+        /* Replace doc library name. */
+        $this->lang->doclib->name = $this->lang->doclib->apiLibName;
+
         $data->type = static::DOC_TYPE_API;
         $this->dao->update(TABLE_DOCLIB)->data($data)->autoCheck()
             ->batchCheck($this->config->api->editlib->requiredFields, 'notempty')

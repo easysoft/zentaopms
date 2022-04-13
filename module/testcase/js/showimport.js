@@ -1,25 +1,31 @@
-$(document).on('mouseup', '[id^=story].chosen-with-drop', function()
+$("[name^='product']").each(function()
 {
-    var select = $(this).prev('select');
-    var id     = $(select).attr('id');
-    var index    = id.substring(5);
-    var moduleID = $('#module' + index).val();
-    var branch   = $('#branch' + index).length > 0 ? $('#branch' + index).val() : 0;
-    if(moduleID == 'ditto')
+    var id = $(this).attr('id');
+    $(this).attr('id', 'product' + id.match(/\d+/));
+});
+
+$("[name^='branch']").each(function()
+{
+    var id = $(this).attr('id');
+    $(this).attr('id', 'branch' + id.match(/\d+/));
+});
+
+$("[name^='story']").each(function()
+{
+    var id        = $(this).attr('id');
+    var num       = id.substring(5);
+    var productID = $('#product' + num).val();
+    var branchID  = $('#branch' + num).val();
+    var moduleID  = $('#module' + num).val();
+    var storyID   = $("#story" + num).val();
+    var storyLink = createLink('story', 'ajaxGetProductStories', 'productID=' + productID + '&branch=' + branchID + '&moduleID=' + moduleID + '&storyID=0&onlyOption=false&status=noclosed&limit=50&type=full&hasParent=1&executionID=0&number=' + num);
+    $.get(storyLink, function(stories)
     {
-        for(var i = index - 1; i >=0; i--)
-        {
-            if($('#module' + i).val() != 'ditto')
-            {
-                moduleID = $('#module' + i).val();
-                break;
-            }
-        }
-    }
-    var link = createLink('story', 'ajaxGetProductStories', 'productID=' + productID + '&branch=' + branch + '&moduleID=' + moduleID + '&storyID='+ ($(select).val() || '0') + '&onlyOption=true&status=noclosed&limit=0&type=null');
-    var $story = $('#story' + index);
-    if($story.data('loadLink') !== link)
-    {
-        $story.load(link, function(){$story.data('loadLink', link).trigger("chosen:updated");});
-    }
+        if(!stories) stories = '<select id="story' + num + '" name="story[' + num + ']" class="form-control"></select>';
+        $('#story' + num).replaceWith(stories);
+        $('#story' + num + "_chosen").remove();
+        $('#story' + num).next('.picker').remove();
+        $('#story' + num).attr('name', 'story[' + num + ']').chosen();
+        $('#story' + num).val(storyID).trigger('chosen:updated');
+    });
 });

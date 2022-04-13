@@ -22,6 +22,9 @@ switch($argv[1])
     case 'program':
         ztfRun('model/program');
         break;
+    case 'programplan':
+        ztfRun('model/programplan');
+        break;
     case 'product':
         ztfRun('model/product');
         break;
@@ -72,6 +75,12 @@ switch($argv[1])
         break;
     case 'cron':
         ztfRun('model/cron');
+        break;
+    case 'stage':
+        ztfRun('model/stage');
+        break;
+    case 'design':
+        ztfRun('model/design');
         break;
     case 'model':
         ztfRun('model');

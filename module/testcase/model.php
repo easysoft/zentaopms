@@ -87,10 +87,7 @@ class testcaseModel extends model
                 if($step->type == 'step')  $parentStepID = 0;
             }
 
-            /* If the story is linked project, make the case link the project. */
-            $this->syncCase2Project($case, $caseID);
-
-            return array('status' => 'created', 'id' => $caseID);
+            return array('status' => 'created', 'id' => $caseID, 'caseInfo' => $case);
         }
     }
 
@@ -203,14 +200,13 @@ class testcaseModel extends model
             $caseID       = $this->dao->lastInsertID();
             $caseIDList[] = $caseID;
 
-            /* If the story is linked project, make the case link the project. */
-            $this->syncCase2Project($case, $caseID);
             $this->executeHooks($caseID);
 
             $this->loadModel('score')->create('testcase', 'create', $caseID);
             $actionID = $this->loadModel('action')->create('case', $caseID, 'Opened');
-            if($this->app->tab == 'project') $this->action->create('case', $caseID, 'linked2project', '', $this->session->project);
-            if($this->app->tab == 'execution') $this->action->create('case', $caseID, 'linked2execution', '', $this->session->execution);
+
+            /* If the story is linked project, make the case link the project. */
+            $this->syncCase2Project($case, $caseID);
         }
         if(!dao::isError()) $this->loadModel('score')->create('ajax', 'batchCreate');
         return $caseIDList;
@@ -684,10 +680,11 @@ class testcaseModel extends model
      * Update a case.
      *
      * @param  int    $caseID
+     * @param  array  $testtasks
      * @access public
      * @return void
      */
-    public function update($caseID)
+    public function update($caseID, $testtasks = array())
     {
         $now     = helper::now();
         $oldCase = $this->getById($caseID);
@@ -781,6 +778,22 @@ class testcaseModel extends model
             else
             {
                 unset($oldCase->steps);
+            }
+
+            if($case->branch and !empty($testtasks))
+            {
+                $this->loadModel('action');
+                foreach($testtasks as $taskID => $testtask)
+                {
+                    if($testtask->branch != $case->branch and $taskID)
+                    {
+                        $this->dao->delete()->from(TABLE_TESTRUN)
+                            ->where('task')->eq($taskID)
+                            ->andWhere('`case`')->eq($caseID)
+                            ->exec();
+                        $this->action->create('case' ,$caseID, 'unlinkedfromtesttask', '', $taskID);
+                    }
+                }
             }
             return common::createChanges($oldCase, $case);
         }
@@ -880,10 +893,11 @@ class testcaseModel extends model
     /**
      * Batch update testcases.
      *
+     * @param  array $testtasks
      * @access public
      * @return array
      */
-    public function batchUpdate()
+    public function batchUpdate($testtasks = array())
     {
         $cases      = array();
         $allChanges = array();
@@ -894,12 +908,12 @@ class testcaseModel extends model
         /* Process data if the value is 'ditto'. */
         foreach($caseIDList as $caseID)
         {
-            if($data->pris[$caseID]     == 'ditto') $data->pris[$caseID]     = isset($prev['pri'])    ? $prev['pri']    : 3;
-            if($data->branches[$caseID] == 'ditto') $data->branches[$caseID] = isset($prev['branch']) ? $prev['branch'] : 0;
-            if($data->modules[$caseID]  == 'ditto') $data->modules[$caseID]  = isset($prev['module']) ? $prev['module'] : 0;
-            if($data->story[$caseID]    == 'ditto') $data->story[$caseID]    = isset($prev['story'])  ? $prev['story']  : 0;
-            if($data->types[$caseID]    == 'ditto') $data->types[$caseID]    = isset($prev['type'])   ? $prev['type']   : '';
-            if($data->story[$caseID]  == '')      $data->story[$caseID]  = 0;
+            if($data->pris[$caseID]    == 'ditto') $data->pris[$caseID]    = isset($prev['pri'])    ? $prev['pri']    : 3;
+            if($data->modules[$caseID] == 'ditto') $data->modules[$caseID] = isset($prev['module']) ? $prev['module'] : 0;
+            if($data->types[$caseID]   == 'ditto') $data->types[$caseID]   = isset($prev['type'])   ? $prev['type']   : '';
+            if($data->story[$caseID]  == '') $data->story[$caseID] = 0;
+            if(isset($data->branches[$caseID]) and $data->branches[$caseID] == 'ditto') $data->branches[$caseID] = isset($prev['branch']) ? $prev['branch'] : 0;
+            if($data->story[$caseID] == 'ditto') $data->story[$caseID] = isset($prev['story']) ? $prev['story'] : 0;
 
             $prev['pri']    = $data->pris[$caseID];
             $prev['type']   = $data->types[$caseID];
@@ -942,6 +956,7 @@ class testcaseModel extends model
         }
 
         /* Update cases. */
+        $this->loadModel('action');
         foreach($cases as $caseID => $case)
         {
             $oldCase = $this->getByID($caseID);
@@ -953,8 +968,9 @@ class testcaseModel extends model
 
             if(!dao::isError())
             {
-                $isLibCase    = ($oldCase->lib and empty($oldCase->product));
-                $titleChanged = ($case->title != $oldCase->title);
+                $isLibCase     = ($oldCase->lib and empty($oldCase->product));
+                $titleChanged  = ($case->title != $oldCase->title);
+                $case->product = $oldCase->product;
                 if($isLibCase and $titleChanged) $this->dao->update(TABLE_CASE)->set('`title`')->eq($case->title)->where('`fromCaseID`')->eq($caseID)->exec();
 
                 $this->updateCase2Project($oldCase, $case, $caseID);
@@ -963,6 +979,21 @@ class testcaseModel extends model
 
                 unset($oldCase->steps);
                 $allChanges[$caseID] = common::createChanges($oldCase, $case);
+
+                if($case->branch and isset($testtasks[$caseID]))
+                {
+                    foreach($testtasks[$caseID] as $taskID => $testtask)
+                    {
+                        if($testtask->branch != $case->branch and $taskID)
+                        {
+                            $this->dao->delete()->from(TABLE_TESTRUN)
+                                ->where('task')->eq($taskID)
+                                ->andWhere('`case`')->eq($caseID)
+                                ->exec();
+                            $this->action->create('case' ,$caseID, 'unlinkedfromtesttask', '', $taskID);
+                        }
+                    }
+                }
             }
             else
             {
@@ -1247,9 +1278,9 @@ class testcaseModel extends model
                 else
                 {
                     /* Compare every step. */
-                    foreach($oldStep as $id => $oldStep)
+                    foreach($oldStep as $id => $step)
                     {
-                        if(trim($oldStep->desc) != trim($steps[$id]->desc) or trim($oldStep->expect) != $steps[$id]->expect)
+                        if(trim($step->desc) != trim($steps[$id]->desc) or trim($step->expect) != $steps[$id]->expect)
                         {
                             $stepChanged = true;
                             break;
@@ -1332,9 +1363,9 @@ class testcaseModel extends model
                         }
                     }
 
-                    $this->syncCase2Project($caseData, $caseID);
-
                     $this->action->create('case', $caseID, 'Opened');
+
+                    $this->syncCase2Project($caseData, $caseID);
                 }
             }
         }
@@ -1388,10 +1419,14 @@ class testcaseModel extends model
             if($module != 'ditto') $prevModule = $module;
             if($module == 'ditto') $data->module[$i] = $prevModule;
         }
-        foreach($data->branch as $i => $branch)
+
+        if(isset($data->branch))
         {
-            if($branch != 'ditto') $prevBranch = $branch;
-            if($branch == 'ditto') $data->branch[$i] = $prevBranch;
+            foreach($data->branch as $i => $branch)
+            {
+                if($branch != 'ditto') $prevBranch = $branch;
+                if($branch == 'ditto') $data->branch[$i] = $prevBranch;
+            }
         }
 
         $libCases = $this->dao->select('*')->from(TABLE_CASE)->where('deleted')->eq(0)->andWhere('id')->in($data->caseIdList)->fetchAll('id');
@@ -1784,6 +1819,7 @@ class testcaseModel extends model
      */
     public function syncCase2Project($case, $caseID)
     {
+        $projects = array();
         if(!empty($case->story))
         {
             $projects = $this->dao->select('project')->from(TABLE_PROJECTSTORY)->where('story')->eq($case->story)->fetchPairs();
@@ -1796,20 +1832,25 @@ class testcaseModel extends model
         {
             $projects = array($this->session->execution);
         }
+        if(empty($projects)) return;
 
-        if(!empty($projects))
+        $this->loadModel('action');
+        $objectInfo = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->in($projects)->fetchAll('id');
+
+        foreach($projects as $projectID)
         {
-            foreach($projects as $projectID)
-            {
-                $lastOrder = (int)$this->dao->select('*')->from(TABLE_PROJECTCASE)->where('project')->eq($projectID)->orderBy('order_desc')->limit(1)->fetch('order');
-                $data = new stdclass();
-                $data->project = $projectID;
-                $data->product = $case->product;
-                $data->case    = $caseID;
-                $data->version = 1;
-                $data->order   = ++ $lastOrder;
-                $this->dao->insert(TABLE_PROJECTCASE)->data($data)->exec();
-            }
+            $lastOrder = (int)$this->dao->select('*')->from(TABLE_PROJECTCASE)->where('project')->eq($projectID)->orderBy('order_desc')->limit(1)->fetch('order');
+            $data = new stdclass();
+            $data->project = $projectID;
+            $data->product = $case->product;
+            $data->case    = $caseID;
+            $data->version = 1;
+            $data->order   = ++ $lastOrder;
+            $this->dao->insert(TABLE_PROJECTCASE)->data($data)->exec();
+
+            $objectType = $objectInfo[$projectID]->type;
+            if($objectType == 'project') $this->action->create('case', $caseID, 'linked2project', '', $projectID);
+            if(in_array($objectType, array('sprint', 'stage'))) $this->action->create('case', $caseID, 'linked2execution', '', $projectID);
         }
     }
 
@@ -1889,7 +1930,7 @@ class testcaseModel extends model
 
         if($methodName == 'review')
         {
-            $status = zget($case, 'status', $status);
+            $status = zget($case, 'status', '');
 
             if($this->post->result == 'pass') return 'normal';
 

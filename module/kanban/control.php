@@ -1403,9 +1403,9 @@ class kanban extends control
         $this->loadModel($objectType)->delete(constant($table), $objectID);
         if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-        $kanbanID = $this->kanban->getKanbanIDByregion($regionID);
-        $$browseType = $this->config->vision == 'lite' ? 'task' : 'all';
-        $kanbanGroup = $this->kanban->getRDKanban($kanbanID, $$browseType);
+        $kanbanID    = $this->kanban->getKanbanIDByregion($regionID);
+        $browseType  = $this->config->vision == 'lite' ? 'task' : $this->session->execLaneType;
+        $kanbanGroup = $this->kanban->getRDKanban($kanbanID, $browseType);
 
         return print(json_encode($kanbanGroup));
     }

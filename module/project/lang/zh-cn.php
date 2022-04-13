@@ -171,6 +171,7 @@ $lang->project->waitProjects    = '未开始的项目';
 $lang->project->doingProjects   = '进行中的项目';
 $lang->project->doingExecutions = '进行中的执行(最近1个)';
 $lang->project->closedProjects  = '已关闭的项目(最近2个)';
+$lang->project->closedProject   = '已关闭的项目';
 $lang->project->noProgram       = '无项目集归属项目';
 
 $lang->project->laneColorList = array('#32C5FF', '#006AF1', '#9D28B2', '#FF8F26', '#FFC20E', '#00A78E', '#7FBB00', '#424BAC', '#C0E9FF', '#EC2761');
@@ -185,8 +186,10 @@ $lang->project->linkStoryByPlanTips    = "此操作会将所选计划下面的{$
 $lang->project->createExecution        = "该项目下没有{$lang->executionCommon}，请先创建{$lang->executionCommon}";
 $lang->project->unlinkExecutionMember  = "该用户参与了%s%s%s个{$lang->execution->common}，是否同时将其移除？（该用户所产生的数据不会受影响。）";
 $lang->project->unlinkExecutionMembers = "移除的团队成员还参与了项目下的执行，是否同步从执行团队中移除？";
+$lang->project->productTip             = '点击新建产品后，项目将不会关联已选中的产品。';
 
-$lang->project->tenThousand = '万';
+$lang->project->tenThousand    = '万';
+$lang->project->hundredMillion = '亿';
 
 $lang->project->unitList['CNY'] = '人民币';
 $lang->project->unitList['USD'] = '美元';

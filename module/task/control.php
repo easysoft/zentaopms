@@ -465,10 +465,7 @@ class task extends control
                 $changes = $this->task->update($taskID);
                 if(dao::isError()) return print(js::error(dao::getError()));
                 $files = $this->loadModel('file')->saveUpload('task', $taskID);
-                if(empty($files) and $this->post->uid != '')
-                {
-                    $files = $this->file->getPairs($_SESSION['album']['used'][$this->post->uid]);
-                }
+                if(empty($files) and $this->post->uid != '') $files = $this->file->getPairs($_SESSION['album']['used'][$this->post->uid]);
             }
 
             $task = $this->task->getById($taskID);
@@ -1455,7 +1452,11 @@ class task extends control
                 }
 
                 /* Skip parent task when batch close task. */
-                if($task->parent == '-1') continue;
+                if($task->parent == '-1')
+                {
+                    $parentTasks[$taskID] = $taskID;
+                    continue;
+                }
 
                 /* Skip closed task when batch close task. */
                 if($task->status == 'closed') continue;
@@ -1469,11 +1470,18 @@ class task extends control
             }
             if(isset($skipTasks) and empty($skipTaskIdList))
             {
-                $skipTasks = join(',', $skipTasks);
+                $skipTasks  = join(',', $skipTasks);
                 $confirmURL = $this->createLink('task', 'batchClose', "skipTaskIdList=$skipTasks");
                 $cancelURL  = $this->server->HTTP_REFERER;
                 return print(js::confirm(sprintf($this->lang->task->error->skipClose, $skipTasks), $confirmURL, $cancelURL, 'self', 'parent'));
             }
+
+            if(isset($parentTasks))
+            {
+                $parentTasks = join(',', $parentTasks);
+                return print(js::alert(sprintf($this->lang->task->error->closeParent, $parentTasks)) . js::reload('parent'));
+            }
+
             if(!dao::isError()) $this->loadModel('score')->create('ajax', 'batchOther');
         }
 

@@ -110,6 +110,7 @@ class search extends control
 
             return print(js::closeModal('parent.parent', '', "function(){parent.parent.loadQueries($queryID, $shortcut, '{$data->title}')}"));
         }
+
         $this->view->module    = $module;
         $this->view->onMenuBar = $onMenuBar;
         $this->display();

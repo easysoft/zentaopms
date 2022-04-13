@@ -1553,6 +1553,16 @@ class storyModel extends model
             ->removeIF($this->post->closedReason != 'subdivided', 'childStories')
             ->get();
 
+        if(!empty($story->duplicateStory))
+        {
+            $duplicateStoryID = $this->dao->select('id')->from(TABLE_STORY)->where('id')->eq($story->duplicateStory)->fetch();
+            if(empty($duplicateStoryID))
+            {
+                dao::$errors[] = sprintf($this->lang->story->errorDuplicateStory, $story->duplicateStory);
+                return false;
+            }
+        }
+
         $this->lang->story->comment = $this->lang->comment;
         $this->dao->update(TABLE_STORY)->data($story, 'comment')
             ->autoCheck()
@@ -2997,15 +3007,16 @@ class storyModel extends model
         if($type == 'reviewBy') $sql = $sql->leftJoin(TABLE_STORYREVIEW)->alias('t3')->on('t1.id = t3.story and t1.version = t3.version');
 
         $stories = $sql->where('t1.deleted')->eq(0)
+            ->andWhere('t2.deleted')->eq('0')
             ->andWhere('t1.type')->eq($storyType)
             ->andWhere('t1.vision')->eq($this->config->vision)
             ->beginIF($type != 'closedBy' and $this->app->moduleName == 'block')->andWhere('t1.status')->ne('closed')->fi()
             ->beginIF($type != 'all')
-            ->beginIF($type == 'assignedTo')->andWhere('assignedTo')->eq($account)->fi()
+            ->beginIF($type == 'assignedTo')->andWhere('t1.assignedTo')->eq($account)->fi()
             ->beginIF($type == 'reviewBy')->andWhere('t3.reviewer')->eq($account)->andWhere('t3.result')->eq('')->andWhere('t1.status')->in('draft,changed')->fi()
-            ->beginIF($type == 'openedBy')->andWhere('openedBy')->eq($account)->fi()
-            ->beginIF($type == 'reviewedBy')->andWhere("CONCAT(',', reviewedBy, ',')")->like("%,$account,%")->fi()
-            ->beginIF($type == 'closedBy')->andWhere('closedBy')->eq($account)->fi()
+            ->beginIF($type == 'openedBy')->andWhere('t1.openedBy')->eq($account)->fi()
+            ->beginIF($type == 'reviewedBy')->andWhere("CONCAT(',', t1.reviewedBy, ',')")->like("%,$account,%")->fi()
+            ->beginIF($type == 'closedBy')->andWhere('t1.closedBy')->eq($account)->fi()
             ->fi()
             ->beginIF($includeLibStories == false and $this->config->edition == 'max')->andWhere('t1.lib')->eq('0')->fi()
             ->orderBy($orderBy)
@@ -3897,29 +3908,29 @@ class storyModel extends model
                 $title  = isset($story->planTitle) ? $story->planTitle : '';
                 $class .= ' text-ellipsis';
             }
-            else if($id == 'sourceNote')
+            elseif($id == 'sourceNote')
             {
                 $title  = $story->sourceNote;
                 $class .= ' text-ellipsis';
             }
-            else if($id == 'category')
+            elseif($id == 'category')
             {
                 $title  = zget($this->lang->story->categoryList, $story->category);
             }
-            else if($id == 'estimate')
+            elseif($id == 'estimate')
             {
                 $title = $story->estimate . ' ' . $this->lang->hourCommon;
             }
-            else if($id == 'reviewedBy')
+            elseif($id == 'reviewedBy')
             {
                 $reviewedBy = '';
                 foreach(explode(',', $story->reviewedBy) as $user) $reviewedBy .= zget($users, $user) . ' ';
-                $story->reviewedBy = $reviewedBy;
+                $story->reviewedBy = trim($reviewedBy);
 
                 $title  = $reviewedBy;
                 $class .= ' text-ellipsis';
             }
-            else if($id == 'stage')
+            elseif($id == 'stage')
             {
                 $style .= 'overflow: visible;';
                 if(isset($storyStages[$story->id]))
@@ -3930,15 +3941,15 @@ class storyModel extends model
                     }
                 }
             }
-            else if($id == 'feedbackBy')
+            elseif($id == 'feedbackBy')
             {
                 $title = $story->feedbackBy;
             }
-            else if($id == 'notifyEmail')
+            elseif($id == 'notifyEmail')
             {
                 $title = $story->notifyEmail;
             }
-            else if($id == 'actions')
+            elseif($id == 'actions')
             {
                 $class .= ' text-center';
             }

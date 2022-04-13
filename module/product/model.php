@@ -622,6 +622,13 @@ class productModel extends model
                 $line->name   = $this->post->lineName;
                 $line->root   = $this->config->systemMode == 'new' ? $product->program : 0;
                 $line->order  = $maxOrder;
+
+                $lines = $this->dao->select('name')->from(TABLE_MODULE)->where('type')->eq('line')->andWhere('root')->eq($line->root)->andWhere('name')->eq($line->name)->fetch();
+                if(!empty($lines))
+                {
+                    dao::$errors['lineName'] = sprintf($this->lang->product->nameIsDuplicated, $line->name);
+                    return false;
+                }
                 $this->dao->insert(TABLE_MODULE)->data($line)->exec();
 
                 if(!dao::isError())
@@ -1794,7 +1801,11 @@ class productModel extends model
             ->andWhere('status')->eq('normal')
             ->fetchGroup('product', 'id');
 
-        return array('programList' => $programList, 'productList' => $productList, 'planList' => $planList, 'projectList' => $projectList, 'executionList' => $executionList, 'projectProduct' => $projectProduct, 'projectLatestExecutions' => $projectLatestExecutions, 'hourList' => $hourList, 'releaseList' => $releaseList);
+        /* Convert predefined HTML entities to characters. */
+        $statsData = array('programList' => $programList, 'productList' => $productList, 'planList' => $planList, 'projectList' => $projectList, 'executionList' => $executionList, 'projectProduct' => $projectProduct, 'projectLatestExecutions' => $projectLatestExecutions, 'hourList' => $hourList, 'releaseList' => $releaseList);
+        $statsData = $this->covertHtmlSpecialChars($statsData);
+
+        return $statsData;
     }
 
     /**
@@ -2248,5 +2259,42 @@ class productModel extends model
             $this->lang->product->menu->settings['subMenu']->branch['link'] = str_replace('@branch@', $this->lang->product->branchName[$product->type], $branchLink);
             $this->lang->product->branch = sprintf($this->lang->product->branch, $this->lang->product->branchName[$product->type]);
         }
+    }
+
+    /**
+     * Convert predefined HTML entities to characters
+     * 
+     * @param  array $statsData
+     * @return array
+     */
+    public function covertHtmlSpecialChars($statsData)
+    {
+        if(empty($statsData)) return array();
+
+        foreach($statsData as $key => $data)
+        {
+            if($key == 'productList' || $key == 'projectList')
+            {
+                !empty($data) && array_map(function($item)
+                {
+                    return $item->name = htmlspecialchars_decode($item->name, ENT_QUOTES);
+                }, 
+                $data);
+            }
+
+            if($key == 'planList')
+            {
+                foreach($data as $productID => $plan)
+                {
+                    !empty($plan) && array_map(function($planItem)
+                    {
+                        return $planItem->title = htmlspecialchars_decode($planItem->title, ENT_QUOTES);
+                    }, 
+                    $plan);
+                }
+            }   
+        }
+
+        return $statsData;
     }
 }

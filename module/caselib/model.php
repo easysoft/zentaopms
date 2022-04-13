@@ -499,7 +499,7 @@ class caselibModel extends model
                         $stepData->case    = $caseID;
                         $stepData->version = 1;
                         $stepData->desc    = htmlSpecialString($desc);
-                        $stepData->expect  = htmlSpecialString(trim($data->expect[$key][$id]));
+                        $stepData->expect  = htmlSpecialString(trim($this->post->expect[$key][$id]));
                         $this->dao->insert(TABLE_CASESTEP)->data($stepData)->autoCheck()->exec();
                         if($stepData->type == 'group') $parentStepID = $this->dao->lastInsertID();
                         if($stepData->type == 'step')  $parentStepID = 0;

@@ -58,7 +58,7 @@
           ?>
           <span class="table-nest-icon icon <?php echo $class . $icon;?>"></span>
           <?php if($program->type == 'program'):?>
-          <?php echo html::a($this->createLink('program', 'product', "programID=$program->id"), $program->name);?>
+          <?php echo strpos(",{$app->user->view->programs},", ",$program->id,") !== false ? html::a($this->createLink('program', 'product', "programID=$program->id"), $program->name) : $program->name;?>
           <?php else:?>
           <?php echo html::a($this->createLink('project', 'index', "projectID=$program->id", '', '', $program->id), $program->name);?>
           <?php endif;?>
@@ -72,7 +72,7 @@
           <?php echo html::a($this->createLink('user', 'profile', "userID=$userID", '', true), $userName, '', "title='{$userName}' data-toggle='modal' data-type='iframe' data-width='600'");?>
           <?php endif;?>
         </td>
-        <?php $programBudget = in_array($this->app->getClientLang(), array('zh-cn','zh-tw')) ? round((float)$program->budget / 10000, 2) . $lang->project->tenThousand : round((float)$program->budget, 2);?>
+        <?php $programBudget = $this->loadModel('project')->getBudgetWithUnit($program->budget);?>
         <td class='text-right'><?php echo $program->budget != 0 ? zget($lang->project->currencySymbol, $program->budgetUnit) . ' ' . $programBudget : $lang->project->future;?></td>
         <td><?php echo $program->begin;?></td>
         <td><?php echo $program->end == LONG_TIME ? $lang->program->longTime : $program->end;?></td>
@@ -85,7 +85,7 @@
         </td>
         <?php foreach($extendFields as $extendField) echo "<td>" . $this->loadModel('flow')->getFieldValue($extendField, $program) . "</td>";?>
         <td class='c-actions'>
-          <?php if($program->type == 'program'):?>
+          <?php if($program->type == 'program' and strpos(",{$app->user->view->programs},", ",$program->id,") !== false):?>
           <?php if($program->status == 'wait' || $program->status == 'suspended') common::printIcon('program', 'start', "programID=$program->id", $program, 'list', 'play', '', 'iframe', true, '', $this->lang->program->start);?>
           <?php if($program->status == 'doing')  common::printIcon('program', 'close',    "programID=$program->id", $program, 'list', 'off',   '', 'iframe', true);?>
           <?php if($program->status == 'closed') common::printIcon('program', 'activate', "programID=$program->id", $program, 'list', 'magic', '', 'iframe', true);?>
@@ -104,7 +104,7 @@
           <?php common::printIcon('program', 'create', "programID=$program->id", '', 'list', 'split', '', '', '', $program->status == 'closed' ? 'disabled' : '', $this->lang->program->children);?>
           <?php if(common::hasPriv('program', 'delete')) echo html::a($this->createLink("program", "delete", "programID=$program->id"), "<i class='icon-trash'></i>", 'hiddenwin', "class='btn' title='{$this->lang->program->delete}'");?>
 
-          <?php else:?>
+          <?php elseif($program->type == 'project'):?>
           <?php if($program->status == 'wait' || $program->status == 'suspended') common::printIcon('project', 'start', "projectID=$program->id", $program, 'list', 'play', '', 'iframe', true);?>
           <?php if($program->status == 'doing')  common::printIcon('project', 'close',    "projectID=$program->id", $program, 'list', 'off', '',   'iframe', true);?>
           <?php if($program->status == 'closed') common::printIcon('project', 'activate', "projectID=$program->id", $program, 'list', 'magic', '', 'iframe', true);?>

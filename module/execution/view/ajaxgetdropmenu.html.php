@@ -22,6 +22,9 @@
 #swapper li > a {margin-top: 4px; margin-bottom: 4px;}
 #swapper li {padding-top: 0; padding-bottom: 0;}
 #swapper .tree li>.list-toggle {top: -1px;}
+
+#closed {width: 90px; height: 25px; line-height: 25px; background-color: #ddd; color: #3c495c; text-align: center; margin-left: 15px; border-radius: 2px;}
+#gray-line {width: 230px;height: 1px; margin-left: 10px; margin-bottom:2px; background-color: #ddd;}
 </style>
 <?php
 $executionCounts      = array();
@@ -58,9 +61,9 @@ foreach($executions as $projectID => $projectExecutions)
     {
         $projectName = zget($projects, $projectID);
 
-        if($executionCounts[$projectID]['myExecution']) $myExecutionsHtml .= '<li><div class="hide-in-search"><a class="text-muted" title="' . $projectName . '">' . $projectName . '</a> <label class="label">' . $lang->project->common . '</label></div><ul>';
-        if($executionCounts[$projectID]['others']) $normalExecutionsHtml  .= '<li><div class="hide-in-search"><a class="text-muted" title="' . $projectName . '">' . $projectName . '</a> <label class="label">' . $lang->project->common . '</label></div><ul>';
-        if($executionCounts[$projectID]['closed']) $closedExecutionsHtml  .= '<li><div class="hide-in-search"><a class="text-muted" title="' . $projectName . '">' . $projectName . '</a> <label class="label">' . $lang->project->common . '</label></div><ul>';
+        if($executionCounts[$projectID]['myExecution']) $myExecutionsHtml .= '<li><div class="hide-in-search"><a class="text-muted not-list-item" title="' . $projectName . '">' . $projectName . '</a> <label class="label">' . $lang->project->common . '</label></div><ul>';
+        if($executionCounts[$projectID]['others']) $normalExecutionsHtml  .= '<li><div class="hide-in-search"><a class="text-muted not-list-item" title="' . $projectName . '">' . $projectName . '</a> <label class="label">' . $lang->project->common . '</label></div><ul>';
+        if($executionCounts[$projectID]['closed']) $closedExecutionsHtml  .= '<li><div class="hide-in-search"><a class="text-muted not-list-item" title="' . $projectName . '">' . $projectName . '</a> <label class="label">' . $lang->project->common . '</label></div><ul>';
     }
 
     foreach($projectExecutions as $index => $execution)
@@ -130,6 +133,8 @@ $closedExecutionsHtml .= '</ul>';
       <a class='pull-right toggle-right-col not-list-item'><?php echo $lang->execution->doneExecutions;?><i class='icon icon-angle-right'></i></a>
     </div>
   </div>
+  <div id="gray-line" hidden></div>
+  <div id="closed" hidden><?php echo $lang->execution->closedExecution?></div>
   <div class="table-col col-right executionTree">
    <div class='list-group executions'><?php echo $closedExecutionsHtml;?></div>
   </div>
@@ -165,6 +170,25 @@ $(function()
             $('li.has-list div.hide-in-search').removeClass('hidden');
             $('.nav-tabs li.active').find('span').show();
         }
-    })
+        if($('.form-control.search-input').val().length > 0)
+        {
+            $('#closed').attr("hidden", false);
+            $('#gray-line').attr("hidden", false);
+        }
+        else
+        {
+            $('#closed').attr("hidden", true);
+            $('#gray-line').attr("hidden", true);
+        }
+    });
+
+    $('#swapper #dropMenu').on('onSearchComplete', function(event, value)
+    {
+        if($('.list-group.executions').height() == 0)
+        {
+            $('#closed').attr("hidden", true);
+            $('#gray-line').attr("hidden", true);
+        }
+    });
 })
 </script>

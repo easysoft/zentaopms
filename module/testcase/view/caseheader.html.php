@@ -45,7 +45,7 @@
     if(isset($menuItem->hidden)) continue;
     $menuType = $menuItem->name;
     if(!$config->testcase->needReview and empty($config->testcase->forceReview) and $menuType == 'wait') continue;
-    if($hasBrowsePriv and $menuType == 'QUERY')
+    if($hasBrowsePriv and $menuType == 'QUERY' and in_array($browseType, array('all', 'needconfirm', 'bysuite')))
     {
         $searchBrowseLink = $this->createLink($currentModule, $currentMethod, $projectParam . "productID=$productID&branch=$branch&browseType=bySearch&param=%s");
         $isBySearch       = $browseType == 'bysearch';

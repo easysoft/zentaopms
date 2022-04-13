@@ -171,6 +171,10 @@ $config->upgrade->proVersion['pro10_3_1']     = '15_7_1';
 $config->upgrade->proVersion['pro11_0_beta1'] = '16_0_beta1';
 $config->upgrade->proVersion['pro11_0']       = '16_0';
 
+$config->upgrade->liteVersion = array();
+$config->upgrade->liteVersion['lite1_0'] = '16_5_beta1';
+$config->upgrade->liteVersion['lite1_1'] = '16_5';
+
 $config->upgrade->lowerTables = array();
 $config->upgrade->lowerTables[$config->db->prefix . 'caseStep']       = $config->db->prefix . 'casestep';
 $config->upgrade->lowerTables[$config->db->prefix . 'docLib']         = $config->db->prefix . 'doclib';

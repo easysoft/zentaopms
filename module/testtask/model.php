@@ -883,18 +883,18 @@ class testtaskModel extends model
             /* When the cases linked the testtask, the cases link to the project. */
             if($this->app->tab != 'qa')
             {
+                $projectID = $this->app->tab == 'project' ? $this->session->project : $this->session->execution;
                 $lastOrder = (int)$this->dao->select('*')->from(TABLE_PROJECTCASE)->where('project')->eq($projectID)->orderBy('order_desc')->limit(1)->fetch('order');
-                $project   = $this->app->tab == 'project' ? $this->session->project : $this->session->execution;
 
                 $data = new stdclass();
-                $data->project = $project;
+                $data->project = $projectID;
                 $data->product = $this->session->product;
                 $data->case    = $caseID;
                 $data->version = 1;
                 $data->order   = ++ $lastOrder;
                 $this->dao->replace(TABLE_PROJECTCASE)->data($data)->exec();
-                $this->loadModel('action')->create('case', $caseID, 'linked2testtask', '', $taskID);
             }
+            $this->loadModel('action')->create('case', $caseID, 'linked2testtask', '', $taskID);
         }
     }
 
@@ -1074,6 +1074,22 @@ class testtaskModel extends model
         $testRun = $this->dao->findById($runID)->from(TABLE_TESTRUN)->fetch();
         $testRun->case = $this->loadModel('testcase')->getById($testRun->case, $testRun->version);
         return $testRun;
+    }
+
+    /**
+     * Get testtasks by case id list.
+     *
+     * @param  string|array $caseIDList
+     * @access public
+     * @return array
+     */
+    public function getGroupByCases($caseIDList)
+    {
+        return $this->dao->select('t1.case, t2.*, t3.branch')->from(TABLE_TESTRUN)->alias('t1')
+            ->leftJoin(TABLE_TESTTASK)->alias('t2')->on('t1.task=t2.id')
+            ->leftJoin(TABLE_BUILD)->alias('t3')->on('t2.build = t3.id')
+            ->where('t1.case')->in($caseIDList)
+            ->fetchGroup('case', 'id');
     }
 
     /**

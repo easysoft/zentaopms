@@ -163,7 +163,8 @@ class story extends control
                 $object = $this->dao->findById((int)$objectID)->from(TABLE_PROJECT)->fetch();
                 if($object->type != 'project')
                 {
-                    $this->loadModel('action')->create('story', $storyID, 'linked2execution', '', $objectID);
+                    $actionType = $object->type == 'kanban' ? 'linked2kanban' : 'linked2execution';
+                    $this->loadModel('action')->create('story', $storyID, $actionType, '', $objectID);
                 }
                 else
                 {
@@ -182,21 +183,7 @@ class story extends control
             if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $storyID));
 
             /* If link from no head then reload. */
-            if(isonlybody())
-            {
-                $execution = $this->execution->getByID($this->session->execution);
-                if($this->app->tab == 'execution' and $execution->type == 'kanban' and $this->app->tab == 'execution')
-                {
-                    $kanbanData = $this->loadModel('kanban')->getRDKanban($this->session->execution, $this->session->execLaneType ? $this->session->execLaneType : 'all');
-                    $kanbanData = json_encode($kanbanData);
-
-                    return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => "parent.updateKanban($kanbanData, 0)"));
-                }
-                else
-                {
-                    return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
-                }
-            }
+            if(isonlybody()) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
 
             if($this->post->newStory)
             {
@@ -228,7 +215,8 @@ class story extends control
         /* Set products, users and module. */
         if($objectID != 0)
         {
-            $products        = $this->product->getProductPairsByProject($objectID);
+            $onlyNoClosed    = empty($this->config->CRProduct) ? 'noclosed' : '';
+            $products        = $this->product->getProductPairsByProject($objectID, $onlyNoClosed);
             $productID       = empty($productID) ? key($products) : $productID;
             $product         = $this->product->getById(($productID and array_key_exists($productID, $products)) ? $productID : key($products));
             $productBranches = $product->type != 'normal' ? $this->loadModel('execution')->getBranchByProduct($productID, $objectID) : array();
@@ -484,21 +472,8 @@ class story extends control
             }
 
             if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'idList' => $stories));
-            if(isonlybody())
-            {
-                $execution = $this->execution->getByID($this->session->execution);
-                if($this->app->tab == 'execution' and $execution->type == 'kanban' and $this->app->tab == 'execution')
-                {
-                    $kanbanData = $this->loadModel('kanban')->getRDKanban($this->session->execution, $this->session->execLaneType ? $this->session->execLaneType : 'all');
-                    $kanbanData = json_encode($kanbanData);
 
-                    return print(js::closeModal('parent.parent', '', "parent.parent.updateKanban($kanbanData)"));
-                }
-                else
-                {
-                    return print(js::closeModal('parent.parent', 'this'));
-                }
-            }
+            if(isonlybody()) return print(js::closeModal('parent.parent', 'this'));
 
             if($storyID)
             {
@@ -1003,6 +978,8 @@ class story extends control
             $version = $this->dao->findById($storyID)->from(TABLE_STORY)->fetch('version');
             $files   = $this->loadModel('file')->saveUpload($story->type, $storyID, $version);
 
+            if(empty($files) and $this->post->uid != '') $files = $this->file->getPairs($_SESSION['album']['used'][$this->post->uid]);
+
             if($this->post->comment != '' or !empty($changes) or !empty($files))
             {
                 $action = (!empty($changes) or !empty($files)) ? 'Changed' : 'Commented';
@@ -1016,21 +993,7 @@ class story extends control
 
             $module = $this->app->tab == 'project' ? 'projectstory' : 'story';
 
-            if(isonlybody())
-            {
-                $execution = $this->execution->getByID($this->session->execution);
-                if($this->app->tab == 'execution' and $execution->type == 'kanban' and $this->app->tab == 'execution')
-                {
-                    $kanbanData = $this->loadModel('kanban')->getRDKanban($this->session->execution, $this->session->execLaneType ? $this->session->execLaneType : 'all');
-                    $kanbanData = json_encode($kanbanData);
-
-                    return print(js::closeModal('parent.parent', '', "parent.parent.updateKanban($kanbanData)"));
-                }
-                else
-                {
-                    return print(js::reload('parent.parent'));
-                }
-            }
+            if(isonlybody()) return print(js::reload('parent.parent'));
 
             if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'success'));
             return print(js::locate($this->createLink($module, 'view', "storyID=$storyID"), 'parent'));
@@ -1128,7 +1091,8 @@ class story extends control
 
         $storyID = (int)$storyID;
         $story   = $this->story->getById($storyID, $version, true);
-        if(!$story) return print(js::error($this->lang->notFound) . js::locate($this->createLink('product', 'index')));
+        $linkModuleName = $this->config->vision == 'lite' ? 'project' : 'product';
+        if(!$story) return print(js::error($this->lang->notFound) . js::locate($this->createLink($linkModuleName, 'index')));
 
         $story = $this->story->mergeReviewer($story, true);
 
@@ -1163,6 +1127,8 @@ class story extends control
         {
             $this->product->setMenu($story->product, $story->branch);
         }
+
+        if($product->type != 'normal') $this->lang->product->branch = sprintf($this->lang->product->branch, $this->lang->product->branchName[$product->type]);
 
         $reviewers          = $this->story->getReviewerPairs($storyID, $story->version);
         $reviewedBy         = trim($story->reviewedBy, ',');

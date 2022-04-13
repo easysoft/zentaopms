@@ -59,6 +59,11 @@ class control extends baseControl
                     {
                         foreach($exportFields  as $field) $this->config->{$this->moduleName}->list->exportFields .= ",{$field->field}";
                     }
+
+                    foreach($exportFields as $flowField => $exportField)
+                    {
+                        if(!isset($this->lang->{$this->moduleName}->$flowField)) $this->lang->{$this->moduleName}->$flowField = $exportField->name;
+                    }
                 }
             }
 

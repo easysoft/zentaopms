@@ -5,7 +5,7 @@ version: "1.0"
 fields:
   - field: id
     note: "ID"
-    range: 401-10000
+    range: 401-410
   - field: product
     note: "产品ID"
     range: 0
@@ -32,15 +32,15 @@ fields:
     range: "1"
   - field: title
     note: "用例标题"
-    range: "1-10000"
+    range: "1-10"
     prefix: "用例库用例"
   - field: precondition
     note: "前置条件"
-    range: "1-10000"
+    range: "1-10"
     prefix: "这是前置条件"
   - field: keywords
     note: "关键词"
-    range: "1-10000"
+    range: "1-10"
     prefix: "这是关键词"
   - field: pri
     note: "优先级"

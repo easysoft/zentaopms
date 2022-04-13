@@ -2039,7 +2039,9 @@ class execution extends control
         $this->loadModel('story');
 
         if(empty($groupBy)) $groupBy = 'default';
+        /* Set Session. */
         $this->session->set('execLaneType', $browseType);
+        $this->session->set('storyList', $this->app->getURI(true), 'execution');
 
         $this->lang->execution->menu = new stdclass();
         $execution = $this->commonAction($executionID);

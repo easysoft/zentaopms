@@ -20,8 +20,6 @@ class bugCloseEntry extends Entry
      */
     public function post($bugID)
     {   
-        $bug = $this->loadModel('bug')->getByID($bugID);
-
         $fields = 'comment';
         $this->batchSetPost($fields);
 
@@ -31,8 +29,7 @@ class bugCloseEntry extends Entry
         $data = $this->getData();
         if(!$data) return $this->send400('error');
         if(isset($data->status) and $data->status == 'fail') return $this->sendError(zget($data, 'code', 400), $data->message);
-
-        $bug = $this->bug->getByID($bugID);
+        $bug = $this->loadModel('bug')->getByID($bugID);
 
         $this->send(200, $this->format($bug, 'openedBy:user,openedDate:time,assignedTo:user,assignedDate:time,reviewedBy:user,reviewedDate:time,lastEditedBy:user,lastEditedDate:time,closedBy:user,closedDate:time,deleted:bool,mailto:userList'));
     }   
