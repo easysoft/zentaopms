@@ -1624,7 +1624,7 @@ class taskModel extends model
             $consumed  += $estimate->consumed;
             $work       = $estimate->work;
             $estimateID = $this->dao->lastInsertID();
-            $actionID   = $this->action->create('task', $taskID, 'RecordEstimate', $work, $estimate->consumed);
+            $actionID   = $this->action->create('task', $taskID, 'RecordEstimate', $work, (float)$estimate->consumed);
 
             if(empty($lastDate) or $lastDate <= $estimate->date)
             {
