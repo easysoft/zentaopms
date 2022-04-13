@@ -1172,6 +1172,7 @@ class programModel extends model
 
         ksort($treeMenu);
         $topMenu = array_shift($treeMenu);
+        $topMenu = empty($topMenu) ? '' : $topMenu;
         $topMenu = explode("\n", trim($topMenu));
         $lastMenu[] = '/';
         foreach($topMenu as $menu)
