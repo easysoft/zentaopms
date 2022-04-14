@@ -216,7 +216,7 @@ class testcase extends control
         $this->view->browseType      = $browseType;
         $this->view->param           = $param;
         $this->view->cases           = $cases;
-        $this->view->branch          = $branch;
+        $this->view->branch          = $product->type == 'normal' ? 0 : $branch;
         $this->view->branchOption    = $branchOption;
         $this->view->branchTagOption = $branchTagOption;
         $this->view->suiteList       = $this->loadModel('testsuite')->getSuites($productID);
@@ -1942,12 +1942,6 @@ class testcase extends control
             }
             unset($rows[0]);
 
-            foreach($header as $title)
-            {
-                if(!isset($fields[$title])) continue;
-                $columnKey[] = $fields[$title];
-            }
-
             $endField = end($fields);
             $caseData = array();
             $stepData = array();
@@ -1955,8 +1949,11 @@ class testcase extends control
             foreach($rows as $row => $data)
             {
                 $case = new stdclass();
-                foreach($columnKey as $key => $field)
+                foreach($header as $key => $title)
                 {
+                    if(!isset($fields[$title])) continue;
+                    $field = $fields[$title];
+
                     if(!isset($data[$key])) continue;
                     $cellValue = $data[$key];
                     if($field == 'story' or $field == 'module' or $field == 'branch')
