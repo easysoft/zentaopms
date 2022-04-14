@@ -41,6 +41,11 @@ $(function()
     {
         var onlybody  = config.onlybody == 'yes';
         var productID = $('#bugProduct').val();
+        if(!productID)
+        {
+            alert(selectProduct);
+            return false;
+        }
         var link      = createLink('bug', 'create', 'productID=' + productID + '&branch=0&extras=todoID=' + todoID, config.defaultView, onlybody);
 
         if(!onlybody) window.parent.$.apps.open(link, 'qa');
