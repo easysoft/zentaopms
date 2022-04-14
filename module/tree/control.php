@@ -385,7 +385,7 @@ class tree extends control
      * @return void
      */
     public function manageChild($rootID, $viewType)
-
+    {
         if(!empty($_POST))
         {
             $moduleIDList = $this->tree->manageChild($rootID, $viewType);

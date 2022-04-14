@@ -50,7 +50,8 @@ $lang->tree->repeatName         = 'The name "%s" exists!';
 $lang->tree->shouldNotBlank     = 'Module name should not be blank!';
 
 $lang->tree->module       = 'Module';
-$lang->tree->name         = 'Name';
+$lang->tree->name         = 'Module Name';
+$lang->tree->wordName     = 'Name';
 $lang->tree->line         = "{$lang->productCommon} Line";
 $lang->tree->cate         = 'Category';
 $lang->tree->dir          = 'Directory';
@@ -71,7 +72,3 @@ $lang->tree->short        = 'Abbr.';
 $lang->tree->all          = 'All Modules';
 $lang->tree->executionDoc = "{$lang->executionCommon} Document";
 $lang->tree->product      = $lang->productCommon;
-
-$this->lang->module        = new stdclass();
-$this->lang->module->name  = '名称';
-$this->lang->module->short = '简称';
