@@ -385,10 +385,11 @@ class tree extends control
      * @return void
      */
     public function manageChild($rootID, $viewType)
-    {
+
         if(!empty($_POST))
         {
             $moduleIDList = $this->tree->manageChild($rootID, $viewType);
+            if(dao::isError()) return print(js::error(dao::getError()));
 
             if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'idList' => $moduleIDList));
             if(($viewType == 'doc' || $viewType == 'api') and isonlybody()) die(js::reload('parent.parent'));
