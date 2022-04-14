@@ -222,6 +222,7 @@ class projectModel extends model
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.execution = t2.id')
             ->where('t2.parent')->in($projectIdList)
             ->andWhere('t1.deleted')->eq(0)
+            ->andWhere('t2.deleted')->eq(0)
             ->andWhere('t1.parent')->lt(1)
             ->groupBy('project')
             ->fetchAll('project');
