@@ -69,7 +69,7 @@ fields:
     type: timestamp
     format: "YYYY-MM-DD hh:mm:ss"
   - field: openedBuild
-    range: 11-20
+    range: 11-20,11{6}
   - field: assignedTo
     range: admin,dev1,test1
   - field: assignedDate
