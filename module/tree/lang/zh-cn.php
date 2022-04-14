@@ -51,6 +51,7 @@ $lang->tree->shouldNotBlank     = '模块名不能为空格！';
 
 $lang->tree->module       = '模块';
 $lang->tree->name         = '模块名称';
+$lang->tree->wordName     = '名称';
 $lang->tree->line         = "{$lang->productCommon}线名称";
 $lang->tree->cate         = '分类名称';
 $lang->tree->dir          = '目录名称';
@@ -71,7 +72,3 @@ $lang->tree->short        = '简称';
 $lang->tree->all          = '所有模块';
 $lang->tree->executionDoc = "{$lang->executionCommon}文档";
 $lang->tree->product      = "所属{$lang->productCommon}";
-
-$this->lang->module        = new stdclass();
-$this->lang->module->name  = '名称';
-$this->lang->module->short = '简称';
