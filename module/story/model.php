@@ -3007,15 +3007,16 @@ class storyModel extends model
         if($type == 'reviewBy') $sql = $sql->leftJoin(TABLE_STORYREVIEW)->alias('t3')->on('t1.id = t3.story and t1.version = t3.version');
 
         $stories = $sql->where('t1.deleted')->eq(0)
+            ->andWhere('t2.deleted')->eq('0')
             ->andWhere('t1.type')->eq($storyType)
             ->andWhere('t1.vision')->eq($this->config->vision)
             ->beginIF($type != 'closedBy' and $this->app->moduleName == 'block')->andWhere('t1.status')->ne('closed')->fi()
             ->beginIF($type != 'all')
-            ->beginIF($type == 'assignedTo')->andWhere('assignedTo')->eq($account)->fi()
+            ->beginIF($type == 'assignedTo')->andWhere('t1.assignedTo')->eq($account)->fi()
             ->beginIF($type == 'reviewBy')->andWhere('t3.reviewer')->eq($account)->andWhere('t3.result')->eq('')->andWhere('t1.status')->in('draft,changed')->fi()
-            ->beginIF($type == 'openedBy')->andWhere('openedBy')->eq($account)->fi()
-            ->beginIF($type == 'reviewedBy')->andWhere("CONCAT(',', reviewedBy, ',')")->like("%,$account,%")->fi()
-            ->beginIF($type == 'closedBy')->andWhere('closedBy')->eq($account)->fi()
+            ->beginIF($type == 'openedBy')->andWhere('t1.openedBy')->eq($account)->fi()
+            ->beginIF($type == 'reviewedBy')->andWhere("CONCAT(',', t1.reviewedBy, ',')")->like("%,$account,%")->fi()
+            ->beginIF($type == 'closedBy')->andWhere('t1.closedBy')->eq($account)->fi()
             ->fi()
             ->beginIF($includeLibStories == false and $this->config->edition == 'max')->andWhere('t1.lib')->eq('0')->fi()
             ->orderBy($orderBy)
@@ -3032,23 +3033,26 @@ class storyModel extends model
     /**
      * Get story pairs of a user.
      *
-     * @param  string  $account
-     * @param  string  $limit
-     * @param  string  $type requirement|story
-     * @param  array   $skipProductIDList
+     * @param  string    $account
+     * @param  string    $limit
+     * @param  string    $type requirement|story
+     * @param  array     $skipProductIDList
+     * @param  int|array $appendStoryID
      * @access public
      * @return array
      */
-    public function getUserStoryPairs($account, $limit = 10, $type = 'story', $skipProductIDList = array())
+    public function getUserStoryPairs($account, $limit = 10, $type = 'story', $skipProductIDList = array(), $appendStoryID = 0)
     {
         return $this->dao->select('id, title')
             ->from(TABLE_STORY)
             ->where('deleted')->eq(0)
+            ->andWhere('status')->ne('closed')
             ->andWhere('type')->eq($type)
             ->andWhere('vision')->eq($this->config->vision)
             ->andWhere('assignedTo')->eq($account)
             ->andWhere('product')->ne(0)
             ->beginIF(!empty($skipProductIDList))->andWhere('product')->notin($skipProductIDList)->fi()
+            ->beginIF(!empty($appendStoryID))->orWhere('id')->in($appendStoryID)->fi()
             ->orderBy('id_desc')
             ->limit($limit)
             ->fetchPairs('id', 'title');

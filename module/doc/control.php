@@ -374,11 +374,11 @@ class doc extends control
     /**
      * Edit a doc.
      *
-     * @param int $docID
-     * @param bool $comment
-     * @param string $objectType
-     * @param int $objectID
-     * @param int $libID
+     * @param int     $docID
+     * @param bool    $comment
+     * @param string  $objectType
+     * @param int     $objectID
+     * @param int     $libID
      * @access public
      * @return void
      */
@@ -466,7 +466,8 @@ class doc extends control
         }
 
         $objects                   = $this->doc->getOrderedObjects($objectType);
-        $libs                      = $this->doc->getLibsByObject($objectType, $objectID);
+        $appendLib                 = (!empty($lib) and $lib->deleted == '1') ? $libID : 0;
+        $libs                      = $this->doc->getLibsByObject($objectType, $objectID, '', $appendLib);
         $this->lang->modulePageNav = $this->doc->select($objectType, $objects, $objectID, $libs, $libID);
         $this->lang->TRActions     = common::hasPriv('doc', 'create') ? $this->doc->buildCreateButton4Doc($objectType, $objectID, $libID) : '';
 
@@ -1020,7 +1021,7 @@ class doc extends control
 
                             /* Add the anchor to the element. */
                             $content[$index] = str_replace('<' . $includeHeadElement[0] . $headElement[2] . '>', '<' . $includeHeadElement[0] . $headElement[2] . " id='anchor{$index}'" . '>', $content[$index]);
-                            $outline         .= '<li class="text-ellipsis">' . html::a('#anchor' . $index, strip_tags($headElement[3]), '', "title='" . strip_tags($headElement[3]) . "'");
+                            $outline        .= '<li class="text-ellipsis">' . html::a('#anchor' . $index, strip_tags($headElement[3]), '', "title='" . strip_tags($headElement[3]) . "'");
 
                             $preElement = $headElement[1];
                         }
@@ -1031,7 +1032,7 @@ class doc extends control
 
                             /* Add the anchor to the element. */
                             $content[$index] = str_replace('<' . $includeHeadElement[1] . $headElement[2] . '>', '<' . $includeHeadElement[1] . $headElement[2] . " id='anchor{$index}'" . '>', $content[$index]);
-                            $outline         .= '<li class="text-ellipsis">' . html::a('#anchor' . $index, strip_tags($headElement[3]), '', "title='" . strip_tags($headElement[3]) . "'") . '</li>';
+                            $outline        .= '<li class="text-ellipsis">' . html::a('#anchor' . $index, strip_tags($headElement[3]), '', "title='" . strip_tags($headElement[3]) . "'") . '</li>';
 
                             $preElement = $includeHeadElement[1];
                         }

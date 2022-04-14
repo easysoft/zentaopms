@@ -60,7 +60,7 @@
           }
           else
           {
-              echo html::select("types[$todo->id]", $lang->todo->typeList, $todo->type, "onchange='loadList(this.value, " . $todo->id . ")' class='form-control'");
+              echo html::select("types[$todo->id]", $lang->todo->typeList, $todo->type, "onchange='loadList(this.value, {$todo->id}, \"{$todo->type}\", {$todo->idvalue})' class='form-control'");
           }
           ?>
         </td>

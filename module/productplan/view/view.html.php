@@ -102,7 +102,7 @@
     <?php endif;?>
     <div class='tab-content'>
       <div id='stories' class='tab-pane <?php if($type == 'story') echo 'active'?>'>
-        <?php $canOrder = common::hasPriv('project', 'storySort');?>
+        <?php $canOrder = common::hasPriv('execution', 'storySort');?>
         <div class='actions'>
           <?php if(!$plan->deleted and $plan->parent >= 0 and $canBeChanged):?>
           <div class="btn-group">

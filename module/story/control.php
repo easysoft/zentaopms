@@ -2526,14 +2526,15 @@ class story extends control
      *
      * @param  int    $userID
      * @param  string $id       the id of the select control.
+     * @param  int    $appendID
      * @access public
      * @return string
      */
-    public function ajaxGetUserStories($userID = '', $id = '')
+    public function ajaxGetUserStories($userID = '', $id = '', $appendID = 0)
     {
         if($userID == '') $userID = $this->app->user->id;
         $user    = $this->loadModel('user')->getById($userID, 'id');
-        $stories = $this->story->getUserStoryPairs($user->account);
+        $stories = $this->story->getUserStoryPairs($user->account, 10, 'story', '', $appendID);
 
         if($id) return print(html::select("stories[$id]", $stories, '', 'class="form-control"'));
         echo html::select('story', $stories, '', 'class=form-control');

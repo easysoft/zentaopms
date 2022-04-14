@@ -19,7 +19,7 @@ fields:
     format: ""
   - field: branch
     note: "分支"
-    range: 0
+    range: 0{161},1,2,0{2},3,4,0{10000}
     prefix: ""
     postfix: ""
     loop: 0
@@ -40,10 +40,14 @@ fields:
     format: ""
   - field: path
     note: "ID路径"
-    range: 1821-10000
-    prefix: ","
-    postfix: ","
-    loop: 0
+    fields:
+      - field: path1
+        range: 1821-2620
+        prefix: ","
+        postfix: ","
+      - field: path2
+        range: []
+        postfix: ""
     format: ""
   - field: grade
     note: "等级"
