@@ -17,7 +17,7 @@
   <div class='btn-toolbar pull-left'>
     <?php $browseLink = $this->session->reportList ? $app->session->reportList : $browseLink;?>
     <?php if(!isonlybody()):?>
-    <?php echo html::a($browseLink, "<i class='icon icon-back icon-sm'></i> " . $lang->goback, '', "class='btn btn-primary'");?>
+    <?php echo html::a($browseLink, "<i class='icon icon-back icon-sm'></i> " . $lang->goback, '', "class='btn btn-secondary'");?>
     <div class='divider'></div>
     <?php endif;?>
     <div class='page-title'>
