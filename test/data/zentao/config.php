@@ -82,9 +82,11 @@ $builder->teamtask    = array('rows' => 20, 'extends' => array('team', 'teamtask
 $builder->stakeholder = array('rows' => 1, 'extends' => array('stakeholder'));
 $builder->stageson    = array('rows' => 30, 'extends' => array('project', 'executionson'));
 
-$builder->doclib     = array('rows' => 900, 'extends' => array('doclib'));
-$builder->doc        = array('rows' => 900, 'extends' => array('doc'));
-$builder->doccontent = array('rows' => 900, 'extends' => array('doccontent'));
+$builder->doclib      = array('rows' => 900, 'extends' => array('doclib'));
+$builder->doc         = array('rows' => 900, 'extends' => array('doc'));
+$builder->doccontent  = array('rows' => 900, 'extends' => array('doccontent'));
+$builder->docmodule   = array('rows' => 100, 'extends' => array('module','docmodule'));
+$builder->docmoduleon = array('rows' => 200, 'extends' => array('module','docmoduleson'));
 
 $builder->build      = array('rows' => 20, 'extends' => array('build'));
 $builder->release    = array('rows' => 10, 'extends' => array('release'));
