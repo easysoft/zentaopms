@@ -123,14 +123,12 @@
                 <div class='input-group'>
                   <?php echo html::select("products[$i]", $allProducts, '', "class='form-control chosen' onchange='loadBranches(this)'");?>
                   <?php if(common::hasPriv('product', 'create')):?>
-                  <span class='input-group-addon'><?php echo html::checkBox('newProduct', $lang->project->addProduct, '', "onchange=addNewProduct(this);");?></span>
+                  <span class='input-group-addon'>
+                    <?php echo html::checkBox('newProduct', $lang->project->addProduct, '', "onchange=addNewProduct(this);");?>
+                    <div><icon class='icon icon-help' data-toggle='popover' data-trigger='focus hover' data-placement='top' data-tip-class='text-muted popover-sm' data-content="<?php echo $lang->project->productTip;?>"></icon></div>
+                  </span>
                   <?php endif;?>
                 </div>
-                <?php if(common::hasPriv('product', 'create')):?>
-                <div class='productTip'>
-                  <icon class='icon icon-help' data-toggle='popover' data-trigger='focus hover' data-placement='top' data-tip-class='text-muted popover-sm' data-content="<?php echo $lang->project->productTip;?>"></icon>
-                </div>
-                <?php endif;?>
               </div>
             </div>
             <div class="col-sm-4 addProduct hidden <?php if($programID) echo 'required';?>">
