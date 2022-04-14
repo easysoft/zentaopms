@@ -209,14 +209,6 @@
         <h4 class="modal-title"><?php echo $lang->execution->selectExecution;?></h4>
       </div>
       <div class="modal-body">
-        <?php if(empty($executions) and $config->systemMode == 'classic'):?>
-        <div class="table-empty-tip">
-          <p>
-            <span class="text-muted"><?php echo $lang->project->empty;?></span>
-            <?php echo html::a("javascript:" . ($config->systemMode == 'new' ? "createProject()" : "createExecution()"), "<i class='icon icon-plus'></i> " . $lang->project->create, '', "class='btn btn-info'");?>
-          </p>
-        </div>
-        <?php else:?>
         <table align='center' class='table table-form'>
           <?php if($config->systemMode == 'new'):?>
           <tr>
@@ -232,7 +224,6 @@
             <td colspan='2' class='text-center'><?php echo html::commonButton($lang->todo->reasonList['task'], "id='toTaskButton'", 'btn btn-primary');?></td>
           </tr>
         </table>
-        <?php endif;?>
       </div>
     </div>
   </div>
