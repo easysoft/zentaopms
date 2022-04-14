@@ -71,3 +71,7 @@ $lang->tree->short        = '简称';
 $lang->tree->all          = '所有模块';
 $lang->tree->executionDoc = "{$lang->executionCommon}文档";
 $lang->tree->product      = "所属{$lang->productCommon}";
+
+$this->lang->module        = new stdclass();
+$this->lang->module->name  = '名称';
+$this->lang->module->short = '简称';
