@@ -71,3 +71,7 @@ $lang->tree->short        = 'Abbr.';
 $lang->tree->all          = 'All Modules';
 $lang->tree->executionDoc = "{$lang->executionCommon} Document";
 $lang->tree->product      = $lang->productCommon;
+
+$this->lang->module        = new stdclass();
+$this->lang->module->name  = 'name';
+$this->lang->module->short = 'abbr.';
