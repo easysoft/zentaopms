@@ -252,7 +252,7 @@ class todoModel extends model
             ->remove(implode(',', $this->config->todo->moduleList) . ',uid')
             ->get();
 
-        if($todo->type != 'custom' and $todo->type != 'cycle')
+        if(in_array($todo->type, $this->config->todo->moduleList))
         {
             $type   = $todo->type;
             $object = $this->loadModel($type)->getByID($objectType);
@@ -330,7 +330,7 @@ class todoModel extends model
                 $todo->type   = $data->types[$todoID];
                 $todo->pri    = $data->pris[$todoID];
                 $todo->status = $data->status[$todoID];
-                $todo->name   = ($todo->type == 'custom' or $todo->type == 'cycle' or $todo->type == 'feedback') ? $data->names[$todoID] : '';
+                $todo->name   = !in_array($todo->type, $this->config->todo->moduleList) ? $data->names[$todoID] : '';
                 $todo->begin  = isset($data->begins[$todoID]) ? $data->begins[$todoID] : 2400;
                 $todo->end    = isset($data->ends[$todoID]) ? $data->ends[$todoID] : 2400;
 
