@@ -674,6 +674,10 @@ class bugModel extends model
             return false;
         }
 
+        if(empty($_POST['assignedTo']) and $oldBug->status == 'closed'){
+            $_POST['assignedTo'] = 'closed';
+        }
+
         $now = helper::now();
         $bug = fixer::input('post')
             ->cleanInt('product,module,severity,project,execution,story,task,branch')
