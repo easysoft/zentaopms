@@ -20,7 +20,7 @@ class bugActiveEntry extends Entry
      */
     public function post($bugID)
     {   
-        $fields = 'assignedTo,uid,resolvedBuild,comment';
+        $fields = 'assignedTo,uid,openedBuild,comment';
         $this->batchSetPost($fields);
 
         $control = $this->loadController('bug', 'activate');

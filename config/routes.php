@@ -67,6 +67,7 @@ $routes['/bugs/:id/assign']     = 'bugAssign';
 $routes['/bugs/:id/confirm']    = 'bugConfirm';
 $routes['/bugs/:id/resolve']    = 'bugResolve';
 $routes['/bugs/:id/active']     = 'bugActive';
+$routes['/bugs/:id/estimate']   = 'bugRecordEstimate';
 
 $routes['/programs/:id/projects'] = 'projects';
 $routes['/products/:id/projects'] = 'productProjects';
@@ -89,6 +90,7 @@ $routes['/tasks/:id/pause']      = 'taskPause';
 $routes['/tasks/:id/finish']     = 'taskFinish';
 $routes['/tasks/:id/close']      = 'taskClose';
 $routes['/tasks/:id/estimate']   = 'taskRecordEstimate';
+$routes['/tasks/:id/active']     = 'taskActive';
 
 $routes['/users']     = 'users';
 $routes['/users/:id'] = 'user';
