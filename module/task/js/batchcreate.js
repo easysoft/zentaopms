@@ -3,7 +3,7 @@ $(function()
 {
     removeDitto();
     if($('th.c-name').width() < 200) $('th.c-name').width(200);
-    if(taskConsumed > 0) alert(addChildTask);
+    if(taskConsumed > 0) bootbox.alert(addChildTask);
 });
 
 $(document).on('change', "[name^='estStarted'], [name^='deadline']", function()

@@ -222,7 +222,7 @@ $(function()
         },
         itemCreator: function($li, item)
         {
-            var link = (item.id !== undefined && item.type != 'line') ? ('<a href="' + createLink('tree', 'browse', 'rootID=<?php echo $rootID ?>&viewType=<?php echo $viewType ?>&moduleID={0}&branch={1}&from=<?php echo $from;?>&projectID=<?php echo isset($projectID) ? $projectID : 0; ?>'.format(item.id, branch)) + '" data-app="' + tab + '">' + item.name + '</a>') : ('<span class="tree-toggle">' + item.name + '</span>');
+            var link = (item.id !== undefined && item.type != 'line') ? ('<a href="' + createLink('tree', 'browse', 'rootID=<?php echo $rootID ?>&viewType=<?php echo $viewType ?>&moduleID={0}&branch={1}&from=<?php echo $from;?>&projectID=<?php echo isset($projectID) ? $projectID : 0; ?>'.format(item.id, branch)) + '" data-app="' + tab + '" title="' + item.name + '">' + item.name + '</a>') : ('<span class="tree-toggle">' + item.name + '</span>');
             var $toggle = $('<span class="module-name" data-id="' + item.id + '">' + link + '</span>');
             if(item.type === 'bug') $toggle.append('&nbsp; <span class="text-muted">[B]</span>');
             if(item.type === 'case') $toggle.append('&nbsp; <span class="text-muted">[C]</span>');
@@ -325,6 +325,9 @@ $(function()
     if(viewType == 'case' || viewType == 'caselib') $('#subNavbar li[data-id="' + viewType +'"]').addClass('active');
 });
 </script>
+<style>
+.module-name {display: inline-block; max-width: 410px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;}
+</style>
 <?php
 if(strpos($viewType, 'doc') !== false)
 {

@@ -891,6 +891,13 @@ class userModel extends model
             /* Create cycle todo in login. */
             $todoList = $this->dao->select('*')->from(TABLE_TODO)->where('cycle')->eq(1)->andWhere('deleted')->eq('0')->andWhere('account')->eq($user->account)->fetchAll('id');
             $this->loadModel('todo')->createByCycle($todoList);
+
+            /* Fix bug #17082. */
+            if($user->avatar)
+            {
+                $avatarRoot = substr($user->avatar, 0, strpos($user->avatar, 'data/upload/'));
+                if($this->config->webRoot != $avatarRoot) $user->avatar = substr_replace($user->avatar, $this->config->webRoot, 0, strlen($avatarRoot));
+            }
         }
         return $user;
     }

@@ -236,7 +236,7 @@
             <td class='c-pri'><span class='label-pri <?php echo 'label-pri-' . $story->pri?>' title='<?php echo zget($lang->story->priList, $story->pri, $story->pri);?>'><?php echo zget($lang->story->priList, $story->pri, $story->pri);?></span></td>
             <td class='c-name' title="<?php echo $story->title?>">
               <?php if($showBranch) $showBranch = isset($this->config->execution->story->showBranch) ? $this->config->execution->story->showBranch : 1;?>
-              <?php if(isset($branchGroups[$story->product][$story->branch]) and $showBranch) echo "<span class='label label-outline label-badge'>" . $branchGroups[$story->product][$story->branch] . '</span>';?>
+              <?php if(isset($branchGroups[$story->product][$story->branch]) and $showBranch) echo "<span class='label label-outline label-badge' title={$branchGroups[$story->product][$story->branch]}>" . $branchGroups[$story->product][$story->branch] . '</span>';?>
               <?php if(!empty($story->module) and isset($modulePairs[$story->module])) echo "<span class='label label-gray label-badge'>{$modulePairs[$story->module]}</span> ";?>
               <?php if($story->parent > 0) echo "<span class='label'>{$lang->story->childrenAB}</span>";?>
               <?php echo html::a($storyLink,$story->title, null, "style='color: $story->color' data-app='execution'");?>

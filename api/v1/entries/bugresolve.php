@@ -20,7 +20,7 @@ class bugResolveEntry extends Entry
      */
     public function post($bugID)
     {   
-        $fields = 'resolution,resolvedBuild,resolvedDate,assignedTo,uid,comment';
+        $fields = 'resolution,resolvedBuild,resolvedDate,duplicateBug,assignedTo,uid,comment';
         $this->batchSetPost($fields);
 
         $control = $this->loadController('bug', 'resolve');
