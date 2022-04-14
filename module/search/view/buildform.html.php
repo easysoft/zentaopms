@@ -132,14 +132,17 @@ foreach($fieldParams as $fieldName => $param)
                     $fieldValue = $formSession["value$fieldNO"];
                     $extraClass = isset($param['class']) ? $param['class'] : '';
 
+                    $placeholder = '';
                     if($fieldValue && strpos('$lastWeek,$thisWeek,$today,$yesterday,$thisMonth,$lastMonth',$fieldValue) !== false)
                     {
-                        echo html::input("value$fieldNO", $fieldValue, "class='form-control $extraClass searchInput'");
+                        $placeholder = "placeholder='{$fieldValue}'";
                     }
-                    else
+                    elseif($fieldName == 'id' and $formSession["operator$fieldNO"] == '=')
                     {
-                        echo html::input("value$fieldNO", $fieldValue, "class='form-control $extraClass searchInput'");
+                        $placeholder = "placeholder='{$lang->search->queryTips}'";;
                     }
+
+                    echo html::input("value$fieldNO", $fieldValue, "class='form-control $extraClass searchInput' $placeholder");
                 }
                 echo '</td>';
 
@@ -198,14 +201,17 @@ foreach($fieldParams as $fieldName => $param)
                     $fieldValue = $formSession["value$fieldNO"];
                     $extraClass = isset($param['class']) ? $param['class'] : '';
 
+                    $placeholder = '';
                     if($fieldValue && strpos('$lastWeek,$thisWeek,$today,$yesterday,$thisMonth,$lastMonth',$fieldValue) !== false)
                     {
-                        echo html::input("value$fieldNO", $fieldValue, "class='form-control $extraClass searchInput' placeholder='{}'");
+                        $placeholder = "placeholder='{$fieldValue}'";
                     }
-                    else
+                    elseif($fieldName == 'id' and $formSession["operator$fieldNO"] == '=')
                     {
-                        echo html::input("value$fieldNO", $fieldValue, "class='form-control $extraClass searchInput'");
+                        $placeholder = "placeholder='{$lang->search->queryTips}'";;
                     }
+
+                    echo html::input("value$fieldNO", $fieldValue, "class='form-control $extraClass searchInput' $placeholder");
                 }
                 echo '</td>';
 

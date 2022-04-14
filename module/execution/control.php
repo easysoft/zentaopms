@@ -227,7 +227,7 @@ class execution extends control
         $this->view->orderBy      = $orderBy;
         $this->view->browseType   = $browseType;
         $this->view->status       = $status;
-        $this->view->users        = $this->loadModel('user')->getPairs('noletter');
+        $this->view->users        = $this->loadModel('user')->getPairs('noletter|all');
         $this->view->param        = $param;
         $this->view->executionID  = $executionID;
         $this->view->execution    = $execution;
@@ -2039,7 +2039,9 @@ class execution extends control
         $this->loadModel('story');
 
         if(empty($groupBy)) $groupBy = 'default';
+        /* Set Session. */
         $this->session->set('execLaneType', $browseType);
+        $this->session->set('storyList', $this->app->getURI(true), 'execution');
 
         $this->lang->execution->menu = new stdclass();
         $execution = $this->commonAction($executionID);

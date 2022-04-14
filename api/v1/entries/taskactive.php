@@ -1,6 +1,6 @@
 <?php
 /**
- * The bug confirm entry point of ZenTaoPMS.
+ * The task active entry point of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2021 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
  * @license     ZPL (http://zpl.pub/page/zplv12.html)
@@ -8,31 +8,31 @@
  * @package     entries
  * @version     1
  * @link        http://www.zentao.net
- */
-class bugConfirmEntry extends Entry
+ **/
+class taskActiveEntry extends Entry
 {
     /** 
      * POST method.
      *
-     * @param  int    $bugID
+     * @param  int    $taskID
      * @access public
      * @return void
-     **/
-    public function post($bugID)
+     */
+    public function post($taskID)
     {   
-        $fields = 'assignedTo,mailto,comment,pri,type';
+        $fields = 'assignedTo,left,comment';
         $this->batchSetPost($fields);
 
-        $control = $this->loadController('bug', 'confirmBug');
-        $control->confirmBug($bugID);
+        $control = $this->loadController('task', 'activate');
+        $control->activate($taskID);
 
         $data = $this->getData();
         if(!$data) return $this->send400('error');
         if(isset($data->status) and $data->status == 'fail') return $this->sendError(zget($data, 'code', 400), $data->message);
 
-        $bug = $this->loadModel('bug')->getById($bugID);
+        $task = $this->loadModel('task')->getByID($taskID);
 
-        $this->send(200, $this->format($bug, 'openedBy:user,openedDate:time,assignedTo:user,assignedDate:time,reviewedBy:user,reviewedDate:time,lastEditedBy:user,lastEditedDate:time,closedBy:user,closedDate:time,deleted:bool,mailto:userList'));
+        $this->send(200, $this->format($task, 'openedBy:user,openedDate:time,assignedTo:user,assignedDate:time,reviewedBy:user,reviewedDate:time,lastEditedBy:user,lastEditedDate:time,closedBy:user,closedDate:time,deleted:bool,mailto:userList'));
     }   
 }
 

@@ -1731,12 +1731,17 @@ class block extends control
             $table      = $this->config->objectTables[$objectType];
             $orderBy    = $objectType == 'todo' ? "`date` desc" : 'id_desc';
             $limitCount = isset($params->{$objectCount}) ? $params->{$objectCount} : 0;
-            $objects    = $this->dao->select('*')->from($table)
-                ->where('deleted')->eq(0)
-                ->andWhere('assignedTo')->eq($this->app->user->account)->fi()
-                ->beginIF($objectType == 'story')->andWhere('type')->eq('story')->fi()
-                ->beginIF($objectType == 'todo')->andWhere('cycle')->eq(0)->andWhere('status')->eq('wait')->andWhere('vision')->eq($this->config->vision)->fi()
-                ->beginIF($objectType != 'todo')->andWhere('status')->ne('closed')->fi()
+            $objects    = $this->dao->select('t1.*')->from($table)->alias('t1')
+                ->beginIF($objectType == 'story')->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product=t2.id')->fi()
+                ->beginIF($objectType == 'bug')->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product=t2.id')->fi()
+                ->beginIF($objectType == 'task')->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.execution=t2.id')->fi()
+                ->where('t1.deleted')->eq(0)
+                ->andWhere('t1.assignedTo')->eq($this->app->user->account)->fi()
+                ->beginIF($objectType == 'story')->andWhere('t1.type')->eq('story')->andWhere('t2.deleted')->eq('0')->fi()
+                ->beginIF($objectType == 'bug')->andWhere('t2.deleted')->eq('0')->fi()
+                ->beginIF($objectType == 'story')->andWhere('t2.deleted')->eq('0')->fi()
+                ->beginIF($objectType == 'todo')->andWhere('t1.cycle')->eq(0)->andWhere('t1.status')->eq('wait')->andWhere('t1.vision')->eq($this->config->vision)->fi()
+                ->beginIF($objectType != 'todo')->andWhere('t1.status')->ne('closed')->fi()
                 ->orderBy($orderBy)
                 ->beginIF($limitCount)->limit($limitCount)->fi()
                 ->fetchAll();

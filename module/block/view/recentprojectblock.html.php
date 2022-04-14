@@ -26,7 +26,7 @@
 #cards .project-stages:after {content: ' '; width: 30px; display: block; right: -5px; top: 16px; bottom: -5px; z-index: 1; background: linear-gradient(to right, rgba(255,255,255,0) 0%, rgba(255,255,255,1) 100%); position: absolute;}
 #cards .project-stages-row {position: relative; height: 30px; z-index: 0;}
 #cards .project-stage-item {white-space: nowrap; position: absolute; top: 0; min-width: 48px; padding-top: 13px; color: #838A9D;}
-#cards .project-stage-item > div {white-space: nowrap; overflow: visible; text-align: center; text-overflow: ellipsis;}
+#cards .project-stage-item > div {max-width: 70px; white-space: nowrap; overflow: hidden; text-align: center; text-overflow: ellipsis;}
 #cards .project-stage-item:before {content: ' '; display: block; width: 8px; height: 8px; border-radius: 50%; background: #D1D1D1; position: absolute; left: 50%; margin-left: -4px; top: 0; z-index: 1;}
 #cards .project-stage-item + .project-stage-item:after {content: ' '; display: block; left: -50%; right: 50%; height: 2px; background-color: #D1D1D1; top: 3px; position: absolute; z-index: 0;}
 #cards .project-stage-item.is-going {color: #333;}
@@ -85,9 +85,9 @@
             <p class='text-muted'><?php echo $lang->project->ongoingStage;?></p>
             <div class='project-stages-container scrollbar-hover'>
               <div class='project-stages-row'>
-                <?php foreach ($projectProjects as $project): ?>
-                <div class='project-stage-item is-<?php echo $project->status;?><?php if($project->status !== 'wait') echo ' is-going'; ?>'>
-                  <div><?php echo $project->name; ?></div>
+                <?php foreach ($projectProjects as $project):?>
+                <div class='project-stage-item is-<?php echo $project->status;?><?php if($project->status !== 'wait') echo ' is-going';?>'>
+                  <div title="<?php echo $project->name;?>"><?php echo $project->name;?></div>
                 </div>
                 <?php endforeach; ?>
               </div>

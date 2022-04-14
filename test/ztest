@@ -79,6 +79,9 @@ switch($argv[1])
     case 'stage':
         ztfRun('model/stage');
         break;
+    case 'tree':
+        ztfRun('model/tree');
+        break;
     case 'design':
         ztfRun('model/design');
         break;

@@ -1366,7 +1366,7 @@ class actionModel extends model
                     $appendLib          = $docLib->deleted == '1' ? $action->objectID : 0;
                     if($docLib->type == 'api')
                     {
-                        $action->objectLink = helper::createLink('api', 'index', "libID={$action->objectID}");
+                        $action->objectLink = helper::createLink('api', 'index', "libID={$action->objectID}&moduleID=0&apiID=0&version=0&release=0&appendLib={$appendLib}");
                     }
                     else
                     {
@@ -1419,6 +1419,16 @@ class actionModel extends model
         if($action->objectType == 'branch' and $action->action == 'mergedbranch')
         {
             $action->objectLink = 'javascript:void(0)';
+        }
+
+        if($action->objectType == 'module')
+        {
+            $moduleType = $this->dao->select('type')->from(TABLE_MODULE)->where('id')->eq($action->objectID)->fetch('type');
+            if($moduleType == 'doc')
+            {
+                $this->app->loadLang('doc');
+                $action->objectLabel = $this->lang->doc->menuTitle;
+            }
         }
 
         return $action;
