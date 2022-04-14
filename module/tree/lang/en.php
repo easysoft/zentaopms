@@ -73,5 +73,5 @@ $lang->tree->executionDoc = "{$lang->executionCommon} Document";
 $lang->tree->product      = $lang->productCommon;
 
 $this->lang->module        = new stdclass();
-$this->lang->module->name  = '名称';
-$this->lang->module->short = '简称';
+$this->lang->module->name  = 'name';
+$this->lang->module->short = 'abbr.';
