@@ -45,7 +45,7 @@ $(function()
 
 function refreshPlan()
 {
-    $('a.refresh').click();
+    loadProductPlans($('#product').val(), $('#branch').val());
 }
 
 /**
