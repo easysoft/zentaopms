@@ -81,6 +81,7 @@ $sessionString .= session_name() . '=' . session_id();
               echo "<li title='{$uploadDate}'>" . html::a($this->createLink('file', 'download', "fileID=$file->id") . $sessionString, $fileTitle . " <span class='text-muted'>({$fileSize})</span>", '_blank', "onclick=\"return downloadFile($file->id, '$file->extension', $imageWidth, '$file->title')\"");
 
               $objectType = zget($this->config->file->objectType, $file->objectType);
+              if($objectType = 'requirement') $objectType = 'story';
               if(common::hasPriv($objectType, 'edit', $object))
               {
                   echo "<span class='right-icon'>&nbsp; ";
