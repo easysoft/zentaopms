@@ -243,10 +243,10 @@ EOF;
         /* Save session. */
         $uri = $this->app->getURI(true);
         $this->session->set('todoList',     $uri, 'my');
-        $this->session->set('bugList',      $uri, 'qa');
-        $this->session->set('taskList',     $uri, 'execution');
-        $this->session->set('storyList',    $uri, 'product');
-        $this->session->set('testtaskList', $uri, 'qa');
+        $this->session->set('bugList',      $uri, 'my');
+        $this->session->set('taskList',     $uri, 'my');
+        $this->session->set('storyList',    $uri, 'my');
+        $this->session->set('testtaskList', $uri, 'my');
 
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
