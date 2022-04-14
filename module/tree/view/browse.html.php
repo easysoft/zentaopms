@@ -325,6 +325,9 @@ $(function()
     if(viewType == 'case' || viewType == 'caselib') $('#subNavbar li[data-id="' + viewType +'"]').addClass('active');
 });
 </script>
+<style>
+.module-name {display: inline-block; max-width: 410px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;}
+</style>
 <?php
 if(strpos($viewType, 'doc') !== false)
 {
