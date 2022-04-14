@@ -993,7 +993,6 @@ class userModel extends model
             /* Authorize by group. */
             foreach($groups as $group)
             {
-                $acl = json_decode($group->acl, true);
                 if(empty($group->acl))
                 {
                     $programAllow = true;
@@ -1005,6 +1004,7 @@ class userModel extends model
                     break;
                 }
 
+                $acl = json_decode($group->acl, true);
                 if(empty($acl['programs'])) $programAllow = true;
                 if(empty($acl['projects'])) $projectAllow = true;
                 if(empty($acl['products'])) $productAllow = true;
