@@ -1708,10 +1708,10 @@ class block extends control
         if(common::hasPriv('task',  'view')) $hasViewPriv['task']  = true;
         if(common::hasPriv('bug',   'view') and $this->config->vision != 'lite') $hasViewPriv['bug']   = true;
         if(common::hasPriv('story', 'view') and $this->config->vision != 'lite') $hasViewPriv['story'] = true;
+        if($this->config->URAndSR and common::hasPriv('story', 'view') and $this->config->vision != 'lite') $hasViewPriv['requirement'] = true;
         if(common::hasPriv('risk',  'view') and $this->config->edition == 'max' and $this->config->vision != 'lite')   $hasViewPriv['risk']    = true;
         if(common::hasPriv('issue', 'view') and $this->config->edition == 'max' and $this->config->vision != 'lite')   $hasViewPriv['issue']   = true;
         if(common::hasPriv('meeting', 'view') and $this->config->edition == 'max' and $this->config->vision != 'lite') $hasViewPriv['meeting'] = true;
-        if($this->config->URAndSR and common::hasPriv('story', 'view') and $this->config->vision != 'lite') $hasViewPriv['requirement'] = true;
 
         $params          = $this->get->param;
         $params          = json_decode(base64_decode($params));
