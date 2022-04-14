@@ -76,3 +76,4 @@ REPLACE INTO `zt_report` (`code`, `name`, `module`, `sql`, `vars`, `langs`, `par
 
 ALTER TABLE `zt_action` MODIFY COLUMN `product` text NOT NULL;
 ALTER TABLE `zt_effort` MODIFY COLUMN `product` text NOT NULL;
+ALTER TABLE `zt_stakeholder` ADD INDEX objectID(`objectID`);
