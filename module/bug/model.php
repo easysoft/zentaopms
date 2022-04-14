@@ -673,7 +673,6 @@ class bugModel extends model
             dao::$errors[] = $this->lang->error->editedByOther;
             return false;
         }
-
         $now = helper::now();
         $bug = fixer::input('post')
             ->cleanInt('product,module,severity,project,execution,story,task,branch')
@@ -701,6 +700,7 @@ class bugModel extends model
             ->setIF($this->post->closedBy    != '' or  $this->post->closedDate   != '', 'status',       'closed')
             ->setIF(($this->post->resolution != '' or  $this->post->resolvedDate != '') and $this->post->assignedTo == '', 'assignedTo', $oldBug->openedBy)
             ->setIF(($this->post->resolution != '' or  $this->post->resolvedDate != '') and $this->post->assignedTo == '', 'assignedDate', $now)
+            ->setIF($this->post->assignedTo  == '' and $oldBug->status           == 'closed', 'assignedTo', 'closed')
             ->setIF($this->post->resolution  == '' and $this->post->resolvedDate =='', 'status', 'active')
             ->setIF($this->post->resolution  != '', 'confirmed', 1)
             ->setIF($this->post->story != false and $this->post->story != $oldBug->story, 'storyVersion', $this->loadModel('story')->getVersion($this->post->story))
