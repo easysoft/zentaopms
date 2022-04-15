@@ -24,7 +24,7 @@
 .product-info .progress {position: absolute; left: 10px; top: 35px; right: 90px;}
 .product-info .progress-info {position: absolute; left: 8px; top: 10px; width: 180px; font-size: 12px;}
 .product-info .type-info {color: #A6AAB8; text-align: center; position: absolute; right: 0; top: 6px; width: 100px;}
-html[lang="en"] .product-info .type-info {color: #A6AAB8; text-align: center; position: absolute; right: 0; top: 6px; width: 90px;}
+html[lang="en"] .product-info .type-info {color: #A6AAB8; text-align: center; position: absolute; right: 0; top: 6px; width: 80px;}
 .product-info .type-value,
 .product-info .type-label {font-size: 12px; overflow: visible; text-overflow: ellipsis; white-space: nowrap;}
 .product-info .type-value {font-size: 14px;}
@@ -35,7 +35,7 @@ html[lang="en"] .product-info .type-info {color: #A6AAB8; text-align: center; po
 .block-statistic .tile {margin-bottom: 30px;}
 .block-statistic .tile-title {font-size: 18px; color: #A6AAB8;}
 .block-statistic .tile-amount {font-size: 48px; margin-bottom: 10px;}
-.block-statistic .col-nav {border-right: 1px solid #EBF2FB; width: 260px; padding: 0;}
+.block-statistic .col-nav {border-right: 1px solid #EBF2FB; width: 240px; padding: 0;}
 .block-statistic .nav-secondary > li {position: relative}
 .block-statistic .nav-secondary > li:hover {background: #f5f5f5;}
 .block-statistic .nav-secondary > li > a {font-size: 14px; color: #838A9D; position: relative; box-shadow: none; padding-left: 20px; white-space: nowrap; text-overflow: ellipsis; overflow: hidden; transition: all .2s;}
