@@ -39,8 +39,12 @@ $builder->case           = array('rows' => 400, 'extends' => array('case'));
 $builder->libcase        = array('rows' => 10, 'extends' => array('case','libcase'));
 $builder->unitcase       = array('rows' => 150, 'extends' => array('case','unitcase'));
 $builder->casestep       = array('rows' => 400, 'extends' => array('casestep'));
+$builder->casemodule     = array('rows' => 100, 'extends' => array('module', 'casemodule'));
+$builder->casemoduleson  = array('rows' => 200, 'extends' => array('module', 'casemoduleson'));
 $builder->bug            = array('rows' => 300, 'extends' => array('bug'));
 $builder->morebug        = array('rows' => 15, 'extends' => array('bug','morebug'));
+$builder->bugmodule      = array('rows' => 100, 'extends' => array('module','bugmodule'));
+$builder->bugmoduleson   = array('rows' => 200, 'extends' => array('module','bugmoduleson'));
 
 $builder->testtask   = array('rows' => 100, 'extends' => array('testtask'));
 $builder->testresult = array('rows' => 70, 'extends' => array('testresult'));
