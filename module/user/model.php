@@ -891,6 +891,13 @@ class userModel extends model
             /* Create cycle todo in login. */
             $todoList = $this->dao->select('*')->from(TABLE_TODO)->where('cycle')->eq(1)->andWhere('deleted')->eq('0')->andWhere('account')->eq($user->account)->fetchAll('id');
             $this->loadModel('todo')->createByCycle($todoList);
+
+            /* Fix bug #17082. */
+            if($user->avatar)
+            {
+                $avatarRoot = substr($user->avatar, 0, strpos($user->avatar, 'data/upload/'));
+                if($this->config->webRoot != $avatarRoot) $user->avatar = substr_replace($user->avatar, $this->config->webRoot, 0, strlen($avatarRoot));
+            }
         }
         return $user;
     }
@@ -986,7 +993,6 @@ class userModel extends model
             /* Authorize by group. */
             foreach($groups as $group)
             {
-                $acl = json_decode($group->acl, true);
                 if(empty($group->acl))
                 {
                     $programAllow = true;
@@ -998,6 +1004,7 @@ class userModel extends model
                     break;
                 }
 
+                $acl = json_decode($group->acl, true);
                 if(empty($acl['programs'])) $programAllow = true;
                 if(empty($acl['projects'])) $projectAllow = true;
                 if(empty($acl['products'])) $productAllow = true;

@@ -32,11 +32,11 @@ $(function()
         <tr>
           <th class='c-line-number'><?php echo $lang->lineNumber?></th>
           <th class='c-id'><?php echo $lang->idAB?></th>
-          <th><?php echo $lang->testcase->title?></th>
+          <th class='required'><?php echo $lang->testcase->title?></th>
           <th class='c-module'><?php echo $lang->testcase->module?></th>
           <th class='c-story'><?php echo $lang->testcase->story?></th>
           <th class='c-pri-box'><?php echo $lang->testcase->pri?></th>
-          <th class='c-type'><?php echo $lang->testcase->type?></th>
+          <th class='c-type required'><?php echo $lang->testcase->type?></th>
           <th class='c-stage'><?php echo $lang->testcase->stage?></th>
           <th><?php echo $lang->testcase->precondition?></th>
           <?php if(!empty($appendFields)):?>
@@ -62,7 +62,7 @@ $(function()
         <?php foreach($caseData as $key => $case):?>
         <?php if(empty($case->title)) continue;?>
         <tr valign='top' class='text-left'>
-          <td><?php echo $key;?></td>
+          <td><?php echo $addID;?></td>
           <td>
             <?php
             if(!empty($case->id))
@@ -75,7 +75,13 @@ $(function()
                 echo "<sub class='gray' style='vertical-align:sub;'>{$lang->testcase->new}</sub>";
             }
             echo html::hidden("product[$key]", $productID);
-            if(!empty($branches)) echo html::hidden("branch[$key]", !empty($case->branch) ? $case->branch : ((!empty($case->id) and isset($cases[$case->id]) and !empty($cases[$case->id]->branch)) ? $cases[$case->id]->branch : $branch));
+            if(!empty($branches))
+            {
+                $branchID = $branch;
+                if(isset($case->branch)) $branchID = $case->branch;
+                if(!empty($case->id) and !empty($cases[$case->id]->branch)) $branchID = $cases[$case->id]->branch;
+                echo html::hidden("branch[$key]", $branchID);
+            }
             echo html::hidden("keywords[$key]", isset($case->keywords) ? $case->keywords : "");
             ?>
           </td>
@@ -100,14 +106,23 @@ $(function()
           <td>
             <?php if(isset($stepData[$key]['desc'])):?>
             <table class='w-p100 bd-0'>
+            <?php $hasStep = false;?>
             <?php foreach($stepData[$key]['desc'] as $id => $desc):?>
             <?php if(empty($desc['content'])) continue;?>
               <tr class='step'>
+                <?php $hasStep = true;?>
                 <td><?php echo $id . html::hidden("stepType[$key][$id]", $desc['type'])?></td>
                 <td><?php echo html::textarea("desc[$key][$id]", htmlSpecialString($desc['content']), "class='form-control'")?></td>
                 <td><?php if($desc['type'] != 'group') echo html::textarea("expect[$key][$id]", isset($stepData[$key]['expect'][$id]['content']) ? htmlSpecialString($stepData[$key]['expect'][$id]['content']) : '', "class='form-control'")?></td>
               </tr>
             <?php endforeach;?>
+            <?php if(!$hasStep):?>
+              <tr class='step'>
+                <td><?php echo '1' . html::hidden("stepType[$key][1]", 'step')?></td>
+                <td><?php echo html::textarea("desc[$key][1]", '', "class='form-control'")?></td>
+                <td><?php echo html::textarea("expect[$key][1]", '', "class='form-control'")?></td>
+              </tr>
+            <?php endif;?>
             </table>
             <?php else:?>
             <table class='w-p100 bd-0'>
@@ -120,6 +135,7 @@ $(function()
             <?php endif;?>
           </td>
         </tr>
+        <?php $addID ++;?>
         <?php endforeach;?>
       </tbody>
       <tfoot>

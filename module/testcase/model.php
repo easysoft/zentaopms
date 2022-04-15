@@ -1232,7 +1232,7 @@ class testcaseModel extends model
             $cases[$key] = $caseData;
             $line++;
         }
-        if(dao::isError()) return print(js::error(dao::getError()));
+        if(dao::isError()) return false;
 
         $forceNotReview = $this->forceNotReview();
         foreach($cases as $key => $caseData)

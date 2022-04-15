@@ -39,8 +39,12 @@ $builder->case           = array('rows' => 400, 'extends' => array('case'));
 $builder->libcase        = array('rows' => 10, 'extends' => array('case','libcase'));
 $builder->unitcase       = array('rows' => 150, 'extends' => array('case','unitcase'));
 $builder->casestep       = array('rows' => 400, 'extends' => array('casestep'));
+$builder->casemodule     = array('rows' => 100, 'extends' => array('module', 'casemodule'));
+$builder->casemoduleson  = array('rows' => 200, 'extends' => array('module', 'casemoduleson'));
 $builder->bug            = array('rows' => 300, 'extends' => array('bug'));
 $builder->morebug        = array('rows' => 15, 'extends' => array('bug','morebug'));
+$builder->bugmodule      = array('rows' => 100, 'extends' => array('module','bugmodule'));
+$builder->bugmoduleson   = array('rows' => 200, 'extends' => array('module','bugmoduleson'));
 
 $builder->testtask   = array('rows' => 100, 'extends' => array('testtask'));
 $builder->testresult = array('rows' => 70, 'extends' => array('testresult'));
@@ -82,9 +86,11 @@ $builder->teamtask    = array('rows' => 20, 'extends' => array('team', 'teamtask
 $builder->stakeholder = array('rows' => 1, 'extends' => array('stakeholder'));
 $builder->stageson    = array('rows' => 30, 'extends' => array('project', 'executionson'));
 
-$builder->doclib     = array('rows' => 900, 'extends' => array('doclib'));
-$builder->doc        = array('rows' => 900, 'extends' => array('doc'));
-$builder->doccontent = array('rows' => 900, 'extends' => array('doccontent'));
+$builder->doclib      = array('rows' => 900, 'extends' => array('doclib'));
+$builder->doc         = array('rows' => 900, 'extends' => array('doc'));
+$builder->doccontent  = array('rows' => 900, 'extends' => array('doccontent'));
+$builder->docmodule   = array('rows' => 100, 'extends' => array('module','docmodule'));
+$builder->docmoduleon = array('rows' => 200, 'extends' => array('module','docmoduleson'));
 
 $builder->build      = array('rows' => 20, 'extends' => array('build'));
 $builder->release    = array('rows' => 10, 'extends' => array('release'));

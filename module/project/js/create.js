@@ -177,7 +177,6 @@ function loadBranches(product, branchID)
         var length = $('#productsBox .row .input-group').size();
         var $html  = $('#productsBox .row .col-sm-4:last').html();
         $('#productsBox .row .col-sm-4:last').find('.input-group-addon').remove();
-        $('#productsBox .row .productTip').remove();
         $('#productsBox .row').append('<div class="col-sm-4">' + $html + '</div>');
         if($('#productsBox .row .input-group:last select').size() >= 2) $('#productsBox .row .input-group:last select:last').remove();
         $('#productsBox .row .input-group:last .chosen-container').remove();

@@ -10,7 +10,8 @@ $config->file->image2Compress  = array('.jpg', '.bmp', '.jpeg');
 $config->file->charset   = array('UTF-8' => 'UTF-8', 'GBK' => 'GBK', 'BIG5' => 'BIG5');
 $config->file->maxImport = 100;
 
-$config->file->objectType['stepResult'] = 'testcase';
+$config->file->objectType['stepResult']  = 'testcase';
+$config->file->objectType['requirement'] = 'story';
 
 $config->file->convertURL['common']['view']       = '1';
 $config->file->convertURL['story']['edit']        = '1';

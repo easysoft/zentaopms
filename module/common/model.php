@@ -1206,17 +1206,6 @@ class commonModel extends model
         /* Cycling to print every sub menu. */
         foreach($menu as $menuItem)
         {
-            /* Fix work and contribute navigation permission check issues. */
-            if(isset($menuItem->link) and isset($menuItem->link['module']) and isset($menuItem->link['method']))
-            {
-                if($menuItem->link['module'] == 'my' and ($menuItem->link['method'] == 'work' or $menuItem->link['method'] == 'contribute'))
-                {
-                    $mode = explode('&', $menuItem->link['vars']);
-                    $mode = substr($mode[0], 5);
-                    $menuItem->hidden = !common::hasPriv('my', $mode);
-                }
-            }
-
             if(isset($menuItem->hidden) && $menuItem->hidden) continue;
             if($isMobile and empty($menuItem->link)) continue;
             if($menuItem->divider) echo "<li class='divider'></li>";

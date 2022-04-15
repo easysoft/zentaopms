@@ -113,6 +113,7 @@ $lang->todo->noTodo         = '该类型没有待办事务';
 $lang->todo->noAssignedTo   = '被指派人不能为空';
 $lang->todo->unfinishedTodo = '待办ID %s 不是完成状态，不能关闭。';
 $lang->todo->today          = '今日待办';
+$lang->todo->selectProduct  = "请选择产品";
 
 $lang->todo->periods['all']             = '指派自己';
 $lang->todo->periods['before']          = '未完';
