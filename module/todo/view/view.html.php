@@ -263,16 +263,16 @@
       </div>
       <div class="modal-body">
         <table align='center' class='table table-form'>
-          <tr>
-            <th><?php echo $lang->todo->product;?></th>
-            <td id='productIdBox'><?php echo html::select('bugProduct', $projectProducts, '', "class='form-control chosen'");?></td>
-          </tr>
           <?php if($config->systemMode == 'new'):?>
           <tr>
             <th><?php echo $lang->todo->project;?></th>
             <td><?php echo html::select('bugProject', $projects, '', "class='form-control chosen' onchange=getProductByProject(this.value);");?></td>
           </tr>
           <?php endif;?>
+          <tr>
+            <th><?php echo $lang->todo->product;?></th>
+            <td id='productIdBox'><?php echo html::select('bugProduct', $projectProducts, '', "class='form-control chosen'");?></td>
+          </tr>
           <tr>
             <td colspan='2' class='text-center'><?php echo html::commonButton($lang->todo->reasonList['bug'], "id='toBugButton'", 'btn btn-primary');?></td>
           </tr>

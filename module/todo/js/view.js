@@ -46,8 +46,8 @@ $(function()
             alert(selectProduct);
             return false;
         }
-        var link      = createLink('bug', 'create', 'productID=' + productID + '&branch=0&extras=todoID=' + todoID, config.defaultView, onlybody);
 
+        var link = createLink('bug', 'create', 'productID=' + productID + '&branch=0&extras=todoID=' + todoID, config.defaultView, onlybody);
         if(!onlybody) window.parent.$.apps.open(link, 'qa');
         if(onlybody) location.href = link;
     })
