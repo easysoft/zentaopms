@@ -1179,10 +1179,11 @@ class user extends control
      *
      * @param  int    $contactListID
      * @param  string $dropdownName mailto|whitelist
+     * @param  string $oldUsers
      * @access public
      * @return string
      */
-    public function ajaxGetContactUsers($contactListID, $dropdownName = 'mailto')
+    public function ajaxGetContactUsers($contactListID, $dropdownName = 'mailto', $oldUsers = '')
     {
         $list = $contactListID ? $this->user->getContactListByID($contactListID) : '';
 
@@ -1191,14 +1192,8 @@ class user extends control
         $users = $this->user->getPairs('devfirst|nodeleted|noclosed', $list ? $list->userList : '', $this->config->maxCount);
         if(isset($this->config->user->moreLink)) $this->config->moreLinks[$dropdownName . "[]"] = $this->config->user->moreLink;
 
-        if(!$contactListID)
-        {
-            return print(html::select($dropdownName . "[]", $users, '', "class='form-control chosen' multiple $attr"));
-        }
-        else
-        {
-            return print(html::select($dropdownName . "[]", $users, $list->userList, "class='form-control chosen' multiple $attr"));
-        }
+        $defaultUsers = empty($contactListID) ? '' : $list->userList . ',' . trim($oldUsers);
+        return print(html::select($dropdownName . "[]", $users, $defaultUsers, "class='form-control chosen' multiple $attr"));
     }
 
     /**
