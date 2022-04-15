@@ -491,7 +491,11 @@ class userModel extends model
                 }
             }
             unset($user->group);
-            $this->dao->insert(TABLE_USER)->data($user)->autoCheck()->exec();
+            $this->dao->insert(TABLE_USER)->data($user)->autoCheck()
+                ->checkIF($user->email  != '', 'email',  'email')
+                ->checkIF($user->phone  != '', 'phone',  'phone')
+                ->checkIF($user->mobile != '', 'mobile', 'mobile')
+                ->exec();
 
             /* Fix bug #2941 */
             $userID       = $this->dao->lastInsertID();
@@ -724,9 +728,20 @@ class userModel extends model
         $this->loadModel('mail');
         foreach($users as $id => $user)
         {
-            $this->dao->update(TABLE_USER)->data($user)->where('id')->eq((int)$id)->exec();
+            $this->dao->update(TABLE_USER)->data($user)
+                ->autoCheck()
+                ->checkIF($user['email']  != '', 'email',  'email')
+                ->checkIF($user['phone']  != '', 'phone',  'phone')
+                ->checkIF($user['mobile'] != '', 'mobile', 'mobile')
+                ->where('id')->eq((int)$id)
+                ->exec();
             $oldUser = $oldUsers[$id];
-            if(!dao::isError())
+            if(dao::isError())
+            {
+                echo js::error(dao::getError());
+                helper::end(js::reload('parent'));
+            }
+            else
             {
                 if($this->config->mail->mta == 'sendcloud' and $user['email'] != $oldUser->email)
                 {
