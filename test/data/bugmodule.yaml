@@ -5,14 +5,14 @@ version: "1.0"
 fields:
   - field: id
     note: "ID"
-    range: 3721-10000
+    range: 4221-4320
     prefix: ""
     postfix: ""
     loop: 0
     format: ""
   - field: root
     note: "根目录"
-    range: 1-100{2}
+    range: 1-100
     prefix: ""
     postfix: ""
     loop: 0
@@ -27,13 +27,13 @@ fields:
   - field: name
     note: "模块名称"
     range: 1-10000
-    prefix: "子目录"
+    prefix: "bug模块"
     postfix: ""
     loop: 0
     format: ""
   - field: parent
     note: "父ID"
-    range: 3621-3720{2}
+    range: 0
     prefix: ""
     postfix: ""
     loop: 0
@@ -42,16 +42,16 @@ fields:
     note: "ID路径"
     fields:
       - field: path1
-        range: 3621-3720{2}
+        range: 4221-4320
         prefix: ","
         postfix: ","
       - field: path2
-        range: 3721-3920
-        postfix: ","
+        range: []
+        postfix: ""
     format: ""
   - field: grade
     note: "等级"
-    range: 2
+    range: 1
     prefix: ""
     postfix: ""
     loop: 0
@@ -65,7 +65,7 @@ fields:
     format: ""
   - field: type
     note: "对象类型"
-    range: doc
+    range: bug
     prefix: ""
     postfix: ""
     loop: 0
