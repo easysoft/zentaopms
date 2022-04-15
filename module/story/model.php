@@ -4336,7 +4336,7 @@ class storyModel extends model
             }
 
             $tracks['noRequirement'] = $stories;
-            $pager->recTotal += 1;
+            if($this->config->URAndSR) $pager->recTotal += 1;
         }
 
         return $tracks;
