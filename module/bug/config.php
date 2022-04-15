@@ -39,7 +39,7 @@ $config->bug->list->exportFields = 'id, product, branch, module, project, execut
     lastEditedDate, files';
 if($config->systemMode == 'classic') $config->bug->list->exportFields = str_replace(' project,', '', $config->bug->list->exportFields);
 
-$config->bug->list->customCreateFields      = 'execution,feedbackBy,notifyEmail,story,task,pri,severity,os,browser,deadline,mailto,keywords';
+$config->bug->list->customCreateFields      = 'execution,noticefeedbackBy,story,task,pri,severity,os,browser,deadline,mailto,keywords';
 $config->bug->list->customBatchCreateFields = 'execution,steps,type,pri,deadline,severity,os,browser,keywords';
 $config->bug->list->customBatchEditFields   = 'type,severity,pri,productplan,assignedTo,deadline,resolvedBy,resolution,os,browser,keywords';
 

@@ -90,6 +90,7 @@ $lang->bug->fromCase         = '来源用例';
 $lang->bug->toCase           = '生成用例';
 $lang->bug->colorTag         = '颜色标签';
 $lang->bug->fixedRate        = '修复率';
+$lang->bug->noticefeedbackBy = '通知反馈者';
 
 /* 方法列表。*/
 $lang->bug->index              = '首页';
