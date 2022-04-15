@@ -1666,7 +1666,7 @@ class treeModel extends model
         if(!isset($_POST['branch'])) $module->branch = $self->branch;
 
         $repeatName = $this->checkUnique($self, array("id{$self->id}" => $module->name), array("id{$self->id}" => $module->branch));
-        if($repeatName) return print(js::alert(sprintf($this->lang->tree->repeatName, $repeatName)));
+        if($repeatName) helper::end(js::alert(sprintf($this->lang->tree->repeatName, $repeatName)));
 
         $parent = $this->getById($this->post->parent);
         $childs = $this->getAllChildId($moduleID);

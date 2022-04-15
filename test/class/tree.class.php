@@ -96,13 +96,25 @@ class treeTest
         return count($objects);
     }
 
+    /**
+     * Test create an option menu of task in html.
+     *
+     * @param  int    $rootID
+     * @param  int    $productID
+     * @param  int    $startModule
+     * @param  string $extra
+     * @access public
+     * @return string
+     */
     public function getTaskOptionMenuTest($rootID, $productID = 0, $startModule = 0, $extra = '')
     {
         $objects = $this->objectModel->getTaskOptionMenu($rootID, $productID = 0, $startModule = 0, $extra = '');
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        $names = '';
+        foreach($objects as $object) $names .= ',' . $object;
+        return $names;
     }
 
     /**
@@ -129,87 +141,76 @@ class treeTest
         return $objects;
     }
 
-    public function getTreeMenuTest($rootID, $type = 'root', $startModule = 0, $userFunc = '', $extra = '', $branch = 0, $extraParams = '')
-    {
-        $objects = $this->objectModel->getTreeMenu($rootID, $type = 'root', $startModule = 0, $userFunc = '', $extra = '', $branch = 0, $extraParams = '');
-
-        if(dao::isError()) return dao::getError();
-
-        return $objects;
-    }
-
-    public function getTaskTreeMenuTest($rootID, $productID = 0, $startModule = 0, $userFunc = '', $extra = '')
-    {
-        $objects = $this->objectModel->getTaskTreeMenu($rootID, $productID = 0, $startModule = 0, $userFunc = '', $extra = '');
-
-        if(dao::isError()) return dao::getError();
-
-        return $objects;
-    }
-
+    /**
+     * Test get full task tree.
+     *
+     * @param  int    $rootID
+     * @param  int    $productID
+     * @access public
+     * @return string
+     */
     public function getTaskStructureTest($rootID, $productID = 0)
     {
         $objects = $this->objectModel->getTaskStructure($rootID, $productID = 0);
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        $child = '';
+        foreach($objects as $object)
+        {
+            if(is_array($object)) $child .= isset($object['children']) ? $object['name'] . ':' . count($object['children']) . ';' : $object['name'] . ':0';
+            if(is_object($object)) $child .= isset($object->children) ? "$object->name:" . count($object->children) . ';' : "$object->name:0";
+        }
+        return $child;
     }
 
+    /**
+     * Test get tree structure.
+     *
+     * @param  int    $rootID
+     * @param  string $type
+     * @access public
+     * @return string
+     */
     public function getTreeStructureTest($rootID, $type)
     {
         $objects = $this->objectModel->getTreeStructure($rootID, $type);
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        $child = '';
+        foreach($objects as $object) $child .= isset($object->children) ? "$object->id:" . count($object->children) . ';' : "$object->id:0;";
+        return $child;
     }
 
-    public function getBugTreeMenuTest($rootID, $productID = 0, $startModule = 0, $userFunc = '', $extra = '')
-    {
-        $objects = $this->objectModel->getBugTreeMenu($rootID, $productID = 0, $startModule = 0, $userFunc = '', $extra = '');
-
-        if(dao::isError()) return dao::getError();
-
-        return $objects;
-    }
-
-    public function getCaseTreeMenuTest($rootID, $productID = 0, $startModule = 0, $userFunc = '', $extra = '')
-    {
-        $objects = $this->objectModel->getCaseTreeMenu($rootID, $productID = 0, $startModule = 0, $userFunc = '', $extra = '');
-
-        if(dao::isError()) return dao::getError();
-
-        return $objects;
-    }
-
-    public function getProjectStoryTreeMenuTest($rootID, $startModule = 0, $userFunc = '')
-    {
-        $objects = $this->objectModel->getProjectStoryTreeMenu($rootID, $startModule = 0, $userFunc = '');
-
-        if(dao::isError()) return dao::getError();
-
-        return $objects;
-    }
-
-    public function buildTreeTest(& $treeMenu, $module, $type, $userFunc, $extra, $branch = 'all')
-    {
-        $objects = $this->objectModel->buildTree($treeMenu, $module, $type, $userFunc, $extra, $branch = 'all');
-
-        if(dao::isError()) return dao::getError();
-
-        return $objects;
-    }
-
+    /**
+     * Test get execution modules.
+     *
+     * @param  int    $executionID
+     * @param  bool   $parent
+     * @param  string $linkObject
+     * @access public
+     * @return string
+     */
     public function getTaskTreeModulesTest($executionID, $parent = false, $linkObject = 'story')
     {
-        $objects = $this->objectModel->getTaskTreeModules($executionID, $parent = false, $linkObject = 'story');
+        $objects = $this->objectModel->getTaskTreeModules($executionID, $parent, $linkObject);
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        $ids = '';
+        foreach($objects as $object) $ids .= ',' . $object;
+        return $ids;
     }
 
+    /**
+     * Test create story link.
+     *
+     * @param  int     $moduleID
+     * @param  array  $extra
+     * @access public
+     * @return string
+     */
     public function createStoryLinkTest($moduleID, $extra = array())
     {
         $type   = '';
@@ -222,15 +223,6 @@ class treeTest
         $string = preg_replace("/.*(projectstory|execution|product).*(title='.*').*/", '$1 $2', $link);
         $string = str_replace("\n", '', $string);
         return $string;
-    }
-
-    public function createLineLinkTest($moduleID, $extra)
-    {
-        $objects = $this->objectModel->createLineLink($type, $module, $extra);
-
-        if(dao::isError()) return dao::getError();
-
-        return $objects;
     }
 
     /**
@@ -255,15 +247,6 @@ class treeTest
         return $string;
     }
 
-    public function createProjectStoryLinkTest($type, $module, $extra)
-    {
-        $objects = $this->objectModel->createProjectStoryLink($type, $module, $extra);
-
-        if(dao::isError()) return dao::getError();
-
-        return $objects;
-    }
-
     /**
      * Test create requirment link.
      *
@@ -285,15 +268,14 @@ class treeTest
         return $string;
     }
 
-    public function createDocLinkTest($type, $module, $extra = '')
-    {
-        $objects = $this->objectModel->createDocLink($type, $module, $extra = '');
-
-        if(dao::isError()) return dao::getError();
-
-        return $objects;
-    }
-
+    /**
+     * Test create manage link.
+     *
+     * @param  int    $moduleID
+     * @param  array $extra
+     * @access public
+     * @return string
+     */
     public function createManageLinkTest($moduleID, $extra)
     {
         $type   = 0;
@@ -306,6 +288,14 @@ class treeTest
         return substr($link, 0, 15);
     }
 
+    /**
+     * Test create task manage link.
+     *
+     * @param  int    $moduleID
+     * @param  array  $extra
+     * @access public
+     * @return string
+     */
     public function createTaskManageLinkTest($moduleID, $extra)
     {
         $type   = '';
@@ -406,15 +396,6 @@ class treeTest
         return $string;
     }
 
-    public function createBranchLinkTest($type, $rootID, $branchID, $branch)
-    {
-        $objects = $this->objectModel->createBranchLink($type, $rootID, $branchID, $branch);
-
-        if(dao::isError()) return dao::getError();
-
-        return $objects;
-    }
-
     /**
      * Test create feedback link.
      *
@@ -436,49 +417,45 @@ class treeTest
         return $string;
     }
 
-    public function createTrainSkillLinkTest($type, $module, $extra = '')
-    {
-        $objects = $this->objectModel->createTrainSkillLink($type, $module, $extra = '');
-
-        if(dao::isError()) return dao::getError();
-
-        return $objects;
-    }
-
-    public function createTrainCourseLinkTest($type, $module, $extra = '')
-    {
-        $objects = $this->objectModel->createTrainCourseLink($type, $module, $extra = '');
-
-        if(dao::isError()) return dao::getError();
-
-        return $objects;
-    }
-
-    public function createTrainPostLinkTest($type, $module, $extra = '')
-    {
-        $objects = $this->objectModel->createTrainPostLink($type, $module, $extra = '');
-
-        if(dao::isError()) return dao::getError();
-
-        return $objects;
-    }
-
+    /**
+     * Test get sons of a module.
+     *
+     * @param  int    $rootID
+     * @param  int    $moduleID
+     * @param  string $type
+     * @param  int    $branch
+     * @access public
+     * @return string
+     */
     public function getSonsTest($rootID, $moduleID, $type = 'root', $branch = 0)
     {
-        $objects = $this->objectModel->getSons($rootID, $moduleID, $type = 'root', $branch = 0);
+        $objects = $this->objectModel->getSons($rootID, $moduleID, $type, $branch);
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        $ids = '';
+        foreach($objects as $object) $ids .= ',' . $object->id;
+        return $ids;
     }
 
+    /**
+     * Test get sons of a task module.
+     *
+     * @param  int    $rootID
+     * @param  int    $productID
+     * @param  int    $moduleID
+     * @access public
+     * @return string
+     */
     public function getTaskSonsTest($rootID, $productID, $moduleID)
     {
         $objects = $this->objectModel->getTaskSons($rootID, $productID, $moduleID);
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        $ids = '';
+        foreach($objects as $object) $ids .= ',' . $object->id;
+        return $ids;
     }
 
     /**
@@ -499,13 +476,23 @@ class treeTest
         return $ids;
     }
 
+    /**
+     * Test get project module.
+     *
+     * @param  int    $projectID
+     * @param  int    $productID
+     * @access public
+     * @return string
+     */
     public function getProjectModuleTest($projectID, $productID = 0)
     {
-        $objects = $this->objectModel->getProjectModule($projectID, $productID = 0);
+        $objects = $this->objectModel->getProjectModule($projectID, $productID);
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        $ids = '';
+        foreach($objects as $objectID) $ids .= ',' . $objectID;
+        return $ids;
     }
 
     /**
@@ -542,13 +529,20 @@ class treeTest
         return $object;
     }
 
+    /**
+     * Test get the module that its type == 'story'.
+     *
+     * @param  int    $moduleID
+     * @access public
+     * @return int
+     */
     public function getStoryModuleTest($moduleID)
     {
-        $objects = $this->objectModel->getStoryModule($moduleID);
+        $object = $this->objectModel->getStoryModule($moduleID);
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        return $object;
     }
 
     /**
@@ -569,31 +563,86 @@ class treeTest
         return $objects;
     }
 
+    /**
+     * Test update modules' order.
+     *
+     * @param  array  $orders
+     * @access public
+     * @return string
+     */
     public function updateOrderTest($orders)
     {
         $objects = $this->objectModel->updateOrder($orders);
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        global $tester;
+        $objects = $tester->dao->select('*')->from(TABLE_MODULE)->where('id')->in(array_keys($orders))->orderBy('`order` asc')->fetchAll();
+        $ids = '';
+        foreach($objects as $object) $ids .= ',' . $object->id;
+        return $ids;
     }
 
-    public function manageChildTest($rootID, $type)
+    /**
+     * Test manage childs of a module.
+     *
+     * @param  int    $rootID
+     * @param  string $type
+     * @param  array  $param
+     * @access public
+     * @return string
+     */
+    public function manageChildTest($rootID, $type, $param)
     {
-        $objects = $this->objectModel->manageChild($rootID, $type);
+        $_POST['allProduct']    = 100;
+        $_POST['productModule'] = 0;
+
+        foreach($param as $key => $value) $_POST[$key] = $value;
+
+        $this->objectModel->manageChild($rootID, $type);
+
+        unset($_POST);
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        global $tester;
+        $objects = $tester->dao->select('*')->from(TABLE_MODULE)->where('parent')->eq($param['parentModuleID'])->andWhere('deleted')->eq(0)->fetchAll();
+
+        $names = '';
+        foreach($objects as $object) $names .= ',' . $object->name;
+        return $names;
     }
 
-    public function updateTest($moduleID)
+    /**
+     * Test update a module.
+     *
+     * @param  int    $moduleID
+     * @param  array  $param
+     * @access public
+     * @return object
+     */
+    public function updateTest($moduleID, $param)
     {
-        $objects = $this->objectModel->update($moduleID);
+        $fields = array('root', 'branch', 'parent', 'name', 'short');
+        $module = $this->objectModel->getByID($moduleID);
+        foreach($fields as $field)
+        {
+            if(isset($param[$field]))
+            {
+                $_POST[$field] = $param[$field];
+            }
+            else
+            {
+                $_POST[$field] = $module->$field;
+            }
+        }
+
+        $this->objectModel->update($moduleID);
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        $object = $this->objectModel->getByID($moduleID);
+        return $object;
     }
 
     /**
@@ -675,22 +724,42 @@ class treeTest
         return $repeatName;
     }
 
+    /**
+     * Test check merge module version.
+     *
+     * @param  int    $rootID
+     * @param  string $viewType
+     * @access public
+     * @return int
+     */
     public function isMergeModuleTest($rootID, $viewType)
     {
-        $objects = $this->objectModel->isMergeModule($rootID, $viewType);
+        $object = $this->objectModel->isMergeModule($rootID, $viewType);
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        return $object ? 1 : 2;
     }
 
+    /**
+     * Test get full trees.
+     *
+     * @param  int    $rootID
+     * @param  string $viewType
+     * @param  string $branchID
+     * @param  int    $currentModuleID
+     * @access public
+     * @return string
+     */
     public function getProductStructureTest($rootID, $viewType, $branchID = 'all', $currentModuleID = 0)
     {
-        $objects = $this->objectModel->getProductStructure($rootID, $viewType, $branchID = 'all', $currentModuleID = 0);
+        $objects = $this->objectModel->getProductStructure($rootID, $viewType, $branchID, $currentModuleID);
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        $child = '';
+        foreach($objects as $object) $child .= isset($object->children) ? "$object->id:" . count($object->children) . ';' : "$object->id:0;";
+        return $child;
     }
 
     /**
@@ -717,6 +786,12 @@ class treeTest
         return $child;
     }
 
+    /**
+     * Test get  all doc structure.
+     *
+     * @access public
+     * @return string
+     */
     public function getDocStructureTest()
     {
         $objects = $this->objectModel->getDocStructure();
