@@ -642,11 +642,7 @@
 
         /* Redirect or open default app after document load */
         var defaultOpenUrl = window.defaultOpen;
-        if(!defaultOpenUrl && location.hash.indexOf('#app=') === 0)
-        {
-            defaultOpenUrl = decodeURIComponent(location.hash.substr(5));
-            if(defaultOpenUrl.indexOf('#app=') < 0) defaultOpenUrl += '#app=' + ($.cookie('tab') ? $.cookie('tab') : defaultApp);
-        }
+        if(!defaultOpenUrl && location.hash.indexOf('#app=') === 0) defaultOpenUrl = decodeURIComponent(location.hash.substr(5));
 
         openTab(defaultOpenUrl ? defaultOpenUrl : defaultApp);
 

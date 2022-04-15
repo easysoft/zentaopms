@@ -124,6 +124,7 @@ class control extends baseControl
 
         if(!isset($this->config->preferenceSetted) and $this->config->vision == 'rnd')
         {
+            setcookie('tab', 'my', 0, $this->config->webRoot, '', $this->config->cookieSecure, false);
             $this->locate(helper::createLink('my', 'preference'));
         }
     }

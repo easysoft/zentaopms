@@ -1196,11 +1196,11 @@ class searchModel extends model
             if(strpos('docx|doc', $file->extension) !== false)
             {
                 $convertedFile = $this->file->convertOffice($file, 'txt');
-                if($convertedFile) $object->comment .= file_get_contents($convertedFile);
+                if($convertedFile) $object->comment .= substr(file_get_contents($convertedFile), 0, $this->config->search->maxFileSize);
             }
             if($file->extension == 'txt')
             {
-                $object->comment .= file_get_contents($file->realPath);
+                $object->comment .= substr(file_get_contents($file->realPath), 0, $this->config->search->maxFileSize);
             }
         }
 

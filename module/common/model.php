@@ -991,6 +991,7 @@ class commonModel extends model
 
         /* Set main menu by app tab and module. */
         self::setMainMenu();
+        self::checkMenuVarsReplaced();
 
         $activeMenu = '';
         $tab = $app->tab;
@@ -2232,7 +2233,8 @@ EOD;
         else
         {
             $referer  = helper::safe64Encode($this->app->getURI(true));
-            return print(js::locate(helper::createLink('user', 'login', "referer=$referer")));
+            print(js::locate(helper::createLink('user', 'login', "referer=$referer")));
+            helper::end();
         }
     }
 
@@ -3057,6 +3059,44 @@ EOD;
 
         /* If objectID is set, cannot use homeMenu. */
         unset($lang->$moduleName->homeMenu);
+    }
+
+    /**
+     * Check menuVars replaced.
+     *
+     * @static
+     * @access public
+     * @return void
+     */
+    public static function checkMenuVarsReplaced()
+    {
+        global $app, $lang;
+
+        $tab          = $app->tab;
+        $varsReplaced = true;
+        foreach($lang->menu as $menuKey => $menu)
+        {
+            if(isset($menu['link']) and strpos($menu['link'], '%s') !== false) $varsReplaced = false;
+            if(!isset($menu['link']) and is_string($menu) and strpos($menu, '%s') !== false) $varsReplaced = false;
+            if(!$varsReplaced) break;
+        }
+
+        if(!$varsReplaced and strpos("|program|product|project|execution|qa|", "|{$tab}|") !== false)
+        {
+            $isTutorialMode = common::isTutorialMode();
+            $currentModule  = $isTutorialMode ? $app->moduleName : $app->rawModule;
+
+            if(isset($lang->$currentModule->menu))
+            {
+                $lang->menu      = isset($lang->$currentModule->menu) ? $lang->$currentModule->menu : array();
+                $lang->menuOrder = isset($lang->$currentModule->menuOrder) ? $lang->$currentModule->menuOrder : array();
+                $app->tab        = zget($lang->navGroup, $currentModule);
+            }
+            else
+            {
+                self::setMenuVars($tab, (int)$app->session->$tab);
+            }
+        }
     }
 
     /*

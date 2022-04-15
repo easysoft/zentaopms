@@ -973,14 +973,22 @@ class baseRouter
      */
     public function setOpenApp()
     {
+        $module    = $this->rawModule;
+        $this->tab = 'my';
+        if(isset($this->lang->navGroup)) $this->tab = zget($this->lang->navGroup, $module, 'my');
+
         if(isset($_COOKIE['tab']) and $_COOKIE['tab'] and preg_match('/^\w+$/', $_COOKIE['tab']))
         {
             $this->tab = $_COOKIE['tab'];
-        }
-        else
-        {
-            $module    = $this->rawModule;
-            $this->tab = isset($this->lang->navGroup->$module) ? $this->lang->navGroup->$module : 'my';
+
+            /* Fix tab when module is program,product,project,execution,qa, bug not equal tab. */
+            if(strpos("|program|product|project|execution|qa|", "|{$module}|") !== false and $this->tab != $module and isset($this->lang->navGroup))
+            {
+                $this->tab = zget($this->lang->navGroup, $module);
+
+                $_COOKIE['tab'] = $this->tab;
+                setcookie('tab', $this->tab, 0, $this->config->webRoot, '', $this->config->cookieSecure, false);
+            }
         }
     }
 
@@ -2687,13 +2695,15 @@ class baseRouter
          **/
         if(preg_match('/[^\x00-\x80]/', $message)) $message = helper::convertEncoding($message, 'gbk');
         $errorLog  = "\n" . date('H:i:s') . " $message in <strong>$file</strong> on line <strong>$line</strong> ";
-        $errorLog .= "when visiting <strong>" . htmlspecialchars($this->getURI()) . "</strong>\n";
+
+        $URI = $this->getURI();
+        $errorLog .= "when visiting <strong>" . (empty($URI) ? '' : htmlspecialchars($URI)) . "</strong>\n";
 
         /*
          * 为了安全起见，对公网环境隐藏脚本路径。
          * If the ip is pulic, hidden the full path of scripts.
          */
-        $remoteIP = zget($_SERVER, "REMOTE_ADDR", '');
+        $remoteIP = helper::getRemoteIp();
         if(!defined('IN_SHELL') and !($remoteIP == '127.0.0.1' or filter_var($remoteIP, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE) === false))
         {
             $errorLog  = str_replace($this->getBasePath(), '', $errorLog);
@@ -2701,7 +2711,7 @@ class baseRouter
 
         /* 保存到日志文件(Save to log file) */
         $errorFile = $this->logRoot . 'php.' . date('Ymd') . '.log.php';
-        if(!is_file($errorFile)) file_put_contents($errorFile, "<?php\n die();\n?>\n");
+        if(!is_file($errorFile)) file_put_contents($errorFile, "<?php\n die();\n?" . ">\n");
 
         $fh = fopen($errorFile, 'a');
         if($fh) fwrite($fh, strip_tags($errorLog)) and fclose($fh);
@@ -2749,7 +2759,7 @@ class baseRouter
         if(!class_exists('dao')) return;
 
         $sqlLog = $this->getLogRoot() . 'sql.' . date('Ymd') . '.log.php';
-        if(!is_file($sqlLog)) file_put_contents($sqlLog, "<?php\n die();\n?>\n");
+        if(!is_file($sqlLog)) file_put_contents($sqlLog, "<?php\n die();\n?" . ">\n");
 
         $fh = @fopen($sqlLog, 'a');
         if(!$fh) return false;

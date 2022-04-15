@@ -143,3 +143,4 @@ $config->search->recPerPage = 10;
 
 /* Set the length of summary of search results. */
 $config->search->summaryLength = 120;
+$config->search->maxFileSize   = 1024;
