@@ -209,14 +209,6 @@
         <h4 class="modal-title"><?php echo $lang->execution->selectExecution;?></h4>
       </div>
       <div class="modal-body">
-        <?php if((empty($projects) and $config->systemMode == 'new') or (empty($executions) and $config->systemMode == 'classic')):?>
-        <div class="table-empty-tip">
-          <p>
-            <span class="text-muted"><?php echo $lang->project->empty;?></span>
-            <?php echo html::a("javascript:" . ($config->systemMode == 'new' ? "createProject()" : "createExecution()"), "<i class='icon icon-plus'></i> " . $lang->project->create, '', "class='btn btn-info'");?>
-          </p>
-        </div>
-        <?php else:?>
         <table align='center' class='table table-form'>
           <?php if($config->systemMode == 'new'):?>
           <tr>
@@ -232,7 +224,6 @@
             <td colspan='2' class='text-center'><?php echo html::commonButton($lang->todo->reasonList['task'], "id='toTaskButton'", 'btn btn-primary');?></td>
           </tr>
         </table>
-        <?php endif;?>
       </div>
     </div>
   </div>
@@ -271,14 +262,6 @@
         <h4 class="modal-title"><?php echo $lang->product->select;?></h4>
       </div>
       <div class="modal-body">
-        <?php if(empty($projects) and $config->systemMode == 'new'):?>
-        <div class="table-empty-tip">
-          <p>
-            <span class="text-muted"><?php echo $lang->project->empty;?></span>
-            <?php echo html::a("javascript:createProject()", "<i class='icon icon-plus'></i> " . $lang->project->create, '', "class='btn btn-info'");?>
-          </p>
-        </div>
-        <?php else:?>
         <table align='center' class='table table-form'>
           <?php if($config->systemMode == 'new'):?>
           <tr>
@@ -294,13 +277,13 @@
             <td colspan='2' class='text-center'><?php echo html::commonButton($lang->todo->reasonList['bug'], "id='toBugButton'", 'btn btn-primary');?></td>
           </tr>
         </table>
-        <?php endif;?>
       </div>
     </div>
   </div>
 </div>
 <?php js::set('todoID', $todo->id);?>
 <?php js::set('selectExecution', $lang->execution->selectExecution);?>
+<?php js::set('selectProduct', $lang->todo->selectProduct);?>
 <script>
 $(function() {parent.$('body.hide-modal-close').removeClass('hide-modal-close'); })
 </script>
