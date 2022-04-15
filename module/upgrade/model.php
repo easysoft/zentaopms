@@ -495,6 +495,9 @@ class upgradeModel extends model
 
                 $this->updateGroup4Lite();
                 break;
+            case '16.5':
+                $this->updateStoryReviewer();
+                break;
         }
 
         $this->deletePatch();
@@ -6135,6 +6138,47 @@ class upgradeModel extends model
                     }
                 }
             }
+        }
+    }
+
+    /**
+     * Update the story reviewer when 12 version to 15.
+     *
+     * @access public
+     * @return void
+     */
+    public function updateStoryReviewer()
+    {
+        $stories = $this->dao->select('t1.*,t2.PO,t2.createdBy')->from(TABLE_STORY)->alias('t1')
+            ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product = t2.id')
+            ->where('t1.deleted')->eq('0')
+            ->andWhere('t2.deleted')->eq('0')
+            ->andWhere('t1.status')->in('draft,changed')
+            ->fetchAll('id');
+
+        foreach($stories as $storyID => $story)
+        {
+            if(!empty($story->assingnedTo))
+            {
+                $story->reviewer = $story->assingnedTo;
+            }
+            elseif(!empty($story->PO))
+            {
+                $story->reviewer = $story->PO;
+            }
+            else
+            {
+                $story->reviewer = $story->createdBy;
+            }
+
+            $data = new stdclass();
+            $data->story      = $storyID;
+            $data->version    = $story->version;
+            $data->reviewer   = $story->reviewer;
+            $data->result     = '';
+            $data->reviewDate = '';
+
+            $this->dao->insert(TABLE_STORYREVIEW)->data($data)->exec();
         }
     }
 }
