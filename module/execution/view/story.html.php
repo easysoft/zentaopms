@@ -308,7 +308,7 @@
                   $lang->testcase->batchCreate = $lang->testcase->create;
                   if($productID and $hasDBPriv and common::hasPriv('testcase', 'create'))
                   {
-                      echo html::a($this->createLink('testcase', 'create', "productID=$story->product&branch=$story->branch&moduleID=$story->module&form=&param=0&storyID=$story->id"), '<i class="icon-testcase-create icon-sitemap"></i>', '', "title='{$lang->testcase->create}' data-app='qa'");
+                      echo html::a($this->createLink('testcase', 'create', "productID=$story->product&branch=$story->branch&moduleID=$story->module&form=&param=0&storyID=$story->id"), '<i class="icon-testcase-create icon-sitemap"></i>', '', "class='btn' title='{$lang->testcase->create}' data-app='qa'");
                   }
 
                   if($canBeChanged and common::hasPriv('execution', 'storyEstimate', $execution))
