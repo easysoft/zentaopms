@@ -70,6 +70,22 @@ function setStories(moduleID, executionID, num)
 function copyStoryTitle(num)
 {
     var storyTitle = $('#story' + num).find('option:selected').text();
+    var storyValue = $('#story' + num).find('option:selected').val();
+    
+    if(storyValue === 'ditto')
+    {
+        for(var i = num; i <= num && i >= 1; i--)
+        {
+            var selectedValue = $('select[id="story' + i +'"]').val();
+            var selectedTitle = $('select[id="story' + i +'"]').find('option:selected').text();
+            if(selectedValue !== 'ditto')
+            { 
+                storyTitle = selectedTitle;
+                break;
+            }
+        }
+    }
+    
     startPosition  = storyTitle.indexOf(':') + 1;
     endPosition    = storyTitle.lastIndexOf('[');
     storyTitle     = storyTitle.substr(startPosition, endPosition - startPosition);
