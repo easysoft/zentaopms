@@ -216,7 +216,7 @@ class testcase extends control
         $this->view->browseType      = $browseType;
         $this->view->param           = $param;
         $this->view->cases           = $cases;
-        $this->view->branch          = $product->type == 'normal' ? 0 : $branch;
+        $this->view->branch          = !empty($product) and $product->type != 'normal' ? $branch : 0;
         $this->view->branchOption    = $branchOption;
         $this->view->branchTagOption = $branchTagOption;
         $this->view->suiteList       = $this->loadModel('testsuite')->getSuites($productID);
