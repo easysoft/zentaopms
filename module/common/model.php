@@ -2010,13 +2010,35 @@ EOD;
             }
             else
             {
-                $key = $existsObjectList['idkey'];
+                $isObject     = false;
+                $objects      = array();
+                $key          = $existsObjectList['idkey'];
                 $queryObjects = $this->dao->query($existsObjectList['sql']);
                 while($object = $queryObjects->fetch())
                 {
+                    $objects[$object->$key] = $object;
                     if(!empty($preAndNextObject->pre)  and is_numeric($preAndNextObject->pre)  and $object->$key == $preAndNextObject->pre)  $preAndNextObject->pre  = $object;
                     if(!empty($preAndNextObject->next) and is_numeric($preAndNextObject->next) and $object->$key == $preAndNextObject->next) $preAndNextObject->next = $object;
-                    if((empty($preAndNextObject->pre) or is_object($preAndNextObject->pre)) and (empty($preAndNextObject->next) or is_object($preAndNextObject->next))) break;
+                    if((empty($preAndNextObject->pre) or is_object($preAndNextObject->pre)) and (empty($preAndNextObject->next) or is_object($preAndNextObject->next)))
+                    {
+                        $isObject = true;
+                        break;
+                    }
+                }
+
+                /* If the pre object or next object is number type, then continue to find the pre or next. */
+                if(!$isObject)
+                {
+                    $objectIdList  = array_keys($objects);
+                    $objectIdIndex = array_search($objectID, $objectIdList);
+                    if(is_numeric($preAndNextObject->pre))
+                    {
+                        $preAndNextObject->pre = $objectIdIndex - 1 >= 0 ? $objects[$objectIdList[$objectIdIndex - 1]] : '';
+                    }
+                    if(is_numeric($preAndNextObject->next))
+                    {
+                        $preAndNextObject->next = $objectIdIndex + 1 < count($objectIdList) ? $objects[$objectIdList[$objectIdIndex + 1]] : '';
+                    }
                 }
             }
         }
