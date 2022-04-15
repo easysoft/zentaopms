@@ -151,7 +151,7 @@ class productModel extends model
         if(defined('TUTORIAL')) return $productID;
 
         if($productID == 0 and $this->cookie->preProductID)   $productID = $this->cookie->preProductID;
-        if(($productID == 0 and $this->session->product == '') or !isset($products[$productID])) $productID = key($products);
+        if($productID == 0 and $this->session->product == '') $productID = key($products);
         $this->session->set('product', (int)$productID, $this->app->tab);
 
         if(!isset($products[$this->session->product]))
@@ -159,7 +159,12 @@ class productModel extends model
             $product = $this->getById($productID);
             if(empty($product)) $productID = key($products);
             $this->session->set('product', (int)$productID, $this->app->tab);
-            if($productID && strpos(",{$this->app->user->view->products},", ",{$productID},") === false) $this->accessDenied();
+            if($productID && strpos(",{$this->app->user->view->products},", ",{$productID},") === false)
+            {
+                $productID = key($products);
+                $this->session->set('product', (int)$productID, $this->app->tab);
+                $this->accessDenied();
+            }
         }
 
         setcookie('preProductID', (int)$productID, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, true);
@@ -2263,7 +2268,7 @@ class productModel extends model
 
     /**
      * Convert predefined HTML entities to characters
-     * 
+     *
      * @param  array $statsData
      * @return array
      */
@@ -2278,7 +2283,7 @@ class productModel extends model
                 !empty($data) && array_map(function($item)
                 {
                     return $item->name = htmlspecialchars_decode($item->name, ENT_QUOTES);
-                }, 
+                },
                 $data);
             }
 
@@ -2289,10 +2294,10 @@ class productModel extends model
                     !empty($plan) && array_map(function($planItem)
                     {
                         return $planItem->title = htmlspecialchars_decode($planItem->title, ENT_QUOTES);
-                    }, 
+                    },
                     $plan);
                 }
-            }   
+            }
         }
 
         return $statsData;
