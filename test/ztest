@@ -11,7 +11,7 @@ switch($argv[1])
         break;
     case 'extract':
         ztfExtract('api');
-        ztfExtract('model/stakeholder');
+        ztfExtract('model');
         break;
     case 'api':
         ztfRun('api');
