@@ -1,8 +1,12 @@
 title: zt_stakeholder
-desc: 干系人表 
+desc: 干系人表
 version: 1.0
 fields:
-  - field: objectID 
+  - field: objectID
     range: 11-100
-  - field: objectType 
+  - field: objectType
     range: project
+  - field: key
+    range: 1
+  - field: user
+    range: admin
