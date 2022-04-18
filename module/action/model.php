@@ -739,6 +739,7 @@ class actionModel extends model
             elseif($action->action == 'createmr' and strpos($action->extra, '::') !== false)
             {
                 list($mrCreatedDate, $mrActor, $mrLink) = explode('::', $action->extra);
+                if(isonlybody()) $mrLink .= '?onlybody=yes';
                 $this->app->loadLang('mr');
                 $desc = sprintf($this->lang->mr->createAction, $mrCreatedDate, $mrActor, $mrLink);
             }

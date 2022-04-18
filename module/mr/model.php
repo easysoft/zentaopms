@@ -1415,7 +1415,7 @@ class mrModel extends model
         /* Get link action text. */
         $MR             = $this->getByID($MRID);
         $users          = $this->loadModel('user')->getPairs('noletter');
-        $MRCreateAction = $MR->createdDate . '::' . zget($users, $MR->createdBy) . '::' . helper::createLink('mr', 'view', "mr={$MR->id}", '', true);
+        $MRCreateAction = $MR->createdDate . '::' . zget($users, $MR->createdBy) . '::' . helper::createLink('mr', 'view', "mr={$MR->id}");
 
         foreach($links as $linkID)
         {
