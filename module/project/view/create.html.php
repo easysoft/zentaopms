@@ -125,7 +125,7 @@
                   <?php if(common::hasPriv('product', 'create')):?>
                   <span class='input-group-addon'>
                     <?php echo html::checkBox('newProduct', $lang->project->addProduct, '', "onchange=addNewProduct(this);");?>
-                    <div><icon class='icon icon-help' data-toggle='popover' data-trigger='focus hover' data-placement='top' data-tip-class='text-muted popover-sm' data-content="<?php echo $lang->project->productTip;?>"></icon></div>
+                    <div><icon class='icon icon-help' data-toggle='popover' data-trigger='focus hover' data-placement='left' data-tip-class='text-muted popover-sm' data-content="<?php echo $lang->project->productTip;?>"></icon></div>
                   </span>
                   <?php endif;?>
                 </div>

@@ -571,7 +571,7 @@ class bug extends control
             if($projectID)
             {
                 $project  = $this->loadModel('project')->getByID($projectID);
-                $projects = array($projectID => $project->name);
+                if(empty($bugID)) $projects = array($projectID => $project->name);
             }
         }
         elseif($projectID)
@@ -581,7 +581,7 @@ class bug extends control
             foreach($productList as $product) $products[$product->id] = $product->name;
 
             $project   = $this->loadModel('project')->getByID($projectID);
-            $projects += array($projectID => $project->name);
+            if(empty($bugID)) $projects += array($projectID => $project->name);
 
             /* Set project menu. */
             if($this->app->tab == 'project') $this->project->setMenu($projectID);
@@ -590,6 +590,9 @@ class bug extends control
         {
             $projects += $this->product->getProjectPairsByProduct($productID, $branch);
         }
+
+        /* When copying bug, get all project linked to the product. */
+        if(!empty($bugID)) $projects += $this->product->getProjectPairsByProduct($productID, $branch);
 
         /* Get block id of assinge to me. */
         $blockID = 0;
