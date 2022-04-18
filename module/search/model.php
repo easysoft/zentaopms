@@ -334,7 +334,7 @@ class searchModel extends model
      *
      * @param  int    $queryID
      * @access public
-     * @return string
+     * @return object
      */
     public function getQuery($queryID)
     {
@@ -362,7 +362,7 @@ class searchModel extends model
      *
      * @param  int    $queryID
      * @access public
-     * @return string
+     * @return object
      */
     public function getById($queryID)
     {
