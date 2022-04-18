@@ -228,16 +228,17 @@ class block extends control
         $blocks = $this->block->getBlockList($module, $type);
         $vision = $this->config->vision;
 
-        $commonField = 'common';
+        $section = 'common';
         if($module == 'project' and $projectID)
         {
-            $project     = $this->loadModel('project')->getByID($projectID);
-            $commonField = $project->model . 'common';
+            $project = $this->loadModel('project')->getByID($projectID);
+            $section = $project->model . 'common';
         }
 
         $inited = $this->dao->select('*')->from(TABLE_CONFIG)
             ->where('module')->eq($module)
             ->andWhere('owner')->eq($this->app->user->account)
+            ->andWhere('`section`')->eq($section)->fi()
             ->andWhere('`key`')->eq('blockInited')
             ->andWhere('vision')->eq($vision)
             ->fetch('value');
