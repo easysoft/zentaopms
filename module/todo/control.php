@@ -218,7 +218,7 @@ class todo extends control
             $bugs   = $this->bug->getUserBugPairs($account, true, 0, '', '', isset($objectIDList['bug']) ? $objectIDList['bug'] : '');
             $tasks  = $this->task->getUserTaskPairs($account, 'wait,doing', '', isset($objectIDList['task']) ? $objectIDList['task'] : '');
             $storys = $this->loadModel('story')->getUserStoryPairs($account, 10, 'story', '', isset($objectIDList['story']) ? $objectIDList['story'] : '');
-            if($this->config->edition != 'open') $this->view->feedbacks = $this->loadModel('feedback')->getUserFeedbackPairs($account);
+            if($this->config->edition != 'open') $this->view->feedbacks = $this->loadModel('feedback')->getUserFeedbackPairs($account, '', isset($objectIDList['feedback']) ? $objectIDList['feedback'] : '');
             if($this->config->edition == 'max')
             {
                 $issues        = $this->loadModel('issue')->getUserIssuePairs($account);
