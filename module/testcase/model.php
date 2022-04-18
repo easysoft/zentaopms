@@ -71,7 +71,9 @@ class testcaseModel extends model
             $this->loadModel('file')->saveUpload('testcase', $caseID);
             $parentStepID = 0;
             $this->loadModel('score')->create('testcase', 'create', $caseID);
-            foreach($this->post->steps as $stepID => $stepDesc)
+
+            $data = fixer::input('post')->filterEmoji('steps,expects')->get();
+            foreach($data->steps as $stepID => $stepDesc)
             {
                 if(empty($stepDesc)) continue;
                 $stepType      = $this->post->stepType;
@@ -81,7 +83,7 @@ class testcaseModel extends model
                 $step->case    = $caseID;
                 $step->version = 1;
                 $step->desc    = htmlSpecialString($stepDesc);
-                $step->expect  = $step->type == 'group' ? '' : htmlSpecialString($this->post->expects[$stepID]);
+                $step->expect  = $step->type == 'group' ? '' : htmlSpecialString($data->expects[$stepID]);
                 $this->dao->insert(TABLE_CASESTEP)->data($step)->autoCheck()->exec();
                 if($step->type == 'group') $parentStepID = $this->dao->lastInsertID();
                 if($step->type == 'step')  $parentStepID = 0;
@@ -741,7 +743,9 @@ class testcaseModel extends model
                 /* Ignore steps when post has no steps. */
                 if($this->post->steps)
                 {
-                    foreach($this->post->steps as $stepID => $stepDesc)
+                    $data = fixer::input('post')->filterEmoji('steps,expects')->get();
+
+                    foreach($data->steps as $stepID => $stepDesc)
                     {
                         if(empty($stepDesc)) continue;
                         $stepType = $this->post->stepType;
@@ -751,7 +755,7 @@ class testcaseModel extends model
                         $step->case    = $caseID;
                         $step->version = $version;
                         $step->desc    = htmlSpecialString($stepDesc);
-                        $step->expect  = $step->type == 'group' ? '' : htmlSpecialString($this->post->expects[$stepID]);
+                        $step->expect  = $step->type == 'group' ? '' : htmlSpecialString($data->expects[$stepID]);
                         $this->dao->insert(TABLE_CASESTEP)->data($step)->autoCheck()->exec();
                         if($step->type == 'group') $parentStepID = $this->dao->lastInsertID();
                         if($step->type == 'step')  $parentStepID = 0;
