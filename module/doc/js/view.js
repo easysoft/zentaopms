@@ -1,12 +1,5 @@
 $(function()
 {
-    if($('#urlIframe').size() > 0)
-    {
-        var defaultHeight = $.cookie('windowHeight') - $('#header').height() - $('#footer').height() - $('#mainMenu').height() - 50;
-        $('#urlIframe').height(defaultHeight);
-        setTimeout($.resetToolbarPosition, 50);
-    }
-
     var isFullscreen = $.cookie('docFullscreen') == 'true';
     $('body').toggleClass('doc-fullscreen', isFullscreen);
     $('.side-col').toggleClass('hidden', isFullscreen);
@@ -32,6 +25,13 @@ $(function()
         {
             $(this).find('a[onclick^=deleteFile]').remove();
         });
+    }
+
+    if($('#urlIframe').size() > 0)
+    {
+        var defaultHeight = $('#mainContent .main-col').height() - 50;
+        $('#urlIframe').height(defaultHeight);
+        setTimeout($.resetToolbarPosition, 50);
     }
 })
 
