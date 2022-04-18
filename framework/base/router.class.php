@@ -965,8 +965,8 @@ class baseRouter
     }
 
     /**
-     * 从cookie中获取当前的group, 即URL锚链接'#open=?'。
-     * Get current group from cookie, original source is url '#open=?'.
+     * 从cookie中获取当前的group, 即URL锚链接'#tab=?'。
+     * Get current group from cookie, original source is url '#tab=?'.
      *
      * @access public
      * @return void
@@ -976,20 +976,7 @@ class baseRouter
         $module    = $this->rawModule;
         $this->tab = 'my';
         if(isset($this->lang->navGroup)) $this->tab = zget($this->lang->navGroup, $module, 'my');
-
-        if(isset($_COOKIE['tab']) and $_COOKIE['tab'] and preg_match('/^\w+$/', $_COOKIE['tab']))
-        {
-            $this->tab = $_COOKIE['tab'];
-
-            /* Fix tab when module is program,product,project,execution,qa, bug not equal tab. */
-            if(strpos("|program|product|project|execution|qa|", "|{$module}|") !== false and $this->tab != $module and isset($this->lang->navGroup))
-            {
-                $this->tab = zget($this->lang->navGroup, $module);
-
-                $_COOKIE['tab'] = $this->tab;
-                setcookie('tab', $this->tab, 0, $this->config->webRoot, '', $this->config->cookieSecure, false);
-            }
-        }
+        if(isset($_COOKIE['tab']) and $_COOKIE['tab'] and preg_match('/^\w+$/', $_COOKIE['tab'])) $this->tab = $_COOKIE['tab'];
     }
 
     /**
