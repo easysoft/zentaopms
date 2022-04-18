@@ -28,7 +28,7 @@ class branch extends control
         $product = $this->loadModel('product')->getById($productID);
         if($product->type == 'normal') $this->locate($this->createLink('product', 'view', "productID=$productID"));
 
-        $this->loadModel('product')->setMenu($productID);
+        $this->product->setMenu($productID);
         $this->session->set('branchManage', $this->app->getURI(true), 'product');
         $this->branch->changeBranchLanguage($productID);
 
