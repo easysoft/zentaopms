@@ -194,7 +194,7 @@
             else
             {
                 appCode = getAppCodeFromUrl(url);
-                if(!appCode) return false;
+                if(!appCode) return openTab('my');
             }
         }
 
