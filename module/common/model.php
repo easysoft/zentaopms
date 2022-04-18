@@ -2332,7 +2332,7 @@ EOD;
 
             if(empty($acls['views'])) return true;
             $menu = isset($lang->navGroup->$module) ? $lang->navGroup->$module : $module;
-            if($menu == 'my' && $method == 'team') $menu = 'system'; // Fix bug #18642.
+            if($module == 'my' && $method == 'team') $menu = 'system'; // Fix bug #18642.
             $menu = strtolower($menu);
             if($menu != 'qa' and !isset($lang->$menu->menu)) return true;
             if(($menu == 'my' && $method != 'team')or $menu == 'index' or $module == 'tree') return true;
