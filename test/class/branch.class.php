@@ -201,15 +201,6 @@ class branchTest
         return $object;
     }
 
-    public function manageTest($productID)
-    {
-        $objects = $this->objectModel->manage($productID);
-
-        if(dao::isError()) return dao::getError();
-
-        return $objects;
-    }
-
     public function unlinkBranch4ProjectTest($productIDList)
     {
         $objects = $this->objectModel->unlinkBranch4Project($productIDList);
@@ -309,24 +300,6 @@ class branchTest
         if(dao::isError()) return dao::getError();
 
         return $objects ? 1 : 2;
-    }
-
-    public function setParamsForLinkTest($module, $link, $projectID, $productID, $branch)
-    {
-        $objects = $this->objectModel->setParamsForLink($module, $link, $projectID, $productID, $branch);
-
-        if(dao::isError()) return dao::getError();
-
-        return $objects;
-    }
-
-    public function setDefaultTest($productID, $branchID)
-    {
-        $objects = $this->objectModel->setDefault($productID, $branchID);
-
-        if(dao::isError()) return dao::getError();
-
-        return $objects;
     }
 
     public function getPairsByProjectProductTest($projectID, $productID)
