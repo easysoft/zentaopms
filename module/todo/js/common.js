@@ -12,7 +12,7 @@ function switchDateTodo(switcher)
 /**
  * Load data.
  * @param  type        $type        Type of selected todo.
- * @param  id          $id          ID of selected todo.  
+ * @param  id          $id          ID of selected todo.
  * @param  defaultType $defaultType Default type of selected todo.
  * @param  idvalue     $idvalue     ID of the closed todo type.
  * @access public
