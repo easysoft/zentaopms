@@ -305,9 +305,8 @@
                   ?>
                   <td title='<?php echo $moduleTitle?>'><?php echo $printModule?></td>
                 </tr>
-                <?php if($story->type != 'requirement'):?>
+                <?php if($story->type != 'requirement' and $story->parent != -1):?>
                 <tr class='plan-line'>
-                  <?php if($story->parent != -1):?>
                   <th><?php echo $lang->story->plan;?></th>
                   <td>
                   <?php
@@ -321,7 +320,6 @@
                   }
                   ?>
                   </td>
-                  <?php endif;?>
                 </tr>
                 <?php endif;?>
                 <tr>
