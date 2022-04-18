@@ -358,6 +358,20 @@ class searchModel extends model
     }
 
     /**
+     * Get a query.
+     *
+     * @param  int    $queryID
+     * @access public
+     * @return string
+     */
+    public function getById()
+    {
+        $query = $this->dao->findByID($queryID)->from(TABLE_USERQUERY)->fetch();
+        if(!$query) return false;
+        return $query;
+    }
+
+    /**
      * Save current query to db.
      *
      * @access public
