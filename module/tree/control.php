@@ -58,7 +58,7 @@ class tree extends control
 
             if(!empty($product->type) && $product->type != 'normal')
             {
-                $branches = $this->loadModel('branch')->getPairs($product->id);
+                $branches = $this->loadModel('branch')->getPairs($product->id, 'withClosed');
                 if($currentModuleID)
                 {
                     $currentModuleBranch = $this->dao->select('branch')->from(TABLE_MODULE)->where('id')->eq($currentModuleID)->fetch('branch');
@@ -335,7 +335,7 @@ class tree extends control
         if($showProduct)
         {
             $product = $this->loadModel('product')->getById($module->root);
-            if($product->type != 'normal') $this->view->branches = $this->loadModel('branch')->getPairs($module->root, 'active');
+            if($product->type != 'normal') $this->view->branches = $this->loadModel('branch')->getPairs($module->root, 'withClosed');
             $this->view->product  = $product;
             $this->view->products = $this->product->getPairs('', $product->program);
         }

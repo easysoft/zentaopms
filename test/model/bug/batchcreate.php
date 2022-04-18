@@ -14,7 +14,7 @@ pid=1
 测试正常批量创建bug2         >> 批量bug五,trunk,codeerror,3,3,1,101
 测试正常批量创建bug3         >> 批量bug九,1,config,3,3,1,0
 测试短时间内重复批量创建bug  >> 0
-测试异常创建bug              >> <html><meta charset='utf-8'/><style>body{background:white}</style><script>alert('『影响版本』不能为空。')
+测试异常创建bug              >> 『影响版本』不能为空。
 
 
 */
@@ -43,6 +43,6 @@ r($bug->batchCreateObject($productID, $normal_create1))   && p('0:title,openedBu
 r($bug->batchCreateObject($productID, $normal_create2))   && p('1:title,openedBuild,type,severity,pri,product,execution')    && e('批量bug五,trunk,codeerror,3,3,1,101');           // 测试正常批量创建bug2
 r($bug->batchCreateObject($productID, $normal_create3))   && p('2:title,openedBuild,type,severity,pri,product,execution')    && e('批量bug九,1,config,3,3,1,0');                    // 测试正常批量创建bug3
 r($bug->batchCreateObject($productID, $normal_create1))   && p()                                                             && e('0');                                             // 测试短时间内重复批量创建bug
-r($bug->batchCreateObject($productID, $exception_create)) && p() && e("<html><meta charset='utf-8'/><style>body{background:white}</style><script>alert('『影响版本』不能为空。')"); // 测试异常创建bug
+r($bug->batchCreateObject($productID, $exception_create)) && p('message:0')                                                  && e("『影响版本』不能为空。"); // 测试异常创建bug
 
 system("./ztest init");

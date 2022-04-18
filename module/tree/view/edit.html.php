@@ -160,7 +160,7 @@ function loadBranches(obj)
     var $inputGroup = $(obj).closest('.input-group');
     $inputGroup.find('#branch').remove();
     $inputGroup.find('#branch_chosen').remove();
-    $.get(createLink('branch', 'ajaxGetBranches', "productID=" + productID), function(data)
+    $.get(createLink('branch', 'ajaxGetBranches', "productID=" + productID + "&oldBranch=0&param=withClosed"), function(data)
     {
         if(data)
         {

@@ -90,6 +90,7 @@ $lang->bug->fromCase         = 'From Case';
 $lang->bug->toCase           = 'To Case';
 $lang->bug->colorTag         = 'Color';
 $lang->bug->fixedRate        = 'Fixed Rate';
+$lang->bug->noticefeedbackBy = 'NoticeFeedbackBy';
 
 /* Method list. */
 $lang->bug->index              = 'Bug Home';

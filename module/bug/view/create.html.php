@@ -138,6 +138,7 @@ if($this->app->tab == 'project')   js::set('objectID', $projectID);
               </div>
             </td>
           <?php $showDeadline = strpos(",$showFields,", ',deadline,') !== false;?>
+          <?php $showNoticefeedbackBy = strpos(",$showFields,", ',noticefeedbackBy,') !== false;?>
           <?php if($showDeadline):?>
             <td id='deadlineTd'>
               <div class='input-group'>
@@ -146,6 +147,7 @@ if($this->app->tab == 'project')   js::set('objectID', $projectID);
               </div>
             </td>
           </tr>
+          <?php if($showNoticefeedbackBy):?>
           <tr>
             <th><nobr><?php echo $lang->bug->feedbackBy;?></nobr></th>
             <td><?php echo html::input('feedbackBy', '', "class='form-control'");?></td>
@@ -156,7 +158,8 @@ if($this->app->tab == 'project')   js::set('objectID', $projectID);
               </div>
             </td>
           </tr>
-          <?php else:?>
+          <?php endif;?>
+          <?php elseif($showNoticefeedbackBy):?>
             <td>
               <div class='input-group' id='feedback'>
               <span class="input-group-addon"><?php echo $lang->bug->feedbackBy?></span>
