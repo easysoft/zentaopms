@@ -8,7 +8,7 @@ fields:
     range: 100-10000
   - field: product
     note: "所属产品"
-    range: 1-10
+    range: 1-10{3}
   - field: branch
     note: "所属分支"
     range: 41-50
