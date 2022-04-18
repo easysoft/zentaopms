@@ -96,7 +96,7 @@ class branchModel extends model
      * Get pairs.
      *
      * @param  int    $productID
-     * @param  string $params
+     * @param  string $params active|noempty|all|withClosed
      * @param  int    $executionID
      * @param  string $mergedBranches
      * @access public
@@ -140,6 +140,16 @@ class branchModel extends model
         if(strpos($params, 'all') !== false)
         {
             $branches = array('all' => $this->lang->branch->all) + $branches;
+        }
+
+        if(strpos($params, 'withClosed') !== false)
+        {
+            $closedBranches = $this->dao->select('id')->from(TABLE_BRANCH)->where('product')->eq($productID)->andWhere('status')->eq('closed')->fetchPairs();
+
+            if(!empty($closedBranches))
+            {
+                foreach($closedBranches as $closedBranch) $branches[$closedBranch] .= ' (' . $this->lang->branch->statusList['closed'] . ')';
+            }
         }
         return $branches;
     }
