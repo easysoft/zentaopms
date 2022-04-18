@@ -25,7 +25,10 @@ class branch extends control
      */
     public function manage($productID, $browseType = 'active', $orderBy = 'order', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
-        $this->loadModel('product')->setMenu($productID);
+        $product = $this->loadModel('product')->getById($productID);
+        if($product->type == 'normal') $this->locate($this->createLink('product', 'view', "productID=$productID"));
+
+        $this->product->setMenu($productID);
         $this->session->set('branchManage', $this->app->getURI(true), 'product');
         $this->branch->changeBranchLanguage($productID);
 
