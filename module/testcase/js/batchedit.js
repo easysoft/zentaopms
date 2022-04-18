@@ -25,19 +25,56 @@ function setDuplicateAndChild(resolution, storyID)
     }
 }
 
-function loadBranches(product, branch, caseID)
+/**
+ * Load branches.
+ *
+ * @param  int    product
+ * @param  int    branch
+ * @param  int    caseID
+ * @param  int    oldBranch
+ * @access public
+ * @return void
+ */
+function loadBranches(product, branch, caseID, oldBranch)
 {
     if(typeof(branch) == 'undefined') branch = 0;
     if(!branch) branch = 0;
 
-    var currentModuleID = $('#modules' + caseID).val();
-    moduleLink = createLink('tree', 'ajaxGetOptionMenu', 'productID=' + product + '&viewtype=case&branch=' + branch + '&rootModuleID=0&returnType=html&fieldID=' + caseID + '&needManage=false&extra=&currentModuleID=' + currentModuleID);
-    $('#modules' + caseID).parent('td').load(moduleLink, function()
+    var result = true;
+    if(branch)
     {
-        $("#modules" + caseID).attr('onchange', "loadStories("+ product + ", this.value, " + caseID + ")").chosen();
-    });
+        var endLoop = false;
+        for(index in testtasks)
+        {
+            if(endLoop) break;
+            if(index == caseID)
+            {
+                endLoop = true;
+                for(taskID in testtasks[index])
+                {
+                    if(branch != oldBranch && testtasks[index][taskID]['branch'] != branch)
+                    {
+                        var tip = confirmUnlinkTesttask.replace("%s", caseID);
+                        result  = confirm(tip);
+                        if(!result) $('#branches' + caseID).val(oldBranch).trigger("chosen:updated");
+                        break;
+                    }
+                }
+            }
+        }
+    }
 
-    loadStories(product, 0, caseID);
+    if(result)
+    {
+        var currentModuleID = $('#modules' + caseID).val();
+        moduleLink          = createLink('tree', 'ajaxGetOptionMenu', 'productID=' + product + '&viewtype=case&branch=' + branch + '&rootModuleID=0&returnType=html&fieldID=' + caseID + '&needManage=false&extra=&currentModuleID=' + currentModuleID);
+        $('#modules' + caseID).parent('td').load(moduleLink, function()
+        {
+            $("#modules" + caseID).attr('onchange', "loadStories("+ product + ", this.value, " + caseID + ")").chosen();
+        });
+
+        loadStories(product, 0, caseID);
+    }
 }
 
 $(document).ready(function()

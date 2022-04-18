@@ -45,7 +45,7 @@
     if(isset($menuItem->hidden)) continue;
     $menuType = $menuItem->name;
     if(!$config->testcase->needReview and empty($config->testcase->forceReview) and $menuType == 'wait') continue;
-    if($hasBrowsePriv and $menuType == 'QUERY')
+    if($hasBrowsePriv and $menuType == 'QUERY' and in_array($browseType, array('all', 'needconfirm', 'bysuite')))
     {
         $searchBrowseLink = $this->createLink($currentModule, $currentMethod, $projectParam . "productID=$productID&branch=$branch&browseType=bySearch&param=%s");
         $isBySearch       = $browseType == 'bysearch';
@@ -138,9 +138,10 @@
       <button type='button' class='btn btn-link dropdown-toggle' data-toggle='dropdown' id='importAction'><i class='icon icon-import muted'></i> <?php echo $lang->import ?><span class='caret'></span></button>
       <ul class='dropdown-menu pull-right' id='importActionMenu'>
       <?php
-      $class = common::hasPriv('testcase', 'import') ? '' : "class=disabled";
-      $misc  = common::hasPriv('testcase', 'import') ? "class='export'" : "class=disabled";
-      $link  = common::hasPriv('testcase', 'import') ?  $this->createLink('testcase', 'import', "productID=$productID&branch=$branch") : '#';
+      $printImportBtn = (common::hasPriv('testcase', 'import') and $branch !== 'all') ? true : false;
+      $class = $printImportBtn ? '' : "class=disabled";
+      $misc  = $printImportBtn ? "class='export'" : "class=disabled";
+      $link  = $printImportBtn ?  $this->createLink('testcase', 'import', "productID=$productID&branch=$branch") : '#';
       echo "<li $class>" . html::a($link, $lang->testcase->fileImport, '', $misc . "data-app={$this->app->tab}") . "</li>";
 
       $class = common::hasPriv('testcase', 'importFromLib') ? '' : "class=disabled";

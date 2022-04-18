@@ -58,7 +58,7 @@ class tree extends control
 
             if(!empty($product->type) && $product->type != 'normal')
             {
-                $branches = $this->loadModel('branch')->getPairs($product->id);
+                $branches = $this->loadModel('branch')->getPairs($product->id, 'withClosed');
                 if($currentModuleID)
                 {
                     $currentModuleBranch = $this->dao->select('branch')->from(TABLE_MODULE)->where('id')->eq($currentModuleID)->fetch('branch');
@@ -321,7 +321,7 @@ class tree extends control
         }
         else
         {
-            $this->view->optionMenu = $this->tree->getOptionMenu($module->root, $module->type, 0, $branch);
+            $this->view->optionMenu = $this->tree->getOptionMenu($module->root, $module->type, 0, $module->branch);
         }
         if($type == 'doc') $this->view->libs = $this->loadModel('doc')->getLibs('all', $extra = 'withObject');
 
@@ -335,7 +335,7 @@ class tree extends control
         if($showProduct)
         {
             $product = $this->loadModel('product')->getById($module->root);
-            if($product->type != 'normal') $this->view->branches = $this->loadModel('branch')->getPairs($module->root, 'active');
+            if($product->type != 'normal') $this->view->branches = $this->loadModel('branch')->getPairs($module->root, 'withClosed');
             $this->view->product  = $product;
             $this->view->products = $this->product->getPairs('', $product->program);
         }
@@ -389,6 +389,7 @@ class tree extends control
         if(!empty($_POST))
         {
             $moduleIDList = $this->tree->manageChild($rootID, $viewType);
+            if(dao::isError()) return print(js::error(dao::getError()));
 
             if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'idList' => $moduleIDList));
             if(($viewType == 'doc' || $viewType == 'api') and isonlybody()) die(js::reload('parent.parent'));

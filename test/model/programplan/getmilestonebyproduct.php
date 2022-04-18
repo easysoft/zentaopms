@@ -16,7 +16,7 @@ $productIDList = array(21, 32, 23, 34, 25);
 
 $programplan = new programplanTest();
 
-r($programplan->getMilestoneByProductTest($productIDList[0], $projectIDList[0])) && p() && e('阶段301,阶段481,阶段211,阶段391,阶段571');                // 测试获取产品21 项目41的里程碑
+r($programplan->getMilestoneByProductTest($productIDList[0], $projectIDList[0])) && p() && e('阶段121,阶段301,阶段481,阶段31,阶段211,阶段391,阶段571'); // 测试获取产品21 项目41的里程碑
 r($programplan->getMilestoneByProductTest($productIDList[1], $projectIDList[1])) && p() && e('0');                                                      // 测试获取产品32 项目52的里程碑
 r($programplan->getMilestoneByProductTest($productIDList[2], $projectIDList[2])) && p() && e('阶段123,阶段303,阶段483,阶段33,阶段213,阶段393,阶段573'); // 测试获取产品23 项目43的里程碑
 r($programplan->getMilestoneByProductTest($productIDList[3], $projectIDList[3])) && p() && e('0');                                                      // 测试获取产品34 项目54的里程碑

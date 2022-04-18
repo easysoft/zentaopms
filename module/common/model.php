@@ -360,7 +360,7 @@ class commonModel extends model
         {
             echo js::locate($denyLink);
         }
-        die;
+        helper::end();
     }
 
     /**
@@ -419,7 +419,7 @@ class commonModel extends model
                     echo '<li>' . html::a(helper::createLink('my', 'preference', '', '', true), "<i class='icon icon-controls'></i> " . $lang->preference, '', "class='iframe' data-width='700'") . '</li>';
                 }
 
-                echo '<li>' . html::a(helper::createLink('my', 'changepassword', '', '', true), "<i class='icon icon-cog-outline'></i> " . $lang->changePassword, '', "class='iframe' data-width='600'") . '</li>';
+                if(common::hasPriv('my', 'changePassword')) echo '<li>' . html::a(helper::createLink('my', 'changepassword', '', '', true), "<i class='icon icon-cog-outline'></i> " . $lang->changePassword, '', "class='iframe' data-width='600'") . '</li>';
 
                 echo "<li class='divider'></li>";
             }
@@ -991,6 +991,7 @@ class commonModel extends model
 
         /* Set main menu by app tab and module. */
         self::setMainMenu();
+        self::checkMenuVarsReplaced();
 
         $activeMenu = '';
         $tab = $app->tab;
@@ -1205,17 +1206,6 @@ class commonModel extends model
         /* Cycling to print every sub menu. */
         foreach($menu as $menuItem)
         {
-            /* Fix work and contribute navigation permission check issues. */
-            if(isset($menuItem->link) and isset($menuItem->link['module']) and isset($menuItem->link['method']))
-            {
-                if($menuItem->link['module'] == 'my' and ($menuItem->link['method'] == 'work' or $menuItem->link['method'] == 'contribute'))
-                {
-                    $mode = explode('&', $menuItem->link['vars']);
-                    $mode = substr($mode[0], 5);
-                    $menuItem->hidden = !common::hasPriv('my', $mode);
-                }
-            }
-
             if(isset($menuItem->hidden) && $menuItem->hidden) continue;
             if($isMobile and empty($menuItem->link)) continue;
             if($menuItem->divider) echo "<li class='divider'></li>";
@@ -2020,13 +2010,35 @@ EOD;
             }
             else
             {
-                $key = $existsObjectList['idkey'];
+                $isObject     = false;
+                $objects      = array();
+                $key          = $existsObjectList['idkey'];
                 $queryObjects = $this->dao->query($existsObjectList['sql']);
                 while($object = $queryObjects->fetch())
                 {
+                    $objects[$object->$key] = $object;
                     if(!empty($preAndNextObject->pre)  and is_numeric($preAndNextObject->pre)  and $object->$key == $preAndNextObject->pre)  $preAndNextObject->pre  = $object;
                     if(!empty($preAndNextObject->next) and is_numeric($preAndNextObject->next) and $object->$key == $preAndNextObject->next) $preAndNextObject->next = $object;
-                    if((empty($preAndNextObject->pre) or is_object($preAndNextObject->pre)) and (empty($preAndNextObject->next) or is_object($preAndNextObject->next))) break;
+                    if((empty($preAndNextObject->pre) or is_object($preAndNextObject->pre)) and (empty($preAndNextObject->next) or is_object($preAndNextObject->next)))
+                    {
+                        $isObject = true;
+                        break;
+                    }
+                }
+
+                /* If the pre object or next object is number type, then continue to find the pre or next. */
+                if(!$isObject)
+                {
+                    $objectIdList  = array_keys($objects);
+                    $objectIdIndex = array_search($objectID, $objectIdList);
+                    if(is_numeric($preAndNextObject->pre))
+                    {
+                        $preAndNextObject->pre = $objectIdIndex - 1 >= 0 ? $objects[$objectIdList[$objectIdIndex - 1]] : '';
+                    }
+                    if(is_numeric($preAndNextObject->next))
+                    {
+                        $preAndNextObject->next = $objectIdIndex + 1 < count($objectIdList) ? $objects[$objectIdList[$objectIdIndex + 1]] : '';
+                    }
                 }
             }
         }
@@ -2204,35 +2216,43 @@ EOD;
      */
     public function checkPriv()
     {
-        $module = $this->app->getModuleName();
-        $method = $this->app->getMethodName();
-        if($this->app->isFlow)
+        try
         {
-            $module = $this->app->rawModule;
-            $method = $this->app->rawMethod;
+            $module = $this->app->getModuleName();
+            $method = $this->app->getMethodName();
+            if($this->app->isFlow)
+            {
+                $module = $this->app->rawModule;
+                $method = $this->app->rawMethod;
+            }
+
+            $beforeValidMethods = array(
+                'user'    => array('deny', 'logout'),
+                'my'      => array('changepassword'),
+                'message' => array('ajaxgetmessage'),
+            );
+            if(!empty($this->app->user->modifyPassword) and (!isset($beforeValidMethods[$module]) or !in_array($method, $beforeValidMethods[$module]))) return print(js::locate(helper::createLink('my', 'changepassword', '', '', true)));
+            if($this->isOpenMethod($module, $method)) return true;
+            if(!$this->loadModel('user')->isLogon() and $this->server->php_auth_user) $this->user->identifyByPhpAuth();
+            if(!$this->loadModel('user')->isLogon() and $this->cookie->za) $this->user->identifyByCookie();
+
+            if(isset($this->app->user))
+            {
+                if(in_array($module, $this->config->programPriv->waterfall) and $this->app->tab == 'project') return true;
+
+                $this->app->user = $this->session->user;
+                if(!commonModel::hasPriv($module, $method)) $this->deny($module, $method);
+            }
+            else
+            {
+                $referer  = helper::safe64Encode($this->app->getURI(true));
+                print(js::locate(helper::createLink('user', 'login', "referer=$referer")));
+                helper::end();
+            }
         }
-
-        $beforeValidMethods = array(
-            'user'    => array('deny', 'logout'),
-            'my'      => array('changepassword'),
-            'message' => array('ajaxgetmessage'),
-        );
-        if(!empty($this->app->user->modifyPassword) and (!isset($beforeValidMethods[$module]) or !in_array($method, $beforeValidMethods[$module]))) return print(js::locate(helper::createLink('my', 'changepassword', '', '', true)));
-        if($this->isOpenMethod($module, $method)) return true;
-        if(!$this->loadModel('user')->isLogon() and $this->server->php_auth_user) $this->user->identifyByPhpAuth();
-        if(!$this->loadModel('user')->isLogon() and $this->cookie->za) $this->user->identifyByCookie();
-
-        if(isset($this->app->user))
+        catch(EndResponseException $endResponseException)
         {
-            if(in_array($module, $this->config->programPriv->waterfall) and $this->app->tab == 'project') return true;
-
-            $this->app->user = $this->session->user;
-            if(!commonModel::hasPriv($module, $method)) $this->deny($module, $method);
-        }
-        else
-        {
-            $referer  = helper::safe64Encode($this->app->getURI(true));
-            return print(js::locate(helper::createLink('user', 'login', "referer=$referer")));
+            echo $endResponseException->getContent();
         }
     }
 
@@ -2738,6 +2758,8 @@ EOD;
     {
         global $config;
 
+        if(empty($object)) return true;
+
         if($type == 'product'   and empty($config->CRProduct)   and $object->status == 'closed') return false;
         if($type == 'execution' and empty($config->CRExecution) and $object->status == 'closed') return false;
 
@@ -3055,6 +3077,44 @@ EOD;
 
         /* If objectID is set, cannot use homeMenu. */
         unset($lang->$moduleName->homeMenu);
+    }
+
+    /**
+     * Check menuVars replaced.
+     *
+     * @static
+     * @access public
+     * @return void
+     */
+    public static function checkMenuVarsReplaced()
+    {
+        global $app, $lang;
+
+        $tab          = $app->tab;
+        $varsReplaced = true;
+        foreach($lang->menu as $menuKey => $menu)
+        {
+            if(isset($menu['link']) and strpos($menu['link'], '%s') !== false) $varsReplaced = false;
+            if(!isset($menu['link']) and is_string($menu) and strpos($menu, '%s') !== false) $varsReplaced = false;
+            if(!$varsReplaced) break;
+        }
+
+        if(!$varsReplaced and strpos("|program|product|project|execution|qa|", "|{$tab}|") !== false)
+        {
+            $isTutorialMode = common::isTutorialMode();
+            $currentModule  = $isTutorialMode ? $app->moduleName : $app->rawModule;
+
+            if(isset($lang->$currentModule->menu))
+            {
+                $lang->menu      = isset($lang->$currentModule->menu) ? $lang->$currentModule->menu : array();
+                $lang->menuOrder = isset($lang->$currentModule->menuOrder) ? $lang->$currentModule->menuOrder : array();
+                $app->tab        = zget($lang->navGroup, $currentModule);
+            }
+            else
+            {
+                self::setMenuVars($tab, (int)$app->session->$tab);
+            }
+        }
     }
 
     /*

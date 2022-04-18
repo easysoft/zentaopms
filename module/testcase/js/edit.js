@@ -56,3 +56,37 @@ function loadLibModules(libID)
         if(typeof(caseModule) == 'string') $('#moduleIdBox').prepend("<span class='input-group-addon'>" + caseModule + "</span>")
     });
 }
+
+/**
+ * Load by branch.
+ *
+ * @param  int    oldBranch
+ * @access public
+ * @return void
+ */
+function loadBranch(oldBranch)
+{
+    var branch = $('#branch').val();
+    if(typeof(branch) == 'undefined') branch = 0;
+
+    var result = true;
+    if(branch)
+    {
+        for(taskID in testtasks)
+        {
+            if(branch != oldBranch && testtasks[taskID]['branch'] != branch)
+            {
+                var tip = confirmUnlinkTesttask.replace("%s", caseID);
+                result  = confirm(tip);
+                if(!result) $('#branch').val(oldBranch).trigger("chosen:updated");
+                break;
+            }
+        }
+    }
+
+    if(result)
+    {
+        loadProductModules($('#product').val(), branch);
+        setStories();
+    }
+}

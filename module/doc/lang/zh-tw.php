@@ -9,6 +9,38 @@
  * @version     $Id: zh-tw.php 824 2010-05-02 15:32:06Z wwccss $
  * @link        http://www.zentao.net
  */
+$lang->doclib = new stdclass();
+$lang->doclib->name      = '文檔庫名稱';
+$lang->doclib->control   = '訪問控制';
+$lang->doclib->group     = '分組';
+$lang->doclib->user      = '用戶';
+$lang->doclib->files     = '附件庫';
+$lang->doclib->all       = '所有文檔庫';
+$lang->doclib->select    = '選擇文檔庫';
+$lang->doclib->execution = $lang->executionCommon . '庫';
+$lang->doclib->product   = $lang->productCommon . '庫';
+
+$lang->doclib->aclListA['default'] = '預設';
+$lang->doclib->aclListA['custom']  = '自定義';
+
+$lang->doclib->aclListB['open']    = '公開';
+$lang->doclib->aclListB['custom']  = '自定義';
+$lang->doclib->aclListB['private'] = '私有';
+
+$lang->doclib->create['product']   = '創建' . $lang->productCommon . '文檔庫';
+$lang->doclib->create['execution'] = '創建' . $lang->executionCommon . '文檔庫';
+$lang->doclib->create['custom']    = '創建自定義文檔庫';
+
+$lang->doclib->main['product']   = $lang->productCommon . '主庫';
+$lang->doclib->main['project']   = '項目主庫';
+$lang->doclib->main['execution'] = $lang->executionCommon . '主庫';
+
+$lang->doclib->tabList['product']   = $lang->productCommon;
+$lang->doclib->tabList['execution'] = $lang->executionCommon;
+$lang->doclib->tabList['custom']    = '自定義';
+
+$lang->doclib->nameList['custom'] = '自定義文檔庫名稱';
+
 /* 欄位列表。*/
 $lang->doc->common       = '文檔';
 $lang->doc->id           = '編號';
@@ -223,35 +255,3 @@ $lang->doc->placeholder->url = '相應的連結地址';
 $lang->doc->summary = "本頁共 <strong>%s</strong> 個附件，共計 <strong>%s</strong>，其中<strong>%s</strong>。";
 $lang->doc->ge      = '個';
 $lang->doc->point   = '、';
-
-$lang->doclib = new stdclass();
-$lang->doclib->name      = '文檔庫名稱';
-$lang->doclib->control   = '訪問控制';
-$lang->doclib->group     = '分組';
-$lang->doclib->user      = '用戶';
-$lang->doclib->files     = '附件庫';
-$lang->doclib->all       = '所有文檔庫';
-$lang->doclib->select    = '選擇文檔庫';
-$lang->doclib->execution = $lang->executionCommon . '庫';
-$lang->doclib->product   = $lang->productCommon . '庫';
-
-$lang->doclib->aclListA['default'] = '預設';
-$lang->doclib->aclListA['custom']  = '自定義';
-
-$lang->doclib->aclListB['open']    = '公開';
-$lang->doclib->aclListB['custom']  = '自定義';
-$lang->doclib->aclListB['private'] = '私有';
-
-$lang->doclib->create['product']   = '創建' . $lang->productCommon . '文檔庫';
-$lang->doclib->create['execution'] = '創建' . $lang->executionCommon . '文檔庫';
-$lang->doclib->create['custom']    = '創建自定義文檔庫';
-
-$lang->doclib->main['product']   = $lang->productCommon . '主庫';
-$lang->doclib->main['project']   = '項目主庫';
-$lang->doclib->main['execution'] = $lang->executionCommon . '主庫';
-
-$lang->doclib->tabList['product']   = $lang->productCommon;
-$lang->doclib->tabList['execution'] = $lang->executionCommon;
-$lang->doclib->tabList['custom']    = '自定義';
-
-$lang->doclib->nameList['custom'] = '自定義文檔庫名稱';

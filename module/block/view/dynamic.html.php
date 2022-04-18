@@ -2,7 +2,7 @@
 <div class='empty-tip'><?php echo $lang->block->emptyTip;?></div>
 <?php else:?>
 <style>
-.block-dynamic .timeline > li .timeline-text {display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-height: 20px;}
+.block-dynamic .timeline > li .timeline-text {max-width: 600px; display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-height: 20px;}
 .block-dynamic .panel-body {padding-top: 0;}
 </style>
 <div class='panel-body scrollbar-hover'>

@@ -20,8 +20,6 @@ class storyAssignToEntry extends Entry
      */
     public function post($storyID)
     {
-        $story = $this->loadModel('story')->getByID($storyID);
-
         $fields = 'assignedTo,comment';
         $this->batchSetPost($fields);
 
@@ -32,7 +30,7 @@ class storyAssignToEntry extends Entry
         if(!$data) return $this->send400('error');
         if(isset($data->status) and $data->status == 'fail') return $this->sendError(zget($data, 'code', 400), $data->message);
 
-        $story = $this->story->getByID($storyID);
+        $story = $this->loadModel('story')->getByID($storyID);
 
         $this->send(200, $this->format($story, 'openedBy:user,openedDate:time,assignedTo:user,assignedDate:time,reviewedBy:user,reviewedDate:time,lastEditedBy:user,lastEditedDate:time,closedBy:user,closedDate:time,deleted:bool,mailto:userList'));
     }

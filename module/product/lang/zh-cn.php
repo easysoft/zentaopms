@@ -23,6 +23,7 @@ $lang->product->select          = "请选择{$lang->productCommon}";
 $lang->product->mine            = '我负责';
 $lang->product->other           = '其他';
 $lang->product->closed          = '已关闭';
+$lang->product->closedProduct   = '已关闭的产品';
 $lang->product->updateOrder     = '排序';
 $lang->product->all             = "所有{$lang->productCommon}";
 $lang->product->manageLine      = "维护{$lang->productCommon}线";

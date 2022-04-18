@@ -171,6 +171,7 @@ $lang->project->waitProjects    = 'Waiting Projects';
 $lang->project->doingProjects   = 'Ongoing Projects';
 $lang->project->doingExecutions = 'Ongoing Executions';
 $lang->project->closedProjects  = 'Closed Projects(The recent two projects)';
+$lang->project->closedProject   = 'Closed Projects';
 $lang->project->noProgram       = 'Independent Projects';
 
 $lang->project->laneColorList = array('#32C5FF', '#006AF1', '#9D28B2', '#FF8F26', '#FFC20E', '#00A78E', '#7FBB00', '#424BAC', '#C0E9FF', '#EC2761');
@@ -185,6 +186,7 @@ $lang->project->linkStoryByPlanTips    = "This action will associate all {$lang-
 $lang->project->createExecution        = "There is no {$lang->executionCommon} under this project, please create {$lang->executionCommon} first";
 $lang->project->unlinkExecutionMember  = "The user participated in %s executions such as %s%s. Do you want to remove the user from those executions as well? (The data related to this user will not be deleted.)";
 $lang->project->unlinkExecutionMembers = "The team members you are removing are also in the execution team of this project. Do you want to remove them from the execution team too?";
+$lang->project->productTip             = 'After clicking New Product, the project will not be linked to the selected product.';
 
 $lang->project->tenThousand = '';
 

@@ -183,6 +183,8 @@ function loadBranches(product, branchID)
         $('#productsBox .row .input-group:last select:first').attr('name', 'products[' + length + ']').attr('id', 'products' + length);
         $('#productsBox .row .input-group:last .chosen').chosen();
 
+        $('[data-toggle="popover"]').popover();
+
         adjustProductBoxMargin();
     }
 

@@ -1624,7 +1624,7 @@ class taskModel extends model
             $consumed  += $estimate->consumed;
             $work       = $estimate->work;
             $estimateID = $this->dao->lastInsertID();
-            $actionID   = $this->action->create('task', $taskID, 'RecordEstimate', $work, $estimate->consumed);
+            $actionID   = $this->action->create('task', $taskID, 'RecordEstimate', $work, (float)$estimate->consumed);
 
             if(empty($lastDate) or $lastDate <= $estimate->date)
             {
@@ -2335,14 +2335,17 @@ class taskModel extends model
     /**
      * Get tasks pairs of a user.
      *
-     * @param  string $account
-     * @param  string $status
-     * @param  array  $skipExecutionIDList
+     * @param  string    $account
+     * @param  string    $status
+     * @param  array     $skipExecutionIDList
+     * @param  int|array $appendTaskID
      * @access public
      * @return array
      */
-    public function getUserTaskPairs($account, $status = 'all', $skipExecutionIDList = array())
+    public function getUserTaskPairs($account, $status = 'all', $skipExecutionIDList = array(), $appendTaskID = 0)
     {
+        $deletedProjectIDList = $this->dao->select('*')->from(TABLE_PROJECT)->where('deleted')->eq(1)->fetchPairs('id', 'id');
+
         $stmt = $this->dao->select('t1.id, t1.name, t2.name as execution')
             ->from(TABLE_TASK)->alias('t1')
             ->leftjoin(TABLE_PROJECT)->alias('t2')->on('t1.execution = t2.id')
@@ -2351,6 +2354,8 @@ class taskModel extends model
             ->beginIF($this->config->vision)->andWhere('t1.vision')->eq($this->config->vision)->fi()
             ->beginIF($status != 'all')->andWhere('t1.status')->in($status)->fi()
             ->beginIF(!empty($skipExecutionIDList))->andWhere('t1.execution')->notin($skipExecutionIDList)->fi()
+            ->beginIF(!empty($appendTaskID))->orWhere('t1.id')->in($appendTaskID)->fi()
+            ->beginIF(!empty($deletedProjectIDList))->andWhere('t1.execution')->notin($deletedProjectIDList)->fi()
             ->query();
 
         $tasks = array();

@@ -60,7 +60,7 @@
           }
           else
           {
-              echo html::select("types[$todo->id]", $lang->todo->typeList, $todo->type, "onchange='loadList(this.value, " . $todo->id . ")' class='form-control'");
+              echo html::select("types[$todo->id]", $lang->todo->typeList, $todo->type, "onchange='loadList(this.value, {$todo->id}, \"{$todo->type}\", {$todo->idvalue})' class='form-control'");
           }
           ?>
         </td>
@@ -69,7 +69,7 @@
           <div id='<?php echo "nameBox" . $todo->id;?>' class='hidden'><?php echo html::input("names[$todo->id]", $todo->name, "class='text-left form-control hiddenwin'"); ?></div>
           <div class='<?php echo "nameBox" . $todo->id;?> text-left'>
           <?php
-          if($todo->type == 'custom' or $todo->type == 'cycle')
+          if(!in_array($todo->type, $this->config->todo->moduleList))
           {
               echo html::input("names[$todo->id]", $todo->name, "class='form-control'");
           }

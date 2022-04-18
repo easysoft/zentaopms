@@ -126,7 +126,7 @@ class release extends control
         $this->commonAction($release->product, $release->branch);
         $build = $this->build->getById($release->build);
 
-        $builds         = $this->loadModel('build')->getBuildPairs($release->product, $release->branch, 'notrunk|withbranch', 0, 'execution', false);
+        $builds         = $this->loadModel('build')->getBuildPairs($release->product, $release->branch, 'notrunk|withbranch', 0, 'execution', '', false);
         $releasedBuilds = $this->release->getReleasedBuilds($release->product, $release->branch);
         foreach($releasedBuilds as $releasedBuild)
         {

@@ -218,11 +218,14 @@ class projectModel extends model
             ->groupBy('root')
             ->fetchAll('root');
 
-        $estimates = $this->dao->select('t2.parent as project, sum(estimate) as estimate')->from(TABLE_TASK)->alias('t1')
+        $condition = $this->config->systemMode == 'classic' ? 't2.id as project' : 't2.parent as project';
+        $estimates = $this->dao->select("$condition, sum(estimate) as estimate")->from(TABLE_TASK)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.execution = t2.id')
-            ->where('t2.parent')->in($projectIdList)
+            ->where('t1.parent')->lt(1)
+            ->beginIF($this->config->systemMode == 'new')->andWhere('t2.parent')->in($projectIdList)->fi()
+            ->beginIF($this->config->systemMode == 'classic')->andWhere('t2.id')->in($projectIdList)->fi()
             ->andWhere('t1.deleted')->eq(0)
-            ->andWhere('t1.parent')->lt(1)
+            ->andWhere('t2.deleted')->eq(0)
             ->groupBy('project')
             ->fetchAll('project');
 
@@ -1668,22 +1671,7 @@ class projectModel extends model
 
             if($id == 'budget')
             {
-                if($project->budget < 10000)
-                {
-                    $budget = round((float)$project->budget, 2);
-                    $unit   = '';
-                }
-                elseif($project->budget < 100000000 and $project->budget >= 10000)
-                {
-                    $budget = round((float)$project->budget/10000, 2);
-                    $unit   = $this->lang->project->tenThousand;
-                }
-                else
-                {
-                    $budget = round((float)$project->budget/100000000, 2);
-                    $unit   = $this->lang->project->hundredMillion;
-                }
-                $projectBudget = in_array($this->app->getClientLang(), array('zh-cn','zh-tw')) ? $budget . $unit : round((float)$project->budget, 2);
+                $projectBudget = $this->getBudgetWithUnit($project->budget);
                 $budgetTitle   = $project->budget != 0 ? zget($this->lang->project->currencySymbol, $project->budgetUnit) . ' ' . $projectBudget : $this->lang->project->future;
 
                 $title = "title='$budgetTitle'";
@@ -1810,6 +1798,35 @@ class projectModel extends model
             }
             echo '</td>';
         }
+    }
+
+    /**
+     * Convert budget unit.
+     *
+     * @param  int    $budget
+     * @access public
+     * @return void
+     */
+    public function getBudgetWithUnit($budget)
+    {
+        if($budget < 10000)
+        {
+            $budget = round((float)$budget, 2);
+            $unit   = '';
+        }
+        elseif($budget < 100000000 and $budget >= 10000)
+        {
+            $budget = round((float)$budget/10000, 2);
+            $unit   = $this->lang->project->tenThousand;
+        }
+        else
+        {
+            $budget = round((float)$budget/100000000, 2);
+            $unit   = $this->lang->project->hundredMillion;
+        }
+
+        $projectBudget = in_array($this->app->getClientLang(), array('zh-cn','zh-tw')) ? $budget . $unit : round((float)$budget, 2);
+        return $projectBudget;
     }
 
     /**

@@ -26,6 +26,8 @@
 #swapper .tree li>.list-toggle {top: -1px;}
 
 #subHeader .tree ul {display: block;}
+#closed {width: 90px; height: 25px; line-height: 25px; background-color: #ddd; color: #3c495c; text-align: center; margin-left: 15px; border-radius: 2px;}
+#gray-line {width: 230px; height: 1px; margin-left: 10px; margin-bottom:2px; background-color: #ddd;}
 </style>
 <?php
 $productCounts      = array();
@@ -135,6 +137,8 @@ $closedProductsHtml .= '</ul>';
       <a class='pull-right toggle-right-col not-list-item'><?php echo $lang->product->closed?><i class='icon icon-angle-right'></i></a>
     </div>
   </div>
+  <div id="gray-line" hidden></div>
+  <div id="closed" hidden><?php echo $lang->product->closedProduct?></div>
   <div class="table-col col-right productTree">
    <div class='list-group products'><?php echo $closedProductsHtml;?></div>
   </div>
@@ -170,6 +174,16 @@ $(function()
             $('li.has-list div.hide-in-search').removeClass('hidden');
             $('.nav-tabs li.active').find('span').show();
         }
+        if($('.form-control.search-input').val().length > 0)
+        {
+            $('#closed').attr("hidden", false);
+            $('#gray-line').attr("hidden", false);
+        }
+        else
+        {
+            $('#closed').attr("hidden", true);
+            $('#gray-line').attr("hidden", true);
+        }
     });
 
     $('#swapper #dropMenu').on('onSearchComplete', function(event, value)
@@ -183,6 +197,11 @@ $(function()
         else if($("#other .clickable.search-list-item").not(".hidden").length > 0)
         {
             $("#navTabs a[href='#other']").tab('show');
+        }
+        if($('ul.tree-angles').height() == 0)
+        {
+            $('#closed').attr("hidden", true);
+            $('#gray-line').attr("hidden", true);
         }
     });
 })

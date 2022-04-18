@@ -41,7 +41,7 @@ fields:
   - field: type
     range: [codeerror,config,install,security,performance,standard,automation,designdefect,others]
   - field: os
-    range: []{2},[all,ie,ie11,ie10,ie9,ie8,ie7,ie6,chrome,firefox,firefox4,firefox3,firefox2,opera,oprea11,oprea10,opera9,safari,maxthon,uc,other]
+    range: []{2},[win10,windows,android,ios]
   - field: browser
     range: []
   - field: hardware

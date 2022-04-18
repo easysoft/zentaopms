@@ -571,7 +571,7 @@ class bug extends control
             if($projectID)
             {
                 $project  = $this->loadModel('project')->getByID($projectID);
-                $projects = array($projectID => $project->name);
+                if(empty($bugID)) $projects = array($projectID => $project->name);
             }
         }
         elseif($projectID)
@@ -581,7 +581,7 @@ class bug extends control
             foreach($productList as $product) $products[$product->id] = $product->name;
 
             $project   = $this->loadModel('project')->getByID($projectID);
-            $projects += array($projectID => $project->name);
+            if(empty($bugID)) $projects += array($projectID => $project->name);
 
             /* Set project menu. */
             if($this->app->tab == 'project') $this->project->setMenu($projectID);
@@ -590,6 +590,9 @@ class bug extends control
         {
             $projects += $this->product->getProjectPairsByProduct($productID, $branch);
         }
+
+        /* When copying bug, get all project linked to the product. */
+        if(!empty($bugID)) $projects += $this->product->getProjectPairsByProduct($productID, $branch);
 
         /* Get block id of assinge to me. */
         $blockID = 0;
@@ -1579,7 +1582,7 @@ class bug extends control
             }
             if(defined('RUN_MODE') && RUN_MODE == 'api')
             {
-                return print(array('status' => 'success', 'data' => $bugID));
+                return $this->send(array('status' => 'success', 'data' => $bugID));
             }
             else
             {
@@ -1937,15 +1940,16 @@ class bug extends control
      *
      * @param  int    $userID
      * @param  string $id       the id of the select control.
+     * @param  int    $appendID
      * @access public
      * @return string
      */
-    public function ajaxGetUserBugs($userID = '', $id = '')
+    public function ajaxGetUserBugs($userID = '', $id = '' , $appendID = 0)
     {
         if($userID == '') $userID = $this->app->user->id;
         $user    = $this->loadModel('user')->getById($userID, 'id');
         $account = $user->account;
-        $bugs    = $this->bug->getUserBugPairs($account);
+        $bugs    = $this->bug->getUserBugPairs($account, true, 0, '', '', $appendID);
 
         if($id) return print(html::select("bugs[$id]", $bugs, '', 'class="form-control"'));
         return print(html::select('bug', $bugs, '', 'class=form-control'));

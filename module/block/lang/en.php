@@ -314,7 +314,7 @@ $lang->block->default['full']['my']['8']['params']['meetingCount'] = '20';
 
 if($config->systemMode == 'new')
 {
-    $lang->block->default['full']['my']['9']['title']  = 'Human Input';
+    $lang->block->default['full']['my']['9']['title']  = 'Manpower Input';
     $lang->block->default['full']['my']['9']['block']  = 'projectteam';
     $lang->block->default['full']['my']['9']['source'] = 'project';
     $lang->block->default['full']['my']['9']['grid']   = 8;
@@ -337,21 +337,22 @@ $lang->block->count   = 'Count';
 $lang->block->type    = 'Type';
 $lang->block->orderBy = 'Order by';
 
-$lang->block->availableBlocks            = new stdclass();
-$lang->block->availableBlocks->todo      = 'My schedule';
-$lang->block->availableBlocks->task      = 'My Tasks';
-$lang->block->availableBlocks->bug       = 'My Bugs';
-$lang->block->availableBlocks->case      = 'My Cases';
-$lang->block->availableBlocks->story     = 'My Stories';
-$lang->block->availableBlocks->product   = $lang->productCommon . 's';
-$lang->block->availableBlocks->execution = $lang->executionCommon . 's';
-$lang->block->availableBlocks->plan      = 'Plans';
-$lang->block->availableBlocks->release   = 'Releases';
-$lang->block->availableBlocks->build     = 'Builds';
-$lang->block->availableBlocks->testtask  = 'Requests';
-$lang->block->availableBlocks->risk      = 'My Risks';
-$lang->block->availableBlocks->issue     = 'My Issues';
-$lang->block->availableBlocks->meeting   = 'My Meetings';
+$lang->block->availableBlocks              = new stdclass();
+$lang->block->availableBlocks->todo        = 'schedule';
+$lang->block->availableBlocks->task        = 'Tasks';
+$lang->block->availableBlocks->bug         = 'Bugs';
+$lang->block->availableBlocks->case        = 'Cases';
+$lang->block->availableBlocks->story       = 'Stories';
+$lang->block->availableBlocks->requirement = 'Requirements';
+$lang->block->availableBlocks->product     = $lang->productCommon . 's';
+$lang->block->availableBlocks->execution   = $lang->executionCommon . 's';
+$lang->block->availableBlocks->plan        = 'Plans';
+$lang->block->availableBlocks->release     = 'Releases';
+$lang->block->availableBlocks->build       = 'Builds';
+$lang->block->availableBlocks->testtask    = 'Requests';
+$lang->block->availableBlocks->risk        = 'Risks';
+$lang->block->availableBlocks->issue       = 'Issues';
+$lang->block->availableBlocks->meeting     = 'Meetings';
 
 if($config->systemMode == 'new') $lang->block->moduleList['project'] = 'Project';
 $lang->block->moduleList['product']   = $lang->productCommon;
@@ -364,7 +365,7 @@ $lang->block->modules['project']->availableBlocks = new stdclass();
 $lang->block->modules['project']->availableBlocks->project       = 'Project List';
 $lang->block->modules['project']->availableBlocks->recentproject = 'Recent Project';
 $lang->block->modules['project']->availableBlocks->statistic     = 'Project Statistic';
-if($config->systemMode == 'new') $lang->block->modules['project']->availableBlocks->projectteam = 'Project Human Input';
+if($config->systemMode == 'new') $lang->block->modules['project']->availableBlocks->projectteam = 'Project Manpower Input';
 
 $lang->block->modules['scrum']['index'] = new stdclass();
 $lang->block->modules['scrum']['index']->availableBlocks = new stdclass();

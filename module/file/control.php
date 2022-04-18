@@ -80,7 +80,7 @@ class file extends control
                 {
                     if($uid) $_SESSION['album']['used'][$uid][$fileID] = $fileID;
                     $_SERVER['SCRIPT_NAME'] = 'index.php';
-                    return $this->send(array('status' => 'success', 'id' => $fileID, 'data' => commonModel::getSysURL() . $this->config->webRoot . $url));
+                    return $this->send(array('status' => 'success', 'id' => $fileID, 'url' => $url));
                 }
                 else
                 {

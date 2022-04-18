@@ -937,12 +937,10 @@ class convertModel extends model
             ->where('project')->in(array_values($projectRelation))
             ->fetchPairs();
 
-        $versionGroup = $method == 'db' ? $this->dao->dbh($this->sourceDBH)->select('SINK_NODE_ID as versionID, SOURCE_NODE_ID as issueID')->from(JIRA_NODEASSOCIATION)->where('SINK_NODE_ENTITY')->eq('Version')->fetchGroup('versionID') : $this->getVersionGroup();
+        $versionGroup = $method == 'db' ? $this->dao->dbh($this->sourceDBH)->select('SINK_NODE_ID as versionID, SOURCE_NODE_ID as issueID, ASSOCIATION_TYPE as relation')->from(JIRA_NODEASSOCIATION)->where('SINK_NODE_ENTITY')->eq('Version')->fetchGroup('versionID') : $this->getVersionGroup();
 
         foreach($dataList as $data)
         {
-            if(empty($data->RELEASEDATE)) continue;
-
             $versionID    = $data->ID;
             $buildProject = $data->PROJECT;
             $projectID    = $projectRelation[$buildProject];
@@ -957,6 +955,38 @@ class convertModel extends model
 
             $this->dao->dbh($this->dbh)->insert(TABLE_BUILD)->data($build)->exec();
             $buildID = $this->dao->dbh($this->dbh)->lastInsertID();
+
+            /* Process build data. */
+            if(isset($versionGroup[$versionID]))
+            {
+                foreach($versionGroup[$versionID] as $issue)
+                {
+                    $issueID   = $method == 'db' ? $issue->issueID : $issue;
+                    $issueType = zget($issueObjectType, $issueID, '');
+                    if(!$issueType || ($issueType != 'story' and $issueType != 'bug')) continue;
+                    $objectID  = $issueType == 'bug' ? zget($issueBugs, $issueID) : zget($issueStories, $issueID);
+
+                    $field = $issueType == 'story' ? 'stories' : 'bugs';
+                    if($issueType == 'story')
+                    {
+                        $this->dao->dbh($this->dbh)->update(TABLE_BUILD)->set("stories = CONCAT(stories, ',$objectID')")->where('id')->eq($buildID)->exec();
+                    }
+                    else
+                    {
+                        $this->dao->dbh($this->dbh)->update(TABLE_BUILD)->set("bugs = CONCAT(bugs, ',$objectID')")->where('id')->eq($buildID)->exec();
+                        if($issue->relation == 'IssueVersion')
+                        {
+                            $this->dao->dbh($this->dbh)->update(TABLE_BUG)->set('openedBuild')->eq($buildID)->where('id')->eq($objectID)->exec();
+                        }
+                        elseif($issue->relation == 'IssueFixVersion')
+                        {
+                            $this->dao->dbh($this->dbh)->update(TABLE_BUG)->set('resolvedBuild')->eq($buildID)->where('id')->eq($objectID)->exec();
+                        }
+                    }
+                }
+            }
+
+            if(empty($data->RELEASEDATE)) continue;
 
             $release = new stdclass();
             $release->product = $build->product;

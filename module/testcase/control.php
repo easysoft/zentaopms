@@ -86,7 +86,7 @@ class testcase extends control
      * @access public
      * @return void
      */
-    public function browse($productID = 0, $branch = 'all', $browseType = 'all', $param = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1, $projectID = 0)
+    public function browse($productID = 0, $branch = '', $browseType = 'all', $param = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1, $projectID = 0)
     {
         $this->loadModel('datatable');
 
@@ -216,7 +216,7 @@ class testcase extends control
         $this->view->browseType      = $browseType;
         $this->view->param           = $param;
         $this->view->cases           = $cases;
-        $this->view->branch          = $branch;
+        $this->view->branch          = !empty($product) and $product->type != 'normal' ? $branch : 0;
         $this->view->branchOption    = $branchOption;
         $this->view->branchTagOption = $branchTagOption;
         $this->view->suiteList       = $this->loadModel('testsuite')->getSuites($productID);
@@ -784,13 +784,16 @@ class testcase extends control
     {
         $this->loadModel('story');
 
+        $testtasks = $this->loadModel('testtask')->getGroupByCases($caseID);
+        $testtasks = empty($testtasks[$caseID]) ? array() : $testtasks[$caseID];
+
         if(!empty($_POST))
         {
             $changes = array();
             $files   = array();
             if($comment == false or $comment == 'false')
             {
-                $changes = $this->testcase->update($caseID);
+                $changes = $this->testcase->update($caseID, $testtasks);
                 if(dao::isError()) return print(js::error(dao::getError()));
                 $files = $this->loadModel('file')->saveUpload('testcase', $caseID);
             }
@@ -913,6 +916,7 @@ class testcase extends control
         $this->view->actions         = $this->loadModel('action')->getList('case', $caseID);
         $this->view->isLibCase       = $isLibCase;
         $this->view->forceNotReview  = $forceNotReview;
+        $this->view->testtasks       = $testtasks;
 
         $this->display();
     }
@@ -929,9 +933,12 @@ class testcase extends control
      */
     public function batchEdit($productID = 0, $branch = 0, $type = 'case', $tab = '')
     {
+        if(!$this->post->caseIDList) return print(js::locate($this->session->caseList));
+        $caseIDList = array_unique($this->post->caseIDList);
+        $testtasks  = $this->loadModel('testtask')->getGroupByCases($caseIDList);
         if($this->post->title)
         {
-            $allChanges = $this->testcase->batchUpdate();
+            $allChanges = $this->testcase->batchUpdate($testtasks);
             if($allChanges)
             {
                 foreach($allChanges as $caseID => $changes )
@@ -946,8 +953,6 @@ class testcase extends control
             return print(js::locate($this->session->caseList, 'parent'));
         }
 
-        if(!$this->post->caseIDList) return print(js::locate($this->session->caseList));
-        $caseIDList    = array_unique($this->post->caseIDList);
         $branchProduct = false;
 
         if($this->app->tab == 'project')   $this->loadModel('project')->setMenu($this->session->project);
@@ -1094,6 +1099,7 @@ class testcase extends control
         $this->view->cases          = $cases;
         $this->view->forceNotReview = $this->testcase->forceNotReview();
         $this->view->modulePairs    = $modulePairs;
+        $this->view->testtasks      = $testtasks;
         $this->view->isLibCase      = $type == 'lib' ? true : false;
 
         $this->display();
@@ -1936,12 +1942,6 @@ class testcase extends control
             }
             unset($rows[0]);
 
-            foreach($header as $title)
-            {
-                if(!isset($fields[$title])) continue;
-                $columnKey[] = $fields[$title];
-            }
-
             $endField = end($fields);
             $caseData = array();
             $stepData = array();
@@ -1949,8 +1949,11 @@ class testcase extends control
             foreach($rows as $row => $data)
             {
                 $case = new stdclass();
-                foreach($columnKey as $key => $field)
+                foreach($header as $key => $title)
                 {
+                    if(!isset($fields[$title])) continue;
+                    $field = $fields[$title];
+
                     if(!isset($data[$key])) continue;
                     $cellValue = $data[$key];
                     if($field == 'story' or $field == 'module' or $field == 'branch')

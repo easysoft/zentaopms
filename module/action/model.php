@@ -739,6 +739,8 @@ class actionModel extends model
             elseif($action->action == 'createmr' and strpos($action->extra, '::') !== false)
             {
                 list($mrCreatedDate, $mrActor, $mrLink) = explode('::', $action->extra);
+                if(isonlybody()) $mrLink .= ($this->config->requestType == 'GET' ? '&onlybody=yes' : '?onlybody=yes');
+                $this->app->loadLang('mr');
                 $desc = sprintf($this->lang->mr->createAction, $mrCreatedDate, $mrActor, $mrLink);
             }
             elseif($this->config->edition == 'max' and strpos($this->config->action->assetType, $action->objectType) !== false and $action->action == 'approved')
@@ -1366,7 +1368,7 @@ class actionModel extends model
                     $appendLib          = $docLib->deleted == '1' ? $action->objectID : 0;
                     if($docLib->type == 'api')
                     {
-                        $action->objectLink = helper::createLink('api', 'index', "libID={$action->objectID}");
+                        $action->objectLink = helper::createLink('api', 'index', "libID={$action->objectID}&moduleID=0&apiID=0&version=0&release=0&appendLib={$appendLib}");
                     }
                     else
                     {
@@ -1419,6 +1421,16 @@ class actionModel extends model
         if($action->objectType == 'branch' and $action->action == 'mergedbranch')
         {
             $action->objectLink = 'javascript:void(0)';
+        }
+
+        if($action->objectType == 'module')
+        {
+            $moduleType = $this->dao->select('type')->from(TABLE_MODULE)->where('id')->eq($action->objectID)->fetch('type');
+            if($moduleType == 'doc')
+            {
+                $this->app->loadLang('doc');
+                $action->objectLabel = $this->lang->doc->menuTitle;
+            }
         }
 
         return $action;

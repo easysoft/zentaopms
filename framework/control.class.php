@@ -59,6 +59,11 @@ class control extends baseControl
                     {
                         foreach($exportFields  as $field) $this->config->{$this->moduleName}->list->exportFields .= ",{$field->field}";
                     }
+
+                    foreach($exportFields as $flowField => $exportField)
+                    {
+                        if(!isset($this->lang->{$this->moduleName}->$flowField)) $this->lang->{$this->moduleName}->$flowField = $exportField->name;
+                    }
                 }
             }
 
@@ -119,6 +124,7 @@ class control extends baseControl
 
         if(!isset($this->config->preferenceSetted) and $this->config->vision == 'rnd')
         {
+            setcookie('tab', 'my', 0, $this->config->webRoot, '', $this->config->cookieSecure, false);
             $this->locate(helper::createLink('my', 'preference'));
         }
     }

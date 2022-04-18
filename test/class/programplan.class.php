@@ -98,27 +98,36 @@ class programplanTest
         return implode(',', $objects);
     }
 
-    public function getDataForGanttTest($executionID, $productID, $baselineID = 0, $selectCustom = '', $returnJson = false)
+    /**
+     * Test get total percent.
+     *
+     * @param  int    $stageID
+     * @param  bool   $parent
+     * @access public
+     * @return int
+     */
+    public function getTotalPercentTest($stageID, $parent = false)
     {
-        $objects = $this->objectModel->getDataForGantt($executionID, $productID, $baselineID, $selectCustom, $returnJson);
+        $stage = $this->objectModel->getByID($stageID);
+
+        $int = $this->objectModel->getTotalPercent($stage, $parent);
 
         if(dao::isError()) return dao::getError();
 
-        $objects = is_string($objects) ? json_decode($objects) : $objects;
-        return $objects;
+        return $int;
     }
 
-    public function getTotalPercentTest($stage, $parent = false)
+    /**
+     * Test process plans.
+     *
+     * @param  array  $planIDList
+     * @access public
+     * @return array
+     */
+    public function processPlansTest($planIDList)
     {
-        $objects = $this->objectModel->getTotalPercent($stage, $parent = false);
+        $plans = $this->objectModel->getByList($planIDList);
 
-        if(dao::isError()) return dao::getError();
-
-        return $objects;
-    }
-
-    public function processPlansTest($plans)
-    {
         $objects = $this->objectModel->processPlans($plans);
 
         if(dao::isError()) return dao::getError();
@@ -126,13 +135,22 @@ class programplanTest
         return $objects;
     }
 
-    public function processPlanTest($plan)
+    /**
+     * Test process plan.
+     *
+     * @param  int    $planID
+     * @access public
+     * @return object
+     */
+    public function processPlanTest($planID)
     {
-        $objects = $this->objectModel->processPlan($plan);
+        $plan = $this->objectModel->getByID($planID);
+
+        $object = $this->objectModel->processPlan($plan);
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        return $object;
     }
 
     /**
@@ -162,62 +180,109 @@ class programplanTest
     public function createTest($param = array())
     {
         $_POST['planIDList'] = array('131', '221', '311', '401', '491', '581', '671');
+
+        global $tester;
+        $plans = $tester->dao->select('*')->from(TABLE_PROJECT)->where('id')->in($_POST['planIDList'])->fetchAll();
+
+
         $_POST['names']      = array('阶段31', '阶段121', '阶段211', '阶段301', '阶段391', '阶段481', '阶段571', '', '', '', '', '');
         $_POST['PM']         = array('', '', '', '', '', '', '', '', '', '', '', '');
         $_POST['percents']   = array('0', '0', '0', '0', '0', '0', '0', '', '', '', '', '');
         $_POST['attributes'] = array('request', 'request', 'request', 'request', 'request', 'request', 'request', 'request', 'request', 'request', 'request', 'request');
         $_POST['acl']        = array('private', 'open', 'open', 'private', 'private', 'open', 'open', 'open', 'open', 'open', 'open', 'open');
         $_POST['milestone']  = array('0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0', '0');
-        $_POST['begin']      = array('2022-03-13', '2022-03-13', '2022-03-16', '2022-03-16', '2022-03-19', '2022-03-19', '2022-03-22', '', '', '', '', '');
-        $_POST['end']        = array('2022-05-18', '2022-04-30', '2022-05-18', '2022-05-18', '2022-04-30', '2022-05-18', '2022-05-18', '', '', '', '', '');
+        $_POST['begin']      = (isset($param['begin']) and isset($param['end'])) ? array($plans[0]->begin, $plans[0]->begin, $plans[0]->begin, $plans[0]->begin, $plans[0]->begin, $plans[0]->begin, $plans[0]->begin, $plans[0]->begin, '', '', '', '') : array($plans[0]->begin, $plans[0]->begin, $plans[0]->begin, $plans[0]->begin, $plans[0]->begin, $plans[0]->begin, $plans[0]->begin, '', '', '', '', '');
+        $_POST['end']        = (isset($param['begin']) and isset($param['end'])) ? array($plans[0]->end, $plans[0]->end, $plans[0]->end, $plans[0]->end, $plans[0]->end, $plans[0]->end, $plans[0]->end, $plans[0]->end, '', '', '', '') : array($plans[0]->end, $plans[0]->end, $plans[0]->end, $plans[0]->end, $plans[0]->end, $plans[0]->end, $plans[0]->end, '', '', '', '', '');
         $_POST['realBegan']  = array('', '', '', '', '', '', '', '', '', '', '', '');
         $_POST['realEnd']    = array('', '', '', '', '', '', '', '', '', '', '', '');
 
-        foreach($param as $field => $value) $_POST[$field] = $value;
+        foreach($param as $field => $value)
+        {
+            if(count($param) == 1 or ($field != 'begin' and $field != 'end')) $_POST[$field] = $value;
+        }
 
         $objects = $this->objectModel->create(41, 0, 0);
 
         unset($_POST);
 
-        if(dao::isError()) return dao::getError();
+        if(dao::isError())
+        {
+            $error = dao::getError()['message'][0];
+            $error = strpos($error, '所属项目的') > 0 ? preg_replace('/\d{4}-\d{2}-\d{2}/', '', $error) : $error;
+            return $error;
+        }
 
-        return $objects;
+        $objects = $tester->dao->select('*')->from(TABLE_PROJECT)->where('parent')->eq($plans[0]->parent)->andWhere('type')->eq('stage')->fetchAll();
+        return count($objects);
     }
 
+    /**
+     * Test set stage tree path.
+     *
+     * @param  int    $planID
+     * @access public
+     * @return object
+     */
     public function setTreePathTest($planID)
     {
-        $objects = $this->objectModel->setTreePath($planID);
+        $this->objectModel->setTreePath($planID);
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        $object = $this->objectModel->getByID($planID);
+        return $object;
     }
 
-    public function updateTest($planID = 0, $projectID = 0)
+    /**
+     * updateTest
+     *
+     * @param  int    $planID
+     * @param  int    $projectID
+     * @param  array  $param
+     * @param  string $index
+     * @access public
+     * @return array
+     */
+    public function updateTest($planID, $projectID, $param = array(), $index = '')
     {
-        $objects = $this->objectModel->update($planID = 0, $projectID = 0);
+        $plan = $this->objectModel->getByID($planID);
 
-        if(dao::isError()) return dao::getError();
+        $_POST['parent']       = $plan->parent;
+        $_POST['name']         = $plan->name;
+        $_POST['percent']      = $plan->percent;
+        $_POST['attribute']    = $plan->attribute;
+        $_POST['milestone']    = $plan->milestone;
+        $_POST['acl']          = $plan->acl;
+        $_POST['begin']        = $plan->begin;
+        $_POST['end']          = $plan->end;
+        $_POST['realBegan']    = $plan->realBegan;
+        $_POST['realEnd']      = $plan->realEnd;
+
+        foreach($param as $key => $value) $_POST[$key] = $value;
+
+        $objects = $this->objectModel->update($planID, $projectID);
+
+        unset($_POST);
+
+        if(dao::isError()) return $index == 'end' ? preg_replace('/『\d{4}-\d{2}-\d{2}』/', '', dao::getError()[$index][0]) : dao::getError()[$index][0];
 
         return $objects;
     }
 
-    public function printCellTest($col, $plan, $users, $projectID)
-    {
-        $objects = $this->objectModel->printCell($col, $plan, $users, $projectID);
-
-        if(dao::isError()) return dao::getError();
-
-        return $objects;
-    }
-
+    /**
+     * Test is create task.
+     *
+     * @param  int    $planID
+     * @access public
+     * @return int
+     */
     public function isCreateTaskTest($planID)
     {
-        $objects = $this->objectModel->isCreateTask($planID);
+        $object = $this->objectModel->isCreateTask($planID);
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        return $object ? 2 : 1;
     }
 
     /**

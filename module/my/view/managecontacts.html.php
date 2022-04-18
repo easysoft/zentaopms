@@ -67,7 +67,7 @@
           }
           else
           {
-              echo html::select('users[]', $users, $list->userList, "multiple $readonly class='form-control chosen' data-drop_direction='down'");
+              echo html::select('users[]', $users, $list->userList, "multiple $readonly class='form-control picker' data-drop_direction='down'");
           }
           ?>
           </td>

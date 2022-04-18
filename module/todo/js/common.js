@@ -9,8 +9,16 @@ function switchDateTodo(switcher)
         $('#date').removeAttr('disabled');
     }
 }
-
-function loadList(type, id)
+/**
+ * Load data.
+ * @param  type        $type        Type of selected todo.
+ * @param  id          $id          ID of selected todo.
+ * @param  defaultType $defaultType Default type of selected todo.
+ * @param  idvalue     $idvalue     ID of the closed todo type.
+ * @access public
+ * @return void
+ */
+function loadList(type, id, defaultType, idvalue)
 {
     if(id)
     {
@@ -23,8 +31,11 @@ function loadList(type, id)
         divID      = '#nameBox';
     }
 
-    var param = 'userID=' + userID;
-    if(id) param += '&id=' + id;
+    id = id ? id : '';
+    var param = 'userID=' + userID + '&id=' + id;
+    if(type == "task") param += '&status=wait,doing';
+    if(type == defaultType && idvalue != 0) param += '&idvalue=' + idvalue;
+
     if(moduleList.indexOf(type) !== -1)
     {
         link = createLink(type, objectsMethod[type], param);

@@ -320,7 +320,7 @@ class treeModel extends model
 
                 ksort($treeMenu);
                 $topMenu = @array_shift($treeMenu);
-                $topMenu = explode("\n", trim($topMenu));
+                $topMenu = explode("\n", trim((string)$topMenu));
                 foreach($topMenu as $menu)
                 {
                     if(!strpos($menu, '|')) continue;
@@ -1638,7 +1638,14 @@ class treeModel extends model
                 $short    = $shorts[$moduleID];
                 $order    = $orders[$moduleID];
                 $moduleID = str_replace('id', '', $moduleID);
-                $this->dao->update(TABLE_MODULE)->set('name')->eq(strip_tags(trim($moduleName)))->set('short')->eq($short)->set('order')->eq($order)->where('id')->eq($moduleID)->limit(1)->exec();
+
+                $data = new stdClass();
+                $data->name  = strip_tags(trim($moduleName));
+                $data->short = $short;
+                $data->order = $order;
+
+                $this->setModuleLang();
+                $this->dao->update(TABLE_MODULE)->data($data)->autoCheck()->where('id')->eq($moduleID)->limit(1)->exec();
             }
         }
 
@@ -1659,7 +1666,7 @@ class treeModel extends model
         if(!isset($_POST['branch'])) $module->branch = $self->branch;
 
         $repeatName = $this->checkUnique($self, array("id{$self->id}" => $module->name), array("id{$self->id}" => $module->branch));
-        if($repeatName) return print(js::alert(sprintf($this->lang->tree->repeatName, $repeatName)));
+        if($repeatName) helper::end(js::alert(sprintf($this->lang->tree->repeatName, $repeatName)));
 
         $parent = $this->getById($this->post->parent);
         $childs = $this->getAllChildId($moduleID);
@@ -2033,5 +2040,18 @@ class treeModel extends model
         }
 
         return $tree;
+    }
+
+    /**
+      * Load module language.
+      *
+      * @access public
+      * @return void
+      */
+    public function setModuleLang()
+    {
+        $this->lang->module        = new stdclass();
+        $this->lang->module->name  = $this->lang->tree->wordName;
+        $this->lang->module->short = $this->lang->tree->short;
     }
 }

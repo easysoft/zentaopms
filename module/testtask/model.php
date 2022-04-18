@@ -1035,8 +1035,8 @@ class testtaskModel extends model
      * @param  string $account
      * @param  int    $limit
      * @param  string $status all|wait|doing|done|blocked
-     * @param  array $skipProductIDList
-     * @param  array $skipExecutionIDList
+     * @param  array  $skipProductIDList
+     * @param  array  $skipExecutionIDList
      * @access public
      * @return array
      */
@@ -1074,6 +1074,22 @@ class testtaskModel extends model
         $testRun = $this->dao->findById($runID)->from(TABLE_TESTRUN)->fetch();
         $testRun->case = $this->loadModel('testcase')->getById($testRun->case, $testRun->version);
         return $testRun;
+    }
+
+    /**
+     * Get testtasks by case id list.
+     *
+     * @param  string|array $caseIDList
+     * @access public
+     * @return array
+     */
+    public function getGroupByCases($caseIDList)
+    {
+        return $this->dao->select('t1.case, t2.*, t3.branch')->from(TABLE_TESTRUN)->alias('t1')
+            ->leftJoin(TABLE_TESTTASK)->alias('t2')->on('t1.task=t2.id')
+            ->leftJoin(TABLE_BUILD)->alias('t3')->on('t2.build = t3.id')
+            ->where('t1.case')->in($caseIDList)
+            ->fetchGroup('case', 'id');
     }
 
     /**

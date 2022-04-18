@@ -183,21 +183,7 @@ class story extends control
             if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $storyID));
 
             /* If link from no head then reload. */
-            if(isonlybody())
-            {
-                $execution = $this->execution->getByID($this->session->execution);
-                if($this->app->tab == 'execution' and $execution->type == 'kanban' and $this->app->tab == 'execution')
-                {
-                    $kanbanData = $this->loadModel('kanban')->getRDKanban($this->session->execution, $this->session->execLaneType ? $this->session->execLaneType : 'all');
-                    $kanbanData = json_encode($kanbanData);
-
-                    return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => "parent.updateKanban($kanbanData, 0)"));
-                }
-                else
-                {
-                    return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
-                }
-            }
+            if(isonlybody()) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
 
             if($this->post->newStory)
             {
@@ -229,7 +215,8 @@ class story extends control
         /* Set products, users and module. */
         if($objectID != 0)
         {
-            $products        = $this->product->getProductPairsByProject($objectID);
+            $onlyNoClosed    = empty($this->config->CRProduct) ? 'noclosed' : '';
+            $products        = $this->product->getProductPairsByProject($objectID, $onlyNoClosed);
             $productID       = empty($productID) ? key($products) : $productID;
             $product         = $this->product->getById(($productID and array_key_exists($productID, $products)) ? $productID : key($products));
             $productBranches = $product->type != 'normal' ? $this->loadModel('execution')->getBranchByProduct($productID, $objectID) : array();
@@ -485,21 +472,8 @@ class story extends control
             }
 
             if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'idList' => $stories));
-            if(isonlybody())
-            {
-                $execution = $this->execution->getByID($this->session->execution);
-                if($this->app->tab == 'execution' and $execution->type == 'kanban' and $this->app->tab == 'execution')
-                {
-                    $kanbanData = $this->loadModel('kanban')->getRDKanban($this->session->execution, $this->session->execLaneType ? $this->session->execLaneType : 'all');
-                    $kanbanData = json_encode($kanbanData);
 
-                    return print(js::closeModal('parent.parent', '', "parent.parent.updateKanban($kanbanData)"));
-                }
-                else
-                {
-                    return print(js::closeModal('parent.parent', 'this'));
-                }
-            }
+            if(isonlybody()) return print(js::closeModal('parent.parent', 'this'));
 
             if($storyID)
             {
@@ -2552,14 +2526,15 @@ class story extends control
      *
      * @param  int    $userID
      * @param  string $id       the id of the select control.
+     * @param  int    $appendID
      * @access public
      * @return string
      */
-    public function ajaxGetUserStories($userID = '', $id = '')
+    public function ajaxGetUserStories($userID = '', $id = '', $appendID = 0)
     {
         if($userID == '') $userID = $this->app->user->id;
         $user    = $this->loadModel('user')->getById($userID, 'id');
-        $stories = $this->story->getUserStoryPairs($user->account);
+        $stories = $this->story->getUserStoryPairs($user->account, 10, 'story', '', $appendID);
 
         if($id) return print(html::select("stories[$id]", $stories, '', 'class="form-control"'));
         echo html::select('story', $stories, '', 'class=form-control');

@@ -328,6 +328,8 @@ class Processor
                 $this->dao->insert(TABLE_STAKEHOLDER)->data($data)->exec();
             }
         }
+        $this->dao->update(TABLE_STAKEHOLDER)->set('`type`')->eq('inside')->where('id')->le('300')->exec();
+        $this->dao->update(TABLE_STAKEHOLDER)->set('`type`')->eq('outside')->set('`user`')->eq('outside1')->where('id')->eq('301')->exec();
     }
 
     /**

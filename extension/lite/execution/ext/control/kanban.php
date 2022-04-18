@@ -42,7 +42,7 @@ class myExecution extends execution
             $TRActions .= "<div class='dropdown'>";
             $TRActions .= html::a('javascript:;', "<i class='icon icon-cog-outline'></i>" . $this->lang->kanban->setting, '', "data-toggle='dropdown' data- class='btn btn-link'");
             $TRActions .= "<ul id='kanbanActionMenu' class='dropdown-menu pull-right'>";
-            $width    = $this->app->getClientLang() == 'en' ? '70%' : '60%';
+            $width    = $this->app->getClientLang() == 'en' ? '750' : '650';
             if(common::hasPriv('kanban', 'createRegion')) $TRActions .= '<li>' . html::a(helper::createLink('kanban', 'createRegion', "kanbanID=$execution->id&from=execution", '', true), '<i class="icon icon-plus"></i>' . $this->lang->kanban->createRegion, '', "class='iframe btn btn-link text-left'") . '</li>';
             if(common::hasPriv('kanban', 'setLaneHeight')) $TRActions .= '<li>' . html::a(helper::createLink('kanban', 'setLaneHeight', "kanbanID=$execution->id&from=execution", '', true), '<i class="icon icon-size-height"></i>' . $this->lang->kanban->laneHeight, '', "class='iframe btn btn-link text-left' data-width=$width") . '</li>';
             $kanbanActions = '';

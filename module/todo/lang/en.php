@@ -113,8 +113,9 @@ $lang->todo->noTodo         = 'No todos of this type.';
 $lang->todo->noAssignedTo   = "The AssignedTo should not be empty.";
 $lang->todo->unfinishedTodo = 'The todos of ID %s are not finished, and can not close.';
 $lang->todo->today          = 'Todo Today';
+$lang->todo->selectProduct  = "Please select a product";
 
-$lang->todo->periods['all']             = 'All Todos';
+$lang->todo->periods['all']             = 'Assigned To Yourself';
 $lang->todo->periods['before']          = 'Unfinished';
 $lang->todo->periods['future']          = 'TBD';
 $lang->todo->periods['thisWeek']        = 'This Week';

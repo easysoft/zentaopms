@@ -18,27 +18,33 @@ $builder->project      = array('rows' => 90, 'extends' => array('project', 'proj
 $builder->projectalone = array('rows' => 20, 'extends' => array('project', 'projectalone'));
 $builder->sprint       = array('rows' => 600, 'extends' => array('project', 'execution'));
 
-$builder->story         = array('rows' => 400, 'extends' => array('story'));
-$builder->childstory    = array('rows' => 50, 'extends' => array('story','childstory'));
-$builder->storyreview   = array('rows' => 100, 'extends' => array('storyreview'));
-$builder->storymodule   = array('rows' => 800, 'extends' => array('module','storymodule'));
-$builder->storyplan     = array('rows' => 400, 'extends' => array('planstory'));
-$builder->storystage    = array('rows' => 450, 'extends' => array('storystage'));
-$builder->storyspec     = array('rows' => 570, 'extends' => array('storyspec'));
-$builder->storyestimate = array('rows' => 6, 'extends' => array('storyestimate'));
-$builder->relation      = array('rows' => 12, 'extends' => array('relation'));
-$builder->task          = array('rows' => 600, 'extends' => array('task','task'));
-$builder->taskmore      = array('rows' => 300, 'extends' => array('task','moretask'));
-$builder->taskspec      = array('rows' => 600, 'extends' => array('taskspec'));
-$builder->taskmodule    = array('rows' => 1800, 'extends' => array('module','taskmodule'));
-$builder->taskestimate  = array('rows' => 600, 'extends' => array('taskestimate'));
-$builder->taskson       = array('rows' => 10,  'extends' => array('task', 'taskson'));
-$builder->case          = array('rows' => 400, 'extends' => array('case'));
-$builder->libcase       = array('rows' => 10, 'extends' => array('case','libcase'));
-$builder->unitcase      = array('rows' => 150, 'extends' => array('case','unitcase'));
-$builder->casestep      = array('rows' => 400, 'extends' => array('casestep'));
-$builder->bug           = array('rows' => 300, 'extends' => array('bug'));
-$builder->morebug       = array('rows' => 15, 'extends' => array('bug','morebug'));
+$builder->story          = array('rows' => 400, 'extends' => array('story'));
+$builder->childstory     = array('rows' => 50, 'extends' => array('story','childstory'));
+$builder->storyreview    = array('rows' => 100, 'extends' => array('storyreview'));
+$builder->storymodule    = array('rows' => 800, 'extends' => array('module','storymodule'));
+$builder->storymoduleson = array('rows' => 400, 'extends' => array('module','storymoduleson'));
+$builder->storyplan      = array('rows' => 400, 'extends' => array('planstory'));
+$builder->storystage     = array('rows' => 450, 'extends' => array('storystage'));
+$builder->storyspec      = array('rows' => 570, 'extends' => array('storyspec'));
+$builder->storyestimate  = array('rows' => 6, 'extends' => array('storyestimate'));
+$builder->relation       = array('rows' => 12, 'extends' => array('relation'));
+$builder->task           = array('rows' => 600, 'extends' => array('task','task'));
+$builder->taskmore       = array('rows' => 300, 'extends' => array('task','moretask'));
+$builder->taskspec       = array('rows' => 600, 'extends' => array('taskspec'));
+$builder->taskmodule     = array('rows' => 1800, 'extends' => array('module','taskmodule'));
+$builder->taskmoduleson  = array('rows' => 600, 'extends' => array('module','taskmoduleson'));
+$builder->taskestimate   = array('rows' => 600, 'extends' => array('taskestimate'));
+$builder->taskson        = array('rows' => 10,  'extends' => array('task', 'taskson'));
+$builder->case           = array('rows' => 400, 'extends' => array('case'));
+$builder->libcase        = array('rows' => 10, 'extends' => array('case','libcase'));
+$builder->unitcase       = array('rows' => 150, 'extends' => array('case','unitcase'));
+$builder->casestep       = array('rows' => 400, 'extends' => array('casestep'));
+$builder->casemodule     = array('rows' => 100, 'extends' => array('module', 'casemodule'));
+$builder->casemoduleson  = array('rows' => 200, 'extends' => array('module', 'casemoduleson'));
+$builder->bug            = array('rows' => 300, 'extends' => array('bug'));
+$builder->morebug        = array('rows' => 15, 'extends' => array('bug','morebug'));
+$builder->bugmodule      = array('rows' => 100, 'extends' => array('module','bugmodule'));
+$builder->bugmoduleson   = array('rows' => 200, 'extends' => array('module','bugmoduleson'));
 
 $builder->testtask   = array('rows' => 100, 'extends' => array('testtask'));
 $builder->testresult = array('rows' => 70, 'extends' => array('testresult'));
@@ -78,17 +84,21 @@ $builder->kanbancellproject   = array('rows' => 4860, 'extends' => array('kanban
 $builder->team        = array('rows' => 400, 'extends' => array('team'));
 $builder->teamtask    = array('rows' => 20, 'extends' => array('team', 'teamtask'));
 $builder->stakeholder = array('rows' => 1, 'extends' => array('stakeholder'));
+$builder->expect      = array('rows' => 270, 'extends' => array('expect'));
 $builder->stageson    = array('rows' => 30, 'extends' => array('project', 'executionson'));
 
-$builder->doclib     = array('rows' => 900, 'extends' => array('doclib'));
-$builder->doc        = array('rows' => 900, 'extends' => array('doc'));
-$builder->doccontent = array('rows' => 900, 'extends' => array('doccontent'));
+$builder->doclib      = array('rows' => 900, 'extends' => array('doclib'));
+$builder->doc         = array('rows' => 900, 'extends' => array('doc'));
+$builder->doccontent  = array('rows' => 900, 'extends' => array('doccontent'));
+$builder->docmodule   = array('rows' => 100, 'extends' => array('module','docmodule'));
+$builder->docmoduleon = array('rows' => 200, 'extends' => array('module','docmoduleson'));
 
 $builder->build      = array('rows' => 20, 'extends' => array('build'));
 $builder->release    = array('rows' => 10, 'extends' => array('release'));
 $builder->design     = array('rows' => 120, 'extends' => array('design'));
 $builder->designspec = array('rows' => 120, 'extends' => array('designspec'));
 
+$builder->stage   = array('rows' => 6, 'extends' => array('stage'));
 $builder->webhook = array('rows' => 7, 'extends' => array('webhook'));
 $builder->entry   = array('rows' => 1, 'extends' => array('entry'));
 

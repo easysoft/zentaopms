@@ -20,6 +20,8 @@
 <?php js::set('executionID', $case->execution);?>
 <?php js::set('tab', $this->app->tab);?>
 <?php js::set('isLibCase', $isLibCase);?>
+<?php js::set('testtasks', $testtasks);?>
+<?php js::set('confirmUnlinkTesttask', $lang->testcase->confirmUnlinkTesttask);?>
 <?php if($this->app->tab == 'execution') js::set('objectID', $case->execution);?>
 <?php if($this->app->tab == 'project') js::set('objectID', $case->project);?>
 <div id='mainContent' class='main-content'>
@@ -174,7 +176,7 @@
                 <td>
                   <div class='input-group'>
                     <?php echo html::select('product', $products, $productID, "onchange='loadAll(this.value)' class='form-control chosen'");?>
-                    <?php if(isset($product->type) and $product->type != 'normal') echo html::select('branch', $branchTagOption, $case->branch, "onchange='loadBranch();' class='form-control'");?>
+                    <?php if(isset($product->type) and $product->type != 'normal') echo html::select('branch', $branchTagOption, $case->branch, "onchange='loadBranch($case->branch);' class='form-control'");?>
                   </div>
                 </td>
               </tr>

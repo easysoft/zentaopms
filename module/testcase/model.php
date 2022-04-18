@@ -680,10 +680,11 @@ class testcaseModel extends model
      * Update a case.
      *
      * @param  int    $caseID
+     * @param  array  $testtasks
      * @access public
      * @return void
      */
-    public function update($caseID)
+    public function update($caseID, $testtasks = array())
     {
         $now     = helper::now();
         $oldCase = $this->getById($caseID);
@@ -777,6 +778,22 @@ class testcaseModel extends model
             else
             {
                 unset($oldCase->steps);
+            }
+
+            if($case->branch and !empty($testtasks))
+            {
+                $this->loadModel('action');
+                foreach($testtasks as $taskID => $testtask)
+                {
+                    if($testtask->branch != $case->branch and $taskID)
+                    {
+                        $this->dao->delete()->from(TABLE_TESTRUN)
+                            ->where('task')->eq($taskID)
+                            ->andWhere('`case`')->eq($caseID)
+                            ->exec();
+                        $this->action->create('case' ,$caseID, 'unlinkedfromtesttask', '', $taskID);
+                    }
+                }
             }
             return common::createChanges($oldCase, $case);
         }
@@ -876,10 +893,11 @@ class testcaseModel extends model
     /**
      * Batch update testcases.
      *
+     * @param  array $testtasks
      * @access public
      * @return array
      */
-    public function batchUpdate()
+    public function batchUpdate($testtasks = array())
     {
         $cases      = array();
         $allChanges = array();
@@ -938,6 +956,7 @@ class testcaseModel extends model
         }
 
         /* Update cases. */
+        $this->loadModel('action');
         foreach($cases as $caseID => $case)
         {
             $oldCase = $this->getByID($caseID);
@@ -960,6 +979,21 @@ class testcaseModel extends model
 
                 unset($oldCase->steps);
                 $allChanges[$caseID] = common::createChanges($oldCase, $case);
+
+                if($case->branch and isset($testtasks[$caseID]))
+                {
+                    foreach($testtasks[$caseID] as $taskID => $testtask)
+                    {
+                        if($testtask->branch != $case->branch and $taskID)
+                        {
+                            $this->dao->delete()->from(TABLE_TESTRUN)
+                                ->where('task')->eq($taskID)
+                                ->andWhere('`case`')->eq($caseID)
+                                ->exec();
+                            $this->action->create('case' ,$caseID, 'unlinkedfromtesttask', '', $taskID);
+                        }
+                    }
+                }
             }
             else
             {
@@ -1198,7 +1232,7 @@ class testcaseModel extends model
             $cases[$key] = $caseData;
             $line++;
         }
-        if(dao::isError()) return print(js::error(dao::getError()));
+        if(dao::isError()) return false;
 
         $forceNotReview = $this->forceNotReview();
         foreach($cases as $key => $caseData)
@@ -1785,6 +1819,7 @@ class testcaseModel extends model
      */
     public function syncCase2Project($case, $caseID)
     {
+        $projects = array();
         if(!empty($case->story))
         {
             $projects = $this->dao->select('project')->from(TABLE_PROJECTSTORY)->where('story')->eq($case->story)->fetchPairs();
@@ -1797,27 +1832,25 @@ class testcaseModel extends model
         {
             $projects = array($this->session->execution);
         }
+        if(empty($projects)) return;
 
         $this->loadModel('action');
         $objectInfo = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->in($projects)->fetchAll('id');
 
-        if(!empty($projects))
+        foreach($projects as $projectID)
         {
-            foreach($projects as $projectID)
-            {
-                $lastOrder = (int)$this->dao->select('*')->from(TABLE_PROJECTCASE)->where('project')->eq($projectID)->orderBy('order_desc')->limit(1)->fetch('order');
-                $data = new stdclass();
-                $data->project = $projectID;
-                $data->product = $case->product;
-                $data->case    = $caseID;
-                $data->version = 1;
-                $data->order   = ++ $lastOrder;
-                $this->dao->insert(TABLE_PROJECTCASE)->data($data)->exec();
+            $lastOrder = (int)$this->dao->select('*')->from(TABLE_PROJECTCASE)->where('project')->eq($projectID)->orderBy('order_desc')->limit(1)->fetch('order');
+            $data = new stdclass();
+            $data->project = $projectID;
+            $data->product = $case->product;
+            $data->case    = $caseID;
+            $data->version = 1;
+            $data->order   = ++ $lastOrder;
+            $this->dao->insert(TABLE_PROJECTCASE)->data($data)->exec();
 
-                $objectType = $objectInfo[$projectID]->type;
-                if($objectType == 'project') $this->action->create('case', $caseID, 'linked2project', '', $projectID);
-                if(in_array($objectType, array('sprint', 'stage'))) $this->action->create('case', $caseID, 'linked2execution', '', $projectID);
-            }
+            $objectType = $objectInfo[$projectID]->type;
+            if($objectType == 'project') $this->action->create('case', $caseID, 'linked2project', '', $projectID);
+            if(in_array($objectType, array('sprint', 'stage'))) $this->action->create('case', $caseID, 'linked2execution', '', $projectID);
         }
     }
 
