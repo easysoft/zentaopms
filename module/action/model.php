@@ -739,6 +739,8 @@ class actionModel extends model
             elseif($action->action == 'createmr' and strpos($action->extra, '::') !== false)
             {
                 list($mrCreatedDate, $mrActor, $mrLink) = explode('::', $action->extra);
+                if(isonlybody()) $mrLink .= ($this->config->requestType == 'GET' ? '&onlybody=yes' : '?onlybody=yes');
+                $this->app->loadLang('mr');
                 $desc = sprintf($this->lang->mr->createAction, $mrCreatedDate, $mrActor, $mrLink);
             }
             elseif($this->config->edition == 'max' and strpos($this->config->action->assetType, $action->objectType) !== false and $action->action == 'approved')
