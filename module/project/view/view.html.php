@@ -81,7 +81,7 @@
           </div>
         </div>
       </div>
-      <?php if($hasExtend):?>
+      <?php if($isExtended):?>
       <div class="col-sm-12">
         <div class='panel'>
           <?php $this->printExtendFields($project, 'div', "position=left&inForm=0");?>
