@@ -23,8 +23,10 @@
 <?php else: ?>
 <div id='mainMenu' class='clearfix'>
   <div class="btn-toolbar pull-left">
+    <?php if(!$onlybody):?>
     <?php echo html::a($this->createLink('mr', 'browse'), '<i class="icon icon-back icon-sm"></i> ' . $lang->goback, '', "class='btn btn-secondary'"); ?>
     <div class="divider"></div>
+    <?php endif;?>
     <div class="page-title">
       <span class="label label-id"><?php echo $MR->id ?></span>
       <span class="text" title='<?php echo $MR->title; ?>'><?php echo  $MR->title; ?></span>
