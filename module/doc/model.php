@@ -2672,6 +2672,7 @@ EOT;
         $autoloadPage = true;
         if(!empty($doc) and $doc->type == 'url')
         {
+            if(!preg_match('/^https?:\/\//', $doc->content)) $doc->content = 'http://' . $doc->content;
             $parsedUrl = parse_url($doc->content);
             $urlPort   = isset($parsedUrl['port']) ? ':' . $parsedUrl['port'] : '';
             $urlDomain = $parsedUrl['host'] . $urlPort;
