@@ -23,7 +23,7 @@
 <?php else: ?>
 <div id='mainMenu' class='clearfix'>
   <div class="btn-toolbar pull-left">
-    <?php if(!$onlybody):?>
+    <?php if(!isonlybody()):?>
     <?php echo html::a($this->createLink('mr', 'browse'), '<i class="icon icon-back icon-sm"></i> ' . $lang->goback, '', "class='btn btn-secondary'"); ?>
     <div class="divider"></div>
     <?php endif;?>
