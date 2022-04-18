@@ -3,14 +3,14 @@
     /* Expand or collapse text */
     function limitText()
     {
-        var $text = $(this);
         var fullText;
         var limitText;
+        var $text   = $(this);
         var options = $.extend({limitSize: 40, suffix: '…'}, $text.data());
-        var text = $text.text();
+        var text    = $text.text();
         if(text.length > options.limitSize)
         {
-            fullText = $text.html();
+            fullText  = $text.html();
             limitText = text.substring(0, options.limitSize) + options.suffix;
             $text.text(limitText).addClass('limit-text-on');
 
