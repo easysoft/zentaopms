@@ -135,7 +135,7 @@
               <li><?php echo html::a($this->createLink('doc', 'browse', "browseType=openedbyme"), '<i class="icon icon-more icon-sm"></i>', '', "title='{$lang->more}'");?></li>
             </nav>
           </div>
-          <?php if(!empty($myDocs)):?>
+          <?php if(empty($myDocs)):?>
           <div class="table-empty-tip">
             <p><span class="text-muted"><?php echo $lang->doc->noDoc;?></span></p>
           </div>

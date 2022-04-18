@@ -1826,9 +1826,8 @@ class docModel extends model
      */
     public function getStatisticInfo()
     {
-        $libIdList = array();
-        $libIdList = $this->getLibIdListByProject($this->session->project);
-        $docIdList = $this->getPrivDocs($libIdList);
+        $allLibs   = array_keys($this->getLibs('all'));
+        $docIdList = $this->getPrivDocs($allLibs);
 
         $today         = date('Y-m-d');
         $lately        = date('Y-m-d', strtotime('-3 day'));
