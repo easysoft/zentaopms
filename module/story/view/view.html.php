@@ -307,6 +307,7 @@
                 </tr>
                 <?php if($story->type != 'requirement'):?>
                 <tr class='plan-line'>
+                  <?php if($story->parent != -1):?>
                   <th><?php echo $lang->story->plan;?></th>
                   <td>
                   <?php
@@ -320,6 +321,7 @@
                   }
                   ?>
                   </td>
+                  <?php endif;?>
                 </tr>
                 <?php endif;?>
                 <tr>
