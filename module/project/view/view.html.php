@@ -81,11 +81,13 @@
           </div>
         </div>
       </div>
+      <?php if($hasExtend):?>
       <div class="col-sm-12">
         <div class='panel'>
           <?php $this->printExtendFields($project, 'div', "position=left&inForm=0");?>
         </div>
       </div>
+      <?php endif;?>
       <div class="col-sm-12">
         <?php $blockHistory = true;?>
         <?php $actionFormLink = $this->createLink('action', 'comment', "objectType=project&objectID=$project->id");?>

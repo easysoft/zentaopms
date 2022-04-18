@@ -749,6 +749,14 @@ class project extends control
         $this->app->loadClass('pager', $static = true);
         $pager = new pager(0, 30, 1);
 
+        /* Check exist extend fields. */
+        $hasExtend = false;
+        if(!empty($this->config->bizVersion))
+        {
+            $extend = $this->loadModel('workflowaction')->getByModuleAndAction('project', 'view');
+            if(!empty($extend) and $extend->extensionType == 'extend') $hasExtend = true;
+        }
+
         $this->view->title        = $this->lang->project->view;
         $this->view->position     = $this->lang->project->view;
         $this->view->projectID    = $projectID;
@@ -762,6 +770,7 @@ class project extends control
         $this->view->planGroup    = $this->loadModel('execution')->getPlans($products);
         $this->view->branchGroups = $this->loadModel('branch')->getByProducts(array_keys($products), '', $linkedBranches);
         $this->view->dynamics     = $this->loadModel('action')->getDynamic('all', 'all', 'date_desc', $pager, 'all', $projectID);
+        $this->view->hasExtend    = $hasExtend;
 
         $this->display();
     }
