@@ -44,10 +44,10 @@ class executionModel extends model
 
         echo(js::alert($this->lang->execution->accessDenied));
 
-        if(!$this->server->http_referer) return print(js::locate(helper::createLink('execution', 'index')));
+        if(!$this->server->http_referer) return print(js::locate(helper::createLink('execution', 'all')));
 
         $loginLink = $this->config->requestType == 'GET' ? "?{$this->config->moduleVar}=user&{$this->config->methodVar}=login" : "user{$this->config->requestFix}login";
-        if(strpos($this->server->http_referer, $loginLink) !== false) return print(js::locate(helper::createLink('execution', 'index')));
+        if(strpos($this->server->http_referer, $loginLink) !== false) return print(js::locate(helper::createLink('execution', 'all')));
 
         return print(js::locate(helper::createLink('execution', 'all')));
     }
