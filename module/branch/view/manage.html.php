@@ -79,7 +79,7 @@
             <?php echo $isMain ? '' : '<i class="icon icon-move"></i>';?>
           </td>
           <?php endif;?>
-          <td class='c-name flex branchName' title='<?php echo $branch->name;?>'>
+          <td class='c-name branchName' title='<?php echo $branch->name;?>'>
             <span class="text-ellipsis"><?php echo $branch->name;?>&nbsp;</span>
             <?php
             /* Fix bug#17342,由于默认分支的后续功能没做,暂时隐藏设置默认分支的功能 */

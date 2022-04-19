@@ -4,9 +4,8 @@
 
 a.setDefault {padding-left: 8px !important}
 
-td.flex {display: flex; flex-flow: row nowrap; justify-content: flex-start; align-items: center;}
-td.flex .label-primary {min-width: 40px;}
-td.flex .setDefault {min-width: 120px;}
+td.branchName > span.text-ellipsis {display: inline-block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;}
+td.branchName > span {vertical-align: middle;}
 
 #mergeBranch .form-actions {padding-top: 20px;}
 .modal-body {padding-top: 0;}
