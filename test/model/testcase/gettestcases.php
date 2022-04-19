@@ -10,6 +10,32 @@ title=测试 testcaseModel->getTestCases();
 cid=1
 pid=1
 
+测试查询产品1 suiteID 1 browseType all 的测试用例 >> 这个是测试用例1;这个是测试用例2;这个是测试用例3;这个是测试用例4
+测试查询产品1 suiteID 1 browseType wait 的测试用例 >> 这个是测试用例1
+测试查询产品1 suiteID 1 browseType bymodule 的测试用例 >> 这个是测试用例1;这个是测试用例2;这个是测试用例3;这个是测试用例4
+测试查询产品1 suiteID 1 browseType needconfirm 的测试用例 >> 这个是测试用例4;这个是测试用例3;这个是测试用例2;这个是测试用例1
+测试查询产品1 suiteID 1 browseType bysuite 的测试用例 >> 这个是测试用例1;这个是测试用例2
+测试查询产品2 suiteID 3 browseType all 的测试用例 >> 这个是测试用例5;这个是测试用例6;这个是测试用例7;这个是测试用例8
+测试查询产品2 suiteID 3 browseType wait 的测试用例 >> 这个是测试用例5
+测试查询产品2 suiteID 3 browseType bymodule 的测试用例 >> 这个是测试用例5;这个是测试用例6;这个是测试用例7;这个是测试用例8
+测试查询产品2 suiteID 3 browseType needconfirm 的测试用例 >> 这个是测试用例8;这个是测试用例7;这个是测试用例6;这个是测试用例5
+测试查询产品2 suiteID 3 browseType bysuite 的测试用例 >> 这个是测试用例5;这个是测试用例6
+测试查询产品3 suiteID 5 browseType all 的测试用例 >> 这个是测试用例9;这个是测试用例10;这个是测试用例11;这个是测试用例12
+测试查询产品3 suiteID 5 browseType wait 的测试用例 >> 这个是测试用例9
+测试查询产品3 suiteID 5 browseType bymodule 的测试用例 >> 这个是测试用例9;这个是测试用例10;这个是测试用例11;这个是测试用例12
+测试查询产品3 suiteID 5 browseType needconfirm 的测试用例 >> 这个是测试用例12;这个是测试用例11;这个是测试用例10;这个是测试用例9
+测试查询产品3 suiteID 5 browseType bysuite 的测试用例 >> 这个是测试用例9;这个是测试用例10
+测试查询产品4 suiteID 7 browseType all 的测试用例 >> 这个是测试用例13;这个是测试用例14;这个是测试用例15;这个是测试用例16
+测试查询产品4 suiteID 7 browseType wait 的测试用例 >> 这个是测试用例13
+测试查询产品4 suiteID 7 browseType bymodule 的测试用例 >> 这个是测试用例13;这个是测试用例14;这个是测试用例15;这个是测试用例16
+测试查询产品4 suiteID 7 browseType needconfirm 的测试用例 >> 这个是测试用例16;这个是测试用例15;这个是测试用例14;这个是测试用例13
+测试查询产品4 suiteID 7 browseType bysuite 的测试用例 >> 这个是测试用例13;这个是测试用例14
+测试查询产品5 suiteID 9 browseType all 的测试用例 >> 这个是测试用例17;这个是测试用例18;这个是测试用例19;这个是测试用例20
+测试查询产品5 suiteID 9 browseType wait 的测试用例 >> 这个是测试用例17
+测试查询产品5 suiteID 9 browseType bymodule 的测试用例 >> 这个是测试用例17;这个是测试用例18;这个是测试用例19;这个是测试用例20
+测试查询产品5 suiteID 9 browseType needconfirm 的测试用例 >> 这个是测试用例20;这个是测试用例19;这个是测试用例18;这个是测试用例17
+测试查询产品5 suiteID 9 browseType bysuite 的测试用例 >> 这个是测试用例17;这个是测试用例18
+
 */
 
 $productID  = array('1', '2', '3', '4', '5');

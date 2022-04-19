@@ -10,6 +10,19 @@ title=测试 treeModel->createManageLink();
 cid=1
 pid=1
 
+测试创建module 1821 branch 0 的managelink >> 产品模块1 <
+测试创建module 1822 branch 0 的managelink >> 产品模块2 <
+测试创建module 1981 branch 0 的managelink >> 产品模块161
+测试创建module 1981 branch 1 的managelink >> 产品模块161
+测试创建module 1981 branch 2 的managelink >> 产品模块161
+测试创建module 1982 branch 0 的managelink >> 产品模块162
+测试创建module 1982 branch 1 的managelink >> 产品模块162
+测试创建module 1982 branch 2 的managelink >> 产品模块162
+测试创建module 1621 branch 0 的managelink >> 模块1601 <a h
+测试创建module 1622 branch 0 的managelink >> 模块1602 <a h
+测试创建module 21 branch 0 的managelink >> 模块1 <a href
+测试创建module 22 branch 0 的managelink >> 模块2 <a href
+
 */
 $moduleID = array(1821, 1822, 1981, 1982, 1621, 1622, 21, 22);
 $extra0   = array('branchID' => 0);

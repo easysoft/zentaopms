@@ -10,6 +10,31 @@ title=测试 treeModel->createTaskManageLink();
 cid=1
 pid=1
 
+测试获取module 1821  product 1 execution 101 的 story manage link >> 产品模块1 browsetask 子模块
+测试获取module 1822  product 1 execution 101 的 story manage link >> 产品模块2 browsetask 子模块
+测试获取module 1981  product 1 execution 101 的 story manage link >> 产品模块161 browsetask 子模块
+测试获取module 1982  product 1 execution 101 的 story manage link >> 产品模块162 browsetask 子模块
+测试获取module 1621  product 1 execution 101 的 story manage link >> 模块1601 [T] edit 编辑模块 browsetask 子模块 delete 删除
+测试获取module 1622  product 1 execution 101 的 story manage link >> 模块1602 [T] edit 编辑模块 browsetask 子模块 delete 删除
+测试获取module 21 product 1 execution 101 的 story manage link >> 模块1 [T] edit 编辑模块 browsetask 子模块 delete 删除
+测试获取module 22 product 1 execution 101 的 story manage link >> 模块2 [T] edit 编辑模块 browsetask 子模块 delete 删除
+测试获取module 1821  product 2 execution 102 的 story manage link >> 产品模块1 browsetask 子模块
+测试获取module 1822  product 2 execution 102 的 story manage link >> 产品模块2 browsetask 子模块
+测试获取module 1981  product 2 execution 102 的 story manage link >> 产品模块161 browsetask 子模块
+测试获取module 1982  product 2 execution 102 的 story manage link >> 产品模块162 browsetask 子模块
+测试获取module 1621  product 2 execution 102 的 story manage link >> 模块1601 [T] edit 编辑模块 browsetask 子模块 delete 删除
+测试获取module 1622  product 2 execution 102 的 story manage link >> 模块1602 [T] edit 编辑模块 browsetask 子模块 delete 删除
+测试获取module 21 product 2 execution 102 的 story manage link >> 模块1 [T] edit 编辑模块 browsetask 子模块 delete 删除
+测试获取module 22 product 2 execution 102 的 story manage link >> 模块2 [T] edit 编辑模块 browsetask 子模块 delete 删除
+测试获取module 1821  product 1 execution 101 tip null 的 story manage link >> 产品模块1 browsetask 子模块
+测试获取module 1822  product 1 execution 101 tip null 的 story manage link >> 产品模块2 browsetask 子模块
+测试获取module 21 product 1 execution 101 tip null的 story manage link >> 模块1 edit 编辑模块 browsetask 子模块 delete 删除
+测试获取module 22 product 1 execution 101 tip null的 story manage link >> 模块2 edit 编辑模块 browsetask 子模块 delete 删除
+测试获取module 1821  product 2 execution 102 tip null的 story manage link >> 产品模块1 browsetask 子模块
+测试获取module 1822  product 2 execution 102 tip null的 story manage link >> 产品模块2 browsetask 子模块
+测试获取module 21 product 2 execution 102 tip null 的 story manage link >> 模块1 edit 编辑模块 browsetask 子模块 delete 删除
+测试获取module 22 product 2 execution 102 tip null 的 story manage link >> 模块2 edit 编辑模块 browsetask 子模块 delete 删除
+
 */
 $moduleID    = array(1821, 1822, 1981, 1982, 1621, 1622, 21, 22);
 $productID   = array(1, 2);

@@ -10,6 +10,23 @@ title=测试 testcaseModel->getByStatus();
 cid=1
 pid=1
 
+测试查询所有产品 所有状态的case >> 400
+测试查询产品1 所有状态的case >> 4
+测试查询产品2 所有状态的case >> 4
+测试查询所有产品 type needconfirm 的case >> 100
+测试查询所有产品 状态 wait 的case >> 100
+测试查询所有产品 状态 normal 的case >> 100
+测试查询所有产品 状态 blocked 的case >> 100
+测试查询所有产品 状态 investigate 的case >> 100
+测试查询产品1 状态 wait 的case >> 1
+测试查询产品1 状态 normal 的case >> 1
+测试查询产品1 状态 blocked 的case >> 1
+测试查询产品1 状态 investigate 的case >> 1
+测试查询产品2 状态 wait 的case >> 1
+测试查询产品2 状态 normal 的case >> 1
+测试查询产品2 状态 blocked 的case >> 1
+测试查询产品2 状态 investigate 的case >> 1
+
 */
 $productIDList = array('0', '1', '2');
 $branch        = 0;

@@ -10,6 +10,25 @@ title=测试 treeModel->getSons();
 cid=1
 pid=1
 
+测试获取root 1 module 1821 type story branch 0 的子module >> ,2621,2622
+测试获取root 2 module 1822 type story branch 0 的子module >> ,2623,2624
+测试获取root 41 module 1981 type story branch 0 的子module >> ,2701,2702
+测试获取root 41 module 1981 type story branch 1 的子module >> ,2701,2702
+测试获取root 41 module 1981 type story branch 2 的子module >> ,2701,2702
+测试获取root 41 module 1982 type story branch 0 的子module >> 0
+测试获取root 41 module 1982 type story branch 1 的子module >> 0
+测试获取root 41 module 1982 type story branch 2 的子module >> 0
+测试获取root 42 module 1985 type story branch 0 的子module >> ,2703,2704
+测试获取root 42 module 1985 type story branch 1 的子module >> ,2703,2704
+测试获取root 42 module 1985 type story branch 2 的子module >> ,2703,2704
+测试获取root 42 module 1987 type story branch 0 的子module >> 0
+测试获取root 42 module 1987 type story branch 1 的子module >> 0
+测试获取root 42 module 1987 type story branch 2 的子module >> 0
+测试获取root 101 module 21 type task branch 0 的子module >> ,3021
+测试获取root 102 module 22 type task branch 0 的子module >> 0
+测试获取root 1 module 3621 type doc branch 0 的子module >> ,3721,3722
+测试获取root 2 module 3621 type doc branch 0 的子module >> ,3723,3724
+
 */
 $root   = array(1, 2, 41, 42, 101, 102);
 $module = array(1821, 1825, 1981, 1982, 1985, 1987, 21, 24, 3621, 3622);

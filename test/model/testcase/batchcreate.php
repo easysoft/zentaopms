@@ -10,6 +10,13 @@ title=测试 testcaseModel->batchCreate();
 cid=1
 pid=1
 
+测试批量创建用例1 >> 2
+测试批量创建用例2 >> 3
+测试批量创建用例3 >> 3
+测试批量创建用例4 >> 3
+测试批量创建用例5 >> 3
+测试重复批量创建用例1 >> 0
+
 */
 
 $title1     = array('测试批量创建4', '', '测试批量创建6');
@@ -21,7 +28,6 @@ $type       = array('feature', 'ditto', 'config');
 $pri        = array('2', 'ditto', '1');
 $stage      = array(array('system', 'smoke'), array('bvt'), array('unittest'));
 $needReview = array(0, 1, 0);
-
 
 $testcase = new testcaseTest();
 

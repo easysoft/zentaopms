@@ -10,6 +10,14 @@ title=测试 programplanModel->update();
 cid=1
 pid=1
 
+测试修改plan的 percent 值 工作占比和超过100 >> 工作量占比累计不应当超过100%
+测试修改plan的 end 值 计划完成小于计划开始 >> 『end』应当不小于。
+测试修改plan的 name 值 名称为空 >> 『name』不能为空。
+测试修改plan的 name 值 >> name,修改后的阶段
+测试修改plan的 percent 值 >> percent,15
+测试修改plan的 begin 值 >> begin,2022-04-01
+测试修改plan的 end 值 >> end,2022-04-30
+
 */
 $planID    = 131;
 $projectID = 41;

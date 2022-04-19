@@ -5,6 +5,7 @@ class programplanTest
     {
          global $tester;
          $this->objectModel = $tester->loadModel('programplan');
+         $tester->dao->delete()->from(TABLE_PROJECTSPEC)->exec();
     }
 
     /**
