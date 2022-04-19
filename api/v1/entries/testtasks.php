@@ -24,7 +24,7 @@ class testtasksEntry extends entry
 
         /* Get all testtasks. */
         $control   = $this->loadController('testtask', 'browse');
-        $productID = $this->param('productID', 0);
+        $productID = $this->param('product', 0);
         $control->browse($productID, $this->param('branch', ''), ($productID > 0 ? 'local' : 'all') . ',' . $this->param('status', 'totalStatus'), $this->param('order', 'id_desc'), $this->param('total', 0), $this->param('limit', 20), $this->param('page', 1), $this->param('begin', ''), $this->param('end', ''));
         $data = $this->getData();
 
