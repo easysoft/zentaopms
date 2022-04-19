@@ -123,9 +123,15 @@ class commonModel extends model
         $projectID = $execution->project;
         $project   = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($projectID)->fetch();
 
+        $today = helper::today();
         if($project->status == 'wait')
         {
-            $this->dao->update(TABLE_PROJECT)->set('status')->eq('doing')->where('id')->eq($projectID)->exec();
+            $this->dao->update(TABLE_PROJECT)
+                 ->set('status')->eq('doing')
+                 ->beginIf(helper::isZeroDate($project->realBegan))->set('realBegan')->eq($today)->fi()
+                 ->where('id')->eq($projectID)
+                 ->exec();
+
             $this->loadModel('action')->create('project', $projectID, 'syncproject');
         }
         return $project;
