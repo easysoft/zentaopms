@@ -45,8 +45,8 @@
           <?php $isProjectAdmin = $group->role == 'projectAdmin';?>
           <?php $disabled       = $isProjectAdmin ? 'disabled' : '';?>
           <?php $lang->group->managepriv = $lang->group->managePrivByGroup;?>
-          <?php common::printIcon('group', 'manageView', "groupID=$group->id", $group, 'list', 'eye', '', "$disabled");?>
-          <?php common::printIcon('group', 'managepriv', "type=byGroup&param=$group->id", $group, 'list', 'lock');?>
+          <?php common::printIcon('group', 'manageView', "groupID=$group->id", $group, 'list', 'eye', '', $disabled);?>
+          <?php common::printIcon('group', 'managepriv', "type=byGroup&param=$group->id", $group, 'list', 'lock', '', $disabled);?>
           <?php $lang->group->managemember = $lang->group->manageMember;?>
           <?php if($isProjectAdmin):?>
           <?php common::printIcon('group', 'manageProjectAdmin', "groupID=$group->id", $group, 'list', 'persons');?>
