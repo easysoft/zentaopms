@@ -546,6 +546,7 @@ $(function()
     if($('#formType').val() == 'more') expandForm(true);
     $searchForm.on('click', '.user-query .icon-close', function(e)
     {
+        e.preventDefault(); // Fix bug #21572.
         var $query = $(this).closest('.user-query');
         var queryId = $query.data('queryId');
         var deleteQueryLink = $.createLink('search', 'deleteQuery', 'queryID=' + queryId);

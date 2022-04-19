@@ -850,6 +850,6 @@ class apiModel extends model
     private function getDemoData($table, $version)
     {
         $file = $this->app->getAppRoot() . 'db' . DS . 'api' . DS . $version . DS . $table;
-        return unserialize(file_get_contents($file));
+        return unserialize(preg_replace_callback('#s:(\d+):"(.*?)";#s', function($match){return 's:'.strlen($match[2]).':"'.$match[2].'";';}, file_get_contents($file)));
     }
 }

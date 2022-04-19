@@ -200,6 +200,12 @@ class repoModel extends model
         if(!$this->checkClient()) return false;
         if(!$this->checkConnection()) return false;
 
+        if($this->post->SCM == 'Gitlab')
+        {
+            if($this->post->gitlabHost == '')    dao::$errors['gitlabHost']    = sprintf($this->lang->error->notempty, $this->lang->repo->gitlabHost);
+            if($this->post->gitlabProject == '') dao::$errors['gitlabProject'] = sprintf($this->lang->error->notempty, $this->lang->repo->gitlabProject);
+        }
+
         $data = fixer::input('post')
             ->setIf($this->post->SCM == 'Gitlab', 'password', $this->post->gitlabToken)
             ->setIf($this->post->SCM == 'Gitlab', 'path', $this->post->gitlabProject)
@@ -261,6 +267,12 @@ class repoModel extends model
     public function update($id)
     {
         $repo = $this->getRepoByID($id);
+
+        if($this->post->SCM == 'Gitlab')
+        {
+            if($this->post->gitlabHost == '')    dao::$errors['gitlabHost']    = sprintf($this->lang->error->notempty, $this->lang->repo->gitlabHost);
+            if($this->post->gitlabProject == '') dao::$errors['gitlabProject'] = sprintf($this->lang->error->notempty, $this->lang->repo->gitlabProject);
+        }
 
         $data = fixer::input('post')
             ->setIf($this->post->SCM == 'Gitlab', 'password', $this->post->gitlabToken)
@@ -1149,7 +1161,12 @@ class repoModel extends model
     {
         if($this->post->SCM == 'Gitlab') return true;
         if(!$this->config->features->checkClient) return true;
-        if(!$this->post->client) return true;
+
+        if(!$this->post->client)
+        {
+            dao::$errors['client'] = sprintf($this->lang->error->notempty, $this->lang->repo->client);
+            return false;
+        }
 
         if(strpos($this->post->client, ' '))
         {
