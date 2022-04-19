@@ -570,8 +570,8 @@ class bug extends control
 
             if($projectID)
             {
-                $project  = $this->loadModel('project')->getByID($projectID);
-                if(empty($bugID)) $projects = array($projectID => $project->name);
+                $project = $this->loadModel('project')->getByID($projectID);
+                if(empty($bugID) or $this->app->tab != 'qa') $projects = array($projectID => $project->name);
             }
         }
         elseif($projectID)
@@ -580,8 +580,8 @@ class bug extends control
             $productList = $this->config->CRProduct ? $this->product->getOrderedProducts('all', 40, $projectID) : $this->product->getOrderedProducts('normal', 40, $projectID);
             foreach($productList as $product) $products[$product->id] = $product->name;
 
-            $project   = $this->loadModel('project')->getByID($projectID);
-            if(empty($bugID)) $projects += array($projectID => $project->name);
+            $project = $this->loadModel('project')->getByID($projectID);
+            if(empty($bugID) or $this->app->tab != 'qa') $projects += array($projectID => $project->name);
 
             /* Set project menu. */
             if($this->app->tab == 'project') $this->project->setMenu($projectID);
@@ -591,8 +591,8 @@ class bug extends control
             $projects += $this->product->getProjectPairsByProduct($productID, $branch);
         }
 
-        /* When copying bug, get all project linked to the product. */
-        if(!empty($bugID)) $projects += $this->product->getProjectPairsByProduct($productID, $branch);
+        /* Link all projects to product when copying bug under qa.*/
+        if(!empty($bugID) and $this->app->tab == 'qa') $projects += $this->product->getProjectPairsByProduct($productID, $branch);
 
         /* Get block id of assinge to me. */
         $blockID = 0;
