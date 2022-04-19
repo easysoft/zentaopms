@@ -65,7 +65,7 @@ fields:
   - field: openedBy
     range: admin
   - field: openedDate
-    range: "(-1M)-(+1w):60"
+    range: "(-1M)-(+1w):-1D"
     type: timestamp
     format: "YYYY-MM-DD hh:mm:ss"
   - field: openedBuild
@@ -73,7 +73,7 @@ fields:
   - field: assignedTo
     range: [admin,dev1,test1]{30},[]{20},[admin,dev1,test1]{20},[]{10},closed{20}
   - field: assignedDate
-    range: "(-1M)-(+1w):60"
+    range: "(-1M)-(+1w):-1D"
     type: timestamp
     format: "YYYY-MM-DD"
   - field: deadline
