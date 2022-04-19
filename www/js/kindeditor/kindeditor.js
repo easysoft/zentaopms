@@ -1,3 +1,10 @@
+/*!
+ * ZUI: Zentao Kindeditor - v1.10.0 - 2022-04-19
+ * http://openzui.com
+ * GitHub: https://github.com/easysoft/zui.git 
+ * Copyright (c) 2022 cnezsoft.com; Licensed MIT
+ */
+
 /******************************************************************************
  * KindEditor - WYSIWYG HTML Editor for Internet
  * Copyright (C) 2006-2013 kindsoft.net
@@ -7997,10 +8004,13 @@ KindEditor.plugin('lineheight', function(K) {
  *******************************************************************************/
 
 KindEditor.plugin('link', function(K) {
+    console.trace('plugin link');
     var self = this,
         name = 'link';
+    if (self.plugin.link) return;
     self.plugin.link = {
         edit: function() {
+            console.trace('edit');
             var lang = self.lang(name + '.'),
                 html = '<div style="padding:20px;">' +
                 //url
