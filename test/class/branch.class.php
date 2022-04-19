@@ -201,24 +201,40 @@ class branchTest
         return $object;
     }
 
+    /**
+     * Test unlink branches for projects when product type is normal.
+     *
+     * @param  string $productIDList
+     * @access public
+     * @return int
+     */
     public function unlinkBranch4ProjectTest($productIDList)
     {
-        $objects = $this->objectModel->unlinkBranch4Project($productIDList);
+        $this->objectModel->unlinkBranch4Project($productIDList);
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        global $tester;
+        $objects = $tester->dao->select('*')->from(TABLE_PROJECTPRODUCT)->where('product')->in($productIDList)->andWhere('branch')->gt(0)->fetchAll();
+        return count($objects);
     }
 
+    /**
+     * Test link branches for projects when product type is not normal.
+     *
+     * @param  int    $productID
+     * @access public
+     * @return int
+     */
     public function linkBranch4ProjectTest($productID)
     {
-        $this->objectModel->unlinkBranch4Project($productID);
-
-        $objects = $this->objectModel->linkBranch4Project($productID);
+        $this->objectModel->linkBranch4Project($productID);
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        global $tester;
+        $objects = $tester->dao->select('*')->from(TABLE_PROJECTPRODUCT)->where('product')->eq($productID)->andWhere('branch')->gt(0)->fetchAll();
+        return count($objects);
     }
 
     /**
@@ -302,13 +318,23 @@ class branchTest
         return $objects ? 1 : 2;
     }
 
+    /**
+     * Test get branches of product which linked project.
+     *
+     * @param  int     $projectID
+     * @param  int     $productID
+     * @access public
+     * @return string
+     */
     public function getPairsByProjectProductTest($projectID, $productID)
     {
         $objects = $this->objectModel->getPairsByProjectProduct($projectID, $productID);
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        $names = '';
+        foreach($objects as $id => $name) $names .= "$id:$name;";
+        return $names;
     }
 
     /**

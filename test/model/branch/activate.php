@@ -22,3 +22,4 @@ r($branch->activateTest($branchID[2])) && p('id,status') && e('6,active');  // �
 r($branch->activateTest($branchID[3])) && p('id,status') && e('8,active');  // 测试激活分支 8
 r($branch->activateTest($branchID[4])) && p('id,status') && e('10,active'); // 测试激活分支 10
 r($branch->activateTest($branchID[5])) && p('id,status') && e('1,active');  // 测试激活分支 1
+system("./ztest init");

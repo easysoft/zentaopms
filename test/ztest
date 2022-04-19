@@ -81,6 +81,7 @@ switch($argv[1])
         break;
     case 'branch':
         ztfRun('model/branch');
+        break;
     case 'tree':
         ztfRun('model/tree');
         break;
