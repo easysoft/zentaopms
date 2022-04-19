@@ -83,7 +83,7 @@ if(!$selfCall) die(include('./todolist.html.php'));
         <div class="form-group">
           <div class="col-sm-12 form-actions no-margin text-center">
             <?php echo html::hidden('type', 'custom');?>
-            <?php echo html::commonButton($lang->save, "onclick='ajaxCreateTodo(this)'", "btn btn-primary btn-wide");?>
+            <?php echo html::commonButton($lang->save, "onclick='ajaxCreateTodo(this)'", "btn btn-primary btn-wide commitButton");?>
             <button type="button" class="btn btn-wide todo-form-trigger" data-trigger="false"><?php echo $lang->goback;?></button>
           </div>
         </div>
@@ -182,6 +182,9 @@ if(!$selfCall) die(include('./todolist.html.php'));
           setTimeout('clearError()', 2000)
           return false;
       }
+
+      $('.commitButton').addClass('disabled');
+
       $.ajax(
       {
           type: "POST",
