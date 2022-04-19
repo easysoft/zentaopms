@@ -10,6 +10,11 @@ title=测试 actionModel->hideOne();
 cid=1
 pid=1
 
+隐藏action 28 >> 2
+隐藏action 87 >> 2
+隐藏已隐藏action 9 >> 2
+隐藏非删除action 1 >> 1
+
 */
 $actionIDList = array('48', '87', '9', '1');
 

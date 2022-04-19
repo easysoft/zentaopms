@@ -10,6 +10,46 @@ title=测试 actionModel->setObjectLink();
 cid=1
 pid=1
 
+测试获取action 1 的objectLink >> 1,model/action/product-view-1.
+测试获取action 2 的objectLink >> 2,model/action/story-view-2.
+测试获取action 3 的objectLink >> 3,model/action/productplan-view-3.
+测试获取action 4 的objectLink >> 4,model/action/release-view-4.
+测试获取action 5 的objectLink >> 5,model/action/project-index-5.
+测试获取action 6 的objectLink >> 6,model/action/task-view-6.
+测试获取action 7 的objectLink >> 7,model/action/build-view-7.
+测试获取action 8 的objectLink >> 8,model/action/bug-view-8.
+测试获取action 9 的objectLink >> 9,
+测试获取action 10 的objectLink >> 10,model/action/testcase-view-10.
+测试获取action 11 的objectLink >> 11,model/action/testtask-view-11.
+测试获取action 12 的objectLink >> 12,javascript:void(0)
+测试获取action 13 的objectLink >> 13,model/action/doc-view-13.
+测试获取action 14 的objectLink >> 14,model/action/doc-objectLibs-product-14-14.
+测试获取action 15 的objectLink >> 15,model/action/todo-view-15.
+测试获取action 16 的objectLink >> 16,
+测试获取action 17 的objectLink >> 17,
+测试获取action 18 的objectLink >> 18,model/action/testsuite-view-18.
+测试获取action 19 的objectLink >> 19,model/action/caselib-view-19.
+测试获取action 20 的objectLink >> 20,model/action/testreport-view-20.
+测试获取action 21 的objectLink >> 21,model/action/entry-browse.
+测试获取action 22 的objectLink >> 22,model/action/webhook-browse.
+测试获取action 23 的objectLink >> 23,
+测试获取action 24 的objectLink >> 24,model/action/product-view-24.
+测试获取action 25 的objectLink >> 25,model/action/story-view-25.
+测试获取action 26 的objectLink >> 26,model/action/productplan-view-26.
+测试获取action 27 的objectLink >> 27,model/action/release-view-27.
+测试获取action 28 的objectLink >> 28,model/action/project-index-28.
+测试获取action 29 的objectLink >> 29,model/action/task-view-29.
+测试获取action 30 的objectLink >> 30,model/action/build-view-30.
+测试获取action 31 的objectLink >> 31,model/action/bug-view-31.
+测试获取action 32 的objectLink >> 32,
+测试获取action 33 的objectLink >> 33,model/action/testcase-view-33.
+测试获取action 34 的objectLink >> 34,model/action/testtask-view-34.
+测试获取action 35 的objectLink >> 35,javascript:void(0)
+测试获取action 36 的objectLink >> 36,model/action/doc-view-36.
+测试获取action 37 的objectLink >> 37,model/action/doc-objectLibs-product-37-37.
+测试获取action 38 的objectLink >> 38,model/action/todo-view-38.
+测试获取action 39 的objectLink >> 39,
+
 */
 
 $actionIDList = array(1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39);

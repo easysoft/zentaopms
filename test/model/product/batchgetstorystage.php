@@ -9,6 +9,10 @@ title=productModel->batchGetStoryStage();
 cid=1
 pid=1
 
+测试获取需求1 2 3的阶段 >> wait;planned;projected
+测试获取需求4 5 6的阶段 >> developing;developed;testing
+测试获取需求7 8 9的阶段 >> tested;verified;released
+
 */
 
 $story1 = new stdclass();

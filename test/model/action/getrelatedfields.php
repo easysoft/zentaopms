@@ -10,6 +10,46 @@ title=测试 actionModel->getRelatedFields();
 cid=1
 pid=1
 
+测试获取objectType product objectId 1 actionType common extra 1 的动态信息 >> ,1,;0;0
+测试获取objectType story objectId 2 actionType extra extra 1 的动态信息 >> ,1,;11;101
+测试获取objectType productplan objectId 3 actionType opened extra 1 的动态信息 >> ,1,;0;0
+测试获取objectType release objectId 4 actionType created extra 1 的动态信息 >> ,41,;14;0
+测试获取objectType project objectId 5 actionType changed extra 11 的动态信息 >> ,,;5;0
+测试获取objectType task objectId 6 actionType edited extra 1 的动态信息 >> ,6,;16;106
+测试获取objectType build objectId 7 actionType assigned extra 1 的动态信息 >> ,7,;17;0
+测试获取objectType bug objectId 8 actionType closed extra 1 的动态信息 >> ,3,;13;103
+测试获取objectType testcase objectId 9 actionType deleted extra 1 的动态信息 >> ,0,;0;0
+测试获取objectType case objectId 10 actionType deletedfile extra 1 的动态信息 >> ,3,;13;103
+测试获取objectType testtask objectId 1 actionType editfile extra 1 的动态信息 >> ,1,;11;101
+测试获取objectType user objectId 12 actionType erased extra 1 的动态信息 >> ,0,;0;0
+测试获取objectType doc objectId 13 actionType undeleted extra 1 的动态信息 >> ,13,;0;0
+测试获取objectType doclib objectId 14 actionType hidden extra 1 的动态信息 >> ,14,;0;0
+测试获取objectType todo objectId 15 actionType commented extra 1 的动态信息 >> ,0,;0;0
+测试获取objectType branch objectId 16 actionType activated extra 1 的动态信息 >> ,0,;0;0
+测试获取objectType module objectId 17 actionType blocked extra 1 的动态信息 >> ,0,;0;0
+测试获取objectType testsuite objectId 18 actionType moved extra 1 的动态信息 >> ,0,;0;0
+测试获取objectType caselib objectId 19 actionType confirmed extra 1 的动态信息 >> ,0,;0;0
+测试获取objectType testreport objectId 20 actionType caseconfirmed extra 1 的动态信息 >> ,,;0;0
+测试获取objectType entry objectId 21 actionType bugconfirmed extra 1 的动态信息 >> ,0,;0;0
+测试获取objectType webhook objectId 22 actionType frombug extra 1 的动态信息 >> ,0,;0;0
+测试获取objectType review objectId 23 actionType started extra 1 的动态信息 >> ,0,;0;0
+测试获取objectType product objectId 24 actionType restarted extra 1 的动态信息 >> ,24,;0;0
+测试获取objectType story objectId 25 actionType delayed extra 1 的动态信息 >> ,7,;0;0
+测试获取objectType productplan objectId 26 actionType suspended extra 1 的动态信息 >> ,9,;0;0
+测试获取objectType release objectId 1 actionType recordestimate extra 1 的动态信息 >> ,1,;11;0
+测试获取objectType project objectId 28 actionType editestimate extra 33 的动态信息 >> ,8,18,98,;28;0
+测试获取objectType task objectId 29 actionType deleteestimate extra 1 的动态信息 >> ,29,;39;129
+测试获取objectType build objectId 1 actionType canceled extra 1 的动态信息 >> ,1,;11;0
+测试获取objectType bug objectId 31 actionType svncommited extra 1 的动态信息 >> ,11,;21;111
+测试获取objectType testcase objectId 32 actionType gitcommited extra 1 的动态信息 >> ,0,;0;0
+测试获取objectType case objectId 33 actionType finished extra 1 的动态信息 >> ,9,;19;109
+测试获取objectType testtask objectId 1 actionType paused extra 1 的动态信息 >> ,1,;11;101
+测试获取objectType user objectId 35 actionType verified extra 1 的动态信息 >> ,0,;0;0
+测试获取objectType doc objectId 36 actionType diff1 extra 1 的动态信息 >> ,36,;0;0
+测试获取objectType doclib objectId 37 actionType diff2 extra 1 的动态信息 >> ,37,;0;0
+测试获取objectType todo objectId 38 actionType diff3 extra 1 的动态信息 >> ,0,;0;0
+测试获取objectType branch objectId 39 actionType linked2bug extra 1 的动态信息 >> ,0,;0;0
+
 */
 $objectType = array('product', 'story', 'productplan', 'release', 'project', 'task', 'build', 'bug', 'testcase', 'case', 'testtask', 'user', 'doc', 'doclib', 'todo', 'branch', 'module', 'testsuite', 'caselib', 'testreport', 'entry', 'webhook', 'review');
 $objectId   = array(1,2,3,4,5,6,7,8,9,10,1,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,1,28,29,1,31,32,33,1,35,36,37,38,39);

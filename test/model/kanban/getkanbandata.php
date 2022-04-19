@@ -10,6 +10,13 @@ title=测试 kanbanModel->getKanbanData();
 cid=1
 pid=1
 
+测试获取kanban1的视图 >> columns:4, lanes:1, cards:4
+测试获取kanban2的视图 >> columns:4, lanes:1, cards:4
+测试获取kanban3的视图 >> columns:4, lanes:1, cards:4
+测试获取kanban4的视图 >> columns:4, lanes:1, cards:4
+测试获取kanban5的视图 >> columns:4, lanes:1, cards:4
+测试获取不存在的kanban的视图 >> columns:0, lanes:0, cards:0
+
 */
 
 $kanbanIDList = array('1', '2', '3', '4', '5', '1000001');

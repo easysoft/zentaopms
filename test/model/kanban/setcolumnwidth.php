@@ -10,6 +10,13 @@ title=测试 kanbanModel->setColumnWidth();
 cid=1
 pid=1
 
+测试修改看板1的fluidBoard值 >> 通用看板1,1
+测试修改看板2的fluidBoard值 >> 通用看板2,1
+测试修改看板3的fluidBoard值 >> 通用看板3,1
+测试修改看板4的fluidBoard值 >> 迭代1,1
+测试修改看板5的fluidBoard值 >> 迭代2,1
+测试修改不存在的看板的fluidBoard值 >> 0
+
 */
 
 $fromExecution = 'execution';

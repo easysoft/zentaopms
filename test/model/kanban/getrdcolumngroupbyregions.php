@@ -10,6 +10,20 @@ title=测试 kanbanModel->getRDColumnGroupByRegions();
 cid=1
 pid=1
 
+测试获取region 1 执行看板泳道列组 >> 4
+测试获取region 1 group 1执行看板泳道列组 >> 4
+测试获取region 1 group 2执行看板泳道列组 >> 0
+测试获取region 2 执行看板泳道列组 >> 4
+测试获取region 2 group 2执行看板泳道列组 >> 4
+测试获取region 2 group 1执行看板泳道列组 >> 0
+测试获取region 3 执行看板泳道列组 >> 8
+测试获取region 3 group 3执行看板泳道列组 >> 4
+测试获取region 3 group 1执行看板泳道列组 >> 0
+测试获取region 4 执行看板泳道列组 >> 12
+测试获取region 4 group 5,6执行看板泳道列组 >> 8
+测试获取region 5 执行看板泳道列组 >> 16
+测试获取region 5 group 8,10执行看板泳道列组 >> 8
+
 */
 
 $regions     = array('1', '2', '3,4', '5,6,7', '8,9,10,11');

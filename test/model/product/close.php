@@ -9,6 +9,13 @@ title=productModel->close();
 cid=1
 pid=1
 
+测试关闭产品1 >> status,normal,closed
+测试关闭产品2 >> status,normal,closed
+测试关闭产品3 >> status,normal,closed
+测试关闭产品4 >> status,normal,closed
+测试关闭产品5 >> status,normal,closed
+测试关闭不存在产品 >> 0
+
 */
 
 $productIDList = array('1', '2', '3', '4', '5', '1000001');

@@ -10,6 +10,25 @@ title=测试 kanbanModel->getRegionPairs();
 cid=1
 pid=1
 
+测试查询kanban1的区域信息 >> 默认区域
+测试查询kanban1 reigon1的区域信息 >> 默认区域
+测试查询kanban1 region2的区域信息 >> 0
+测试查询kanban1的区域信息 >> 默认区域
+测试查询kanban1 reigon2的区域信息 >> 默认区域
+测试查询kanban1 region3的区域信息 >> 0
+测试查询kanban1的区域信息 >> 默认区域
+测试查询kanban1 reigon3的区域信息 >> 默认区域
+测试查询kanban1 region4的区域信息 >> 0
+测试查询kanban1的区域信息 >> 默认区域
+测试查询kanban1 reigon4的区域信息 >> 默认区域
+测试查询kanban1 region5的区域信息 >> 0
+测试查询kanban1的区域信息 >> 默认区域
+测试查询kanban1 reigon5的区域信息 >> 默认区域
+测试查询kanban1 region10001的区域信息 >> 0
+测试查询不存在的kanban的区域信息 >> 0
+测试查询执行161的区域信息 >> 默认区域
+测试查询执行162的区域信息 >> 默认区域
+
 */
 $kanbanIDList    = array('1', '2', '3', '4', '5', '10001');
 $regionIDList    = array('1', '2', '3', '4', '5', '10001');

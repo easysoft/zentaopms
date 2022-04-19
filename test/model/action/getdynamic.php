@@ -10,6 +10,24 @@ title=测试 actionModel->getDynamic();
 cid=1
 pid=1
 
+查找全部动态 >> 100
+查找用户admin动态 >> 34
+查找用户dev17动态 >> 33
+查找用户test18动态 >> 33
+查找今天的动态 >> 3
+查找昨天的动态 >> 3
+查找上周的动态 >> 21
+查找产品1的动态 >> 1
+查找产品2的动态 >> 1
+查找产品3的动态 >> 1
+查找项目1的动态 >> 1
+查找项目2的动态 >> 1
+查找项目3的动态 >> 1
+查找执行1的动态 >> 0
+查找执行2的动态 >> 0
+查找执行3的动态 >> 0
+查找今天的动态 >> 97
+
 */
 
 $accountList     = array('all', 'admin', 'dev17', 'test18');
@@ -18,7 +36,6 @@ $productIDList   = array('all', 1, 2, 3);
 $projectIDList   = array('all', 1, 2, 3);
 $executionIDList = array('all', 1, 2, 3);
 $dateList        = array('', 'today');
-
 
 $action = new actionTest();
 
