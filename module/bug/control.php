@@ -570,7 +570,7 @@ class bug extends control
 
             if($projectID)
             {
-                $project  = $this->loadModel('project')->getByID($projectID);
+                $project = $this->loadModel('project')->getByID($projectID);
                 if(empty($bugID) or $this->app->tab != 'qa') $projects = array($projectID => $project->name);
             }
         }
@@ -580,7 +580,7 @@ class bug extends control
             $productList = $this->config->CRProduct ? $this->product->getOrderedProducts('all', 40, $projectID) : $this->product->getOrderedProducts('normal', 40, $projectID);
             foreach($productList as $product) $products[$product->id] = $product->name;
 
-            $project   = $this->loadModel('project')->getByID($projectID);
+            $project = $this->loadModel('project')->getByID($projectID);
             if(empty($bugID) or $this->app->tab != 'qa') $projects += array($projectID => $project->name);
 
             /* Set project menu. */
