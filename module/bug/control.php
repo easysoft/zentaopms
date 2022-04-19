@@ -2153,7 +2153,7 @@ class bug extends control
                 if(isset($bugLang->resolutionList[$bug->resolution])) $bug->resolution = $bugLang->resolutionList[$bug->resolution];
 
                 if(isset($users[$bug->openedBy]))     $bug->openedBy     = $users[$bug->openedBy];
-                if(isset($users[$bug->assignedTo]))   $bug->assignedTo   = $users[$bug->assignedTo];
+                if(isset($users[$bug->assignedTo]))   $bug->assignedTo   = $users[$bug->assignedTo] . "(#$bug->assignedTo)";
                 if(isset($users[$bug->resolvedBy]))   $bug->resolvedBy   = $users[$bug->resolvedBy];
                 if(isset($users[$bug->lastEditedBy])) $bug->lastEditedBy = $users[$bug->lastEditedBy];
                 if(isset($users[$bug->closedBy]))     $bug->closedBy     = $users[$bug->closedBy];
