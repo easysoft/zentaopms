@@ -480,7 +480,7 @@ class project extends control
             $products = $this->product->getProducts($copyProjectID);
             foreach($products as $product)
             {
-                $productPlans[$product->id] = $this->loadModel('productplan')->getPairs($product->id);
+                $productPlans[$product->id] = $this->loadModel('productplan')->getPairs($product->id, '', 'noclosed');
             }
         }
 
