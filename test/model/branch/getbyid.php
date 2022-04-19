@@ -10,6 +10,23 @@ title=测试 branchModel->getById();
 cid=1
 pid=1
 
+测试获取 branchID 1 的分支信息 >> 分支1
+测试获取 branchID 1 productID 41 的分支信息 >> 分支1
+测试获取 branchID 1 productID 41 field 空 的分支信息 >> 分支1
+测试获取 branchID 2 的分支信息 >> 分支2
+测试获取 branchID 2 productID 41 的分支信息 >> 分支2
+测试获取 branchID 2 productID 41 field 空 的分支信息 >> 分支2
+测试获取 branchID 3 的分支信息 >> 分支3
+测试获取 branchID 3 productID 41 的分支信息 >> 分支3
+测试获取 branchID 3 productID 41 field 空 的分支信息 >> 分支3
+测试获取 branchID 空 的分支信息 >> 0
+测试获取 branchID 空 productID 41 的分支信息 >> 主干
+测试获取 branchID 空 productID 81 的分支信息 >> 主干
+测试获取 branchID 空 productID 1 的分支信息 >> 主干
+测试获取 branchID 空 productID 41 field 空 的分支信息 >> 主干
+测试获取 branchID 空 productID 81 field 空 的分支信息 >> 主干
+测试获取 branchID 空 productID 1  field 空 的分支信息 >> 主干
+
 */
 $branchID  = array(1, 2, 3, '');
 $productID = array(41, 81, 1);

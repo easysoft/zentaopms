@@ -10,10 +10,15 @@ title=测试 branchModel->linkBranch4Project();
 cid=1
 pid=1
 
+测试关联产品 41 的分支到项目 >> 4
+测试关联产品 42 的分支到项目 >> 4
+测试关联产品 43 的分支到项目 >> 4
+测试关联产品 44 的分支到项目 >> 4
+测试关联产品 45 的分支到项目 >> 4
+
 */
 
 $productID = array(41, 42, 43, 44, 45);
-
 
 $branch = new branchTest();
 

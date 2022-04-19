@@ -10,6 +10,14 @@ title=测试 branchModel->close();
 cid=1
 pid=1
 
+测试关闭branchID 1 >> 1,closed
+测试关闭branchID 2 >> 2,closed
+测试关闭branchID 3 >> 3,closed
+测试关闭branchID 4 >> 4,closed
+测试关闭branchID 5 >> 5,closed
+测试关闭branchID 6 >> 6,closed
+测试重复关闭branchID 1 >> 1,closed
+
 */
 $branchID = array(1, 2, 3, 4, 5, 6);
 

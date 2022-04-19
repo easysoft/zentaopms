@@ -10,6 +10,13 @@ title=测试 branchModel->getProductType();
 cid=1
 pid=1
 
+测试获取分支 1 的项目类型 >> branch
+测试获取分支 3 的项目类型 >> branch
+测试获取分支 81 的项目类型 >> platform
+测试获取分支 83 的项目类型 >> platform
+测试获取分支 161 的项目类型 >> normal
+测试获取分支 163 的项目类型 >> normal
+
 */
 $branchID = array(1, 3, 81, 83, 161, 163);
 
