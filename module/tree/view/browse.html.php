@@ -326,7 +326,7 @@ $(function()
 });
 </script>
 <style>
-.module-name {display: inline-block; max-width: 410px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;}
+.module-name {display: inline-block; max-width: calc(100% - 85px); white-space: nowrap; overflow: hidden; text-overflow: ellipsis;}
 </style>
 <?php
 if(strpos($viewType, 'doc') !== false)
