@@ -1631,7 +1631,7 @@ class execution extends control
         $this->view->productPlans         = $productPlans;
         $this->view->branchGroups         = $this->execution->getBranchByProduct(array_keys($linkedProducts), $this->config->systemMode == 'new' ? $execution->project : 0, 'noclosed', $linkedBranchList);
         $this->view->teamMembers          = $this->execution->getTeamMembers($executionID);
-        if($this->config->systemMode == 'new') $this->view->allProjects = $this->project->getPairsByModel($project->model, 0, 'noclosed');
+        if($this->config->systemMode == 'new') $this->view->allProjects = $this->project->getPairsByModel($project->model, 0, 'noclosed', $project->id);
         $this->display();
     }
 
@@ -1677,8 +1677,9 @@ class execution extends control
 
         if($this->app->tab == 'project')
         {
-            $this->project->setMenu($this->session->project);
-            $this->view->project = $this->project->getById($this->session->project);
+            $projectID = $this->session->project;
+            $this->project->setMenu($projectID);
+            $this->view->project = $this->project->getById($projectID);
         }
 
         if(!$this->post->executionIDList) return print(js::locate($this->session->executionList, 'parent'));
@@ -1716,7 +1717,7 @@ class execution extends control
         $this->view->position[]      = $this->lang->execution->batchEdit;
         $this->view->executionIDList = $executionIDList;
         $this->view->executions      = $executions;
-        $this->view->allProjects     = $this->project->getPairsByModel('all', 0, 'noclosed');
+        $this->view->allProjects     = $this->project->getPairsByModel('all', 0, 'noclosed', isset($projectID) ? $projectID : 0);
         $this->view->pmUsers         = $pmUsers;
         $this->view->poUsers         = $poUsers;
         $this->view->qdUsers         = $qdUsers;

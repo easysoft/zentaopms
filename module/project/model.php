@@ -678,12 +678,14 @@ class projectModel extends model
     /**
      * Get project pairs by model and project.
      *
-     * @param  string $model all|scrum|waterfall|kanban
-     * @param  int    $programID
+     * @param  string           $model all|scrum|waterfall|kanban
+     * @param  int              $programID
+     * @param  string           $param noclosed
+     * @param  string|int|array $append
      * @access public
      * @return array
      */
-    public function getPairsByModel($model = 'all', $programID = 0, $param = '')
+    public function getPairsByModel($model = 'all', $programID = 0, $param = '', $append = '')
     {
         if(defined('TUTORIAL')) return $this->loadModel('tutorial')->getProjectPairs();
 
@@ -696,6 +698,7 @@ class projectModel extends model
             ->beginIF($model != 'all')->andWhere('model')->eq($model)->fi()
             ->beginIF(strpos($param, 'noclosed') !== false)->andWhere('status')->ne('closed')->fi()
             ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->projects)->fi()
+            ->beginIF(!empty($append))->orWhere('id')->in($append)->fi()
             ->orderBy('id_desc')
             ->fetchAll();
 
