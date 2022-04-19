@@ -1019,9 +1019,9 @@ EOT;
         {
             $js .= "history.back(-1);\n";
         }
-        elseif(strpos($target, '$.apps.open') !== false)
+        elseif($target === 'app' or strpos($target, '$.apps.open') !== false)
         {
-            $js .= "$target('$url')";
+            $js .= "parent.$target('$url')";
         }
         else
         {
