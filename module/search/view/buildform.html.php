@@ -364,9 +364,6 @@ $(function()
     {
         var $period = $('#selectPeriod');
 
-        // bug #21650
-        // if($period.length) $period.remove();
-
         <?php
         $selectPeriod  = "<ul id='selectPeriod' class='dropdown-menu'>";
         $selectPeriod .= "<li class='dropdown-header'>{$lang->datepicker->dpText->TEXT_OR} {$lang->datepicker->dpText->TEXT_DATE}</li>";
