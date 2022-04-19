@@ -10,6 +10,14 @@ title=测试 branchModel->checkBranchData();
 cid=1
 pid=1
 
+测试验证branchID 1 的数据 >> 2
+测试验证branchID 2 的数据 >> 2
+测试验证branchID 3 的数据 >> 2
+测试验证branchID 4 的数据 >> 2
+测试验证branchID 5 的数据 >> 2
+测试验证branchID 6 的数据 >> 2
+测试验证branchID 1000001 的数据 >> 1
+
 */
 $branchID = array(1, 2, 3, 4, 5, 6, 1000001);
 

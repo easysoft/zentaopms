@@ -10,6 +10,12 @@ title=测试 branchModel->update();
 cid=1
 pid=1
 
+测试修改分支名称 >> name,分支1,修改后的分支1
+测试修改分支状态 >> status,active,closed
+测试修改分支描述 >> desc,,修改后的分支1描述
+测试修改分支名称 >> 『名称』不能为空。
+测试修改分支名称 >> 分支名称已存在
+
 */
 $changeName   = array('name' => '修改后的分支1');
 $changeStatus = array('status' => 'closed');

@@ -10,6 +10,15 @@ title=测试 treeModel->getOptionMenu();
 cid=1
 pid=1
 
+测试获取root 1 type story 的目录 >> 13
+测试获取root 2 type story 的目录 >> 13
+测试获取root 41 type story 的目录 >> 11
+测试获取root 42 type story 的目录 >> 11
+测试获取root 101 type task 的目录 >> 5
+测试获取root 102 type task 的目录 >> 4
+测试获取root 1 type doc 的目录 >> 4
+测试获取root 2 type doc 的目录 >> 4
+
 */
 $root = array(1, 2, 41, 42, 101, 102);
 $type = array('story', 'task', 'doc');

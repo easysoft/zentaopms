@@ -10,6 +10,13 @@ title=测试 stageModel->getStages();
 cid=1
 pid=1
 
+测试获取阶段 1 >> 需求,10,request
+测试获取阶段 2 >> 设计,10,design
+测试获取阶段 3 >> 开发,50,dev
+测试获取阶段 4 >> 测试,15,qa
+测试获取阶段 5 >> 发布,10,release
+测试获取阶段 6 >> 总结评审,5,review
+
 */
 
 $stage = new stageTest();

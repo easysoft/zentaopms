@@ -10,6 +10,14 @@ title=测试 testcaseModel->batchChangeModule();
 cid=1
 pid=1
 
+测试批量修改case 161 162 的module为161 >> 161;161
+测试批量修改case 163 164 的module为163 >> 163;163
+测试批量修改case 165 166 的module为165 >> 165;165
+测试批量修改case 167 168 的module为167 >> 167;167
+测试批量修改case 169 170 的module为169 >> 169;169
+测试批量修改case 171 172 的module为171 >> 171;171
+测试批量修改case 173 174 的module为173 >> 173;173
+
 */
 $caseIDList = array(array(161, 162), array(163, 164), array(165, 166), array(167, 168), array(169, 170), array(171, 172), array(173, 174));
 $moduleList = array(161, 163, 165, 167, 169, 171, 173);

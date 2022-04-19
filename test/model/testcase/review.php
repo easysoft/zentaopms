@@ -10,6 +10,12 @@ title=测试 testcaseModel->review();
 cid=1
 pid=1
 
+测试评审用例 1 >> status,wait,normal
+测试评审用例 2 >> reviewedBy,admin,test2
+测试评审用例 3 >> status,wait,normal
+测试评审用例 4 >> reviewedBy,admin,test4
+测试评审用例 5 >> status,wait,normal
+
 */
 
 $caseIDList = array(1, 5, 9, 13, 17);

@@ -10,6 +10,17 @@ title=测试 testcaseModel->batchReview();
 cid=1
 pid=1
 
+测试评审case 401 402 为clarify >> 102
+测试评审case 403 404 为clarify >> 0
+测试评审case 405 406 为clarify >> 103
+测试评审case 407 408 为clarify >> 0
+测试评审case 409 410 为clarify >> 104
+测试评审case 401 402 为pass >> 105
+测试评审case 403 404 为pass >> 0
+测试评审case 405 406 为pass >> 106
+测试评审case 407 408 为pass >> 0
+测试评审case 409 410 为pass >> 107
+
 */
 $caseIDList = array(array(401, 402), array(403, 404), array(405, 406), array(407, 408), array(409, 410));
 $resultList = array('clarify', 'pass');

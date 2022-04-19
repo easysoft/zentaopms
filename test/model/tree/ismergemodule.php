@@ -10,6 +10,16 @@ title=测试 treeModel->isMergeModule();
 cid=1
 pid=1
 
+测试检查root 1 type bug 合并模块版本 >> 1
+测试检查root 2 type bug 合并模块版本 >> 1
+测试检查root 3 type bug 合并模块版本 >> 1
+测试检查root 1 type case 合并模块版本 >> 1
+测试检查root 2 type case 合并模块版本 >> 1
+测试检查root 3 type case 合并模块版本 >> 1
+测试检查root 101 type task 合并模块版本 >> 1
+测试检查root 102 type task 合并模块版本 >> 1
+测试检查root 103 type task 合并模块版本 >> 1
+
 */
 $root = array(1, 2, 3, 101, 102, 103);
 $type = array('bug', 'case', 'task');

@@ -10,6 +10,11 @@ title=测试 branchModel->changeBranchLanguage();
 cid=1
 pid=1
 
+测试修改productID 1 的分支语言项 >> 新建%s
+测试修改productID 41 的分支语言项 >> 新建分支
+测试修改productID 81 的分支语言项 >> 新建平台
+测试修改productID 42 的分支语言项 >> 新建分支
+
 */
 $productID = array(1, 41, 81, 42);
 

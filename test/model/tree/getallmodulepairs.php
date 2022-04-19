@@ -10,6 +10,11 @@ title=测试 treeModel->getAllModulePairs();
 cid=1
 pid=1
 
+测试获取默认(task)的模块信息 >> 3601
+测试获取默认(task)的模块信息 >> 1501
+测试获取默认(task)的模块信息 >> 1501
+测试获取默认(task)的模块信息 >> 3601
+
 */
 $type = array('bug', 'case', 'task');
 

@@ -10,6 +10,12 @@ title=测试 testcaseModel->getStatus();
 cid=1
 pid=1
 
+测试获取create的状态 >> normal
+测试获取review pass 的状态 >> pass
+测试获取review clarify 的状态 >> clarify
+测试获取update的状态 >> wait
+测试获取update 别人变更 的状态 >> 该记录可能已经被改动。请刷新页面重新编辑！
+
 */
 
 $typeList = array('create', 'review', 'update');

@@ -10,6 +10,9 @@ title=测试 branchModel->getAllPairs();
 cid=1
 pid=1
 
+测试获取全部分支名 >> 167
+测试获取全部分支名 >> 166
+
 */
 $params = 'noempty';
 

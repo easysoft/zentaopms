@@ -10,6 +10,10 @@ title=测试 branchModel->batchUpdate();
 cid=1
 pid=1
 
+测试批量更新名称 >> name,分支9,修改分支9的名称
+测试批量更新描述 >> desc,,修改分支9的描述
+测试批量更新状态 >> status,active,closed
+
 */
 
 $changeName   = array('name' => array('9' => '修改分支9的名称', '10' => '修改后的分支10名称'));

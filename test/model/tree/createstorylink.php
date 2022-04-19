@@ -10,6 +10,16 @@ title=测试 treeModel->createStoryLink();
 cid=1
 pid=1
 
+测试获取module 1821 project 11 product 1 的 story link >> projectstory title='产品模块1'
+测试获取module 1822 project 11 product 1 的 story link >> projectstory title='产品模块2'
+测试获取module 1981 project 2 product 2 的 story link >> projectstory title='产品模块161'
+测试获取module 1982 product 1 的 story link >> product title='产品模块162'
+测试获取module 1621 execution 101 的 story link >> execution title='模块1601'
+测试获取module 1622 execution 102 的 story link >> execution title='模块1602'
+测试获取module 21 branch 0 的 story link >> product title='模块1'
+测试获取module 22 branch 1 的 story link >> product title='模块2'
+测试获取module 1821 branch 2 的 story link >> product title='产品模块1'
+
 */
 $moduleID    = array(1821, 1822, 1981, 1982, 1621, 1622, 21, 22);
 $projectID   = array(11,12);

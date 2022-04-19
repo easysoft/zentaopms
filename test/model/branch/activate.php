@@ -10,6 +10,13 @@ title=测试 branchModel->activate();
 cid=1
 pid=1
 
+测试激活分支 2 >> 2,active
+测试激活分支 4 >> 4,active
+测试激活分支 6 >> 6,active
+测试激活分支 8 >> 8,active
+测试激活分支 10 >> 10,active
+测试激活分支 1 >> 1,active
+
 */
 
 $branchID = array(2, 4, 6, 8, 10, 1);

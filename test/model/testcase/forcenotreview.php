@@ -10,6 +10,8 @@ title=测试 testcaseModel->forceNotReview();
 cid=1
 pid=1
 
+测试检查是否强制审核 >> 1
+
 */
 
 $testcase = new testcaseTest();

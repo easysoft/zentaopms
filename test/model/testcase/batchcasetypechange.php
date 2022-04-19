@@ -10,6 +10,14 @@ title=测试 testcaseModel->batchCaseTypeChange();
 cid=1
 pid=1
 
+测试批量修改case 1 2 type为 feature >> feature;feature
+测试批量修改case 3 4 type为 performance >> performance;performance 
+测试批量修改case 5 6 type为 config >> config;config
+测试批量修改case 7 8 type为 install >> install;install
+测试批量修改case 9 10 type为 security >> security;security
+测试批量修改case 11 12 type为 interface >> interface;interface
+测试批量修改case 13 14 15 type为 other >> other;other;other
+
 */
 $caseIDList = array(array(1, 2), array(3, 4), array(5, 6), array(7, 8), array(9, 10), array(11, 12), array(13, 14, 15));
 $typeList   = array('feature', 'performance', 'config', 'install', 'security', 'interface', 'other');
