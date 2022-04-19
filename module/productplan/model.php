@@ -181,12 +181,12 @@ class productplanModel extends model
      *
      * @param  array|int        $product
      * @param  int|string|array $branch
-     * @param  string           $expired
+     * @param  string           $param unexpired|noclosed
      * @param  bool             $skipParent
      * @access public
      * @return array
      */
-    public function getPairs($product = 0, $branch = '', $expired = '', $skipParent = false)
+    public function getPairs($product = 0, $branch = '', $param = '', $skipParent = false)
     {
         $date = date('Y-m-d');
         $plans = $this->dao->select('t1.id,t1.title,t1.parent,t1.begin,t1.end,t2.name as branchName,t3.type as productType')->from(TABLE_PRODUCTPLAN)->alias('t1')
@@ -195,7 +195,8 @@ class productplanModel extends model
             ->where('t1.product')->in($product)
             ->andWhere('t1.deleted')->eq(0)
             ->beginIF($branch !== '')->andWhere('t1.branch')->in($branch)->fi()
-            ->beginIF($expired == 'unexpired')->andWhere('t1.end')->ge($date)->fi()
+            ->beginIF(strpos($param, 'unexpired') !== false)->andWhere('t1.end')->ge($date)->fi()
+            ->beginIF(strpos($param, 'noclosed')  !== false)->andWhere('t1.status')->ne('closed')->fi()
             ->orderBy('t1.begin desc')
             ->fetchAll('id');
 
@@ -223,7 +224,7 @@ class productplanModel extends model
      *
      * @param  array|int    $product
      * @param  int          $branch
-     * @param  string       $param skipParent|withMainPlan|unexpired
+     * @param  string       $param skipParent|withMainPlan|unexpired|noclosed
      * @access public
      * @return array
      */
@@ -236,6 +237,7 @@ class productplanModel extends model
             ->where('product')->in($product)
             ->andWhere('deleted')->eq(0)
             ->beginIF(strpos($param, 'unexpired') !== false)->andWhere('end')->ge($date)->fi()
+            ->beginIF(strpos($param, 'noclosed') !== false)->andWhere('status')->ne('closed')->fi()
             ->beginIF($branch !== 'all' or $branch !== '')->andWhere("branch")->in($branch)->fi()
             ->orderBy('begin desc')
             ->fetchAll('id');
