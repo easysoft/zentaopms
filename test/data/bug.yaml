@@ -9,7 +9,7 @@ fields:
   - field: product
     range: 1-100{3}
   - field: branch
-    range: 0
+    range: 0{120},0-2,0,3-4,0,5-6,0,7-8,0,9-10,0{100000000}
   - field: module
     range: 1821-1823,1825-1827,1831-1833,0{1000000}
   - field: execution
