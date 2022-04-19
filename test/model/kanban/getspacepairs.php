@@ -10,6 +10,23 @@ title=测试 kanbanModel->getSpacePairs();
 cid=1
 pid=1
 
+查询用户可以看到的admin private的空间数量 >> 0
+查询用户可以看到的admin cooperation的空间数量 >> 17
+查询用户可以看到的admin public的空间数量 >> 16
+查询用户可以看到的admin involved的空间数量 >> 0
+查询用户可以看到的po16 private的空间数量 >> 1
+查询用户可以看到的po16 cooperation的空间数量 >> 0
+查询用户可以看到的po16 public的空间数量 >> 16
+查询用户可以看到的po16 involved的空间数量 >> 0
+查询用户可以看到的pm3 private的空间数量 >> 1
+查询用户可以看到的test37 cooperation的空间数量 >> 0
+查询用户可以看到的test37 public的空间数量 >> 16
+查询用户可以看到的test37 involved的空间数量 >> 0
+查询用户可以看到的user25 private的空间数量 >> 1
+查询用户可以看到的user25 cooperation的空间数量 >> 0
+查询用户可以看到的user25 public的空间数量 >> 16
+查询用户可以看到的user25 involved的空间数量 >> 0
+
 */
 $userList   = array('admin', 'po16', 'test37', 'user25');
 $browseType = array('private', 'cooperation', 'public', 'involved');

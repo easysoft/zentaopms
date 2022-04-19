@@ -10,6 +10,23 @@ title=测试 kanbanModel->addKanbanCell();
 cid=1
 pid=1
 
+更新类型为common的kanbancell >> common,,0,1,2,
+更新类型为common的kanbancell 有cardID >> common,,3,0,1,2,
+插入类型为common的kanbancell >> common,
+插入类型为common的kanbancell 有cardID >> common,,3,
+更新类型为story的kanbancell >> story,,0,
+更新类型为story的kanbancell 有cardID >> story,,3,0,
+插入类型为story的kanbancell >> story,
+插入类型为story的kanbancell 有cardID >> story,,3,
+更新类型为bug的kanbancell >> bug,,0,
+更新类型为bug的kanbancell 有cardID >> bug,,3,0,
+插入类型为bug的kanbancell >> bug,
+插入类型为bug的kanbancell 有cardID >> bug,,3,
+更新类型为task的kanbancell >> task,,0,
+更新类型为task的kanbancell 有cardID >> task,,3,0,
+插入类型为task的kanbancell >> task,
+插入类型为task的kanbancell 有cardID >> task,,3,
+
 */
 
 $kanban = new kanbanTest();

@@ -9,6 +9,16 @@ title=productModel->getStats4Kanban();
 cid=1
 pid=1
 
+测试获取产品的看板stats信息 >> 项目集1,项目集2,项目集3
+测试获取产品的看板stats信息 >> 正常产品1;正常产品2;正常产品3
+测试获取产品的看板stats信息 >> 项目3;项目4;项目5
+测试获取产品的看板stats信息 >> 迭代544;迭代546;迭代552
+测试获取产品的看板stats信息 >> 44.44,9;100,10
+测试获取产品的看板stats信息 >> 14
+测试获取产品的看板stats信息 >> 22
+测试获取产品的看板stats信息 >> 72
+测试获取产品的看板stats信息 >> 2
+
 */
 
 $product = new productTest('admin');
@@ -24,4 +34,3 @@ r($product->getStats4KanbanTest($typeList[2], true)) && p()                     
 r($product->getStats4KanbanTest($typeList[4], true)) && p()                                                && e('22');                            // 测试获取产品的看板stats信息
 r($product->getStats4KanbanTest($typeList[5], true)) && p()                                                && e('72');                            // 测试获取产品的看板stats信息
 r($product->getStats4KanbanTest($typeList[8], true)) && p()                                                && e('2');                             // 测试获取产品的看板stats信息
-

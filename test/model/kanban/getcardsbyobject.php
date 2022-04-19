@@ -10,6 +10,21 @@ title=测试 kanbanModel->getCardsByObject();
 cid=1
 pid=1
 
+测试查询kanban 1的卡片数量 >> 16
+测试查询kanban 2的卡片数量 >> 16
+测试查询kanban 3的卡片数量 >> 16
+测试查询kanban 4的卡片数量 >> 16
+测试查询kanban 5的卡片数量 >> 16
+测试查询不存在kanban的卡片数量 >> 0
+测试查询region 1的卡片数量 >> 16
+测试查询region 2的卡片数量 >> 16
+测试查询region 3的卡片数量 >> 16
+测试查询region 4的卡片数量 >> 16
+测试查询region 5的卡片数量 >> 16
+测试查询不存在region的卡片数量 >> 0
+测试查询status doing的卡片数量 >> 667
+测试查询status doing的卡片数量 >> 333
+
 */
 
 $objectType   = array('kanban', 'region', 'status');

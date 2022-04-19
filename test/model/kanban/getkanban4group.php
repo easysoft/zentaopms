@@ -10,6 +10,21 @@ title=测试 kanbanModel->getKanban4Group();
 cid=1
 pid=1
 
+获取执行101 类型story 分组pri的看板信息 >> lanes:3
+获取执行101 类型story 分组category的看板信息 >> lanes:2
+获取执行101 类型story 分组module的看板信息 >> lanes:3
+获取执行101 类型story 分组source的看板信息 >> lanes:3
+获取执行102 类型task 分组pri的看板信息 >> lanes:4
+获取执行102 类型task 分组module的看板信息 >> lanes:5
+获取执行102 类型task 分组assignedTo的看板信息 >> lanes:1
+获取执行102 类型task 分组story的看板信息 >> lanes:2
+获取执行103 类型bug 分组pri的看板信息 >> lanes:4
+获取执行103 类型bug 分组module的看板信息 >> lanes:4
+获取执行103 类型bug 分组assignedTo的看板信息 >> lanes:3
+获取执行103 类型bug 分组severity的看板信息 >> lanes:4
+获取执行104 类型story 分组pri的看板信息 >> lanes:3
+获取执行105 类型story 分组pri的看板信息 >> lanes:3
+
 */
 
 $executionIDList = array('101', '102', '103', '104', '105');

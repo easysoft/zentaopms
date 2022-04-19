@@ -10,6 +10,12 @@ title=测试 kanbanModel->createSpace();
 cid=1
 pid=1
 
+创建私人空间 >> 测试创建私人空间,private,私人空间的描述,admin,,admin,po15
+创建协作空间 >> 测试创建协作空间,cooperation,协作空间的描述,po16,po15,admin,po16,
+创建公共空间 >> 测试创建公共空间,public,公共空间的描述,user1,user2,user3,admin,user1,
+创建不填写名称的空间 >> 『空间名称』不能为空。
+创建不填写负责人的空间 >> 『负责人』不能为空。
+
 */
 
 $space1 = new stdclass();

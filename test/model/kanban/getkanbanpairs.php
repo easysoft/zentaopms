@@ -9,6 +9,14 @@ title=测试 kanbanModel->getKanbanPairs();
 cid=1
 pid=1
 
+获取用户admin可以看到的看板pairs >> 100
+获取用户po1可以看到的看板pairs >> 32
+获取用户po2可以看到的看板pairs >> 32
+获取用户user1可以看到的看板pairs >> 32
+获取用户user2可以看到的看板pairs >> 32
+获取用户pm1可以看到的看板pairs >> 32
+获取用户pm2可以看到的看板pairs >> 32
+
 */
 
 $userList = array('admin', 'po1', 'po2', 'user1', 'user2', 'pm1', 'pm2');

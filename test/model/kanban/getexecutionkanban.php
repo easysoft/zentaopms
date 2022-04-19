@@ -10,6 +10,23 @@ title=测试 kanbanModel->getExecutionKanban();
 cid=1
 pid=1
 
+测试获取execution101的执行看板信息 >> columns:27, lanes:3, cards:15
+测试获取execution101 story的执行看板信息 >> columns:11, lanes:1, cards:0
+测试获取execution101 task的执行看板信息 >> columns:7, lanes:1, cards:11
+测试获取execution101 bug的执行看板信息 >> columns:9, lanes:1, cards:4
+测试获取execution102的执行看板信息 >> columns:27, lanes:3, cards:10
+测试获取execution102 story pri的执行看板信息 >> columns:11, lanes:3, cards:2
+测试获取execution102 story category的执行看板信息 >> columns:11, lanes:2, cards:2
+测试获取execution103的执行看板信息 >> columns:27, lanes:3, cards:10
+测试获取execution103 task module的执行看板信息 >> columns:7, lanes:5, cards:4
+测试获取execution103 story source的执行看板信息 >> columns:11, lanes:3, cards:2
+测试获取execution103的执行看板信息 >> columns:27, lanes:3, cards:10
+测试获取execution103 bug module的执行看板信息 >> columns:9, lanes:2, cards:4
+测试获取execution103 bug source的执行看板信息 >> columns:9, lanes:5, cards:4
+测试获取execution103的执行看板信息 >> columns:27, lanes:3, cards:10
+测试获取execution103 bug module的执行看板信息 >> columns:9, lanes:5, cards:4
+测试获取execution103 bug severity的执行看板信息 >> columns:9, lanes:4, cards:4
+
 */
 
 $executionIDList = array('101', '102', '103', '104', '105');

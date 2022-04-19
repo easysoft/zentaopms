@@ -10,6 +10,46 @@ title=测试 actionModel->getList();
 cid=1
 pid=1
 
+测试获取objectType product objectId 1的动态信息 >> 1,admin,1
+测试获取objectType story objectId 2的动态信息 >> 2,dev17,1
+测试获取objectType productplan objectId 3的动态信息 >> 3,test18,1
+测试获取objectType release objectId 4的动态信息 >> 4,admin,1
+测试获取objectType project objectId 5的动态信息 >> 5,dev17,11
+测试获取objectType task objectId 6的动态信息 >> 6,test18,1
+测试获取objectType build objectId 7的动态信息 >> 7,admin,1
+测试获取objectType bug objectId 8的动态信息 >> 8,dev17,1
+测试获取objectType testcase objectId 9的动态信息 >> 9,test18,2
+测试获取objectType case objectId 10的动态信息 >> 10,admin,1
+测试获取objectType testtask objectId 11的动态信息 >> 11,dev17,1
+测试获取objectType user objectId 12的动态信息 >> 12,test18,1
+测试获取objectType doc objectId 13的动态信息 >> 13,admin,1
+测试获取objectType doclib objectId 14的动态信息 >> 14,dev17,1
+测试获取objectType todo objectId 15的动态信息 >> 15,test18,1
+测试获取objectType branch objectId 16的动态信息 >> 16,admin,1
+测试获取objectType module objectId 17的动态信息 >> 17,dev17,1
+测试获取objectType testsuite objectId 18的动态信息 >> 18,test18,<a href='model/action/execution-task-1.' >#1 项目集1</a>
+测试获取objectType caselib objectId 19的动态信息 >> 19,admin,1
+测试获取objectType testreport objectId 20的动态信息 >> 20,dev17,1
+测试获取objectType entry objectId 21的动态信息 >> 21,test18,1
+测试获取objectType webhook objectId 22的动态信息 >> 22,admin,<a href='model/action/bug-view-1.' >1</a>
+测试获取objectType review objectId 23的动态信息 >> 23,dev17,1
+测试获取objectType product objectId 24的动态信息 >> 24,test18,1
+测试获取objectType story objectId 25的动态信息 >> 25,admin,1
+测试获取objectType productplan objectId 26的动态信息 >> 26,dev17,1
+测试获取objectType release objectId 27的动态信息 >> 27,test18,1
+测试获取objectType project objectId 28的动态信息 >> 28,admin,33
+测试获取objectType task objectId 29的动态信息 >> 29,dev17,1
+测试获取objectType build objectId 30的动态信息 >> 30,test18,1
+测试获取objectType bug objectId 31的动态信息 >> 31,admin,1
+测试获取objectType testcase objectId 32的动态信息 >> 32,项目经理17,1
+测试获取objectType case objectId 33的动态信息 >> 33,test18,1
+测试获取objectType testtask objectId 34的动态信息 >> 34,admin,1
+测试获取objectType user objectId 35的动态信息 >> 35,dev17,1
+测试获取objectType doc objectId 36的动态信息 >> 36,test18,1
+测试获取objectType doclib objectId 37的动态信息 >> 37,admin,1
+测试获取objectType todo objectId 38的动态信息 >> 38,dev17,1
+测试获取objectType branch objectId 39的动态信息 >> 39,test18,<a href='model/action/build-view-1-branch.' >项目版本版本1</a>
+
 */
 
 $objectType = array('product', 'story', 'productplan', 'release', 'project', 'task', 'build', 'bug', 'testcase', 'case', 'testtask', 'user', 'doc', 'doclib', 'todo', 'branch', 'module', 'testsuite', 'caselib', 'testreport', 'entry', 'webhook', 'review');

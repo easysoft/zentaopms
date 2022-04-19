@@ -10,6 +10,12 @@ title=测试 kanbanModel->restoreColumn();
 cid=1
 pid=1
 
+还原卡片1 >> 未开始,0
+还原卡片1 >> 进行中,0
+还原卡片2 >> 已完成,0
+还原卡片3 >> 已关闭,0
+还原卡片4 >> 未开始,0
+
 */
 
 $columnIDList = array('1', '2', '3', '4', '5');

@@ -10,6 +10,12 @@ title=测试 actionModel->updateComment();
 cid=1
 pid=1
 
+测试更新action 1的备注 >> 备注1
+测试更新action 2的备注 >> 备注2
+测试更新action 3的备注 >> 备注3
+测试更新action 4的备注 >> 备注4
+测试更新action 5的备注 >> 备注5
+
 */
 $actionIDList = array('1', '2', '3', '4', '5');
 $commentList  = array('备注1', '备注2', '备注3', '备注4', '备注5');

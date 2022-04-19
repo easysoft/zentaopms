@@ -10,6 +10,31 @@ title=测试 kanbanModel->isClickable();
 cid=1
 pid=1
 
+测试lane1 是否可以排序 >> 2
+测试lane1 是否可以删除 >> 2
+测试lane276 是否可以排序 >> 2
+测试lane276 是否可以删除 >> 1
+测试column1 是否可以拆分子列 >> 1
+测试column1 是否可以还原 >> 2
+测试column1 是否可以归档 >> 1
+测试column1 是否可以删除 >> 1
+测试column1 是否可以排序 >> 1
+测试column403 是否可以拆分子列 >> 2
+测试column403 是否可以还原 >> 2
+测试column403 是否可以归档 >> 1
+测试column403 是否可以删除 >> 1
+测试column403 是否可以排序 >> 1
+测试column404 是否可以拆分子列 >> 2
+测试column404 是否可以还原 >> 2
+测试column404 是否可以归档 >> 1
+测试column404 是否可以删除 >> 1
+测试column404 是否可以排序 >> 1
+测试column405 是否可以拆分子列 >> 2
+测试column405 是否可以还原 >> 2
+测试column405 是否可以归档 >> 1
+测试column405 是否可以删除 >> 1
+测试column405 是否可以排序 >> 1
+
 */
 
 $objectType = array('Lane', 'Column');

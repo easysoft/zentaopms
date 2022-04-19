@@ -10,6 +10,12 @@ title=测试 kanbanModel->splitColumn();
 cid=1
 pid=1
 
+测试拆分列1 >> 2
+测试拆分列2 >> 2
+测试拆分列3 >> 2
+测试拆分列4 >> 在制品数量必须是正整数。
+测试拆分列4 >> 『看板列名称』不能为空。
+
 */
 
 $columnIDList = array('1', '2', '3', '4');
@@ -33,8 +39,6 @@ $splits4  = array('name' => $name, 'color' => $color, 'WIPCount' => $WIPCount);
 
 $name     = array('1' => '', '2' => '');
 $splits5  = array('name' => $name, 'color' => $color, 'noLimit' => $noLimit);
-
-
 
 $kanban = new kanbanTest();
 

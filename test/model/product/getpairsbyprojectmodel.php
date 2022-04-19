@@ -9,6 +9,11 @@ title=productModel->getPairsByProjectModel();
 cid=1
 pid=1
 
+测试获取model为all产品数量 >> 120
+测试获取model为scrum产品数量 >> 70
+测试获取model为waterfall产品数量 >> 40
+测试获取model为kanban产品数量 >> 40
+
 */
 
 $modelList = array('all', 'scrum', 'waterfall', 'kanban');

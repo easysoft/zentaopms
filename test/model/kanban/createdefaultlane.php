@@ -10,6 +10,12 @@ title=测试 kanbanModel->createDefaultLane();
 cid=1
 pid=1
 
+创建region 1 group 1的默认泳道 >> 默认泳道,1,1,common
+创建region 2 group 2的默认泳道 >> 默认泳道,2,2,common
+创建region 3 group 3的默认泳道 >> 默认泳道,3,3,common
+创建region 4 group 4的默认泳道 >> 默认泳道,4,4,common
+创建region 5 group 5的默认泳道 >> 默认泳道,5,5,common
+
 */
 
 $kanban = new kanbanTest();

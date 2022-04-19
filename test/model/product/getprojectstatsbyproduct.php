@@ -9,6 +9,26 @@ title=productModel->getProjectStatsByProduct();
 cid=1
 pid=1
 
+测试获取产品1的 browseType为all的信息 >> 项目1;项目11
+测试获取产品1的 browseType为unclosed的信息 >> 0
+测试获取产品1的 browseType为unplan的信息 >> 0
+测试获取产品1的 browseType为allstory的信息 >> 0
+测试获取产品2的 browseType为all的信息 >> 项目2;项目12
+测试获取产品2的 browseType为assignedtome的信息 >> 0
+测试获取产品2的 browseType为openedbyme的信息 >> 0
+测试获取产品2的 browseType为reviewedbyme的信息 >> 0
+测试获取产品3的 browseType为all的信息 >> 项目3;项目13
+测试获取产品3的 browseType为reviewbyme的信息 >> 0
+测试获取产品3的 browseType为closedbyme的信息 >> 0
+测试获取产品3的 browseType为draftstory的信息 >> 0
+测试获取产品4的 browseType为all的信息 >> 项目4;项目14
+测试获取产品4的 browseType为activestory的信息 >> 0
+测试获取产品4的 browseType为changedstory的信息 >> 0
+测试获取产品5的 browseType为all的信息 >> 项目5;项目15
+测试获取产品5的 browseType为willclose的信息 >> 0
+测试获取产品5的 browseType为closedstory的信息 >> 0
+测试获取不存在产品的信息 >> 0
+
 */
 
 $productIDList = array('1', '2', '3', '4', '5', '1000001');

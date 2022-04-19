@@ -10,6 +10,12 @@ title=测试 actionModel->logHistory();
 cid=1
 pid=1
 
+测试新增actionID 10001 历史记录 >> name,变更前名称,变更后名称;code,变更前编号,变更后编号
+测试新增actionID 10002 历史记录 >> assignedTo,admin,test1
+测试新增actionID 10003 历史记录 >> name,name1,name2
+测试新增actionID 10004 历史记录 >> code,code1,code2
+测试新增actionID 10005 历史记录 >> assignedTo,test2,test1
+
 */
 
 $actionIDList = array('10001', '10002', '10003', '10004', '10005');
@@ -22,7 +28,6 @@ $changes4[0] = array('field' => 'code', 'old' => 'code1', 'new' => 'code2');
 $changes5[0] = array('field' => 'assignedTo', 'old' => 'test2', 'new' => 'test1');
 
 $action = new actionTest();
-
 
 r($action->logHistoryTest($actionIDList[0], $changes1)) && p('0:field,old,new;1:field,old,new') && e('name,变更前名称,变更后名称;code,变更前编号,变更后编号'); // 测试新增actionID 10001 历史记录
 r($action->logHistoryTest($actionIDList[1], $changes2)) && p('0:field,old,new')                 && e('assignedTo,admin,test1');                                // 测试新增actionID 10002 历史记录

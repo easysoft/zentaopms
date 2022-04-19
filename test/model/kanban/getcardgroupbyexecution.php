@@ -10,6 +10,18 @@ title=测试 kanbanModel->getCardGroupByExecution();
 cid=1
 pid=1
 
+测试查询execution161的卡片 >> 5
+测试查询execution161的task卡片 >> 1
+测试查询execution161的bug卡片 >> 3
+测试查询execution161的story卡片 >> 1
+测试查询execution162的卡片 >> 5
+测试查询execution162的task卡片 >> 1
+测试查询execution162的bug卡片 >> 3
+测试查询execution162的story卡片 >> 1
+测试查询execution163的卡片 >> 4
+测试查询execution164的卡片 >> 4
+测试查询execution165的卡片 >> 0
+
 */
 
 $executionIDList = array('161', '162', '163', '164', '165');
