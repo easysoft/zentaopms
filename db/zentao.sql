@@ -1259,7 +1259,7 @@ CREATE TABLE IF NOT EXISTS `zt_stakeholder` (
   `createdDate` date NOT NULL,
   `editedBy` char(30) NOT NULL,
   `editedDate` date NOT NULL,
-  `deleted` enum('0','1') NOT NULL
+  `deleted` enum('0','1') NOT NULL,
   KEY `objectID` (`objectID`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_story`;
