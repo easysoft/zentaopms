@@ -305,7 +305,7 @@
                   ?>
                   <td title='<?php echo $moduleTitle?>'><?php echo $printModule?></td>
                 </tr>
-                <?php if($story->type != 'requirement'):?>
+                <?php if($story->type != 'requirement' and $story->parent != -1):?>
                 <tr class='plan-line'>
                   <th><?php echo $lang->story->plan;?></th>
                   <td>
