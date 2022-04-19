@@ -10,6 +10,16 @@ title=测试 testcaseModel->batchUpdate();
 cid=1
 pid=1
 
+测试批量修改用例标题 >> title,这个是测试用例1,修改后的测试用例1
+测试批量修改用例优先级 >> pri,2,1
+测试批量修改用例状态 >> status,blocked,nomal
+测试批量修改用例模块 >> module,0,1822
+测试批量修改用例颜色 >> color,#3da7f5,#2dbdb2
+测试批量修改用例类型 >> type,performance,other
+测试批量修改用例前置条件 >> precondition,这是前置条件3,修改后的前置条件3
+测试批量修改用例关键词 >> keywords,这是关键词4,修改后的关键词4
+测试批量修改用例阶段 >> stage,unittest,unittest,feature
+
 */
 
 $changeTitle        = array('1' => '修改后的测试用例1', '2' => '这个是测试用例2', '3' => '这个是测试用例3', '4' => '这个是测试用例4');;
@@ -31,7 +41,6 @@ $changeTypes        = array('types' => $changeTypes);
 $changePrecondition = array('precondition' => $changePrecondition);
 $changeKeywords     = array('keywords' => $changeKeywords);
 $changeStages       = array('stages' => $changeStages);
-
 
 $testcase = new testcaseTest();
 

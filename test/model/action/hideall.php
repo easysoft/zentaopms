@@ -10,6 +10,8 @@ title=测试 actionModel->hideAll();
 cid=1
 pid=1
 
+隐藏回收站全部信息 >> 2;2;2
+
 */
 
 $action = new actionTest();

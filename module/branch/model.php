@@ -504,7 +504,6 @@ class branchModel extends model
             }
             else
             {
-                $branchGroups[$branch->product][0] = $this->lang->branch->main;
                 $branchGroups[$branch->product][$branch->id] = htmlspecialchars_decode($branch->name);
             }
         }

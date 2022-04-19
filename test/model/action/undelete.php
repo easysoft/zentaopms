@@ -10,6 +10,11 @@ title=测试 actionModel->undelete();
 cid=1
 pid=1
 
+测试还原action 28 >> 0
+测试还原action 87 >> 0
+测试还原action 9 >> 0
+测试还原未删除action 1 >> 1
+
 */
 $actionIDList = array('48', '87', '9', '1');
 

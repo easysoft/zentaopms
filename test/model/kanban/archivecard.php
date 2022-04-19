@@ -10,6 +10,12 @@ title=测试 kanbanModel->archiveCard();
 cid=1
 pid=1
 
+测试归档卡片1 >> archived,0,1
+测试归档卡片2 >> archived,0,1
+测试归档卡片3 >> archived,0,1
+测试归档卡片4 >> archived,0,1
+测试归档卡片5 >> archived,0,1
+
 */
 
 $cardIDList = array('1', '2', '3', '4', '5');

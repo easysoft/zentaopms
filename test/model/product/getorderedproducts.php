@@ -9,6 +9,10 @@ title=productModel->getOrderedProducts();
 cid=1
 pid=1
 
+测试获取状态为all的产品数量 >> 120
+测试获取状态为noclosed的产品数量 >> 80
+测试获取状态为closed的产品数量 >> 40
+
 */
 
 $statusList  = array('all', 'noclosed', 'closed');

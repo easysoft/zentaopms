@@ -10,6 +10,27 @@ title=测试 kanbanModel->import();
 cid=1
 pid=1
 
+开启看板1的导入功能 可选项全部 >> plans,releases,builds,executions,cards 
+开启看板1的导入功能 可选项plans cards >> plans,cards
+关闭看板1的导入功能 可选项全部 >> 0
+关闭看板1的导入功能 可选项plans cards >> 0
+开启看板2的导入功能 可选项全部 >> plans,releases,builds,executions,cards 
+开启看板2的导入功能 可选项plans cards >> plans,cards
+关闭看板2的导入功能 可选项全部 >> 0
+关闭看板2的导入功能 可选项plans cards >> 0
+开启看板3的导入功能 可选项全部 >> plans,releases,builds,executions,cards 
+开启看板3的导入功能 可选项plans cards >> plans,cards
+关闭看板3的导入功能 可选项全部 >> 0
+关闭看板3的导入功能 可选项plans cards >> 0
+开启看板4的导入功能 可选项全部 >> plans,releases,builds,executions,cards 
+开启看板4的导入功能 可选项plans cards >> plans,cards
+关闭看板4的导入功能 可选项全部 >> 0
+关闭看板4的导入功能 可选项plans cards >> 0
+开启看板5的导入功能 可选项全部 >> plans,releases,builds,executions,cards 
+开启看板5的导入功能 可选项plans cards >> plans,cards
+关闭看板5的导入功能 可选项全部 >> 0
+关闭看板5的导入功能 可选项plans cards >> 0
+
 */
 
 $kanban = new kanbanTest();

@@ -43,6 +43,7 @@
 .region .kanban-header-col > .actions {position: relative; right: 5px;}
 .region .kanban-header-parent-col > .actions {position: absolute; right: 0px;}
 .region .kanban-header-sub-cols .actions {position: absolute; right: 0px;}
+.region .kanban.kanban-dragging {overflow: hidden;}
 
 .region .kanban-lane {position: relative; border-bottom: none!important; min-height: 200px !important}
 

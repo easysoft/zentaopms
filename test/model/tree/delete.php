@@ -10,6 +10,15 @@ title=测试 treeModel->delete();
 cid=1
 pid=1
 
+测试删除module 1821 >> 1
+测试删除module 1822 >> 1
+测试删除module 1981 >> 1
+测试删除module 1982 >> 1
+测试删除module 1621 >> 1
+测试删除module 1622 >> 1
+测试删除module 21 >> 1
+测试删除module 22 >> 1
+
 */
 
 $moduleID = array(1821, 1822, 1981, 1982, 1621, 1622, 21, 22);

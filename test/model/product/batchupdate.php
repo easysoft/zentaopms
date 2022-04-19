@@ -9,6 +9,10 @@ title=测试 productModel->batchUpdate();
 cid=1
 pid=1
 
+批量修改product名称 >> name,正常产品1,批量修改产品1
+批量修改produc测试负责人 >> QD,test2,test1
+批量修改product状态 >> status,normal,closed
+
 */
 
 $names      = array('1' => '批量修改产品1', '2' => '正常产品2', '3' => '正常产品3');

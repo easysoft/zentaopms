@@ -10,6 +10,12 @@ title=测试 actionModel->read();
 cid=1
 pid=1
 
+测试对action 1 进行阅读操作 >> product,1,1
+测试对action 2 进行阅读操作 >> story,2,1
+测试对action 3 进行阅读操作 >> productplan,3,1
+测试对action 4 进行阅读操作 >> release,4,1
+测试对action 5 进行阅读操作 >> project,5,1
+
 */
 
 $objectType = array('product', 'story', 'productplan', 'release', 'project');

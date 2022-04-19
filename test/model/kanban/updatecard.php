@@ -10,6 +10,16 @@ title=测试 kanbanModel->updateCard();
 cid=1
 pid=1
 
+测试修改卡片1 >> name,卡片1,修改名字;desc,,修改注释;estimate,0,3
+测试修改卡片2 >> begin,2022-03-30;end,2022-04-01;progress,50,0
+测试修改卡片3 >> assignedTo,admin,user5,po17,user3;progress,100,50;status,done,doing
+测试修改卡片4 >> progress,0,100;status,doing,done
+测试修改卡片5 >> pri,3,1
+测试修改卡片开始小于结束日期 >> "截止日期"不能小于"预计开始"!
+测试修改卡片预计小于0 >> 预计不能为负数!
+测试修改卡片进度小于0 >> 请输入正确的进度
+测试修改卡片进度大于100 >> 请输入正确的进度
+
 */
 
 $cardIDList = array('1', '2', '3', '4', '5');

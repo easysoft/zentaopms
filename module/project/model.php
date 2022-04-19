@@ -678,12 +678,14 @@ class projectModel extends model
     /**
      * Get project pairs by model and project.
      *
-     * @param  string $model all|scrum|waterfall|kanban
-     * @param  int    $programID
+     * @param  string           $model all|scrum|waterfall|kanban
+     * @param  int              $programID
+     * @param  string           $param noclosed
+     * @param  string|int|array $append
      * @access public
      * @return array
      */
-    public function getPairsByModel($model = 'all', $programID = 0, $param = '')
+    public function getPairsByModel($model = 'all', $programID = 0, $param = '', $append = '')
     {
         if(defined('TUTORIAL')) return $this->loadModel('tutorial')->getProjectPairs();
 
@@ -696,6 +698,7 @@ class projectModel extends model
             ->beginIF($model != 'all')->andWhere('model')->eq($model)->fi()
             ->beginIF(strpos($param, 'noclosed') !== false)->andWhere('status')->ne('closed')->fi()
             ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->projects)->fi()
+            ->beginIF(!empty($append))->orWhere('id')->in($append)->fi()
             ->orderBy('id_desc')
             ->fetchAll();
 
@@ -906,8 +909,8 @@ class projectModel extends model
         $this->dao->insert(TABLE_PROJECT)->data($project)
             ->autoCheck()
             ->batchcheck($requiredFields, 'notempty')
-            ->checkIF(!empty($project->name), 'name', 'unique', "`type`='project' and `parent` = $project->parent")
-            ->checkIF(!empty($project->code), 'code', 'unique', "`type`='project'")
+            ->checkIF(!empty($project->name), 'name', 'unique', "`type`='project' and `parent` = $project->parent and `model` = '{$project->model}'")
+            ->checkIF(!empty($project->code), 'code', 'unique', "`type`='project' and `model` = '{$project->model}'")
             ->checkIF($project->end != '', 'end', 'gt', $project->begin)
             ->exec();
 
@@ -1139,8 +1142,8 @@ class projectModel extends model
             ->checkIF($project->begin != '', 'begin', 'date')
             ->checkIF($project->end != '', 'end', 'date')
             ->checkIF($project->end != '', 'end', 'gt', $project->begin)
-            ->checkIF(!empty($project->name), 'name', 'unique', "id != $projectID and `type` = 'project' and `parent` = $project->parent")
-            ->checkIF(!empty($project->code), 'code', 'unique', "id != $projectID and `type` = 'project'")
+            ->checkIF(!empty($project->name), 'name', 'unique', "id != $projectID and `type` = 'project' and `parent` = $project->parent and `model` = '{$project->model}'")
+            ->checkIF(!empty($project->code), 'code', 'unique', "id != $projectID and `type` = 'project' and `model` = '{$project->model}'")
             ->where('id')->eq($projectID)
             ->exec();
 
@@ -1280,8 +1283,8 @@ class projectModel extends model
                 ->checkIF($project->begin != '', 'begin', 'date')
                 ->checkIF($project->end != '', 'end', 'date')
                 ->checkIF($project->end != '', 'end', 'gt', $project->begin)
-                ->checkIF(!empty($project->name), 'name', 'unique', "id != $projectID and `type`='project' and `parent` = $parentID")
-                ->checkIF(!empty($project->code), 'code', 'unique', "id != $projectID and `type`='project'")
+                ->checkIF(!empty($project->name), 'name', 'unique', "id != $projectID and `type`='project' and `parent` = $parentID and `model` = '{$project->model}'")
+                ->checkIF(!empty($project->code), 'code', 'unique', "id != $projectID and `type`='project' and `model` = '{$project->model}'")
                 ->where('id')->eq($projectID)
                 ->exec();
 

@@ -10,6 +10,22 @@ title=测试 treeModel->checkUnique();
 cid=1
 pid=1
 
+测试module1是否与已存在的模块重名 >> 0
+测试module1 和 moduleID1 里的模块是否与已存在的模块重名 >> 产品模块1
+测试module1 和 moduleID1 里的模块是否与已存在的模块重名 >> 产品模块2
+测试module1是否与已存在的模块重名 >> 产品模块3
+测试module1 和 moduleID1 里的模块是否与已存在的模块重名 >> 产品模块1
+测试module1 和 moduleID1 里的模块是否与已存在的模块重名 >> 产品模块2
+测试module1是否与已存在的模块重名 >> 0
+测试module1 和 moduleID1 里的模块是否与已存在的模块重名 >> 产品模块161
+测试module1 和 moduleID1 里的模块是否与已存在的模块重名 >> 产品模块161
+测试module1是否与已存在的模块重名 >> 产品子模块281
+测试module1 和 moduleID1 里的模块是否与已存在的模块重名 >> 产品子模块281
+测试module1 和 moduleID1 里的模块是否与已存在的模块重名 >> 0
+测试module1是否与已存在的模块重名 >> 0
+测试module1 和 moduleID1 里的模块是否与已存在的模块重名 >> 0
+测试module1 和 moduleID1 里的模块是否与已存在的模块重名 >> 0
+
 */
 $module1 = new stdclass();
 $module1->name   = '不会重名的模块';

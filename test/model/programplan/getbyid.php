@@ -10,6 +10,12 @@ title=测试 programplanModel->getByID();
 cid=1
 pid=1
 
+获取阶段131 >> 阶段31,project31
+获取阶段132 >> 阶段32,project32
+获取阶段133 >> 阶段33,project33
+获取阶段134 >> 阶段34,project34
+获取阶段135 >> 阶段35,project35
+
 */
 
 $planIDList = array('131', '132', '133', '134', '135');

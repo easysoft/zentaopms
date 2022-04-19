@@ -9,6 +9,10 @@ title=productModel->manageLine();
 cid=1
 pid=1
 
+测试修改产品线名称 >> 产品线2
+测试修改所属项目集 >> 1
+测试创建新的产品线 >> 产品线21
+
 */
 
 $product = new productTest('admin');
@@ -24,7 +28,6 @@ $lines2   = array('modules' => $modules, 'programs' => $programs);
 $modules  = array(0 => '产品线21', 1 => '');
 $programs = array(0 => '1', 1 => '1');
 $lines3   = array('modules' => $modules, 'programs' => $programs);
-
 
 $modules  = array(0 => '');
 $programs = array(0 => '1');

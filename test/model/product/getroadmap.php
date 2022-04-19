@@ -9,6 +9,13 @@ title=productModel->getRoadmap();
 cid=1
 pid=1
 
+测试获取产品1的roadmap数量 >> 4
+测试获取产品2的roadmap数量 >> 1
+测试获取产品3的roadmap数量 >> 0
+测试获取产品4的roadmap数量 >> 0
+测试获取产品5的roadmap数量 >> 0
+测试获取不存在产品的roadmap数量 >> 0
+
 */
 
 $productIDList = array('1', '2', '3', '4', '5', '1000001');

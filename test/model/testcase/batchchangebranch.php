@@ -10,6 +10,14 @@ title=测试 testcaseModel->batchChangeBranch();
 cid=1
 pid=1
 
+测试批量修改case 161 162 的branch为1 >> 1;1
+测试批量修改case 163 164 的branch为2 >> 2;2
+测试批量修改case 165 166 的branch为3 >> 3;3
+测试批量修改case 167 168 的branch为4 >> 4;4
+测试批量修改case 169 170 的branch为5 >> 5;5
+测试批量修改case 171 172 的branch为6 >> 6;6
+测试批量修改case 173 174 的branch为7 >> 7;7
+
 */
 
 $caseIDList = array(array(161, 162), array(163, 164), array(165, 166), array(167, 168), array(169, 170), array(171, 172), array(173, 174));

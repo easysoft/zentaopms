@@ -9,6 +9,12 @@ title=productModel->getTeamMemberPairs();
 cid=1
 pid=1
 
+测试获取产品1的信息 >> po1,test1,dev1,0,1,2,3
+测试获取产品2的信息 >> po2,test2,dev2,0,1,2,3
+测试获取产品3的信息 >> po3,test3,dev3,0,1,2,3
+测试获取产品4的信息 >> po4,test4,dev4,0,1,2,3
+测试获取产品5的信息 >> po5,test5,dev5,0,1,2,3
+
 */
 
 $productIDList = array('1', '2', '3', '4', '5', '1000001');

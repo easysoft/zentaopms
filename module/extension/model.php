@@ -617,7 +617,7 @@ class extensionModel extends model
             foreach($dirs as $dir)
             {
                 if(!is_dir($appRoot . $dir)) continue;
-                if(!rmdir($appRoot . $dir)) $removeCommands[] = "rmdir $appRoot$dir"; // fix bug #2965
+                if(!rmdir($appRoot . $dir)) $removeCommands[] = PHP_OS == 'Linux' ? "rm -fr $appRoot$dir" : "rmdir $appRoot$dir /s /q";
             }
         }
 

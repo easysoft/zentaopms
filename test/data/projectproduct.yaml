@@ -7,6 +7,6 @@ fields:
   - field: product
     range: 1-100
   - field: branch
-    range: 0
+    range: 0{40},1-10:2,0{155}
   - field: plan
     range: 1-360:3

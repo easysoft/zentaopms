@@ -10,6 +10,12 @@ title=测试 kanbanModel->restoreCard();
 cid=1
 pid=1
 
+还原卡片1 >> archived,1,0
+还原卡片1 >> archived,1,0
+还原卡片2 >> archived,1,0
+还原卡片3 >> archived,1,0
+还原卡片4 >> archived,1,0
+
 */
 $kanbanIDList = array('1', '2', '3', '4', '5');
 

@@ -10,6 +10,13 @@ title=测试 testcaseModel->create();
 cid=1
 pid=1
 
+测试创建用例1 >> created
+测试创建用例2 >> created
+测试创建用例3 >> created
+测试创建重名用例1 >> exists
+测试创建没有填写名字的用例 >> 『用例标题』不能为空。
+测试创建没有填写类型的用例 >> 『用例类型』不能为空。
+
 */
 
 $testcase1 = array('title' => '测试创建测试用例1');
@@ -18,8 +25,6 @@ $testcase3 = array('title' => '测试创建测试用例3', 'keywords' => '测试
 
 $no_title = array('title' => '');
 $no_type  = array('type' => '', 'title' => '测试创建没有填写类型的用例');
-
-
 
 $testcase = new testcaseTest();
 
