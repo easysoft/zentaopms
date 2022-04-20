@@ -2245,9 +2245,17 @@ EOD;
             }
             else
             {
-                if(helper::isAjaxRequest()) die(json_encode(array('result' => false, 'message' => $this->lang->error->loginTimeout))); // Fix bug #14478.
+                $uri = $this->app->getURI(true);
+                if($module == 'message' and $method == 'ajaxgetmessage')
+                {
+                    $uri = helper::createLink('my');
+                }
+                elseif(helper::isAjaxRequest())
+                {
+                    die(json_encode(array('result' => false, 'message' => $this->lang->error->loginTimeout))); // Fix bug #14478.
+                }
 
-                $referer  = helper::safe64Encode($this->app->getURI(true));
+                $referer = helper::safe64Encode($uri);
                 print(js::locate(helper::createLink('user', 'login', "referer=$referer")));
                 helper::end();
             }
