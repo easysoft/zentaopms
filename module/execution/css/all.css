@@ -24,3 +24,5 @@ td.flex span.project-type-label {margin-left: 5px; min-width: 36px;}
 .c-action {text-align: center;}
 .c-name > span {margin-right: 2px;}
 td.flex span.project-type-label {min-width: 40px;}
+
+.label-children {min-width:22px !important;}
