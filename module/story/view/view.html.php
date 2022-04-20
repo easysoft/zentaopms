@@ -395,7 +395,6 @@
                   <th><?php echo $lang->story->assignedTo;?></th>
                   <td><?php if($story->assignedTo) echo zget($users, $story->assignedTo) . $lang->at . $story->assignedDate;?></td>
                 </tr>
-                <?php if(!$checkSuperReviewed):?>
                 <tr>
                   <th><?php echo $lang->story->reviewers;?></th>
                   <td>
@@ -410,7 +409,6 @@
                     ?>
                   </td>
                 </tr>
-                <?php endif;?>
                 <tr>
                   <th><?php echo $lang->story->reviewedDate;?></th>
                   <td><?php if($story->reviewedBy) echo $story->reviewedDate;?></td>
