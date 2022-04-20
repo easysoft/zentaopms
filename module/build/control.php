@@ -425,7 +425,7 @@ class build extends control
      * @access public
      * @return string
      */
-    public function ajaxGetExecutionBuilds($executionID, $productID, $varName, $build = '', $branch = 'all', $index = 0, $needCreate = false, $type = 'normal')
+    public function ajaxGetExecutionBuilds($executionID, $productID, $varName, $build = '', $branch = 'all', $index = 0, $needCreate = false, $type = 'normal', $number = '')
     {
         $isJsonView = $this->app->getViewType() == 'json';
         if($varName == 'openedBuild')
@@ -435,6 +435,7 @@ class build extends control
             $params = ($type == 'all') ? 'noempty' : 'noempty, noterminate, nodone';
             $builds = $this->build->getBuildPairs($productID, $branch, $params, $executionID, 'execution', $build);
             if($isJsonView) return print(json_encode($builds));
+            $varName = $number === '' ? $varName : $varName . "[$number]";
             return print(html::select($varName . '[]', $builds , '', 'size=4 class=form-control multiple'));
         }
         if($varName == 'openedBuilds')

@@ -2013,10 +2013,11 @@ class story extends control
      * @param  string $number
      * @param  string $type full
      * @param  string $status all|unclosed
+     * @param  string $from
      * @access public
      * @return void
      */
-    public function ajaxGetExecutionStories($executionID, $productID = 0, $branch = 0, $moduleID = 0, $storyID = 0, $number = '', $type = 'full', $status = 'all')
+    public function ajaxGetExecutionStories($executionID, $productID = 0, $branch = 0, $moduleID = 0, $storyID = 0, $number = '', $type = 'full', $status = 'all', $from = '')
     {
         if($moduleID)
         {
@@ -2035,7 +2036,8 @@ class story extends control
         else
         {
             $storyName = $number === '' ? 'story' : "story[$number]";
-            return print(html::select($storyName, empty($stories) ? array('' => '') : $stories, $storyID, 'class=form-control onchange=setStoryRelated(' . $number . ');'));
+            $misc      = $from   === 'bug' ? 'class=form-control' : 'class=form-control onchange=setStoryRelated(' . $number . ');';
+            return print(html::select($storyName, empty($stories) ? array('' => '') : $stories, $storyID, $misc));
         }
     }
 
