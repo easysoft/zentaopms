@@ -556,6 +556,7 @@ class projectModel extends model
             ->andWhere('deleted')->eq(0)
             ->beginIF($projectIdList)->andWhere('id')->in($projectIdList)->fi()
             ->beginIF(!$this->app->user->admin and $mode != 'all')->andWhere('id')->in($this->app->user->view->projects)->fi()
+            ->beginIF($mode != 'all' and !empty($mode))->andWhere('model')->in(explode(',', $mode))->fi()
             ->fetchPairs('id', 'name');
     }
 
@@ -1946,7 +1947,6 @@ class projectModel extends model
     public function getTeamMemberPairs($projectID)
     {
         $project = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($projectID)->fetch();
-
         if(empty($project)) return array();
 
         $type = 'project';
