@@ -81,7 +81,11 @@
             <th class='c-pri<?php  echo zget($visibleFields, 'pri', ' hidden') . zget($requiredFields, 'pri', '', ' required');?>'><?php echo $lang->task->pri;?></th>
             <?php
             $extendFields = $this->task->getFlowExtendFields();
-            foreach($extendFields as $extendField) echo "<th class='w-100px'>{$extendField->name}</th>";
+            foreach($extendFields as $extendField) 
+            {
+                $required = $extendField->rules == 1 ? 'required' : '';
+                echo "<th class='w-100px $required'>{$extendField->name}</th>";
+            }
             ?>
           </tr>
         </thead>
