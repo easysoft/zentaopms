@@ -228,7 +228,7 @@ foreach($fieldParams as $fieldName => $param)
         <ul>
           <?php foreach($queries as $queryID => $queryName):?>
           <?php if(empty($queryID)) continue;?>
-          <?php $query = $this->search->getById($queryID);?>
+          <?php $query = $this->search->getByID($queryID);?>
           <li><?php echo html::a("javascript:executeQuery($queryID)", $queryName . ((common::hasPriv('search', 'deleteQuery') and $this->app->user->account == $query->account) ? '<i class="icon icon-close"></i>' : ''), '', "class='label user-query' data-query-id='$queryID' title='{$queryName}'");?></li>
           <?php endforeach;?>
         </ul>
