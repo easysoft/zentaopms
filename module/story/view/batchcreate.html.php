@@ -153,7 +153,7 @@ $(function()
                 var $select = $(this);
                 if($select.hasClass('picker-select')) $select.parent().find('.picker').remove();
                 if(index == 1) $select.find("option[value='ditto']").remove();
-                if(index > 1) $select.val('ditto');
+                if(index > 1 && $select.find('option[value="ditto"]').length > 0) $select.val('ditto');
                 if($select.attr('id').indexOf('branch') >= 0) $select.val('<?php echo $branch;?>')
                 $select.chosen();
                 setTimeout(function()

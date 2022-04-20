@@ -183,7 +183,7 @@
             {
                 $object = new stdclass();
                 $object->{$extendField->field} = $extendField->default;
-                echo "<td" . (($extendField->control == 'select' or $extendField->control == 'multi-select') ? " style='overflow:visible'" : '') . ">" . $this->loadModel('flow')->getFieldControl($extendField, '', $extendField->field . "[$i]") . "</td>";
+                echo "<td" . (($extendField->control == 'select' or $extendField->control == 'multi-select') ? " style='overflow:visible'" : '') . ">" . $this->loadModel('flow')->getFieldControl($extendField, $object, $extendField->field . "[$i]") . "</td>";
             }
             ?>
           </tr>
@@ -236,7 +236,7 @@
       {
           $object = new stdclass();
           $object->{$extendField->field} = $extendField->default;
-          echo "<td" . (($extendField->control == 'select' or $extendField->control == 'multi-select') ? " style='overflow:visible'" : '') . ">" . $this->loadModel('flow')->getFieldControl($extendField, '', $extendField->field . "[%s]") . "</td>";
+          echo "<td" . (($extendField->control == 'select' or $extendField->control == 'multi-select') ? " style='overflow:visible'" : '') . ">" . $this->loadModel('flow')->getFieldControl($extendField, $object, $extendField->field . "[%s]") . "</td>";
       }
       ?>
     </tr>
