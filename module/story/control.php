@@ -1132,8 +1132,6 @@ class story extends control
 
         $reviewers          = $this->story->getReviewerPairs($storyID, $story->version);
         $reviewedBy         = trim($story->reviewedBy, ',');
-        $superReviewers     = trim(zget($this->config->story, 'superReviewers', ''), ',');
-        $checkSuperReviewed = empty($reviewedBy) ? false : strpos(",$superReviewers,", ",$reviewedBy,");
 
         $this->executeHooks($storyID);
 
@@ -1165,7 +1163,6 @@ class story extends control
         $this->view->preAndNext         = $this->loadModel('common')->getPreAndNextObject('story', $storyID);
         $this->view->from               = $from;
         $this->view->param              = $param;
-        $this->view->checkSuperReviewed = $checkSuperReviewed !== false ? true : false;
 
         $this->display();
     }
