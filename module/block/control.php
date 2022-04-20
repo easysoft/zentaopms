@@ -1399,7 +1399,8 @@ class block extends control
             ->where('deleted')->eq(0)
             ->beginIF($this->config->vision == 'lite')->andWhere('type')->eq('kanban')->fi()
             ->beginIF($this->config->vision == 'rnd')->andWhere('type')->eq('sprint')->fi()
-            ->andWhere('parent')->eq($this->session->project)
+            ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->sprints)->fi()
+            ->andWhere('project')->eq($this->session->project)
             ->groupBy('status')
             ->fetchPairs();
 
