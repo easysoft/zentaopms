@@ -5,6 +5,7 @@ class reportTest
     {
          global $tester;
          $this->objectModel = $tester->loadModel('report');
+         $tester->dao->delete()->from(TABLE_ACTION)->where('id')->gt(100)->exec();
     }
 
     /**
@@ -75,9 +76,15 @@ class reportTest
      */
     public function getExecutionsTest($begin = 0, $end = 0)
     {
+        global $tester;
+        $tester->dao->update(TABLE_EXECUTION)->set('`status`')->eq('closed')->where('`id`')->in('101,102,103,107,111,121,151,183')->exec();
+
         $begin = $begin != 0 ? date('Y-m-d', strtotime(date('Y-m-d') . $begin)) : 0;
         $end   = $end != 0 ? date('Y-m-d', strtotime(date('Y-m-d') . $end)) : 0;
         $objects = $this->objectModel->getExecutions($begin, $end);
+
+        $tester->dao->update(TABLE_EXECUTION)->set('`status`')->eq('wait')->where('`id`')->in('101,103,107,111,121,151,183')->exec();
+        $tester->dao->update(TABLE_EXECUTION)->set('`status`')->eq('doing')->where('`id`')->in('102')->exec();
 
         if(dao::isError()) return dao::getError();
 
@@ -135,13 +142,31 @@ class reportTest
         return $count;
     }
 
+    /**
+     * Test get workload.
+     *
+     * @param  int    $dept
+     * @param  string $assign
+     * @access public
+     * @return string
+     */
     public function getWorkloadTest($dept = 0, $assign = 'assign')
     {
-        $objects = $this->objectModel->getWorkload($dept = 0, $assign = 'assign');
+        $objects = $this->objectModel->getWorkload($dept, $assign);
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        $workload = '';
+        foreach($objects as $user => $work)
+        {
+            if(strlen($workload) > 40) break;
+
+            $workload .= "$user:";
+            foreach($work['total'] as $key => $value) $workload .= "$key:$value,";
+            $workload = trim($workload, ',');
+            $workload .= ';';
+        }
+        return $workload;
     }
 
     /**
@@ -161,53 +186,88 @@ class reportTest
         return $count;
     }
 
-    public function getSysURLTest()
-    {
-        $objects = $this->objectModel->getSysURL();
-
-        if(dao::isError()) return dao::getError();
-
-        return $objects;
-    }
-
+    /**
+     * Test get user bugs.
+     *
+     * @access public
+     * @return string
+     */
     public function getUserBugsTest()
     {
         $objects = $this->objectModel->getUserBugs();
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        $counts = '';
+        foreach($objects as $user => $bugs) $counts .= "$user:" . count($bugs) . ';';
+        return $counts;
     }
 
+    /**
+     * Test get user tasks.
+     *
+     * @access public
+     * @return string
+     */
     public function getUserTasksTest()
     {
         $objects = $this->objectModel->getUserTasks();
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        $counts = '';
+        foreach($objects as $user => $tasks) $counts .= "$user:" . count($tasks) . ';';
+        return $counts;
     }
 
-    public function getUserTodosTest()
+    /**
+     * Test get user todos.
+     *
+     * @access public
+     * @return string
+     */
+    public function getUserTodosTest($userType)
     {
         $objects = $this->objectModel->getUserTodos();
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        $counts = '';
+        foreach($objects as $user => $todos)
+        {
+            if(strpos($user, $userType) !== false and str_replace($userType, '', $user) < 11) $counts .= "$user:" . count($todos) . ';';
+        }
+        return $counts;
     }
 
+    /**
+     * Test get user test tasks.
+     *
+     * @access public
+     * @return string
+     */
     public function getUserTestTasksTest()
     {
         $objects = $this->objectModel->getUserTestTasks();
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        $counts = '';
+        foreach($objects as $user => $testtasks) $counts .= "$user:" . count($testtasks) . ';';
+        return $counts;
     }
 
-    public function getUserYearLoginsTest($accounts, $year)
+    /**
+     * Test get user login count in this year.
+     *
+     * @param  string $accounts
+     * @access public
+     * @return int
+     */
+    public function getUserYearLoginsTest($accounts)
     {
+        $year = date('Y');
+
         $objects = $this->objectModel->getUserYearLogins($accounts, $year);
 
         if(dao::isError()) return dao::getError();
@@ -215,8 +275,17 @@ class reportTest
         return $objects;
     }
 
-    public function getUserYearActionsTest($accounts, $year)
+    /**
+     * Test get user action count in this year.
+     *
+     * @param  array $accounts
+     * @access public
+     * @return void
+     */
+    public function getUserYearActionsTest($accounts)
     {
+        $year = date('Y');
+
         $objects = $this->objectModel->getUserYearActions($accounts, $year);
 
         if(dao::isError()) return dao::getError();
@@ -224,49 +293,102 @@ class reportTest
         return $objects;
     }
 
-    public function getUserYearContributionsTest($accounts, $year)
+    /**
+     * Test get user contributions in this year.
+     *
+     * @param  array  $accounts
+     * @access public
+     * @return string
+     */
+    public function getUserYearContributionsTest($accounts)
     {
+        $year = date('Y');
+
         $objects = $this->objectModel->getUserYearContributions($accounts, $year);
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        $contributions = '';
+        foreach($objects as $type => $contributionTypes)
+        {
+            $contributions .= "$type:";
+            foreach($contributionTypes as $contributionType => $count) $contributions .= "$contributionType:$count,";
+            $contributions = trim($contributions, ',') . ';';
+        }
+        return $contributions;
     }
 
-    public function getUserYearTodosTest($accounts, $year)
+    /**
+     * Test get user todo stat in this year.
+     *
+     * @param  array  $accounts
+     * @access public
+     * @return string
+     */
+    public function getUserYearTodosTest($accounts)
     {
+        $year = date('Y');
         $objects = $this->objectModel->getUserYearTodos($accounts, $year);
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        $count = '';
+        foreach($objects as $type => $value) $count .= "$type:$value;";
+        return $count;
     }
 
-    public function getUserYearEffortsTest($accounts, $year)
+    /**
+     * Test get user effort stat in this error.
+     *
+     * @param  string $accounts
+     * @access public
+     * @return object
+     */
+    public function getUserYearEffortsTest($accounts)
     {
-        $objects = $this->objectModel->getUserYearEfforts($accounts, $year);
+        $year = date('Y');
+
+        $object = $this->objectModel->getUserYearEfforts($accounts, $year);
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        return $object;
     }
 
-    public function getUserYearProductsTest($accounts, $year)
+    /**
+     * Test get count of created story,plan and closed story by accounts every product in this year.
+     *
+     * @param mixed $accounts
+     * @access public
+     * @return void
+     */
+    public function getUserYearProductsTest($accounts)
     {
+        $year = date('Y');
+
         $objects = $this->objectModel->getUserYearProducts($accounts, $year);
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        return implode(',', array_keys($objects));
     }
 
-    public function getUserYearExecutionsTest($accounts, $year)
+    /**
+     * Test get count of finished task, story and resolved bug by accounts every executions in this years.
+     *
+     * @param  string $accounts
+     * @access public
+     * @return string
+     */
+    public function getUserYearExecutionsTest($accounts)
     {
+        $year = date('Y');
+
         $objects = $this->objectModel->getUserYearExecutions($accounts, $year);
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        return implode(',', array_keys($objects));
     }
 
     /**
@@ -290,49 +412,96 @@ class reportTest
         return $types;
     }
 
-    public function getYearObjectStatTest($accounts, $year, $objectType)
+    /**
+     * Test get year object stat, include status and action stat.
+     *
+     * @param  string $accounts
+     * @param  string $objectType
+     * @access public
+     * @return string
+     */
+    public function getYearObjectStatTest($accounts, $objectType)
     {
+        $year = date('Y');
+
         $objects = $this->objectModel->getYearObjectStat($accounts, $year, $objectType);
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        $stats = '';
+        foreach($objects['statusStat'] as $stat => $count) $stats .= "$stat:$count;";
+        return $stats;
     }
 
-    public function getYearCaseStatTest($accounts, $year)
+    /**
+     * Test get year case stat, include result and action stat.
+     *
+     * @param  string $accounts
+     * @access public
+     * @return string
+     */
+    public function getYearCaseStatTest($accounts)
     {
+        $year = date('Y');
+
         $objects = $this->objectModel->getYearCaseStat($accounts, $year);
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        $result = '';
+        foreach($objects['resultStat'] as $type => $value) $result .= "$type:$value;";
+        return $result;
     }
 
+    /**
+     * Test get year months.
+     *
+     * @param  string $year
+     * @access public
+     * @return string
+     */
     public function getYearMonthsTest($year)
     {
         $objects = $this->objectModel->getYearMonths($year);
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        return implode(',', $objects);
     }
 
+    /**
+     * Test get status overview.
+     *
+     * @param  string $objectType
+     * @param  array  $statusStat
+     * @access public
+     * @return string
+     */
     public function getStatusOverviewTest($objectType, $statusStat)
     {
-        $objects = $this->objectModel->getStatusOverview($objectType, $statusStat);
+        $object = $this->objectModel->getStatusOverview($objectType, $statusStat);
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        return $object;
     }
 
+    /**
+     * Test get project status overview.
+     *
+     * @param  array $accounts
+     * @access public
+     * @return string
+     */
     public function getProjectStatusOverviewTest($accounts = array())
     {
-        $objects = $this->objectModel->getProjectStatusOverview($accounts = array());
+        $objects = $this->objectModel->getProjectStatusOverview($accounts);
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        $counts = '';
+        foreach($objects as $type => $count) $counts .= "$type:$count;";
+        return $counts;
     }
 
     /**
@@ -343,8 +512,9 @@ class reportTest
      * @access public
      * @return string
      */
-    public function getOutput4APITest($accounts, $year)
+    public function getOutput4APITest($accounts)
     {
+        $year = date('Y');
         $objects = $this->objectModel->getOutput4API($accounts, $year);
 
         if(dao::isError()) return dao::getError();
@@ -354,12 +524,19 @@ class reportTest
         return $output;
     }
 
-    public function getProjectExecutionsTest()
+    /**
+     * Test get project and execution name.
+     *
+     * @param  bool   $count
+     * @access public
+     * @return int|array
+     */
+    public function getProjectExecutionsTest($count = false)
     {
         $objects = $this->objectModel->getProjectExecutions();
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        return $count ? count($objects) : $objects;
     }
 }

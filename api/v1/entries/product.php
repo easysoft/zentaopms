@@ -55,7 +55,7 @@ class productEntry extends Entry
                     $product->execution = $this->loadModel('product')->getExecutionPairsByProduct($productID);
                     break;
                 case 'moduleoptionmenu':
-                    $product->moduleOptionMenu = $this->loadModel('tree')->getOptionMenu($productID, 'bug', 0, 'all');
+                    $product->moduleOptionMenu = $this->loadModel('tree')->getOptionMenu($productID, 'story', 0, 'all');
                     break;
                 case 'builds':
                     $product->builds = $this->loadModel('build')->getBuildPairs($productID, 'all', 'noempty,noterminate,nodone,withbranch', $this->param('object', 0), $this->param('objectType', 'execution'));
