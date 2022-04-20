@@ -185,8 +185,7 @@ fields:
     format: ""
   - field: assignedTo
     note: "指派给"
-    from: common.user.v1.yaml
-    use: user
+    range: ""
     prefix: ""
     postfix: ""
     loop: 0
