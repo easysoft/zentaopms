@@ -18,3 +18,6 @@ js::import($jsRoot . 'dhtmlxgantt/ext/dhtmlxgantt_marker.js');
 $currentLang = $app->getClientLang();
 if($currentLang != 'en') js::import($jsRoot . 'dhtmlxgantt/lang/' . $currentLang . '.js');
 ?>
+<style>
+.gantt_message_area{display:none;}
+</style>
