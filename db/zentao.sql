@@ -8816,7 +8816,7 @@ ALTER TABLE `zt_story` ADD `fromStory` mediumint(8) unsigned NOT NULL default 0 
 ALTER TABLE `zt_story` ADD `fromVersion` smallint(6) NOT NULL default 1 after `fromStory`;
 ALTER TABLE `zt_story` ADD `approvedDate` date NOT NULL after `assignedDate`;
 
-ALTER TABLE `zt_todo` CHANGE `type` `type` char(15) NOT NULL AFTER `feedback`;
+ALTER TABLE `zt_todo` CHANGE `type` char(15) NOT NULL AFTER `feedback`;
 
 -- DROP TABLE IF EXISTS `zt_durationestimation`;
 CREATE TABLE IF NOT EXISTS `zt_durationestimation` (

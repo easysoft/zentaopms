@@ -183,6 +183,7 @@ $lang->custom->notice->indexPage['project'] = "从8.2版本起增加了项目主
 $lang->custom->notice->indexPage['qa']      = "从8.2版本起增加了测试主页视图，是否默认进入测试主页？";
 
 $lang->custom->notice->invalidStrlen['ten']        = '键的长度必须小于10个字符！';
+$lang->custom->notice->invalidStrlen['fifteen']    = '键的长度必须小于15个字符！';
 $lang->custom->notice->invalidStrlen['twenty']     = '键的长度必须小于20个字符！';
 $lang->custom->notice->invalidStrlen['thirty']     = '键的长度必须小于30个字符！';
 $lang->custom->notice->invalidStrlen['twoHundred'] = '键的长度必须小于225个字符！';

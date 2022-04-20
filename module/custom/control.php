@@ -172,14 +172,14 @@ class custom extends control
                     }
                     if(!empty($key) and !isset($oldCustoms[$key]) and $key != 'n/a' and !validater::checkREG($key, '/^[a-z_A-Z_0-9]+$/')) return $this->send(array('result' => 'fail', 'message' => $this->lang->custom->notice->invalidStringKey));
 
-                    /* The length of roleList in user module and typeList in todo module is less than 10. check it when saved. */
-                    if($field == 'roleList' or $module == 'todo' and $field == 'typeList')
-                    {
-                        if(strlen($key) > 10) return $this->send(array('result' => 'fail', 'message' => $this->lang->custom->notice->invalidStrlen['ten']));
-                    }
+                    /* The length of roleList in user module is less than 10. check it when saved. */
+                    if($module == 'user' and $field == 'roleList' and strlen($key) > 10) return $this->send(array('result' => 'fail', 'message' => $this->lang->custom->notice->invalidStrlen['ten']));
+
+                    /* The length of typeList in todo module is less than 15. check it when saved. */
+                    if($module == 'todo' and $field == 'typeList' and strlen($key) > 15) return $this->send(array('result' => 'fail', 'message' => $this->lang->custom->notice->invalidStrlen['fifteen']));
 
                     /* The length of sourceList in story module and typeList in task module is less than 20, check it when saved. */
-                    if($field == 'sourceList' or $module == 'task' and $field == 'typeList')
+                    if(($module == 'story' and $field == 'sourceList') or ($module == 'task' and $field == 'typeList'))
                     {
                         if(strlen($key) > 20) return $this->send(array('result' => 'fail', 'message' => $this->lang->custom->notice->invalidStrlen['twenty']));
                     }
@@ -188,7 +188,7 @@ class custom extends control
                     if($module == 'testcase' and $field == 'stageList' and strlen($key) > 255) return $this->send(array('result' => 'fail', 'message' => $this->lang->custom->notice->invalidStrlen['twoHundred']));
 
                     /* The length of field that in bug and testcase module and reasonList in story and task module is less than 30, check it when saved. */
-                    if($module == 'bug' or $field == 'reasonList' or $module == 'testcase')
+                    if(in_array($module, array('bug', 'testcase')) or (in_array($module, array('story', 'task')) and $field == 'reasonList'))
                     {
                         if(strlen($key) > 30) return $this->send(array('result' => 'fail', 'message' => $this->lang->custom->notice->invalidStrlen['thirty']));
                     }
