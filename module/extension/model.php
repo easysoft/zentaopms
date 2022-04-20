@@ -456,7 +456,7 @@ class extensionModel extends model
                 if(!is_writable($parentDir) or !@mkdir($path, 0777, true))
                 {
                     $return->errors .= sprintf($this->lang->extension->errorTargetPathNotExists, $path) . '<br />';
-                    $return->mkdirCommands .= "mkdir -p $path<br />";
+                    $return->mkdirCommands .= "sudo mkdir -p $path<br />";
                     $return->chmodCommands .= "sudo chmod -R 777 $path<br />";
                 }
                 $return->dirs2Created[] = $path;
