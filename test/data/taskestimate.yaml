@@ -12,12 +12,12 @@ fields:
     format: ""
   - field: date
     note: "更新日期"
-    from: common.date.v1.yaml
-    use: dateB
+    range: "(-1M)-(+1w):60s"
+    type: timestamp
+    format: "YYYY-MM-DD hh:mm:ss"
     prefix: ""
     postfix: ""
     loop: 0
-    format: ""
   - field: left
     note: "总计消耗"
     range: 0
