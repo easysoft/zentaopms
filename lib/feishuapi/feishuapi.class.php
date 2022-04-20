@@ -9,12 +9,12 @@ class feishuapi
     private $errors = array();
 
     /**
-     * Construct 
-     * 
-     * @param  string $appKey 
-     * @param  string $appSecret 
-     * @param  string $agentId 
-     * @param  string $apiUrl 
+     * Construct
+     *
+     * @param  string $appKey
+     * @param  string $appSecret
+     * @param  string $agentId
+     * @param  string $apiUrl
      * @access public
      * @return void
      */
@@ -29,7 +29,7 @@ class feishuapi
 
     /**
      * Get token.
-     * 
+     *
      * @access public
      * @return string
      */
@@ -47,7 +47,7 @@ class feishuapi
 
     /**
      * Get users.
-     * 
+     *
      * @param  string $selectedDepts
      * @access public
      * @return array
@@ -103,7 +103,7 @@ class feishuapi
 
     /**
      * Get depts.
-     * 
+     *
      * @access public
      * @return array
      */
@@ -146,7 +146,7 @@ class feishuapi
 
     /**
      * Get department tree structure.
-     * 
+     *
      * @access public
      * @return array
      */
@@ -186,10 +186,10 @@ class feishuapi
     }
 
     /**
-     * Send message 
-     * 
-     * @param  string $userList 
-     * @param  string $message 
+     * Send message
+     *
+     * @param  string $userList
+     * @param  string $message
      * @access public
      * @return array
      */
@@ -207,8 +207,8 @@ class feishuapi
 
     /**
      * Query API.
-     * 
-     * @param  string $url 
+     *
+     * @param  string $url
      * @access public
      * @return string
      */
@@ -225,6 +225,7 @@ class feishuapi
         if(isset($response->code) and $response->code == 0) return $response;
 
         if(empty($response)) $this->errors = $errors;
+        if(isset($response->result) and $response->result == 'fail') $this->errors['curl'] = $response->message;
         if(isset($response->code)) $this->errors[$response->code] = "Errcode:{$response->code}, Errmsg:{$response->msg}";
         if(!empty($this->errors))
         {
@@ -236,7 +237,7 @@ class feishuapi
 
     /**
      * Check for errors.
-     * 
+     *
      * @access public
      * @return bool
      */
@@ -247,7 +248,7 @@ class feishuapi
 
     /**
      * Get errors.
-     * 
+     *
      * @access public
      * @return array
      */

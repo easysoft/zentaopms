@@ -434,7 +434,7 @@ class customModel extends model
         global $lang, $app, $dbh;
         if(!isset($lang->$module->featureBar[$method])) return;
         $queryModule = $module == 'execution' ? 'task' : ($module == 'product' ? 'story' : $module);
-        $shortcuts   = $dbh->query('select id, title from ' . TABLE_USERQUERY . " where `account` = '{$app->user->account}' AND `module` = '{$queryModule}' AND `shortcut` = '1' order by id")->fetchAll();
+        $shortcuts   = $dbh->query('select id, title from ' . TABLE_USERQUERY . " where (`account` = '{$app->user->account}' or `common` = '1') AND `module` = '{$queryModule}' AND `shortcut` = '1' order by id")->fetchAll();
 
         if($shortcuts)
         {

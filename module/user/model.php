@@ -228,7 +228,7 @@ class userModel extends model
     {
         $users = $this->dao->select('account, realname, avatar, dept, role')->from(TABLE_USER)
             ->where('deleted')->eq(0)
-            ->beginIF($accounts)->andWhere('type')->eq($type)->fi()
+            ->beginIF($type)->andWhere('type')->eq($type)->fi()
             ->beginIF($accounts)->andWhere('account')->in($accounts)->fi()
             ->fetchAll('account');
 

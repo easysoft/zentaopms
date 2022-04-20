@@ -1285,6 +1285,7 @@ class productModel extends model
             ->beginIF($branch)->andWhere('t1.branch')->in($branch)->fi()
             ->beginIF(!$this->app->user->admin)->andWhere('t2.id')->in($this->app->user->view->sprints)->fi()
             ->andWhere('t2.deleted')->eq('0')
+            ->orderBy('id_desc')
             ->fetchAll('id');
 
         $projectIdList = array();

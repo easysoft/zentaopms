@@ -259,7 +259,7 @@ class html extends baseHTML
         }
         elseif(is_object($user))
         {
-            $userObj->avatar  = $user->avatar;
+            $userObj->avatar  = isset($user->avatar) ? $user->avatar : '';
             $userObj->account = $user->account;
             $userObj->name    = isset($user->name) ? $user->name : (isset($user->realname) ? $user->realname : $user->account);
             $user = $userObj;
