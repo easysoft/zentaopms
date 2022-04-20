@@ -422,11 +422,13 @@ class mr extends control
             }
         }
 
-        $this->view->repo     = $this->loadModel('repo')->getRepoByID($MR->repoID);
-        $this->view->repoID   = $MR->repoID;
-        $this->view->diffs    = $diffs;
-        $this->view->encoding = $encoding;
-        $this->view->arrange  = $arrange;
+        $this->view->repo         = $this->loadModel('repo')->getRepoByID($MR->repoID);
+        $this->view->repoID       = $MR->repoID;
+        $this->view->diffs        = $diffs;
+        $this->view->encoding     = $encoding;
+        $this->view->arrange      = $arrange;
+        $this->view->sourceBranch = $MR->sourceBranch;
+        $this->view->targetBranch = $MR->targetBranch;
         $this->display();
     }
 
