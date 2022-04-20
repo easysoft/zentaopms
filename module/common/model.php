@@ -2245,6 +2245,8 @@ EOD;
             }
             else
             {
+                if(helper::isAjaxRequest()) die(json_encode(array('result' => false, 'message' => $this->lang->error->loginTimeout))); // Fix bug #14478.
+
                 $referer  = helper::safe64Encode($this->app->getURI(true));
                 print(js::locate(helper::createLink('user', 'login', "referer=$referer")));
                 helper::end();

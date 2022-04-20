@@ -2402,7 +2402,7 @@ class story extends control
                 if(isset($storyLang->sourceList[$story->sourceNote]))   $story->sourceNote   = $storyLang->sourceList[$story->sourceNote];
 
                 if(isset($users[$story->openedBy]))     $story->openedBy     = $users[$story->openedBy];
-                if(isset($users[$story->assignedTo]))   $story->assignedTo   = $users[$story->assignedTo];
+                if(isset($users[$story->assignedTo]))   $story->assignedTo   = $users[$story->assignedTo] . "(#$story->assignedTo)";
                 if(isset($users[$story->lastEditedBy])) $story->lastEditedBy = $users[$story->lastEditedBy];
                 if(isset($users[$story->closedBy]))     $story->closedBy     = $users[$story->closedBy];
 

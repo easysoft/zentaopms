@@ -272,9 +272,10 @@ class repo extends control
 
         $this->commonAction($repoID, $objectID);
 
-        $file  = $entry;
-        $repo  = $this->repo->getRepoByID($repoID);
-        $entry = $this->repo->decodePath($entry);
+        $file     = $entry;
+        $repo     = $this->repo->getRepoByID($repoID);
+        $entry    = $this->repo->decodePath($entry);
+        $revision = str_replace('*', '-', $revision);
 
         $this->scm->setEngine($repo);
         $info = $this->scm->info($entry, $revision);

@@ -131,6 +131,19 @@ class action extends control
      */
     public function comment($objectType, $objectID)
     {
+        if(strtolower($objectType) == 'task')
+        {
+            $task       = $this->loadModel('task')->getById($objectID);
+            $executions = explode(',', $this->app->user->view->sprints);
+            if(!in_array($task->execution, $executions)) return print(js::error($this->lang->error->accessDenied));
+        }
+        elseif(strtolower($objectType) == 'story')
+        {
+            $story      = $this->loadModel('story')->getById($objectID);
+            $executions = explode(',', $this->app->user->view->sprints);
+            if(!array_intersect(array_keys($story->executions), $executions)) return print(js::error($this->lang->error->accessDenied));
+        }
+
         $actionID = $this->action->create($objectType, $objectID, 'Commented', $this->post->comment);
         if(defined('RUN_MODE') && RUN_MODE == 'api')
         {
