@@ -2013,7 +2013,7 @@ class story extends control
      * @param  string $number
      * @param  string $type full
      * @param  string $status all|unclosed
-     * @param  string $from
+     * @param  string $from bug
      * @access public
      * @return void
      */

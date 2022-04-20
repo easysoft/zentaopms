@@ -381,18 +381,21 @@ function loadExecutionTasks(executionID)
 /**
  * Load execution stories.
  *
- * @param  executionID $executionID
+ * @param  int  executionID
+ * @param  int  num
  * @access public
  * @return void
  */
 function loadExecutionStories(executionID, num)
 {
     if(typeof(num) == 'undefined') num = '';
-    var productID = $('#product' + num).val();
 
-    var branch = $('#branch' + num).val();
+    var productID = $('#product' + num).val();
+    var branch    = $('#branch' + num).val();
+
     if(typeof(branch) == 'undefined') branch = 0;
     if(typeof(oldStoryID) == 'undefined') oldStoryID = 0;
+
     var link = createLink('story', 'ajaxGetExecutionStories', 'executionID=' + executionID + '&productID=' + productID + '&branch=' + branch + '&moduleID=0&storyID=' + oldStoryID + '&number=' + num + '&type=full&status=all&from=bug');
     $('#storyIdBox' + num).load(link, function(){$('#story' + num).chosen();});
 }
@@ -400,7 +403,7 @@ function loadExecutionStories(executionID, num)
 /**
  * Load builds of a project.
  *
- * @param  int      $projectID
+ * @param  int      projectID
  * @access public
  * @return void
  */
@@ -439,18 +442,20 @@ function loadProjectBuilds(projectID)
 /**
  * Load builds of a execution.
  *
- * @param  int      $executionID
- * @param  int      $num
+ * @param  int      executionID
+ * @param  int      num
  * @access public
  * @return void
  */
 function loadExecutionBuilds(executionID, num)
 {
     if(typeof(num) == 'undefined') num = '';
-    if(typeof(branch) == 'undefined') var branch = 0;
     var branch = $('#branch' + num).val();
+
+    if(typeof(branch) == 'undefined') var branch = 0;
+
     var oldOpenedBuild = $('#openedBuild' + num).val() ? $('#openedBuild' + num).val() : 0;
-    var productID = $('#product' + num).val();
+    var productID      = $('#product' + num).val();
 
     if(page == 'create')
     {
