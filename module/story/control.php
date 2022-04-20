@@ -1341,7 +1341,7 @@ class story extends control
         {
             $changes = $this->story->close($storyID);
             if(dao::isError()) return print(js::error(dao::getError()));
-            $this->story->closeParentUserStory($storyID);
+            $this->story->closeParentRequirement($storyID);
 
             if($changes)
             {

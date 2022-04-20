@@ -2990,16 +2990,16 @@ class storyModel extends model
     }
 
     /**
-     * Close user story if all son story for segmentation has been closed.
+     * Close requirement if all son story for segmentation has been closed.
      *
      * @param  int    $storyID
      * @access public
      * @return void
      */
-    public function closeParentUserStory($storyID)
+    public function closeParentRequirement($storyID)
     {
         $parentID = $this->dao->select('BID')->from(TABLE_RELATION)->where('AID')->eq($storyID)->fetch();
-        $stories = $this->dao->select('t2.id, t2.status')->from(TABLE_RELATION)->alias('t1')
+        $stories  = $this->dao->select('t2.id, t2.status')->from(TABLE_RELATION)->alias('t1')
             ->leftJoin(TABLE_STORY)->alias('t2')->on('t2.id=t1.AID')
             ->where('t1.BType')->eq('requirement')
             ->andWhere('t2.status')->ne('closed')
