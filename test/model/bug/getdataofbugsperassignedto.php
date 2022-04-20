@@ -18,7 +18,7 @@ pid=1
 
 
 $bug=new bugTest();
-r($bug->getDataOfBugsPerAssignedToTest()) && p('admin:name,value')  && e('admin,80');  // 获取用户admin数据
+r($bug->getDataOfBugsPerAssignedToTest()) && p('admin:name,value')  && e('admin,85');  // 获取用户admin数据
 r($bug->getDataOfBugsPerAssignedToTest()) && p('dev1:name,value')   && e('开发1,85');   // 获取用户dev1数据
 r($bug->getDataOfBugsPerAssignedToTest()) && p('test1:name,value')  && e('测试1,85');  // 获取用户test1数据
 r($bug->getDataOfBugsPerAssignedToTest()) && p('closed:name,value') && e('Closed,20'); // 获取用户closed数据
