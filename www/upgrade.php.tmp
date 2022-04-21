@@ -11,8 +11,9 @@
  */
 /* Judge my.php exists or not. */
 define('IN_UPGRADE', true);
-$dbConfig = dirname(dirname(__FILE__)) . '/config/db.php';
-$myConfig = dirname(dirname(__FILE__)) . '/config/my.php';
+$basePath = dirname(dirname(__FILE__));
+$dbConfig = $basePath . '/config/db.php';
+$myConfig = $basePath . '/config/my.php';
 if(file_exists($dbConfig))
 {
     if(file_exists($myConfig))
@@ -23,7 +24,7 @@ if(file_exists($dbConfig))
 
     if(!@rename($dbConfig, $myConfig))
     {
-        $configDir = dirname(dirname(__FILE__)) . '/config/';
+        $configDir = $basePath . '/config/';
         echo "请执行命令 chmod 777 $configDir 来修改权限，保证禅道在该目录有操作文件权限" . "<br />";
         echo "Please execute the command 'chmod 777 $configDir' to modify the permissions to ensure that the ZenTao has operating file permissions in this directory";
         exit;
@@ -36,6 +37,12 @@ if(file_exists($dbConfig))
     }
 }
 if(!file_exists($myConfig)) die(header('location: install.php'));
+if(file_exists("{$basePath}/config/ext/secret.php") and !unlink("{$basePath}/config/ext/secret.php"))
+{
+    echo "请删除文件 {$basePath}/config/ext/secret.php，后刷新页面<br />";
+    echo "Please delete {$basePath}/config/ext/secret.php and refresh.";
+    exit;
+}
 
 error_reporting(0);
 

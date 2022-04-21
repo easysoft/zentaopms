@@ -188,6 +188,7 @@ class dingapi
         if(isset($response->errcode) and $response->errcode == 0) return $response;
 
         if(empty($response)) $this->errors = $errors;
+        if(isset($response->result) and $response->result == 'fail') $this->errors['curl'] = $response->message;
         if(isset($response->errcode)) $this->errors[$response->errcode] = "Errcode:{$response->errcode}, Errmsg:{$response->errmsg}";
         return false;
     }

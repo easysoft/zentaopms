@@ -388,6 +388,7 @@ $lang->error->noData          = 'No data.';
 $lang->error->editedByOther   = 'This record might have been changed. Please refresh and try to edit again!';
 $lang->error->tutorialData    = 'No data can be imported in tutorial mode. Please quit tutorial first!';
 $lang->error->noCurlExt       = 'No Curl module installed';
+$lang->error->loginTimeout    = 'Login has timed out, please login again!';
 
 /* Page info. */
 $lang->pager = new stdclass();

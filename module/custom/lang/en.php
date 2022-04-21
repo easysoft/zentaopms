@@ -183,6 +183,7 @@ $lang->custom->notice->indexPage['project'] = "ZenTao 8.2+ has Project Home. Do 
 $lang->custom->notice->indexPage['qa']      = "ZenTao 8.2+ has Test Homepage. Do you want to go to Test Homepage?";
 
 $lang->custom->notice->invalidStrlen['ten']        = 'The key should be <= 10 characters.';
+$lang->custom->notice->invalidStrlen['fifteen']    = 'The key should be <= 15 characters.';
 $lang->custom->notice->invalidStrlen['twenty']     = 'The key should be <= 20 characters.';
 $lang->custom->notice->invalidStrlen['thirty']     = 'The key should be <= 30 characters.';
 $lang->custom->notice->invalidStrlen['twoHundred'] = 'The key should be <= 225 characters.';

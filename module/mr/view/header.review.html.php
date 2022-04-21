@@ -38,7 +38,8 @@ if($repoExecution)
 }
 
 $reviews = $this->mr->getReview($repoID, $MR->id);
-$v1      = isset($oldRevision) ? $oldRevision : 0;
+$v1      = str_replace('-', '*', $sourceBranch);
+$v2      = str_replace('-', '*', $targetBranch);
 
 $this->loadModel('repo');
 
@@ -46,7 +47,7 @@ $taskModuleSelect    = html::select('taskModule', $taskModules, $taskRepoModule,
 $taskUserSelect      = html::select('taskAssignedTo', $taskMembers, '', 'class="form-control chosen"');
 $taskExecutionSelect = html::select('taskExecution', $taskExecutions, $repoExecution, 'class="form-control chosen" onchange="changeExecution(this)"');
 
-$reviewUrl       = $this->createLink('mr', 'addReview', "repoID=$repoID&mr={$MR->id}&v1=$v1&v2=");
+$reviewUrl       = $this->createLink('mr', 'addReview', "repoID=$repoID&mr={$MR->id}&v1=$v1&v2=$v2");
 $productSelect   = html::select('product', $products, $repoProduct, 'class="product form-control chosen" onchange="changeProduct(this)"');
 $branches        = $this->loadModel('branch')->getPairs($repoProduct);
 $moduleSelect    = html::select('module', $modules, $bugRepoModule, 'class="form-control chosen"');
@@ -153,7 +154,6 @@ js::set('revision', '');
         <td colspan="3" class='form-actions'>
           <?php echo html::submitButton($lang->repo->submit, '', 'btn btn-wide btn-primary reviewSubmit');?>
           <?php echo html::commonButton($lang->cancel, "onclick='hiddenForm()'", 'btn btn-wide');?>
-          <input type="hidden" id='entry' name="entry" value=""/>
         </td>
       </tr>
     </table>

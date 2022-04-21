@@ -334,7 +334,7 @@ class searchModel extends model
      *
      * @param  int    $queryID
      * @access public
-     * @return string
+     * @return object
      */
     public function getQuery($queryID)
     {
@@ -354,6 +354,20 @@ class searchModel extends model
             $querySessionName = $query->form['module'] . 'Query';
             $query->sql = $_SESSION[$querySessionName];
         }
+        return $query;
+    }
+
+    /**
+     * Get a query.
+     *
+     * @param  int    $queryID
+     * @access public
+     * @return object
+     */
+    public function getByID($queryID)
+    {
+        $query = $this->dao->findByID($queryID)->from(TABLE_USERQUERY)->fetch();
+        if(!$query) return false;
         return $query;
     }
 

@@ -123,9 +123,15 @@ class commonModel extends model
         $projectID = $execution->project;
         $project   = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($projectID)->fetch();
 
+        $today = helper::today();
         if($project->status == 'wait')
         {
-            $this->dao->update(TABLE_PROJECT)->set('status')->eq('doing')->where('id')->eq($projectID)->exec();
+            $this->dao->update(TABLE_PROJECT)
+                 ->set('status')->eq('doing')
+                 ->beginIf(helper::isZeroDate($project->realBegan))->set('realBegan')->eq($today)->fi()
+                 ->where('id')->eq($projectID)
+                 ->exec();
+
             $this->loadModel('action')->create('project', $projectID, 'syncproject');
         }
         return $project;
@@ -2245,7 +2251,17 @@ EOD;
             }
             else
             {
-                $referer  = helper::safe64Encode($this->app->getURI(true));
+                $uri = $this->app->getURI(true);
+                if($module == 'message' and $method == 'ajaxgetmessage')
+                {
+                    $uri = helper::createLink('my');
+                }
+                elseif(helper::isAjaxRequest())
+                {
+                    die(json_encode(array('result' => false, 'message' => $this->lang->error->loginTimeout))); // Fix bug #14478.
+                }
+
+                $referer = helper::safe64Encode($uri);
                 print(js::locate(helper::createLink('user', 'login', "referer=$referer")));
                 helper::end();
             }

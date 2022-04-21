@@ -31,7 +31,7 @@ $(function()
     });
 
     $('#pri').on('change', function()
-    {   
+    {
         var $select = $(this);
         var $selector = $select.closest('.pri-selector');
         var value = $select.val();

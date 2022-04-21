@@ -22,6 +22,11 @@
 .gantt_task_content{display: none;}
 .checkbox-primary {margin-top: 0px; margin-left: 10px;}
 form {display: block; margin-top: 0em; margin-block-end: 1em;}
+<?php if($selectCustom == 'task'):?>
+.gantt_grid .gantt_grid_scale{width:100% !important;}
+.gantt_grid .gantt_grid_data{width:100% !important;}
+.gantt_grid .gantt_grid_data .gantt_row{width:100% !important;}
+<?php endif;?>
 </style>
 <?php js::set('customUrl', $this->createLink('programplan', 'ajaxCustom'));?>
 <?php js::set('dateDetails', $dateDetails);?>
@@ -71,7 +76,15 @@ function drawGanttToCanvas(exportType, successCallback, errorCallback)
     var $ganttDataArea  = $ganttView.find('.gantt_data_area');
     var $ganttDridData  = $ganttView.find('.gantt_grid_data');
     var ganttHeight     = $ganttView.find('.gantt_task_bg').outerHeight() + $ganttView.find('.gantt_grid_scale').outerHeight() + 1;
-    var ganttWidth      = $ganttDataArea.outerWidth() + $ganttDridData.outerWidth();
+
+    <?php if($selectCustom == 'task'):?>
+    var ganttWidth  = $ganttDridData.width() - 100;
+    var ganttHeight = $ganttView.find('.gantt_grid_scale').outerHeight();
+    $ganttDridData.find('.gantt_row').each(function() {ganttHeight += $(this).outerHeight();});
+    <?php else:?>
+    var ganttWidth  = $ganttDataArea.outerWidth() + $ganttDridData.outerWidth();
+    var ganttHeight = $ganttView.find('.gantt_task_bg').outerHeight() + $ganttView.find('.gantt_grid_scale').outerHeight() + 1;
+    <?php endif;?>
 
     $ganttContainer.css(
     {
@@ -202,13 +215,13 @@ function zoomTasks(node)
         break;
         case "week":
             gantt.config.min_column_width = 70;
-            gantt.config.scales = [{unit: 'week', step: 1, format: "<?php echo $lang->project->gantt->zooming['week'];?> #%W"}, {unit:"day", step:1, date:"%D"}]
+            gantt.config.scales = [{unit: 'week', step: 1, format: "<?php echo $lang->execution->gantt->zooming['week'];?> #%W"}, {unit:"day", step:1, date:"%D"}]
             gantt.config.scale_height = 60;
         break;
         case "month":
             gantt.config.min_column_width = 70;
             gantt.config.scale_height = 60;
-            gantt.config.scales = [{unit: 'month', step: 1, format: '%M'}, {unit:"week", step:1, date:"<?php echo $lang->project->gantt->zooming['week'];?> #%W"}];
+            gantt.config.scales = [{unit: 'month', step: 1, format: '%M'}, {unit:"week", step:1, date:"<?php echo $lang->execution->gantt->zooming['week'];?> #%W"}];
         break;
     }
     gantt.render();

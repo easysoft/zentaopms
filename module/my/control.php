@@ -418,8 +418,9 @@ EOF;
         if($this->config->systemMode == 'new')
         {
             $projects = $this->dao->select('t1.id,t1.name,t2.id as execution')->from(TABLE_PROJECT)->alias('t1')
-                ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.id=t2.parent')
+                ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.id=t2.project')
                 ->where('t2.id')->in($executionIDList)
+                ->andWhere('t1.type')->eq('project')
                 ->fetchAll('execution');
         }
 
@@ -856,7 +857,7 @@ EOF;
         $this->view->browseType = $browseType;
         $this->view->ncs        = $ncList;
         $this->view->users      = $this->loadModel('user')->getPairs('noclosed|noletter');
-        $this->view->projects   = $this->loadModel('project')->getPairsByProgram(0);
+        $this->view->projects   = $this->loadModel('project')->getPairsByProgram();
         $this->view->pager      = $pager;
         $this->view->orderBy    = $orderBy;
         $this->view->mode       = 'nc';
