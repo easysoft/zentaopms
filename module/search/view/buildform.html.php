@@ -295,6 +295,14 @@ $(function()
         $chosen.toggleClass('chosen-up', $drop.height() + $drop.offset().top - $(document).scrollTop() > $(window).height());
     });
 
+    $searchForm.find('.picker-select').each(function()
+    {
+        var $select = $(this);
+        var pickerOptions = {chosenMode: true}
+        if($select.attr('data-pickertype') == 'remote') pickerOptions.remote = $select.attr('data-pickerremote');
+        $select.picker(pickerOptions);
+    });
+
     /* Toggle user queries action. */
     $('#toggle-queries').click(function()
     {
