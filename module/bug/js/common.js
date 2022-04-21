@@ -341,7 +341,7 @@ function loadExecutionRelated(executionID)
         loadExecutionTasks(executionID);
         loadExecutionStories(executionID);
         loadExecutionBuilds(executionID);
-        loadAssignedTo(executionID);
+        loadAssignedTo(executionID, $('#assignedTo').val());
         loadTestTasks($('#product').val(), executionID);
     }
     else
