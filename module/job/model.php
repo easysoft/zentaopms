@@ -457,12 +457,12 @@ class jobModel extends model
 
         if($job->triggerType == 'tag')
         {
-            $lastTag = $this->getLastTagByRepo($repo, $job);
-            if($lastTag)
+            $job->lastTag = $this->getLastTagByRepo($repo, $job);
+
+            if($job->lastTag)
             {
-                $build->tag   = $lastTag;
-                $job->lastTag = $lastTag;
-                $this->dao->update(TABLE_JOB)->set('lastTag')->eq($lastTag)->where('id')->eq($job->id)->exec();
+                $build->tag = $job->lastTag;
+                $this->dao->update(TABLE_JOB)->set('lastTag')->eq($job->lastTag)->where('id')->eq($job->id)->exec();
             }
         }
 
