@@ -556,7 +556,7 @@ class projectModel extends model
             ->andWhere('deleted')->eq(0)
             ->beginIF($projectIdList)->andWhere('id')->in($projectIdList)->fi()
             ->beginIF(!$this->app->user->admin and $mode != 'all')->andWhere('id')->in($this->app->user->view->projects)->fi()
-            ->beginIF($mode != 'all' and !empty($mode))->andWhere('model')->in(explode(',', $mode))->fi()
+            ->beginIF($mode != 'all' and !empty($mode))->andWhere('model')->in($mode)->fi()
             ->fetchPairs('id', 'name');
     }
 
