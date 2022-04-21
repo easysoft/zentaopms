@@ -495,7 +495,8 @@ class upgradeModel extends model
 
                 $this->updateGroup4Lite();
                 break;
-            case '16.5':
+            case '16_5':
+                $this->updateProjectStatus();
                 $this->updateStoryReviewer();
                 break;
         }
@@ -6180,5 +6181,36 @@ class upgradeModel extends model
 
             $this->dao->insert(TABLE_STORYREVIEW)->data($data)->exec();
         }
+    }
+
+    /**  
+     * Update the project status.
+     *
+     * @access public
+     * @return void
+     */    
+    public function updateProjectStatus()
+    {
+        $projects = $this->dao->select('*')->from(TABLE_PROJECT) 
+            ->where('deleted')->eq('0')
+            ->andWhere('status')->eq('doing')
+            ->andWhere('type')->eq('project')
+            ->andWhere('realBegan')->eq('0000-00-00')
+            ->fetchAll('id');
+
+        if(empty($projects)) return; 
+
+        $projectIDList = array_keys($projects);
+
+        $executions = $this->dao->select('id,project,min(realBegan) as minBegan')->from(TABLE_EXECUTION)
+            ->where('status')->eq('doing')
+            ->andWhere('deleted')->eq('0')
+            ->andWhere('project')->in($projectIDList)
+            ->groupBy('project')
+            ->fetchAll();
+
+        if(empty($executions)) return;
+
+        foreach ($executions as $execution) $this->dao->update(TABLE_PROJECT)->set('realBegan')->eq($execution->minBegan)->where('id')->eq($execution->project)->exec();
     }
 }
