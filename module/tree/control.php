@@ -548,7 +548,7 @@ class tree extends control
 
         $modules = $this->tree->getOptionMenu($productID, $viewType, $startModuleID = 0, $branchID);
 
-        $moduleName = $viewType == 'bug' && $from != 'showImport' ? "modules[$number]" : "module[$number]";
+        $moduleName = ($viewType == 'bug' and $from != 'showImport') ? "modules[$number]" : "module[$number]";
         $modules    = empty($modules) ? array('' => '') : $modules;
         echo html::select($moduleName, $modules, $currentModuleID, 'class=form-control');
     }

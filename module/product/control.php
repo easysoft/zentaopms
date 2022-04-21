@@ -990,7 +990,7 @@ class product extends control
         {
             $executions     = empty($executions) ? array('' => '') : $executions;
             $executionsName = $from == 'showImport' ? "execution[$number]" : "executions[$number]";
-            $misc           = $from == 'showImport' ? "class='form-control' onchange='loadExecutionBuilds(this.value, $number)'" : "class='form-control' onchange='loadExecutionBuilds($productID, this.value, $number)'";
+            $misc           = $from == 'showImport' ? "class='form-control' onchange='loadImportExecutionRelated(this.value, $number)'" : "class='form-control' onchange='loadExecutionBuilds($productID, this.value, $number)'";
             return print(html::select($executionsName, $executions, '', $misc));
         }
     }
