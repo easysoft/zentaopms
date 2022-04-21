@@ -276,7 +276,7 @@ class personnelTest
      *
      * @param  string $objectType
      * @param  int    $objectID
-     * @param  string mixed $user
+     * @param  array  mixed $user
      * @access public
      * @return void
      */
@@ -292,8 +292,20 @@ class personnelTest
         return $objects;
     }
 
+    /**
+     * Delete product whitelist Test
+     *
+     * @param  int    mixed $productID
+     * @param  string $account
+     * @access public
+     * @return void
+     */
     public function deleteProductWhitelistTest($productID, $account = '')
     {
+        global $tester;
+        $this->addWhitelistTest('product', $productID, array('admin'));
+        $tester->dao->update(TABLE_ACL)->set('source')->eq('sync')->where('objectID')->eq($productID)->andWhere('objectType')->eq('product')->exec();
+
         $objects = $this->objectModel->deleteProductWhitelist($productID, $account);
 
         if(dao::isError()) return dao::getError();
@@ -301,8 +313,19 @@ class personnelTest
         return $objects;
     }
 
-    public function deleteProgramWhitelistTest($programID = 0, $account = '')
+    /**
+     * Delete program whitelist Test
+     *
+     * @param  int    $programID
+     * @param  string $account
+     * @access public
+     * @return void
+     */
+    public function deleteProgramWhitelistTest($programID, $account)
     {
+        global $tester;
+        $this->addWhitelistTest('program', $programID, array($account));
+        $tester->dao->update(TABLE_ACL)->set('source')->eq('sync')->where('objectID')->eq($programID)->andWhere('objectType')->eq('program')->exec();
         $objects = $this->objectModel->deleteProgramWhitelist($programID, $account);
 
         if(dao::isError()) return dao::getError();
@@ -310,8 +333,19 @@ class personnelTest
         return $objects;
     }
 
-    public function deleteProjectWhitelistTest($objectID = 0, $account = '')
+    /**
+     * Delete project whitelist Test
+     *
+     * @param  int    mixed $objectID
+     * @param  string mixed $account
+     * @access public
+     * @return void
+     */
+    public function deleteProjectWhitelistTest($objectID, $account)
     {
+        global $tester;
+        $this->addWhitelistTest('project', $objectID, array($account));
+        $tester->dao->update(TABLE_ACL)->set('source')->eq('sync')->where('objectID')->eq($objectID)->andWhere('objectType')->eq('project')->exec();
         $objects = $this->objectModel->deleteProjectWhitelist($objectID, $account);
 
         if(dao::isError()) return dao::getError();
@@ -319,8 +353,19 @@ class personnelTest
         return $objects;
     }
 
+    /**
+     * Delete execution whitelist Test
+     *
+     * @param  int    mixed $executionID
+     * @param  string $account
+     * @access public
+     * @return void
+     */
     public function deleteExecutionWhitelistTest($executionID, $account = '')
     {
+        global $tester;
+        $this->addWhitelistTest('sprint', $executionID, array($account));
+        $tester->dao->update(TABLE_ACL)->set('source')->eq('sync')->where('objectID')->eq($executionID)->andWhere('objectType')->eq('sprint')->exec();
         $objects = $this->objectModel->deleteExecutionWhitelist($executionID, $account);
 
         if(dao::isError()) return dao::getError();
@@ -328,8 +373,21 @@ class personnelTest
         return $objects;
     }
 
+    /**
+     * Delete whitelist Test
+     *
+     * @param array $users
+     * @param  string $objectType
+     * @param  int    $objectID
+     * @param  int    $groupID
+     * @access public
+     * @return void
+     */
     public function deleteWhitelistTest($users = array(), $objectType = 'program', $objectID = 0, $groupID = 0)
     {
+        global $tester;
+        $this->addWhitelistTest($objectType, $objectID, $users);
+        $tester->dao->update(TABLE_ACL)->set('source')->eq('sync')->where('objectID')->eq($objectID)->andWhere('objectType')->eq($objectType)->exec();
         $objects = $this->objectModel->deleteWhitelist($users, $objectType, $objectID, $groupID);
 
         if(dao::isError()) return dao::getError();
