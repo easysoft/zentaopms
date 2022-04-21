@@ -18,11 +18,11 @@ $(function()
     {
         if(parseInt($('#maxImport').val())) $('#times').html(Math.ceil(parseInt($('#allCount').html()) / parseInt($('#maxImport').val())));
     });
-    $('#import').click(function(){location.href = createLink('testcase', 'showImport', "productID=<?php echo $productID;?>&branch=<?php echo $branch?>&pageID=1&maxImport=" + $('#maxImport').val())});
+    $('#import').click(function(){location.href = createLink('testcase', 'showImport', "productID=<?php echo $productID;?>&branch=<?php echo $branch?>&pageID=1&maxImport=" + $('#maxImport').val())})
 });
 </script>
 <?php else:?>
-<div id="mainContent" class="main-content fade">
+<div id="mainContent" class="main-content">
   <div class="main-header clearfix">
     <h2><?php echo $lang->testcase->import;?></h2>
   </div>
@@ -86,7 +86,6 @@ $(function()
             <?php if($product->type != 'normal'):?>
             <?php
             if(isset($case->branch)) $branchID = $case->branch;
-            if(!empty($case->id) and !empty($cases[$case->id]->branch)) $branchID = $cases[$case->id]->branch;
             if(!isset($branches[$branchID])) $branchID = $branch;
             ?>
             <td><?php echo html::select("branch[$key]", $branches, $branchID, "class='form-control chosen' onchange='setModules(this.value, $productID, $key)'");?></td>
