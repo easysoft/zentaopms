@@ -1272,10 +1272,11 @@ class productModel extends model
      *
      * @param  int    $productID
      * @param  int    $branch
+     * @param  int    $projectID
      * @access public
      * @return array
      */
-    public function getAllExecutionPairsByProduct($productID, $branch = 0)
+    public function getAllExecutionPairsByProduct($productID, $branch = 0, $projectID = 0)
     {
         if(empty($productID)) return array();
         $executions = $this->dao->select('t2.id,t2.project,t2.name,t2.grade,t2.parent')->from(TABLE_PROJECTPRODUCT)->alias('t1')
@@ -1283,6 +1284,7 @@ class productModel extends model
             ->where('t1.product')->eq($productID)
             ->andWhere('t2.type')->in('stage,sprint,kanban')
             ->beginIF($branch)->andWhere('t1.branch')->in($branch)->fi()
+            ->beginIF($projectID)->andWhere('t2.project')->eq($projectID)->fi()
             ->beginIF(!$this->app->user->admin)->andWhere('t2.id')->in($this->app->user->view->sprints)->fi()
             ->andWhere('t2.deleted')->eq('0')
             ->fetchAll('id');

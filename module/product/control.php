@@ -967,10 +967,11 @@ class product extends control
      * @param  int    $branch
      * @param  string $number
      * @param  int    $executionID
+     * @param  string $from showImport
      * @access public
      * @return void
      */
-    public function ajaxGetExecutions($productID, $projectID = 0, $branch = 0, $number = '', $executionID = 0)
+    public function ajaxGetExecutions($productID, $projectID = 0, $branch = 0, $number = '', $executionID = 0, $from = '')
     {
         if($this->app->tab == 'execution' and $this->session->execution)
         {
@@ -978,7 +979,7 @@ class product extends control
             if($execution->type == 'kanban') $projectID = $execution->project;
         }
 
-        $executions = $this->product->getExecutionPairsByProduct($productID, $branch, 'id_desc', $projectID, empty($this->config->CRExecution) ? 'noclosed' : '');
+        $executions = $from == 'showImport' ? $this->product->getAllExecutionPairsByProduct($productID, $branch, $projectID) : $this->product->getExecutionPairsByProduct($productID, $branch, 'id_desc', $projectID, empty($this->config->CRExecution) ? 'noclosed' : '');
         if($this->app->getViewType() == 'json') return print(json_encode($executions));
 
         if($number === '')
@@ -987,9 +988,10 @@ class product extends control
         }
         else
         {
-            $executionsName = "executions[$number]";
             $executions     = empty($executions) ? array('' => '') : $executions;
-            return print(html::select($executionsName, $executions, '', "class='form-control' onchange='loadExecutionBuilds($productID, this.value, $number)'"));
+            $executionsName = $from == 'showImport' ? "execution[$number]" : "executions[$number]";
+            $misc           = $from == 'showImport' ? "class='form-control' onchange='loadExecutionBuilds(this.value, $number)'" : "class='form-control' onchange='loadExecutionBuilds($productID, this.value, $number)'";
+            return print(html::select($executionsName, $executions, '', $misc));
         }
     }
 
