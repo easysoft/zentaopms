@@ -20,6 +20,19 @@ helper::import(dirname(dirname(__FILE__)) . '/base/filter/filter.class.php');
  */
 class validater extends baseValidater
 {
+    /**
+     * 检查文件名。
+     * Check file name.
+     *
+     * @param string $var
+     * @static
+     * @access public
+     * @return bool
+     */
+    public static function checkFileName($var)
+    {
+        return !preg_match('/>+|<+/', $var);
+    }
 }
 
 /**
