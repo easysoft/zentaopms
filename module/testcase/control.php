@@ -1913,7 +1913,7 @@ class testcase extends control
 
         $caseLang   = $this->lang->testcase;
         $caseConfig = $this->config->testcase;
-        $branches   = $this->loadModel('branch')->getPairs($productID);
+        $branches   = $this->loadModel('branch')->getPairs($productID, 'active');
         $stories    = $this->loadModel('story')->getProductStoryPairs($productID, $branch);
         $fields     = $this->testcase->getImportFields($productID);
         $fields     = array_flip($fields);
