@@ -1,5 +1,6 @@
-<?php js::set('isAjaxRequest', helper::isAjaxRequest());?>
-<?php if(!helper::isAjaxRequest()): ?>
+<?php $isAjaxRequest = helper::isAjaxRequest();?>
+<?php js::set('isAjaxRequest', $isAjaxRequest);?>
+<?php if(!$isAjaxRequest): ?>
 <?php include "../../common/view/header.html.php"?>
 <?php endif;?>
 <div class='modal-dialog' id='guideDialog'>
@@ -50,6 +51,6 @@ $('.createButton').on('click', function()
     $.closeModal();
 });
 </script>
-<?php if(!helper::isAjaxRequest()): ?>
+<?php if(!$isAjaxRequest): ?>
 <?php include "../../common/view/footer.html.php"?>
 <?php endif;?>
