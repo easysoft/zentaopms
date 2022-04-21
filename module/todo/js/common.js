@@ -48,7 +48,7 @@ function loadList(type, id, defaultType, idvalue)
             if(data.length != 0)
             {
                 $(divClass).html(data).find('select').chosen();
-                if(config.currentMethod == 'edit') $(divClass).html(data).find('select').val(idvalue).trigger('chosen:updated');
+                if(config.currentMethod == 'edit' || type == 'feedback') $(divClass).html(data).find('select').val(idvalue).trigger('chosen:updated');
             }
             else
             {

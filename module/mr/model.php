@@ -1177,7 +1177,6 @@ class mrModel extends model
             $bugInfo['content']    = $data->steps;
             $bugInfo['title']      = $data->title;
             $bugInfo['objectType'] = 'bug';
-            $bugInfo['entry']      = $data->entry;
             return $bugInfo;
         }
 

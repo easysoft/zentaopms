@@ -1704,7 +1704,8 @@ class testtaskModel extends model
                 elseif(!isset($existCases[$case->title]))
                 {
                     $this->dao->insert(TABLE_CASE)->data($case, 'steps')->exec();
-                    $caseID = $this->dao->lastInsertID();
+                    $caseID      = $this->dao->lastInsertID();
+                    $case->steps = isset($case->steps) ? $case->steps : array();
                     foreach($case->steps as $caseStep)
                     {
                         $caseStep->case    = $caseID;

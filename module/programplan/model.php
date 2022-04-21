@@ -200,8 +200,8 @@ class programplanModel extends model
             if($data->start_date) $data->start_date = date('d-m-Y', strtotime($data->start_date));
             if($data->start_date == '' or $data->endDate == '') $data->duration = 0;
 
-            $datas['data'][] = $data;
-            $stageIndex[]    = array('planID' => $plan->id, 'progress' => array('totalConsumed' => 0, 'totalReal' => 0));
+            $datas['data'][]       = $data;
+            $stageIndex[$plan->id] = array('planID' => $plan->id, 'parent' => $plan->parent, 'progress' => array('totalConsumed' => 0, 'totalReal' => 0));
         }
 
         $taskSign = "<span>[ T ] </span>";
@@ -272,9 +272,15 @@ class programplanModel extends model
                 {
                     $stageIndex[$index]['progress']['totalConsumed'] += $task->consumed;
                     $stageIndex[$index]['progress']['totalReal']     += ($task->left + $task->consumed);
+                    
+                    $stageIndex[$stage['parent']]['progress']['totalConsumed'] += $task->consumed;
+                    $stageIndex[$stage['parent']]['progress']['totalReal']     += ($task->left + $task->consumed);
                 }
             }
         }
+        
+        /* Ceturns all the values from the stageIndex and indexes the array numerically. */
+        $stageIndex = array_values($stageIndex); 
 
         /* Calculate the progress of the phase. */
         foreach($stageIndex as $index => $stage)

@@ -20,3 +20,4 @@
 .doc-fullscreen .fullscreen-btn > .icon-fullscreen:before {content: '\e972';}
 .right-icon a {color: #1183fb;}
 .cell th,td {word-break: break-word;}
+.main-actions {width: 100% !important;}

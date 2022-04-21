@@ -171,7 +171,7 @@
         <tr>
           <td colspan='3' class='text-center form-actions'>
             <?php echo html::submitButton();?>
-            <?php if(!isonlybody()) echo html::a($this->createLink('my', 'todo', 'type=all'), $lang->goback, '', "class='btn btn-back btn-wide'");?>
+            <?php if(!isonlybody()) echo html::a($this->session->todoList, $lang->goback, '', "class='btn btn-back btn-wide'");?>
           </td>
         </tr>
       </table>

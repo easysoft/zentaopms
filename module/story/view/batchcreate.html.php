@@ -68,7 +68,11 @@
             <th class='c-keywords<?php echo zget($visibleFields, 'keywords', ' hidden') . zget($requiredFields, 'keywords', '', ' required');?>'><?php echo $lang->story->keywords;?></th>
             <?php
             $extendFields = $this->story->getFlowExtendFields();
-            foreach($extendFields as $extendField) echo "<th class='c-extend'>{$extendField->name}</th>";
+            foreach($extendFields as $extendField) 
+            {
+                $required = strpos(",$extendField->rules,", ',1,') !== false ? 'required' : '';
+                echo "<th class='c-extend $required'>{$extendField->name}</th>";
+            }
             ?>
           </tr>
         </thead>
@@ -115,11 +119,12 @@
             </td>
             <td class='<?php echo zget($visibleFields, 'keywords', 'hidden')?>'><?php echo html::input('keywords[$id]', '', "class='form-control'");?></td>
             <?php 
+            $this->loadModel('flow');
             foreach($extendFields as $extendField) 
             {
                 $object = new stdclass();
                 $object->{$extendField->field} = $extendField->default;
-                echo "<td" . (($extendField->control == 'select' or $extendField->control == 'multi-select') ? " style='overflow:visible'" : '') . ">" . $this->loadModel('flow')->getFieldControl($extendField, $object, $extendField->field . '[$id]') . "</td>";
+                echo "<td" . (($extendField->control == 'select' or $extendField->control == 'multi-select') ? " style='overflow:visible'" : '') . ">" . $this->flow->getFieldControl($extendField, $object, $extendField->field . '[$id]') . "</td>";
             }
             ?>
           </tr>
@@ -153,7 +158,7 @@ $(function()
                 var $select = $(this);
                 if($select.hasClass('picker-select')) $select.parent().find('.picker').remove();
                 if(index == 1) $select.find("option[value='ditto']").remove();
-                if(index > 1) $select.val('ditto');
+                if(index > 1 && $select.find('option[value="ditto"]').length > 0) $select.val('ditto');
                 if($select.attr('id').indexOf('branch') >= 0) $select.val('<?php echo $branch;?>')
                 $select.chosen();
                 setTimeout(function()

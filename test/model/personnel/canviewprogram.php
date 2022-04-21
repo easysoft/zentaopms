@@ -10,6 +10,9 @@ title=测试 personnelModel->canViewProgram();
 cid=1
 pid=1
 
+看是否具有访问权限有的情况 >> 1
+看是否具有访问权限no的情况 >> 1
+
 */
 
 $personnel = new personnelTest('admin');

@@ -857,7 +857,7 @@ EOF;
         $this->view->browseType = $browseType;
         $this->view->ncs        = $ncList;
         $this->view->users      = $this->loadModel('user')->getPairs('noclosed|noletter');
-        $this->view->projects   = $this->loadModel('project')->getPairsByProgram(0);
+        $this->view->projects   = $this->loadModel('project')->getPairsByProgram();
         $this->view->pager      = $pager;
         $this->view->orderBy    = $orderBy;
         $this->view->mode       = 'nc';

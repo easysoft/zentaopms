@@ -96,7 +96,13 @@ switch($argv[1])
         break;
     case 'productsonplan':
         ztfRun('model/productsonplan');
-        break;;
+        break;
+    case 'personnel':
+        ztfRun('model/personnel');
+        break;
+    case 'projectstory':
+        ztfRun('model/projectstory');
+        break;
     case 'admin':
         ztfRun('model/admin');
         break;
