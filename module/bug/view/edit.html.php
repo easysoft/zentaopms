@@ -145,7 +145,12 @@ if($this->app->tab == 'project')   js::set('objectID', $bug->project);
                 </tr>
                 <tr>
                   <th><?php echo $lang->bug->assignedTo;?></th>
-                  <td><?php echo html::select('assignedTo', $users, $bug->assignedTo, "class='form-control chosen'");?></td>
+                  <td>
+                    <div class='input-group'>
+                      <?php echo html::select('assignedTo', $users, $bug->assignedTo, "class='form-control chosen'");?>
+                      <span class='input-group-btn'><?php echo html::commonButton($lang->bug->allUsers, "class='btn btn-default' onclick='loadAllUsers()' data-toggle='tooltip'");?></span>
+                    </div>
+                  </td>
                 </tr>
                 <tr>
                   <th><?php echo $lang->bug->deadline;?></th>
