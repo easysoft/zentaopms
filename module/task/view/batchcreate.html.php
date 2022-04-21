@@ -167,11 +167,12 @@
             <td <?php echo zget($visibleFields, 'desc', "class='hidden'")?>><?php echo html::textarea("desc[$i]", '', "rows='1' class='form-control autosize'");?></td>
             <td <?php echo zget($visibleFields, 'pri', "class='hidden'")?>><?php echo html::select("pri[$i]", (array)$lang->task->priList, $pri, 'class=form-control');?></td>
             <?php 
+            $this->loadModel('flow');
             foreach($extendFields as $extendField) 
             {
                 $object = new stdclass();
                 $object->{$extendField->field} = $extendField->default;
-                echo "<td" . (($extendField->control == 'select' or $extendField->control == 'multi-select') ? " style='overflow:visible'" : '') . ">" . $this->loadModel('flow')->getFieldControl($extendField, $object, $extendField->field . "[$i]") . "</td>";
+                echo "<td" . (($extendField->control == 'select' or $extendField->control == 'multi-select') ? " style='overflow:visible'" : '') . ">" . $this->flow->getFieldControl($extendField, $object, $extendField->field . "[$i]") . "</td>";
             }
             ?>
           </tr>
@@ -240,11 +241,12 @@
       <td <?php echo zget($visibleFields, 'desc', "class='hidden'")?>><?php echo html::textarea("desc[%s]", '', "rows='1' class='form-control autosize'");?></td>
       <td <?php echo zget($visibleFields, 'pri', "class='hidden'")?>><?php echo html::select("pri[%s]", (array)$lang->task->priList, $pri, 'class=form-control');?></td>
       <?php 
+      $this->loadModel('flow');
       foreach($extendFields as $extendField) 
       {
           $object = new stdclass();
           $object->{$extendField->field} = $extendField->default;
-          echo "<td" . (($extendField->control == 'select' or $extendField->control == 'multi-select') ? " style='overflow:visible'" : '') . ">" . $this->loadModel('flow')->getFieldControl($extendField, $object, $extendField->field . "[%s]") . "</td>";
+          echo "<td" . (($extendField->control == 'select' or $extendField->control == 'multi-select') ? " style='overflow:visible'" : '') . ">" . $this->flow->getFieldControl($extendField, $object, $extendField->field . "[%s]") . "</td>";
       }
       ?>
     </tr>

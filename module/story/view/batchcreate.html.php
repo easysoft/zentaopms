@@ -119,11 +119,12 @@
             </td>
             <td class='<?php echo zget($visibleFields, 'keywords', 'hidden')?>'><?php echo html::input('keywords[$id]', '', "class='form-control'");?></td>
             <?php 
+            $this->loadModel('flow');
             foreach($extendFields as $extendField) 
             {
                 $object = new stdclass();
                 $object->{$extendField->field} = $extendField->default;
-                echo "<td" . (($extendField->control == 'select' or $extendField->control == 'multi-select') ? " style='overflow:visible'" : '') . ">" . $this->loadModel('flow')->getFieldControl($extendField, $object, $extendField->field . '[$id]') . "</td>";
+                echo "<td" . (($extendField->control == 'select' or $extendField->control == 'multi-select') ? " style='overflow:visible'" : '') . ">" . $this->flow->getFieldControl($extendField, $object, $extendField->field . '[$id]') . "</td>";
             }
             ?>
           </tr>

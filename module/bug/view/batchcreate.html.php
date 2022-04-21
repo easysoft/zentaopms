@@ -129,11 +129,13 @@
             <td class='<?php echo zget($visibleFields, 'os', 'hidden')?>' style='overflow:visible'>      <?php echo html::select("oses[$i]", $lang->bug->osList, $os, "class='form-control chosen'");?></td>
             <td class='<?php echo zget($visibleFields, 'browser', 'hidden')?>' style='overflow:visible'> <?php echo html::select("browsers[$i]", $lang->bug->browserList, $browser, "class='form-control chosen'");?></td>
             <td class='<?php echo zget($visibleFields, 'keywords', 'hidden')?>'><?php echo html::input("keywords[$i]", '', "class='form-control'");?></td>
-            <?php foreach($extendFields as $extendField) 
+            <?php 
+            $this->loadModel('flow');
+            foreach($extendFields as $extendField) 
             {
                 $object = new stdclass();
                 $object->{$extendField->field} = $extendField->default;
-                echo "<td" . (($extendField->control == 'select' or $extendField->control == 'multi-select') ? " style='overflow:visible'" : '') . ">" . $this->loadModel('flow')->getFieldControl($extendField, $object, $extendField->field . "[$i]") . "</td>";
+                echo "<td" . (($extendField->control == 'select' or $extendField->control == 'multi-select') ? " style='overflow:visible'" : '') . ">" . $this->flow->getFieldControl($extendField, $object, $extendField->field . "[$i]") . "</td>";
             }
             ?>
           </tr>
@@ -183,11 +185,12 @@
             <td class='<?php echo zget($visibleFields, 'browser', 'hidden')?>' style='overflow:visible'> <?php echo html::select("browsers[$i]", $lang->bug->browserList, $browser, "class='form-control chosen'");?></td>
             <td class='<?php echo zget($visibleFields, 'keywords', 'hidden')?>'><?php echo html::input("keywords[$i]", '', "class='form-control'");?></td>
             <?php 
+            $this->loadModel('flow');
             foreach($extendFields as $extendField) 
             {
                 $object = new stdclass();
                 $object->{$extendField->field} = $extendField->default;
-                echo "<td" . (($extendField->control == 'select' or $extendField->control == 'multi-select') ? " style='overflow:visible'" : '') . ">" . $this->loadModel('flow')->getFieldControl($extendField, $object, $extendField->field . "[$i]") . "</td>";
+                echo "<td" . (($extendField->control == 'select' or $extendField->control == 'multi-select') ? " style='overflow:visible'" : '') . ">" . $this->flow->getFieldControl($extendField, $object, $extendField->field . "[$i]") . "</td>";
             }
             ?>
           </tr>
@@ -236,11 +239,12 @@
       <td class='<?php echo zget($visibleFields, 'browser', 'hidden')?>' style='overflow:visible'> <?php echo html::select("browsers[%s]", $lang->bug->browserList, $browser, "class='form-control chosen'");?></td>
       <td class='<?php echo zget($visibleFields, 'keywords', 'hidden')?>'><?php echo html::input("keywords[%s]", '', "class='form-control'");?></td>
       <?php 
+      $this->loadModel('flow');
       foreach($extendFields as $extendField) 
       {
           $object = new stdclass();
           $object->{$extendField->field} = $extendField->default;
-          echo "<td" . (($extendField->control == 'select' or $extendField->control == 'multi-select') ? " style='overflow:visible'" : '') . ">" . $this->loadModel('flow')->getFieldControl($extendField, $object, $extendField->field . "[%s]") . "</td>";
+          echo "<td" . (($extendField->control == 'select' or $extendField->control == 'multi-select') ? " style='overflow:visible'" : '') . ">" . $this->flow->getFieldControl($extendField, $object, $extendField->field . "[%s]") . "</td>";
       }
       ?>
     </tr>
