@@ -1,3 +1,7 @@
+<?php js::set('isAjaxRequest', helper::isAjaxRequest());?>
+<?php if(!helper::isAjaxRequest()): ?>
+<?php include "../../common/view/header.html.php"?>
+<?php endif;?>
 <div class='modal-dialog' id='guideDialog'>
   <style>
   #guideDialog {width: 780px}
@@ -46,3 +50,6 @@ $('.createButton').on('click', function()
     $.closeModal();
 });
 </script>
+<?php if(!helper::isAjaxRequest()): ?>
+<?php include "../../common/view/footer.html.php"?>
+<?php endif;?>
