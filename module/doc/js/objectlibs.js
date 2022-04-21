@@ -87,6 +87,8 @@ function fullScreen()
             whenFailEnterFullscreen(error);
         }
     }
+
+    $('.main-col iframe').css('min-height', $(window).height() + 'px');
 }
 
 /**
@@ -102,6 +104,7 @@ function exitFullScreen()
     $('#content .actions').removeClass('hidden');
     $('#content .file-image .right-icon').removeClass('hidden');
     $('#content .detail').eq(1).removeClass('hidden');
+    $('.main-col iframe').css('min-height', '380px');
     $.cookie('isFullScreen', 0);
 }
 
