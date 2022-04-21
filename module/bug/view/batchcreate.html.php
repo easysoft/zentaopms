@@ -71,7 +71,7 @@
             $extendFields = $this->bug->getFlowExtendFields();
             foreach($extendFields as $extendField) 
             {
-                $required = $extendField->rules == 1 ? 'required' : '';
+                $required = strpos(",$extendField->rules,", ',1,') !== false ? 'required' : '';
                 echo "<th class='c-extend $required'>{$extendField->name}</th>";
             }
             ?>

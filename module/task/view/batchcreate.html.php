@@ -83,7 +83,7 @@
             $extendFields = $this->task->getFlowExtendFields();
             foreach($extendFields as $extendField) 
             {
-                $required = $extendField->rules == 1 ? 'required' : '';
+                $required = strpos(",$extendField->rules,", ',1,') !== false ? 'required' : '';
                 echo "<th class='w-100px $required'>{$extendField->name}</th>";
             }
             ?>
