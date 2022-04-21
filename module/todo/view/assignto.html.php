@@ -63,6 +63,8 @@
             <tr><td colspan='3' class='text-center form-actions'><?php echo html::submitButton();?></td></tr>
             </tfoot>
           </table>
+          <hr class='small' />
+          <div class='main'><?php include '../../common/view/action.html.php';?></div>
         </form>
       </div>
     </div>
