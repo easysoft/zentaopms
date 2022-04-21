@@ -4275,7 +4275,10 @@ class storyModel extends model
                     $stories[$id]->tasks = $this->loadModel('task')->getStoryTasks($id);
                     if($this->config->edition == 'max')
                     {
-                        $stories[$id]->designs   = $this->dao->select('id, name')->from(TABLE_DESIGN)->where('story')->eq($id)->fetchAll('id');
+                        $stories[$id]->designs   = $this->dao->select('id, name')->from(TABLE_DESIGN)
+                            ->where('story')->eq($id)
+                            ->andWhere('deleted')->eq('0')
+                            ->fetchAll('id');
                         $stories[$id]->revisions = $this->dao->select('BID, extra')->from(TABLE_RELATION)
                             ->where('AType')->eq('design')
                             ->andWhere('BType')->eq('commit')
@@ -4345,7 +4348,10 @@ class storyModel extends model
                 $stories[$id]->tasks  = $this->loadModel('task')->getStoryTasks($id);
                 if($this->config->edition == 'max')
                 {
-                    $stories[$id]->designs   = $this->dao->select('id, name')->from(TABLE_DESIGN)->where('story')->eq($id)->fetchAll('id');
+                    $stories[$id]->designs   = $this->dao->select('id, name')->from(TABLE_DESIGN)
+                        ->where('story')->eq($id)
+                        ->andWhere('deleted')->eq('0')
+                        ->fetchAll('id');
                     $stories[$id]->revisions = $this->dao->select('BID, extra')->from(TABLE_RELATION)
                         ->where('AType')->eq('design')
                         ->andWhere('BType')->eq('commit')
@@ -4385,7 +4391,10 @@ class storyModel extends model
             $track[$id]->task  = $this->loadModel('task')->getStoryTasks($id);
             if($this->config->edition == 'max')
             {
-                $track[$id]->design   = $this->dao->select('id, name')->from(TABLE_DESIGN)->where('story')->eq($id)->fetchAll('id');
+                $track[$id]->design   = $this->dao->select('id, name')->from(TABLE_DESIGN)
+                    ->where('story')->eq($id)
+                    ->andWhere('deleted')->eq('0')
+                    ->fetchAll('id');
                 $track[$id]->revision = $this->dao->select('BID, extra')->from(TABLE_RELATION)->where('AType')->eq('design')->andWhere('BType')->eq('commit')->andWhere('AID')->in(array_keys($track[$id]->design))->fetchPairs();
             }
         }
