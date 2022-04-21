@@ -22,11 +22,34 @@
 .gantt_task_content{display: none;}
 .checkbox-primary {margin-top: 0px; margin-left: 10px;}
 form {display: block; margin-top: 0em; margin-block-end: 1em;}
-<?php if($selectCustom == 'task'):?>
-.gantt_grid .gantt_grid_scale{width:100% !important;}
-.gantt_grid .gantt_grid_data{width:100% !important;}
-.gantt_grid .gantt_grid_data .gantt_row{width:100% !important;}
-<?php endif;?>
+.gantt_task_progress {background: rgba(0,0,0,.1)}
+#ganttPris > span {display: inline-block; line-height: 20px; min-width: 20px; border-radius: 2px;}
+.gantt_task_line {background: #<?php echo $lang->execution->gantt->color[0]?>; border-color: #<?php echo $lang->execution->gantt->color[0]?>;}
+.gantt_task_line.pri-1 {background: #<?php echo $lang->execution->gantt->color[1]?>; border-color: #<?php echo $lang->execution->gantt->color[1]?>}
+.gantt_task_line.pri-2 {background: #<?php echo $lang->execution->gantt->color[2]?>; border-color: #<?php echo $lang->execution->gantt->color[2]?>}
+.gantt_task_line.pri-3 {background: #<?php echo $lang->execution->gantt->color[3]?>; border-color: #<?php echo $lang->execution->gantt->color[3]?>}
+.gantt_task_line.pri-4 {background: #<?php echo $lang->execution->gantt->color[4]?>; border-color: #<?php echo $lang->execution->gantt->color[4]?>}
+.gantt_task_line.gantt_selected {box-shadow: 0 1px 1px rgba(0,0,0,.05), 0 2px 6px 0 rgba(0,0,0,.045)}
+.gantt_link_arrow_right {border-left-color: #2196F3;}
+.gantt_link_arrow_left {border-right-color: #2196F3;}
+.gantt_task_link .gantt_line_wrapper div{background-color: #2196F3;}
+.gantt_critical_link .gantt_line_wrapper>div {background-color: #e63030 !important;}
+.gantt_critical_link.start_to_start .gantt_link_arrow_right {border-left-color: #e63030 !important;}
+.gantt_critical_link.finish_to_start .gantt_link_arrow_right {border-left-color: #e63030 !important;}
+.gantt_critical_link.start_to_finish .gantt_link_arrow_left {border-right-color: #e63030 !important;}
+.gantt_critical_link.finish_to_finish .gantt_link_arrow_left {border-right-color: #e63030 !important;}
+.gantt_task_link.start_to_start .gantt_line_wrapper div { background-color: #DD55EA; }
+.gantt_task_link.start_to_start:hover .gantt_line_wrapper div { box-shadow: 0 0 5px 0px #DD55EA; }
+.gantt_task_link.start_to_start .gantt_link_arrow_right { border-left-color: #DD55EA; }
+.gantt_task_link.finish_to_start .gantt_line_wrapper div { background-color: #7576ba; }
+.gantt_task_link.finish_to_start:hover .gantt_line_wrapper div { box-shadow: 0 0 5px 0px #7576ba; }
+.gantt_task_link.finish_to_start .gantt_link_arrow_right { border-left-color: #7576ba; }
+.gantt_task_link.finish_to_finish .gantt_line_wrapper div { background-color: #55d822; }
+.gantt_task_link.finish_to_finish:hover .gantt_line_wrapper div { box-shadow: 0 0 5px 0px #55d822; }
+.gantt_task_link.finish_to_finish .gantt_link_arrow_left { border-right-color: #55d822; }
+.gantt_task_link.start_to_finish .gantt_line_wrapper div { background-color: #975000; }
+.gantt_task_link.start_to_finish:hover .gantt_line_wrapper div { box-shadow: 0 0 5px 0px #975000; }
+.gantt_task_link.start_to_finish .gantt_link_arrow_left { border-right-color: #975000; }
 </style>
 <?php js::set('customUrl', $this->createLink('programplan', 'ajaxCustom'));?>
 <?php js::set('dateDetails', $dateDetails);?>
@@ -35,9 +58,15 @@ form {display: block; margin-top: 0em; margin-block-end: 1em;}
 <div id='mainContent' class='main-content load-indicator' data-loading='<?php echo $lang->programplan->exporting;?>'>
   <form class="main-form form-ajax">
     <div class="example">
-    <?php echo html::commonButton($lang->programplan->full, 'id="fullScreenBtn"', 'btn btn-primary btn-sm')?>
-    <?php if($app->rawModule == 'review' and $app->rawMethod == 'assess') unset($lang->programplan->stageCustom->date); ?>
-    <?php echo html::checkbox('stageCustom', $lang->programplan->stageCustom, $selectCustom);?>
+      <?php echo html::commonButton($lang->programplan->full, 'id="fullScreenBtn"', 'btn btn-primary btn-sm')?>
+      <?php if($app->rawModule == 'review' and $app->rawMethod == 'assess') unset($lang->programplan->stageCustom->date); ?>
+      <?php echo html::checkbox('stageCustom', $lang->programplan->stageCustom, $selectCustom);?>
+      <div class='btn btn-link' id='ganttPris'>
+        <strong><?php echo $lang->task->pri . " : "?></strong>
+        <?php foreach($lang->execution->gantt->color as $pri => $color):?>
+        <span style="background:#<?php echo $color?>"><?php echo $pri;?></span> &nbsp;
+        <?php endforeach;?>
+      </div>
     </div>
   </form>
   <div id='ganttContainer'>
@@ -75,15 +104,14 @@ function drawGanttToCanvas(exportType, successCallback, errorCallback)
     var $ganttContainer = $('#ganttContainer');
     var $ganttDataArea  = $ganttView.find('.gantt_data_area');
     var $ganttDridData  = $ganttView.find('.gantt_grid_data');
-    var ganttHeight     = $ganttView.find('.gantt_task_bg').outerHeight() + $ganttView.find('.gantt_grid_scale').outerHeight() + 1;
+
+    var ganttHeight = $ganttView.find('.gantt_grid_scale').outerHeight();
+    ganttHeight += <?php echo count($plans['data'])?> * 25;
 
     <?php if($selectCustom == 'task'):?>
     var ganttWidth  = $ganttDridData.width() - 100;
-    var ganttHeight = $ganttView.find('.gantt_grid_scale').outerHeight();
-    $ganttDridData.find('.gantt_row').each(function() {ganttHeight += $(this).outerHeight();});
     <?php else:?>
-    var ganttWidth  = $ganttDataArea.outerWidth() + $ganttDridData.outerWidth();
-    var ganttHeight = $ganttView.find('.gantt_task_bg').outerHeight() + $ganttView.find('.gantt_grid_scale').outerHeight() + 1;
+    var ganttWidth = $ganttDataArea.outerWidth() + $ganttDridData.outerWidth();
     <?php endif;?>
 
     $ganttContainer.css(
@@ -245,13 +273,14 @@ function updateCriticalPath()
 
 $("#fullScreenBtn").on("click", function()
 {
-    $("#mainContent").css("z-index", "9999");
-    $("#ganttView").css("z-index", "9999");
+    $("#mainContent").css("z-index", "5");
+    $("#ganttView").css("z-index", "5");
 });
 
 function exitHandler()
 {
-    if (module == 'review' && method == 'assess' && !document.fullscreenElement && !document.webkitIsFullScreen && !document.mozFullScreen && !document.msFullscreenElement) {
+    if (module == 'review' && method == 'assess' && !document.fullscreenElement && !document.webkitIsFullScreen && !document.mozFullScreen && !document.msFullscreenElement)
+    {
         location.reload();
     }
 }
@@ -268,7 +297,7 @@ $(function()
         $('#ganttView').css('height', Math.max(200, Math.floor($(window).height() - $('#footer').outerHeight() - $('#header').outerHeight() - $('#mainMenu').outerHeight() - 80)));
     };
 
-    var ganttData = $.parseJSON(<?php echo json_encode($plans);?>);
+    var ganttData = $.parseJSON(<?php echo json_encode(json_encode($plans));?>);
     if(!ganttData.data) ganttData.data = [];
 
     gantt.config.readonly          = true;
@@ -304,19 +333,7 @@ $(function()
 
     if((module == 'review' && method == 'assess') || dateDetails)
     {
-        layout = gantt.config.layout;
-
-		gantt.config.layout = {
-			css: "gantt_container",
-			cols: [
-				{
-					rows:[
-						{view: "grid", scrollX: "gridScroll", scrollable: true, scrollY: "scrollVer"},
-						{view: "scrollbar", id: "gridScroll", group:"horizontal"}
-					]
-				}
-			]
-		};
+        gantt.config.show_chart = false;
     }
 
     var date2Str  = gantt.date.date_to_str(gantt.config.task_date);
@@ -329,9 +346,19 @@ $(function()
         title: todayTips + ": " + date2Str(today)
     });
 
+    gantt.templates.task_class       = function(start, end, task){return 'pri-' + (task.pri || 0);};
     gantt.templates.scale_cell_class = function(date)
     {
         if(date.getDay() == 0 || date.getDay() == 6) return 'weekend';
+    };
+
+    gantt.templates.link_class = function(link)
+    {
+        var types = gantt.config.links;
+        if(link.type == types.finish_to_start)  return 'finish_to_start';
+        if(link.type == types.start_to_start)   return 'start_to_start';
+        if(link.type == types.finish_to_finish) return 'finish_to_finish';
+        if(link.type == types.start_to_finish)  return 'start_to_finish';
     };
 
     gantt.templates.timeline_cell_class = function(item, date)
