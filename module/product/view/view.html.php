@@ -37,7 +37,7 @@
             </div>
           </div>
           <?php endif;?>
-          <div class="detail">
+          <div class="detail pm-detail">
             <div class="detail-title"><strong><?php echo $lang->product->manager;?></strong></div>
             <div class="detail-content">
               <table class="table table-data">
