@@ -10,6 +10,7 @@
  * @link        http://www.zentao.net
  */
 ?>
+<?php $executionNameType = ($from == 'execution' || 'doc') and ($config->systemMode == 'new');?>
 <?php if(isset($tips)):?>
 <?php $defaultURL = $this->createLink('execution', 'task', "execution=$executionID");?>
 <?php include '../../common/view/header.html.php';?>
@@ -46,9 +47,9 @@
 <div id='mainContent' class='main-content'>
   <div class='center-block'>
     <div class='main-header'>
-      <h2><?php echo (($from == 'execution') and ($config->systemMode == 'new')) ? $lang->execution->createExec : $lang->execution->create;?></h2>
+      <h2><?php echo $executionNameType ? $lang->execution->createExec : $lang->execution->create;?></h2>
       <div class="pull-right btn-toolbar">
-        <button type='button' class='btn btn-link' data-toggle='modal' data-target='#copyProjectModal'><?php echo html::icon($lang->icons['copy'], 'muted') . ' ' . ((($from == 'execution') and ($config->systemMode == 'new')) ? $lang->execution->copyExec : $lang->execution->copy);?></button>
+        <button type='button' class='btn btn-link' data-toggle='modal' data-target='#copyProjectModal'><?php echo html::icon($lang->icons['copy'], 'muted') . ' ' . ($executionNameType ? $lang->execution->copyExec : $lang->execution->copy);?></button>
       </div>
     </div>
     <form class='form-indicator main-form form-ajax' method='post' target='hiddenwin' id='dataform'>
@@ -61,12 +62,12 @@
         </tr>
         <?php endif;?>
         <tr>
-          <th class='w-120px'><?php echo (($from == 'execution') and ($config->systemMode == 'new')) ? $lang->execution->execName : $lang->execution->name;?></th>
+          <th class='w-120px'><?php echo $executionNameType ? $lang->execution->execName : $lang->execution->name;?></th>
           <td class="col-main"><?php echo html::input('name', $name, "class='form-control' required");?></td>
           <td colspan='2'></td>
         </tr>
         <tr>
-          <th><?php echo (($from == 'execution') and ($config->systemMode == 'new')) ? $lang->execution->execCode : $lang->execution->code;?></th>
+          <th><?php echo $executionNameType ? $lang->execution->execCode : $lang->execution->code;?></th>
           <td><?php echo html::input('code', $code, "class='form-control' required");?></td><td></td><td></td>
         </tr>
         <tr>
@@ -91,7 +92,7 @@
         </tr>
         <?php if(empty($project) or $project->model != 'kanban'):?>
         <tr>
-          <th><?php echo (($from == 'execution') and ($config->systemMode == 'new')) ? $lang->execution->execType : $lang->execution->type;?></th>
+          <th><?php echo $executionNameType ? $lang->execution->execType : $lang->execution->type;?></th>
           <td>
           <?php
           if($isStage)
@@ -218,7 +219,7 @@
           <td colspan='3'><?php echo html::select('teamMembers[]', $users, '', "class='form-control chosen' multiple"); ?></td>
         </tr>
         <tr>
-          <th><?php echo (($from == 'execution') and ($config->systemMode == 'new')) ? $lang->execution->execDesc : $lang->execution->desc;?></th>
+          <th><?php echo $executionNameType ? $lang->execution->execDesc : $lang->execution->desc;?></th>
           <td colspan='3'>
             <?php echo $this->fetch('user', 'ajaxPrintTemplates', 'type=execution&link=desc');?>
             <?php echo html::textarea('desc', '', "rows='6' class='form-control kindeditor' hidefocus='true'");?>
