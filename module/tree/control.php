@@ -277,7 +277,7 @@ class tree extends control
         $parentModules = $this->tree->getParents($currentModuleID);
         $newModule     = (version_compare($execution->openedVersion, '4.1', '>') and $products) ? true : false;
 
-        $title      = $execution->type == 'stage' ? $this->lang->tree->manageStage : $this->lang->tree->manageExecution;
+        $title      = $this->lang->tree->manageExecution;
         $position[] = html::a($this->createLink('execution', 'task', "executionID=$rootID"), $execution->name);
         $position[] = $this->lang->tree->manageExecution;
 

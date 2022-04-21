@@ -44,7 +44,7 @@ li.story-item > .tree-actions .tree-action[data-type=delete] {display: none;}
     <form id='childrenForm' method='post' target='hiddenwin' action='<?php echo $this->createLink('tree', 'manageChild', "root={$root->id}&viewType=task");?>'>
       <div class='panel'>
         <div class='panel-heading'>
-          <div class='panel-title'><?php echo $root->type == 'stage' ? $lang->tree->manageStageChild : $lang->tree->manageTaskChild;?></div>
+          <div class='panel-title'><?php echo $lang->tree->manageTaskChild;?></div>
         </div>
         <div class='panel-body'>
           <table class='table table-form table-auto'>
