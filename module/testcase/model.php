@@ -644,6 +644,21 @@ class testcaseModel extends model
     }
 
     /**
+     * Get cases by product id.
+     *
+     * @param  int    $productID
+     * @access public
+     * @return array
+     */
+    public function getByProduct($productID)
+    {
+        return $this->dao->select('*')->from(TABLE_CASE)
+            ->where('deleted')->eq(0)
+            ->andWhere('product')->eq($productID)
+            ->fetchAll('id');
+    }
+
+    /**
      * Get cases of a story.
      *
      * @param  int    $storyID

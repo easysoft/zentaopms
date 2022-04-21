@@ -563,6 +563,7 @@ class productModel extends model
             if($currentModule == 'product' and strpos($this->config->product->showBranchMethod, $currentMethod) !== false) $isShowBranch = true;
             if($this->app->tab == 'qa' and strpos(',testsuite,testreport,testtask,', ",$currentModule,") === false) $isShowBranch = true;
             if($this->app->tab == 'qa' and $currentModule == 'testtask' and strpos(',create,edit,browseunits,importunitresult,unitcases,', ",$currentMethod,") === false) $isShowBranch = true;
+            if($currentModule == 'testcase' and $currentMethod == 'showimport') $isShowBranch = false;
             if($isShowBranch)
             {
                 $this->lang->product->branch = sprintf($this->lang->product->branch, $this->lang->product->branchName[$currentProduct->type]);
