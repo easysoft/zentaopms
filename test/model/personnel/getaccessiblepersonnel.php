@@ -10,6 +10,11 @@ title=测试 personnelModel->getAccessiblePersonnel();
 cid=1
 pid=1
 
+测试取出结果集中的一个对象里的名字programID=1 >> 测试1
+测试取出匹配的数量 >> 10
+测试取出结果集中的一个对象里的名字programID=2 >> 开发11
+测试取出匹配的数量 >> 10
+
 */
 
 $personnel = new personnelTest('admin');

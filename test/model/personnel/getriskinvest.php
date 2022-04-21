@@ -10,6 +10,8 @@ title=测试 personnelModel->getRiskInvest();
 cid=1
 pid=1
 
+
+
 */
 
 $personnel = new personnelTest('admin');
