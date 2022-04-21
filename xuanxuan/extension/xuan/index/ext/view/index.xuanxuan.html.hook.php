@@ -10,7 +10,7 @@ $('html').addClass('xxc-embed');
 /** Update zentao client app menu */
 function updateAppMenu()
 {
-    const menuItems = appsMenuItems.map(function(item)
+    var menuItems = appsMenuItems.map(function(item)
     {
         if (item === 'divider') return '-';
         var $title = $('<div>' + item.title + '</div>');
