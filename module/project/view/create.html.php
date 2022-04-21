@@ -92,7 +92,6 @@
           </td>
           <td colspan='2'><?php echo html::radio('delta', $lang->project->endList , '', "onclick='computeEndDate(this.value)'");?></td>
         </tr>
-        <?php if($model == 'scrum'):?>
         <tr id='daysBox'>
           <th><?php echo $lang->execution->days;?></th>
           <td>
@@ -102,7 +101,6 @@
             </div>
           </td><td></td><td></td>
         </tr>
-        <?php endif;?>
         <tr>
           <th id='productTitle'><?php echo $lang->project->manageProducts;?></th>
           <td class='text-left' id='productsBox' colspan="3">
