@@ -10,7 +10,7 @@
  * @link        http://www.zentao.net
  */
 ?>
-<?php $showExecutionExec = ($from == 'execution' || $from == 'doc') and ($config->systemMode == 'new');?>
+<?php $showExecutionExec = !empty($from) and ($from == 'execution' || $from == 'doc') and ($config->systemMode == 'new');?>
 <?php if(isset($tips)):?>
 <?php $defaultURL = $this->createLink('execution', 'task', "execution=$executionID");?>
 <?php include '../../common/view/header.html.php';?>
