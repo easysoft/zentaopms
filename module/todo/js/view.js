@@ -68,8 +68,8 @@ function createProduct()
 
     var link = createLink('product', 'create');
 
-    config.onlybody      = onlybody;
-    parent.location.href = link;
+    config.onlybody = onlybody;
+    window.parent.$.apps.open(link, 'product');
 }
 
 /**
