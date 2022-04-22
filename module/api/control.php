@@ -34,16 +34,13 @@ class api extends control
     public function index($libID = 0, $moduleID = 0, $apiID = 0, $version = 0, $release = 0, $appendLib = 0)
     {
         /* Get all api doc libraries. */
+        $libs      = $this->doc->getApiLibs($appendLib);
+        if($libID == 0 and !empty($libs)) $libID = key($libs);
         $lib       = $this->doc->getLibById($libID);
         $appendLib = (!empty($lib) and $lib->deleted == '1') ? $libID : 0;
-        $libs      = $this->doc->getApiLibs($appendLib);
 
         /* Generate bread crumbs dropMenu. */
-        if($libs)
-        {
-            if($libID == 0) $libID = key($libs);
-            $this->lang->modulePageNav = $this->generateLibsDropMenu($libs, $libID, $release);
-        }
+        if($libs) $this->lang->modulePageNav = $this->generateLibsDropMenu($libs, $libID, $release);
 
         /* Get an api doc. */
         if($apiID > 0)
