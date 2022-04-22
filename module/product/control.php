@@ -1009,10 +1009,12 @@ class product extends control
     public function ajaxGetPlans($productID, $branch = 0, $planID = 0, $fieldID = '', $needCreate = false, $expired = '', $param = '')
     {
         $param   = strtolower($param);
-        $plans   = $this->loadModel('productplan')->getPairs($productID, $branch, $expired, strpos($param, 'skipparent') !== false);
+        $plans   = $this->loadModel('productplan')->getPairs($productID, $branch == 0 ? '' : $branch, $expired, strpos($param, 'skipparent') !== false);
         $field   = $fieldID ? "plans[$fieldID]" : 'plan';
-        $output  = '';
-        $output .= html::select($field, $plans, $planID, "class='form-control chosen'");
+        $output  = html::select($field, $plans, $planID, "class='form-control chosen'");
+
+        if($branch == 0 and strpos($param, 'edit')) $output = html::select($field, $plans, $planID, "class='form-control chosen' multiple");
+
         if(count($plans) == 1 and $needCreate and $needCreate !== 'false')
         {
             $output .= "<div class='input-group-btn'>";

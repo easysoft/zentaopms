@@ -151,9 +151,9 @@
                 <th class='c-id text-left'>
                   <?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?>
                 </th>
-                <th class='w-70px' title='<?php echo $lang->pri;?>'> <?php common::printOrderLink('pri',        $orderBy, $vars, $lang->priAB);?></th>
-                <th class='text-left'><?php common::printOrderLink('title',      $orderBy, $vars, $lang->story->title);?></th>
-                <th class='w-70px'> <?php common::printOrderLink('status',     $orderBy, $vars, $lang->statusAB);?></th>
+                <th class='w-70px' title='<?php echo $lang->pri;?>'> <?php common::printOrderLink('pri', $orderBy, $vars, $lang->priAB);?></th>
+                <th class='text-left'><?php common::printOrderLink('title', $orderBy, $vars, $lang->story->title);?></th>
+                <th class='w-70px'> <?php common::printOrderLink('status', $orderBy, $vars, $lang->statusAB);?></th>
                 <?php else:?>
                 <th class='c-id text-left'>
                   <?php if($planStories && $canBatchAction):?>
