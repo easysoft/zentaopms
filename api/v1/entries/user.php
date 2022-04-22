@@ -375,7 +375,7 @@ class userEntry extends Entry
         $oldUser = $this->loadModel('user')->getByID($userID, 'id');
 
         /* Set $_POST variables. */
-        $fields = 'dept,realname,email,commiter,gender';
+        $fields = 'dept,realname,email,commiter,gender,role,mobile,phone,visions';
         $this->batchSetPost($fields, $oldUser);
         $this->setPost('account', $oldUser->account);
 
@@ -388,7 +388,8 @@ class userEntry extends Entry
         $control = $this->loadController('user', 'edit');
         $control->edit($userID);
 
-        $this->getData();
+        $data = $this->getData();
+        if(isset($data->result) and $data->result == 'fail') return $this->sendError(zget($data, 'code', 400), $data->message);
         $user = $this->user->getByID($userID, 'id');
         unset($user->password);
 
