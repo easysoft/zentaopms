@@ -354,22 +354,22 @@ class personnelModel extends model
         $userTasks = array();
         foreach($tasks as $task)
         {
-            if($task->openedBy && isset($invest[$task->openedBy]))
+            if($task->openedBy and isset($invest[$task->openedBy]))
             {
                 $invest[$task->openedBy]['createdTask'] += 1;
-                $userTasks[$task->openedBy][$task->id]    = $task->id;
+                $userTasks[$task->openedBy][$task->id]   = $task->id;
             }
 
-            if($task->finishedBy && isset($invest[$task->finishedBy]))
+            if($task->finishedBy and isset($invest[$task->finishedBy]))
             {
                 $invest[$task->finishedBy]['finishedTask'] += 1;
-                $userTasks[$task->finishedBy][$task->id]     = $task->id;
+                $userTasks[$task->finishedBy][$task->id]    = $task->id;
             }
 
-            if($task->assignedTo && $task->status == 'wait' && isset($invest[$task->assignedTo]))
+            if($task->assignedTo and isset($invest[$task->assignedTo]))
             {
-                $invest[$task->assignedTo]['pendingTask'] += 1;
-                $userTasks[$task->assignedTo][$task->id]    = $task->id;
+                if($task->status == 'wait') $invest[$task->assignedTo]['pendingTask'] += 1;
+                $userTasks[$task->assignedTo][$task->id] = $task->id;
             }
         }
 
