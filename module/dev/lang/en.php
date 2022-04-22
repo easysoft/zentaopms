@@ -125,6 +125,15 @@ $lang->dev->tableList['im_chat_message_index'] = 'Zentao Client Message';
 $lang->dev->tableList['im_message_backup']     = 'Zentao Client Backup';
 $lang->dev->tableList['im_message_index']      = 'Zentao Client Message Index';
 $lang->dev->tableList['im_userdevice']         = 'Zentao Client User Device';
+$lang->dev->tableList['baseimage']             = 'Image';
+$lang->dev->tableList['baseimagebrowser']      = 'Image Browser';
+$lang->dev->tableList['browser']               = 'Browser';
+$lang->dev->tableList['kanban']                = 'Kanban';
+$lang->dev->tableList['kanbancard']            = 'Kanban Card';
+$lang->dev->tableList['kanbancell']            = 'Kanban Cell';
+$lang->dev->tableList['kanbangroup']           = 'Kanban Group';
+$lang->dev->tableList['kanbanregion']          = 'Kanban Region';
+$lang->dev->tableList['kanbanspace']           = 'Kanban Space';
 
 $lang->dev->groupList['my']        = 'Dashboard';
 $lang->dev->groupList['program']   = 'Program';

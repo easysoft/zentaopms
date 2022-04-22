@@ -1486,7 +1486,7 @@ class userModel extends model
         $this->dao->insert(TABLE_USERCONTACT)->data($data)
             ->autoCheck()
             ->exec();
-        if(dao::isError()) return print(js::error(dao::getError()));
+        if(dao::isError()) return false;
 
         return $this->dao->lastInsertID();
     }

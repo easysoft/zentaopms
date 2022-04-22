@@ -220,6 +220,7 @@ class actionModel extends model
                 case 'branch':
                     $record['product'] = $objectID == 0 ? $extra : $this->dao->select('product')->from($this->config->objectTables[$objectType])->where('id')->eq($objectID)->fetch('product');
                     break;
+                case 'testcase':
                 case 'case':
                     $result = $this->dao->select('product, project, execution')->from($this->config->objectTables[$objectType])->where('id')->eq($objectID)->fetch();
                     $record['product']   = $result->product;

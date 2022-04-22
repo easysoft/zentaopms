@@ -197,6 +197,7 @@
         <tr>
           <td colspan='4' class='text-center form-actions'>
             <?php
+              if($disableModel == 'disabled' or $project->model == 'kanban') echo html::hidden('model', $project->model);
               echo html::submitButton();
               if(!isonlybody()) echo html::backButton();
             ?>
