@@ -313,7 +313,7 @@ $projectIDParam = $isProjectStory ? "projectID=$projectID&" : '';
           {
               if($value->id == 'title' || $value->id == 'id' || $value->id == 'pri' || $value->id == 'status')
               {
-                  if($storyType == 'requirement' and (in_array($value->id, array('plan', 'stage')))) $value->show = false;
+                  if($storyType == 'requirement' and (in_array($value->id, array('plan', 'stage', 'taskCount', 'bugCount', 'caseCount')))) $value->show = false;
 
                   if($value->show)
                   {
@@ -326,7 +326,7 @@ $projectIDParam = $isProjectStory ? "projectID=$projectID&" : '';
           <?php
           foreach($setting as $key => $value)
           {
-              if($storyType == 'requirement' and (in_array($value->id, array('plan', 'stage')))) $value->show = false;
+              if($storyType == 'requirement' and (in_array($value->id, array('plan', 'stage', 'taskCount', 'bugCount', 'caseCount')))) $value->show = false;
 
               if($value->show)
               {
