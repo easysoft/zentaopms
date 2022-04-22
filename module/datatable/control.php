@@ -92,6 +92,9 @@ class datatable extends control
         {
             unset($cols['plan']);
             unset($cols['stage']);
+            unset($cols['taskCount']);
+            unset($cols['bugCount']);
+            unset($cols['caseCount']);
         }
 
         $this->view->cols    = $cols;
