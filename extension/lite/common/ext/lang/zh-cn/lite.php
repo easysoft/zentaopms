@@ -151,7 +151,7 @@ $lang->admin->menu->dev       = array('link' => "$lang->redev|dev|api", 'alias' 
 $lang->admin->menu->message   = array('link' => "{$lang->message->common}|message|index", 'subModule' => 'message,mail,webhook,sms');
 $lang->admin->menu->system    = array('link' => "{$lang->admin->system}|backup|index", 'subModule' => 'cron,backup,action,admin,search,ldap', 'exclude' => 'admin-index,admin-xuanxuan,admin-register,admin-ztcompany');
 
-$lang->admin->menu->xuanxuan['link']  = '聊天|admin|xuanxuan';
+if($config->vision != 'lite') $lang->admin->menu->xuanxuan['link']  = '聊天|admin|xuanxuan';
 
 /* Admin menu order. */
 $lang->admin->menuOrder = array();
