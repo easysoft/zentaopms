@@ -119,3 +119,5 @@ $config->product->statisticFields['stories']      = array('draftStories', 'activ
 $config->product->statisticFields['bugs']         = array('unResolvedBugs', 'closedBugs', 'fixedBugs');
 $config->product->statisticFields['plans']        = array('plans');
 $config->product->statisticFields['releases']     = array('releases');
+
+$config->product->skipCreateProduct = ',create,index,showerrornone,ajaxgetdropmenu,kanban,all,manageline,export,';
