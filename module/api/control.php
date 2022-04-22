@@ -73,6 +73,7 @@ class api extends control
 
         $this->setMenu($libID, $moduleID);
 
+        $this->view->lib        = $lib;
         $this->view->isRelease  = $release > 0;
         $this->view->release    = $release;
         $this->view->title      = $this->lang->api->pageTitle;
