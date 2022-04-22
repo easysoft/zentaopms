@@ -272,15 +272,19 @@ class programplanModel extends model
                 {
                     $stageIndex[$index]['progress']['totalConsumed'] += $task->consumed;
                     $stageIndex[$index]['progress']['totalReal']     += ($task->left + $task->consumed);
-                    
-                    $stageIndex[$stage['parent']]['progress']['totalConsumed'] += $task->consumed;
-                    $stageIndex[$stage['parent']]['progress']['totalReal']     += ($task->left + $task->consumed);
+
+                    $parent = $stage['parent'];
+                    if(isset($stageIndex[$parent]))
+                    {
+                        $stageIndex[$parent]['progress']['totalConsumed'] += $task->consumed;
+                        $stageIndex[$parent]['progress']['totalReal']     += ($task->left + $task->consumed);
+                    }
                 }
             }
         }
-        
+
         /* Ceturns all the values from the stageIndex and indexes the array numerically. */
-        $stageIndex = array_values($stageIndex); 
+        $stageIndex = array_values($stageIndex);
 
         /* Calculate the progress of the phase. */
         foreach($stageIndex as $index => $stage)
