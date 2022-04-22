@@ -391,13 +391,12 @@ $(function()
                 if(target.next('input[type=hidden]').length)
                 {
                     target.next('input[type=hidden]').val($(this).attr('href').replace('#', '$'));
-                    target.attr('placeholder', $(this).attr('href').replace('#', '$'));
                 }
                 else
                 {
                     target.val($(this).attr('href').replace('#', '$'));
                 }
-
+                target.attr('placeholder', $(this).attr('href').replace('#', '$'));
                 $(query).closest('form').find('#operator' + $period.data('fieldNO')).val('between');
                 $period.hide();
             }
