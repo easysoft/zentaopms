@@ -537,17 +537,18 @@ class tree extends control
      * @param  int    $branchID
      * @param  int    $number
      * @param  int    $currentModuleID
+     * @param  string $from showImport
      * @access public
      * @return string the html select string.
      */
-    public function ajaxGetModules($productID, $viewType = 'story', $branchID = 0, $number = 0, $currentModuleID = 0)
+    public function ajaxGetModules($productID, $viewType = 'story', $branchID = 0, $number = 0, $currentModuleID = 0, $from = '')
     {
         $currentModule   = $this->tree->getById($currentModuleID);
         $currentModuleID = (isset($currentModule->branch) and $currentModule->branch == 0) ? $currentModuleID : 0;
 
         $modules = $this->tree->getOptionMenu($productID, $viewType, $startModuleID = 0, $branchID);
 
-        $moduleName = $viewType == 'bug' ? "modules[$number]" : "module[$number]";
+        $moduleName = ($viewType == 'bug' and $from != 'showImport') ? "modules[$number]" : "module[$number]";
         $modules    = empty($modules) ? array('' => '') : $modules;
         echo html::select($moduleName, $modules, $currentModuleID, 'class=form-control');
     }
