@@ -20,3 +20,5 @@ table.diff {margin-bottom: 0px;}
 .label-exchange {background-color: #566F7C; cursor: pointer;}
 .label-exchange i {padding: 0;}
 .btn-download {border-right: none;}
+.body-modal .repo-diff {display: none;}
+.body-modal #mainMenu {padding-bottom: 40px;}

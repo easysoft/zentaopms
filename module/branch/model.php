@@ -753,7 +753,9 @@ class branchModel extends model
             ->andWhere('product')->eq($productID)
             ->fetchGroup('project');
 
-        $this->dao->delete()->from(TABLE_PROJECTPRODUCT)->where('branch')->in($mergedBranches . ",$targetBranch")->exec();
+        $this->dao->delete()->from(TABLE_PROJECTPRODUCT)->where('branch')->in($mergedBranches . ",$targetBranch")
+            ->andWhere('product')->eq($productID)
+            ->exec();
         foreach($linkedProject as $projectID => $projectProducts)
         {
             $plan = 0;

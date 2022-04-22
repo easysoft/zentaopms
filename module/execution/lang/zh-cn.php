@@ -477,4 +477,16 @@ $lang->execution->statusColorList['doing']     = '#0BD986';
 $lang->execution->statusColorList['suspended'] = '#fdc137';
 $lang->execution->statusColorList['closed']    = '#838A9D';
 
+if(!isset($lang->execution->gantt)) $lang->execution->gantt = new stdclass();
+$lang->execution->gantt->color[0] = 'bbb';
+$lang->execution->gantt->color[1] = 'ff5d5d';
+$lang->execution->gantt->color[2] = 'ff9800';
+$lang->execution->gantt->color[3] = '16a8f8';
+$lang->execution->gantt->color[4] = '00da88';
+
+$lang->execution->gantt->exportImg  = '导出图片';
+$lang->execution->gantt->exportPDF  = '导出 PDF';
+$lang->execution->gantt->exporting  = '正在导出……';
+$lang->execution->gantt->exportFail = '导出失败。';
+
 $lang->execution->boardColorList = array('#32C5FF', '#006AF1', '#9D28B2', '#FF8F26', '#7FBB00', '#424BAC', '#66c5f8', '#EC2761');

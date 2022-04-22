@@ -133,21 +133,15 @@
     </div>
     <?php endif;?>
     <?php if(empty($productID) or common::canModify('product', $product)):?>
-    <?php if(!empty($productID)): ?>
+    <?php if(!empty($productID) and (common::hasPriv('testcase', 'import') or common::hasPriv('testcase', 'importFromLib'))): ?>
     <div class='btn-group'>
       <button type='button' class='btn btn-link dropdown-toggle' data-toggle='dropdown' id='importAction'><i class='icon icon-import muted'></i> <?php echo $lang->import ?><span class='caret'></span></button>
       <ul class='dropdown-menu pull-right' id='importActionMenu'>
       <?php
-      $printImportBtn = (common::hasPriv('testcase', 'import') and $branch !== 'all') ? true : false;
-      $class = $printImportBtn ? '' : "class=disabled";
-      $misc  = $printImportBtn ? "class='export'" : "class=disabled";
-      $link  = $printImportBtn ?  $this->createLink('testcase', 'import', "productID=$productID&branch=$branch") : '#';
-      echo "<li $class>" . html::a($link, $lang->testcase->fileImport, '', $misc . "data-app={$this->app->tab}") . "</li>";
+      if(common::hasPriv('testcase', 'import')) echo "<li>" . html::a($this->createlink('testcase', 'import', "productID=$productID&branch=$branch"), $lang->testcase->fileImport, '', "class='export' data-app={$app->tab}") . "</li>";
 
-      $class = common::hasPriv('testcase', 'importFromLib') ? '' : "class=disabled";
-      $misc  = common::hasPriv('testcase', 'importFromLib') ? "data-app='{$this->app->tab}'" : "class=disabled";
-      $link  = common::hasPriv('testcase', 'importFromLib') ?  $this->createLink('testcase', 'importFromLib', "productID=$productID&branch=$branch&libID=0&orderBy=id_desc&browseType=&queryID=10&recTotal=0&recPerPage=20&pageID=1&projectID=$projectID") : '#';
-      echo "<li $class>" . html::a($link, $lang->testcase->importFromLib, '', $misc . "data-app={$this->app->tab}") . "</li>";
+      $link  = $this->createLink('testcase', 'importFromLib', "productID=$productID&branch=$branch&libID=0&orderBy=id_desc&browseType=&queryID=10&recTotal=0&recPerPage=20&pageID=1&projectID=$projectID");
+      if(common::hasPriv('testcase', 'importFromLib')) echo "<li>" . html::a($link, $lang->testcase->importFromLib, '', "data-app={$app->tab}") . "</li>";
       ?>
       </ul>
     </div>

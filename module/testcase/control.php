@@ -1913,7 +1913,7 @@ class testcase extends control
 
         $caseLang   = $this->lang->testcase;
         $caseConfig = $this->config->testcase;
-        $branches   = $this->loadModel('branch')->getPairs($productID);
+        $branches   = $this->loadModel('branch')->getPairs($productID, 'active');
         $stories    = $this->loadModel('story')->getProductStoryPairs($productID, $branch);
         $fields     = $this->testcase->getImportFields($productID);
         $fields     = array_flip($fields);
@@ -2093,7 +2093,7 @@ class testcase extends control
 
         $this->view->stories    = $stories;
         $this->view->modules    = $modules;
-        $this->view->cases      = $this->dao->select('id, module, story, stage, status, pri, type')->from(TABLE_CASE)->where('product')->eq($productID)->andWhere('deleted')->eq(0)->fetchAll('id');
+        $this->view->cases      = $this->testcase->getByProduct($productID);
         $this->view->caseData   = $caseData;
         $this->view->stepData   = $stepData;
         $this->view->productID  = $productID;
@@ -2103,7 +2103,7 @@ class testcase extends control
         $this->view->allPager   = $allPager;
         $this->view->pagerID    = $pagerID;
         $this->view->branch     = $branch;
-        $this->view->product    = $this->products[$productID];
+        $this->view->product    = $this->product->getByID($productID);
         $this->view->maxImport  = $maxImport;
         $this->view->dataInsert = $insert;
 

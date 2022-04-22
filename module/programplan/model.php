@@ -169,12 +169,12 @@ class programplanModel extends model
         }
 
         $datas       = array();
-        $planIDList  = array();
+        $planIdList  = array();
         $isMilestone = "<icon class='icon icon-flag icon-sm red'></icon> ";
         $stageIndex  = array();
         foreach($plans as $plan)
         {
-            $planIDList[$plan->id] = $plan->id;
+            $planIdList[$plan->id] = $plan->id;
 
             $start = helper::isZeroDate($plan->begin) ? '' : $plan->begin;
             $end   = helper::isZeroDate($plan->end)   ? '' : $plan->end;
@@ -216,10 +216,7 @@ class programplanModel extends model
         if(empty($selectCustom)) $selectCustom = $this->loadModel('setting')->getItem("owner={$owner}&module={$module}&section={$section}&key={$object}");
 
         $tasks = array();
-        if(strpos($selectCustom, 'task') !== false)
-        {
-            $tasks = $this->dao->select('*')->from(TABLE_TASK)->where('deleted')->eq(0)->andWhere('execution')->in($planIDList)->fetchAll('id');
-        }
+        if(strpos($selectCustom, 'task') !== false) $tasks = $this->dao->select('*')->from(TABLE_TASK)->where('deleted')->eq(0)->andWhere('execution')->in($planIdList)->fetchAll('id');
 
         if($baselineID)
         {
@@ -254,10 +251,12 @@ class programplanModel extends model
             $data->deadline     = $end;
             $data->realBegan    = $realBegan;
             $data->realEnd      = $realEnd;
+            $data->pri          = $task->pri;
             $data->parent       = $task->parent > 0 ? $task->execution . '-' . $task->parent : $task->execution;
             $data->open         = true;
-            $progress           = $task->consumed ? round($task->consumed / ($task->left + $task->consumed), 3) * 100 : 0;
-            $data->taskProgress = $progress . '%';
+            $progress           = $task->consumed ? round($task->consumed / ($task->left + $task->consumed), 3) : 0;
+            $data->progress     = $progress;
+            $data->taskProgress = ($progress * 100) . '%';
             $data->start_date   = $data->realBegan ? $data->realBegan : $data->begin;
             $data->endDate      = $data->realEnd ? $data->realEnd : $data->deadline;
             $data->duration     = 0;
@@ -286,9 +285,24 @@ class programplanModel extends model
         /* Calculate the progress of the phase. */
         foreach($stageIndex as $index => $stage)
         {
-            $progress  = empty($stage['progress']['totalConsumed']) ? 0 : round($stage['progress']['totalConsumed'] / $stage['progress']['totalReal'], 3) * 100;
-            $progress .= '%';
+            $progress  = empty($stage['progress']['totalConsumed']) ? 0 : round($stage['progress']['totalConsumed'] / $stage['progress']['totalReal'], 3);
+            $datas['data'][$index]->progress = $progress;
+
+            $progress = ($progress * 100) . '%';
             $datas['data'][$index]->taskProgress = $progress;
+        }
+
+        $datas['links'] = array();
+        if($this->config->edition != 'open')
+        {
+            $relations = $this->dao->select('*')->from(TABLE_RELATIONOFTASKS)->where('execution')->in($planIdList)->orderBy('task,pretask')->fetchAll();
+            foreach($relations as $relation)
+            {
+                $link['source']   = $relation->execution . '-' . $relation->pretask;
+                $link['target']   = $relation->execution . '-' . $relation->task;
+                $link['type']     = $this->config->execution->gantt->linkType[$relation->condition][$relation->action];
+                $datas['links'][] = $link;
+            }
         }
 
         return $returnJson ? json_encode($datas) : $datas;

@@ -244,7 +244,7 @@
             <table class='table table-form'>
               <?php if($story->status == 'closed'):?>
               <tr id='duplicateStoryBox'>
-                <th class='w-70px'><?php echo $lang->story->duplicateStory;?></th>
+                <th class='w-90px'><?php echo $lang->story->duplicateStory;?></th>
                 <td><?php echo html::input('duplicateStory', $story->duplicateStory == 0 ? '' : $story->duplicateStory, "class='form-control'");?></td>
               </tr>
               <?php endif;?>

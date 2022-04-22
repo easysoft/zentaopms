@@ -83,7 +83,7 @@ class programplan extends control
             $selectCustom = $this->loadModel('setting')->getItem("owner={$owner}&module={$module}&section={$section}&key={$object}");
             if(strpos($selectCustom, 'date') !== false) $dateDetails = 0;
 
-            $plans = $this->programplan->getDataForGantt($projectID, $this->productID, $baselineID);
+            $plans = $this->programplan->getDataForGantt($projectID, $this->productID, $baselineID, $selectCustom, false);
         }
 
         if($type == 'lists')

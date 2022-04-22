@@ -20,3 +20,4 @@ table.diff {margin-bottom: 0px;}
 .label-exchange {background-color: #566F7C; cursor: pointer;}
 .label-exchange i {padding: 0;}
 .btn-download {border-right: none;}
+.body-modal #back {display: none;}
