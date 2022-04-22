@@ -854,6 +854,8 @@ class userModel extends model
     public function identify($account, $password)
     {
         if(!$account or !$password) return false;
+        /* Check account rule in login.  */
+        if(!validater::checkAccount($account)) return false;
 
         /* Get the user first. If $password length is 32, don't add the password condition.  */
         $record = $this->dao->select('*')->from(TABLE_USER)
@@ -1288,6 +1290,8 @@ class userModel extends model
      */
     public function failPlus($account)
     {
+        if(!validater::checkAccount($account)) return 0;
+
         /* Save session fails. */
         $sessionFails  = (int)$this->session->loginFails;
         $sessionFails += 1;
