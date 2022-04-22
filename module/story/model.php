@@ -252,6 +252,13 @@ class storyModel extends model
         if(!dao::isError())
         {
             $storyID = $this->dao->lastInsertID();
+
+            if($story->parent)
+            {
+                $stories = array($storyID);
+                $this->subdivide($story->parent, $stories);
+            }
+
             $this->file->updateObjectID($this->post->uid, $storyID, $story->type);
             $this->file->saveUpload($story->type, $storyID, $extra = 1);
 
