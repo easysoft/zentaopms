@@ -74,6 +74,9 @@
   </div>
   <?php else:?>
   <div class="cell main-col" data-min-width="400">
+    <div class="detail base-url">
+      <p><?php echo $lang->api->baseUrl . ': ' . $lib->baseUrl;?></p>
+    </div>
     <div class="detail">
       <ul class="list-group">
         <?php foreach($apiList as $api):?>

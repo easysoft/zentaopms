@@ -416,16 +416,18 @@ class build extends control
      * AJAX: get builds of an execution in html select.
      *
      * @param  int        $executionID
+     * @param  int        $productID
      * @param  string     $varName      the name of the select object to create
      * @param  string     $build        build to selected
      * @param  string|int $branch
      * @param  int        $index        the index of batch create bug.
      * @param  bool       $needCreate   if need to append the link of create build
      * @param  string     $type         get all builds or some builds belong to normal releases and executions are not done.
+     * @param  int        $number
      * @access public
      * @return string
      */
-    public function ajaxGetExecutionBuilds($executionID, $productID, $varName, $build = '', $branch = 'all', $index = 0, $needCreate = false, $type = 'normal')
+    public function ajaxGetExecutionBuilds($executionID, $productID, $varName, $build = '', $branch = 'all', $index = 0, $needCreate = false, $type = 'normal', $number = '')
     {
         $isJsonView = $this->app->getViewType() == 'json';
         if($varName == 'openedBuild')
@@ -435,6 +437,8 @@ class build extends control
             $params = ($type == 'all') ? 'noempty' : 'noempty, noterminate, nodone';
             $builds = $this->build->getBuildPairs($productID, $branch, $params, $executionID, 'execution', $build);
             if($isJsonView) return print(json_encode($builds));
+
+            $varName = $number === '' ? $varName : $varName . "[$number]";
             return print(html::select($varName . '[]', $builds , '', 'size=4 class=form-control multiple'));
         }
         if($varName == 'openedBuilds')

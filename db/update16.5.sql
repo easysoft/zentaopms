@@ -79,8 +79,8 @@ ALTER TABLE `zt_effort` MODIFY COLUMN `product` text NOT NULL;
 ALTER TABLE `zt_stakeholder` ADD INDEX objectID(`objectID`);
 UPDATE `zt_api` SET response = REPLACE(response, 'assgnedDate', 'assignedDate');
 
-REPLACE INTO `zt_zoutput` (`id`, `activity`, `name`, `content`, `optional`, `status`, `createdBy`, `createdDate`, `editedBy`, `order`, `deleted`) VALUES
-(71,47,'禅道缺陷记录','','','','admin','2020-01-09 14:22:52','',355,'0'),
-(78,52,'禅道缺陷记录','','','','admin','2020-01-09 14:22:52','',390,'0'),
-(89,58,'禅道缺陷跟踪系统记录项','','yes','','admin','2020-01-09 14:25:16','',445,'0'),
-(99,64,'禅道缺陷记录项','','yes','','admin','2020-01-09 14:26:52','',495,'0');
+REPLACE INTO `zt_zoutput` (`id`, `activity`, `name`, `content`, `optional`, `status`, `createdBy`, `createdDate`, `editedBy`, `editedDate`, `order`, `deleted`) VALUES
+(71,47,'禅道缺陷记录','','','','admin','2020-01-09 14:22:52','','0000-00-00 00:00:00',355,'0'),
+(78,52,'禅道缺陷记录','','','','admin','2020-01-09 14:22:52','','0000-00-00 00:00:00',390,'0'),
+(89,58,'禅道缺陷跟踪系统记录项','','yes','','admin','2020-01-09 14:25:16','','0000-00-00 00:00:00',445,'0'),
+(99,64,'禅道缺陷记录项','','yes','','admin','2020-01-09 14:26:52','','0000-00-00 00:00:00',495,'0');

@@ -295,6 +295,14 @@ $(function()
         $chosen.toggleClass('chosen-up', $drop.height() + $drop.offset().top - $(document).scrollTop() > $(window).height());
     });
 
+    $searchForm.find('.picker-select').each(function()
+    {
+        var $select = $(this);
+        var pickerOptions = {chosenMode: true}
+        if($select.attr('data-pickertype') == 'remote') pickerOptions.remote = $select.attr('data-pickerremote');
+        $select.picker(pickerOptions);
+    });
+
     /* Toggle user queries action. */
     $('#toggle-queries').click(function()
     {
@@ -383,13 +391,12 @@ $(function()
                 if(target.next('input[type=hidden]').length)
                 {
                     target.next('input[type=hidden]').val($(this).attr('href').replace('#', '$'));
-                    target.attr('placeholder', $(this).attr('href').replace('#', '$'));
                 }
                 else
                 {
                     target.val($(this).attr('href').replace('#', '$'));
                 }
-
+                target.attr('placeholder', $(this).attr('href').replace('#', '$'));
                 $(query).closest('form').find('#operator' + $period.data('fieldNO')).val('between');
                 $period.hide();
             }

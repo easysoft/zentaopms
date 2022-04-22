@@ -60,7 +60,7 @@
             <?php if(empty($task->team) or $task->assignedTo == $this->app->user->account):?>
             <td align='center' class='c-actions'>
               <?php
-              if(($task->status == 'wait' or $task->status == 'pause' or $task->status == 'doing') and ($this->app->user->admin or $this->app->user->account == $estimate->account))
+              if($this->app->user->admin or $this->app->user->account == $estimate->account)
               {
                   common::printIcon('task', 'editEstimate', "estimateID=$estimate->id", '', 'list', 'pencil', '', 'showinonlybody', true);
                   common::printIcon('task', 'deleteEstimate', "estimateID=$estimate->id", '', 'list', 'close', 'hiddenwin', 'showinonlybody');
@@ -82,7 +82,6 @@
       </div>
     </div>
     <?php else:?>
-          <?php if(in_array($task->status, array('wait', 'pause', 'doing'))):?>
           <?php for($i = 1; $i <= 3; $i++):?>
           <tr class="text-center">
             <td><?php echo $i . html::hidden("id[$i]", $i);?></td>
@@ -96,7 +95,6 @@
           <tr>
             <td colspan='6' class='text-center form-actions'><?php echo html::submitButton() . html::backButton('', '', 'btn btn-wide');?></td>
           </tr>
-          <?php endif;?>
         </tbody>
       </table>
     </form>
