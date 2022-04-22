@@ -270,7 +270,7 @@ function loadProductExecutions(productID, projectID = 0)
     {
         $(this).find('select').chosen();
         if(typeof(bugExecution) == 'string' && systemMode != 'classic') $('#executionIdBox').prepend("<span class='input-group-addon' id='executionBox' style='border-left-width: 0px;'>" + bugExecution + "</span>");
-        if(required) $(this).find('#execution_chosen').addClass('required');
+        if(required) $(this).addClass('required');
         if(page != 'edit') changeAssignedTo(projectID);
     });
 
