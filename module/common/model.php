@@ -2286,7 +2286,7 @@ EOD;
         {
             if($_SERVER['HTTP_SEC_FETCH_DEST'] == 'iframe') return;
         }
-        else if(isset($_SERVER['HTTP_REFERER']) && !empty($_SERVER['HTTP_REFERER']))
+        else if(strpos(strtolower($_SERVER['HTTP_USER_AGENT']), 'safari') !== false || (isset($_SERVER['HTTP_REFERER']) && !empty($_SERVER['HTTP_REFERER'])))
         {
             return;
         }
