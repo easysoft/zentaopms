@@ -412,6 +412,7 @@ class personnelModel extends model
 
         $userHours = $this->dao->select('account, sum(`left`) as `left`, sum(consumed) as consumed')->from(TABLE_EFFORT)
             ->where('account')->in($accounts)
+            ->andWhere('deleted')->eq(0)
             ->andWhere('objectType')->eq('task')
             ->andWhere('objectID')->in($taskIDList)
             ->groupBy('account')
