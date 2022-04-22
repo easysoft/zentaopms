@@ -1021,6 +1021,10 @@ EOF;
                     return $this->send($response);
                 }
                 $listID = $this->user->createContactList($data->newList, $data->users);
+                if(dao::isError())
+                {
+                    return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+                }
                 $this->user->setGlobalContacts($listID, isset($data->share));
                 if(isonlybody()) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => "parent.parent.ajaxGetContacts('#mailto')"));
                 return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('manageContacts', "listID=$listID")));
