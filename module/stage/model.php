@@ -26,6 +26,10 @@ class stageModel extends model
             ->add('createdDate', helper::today())
             ->get();
 
+        $totalPercent = $this->getTotalPercent();
+
+        if(round($totalPercent + $stage->percent) > 100) return dao::$errors['message'][] = $this->lang->stage->error->percentOver;
+
         $this->dao->insert(TABLE_STAGE)->data($stage)->autoCheck()->exec();
 
         if(!dao::isError()) return $this->dao->lastInsertID();
@@ -41,6 +45,10 @@ class stageModel extends model
     public function batchCreate()
     {
         $data = fixer::input('post')->get();
+
+        $totalPercent = $this->getTotalPercent();
+
+        if(round($totalPercent + array_sum($data->percent)) > 100) return dao::$errors['message'][] = $this->lang->stage->error->percentOver;
 
         $this->loadModel('action');
         foreach($data->name as $i => $name)
@@ -78,6 +86,10 @@ class stageModel extends model
             ->add('editedBy', $this->app->user->account)
             ->add('editedDate', helper::today())
             ->get();
+
+        $totalPercent = $this->getTotalPercent();
+
+        if(round($totalPercent + $stage->percent - $oldStage->percent) > 100) return dao::$errors['message'][] = $this->lang->stage->error->percentOver;
 
         $this->dao->update(TABLE_STAGE)->data($stage)->autoCheck()->where('id')->eq((int)$stageID)->exec();
 
@@ -126,5 +138,15 @@ class stageModel extends model
     public function getByID($stageID)
     {
         return $this->dao->select('*')->from(TABLE_STAGE)->where('deleted')->eq(0)->andWhere('id')->eq((int)$stageID)->fetch();
+    }
+
+    /**
+     *  Get stage total percent
+     *
+     *  return string
+     */
+    public function getTotalPercent()
+    {
+        return $this->dao->select('sum(percent) as total')->from(TABLE_STAGE)->where('deleted')->eq('0')->fetch('total');
     }
 }

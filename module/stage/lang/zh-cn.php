@@ -36,3 +36,6 @@ $lang->stage->typeList['other']   = '其他';
 $lang->stage->viewList      = '浏览列表';
 $lang->stage->noStage       = '暂时没有阶段';
 $lang->stage->confirmDelete = '您确定要执行删除操作吗？';
+
+$lang->stage->error                  = new stdclass();
+$lang->stage->error->percentOver     = '工作量占比累计不应当超过100%';
