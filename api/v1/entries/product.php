@@ -55,7 +55,7 @@ class productEntry extends Entry
                     $product->execution = $this->loadModel('product')->getExecutionPairsByProduct($productID);
                     break;
                 case 'moduleoptionmenu':
-                    $product->moduleOptionMenu = $this->loadModel('tree')->getOptionMenu($productID, 'story', 0, 'all');
+                    $product->moduleOptionMenu = $this->loadModel('tree')->getOptionMenu($productID, 'story', 0, '0');
                     break;
                 case 'parentstories':
                     $product->parentstories= $this->loadModel('story')->getParentStoryPairs($productID);
