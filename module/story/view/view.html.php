@@ -362,7 +362,6 @@
                 <tr>
                   <th><?php echo $lang->story->estimate;?></th>
                   <td title="<?php echo $story->estimate . ' ' . $lang->hourCommon;?>"><?php echo $story->estimate . $config->hourUnit;?></td>
-<?php a($config->hourUnit);?>
                 </tr>
                 <?php if(in_array($story->source, $config->story->feedbackSource)):?>
                 <tr>

@@ -23,6 +23,7 @@ class executionEntry extends Entry
         $fields    = $this->param('fields');
         $productID = $this->param('productID');
         $status    = $this->param('status', 'all');
+
         $control = $this->loadController('execution', 'view');
         $control->view($executionID);
 
