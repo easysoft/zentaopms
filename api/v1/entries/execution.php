@@ -38,7 +38,7 @@ class executionEntry extends Entry
         $execution->products    = array();
         foreach($data->data->products as $productID => $executionProduct)
         {
-            if($status == 'noclosed' and $executionProduct->status == closed) continue;
+            if($status == 'noclosed' and $executionProduct->status == 'closed') continue;
 
             $product = new stdclass();
             $product->id = $executionProduct->id;
