@@ -737,7 +737,6 @@ class fileModel extends model
             if($content) $data->$editorID = $content;
             $data->$editorID = preg_replace("/ src=\"$readLinkReg\" /", ' src="' . $imgURL . '" ', $data->$editorID);
             $data->$editorID = preg_replace("/ src=\"" . htmlSpecialString($readLinkReg) . "\" /", ' src="' . $imgURL . '" ', $data->$editorID);
-
             preg_match_all('/ src="{([0-9]+)\.\w+}"/', $data->$editorID, $matchs);
             if($matchs[1])
             {
