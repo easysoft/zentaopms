@@ -132,7 +132,7 @@ js::set('dittoNotice', $dittoNotice);
             <td <?php echo zget($visibleFields, 'deadline',   "class='hidden'")?>><?php echo html::input("deadlines[$taskID]", helper::isZeroDate($tasks[$taskID]->deadline) ? '' : $tasks[$taskID]->deadline, "class='form-control text-center form-date'");?></td>
             <td <?php echo zget($visibleFields, 'pri',        "class='hidden'")?>><?php echo html::select("pris[$taskID]", $priList, $tasks[$taskID]->pri, "class='form-control'");?></td>
             <td <?php echo zget($visibleFields, 'estimate',   "class='hidden'")?>><?php echo html::input("estimates[$taskID]", $tasks[$taskID]->estimate, "class='form-control text-center' {$disableHour}");?></td>
-            <td <?php echo zget($visibleFields, 'record',     "class='hidden'")?>><?php echo html::input("consumeds[$taskID]", '', "class='form-control text-center' {$disableHour}");?></td>
+            <td <?php echo zget($visibleFields, 'record',     "class='hidden'")?>><?php echo html::input("consumeds[$taskID]", 0, "class='form-control text-center' {$disableHour}");?></td>
             <td <?php echo zget($visibleFields, 'left',       "class='hidden'")?>><?php echo html::input("lefts[$taskID]", $tasks[$taskID]->left, "class='form-control text-center' {$disableHour}");?></td>
             <td class='text-left<?php echo zget($visibleFields, 'finishedBy', ' hidden')?>' style='overflow:visible'><?php echo html::select("finishedBys[$taskID]", $members, $tasks[$taskID]->finishedBy, "class='form-control chosen'");?></td>
             <td class='text-left<?php echo zget($visibleFields, 'canceledBy', ' hidden')?>' style='overflow:visible'><?php echo html::select("canceledBys[$taskID]", $members, $tasks[$taskID]->canceledBy, "class='form-control chosen'");?></td>
