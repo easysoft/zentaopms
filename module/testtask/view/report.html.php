@@ -52,7 +52,19 @@
       <div class='table-row chart-row'>
         <div class='main-col'>
           <div class='chart-wrapper text-center'>
-            <h4><?php echo $lang->testtask->report->charts[$chartType];?></h4>
+            <h4>
+            <?php echo $lang->testtask->report->charts[$chartType];?>
+            <?php if($chartType  == 'testTaskPerRunResult'):?>
+              <?php
+              $total = 0;
+              foreach($datas['testTaskPerRunResult'] as $key => $data) $total += $data->value;
+              $pass   = isset($datas['testTaskPerRunResult']['pass']) ? $datas['testTaskPerRunResult']['pass']->value : 0;
+              $noExec = isset($datas['testTaskPerRunResult']['']) ? $datas['testTaskPerRunResult']['']->value : 0;
+              $fail   = isset($datas['testTaskPerRunResult']['fail']) ? $datas['testTaskPerRunResult']['fail']->value : 0;
+              ?>
+              <a data-toggle='tooltip' title='<?php echo sprintf($lang->testtask->report->testTaskPerRunResultTip, $total, $pass, $noExec, $fail);?>'><i class='icon-help'></i></a>
+            <?php endif;?>
+            </h4>
             <div class='chart-canvas'><canvas id='chart-<?php echo $chartType ?>' width='<?php echo $chartOption->width;?>' height='<?php echo $chartOption->height;?>' data-responsive='true'></canvas></div>
           </div>
         </div>

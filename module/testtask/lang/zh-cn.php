@@ -179,6 +179,8 @@ $lang->testtask->report->common = '报表';
 $lang->testtask->report->select = '请选择报表类型';
 $lang->testtask->report->create = '生成报表';
 
+$lang->testtask->report->testTaskPerRunResultTip = '共有%s个用例，通过%s个、未执行%s个、失败%s个';
+
 $lang->testtask->report->charts['testTaskPerRunResult'] = '按用例结果统计';
 $lang->testtask->report->charts['testTaskPerType']      = '按用例类型统计';
 $lang->testtask->report->charts['testTaskPerModule']    = '按用例模块统计';
