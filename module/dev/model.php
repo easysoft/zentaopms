@@ -137,6 +137,15 @@ class devModel extends model
     public function getAPIs($module)
     {
         $fileName = $this->app->getModuleRoot() . $module . DS . 'control.php';
+        if(!file_exists($fileName))
+        {
+            $extPaths = $this->getModuleExtPath();
+            foreach($extPaths as $extPath)
+            {
+                $fileName = $extPath . $module . DS . 'control.php';
+                if(file_exists($fileName)) break;
+            }
+        }
         if($module != 'common' and $module != 'dev') include $fileName;
 
         $classReflect = new ReflectionClass($module);
@@ -251,7 +260,38 @@ class devModel extends model
             $group  = zget($this->config->dev->group, $module, 'other');
             $modules[$group][] = $module;
         }
+
+        $extPaths = $this->getModuleExtPath();
+        foreach($extPaths as $extPath)
+        {
+            if(empty($extPath)) continue;
+            foreach(glob($extPath . '*') as $path)
+            {
+                if(!file_exists($path . DS . 'control.php')) continue;
+
+                $module = basename($path);
+                if($module == 'editor' or $module == 'help' or $module == 'setting' or $module == 'common') continue;
+                $group  = zget($this->config->dev->group, $module, 'other');
+                $modules[$group][] = $module;
+            }
+        }
+
         return $modules;
+    }
+
+    /**
+     * Get module ext path.
+     *
+     * @access public
+     * @return array
+     */
+    public function getModuleExtPath()
+    {
+        $extPaths = array();
+        if($this->config->edition != 'open') $extPaths['common'] = $this->app->getExtensionRoot() . $this->config->edition . DS;
+        $extPaths['xuan'] = $this->app->getExtensionRoot() . 'xuan' . DS;
+
+        return $extPaths;
     }
 
     /**
