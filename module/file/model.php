@@ -735,6 +735,8 @@ class fileModel extends model
 
             $content = $this->pasteImage($data->$editorID, $uid);
             if($content) $data->$editorID = $content;
+
+            $data->$editorID = htmlspecialchars_decode($data->$editorID);
             $data->$editorID = preg_replace("/ src=\"$readLinkReg\" /", ' src="' . $imgURL . '" ', $data->$editorID);
             $data->$editorID = preg_replace("/ src=\"" . htmlSpecialString($readLinkReg) . "\" /", ' src="' . $imgURL . '" ', $data->$editorID);
 
