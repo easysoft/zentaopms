@@ -22,7 +22,7 @@ class executionEntry extends Entry
     {
         $fields    = $this->param('fields');
         $productID = $this->param('productID');
-
+        $status    = $this->param('status', 'all');
         $control = $this->loadController('execution', 'view');
         $control->view($executionID);
 
@@ -37,6 +37,8 @@ class executionEntry extends Entry
         $execution->products    = array();
         foreach($data->data->products as $productID => $executionProduct)
         {
+            if($status == 'noclosed' and $executionProduct->status == closed) continue;
+
             $product = new stdclass();
             $product->id = $executionProduct->id;
             $product->name = $executionProduct->name;

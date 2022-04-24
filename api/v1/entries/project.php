@@ -63,8 +63,9 @@ class projectEntry extends entry
                     $project->teams = $teams;
                     break;
                 case "products":
+                    $status = $this->param('status', '');
                     $project->products = array();
-                    $productList = $this->loadModel('product')->getOrderedProducts('all', 40, $projectID);
+                    $productList = $this->loadModel('product')->getOrderedProducts($status, 40, $projectID);
                     foreach($productList as $product) $project->products[] = $product;
                     break;
                 case "stat":
