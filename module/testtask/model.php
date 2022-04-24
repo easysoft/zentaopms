@@ -1595,7 +1595,7 @@ class testtaskModel extends model
         if(empty($file))
         {
             dao::$errors[] = $this->lang->testtask->unitXMLFormat;
-            return print(js::error(dao::getError()));
+            die(js::error(dao::getError()));
         }
 
         $file     = $file[0];
