@@ -67,7 +67,7 @@
         </tr>
         <tr>
           <th><?php echo $lang->testtask->resultFile;?></th>
-          <td><?php echo html::file('resultFile', "class='form-control'");?></td>
+          <td class='required'><?php echo html::file('resultFile', "class='form-control'");?></td>
           <td><?php echo $lang->testtask->unitXMLFormat;?></td>
         </tr>
         <tr>
