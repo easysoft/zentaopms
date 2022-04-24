@@ -30,7 +30,11 @@ class stageModel extends model
 
         if(round($totalPercent + $stage->percent) > 100) return dao::$errors['message'][] = $this->lang->stage->error->percentOver;
 
-        $this->dao->insert(TABLE_STAGE)->data($stage)->autoCheck()->exec();
+        $this->dao->insert(TABLE_STAGE)
+            ->data($stage)
+            ->autoCheck()
+            ->checkIF($stage->percent != '', 'percent', 'float')
+            ->exec();
 
         if(!dao::isError()) return $this->dao->lastInsertID();
         return false;
@@ -62,7 +66,7 @@ class stageModel extends model
             $stage->createdBy   = $this->app->user->account;
             $stage->createdDate = helper::today();
 
-            $this->dao->insert(TABLE_STAGE)->data($stage)->autoCheck()->exec();
+            $this->dao->insert(TABLE_STAGE)->data($stage)->autoCheck()->checkIF($stage->percent != '', 'percent', 'float')->exec();
 
             $stageID = $this->dao->lastInsertID();
             $this->action->create('stage', $stageID, 'Opened');
@@ -91,7 +95,7 @@ class stageModel extends model
 
         if(round($totalPercent + $stage->percent - $oldStage->percent) > 100) return dao::$errors['message'][] = $this->lang->stage->error->percentOver;
 
-        $this->dao->update(TABLE_STAGE)->data($stage)->autoCheck()->where('id')->eq((int)$stageID)->exec();
+        $this->dao->update(TABLE_STAGE)->data($stage)->autoCheck()->checkIF($stage->percent != '', 'percent', 'float')->where('id')->eq((int)$stageID)->exec();
 
         if(!dao::isError()) return common::createChanges($oldStage, $stage);
         return false;

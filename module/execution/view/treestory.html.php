@@ -199,6 +199,7 @@
   <div class="detail-content">
     <table class="table table-data">
       <tbody>
+        <?php if($this->config->vision != 'lite'):?>
         <?php if(!empty($fromBug)):?>
         <tr class='text-top'>
           <th class='thWidth'><?php echo $lang->story->legendFromBug;?></th>
@@ -243,6 +244,7 @@
             <?php endif;?>
           </td>
         </tr>
+        <?php endif;?>
         <tr class='text-top'>
           <th><?php echo $lang->story->legendLinkStories;?></th>
           <td class='pd-0'>

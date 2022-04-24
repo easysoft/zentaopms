@@ -16,6 +16,7 @@ h3 {font-size: 16px;}
 .versions {position: relative;}
 #diffRepo {position: absolute; left: 20px; z-index: 1000;}
 #repoID {display: inline-block; width: auto;}
+.table-form>tbody>tr>th {width: 110px;}
 .repoCode a:hover {text-decoration: none;}
 .commentButton
 {
