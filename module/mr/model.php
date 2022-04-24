@@ -1392,6 +1392,7 @@ class mrModel extends model
             ->where('t1.AType')->eq('mr')
             ->andWhere('t1.BType')->eq($objectType)
             ->andWhere('t1.BID')->eq($objectID)
+            ->andWhere('t2.id')->ne(0)
             ->fetchPairs();
     }
 

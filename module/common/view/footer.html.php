@@ -16,11 +16,12 @@ needPing = false;
 $(function()
 {
     var windowBlur = false;
-    if(window.Notification)
+    if(window.Notification && Notification.permission == 'granted')
     {
         window.onblur  = function(){windowBlur = true;}
         window.onfocus = function(){windowBlur = false;}
     }
+
     setInterval(function()
     {
         $.get(createLink('message', 'ajaxGetMessage', "windowBlur=" + (windowBlur ? '1' : '0')), function(data)

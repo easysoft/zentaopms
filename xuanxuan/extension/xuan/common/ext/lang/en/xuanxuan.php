@@ -1,7 +1,10 @@
 <?php
 $lang->xuanxuan = new stdclass();
-$lang->admin->menu->xuanxuan = array('link' => 'Desktop|admin|xuanxuan', 'subModule' => 'client,setting');
-$lang->admin->menuOrder[6]   = 'xuanxuan';
+if($config->vision != 'lite')
+{
+    $lang->admin->menu->xuanxuan = array('link' => 'Desktop|admin|xuanxuan', 'subModule' => 'client,setting');
+    $lang->admin->menuOrder[6]   = 'xuanxuan';
+}
 
 $lang->admin->menu->xuanxuan['subMenu'] = new stdclass();
 $lang->admin->menu->xuanxuan['subMenu']->index   = array('link' => 'Home|admin|xuanxuan');

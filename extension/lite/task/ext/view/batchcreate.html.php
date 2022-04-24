@@ -135,7 +135,7 @@
             </td>
             <td <?php echo zget($visibleFields, 'region', "class='hidden'")?> style='overflow:visible'><?php echo html::select("region[$i]", $regionList, isset($regionID) ? $regionID : '', "class='form-control chosen' onchange='loadLaneGroup(this.value, $i)'");?></td>
             <td <?php echo zget($visibleFields, 'lane', "class='hidden'")?> style='overflow:visible'><?php echo html::select("lane[$i]", $lanes, '', "class='form-control chosen'");?></td>
-            <td><?php echo html::select("type[$i]", $lang->task->typeList, $type, 'class=form-control');?></td>
+            <td><?php echo html::select("type[$i]", $lang->task->typeList, $type, "class='form-control chosen'");?></td>
             <td <?php echo zget($visibleFields, 'assignedTo', "class='hidden'")?> style='overflow:visible'><?php echo html::select("assignedTo[$i]", $members, $member, "class='form-control chosen'");?></td>
             <td <?php echo zget($visibleFields, 'estimate', "class='hidden'")?>><?php echo html::input("estimate[$i]", '', "class='form-control text-center'");?></td>
             <td <?php echo zget($visibleFields, 'estStarted', "class='hidden'")?>>

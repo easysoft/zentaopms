@@ -26,3 +26,5 @@ td.flex span.project-type-label {margin-left: 5px; min-width: 36px;}
 td.flex span.project-type-label {min-width: 40px;}
 
 .label-children {min-width:22px !important;}
+.c-name > a, .table-children .text-left > a {padding-left: 5px;}
+.has-child > span {margin-right: 5px;}

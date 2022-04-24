@@ -34,8 +34,9 @@ class api extends control
     public function index($libID = 0, $moduleID = 0, $apiID = 0, $version = 0, $release = 0, $appendLib = 0)
     {
         /* Get all api doc libraries. */
-        $libs      = $this->doc->getApiLibs($appendLib);
+        $libs = $this->doc->getApiLibs($appendLib);
         if($libID == 0 and !empty($libs)) $libID = key($libs);
+
         $lib       = $this->doc->getLibById($libID);
         $appendLib = (!empty($lib) and $lib->deleted == '1') ? $libID : 0;
 

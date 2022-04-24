@@ -2291,7 +2291,7 @@ class taskModel extends model
     public function getUserTasks($account, $type = 'assignedTo', $limit = 0, $pager = null, $orderBy = "id_desc", $projectID = 0)
     {
         if(!$this->loadModel('common')->checkField(TABLE_TASK, $type)) return array();
-        $tasks = $this->dao->select('t1.*, t2.id as executionID, t2.name as executionName, t3.id as storyID, t3.title as storyTitle, t3.status AS storyStatus, t3.version AS latestStoryVersion')
+        $tasks = $this->dao->select('t1.*, t2.id as executionID, t2.name as executionName, t2.type as executionType, t3.id as storyID, t3.title as storyTitle, t3.status AS storyStatus, t3.version AS latestStoryVersion')
             ->from(TABLE_TASK)->alias('t1')
             ->leftJoin(TABLE_EXECUTION)->alias('t2')->on("t1.execution = t2.id")
             ->leftJoin(TABLE_STORY)->alias('t3')->on('t1.story = t3.id')

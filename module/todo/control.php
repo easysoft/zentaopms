@@ -633,7 +633,7 @@ class todo extends control
 
             $this->post->set('fields', $fields);
             $this->post->set('rows', $todos);
-            $this->post->set('kind', $this->lang->todo->common);
+            $this->post->set('kind', 'todo');
             $this->fetch('file', 'export2' . $this->post->fileType, $_POST);
         }
 
