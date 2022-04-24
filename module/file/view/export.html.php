@@ -53,6 +53,15 @@ function switchEncode(fileType)
     if(fileType != 'csv') $encode.val('utf-8').attr('disabled', 'disabled');
     else $encode.removeAttr('disabled');
     $encode.trigger('chosen:updated');
+
+    if(fileType == 'word')
+    {
+        $('#tplBox').closest('tr').addClass('hidden');
+    }
+    else
+    {
+        $('#tplBox').closest('tr').removeClass('hidden');
+    }
 }
 
 function saveTemplate()
