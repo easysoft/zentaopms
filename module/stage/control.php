@@ -40,6 +40,7 @@ class stage extends control
         if($_POST)
         {
             $stageID = $this->stage->create();
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $response['result']  = 'success';
             $response['message'] = $this->lang->saveSuccess;
