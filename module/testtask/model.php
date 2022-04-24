@@ -1595,7 +1595,7 @@ class testtaskModel extends model
         if(empty($file))
         {
             dao::$errors[] = $this->lang->testtask->unitXMLFormat;
-            die(js::error(dao::getError()));
+            return false;
         }
 
         $file     = $file[0];
@@ -1604,7 +1604,7 @@ class testtaskModel extends model
         if(simplexml_load_file($fileName) === false)
         {
             dao::$errors[] = $this->lang->testtask->cannotBeParsed;
-            return print(js::error(dao::getError()));
+            return false;
         }
 
         $frame = $this->post->frame;
