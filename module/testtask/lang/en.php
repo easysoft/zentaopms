@@ -179,6 +179,8 @@ $lang->testtask->report->common = 'Report';
 $lang->testtask->report->select = 'Select Report Type';
 $lang->testtask->report->create = 'Create Report';
 
+$lang->testtask->report->testTaskPerRunResultTip = 'There are %s usecase, including %s passed,%s not executed, and %s failed';
+
 $lang->testtask->report->charts['testTaskPerRunResult'] = 'Test Case Result';
 $lang->testtask->report->charts['testTaskPerType']      = 'Test Case Type';
 $lang->testtask->report->charts['testTaskPerModule']    = 'Test Case Module';

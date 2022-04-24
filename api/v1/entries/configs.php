@@ -26,6 +26,8 @@ class configsEntry extends baseEntry
         $configs[] = array('key' => 'charset',    'value' => $this->config->charset);
         $configs[] = array('key' => 'timezone',   'value' => $this->config->timezone);
         $configs[] = array('key' => 'systemMode', 'value' => $this->config->systemMode);
+        $configs[] = array('key' => 'hourUnit',   'value' => $this->config->hourUnit);
+        $configs[] = array('key' => 'CRProduct',  'value' => $this->config->CRProduct);
 
         $this->send(200, $configs);
     }
