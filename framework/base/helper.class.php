@@ -691,7 +691,7 @@ class baseHelper
      * @access public
      * @return string
      */
-    public static function getRemoteIp($proxy = false)
+    public static function getRemoteIp($proxy = true)
     {
         $ip = '';
         if(!empty($_SERVER["REMOTE_ADDR"])) $ip = $_SERVER["REMOTE_ADDR"];

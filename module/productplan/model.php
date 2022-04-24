@@ -238,7 +238,7 @@ class productplanModel extends model
             ->andWhere('deleted')->eq(0)
             ->beginIF(strpos($param, 'unexpired') !== false)->andWhere('end')->ge($date)->fi()
             ->beginIF(strpos($param, 'noclosed') !== false)->andWhere('status')->ne('closed')->fi()
-            ->beginIF($branch !== 'all' or $branch !== '')->andWhere("branch")->in($branch)->fi()
+            ->beginIF($branch !== 'all' and $branch !== '')->andWhere("branch")->in($branch)->fi()
             ->orderBy('begin desc')
             ->fetchAll('id');
 
@@ -375,7 +375,7 @@ class productplanModel extends model
         $plans = $this->dao->select('branch,id,title,begin,end')->from(TABLE_PRODUCTPLAN)
             ->where('product')->eq($productID)
             ->andWhere('deleted')->eq(0)
-            ->beginIF(!empty($branches))->andWhere('branch')->in($branches)->fi()
+            ->beginIF($branches != '')->andWhere('branch')->in($branches)->fi()
             ->beginIF($skipParent)->andWhere('parent')->ne(-1)->fi()
             ->fetchAll('id');
 
@@ -846,9 +846,15 @@ class productplanModel extends model
             }
             else
             {
-                $plansOfStory = $story->plan . ',' . $planID;
+                $branchPlanPairs = $this->dao->select('branch, id as plan')->from(TABLE_PRODUCTPLAN)
+                    ->where('product')->eq($story->product)
+                    ->andWhere('id')->in($story->plan)
+                    ->fetchPairs();
+                if(isset($branchPlanPairs[$plan->branch])) $branchPlanPairs[$plan->branch] = $planID;
 
-                $this->dao->update(TABLE_STORY)->set("plan")->eq($plansOfStory)->where('id')->eq((int)$storyID)->andWhere('branch')->eq('0')->exec();
+                $plansOfStory = ',' . implode(',', $branchPlanPairs);
+
+                $this->dao->update(TABLE_STORY)->set("plan")->eq($plansOfStory)->where('id')->eq((int)$storyID)->exec();
 
                 $this->story->updateStoryOrderOfPlan($storyID, $planID);
             }

@@ -125,6 +125,15 @@ $lang->dev->tableList['im_chat_message_index'] = 'im聊天消息';
 $lang->dev->tableList['im_message_backup']     = 'im消息备份';
 $lang->dev->tableList['im_message_index']      = 'im消息索引';
 $lang->dev->tableList['im_userdevice']         = 'im用户设备';
+$lang->dev->tableList['baseimage']             = '图片';
+$lang->dev->tableList['baseimagebrowser']      = '浏览图片';
+$lang->dev->tableList['browser']               = '浏览';
+$lang->dev->tableList['kanban']                = '看板';
+$lang->dev->tableList['kanbancard']            = '看板卡片';
+$lang->dev->tableList['kanbancell']            = '看板单元格';
+$lang->dev->tableList['kanbangroup']           = '看板组';
+$lang->dev->tableList['kanbanregion']          = '看板区域';
+$lang->dev->tableList['kanbanspace']           = '看板空间';
 
 $lang->dev->groupList['my']        = '我的地盘';
 $lang->dev->groupList['program']   = '项目集';
