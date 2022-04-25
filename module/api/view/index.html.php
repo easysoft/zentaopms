@@ -31,7 +31,7 @@
             echo "<div class='menu-actions'>";
             echo html::a('javascript:;', "<i class='icon icon-ellipsis-v'></i>", '', "data-toggle='dropdown' class='btn btn-link'");
             echo "<ul class='dropdown-menu pull-right'>";
-            if($canTreeBrowse) echo '<li>' . html::a($this->createLink('tree', 'browse', "rootID=$libID&view=api", '', true), '<i class="icon-cog-outline"></i> ' . $this->lang->api->manageType, '', "class='iframe'") . '</li>';
+            if($canTreeBrowse) echo '<li>' . html::a($this->createLink('tree', 'browse', "rootID=$libID&view=api", '', true), '<i class="icon-cog-outline"></i> ' . $this->lang->api->manageType, '', "class='iframe' data-width='1200px'") . '</li>';
             if($canViewReleases) echo '<li>' . html::a($this->createLink('api', 'releases', "libID=$libID", '', true), '<i class="icon-version"></i> ' . $this->lang->api->managePublish, '', "class='iframe'") . '</li>';
             echo "<li class='divider'></li>";
             if($canEditLib) echo '<li>' . html::a($this->createLink('api', 'editLib', "rootID=$libID"), '<i class="icon-edit"></i> ' . $lang->api->editLib, '', "class='iframe'") . '</li>';
