@@ -12,17 +12,17 @@
 class apiModel extends model
 {
     /* Status. */
-    const STATUS_DOING = 'doing';
-    const STATUS_DONE = 'done';
+    const STATUS_DOING  = 'doing';
+    const STATUS_DONE   = 'done';
     const STATUS_HIDDEN = 'hidden';
 
     /* Scope. */
-    const SCOPE_QUERY = 'query';
+    const SCOPE_QUERY     = 'query';
     const SCOPE_FORM_DATA = 'formData';
-    const SCOPE_PATH = 'path';
-    const SCOPE_BODY = 'body';
-    const SCOPE_HEADER = 'header';
-    const SCOPE_COOKIE = 'cookie';
+    const SCOPE_PATH      = 'path';
+    const SCOPE_BODY      = 'body';
+    const SCOPE_HEADER    = 'header';
+    const SCOPE_COOKIE    = 'cookie';
 
     /* Params. */
     const PARAMS_TYPE_CUSTOM = 'custom';
@@ -68,7 +68,7 @@ class apiModel extends model
     /**
      * Delete a lib publish.
      *
-     * @param int $id
+     * @param  int    $id
      * @access public
      * @return void
      */
@@ -82,29 +82,43 @@ class apiModel extends model
     /**
      * Create an api doc.
      *
-     * @param object $params
      * @access public
-     * @return int
+     * @return object | bool
      */
-    public function create($params)
+    public function create()
     {
-        $this->dao->insert(TABLE_API)->data($params)
+        $now  = helper::now();
+        $data = fixer::input('post')
+            ->trim('title,path')
+            ->remove('type')
+            ->skipSpecial('params,response')
+            ->add('addedBy', $this->app->user->account)
+            ->add('addedDate', $now)
+            ->add('editedBy', $this->app->user->account)
+            ->add('editedDate', $now)
+            ->add('version', 1)
+            ->setDefault('product,module', 0)
+            ->get();
+
+        $this->dao->insert(TABLE_API)->data($data)
             ->autoCheck()
             ->batchCheck($this->config->api->create->requiredFields, 'notempty')
             ->exec();
 
-        $params->id = $this->dao->lastInsertID();
+        if(dao::isError()) return false;
 
-        $apiSpec = $this->getApiSpecByData($params);
+        $data->id = $this->dao->lastInsertID();
+
+        $apiSpec = $this->getApiSpecByData($data);
         $this->dao->replace(TABLE_API_SPEC)->data($apiSpec)->exec();
 
-        return dao::isError() ? false : $params->id;
+        return $data;
     }
 
     /**
-     * Create a global struct
+     * Create a global struct.
      *
-     * @param object $data
+     * @param  object $data
      * @access public
      * @return int
      */
@@ -115,6 +129,8 @@ class apiModel extends model
             ->autoCheck()
             ->batchCheck($this->config->api->struct->requiredFields, 'notempty')
             ->exec();
+
+        if(dao::isError()) return false;
 
         $id = $this->dao->lastInsertID();
 
@@ -130,19 +146,28 @@ class apiModel extends model
         );
         $this->dao->insert(TABLE_APISTRUCT_SPEC)->data($version)->exec();
 
-        return dao::isError() ? 0 : $id;
+        if(dao::isError()) return false;
+
+        return $id;
     }
 
     /**
      * Update a struct.
      *
-     * @param int $id
-     * @param object $data
+     * @param  int    $id
      * @access public
      * @return array
      */
-    public function updateStruct($id, $data)
+    public function updateStruct($id)
     {
+        $now  = helper::now();
+        $data = fixer::input('post')
+            ->skipSpecial('attribute')
+            ->add('lib', $struct->lib)
+            ->add('editedBy', $this->app->user->account)
+            ->add('editedDate', $now)
+            ->get();
+
         $old = $this->dao->findByID($id)->from(TABLE_APISTRUCT)->fetch();
 
         unset($data->addedBy);
@@ -190,11 +215,10 @@ class apiModel extends model
             return false;
         }
 
-        $now     = helper::now();
-        $account = $this->app->user->account;
-        $data    = fixer::input('post')
+        $now  = helper::now();
+        $data = fixer::input('post')
             ->skipSpecial('params,response')
-            ->add('editedBy', $account)
+            ->add('editedBy', $this->app->user->account)
             ->add('editedDate', $now)
             ->add('version', $oldApi->version)
             ->setDefault('product,module', 0)
@@ -259,36 +283,21 @@ class apiModel extends model
     }
 
     /**
-     * Get release by version.
+     * Get release.
      *
-     * @param int $libID
-     * @param string $version
+     * @param  int    $libID
+     * @param  string $type
+     * @param  int    $param
+     * @access public
      * @return object
-     * @access public
      */
-    public function getReleaseByVersion($libID, $version)
+    public function getRelease($libID = 0, $type = '', $param = 0)
     {
-        $model = $this->dao->select('*')
-            ->from(TABLE_API_LIB_RELEASE)
-            ->where('version')->eq($version)
-            ->andWhere('lib')->eq($libID)
-            ->fetch();
-        if($model) $model->snap = json_decode($model->snap, true);
-        return $model;
-    }
-
-    /**
-     * Get release by id.
-     *
-     * @param int $id
-     * @access public
-     * @return array
-     */
-    public function getReleaseById($id)
-    {
-        $model = $this->dao->select('*')
-            ->from(TABLE_API_LIB_RELEASE)
-            ->where('id')->eq($id)
+        $model = $this->dao->select('*')->from(TABLE_API_LIB_RELEASE)
+            ->where('1 = 1')
+            ->beginIF($libID)->andWhere('lib')->eq($libID)->fi()
+            ->beginIF($type == 'byVersion')->andWhere('version')->eq($param)->fi()
+            ->beginIF($type == 'byId')->andWhere('id')->eq($param)->fi()
             ->fetch();
         if($model) $model->snap = json_decode($model->snap, true);
         return $model;
@@ -303,10 +312,7 @@ class apiModel extends model
      */
     public function getReleaseListByApi($libID)
     {
-        $versions = $this->dao->select('*')->from(TABLE_API_LIB_RELEASE)
-            ->where('lib')->eq($libID)
-            ->fetchAll('id');
-        return $versions;
+        return $this->dao->select('*')->from(TABLE_API_LIB_RELEASE)->where('lib')->eq($libID)->fetchAll('id');
     }
 
 
@@ -323,7 +329,7 @@ class apiModel extends model
     {
         if($release)
         {
-            $rel = $this->getReleaseById($release);
+            $rel = $this->getRelease(0, 'byId', $release);
             foreach($rel->snap['apis'] as $api)
             {
                 if($api['id'] == $id) $version = $api['version'];
@@ -338,9 +344,7 @@ class apiModel extends model
             $fields = 'api.*,doc.name as libName,module.name as moduleName';
         }
 
-        $model = $this->dao
-            ->select($fields)
-            ->from(TABLE_API)->alias('api')
+        $model = $this->dao->select($fields)->from(TABLE_API)->alias('api')
             ->beginIF($version)->leftJoin(TABLE_API_SPEC)->alias('spec')->on('api.id = spec.doc')->fi()
             ->leftJoin(TABLE_DOCLIB)->alias('doc')->on('api.lib = doc.id')
             ->leftJoin(TABLE_MODULE)->alias('module')->on('api.module = module.id')
@@ -359,8 +363,9 @@ class apiModel extends model
     /**
      * Get api list by release.
      *
-     * @param object $release
-     * @param string $where
+     * @param  object $release
+     * @param  string $where
+     * @access public
      * @return array
      */
     public function getApiListByRelease($release, $where = '')
@@ -380,20 +385,19 @@ class apiModel extends model
     }
 
     /**
-     * Get api doc list by module id
+     * Get api doc list by module id.
      *
-     * @param int $libID
-     * @param int $moduleID
-     * @param int $release
+     * @param  int   $libID
+     * @param  int   $moduleID
+     * @param  int   $release
      * @return array $list
-     * @author thanatos thanatos915@163.com
      */
     public function getListByModuleId($libID = 0, $moduleID = 0, $release = 0)
     {
         /* Get release info. */
         if($release > 0)
         {
-            $rel = $this->getReleaseById($release);
+            $rel = $this->getRelease(0, 'byId', $release);
 
             $where = "1=1 and lib = $libID ";
             if($moduleID > 0)
@@ -413,7 +417,6 @@ class apiModel extends model
         }
         else
         {
-
             if($moduleID > 0)
             {
                 $sub   = $this->dao->select('id')->from(TABLE_MODULE)->where('FIND_IN_SET(' . $moduleID . ', path)')->processSQL();
@@ -585,7 +588,7 @@ class apiModel extends model
                 foreach($_POST as $key => $value) $param .= ',' . $key . '=' . $value;
                 $param = ltrim($param, ',');
             }
-            $url = rtrim($host, '/') . inlink('getModel', "moduleName=$moduleName&methodName=$methodName&params=$param", 'json');
+            $url  = rtrim($host, '/') . inlink('getModel', "moduleName=$moduleName&methodName=$methodName&params=$param", 'json');
             $url .= $this->config->requestType == "PATH_INFO" ? '?' : '&';
             $url .= $this->config->sessionVar . '=' . session_id();
         }
@@ -596,7 +599,7 @@ class apiModel extends model
                 foreach($_POST as $key => $value) $param .= '&' . $key . '=' . $value;
                 $param = ltrim($param, '&');
             }
-            $url = rtrim($host, '/') . helper::createLink($moduleName, $methodName, $param, 'json');
+            $url  = rtrim($host, '/') . helper::createLink($moduleName, $methodName, $param, 'json');
             $url .= $this->config->requestType == "PATH_INFO" ? '?' : '&';
             $url .= $this->config->sessionVar . '=' . session_id();
         }
