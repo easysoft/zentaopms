@@ -4286,10 +4286,11 @@ class storyModel extends model
                             ->where('story')->eq($id)
                             ->andWhere('deleted')->eq('0')
                             ->fetchAll('id');
-                        $stories[$id]->revisions = $this->dao->select('BID, extra')->from(TABLE_RELATION)
-                            ->where('AType')->eq('design')
-                            ->andWhere('BType')->eq('commit')
-                            ->andWhere('AID')->in(array_keys($stories[$id]->designs))
+                        $stories[$id]->revisions = $this->dao->select('BID, t2.comment')->from(TABLE_RELATION)->alias('t1')
+                            ->leftjoin(TABLE_REPOHISTORY)->alias('t2')->on('t1.BID = t2.id')
+                            ->where('t1.AType')->eq('design')
+                            ->andWhere('t1.BType')->eq('commit')
+                            ->andWhere('t1.AID')->in(array_keys($stories[$id]->designs))
                             ->fetchPairs();
                     }
                 }
@@ -4359,10 +4360,11 @@ class storyModel extends model
                         ->where('story')->eq($id)
                         ->andWhere('deleted')->eq('0')
                         ->fetchAll('id');
-                    $stories[$id]->revisions = $this->dao->select('BID, extra')->from(TABLE_RELATION)
-                        ->where('AType')->eq('design')
-                        ->andWhere('BType')->eq('commit')
-                        ->andWhere('AID')->in(array_keys($stories[$id]->designs))
+                    $stories[$id]->revisions = $this->dao->select('BID, t2.comment')->from(TABLE_RELATION)->alias('t1')
+                        ->leftjoin(TABLE_REPOHISTORY)->alias('t2')->on('t1.BID = t2.id')
+                        ->where('t1.AType')->eq('design')
+                        ->andWhere('t1.BType')->eq('commit')
+                        ->andWhere('t1.AID')->in(array_keys($stories[$id]->designs))
                         ->fetchPairs();
                 }
             }
