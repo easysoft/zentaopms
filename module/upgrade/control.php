@@ -83,7 +83,7 @@ class upgrade extends control
         $version = str_replace(array(' ', '.'), array('', '_'), $this->config->installedVersion);
         $version = strtolower($version);
 
-        if($this->config->visions == ',lite,') 
+        if($this->config->visions == ',lite,')
         {
             $installedVersion = str_replace('.', '_', $this->config->installedVersion);
             $version = array_search($installedVersion, $this->config->upgrade->liteVersion);
@@ -92,7 +92,7 @@ class upgrade extends control
             {
                 if(strpos($key, 'lite') === false) unset($this->lang->upgrade->fromVersions[$key]);
             }
-            
+
             $this->config->version = ($this->config->edition == 'biz' ? 'LiteVIP' : 'Lite') . $this->config->liteVersion;
         }
 
@@ -238,6 +238,8 @@ class upgrade extends control
      */
     public function mergeProgram($type = 'productline', $programID = 0, $projectType = 'project')
     {
+        set_time_limit(0);
+
         $this->session->set('upgrading', true);
         $this->app->loadLang('program');
         $this->app->loadLang('project');

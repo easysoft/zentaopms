@@ -482,6 +482,11 @@ class baseControl
             {
                 if(empty($cssPath)) continue;
 
+                $extMethodCssFile = dirname(dirname($cssPath)) . DS . 'css' . DS . $devicePrefix . $methodName . '.css';
+                if(is_file($extMethodCssFile)) $js .= file_get_contents($extMethodCssFile);
+                $extMethodCssLangFile = dirname(dirname($cssPath)) . DS . 'css' . DS . $devicePrefix . "{$methodName}.{$clientLang}.css";
+                if(is_file($extMethodCssLangFile)) $js .= file_get_contents($extMethodCssLangFile);
+
                 $cssMethodExt = $cssPath . $methodName . DS;
                 $cssCommonExt = $cssPath . 'common' . DS;
 
@@ -575,6 +580,9 @@ class baseControl
             foreach($jsExtPath as $jsPath)
             {
                 if(empty($jsPath)) continue;
+
+                $extMethodJsFile = dirname(dirname($jsPath)) . DS . 'js' . DS . $this->devicePrefix . $methodName . '.js';
+                if(is_file($extMethodJsFile)) $js .= file_get_contents($extMethodJsFile);
 
                 $jsMethodExt = $jsPath . $methodName . DS;
                 $jsCommonExt = $jsPath . 'common' . DS;
@@ -942,9 +950,9 @@ class baseControl
                     die(isset($data['message']) ? $data['message'] : 'fail');
                 }
 
-                $message = json_decode(json_encode((array)$data['message']));
-                foreach((array)$message as $item => $errors) $message->$item = implode(',', $errors);
-                die(js::alert(strip_tags(implode('\n', (array)$message))));
+                $message = json_decode(json_encode($data['message']), true);
+                foreach($message as $item => $errors) $message[$item] = implode(',', $errors);
+                die(js::alert(strip_tags(implode('\n', $message))));
             }
             die('fail');
         }
