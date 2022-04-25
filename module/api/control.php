@@ -151,7 +151,7 @@ class api extends control
                 ->get();
 
             /* Check version is exist. */
-            if(!empty($data->version) and $this->api->getReleaseByVersion($libID, $data->version))
+            if(!empty($data->version) and $this->api->getRelease($libID, 'byVersion', $data->version))
             {
                 return $this->sendError($this->lang->api->noUniqueVersion);
             }
@@ -257,16 +257,7 @@ class api extends control
 
         if(!empty($_POST))
         {
-            $now    = helper::now();
-            $userId = $this->app->user->account;
-            $data   = fixer::input('post')
-                ->skipSpecial('attribute')
-                ->add('lib', $struct->lib)
-                ->add('editedBy', $userId)
-                ->add('editedDate', $now)
-                ->get();
-
-            $changes = $this->api->updateStruct($structID, $data);
+            $changes = $this->api->updateStruct($structID);
             if(dao::isError()) return $this->sendError(dao::getError());
             $actionID = $this->action->create('apistruct', $structID, 'Edited');
             $this->action->logHistory($actionID, $changes);
@@ -434,12 +425,13 @@ class api extends control
         $this->setMenu($api->lib);
 
         $this->getTypeOptions($api->lib);
+
+        $this->view->title            = $api->title . $this->lang->api->edit;
         $this->view->gobackLink       = $this->createLink('api', 'index', "libID={$api->lib}&moduleID={$api->module}");
         $this->view->user             = $this->app->user->account;
         $this->view->allUsers         = $this->loadModel('user')->getPairs('devfirst|noclosed');;
         $this->view->moduleOptionMenu = $this->loadModel('tree')->getOptionMenu($api->lib, 'api', $startModuleID = 0);
         $this->view->moduleID         = $api->module ? (int)$api->module : (int)$this->cookie->lastDocModule;
-        $this->view->title            = $api->title . $this->lang->api->edit;
 
         $this->display();
     }
@@ -456,24 +448,11 @@ class api extends control
     {
         if(!empty($_POST))
         {
-            $now    = helper::now();
-            $params = fixer::input('post')
-                ->trim('title,path')
-                ->remove('type')
-                ->skipSpecial('params,response')
-                ->add('addedBy', $this->app->user->account)
-                ->add('addedDate', $now)
-                ->add('editedBy', $this->app->user->account)
-                ->add('editedDate', $now)
-                ->add('version', 1)
-                ->setDefault('product,module', 0)
-                ->get();
+            $api = $this->api->create();
+            if($api === false) return $this->sendError(dao::getError());
 
-            $apiID = $this->api->create($params);
-            if(empty($apiID)) return $this->sendError(dao::getError());
-
-            $this->action->create('api', $apiID, 'Created');
-            return $this->sendSuccess(array('locate' => helper::createLink('api', 'index', "libID={$params->lib}&moduleID=0&apiID=$apiID")));
+            $this->action->create('api', $api->id, 'Created');
+            return $this->sendSuccess(array('locate' => helper::createLink('api', 'index', "libID={$api->lib}&moduleID=0&apiID={$api->id}")));
         }
 
         $libs = $this->doc->getLibs('api', '', $libID);
@@ -500,6 +479,8 @@ class api extends control
     }
 
     /**
+     * Delete an api.
+     *
      * @param  int    $apiID
      * @param  string $confirm
      * @access public
@@ -509,8 +490,7 @@ class api extends control
     {
         if($confirm == 'no')
         {
-            $tips = $this->lang->api->confirmDelete;
-            return print(js::confirm($tips, inlink('delete', "apiID=$apiID&confirm=yes")));
+            return print(js::confirm($this->lang->api->confirmDelete, inlink('delete', "apiID=$apiID&confirm=yes")));
         }
         else
         {
@@ -529,7 +509,7 @@ class api extends control
     }
 
     /**
-     * Get params type options by scope
+     * AJAX: Get params type options by scope.
      *
      * @access public
      * @return void
@@ -545,9 +525,10 @@ class api extends control
     }
 
     /**
-     * Get ref options by ajax.
+     * AJAX: Get ref options.
      *
-     * @param  int $libID
+     * @param  int     $libID
+     * @param  int     $structID
      * @access public
      * @return void
      */
@@ -558,8 +539,8 @@ class api extends control
         $options = array();
         foreach($res as $item)
         {
-            if($item->id == $structID)
-                continue;
+            if($item->id == $structID) continue;
+
             $options[$item->id] = $item->name;
         }
 
@@ -567,9 +548,9 @@ class api extends control
     }
 
     /**
-     * Get ref info by ajax.
+     * AJAX: Get ref info.
      *
-     * @param  int $refID
+     * @param  int    $refID
      * @access public
      * @return void
      */
@@ -580,8 +561,10 @@ class api extends control
     }
 
     /**
-     * Ajax get all child module.
+     * AJAX: Get all child module.
      *
+     * @param  int     $libID
+     * @param  string  $type
      * @access public
      * @return void
      */
@@ -596,8 +579,8 @@ class api extends control
     /**
      * Set doc menu by method name.
      *
-     * @param  int $libID
-     * @param  int $moduleID
+     * @param  int    $libID
+     * @param  int    $moduleID
      * @access public
      * @return void
      */
@@ -675,7 +658,7 @@ EOT;
         foreach($libs as $key => $lib)
         {
             $selected = $key == $libID ? 'selected' : '';
-            $output   .= html::a(inlink('index', "libID=$key"), $lib->name, '', "class='$selected' data-app='{$this->app->tab}'");
+            $output  .= html::a(inlink('index', "libID=$key"), $lib->name, '', "class='$selected' data-app='{$this->app->tab}'");
         }
         $output .= "</div></div></div></div></div>";
 
@@ -684,7 +667,7 @@ EOT;
         if(!empty($versions))
         {
             $versionName = $version > 0 ? $versions[$version]->version : $this->lang->api->defaultVersion;
-            $output      .= <<<EOT
+            $output     .= <<<EOT
 <div class='btn-group angle-btn'>
   <div class='btn-group'>
     <button id='currentBranch' data-toggle='dropdown' type='button' class='btn btn-limit'>{$versionName} <span class='caret'></span>
@@ -698,12 +681,12 @@ EOT;
       <div class='table-col'>
         <div class='list-group'>
 EOT;
-            $selected    = $version > 0 ? '' : 'selected';
-            $output      .= html::a(inlink('index', "libID=$libID&moduleID=0&apiID=0&version=0&release=0"), $this->lang->api->defaultVersion, '', "class='$selected'");
+            $selected = $version > 0 ? '' : 'selected';
+            $output  .= html::a(inlink('index', "libID=$libID&moduleID=0&apiID=0&version=0&release=0"), $this->lang->api->defaultVersion, '', "class='$selected'");
             foreach($versions as $key => $item)
             {
                 $selected = $key == $version ? 'selected' : '';
-                $output   .= html::a(inlink('index', "libID=$libID&moduleID=0&apiID=0&version=0&release=$key"), $item->version, '', "class='$selected' data-app='{$this->app->tab}'");
+                $output  .= html::a(inlink('index', "libID=$libID&moduleID=0&apiID=0&version=0&release=$key"), $item->version, '', "class='$selected' data-app='{$this->app->tab}'");
             }
             $output .= "</div></div></div></div></div>";
         }
@@ -743,7 +726,7 @@ EOT;
         $newParams = array_shift($params);
         foreach($params as $param)
         {
-            $sign      = strpos($param, '=') !== false ? '&' : ',';
+            $sign       = strpos($param, '=') !== false ? '&' : ',';
             $newParams .= $sign . $param;
         }
 

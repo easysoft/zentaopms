@@ -4,7 +4,7 @@ $('#submit').click(function()
     var name       = $('#name').val();
     var date       = $('#date').val();
     var build      = $('#build').val();
-    if(name && build && dateFormat.test(date))
+    if(name && build && typeof(notEmptyBuilds[build]) != 'undefined' && dateFormat.test(date))
     {
         var result = confirm(confirmLink) ? true : false;
         $('#sync').val(result);
