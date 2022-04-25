@@ -28,6 +28,7 @@ class stageModel extends model
 
         $totalPercent = $this->getTotalPercent();
 
+        if(!is_numeric($stage->percent)) return dao::$errors['message'][] = $this->lang->stage->error->notNum;
         if(round($totalPercent + $stage->percent) > 100) return dao::$errors['message'][] = $this->lang->stage->error->percentOver;
 
         $this->dao->insert(TABLE_STAGE)

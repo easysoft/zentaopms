@@ -39,3 +39,4 @@ $lang->stage->confirmDelete = 'Do you want to delete it?';
 
 $lang->stage->error              = new stdclass();
 $lang->stage->error->percentOver = 'The sum of "Workload %" cannot exceed 100%.';
+$lang->stage->error->notNum      = 'The workload ratio should be numerical';
