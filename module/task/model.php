@@ -1641,7 +1641,7 @@ class taskModel extends model
         $data->lastEditedDate = $now;
         if(helper::isZeroDate($task->realStarted)) $data->realStarted = $now;
 
-        if($left == 0)
+        if($left == 0 and strpos('done,cancel,closed', $task->status) === false)
         {
             $data->status       = 'done';
             $data->assignedTo   = $task->openedBy;
@@ -1656,7 +1656,7 @@ class taskModel extends model
             $data->assignedDate = $now;
             $data->realStarted  = $earliestTime;
         }
-        elseif($task->status == 'pause')
+        elseif($left != 0 and strpos('done,cancel,closed,pause', $task->status) !== false)
         {
             $data->status       = 'doing';
             $data->assignedTo   = $this->app->user->account;
