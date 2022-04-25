@@ -2481,6 +2481,7 @@ class taskModel extends model
      */
     public function getStoryTaskCounts($stories, $executionID = 0)
     {
+        if(empty($stories)) return array();
         $taskCounts = $this->dao->select('story, COUNT(*) AS tasks')
             ->from(TABLE_TASK)
             ->where('story')->in($stories)
