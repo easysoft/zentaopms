@@ -82,13 +82,22 @@ class release extends control
         foreach($releasedBuilds as $build) unset($builds[$build]);
         unset($builds['trunk']);
 
+        /* Get the builds of the linked stories or bugs. */
+        $notEmptyBuilds = array();
+        $buildList      = $this->build->getByList(array_keys($builds));
+        foreach($buildList as $build)
+        {
+            if(!empty($build->stories) or !empty($build->bugs)) $notEmptyBuilds[$build->id] = $build->id;
+        }
+
         $this->commonAction($productID, $branch);
-        $this->view->title       = $this->view->product->name . $this->lang->colon . $this->lang->release->create;
-        $this->view->position[]  = $this->lang->release->create;
-        $this->view->productID   = $productID;
-        $this->view->builds      = $builds;
-        $this->view->users       = $this->loadModel('user')->getPairs('noletter|noclosed');
-        $this->view->lastRelease = $this->release->getLast($productID, $branch);
+        $this->view->title          = $this->view->product->name . $this->lang->colon . $this->lang->release->create;
+        $this->view->position[]     = $this->lang->release->create;
+        $this->view->productID      = $productID;
+        $this->view->builds         = $builds;
+        $this->view->users          = $this->loadModel('user')->getPairs('noletter|noclosed');
+        $this->view->lastRelease    = $this->release->getLast($productID, $branch);
+        $this->view->notEmptyBuilds = $notEmptyBuilds;
 
         $this->display();
     }
