@@ -107,9 +107,9 @@
               </td>
               <?php if($config->edition == 'max'):?>
               <td>
-                <?php foreach($story->revisions as $revision => $repoID):?>
+                <?php foreach($story->revisions as $revision => $repoComment):?>
                 <?php
-                echo html::a($this->createLink('design', 'revision', "repoID=$revision"), '#'. $revision, '', "data-app='devops'") . '<br/>';
+                echo html::a($this->createLink('design', 'revision', "repoID=$revision"), '#'. $revision . '-' . $repoComment, '', "data-app='devops'") . '<br/>';
                 ?>
                 <?php endforeach;?>
               </td>
