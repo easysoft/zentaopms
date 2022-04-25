@@ -253,7 +253,8 @@ class storyModel extends model
         {
             $storyID = $this->dao->lastInsertID();
 
-            if($story->parent)
+            /* Fix bug #21992, user story have no parent story. */
+            if(isset($story->parent) and $story->parent)
             {
                 $stories = array($storyID);
                 $this->subdivide($story->parent, $stories);
