@@ -1415,10 +1415,11 @@ class bugModel extends model
      * @param  array  $products
      * @param  int    $queryID
      * @param  string $actionURL
+     * @param  int    $branch
      * @access public
      * @return void
      */
-    public function buildSearchForm($productID, $products, $queryID, $actionURL)
+    public function buildSearchForm($productID, $products, $queryID, $actionURL, $branch = 0)
     {
         $projectID     = $this->lang->navGroup->bug == 'qa' ? 0 : $this->session->project;
         $productParams = ($productID and isset($products[$productID])) ? array($productID => $products[$productID]) : $products;
@@ -1429,7 +1430,7 @@ class bugModel extends model
         /* Get all modules. */
         $modules = array();
         $this->loadModel('tree');
-        if($productID) $modules = $this->tree->getOptionMenu($productID, 'bug', 0);
+        if($productID) $modules = $this->tree->getOptionMenu($productID, 'bug', 0, $branch);
         if(!$productID)
         {
             foreach($products as $id => $productName) $modules += $this->tree->getOptionMenu($id, 'bug');
@@ -1570,7 +1571,7 @@ class bugModel extends model
     public function getUserBugPairs($account, $appendProduct = true, $limit = 0, $skipProductIDList = array(), $skipExecutionIDList = array(), $appendBugID = 0)
     {
         $deletedProjectIDList = $this->dao->select('*')->from(TABLE_PROJECT)->where('deleted')->eq(1)->fetchPairs('id', 'id');
-        
+
         $bugs = array();
         $stmt = $this->dao->select('t1.id, t1.title, t2.name as product')
             ->from(TABLE_BUG)->alias('t1')
@@ -1894,6 +1895,7 @@ class bugModel extends model
      */
     public function getStoryBugCounts($stories, $executionID = 0)
     {
+        if(empty($stories)) return array();
         $bugCounts = $this->dao->select('story, COUNT(*) AS bugs')
             ->from(TABLE_BUG)
             ->where('story')->in($stories)

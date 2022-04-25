@@ -683,6 +683,7 @@ class testcaseModel extends model
      */
     public function getStoryCaseCounts($stories)
     {
+        if(empty($stories)) return array();
         $caseCounts = $this->dao->select('story, COUNT(*) AS cases')
             ->from(TABLE_CASE)
             ->where('story')->in($stories)
