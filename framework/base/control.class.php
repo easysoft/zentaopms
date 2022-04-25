@@ -483,9 +483,9 @@ class baseControl
                 if(empty($cssPath)) continue;
 
                 $extMethodCssFile = dirname(dirname($cssPath)) . DS . 'css' . DS . $devicePrefix . $methodName . '.css';
-                if(is_file($extMethodCssFile)) $js .= file_get_contents($extMethodCssFile);
+                if(is_file($extMethodCssFile)) $css .= file_get_contents($extMethodCssFile);
                 $extMethodCssLangFile = dirname(dirname($cssPath)) . DS . 'css' . DS . $devicePrefix . "{$methodName}.{$clientLang}.css";
-                if(is_file($extMethodCssLangFile)) $js .= file_get_contents($extMethodCssLangFile);
+                if(is_file($extMethodCssLangFile)) $css .= file_get_contents($extMethodCssLangFile);
 
                 $cssMethodExt = $cssPath . $methodName . DS;
                 $cssCommonExt = $cssPath . 'common' . DS;
