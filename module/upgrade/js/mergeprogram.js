@@ -6,8 +6,6 @@ $(function()
     setProgramEnd(programEnd);
     setProjectPM();
 
-    setProgramByProduct($(':checkbox:checked[data-productid]'));
-
     /* Define drag to select relevant parameters. */
     var options = {
         selector: 'input',
@@ -158,7 +156,6 @@ $(function()
     /* Select all product events. */
     $('#checkAllProducts').click(function()
     {
-
         var lineID  = $('li.currentPage').attr('lineid');
         var checked = true;
         if($(this).is(':checked'))
