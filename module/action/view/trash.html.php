@@ -57,6 +57,12 @@
                 $methodName = 'view';
                 $module     = 'caselib';
             }
+            if($module == 'basicmeas')
+            {
+                $module     = 'measurement';
+                $methodName = 'setSQL';
+                $params     = "id={$action->objectID}";
+            }
             if($action->objectType == 'api')
             {
                 $params     = "libID=0&moduelID=0&apiID={$action->objectID}";
