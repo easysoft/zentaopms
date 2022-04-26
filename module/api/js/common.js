@@ -415,7 +415,10 @@ try {
             },
             del(data, index) {
                 if(data.length <= 1) return;
-                data.splice(index, 1)
+                for(let i = index+1; i < data.length; i++){
+                    if(data[i].sub == data[index].sub) return data.splice(index, i - index)
+                }
+                data.splice(index, data.length - index)
             },
             changeType() {
                 if (!this.params[this.structType] || this.params[this.structType].length > 0) {
