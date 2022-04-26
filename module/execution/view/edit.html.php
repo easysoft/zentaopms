@@ -131,6 +131,7 @@
           </td>
         </tr>
         <?php endif;?>
+        <?php if(!in_array($execution->attribute, array('request', 'design', 'review'))): ?>
         <tr>
           <th><?php echo $lang->execution->manageProducts;?></th>
           <td class='text-left' id='productsBox' colspan="2">
@@ -181,6 +182,9 @@
             </div>
           </td>
         </tr>
+        <?php else: ?>
+        <?php echo html::hidden("products[]", key($linkedProducts));?>
+        <?php endif; ?>
         <tr>
           <th><?php echo $lang->execution->team;?></th>
           <td colspan='2'><?php echo html::select('teamMembers[]', $users, array_keys($teamMembers), "class='form-control chosen' multiple"); ?></td>
