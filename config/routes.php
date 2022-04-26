@@ -16,6 +16,8 @@ $routes['/tabs/:module'] = 'tabs';
 $routes['/files']     = 'files';
 $routes['/files/:id'] = 'file';
 
+$routes['/feedbacks'] = 'feedbacks';
+
 $routes['/options/:type'] = 'options';
 
 $routes['/configurations']       = 'configs';
