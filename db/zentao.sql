@@ -206,7 +206,7 @@ CREATE TABLE IF NOT EXISTS `zt_bug` (
   `result` mediumint(8) unsigned NOT NULL,
   `repo` mediumint(8) unsigned NOT NULL,
   `mr` mediumint(8) unsigned NOT NULL,
-  `entry` varchar(255) NOT NULL,
+  `entry` text NOT NULL,
   `lines` varchar(10) NOT NULL,
   `v1` varchar(40) NOT NULL,
   `v2` varchar(40) NOT NULL,

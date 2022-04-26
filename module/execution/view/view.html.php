@@ -190,6 +190,7 @@
                 </p>
               </div>
             </div>
+            <?php if(!in_array($execution->attribute, array('request', 'design', 'review'))): ?>
             <div class="detail">
               <div class="detail-title">
                 <strong><?php echo $lang->execution->manageProducts;?></strong>
@@ -208,6 +209,7 @@
                 </div>
               </div>
             </div>
+            <?php endif; ?>
             <div class="detail">
               <div class="detail-title"><strong><?php echo $lang->execution->linkPlan;?></strong></div>
               <div class="detail-content">

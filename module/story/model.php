@@ -457,14 +457,14 @@ class storyModel extends model
         $stories = $result['data'];
 
         $module = 0;
-        $plan   = 0;
+        $plan   = '';
         $pri    = 0;
         $source = '';
 
         foreach($stories->title as $i => $title)
         {
             $module = $stories->module[$i] == 'ditto' ? $module : $stories->module[$i];
-            $plan   = isset($stories->plan[$i]) ? ($stories->plan[$i] == 'ditto' ? $plan : $stories->plan[$i]) : 0;
+            $plan   = isset($stories->plan[$i]) ? ($stories->plan[$i] == 'ditto' ? $plan : $stories->plan[$i]) : '';
             $pri    = $stories->pri[$i]    == 'ditto' ? $pri    : $stories->pri[$i];
             $source = $stories->source[$i] == 'ditto' ? $source : $stories->source[$i];
             $stories->module[$i] = (int)$module;
@@ -1520,7 +1520,7 @@ class storyModel extends model
 
             $newStory = new stdClass();
             $newStory->parent         = '-1';
-            $newStory->plan           = 0;
+            $newStory->plan           = '';
             $newStory->lastEditedBy   = $this->app->user->account;
             $newStory->lastEditedDate = $now;
             $newStory->childStories   = trim($oldStory->childStories . ',' . $childStories, ',');
@@ -1624,7 +1624,7 @@ class storyModel extends model
             $story->duplicateStory = $data->duplicateStoryIDList[$storyID] ? $data->duplicateStoryIDList[$storyID] : $oldStory->duplicateStory;
             $story->childStories   = $data->childStoriesIDList[$storyID] ? $data->childStoriesIDList[$storyID] : $oldStory->childStories;
 
-            if($story->closedReason != 'done') $story->plan  = 0;
+            if($story->closedReason != 'done') $story->plan  = '';
 
             $stories[$storyID] = $story;
             unset($story);
@@ -2690,7 +2690,7 @@ class storyModel extends model
         {
             $storyQuery = str_replace($allBranch, '1', $storyQuery);
         }
-        elseif($branch !== 'all')
+        elseif($branch !== 'all' and $queryProductID != 'all')
         {
             if($branch and strpos($storyQuery, '`branch` =') === false) $storyQuery .= " AND `branch` in($branch)";
         }
