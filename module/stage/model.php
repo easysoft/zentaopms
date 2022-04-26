@@ -34,6 +34,7 @@ class stageModel extends model
         $this->dao->insert(TABLE_STAGE)
             ->data($stage)
             ->autoCheck()
+            ->batchCheck($this->config->stage->create->requiredFields, 'notempty')
             ->checkIF($stage->percent != '', 'percent', 'float')
             ->exec();
 
@@ -67,7 +68,10 @@ class stageModel extends model
             $stage->createdBy   = $this->app->user->account;
             $stage->createdDate = helper::today();
 
-            $this->dao->insert(TABLE_STAGE)->data($stage)->autoCheck()->checkIF($stage->percent != '', 'percent', 'float')->exec();
+            $this->dao->insert(TABLE_STAGE)->data($stage)->autoCheck()
+                ->batchCheck($this->config->stage->create->requiredFields, 'notempty')
+                ->checkIF($stage->percent != '', 'percent', 'float')
+                ->exec();
             
             if(dao::isError()) return false; 
             
@@ -98,7 +102,12 @@ class stageModel extends model
 
         if(round($totalPercent + $stage->percent - $oldStage->percent) > 100) return dao::$errors['message'][] = $this->lang->stage->error->percentOver;
 
-        $this->dao->update(TABLE_STAGE)->data($stage)->autoCheck()->checkIF($stage->percent != '', 'percent', 'float')->where('id')->eq((int)$stageID)->exec();
+        $this->dao->update(TABLE_STAGE)
+            ->data($stage)
+            ->autoCheck()
+            ->batchCheck($this->config->stage->edit->requiredFields, 'notempty')
+            ->checkIF($stage->percent != '', 'percent', 'float')->where('id')->eq((int)$stageID)
+            ->exec();
 
         if(!dao::isError()) return common::createChanges($oldStage, $stage);
         return false;
