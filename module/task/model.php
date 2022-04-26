@@ -1194,10 +1194,9 @@ class taskModel extends model
             $task->consumed       = $oldTask->consumed;
             $task->parent         = $oldTask->parent;
 
-            if(strpos(',doing,pause,', $data->statuses[$taskID]) and empty($teams) and empty($task->left))
+            if(strpos(',doing,pause,', $task->status) and empty($teams) and empty($task->left))
             {
-                $taskStatus = $data->statuses[$taskID];
-                dao::$errors[] = sprintf($this->lang->task->error->leftEmptyAB, zget($this->lang->task->statusList, $taskStatus));
+                dao::$errors[] = sprintf($this->lang->task->error->leftEmptyAB, zget($this->lang->task->statusList, $task->status));
                 return false;
             }
 
