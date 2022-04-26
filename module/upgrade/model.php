@@ -4530,7 +4530,8 @@ class upgradeModel extends model
 
             if($data->projectType == 'project')
             {
-                $projectPairs = $this->dao->select('id,name')->from(TABLE_EXECUTION) ->where('deleted')->eq('0')
+                $projectPairs = $this->dao->select('id,name')->from(TABLE_EXECUTION)
+                    ->where('deleted')->eq('0')
                     ->andWhere('id')->in($projectIdList)
                     ->fetchPairs();
 
