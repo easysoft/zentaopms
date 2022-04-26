@@ -11,6 +11,7 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
+<style>.c-percent, .c-type {width:150px;}</style>
 <div id="mainContent" class="main-content fade">
   <div class="main-header">
     <h2><?php echo $lang->stage->batchCreate;?></h2>
@@ -19,10 +20,10 @@
     <table class="table table-form">
       <thead>
         <tr>
-          <th class='w-50px'><?php echo $lang->stage->id;?></th>
+          <th class='c-id'><?php echo $lang->stage->id;?></th>
           <th><?php echo $lang->stage->name;?></th>
-          <th class='w-200px'><?php echo $lang->stage->percent;?></th>
-          <th class='w-200px'><?php echo $lang->stage->type;?></th>
+          <th class='c-percent required'><?php echo $lang->stage->percent;?></th>
+          <th class='c-type required'><?php echo $lang->stage->type;?></th>
         </tr>
       </thead>
       <tbody>
