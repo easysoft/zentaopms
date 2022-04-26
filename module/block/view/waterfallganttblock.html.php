@@ -20,7 +20,11 @@
     <?php endif;?>
   </div>
   <style>
+  <?php if(common::checkNotCN()):?>
+  .gantt-product-tips {position: absolute; top: -32px; left: 280px; opacity: 0.5;}
+  <?php else:?>
   .gantt-product-tips {position: absolute; top: -32px; left: 240px; opacity: 0.5;}
+  <?php endif;?>
   .gantt-product-tips i {vertical-align: middle;}
   .block-waterfallgantt > .panel-body {overflow: visible!important}
   #<?php echo $waterfallGanttID; ?> {position: relative}
@@ -95,6 +99,7 @@
         $.each(tasks, function(index, task)
         {
             var plan = plansMap[task.parent];
+            if(typeof(plan) == 'undefined') return;
             while(plan.parent > 0)
             {
                 plan = plansMap[plan.parent];

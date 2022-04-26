@@ -3,7 +3,11 @@
 .block-waterfallreport .col-right {width: 87%;}
 .block-waterfallreport .panel-body {padding-top: 0;}
 .block-waterfallreport .table-row {margin-bottom: 20px;}
+<?php if(common::checkNotCN()):?>
+.block-waterfallreport .stage {position: absolute; top: 14px; left: 140px;}
+<?php else:?>
 .block-waterfallreport .stage {position: absolute; top: 14px; left: 90px;}
+<?php endif;?>
 .block-waterfallreport .col-right .tiles {padding: 10px 0 0 16px;}
 .block-waterfallreport .col-right .tile {width: 20%;}
 .block-waterfallreport .col-right .tile .tile-title {font-weight: 700;}
