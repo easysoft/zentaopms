@@ -50,6 +50,7 @@ form {display: block; margin-top: 0em; margin-block-end: 1em;}
 .gantt_task_link.start_to_finish .gantt_line_wrapper div { background-color: #975000; }
 .gantt_task_link.start_to_finish:hover .gantt_line_wrapper div { box-shadow: 0 0 5px 0px #975000; }
 .gantt_task_link.start_to_finish .gantt_link_arrow_left { border-right-color: #975000; }
+.gantt_marker .gantt_marker_content {left: -15px; background-color: #f51e1e;}
 </style>
 <?php js::set('customUrl', $this->createLink('programplan', 'ajaxCustom'));?>
 <?php js::set('dateDetails', $dateDetails);?>
