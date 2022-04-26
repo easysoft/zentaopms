@@ -478,14 +478,19 @@ class baseControl
 
         if(!empty($cssExtPath))
         {
+            $realModulePath = realPath($modulePath);
             foreach($cssExtPath as $cssPath)
             {
                 if(empty($cssPath)) continue;
 
-                $extMethodCssFile = dirname(dirname($cssPath)) . DS . 'css' . DS . $devicePrefix . $methodName . '.css';
-                if(is_file($extMethodCssFile)) $css .= file_get_contents($extMethodCssFile);
-                $extMethodCssLangFile = dirname(dirname($cssPath)) . DS . 'css' . DS . $devicePrefix . "{$methodName}.{$clientLang}.css";
-                if(is_file($extMethodCssLangFile)) $css .= file_get_contents($extMethodCssLangFile);
+                $extModulePath = dirname(dirname($cssPath));
+                if(realpath($extModulePath) != $realModulePath)
+                {
+                    $extMethodCssFile = $extModulePath . DS . 'css' . DS . $devicePrefix . $methodName . '.css';
+                    if(is_file($extMethodCssFile)) $css .= file_get_contents($extMethodCssFile);
+                    $extMethodCssLangFile = $extModulePath . DS . 'css' . DS . $devicePrefix . "{$methodName}.{$clientLang}.css";
+                    if(is_file($extMethodCssLangFile)) $css .= file_get_contents($extMethodCssLangFile);
+                }
 
                 $cssMethodExt = $cssPath . $methodName . DS;
                 $cssCommonExt = $cssPath . 'common' . DS;
@@ -577,12 +582,17 @@ class baseControl
 
         if(!empty($jsExtPath))
         {
+            $realModulePath = realPath($modulePath);
             foreach($jsExtPath as $jsPath)
             {
                 if(empty($jsPath)) continue;
 
-                $extMethodJsFile = dirname(dirname($jsPath)) . DS . 'js' . DS . $this->devicePrefix . $methodName . '.js';
-                if(is_file($extMethodJsFile)) $js .= file_get_contents($extMethodJsFile);
+                $extModulePath = dirname(dirname($jsPath));
+                if(realpath($extModulePath) != $realModulePath)
+                {
+                    $extMethodJsFile = $extModulePath . DS . 'js' . DS . $this->devicePrefix . $methodName . '.js';
+                    if(is_file($extMethodJsFile)) $js .= file_get_contents($extMethodJsFile);
+                }
 
                 $jsMethodExt = $jsPath . $methodName . DS;
                 $jsCommonExt = $jsPath . 'common' . DS;
