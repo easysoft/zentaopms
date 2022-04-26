@@ -79,3 +79,4 @@ $lang->programplan->error->planFinishSmall = 'The "End" date must be > the "Begi
 $lang->programplan->error->percentOver     = 'The sum of "Workload %" cannot exceed 100%.';
 $lang->programplan->error->createdTask     = 'The task is decomposed. Sub stages cannot be added.';
 $lang->programplan->error->parentWorkload  = 'The sum of the workload in the sub stage cannot be > that in the parent stage: %s.';
+$lang->programplan->error->sameName        = 'Stage name cannot be the same!';
