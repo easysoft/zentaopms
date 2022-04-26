@@ -2670,7 +2670,7 @@ EOD;
         if($isFreepasswd) return print(js::locate($this->config->webRoot));
 
         $this->session->set('ENTRY_CODE', $this->get->code);
-        $this->session->set('VALID_ENTRY', md5(md5($this->get->code) . $this->server->remote_addr));
+        $this->session->set('VALID_ENTRY', md5(md5($this->get->code) . helper::getRemoteIp()));
         $this->loadModel('entry')->saveLog($entry->id, $this->server->request_uri);
 
         /* Add for task #5384. */
@@ -2837,7 +2837,7 @@ EOD;
         commonModel::$requestErrors = array();
 
         if(!is_array($headers)) $headers = (array)$headers;
-        $headers[] = "API-RemoteIP: " . zget($_SERVER, 'REMOTE_ADDR', '');
+        $headers[] = "API-RemoteIP: " . helper::getRemoteIp();
 
         $curl = curl_init();
         curl_setopt($curl, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_1_0);
@@ -2924,7 +2924,7 @@ EOD;
         commonModel::$requestErrors = array();
 
         if(!is_array($headers)) $headers = (array)$headers;
-        $headers[] = "API-RemoteIP: " . zget($_SERVER, 'REMOTE_ADDR', '');
+        $headers[] = "API-RemoteIP: " . helper::getRemoteIp();
         if($dataType == 'json')
         {
             $headers[] = 'Content-Type: application/json;charset=utf-8';

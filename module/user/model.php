@@ -888,7 +888,7 @@ class userModel extends model
 
         if($user)
         {
-            $ip   = $this->server->remote_addr;
+            $ip   = helper::getRemoteIp();
             $last = $this->server->request_time;
 
             $user->lastTime       = $user->last;
