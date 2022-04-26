@@ -40,11 +40,9 @@
               <?php endif;?>
             </th>
             <?php endif;?>
-            <?php if($config->URAndSR):?>
             <th><?php echo $lang->story->story;?></th>
-            <?php else:?>
+            <?php if($this->app->rawModule == 'projectstory'): ?>
             <th <?php echo $style;?>>
-              <?php if($this->app->rawModule == 'projectstory'): ?>
               <div class="dropdown">
                 <?php echo html::a('javascript:;', "<i class='icon icon-product'></i>". $projectProducts[$productID]->name . '<span class="caret"></span>', '', 'class="dropdown-toggle" data-toggle="dropdown"');?>
                 <ul class="dropdown-menu">
@@ -53,7 +51,6 @@
                   <?php endforeach;?>
                 </ul>
               </div>
-              <?php endif;?>
             </th>
             <?php endif;?>
             <th><?php echo $lang->story->tasks;?></th>
@@ -84,7 +81,7 @@
             <?php $i = 1;?>
             <?php foreach($track as $storyID => $story):?>
             <?php if($i != 1) echo '<tr>';?>
-              <td style='padding-left: 10px;'>
+              <td>
                 <?php if(isset($story->parent) and $story->parent > 0):?><span class="label label-badge label-light" title="<?php echo $this->lang->story->children;?>"><?php echo $this->lang->story->childrenAB;?></span><?php endif;?>
                 <?php echo html::a($this->createLink($module, 'view', "storyID=$storyID"), $story->title, '',"title='$story->title' data-app='$tab'");?>
               </td>
