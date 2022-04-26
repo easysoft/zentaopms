@@ -642,7 +642,7 @@ class upgrade extends control
                 $this->dao->update(TABLE_PROJECT)->set('name')->eq($projectName)->where('id')->eq($projectID)->exec();
             }
 
-            return print(js::closeModal('parent.parent', ''));
+            return print(js::reload('parent.parent', ''));
         }
 
         $objectGroup = array();

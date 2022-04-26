@@ -366,7 +366,7 @@ $(function()
         $(target).removeClass('hidden');
 
         /* Replace program name. */
-        if($("[id^='productLines\[" + currentLine +"\]'").prop('checked')) $('#programName').val($(this).text());
+        if(!$('#programName').val() && $("[id^='productLines\[" + currentLine +"\]'").prop('checked')) $('#programName').val($(this).text());
 
         /* Replace project name. */
         var productID = $(target).find('.lineGroup .productList input[name*="product"]').val();
