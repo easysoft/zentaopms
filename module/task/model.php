@@ -1709,7 +1709,7 @@ class taskModel extends model
         $now     = helper::now();
         $today   = helper::today();
 
-        if(strpos($this->config->task->finish->requiredFields, 'comment') !== false and !$this->post->comment)
+        if($extra != 'DEVOPS' and strpos($this->config->task->finish->requiredFields, 'comment') !== false and !$this->post->comment)
         {
             dao::$errors[] = sprintf($this->lang->error->notempty, $this->lang->comment);
             return false;
