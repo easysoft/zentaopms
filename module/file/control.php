@@ -49,6 +49,12 @@ class file extends control
     public function ajaxUpload($uid = '')
     {
         $file = $this->file->getUpload('imgFile');
+
+        if(!isset($file[0]) or !in_array($file[0]['extension'], $this->config->file->imageExtensions))
+        {
+            return print(json_encode(array('result' => 'fail', 'message' => $this->lang->file->errorFileFormate)));
+        }
+
         $file = $file[0];
         if($file)
         {
