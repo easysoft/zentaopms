@@ -565,7 +565,7 @@ class task extends control
         if($this->post->names)
         {
             $allChanges = $this->task->batchUpdate();
-            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            if(dao::isError()) return print(js::error(dao::getError()));
 
             if(!empty($allChanges))
             {
