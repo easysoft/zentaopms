@@ -20,25 +20,27 @@ class feedbacksEntry extends entry
      */
     public function get()
     {
-        a('yes');die;
         $control = $this->loadController('feedback', 'admin');
-        $control->admin();
+        $control->admin($this->param('status', 'unclosed'), 0, $this->param('orderBy', 'id_desc'), 0, $this->param('limit', 20), $this->param('page', 1));
         $data = $this->getData();
-        a($data);die;
 
         if(!$data or !isset($data->status)) return $this->sendError(400, 'error');
         if(isset($data->status) and $data->status == 'fail') return $this->sendError(400, $data->message);
 
-        $executions = $data->data->executionStats;
-        $pager      = $data->data->pager;
-        $projects   = $data->data->projects;
+        $feedbacks = $data->data->feedbacks;
+        $pager     = $data->data->pager;
+
+        $result = array();
+        foreach($feedbacks as $feedback)
+        {
+            $result[] = $this->format($feedback, 'openedBy:user,openedDate:time,reviewedBy:user,reviewedDate:time,processedBy:user,processedDate:time,closedBy:user,closedDate:time,editedBy:user,editedDate:time,mailto:userList,deleted:bool');
+        }
 
         $data = array();
-        $data['page']       = $pager->pageID;
-        $data['total']      = $pager->recTotal;
-        $data['limit']      = $pager->recPerPage;
-        $data['executions'] = $result;
-        if(!empty($withProject)) $data['projects'] = $projects;
+        $data['page']      = $pager->pageID;
+        $data['total']     = $pager->recTotal;
+        $data['limit']     = $pager->recPerPage;
+        $data['feedbacks'] = $result;
 
         return $this->send(200, $data);
     }
