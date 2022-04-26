@@ -160,15 +160,15 @@ class apiModel extends model
      */
     public function updateStruct($id)
     {
+        $old = $this->dao->findByID($id)->from(TABLE_APISTRUCT)->fetch();
+
         $now  = helper::now();
         $data = fixer::input('post')
             ->skipSpecial('attribute')
-            ->add('lib', $struct->lib)
+            ->add('lib', $old->lib)
             ->add('editedBy', $this->app->user->account)
             ->add('editedDate', $now)
             ->get();
-
-        $old = $this->dao->findByID($id)->from(TABLE_APISTRUCT)->fetch();
 
         unset($data->addedBy);
         unset($data->addedDate);
