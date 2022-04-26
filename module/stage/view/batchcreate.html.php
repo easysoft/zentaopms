@@ -21,7 +21,7 @@
       <thead>
         <tr>
           <th class='c-id'><?php echo $lang->stage->id;?></th>
-          <th><?php echo $lang->stage->name;?></th>
+          <th class='required'><?php echo $lang->stage->name;?></th>
           <th class='c-percent required'><?php echo $lang->stage->percent;?></th>
           <th class='c-type required'><?php echo $lang->stage->type;?></th>
         </tr>
