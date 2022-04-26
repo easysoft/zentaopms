@@ -68,7 +68,9 @@ class stageModel extends model
             $stage->createdDate = helper::today();
 
             $this->dao->insert(TABLE_STAGE)->data($stage)->autoCheck()->checkIF($stage->percent != '', 'percent', 'float')->exec();
-
+            
+            if(dao::isError()) return false; 
+            
             $stageID = $this->dao->lastInsertID();
             $this->action->create('stage', $stageID, 'Opened');
         }
