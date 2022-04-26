@@ -1657,7 +1657,7 @@ class repoModel extends model
                         $this->post->set('realStarted', date('Y-m-d'));
                         $this->post->set('currentConsumed', $this->post->consumed);
                         $this->post->set('consumed', $this->post->consumed + $task->consumed);
-                        $changes = $this->task->finish($taskID);
+                        $changes = $this->task->finish($taskID, 'DEVOPS');
                         foreach($this->createActionChanges($log, $repoRoot, $scm) as $change) $changes[] = $change;
                         if($changes)
                         {

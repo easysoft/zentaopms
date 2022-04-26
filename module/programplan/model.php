@@ -433,6 +433,9 @@ class programplanModel extends model
             $parentACL       = $parentStage->acl;
         }
 
+        $names = array_filter($names);
+        if(count(array_unique($names)) != count($names)) return dao::$errors['message'][] = $this->lang->programplan->error->sameName;
+
         $datas = array();
         foreach($names as $key => $name)
         {
