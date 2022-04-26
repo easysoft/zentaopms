@@ -26,7 +26,7 @@ class sso extends control
         $this->app->loadConfig('sso');
         if(!$this->config->sso->turnon) return print($this->locate($locate));
 
-        $userIP = $this->server->remote_addr;
+        $userIP = helper::getRemoteIp();
         $code   = $this->config->sso->code;
         $key    = $this->config->sso->key;
         if($type != 'return')
@@ -135,7 +135,7 @@ class sso extends control
         if($type != 'return')
         {
             $code   = $this->config->sso->code;
-            $userIP = $this->server->remote_addr;
+            $userIP = helper::getRemoteIp();
             $token  = $this->get->token;
             $key    = $this->config->sso->key;
             $auth   = md5($code . $userIP . $token . $key);
@@ -199,7 +199,7 @@ class sso extends control
         if(!$this->session->ssoData) return;
 
         $ssoData = $this->session->ssoData;
-        $userIP  = $this->server->remote_addr;
+        $userIP  = helper::getRemoteIp();
         $code    = $this->config->sso->code;
         $key     = $this->config->sso->key;
         if($ssoData->auth != md5($code . $userIP . $ssoData->token . $key)) return;

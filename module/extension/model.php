@@ -599,11 +599,11 @@ class extensionModel extends model
                 $file = $appRoot . $file;
                 if(!file_exists($file)) continue;
 
-                if(md5_file($file) != $savedMD5)
+                if(!is_writable($file) or @md5_file($file) != $savedMD5)
                 {
                     $removeCommands[] = PHP_OS == 'Linux' ? "rm -fr $file #changed" : "del $file :changed";
                 }
-                elseif(!@unlink($file))
+                elseif(!is_writable($file) or !@unlink($file))
                 {
                     $removeCommands[] = PHP_OS == 'Linux' ? "rm -fr $file" : "del $file";
                 }
@@ -617,7 +617,7 @@ class extensionModel extends model
             foreach($dirs as $dir)
             {
                 if(!is_dir($appRoot . $dir)) continue;
-                if(!rmdir($appRoot . $dir)) $removeCommands[] = PHP_OS == 'Linux' ? "rm -fr $appRoot$dir" : "rmdir $appRoot$dir /s /q";
+                if(!is_writable($appRoot . $dir) or !rmdir($appRoot . $dir)) $removeCommands[] = PHP_OS == 'Linux' ? "rm -fr $appRoot$dir" : "rmdir $appRoot$dir /s /q";
             }
         }
 
@@ -636,7 +636,10 @@ class extensionModel extends model
     public function cleanModelCache()
     {
         $modelCacheFiles = glob($this->app->getTmpRoot() . 'model/*');
-        foreach($modelCacheFiles as $cacheFile) @unlink($cacheFile);
+        foreach($modelCacheFiles as $cacheFile)
+        {
+            if(is_writable($cacheFile) and !is_dir($cacheFile)) @unlink($cacheFile);
+        }
     }
 
     /**

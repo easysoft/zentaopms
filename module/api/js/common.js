@@ -311,8 +311,6 @@ try {
             },
             current: {
                 handler(val) {
-                    // console.log(val)
-                    /* handle level field data. */
                     const attr = [];
                     val.forEach((item) => {
                         if (item.sub == 1) {
@@ -394,13 +392,11 @@ try {
                 })
             },
             addSub(current, key, s) {
-                sub = current.sub ? current.sub : 1;
-                sub += 1
+                sub = current.sub ? current.sub + 1 : 2;
                 if (s.sub) {
                     sub = s.sub + 1
                 }
                 fieldKey = s.key
-                // console.log('添加子字段', JSON.stringify(s), fieldKey)
                 const field = {
                     ...this.getInitField(),
                     parentKey: fieldKey,
@@ -408,11 +404,14 @@ try {
                 }
                 current.splice(key + 1, 0, field)
             },
-            add(data, sub) {
+            add(data, key, sub) {
                 const field = this.getInitField();
                 field.sub = sub.sub;
                 field.parentKey = sub.parentKey;
-                data.push({...field});
+                for(let index = key+1; index < data.length; index++) {
+                    if(data[index].sub <= field.sub) return data.splice(index, 0, field);
+                }
+                data.splice(data.length, 0, field)
             },
             del(data, index) {
                 if(data.length <= 1) return;
@@ -451,7 +450,7 @@ try {
                   </thead>
                   <tbody>
                     <template v-for="(item,key) in current">
-                      <param-field :current="current" :ckey="key" :value.sync="item" @add="add(current, $event)" @del="del(current, key)"  @sub="addSub(current, key, $event)"></param-field>
+                      <param-field :current="current" :ckey="key" :value.sync="item" @add="add(current, key, $event)" @del="del(current, key)"  @sub="addSub(current, key, $event)"></param-field>
                     </template>
                   </tbody>
               </table>
