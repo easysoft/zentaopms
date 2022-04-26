@@ -251,6 +251,9 @@ $lang->user->contacts->common   = 'Contacts';
 $lang->user->contacts->listName = 'List Name';
 $lang->user->contacts->userList = 'User List';
 
+$lang->usercontact = new stdclass;
+$lang->usercontact->listName = 'List Name';
+
 $lang->user->contacts->manage        = 'Manage List';
 $lang->user->contacts->contactsList  = 'Contact List';
 $lang->user->contacts->selectedUsers = 'Users';
