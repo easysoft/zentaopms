@@ -48,7 +48,7 @@ js::set('struct', $struct);
             <tr>
               <td class="w-110px"></td>
               <td colspan="2">
-                <body-field @change="changeAttr" :attr="struct.attribute" :struct-type="struct.type"></body-field>
+                <body-field @change="changeAttr" :attr="struct.attribute" :struct-type="struct.structType"></body-field>
                 <input type="hidden" name="attribute" v-model="attr">
               </td>
             </tr>
