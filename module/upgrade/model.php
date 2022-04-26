@@ -4528,6 +4528,33 @@ class upgradeModel extends model
 
             if(isset($data->projectName) and $data->projectType == 'execution' and empty($data->projectName)) return print(js::alert(sprintf($this->lang->error->notempty, $this->lang->upgrade->projectName)));
 
+            if($data->projectType == 'project')
+            {
+                $projectPairs = $this->dao->select('id,name')->from(TABLE_EXECUTION) ->where('deleted')->eq('0')
+                    ->andWhere('id')->in($projectIdList)
+                    ->fetchPairs();
+
+                $projectNames  = array();
+                $duplicateList = '';
+                foreach($projectPairs as $projectID => $projectName)
+                {
+                    if(isset($projectNames[$projectName]))
+                    {
+                        $duplicateList .= "$projectID,";
+                        $duplicateList .= "{$projectNames[$projectName]},";
+                        continue;
+                    }
+
+                    $projectNames[$projectName] = $projectID;
+                }
+
+                if($duplicateList)
+                {
+                    echo "<script>new parent.$.zui.ModalTrigger({url: parent.$.createLink('upgrade', 'renameObject', 'type=project&duplicateList=$duplicateList', '', 1), type: 'iframe', width:'40%'}).show();</script>";
+                    die;
+                }
+            }
+
             /* Insert program. */
             $program = new stdclass();
             $program->name          = $data->programName;
@@ -6183,22 +6210,22 @@ class upgradeModel extends model
         }
     }
 
-    /**  
+    /**
      * Update the project status.
      *
      * @access public
      * @return void
-     */    
+     */
     public function updateProjectStatus()
     {
-        $projects = $this->dao->select('*')->from(TABLE_PROJECT) 
+        $projects = $this->dao->select('*')->from(TABLE_PROJECT)
             ->where('deleted')->eq('0')
             ->andWhere('status')->eq('doing')
             ->andWhere('type')->eq('project')
             ->andWhere('realBegan')->eq('0000-00-00')
             ->fetchAll('id');
 
-        if(empty($projects)) return; 
+        if(empty($projects)) return;
 
         $projectIDList = array_keys($projects);
 
