@@ -1194,6 +1194,12 @@ class taskModel extends model
             $task->consumed       = $oldTask->consumed;
             $task->parent         = $oldTask->parent;
 
+            if(strpos(',doing,pause,', $task->status) and empty($teams) and empty($task->left))
+            {
+                dao::$errors[] = sprintf($this->lang->task->error->leftEmptyAB, zget($this->lang->task->statusList, $task->status));
+                return false;
+            }
+
             if(empty($task->closedReason))
             {
                 if($oldTask->status == 'done')   $task->closedReason = 'done';
