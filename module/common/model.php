@@ -2297,10 +2297,10 @@ EOD;
            $module == 'tutorial' ||
            $module == 'install' ||
            $module == 'upgrade' ||
-           ($module == 'user' && ($method == 'login' || $method == 'deny' || $method == 'logout')) ||
-           ($module == 'my' && ($method == 'changepassword' || $method == 'preference')) ||
-           ($module == 'file' && ($method == 'read' || $method == 'download' || $method == 'uploadimages')) ||
-           ($module == 'sso' && $method == 'login'))
+          ($module == 'user' && strpos('|login|deny|logout|', "|{$method}|") !== false) ||
+          ($module == 'my' && strpos('|changepassword|preference|', "|{$method}|") !== false) ||
+          ($module == 'file' && strpos('|read|download|uploadimages|ajaxwopifiles|', "|{$method}|") !== false) ||
+          ($module == 'sso' && $method == 'login'))
         {
             return;
         }
