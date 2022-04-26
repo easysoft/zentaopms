@@ -1960,6 +1960,7 @@ class projectModel extends model
             ->where('t1.root')->eq((int)$projectID)
             ->andWhere('t1.type')->eq($type)
             ->andWhere('t2.deleted')->eq('0')
+            ->beginIF($this->config->vision)->andWhere("CONCAT(',', t2.visions, ',')")->like("%,{$this->config->vision},%")->fi()
             ->fetchPairs('account', 'realname');
 
         return array('' => '') + $members;
