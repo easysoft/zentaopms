@@ -57,6 +57,7 @@ function switchEncode(fileType)
     if(fileType == 'word')
     {
         $('#tplBox').closest('tr').addClass('hidden');
+        $('#customFields').addClass('hidden');
     }
     else
     {
