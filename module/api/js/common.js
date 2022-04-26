@@ -200,6 +200,14 @@ try {
                     }
                 }
             },
+            current:
+            {
+                type: Array
+            },
+            ckey:
+            {
+                type: Number
+            }
         },
         watch: {
             value: {
@@ -207,6 +215,14 @@ try {
                     this.$emit('update:value', val)
                 },
                 deep: true,
+            }
+        },
+        computed:
+        {
+            typeOptionsFilter: function()
+            {
+                if(this.current[this.ckey + 1] && this.current[this.ckey + 1].parentKey && this.current[this.ckey + 1].parentKey == this.current[this.ckey].key) return typeOptions.slice(0, 2);
+                return typeOptions;
             }
         },
         methods: {
@@ -229,7 +245,7 @@ try {
           </td>
           <td class="w-100px">
               <select class="form-control" v-model="value.paramsType">
-                <option v-for="item in typeOptions" :value="item.value">{{item.label}}</option>
+                <option v-for="item in typeOptionsFilter" :value="item.value">{{item.label}}</option>
               </select>
           </td>
           <td class="w-80px">
@@ -435,7 +451,7 @@ try {
                   </thead>
                   <tbody>
                     <template v-for="(item,key) in current">
-                      <param-field :value.sync="item" @add="add(current, $event)" @del="del(current, key)"  @sub="addSub(current, key, $event)"></param-field>
+                      <param-field :current="current" :ckey="key" :value.sync="item" @add="add(current, $event)" @del="del(current, key)"  @sub="addSub(current, key, $event)"></param-field>
                     </template>
                   </tbody>
               </table>
