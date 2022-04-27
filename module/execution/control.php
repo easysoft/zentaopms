@@ -3587,7 +3587,7 @@ class execution extends control
         if($execution->type == 'project')
         {
             $moduleName = 'projectstory';
-            $param      = "projectID=$executionID";
+            $param      = "projectID=$executionID&productID=$productID";
         }
 
         if($execution->type == 'kanban')
@@ -3596,7 +3596,7 @@ class execution extends control
             $lang->executionCommon = $lang->execution->kanban;
             include $this->app->getModulePath('', 'execution') . 'lang/' . $this->app->getClientLang() . '.php';
         }
-        if($count != 0) echo js::alert(sprintf($this->lang->execution->haveDraft, $count)) . js::locate($this->createLink($moduleName, $execution->type == 'sprint' ? 'story' : 'kanban', $param));
+        if($count != 0) echo js::alert(sprintf($this->lang->execution->haveDraft, $count)) . js::locate($this->createLink($moduleName, in_array($execution->type, array('sprint','project')) ? 'story' : 'kanban', $param));
         return print(js::locate(helper::createLink($moduleName, $fromMethod, $param)));
     }
 
