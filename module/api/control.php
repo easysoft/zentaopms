@@ -319,6 +319,7 @@ class api extends control
             /* Record action for create api library. */
             $this->action->create('docLib', $libID, 'Created');
 
+            if(!helper::isAjaxRequest()) return print(js::locate($this->createLink('api', 'index', "libID=$libID"), 'parent.parent'));
             return $this->sendSuccess(array('locate' => $this->createLink('api', 'index', "libID=$libID")));
         }
 
