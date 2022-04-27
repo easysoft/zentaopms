@@ -102,7 +102,6 @@ class bug extends control
         {
             $branch = 'all';
         }
-
         $this->qa->setMenu($this->products, $productID, $branch);
 
         /* Set browse type. */

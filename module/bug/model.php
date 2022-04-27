@@ -1408,6 +1408,39 @@ class bugModel extends model
         }
     }
 
+    public function getStatisticToApp($productID = 0, $endDate = '', $days = 30)
+    {
+        $startDate = '';
+        if(empty($endDate)) $endDate = date('Y-m-d');
+
+        $dateArr = array();
+        for($day = $days - 1; $day >= 0; $day--)
+        {
+            $time = strtotime(-$day . ' day', strtotime($endDate));
+            $date = date('m/d', $time);
+            $dateArr[$date] = new stdClass();
+            $dateArr[$date]->num  = 0;
+            $dateArr[$date]->date = $date;
+
+            if($day == $days -1) $startDate = date('Y-m-d', $time) . ' 00:00:00';
+        }
+
+        $dateFields = ['openedDate', 'resolvedDate', 'closedDate'];
+        $staticData = array();
+        foreach($dateFields as $field)
+        {
+            $bugCount = $this->dao->select("count(id) as num, date_format($field, '%m/%d') as date")->from(TABLE_BUG)
+                ->where('product')->eq($productID)
+                ->andWhere($field)->ne('0000-00-00 00:00:00')
+                ->andWhere($field)->ne('')
+                ->andWhere('deleted')->eq(0)
+                ->andWhere($field)->between($startDate, $endDate . ' 23:50:59')
+                ->groupBy('date')
+                ->fetchAll('date');
+            $staticData[$field] = array_merge($dateArr, $bugCount);
+        }
+        return $staticData;
+    }
     /**
      * Build search form.
      *
