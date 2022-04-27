@@ -78,7 +78,7 @@ class api extends control
         $this->view->libID      = $libID;
         $this->view->apiID      = $apiID;
         $this->view->libs       = $libs;
-        $this->view->moduleTree = $libID ? $this->doc->getApiModuleTree($libID, $apiID) : '';
+        $this->view->moduleTree = $libID ? $this->doc->getApiModuleTree($libID, $apiID, 0, $moduleID) : '';
         $this->view->users      = $this->user->getPairs('noclosed,noletter');
 
         $this->display();
