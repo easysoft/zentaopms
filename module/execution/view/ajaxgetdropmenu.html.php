@@ -164,7 +164,6 @@ $(function()
         {
             $('div.hide-in-search').siblings('i').addClass('hide-in-search');
             $('.nav-tabs li span').hide();
-
         }
         else
         {
@@ -194,7 +193,8 @@ $(function()
         }
          
         var listItem = $(this).find('.has-list');
-        listItem.each(function (){
+        listItem.each(function ()
+        {
             $(this).css('display','')
             var $hidden = $(this).find('.hidden');
             var $item   = $(this).find('.search-list-item');
