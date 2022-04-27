@@ -218,8 +218,10 @@ class router extends baseRouter
 
         /* Get user preference. */
         $account     = isset($this->session->user->account) ? $this->session->user->account : '';
+        $sql         = new sql();
+        $account     = $sql->quote($account);
         $userSetting = array();
-        if($this->dbh and !empty($this->config->db->name)) $userSetting = $this->dbh->query('SELECT `key`, value FROM' . TABLE_CONFIG . "WHERE `owner`='{$account}' AND `module`='common' and `key` in ('programLink', 'productLink', 'projectLink', 'executionLink', 'URSR')")->fetchAll();
+        if($this->dbh and !empty($this->config->db->name)) $userSetting = $this->dbh->query('SELECT `key`, value FROM' . TABLE_CONFIG . "WHERE `owner`= $account AND `module`='common' and `key` in ('programLink', 'productLink', 'projectLink', 'executionLink', 'URSR')")->fetchAll();
         foreach($userSetting as $setting)
         {
              if($setting->key == 'URSR')          $config->URSR          = $setting->value;

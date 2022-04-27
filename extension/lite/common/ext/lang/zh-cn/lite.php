@@ -139,11 +139,11 @@ $lang->doc->menuOrder[30] = 'custom';
 $lang->doc->menu->project['subMenu'] = new stdclass();
 $lang->doc->menu->custom['subMenu']  = new stdclass();
 
-$xuanxuanMenu = $lang->admin->menu->xuanxuan;
+if(isset($lang->admin->menu->xuanxuan)) $xuanxuanMenu = $lang->admin->menu->xuanxuan;
 /* Admin menu. */
 $lang->admin->menu            = new stdclass();
 $lang->admin->menu->index     = array('link' => "$lang->indexPage|admin|index", 'alias' => 'register,certifytemail,certifyztmobile,ztcompany');
-$lang->admin->menu->xuanxuan  = $xuanxuanMenu;
+if(isset($xuanxuanMenu)) $lang->admin->menu->xuanxuan = $xuanxuanMenu;
 $lang->admin->menu->company   = array('link' => "{$lang->personnel->common}|company|browse|", 'subModule' => ',user,dept,group,');
 $lang->admin->menu->custom    = array('link' => "{$lang->custom->common}|custom|index", 'exclude' => 'custom-browsestoryconcept,custom-timezone,custom-estimate');
 $lang->admin->menu->extension = array('link' => "{$lang->extension->common}|extension|browse", 'subModule' => 'extension');
