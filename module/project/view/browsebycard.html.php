@@ -143,14 +143,15 @@
             <div class="clearfix">
               <?php if(!empty($project->teamMembers)):?>
               <div class='project-members pull-left'>
-                <?php foreach($project->teamMembers as $member):?>
+                <?php foreach($project->teamMembers as $key => $member):?>
                 <?php
-                if($count > 2) continue;
                 if(!isset($users[$member]))
                 {
                     $project->teamCount --;
+                    unset($project->teamMembers[$key]);
                     continue;
                 }
+                if($count > 2) continue;
                 $count ++;
                 ?>
                 <a href='<?php echo helper::createLink('project', 'team', "projectID=$projectID");?>' title="<?php echo $users[$member];?>">
@@ -159,8 +160,9 @@
                 <?php endforeach;?>
                 <?php if($project->teamCount > 3):?>
                 <?php if($project->teamCount > 4) echo '<span>…</span>';?>
-                <a href='<?php echo helper::createLink('project', 'team', "projectID=$projectID");?>' title="<?php echo $users[$member];?>">
-                  <?php echo html::middleAvatar(array('avatar' => $usersAvatar[end($project->teamMembers)], 'account' => $member, 'name' => $users[$member]), 'avatar-circle avatar-' . zget($userIdPairs, $member)); ?>
+                <?php $lastMember = end($project->teamMembers);?>
+                <a href='<?php echo helper::createLink('project', 'team', "projectID=$projectID");?>' title="<?php echo $users[$lastMember];?>">
+                  <?php echo html::middleAvatar(array('avatar' => $usersAvatar[$lastMember], 'account' => $lastMember, 'name' => $users[$lastMember]), 'avatar-circle avatar-' . zget($userIdPairs, $lastMember)); ?>
                 </a>
                 <?php endif;?>
               </div>
