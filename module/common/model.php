@@ -65,7 +65,8 @@ class commonModel extends model
             if($thisModule == 'execution')
             {
                 $executionID = $objectID;
-                $execution   = $this->dao->select('id, project')->from(TABLE_EXECUTION)->where('id')->eq($executionID)->fetch();
+                $execution   = $this->dao->select('id, project, grade, parent')->from(TABLE_EXECUTION)->where('id')->eq($executionID)->fetch();
+                $this->syncExecutionByChild($execution);
                 $project     = $this->syncProjectStatus($execution);
                 $this->syncProgramStatus($project);
             }
@@ -102,7 +103,6 @@ class commonModel extends model
             ->andWhere('status')->eq('wait')
             ->orderBy('id_desc')
             ->fetchPairs();
-
         $now = helper::now();
         $this->dao->update(TABLE_PROGRAM)->set('status')->eq('doing')->set('realBegan')->eq($now)->where('id')->in($waitList)->exec();
         foreach($waitList as $programID)
@@ -135,6 +135,33 @@ class commonModel extends model
             $this->loadModel('action')->create('project', $projectID, 'syncproject');
         }
         return $project;
+    }
+    /**
+     * Set the status of the execution to which the sub execution is linked as Ongoing.
+     *
+     * @param  object $execution
+     * @access public
+     * @return object $parentExecution
+     */
+    public function syncExecutionByChild($execution)
+    {
+        if($execution->grade == 1) return false;
+
+        $parentExecutionID = $execution->parent;
+        $today = helper::today();
+        $parentExecution = $this->dao->select('*')->from(TABLE_EXECUTION)->where('id')->eq($parentExecutionID)->fetch();
+
+        if($parentExecution->status == 'wait')
+        {
+            $this->dao->update(TABLE_EXECUTION)
+                 ->set('status')->eq('doing')
+                 ->beginIf(helper::isZeroDate($parentExecution->realBegan))->set('realBegan')->eq($today)->fi()
+                 ->where('id')->eq($parentExecutionID)
+                 ->exec();
+            $this->loadModel('action')->create('execution', $parentExecutionID, 'syncexecutionbychild');
+        }
+
+        return $parentExecution;
     }
 
     /**
