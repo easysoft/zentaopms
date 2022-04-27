@@ -25,6 +25,7 @@
 
 #closed {width: 90px; height: 25px; line-height: 25px; background-color: #ddd; color: #3c495c; text-align: center; margin-left: 15px; border-radius: 2px;}
 #gray-line {width: 230px;height: 1px; margin-left: 10px; margin-bottom:2px; background-color: #ddd;}
+#dropMenu.has-search-text .hide-in-search {display: flex;}
 </style>
 <?php
 $executionCounts      = array();
@@ -163,6 +164,7 @@ $(function()
         {
             $('div.hide-in-search').siblings('i').addClass('hide-in-search');
             $('.nav-tabs li span').hide();
+
         }
         else
         {
@@ -170,6 +172,7 @@ $(function()
             $('li.has-list div.hide-in-search').removeClass('hidden');
             $('.nav-tabs li.active').find('span').show();
         }
+        
         if($('.form-control.search-input').val().length > 0)
         {
             $('#closed').attr("hidden", false);
@@ -189,6 +192,14 @@ $(function()
             $('#closed').attr("hidden", true);
             $('#gray-line').attr("hidden", true);
         }
+         
+        var listItem = $(this).find('.has-list');
+        listItem.each(function (){
+            $(this).css('display','')
+            var $hidden = $(this).find('.hidden');
+            var $item   = $(this).find('.search-list-item');
+            if($hidden.length == $item.length) $(this).css('display','none');
+        });
     });
 })
 </script>
