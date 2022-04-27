@@ -87,6 +87,9 @@ class taskEntry extends Entry
         $task->preAndNext['pre']  = $preAndNext->pre  ? $preAndNext->pre->id : '';
         $task->preAndNext['next'] = $preAndNext->next ? $preAndNext->next->id : '';
 
+        $execution             = $this->loadModel('project')->getByID($task->execution, 'execution');
+        $task->executionStatus = $execution->status;
+
         $this->send(200, $this->format($task, 'deadline:date,openedBy:user,openedDate:time,assignedTo:user,assignedDate:time,realStarted:time,finishedBy:user,finishedDate:time,closedBy:user,closedDate:time,canceledBy:user,canceledDate:time,lastEditedBy:user,lastEditedDate:time,deleted:bool,mailto:userList'));
     }
 
