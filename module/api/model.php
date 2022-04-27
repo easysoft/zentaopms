@@ -103,6 +103,8 @@ class apiModel extends model
         $this->dao->insert(TABLE_API)->data($data)
             ->autoCheck()
             ->batchCheck($this->config->api->create->requiredFields, 'notempty')
+            ->check('title', 'unique', "lib = $data->lib AND module = $data->module")
+            ->check('path', 'unique', "lib = $data->lib AND module = $data->module")
             ->exec();
 
         if(dao::isError()) return false;
