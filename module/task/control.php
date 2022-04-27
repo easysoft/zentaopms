@@ -365,7 +365,12 @@ class task extends control
         }
 
         /* Set Custom*/
-        foreach(explode(',', $this->config->task->customBatchCreateFields) as $field) $customFields[$field] = $this->lang->task->$field;
+        foreach(explode(',', $this->config->task->customBatchCreateFields) as $field)
+        {
+            if($execution->type == 'stage' and strpos('estStarted,deadline', $field) !== false) continue;
+            $customFields[$field] = $this->lang->task->$field;
+        }
+
         $this->view->customFields = $customFields;
         $this->view->showFields   = $this->config->task->custom->batchCreateFields;
 
@@ -565,7 +570,7 @@ class task extends control
         if($this->post->names)
         {
             $allChanges = $this->task->batchUpdate();
-            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            if(dao::isError()) return print(js::error(dao::getError()));
 
             if(!empty($allChanges))
             {

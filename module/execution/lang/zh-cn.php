@@ -313,7 +313,7 @@ $lang->execution->batchWBS             = "批量分解";
 $lang->execution->howToUpdateBurn      = "<a href='https://api.zentao.net/goto.php?item=burndown&lang=zh-cn' target='_blank' title='如何更新燃尽图？' class='btn btn-link'>帮助 <i class='icon icon-help'></i></a>";
 $lang->execution->whyNoStories         = "看起来没有{$lang->SRCommon}可以关联。请检查下{$lang->executionCommon}关联的{$lang->productCommon}中有没有{$lang->SRCommon}，而且要确保它们已经审核通过。";
 $lang->execution->productStories       = "{$lang->executionCommon}关联的{$lang->SRCommon}是{$lang->productCommon}{$lang->SRCommon}的子集，并且只有评审通过的{$lang->SRCommon}才能关联。请<a href='%s'>关联{$lang->SRCommon}</a>。";
-$lang->execution->haveDraft            = "有%s条草稿状态的{$lang->SRCommon}无法关联到该{$lang->executionCommon}";
+$lang->execution->haveDraft            = "有%s条草稿状态的{$lang->SRCommon}无法关联到该执行";
 $lang->execution->doneExecutions       = '已结束';
 $lang->execution->selectDept           = '选择部门';
 $lang->execution->selectDeptTitle      = '选择一个部门的成员';
