@@ -1,3 +1,5 @@
 .pager {margin-top: 0;}
 .tree li>a:hover {color: #fff; background-color: #0c64eb;}
 .tree li>a.active  {color: #fff; background-color: #0c64eb;}
+.side-col {width: 210px;}
+#sidebar .cell {width: 190px;}
