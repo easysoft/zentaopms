@@ -136,6 +136,7 @@ class commonModel extends model
         }
         return $project;
     }
+
     /**
      * Set the status of the execution to which the sub execution is linked as Ongoing.
      *
