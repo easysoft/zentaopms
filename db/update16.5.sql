@@ -87,3 +87,5 @@ REPLACE INTO `zt_zoutput` (`id`, `activity`, `name`, `content`, `optional`, `sta
 (99,64,'禅道缺陷记录项','','yes','','admin','2020-01-09 14:26:52','','0000-00-00 00:00:00',495,'0');
 
 DELETE FROM `zt_config` WHERE `section` = 'customMenu';
+
+UPDATE `zt_story` SET `plan` = '' WHERE `plan` = 0;

@@ -57,8 +57,8 @@ class report extends control
     {
         $this->session->set('executionList', $this->app->getURI(true), 'execution');
 
-        $begin = $begin ? date('Y-m-d', strtotime($begin)) : '';
-        $end   = $end   ? date('Y-m-d', strtotime($end))   : '';
+        $begin = date('Y-m-d', ($begin ? strtotime($begin) : time() - (date('j') - 1) * 24 * 3600));
+        $end   = date('Y-m-d', ($end   ? strtotime($end)   : time() + (date('t') - date('j')) * 24 * 3600));
 
         $this->view->title      = $this->lang->report->projectDeviation;
         $this->view->position[] = $this->lang->report->projectDeviation;
