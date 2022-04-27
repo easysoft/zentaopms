@@ -5,7 +5,7 @@
         <div class="no-padding">
           <div class="detail-title no-padding doc-title">
             <div class="http-method label"><?php echo $api->method;?></div>
-            <div class="path"><?php echo $api->path;?></div>
+            <div class="path" title="<?php echo $api->path;?>"><?php echo $api->path;?></div>
             <div class="info">
               <div class="version">
                 <div class='btn-group'>
