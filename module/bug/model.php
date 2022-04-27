@@ -1408,6 +1408,15 @@ class bugModel extends model
         }
     }
 
+    /**
+     * Get statistic to app. 
+     * 
+     * @param  int    $productID 
+     * @param  string $endDate 
+     * @param  int    $days 
+     * @access public
+     * @return void
+     */
     public function getStatisticToApp($productID = 0, $endDate = '', $days = 30)
     {
         $startDate = '';
