@@ -42,7 +42,7 @@ function toggleAcl(acl, type)
         var notice  = typeof(noticeAcl[libType][acl]) != 'undefined' ? noticeAcl[libType][acl] : '';
         $('#noticeAcl').html(notice);
 
-        if(libType == 'custom' && acl == 'private') $('#whiteListBox').addClass('hidden');
+        if((libType == 'custom' || libType == 'api') && acl == 'private') $('#whiteListBox').addClass('hidden');
 
         if(libType == 'project' && typeof(doclibID) != 'undefined')
         {

@@ -19,7 +19,7 @@
         <div class='main-header'>
           <h2><?php echo $lang->doc->createLib;?></h2>
         </div>
-        <form method='post' target='hiddenwin' >
+        <form method='post' target='hiddenwin'>
           <table class='table table-form'>
             <tr>
               <th class='w-110px'><?php echo $lang->doc->libType?></th>
@@ -45,9 +45,17 @@
               <th><?php echo $lang->doc->execution?></th>
               <td><?php echo html::select('execution', $executions, $type == 'execution' ? $objectID : '', "class='form-control chosen' data-drop_direction='down'")?></td>
             </tr>
-            <tr>
+            <tr class="normalLib">
               <th><?php echo $lang->doclib->name?></th>
               <td><?php echo html::input('name', '', "class='form-control'")?></td>
+            </tr>
+            <tr class='apilib hidden'>
+              <th><?php echo $lang->api->name?></th>
+              <td><?php echo html::input('name', '', "class='form-control'")?></td>
+            </tr>
+            <tr class="apilib hidden">
+              <th><?php echo $lang->api->baseUrl?></th>
+              <td><?php echo html::input('baseUrl', '', "class='form-control' placeholder='" . $lang->api->baseUrlDesc . "'");?></td>
             </tr>
             <tr>
               <th><?php echo $lang->doclib->control;?></th>
@@ -67,6 +75,12 @@
                   <span class='input-group-addon'><?php echo $lang->doclib->user?></span>
                   <?php echo html::select('users[]', $users, '', "class='form-control chosen' multiple")?>
                 </div>
+              </td>
+            </tr>
+            <tr class="apilib hidden">
+              <th><?php echo $lang->api->desc;?></th>
+              <td>
+                  <?php echo html::textarea('desc', '', "rows='8' class='form-control kindeditor' hidefocus='true' tabindex=''");?>
               </td>
             </tr>
             <tr>

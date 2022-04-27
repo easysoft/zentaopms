@@ -171,6 +171,8 @@ class doc extends control
         if(empty($projects)) unset($libTypeList['project']);
         if(empty($executions)) unset($libTypeList['execution']);
 
+        $this->app->loadLang('api');
+
         $this->view->groups      = $this->loadModel('group')->getPairs();
         $this->view->users       = $this->user->getPairs('nocode|noclosed');
         $this->view->products    = $products;
