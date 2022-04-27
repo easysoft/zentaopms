@@ -39,7 +39,7 @@ if(!$selfCall) die(include('./todolist.html.php'));
   <div class='panel-body'>
     <div class="todoes-input">
       <div class="todo-form-trigger"><input type="text" placeholder="<?php echo $lang->todo->lblClickCreate?>" autocomplete="off" class="form-control"></div>
-      <form class="form-horizontal todoes-form layer" method='post' target='hiddenwin' action='<?php echo $this->createLink('todo', 'create', 'date=today&userID=&from=block');?>'>
+      <form class="form-horizontal todoes-form layer not-watch" method='post' target='hiddenwin' action='<?php echo $this->createLink('todo', 'create', 'date=today&userID=&from=block');?>'>
         <h3><?php echo $lang->todo->create;?></h3>
         <?php $leftWidth  = common::checkNotCN() ? 'col-sm-3' : 'col-sm-2';?>
         <div class="form-group">
