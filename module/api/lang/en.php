@@ -199,9 +199,6 @@ $lang->api->structParamsOptons   = array_merge($lang->api->paramsTypeOptions, ar
 $lang->api->allParamsTypeOptions = array_merge($lang->api->paramsTypeOptions, $lang->api->paramsTypeCustomOptions);
 $lang->api->requiredOptions      = array(0 => 'No', 1 => 'Yes');
 
-$lang->doclib       = new stdclass();
-$lang->doclib->name = 'API Library Name';
-
 $lang->apistruct = new stdClass();
 $lang->apistruct->name = 'Name';
 

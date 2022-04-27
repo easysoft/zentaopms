@@ -199,9 +199,6 @@ $lang->api->structParamsOptons   = array_merge($lang->api->paramsTypeOptions, ar
 $lang->api->allParamsTypeOptions = array_merge($lang->api->paramsTypeOptions, $lang->api->paramsTypeCustomOptions);
 $lang->api->requiredOptions      = array(0 => '否', 1 => '是');
 
-$lang->doclib       = new stdclass();
-$lang->doclib->name = '接口库名称';
-
 $lang->apistruct = new stdClass();
 $lang->apistruct->name = '结构名';
 

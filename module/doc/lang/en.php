@@ -158,6 +158,7 @@ $lang->doc->allExecutions = 'All' . $lang->executionCommon . 's';
 $lang->doc->libTypeList['product']   = $lang->productCommon . ' Library';
 if($config->systemMode == 'new') $lang->doc->libTypeList['project'] = 'Project Library';
 $lang->doc->libTypeList['execution'] = $lang->execution->common . ' Library';
+$lang->doc->libTypeList['api']       = 'API Library';
 $lang->doc->libTypeList['custom']    = 'Custom Library';
 
 $lang->doc->libGlobalList['api'] = 'Api Libray';
@@ -248,6 +249,9 @@ $lang->doc->noticeAcl['lib']['project']['private']   = 'Users who can access the
 $lang->doc->noticeAcl['lib']['project']['custom']    = 'Users in the whiltelist can access it.';
 $lang->doc->noticeAcl['lib']['execution']['default'] = "Users who can access the selected {$lang->executionCommon} can access it.";
 $lang->doc->noticeAcl['lib']['execution']['custom']  = "Users who can access the selected {$lang->executionCommon} or users in the whiltelist can access it.";
+$lang->doc->noticeAcl['lib']['api']['open']          = 'All users can access it.';
+$lang->doc->noticeAcl['lib']['api']['custom']        = 'Users in the whitelist can access it.';
+$lang->doc->noticeAcl['lib']['api']['private']       = 'Only the one who created it can access it.';
 $lang->doc->noticeAcl['lib']['custom']['open']       = 'All users can access it.';
 $lang->doc->noticeAcl['lib']['custom']['custom']     = 'Users in the whitelist can access it.';
 $lang->doc->noticeAcl['lib']['custom']['private']    = 'Only the one who created it can access it.';
