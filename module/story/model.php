@@ -1732,7 +1732,16 @@ class storyModel extends model
             if($oldStory->branch) $story->plan = $planID;
 
             /* Append the plan id to plan field if product is multi and story is all branch. */
-            if($this->session->currentProductType != 'normal' and empty($story->branch) and $planID != 0) $story->plan = $oldStory->plan ? $oldStory->plan . ",$planID" : ",$planID";
+            if($this->session->currentProductType != 'normal' and empty($story->branch) and $planID != 0)
+            {
+                $branchPlanPairs = $this->dao->select('branch, id as plan')->from(TABLE_PRODUCTPLAN)
+                    ->where('product')->eq($oldStory->product)
+                    ->andWhere('id')->in($oldStory->plan)
+                    ->fetchPairs();
+                if(isset($branchPlanPairs[$plan->branch])) $branchPlanPairs[$plan->branch] = $planID;
+
+                $story->plan = $oldStory->plan ? ',' . implode(',', $branchPlanPairs) : ",$planID";
+            }
 
             /* Change stage. */
             if($planID)
