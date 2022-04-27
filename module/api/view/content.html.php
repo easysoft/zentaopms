@@ -91,16 +91,17 @@
           <?php
           function parseTree($data, $typeList, $level = 0)
           {
+              global $lang;
+
               $str   = '<tr>';
               $field = '';
               for($i = 0; $i < $level; $i++) $field .= '&nbsp;&nbsp;'. ($i == $level-1 ? '∟' : '&nbsp;') . '&nbsp;&nbsp;';
-              $field   .= $data['field'];
-              $str     .= '<td>' . $field . '</td>';
-              $str     .= '<td>' . zget($typeList, $data['paramsType'], '') . '</td>';
-              $require = $data['required'] ? '是' : '否';
-              $str     .= '<td>' . $require . '</td>';
-              $str     .= '<td>' . $data['desc'] . '</td>';
-              $str     .= '</tr>';
+              $field .= $data['field'];
+              $str   .= '<td>' . $field . '</td>';
+              $str   .= '<td>' . zget($typeList, $data['paramsType'], '') . '</td>';
+              $str   .= '<td class="text-center">' . zget($lang->api->boolList, $data['required'], '') . '</td>';
+              $str   .= '<td>' . $data['desc'] . '</td>';
+              $str   .= '</tr>';
               if(isset($data['children']) && count($data['children']) > 0)
               {
                   $level++;
@@ -115,9 +116,9 @@
             <thead>
             <tr>
               <th><?php echo $lang->api->req->name;?></th>
-              <th><?php echo $lang->api->req->type;?></th>
-              <th><?php echo $lang->api->req->required;?></th>
-              <th><?php echo $lang->api->req->desc;?></th>
+              <th class="w-50px"><?php echo $lang->api->req->type;?></th>
+              <th class="w-50px text-center"><?php echo $lang->api->req->required;?></th>
+              <th class="w-300px"><?php echo $lang->api->req->desc;?></th>
             </tr>
             </thead>
             <tbody><?php foreach($api->params['params'] as $item) echo parseTree($item, $typeList);?></tbody>
@@ -133,9 +134,9 @@
             <thead>
             <tr>
               <th><?php echo $lang->api->req->name;?></th>
-              <th><?php echo $lang->api->req->type;?></th>
-              <th><?php echo $lang->api->req->required;?></th>
-              <th><?php echo $lang->api->req->desc;?></th>
+              <th class="w-50px"><?php echo $lang->api->req->type;?></th>
+              <th class="w-50px text-center"><?php echo $lang->api->req->required;?></th>
+              <th class="w-300px"><?php echo $lang->api->req->desc;?></th>
             </tr>
             </thead>
             <tbody>
