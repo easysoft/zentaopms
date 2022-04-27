@@ -1409,7 +1409,7 @@ class bugModel extends model
     }
 
     /**
-     * Get statistic to app. 
+     * Get statistic.
      * 
      * @param  int    $productID 
      * @param  string $endDate 
@@ -1417,7 +1417,7 @@ class bugModel extends model
      * @access public
      * @return void
      */
-    public function getStatisticToApp($productID = 0, $endDate = '', $days = 30)
+    public function getStatistic($productID = 0, $endDate = '', $days = 30)
     {
         $startDate = '';
         if(empty($endDate)) $endDate = date('Y-m-d');
@@ -1450,6 +1450,7 @@ class bugModel extends model
         }
         return $staticData;
     }
+
     /**
      * Build search form.
      *
