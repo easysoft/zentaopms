@@ -509,7 +509,17 @@ class baseHTML
             setcookie('goback', json_encode($gobackList), $config->cookieLife, $config->webRoot, '', $config->cookieSecure, false);
         }
 
-        return  "<a href='{$gobackLink}' class='btn btn-back $class' $misc>{$label}</a>";
+        $dataApp = '';
+        foreach($gobackList as $locateApp => $locateLink)
+        {
+            if($gobackLink == $locateLink)
+            {
+                $dataApp = $locateApp;
+                continue;
+            }
+        }
+
+        return  "<a href='{$gobackLink}' class='btn btn-back $class' data-app='$dataApp' $misc>{$label}</a>";
     }
 
     /**
