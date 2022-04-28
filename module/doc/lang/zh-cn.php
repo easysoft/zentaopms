@@ -21,6 +21,7 @@ $lang->doclib->execution  = $lang->executionCommon . '库';
 $lang->doclib->product    = $lang->productCommon . '库';
 $lang->doclib->apiLibName = '接口库名称';
 
+$lang->doclib->aclListA = array();
 $lang->doclib->aclListA['default'] = '默认';
 $lang->doclib->aclListA['custom']  = '自定义';
 
@@ -158,6 +159,7 @@ $lang->doc->allExecutions = '所有' . $lang->executionCommon;
 $lang->doc->libTypeList['product']   = $lang->productCommon . '文档库';
 if($config->systemMode == 'new') $lang->doc->libTypeList['project'] = '项目文档库';
 $lang->doc->libTypeList['execution'] = $lang->execution->common . '文档库';
+$lang->doc->libTypeList['api']       = '接口库';
 $lang->doc->libTypeList['custom']    = '自定义文档库';
 
 $lang->doc->libGlobalList['api'] = '接口文档库';
@@ -248,6 +250,9 @@ $lang->doc->noticeAcl['lib']['project']['private']   = "有所选项目访问权
 $lang->doc->noticeAcl['lib']['project']['custom']    = "白名单的用户可以访问。";
 $lang->doc->noticeAcl['lib']['execution']['default'] = "有所选{$lang->executionCommon}访问权限的用户可以访问。";
 $lang->doc->noticeAcl['lib']['execution']['custom']  = "有所选{$lang->executionCommon}访问权限或白名单里的用户可以访问。";
+$lang->doc->noticeAcl['lib']['api']['open']          = '所有人都可以访问。';
+$lang->doc->noticeAcl['lib']['api']['custom']        = '白名单的用户可以访问。';
+$lang->doc->noticeAcl['lib']['api']['private']       = '只有创建者自己可以访问。';
 $lang->doc->noticeAcl['lib']['custom']['open']       = '所有人都可以访问。';
 $lang->doc->noticeAcl['lib']['custom']['custom']     = '白名单的用户可以访问。';
 $lang->doc->noticeAcl['lib']['custom']['private']    = '只有创建者自己可以访问。';

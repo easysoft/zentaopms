@@ -775,11 +775,15 @@ class programplanModel extends model
         if($planChanged)  $plan->version = $oldPlan->version + 1;
         if(empty($plan->parent)) $plan->parent = $projectID;
 
+        /* Fix bug #22030. Reset field name for show dao error. */
+        $this->lang->project->name = $this->lang->programplan->name;
+
         $this->dao->update(TABLE_PROJECT)->data($plan)
             ->autoCheck()
             ->batchCheck($this->config->programplan->edit->requiredFields, 'notempty')
             ->checkIF($plan->end != '0000-00-00', 'end', 'ge', $plan->begin)
             ->checkIF($plan->percent != false, 'percent', 'float')
+            ->checkIF((!empty($plan->name) and $this->config->systemMode == 'new'), 'name', 'unique', "id != {$planID} and type in ('sprint','stage') and `project` = {$oldPlan->project}")
             ->where('id')->eq($planID)
             ->exec();
 
@@ -920,6 +924,8 @@ class programplanModel extends model
      */
     public function isCreateTask($planID)
     {
+        if(empty($planID)) return true;
+
         $task = $this->dao->select('*')->from(TABLE_TASK)->where('execution')->eq($planID)->andWhere('deleted')->eq('0')->limit(1)->fetch();
         return empty($task) ? true : false;
     }

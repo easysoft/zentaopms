@@ -65,17 +65,5 @@
     </div>
   </div>
 </div>
-<div class='hidden'>
-  <table>
-    <tr id='aclBoxA'>
-      <th><?php echo $lang->api->control;?></th>
-      <td><?php echo html::radio('acl', $lang->api->aclListA, 'default', "onchange='toggleAcl(this.value, \"lib\")'")?></td>
-    </tr>
-    <tr id='aclBoxB'>
-      <th><?php echo $lang->api->control;?></th>
-      <td><?php echo html::radio('acl', $lang->api->aclListB, 'open', "onchange='toggleAcl(this.value, \"lib\")'")?></td>
-    </tr>
-  </table>
-</div>
 <?php js::set('noticeAcl', $lang->api->noticeAcl);?>
 <?php include '../../common/view/footer.lite.html.php';?>

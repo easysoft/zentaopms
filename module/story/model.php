@@ -1732,7 +1732,16 @@ class storyModel extends model
             if($oldStory->branch) $story->plan = $planID;
 
             /* Append the plan id to plan field if product is multi and story is all branch. */
-            if($this->session->currentProductType != 'normal' and empty($story->branch) and $planID != 0) $story->plan = $oldStory->plan ? $oldStory->plan . ",$planID" : ",$planID";
+            if($this->session->currentProductType != 'normal' and empty($story->branch) and $planID != 0)
+            {
+                $branchPlanPairs = $this->dao->select('branch, id as plan')->from(TABLE_PRODUCTPLAN)
+                    ->where('product')->eq($oldStory->product)
+                    ->andWhere('id')->in($oldStory->plan)
+                    ->fetchPairs();
+                if(isset($branchPlanPairs[$plan->branch])) $branchPlanPairs[$plan->branch] = $planID;
+
+                $story->plan = $oldStory->plan ? ',' . implode(',', $branchPlanPairs) : ",$planID";
+            }
 
             /* Change stage. */
             if($planID)
@@ -2807,6 +2816,7 @@ class storyModel extends model
                 ->where($storyQuery)
                 ->andWhere('t1.project')->eq((int)$executionID)
                 ->andWhere('t2.deleted')->eq(0)
+                ->andWhere('t4.deleted')->eq(0)
                 ->andWhere('t2.type')->eq($storyType)
                 ->beginIF($excludeStories)->andWhere('t2.id')->notIN($excludeStories)->fi()
                 ->orderBy($orderBy)
@@ -2862,6 +2872,7 @@ class storyModel extends model
                 ->beginIF($this->session->storyBrowseType and strpos('changed|', $this->session->storyBrowseType) !== false)->andWhere('t2.status')->in(array_keys($unclosedStatus))->fi()
                 ->beginIF($modules)->andWhere('t2.module')->in($modules)->fi()
                 ->andWhere('t2.deleted')->eq(0)
+                ->andWhere('t4.deleted')->eq(0)
                 ->orderBy($orderBy)
                 ->page($pager, 't2.id')
                 ->fetchAll('id');

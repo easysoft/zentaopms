@@ -11,10 +11,11 @@
 .main-col .doc-title {display: flex; font-size: 16px; margin-bottom: 15px;}
 .main-col .doc-title .title {margin: 0; line-height: 30px; font-size: 25px;}
 .main-col .doc-title .http-method {line-height: 27px; height: 27px; font-size: 13px; margin-right: 10px; padding: 0 10px;}
-.main-col .doc-title .path {line-height: 30px; font-size: 20px; margin-right: 15px; word-wrap: break-word;}
+.main-col .doc-title .path {line-height: 30px; font-size: 20px; margin-right: 15px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;}
 .main-col .doc-title .info {flex: 1 1 0;}
 .main-col .doc-title .version a {font-size: 13px; color: #8c8c8c;}
 .main-col .doc-title .version .dropdown-menu a:hover {color: #ffffff;}
+.main-col .doc-title .actions {min-width: 120px; display: inline-block;}
 .main-col .doc-title .actions a + a {margin-left: 8px;}
 .main-col .doc-title .actions i {font-size: 15px; color: #8c8c8c;}
 #content h2.title {margin: 0; font-size: 17px;}
@@ -94,10 +95,22 @@
     color: #a41e22;
 }
 
+.detail .list-group-item a {
+    display: flex;
+    align-items: center;
+}
+
+.detail .list-group-item .path, .detail .list-group-item .desc {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
 .detail .list-group-item .path {
     padding-left: 10px;
     font-size: 14px;
-    color: black
+    color: black;
+    flex: 1;
 }
 .detail .list-group-item .desc {
     width: auto;
@@ -105,6 +118,7 @@
     line-height: 38px;
     float: right;
     padding-right: 10px;
+    max-width: 200px;
 }
 .detail .list-group-item {list-style: none; font-size: 14px; margin-bottom: 10px; line-height: 30px}
 .detail .list-group-item span {line-height: 30px; width: 65px;}

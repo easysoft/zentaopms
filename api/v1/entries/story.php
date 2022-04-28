@@ -36,8 +36,9 @@ class storyEntry extends Entry
         if(isset($story->planTitle)) $story->planTitle = array_values((array)$story->planTitle);
         if($story->parent > 0) $story->parentPri = $this->dao->select('pri')->from(TABLE_STORY)->where('id')->eq($story->parent)->fetch('pri');
 
-        /* Set product name */
-        $story->productName = $data->data->product->name;
+        /* Set product name and status*/
+        $story->productName   = $data->data->product->name;
+        $story->productStatus = $data->data->product->status;
 
         /* Set module title */
         $moduleTitle = '';

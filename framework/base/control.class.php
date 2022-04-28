@@ -483,15 +483,6 @@ class baseControl
             {
                 if(empty($cssPath)) continue;
 
-                $extModulePath = dirname(dirname($cssPath));
-                if(realpath($extModulePath) != $realModulePath)
-                {
-                    $extMethodCssFile = $extModulePath . DS . 'css' . DS . $devicePrefix . $methodName . '.css';
-                    if(is_file($extMethodCssFile)) $css .= file_get_contents($extMethodCssFile);
-                    $extMethodCssLangFile = $extModulePath . DS . 'css' . DS . $devicePrefix . "{$methodName}.{$clientLang}.css";
-                    if(is_file($extMethodCssLangFile)) $css .= file_get_contents($extMethodCssLangFile);
-                }
-
                 $cssMethodExt = $cssPath . $methodName . DS;
                 $cssCommonExt = $cssPath . 'common' . DS;
 
@@ -586,13 +577,6 @@ class baseControl
             foreach($jsExtPath as $jsPath)
             {
                 if(empty($jsPath)) continue;
-
-                $extModulePath = dirname(dirname($jsPath));
-                if(realpath($extModulePath) != $realModulePath)
-                {
-                    $extMethodJsFile = $extModulePath . DS . 'js' . DS . $this->devicePrefix . $methodName . '.js';
-                    if(is_file($extMethodJsFile)) $js .= file_get_contents($extMethodJsFile);
-                }
 
                 $jsMethodExt = $jsPath . $methodName . DS;
                 $jsCommonExt = $jsPath . 'common' . DS;

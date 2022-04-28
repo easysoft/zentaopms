@@ -30,7 +30,7 @@
       <table class='table has-sort-head' id='userList'>
         <thead>
           <tr>
-            <?php $vars = "libID={$libID}&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}";?>
+            <?php $vars = "libID={$libID}&releaseID=$releaseID&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}";?>
             <th class='c-id'><?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?></th>
             <th class='c-type'><?php common::printOrderLink('type', $orderBy, $vars, $lang->api->structType);?></th>
             <th class='c-name'><?php echo $lang->api->structName;?></th>

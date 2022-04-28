@@ -78,7 +78,7 @@ class api extends control
         $this->view->libID      = $libID;
         $this->view->apiID      = $apiID;
         $this->view->libs       = $libs;
-        $this->view->moduleTree = $libID ? $this->doc->getApiModuleTree($libID, $apiID) : '';
+        $this->view->moduleTree = $libID ? $this->doc->getApiModuleTree($libID, $apiID, $release, $moduleID) : '';
         $this->view->users      = $this->user->getPairs('noclosed,noletter');
 
         $this->display();
@@ -170,6 +170,8 @@ class api extends control
     /**
      * Api doc global struct page.
      *
+     * @param  int    $libID
+     * @param  int    $releaseID
      * @param  string $orderBy
      * @param  int    $recTotal
      * @param  int    $recPerPage
@@ -177,25 +179,34 @@ class api extends control
      * @access public
      * @return void
      */
-    public function struct($libID = 0, $orderBy = 'id', $recTotal = 0, $recPerPage = 15, $pageID = 1)
+    public function struct($libID = 0, $releaseID = 0, $orderBy = 'id', $recTotal = 0, $recPerPage = 15, $pageID = 1)
     {
         $libs = $this->doc->getApiLibs();
         $this->app->loadClass('pager', $static = true);
-        $this->lang->modulePageNav = $this->generateLibsDropMenu($libs, $libID);
+        $this->lang->modulePageNav = $this->generateLibsDropMenu($libs, $libID, $releaseID);
 
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
         /* Append id for secend sort. */
         $sort = common::appendOrder($orderBy);
 
-        $structs = $this->api->getStructByQuery($libID, $pager, $sort);
+        if($releaseID)
+        {
+            $release = $this->api->getRelease($libID, 'byId', $releaseID);
+            $structs = $this->api->getStructListByRelease($release, '1 = 1 ', $sort);
+        }
+        else
+        {
+            $structs = $this->api->getStructByQuery($libID, $pager, $sort);
+        }
 
         common::setMenuVars('doc', $libID);
-        $this->view->libID   = $libID;
-        $this->view->structs = $structs;
-        $this->view->orderBy = $orderBy;
-        $this->view->title   = $this->lang->api->struct;
-        $this->view->pager   = $pager;
+        $this->view->libID     = $libID;
+        $this->view->releaseID = $releaseID;
+        $this->view->structs   = $structs;
+        $this->view->orderBy   = $orderBy;
+        $this->view->title     = $this->lang->api->struct;
+        $this->view->pager     = $pager;
         $this->display();
     }
 
@@ -319,6 +330,7 @@ class api extends control
             /* Record action for create api library. */
             $this->action->create('docLib', $libID, 'Created');
 
+            if(!helper::isAjaxRequest()) return print(js::locate($this->createLink('api', 'index', "libID=$libID"), 'parent.parent'));
             return $this->sendSuccess(array('locate' => $this->createLink('api', 'index', "libID=$libID")));
         }
 
@@ -640,6 +652,8 @@ class api extends control
         if(empty($libs)) return '';
         if(!isset($libs[$libID])) return '';
 
+        $methodName = $this->app->rawMethod;
+
         $libName = $libs[$libID]->name;
         $output  = <<<EOT
 <div class='btn-group angle-btn'>
@@ -658,7 +672,7 @@ EOT;
         foreach($libs as $key => $lib)
         {
             $selected = $key == $libID ? 'selected' : '';
-            $output  .= html::a(inlink('index', "libID=$key"), $lib->name, '', "class='$selected' data-app='{$this->app->tab}'");
+            $output  .= html::a(inlink($methodName, "libID=$key"), $lib->name, '', "class='$selected' data-app='{$this->app->tab}'");
         }
         $output .= "</div></div></div></div></div>";
 
@@ -681,12 +695,13 @@ EOT;
       <div class='table-col'>
         <div class='list-group'>
 EOT;
+            $params   = $methodName == 'index' ? "libID=$libID&moduleID=0&apiID=0&version=0" : "libID=$libID";
             $selected = $version > 0 ? '' : 'selected';
-            $output  .= html::a(inlink('index', "libID=$libID&moduleID=0&apiID=0&version=0&release=0"), $this->lang->api->defaultVersion, '', "class='$selected'");
+            $output  .= html::a(inlink($methodName, $params . "&release=0"), $this->lang->api->defaultVersion, '', "class='$selected'");
             foreach($versions as $key => $item)
             {
                 $selected = $key == $version ? 'selected' : '';
-                $output  .= html::a(inlink('index', "libID=$libID&moduleID=0&apiID=0&version=0&release=$key"), $item->version, '', "class='$selected' data-app='{$this->app->tab}'");
+                $output  .= html::a(inlink($methodName, $params . "&release=$key"), $item->version, '', "class='$selected' data-app='{$this->app->tab}'");
             }
             $output .= "</div></div></div></div></div>";
         }
