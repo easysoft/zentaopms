@@ -189,3 +189,5 @@ h3 {font-size: 16px;}
 #submitLabel {text-align: left;}
 
 .header-btn .btn > .text {text-overflow: unset !important;}
+
+#repoPageSize {right: 90px;}
