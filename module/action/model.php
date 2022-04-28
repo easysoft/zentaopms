@@ -1298,15 +1298,16 @@ class actionModel extends model
 
             $action->objectLabel = $objectLabel;
             $action->product     = trim($action->product, ',');
-            $objectTable         = zget($this->config->objectTables, $action->objectType);
-            $objectDeleted       = $this->dao->select('deleted')->from($objectTable)->where('id')->eq($action->objectID)->fetch('deleted');
-            $noLink              = array('program', 'project', 'product', 'execution');
 
-            if(in_array($action->objectType, $noLink) and $objectDeleted == 1)
+            $judgeDeletedObject = array('program', 'project', 'product', 'execution');
+            if(in_array($action->objectType, $judgeDeletedObject))
             {
-               $action->objectLink = '';
+                $objectTable   = zget($this->config->objectTables, $action->objectType);
+                $objectDeleted = $this->dao->select('deleted')->from($objectTable)->where('id')->eq($action->objectID)->fetch('deleted');
+                if($objectDeleted) return $action;
             }
-            elseif($this->config->edition == 'max'
+
+            if($this->config->edition == 'max'
                and strpos($this->config->action->assetType, $action->objectType) !== false
                and empty($action->project) and empty($action->product) and empty($action->execution))
             {
