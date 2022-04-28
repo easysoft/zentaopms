@@ -172,6 +172,7 @@ class reportModel extends model
         $stmt = $this->dao->select('id,plan,product,status')
             ->from(TABLE_STORY)
             ->where('deleted')->eq(0)
+            ->andWhere('parent')->ge(0)
             ->beginIF($storyType)->andWhere('type')->eq($storyType)->fi()
             ->query();
         while($story = $stmt->fetch())
