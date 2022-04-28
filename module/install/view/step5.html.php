@@ -10,6 +10,7 @@
  */
 ?>
 <?php include '../../common/view/header.lite.html.php';?>
+<?php js::set('errorEmpty', $lang->install->errorEmpty);?>
 <style>.modal-body table tr th{text-align: right}</style>
 <div class='container'>
   <div class='modal-dialog'>
@@ -44,7 +45,7 @@
       <strong><?php echo $lang->install->getPriv;?></strong>
     </div>
     <div class='modal-body'>
-      <form method='post' target='hiddenwin'>
+      <form method='post'>
         <table class='table table-form mw-400px' style='margin: 0 auto'>
           <tr>
             <th class='c-company'><?php echo $lang->install->company;?></th>

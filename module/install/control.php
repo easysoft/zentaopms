@@ -206,13 +206,13 @@ class install extends control
         if(!empty($_POST))
         {
             $this->install->grantPriv();
-            if(dao::isError()) return print(js::error(dao::getError()));
+            if(dao::isError()) return print(js::error(dao::getError()) . js::locate('back'));
 
             $this->install->updateLang();
-            if(dao::isError()) return print(js::error(dao::getError()));
+            if(dao::isError()) return print(js::error(dao::getError()) . js::locate('back'));
 
             if($this->post->importDemoData) $this->install->importDemoData();
-            if(dao::isError()) echo js::alert($this->lang->install->errorImportDemoData);
+            if(dao::isError()) return print(js::alert($this->lang->install->errorImportDemoData) . js::locate('back'));
 
             $this->loadModel('setting');
             $this->setting->updateVersion($this->config->version);
