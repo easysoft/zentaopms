@@ -57,8 +57,8 @@
     $i = 0;
     foreach($lang->mainNav as $module => $title)
     {
-        $i++;
         if(!is_string($title)) continue;
+        $i++;
         if($i == 13) echo '<div class="btn-group"><a href="javascript:;" data-toggle="dropdown" class="btn btn-link">' . $lang->group->more . '<span class="caret"></span></a><ul class="dropdown-menu">';
         $active = $menu == $module ? 'btn-active-text' : '';
         if($i >= 13) echo '<li>';
