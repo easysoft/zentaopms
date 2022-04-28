@@ -1170,8 +1170,8 @@ function createColumnCreateMenu(options)
     if(privs.includes('createCard')) items.push({label: kanbanLang.createCard, url: $.createLink('kanban', 'createCard', 'kanbanID=' + kanbanID + '&regionID=' + regionID + '&groupID=' + groupID + '&columnID=' + columnID, '', true), className: 'iframe', attrs: {'data-toggle': 'modal'}});
     if(privs.includes('batchCreateCard')) items.push({label: kanbanLang.batchCreateCard, url: $.createLink('kanban', 'batchCreateCard', 'kanbanID=' + kanbanID + '&regionID=' + regionID + '&groupID=' + groupID + '&laneID=' + laneID + '&columnID=' + columnID), attrs: {'data-width': '80%'}});
     if(privs.includes('import') && kanban.object.indexOf('cards') != -1) items.push({label: kanbanLang.importCard, url: $.createLink('kanban', 'importCard', 'kanbanID=' + kanbanID + '&regionID=' + regionID + '&groupID=' + groupID + '&columnID=' + columnID), className: 'iframe', attrs: {'data-toggle': 'modal'}});
-    if(privs.includes('import') && kanban.object && kanban.object != 'cards') items.push({className: 'parentDivider'});
-    if(privs.includes('import') && kanban.object && kanban.object != 'cards') items.push({label: kanbanLang.importAB, className: 'import'});
+    if(privs.includes('import') && kanban.object && kanban.object != 'cards' && vision != 'lite') items.push({className: 'parentDivider'});
+    if(privs.includes('import') && kanban.object && kanban.object != 'cards' && vision != 'lite') items.push({label: kanbanLang.importAB, className: 'import'});
 
     return items;
 }

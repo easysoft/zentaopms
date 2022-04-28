@@ -20,6 +20,7 @@ $app->loadLang('productplan');
 $laneCount = 0;
 foreach($regions as $region) $laneCount += $region->laneCount;
 
+js::set('vision', $this->config->vision);
 js::set('regions', $regions);
 js::set('kanban', $kanban);
 js::set('kanbanLang', $lang->kanban);
