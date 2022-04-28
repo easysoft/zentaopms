@@ -73,7 +73,7 @@ $lang->upgrade->to15Desc       = <<<EOD
 <p>您可以在线体验最新版本的功能，以决定是否启用新的模式：<a class='text-info' href='http://zentaomax.demo.zentao.net' target='_blank'>最新版演示demo</a></p>
 <p>您还可以下载新版本功能介绍PPT：<a class='text-info' href='https://dl.cnezsoft.com/zentao/zentaoconcept.pdf' target='_blank'>最新版功能介绍PPT</a></p>
 <video src="https://dl.cnezsoft.com/vedio/program0716.mp4"  width="100%" controls ="controls"></video>
-<p style="text-align:center"><small>禅道15.0版本介绍</small></p>
+<p style="text-align:center"><small>禅道15版本介绍</small></p>
 <br/>
 <p><strong>请问您计划如何使用禅道的新版本呢？</strong></p>
 EOD;

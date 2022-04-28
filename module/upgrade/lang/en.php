@@ -70,7 +70,7 @@ $lang->upgrade->to15Desc      = <<<EOD
 <p>You can try the online demo before you decide to enable new features: <a class='text-info' href='http://zentaomax.demo.zentao.net' target='_blank'>New Features Online Demo</a></p>
 <p>You can also download an introduction PPT to help you understand it：<a class='text-info' href='' target='_blank'> New Features Introduction PPT</a></p>
 <video src="https://dl.cnezsoft.com/vedio/zentaoconcepteng0716.mp4" width="100%" controls ="controls"></video>
-<p style="text-align:center"><small>ZenTao Version 15.0 Introduction</small></p>
+<p style="text-align:center"><small>ZenTao Version 15 Introduction</small></p>
 <br/>
 <p><strong>How do you like to use ZenTao?</strong></p>
 EOD;
