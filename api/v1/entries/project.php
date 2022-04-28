@@ -80,6 +80,9 @@ class projectEntry extends entry
                     $actions = $data->data->actions;
                     $project->actions = $this->loadModel('action')->processActionForAPI($actions, (array)$data->data->users, $this->lang->project);
                     break;
+                case "builds":
+                    $project->builds = $this->loadModel('build')->getBuildPairs($this->param('productID', '0'), 'all', 'noempty,noterminate,nodone,withbranch', $projectID,  'project');
+                    break;
                 case "dynamics":
                     $dynamics = $data->data->dynamics;
                     $project->dynamics = $this->loadModel('action')->processDynamicForAPI($dynamics);

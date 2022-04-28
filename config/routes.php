@@ -55,8 +55,6 @@ $routes['/stories/:id/child']      = 'storyChild';
 $routes['/stories/:id/recall']     = 'storyRecall';
 $routes['/stories/:id/review']     = 'storyReview';
 
-$routes['/module/:id/stories'] = 'moduleStories';
-
 $routes['/products/:id/bugs']   = 'bugs';
 $routes['/projects/:id/bugs']   = 'projectBugs';
 $routes['/executions/:id/bugs'] = 'executionBugs';
