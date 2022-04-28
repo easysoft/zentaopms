@@ -1300,7 +1300,7 @@ class actionModel extends model
             $action->product     = trim($action->product, ',');
 
             $noLinkObjects = array('program', 'project', 'product', 'execution');
-            if(in_array($action->objectType, $judgeDeletedObject))
+            if(in_array($action->objectType, $noLinkObjects))
             {
                 $objectTable   = zget($this->config->objectTables, $action->objectType);
                 $objectDeleted = $this->dao->select('deleted')->from($objectTable)->where('id')->eq($action->objectID)->fetch('deleted');
