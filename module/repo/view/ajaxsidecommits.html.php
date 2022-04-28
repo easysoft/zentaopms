@@ -15,7 +15,7 @@ $pathInfo = '&root=' . $this->repo->encodePath(empty($path) ? '/' : $path);
 if(isset($entry)) $pathInfo .= '&type=file';
 ?>
 <?php js::set('paramsBase', "repoID=$repoID&path=" . $this->repo->encodePath($path) . "&objectID=$objectID&type=$logType");?>
-<form id='logForm' class='main-table' data-ride='table' method='post'>
+<form id='logForm' class='main-table' data-ride='table' method='post' onsubmit='logsubmit()'>
   <table class='table table-fixed'>
     <thead>
       <tr>
@@ -69,6 +69,11 @@ if(isset($entry)) $pathInfo .= '&type=file';
   </div>
 </form>
 <script>
+if($.cookie('sideRepoSelected'))
+{
+    var sideRepoSelectedAry = $.cookie('sideRepoSelected').split(',');
+    for(i in sideRepoSelectedAry) $("input:checkbox[value='" + sideRepoSelectedAry[i] + "']").attr('checked', 'checked');
+}
 if($("input:checkbox[name='revision[]']:checked").length < 2)
 {
     $("input:checkbox[name='revision[]']:lt(2)").attr('checked', 'checked');
@@ -86,6 +91,23 @@ $("input:checkbox[name='revision[]']").click(function(){
         $("input:checkbox[name='revision[]']").each(function(){$(this).attr("disabled", false)});
     }
 });
+
+/**
+ * Method before submit
+ *
+ * @access public
+ * @return void
+ */
+function logsubmit()
+{
+    $("input:checkbox[name='revision[]']:checked").each(function()
+    {
+        var sideRepoSelected = $.cookie('sideRepoSelected') ? $.cookie('sideRepoSelected').split(',') : [];
+        sideRepoSelected.unshift($(this).val());
+        sideRepoSelected = sideRepoSelected.slice(0, 2);
+        $.cookie('sideRepoSelected', sideRepoSelected.join(','), {expires:config.cookieLife, path:config.webRoot});
+    });
+}
 
 $(function()
 {
