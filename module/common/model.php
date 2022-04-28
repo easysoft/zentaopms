@@ -2532,17 +2532,6 @@ EOD;
         /* The ip is same as ip in white list. */
         if($ip == $ipWhiteList) return true;
 
-        /* If the ip in white list is like 192.168.1.1-192.168.1.10. */
-        if(strpos($ipWhiteList, '-') !== false)
-        {
-            list($min, $max) = explode('-', $ipWhiteList);
-            $min = ip2long(trim($min));
-            $max = ip2long(trim($max));
-            $ip  = ip2long(trim($ip));
-
-            return $ip >= $min and $ip <= $max;
-        }
-
         /* If the ip in white list is like 192.168.1.1,192.168.1.10. */
         if(strpos($ipWhiteList, ',') !== false)
         {
@@ -2552,6 +2541,17 @@ EOD;
                 if($this->checkIP($ipRule)) return true;
             }
             return false;
+        }
+
+        /* If the ip in white list is like 192.168.1.1-192.168.1.10. */
+        if(strpos($ipWhiteList, '-') !== false)
+        {
+            list($min, $max) = explode('-', $ipWhiteList);
+            $min = ip2long(trim($min));
+            $max = ip2long(trim($max));
+            $ip  = ip2long(trim($ip));
+
+            return $ip >= $min and $ip <= $max;
         }
 
         /* If the ip in white list is like 192.168.1.*. */
