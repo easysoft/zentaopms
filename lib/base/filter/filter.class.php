@@ -1370,23 +1370,4 @@ class baseFixer
         foreach($fields as $key => $fieldName) if(!isset($this->data->$fieldName)) unset($fields[$key]);
         return $fields;
     }
-
-    /**
-     * 过滤Emoji表情。
-     * Filter Emoji.
-     *
-     * @param  string $fieldName
-     * @access public
-     * @return object
-     */
-    public function filterEmoji($fieldName){
-        $fields = $this->processFields($fieldName);
-        foreach($fields as $fieldName)
-        {
-            $this->data->$fieldName = preg_replace_callback('/./u', function (array $match){
-                return strlen($match[0]) >= 4 ? '' : $match[0];
-            }, $this->data->$fieldName);
-        }
-        return $this;
-    }
 }

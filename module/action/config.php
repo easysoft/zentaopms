@@ -59,4 +59,4 @@ $config->action->majorList['execution'] = array('opened', 'edited');
 
 $config->action->needGetProjectType = 'build,task,bug,case,testcase,caselib,testtask,testsuite,testreport,doc,issue,release,risk,design,opportunity,trainplan,gapanalysis,researchplan,researchreport,';
 $config->action->needGetRelateField = ',story,productplan,release,task,build,bug,testcase,case,testtask,testreport,doc,doclib,issue,risk,opportunity,trainplan,gapanalysis,team,whitelist,researchplan,researchreport,meeting,kanbanlane,kanbancolumn,';
-$config->action->noLinkModules      = ',doclib,module,webhook,gitlab,sonarqube,pipeline,jenkins,kanban,kanbanspace,kanbancolumn,kanbanlane,kanbanregion,kanbancard,execution,project,traincategory,apistruct,program,';
+$config->action->noLinkModules      = ',doclib,module,webhook,gitlab,sonarqube,pipeline,jenkins,kanban,kanbanspace,kanbancolumn,kanbanlane,kanbanregion,kanbancard,execution,project,traincategory,apistruct,program,product,';

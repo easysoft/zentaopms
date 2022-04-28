@@ -2251,9 +2251,14 @@ EOT;
     /**
      * Get api doc module tree
      *
-     * @author thanatos thanatos915@163.com
+     * @param  int     $rootID
+     * @param  pointer $docID
+     * @param  int     $release
+     * @param  int     $moduleID
+     * @access public
+     * @return string
      */
-    public function getApiModuleTree($rootID, &$docID = 0, $release = 0)
+    public function getApiModuleTree($rootID, &$docID = 0, $release = 0, $moduleID = 0)
     {
         $startModulePath = '';
         $currentMethod   = $this->app->getMethodName();
@@ -2285,7 +2290,7 @@ EOT;
         {
             foreach($release->snap['modules'] as $module)
             {
-                $this->buildTree($treeMenu, 'api', 0, $rootID, $module, $moduleDocs, $docID);
+                $this->buildTree($treeMenu, 'api', 0, $rootID, $module, $moduleDocs, $docID, $moduleID);
             }
         }
         else
@@ -2300,7 +2305,7 @@ EOT;
             $stmt  = $this->dbh->query($query);
             while ($module = $stmt->fetch())
             {
-                $this->buildTree($treeMenu, 'api', 0, $rootID, $module, $moduleDocs, $docID);
+                $this->buildTree($treeMenu, 'api', 0, $rootID, $module, $moduleDocs, $docID, $moduleID);
             }
         }
 
@@ -2429,10 +2434,11 @@ EOT;
      * @param  object  $module
      * @param  array   $moduleDocs
      * @param  pointer $docID
+     * @param  int     $moduleID
      * @access private
      * @return string
      */
-    private function buildTree(&$treeMenu, $type, $objectID, $libID, $module, $moduleDocs, &$docID)
+    private function buildTree(&$treeMenu, $type, $objectID, $libID, $module, $moduleDocs, &$docID, $moduleID = 0)
     {
         if(!isset($treeMenu[$module->id])) $treeMenu[$module->id] = '';
 
@@ -2467,7 +2473,7 @@ EOT;
                         if(common::hasPriv('doc', 'edit'))
                         {
                             $treeMenu[$module->id] .= "<div class='tree-actions'>";
-                            $treeMenu[$module->id] .= html::a(helper::createLink('doc', 'edit', "docID=$docID&comment=false&objectType=$type&objectID=$objectID&libID=$libID"), "<i class='icon icon-edit'></i>", '', "title={$this->lang->doc->edit} data-app={$this->app->tab}");
+                            $treeMenu[$module->id] .= html::a(helper::createLink('doc', 'edit', "docID={$doc->id}&comment=false&objectType=$type&objectID=$objectID&libID=$libID"), "<i class='icon icon-edit'></i>", '', "title={$this->lang->doc->edit} data-app={$this->app->tab}");
                             $treeMenu[$module->id] .= '</div>';
                         }
                         $treeMenu[$module->id] .= '</div>';
@@ -2520,9 +2526,7 @@ EOT;
 
         if($type == static::DOC_TYPE_API)
         {
-            $params   = $_GET;
-            $moduleID = isset($params['moduleID']) ? $params['moduleID'] : 0;
-            if($moduleID && $moduleID == $module->id)
+            if($moduleID and $moduleID == $module->id)
             {
                 array_push($class, 'active');
             }

@@ -14,6 +14,7 @@
 $pathInfo = '&root=' . $this->repo->encodePath(empty($path) ? '/' : $path);
 if(isset($entry)) $pathInfo .= '&type=file';
 ?>
+<?php js::set('paramsBase', "repoID=$repoID&path=" . $this->repo->encodePath($path) . "&objectID=$objectID&type=$logType");?>
 <form id='logForm' class='main-table' data-ride='table' method='post'>
   <table class='table table-fixed'>
     <thead>
@@ -52,6 +53,7 @@ if(isset($entry)) $pathInfo .= '&type=file';
     <?php if(common::hasPriv('repo', 'diff')) echo html::submitButton($lang->repo->diff, '', count($revisions) < 2 ? 'disabled btn btn-primary' : 'btn btn-primary')?>
     <?php echo html::a($this->repo->createLink('log', "repoID=$repoID&objectID=$objectID&entry=" . $this->repo->encodePath($path) . "&revision=HEAD&type=$logType"), $lang->repo->allLog, '', "class='allLogs' data-app='{$this->app->tab}'");?>
     <div class='pull-right'>
+        <ul id="repoPageSize" class="pager" data-ride="pager" data-elements="size_menu" data-rec-total="<?php echo $pager->recTotal;?>" data-rec-per-page="<?php echo $pager->recPerPage;?>" data-page="<?php echo $pager->pageID;?>"></ul>
       <div class='btn-group'>
         <?php
         $prePage  = $pager->pageID == 1 ? 1 : $pager->pageID - 1;
@@ -83,5 +85,16 @@ $("input:checkbox[name='revision[]']").click(function(){
         $('#diffRepo').remove();
         $("input:checkbox[name='revision[]']").each(function(){$(this).attr("disabled", false)});
     }
+});
+
+$(function()
+{
+    var myPager = $('#repoPageSize').data('zui.pager');
+    if(!myPager) $('#repoPageSize').pager();
+
+    $('#repoPageSize').on('onPageChange', function(e, state, oldState) {
+        var link = createLink('repo', 'ajaxSideCommits', paramsBase + '&recTotal=' + state.recTotal + '&recPerPage=' + state.recPerPage + '&pageID=' + state.page);
+        $('#sidebar .side-body').load(link);
+    });
 });
 </script>

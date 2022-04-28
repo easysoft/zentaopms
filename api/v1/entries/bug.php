@@ -32,8 +32,9 @@ class bugEntry extends entry
 
         $bug = $data->data->bug;
 
-        /* Set product name */
-        $bug->productName = $data->data->product->name;
+        /* Set product name and status */
+        $bug->productName   = $data->data->product->name;
+        $bug->productStatus = $data->data->product->status;
 
         /* Set module title */
         $moduleTitle = '';

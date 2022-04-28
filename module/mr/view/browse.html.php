@@ -51,16 +51,16 @@
   <form class='main-table' id='ajaxForm' method='post'>
     <table id='gitlabProjectList' class='table has-sort-head table-fixed'>
       <thead>
-        <tr>
+        <tr class='text-left'>
           <?php $vars = "mode=$mode&param=$param&objectID=$objectID&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}";?>
-          <th class='w-60px  text-left'><?php common::printOrderLink('id', $orderBy, $vars, $lang->mr->id);?></th>
-          <th class='w-200px text-left'><?php common::printOrderLink('title', $orderBy, $vars, $lang->mr->title);?></th>
-          <th class='w-200px text-left'><?php common::printOrderLink('sourceBranch', $orderBy, $vars, $lang->mr->sourceBranch);?></th>
-          <th class='w-200px text-left'><?php common::printOrderLink('targetBranch', $orderBy, $vars, $lang->mr->targetBranch);?></th>
-          <th class='w-120px text-left'><?php common::printOrderLink('mergeStatus', $orderBy, $vars, $lang->mr->mergeStatus);?></th>
-          <th class='w-120px text-left'><?php common::printOrderLink('approvalStatus', $orderBy, $vars, $lang->mr->approvalStatus);?></th>
-          <th class='w-120px text-left'><?php common::printOrderLink('createdBy', $orderBy, $vars, $lang->mr->author);?></th>
-          <th class='w-120px c-actions-3'><?php echo $lang->actions;?></th>
+          <th class='w-60px'><?php common::printOrderLink('id', $orderBy, $vars, $lang->mr->id);?></th>
+          <th class='c-name'><?php common::printOrderLink('title', $orderBy, $vars, $lang->mr->title);?></th>
+          <th class='w-200px'><?php common::printOrderLink('sourceBranch', $orderBy, $vars, $lang->mr->sourceBranch);?></th>
+          <th class='w-200px'><?php common::printOrderLink('targetBranch', $orderBy, $vars, $lang->mr->targetBranch);?></th>
+          <th class='w-120px'><?php common::printOrderLink('mergeStatus', $orderBy, $vars, $lang->mr->mergeStatus);?></th>
+          <th class='w-120px'><?php common::printOrderLink('approvalStatus', $orderBy, $vars, $lang->mr->approvalStatus);?></th>
+          <th class='w-120px'><?php common::printOrderLink('createdBy', $orderBy, $vars, $lang->mr->author);?></th>
+          <th class='c-actions-5'><?php echo $lang->actions;?></th>
         </tr>
       </thead>
       <tbody>
