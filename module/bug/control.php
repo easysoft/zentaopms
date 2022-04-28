@@ -2305,6 +2305,21 @@ class bug extends control
     }
 
     /**
+     * Ajax get product members.
+     *
+     * @param  int    $productID
+     * @param  string $selectedUser
+     * @access public
+     * @return string
+     */
+    public function ajaxGetProductMembers($productID, $selectedUser = '')
+    {
+        $productMembers = $this->bug->getProductMemberPairs($productID);
+
+        return print(html::select('assignedTo', $productMembers, $selectedUser, 'class="form-control"'));
+    }
+
+    /**
      * Ajax get project team members.
      *
      * @param  int    $projectID

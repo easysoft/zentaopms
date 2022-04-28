@@ -38,6 +38,7 @@ $lang->group->noneProduct        = "暂时没有{$lang->productCommon}";
 $lang->group->noneExecution      = "暂时没有{$lang->execution->common}";
 $lang->group->project            = '项目';
 $lang->group->group              = '分组';
+$lang->group->more               = '更多';
 
 global $config;
 if($config->systemMode == 'new') $lang->group->noneProject = '暂时没有项目';

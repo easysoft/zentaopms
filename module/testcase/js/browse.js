@@ -1,7 +1,7 @@
 /**
  * Confirm batch delete cases.
- * 
- * @param  string $actionLink 
+ *
+ * @param  string $actionLink
  * @access public
  * @return void
  */

@@ -31,7 +31,7 @@ class taskAssignToEntry extends Entry
         $control->assignTo($task->execution, $taskID);
 
         $data = $this->getData();
-        if(!$data or !isset($data->status)) return $this->send400('error');
+        if(!$data) return $this->send400('error');
         if(isset($data->status) and $data->status == 'fail') return $this->sendError(zget($data, 'code', 400), $data->message);
 
         $task = $this->loadModel('task')->getByID($taskID);

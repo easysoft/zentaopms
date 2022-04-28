@@ -310,7 +310,7 @@ class design extends control
         $repoID = $repoID ? $repoID : key($repos);
 
         $repo      = $this->loadModel('repo')->getRepoByID($repoID);
-        $revisions = $this->repo->getCommits($repo, '', 'HEAD', '', '', $begin, $end);
+        $revisions = $this->repo->getCommits($repo, '', 'HEAD', '', '', $begin, date('Y-m-d 23:59:59', strtotime($end)));
 
         if($_POST)
         {
