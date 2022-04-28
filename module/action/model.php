@@ -1300,8 +1300,9 @@ class actionModel extends model
             $action->product     = trim($action->product, ',');
             $objectTable         = zget($this->config->objectTables, $action->objectType);
             $objectDeleted       = $this->dao->select('deleted')->from($objectTable)->where('id')->eq($action->objectID)->fetch('deleted');
+            $noLink              = array('program', 'project', 'product', 'execution');
 
-            if($objectDeleted == 1)
+            if(in_array($action->objectType, $noLink) and $objectDeleted == 1)
             {
                $action->objectLink  = '';
             }
