@@ -10,9 +10,9 @@
         <?php foreach($tables[$group] as $subTable => $table):?>
         <?php
         $active    = ($table == $selectedTable) ? 'active' : '';
-        $tableName = zget($lang->dev->tableList, $subTable, $table);
+        $tableName = zget($lang->dev->tableList, $subTable, '');
         ?>
-        <?php echo html::a(inlink('db', "table=$table"), $tableName, '', "class='$active'");?>
+        <?php if(!empty($tableName)) echo html::a(inlink('db', "table=$table"), $tableName, '', "class='$active'");?>
         <?php endforeach;?>
         <?php endif;?>
         <?php endforeach;?>
@@ -22,9 +22,9 @@
         <?php foreach($tables[$group] as $subTable => $table):?>
         <?php
         $active    = ($table == $selectedTable) ? 'active' : '';
-        $tableName = zget($lang->dev->tableList, $subTable, $table);
+        $tableName = zget($lang->dev->tableList, $subTable, '');
         ?>
-        <?php echo html::a(inlink('db', "table=$table"), $tableName, '', "class='$active'");?>
+        <?php if(!empty($tableName)) echo html::a(inlink('db', "table=$table"), $tableName, '', "class='$active'");?>
         <?php endforeach;?>
         <?php endif;?>
         <?php endforeach;?>
