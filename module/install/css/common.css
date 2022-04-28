@@ -3,6 +3,7 @@ body {background: #f1f1f1;}
 .modal-dialog {width: 100%; margin-top: 20px;}
 .modal-footer {text-align: center; margin-top: 0;}
 .w-350px {width: 350px;}
+.text-notice {padding-left: 20px; padding-bottom: 20px;}
 
 .table,.alert {margin: 0;}
 .table+.alert {margin-top: 20px;}

@@ -153,6 +153,9 @@ $lang->install->save2File          = '<div class="alert alert-warning">Copy the 
 $lang->install->saved2File         = 'The configuration file has been saved to " <strong>%s</strong> ". You can change this file later.';
 $lang->install->errorNotSaveConfig = 'The configuration file is not saved.';
 
+global $app;
+$lang->install->CSRFNotice = "CSRF defense has been enabled in the system. If you don't need it, contact the administrator to disable it manually in the {$app->moduleRoot}config/config.php file.";
+
 $lang->install->getPriv            = 'Set Admin';
 $lang->install->company            = 'Company Name';
 $lang->install->account            = 'Admin Account';
