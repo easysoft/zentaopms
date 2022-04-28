@@ -216,7 +216,7 @@ class programplanModel extends model
         if(empty($selectCustom)) $selectCustom = $this->loadModel('setting')->getItem("owner={$owner}&module={$module}&section={$section}&key={$object}");
 
         $tasks = array();
-        if(strpos($selectCustom, 'task') !== false) $tasks = $this->dao->select('*')->from(TABLE_TASK)->where('deleted')->eq(0)->andWhere('execution')->in($planIdList)->fetchAll('id');
+        $tasks = $this->dao->select('*')->from(TABLE_TASK)->where('deleted')->eq(0)->andWhere('execution')->in($planIdList)->fetchAll('id');
 
         if($baselineID)
         {
@@ -265,7 +265,7 @@ class programplanModel extends model
             if($data->start_date) $data->start_date = date('d-m-Y', strtotime($data->start_date));
             if($data->start_date == '' or $data->endDate == '') $data->duration = 0;
 
-            $datas['data'][] = $data;
+            if(strpos($selectCustom, 'task') !== false) $datas['data'][] = $data;
             foreach($stageIndex as $index => $stage)
             {
                 if($stage['planID'] == $task->execution)
