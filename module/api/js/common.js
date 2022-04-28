@@ -426,7 +426,12 @@ try {
                         this.getInitField()
                     ];
                 }
-                this.current = this.params[this.structType];
+                this.current.structType = this.structType;
+                for(let key = this.current.length - 1; key >= 0; key--)
+                {
+                    this.current[key].structType = this.structType;
+                    if(this.structType == 'formData' && this.current[key].sub != 1) this.current.splice(key, 1);
+                }
             },
             getPadding(sub) {
                 var padding = 0;
