@@ -339,7 +339,7 @@ class apiModel extends model
         }
         if($version)
         {
-            $fields = 'spec.*,api.id,api.product,api.lib,api.version,api.paramsExample,api.responseExample,doc.name as libName,module.name as moduleName,api.editedBy,api.editedDate';
+            $fields = 'spec.*,api.id,api.product,api.lib,api.version,doc.name as libName,module.name as moduleName,api.editedBy,api.editedDate';
         }
         else
         {
@@ -677,22 +677,24 @@ class apiModel extends model
     private function getApiSpecByData($data)
     {
         return array(
-            'doc'          => $data->id,
-            'module'       => $data->module,
-            'title'        => $data->title,
-            'path'         => $data->path,
-            'protocol'     => $data->protocol,
-            'method'       => $data->method,
-            'requestType'  => $data->requestType,
-            'responseType' => isset($data->responseType) ? $data->responseType : '',
-            'status'       => $data->status,
-            'owner'        => $data->owner,
-            'desc'         => $data->desc,
-            'version'      => $data->version,
-            'params'       => $data->params,
-            'response'     => $data->response,
-            'addedBy'      => $this->app->user->account,
-            'addedDate'    => helper::now(),
+            'doc'             => $data->id,
+            'module'          => $data->module,
+            'title'           => $data->title,
+            'path'            => $data->path,
+            'protocol'        => $data->protocol,
+            'method'          => $data->method,
+            'requestType'     => $data->requestType,
+            'responseType'    => isset($data->responseType) ? $data->responseType : '',
+            'status'          => $data->status,
+            'owner'           => $data->owner,
+            'desc'            => $data->desc,
+            'version'         => $data->version,
+            'params'          => $data->params,
+            'paramsExample'   => $data->paramsExample,
+            'responseExample' => $data->responseExample,
+            'response'        => $data->response,
+            'addedBy'         => $this->app->user->account,
+            'addedDate'       => helper::now(),
         );
     }
 
