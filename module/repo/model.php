@@ -376,7 +376,7 @@ class repoModel extends model
         foreach($repos as $repo)
         {
             $repo->acl = json_decode($repo->acl);
-            $scm = $repo->SCM == 'Subversion' ? 'svn' : 'git';
+            $scm = $repo->SCM == 'Subversion' ? 'svn' : strtolower($repo->SCM);
             if($this->checkPriv($repo))
             {
                 if(($type == 'project' or $type == 'execution') and $projectID)
