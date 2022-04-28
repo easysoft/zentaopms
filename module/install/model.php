@@ -506,7 +506,6 @@ class installModel extends model
             ->stripTags('company')
             ->get();
 
-
         $requiredFields = explode(',', $this->config->install->step5RequiredFields);
         foreach($requiredFields as $field)
         {
