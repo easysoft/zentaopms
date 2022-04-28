@@ -1785,7 +1785,7 @@ class projectModel extends model
                             echo "<div class='btn-group'>";
                             echo "<button type='button' class='btn dropdown-toggle' data-toggle='context-dropdown' title='{$this->lang->more}'><i class='icon-more-alt'></i></button>";
                             echo "<ul class='dropdown-menu pull-right text-center' role='menu'>";
-                            common::printIcon($moduleName, 'manageProducts', "projectID=$project->id", $project, 'list', 'link', '', 'btn-action', '', $this->app->tab . $attr, $this->lang->project->manageProducts);
+                            common::printIcon($moduleName, 'manageProducts', "projectID=$project->id", $project, 'list', 'link', '', 'btn-action', '', '', $this->lang->project->manageProducts);
                             if($this->config->systemMode == 'new') common::printIcon('project', 'whitelist', "projectID=$project->id&module=project&from=$from", $project, 'list', 'shield-check', '', 'btn-action', '', $dataApp . $attr);
                             if(common::hasPriv($moduleName, 'delete')) echo html::a(helper::createLink($moduleName, "delete", "projectID=$project->id"), "<i class='icon-trash'></i>", 'hiddenwin', "class='btn btn-action' title='{$this->lang->project->delete}'");
                             echo "</ul>";
