@@ -100,11 +100,22 @@ class fixer extends baseFixer
      * @access public
      * @return object
      */
-    public function filterEmoji($value){
-        $value = preg_replace_callback('/./u', function (array $match)
+    public function filterEmoji($value)
+    {
+        if(is_object($value) or is_array($value))
         {
-            return strlen($match[0]) >= 4 ? '' : $match[0];
-        }, $value);
+            foreach($value as $subValue)
+            {
+                $subValue = $this->filterEmoji($subValue);
+            }
+        }
+        else
+        {
+            $value = preg_replace_callback('/./u', function (array $match)
+            {
+                return strlen($match[0]) >= 4 ? '' : $match[0];
+            }, $value);
+        }
 
         return $value;
     }
