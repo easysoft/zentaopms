@@ -2543,6 +2543,43 @@ EOD;
             return $ip >= $min and $ip <= $max;
         }
 
+        /* If the ip in white list is like 192.168.1.1,192.168.1.10. */
+        if(strpos($ipWhiteList, ',') !== false)
+        {
+            $ipArr = explode(',', $ipWhiteList);
+            foreach($ipArr as $ipRule)
+            {
+                if($this->checkIP($ipRule)) return true;
+            }
+            return false;
+        }
+
+        /* If the ip in white list is like 192.168.1.*. */
+        if(strpos($ipWhiteList, '*') !== false)
+        {
+            $regCount = substr_count($ipWhiteList, '.');
+            if($regCount == 3)
+            {
+                $min = str_replace('*', '0', $ipWhiteList);
+                $max = str_replace('*', '255', $ipWhiteList);
+            }
+            elseif($regCount == 2)
+            {
+                $min = str_replace('*', '0.0', $ipWhiteList);
+                $max = str_replace('*', '255.255', $ipWhiteList);
+            }
+            elseif($regCount == 1)
+            {
+                $min = str_replace('*', '0.0.0', $ipWhiteList);
+                $max = str_replace('*', '255.255.255', $ipWhiteList);
+            }
+            $min = ip2long(trim($min));
+            $max = ip2long(trim($max));
+            $ip  = ip2long(trim($ip));
+
+            return ($ip >= $min and $ip <= $max);
+        }
+
         /* If the ip in white list is in IP/CIDR format eg 127.0.0.1/24. Thanks to zcat. */
         if(strpos($ipWhiteList, '/') == false) $ipWhiteList .= '/32';
         list($ipWhiteList, $netmask) = explode('/', $ipWhiteList, 2);
