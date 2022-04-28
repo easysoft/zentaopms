@@ -33,9 +33,21 @@ class storiesEntry extends entry
         $stories = $data->data->stories;
         $pager   = $data->data->pager;
         $result  = array();
+        $this->loadModel('product');
         foreach($stories as $story)
         {
-            if(isset($story->children)) $story->children = array_values((array)$story->children);
+            $product              = $this->product->getById($story->product);
+            $story->productStatus = $product->status;
+            if(isset($story->children))
+            {
+                $story->children = array_values((array)$story->children);
+                foreach($story->children as $id => $children)
+                {
+                    $childrenProduct                     = $this->product->getById($children->product);
+                    $story->children[$id]->productStatus = $childrenProduct->status;
+                }
+            }
+
             $result[] = $this->format($story, 'openedBy:user,openedDate:time,assignedTo:user,assignedDate:time,reviewedBy:user,reviewedDate:time,lastEditedBy:user,lastEditedDate:time,closedBy:user,closedDate:time,deleted:bool,mailto:userList');
         }
         return $this->send(200, array('page' => $pager->pageID, 'total' => $pager->recTotal, 'limit' => $pager->recPerPage, 'stories' => $result));
