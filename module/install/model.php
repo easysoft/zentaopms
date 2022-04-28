@@ -506,6 +506,17 @@ class installModel extends model
             ->stripTags('company')
             ->get();
 
+
+        $requiredFields = explode(',', $this->config->install->step5RequiredFields);
+        foreach($requiredFields as $field)
+        {
+            if(empty($data->{$field}))
+            {
+                dao::$errors[] = $this->lang->install->errorEmpty[$field];
+                return false;
+            }
+        }
+
         /* Insert a company. */
         $company = new stdclass();
         $company->name   = $data->company;
