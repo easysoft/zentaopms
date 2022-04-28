@@ -1410,10 +1410,10 @@ class bugModel extends model
 
     /**
      * Get statistic.
-     * 
-     * @param  int    $productID 
-     * @param  string $endDate 
-     * @param  int    $days 
+     *
+     * @param  int    $productID
+     * @param  string $endDate
+     * @param  int    $days
      * @access public
      * @return void
      */

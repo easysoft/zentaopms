@@ -75,6 +75,7 @@ class fixer extends baseFixer
             }
             if(isset($flowFields[$field]) and ($flowFields[$field]->control == 'textarea' or $flowFields[$field]->control == 'richtext')) $this->skipSpecial($field);
             $this->specialChars($field);
+            $this->data->$field = $this->filterEmoji($value);
         }
 
         if(empty($fields)) return $this->data;
@@ -89,5 +90,22 @@ class fixer extends baseFixer
         }
 
         return $this->data;
+    }
+
+    /**
+     * 过滤Emoji表情。
+     * Filter Emoji.
+     *
+     * @param  string $value
+     * @access public
+     * @return object
+     */
+    public function filterEmoji($value){
+        $value = preg_replace_callback('/./u', function (array $match)
+        {
+            return strlen($match[0]) >= 4 ? '' : $match[0];
+        }, $value);
+
+        return $value;
     }
 }
