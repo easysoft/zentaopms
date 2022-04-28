@@ -59,12 +59,12 @@
     {
         $i++;
         if(!is_string($title)) continue;
-        if($i == 13) echo '<div class="btn-group"><a href="javascript:;" data-toggle="dropdown" class="btn btn-link">更多 <span class="caret"></span></a><ul class="dropdown-menu">';
+        if($i == 8) echo '<div class="btn-group"><a href="javascript:;" data-toggle="dropdown" class="btn btn-link">' . $lang->group->more . '<span class="caret"></span></a><ul class="dropdown-menu">';
         $active = $menu == $module ? 'btn-active-text' : '';
-        if($i >= 13) echo '<li>';
+        if($i >= 8) echo '<li>';
         echo html::a(inlink('managePriv', sprintf($params, $module)), "<span class='text'>" . strip_tags(substr($title, 0, strpos($title, '|'))) . '</span>', '', "class='btn btn-link $active'");
-        if($i >= 13) echo '</li>';
-        if($i == count($lang->mainNav->menuOrder) and $i >= 13) echo '</ul></div>';
+        if($i >= 8) echo '</li>';
+        if($i == count($lang->mainNav->menuOrder) and $i >= 8) echo '</ul></div>';
     }
     ?>
 
