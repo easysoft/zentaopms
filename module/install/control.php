@@ -93,6 +93,18 @@ class install extends control
             $this->view->sessionInfo   = $sessionInfo;
         }
 
+        $notice = '';
+        if($this->config->framework->filterCSRF)
+        {
+            $httpType = (isset($_SERVER["HTTPS"]) && $_SERVER["HTTPS"] == 'on') ? 'https' : 'http';
+            if(isset($_SERVER['HTTP_X_FORWARDED_PROTO']) and strtolower($_SERVER['HTTP_X_FORWARDED_PROTO']) == 'https') $httpType = 'https';
+            if(isset($_SERVER['REQUEST_SCHEME']) and strtolower($_SERVER['REQUEST_SCHEME']) == 'https') $httpType = 'https';
+
+            $httpHost = zget($_SERVER, 'HTTP_HOST', '');
+            if(empty($httpHost) or strpos($this->server->http_referer, "$httpType://$httpHost") !== 0) $notice = $this->lang->install->CSRFNotice;
+        }
+
+        $this->view->notice = $notice;
         $this->display();
     }
 

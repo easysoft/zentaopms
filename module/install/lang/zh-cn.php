@@ -153,6 +153,9 @@ $lang->install->save2File          = '<div class="alert alert-warning">拷贝上
 $lang->install->saved2File         = '配置信息已经成功保存到" <strong>%s</strong> "中。您后面还可继续修改此文件。';
 $lang->install->errorNotSaveConfig = '还没有保存配置文件';
 
+global $app;
+$lang->install->CSRFNotice = "系统已开启了CSRF的防御，如需关闭，请联系管理员到{$app->moduleRoot}config/config.php文件中手动关闭。";
+
 $lang->install->getPriv            = '设置帐号';
 $lang->install->company            = '公司名称';
 $lang->install->account            = '管理员帐号';

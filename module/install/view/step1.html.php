@@ -95,7 +95,7 @@
           </td>
           <td class='<?php echo $tmpRootResult;?>'><?php echo $lang->install->$tmpRootResult;?></td>
           <td class='text-left f-12px'>
-            <?php 
+            <?php
             if(!$tmpRootInfo['exists'])   printf($mkdir, $tmpRootInfo['path'], $tmpRootInfo['path']);
             if(!$tmpRootInfo['writable']) printf($chmod, $tmpRootInfo['path'], $tmpRootInfo['path']);
             ?>
@@ -111,7 +111,7 @@
           </td>
           <td class='<?php echo $dataRootResult;?>'><?php echo $lang->install->$dataRootResult;?></td>
           <td class='text-left f-12px'>
-            <?php 
+            <?php
             if(!$dataRootInfo['exists'])   printf($mkdir, $dataRootInfo['path'], $dataRootInfo['path']);
             if(!$dataRootInfo['writable']) printf($chmod, $dataRootInfo['path'], $dataRootInfo['path']);
             ?>
@@ -137,6 +137,9 @@
         <?php endif;?>
       </table>
     </div>
+    <?php if($notice):?>
+    <div class='text-danger text-notice'><?php echo $notice;?></div>
+    <?php endif;?>
     <div class='modal-footer'>
       <?php
       if($phpResult      == 'ok' and
