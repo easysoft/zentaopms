@@ -72,7 +72,7 @@ class testcaseModel extends model
             $parentStepID = 0;
             $this->loadModel('score')->create('testcase', 'create', $caseID);
 
-            $data = fixer::input('post')->filterEmoji('steps,expects')->get();
+            $data = fixer::input('post')->get();
             foreach($data->steps as $stepID => $stepDesc)
             {
                 if(empty($stepDesc)) continue;
@@ -759,7 +759,7 @@ class testcaseModel extends model
                 /* Ignore steps when post has no steps. */
                 if($this->post->steps)
                 {
-                    $data = fixer::input('post')->filterEmoji('steps,expects')->get();
+                    $data = fixer::input('post')->get();
 
                     foreach($data->steps as $stepID => $stepDesc)
                     {
