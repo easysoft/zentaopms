@@ -389,7 +389,6 @@ class task extends control
         $this->view->customFields = $customFields;
         $this->view->showFields   = $this->config->task->custom->batchCreateFields;
 
-
         if($execution->type == 'kanban')
         {
             $extra = str_replace(array(',', ' '), array('&', ''), $extra);
