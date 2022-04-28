@@ -427,7 +427,8 @@ try {
                     ];
                 }
                 this.current.structType = this.structType;
-                for(let key = this.current.length - 1; key >= 0; key--){
+                for(let key = this.current.length - 1; key >= 0; key--)
+                {
                     this.current[key].structType = this.structType;
                     if(this.structType == 'formData' && this.current[key].sub != 1) this.current.splice(key, 1);
                 }
