@@ -1837,6 +1837,13 @@ class bugModel extends model
         return $bugs;
     }
 
+    /**
+     * get Product member pairs.
+     *
+     * @param  int    $productID
+     * @access public
+     * @return void
+     */
     public function getProductMemberPairs($productID)
     {
         if(defined('TUTORIAL')) return $this->loadModel('tutorial')->getTeamMembersPairs();
@@ -1846,7 +1853,8 @@ class bugModel extends model
         $users = $this->dao->select("t2.id, t2.account, t2.realname")->from(TABLE_TEAM)->alias('t1')
             ->leftJoin(TABLE_USER)->alias('t2')->on('t1.account = t2.account')
             ->where('t1.root')->in(array_keys($projects))
-            ->andWhere('t1.type')->eq('project')
+            ->beginIF($this->config->systemMode == 'new')->andWhere('t1.type')->eq('project')->fi()
+            ->beginIF($this->config->systemMode == 'classic')->andWhere('t1.type')->eq('execution')->fi()
             ->andWhere('t2.deleted')->eq(0)
             ->fi()
             ->fetchAll('account');

@@ -352,7 +352,14 @@ function loadExecutionRelated(executionID)
         $('#taskIdBox').innerHTML = '<select id="task"></select>';  // Reset the task.
         loadProductStories(currentProductID);
         loadTestTasks(currentProductID);
-        loadProjectTeamMembers(currentProjectID);
+        if(typeof(currentProjectID) == 'undefined')
+        {
+            loadProductMembers(currentProductID);
+        }
+        else
+        {
+            loadProjectTeamMembers(currentProjectID);
+        }
 
         currentProjectID != 0 ? loadProjectBuilds(currentProjectID) : loadProductBuilds(currentProductID);
     }
@@ -480,6 +487,25 @@ function loadExecutionBuilds(executionID, num)
         link = createLink('build', 'ajaxGetProductBuilds', 'productID=' + productID + '&varName=resolvedBuild&build=' + oldResolvedBuild + '&branch=' + branch);
         $('#resolvedBuildBox').load(link, function(){$(this).find('select').val(oldResolvedBuild).chosen()});
     }
+}
+
+/**
+ * Load product members.
+ *
+ * @param  productID
+ * @access public
+ * @return void
+ */
+function loadProductMembers(productID)
+{
+    link = createLink('bug', 'ajaxGetProductMembers', 'productID=' + productID + '&selectedUser=' + $('#assignedTo').val());
+    $.get(link, function(data)
+    {
+        if(!data) data = '<select id="assignedTo" name="assignedTo" class="form-control"></select>';
+        $('#assignedTo').replaceWith(data);
+        $('#assignedTo_chosen').remove();
+        $("#assignedTo").chosen();
+    });
 }
 
 /**
