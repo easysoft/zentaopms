@@ -427,6 +427,7 @@ class weeklyModel extends model
             ->from(TABLE_TASK)
             ->where('execution')->in($executionIdList)
             ->andWhere('consumed')->gt(0)
+            ->andWhere("(estStarted < '$nextMonday' or estStarted='0000-00-00')")
             ->andWhere('status')->ne('cancel')
             ->fetchAll('id');
 
@@ -466,13 +467,12 @@ class weeklyModel extends model
         $executions      = $this->loadModel('execution')->getList($project, 'all', 'all', 0, 0, 0);
         $executionIdList = array_keys($executions);
 
-        if($this->config->edition == 'max')
+        if($this->config->edition != 'open')
         {
             $AC = $this->dao->select('sum(consumed) as consumed')
                 ->from(TABLE_EFFORT)
                 ->where('objectType')->eq('task')
                 ->andWhere('execution')->in($executionIdList)
-                ->andWhere('date')->ge($monday)
                 ->andWhere('date')->lt($nextMonday)
                 ->fetch('consumed');
         }
@@ -482,7 +482,6 @@ class weeklyModel extends model
             $AC = $this->dao->select('sum(consumed) as consumed')
                 ->from(TABLE_TASKESTIMATE)
                 ->where('task')->in($taskIdList)
-                ->andWhere('date')->ge($monday)
                 ->andWhere('date')->lt($nextMonday)
                 ->fetch('consumed');
         }
