@@ -51,14 +51,16 @@ $position[] = $this->lang->client->browse;
     </tbody>
   </table>
 </div>
+<?php if($this->config->edition == 'open'):?>
 <script>
 $(function()
 {
-    $(document).on('click', '.deleter', function()
+    $('.deleter').on('click', function()
     {
+        $deleter = $(this);
         if(confirm('<?php echo $lang->confirmDelete?>'))
         {
-            $.getJSON(deleter.attr('href'), function(data)
+            $.getJSON($deleter.attr('href'), function(data)
             {
                 if(data.result != 'success') alert(data.message);
                 return location.reload();
@@ -66,7 +68,7 @@ $(function()
         }
         return false;
     });
-
 })
 </script>
+<?php endif;?>
 <?php include $app->getModuleRoot() . 'common/view/footer.html.php';?>
