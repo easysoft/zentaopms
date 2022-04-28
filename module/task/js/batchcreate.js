@@ -4,6 +4,7 @@ $(function()
     removeDitto();
     if($('th.c-name').width() < 200) $('th.c-name').width(200);
     if(taskConsumed > 0) bootbox.alert(addChildTask);
+    $('#customField').on('click', function(){$('#tableBody .chosen-with-drop').removeClass('chosen-with-drop chosen-container-active')});
 });
 
 $(document).on('change', "[name^='estStarted'], [name^='deadline']", function()
