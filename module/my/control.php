@@ -174,7 +174,7 @@ class my extends control
             $reviewCount = $pager->recTotal;
 
             /* Get the number of nc assigned to me. */
-            $ncList  = $this->my->getNcList('assignedToMe', 'id_desc', $pager);
+            $ncList  = $this->my->getNcList('assignedToMe', 'id_desc', $pager, 'active');
             $ncCount = $pager->recTotal;
 
             /* Get the number of meetings assigned to me. */
