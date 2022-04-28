@@ -90,7 +90,7 @@ class docModel extends model
         $projects   = $this->loadModel('project')->getPairsByProgram();
         $executions = $this->loadModel('execution')->getPairs();
         $waterfalls = array();
-        if($type == 'all' or $type == 'execution')
+        if(empty($objectID) and ($type == 'all' or $type == 'execution'))
         {
             $waterfalls = $this->dao->select('t1.id,t2.name')->from(TABLE_EXECUTION)->alias('t1')
                 ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')
