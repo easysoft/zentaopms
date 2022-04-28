@@ -38,6 +38,7 @@ $lang->group->noneProduct        = "No {$lang->productCommon}";
 $lang->group->noneExecution      = "No {$lang->execution->common}";
 $lang->group->project            = 'Project';
 $lang->group->group              = 'Group';
+$lang->group->more               = 'more';
 
 global $config;
 if($config->systemMode == 'new') $lang->group->noneProject = 'No Project';
