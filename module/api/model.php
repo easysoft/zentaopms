@@ -28,7 +28,9 @@ class apiModel extends model
     const PARAMS_TYPE_CUSTOM = 'custom';
 
     /**
-     * @param object $data
+     * Create release.
+     *
+     * @param  object $data
      * @access public
      * @return int
      */
@@ -370,7 +372,7 @@ class apiModel extends model
      * @access public
      * @return array
      */
-    public function getApiListByRelease($release, $where = '')
+    public function getApiListByRelease($release, $where = '1 = 1 ')
     {
         $strJoin = array();
         foreach($release->snap['apis'] as $api)
@@ -481,6 +483,33 @@ class apiModel extends model
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll();
+    }
+
+    /**
+     * Get struct list by release.
+     *
+     * @param  object $release
+     * @param  string $where
+     * @param  string $orderBy
+     * @access public
+     * @return array
+     */
+    public function getStructListByRelease($release, $where = '1 = 1 ', $orderBy = 'id')
+    {
+        $strJoin = array();
+        foreach($release->snap['structs'] as $struct)
+        {
+            $strJoin[] = "(object.id = {$struct['id']} and spec.version = {$struct['version']} )";
+        }
+
+        if($strJoin) $where .= 'and (' . implode(' or ', $strJoin) . ')';
+        $list = $this->dao->select('object.lib,spec.name,spec.type,spec.desc,spec.attribute,spec.version,spec.addedBy,spec.addedDate,object.id,user.realname as addedName')->from(TABLE_APISTRUCT)->alias('object')
+            ->leftJoin(TABLE_APISTRUCT_SPEC)->alias('spec')->on('object.name = spec.name')
+            ->leftJoin(TABLE_USER)->alias('user')->on('user.account = spec.addedBy')
+            ->where($where)
+            ->orderBy($orderBy)
+            ->fetchAll();
+        return $list;
     }
 
     /**

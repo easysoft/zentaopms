@@ -2267,7 +2267,7 @@ EOT;
 
         if($release)
         {
-            $rel  = $this->api->getReleaseById($release);
+            $rel  = $this->api->getRelease($rootID, 'byId', $release);
             $docs = $this->api->getApiListByRelease($rel);
         }
         else
@@ -2288,7 +2288,7 @@ EOT;
         $treeMenu = array();
         if($release)
         {
-            foreach($release->snap['modules'] as $module)
+            foreach($rel->snap['modules'] as $module)
             {
                 $this->buildTree($treeMenu, 'api', 0, $rootID, $module, $moduleDocs, $docID, $moduleID);
             }
