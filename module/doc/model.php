@@ -89,6 +89,18 @@ class docModel extends model
         $products   = $this->loadModel('product')->getPairs();
         $projects   = $this->loadModel('project')->getPairsByProgram();
         $executions = $this->loadModel('execution')->getPairs();
+        $waterfalls = array();
+        if($type == 'all' or $type == 'execution')
+        {
+            $waterfalls = $this->dao->select('t1.id,t2.name')->from(TABLE_EXECUTION)->alias('t1')
+                ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')
+                ->where('t1.type')->eq('stage')
+                ->andWhere('t2.type')->eq('project')
+                ->andWhere('t2.model')->eq('waterfall')
+                ->andWhere('t1.deleted')->eq('0')
+                ->andWhere('t2.deleted')->eq('0')
+                ->fetchPairs('id', 'name');
+        }
 
         $libPairs = array();
         while($lib = $stmt->fetch())
@@ -102,8 +114,12 @@ class docModel extends model
                 if(strpos($extra, 'withObject') !== false)
                 {
                     if($lib->product != 0) $lib->name = zget($products, $lib->product, '') . ' / ' . $lib->name;
-                    if($lib->execution != 0) $lib->name = zget($executions, $lib->execution, '') . ' / ' . $lib->name;
                     if($lib->project != 0) $lib->name = zget($projects, $lib->project, '') . ' / ' . $lib->name;
+                    if($lib->execution != 0)
+                    {
+                        $lib->name = zget($executions, $lib->execution, '') . ' / ' . $lib->name;
+                        if(!empty($waterfalls[$lib->execution])) $lib->name = $waterfalls[$lib->execution] . ' / ' . $lib->name;
+                    }
                 }
 
                 $libPairs[$lib->id] = $lib->name;
