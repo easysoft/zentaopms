@@ -512,7 +512,7 @@ class baseHTML
         $dataApp = array_search($gobackLink, $gobackList) ? array_search($gobackLink, $gobackList) : '';
         $dataApp = empty($dataApp) ? '' : "data-app='$dataApp'";
 
-        return  "<a href='{$gobackLink}' class='btn btn-back $class' $dataApp $misc>{$label}</a>";
+        return "<a href='{$gobackLink}' class='btn btn-back $class' $dataApp $misc>{$label}</a>";
     }
 
     /**

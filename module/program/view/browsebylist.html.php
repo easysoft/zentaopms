@@ -126,7 +126,7 @@
           <div class='btn-group'>
             <button type='button' class='btn dropdown-toggle' data-toggle='dropdown' title="<?php echo $this->lang->more;?>"><i class='icon-more-alt'></i></button>
             <ul class='dropdown-menu pull-right text-center' role='menu'>
-              <?php common::printIcon('project', 'manageProducts', "projectID=$program->id", $program, 'list', 'link', '', '', false, "data-group='project'", '', $program->id);?>
+              <?php common::printIcon('project', 'manageProducts', "projectID=$program->id&from=browse", $program, 'list', 'link', '', "$class", false, "data-app='program'", '', $program->id);?>
               <?php common::printIcon('project', 'whitelist',      "projectID=$program->id&module=project&from=browse", $program, 'list', 'shield-check', '', "$class", '', "data-app='project'");?>
               <?php if(common::hasPriv('project','delete')) echo html::a($this->createLink("project", "delete", "projectID=$program->id"), "<i class='icon-trash'></i>", 'hiddenwin', "class='btn' title='{$this->lang->delete}' data-group='program'");?>
             </ul>
