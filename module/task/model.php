@@ -1311,6 +1311,11 @@ class taskModel extends model
                 return false;
             }
 
+            if($this->config->systemMode == 'new')
+            {
+                $project = $this->loadModel('project')->getByID($oldTask->project);
+                if($project->model == 'waterfall') $this->config->task->edit->requiredFields .= ',estStarted,deadline';
+            }
             foreach(explode(',', $this->config->task->edit->requiredFields) as $field)
             {
                 $field = trim($field);
