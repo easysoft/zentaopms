@@ -1299,7 +1299,7 @@ class actionModel extends model
             $action->objectLabel = $objectLabel;
             $action->product     = trim($action->product, ',');
 
-            $judgeDeletedObject = array('program', 'project', 'product', 'execution');
+            $noLinkObjects = array('program', 'project', 'product', 'execution');
             if(in_array($action->objectType, $judgeDeletedObject))
             {
                 $objectTable   = zget($this->config->objectTables, $action->objectType);
