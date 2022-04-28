@@ -1304,7 +1304,7 @@ class actionModel extends model
 
             if(in_array($action->objectType, $noLink) and $objectDeleted == 1)
             {
-               $action->objectLink  = '';
+               $action->objectLink = '';
             }
             elseif($this->config->edition == 'max'
                and strpos($this->config->action->assetType, $action->objectType) !== false
