@@ -53,11 +53,20 @@
     <?php $active = empty($menu) ? 'btn-active-text' : '';?>
     <?php echo html::a(inlink('managePriv', sprintf($params, '')), "<span class='text'>{$lang->group->all}</span>", '', "class='btn btn-link $active'")?>
 
-    <?php foreach($lang->mainNav as $module => $title):?>
-    <?php if(!is_string($title)) continue;?>
-    <?php $active = $menu == $module ? 'btn-active-text' : '';?>
-    <?php echo html::a(inlink('managePriv', sprintf($params, $module)), "<span class='text'>" . strip_tags(substr($title, 0, strpos($title, '|'))) . '</span>', '', "class='btn btn-link $active'")?>
-    <?php endforeach;?>
+    <?php
+    $i = 0;
+    foreach($lang->mainNav as $module => $title)
+    {
+        if(!is_string($title)) continue;
+        $i++;
+        if($i == $config->group->maxToolBarCount) echo '<div class="btn-group"><a href="javascript:;" data-toggle="dropdown" class="btn btn-link">' . $lang->group->more . '<span class="caret"></span></a><ul class="dropdown-menu">';
+        $active = $menu == $module ? 'btn-active-text' : '';
+        if($i >= $config->group->maxToolBarCount) echo '<li>';
+        echo html::a(inlink('managePriv', sprintf($params, $module)), "<span class='text'>" . strip_tags(substr($title, 0, strpos($title, '|'))) . '</span>', '', "class='btn btn-link $active'");
+        if($i >= $config->group->maxToolBarCount) echo '</li>';
+        if($i == count($lang->mainNav->menuOrder) and $i >= $config->group->maxToolBarCount) echo '</ul></div>';
+    }
+    ?>
 
     <?php $active = $menu == 'other' ? 'btn-active-text' : '';?>
     <?php echo html::a(inlink('managePriv', sprintf($params, 'other')), "<span class='text'>{$lang->group->other}</span>", '', "class='btn btn-link $active'");?>
