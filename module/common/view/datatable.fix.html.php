@@ -95,7 +95,7 @@ $(function()
         <h4 class="modal-title"><i class="icon-cog-outline"></i> <?php echo $lang->datatable->displaySetting;?></h4>
       </div>
       <div class="modal-body">
-        <form class='form-condensed' method='post' target='hiddenwin' action='<?php echo $this->createLink('datatable', 'ajaxSave')?>'>
+        <form class="form-condensed not-watch" method='post' target='hiddenwin' action='<?php echo $this->createLink('datatable', 'ajaxSave')?>'>
           <table class='table table-form'>
             <tr>
               <td class='w-160px'><?php echo $lang->datatable->showModule;?></td>

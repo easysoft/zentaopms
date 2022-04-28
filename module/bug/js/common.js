@@ -53,6 +53,68 @@ function loadAll(productID)
 }
 
 /**
+  * Load all users as assignedTo list.
+  *
+  * @access public
+  * @return void
+  */
+function loadAllUsers()
+{
+    var link = createLink('bug', 'ajaxLoadAllUsers', 'selectedUser=' + $('#assignedTo').val());
+    $.get(link, function(data)
+    {
+        if(data)
+        {
+            var moduleID  = $('#module').val();
+            var productID = $('#product').val();
+            setAssignedTo(moduleID, productID);
+            $('#assignedTo').replaceWith(data);
+            $('#assignedTo_chosen').remove();
+            $('#assignedTo').chosen();
+        }
+    });
+}
+
+/**
+ * Set the assignedTo field.
+ *
+ * @param  int    $moduleID
+ * @param  int    $productID
+ * @access public
+ * @return void
+ */
+function setAssignedTo(moduleID, productID)
+{
+    if(typeof(productID) == 'undefined') productID = $('#product').val();
+    if(typeof(moduleID) == 'undefined')  moduleID  = $('#module').val();
+    var link = createLink('bug', 'ajaxGetModuleOwner', 'moduleID=' + moduleID + '&productID=' + productID);
+    $.get(link, function(owner)
+    {
+        owner        = JSON.parse(owner);
+        var account  = owner[0];
+        var realName = owner[1];
+        var isExist  = false;
+        var count    = $('#assignedTo').find('option').length;
+        for(var i=0; i < count; i++)
+        {
+            if($('#assignedTo').get(0).options[i].value == account)
+            {
+                isExist = true;
+                break;
+            }
+        }
+        if(!isExist && account)
+        {
+            option = "<option title='" + realName + "' value='" + account + "'>" + realName + "</option>";
+            $("#assignedTo").append(option);
+        }
+        $('#assignedTo').val(account);
+        $("#assignedTo").trigger("chosen:updated");
+    });
+}
+
+
+/**
  * Load by branch.
  *
  * @access public
@@ -352,7 +414,14 @@ function loadExecutionRelated(executionID)
         $('#taskIdBox').innerHTML = '<select id="task"></select>';  // Reset the task.
         loadProductStories(currentProductID);
         loadTestTasks(currentProductID);
-        loadProjectTeamMembers(currentProjectID);
+        if(typeof(currentProjectID) == 'undefined')
+        {
+            loadProductMembers(currentProductID);
+        }
+        else
+        {
+            loadProjectTeamMembers(currentProjectID);
+        }
 
         currentProjectID != 0 ? loadProjectBuilds(currentProjectID) : loadProductBuilds(currentProductID);
     }
@@ -480,6 +549,25 @@ function loadExecutionBuilds(executionID, num)
         link = createLink('build', 'ajaxGetProductBuilds', 'productID=' + productID + '&varName=resolvedBuild&build=' + oldResolvedBuild + '&branch=' + branch);
         $('#resolvedBuildBox').load(link, function(){$(this).find('select').val(oldResolvedBuild).chosen()});
     }
+}
+
+/**
+ * Load product members.
+ *
+ * @param  productID
+ * @access public
+ * @return void
+ */
+function loadProductMembers(productID)
+{
+    link = createLink('bug', 'ajaxGetProductMembers', 'productID=' + productID + '&selectedUser=' + $('#assignedTo').val());
+    $.get(link, function(data)
+    {
+        if(!data) data = '<select id="assignedTo" name="assignedTo" class="form-control"></select>';
+        $('#assignedTo').replaceWith(data);
+        $('#assignedTo_chosen').remove();
+        $("#assignedTo").chosen();
+    });
 }
 
 /**

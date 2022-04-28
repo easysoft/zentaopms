@@ -1130,8 +1130,8 @@ class story extends control
 
         if($product->type != 'normal') $this->lang->product->branch = sprintf($this->lang->product->branch, $this->lang->product->branchName[$product->type]);
 
-        $reviewers          = $this->story->getReviewerPairs($storyID, $story->version);
-        $reviewedBy         = trim($story->reviewedBy, ',');
+        $reviewers  = $this->story->getReviewerPairs($storyID, $story->version);
+        $reviewedBy = trim($story->reviewedBy, ',');
 
         $this->executeHooks($storyID);
 

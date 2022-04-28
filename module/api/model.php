@@ -28,7 +28,9 @@ class apiModel extends model
     const PARAMS_TYPE_CUSTOM = 'custom';
 
     /**
-     * @param object $data
+     * Create release.
+     *
+     * @param  object $data
      * @access public
      * @return int
      */
@@ -339,7 +341,7 @@ class apiModel extends model
         }
         if($version)
         {
-            $fields = 'spec.*,api.id,api.product,api.lib,api.version,api.paramsExample,api.responseExample,doc.name as libName,module.name as moduleName,api.editedBy,api.editedDate';
+            $fields = 'spec.*,api.id,api.product,api.lib,api.version,doc.name as libName,module.name as moduleName,api.editedBy,api.editedDate';
         }
         else
         {
@@ -370,7 +372,7 @@ class apiModel extends model
      * @access public
      * @return array
      */
-    public function getApiListByRelease($release, $where = '')
+    public function getApiListByRelease($release, $where = '1 = 1 ')
     {
         $strJoin = array();
         foreach($release->snap['apis'] as $api)
@@ -481,6 +483,33 @@ class apiModel extends model
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll();
+    }
+
+    /**
+     * Get struct list by release.
+     *
+     * @param  object $release
+     * @param  string $where
+     * @param  string $orderBy
+     * @access public
+     * @return array
+     */
+    public function getStructListByRelease($release, $where = '1 = 1 ', $orderBy = 'id')
+    {
+        $strJoin = array();
+        foreach($release->snap['structs'] as $struct)
+        {
+            $strJoin[] = "(object.id = {$struct['id']} and spec.version = {$struct['version']} )";
+        }
+
+        if($strJoin) $where .= 'and (' . implode(' or ', $strJoin) . ')';
+        $list = $this->dao->select('object.lib,spec.name,spec.type,spec.desc,spec.attribute,spec.version,spec.addedBy,spec.addedDate,object.id,user.realname as addedName')->from(TABLE_APISTRUCT)->alias('object')
+            ->leftJoin(TABLE_APISTRUCT_SPEC)->alias('spec')->on('object.name = spec.name')
+            ->leftJoin(TABLE_USER)->alias('user')->on('user.account = spec.addedBy')
+            ->where($where)
+            ->orderBy($orderBy)
+            ->fetchAll();
+        return $list;
     }
 
     /**
@@ -677,22 +706,24 @@ class apiModel extends model
     private function getApiSpecByData($data)
     {
         return array(
-            'doc'          => $data->id,
-            'module'       => $data->module,
-            'title'        => $data->title,
-            'path'         => $data->path,
-            'protocol'     => $data->protocol,
-            'method'       => $data->method,
-            'requestType'  => $data->requestType,
-            'responseType' => isset($data->responseType) ? $data->responseType : '',
-            'status'       => $data->status,
-            'owner'        => $data->owner,
-            'desc'         => $data->desc,
-            'version'      => $data->version,
-            'params'       => $data->params,
-            'response'     => $data->response,
-            'addedBy'      => $this->app->user->account,
-            'addedDate'    => helper::now(),
+            'doc'             => $data->id,
+            'module'          => $data->module,
+            'title'           => $data->title,
+            'path'            => $data->path,
+            'protocol'        => $data->protocol,
+            'method'          => $data->method,
+            'requestType'     => $data->requestType,
+            'responseType'    => isset($data->responseType) ? $data->responseType : '',
+            'status'          => $data->status,
+            'owner'           => $data->owner,
+            'desc'            => $data->desc,
+            'version'         => $data->version,
+            'params'          => $data->params,
+            'paramsExample'   => $data->paramsExample,
+            'responseExample' => $data->responseExample,
+            'response'        => $data->response,
+            'addedBy'         => $this->app->user->account,
+            'addedDate'       => helper::now(),
         );
     }
 

@@ -44,8 +44,7 @@ class task extends control
         $extra = str_replace(array(',', ' '), array('&', ''), $extra);
         parse_str($extra, $output);
 
-        $execution   = $this->execution->getById($executionID);
-        $executions  = $this->execution->getPairs(0, 'all', !common::canModify('execution', $execution) ? 'noclosed' : '');
+        $executions  = $this->execution->getPairs(0, 'all', 'noclosed');
         $executionID = $this->execution->saveState($executionID, $executions);
         $this->execution->setMenu($executionID);
 
@@ -84,6 +83,7 @@ class task extends control
             $task->desc = $todo->desc;
         }
 
+        $execution = $this->execution->getById($executionID);
         $taskLink  = $this->createLink('execution', 'browse', "executionID=$executionID&tab=task");
 
         $this->loadModel('kanban');
@@ -272,7 +272,7 @@ class task extends control
         $this->view->position         = $position;
         $this->view->gobackLink       = (isset($output['from']) and $output['from'] == 'global') ? $this->createLink('execution', 'task', "executionID=$executionID") : '';
         $this->view->execution        = $execution;
-        $this->view->executions       = $this->config->systemMode == 'classic' ? $executions : $this->execution->getByProject($projectID, !common::canModify('execution', $execution) ? 'noclosed' : 'all', 0, true);
+        $this->view->executions       = $this->config->systemMode == 'classic' ? $executions : $this->execution->getByProject($projectID, 'undone', 0, true);
         $this->view->task             = $task;
         $this->view->users            = $users;
         $this->view->storyID          = $storyID;
@@ -309,11 +309,6 @@ class task extends control
         }
 
         $execution = $this->execution->getById($executionID);
-        if($this->config->systemMode == 'new')
-        {
-            $project = $this->project->getByID($execution->project);
-            if($project->model == 'waterfall') $this->config->task->create->requiredFields .= ',estStarted,deadline';
-        }
 
         if($this->app->tab == 'my')
         {
@@ -364,16 +359,6 @@ class task extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $taskLink));
         }
 
-        /* Set Custom*/
-        foreach(explode(',', $this->config->task->customBatchCreateFields) as $field)
-        {
-            if($execution->type == 'stage' and strpos('estStarted,deadline', $field) !== false) continue;
-            $customFields[$field] = $this->lang->task->$field;
-        }
-
-        $this->view->customFields = $customFields;
-        $this->view->showFields   = $this->config->task->custom->batchCreateFields;
-
         $story = $this->story->getByID($storyID);
         if($story)
         {
@@ -388,6 +373,21 @@ class task extends control
         $members       = $this->loadModel('user')->getTeamMemberPairs($executionID, 'execution', 'nodeleted');
         $showAllModule = isset($this->config->execution->task->allModule) ? $this->config->execution->task->allModule : '';
         $modules       = $this->loadModel('tree')->getTaskOptionMenu($executionID, 0, 0, $showAllModule ? 'allModule' : '');
+
+        /* Set Custom*/
+        if($this->config->systemMode == 'new')
+        {
+            $project = $this->project->getByID($execution->project);
+            if($project->model == 'waterfall') $this->config->task->create->requiredFields .= ',estStarted,deadline';
+        }
+
+        foreach(explode(',', $this->config->task->customBatchCreateFields) as $field)
+        {
+            if($execution->type == 'stage' and strpos('estStarted,deadline', $field) !== false) continue;
+            $customFields[$field] = $this->lang->task->$field;
+        }
+        $this->view->customFields = $customFields;
+        $this->view->showFields   = $this->config->task->custom->batchCreateFields;
 
         if($execution->type == 'kanban')
         {
@@ -663,7 +663,25 @@ class task extends control
         if($showSuhosinInfo) $this->view->suhosinInfo = extension_loaded('suhosin') ? sprintf($this->lang->suhosinInfo, $countInputVars) : sprintf($this->lang->maxVarsInfo, $countInputVars);
 
         /* Set Custom*/
-        foreach(explode(',', $this->config->task->customBatchEditFields) as $field) $customFields[$field] = $this->lang->task->$field;
+        if(isset($execution))
+        {
+            if($this->config->systemMode == 'new')
+            {
+                $project = $this->project->getByID($execution->project);
+                if($project->model == 'waterfall') $this->config->task->edit->requiredFields .= ',estStarted,deadline';
+            }
+
+            foreach(explode(',', $this->config->task->customBatchEditFields) as $field)
+            {
+                if($execution->type == 'stage' and strpos('estStarted,deadline', $field) !== false) continue;
+                $customFields[$field] = $this->lang->task->$field;
+            }
+        }
+        else
+        {
+            foreach(explode(',', $this->config->task->customBatchEditFields) as $field) $customFields[$field] = $this->lang->task->$field;
+        }
+
         $this->view->customFields = $customFields;
         $this->view->showFields   = $this->config->task->custom->batchEditFields;
 

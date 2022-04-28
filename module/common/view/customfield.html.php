@@ -17,7 +17,7 @@
   #formSettingForm .checkbox-primary {width: 50%; float: left; margin: 3px 0;}
   #formSetting .btn {margin-right: 8px;}
   </style>
-  <button type="button" title="<?php echo $lang->customField;?>" class="btn btn-link" data-toggle="dropdown"><i class="icon icon-cog"></i></button>
+  <button type="button" title="<?php echo $lang->customField;?>" class="btn btn-link" id="customField" data-toggle="dropdown"><i class="icon icon-cog"></i></button>
   <div class="dropdown-menu pull-right" id="formSetting">
     <form class='with-padding load-indicator' id='formSettingForm' method='post' target='hiddenwin' action='<?php echo $customLink?>'>
       <div><?php echo $lang->customField;?></div>

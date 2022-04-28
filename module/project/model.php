@@ -415,7 +415,7 @@ class projectModel extends model
         $workhour = new stdclass();
         $workhour->totalHours    = $this->dao->select('sum(t1.days * t1.hours) AS totalHours')->from(TABLE_TEAM)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.root=t2.id')
-            ->where('t2.project')->in($projectID)
+            ->where('t2.id')->in($projectID)
             ->andWhere('t2.deleted')->eq(0)
             ->andWhere('t1.type')->eq('project')
             ->fetch('totalHours');
@@ -1708,7 +1708,7 @@ class projectModel extends model
                     if(isset($project->delay)) $suffix = "<span class='label label-danger label-badge'>{$this->lang->project->statusList['delay']}</span>";
                     if(!empty($suffix) || !empty($prefix)) echo '<div class="project-name' . (empty($prefix) ? '' : ' has-prefix') . (empty($suffix) ? '' : ' has-suffix') . '">';
                     if(!empty($prefix)) echo $prefix;
-                    echo html::a($projectLink, $project->name, '', "class='text-ellipsis'");
+                    echo html::a($projectLink, $project->name, '', "class='text-ellipsis text-primary'");
                     if(!empty($suffix)) echo $suffix;
                     if(!empty($suffix) || !empty($prefix)) echo '</div>';
                     break;
@@ -1785,7 +1785,7 @@ class projectModel extends model
                             echo "<div class='btn-group'>";
                             echo "<button type='button' class='btn dropdown-toggle' data-toggle='context-dropdown' title='{$this->lang->more}'><i class='icon-more-alt'></i></button>";
                             echo "<ul class='dropdown-menu pull-right text-center' role='menu'>";
-                            common::printIcon($moduleName, 'manageProducts', "projectID=$project->id", $project, 'list', 'link', '', 'btn-action', '', $dataApp . $attr, $this->lang->project->manageProducts);
+                            common::printIcon($moduleName, 'manageProducts', "projectID=$project->id", $project, 'list', 'link', '', 'btn-action', '', $attr, $this->lang->project->manageProducts);
                             if($this->config->systemMode == 'new') common::printIcon('project', 'whitelist', "projectID=$project->id&module=project&from=$from", $project, 'list', 'shield-check', '', 'btn-action', '', $dataApp . $attr);
                             if(common::hasPriv($moduleName, 'delete')) echo html::a(helper::createLink($moduleName, "delete", "projectID=$project->id"), "<i class='icon-trash'></i>", 'hiddenwin', "class='btn btn-action' title='{$this->lang->project->delete}'");
                             echo "</ul>";

@@ -38,7 +38,7 @@ include '../../common/view/header.lite.html.php';
 
         if($denyType == 'noview')
         {
-            $menuName = $menu;
+            $menuName = isset($lang->$menu->common) ? $lang->$module->common : $menu;
             if(isset($lang->menu->$menu))list($menuName) = explode('|', $lang->menu->$menu);
             printf($lang->user->errorView, $menuName);
         }

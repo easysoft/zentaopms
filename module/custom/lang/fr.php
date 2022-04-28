@@ -46,7 +46,7 @@ $lang->custom->SRConcept            = "SR Concept";
 $lang->custom->reviewRule           = 'Review Rules';
 $lang->custom->switch               = "Switch";
 $lang->custom->oneUnit              = "One {$lang->hourCommon}";
-$lang->custom->convertRelationTitle = "Please set the conversion factor of {$lang->hourCommon} to %s first";
+$lang->custom->convertRelationTitle = "Please firstly set the conversion factor from {$lang->hourCommon} to %s";
 
 if($config->systemMode == 'new') $lang->custom->execution = 'Execution';
 if($config->systemMode == 'classic' || !$config->systemMode) $lang->custom->execution = $lang->executionCommon;
@@ -71,7 +71,7 @@ $lang->custom->regionMustNumber    = 'The interval must be a number!';
 $lang->custom->tipNotEmpty         = 'The prompt can not be empty!';
 $lang->custom->currencyNotEmpty    = 'You have to select one currency at least.';
 $lang->custom->defaultNotEmpty     = 'The default currency can not be empty';
-$lang->custom->convertRelationTips = "After {$lang->hourCommon} is converted to %s, historical data will be uniformly converted to %s";
+$lang->custom->convertRelationTips = "After converting {$lang->hourCommon} to %s, the historical data will be converted uniformly to %s.";
 $lang->custom->saveTips            = 'After clicking save, the current %s will be used as the default estimation unit';
 
 $lang->custom->numberError = 'The interval must be greater than zero!';

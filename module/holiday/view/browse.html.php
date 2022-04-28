@@ -14,7 +14,7 @@
 <div id='mainMenu' class='clearfix'>
   <div class='pull-left btn-toolbar'>
     <?php
-    echo html::a($this->createLink('holiday', 'browse'), '<span class="text">' . $lang->holiday->all . '</span>', '', "class='btn btn-link btn-active-text'");
+    echo html::a($this->createLink('holiday', 'browse'), '<span class="text">' . $lang->holiday->all . '</span>', '', "class='btn btn-link btn-active-text' data-app='oa'");
     ?>
   </div>
   <div class='pull-right'>

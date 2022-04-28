@@ -490,7 +490,7 @@ class todo extends control
             if($todo->type == 'story') $app = 'product';
             $cancelURL   = $this->server->HTTP_REFERER;
             if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'success', 'message' => sprintf($this->lang->todo->$confirmNote, $todo->idvalue), 'locate' => $confirmURL));
-            return print(js::confirm(sprintf($this->lang->todo->$confirmNote, $todo->idvalue), $confirmURL, $cancelURL, $okTarget, 'parent', $app));
+            return print(strpos($cancelURL, 'calendar') ? json_encode(array(sprintf($this->lang->todo->$confirmNote, $todo->idvalue), $confirmURL)) : js::confirm(sprintf($this->lang->todo->$confirmNote, $todo->idvalue), $confirmURL, $cancelURL, $okTarget, 'parent', $app));
         }
         if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'success'));
         if(isonlybody()) return print(js::reload('parent.parent'));
