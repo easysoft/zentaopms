@@ -627,7 +627,11 @@ class mrModel extends model
     public function apiGetMRList($gitlabID, $projectID)
     {
         $url = sprintf($this->gitlab->getApiRoot($gitlabID), "/projects/$projectID/merge_requests");
-        return json_decode(commonModel::http($url));
+
+        $response = json_decode(commonModel::http($url));
+        if(empty($response)) $response = array();
+
+        return $response;
     }
 
     /**

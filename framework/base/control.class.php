@@ -912,11 +912,17 @@ class baseControl
                 $data[$key] = str_replace('%22', '"', urlencode($value));
             }
 
-            print(urldecode(json_encode($data)));
-            $response = helper::removeUTF8Bom(ob_get_clean());
+            if(defined('RUN_MODE') and RUN_MODE == 'api')
+            {
+                print(urldecode(json_encode($data)));
+                $response = helper::removeUTF8Bom(ob_get_clean());
+                return print($response);
+            }
 
-            if(defined('RUN_MODE') and RUN_MODE == 'api') return print($response);
+            $obLevel = ob_get_level();
+            for($i = 0; $i < $obLevel; $i++) ob_end_clean();
 
+            $response = helper::removeUTF8Bom(urldecode(json_encode($data)));
             die($response);
         }
 
