@@ -2666,7 +2666,7 @@ EOT;
             if(empty($object))
             {
                 $param = ($type == 'project' and $this->config->vision == 'lite') ? 'model=kanban' : '';
-                $methodName = $type == 'project' ? 'createGuide' : 'create';
+                $methodName = ($type == 'project' and $this->config->vision != 'lite') ? 'createGuide' : 'create';
                 return print(js::locate(helper::createLink($type, $methodName, $param)));
             }
         }
