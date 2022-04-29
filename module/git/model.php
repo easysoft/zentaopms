@@ -133,7 +133,7 @@ class gitModel extends model
         {
             $gitlabUserList = $this->loadModel('gitlab')->apiGetUsers($repo->gitlab);
             $acountIDPairs  = $this->gitlab->getUserIdAccountPairs($repo->gitlab);
-            foreach($gitlabUserList as $gitlabUser) $gitlabAccountPairs[$gitlabUser->realname] = zget($acountIDPairs, $gitlabUser->id, $gitlabUser->realname);
+            foreach($gitlabUserList as $gitlabUser) $gitlabAccountPairs[$gitlabUser->realname] = zget($acountIDPairs, $gitlabUser->id, '');
         }
 
         /* Update code commit history. */
