@@ -2654,7 +2654,7 @@ EOD;
                     }
                 }
 
-                $allConverted[$item] = strtolower(join($wordsPinYin) . ' ' . $abbr);
+                $allConverted[$item] = mb_strtolower(join($wordsPinYin) . ' ' . $abbr);
             }
         }
 
