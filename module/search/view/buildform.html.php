@@ -303,7 +303,7 @@ $(function()
         $select.picker(pickerOptions);
     });
 
-    $('#queryBox select, input').change(function(){
+    $('#queryBox select, #queryBox input').change(function(){
         $('#save-query').attr("disabled","disabled");
     })
     /* Toggle user queries action. */
