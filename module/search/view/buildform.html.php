@@ -244,7 +244,7 @@ foreach($fieldParams as $fieldName => $param)
         echo html::submitButton($lang->search->common, '', 'btn btn-primary') . " &nbsp; ";
         if($style != 'simple')
         {
-            if(common::hasPriv('search', 'saveQuery')) echo html::a($this->createLink('search', 'saveQuery', "module=$module&onMenuBar=$onMenuBar"), $lang->save, '', "class='btn-save-form btn btn-secondary iframe' id='save-btn'") . "&nbsp;";
+            if(common::hasPriv('search', 'saveQuery')) echo html::a($this->createLink('search', 'saveQuery', "module=$module&onMenuBar=$onMenuBar"), $lang->save, '', "class='btn-save-form btn btn-secondary iframe' id='save-query'") . "&nbsp;";
             echo html::commonButton($lang->search->reset, '', 'btn-reset-form btn');
         }
         echo html::commonButton('<i class="icon icon-chevron-double-down"></i>', '', 'btn-expand-form btn btn-info pull-right');
@@ -303,8 +303,8 @@ $(function()
         $select.picker(pickerOptions);
     });
 
-    $('select, input').change(function(){
-        $('#save-btn').attr("disabled","disabled");
+    $('#task-search select, input').change(function(){
+        $('#save-query').attr("disabled","disabled");
     })
     /* Toggle user queries action. */
     $('#toggle-queries').click(function()
