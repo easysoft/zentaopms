@@ -11,7 +11,7 @@
  */
 class feedbackEntry extends Entry
 {
-    /** 
+    /**
      * GET method.
      *
      * @param  int    $feedbackID
@@ -19,17 +19,18 @@ class feedbackEntry extends Entry
      * @return void
      */
     public function get($feedbackID)
-    {   
+    {
         $control = $this->loadController('feedback', 'adminiView');
         $control->adminView($feedbackID);
 
         $data = $this->getData();
 
         $feedback = $data->data->feedback;
- 
-        $feedback->productName = $data->data->product;
-        $feedback->moduleName  = $data->data->modulePath[0]->name ? $data->data->modulePath[0]->name : '/';
-        
+
+        $feedback->publicStatus = $feedback->public;
+        $feedback->productName  = $data->data->product;
+        $feedback->moduleName   = isset($data->data->modulePath[0]->name) ? $data->data->modulePath[0]->name : '/';
+
         if(!$data or !isset($data->status)) return $this->send400('error');
         if(isset($data->status) and $data->status == 'fail') return $this->sendError(zget($data, 'code', 400), $data->message);
 
@@ -40,26 +41,27 @@ class feedbackEntry extends Entry
     /**
      * PUT method.
      *
-     * @param  int    $productID
+     * @param  int    $feedbackID
      * @access public
      * @return void
      */
-    public function put($productID)
+    public function put($feedbackID)
     {
-        $oldProduct = $this->loadModel('product')->getByID($productID);
+        $oldFeedback = $this->loadModel('feedback')->getById($feedbackID);
 
-        /* Set $_POST variables. */
-        $fields = 'program,line,name,PO,QD,RD,type,desc,whitelist,status,acl';
-        $this->batchSetPost($fields, $oldProduct);
+        $fields = 'module,product,type,title,public,desc,status,feedbackBy,notifyEmail,notify,uid';
+        $this->batchSetPost($fields, $oldFeedback);
 
-        $control = $this->loadController('product', 'edit');
-        $control->edit($productID);
+        $control = $this->loadController('feedback', 'edit');
+        $control->edit($feedbackID, '');
 
         $data = $this->getData();
         if(isset($data->result) and $data->result == 'fail') return $this->sendError(400, $data->message);
+        if(!isset($data->result)) return $this->sendError(400, 'error');
 
-        $product = $this->product->getByID($productID);
-        $this->send(200, $this->format($product, 'createdDate:time'));
+        $feedback = $this->feedback->getByID($feedbackID);
+
+        return $this->send(200, $this->format($feedback, 'openedBy:user,openedDate:time,reviewedBy:user,reviewedDate:time,processedBy:user,processedDate:time,closedBy:user,closedDate:time,editedBy:user,editedDate:time,mailto:userList,deleted:bool'));
     }
 
     /**
