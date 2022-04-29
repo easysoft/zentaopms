@@ -1236,7 +1236,7 @@ class testcaseModel extends model
                 {
                     $requiredField = trim($requiredField);
                     if(!isset($caseData->$requiredField)) continue;
-                    if(empty($caseData->$requiredField) and !array_key_exists($requiredField, $errorMessages)) $errorMessages[$requiredField] = $this->lang->testcase->$requiredField;
+                    if(empty($caseData->$requiredField) and !isset($errorMessages[$requiredField])) $errorMessages[$requiredField] = $this->lang->testcase->$requiredField;
                 }
             }
 
