@@ -1210,8 +1210,9 @@ class testcaseModel extends model
         }
         $storyVersionPairs = $this->story->getVersions($data->story);
 
-        $cases = array();
-        $line  = 1;
+        $cases      = array();
+        $line       = 1;
+        $fieldNames = array();
         foreach($data->product as $key => $product)
         {
             $caseData = new stdclass();
@@ -1235,7 +1236,7 @@ class testcaseModel extends model
                 {
                     $requiredField = trim($requiredField);
                     if(!isset($caseData->$requiredField)) continue;
-                    if(empty($caseData->$requiredField)) dao::$errors[] = sprintf($this->lang->testcase->noRequire, $line, $this->lang->testcase->$requiredField);
+                    if(empty($caseData->$requiredField) and !isset($fieldNames[$requiredField])) $fieldNames[$requiredField] = $this->lang->testcase->$requiredField;
                 }
             }
 
@@ -1252,6 +1253,8 @@ class testcaseModel extends model
             $cases[$key] = $caseData;
             $line++;
         }
+        if(!empty($fieldNames)) dao::$errors = sprintf($this->lang->testcase->noRequireTip, implode(',', $fieldNames));
+
         if(dao::isError()) return false;
 
         $forceNotReview = $this->forceNotReview();
