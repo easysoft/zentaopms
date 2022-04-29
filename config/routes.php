@@ -16,6 +16,12 @@ $routes['/tabs/:module'] = 'tabs';
 $routes['/files']     = 'files';
 $routes['/files/:id'] = 'file';
 
+<<<<<<< Updated upstream
+=======
+$routes['/feedbacks']     = 'feedbacks';
+$routes['/feedbacks/:id'] = 'feedback';
+
+>>>>>>> Stashed changes
 $routes['/options/:type'] = 'options';
 
 $routes['/configurations']       = 'configs';
