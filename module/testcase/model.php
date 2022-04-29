@@ -1210,9 +1210,9 @@ class testcaseModel extends model
         }
         $storyVersionPairs = $this->story->getVersions($data->story);
 
-        $cases        = array();
-        $line         = 1;
-        $noRequireTip = array();
+        $cases         = array();
+        $line          = 1;
+        $errorMessages = array();
         foreach($data->product as $key => $product)
         {
             $caseData = new stdclass();
@@ -1236,7 +1236,7 @@ class testcaseModel extends model
                 {
                     $requiredField = trim($requiredField);
                     if(!isset($caseData->$requiredField)) continue;
-                    if(empty($caseData->$requiredField) and !array_key_exists($requiredField, $noRequireTip)) $noRequireTip[$requiredField] = $this->lang->testcase->$requiredField;
+                    if(empty($caseData->$requiredField) and !array_key_exists($requiredField, $errorMessages)) $errorMessages[$requiredField] = $this->lang->testcase->$requiredField;
                 }
             }
 
@@ -1253,7 +1253,7 @@ class testcaseModel extends model
             $cases[$key] = $caseData;
             $line++;
         }
-        if(!empty($noRequireTip)) dao::$errors = sprintf($this->lang->testcase->noRequireTip, implode(',', $noRequireTip));
+        if(!empty($errorMessages)) dao::$errors = sprintf($this->lang->testcase->noRequireTip, implode(',', $errorMessages));
 
         if(dao::isError()) return false;
 
