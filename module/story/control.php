@@ -2447,7 +2447,7 @@ class story extends control
                 {
                     foreach($relatedFiles[$story->id] as $file)
                     {
-                        $fileURL = common::getSysURL() . $this->file->webPath . $this->file->getRealPathName($file->pathname);
+                        $fileURL = common::getSysURL() . helper::createLink('file', 'download', "fileID=$file->id");
                         $story->files .= html::a($fileURL, $file->title, '_blank') . '<br />';
                     }
                 }
