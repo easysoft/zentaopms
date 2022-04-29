@@ -30,15 +30,17 @@ class storiesEntry extends entry
         if(!$data or !isset($data->status)) return $this->sendError(400, 'error');
         if(isset($data->status) and $data->status == 'fail') return $this->sendError(zget($data, 'code', 400), $data->message);
 
-        $stories = $data->data->stories;
-        $pager   = $data->data->pager;
+        $stories      = $data->data->stories;
+        $pager        = $data->data->pager;
+        $requirements = $this->loadModel('story')->getRequirements($productID);
+
         $result  = array();
         foreach($stories as $story)
         {
             if(isset($story->children)) $story->children = array_values((array)$story->children);
             $result[] = $this->format($story, 'openedBy:user,openedDate:time,assignedTo:user,assignedDate:time,reviewedBy:user,reviewedDate:time,lastEditedBy:user,lastEditedDate:time,closedBy:user,closedDate:time,deleted:bool,mailto:userList');
         }
-        return $this->send(200, array('page' => $pager->pageID, 'total' => $pager->recTotal, 'limit' => $pager->recPerPage, 'stories' => $result));
+        return $this->send(200, array('page' => $pager->pageID, 'total' => $pager->recTotal, 'limit' => $pager->recPerPage, 'stories' => $result, 'requirements' => $requirements));
     }
 
     /**
