@@ -19,6 +19,7 @@ $routes['/files/:id'] = 'file';
 $routes['/feedbacks']            = 'feedbacks';
 $routes['/feedbacks/:id']        = 'feedback';
 $routes['/feedbacks/:id/assign'] = 'feedbackAssignto';
+$routes['/feedbacks/:id/close']  = 'feedbackClose';
 
 $routes['/options/:type'] = 'options';
 
