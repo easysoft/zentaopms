@@ -324,6 +324,11 @@ $(function()
         }
     });
 
+    $(window).resize(function()
+    {
+        if(!$('#userQueries').hasClass('hidden')) $('#toggle-queries').css('right', $('#userQueries').outerWidth());
+    })
+
     /*
      * Load queries form
      */
