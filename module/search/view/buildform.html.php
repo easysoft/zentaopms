@@ -51,7 +51,7 @@ $formId = 'searchForm-' . uniqid('');
 #userQueries .label:hover {background-color: #aaa; color: #fff;}
 #userQueries .label > .icon-close {position: absolute; top: 2px; right: 2px; border-radius: 9px; font-size: 12px; line-height: 18px; width: 18px; display: inline-block;}
 #userQueries .label > .icon-close:hover {background-color: #ff5d5d; color: #fff;}
-@media (max-width: 1050px) {#userQueries {display: none}}
+@media (max-width: 1050px) {#userQueries, #toggle-queries {display: none}}
 <?php if($style == 'simple'):?>
 #<?php echo $formId;?> .form-actions {text-align: left; padding: 0!important; max-width: 200px; vertical-align: middle; width: 100px;}
 #queryBox.show {min-height: 66px;}
