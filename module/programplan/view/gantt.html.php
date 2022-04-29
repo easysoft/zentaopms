@@ -14,7 +14,6 @@
 <?php include '../../common/view/gantt.html.php';?>
 <style>
 #ganttView {height: 600px;}
-#ganttView .gantt_layout_cell {min-width: 560px!important;}
 #mainContent:before {background: #fff;}
 .gantt-fullscreen #header,
 .gantt-fullscreen #mainMenu,
