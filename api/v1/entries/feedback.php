@@ -27,9 +27,9 @@ class feedbackEntry extends Entry
 
         $feedback = $data->data->feedback;
 
-        $feedback->productName  = $data->data->product;
-        $feedback->moduleName   = $data->data->modulePath[0]->name ? $data->data->modulePath[0]->name : '/';
-        $feedback->resultType   = $data->data->type;
+        $feedback->productName = $data->data->product;
+        $feedback->moduleName  = $data->data->modulePath[0]->name ? $data->data->modulePath[0]->name : '/';
+        $feedback->resultType  = $data->data->type;
         if($feedback->resultInfo->deleted == 0) $feedback->resultStatus = $this->loadModel('feedback')->processStatus($feedback->resultType, $feedback->resultInfo);
 
         if(!$data or !isset($data->status)) return $this->send400('error');
