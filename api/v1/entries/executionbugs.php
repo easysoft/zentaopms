@@ -33,6 +33,7 @@ class executionBugsEntry extends entry
             $bugs   = $data->data->bugs;
             $pager  = $data->data->pager;
             $result = array();
+            $this->loadModel('product');
             foreach($bugs as $bug)
             {
                 $status = array('code' => $bug->status, 'name' => $this->lang->bug->statusList[$bug->status]);
@@ -41,6 +42,9 @@ class executionBugsEntry extends entry
                 if(!empty($bug->delay)) $status = array('code' => 'delay', 'name' => $this->lang->bug->overdueBugs);
                 $bug->status     = $status['code'];
                 $bug->statusName = $status['name'];
+
+                $product            = $this->product->getById($bug->product);
+                $bug->productStatus = $product->status;
 
                 $result[$bug->id] = $this->format($bug, 'activatedDate:time,openedDate:time,assignedDate:time,resolvedDate:time,closedDate:time,lastEditedDate:time,deadline:date,deleted:bool');
             }
