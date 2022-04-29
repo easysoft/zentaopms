@@ -171,7 +171,7 @@ class storyModel extends model
      *  @access public
      *  @return void
      */
-    public function getRequierements($productID)
+    public function getRequirements($productID)
     {
         return $this->dao->select('id,title')->from(TABLE_STORY)
            ->where('deleted')->eq(0)
