@@ -1734,6 +1734,7 @@ class executionModel extends model
             {
                 foreach($branchPairs as $branchID => $branchName)
                 {
+                    if(strpos($param, 'withMain') !== false and $branchID == BRANCH_MAIN) continue;
                     if(!isset($projectProducts[$productID][$branchID])) unset($branchGroups[$productID][$branchID]);
                 }
             }
