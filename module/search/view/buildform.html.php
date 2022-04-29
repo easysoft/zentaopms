@@ -324,7 +324,6 @@ $(function()
 
     $(window).resize(function()
     {
-        console.log($('#userQueries').outerWidth());
         if(!$('#userQueries').hasClass('hidden')) $('#toggle-queries').css('right', $('#userQueries').outerWidth());
     })
 
