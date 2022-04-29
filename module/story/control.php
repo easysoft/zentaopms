@@ -219,7 +219,7 @@ class story extends control
             $products        = $this->product->getProductPairsByProject($objectID, $onlyNoClosed);
             $productID       = empty($productID) ? key($products) : $productID;
             $product         = $this->product->getById(($productID and array_key_exists($productID, $products)) ? $productID : key($products));
-            $productBranches = $product->type != 'normal' ? $this->loadModel('execution')->getBranchByProduct($productID, $objectID) : array();
+            $productBranches = $product->type != 'normal' ? $this->loadModel('execution')->getBranchByProduct($productID, $objectID, 'noclosed|withMain') : array();
             $branches        = isset($productBranches[$productID]) ? $productBranches[$productID] : array();
             $branch          = key($branches);
         }
@@ -502,7 +502,7 @@ class story extends control
 
         if($executionID != 0)
         {
-            $productBranches = $product->type != 'normal' ? $this->loadModel('execution')->getBranchByProduct($productID, $executionID) : array();
+            $productBranches = $product->type != 'normal' ? $this->loadModel('execution')->getBranchByProduct($productID, $executionID, 'noclosed|withMain') : array();
             $branches        = isset($productBranches[$productID]) ? $productBranches[$productID] : array();
             $branch          = key($branches);
         }
