@@ -925,6 +925,7 @@ class bug extends control
                     }
                 }
                 $files = $this->loadModel('file')->saveUpload('bug', $bugID);
+                if(empty($files) and $this->post->uid != '' and isset($_SESSION['album']['used'][$this->post->uid])) $files = $this->file->getPairs($_SESSION['album']['used'][$this->post->uid]);
             }
             if($this->post->comment != '' or !empty($changes) or !empty($files))
             {
