@@ -2809,14 +2809,13 @@ class storyModel extends model
             }
             $storyQuery = preg_replace('/`(\w+)`/', 't2.`$1`', $storyQuery);
 
-            $stories = $this->dao->select('distinct t1.*, t2.*, t3.branch as productBranch, t4.type as productType, t2.version as version')->from(TABLE_PROJECTSTORY)->alias('t1')
+            $stories = $this->dao->select('distinct t1.*, t2.*, t3.type as productType, t2.version as version')->from(TABLE_PROJECTSTORY)->alias('t1')
                 ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
-                ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t3')->on('t1.project = t3.project')
-                ->leftJoin(TABLE_PRODUCT)->alias('t4')->on('t2.product = t4.id')
+                ->leftJoin(TABLE_PRODUCT)->alias('t3')->on('t2.product = t3.id')
                 ->where($storyQuery)
                 ->andWhere('t1.project')->eq((int)$executionID)
                 ->andWhere('t2.deleted')->eq(0)
-                ->andWhere('t4.deleted')->eq(0)
+                ->andWhere('t3.deleted')->eq(0)
                 ->andWhere('t2.type')->eq($storyType)
                 ->beginIF($excludeStories)->andWhere('t2.id')->notIN($excludeStories)->fi()
                 ->orderBy($orderBy)
@@ -2850,10 +2849,9 @@ class storyModel extends model
 
             $type = ($type == 'bymodule' and $this->session->storyBrowseType) ? $this->session->storyBrowseType : $type;
 
-            $stories = $this->dao->select('distinct t1.*, t2.*,t3.branch as productBranch,t4.type as productType,t2.version as version')->from(TABLE_PROJECTSTORY)->alias('t1')
+            $stories = $this->dao->select('distinct t1.*, t2.*,t3.type as productType,t2.version as version')->from(TABLE_PROJECTSTORY)->alias('t1')
                 ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
-                ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t3')->on('t1.project = t3.project')
-                ->leftJoin(TABLE_PRODUCT)->alias('t4')->on('t2.product = t4.id')
+                ->leftJoin(TABLE_PRODUCT)->alias('t3')->on('t2.product = t3.id')
                 ->where('t1.project')->eq((int)$executionID)
                 ->andWhere('t2.type')->eq($storyType)
                 ->beginIF($excludeStories)->andWhere('t2.id')->notIN($excludeStories)->fi()
@@ -2872,22 +2870,35 @@ class storyModel extends model
                 ->beginIF($this->session->storyBrowseType and strpos('changed|', $this->session->storyBrowseType) !== false)->andWhere('t2.status')->in(array_keys($unclosedStatus))->fi()
                 ->beginIF($modules)->andWhere('t2.module')->in($modules)->fi()
                 ->andWhere('t2.deleted')->eq(0)
-                ->andWhere('t4.deleted')->eq(0)
+                ->andWhere('t3.deleted')->eq(0)
                 ->orderBy($orderBy)
                 ->page($pager, 't2.id')
                 ->fetchAll('id');
         }
 
-        $query    = $this->dao->get();
-        $branches = array();
-        foreach($stories as $story)
-        {
-            if(empty($story->branch) and $story->productType != 'normal') $branches[$story->productBranch][$story->id] = $story->id;
-        }
+        $query = $this->dao->get();
+
+        /* Get the stories of main branch. */
+        $branchStoryList = $this->dao->select('t1.*,t2.branch as productBranch')->from(TABLE_PROJECTSTORY)->alias('t1')
+            ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t2')->on('t1.project = t2.project')
+            ->leftJoin(TABLE_PRODUCT)->alias('t3')->on('t1.product = t3.id')
+            ->where('t1.story')->in(array_keys($stories))
+            ->andWhere('t1.branch')->eq(BRANCH_MAIN)
+            ->andWhere('t3.type')->ne('normal')
+            ->fetchAll();
+
+        $branches       = array();
+        $stageOrderList = 'wait,planned,projected,developing,developed,testing,tested,verified,released,closed';
+
+        foreach($branchStoryList as $story) $branches[$story->productBranch][$story->story] = $story->story;
+
+        /* Set up story stage. */
         foreach($branches as $branchID => $storyIdList)
         {
             $stages = $this->dao->select('*')->from(TABLE_STORYSTAGE)->where('story')->in($storyIdList)->andWhere('branch')->eq($branchID)->fetchPairs('story', 'stage');
-            foreach($stages as $storyID => $stage) $stories[$storyID]->stage = $stage;
+
+            /* Take the earlier stage. */
+            foreach($stages as $storyID => $stage) if(strpos($stageOrderList, $stories[$storyID]->stage) > strpos($stageOrderList, $stage)) $stories[$storyID]->stage = $stage;
         }
 
         $this->dao->sqlobj->sql = $query;
