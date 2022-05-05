@@ -15,7 +15,7 @@
   <div class="main-header">
     <h2><?php echo $storyID ? $storyTitle . ' - ' . $this->lang->story->subdivide : $this->lang->story->batchCreate;?></h2>
     <div class="pull-right btn-toolbar">
-      <?php if(common::hasPriv('file', 'uploadImages')) echo html::a($this->createLink('file', 'uploadImages', 'module=story&params=' . helper::safe64Encode("productID=$productID&branch=$branch&moduleID=$moduleID&storyID=$storyID&executionID=&plan=&type=$type")), $lang->uploadImages, '', "data-toggle='modal' data-type='iframe' class='btn btn-primary' data-width='70%'")?>
+      <?php if(common::hasPriv('file', 'uploadImages')) echo html::a($this->createLink('file', 'uploadImages', 'module=story&params=' . helper::safe64Encode("productID=$productID&branch=$branch&moduleID=$moduleID&storyID=$storyID&executionID=$executionID&plan=&type=$type")), $lang->uploadImages, '', "data-toggle='modal' data-type='iframe' class='btn btn-primary' data-width='70%'")?>
       <button type='button' data-toggle='modal' data-target="#importLinesModal" class="btn btn-primary"><?php echo $lang->pasteText;?></button>
       <?php $customLink = $this->createLink('custom', 'ajaxSaveCustomFields', 'module=story&section=custom&key=batchCreateFields')?>
       <?php include '../../common/view/customfield.html.php';?>
@@ -68,7 +68,7 @@
             <th class='c-keywords<?php echo zget($visibleFields, 'keywords', ' hidden') . zget($requiredFields, 'keywords', '', ' required');?>'><?php echo $lang->story->keywords;?></th>
             <?php
             $extendFields = $this->story->getFlowExtendFields();
-            foreach($extendFields as $extendField) 
+            foreach($extendFields as $extendField)
             {
                 $required = strpos(",$extendField->rules,", ',1,') !== false ? 'required' : '';
                 echo "<th class='c-extend $required'>{$extendField->name}</th>";
@@ -118,9 +118,9 @@
               </div>
             </td>
             <td class='<?php echo zget($visibleFields, 'keywords', 'hidden')?>'><?php echo html::input('keywords[$id]', '', "class='form-control'");?></td>
-            <?php 
+            <?php
             $this->loadModel('flow');
-            foreach($extendFields as $extendField) 
+            foreach($extendFields as $extendField)
             {
                 $object = new stdclass();
                 $object->{$extendField->field} = $extendField->default;
