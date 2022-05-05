@@ -179,6 +179,7 @@ class build extends control
         {
             $branchTagOption[$branchInfo->id] = $branchInfo->name . ($branchInfo->status == 'closed' ? ' (' . $this->lang->branch->statusList['closed'] . ')' : '');
         }
+        if(!isset($branchTagOption[$build->branch])) $branchTagOption[$build->branch] = $this->branch->getById($build->branch, 0, 'name');
 
         foreach($productGroups as $product) $products[$product->id] = $product->name;
 
