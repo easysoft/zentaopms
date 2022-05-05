@@ -549,7 +549,6 @@ class story extends control
         foreach(explode(',', $this->config->story->list->customBatchCreateFields) as $field)
         {
             if($product->type != 'normal') $customFields[$product->type] = $this->lang->product->branchName[$product->type];
-            if(isonlybody() and $field == 'plan') continue;
             $customFields[$field] = $this->lang->story->$field;
         }
 
