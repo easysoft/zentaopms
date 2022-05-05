@@ -1387,6 +1387,7 @@ class docModel extends model
                     ->leftjoin(TABLE_DOCLIB)->alias('t2')->on('t2.project=t1.id')
                     ->where("CONCAT(',', t2.users, ',')")->like("%,{$this->app->user->account},%")
                     ->andWhere('t1.vision')->eq($this->config->vision)
+                    ->andWhere('t1.deleted')->eq(0)
                     ->fetchPairs();
             }
 
