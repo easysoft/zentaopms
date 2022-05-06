@@ -87,9 +87,9 @@ $builder->stakeholder = array('rows' => 1, 'extends' => array('stakeholder'));
 $builder->expect      = array('rows' => 270, 'extends' => array('expect'));
 $builder->stageson    = array('rows' => 30, 'extends' => array('project', 'executionson'));
 
-$builder->doclib      = array('rows' => 900, 'extends' => array('doclib'));
+$builder->doclib      = array('rows' => 910, 'extends' => array('doclib'));
 $builder->doc         = array('rows' => 900, 'extends' => array('doc'));
-$builder->doccontent  = array('rows' => 900, 'extends' => array('doccontent'));
+$builder->doccontent  = array('rows' => 910, 'extends' => array('doccontent'));
 $builder->docmodule   = array('rows' => 100, 'extends' => array('module','docmodule'));
 $builder->docmoduleon = array('rows' => 200, 'extends' => array('module','docmoduleson'));
 
@@ -103,6 +103,7 @@ $builder->webhook = array('rows' => 7, 'extends' => array('webhook'));
 $builder->entry   = array('rows' => 1, 'extends' => array('entry'));
 
 $builder->pipeline = array('rows' => 2,  'extends' => array('pipeline'));
+$builder->holiday  = array('rows' => 100,  'extends' => array('holiday'));
 $builder->repo     = array('rows' => 1,  'extends' => array('repo'));
 $builder->job      = array('rows' => 2,  'extends' => array('job'));
 $builder->mr       = array('rows' => 1,  'extends' => array('mr'));
