@@ -69,14 +69,14 @@ class feedbackEntry extends Entry
     /**
      * DELETE method.
      *
-     * @param  int    $productID
+     * @param  int    $feedbackID
      * @access public
      * @return void
      */
-    public function delete($productID)
+    public function delete($feedbackID)
     {
-        $control = $this->loadController('product', 'delete');
-        $control->delete($productID, 'yes');
+        $control = $this->loadController('feedback', 'delete');
+        $control->delete($feedbackID, 'yes');
 
         $this->getData();
         $this->sendSuccess(200, 'success');
