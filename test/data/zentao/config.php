@@ -12,6 +12,8 @@ $builder->userview    = array('rows' => 400, 'extends' => array('userview'));
 $builder->dept        = array('rows' => 100,  'extends' => array('dept'));
 $builder->action      = array('rows' => 100,  'extends' => array('action'));
 $builder->history     = array('rows' => 100,  'extends' => array('history'));
+$builder->file        = array('rows' => 100,  'extends' => array('file'));
+$builder->score        = array('rows' => 100,  'extends' => array('score'));
 
 $builder->program      = array('rows' => 10, 'extends' => array('project', 'program'));
 $builder->project      = array('rows' => 90, 'extends' => array('project', 'project'));
