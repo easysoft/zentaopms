@@ -97,7 +97,7 @@ class groupTest
         return $objects;
     }
 
-    public function getGroupAccountsTest($groupIdList = arrayTest())
+    public function getGroupAccountsTest($groupIdList)
     {
         $objects = $this->objectModel->getGroupAccounts($groupIdList = array());
 
