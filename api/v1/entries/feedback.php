@@ -29,7 +29,7 @@ class feedbackEntry extends Entry
 
         $feedback->publicStatus = $feedback->public;
         $feedback->productName  = $data->data->product;
-        $feedback->moduleName   = $data->data->modulePath[0]->name ? $data->data->modulePath[0]->name : '/';
+        $feedback->moduleName   = isset($data->data->modulePath[0]->name) ? $data->data->modulePath[0]->name : '/';
         $feedback->resultType   = $data->data->type;
         if($feedback->resultInfo->deleted == 0) $feedback->resultStatus = $this->loadModel('feedback')->processStatus($feedback->resultType, $feedback->resultInfo);
 
