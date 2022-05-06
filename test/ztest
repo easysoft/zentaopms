@@ -85,6 +85,9 @@ switch($argv[1])
     case 'project':
         ztfRun('model/project');
         break;
+    case 'pipeline':
+        ztfRun('model/pipeline');
+        break;
     case 'report':
         ztfRun('model/report');
         break;
@@ -112,6 +115,7 @@ switch($argv[1])
     case 'user':
         ztfRun('model/user');
         break;
+
 
     default:
         ztfExtract($argv[1]);
