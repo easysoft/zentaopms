@@ -16,6 +16,12 @@ class messageTest
         return $objects;
     }
 
+    /**
+     * Get objectTypes.
+     *
+     * @access public
+     * @return void
+     */
     public function getObjectTypesTest()
     {
         $objects = $this->objectModel->getObjectTypes();
@@ -25,6 +31,12 @@ class messageTest
         return $objects;
     }
 
+    /**
+     * Get object actions.
+     *
+     * @access public
+     * @return void
+     */
     public function getObjectActionsTest()
     {
         $objects = $this->objectModel->getObjectActions();
@@ -34,6 +46,17 @@ class messageTest
         return $objects;
     }
 
+    /**
+     * Check send.
+     *
+     * @param  int    $objectType
+     * @param  int    $objectID
+     * @param  int    $actionType
+     * @param  int    $actionID
+     * @param  string $actor
+     * @access public
+     * @return void
+     */
     public function sendTest($objectType, $objectID, $actionType, $actionID, $actor = '')
     {
         $objects = $this->objectModel->send($objectType, $objectID, $actionType, $actionID, $actor = '');
@@ -43,6 +66,17 @@ class messageTest
         return $objects;
     }
 
+    /**
+     * Save notice.
+     *
+     * @param  int    $objectType
+     * @param  int    $objectID
+     * @param  int    $actionType
+     * @param  int    $actionID
+     * @param  string $actor
+     * @access public
+     * @return void
+     */
     public function saveNoticeTest($objectType, $objectID, $actionType, $actionID, $actor = '')
     {
         $objects = $this->objectModel->saveNotice($objectType, $objectID, $actionType, $actionID, $actor = '');
@@ -52,6 +86,13 @@ class messageTest
         return $objects;
     }
 
+    /**
+     * Get toList.
+     *
+     * @param  int    $objectType
+     * @access public
+     * @return void
+     */
     public function getToListTest($objectType)
     {
         global $tester;
@@ -64,6 +105,12 @@ class messageTest
         return $objects;
     }
 
+    /**
+     * Get notice todos.
+     *
+     * @access public
+     * @return void
+     */
     public function getNoticeTodosTest()
     {
         $objects = $this->objectModel->getNoticeTodos();
