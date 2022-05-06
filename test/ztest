@@ -55,6 +55,9 @@ switch($argv[1])
     case 'execution':
         ztfRun('model/execution');
         break;
+    case 'git':
+        ztfRun('model/git');
+        break;
     case 'group':
         ztfRun('model/group');
         break;
