@@ -105,6 +105,7 @@ $builder->stage        = array('rows' => 6, 'extends' => array('stage'));
 $builder->webhook      = array('rows' => 7, 'extends' => array('webhook'));
 $builder->entry        = array('rows' => 1, 'extends' => array('entry'));
 $builder->weeklyreport = array('rows' => 10, 'extends' => array('weeklyreport'));
+$builder->metting      = array('rows' => 10, 'extends' => array('meeting'));
 
 $builder->pipeline = array('rows' => 2,  'extends' => array('pipeline'));
 $builder->holiday  = array('rows' => 100,  'extends' => array('holiday'));
