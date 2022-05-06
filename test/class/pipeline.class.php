@@ -1,7 +1,6 @@
 <?php
 class pipelineTest
 {
-
     /**  
      * __construct
      *
@@ -10,10 +9,9 @@ class pipelineTest
      */
     public function __construct()
     {
-         global $tester;
-
-         
-         $this->objectModel = $tester->loadModel('pipeline');
+        global $tester;
+        
+        $this->objectModel = $tester->loadModel('pipeline');
     }
 
     /**

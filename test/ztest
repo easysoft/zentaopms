@@ -116,7 +116,6 @@ switch($argv[1])
         ztfRun('model/user');
         break;
 
-
     default:
         ztfExtract($argv[1]);
         system("php " . $argv[1]);
