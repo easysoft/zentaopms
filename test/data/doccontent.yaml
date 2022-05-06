@@ -54,7 +54,7 @@ fields:
     format: ""
   - field: version
     note: "版本号"
-    range: "1"
+    range: 1{900},2{10}
     prefix: ""
     postfix: ""
     loop: 0

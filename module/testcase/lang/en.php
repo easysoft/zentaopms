@@ -223,6 +223,7 @@ $lang->testcase->buttonToList = 'Back';
 $lang->testcase->errorEncode      = 'No data. Please select right encoding and upload again!';
 $lang->testcase->noFunction       = 'Iconv and mb_convert_encoding are not found. You cannot convert the data to the encoding you want!';
 $lang->testcase->noRequire        = "Row %s has“%s ”which is a required field and it should not be blank.";
+$lang->testcase->noRequireTip     = "“%s”is a required field and it should not be blank.";
 $lang->testcase->noLibrary        = "No library exists. Please create one first.";
 $lang->testcase->mustChooseResult = 'Review result is required.';
 $lang->testcase->noModule         = '<div>You have no modules.</div><div>Manage it now.</div>';

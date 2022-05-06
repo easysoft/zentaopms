@@ -12,42 +12,42 @@ fields:
     format: ""
   - field: type
     note: "文档类型"
-    range: product{100},project{90},execution{630},custom{80}
+    range: product{100},project{90},execution{630},custom{80},api{10}
     prefix: ""
     postfix: ""
     loop: 0
     format: ""
   - field: product
     note: "产品库"
-    range: 1-100,0{90},0{630},0{80}
+    range: 1-100,0{90},0{630},0{90}
     prefix: ""
     postfix: ""
     loop: 0
     format: ""
   - field: project
     note: "项目库"
-    range: 0{100},11-100,0{630},0{80}
+    range: 0{100},11-100,0{630},0{90}
     prefix: ""
     postfix: ""
     loop: 0
     format: ""
   - field: execution
     note: "执行库"
-    range: 0{100},0{90},101-730,0{80}
+    range: 0{100},0{90},101-730,0{90}
     prefix: ""
     postfix: ""
     loop: 0
     format: ""
   - field: name
     note: "文档库名称"
-    range: 产品主库{100},项目主库{90},迭代主库{30},阶段主库{30},看板主库{30},迭代主库{30},阶段主库{30},看板主库{30},迭代主库{30},阶段主库{30},看板主库{30},迭代主库{30},阶段主库{30},看板主库{30},迭代主库{30},阶段主库{30},看板主库{30},迭代主库{30},阶段主库{30},看板主库{30},迭代主库{30},阶段主库{30},阶段主库{30},自定义库{80}
+    range: 产品主库{100},项目主库{90},迭代主库{30},阶段主库{30},看板主库{30},迭代主库{30},阶段主库{30},看板主库{30},迭代主库{30},阶段主库{30},看板主库{30},迭代主库{30},阶段主库{30},看板主库{30},迭代主库{30},阶段主库{30},看板主库{30},迭代主库{30},阶段主库{30},看板主库{30},迭代主库{30},阶段主库{30},阶段主库{30},自定义库{80},接口库{10}
     prefix: ""
     postfix: ""
     loop: 0
     format: ""
   - field: acl
     note: "权限"
-    range: default{820},open{80}
+    range: default{820},open{80},private{2},open{5},custom{3}
     prefix: ""
     postfix: ""
     loop: 0
@@ -67,7 +67,7 @@ fields:
     format: ""
   - field: main
     note: "文档主库"
-    range: 0{820},1{90}
+    range: 0{820},1{80},0{10}
     prefix: ""
     postfix: ""
     loop: 0

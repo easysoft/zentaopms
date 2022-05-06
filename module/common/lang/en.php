@@ -30,6 +30,7 @@ $lang->zentaoPMS      = 'ZenTao';
 $lang->pmsName        = 'ALM';
 $lang->proName        = 'Pro';
 $lang->bizName        = 'Biz';
+$lang->maxName        = 'Max';
 $lang->liteName       = 'Lite';
 $lang->logoImg        = 'zt-logo-en.png';
 $lang->welcome        = "%s ALM";

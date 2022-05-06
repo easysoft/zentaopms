@@ -12,6 +12,9 @@ $builder->userview    = array('rows' => 400, 'extends' => array('userview'));
 $builder->dept        = array('rows' => 100,  'extends' => array('dept'));
 $builder->action      = array('rows' => 100,  'extends' => array('action'));
 $builder->history     = array('rows' => 100,  'extends' => array('history'));
+$builder->file        = array('rows' => 100,  'extends' => array('file'));
+$builder->score       = array('rows' => 100,  'extends' => array('score'));
+$builder->extension   = array('rows' => 10,  'extends' => array('extension'));
 
 $builder->program      = array('rows' => 10, 'extends' => array('project', 'program'));
 $builder->project      = array('rows' => 90, 'extends' => array('project', 'project'));
@@ -87,9 +90,9 @@ $builder->stakeholder = array('rows' => 1, 'extends' => array('stakeholder'));
 $builder->expect      = array('rows' => 270, 'extends' => array('expect'));
 $builder->stageson    = array('rows' => 30, 'extends' => array('project', 'executionson'));
 
-$builder->doclib      = array('rows' => 900, 'extends' => array('doclib'));
+$builder->doclib      = array('rows' => 910, 'extends' => array('doclib'));
 $builder->doc         = array('rows' => 900, 'extends' => array('doc'));
-$builder->doccontent  = array('rows' => 900, 'extends' => array('doccontent'));
+$builder->doccontent  = array('rows' => 910, 'extends' => array('doccontent'));
 $builder->docmodule   = array('rows' => 100, 'extends' => array('module','docmodule'));
 $builder->docmoduleon = array('rows' => 200, 'extends' => array('module','docmoduleson'));
 
@@ -98,11 +101,14 @@ $builder->release    = array('rows' => 10, 'extends' => array('release'));
 $builder->design     = array('rows' => 120, 'extends' => array('design'));
 $builder->designspec = array('rows' => 120, 'extends' => array('designspec'));
 
-$builder->stage   = array('rows' => 6, 'extends' => array('stage'));
-$builder->webhook = array('rows' => 7, 'extends' => array('webhook'));
-$builder->entry   = array('rows' => 1, 'extends' => array('entry'));
+$builder->stage        = array('rows' => 6, 'extends' => array('stage'));
+$builder->webhook      = array('rows' => 7, 'extends' => array('webhook'));
+$builder->entry        = array('rows' => 1, 'extends' => array('entry'));
+$builder->weeklyreport = array('rows' => 10, 'extends' => array('weeklyreport'));
+$builder->metting      = array('rows' => 10, 'extends' => array('meeting'));
 
 $builder->pipeline = array('rows' => 2,  'extends' => array('pipeline'));
+$builder->holiday  = array('rows' => 100,  'extends' => array('holiday'));
 $builder->repo     = array('rows' => 1,  'extends' => array('repo'));
 $builder->job      = array('rows' => 2,  'extends' => array('job'));
 $builder->mr       = array('rows' => 1,  'extends' => array('mr'));

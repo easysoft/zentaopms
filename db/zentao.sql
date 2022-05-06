@@ -13,7 +13,7 @@ CREATE TABLE IF NOT EXISTS `zt_action` (
   `id` mediumint(8) unsigned NOT NULL auto_increment,
   `objectType` varchar(30) NOT NULL default '',
   `objectID` mediumint(8) unsigned NOT NULL default '0',
-  `product` varchar(255) NOT NULL,
+  `product` text NOT NULL,
   `project` mediumint(8) unsigned NOT NULL,
   `execution` mediumint(8) unsigned NOT NULL,
   `actor` varchar(100) NOT NULL default '',
@@ -6215,7 +6215,7 @@ ALTER TABLE `zt_effort` DROP `status`;
 
 ALTER TABLE `zt_effort` ADD `objectType` varchar(30) NOT NULL AFTER `id`;
 ALTER TABLE `zt_effort` ADD `objectID` mediumint(8) unsigned NOT NULL AFTER `objectType`;
-ALTER TABLE `zt_effort` ADD `product` varchar(255) NOT NULL AFTER `objectID`;
+ALTER TABLE `zt_effort` ADD `product` text NOT NULL AFTER `objectID`;
 ALTER TABLE `zt_effort` ADD `project` mediumint(8) unsigned NOT NULL AFTER `product`;
 ALTER TABLE `zt_effort` ADD `execution` mediumint(8) unsigned NOT NULL AFTER `project`;
 ALTER TABLE `zt_effort` ADD `account` varchar(30) NOT NULL AFTER `execution`;

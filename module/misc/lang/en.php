@@ -28,18 +28,25 @@ $lang->misc->zentao->icons['service'] = 'heart';
 
 $lang->misc->zentao->about['bizversion']   = 'ZenTao Biz';
 $lang->misc->zentao->about['official']     = "Official Website";
+$lang->misc->zentao->about['changelog']    = "Revision Log";
 $lang->misc->zentao->about['license']      = "License";
+$lang->misc->zentao->about['extension']    = "Plugin Platform";
+$lang->misc->zentao->about['follow']       = "Follow Us";
 
 $lang->misc->zentao->support['vip']        = "VIP Support";
 $lang->misc->zentao->support['manual']     = "User Manual";
+$lang->misc->zentao->support['faq']        = "Common Problem";
+$lang->misc->zentao->support['ask']        = "Official Answer";
+$lang->misc->zentao->support['video']      = "Use Video";
+$lang->misc->zentao->support['qqgroup']    = "Official QQ Group";
 
 $lang->misc->zentao->cowin['reportbug']    = "Report Bug ";
 $lang->misc->zentao->cowin['feedback']     = "Feedback";
-$lang->misc->zentao->cowin['translate']    = "Translate";
 $lang->misc->zentao->cowin['recommend']    = "More";
 
-$lang->misc->zentao->service['idc']        = 'ZenTao Cloud';
-$lang->misc->zentao->service['custom']     = 'ZenTao Custom';
+$lang->misc->zentao->service['zentaotrain'] = 'ZenTao Training';
+$lang->misc->zentao->service['idc']         = 'ZenTao Cloud';
+$lang->misc->zentao->service['custom']      = 'ZenTao Custom';
 
 global $config;
 $lang->misc->zentao->others['chanzhi']  = "<img src='{$config->webRoot}theme/default/images/main/chanzhi.ico' /> Zsite";
@@ -88,6 +95,7 @@ $lang->misc->feature->themeDesc      = '<p>ZenTao 15.0+ a new "Youth Blue" theme
 $lang->misc->feature->visionsDesc    = "<p>The concept of interface has been added since 16.5. Users can deal with R & D affairs in <span style='color: #0c60e1'>[R&D]</span> and daily office affairs in <span style='color: #0c60e1'>[Lite]</span>.</p><p>You can view the current interface on the avatar, and click the name of the interface to view and switch other interfaces.</p>";
 $lang->misc->feature->visionsImage   = 'theme/default/images/main/visions_en.png';
 
+$lang->misc->releaseDate['17.0.beta1']  = '2022-05-06';
 $lang->misc->releaseDate['16.5']        = '2022-03-24';
 $lang->misc->releaseDate['16.5.beta1']  = '2022-03-16';
 $lang->misc->releaseDate['16.4']        = '2022-02-15';
@@ -164,6 +172,7 @@ $lang->misc->releaseDate['7.2.stable']  = '2015-05-22';
 $lang->misc->releaseDate['7.1.stable']  = '2015-03-07';
 $lang->misc->releaseDate['6.3.stable']  = '2014-11-07';
 
+$lang->misc->feature->all['17.0.beta1'][] = array('title' => "Complete customer's high priority requirements", 'desc' => '');
 $lang->misc->feature->all['16.5'][]       = array('title' => 'Fix bug.', 'desc' => '');
 $lang->misc->feature->all['16.5.beta1'][] = array('title' => 'Fix bug, merge all code to one package', 'desc' => '');
 $lang->misc->feature->all['16.4'][]       = array('title' => 'Implement JIRA import function and improve plug-in extension mechanism.', 'desc' => '');
