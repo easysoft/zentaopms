@@ -49,6 +49,9 @@ switch($argv[1])
     case 'design':
         ztfRun('model/design');
         break;
+    case 'file':
+        ztfRun('model/file');
+        break;
     case 'execution':
         ztfRun('model/execution');
         break;
@@ -105,6 +108,9 @@ switch($argv[1])
         break;
     case 'todo':
         ztfRun('model/todo');
+        break;
+    case 'message':
+        ztfRun('model/message');
         break;
     case 'tree':
         ztfRun('model/tree');

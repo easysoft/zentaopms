@@ -13,7 +13,8 @@ $builder->dept        = array('rows' => 100,  'extends' => array('dept'));
 $builder->action      = array('rows' => 100,  'extends' => array('action'));
 $builder->history     = array('rows' => 100,  'extends' => array('history'));
 $builder->file        = array('rows' => 100,  'extends' => array('file'));
-$builder->score        = array('rows' => 100,  'extends' => array('score'));
+$builder->score       = array('rows' => 100,  'extends' => array('score'));
+$builder->extension   = array('rows' => 10,  'extends' => array('extension'));
 
 $builder->program      = array('rows' => 10, 'extends' => array('project', 'program'));
 $builder->project      = array('rows' => 90, 'extends' => array('project', 'project'));
@@ -104,6 +105,7 @@ $builder->stage        = array('rows' => 6, 'extends' => array('stage'));
 $builder->webhook      = array('rows' => 7, 'extends' => array('webhook'));
 $builder->entry        = array('rows' => 1, 'extends' => array('entry'));
 $builder->weeklyreport = array('rows' => 10, 'extends' => array('weeklyreport'));
+$builder->metting      = array('rows' => 10, 'extends' => array('meeting'));
 
 $builder->pipeline = array('rows' => 2,  'extends' => array('pipeline'));
 $builder->holiday  = array('rows' => 100,  'extends' => array('holiday'));
