@@ -651,6 +651,7 @@ $lang->action->label->kanbanlane   = 'Kanban Lane|execution|kanban|execution=%s&
 $lang->action->label->kanbancard   = 'Kanban Card|kanban|view|kanbanID=%s';
 $lang->action->label->mr           = 'Merge Request|mr|view|id=%s';
 $lang->action->label->gitlab       = 'GitLab Server|gitlab|view|id=%s';
+$lang->action->label->stage        = 'Stage|stage|browse|';
 
 /* Object type. */
 $lang->action->search = new stdclass();
