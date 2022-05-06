@@ -7,13 +7,25 @@ class groupTest
          $this->objectModel = $tester->loadModel('group');
     }
 
-    public function createTest()
+    /**
+     * Test create a group.
+     *
+     * @param mixed $param
+     * @access public
+     * @return object
+     */
+    public function createObject($param)
     {
-        $objects = $this->objectModel->create();
+        foreach($param as $k => $v) $_POST[$k] = $v;
+
+        $groupID = $this->objectModel->create();
+        unset($_POST);
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        $object = $this->objectModel->getById($groupID);
+
+        return $object;
     }
 
     public function updateTest($groupID)
@@ -97,7 +109,7 @@ class groupTest
         return $objects;
     }
 
-    public function getGroupAccountsTest($groupIdList = arrayTest())
+    public function getGroupAccountsTest($groupIdList)
     {
         $objects = $this->objectModel->getGroupAccounts($groupIdList = array());
 
