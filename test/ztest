@@ -19,95 +19,98 @@ switch($argv[1])
     case 'control':
         ztfRun('control');
         break;
+    case 'action':
+        ztfRun('model/action');
+        break;
+    case 'admin':
+        ztfRun('model/admin');
+        break;
+    case 'branch':
+        ztfRun('model/branch');
+        break;
+    case 'bug':
+        ztfRun('model/bug');
+        break;
+    case 'build':
+        ztfRun('model/build');
+        break;
+    case 'caselib':
+        ztfRun('model/caselib');
+        break;
+    case 'company':
+        ztfRun('model/company');
+        break;
+    case 'cron':
+        ztfRun('model/cron');
+        break;
+    case 'dept':
+        ztfRun('model/dept');
+        break;
+    case 'design':
+        ztfRun('model/design');
+        break;
+    case 'execution':
+        ztfRun('model/execution');
+        break;
+    case 'group':
+        ztfRun('model/group');
+        break;
+    case 'kanban':
+        ztfRun('model/kanban');
+        break;
+    case 'model':
+        ztfRun('model');
+        break;
+    case 'my':
+        ztfRun('model/my');
+        break;
+    case 'personnel':
+        ztfRun('model/personnel');
+        break;
+    case 'product':
+        ztfRun('model/product');
+        break;
+    case 'projectstory':
+        ztfRun('model/projectstory');
+        break;
+    case 'productsonplan':
+        ztfRun('model/productsonplan');
+        break;
     case 'program':
         ztfRun('model/program');
         break;
     case 'programplan':
         ztfRun('model/programplan');
         break;
-    case 'product':
-        ztfRun('model/product');
-        break;
     case 'project':
         ztfRun('model/project');
-        break;
-    case 'task':
-        ztfRun('model/task');
-        break;
-    case 'story':
-        ztfRun('model/story');
-        break;
-    case 'execution':
-        ztfRun('model/execution');
-        break;
-    case 'user':
-        ztfRun('model/user');
-        break;
-    case 'bug':
-        ztfRun('model/bug');
-        break;
-    case 'company':
-        ztfRun('model/company');
-        break;
-    case 'todo':
-        ztfRun('model/todo');
-        break;
-    case 'dept':
-        ztfRun('model/dept');
-        break;
-    case 'build':
-        ztfRun('model/build');
-        break;
-    case 'kanban':
-        ztfRun('model/kanban');
-        break;
-    case 'action':
-        ztfRun('model/action');
-        break;
-    case 'testcase':
-        ztfRun('model/testcase');
-        break;
-    case 'my':
-        ztfRun('model/my');
-        break;
-    case 'caselib':
-        ztfRun('model/caselib');
-        break;
-    case 'cron':
-        ztfRun('model/cron');
-        break;
-    case 'stage':
-        ztfRun('model/stage');
-        break;
-    case 'branch':
-        ztfRun('model/branch');
         break;
     case 'report':
         ztfRun('model/report');
         break;
-    case 'tree':
-        ztfRun('model/tree');
-        break;
-    case 'design':
-        ztfRun('model/design');
+    case 'stage':
+        ztfRun('model/stage');
         break;
     case 'stakeholder':
         ztfRun('model/stakeholder');
         break;
-    case 'productsonplan':
-        ztfRun('model/productsonplan');
+    case 'story':
+        ztfRun('model/story');
         break;
-    case 'personnel':
-        ztfRun('model/personnel');
+    case 'task':
+        ztfRun('model/task');
         break;
-    case 'projectstory':
-        ztfRun('model/projectstory');
+    case 'testcase':
+        ztfRun('model/testcase');
         break;
-    case 'admin':
-        ztfRun('model/admin');
+    case 'todo':
+        ztfRun('model/todo');
         break;
-    case 'model':
-        ztfRun('model');
+    case 'tree':
+        ztfRun('model/tree');
+        break;
+    case 'user':
+        ztfRun('model/user');
         break;
 
     default:
