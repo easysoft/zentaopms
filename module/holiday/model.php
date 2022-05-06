@@ -74,6 +74,8 @@ class holidayModel extends model
             ->batchCheck($this->config->holiday->require->create, 'notempty')
             ->check('end', 'ge', $holiday->begin)
             ->exec();
+        $lastInsertID = $this->dao->lastInsertID();
+
         if(dao::isError()) return false;
 
         $beginDate = $this->post->begin;
@@ -87,7 +89,7 @@ class holidayModel extends model
         $this->updateTaskPlanDuration($beginDate, $endDate);
         $this->updateTaskRealDuration($beginDate, $endDate);
 
-        return $this->dao->lastInsertID();
+        return $lastInsertID;
     }
 
     /**
