@@ -106,6 +106,9 @@ switch($argv[1])
     case 'admin':
         ztfRun('model/admin');
         break;
+    case 'message':
+        ztfRun('model/message');
+        break;
     case 'model':
         ztfRun('model');
         break;
