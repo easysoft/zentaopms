@@ -28,6 +28,13 @@ class groupTest
         return $object;
     }
 
+    /**
+     * Update a group.
+     *
+     * @param  int    $groupID
+     * @access public
+     * @return void
+     */
     public function updateTest($groupID)
     {
         $objects = $this->objectModel->update($groupID);
@@ -37,6 +44,13 @@ class groupTest
         return $objects;
     }
 
+    /**
+     * Copy a group.
+     *
+     * @param  int    $groupID
+     * @access public
+     * @return void
+     */
     public function copyTest($groupID)
     {
         $objects = $this->objectModel->copy($groupID);
@@ -46,6 +60,14 @@ class groupTest
         return $objects;
     }
 
+    /**
+     * Copy privileges.
+     *
+     * @param  string    $fromGroup
+     * @param  string    $toGroup
+     * @access public
+     * @return void
+     */
     public function copyPrivTest($fromGroup, $toGroup)
     {
         $objects = $this->objectModel->copyPriv($fromGroup, $toGroup);
@@ -55,6 +77,14 @@ class groupTest
         return $objects;
     }
 
+    /**
+     * Copy user.
+     *
+     * @param  string    $fromGroup
+     * @param  string    $toGroup
+     * @access public
+     * @return void
+     */
     public function copyUserTest($fromGroup, $toGroup)
     {
         $objects = $this->objectModel->copyUser($fromGroup, $toGroup);
@@ -64,6 +94,13 @@ class groupTest
         return $objects;
     }
 
+    /**
+     * Get group lists.
+     *
+     * @param  int    $projectID
+     * @access public
+     * @return array
+     */
     public function getListTest($projectID = 0)
     {
         $objects = $this->objectModel->getList($projectID = 0);
@@ -73,6 +110,13 @@ class groupTest
         return $objects;
     }
 
+    /**
+     * Get group pairs.
+     *
+     * @param  int    $projectID
+     * @access public
+     * @return array
+     */
     public function getPairsTest($projectID = 0)
     {
         $objects = $this->objectModel->getPairs($projectID = 0);
@@ -82,6 +126,13 @@ class groupTest
         return $objects;
     }
 
+    /**
+     * Get group by id.
+     *
+     * @param  int    $groupID
+     * @access public
+     * @return object
+     */
     public function getByIDTest($groupID)
     {
         $objects = $this->objectModel->getByID($groupID);
@@ -91,6 +142,13 @@ class groupTest
         return $objects;
     }
 
+    /**
+     * Get group by account.
+     *
+     * @param  string    $account
+     * @access public
+     * @return array
+     */
     public function getByAccountTest($account)
     {
         $objects = $this->objectModel->getByAccount($account);
@@ -100,6 +158,13 @@ class groupTest
         return $objects;
     }
 
+    /**
+     * Get groups by accounts.
+     *
+     * @param  array  $accounts
+     * @access public
+     * @return array
+     */
     public function getByAccountsTest($accounts)
     {
         $objects = $this->objectModel->getByAccounts($accounts);
@@ -109,6 +174,13 @@ class groupTest
         return $objects;
     }
 
+    /**
+     * Get the account number in the group.
+     *
+     * @param  array  $groupIdList
+     * @access public
+     * @return array
+     */
     public function getGroupAccountsTest($groupIdList)
     {
         $objects = $this->objectModel->getGroupAccounts($groupIdList);
@@ -118,6 +190,13 @@ class groupTest
         return $objects;
     }
 
+    /**
+     * Get privileges of a groups.
+     *
+     * @param  int    $groupID
+     * @access public
+     * @return array
+     */
     public function getPrivsTest($groupID)
     {
         $objects = $this->objectModel->getPrivs($groupID);
@@ -127,6 +206,13 @@ class groupTest
         return $objects;
     }
 
+    /**
+     * Get user pairs of a group.
+     *
+     * @param  int    $groupID
+     * @access public
+     * @return array
+     */
     public function getUserPairsTest($groupID)
     {
         $objects = $this->objectModel->getUserPairs($groupID);
@@ -136,6 +222,13 @@ class groupTest
         return $objects;
     }
 
+    /**
+     * Get user programs of a group.
+     *
+     * @param  int    $groupID
+     * @access public
+     * @return array
+     */
     public function getUserProgramsTest($groupID)
     {
         $objects = $this->objectModel->getUserPrograms($groupID);
@@ -145,6 +238,12 @@ class groupTest
         return $objects;
     }
 
+    /**
+     * Get the ID of the group that has access to the program.
+     *
+     * @access public
+     * @return array
+     */
     public function getAccessProgramGroupTest()
     {
         $objects = $this->objectModel->getAccessProgramGroup();
@@ -154,6 +253,14 @@ class groupTest
         return $objects;
     }
 
+    /**
+     * Delete a group.
+     *
+     * @param  int    $groupID
+     * @param  null   $null      compatible with that of model::delete()
+     * @access public
+     * @return void
+     */
     public function deleteTest($groupID, $null = null)
     {
         $objects = $this->objectModel->delete($groupID, $null = null);
@@ -163,6 +270,13 @@ class groupTest
         return $objects;
     }
 
+    /**
+     * Update privilege of a group.
+     *
+     * @param  int    $groupID
+     * @access public
+     * @return bool
+     */
     public function updatePrivByGroupTest($groupID, $menu, $version)
     {
         $objects = $this->objectModel->updatePrivByGroup($groupID, $menu, $version);
@@ -172,6 +286,13 @@ class groupTest
         return $objects;
     }
 
+    /**
+     * Update view priv.
+     *
+     * @param  int    $groupID
+     * @access public
+     * @return bool
+     */
     public function updateViewTest($groupID)
     {
         $objects = $this->objectModel->updateView($groupID);
@@ -181,6 +302,12 @@ class groupTest
         return $objects;
     }
 
+    /**
+     * Update privilege by module.
+     *
+     * @access public
+     * @return void
+     */
     public function updatePrivByModuleTest()
     {
         $objects = $this->objectModel->updatePrivByModule();
@@ -190,6 +317,13 @@ class groupTest
         return $objects;
     }
 
+    /**
+     * Update users.
+     *
+     * @param  int    $groupID
+     * @access public
+     * @return void
+     */
     public function updateUserTest($groupID)
     {
         $objects = $this->objectModel->updateUser($groupID);
@@ -199,6 +333,13 @@ class groupTest
         return $objects;
     }
 
+    /**
+     * Update project admins.
+     *
+     * @param  int    $groupID
+     * @access public
+     * @return void
+     */
     public function updateProjectAdminTest($groupID)
     {
         $objects = $this->objectModel->updateProjectAdmin($groupID);
@@ -208,6 +349,12 @@ class groupTest
         return $objects;
     }
 
+    /**
+     * Sort resource.
+     *
+     * @access public
+     * @return void
+     */
     public function sortResourceTest()
     {
         $objects = $this->objectModel->sortResource();
@@ -217,6 +364,14 @@ class groupTest
         return $objects;
     }
 
+    /**
+     * Check menu have module
+     *
+     * @param  string    $menu
+     * @param  string    $moduleName
+     * @access public
+     * @return void
+     */
     public function checkMenuModuleTest($menu, $moduleName)
     {
         $objects = $this->objectModel->checkMenuModule($menu, $moduleName);
@@ -226,6 +381,13 @@ class groupTest
         return $objects;
     }
 
+    /**
+     * Get modules in menu
+     *
+     * @param  string    $menu
+     * @access public
+     * @return void
+     */
     public function getMenuModulesTest($menu)
     {
         $objects = $this->objectModel->getMenuModules($menu);
