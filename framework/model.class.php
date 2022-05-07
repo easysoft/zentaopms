@@ -54,6 +54,130 @@ class model extends baseModel
     }
 
     /**
+     * Build menu of a module.
+     *
+     * @param  string $moduleName
+     * @param  string $methodName
+     * @param  string $params
+     * @param  string $label
+     * @param  object $data
+     * @param  string $type
+     * @param  string $misc
+     * @param  bool   $li
+     * @access public
+     * @return string
+     */
+    public function buildMenu($moduleName, $methodName, $params, $label, $data, $type = 'browse', $misc = '', $li = false)
+    {
+        if(strpos($moduleName, '.') !== false) list($appName, $moduleName) = explode('.', $moduleName);
+
+        if(strpos($methodName, '_') !== false && strpos($methodName, '_') > 0) list($module, $method) = explode('_', $methodName);
+
+        if(empty($module)) $module = $moduleName;
+        if(empty($method)) $method = $methodName;
+
+        if(!common::hasPriv($module, $method)) return '';
+
+        if(isset($this->config->bizVersion))
+        {
+            static $actions;
+            if(empty($actions)) $actions = $this->dao->select('*')->from(TABLE_WORKFLOWACTION)->where('module')->eq($moduleName)->andWhere('buildin')->eq('1')->andWhere('status')->eq('enable')->fetchAll('action');
+        }
+
+        $enabled = true;
+        if(isset($actions[$methodName]))
+        {
+            $action = $actions[$methodName];
+
+            if($action->extensionType == 'override') return $this->loadModel('flow')->buildActionMenu($moduleName, $action, $data, $type);
+
+            $conditions = json_decode($action->conditions);
+            if($action->extensionType == 'extend' && $conditions)
+            {
+                $enabled = $this->loadModel('flow')->checkConditions($conditions, $data);
+                $label   = $action->name;
+            }
+            else
+            {
+                if(method_exists($this, 'isClickable')) $enabled = $this->isClickable($module, $method, $data);
+            }
+        }
+        else
+        {
+            if(method_exists($this, 'isClickable')) $enabled = $this->isClickable($module, $method, $data);
+        }
+
+        if($enabled) $enabled = commonModel::checkPrivByVars($module, $method, $params);
+
+        if($enabled)
+        {
+            $link = helper::createLink($module, $method, $params);
+            $html = html::a($link, $label, '', $misc);
+            if($type == 'browse' && $li) $html = '<li>' . $html . '</li>';
+
+            return $html;
+        }
+        else
+        {
+            if($type == 'view') return '';
+            if($type == 'browse' && $li) return '';
+
+            return html::a('javascript:;', $label, '', "class='disabled'");
+        }
+    }
+
+    /**
+     * Build menu of actions created by workflow action.
+     *
+     * @param  string $module
+     * @param  int    $data
+     * @param  string $type         browse | view
+     * @param  string $show         direct | dropdownlist
+     * @access public
+     * @return string
+     */
+    public function buildFlowMenu($module, $data, $type = 'browse', $show = '')
+    {
+        if(!isset($this->config->bizVersion)) return '';
+
+        $moduleName = $module;
+        if(strpos($module, '.') !== false) list($appName, $moduleName) = explode('.', $module);
+
+        static $actions;
+        if(empty($actions)) $actions = $this->dao->select('*')->from(TABLE_WORKFLOWACTION)->where('module')->eq($moduleName)->andWhere('buildin')->eq('0')->andWhere('status')->eq('enable')->orderBy('order_asc')->fetchAll();
+
+        $menu = '';
+        if($show)
+        {
+            foreach($actions as $action)
+            {
+                if(strpos($action->position, $type) === false || $action->show != $show) continue;
+
+                $menu .= $this->loadModel('flow')->buildActionMenu($moduleName, $action, $data, $type);
+            }
+        }
+        else
+        {
+            $dropdownMenu = '';
+            foreach($actions as $action)
+            {
+                if(strpos($action->position, $type) === false) continue;
+
+                if($type == 'view' || $action->show == 'direct')         $menu         .= $this->loadModel('flow')->buildActionMenu($moduleName, $action, $data, $type);
+                if($type == 'browse' && $action->show == 'dropdownlist') $dropdownMenu .= $this->loadModel('flow')->buildActionMenu($moduleName, $action, $data, $type);
+            }
+
+            if($type == 'browse' && $dropdownMenu)
+            {
+                $menu .= "<div class='dropdown'><a href='javascript:;' data-toggle='dropdown'>{$this->lang->more}<span class='caret'> </span></a>";
+                $menu .= "<ul class='dropdown-menu pull-right'>{$dropdownMenu}</ul></div>";
+            }
+        }
+
+        return $menu;
+    }
+
+    /**
      * Process status of an object according to its subStatus.
      *
      * @param  string $module   product | release | story | project | task | bug | testcase | testtask | feedback
@@ -69,6 +193,48 @@ class model extends baseModel
     }
 
     /**
+     * Process workflow export data.
+     *
+     * @param  object    $data
+     * @access public
+     * @return object
+     */
+    public function processExportData($data)
+    {
+        if(!isset($this->config->bizVersion)) return $data;
+
+        return $this->loadModel('workflowfield')->processExportData($data);
+    }
+
+    /**
+     * Process workflow export options.
+     *
+     * @param  object    $data
+     * @access public
+     * @return object
+     */
+    public function processExportOptions($data)
+    {
+        if(!isset($this->config->bizVersion)) return $data;
+
+        return $this->loadModel('workflowfield')->processExportOptions($data);
+    }
+
+    /**
+     * Process workflow import data.
+     *
+     * @param  object    $data
+     * @access public
+     * @return object
+     */
+    public function processImportData($data)
+    {
+        if(!isset($this->config->bizVersion)) return $data;
+
+        return $this->loadModel('workflowfield')->processImportData($data);
+    }
+
+    /**
      * Get flow extend fields.
      *
      * @access public
@@ -79,6 +245,19 @@ class model extends baseModel
         if(!isset($this->config->bizVersion)) return array();
 
         return $this->loadModel('flow')->getExtendFields($this->app->getModuleName(), $this->app->getMethodName());
+    }
+
+    /**
+     * Set workflow export fields.
+     *
+     * @access public
+     * @return string
+     */
+    public function getFlowExportFields()
+    {
+        if(!isset($this->config->bizVersion)) return array();
+
+        return $this->loadModel('workflowfield')->getExportFields($this->app->getModuleName());
     }
 
     /**
@@ -112,6 +291,17 @@ class model extends baseModel
 
         $action = $this->loadModel('workflowaction')->getByModuleAndAction($moduleName, $methodName);
         if(empty($action) or $action->extensionType == 'none') return false;
+
+        $this->loadModel('file');
+        if($this->post->uid) $this->file->updateObjectID($this->post->uid, $objectID, $moduleName);
+        $fields = $this->workflowaction->getFields($moduleName, $action->action, false);
+        foreach($fields as $field)
+        {
+            if($field->control == 'file' && $field->show && !$field->readonly)
+            {
+                $this->file->saveUpload($moduleName, $objectID, $field->field, $field->field, $field->field);
+            }
+        }
 
         $flow = $this->loadModel('workflow')->getByModule($moduleName);
         if($flow && $action) $this->loadModel('workflowhook')->execute($flow, $action, $objectID);

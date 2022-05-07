@@ -42,8 +42,6 @@ class control extends baseControl
         /* Code for task #9224. Set requiredFields for workflow. */
         if($this->dbh and (defined('IN_USE') or (defined('RUN_MODE') and RUN_MODE == 'api')))
         {
-            $this->checkRequireFlowField();
-
             if(isset($this->config->{$this->moduleName}) and strpos($this->methodName, 'export') !== false)
             {
                 if(isset($this->config->{$this->moduleName}->exportFields) or isset($this->config->{$this->moduleName}->list->exportFields))
@@ -292,6 +290,24 @@ class control extends baseControl
     }
 
     /**
+     * Build operate menu of a method.
+     *
+     * @param  object $object    product|project|productplan|release|build|story|task|bug|testtask|testcase|testsuite
+     * @param  string $displayOn view|browse
+     * @access public
+     * @return void
+     */
+    public function buildOperateMenu($object, $displayOn = 'view')
+    {
+        if(!isset($this->config->bizVersion)) return false;
+
+        $flow = $this->loadModel('workflow')->getByModule($this->moduleName);
+        return $this->loadModel('flow')->buildOperateMenu($flow, $object, $displayOn);
+        //$moduleName = $this->moduleName;
+        //return $this->$moduleName->buildOperateMenu($object, $type);
+    }
+
+    /**
      * Execute hooks of a method.
      *
      * @param  int    $objectID     The id of an object. The object maybe a bug | build | feedback | product | productplan | project | release | story | task | testcase | testsuite | testtask.
@@ -307,19 +323,18 @@ class control extends baseControl
     }
 
     /**
-     * Build operate menu of a method.
-     *
-     * @param  object $object    product|project|productplan|release|build|story|task|bug|testtask|testcase|testsuite
-     * @param  string $displayOn view|browse
+     * Set workflow export fields 
+     * 
+     * @param  array  $fields 
      * @access public
-     * @return void
+     * @return array
      */
-    public function buildOperateMenu($object, $displayOn = 'view')
+    public function getFlowExportFields()
     {
-        if(!isset($this->config->bizVersion)) return false;
+        if(!isset($this->config->bizVersion)) return array();
 
-        $flow = $this->loadModel('workflow')->getByModule($this->moduleName);
-        return $this->loadModel('flow')->buildOperateMenu($flow, $object, $displayOn);
+        $moduleName = $this->moduleName;
+        return $this->$moduleName->getFlowExportFields();
     }
 
     /**
@@ -332,14 +347,27 @@ class control extends baseControl
      *                          position=left|right     The position which the fields displayed in a page.
      *                          inForm=0|1              The fields displayed in a form or not. The default is 1.
      *                          inCell=0|1              The fields displayed in a div with class cell or not. The default is 0.
+     * @param  bool   $print
      * @access public
      * @return void
      */
-    public function printExtendFields($object, $type, $extras = '')
+    public function printExtendFields($object, $type, $extras = '', $print = false)
     {
         if(!isset($this->config->bizVersion)) return false;
 
-        echo $this->loadModel('flow')->printFields($this->moduleName, $this->methodName, $object, $type, $extras);
+        $moduleName = $this->app->getModuleName();
+        $methodName = $this->app->getMethodName();
+        $fields     = $this->loadModel('flow')->printFields($moduleName, $methodName, $object, $type, $extras);
+        if(!$print) return $fields;
+
+        $jsRoot = $this->config->webRoot . "js/";
+        $picker = file_get_contents($this->app->getBasePath() . 'app/sys/common/view/picker.html.php');
+        $picker = substr($picker, strpos($picker, '<style>'));
+
+        js::import($jsRoot . 'picker/min.js');
+        css::import($jsRoot . 'picker/min.css');
+
+        echo $picker . $fields;
     }
 
     /**
@@ -355,113 +383,6 @@ class control extends baseControl
         $moduleName = $this->moduleName;
 
         return $this->$moduleName->processStatus($module, $record);
-    }
-
-    /**
-     * Check require with flow field when post data.
-     *
-     * @access public
-     * @return void
-     */
-    public function checkRequireFlowField()
-    {
-        if($this->config->edition == 'open') return false;
-        if(empty($_POST)) return false;
-
-        $action = $this->dao->select('*')->from(TABLE_WORKFLOWACTION)->where('module')->eq($this->moduleName)->andWhere('action')->eq($this->methodName)->fetch();
-        if(empty($action)) return false;
-        if($action->extensionType == 'none' and $action->buildin == 1) return false;
-
-        $flow    = $this->dao->select('*')->from(TABLE_WORKFLOW)->where('module')->eq($this->moduleName)->fetch();
-        $fields  = $this->loadModel('workflowaction')->getFields($this->moduleName, $this->methodName);
-        $layouts = $this->loadModel('workflowlayout')->getFields($this->moduleName, $this->methodName);
-        $rules   = $this->dao->select('*')->from(TABLE_WORKFLOWRULE)->orderBy('id_desc')->fetchAll('id');
-
-        $requiredFields = '';
-        $mustPostFields = '';
-        $numberFields   = '';
-        $message        = array();
-        foreach($fields as $field)
-        {
-            if(!empty($field->buildin)) continue;
-            if(empty($field->show)) continue;
-            if(!isset($layouts[$field->field])) continue;
-
-            $fieldRules = explode(',', trim($field->rules, ','));
-            $fieldRules = array_unique($fieldRules);
-            foreach($fieldRules as $ruleID)
-            {
-                if(!isset($rules[$ruleID])) continue;
-                if(!empty($_POST[$field->field]) and !is_string($_POST[$field->field])) continue;
-
-                $rule = $rules[$ruleID];
-                if($rule->type == 'system' and $rule->rule == 'notempty')
-                {
-                    $requiredFields .= ",{$field->field}";
-                    if($field->control == 'radio' or $field->control == 'checkbox') $mustPostFields .= ",{$field->field}";
-                    if(strpos($field->type, 'int') !== false and $field->control == 'select') $numberFields .= ",{$field->field}";
-                }
-                elseif($rule->type == 'system' and isset($_POST[$field->field]))
-                {
-                    $pass = true;
-                    if($rule->rule == 'unique')
-                    {
-                        if(!empty($_POST[$field->field]))
-                        {
-                            $sqlClass = new sql();
-                            $sql      = "SELECT COUNT(*) AS count FROM $flow->table WHERE `$field->field` = " . $sqlClass->quote(fixer::input('post')->get($field->field));
-                            if(isset($_POST['id'])) $sql .= ' AND `id` != ' . (int)$_POST['id'];
-
-                            $row = $this->dbh->query($sql)->fetch();
-                            if($row->count != 0) $pass = false;
-                        }
-                    }
-                    else
-                    {
-                        $checkFunc = 'check' . $rule->rule;
-                        if(validater::$checkFunc($_POST[$field->field]) === false) $pass = false;
-                    }
-
-                    if(!$pass)
-                    {
-                        $error = zget($this->lang->error, $rule->rule, '');
-                        if($rule->rule == 'unique') $error = sprintf($error, $field->name, $_POST[$field->field]);
-                        if($error) $error = sprintf($error, $field->name);
-                        if(empty($error)) $error = sprintf($this->lang->error->reg, $field->name, $rule->rule);
-
-                        $message[$field->field][] = $error;
-                    }
-                }
-                elseif($rule->type == 'regex' and isset($_POST[$field->field]))
-                {
-                    if(validater::checkREG($_POST[$field->field], $rule->rule) === false) $message[$field->field][] = sprintf($this->lang->error->reg, $field->name, $rule->rule);
-                }
-            }
-        }
-
-        if($requiredFields)
-        {
-            if(isset($this->config->{$this->moduleName}->{$this->methodName}->requiredFields)) $requiredFields .= ',' . $this->config->{$this->moduleName}->{$this->methodName}->requiredFields;
-
-            foreach(explode(',', $requiredFields) as $requiredField)
-            {
-                if(empty($requiredField)) continue;
-                if(!isset($fields[$requiredField])) continue;
-                if(isset($_POST[$requiredField]) and $_POST[$requiredField] === '')
-                {
-                    $message[$requiredField][] = sprintf($this->lang->error->notempty, $fields[$requiredField]->name);
-                }
-                elseif(strpos(",{$numberFields},", ",{$requiredField},") !== false and empty($_POST[$requiredField]))
-                {
-                    $message[$requiredField][] = sprintf($this->lang->error->notempty, $fields[$requiredField]->name);
-                }
-                elseif(strpos(",{$mustPostFields},", ",{$requiredField},") !== false and !isset($_POST[$requiredField]))
-                {
-                    $message[$requiredField][] = sprintf($this->lang->error->notempty, $fields[$requiredField]->name);
-                }
-            }
-        }
-        if($message) $this->send(array('result' => 'fail', 'message' => $message));
     }
 
     /**
