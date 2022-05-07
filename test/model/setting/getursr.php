@@ -10,8 +10,10 @@ title=测试 settingModel->getURSR();
 cid=1
 pid=1
 
+测试正常查询URSR >> 2
+
 */
 
 $setting = new settingTest();
 
-r($setting->getURSRTest()) && p() && e();
+r($setting->getURSRTest()) && p() && e('2'); //测试正常查询URSR

@@ -124,24 +124,55 @@ class settingTest
         return $objects;
     }
 
-    public function createDAOTest($params, $method = 'select')
+    /**
+     * Test create a DAO object to select or delete one or more records.
+     *
+     * @param  string $paramString
+     * @param  string $method     select|delete.
+     * @access public
+     * @return array|int
+     */
+    public function createDAOTest($paramString, $method = 'select')
     {
-        $objects = $this->objectModel->createDAO($params, $method = 'select');
+        $params  = $this->objectModel->parseItemParam($paramString);
+        if($method == 'delete')
+        {
+            $objects = $this->objectModel->createDAO($params, $method)->exec();
+        }
+        else
+        {
+            $objects = $this->objectModel->createDAO($params, $method)->orderBy('key')->fetch();
+        }
 
         if(dao::isError()) return dao::getError();
 
         return $objects;
     }
 
+    /**
+     * Get config of system and one user.
+     *
+     * @param  string $account
+     * @access public
+     * @return bool
+     */
     public function getSysAndPersonalConfigTest($account = '')
     {
-        $objects = $this->objectModel->getSysAndPersonalConfig($account = '');
+        $objects = $this->objectModel->getSysAndPersonalConfig($account);
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        return !empty($objects) ? true : false;
     }
 
+    /**
+     * Test get the version of current zentaopms.
+     *
+     * Since the version field not saved in db. So if empty, return 0.3 beta.
+     *
+     * @access public
+     * @return void
+     */
     public function getVersionTest()
     {
         $objects = $this->objectModel->getVersion();
@@ -151,6 +182,12 @@ class settingTest
         return $objects;
     }
 
+    /**
+     * Test get URSR.
+     *
+     * @access public
+     * @return int
+     */
     public function getURSRTest()
     {
         $objects = $this->objectModel->getURSR();
@@ -160,24 +197,58 @@ class settingTest
         return $objects;
     }
 
+    /**
+     * Test update version
+     *
+     * @param  string $version
+     * @access public
+     * @return array
+     */
     public function updateVersionTest($version)
     {
-        $objects = $this->objectModel->updateVersion($version);
+        $this->objectModel->updateVersion($version);
 
         if(dao::isError()) return dao::getError();
+
+        $params['owner']   = 'system';
+        $params['module']  = 'common';
+        $params['section'] = 'global';
+        $params['key']     = 'version';
+
+        $objects = $this->objectModel->createDAO($params)->fetchAll();
 
         return $objects;
     }
 
+    /**
+     * Test set the sn of current zentaopms.
+     *
+     * @access public
+     * @return bool
+     */
     public function setSNTest()
     {
-        $objects = $this->objectModel->setSN();
+        $this->objectModel->setSN();
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        $params['owner']   = 'system';
+        $params['module']  = 'common';
+        $params['section'] = 'global';
+        $params['key']     = 'sn';
+
+        $objects = $this->objectModel->createDAO($params)->fetchAll();
+
+        return !empty($objects) ? true : false;
     }
 
+    /**
+     * Test judge a sn needed update or not.
+     *
+     * @param  string $sn
+     * @access public
+     * @return bool
+     */
     public function snNeededUpdateTest($sn)
     {
         $objects = $this->objectModel->snNeededUpdate($sn);
