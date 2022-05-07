@@ -61,6 +61,9 @@ switch($argv[1])
     case 'group':
         ztfRun('model/group');
         break;
+    case 'jenkins':
+        ztfRun('model/jenkins');
+        break;
     case 'kanban':
         ztfRun('model/kanban');
         break;
