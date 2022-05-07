@@ -9,10 +9,12 @@ class apiTest
 
     public function publishLibTest($data)
     {
-        $objects = $this->objectModel->publishLib($data);
+        $objectID = $this->objectModel->publishLib($data);
 
         if(dao::isError()) return dao::getError();
 
+        $objects = $this->objectModel->getRelease($data->lib);
+        $this->objectModel->deleteRelease($objectID);
         return $objects;
     }
 
@@ -27,28 +29,43 @@ class apiTest
 
     public function createTest($params)
     {
+        global $tester;
+
         $_POST = $params;
-        $objects = $this->objectModel->create($_POST['lib']);
+        $objects = $this->objectModel->create($params['lib']);
 
         if(dao::isError()) return dao::getError();
+
+        $tester->dao->delete()->from(TABLE_API)->where('id')->eq($objects->id)->exec();
 
         return $objects;
     }
 
-    public function createStructTest($data)
+    public function createStructTest($data, $confirm = true)
     {
-        $objects = $this->objectModel->createStruct($data);
+        global $tester;
+
+        $objectID = $this->objectModel->createStruct($data);
 
         if(dao::isError()) return dao::getError();
+
+        $objects = $this->objectModel->getStructByID($objectID);
+
+        if($confirm) $tester->dao->delete()->from(TABLE_APISTRUCT)->where('id')->eq($objects->id)->exec();
 
         return $objects;
     }
 
-    public function updateStructTest($id)
+    public function updateStructTest($id, $params, $confirm = true)
     {
+        global $tester;
+
+        $_POST = $params;
         $objects = $this->objectModel->updateStruct($id);
 
         if(dao::isError()) return dao::getError();
+
+        if($confirm) $tester->dao->delete()->from(TABLE_APISTRUCT)->where('id')->eq($id)->exec();
 
         return $objects;
     }

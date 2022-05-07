@@ -12,6 +12,31 @@ pid=1
 
 */
 
+global $tester;
 $api = new apiTest();
 
-r($api->updateStructTest()) && p() && e();
+$normalStruct = new stdclass();
+$normalStruct->name      = 'struct';
+$normalStruct->type      = 'formData';
+$normalStruct->attribute = '[{"field":"field1","paramsType":"string","required":true,"desc":"desc","structType":"formData","sub":1,"key":"l2u5qy3jc1se6ghigll","children":[]}]';
+$normalStruct->desc      = '';
+$normalStruct->addedBy   = $tester->app->user->account;
+$normalStruct->addedDate = helper::now();
+
+$data = array(
+    'name'      => 'editStruct',
+    'type'      => 'formData',
+    'attribute' => '[{"field":"field1","paramsType":"string","required":true,"desc":"desc","structType":"formData","sub":1,"key":"l2u5qy3jc1se6ghigll","children":[]}]',
+    'desc'      => '',
+);
+
+$normalEditStruct = $data;
+
+$emptyNameEditStruct = $data;
+$emptyNameEditStruct['name'] = '';
+
+$struct = $api->createStructTest($normalStruct, false);
+r($api->updateStructTest($struct->id, $normalEditStruct, false)) && p('0:new') && e('editStruct');                //正常的修改
+r($api->updateStructTest($struct->id, $emptyNameEditStruct)) && p('name:0') && e('『Name』should not be blank.'); //没有名称的修改
+
+//system("./ztest init");
