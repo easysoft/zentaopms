@@ -78,7 +78,7 @@ fields:
     format: ""
   - field: type
     note: "文档类型"
-    range: text,markdown
+    range: text,markdown,url
     prefix: ""
     postfix: ""
     loop: 0

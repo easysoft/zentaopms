@@ -43,6 +43,9 @@ switch($argv[1])
     case 'cron':
         ztfRun('model/cron');
         break;
+    case 'datatable':
+        ztfRun('model/datatable');
+        break;
     case 'dept':
         ztfRun('model/dept');
         break;
@@ -51,6 +54,9 @@ switch($argv[1])
         break;
     case 'entry':
         ztfRun('model/entry');
+        break;
+    case 'doc':
+        ztfRun('model/doc');
         break;
     case 'file':
         ztfRun('model/file');
@@ -63,6 +69,9 @@ switch($argv[1])
         break;
     case 'group':
         ztfRun('model/group');
+        break;
+    case 'jenkins':
+        ztfRun('model/jenkins');
         break;
     case 'kanban':
         ztfRun('model/kanban');
@@ -93,6 +102,9 @@ switch($argv[1])
         break;
     case 'project':
         ztfRun('model/project');
+        break;
+    case 'pipeline':
+        ztfRun('model/pipeline');
         break;
     case 'holiday':
         ztfRun('model/holiday');
