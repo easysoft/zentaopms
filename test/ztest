@@ -52,6 +52,12 @@ switch($argv[1])
     case 'design':
         ztfRun('model/design');
         break;
+    case 'entry':
+        ztfRun('model/entry');
+        break;
+    case 'doc':
+        ztfRun('model/doc');
+        break;
     case 'file':
         ztfRun('model/file');
         break;
@@ -69,9 +75,6 @@ switch($argv[1])
         break;
     case 'kanban':
         ztfRun('model/kanban');
-        break;
-    case 'message':
-        ztfRun('model/message');
         break;
     case 'model':
         ztfRun('model');
@@ -109,8 +112,6 @@ switch($argv[1])
     case 'report':
         ztfRun('model/report');
         break;
-    case 'sso':
-        ztfRun('model/sso');
     case 'setting':
         ztfRun('model/setting');
         break;
@@ -132,8 +133,8 @@ switch($argv[1])
     case 'todo':
         ztfRun('model/todo');
         break;
-    case 'tutorial':
-        ztfRun('model/tutorial');
+    case 'message':
+        ztfRun('model/message');
         break;
     case 'tree':
         ztfRun('model/tree');

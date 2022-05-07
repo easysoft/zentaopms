@@ -470,6 +470,12 @@ class docTest
         return $objects;
     }
 
+    /**
+     * Get statistic information.
+     *
+     * @access public
+     * @return object
+     */
     public function getStatisticInfoTest()
     {
         $objects = $this->objectModel->getStatisticInfo();
@@ -479,6 +485,14 @@ class docTest
         return $objects;
     }
 
+    /**
+     * Get the previous and next doc.
+     *
+     * @param  int $docID
+     * @param  int $libID
+     * @access public
+     * @return object
+     */
     public function getPreAndNextDocTest($docID, $libID)
     {
         $objects = $this->objectModel->getPreAndNextDoc($docID, $libID);

@@ -1196,7 +1196,7 @@ class docModel extends model
     {
         $libs    = array();
         $docLibs = array();
-        if($type == 'product' or $type == 'extension')
+        if($type == 'product' or $type == 'execution')
         {
             $nonzeroLibs = array();
             if(strpos($this->config->doc->custom->showLibs, 'zero') === false)
