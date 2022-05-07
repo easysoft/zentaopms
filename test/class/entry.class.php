@@ -17,14 +17,10 @@ class entryTest
     public function getByIdTest($entryID)
     {
         $object = $this->objectModel->getById($entryID);
-        if(dao::isError())
-        {
-            return dao::getError();
-        }
-        else
-        {
-            return $object;
-        }
+
+        if(dao::isError()) return dao::getError();
+
+        return $object;
     }
 
     /**
@@ -37,14 +33,10 @@ class entryTest
     public function getByCodeTest($code)
     {
         $object = $this->objectModel->getByCode($code);
-        if(dao::isError())
-        {
-            return dao::getError();
-        }
-        else
-        {
-            return $object;
-        }
+
+        if(dao::isError()) return dao::getError();
+
+        return $object;
     }
 
     /**
@@ -57,14 +49,10 @@ class entryTest
     public function getByKeyTest($key)
     {
         $object = $this->objectModel->getByKey($key);
-        if(dao::isError())
-        {
-            return dao::getError();
-        }
-        else
-        {
-            return $object;
-        }
+
+        if(dao::isError()) return dao::getError();
+
+        return $object;
     }
 
     /**
@@ -78,14 +66,10 @@ class entryTest
     public function getListTest($orderBy = 'id_desc', $pager = null)
     {
         $objects = $this->objectModel->getList($orderBy, $pager);
-        if(dao::isError())
-        {
-            return dao::getError();
-        }
-        else
-        {
-            return $objects;
-        }
+
+        if(dao::isError()) return dao::getError();
+
+        return $objects;
     }
 
     /**
@@ -100,14 +84,10 @@ class entryTest
     public function getLogsTest($id, $orderBy = 'date_desc', $pager = null)
     {
         $object = $this->objectModel->getLogs($id, $orderBy, $paper);
-        if(dao::isError())
-        {
-            return dao::getError();
-        }
-        else
-        {
-            return $object;
-        }
+
+        if(dao::isError()) return dao::getError();
+
+        return $object;
     }
 
     /**
@@ -131,15 +111,11 @@ class entryTest
 
         $objectID = $this->objectModel->create();
         unset($_POST);
-        if(dao::isError())
-        {
-            return dao::getError();
-        }
-        else
-        {
-            $object = $this->objectModel->getById($objectID);
-            return $object;
-        }
+
+        if(dao::isError()) return dao::getError();
+
+        $object = $this->objectModel->getById($objectID);
+        return $object;
     }
 
     /**
@@ -172,14 +148,8 @@ class entryTest
         if($change == array()) $change = '没有数据更新';
         unset($_POST);
 
-        if(dao::isError())
-        {
-            return dao::getError();
-        }
-        else
-        {
-            return $change;
-        }
+        if(dao::isError()) return dao::getError();
+        return $change;
     }
 
     /**
@@ -193,15 +163,11 @@ class entryTest
     public function updateCalledTimeTest($code, $time)
     {
         $this->objectModel->updateCalledTime($code, $time);
-        if(dao::isError())
-        {
-            return dao::getError();
-        }
-        else
-        {
-            $object = $this->objectModel->getByCode($code);
-            return $object;
-        }
+
+        if(dao::isError()) return dao::getError();
+
+        $object = $this->objectModel->getByCode($code);
+        return $object;
     }
 
     /**
@@ -215,17 +181,12 @@ class entryTest
     public function saveLogTest($entryID, $url)
     {
         $this->objectModel->saveLog($entryID, $url);
-        if(dao::isError())
-        {
-            return dao::getError();
-        }
-        else
-        {
-           global $tester;
-           $object = $tester->dbh->query("SELECT * FROM " . TABLE_LOG  ." WHERE objectID = $entryID AND objectType = 'entry'")->fetch();
-           return $object;
-        }
 
+        if(dao::isError()) return dao::getError();
+
+        global $tester;
+        $object = $tester->dbh->query("SELECT * FROM " . TABLE_LOG  ." WHERE objectID = $entryID AND objectType = 'entry'")->fetch();
+        return $object;
     }
 
 }
