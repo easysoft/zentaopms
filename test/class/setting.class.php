@@ -7,15 +7,30 @@ class settingTest
          $this->objectModel = $tester->loadModel('setting');
     }
 
+    /**
+     * Get value of an item.
+     *
+     * @param  string   $paramString    see parseItemParam();
+     * @access public
+     * @return misc
+     */
     public function getItemTest($paramString)
     {
         $objects = $this->objectModel->getItem($paramString);
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        if($objects or $objects === 0 or $objects === '0') return true;
+        return false;
     }
 
+    /**
+     * Get some items.
+     *
+     * @param  string   $paramString    see parseItemParam();
+     * @access public
+     * @return array
+     */
     public function getItemsTest($paramString)
     {
         $objects = $this->objectModel->getItems($paramString);
@@ -25,15 +40,48 @@ class settingTest
         return $objects;
     }
 
+    /**
+     * Set value of an item.
+     *
+     * @param  string      $path     system.common.global.sn | system.common.sn | system.common.global.sn@rnd
+     * @param  string      $value
+     * @access public
+     * @return void
+     */
     public function setItemTest($path, $value = '')
     {
-        $objects = $this->objectModel->setItem($path, $value = '');
+        $this->objectModel->setItem($path, $value);
 
         if(dao::isError()) return dao::getError();
+
+        /* Determine vision of config item. */
+        $pathVision = explode('@', $path);
+        $vision     = isset($pathVision[1]) ? $pathVision[1] : '';
+        $path       = $pathVision[0];
+        $level      = substr_count($path, '.');
+        $section    = '';
+
+        if($level <= 1) return false;
+        if($level == 2) list($owner, $module, $key) = explode('.', $path);
+        if($level == 3) list($owner, $module, $section, $key) = explode('.', $path);
+        $paramString = "vision=$vision&owner=$owner&module=$module&section=$section&key=$key";
+        $objects     = $this->objectModel->getItem($paramString);
 
         return $objects;
     }
 
+    /**
+     * Batch set items, the example:
+     *
+     * $path = 'system.mail';
+     * $items->turnon = true;
+     * $items->smtp->host = 'localhost';
+     *
+     * @param  string         $path   like system.mail
+     * @param  array|object   $items  the items array or object, can be mixed by one level or two levels.
+     * @access public
+     * @return bool
+     */
     public function setItemsTest($path, $items)
     {
         $objects = $this->objectModel->setItems($path, $items);
@@ -43,15 +91,30 @@ class settingTest
         return $objects;
     }
 
+    /**
+     * Delete items.
+     *
+     * @param  string   $paramString    see parseItemParam();
+     * @access public
+     * @return void
+     */
     public function deleteItemsTest($paramString)
     {
-        $objects = $this->objectModel->deleteItems($paramString);
+        $this->objectModel->deleteItems($paramString);
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        $object = $this->getItemTest($paramString);
+        return $object;
     }
 
+    /**
+     * Parse the param string for select or delete items.
+     *
+     * @param  string    $paramString     owner=xxx&key=sn and so on.
+     * @access public
+     * @return array
+     */
     public function parseItemParamTest($paramString)
     {
         $objects = $this->objectModel->parseItemParam($paramString);
