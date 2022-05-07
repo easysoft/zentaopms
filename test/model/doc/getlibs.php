@@ -40,7 +40,7 @@ $types = array('all', 'api', 'product', 'project', 'execution');
 $extra = array('', 'withObject', 'notdoc');
 $appendLibs = array('17', '1');
 $objectIDs  = array('1', '11', '101', '0');
-//var_dump($doc->getLibs($types[4], $extra[0], '', $objectIDs[2]));die;
+
 r($doc->getLibs($types[0], $extra[0], '', $objectIDs[3]))          && p('1')   && e('产品主库');            //全部文档库查询
 r($doc->getLibs($types[1], $extra[0], '', $objectIDs[3]))          && p()      && e('0');                   //api文档库查询
 r($doc->getLibs($types[2], $extra[0], '', $objectIDs[3]))          && p('10')  && e('产品主库');            //产品文档库查询
