@@ -104,8 +104,10 @@ $builder->designspec = array('rows' => 120, 'extends' => array('designspec'));
 $builder->stage        = array('rows' => 6, 'extends' => array('stage'));
 $builder->webhook      = array('rows' => 7, 'extends' => array('webhook'));
 $builder->entry        = array('rows' => 1, 'extends' => array('entry'));
+$builder->log          = array('rows' => 10, 'extends' => array('log'));
 $builder->weeklyreport = array('rows' => 10, 'extends' => array('weeklyreport'));
 $builder->metting      = array('rows' => 10, 'extends' => array('meeting'));
+$builder->usertpl      = array('rows' => 10, 'extends' => array('usertpl'));
 
 $builder->pipeline = array('rows' => 2,  'extends' => array('pipeline'));
 $builder->holiday  = array('rows' => 100,  'extends' => array('holiday'));
