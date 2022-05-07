@@ -101,7 +101,7 @@ class upgradeModel extends model
 
             $this->saveLogs("Execute $openVersion");
             $this->execSQL($this->getUpgradeFile(str_replace('_', '.', $openVersion)));
-            $this->executeOpen($openVersion, $fromEdition, $executedXuanxuan);
+            $this->executeOpen($openVersion, $fromEdition, $executedXuanxuan, $fromVersion);
 
             /* Execute pro. */
             foreach($chargedVersions['pro'] as $proVersion)
@@ -147,10 +147,11 @@ class upgradeModel extends model
      * @param  string $openVersion
      * @param  string $fromEdition
      * @param  bool   $executedXuanxuan
+     * @param  string $fromVersion
      * @access public
      * @return void
      */
-    public function executeOpen($openVersion, $fromEdition, $executedXuanxuan)
+    public function executeOpen($openVersion, $fromEdition, $executedXuanxuan, $fromVersion)
     {
         switch($openVersion)
         {
@@ -497,7 +498,7 @@ class upgradeModel extends model
                 break;
             case '16_5':
                 $this->updateProjectStatus();
-                $this->updateStoryReviewer();
+                $this->updateStoryReviewer($fromVersion);
                 break;
         }
 
@@ -6174,11 +6175,29 @@ class upgradeModel extends model
     /**
      * Update the story reviewer when 12 version to 15.
      *
+     * @param  string  $fromVersion
      * @access public
      * @return void
      */
-    public function updateStoryReviewer()
+    public function updateStoryReviewer($fromVersion)
     {
+        $isOldVersion = false;
+        $fromVersion  = str_replace('_', '.', $fromVersion);
+        if(is_numeric($fromVersion[0]) and version_compare($fromVersion, '12.5.3', '<='))
+        {
+            $isOldVersion = true;
+        }
+        elseif($fromVersion[0] == 'p' and version_compare($fromVersion, 'pro9.0.3', '<='))
+        {
+            $isOldVersion = true;
+        }
+        elseif($fromVersion[0] == 'b' and version_compare($fromVersion, 'biz4.1.3', '<='))
+        {
+            $isOldVersion = true;
+        }
+
+        if(!$isOldVersion) return;
+
         $stories = $this->dao->select('t1.*,t2.PO,t2.createdBy')->from(TABLE_STORY)->alias('t1')
             ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product = t2.id')
             ->where('t1.deleted')->eq('0')

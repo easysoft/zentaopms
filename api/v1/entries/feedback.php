@@ -29,9 +29,9 @@ class feedbackEntry extends Entry
 
         $feedback->publicStatus = $feedback->public;
         $feedback->productName  = $data->data->product;
-        $feedback->moduleName   = $data->data->modulePath[0]->name ? $data->data->modulePath[0]->name : '/';
+        $feedback->moduleName   = isset($data->data->modulePath[0]->name) ? $data->data->modulePath[0]->name : '/';
         $feedback->resultType   = $data->data->type;
-        if($feedback->resultInfo->deleted == 0) $feedback->resultStatus = $this->loadModel('feedback')->processStatus($feedback->resultType, $feedback->resultInfo);
+        if(isset($feedback->resultInfo) and $feedback->resultInfo->deleted == 0) $feedback->resultStatus = $this->loadModel('feedback')->processStatus($feedback->resultType, $feedback->resultInfo);
 
         if(!$data or !isset($data->status)) return $this->send400('error');
         if(isset($data->status) and $data->status == 'fail') return $this->sendError(zget($data, 'code', 400), $data->message);
@@ -69,14 +69,14 @@ class feedbackEntry extends Entry
     /**
      * DELETE method.
      *
-     * @param  int    $productID
+     * @param  int    $feedbackID
      * @access public
      * @return void
      */
-    public function delete($productID)
+    public function delete($feedbackID)
     {
-        $control = $this->loadController('product', 'delete');
-        $control->delete($productID, 'yes');
+        $control = $this->loadController('feedback', 'delete');
+        $control->delete($feedbackID, 'yes');
 
         $this->getData();
         $this->sendSuccess(200, 'success');

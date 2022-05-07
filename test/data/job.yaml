@@ -41,6 +41,12 @@ fields:
   - field: engine
     note: "引擎"
     range: jenkins,gitlab
+  - field: server
+    note: "服务器ID"
+    range: 3,1
+  - field: pipeline
+    note: "流水线"
+    range: dave,[{"project":"1569"}]
   - field: triggerType
     note: "触发方式"
     range: tag,commit,schedule

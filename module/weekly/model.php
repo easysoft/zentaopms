@@ -343,7 +343,7 @@ class weeklyModel extends model
         $monday     = $this->getThisMonday($date);
         $nextMonday = date('Y-m-d', strtotime("$monday +7 days"));
 
-        $executions      = $this->loadModel('execution')->getList($status = 'all', $limit = 0, $productID = 0, $branch = 0, $project);
+        $executions      = $this->loadModel('execution')->getList($project);
         $executionIdList = array_keys($executions);
 
         return $this->dao->select('*')

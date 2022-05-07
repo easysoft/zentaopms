@@ -194,7 +194,6 @@ class gitModel extends model
                     $commits += count($logs);
                 }
             }
-
         }
 
         $this->repo->updateCommitCount($repo->id, $commits);
@@ -296,6 +295,8 @@ class gitModel extends model
      */
     public function getRepoTags($repo)
     {
+        if(empty($repo->client) or empty($repo->path) or !isset($repo->account) or !isset($repo->password) or !isset($repo->encoding)) return false;
+
         $scm = $this->app->loadClass('scm');
         $scm->setEngine($repo);
         return $scm->tags('');
@@ -311,6 +312,8 @@ class gitModel extends model
      */
     public function getRepoLogs($repo, $fromRevision)
     {
+        if(empty($repo->client) or empty($repo->path) or !isset($repo->account) or !isset($repo->password) or !isset($repo->encoding)) return false;
+
         $scm = $this->app->loadClass('scm');
         $scm->setEngine($repo);
         $logs = $scm->log('', $fromRevision);
@@ -369,106 +372,6 @@ class gitModel extends model
         $parsedLog->files     = $files;
 
         return $parsedLog;
-    }
-
-    /**
-     * Diff a url.
-     *
-     * @param  string $path
-     * @param  int    $revision
-     * @access public
-     * @return string|bool
-     */
-    public function diff($path, $revision)
-    {
-        $repo = $this->getRepoByURL($path);
-        if(!$repo) return false;
-
-        $this->setClient($repo);
-        if(empty($this->client)) return false;
-        putenv('LC_CTYPE=en_US.UTF-8');
-
-        chdir($repo->path);
-        exec("{$this->client} config core.quotepath false");
-        $subPath = substr($path, strlen($repo->path));
-        if($subPath[0] == '/' or $subPath[0] == '\\') $subPath = substr($subPath, 1);
-
-        $encodings = explode(',', $this->config->git->encodings);
-        foreach($encodings as $encoding)
-        {
-            $encoding = trim($encoding);
-            if($encoding == 'utf-8') continue;
-            $subPath = helper::convertEncoding($subPath, 'utf-8', $encoding);
-            if($subPath) break;
-        }
-
-        exec("$this->client rev-list -n 2 $revision -- $subPath", $lists);
-        if(count($lists) == 2) list($nowRevision, $preRevision) = $lists;
-        $cmd = "$this->client diff $preRevision $nowRevision -- $subPath 2>&1";
-        $diff = `$cmd`;
-
-        $encoding = isset($repo->encoding) ? $repo->encoding : 'utf-8';
-        if($encoding and $encoding != 'utf-8') $diff = helper::convertEncoding($diff, $encoding);
-
-        return $diff;
-    }
-
-    /**
-     * Cat a url.
-     *
-     * @param  string $path
-     * @param  int    $revision
-     * @access public
-     * @return string|bool
-     */
-    public function cat($path, $revision)
-    {
-        $repo = $this->getRepoByURL($path);
-        if(!$repo) return false;
-
-        $this->setClient($repo);
-        if(empty($this->client)) return false;
-
-        putenv('LC_CTYPE=en_US.UTF-8');
-
-        $subPath = substr($path, strlen($repo->path));
-        if($subPath[0] == '/' or $subPath[0] == '\\') $subPath = substr($subPath, 1);
-
-        $encodings = explode(',', $this->config->git->encodings);
-        foreach($encodings as $encoding)
-        {
-            $encoding = trim($encoding);
-            if($encoding == 'utf-8') continue;
-            $subPath = helper::convertEncoding($subPath, 'utf-8', $encoding);
-            if($subPath) break;
-        }
-
-        chdir($repo->path);
-        exec("{$this->client} config core.quotepath false");
-        $cmd  = "$this->client show $revision:$subPath 2>&1";
-        $code = `$cmd`;
-
-        $encoding = isset($repo->encoding) ? $repo->encoding : 'utf-8';
-        if($encoding and $encoding != 'utf-8') $code = helper::convertEncoding($code, $encoding);
-
-        return $code;
-    }
-
-    /**
-     * Get repo by url.
-     *
-     * @param  string    $url
-     * @access public
-     * @return object|bool
-     */
-    public function getRepoByURL($url)
-    {
-        foreach($this->config->git->repos as $repo)
-        {
-            if(empty($repo['path'])) continue;
-            if(strpos($url, $repo['path']) !== false) return (object)$repo;
-        }
-        return false;
     }
 
     /**
