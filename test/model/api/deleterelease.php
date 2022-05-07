@@ -12,6 +12,18 @@ pid=1
 
 */
 
+global $tester;
 $api = new apiTest();
 
-r($api->deleteReleaseTest()) && p() && e();
+$normalRelease = new stdclass();
+$normalRelease->version   = 'Version1';
+$normalRelease->desc      = '';
+$normalRelease->lib       = 910;
+$normalRelease->addedBy   = $tester->app->user->account;
+$normalRelease->addedDate = helper::now();
+
+$release = $api->publishLibTest($normalRelease, false);
+
+r($api->deleteReleaseTest($release->id, $release->lib)) && p('') && e('0'); //删除一个创建的发布
+
+//system("./ztest init");

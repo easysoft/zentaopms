@@ -7,27 +7,31 @@ class apiTest
          $this->objectModel = $tester->loadModel('api');
     }
 
-    public function publishLibTest($data)
+    public function publishLibTest($data, $confirm = true)
     {
         $objectID = $this->objectModel->publishLib($data);
 
         if(dao::isError()) return dao::getError();
 
         $objects = $this->objectModel->getRelease($data->lib);
-        $this->objectModel->deleteRelease($objectID);
+
+        if($confirm) $this->objectModel->deleteRelease($objectID);
+
         return $objects;
     }
 
-    public function deleteReleaseTest($id)
+    public function deleteReleaseTest($id, $libID = 0)
     {
-        $objects = $this->objectModel->deleteRelease($id);
+        $this->objectModel->deleteRelease($id);
+
+        $objects = $this->objectModel->getRelease($libID);
 
         if(dao::isError()) return dao::getError();
 
         return $objects;
     }
 
-    public function createTest($params)
+    public function createTest($params, $confirm = true)
     {
         global $tester;
 
@@ -36,7 +40,7 @@ class apiTest
 
         if(dao::isError()) return dao::getError();
 
-        $tester->dao->delete()->from(TABLE_API)->where('id')->eq($objects->id)->exec();
+        if($confirm) $tester->dao->delete()->from(TABLE_API)->where('id')->eq($objects->id)->exec();
 
         return $objects;
     }
@@ -79,29 +83,39 @@ class apiTest
         return $objects;
     }
 
-    public function getStructListByLibIDTest($id)
+    public function getStructListByLibIDTest($id, $confirm = true)
     {
+        global $tester;
+
         $objects = $this->objectModel->getStructListByLibID($id);
 
         if(dao::isError()) return dao::getError();
 
+        if($confirm) $tester->dao->delete()->from(TABLE_APISTRUCT)->where('id')->eq($objects['0']->id)->exec();
+
         return $objects;
     }
 
-    public function getStructByIDTest($id)
+    public function getStructByIDTest($id, $confirm = true)
     {
+        global $tester;
+
         $objects = $this->objectModel->getStructByID($id);
 
         if(dao::isError()) return dao::getError();
 
+        if($confirm) $tester->dao->delete()->from(TABLE_APISTRUCT)->where('id')->eq($objects->id)->exec();
+
         return $objects;
     }
 
-    public function getReleaseTest($libID = 0, $type = '', $param = 0)
+    public function getReleaseTest($libID = 0, $type = '', $param = 0, $confirm = true)
     {
         $objects = $this->objectModel->getRelease($libID = 0, $type = '', $param = 0);
 
         if(dao::isError()) return dao::getError();
+
+        if($confirm) $this->objectModel->deleteRelease($objects->id);
 
         return $objects;
     }
@@ -126,9 +140,14 @@ class apiTest
 
     public function getApiListByReleaseTest($release, $where = '1 = 1 ')
     {
+        global $tester;
+
         $objects = $this->objectModel->getApiListByRelease($release, $where = '1 = 1 ');
 
         if(dao::isError()) return dao::getError();
+
+        foreach($release->snap['apis'] as $api) $tester->dao->delete()->from(TABLE_API)->where('id')->eq($api['id'])->exec();
+        $this->objectModel->deleteRelease($release->id);
 
         return $objects;
     }

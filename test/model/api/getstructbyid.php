@@ -12,6 +12,18 @@ pid=1
 
 */
 
+global $tester;
 $api = new apiTest();
 
-r($api->getStructByIDTest()) && p() && e();
+$normalStruct = new stdclass();
+$normalStruct->name      = 'struct';
+$normalStruct->type      = 'formData';
+$normalStruct->attribute = '[{"field":"field1","paramsType":"string","required":true,"desc":"desc","structType":"formData","sub":1,"key":"l2u5qy3jc1se6ghigll","children":[]}]';
+$normalStruct->desc      = '';
+$normalStruct->addedBy   = $tester->app->user->account;
+$normalStruct->addedDate = helper::now();
+
+$struct = $api->createStructTest($normalStruct, false);
+r($api->getStructByIDTest($struct->id)) && p('name') && e('struct'); //获取刚创建的数据结构
+
+//system("./ztest init");
