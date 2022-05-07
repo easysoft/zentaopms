@@ -10,7 +10,12 @@ title=测试 docModel->getFileSourcePairs();
 cid=1
 pid=1
 
-
+测试获取 产品 1 的文件类型分组 >> testcase:1;story:1;bug:1;
+测试获取 产品 2 的文件类型分组 >> 0
+测试获取 项目 11 的文件类型分组 >> task:2;bug:1;
+测试获取 项目 12 的文件类型分组 >> 0
+测试获取 执行 101 的文件类型分组 >> testcase:1;bug:1;task:1;
+测试获取 执行 102 的文件类型分组 >> 0
 
 */
 

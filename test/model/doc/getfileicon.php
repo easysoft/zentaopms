@@ -10,7 +10,12 @@ title=测试 docModel->getFileIcon();
 cid=1
 pid=1
 
-
+测试获取 产品 1 的文件icon >> icon-file icon-file-word icon-file-word
+测试获取 产品 2 的文件icon >> 0
+测试获取 项目 11 的文件icon >> icon-file-word icon-file-word icon-file-text
+测试获取 项目 12 的文件icon >> 0
+测试获取 执行 101 的文件icon >> icon-file icon-file-word icon-file-text
+测试获取 执行 102 的文件icon >> 0
 
 */
 

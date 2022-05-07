@@ -412,13 +412,27 @@ class docTest
         return $names;
     }
 
+    /**
+     * Test fill docs in tree.
+     *
+     * @param  object $node
+     * @param  int    $libID
+     * @access public
+     * @return object
+     */
     public function fillDocsInTreeTest($node, $libID)
     {
-        $objects = $this->objectModel->fillDocsInTree($node, $libID);
+        $object = $this->objectModel->fillDocsInTree($node, $libID);
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        $docsCounts = "$object->name:$object->docsCount;";
+        foreach($object->children as $children)
+        {
+            if(isset($children->type) and $children->type == 'doc') continue;
+            $docsCounts .= "$children->name:$children->docsCount;";
+        }
+        return $docsCounts;
     }
 
     public function getProductCrumbTest($productID, $executionID = 0)
@@ -430,13 +444,21 @@ class docTest
         return $objects;
     }
 
+    /**
+     * Test set lib users.
+     *
+     * @param  string $type
+     * @param  int    $objectID
+     * @access public
+     * @return array
+     */
     public function setLibUsersTest($type, $objectID)
     {
         $objects = $this->objectModel->setLibUsers($type, $objectID);
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        return implode($objects, ',');
     }
 
     public function getLibIdListByProjectTest($projectID = 0)
