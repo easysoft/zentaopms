@@ -11,24 +11,13 @@ class gitTest
     }
 
     /**
-     * Run
-     *
-     * @access public
-     * @return void
-     */
-    public function run()
-    {
-        return $this->gitModel->run();
-    }
-
-    /**
      * Update commit.
      *
      * @param  object $repo
      * @param  array  $commentGroup
      * @param  bool   $printLog
      * @access public
-     * @return string
+     * @return bool
      */
     public function updateCommit($repo)
     {
@@ -44,7 +33,7 @@ class gitTest
      * Set the repos.
      *
      * @access public
-     * @return mixed
+     * @return object
      */
     public function setRepos()
     {
@@ -57,7 +46,7 @@ class gitTest
      * Get repos.
      *
      * @access public
-     * @return array
+     * @return string
      */
     public function getRepos()
     {
@@ -70,7 +59,7 @@ class gitTest
      *
      * @param  object    $repo
      * @access public
-     * @return bool
+     * @return object
      */
     public function setRepo($repo)
     {
@@ -91,7 +80,7 @@ class gitTest
      *
      * @param  object    $repo
      * @access public
-     * @return mixed
+     * @return int
      */
     public function getRepoTags($repo)
     {
@@ -104,9 +93,8 @@ class gitTest
      * Get repo logs.
      *
      * @param  object  $repo
-     * @param  int     $fromRevision
      * @access public
-     * @return array
+     * @return int
      */
     public function getRepoLogs($repo)
     {

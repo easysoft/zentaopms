@@ -298,6 +298,13 @@ class docTest
         return $objects;
     }
 
+    /**
+     * Test stat module and document counts of lib.
+     *
+     * @param  array  $idList
+     * @access public
+     * @return array
+     */
     public function statLibCountsTest($idList)
     {
         $objects = $this->objectModel->statLibCounts($idList);
@@ -307,49 +314,125 @@ class docTest
         return $objects;
     }
 
+    /**
+     * Test get lib files.
+     *
+     * @param  string $type
+     * @param  int    $objectID
+     * @param  string $orderBy
+     * @param  object $pager
+     * @access public
+     * @return string
+     */
     public function getLibFilesTest($type, $objectID, $orderBy, $pager = null)
     {
         $objects = $this->objectModel->getLibFiles($type, $objectID, $orderBy, $pager = null);
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        $titles = '';
+        foreach($objects as $object)
+        {
+            $titles .= "$object->title,";
+        }
+        $titles = trim($titles, ',');
+        return $titles;
     }
 
-    public function getFileSourcePairsTest($files)
+    /**
+     * Test get file source pairs.
+     *
+     * @param  array $files
+     * @access public
+     * @return void
+     */
+    public function getFileSourcePairsTest($type, $objectID)
     {
+        $files = $this->objectModel->getLibFiles($type, $objectID, 't1.id_desc', $pager = null);
+
         $objects = $this->objectModel->getFileSourcePairs($files);
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        $counts = '';
+        foreach($objects as $type => $items)
+        {
+            $counts .= "$type:" . count($items) .';';
+        }
+        return $counts;
     }
 
-    public function getFileIconTest($files)
+    /**
+     * Test get file icon.
+     *
+     * @param  string $type
+     * @param  int    $objectID
+     * @access public
+     * @return string
+     */
+    public function getFileIconTest($type, $objectID)
     {
+        $files = $this->objectModel->getLibFiles($type, $objectID, 't1.id_desc', $pager = null);
+
         $objects = $this->objectModel->getFileIcon($files);
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        $icons = '';
+        foreach($objects as $object)
+        {
+            preg_match("/icon-[^']*/", $object, $matches);
+            $icons .= "$matches[0] ";
+        }
+        $icons = trim($icons);
+        return $icons;
     }
 
+    /**
+     * Test get doc tree.
+     *
+     * @param  int $libID
+     * @access public
+     * @return string
+     */
     public function getDocTreeTest($libID)
     {
         $objects = $this->objectModel->getDocTree($libID);
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        $names = '';
+        foreach($objects as $object)
+        {
+            $names .= "$object->name:";
+            foreach($object->children as $children) $names .= (isset($children->name) ? $children->name : $children->title) . ",";
+            $names  = trim($names, ',');
+            $names .= ";";
+        }
+        return $names;
     }
 
+    /**
+     * Test fill docs in tree.
+     *
+     * @param  object $node
+     * @param  int    $libID
+     * @access public
+     * @return object
+     */
     public function fillDocsInTreeTest($node, $libID)
     {
-        $objects = $this->objectModel->fillDocsInTree($node, $libID);
+        $object = $this->objectModel->fillDocsInTree($node, $libID);
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        $docsCounts = "$object->name:$object->docsCount;";
+        foreach($object->children as $children)
+        {
+            if(isset($children->type) and $children->type == 'doc') continue;
+            $docsCounts .= "$children->name:$children->docsCount;";
+        }
+        return $docsCounts;
     }
 
     public function getProductCrumbTest($productID, $executionID = 0)
@@ -361,13 +444,21 @@ class docTest
         return $objects;
     }
 
+    /**
+     * Test set lib users.
+     *
+     * @param  string $type
+     * @param  int    $objectID
+     * @access public
+     * @return array
+     */
     public function setLibUsersTest($type, $objectID)
     {
         $objects = $this->objectModel->setLibUsers($type, $objectID);
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        return implode($objects, ',');
     }
 
     public function getLibIdListByProjectTest($projectID = 0)
@@ -379,6 +470,12 @@ class docTest
         return $objects;
     }
 
+    /**
+     * Get statistic information.
+     *
+     * @access public
+     * @return object
+     */
     public function getStatisticInfoTest()
     {
         $objects = $this->objectModel->getStatisticInfo();
@@ -388,6 +485,14 @@ class docTest
         return $objects;
     }
 
+    /**
+     * Get the previous and next doc.
+     *
+     * @param  int $docID
+     * @param  int $libID
+     * @access public
+     * @return object
+     */
     public function getPreAndNextDocTest($docID, $libID)
     {
         $objects = $this->objectModel->getPreAndNextDoc($docID, $libID);

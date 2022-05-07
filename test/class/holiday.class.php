@@ -10,7 +10,7 @@ class holidayTest
     /**
      * Test getById method.
      *
-     * @param  string    $id
+     * @param  int     $id
      * @access public
      * @return object
      */
@@ -143,6 +143,14 @@ class holidayTest
         return count($objects);
     }
 
+    /**
+     * Test getWorkingDays method.
+     *
+     * @param  string    $begin
+     * @param  string    $end
+     * @access public
+     * @return int
+     */
     public function getWorkingDaysTest($begin = '', $end = '')
     {
         $objects = $this->objectModel->getWorkingDays($begin, $end);
@@ -152,6 +160,14 @@ class holidayTest
         return count($objects);
     }
 
+    /**
+     * Test getActualWorkingDays method.
+     *
+     * @param  string    $begin
+     * @param  string    $end
+     * @access public
+     * @return int
+     */
     public function getActualWorkingDaysTest($begin, $end)
     {
         $objects = $this->objectModel->getActualWorkingDays($begin, $end);
@@ -213,68 +229,92 @@ class holidayTest
     /**
      * Test updateProgramPlanDuration method.
      *
-     * @param  string    $beginDate
-     * @param  string    $endDate
+     * @param  int       $testProjectID
+     * @param  object    $holiday
      * @access public
-     * @return object
+     * @return int
      */
-    public function updateProgramPlanDurationTest($beginDate, $endDate)
+    public function updateProgramPlanDurationTest($testProjectID, $holidayID)
     {
-        $objects = $this->objectModel->updateProgramPlanDuration($beginDate, $endDate);
+        global $tester;
+
+        $holiday = $tester->dao->select('*')->from(TABLE_HOLIDAY)->where('id')->eq($holidayID)->fetch();
+
+        $this->objectModel->updateProgramPlanDuration($holiday->begin, $holiday->end);
+
+        $project = $tester->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($testProjectID)->fetch();
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        return $project->planDuration;
     }
 
     /**
      * Test updateProjectRealDuration method.
      *
-     * @param  string    $beginDate
-     * @param  string    $endDate
+     * @param  int       $testProjectID
+     * @param  object    $holiday
      * @access public
-     * @return object
+     * @return int
      */
-    public function updateProjectRealDurationTest($beginDate, $endDate)
+    public function updateProjectRealDurationTest($testProjectID, $holidayID)
     {
-        $objects = $this->objectModel->updateProjectRealDuration($beginDate, $endDate);
+        global $tester;
+
+        $holiday = $tester->dao->select('*')->from(TABLE_HOLIDAY)->where('id')->eq($holidayID)->fetch();
+
+        $this->objectModel->updateProjectRealDuration($holiday->begin, $holiday->end);
+
+        $project = $tester->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($testProjectID)->fetch();
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        return $project->realDuration;
     }
 
     /**
      * Test updateTaskPlanDuration method.
      *
-     * @param  string    $beginDate
-     * @param  string    $endDate
+     * @param  int       $testTaskID
+     * @param  object    $holiday
      * @access public
-     * @return object
+     * @return int
      */
-    public function updateTaskPlanDurationTest($beginDate, $endDate)
+    public function updateTaskPlanDurationTest($testTaskID, $holidayID)
     {
-        $objects = $this->objectModel->updateTaskPlanDuration($beginDate, $endDate);
+        global $tester;
+
+        $holiday = $tester->dao->select('*')->from(TABLE_HOLIDAY)->where('id')->eq($holidayID)->fetch();
+
+        $this->objectModel->updateTaskPlanDuration($holiday->begin, $holiday->end);
+
+        $task = $tester->dao->select('*')->from(TABLE_TASK)->where('id')->eq($testTaskID)->fetch();
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        return $task->planDuration;
     }
 
     /**
      * Test updateTaskRealDuration method.
      *
-     * @param  string    $beginDate
-     * @param  string    $endDate
+     * @param  int       $testTaskID
+     * @param  object    $holiday
      * @access public
-     * @return object
+     * @return int
      */
-    public function updateTaskRealDurationTest($beginDate, $endDate)
+    public function updateTaskRealDurationTest($testTaskID, $holidayID)
     {
-        $objects = $this->objectModel->updateTaskRealDuration($beginDate, $endDate);
+        global $tester;
+
+        $holiday = $tester->dao->select('*')->from(TABLE_HOLIDAY)->where('id')->eq($holidayID)->fetch();
+
+        $this->objectModel->updateTaskRealDuration($holiday->begin, $holiday->end);
+
+        $task = $tester->dao->select('*')->from(TABLE_TASK)->where('id')->eq($testTaskID)->fetch();
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        return $task->realDuration;
     }
 }
