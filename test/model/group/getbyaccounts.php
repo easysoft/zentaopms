@@ -21,13 +21,11 @@ pid=1
 
 */
 
-$accountList = array
-    (
-        array('outside3', 'top2'),
-        array('td1', 'pd2'),
-        array('po48', 'pm1'),
-        array('dev100', 'test2')
-    );
+$accountList    = array();
+$accountList[0] = array('outside3', 'top2');
+$accountList[1] = array('td1', 'pd2');
+$accountList[2] = array('po48', 'pm1');
+$accountList[3] = array('dev100', 'test2');
 
 $group   = new groupTest();
 $groups0 = $group->getByAccountsTest($accountList[0]);
