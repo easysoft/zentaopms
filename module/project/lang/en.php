@@ -188,7 +188,8 @@ $lang->project->unlinkExecutionMember  = "The user participated in %s executions
 $lang->project->unlinkExecutionMembers = "The team members you are removing are also in the execution team of this project. Do you want to remove them from the execution team too?";
 $lang->project->productTip             = 'After clicking New Product, the project will not be linked to the selected product.';
 
-$lang->project->tenThousand = '';
+$lang->project->tenThousand    = 'Ten Thousand';
+$lang->project->hundredMillion = 'Hundred Million';
 
 $lang->project->unitList['CNY'] = 'RMB';
 $lang->project->unitList['USD'] = 'USD';

@@ -33,8 +33,11 @@ fields:
     format: ""
   - field: content
     note: "文档正文"
-    range: 1-10000
-    prefix: "文档正文"
+    fields:
+      - field: content1
+        range: 文档正文,文档正文,www.baidu.com
+      - field: content2
+        range: 1-2,[]
     postfix: ""
     loop: 0
     format: ""
@@ -47,14 +50,14 @@ fields:
     format: ""
   - field: type
     note: "文档类型"
-    range: text,markdown
+    range: text,markdown,html
     prefix: ""
     postfix: ""
     loop: 0
     format: ""
   - field: version
     note: "版本号"
-    range: "1"
+    range: 1{900},2{10}
     prefix: ""
     postfix: ""
     loop: 0

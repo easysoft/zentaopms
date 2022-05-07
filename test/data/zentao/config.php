@@ -12,6 +12,9 @@ $builder->userview    = array('rows' => 400, 'extends' => array('userview'));
 $builder->dept        = array('rows' => 100,  'extends' => array('dept'));
 $builder->action      = array('rows' => 100,  'extends' => array('action'));
 $builder->history     = array('rows' => 100,  'extends' => array('history'));
+$builder->file        = array('rows' => 100,  'extends' => array('file'));
+$builder->score       = array('rows' => 100,  'extends' => array('score'));
+$builder->extension   = array('rows' => 10,  'extends' => array('extension'));
 
 $builder->program      = array('rows' => 10, 'extends' => array('project', 'program'));
 $builder->project      = array('rows' => 90, 'extends' => array('project', 'project'));
@@ -98,16 +101,21 @@ $builder->release    = array('rows' => 10, 'extends' => array('release'));
 $builder->design     = array('rows' => 120, 'extends' => array('design'));
 $builder->designspec = array('rows' => 120, 'extends' => array('designspec'));
 
-$builder->stage   = array('rows' => 6, 'extends' => array('stage'));
-$builder->webhook = array('rows' => 7, 'extends' => array('webhook'));
-$builder->entry   = array('rows' => 1, 'extends' => array('entry'));
+$builder->stage        = array('rows' => 6, 'extends' => array('stage'));
+$builder->webhook      = array('rows' => 7, 'extends' => array('webhook'));
+$builder->entry        = array('rows' => 1, 'extends' => array('entry'));
+$builder->log          = array('rows' => 10, 'extends' => array('log'));
+$builder->weeklyreport = array('rows' => 10, 'extends' => array('weeklyreport'));
+$builder->metting      = array('rows' => 10, 'extends' => array('meeting'));
+$builder->usertpl      = array('rows' => 10, 'extends' => array('usertpl'));
 
-$builder->pipeline = array('rows' => 2,  'extends' => array('pipeline'));
+$builder->pipeline = array('rows' => 3,  'extends' => array('pipeline'));
 $builder->holiday  = array('rows' => 100,  'extends' => array('holiday'));
 $builder->repo     = array('rows' => 1,  'extends' => array('repo'));
 $builder->job      = array('rows' => 2,  'extends' => array('job'));
 $builder->mr       = array('rows' => 1,  'extends' => array('mr'));
 $builder->oauth    = array('rows' => 90, 'extends' => array('oauth'));
+$builder->notify   = array('rows' => 10, 'extends' => array('notify'));
 
 $builder->vm         = array('rows' => 1,  'extends' => array('vm'));
 $builder->vmtemplate = array('rows' => 1,  'extends' => array('vmtemplate'));

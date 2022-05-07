@@ -512,62 +512,36 @@ class router extends baseRouter
         if($this->config->requestType != 'GET')
         {
             /* e.g. $this->URI = /$module-close-1.html. */
-            $params = explode($this->config->requestFix, $this->URI); // $params = array($module, 'close', 1);
+            $params = explode($this->config->requestFix, $this->URI);       // $params = array($module, 'close', 1);
 
             /* Remove module and method. */
-            $params = array_slice($params, 2); // $params = array(1);
+            $params = array_slice($params, 2);                              // $params = array(1);
 
-            /* Prepend other params. */
-            if($methodName == 'operate')      array_unshift($params, $this->rawMethod); // $params = array('close', 1);
-            if($methodName == 'batchOperate') array_unshift($params, $this->rawMethod); // $params = array('close', 1);
-            if($methodName == 'browse')
-            {
-                if(!(isset($params[0]) and $params[0] == 'bysearch')) array_unshift($params, 'browse');
-            }
+            array_unshift($params, $methodName);                            // $params = array('operate', 1);
+            array_unshift($params, $moduleName);                            // $params = array('flow', 'operate', 1);
 
-            array_unshift($params, $this->rawModule);                                   // $params = array($module, 'close', 1);
-            array_unshift($params, $methodName);                                        // $params = array('operate', $module, 'close', 1);
-            array_unshift($params, $moduleName);                                        // $params = array('flow', 'operate', $module, 'close', 1);
-
-            $this->URI = implode($this->config->requestFix, $params);                   // $this->URI = flow-operate-$module-close-1.html;
+            $this->URI = implode($this->config->requestFix, $params);       // $this->URI = flow-operate-1.html;
         }
         else
         {
             /* Extract $path and $query from $params. */
-            /* e.g. $tshi->URI = /index.php?m=$module&f=browse&mode=search&label=1. */
-            $params = parse_url($this->URI);    // $params = array('path' => '/index.php', 'query' => m=$module&f=browse&mode=search&label=1;
-            extract($params);                   // $path = '/index.php'; $query = 'm=$module&f=browse&mode=search&label=1';
-            parse_str($query, $params);         // $params = array('m' => $module, 'f' => 'browse', 'mode' = 'search', 'label' => 1);
-
-            $params = array_reverse($params);           // $params = array('label' => 1, 'mode' => 'search');
-            if($methodName == 'operate')      $params['action'] = $params[$this->config->methodVar];
-            if($methodName == 'batchOperate') $params['action'] = $params[$this->config->methodVar];
+            /* e.g. $tshi->URI = /index.php?m=$module&f=close&id=1. */
+            $params = parse_url($this->URI);                        // $params = array('path' => '/index.php', 'query' => m=$module&f=close&id=1;
+            extract($params);                                       // $path = '/index.php'; $query = 'm=$module&f=close&id=1';
+            parse_str($query, $params);                             // $params = array('m' => $module, 'f' => 'close', 'id' => 1);
 
             /* Remove module and method. */
-            unset($params[$this->config->moduleVar]);   // $params = array('f' => 'browse', 'mode' => 'search', 'label' => 1);
-            unset($params[$this->config->methodVar]);   // $params = array('mode' => 'search', 'label' => 1);
+            unset($params[$this->config->moduleVar]);               // $params = array('f' => 'close', 'id' => 1);
+            unset($params[$this->config->methodVar]);               // $params = array('id' => 1);
 
-            /* Prepend other params. */
-            if($methodName == 'browse')
-            {
-                if(!(isset($params['mode']) and $params['mode'] == 'bysearch')) $params['mode'] = 'browse';
-            }
+            $params = array_reverse($params);                       // $params = array('id' => 1);
 
-            $params['module']                 = $this->rawModule;   // $param = array('label' => 1, 'mode' => 'search', 'module' => $module);
-            $params[$this->config->methodVar] = $methodName;        // $param = array('label' => 1, 'mode' => 'search', 'module' => $module, 'f' => 'browse');
-            $params[$this->config->moduleVar] = $moduleName;        // $param = array('label' => 1, 'mode' => 'search', 'module' => $module, 'f' => 'browse', 'm' => 'flow');
+            $params[$this->config->methodVar] = $methodName;        // $param = array('id' => 1, 'f' => 'operate');
+            $params[$this->config->moduleVar] = $moduleName;        // $param = array('id' => 1, 'f' => 'operate', 'm' => 'flow');
 
-            $params = array_reverse($params);   // $params = array('m' => 'flow', 'f' => 'browse', 'module' => $module, 'mode' => 'search', 'label' => 1);
+            $params = array_reverse($params);                       // $params = array('m' => 'flow', 'f' => 'operate', 'id' => 1);
 
-            /* Reset $_GET for setParamsByGET. */
-            $get = $params;
-            foreach($_GET as $key => $value)
-            {
-                if(!isset($get[$key])) $get[$key] = $value;
-            }
-            $_GET = $get;
-
-            $this->URI = $path . '?' . http_build_query($params);   // $this->URI = '/index.php?m=flow&f=browse&module=$module&mode=search&label=1';
+            $this->URI = $path . '?' . http_build_query($params);   // $this->URI = '/index.php?m=flow&f=operate&id=1';
         }
     }
 
@@ -632,20 +606,6 @@ class router extends baseRouter
     {
         if(isset($_GET['project'])) $this->session->set('project', $_GET['project']);
         /* If the isFlow is true, reset the passed params. */
-        if($this->isFlow)
-        {
-            $passedParams = array_reverse($passedParams);
-
-            /* 如果请求的方法名不是browse、create、edit、view、delete、export中的任何一个，则需要添加action参数来传递请求的方法名。 */
-            /* If the requested method name is not any of browse, create, edit, view, delete, or export, you need to add an action parameter to pass the requested method name. */
-            if(isset($this->config->workflowaction->default->actions) and !in_array($this->rawMethod, $this->config->workflowaction->default->actions)) $passedParams['action'] = $this->rawMethod;
-
-            /* 添加module参数来传递请求的模块名。 */
-            /* Add the module parameter to pass the requested module name. */
-            $passedParams['module'] = $this->rawModule;
-
-            $passedParams = array_reverse($passedParams);
-        }
 
         /* display参数用来标记请求是否来自禅道客户端的卡片展示页面，此处应该删掉以避免对方法调用产生影响。 */
         /* The display parameter is used to mark whether the request comes from the card display page of the ZenTao client. It should be deleted here to avoid affecting the method call. */

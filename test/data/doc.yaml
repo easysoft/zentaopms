@@ -57,7 +57,7 @@ fields:
     format: ""
   - field: module
     note: "模块"
-    range: 0
+    range: 3621-3630,0{890}
     prefix: ""
     postfix: ""
     loop: 0
@@ -78,7 +78,7 @@ fields:
     format: ""
   - field: type
     note: "文档类型"
-    range: text,markdown
+    range: text,markdown,url
     prefix: ""
     postfix: ""
     loop: 0
@@ -162,19 +162,19 @@ fields:
     format: ""
   - field: groups
     note: "分组"
-    range: ""
+    range: 0,1,1
     prefix: ""
     postfix: ""
     format: ""
   - field: users
     note: "用户"
-    range: ""
+    range: 0,admin,admin
     prefix: ""
     postfix: ""
     format: ""
   - field: version
     note: "版本号"
-    range: 1
+    range: 2{10},1{890}
     prefix: ""
     postfix: ""
     format: ""
