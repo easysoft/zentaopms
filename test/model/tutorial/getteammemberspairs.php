@@ -14,4 +14,4 @@ pid=1
 
 $tutorial = new tutorialTest();
 
-r($tutorial->getTeamMembersPairsTest()) && p('admin') && e('admin');
+r($tutorial->getTeamMembersPairsTest()) && p('admin') && e('admin'); //测试是否能拿到数据

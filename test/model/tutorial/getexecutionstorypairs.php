@@ -14,4 +14,4 @@ pid=1
 
 $tutorial = new tutorialTest();
 
-r($tutorial->getExecutionStoryPairsTest()) && p('1') && e('Test story');
+r($tutorial->getExecutionStoryPairsTest()) && p('1') && e('Test story'); //测试是否能拿到数据

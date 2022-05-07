@@ -14,4 +14,5 @@ pid=1
 
 $tutorial = new tutorialTest();
 
-r($tutorial->getProductStatsTest()) && p() && e();
+r($tutorial->getProductStatsTest()) && p('1:code')        && e('test');        //测试是否能拿到数据
+r($tutorial->getProductStatsTest()) && p('1[branches]:1') && e('Test branch'); //测试是否能拿到数据

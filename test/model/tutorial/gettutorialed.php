@@ -14,4 +14,4 @@ pid=1
 
 $tutorial = new tutorialTest();
 
-r($tutorial->getTutorialedTest()) && p() && e('0');
+r($tutorial->getTutorialedTest()) && p() && e('0'); //测试是否能拿到数据
