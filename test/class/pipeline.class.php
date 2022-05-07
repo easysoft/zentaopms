@@ -51,7 +51,9 @@ class pipelineTest
     /**
      * Get pipeline pairs
      *
-     * @return array
+     * @param  int    $data 
+     * @access public
+     * @return array 
      */
     public function getPairs($data)
     {
@@ -67,8 +69,10 @@ class pipelineTest
     /**
      * Create a pipeline.
      *
+     * @param  int    $type 
+     * @param  int    $param 
      * @access public
-     * @return bool
+     * @return void
      */
     public function createTest($type, $param)
     {
