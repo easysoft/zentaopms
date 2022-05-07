@@ -13,7 +13,13 @@ pid=1
 
 
 */
+global $tester;
+$doc = $tester->loadModel('doc');
 
-$doc = new docTest();
+$types  = array('all', 'product', 'execution');
+$idList = array('17', '1');
 
-r($doc->getSubLibGroupsTest()) && p() && e();
+r($doc->getSubLibGroups($types[0], $idList))        && p()            && e('0');              //all查询
+r($doc->getSubLibGroups($types[1], $idList)[1])     && p('1;files')   && e('产品主库;附件库');//产品库查询
+r($doc->getSubLibGroups($types[2], $idList))        && p()            && e('0');              //执行库查询
+r(count($doc->getSubLibGroups($types[1], $idList))) && p()            && e('2');              //产品库查询统计

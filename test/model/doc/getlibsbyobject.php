@@ -13,7 +13,17 @@ pid=1
 
 
 */
+global $tester;
+$doc = $tester->loadModel('doc');
 
-$doc = new docTest();
+$types        = array('all', 'api', 'product', 'project', 'execution', 'custom', 'book');
+$objectIDList = array('1', '117', '217', '901');
+$appendLib    = '701';
 
-r($doc->getLibsByObjectTest()) && p() && e();
+r($doc->getLibsByObject($types[0], $objectIDList[0], '', $appendLib)) && p()                    && e('0');                 //all类型查询
+r($doc->getLibsByObject($types[1], $objectIDList[0], '', $appendLib)) && p()                    && e('0');                 //api类型查询
+r($doc->getLibsByObject($types[2], $objectIDList[0], '', $appendLib)) && p('1:name;701:type')   && e('产品主库;execution');//product类型查询
+r($doc->getLibsByObject($types[3], $objectIDList[1], '', $appendLib)) && p()                    && e('0');                 //project类型查询
+r($doc->getLibsByObject($types[4], $objectIDList[2], '', $appendLib)) && p('307:name;701:type') && e('迭代主库;execution');//execution类型查询
+r($doc->getLibsByObject($types[5], $objectIDList[3], '', $appendLib)) && p('900:name;701:type') && e('自定义库;execution');//custom类型查询
+r($doc->getLibsByObject($types[6], $objectIDList[3], '', $appendLib)) && p('701:type')          && e('execution');         //book类型查询
