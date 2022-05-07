@@ -43,6 +43,9 @@ switch($argv[1])
     case 'cron':
         ztfRun('model/cron');
         break;
+    case 'datatable':
+        ztfRun('model/datatable');
+        break;
     case 'dept':
         ztfRun('model/dept');
         break;
