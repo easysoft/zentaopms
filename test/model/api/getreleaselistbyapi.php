@@ -12,6 +12,17 @@ pid=1
 
 */
 
+global $tester;
 $api = new apiTest();
 
-r($api->getReleaseListByApiTest()) && p() && e();
+$normalRelease = new stdclass();
+$normalRelease->version   = 'Version1';
+$normalRelease->desc      = '';
+$normalRelease->lib       = 910;
+$normalRelease->addedBy   = $tester->app->user->account;
+$normalRelease->addedDate = helper::now();
+
+$release = $api->publishLibTest($normalRelease, false);
+r($api->getReleaseListByApiTest($release->lib, $release->id)) && p("{$release->id}:lib") && e('910'); //获取刚插入的发布信息
+
+//system("./ztest init");

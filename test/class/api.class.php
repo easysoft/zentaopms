@@ -74,11 +74,16 @@ class apiTest
         return $objects;
     }
 
-    public function updateTest($apiID)
+    public function updateTest($apiID, $params, $confirm = true)
     {
+        global $tester;
+        $_POST = $params;
+
         $objects = $this->objectModel->update($apiID);
 
         if(dao::isError()) return dao::getError();
+
+        if($confirm) $tester->dao->delete()->from(TABLE_API)->where('id')->eq($apiID)->exec();
 
         return $objects;
     }
@@ -120,11 +125,13 @@ class apiTest
         return $objects;
     }
 
-    public function getReleaseListByApiTest($libID)
+    public function getReleaseListByApiTest($libID, $id = 0, $confirm = true)
     {
         $objects = $this->objectModel->getReleaseListByApi($libID);
 
         if(dao::isError()) return dao::getError();
+
+        if($confirm) $this->objectModel->deleteRelease($objects[$id]->id);
 
         return $objects;
     }
