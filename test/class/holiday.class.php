@@ -34,11 +34,11 @@ class holidayTest
      */
     public function getListTest($year = '', $type = 'all')
     {
-        $objects = $this->objectModel->getList($year = '', $type = 'all');
+        $objects = $this->objectModel->getList($year, $type);
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        return count($objects);
     }
 
     /**
@@ -140,10 +140,10 @@ class holidayTest
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        return count($objects);
     }
 
-    public function getWorkingDaysTest($begin, $end)
+    public function getWorkingDaysTest($begin = '', $end = '')
     {
         $objects = $this->objectModel->getWorkingDays($begin, $end);
 
