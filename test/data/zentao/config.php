@@ -107,7 +107,7 @@ $builder->entry        = array('rows' => 1, 'extends' => array('entry'));
 $builder->weeklyreport = array('rows' => 10, 'extends' => array('weeklyreport'));
 $builder->metting      = array('rows' => 10, 'extends' => array('meeting'));
 
-$builder->pipeline = array('rows' => 2,  'extends' => array('pipeline'));
+$builder->pipeline = array('rows' => 3,  'extends' => array('pipeline'));
 $builder->holiday  = array('rows' => 100,  'extends' => array('holiday'));
 $builder->repo     = array('rows' => 1,  'extends' => array('repo'));
 $builder->job      = array('rows' => 2,  'extends' => array('job'));
