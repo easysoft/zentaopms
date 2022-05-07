@@ -52,6 +52,9 @@ switch($argv[1])
     case 'design':
         ztfRun('model/design');
         break;
+    case 'doc':
+        ztfRun('model/doc');
+        break;
     case 'file':
         ztfRun('model/file');
         break;
