@@ -97,6 +97,9 @@ switch($argv[1])
     case 'project':
         ztfRun('model/project');
         break;
+    case 'pipeline':
+        ztfRun('model/pipeline');
+        break;
     case 'holiday':
         ztfRun('model/holiday');
         break;
