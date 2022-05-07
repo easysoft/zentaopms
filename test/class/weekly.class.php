@@ -13,7 +13,7 @@ class weeklyTest
      * GetPageNav
      *
      * @param  int    $projectID
-     * @param  int    $date
+     * @param  string $date
      * @access public
      * @return string
      */
@@ -35,6 +35,7 @@ class weeklyTest
      * GetWeekPairs
      *
      * @param  int    $begin
+     * @param  int    $end
      * @access public
      * @return array
      */
@@ -84,7 +85,7 @@ class weeklyTest
      * GetFromDB
      *
      * @param  int    $project
-     * @param  int    $date
+     * @param  string $date
      * @access public
      * @return object
      */
@@ -102,7 +103,7 @@ class weeklyTest
      * Save data.
      *
      * @param  int    $project
-     * @param  int    $date
+     * @param  string $date
      * @access public
      * @return void
      */
@@ -120,8 +121,8 @@ class weeklyTest
     /**
      * GetWeekSN
      *
-     * @param  int    $begin
-     * @param  int    $date
+     * @param  string $begin
+     * @param  string $date
      * @access public
      * @return int
      */
@@ -138,7 +139,7 @@ class weeklyTest
     /**
      * Get monday for a date.
      *
-     * @param  int $date
+     * @param  string $date
      * @access public
      * @return date
      */
@@ -155,7 +156,7 @@ class weeklyTest
     /**
      * GetThisSunday
      *
-     * @param  int    $date
+     * @param  string $date
      * @access public
      * @return date
      */
@@ -172,7 +173,7 @@ class weeklyTest
     /**
      * GetLastDay
      *
-     * @param  int    $date
+     * @param  string $date
      * @access public
      * @return string
      */
