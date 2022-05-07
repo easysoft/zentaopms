@@ -1,0 +1,68 @@
+title: table zt_log
+desc: "接口日志"
+author: automated export
+version: "1.0"
+fields:
+  - field: id
+    note: "ID"
+    range: 1-10000
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: objectType
+    note: "对象类型"
+    range: entry,webhook{9}
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: objectID
+    note: "对象ID"
+    range: 1-10000
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: action
+    note: "操作日志ID"
+    range: 1-10000
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: date
+    note: "日期"
+    range: "(-1M)-(1w)"
+    type: timestamp
+    format: "YYYY-MM-DD hh:mm:ss"
+    prefix: ""
+    postfix: ""
+  - field: url
+    note: "请求地址"
+    range: "qcmmi"
+    prefix: "http://"
+    postfix: ".com"
+    loop: 0
+    format: ""
+  - field: contentType
+    note: "内容类型"
+    range: "application/json"
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: data
+    note: "数据"
+    range: a-z
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: result
+    note: "结果"
+    range: a-z
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""

@@ -1,0 +1,47 @@
+title: table zt_usertpl
+desc: "用户模块"
+author: automated export
+version: "1.0"
+fields:
+  - field: id
+    note: "ID"
+    range: 1-10000
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: account
+    range: admin,dev10,top10,test10,po10
+    note: "用户名"
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: type
+    note: "类型"
+    range: exporttask,story,exportbug,exportstory
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: title
+    note: "模板名"
+    range: 1-10000
+    prefix: "模板名称"
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: content
+    note: "内容"
+    range: 1-10000
+    prefix: "模块内容"
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: public
+    note: "是否公开"
+    range: 0,1
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
