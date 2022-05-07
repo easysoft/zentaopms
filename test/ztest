@@ -94,6 +94,9 @@ switch($argv[1])
     case 'report':
         ztfRun('model/report');
         break;
+    case 'setting':
+        ztfRun('model/setting');
+        break;
     case 'stage':
         ztfRun('model/stage');
         break;
