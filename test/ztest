@@ -64,6 +64,9 @@ switch($argv[1])
     case 'kanban':
         ztfRun('model/kanban');
         break;
+    case 'message':
+        ztfRun('model/message');
+        break;
     case 'model':
         ztfRun('model');
         break;
@@ -112,8 +115,8 @@ switch($argv[1])
     case 'todo':
         ztfRun('model/todo');
         break;
-    case 'message':
-        ztfRun('model/message');
+    case 'tutorial':
+        ztfRun('model/tutorial');
         break;
     case 'tree':
         ztfRun('model/tree');
