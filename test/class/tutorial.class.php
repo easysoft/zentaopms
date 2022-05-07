@@ -7,6 +7,12 @@ class tutorialTest
          $this->objectModel = $tester->loadModel('tutorial');
     }
 
+    /**
+     * Check novice.
+     * 
+     * @access public
+     * @return void
+     */
     public function checkNoviceTest()
     {
         $this->app->user->modifyPassword = 1;
@@ -17,6 +23,12 @@ class tutorialTest
         return $objects;
     }
 
+    /**
+     * Get tutorial product pairs.
+     * 
+     * @access public
+     * @return void
+     */
     public function getProductPairsTest()
     {
         $objects = $this->objectModel->getProductPairs();
@@ -26,6 +38,12 @@ class tutorialTest
         return $objects;
     }
 
+    /**
+     * Get module pairs for tutorial.
+     * 
+     * @access public
+     * @return void
+     */
     public function getModulePairsTest()
     {
         $objects = $this->objectModel->getModulePairs();
@@ -35,6 +53,12 @@ class tutorialTest
         return $objects;
     }
 
+    /**
+     * Get tutorial product.
+     * 
+     * @access public
+     * @return void
+     */
     public function getProductTest()
     {
         $objects = $this->objectModel->getProduct();
@@ -44,6 +68,12 @@ class tutorialTest
         return $objects;
     }
 
+    /**
+     * Get product stats for tutorial.
+     * 
+     * @access public
+     * @return void
+     */
     public function getProductStatsTest()
     {
         $objects = $this->objectModel->getProductStats();
@@ -53,6 +83,12 @@ class tutorialTest
         return $objects;
     }
 
+    /**
+     * Get project for tutorial.
+     * 
+     * @access public
+     * @return void
+     */
     public function getProjectTest()
     {
         $objects = $this->objectModel->getProject();
@@ -62,6 +98,12 @@ class tutorialTest
         return $objects;
     }
 
+    /**
+     * Get tutorial project pairs.
+     * 
+     * @access public
+     * @return void
+     */
     public function getProjectPairsTest()
     {
         $objects = $this->objectModel->getProjectPairs();
@@ -71,6 +113,13 @@ class tutorialTest
         return $objects;
     }
 
+    /**
+     * Get project stats for tutorial.
+     * 
+     * @param  string $browseType 
+     * @access public
+     * @return void
+     */
     public function getProjectStatsTest($browseType = '')
     {
         $objects = $this->objectModel->getProjectStats($browseType = '');
@@ -80,6 +129,12 @@ class tutorialTest
         return $objects;
     }
 
+    /**
+     * Get tutorial stories.
+     * 
+     * @access public
+     * @return void
+     */
     public function getStoriesTest()
     {
         $objects = $this->objectModel->getStories();
@@ -89,6 +144,12 @@ class tutorialTest
         return $objects;
     }
 
+    /**
+     * Get tutorial Execution pairs.
+     * 
+     * @access public
+     * @return void
+     */
     public function getExecutionPairsTest()
     {
         $objects = $this->objectModel->getExecutionPairs();
@@ -98,6 +159,12 @@ class tutorialTest
         return $objects;
     }
 
+    /**
+     * Get tutorial execution.
+     * 
+     * @access public
+     * @return void
+     */
     public function getExecutionTest()
     {
         $objects = $this->objectModel->getExecution();
@@ -107,6 +174,12 @@ class tutorialTest
         return $objects;
     }
 
+    /**
+     * Get tutorial execution products.
+     * 
+     * @access public
+     * @return void
+     */
     public function getExecutionProductsTest()
     {
         $objects = $this->objectModel->getExecutionProducts();
@@ -116,6 +189,12 @@ class tutorialTest
         return $objects;
     }
 
+    /**
+     * Get tutorial execution stories.
+     * 
+     * @access public
+     * @return void
+     */
     public function getExecutionStoriesTest()
     {
         $objects = $this->objectModel->getExecutionStories();
@@ -125,6 +204,12 @@ class tutorialTest
         return $objects;
     }
 
+    /**
+     * Get tutorial execution story pairs.
+     * 
+     * @access public
+     * @return void
+     */
     public function getExecutionStoryPairsTest()
     {
         $objects = $this->objectModel->getExecutionStoryPairs();
@@ -134,6 +219,12 @@ class tutorialTest
         return $objects;
     }
 
+    /**
+     * Get tutorial team members.
+     * 
+     * @access public
+     * @return void
+     */
     public function getTeamMembersTest()
     {
         $objects = $this->objectModel->getTeamMembers();
@@ -143,6 +234,12 @@ class tutorialTest
         return $objects;
     }
 
+    /**
+     * Get team members pairs.
+     * 
+     * @access public
+     * @return void
+     */
     public function getTeamMembersPairsTest()
     {
         $objects = $this->objectModel->getTeamMembersPairs();
@@ -152,6 +249,12 @@ class tutorialTest
         return $objects;
     }
 
+    /**
+     * Get tutorial user pairs.
+     * 
+     * @access public
+     * @return void
+     */
     public function getUserPairsTest()
     {
         $objects = $this->objectModel->getUserPairs();
@@ -161,6 +264,12 @@ class tutorialTest
         return $objects;
     }
 
+    /**
+     * Get tutorialed.
+     * 
+     * @access public
+     * @return void
+     */
     public function getTutorialedTest()
     {
         $objects = $this->objectModel->getTutorialed();
