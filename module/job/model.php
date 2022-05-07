@@ -486,7 +486,7 @@ class jobModel extends model
     }
 
     /**
-     * Exec jenkins  pipeline.
+     * Exec jenkins pipeline.
      *
      * @param  object    $job
      * @param  object    $repo

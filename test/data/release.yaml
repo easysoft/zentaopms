@@ -62,5 +62,9 @@ fields:
   - field: subStatus
     range: ' '
 
+  - field: notify
+    range: PO,PD
+    postfix: ","
+
   - field: deleted
     range: 0
