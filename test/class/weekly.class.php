@@ -20,19 +20,6 @@ class weeklyTest
 
     public function getPageNavTest($projectID, $date)
     {
-        if($date == 1)
-        {
-            $date = date('Y-m-d');
-        }
-        elseif($date == 2)
-        {
-            $date = date('Y-m-d', strtotime(date('Y-m-d')."- 6 days"));
-        }
-        else
-        {
-            $date = date('Y-m-d', strtotime(date('Y-m-d') . "+ 6 days"));
-        }
-
         $project = $this->projectModel->getById($projectID);
         $pageNav = $this->objectModel->getPageNav($project, $date);
 
