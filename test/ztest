@@ -37,6 +37,9 @@ switch($argv[1])
     case 'caselib':
         ztfRun('model/caselib');
         break;
+    case 'ci':
+        ztfRun('model/ci');
+        break;
     case 'company':
         ztfRun('model/company');
         break;
