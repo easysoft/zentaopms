@@ -372,7 +372,7 @@ class docTest
 
     public function getLibIdListByProjectTest($projectID = 0)
     {
-        $objects = $this->objectModel->getLibIdListByProject($projectID = 0);
+        $objects = $this->objectModel->getLibIdListByProject($projectID);
 
         if(dao::isError()) return dao::getError();
 
