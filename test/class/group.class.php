@@ -111,7 +111,7 @@ class groupTest
 
     public function getGroupAccountsTest($groupIdList)
     {
-        $objects = $this->objectModel->getGroupAccounts($groupIdList = array());
+        $objects = $this->objectModel->getGroupAccounts($groupIdList);
 
         if(dao::isError()) return dao::getError();
 
