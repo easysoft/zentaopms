@@ -12,7 +12,7 @@ class settingTest
      *
      * @param  string   $paramString    see parseItemParam();
      * @access public
-     * @return misc
+     * @return bool
      */
     public function getItemTest($paramString)
     {
@@ -29,7 +29,7 @@ class settingTest
      *
      * @param  string   $paramString    see parseItemParam();
      * @access public
-     * @return array
+     * @return array|string
      */
     public function getItemsTest($paramString)
     {
@@ -46,7 +46,7 @@ class settingTest
      * @param  string      $path     system.common.global.sn | system.common.sn | system.common.global.sn@rnd
      * @param  string      $value
      * @access public
-     * @return void
+     * @return misc
      */
     public function setItemTest($path, $value = '')
     {
@@ -80,15 +80,15 @@ class settingTest
      * @param  string         $path   like system.mail
      * @param  array|object   $items  the items array or object, can be mixed by one level or two levels.
      * @access public
-     * @return bool
+     * @return bool|string
      */
     public function setItemsTest($path, $items)
     {
-        $objects = $this->objectModel->setItems($path, $items);
+        $result = $this->objectModel->setItems($path, $items);
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        return $result;
     }
 
     /**
@@ -96,7 +96,7 @@ class settingTest
      *
      * @param  string   $paramString    see parseItemParam();
      * @access public
-     * @return void
+     * @return misc
      */
     public function deleteItemsTest($paramString)
     {
