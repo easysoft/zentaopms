@@ -7,15 +7,6 @@ class fileTest
          $this->objectModel = $tester->loadModel('file');
     }
 
-    public function __constructTest()
-    {
-        $objects = $this->objectModel->construct();
-
-        if(dao::isError()) return dao::getError();
-
-        return $objects;
-    }
-
     /**
      * Test get files of an object.
      *
@@ -53,15 +44,6 @@ class fileTest
         if(dao::isError()) return dao::getError();
 
         return $object;
-    }
-
-    public function saveUploadTest($objectType = '', $objectID = '', $extra = '', $filesName = 'files', $labelsName = 'labels')
-    {
-        $objects = $this->objectModel->saveUpload($objectType = '', $objectID = '', $extra = '', $filesName = 'files', $labelsName = 'labels');
-
-        if(dao::isError()) return dao::getError();
-
-        return $objects;
     }
 
     /**
@@ -134,15 +116,6 @@ class fileTest
         return $object;
     }
 
-    public function saveUploadFileTest($file, $uid)
-    {
-        $objects = $this->objectModel->saveUploadFile($file, $uid);
-
-        if(dao::isError()) return dao::getError();
-
-        return $objects;
-    }
-
     /**
      * Test get extension of a file.
      *
@@ -159,6 +132,13 @@ class fileTest
         return $string;
     }
 
+    /**
+     * Test get save name.
+     *
+     * @param  string $pathName
+     * @access public
+     * @return string
+     */
     public function getSaveNameTest($pathName)
     {
         $objects = $this->objectModel->getSaveName($pathName);
@@ -184,13 +164,20 @@ class fileTest
         return $realpath;
     }
 
+    /**
+     * Test get export tpl.
+     *
+     * @param  string $module
+     * @access public
+     * @return array
+     */
     public function getExportTemplateTest($module)
     {
         $objects = $this->objectModel->getExportTemplate($module);
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        return count($objects);
     }
 
     /**
@@ -209,22 +196,26 @@ class fileTest
         return $path;
     }
 
-    public function saveExportTemplateTest($module)
+    /**
+     * Test save export template.
+     *
+     * @param  string $module
+     * @access public
+     * @return object
+     */
+    public function saveExportTemplateTest($module, $file)
     {
-        $objects = $this->objectModel->saveExportTemplate($module);
+        foreach($file as $key => $value) $_POST[$key] = $value;
 
-        if(dao::isError()) return dao::getError();
+        $objectID = $this->objectModel->saveExportTemplate($module);
 
-        return $objects;
-    }
+        unset($_POST);
 
-    public function setPathNameTest($fileID, $extension)
-    {
-        $objects = $this->objectModel->setPathName($fileID, $extension);
+        if(dao::isError()) return dao::getError()['title'][0];
 
-        if(dao::isError()) return dao::getError();
-
-        return $objects;
+        global $tester;
+        $object = $tester->dao->select('*')->from(TABLE_USERTPL)->where('id')->eq($objectID)->fetch();
+        return $object;
     }
 
     /**
@@ -262,60 +253,6 @@ class fileTest
         return $path;
     }
 
-    public function setImgSizeTest($content, $maxSize = 0)
-    {
-        $objects = $this->objectModel->setImgSize($content, $maxSize = 0);
-
-        if(dao::isError()) return dao::getError();
-
-        return $objects;
-    }
-
-    public function replaceFileTest($fileID, $postName = 'upFile')
-    {
-        $objects = $this->objectModel->replaceFile($fileID, $postName = 'upFile');
-
-        if(dao::isError()) return dao::getError();
-
-        return $objects;
-    }
-
-    public function cropImageTest($rawImage, $target, $x, $y, $width, $height, $resizeWidth = 0, $resizeHeight = 0)
-    {
-        $objects = $this->objectModel->cropImage($rawImage, $target, $x, $y, $width, $height, $resizeWidth = 0, $resizeHeight = 0);
-
-        if(dao::isError()) return dao::getError();
-
-        return $objects;
-    }
-
-    public function pasteImageTest($data, $uid = '', $safe = false)
-    {
-        $objects = $this->objectModel->pasteImage($data, $uid = '', $safe = false);
-
-        if(dao::isError()) return dao::getError();
-
-        return $objects;
-    }
-
-    public function parseCSVTest($fileName)
-    {
-        $objects = $this->objectModel->parseCSV($fileName);
-
-        if(dao::isError()) return dao::getError();
-
-        return $objects;
-    }
-
-    public function processImgURLTest($data, $editorList, $uid = '')
-    {
-        $objects = $this->objectModel->processImgURL($data, $editorList, $uid = '');
-
-        if(dao::isError()) return dao::getError();
-
-        return $objects;
-    }
-
     /**
      * Test compress image.
      *
@@ -330,15 +267,6 @@ class fileTest
         if(dao::isError()) return dao::getError();
 
         return $object;
-    }
-
-    public function imagecreatefrombmpTest($filename)
-    {
-        $objects = $this->objectModel->imagecreatefrombmp($filename);
-
-        if(dao::isError()) return dao::getError();
-
-        return $objects;
     }
 
     /**
@@ -361,33 +289,6 @@ class fileTest
 
         global $tester;
         $objects = $tester->dao->select('*')->from(TABLE_FILE)->where('id')->in($albums['used'][$uid])->fetchAll('id');
-
-        if(dao::isError()) return dao::getError();
-
-        return $objects;
-    }
-
-    public function replaceImgURLTest($data, $fields)
-    {
-        $objects = $this->objectModel->replaceImgURL($data, $fields);
-
-        if(dao::isError()) return dao::getError();
-
-        return $objects;
-    }
-
-    public function sendDownHeaderTest($fileName, $fileType, $content, $type = 'content')
-    {
-        $objects = $this->objectModel->sendDownHeader($fileName, $fileType, $content, $type = 'content');
-
-        if(dao::isError()) return dao::getError();
-
-        return $objects;
-    }
-
-    public function getImageSizeTest($file)
-    {
-        $objects = $this->objectModel->getImageSize($file);
 
         if(dao::isError()) return dao::getError();
 

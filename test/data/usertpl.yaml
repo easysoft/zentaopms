@@ -19,7 +19,7 @@ fields:
     format: ""
   - field: type
     note: "类型"
-    range: task,story,bug,exportstory
+    range: exporttask,story,exportbug,exportstory
     prefix: ""
     postfix: ""
     loop: 0
