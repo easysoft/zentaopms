@@ -58,6 +58,9 @@ switch($argv[1])
     case 'design':
         ztfRun('model/design');
         break;
+    case 'dev':
+        ztfRun('model/dev');
+        break;
     case 'entry':
         ztfRun('model/entry');
         break;
