@@ -25,6 +25,9 @@ switch($argv[1])
     case 'admin':
         ztfRun('model/admin');
         break;
+    case 'block':
+        ztfRun('model/block');
+        break;
     case 'branch':
         ztfRun('model/branch');
         break;
