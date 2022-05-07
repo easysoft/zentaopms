@@ -82,6 +82,9 @@ switch($argv[1])
     case 'branch':
         ztfRun('model/branch');
         break;
+    case 'holiday':
+        ztfRun('model/holiday');
+        break;
     case 'report':
         ztfRun('model/report');
         break;

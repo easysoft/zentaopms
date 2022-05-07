@@ -172,13 +172,16 @@ class holidayModel extends model
             ->andWhere('end')->ge($begin)
             ->fetchAll('id');
 
+        $naturalDays = $this->getDaysBetween($begin, $end);
+
         $workingDays = array();
         foreach($records as $record)
         {
-            $dates = $this->getDaysBetween($record->begin, $record->end);
+            $dates       = $this->getDaysBetween($record->begin, $record->end);
             $workingDays = array_merge($workingDays, $dates);
         }
-        return $workingDays;
+
+        return array_intersect($naturalDays, $workingDays);
     }
 
     /**
