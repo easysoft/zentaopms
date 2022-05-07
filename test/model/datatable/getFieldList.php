@@ -17,7 +17,6 @@ pid=1
 
 */
 
-
 $datatable = new datatableTest();
 r($datatable->getFieldListTest('product', 'browse'))  && p('id:title')    && e('ID');       //获取产品模块browse方法自定义列
 r($datatable->getFieldListTest('project', 'browse'))  && p('name:title')  && e('项目名称'); //获取项目模块browse方法自定义列

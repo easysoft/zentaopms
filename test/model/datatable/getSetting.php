@@ -17,7 +17,6 @@ pid=1
 
 */
 
-
 $datatable = new datatableTest();
 r($datatable->getSettingTest('product', 'browse'))  && p('0:title') && e('ID');       //获取产品模块browse方法设置
 r($datatable->getSettingTest('project', 'browse'))  && p('1:title') && e('项目名称'); //获取项目模块browse方法设置
