@@ -152,13 +152,22 @@ class apiTest
         return $objects;
     }
 
+    /**
+     * Get list by module ID.
+     *
+     * @param  int    $libID
+     * @param  int    $moduleID
+     * @param  int    $release
+     * @access public
+     * @return void
+     */
     public function getListByModuleIdTest($libID = 0, $moduleID = 0, $release = 0)
     {
-        $objects = $this->objectModel->getListByModuleId($libID = 0, $moduleID = 0, $release = 0);
+        $objects = $this->objectModel->getListByModuleId($libID, $moduleID, $release);
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        return current($objects);
     }
 
     public function getStructByQueryTest($libID, $pager = '', $orderBy = '')
