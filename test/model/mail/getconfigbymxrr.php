@@ -13,6 +13,7 @@ pid=1
 */
 
 $mail = new mailTest();
+
 $result1 = $mail->getConfigByMXRRTest('qq.com','test');
 $result2 = $mail->getConfigByMXRRTest('sohu.com','test');
 

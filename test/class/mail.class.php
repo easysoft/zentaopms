@@ -11,8 +11,8 @@ class mailTest
     {
          global $tester;
          global $dao;
-         $this->dao = $dao;
-         $this->tester = $tester;
+         $this->dao         = $dao;
+         $this->tester      = $tester;
          $this->objectModel = $tester->loadModel('mail');
     }
 
@@ -212,11 +212,11 @@ class mailTest
 
         if($toList and $subject)
         {
-            $id      = $this->dao->lastInsertID();
+            $id     = $this->dao->lastInsertID();
             $object = $this->dao->select('*')->from(TABLE_NOTIFY)->where('id')->eq($id)->fetch(); 
         }
 
-        if(!$object)    return '没有数据提交';
+        if(!$object)       return '没有数据提交';
         if(dao::isError()) return dao::getError();
         
         return $object; 

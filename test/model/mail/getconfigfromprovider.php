@@ -13,6 +13,7 @@ pid=1
 */
 
 $mail = new mailTest();
+
 $result1 = $mail->getConfigFromProviderTest('qq.com','123');
 $result2 = $mail->getConfigFromProviderTest('sohu.com','123');
 
