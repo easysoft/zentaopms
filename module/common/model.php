@@ -1560,6 +1560,7 @@ EOD;
      * @param  string $extraClass
      * @param  bool   $onlyBody
      * @param  string $misc
+     * @Param  bool   $extraEnabled
      * @static
      * @access public
      * @return void

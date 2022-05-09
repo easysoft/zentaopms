@@ -324,7 +324,6 @@ class control extends baseControl
 
         $flow = $this->loadModel('workflow')->getByModule($moduleName);
         return $this->loadModel('flow')->buildOperateMenu($flow, $object, $type);
-        
     }
 
     /**
