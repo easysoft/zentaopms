@@ -90,7 +90,7 @@ class control extends baseControl
      * Det default priv by workflow.
      * 
      * @access public
-     * @return void
+     * @return bool
      */
     public function setDefaultPrivByWorkflow()
     {
@@ -315,7 +315,7 @@ class control extends baseControl
      * @param  object $object    product|project|productplan|release|build|story|task|bug|testtask|testcase|testsuite
      * @param  string $displayOn view|browse
      * @access public
-     * @return void
+     * @return string
      */
     public function buildOperateMenu($object, $type = 'view')
     {
@@ -412,7 +412,7 @@ class control extends baseControl
      *
      * @param  string    $viewFile
      * @access public
-     * @return void
+     * @return bool|string
      */
     public function printViewFile($viewFile)
     {
