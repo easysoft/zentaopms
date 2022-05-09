@@ -215,6 +215,12 @@ class blockTest
         return $objects;
     }
 
+    /**
+     * Get plan params.
+     *
+     * @access public
+     * @return json
+     */
     public function getPlanParamsTest()
     {
         $objects = $this->objectModel->getPlanParams();
