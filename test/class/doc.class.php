@@ -493,8 +493,16 @@ class docTest
         return $objects;
     }
 
-    public function getToAndCcListTest($doc)
+    /**
+     * Get toList and ccList.
+     *
+     * @param  int    $docID
+     * @access public
+     * @return bool|array
+     */
+    public function getToAndCcListTest($docID)
     {
+        $doc     = $this->objectModel->getByID($docID);
         $objects = $this->objectModel->getToAndCcList($doc);
 
         if(dao::isError()) return dao::getError();
@@ -547,8 +555,16 @@ class docTest
         return $objects;
     }
 
-    public function checkAutoloadPageTest($doc)
+    /**
+     * Whether the url of link type documents needs to be autoloaded.
+     *
+     * @param  int    $docID
+     * @access public
+     * @return bool
+     */
+    public function checkAutoloadPageTest($docID)
     {
+        $doc     = $this->objectModel->getByID($docID);
         $objects = $this->objectModel->checkAutoloadPage($doc);
 
         if(dao::isError()) return dao::getError();
