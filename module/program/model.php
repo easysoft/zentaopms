@@ -689,6 +689,7 @@ class programModel extends model
         $oldProgram = $this->dao->findById($programID)->from(TABLE_PROGRAM)->fetch();
 
         $program = fixer::input('post')
+            ->add('id', $programID)
             ->setDefault('team', $this->post->name)
             ->setDefault('end', '')
             ->setIF($this->post->begin == '0000-00-00', 'begin', '')

@@ -469,6 +469,7 @@ class executionModel extends model
 
         /* Get the data from the post. */
         $execution = fixer::input('post')
+            ->add('id', $executionID)
             ->setDefault('lastEditedBy', $this->app->user->account)
             ->setDefault('lastEditedDate', helper::now())
             ->setIF(helper::isZeroDate($this->post->begin), 'begin', '')
@@ -621,6 +622,7 @@ class executionModel extends model
 
             $executionID = (int)$executionID;
             $executions[$executionID] = new stdClass();
+            $executions[$executionID]->id             = $executionID;
             $executions[$executionID]->name           = $executionName;
             $executions[$executionID]->code           = $executionCode;
             $executions[$executionID]->PM             = $data->PMs[$executionID];
@@ -759,6 +761,7 @@ class executionModel extends model
         $now          = helper::now();
 
         $execution = fixer::input('post')
+            ->add('id', $executionID)
             ->setDefault('status', 'doing')
             ->setDefault('lastEditedBy', $this->app->user->account)
             ->setDefault('lastEditedDate', $now)
@@ -791,6 +794,7 @@ class executionModel extends model
         $now          = helper::now();
 
         $execution = fixer::input('post')
+            ->add('id', $executionID)
             ->setDefault('lastEditedBy', $this->app->user->account)
             ->setDefault('lastEditedDate', $now)
             ->remove('comment')
@@ -820,6 +824,7 @@ class executionModel extends model
         $now          = helper::now();
 
         $execution = fixer::input('post')
+            ->add('id', $executionID)
             ->setDefault('status', 'suspended')
             ->setDefault('lastEditedBy', $this->app->user->account)
             ->setDefault('lastEditedDate', $now)
@@ -846,6 +851,7 @@ class executionModel extends model
         $now          = helper::now();
 
         $execution = fixer::input('post')
+            ->add('id', $executionID)
             ->setDefault('realEnd', '')
             ->setDefault('status', 'doing')
             ->setDefault('lastEditedBy', $this->app->user->account)
@@ -915,6 +921,7 @@ class executionModel extends model
         $now          = helper::now();
 
         $execution = fixer::input('post')
+            ->add('id', $executionID)
             ->setDefault('status', 'closed')
             ->setDefault('closedBy', $this->app->user->account)
             ->setDefault('closedDate', $now)

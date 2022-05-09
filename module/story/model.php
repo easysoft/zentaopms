@@ -676,6 +676,7 @@ class storyModel extends model
         $story = fixer::input('post')
             ->callFunc('title', 'trim')
             ->setDefault('lastEditedBy', $this->app->user->account)
+            ->add('id', $storyID)
             ->add('lastEditedDate', $now)
             ->setIF($specChanged, 'version', $oldStory->version + 1)
             ->setIF($specChanged and $oldStory->status == 'active' and $this->post->needNotReview == false, 'status',  'changed')
@@ -772,6 +773,7 @@ class storyModel extends model
             ->cleanFloat('estimate')
             ->setDefault('assignedDate', $oldStory->assignedDate)
             ->setDefault('lastEditedBy', $this->app->user->account)
+            ->add('id', $storyID)
             ->add('lastEditedDate', $now)
             ->setDefault('plan,notifyEmail', '')
             ->setDefault('status', $oldStory->status)
@@ -1209,6 +1211,7 @@ class storyModel extends model
                 $oldStory = $oldStories[$storyID];
 
                 $story                 = new stdclass();
+                $story->id             = $storyID;
                 $story->lastEditedBy   = $this->app->user->account;
                 $story->lastEditedDate = $now;
                 $story->status         = $oldStory->status;
@@ -1330,6 +1333,7 @@ class storyModel extends model
             ->removeIF($this->post->result == 'reject' and $this->post->closedReason != 'duplicate', 'duplicateStory')
             ->removeIF($this->post->result == 'reject' and $this->post->closedReason != 'subdivided', 'childStories')
             ->add('reviewedBy', $oldStory->reviewedBy . ',' . $this->app->user->account)
+            ->add('id', $storyID)
             ->remove('result,preVersion,comment')
             ->get();
 
@@ -1549,6 +1553,7 @@ class storyModel extends model
         $oldStory = $this->dao->findById($storyID)->from(TABLE_STORY)->fetch();
         $now      = helper::now();
         $story = fixer::input('post')
+            ->add('id', $storyID)
             ->add('assignedTo', 'closed')
             ->add('status', 'closed')
             ->add('stage', 'closed')
@@ -1981,6 +1986,13 @@ class storyModel extends model
         $story->assignedTo     = $assignedTo;
         $story->assignedDate   = $now;
 
+        $story = fixer::input('post')
+            ->add('id', $storyID)
+            ->add('lastEditedBy', $this->app->user->account)
+            ->add('lastEditedDate', $now)
+            ->add('assignedDate', $now)
+            ->get();
+
         $this->dao->update(TABLE_STORY)->data($story)->autoCheck()->where('id')->eq((int)$storyID)->exec();
         if(!dao::isError()) return common::createChanges($oldStory, $story);
         return false;
@@ -2029,6 +2041,7 @@ class storyModel extends model
         $oldStory = $this->dao->findById($storyID)->from(TABLE_STORY)->fetch();
         $now      = helper::now();
         $story = fixer::input('post')
+            ->add('id', $storyID)
             ->add('closedBy', '')
             ->add('closedReason', '')
             ->add('closedDate', '0000-00-00')

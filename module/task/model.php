@@ -908,6 +908,7 @@ class taskModel extends model
 
         $now  = helper::now();
         $task = fixer::input('post')
+            ->add('id', $taskID)
             ->setDefault('story, estimate, left, consumed', 0)
             ->setDefault('realStarted', '0000-00-00 00:00:00')
             ->setIF(is_numeric($this->post->estimate), 'estimate', (float)$this->post->estimate)
@@ -1170,6 +1171,7 @@ class taskModel extends model
             $oldTask = $oldTasks[$taskID];
 
             $task = new stdclass();
+            $task->id             = $taskID;
             $task->color          = $data->colors[$taskID];
             $task->name           = $data->names[$taskID];
             $task->module         = isset($data->modules[$taskID]) ? $data->modules[$taskID] : 0;
@@ -1437,6 +1439,7 @@ class taskModel extends model
 
         $now  = helper::now();
         $task = fixer::input('post')
+            ->add('id', $taskID)
             ->cleanFloat('left')
             ->setDefault('lastEditedBy', $this->app->user->account)
             ->setDefault('lastEditedDate', $now)
@@ -1502,6 +1505,7 @@ class taskModel extends model
 
         $now  = helper::now();
         $task = fixer::input('post')
+            ->add('id', $taskID)
             ->setDefault('lastEditedBy', $this->app->user->account)
             ->setDefault('lastEditedDate', $now)
             ->setDefault('status', 'doing')
@@ -1727,6 +1731,7 @@ class taskModel extends model
         }
 
         $task = fixer::input('post')
+            ->add('id', $taskID)
             ->setIF(is_numeric($this->post->consumed), 'consumed', (float)$this->post->consumed)
             ->setIF(!$this->post->realStarted and helper::isZeroDate($oldTask->realStarted), 'realStarted', $now)
             ->setDefault('left', 0)
@@ -1857,6 +1862,7 @@ class taskModel extends model
         $oldTask = $this->getById($taskID);
 
         $task = fixer::input('post')
+            ->add('id', $taskID)
             ->setDefault('status', 'pause')
             ->setDefault('lastEditedBy', $this->app->user->account)
             ->setDefault('lastEditedDate', helper::now())
@@ -1890,6 +1896,7 @@ class taskModel extends model
 
         $now  = helper::now();
         $task = fixer::input('post')
+            ->add('id', $taskID)
             ->setDefault('status', 'closed')
             ->setDefault('assignedTo', 'closed')
             ->setDefault('assignedDate', $now)
@@ -1935,6 +1942,7 @@ class taskModel extends model
 
         $now  = helper::now();
         $task = fixer::input('post')
+            ->add('id', $taskID)
             ->setDefault('status', 'cancel')
             ->setDefault('assignedTo', $oldTask->openedBy)
             ->setDefault('assignedDate', $now)
@@ -1995,6 +2003,7 @@ class taskModel extends model
         $oldTask = $this->getById($taskID);
         if($oldTask->parent == '-1') $this->config->task->activate->requiredFields = '';
         $task = fixer::input('post')
+            ->add('id', $taskID)
             ->setIF(is_numeric($this->post->left), 'left', (float)$this->post->left)
             ->setDefault('left', 0)
             ->setDefault('status', 'doing')

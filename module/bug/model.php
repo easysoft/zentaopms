@@ -675,6 +675,7 @@ class bugModel extends model
         }
         $now = helper::now();
         $bug = fixer::input('post')
+            ->add('id', $bugID)
             ->cleanInt('product,module,severity,project,execution,story,task,branch')
             ->stripTags($this->config->bug->editor->edit['id'], $this->config->allowedTags)
             ->setDefault('product,module,execution,story,task,duplicateBug,branch', 0)
@@ -789,6 +790,7 @@ class bugModel extends model
                 $oldBug = $oldBugs[$bugID];
 
                 $bug = new stdclass();
+                $bug->id             = $bugID;
                 $bug->lastEditedBy   = $this->app->user->account;
                 $bug->lastEditedDate = $now;
                 $bug->type           = $data->types[$bugID];
@@ -930,6 +932,7 @@ class bugModel extends model
         $now = helper::now();
         $oldBug = $this->getById($bugID);
         $bug = fixer::input('post')
+            ->add('id', $bugID)
             ->setDefault('lastEditedBy', $this->app->user->account)
             ->setDefault('lastEditedDate', $now)
             ->setDefault('assignedDate', $now)
@@ -963,6 +966,7 @@ class bugModel extends model
         $oldBug = $this->getById($bugID);
 
         $bug = fixer::input('post')
+            ->add('id', $bugID)
             ->setDefault('confirmed', 1)
             ->setDefault('lastEditedBy', $this->app->user->account)
             ->setDefault('lastEditedDate', $now)
@@ -1028,6 +1032,7 @@ class bugModel extends model
         $now    = helper::now();
         $oldBug = $this->getById($bugID);
         $bug    = fixer::input('post')
+            ->add('id', $bugID)
             ->add('status',    'resolved')
             ->add('confirmed', 1)
             ->setDefault('lastEditedBy',   $this->app->user->account)
@@ -1312,6 +1317,7 @@ class bugModel extends model
             ->setDefault('lastEditedDate', $now)
             ->setDefault('activatedDate',  $now)
             ->setDefault('activatedCount', (int)$oldBug->activatedCount)
+            ->add('id', $bugID)
             ->add('resolution', '')
             ->add('status', 'active')
             ->add('resolvedDate', '0000-00-00')
@@ -1363,6 +1369,7 @@ class bugModel extends model
         $now    = helper::now();
         $oldBug = $this->getById($bugID);
         $bug    = fixer::input('post')
+            ->add('id', $bugID)
             ->add('assignedTo', 'closed')
             ->add('status',     'closed')
             ->add('confirmed',  1)

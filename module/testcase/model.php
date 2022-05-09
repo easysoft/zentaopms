@@ -715,6 +715,7 @@ class testcaseModel extends model
         $version = $stepChanged ? $oldCase->version + 1 : $oldCase->version;
 
         $case = fixer::input('post')
+            ->add('id', $caseID)
             ->add('version', $version)
             ->setIF($this->post->story != false and $this->post->story != $oldCase->story, 'storyVersion', $this->loadModel('story')->getVersion($this->post->story))
             ->setIF(!$this->post->linkCase, 'linkCase', '')
@@ -835,6 +836,7 @@ class testcaseModel extends model
         $now    = helper::now();
         $status = $this->getStatus('review', $oldCase);
         $case   = fixer::input('post')
+            ->add('id', $caseID)
             ->remove('result,comment')
             ->setDefault('reviewedDate', substr($now, 0, 10))
             ->setDefault('lastEditedBy', $this->app->user->account)
@@ -947,6 +949,7 @@ class testcaseModel extends model
         foreach($caseIDList as $caseID)
         {
             $case = new stdclass();
+            $case->id             = $caseID;
             $case->lastEditedBy   = $this->app->user->account;
             $case->lastEditedDate = $now;
             $case->pri            = $data->pris[$caseID];

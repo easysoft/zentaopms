@@ -42,8 +42,6 @@ class control extends baseControl
         /* Code for task #9224. Set requiredFields for workflow. */
         if($this->dbh and (defined('IN_USE') or (defined('RUN_MODE') and RUN_MODE == 'api')))
         {
-            $this->checkRequireFlowField();
-
             if(isset($this->config->{$this->moduleName}) and strpos($this->methodName, 'export') !== false)
             {
                 if(isset($this->config->{$this->moduleName}->exportFields) or isset($this->config->{$this->moduleName}->list->exportFields))
