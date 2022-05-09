@@ -657,6 +657,7 @@ class programModel extends model
             ->checkIF($program->end != '', 'end', 'date')
             ->checkIF($program->end != '', 'end', 'gt', $program->begin)
             ->checkIF(!empty($program->name), 'name', 'unique', "`type`='program' and `parent` = $program->parent")
+            ->checkFlow()
             ->exec();
 
         if(!dao::isError())
@@ -755,6 +756,7 @@ class programModel extends model
             ->checkIF($program->end != '', 'end', 'date')
             ->checkIF($program->end != '', 'end', 'gt', $program->begin)
             ->checkIF(!empty($program->name), 'name', 'unique', "id!=$programID and `type`='program' and `parent` = $program->parent")
+            ->checkFlow()
             ->where('id')->eq($programID)
             ->limit(1)
             ->exec();

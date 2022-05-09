@@ -378,6 +378,7 @@ class executionModel extends model
             ->checkIF($sprint->begin != '', 'begin', 'date')
             ->checkIF($sprint->end != '', 'end', 'date')
             ->checkIF($sprint->end != '', 'end', 'ge', $sprint->begin)
+            ->checkFlow()
             ->exec();
 
         /* Add the creater to the team. */
@@ -514,6 +515,7 @@ class executionModel extends model
             ->checkIF($execution->end != '', 'end', 'ge', $execution->begin)
             ->checkIF((!empty($execution->name) and $this->config->systemMode == 'new'), 'name', 'unique', "id != $executionID and type in ('sprint','stage') and `project` = $executionProject")
             ->checkIF(!empty($execution->code), 'code', 'unique', "id != $executionID and type in ('sprint','stage')")
+            ->checkFlow()
             ->where('id')->eq($executionID)
             ->limit(1)
             ->exec();
@@ -669,13 +671,6 @@ class executionModel extends model
                 if(is_array($executions[$executionID]->{$extendField->field})) $executions[$executionID]->{$extendField->field} = join(',', $executions[$executionID]->{$extendField->field});
 
                 $executions[$executionID]->{$extendField->field} = htmlSpecialString($executions[$executionID]->{$extendField->field});
-                $message = $this->checkFlowRule($extendField, $executions[$executionID]->{$extendField->field});
-
-                if($message)
-                {
-                    dao::$errors['message'][] = $message;
-                    return false;
-                }
             }
         }
 
@@ -705,6 +700,7 @@ class executionModel extends model
                 ->checkIF($execution->end != '', 'end', 'ge', $execution->begin)
                 ->checkIF((!empty($execution->name) and $this->config->systemMode == 'new'), 'name', 'unique', "id != $executionID and type in ('sprint','stage') and `project` = $projectID")
                 ->checkIF(!empty($execution->code), 'code', 'unique', "id != $executionID and type in ('sprint','stage')")
+                ->checkFlow()
                 ->where('id')->eq($executionID)
                 ->limit(1)
                 ->exec();
@@ -767,6 +763,7 @@ class executionModel extends model
             ->autoCheck()
             ->check($this->config->execution->start->requiredFields, 'notempty')
             ->checkIF($execution->realBegan != '', 'realBegan', 'le', helper::today())
+            ->checkFlow()
             ->where('id')->eq((int)$executionID)
             ->exec();
 
@@ -799,6 +796,7 @@ class executionModel extends model
 
         $this->dao->update(TABLE_EXECUTION)->data($execution)
             ->autoCheck()
+            ->checkFlow()
             ->where('id')->eq((int)$executionID)
             ->exec();
 
@@ -825,6 +823,7 @@ class executionModel extends model
 
         $this->dao->update(TABLE_EXECUTION)->data($execution)
             ->autoCheck()
+            ->checkFlow()
             ->where('id')->eq((int)$executionID)
             ->exec();
 
@@ -859,6 +858,7 @@ class executionModel extends model
 
         $this->dao->update(TABLE_EXECUTION)->data($execution)
             ->autoCheck()
+            ->checkFlow()
             ->where('id')->eq((int)$executionID)
             ->exec();
 
@@ -928,6 +928,7 @@ class executionModel extends model
             ->check($this->config->execution->close->requiredFields,'notempty')
             ->checkIF($execution->realEnd != '', 'realEnd', 'le', helper::today())
             ->checkIF($execution->realEnd != '', 'realEnd', 'ge', $oldExecution->realBegan)
+            ->checkFlow()
             ->where('id')->eq((int)$executionID)
             ->exec();
 

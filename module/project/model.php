@@ -913,6 +913,7 @@ class projectModel extends model
             ->checkIF(!empty($project->name), 'name', 'unique', "`type`='project' and `parent` = $project->parent and `model` = '{$project->model}'")
             ->checkIF(!empty($project->code), 'code', 'unique', "`type`='project' and `model` = '{$project->model}'")
             ->checkIF($project->end != '', 'end', 'gt', $project->begin)
+            ->checkFlow()
             ->exec();
 
         /* Add the creater to the team. */
@@ -1145,6 +1146,7 @@ class projectModel extends model
             ->checkIF($project->end != '', 'end', 'gt', $project->begin)
             ->checkIF(!empty($project->name), 'name', 'unique', "id != $projectID and `type` = 'project' and `parent` = $project->parent and `model` = '{$project->model}'")
             ->checkIF(!empty($project->code), 'code', 'unique', "id != $projectID and `type` = 'project' and `model` = '{$project->model}'")
+            ->checkFlow()
             ->where('id')->eq($projectID)
             ->exec();
 
@@ -1267,8 +1269,6 @@ class projectModel extends model
                 if(is_array($projects[$projectID]->{$extendField->field})) $projects[$projectID]->{$extendField->field} = join(',', $projects[$projectID]->{$extendField->field});
 
                 $projects[$projectID]->{$extendField->field} = htmlSpecialString($projects[$projectID]->{$extendField->field});
-                $message = $this->checkFlowRule($extendField, $projects[$projectID]->{$extendField->field});
-                if($message) hepler::end(js::alert($message));
             }
         }
         if(dao::isError()) return print(js::error(dao::getError()));
@@ -1286,6 +1286,7 @@ class projectModel extends model
                 ->checkIF($project->end != '', 'end', 'gt', $project->begin)
                 ->checkIF(!empty($project->name), 'name', 'unique', "id != $projectID and `type`='project' and `parent` = $parentID and `model` = '{$project->model}'")
                 ->checkIF(!empty($project->code), 'code', 'unique', "id != $projectID and `type`='project' and `model` = '{$project->model}'")
+                ->checkFlow()
                 ->where('id')->eq($projectID)
                 ->exec();
 
@@ -1328,6 +1329,7 @@ class projectModel extends model
             ->autoCheck()
             ->check($this->config->project->start->requiredFields, 'notempty')
             ->checkIF($project->realBegan != '', 'realBegan', 'le', helper::today())
+            ->checkFlow()
             ->where('id')->eq((int)$projectID)
             ->exec();
 
@@ -1357,6 +1359,7 @@ class projectModel extends model
 
         $this->dao->update(TABLE_PROJECT)->data($project)
             ->autoCheck()
+            ->checkFlow()
             ->where('id')->eq((int)$projectID)
             ->exec();
 
@@ -1382,6 +1385,7 @@ class projectModel extends model
 
         $this->dao->update(TABLE_PROJECT)->data($project)
             ->autoCheck()
+            ->checkFlow()
             ->where('id')->eq((int)$projectID)
             ->exec();
 
@@ -1417,6 +1421,7 @@ class projectModel extends model
 
         $this->dao->update(TABLE_PROJECT)->data($project)
             ->autoCheck()
+            ->checkFlow()
             ->where('id')->eq((int)$projectID)
             ->exec();
 
@@ -1486,6 +1491,7 @@ class projectModel extends model
             ->check($this->config->project->close->requiredFields, 'notempty')
             ->checkIF($project->realEnd != '', 'realEnd', 'le', helper::today())
             ->checkIF($project->realEnd != '', 'realEnd', 'ge', $oldProject->realBegan)
+            ->checkFlow()
             ->where('id')->eq((int)$projectID)
             ->exec();
 

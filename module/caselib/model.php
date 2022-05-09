@@ -102,6 +102,7 @@ class caselibModel extends model
         $this->dao->update(TABLE_TESTSUITE)->data($lib)
             ->autoCheck()
             ->batchcheck($this->config->caselib->edit->requiredFields, 'notempty')
+            ->checkFlow()
             ->where('id')->eq($libID)
             ->exec();
         if(!dao::isError())
@@ -186,6 +187,7 @@ class caselibModel extends model
         $this->dao->insert(TABLE_TESTSUITE)->data($lib)
             ->batchcheck($this->config->caselib->create->requiredFields, 'notempty')
             ->check('name', 'unique', "deleted = '0'")
+            ->checkFlow()
             ->exec();
         if(!dao::isError())
         {

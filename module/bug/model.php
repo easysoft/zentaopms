@@ -94,6 +94,7 @@ class bugModel extends model
             ->autoCheck()
             ->checkIF($bug->notifyEmail, 'notifyEmail', 'email')
             ->batchCheck($this->config->bug->create->requiredFields, 'notempty')
+            ->checkFlow()
             ->exec();
 
         if(!dao::isError())
@@ -225,8 +226,6 @@ class bugModel extends model
                 if(is_array($bug->{$extendField->field})) $bug->{$extendField->field} = join(',', $bug->{$extendField->field});
 
                 $bug->{$extendField->field} = htmlSpecialString($bug->{$extendField->field});
-                $message = $this->checkFlowRule($extendField, $bug->{$extendField->field});
-                if($message) return print(js::alert($message));
             }
 
             /* Required field check. */
@@ -282,6 +281,7 @@ class bugModel extends model
             $this->dao->insert(TABLE_BUG)->data($bug)
                 ->autoCheck()
                 ->batchCheck($this->config->bug->create->requiredFields, 'notempty')
+                ->checkFlow()
                 ->exec();
             if(dao::isError()) return false;
 
@@ -717,6 +717,7 @@ class bugModel extends model
             ->checkIF($bug->notifyEmail, 'notifyEmail', 'email')
             ->checkIF($bug->resolution == 'duplicate', 'duplicateBug', 'notempty')
             ->checkIF($bug->resolution == 'fixed',     'resolvedBuild','notempty')
+            ->checkFlow()
             ->where('id')->eq((int)$bugID)
             ->exec();
 
@@ -827,8 +828,6 @@ class bugModel extends model
                     if(is_array($bug->{$extendField->field})) $bug->{$extendField->field} = join(',', $bug->{$extendField->field});
 
                     $bug->{$extendField->field} = htmlSpecialString($bug->{$extendField->field});
-                    $message = $this->checkFlowRule($extendField, $bug->{$extendField->field});
-                    if($message) return print(js::alert($message));
                 }
 
                 $bugs[$bugID] = $bug;
@@ -845,6 +844,7 @@ class bugModel extends model
                     ->batchCheck($this->config->bug->edit->requiredFields, 'notempty')
                     ->checkIF($bug->resolvedBy, 'resolution', 'notempty')
                     ->checkIF($bug->resolution == 'duplicate', 'duplicateBug', 'notempty')
+                    ->checkFlow()
                     ->where('id')->eq((int)$bugID)
                     ->exec();
 
@@ -940,6 +940,7 @@ class bugModel extends model
         $this->dao->update(TABLE_BUG)
             ->data($bug)
             ->autoCheck()
+            ->checkFlow()
             ->where('id')->eq($bugID)->exec();
 
         if(!dao::isError()) return common::createChanges($oldBug, $bug);
@@ -970,7 +971,7 @@ class bugModel extends model
             ->join('mailto', ',')
             ->get();
 
-        $this->dao->update(TABLE_BUG)->data($bug)->where('id')->eq($bugID)->exec();
+        $this->dao->update(TABLE_BUG)->data($bug)->autoCheck()->checkFlow()->where('id')->eq($bugID)->exec();
 
         if(!dao::isError())
         {
@@ -1100,6 +1101,7 @@ class bugModel extends model
             ->batchCheck($this->config->bug->resolve->requiredFields, 'notempty')
             ->checkIF($bug->resolution == 'duplicate', 'duplicateBug', 'notempty')
             ->checkIF($bug->resolution == 'fixed',     'resolvedBuild','notempty')
+            ->checkFlow()
             ->where('id')->eq((int)$bugID)
             ->exec();
 
@@ -1324,7 +1326,7 @@ class bugModel extends model
             ->remove('comment,files,labels')
             ->get();
 
-        $this->dao->update(TABLE_BUG)->data($bug)->autoCheck()->where('id')->eq((int)$bugID)->exec();
+        $this->dao->update(TABLE_BUG)->data($bug)->autoCheck()->checkFlow()->where('id')->eq((int)$bugID)->exec();
         $this->dao->update(TABLE_BUG)->set('activatedCount = activatedCount + 1')->where('id')->eq((int)$bugID)->exec();
 
         if($solveBuild)
@@ -1372,7 +1374,7 @@ class bugModel extends model
             ->remove('comment')
             ->get();
 
-        $this->dao->update(TABLE_BUG)->data($bug)->autoCheck()->where('id')->eq((int)$bugID)->exec();
+        $this->dao->update(TABLE_BUG)->data($bug)->autoCheck()->checkFlow()->where('id')->eq((int)$bugID)->exec();
         if($oldBug->execution)
         {
             $this->loadModel('kanban');

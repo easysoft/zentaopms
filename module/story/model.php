@@ -247,6 +247,7 @@ class storyModel extends model
             ->autoCheck()
             ->checkIF($story->notifyEmail, 'notifyEmail', 'email')
             ->batchCheck($requiredFields, 'notempty')
+            ->checkFlow()
             ->exec();
 
         if(!dao::isError())
@@ -514,8 +515,6 @@ class storyModel extends model
                 if(is_array($story->{$extendField->field})) $story->{$extendField->field} = join(',', $story->{$extendField->field});
 
                 $story->{$extendField->field} = htmlSpecialString($story->{$extendField->field});
-                $message = $this->checkFlowRule($extendField, $story->{$extendField->field});
-                if($message) return print(js::alert($message));
             }
 
             foreach(explode(',', $this->config->story->create->requiredFields) as $field)
@@ -538,7 +537,7 @@ class storyModel extends model
 
         foreach($data as $i => $story)
         {
-            $this->dao->insert(TABLE_STORY)->data($story)->autoCheck()->exec();
+            $this->dao->insert(TABLE_STORY)->data($story)->autoCheck()->checkFlow()->exec();
             if(dao::isError())
             {
                 echo js::error(dao::getError());
@@ -693,6 +692,7 @@ class storyModel extends model
         $this->dao->update(TABLE_STORY)->data($story, 'spec,verify')
             ->autoCheck()
             ->batchCheck($this->config->story->change->requiredFields, 'notempty')
+            ->checkFlow()
             ->where('id')->eq((int)$storyID)->exec();
 
         if(!dao::isError())
@@ -864,6 +864,7 @@ class storyModel extends model
             ->checkIF(isset($story->closedReason) and $story->closedReason == 'done', 'stage', 'notempty')
             ->checkIF(isset($story->closedReason) and $story->closedReason == 'duplicate',  'duplicateStory', 'notempty')
             ->checkIF($story->notifyEmail, 'notifyEmail', 'email')
+            ->checkFlow()
             ->where('id')->eq((int)$storyID)->exec();
 
         if(!dao::isError())
@@ -1245,8 +1246,6 @@ class storyModel extends model
                     if(is_array($story->{$extendField->field})) $story->{$extendField->field} = join(',', $story->{$extendField->field});
 
                     $story->{$extendField->field} = htmlSpecialString($story->{$extendField->field});
-                    $message = $this->checkFlowRule($extendField, $story->{$extendField->field});
-                    if($message) return print(js::alert($message));
                 }
 
                 $stories[$storyID] = $story;
@@ -1261,6 +1260,7 @@ class storyModel extends model
                     ->checkIF($story->closedBy, 'closedReason', 'notempty')
                     ->checkIF($story->closedReason == 'done', 'stage', 'notempty')
                     ->checkIF($story->closedReason == 'duplicate',  'duplicateStory', 'notempty')
+                    ->checkFlow()
                     ->where('id')->eq((int)$storyID)
                     ->exec();
                 if($story->title != $oldStory->title)
@@ -1353,6 +1353,7 @@ class storyModel extends model
             ->batchCheck($this->config->story->review->requiredFields, 'notempty')
             ->checkIF($this->post->result == 'reject', 'closedReason', 'notempty')
             ->checkIF($this->post->result == 'reject' and $this->post->closedReason == 'duplicate',  'duplicateStory', 'notempty')
+            ->checkFlow()
             ->where('id')->eq($storyID)->exec();
         if($this->post->result == 'revert')
         {
@@ -1576,6 +1577,7 @@ class storyModel extends model
             ->autoCheck()
             ->batchCheck($this->config->story->close->requiredFields, 'notempty')
             ->checkIF($story->closedReason == 'duplicate', 'duplicateStory', 'notempty')
+            ->checkFlow()
             ->where('id')->eq($storyID)->exec();
 
         /* Update parent story status and stage. */
@@ -1975,13 +1977,13 @@ class storyModel extends model
         $assignedTo = $this->post->assignedTo;
         if($assignedTo == $oldStory->assignedTo) return array();
 
-        $story = new stdclass();
-        $story->lastEditedBy   = $this->app->user->account;
-        $story->lastEditedDate = $now;
-        $story->assignedTo     = $assignedTo;
-        $story->assignedDate   = $now;
+        $story = fixer::input('post')
+            ->add('lastEditedBy', $this->app->user->account)
+            ->add('lastEditedDate', $now)
+            ->add('assignedDate', $now)
+            ->get();
 
-        $this->dao->update(TABLE_STORY)->data($story)->autoCheck()->where('id')->eq((int)$storyID)->exec();
+        $this->dao->update(TABLE_STORY)->data($story)->autoCheck()->checkFlow()->where('id')->eq((int)$storyID)->exec();
         if(!dao::isError()) return common::createChanges($oldStory, $story);
         return false;
     }
@@ -2042,7 +2044,7 @@ class storyModel extends model
             ->setDefault('activatedDate', $now)
             ->remove('comment')
             ->get();
-        $this->dao->update(TABLE_STORY)->data($story)->autoCheck()->where('id')->eq($storyID)->exec();
+        $this->dao->update(TABLE_STORY)->data($story)->autoCheck()->checkFlow()->where('id')->eq($storyID)->exec();
 
         if($this->post->status == 'active') $this->dao->delete()->from(TABLE_STORYREVIEW)->where('story')->eq($storyID)->exec();
 

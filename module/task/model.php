@@ -138,6 +138,7 @@ class taskModel extends model
                 ->batchCheck($requiredFields, 'notempty')
                 ->checkIF($task->estimate != '', 'estimate', 'float')
                 ->checkIF(!helper::isZeroDate($task->deadline), 'deadline', 'ge', $task->estStarted)
+                ->checkFlow()
                 ->exec();
 
             if(dao::isError()) return false;
@@ -363,12 +364,6 @@ class taskModel extends model
                 if(is_array($data[$i]->{$extendField->field})) $data[$i]->{$extendField->field} = join(',', $data[$i]->{$extendField->field});
 
                 $data[$i]->{$extendField->field} = htmlSpecialString($data[$i]->{$extendField->field});
-                $message = $this->checkFlowRule($extendField, $data[$i]->{$extendField->field});
-                if($message)
-                {
-                    dao::$errors['message'][] = sprintf($message);
-                    return false;
-                }
             }
         }
 
@@ -423,6 +418,7 @@ class taskModel extends model
             $this->dao->insert(TABLE_TASK)->data($task)
                 ->autoCheck()
                 ->checkIF($task->estimate != '', 'estimate', 'float')
+                ->checkFlow()
                 ->exec();
 
             if(dao::isError()) return false;
@@ -1048,6 +1044,7 @@ class taskModel extends model
             ->batchCheckIF($task->status == 'done', 'canceledBy, canceledDate', 'empty')
 
             ->batchCheckIF($task->closedReason == 'cancel', 'finishedBy, finishedDate', 'empty')
+            ->checkFlow()
             ->where('id')->eq((int)$taskID)->exec();
 
         if(!dao::isError())
@@ -1217,8 +1214,6 @@ class taskModel extends model
                 if(is_array($task->{$extendField->field})) $task->{$extendField->field} = join(',', $task->{$extendField->field});
 
                 $task->{$extendField->field} = htmlSpecialString($task->{$extendField->field});
-                $message = $this->checkFlowRule($extendField, $task->{$extendField->field});
-                if($message) return print(js::alert($message));
             }
 
             if(isset($data->consumeds[$taskID]))
@@ -1353,6 +1348,7 @@ class taskModel extends model
                 ->batchCheckIF($task->status == 'done', 'canceledBy, canceledDate', 'empty')
 
                 ->batchCheckIF($task->closedReason == 'cancel', 'finishedBy, finishedDate', 'empty')
+                ->checkFlow()
                 ->where('id')->eq((int)$taskID)
                 ->exec();
             if(dao::isError())
@@ -1469,6 +1465,7 @@ class taskModel extends model
             ->data($task)
             ->autoCheck()
             ->check('left', 'float')
+            ->checkFlow()
             ->where('id')->eq($taskID)
             ->exec();
 
@@ -1555,6 +1552,7 @@ class taskModel extends model
         $this->dao->update(TABLE_TASK)->data($task)
             ->autoCheck()
             ->check('consumed,left', 'float')
+            ->checkFlow()
             ->where('id')->eq((int)$taskID)->exec();
 
         if($oldTask->parent > 0)
@@ -1825,6 +1823,7 @@ class taskModel extends model
 
         $this->dao->update(TABLE_TASK)->data($task)
             ->autoCheck()
+            ->checkFlow()
             ->where('id')->eq((int)$taskID)
             ->exec();
 
@@ -1863,7 +1862,7 @@ class taskModel extends model
             ->remove('comment')
             ->get();
 
-        $this->dao->update(TABLE_TASK)->data($task)->autoCheck()->where('id')->eq((int)$taskID)->exec();
+        $this->dao->update(TABLE_TASK)->data($task)->autoCheck()->checkFlow()->where('id')->eq((int)$taskID)->exec();
 
         if($oldTask->parent > 0) $this->updateParentStatus($taskID);
 
@@ -1901,7 +1900,7 @@ class taskModel extends model
             ->remove('comment')
             ->get();
 
-        $this->dao->update(TABLE_TASK)->data($task)->autoCheck()->where('id')->eq((int)$taskID)->exec();
+        $this->dao->update(TABLE_TASK)->data($task)->autoCheck()->checkFlow()->where('id')->eq((int)$taskID)->exec();
 
         if(!dao::isError())
         {
@@ -1945,7 +1944,7 @@ class taskModel extends model
             ->remove('comment')
             ->get();
 
-        $this->dao->update(TABLE_TASK)->data($task)->autoCheck()->where('id')->eq((int)$taskID)->exec();
+        $this->dao->update(TABLE_TASK)->data($task)->autoCheck()->checkFlow()->where('id')->eq((int)$taskID)->exec();
         if($oldTask->fromBug) $this->dao->update(TABLE_BUG)->set('toTask')->eq(0)->where('id')->eq($oldTask->fromBug)->exec();
         if($oldTask->parent > 0) $this->updateParentStatus($taskID);
         if($oldTask->parent == '-1')
@@ -2027,6 +2026,7 @@ class taskModel extends model
         $this->dao->update(TABLE_TASK)->data($task)
             ->autoCheck()
             ->batchCheck($this->config->task->activate->requiredFields, 'notempty')
+            ->checkFlow()
             ->where('id')->eq((int)$taskID)
             ->exec();
 

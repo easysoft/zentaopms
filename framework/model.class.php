@@ -250,21 +250,6 @@ class model extends baseModel
     }
 
     /**
-     * Check flow rule.
-     *
-     * @param  object $field
-     * @param  string $value
-     * @access public
-     * @return bool|string
-     */
-    public function checkFlowRule($field, $value)
-    {
-        if(!isset($this->config->bizVersion)) return false;
-
-        return $this->loadModel('flow')->checkRule($field, $value);
-    }
-
-    /**
      * Execute Hooks
      *
      * @param  int    $objectID

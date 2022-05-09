@@ -609,6 +609,7 @@ class productModel extends model
             ->batchCheck($this->config->product->create->requiredFields, 'notempty')
             ->checkIF((!empty($product->name) and $this->config->systemMode == 'new'), 'name', 'unique', "`program` = $programID")
             ->checkIF(!empty($product->code), 'code', 'unique')
+            ->checkFlow()
             ->exec();
 
         if(!dao::isError())
@@ -717,6 +718,7 @@ class productModel extends model
             ->batchCheck($this->config->product->edit->requiredFields, 'notempty')
             ->checkIF((!empty($product->name) and $this->config->systemMode == 'new'), 'name', 'unique', "id != $productID and `program` = $programID")
             ->checkIF(!empty($product->code), 'code', 'unique', "id != $productID")
+            ->checkFlow()
             ->where('id')->eq($productID)
             ->exec();
 
@@ -771,8 +773,6 @@ class productModel extends model
                 if(is_array($products[$productID]->{$extendField->field})) $products[$productID]->{$extendField->field} = join(',', $products[$productID]->{$extendField->field});
 
                 $products[$productID]->{$extendField->field} = htmlSpecialString($products[$productID]->{$extendField->field});
-                $message = $this->checkFlowRule($extendField, $products[$productID]->{$extendField->field});
-                if($message) return print(js::alert($message));
             }
         }
         if(dao::isError()) return print(js::error(dao::getError()));
@@ -789,6 +789,7 @@ class productModel extends model
                 ->autoCheck()
                 ->batchCheck($this->config->product->edit->requiredFields , 'notempty')
                 ->checkIF((!empty($product->name) and $this->config->systemMode == 'new'), 'name', 'unique', "id != $productID and `program` = $programID")
+                ->checkFlow()
                 ->where('id')->eq($productID)
                 ->exec();
             if(dao::isError()) return print(js::error('product#' . $productID . dao::getError(true)));
@@ -825,6 +826,7 @@ class productModel extends model
 
         $this->dao->update(TABLE_PRODUCT)->data($product)
             ->autoCheck()
+            ->checkFlow()
             ->where('id')->eq((int)$productID)
             ->exec();
 

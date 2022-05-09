@@ -44,6 +44,7 @@ class testtaskModel extends model
             ->checkIF($task->begin != '', 'begin', 'date')
             ->checkIF($task->end != '', 'end', 'date')
             ->checkIF($task->end != '', 'end', 'ge', $task->begin)
+            ->checkFlow()
             ->exec();
 
         if(!dao::isError())
@@ -739,6 +740,7 @@ class testtaskModel extends model
             ->autoCheck()
             ->batchcheck($this->config->testtask->edit->requiredFields, 'notempty')
             ->checkIF($task->end != '', 'end', 'ge', $task->begin)
+            ->checkFlow()
             ->where('id')->eq($taskID)
             ->exec();
         if(!dao::isError())
@@ -765,6 +767,7 @@ class testtaskModel extends model
 
         $this->dao->update(TABLE_TESTTASK)->data($testtask)
             ->autoCheck()
+            ->checkFlow()
             ->where('id')->eq((int)$taskID)
             ->exec();
 
@@ -801,6 +804,7 @@ class testtaskModel extends model
         $testtask = $this->loadModel('file')->processImgURL($testtask, $this->config->testtask->editor->close['id'], $this->post->uid);
         $this->dao->update(TABLE_TESTTASK)->data($testtask)
             ->autoCheck()
+            ->checkFlow()
             ->where('id')->eq((int)$taskID)
             ->exec();
 
@@ -827,6 +831,7 @@ class testtaskModel extends model
 
         $this->dao->update(TABLE_TESTTASK)->data($testtask)
             ->autoCheck()
+            ->checkFlow()
             ->where('id')->eq((int)$taskID)
             ->exec();
 
@@ -849,6 +854,7 @@ class testtaskModel extends model
 
         $this->dao->update(TABLE_TESTTASK)->data($testtask)
             ->autoCheck()
+            ->checkFlow()
             ->where('id')->eq((int)$taskID)
             ->exec();
 
