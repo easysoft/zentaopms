@@ -14,4 +14,4 @@ pid=1
 
 $mail = new mailTest();
 
-r($mail->mailExistTest()) && p('email') && e('1000010000@qq.com'); //检查系统是否至少存在邮件
+r($mail->mailExistTest()) && p('email') && e('10001000@qq.com'); //检查系统是否至少存在邮件

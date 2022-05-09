@@ -43,11 +43,11 @@ class mailTest
      */
     public function getConfigFromProviderTest($domain, $username)
     {
-        $objects = $this->objectModel->getConfigFromProvider($domain, $username);
+        $object = $this->objectModel->getConfigFromProvider($domain, $username);
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        return $object;
     }
 
     /**
@@ -60,11 +60,11 @@ class mailTest
      */
     public function getConfigByMXRRTest($domain, $username)
     {
-        $objects = $this->objectModel->getConfigByMXRR($domain, $username);
+        $object = $this->objectModel->getConfigByMXRR($domain, $username);
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        return $object;
     }
 
     /**
@@ -78,11 +78,11 @@ class mailTest
      */
     public function getConfigByDetectingSMTPTest($domain, $username, $port)
     {
-        $objects = $this->objectModel->getConfigByDetectingSMTP($domain, $username, $port);
+        $object = $this->objectModel->getConfigByDetectingSMTP($domain, $username, $port);
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        return $object;
     }
 
     /**
@@ -93,41 +93,11 @@ class mailTest
      */
     public function setMTATest()
     {
-        $objects = $this->objectModel->setMTA();
+        $object = $this->objectModel->setMTA();
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
-    }
-
-    /**
-     * Set SMTP. 
-     * 
-     * @access public
-     * @return void
-     */
-    public function setSMTPTest()
-    {
-        $objects = $this->objectModel->setSMTP();
-
-        if(dao::isError()) return dao::getError();
-
-        return $objects;
-    }
-
-    /**
-     * Set PhpMail. 
-     * 
-     * @access public
-     * @return void
-     */
-    public function setPhpMailTest()
-    {
-        $objects = $this->objectModel->setPhpMail();
-
-        if(dao::isError()) return dao::getError();
-
-        return $objects;
+        return $object;
     }
 
     /**
@@ -138,25 +108,13 @@ class mailTest
      */
     public function setSendMailTest()
     {
-        $objects = $this->objectModel->setSendMail();
+        $object = $this->objectModel->setSendMail();
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        return $object;
     }
 
-    /**
-     * Set GMail. 
-     * 
-     * @access public
-     * @return void
-     */
-    public function setGMailTest()
-    {
-        $this->objectModel->setGMail();
-
-        return $this->setMTATest();
-    }
 
     /**
      * Send. 
@@ -172,28 +130,11 @@ class mailTest
      */
     public function sendTest($toList, $subject, $body = '', $ccList = '', $includeMe = false, $emails = array())
     {
-        $objects = $this->objectModel->send($toList, $subject, $body, $ccList, $includeMe, $emails);
+        $object = $this->objectModel->send($toList, $subject, $body, $ccList, $includeMe, $emails);
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
-    }
-
-    /**
-     * Set TO. 
-     * 
-     * @param  int    $toList 
-     * @param  int    $emails 
-     * @access public
-     * @return void
-     */
-    public function setTOTest($toList, $emails)
-    {
-        $objects = $this->objectModel->setTO($toList, $emails);
-
-        if(dao::isError()) return dao::getError();
-
-        return $objects;
+        return $object;
     }
 
     /**
@@ -240,36 +181,6 @@ class mailTest
     }
 
     /**
-     * Set errorlang.
-     * 
-     * @access public
-     * @return void
-     */
-    public function setErrorLangTest()
-    {
-        $objects = $this->objectModel->setErrorLang();
-
-        if(dao::isError()) return dao::getError();
-
-        return $objects;
-    }
-
-    /**
-     * clear. 
-     * 
-     * @access public
-     * @return void
-     */
-    public function clearTest()
-    {
-        $objects = $this->objectModel->clear();
-
-        if(dao::isError()) return dao::getError();
-
-        return $objects;
-    }
-
-    /**
      * Mail exist. 
      * 
      * @access public
@@ -282,36 +193,6 @@ class mailTest
         if(dao::isError()) return dao::getError();
 
         return $object;
-    }
-
-    /**
-     * Is error. 
-     * 
-     * @access public
-     * @return void
-     */
-    public function isErrorTest()
-    {
-        $object = $this->objectModel->isError();
-
-        if(dao::isError()) return dao::getError();
-
-        return $object;
-    }
-
-    /**
-     * Get error. 
-     * 
-     * @access public
-     * @return void
-     */
-    public function getErrorTest()
-    {
-        $objects = $this->objectModel->getError();
-
-        if(dao::isError()) return dao::getError();
-
-        return $objects;
     }
 
     /**
@@ -390,23 +271,6 @@ class mailTest
             ->fetchAll();
         
         $object = $this->objectModel->mergeMails($mails);
-
-        if(dao::isError()) return dao::getError();
-
-        return $object;
-    }
-
-    /**
-     * Sendmail. 
-     * 
-     * @param  int    $objectID 
-     * @param  int    $actionID 
-     * @access public
-     * @return void
-     */
-    public function sendmailTest($objectID, $actionID)
-    {
-        $object = $this->objectModel->sendmail($objectID, $actionID);
 
         if(dao::isError()) return dao::getError();
 
