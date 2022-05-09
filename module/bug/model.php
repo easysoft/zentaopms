@@ -2787,15 +2787,15 @@ class bugModel extends model
      * @access public
      * @return void
      */
-    public static function isClickable($object, $action)
+    public static function isClickable($object, $action, $module = 'bug')
     {
         $action = strtolower($action);
 
-        if($action == 'confirmbug') return $object->status == 'active' and $object->confirmed == 0;
-        if($action == 'resolve')    return $object->status == 'active';
-        if($action == 'close')      return $object->status == 'resolved';
-        if($action == 'activate')   return $object->status != 'active';
-        if($action == 'tostory')    return $object->status == 'active';
+        if($module == 'bug' && $action == 'confirmbug') return $object->status == 'active' and $object->confirmed == 0;
+        if($module == 'bug' && $action == 'resolve')    return $object->status == 'active';
+        if($module == 'bug' && $action == 'close')      return $object->status == 'resolved';
+        if($module == 'bug' && $action == 'activate')   return $object->status != 'active';
+        if($module == 'bug' && $action == 'tostory')    return $object->status == 'active';
 
         return true;
     }
@@ -3232,5 +3232,36 @@ class bugModel extends model
             ->where('type')->eq('project')
             ->andWhere('deleted')->eq(0)
             ->fetchPairs('id');
+    }
+
+    public function buildOperateMenu($bug, $type = 'view')
+    {
+        $menu          = '';
+        $menuType      = $type == 'browse' ? 'list' : 'button';
+        $params        = "bugID=$bug->id";
+        $extraParams   = "extras=bugID=$bug->id";
+        if($this->app->tab == 'project')   $extraParams .= ",projectID={$bug->project}";
+        if($this->app->tab == 'execution') $extraParams .= ",executionID={$bug->execution}";
+        $copyParams    = "productID=$bug->product&branch=$bug->branch&$extraParams";
+        $convertParams = "productID=$bug->product&branch=$bug->branch&moduleID=0&from=bug&bugID=$bug->id";
+        $toStoryParams = "product=$bug->product&branch=$bug->branch&module=0&story=0&execution=0&bugID=$bug->id";
+
+        $menu  .= $this->buildMenu('bug', 'confirmBug', $params, $bug, $menuType, 'ok', '', "iframe", true);
+        if($type == 'view') $menu .= $this->buildMenu('bug', 'assignTo', $params, $bug, $menuType, '', '', "iframe", true);
+        $menu  .= $this->buildMenu('bug', 'resolve', $params, $bug, $menuType, 'checked', '', "iframe", true);
+        $menu  .= $this->buildMenu('bug', 'close', $params, $bug, $menuType, '', '', "text-danger iframe showinonlybody", true);
+        $menu  .= $this->buildMenu('bug', 'activate', $params, $bug, $menuType, '', '', "text-success iframe showinonlybody", true);
+        if($this->app->tab != 'product')
+        {
+            $menu  .= $this->buildMenu('bug', 'toStory', $toStoryParams, $bug, $menuType, $this->lang->icons['story'], '', '', '', "data-app='product'", $this->lang->bug->toStory);
+            $menu  .= $this->buildMenu('bug', 'createCase', $convertParams, $bug, $menuType, 'sitemap');
+        }
+        $menu  .= "<div class='divider'></div>";
+        $menu  .= $this->buildFlowMenu('bug', $bug, $type, 'direct');
+        $menu  .= "<div class='divider'></div>";
+        $menu  .= $this->buildMenu('bug', 'edit', $params, $bug, $menuType);
+        if($this->app->tab != 'product') $menu .= $this->buildMenu('bug', 'create', $copyParams, $bug, $menuType, 'copy');
+        $menu  .= $this->buildMenu('bug', 'delete', $params, $bug, $menuType, 'trash', 'hiddenwin', "showinonlybody");
+        return $menu;
     }
 }

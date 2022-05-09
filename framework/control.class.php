@@ -82,31 +82,49 @@ class control extends baseControl
             }
 
             /* If workflow is created by a normal user, set priv. */
-            if(isset($this->app->user) and !$this->app->user->admin)
-            {
-                $actions = $this->dao->select('module, action')->from(TABLE_WORKFLOWACTION)->where('createdBy')->eq($this->app->user->account)->andWhere('buildin')->eq('0')->fetchGroup('module');
-                $labels  = $this->dao->select('module, code')->from(TABLE_WORKFLOWLABEL)->where('createdBy')->eq($this->app->user->account)->andWhere('buildin')->eq('0')->fetchGroup('module');
-                if(!empty($actions))
-                {
-                    foreach($actions as $module => $actionObj)
-                    {
-                        foreach($actionObj as $action) $this->app->user->rights['rights'][$module][$action->action] = 1;
-                    }
-                }
+            if(isset($this->app->user) and !$this->app->user->admin) $this->setDefaultPrivByWorkflow();
+        }
+    }
 
-                if(!empty($labels))
+    /**
+     * Det default priv by workflow.
+     * 
+     * @access public
+     * @return void
+     */
+    public function setDefaultPrivByWorkflow()
+    {
+        $actionList = $this->dao->select('module, action')->from(TABLE_WORKFLOWACTION)
+            ->where('createdBy')->eq($this->app->user->account)
+            ->andWhere('buildin')->eq('0')
+            ->fetchGroup('module');
+
+        if($actionList)
+        {
+            foreach($actionList as $module => $actions)
+            {
+                foreach($actions as $action) $this->app->user->rights['rights'][$module][$action->action] = 1;
+            }
+        }
+
+        $labelList = $this->dao->select('module, code')->from(TABLE_WORKFLOWLABEL)
+            ->where('createdBy')->eq($this->app->user->account)
+            ->andWhere('buildin')->eq('0')
+            ->fetchGroup('module');
+
+        if($labelList)
+        {
+            foreach($labelList as $module => $labels)
+            {
+                foreach($labels as $label)
                 {
-                    foreach($labels as $module => $codeObj)
-                    {
-                        foreach($codeObj as $code)
-                        {
-                            $code = str_replace('browse', '', $code->code);
-                            $this->app->user->rights['rights'][$module][$code] = 1;
-                        }
-                    }
+                    $code = str_replace('browse', '', $label->code);
+                    $this->app->user->rights['rights'][$module][$code] = 1;
                 }
             }
         }
+
+        return true;
     }
 
     /**
@@ -299,14 +317,16 @@ class control extends baseControl
      * @access public
      * @return void
      */
-    public function buildOperateMenu($object, $displayOn = 'view')
+    public function buildOperateMenu($object, $type = 'view')
     {
         if(!isset($this->config->bizVersion)) return false;
 
-        $flow = $this->loadModel('workflow')->getByModule($this->moduleName);
-        return $this->loadModel('flow')->buildOperateMenu($flow, $object, $displayOn);
-        //$moduleName = $this->moduleName;
-        //return $this->$moduleName->buildOperateMenu($object, $type);
+        $moduleName = $this->moduleName;
+        if($moduleName == 'bug') return $this->$moduleName->buildOperateMenu($object, $type);
+
+        $flow = $this->loadModel('workflow')->getByModule($moduleName);
+        return $this->loadModel('flow')->buildOperateMenu($flow, $object, $type);
+        
     }
 
     /**

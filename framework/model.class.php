@@ -59,15 +59,17 @@ class model extends baseModel
      * @param  string $moduleName
      * @param  string $methodName
      * @param  string $params
-     * @param  string $label
      * @param  object $data
      * @param  string $type
+     * @param  string $icon
+     * @param  string $target
      * @param  string $misc
-     * @param  bool   $li
+     * @param  bool   $onlyBody
      * @access public
      * @return string
      */
-    public function buildMenu($moduleName, $methodName, $params, $label, $data, $type = 'browse', $misc = '', $li = false)
+
+    public function buildMenu($moduleName, $methodName, $params, $data, $type = 'view', $icon = '', $target = '', $class = '', $onlyBody = false, $misc = '' , $title = '')
     {
         if(strpos($moduleName, '.') !== false) list($appName, $moduleName) = explode('.', $moduleName);
 
@@ -99,31 +101,18 @@ class model extends baseModel
             }
             else
             {
-                if(method_exists($this, 'isClickable')) $enabled = $this->isClickable($module, $method, $data);
+                if(method_exists($this, 'isClickable')) $enabled = $this->isClickable($data, $method, $module);
             }
         }
         else
         {
-            if(method_exists($this, 'isClickable')) $enabled = $this->isClickable($module, $method, $data);
+            if(method_exists($this, 'isClickable')) $enabled = $this->isClickable($data, $method, $module);
         }
 
-        if($enabled) $enabled = commonModel::checkPrivByVars($module, $method, $params);
-
-        if($enabled)
-        {
-            $link = helper::createLink($module, $method, $params);
-            $html = html::a($link, $label, '', $misc);
-            if($type == 'browse' && $li) $html = '<li>' . $html . '</li>';
-
-            return $html;
-        }
-        else
-        {
-            if($type == 'view') return '';
-            if($type == 'browse' && $li) return '';
-
-            return html::a('javascript:;', $label, '', "class='disabled'");
-        }
+        $html = '';
+        $type = $type == 'browse' ? 'list' : 'button';
+        if($enabled) $html = common::buildIconButton($module, $method, $params, $data, $type, $icon, $target, $class, $onlyBody, $misc, $title);
+        return $html;
     }
 
     /**
