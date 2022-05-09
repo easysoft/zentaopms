@@ -2784,6 +2784,7 @@ class bugModel extends model
      *
      * @param  string $bug
      * @param  string $action
+     * @param  string $module
      * @access public
      * @return void
      */
@@ -3223,7 +3224,7 @@ class bugModel extends model
     }
 
     /**
-     * Build operateMenu.
+     * Build bug menu.
      * 
      * @param  object $bug 
      * @param  string $type 
@@ -3260,6 +3261,7 @@ class bugModel extends model
         $menu .= $this->buildMenu('bug', 'edit', $params, $bug, $type);
         if($this->app->tab != 'product') $menu .= $this->buildMenu('bug', 'create', $copyParams, $bug, $type, 'copy');
         if($type == 'view') $menu .= $this->buildMenu('bug', 'delete', $params, $bug, $type, 'trash', 'hiddenwin', "showinonlybody");
+
         return $menu;
     }
 }
