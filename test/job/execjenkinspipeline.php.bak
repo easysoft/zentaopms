@@ -1,0 +1,24 @@
+#!/usr/bin/env php
+<?php
+include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
+include dirname(dirname(dirname(__FILE__))) . '/class/job.class.php';
+su('admin');
+
+/**
+
+title=jobModel->execJenkinsPipeline();
+cid=1
+pid=1
+
+测试执行jekins pipeline情况 >> 1
+
+*/
+
+$jobID      = 1;
+$repo       = 1;
+$complileID = 1;
+
+$job = new jobTest();
+$job->execTest($jobID);
+r($job->execJenkinsPipelineTest($jobID, $repo, $complileID)) && p('id')&& e('1');     // 测试执行jekins pipeline情况
+//system("./ztest init");
