@@ -378,6 +378,7 @@ class executionModel extends model
             ->checkIF($sprint->begin != '', 'begin', 'date')
             ->checkIF($sprint->end != '', 'end', 'date')
             ->checkIF($sprint->end != '', 'end', 'ge', $sprint->begin)
+            ->checkFlow()
             ->exec();
 
         /* Add the creater to the team. */
@@ -515,6 +516,7 @@ class executionModel extends model
             ->checkIF((!empty($execution->name) and $this->config->systemMode == 'new'), 'name', 'unique', "id != $executionID and type in ('sprint','stage') and `project` = $executionProject")
             ->checkIF(!empty($execution->code), 'code', 'unique', "id != $executionID and type in ('sprint','stage')")
             ->where('id')->eq($executionID)
+            ->checkFlow()
             ->limit(1)
             ->exec();
 
