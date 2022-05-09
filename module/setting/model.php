@@ -77,8 +77,7 @@ class settingModel extends model
         $item->section = $section;
         $item->key     = $key;
         $item->value   = $value;
-
-        if($vision) $item->vision = $vision;
+        $item->vision  = empty($vision) ? '' : $vision;
 
         $this->dao->replace(TABLE_CONFIG)->data($item)->exec();
     }
@@ -164,6 +163,12 @@ class settingModel extends model
      */
     public function createDAO($params, $method = 'select')
     {
+        $params['vision']  = isset($params['vision'])  ? $params['vision']  : '';
+        $params['owner']   = isset($params['owner'])   ? $params['owner']   : '';
+        $params['module']  = isset($params['module'])  ? $params['module']  : '';
+        $params['section'] = isset($params['section']) ? $params['section'] : '';
+        $params['key']     = isset($params['key'])     ? $params['key']     : '';
+
         return $this->dao->$method('*')->from(TABLE_CONFIG)->where('1 = 1')
             ->beginIF($params['vision'])->andWhere('vision')->in($params['vision'])->fi()
             ->beginIF($params['owner'])->andWhere('owner')->in($params['owner'])->fi()

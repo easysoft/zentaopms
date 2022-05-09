@@ -21,10 +21,8 @@ fields:
     format: ""
   - field: weekStart
     note: ""
-    range: "(M)-(w):60s"
-    type: timestamp
-    format: "YYYY-MM-DD"
-    prefix: ""
+    range: ""
+    prefix: "2022-05-02"
     postfix: ""
   - field: pv
     range: 1-10

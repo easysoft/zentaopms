@@ -28,5 +28,9 @@ fields:
     range: 0
   - field: compileID
     range: 0
+  - field: createdBy
+    range: admin
+  - field: assignee
+    range: admin
   - field: deleted
     range: 0
