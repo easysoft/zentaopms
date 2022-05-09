@@ -684,6 +684,7 @@ class productModel extends model
         if($oldProduct->bind) $this->config->product->edit->requiredFields = 'name';
 
         $product = fixer::input('post')
+            ->add('id', $productID)
             ->callFunc('name', 'trim')
             ->setDefault('line', 0)
             ->setIF(!isset($_POST['whitelist']), 'whitelist', '')
@@ -766,6 +767,7 @@ class productModel extends model
             $products[$productID]->status  = $data->statuses[$productID];
             $products[$productID]->desc    = strip_tags($this->post->descs[$productID], $this->config->allowedTags);
             $products[$productID]->acl     = $data->acls[$productID];
+            $products[$productID]->id      = $productID;
 
             foreach($extendFields as $extendField)
             {
@@ -821,6 +823,7 @@ class productModel extends model
         $oldProduct = $this->getById($productID);
         $now        = helper::now();
         $product= fixer::input('post')
+            ->add('id', $productID)
             ->setDefault('status', 'closed')
             ->remove('comment')->get();
 

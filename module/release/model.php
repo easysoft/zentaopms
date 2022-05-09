@@ -192,6 +192,7 @@ class releaseModel extends model
             ->autoCheck()
             ->batchCheck($this->config->release->create->requiredFields, 'notempty')
             ->check('name', 'unique', "product = '{$release->product}' AND branch = '{$release->branch}' AND deleted = '0'");
+            ->checkFlow()
 
         if(dao::isError())
         {
@@ -248,6 +249,7 @@ class releaseModel extends model
         $branch     = $this->dao->select('branch')->from(TABLE_BUILD)->where('id')->eq((int)$this->post->build)->fetch('branch');
 
         $release = fixer::input('post')->stripTags($this->config->release->editor->edit['id'], $this->config->allowedTags)
+            ->add('id', $releaseID)
             ->add('branch',  (int)$branch)
             ->join('mailto', ',')
             ->setIF(!$this->post->marker, 'marker', 0)
@@ -269,6 +271,7 @@ class releaseModel extends model
             ->autoCheck()
             ->batchCheck($this->config->release->edit->requiredFields, 'notempty')
             ->check('name', 'unique', "id != '$releaseID' AND product = '{$release->product}' AND branch = '$branch' AND deleted = '0'")
+            ->checkFlow()
             ->where('id')->eq((int)$releaseID)
             ->exec();
         if(!dao::isError())

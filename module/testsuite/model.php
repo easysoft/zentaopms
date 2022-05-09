@@ -150,6 +150,7 @@ class testsuiteModel extends model
         $oldSuite = $this->dao->select("*")->from(TABLE_TESTSUITE)->where('id')->eq((int)$suiteID)->fetch();
         $suite    = fixer::input('post')
             ->stripTags($this->config->testsuite->editor->edit['id'], $this->config->allowedTags)
+            ->add('id', $suiteID)
             ->add('lastEditedBy', $this->app->user->account)
             ->add('lastEditedDate', helper::now())
             ->remove('uid')

@@ -47,14 +47,14 @@ class dao extends baseDAO
         $module = $app->getmodulename();
         $method = $app->getmethodname();
 
-        $flowaction = $this->dbh->query("select * from " . table_workflowaction . " where `module` = '{$module}' and `action` = '{$method}' and `buildin` = '1' and `extensiontype` = 'extend'")->fetch(pdo::fetch_obj);
+        $flowaction = $this->dbh->query("select * from " . TABLE_WORKFLOWACTION . " where `module` = '{$module}' and `action` = '{$method}' and `buildin` = '1' and `extensiontype` = 'extend'")->fetch(PDO::FETCH_OBJ);
         if(!$flowaction) return $this;
 
-        $flowfields = $this->dbh->query("select t2.name,t2.rules,t2.control,t2.field,t1.layoutrules from " . table_workflowlayout . " as t1 left join " . table_workflowfield . " as t2 on t1.module = t2.module and t1.field = t2.field where t1.module = '{$module}' and t1.action = '{$method}' and t1.readonly = '0'")->fetchall();
+        $flowfields = $this->dbh->query("select t2.name,t2.rules,t2.control,t2.field,t1.layoutrules from " . TABLE_WORKFLOWLAYOUT . " as t1 left join " . TABLE_WORKFLOWFIELD . " as t2 on t1.module = t2.module and t1.field = t2.field where t1.module = '{$module}' and t1.action = '{$method}' and t1.readonly = '0'")->fetchall();
         if(!$flowfields) return $this;
 
         $rules    = array();
-        $rawrules = $this->dbh->query("select * from " . table_workflowrule)->fetchall();
+        $rawrules = $this->dbh->query("select * from " . TABLE_WORKFLOWRULE)->fetchall();
         foreach($rawrules as $rule) $rules[$rule->id] = $rule;
 
         foreach($flowfields as $key => $field)
