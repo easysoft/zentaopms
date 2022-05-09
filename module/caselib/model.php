@@ -94,6 +94,7 @@ class caselibModel extends model
         $oldLib = $this->dao->select("*")->from(TABLE_TESTSUITE)->where('id')->eq((int)$libID)->fetch();
         $lib    = fixer::input('post')
             ->stripTags($this->config->caselib->editor->edit['id'], $this->config->allowedTags)
+            ->add('id', $libID)
             ->add('lastEditedBy', $this->app->user->account)
             ->add('lastEditedDate', helper::now())
             ->remove('uid')
@@ -103,6 +104,7 @@ class caselibModel extends model
             ->autoCheck()
             ->batchcheck($this->config->caselib->edit->requiredFields, 'notempty')
             ->where('id')->eq($libID)
+            ->checkFlow()
             ->exec();
         if(!dao::isError())
         {
@@ -186,6 +188,7 @@ class caselibModel extends model
         $this->dao->insert(TABLE_TESTSUITE)->data($lib)
             ->batchcheck($this->config->caselib->create->requiredFields, 'notempty')
             ->check('name', 'unique', "deleted = '0'")
+            ->checkFlow()
             ->exec();
         if(!dao::isError())
         {

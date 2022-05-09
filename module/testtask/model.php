@@ -733,14 +733,22 @@ class testtaskModel extends model
     public function update($taskID)
     {
         $oldTask = $this->dao->select("*")->from(TABLE_TESTTASK)->where('id')->eq((int)$taskID)->fetch();
-        $task = fixer::input('post')->stripTags($this->config->testtask->editor->edit['id'], $this->config->allowedTags)->join('mailto', ',')->join('type', ',')->remove('files,labels,uid,comment,contactListMenu')->get();
+        $task = fixer::input('post')
+            ->add('id')
+            ->stripTags($this->config->testtask->editor->edit['id'], $this->config->allowedTags)
+            ->join('mailto', ',')
+            ->join('type', ',')
+            ->remove('files,labels,uid,comment,contactListMenu')
+            ->get();
         $task = $this->loadModel('file')->processImgURL($task, $this->config->testtask->editor->edit['id'], $this->post->uid);
+
         $this->dao->update(TABLE_TESTTASK)->data($task)
             ->autoCheck()
             ->batchcheck($this->config->testtask->edit->requiredFields, 'notempty')
             ->checkIF($task->end != '', 'end', 'ge', $task->begin)
             ->where('id')->eq($taskID)
             ->exec();
+
         if(!dao::isError())
         {
             $this->file->updateObjectID($this->post->uid, $taskID, 'testtask');
@@ -760,6 +768,7 @@ class testtaskModel extends model
     {
         $oldTesttask = $this->getById($taskID);
         $testtask = fixer::input('post')
+            ->add('id', $taskID)
             ->setDefault('status', 'doing')
             ->remove('comment')->get();
 
@@ -781,6 +790,7 @@ class testtaskModel extends model
     {
         $oldTesttask = $this->getById($taskID);
         $testtask = fixer::input('post')
+            ->add('id', $taskID)
             ->setDefault('status', 'done')
             ->stripTags($this->config->testtask->editor->close['id'], $this->config->allowedTags)
             ->join('mailto', ',')
@@ -822,6 +832,7 @@ class testtaskModel extends model
     {
         $oldTesttask = $this->getById($taskID);
         $testtask = fixer::input('post')
+            ->add('id', $taskID)
             ->setDefault('status', 'blocked')
             ->remove('comment')->get();
 

@@ -475,6 +475,7 @@ class productplanModel extends model
         $plan = fixer::input('post')->stripTags($this->config->productplan->editor->edit['id'], $this->config->allowedTags)
             ->setIF($this->post->future or empty($_POST['begin']), 'begin', $this->config->productplan->future)
             ->setIF($this->post->future or empty($_POST['end']), 'end', $this->config->productplan->future)
+            ->add('id', $planID)
             ->remove('delta,uid,future')
             ->get();
 
@@ -638,6 +639,7 @@ class productplanModel extends model
             $plan->end    = isset($data->end[$planID]) ? $data->end[$planID] : '';
             $plan->status = isset($data->status[$planID]) ? $data->status[$planID] : $oldPlans[$planID]->status;
             $plan->parent = $oldPlans[$planID]->parent;
+            $plan->id     = $planID;
 
             if(empty($plan->title)) return print(js::alter(sprintf($this->lang->productplan->errorNoTitle, $planID)));
             if($plan->begin > $plan->end and !empty($plan->end)) return print(js::alert(sprintf($this->lang->productplan->beginGeEnd, $planID)));

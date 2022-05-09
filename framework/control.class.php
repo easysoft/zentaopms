@@ -42,8 +42,6 @@ class control extends baseControl
         /* Code for task #9224. Set requiredFields for workflow. */
         if($this->dbh and (defined('IN_USE') or (defined('RUN_MODE') and RUN_MODE == 'api')))
         {
-            $this->checkRequireFlowField();
-
             if(isset($this->config->{$this->moduleName}) and strpos($this->methodName, 'export') !== false)
             {
                 if(isset($this->config->{$this->moduleName}->exportFields) or isset($this->config->{$this->moduleName}->list->exportFields))
@@ -82,31 +80,49 @@ class control extends baseControl
             }
 
             /* If workflow is created by a normal user, set priv. */
-            if(isset($this->app->user) and !$this->app->user->admin)
-            {
-                $actions = $this->dao->select('module, action')->from(TABLE_WORKFLOWACTION)->where('createdBy')->eq($this->app->user->account)->andWhere('buildin')->eq('0')->fetchGroup('module');
-                $labels  = $this->dao->select('module, code')->from(TABLE_WORKFLOWLABEL)->where('createdBy')->eq($this->app->user->account)->andWhere('buildin')->eq('0')->fetchGroup('module');
-                if(!empty($actions))
-                {
-                    foreach($actions as $module => $actionObj)
-                    {
-                        foreach($actionObj as $action) $this->app->user->rights['rights'][$module][$action->action] = 1;
-                    }
-                }
+            if(isset($this->app->user) and !$this->app->user->admin) $this->setDefaultPrivByWorkflow();
+        }
+    }
 
-                if(!empty($labels))
+    /**
+     * Det default priv by workflow.
+     * 
+     * @access public
+     * @return bool
+     */
+    public function setDefaultPrivByWorkflow()
+    {
+        $actionList = $this->dao->select('module, action')->from(TABLE_WORKFLOWACTION)
+            ->where('createdBy')->eq($this->app->user->account)
+            ->andWhere('buildin')->eq('0')
+            ->fetchGroup('module');
+
+        if($actionList)
+        {
+            foreach($actionList as $module => $actions)
+            {
+                foreach($actions as $action) $this->app->user->rights['rights'][$module][$action->action] = 1;
+            }
+        }
+
+        $labelList = $this->dao->select('module, code')->from(TABLE_WORKFLOWLABEL)
+            ->where('createdBy')->eq($this->app->user->account)
+            ->andWhere('buildin')->eq('0')
+            ->fetchGroup('module');
+
+        if($labelList)
+        {
+            foreach($labelList as $module => $labels)
+            {
+                foreach($labels as $label)
                 {
-                    foreach($labels as $module => $codeObj)
-                    {
-                        foreach($codeObj as $code)
-                        {
-                            $code = str_replace('browse', '', $code->code);
-                            $this->app->user->rights['rights'][$module][$code] = 1;
-                        }
-                    }
+                    $code = str_replace('browse', '', $label->code);
+                    $this->app->user->rights['rights'][$module][$code] = 1;
                 }
             }
         }
+
+        return true;
     }
 
     /**
@@ -292,6 +308,25 @@ class control extends baseControl
     }
 
     /**
+     * Build operate menu of a method.
+     *
+     * @param  object $object    product|project|productplan|release|build|story|task|bug|testtask|testcase|testsuite
+     * @param  string $displayOn view|browse
+     * @access public
+     * @return string
+     */
+    public function buildOperateMenu($object, $type = 'view')
+    {
+        if(!isset($this->config->bizVersion)) return false;
+
+        $moduleName = $this->moduleName;
+        if($moduleName == 'bug' || $moduleName == 'feedback') return $this->$moduleName->buildOperateMenu($object, $type);
+
+        $flow = $this->loadModel('workflow')->getByModule($moduleName);
+        return $this->loadModel('flow')->buildOperateMenu($flow, $object, $type);
+    }
+
+    /**
      * Execute hooks of a method.
      *
      * @param  int    $objectID     The id of an object. The object maybe a bug | build | feedback | product | productplan | project | release | story | task | testcase | testsuite | testtask.
@@ -307,19 +342,18 @@ class control extends baseControl
     }
 
     /**
-     * Build operate menu of a method.
-     *
-     * @param  object $object    product|project|productplan|release|build|story|task|bug|testtask|testcase|testsuite
-     * @param  string $displayOn view|browse
+     * Set workflow export fields 
+     * 
+     * @param  array  $fields 
      * @access public
-     * @return void
+     * @return array
      */
-    public function buildOperateMenu($object, $displayOn = 'view')
+    public function getFlowExportFields()
     {
-        if(!isset($this->config->bizVersion)) return false;
+        if(!isset($this->config->bizVersion)) return array();
 
-        $flow = $this->loadModel('workflow')->getByModule($this->moduleName);
-        return $this->loadModel('flow')->buildOperateMenu($flow, $object, $displayOn);
+        $moduleName = $this->moduleName;
+        return $this->$moduleName->getFlowExportFields();
     }
 
     /**
@@ -332,14 +366,27 @@ class control extends baseControl
      *                          position=left|right     The position which the fields displayed in a page.
      *                          inForm=0|1              The fields displayed in a form or not. The default is 1.
      *                          inCell=0|1              The fields displayed in a div with class cell or not. The default is 0.
+     * @param  bool   $print
      * @access public
      * @return void
      */
-    public function printExtendFields($object, $type, $extras = '')
+    public function printExtendFields($object, $type, $extras = '', $print = false)
     {
         if(!isset($this->config->bizVersion)) return false;
 
-        echo $this->loadModel('flow')->printFields($this->moduleName, $this->methodName, $object, $type, $extras);
+        $moduleName = $this->app->getModuleName();
+        $methodName = $this->app->getMethodName();
+        $fields     = $this->loadModel('flow')->printFields($moduleName, $methodName, $object, $type, $extras);
+        if(!$print) return $fields;
+
+        $jsRoot = $this->config->webRoot . "js/";
+        $picker = file_get_contents($this->app->getBasePath() . 'app/sys/common/view/picker.html.php');
+        $picker = substr($picker, strpos($picker, '<style>'));
+
+        js::import($jsRoot . 'picker/min.js');
+        css::import($jsRoot . 'picker/min.css');
+
+        echo $picker . $fields;
     }
 
     /**
@@ -355,6 +402,31 @@ class control extends baseControl
         $moduleName = $this->moduleName;
 
         return $this->$moduleName->processStatus($module, $record);
+    }
+
+    /**
+     * Print view file.
+     *
+     * @param  string    $viewFile
+     * @access public
+     * @return bool|string
+     */
+    public function printViewFile($viewFile)
+    {
+        if(!file_exists($viewFile)) return false;
+
+        $currentPWD = getcwd();
+        chdir(dirname($viewFile));
+
+        extract((array)$this->view);
+        ob_start();
+        include $viewFile;
+        $output = ob_get_contents();
+        ob_end_clean();
+
+        chdir($currentPWD);
+
+        return $output;
     }
 
     /**
@@ -464,28 +536,4 @@ class control extends baseControl
         if($message) $this->send(array('result' => 'fail', 'message' => $message));
     }
 
-    /**
-     * Print view file.
-     *
-     * @param  string    $viewFile
-     * @access public
-     * @return void
-     */
-    public function printViewFile($viewFile)
-    {
-        if(!file_exists($viewFile)) return false;
-
-        $currentPWD = getcwd();
-        chdir(dirname($viewFile));
-
-        extract((array)$this->view);
-        ob_start();
-        include $viewFile;
-        $output = ob_get_contents();
-        ob_end_clean();
-
-        chdir($currentPWD);
-
-        return $output;
-    }
 }

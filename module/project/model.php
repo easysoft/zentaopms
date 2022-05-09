@@ -1066,6 +1066,7 @@ class projectModel extends model
         $_POST['products'] = isset($_POST['products']) ? array_filter($_POST['products']) : $linkedProducts;
 
         $project = fixer::input('post')
+            ->add('id', $projectID)
             ->callFunc('name', 'trim')
             ->setDefault('team', substr($this->post->name, 0, 30))
             ->setDefault('lastEditedBy', $this->app->user->account)
@@ -1237,6 +1238,7 @@ class projectModel extends model
 
             $projects[$projectID] = new stdClass();
             if(isset($data->parents[$projectID])) $projects[$projectID]->parent = $data->parents[$projectID];
+            $projects[$projectID]->id             = $projectID;
             $projects[$projectID]->name           = $projectName;
             $projects[$projectID]->PM             = $data->PMs[$projectID];
             $projects[$projectID]->begin          = $data->begins[$projectID];
@@ -1319,6 +1321,7 @@ class projectModel extends model
         $now        = helper::now();
 
         $project = fixer::input('post')
+            ->add('id', $projectID)
             ->setDefault('status', 'doing')
             ->setDefault('lastEditedBy', $this->app->user->account)
             ->setDefault('lastEditedDate', $now)
@@ -1350,6 +1353,7 @@ class projectModel extends model
         $now        = helper::now();
 
         $project = fixer::input('post')
+            ->add('id', $projectID)
             ->setDefault('lastEditedBy', $this->app->user->account)
             ->setDefault('lastEditedDate', $now)
             ->remove('comment')
@@ -1374,6 +1378,7 @@ class projectModel extends model
     {
         $oldProject = $this->getById($projectID);
         $project = fixer::input('post')
+            ->add('id', $projectID)
             ->setDefault('status', 'suspended')
             ->setDefault('lastEditedBy', $this->app->user->account)
             ->setDefault('lastEditedDate', helper::now())
@@ -1401,6 +1406,7 @@ class projectModel extends model
         $now        = helper::now();
 
         $project = fixer::input('post')
+            ->add('id', $projectID)
             ->setDefault('realEnd','')
             ->setDefault('status', 'doing')
             ->setDefault('lastEditedBy', $this->app->user->account)
@@ -1471,6 +1477,7 @@ class projectModel extends model
         $now        = helper::now();
 
         $project = fixer::input('post')
+            ->add('id', $projectID)
             ->setDefault('status', 'closed')
             ->setDefault('closedBy', $this->app->user->account)
             ->setDefault('closedDate', $now)
