@@ -3251,9 +3251,12 @@ class bugModel extends model
             $menu .= $this->buildMenu('bug', 'toStory', $toStoryParams, $bug, $type, $this->lang->icons['story'], '', '', '', "data-app='product'", $this->lang->bug->toStory);
             $menu .= $this->buildMenu('bug', 'createCase', $convertParams, $bug, $type, 'sitemap');
         }
-        if($type == 'view') $menu .= "<div class='divider'></div>";
-        $menu .= $this->buildFlowMenu('bug', $bug, $type, 'direct');
-        if($type == 'view') $menu .= "<div class='divider'></div>";
+        if($type == 'view')
+        {
+            $menu .= "<div class='divider'></div>";
+            $menu .= $this->buildFlowMenu('bug', $bug, $type, 'direct');
+            $menu .= "<div class='divider'></div>";
+        }
         $menu .= $this->buildMenu('bug', 'edit', $params, $bug, $type);
         if($this->app->tab != 'product') $menu .= $this->buildMenu('bug', 'create', $copyParams, $bug, $type, 'copy');
         if($type == 'view') $menu .= $this->buildMenu('bug', 'delete', $params, $bug, $type, 'trash', 'hiddenwin', "showinonlybody");
