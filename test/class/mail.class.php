@@ -21,7 +21,7 @@ class mailTest
      * 
      * @param  int    $email 
      * @access public
-     * @return void
+     * @return object
      */
     public function autoDetectTest($email)
     {
@@ -39,7 +39,7 @@ class mailTest
      * @param  int    $domain 
      * @param  int    $username 
      * @access public
-     * @return void
+     * @return object
      */
     public function getConfigFromProviderTest($domain, $username)
     {
@@ -56,7 +56,7 @@ class mailTest
      * @param  int    $domain 
      * @param  int    $username 
      * @access public
-     * @return void
+     * @return object
      */
     public function getConfigByMXRRTest($domain, $username)
     {
@@ -74,7 +74,7 @@ class mailTest
      * @param  int    $username 
      * @param  int    $port 
      * @access public
-     * @return void
+     * @return object
      */
     public function getConfigByDetectingSMTPTest($domain, $username, $port)
     {
@@ -89,7 +89,7 @@ class mailTest
      * Set MTA. 
      * 
      * @access public
-     * @return void
+     * @return object
      */
     public function setMTATest()
     {
@@ -104,7 +104,7 @@ class mailTest
      * Set sendmail. 
      * 
      * @access public
-     * @return void
+     * @return object
      */
     public function setSendMailTest()
     {
@@ -126,7 +126,7 @@ class mailTest
      * @param  int    $includeMe 
      * @param  array  $emails 
      * @access public
-     * @return void
+     * @return object
      */
     public function sendTest($toList, $subject, $body = '', $ccList = '', $includeMe = false, $emails = array())
     {
@@ -143,7 +143,7 @@ class mailTest
      * @param  int    $ccList 
      * @param  int    $emails 
      * @access public
-     * @return void
+     * @return object
      */
     public function setCCTest($ccList, $emails)
     {
@@ -157,7 +157,7 @@ class mailTest
      * 
      * @param  int    $subject 
      * @access public
-     * @return void
+     * @return object
      */
     public function setSubjectTest($subject)
     {
@@ -171,7 +171,7 @@ class mailTest
      * 
      * @param  int    $body 
      * @access public
-     * @return void
+     * @return object
      */
     public function setBodyTest($body)
     {
@@ -184,7 +184,7 @@ class mailTest
      * Mail exist. 
      * 
      * @access public
-     * @return void
+     * @return object
      */
     public function mailExistTest()
     {
@@ -204,7 +204,7 @@ class mailTest
      * @param  string $ccList 
      * @param  int    $includeMe 
      * @access public
-     * @return void
+     * @return object
      */
     public function addQueueTest($toList, $subject, $body = '', $ccList = '', $includeMe = false)
     {
@@ -229,7 +229,7 @@ class mailTest
      * @param  string $orderBy 
      * @param  int    $pager 
      * @access public
-     * @return void
+     * @return object
      */
     public function getQueueTest($status = '', $orderBy = 'id_desc', $pager = null)
     {
@@ -245,7 +245,7 @@ class mailTest
      * 
      * @param  int    $queueID 
      * @access public
-     * @return void
+     * @return object
      */
     public function getQueueByIdTest($queueID)
     {
@@ -261,7 +261,7 @@ class mailTest
      * 
      * @param  int    $user 
      * @access public
-     * @return void
+     * @return object
      */
     public function mergeMailsTest($user)
     {
@@ -285,7 +285,7 @@ class mailTest
      * @param  int    $title 
      * @param  int    $actionType 
      * @access public
-     * @return void
+     * @return object
      */
     public function getSubjectTest($objectType, $object, $title, $actionType)
     {
