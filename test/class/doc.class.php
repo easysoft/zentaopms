@@ -458,7 +458,6 @@ class docTest
      * @access public
      * @return bool|array
      */
-
     public function getToAndCcListTest($docID)
     {
         $doc     = $this->objectModel->getByID($docID);
@@ -521,7 +520,6 @@ class docTest
      * @access public
      * @return bool
      */
-
     public function checkAutoloadPageTest($docID)
     {
         $doc     = $this->objectModel->getByID($docID);
