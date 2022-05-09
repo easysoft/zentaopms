@@ -1564,7 +1564,7 @@ EOD;
      * @access public
      * @return void
      */
-    public static function buildIconButton($module, $method, $vars = '', $object = '', $type = 'button', $icon = '', $target = '', $extraClass = '', $onlyBody = false, $misc = '', $title = '', $programID = 0)
+    public static function buildIconButton($module, $method, $vars = '', $object = '', $type = 'button', $icon = '', $target = '', $extraClass = '', $onlyBody = false, $misc = '', $title = '', $programID = 0, $extraEnabled = '')
     {
         if(isonlybody() and strpos($extraClass, 'showinonlybody') === false) return false;
 
@@ -1578,7 +1578,11 @@ EOD;
 
         /* Judge the $method of $module clickable or not, default is clickable. */
         $clickable = true;
-        if(is_object($object))
+        if(is_bool($extraEnabled))
+        {
+            $clickable = $extraEnabled;
+        }
+        else if(is_object($object))
         {
             if($app->getModuleName() != $module) $app->control->loadModel($module);
             $modelClass = class_exists("ext{$module}Model") ? "ext{$module}Model" : $module . "Model";
@@ -1622,7 +1626,6 @@ EOD;
 
         if(!$clickable) $class .= ' disabled';
         if($icon)       $class .= ' icon-' . $icon;
-
 
         /* Create the icon link. */
         if($clickable)

@@ -3234,10 +3234,17 @@ class bugModel extends model
             ->fetchPairs('id');
     }
 
+    /**
+     * Build operateMenu.
+     * 
+     * @param  object $bug 
+     * @param  string $type 
+     * @access public
+     * @return void
+     */
     public function buildOperateMenu($bug, $type = 'view')
     {
         $menu          = '';
-        $menuType      = $type == 'browse' ? 'list' : 'button';
         $params        = "bugID=$bug->id";
         $extraParams   = "extras=bugID=$bug->id";
         if($this->app->tab == 'project')   $extraParams .= ",projectID={$bug->project}";
@@ -3246,22 +3253,22 @@ class bugModel extends model
         $convertParams = "productID=$bug->product&branch=$bug->branch&moduleID=0&from=bug&bugID=$bug->id";
         $toStoryParams = "product=$bug->product&branch=$bug->branch&module=0&story=0&execution=0&bugID=$bug->id";
 
-        $menu  .= $this->buildMenu('bug', 'confirmBug', $params, $bug, $menuType, 'ok', '', "iframe", true);
-        if($type == 'view') $menu .= $this->buildMenu('bug', 'assignTo', $params, $bug, $menuType, '', '', "iframe", true);
-        $menu  .= $this->buildMenu('bug', 'resolve', $params, $bug, $menuType, 'checked', '', "iframe", true);
-        $menu  .= $this->buildMenu('bug', 'close', $params, $bug, $menuType, '', '', "text-danger iframe showinonlybody", true);
-        $menu  .= $this->buildMenu('bug', 'activate', $params, $bug, $menuType, '', '', "text-success iframe showinonlybody", true);
+        $menu  .= $this->buildMenu('bug', 'confirmBug', $params, $bug, $type, 'ok', '', "iframe", true);
+        if($type == 'view') $menu .= $this->buildMenu('bug', 'assignTo', $params, $bug, $type, '', '', "iframe", true);
+        $menu  .= $this->buildMenu('bug', 'resolve', $params, $bug, $type, 'checked', '', "iframe", true);
+        $menu  .= $this->buildMenu('bug', 'close', $params, $bug, $type, '', '', "text-danger iframe showinonlybody", true);
+        if($type == 'view') $menu  .= $this->buildMenu('bug', 'activate', $params, $bug, $type, '', '', "text-success iframe showinonlybody", true);
         if($this->app->tab != 'product')
         {
-            $menu  .= $this->buildMenu('bug', 'toStory', $toStoryParams, $bug, $menuType, $this->lang->icons['story'], '', '', '', "data-app='product'", $this->lang->bug->toStory);
-            $menu  .= $this->buildMenu('bug', 'createCase', $convertParams, $bug, $menuType, 'sitemap');
+            $menu  .= $this->buildMenu('bug', 'toStory', $toStoryParams, $bug, $type, $this->lang->icons['story'], '', '', '', "data-app='product'", $this->lang->bug->toStory);
+            $menu  .= $this->buildMenu('bug', 'createCase', $convertParams, $bug, $type, 'sitemap');
         }
-        $menu  .= "<div class='divider'></div>";
+        if($type == 'view') $menu  .= "<div class='divider'></div>";
         $menu  .= $this->buildFlowMenu('bug', $bug, $type, 'direct');
-        $menu  .= "<div class='divider'></div>";
-        $menu  .= $this->buildMenu('bug', 'edit', $params, $bug, $menuType);
-        if($this->app->tab != 'product') $menu .= $this->buildMenu('bug', 'create', $copyParams, $bug, $menuType, 'copy');
-        $menu  .= $this->buildMenu('bug', 'delete', $params, $bug, $menuType, 'trash', 'hiddenwin', "showinonlybody");
+        if($type == 'view') $menu  .= "<div class='divider'></div>";
+        $menu  .= $this->buildMenu('bug', 'edit', $params, $bug, $type);
+        if($this->app->tab != 'product') $menu .= $this->buildMenu('bug', 'create', $copyParams, $bug, $type, 'copy');
+        $menu  .= $this->buildMenu('bug', 'delete', $params, $bug, $type, 'trash', 'hiddenwin', "showinonlybody");
         return $menu;
     }
 }

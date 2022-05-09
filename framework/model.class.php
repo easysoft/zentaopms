@@ -111,7 +111,7 @@ class model extends baseModel
 
         $html = '';
         $type = $type == 'browse' ? 'list' : 'button';
-        if($enabled) $html = common::buildIconButton($module, $method, $params, $data, $type, $icon, $target, $class, $onlyBody, $misc, $title);
+        $html = common::buildIconButton($module, $method, $params, $data, $type, $icon, $target, $class, $onlyBody, $misc, $title, '', $enabled);
         return $html;
     }
 
