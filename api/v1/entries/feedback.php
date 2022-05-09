@@ -20,7 +20,7 @@ class feedbackEntry extends Entry
      */
     public function get($feedbackID)
     {
-        $control = $this->loadController('feedback', 'adminiView');
+        $control = $this->loadController('feedback', 'adminView');
         $control->adminView($feedbackID);
 
         $data = $this->getData();
