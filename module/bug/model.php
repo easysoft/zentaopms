@@ -3229,7 +3229,7 @@ class bugModel extends model
      * @param  object $bug 
      * @param  string $type 
      * @access public
-     * @return void
+     * @return string
      */
     public function buildOperateMenu($bug, $type = 'view')
     {
