@@ -32,10 +32,7 @@
   <?php else:?>
   <div class="main-col">
     <form class="main-table table-product" data-ride="table" data-nested='true' id="productListForm" method="post" action='<?php echo inLink('batchEdit', '');?>' data-preserve-nested='false' data-expand-nest-child='true'>
-      <?php
-      $canOrder     = common::hasPriv('product', 'updateOrder');
-      $canBatchEdit = common::hasPriv('product', 'batchEdit');
-      ?>
+      <?php $canBatchEdit = common::hasPriv('product', 'batchEdit'); ?>
       <table id="productList" class="table has-sort-head table-nested table-fixed">
         <?php $vars = "browseType=$browseType&orderBy=%s";?>
         <thead>
@@ -215,12 +212,7 @@
             <td><?php echo $product->plans;?></td>
             <td><?php echo $product->releases;?></td>
             <?php foreach($extendFields as $extendField) echo "<td>" . $this->loadModel('flow')->getFieldValue($extendField, $product) . "</td>";?>
-            <td class='c-actions sort-handler'>
-              <?php common::printIcon('product', 'edit', "product=$product->id", $product, 'list', 'edit');?>
-              <?php if($canOrder):?>
-              <i class="icon icon-move text-blue"></i>
-              <?php endif;?>
-            </td>
+            <td class='c-actions sort-handler'><?php echo $this->buildOperateMenu($product, 'browse');?></td>
           </tr>
           <?php endforeach;?>
           <?php endif;?>

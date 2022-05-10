@@ -64,7 +64,7 @@ class testcaseModel extends model
 
         /* Value of story may be showmore. */
         $case->story = (int)$case->story;
-        $this->dao->insert(TABLE_CASE)->data($case)->autoCheck()->batchCheck($this->config->testcase->create->requiredFields, 'notempty')->exec();
+        $this->dao->insert(TABLE_CASE)->data($case)->autoCheck()->batchCheck($this->config->testcase->create->requiredFields, 'notempty')->checkFlow()->exec();
         if(!$this->dao->isError())
         {
             $caseID = $this->dao->lastInsertID();
@@ -174,8 +174,6 @@ class testcaseModel extends model
                 if(is_array($data[$i]->{$extendField->field})) $data[$i]->{$extendField->field} = join(',', $data[$i]->{$extendField->field});
 
                 $data[$i]->{$extendField->field} = htmlSpecialString($data[$i]->{$extendField->field});
-                $message = $this->checkFlowRule($extendField, $data[$i]->{$extendField->field});
-                if($message) return print(js::alert($message));
             }
 
             foreach(explode(',', $this->config->testcase->create->requiredFields) as $field)
@@ -191,6 +189,7 @@ class testcaseModel extends model
             $this->dao->insert(TABLE_CASE)->data($case)
                 ->autoCheck()
                 ->batchCheck($this->config->testcase->create->requiredFields, 'notempty')
+                ->checkFlow()
                 ->exec();
 
             if(dao::isError())
@@ -738,7 +737,7 @@ class testcaseModel extends model
             array_splice($requiredFieldsArr, $fieldIndex, 1);
             $requiredFields    = implode(',', $requiredFieldsArr);
         }
-        $this->dao->update(TABLE_CASE)->data($case)->autoCheck()->batchCheck($requiredFields, 'notempty')->where('id')->eq((int)$caseID)->exec();
+        $this->dao->update(TABLE_CASE)->data($case)->autoCheck()->batchCheck($requiredFields, 'notempty')->checkFlow()->where('id')->eq((int)$caseID)->exec();
         if(!$this->dao->isError())
         {
             $isLibCase    = ($oldCase->lib and empty($oldCase->product));
@@ -845,7 +844,7 @@ class testcaseModel extends model
             ->join('reviewedBy', ',')
             ->get();
 
-        $this->dao->update(TABLE_CASE)->data($case)->autoCheck()->where('id')->eq($caseID)->exec();
+        $this->dao->update(TABLE_CASE)->data($case)->autoCheck()->checkFlow()->where('id')->eq($caseID)->exec();
 
         if(dao::isError()) return false;
 
@@ -970,8 +969,6 @@ class testcaseModel extends model
                 if(is_array($case->{$extendField->field})) $case->{$extendField->field} = join(',', $case->{$extendField->field});
 
                 $case->{$extendField->field} = htmlSpecialString($case->{$extendField->field});
-                $message = $this->checkFlowRule($extendField, $case->{$extendField->field});
-                if($message) return print(js::alert($message));
             }
 
             $cases[$caseID] = $case;
@@ -986,6 +983,7 @@ class testcaseModel extends model
             $this->dao->update(TABLE_CASE)->data($case)
                 ->autoCheck()
                 ->batchCheck($this->config->testcase->edit->requiredFields, 'notempty')
+                ->checkFlow()
                 ->where('id')->eq($caseID)
                 ->exec();
 

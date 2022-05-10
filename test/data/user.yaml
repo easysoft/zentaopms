@@ -80,9 +80,9 @@ fields:
     note: "邮箱"
     fields:
     - field: email1
-      range: 100-999:R
+      range: 1000-9999:2
     - field: email2
-      range: 100-999:R
+      range: 1000-9999:2
     - field: email3
       range: [@qq.com,@163.com,@gmail.com]
   - field: skype

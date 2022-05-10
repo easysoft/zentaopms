@@ -103,6 +103,7 @@ class caselibModel extends model
         $this->dao->update(TABLE_TESTSUITE)->data($lib)
             ->autoCheck()
             ->batchcheck($this->config->caselib->edit->requiredFields, 'notempty')
+            ->checkFlow()
             ->where('id')->eq($libID)
             ->checkFlow()
             ->exec();

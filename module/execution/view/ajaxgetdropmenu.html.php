@@ -46,7 +46,12 @@ foreach($executions as $projectID => $projectExecutions)
         if($execution->status != 'done' and $execution->status != 'closed' and ($execution->PM == $this->app->user->account or isset($execution->teams[$this->app->user->account]))) $executionCounts[$projectID]['myExecution'] ++;
         if($execution->status != 'done' and $execution->status != 'closed' and $execution->PM != $this->app->user->account and !isset($execution->teams[$this->app->user->account])) $executionCounts[$projectID]['others'] ++;
         if($execution->status == 'done' or $execution->status == 'closed') $executionCounts[$projectID]['closed'] ++;
-        $executionNames[] = $execution->name;
+        $onlyChildStage = $execution->grade == 2 and $execution->project != $execution->parent;
+        $executionNames[$execution->id] = $execution->name;
+        if($onlyChildStage and isset($parents[$execution->parent]))
+        {
+            $executionNames[$execution->id] = $parents[$execution->parent]->name . '/' . $execution->name;
+        }
     }
 }
 $executionsPinYin = common::convert2Pinyin($executionNames);
@@ -77,7 +82,7 @@ foreach($executions as $projectID => $projectExecutions)
         $selected = $execution->id == $executionID ? 'selected' : '';
         if($execution->status != 'done' and $execution->status != 'closed' and ($execution->PM == $this->app->user->account or isset($execution->teams[$this->app->user->account])))
         {
-            $myExecutionsHtml .= '<li>' . html::a(sprintf($link, $execution->id), $execution->name, '', "class='$selected clickable' title='{$execution->name}' data-key='" . zget($executionsPinYin, $execution->name, '') . "' data-app='{$this->app->tab}'") . '</li>';
+            $myExecutionsHtml .= '<li>' . html::a(sprintf($link, $execution->id), $executionNames[$execution->id], '', "class='$selected clickable' title='{$execution->name}' data-key='" . zget($executionsPinYin, $execution->name, '') . "' data-app='{$this->app->tab}'") . '</li>';
 
             if($selected == 'selected') $tabActive = 'myExecution';
 
@@ -85,7 +90,7 @@ foreach($executions as $projectID => $projectExecutions)
         }
         else if($execution->status != 'done' and $execution->status != 'closed' and $execution->PM != $this->app->user->account and !isset($execution->teams[$this->app->user->account]))
         {
-            $normalExecutionsHtml .= '<li>' . html::a(sprintf($link, $execution->id), $execution->name, '', "class='$selected clickable' title='{$execution->name}' data-key='" . zget($executionsPinYin, $execution->name, '') . "' data-app='{$this->app->tab}'") . '</li>';
+            $normalExecutionsHtml .= '<li>' . html::a(sprintf($link, $execution->id), $executionNames[$execution->id], '', "class='$selected clickable' title='{$execution->name}' data-key='" . zget($executionsPinYin, $execution->name, '') . "' data-app='{$this->app->tab}'") . '</li>';
 
             if($selected == 'selected') $tabActive = 'other';
 
@@ -93,7 +98,7 @@ foreach($executions as $projectID => $projectExecutions)
         }
         else if($execution->status == 'done' or $execution->status == 'closed')
         {
-            $closedExecutionsHtml .= '<li>' . html::a(sprintf($link, $execution->id), $execution->name, '', "class='$selected clickable' title='$execution->name' data-key='" . zget($executionsPinYin, $execution->name, '') . "' data-app='{$this->app->tab}'") . '</li>';
+            $closedExecutionsHtml .= '<li>' . html::a(sprintf($link, $execution->id), $executionNames[$execution->id], '', "class='$selected clickable' title='$execution->name' data-key='" . zget($executionsPinYin, $execution->name, '') . "' data-app='{$this->app->tab}'") . '</li>';
 
             if($selected == 'selected') $tabActive = 'closed';
         }
@@ -171,7 +176,7 @@ $(function()
             $('li.has-list div.hide-in-search').removeClass('hidden');
             $('.nav-tabs li.active').find('span').show();
         }
-        
+
         if($('.form-control.search-input').val().length > 0)
         {
             $('#closed').attr("hidden", false);
@@ -191,7 +196,7 @@ $(function()
             $('#closed').attr("hidden", true);
             $('#gray-line').attr("hidden", true);
         }
-         
+
         var listItem = $(this).find('.has-list');
         listItem.each(function ()
         {
