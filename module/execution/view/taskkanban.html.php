@@ -193,7 +193,8 @@ js::set('priv',
         'canStartTask'        => common::hasPriv('task', 'start'),
         'canAssignBug'        => common::hasPriv('bug', 'assignto'),
         'canConfirmBug'       => common::hasPriv('bug', 'confirmBug'),
-        'canActivateBug'      => common::hasPriv('bug', 'activate')
+        'canActivateBug'      => common::hasPriv('bug', 'activate'),
+        'canCloseStory'       => common::hasPriv('story', 'close')
     )
 );
 ?>

@@ -961,27 +961,35 @@ function changeCardColType(cardID, fromColID, toColID, fromLaneID, toLaneID, car
     /* Story lane. */
     if(cardType == 'story')
     {
-        if(toColType == 'ready' && typeof(reviewStoryParis[objectID]) != 'undefined')
+        if(toColType == 'closed' && priv.canCloseStory)
         {
-            bootbox.alert(executionLang.storyDragError);
-            return false;
+            var link = createLink('story', 'close', 'storyID=' + objectID, '', true);
+            showIframe = true;
         }
-
-        var link  = createLink('kanban', 'ajaxMoveCard', 'cardID=' + objectID + '&fromColID=' + fromColID + '&toColID=' + toColID + '&fromLaneID=' + fromLaneID + '&toLaneID=' + toLaneID + '&execitionID=' + executionID + '&browseType=' + browseType + '&groupBy=' + groupBy + '&regionID=' + regionID+ '&orderBy=' + orderBy );
-        $.ajax(
+        else
         {
-            method:   'post',
-            dataType: 'json',
-            url:       link,
-            success: function(data)
+            if(toColType == 'ready' && typeof(reviewStoryParis[objectID]) != 'undefined')
             {
-                updateRegion(regionID, data[regionID]);
-            },
-            error: function(xhr, status, error)
-            {
-                showErrorMessager(error || lang.timeout);
+                bootbox.alert(executionLang.storyDragError);
+                return false;
             }
-        });
+
+            var link  = createLink('kanban', 'ajaxMoveCard', 'cardID=' + objectID + '&fromColID=' + fromColID + '&toColID=' + toColID + '&fromLaneID=' + fromLaneID + '&toLaneID=' + toLaneID + '&execitionID=' + executionID + '&browseType=' + browseType + '&groupBy=' + groupBy + '&regionID=' + regionID+ '&orderBy=' + orderBy );
+            $.ajax(
+            {
+                method:   'post',
+                dataType: 'json',
+                url:       link,
+                success: function(data)
+                {
+                    updateRegion(regionID, data[regionID]);
+                },
+                error: function(xhr, status, error)
+                {
+                    showErrorMessager(error || lang.timeout);
+                }
+            });
+        }
     }
 
     if(showIframe)

@@ -687,28 +687,36 @@ function changeCardColType(cardID, fromColID, toColID, fromLaneID, toLaneID, car
     /* Story lane. */
     if(cardType == 'story')
     {
-        if(toColType == 'ready' && typeof(reviewStoryParis[objectID]) != 'undefined')
+        if(toColType == 'closed' && priv.canCloseStory)
         {
-            bootbox.alert(executionLang.storyDragError);
-            return false;
+            var link = createLink('story', 'close', 'storyID=' + objectID, '', true);
+            showIframe = true;
         }
-
-        var link  = createLink('kanban', 'ajaxMoveCard', 'cardID=' + objectID + '&fromColID=' + fromColID + '&toColID=' + toColID + '&fromLaneID=' + fromLaneID + '&toLaneID=' + toLaneID + '&execitionID=' + executionID + '&browseType=' + browseType + '&groupBy=' + groupBy);
-        $.get(link, function(data)
+        else
         {
-            if(data)
+            if(toColType == 'ready' && typeof(reviewStoryParis[objectID]) != 'undefined')
             {
-                kanbanGroup = $.parseJSON(data);
-                if(groupBy == 'default')
-                {
-                    updateKanban('story', kanbanGroup.story);
-                }
-                else
-                {
-                    updateKanban(browseType, kanbanGroup[groupBy]);
-                }
+                bootbox.alert(executionLang.storyDragError);
+                return false;
             }
-        });
+
+            var link  = createLink('kanban', 'ajaxMoveCard', 'cardID=' + objectID + '&fromColID=' + fromColID + '&toColID=' + toColID + '&fromLaneID=' + fromLaneID + '&toLaneID=' + toLaneID + '&execitionID=' + executionID + '&browseType=' + browseType + '&groupBy=' + groupBy);
+            $.get(link, function(data)
+            {
+                if(data)
+                {
+                    kanbanGroup = $.parseJSON(data);
+                    if(groupBy == 'default')
+                    {
+                        updateKanban('story', kanbanGroup.story);
+                    }
+                    else
+                    {
+                        updateKanban(browseType, kanbanGroup[groupBy]);
+                    }
+                }
+            });
+        }
     }
 
     if(showIframe)

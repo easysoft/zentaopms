@@ -1666,9 +1666,15 @@ class kanban extends control
         $toColumn = $this->kanban->getColumnByID($toColID);
         if($toColumn->laneType == 'story' and in_array($toColumn->type, array('tested', 'verified', 'released', 'closed')))
         {
-            $stage = $toColumn->type;
-            $this->dao->update(TABLE_STORY)->set('stage')->eq($stage)->where('id')->eq($cardID)->exec();
-            $this->dao->update(TABLE_STORYSTAGE)->set('stage')->eq($stage)->where('story')->eq($cardID)->exec();
+            $data = new stdclass();
+            $data->stage = $toColumn->type;
+            if($toColumn->type == 'released')
+            {
+                $fromColumn = $this->kanban->getColumnByID($fromColID);
+                if($fromColumn->type == 'closed') $data->status = 'active';
+            }
+            $this->dao->update(TABLE_STORY)->data($data)->where('id')->eq($cardID)->exec();
+            $this->dao->update(TABLE_STORYSTAGE)->set('stage')->eq($toColumn->type)->where('story')->eq($cardID)->exec();
         }
 
         $kanbanGroup = $regionID == 0 ? $this->kanban->getExecutionKanban($executionID, $browseType, $groupBy) : $this->kanban->getRDKanban($executionID, $browseType, $orderBy, $regionID, $groupBy);
