@@ -105,6 +105,7 @@ class caselibModel extends model
             ->batchcheck($this->config->caselib->edit->requiredFields, 'notempty')
             ->checkFlow()
             ->where('id')->eq($libID)
+            ->checkFlow()
             ->exec();
         if(!dao::isError())
         {

@@ -518,6 +518,7 @@ class executionModel extends model
             ->checkIF(!empty($execution->code), 'code', 'unique', "id != $executionID and type in ('sprint','stage')")
             ->checkFlow()
             ->where('id')->eq($executionID)
+            ->checkFlow()
             ->limit(1)
             ->exec();
 
