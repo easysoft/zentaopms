@@ -102,20 +102,7 @@ $status = $this->session->testTaskVersionStatus;
       </td>
       <?php foreach($extendFields as $extendField) echo "<td>" . $this->loadModel('flow')->getFieldValue($extendField, $task) . "</td>";?>
       <td class='c-actions'>
-        <?php
-        echo '<div id="action-divider">';
-        common::printIcon('testtask',   'cases',    "taskID=$task->id", $task, 'list', 'sitemap');
-        common::printIcon('testtask',   'linkCase', "taskID=$task->id&type=all&param=myQueryID", $task, 'list', 'link');
-        common::printIcon('testreport', 'browse',   "objectID=$task->product&objectType=product&extra=$task->id", $task, 'list', 'flag');
-        echo '</div>';
-        common::printIcon('testtask',   'view',     "taskID=$task->id", '', 'list', 'list-alt', '', 'iframe', true, "data-width='90%'");
-        common::printIcon('testtask',   'edit',     "taskID=$task->id", $task, 'list');
-        if(common::hasPriv('testtask', 'delete', $task))
-        {
-            $deleteURL = $this->createLink('testtask', 'delete', "taskID=$task->id&confirm=yes");
-            echo html::a("javascript:ajaxDelete(\"$deleteURL\",\"taskList\",confirmDelete)", '<i class="icon-common-delete icon-trash"></i>', '', "title='{$lang->testtask->delete}' class='btn'");
-        }
-        ?>
+        <?php echo $this->buildOperateMenu($task, 'browse');?>
       </td>
     </tr>
     <?php endforeach;?>

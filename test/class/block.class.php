@@ -254,7 +254,27 @@ class blockTest
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+
+        $objects = json_decode($objects);
+        $return = '';
+        foreach($objects as $type => $params)
+        {
+            $return .= "$type:{";
+            foreach($params as $param => $paramValue)
+            {
+                if(is_object($paramValue))
+                {
+                    foreach($paramValue as $key => $value) $return .= "$key=>$value,";
+                }
+                else
+                {
+                    $return .= "$param:$paramValue,";
+                }
+            }
+            $return  = trim($return, ',');
+            $return .= '};';
+        }
+        return $return;
     }
 
     /**

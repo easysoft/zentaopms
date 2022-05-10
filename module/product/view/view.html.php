@@ -158,24 +158,10 @@
     <div class='main-actions'>
       <div class="btn-toolbar">
         <?php
-        $params = "product=$product->id";
         $browseLink = $this->session->productList ? $this->session->productList : inlink('browse', "productID=$product->id");
         common::printBack($browseLink);
-        if(!$product->deleted)
-        {
-            echo $this->buildOperateMenu($product, 'view');
 
-            echo "<div class='divider'></div>";
-
-            if($product->status != 'closed')
-            {
-                common::printIcon('product', 'close', $params, $product, 'button', '', '', 'iframe', true);
-                echo "<div class='divider'></div>";
-            }
-
-            common::printIcon('product', 'edit', $params, $product);
-            common::printIcon('product', 'delete', $params, $product, 'button', 'trash', 'hiddenwin');
-        }
+        if(!$product->deleted) echo $this->buildOperateMenu($product, 'view');
         ?>
       </div>
     </div>

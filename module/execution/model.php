@@ -2819,8 +2819,9 @@ class executionModel extends model
             ->where('execution')->in(array_keys($executions))
             ->andWhere('deleted')->eq('0')
             ->andWhere('parent')->ge('0')
-            ->andWhere('status')->eq('done')
+            ->andWhere('status', true)->eq('done')
             ->orWhere('status')->eq('closed')
+            ->markRight(1)
             ->groupBy('execution')
             ->fetchAll('execution');
         $storyPoints = $this->dao->select('t1.project, sum(t2.estimate) AS `storyPoint`')->from(TABLE_PROJECTSTORY)->alias('t1')
