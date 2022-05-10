@@ -1,0 +1,1488 @@
+8f0d651d9c1 (wangchunsheng            2013-01-18 01:58:14 +0000    1) <?php
+8f0d651d9c1 (wangchunsheng            2013-01-18 01:58:14 +0000    2) /**
+8f0d651d9c1 (wangchunsheng            2013-01-18 01:58:14 +0000    3)  * The control file of product module of ZenTaoPMS.
+8f0d651d9c1 (wangchunsheng            2013-01-18 01:58:14 +0000    4)  *
+0dd2d53f406 (wangyidong               2015-01-28 15:14:02 +0800    5)  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+015401d1e0b (wangyidong               2015-11-05 14:09:52 +0800    6)  * @license     ZPL (http://zpl.pub/page/zplv12.html)
+8f0d651d9c1 (wangchunsheng            2013-01-18 01:58:14 +0000    7)  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
+8f0d651d9c1 (wangchunsheng            2013-01-18 01:58:14 +0000    8)  * @package     product
+ec50ddf69df (wyd621                   2013-07-17 10:05:00 +0800    9)  * @version     $Id: control.php 5144 2013-07-15 06:37:03Z chencongzhi520@gmail.com $
+8f0d651d9c1 (wangchunsheng            2013-01-18 01:58:14 +0000   10)  * @link        http://www.zentao.net
+8f0d651d9c1 (wangchunsheng            2013-01-18 01:58:14 +0000   11)  */
+8f0d651d9c1 (wangchunsheng            2013-01-18 01:58:14 +0000   12) class product extends control
+8f0d651d9c1 (wangchunsheng            2013-01-18 01:58:14 +0000   13) {
+8f0d651d9c1 (wangchunsheng            2013-01-18 01:58:14 +0000   14)     public $products = array();
+8f0d651d9c1 (wangchunsheng            2013-01-18 01:58:14 +0000   15) 
+8f0d651d9c1 (wangchunsheng            2013-01-18 01:58:14 +0000   16)     /**
+8f0d651d9c1 (wangchunsheng            2013-01-18 01:58:14 +0000   17)      * Construct function.
+45f1da3824b (滔哥                     2018-05-09 09:58:48 +0800   18)      *
+8f0d651d9c1 (wangchunsheng            2013-01-18 01:58:14 +0000   19)      * @access public
+8f0d651d9c1 (wangchunsheng            2013-01-18 01:58:14 +0000   20)      * @return void
+8f0d651d9c1 (wangchunsheng            2013-01-18 01:58:14 +0000   21)      */
+03a8e3a2d63 (wangyidong               2016-04-26 09:22:46 +0800   22)     public function __construct($moduleName = '', $methodName = '')
+8f0d651d9c1 (wangchunsheng            2013-01-18 01:58:14 +0000   23)     {
+03a8e3a2d63 (wangyidong               2016-04-26 09:22:46 +0800   24)         parent::__construct($moduleName, $methodName);
+8f0d651d9c1 (wangchunsheng            2013-01-18 01:58:14 +0000   25) 
+8f0d651d9c1 (wangchunsheng            2013-01-18 01:58:14 +0000   26)         /* Load need modules. */
+8f0d651d9c1 (wangchunsheng            2013-01-18 01:58:14 +0000   27)         $this->loadModel('story');
+8f0d651d9c1 (wangchunsheng            2013-01-18 01:58:14 +0000   28)         $this->loadModel('release');
+8f0d651d9c1 (wangchunsheng            2013-01-18 01:58:14 +0000   29)         $this->loadModel('tree');
+8f0d651d9c1 (wangchunsheng            2013-01-18 01:58:14 +0000   30)         $this->loadModel('user');
+8f0d651d9c1 (wangchunsheng            2013-01-18 01:58:14 +0000   31) 
+8f0d651d9c1 (wangchunsheng            2013-01-18 01:58:14 +0000   32)         /* Get all products, if no, goto the create page. */
+697b2fd3180 (mayue                    2021-12-27 13:20:57 +0800   33)         $this->products = $this->product->getPairs('nocode');
+178a45b6b56 (liyuchun                 2021-12-23 15:15:21 +0800   34)         $isAPI = ($this->app->viewType == 'json' or (defined('RUN_MODE') and RUN_MODE == 'api'));
+98153aa83b2 (hufangzhou               2022-04-22 15:37:10 +0800   35)         if(empty($this->products) and strpos($this->config->product->skipRedirectMethod, ",$this->methodName,") === false and $this->app->getViewType() != 'mhtml' and !$isAPI) $this->locate($this->createLink('product', 'create'));
+8f0d651d9c1 (wangchunsheng            2013-01-18 01:58:14 +0000   36)         $this->view->products = $this->products;
+8f0d651d9c1 (wangchunsheng            2013-01-18 01:58:14 +0000   37)     }
+8f0d651d9c1 (wangchunsheng            2013-01-18 01:58:14 +0000   38) 
+8f0d651d9c1 (wangchunsheng            2013-01-18 01:58:14 +0000   39)     /**
+8f0d651d9c1 (wangchunsheng            2013-01-18 01:58:14 +0000   40)      * Index page, to browse.
+8f0d651d9c1 (wangchunsheng            2013-01-18 01:58:14 +0000   41)      *
+8f0d651d9c1 (wangchunsheng            2013-01-18 01:58:14 +0000   42)      * @param  string $locate     locate to browse page or not. If not, display all products.
+45f1da3824b (滔哥                     2018-05-09 09:58:48 +0800   43)      * @param  int    $productID
+45f1da3824b (滔哥                     2018-05-09 09:58:48 +0800   44)      * @param  string $orderBy
+45f1da3824b (滔哥                     2018-05-09 09:58:48 +0800   45)      * @param  int    $recTotal
+45f1da3824b (滔哥                     2018-05-09 09:58:48 +0800   46)      * @param  int    $recPerPage
+45f1da3824b (滔哥                     2018-05-09 09:58:48 +0800   47)      * @param  int    $pageID
+8f0d651d9c1 (wangchunsheng            2013-01-18 01:58:14 +0000   48)      * @access public
+8f0d651d9c1 (wangchunsheng            2013-01-18 01:58:14 +0000   49)      * @return void
+8f0d651d9c1 (wangchunsheng            2013-01-18 01:58:14 +0000   50)      */
+c5dcca79bf1 (wangyidong               2016-04-15 11:32:46 +0800   51)     public function index($locate = 'auto', $productID = 0, $status = 'noclosed', $orderBy = 'order_desc', $recTotal = 0, $recPerPage = 10, $pageID = 1)
+8f0d651d9c1 (wangchunsheng            2013-01-18 01:58:14 +0000   52)     {
+99b7d416023 (daitingting              2017-05-10 14:48:37 +0800   53)         if($locate == 'yes') $this->locate($this->createLink($this->moduleName, 'browse'));
+4d38fbdad13 (wangyidong               2016-04-08 11:40:37 +0800   54) 
+a8110589a41 (wangyidong               2017-04-07 10:10:24 +0800   55)         if($this->app->getViewType() != 'mhtml') unset($this->lang->product->menu->index);
+c5dcca79bf1 (wangyidong               2016-04-15 11:32:46 +0800   56)         $productID = $this->product->saveState($productID, $this->products);
+cd8cd0b43c5 (wangyidong               2016-05-23 09:22:03 +0800   57)         $branch    = (int)$this->cookie->preBranch;
+1cae502aee7 (wangyidong               2021-05-20 16:55:12 +0800   58) 
+1cae502aee7 (wangyidong               2021-05-20 16:55:12 +0800   59)         if($this->app->viewType == 'mhtml') $this->product->setMenu($productID, $branch);
+c5dcca79bf1 (wangyidong               2016-04-15 11:32:46 +0800   60) 
+c1e6e6a82ce (leiyong                  2020-10-21 09:11:19 +0800   61)         if(common::hasPriv('product', 'create')) $this->lang->TRActions = html::a($this->createLink('product', 'create'), "<i class='icon icon-sm icon-plus'></i> " . $this->lang->product->create, '', "class='btn btn-primary'");
+602e8244de7 (Yagami                   2019-03-19 10:25:17 +0800   62) 
+53e0784d6a1 (leiyong                  2020-12-01 11:17:57 +0800   63)         $this->view->title      = $this->lang->product->index;
+53e0784d6a1 (leiyong                  2020-12-01 11:17:57 +0800   64)         $this->view->position[] = $this->lang->product->index;
+4d38fbdad13 (wangyidong               2016-04-08 11:40:37 +0800   65)         $this->display();
+8f0d651d9c1 (wangchunsheng            2013-01-18 01:58:14 +0000   66)     }
+8f0d651d9c1 (wangchunsheng            2013-01-18 01:58:14 +0000   67) 
+8f0d651d9c1 (wangchunsheng            2013-01-18 01:58:14 +0000   68)     /**
+504ee5f6c36 (hufangzhou               2020-12-30 16:03:55 +0800   69)      * The projects which linked the product.
+45f1da3824b (滔哥                     2018-05-09 09:58:48 +0800   70)      *
+45f1da3824b (滔哥                     2018-05-09 09:58:48 +0800   71)      * @param  string $status
+45f1da3824b (滔哥                     2018-05-09 09:58:48 +0800   72)      * @param  int    $productID
+504ee5f6c36 (hufangzhou               2020-12-30 16:03:55 +0800   73)      * @param  int    $branch
+aaace4b2ded (holan20180123            2021-03-11 15:32:59 +0800   74)      * @param  int    $involved
+eb63a178858 (王怡栋                   2021-11-19 09:08:03 +0800   75)      * @param  string $orderBy
+8f0d651d9c1 (wangchunsheng            2013-01-18 01:58:14 +0000   76)      * @access public
+8f0d651d9c1 (wangchunsheng            2013-01-18 01:58:14 +0000   77)      * @return void
+8f0d651d9c1 (wangchunsheng            2013-01-18 01:58:14 +0000   78)      */
+9a80f35962a (王怡栋                   2021-11-25 10:25:05 +0800   79)     public function project($status = 'all', $productID = 0, $branch = '', $involved = 0, $orderBy = 'order_desc')
+8f0d651d9c1 (wangchunsheng            2013-01-18 01:58:14 +0000   80)     {
+4caf65064c7 (holan20180123            2021-03-08 15:47:09 +0800   81)         $this->app->loadLang('execution');
+821fd3644cb (xieqiyu                  2021-12-08 18:48:33 +0800   82)         $this->loadModel('project');
+9c29107a6b0 (leiyong                  2021-03-22 15:27:44 +0800   83) 
+8352d145f56 (hufangzhou               2021-11-12 15:22:47 +0800   84)         $branch = ($this->cookie->preBranch !== '' and $branch === '') ? $this->cookie->preBranch : $branch;
+d279c5d7d77 (hufangzhou               2021-11-05 18:47:39 +0800   85)         setcookie('preBranch', $branch, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, true);
+d279c5d7d77 (hufangzhou               2021-11-05 18:47:39 +0800   86) 
+9c29107a6b0 (leiyong                  2021-03-22 15:27:44 +0800   87)         $this->product->setMenu($productID, $branch);
+8f0d651d9c1 (wangchunsheng            2013-01-18 01:58:14 +0000   88) 
+097f76364ec (holan20180123            2021-01-19 10:54:11 +0800   89)         /* Get PM id list. */
+097f76364ec (holan20180123            2021-01-19 10:54:11 +0800   90)         $accounts     = array();
+eb63a178858 (王怡栋                   2021-11-19 09:08:03 +0800   91)         $projectStats = $this->product->getProjectStatsByProduct($productID, $status, $branch, $involved, $orderBy);
+ad8ed52f22e (xieqiyu                  2021-12-10 10:57:56 +0800   92)         $product      = $this->product->getByID($productID);
+ad8ed52f22e (xieqiyu                  2021-12-10 10:57:56 +0800   93)         $projects     = $this->project->getPairsByProgram($product->program, 'all', false, 'order_asc');
+94e2d9d56a5 (Yagami                   2021-04-08 11:28:59 +0800   94) 
+097f76364ec (holan20180123            2021-01-19 10:54:11 +0800   95)         foreach($projectStats as $project)
+097f76364ec (holan20180123            2021-01-19 10:54:11 +0800   96)         {
+097f76364ec (holan20180123            2021-01-19 10:54:11 +0800   97)             if(!empty($project->PM) and !in_array($project->PM, $accounts)) $accounts[] = $project->PM;
+ad8ed52f22e (xieqiyu                  2021-12-10 10:57:56 +0800   98)             unset($projects[$project->id]);
+097f76364ec (holan20180123            2021-01-19 10:54:11 +0800   99)         }
+097f76364ec (holan20180123            2021-01-19 10:54:11 +0800  100)         $PMList = $this->user->getListByAccounts($accounts, 'account');
+097f76364ec (holan20180123            2021-01-19 10:54:11 +0800  101) 
+097f76364ec (holan20180123            2021-01-19 10:54:11 +0800  102)         $this->view->title        = $this->products[$productID] . $this->lang->colon . $this->lang->product->project;
+097f76364ec (holan20180123            2021-01-19 10:54:11 +0800  103)         $this->view->position[]   = $this->products[$productID];
+097f76364ec (holan20180123            2021-01-19 10:54:11 +0800  104)         $this->view->position[]   = $this->lang->product->project;
+097f76364ec (holan20180123            2021-01-19 10:54:11 +0800  105)         $this->view->projectStats = $projectStats;
+097f76364ec (holan20180123            2021-01-19 10:54:11 +0800  106)         $this->view->PMList       = $PMList;
+097f76364ec (holan20180123            2021-01-19 10:54:11 +0800  107)         $this->view->productID    = $productID;
+821fd3644cb (xieqiyu                  2021-12-08 18:48:33 +0800  108)         $this->view->product      = $product;
+ad8ed52f22e (xieqiyu                  2021-12-10 10:57:56 +0800  109)         $this->view->projects     = $projects;
+097f76364ec (holan20180123            2021-01-19 10:54:11 +0800  110)         $this->view->status       = $status;
+097f76364ec (holan20180123            2021-01-19 10:54:11 +0800  111)         $this->view->users        = $this->loadModel('user')->getPairs('noletter');
+821fd3644cb (xieqiyu                  2021-12-08 18:48:33 +0800  112)         $this->view->branchID     = $branch;
+559ce03369b (xieqiyu                  2021-12-14 08:57:10 +0800  113)         $this->view->branchStatus = $this->loadModel('branch')->getByID($branch, 0, 'status');
+8f0d651d9c1 (wangchunsheng            2013-01-18 01:58:14 +0000  114)         $this->display();
+8f0d651d9c1 (wangchunsheng            2013-01-18 01:58:14 +0000  115)     }
+8f0d651d9c1 (wangchunsheng            2013-01-18 01:58:14 +0000  116) 
+8f0d651d9c1 (wangchunsheng            2013-01-18 01:58:14 +0000  117)     /**
+8f0d651d9c1 (wangchunsheng            2013-01-18 01:58:14 +0000  118)      * Browse a product.
+61b5f77f910 (pengjiangxiu             2017-08-22 13:05:13 +0800  119)      *
+d279c5d7d77 (hufangzhou               2021-11-05 18:47:39 +0800  120)      * @param  int         $productID
+d279c5d7d77 (hufangzhou               2021-11-05 18:47:39 +0800  121)      * @param  int|stirng  $branch
+d279c5d7d77 (hufangzhou               2021-11-05 18:47:39 +0800  122)      * @param  string      $browseType
+d279c5d7d77 (hufangzhou               2021-11-05 18:47:39 +0800  123)      * @param  int         $param
+d279c5d7d77 (hufangzhou               2021-11-05 18:47:39 +0800  124)      * @param  string      $storyType requirement|story
+d279c5d7d77 (hufangzhou               2021-11-05 18:47:39 +0800  125)      * @param  string      $orderBy
+d279c5d7d77 (hufangzhou               2021-11-05 18:47:39 +0800  126)      * @param  int         $recTotal
+d279c5d7d77 (hufangzhou               2021-11-05 18:47:39 +0800  127)      * @param  int         $recPerPage
+d279c5d7d77 (hufangzhou               2021-11-05 18:47:39 +0800  128)      * @param  int         $pageID
+d279c5d7d77 (hufangzhou               2021-11-05 18:47:39 +0800  129)      * @param  int         $projectID
+8f0d651d9c1 (wangchunsheng            2013-01-18 01:58:14 +0000  130)      * @access public
+8f0d651d9c1 (wangchunsheng            2013-01-18 01:58:14 +0000  131)      * @return void
+8f0d651d9c1 (wangchunsheng            2013-01-18 01:58:14 +0000  132)      */
+d279c5d7d77 (hufangzhou               2021-11-05 18:47:39 +0800  133)     public function browse($productID = 0, $branch = '', $browseType = '', $param = 0, $storyType = 'story', $orderBy = '', $recTotal = 0, $recPerPage = 20, $pageID = 1, $projectID = 0)
+0fb4b5ce32b (zhaohaibo                2020-05-27 14:34:57 +0800  134)     {
+664e290f973 (zhujinyong               2021-08-31 00:30:48 +0800  135)         $productID = $this->app->tab != 'project' ? $this->product->saveState($productID, $this->products) : $productID;
+9fa66c3d0f1 (xieqiyu                  2022-02-24 14:40:14 +0800  136)         $product   = $this->product->getById($productID);
+9fa66c3d0f1 (xieqiyu                  2022-02-24 14:40:14 +0800  137) 
+9fa66c3d0f1 (xieqiyu                  2022-02-24 14:40:14 +0800  138)         if($product and $product->type != 'normal')
+9fa66c3d0f1 (xieqiyu                  2022-02-24 14:40:14 +0800  139)         {
+9fa66c3d0f1 (xieqiyu                  2022-02-24 14:40:14 +0800  140)             $branchPairs = $this->loadModel('branch')->getPairs($productID, 'all');
+9fa66c3d0f1 (xieqiyu                  2022-02-24 14:40:14 +0800  141)             $branch      = ($this->cookie->preBranch !== '' and $branch === '' and isset($branchPairs[$this->cookie->preBranch])) ? $this->cookie->preBranch : $branch;
+9fa66c3d0f1 (xieqiyu                  2022-02-24 14:40:14 +0800  142)             $branchID    = $branch;
+9fa66c3d0f1 (xieqiyu                  2022-02-24 14:40:14 +0800  143)         }
+9fa66c3d0f1 (xieqiyu                  2022-02-24 14:40:14 +0800  144)         else
+9fa66c3d0f1 (xieqiyu                  2022-02-24 14:40:14 +0800  145)         {
+9fa66c3d0f1 (xieqiyu                  2022-02-24 14:40:14 +0800  146)             $branchID = $branch = 'all';
+9fa66c3d0f1 (xieqiyu                  2022-02-24 14:40:14 +0800  147)         }
+c7313cefd65 (zhujinyong               2021-03-22 11:44:09 +0800  148) 
+b1098e7040e (xieqiyu                  2021-11-11 13:53:24 +0800  149)         /* Set menu. */
+b1098e7040e (xieqiyu                  2021-11-11 13:53:24 +0800  150)         if($this->app->tab == 'product')
+b1098e7040e (xieqiyu                  2021-11-11 13:53:24 +0800  151)         {
+b1098e7040e (xieqiyu                  2021-11-11 13:53:24 +0800  152)             $this->session->set('storyList',   $this->app->getURI(true), 'product');
+b1098e7040e (xieqiyu                  2021-11-11 13:53:24 +0800  153)             $this->session->set('productList', $this->app->getURI(true), 'product');
+b1098e7040e (xieqiyu                  2021-11-11 13:53:24 +0800  154) 
+b1098e7040e (xieqiyu                  2021-11-11 13:53:24 +0800  155)             $this->product->setMenu($productID, $branch, 0, '', "storyType=$storyType");
+b1098e7040e (xieqiyu                  2021-11-11 13:53:24 +0800  156)         }
+664e290f973 (zhujinyong               2021-08-31 00:30:48 +0800  157)         if($this->app->tab == 'project')
+78940a54985 (leiyong                  2021-03-25 14:58:11 +0800  158)         {
+78940a54985 (leiyong                  2021-03-25 14:58:11 +0800  159)             $this->session->set('storyList', $this->app->getURI(true), 'project');
+78940a54985 (leiyong                  2021-03-25 14:58:11 +0800  160)             $this->loadModel('project')->setMenu($projectID);
+78940a54985 (leiyong                  2021-03-25 14:58:11 +0800  161)         }
+a6eff425ca4 (zhujinyong               2021-03-21 12:15:55 +0800  162) 
+8f0d651d9c1 (wangchunsheng            2013-01-18 01:58:14 +0000  163)         /* Lower browse type. */
+1cb9c73bcef (qiyu-xie                 2021-01-26 11:48:21 +0800  164)         $browseType = strtolower($browseType);
+8f0d651d9c1 (wangchunsheng            2013-01-18 01:58:14 +0000  165) 
+6eaec523d6a (holan20180123            2021-03-08 16:27:53 +0800  166)         /* Load datatable and execution. */
+be07c40bf79 (wangyidong               2016-03-28 09:27:09 +0800  167)         $this->loadModel('datatable');
+6eaec523d6a (holan20180123            2021-03-08 16:27:53 +0800  168)         $this->loadModel('execution');
+be07c40bf79 (wangyidong               2016-03-28 09:27:09 +0800  169) 
+8f0d651d9c1 (wangchunsheng            2013-01-18 01:58:14 +0000  170)         /* Set product, module and query. */
+0dc863da3ac (wangyidong               2021-04-07 17:44:25 +0800  171)         setcookie('preProductID', $productID, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, true);
+d279c5d7d77 (hufangzhou               2021-11-05 18:47:39 +0800  172)         setcookie('preBranch', $branch, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, true);
+2872ae3f8f6 (wangyidong               2016-04-22 14:19:37 +0800  173) 
+78e714df92d (holan20180123            2020-07-23 15:49:13 +0800  174)         if($this->cookie->preProductID != $productID or $this->cookie->preBranch != $branch or $browseType == 'bybranch')
+2872ae3f8f6 (wangyidong               2016-04-22 14:19:37 +0800  175)         {
+bf08427c9a5 (hufangzhou               2021-11-12 09:45:43 +0800  176)             $_COOKIE['storyModule'] = 0;
+bf08427c9a5 (hufangzhou               2021-11-12 09:45:43 +0800  177)             setcookie('storyModule', 0, 0, $this->config->webRoot, '', $this->config->cookieSecure, false);
+2872ae3f8f6 (wangyidong               2016-04-22 14:19:37 +0800  178)         }
+2872ae3f8f6 (wangyidong               2016-04-22 14:19:37 +0800  179) 
+78e714df92d (holan20180123            2020-07-23 15:49:13 +0800  180)         if($browseType == 'bymodule' or $browseType == '')
+78e714df92d (holan20180123            2020-07-23 15:49:13 +0800  181)         {
+0dc863da3ac (wangyidong               2021-04-07 17:44:25 +0800  182)             setcookie('storyModule', (int)$param, 0, $this->config->webRoot, '', $this->config->cookieSecure, false);
+664e290f973 (zhujinyong               2021-08-31 00:30:48 +0800  183)             if($this->app->tab == 'project') setcookie('storyModuleParam', (int)$param, 0, $this->config->webRoot, '', $this->config->cookieSecure, false);
+4163d17335b (hufangzhou               2021-11-11 15:31:37 +0800  184)             $_COOKIE['storyBranch'] = 'all';
+4163d17335b (hufangzhou               2021-11-11 15:31:37 +0800  185)             setcookie('storyBranch', 'all', 0, $this->config->webRoot, '', $this->config->cookieSecure, false);
+d10834ab9f6 (hufangzhou               2021-11-08 18:02:15 +0800  186)             if($browseType == '') setcookie('treeBranch', $branch, 0, $this->config->webRoot, '', $this->config->cookieSecure, false);
+78e714df92d (holan20180123            2020-07-23 15:49:13 +0800  187)         }
+4163d17335b (hufangzhou               2021-11-11 15:31:37 +0800  188)         if($browseType == 'bybranch') setcookie('storyBranch', $branch, 0, $this->config->webRoot, '', $this->config->cookieSecure, false);
+2872ae3f8f6 (wangyidong               2016-04-22 14:19:37 +0800  189) 
+664e290f973 (zhujinyong               2021-08-31 00:30:48 +0800  190)         $cookieModule = $this->app->tab == 'project' ? $this->cookie->storyModuleParam : $this->cookie->storyModule;
+5174ede18ef (holan20180123            2021-05-11 10:43:56 +0800  191)         $moduleID = ($browseType == 'bymodule') ? (int)$param : (($browseType == 'bysearch' or $browseType == 'bybranch') ? 0 : ($cookieModule ? $cookieModule : 0));
+61b5f77f910 (pengjiangxiu             2017-08-22 13:05:13 +0800  192)         $queryID  = ($browseType == 'bysearch') ? (int)$param : 0;
+8f0d651d9c1 (wangchunsheng            2013-01-18 01:58:14 +0000  193) 
+d4d49466b4d (holan20180123            2020-07-26 21:16:48 +0800  194)         /* Set moduleTree. */
+d4d49466b4d (holan20180123            2020-07-26 21:16:48 +0800  195)         $createModuleLink = $storyType == 'story' ? 'createStoryLink' : 'createRequirementLink';
+d4d49466b4d (holan20180123            2020-07-26 21:16:48 +0800  196)         if($browseType == '')
+d4d49466b4d (holan20180123            2020-07-26 21:16:48 +0800  197)         {
+d10834ab9f6 (hufangzhou               2021-11-08 18:02:15 +0800  198)             setcookie('treeBranch', $branch, 0, $this->config->webRoot, '', $this->config->cookieSecure, false);
+d4d49466b4d (holan20180123            2020-07-26 21:16:48 +0800  199)             $browseType = 'unclosed';
+d4d49466b4d (holan20180123            2020-07-26 21:16:48 +0800  200)         }
+d4d49466b4d (holan20180123            2020-07-26 21:16:48 +0800  201)         else
+d4d49466b4d (holan20180123            2020-07-26 21:16:48 +0800  202)         {
+d10834ab9f6 (hufangzhou               2021-11-08 18:02:15 +0800  203)             $branch = $this->cookie->treeBranch;
+ecee971a217 (Yagami                   2021-03-25 15:50:08 +0800  204)         }
+ecee971a217 (Yagami                   2021-03-25 15:50:08 +0800  205) 
+ecee971a217 (Yagami                   2021-03-25 15:50:08 +0800  206)         /* If in project story and not chose product, get project story mdoules. */
+ecee971a217 (Yagami                   2021-03-25 15:50:08 +0800  207)         if($this->app->rawModule == 'projectstory' and empty($productID))
+ecee971a217 (Yagami                   2021-03-25 15:50:08 +0800  208)         {
+ecee971a217 (Yagami                   2021-03-25 15:50:08 +0800  209)             $moduleTree = $this->tree->getProjectStoryTreeMenu($projectID, 0, array('treeModel', $createModuleLink));
+ecee971a217 (Yagami                   2021-03-25 15:50:08 +0800  210)         }
+ecee971a217 (Yagami                   2021-03-25 15:50:08 +0800  211)         else
+ecee971a217 (Yagami                   2021-03-25 15:50:08 +0800  212)         {
+ecee971a217 (Yagami                   2021-03-25 15:50:08 +0800  213)             $moduleTree = $this->tree->getTreeMenu($productID, 'story', $startModuleID = 0, array('treeModel', $createModuleLink), array('projectID' => $projectID, 'productID' => $productID), $branch, "&param=$param&storyType=$storyType");
+d4d49466b4d (holan20180123            2020-07-26 21:16:48 +0800  214)         }
+d4d49466b4d (holan20180123            2020-07-26 21:16:48 +0800  215) 
+e639fd43793 (leiyong                  2020-07-27 02:29:36 -0700  216)         if($browseType != 'bymodule' and $browseType != 'bybranch') $this->session->set('storyBrowseType', $browseType);
+edf7d6448be (leiyong                  2020-07-27 03:29:59 -0700  217)         if(($browseType == 'bymodule' or $browseType == 'bybranch') and $this->session->storyBrowseType == 'bysearch') $this->session->set('storyBrowseType', 'unclosed');
+e639fd43793 (leiyong                  2020-07-27 02:29:36 -0700  218) 
+8f0d651d9c1 (wangchunsheng            2013-01-18 01:58:14 +0000  219)         /* Process the order by field. */
+8f0d651d9c1 (wangchunsheng            2013-01-18 01:58:14 +0000  220)         if(!$orderBy) $orderBy = $this->cookie->productStoryOrder ? $this->cookie->productStoryOrder : 'id_desc';
+0dc863da3ac (wangyidong               2021-04-07 17:44:25 +0800  221)         setcookie('productStoryOrder', $orderBy, 0, $this->config->webRoot, '', $this->config->cookieSecure, true);
+8f0d651d9c1 (wangchunsheng            2013-01-18 01:58:14 +0000  222) 
+d015ef75e7f (wangyidong               2014-12-04 09:07:18 +0000  223)         /* Append id for secend sort. */
+5c4609d3023 (xieqiyu                  2021-12-31 15:43:27 +0800  224)         $sort = common::appendOrder($orderBy);
+d015ef75e7f (wangyidong               2014-12-04 09:07:18 +0000  225) 
+8f0d651d9c1 (wangchunsheng            2013-01-18 01:58:14 +0000  226)         /* Load pager. */
+8f0d651d9c1 (wangchunsheng            2013-01-18 01:58:14 +0000  227)         $this->app->loadClass('pager', $static = true);
+74f7a959029 (chaideqing               2021-11-29 14:55:14 +0800  228)         if($this->app->getViewType() == 'xhtml') $recPerPage = 10;
+8f0d651d9c1 (wangchunsheng            2013-01-18 01:58:14 +0000  229)         $pager = new pager($recTotal, $recPerPage, $pageID);
+8f0d651d9c1 (wangchunsheng            2013-01-18 01:58:14 +0000  230) 
+c62d5992925 (mayue                    2021-12-01 10:44:38 +0800  231)         /* Display of branch label. */
+63d4d3dad89 (mayue                    2021-12-02 09:20:37 +0800  232)         $showBranch = $this->loadModel('branch')->showBranch($productID);
+c62d5992925 (mayue                    2021-12-01 10:44:38 +0800  233) 
+5a1e31adf2c (zhujinyong               2021-12-21 14:53:05 +0800  234)         /* Get stories. */
+2d14f0aec45 (hufangzhou               2021-01-15 16:41:41 +0800  235)         if($this->app->rawModule == 'projectstory')
+2d14f0aec45 (hufangzhou               2021-01-15 16:41:41 +0800  236)         {
+63d4d3dad89 (mayue                    2021-12-02 09:20:37 +0800  237)             $showBranch = $this->loadModel('branch')->showBranch($productID, 0, $projectID);
+c62d5992925 (mayue                    2021-12-01 10:44:38 +0800  238) 
+5a1e31adf2c (zhujinyong               2021-12-21 14:53:05 +0800  239)             if(!empty($product)) $this->session->set('currentProductType', $product->type);
+4f4a1f990b0 (tianshujie               2021-11-25 11:28:50 +0800  240) 
+47cdcd78c06 (xieqiyu                  2021-11-17 19:30:13 +0800  241)             $this->products  = $this->product->getProducts($projectID, 'all', '', false);
+ecee971a217 (Yagami                   2021-03-25 15:50:08 +0800  242)             $projectProducts = $this->product->getProducts($projectID);
+6eaec523d6a (holan20180123            2021-03-08 16:27:53 +0800  243)             $productPlans    = $this->execution->getPlans($projectProducts);
+2d14f0aec45 (hufangzhou               2021-01-15 16:41:41 +0800  244) 
+600e4fdbbab (tianshujie               2021-11-23 14:45:20 +0800  245)             if($browseType == 'bybranch') $param = $branchID;
+600e4fdbbab (tianshujie               2021-11-23 14:45:20 +0800  246)             $stories = $this->story->getExecutionStories($projectID, $productID, $branchID, $sort, $browseType, $param, 'story', '', $pager);
+2d14f0aec45 (hufangzhou               2021-01-15 16:41:41 +0800  247)         }
+cfbb1d8433f (hufangzhou               2021-03-10 13:46:38 +0800  248)         else
+cfbb1d8433f (hufangzhou               2021-03-10 13:46:38 +0800  249)         {
+5a1e31adf2c (zhujinyong               2021-12-21 14:53:05 +0800  250)             $stories = $this->product->getStories($productID, $branchID, $browseType, $queryID, $moduleID, $storyType, $sort, $pager);
+5a1e31adf2c (zhujinyong               2021-12-21 14:53:05 +0800  251)         }
+28a842da551 (zhouxin                  2022-04-11 05:58:43 +0000  252)         $queryCondition = $this->dao->get();
+5a1e31adf2c (zhujinyong               2021-12-21 14:53:05 +0800  253) 
+5a1e31adf2c (zhujinyong               2021-12-21 14:53:05 +0800  254)         /* Display status of branch. */
+5a1e31adf2c (zhujinyong               2021-12-21 14:53:05 +0800  255)         $branchOption    = array();
+5a1e31adf2c (zhujinyong               2021-12-21 14:53:05 +0800  256)         $branchTagOption = array();
+9fa66c3d0f1 (xieqiyu                  2022-02-24 14:40:14 +0800  257)         if($product and $product->type != 'normal')
+5a1e31adf2c (zhujinyong               2021-12-21 14:53:05 +0800  258)         {
+9fa66c3d0f1 (xieqiyu                  2022-02-24 14:40:14 +0800  259)             $branches = $this->loadModel('branch')->getList($productID, $projectID, 'all');
+9fa66c3d0f1 (xieqiyu                  2022-02-24 14:40:14 +0800  260)             foreach($branches as $branchInfo)
+9fa66c3d0f1 (xieqiyu                  2022-02-24 14:40:14 +0800  261)             {
+9fa66c3d0f1 (xieqiyu                  2022-02-24 14:40:14 +0800  262)                 $branchOption[$branchInfo->id]    = $branchInfo->name;
+9fa66c3d0f1 (xieqiyu                  2022-02-24 14:40:14 +0800  263)                 $branchTagOption[$branchInfo->id] = $branchInfo->name . ($branchInfo->status == 'closed' ? ' (' . $this->lang->branch->statusList['closed'] . ')' : '');
+9fa66c3d0f1 (xieqiyu                  2022-02-24 14:40:14 +0800  264)             }
+cfbb1d8433f (hufangzhou               2021-03-10 13:46:38 +0800  265)         }
+8f0d651d9c1 (wangchunsheng            2013-01-18 01:58:14 +0000  266) 
+8f0d651d9c1 (wangchunsheng            2013-01-18 01:58:14 +0000  267)         /* Process the sql, get the conditon partion, save it to session. */
+28a842da551 (zhouxin                  2022-04-11 05:58:43 +0000  268)         $this->loadModel('common')->saveQueryCondition($queryCondition, 'story', ($browseType != 'bysearch' and $browseType != 'reviewbyme' and $this->app->rawModule != 'projectstory'));
+8f0d651d9c1 (wangchunsheng            2013-01-18 01:58:14 +0000  269) 
+bc207f47004 (hufangzhou               2021-06-05 15:26:26 +0800  270)         if(!empty($stories)) $stories = $this->story->mergeReviewer($stories);
+bc207f47004 (hufangzhou               2021-06-05 15:26:26 +0800  271) 
+86439a699ec (chenfeiCF                2016-11-17 11:22:14 +0800  272)         /* Get related tasks, bugs, cases count of each story. */
+86439a699ec (chenfeiCF                2016-11-17 11:22:14 +0800  273)         $storyIdList = array();
+fcfe033f28a (wangyidong               2020-03-13 08:36:31 +0800  274)         foreach($stories as $story)
+fcfe033f28a (wangyidong               2020-03-13 08:36:31 +0800  275)         {
+fcfe033f28a (wangyidong               2020-03-13 08:36:31 +0800  276)             $storyIdList[$story->id] = $story->id;
+fcfe033f28a (wangyidong               2020-03-13 08:36:31 +0800  277)             if(!empty($story->children))
+fcfe033f28a (wangyidong               2020-03-13 08:36:31 +0800  278)             {
+fcfe033f28a (wangyidong               2020-03-13 08:36:31 +0800  279)                 foreach($story->children as $child) $storyIdList[$child->id] = $child->id;
+fcfe033f28a (wangyidong               2020-03-13 08:36:31 +0800  280)             }
+fcfe033f28a (wangyidong               2020-03-13 08:36:31 +0800  281)         }
+86439a699ec (chenfeiCF                2016-11-17 11:22:14 +0800  282)         $storyTasks = $this->loadModel('task')->getStoryTaskCounts($storyIdList);
+86439a699ec (chenfeiCF                2016-11-17 11:22:14 +0800  283)         $storyBugs  = $this->loadModel('bug')->getStoryBugCounts($storyIdList);
+86439a699ec (chenfeiCF                2016-11-17 11:22:14 +0800  284)         $storyCases = $this->loadModel('testcase')->getStoryCaseCounts($storyIdList);
+86439a699ec (chenfeiCF                2016-11-17 11:22:14 +0800  285) 
+d13750a5a4a (wangyidong               2020-05-11 16:48:41 +0800  286)         /* Change for requirement story title. */
+95521e44a4c (holan20180123            2020-12-09 13:48:51 +0800  287)         if($storyType == 'requirement')
+d13750a5a4a (wangyidong               2020-05-11 16:48:41 +0800  288)         {
+00cc8ff2c30 (Yagami                   2021-01-18 16:15:39 +0800  289)             $this->lang->story->title  = str_replace($this->lang->SRCommon, $this->lang->URCommon, $this->lang->story->title);
+00cc8ff2c30 (Yagami                   2021-01-18 16:15:39 +0800  290)             $this->lang->story->create = str_replace($this->lang->SRCommon, $this->lang->URCommon, $this->lang->story->create);
+d13750a5a4a (wangyidong               2020-05-11 16:48:41 +0800  291)             $this->config->product->search['fields']['title'] = $this->lang->story->title;
+e325f991793 (qiyu-xie                 2021-03-31 13:05:25 +0800  292)             unset($this->config->product->search['fields']['plan']);
+4520e903fb3 (holan20180123            2021-05-06 16:29:16 +0800  293)             unset($this->config->product->search['fields']['stage']);
+d13750a5a4a (wangyidong               2020-05-11 16:48:41 +0800  294)         }
+d13750a5a4a (wangyidong               2020-05-11 16:48:41 +0800  295) 
+8f0d651d9c1 (wangchunsheng            2013-01-18 01:58:14 +0000  296)         /* Build search form. */
+49a33127e2d (leiyong                  2020-11-26 13:57:36 +0800  297)         $rawModule = $this->app->rawModule;
+49a33127e2d (leiyong                  2020-11-26 13:57:36 +0800  298)         $rawMethod = $this->app->rawMethod;
+543078c4ee2 (zhujinyong               2021-03-23 14:21:53 +0800  299) 
+543078c4ee2 (zhujinyong               2021-03-23 14:21:53 +0800  300)         $params    = $rawModule == 'projectstory' ? "projectID=$projectID&" : '';
+543078c4ee2 (zhujinyong               2021-03-23 14:21:53 +0800  301)         $actionURL = $this->createLink($rawModule, $rawMethod, $params . "productID=$productID&branch=$branch&browseType=bySearch&queryID=myQueryID&storyType=$storyType");
+543078c4ee2 (zhujinyong               2021-03-23 14:21:53 +0800  302) 
+7552ca07e3b (wangyidong               2016-05-31 14:09:06 +0800  303)         $this->config->product->search['onMenuBar'] = 'yes';
+d7110d4ea8f (hufangzhou               2021-12-01 08:16:32 +0800  304)         $this->product->buildSearchForm($productID, $this->products, $queryID, $actionURL, $branch);
+8f0d651d9c1 (wangchunsheng            2013-01-18 01:58:14 +0000  305) 
+5d70ec7e35d (wangyidong               2016-05-04 14:59:39 +0800  306)         $showModule = !empty($this->config->datatable->productBrowse->showModule) ? $this->config->datatable->productBrowse->showModule : '';
+ee0ace3c750 (wangyidong               2016-04-05 14:29:21 +0800  307) 
+e434046f8a6 (hufangzhou               2021-03-10 10:24:33 +0800  308)         $productName = ($this->app->rawModule == 'projectstory' and empty($productID)) ? $this->lang->product->all : $this->products[$productID];
+e434046f8a6 (hufangzhou               2021-03-10 10:24:33 +0800  309) 
+e996a9d4ed1 (chenfeiCF                2016-03-09 21:30:53 +0800  310)         /* Assign. */
+e434046f8a6 (hufangzhou               2021-03-10 10:24:33 +0800  311)         $this->view->title           = $productName . $this->lang->colon . $this->lang->product->browse;
+e434046f8a6 (hufangzhou               2021-03-10 10:24:33 +0800  312)         $this->view->position[]      = $productName;
+672dde69b82 (hufangzhou               2021-01-25 15:48:55 +0800  313)         $this->view->position[]      = $this->lang->product->browse;
+672dde69b82 (hufangzhou               2021-01-25 15:48:55 +0800  314)         $this->view->productID       = $productID;
+fa4c4c31c12 (hufangzhou               2021-02-18 09:12:39 +0800  315)         $this->view->product         = $product;
+e434046f8a6 (hufangzhou               2021-03-10 10:24:33 +0800  316)         $this->view->productName     = $productName;
+672dde69b82 (hufangzhou               2021-01-25 15:48:55 +0800  317)         $this->view->moduleID        = $moduleID;
+672dde69b82 (hufangzhou               2021-01-25 15:48:55 +0800  318)         $this->view->stories         = $stories;
+93c8bb6ba8a (tianshujie               2021-11-11 16:32:29 +0800  319)         $this->view->plans           = $this->loadModel('productplan')->getPairs($productID, $branch === 'all' ? '' : $branch, '', true);
+9463211a2b9 (tianshujie98             2021-03-10 13:28:09 +0800  320)         $this->view->productPlans    = isset($productPlans) ? array(0 => '') + $productPlans : array();
+672dde69b82 (hufangzhou               2021-01-25 15:48:55 +0800  321)         $this->view->summary         = $this->product->summary($stories, $storyType);
+672dde69b82 (hufangzhou               2021-01-25 15:48:55 +0800  322)         $this->view->moduleTree      = $moduleTree;
+672dde69b82 (hufangzhou               2021-01-25 15:48:55 +0800  323)         $this->view->parentModules   = $this->tree->getParents($moduleID);
+672dde69b82 (hufangzhou               2021-01-25 15:48:55 +0800  324)         $this->view->pager           = $pager;
+672dde69b82 (hufangzhou               2021-01-25 15:48:55 +0800  325)         $this->view->users           = $this->user->getPairs('noletter|pofirst|nodeleted');
+672dde69b82 (hufangzhou               2021-01-25 15:48:55 +0800  326)         $this->view->orderBy         = $orderBy;
+672dde69b82 (hufangzhou               2021-01-25 15:48:55 +0800  327)         $this->view->browseType      = $browseType;
+600e4fdbbab (tianshujie               2021-11-23 14:45:20 +0800  328)         $this->view->modules         = $this->tree->getOptionMenu($productID, 'story', 0, $branchID);
+672dde69b82 (hufangzhou               2021-01-25 15:48:55 +0800  329)         $this->view->moduleID        = $moduleID;
+4163d17335b (hufangzhou               2021-11-11 15:31:37 +0800  330)         $this->view->moduleName      = ($moduleID and $moduleID !== 'all') ? $this->tree->getById($moduleID)->name : $this->lang->tree->all;
+672dde69b82 (hufangzhou               2021-01-25 15:48:55 +0800  331)         $this->view->branch          = $branch;
+600e4fdbbab (tianshujie               2021-11-23 14:45:20 +0800  332)         $this->view->branchID        = $branchID;
+5a1e31adf2c (zhujinyong               2021-12-21 14:53:05 +0800  333)         $this->view->branchOption    = $branchOption;
+5a1e31adf2c (zhujinyong               2021-12-21 14:53:05 +0800  334)         $this->view->branchTagOption = $branchTagOption;
+07f8a820b0f (mayue                    2021-12-02 09:28:02 +0800  335)         $this->view->showBranch      = $showBranch;
+672dde69b82 (hufangzhou               2021-01-25 15:48:55 +0800  336)         $this->view->storyStages     = $this->product->batchGetStoryStage($stories);
+672dde69b82 (hufangzhou               2021-01-25 15:48:55 +0800  337)         $this->view->setModule       = true;
+672dde69b82 (hufangzhou               2021-01-25 15:48:55 +0800  338)         $this->view->storyTasks      = $storyTasks;
+672dde69b82 (hufangzhou               2021-01-25 15:48:55 +0800  339)         $this->view->storyBugs       = $storyBugs;
+672dde69b82 (hufangzhou               2021-01-25 15:48:55 +0800  340)         $this->view->storyCases      = $storyCases;
+672dde69b82 (hufangzhou               2021-01-25 15:48:55 +0800  341)         $this->view->param           = $param;
+6582a700bb2 (zhujinyong               2021-03-21 16:11:07 +0800  342)         $this->view->projectID       = $projectID;
+672dde69b82 (hufangzhou               2021-01-25 15:48:55 +0800  343)         $this->view->products        = $this->products;
+672dde69b82 (hufangzhou               2021-01-25 15:48:55 +0800  344)         $this->view->projectProducts = isset($projectProducts) ? $projectProducts : array();
+672dde69b82 (hufangzhou               2021-01-25 15:48:55 +0800  345)         $this->view->storyType       = $storyType;
+664e290f973 (zhujinyong               2021-08-31 00:30:48 +0800  346)         $this->view->from            = $this->app->tab;
+8b8c4fe1800 (mayue                    2021-11-17 09:30:34 +0800  347)         $this->view->modulePairs     = $showModule ? $this->tree->getModulePairs($productID, 'story', $showModule) : array();
+8f0d651d9c1 (wangchunsheng            2013-01-18 01:58:14 +0000  348)         $this->display();
+8f0d651d9c1 (wangchunsheng            2013-01-18 01:58:14 +0000  349)     }
+8f0d651d9c1 (wangchunsheng            2013-01-18 01:58:14 +0000  350) 
+8f0d651d9c1 (wangchunsheng            2013-01-18 01:58:14 +0000  351)     /**
+45f1da3824b (滔哥                     2018-05-09 09:58:48 +0800  352)      * Create a product.
+45f1da3824b (滔哥                     2018-05-09 09:58:48 +0800  353)      *
+35423591120 (hufangzhou               2020-12-24 11:16:30 +0800  354)      * @param  int    $programID
+441cda176d0 (tianshujie               2021-09-15 15:56:19 +0800  355)      * @param  string $extra
+8f0d651d9c1 (wangchunsheng            2013-01-18 01:58:14 +0000  356)      * @access public
+8f0d651d9c1 (wangchunsheng            2013-01-18 01:58:14 +0000  357)      * @return void
+8f0d651d9c1 (wangchunsheng            2013-01-18 01:58:14 +0000  358)      */
+441cda176d0 (tianshujie               2021-09-15 15:56:19 +0800  359)     public function create($programID = 0, $extra = '')
+8f0d651d9c1 (wangchunsheng            2013-01-18 01:58:14 +0000  360)     {
+8f0d651d9c1 (wangchunsheng            2013-01-18 01:58:14 +0000  361)         if(!empty($_POST))
+8f0d651d9c1 (wangchunsheng            2013-01-18 01:58:14 +0000  362)         {
+8f0d651d9c1 (wangchunsheng            2013-01-18 01:58:14 +0000  363)             $productID = $this->product->create();
+437ed911c85 (zhujinyong               2021-07-15 13:39:06 +0800  364)             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+8f0d651d9c1 (wangchunsheng            2013-01-18 01:58:14 +0000  365)             $this->loadModel('action')->create('product', $productID, 'opened');
+e2070d56b1d (wangyidong               2017-12-04 13:37:43 +0800  366) 
+621f338faa8 (liugang                  2019-07-25 13:02:18 +0800  367)             $this->executeHooks($productID);
+437ed911c85 (zhujinyong               2021-07-15 13:39:06 +0800  368)             if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $productID));
+90014ee5cce (chenfei                  2019-07-13 13:31:44 +0800  369) 
+664e290f973 (zhujinyong               2021-08-31 00:30:48 +0800  370)             $tab = $this->app->tab;
+664e290f973 (zhujinyong               2021-08-31 00:30:48 +0800  371)             $moduleName = $tab == 'program'? 'program' : $this->moduleName;
+664e290f973 (zhujinyong               2021-08-31 00:30:48 +0800  372)             $methodName = $tab == 'program'? 'product' : 'browse';
+664e290f973 (zhujinyong               2021-08-31 00:30:48 +0800  373)             $param      = $tab == 'program' ? "programID=$programID" : "productID=$productID";
+03390a69003 (tianshujie               2022-03-08 13:01:53 +0800  374)             $locate     = isonlybody() ? 'parent' : $this->createLink($moduleName, $methodName, $param);
+664e290f973 (zhujinyong               2021-08-31 00:30:48 +0800  375)             if($tab == 'doc') $locate = $this->createLink('doc', 'objectLibs', 'type=product');
+437ed911c85 (zhujinyong               2021-07-15 13:39:06 +0800  376)             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $locate));
+8f0d651d9c1 (wangchunsheng            2013-01-18 01:58:14 +0000  377)         }
+8f0d651d9c1 (wangchunsheng            2013-01-18 01:58:14 +0000  378) 
+664e290f973 (zhujinyong               2021-08-31 00:30:48 +0800  379)         if($this->app->tab == 'program') $this->loadModel('program')->setMenu($programID);
+4d5bacb8236 (wangyidong               2021-06-11 16:51:28 +0800  380)         if($this->app->getViewType() == 'mhtml')
+4d5bacb8236 (wangyidong               2021-06-11 16:51:28 +0800  381)         {
+4d5bacb8236 (wangyidong               2021-06-11 16:51:28 +0800  382)             if($this->app->rawModule == 'projectstory' and $this->app->rawMethod == 'story')
+4d5bacb8236 (wangyidong               2021-06-11 16:51:28 +0800  383)             {
+4d5bacb8236 (wangyidong               2021-06-11 16:51:28 +0800  384)                 $this->loadModel('project')->setMenu();
+4d5bacb8236 (wangyidong               2021-06-11 16:51:28 +0800  385)             }
+4d5bacb8236 (wangyidong               2021-06-11 16:51:28 +0800  386)             else
+4d5bacb8236 (wangyidong               2021-06-11 16:51:28 +0800  387)             {
+4d5bacb8236 (wangyidong               2021-06-11 16:51:28 +0800  388)                 $this->product->setMenu('');
+4d5bacb8236 (wangyidong               2021-06-11 16:51:28 +0800  389)             }
+4d5bacb8236 (wangyidong               2021-06-11 16:51:28 +0800  390)         }
+2ee7594858d (zhujinyong               2021-03-23 08:45:02 +0800  391) 
+441cda176d0 (tianshujie               2021-09-15 15:56:19 +0800  392)         $extra = str_replace(array(',', ' '), array('&', ''), $extra);
+441cda176d0 (tianshujie               2021-09-15 15:56:19 +0800  393)         parse_str($extra, $output);
+441cda176d0 (tianshujie               2021-09-15 15:56:19 +0800  394) 
+548b5655b0b (tianshujie98             2020-08-05 17:22:22 +0800  395)         $this->loadModel('user');
+548b5655b0b (tianshujie98             2020-08-05 17:22:22 +0800  396)         $poUsers = $this->user->getPairs('nodeleted|pofirst|noclosed',  '', $this->config->maxCount);
+548b5655b0b (tianshujie98             2020-08-05 17:22:22 +0800  397)         if(!empty($this->config->user->moreLink)) $this->config->moreLinks["PO"] = $this->config->user->moreLink;
+548b5655b0b (tianshujie98             2020-08-05 17:22:22 +0800  398) 
+548b5655b0b (tianshujie98             2020-08-05 17:22:22 +0800  399)         $qdUsers = $this->user->getPairs('nodeleted|qdfirst|noclosed',  '', $this->config->maxCount);
+548b5655b0b (tianshujie98             2020-08-05 17:22:22 +0800  400)         if(!empty($this->config->user->moreLink)) $this->config->moreLinks["QD"] = $this->config->user->moreLink;
+548b5655b0b (tianshujie98             2020-08-05 17:22:22 +0800  401) 
+548b5655b0b (tianshujie98             2020-08-05 17:22:22 +0800  402)         $rdUsers = $this->user->getPairs('nodeleted|devfirst|noclosed', '', $this->config->maxCount);
+548b5655b0b (tianshujie98             2020-08-05 17:22:22 +0800  403)         if(!empty($this->config->user->moreLink)) $this->config->moreLinks["RD"] = $this->config->user->moreLink;
+548b5655b0b (tianshujie98             2020-08-05 17:22:22 +0800  404) 
+5d74fc96d26 (tianshujie98             2021-04-14 10:46:54 +0800  405)         $lines = array();
+5d74fc96d26 (tianshujie98             2021-04-14 10:46:54 +0800  406)         if($programID) $lines = array('') + $this->product->getLinePairs($programID);
+5d74fc96d26 (tianshujie98             2021-04-14 10:46:54 +0800  407)         if($this->config->systemMode == 'classic') $lines = array('') + $this->product->getLinePairs();
+5d74fc96d26 (tianshujie98             2021-04-14 10:46:54 +0800  408) 
+664e290f973 (zhujinyong               2021-08-31 00:30:48 +0800  409)         if($this->app->tab == 'doc') unset($this->lang->doc->menu->product['subMenu']);
+62cdfe21985 (tianshujie98             2021-08-05 13:25:34 +0800  410) 
+0d3b5afe401 (wangchunsheng            2013-01-20 09:11:48 +0000  411)         $this->view->title      = $this->lang->product->create;
+0d3b5afe401 (wangchunsheng            2013-01-20 09:11:48 +0000  412)         $this->view->position[] = $this->view->title;
+441cda176d0 (tianshujie               2021-09-15 15:56:19 +0800  413)         $this->view->gobackLink = (isset($output['from']) and $output['from'] == 'global') ? $this->createLink('product', 'all') : '';
+0d3b5afe401 (wangchunsheng            2013-01-20 09:11:48 +0000  414)         $this->view->groups     = $this->loadModel('group')->getPairs();
+7fc2b74a539 (zhujinyong               2021-03-18 09:21:46 +0800  415)         $this->view->programID  = $programID;
+548b5655b0b (tianshujie98             2020-08-05 17:22:22 +0800  416)         $this->view->poUsers    = $poUsers;
+548b5655b0b (tianshujie98             2020-08-05 17:22:22 +0800  417)         $this->view->qdUsers    = $qdUsers;
+548b5655b0b (tianshujie98             2020-08-05 17:22:22 +0800  418)         $this->view->rdUsers    = $rdUsers;
+c0f44f6465d (leiyong                  2020-10-25 17:30:41 +0800  419)         $this->view->users      = $this->user->getPairs('nodeleted|noclosed');
+4caf65064c7 (holan20180123            2021-03-08 15:47:09 +0800  420)         $this->view->programs   = array('') + $this->loadModel('program')->getTopPairs('', 'noclosed');
+5d74fc96d26 (tianshujie98             2021-04-14 10:46:54 +0800  421)         $this->view->lines      = $lines;
+ae552beafa9 (Yagami                   2020-12-16 16:52:37 +0800  422)         $this->view->URSRPairs  = $this->loadModel('custom')->getURSRPairs();
+081b841d187 (wangyidong               2017-03-24 16:19:10 +0800  423) 
+081b841d187 (wangyidong               2017-03-24 16:19:10 +0800  424)         unset($this->lang->product->typeList['']);
+8f0d651d9c1 (wangchunsheng            2013-01-18 01:58:14 +0000  425)         $this->display();
+8f0d651d9c1 (wangchunsheng            2013-01-18 01:58:14 +0000  426)     }
+8f0d651d9c1 (wangchunsheng            2013-01-18 01:58:14 +0000  427) 
+8f0d651d9c1 (wangchunsheng            2013-01-18 01:58:14 +0000  428)     /**
+8f0d651d9c1 (wangchunsheng            2013-01-18 01:58:14 +0000  429)      * Edit a product.
+45f1da3824b (滔哥                     2018-05-09 09:58:48 +0800  430)      *
+036ccf82f50 (leiyong                  2020-09-28 14:14:28 +0800  431)      * @param  int       $productID
+036ccf82f50 (leiyong                  2020-09-28 14:14:28 +0800  432)      * @param  string    $action
+036ccf82f50 (leiyong                  2020-09-28 14:14:28 +0800  433)      * @param  string    $extra
+48e4241c472 (hufangzhou               2020-12-28 09:55:39 +0800  434)      * @param  int       $programID
+8f0d651d9c1 (wangchunsheng            2013-01-18 01:58:14 +0000  435)      * @access public
+8f0d651d9c1 (wangchunsheng            2013-01-18 01:58:14 +0000  436)      * @return void
+8f0d651d9c1 (wangchunsheng            2013-01-18 01:58:14 +0000  437)      */
+48e4241c472 (hufangzhou               2020-12-28 09:55:39 +0800  438)     public function edit($productID, $action = 'edit', $extra = '', $programID = 0)
+8f0d651d9c1 (wangchunsheng            2013-01-18 01:58:14 +0000  439)     {
+1f5c6ddb6bf (Yagami                   2020-11-27 11:12:45 +0800  440)         $this->app->loadLang('custom');
+a95a72b5793 (Yagami                   2020-09-23 10:27:35 +0800  441) 
+8ef40239b48 (tianshujie98             2021-01-28 09:39:06 +0800  442)         /* Init vars. */
+45df4dea290 (Yagami                   2021-04-06 09:41:30 +0800  443)         $product = $this->product->getById($productID);
+45df4dea290 (Yagami                   2021-04-06 09:41:30 +0800  444)         if($product->bind) $this->config->product->edit->requiredFields = 'name';
+45df4dea290 (Yagami                   2021-04-06 09:41:30 +0800  445) 
+b83692f5f73 (tianshujie98             2021-03-02 09:26:12 +0800  446)         $unmodifiableProjects = array();
+244917f1114 (holan20180123            2021-03-08 16:17:30 +0800  447)         $canChangeProgram     = true;
+f6c559ecd66 (tianshujie98             2021-01-27 16:08:34 +0800  448)         $singleLinkProjects   = array();
+f6c559ecd66 (tianshujie98             2021-01-27 16:08:34 +0800  449)         $multipleLinkProjects = array();
+8ef40239b48 (tianshujie98             2021-01-28 09:39:06 +0800  450)         $linkStoriesProjects  = array();
+f6c559ecd66 (tianshujie98             2021-01-27 16:08:34 +0800  451) 
+8ef40239b48 (tianshujie98             2021-01-28 09:39:06 +0800  452)         /* Link the projects stories under this product. */
+b83692f5f73 (tianshujie98             2021-03-02 09:26:12 +0800  453)         $unmodifiableProjects = $this->dao->select('t1.*')->from(TABLE_PROJECTSTORY)->alias('t1')
+3ee2aa34a75 (tianshujie98             2021-02-19 11:13:08 +0800  454)             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
+3ee2aa34a75 (tianshujie98             2021-02-19 11:13:08 +0800  455)             ->where('t1.product')->eq($productID)
+8203c0df125 (tianshujie98             2021-02-20 09:19:43 +0800  456)             ->andWhere('t2.type')->eq('project')
+3ee2aa34a75 (tianshujie98             2021-02-19 11:13:08 +0800  457)             ->andWhere('t2.deleted')->eq('0')
+3ee2aa34a75 (tianshujie98             2021-02-19 11:13:08 +0800  458)             ->fetchPairs('project', 'product');
+8203c0df125 (tianshujie98             2021-02-20 09:19:43 +0800  459) 
+244917f1114 (holan20180123            2021-03-08 16:17:30 +0800  460)         if(!empty($unmodifiableProjects)) $canChangeProgram = false;
+f6c559ecd66 (tianshujie98             2021-01-27 16:08:34 +0800  461) 
+8ef40239b48 (tianshujie98             2021-01-28 09:39:06 +0800  462)         /* Get the projects linked with this product. */
+8203c0df125 (tianshujie98             2021-02-20 09:19:43 +0800  463)         $projectPairs = $this->dao->select('t2.id,t2.name')->from(TABLE_PROJECTPRODUCT)->alias('t1')
+8203c0df125 (tianshujie98             2021-02-20 09:19:43 +0800  464)             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
+8203c0df125 (tianshujie98             2021-02-20 09:19:43 +0800  465)             ->where('t1.product')->eq($productID)
+8203c0df125 (tianshujie98             2021-02-20 09:19:43 +0800  466)             ->andWhere('t2.type')->eq('project')
+8203c0df125 (tianshujie98             2021-02-20 09:19:43 +0800  467)             ->andWhere('t2.deleted')->eq('0')
+8203c0df125 (tianshujie98             2021-02-20 09:19:43 +0800  468)             ->fetchPairs();
+f6c559ecd66 (tianshujie98             2021-01-27 16:08:34 +0800  469) 
+5a752c09dc4 (tianshujie98             2021-01-13 17:16:40 +0800  470)         if(!empty($projectPairs))
+5a752c09dc4 (tianshujie98             2021-01-13 17:16:40 +0800  471)         {
+5a752c09dc4 (tianshujie98             2021-01-13 17:16:40 +0800  472)             foreach($projectPairs as $projectID => $projectName)
+5a752c09dc4 (tianshujie98             2021-01-13 17:16:40 +0800  473)             {
+244917f1114 (holan20180123            2021-03-08 16:17:30 +0800  474)                 if($canChangeProgram)
+f6c559ecd66 (tianshujie98             2021-01-27 16:08:34 +0800  475)                 {
+f6c559ecd66 (tianshujie98             2021-01-27 16:08:34 +0800  476)                     $products = $this->dao->select('product')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($projectID)->fetchPairs();
+f6c559ecd66 (tianshujie98             2021-01-27 16:08:34 +0800  477)                     if(count($products) == 1)
+f6c559ecd66 (tianshujie98             2021-01-27 16:08:34 +0800  478)                     {
+f6c559ecd66 (tianshujie98             2021-01-27 16:08:34 +0800  479)                         $singleLinkProjects[$projectID] = $projectName;
+f6c559ecd66 (tianshujie98             2021-01-27 16:08:34 +0800  480)                     }
+f6c559ecd66 (tianshujie98             2021-01-27 16:08:34 +0800  481) 
+f6c559ecd66 (tianshujie98             2021-01-27 16:08:34 +0800  482)                     if(count($products) > 1)
+f6c559ecd66 (tianshujie98             2021-01-27 16:08:34 +0800  483)                     {
+f6c559ecd66 (tianshujie98             2021-01-27 16:08:34 +0800  484)                         $multipleLinkProjects[$projectID] = $projectName;
+f6c559ecd66 (tianshujie98             2021-01-27 16:08:34 +0800  485)                     }
+f6c559ecd66 (tianshujie98             2021-01-27 16:08:34 +0800  486)                 }
+f6c559ecd66 (tianshujie98             2021-01-27 16:08:34 +0800  487)                 else
+f6c559ecd66 (tianshujie98             2021-01-27 16:08:34 +0800  488)                 {
+b83692f5f73 (tianshujie98             2021-03-02 09:26:12 +0800  489)                     if(isset($unmodifiableProjects[$projectID])) $linkStoriesProjects[$projectID] = $projectName;
+f6c559ecd66 (tianshujie98             2021-01-27 16:08:34 +0800  490)                 }
+5a752c09dc4 (tianshujie98             2021-01-13 17:16:40 +0800  491)             }
+5a752c09dc4 (tianshujie98             2021-01-13 17:16:40 +0800  492)         }
+5a752c09dc4 (tianshujie98             2021-01-13 17:16:40 +0800  493) 
+8f0d651d9c1 (wangchunsheng            2013-01-18 01:58:14 +0000  494)         if(!empty($_POST))
+8f0d651d9c1 (wangchunsheng            2013-01-18 01:58:14 +0000  495)         {
+45f1da3824b (滔哥                     2018-05-09 09:58:48 +0800  496)             $changes = $this->product->update($productID);
+3159469466e (tianshujie98             2021-01-14 09:03:03 +0800  497) 
+e1b120bb0ae (tianshujie98             2021-03-31 08:20:50 +0800  498)             if($this->config->systemMode == 'new')
+5a752c09dc4 (tianshujie98             2021-01-13 17:16:40 +0800  499)             {
+e1b120bb0ae (tianshujie98             2021-03-31 08:20:50 +0800  500)                 /* Change the projects set of the program. */
+19b3b75b2e3 (qiyu-xie                 2021-07-20 11:24:50 +0800  501)                 if(($_POST['program'] != $product->program) and ($singleLinkProjects or $multipleLinkProjects))
+e1b120bb0ae (tianshujie98             2021-03-31 08:20:50 +0800  502)                 {
+e1b120bb0ae (tianshujie98             2021-03-31 08:20:50 +0800  503)                     $this->product->updateProjects($productID, $singleLinkProjects, $multipleLinkProjects);
+e1b120bb0ae (tianshujie98             2021-03-31 08:20:50 +0800  504)                 }
+5a752c09dc4 (tianshujie98             2021-01-13 17:16:40 +0800  505)             }
+3159469466e (tianshujie98             2021-01-14 09:03:03 +0800  506) 
+437ed911c85 (zhujinyong               2021-07-15 13:39:06 +0800  507)             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+ded3e99d370 (wangyidong               2015-05-13 16:44:44 +0800  508)             if($action == 'undelete')
+ded3e99d370 (wangyidong               2015-05-13 16:44:44 +0800  509)             {
+ded3e99d370 (wangyidong               2015-05-13 16:44:44 +0800  510)                 $this->loadModel('action');
+ded3e99d370 (wangyidong               2015-05-13 16:44:44 +0800  511)                 $this->dao->update(TABLE_PRODUCT)->set('deleted')->eq(0)->where('id')->eq($productID)->exec();
+ded3e99d370 (wangyidong               2015-05-13 16:44:44 +0800  512)                 $this->dao->update(TABLE_ACTION)->set('extra')->eq(ACTIONMODEL::BE_UNDELETED)->where('id')->eq($extra)->exec();
+ded3e99d370 (wangyidong               2015-05-13 16:44:44 +0800  513)                 $this->action->create('product', $productID, 'undeleted');
+ded3e99d370 (wangyidong               2015-05-13 16:44:44 +0800  514)             }
+8f0d651d9c1 (wangchunsheng            2013-01-18 01:58:14 +0000  515)             if($changes)
+8f0d651d9c1 (wangchunsheng            2013-01-18 01:58:14 +0000  516)             {
+8f0d651d9c1 (wangchunsheng            2013-01-18 01:58:14 +0000  517)                 $actionID = $this->loadModel('action')->create('product', $productID, 'edited');
+8f0d651d9c1 (wangchunsheng            2013-01-18 01:58:14 +0000  518)                 $this->action->logHistory($actionID, $changes);
+8f0d651d9c1 (wangchunsheng            2013-01-18 01:58:14 +0000  519)             }
+eb3ecce61e4 (liugang                  2018-04-17 15:56:58 +0800  520) 
+621f338faa8 (liugang                  2019-07-25 13:02:18 +0800  521)             $this->executeHooks($productID);
+48e4241c472 (hufangzhou               2020-12-28 09:55:39 +0800  522) 
+48e4241c472 (hufangzhou               2020-12-28 09:55:39 +0800  523)             $moduleName = $programID ? 'program'    : 'product';
+4e1ac813a48 (zhujinyong               2021-03-08 10:10:18 +0800  524)             $methodName = $programID ? 'product' : 'view';
+48e4241c472 (hufangzhou               2020-12-28 09:55:39 +0800  525)             $param      = $programID ? "programID=$programID" : "product=$productID";
+48e4241c472 (hufangzhou               2020-12-28 09:55:39 +0800  526)             $locate     = $this->createLink($moduleName, $methodName, $param);
+c53821b96c7 (holan20180123            2021-03-09 09:23:26 +0800  527) 
+0eda0edd50f (holan20180123            2021-03-24 16:12:48 +0800  528)             if(!$programID) $this->session->set('productList', $this->createLink('product', 'browse', $param), 'product');
+437ed911c85 (zhujinyong               2021-07-15 13:39:06 +0800  529)             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $locate));
+8f0d651d9c1 (wangchunsheng            2013-01-18 01:58:14 +0000  530)         }
+8f0d651d9c1 (wangchunsheng            2013-01-18 01:58:14 +0000  531) 
+424c6ae400c (Yagami                   2021-02-23 09:30:09 +0800  532)         $productID = $this->product->saveState($productID, $this->products);
+a6eff425ca4 (zhujinyong               2021-03-21 12:15:55 +0800  533)         $this->product->setMenu($productID);
+8f0d651d9c1 (wangchunsheng            2013-01-18 01:58:14 +0000  534) 
+444b29404a1 (xieqiyu                  2021-09-15 15:35:42 +0800  535)         if($programID) $this->loadModel('program')->setMenu($programID);
+48e4241c472 (hufangzhou               2020-12-28 09:55:39 +0800  536) 
+5a752c09dc4 (tianshujie98             2021-01-13 17:16:40 +0800  537)         /* Get the relevant person in charge. */
+548b5655b0b (tianshujie98             2020-08-05 17:22:22 +0800  538)         $this->loadModel('user');
+d285dd2aea0 (tianshujie98             2021-04-29 09:00:40 +0800  539)         $poUsers = $this->user->getPairs('nodeleted|pofirst|noclosed',  $product->PO, $this->config->maxCount);
+548b5655b0b (tianshujie98             2020-08-05 17:22:22 +0800  540)         if(!empty($this->config->user->moreLink)) $this->config->moreLinks["PO"] = $this->config->user->moreLink;
+548b5655b0b (tianshujie98             2020-08-05 17:22:22 +0800  541) 
+d285dd2aea0 (tianshujie98             2021-04-29 09:00:40 +0800  542)         $qdUsers = $this->user->getPairs('nodeleted|qdfirst|noclosed',  $product->QD, $this->config->maxCount);
+548b5655b0b (tianshujie98             2020-08-05 17:22:22 +0800  543)         if(!empty($this->config->user->moreLink)) $this->config->moreLinks["QD"] = $this->config->user->moreLink;
+548b5655b0b (tianshujie98             2020-08-05 17:22:22 +0800  544) 
+d285dd2aea0 (tianshujie98             2021-04-29 09:00:40 +0800  545)         $rdUsers = $this->user->getPairs('nodeleted|devfirst|noclosed', $product->RD, $this->config->maxCount);
+548b5655b0b (tianshujie98             2020-08-05 17:22:22 +0800  546)         if(!empty($this->config->user->moreLink)) $this->config->moreLinks["RD"] = $this->config->user->moreLink;
+548b5655b0b (tianshujie98             2020-08-05 17:22:22 +0800  547) 
+c8fcf598750 (holan20180123            2021-02-23 13:46:21 +0800  548)         $lines = array();
+c8fcf598750 (holan20180123            2021-02-23 13:46:21 +0800  549)         if($product->program) $lines = array('') + $this->product->getLinePairs($product->program);
+294058ddcdd (Yagami                   2021-03-02 10:13:36 +0800  550)         if($this->config->systemMode == 'classic') $lines = array('') + $this->product->getLinePairs();
+c8fcf598750 (holan20180123            2021-02-23 13:46:21 +0800  551) 
+2de42041ea1 (holan20180123            2021-07-19 09:53:53 +0800  552)         /* Get programs. */
+2de42041ea1 (holan20180123            2021-07-19 09:53:53 +0800  553)         $programs = $this->loadModel('program')->getTopPairs();
+2de42041ea1 (holan20180123            2021-07-19 09:53:53 +0800  554)         if(!isset($programs[$product->program]) and $product->program)
+2de42041ea1 (holan20180123            2021-07-19 09:53:53 +0800  555)         {
+2de42041ea1 (holan20180123            2021-07-19 09:53:53 +0800  556)             $program  = $this->program->getByID($product->program);
+2de42041ea1 (holan20180123            2021-07-19 09:53:53 +0800  557)             $programs = array($product->program => $program->name);
+2de42041ea1 (holan20180123            2021-07-19 09:53:53 +0800  558)         }
+2de42041ea1 (holan20180123            2021-07-19 09:53:53 +0800  559) 
+0d3b5afe401 (wangchunsheng            2013-01-20 09:11:48 +0000  560)         $this->view->title      = $this->lang->product->edit . $this->lang->colon . $product->name;
+0d3b5afe401 (wangchunsheng            2013-01-20 09:11:48 +0000  561)         $this->view->position[] = html::a($this->createLink($this->moduleName, 'browse'), $product->name);
+0d3b5afe401 (wangchunsheng            2013-01-20 09:11:48 +0000  562)         $this->view->position[] = $this->lang->product->edit;
+ab6ea6f7e01 (leiyong                  2020-09-23 13:27:18 +0800  563) 
+f6c559ecd66 (tianshujie98             2021-01-27 16:08:34 +0800  564)         $this->view->product              = $product;
+f6c559ecd66 (tianshujie98             2021-01-27 16:08:34 +0800  565)         $this->view->groups               = $this->loadModel('group')->getPairs();
+f6c559ecd66 (tianshujie98             2021-01-27 16:08:34 +0800  566)         $this->view->program              = $this->loadModel('program')->getParentPairs();
+f6c559ecd66 (tianshujie98             2021-01-27 16:08:34 +0800  567)         $this->view->poUsers              = $poUsers;
+f6c559ecd66 (tianshujie98             2021-01-27 16:08:34 +0800  568)         $this->view->poUsers              = $poUsers;
+f6c559ecd66 (tianshujie98             2021-01-27 16:08:34 +0800  569)         $this->view->qdUsers              = $qdUsers;
+f6c559ecd66 (tianshujie98             2021-01-27 16:08:34 +0800  570)         $this->view->rdUsers              = $rdUsers;
+f6c559ecd66 (tianshujie98             2021-01-27 16:08:34 +0800  571)         $this->view->users                = $this->user->getPairs('nodeleted|noclosed');
+2de42041ea1 (holan20180123            2021-07-19 09:53:53 +0800  572)         $this->view->programs             = array('') + $programs;
+c8fcf598750 (holan20180123            2021-02-23 13:46:21 +0800  573)         $this->view->lines                = $lines;
+f6c559ecd66 (tianshujie98             2021-01-27 16:08:34 +0800  574)         $this->view->URSRPairs            = $this->loadModel('custom')->getURSRPairs();
+244917f1114 (holan20180123            2021-03-08 16:17:30 +0800  575)         $this->view->canChangeProgram     = $canChangeProgram;
+f6c559ecd66 (tianshujie98             2021-01-27 16:08:34 +0800  576)         $this->view->singleLinkProjects   = $singleLinkProjects;
+f6c559ecd66 (tianshujie98             2021-01-27 16:08:34 +0800  577)         $this->view->multipleLinkProjects = $multipleLinkProjects;
+8ef40239b48 (tianshujie98             2021-01-28 09:39:06 +0800  578)         $this->view->linkStoriesProjects  = $linkStoriesProjects;
+8f0d651d9c1 (wangchunsheng            2013-01-18 01:58:14 +0000  579) 
+081b841d187 (wangyidong               2017-03-24 16:19:10 +0800  580)         unset($this->lang->product->typeList['']);
+8f0d651d9c1 (wangchunsheng            2013-01-18 01:58:14 +0000  581)         $this->display();
+8f0d651d9c1 (wangchunsheng            2013-01-18 01:58:14 +0000  582)     }
+8f0d651d9c1 (wangchunsheng            2013-01-18 01:58:14 +0000  583) 
+01cebe53aea (chencongzhi520@gmail.com 2013-07-10 06:06:46 +0000  584)     /**
+01cebe53aea (chencongzhi520@gmail.com 2013-07-10 06:06:46 +0000  585)      * Batch edit products.
+45f1da3824b (滔哥                     2018-05-09 09:58:48 +0800  586)      *
+e9e74e06527 (hufangzhou               2020-12-24 13:30:14 +0800  587)      * @param  int    $programID
+01cebe53aea (chencongzhi520@gmail.com 2013-07-10 06:06:46 +0000  588)      * @access public
+01cebe53aea (chencongzhi520@gmail.com 2013-07-10 06:06:46 +0000  589)      * @return void
+01cebe53aea (chencongzhi520@gmail.com 2013-07-10 06:06:46 +0000  590)      */
+195e6492d23 (holan20180123            2021-07-12 10:36:44 +0800  591)     public function batchEdit($programID = 0)
+01cebe53aea (chencongzhi520@gmail.com 2013-07-10 06:06:46 +0000  592)     {
+01cebe53aea (chencongzhi520@gmail.com 2013-07-10 06:06:46 +0000  593)         if($this->post->names)
+01cebe53aea (chencongzhi520@gmail.com 2013-07-10 06:06:46 +0000  594)         {
+01cebe53aea (chencongzhi520@gmail.com 2013-07-10 06:06:46 +0000  595)             $allChanges = $this->product->batchUpdate();
+01cebe53aea (chencongzhi520@gmail.com 2013-07-10 06:06:46 +0000  596)             if(!empty($allChanges))
+01cebe53aea (chencongzhi520@gmail.com 2013-07-10 06:06:46 +0000  597)             {
+01cebe53aea (chencongzhi520@gmail.com 2013-07-10 06:06:46 +0000  598)                 foreach($allChanges as $productID => $changes)
+01cebe53aea (chencongzhi520@gmail.com 2013-07-10 06:06:46 +0000  599)                 {
+c49bc171fc7 (wangyidong               2014-07-25 05:53:25 +0000  600)                     if(empty($changes)) continue;
+c49bc171fc7 (wangyidong               2014-07-25 05:53:25 +0000  601) 
+c49bc171fc7 (wangyidong               2014-07-25 05:53:25 +0000  602)                     $actionID = $this->loadModel('action')->create('product', $productID, 'Edited');
+c49bc171fc7 (wangyidong               2014-07-25 05:53:25 +0000  603)                     $this->action->logHistory($actionID, $changes);
+01cebe53aea (chencongzhi520@gmail.com 2013-07-10 06:06:46 +0000  604)                 }
+01cebe53aea (chencongzhi520@gmail.com 2013-07-10 06:06:46 +0000  605)             }
+475c058ee1d (leiyong                  2020-09-24 11:21:18 +0800  606) 
+664e290f973 (zhujinyong               2021-08-31 00:30:48 +0800  607)             $locate = $this->app->tab == 'product' ? $this->createLink('product', 'all') : $this->createLink('program', 'product', "programID=$programID");
+5a334ccb86d (zhujinyong               2022-02-22 09:26:31 +0800  608)             return print(js::locate($locate, 'parent'));
+01cebe53aea (chencongzhi520@gmail.com 2013-07-10 06:06:46 +0000  609)         }
+01cebe53aea (chencongzhi520@gmail.com 2013-07-10 06:06:46 +0000  610) 
+c6cd5d42a36 (王怡栋                   2021-08-26 13:43:57 +0800  611)         $productIDList = $this->post->productIDList;
+5a334ccb86d (zhujinyong               2022-02-22 09:26:31 +0800  612)         if(empty($productIDList)) return print(js::locate($this->session->productList, 'parent'));
+c6cd5d42a36 (王怡栋                   2021-08-26 13:43:57 +0800  613) 
+c6cd5d42a36 (王怡栋                   2021-08-26 13:43:57 +0800  614)         /* Set menu when page come from program. */
+664e290f973 (zhujinyong               2021-08-31 00:30:48 +0800  615)         if($this->app->tab == 'program') $this->loadModel('program')->setMenu(0);
+01cebe53aea (chencongzhi520@gmail.com 2013-07-10 06:06:46 +0000  616) 
+d45ecec1220 (chenfeiCF                2016-04-14 16:38:30 +0800  617)         /* Set custom. */
+d45ecec1220 (chenfeiCF                2016-04-14 16:38:30 +0800  618)         foreach(explode(',', $this->config->product->customBatchEditFields) as $field) $customFields[$field] = $this->lang->product->$field;
+d45ecec1220 (chenfeiCF                2016-04-14 16:38:30 +0800  619)         $this->view->customFields = $customFields;
+38dbf6e28a2 (chenfeiCF                2016-04-29 15:23:15 +0800  620)         $this->view->showFields   = $this->config->product->custom->batchEditFields;
+d45ecec1220 (chenfeiCF                2016-04-14 16:38:30 +0800  621) 
+b91e47c2e70 (wangyidong               2017-08-14 10:05:30 +0800  622)         $products      = $this->dao->select('*')->from(TABLE_PRODUCT)->where('id')->in($productIDList)->fetchAll('id');
+b91e47c2e70 (wangyidong               2017-08-14 10:05:30 +0800  623)         $appendPoUsers = $appendQdUsers = $appendRdUsers = array();
+b91e47c2e70 (wangyidong               2017-08-14 10:05:30 +0800  624)         foreach($products as $product)
+b91e47c2e70 (wangyidong               2017-08-14 10:05:30 +0800  625)         {
+b91e47c2e70 (wangyidong               2017-08-14 10:05:30 +0800  626)             $appendPoUsers[$product->PO] = $product->PO;
+b91e47c2e70 (wangyidong               2017-08-14 10:05:30 +0800  627)             $appendQdUsers[$product->QD] = $product->QD;
+b91e47c2e70 (wangyidong               2017-08-14 10:05:30 +0800  628)             $appendRdUsers[$product->RD] = $product->RD;
+b91e47c2e70 (wangyidong               2017-08-14 10:05:30 +0800  629)         }
+b91e47c2e70 (wangyidong               2017-08-14 10:05:30 +0800  630) 
+548b5655b0b (tianshujie98             2020-08-05 17:22:22 +0800  631)         $this->loadModel('user');
+06271388774 (孙华伟                   2022-03-21 11:18:06 +0800  632)         $poUsers = $this->user->getPairs('nodeleted|noclosed|pofirst', $appendPoUsers);
+548b5655b0b (tianshujie98             2020-08-05 17:22:22 +0800  633)         if(!empty($this->config->user->moreLink)) $this->config->moreLinks["PO"] = $this->config->user->moreLink;
+548b5655b0b (tianshujie98             2020-08-05 17:22:22 +0800  634) 
+06271388774 (孙华伟                   2022-03-21 11:18:06 +0800  635)         $qdUsers = $this->user->getPairs('nodeleted|noclosed|qdfirst', $appendQdUsers);
+548b5655b0b (tianshujie98             2020-08-05 17:22:22 +0800  636)         if(!empty($this->config->user->moreLink)) $this->config->moreLinks["QD"] = $this->config->user->moreLink;
+548b5655b0b (tianshujie98             2020-08-05 17:22:22 +0800  637) 
+06271388774 (孙华伟                   2022-03-21 11:18:06 +0800  638)         $rdUsers = $this->user->getPairs('nodeleted|noclosed|devfirst', $appendRdUsers);
+548b5655b0b (tianshujie98             2020-08-05 17:22:22 +0800  639)         if(!empty($this->config->user->moreLink)) $this->config->moreLinks["RD"] = $this->config->user->moreLink;
+548b5655b0b (tianshujie98             2020-08-05 17:22:22 +0800  640) 
+2de42041ea1 (holan20180123            2021-07-19 09:53:53 +0800  641)         $programs             = array();
+2de42041ea1 (holan20180123            2021-07-19 09:53:53 +0800  642)         $unauthorizedPrograms = array();
+fa7e9fa7927 (holan20180123            2021-07-16 16:06:38 +0800  643)         if($this->config->systemMode == 'new')
+a14b1c87119 (holan20180123            2021-07-13 10:02:40 +0800  644)         {
+0a562d579a1 (mayue                    2022-03-28 10:58:58 +0800  645)             $programs = $this->loadModel('program')->getTopPairs();
+2de42041ea1 (holan20180123            2021-07-19 09:53:53 +0800  646) 
+2de42041ea1 (holan20180123            2021-07-19 09:53:53 +0800  647)             /* Get unauthorized programs. */
+2de42041ea1 (holan20180123            2021-07-19 09:53:53 +0800  648)             $programIDList = array();
+2de42041ea1 (holan20180123            2021-07-19 09:53:53 +0800  649)             foreach($products as $product)
+2de42041ea1 (holan20180123            2021-07-19 09:53:53 +0800  650)             {
+2de42041ea1 (holan20180123            2021-07-19 09:53:53 +0800  651)                 if($product->program and !isset($programs[$product->program]) and !in_array($product->program, $programIDList)) $programIDList[] = $product->program;
+2de42041ea1 (holan20180123            2021-07-19 09:53:53 +0800  652)             }
+2de42041ea1 (holan20180123            2021-07-19 09:53:53 +0800  653)             $unauthorizedPrograms = $this->program->getPairsByList($programIDList);
+2de42041ea1 (holan20180123            2021-07-19 09:53:53 +0800  654) 
+2de42041ea1 (holan20180123            2021-07-19 09:53:53 +0800  655)             /* Get product lines by programs.*/
+2de42041ea1 (holan20180123            2021-07-19 09:53:53 +0800  656)             $lines = array(0 => '');
+2de42041ea1 (holan20180123            2021-07-19 09:53:53 +0800  657)             foreach($programs + $unauthorizedPrograms as $id => $program)
+fa7e9fa7927 (holan20180123            2021-07-16 16:06:38 +0800  658)             {
+fa7e9fa7927 (holan20180123            2021-07-16 16:06:38 +0800  659)                 $lines[$id] = array('') + $this->product->getLinePairs($id);
+fa7e9fa7927 (holan20180123            2021-07-16 16:06:38 +0800  660)             }
+fa7e9fa7927 (holan20180123            2021-07-16 16:06:38 +0800  661)         }
+fa7e9fa7927 (holan20180123            2021-07-16 16:06:38 +0800  662)         else
+fa7e9fa7927 (holan20180123            2021-07-16 16:06:38 +0800  663)         {
+fa7e9fa7927 (holan20180123            2021-07-16 16:06:38 +0800  664)             $lines = array('') + $this->product->getLinePairs();
+a14b1c87119 (holan20180123            2021-07-13 10:02:40 +0800  665)         }
+a14b1c87119 (holan20180123            2021-07-13 10:02:40 +0800  666) 
+2de42041ea1 (holan20180123            2021-07-19 09:53:53 +0800  667)         $this->view->title                = $this->lang->product->batchEdit;
+2de42041ea1 (holan20180123            2021-07-19 09:53:53 +0800  668)         $this->view->position[]           = $this->lang->product->batchEdit;
+2de42041ea1 (holan20180123            2021-07-19 09:53:53 +0800  669)         $this->view->lines                = $lines;
+2de42041ea1 (holan20180123            2021-07-19 09:53:53 +0800  670)         $this->view->productIDList        = $productIDList;
+2de42041ea1 (holan20180123            2021-07-19 09:53:53 +0800  671)         $this->view->products             = $products;
+2de42041ea1 (holan20180123            2021-07-19 09:53:53 +0800  672)         $this->view->poUsers              = $poUsers;
+2de42041ea1 (holan20180123            2021-07-19 09:53:53 +0800  673)         $this->view->qdUsers              = $qdUsers;
+2de42041ea1 (holan20180123            2021-07-19 09:53:53 +0800  674)         $this->view->rdUsers              = $rdUsers;
+2de42041ea1 (holan20180123            2021-07-19 09:53:53 +0800  675)         $this->view->programID            = $programID;
+2de42041ea1 (holan20180123            2021-07-19 09:53:53 +0800  676)         $this->view->programs             = array('' => '') + $programs;
+2de42041ea1 (holan20180123            2021-07-19 09:53:53 +0800  677)         $this->view->unauthorizedPrograms = $unauthorizedPrograms;
+081b841d187 (wangyidong               2017-03-24 16:19:10 +0800  678) 
+081b841d187 (wangyidong               2017-03-24 16:19:10 +0800  679)         unset($this->lang->product->typeList['']);
+01cebe53aea (chencongzhi520@gmail.com 2013-07-10 06:06:46 +0000  680)         $this->display();
+01cebe53aea (chencongzhi520@gmail.com 2013-07-10 06:06:46 +0000  681)     }
+01cebe53aea (chencongzhi520@gmail.com 2013-07-10 06:06:46 +0000  682) 
+8f0d651d9c1 (wangchunsheng            2013-01-18 01:58:14 +0000  683)     /**
+8f0d651d9c1 (wangchunsheng            2013-01-18 01:58:14 +0000  684)      * Close product.
+45f1da3824b (滔哥                     2018-05-09 09:58:48 +0800  685)      *
+45f1da3824b (滔哥                     2018-05-09 09:58:48 +0800  686)      * @param  int    $productID
+8f0d651d9c1 (wangchunsheng            2013-01-18 01:58:14 +0000  687)      * @access public
+8f0d651d9c1 (wangchunsheng            2013-01-18 01:58:14 +0000  688)      * @return void
+8f0d651d9c1 (wangchunsheng            2013-01-18 01:58:14 +0000  689)      */
+8f0d651d9c1 (wangchunsheng            2013-01-18 01:58:14 +0000  690)     public function close($productID)
+8f0d651d9c1 (wangchunsheng            2013-01-18 01:58:14 +0000  691)     {
+8f0d651d9c1 (wangchunsheng            2013-01-18 01:58:14 +0000  692)         $product = $this->product->getById($productID);
+8f0d651d9c1 (wangchunsheng            2013-01-18 01:58:14 +0000  693)         $actions = $this->loadModel('action')->getList('product', $productID);
+8f0d651d9c1 (wangchunsheng            2013-01-18 01:58:14 +0000  694) 
+8f0d651d9c1 (wangchunsheng            2013-01-18 01:58:14 +0000  695)         if(!empty($_POST))
+8f0d651d9c1 (wangchunsheng            2013-01-18 01:58:14 +0000  696)         {
+8f0d651d9c1 (wangchunsheng            2013-01-18 01:58:14 +0000  697)             $changes = $this->product->close($productID);
+5a334ccb86d (zhujinyong               2022-02-22 09:26:31 +0800  698)             if(dao::isError()) return print(js::error(dao::getError()));
+8f0d651d9c1 (wangchunsheng            2013-01-18 01:58:14 +0000  699) 
+8f0d651d9c1 (wangchunsheng            2013-01-18 01:58:14 +0000  700)             if($this->post->comment != '' or !empty($changes))
+8f0d651d9c1 (wangchunsheng            2013-01-18 01:58:14 +0000  701)             {
+8f0d651d9c1 (wangchunsheng            2013-01-18 01:58:14 +0000  702)                 $actionID = $this->action->create('product', $productID, 'Closed', $this->post->comment);
+8f0d651d9c1 (wangchunsheng            2013-01-18 01:58:14 +0000  703)                 $this->action->logHistory($actionID, $changes);
+8f0d651d9c1 (wangchunsheng            2013-01-18 01:58:14 +0000  704)             }
+90014ee5cce (chenfei                  2019-07-13 13:31:44 +0800  705) 
+621f338faa8 (liugang                  2019-07-25 13:02:18 +0800  706)             $this->executeHooks($productID);
+90014ee5cce (chenfei                  2019-07-13 13:31:44 +0800  707) 
+5a334ccb86d (zhujinyong               2022-02-22 09:26:31 +0800  708)             return print(js::reload('parent.parent'));
+8f0d651d9c1 (wangchunsheng            2013-01-18 01:58:14 +0000  709)         }
+8f0d651d9c1 (wangchunsheng            2013-01-18 01:58:14 +0000  710) 
+a6eff425ca4 (zhujinyong               2021-03-21 12:15:55 +0800  711)         $this->product->setMenu($productID);
+8f0d651d9c1 (wangchunsheng            2013-01-18 01:58:14 +0000  712) 
+0d3b5afe401 (wangchunsheng            2013-01-20 09:11:48 +0000  713)         $this->view->product    = $product;
+0d3b5afe401 (wangchunsheng            2013-01-20 09:11:48 +0000  714)         $this->view->title      = $this->view->product->name . $this->lang->colon .$this->lang->close;
+0d3b5afe401 (wangchunsheng            2013-01-20 09:11:48 +0000  715)         $this->view->position[] = $this->lang->close;
+0d3b5afe401 (wangchunsheng            2013-01-20 09:11:48 +0000  716)         $this->view->actions    = $actions;
+72bcbfb72a9 (xia0ta0                  2014-03-05 09:19:28 +0800  717)         $this->view->users      = $this->loadModel('user')->getPairs('noletter');
+8f0d651d9c1 (wangchunsheng            2013-01-18 01:58:14 +0000  718)         $this->display();
+8f0d651d9c1 (wangchunsheng            2013-01-18 01:58:14 +0000  719)     }
+8f0d651d9c1 (wangchunsheng            2013-01-18 01:58:14 +0000  720) 
+8f0d651d9c1 (wangchunsheng            2013-01-18 01:58:14 +0000  721)     /**
+8f0d651d9c1 (wangchunsheng            2013-01-18 01:58:14 +0000  722)      * View a product.
+45f1da3824b (滔哥                     2018-05-09 09:58:48 +0800  723)      *
+45f1da3824b (滔哥                     2018-05-09 09:58:48 +0800  724)      * @param  int    $productID
+8f0d651d9c1 (wangchunsheng            2013-01-18 01:58:14 +0000  725)      * @access public
+8f0d651d9c1 (wangchunsheng            2013-01-18 01:58:14 +0000  726)      * @return void
+8f0d651d9c1 (wangchunsheng            2013-01-18 01:58:14 +0000  727)      */
+8f0d651d9c1 (wangchunsheng            2013-01-18 01:58:14 +0000  728)     public function view($productID)
+8f0d651d9c1 (wangchunsheng            2013-01-18 01:58:14 +0000  729)     {
+abd8af87a66 (leiyong                  2021-04-01 09:57:12 +0300  730)         $productID = (int)$productID;
+abd8af87a66 (leiyong                  2021-04-01 09:57:12 +0300  731)         $product   = $this->product->getStatByID($productID);
+ec56a0fed26 (dingguodong              2021-08-11 17:59:44 +0800  732) 
+ec56a0fed26 (dingguodong              2021-08-11 17:59:44 +0800  733)         if(!$product)
+ec56a0fed26 (dingguodong              2021-08-11 17:59:44 +0800  734)         {
+489a87e0ec8 (zhujinyong               2021-09-08 10:40:25 +0800  735)             if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'fail', 'code' => 404, 'message' => '404 Not found'));
+5a334ccb86d (zhujinyong               2022-02-22 09:26:31 +0800  736)             return print(js::error($this->lang->notFound) . js::locate($this->createLink('product', 'index')));
+ec56a0fed26 (dingguodong              2021-08-11 17:59:44 +0800  737)         }
+537699060f7 (daitingting              2018-07-03 16:26:44 +0800  738) 
+537699060f7 (daitingting              2018-07-03 16:26:44 +0800  739)         $product->desc = $this->loadModel('file')->setImgSize($product->desc);
+a6eff425ca4 (zhujinyong               2021-03-21 12:15:55 +0800  740)         $this->product->setMenu($productID);
+8f0d651d9c1 (wangchunsheng            2013-01-18 01:58:14 +0000  741) 
+24cb0d757ed (wangyidong               2018-09-12 17:12:58 +0800  742)         /* Load pager. */
+24cb0d757ed (wangyidong               2018-09-12 17:12:58 +0800  743)         $this->app->loadClass('pager', $static = true);
+24cb0d757ed (wangyidong               2018-09-12 17:12:58 +0800  744)         $pager = new pager(0, 30, 1);
+24cb0d757ed (wangyidong               2018-09-12 17:12:58 +0800  745) 
+621f338faa8 (liugang                  2019-07-25 13:02:18 +0800  746)         $this->executeHooks($productID);
+821095baf76 (chenfei                  2019-07-24 18:26:00 +0800  747) 
+68682101b55 (azhi                     2013-08-01 16:52:24 +0800  748)         $this->view->title      = $product->name . $this->lang->colon . $this->lang->product->view;
+0d3b5afe401 (wangchunsheng            2013-01-20 09:11:48 +0000  749)         $this->view->position[] = html::a($this->createLink($this->moduleName, 'browse'), $product->name);
+0d3b5afe401 (wangchunsheng            2013-01-20 09:11:48 +0000  750)         $this->view->position[] = $this->lang->product->view;
+475c058ee1d (leiyong                  2020-09-24 11:21:18 +0800  751) 
+0d3b5afe401 (wangchunsheng            2013-01-20 09:11:48 +0000  752)         $this->view->product    = $product;
+0d3b5afe401 (wangchunsheng            2013-01-20 09:11:48 +0000  753)         $this->view->actions    = $this->loadModel('action')->getList('product', $productID);
+0d3b5afe401 (wangchunsheng            2013-01-20 09:11:48 +0000  754)         $this->view->users      = $this->user->getPairs('noletter');
+0d3b5afe401 (wangchunsheng            2013-01-20 09:11:48 +0000  755)         $this->view->groups     = $this->loadModel('group')->getPairs();
+bf326f57ffe (daitingting              2018-04-16 16:55:32 +0800  756)         $this->view->branches   = $this->loadModel('branch')->getPairs($productID);
+412fbb23053 (liyuchun                 2021-11-16 16:25:00 +0800  757)         $this->view->reviewers  = explode(',', $product->reviewer);
+8f0d651d9c1 (wangchunsheng            2013-01-18 01:58:14 +0000  758) 
+8f0d651d9c1 (wangchunsheng            2013-01-18 01:58:14 +0000  759)         $this->display();
+8f0d651d9c1 (wangchunsheng            2013-01-18 01:58:14 +0000  760)     }
+8f0d651d9c1 (wangchunsheng            2013-01-18 01:58:14 +0000  761) 
+8f0d651d9c1 (wangchunsheng            2013-01-18 01:58:14 +0000  762)     /**
+8f0d651d9c1 (wangchunsheng            2013-01-18 01:58:14 +0000  763)      * Delete a product.
+45f1da3824b (滔哥                     2018-05-09 09:58:48 +0800  764)      *
+45f1da3824b (滔哥                     2018-05-09 09:58:48 +0800  765)      * @param  int    $productID
+8f0d651d9c1 (wangchunsheng            2013-01-18 01:58:14 +0000  766)      * @param  string $confirm    yes|no
+8f0d651d9c1 (wangchunsheng            2013-01-18 01:58:14 +0000  767)      * @access public
+8f0d651d9c1 (wangchunsheng            2013-01-18 01:58:14 +0000  768)      * @return void
+8f0d651d9c1 (wangchunsheng            2013-01-18 01:58:14 +0000  769)      */
+8f0d651d9c1 (wangchunsheng            2013-01-18 01:58:14 +0000  770)     public function delete($productID, $confirm = 'no')
+8f0d651d9c1 (wangchunsheng            2013-01-18 01:58:14 +0000  771)     {
+8f0d651d9c1 (wangchunsheng            2013-01-18 01:58:14 +0000  772)         if($confirm == 'no')
+8f0d651d9c1 (wangchunsheng            2013-01-18 01:58:14 +0000  773)         {
+5a334ccb86d (zhujinyong               2022-02-22 09:26:31 +0800  774)             return print(js::confirm($this->lang->product->confirmDelete, $this->createLink('product', 'delete', "productID=$productID&confirm=yes")));
+8f0d651d9c1 (wangchunsheng            2013-01-18 01:58:14 +0000  775)         }
+8f0d651d9c1 (wangchunsheng            2013-01-18 01:58:14 +0000  776)         else
+8f0d651d9c1 (wangchunsheng            2013-01-18 01:58:14 +0000  777)         {
+8f0d651d9c1 (wangchunsheng            2013-01-18 01:58:14 +0000  778)             $this->product->delete(TABLE_PRODUCT, $productID);
+8feda80cd9a (wangyidong               2016-10-13 17:35:02 +0800  779)             $this->dao->update(TABLE_DOCLIB)->set('deleted')->eq(1)->where('product')->eq($productID)->exec();
+ea086296b0c (leiyong                  2021-03-22 23:53:00 +0800  780)             $this->session->set('product', '');
+621f338faa8 (liugang                  2019-07-25 13:02:18 +0800  781)             $this->executeHooks($productID);
+437ed911c85 (zhujinyong               2021-07-15 13:39:06 +0800  782) 
+437ed911c85 (zhujinyong               2021-07-15 13:39:06 +0800  783)             if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess));
+5a334ccb86d (zhujinyong               2022-02-22 09:26:31 +0800  784)             return print(js::locate($this->createLink('product', 'all'), 'parent'));
+8f0d651d9c1 (wangchunsheng            2013-01-18 01:58:14 +0000  785)         }
+8f0d651d9c1 (wangchunsheng            2013-01-18 01:58:14 +0000  786)     }
+8f0d651d9c1 (wangchunsheng            2013-01-18 01:58:14 +0000  787) 
+8f0d651d9c1 (wangchunsheng            2013-01-18 01:58:14 +0000  788)     /**
+45f1da3824b (滔哥                     2018-05-09 09:58:48 +0800  789)      * Road map of a product.
+45f1da3824b (滔哥                     2018-05-09 09:58:48 +0800  790)      *
+d279c5d7d77 (hufangzhou               2021-11-05 18:47:39 +0800  791)      * @param  int        $productID
+d279c5d7d77 (hufangzhou               2021-11-05 18:47:39 +0800  792)      * @param  int|string $branch
+8f0d651d9c1 (wangchunsheng            2013-01-18 01:58:14 +0000  793)      * @access public
+8f0d651d9c1 (wangchunsheng            2013-01-18 01:58:14 +0000  794)      * @return void
+8f0d651d9c1 (wangchunsheng            2013-01-18 01:58:14 +0000  795)      */
+f184873bca4 (mayue                    2022-03-25 13:45:28 +0800  796)     public function roadmap($productID, $branch = 'all')
+8f0d651d9c1 (wangchunsheng            2013-01-18 01:58:14 +0000  797)     {
+a6eff425ca4 (zhujinyong               2021-03-21 12:15:55 +0800  798)         $this->product->setMenu($productID, $branch);
+8f0d651d9c1 (wangchunsheng            2013-01-18 01:58:14 +0000  799) 
+0eda0edd50f (holan20180123            2021-03-24 16:12:48 +0800  800)         $this->session->set('releaseList',     $this->app->getURI(true), 'product');
+0eda0edd50f (holan20180123            2021-03-24 16:12:48 +0800  801)         $this->session->set('productPlanList', $this->app->getURI(true), 'product');
+8f0d651d9c1 (wangchunsheng            2013-01-18 01:58:14 +0000  802) 
+8f0d651d9c1 (wangchunsheng            2013-01-18 01:58:14 +0000  803)         $product = $this->dao->findById($productID)->from(TABLE_PRODUCT)->fetch();
+98a7da512fb (wangyidong               2019-11-07 13:53:30 +0800  804)         if(empty($product)) $this->locate($this->createLink('product', 'showErrorNone', 'fromModule=product'));
+7c02a1f88af (wangyidong               2019-11-07 13:50:32 +0800  805) 
+0d3b5afe401 (wangchunsheng            2013-01-20 09:11:48 +0000  806)         $this->view->title      = $product->name . $this->lang->colon . $this->lang->product->roadmap;
+0d3b5afe401 (wangchunsheng            2013-01-20 09:11:48 +0000  807)         $this->view->position[] = html::a($this->createLink($this->moduleName, 'browse'), $product->name);
+0d3b5afe401 (wangchunsheng            2013-01-20 09:11:48 +0000  808)         $this->view->position[] = $this->lang->product->roadmap;
+0d3b5afe401 (wangchunsheng            2013-01-20 09:11:48 +0000  809)         $this->view->product    = $product;
+3214cb08ce6 (wangyidong               2015-11-02 09:47:37 +0800  810)         $this->view->roadmaps   = $this->product->getRoadmap($productID, $branch);
+d8f448e1bf8 (daitingting              2018-04-23 14:11:01 +0800  811)         $this->view->branches   = $product->type == 'normal' ? array(0 => '') : $this->loadModel('branch')->getPairs($productID);
+8f0d651d9c1 (wangchunsheng            2013-01-18 01:58:14 +0000  812) 
+8f0d651d9c1 (wangchunsheng            2013-01-18 01:58:14 +0000  813)         $this->display();
+8f0d651d9c1 (wangchunsheng            2013-01-18 01:58:14 +0000  814)     }
+8f0d651d9c1 (wangchunsheng            2013-01-18 01:58:14 +0000  815) 
+8f0d651d9c1 (wangchunsheng            2013-01-18 01:58:14 +0000  816)     /**
+8f0d651d9c1 (wangchunsheng            2013-01-18 01:58:14 +0000  817)      * Product dynamic.
+45f1da3824b (滔哥                     2018-05-09 09:58:48 +0800  818)      *
+8de5f93c2be (wangyidong               2020-12-08 09:21:32 +0800  819)      * @param  int    $productID
+45f1da3824b (滔哥                     2018-05-09 09:58:48 +0800  820)      * @param  string $type
+8de5f93c2be (wangyidong               2020-12-08 09:21:32 +0800  821)      * @param  string $param
+45f1da3824b (滔哥                     2018-05-09 09:58:48 +0800  822)      * @param  int    $recTotal
+8de5f93c2be (wangyidong               2020-12-08 09:21:32 +0800  823)      * @param  string $date
+8de5f93c2be (wangyidong               2020-12-08 09:21:32 +0800  824)      * @param  string $direction    next|pre
+8f0d651d9c1 (wangchunsheng            2013-01-18 01:58:14 +0000  825)      * @access public
+8f0d651d9c1 (wangchunsheng            2013-01-18 01:58:14 +0000  826)      * @return void
+8f0d651d9c1 (wangchunsheng            2013-01-18 01:58:14 +0000  827)      */
+4524f89c214 (wangyidong               2018-04-20 13:00:35 +0800  828)     public function dynamic($productID = 0, $type = 'today', $param = '', $recTotal = 0, $date = '', $direction = 'next')
+8f0d651d9c1 (wangchunsheng            2013-01-18 01:58:14 +0000  829)     {
+8f0d651d9c1 (wangchunsheng            2013-01-18 01:58:14 +0000  830)         /* Save session. */
+d32830d49e7 (liugang                  2018-07-04 15:39:16 +0800  831)         $uri = $this->app->getURI(true);
+0eda0edd50f (holan20180123            2021-03-24 16:12:48 +0800  832)         $this->session->set('productList',     $uri, 'product');
+0eda0edd50f (holan20180123            2021-03-24 16:12:48 +0800  833)         $this->session->set('productPlanList', $uri, 'product');
+0eda0edd50f (holan20180123            2021-03-24 16:12:48 +0800  834)         $this->session->set('releaseList',     $uri, 'product');
+0eda0edd50f (holan20180123            2021-03-24 16:12:48 +0800  835)         $this->session->set('storyList',       $uri, 'product');
+0eda0edd50f (holan20180123            2021-03-24 16:12:48 +0800  836)         $this->session->set('projectList',     $uri, 'project');
+0eda0edd50f (holan20180123            2021-03-24 16:12:48 +0800  837)         $this->session->set('executionList',   $uri, 'execution');
+0eda0edd50f (holan20180123            2021-03-24 16:12:48 +0800  838)         $this->session->set('taskList',        $uri, 'execution');
+0eda0edd50f (holan20180123            2021-03-24 16:12:48 +0800  839)         $this->session->set('buildList',       $uri, 'execution');
+0eda0edd50f (holan20180123            2021-03-24 16:12:48 +0800  840)         $this->session->set('bugList',         $uri, 'qa');
+0eda0edd50f (holan20180123            2021-03-24 16:12:48 +0800  841)         $this->session->set('caseList',        $uri, 'qa');
+0eda0edd50f (holan20180123            2021-03-24 16:12:48 +0800  842)         $this->session->set('testtaskList',    $uri, 'qa');
+8f0d651d9c1 (wangchunsheng            2013-01-18 01:58:14 +0000  843) 
+616f719120a (hufangzhou               2021-07-20 15:11:06 +0800  844)         $this->product->setMenu($productID, 0, 0, '', $type);
+8f0d651d9c1 (wangchunsheng            2013-01-18 01:58:14 +0000  845) 
+d015ef75e7f (wangyidong               2014-12-04 09:07:18 +0000  846)         /* Append id for secend sort. */
+4524f89c214 (wangyidong               2018-04-20 13:00:35 +0800  847)         $orderBy = $direction == 'next' ? 'date_desc' : 'date_asc';
+d015ef75e7f (wangyidong               2014-12-04 09:07:18 +0000  848) 
+491b3554916 (wangyidong               2018-04-13 10:44:10 +0800  849)         /* Load pager. */
+491b3554916 (wangyidong               2018-04-13 10:44:10 +0800  850)         $this->app->loadClass('pager', $static = true);
+4524f89c214 (wangyidong               2018-04-20 13:00:35 +0800  851)         $pager = new pager($recTotal, $recPerPage = 50, $pageID = 1);
+491b3554916 (wangyidong               2018-04-13 10:44:10 +0800  852) 
+8f0d651d9c1 (wangchunsheng            2013-01-18 01:58:14 +0000  853)         /* Set the user and type. */
+8de5f93c2be (wangyidong               2020-12-08 09:21:32 +0800  854)         $account = 'all';
+8de5f93c2be (wangyidong               2020-12-08 09:21:32 +0800  855)         if($type == 'account')
+8de5f93c2be (wangyidong               2020-12-08 09:21:32 +0800  856)         {
+8de5f93c2be (wangyidong               2020-12-08 09:21:32 +0800  857)             $user = $this->loadModel('user')->getById((int)$param, 'id');
+8de5f93c2be (wangyidong               2020-12-08 09:21:32 +0800  858)             if($user) $account = $user->account;
+8de5f93c2be (wangyidong               2020-12-08 09:21:32 +0800  859)         }
+8f0d651d9c1 (wangchunsheng            2013-01-18 01:58:14 +0000  860)         $period  = $type == 'account' ? 'all'  : $type;
+4524f89c214 (wangyidong               2018-04-20 13:00:35 +0800  861)         $date    = empty($date) ? '' : date('Y-m-d', $date);
+c1f3258a743 (王怡栋                   2022-03-14 16:08:58 +0800  862)         $actions = $this->loadModel('action')->getDynamic($account, $period, $orderBy, $pager, $productID, 'all', 'all', $date, $direction);
+8f0d651d9c1 (wangchunsheng            2013-01-18 01:58:14 +0000  863) 
+8f0d651d9c1 (wangchunsheng            2013-01-18 01:58:14 +0000  864)         /* The header and position. */
+0d3b5afe401 (wangchunsheng            2013-01-20 09:11:48 +0000  865)         $this->view->title      = $this->products[$productID] . $this->lang->colon . $this->lang->product->dynamic;
+68682101b55 (azhi                     2013-08-01 16:52:24 +0800  866)         $this->view->position[] = html::a($this->createLink($this->moduleName, 'browse'), $this->products[$productID]);
+0d3b5afe401 (wangchunsheng            2013-01-20 09:11:48 +0000  867)         $this->view->position[] = $this->lang->product->dynamic;
+8f0d651d9c1 (wangchunsheng            2013-01-18 01:58:14 +0000  868) 
+8de5f93c2be (wangyidong               2020-12-08 09:21:32 +0800  869)         $this->view->userIdPairs  = $this->loadModel('user')->getPairs('noletter|nodeleted|noclosed|useid');
+8de5f93c2be (wangyidong               2020-12-08 09:21:32 +0800  870)         $this->view->accountPairs = $this->user->getPairs('noletter|nodeleted|noclosed');
+8de5f93c2be (wangyidong               2020-12-08 09:21:32 +0800  871) 
+8f0d651d9c1 (wangchunsheng            2013-01-18 01:58:14 +0000  872)         /* Assign. */
+a7e49faf959 (wangyidong               2018-04-09 16:14:54 +0800  873)         $this->view->productID  = $productID;
+a7e49faf959 (wangyidong               2018-04-09 16:14:54 +0800  874)         $this->view->type       = $type;
+a7e49faf959 (wangyidong               2018-04-09 16:14:54 +0800  875)         $this->view->orderBy    = $orderBy;
+8de5f93c2be (wangyidong               2020-12-08 09:21:32 +0800  876)         $this->view->account    = $account;
+8de5f93c2be (wangyidong               2020-12-08 09:21:32 +0800  877)         $this->view->user       = isset($user) ? $user : '';
+a7e49faf959 (wangyidong               2018-04-09 16:14:54 +0800  878)         $this->view->param      = $param;
+491b3554916 (wangyidong               2018-04-13 10:44:10 +0800  879)         $this->view->pager      = $pager;
+a99aab00ea4 (tianshujie98             2020-08-05 17:04:47 +0800  880)         $this->view->dateGroups = $this->action->buildDateGroup($actions, $direction, $type);
+4524f89c214 (wangyidong               2018-04-20 13:00:35 +0800  881)         $this->view->direction  = $direction;
+8f0d651d9c1 (wangchunsheng            2013-01-18 01:58:14 +0000  882)         $this->display();
+8f0d651d9c1 (wangchunsheng            2013-01-18 01:58:14 +0000  883)     }
+8f0d651d9c1 (wangchunsheng            2013-01-18 01:58:14 +0000  884) 
+797f3538649 (hufangzhou               2021-01-12 14:50:21 +0800  885)     /**
+797f3538649 (hufangzhou               2021-01-12 14:50:21 +0800  886)      * Product dashboard.
+797f3538649 (hufangzhou               2021-01-12 14:50:21 +0800  887)      *
+797f3538649 (hufangzhou               2021-01-12 14:50:21 +0800  888)      * @param  int    $productID
+797f3538649 (hufangzhou               2021-01-12 14:50:21 +0800  889)      * @access public
+797f3538649 (hufangzhou               2021-01-12 14:50:21 +0800  890)      * @return void
+797f3538649 (hufangzhou               2021-01-12 14:50:21 +0800  891)      */
+df07e062648 (Yagami                   2021-01-14 16:12:21 +0800  892)     public function dashboard($productID = 0)
+797f3538649 (hufangzhou               2021-01-12 14:50:21 +0800  893)     {
+cc9a32d9816 (tianshujie               2021-08-30 14:14:37 +0800  894)         $uri = $this->app->getURI(true);
+cc9a32d9816 (tianshujie               2021-08-30 14:14:37 +0800  895)         $this->session->set('productPlanList', $uri, 'product');
+cc9a32d9816 (tianshujie               2021-08-30 14:14:37 +0800  896)         $this->session->set('releaseList',     $uri, 'product');
+1765f123388 (tianshujie               2021-08-30 10:24:25 +0800  897) 
+df07e062648 (Yagami                   2021-01-14 16:12:21 +0800  898)         $productID = $this->product->saveState($productID, $this->products);
+df07e062648 (Yagami                   2021-01-14 16:12:21 +0800  899)         $product   = $this->product->getStatByID($productID);
+5a334ccb86d (zhujinyong               2022-02-22 09:26:31 +0800  900)         if(!$product) return print(js::locate('product', 'all'));
+797f3538649 (hufangzhou               2021-01-12 14:50:21 +0800  901) 
+797f3538649 (hufangzhou               2021-01-12 14:50:21 +0800  902)         $product->desc = $this->loadModel('file')->setImgSize($product->desc);
+a6eff425ca4 (zhujinyong               2021-03-21 12:15:55 +0800  903)         $this->product->setMenu($productID);
+797f3538649 (hufangzhou               2021-01-12 14:50:21 +0800  904) 
+797f3538649 (hufangzhou               2021-01-12 14:50:21 +0800  905)         /* Load pager. */
+797f3538649 (hufangzhou               2021-01-12 14:50:21 +0800  906)         $this->app->loadClass('pager', $static = true);
+797f3538649 (hufangzhou               2021-01-12 14:50:21 +0800  907)         $pager = new pager(0, 30, 1);
+797f3538649 (hufangzhou               2021-01-12 14:50:21 +0800  908) 
+797f3538649 (hufangzhou               2021-01-12 14:50:21 +0800  909)         $this->view->title      = $product->name . $this->lang->colon . $this->lang->product->view;
+797f3538649 (hufangzhou               2021-01-12 14:50:21 +0800  910)         $this->view->position[] = html::a($this->createLink($this->moduleName, 'browse'), $product->name);
+797f3538649 (hufangzhou               2021-01-12 14:50:21 +0800  911)         $this->view->position[] = $this->lang->product->view;
+797f3538649 (hufangzhou               2021-01-12 14:50:21 +0800  912) 
+4b7a9427a21 (Yagami                   2021-03-01 18:16:18 +0800  913)         $this->view->product  = $product;
+4b7a9427a21 (Yagami                   2021-03-01 18:16:18 +0800  914)         $this->view->actions  = $this->loadModel('action')->getList('product', $productID);
+4b7a9427a21 (Yagami                   2021-03-01 18:16:18 +0800  915)         $this->view->users    = $this->user->getPairs('noletter');
+4b7a9427a21 (Yagami                   2021-03-01 18:16:18 +0800  916)         $this->view->lines    = array('') + $this->product->getLinePairs();
+4b7a9427a21 (Yagami                   2021-03-01 18:16:18 +0800  917)         $this->view->dynamics = $this->action->getDynamic('all', 'all', 'date_desc', $pager, $productID);
+4b7a9427a21 (Yagami                   2021-03-01 18:16:18 +0800  918)         $this->view->roadmaps = $this->product->getRoadmap($productID, 0, 6);
+797f3538649 (hufangzhou               2021-01-12 14:50:21 +0800  919) 
+797f3538649 (hufangzhou               2021-01-12 14:50:21 +0800  920)         $this->display();
+797f3538649 (hufangzhou               2021-01-12 14:50:21 +0800  921)     }
+797f3538649 (hufangzhou               2021-01-12 14:50:21 +0800  922) 
+6b69424799c (tianshujie98             2021-03-18 11:21:56 +0800  923)     /**
+6b69424799c (tianshujie98             2021-03-18 11:21:56 +0800  924)      * Ajax get products.
+6b69424799c (tianshujie98             2021-03-18 11:21:56 +0800  925)      *
+6b69424799c (tianshujie98             2021-03-18 11:21:56 +0800  926)      * @param  int    $executionID
+6b69424799c (tianshujie98             2021-03-18 11:21:56 +0800  927)      * @access public
+6b69424799c (tianshujie98             2021-03-18 11:21:56 +0800  928)      * @return void
+6b69424799c (tianshujie98             2021-03-18 11:21:56 +0800  929)      */
+6b69424799c (tianshujie98             2021-03-18 11:21:56 +0800  930)     public function ajaxGetProducts($executionID)
+6b69424799c (tianshujie98             2021-03-18 11:21:56 +0800  931)     {
+e009d87903d (tianshujie98             2021-03-18 20:20:11 +0800  932)         $this->loadModel('build');
+e009d87903d (tianshujie98             2021-03-18 20:20:11 +0800  933)         $products = $this->product->getProductPairsByProject($executionID);
+e009d87903d (tianshujie98             2021-03-18 20:20:11 +0800  934)         if(empty($products))
+e009d87903d (tianshujie98             2021-03-18 20:20:11 +0800  935)         {
+5a334ccb86d (zhujinyong               2022-02-22 09:26:31 +0800  936)             return print(printf($this->lang->build->noProduct, $this->createLink('execution', 'manageproducts', "executionID=$executionID&from=buildCreate", '', 'true'), 'project'));
+e009d87903d (tianshujie98             2021-03-18 20:20:11 +0800  937)         }
+a603b171e6c (tianshujie98             2021-03-29 10:04:26 +0800  938)         else
+a603b171e6c (tianshujie98             2021-03-29 10:04:26 +0800  939)         {
+5a334ccb86d (zhujinyong               2022-02-22 09:26:31 +0800  940)             return print(html::select('product', $products, empty($product) ? '' : $product->id, "onchange='loadBranches(this.value);' class='form-control chosen' required data-toggle='modal' data-type='iframe'"));
+a603b171e6c (tianshujie98             2021-03-29 10:04:26 +0800  941)         }
+6b69424799c (tianshujie98             2021-03-18 11:21:56 +0800  942)     }
+6b69424799c (tianshujie98             2021-03-18 11:21:56 +0800  943) 
+07532a914cb (holan20180123            2021-03-16 14:36:45 +0800  944)     /**
+07532a914cb (holan20180123            2021-03-16 14:36:45 +0800  945)      * AJAX: get projects of a product in html select.
+07532a914cb (holan20180123            2021-03-16 14:36:45 +0800  946)      *
+07532a914cb (holan20180123            2021-03-16 14:36:45 +0800  947)      * @param  int    $productID
+07532a914cb (holan20180123            2021-03-16 14:36:45 +0800  948)      * @param  int    $branch
+07532a914cb (holan20180123            2021-03-16 14:36:45 +0800  949)      * @param  int    $projectID
+07532a914cb (holan20180123            2021-03-16 14:36:45 +0800  950)      * @access public
+07532a914cb (holan20180123            2021-03-16 14:36:45 +0800  951)      * @return void
+07532a914cb (holan20180123            2021-03-16 14:36:45 +0800  952)      */
+07532a914cb (holan20180123            2021-03-16 14:36:45 +0800  953)     public function ajaxGetProjects($productID, $branch = 0, $projectID = 0)
+07532a914cb (holan20180123            2021-03-16 14:36:45 +0800  954)     {
+9b63d380b0e (holan20180123            2021-03-17 13:48:39 +0800  955)         $projects  = array('' => '');
+fdade49b5d1 (tianshujie               2021-11-17 09:21:05 +0800  956)         $projects += $this->product->getProjectPairsByProduct($productID, $branch);
+5a334ccb86d (zhujinyong               2022-02-22 09:26:31 +0800  957)         if($this->app->getViewType() == 'json') return print(json_encode($projects));
+07532a914cb (holan20180123            2021-03-16 14:36:45 +0800  958) 
+5a334ccb86d (zhujinyong               2022-02-22 09:26:31 +0800  959)         return print(html::select('project', $projects, $projectID, "class='form-control' onchange='loadProductExecutions({$productID}, this.value)'"));
+07532a914cb (holan20180123            2021-03-16 14:36:45 +0800  960)     }
+07532a914cb (holan20180123            2021-03-16 14:36:45 +0800  961) 
+8f0d651d9c1 (wangchunsheng            2013-01-18 01:58:14 +0000  962)     /**
+c55c18093cd (tianshujie98             2021-03-12 10:16:49 +0800  963)      * AJAX: get executions of a product in html select.
+45f1da3824b (滔哥                     2018-05-09 09:58:48 +0800  964)      *
+45f1da3824b (滔哥                     2018-05-09 09:58:48 +0800  965)      * @param  int    $productID
+3c96c449358 (holan20180123            2021-04-20 16:06:43 +0800  966)      * @param  int    $projectID
+c55c18093cd (tianshujie98             2021-03-12 10:16:49 +0800  967)      * @param  int    $branch
+a539be0c32e (chenfeiCF                2016-12-04 13:35:40 +0800  968)      * @param  string $number
+3c96c449358 (holan20180123            2021-04-20 16:06:43 +0800  969)      * @param  int    $executionID
+b32081bab79 (renying                  2022-04-21 09:27:36 +0800  970)      * @param  string $from showImport
+8f0d651d9c1 (wangchunsheng            2013-01-18 01:58:14 +0000  971)      * @access public
+8f0d651d9c1 (wangchunsheng            2013-01-18 01:58:14 +0000  972)      * @return void
+8f0d651d9c1 (wangchunsheng            2013-01-18 01:58:14 +0000  973)      */
+b32081bab79 (renying                  2022-04-21 09:27:36 +0800  974)     public function ajaxGetExecutions($productID, $projectID = 0, $branch = 0, $number = '', $executionID = 0, $from = '')
+8f0d651d9c1 (wangchunsheng            2013-01-18 01:58:14 +0000  975)     {
+85f96e64891 (tianshujie               2022-03-04 13:49:58 +0800  976)         if($this->app->tab == 'execution' and $this->session->execution)
+85f96e64891 (tianshujie               2022-03-04 13:49:58 +0800  977)         {
+85f96e64891 (tianshujie               2022-03-04 13:49:58 +0800  978)             $execution = $this->loadModel('execution')->getByID($this->session->execution);
+85f96e64891 (tianshujie               2022-03-04 13:49:58 +0800  979)             if($execution->type == 'kanban') $projectID = $execution->project;
+85f96e64891 (tianshujie               2022-03-04 13:49:58 +0800  980)         }
+85f96e64891 (tianshujie               2022-03-04 13:49:58 +0800  981) 
+b32081bab79 (renying                  2022-04-21 09:27:36 +0800  982)         $executions = $from == 'showImport' ? $this->product->getAllExecutionPairsByProduct($productID, $branch, $projectID) : $this->product->getExecutionPairsByProduct($productID, $branch, 'id_desc', $projectID, empty($this->config->CRExecution) ? 'noclosed' : '');
+5a334ccb86d (zhujinyong               2022-02-22 09:26:31 +0800  983)         if($this->app->getViewType() == 'json') return print(json_encode($executions));
+45f1da3824b (滔哥                     2018-05-09 09:58:48 +0800  984) 
+a539be0c32e (chenfeiCF                2016-12-04 13:35:40 +0800  985)         if($number === '')
+a539be0c32e (chenfeiCF                2016-12-04 13:35:40 +0800  986)         {
+0d215169976 (xieqiyu                  2022-03-22 08:40:43 +0800  987)             return print(html::select('execution', array('' => '') + $executions, $executionID, "class='form-control' onchange='loadExecutionRelated(this.value)'"));
+a539be0c32e (chenfeiCF                2016-12-04 13:35:40 +0800  988)         }
+a539be0c32e (chenfeiCF                2016-12-04 13:35:40 +0800  989)         else
+a539be0c32e (chenfeiCF                2016-12-04 13:35:40 +0800  990)         {
+c55c18093cd (tianshujie98             2021-03-12 10:16:49 +0800  991)             $executions     = empty($executions) ? array('' => '') : $executions;
+b32081bab79 (renying                  2022-04-21 09:27:36 +0800  992)             $executionsName = $from == 'showImport' ? "execution[$number]" : "executions[$number]";
+d02cb94ab6d (renying                  2022-04-21 10:41:24 +0800  993)             $misc           = $from == 'showImport' ? "class='form-control' onchange='loadImportExecutionRelated(this.value, $number)'" : "class='form-control' onchange='loadExecutionBuilds($productID, this.value, $number)'";
+b32081bab79 (renying                  2022-04-21 09:27:36 +0800  994)             return print(html::select($executionsName, $executions, '', $misc));
+a539be0c32e (chenfeiCF                2016-12-04 13:35:40 +0800  995)         }
+8f0d651d9c1 (wangchunsheng            2013-01-18 01:58:14 +0000  996)     }
+8f0d651d9c1 (wangchunsheng            2013-01-18 01:58:14 +0000  997) 
+8f0d651d9c1 (wangchunsheng            2013-01-18 01:58:14 +0000  998)     /**
+45f1da3824b (滔哥                     2018-05-09 09:58:48 +0800  999)      * AJAX: get plans of a product in html select.
+45f1da3824b (滔哥                     2018-05-09 09:58:48 +0800 1000)      *
+45f1da3824b (滔哥                     2018-05-09 09:58:48 +0800 1001)      * @param  int    $productID
+45f1da3824b (滔哥                     2018-05-09 09:58:48 +0800 1002)      * @param  int    $planID
+633d26dc8a4 (azhi                     2013-08-01 13:31:51 +0800 1003)      * @param  bool   $needCreate
+809c8d5eb29 (wangyidong               2018-03-16 15:51:14 +0800 1004)      * @param  string $expired
+6b63ed43f26 (zhouxin                  2021-11-17 10:44:19 +0800 1005)      * @param  string $param
+8f0d651d9c1 (wangchunsheng            2013-01-18 01:58:14 +0000 1006)      * @access public
+8f0d651d9c1 (wangchunsheng            2013-01-18 01:58:14 +0000 1007)      * @return void
+8f0d651d9c1 (wangchunsheng            2013-01-18 01:58:14 +0000 1008)      */
+1d93fa0cd9c (tianshujie               2021-11-25 10:30:22 +0800 1009)     public function ajaxGetPlans($productID, $branch = 0, $planID = 0, $fieldID = '', $needCreate = false, $expired = '', $param = '')
+8f0d651d9c1 (wangchunsheng            2013-01-18 01:58:14 +0000 1010)     {
+f9f726270e4 (tianshujie               2021-12-29 14:35:09 +0800 1011)         $param   = strtolower($param);
+b625c5e1f2a (mayue                    2022-04-22 16:05:13 +0800 1012)         $plans   = $this->loadModel('productplan')->getPairs($productID, $branch == 0 ? '' : $branch, $expired, strpos($param, 'skipparent') !== false);
+f9f726270e4 (tianshujie               2021-12-29 14:35:09 +0800 1013)         $field   = $fieldID ? "plans[$fieldID]" : 'plan';
+b625c5e1f2a (mayue                    2022-04-22 16:05:13 +0800 1014)         $output  = html::select($field, $plans, $planID, "class='form-control chosen'");
+b625c5e1f2a (mayue                    2022-04-22 16:05:13 +0800 1015) 
+b625c5e1f2a (mayue                    2022-04-22 16:05:13 +0800 1016)         if($branch == 0 and strpos($param, 'edit')) $output = html::select($field, $plans, $planID, "class='form-control chosen' multiple");
+b625c5e1f2a (mayue                    2022-04-22 16:05:13 +0800 1017) 
+8bf6c34acde (tianshujie               2021-11-26 13:37:15 +0800 1018)         if(count($plans) == 1 and $needCreate and $needCreate !== 'false')
+8bf6c34acde (tianshujie               2021-11-26 13:37:15 +0800 1019)         {
+8bf6c34acde (tianshujie               2021-11-26 13:37:15 +0800 1020)             $output .= "<div class='input-group-btn'>";
+8bf6c34acde (tianshujie               2021-11-26 13:37:15 +0800 1021)             $output .= html::a($this->createLink('productplan', 'create', "productID=$productID&branch=$branch", '', true), "<i class='icon icon-plus'></i>", '', "class='btn btn-icon' data-toggle='modal' data-type='iframe' data-width='95%' title='{$this->lang->productplan->create}'");
+8bf6c34acde (tianshujie               2021-11-26 13:37:15 +0800 1022)             $output .= '</div>';
+8bf6c34acde (tianshujie               2021-11-26 13:37:15 +0800 1023)             $output .= "<div class='input-group-btn'>";
+8bf6c34acde (tianshujie               2021-11-26 13:37:15 +0800 1024)             $output .= html::a("javascript:void(0)", "<i class='icon icon-refresh'></i>", '', "class='btn btn-icon refresh' data-toggle='tooltip' title='{$this->lang->refresh}' onclick='loadProductPlans($productID)'");
+8bf6c34acde (tianshujie               2021-11-26 13:37:15 +0800 1025)             $output .= '</div>';
+633d26dc8a4 (azhi                     2013-08-01 13:31:51 +0800 1026)         }
+5a334ccb86d (zhujinyong               2022-02-22 09:26:31 +0800 1027)         echo $output;
+8f0d651d9c1 (wangchunsheng            2013-01-18 01:58:14 +0000 1028)     }
+b0c61ffca14 (chencongzhi520@gmail.com 2013-06-03 09:15:19 +0000 1029) 
+5cf387d16db (holan20180123            2021-02-22 15:08:01 +0800 1030)     /**
+5cf387d16db (holan20180123            2021-02-22 15:08:01 +0800 1031)      * Ajax get product lines.
+5cf387d16db (holan20180123            2021-02-22 15:08:01 +0800 1032)      *
+5cf387d16db (holan20180123            2021-02-22 15:08:01 +0800 1033)      * @param  int    $programID
+a14b1c87119 (holan20180123            2021-07-13 10:02:40 +0800 1034)      * @param  int    $productID
+5cf387d16db (holan20180123            2021-02-22 15:08:01 +0800 1035)      * @access public
+5cf387d16db (holan20180123            2021-02-22 15:08:01 +0800 1036)      * @return void
+5cf387d16db (holan20180123            2021-02-22 15:08:01 +0800 1037)      */
+a14b1c87119 (holan20180123            2021-07-13 10:02:40 +0800 1038)     public function ajaxGetLine($programID, $productID = 0)
+5cf387d16db (holan20180123            2021-02-22 15:08:01 +0800 1039)     {
+a14b1c87119 (holan20180123            2021-07-13 10:02:40 +0800 1040)         $lines = array();
+a14b1c87119 (holan20180123            2021-07-13 10:02:40 +0800 1041)         if(empty($productID) or $programID) $lines = $this->product->getLinePairs($programID);
+a14b1c87119 (holan20180123            2021-07-13 10:02:40 +0800 1042) 
+5a334ccb86d (zhujinyong               2022-02-22 09:26:31 +0800 1043)         if($productID)  return print(html::select("lines[$productID]", array('' => '') + $lines, '', "class='form-control picker-select'"));
+5a334ccb86d (zhujinyong               2022-02-22 09:26:31 +0800 1044)         if(!$productID) return print(html::select('line', array('' => '') + $lines, '', "class='form-control chosen'"));
+5cf387d16db (holan20180123            2021-02-22 15:08:01 +0800 1045)     }
+5cf387d16db (holan20180123            2021-02-22 15:08:01 +0800 1046) 
+412fbb23053 (liyuchun                 2021-11-16 16:25:00 +0800 1047)     /**
+412fbb23053 (liyuchun                 2021-11-16 16:25:00 +0800 1048)      * Ajax get reviewers.
+412fbb23053 (liyuchun                 2021-11-16 16:25:00 +0800 1049)      *
+412fbb23053 (liyuchun                 2021-11-16 16:25:00 +0800 1050)      * @param  int    $productID
+412fbb23053 (liyuchun                 2021-11-16 16:25:00 +0800 1051)      * @param  int    $storyID
+412fbb23053 (liyuchun                 2021-11-16 16:25:00 +0800 1052)      * @access public
+412fbb23053 (liyuchun                 2021-11-16 16:25:00 +0800 1053)      * @return void
+412fbb23053 (liyuchun                 2021-11-16 16:25:00 +0800 1054)      */
+412fbb23053 (liyuchun                 2021-11-16 16:25:00 +0800 1055)     public function ajaxGetReviewers($productID, $storyID = 0)
+412fbb23053 (liyuchun                 2021-11-16 16:25:00 +0800 1056)     {
+412fbb23053 (liyuchun                 2021-11-16 16:25:00 +0800 1057)         /* Get product reviewers. */
+412fbb23053 (liyuchun                 2021-11-16 16:25:00 +0800 1058)         $product          = $this->product->getByID($productID);
+412fbb23053 (liyuchun                 2021-11-16 16:25:00 +0800 1059)         $productReviewers = $product->reviewer;
+dc46e684fef (liyuchun                 2021-12-28 14:10:59 +0800 1060)         if(!$productReviewers and $product->acl != 'open') $productReviewers = $this->loadModel('user')->getProductViewListUsers($product, '', '', '');
+412fbb23053 (liyuchun                 2021-11-16 16:25:00 +0800 1061) 
+412fbb23053 (liyuchun                 2021-11-16 16:25:00 +0800 1062)         $storyReviewers = '';
+412fbb23053 (liyuchun                 2021-11-16 16:25:00 +0800 1063)         if($storyID)
+412fbb23053 (liyuchun                 2021-11-16 16:25:00 +0800 1064)         {
+9362f0941ad (liyuchun                 2021-11-16 16:30:41 +0800 1065)             $story          = $this->loadModel('story')->getByID($storyID);
+412fbb23053 (liyuchun                 2021-11-16 16:25:00 +0800 1066)             $storyReviewers = $this->story->getReviewerPairs($story->id, $story->version);
+412fbb23053 (liyuchun                 2021-11-16 16:25:00 +0800 1067)             $storyReviewers = implode(',', array_keys($storyReviewers));
+412fbb23053 (liyuchun                 2021-11-16 16:25:00 +0800 1068)         }
+412fbb23053 (liyuchun                 2021-11-16 16:25:00 +0800 1069) 
+412fbb23053 (liyuchun                 2021-11-16 16:25:00 +0800 1070)         $reviewers = $this->loadModel('user')->getPairs('noclosed|nodeleted', $storyReviewers, 0, $productReviewers);
+412fbb23053 (liyuchun                 2021-11-16 16:25:00 +0800 1071) 
+5a334ccb86d (zhujinyong               2022-02-22 09:26:31 +0800 1072)         echo html::select("reviewer[]", $reviewers, $storyReviewers, "class='form-control chosen' multiple");
+5cf387d16db (holan20180123            2021-02-22 15:08:01 +0800 1073)     }
+5cf387d16db (holan20180123            2021-02-22 15:08:01 +0800 1074) 
+b0c61ffca14 (chencongzhi520@gmail.com 2013-06-03 09:15:19 +0000 1075)     /**
+b0c61ffca14 (chencongzhi520@gmail.com 2013-06-03 09:15:19 +0000 1076)      * Drop menu page.
+45f1da3824b (滔哥                     2018-05-09 09:58:48 +0800 1077)      *
+45f1da3824b (滔哥                     2018-05-09 09:58:48 +0800 1078)      * @param  int    $productID
+45f1da3824b (滔哥                     2018-05-09 09:58:48 +0800 1079)      * @param  string $module
+45f1da3824b (滔哥                     2018-05-09 09:58:48 +0800 1080)      * @param  string $method
+45f1da3824b (滔哥                     2018-05-09 09:58:48 +0800 1081)      * @param  string $extra
+fd4b4f3b35a (hufangzhou               2021-07-13 15:49:23 +0800 1082)      * @param  string $from
+b0c61ffca14 (chencongzhi520@gmail.com 2013-06-03 09:15:19 +0000 1083)      * @access public
+b0c61ffca14 (chencongzhi520@gmail.com 2013-06-03 09:15:19 +0000 1084)      * @return void
+b0c61ffca14 (chencongzhi520@gmail.com 2013-06-03 09:15:19 +0000 1085)      */
+13a304980de (leiyong                  2021-02-24 10:31:20 +0800 1086)     public function ajaxGetDropMenu($productID, $module, $method, $extra = '', $from = '')
+b0c61ffca14 (chencongzhi520@gmail.com 2013-06-03 09:15:19 +0000 1087)     {
+13a304980de (leiyong                  2021-02-24 10:31:20 +0800 1088)         if($from == 'qa')
+13a304980de (leiyong                  2021-02-24 10:31:20 +0800 1089)         {
+13a304980de (leiyong                  2021-02-24 10:31:20 +0800 1090)             $this->app->loadConfig('qa');
+13a304980de (leiyong                  2021-02-24 10:31:20 +0800 1091)             foreach($this->config->qa->menuList as $menu) $this->lang->navGroup->$menu = 'qa';
+13a304980de (leiyong                  2021-02-24 10:31:20 +0800 1092)         }
+13a304980de (leiyong                  2021-02-24 10:31:20 +0800 1093) 
+e0070879664 (hufangzhou               2021-07-13 13:33:14 +0800 1094)         $programProducts = array();
+e0070879664 (hufangzhou               2021-07-13 13:33:14 +0800 1095) 
+664e290f973 (zhujinyong               2021-08-31 00:30:48 +0800 1096)         $products = $this->app->tab == 'project' ? $this->product->getProducts($this->session->project) : $this->product->getList();
+b919cc45b26 (leiyong                  2020-11-19 09:07:31 +0800 1097) 
+e0070879664 (hufangzhou               2021-07-13 13:33:14 +0800 1098)         foreach($products as $product) $programProducts[$product->program][] = $product;
+e0070879664 (hufangzhou               2021-07-13 13:33:14 +0800 1099) 
+46df489385b (hufangzhou               2021-03-02 09:40:41 +0800 1100)         $this->view->link      = $this->product->getProductLink($module, $method, $extra);
+46df489385b (hufangzhou               2021-03-02 09:40:41 +0800 1101)         $this->view->productID = $productID;
+46df489385b (hufangzhou               2021-03-02 09:40:41 +0800 1102)         $this->view->module    = $module;
+46df489385b (hufangzhou               2021-03-02 09:40:41 +0800 1103)         $this->view->method    = $method;
+46df489385b (hufangzhou               2021-03-02 09:40:41 +0800 1104)         $this->view->extra     = $extra;
+e0070879664 (hufangzhou               2021-07-13 13:33:14 +0800 1105)         $this->view->products  = $programProducts;
+664e290f973 (zhujinyong               2021-08-31 00:30:48 +0800 1106)         $this->view->projectID = $this->app->tab == 'project' ? $this->session->project : 0;
+244917f1114 (holan20180123            2021-03-08 16:17:30 +0800 1107)         $this->view->programs  = $this->loadModel('program')->getPairs(true);
+6fcb8759c52 (tianshujie98             2021-03-09 14:15:46 +0800 1108)         $this->view->lines     = $this->product->getLinePairs();
+b0c61ffca14 (chencongzhi520@gmail.com 2013-06-03 09:15:19 +0000 1109)         $this->display();
+b0c61ffca14 (chencongzhi520@gmail.com 2013-06-03 09:15:19 +0000 1110)     }
+b0c61ffca14 (chencongzhi520@gmail.com 2013-06-03 09:15:19 +0000 1111) 
+163fb178f13 (wangyidong               2015-05-08 13:12:15 +0800 1112)     /**
+1c89035b869 (wangyidong               2015-05-20 09:47:21 +0800 1113)      * Update order.
+45f1da3824b (滔哥                     2018-05-09 09:58:48 +0800 1114)      *
+163fb178f13 (wangyidong               2015-05-08 13:12:15 +0800 1115)      * @access public
+163fb178f13 (wangyidong               2015-05-08 13:12:15 +0800 1116)      * @return void
+163fb178f13 (wangyidong               2015-05-08 13:12:15 +0800 1117)      */
+1c89035b869 (wangyidong               2015-05-20 09:47:21 +0800 1118)     public function updateOrder()
+163fb178f13 (wangyidong               2015-05-08 13:12:15 +0800 1119)     {
+33e2b79be2f (tianshujie98             2020-12-25 17:18:29 +0800 1120)         /* Init vars. */
+33e2b79be2f (tianshujie98             2020-12-25 17:18:29 +0800 1121)         $idList  = explode(',', trim($this->post->products, ','));
+33e2b79be2f (tianshujie98             2020-12-25 17:18:29 +0800 1122)         $orderBy = $this->post->orderBy;
+33e2b79be2f (tianshujie98             2020-12-25 17:18:29 +0800 1123)         if(strpos($orderBy, 'order') === false) return false;
+33e2b79be2f (tianshujie98             2020-12-25 17:18:29 +0800 1124) 
+33e2b79be2f (tianshujie98             2020-12-25 17:18:29 +0800 1125)         /* Remove programID. */
+a263f32394a (tianshujie98             2020-12-24 13:36:02 +0800 1126)         foreach($idList as $i => $id)
+a263f32394a (tianshujie98             2020-12-24 13:36:02 +0800 1127)         {
+a263f32394a (tianshujie98             2020-12-24 13:36:02 +0800 1128)             if(!is_numeric($id)) unset($idList[$i]);
+a263f32394a (tianshujie98             2020-12-24 13:36:02 +0800 1129)         }
+163fb178f13 (wangyidong               2015-05-08 13:12:15 +0800 1130) 
+33e2b79be2f (tianshujie98             2020-12-25 17:18:29 +0800 1131)         /* Update order. */
+163fb178f13 (wangyidong               2015-05-08 13:12:15 +0800 1132)         $products = $this->dao->select('id,`order`')->from(TABLE_PRODUCT)->where('id')->in($idList)->orderBy($orderBy)->fetchPairs('order', 'id');
+163fb178f13 (wangyidong               2015-05-08 13:12:15 +0800 1133)         foreach($products as $order => $id)
+163fb178f13 (wangyidong               2015-05-08 13:12:15 +0800 1134)         {
+163fb178f13 (wangyidong               2015-05-08 13:12:15 +0800 1135)             $newID = array_shift($idList);
+163fb178f13 (wangyidong               2015-05-08 13:12:15 +0800 1136)             if($id == $newID) continue;
+163fb178f13 (wangyidong               2015-05-08 13:12:15 +0800 1137)             $this->dao->update(TABLE_PRODUCT)->set('`order`')->eq($order)->where('id')->eq($newID)->exec();
+163fb178f13 (wangyidong               2015-05-08 13:12:15 +0800 1138)         }
+163fb178f13 (wangyidong               2015-05-08 13:12:15 +0800 1139)     }
+a6a61d7e1fc (wangyidong               2016-03-29 10:50:33 +0800 1140) 
+a6a61d7e1fc (wangyidong               2016-03-29 10:50:33 +0800 1141)     /**
+a6a61d7e1fc (wangyidong               2016-03-29 10:50:33 +0800 1142)      * Show error no product when visit qa.
+45f1da3824b (滔哥                     2018-05-09 09:58:48 +0800 1143)      *
+17180656c7b (leiyong                  2021-03-25 18:00:10 +0800 1144)      * @param  string $moduleName
+17180656c7b (leiyong                  2021-03-25 18:00:10 +0800 1145)      * @param  string $activeMenu
+2b9f4f299c0 (leiyong                  2021-03-26 14:24:45 +0800 1146)      * @param  int    $objectID
+a6a61d7e1fc (wangyidong               2016-03-29 10:50:33 +0800 1147)      * @access public
+a6a61d7e1fc (wangyidong               2016-03-29 10:50:33 +0800 1148)      * @return void
+a6a61d7e1fc (wangyidong               2016-03-29 10:50:33 +0800 1149)      */
+2b9f4f299c0 (leiyong                  2021-03-26 14:24:45 +0800 1150)     public function showErrorNone($moduleName = 'qa', $activeMenu = 'index', $objectID = 0)
+a6a61d7e1fc (wangyidong               2016-03-29 10:50:33 +0800 1151)     {
+17180656c7b (leiyong                  2021-03-25 18:00:10 +0800 1152)         if($moduleName == 'project')
+9b5c484cf91 (Yagami                   2020-11-19 16:43:12 +0800 1153)         {
+2b9f4f299c0 (leiyong                  2021-03-26 14:24:45 +0800 1154)             $this->loadModel('project')->setMenu($objectID);
+2b9f4f299c0 (leiyong                  2021-03-26 14:24:45 +0800 1155)             $project = $this->project->getByID($objectID);
+17180656c7b (leiyong                  2021-03-25 18:00:10 +0800 1156)             $this->lang->project->menu      = $this->lang->{$project->model}->menu;
+17180656c7b (leiyong                  2021-03-25 18:00:10 +0800 1157)             $this->lang->project->menuOrder = $this->lang->{$project->model}->menuOrder;
+17180656c7b (leiyong                  2021-03-25 18:00:10 +0800 1158)             $this->app->rawModule = $activeMenu;
+17180656c7b (leiyong                  2021-03-25 18:00:10 +0800 1159) 
+14dd2012ccb (leiyong                  2021-04-09 06:01:18 +0300 1160)             if($activeMenu == 'bug')            $this->lang->{$project->model}->menu->qa['subMenu']->bug['subModule']        = 'product';
+14dd2012ccb (leiyong                  2021-04-09 06:01:18 +0300 1161)             if($activeMenu == 'testcase')       $this->lang->{$project->model}->menu->qa['subMenu']->testcase['subModule']   = 'product';
+14dd2012ccb (leiyong                  2021-04-09 06:01:18 +0300 1162)             if($activeMenu == 'testtask')       $this->lang->{$project->model}->menu->qa['subMenu']->testtask['subModule']   = 'product';
+14dd2012ccb (leiyong                  2021-04-09 06:01:18 +0300 1163)             if($activeMenu == 'testreport')     $this->lang->{$project->model}->menu->qa['subMenu']->testreport['subModule'] = 'product';
+14dd2012ccb (leiyong                  2021-04-09 06:01:18 +0300 1164)             if($activeMenu == 'projectrelease') $this->lang->{$project->model}->menu->release['subModule']                   = 'projectrelease';
+9b5c484cf91 (Yagami                   2020-11-19 16:43:12 +0800 1165)         }
+17180656c7b (leiyong                  2021-03-25 18:00:10 +0800 1166)         elseif($moduleName == 'qa')
+2316458960a (leiyong                  2021-03-11 14:50:38 +0800 1167)         {
+17180656c7b (leiyong                  2021-03-25 18:00:10 +0800 1168)             $this->loadModel('qa')->setMenu(array(), 0);
+2b9f4f299c0 (leiyong                  2021-03-26 14:24:45 +0800 1169)             $this->app->rawModule = $activeMenu;
+2316458960a (leiyong                  2021-03-11 14:50:38 +0800 1170) 
+02f74276faf (王怡栋                   2021-08-26 14:39:58 +0800 1171)             if($activeMenu == 'testcase')   unset($this->lang->qa->menu->testcase['subMenu']);
+d2db659d01b (王怡栋                   2021-08-26 15:13:40 +0800 1172)             if($activeMenu == 'testsuite')  unset($this->lang->qa->menu->testcase['subMenu']);
+d2db659d01b (王怡栋                   2021-08-26 15:13:40 +0800 1173)             if($activeMenu == 'testtask')   unset($this->lang->qa->menu->testtask['subMenu']);
+d2db659d01b (王怡栋                   2021-08-26 15:13:40 +0800 1174)             if($activeMenu == 'testreport') unset($this->lang->qa->menu->testtask['subMenu']);
+2316458960a (leiyong                  2021-03-11 14:50:38 +0800 1175)         }
+2b9f4f299c0 (leiyong                  2021-03-26 14:24:45 +0800 1176)         elseif($moduleName == 'execution')
+2b9f4f299c0 (leiyong                  2021-03-26 14:24:45 +0800 1177)         {
+2b9f4f299c0 (leiyong                  2021-03-26 14:24:45 +0800 1178)             $this->loadModel('execution')->setMenu($objectID);
+e4b370cbc90 (leiyong                  2021-03-29 11:27:25 +0800 1179)             $this->app->rawModule = $activeMenu;
+44963152121 (leiyong                  2021-04-01 05:57:20 +0300 1180)             if($activeMenu == 'bug')        $this->lang->execution->menu->qa['subMenu']->bug['subModule']        = 'product';
+44963152121 (leiyong                  2021-04-01 05:57:20 +0300 1181)             if($activeMenu == 'testcase')   $this->lang->execution->menu->qa['subMenu']->testcase['subModule']   = 'product';
+44963152121 (leiyong                  2021-04-01 05:57:20 +0300 1182)             if($activeMenu == 'testtask')   $this->lang->execution->menu->qa['subMenu']->testtask['subModule']   = 'product';
+44963152121 (leiyong                  2021-04-01 05:57:20 +0300 1183)             if($activeMenu == 'testreport') $this->lang->execution->menu->qa['subMenu']->testreport['subModule'] = 'product';
+2b9f4f299c0 (leiyong                  2021-03-26 14:24:45 +0800 1184)         }
+38930849999 (wangyidong               2021-06-08 13:33:34 +0800 1185)         if($this->app->getViewType() == 'mhtml') $this->product->setMenu('');
+a6a61d7e1fc (wangyidong               2016-03-29 10:50:33 +0800 1186) 
+2b9f4f299c0 (leiyong                  2021-03-26 14:24:45 +0800 1187)         $this->view->title    = $this->lang->$moduleName->common;
+2b9f4f299c0 (leiyong                  2021-03-26 14:24:45 +0800 1188)         $this->view->objectID = $objectID;
+a6a61d7e1fc (wangyidong               2016-03-29 10:50:33 +0800 1189)         $this->display();
+a6a61d7e1fc (wangyidong               2016-03-29 10:50:33 +0800 1190)     }
+c50c181700d (wangyidong               2016-04-08 10:41:20 +0800 1191) 
+619e9220caf (wangyidong               2016-04-15 15:03:35 +0800 1192)     /**
+c1d1d71eafe (Yagami                   2020-09-22 15:44:05 +0800 1193)      * Products under project set.
+60f3998e094 (pengjiangxiu             2017-09-12 10:17:43 +0800 1194)      *
+c1d1d71eafe (Yagami                   2020-09-22 15:44:05 +0800 1195)      * @param  string $browseType
+60f3998e094 (pengjiangxiu             2017-09-12 10:17:43 +0800 1196)      * @param  string $orderBy
+619e9220caf (wangyidong               2016-04-15 15:03:35 +0800 1197)      * @access public
+619e9220caf (wangyidong               2016-04-15 15:03:35 +0800 1198)      * @return void
+619e9220caf (wangyidong               2016-04-15 15:03:35 +0800 1199)      */
+bc40429ad6f (Yagami                   2021-07-13 14:49:22 +0800 1200)     public function all($browseType = 'noclosed', $orderBy = 'order_asc')
+c50c181700d (wangyidong               2016-04-08 10:41:20 +0800 1201)     {
+c9171ad5a3e (tianshujie98             2020-12-22 11:08:27 +0800 1202)         /* Load module and set session. */
+c1d1d71eafe (Yagami                   2020-09-22 15:44:05 +0800 1203)         $this->loadModel('program');
+0eda0edd50f (holan20180123            2021-03-24 16:12:48 +0800 1204)         $this->session->set('productList', $this->app->getURI(true), 'product');
+c50c181700d (wangyidong               2016-04-08 10:41:20 +0800 1205) 
+1cae502aee7 (wangyidong               2021-05-20 16:55:12 +0800 1206)         if($this->app->viewType == 'mhtml')
+1cae502aee7 (wangyidong               2021-05-20 16:55:12 +0800 1207)         {
+1cae502aee7 (wangyidong               2021-05-20 16:55:12 +0800 1208)             $productID = $this->product->saveState(0, $this->products);
+1cae502aee7 (wangyidong               2021-05-20 16:55:12 +0800 1209)             $this->product->setMenu($productID);
+1cae502aee7 (wangyidong               2021-05-20 16:55:12 +0800 1210)         }
+1cae502aee7 (wangyidong               2021-05-20 16:55:12 +0800 1211) 
+4e1a36384ce (Yagami                   2021-02-22 16:24:26 +0800 1212)         /* Process product structure. */
+cbc7963ea8c (holan20180123            2021-02-22 16:09:07 +0800 1213)         $productStats     = $this->product->getStats($orderBy, '', $browseType, '', 'story');
+7e9e1d0623a (tianshujie98             2021-08-03 11:05:11 +0800 1214)         $productStructure = $this->product->statisticProgram($productStats);
+a49b81b30c0 (leiyong                  2020-02-20 13:25:48 +0800 1215) 
+c1d1d71eafe (Yagami                   2020-09-22 15:44:05 +0800 1216)         $this->view->title        = $this->lang->product->common;
+c1d1d71eafe (Yagami                   2020-09-22 15:44:05 +0800 1217)         $this->view->position[]   = $this->lang->product->common;
+c1d1d71eafe (Yagami                   2020-09-22 15:44:05 +0800 1218) 
+cbc7963ea8c (holan20180123            2021-02-22 16:09:07 +0800 1219)         $this->view->recTotal         = count($productStats);
+cbc7963ea8c (holan20180123            2021-02-22 16:09:07 +0800 1220)         $this->view->productStats     = $productStats;
+cbc7963ea8c (holan20180123            2021-02-22 16:09:07 +0800 1221)         $this->view->productStructure = $productStructure;
+cbc7963ea8c (holan20180123            2021-02-22 16:09:07 +0800 1222)         $this->view->orderBy          = $orderBy;
+cbc7963ea8c (holan20180123            2021-02-22 16:09:07 +0800 1223)         $this->view->browseType       = $browseType;
+475c058ee1d (leiyong                  2020-09-24 11:21:18 +0800 1224) 
+c50c181700d (wangyidong               2016-04-08 10:41:20 +0800 1225)         $this->display();
+c50c181700d (wangyidong               2016-04-08 10:41:20 +0800 1226)     }
+93a17061b46 (wangyidong               2017-02-27 13:18:44 +0800 1227) 
+4f51d890b13 (hufangzhou               2021-08-23 16:09:19 +0800 1228)     /**
+4f51d890b13 (hufangzhou               2021-08-23 16:09:19 +0800 1229)      * Product kanban.
+4f51d890b13 (hufangzhou               2021-08-23 16:09:19 +0800 1230)      *
+4f51d890b13 (hufangzhou               2021-08-23 16:09:19 +0800 1231)      * @access public
+4f51d890b13 (hufangzhou               2021-08-23 16:09:19 +0800 1232)      * @return void
+4f51d890b13 (hufangzhou               2021-08-23 16:09:19 +0800 1233)      */
+4f51d890b13 (hufangzhou               2021-08-23 16:09:19 +0800 1234)     public function kanban()
+4f51d890b13 (hufangzhou               2021-08-23 16:09:19 +0800 1235)     {
+9ff54e47388 (hufangzhou               2021-09-15 09:12:28 +0800 1236)         $this->session->set('projectList', $this->app->getURI(true), 'project');
+9ff54e47388 (hufangzhou               2021-09-15 09:12:28 +0800 1237)         $this->session->set('productPlanList', $this->app->getURI(true), 'product');
+9ff54e47388 (hufangzhou               2021-09-15 09:12:28 +0800 1238)         $this->session->set('releaseList', $this->app->getURI(true), 'product');
+9ff54e47388 (hufangzhou               2021-09-15 09:12:28 +0800 1239) 
+c24f76ce19b (hufangzhou               2021-08-26 14:36:38 +0800 1240)         $kanbanGroup = $this->product->getStats4Kanban();
+c24f76ce19b (hufangzhou               2021-08-26 14:36:38 +0800 1241)         extract($kanbanGroup);
+c24f76ce19b (hufangzhou               2021-08-26 14:36:38 +0800 1242) 
+1c7e707e413 (liyuchun                 2021-11-10 10:24:02 +0800 1243)         $programPairs  = $this->loadModel('program')->getPairs(true);
+c24f76ce19b (hufangzhou               2021-08-26 14:36:38 +0800 1244)         $myProducts    = array();
+c24f76ce19b (hufangzhou               2021-08-26 14:36:38 +0800 1245)         $otherProducts = array();
+c24f76ce19b (hufangzhou               2021-08-26 14:36:38 +0800 1246)         foreach($productList as $productID => $product)
+c24f76ce19b (hufangzhou               2021-08-26 14:36:38 +0800 1247)         {
+d88a87d3079 (Hao Sun                  2021-09-07 08:26:58 +0800 1248)             if($product->status != 'normal') continue;
+d88a87d3079 (Hao Sun                  2021-09-07 08:26:58 +0800 1249)             if($product->PO == $this->app->user->account) $myProducts[$product->program][] = $productID;
+d88a87d3079 (Hao Sun                  2021-09-07 08:26:58 +0800 1250)             else $otherProducts[$product->program][] = $productID;
+c24f76ce19b (hufangzhou               2021-08-26 14:36:38 +0800 1251)         }
+c24f76ce19b (hufangzhou               2021-08-26 14:36:38 +0800 1252) 
+d88a87d3079 (Hao Sun                  2021-09-07 08:26:58 +0800 1253)         $kanbanList = array();
+d88a87d3079 (Hao Sun                  2021-09-07 08:26:58 +0800 1254)         if(!empty($myProducts))    $kanbanList['my']    = $myProducts;
+d88a87d3079 (Hao Sun                  2021-09-07 08:26:58 +0800 1255)         if(!empty($otherProducts)) $kanbanList['other'] = $otherProducts;
+c24f76ce19b (hufangzhou               2021-08-26 14:36:38 +0800 1256) 
+140a6324980 (hufangzhou               2021-09-09 10:26:10 +0800 1257)         $emptyHour = new stdclass();
+140a6324980 (hufangzhou               2021-09-09 10:26:10 +0800 1258)         $emptyHour->totalEstimate = 0;
+140a6324980 (hufangzhou               2021-09-09 10:26:10 +0800 1259)         $emptyHour->totalConsumed = 0;
+140a6324980 (hufangzhou               2021-09-09 10:26:10 +0800 1260)         $emptyHour->totalLeft     = 0;
+140a6324980 (hufangzhou               2021-09-09 10:26:10 +0800 1261)         $emptyHour->progress      = 0;
+140a6324980 (hufangzhou               2021-09-09 10:26:10 +0800 1262) 
+c24f76ce19b (hufangzhou               2021-08-26 14:36:38 +0800 1263)         $this->view->title            = $this->lang->product->kanban;
+d88a87d3079 (Hao Sun                  2021-09-07 08:26:58 +0800 1264)         $this->view->kanbanList       = $kanbanList;
+1c7e707e413 (liyuchun                 2021-11-10 10:24:02 +0800 1265)         $this->view->programList      = array(0 => $this->lang->product->emptyProgram) + $programPairs;
+c24f76ce19b (hufangzhou               2021-08-26 14:36:38 +0800 1266)         $this->view->productList      = $productList;
+c24f76ce19b (hufangzhou               2021-08-26 14:36:38 +0800 1267)         $this->view->planList         = $planList;
+c24f76ce19b (hufangzhou               2021-08-26 14:36:38 +0800 1268)         $this->view->projectList      = $projectList;
+c24f76ce19b (hufangzhou               2021-08-26 14:36:38 +0800 1269)         $this->view->projectProduct   = $projectProduct;
+c24f76ce19b (hufangzhou               2021-08-26 14:36:38 +0800 1270)         $this->view->latestExecutions = $projectLatestExecutions;
+aa35ebd8216 (hufangzhou               2021-09-08 13:45:21 +0800 1271)         $this->view->executionList    = $executionList;
+c24f76ce19b (hufangzhou               2021-08-26 14:36:38 +0800 1272)         $this->view->hourList         = $hourList;
+140a6324980 (hufangzhou               2021-09-09 10:26:10 +0800 1273)         $this->view->emptyHour        = $emptyHour;
+c24f76ce19b (hufangzhou               2021-08-26 14:36:38 +0800 1274)         $this->view->releaseList      = $releaseList;
+c24f76ce19b (hufangzhou               2021-08-26 14:36:38 +0800 1275) 
+4f51d890b13 (hufangzhou               2021-08-23 16:09:19 +0800 1276)         $this->display();
+4f51d890b13 (hufangzhou               2021-08-23 16:09:19 +0800 1277)     }
+4f51d890b13 (hufangzhou               2021-08-23 16:09:19 +0800 1278) 
+36d49f1cdfe (Yagami                   2021-02-22 14:09:36 +0800 1279)     /**
+36d49f1cdfe (Yagami                   2021-02-22 14:09:36 +0800 1280)      * Manage product line.
+64fee8e9b1d (Catouse                  2021-03-04 14:48:35 +0800 1281)      *
+36d49f1cdfe (Yagami                   2021-02-22 14:09:36 +0800 1282)      * @access public
+36d49f1cdfe (Yagami                   2021-02-22 14:09:36 +0800 1283)      * @return void
+36d49f1cdfe (Yagami                   2021-02-22 14:09:36 +0800 1284)      */
+36d49f1cdfe (Yagami                   2021-02-22 14:09:36 +0800 1285)     public function manageLine()
+36d49f1cdfe (Yagami                   2021-02-22 14:09:36 +0800 1286)     {
+05dda5ebb8b (holan20180123            2021-02-22 14:35:53 +0800 1287)         $this->app->loadLang('tree');
+36d49f1cdfe (Yagami                   2021-02-22 14:09:36 +0800 1288)         if($_POST)
+36d49f1cdfe (Yagami                   2021-02-22 14:09:36 +0800 1289)         {
+36d49f1cdfe (Yagami                   2021-02-22 14:09:36 +0800 1290)             $this->product->manageLine();
+5a334ccb86d (zhujinyong               2022-02-22 09:26:31 +0800 1291)             if(dao::isError()) return print(js::error(dao::getError()));
+5a334ccb86d (zhujinyong               2022-02-22 09:26:31 +0800 1292)             return print(js::reload('parent'));
+36d49f1cdfe (Yagami                   2021-02-22 14:09:36 +0800 1293)         }
+36d49f1cdfe (Yagami                   2021-02-22 14:09:36 +0800 1294) 
+36d49f1cdfe (Yagami                   2021-02-22 14:09:36 +0800 1295)         $this->view->title      = $this->lang->product->line;
+36d49f1cdfe (Yagami                   2021-02-22 14:09:36 +0800 1296)         $this->view->position[] = $this->lang->product->line;
+36d49f1cdfe (Yagami                   2021-02-22 14:09:36 +0800 1297) 
+4caf65064c7 (holan20180123            2021-03-08 15:47:09 +0800 1298)         $this->view->programs = array('') + $this->loadModel('program')->getTopPairs();
+5aea0c9ac79 (孙华伟                   2022-03-28 17:17:13 +0800 1299)         $this->view->lines    = $this->product->getLines();
+36d49f1cdfe (Yagami                   2021-02-22 14:09:36 +0800 1300)         $this->display();
+36d49f1cdfe (Yagami                   2021-02-22 14:09:36 +0800 1301)     }
+36d49f1cdfe (Yagami                   2021-02-22 14:09:36 +0800 1302) 
+969b52508ca (leiyong                  2020-10-26 13:04:56 +0800 1303)     /**
+969b52508ca (leiyong                  2020-10-26 13:04:56 +0800 1304)      * Get white list personnel.
+969b52508ca (leiyong                  2020-10-26 13:04:56 +0800 1305)      *
+969b52508ca (leiyong                  2020-10-26 13:04:56 +0800 1306)      * @param  int    $productID
+aff516e6598 (leiyong                  2020-10-26 14:38:41 +0800 1307)      * @param  string $module
+5002be3199a (leiyong                  2020-10-27 13:10:54 +0800 1308)      * @param  string $objectType
+5002be3199a (leiyong                  2020-10-27 13:10:54 +0800 1309)      * @param  string $orderBy
+969b52508ca (leiyong                  2020-10-26 13:04:56 +0800 1310)      * @param  int    $recTotal
+969b52508ca (leiyong                  2020-10-26 13:04:56 +0800 1311)      * @param  int    $recPerPage
+969b52508ca (leiyong                  2020-10-26 13:04:56 +0800 1312)      * @param  int    $pageID
+969b52508ca (leiyong                  2020-10-26 13:04:56 +0800 1313)      * @access public
+969b52508ca (leiyong                  2020-10-26 13:04:56 +0800 1314)      * @return void
+969b52508ca (leiyong                  2020-10-26 13:04:56 +0800 1315)      */
+5002be3199a (leiyong                  2020-10-27 13:10:54 +0800 1316)     public function whitelist($productID = 0, $module = 'product', $objectType = 'product', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+969b52508ca (leiyong                  2020-10-26 13:04:56 +0800 1317)     {
+a6eff425ca4 (zhujinyong               2021-03-21 12:15:55 +0800 1318)         $this->product->setMenu($productID, 0);
+9b08d19c22e (sgm0422                  2021-01-03 15:05:36 +0800 1319)         $this->lang->modulePageNav = '';
+969b52508ca (leiyong                  2020-10-26 13:04:56 +0800 1320) 
+5002be3199a (leiyong                  2020-10-27 13:10:54 +0800 1321)         echo $this->fetch('personnel', 'whitelist', "objectID=$productID&module=product&browseType=$objectType&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID");
+969b52508ca (leiyong                  2020-10-26 13:04:56 +0800 1322)     }
+969b52508ca (leiyong                  2020-10-26 13:04:56 +0800 1323) 
+969b52508ca (leiyong                  2020-10-26 13:04:56 +0800 1324)     /**
+969b52508ca (leiyong                  2020-10-26 13:04:56 +0800 1325)      * Adding users to the white list.
+969b52508ca (leiyong                  2020-10-26 13:04:56 +0800 1326)      *
+969b52508ca (leiyong                  2020-10-26 13:04:56 +0800 1327)      * @param  int     $productID
+969b52508ca (leiyong                  2020-10-26 13:04:56 +0800 1328)      * @param  int     $deptID
+487662ad624 (holan20180123            2021-08-11 10:58:03 +0800 1329)      * @param  int     $copyID
+969b52508ca (leiyong                  2020-10-26 13:04:56 +0800 1330)      * @param  string  $branch
+969b52508ca (leiyong                  2020-10-26 13:04:56 +0800 1331)      * @access public
+969b52508ca (leiyong                  2020-10-26 13:04:56 +0800 1332)      * @return void
+969b52508ca (leiyong                  2020-10-26 13:04:56 +0800 1333)      */
+487662ad624 (holan20180123            2021-08-11 10:58:03 +0800 1334)     public function addWhitelist($productID = 0, $deptID = 0, $copyID = 0)
+969b52508ca (leiyong                  2020-10-26 13:04:56 +0800 1335)     {
+487662ad624 (holan20180123            2021-08-11 10:58:03 +0800 1336)         $this->product->setMenu($productID);
+9b08d19c22e (sgm0422                  2021-01-03 15:05:36 +0800 1337)         $this->lang->modulePageNav = '';
+969b52508ca (leiyong                  2020-10-26 13:04:56 +0800 1338) 
+487662ad624 (holan20180123            2021-08-11 10:58:03 +0800 1339)         echo $this->fetch('personnel', 'addWhitelist', "objectID=$productID&dept=$deptID&copyID=$copyID&objectType=product&module=product");
+969b52508ca (leiyong                  2020-10-26 13:04:56 +0800 1340)     }
+969b52508ca (leiyong                  2020-10-26 13:04:56 +0800 1341) 
+969b52508ca (leiyong                  2020-10-26 13:04:56 +0800 1342)     /*
+969b52508ca (leiyong                  2020-10-26 13:04:56 +0800 1343)      * Removing users from the white list.
+969b52508ca (leiyong                  2020-10-26 13:04:56 +0800 1344)      *
+969b52508ca (leiyong                  2020-10-26 13:04:56 +0800 1345)      * @param  int     $id
+969b52508ca (leiyong                  2020-10-26 13:04:56 +0800 1346)      * @param  string  $confirm
+969b52508ca (leiyong                  2020-10-26 13:04:56 +0800 1347)      * @access public
+969b52508ca (leiyong                  2020-10-26 13:04:56 +0800 1348)      * @return void
+969b52508ca (leiyong                  2020-10-26 13:04:56 +0800 1349)      */
+0b0cdcbda72 (Yagami                   2021-03-12 10:56:47 +0800 1350)     public function unbindWhitelist($id = 0, $confirm = 'no')
+969b52508ca (leiyong                  2020-10-26 13:04:56 +0800 1351)     {
+0b0cdcbda72 (Yagami                   2021-03-12 10:56:47 +0800 1352)         echo $this->fetch('personnel', 'unbindWhitelist', "id=$id&confirm=$confirm");
+969b52508ca (leiyong                  2020-10-26 13:04:56 +0800 1353)     }
+969b52508ca (leiyong                  2020-10-26 13:04:56 +0800 1354) 
+1b82933c0db (wangyidong               2017-10-30 11:32:53 +0800 1355)     /**
+45f1da3824b (滔哥                     2018-05-09 09:58:48 +0800 1356)      * Export product.
+45f1da3824b (滔哥                     2018-05-09 09:58:48 +0800 1357)      *
+45f1da3824b (滔哥                     2018-05-09 09:58:48 +0800 1358)      * @param  string    $status
+45f1da3824b (滔哥                     2018-05-09 09:58:48 +0800 1359)      * @param  string    $orderBy
+1b82933c0db (wangyidong               2017-10-30 11:32:53 +0800 1360)      * @access public
+1b82933c0db (wangyidong               2017-10-30 11:32:53 +0800 1361)      * @return void
+1b82933c0db (wangyidong               2017-10-30 11:32:53 +0800 1362)      */
+1b82933c0db (wangyidong               2017-10-30 11:32:53 +0800 1363)     public function export($status, $orderBy)
+1b82933c0db (wangyidong               2017-10-30 11:32:53 +0800 1364)     {
+1b82933c0db (wangyidong               2017-10-30 11:32:53 +0800 1365)         if($_POST)
+1b82933c0db (wangyidong               2017-10-30 11:32:53 +0800 1366)         {
+1b82933c0db (wangyidong               2017-10-30 11:32:53 +0800 1367)             $productLang   = $this->lang->product;
+1b82933c0db (wangyidong               2017-10-30 11:32:53 +0800 1368)             $productConfig = $this->config->product;
+1b82933c0db (wangyidong               2017-10-30 11:32:53 +0800 1369) 
+1b82933c0db (wangyidong               2017-10-30 11:32:53 +0800 1370)             /* Create field lists. */
+938ac3f7c61 (zenggang                 2021-08-04 10:04:46 +0800 1371)             if(!$this->config->URAndSR) $productConfig->list->exportFields = str_replace('activeRequirements,changedRequirements,draftRequirements,closedRequirements,requireCompleteRate,', '', $productConfig->list->exportFields);
+1b82933c0db (wangyidong               2017-10-30 11:32:53 +0800 1372)             $fields = $this->post->exportFields ? $this->post->exportFields : explode(',', $productConfig->list->exportFields);
+1b82933c0db (wangyidong               2017-10-30 11:32:53 +0800 1373)             foreach($fields as $key => $fieldName)
+1b82933c0db (wangyidong               2017-10-30 11:32:53 +0800 1374)             {
+1b82933c0db (wangyidong               2017-10-30 11:32:53 +0800 1375)                 $fieldName = trim($fieldName);
+1b82933c0db (wangyidong               2017-10-30 11:32:53 +0800 1376)                 $fields[$fieldName] = zget($productLang, $fieldName);
+1b82933c0db (wangyidong               2017-10-30 11:32:53 +0800 1377)                 unset($fields[$key]);
+1b82933c0db (wangyidong               2017-10-30 11:32:53 +0800 1378)             }
+1b82933c0db (wangyidong               2017-10-30 11:32:53 +0800 1379) 
+5cf387d16db (holan20180123            2021-02-22 15:08:01 +0800 1380)             $lines = $this->product->getLinePairs();
+938ac3f7c61 (zenggang                 2021-08-04 10:04:46 +0800 1381)             $productStats = $this->product->getStats('program_desc,line_desc,' . $orderBy, null, $status);
+1b82933c0db (wangyidong               2017-10-30 11:32:53 +0800 1382)             foreach($productStats as $i => $product)
+1b82933c0db (wangyidong               2017-10-30 11:32:53 +0800 1383)             {
+ccf6ba71742 (zenggang                 2021-07-28 11:31:46 +0800 1384)                 $product->line                = zget($lines, $product->line, '');
+938ac3f7c61 (zenggang                 2021-08-04 10:04:46 +0800 1385)                 if($this->config->URAndSR)
+938ac3f7c61 (zenggang                 2021-08-04 10:04:46 +0800 1386)                 {
+938ac3f7c61 (zenggang                 2021-08-04 10:04:46 +0800 1387)                     $product->activeRequirements  = (int) $product->requirements['active'];
+938ac3f7c61 (zenggang                 2021-08-04 10:04:46 +0800 1388)                     $product->changedRequirements = (int) $product->requirements['changed'];
+938ac3f7c61 (zenggang                 2021-08-04 10:04:46 +0800 1389)                     $product->draftRequirements   = (int) $product->requirements['draft'];
+938ac3f7c61 (zenggang                 2021-08-04 10:04:46 +0800 1390)                     $product->closedRequirements  = (int) $product->requirements['closed'];
+938ac3f7c61 (zenggang                 2021-08-04 10:04:46 +0800 1391)                     $product->totalRequirements   = $product->activeRequirements + $product->changedRequirements + $product->draftRequirements + $product->closedRequirements;
+938ac3f7c61 (zenggang                 2021-08-04 10:04:46 +0800 1392)                     $product->requireCompleteRate = ($product->totalRequirements == 0 ? 0 : round($product->closedRequirements / $product->totalRequirements, 3) * 100) . '%';
+938ac3f7c61 (zenggang                 2021-08-04 10:04:46 +0800 1393)                 }
+ccf6ba71742 (zenggang                 2021-07-28 11:31:46 +0800 1394)                 $product->activeStories       = (int)$product->stories['active'];
+ccf6ba71742 (zenggang                 2021-07-28 11:31:46 +0800 1395)                 $product->changedStories      = (int)$product->stories['changed'];
+ccf6ba71742 (zenggang                 2021-07-28 11:31:46 +0800 1396)                 $product->draftStories        = (int)$product->stories['draft'];
+ccf6ba71742 (zenggang                 2021-07-28 11:31:46 +0800 1397)                 $product->closedStories       = (int)$product->stories['closed'];
+938ac3f7c61 (zenggang                 2021-08-04 10:04:46 +0800 1398)                 $product->totalStories        = $product->activeStories + $product->changedStories + $product->draftStories + $product->closedStories;
+938ac3f7c61 (zenggang                 2021-08-04 10:04:46 +0800 1399)                 $product->storyCompleteRate   = ($product->totalStories == 0 ? 0 : round($product->closedStories / $product->totalStories, 3) * 100) . '%';
+ccf6ba71742 (zenggang                 2021-07-28 11:31:46 +0800 1400)                 $product->unResolvedBugs      = (int)$product->unResolved;
+ccf6ba71742 (zenggang                 2021-07-28 11:31:46 +0800 1401)                 $product->assignToNullBugs    = (int)$product->assignToNull;
+938ac3f7c61 (zenggang                 2021-08-04 10:04:46 +0800 1402)                 $product->closedBugs          = (int)$product->closedBugs;
+938ac3f7c61 (zenggang                 2021-08-04 10:04:46 +0800 1403)                 $product->bugFixedRate        = (($product->unResolved + $product->fixedBugs) == 0 ? 0 : round($product->fixedBugs / ($product->unResolved + $product->fixedBugs), 3) * 100) . '%';
+ccf6ba71742 (zenggang                 2021-07-28 11:31:46 +0800 1404)                 $product->program             = $product->programName;
+4f38cc63eba (holan20180123            2021-08-25 10:02:30 +0800 1405) 
+675810e5944 (zenggang                 2021-08-09 18:36:55 +0800 1406)                 /* get rowspan data */
+675810e5944 (zenggang                 2021-08-09 18:36:55 +0800 1407)                 if($lastProgram == '' or $product->program != $lastProgram)
+675810e5944 (zenggang                 2021-08-09 18:36:55 +0800 1408)                 {
+675810e5944 (zenggang                 2021-08-09 18:36:55 +0800 1409)                     $rowspan[$i]['rows']['program'] = 1;
+675810e5944 (zenggang                 2021-08-09 18:36:55 +0800 1410)                     $programI = $i;
+675810e5944 (zenggang                 2021-08-09 18:36:55 +0800 1411)                 }
+f495f058ed1 (zenggang                 2021-09-08 15:31:11 +0800 1412)                 else $rowspan[$programI]['rows']['program'] ++;
+675810e5944 (zenggang                 2021-08-09 18:36:55 +0800 1413)                 if($lastLine == '' or $product->line != $lastLine)
+675810e5944 (zenggang                 2021-08-09 18:36:55 +0800 1414)                 {
+675810e5944 (zenggang                 2021-08-09 18:36:55 +0800 1415)                     $rowspan[$i]['rows']['line'] = 1;
+675810e5944 (zenggang                 2021-08-09 18:36:55 +0800 1416)                     $lineI = $i;
+675810e5944 (zenggang                 2021-08-09 18:36:55 +0800 1417)                 }
+f495f058ed1 (zenggang                 2021-09-08 15:31:11 +0800 1418)                 else $rowspan[$lineI]['rows']['line'] ++;
+675810e5944 (zenggang                 2021-08-09 18:36:55 +0800 1419)                 $lastProgram = $product->program;
+f495f058ed1 (zenggang                 2021-09-08 15:31:11 +0800 1420)                 $lastLine    = $product->line;
+1b82933c0db (wangyidong               2017-10-30 11:32:53 +0800 1421) 
+1b82933c0db (wangyidong               2017-10-30 11:32:53 +0800 1422)                 if($this->post->exportType == 'selected')
+1b82933c0db (wangyidong               2017-10-30 11:32:53 +0800 1423)                 {
+1b82933c0db (wangyidong               2017-10-30 11:32:53 +0800 1424)                     $checkedItem = $this->cookie->checkedItem;
+1b82933c0db (wangyidong               2017-10-30 11:32:53 +0800 1425)                     if(strpos(",$checkedItem,", ",{$product->id},") === false) unset($productStats[$i]);
+1b82933c0db (wangyidong               2017-10-30 11:32:53 +0800 1426)                 }
+1b82933c0db (wangyidong               2017-10-30 11:32:53 +0800 1427)             }
+b7c3e92e956 (tianshujie               2022-02-24 16:17:26 +0800 1428)             if($this->config->edition != 'open') list($fields, $productStats) = $this->loadModel('workflowfield')->appendDataFromFlow($fields, $productStats);
+1b82933c0db (wangyidong               2017-10-30 11:32:53 +0800 1429) 
+675810e5944 (zenggang                 2021-08-09 18:36:55 +0800 1430)             if(isset($rowspan)) $this->post->set('rowspan', $rowspan);
+1b82933c0db (wangyidong               2017-10-30 11:32:53 +0800 1431)             $this->post->set('fields', $fields);
+1b82933c0db (wangyidong               2017-10-30 11:32:53 +0800 1432)             $this->post->set('rows', $productStats);
+1b82933c0db (wangyidong               2017-10-30 11:32:53 +0800 1433)             $this->post->set('kind', 'product');
+1b82933c0db (wangyidong               2017-10-30 11:32:53 +0800 1434)             $this->fetch('file', 'export2' . $this->post->fileType, $_POST);
+1b82933c0db (wangyidong               2017-10-30 11:32:53 +0800 1435)         }
+1b82933c0db (wangyidong               2017-10-30 11:32:53 +0800 1436)         $this->display();
+1b82933c0db (wangyidong               2017-10-30 11:32:53 +0800 1437)     }
+1b82933c0db (wangyidong               2017-10-30 11:32:53 +0800 1438) 
+8624ceb224c (daitingting              2017-05-08 15:08:42 +0800 1439)     /**
+8624ceb224c (daitingting              2017-05-08 15:08:42 +0800 1440)      * Build of product.
+45f1da3824b (滔哥                     2018-05-09 09:58:48 +0800 1441)      *
+45f1da3824b (滔哥                     2018-05-09 09:58:48 +0800 1442)      * @param  int    $productID
+8624ceb224c (daitingting              2017-05-08 15:08:42 +0800 1443)      * @access public
+8624ceb224c (daitingting              2017-05-08 15:08:42 +0800 1444)      * @return void
+8624ceb224c (daitingting              2017-05-08 15:08:42 +0800 1445)      */
+8be716b8a5d (wangyidong               2017-12-01 13:17:16 +0800 1446)     public function build($productID = 0, $branch = 0)
+ce174f973c0 (daitingting              2017-05-05 12:09:19 +0800 1447)     {
+ce174f973c0 (daitingting              2017-05-05 12:09:19 +0800 1448)         $this->app->loadLang('build');
+0eda0edd50f (holan20180123            2021-03-24 16:12:48 +0800 1449)         $this->session->set('productList', $this->app->getURI(true), 'product');
+ce174f973c0 (daitingting              2017-05-05 12:09:19 +0800 1450) 
+ce174f973c0 (daitingting              2017-05-05 12:09:19 +0800 1451)         /* Get all product list. Locate to the create product page if there is no product. */
+82428349ad9 (zhujinyong               2021-03-22 12:03:10 +0800 1452)         $this->products = $this->product->getPairs('', $this->session->project);
+ce174f973c0 (daitingting              2017-05-05 12:09:19 +0800 1453)         if(empty($this->products) and strpos('create|view', $this->methodName) === false) $this->locate($this->createLink('product', 'create'));
+ce174f973c0 (daitingting              2017-05-05 12:09:19 +0800 1454) 
+ce174f973c0 (daitingting              2017-05-05 12:09:19 +0800 1455)         /* Get current product. */
+ce174f973c0 (daitingting              2017-05-05 12:09:19 +0800 1456)         $productID = $this->product->saveState($productID, $this->products);
+ce174f973c0 (daitingting              2017-05-05 12:09:19 +0800 1457)         $product   = $this->product->getById($productID);
+a6eff425ca4 (zhujinyong               2021-03-21 12:15:55 +0800 1458)         $this->product->setMenu($productID, $branch);
+ce174f973c0 (daitingting              2017-05-05 12:09:19 +0800 1459) 
+ce174f973c0 (daitingting              2017-05-05 12:09:19 +0800 1460)         /* Set menu.*/
+0eda0edd50f (holan20180123            2021-03-24 16:12:48 +0800 1461)         $this->session->set('buildList', $this->app->getURI(true), 'execution');
+ce174f973c0 (daitingting              2017-05-05 12:09:19 +0800 1462) 
+ce174f973c0 (daitingting              2017-05-05 12:09:19 +0800 1463)         $this->view->title      = $product->name . $this->lang->colon . $this->lang->product->build;
+ce174f973c0 (daitingting              2017-05-05 12:09:19 +0800 1464)         $this->view->position[] = $this->lang->product->build;
+ce174f973c0 (daitingting              2017-05-05 12:09:19 +0800 1465)         $this->view->products   = $this->products;
+ce174f973c0 (daitingting              2017-05-05 12:09:19 +0800 1466)         $this->view->product    = $product;
+8be716b8a5d (wangyidong               2017-12-01 13:17:16 +0800 1467)         $this->view->builds     = $this->dao->select('*')->from(TABLE_BUILD)->where('product')->eq($productID)
+8be716b8a5d (wangyidong               2017-12-01 13:17:16 +0800 1468)             ->beginIF($branch)->andWhere('branch')->eq($branch)->fi()
+8be716b8a5d (wangyidong               2017-12-01 13:17:16 +0800 1469)             ->andWhere('deleted')->eq(0)
+8be716b8a5d (wangyidong               2017-12-01 13:17:16 +0800 1470)             ->fetchAll();
+ce174f973c0 (daitingting              2017-05-05 12:09:19 +0800 1471)         $this->view->users      = $this->loadModel('user')->getPairs('noletter');
+ce174f973c0 (daitingting              2017-05-05 12:09:19 +0800 1472) 
+ce174f973c0 (daitingting              2017-05-05 12:09:19 +0800 1473)         $this->display();
+ce174f973c0 (daitingting              2017-05-05 12:09:19 +0800 1474)     }
+79c2decff23 (Catouse                  2020-08-25 15:50:18 +0800 1475) 
+79c2decff23 (Catouse                  2020-08-25 15:50:18 +0800 1476)     /**
+79c2decff23 (Catouse                  2020-08-25 15:50:18 +0800 1477)      * Set product id to session in ajax
+79c2decff23 (Catouse                  2020-08-25 15:50:18 +0800 1478)      *
+79c2decff23 (Catouse                  2020-08-25 15:50:18 +0800 1479)      * @param  int    $productID
+79c2decff23 (Catouse                  2020-08-25 15:50:18 +0800 1480)      * @access public
+79c2decff23 (Catouse                  2020-08-25 15:50:18 +0800 1481)      * @return void
+79c2decff23 (Catouse                  2020-08-25 15:50:18 +0800 1482)      */
+79c2decff23 (Catouse                  2020-08-25 15:50:18 +0800 1483)     public function ajaxSetState($productID)
+79c2decff23 (Catouse                  2020-08-25 15:50:18 +0800 1484)     {
+79c2decff23 (Catouse                  2020-08-25 15:50:18 +0800 1485)         $this->session->set('product', (int)$productID);
+79c2decff23 (Catouse                  2020-08-25 15:50:18 +0800 1486)         $this->send(array('result' => 'success', 'productID' => $this->session->product));
+79c2decff23 (Catouse                  2020-08-25 15:50:18 +0800 1487)     }
+8f0d651d9c1 (wangchunsheng            2013-01-18 01:58:14 +0000 1488) }
