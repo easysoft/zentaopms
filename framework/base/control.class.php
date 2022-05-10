@@ -416,7 +416,7 @@ class baseControl
         $moduleName = basename(dirname(dirname(realpath($viewFile))));
         $extPath    = $this->app->getModuleExtPath('', $moduleName, 'view');
 
-        $checkedOrder = array('site', 'custom', 'vision', 'xuan', 'common');
+        $checkedOrder = array('site', 'saas', 'custom', 'vision', 'xuan', 'common');
         $fileName     = basename($viewFile);
         foreach($checkedOrder as $checkedType)
         {
@@ -804,6 +804,12 @@ class baseControl
 
             $commonActionExtFile = $actionExtPath['custom'] . strtolower($methodName) . '.php';
             if(file_exists($commonActionExtFile)) $file2Included = $commonActionExtFile;
+
+            if(!empty($actionExtPath['saas']))
+            {
+                $commonActionExtFile = $actionExtPath['saas'] . strtolower($methodName) . '.php';
+                if(file_exists($commonActionExtFile)) $file2Included = $commonActionExtFile;
+            }
 
             if(!empty($actionExtPath['site']))
             {
