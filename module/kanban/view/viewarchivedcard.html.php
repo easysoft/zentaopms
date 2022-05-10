@@ -88,27 +88,15 @@ $app->loadLang('productplan');
           <div class="info">
             <span class="pri label-pri label-pri-<?php echo $card->pri;?>"><?php echo $card->pri;?></span>
             <?php if($card->estimate and $card->estimate != 0) echo "<span class='text-gray'>{$card->estimate}h</span>";?>
-        <?php elseif($card->fromType == 'productplan'):?>
-          <?php echo html::a($this->createLink('productplan', 'view', "id=$card->fromID"), $card->title, '', "class='cardName' title='$card->title'");?>
-          <div class="info productplan">
-            <span class="label label-<?php echo $card->objectStatus?>" ><?php echo $lang->{$card->fromType}->statusList[$card->objectStatus];?></span>
-        <?php elseif($card->fromType == 'release'):?>
-          <?php echo html::a($this->createLink('release', 'view', "id=$card->fromID"), $card->name, '', "class='cardName' title='$card->name'");?>
-          <div class="info release">
-            <span class="label label-<?php echo $card->objectStatus?>" ><?php echo $lang->{$card->fromType}->statusList[$card->objectStatus];?></span>
-            <?php if(!helper::isZeroDate($card->date)):?>
-            <span class="time label label-light"><?php echo date("m/d", strtotime($card->date));?></span>
-            <?php endif;?>
-        <?php elseif($card->fromType == 'execution'):?>
-          <?php echo html::a($this->createLink('execution', 'view', "id=$card->fromID"), $card->name, '', "class='cardName' title='$card->name'");?>
-          <div class="info execution">
-            <span class="label label-<?php echo $card->objectStatus?>" ><?php echo $lang->{$card->fromType}->statusList[$card->objectStatus];?></span>
-        <?php elseif($card->fromType == 'build'):?>
-          <?php echo html::a($this->createLink('build', 'view', "id=$card->fromID"), $card->name, '', "class='cardName' title='$card->name' data-app='project'");?>
-          <div class="info build">
-            <?php if(!helper::isZeroDate($card->date)):?>
-            <span class="time label label-light"><?php echo date("m/d", strtotime($card->date));?></span>
-            <?php endif;?>
+        <?php else:?>
+        <?php
+        $name = isset($card->title) ? $card->title : $card->name;
+        if(!common::hasPriv($card->fromType, 'view')) echo html::a($this->createLink('productplan', 'view', "id=$card->fromID"), $name, '', "class='cardName' title='$name'");
+        if(common::hasPriv($card->fromType, 'view')) echo "<div class='cardName' title='$name'>$name</div>";
+        echo "<div class='info $card->fromType'>";
+        if($card->fromType != 'release' and isset($lang->{$card->fromType}->statusList[$card->objectStatus])) echo "<span class='label label-$card->objectStatus'>" . $lang->{$card->fromType}->statusList[$card->objectStatus] . '</span>';
+        if(isset($card->date) and !helper::isZeroDate($card->date)) echo "<span class='time label label-light'>" . date("m/d", strtotime($card->date)) . "</span>"
+        ?>
         <?php endif;?>
             <?php if(helper::isZeroDate($card->end) and !helper::isZeroDate($card->begin)):?>
             <span class="time label label-light"><?php echo date("m/d", strtotime($card->begin)) . $lang->kanbancard->beginAB;?></span>
@@ -192,7 +180,7 @@ $(function()
         if($item.children('.productplan').length) icon = '<i class="icon icon-delay">';
         if($item.children('.release').length)     icon = '<i class="icon icon-publish">';
 
-        $item.children('a').prepend(icon);
+        $item.children('.cardName').prepend(icon);
     });
 })
 </script>
