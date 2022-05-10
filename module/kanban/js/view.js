@@ -278,6 +278,22 @@ function renderKanbanItem(item, $item)
     var whiteStyle = null;
     if(item.color == '#2a5f29' || item.color == '#b10b0b' || item.color == '#cfa227') whiteStyle = 'style="color:#FFFFFF"';
 
+    var privs        = item.actions;
+    var printMoreBtn = (privs.includes('editCard') || privs.includes('archiveCard') || privs.includes('copyCard') || privs.includes('deleteCard') || privs.includes('moveCard') || privs.includes('setCardColor'));
+    var $actions     = $item.children('.actions');
+    var $title       = $item.children('.title');
+    if(printMoreBtn && !$actions.length)
+    {
+        $(
+        [
+            '<div class="actions" title="' + kanbanLang.more + '">',
+              '<a data-contextmenu="card"' + whiteStyle + 'data-id="' + item.id + '">',
+                '<i class="icon icon-ellipsis-v"></i>',
+              '</a>',
+            '</div>'
+        ].join('')).appendTo($item);
+    }
+
     if(item.fromType == 'execution')
     {
         renderExecutionItem(item, $item);
@@ -296,52 +312,12 @@ function renderKanbanItem(item, $item)
     }
     else
     {
-        var $title       = $item.children('.title');
-        var privs        = item.actions;
-        var printMoreBtn = (privs.includes('editCard') || privs.includes('archiveCard') || privs.includes('copyCard') || privs.includes('deleteCard') || privs.includes('moveCard') || privs.includes('setCardColor'));
-
-        if(privs.includes('sortCard')) $item.parent().addClass('sort');
         if(!$title.length)
         {
-            $('<div class="label label-finish">' + kanbanLang.finished + '</div>').appendTo($item);
             if(privs.includes('viewCard')) $title = $('<a class="title iframe" data-toggle="modal" data-width="80%"></a>').appendTo($item).attr('href', createLink('kanban', 'viewCard', 'cardID=' + item.id, '', true));
             if(!privs.includes('viewCard')) $title = $('<p class="title"></p>').appendTo($item);
         }
         $title.text(item.name).attr('title', item.name);
-
-        if(kanban.performable == 1 && item.status == 'done' )
-        {
-            var finishColor = '#2a5f29';
-            if(item.color == '#2a5f29') finishColor  = '#FFFFFF';
-            $title.text(item.name).css('color', finishColor);
-            $item.children('.label-finish').show();
-            if(item.color == '#2a5f29')
-            {
-                $item.children('.label-finish').css({'background-color':'#FFFFFF','color':'#2a5f29'});
-            }
-            else
-            {
-                $item.children('.label-finish').css({'background-color':'','color':'#FFFFFF'});
-            }
-        }
-        else
-        {
-            $title.text(item.name).css('color', '');
-            $item.children('.label-finish').hide();
-        }
-
-        var $actions = $item.children('.actions');
-        if(printMoreBtn && !$actions.length)
-        {
-            $(
-            [
-                '<div class="actions" title="' + kanbanLang.more + '">',
-                  '<a data-contextmenu="card"' + whiteStyle + 'data-id="' + item.id + '">',
-                    '<i class="icon icon-ellipsis-v"></i>',
-                  '</a>',
-                '</div>'
-            ].join('')).appendTo($item);
-        }
 
         var $info = $item.children('.info');
         if(!$info.length) $info = $(
@@ -353,11 +329,6 @@ function renderKanbanItem(item, $item)
                 '<div class="user"></div>',
             '</div>'
         ].join('')).appendTo($item);
-        if(kanban.performable == 1)
-        {
-            var $progress = $item.children('.progress-box');
-            if(!$progress.length) $progress = $('<div class="progress-box"><div class="progress"><div class="progress-bar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: ' + item.progress + '%;"></div></div><div class="progress-number">' + item.progress + '%</div></div>').appendTo($item);
-        }
 
         $item.data('card', item);
 
@@ -367,15 +338,6 @@ function renderKanbanItem(item, $item)
         $info.children('.pri')
             .attr('class', 'pri label-pri label-pri-' + item.pri)
             .text(item.pri);
-        if(kanban.performable == 1)
-        {
-            $progress.find('.progress-bar').css('width', item.progress + '%');
-            $progress.find('.progress-number').html(item.progress + '%');
-        }
-
-        $item.css('background-color', item.color);
-        $item.toggleClass('has-color', item.color != '#fff' && item.color != '');
-        $item.find('.info > .label-light').css('background-color', item.color);
 
         var $time = $info.children('.time');
         if(item.end == '0000-00-00' && item.begin == '0000-00-00')
@@ -413,6 +375,41 @@ function renderKanbanItem(item, $item)
         for(i = 0; i < assignedTo.length; i++) title.push(users[assignedTo[i]]);
         $user.html(renderUsersAvatar(assignedTo, item.id)).attr('title', title);
     }
+
+    if(kanban.performable == 1)
+    {
+        var $progress = $item.children('.progress-box');
+        if(!$progress.length) $progress = $('<div class="progress-box"><div class="progress"><div class="progress-bar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: ' + item.progress + '%;"></div></div><div class="progress-number">' + item.progress + '%</div></div>').appendTo($item);
+        $progress.find('.progress-bar').css('width', item.progress + '%');
+        $progress.find('.progress-number').html(item.progress + '%');
+    }
+    $item.css('background-color', item.color);
+    $item.toggleClass('has-color', item.color != '#fff' && item.color != '');
+    $item.find('.info > .label-light').css('background-color', item.color);
+
+    $title = item.fromType == 'execution' ? $item.children('.header').children('.executionName').children('.title') : $item.children('.title');
+    if(!$title.children('.label-finish').length) $title.prepend('<div class="label label-finish">' + kanbanLang.finished + '</div>');
+    var name = item.title ? item.title : item.name;
+    if(kanban.performable == 1 && item.status == 'done' )
+    {
+        var finishColor = '#2a5f29';
+        if(item.color == '#2a5f29') finishColor  = '#FFFFFF';
+        $title.css('color', finishColor);
+        $title.children('.label-finish').show();
+        if(item.color == '#2a5f29')
+        {
+            $item.children('.label-finish').css({'background-color':'#FFFFFF','color':'#2a5f29'});
+        }
+        else
+        {
+            $item.children('.label-finish').css({'background-color':'','color':'#FFFFFF'});
+        }
+    }
+    else
+    {
+        $title.css('color', '');
+        $title.children('.label-finish').hide();
+    }
 }
 
 /**
@@ -445,14 +442,19 @@ function renderExecutionItem(item, $item)
 
     /* Print execution name. */
     var $title = $titleBox.children('.title');
+    var name   = item.title ? item.title : item.name;
     if(!$title.length)
     {
         var icon = mode == 'new' ? 'run' : 'project';
         var viewMethod = item.execType == 'kanban' ? 'kanban' : 'view';
-        if(privs.includes('viewExecution') && item.deleted == '0') $title = $('<a class="title"><i class="icon icon-' + icon + '"></i>' + item.name + '</a>').appendTo($titleBox).attr('href', createLink('execution', viewMethod, 'executionID=' + item.fromID));
-        if(!privs.includes('viewExecution') || item.deleted == '1') $title = $('<div class="title"><i class="icon icon-' + icon + '"></i>' + item.name + '</div>').appendTo($titleBox);
+        if(privs.includes('viewExecution') && item.deleted == '0') $title = $('<a class="title"><i class="icon icon-' + icon + '"></i>' + name + '</a>').appendTo($titleBox).attr('href', createLink('execution', viewMethod, 'executionID=' + item.fromID));
+        if(!privs.includes('viewExecution') || item.deleted == '1') $title = $('<div class="title"><i class="icon icon-' + icon + '"></i>' + name + '</div>').appendTo($titleBox);
     }
-    $title.attr('title', item.name);
+    if(!$title.children('i').length)
+    {
+        $title.append('<i class="icon icon-run"></i>' + item.title);
+    }
+    $title.attr('title', name);
 
     if(item.delay)
     {
@@ -477,7 +479,7 @@ function renderExecutionItem(item, $item)
     {
         if(item.deleted == '0')
         {
-            $statusBox = $('<span class="execStatus label label-' + item.status + '">' + executionLang.statusList[item.status] + '</span>').appendTo($info);
+            $statusBox = $('<span class="execStatus label label-' + item.objectStatus + '">' + executionLang.statusList[item.objectStatus] + '</span>').appendTo($info);
         }
         else
         {
@@ -519,12 +521,17 @@ function renderReleaseItem(item, $item)
 
     /* Print name. */
     var $title = $item.children('.releaseTitle');
+    var name   = item.title ? item.title : item.name;
     if(!$title.length)
     {
-        if(privs.includes('viewRelease') && item.deleted == '0') $title = $('<a class="releaseTitle title"><i class="icon icon-publish"></i>' + item.name + '</a>').appendTo($item).attr('href', createLink('release', 'view', 'releaseID=' + item.fromID));
-        if(!privs.includes('viewRelease') || item.deleted == '1') $title = $('<div class="releaseTitle"><i class="icon icon-publish"></i>' + item.name + '</div>').appendTo($item);
+        if(privs.includes('viewRelease') && item.deleted == '0') $title = $('<a class="releaseTitle title"><i class="icon icon-publish"></i>' + name + '</a>').appendTo($item).attr('href', createLink('release', 'view', 'releaseID=' + item.fromID));
+        if(!privs.includes('viewRelease') || item.deleted == '1') $title = $('<div class="releaseTitle"><i class="icon icon-publish"></i>' + name + '</div>').appendTo($item);
     }
-    $title.attr('title', item.name);
+    if(!$title.children('i').length)
+    {
+        $title.prepend('<i class="icon icon-publish"></i>');
+    }
+    $title.attr('title', name);
 
     var $info = $item.children('.releaseInfo');
     if(!$info.length) $info = $(
@@ -538,7 +545,7 @@ function renderReleaseItem(item, $item)
     {
         if(item.deleted == '0')
         {
-            $statusBox = $('<span class="releaseStatus label label-' + item.status + '">' + releaseLang.statusList[item.status] + '</span>').appendTo($info);
+            $statusBox = $('<span class="releaseStatus label label-' + item.objectStatus + '">' + releaseLang.statusList[item.objectStatus] + '</span>').appendTo($info);
         }
         else
         {
@@ -578,10 +585,15 @@ function renderProductplanItem(item, $item)
 
     /* Print name. */
     var $title = $item.children('.productplanTitle');
+    var name   = item.title ? item.title : item.name;
     if(!$title.length)
     {
-        if(privs.includes('viewPlan') && item.deleted == '0') $title = $('<a class="productplanTitle title"><i class="icon icon-delay"></i>' + item.title + '</a>').appendTo($item).attr('href', createLink('productplan', 'view', 'productplanID=' + item.fromID));
-        if(!privs.includes('viewPlan') || item.deleted == '1') $title = $('<div class="productplanTitle"><i class="icon icon-delay"></i>' + item.title + '</div>').appendTo($item);
+        if(privs.includes('viewPlan') && item.deleted == '0') $title = $('<a class="productplanTitle title"><i class="icon icon-delay"></i>' + name + '</a>').appendTo($item).attr('href', createLink('productplan', 'view', 'productplanID=' + item.fromID));
+        if(!privs.includes('viewPlan') || item.deleted == '1') $title = $('<div class="productplanTitle"><i class="icon icon-delay"></i>' + name + '</div>').appendTo($item);
+    }
+    if(!$title.children('i').length)
+    {
+        $title.append('<i class="icon icon-delay"></i>' + name);
     }
     $title.attr('title', item.title);
 
@@ -597,7 +609,7 @@ function renderProductplanItem(item, $item)
     {
         if(item.deleted == '0')
         {
-            $statusBox = $('<span class="productplanStatus label label-' + item.status + '">' + productplanLang.statusList[item.status] + '</span>').appendTo($info);
+            $statusBox = $('<span class="productplanStatus label label-' + item.objectStatus + '">' + productplanLang.statusList[item.objectStatus] + '</span>').appendTo($info);
         }
         else
         {
@@ -646,12 +658,17 @@ function renderBuildItem(item, $item)
 
     /* Print name. */
     var $title = $item.children('.buildTitle');
+    var name   = item.title ? item.title : item.name;
     if(!$title.length)
     {
-        if(privs.includes('viewBuild') && item.deleted == '0') $title = $('<a class="buildTitle" data-app="project"><i class="icon icon-ver"></i>' + item.name + '</a>').appendTo($item).attr('href', createLink('build', 'view', 'buildID=' + item.fromID));
-        if(!privs.includes('viewBuild') || item.deleted == '1') $title = $('<div class="buildTitle"><i class="icon icon-ver"></i>' + item.name + '</div>').appendTo($item);
+        if(privs.includes('viewBuild') && item.deleted == '0') $title = $('<a class="buildTitle title" data-app="project"><i class="icon icon-ver"></i>' + name + '</a>').appendTo($item).attr('href', createLink('build', 'view', 'buildID=' + item.fromID));
+        if(!privs.includes('viewBuild') || item.deleted == '1') $title = $('<div class="buildTitle title"><i class="icon icon-ver"></i>' + name + '</div>').appendTo($item);
     }
-    $title.attr('title', item.name);
+    if(!$title.children('i').length)
+    {
+        $title.append('<i class="icon icon-ver"></i>' + item.title);
+    }
+    $title.attr('title', name);
 
     var $info = $item.children('.info');
     if(!$info.length) $info = $(
@@ -1081,9 +1098,6 @@ function createCardMenu(options)
             items.push({label: kanbanLang.finishCard, icon: 'checked', onClick: function(){finishCard(card.id, card.kanban, card.region);}});
         }
     }
-    if(privs.includes('archiveCard') && kanban.archived == '1') items.push({label: kanbanLang.archiveCard, icon: 'card-archive', url: createLink('kanban', 'archiveCard', 'cardID=' + card.id), attrs: {'target': 'hiddenwin'}});
-    if(privs.includes('copyCard')) items.push({label: kanbanLang.copyCard, icon: 'copy', url: createLink('kanban', 'copyCard', 'cardID=' + card.id, '', 'true'), className: 'iframe', attrs: {'data-toggle': 'modal'}});
-    if(privs.includes('deleteCard')) items.push({label: kanbanLang.deleteCard, icon: 'trash', url: createLink('kanban', 'deleteCard', 'cardID=' + card.id), attrs: {'target': 'hiddenwin'}});
     if(privs.includes('moveCard'))
     {
         var moveCardItems = [];
@@ -1107,6 +1121,7 @@ function createCardMenu(options)
         moveCardItems = moveCardItems.reverse();
         items.push({label: kanbanLang.moveCard, icon: 'move', items: moveCardItems});
     }
+    if(privs.includes('archiveCard') && kanban.archived == '1') items.push({label: kanbanLang.archiveCard, icon: 'card-archive', url: createLink('kanban', 'archiveCard', 'cardID=' + card.id), attrs: {'target': 'hiddenwin'}});
     if(privs.includes('setCardColor'))
     {
         var cardColoritems = [];
@@ -1120,6 +1135,7 @@ function createCardMenu(options)
         };
         items.push({label: kanbanLang.cardColor, icon: 'color', items: cardColoritems});
     }
+    if(privs.includes('deleteCard')) items.push({label: kanbanLang.deleteCard, icon: 'trash', url: createLink('kanban', 'deleteCard', 'cardID=' + card.id), attrs: {'target': 'hiddenwin'}});
 
     var bounds = options.$trigger[0].getBoundingClientRect();
     items.$options = {x: bounds.right, y: bounds.top};

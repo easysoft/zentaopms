@@ -1320,8 +1320,14 @@ class kanban extends control
     {
         $region = $this->kanban->getRegionByID($regionID);
 
+        $cards = $this->kanban->getCardsByObject('region', $regionID, 1);
+        foreach($this->config->kanban->fromType as $fromType)
+        {
+            $cards = $this->kanban->getImportedCards($region->kanban, $cards, $fromType, 1);
+        }
+
         $this->view->kanban      = $this->kanban->getByID($region->kanban);
-        $this->view->cards       = $this->kanban->getCardsByObject('region', $regionID, 1);
+        $this->view->cards       = $cards;
         $this->view->users       = $this->loadModel('user')->getPairs('noletter|nodeleted');
         $this->view->userIdPairs = $this->user->getPairs('noletter|nodeleted|showid');
         $this->view->usersAvatar = $this->user->getAvatarPairs();

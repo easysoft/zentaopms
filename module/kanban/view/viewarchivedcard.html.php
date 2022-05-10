@@ -31,6 +31,7 @@
 #archivedCards .info > .users > span:after {right: -4px; content: ''; display: block; position: absolute; width: 2px; height: 2px; background-color: #8990a2; top: 0px; border-radius: 50%;}
 #archivedCards .info > .users .avatar {display: inline-block; position: relative; border-radius: 50%; top: -5px; margin:  5px; right: -7px; margin-left: -4px;}
 #archivedCards .cardName {word-wrap: break-word;}
+#archivedCards .card-item .icon {margin-right:2px;}
 #archivedCards .card-item .red {background-color: #b10b0b;}
 #archivedCards .card-item .yellow {background-color: #cfa227;}
 #archivedCards .card-item .green {background-color: #2a5f29;}
@@ -44,6 +45,12 @@
 #archivedCards .progress-box {width: 97%;}
 #performable {padding: 25px 10px !important;}
 </style>
+<?php
+$app->loadLang('execution');
+$app->loadLang('release');
+$app->loadLang('build');
+$app->loadLang('productplan');
+?>
 <div class='panel'>
   <div class='panel-heading text-center'>
     <strong><?php echo $lang->kanban->archivedCard;?></strong>
@@ -76,10 +83,33 @@
         <?php if($card->status == 'done'):?>
         <div class="label" style="<?php echo $labelColor;?>"><?php echo $lang->kanban->finished;?></div>
         <?php endif;?>
+        <?php if(empty($card->fromType)):?>
           <?php echo html::a($this->createLink('kanban', 'viewCard', "cardID=$card->id", '', true), $card->name, '', "class='cardName iframe' data-toggle='modal' data-width='80%' title='$card->name'");?>
           <div class="info">
             <span class="pri label-pri label-pri-<?php echo $card->pri;?>"><?php echo $card->pri;?></span>
             <?php if($card->estimate and $card->estimate != 0) echo "<span class='text-gray'>{$card->estimate}h</span>";?>
+        <?php elseif($card->fromType == 'productplan'):?>
+          <?php echo html::a($this->createLink('productplan', 'view', "id=$card->fromID"), $card->title, '', "class='cardName' title='$card->title'");?>
+          <div class="info productplan">
+            <span class="label label-<?php echo $card->objectStatus?>" ><?php echo $lang->{$card->fromType}->statusList[$card->objectStatus];?></span>
+        <?php elseif($card->fromType == 'release'):?>
+          <?php echo html::a($this->createLink('release', 'view', "id=$card->fromID"), $card->name, '', "class='cardName' title='$card->name'");?>
+          <div class="info release">
+            <span class="label label-<?php echo $card->objectStatus?>" ><?php echo $lang->{$card->fromType}->statusList[$card->objectStatus];?></span>
+            <?php if(!helper::isZeroDate($card->date)):?>
+            <span class="time label label-light"><?php echo date("m/d", strtotime($card->date));?></span>
+            <?php endif;?>
+        <?php elseif($card->fromType == 'execution'):?>
+          <?php echo html::a($this->createLink('execution', 'view', "id=$card->fromID"), $card->name, '', "class='cardName' title='$card->name'");?>
+          <div class="info execution">
+            <span class="label label-<?php echo $card->objectStatus?>" ><?php echo $lang->{$card->fromType}->statusList[$card->objectStatus];?></span>
+        <?php elseif($card->fromType == 'build'):?>
+          <?php echo html::a($this->createLink('build', 'view', "id=$card->fromID"), $card->name, '', "class='cardName' title='$card->name'");?>
+          <div class="info build">
+            <?php if(!helper::isZeroDate($card->date)):?>
+            <span class="time label label-light"><?php echo date("m/d", strtotime($card->date));?></span>
+            <?php endif;?>
+        <?php endif;?>
             <?php if(helper::isZeroDate($card->end) and !helper::isZeroDate($card->begin)):?>
             <span class="time label label-light"><?php echo date("m/d", strtotime($card->begin)) . $lang->kanbancard->beginAB;?></span>
             <?php endif;?>
@@ -151,6 +181,18 @@ $(function()
     $('#archivedCards .panel .close').click(function()
     {
         $('#archivedCards').animate({right: -400}, 500);
+    });
+    $('.card-item').each(function()
+    {
+        var $item = $(this).children('.col-xs-10').children('.kanban-item');
+        var icon  = '';
+
+        if($item.children('.build').length)       icon = '<i class="icon icon-ver">';
+        if($item.children('.execution').length)   icon = '<i class="icon icon-run">';
+        if($item.children('.productplan').length) icon = '<i class="icon icon-delay">';
+        if($item.children('.release').length)     icon = '<i class="icon icon-publish">';
+
+        $item.children('a').prepend(icon);
     });
 })
 </script>
