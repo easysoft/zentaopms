@@ -104,7 +104,7 @@ $app->loadLang('productplan');
           <div class="info execution">
             <span class="label label-<?php echo $card->objectStatus?>" ><?php echo $lang->{$card->fromType}->statusList[$card->objectStatus];?></span>
         <?php elseif($card->fromType == 'build'):?>
-          <?php echo html::a($this->createLink('build', 'view', "id=$card->fromID"), $card->name, '', "class='cardName' title='$card->name'");?>
+          <?php echo html::a($this->createLink('build', 'view', "id=$card->fromID"), $card->name, '', "class='cardName' title='$card->name' data-app='project'");?>
           <div class="info build">
             <?php if(!helper::isZeroDate($card->date)):?>
             <span class="time label label-light"><?php echo date("m/d", strtotime($card->date));?></span>
@@ -167,7 +167,7 @@ $app->loadLang('productplan');
 
         if($canRestore) echo html::a(inlink('restoreCard', "cardID={$card->id}"), $lang->kanban->restore, '', "class='btn btn-xs btn-primary' target='hiddenwin'");
 
-        if($canDelete) echo html::a($this->createLink('kanban', 'deleteCard', "cardID=$card->id"), $lang->delete, '', "class='btn btn-xs delete-card' target='hiddenwin'");
+        if($canDelete) echo html::a($this->createLink('kanban', 'deleteCard', "cardID=$card->id"), $card->fromType == '' ? $lang->delete : $lang->unlink, '', "class='btn btn-xs delete-card' target='hiddenwin'");
         ?>
       </div>
     </div>

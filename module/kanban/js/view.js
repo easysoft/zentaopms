@@ -1086,7 +1086,7 @@ function createCardMenu(options)
     if(!privs.length) return [];
 
     var items = [];
-    if(privs.includes('editCard')) items.push({label: kanbanLang.editCard, icon: 'edit', url: createLink('kanban', 'editCard', 'cardID=' + card.id, '', 'true'), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width': '80%'}});
+    if(privs.includes('editCard') && card.fromType == '') items.push({label: kanbanLang.editCard, icon: 'edit', url: createLink('kanban', 'editCard', 'cardID=' + card.id, '', 'true'), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width': '80%'}});
     if(privs.includes('performable') && kanban.performable == 1)
     {
         if(card.status == 'done')
@@ -1125,7 +1125,7 @@ function createCardMenu(options)
     if(privs.includes('setCardColor'))
     {
         var cardColoritems = [];
-        if(!card.color) color = "#fff";
+        if(!card.color) card.color = "#fff";
         for(let i = 0 ; i < colorList.length ; i ++ )
         {
             var attr   = card.color == colorList[i] ? '<i class="icon icon-check" style="margin-left: 5px"></i>' : '';
@@ -1135,7 +1135,7 @@ function createCardMenu(options)
         };
         items.push({label: kanbanLang.cardColor, icon: 'color', items: cardColoritems});
     }
-    if(privs.includes('deleteCard')) items.push({label: kanbanLang.deleteCard, icon: 'trash', url: createLink('kanban', 'deleteCard', 'cardID=' + card.id), attrs: {'target': 'hiddenwin'}});
+    if(privs.includes('deleteCard')) items.push({label: card.fromType == '' ? kanbanLang.deleteCard : kanbanLang.removeCard, icon: card.fromType == '' ? 'trash' : 'unlink', url: createLink('kanban', 'deleteCard', 'cardID=' + card.id), attrs: {'target': 'hiddenwin'}});
 
     var bounds = options.$trigger[0].getBoundingClientRect();
     items.$options = {x: bounds.right, y: bounds.top};
