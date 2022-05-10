@@ -26,12 +26,15 @@ class program extends control
      * @access public
      * @return void
      */
-    public function browse($status = 'all', $orderBy = 'order_asc')
+    public function browse($status = 'all', $orderBy = 'order_asc', $recTotal = 0, $recPerPage = 10, $pageID = 1)
     {
         if(common::hasPriv('program', 'create')) $this->lang->pageActions = html::a($this->createLink('program', 'create'), "<i class='icon icon-plus'></i> " . $this->lang->program->create, '', "class='btn btn-primary create-program-btn'");
 
         $this->session->set('programList', $this->app->getURI(true), 'program');
         $this->session->set('projectList', $this->app->getURI(true), 'program');
+
+        $this->app->loadClass('pager', $static = true);
+        $pager = new pager($recTotal, $recPerPage, $pageID);
 
         $programType = $this->cookie->programType ? $this->cookie->programType : 'bylist';
 
@@ -41,7 +44,10 @@ class program extends control
         }
         else
         {
-            $programs = $this->program->getList($status, $orderBy, null, true);
+            $topPrograms = $this->program->getList($status, $orderBy, $pager, 'topProgram');
+            $programIDs  = array();
+            foreach($topPrograms as $programID => $program) $programIDs[] = $programID;
+            $programs = $this->program->getList($status, $orderBy, null, 'byTopIDs', $programIDs);
         }
 
         /* Get PM id list. */
@@ -58,6 +64,7 @@ class program extends control
         $this->view->programs     = $programs;
         $this->view->status       = $status;
         $this->view->orderBy      = $orderBy;
+        $this->view->pager        = $pager;
         $this->view->users        = $this->user->getPairs('noletter');
         $this->view->userIdPairs  = $this->user->getPairs('noletter|showid');
         $this->view->usersAvatar  = $this->user->getAvatarPairs('');

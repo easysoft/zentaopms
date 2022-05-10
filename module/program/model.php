@@ -133,8 +133,15 @@ class programModel extends model
      * @access public
      * @return array
      */
-    public function getList($status = 'all', $orderBy = 'id_asc', $pager = NULL)
+    public function getList($status = 'all', $orderBy = 'id_asc', $pager = NULL, $filter = '', $filterParams = '')
     {
+        $filterSql = '';
+        if($filter === 'byTopIDs')
+        {
+            foreach($filterParams as $topID) $filterSql .= "path like ',{$topID},%' or ";
+            if($filterSql) $filterSql = '(' . substr($filterSql, 0, -3) . ')'; // Remove last or.
+        }
+
         return $this->dao->select('*')->from(TABLE_PROGRAM)
             ->where('deleted')->eq(0)
             ->andWhere('vision')->eq($this->config->vision)
@@ -146,6 +153,8 @@ class programModel extends model
             ->markRight(2)
             ->beginIF($status != 'all')->andWhere('status')->eq($status)->fi()
             ->beginIF(!$this->cookie->showClosed)->andWhere('status')->ne('closed')->fi()
+            ->beginIF($filter === 'topProgram')->andWhere('parent')->eq(0)->fi()
+            ->beginIF(!empty($filterSql))->andWhere($filterSql)->fi()
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id');
@@ -240,15 +249,15 @@ class programModel extends model
             foreach($products as $product)
             {
                 $product->plans    = zget($plans, $product->id, array());
-                
+
                 /* Convert predefined HTML entities to characters. */
                 !empty($product->plans) && array_map(function($planVal)
                 {
                     return $planVal->title = htmlspecialchars_decode($planVal->title, ENT_QUOTES);
-                }, 
+                },
                 $product->plans);
                 $product->name = htmlspecialchars_decode($product->name, ENT_QUOTES);
-                
+
                 $product->releases = zget($releases, $product->id, array());
                 $projects          = zget($projectGroup, $product->id, array());
                 foreach($projects as $project)

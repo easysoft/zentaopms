@@ -71,6 +71,7 @@ $lang->program->moreProgram      = 'More program';
 $lang->program->stakeholderType  = 'Stakeholder type';
 $lang->program->parentBudget     = 'Parent program surplus budget：';
 $lang->program->isStakeholderKey = 'Key stakeholder';
+$lang->program->pageSize         = '<strong>{recPerPage}</strong> Top Programs per page';
 
 $lang->program->stakeholderTypeList['inside']  = 'Inside';
 $lang->program->stakeholderTypeList['outside'] = 'Outside';

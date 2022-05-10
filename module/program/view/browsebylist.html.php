@@ -138,6 +138,7 @@
       <?php endforeach;?>
     </tbody>
   </table>
+  <div class='table-footer'><?php $pager->show('right', 'pagerjs');?></div>
 </form>
 <style>
 #programTableList.sortable-sorting > tr {opacity: 0.7}
