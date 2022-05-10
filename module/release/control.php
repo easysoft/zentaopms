@@ -41,15 +41,18 @@ class release extends control
      * @access public
      * @return void
      */
-    public function browse($productID, $branch = 'all', $type = 'all', $orderBy = 't1.date_desc')
+    public function browse($productID, $branch = 'all', $type = 'all', $orderBy = 't1.date_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
+        $this->app->loadClass('pager', $static = true);
+        $pager = new pager($recTotal, $recPerPage, $pageID);
         $this->commonAction($productID, $branch);
         $this->session->set('releaseList', $this->app->getURI(true), 'product');
 
         $this->view->title      = $this->view->product->name . $this->lang->colon . $this->lang->release->browse;
         $this->view->position[] = $this->lang->release->browse;
-        $this->view->releases   = $this->release->getList($productID, $branch, $type, $orderBy);
+        $this->view->releases   = $this->release->getList($productID, $branch, $type, $orderBy, $pager);
         $this->view->type       = $type;
+        $this->view->pager      = $pager;
         $this->display();
     }
 

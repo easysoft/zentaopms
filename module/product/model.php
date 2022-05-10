@@ -609,6 +609,7 @@ class productModel extends model
             ->batchCheck($this->config->product->create->requiredFields, 'notempty')
             ->checkIF((!empty($product->name) and $this->config->systemMode == 'new'), 'name', 'unique', "`program` = $programID")
             ->checkIF(!empty($product->code), 'code', 'unique')
+            ->checkFlow()
             ->exec();
 
         if(!dao::isError())
@@ -718,6 +719,7 @@ class productModel extends model
             ->batchCheck($this->config->product->edit->requiredFields, 'notempty')
             ->checkIF((!empty($product->name) and $this->config->systemMode == 'new'), 'name', 'unique', "id != $productID and `program` = $programID")
             ->checkIF(!empty($product->code), 'code', 'unique', "id != $productID")
+            ->checkFlow()
             ->where('id')->eq($productID)
             ->exec();
 
@@ -773,8 +775,6 @@ class productModel extends model
                 if(is_array($products[$productID]->{$extendField->field})) $products[$productID]->{$extendField->field} = join(',', $products[$productID]->{$extendField->field});
 
                 $products[$productID]->{$extendField->field} = htmlSpecialString($products[$productID]->{$extendField->field});
-                $message = $this->checkFlowRule($extendField, $products[$productID]->{$extendField->field});
-                if($message) return print(js::alert($message));
             }
         }
         if(dao::isError()) return print(js::error(dao::getError()));
@@ -791,6 +791,7 @@ class productModel extends model
                 ->autoCheck()
                 ->batchCheck($this->config->product->edit->requiredFields , 'notempty')
                 ->checkIF((!empty($product->name) and $this->config->systemMode == 'new'), 'name', 'unique', "id != $productID and `program` = $programID")
+                ->checkFlow()
                 ->where('id')->eq($productID)
                 ->exec();
             if(dao::isError()) return print(js::error('product#' . $productID . dao::getError(true)));
@@ -828,6 +829,7 @@ class productModel extends model
 
         $this->dao->update(TABLE_PRODUCT)->data($product)
             ->autoCheck()
+            ->checkFlow()
             ->where('id')->eq((int)$productID)
             ->exec();
 
@@ -2018,6 +2020,37 @@ class productModel extends model
         if($action == 'close') return $product->status != 'closed';
 
         return true;
+    }
+
+    /**
+     * Build operate menu.
+     *
+     * @param  object $product
+     * @param  string $type
+     * @access public
+     * @return string
+     */
+    public function buildOperateMenu($product, $type = 'view')
+    {
+        $menu   = '';
+        $params = "product=$product->id";
+
+        if($type == 'view')
+        {
+            $menu .= "<div class='divider'></div>";
+            $menu .= $this->buildFlowMenu('product', $product, $type, 'direct');
+            $menu .= "<div class='divider'></div>";
+
+            $menu .= $this->buildMenu('product', 'close', $params, $product, $type, '', '', '', '', "data-app='product'");
+            $menu .= "<div class='divider'></div>";
+        }
+
+        $menu .= $this->buildMenu('product', 'edit', $params, $product, $type);
+
+        if($type == 'view') $menu .= $this->buildMenu('product', 'delete', $params, $product, $type, 'trash', 'hiddenwin');
+        if($type == 'browse' && common::hasPriv('product', 'updateOrder')) $menu .= "<i class='icon icon-move text-blue'></i>";
+
+        return $menu;
     }
 
     /**
