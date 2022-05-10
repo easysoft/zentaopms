@@ -90,6 +90,16 @@ DELETE FROM `zt_config` WHERE `section` = 'customMenu';
 
 UPDATE `zt_story` SET `plan` = '' WHERE `plan` = 0;
 
+UPDATE `zt_workflowfield` set `control` = 'datetime' WHERE `module` = 'testcase' and `field` IN ('openedDate','reviewedDate','lastEditedDate','lastRunDate');
+
+UPDATE `zt_workflowfield` set `control` = 'date'     WHERE `module` = 'testtask' and `field` IN ('begin','end');
+UPDATE `zt_workflowfield` set `control` = 'richtext' WHERE `module` = 'testtask' and `field` = 'desc';
+
+UPDATE `zt_workflowfield` set `control` = 'datetime' WHERE `module` IN ('testsuite','caselib') and `field` IN ('addedDate','lastEditedDate');
+UPDATE `zt_workflowfield` set `control` = 'richtext' WHERE `module` = 'testsuite' and `field` = 'desc';
+
+UPDATE `zt_workflowfield` set `control` = 'datetime' WHERE `module` = 'feedback' and `field` IN ('openedDate','reviewedDate','processedDate','closedDate','editedDate','assignedDate');
+
 UPDATE `zt_workflowfield` SET `control` = 'datetime' WHERE `module` = 'product' and `field` = 'createdDate';
 UPDATE `zt_workflowfield` SET `control` = 'date' WHERE `module` = 'productplan' and `field` = 'begin';
 UPDATE `zt_workflowfield` SET `control` = 'date' WHERE `module` = 'productplan' and `field` = 'end';
