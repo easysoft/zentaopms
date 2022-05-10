@@ -328,6 +328,10 @@ if(!window.kanbanDropRules)
         {
             backlog: ['ready', 'backlog'],
             ready: ['backlog', 'ready'],
+            tested: ['verified'],
+            verified: ['tested', 'released'],
+            released: ['verified', 'closed'],
+            closed: ['released'],
         },
         bug:
         {
@@ -957,7 +961,12 @@ function changeCardColType(cardID, fromColID, toColID, fromLaneID, toLaneID, car
     /* Story lane. */
     if(cardType == 'story')
     {
-        if(toColType == 'ready' || toColType == 'backlog')
+        if(toColType == 'closed' && priv.canCloseStory)
+        {
+            var link = createLink('story', 'close', 'storyID=' + objectID, '', true);
+            showIframe = true;
+        }
+        else
         {
             if(toColType == 'ready' && typeof(reviewStoryParis[objectID]) != 'undefined')
             {
