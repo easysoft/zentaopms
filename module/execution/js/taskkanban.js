@@ -480,6 +480,10 @@ if(!window.kanbanDropRules)
         {
             backlog: ['ready'],
             ready: ['backlog'],
+            tested: ['verified'],
+            verified: ['tested', 'released'],
+            released: ['verified', 'closed'],
+            closed: ['released'],
         },
         bug:
         {
@@ -495,7 +499,7 @@ if(!window.kanbanDropRules)
         {
             'wait': ['developing', 'developed', 'canceled', 'closed'],
             'developing': ['developed', 'pause', 'canceled'],
-            'developed': ['closed'],
+            'developed': ['developing', 'closed'],
             'pause': ['developing'],
             'canceled': ['developing'],
             'closed': ['developing'],
@@ -683,31 +687,28 @@ function changeCardColType(cardID, fromColID, toColID, fromLaneID, toLaneID, car
     /* Story lane. */
     if(cardType == 'story')
     {
-        if(toColType == 'ready' || toColType == 'backlog')
+        if(toColType == 'ready' && typeof(reviewStoryParis[objectID]) != 'undefined')
         {
-            if(toColType == 'ready' && typeof(reviewStoryParis[objectID]) != 'undefined')
-            {
-                bootbox.alert(executionLang.storyDragError);
-                return false;
-            }
-
-            var link  = createLink('kanban', 'ajaxMoveCard', 'cardID=' + objectID + '&fromColID=' + fromColID + '&toColID=' + toColID + '&fromLaneID=' + fromLaneID + '&toLaneID=' + toLaneID + '&execitionID=' + executionID + '&browseType=' + browseType + '&groupBy=' + groupBy);
-            $.get(link, function(data)
-            {
-                if(data)
-                {
-                    kanbanGroup = $.parseJSON(data);
-                    if(groupBy == 'default')
-                    {
-                        updateKanban('story', kanbanGroup.story);
-                    }
-                    else
-                    {
-                        updateKanban(browseType, kanbanGroup[groupBy]);
-                    }
-                }
-            })
+            bootbox.alert(executionLang.storyDragError);
+            return false;
         }
+
+        var link  = createLink('kanban', 'ajaxMoveCard', 'cardID=' + objectID + '&fromColID=' + fromColID + '&toColID=' + toColID + '&fromLaneID=' + fromLaneID + '&toLaneID=' + toLaneID + '&execitionID=' + executionID + '&browseType=' + browseType + '&groupBy=' + groupBy);
+        $.get(link, function(data)
+        {
+            if(data)
+            {
+                kanbanGroup = $.parseJSON(data);
+                if(groupBy == 'default')
+                {
+                    updateKanban('story', kanbanGroup.story);
+                }
+                else
+                {
+                    updateKanban(browseType, kanbanGroup[groupBy]);
+                }
+            }
+        });
     }
 
     if(showIframe)
