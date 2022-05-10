@@ -341,51 +341,6 @@ class blockTest
         return $objects;
     }
 
-    public function getOverviewParamsTest()
-    {
-        $objects = $this->objectModel->getOverviewParams();
-
-        if(dao::isError()) return dao::getError();
-
-        return $objects;
-    }
-
-    public function getWaterfallReportParamsTest()
-    {
-        $objects = $this->objectModel->getWaterfallReportParams();
-
-        if(dao::isError()) return dao::getError();
-
-        return $objects;
-    }
-
-    public function getWaterfallEstimateParamsTest()
-    {
-        $objects = $this->objectModel->getWaterfallEstimateParams();
-
-        if(dao::isError()) return dao::getError();
-
-        return $objects;
-    }
-
-    public function getWaterfallGanttParamsTest()
-    {
-        $objects = $this->objectModel->getWaterfallGanttParams();
-
-        if(dao::isError()) return dao::getError();
-
-        return $objects;
-    }
-
-    public function getWaterfallProgressParamsTest()
-    {
-        $objects = $this->objectModel->getWaterfallProgressParams();
-
-        if(dao::isError()) return dao::getError();
-
-        return $objects;
-    }
-
     public function getWaterfallIssueParamsTest($module = '')
     {
         $objects = $this->objectModel->getWaterfallIssueParams($module = '');
