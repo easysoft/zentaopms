@@ -190,6 +190,7 @@ class releaseModel extends model
             ->batchCheck($this->config->release->create->requiredFields, 'notempty')
             ->check('name', 'unique', "product = '{$release->product}' AND branch = '{$release->branch}' AND deleted = '0'")
             ->checkFlow();
+
         if(dao::isError())
         {
             if(!empty($buildID)) $this->dao->delete()->from(TABLE_BUILD)->where('id')->eq($buildID)->exec();
