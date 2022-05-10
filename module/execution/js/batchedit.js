@@ -4,10 +4,11 @@ $(function()
     {
         var executionID = $(this).attr('id').replace('projects', '');
         var $td = $(this).closest('td');
-        if($td.find('[id^="syncStories"]').length == 0)
+        if($td.find('[id^="sync"]').length == 0)
         {
-            $td.append("<input type='hidden' id='syncStories" + executionID + "' name='syncStories[" + executionID + "]' value='no' />");
+            $td.append("<input type='hidden' id='sync" + executionID + "' name='sync[" + executionID + "]' value='no' />");
         }
-        $("#syncStories" + executionID).val(confirm(confirmSyncStories) ? 'yes' : 'no');
+        alert(confirmSync);
+        $("#sync" + executionID).val('yes');
     })
 });
