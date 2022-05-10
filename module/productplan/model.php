@@ -432,6 +432,7 @@ class productplanModel extends model
             ->autoCheck()
             ->batchCheck($this->config->productplan->create->requiredFields, 'notempty')
             ->checkIF(!$this->post->future && !empty($_POST['begin']) && !empty($_POST['end']), 'end', 'ge', $plan->begin)
+            ->checkFlow()
             ->exec();
         if(!dao::isError())
         {
@@ -513,6 +514,7 @@ class productplanModel extends model
             ->autoCheck()
             ->batchCheck($this->config->productplan->edit->requiredFields, 'notempty')
             ->checkIF(!$this->post->future && !empty($_POST['begin']) && !empty($_POST['end']), 'end', 'ge', $plan->begin)
+            ->checkFlow()
             ->where('id')->eq((int)$planID)
             ->exec();
         if(dao::isError()) return false;
@@ -653,8 +655,6 @@ class productplanModel extends model
                 if(is_array($plan->{$extendField->field})) $plan->{$extendField->field} = join(',', $plan->{$extendField->field});
 
                 $plan->{$extendField->field} = htmlSpecialString($plan->{$extendField->field});
-                $message = $this->checkFlowRule($extendField, $plan->{$extendField->field});
-                if($message) return print(js::alert($message));
             }
 
             $plans[$planID] = $plan;
@@ -697,7 +697,7 @@ class productplanModel extends model
             if($change)
             {
                 if($parentID > 0 and !isset($parents[$parentID])) $parents[$parentID] = $parentID;
-                $this->dao->update(TABLE_PRODUCTPLAN)->data($plan)->autoCheck()->where('id')->eq($planID)->exec();
+                $this->dao->update(TABLE_PRODUCTPLAN)->data($plan)->autoCheck()->checkFlow()->where('id')->eq($planID)->exec();
                 if(dao::isError()) return print(js::error(dao::getError()));
                 $changes[$planID] = $change;
             }

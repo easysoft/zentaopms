@@ -71,6 +71,7 @@ class testsuiteModel extends model
         $suite = $this->loadModel('file')->processImgURL($suite, $this->config->testsuite->editor->create['id'], $this->post->uid);
         $this->dao->insert(TABLE_TESTSUITE)->data($suite)
             ->batchcheck($this->config->testsuite->create->requiredFields, 'notempty')
+            ->checkFlow()
             ->exec();
         if(!dao::isError())
         {
@@ -158,6 +159,7 @@ class testsuiteModel extends model
         $this->dao->update(TABLE_TESTSUITE)->data($suite)
             ->autoCheck()
             ->batchcheck($this->config->testsuite->edit->requiredFields, 'notempty')
+            ->checkFlow()
             ->where('id')->eq($suiteID)
             ->exec();
         if(!dao::isError())
