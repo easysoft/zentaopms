@@ -320,10 +320,7 @@ class control extends baseControl
         if(!isset($this->config->bizVersion)) return false;
 
         $moduleName = $this->moduleName;
-        if($moduleName == 'bug' || $moduleName == 'feedback' || $moduleName == 'caselib' || $moduleName == 'testsuite' || $moduleName == 'testtask' || $moduleName == 'testcase')
-        {
-            return $this->$moduleName->buildOperateMenu($object, $type);
-        }
+        if(strpos(',bug,feedback,caselib,testsuite,testtask,testcase,product,', ",{$moduleName},") !== false) return $this->$moduleName->buildOperateMenu($object, $type);
 
         $flow = $this->loadModel('workflow')->getByModule($moduleName);
         return $this->loadModel('flow')->buildOperateMenu($flow, $object, $type);
