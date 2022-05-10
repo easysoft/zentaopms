@@ -100,6 +100,20 @@ UPDATE `zt_workflowfield` set `control` = 'richtext' WHERE `module` = 'testsuite
 
 UPDATE `zt_workflowfield` set `control` = 'datetime' WHERE `module` = 'feedback' and `field` IN ('openedDate','reviewedDate','processedDate','closedDate','editedDate','assignedDate');
 
+UPDATE `zt_workflowfield` SET `control` = 'datetime' WHERE `module` = 'product' and `field` = 'createdDate';
+UPDATE `zt_workflowfield` SET `control` = 'date' WHERE `module` = 'productplan' and `field` = 'begin';
+UPDATE `zt_workflowfield` SET `control` = 'date' WHERE `module` = 'productplan' and `field` = 'end';
+UPDATE `zt_workflowfield` SET `control` = 'radio' WHERE `module` = 'productplan' and `field` = 'deleted';
+UPDATE `zt_workflowfield` SET `control` = 'select', `options` = 12 WHERE `module` = 'productplan' and `field` = 'parent';
+UPDATE `zt_workflowfield` SET `control` = 'date' WHERE `module` = 'release' and `field` = 'date';
+UPDATE `zt_workflowfield` SET `control` = 'richtext' WHERE `module` = 'release' and `field` = 'desc';
+UPDATE `zt_workflowfield` SET `control` = 'radio' WHERE `module` = 'release' and `field` = 'deleted';
+UPDATE `zt_workflowfield` SET `control` = 'datetime' WHERE `module` = 'story' and `field` = 'assignedDate';
+UPDATE `zt_workflowfield` SET `control` = 'datetime' WHERE `module` = 'story' and `field` = 'lastEditedDate';
+UPDATE `zt_workflowfield` SET `control` = 'date' WHERE `module` = 'story' and `field` = 'reviewedDate';
+UPDATE `zt_workflowfield` SET `control` = 'datetime' WHERE `module` = 'story' and `field` = 'closedDate';
+UPDATE `zt_workflowfield` SET `control` = 'radio' WHERE `module` = 'story' and `field` = 'deleted';
+
 DELETE FROM `zt_workflowfield` WHERE `module`='execution' AND `field`='stage';
 DELETE FROM `zt_workflowfield` WHERE `module`='program' AND `field`='stage';
 DELETE FROM `zt_workflowfield` WHERE `module`='project' AND `field`='stage';

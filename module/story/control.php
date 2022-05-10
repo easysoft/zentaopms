@@ -1351,7 +1351,7 @@ class story extends control
             if(isonlybody())
             {
                 $execution = $this->execution->getByID($this->session->execution);
-                if($this->app->tab == 'execution' and $execution->type == 'kanban' and $this->app->tab == 'execution')
+                if($this->app->tab == 'execution' and $execution->type == 'kanban')
                 {
                     $this->loadModel('kanban')->updateLane($this->session->execution, 'story', $storyID);
                     $kanbanData = $this->kanban->getRDKanban($this->session->execution, $this->session->execLaneType ? $this->session->execLaneType : 'all');

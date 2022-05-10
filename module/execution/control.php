@@ -3148,7 +3148,16 @@ class execution extends control
         }
 
         $projectExecutions = array();
-        foreach($orderedExecutions as $execution) $projectExecutions[$execution->project][] = $execution;
+        $parentIdList = array();
+        foreach($orderedExecutions as $execution)
+        {
+            $projectExecutions[$execution->project][] = $execution;
+            if($execution->type != 'stage') continue;
+            if($execution->grade == 2 and $execution->project != $execution->parent) $parentIdList[$execution->parent] = $execution->parent;
+        }
+
+        $parents = array();
+        if($parentIdList) $parents = $this->execution->getByIdList($parentIdList);
 
         $this->view->link        = $this->execution->getLink($module, $method, $extra);
         $this->view->module      = $module;
@@ -3157,6 +3166,7 @@ class execution extends control
         $this->view->extra       = $extra;
         $this->view->projects    = $projectPairs;
         $this->view->executions  = $projectExecutions;
+        $this->view->parents     = $parents;
         $this->display();
     }
 
