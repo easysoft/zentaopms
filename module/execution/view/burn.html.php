@@ -22,7 +22,7 @@
   <div class='btn-toolbar pull-left'>
     <?php
     $weekend = ($type == 'noweekend') ? 'withweekend' : "noweekend";
-    common::printLink('execution', 'computeBurn', 'reload=yes', '<i class="icon icon-refresh"></i> ' . $lang->execution->computeBurn, 'hiddenwin', "title='{$lang->execution->computeBurn}{$lang->execution->burn}' class='btn btn-primary' id='computeBurn'");
+    common::printLink('execution', 'computeBurn', 'reload=yes', '<i class="icon icon-refresh"></i> ' . $lang->execution->computeBurn, 'hiddenwin', "title='{$lang->execution->computeBurn}' class='btn btn-primary' id='computeBurn'");
     echo '<div class="space"></div>';
     echo html::a($this->createLink('execution', 'burn', "executionID=$executionID&type=$weekend&interval=$interval"), $lang->execution->$weekend, '', "class='btn btn-link'");
     if(common::canModify('execution', $execution)) common::printLink('execution', 'fixFirst', "execution=$execution->id", $lang->execution->fixFirst, '', "class='btn btn-link iframe' data-width='700'");
