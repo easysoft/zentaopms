@@ -128,6 +128,7 @@ class apiTest
     public function getReleaseListByApiTest($libID, $id = 0, $confirm = true)
     {
         $objects = $this->objectModel->getReleaseListByApi($libID);
+        a($objects);
 
         if(dao::isError()) return dao::getError();
 
@@ -243,15 +244,6 @@ class apiTest
     public function getTypeListTest($libID)
     {
         $objects = $this->objectModel->getTypeList($libID);
-
-        if(dao::isError()) return dao::getError();
-
-        return $objects;
-    }
-
-    public function createDemoDataTest($name, $baseUrl, $version = '16.0')
-    {
-        $objects = $this->objectModel->createDemoData($name, $baseUrl, $version = '16.0');
 
         if(dao::isError()) return dao::getError();
 

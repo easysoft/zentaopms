@@ -57,5 +57,3 @@ $editApi   = $editData;
 $apiInfo = $api->createTest($normalApi, false);
 
 r($api->updateTest($apiInfo->id, $editApi)) && p('0:new') && e('edittestapi'); //修改一个刚创建的api
-
-//system("./ztest init");

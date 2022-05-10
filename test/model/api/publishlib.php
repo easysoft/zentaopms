@@ -31,5 +31,3 @@ $normalRelease->addedDate = helper::now();
 
 r($api->publishLibTest($emptyBuildRelease)) && p('version:0') && e('『Version』should not be blank.');  //没有版本名的发布
 r($api->publishLibTest($normalRelease)) && p('version') && e('Version1');                               //正常的发布
-
-//system("./ztest init");

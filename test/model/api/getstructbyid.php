@@ -25,5 +25,3 @@ $normalStruct->addedDate = helper::now();
 
 $struct = $api->createStructTest($normalStruct, false);
 r($api->getStructByIDTest($struct->id)) && p('name') && e('struct'); //获取刚创建的数据结构
-
-//system("./ztest init");

@@ -500,9 +500,12 @@ class apiModel extends model
     public function getStructListByRelease($release, $where = '1 = 1 ', $orderBy = 'id')
     {
         $strJoin = array();
-        foreach($release->snap['structs'] as $struct)
+        if(isset($release->snap['structs']))
         {
-            $strJoin[] = "(object.id = {$struct['id']} and spec.version = {$struct['version']} )";
+            foreach($release->snap['structs'] as $struct)
+            {
+                $strJoin[] = "(object.id = {$struct['id']} and spec.version = {$struct['version']} )";
+            }
         }
 
         if($strJoin) $where .= 'and (' . implode(' or ', $strJoin) . ')';

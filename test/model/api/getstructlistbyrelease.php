@@ -44,6 +44,5 @@ $normalRelease->addedDate = helper::now();
 $apiInfo = $api->createTest($normalApi, false);
 $release = $api->publishLibTest($normalRelease, false);
 
-r($api->getStructListByReleaseTest()) && p() && e();
-r($api->getApiListByReleaseTest($release)) && p('0:lib') && e('910'); //创建api后创建发布，使用发布查找api
-//system("./ztest init");
+r($api->getStructListByReleaseTest($release->lib)) && p('') && e('');
+//r($api->getApiListByReleaseTest($release)) && p('0:lib') && e('910'); //创建api后创建发布，使用发布查找api

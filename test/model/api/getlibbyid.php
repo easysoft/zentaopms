@@ -36,5 +36,3 @@ $normalApi = $data;
 
 $apiInfo = $api->createTest($normalApi, false);
 r($api->getLibByIdTest($apiInfo->id)) && p('lib') && e('910'); //获取刚创建的api
-
-//system("./ztest init");

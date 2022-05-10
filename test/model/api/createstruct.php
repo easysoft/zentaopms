@@ -33,5 +33,3 @@ $normalStruct->addedDate = helper::now();
 
 r($api->createStructTest($normalStruct)) && p('name') && e('struct');                            //创建数据结构
 r($api->createStructTest($emptyNameStruct)) && p('name:0') && e('『Name』should not be blank.'); //创建没有结构名的数据结构
-
-//system("./ztest init");

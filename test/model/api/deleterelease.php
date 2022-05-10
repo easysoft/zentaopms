@@ -25,5 +25,3 @@ $normalRelease->addedDate = helper::now();
 $release = $api->publishLibTest($normalRelease, false);
 
 r($api->deleteReleaseTest($release->id, $release->lib)) && p('') && e('0'); //删除一个创建的发布
-
-//system("./ztest init");

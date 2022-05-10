@@ -24,5 +24,3 @@ $normalRelease->addedDate = helper::now();
 
 $release = $api->publishLibTest($normalRelease, false);
 r($api->getReleaseTest($release->lib)) && p('version') && e('Version1'); //获取刚创建的发布
-
-//system("./ztest init");

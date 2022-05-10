@@ -38,5 +38,3 @@ $emptyNameEditStruct['name'] = '';
 $struct = $api->createStructTest($normalStruct, false);
 r($api->updateStructTest($struct->id, $normalEditStruct, false)) && p('0:new') && e('editStruct');                //正常的修改
 r($api->updateStructTest($struct->id, $emptyNameEditStruct)) && p('name:0') && e('『Name』should not be blank.'); //没有名称的修改
-
-//system("./ztest init");
