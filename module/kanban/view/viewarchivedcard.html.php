@@ -91,8 +91,8 @@ $app->loadLang('productplan');
         <?php else:?>
         <?php
         $name = isset($card->title) ? $card->title : $card->name;
-        if(!common::hasPriv($card->fromType, 'view')) echo html::a($this->createLink('productplan', 'view', "id=$card->fromID"), $name, '', "class='cardName' title='$name'");
-        if(common::hasPriv($card->fromType, 'view')) echo "<div class='cardName' title='$name'>$name</div>";
+        if(common::hasPriv($card->fromType, 'view')) echo html::a($this->createLink('productplan', 'view', "id=$card->fromID"), $name, '', "class='cardName' title='$name'");
+        if(!common::hasPriv($card->fromType, 'view')) echo "<div class='cardName' title='$name'>$name</div>";
         echo "<div class='info $card->fromType'>";
         if($card->fromType != 'release' and isset($lang->{$card->fromType}->statusList[$card->objectStatus])) echo "<span class='label label-$card->objectStatus'>" . $lang->{$card->fromType}->statusList[$card->objectStatus] . '</span>';
         if(isset($card->date) and !helper::isZeroDate($card->date)) echo "<span class='time label label-light'>" . date("m/d", strtotime($card->date)) . "</span>"
