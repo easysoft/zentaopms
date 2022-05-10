@@ -1668,6 +1668,7 @@ class kanban extends control
         {
             $stage = $toColumn->type;
             $this->dao->update(TABLE_STORY)->set('stage')->eq($stage)->where('id')->eq($cardID)->exec();
+            $this->dao->update(TABLE_STORYSTAGE)->set('stage')->eq($stage)->where('story')->eq($cardID)->exec();
         }
 
         $kanbanGroup = $regionID == 0 ? $this->kanban->getExecutionKanban($executionID, $browseType, $groupBy) : $this->kanban->getRDKanban($executionID, $browseType, $orderBy, $regionID, $groupBy);
