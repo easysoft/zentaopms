@@ -2160,4 +2160,76 @@ class testtaskModel extends model
 
         return array('suites' => $suites, 'cases' => $cases, 'results' => $results, 'suiteNames' => $suiteNames, 'caseTitles' => $caseTitles);
     }
+
+    /**
+     * Build test task menu. 
+     * 
+     * @param  object $task 
+     * @param  string $type 
+     * @access public
+     * @return string
+     */
+    public function buildOperateMenu($task, $type = 'view')
+    {
+        $function = 'buildOperate' . ucfirst($type) . 'Menu';
+        return $this->$function($task);
+    }
+
+    /**
+     * Build test task view menu. 
+     * 
+     * @param  object $task 
+     * @access public
+     * @return string
+     */
+    public function buildOperateViewMenu($task)
+    {
+        if($task->deleted) return '';
+
+        $menu   = '';
+        $params = "taskID=$task->id";
+
+        $menu .= $this->buildMenu('testtask', 'start',    $params, $task, 'view', '', '', 'iframe showinonlybody', true);
+        $menu .= $this->buildMenu('testtask', 'close',    $params, $task, 'view', '', '', 'iframe showinonlybody', true);
+        $menu .= $this->buildMenu('testtask', 'block',    $params, $task, 'view', 'pause', '', 'iframe showinonlybody', true);
+        $menu .= $this->buildMenu('testtask', 'activate', $params, $task, 'view', 'magic', '', 'iframe showinonlybody', true);
+        $menu .= $this->buildMenu('testtask', 'cases',    $params, $task, 'view', 'sitemap');
+        $menu .= $this->buildMenu('testtask', 'linkCase', $params, $task, 'view', 'link');
+
+        $menu  .= "<div class='divider'></div>";
+        $menu  .= $this->buildFlowMenu('testtask', $task, 'view', 'direct');
+        $menu  .= "<div class='divider'></div>";
+
+        $menu .= $this->buildMenu('testtask', 'edit',   $params, $task, 'view');
+        $menu .= $this->buildMenu('testtask', 'delete', $params, $task, 'view', 'trash', 'hiddenwin');
+        
+        return $menu;
+    }
+
+    /**
+     * Build test task browse menu.
+     * 
+     * @param  object $task 
+     * @access public
+     * @return string
+     */
+    public function buildOperateBrowseMenu($task)
+    {
+        $menu   = '';
+        $params = "taskID=$task->id";
+
+        $menu .= '<div id="action-divider">';
+        $menu .= $this->buildMenu('testtask',   'cases',    $params, $task, 'browse', 'sitemap');
+        $menu .= $this->buildMenu('testtask',   'linkCase', "$params&type=all&param=myQueryID", $task, 'browse', 'link');
+        $menu .= $this->buildMenu('testreport', 'browse',   "objectID=$task->product&objectType=product&extra=$task->id", $task, 'browse', 'flag');
+        $menu .= '</div>';
+        $menu .= $this->buildMenu('testtask',   'view',     $params, $task, 'browse', 'list-alt', '', 'iframe', true, "data-width='90%'");
+        $menu .= $this->buildMenu('testtask',   'edit',     $params, $task, 'browse');
+        if(common::hasPriv('testtask', 'delete', $task))
+        {
+            $deleteURL = helper::createLink('testtask', 'delete', "taskID=$task->id&confirm=yes");
+            $menu .= html::a("javascript:ajaxDelete(\"$deleteURL\",\"taskList\",confirmDelete)", '<i class="icon-common-delete icon-trash"></i>', '', "title='{$this->lang->testtask->delete}' class='btn'");
+        }
+        return $menu;
+    }
 }

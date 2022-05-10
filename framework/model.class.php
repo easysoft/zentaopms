@@ -83,7 +83,12 @@ class model extends baseModel
         if(isset($this->config->bizVersion))
         {
             static $actions;
-            if(empty($actions)) $actions = $this->dao->select('*')->from(TABLE_WORKFLOWACTION)->where('module')->eq($moduleName)->andWhere('buildin')->eq('1')->andWhere('status')->eq('enable')->fetchAll('action');
+            if(empty($actions)) $actions = $this->dao->select('*')->from(TABLE_WORKFLOWACTION)
+                ->where('module')->eq($moduleName)
+                ->andWhere('buildin')->eq('1')
+                ->andWhere('status')->eq('enable')
+                ->beginIF(!empty($this->config->vision))->andWhere('vision')->eq($this->config->vision)->fi()
+                ->fetchAll('action');
         }
 
         $enabled = true;
@@ -133,7 +138,13 @@ class model extends baseModel
         if(strpos($module, '.') !== false) list($appName, $moduleName) = explode('.', $module);
 
         static $actions;
-        if(empty($actions)) $actions = $this->dao->select('*')->from(TABLE_WORKFLOWACTION)->where('module')->eq($moduleName)->andWhere('buildin')->eq('0')->andWhere('status')->eq('enable')->orderBy('order_asc')->fetchAll();
+        if(empty($actions)) $actions = $this->dao->select('*')->from(TABLE_WORKFLOWACTION)
+            ->where('module')->eq($moduleName)
+            ->andWhere('buildin')->eq('0')
+            ->andWhere('status')->eq('enable')
+            ->beginIF(!empty($this->config->vision))->andWhere('vision')->eq($this->config->vision)->fi()
+            ->orderBy('order_asc')
+            ->fetchAll();
 
         $menu = '';
         if($show)

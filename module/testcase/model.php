@@ -1715,22 +1715,8 @@ class testcaseModel extends model
                 echo $case->stepNumber;
                 break;
             case 'actions':
-                if($canBeChanged)
-                {
-                    if($case->needconfirm or $browseType == 'needconfirm')
-                    {
-                        common::printIcon('testcase', 'confirmstorychange',  "caseID=$case->id", $case, 'list', 'confirm', 'hiddenwin', '', '', '', $this->lang->confirm);
-                        break;
-                    }
-
-                    common::printIcon('testtask', 'results', "runID=0&caseID=$case->id", $case, 'list', '', '', 'iframe', true, "data-width='95%'");
-                    common::printIcon('testtask', 'runCase', "runID=0&caseID=$case->id&version=$case->version", $case, 'list', 'play', '', 'runCase iframe', false, "data-width='95%'");
-                    common::printIcon('testcase', 'edit',    "caseID=$case->id", $case, 'list');
-                    if($this->config->testcase->needReview or !empty($this->config->testcase->forceReview)) common::printIcon('testcase', 'review',  "caseID=$case->id", $case, 'list', 'glasses', '', 'iframe');
-                    common::printIcon('testcase', 'createBug', "product=$case->product&branch=$case->branch&extra=caseID=$case->id,version=$case->version,runID=", $case, 'list', 'bug', '', 'iframe', '', "data-width='90%'");
-                    common::printIcon('testcase', 'create',  "productID=$case->product&branch=$case->branch&moduleID=$case->module&from=testcase&param=$case->id", $case, 'list', 'copy');
-                }
-
+                $case->browseType = $browseType;
+                echo $this->buildOperateMenu($case, 'browse');
                 break;
             }
             echo '</td>';
@@ -2015,5 +2001,117 @@ class testcaseModel extends model
         }
 
         return '';
+    }
+
+    /**
+     * Build test case menu.
+     *
+     * @param  object $case 
+     * @param  string $type 
+     * @access public
+     * @return string
+     */
+    public function buildOperateMenu($case, $type = 'view')
+    {
+        $function = 'buildOperate' . ucfirst($type) . 'Menu';
+        return $this->$function($case);
+    }
+
+    /**
+     * Build test case view menu.
+     *
+     * @param  object $case 
+     * @access public
+     * @return string
+     */
+    public function buildOperateViewMenu($case)
+    {
+        if($case->deleted) return '';
+
+        $menu        = '';
+        $params      = "caseID=$case->id";
+        $extraParams = "runID=$case->runID&$params";
+        if(!$case->needconfirm)
+        {
+            if(!$case->isLibCase)
+            {
+                if($this->app->getViewType() == 'xhtml')
+                {
+                    $menu .= $this->buildMenu('testtask', 'runCase', "$extraParams&version=$case->currentVersion", $case, 'view', 'play', '', 'showinonlybody', false, "data-width='95%'");
+                    $menu .= $this->buildMenu('testtask', 'results', "$extraParams&version=$case->version",        $case, 'view', '', '', 'showinonlybody', false, "data-width='95%'");
+                }
+                else
+                {
+                    $menu .= $this->buildMenu('testtask', 'runCase', "$extraParams&version=$case->currentVersion", $case, 'view', 'play', '', 'showinonlybody iframe', false, "data-width='95%'");
+                    $menu .= $this->buildMenu('testtask', 'results', "$extraParams&version=$case->version",        $case, 'view', '', '', 'showinonlybody iframe', false, "data-width='95%'");
+                }
+                if($case->caseFails > 0)
+                {
+                    $menu .= $this->buildMenu('testcase', 'createBug', "product=$case->product&branch=$case->branch&extra=$params,version=$case->version,runID=$case->runID", $case, 'view', 'bug', '', 'iframe', '', "data-width='90%'");
+                }
+            }
+            if($this->config->testcase->needReview || !empty($this->config->testcase->forceReview))
+            {
+                $menu .= $this->buildMenu('testcase', 'review', $params, $case, 'view', '', '', 'iframe', '', '', $this->lang->testcase->reviewAB);
+            }
+        }
+        else
+        {
+            $menu .= $this->buildMenu('testcase', 'confirmstorychange', $params, $case, 'view', 'confirm', 'hiddenwin', '', '', '', $this->lang->confirm);
+        }
+
+        $menu .= "<div class='divider'></div>";
+        $menu .= $this->buildFlowMenu('testcase', $case, 'view', 'direct');
+        $menu .= "<div class='divider'></div>";
+
+        if(!$case->needconfirm)
+        {
+            if(!isonlybody()) $menu .= $this->buildMenu('testcase', 'edit', $params, $case, 'view', '', '', 'showinonlybody');
+            if(!$case->isLibCase && $case->auto != 'unit')
+            { 
+                $menu .= $this->buildMenu('testcase', 'create', "productID=$case->product&branch=$case->branch&moduleID=$case->module&from=testcase&param=$case->id", $case, 'view', 'copy');
+            }
+            if($case->isLibCase && common::hasPriv('caselib', 'createCase'))
+            { 
+                echo html::a(helper::createLink('caselib', 'createCase', "libID=$case->lib&moduleID=$case->module&param=$case->id"), "<i class='icon-copy'></i>", '', "class='btn' title='{$this->lang->testcase->copy}'");
+            }
+
+            $menu .= $this->buildMenu('testcase', 'delete', $params, $case, 'view', 'trash', 'hiddenwin', '');
+        }
+
+        return $menu;
+    }
+
+    /**
+     * Build test case browse menu.
+     *
+     * @param  object $case 
+     * @access public
+     * @return string
+     */
+    public function buildOperateBrowseMenu($case)
+    {
+        $canBeChanged = common::canBeChanged('case', $case);
+        if(!$canBeChanged) return '';
+
+        $menu   = '';
+        $params = "caseID=$case->id";
+
+        if($case->needconfirm || $case->browseType == 'needconfirm')
+        {
+            return $this->buildMenu('testcase', 'confirmstorychange', $params, $case, 'browse', 'confirm', 'hiddenwin', '', '', '', $this->lang->confirm);
+        }
+
+        $menu .= $this->buildMenu('testtask', 'results', "runID=0&$params", $case, 'browse', '', '', 'iframe', true, "data-width='95%'");
+        $menu .= $this->buildMenu('testtask', 'runCase', "runID=0&$params&version=$case->version", $case, 'browse', 'play', '', 'runCase iframe', false, "data-width='95%'");
+        $menu .= $this->buildMenu('testcase', 'edit',    "caseID=$case->id", $case, 'browse');
+        if($this->config->testcase->needReview || !empty($this->config->testcase->forceReview))
+        {
+            common::printIcon('testcase', 'review', $params, $case, 'browse', 'glasses', '', 'iframe');
+        }
+        $menu .= $this->buildMenu('testcase', 'createBug', "product=$case->product&branch=$case->branch&extra=caseID=$case->id,version=$case->version,runID=", $case, 'browse', 'bug', '', 'iframe', '', "data-width='90%'");
+        $menu .= $this->buildMenu('testcase', 'create',  "productID=$case->product&branch=$case->branch&moduleID=$case->module&from=testcase&param=$case->id", $case, 'browse', 'copy');
+
+        return $menu;
     }
 }
