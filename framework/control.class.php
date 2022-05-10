@@ -86,7 +86,7 @@ class control extends baseControl
 
     /**
      * Det default priv by workflow.
-     * 
+     *
      * @access public
      * @return bool
      */
@@ -197,6 +197,7 @@ class control extends baseControl
             $commonExtViewFile = $viewExtPath['common'] . $this->devicePrefix . $methodName . ".{$viewType}.php";
             $xuanExtViewFile   = $viewExtPath['xuan']   . $this->devicePrefix . $methodName . ".{$viewType}.php";
             $visionExtViewFile = $viewExtPath['vision'] . $this->devicePrefix . $methodName . ".{$viewType}.php";
+            $saasExtViewFile   = $viewExtPath['saas']   . $this->devicePrefix . $methodName . ".{$viewType}.php";
             $customExtViewFile = $viewExtPath['custom'] . $this->devicePrefix . $methodName . ".{$viewType}.php";
             $siteExtViewFile   = empty($viewExtPath['site']) ? '' : $viewExtPath['site'] . $this->devicePrefix . $methodName . ".{$viewType}.php";
 
@@ -217,6 +218,10 @@ class control extends baseControl
             {
                 $viewFile = $xuanExtViewFile;
             }
+            else if(file_exists($saasExtViewFile))
+            {
+                $viewFile = $saasExtViewFile;
+            }
             else if(file_exists($commonExtViewFile))
             {
                 $viewFile = $commonExtViewFile;
@@ -235,10 +240,11 @@ class control extends baseControl
                 $commonExtHookFiles = glob($viewExtPath['vision'] . $this->devicePrefix . $methodName . ".*.{$viewType}.hook.php");
             }
             $xuanExtHookFiles   = glob($viewExtPath['xuan']   . $this->devicePrefix . $methodName . ".*.{$viewType}.hook.php");
+            $saasExtHookFiles   = glob($viewExtPath['saas']   . $this->devicePrefix . $methodName . ".*.{$viewType}.hook.php");
             $customExtHookFiles = glob($viewExtPath['custom'] . $this->devicePrefix . $methodName . ".*.{$viewType}.hook.php");
 
             $siteExtHookFiles = empty($viewExtPath['site']) ? '' : glob($viewExtPath['site'] . $this->devicePrefix . $methodName . ".*.{$viewType}.hook.php");
-            $extHookFiles     = array_merge((array)$commonExtHookFiles, (array)$xuanExtHookFiles, (array)$customExtHookFiles, (array)$siteExtHookFiles);
+            $extHookFiles     = array_merge((array)$commonExtHookFiles, (array)$xuanExtHookFiles, (array)$saasExtHookFiles, (array)$customExtHookFiles, (array)$siteExtHookFiles);
         }
 
         if(!empty($extHookFiles)) return array('viewFile' => $viewFile, 'hookFiles' => $extHookFiles);
@@ -320,7 +326,7 @@ class control extends baseControl
         if(!isset($this->config->bizVersion)) return false;
 
         $moduleName = $this->moduleName;
-        if($moduleName == 'bug' || $moduleName == 'feedback') return $this->$moduleName->buildOperateMenu($object, $type);
+        if(strpos(',bug,feedback,caselib,testsuite,testtask,testcase,product,', ",{$moduleName},") !== false) return $this->$moduleName->buildOperateMenu($object, $type);
 
         $flow = $this->loadModel('workflow')->getByModule($moduleName);
         return $this->loadModel('flow')->buildOperateMenu($flow, $object, $type);
@@ -342,9 +348,9 @@ class control extends baseControl
     }
 
     /**
-     * Set workflow export fields 
-     * 
-     * @param  array  $fields 
+     * Set workflow export fields
+     *
+     * @param  array  $fields
      * @access public
      * @return array
      */

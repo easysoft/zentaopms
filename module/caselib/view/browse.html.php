@@ -157,15 +157,7 @@ js::set('flow',          $config->global->flow);
               <td class='<?php if(isset($run)) echo $run->status;?> testcase-<?php echo $case->status?>'> <?php echo $this->processStatus('testcase', $case);?></td>
               <?php foreach($extendFields as $extendField) echo "<td>" . $this->loadModel('flow')->getFieldValue($extendField, $case) . "</td>";?>
               <td class='c-actions'>
-                <?php
-                if($config->testcase->needReview or !empty($config->testcase->forceReview)) common::printIcon('testcase', 'review',  "caseID=$case->id", $case, 'list', 'glasses', '', 'iframe');
-                common::printIcon('testcase',  'edit', "caseID=$case->id", $case, 'list');
-                if(common::hasPriv('testcase', 'delete'))
-                {
-                    $deleteURL = $this->createLink('testcase', 'delete', "caseID=$case->id&confirm=yes");
-                    echo html::a("javascript:ajaxDelete(\"$deleteURL\", \"caseList\", confirmDelete)", '<i class="icon icon-trash"></i>', '', "title='{$lang->testcase->delete}' class='btn'");
-                }
-                ?>
+                <?php echo $this->buildOperateMenu($case, 'browse');?>
               </td>
             </tr>
             <?php endforeach;?>
