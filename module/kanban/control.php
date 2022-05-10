@@ -1663,6 +1663,13 @@ class kanban extends control
             ->andWhere('`column`')->eq($toColID)
             ->exec();
 
+        $toColumn = $this->kanban->getColumnByID($toColID);
+        if($toColumn->laneType == 'story' and in_array($toColumn->type, array('tested', 'verified', 'released', 'closed')))
+        {
+            $stage = $toColumn->type;
+            $this->dao->update(TABLE_STORY)->set('stage')->eq($stage)->where('id')->eq($cardID)->exec();
+        }
+
         $kanbanGroup = $regionID == 0 ? $this->kanban->getExecutionKanban($executionID, $browseType, $groupBy) : $this->kanban->getRDKanban($executionID, $browseType, $orderBy, $regionID, $groupBy);
         echo json_encode($kanbanGroup);
     }
