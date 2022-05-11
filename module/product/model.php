@@ -1100,8 +1100,8 @@ class productModel extends model
         $this->config->product->all->search['queryID']   = $queryID;
         $this->config->product->all->search['actionURL'] = $actionURL;
 
-        $linePairs    = $this->getLinePairs();
-        $this->config->product->all->search['params']['line']['values']    = array('' => '') + $linePairs;
+        $linePairs = $this->getLinePairs();
+        $this->config->product->all->search['params']['line']['values'] = array('' => '') + $linePairs;
 
         if($this->config->systemMode == 'new')
         {

@@ -98,7 +98,6 @@ $config->product->all->search['fields']['desc']        = $lang->product->desc;
 $config->product->all->search['fields']['PO']          = $lang->product->PO;
 $config->product->all->search['fields']['QD']          = $lang->product->QD;
 $config->product->all->search['fields']['RD']          = $lang->product->RD;
-$config->product->all->search['fields']['feedback']    = $lang->product->feedback;
 $config->product->all->search['fields']['reviewer']    = $lang->product->reviewer;
 $config->product->all->search['fields']['type']        = $lang->product->type;
 $config->product->all->search['fields']['createdDate'] = $lang->product->createdDate;
@@ -113,7 +112,6 @@ $config->product->all->search['params']['desc']        = array('operator' => 'in
 $config->product->all->search['params']['PO']          = array('operator' => '=',       'control' => 'select', 'values' => 'users');
 $config->product->all->search['params']['QD']          = array('operator' => '=',       'control' => 'select', 'values' => 'users');
 $config->product->all->search['params']['RD']          = array('operator' => '=',       'control' => 'select', 'values' => 'users');
-$config->product->all->search['params']['feedback']    = array('operator' => '=',       'control' => 'select', 'values' => 'users');
 $config->product->all->search['params']['reviewer']    = array('operator' => 'include', 'control' => 'select', 'values' => 'users');
 $config->product->all->search['params']['type']        = array('operator' => '=',       'control' => 'select', 'values' => $lang->product->typeList);
 $config->product->all->search['params']['createdDate'] = array('operator' => '=',       'control' => 'input',  'values' => '', 'class' => 'date');
