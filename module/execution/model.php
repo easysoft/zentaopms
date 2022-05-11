@@ -4033,4 +4033,36 @@ class executionModel extends model
         }
         $this->dao->update(TABLE_PROJECT)->set('path')->eq($path['path'])->set('grade')->eq($path['grade'])->where('id')->eq($execution->id)->exec();
     }
+
+    /**
+     * Build execution action menu.
+     *
+     * @param  object $execution
+     * @param  string $type
+     * @access public
+     * @return string
+     */
+    public function buildOperateMenu($execution, $type = 'view')
+    {
+        if($execution->deleted) return '';
+
+        $menu   = '';
+        $params = "executionID=$execution->id";
+
+        $menu .= "<div class='divider'></div>";
+        $menu .= $this->buildMenu('execution', 'start',    $params, $execution, $type, '', '', 'iframe', true);
+        $menu .= $this->buildMenu('execution', 'activate', $params, $execution, $type, '', '', 'iframe', true);
+        $menu .= $this->buildMenu('execution', 'putoff',   $params, $execution, $type, '', '', 'iframe', true);
+        $menu .= $this->buildMenu('execution', 'suspend',  $params, $execution, $type, '', '', 'iframe', true);
+        $menu .= $this->buildMenu('execution', 'close',    $params, $execution, $type, '', '', 'iframe', true);
+
+        $menu .= "<div class='divider'></div>";
+        $menu .= $this->buildFlowMenu('execution', $execution, 'view', 'direct');
+        $menu .= "<div class='divider'></div>";
+
+        $menu .= $this->buildMenu('execution', 'edit',   "execution=$execution->id", $execution);
+        $menu .= $this->buildMenu('execution', 'delete', "execution=$execution->id", $execution, 'button', 'trash', 'hiddenwin');
+
+        return $menu;
+    }
 }

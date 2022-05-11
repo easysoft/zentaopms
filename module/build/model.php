@@ -505,7 +505,6 @@ class buildModel extends model
      */
     public function batchUnlinkBug($buildID)
     {
-
         $bugList = $this->post->unlinkBugs;
         if(empty($bugList)) return true;
 
@@ -517,5 +516,28 @@ class buildModel extends model
 
         $this->loadModel('action');
         foreach($this->post->unlinkBugs as $unlinkBugID) $this->action->create('bug', $unlinkBugID, 'unlinkedfrombuild', '', $buildID);
+    }
+
+    /**
+     * Build action menu.
+     *
+     * @param  object $build
+     * @param  string $type
+     * @access public
+     * @return string
+     */
+    public function buildOperateMenu($build, $type = 'view')
+    {
+        $canBeChanged = common::canBeChanged('build', $build);
+        if($build->deleted || !$canBeChanged) return '';
+
+        $menu   = '';
+        $params = "buildID=$build->id";
+
+        $menu .= $this->buildFlowMenu('build', $build, 'view', 'direct');
+        $menu .= $this->buildMenu('build', 'edit',   $params, $build, $type);
+        $menu .= $this->buildMenu('build', 'delete', $params, $build, $type, 'trash', 'hiddenwin');
+
+        return $menu;
     }
 }

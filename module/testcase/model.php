@@ -1169,15 +1169,16 @@ class testcaseModel extends model
      *
      * @param  object $case
      * @param  string $action
+     * @param  string $module
      * @access public
      * @return void
      */
-    public static function isClickable($case, $action)
+    public static function isClickable($case, $action, $module = 'testcase')
     {
         $action = strtolower($action);
 
-        if($action == 'createbug') return $case->caseFails > 0;
-        if($action == 'review') return isset($case->caseStatus) ? $case->caseStatus == 'wait' : $case->status == 'wait';
+        if($module == 'testcase' && $action == 'createbug') return $case->caseFails > 0;
+        if($module == 'testcase' && $action == 'review') return isset($case->caseStatus) ? $case->caseStatus == 'wait' : $case->status == 'wait';
 
         return true;
     }

@@ -96,25 +96,9 @@
     </div>
     <div class='main-actions'>
       <div class="btn-toolbar">
-        <?php
-        $params     = "project=$project->id";
-        $browseLink = $this->session->projectList ? $this->session->projectList : inlink('browse');
-        common::printBack($browseLink);
-        if(!$project->deleted)
-        {
-            echo "<div class='divider'></div>";
-            common::printIcon('project', 'start',    "projectID=$project->id", $project, 'button', 'play', '', 'iframe', true, '', $lang->project->start);
-            common::printIcon('project', 'activate', "projectID=$project->id", $project, 'button', 'magic', '', 'iframe', true, '', $lang->project->activate);
-            common::printIcon('project', 'suspend',  "projectID=$project->id", $project, 'button', 'pause', '', 'iframe', true, '', $lang->project->suspend);
-            common::printIcon('project', 'close',    "projectID=$project->id", $project, 'button', 'off', '', 'iframe', true, '', $lang->close);
-
-            echo $this->buildOperateMenu($project, 'view');
-
-            echo "<div class='divider'></div>";
-            common::printIcon('project', 'edit', $params . '&from=view', $project, 'button', 'edit', '', '', '', '', $lang->edit);
-            common::printIcon('project', 'delete', $params, $project, 'button', 'trash', 'hiddenwin', '', '', '', $lang->delete);
-        }
-        ?>
+        <?php $browseLink = $this->session->projectList ? $this->session->projectList : inlink('browse');?>
+        <?php common::printBack($browseLink);?>
+        <?php echo $this->buildOperateMenu($project, 'view');?>
       </div>
     </div>
   </div>
