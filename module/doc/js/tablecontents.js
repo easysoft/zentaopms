@@ -22,7 +22,7 @@ $(function()
    /* Make modules tree sortable. */
    $('#modules').sortable(
    {
-       trigger: '.module-name>a.sort-module, .tree-actions>.sortModule>.icon-move, .module-name>a.sortDoc, .tree-actions>.sortDoc>.icon-move',
+       trigger: '.module-name>a.sort-module, .tree-actions>.sortModule>.icon-move, a.sortDoc, .tree-actions>.sortDoc>.icon-move',
        dropToClass: 'sort-to',
        stopPropagation: true,
        nested: true,

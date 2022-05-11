@@ -2416,7 +2416,13 @@ EOT;
 
                 if($currentMethod == 'tablecontents')
                 {
-                    $treeMenu[0] .= '<span class="tail-info">' . zget($users, $doc->editedBy) . ' &nbsp;' . $doc->editedDate . '</span>';
+                    $treeMenu[0] .= '<div class="tree-group"><span class="tail-info">' . zget($users, $doc->editedBy) . ' &nbsp;' . $doc->editedDate . '</span>';
+                    if(common::hasPriv('doc', 'updateOrder'))
+                    {
+                        $treeMenu[0] .= "<div class='tree-actions'>";
+                        $treeMenu[0] .= html::a('javascript:;', "<i class='icon icon-move sortDoc'></i>", '', "title='{$this->lang->doc->updateOrder}' class='sortDoc'");
+                        $treeMenu[0] .= '</div>';
+                    }
                 }
                 if($currentMethod == 'objectlibs')
                 {
@@ -2432,7 +2438,9 @@ EOT;
                 }
                 else
                 {
-                    $treeMenu[0] .= html::a(inlink('objectLibs', "type=$type&objectID=$objectID&libID=$rootID&docID={$doc->id}"), "<i class='icon icon-file-text text-muted'></i> &nbsp;" . $doc->title, '', "data-app='{$this->app->tab}' class='doc-title' title='{$doc->title}'");
+                    $class = common::hasPriv('doc', 'updateOrder') ? 'sortDoc' : '';
+                    $treeMenu[0] .= html::a(inlink('objectLibs', "type=$type&objectID=$objectID&libID=$rootID&docID={$doc->id}"), "<i class='icon icon-file-text text-muted'></i> &nbsp;" . $doc->title, '', "data-app='{$this->app->tab}' class='doc-title $class' title='{$doc->title}'");
+                    $treeMenu[0] .= '</div>';
                 }
 
                 $treeMenu[0] .= '</li>';
@@ -2527,14 +2535,11 @@ EOT;
         else
         {
             $li = "<div class='tree-group'><span class='module-name'><a class='sort-module' title='{$module->name}'>" . $module->name . '</a></span>';
-            if($currentMethod == 'tablecontents')
+            if($currentMethod == 'tablecontents' and common::hasPriv('tree', 'updateOrder'))
             {
-                if(common::hasPriv('tree', 'updateOrder'))
-                {
-                    $li .= "<div class='tree-actions'>";
-                    $li .= html::a('javascript:;', "<i class='icon icon-move sortModule'></i>", '', "title='{$this->lang->doc->updateOrder}' class='sortModule'");
-                    $li .= '</div>';
-                }
+                $li .= "<div class='tree-actions'>";
+                $li .= html::a('javascript:;', "<i class='icon icon-move sortModule'></i>", '', "title='{$this->lang->doc->updateOrder}' class='sortModule'");
+                $li .= '</div>';
             }
             else
             {
