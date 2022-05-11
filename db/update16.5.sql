@@ -140,7 +140,8 @@ ALTER TABLE `zt_workflowdatasource` ADD UNIQUE `code` (`code`);
 REPLACE INTO `zt_workflowdatasource` (`type`, `name`, `code`, `buildin`, `datasource`, `view`, `keyField`, `valueField`) VALUES
 ('lang', '项目模型', 'projectModel', '1', 'projectModel', '', '', ''),
 ('lang', '反馈类型', 'feedbackType', '1', 'feedbackType', '', '', ''),
-('lang', '反馈处理方案', 'feedbackSolution', '1', 'feedbackSolution', '', '', '');
+('lang', '反馈处理方案', 'feedbackSolution',     '1', 'feedbackSolution',     '', '', '');
+('lang', '反馈关闭原因', 'feedbackclosedReason', '1', 'feedbackclosedReason', '', '', '');
 
 REPLACE INTO `zt_workflowfield` (`module`, `field`, `type`, `length`, `name`, `control`, `expression`, `options`, `default`, `rules`, `placeholder`, `order`, `searchOrder`, `exportOrder`, `canExport`, `canSearch`, `isValue`, `readonly`, `buildin`, `desc`, `createdBy`, `createdDate`, `editedBy`, `editedDate`) VALUES
 ('execution',	'type', 	        'char', 	'30',	'迭代类型',	        'select',	'',	'16',	'sprint',	'',	'',	3,	0,	0,	'0',	'0',	'0',	'1',	1,	'',	'',	'0000-00-00 00:00:00',	'',	'0000-00-00 00:00:00'),
