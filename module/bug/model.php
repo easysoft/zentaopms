@@ -3234,9 +3234,9 @@ class bugModel extends model
 
     /**
      * Build bug menu.
-     * 
-     * @param  object $bug 
-     * @param  string $type 
+     *
+     * @param  object $bug
+     * @param  string $type
      * @access public
      * @return string
      */
