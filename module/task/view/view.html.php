@@ -170,7 +170,7 @@
         <?php common::printBack($browseLink);?>
         <?php if(!isonlybody()) echo "<div class='divider'></div>";?>
         <?php $task->executionList = $execution;?>
-        <?php echo $this->buildOperateMenu($task, 'view');?>
+        <?php echo $this->task->buildOperateMenu($task, 'view');?>
       </div>
     </div>
   </div>

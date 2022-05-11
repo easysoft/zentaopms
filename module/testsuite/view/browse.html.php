@@ -70,7 +70,7 @@
       <td><?php echo $suite->addedDate;?></td>
       <?php foreach($extendFields as $extendField) echo "<td>" . $this->loadModel('flow')->getFieldValue($extendField, $suite) . "</td>";?>
       <td class='c-actions'>
-        <?php echo $this->buildOperateMenu($suite, 'browse');?>
+        <?php echo $this->testsuite->buildOperateMenu($suite, 'browse');?>
       </td>
     </tr>
     <?php endforeach;?>

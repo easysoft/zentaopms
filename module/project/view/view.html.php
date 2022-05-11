@@ -98,7 +98,7 @@
       <div class="btn-toolbar">
         <?php $browseLink = $this->session->projectList ? $this->session->projectList : inlink('browse');?>
         <?php common::printBack($browseLink);?>
-        <?php echo $this->buildOperateMenu($project, 'view');?>
+        <?php echo $this->project->buildOperateMenu($project, 'view');?>
       </div>
     </div>
   </div>

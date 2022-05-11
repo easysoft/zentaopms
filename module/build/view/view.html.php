@@ -48,7 +48,7 @@ tbody tr td:first-child input {display: none;}
   </div>
   <?php if(!isonlybody()):?>
   <div class='btn-toolbar pull-right'>
-    <?php echo $this->buildOperateMenu($build, 'view');?>
+    <?php echo $this->build->buildOperateMenu($build, 'view');?>
   </div>
   <?php endif;?>
 </div>

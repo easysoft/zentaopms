@@ -200,7 +200,7 @@
       <div class="btn-toolbar">
         <?php common::printBack($browseLink);?>
         <?php if(!isonlybody()) echo "<div class='divider'></div>";?>
-        <?php if(!$story->deleted) echo $this->buildOperateMenu($story, 'view');?>
+        <?php if(!$story->deleted) echo $this->story->buildOperateMenu($story, 'view');?>
       </div>
     </div>
   </div>
