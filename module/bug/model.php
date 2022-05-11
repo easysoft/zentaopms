@@ -2747,8 +2747,8 @@ class bugModel extends model
 
                     $bugQuery = preg_replace("/`story`[ ]+(NOT[ ]*)?LIKE[ ]+'%$searchValue%'/Ui", '`story` $1 IN (' . implode($story, ',') .')', $bugQuery);
                 }
-                $bugQuery .= ' AND `story` != 0';
             }
+            $bugQuery .= ' AND `story` != 0';
         }
 
         $bugs = $this->dao->select('*')->from(TABLE_BUG)->where($bugQuery)
