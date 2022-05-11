@@ -1685,6 +1685,26 @@ class bugModel extends model
             {
                 $bugQuery = str_replace($allProduct, '1', $this->session->projectBugQuery);
             }
+            if(strpos($bugQuery, ' `story` ') !== false)
+            {
+                preg_match_all("/`story`[ ]+(NOT *)?LIKE[ ]+'%([^%]*)%'/Ui", $bugQuery, $out);
+                if(!empty($out[2]))
+                {
+                    foreach($out[2] as $searchValue)
+                    {
+                        $story = $this->dao->select('id')->from(TABLE_STORY)->alias('t1')
+                            ->leftJoin(TABLE_STORYSPEC)->alias('t2')->on('t1.id=t2.story')
+                            ->where('t1.title')->like("%$searchValue%")
+                            ->orWhere('t1.keywords')->like("%$searchValue%")
+                            ->orWhere('t2.spec')->like("%$searchValue%")
+                            ->orWhere('t2.verify')->like("%$searchValue%")
+                            ->fetchPairs('id');
+
+                        $bugQuery = preg_replace("/`story`[ ]+(NOT[ ]*)?LIKE[ ]+'%$searchValue%'/Ui", '`story` $1 IN (' . implode(',', $story) .')', $bugQuery);
+                    }
+                }
+                $bugQuery .= ' AND `story` != 0';
+            }
 
             $bugs = $this->dao->select('*')->from(TABLE_BUG)
                 ->where($bugQuery)
@@ -1751,6 +1771,26 @@ class bugModel extends model
             if(strpos($this->session->executionBugQuery, $allProduct) !== false)
             {
                 $bugQuery = str_replace($allProduct, '1', $this->session->executionBugQuery);
+            }
+            if(strpos($bugQuery, ' `story` ') !== false)
+            {
+                preg_match_all("/`story`[ ]+(NOT *)?LIKE[ ]+'%([^%]*)%'/Ui", $bugQuery, $out);
+                if(!empty($out[2]))
+                {
+                    foreach($out[2] as $searchValue)
+                    {
+                        $story = $this->dao->select('id')->from(TABLE_STORY)->alias('t1')
+                            ->leftJoin(TABLE_STORYSPEC)->alias('t2')->on('t1.id=t2.story')
+                            ->where('t1.title')->like("%$searchValue%")
+                            ->orWhere('t1.keywords')->like("%$searchValue%")
+                            ->orWhere('t2.spec')->like("%$searchValue%")
+                            ->orWhere('t2.verify')->like("%$searchValue%")
+                            ->fetchPairs('id');
+
+                        $bugQuery = preg_replace("/`story`[ ]+(NOT[ ]*)?LIKE[ ]+'%$searchValue%'/Ui", '`story` $1 IN (' . implode(',', $story) .')', $bugQuery);
+                    }
+                }
+                $bugQuery .= ' AND `story` != 0';
             }
 
             $bugs = $this->dao->select('*')->from(TABLE_BUG)
@@ -2745,7 +2785,7 @@ class bugModel extends model
                         ->orWhere('t2.verify')->like("%$searchValue%")
                         ->fetchPairs('id');
 
-                    $bugQuery = preg_replace("/`story`[ ]+(NOT[ ]*)?LIKE[ ]+'%$searchValue%'/Ui", '`story` $1 IN (' . implode($story, ',') .')', $bugQuery);
+                    $bugQuery = preg_replace("/`story`[ ]+(NOT[ ]*)?LIKE[ ]+'%$searchValue%'/Ui", '`story` $1 IN (' . implode(',', $story) .')', $bugQuery);
                 }
             }
             $bugQuery .= ' AND `story` != 0';
