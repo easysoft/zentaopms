@@ -42,7 +42,9 @@
 #archivedCards .card-item .has-color .info > .label-pri,
 #archivedCards .card-item .has-color .info > .estimate,
 #archivedCards .card-item .has-color .info > .label-light {color: #FFFFFF;}
+#archivedCards .info.execution .label-light, #archivedCards .info.productplan .label-light, #archivedCards .info.build .label-light, #archivedCards .info.release .label-light {background: #EFEFEF !important; color: #838A9D !important;}
 #archivedCards .card-item .has-color .info > .label-pri {border-color: #FFFFFF;}
+#archivedCards .card-item .has-color .progress-box > .progress-number {color: #FFFFFF;}
 #archivedCards .progress-box {width: 97%;}
 #performable {padding: 25px 10px !important;}
 </style>
@@ -105,8 +107,11 @@ $app->loadLang('productplan');
             <?php if(helper::isZeroDate($card->begin) and !helper::isZeroDate($card->end) and $card->begin != '2030-01-01' and $card->end != '2030-01-01'):?>
             <span class="time label label-light"><?php echo date("m/d", strtotime($card->end)) . $lang->kanbancard->deadlineAB;?></span>
             <?php endif;?>
-            <?php if(!helper::isZeroDate($card->begin) and !helper::isZeroDate($card->end) and $card->begin != '2030-01-01' and $card->end != '2030-01-01'):?>
+            <?php if(!helper::isZeroDate($card->begin) and !helper::isZeroDate($card->end) and $card->begin != '2030-01-01' and $card->end != '2030-01-01' and $card->fromType == ''):?>
             <span class="time label label-light"><?php echo date("m/d", strtotime($card->begin)) . ' ~ ' . date("m/d", strtotime($card->end));?></span>
+            <?php endif;?>
+            <?php if(!helper::isZeroDate($card->begin) and !helper::isZeroDate($card->end) and $card->begin != '2030-01-01' and $card->end != '2030-01-01' and $card->fromType != ''):?>
+            <span class="time label label-light"><?php echo date("m-d", strtotime($card->begin)) . ' ' . $lang->{$card->fromType}->to . ' ' . date("m-d", strtotime($card->end));?></span>
             <?php endif;?>
             <?php
             if($card->begin == '2030-01-01' or $card->end == '2030-01-01') echo '<span class="date label label-future" title="' . $lang->{$card->fromType}->future . '">' . $lang->{$card->fromType}->future . '</span>';
