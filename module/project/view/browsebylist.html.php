@@ -40,6 +40,7 @@
     <?php echo html::a(inlink('browse', "programID=$programID&browseType=$key"), $label, '', "class='btn btn-link $active'");?>
     <?php endforeach;?>
     <?php echo html::checkbox('involved', array('1' => $lang->project->mine), '', $this->cookie->involved ? 'checked=checked' : '');?>
+    <a class="btn btn-link querybox-toggle" id='bysearchTab'><i class="icon icon-search muted"></i> <?php echo '搜索';?></a>
   </div>
   <div class="btn-toolbar pull-right">
     <div class="btn-group panel-actions">
@@ -67,6 +68,7 @@
   </div>
   <?php endif;?>
   <div class="main-col">
+    <div class="cell<?php if($browseType == 'bysearch') echo ' show';?>" id="queryBox" data-module='project'></div>
     <?php if(empty($projectStats)):?>
     <div class="table-empty-tip">
       <p>

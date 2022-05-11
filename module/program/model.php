@@ -240,15 +240,15 @@ class programModel extends model
             foreach($products as $product)
             {
                 $product->plans    = zget($plans, $product->id, array());
-                
+
                 /* Convert predefined HTML entities to characters. */
                 !empty($product->plans) && array_map(function($planVal)
                 {
                     return $planVal->title = htmlspecialchars_decode($planVal->title, ENT_QUOTES);
-                }, 
+                },
                 $product->plans);
                 $product->name = htmlspecialchars_decode($product->name, ENT_QUOTES);
-                
+
                 $product->releases = zget($releases, $product->id, array());
                 $projects          = zget($projectGroup, $product->id, array());
                 foreach($projects as $project)
