@@ -1987,6 +1987,7 @@ class storyModel extends model
             ->add('lastEditedBy', $this->app->user->account)
             ->add('lastEditedDate', $now)
             ->add('assignedDate', $now)
+            ->remove('comment')
             ->get();
 
         $this->dao->update(TABLE_STORY)->data($story)->autoCheck()->checkFlow()->where('id')->eq((int)$storyID)->exec();
@@ -3038,6 +3039,8 @@ class storyModel extends model
     public function closeParentRequirement($storyID)
     {
         $parentID = $this->dao->select('BID')->from(TABLE_RELATION)->where('AID')->eq($storyID)->fetch();
+        if(empty($parentID)) return;
+
         $stories  = $this->dao->select('t2.id, t2.status')->from(TABLE_RELATION)->alias('t1')
             ->leftJoin(TABLE_STORY)->alias('t2')->on('t2.id=t1.AID')
             ->where('t1.BType')->eq('requirement')

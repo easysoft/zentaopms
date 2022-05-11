@@ -121,13 +121,13 @@
 .label-closed, .label-terminate {background: #e5e5e5 !important; color: #b8b8b8;}
 .label-deleted {background: #ff5d5d !important; color: #fff;}
 .label-normal {background: #e1e8d9 !important; color: #9abe76;}
-.kanban-item > .kanban-card > .execInfo > .user, .kanban-item > .kanban-card > .releaseInfo > .user, .kanban-item > .kanban-card > .productplanInfo > .user {position: absolute; right: 13px; bottom: 1px}
+.kanban-item > .kanban-card > .execInfo > .user, .kanban-item > .kanban-card > .releaseInfo > .user, .kanban-item > .kanban-card > .productplanInfo > .user {float:right}
 .kanban-item > .kanban-card > .execInfo > .user > .avatar, .kanban-item > .kanban-card > .releaseInfo > .user > .avatar, .kanban-item > .kanban-card > .productplanInfo > .user > .avatar {display: inline-block; width: 24px; height: 24px; line-height: 24px; margin-right: 0px; margin-left: 2px}
 .kanban-card .releaseTitle .icon, .kanban-card .title .icon, .kanban-card .productplanTitle .icon, .kanban-card .title .icon, .kanban-card .buildTitle .icon{padding-right: 5px;}
 .kanban-card .label-finish {margin-right: 7px; margin-top: -1px; padding: 3px 5px; float: left; background-color:#2a5f29;}
 .kanban-card .releaseTitle, .kanban-card .productplanTitle {width: 100%; float: left;}
 
-.progress-box {display: flex; flex-direction: row; margin-top: 10px;}
+.progress-box {width:100%; display: flex; flex-direction: row; margin-top: 10px;}
 .progress {flex: auto; margin: 5px auto 5px;}
 .progress-number {padding-left: 5px;}
 
