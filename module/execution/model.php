@@ -692,18 +692,18 @@ class executionModel extends model
 
             if(isset($execution->project))
             {
-                $executionProducts  = $this->loadModel('product')->getProducts($executionID);
-                $projectProducts    = $this->product->getProducts($execution->project);
-                $executionProducts  = array_keys($executionProducts);
-                $projectProducts    = array_keys($projectProducts);
-                $diffProducts       = array_diff($executionProducts, $projectProducts);
-                if(!empty($diffProducts))
+                $executionProductsList  = $this->loadModel('product')->getProducts($executionID);
+                $projectProductsList    = $this->product->getProducts($execution->project);
+                $executionProductsID    = array_keys($executionProductsList);
+                $projectProductsID      = array_keys($projectProductsList);
+                $diffProductsID         = array_diff($executionProductsID, $projectProductsID);
+                if(!empty($diffProductsID))
                 {
-                    foreach($diffProducts as $key => $newProduct)
+                    foreach($diffProductsID as $key => $newProductID)
                     {
                         $data = $this->dao->select('*')->from(TABLE_PROJECTPRODUCT)
                             ->where('project')->eq($executionID)
-                            ->andWhere('product')->eq($newProduct)
+                            ->andWhere('product')->eq($newProductID)
                             ->fetch();
                         $data->project = $execution->project;
                         $this->dao->insert(TABLE_PROJECTPRODUCT)->data($data)->exec();
