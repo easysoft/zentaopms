@@ -684,6 +684,27 @@ class executionModel extends model
             $projectID    = isset($execution->project) ? $execution->project : $oldExecution->project;
             $project      = $this->project->getByID($projectID);
 
+            if(isset($execution->project))
+            {
+                $executionProductList   = $this->loadModel('product')->getProducts($executionID);
+                $projectProductList     = $this->product->getProducts($execution->project);
+                $executionProductIdList = array_keys($executionProductList);
+                $projectProductIdList   = array_keys($projectProductList);
+                $diffProductIdList      = array_diff($executionProductIdList, $projectProductIdList);
+                if(!empty($diffProductIdList))
+                {
+                    foreach($diffProductIdList as $key => $newProductID)
+                    {
+                        $data = $this->dao->select('*')->from(TABLE_PROJECTPRODUCT)
+                            ->where('project')->eq($executionID)
+                            ->andWhere('product')->eq($newProductID)
+                            ->fetch();
+                        $data->project = $execution->project;
+                        $this->dao->insert(TABLE_PROJECTPRODUCT)->data($data)->exec();
+                    }
+                }
+            }
+
             if($project  and $execution->begin < $project->begin)
             {
                 dao::$errors['begin'] = sprintf($this->lang->execution->errorLetterProject, $project->begin);

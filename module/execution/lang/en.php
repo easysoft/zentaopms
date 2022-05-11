@@ -340,7 +340,7 @@ if($config->systemMode == 'new')     $lang->execution->copyTeamTitle = "Choose a
 $lang->execution->confirmDelete               = "Do you want to delete the {$lang->executionCommon}[%s]?";
 $lang->execution->confirmUnlinkMember         = "Do you want to unlink this User from {$lang->executionCommon}?";
 $lang->execution->confirmUnlinkStory          = "After {$lang->SRCommon} is removed, cased linked to {$lang->SRCommon} will be reomoved and tasks linked to {$lang->SRCommon} will be cancelled. Do you want to continue?";
-$lang->execution->confirmSyncStories          = "After modifying the project, synchronize the execution related {$lang->SRCommon} to the new project?";
+$lang->execution->confirmSync                 = "After modifying the project, in order to maintain the consistency of data, the data of products, requirements, teams and whitelist associated with the implementation will be synchronized to the new project. Please know.";
 $lang->execution->confirmUnlinkExecutionStory = "Do you want to unlink this Story from the execution?";
 $lang->execution->notAllowedUnlinkStory       = "This {$lang->SRCommon} is linked to the {$lang->executionCommon} of the execution. Remove it from the {$lang->executionCommon}, then try again.";
 $lang->execution->notAllowRemoveProducts      = "The story of this product is linked with the {$lang->executionCommon}. Unlink it before doing any action.";
