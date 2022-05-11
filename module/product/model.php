@@ -311,12 +311,6 @@ class productModel extends model
             ->andWhere('t1.deleted')->eq(0)
             ->beginIF(!$this->app->user->admin)->andWhere('t1.id')->in($this->app->user->view->products)->fi()
             ->andWhere('t1.vision')->eq($this->config->vision)->fi()
-            ->andWhere('t1.PO', true)->eq($this->app->user->account)
-            ->orWhere('t1.QD')->eq($this->app->user->account)
-            ->orWhere('t1.RD')->eq($this->app->user->account)
-            ->orWhere('t1.createdBy')->eq($this->app->user->account)
-            ->markRight(1)
-            ->fi()
             ->orderBy('t1.order_asc')
             ->fetchAll('id');
 
