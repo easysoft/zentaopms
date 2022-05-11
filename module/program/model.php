@@ -130,6 +130,8 @@ class programModel extends model
      * @param  string $status
      * @param  string $orderBy
      * @param  object $pager
+     * @param  string $filter       topProgram|byTopIDs
+     * @param  mixed  $filterParams
      * @access public
      * @return array
      */
