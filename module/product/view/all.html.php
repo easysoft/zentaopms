@@ -222,17 +222,18 @@
         <?php endforeach;?>
         </tbody>
       </table>
-      <?php if(!empty($product) and $canBatchEdit):?>
       <div class='table-footer'>
+        <?php echo $pager->show('left', 'pagerjs');?>
+        <?php if(!empty($product) and $canBatchEdit):?>
         <div class="checkbox-primary check-all"><label><?php echo $lang->selectAll?></label></div>
         <div class="table-actions btn-toolbar">
         <?php
         $actionLink = $this->createLink('product', 'batchEdit');
         echo html::commonButton($lang->edit, "data-form-action='$actionLink'");
         ?>
+        <?php endif;?>
         </div>
       </div>
-      <?php endif;?>
     </form>
   </div>
   <?php endif;?>
