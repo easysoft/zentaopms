@@ -200,53 +200,7 @@
       <div class="btn-toolbar">
         <?php common::printBack($browseLink);?>
         <?php if(!isonlybody()) echo "<div class='divider'></div>";?>
-        <?php if(!$story->deleted):?>
-        <?php
-        common::printIcon('story', 'change', "storyID=$story->id", $story, 'button', 'alter', '', 'showinonlybody');
-        common::printIcon('story', 'recall', "storyID=$story->id", $story, 'button', 'undo', '', 'showinonlybody');
-        common::printIcon('story', 'review', "storyID=$story->id", $story, 'button', 'search', '', 'showinonlybody');
-        if($story->status == 'active' and $story->stage == 'wait' and $story->parent <= 0 and !isonlybody())
-        {
-            $divideLang = $lang->story->subdivide;
-            $misc       = "class='btn divideStory' data-toggle='modal' data-type='iframe' data-width='95%'";
-            $link       = $this->createLink('story', 'batchCreate', "productID=$story->product&branch=$story->branch&moduleID=$story->module&storyID=$story->id", '', true);
-            if(common::hasPriv('story', 'batchCreate', $story)) echo html::a($link, "<i class='icon icon-split'></i> " . $divideLang, '', $misc);
-        }
-
-        common::printIcon('story', 'assignTo', "storyID=$story->id", $story, 'button', '', '', 'iframe showinonlybody', true);
-        common::printIcon('story', 'close',    "storyID=$story->id", $story, 'button', '', '', 'iframe showinonlybody', true);
-        common::printIcon('story', 'activate', "storyID=$story->id", $story, 'button', '', '', 'iframe showinonlybody', true);
-        if($this->config->edition == 'max' and $this->app->tab == 'project' and common::hasPriv('story', 'importToLib')) echo html::a('#importToLib', "<i class='icon icon-assets'></i> " . $this->lang->story->importToLib, '', 'class="btn" data-toggle="modal"');
-
-        if($story->parent >= 0 and $story->type != 'requirement' and (common::hasPriv('testcase', 'create', $story) or common::hasPriv('testcase', 'batchCreate', $story)))
-        {
-            $this->app->loadLang('testcase');
-            echo "<div class='btn-group dropup'>";
-            echo "<button type='button' class='btn dropdown-toggle' data-toggle='dropdown'><i class='icon icon-sitemap'></i> " . $lang->testcase->common . " <span class='caret'></span></button>";
-            echo "<ul class='dropdown-menu' id='createCaseActionMenu'>";
-
-            $misc = "data-toggle='modal' data-type='iframe' data-width='95%'";
-            if(isonlybody()) $misc = '';
-            $link = $this->createLink('testcase', 'create', "productID=$story->product&branch=$story->branch&moduleID=0&from=&param=0&storyID=$story->id", '', true);
-            if(common::hasPriv('testcase', 'create', $story)) echo "<li>" . html::a($link, $lang->testcase->create, '', $misc) . "</li>";
-
-            $link = $this->createLink('testcase', 'batchCreate', "productID=$story->product&branch=$story->branch&moduleID=0&storyID=$story->id", '', true);
-            if(common::hasPriv('testcase', 'batchCreate')) echo "<li>" . html::a($link, $lang->testcase->batchCreate, '', $misc) . "</li>";
-
-            echo "</ul>";
-            echo "</div>";
-        }
-
-        if($from == 'execution' and strpos('draft,closed', $story->status) === false) common::printIcon('task', 'create', "execution=$param&storyID=$story->id&moduleID=$story->module", $story, 'button', 'plus', '', 'showinonlybody');
-
-        echo $this->buildOperateMenu($story, 'view');
-
-        echo "<div class='divider'></div>";
-        common::printIcon('story', 'edit', "storyID=$story->id", $story);
-        common::printIcon('story', 'create', "productID=$story->product&branch=$story->branch&moduleID=$story->module&storyID=$story->id&executionID=0&bugID=0&planID=0&todoID=0&extra=&type=$story->type", $story, 'button', 'copy', '', '', '', "data-width='1050'");
-        common::printIcon('story', 'delete', "storyID=$story->id", $story, 'button', 'trash', 'hiddenwin', 'showinonlybody',true);
-        ?>
-        <?php endif;?>
+        <?php if(!$story->deleted) echo $this->buildOperateMenu($story, 'view');?>
       </div>
     </div>
   </div>
