@@ -1,14 +1,15 @@
-$(function()
+function sync(obj, executionID, projectID)
 {
-    $('[id^="projects"]').change(function()
+    var $td = $(obj).closest('td');
+    if($td.find('[id^="syncStories"]').length == 0)
     {
-        var executionID = $(this).attr('id').replace('projects', '');
-        var $td = $(this).closest('td');
-        if($td.find('[id^="sync"]').length == 0)
-        {
-            $td.append("<input type='hidden' id='sync" + executionID + "' name='sync[" + executionID + "]' value='no' />");
-        }
-        alert(confirmSync);
-        $("#sync" + executionID).val('yes');
-    })
-});
+        console.log($td);
+        $td.append("<input type='hidden' id='syncStories" + executionID + "' name='syncStories[" + executionID + "]' value='no' />");
+    }
+    var confirmVal = confirm(confirmSync);
+    $("#syncStories" + executionID).val(confirmVal ? 'yes' : 'no');
+    if(!confirmVal)
+    {
+        $(obj).val(projectID).trigger("chosen:updated");
+    }
+};

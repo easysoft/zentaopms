@@ -83,7 +83,7 @@
           <tr>
             <td><?php echo sprintf('%03d', $executionID) . html::hidden("executionIDList[$executionID]", $executionID);?></td>
             <?php if($config->systemMode == 'new' and isset($project) and $project->model == 'scrum'):?>
-            <td class='text-left' style='overflow:visible'><?php echo html::select("projects[$executionID]", $allProjects, $executions[$executionID]->project, "class='form-control picker-select'");?></td>
+            <td class='text-left' style='overflow:visible'><?php echo html::select("projects[$executionID]", $allProjects, $executions[$executionID]->project, "class='form-control picker-select' onchange='sync(this, $executionID, {$executions[$executionID]->project})'");?></td>
             <?php endif;?>
             <td title='<?php echo $executions[$executionID]->name?>'><?php echo html::input("names[$executionID]", $executions[$executionID]->name, "class='form-control'");?></td>
             <td><?php echo html::input("codes[$executionID]",     $executions[$executionID]->code, "class='form-control'");?></td>
