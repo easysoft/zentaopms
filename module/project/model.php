@@ -465,7 +465,7 @@ class projectModel extends model
      * @param  string $method
      * @param  int    $projectID
      * @access public
-     * @return void
+     * @return string
      */
     public function getProjectLink($module, $method, $projectID)
     {
