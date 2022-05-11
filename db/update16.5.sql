@@ -135,8 +135,6 @@ DELETE FROM `zt_workflowfield` WHERE `module`='project' AND `field`='stage';
 DELETE FROM `zt_workflowfield` WHERE `module`='bug' AND `field`='feedback';
 DELETE FROM `zt_workflowfield` WHERE `module`='task' AND `field`='feedback';
 
-ALTER TABLE `zt_workflowdatasource` ADD UNIQUE `code` (`code`);
-
 REPLACE INTO `zt_workflowdatasource` (`type`, `name`, `code`, `buildin`, `datasource`, `view`, `keyField`, `valueField`) VALUES
 ('lang', '项目模型', 'projectModel', '1', 'projectModel', '', '', ''),
 ('lang', '反馈类型', 'feedbackType', '1', 'feedbackType', '', '', ''),
