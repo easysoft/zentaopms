@@ -71,6 +71,6 @@ $(function()
         {
             $('#submit').after("<input type='hidden' id='syncStories' name='syncStories' value='no' />");
         }
-        $("#syncStories").val(confirm(confirmSyncStories) ? 'yes' : 'no');
+        $("#syncStories").val(confirm(confirmSync) ? 'yes' : 'no');
     });
 })
