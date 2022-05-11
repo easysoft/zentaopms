@@ -1677,10 +1677,15 @@ class execution extends control
 
         if($this->app->tab == 'project')
         {
-            $projectID = $this->session->project;
-            $project   = $this->project->getById($projectID);
+            $projectID   = $this->session->project;
+            $project     = $this->project->getById($projectID);
+            $allProjects = $this->project->getPairsByModel($project->model, 0, 'noclosed', isset($projectID) ? $projectID : 0);
             $this->project->setMenu($projectID);
             $this->view->project = $project;
+        }
+        else
+        {
+            $allProjects = $this->project->getPairsByModel('all', 0, 'noclosed', isset($projectID) ? $projectID : 0);
         }
 
         if(!$this->post->executionIDList) return print(js::locate($this->session->executionList, 'parent'));
@@ -1718,7 +1723,7 @@ class execution extends control
         $this->view->position[]      = $this->lang->execution->batchEdit;
         $this->view->executionIDList = $executionIDList;
         $this->view->executions      = $executions;
-        $this->view->allProjects     = $this->project->getPairsByModel($project->model, 0, 'noclosed', isset($projectID) ? $projectID : 0);
+        $this->view->allProjects     = $allProjects;
         $this->view->pmUsers         = $pmUsers;
         $this->view->poUsers         = $poUsers;
         $this->view->qdUsers         = $qdUsers;
