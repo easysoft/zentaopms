@@ -226,6 +226,7 @@ $lang->project->currencySymbol['NZD'] = 'NZ$';
 $lang->project->currencySymbol['THB'] = '฿';
 $lang->project->currencySymbol['SGD'] = 'S$';
 
+$lang->project->modelList['']          = '';
 $lang->project->modelList['scrum']     = "Scrum";
 $lang->project->modelList['waterfall'] = "CMMI";
 $lang->project->modelList['kanban']    = "Kanban";
@@ -256,6 +257,7 @@ $lang->project->kanbanSubAclList['program'] = 'Open in the program (all upper-le
 $lang->project->authList['extend'] = 'Inherit (system privilege and project privilege)';
 $lang->project->authList['reset']  = 'Reset (project privilege only)';
 
+$lang->project->statusList['']          = '';
 $lang->project->statusList['wait']      = 'Waiting';
 $lang->project->statusList['doing']     = 'Doing';
 $lang->project->statusList['suspended'] = 'Suspended';

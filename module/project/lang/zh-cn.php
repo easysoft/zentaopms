@@ -79,7 +79,6 @@ $lang->project->begin              = '计划开始';
 $lang->project->end                = '计划完成';
 $lang->project->status             = '状态';
 $lang->project->subStatus          = '子状态';
-$lang->project->projectStatus      = '项目状态';
 $lang->project->type               = '项目类型';
 $lang->project->lifetime           = '项目周期';
 $lang->project->attribute          = '阶段类型';
@@ -162,7 +161,6 @@ $lang->project->branch             = '所属分支';
 $lang->project->plan               = '所属计划';
 $lang->project->createKanban       = '添加看板';
 $lang->project->kanban             = '看板';
-$lang->project->search             = '搜索';
 
 /* Project Kanban. */
 $lang->project->typeList = array();
