@@ -19,6 +19,7 @@
 #archivedCards .kanban-item > .info {margin-top: 5px; position: relative;}
 #archivedCards .kanban-item > .info > .pri {height: 14px; border-width: 1px; font-size: 12px; line-height: 12px; min-width: 14px; padding: 0 1px;}
 #archivedCards .kanban-item > .info > .time {margin-left: 10px; font-size: 12px}
+#archivedCards .kanban-item > .info.build > .time {margin-left:0px; font-size: 12px}
 #archivedCards .kanban-item > .info > .user {position: absolute; right: 0; top: 0}
 #archivedCards .card-actions {position: relative; padding: 15px 10px; padding-top: 0px;}
 #archivedCards .card-actions > .btn {display: block;}
@@ -91,51 +92,66 @@ $app->loadLang('productplan');
         <?php else:?>
         <?php
         $name = isset($card->title) ? $card->title : $card->name;
-        if(common::hasPriv($card->fromType, 'view')) echo html::a($this->createLink('productplan', 'view', "id=$card->fromID"), $name, '', "class='cardName' title='$name'");
+        if(common::hasPriv($card->fromType, 'view')) echo html::a($this->createLink($card->fromType, 'view', "id=$card->fromID"), $name, '', "class='cardName' title='$name'");
         if(!common::hasPriv($card->fromType, 'view')) echo "<div class='cardName' title='$name'>$name</div>";
         echo "<div class='info $card->fromType'>";
-        if($card->fromType != 'release' and isset($lang->{$card->fromType}->statusList[$card->objectStatus])) echo "<span class='label label-$card->objectStatus'>" . $lang->{$card->fromType}->statusList[$card->objectStatus] . '</span>';
+        if(isset($lang->{$card->fromType}->statusList[$card->objectStatus])) echo "<span class='label label-$card->objectStatus'>" . $lang->{$card->fromType}->statusList[$card->objectStatus] . '</span>';
         if(isset($card->date) and !helper::isZeroDate($card->date)) echo "<span class='time label label-light'>" . date("m/d", strtotime($card->date)) . "</span>"
         ?>
         <?php endif;?>
-            <?php if(helper::isZeroDate($card->end) and !helper::isZeroDate($card->begin)):?>
+            <?php if(helper::isZeroDate($card->end) and !helper::isZeroDate($card->begin) and $card->begin != '2030-01-01' and $card->end != '2030-01-01'):?>
             <span class="time label label-light"><?php echo date("m/d", strtotime($card->begin)) . $lang->kanbancard->beginAB;?></span>
             <?php endif;?>
-            <?php if(helper::isZeroDate($card->begin) and !helper::isZeroDate($card->end)):?>
+            <?php if(helper::isZeroDate($card->begin) and !helper::isZeroDate($card->end) and $card->begin != '2030-01-01' and $card->end != '2030-01-01'):?>
             <span class="time label label-light"><?php echo date("m/d", strtotime($card->end)) . $lang->kanbancard->deadlineAB;?></span>
             <?php endif;?>
-            <?php if(!helper::isZeroDate($card->begin) and !helper::isZeroDate($card->end)):?>
+            <?php if(!helper::isZeroDate($card->begin) and !helper::isZeroDate($card->end) and $card->begin != '2030-01-01' and $card->end != '2030-01-01'):?>
             <span class="time label label-light"><?php echo date("m/d", strtotime($card->begin)) . ' ~ ' . date("m/d", strtotime($card->end));?></span>
             <?php endif;?>
             <?php
-            $assignedToList = explode(',', $card->assignedTo);
+            if($card->begin == '2030-01-01' or $card->end == '2030-01-01') echo '<span class="date label label-future" title="' . $lang->{$card->fromType}->future . '">' . $lang->{$card->fromType}->future . '</span>';
+
+            if($card->fromType == '')          $assignedToList = explode(',', $card->assignedTo);
+            if($card->fromType == 'execution') $assignedToList = $card->PM;
+            if($card->fromType == 'build')     $assignedToList = $card->builder;
+            if($card->fromType == 'release' or $card->fromType == 'productplan') $assignedToList = $card->createdBy;
             $count          = 0;
             $members        = '';
             ?>
-            <?php
-            foreach($assignedToList as $index => $account)
+            <?php if(is_array($assignedToList)):?>
+              <?php
+              foreach($assignedToList as $index => $account)
+              {
+                  if(!isset($users[$account]) or !isset($usersAvatar[$account]))
+                  {
+                      unset($assignedToList[$index]);
+                      continue;
+                  }
+                  $members .= $users[$account] . ',';
+              }
+              $userCount = count($assignedToList);
+              ?>
+              <?php if($userCount > 0):?>
+              <div class='users pull-right' title="<?php echo trim($members, ',');?>">
+              <?php
+              foreach($assignedToList as $account)
+              {
+                  if($count > 2) continue;
+                  echo html::smallAvatar(array('avatar' => $usersAvatar[$account], 'account' => $account, 'name' => $users[$account]), 'avatar-circle');
+                  $count ++;
+              }
+              ?>
+              <?php if($count > 2) echo "<span>...</span>";?>
+              </div>
+              <?php endif;?>
+            <?php else:?>
+            <?php if(isset($usersAvatar[$assignedToList]) and isset($users[$assignedToList]))
             {
-                if(!isset($users[$account]) or !isset($usersAvatar[$account]))
-                {
-                    unset($assignedToList[$index]);
-                    continue;
-                }
-                $members .= $users[$account] . ',';
-            }
-            $userCount = count($assignedToList);
-            ?>
-            <?php if($userCount > 0):?>
-            <div class='users pull-right' title="<?php echo trim($members, ',');?>">
-            <?php
-            foreach($assignedToList as $account)
-            {
-                if($count > 2) continue;
-                echo html::smallAvatar(array('avatar' => $usersAvatar[$account], 'account' => $account, 'name' => $users[$account]), 'avatar-circle');
-                $count ++;
+                echo "<div class='users pull-right' title='" . $users[$assignedToList] . "'>";
+                echo html::smallAvatar(array('avatar' => $usersAvatar[$assignedToList], 'account' => $assignedToList, 'name' => $users[$assignedToList]), 'avatar-circle');
+                echo "</div>";
             }
             ?>
-            <?php if($count > 2) echo "<span>...</span>";?>
-            </div>
             <?php endif;?>
           </div>
           <?php if($kanban->performable):?>
