@@ -114,6 +114,21 @@ UPDATE `zt_workflowfield` SET `control` = 'date' WHERE `module` = 'story' and `f
 UPDATE `zt_workflowfield` SET `control` = 'datetime' WHERE `module` = 'story' and `field` = 'closedDate';
 UPDATE `zt_workflowfield` SET `control` = 'radio' WHERE `module` = 'story' and `field` = 'deleted';
 
+UPDATE `zt_workflowaction` SET `position` = 'browse' WHERE `module` = 'product' and `action` = 'all' and `vision` = 'rnd';
+UPDATE `zt_workflowaction` SET `type` = 'batch', `position` = 'browse' WHERE `module` = 'product' and `action` = 'batchedit' and `vision` = 'rnd';
+UPDATE `zt_workflowaction` SET `position` = 'browse' WHERE `module` = 'product' and `action` = 'browse' and `vision` = 'rnd';
+UPDATE `zt_workflowaction` SET `show` = 'direct' WHERE `module` = 'product'  and `vision` = 'rnd';
+UPDATE `zt_workflowaction` SET `type` = 'batch', `position` = 'browse' WHERE `module` = 'productplan' and `action` = 'batchedit' and `vision` = 'rnd';
+UPDATE `zt_workflowaction` SET `position` = 'browse' WHERE `module` = 'productplan' and `action` = 'browse' and `vision` = 'rnd';
+UPDATE `zt_workflowaction` SET `show` = 'direct' WHERE `module` = 'productplan' and `vision` = 'rnd';
+UPDATE `zt_workflowaction` SET `position` = 'browse' WHERE `module` = 'release' and `action` = 'browse' and `vision` = 'rnd';
+UPDATE `zt_workflowaction` SET `show` = 'direct' WHERE `module` = 'release' and `vision` = 'rnd';
+UPDATE `zt_workflowaction` SET `type` = 'batch' WHERE `module` = 'story' and `action` = 'batchcreate' and `vision` = 'rnd';
+UPDATE `zt_workflowaction` SET `type` = 'batch' WHERE `module` = 'story' and `action` = 'batchedit' and `vision` = 'rnd';
+UPDATE `zt_workflowaction` SET `position` = 'browse' WHERE `module` = 'story' and `action` = 'browse' and `vision` = 'rnd';
+UPDATE `zt_workflowaction` SET `position` = 'browse' WHERE `module` = 'story' and `action` = 'exporttemplate' and `vision` = 'rnd';
+UPDATE `zt_workflowaction` SET `position` = 'browse' WHERE `module` = 'story' and `action` = 'import' and `vision` = 'rnd';
+UPDATE `zt_workflowaction` SET `position` = 'view' WHERE `module` = 'story' and `action` = 'view' and `vision` = 'rnd';
 DELETE FROM `zt_workflowfield` WHERE `module`='execution' AND `field`='stage';
 DELETE FROM `zt_workflowfield` WHERE `module`='program' AND `field`='stage';
 DELETE FROM `zt_workflowfield` WHERE `module`='project' AND `field`='stage';
