@@ -1679,32 +1679,7 @@ class bugModel extends model
                 }
             }
 
-            $allProduct = "`product` = 'all'";
-            $bugQuery   = $this->session->projectBugQuery;
-            if(strpos($this->session->projectBugQuery, $allProduct) !== false)
-            {
-                $bugQuery = str_replace($allProduct, '1', $this->session->projectBugQuery);
-            }
-            if(strpos($bugQuery, ' `story` ') !== false)
-            {
-                preg_match_all("/`story`[ ]+(NOT *)?LIKE[ ]+'%([^%]*)%'/Ui", $bugQuery, $out);
-                if(!empty($out[2]))
-                {
-                    foreach($out[2] as $searchValue)
-                    {
-                        $story = $this->dao->select('id')->from(TABLE_STORY)->alias('t1')
-                            ->leftJoin(TABLE_STORYSPEC)->alias('t2')->on('t1.id=t2.story')
-                            ->where('t1.title')->like("%$searchValue%")
-                            ->orWhere('t1.keywords')->like("%$searchValue%")
-                            ->orWhere('t2.spec')->like("%$searchValue%")
-                            ->orWhere('t2.verify')->like("%$searchValue%")
-                            ->fetchPairs('id');
-
-                        $bugQuery = preg_replace("/`story`[ ]+(NOT[ ]*)?LIKE[ ]+'%$searchValue%'/Ui", '`story` $1 IN (' . implode(',', $story) .')', $bugQuery);
-                    }
-                }
-                $bugQuery .= ' AND `story` != 0';
-            }
+            $bugQuery = $this->getBugQuery($this->session->projectBugQuery);
 
             $bugs = $this->dao->select('*')->from(TABLE_BUG)
                 ->where($bugQuery)
@@ -1766,32 +1741,7 @@ class bugModel extends model
                 }
             }
 
-            $allProduct = "`product` = 'all'";
-            $bugQuery   = $this->session->executionBugQuery;
-            if(strpos($this->session->executionBugQuery, $allProduct) !== false)
-            {
-                $bugQuery = str_replace($allProduct, '1', $this->session->executionBugQuery);
-            }
-            if(strpos($bugQuery, ' `story` ') !== false)
-            {
-                preg_match_all("/`story`[ ]+(NOT *)?LIKE[ ]+'%([^%]*)%'/Ui", $bugQuery, $out);
-                if(!empty($out[2]))
-                {
-                    foreach($out[2] as $searchValue)
-                    {
-                        $story = $this->dao->select('id')->from(TABLE_STORY)->alias('t1')
-                            ->leftJoin(TABLE_STORYSPEC)->alias('t2')->on('t1.id=t2.story')
-                            ->where('t1.title')->like("%$searchValue%")
-                            ->orWhere('t1.keywords')->like("%$searchValue%")
-                            ->orWhere('t2.spec')->like("%$searchValue%")
-                            ->orWhere('t2.verify')->like("%$searchValue%")
-                            ->fetchPairs('id');
-
-                        $bugQuery = preg_replace("/`story`[ ]+(NOT[ ]*)?LIKE[ ]+'%$searchValue%'/Ui", '`story` $1 IN (' . implode(',', $story) .')', $bugQuery);
-                    }
-                }
-                $bugQuery .= ' AND `story` != 0';
-            }
+            $bugQuery = $this->getBugQuery($this->session->executionBugQuery);
 
             $bugs = $this->dao->select('*')->from(TABLE_BUG)
                 ->where($bugQuery)
@@ -2743,20 +2693,47 @@ class bugModel extends model
             if($this->session->bugQuery == false) $this->session->set('bugQuery', ' 1 = 1');
         }
 
-        $allProduct = "`product` = 'all'";
-        $bugQuery   = $this->session->bugQuery;
+        $bugQuery = $this->getBugQuery($this->session->bugQuery);
+
         if(is_array($productIDList)) $productIDList = implode(',', $productIDList);
         if(strpos($bugQuery, '`product` =') === false) $bugQuery .= ' AND `product` in (' . $productIDList . ')';
+
+        $allBranch = "`branch` = 'all'";
+        if($branch !== 'all' and strpos($bugQuery, '`branch` =') === false) $bugQuery .= " AND `branch` in('0','$branch')";
+        if(strpos($bugQuery, $allBranch) !== false) $bugQuery = str_replace($allBranch, '1', $bugQuery);
+
+        $bugs = $this->dao->select('*')->from(TABLE_BUG)->where($bugQuery)
+            ->beginIF(!$this->app->user->admin)->andWhere('execution')->in('0,' . $this->app->user->view->sprints)->fi()
+            ->beginIF($excludeBugs)->andWhere('id')->notIN($excludeBugs)->fi()
+
+            ->beginIF($projectID)
+            ->andWhere('project', true)->eq($projectID)
+            ->orWhere('project')->eq(0)
+            ->andWhere('openedBuild')->eq('trunk')
+            ->markRight(1)
+            ->fi()
+
+            ->andWhere('deleted')->eq(0)
+            ->orderBy($orderBy)->page($pager)->fetchAll();
+        return $bugs;
+    }
+
+    /**
+     * Get bug query.
+     *
+     * @param  string $bugQuery
+     * @access public
+     * @return string
+     */
+    public function getBugQuery($bugQuery)
+    {
+        $allProduct = "`product` = 'all'";
         if(strpos($bugQuery, $allProduct) !== false)
         {
             $products = $this->app->user->view->products;
             $bugQuery = str_replace($allProduct, '1', $bugQuery);
             $bugQuery = $bugQuery . ' AND `product` ' . helper::dbIN($products);
         }
-
-        $allBranch = "`branch` = 'all'";
-        if($branch !== 'all' and strpos($bugQuery, '`branch` =') === false) $bugQuery .= " AND `branch` in('0','$branch')";
-        if(strpos($bugQuery, $allBranch) !== false) $bugQuery = str_replace($allBranch, '1', $bugQuery);
 
         $allProject = "`project` = 'all'";
         if(strpos($bugQuery, $allProject) !== false)
@@ -2790,21 +2767,7 @@ class bugModel extends model
             }
             $bugQuery .= ' AND `story` != 0';
         }
-
-        $bugs = $this->dao->select('*')->from(TABLE_BUG)->where($bugQuery)
-            ->beginIF(!$this->app->user->admin)->andWhere('execution')->in('0,' . $this->app->user->view->sprints)->fi()
-            ->beginIF($excludeBugs)->andWhere('id')->notIN($excludeBugs)->fi()
-
-            ->beginIF($projectID)
-            ->andWhere('project', true)->eq($projectID)
-            ->orWhere('project')->eq(0)
-            ->andWhere('openedBuild')->eq('trunk')
-            ->markRight(1)
-            ->fi()
-
-            ->andWhere('deleted')->eq(0)
-            ->orderBy($orderBy)->page($pager)->fetchAll();
-        return $bugs;
+        return $bugQuery;
     }
 
     /**
