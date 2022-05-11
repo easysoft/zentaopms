@@ -2730,6 +2730,26 @@ class bugModel extends model
         /* Fix bug #2878. */
         if(strpos($bugQuery, ' `resolvedDate` ') !== false) $bugQuery = str_replace(' `resolvedDate` ', " `resolvedDate` != '0000-00-00 00:00:00' AND `resolvedDate` ", $bugQuery);
         if(strpos($bugQuery, ' `closedDate` ') !== false)   $bugQuery = str_replace(' `closedDate` ', " `closedDate` != '0000-00-00 00:00:00' AND `closedDate` ", $bugQuery);
+        if(strpos($bugQuery, ' `story` ') !== false)
+        {
+            preg_match_all("/`story`[ ]+(NOT *)?LIKE[ ]+'%([^%]*)%'/Ui", $bugQuery, $out);
+            if(!empty($out[2]))
+            {
+                foreach($out[2] as $searchValue)
+                {
+                    $story = $this->dao->select('id')->from(TABLE_STORY)->alias('t1')
+                        ->leftJoin(TABLE_STORYSPEC)->alias('t2')->on('t1.id=t2.story')
+                        ->where('t1.title')->like("%$searchValue%")
+                        ->orWhere('t1.keywords')->like("%$searchValue%")
+                        ->orWhere('t2.spec')->like("%$searchValue%")
+                        ->orWhere('t2.verify')->like("%$searchValue%")
+                        ->fetchPairs('id');
+
+                    $bugQuery = preg_replace("/`story`[ ]+(NOT[ ]*)?LIKE[ ]+'%$searchValue%'/Ui", '`story` $1 IN (' . implode($story, ',') .')', $bugQuery);
+                }
+                $bugQuery .= ' AND `story` != 0';
+            }
+        }
 
         $bugs = $this->dao->select('*')->from(TABLE_BUG)->where($bugQuery)
             ->beginIF(!$this->app->user->admin)->andWhere('execution')->in('0,' . $this->app->user->view->sprints)->fi()
@@ -3234,9 +3254,9 @@ class bugModel extends model
 
     /**
      * Build bug menu.
-     * 
-     * @param  object $bug 
-     * @param  string $type 
+     *
+     * @param  object $bug
+     * @param  string $type
      * @access public
      * @return string
      */
