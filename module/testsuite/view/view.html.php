@@ -32,10 +32,6 @@
     if(!$suite->deleted and $canBeChanged)
     {
         echo $this->buildOperateMenu($suite, 'view');
-
-        common::printLink('testsuite', 'linkCase', "suiteID=$suite->id", "<i class='icon icon-link'> </i> " . '', '', "class='btn btn-link' title='{$lang->testsuite->linkCase}'");
-        common::printIcon('testsuite', 'edit',     "suiteID=$suite->id");
-        common::printIcon('testsuite', 'delete',   "suiteID=$suite->id", '', 'button', 'trash', 'hiddenwin');
     }
     ?>
   </div>

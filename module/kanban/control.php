@@ -1320,8 +1320,14 @@ class kanban extends control
     {
         $region = $this->kanban->getRegionByID($regionID);
 
+        $cards = $this->kanban->getCardsByObject('region', $regionID, 1);
+        foreach($this->config->kanban->fromType as $fromType)
+        {
+            $cards = $this->kanban->getImportedCards($region->kanban, $cards, $fromType, 1);
+        }
+
         $this->view->kanban      = $this->kanban->getByID($region->kanban);
-        $this->view->cards       = $this->kanban->getCardsByObject('region', $regionID, 1);
+        $this->view->cards       = $cards;
         $this->view->users       = $this->loadModel('user')->getPairs('noletter|nodeleted');
         $this->view->userIdPairs = $this->user->getPairs('noletter|nodeleted|showid');
         $this->view->usersAvatar = $this->user->getAvatarPairs();
@@ -1374,13 +1380,20 @@ class kanban extends control
 	 */
     public function deleteCard($cardID, $confirm = 'no')
     {
+        $card = $this->kanban->getCardByID($cardID);
         if($confirm == 'no')
         {
-            return print(js::confirm($this->lang->kanbancard->confirmDelete, $this->createLink('kanban', 'deleteCard', "cardID=$cardID&confirm=yes")));
+            $confirmTip = $card->fromType == '' ? $this->lang->kanbancard->confirmDelete : $this->lang->kanbancard->confirmRemove;
+            return print(js::confirm($confirmTip, $this->createLink('kanban', 'deleteCard', "cardID=$cardID&confirm=yes")));
         }
         else
         {
-            $this->kanban->delete(TABLE_KANBANCARD, $cardID);
+            if($card->fromType == '') $this->kanban->delete(TABLE_KANBANCARD, $cardID);
+            if($card->fromType != '')
+            {
+                $this->dao->delete()->from(TABLE_KANBANCARD)->where('id')->eq($cardID)->exec();
+                $this->loadModel('action')->create('kanbancard', $cardID, 'Deleted', '', $cardID);
+            }
 
             if(isonlybody()) return print(js::reload('parent.parent'));
             return print(js::reload('parent'));
@@ -1662,6 +1675,20 @@ class kanban extends control
             ->andWhere('lane')->eq($toLaneID)
             ->andWhere('`column`')->eq($toColID)
             ->exec();
+
+        $toColumn = $this->kanban->getColumnByID($toColID);
+        if($toColumn->laneType == 'story' and in_array($toColumn->type, array('tested', 'verified', 'released', 'closed')))
+        {
+            $data = new stdclass();
+            $data->stage = $toColumn->type;
+            if($toColumn->type == 'released')
+            {
+                $fromColumn = $this->kanban->getColumnByID($fromColID);
+                if($fromColumn->type == 'closed') $data->status = 'active';
+            }
+            $this->dao->update(TABLE_STORY)->data($data)->where('id')->eq($cardID)->exec();
+            $this->dao->update(TABLE_STORYSTAGE)->set('stage')->eq($toColumn->type)->where('story')->eq($cardID)->exec();
+        }
 
         $kanbanGroup = $regionID == 0 ? $this->kanban->getExecutionKanban($executionID, $browseType, $groupBy) : $this->kanban->getRDKanban($executionID, $browseType, $orderBy, $regionID, $groupBy);
         echo json_encode($kanbanGroup);

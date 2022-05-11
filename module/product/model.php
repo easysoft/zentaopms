@@ -2023,6 +2023,37 @@ class productModel extends model
     }
 
     /**
+     * Build operate menu.
+     *
+     * @param  object $product
+     * @param  string $type
+     * @access public
+     * @return string
+     */
+    public function buildOperateMenu($product, $type = 'view')
+    {
+        $menu   = '';
+        $params = "product=$product->id";
+
+        if($type == 'view')
+        {
+            $menu .= "<div class='divider'></div>";
+            $menu .= $this->buildFlowMenu('product', $product, $type, 'direct');
+            $menu .= "<div class='divider'></div>";
+
+            $menu .= $this->buildMenu('product', 'close', $params, $product, $type, '', '', '', '', "data-app='product'");
+            $menu .= "<div class='divider'></div>";
+        }
+
+        $menu .= $this->buildMenu('product', 'edit', $params, $product, $type);
+
+        if($type == 'view') $menu .= $this->buildMenu('product', 'delete', $params, $product, $type, 'trash', 'hiddenwin');
+        if($type == 'browse' && common::hasPriv('product', 'updateOrder')) $menu .= "<i class='icon icon-move text-blue'></i>";
+
+        return $menu;
+    }
+
+    /**
      * Create the link from module,method,extra,branch.
      *
      * @param  string  $module

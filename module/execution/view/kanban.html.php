@@ -105,6 +105,7 @@ js::set('priv',
         'canEditStory'          => common::hasPriv('story', 'edit'),
         'canDeleteStory'        => common::hasPriv('story', 'delete'),
         'canChangeStory'        => common::hasPriv('story', 'change'),
+        'canCloseStory'         => common::hasPriv('story', 'close'),
         'canUnlinkStory'        => common::hasPriv('execution', 'unlinkStory'),
     )
 );
