@@ -130,18 +130,21 @@ class programModel extends model
      * @param  string $status
      * @param  string $orderBy
      * @param  object $pager
-     * @param  string $filter       topProgram|byTopIDs
-     * @param  mixed  $filterParams
+     * @param  string $type       top|child
+     * @param  mixed  $typeParams
      * @access public
      * @return array
      */
-    public function getList($status = 'all', $orderBy = 'id_asc', $pager = NULL, $filter = '', $filterParams = '')
+    public function getList($status = 'all', $orderBy = 'id_asc', $pager = NULL, $type = '', $typeParams = '')
     {
-        $filterSql = '';
-        if($filter === 'byTopIDs')
+        $ids = array();
+        if($type === 'child')
         {
-            foreach($filterParams as $topID) $filterSql .= "path like ',{$topID},%' or ";
-            if($filterSql) $filterSql = '(' . substr($filterSql, 0, -3) . ')'; // Remove last or.
+            foreach($typeParams as $topID)
+            {
+                $topIDs = $this->dao->select('id')->from(TABLE_PROGRAM)->Where('path')->like(",$topID,%")->fetchPairs('id');
+                if($topIDs) $ids = array_merge($ids, $topIDs);
+            }
         }
 
         return $this->dao->select('*')->from(TABLE_PROGRAM)
@@ -155,8 +158,54 @@ class programModel extends model
             ->markRight(2)
             ->beginIF($status != 'all')->andWhere('status')->eq($status)->fi()
             ->beginIF(!$this->cookie->showClosed)->andWhere('status')->ne('closed')->fi()
-            ->beginIF($filter === 'topProgram')->andWhere('parent')->eq(0)->fi()
-            ->beginIF(!empty($filterSql))->andWhere($filterSql)->fi()
+            ->beginIF($type === 'top')->andWhere('parent')->eq(0)->fi()
+            ->beginIF(!empty($ids))->andWhere('id')->in($ids)->fi()
+            ->orderBy($orderBy)
+            ->page($pager)
+            ->fetchAll('id');
+    }
+
+    /**
+     * Get program list by search.
+     *
+     * @param string $orderBy
+     * @param object $pager
+     * @param int $queryID
+     * @access public
+     * @return void
+     */
+    public function getListBySearch($orderBy = 'id_asc', $pager = NULL, $queryID = 0)
+    {
+        if($queryID)
+        {
+            $query = $this->loadModel('search')->getQuery($queryID);
+            if($query)
+            {
+                $this->session->set('programQuery', $query->sql);
+                $this->session->set('programForm', $query->form);
+            }
+            else
+            {
+                $this->session->set('programQuery', ' 1 = 1');
+            }
+        }
+        else
+        {
+            if($this->session->programQuery == false) $this->session->set('programQuery', ' 1 = 1');
+        }
+        $query = $this->session->programQuery;
+
+        return $this->dao->select('*')->from(TABLE_PROGRAM)
+            ->where('deleted')->eq(0)
+            ->andWhere('vision')->eq($this->config->vision)
+            ->andWhere('((type')->eq('program')
+            ->beginIF(!$this->app->user->admin and $this->app->rawMethod != 'browse')->andWhere('id')->in($this->app->user->view->programs)->fi()
+            ->markRight(1)
+            ->orWhere('(type')->eq('project')
+            ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->projects)->fi()
+            ->markRight(2)
+            ->beginIF(!$this->cookie->showClosed)->andWhere('status')->ne('closed')->fi()
+            ->beginIF($query)->andWhere($query)->fi()
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id');

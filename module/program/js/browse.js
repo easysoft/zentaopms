@@ -45,7 +45,7 @@ $(function()
     });
 
     var myPager = $('.pager').data('zui.pager');
-    if(myPager)
+    if(status != 'bySearch' && myPager)
     {
         myPager.lang.pageSize = pageSize;
         myPager.set();
