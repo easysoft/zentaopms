@@ -2790,7 +2790,7 @@ class executionModel extends model
      *
      * @param  int    $executionID
      * @access public
-     * @return void
+     * @return array
      */
     public function computeBurn($executionID = 0)
     {

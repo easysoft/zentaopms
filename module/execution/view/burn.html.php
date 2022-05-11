@@ -22,13 +22,14 @@
 <div id='mainMenu' class='clearfix'>
   <div class='btn-toolbar pull-left'>
     <?php
-    $weekend = strpos($type, 'noweekend') !== false ? 'withweekend' : 'noweekend';
-    $delay   = strpos($type, 'withdelay') !== false ? 'nodelay'     : 'withdelay';
     if(strpos('wait,doing', $execution->status) !== false)
     {
         common::printLink('execution', 'computeBurn', 'reload=yes', '<i class="icon icon-refresh"></i> ' . $lang->execution->computeBurn, 'hiddenwin', "title='{$lang->execution->computeBurn}' class='btn btn-primary' id='computeBurn'");
         echo '<div class="space"></div>';
     }
+
+    $weekend = strpos($type, 'noweekend') !== false ? 'withweekend' : 'noweekend';
+    $delay   = strpos($type, 'withdelay') !== false ? 'nodelay'     : 'withdelay';
     echo html::a('#', $lang->execution->$weekend, '', "class='btn btn-link' id='weekend'");
     if((strpos('closed,suspended', $execution->status) === false and helper::today() > $execution->end)
         or ($execution->status == 'closed'    and substr($execution->closedDate, 0, 10) > $execution->end)
