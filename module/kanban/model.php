@@ -1113,16 +1113,17 @@ class kanbanModel extends model
      * @param  int    $kanbanID
      * @param  object $cards
      * @param  string $fromType
+     * @param  int    $archived
      * @access public
      * @return array
      */
-    public function getImportedCards($kanbanID, $cards, $fromType)
+    public function getImportedCards($kanbanID, $cards, $fromType, $archived = 0)
     {
         /* Get imported cards based on imported object type. */
         $objectCards = $this->dao->select('*')->from(TABLE_KANBANCARD)
             ->where('deleted')->eq(0)
             ->andWhere('kanban')->eq($kanbanID)
-            ->andWhere('archived')->eq(0)
+            ->andWhere('archived')->eq($archived)
             ->andWhere('fromType')->eq($fromType)
             ->fetchGroup('fromID', 'id');
 
@@ -1168,6 +1169,8 @@ class kanbanModel extends model
                         $objectCard->execType = $object->type;
                     }
 
+                    $objectCard->objectStatus = $objectCard->status;
+                    $objectCard->status       = $objectCard->progress == 100 ? 'done' : 'doing';
                     $cards[$cardID] = $objectCard;
                 }
             }

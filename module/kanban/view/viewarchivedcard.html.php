@@ -31,6 +31,7 @@
 #archivedCards .info > .users > span:after {right: -4px; content: ''; display: block; position: absolute; width: 2px; height: 2px; background-color: #8990a2; top: 0px; border-radius: 50%;}
 #archivedCards .info > .users .avatar {display: inline-block; position: relative; border-radius: 50%; top: -5px; margin:  5px; right: -7px; margin-left: -4px;}
 #archivedCards .cardName {word-wrap: break-word;}
+#archivedCards .card-item .icon {margin-right:2px;}
 #archivedCards .card-item .red {background-color: #b10b0b;}
 #archivedCards .card-item .yellow {background-color: #cfa227;}
 #archivedCards .card-item .green {background-color: #2a5f29;}
@@ -44,6 +45,12 @@
 #archivedCards .progress-box {width: 97%;}
 #performable {padding: 25px 10px !important;}
 </style>
+<?php
+$app->loadLang('execution');
+$app->loadLang('release');
+$app->loadLang('build');
+$app->loadLang('productplan');
+?>
 <div class='panel'>
   <div class='panel-heading text-center'>
     <strong><?php echo $lang->kanban->archivedCard;?></strong>
@@ -76,10 +83,21 @@
         <?php if($card->status == 'done'):?>
         <div class="label" style="<?php echo $labelColor;?>"><?php echo $lang->kanban->finished;?></div>
         <?php endif;?>
+        <?php if(empty($card->fromType)):?>
           <?php echo html::a($this->createLink('kanban', 'viewCard', "cardID=$card->id", '', true), $card->name, '', "class='cardName iframe' data-toggle='modal' data-width='80%' title='$card->name'");?>
           <div class="info">
             <span class="pri label-pri label-pri-<?php echo $card->pri;?>"><?php echo $card->pri;?></span>
             <?php if($card->estimate and $card->estimate != 0) echo "<span class='text-gray'>{$card->estimate}h</span>";?>
+        <?php else:?>
+        <?php
+        $name = isset($card->title) ? $card->title : $card->name;
+        if(common::hasPriv($card->fromType, 'view')) echo html::a($this->createLink('productplan', 'view', "id=$card->fromID"), $name, '', "class='cardName' title='$name'");
+        if(!common::hasPriv($card->fromType, 'view')) echo "<div class='cardName' title='$name'>$name</div>";
+        echo "<div class='info $card->fromType'>";
+        if($card->fromType != 'release' and isset($lang->{$card->fromType}->statusList[$card->objectStatus])) echo "<span class='label label-$card->objectStatus'>" . $lang->{$card->fromType}->statusList[$card->objectStatus] . '</span>';
+        if(isset($card->date) and !helper::isZeroDate($card->date)) echo "<span class='time label label-light'>" . date("m/d", strtotime($card->date)) . "</span>"
+        ?>
+        <?php endif;?>
             <?php if(helper::isZeroDate($card->end) and !helper::isZeroDate($card->begin)):?>
             <span class="time label label-light"><?php echo date("m/d", strtotime($card->begin)) . $lang->kanbancard->beginAB;?></span>
             <?php endif;?>
@@ -137,7 +155,7 @@
 
         if($canRestore) echo html::a(inlink('restoreCard', "cardID={$card->id}"), $lang->kanban->restore, '', "class='btn btn-xs btn-primary' target='hiddenwin'");
 
-        if($canDelete) echo html::a($this->createLink('kanban', 'deleteCard', "cardID=$card->id"), $lang->delete, '', "class='btn btn-xs delete-card' target='hiddenwin'");
+        if($canDelete) echo html::a($this->createLink('kanban', 'deleteCard', "cardID=$card->id"), $card->fromType == '' ? $lang->delete : $lang->unlink, '', "class='btn btn-xs delete-card' target='hiddenwin'");
         ?>
       </div>
     </div>
@@ -151,6 +169,18 @@ $(function()
     $('#archivedCards .panel .close').click(function()
     {
         $('#archivedCards').animate({right: -400}, 500);
+    });
+    $('.card-item').each(function()
+    {
+        var $item = $(this).children('.col-xs-10').children('.kanban-item');
+        var icon  = '';
+
+        if($item.children('.build').length)       icon = '<i class="icon icon-ver">';
+        if($item.children('.execution').length)   icon = '<i class="icon icon-run">';
+        if($item.children('.productplan').length) icon = '<i class="icon icon-delay">';
+        if($item.children('.release').length)     icon = '<i class="icon icon-publish">';
+
+        $item.children('.cardName').prepend(icon);
     });
 })
 </script>

@@ -1320,8 +1320,14 @@ class kanban extends control
     {
         $region = $this->kanban->getRegionByID($regionID);
 
+        $cards = $this->kanban->getCardsByObject('region', $regionID, 1);
+        foreach($this->config->kanban->fromType as $fromType)
+        {
+            $cards = $this->kanban->getImportedCards($region->kanban, $cards, $fromType, 1);
+        }
+
         $this->view->kanban      = $this->kanban->getByID($region->kanban);
-        $this->view->cards       = $this->kanban->getCardsByObject('region', $regionID, 1);
+        $this->view->cards       = $cards;
         $this->view->users       = $this->loadModel('user')->getPairs('noletter|nodeleted');
         $this->view->userIdPairs = $this->user->getPairs('noletter|nodeleted|showid');
         $this->view->usersAvatar = $this->user->getAvatarPairs();
@@ -1374,13 +1380,20 @@ class kanban extends control
 	 */
     public function deleteCard($cardID, $confirm = 'no')
     {
+        $card = $this->kanban->getCardByID($cardID);
         if($confirm == 'no')
         {
-            return print(js::confirm($this->lang->kanbancard->confirmDelete, $this->createLink('kanban', 'deleteCard', "cardID=$cardID&confirm=yes")));
+            $confirmTip = $card->fromType == '' ? $this->lang->kanbancard->confirmDelete : $this->lang->kanbancard->confirmRemove;
+            return print(js::confirm($confirmTip, $this->createLink('kanban', 'deleteCard', "cardID=$cardID&confirm=yes")));
         }
         else
         {
-            $this->kanban->delete(TABLE_KANBANCARD, $cardID);
+            if($card->fromType == '') $this->kanban->delete(TABLE_KANBANCARD, $cardID);
+            if($card->fromType != '')
+            {
+                $this->dao->delete()->from(TABLE_KANBANCARD)->where('id')->eq($cardID)->exec();
+                $this->loadModel('action')->create('kanbancard', $cardID, 'Deleted', '', $cardID);
+            }
 
             if(isonlybody()) return print(js::reload('parent.parent'));
             return print(js::reload('parent'));
