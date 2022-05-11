@@ -2948,10 +2948,11 @@ class executionModel extends model
      * @param  int    $executionID
      * @param  string $burnBy
      * @param  bool   $showDelay
+     * @param  array  $dateList
      * @access public
      * @return array
      */
-    public function getBurnDataFlot($executionID = 0, $burnBy = '', $showDelay = false)
+    public function getBurnDataFlot($executionID = 0, $burnBy = '', $showDelay = false, $dateList = array())
     {
         /* Get execution and burn counts. */
         $execution    = $this->getById($executionID);
@@ -2970,6 +2971,23 @@ class executionModel extends model
             $burnData[$date] = $set;
             $count++;
         }
+
+        if($showDelay)
+        {
+            foreach($dateList as $date)
+            {
+                if(!isset($burnData[$date]))
+                {
+                    $set = new stdClass();
+                    $set->name  = $date;
+                    $set->left  = 0;
+                    $set->value = 'null';
+
+                    $burnData[$date] = $set;
+                }
+            }
+        }
+
         $burnData = array_reverse($burnData);
 
         return $burnData;
@@ -3659,7 +3677,7 @@ class executionModel extends model
             or ($execution->status == 'closed'    and substr($execution->closedDate, 0, 10) > $execution->end)
             or ($execution->status == 'suspended' and $execution->suspendedDate > $execution->end))
         {
-            $delaySets = $this->getBurnDataFlot($executionID, $burnBy, true);
+            $delaySets = $this->getBurnDataFlot($executionID, $burnBy, true, $dateList);
             $chartData['delayLine'] = $this->report->createSingleJSON($delaySets, $dateList);
         }
 
