@@ -1123,7 +1123,6 @@ class productplanModel extends model
             if($plan->parent >= 0 && common::hasPriv('productplan', 'delete', $plan)) $menu .= html::a(helper::createLink('productplan', 'delete', $params), "<i class='icon-common-delete icon-trash'></i> " . $this->lang->delete, '', "class='btn btn-link' title='{$this->lang->delete}' target='hiddenwin'");
         }
 
-
         return $menu;
     }
 }
