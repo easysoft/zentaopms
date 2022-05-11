@@ -114,7 +114,7 @@ $config->product->all->search['params']['PO']          = array('operator' => '='
 $config->product->all->search['params']['QD']          = array('operator' => '=',       'control' => 'select', 'values' => 'users');
 $config->product->all->search['params']['RD']          = array('operator' => '=',       'control' => 'select', 'values' => 'users');
 $config->product->all->search['params']['feedback']    = array('operator' => '=',       'control' => 'select', 'values' => 'users');
-$config->product->all->search['params']['reviewer']    = array('operator' => '=',       'control' => 'select', 'values' => 'users');
+$config->product->all->search['params']['reviewer']    = array('operator' => 'include', 'control' => 'select', 'values' => 'users');
 $config->product->all->search['params']['type']        = array('operator' => '=',       'control' => 'select', 'values' => $lang->product->typeList);
 $config->product->all->search['params']['createdDate'] = array('operator' => '=',       'control' => 'input',  'values' => '', 'class' => 'date');
 $config->product->all->search['params']['createdBy']   = array('operator' => '=',       'control' => 'select', 'values' => 'users');
