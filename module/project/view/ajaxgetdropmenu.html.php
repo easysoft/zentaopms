@@ -30,6 +30,7 @@
 <?php
 $projectCounts      = array();
 $projectNames       = array();
+$defaultLink        = $link;
 $tabActive          = '';
 $myProjects         = 0;
 $others             = 0;
@@ -69,9 +70,28 @@ foreach($projects as $programID => $programProjects)
 
     foreach($programProjects as $index => $project)
     {
-        $selected = $project->id == $projectID ? 'selected' : '';
-        $link     = helper::createLink('project', 'index', "projectID=%s", '', '', $project->id);
-        $icon     = '<i class="icon icon-sprint"></i> ';
+        $selected    = $project->id == $projectID ? 'selected' : '';
+        $icon        = '<i class="icon icon-sprint"></i> ';
+
+        if($project->model == 'waterfall' and $module == 'design')
+        {
+            $link = helper::createLink('design', 'browse', "projectID=%s");
+        }
+        elseif($project->model == 'kanban')
+        {
+            $link = helper::createLink('project', 'index', "projectID=%s");
+        }
+        else
+        {
+            $link = $defaultLink;
+        }
+
+        /* Set link when project redefines permissions. */
+        if($project->auth == 'reset')
+        {
+            $this->loadModel('common')->resetProjectPriv($project->id);
+            $link = helper::createLink('project', 'index', "projectID=%s");
+        }
 
         if($project->model != 'scrum') $icon = "<i class='icon icon-{$project->model}'></i> ";
         $projectName = $icon . $project->name;

@@ -127,6 +127,7 @@ class project extends control
             unset($projects[$project->id]);
         }
 
+        $this->view->link      = $this->project->getProjectLink($module, $method, $projectID);
         $this->view->projectID = $projectID;
         $this->view->projects  = $orderedProjects;
         $this->view->module    = $module;
