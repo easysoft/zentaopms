@@ -3761,6 +3761,92 @@ class storyModel extends model
     }
 
     /**
+     * Build operate menu.
+     *
+     * @param  object $story
+     * @param  string $type
+     * @access public
+     * @return string
+     */
+    public function buildOperateMenu($story, $type = 'view')
+    {
+        $menu   = '';
+        $params = "storyID=$story->id";
+
+        if($type == 'browse')
+        {
+            if(common::canBeChanged('story', $story))
+            {
+                if($story->URChanged) return $this->buildMenu('story', 'processStoryChange', $params, $story, $type, 'search', '', 'iframe', true, '', $this->lang->confirm);
+
+                $menu .= $this->buildMenu('story', 'change', $params . "&from=$story->from", $story, $type, 'alter');
+                $menu .= $this->buildMenu('story', 'review', $params . "&from=$story->from", $story, $type, 'search');
+                $menu .= $this->buildMenu('story', 'recall', $params, $story, $type, 'undo', 'hiddenwin', '', '', '', $this->lang->story->recall);
+                $menu .= $this->buildMenu('story', 'close', $params, $story, $type, '', '', 'iframe', true);
+                $menu .= $this->buildMenu('story', 'edit', $params . "&from=$story->from", $story, $type);
+
+                if($story->type != 'requirement' and $this->config->vision != 'lite') $menu .= $this->buildMenu('story', 'createCase', "productID=$story->product&branch=$story->branch&module=0&from=&param=0&$params", $story, $type, 'sitemap', '', '', false, "data-app='qa'");
+                if($this->app->rawModule != 'projectstory' OR $this->config->vision == 'lite')  $menu .= $this->buildMenu('story', 'batchCreate', "productID=$story->product&branch=$story->branch&module=$story->module&$params&executionID={$this->session->project}", $story, $type, 'split', '', '', '', '', $this->lang->story->subdivide);
+                if($this->app->rawModule == 'projectstory' and $this->config->vision != 'lite') $menu .= $this->buildMenu('projectstory', 'unlinkStory', "projectID={$this->session->project}&$params", $story, $type, 'unlink', 'hiddenwin');
+            }
+            else
+            {
+                return $this->buildMenu('story', 'close', $params, $story, 'list', '', '', 'iframe', true);
+            }
+        }
+
+        if($type == 'view')
+        {
+            $menu .= $this->buildMenu('story', 'change', $params, $story, $type, 'alter', '', 'showinonlybody');
+            $menu .= $this->buildMenu('story', 'recall', $params, $story, $type, 'undo', '', 'showinonlybody');
+            $menu .= $this->buildMenu('story', 'review', $params, $story, $type, 'search', '', 'showinonlybody');
+
+            if(!isonlybody()) $menu .= $this->buildMenu('story', 'batchCreate', "productID=$story->product&branch=$story->branch&moduleID=$story->module&$params", $story, $type, 'split', '', 'divideStory', '', "data-toggle='modal' data-type='iframe' data-width='95%'", $this->lang->story->subdivide);
+
+            $menu .= $this->buildMenu('story', 'assignTo', $params, $story, $type, '', '', 'iframe showinonlybody', true);
+            $menu .= $this->buildMenu('story', 'close',    $params, $story, $type, '', '', 'iframe showinonlybody', true);
+            $menu .= $this->buildMenu('story', 'activate', $params, $story, $type, '', '', 'iframe showinonlybody', true);
+
+            if($this->config->edition == 'max' and $this->app->tab == 'project' and common::hasPriv('story', 'importToLib')) $menu .= html::a('#importToLib', "<i class='icon icon-assets'></i> " . $this->lang->story->importToLib, '', 'class="btn" data-toggle="modal"');
+
+            /* Print testcate actions. */
+            if($story->parent >= 0 and $story->type != 'requirement' and (common::hasPriv('testcase', 'create', $story) or common::hasPriv('testcase', 'batchCreate', $story)))
+            {
+                $this->app->loadLang('testcase');
+                $menu .= "<div class='btn-group dropup'>";
+                $menu .= "<button type='button' class='btn dropdown-toggle' data-toggle='dropdown'><i class='icon icon-sitemap'></i> " . $this->lang->testcase->common . " <span class='caret'></span></button>";
+                $menu .= "<ul class='dropdown-menu' id='createCaseActionMenu'>";
+
+                $misc = "data-toggle='modal' data-type='iframe' data-width='95%'";
+                if(isonlybody()) $misc = '';
+
+                if(common::hasPriv('testcase', 'create', $story))
+                {
+                    $link = helper::createLink('testcase', 'create', "productID=$story->product&branch=$story->branch&moduleID=0&from=&param=0&$params", '', true);
+                    $menu .= "<li>" . html::a($link, $this->lang->testcase->create, '', $misc) . "</li>";
+                }
+
+                if(common::hasPriv('testcase', 'batchCreate'))
+                {
+                    $link = helper::createLink('testcase', 'batchCreate', "productID=$story->product&branch=$story->branch&moduleID=0&$params", '', true);
+                    $menu .= "<li>" . html::a($link, $this->lang->testcase->batchCreate, '', $misc) . "</li>";
+                }
+
+                $menu .= "</ul></div>";
+            }
+
+            if($this->app->tab == 'execution' and strpos('draft,closed', $story->status) === false) $menu .= $this->buildMenu('task', 'create', "execution={$this->session->project}&{$params}&moduleID=$story->module", $story, $type, 'plus', '', 'showinonly body');
+
+            $menu .= "<div class='divider'></div>";
+            $menu .= $this->buildMenu('story', 'edit', $params, $story, $type);
+            $menu .= $this->buildMenu('story', 'create', "productID=$story->product&branch=$story->branch&moduleID=$story->module&{$params}&executionID=0&bugID=0&planID=0&todoID=0&extra=&type=$story->type", $story, $type, 'copy', '', '', '     ', "data-width='1050'");
+            $menu .= $this->buildMenu('story', 'delete', $params, $story, 'button', 'trash', 'hiddenwin', 'showinonlybody', true);
+        }
+
+        return $menu;
+    }
+
+    /**
      * Merge plan title.
      *
      * @param  int|array $productID
@@ -4164,29 +4250,7 @@ class storyModel extends model
                 echo $story->version;
                 break;
             case 'actions':
-                $vars            = "story={$story->id}";
-                $executionParams = $this->config->vision == 'lite' ? "&executionID={$this->session->project}" : '';
-                if($canBeChanged)
-                {
-                    if($story->URChanged)
-                    {
-                        common::printIcon('story', 'processStoryChange', "storyID=$story->id", '', 'list', 'search', '', 'iframe', true, '', $this->lang->confirm);
-                        break;
-                    }
-
-                    common::printIcon('story', 'change', $vars . "&from=$story->from", $story, 'list', 'alter', '', '', false, "data-group=$story->from");
-                    common::printIcon('story', 'review', $vars . "&from=$story->from", $story, 'list', 'search', '', '', false, "data-group=$story->from");
-                    common::printIcon('story', 'recall', $vars, $story, 'list', 'undo', 'hiddenwin', '', '', '', $this->lang->story->recall);
-                    common::printIcon('story', 'close', $vars, $story, 'list', '', '', 'iframe', true);
-                    common::printIcon('story', 'edit', $vars . "&from=$story->from", $story, 'list', '', '', '', false, "data-group=$story->from");
-                    if($story->type != 'requirement' and $this->config->vision != 'lite') common::printIcon('story', 'createCase', "productID=$story->product&branch=$story->branch&module=0&from=&param=0&$vars", $story, 'list', 'sitemap', '', '', false, "data-app='qa'");
-                    if($this->app->rawModule != 'projectstory' OR $this->config->vision == 'lite') common::printIcon('story', 'batchCreate', "productID=$story->product&branch=$story->branch&module=$story->module&storyID=$story->id" . $executionParams, $story, 'list', 'split', '', '', '', '', $this->lang->story->subdivide);
-                    if($this->app->rawModule == 'projectstory' and $this->config->vision != 'lite') common::printIcon('projectstory', 'unlinkStory', "projectID={$this->session->project}&storyID=$story->id", '', 'list', 'unlink', 'hiddenwin');
-                }
-                else
-                {
-                    common::printIcon('story', 'close',      $vars, $story, 'list', '', '', 'iframe', true);
-                }
+                echo $this->buildOperateMenu($story, 'browse');
                 break;
             }
             echo '</td>';
