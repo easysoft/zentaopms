@@ -2108,7 +2108,7 @@ class productModel extends model
             $menu .= $this->buildFlowMenu('product', $product, $type, 'direct');
             $menu .= "<div class='divider'></div>";
 
-            $menu .= $this->buildMenu('product', 'close', $params, $product, $type, '', '', '', '', "data-app='product'");
+            $menu .= $this->buildMenu('product', 'close', $params, $product, $type, '', '', 'iframe', true, "data-app='product'");
             $menu .= "<div class='divider'></div>";
         }
 
