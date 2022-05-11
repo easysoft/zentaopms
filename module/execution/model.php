@@ -2804,13 +2804,13 @@ class executionModel extends model
         $field = $this->config->edition == 'open' ? 'task' : 'objectID';
         $totalConsumed = $this->dao->select("t2.execution as execution, t1.$field as task, t1.date as date, sum(t1.consumed) as totalConsumed")->from($table)->alias('t1')
             ->leftJoin(TABLE_TASK)->alias('t2')->on("t1.$field=t2.id")
-            ->where('execution')->in(array_keys($executions))
+            ->where('t2.execution')->in(array_keys($executions))
             ->beginIF($this->config->edition != 'open')->andWhere('t1.objectType')->eq('task')->fi()
             ->andWhere('t2.deleted')->eq('0')
             ->andWhere('t2.parent')->ge('0')
             ->andWhere('t2.status')->ne('cancel')
-            ->andWhere('date')->ne($today)
-            ->groupBy('task, date')
+            ->andWhere('t1.date')->ne($today)
+            ->groupBy("t1.$field, t1.date")
             ->orderBy('t1.id_desc')
             ->fetchGroup('task', 'date');
 
