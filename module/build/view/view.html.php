@@ -48,15 +48,7 @@ tbody tr td:first-child input {display: none;}
   </div>
   <?php if(!isonlybody()):?>
   <div class='btn-toolbar pull-right'>
-    <?php
-    if(!$build->deleted and $canBeChanged)
-    {
-        echo $this->buildOperateMenu($build, 'view');
-
-        if(common::hasPriv('build', 'edit'))   echo html::a($this->createLink('build', 'edit',   "buildID=$build->id"), "<i class='icon-common-edit icon-edit'></i> " . $this->lang->edit, '', "class='btn btn-link' title='{$this->lang->edit}' data-app='{$app->tab}'");
-        if(common::hasPriv('build', 'delete')) echo html::a($this->createLink('build', 'delete', "buildID=$build->id"), "<i class='icon-common-delete icon-trash'></i> " . $this->lang->delete, '', "class='btn btn-link' title='{$this->lang->delete}' target='hiddenwin' data-app='{$app->tab}'");
-    }
-    ?>
+    <?php echo $this->buildOperateMenu($build, 'view');?>
   </div>
   <?php endif;?>
 </div>

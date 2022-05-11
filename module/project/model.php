@@ -1763,54 +1763,8 @@ class projectModel extends model
                     echo html::ring($project->hours->progress);
                     break;
                 case 'actions':
-                    $moduleName = $this->config->systemMode == 'classic' ? "execution" : "project";
-                    if($project->status == 'wait' || $project->status == 'suspended') common::printIcon($moduleName, 'start', "projectID=$project->id", $project, 'list', 'play', '', 'iframe', true);
-                    if($project->status == 'doing') common::printIcon($moduleName, 'close', "projectID=$project->id", $project, 'list', 'off', '', 'iframe', true);
-                    if($project->status == 'closed') common::printIcon($moduleName, 'activate', "projectID=$project->id", $project, 'list', 'magic', '', 'iframe', true);
-
-                    if(common::hasPriv($moduleName, 'suspend') || (common::hasPriv($moduleName, 'close') && $project->status != 'doing') || (common::hasPriv($moduleName, 'activate') && $project->status != 'closed'))
-                    {
-                        echo "<div class='btn-group'>";
-                        echo "<button type='button' class='btn icon-caret-down dropdown-toggle' data-toggle='context-dropdown' title='{$this->lang->more}' style='width: 16px; padding-left: 0px; border-radius: 4px;'></button>";
-                        echo "<ul class='dropdown-menu pull-right text-center' role='menu' style='position: unset; min-width: auto; padding: 5px 6px;'>";
-                        common::printIcon($moduleName, 'suspend', "projectID=$project->id", $project, 'list', 'pause', '', 'iframe btn-action', true);
-                        if($project->status != 'doing') common::printIcon($moduleName, 'close', "projectID=$project->id", $project, 'list', 'off', '', 'iframe btn-action', true);
-                        if($project->status != 'closed') common::printIcon($moduleName, 'activate', "projectID=$project->id", $project, 'list', 'magic', '', 'iframe btn-action', true);
-                        echo "</ul>";
-                        echo "</div>";
-                    }
-
-                    $from     = $project->from == 'project' ? 'project' : 'pgmproject';
-                    $iframe   = ($this->app->tab == 'program' or $project->model == 'kanban') ? 'iframe' : '';
-                    $onlyBody = ($this->app->tab == 'program' or $project->model == 'kanban') ? true : '';
-                    $dataApp  = $this->config->systemMode == 'classic' ? "data-app=execution" : "data-app=project";
-                    $attr     = $project->model == 'kanban' ? " disabled='disabled'" : '';
-
-                    common::printIcon($moduleName, 'edit', "projectID=$project->id", $project, 'list', 'edit', '', $iframe, $onlyBody, $dataApp);
-
-                    if($this->config->vision != 'lite')
-                    {
-                        common::printIcon($moduleName, 'team', "projectID=$project->id", $project, 'list', 'group', '', '', '', $dataApp . $attr, $this->lang->execution->team);
-                        if($this->config->systemMode == 'new') common::printIcon('project', 'group', "projectID=$project->id&programID=$programID", $project, 'list', 'lock', '', '', '', $dataApp . $attr);
-
-                        if(common::hasPriv($moduleName, 'manageProducts') || common::hasPriv($moduleName, 'whitelist') || common::hasPriv($moduleName, 'delete'))
-                        {
-                            echo "<div class='btn-group'>";
-                            echo "<button type='button' class='btn dropdown-toggle' data-toggle='context-dropdown' title='{$this->lang->more}'><i class='icon-more-alt'></i></button>";
-                            echo "<ul class='dropdown-menu pull-right text-center' role='menu'>";
-                            common::printIcon($moduleName, 'manageProducts', "projectID=$project->id", $project, 'list', 'link', '', 'btn-action', '', $attr, $this->lang->project->manageProducts);
-                            if($this->config->systemMode == 'new') common::printIcon('project', 'whitelist', "projectID=$project->id&module=project&from=$from", $project, 'list', 'shield-check', '', 'btn-action', '', $dataApp . $attr);
-                            if(common::hasPriv($moduleName, 'delete')) echo html::a(helper::createLink($moduleName, "delete", "projectID=$project->id"), "<i class='icon-trash'></i>", 'hiddenwin', "class='btn btn-action' title='{$this->lang->project->delete}'");
-                            echo "</ul>";
-                            echo "</div>";
-                        }
-                    }
-                    else
-                    {
-                        common::printIcon($moduleName, 'team', "projectID=$project->id", $project, 'list', 'group', '', '', '', $dataApp, $this->lang->execution->team);
-                        if($this->config->systemMode == 'new') common::printIcon('project', 'whitelist', "projectID=$project->id&module=project&from=$from", $project, 'list', 'shield-check', '', 'btn-action', '', $dataApp);
-                        if(common::hasPriv($moduleName, 'delete')) echo html::a(helper::createLink($moduleName, "delete", "projectID=$project->id"), "<i class='icon-trash'></i>", 'hiddenwin', "class='btn btn-action' title='{$this->lang->project->delete}'");
-                    }
+                    $project->programID = $programID;
+                    echo $this->buildOperateMenu($project, 'browse');
                     break;
             }
             echo '</td>';
@@ -2356,5 +2310,116 @@ class projectModel extends model
             ->beginIF(!empty($type))->andWhere('type')->eq($type)->fi()
             ->fetch();
         return $result;
+    }
+
+    /**
+     * Build project action menu.
+     *
+     * @param  object $project
+     * @param  string $type
+     * @access public
+     * @return string
+     */
+    public function buildOperateMenu($project, $type = 'view')
+    {
+        $function = 'buildOperate' . ucfirst($type) . 'Menu';
+        return $this->$function($project);
+    }
+
+    /**
+     * Build project view action menu.
+     *
+     * @param  object $project
+     * @access public
+     * @return string
+     */
+    public function buildOperateViewMenu($project)
+    {
+        if($project->deleted) return '';
+
+        $menu   = '';
+        $params = "projectID=$project->id";
+
+        $menu .= "<div class='divider'></div>";
+        $menu .= $this->buildMenu('project', 'start',    $params, $project, 'view', 'play',  '', 'iframe', true, '', $this->lang->project->start);
+        $menu .= $this->buildMenu('project', 'activate', $params, $project, 'view', 'magic', '', 'iframe', true, '', $this->lang->project->activate);
+        $menu .= $this->buildMenu('project', 'suspend',  $params, $project, 'view', 'pause', '', 'iframe', true, '', $this->lang->project->suspend);
+        $menu .= $this->buildMenu('project', 'close',    $params, $project, 'view', 'off',   '', 'iframe', true, '', $this->lang->close);
+
+        $menu .= "<div class='divider'></div>";
+        $menu .= $this->buildFlowMenu('project', $project, 'view', 'direct');
+        $menu .= "<div class='divider'></div>";
+
+        $menu .= $this->buildMenu('project', 'edit',   "project=$project->id&from=view", $project, 'button', 'edit', '',           '', '', '', $this->lang->edit);
+        $menu .= $this->buildMenu('project', 'delete', "project=$project->id",           $project, 'button', 'trash', 'hiddenwin', '', '', '', $this->lang->delete);
+
+        return $menu;
+    }
+
+    /**
+     * Build project browse action menu.
+     *
+     * @param  object $project
+     * @access public
+     * @return string
+     */
+    public function buildOperateBrowseMenu($project)
+    {
+        $menu   = '';
+        $params = "projectID=$project->id";
+
+        $moduleName = $this->config->systemMode == 'classic' ? "execution" : "project";
+        if($project->status == 'wait' || $project->status == 'suspended')
+        {
+            $menu .= $this->buildMenu($moduleName, 'start', $params, $project, 'browse', 'play', '', 'iframe', true);
+        }
+        if($project->status == 'doing')  $menu .= $this->buildMenu($moduleName, 'close',    $params, $project, 'browse', 'off',   '', 'iframe', true);
+        if($project->status == 'closed') $menu .= $this->buildMenu($moduleName, 'activate', $params, $project, 'browse', 'magic', '', 'iframe', true);
+
+        if(common::hasPriv($moduleName, 'suspend') || (common::hasPriv($moduleName, 'close') && $project->status != 'doing') || (common::hasPriv($moduleName, 'activate') && $project->status != 'closed'))
+        {
+            $menu .= "<div class='btn-group'>";
+            $menu .= "<button type='button' class='btn icon-caret-down dropdown-toggle' data-toggle='context-dropdown' title='{$this->lang->more}' style='width: 16px; padding-left: 0px; border-radius: 4px;'></button>";
+            $menu .= "<ul class='dropdown-menu pull-right text-center' role='menu' style='position: unset; min-width: auto; padding: 5px 6px;'>";
+            $menu .= $this->buildMenu($moduleName, 'suspend', $params, $project, 'browse', 'pause', '', 'iframe btn-action', true);
+            if($project->status != 'doing')  $menu .= $this->buildMenu($moduleName, 'close',    $params, $project, 'browse', 'off',   '', 'iframe btn-action', true);
+            if($project->status != 'closed') $menu .= $this->buildMenu($moduleName, 'activate', $params, $project, 'browse', 'magic', '', 'iframe btn-action', true);
+            $menu .= "</ul>";
+            $menu .= "</div>";
+        }
+
+        $from     = $project->from == 'project' ? 'project' : 'pgmproject';
+        $iframe   = ($this->app->tab == 'program' || $project->model == 'kanban') ? 'iframe' : '';
+        $onlyBody = ($this->app->tab == 'program' || $project->model == 'kanban') ? true : '';
+        $dataApp  = $this->config->systemMode == 'classic' ? "data-app=execution" : "data-app=project";
+        $attr     = $project->model == 'kanban' ? " disabled='disabled'" : '';
+
+        $menu .= $this->buildMenu($moduleName, 'edit', $params, $project, 'browse', 'edit', '', $iframe, $onlyBody, $dataApp);
+
+        if($this->config->vision != 'lite')
+        {
+            $menu .= $this->buildMenu($moduleName, 'team', $params, $project, 'browse', 'group', '', '', '', $dataApp . $attr, $this->lang->execution->team);
+            if($this->config->systemMode == 'new') $menu .= $this->buildMenu('project', 'group', "$params&programID={$project->programID}", $project, 'browse', 'lock', '', '', '', $dataApp . $attr);
+
+            if(common::hasPriv($moduleName, 'manageProducts') || common::hasPriv($moduleName, 'whitelist') || common::hasPriv($moduleName, 'delete'))
+            {
+                $menu .= "<div class='btn-group'>";
+                $menu .= "<button type='button' class='btn dropdown-toggle' data-toggle='context-dropdown' title='{$this->lang->more}'><i class='icon-more-alt'></i></button>";
+                $menu .= "<ul class='dropdown-menu pull-right text-center' role='menu'>";
+                $menu .= $this->buildMenu($moduleName, 'manageProducts', $params, $project, 'browse', 'link', '', 'btn-action', '', $attr, $this->lang->project->manageProducts);
+                if($this->config->systemMode == 'new') $menu .= $this->buildMenu('project', 'whitelist', "$params&module=project&from=$from", $project, 'browse', 'shield-check', '', 'btn-action', '', $dataApp . $attr);
+                $menu .= $this->buildMenu($moduleName, "delete", $params, $project, 'browse', 'trash', 'hiddenwin', 'btn-action');
+                $menu .= "</ul>";
+                $menu .= "</div>";
+            }
+        }
+        else
+        {
+            $menu .= $this->buildMenu($moduleName, 'team', $params, $project, 'browse', 'group', '', '', '', $dataApp, $this->lang->execution->team);
+            if($this->config->systemMode == 'new') $menu .= $this->buildMenu('project', 'whitelist', "$params&module=project&from=$from", $project, 'browse', 'shield-check', '', 'btn-action', '', $dataApp);
+            $menu .= $this->buildMenu($moduleName, "delete", $params, $project, 'browse', 'trash', 'hiddenwin', 'btn-action');
+        }
+
+        return $menu;
     }
 }
