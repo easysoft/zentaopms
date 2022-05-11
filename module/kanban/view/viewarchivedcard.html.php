@@ -145,13 +145,14 @@ $app->loadLang('productplan');
               </div>
               <?php endif;?>
             <?php else:?>
-            <?php if(isset($usersAvatar[$assignedToList]) and isset($users[$assignedToList]))
-            {
-                echo "<div class='users pull-right' title='" . $users[$assignedToList] . "'>";
-                echo html::smallAvatar(array('avatar' => $usersAvatar[$assignedToList], 'account' => $assignedToList, 'name' => $users[$assignedToList]), 'avatar-circle');
-                echo "</div>";
-            }
-            ?>
+              <?php
+              if(isset($usersAvatar[$assignedToList]) and isset($users[$assignedToList]))
+              {
+                  echo "<div class='users pull-right' title='" . $users[$assignedToList] . "'>";
+                  echo html::smallAvatar(array('avatar' => $usersAvatar[$assignedToList], 'account' => $assignedToList, 'name' => $users[$assignedToList]), 'avatar-circle');
+                  echo "</div>";
+              }
+              ?>
             <?php endif;?>
           </div>
           <?php if($kanban->performable):?>
