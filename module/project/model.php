@@ -629,6 +629,39 @@ class projectModel extends model
             ->fetchGroup('productID', 'branchID');
     }
 
+    /*
+     * Get projects by search conditions.
+     *
+     * @param string $projectQuery
+     * @return array
+     * */
+    public function getBySearch($projectQuery)
+    {
+        return $this->dao->select('*')->from(TABLE_PROJECT)
+            ->where($projectQuery)
+            ->andWhere('type')->eq('project')
+            ->fetchAll();
+    }
+
+    /*
+     * Build search form
+     *
+     * @param int     $queryID
+     * @param string  $actionURL
+     *
+     * @return 0
+     * */
+    public function buildSearchFrom($queryID, $actionURL)
+    {
+        $this->config->project->search['queryID']   = $queryID;
+        $this->config->project->search['actionURL'] = $actionURL;
+
+        $programPairs  = array(0 => '');
+        $programPairs += $this->loadModel('program')->getPairs();
+        $this->config->project->search['params']['parent']['values'] = $programPairs;
+        $this->loadModel('search')->setSearchParams($this->config->project->search);
+    }
+
     /**
      * Build the query.
      *
