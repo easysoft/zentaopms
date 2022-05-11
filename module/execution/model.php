@@ -2794,6 +2794,7 @@ class executionModel extends model
         $executions = $this->dao->select('id, code')->from(TABLE_EXECUTION)
             ->where('end')->ge($today)
             ->andWhere('type')->in('sprint,stage')
+            ->andWhere('lifetime')->ne('ops')
             ->andWhere('status')->notin('done,closed,suspended')
             ->fetchPairs();
         if(!$executions) return array();
@@ -2803,22 +2804,22 @@ class executionModel extends model
         $field = $this->config->edition == 'open' ? 'task' : 'objectID';
         $totalConsumed = $this->dao->select("t2.execution as execution, t1.$field as task, t1.date as date, sum(t1.consumed) as totalConsumed")->from($table)->alias('t1')
             ->leftJoin(TABLE_TASK)->alias('t2')->on("t1.$field=t2.id")
-            ->where('t2.execution')->in(array_keys($executions))
+            ->where('execution')->in(array_keys($executions))
             ->beginIF($this->config->edition != 'open')->andWhere('t1.objectType')->eq('task')->fi()
             ->andWhere('t2.deleted')->eq('0')
             ->andWhere('t2.parent')->ge('0')
             ->andWhere('t2.status')->ne('cancel')
-            ->andWhere('t1.date')->ne($today)
-            ->groupBy("t1.$field, t1.date")
+            ->andWhere('date')->ne($today)
+            ->groupBy('task, date')
             ->orderBy('t1.id_desc')
             ->fetchGroup('task', 'date');
 
-        $maxIDList = $this->dao->select('max(id) as id')->from($table)
+        $latestIdList = $this->dao->select('max(id) as id')->from($table)
             ->where($field)->in(array_keys($totalConsumed))
             ->beginIF($this->config->edition != 'open')->andWhere('objectType')->eq('task')->fi()
             ->groupBy("$field,date")->fetchAll('id');
-        $lefts = $this->dao->select("$field, date, `left`")->from($table)
-            ->where('id')->in(array_keys($maxIDList))
+        $latestLefts = $this->dao->select("$field, date, `left`")->from($table)
+            ->where('id')->in(array_keys($latestIdList))
             ->fetchGroup($field, 'date');
 
         $burnList = array();
@@ -2837,7 +2838,7 @@ class executionModel extends model
                 }
 
                 $burnList[$executionID][$date]->consumed += $consumed->totalConsumed;
-                $burnList[$executionID][$date]->left     += $lefts[$taskID][$date]->left;
+                $burnList[$executionID][$date]->left     += $latestLefts[$taskID][$date]->left;
             }
         }
 
