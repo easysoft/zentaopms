@@ -2792,8 +2792,7 @@ class executionModel extends model
     {
         $today = helper::today();
         $executions = $this->dao->select('id, code')->from(TABLE_EXECUTION)
-            ->where('end')->ge($today)
-            ->andWhere('type')->in('sprint,stage')
+            ->where('type')->in('sprint,stage')
             ->andWhere('lifetime')->ne('ops')
             ->andWhere('status')->notin('done,closed,suspended')
             ->fetchPairs();
@@ -2943,10 +2942,11 @@ class executionModel extends model
      *
      * @param  int    $executionID
      * @param  string $burnBy
+     * @param  bool   $showDelay
      * @access public
      * @return array
      */
-    public function getBurnDataFlot($executionID = 0, $burnBy = '')
+    public function getBurnDataFlot($executionID = 0, $burnBy = '', $showDelay = false)
     {
         /* Get execution and burn counts. */
         $execution    = $this->getById($executionID);
@@ -2959,7 +2959,8 @@ class executionModel extends model
         foreach($sets as $date => $set)
         {
             if($date < $execution->begin) continue;
-            if($date > $execution->end) continue;
+            if(!$showDelay and $date > $execution->end) $set->value = 'null';
+            if($showDelay  and $date < $execution->end) $set->value = 'null';
 
             $burnData[$date] = $set;
             $count++;
@@ -3647,6 +3648,13 @@ class executionModel extends model
         $chartData['labels']   = $this->report->convertFormat($dateList, DT_DATE5);
         $chartData['burnLine'] = $this->report->createSingleJSON($sets, $dateList);
         $chartData['baseLine'] = $baselineJSON;
+
+        $execution = $this->getById($executionID);
+        if($execution->status != 'closed' and helper::today() > $execution->end)
+        {
+            $delaySets = $this->getBurnDataFlot($executionID, $burnBy, true);
+            $chartData['delayLine'] = $this->report->createSingleJSON($delaySets, $dateList);
+        }
 
         return $chartData;
     }
