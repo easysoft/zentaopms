@@ -80,25 +80,7 @@
         </td>
         <?php foreach($extendFields as $extendField) echo "<td>" . $this->loadModel('flow')->getFieldValue($extendField, $release) . "</td>";?>
         <td class='c-actions'>
-          <?php
-          if($canBeChanged)
-          {
-              if(common::hasPriv('release', 'linkStory')) echo html::a(inlink('view', "releaseID=$release->id&type=story&link=true"), '<i class="icon-link"></i> ', '', "class='btn' title='{$lang->release->linkStory}'");
-              if(common::hasPriv('release', 'linkBug')) echo html::a(inlink('view', "releaseID=$release->id&type=bug&link=true"), '<i class="icon-bug"></i> ', '', "class='btn' title='{$lang->release->linkBug}'");
-              if(common::hasPriv('release', 'changeStatus', $release))
-              {
-                  $changedStatus = $release->status == 'normal' ? 'terminate' : 'normal';
-                  echo html::a($this->createLink('release', 'changeStatus', "releaseID=$release->id&status=$changedStatus"), '<i class="icon-' . ($release->status == 'normal' ? 'pause' : 'play') . '"></i> ', 'hiddenwin', "class='btn' title='{$lang->release->changeStatusList[$changedStatus]}'");
-              }
-              common::printIcon('release', 'edit',   "release=$release->id", $release, 'list');
-              common::printIcon('release', 'notify',   "release=$release->id", $release, 'list', 'bullhorn', '', 'iframe', true);
-              if(common::hasPriv('release', 'delete', $release))
-              {
-                  $deleteURL = $this->createLink('release', 'delete', "releaseID=$release->id&confirm=yes");
-                  echo html::a("javascript:ajaxDelete(\"$deleteURL\", \"releaseList\", confirmDelete)", '<i class="icon-trash"></i>', '', "class='btn' title='{$lang->release->delete}'");
-              }
-          }
-          ?>
+          <?php echo $this->release->buildOperateMenu($release, 'browse');?>
         </td>
       </tr>
       <?php endforeach;?>

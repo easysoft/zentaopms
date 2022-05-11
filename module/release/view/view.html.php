@@ -14,6 +14,7 @@
 <?php include '../../common/view/tablesorter.html.php';?>
 <?php js::set('confirmUnlinkStory', $lang->release->confirmUnlinkStory)?>
 <?php js::set('confirmUnlinkBug', $lang->release->confirmUnlinkBug)?>
+<?php $canBeChanged = common::canBeChanged('release', $release);?>
 <div id='mainMenu' class='clearfix'>
   <div class='btn-toolbar pull-left'>
     <?php $browseLink = $this->session->releaseList ? $this->session->releaseList : inlink('browse', "productID=$release->product");?>
@@ -30,22 +31,7 @@
     </div>
   </div>
   <div class='btn-toolbar pull-right'>
-    <?php
-    $canBeChanged = common::canBeChanged('release', $release);
-
-    if(!$release->deleted and $canBeChanged and !isonlybody())
-    {
-        echo $this->buildOperateMenu($release, 'view');
-
-        if(common::hasPriv('release', 'changeStatus', $release))
-        {
-            $changedStatus = $release->status == 'normal' ? 'terminate' : 'normal';
-            echo html::a(inlink('changeStatus', "releaseID=$release->id&status=$changedStatus"), '<i class="icon-' . ($release->status == 'normal' ? 'pause' : 'play') . '"></i> ' . $lang->release->changeStatusList[$changedStatus], 'hiddenwin', "class='btn btn-link' title='{$lang->release->changeStatusList[$changedStatus]}'");
-        }
-        if(common::hasPriv('release', 'edit'))   echo html::a(inlink('edit',   "releaseID=$release->id"), "<i class='icon-common-edit icon-edit'></i> " . $this->lang->edit, '', "class='btn btn-link' title='{$this->lang->edit}'");
-        if(common::hasPriv('release', 'delete')) echo html::a(inlink('delete', "releaseID=$release->id"), "<i class='icon-common-delete icon-trash'></i> " . $this->lang->delete, '', "class='btn btn-link' title='{$this->lang->delete}' target='hiddenwin'");
-    }
-    ?>
+    <?php echo $this->release->buildOperateMenu($release, 'view');?>
   </div>
 </div>
 <div id='mainContent' class='main-content'>
