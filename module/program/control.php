@@ -26,12 +26,15 @@ class program extends control
      * @access public
      * @return void
      */
-    public function browse($status = 'all', $orderBy = 'order_asc')
+    public function browse($status = 'all', $orderBy = 'order_asc', $recTotal = 0, $recPerPage = 10, $pageID = 1, $param = 0)
     {
         if(common::hasPriv('program', 'create')) $this->lang->pageActions = html::a($this->createLink('program', 'create'), "<i class='icon icon-plus'></i> " . $this->lang->program->create, '', "class='btn btn-primary create-program-btn'");
 
         $this->session->set('programList', $this->app->getURI(true), 'program');
         $this->session->set('projectList', $this->app->getURI(true), 'program');
+
+        $this->app->loadClass('pager', $static = true);
+        $pager = new pager($recTotal, $recPerPage, $pageID);
 
         $programType = $this->cookie->programType ? $this->cookie->programType : 'bylist';
 
@@ -41,7 +44,18 @@ class program extends control
         }
         else
         {
-            $programs = $this->program->getList($status, $orderBy, null, true);
+            if(strtolower($status) == 'bysearch')
+            {
+                $queryID  = (int)$param;
+                $programs = $this->program->getListBySearch($orderBy, $pager, $queryID);
+            }
+            else
+            {
+                $topPrograms = $this->program->getList($status, $orderBy, $pager, 'top');
+                $programIds  = array();
+                foreach($topPrograms as $programID => $program) $programIds[] = $programID;
+                $programs = $this->program->getList($status, $orderBy, null, 'child', $programIds);
+            }
         }
 
         /* Get PM id list. */
@@ -52,12 +66,19 @@ class program extends control
         }
         $PMList = $this->loadModel('user')->getListByAccounts($accounts, 'account');
 
+        /* Build the search form. */
+        $actionURL = $this->createLink('program', 'browse', "status=bySearch&orderBy={$orderBy}&recTotal={$recTotal}&recPerPage={$recPerPage}&pageID={$pageID}&param=myQueryID");
+        $this->config->program->search['onMenuBar'] = 'yes';
+        $this->config->program->search['actionURL'] = $actionURL;
+        $this->loadModel('search')->setSearchParams($this->config->program->search);
+
         $this->view->title      = $this->lang->program->browse;
         $this->view->position[] = $this->lang->program->browse;
 
         $this->view->programs     = $programs;
         $this->view->status       = $status;
         $this->view->orderBy      = $orderBy;
+        $this->view->pager        = $pager;
         $this->view->users        = $this->user->getPairs('noletter');
         $this->view->userIdPairs  = $this->user->getPairs('noletter|showid');
         $this->view->usersAvatar  = $this->user->getAvatarPairs('');
