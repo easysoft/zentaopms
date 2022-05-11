@@ -1197,11 +1197,13 @@ class product extends control
      * @access public
      * @return void
      */
-    public function all($browseType = 'noclosed', $orderBy = 'order_asc')
+    public function all($browseType = 'noclosed', $orderBy = 'order_asc', $param = 0)
     {
         /* Load module and set session. */
         $this->loadModel('program');
         $this->session->set('productList', $this->app->getURI(true), 'product');
+
+        $queryID  = ($browseType == 'bySearch') ? (int)$param : 0;
 
         if($this->app->viewType == 'mhtml')
         {
@@ -1210,8 +1212,11 @@ class product extends control
         }
 
         /* Process product structure. */
-        $productStats     = $this->product->getStats($orderBy, '', $browseType, '', 'story');
+        $productStats     = $this->product->getStats($orderBy, '', $browseType, '', 'story', '', $queryID);
         $productStructure = $this->product->statisticProgram($productStats);
+
+        $actionURL = $this->createLink('product', 'all', "browseType=bySearch&orderBy=order_asc&queryID=myQueryID");
+        $this->product->buildProductSearchForm($param, $actionURL);
 
         $this->view->title        = $this->lang->product->common;
         $this->view->position[]   = $this->lang->product->common;
