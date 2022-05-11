@@ -44,9 +44,9 @@ $(function()
         }
     });
 
-   var myPager = $('.pager').data('zui.pager');
-   myPager.lang.pageSize = pageSize;
-   myPager.set();
+    var myPager = $('.pager').data('zui.pager');
+    myPager.lang.pageSize = pageSize;
+    myPager.set();
 });
 
 function showEditCheckbox(show)
