@@ -96,7 +96,7 @@ $app->loadLang('productplan');
         if(!common::hasPriv($card->fromType, 'view')) echo "<div class='cardName' title='$name'>$name</div>";
         echo "<div class='info $card->fromType'>";
         if(isset($lang->{$card->fromType}->statusList[$card->objectStatus])) echo "<span class='label label-$card->objectStatus'>" . $lang->{$card->fromType}->statusList[$card->objectStatus] . '</span>';
-        if(isset($card->date) and !helper::isZeroDate($card->date)) echo "<span class='time label label-light'>" . date("m/d", strtotime($card->date)) . "</span>"
+        if(isset($card->date) and !helper::isZeroDate($card->date)) echo "<span class='time label label-light'>" . date("Y-m-d", strtotime($card->date)) . "</span>"
         ?>
         <?php endif;?>
             <?php if(helper::isZeroDate($card->end) and !helper::isZeroDate($card->begin) and $card->begin != '2030-01-01' and $card->end != '2030-01-01'):?>
