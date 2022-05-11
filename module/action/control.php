@@ -14,6 +14,7 @@ class action extends control
     /**
      * Trash.
      *
+     * @param  string $browseType
      * @param  string $type all|hidden
      * @param  string $orderBy
      * @param  int    $recTotal
@@ -22,7 +23,7 @@ class action extends control
      * @access public
      * @return void
      */
-    public function trash($type = 'all', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function trash($browseType = 'all', $type = 'all', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         $this->loadModel('backup');
 
@@ -60,18 +61,37 @@ class action extends control
         $pager = pager::init($recTotal, $recPerPage, $pageID);
 
         /* Append id for secend sort. */
-        $sort    = common::appendOrder($orderBy);
-        $trashes = $this->action->getTrashes($type, $sort, $pager);
+        $sort           = common::appendOrder($orderBy);
+        $trashes        = $this->action->getTrashes($browseType, $type, $sort, $pager);
+        $objectTypeList = $this->action->getTrashObjectTypes($type);
+        $objectTypeList = array_keys($objectTypeList);
+
+        $preferredType       = array();
+        $moreType            = array();
+        $preferredTypeConfig = $this->config->systemMode == 'new' ? $this->config->action->preferredType->new : $this->config->action->preferredType->classic;
+        foreach($objectTypeList as $objectType)
+        {
+            in_array($objectType, $preferredTypeConfig) ? $preferredType[$objectType] = $objectType : $moreType[$objectType] = $objectType;
+        }
+        if(count($preferredType) < $this->config->action->preferredTypeNum)
+        {
+            $toPreferredType = array_splice($moreType, 0, $this->config->action->preferredTypeNum - count($preferredType));
+            $preferredType   = $preferredType + $toPreferredType;
+        }
 
         /* Title and position. */
         $this->view->title      = $this->lang->action->trash;
         $this->view->position[] = $this->lang->action->trash;
 
-        $this->view->trashes = $trashes;
-        $this->view->type    = $type;
-        $this->view->orderBy = $orderBy;
-        $this->view->pager   = $pager;
-        $this->view->users   = $this->loadModel('user')->getPairs('noletter');
+        $this->view->trashes             = $trashes;
+        $this->view->type                = $type;
+        $this->view->currentObjectType   = $browseType;
+        $this->view->orderBy             = $orderBy;
+        $this->view->pager               = $pager;
+        $this->view->users               = $this->loadModel('user')->getPairs('noletter');
+        $this->view->preferredType       = $preferredType;
+        $this->view->moreType            = $moreType;
+        $this->view->preferredTypeConfig = $preferredTypeConfig;
         $this->display();
     }
 
