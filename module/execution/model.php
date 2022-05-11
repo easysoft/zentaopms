@@ -692,14 +692,14 @@ class executionModel extends model
 
             if(isset($execution->project))
             {
-                $executionProductsList  = $this->loadModel('product')->getProducts($executionID);
-                $projectProductsList    = $this->product->getProducts($execution->project);
-                $executionProductsID    = array_keys($executionProductsList);
-                $projectProductsID      = array_keys($projectProductsList);
-                $diffProductsID         = array_diff($executionProductsID, $projectProductsID);
-                if(!empty($diffProductsID))
+                $executionProductList   = $this->loadModel('product')->getProducts($executionID);
+                $projectProductList     = $this->product->getProducts($execution->project);
+                $executionProductIdList = array_keys($executionProductList);
+                $projectProductIdList   = array_keys($projectProductList);
+                $diffProductIdList      = array_diff($executionProductIdList, $projectProductIdList);
+                if(!empty($diffProductIdList))
                 {
-                    foreach($diffProductsID as $key => $newProductID)
+                    foreach($diffProductIdList as $key => $newProductID)
                     {
                         $data = $this->dao->select('*')->from(TABLE_PROJECTPRODUCT)
                             ->where('project')->eq($executionID)
