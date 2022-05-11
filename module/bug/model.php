@@ -2693,9 +2693,14 @@ class bugModel extends model
             if($this->session->bugQuery == false) $this->session->set('bugQuery', ' 1 = 1');
         }
 
-        $bugQuery = $this->getBugQuery($this->session->bugQuery, $productIDList, $branch);
+        $bugQuery = $this->getBugQuery($this->session->bugQuery);
+
         if(is_array($productIDList)) $productIDList = implode(',', $productIDList);
         if(strpos($bugQuery, '`product` =') === false) $bugQuery .= ' AND `product` in (' . $productIDList . ')';
+
+        $allBranch = "`branch` = 'all'";
+        if($branch !== 'all' and strpos($bugQuery, '`branch` =') === false) $bugQuery .= " AND `branch` in('0','$branch')";
+        if(strpos($bugQuery, $allBranch) !== false) $bugQuery = str_replace($allBranch, '1', $bugQuery);
 
         $bugs = $this->dao->select('*')->from(TABLE_BUG)->where($bugQuery)
             ->beginIF(!$this->app->user->admin)->andWhere('execution')->in('0,' . $this->app->user->view->sprints)->fi()
@@ -2717,11 +2722,10 @@ class bugModel extends model
      * Get bug query.
      *
      * @param  string $bugQuery
-     * @param  string $branch
      * @access public
      * @return string
      */
-    public function getBugQuery($bugQuery, $branch = 'all')
+    public function getBugQuery($bugQuery)
     {
         $allProduct = "`product` = 'all'";
         if(strpos($bugQuery, $allProduct) !== false)
@@ -2730,10 +2734,6 @@ class bugModel extends model
             $bugQuery = str_replace($allProduct, '1', $bugQuery);
             $bugQuery = $bugQuery . ' AND `product` ' . helper::dbIN($products);
         }
-
-        $allBranch = "`branch` = 'all'";
-        if($branch !== 'all' and strpos($bugQuery, '`branch` =') === false) $bugQuery .= " AND `branch` in('0','$branch')";
-        if(strpos($bugQuery, $allBranch) !== false) $bugQuery = str_replace($allBranch, '1', $bugQuery);
 
         $allProject = "`project` = 'all'";
         if(strpos($bugQuery, $allProject) !== false)
