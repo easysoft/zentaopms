@@ -532,6 +532,14 @@ class projectModel extends model
             {
                 $link = helper::createLink($module, 'group', "projectID=%s");
             }
+            elseif($module == 'product' and $method == 'showerrornone')
+            {
+                $link = helper::createLink('projectstory', 'story', "projectID=%s");
+            }
+            elseif($module == 'projectstory' and $method == 'story')
+            {
+                $link = helper::createLink($module, $method, "projectID=%s");
+            }
             elseif($module == 'projectstory' and $method == 'linkstory')
             {
                 $link = helper::createLink($module, $method, "projectID=%s");

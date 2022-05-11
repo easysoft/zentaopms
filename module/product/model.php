@@ -975,13 +975,15 @@ class productModel extends model
      * @param  int    $queryID
      * @param  int    $actionURL
      * @param  int    $branch
+     * @param  int    $projectID
      * @access public
      * @return void
      */
-    public function buildSearchForm($productID, $products, $queryID, $actionURL, $branch = 0)
+    public function buildSearchForm($productID, $products, $queryID, $actionURL, $branch = 0, $projectID = 0)
     {
         $productIdList = ($this->app->tab == 'project' and empty($productID)) ? array_keys($products) : $productID;
         $branchParam   = ($this->app->tab == 'project' and empty($productID)) ? '' : $branch;
+        $projectID     = ($this->app->tab == 'project' and empty($projectID)) ? $this->session->project : $projectID;
 
         $this->config->product->search['actionURL'] = $actionURL;
         $this->config->product->search['queryID']   = $queryID;
@@ -997,7 +999,7 @@ class productModel extends model
             if($productID)
             {
                 $modules          = array();
-                $branchList       = $this->loadModel('branch')->getPairs($productID, '', $this->session->project);
+                $branchList       = $this->loadModel('branch')->getPairs($productID, '', $projectID);
                 $branchModuleList = $this->tree->getOptionMenu($productID, 'story', 0, array_keys($branchList));
                 foreach($branchModuleList as $branchID => $branchModules) $modules[] = $branchModules;
             }
@@ -1005,7 +1007,7 @@ class productModel extends model
             {
                 $moduleList  = array();
                 $modules     = array('/');
-                $branchGroup = $this->loadModel('execution')->getBranchByProduct(array_keys($products), $this->session->project, '');
+                $branchGroup = $this->loadModel('execution')->getBranchByProduct(array_keys($products), $projectID, '');
                 foreach($products as $productID => $productName)
                 {
                     if(isset($branchGroup[$productID]))
