@@ -229,7 +229,7 @@ $lang->project->currencySymbol['NZD'] = 'NZ$';
 $lang->project->currencySymbol['THB'] = '฿';
 $lang->project->currencySymbol['SGD'] = 'S$';
 
-$lang->project->modelList['']         = "";
+$lang->project->modelList['']          = "";
 $lang->project->modelList['scrum']     = "Scrum";
 $lang->project->modelList['waterfall'] = "瀑布";
 $lang->project->modelList['kanban']    = "看板";
