@@ -128,7 +128,10 @@ UPDATE `zt_workflowaction` SET `type` = 'batch' WHERE `module` = 'story' and `ac
 UPDATE `zt_workflowaction` SET `position` = 'browse' WHERE `module` = 'story' and `action` = 'browse' and `vision` = 'rnd';
 UPDATE `zt_workflowaction` SET `position` = 'browse' WHERE `module` = 'story' and `action` = 'exporttemplate' and `vision` = 'rnd';
 UPDATE `zt_workflowaction` SET `position` = 'browse' WHERE `module` = 'story' and `action` = 'import' and `vision` = 'rnd';
-UPDATE `zt_workflowaction` SET `position` = 'view' WHERE `module` = 'story' and `action` = 'view' and `vision` = 'rnd';
+UPDATE `zt_workflowaction` SET `position` = 'browse' WHERE `module` = 'story' and `action` = 'view' and `vision` = 'rnd';
+UPDATE `zt_workflowaction` SET `show` = 'direct' WHERE `module` = 'story'  and `vision` = 'rnd' and action NOT IN ('exporttemplate', 'import');
+UPDATE `zt_workflowaction` SET `show` = 'direct' WHERE `module` = 'program'  and `vision` = 'rnd'
+
 DELETE FROM `zt_workflowfield` WHERE `module`='execution' AND `field`='stage';
 DELETE FROM `zt_workflowfield` WHERE `module`='program' AND `field`='stage';
 DELETE FROM `zt_workflowfield` WHERE `module`='project' AND `field`='stage';
