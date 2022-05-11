@@ -7,6 +7,13 @@ class compileTest
          $this->objectModel = $tester->loadModel('compile');
     }
 
+    /**
+     * Get by id
+     *
+     * @param  int    $buildID
+     * @access public
+     * @return object
+     */
     public function getByIDTest($buildID)
     {
         $objects = $this->objectModel->getByID($buildID);
@@ -16,15 +23,15 @@ class compileTest
         return $objects;
     }
 
-    public function getByQueueTest($queue)
-    {
-        $objects = $this->objectModel->getByQueue($queue);
-
-        if(dao::isError()) return dao::getError();
-
-        return $objects;
-    }
-
+    /**
+     * Get build list.
+     *
+     * @param  int    $jobID
+     * @param  string $orderBy
+     * @param  object $pager
+     * @access public
+     * @return array
+     */
     public function getListTest($jobID, $orderBy = 'id_desc', $pager = null)
     {
         $objects = $this->objectModel->getList($jobID, $orderBy = 'id_desc', $pager = null);
@@ -34,6 +41,12 @@ class compileTest
         return $objects;
     }
 
+    /**
+     * Get list by jobID.
+     *
+     * @param  int $jobID
+     * @return array
+     */
     public function getListByJobIDTest($jobID)
     {
         $objects = $this->objectModel->getListByJobID($jobID);
@@ -43,15 +56,13 @@ class compileTest
         return $objects;
     }
 
-    public function getUnexecutedListTest()
-    {
-        $objects = $this->objectModel->getUnexecutedList();
-
-        if(dao::isError()) return dao::getError();
-
-        return $objects;
-    }
-
+    /**
+     * Get last result.
+     *
+     * @param  int    $jobID
+     * @access public
+     * @return object
+     */
     public function getLastResultTest($jobID)
     {
         $objects = $this->objectModel->getLastResult($jobID);
@@ -61,6 +72,13 @@ class compileTest
         return $objects;
     }
 
+    /**
+     * Get success jobs by job id list.
+     *
+     * @param  array  $jobIDList
+     * @access public
+     * @return array
+     */
     public function getSuccessJobsTest($jobIDList)
     {
         $objects = $this->objectModel->getSuccessJobs($jobIDList);
@@ -70,6 +88,13 @@ class compileTest
         return $objects;
     }
 
+    /**
+     * Get build url.
+     *
+     * @param  object $jenkins
+     * @access public
+     * @return object
+     */
     public function getBuildUrlTest($jenkins)
     {
         $objects = $this->objectModel->getBuildUrl($jenkins);
@@ -79,6 +104,15 @@ class compileTest
         return $objects;
     }
 
+    /**
+     * Save build by job
+     *
+     * @param  int    $jobID
+     * @param  string $data
+     * @param  string $type
+     * @access public
+     * @return void
+     */
     public function createByJobTest($jobID, $data = '', $type = 'tag')
     {
         global $tester;
@@ -91,6 +125,13 @@ class compileTest
         return $objects;
     }
 
+    /**
+     * Execute compile
+     *
+     * @param  object $compile
+     * @access public
+     * @return bool
+     */
     public function execTest($compile)
     {
         $objects = $this->objectModel->exec($compile);
