@@ -637,11 +637,10 @@ class projectModel extends model
      * */
     public function getBySearch($projectQuery)
     {
-        $projects = $this->dao->select('*')->from(TABLE_PROJECT)
+        return $this->dao->select('*')->from(TABLE_PROJECT)
             ->where($projectQuery)
             ->andWhere('type')->eq('project')
             ->fetchAll();
-        return $projects;
     }
 
     /*
