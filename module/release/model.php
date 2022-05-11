@@ -80,7 +80,7 @@ class releaseModel extends model
         return $this->dao->select('id, name')->from(TABLE_RELEASE)
             ->where('product')->eq((int)$productID)
             ->beginIF($branch)->andWhere('branch')->eq($branch)->fi()
-            ->orderBy('date DESC')
+            ->orderBy('id DESC')
             ->limit(1)
             ->fetch();
     }
