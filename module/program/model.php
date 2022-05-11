@@ -131,16 +131,16 @@ class programModel extends model
      * @param  string $orderBy
      * @param  object $pager
      * @param  string $type       top|child
-     * @param  mixed  $typeParams
+     * @param  mixed  $idList
      * @access public
      * @return array
      */
-    public function getList($status = 'all', $orderBy = 'id_asc', $pager = NULL, $type = '', $topIdList = '')
+    public function getList($status = 'all', $orderBy = 'id_asc', $pager = NULL, $type = '', $idList = '')
     {
         $projectIdList = array();
         if($type === 'child')
         {
-            foreach($topIdList as $topID)
+            foreach($idList as $topID)
             {
                 $projectIdList += $this->dao->select('id')->from(TABLE_PROGRAM)->Where('path')->like(",$topID,%")->fetchPairs('id');
             }
