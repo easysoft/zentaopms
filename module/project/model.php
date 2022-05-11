@@ -637,10 +637,9 @@ class projectModel extends model
      * */
     public function getBySearch($projectQuery)
     {
-        $flag = stripos($projectQuery, 'and') + 3;
-        $projectQuery = substr_replace($projectQuery, " (`type` = 'project') and", $flag, 0);
         $projects = $this->dao->select('*')->from(TABLE_PROJECT)
             ->where($projectQuery)
+            ->andWhere('type')->eq('project')
             ->fetchAll();
         return $projects;
     }

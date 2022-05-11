@@ -66,7 +66,6 @@ $lang->project->id                 = '项目编号';
 $lang->project->project            = '所属项目';
 $lang->project->stage              = '阶段';
 $lang->project->model              = '项目管理方式';
-$lang->project->manageType         = '管理类型';
 $lang->project->PM                 = '负责人';
 $lang->project->PO                 = '项目负责人';
 $lang->project->QD                 = '测试负责人';
@@ -163,6 +162,7 @@ $lang->project->branch             = '所属分支';
 $lang->project->plan               = '所属计划';
 $lang->project->createKanban       = '添加看板';
 $lang->project->kanban             = '看板';
+$lang->project->search             = '搜索';
 
 /* Project Kanban. */
 $lang->project->typeList = array();
