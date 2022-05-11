@@ -135,15 +135,14 @@ class programModel extends model
      * @access public
      * @return array
      */
-    public function getList($status = 'all', $orderBy = 'id_asc', $pager = NULL, $type = '', $typeParams = '')
+    public function getList($status = 'all', $orderBy = 'id_asc', $pager = NULL, $type = '', $topIdList = '')
     {
-        $ids = array();
+        $projectIdList = array();
         if($type === 'child')
         {
-            foreach($typeParams as $topID)
+            foreach($topIdList as $topID)
             {
-                $topIDs = $this->dao->select('id')->from(TABLE_PROGRAM)->Where('path')->like(",$topID,%")->fetchPairs('id');
-                if($topIDs) $ids = array_merge($ids, $topIDs);
+                $projectIdList += $this->dao->select('id')->from(TABLE_PROGRAM)->Where('path')->like(",$topID,%")->fetchPairs('id');
             }
         }
 
@@ -159,7 +158,7 @@ class programModel extends model
             ->beginIF($status != 'all')->andWhere('status')->eq($status)->fi()
             ->beginIF(!$this->cookie->showClosed)->andWhere('status')->ne('closed')->fi()
             ->beginIF($type === 'top')->andWhere('parent')->eq(0)->fi()
-            ->beginIF(!empty($ids))->andWhere('id')->in($ids)->fi()
+            ->beginIF(!empty($projectIdList))->andWhere('id')->in($projectIdList)->fi()
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id');
