@@ -275,6 +275,13 @@ class productModel extends model
             ->fetchAll('id');
     }
 
+    /**
+     * Get list by search.
+     *
+     * @param  int    $queryID
+     * @access public
+     * @return array
+     */
     public function getListBySearch($queryID = 0)
     {
         if($queryID)
@@ -1086,6 +1093,14 @@ class productModel extends model
         $this->loadModel('search')->setSearchParams($this->config->product->search);
     }
 
+    /**
+     * Build search form for all method of product module.
+     *
+     * @param  int       $queryID
+     * @param  string    $actionURL
+     * @access public
+     * @return void
+     */
     public function buildProductSearchForm($queryID, $actionURL)
     {
         $this->config->product->all->search['queryID']   = $queryID;
