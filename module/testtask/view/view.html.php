@@ -51,7 +51,7 @@
       <div class="btn-toolbar">
         <?php echo html::backButton('<i class="icon icon-back icon-sm"></i> ' . $lang->goback, '', 'btn btn-secondary');?>
         <div class='divider'></div>
-        <?php echo $this->buildOperateMenu($task, 'view');?>
+        <?php echo $this->testtask->buildOperateMenu($task, 'view');?>
       </div>
     </div>
   </div>

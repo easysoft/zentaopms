@@ -214,7 +214,7 @@
             <td><?php echo $product->plans;?></td>
             <td><?php echo $product->releases;?></td>
             <?php foreach($extendFields as $extendField) echo "<td>" . $this->loadModel('flow')->getFieldValue($extendField, $product) . "</td>";?>
-            <td class='c-actions sort-handler'><?php echo $this->buildOperateMenu($product, 'browse');?></td>
+            <td class='c-actions sort-handler'><?php echo $this->product->buildOperateMenu($product, 'browse');?></td>
           </tr>
           <?php endforeach;?>
           <?php endif;?>

@@ -144,7 +144,7 @@
           <div title='<?php echo $desc;?>'><?php echo nl2br($desc);?></div>
         </td>
         <?php foreach($extendFields as $extendField) echo "<td>" . $this->loadModel('flow')->getFieldValue($extendField, $plan) . "</td>";?>
-        <td class='c-actions'><?php echo $this->buildOperateMenu($plan, 'browse'); ?></td>
+        <td class='c-actions'><?php echo $this->productplan->buildOperateMenu($plan, 'browse'); ?></td>
       </tr>
       <?php endforeach;?>
       </tbody>

@@ -148,7 +148,7 @@
         <div class="btn-toolbar">
           <?php $browseLink = $this->session->executionList ? $this->session->executionList : inlink('browse', "executionID=$execution->id");?>
           <?php common::printBack($browseLink);?>
-          <?php echo $this->buildOperateMenu($execution, 'view');?>
+          <?php echo $this->execution->buildOperateMenu($execution, 'view');?>
         </div>
       </div>
     </div>

@@ -39,7 +39,7 @@
       <div class="btn-toolbar">
         <?php common::printBack($browseLink);?>
         <?php echo "<div class='divider'></div>";?>
-        <?php echo $this->buildOperateMenu($lib, 'view');?>
+        <?php echo $this->caselib->buildOperateMenu($lib, 'view');?>
       </div>
     </div>
   </div>
