@@ -52,9 +52,9 @@ class program extends control
             else
             {
                 $topPrograms = $this->program->getList($status, $orderBy, $pager, 'top');
-                $programIDs  = array();
-                foreach($topPrograms as $programID => $program) $programIDs[] = $programID;
-                $programs = $this->program->getList($status, $orderBy, null, 'child', $programIDs);
+                $programIds  = array();
+                foreach($topPrograms as $programID => $program) $programIds[] = $programID;
+                $programs = $this->program->getList($status, $orderBy, null, 'child', $programIds);
             }
         }
 
