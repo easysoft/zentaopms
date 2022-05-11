@@ -413,3 +413,5 @@ UPDATE `zt_workflowaction` SET `type`='single', `position`='browseandview', `sho
 UPDATE `zt_workflowaction` SET `type`='single', `position`='browse', `show`='direct', `open`='modal', `layout`='normal' WHERE `module`='task' AND `action`='showimport';
 UPDATE `zt_workflowaction` SET `type`='single', `position`='browseandview', `show`='direct', `open`='modal', `layout`='normal' WHERE `module`='task' AND `action`='start';
 UPDATE `zt_workflowaction` SET `type`='single', `position`='browse', `show`='direct', `open`='normal', `layout`='side' WHERE `module`='task' AND `action`='view';
+UPDATE `zt_workflowaction` SET `type`='batch' WHERE `module`IN ('feedback','caselib','testsuite','testtask','testcase') AND `action` IN ('admin','browse','batchedit','batchcreate','import','showimport');
+UPDATE `zt_workflowaction` SET `position`='browse' WHERE `module`IN ('feedback','caselib','testsuite','testtask','testcase') AND `action` IN ('batchedit','batchcreate','import','showimport');
