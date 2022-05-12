@@ -826,20 +826,6 @@ class projectModel extends model
     }
 
     /*
-     * Get projects by search conditions.
-     *
-     * @param string $projectQuery
-     * @return array
-     * */
-    public function getBySearch($projectQuery)
-    {
-        return $this->dao->select('*')->from(TABLE_PROJECT)
-            ->where($projectQuery)
-            ->andWhere('type')->eq('project')
-            ->fetchAll();
-    }
-
-    /*
      * Build search form
      *
      * @param int     $queryID

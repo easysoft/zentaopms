@@ -74,7 +74,7 @@
       <p>
         <span class="text-muted"><?php echo $lang->project->empty;?></span>
         <?php if(!defined('TUTORIAL')):?>
-        <?php if(common::hasPriv('project', 'create')) common::printLink('project', 'createGuide', "programID=$programID", '<i class="icon icon-plus"></i> ' . $lang->project->create, '', 'class="btn btn-info" data-toggle="modal"');?>
+        <?php if(common::hasPriv('project', 'create') and $browseType != 'bysearch') common::printLink('project', 'createGuide', "programID=$programID", '<i class="icon icon-plus"></i> ' . $lang->project->create, '', 'class="btn btn-info" data-toggle="modal"');?>
         <?php else:?>
         <?php common::printLink('execution', 'create', '', '<i class="icon icon-plus"></i> ' . $lang->execution->create, '', 'class="btn btn-info"');?>
         <?php endif;?>
