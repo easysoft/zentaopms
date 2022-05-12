@@ -63,16 +63,6 @@
 </div>
 
 <div id='mainContent' class="main-row">
-  <div class='side-col' id='sidebar'>
-    <div class='cell'>
-      <div class='list-group'>
-        <?php
-        echo html::a($this->createLink('backup', 'index'), $lang->backup->common);
-        echo html::a($this->createLink('action', 'trash'), $lang->action->trash, '', "class='active'");
-        ?>
-      </div>
-    </div>
-  </div>
   <div class='main-table' data-ride='table'>
     <table class='table has-sort-head'>
       <?php $vars = "browseType=$currentObjectType&type=$type&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"; ?>

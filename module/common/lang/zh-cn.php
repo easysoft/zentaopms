@@ -192,6 +192,8 @@ $lang->stage->common      = '阶段';
 $lang->stage->list        = '阶段列表';
 $lang->execution->list    = "{$lang->executionCommon}列表";
 $lang->kanban->common     = '看板';
+$lang->backup->common     = '备份';
+$lang->action->trash      = '回收站';
 
 $lang->personnel->common     = '人员';
 $lang->personnel->invest     = '投入人员';
