@@ -116,7 +116,22 @@ class install extends control
      */
     public function step2()
     {
+        $dbHost = $dbPort = $dbName = $dbUser = $dbPassword = '';
+
+        /* Get mysql env in docker container. */
+        if(getenv('MYSQL_HOST'))     $dbHost     = getenv('MYSQL_HOST');
+        if(getenv('MYSQL_PORT'))     $dbPort     = getenv('MYSQL_PORT');
+        if(getenv('MYSQL_DB'))       $dbName     = getenv('MYSQL_DB');
+        if(getenv('MYSQL_USER'))     $dbUser     = getenv('MYSQL_USER');
+        if(getenv('MYSQL_PASSWORD')) $dbPassword = getenv('MYSQL_PASSWORD');
+
         $this->view->title = $this->lang->install->setConfig;
+
+        $this->view->dbHost     = $dbHost ? $dbHost : '127.0.0.1';
+        $this->view->dbPort     = $dbPort ? $dbPort : '3306';
+        $this->view->dbName     = $dbName ? $dbName : 'zentao';
+        $this->view->dbUser     = $dbUser ? $dbUser : 'root';
+        $this->view->dbPassword = $dbPassword ? $dbPassword : '';
         $this->display();
     }
 
