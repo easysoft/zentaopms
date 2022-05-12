@@ -101,6 +101,7 @@ UPDATE `zt_workflowfield` set `control` = 'richtext' WHERE `module` = 'testsuite
 UPDATE `zt_workflowfield` set `control` = 'datetime' WHERE `module` = 'feedback' and `field` IN ('openedDate','reviewedDate','processedDate','closedDate','editedDate','assignedDate');
 
 UPDATE `zt_workflowfield` SET `control` = 'datetime' WHERE `module` = 'product' and `field` = 'createdDate';
+UPDATE `zt_workflowfield` SET `control` = 'radio' WHERE `module` = 'product' and `field` = 'deleted';
 UPDATE `zt_workflowfield` SET `control` = 'date' WHERE `module` = 'productplan' and `field` = 'begin';
 UPDATE `zt_workflowfield` SET `control` = 'date' WHERE `module` = 'productplan' and `field` = 'end';
 UPDATE `zt_workflowfield` SET `control` = 'radio' WHERE `module` = 'productplan' and `field` = 'deleted';
