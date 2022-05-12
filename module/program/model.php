@@ -1332,12 +1332,12 @@ class programModel extends model
      * @access public
      * @return array
      */
-    public function getProjectStats($programID = 0, $browseType = 'undone', $queryID = 0, $orderBy = 'id_desc', $pager = null, $programTitle = 0, $involved = 0, $queryAll = false)
+    public function getProjectStats($programID = 0, $browseType = 'undone', $queryID = 0, $orderBy = 'id_desc', $pager = null, $programTitle = 0, $involved = 0, $queryAll = false, $projects = null)
     {
         if(defined('TUTORIAL')) return $this->loadModel('tutorial')->getProjectStats($browseType);
 
         /* Init vars. */
-        $projects = $this->getProjectList($programID, $browseType, $queryID, $orderBy, $pager, $programTitle, $involved, $queryAll);
+        if(empty($projects)) $projects = $this->getProjectList($programID, $browseType, $queryID, $orderBy, $pager, $programTitle, $involved, $queryAll);
 
         if(empty($projects)) return array();
 
@@ -1378,7 +1378,6 @@ class programModel extends model
             }
             $hours[$projectID] = $hour;
         }
-
         /* Compute totalReal and progress. */
         foreach($hours as $hour)
         {
