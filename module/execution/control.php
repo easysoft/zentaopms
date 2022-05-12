@@ -1834,6 +1834,7 @@ class execution extends control
         if(!empty($_POST))
         {
             $this->loadModel('action');
+            $this->execution->computeBurn($executionID);
             $changes = $this->execution->suspend($executionID);
             if(dao::isError()) return print(js::error(dao::getError()));
 

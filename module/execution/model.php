@@ -481,6 +481,8 @@ class executionModel extends model
             ->remove('products, branch, uid, plans, syncStories, contactListMenu, teamMembers')
             ->get();
 
+        if(in_array($execution->status, array('closed', 'suspended'))) $this->computeBurn($executionID);
+
         if($this->config->systemMode == 'new' and (empty($execution->project) or $execution->project == $oldExecution->project)) $this->checkBeginAndEndDate($oldExecution->project, $execution->begin, $execution->end);
         if(dao::isError()) return false;
 
