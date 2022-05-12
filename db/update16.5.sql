@@ -109,6 +109,7 @@ UPDATE `zt_workflowfield` SET `control` = 'select', `options` = 12 WHERE `module
 UPDATE `zt_workflowfield` SET `control` = 'date' WHERE `module` = 'release' and `field` = 'date';
 UPDATE `zt_workflowfield` SET `control` = 'richtext' WHERE `module` = 'release' and `field` = 'desc';
 UPDATE `zt_workflowfield` SET `control` = 'radio' WHERE `module` = 'release' and `field` = 'deleted';
+UPDATE `zt_workflowfield` SET `control` = 'datetime' WHERE `module` = 'story' and `field` = 'openedDate';
 UPDATE `zt_workflowfield` SET `control` = 'datetime' WHERE `module` = 'story' and `field` = 'assignedDate';
 UPDATE `zt_workflowfield` SET `control` = 'datetime' WHERE `module` = 'story' and `field` = 'lastEditedDate';
 UPDATE `zt_workflowfield` SET `control` = 'date' WHERE `module` = 'story' and `field` = 'reviewedDate';
