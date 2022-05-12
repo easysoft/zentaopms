@@ -15,3 +15,4 @@ pid=1
 $compile = new compileTest();
 
 r($compile->getListTest('1')) && p('1:name') && e('这是一个Job1'); //检查是否能获取到数据
+r($compile->getListTest('3')) && p('')       && e('0');            //检查获取不存在的数据会返回什么

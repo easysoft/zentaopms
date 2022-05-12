@@ -21,8 +21,13 @@ $compile2->id   = 3;
 $compile2->name = '这是一个compile数据';
 $compile2->job  = 1;
 
+$compile3 = new stdclass();
+$compile3->id   = 1;
+$compile3->name = '这是一个compile数据';
+$compile3->job  = 1;
+
 $compile = new compileTest();
 
-r($compile->execTest($compile2));
-r($compile->execTest($compile1)) && p() && e('0'); //检测是否能执行编译
-r($compile->execTest($compile2)) && p() && e('1'); //检测是否能执行编译
+r($compile->execTest($compile1)) && p() && e('0'); //检测job不存在时是否能执行编译
+r($compile->execTest($compile2)) && p() && e('1'); //检测job存在但是$compile->id不等于$compile->job是否能执行编译
+r($compile->execTest($compile3)) && p() && e('1'); //检测job存在同时$compile->id等于$compile->job是否能执行编译

@@ -24,7 +24,16 @@ $jenkins2->password = '8bb44ffbc4b42fcbb3152cc05fd21c67';
 $jenkins2->token    = '';
 $jenkins2->pipeline = '11';
 
+$jenkins3 = new stdclass();
+$jenkins3->url      = '';
+$jenkins3->account  = '';
+$jenkins3->password = '';
+$jenkins3->token    = '';
+$jenkins3->pipeline = '';
+
 $compile = new compileTest();
 
 r($compile->getBuildUrlTest($jenkins1)) && p('userPWD') && e('123456:zxd');                                    //检测password为空时获取的信息
 r($compile->getBuildUrlTest($jenkins2)) && p('url')     && e('pms.cc.cc/job/11/buildWithParameters/api/json'); //检测token为空时获取的信息
+r($compile->getBuildUrlTest($jenkins3)) && p('url')     && e('/job//buildWithParameters/api/json');          //检测jenkins为空时获取的信息
+r($compile->getBuildUrlTest($jenkins3)) && p('userPWD') && e(':');                                             //检测jenkins为空时获取的信息
