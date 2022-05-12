@@ -527,9 +527,10 @@ class programModel extends model
             ->leftJoin(TABLE_STAKEHOLDER)->alias('t3')->on('t1.id=t3.objectID')
             ->where('t1.deleted')->eq('0')
             ->andWhere('t1.vision')->eq($this->config->vision)
+            ->beginIF($browseType == 'bysearch')->andWhere($this->session->projectQuery)->fi()
             ->beginIF($this->config->systemMode == 'new')->andWhere('t1.type')->eq('project')->fi()
             ->beginIF($this->config->systemMode == 'new' and ($this->cookie->involved or $involved))->andWhere('t2.type')->eq('project')->fi()
-            ->beginIF($browseType != 'all' and $browseType != 'undone')->andWhere('t1.status')->eq($browseType)->fi()
+            ->beginIF($browseType != 'all' and $browseType != 'undone' and $browseType != 'bysearch')->andWhere('t1.status')->eq($browseType)->fi()
             ->beginIF($browseType == 'undone')->andWhere('t1.status')->in('wait,doing')->fi()
             ->beginIF($path)->andWhere('t1.path')->like($path . '%')->fi()
             ->beginIF(!$queryAll and !$this->app->user->admin and $this->config->systemMode == 'new')->andWhere('t1.id')->in($this->app->user->view->projects)->fi()
@@ -1332,13 +1333,12 @@ class programModel extends model
      * @access public
      * @return array
      */
-    public function getProjectStats($programID = 0, $browseType = 'undone', $queryID = 0, $orderBy = 'id_desc', $pager = null, $programTitle = 0, $involved = 0, $queryAll = false, $projects = null)
+    public function getProjectStats($programID = 0, $browseType = 'undone', $queryID = 0, $orderBy = 'id_desc', $pager = null, $programTitle = 0, $involved = 0, $queryAll = false)
     {
         if(defined('TUTORIAL')) return $this->loadModel('tutorial')->getProjectStats($browseType);
 
         /* Init vars. */
-        if($projects == 'noProject') return array();
-        if(empty($projects)) $projects = $this->getProjectList($programID, $browseType, $queryID, $orderBy, $pager, $programTitle, $involved, $queryAll);
+        $projects = $this->getProjectList($programID, $browseType, $queryID, $orderBy, $pager, $programTitle, $involved, $queryAll);
         if(empty($projects)) return array();
 
         $projectKeys = array_keys($projects);
