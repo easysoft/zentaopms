@@ -1573,7 +1573,7 @@ class treeModel extends model
 
         foreach($childs as $moduleID => $moduleName)
         {
-            if(preg_match('/(^\s+$)/', $moduleName)) return print(js::alert($this->lang->tree->shouldNotBlank));
+            if(preg_match('/(^\s+$)/', $moduleName)) helper::end(js::alert($this->lang->tree->shouldNotBlank));
         }
 
         $module         = new stdClass();
@@ -1581,7 +1581,7 @@ class treeModel extends model
         $module->type   = $type;
         $module->parent = $parentModuleID;
         $repeatName     = $this->checkUnique($module, $childs);
-        if($repeatName) return print(js::alert(sprintf($this->lang->tree->repeatName, $repeatName)));
+        if($repeatName) helper::end(js::alert(sprintf($this->lang->tree->repeatName, $repeatName)));
 
         $parentModule = $this->getByID($parentModuleID);
 
