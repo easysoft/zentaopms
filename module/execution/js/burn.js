@@ -5,6 +5,18 @@ $(function()
     {
         location.href = createLink('execution', 'burn', 'executionID=' + executionID + '&type=' + type + '&interval=' + $(this).val());
     });
+
+    $('#weekend').click(function()
+    {
+        var browseType = type.match('noweekend') ? type.replace('noweekend', 'withweekend') : type.replace('withweekend', 'noweekend');
+        location.href = createLink('execution', 'burn', 'executionID=' + executionID + '&type=' + browseType + '&interval=' + interval);
+    });
+
+    $('#delay').click(function()
+    {
+        var browseType = type.match('nodelay') ? type.replace('nodelay', 'withdelay') : type.replace('withdelay', 'nodelay');
+        location.href = createLink('execution', 'burn', 'executionID=' + executionID + '&type=' + browseType + '&interval=' + interval);
+    });
 })
 
 /* Save burn as image.*/

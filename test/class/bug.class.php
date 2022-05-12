@@ -2024,4 +2024,25 @@ class bugTest
             return $array;
         }
     }
+
+    /**
+     * Test get bug query.
+     *
+     * @param  string $bugQuery
+     * @access public
+     * @return array
+     */
+    public function getBugQueryTest($bugQuery)
+    {
+        $array = $this->objectModel->getBugQuery($bugQuery);
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return $array;
+        }
+    }
 }

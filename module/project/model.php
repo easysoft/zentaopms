@@ -457,6 +457,202 @@ class projectModel extends model
         return $projects;
     }
 
+
+    /**
+     * Create the link from module,method.
+     *
+     * @param  string $module
+     * @param  string $method
+     * @param  int    $projectID
+     * @access public
+     * @return string
+     */
+    public function getProjectLink($module, $method, $projectID)
+    {
+        $link    = helper::createLink('project', 'index', "projectID=%s");
+        $project = $this->getByID($projectID);
+
+        if(strpos(',project,product,projectstory,story,bug,doc,testcase,testtask,testreport,build,projectrelease,stakeholder,issue,risk,meeting,report,measrecord', ',' . $module . ',') !== false)
+        {
+            if($module == 'project' and $method == 'execution')
+            {
+                $link = helper::createLink($module, $method, "status=all&projectID=%s");
+            }
+            elseif($module == 'project' and strpos(',bug,testcase,testtask,testreport,build,dynamic,view,manageproducts,team,managemembers,whitelist,addwhitelist,group,', ',' . $method . ','))
+            {
+                $link = helper::createLink($module, $method, "projectID=%s");
+            }
+            elseif($module == 'project' and $method == 'managePriv')
+            {
+                $link = helper::createLink($module, 'group', "projectID=%s");
+            }
+            elseif($module == 'product' and $method == 'showerrornone')
+            {
+                $link = helper::createLink('projectstory', 'story', "projectID=%s");
+            }
+            elseif($module == 'projectstory' and $method == 'story')
+            {
+                $link = helper::createLink($module, $method, "projectID=%s");
+            }
+            elseif($module == 'projectstory' and $method == 'linkstory')
+            {
+                $link = helper::createLink($module, $method, "projectID=%s");
+            }
+            elseif($module == 'projectstory' and $method = 'track')
+            {
+                $link = helper::createLink($module, $method, "projectID=%s");
+            }
+            elseif($module == 'bug')
+            {
+                if($method == 'create')
+                {
+                    $link = helper::createLink($module, $method, "productID=0&branch=0&extras=projectID=%s");
+                }
+                elseif($method == 'edit')
+                {
+                    $link = helper::createLink('project', 'bug', "projectID=%s");
+                }
+            }
+            elseif($module == 'story')
+            {
+                if($method == 'create')
+                {
+                    $link = helper::createLink($module, $method);
+                }
+                elseif($method == 'change')
+                {
+                    $link = helper::createLink('projectstory', 'story', "projectID=%s");
+                }
+                elseif($method == 'zerocase')
+                {
+                    $link = helper::createLink('project', 'testcase', "projectID=%s");
+                }
+            }
+            elseif($module == 'testcase' and $method == 'create')
+            {
+                if($method == 'create')
+                {
+                    $link = helper::createLink($module, $method);
+                }
+                elseif($method == 'edit')
+                {
+                    $link = helper::createLink('project', 'testcase', "projectID=%s");
+                }
+            }
+            elseif($module == 'testtask')
+            {
+                if($method == 'create')
+                {
+                    $link = helper::createLink($module, $method, "product=0&executionID=0&build=0&projectID=%s");
+                }
+                else
+                {
+                    $link = helper::createLink($module, 'browseunits');
+                }
+            }
+            elseif($module == 'testreport')
+            {
+                $link = helper::createLink('project', 'testreport', "projectID=%s");
+            }
+            elseif($module == 'repo')
+            {
+                if($method == 'create')
+                {
+                    $link = helper::createLink($module, $method, "objectID=%s#app=project");
+                }
+                else
+                {
+                    $link = helper::createLink($module, 'browse', "repoID=&branchID=&objectID=%s#app=project");
+                }
+            }
+            elseif($module == 'doc')
+            {
+                $link = helper::createLink($module, 'tablecontents', "type=project&objectID=%s#app=project");
+            }
+            elseif($module == 'build')
+            {
+                if($method == 'create')
+                {
+                    $link = helper::createLink($module, $method, "executionID=&productID=&projectID=%s#app=project");
+                }
+                else
+                {
+                    $link = helper::createLink('project', 'build', "projectID=%s");
+                }
+            }
+            elseif($module == 'projectrelease')
+            {
+                if($method == 'create')
+                {
+                    $link = helper::createLink($module, $method, "projectID=%s");
+                }
+                else
+                {
+                    $link = helper::createLink('projectrelease', 'browse', "projectID=%s");
+                }
+            }
+            elseif($module == 'stakeholder')
+            {
+                if($method == 'create')
+                {
+                    $link = helper::createLink($module, $method, "projectID=%s");
+                }
+                else
+                {
+                    $link = helper::createLink($module, 'browse', "projectID=%s");
+                }
+            }
+            elseif(strpos("issue,risk,meeting,report,measrecord", $module) !== false)
+            {
+                if($method == 'projectsummary')
+                {
+                    $link = helper::createLink($module, $method, "projectID=%s#app=project");
+                }
+                else
+                {
+                    $link = helper::createLink($module, 'browse', "projectID=%s");
+                }
+            }
+        }
+
+        if(in_array($module, $this->config->waterfallModules))
+        {
+            $link = helper::createLink($module, 'browse', "projectID=%s");
+            if($module == 'reviewissue')
+            {
+                $link = helper::createLink($module, 'issue', "projectID=%s");
+            }
+            elseif($module == 'cm' and $method = 'report')
+            {
+                $link = helper::createLink($module, $method, "projectID=%s");
+            }
+            elseif($module == 'weekly' and $method = 'index')
+            {
+                $link = helper::createLink($module, $method, "projectID=%s");
+            }
+            elseif($module == 'milestone' and $method = 'index')
+            {
+                $link = helper::createLink($module, $method, "projectID=%s");
+            }
+            elseif($module == 'workestimation' and $method = 'index')
+            {
+                $link = helper::createLink($module, $method, "projectID=%s");
+            }
+            elseif($module == 'durationestimation' and $method = 'index')
+            {
+                $link = helper::createLink($module, $method, "projectID=%s");
+            }
+            elseif($module == 'budget' and $method = 'summary')
+            {
+                $link = helper::createLink($module, $method, "projectID=%s");
+            }
+        }
+
+        if($project->model == 'kanban') $link = helper::createLink('project', 'index', "projectID=%s");
+
+        return $link;
+    }
+
     /**
      * Get project stat data .
      *
@@ -517,7 +713,7 @@ class projectModel extends model
             ->andWhere('deleted')->eq(0)
             ->andWhere('vision')->eq($this->config->vision)
             ->beginIF($programID !== '')->andWhere('parent')->eq($programID)->fi()
-            ->beginIF($status != 'all' && $status != 'noclosed')->andWhere('status')->eq($status)->fi()
+            ->beginIF($status != 'all' and $status != 'noclosed')->andWhere('status')->eq($status)->fi()
             ->beginIF($excludedModel)->andWhere('model')->ne($excludedModel)->fi()
             ->beginIF($status == 'noclosed')->andWhere('status')->ne('closed')->fi()
             ->beginIF(!$this->app->user->admin and !$isQueryAll)->andWhere('id')->in($this->app->user->view->projects)->fi()
@@ -1014,7 +1210,7 @@ class projectModel extends model
 
             $this->updateProducts($projectID);
 
-            if(isset($_POST['newProduct']) || (!$project->parent && empty($linkedProductsCount)))
+            if(isset($_POST['newProduct']) or (!$project->parent and empty($linkedProductsCount)))
             {
                 /* If parent not empty, link products or create products. */
                 $product = new stdclass();
@@ -1752,11 +1948,11 @@ class projectModel extends model
                     if($project->model === 'scrum') $prefix = "<span class='project-type-label label label-outline label-info'>{$this->lang->project->scrum}</span> ";
                     if($project->model === 'kanban') $prefix = "<span class='project-type-label label label-outline label-info'>{$this->lang->project->kanban}</span> ";
                     if(isset($project->delay)) $suffix = "<span class='label label-danger label-badge'>{$this->lang->project->statusList['delay']}</span>";
-                    if(!empty($suffix) || !empty($prefix)) echo '<div class="project-name' . (empty($prefix) ? '' : ' has-prefix') . (empty($suffix) ? '' : ' has-suffix') . '">';
+                    if(!empty($suffix) or !empty($prefix)) echo '<div class="project-name' . (empty($prefix) ? '' : ' has-prefix') . (empty($suffix) ? '' : ' has-suffix') . '">';
                     if(!empty($prefix)) echo $prefix;
                     echo html::a($projectLink, $project->name, '', "class='text-ellipsis text-primary'");
                     if(!empty($suffix)) echo $suffix;
-                    if(!empty($suffix) || !empty($prefix)) echo '</div>';
+                    if(!empty($suffix) or !empty($prefix)) echo '</div>';
                     break;
                 case 'code':
                     echo $project->code;
@@ -2015,7 +2211,7 @@ class projectModel extends model
                 ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
                 ->where('t1.type')->in('sprint,stage,kanban')
                 ->beginIF($projectID != 0)->andWhere('t1.project')->eq($projectID)->fi()
-                ->beginIF($projectID == 0 && $this->config->vision)->andWhere('t1.vision')->eq($this->config->vision)->fi()
+                ->beginIF($projectID == 0 and $this->config->vision)->andWhere('t1.vision')->eq($this->config->vision)->fi()
                 ->beginIF(!empty($myExecutionIDList))->andWhere('t1.id')->in(array_keys($myExecutionIDList))->fi()
                 ->beginIF($status == 'undone')->andWhere('t1.status')->notIN('done,closed')->fi()
                 ->beginIF($status != 'all' and $status != 'undone' and $status != 'involved')->andWhere('t1.status')->eq($status)->fi()
@@ -2285,14 +2481,14 @@ class projectModel extends model
             $lang->project->dividerMenu = $lang->{$model}->dividerMenu;
         }
 
-        $this->lang->switcherMenu = $this->getSwitcher($objectID, $this->app->rawModule, $this->app->rawMethod);
-
         /* Reset project priv. */
         $moduleName = $this->app->rawModule;
         $methodName = $this->app->rawMethod;
-
         $this->loadModel('common')->resetProjectPriv($objectID);
         if(!$this->common->isOpenMethod($moduleName, $methodName) and !commonModel::hasPriv($moduleName, $methodName)) $this->common->deny($moduleName, $methodName, false);
+
+        $this->lang->switcherMenu = $this->getSwitcher($objectID, $this->app->rawModule, $this->app->rawMethod);
+
         common::setMenuVars('project', $objectID);
     }
 

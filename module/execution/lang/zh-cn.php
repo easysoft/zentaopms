@@ -359,7 +359,9 @@ $lang->execution->linkStory                   = "关联{$lang->SRCommon}";
 $lang->execution->createTask                  = '创建任务';
 $lang->execution->goback                      = "返回任务列表";
 $lang->execution->noweekend                   = '去除周末';
+$lang->execution->nodelay                     = '去除延期日期';
 $lang->execution->withweekend                 = '显示周末';
+$lang->execution->withdelay                   = '显示延期日期';
 $lang->execution->interval                    = '间隔';
 $lang->execution->fixFirstWithLeft            = '修改剩余工时';
 $lang->execution->unfinishedExecution         = "该{$lang->executionCommon}下还有";
@@ -384,6 +386,7 @@ $lang->execution->charts->burn->graph->rotateNames  = 1;
 $lang->execution->charts->burn->graph->showValues   = 0;
 $lang->execution->charts->burn->graph->reference    = '参考';
 $lang->execution->charts->burn->graph->actuality    = '实际';
+$lang->execution->charts->burn->graph->delay        = '延期';
 
 $lang->execution->placeholder = new stdclass();
 $lang->execution->placeholder->code      = '团队内部的简称';

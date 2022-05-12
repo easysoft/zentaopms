@@ -481,6 +481,8 @@ class executionModel extends model
             ->remove('products, branch, uid, plans, syncStories, contactListMenu, teamMembers')
             ->get();
 
+        if(in_array($execution->status, array('closed', 'suspended'))) $this->computeBurn($executionID);
+
         if($this->config->systemMode == 'new' and (empty($execution->project) or $execution->project == $oldExecution->project)) $this->checkBeginAndEndDate($oldExecution->project, $execution->begin, $execution->end);
         if(dao::isError()) return false;
 
@@ -565,6 +567,27 @@ class executionModel extends model
 
         /* Fix bug#3074, Update views for team members. */
         if($execution->acl != 'open') $this->updateUserView($executionID, 'sprint', $changedAccounts);
+
+        if(isset($execution->project))
+        {
+            $executionProductList   = $this->loadModel('product')->getProducts($executionID);
+            $projectProductList     = $this->product->getProducts($execution->project);
+            $executionProductIdList = array_keys($executionProductList);
+            $projectProductIdList   = array_keys($projectProductList);
+            $diffProductIdList      = array_diff($executionProductIdList, $projectProductIdList);
+            if(!empty($diffProductIdList))
+            {
+                foreach($diffProductIdList as $key => $newProductID)
+                {
+                    $data = $this->dao->select('*')->from(TABLE_PROJECTPRODUCT)
+                        ->where('project')->eq($executionID)
+                        ->andWhere('product')->eq($newProductID)
+                        ->fetch();
+                    $data->project = $execution->project;
+                    $this->dao->insert(TABLE_PROJECTPRODUCT)->data($data)->exec();
+                }
+            }
+        }
 
         if(!dao::isError())
         {
@@ -846,6 +869,7 @@ class executionModel extends model
             ->setDefault('status', 'suspended')
             ->setDefault('lastEditedBy', $this->app->user->account)
             ->setDefault('lastEditedDate', $now)
+            ->setDefault('suspendedDate', helper::today())
             ->remove('comment')->get();
 
         $this->dao->update(TABLE_EXECUTION)->data($execution)
@@ -2806,17 +2830,18 @@ class executionModel extends model
     /**
      * Compute burn of a execution.
      *
+     * @param  int    $executionID
      * @access public
      * @return array
      */
-    public function computeBurn()
+    public function computeBurn($executionID = 0)
     {
         $today = helper::today();
         $executions = $this->dao->select('id, code')->from(TABLE_EXECUTION)
-            ->where('end')->ge($today)
-            ->andWhere('type')->in('sprint,stage')
+            ->where('type')->in('sprint,stage')
             ->andWhere('lifetime')->ne('ops')
             ->andWhere('status')->notin('done,closed,suspended')
+            ->beginIF($executionID)->andWhere('id')->eq($executionID)->fi()
             ->fetchPairs();
         if(!$executions) return array();
 
@@ -2964,10 +2989,12 @@ class executionModel extends model
      *
      * @param  int    $executionID
      * @param  string $burnBy
+     * @param  bool   $showDelay
+     * @param  array  $dateList
      * @access public
      * @return array
      */
-    public function getBurnDataFlot($executionID = 0, $burnBy = '')
+    public function getBurnDataFlot($executionID = 0, $burnBy = '', $showDelay = false, $dateList = array())
     {
         /* Get execution and burn counts. */
         $execution    = $this->getById($executionID);
@@ -2980,11 +3007,29 @@ class executionModel extends model
         foreach($sets as $date => $set)
         {
             if($date < $execution->begin) continue;
-            if($date > $execution->end) continue;
+            if(!$showDelay and $date > $execution->end) $set->value = 'null';
+            if($showDelay  and $date < $execution->end) $set->value = 'null';
 
             $burnData[$date] = $set;
             $count++;
         }
+
+        if($showDelay)
+        {
+            foreach($dateList as $date)
+            {
+                if(!isset($burnData[$date]))
+                {
+                    $set = new stdClass();
+                    $set->name  = $date;
+                    $set->left  = 0;
+                    $set->value = 'null';
+
+                    $burnData[$date] = $set;
+                }
+            }
+        }
+
         $burnData = array_reverse($burnData);
 
         return $burnData;
@@ -3668,6 +3713,15 @@ class executionModel extends model
         $chartData['labels']   = $this->report->convertFormat($dateList, DT_DATE5);
         $chartData['burnLine'] = $this->report->createSingleJSON($sets, $dateList);
         $chartData['baseLine'] = $baselineJSON;
+
+        $execution = $this->getById($executionID);
+        if((strpos('closed,suspended', $execution->status) === false and helper::today() > $execution->end)
+            or ($execution->status == 'closed'    and substr($execution->closedDate, 0, 10) > $execution->end)
+            or ($execution->status == 'suspended' and $execution->suspendedDate > $execution->end))
+        {
+            $delaySets = $this->getBurnDataFlot($executionID, $burnBy, true, $dateList);
+            $chartData['delayLine'] = $this->report->createSingleJSON($delaySets, $dateList);
+        }
 
         return $chartData;
     }
