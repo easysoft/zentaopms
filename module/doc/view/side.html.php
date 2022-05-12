@@ -79,7 +79,7 @@ $sideWidth = common::checkNotCN() ? '270' : '238';
       /* Make modules tree sortable */
       $('#modules').sortable(
       {
-          trigger: '.module-name>a.sort-module',
+          trigger: '.module-name>a.sort-module, .tree-actions>.sortModule>.icon-move, .module-name>a.sortDoc, .tree-actions>.sortDoc>.icon-move',
           dropToClass: 'sort-to',
           stopPropagation: true,
           nested: true,
@@ -100,7 +100,15 @@ $sideWidth = common::checkNotCN() ? '270' : '238';
               {
                   if($('#modules').hasClass('sortable-sorting')) $ul.addClass('is-sorting');
               }, 100);
-              return $ul.children('li');
+
+              if($ele.hasClass('sortDoc'))
+              {
+                  return $ul.children('li.sortDoc');
+              }
+              else
+              {
+                  return $ul.children('li.catalog');
+              }
           },
           always: function()
           {
@@ -110,16 +118,34 @@ $sideWidth = common::checkNotCN() ? '270' : '238';
           {
               if(!e.changed) return;
 
-              var orders = {};
-              $('#modules').find('li.can-sort').each(function()
+              var orders       = {};
+              var link         = '';
+              var elementClass = e.list.context.className;
+              if(elementClass.indexOf('sortDoc') >= 0)
               {
-                  var $li = $(this);
+                  $('#modules').find('li.sortDoc').each(function()
+                  {
+                      var $li = $(this);
 
-                  var item = $li.data();
-                  '<?php echo $type;?>' == 'book' ? orders['sort[' + item.id + ']'] = $li.attr('data-order') || item.order : orders['orders[' + item.id + ']'] = $li.attr('data-order') || item.order;
-              });
+                      var item = $li.data();
+                      orders['orders[' + item.id + ']'] = $li.attr('data-order') || item.order;
+                  });
 
-              var link = '<?php echo $type;?>' == 'book' ? createLink('doc', 'sortBookOrder') : createLink('tree', 'updateOrder');
+                  link = createLink('doc', 'updateOrder');
+              }
+              else
+              {
+                  $('#modules').find('li.can-sort').each(function()
+                  {
+                      var $li = $(this);
+
+                      var item = $li.data();
+                      '<?php echo $type;?>' == 'book' ? orders['sort[' + item.id + ']'] = $li.attr('data-order') || item.order : orders['orders[' + item.id + ']'] = $li.attr('data-order') || item.order;
+                  });
+
+                  link = '<?php echo $type?>' == 'book' ? createLink('doc', 'sortBookOrder') : createLink('tree', 'updateOrder');
+              }
+
               $.post(link, orders, function(data){}).error(function()
               {
                   bootbox.alert(lang.timeout);

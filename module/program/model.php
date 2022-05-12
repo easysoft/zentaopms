@@ -130,11 +130,22 @@ class programModel extends model
      * @param  string $status
      * @param  string $orderBy
      * @param  object $pager
+     * @param  string $type       top|child
+     * @param  mixed  $idList
      * @access public
      * @return array
      */
-    public function getList($status = 'all', $orderBy = 'id_asc', $pager = NULL)
+    public function getList($status = 'all', $orderBy = 'id_asc', $pager = NULL, $type = '', $idList = '')
     {
+        $projectIdList = array();
+        if($type === 'child')
+        {
+            foreach($idList as $topID)
+            {
+                $projectIdList += $this->dao->select('id')->from(TABLE_PROGRAM)->Where('path')->like(",$topID,%")->fetchPairs('id');
+            }
+        }
+
         return $this->dao->select('*')->from(TABLE_PROGRAM)
             ->where('deleted')->eq(0)
             ->andWhere('vision')->eq($this->config->vision)
@@ -146,6 +157,54 @@ class programModel extends model
             ->markRight(2)
             ->beginIF($status != 'all')->andWhere('status')->eq($status)->fi()
             ->beginIF(!$this->cookie->showClosed)->andWhere('status')->ne('closed')->fi()
+            ->beginIF($type === 'top')->andWhere('parent')->eq(0)->fi()
+            ->beginIF(!empty($projectIdList))->andWhere('id')->in($projectIdList)->fi()
+            ->orderBy($orderBy)
+            ->page($pager)
+            ->fetchAll('id');
+    }
+
+    /**
+     * Get program list by search.
+     *
+     * @param string $orderBy
+     * @param object $pager
+     * @param int $queryID
+     * @access public
+     * @return void
+     */
+    public function getListBySearch($orderBy = 'id_asc', $pager = NULL, $queryID = 0)
+    {
+        if($queryID)
+        {
+            $query = $this->loadModel('search')->getQuery($queryID);
+            if($query)
+            {
+                $this->session->set('programQuery', $query->sql);
+                $this->session->set('programForm', $query->form);
+            }
+            else
+            {
+                $this->session->set('programQuery', ' 1 = 1');
+            }
+        }
+        else
+        {
+            if($this->session->programQuery == false) $this->session->set('programQuery', ' 1 = 1');
+        }
+        $query = $this->session->programQuery;
+
+        return $this->dao->select('*')->from(TABLE_PROGRAM)
+            ->where('deleted')->eq(0)
+            ->andWhere('vision')->eq($this->config->vision)
+            ->andWhere('((type')->eq('program')
+            ->beginIF(!$this->app->user->admin and $this->app->rawMethod != 'browse')->andWhere('id')->in($this->app->user->view->programs)->fi()
+            ->markRight(1)
+            ->orWhere('(type')->eq('project')
+            ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->projects)->fi()
+            ->markRight(2)
+            ->beginIF(!$this->cookie->showClosed)->andWhere('status')->ne('closed')->fi()
+            ->beginIF($query)->andWhere($query)->fi()
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id');
@@ -240,15 +299,15 @@ class programModel extends model
             foreach($products as $product)
             {
                 $product->plans    = zget($plans, $product->id, array());
-                
+
                 /* Convert predefined HTML entities to characters. */
                 !empty($product->plans) && array_map(function($planVal)
                 {
                     return $planVal->title = htmlspecialchars_decode($planVal->title, ENT_QUOTES);
-                }, 
+                },
                 $product->plans);
                 $product->name = htmlspecialchars_decode($product->name, ENT_QUOTES);
-                
+
                 $product->releases = zget($releases, $product->id, array());
                 $projects          = zget($projectGroup, $product->id, array());
                 foreach($projects as $project)

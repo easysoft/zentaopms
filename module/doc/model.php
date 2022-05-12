@@ -2379,6 +2379,7 @@ EOT;
         $docs = $this->dao->select('*')->from(TABLE_DOC)
             ->where('lib')->eq($rootID)
             ->andWhere('deleted')->eq(0)
+            ->orderBy('`order` asc')
             ->fetchAll();
         $moduleDocs = array();
         foreach($docs as $doc)
@@ -2410,25 +2411,36 @@ EOT;
             {
                 if(!$docID and $currentMethod != 'tablecontents') $docID = $doc->id;
 
-                $treeMenu[0] .= '<li' . ($doc->id == $docID ? ' class="active"' : ' class="independent"') . " data-id=$doc->id>";
+                $class = common::hasPriv('doc', 'updateOrder') ? ' sortDoc' : '';
+                $treeMenu[0] .= '<li' . " class='" . ($doc->id == $docID ? 'active' : 'doc') . "$class'" . " data-id=$doc->id>";
 
                 if($currentMethod == 'tablecontents')
                 {
-                    $treeMenu[0] .= '<span class="tail-info">' . zget($users, $doc->editedBy) . ' &nbsp;' . $doc->editedDate . '</span>';
+                    $treeMenu[0] .= '<div class="tree-group"><span class="tail-info">' . zget($users, $doc->editedBy) . ' &nbsp;' . $doc->editedDate . '</span>';
+                    if(common::hasPriv('doc', 'updateOrder'))
+                    {
+                        $treeMenu[0] .= "<div class='tree-actions'>";
+                        $treeMenu[0] .= html::a('javascript:;', "<i class='icon icon-move sortDoc'></i>", '', "title='{$this->lang->doc->updateOrder}' class='sortDoc'");
+                        $treeMenu[0] .= '</div>';
+                    }
                 }
                 if($currentMethod == 'objectlibs')
                 {
-                    $treeMenu[0] .= "<div class='tree-group'><span class='module-name'>" . html::a(inlink('objectLibs', "type=$type&objectID=$objectID&libID=$rootID&docID={$doc->id}"), "<i class='icon icon-file-text text-muted'></i> &nbsp;" . $doc->title, '', "data-app='{$this->app->tab}' class='doc-title' title='{$doc->title}'") . '</span>';
-                    if(common::hasPriv('doc', 'edit'))
+                    $class = common::hasPriv('doc', 'updateOrder') ? 'sortDoc' : '';
+                    $treeMenu[0] .= "<div class='tree-group'><span class='module-name'>" . html::a(inlink('objectLibs', "type=$type&objectID=$objectID&libID=$rootID&docID={$doc->id}"), "<i class='icon icon-file-text text-muted'></i> &nbsp;" . $doc->title, '', "data-app='{$this->app->tab}' class='doc-title $class' title='{$doc->title}'") . '</span>';
+                    if(common::hasPriv('doc', 'edit') or common::hasPriv('doc', 'updateOrder'))
                     {
                         $treeMenu[0] .= "<div class='tree-actions'>";
-                        $treeMenu[0] .= html::a(helper::createLink('doc', 'edit', "docID={$doc->id}&comment=false&objectType=$type&objectID=$objectID&libID=$rootID"), "<i class='icon icon-edit'></i>", '', "title={$this->lang->doc->edit} data-app='{$this->app->tab}'");
+                        if(common::hasPriv('doc', 'edit')) $treeMenu[0] .= html::a(helper::createLink('doc', 'edit', "docID={$doc->id}&comment=false&objectType=$type&objectID=$objectID&libID=$rootID"), "<i class='icon icon-edit'></i>", '', "title={$this->lang->doc->edit} data-app='{$this->app->tab}'");
+                        if(common::hasPriv('doc', 'updateOrder')) $treeMenu[0] .= html::a('javascript:;', "<i class='icon icon-move sortDoc'></i>", '', "title='{$this->lang->doc->updateOrder}' class='sortDoc'");
                         $treeMenu[0] .= '</div></div>';
                     }
                 }
                 else
                 {
-                    $treeMenu[0] .= html::a(inlink('objectLibs', "type=$type&objectID=$objectID&libID=$rootID&docID={$doc->id}"), "<i class='icon icon-file-text text-muted'></i> &nbsp;" . $doc->title, '', "data-app='{$this->app->tab}' class='doc-title' title='{$doc->title}'");
+                    $class = common::hasPriv('doc', 'updateOrder') ? 'sortDoc' : '';
+                    $treeMenu[0] .= html::a(inlink('objectLibs', "type=$type&objectID=$objectID&libID=$rootID&docID={$doc->id}"), "<i class='icon icon-file-text text-muted'></i> &nbsp;" . $doc->title, '', "data-app='{$this->app->tab}' class='doc-title $class' title='{$doc->title}'");
+                    $treeMenu[0] .= '</div>';
                 }
 
                 $treeMenu[0] .= '</li>';
@@ -2477,27 +2489,38 @@ EOT;
                 else
                 {
                     if(!$docID and $currentMethod != 'tablecontents') $docID = $doc->id;
-                    $treeMenu[$module->id] .= '<li' . ($doc->id == $docID ? ' class="active"' : ' class="doc"') . " data-id=$doc->id>";
+                    $class = common::hasPriv('doc', 'updateOrder') ? ' sortDoc' : '';
+                    $treeMenu[$module->id] .= '<li' . " class='" . ($doc->id == $docID ? 'active' : 'doc') . "$class'" . " data-id=$doc->id>";
 
                     if($currentMethod == 'tablecontents')
                     {
-                        $treeMenu[$module->id] .= '<span class="tail-info">' . zget($users, $doc->editedBy) . ' &nbsp;' . $doc->editedDate . '</span>';
+                        $treeMenu[$module->id] .= '<div class="tree-group"><span class="tail-info">' . zget($users, $doc->editedBy) . ' &nbsp;' . $doc->editedDate . '</span>';
+                        if(common::hasPriv('doc', 'updateOrder'))
+                        {
+                            $treeMenu[$module->id] .= "<div class='tree-actions'>";
+                            $treeMenu[$module->id] .= html::a('javascript:;', "<i class='icon icon-move sortDoc'></i>", '', "title='{$this->lang->doc->updateOrder}' class='sortDoc'");
+                            $treeMenu[$module->id] .= '</div>';
+                        }
                     }
 
                     if($currentMethod == 'objectlibs')
                     {
-                        $treeMenu[$module->id] .= "<div class='tree-group'><span class='module-name'>" . html::a(inlink('objectLibs', "type=$type&objectID=$objectID&libID=$libID&docID={$doc->id}"), "<i class='icon icon-file-text text-muted'></i> &nbsp;" . $doc->title, '', "data-app='{$this->app->tab}' class='doc-title' title='{$doc->title}'") . '</span>';
-                        if(common::hasPriv('doc', 'edit'))
+                        $class = common::hasPriv('doc', 'updateOrder') ? 'sortDoc' : '';
+                        $treeMenu[$module->id] .= "<div class='tree-group'><span class='module-name'>" . html::a(inlink('objectLibs', "type=$type&objectID=$objectID&libID=$libID&docID={$doc->id}"), "<i class='icon icon-file-text text-muted'></i> &nbsp;" . $doc->title, '', "data-app='{$this->app->tab}' class='doc-title $class' title='{$doc->title}'") . '</span>';
+                        if(common::hasPriv('doc', 'edit') or common::hasPriv('doc', 'updateOrder'))
                         {
                             $treeMenu[$module->id] .= "<div class='tree-actions'>";
-                            $treeMenu[$module->id] .= html::a(helper::createLink('doc', 'edit', "docID={$doc->id}&comment=false&objectType=$type&objectID=$objectID&libID=$libID"), "<i class='icon icon-edit'></i>", '', "title={$this->lang->doc->edit} data-app={$this->app->tab}");
+                            if(common::hasPriv('doc', 'edit')) $treeMenu[$module->id] .= html::a(helper::createLink('doc', 'edit', "docID={$doc->id}&comment=false&objectType=$type&objectID=$objectID&libID=$libID"), "<i class='icon icon-edit'></i>", '', "title={$this->lang->doc->edit} data-app={$this->app->tab}");
+                            if(common::hasPriv('doc', 'updateOrder')) $treeMenu[$module->id] .= html::a('javascript:;', "<i class='icon icon-move sortDoc'></i>", '', "title='{$this->lang->doc->updateOrder}' class='sortDoc'");
                             $treeMenu[$module->id] .= '</div>';
                         }
                         $treeMenu[$module->id] .= '</div>';
                     }
                     elseif($currentMethod == 'tablecontents')
                     {
-                        $treeMenu[$module->id] .= html::a(inlink('objectLibs', "type=$type&objectID=$objectID&libID=$libID&docID={$doc->id}"), "<i class='icon icon-file-text text-muted'></i> &nbsp;" . $doc->title, '', "data-app='{$this->app->tab}' class='doc-title' title='{$doc->title}'");
+                        $class = common::hasPriv('doc', 'updateOrder') ? 'sortDoc' : '';
+                        $treeMenu[$module->id] .= html::a(inlink('objectLibs', "type=$type&objectID=$objectID&libID=$libID&docID={$doc->id}"), "<i class='icon icon-file-text text-muted'></i> &nbsp;" . $doc->title, '', "data-app='{$this->app->tab}' class='doc-title $class' title='{$doc->title}'");
+                        $treeMenu[$module->id] .= '</div>';
                     }
 
                     $treeMenu[$module->id] .= '</li>';
@@ -2511,22 +2534,25 @@ EOT;
         }
         else
         {
-            if($currentMethod == 'tablecontents')
+            $li = "<div class='tree-group'><span class='module-name'><a class='sort-module' title='{$module->name}'>" . $module->name . '</a></span>';
+            if($currentMethod == 'tablecontents' and common::hasPriv('tree', 'updateOrder'))
             {
-                $li = "<a title='{$module->name}'>" . $module->name . '</a>';
+                $li .= "<div class='tree-actions'>";
+                $li .= html::a('javascript:;', "<i class='icon icon-move sortModule'></i>", '', "title='{$this->lang->doc->updateOrder}' class='sortModule'");
+                $li .= '</div>';
             }
             else
             {
-                $li = "<div class='tree-group'><span class='module-name'><a class='sort-module' title='{$module->name}'>" . $module->name . '</a></span>';
-                if(common::hasPriv('tree', 'edit') or common::hasPriv('tree', 'browse'))
+                if(common::hasPriv('tree', 'edit') or common::hasPriv('tree', 'browse') or common::hasPriv('tree', 'browse') or common::hasPriv('tree', 'updateOrder'))
                 {
                     $li .= "<div class='tree-actions'>";
-                    if(common::hasPriv('tree', 'edit'))   $li .= html::a(helper::createLink('tree', 'edit', "module=$module->id&type=doc"), "<i class='icon icon-edit'></i>", '', "data-toggle='modal' title={$this->lang->doc->editType}");
-                    if(common::hasPriv('tree', 'browse')) $li .= html::a(helper::createLink('tree', 'browse', "rootID=$libID&type=doc&module=$module->id", '', 1), "<i class='icon icon-split'></i>", '', "class='iframe' title={$this->lang->doc->editChildType}");
+                    if(common::hasPriv('tree', 'edit'))   $li .= html::a(helper::createLink('tree', 'edit', "module=$module->id&type=doc"), "<i class='icon icon-edit'></i>", '', "data-toggle='modal' title='{$this->lang->doc->editType}'");
+                    if(common::hasPriv('tree', 'browse')) $li .= html::a(helper::createLink('tree', 'browse', "rootID=$libID&type=doc&module=$module->id", '', 1), "<i class='icon icon-split'></i>", '', "class='iframe' title='{$this->lang->doc->editChildType}'");
+                    if(common::hasPriv('tree', 'updateOrder')) $li .= html::a('javascript:;', "<i class='icon icon-move sortModule'></i>", '', "title='{$this->lang->doc->updateOrder}' class='sortModule'");
                     $li .= '</div>';
                 }
-                $li .= '</div>';
             }
+            $li .= '</div>';
         }
         if($treeMenu[$module->id])
         {

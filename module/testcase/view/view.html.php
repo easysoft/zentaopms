@@ -116,7 +116,7 @@
         <?php $case->isLibCase = $isLibCase;?>
         <?php $case->caseFails = $caseFails;?>
         <?php $case->runID     = $runID;?>
-        <?php echo $this->buildOperateMenu($case, 'view');?>
+        <?php echo $this->testcase->buildOperateMenu($case, 'view');?>
       </div>
     </div>
   </div>

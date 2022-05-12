@@ -157,7 +157,7 @@ js::set('flow',          $config->global->flow);
               <td class='<?php if(isset($run)) echo $run->status;?> testcase-<?php echo $case->status?>'> <?php echo $this->processStatus('testcase', $case);?></td>
               <?php foreach($extendFields as $extendField) echo "<td>" . $this->loadModel('flow')->getFieldValue($extendField, $case) . "</td>";?>
               <td class='c-actions'>
-                <?php echo $this->buildOperateMenu($case, 'browse');?>
+                <?php echo $this->caselib->buildOperateMenu($case, 'browse');?>
               </td>
             </tr>
             <?php endforeach;?>

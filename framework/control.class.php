@@ -326,10 +326,7 @@ class control extends baseControl
         if(!isset($this->config->bizVersion)) return false;
 
         $moduleName = $this->moduleName;
-        if(strpos(',bug,feedback,caselib,testsuite,testtask,testcase,product,productplan,', ",{$moduleName},") !== false) return $this->$moduleName->buildOperateMenu($object, $type);
-
-        $flow = $this->loadModel('workflow')->getByModule($moduleName);
-        return $this->loadModel('flow')->buildOperateMenu($flow, $object, $type);
+        return $this->$moduleName->buildOperateMenu($object, $type);
     }
 
     /**

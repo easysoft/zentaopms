@@ -696,6 +696,26 @@ class doc extends control
     }
 
     /**
+     * Update order.
+     *
+     * @access public
+     * @return void
+     */
+    public function updateOrder()
+    {
+        if($_SERVER['REQUEST_METHOD'] == 'POST')
+        {
+            foreach($_POST['orders'] as $id => $order)
+            {
+                $this->dao->update(TABLE_DOC)->set('`order`')->eq($order)->where('id')->eq($id)->exec();
+            }
+
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            return $this->send(array('result' => 'success'));
+        }
+    }
+
+    /**
      * Ajax get modules by libID.
      *
      * @param int $libID

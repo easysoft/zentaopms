@@ -220,6 +220,6 @@
 <?php js::set('unmodifiableBranches', $unmodifiableBranches)?>
 <?php js::set('multiBranchProducts', $multiBranchProducts);?>
 <?php js::set('tip', $lang->execution->notAllowRemoveProducts);?>
-<?php js::set('confirmSyncStories', $lang->execution->confirmSyncStories);?>
+<?php js::set('confirmSync', $lang->execution->confirmSync);?>
 <?php js::set('systemMode', $config->systemMode);?>
 <?php include '../../common/view/footer.html.php';?>

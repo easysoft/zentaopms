@@ -1215,6 +1215,7 @@ $lang->resource->doc->objectLibs    = 'objectLibs';
 $lang->resource->doc->collect       = 'collectAction';
 $lang->resource->doc->tableContents = 'tableContents';
 $lang->resource->doc->showFiles     = 'showFiles';
+$lang->resource->doc->updateOrder   = 'updateOrder';
 
 $lang->doc->methodOrder[0]  = 'index';
 $lang->doc->methodOrder[5]  = 'browse';

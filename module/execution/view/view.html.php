@@ -146,26 +146,9 @@
       </div>
       <div class='main-actions'>
         <div class="btn-toolbar">
-          <?php
-          $params = "execution=$execution->id";
-          $browseLink = $this->session->executionList ? $this->session->executionList : inlink('browse', "executionID=$execution->id");
-          common::printBack($browseLink);
-          if(!$execution->deleted)
-          {
-              echo "<div class='divider'></div>";
-              common::printIcon('execution', 'start',    "executionID=$execution->id", $execution, 'button', '', '', 'iframe', true);
-              common::printIcon('execution', 'activate', "executionID=$execution->id", $execution, 'button', '', '', 'iframe', true);
-              common::printIcon('execution', 'putoff',   "executionID=$execution->id", $execution, 'button', '', '', 'iframe', true);
-              common::printIcon('execution', 'suspend',  "executionID=$execution->id", $execution, 'button', '', '', 'iframe', true);
-              common::printIcon('execution', 'close',    "executionID=$execution->id", $execution, 'button', '', '', 'iframe', true);
-
-              echo $this->buildOperateMenu($execution, 'view');
-
-              echo "<div class='divider'></div>";
-              common::printIcon('execution', 'edit', $params, $execution);
-              common::printIcon('execution', 'delete', $params, $execution, 'button', 'trash', 'hiddenwin');
-          }
-          ?>
+          <?php $browseLink = $this->session->executionList ? $this->session->executionList : inlink('browse', "executionID=$execution->id");?>
+          <?php common::printBack($browseLink);?>
+          <?php echo $this->execution->buildOperateMenu($execution, 'view');?>
         </div>
       </div>
     </div>
