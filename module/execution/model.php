@@ -702,6 +702,8 @@ class executionModel extends model
 
         foreach($executions as $executionID => $execution)
         {
+            if(isset($execution->status) and in_array($execution->status, array('done', 'closed', 'suspended'))) $this->computeBurn($executionID);
+
             $oldExecution = $oldExecutions[$executionID];
             $team         = $this->loadModel('user')->getTeamMemberPairs($executionID, 'execution');
             $projectID    = isset($execution->project) ? $execution->project : $oldExecution->project;
