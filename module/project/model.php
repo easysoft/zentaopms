@@ -491,7 +491,9 @@ class projectModel extends model
                 $link = helper::createLink($module, $method, "projectID=%s");
             }
             elseif($module == 'project' and $method == 'testreport')
-            { $link = helper::createLink($module, $method, "projectID=%s"); }
+            {
+                $link = helper::createLink($module, $method, "projectID=%s");
+            }
             elseif($module == 'project' and $method == 'build')
             {
                 $link = helper::createLink($module, $method, "projectID=%s");

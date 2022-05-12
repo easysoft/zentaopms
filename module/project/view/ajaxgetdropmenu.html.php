@@ -87,11 +87,7 @@ foreach($projects as $programID => $programProjects)
         }
 
         /* Set link when project redefines permissions. */
-        if($project->auth == 'reset')
-        {
-            $this->loadModel('common')->resetProjectPriv($project->id);
-            if(!common::hasPriv($module, $method)) $link = helper::createLink('project', 'index', "projectID=%s");
-        }
+        if($project->auth == 'reset') $link = helper::createLink('project', 'index', "projectID=%s");
 
         if($project->model != 'scrum') $icon = "<i class='icon icon-{$project->model}'></i> ";
         $projectName = $icon . $project->name;
