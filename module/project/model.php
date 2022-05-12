@@ -515,11 +515,7 @@ class projectModel extends model
             }
             elseif($module == 'story')
             {
-                if($method == 'create')
-                {
-                    $link = helper::createLink($module, $method);
-                }
-                elseif($method == 'change')
+                if($method == 'change' or $method == 'create')
                 {
                     $link = helper::createLink('projectstory', 'story', "projectID=%s");
                 }
@@ -528,26 +524,19 @@ class projectModel extends model
                     $link = helper::createLink('project', 'testcase', "projectID=%s");
                 }
             }
-            elseif($module == 'testcase' and $method == 'create')
+            elseif($module == 'testcase')
             {
-                if($method == 'create')
-                {
-                    $link = helper::createLink($module, $method);
-                }
-                elseif($method == 'edit')
-                {
-                    $link = helper::createLink('project', 'testcase', "projectID=%s");
-                }
+                $link = helper::createLink('project', 'testcase', "projectID=%s");
             }
             elseif($module == 'testtask')
             {
-                if($method == 'create')
+                if($method == 'browseunits')
                 {
-                    $link = helper::createLink($module, $method, "product=0&executionID=0&build=0&projectID=%s");
+                    $link = helper::createLink('project', 'testcase', "projectID=%s");
                 }
                 else
                 {
-                    $link = helper::createLink($module, 'browseunits');
+                    $link = helper::createLink('project', 'testtask', "projectID=%s");
                 }
             }
             elseif($module == 'testreport')
@@ -2475,6 +2464,8 @@ class projectModel extends model
         if(!$this->common->isOpenMethod($moduleName, $methodName) and !commonModel::hasPriv($moduleName, $methodName)) $this->common->deny($moduleName, $methodName, false);
 
         $this->lang->switcherMenu = $this->getSwitcher($objectID, $this->app->rawModule, $this->app->rawMethod);
+
+        $this->savestate($objectID);
 
         common::setMenuVars('project', $objectID);
     }
