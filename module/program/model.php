@@ -1378,6 +1378,7 @@ class programModel extends model
             }
             $hours[$projectID] = $hour;
         }
+        
         /* Compute totalReal and progress. */
         foreach($hours as $hour)
         {
