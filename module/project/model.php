@@ -472,13 +472,13 @@ class projectModel extends model
         $link    = helper::createLink('project', 'index', "projectID=%s");
         $project = $this->getByID($projectID);
 
-        if(strpos(',project,product,projectstory,story,bug,doc,testcase,testtask,testreport,build,projectrelease,stakeholder,issue,risk,meeting,report,measrecord', ',' . $module . ',') !== false)
+        if(strpos(',project,product,projectstory,story,bug,doc,testcase,testtask,testreport,repo,build,projectrelease,stakeholder,issue,risk,meeting,report,measrecord', ',' . $module . ',') !== false)
         {
             if($module == 'project' and $method == 'execution')
             {
                 $link = helper::createLink($module, $method, "status=all&projectID=%s");
             }
-            elseif($module == 'project' and strpos(',bug,testcase,testtask,testreport,build,dynamic,view,manageproducts,team,managemembers,whitelist,addwhitelist,group,', ',' . $method . ','))
+            elseif($module == 'project' and strpos(',bug,testcase,testtask,testreport,build,dynamic,view,manageproducts,team,managemembers,whitelist,addwhitelist,group,', ',' . $method . ',') !== false)
             {
                 $link = helper::createLink($module, $method, "projectID=%s");
             }
@@ -515,11 +515,7 @@ class projectModel extends model
             }
             elseif($module == 'story')
             {
-                if($method == 'create')
-                {
-                    $link = helper::createLink($module, $method);
-                }
-                elseif($method == 'change')
+                if($method == 'change' or $method == 'create')
                 {
                     $link = helper::createLink('projectstory', 'story', "projectID=%s");
                 }
@@ -528,26 +524,19 @@ class projectModel extends model
                     $link = helper::createLink('project', 'testcase', "projectID=%s");
                 }
             }
-            elseif($module == 'testcase' and $method == 'create')
+            elseif($module == 'testcase')
             {
-                if($method == 'create')
-                {
-                    $link = helper::createLink($module, $method);
-                }
-                elseif($method == 'edit')
-                {
-                    $link = helper::createLink('project', 'testcase', "projectID=%s");
-                }
+                $link = helper::createLink('project', 'testcase', "projectID=%s");
             }
             elseif($module == 'testtask')
             {
-                if($method == 'create')
+                if($method == 'browseunits')
                 {
-                    $link = helper::createLink($module, $method, "product=0&executionID=0&build=0&projectID=%s");
+                    $link = helper::createLink('project', 'testcase', "projectID=%s");
                 }
                 else
                 {
-                    $link = helper::createLink($module, 'browseunits');
+                    $link = helper::createLink('project', 'testtask', "projectID=%s");
                 }
             }
             elseif($module == 'testreport')
@@ -823,20 +812,6 @@ class projectModel extends model
             ->andWhere('t2.deleted')->eq(0)
             ->andWhere('t2.project')->eq($projectID)
             ->fetchGroup('productID', 'branchID');
-    }
-
-    /*
-     * Get projects by search conditions.
-     *
-     * @param string $projectQuery
-     * @return array
-     * */
-    public function getBySearch($projectQuery)
-    {
-        return $this->dao->select('*')->from(TABLE_PROJECT)
-            ->where($projectQuery)
-            ->andWhere('type')->eq('project')
-            ->fetchAll();
     }
 
     /*
@@ -1531,6 +1506,7 @@ class projectModel extends model
                 /* When acl is open, white list set empty. When acl is private,update user view. */
                 if($project->acl == 'open') $this->loadModel('personnel')->updateWhitelist(array(), 'project', $projectID);
                 if($project->acl != 'open') $this->loadModel('user')->updateUserView($projectID, 'project');
+                $this->executeHooks($projectID);
             }
             $allChanges[$projectID] = common::createChanges($oldProject, $project);
         }
@@ -2488,6 +2464,8 @@ class projectModel extends model
         if(!$this->common->isOpenMethod($moduleName, $methodName) and !commonModel::hasPriv($moduleName, $methodName)) $this->common->deny($moduleName, $methodName, false);
 
         $this->lang->switcherMenu = $this->getSwitcher($objectID, $this->app->rawModule, $this->app->rawMethod);
+
+        $this->saveState($objectID, $this->project->getPairsByProgram());
 
         common::setMenuVars('project', $objectID);
     }

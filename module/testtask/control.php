@@ -165,7 +165,7 @@ class testtask extends control
                 $this->lang->waterfall->menu->qa['subMenu']->testtask['subModule'] = '';
             }
 
-            $this->loadModel('project')->setMenu($this->session->project);
+            $this->loadModel('project')->setMenu($projectID);
             $this->lang->modulePageNav = $this->product->select($this->products, $productID, 'testtask', 'browseUnits', "projectID=$projectID", '', 0, '', false);
         }
         else

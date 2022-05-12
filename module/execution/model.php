@@ -568,6 +568,27 @@ class executionModel extends model
         /* Fix bug#3074, Update views for team members. */
         if($execution->acl != 'open') $this->updateUserView($executionID, 'sprint', $changedAccounts);
 
+        if(isset($execution->project))
+        {
+            $executionProductList   = $this->loadModel('product')->getProducts($executionID);
+            $projectProductList     = $this->product->getProducts($execution->project);
+            $executionProductIdList = array_keys($executionProductList);
+            $projectProductIdList   = array_keys($projectProductList);
+            $diffProductIdList      = array_diff($executionProductIdList, $projectProductIdList);
+            if(!empty($diffProductIdList))
+            {
+                foreach($diffProductIdList as $key => $newProductID)
+                {
+                    $data = $this->dao->select('*')->from(TABLE_PROJECTPRODUCT)
+                        ->where('project')->eq($executionID)
+                        ->andWhere('product')->eq($newProductID)
+                        ->fetch();
+                    $data->project = $execution->project;
+                    $this->dao->insert(TABLE_PROJECTPRODUCT)->data($data)->exec();
+                }
+            }
+        }
+
         if(!dao::isError())
         {
             if(isset($execution->project) and $execution->project != $oldExecution->project)

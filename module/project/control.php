@@ -299,19 +299,18 @@ class project extends control
         $this->session->set('projectList', $this->app->getURI(true), 'project');
 
         $projectType = $this->cookie->projectType ? $this->cookie->projectType : 'bylist';
+        $browseType  = strtolower($browseType);
 
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
         $queryID = ($browseType == 'bysearch') ? (int)$param : 0;
-        $programTitle = $this->loadModel('setting')->getItem('owner=' . $this->app->user->account . '&module=project&key=programTitle');
-        $projectStats = $this->loadModel('program')->getProjectStats($programID, $browseType, $queryID, $orderBy, $pager, $programTitle);
-
         $actionURL = $this->createLink('project', 'browse', "&programID=$programID&browseType=bySearch&queryID=myQueryID");
         $this->project->buildSearchFrom($queryID, $actionURL);
-        $projectQuery = $this->session->projectQuery;
-        if($browseType == 'bySearch') $projectStats = $this->project->getBySearch($projectQuery);
+
+        $programTitle = $this->loadModel('setting')->getItem('owner=' . $this->app->user->account . '&module=project&key=programTitle');
+        $projectStats = $this->loadModel('program')->getProjectStats($programID, $browseType, $queryID, $orderBy, $pager, $programTitle);
 
         $this->view->title      = $this->lang->project->browse;
         $this->view->position[] = $this->lang->project->browse;
@@ -430,6 +429,7 @@ class project extends control
                 }
             }
 
+            $this->executeHooks($projectID);
             if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $projectID));
 
             if($this->app->tab == 'program')
@@ -588,6 +588,7 @@ class project extends control
                 $this->loadModel('productplan')->linkProject($projectID, $newPlans);
             }
 
+            $this->executeHooks($projectID);
             if(isonlybody()) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
 
             $locateLink = ($this->session->projectList and $from != 'view') ? $this->session->projectList : inLink('view', "projectID=$projectID");
@@ -762,6 +763,8 @@ class project extends control
             $extend = $this->loadModel('workflowaction')->getByModuleAndAction('project', 'view');
             if(!empty($extend) and $extend->extensionType == 'extend') $isExtended = true;
         }
+
+        $this->executeHooks($projectID);
 
         $this->view->title        = $this->lang->project->view;
         $this->view->position     = $this->lang->project->view;
@@ -1723,6 +1726,7 @@ class project extends control
             $url = $this->createLink('project', 'browse');
             if($this->app->tab == 'program') $url = $this->createLink('program', 'browse');
 
+            $this->executeHooks($projectID);
             if(empty($executionIdList))
             {
                 if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess));

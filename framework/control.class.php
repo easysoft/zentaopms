@@ -373,7 +373,7 @@ class control extends baseControl
      * @access public
      * @return void
      */
-    public function printExtendFields($object, $type, $extras = '', $print = false)
+    public function printExtendFields($object, $type, $extras = '', $print = true)
     {
         if(!isset($this->config->bizVersion)) return false;
 
@@ -382,12 +382,13 @@ class control extends baseControl
         $fields     = $this->loadModel('flow')->printFields($moduleName, $methodName, $object, $type, $extras);
         if(!$print) return $fields;
 
-        $jsRoot = $this->config->webRoot . "js/";
-        $picker = file_get_contents($this->app->getBasePath() . 'app/sys/common/view/picker.html.php');
-        $picker = substr($picker, strpos($picker, '<style>'));
+        $picker = '';
+        //$jsRoot = $this->config->webRoot . "js/";
+        //$picker = file_get_contents($this->app->getBasePath() . 'app/sys/common/view/picker.html.php');
+        //$picker = substr($picker, strpos($picker, '<style>'));
 
-        js::import($jsRoot . 'picker/min.js');
-        css::import($jsRoot . 'picker/min.css');
+        //js::import($jsRoot . 'picker/min.js');
+        //css::import($jsRoot . 'picker/min.css');
 
         echo $picker . $fields;
     }

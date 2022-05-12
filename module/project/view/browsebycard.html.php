@@ -62,7 +62,8 @@
     <?php if($browseType == $key) $label .= " <span class='label label-light label-badge'>{$pager->recTotal}</span>";?>
     <?php echo html::a(inlink('browse', "programID=$programID&browseType=$key"), $label, '', "class='btn btn-link $active'");?>
     <?php endforeach;?>
-    <?php echo html::checkbox('involved', array('1' => $lang->project->mine), '', $this->cookie->involved ? 'checked=checked' : '');?>
+    <?php if($browseType != 'bysearch') echo html::checkbox('involved', array('1' => $lang->project->mine), '', $this->cookie->involved ? 'checked=checked' : '');?>
+    <a class="btn btn-link querybox-toggle" id='bysearchTab'><i class="icon icon-search muted"></i> <?php echo $lang->search->common;?></a>
   </div>
   <div class="btn-toolbar pull-right">
     <div class="btn-group panel-actions">
@@ -78,6 +79,7 @@
   </div>
 </div>
 <div id='mainContent'>
+    <div class="cell<?php if($browseType == 'bysearch') echo ' show';?>" id="queryBox" data-module='project'></div>
   <div class='row cell' id='cards'>
     <?php if(empty($projectStats)):?>
     <div class="table-empty-tip">

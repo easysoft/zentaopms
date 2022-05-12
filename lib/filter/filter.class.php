@@ -45,51 +45,39 @@ class fixer extends baseFixer
 {
     public function get($fields = '')
     {
-        $fields = str_replace(' ', '', trim($fields));
-
-        /* Get extend field by flow. */
         global $config;
-        $flowFields = array();
+        /* Get extend field by flow. */
         if(isset($config->bizVersion))
         {
             global $app, $dbh;
-            $moduleName = $app->getModuleName();
-            $stmt = $dbh->query("SELECT * FROM " . TABLE_WORKFLOWFIELD . " WHERE `module` = '{$moduleName}' and `buildin` = '0'");
+            $flowFields = array();
+            $moduleName = $app->rawModule;
+            $stmt       = $dbh->query("SELECT * FROM " . TABLE_WORKFLOWFIELD . " WHERE `module` = '{$moduleName}' and `buildin` = '0'");
             while($flowField = $stmt->fetch()) $flowFields[$flowField->field] = $flowField;
-        }
-        foreach($this->data as $field => $value)
-        {
-            /* Implode array when form has array. */
-            if(isset($flowFields[$field]) and is_array($value))
+
+            foreach($flowFields as $field => $fieldObject)
             {
-                $canImplode = true;
-                foreach($value as $k => $v)
+                if(!isset($this->data->$field)) continue;
+
+                $value = $this->data->$field;
+                if(is_array($value))
                 {
-                    if(is_object($v) or is_array($v))
+                    $canImplode = true;
+                    foreach($value as $k => $v)
                     {
-                        $canImplode = false;
-                        break;
+                        if(is_object($v) or is_array($v))
+                        {
+                            $canImplode = false;
+                            break;
+                        }
                     }
+                    if($canImplode) $this->data->$field = implode(',', $value);
                 }
-                if($canImplode) $this->data->$field = implode(',', $value);
+                if($fieldObject->control == 'textarea' || $fieldObject->control == 'richtext') $this->skipSpecial($field);
             }
-            if(isset($flowFields[$field]) and ($flowFields[$field]->control == 'textarea' or $flowFields[$field]->control == 'richtext')) $this->skipSpecial($field);
-            $this->specialChars($field);
-            $this->data->$field = $this->filterEmoji($value);
         }
 
-        if(empty($fields)) return $this->data;
-        if(strpos($fields, ',') === false) return $this->data->$fields;
-
-        /* Process fields for check by key. */
-        $fields = array_flip(explode(',', $fields));
-        foreach($this->data as $field => $value)
-        {
-            if(!isset($fields[$field])) unset($this->data->$field);
-            if(!isset($this->stripedFields[$field])) $this->specialChars($field);
-        }
-
-        return $this->data;
+        return parent::get($fields);
     }
 
     /**

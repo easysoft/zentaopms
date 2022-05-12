@@ -78,14 +78,12 @@ class model extends baseModel
         if(empty($module)) $module = $moduleName;
         if(empty($method)) $method = $methodName;
 
-        if(!common::hasPriv($module, $method)) return '';
-
+        static $actions = array();
         if(isset($this->config->bizVersion))
         {
-            static $actions;
-            if(empty($actions))
+            if(empty($actions[$moduleName]))
             {
-                $actions = $this->dao->select('*')->from(TABLE_WORKFLOWACTION)
+                $actions[$moduleName] = $this->dao->select('*')->from(TABLE_WORKFLOWACTION)
                     ->where('module')->eq($moduleName)
                     ->andWhere('buildin')->eq('1')
                     ->andWhere('status')->eq('enable')
@@ -95,9 +93,9 @@ class model extends baseModel
         }
 
         $enabled = true;
-        if(isset($actions[$methodName]))
+        if(!empty($actions) and isset($actions[$moduleName][$methodName]))
         {
-            $action = $actions[$methodName];
+            $action = $actions[$moduleName][$methodName];
 
             if($action->extensionType == 'override') return $this->loadModel('flow')->buildActionMenu($moduleName, $action, $data, $type);
 

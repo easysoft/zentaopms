@@ -63,14 +63,24 @@ $(function()
             }
         }
     });
-
-    oldProject = $("#project").val();
-    $('#project').change(function()
-    {
-        if($('#submit').closest('td').find('#syncStories').length == 0)
-        {
-            $('#submit').after("<input type='hidden' id='syncStories' name='syncStories' value='no' />");
-        }
-        $("#syncStories").val(confirm(confirmSync) ? 'yes' : 'no');
-    });
 })
+var lastProjectID = $("#project").val();
+
+function changeProject(projectID)
+{
+    if($('#submit').closest('td').find('#syncStories').length == 0)
+    {
+        $('#submit').after("<input type='hidden' id='syncStories' name='syncStories' value='no' />");
+    }
+
+    var confirmVal = confirm(confirmSync);
+    $("#syncStories").val(confirmVal ? 'yes' : 'no');
+
+    if(!confirmVal)
+    {
+        $('#project').val(lastProjectID).trigger("chosen:updated");
+        return false;
+    }
+
+    lastProjectID = projectID;
+};

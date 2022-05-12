@@ -96,7 +96,7 @@ UPDATE `zt_workflowfield` set `control` = 'date'     WHERE `module` = 'testtask'
 UPDATE `zt_workflowfield` set `control` = 'richtext' WHERE `module` = 'testtask' and `field` = 'desc';
 
 UPDATE `zt_workflowfield` set `control` = 'datetime' WHERE `module` IN ('testsuite','caselib') and `field` IN ('addedDate','lastEditedDate');
-UPDATE `zt_workflowfield` set `control` = 'richtext' WHERE `module` = 'testsuite' and `field` = 'desc';
+UPDATE `zt_workflowfield` set `control` = 'richtext' WHERE `module` IN ('testsuite','caselib') and `field` = 'desc';
 
 UPDATE `zt_workflowfield` set `control` = 'datetime' WHERE `module` = 'feedback' and `field` IN ('openedDate','reviewedDate','processedDate','closedDate','editedDate','assignedDate');
 
@@ -452,3 +452,4 @@ REPLACE INTO `zt_workflowfield` (`module`, `field`, `type`, `length`, `name`, `c
 ('program', 'displayCards', 	'enum', 	'', 	'displayCards', 	'radio', 	'', '[\"\\u672a\\u5220\\u9664\",\"\\u5df2\\u5220\\u9664\"]',   '0',  '', '', 45, 0, 0, '0', '0', '0', '1', 1, '', '', '2022-04-19 10:14:25', '', '0000-00-00 00:00:00'),
 ('program', 'fluidBoard', 	'enum', 	'', 	'fluidBoard', 		'radio', 	'', '[\"\\u672a\\u5220\\u9664\",\"\\u5df2\\u5220\\u9664\"]',   '0',  '', '', 46, 0, 0, '0', '0', '0', '1', 1, '', '', '2022-04-19 10:14:25', '', '0000-00-00 00:00:00');
 
+UPDATE `zt_workflowaction` SET `position`='browse' WHERE `action` IN ('view','exporttemplate');
