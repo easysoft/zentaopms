@@ -63,14 +63,21 @@ $(function()
             }
         }
     });
-
-    oldProject = $("#project").val();
-    $('#project').change(function()
-    {
-        if($('#submit').closest('td').find('#syncStories').length == 0)
-        {
-            $('#submit').after("<input type='hidden' id='syncStories' name='syncStories' value='no' />");
-        }
-        $("#syncStories").val(confirm(confirmSyncStories) ? 'yes' : 'no');
-    });
 })
+
+function changeProject(projectID)
+{
+    if($('#submit').closest('td').find('#syncStories').length == 0)
+    {
+        $('#submit').after("<input type='hidden' id='syncStories' name='syncStories' value='no' />");
+    }
+
+    var confirmVal = confirm(confirmSync);
+    $("#syncStories").val(confirmVal ? 'yes' : 'no');
+
+    if(!confirmVal)
+    {
+        $('#project').val(projectID).trigger("chosen:updated");
+        console.log($('#project').val(projectID));
+    }
+};
