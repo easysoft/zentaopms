@@ -1,5 +1,6 @@
 function changeProject(obj, executionID, projectID)
 {
+    var lastSelected = $(obj).data('lastselected');
     var $td = $(obj).closest('td');
 
     if($td.find('[id^="syncStories"]').length == 0)
@@ -12,6 +13,12 @@ function changeProject(obj, executionID, projectID)
 
     if(!confirmVal)
     {
-        $(obj).val(projectID).trigger("chosen:updated");
+        $(obj).val(lastSelected).trigger("chosen:updated");
+        return false;
     }
-};
+    else
+    {
+        lastSelected = $(obj).val();
+        $(obj).data("lastselected", lastSelected);
+    }
+}

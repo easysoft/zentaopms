@@ -28,7 +28,7 @@
         <?php if($config->systemMode == 'new'):?>
         <tr>
           <th class='w-120px'><?php echo $lang->execution->projectName;?></th>
-          <td><?php echo html::select('project', $allProjects, $execution->project, "class='form-control chosen' onchange='changeProject($execution->project)' required");?></td><td></td>
+          <td><?php echo html::select('project', $allProjects, $execution->project, "class='form-control chosen' onchange='changeProject(this.value)' required");?></td><td></td>
         </tr>
         <?php endif;?>
         <tr>

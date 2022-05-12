@@ -64,6 +64,7 @@ $(function()
         }
     });
 })
+var lastProjectID = $("#project").val();
 
 function changeProject(projectID)
 {
@@ -77,7 +78,9 @@ function changeProject(projectID)
 
     if(!confirmVal)
     {
-        $('#project').val(projectID).trigger("chosen:updated");
-        console.log($('#project').val(projectID));
+        $('#project').val(lastProjectID).trigger("chosen:updated");
+        return false;
     }
+
+    lastProjectID = projectID;
 };
