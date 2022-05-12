@@ -40,41 +40,44 @@ class dao extends baseDAO
 
         if(!is_object($data)) $data = (object)$data;
 
-        $app->loadLang('workflow');
-        $app->loadConfig('workflow');
-
-        /* Check current module is buildin workflow. */
-        if(isset($config->workflow->buildin->modules))
+        if(isset($config->bizVersion))
         {
-            $currentModule = $app->rawModule;
-            foreach($config->workflow->buildin->modules as $appModules)
-            {
-                if(!empty($appModules->$currentModule))
-                {
-                    $currentMainTable = zget($appModules->$currentModule, 'table', '');
-                    break;
-                }
-            }
+            $app->loadLang('workflow');
+            $app->loadConfig('workflow');
 
-            if(isset($currentMainTable))
+            /* Check current module is buildin workflow. */
+            if(isset($config->workflow->buildin->modules))
             {
-                if($currentMainTable == $this->table)
+                $currentModule = $app->rawModule;
+                foreach($config->workflow->buildin->modules as $appModules)
                 {
-                    $data = $this->processData($data);
-                }
-                else
-                {
-                    $workflowFields = array();
-                    $stmt = $this->dbh->query("SELECT `field`,`type` FROM " . TABLE_WORKFLOWFIELD . " WHERE `module` = '{$currentModule}' AND `buildin` = '0'");
-                    while($row = $stmt->fetch())
+                    if(!empty($appModules->$currentModule))
                     {
-                        $workflowFields[$row->field] = $row->type;
+                        $currentMainTable = zget($appModules->$currentModule, 'table', '');
+                        break;
                     }
+                }
 
-                    $fields = $this->getFieldsType();
-                    foreach($data as $field => $value)
+                if(isset($currentMainTable))
+                {
+                    if($currentMainTable == $this->table)
                     {
-                        if(!isset($fields[$field]) && isset($workflowFields[$field])) unset($data->$field);
+                        $data = $this->processData($data);
+                    }
+                    else
+                    {
+                        $workflowFields = array();
+                        $stmt = $this->dbh->query("SELECT `field`,`type` FROM " . TABLE_WORKFLOWFIELD . " WHERE `module` = '{$currentModule}' AND `buildin` = '0'");
+                        while($row = $stmt->fetch())
+                        {
+                            $workflowFields[$row->field] = $row->type;
+                        }
+
+                        $fields = $this->getFieldsType();
+                        foreach($data as $field => $value)
+                        {
+                            if(!isset($fields[$field]) && isset($workflowFields[$field])) unset($data->$field);
+                        }
                     }
                 }
             }
