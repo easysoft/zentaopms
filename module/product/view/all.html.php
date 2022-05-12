@@ -27,6 +27,7 @@
 </div>
 <div id="mainContent" class="main-row fade">
   <?php if(empty($productStructure)):?>
+  <div class="cell<?php if($browseType == 'bySearch') echo ' show';?>" id="queryBox" data-module='product'></div>
   <div class="table-empty-tip">
     <p><span class="text-muted"><?php echo $lang->product->noProduct;?></span></p>
   </div>
