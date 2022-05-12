@@ -1337,8 +1337,8 @@ class programModel extends model
         if(defined('TUTORIAL')) return $this->loadModel('tutorial')->getProjectStats($browseType);
 
         /* Init vars. */
+        if($projects == 'noProject') return array();
         if(empty($projects)) $projects = $this->getProjectList($programID, $browseType, $queryID, $orderBy, $pager, $programTitle, $involved, $queryAll);
-
         if(empty($projects)) return array();
 
         $projectKeys = array_keys($projects);
