@@ -90,7 +90,7 @@ foreach($projects as $programID => $programProjects)
         if($project->auth == 'reset')
         {
             $this->loadModel('common')->resetProjectPriv($project->id);
-            $link = helper::createLink('project', 'index', "projectID=%s");
+            if(!common::hasPriv($module, $method)) $link = helper::createLink('project', 'index', "projectID=%s");
         }
 
         if($project->model != 'scrum') $icon = "<i class='icon icon-{$project->model}'></i> ";
