@@ -96,7 +96,7 @@ UPDATE `zt_workflowfield` set `control` = 'date'     WHERE `module` = 'testtask'
 UPDATE `zt_workflowfield` set `control` = 'richtext' WHERE `module` = 'testtask' and `field` = 'desc';
 
 UPDATE `zt_workflowfield` set `control` = 'datetime' WHERE `module` IN ('testsuite','caselib') and `field` IN ('addedDate','lastEditedDate');
-UPDATE `zt_workflowfield` set `control` = 'richtext' WHERE `module` = 'testsuite' and `field` = 'desc';
+UPDATE `zt_workflowfield` set `control` = 'richtext' WHERE `module` IN ('testsuite','caselib') and `field` = 'desc';
 
 UPDATE `zt_workflowfield` set `control` = 'datetime' WHERE `module` = 'feedback' and `field` IN ('openedDate','reviewedDate','processedDate','closedDate','editedDate','assignedDate');
 
@@ -418,3 +418,4 @@ UPDATE `zt_workflowaction` SET `type`='single', `position`='browseandview', `sho
 UPDATE `zt_workflowaction` SET `type`='single', `position`='browse', `show`='direct', `open`='normal', `layout`='side' WHERE `module`='task' AND `action`='view';
 UPDATE `zt_workflowaction` SET `type`='batch' WHERE `module`IN ('feedback','caselib','testsuite','testtask','testcase') AND `action` IN ('admin','browse','batchedit','batchcreate','import','showimport');
 UPDATE `zt_workflowaction` SET `position`='browse' WHERE `module`IN ('feedback','caselib','testsuite','testtask','testcase') AND `action` IN ('batchedit','batchcreate','import','showimport');
+UPDATE `zt_workflowaction` SET `position`='browse' WHERE `action` IN ('view','exporttemplate');
