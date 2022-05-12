@@ -417,5 +417,5 @@ UPDATE `zt_workflowaction` SET `position`='browse' WHERE `action` IN ('view','ex
 
 UPDATE `zt_workflowaction` SET `method`='browse' WHERE `action`='admin';
 UPDATE `zt_workflowaction` SET `method`='operate' WHERE `action` IN ('review','assignTo','comment','close','activate','start','block');
-UPDATE `zt_workflowaction` SET `method`='batchOperate' WHERE `action`='batchedit';
+UPDATE `zt_workflowaction` SET `method`='batchoperate' WHERE `action`='batchedit';
 UPDATE `zt_workflowaction` SET `method`='view' WHERE `action`='adminview';
