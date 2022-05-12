@@ -1163,7 +1163,7 @@ class execution extends control
 
         /* Get date list. */
         $executionInfo = $this->execution->getByID($executionID);
-        $deadline      = $execution->status != 'closed' ? helper::today() : substr($execution->closedDate, 0, 10);
+        $deadline      = strpos('closed,suspended', $execution->status) === false ? helper::today() : ($execution->status == 'closed' ? substr($execution->closedDate, 0, 10) : $execution->suspendedDate);
         $endDate       = strpos($type, 'withdelay') !== false ? $deadline : $executionInfo->end;
         list($dateList, $interval) = $this->execution->getDateList($executionInfo->begin, $endDate, $type, $interval, 'Y-m-d');
         $chartData = $this->execution->buildBurnData($executionID, $dateList, $type, $burnBy);

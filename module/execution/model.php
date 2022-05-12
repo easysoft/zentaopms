@@ -827,6 +827,7 @@ class executionModel extends model
             ->setDefault('status', 'suspended')
             ->setDefault('lastEditedBy', $this->app->user->account)
             ->setDefault('lastEditedDate', $now)
+            ->setDefault('suspendedDate', helper::today())
             ->remove('comment')->get();
 
         $this->dao->update(TABLE_EXECUTION)->data($execution)
@@ -3654,7 +3655,9 @@ class executionModel extends model
         $chartData['baseLine'] = $baselineJSON;
 
         $execution = $this->getById($executionID);
-        if(($execution->status != 'closed' and helper::today() > $execution->end) or ($execution->status == 'closed' and substr($execution->closedDate, 0, 10) > $execution->end))
+        if((strpos('closed,suspended', $execution->status) === false and helper::today() > $execution->end)
+            or ($execution->status == 'closed'    and substr($execution->closedDate, 0, 10) > $execution->end)
+            or ($execution->status == 'suspended' and $execution->suspendedDate > $execution->end))
         {
             $delaySets = $this->getBurnDataFlot($executionID, $burnBy, true);
             $chartData['delayLine'] = $this->report->createSingleJSON($delaySets, $dateList);

@@ -24,10 +24,17 @@
     <?php
     $weekend = strpos($type, 'noweekend') !== false ? 'withweekend' : 'noweekend';
     $delay   = strpos($type, 'withdelay') !== false ? 'nodelay'     : 'withdelay';
-    common::printLink('execution', 'computeBurn', 'reload=yes', '<i class="icon icon-refresh"></i> ' . $lang->execution->computeBurn, 'hiddenwin', "title='{$lang->execution->computeBurn}' class='btn btn-primary' id='computeBurn'");
-    echo '<div class="space"></div>';
+    if(strpos('closed,suspended', $execution->status) === false)
+    {
+        common::printLink('execution', 'computeBurn', 'reload=yes', '<i class="icon icon-refresh"></i> ' . $lang->execution->computeBurn, 'hiddenwin', "title='{$lang->execution->computeBurn}' class='btn btn-primary' id='computeBurn'");
+        echo '<div class="space"></div>';
+    }
     echo html::a('#', $lang->execution->$weekend, '', "class='btn btn-link' id='weekend'");
-    if(($execution->status != 'closed' and helper::today() > $execution->end) or ($execution->status == 'closed' and substr($execution->closedDate, 0, 10) > $execution->end)) echo html::a('#', $lang->execution->$delay, '', "class='btn btn-link' id='delay'");
+    if((strpos('closed,suspended', $execution->status) === false and helper::today() > $execution->end)
+        or ($execution->status == 'closed'    and substr($execution->closedDate, 0, 10) > $execution->end)
+        or ($execution->status == 'suspended' and $execution->suspendedDate > $execution->end))
+    echo html::a('#', $lang->execution->$delay, '', "class='btn btn-link' id='delay'");
+
     if(common::canModify('execution', $execution)) common::printLink('execution', 'fixFirst', "execution=$execution->id", $lang->execution->fixFirst, '', "class='btn btn-link iframe' data-width='700'");
     echo $lang->execution->howToUpdateBurn;
     ?>
