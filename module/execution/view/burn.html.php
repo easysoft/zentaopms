@@ -27,7 +27,7 @@
     common::printLink('execution', 'computeBurn', 'reload=yes', '<i class="icon icon-refresh"></i> ' . $lang->execution->computeBurn, 'hiddenwin', "title='{$lang->execution->computeBurn}' class='btn btn-primary' id='computeBurn'");
     echo '<div class="space"></div>';
     echo html::a('#', $lang->execution->$weekend, '', "class='btn btn-link' id='weekend'");
-    if($execution->status != 'closed' and helper::today() > $execution->end) echo html::a('#', $lang->execution->$delay, '', "class='btn btn-link' id='delay'");
+    if(($execution->status != 'closed' and helper::today() > $execution->end) or ($execution->status == 'closed' and substr($execution->closedDate, 0, 10) > $execution->end)) echo html::a('#', $lang->execution->$delay, '', "class='btn btn-link' id='delay'");
     if(common::canModify('execution', $execution)) common::printLink('execution', 'fixFirst', "execution=$execution->id", $lang->execution->fixFirst, '', "class='btn btn-link iframe' data-width='700'");
     echo $lang->execution->howToUpdateBurn;
     ?>
@@ -109,7 +109,7 @@ function initBurnChar()
         pointColor: 'red',
         fillColor: 'rgba(0,106,241, .07)',
         pointHighlightFill: '#fff',
-        data: <?php echo $chartData['delayLine']?>
+        data: <?php echo isset($chartData['delayLine']) ? $chartData['delayLine'] : '[]';?>
     }
     if(type.match('withdelay')) data.datasets.push(delaySets);
 

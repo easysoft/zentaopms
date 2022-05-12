@@ -2785,16 +2785,18 @@ class executionModel extends model
     /**
      * Compute burn of a execution.
      *
+     * @param  int    $executionID
      * @access public
-     * @return array
+     * @return void
      */
-    public function computeBurn()
+    public function computeBurn($executionID = 0)
     {
         $today = helper::today();
         $executions = $this->dao->select('id, code')->from(TABLE_EXECUTION)
             ->where('type')->in('sprint,stage')
             ->andWhere('lifetime')->ne('ops')
             ->andWhere('status')->notin('done,closed,suspended')
+            ->beginIF($executionID)->andWhere('id')->eq($executionID)->fi()
             ->fetchPairs();
         if(!$executions) return array();
 
@@ -3650,7 +3652,7 @@ class executionModel extends model
         $chartData['baseLine'] = $baselineJSON;
 
         $execution = $this->getById($executionID);
-        if($execution->status != 'closed' and helper::today() > $execution->end)
+        if(($execution->status != 'closed' and helper::today() > $execution->end) or ($execution->status == 'closed' and substr($execution->closedDate, 0, 10) > $execution->end))
         {
             $delaySets = $this->getBurnDataFlot($executionID, $burnBy, true);
             $chartData['delayLine'] = $this->report->createSingleJSON($delaySets, $dateList);
