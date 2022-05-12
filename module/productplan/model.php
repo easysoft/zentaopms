@@ -1076,7 +1076,7 @@ class productplanModel extends model
                 }
             }
 
-            if(!$canClickExecution)
+            if($canClickExecution)
             {
                 $executionLink = $this->config->systemMode == 'new' ? '#projects' : helper::createLink('execution', 'create', "projectID=0&executionID=0&copyExecutionID=0&plan=$plan->id&confirm=no&productID=$plan->product");
                 if($this->config->systemMode == 'new')
