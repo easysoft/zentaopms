@@ -24,7 +24,7 @@
     <?php
     $weekend = strpos($type, 'noweekend') !== false ? 'withweekend' : 'noweekend';
     $delay   = strpos($type, 'withdelay') !== false ? 'nodelay'     : 'withdelay';
-    if(strpos('closed,suspended', $execution->status) === false)
+    if(strpos('wait,doing', $execution->status) !== false)
     {
         common::printLink('execution', 'computeBurn', 'reload=yes', '<i class="icon icon-refresh"></i> ' . $lang->execution->computeBurn, 'hiddenwin', "title='{$lang->execution->computeBurn}' class='btn btn-primary' id='computeBurn'");
         echo '<div class="space"></div>';
