@@ -3002,10 +3002,7 @@ class executionModel extends model
         /* If the burnCounts > $itemCounts, get the latest $itemCounts records. */
         $sets = $this->dao->select("date AS name, `$burnBy` AS value, `$burnBy`")->from(TABLE_BURN)->where('execution')->eq((int)$executionID)->andWhere('task')->eq(0)->orderBy('date DESC')->fetchAll('name');
 
-        $count      = 0;
-        $burnData   = array();
-        $firstBurnBy = 0;
-        $firstDate   = '';
+        $burnData = array();
         foreach($sets as $date => $set)
         {
             if($date < $execution->begin) continue;
@@ -3013,9 +3010,6 @@ class executionModel extends model
             if($showDelay  and $date < $execution->end) $set->value = 'null';
 
             $burnData[$date] = $set;
-            $firstBurnBy      = $set->$burnBy;
-            $firstDate        = $date;
-            $count++;
         }
 
         foreach($dateList as $date)
@@ -3027,7 +3021,7 @@ class executionModel extends model
                     $set = new stdClass();
                     $set->name    = $date;
                     $set->value   = 'null';
-                    $set->$burnBy = $date < $firstDate ? $firstBurnBy : 0;
+                    $set->$burnBy = 0;
 
                     $burnData[$date] = $set;
                 }
@@ -3705,9 +3699,9 @@ class executionModel extends model
         $this->loadModel('report');
         $burnBy = $burnBy ? $burnBy : 'left';
 
-        $sets          = $this->getBurnDataFlot($executionID, $burnBy, false, $dateList);
-        $limitJSON     = '[]';
-        $baselineJSON  = '[]';
+        $sets         = $this->getBurnDataFlot($executionID, $burnBy, false, $dateList);
+        $limitJSON    = '[]';
+        $baselineJSON = '[]';
 
         $firstBurn    = empty($sets) ? 0 : reset($sets);
         $firstTime    = !empty($firstBurn->$burnBy) ? $firstBurn->$burnBy : (!empty($firstBurn->value) ? $firstBurn->value : 0);
