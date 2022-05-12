@@ -630,23 +630,6 @@ class projectModel extends model
     }
 
     /*
-     * Get projects by search conditions.
-     *
-     * @param string $projectQuery
-     * @return array
-     * */
-    public function getBySearch($projectQuery)
-    {
-        $projects =  $this->dao->select('*')->from(TABLE_PROJECT)
-            ->where($projectQuery)
-            ->andWhere('type')->eq('project')
-            ->fetchAll('id');
-        if(empty($projects)) $projects = 'noProject';
-        $projects = $this->loadModel('program')->getProjectStats(0, 'undone', 0, 'id_desc', null, 0, 0, false, $projects);
-        return $projects;
-    }
-
-    /*
      * Build search form
      *
      * @param int     $queryID

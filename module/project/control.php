@@ -298,19 +298,18 @@ class project extends control
         $this->session->set('projectList', $this->app->getURI(true), 'project');
 
         $projectType = $this->cookie->projectType ? $this->cookie->projectType : 'bylist';
+        $browseType  = strtolower($browseType);
 
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
         $queryID = ($browseType == 'bysearch') ? (int)$param : 0;
-        $programTitle = $this->loadModel('setting')->getItem('owner=' . $this->app->user->account . '&module=project&key=programTitle');
-        $projectStats = $this->loadModel('program')->getProjectStats($programID, $browseType, $queryID, $orderBy, $pager, $programTitle);
-
         $actionURL = $this->createLink('project', 'browse', "&programID=$programID&browseType=bySearch&queryID=myQueryID");
         $this->project->buildSearchFrom($queryID, $actionURL);
-        $projectQuery = $this->session->projectQuery;
-        if($browseType == 'bySearch') $projectStats = $this->project->getBySearch($projectQuery);
+
+        $programTitle = $this->loadModel('setting')->getItem('owner=' . $this->app->user->account . '&module=project&key=programTitle');
+        $projectStats = $this->loadModel('program')->getProjectStats($programID, $browseType, $queryID, $orderBy, $pager, $programTitle);
 
         $this->view->title      = $this->lang->project->browse;
         $this->view->position[] = $this->lang->project->browse;
