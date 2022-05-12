@@ -26,11 +26,13 @@ pid=1
 查看看板23的普通卡片和productplan片 >> ,177,178,179,180,181,182,183,184
 查看看板25的普通卡片和build卡片 >> ,193,194,195,196,197,198,199,200,993,994,995,996,997,998,999,1000
 查看看板25的普通卡片和productplan片 >> ,193,194,195,196,197,198,199,200
+查看看板1已归档的普通卡片和productplan卡片 >> ,6,7,8,801,802,803,804,805,806,807,808
 
 */
 
 $kanbanIDList = array('1', '2', '9', '10', '11', '12', '23', '25');
 $fromType     = array('productplan', 'release', 'execution', 'build');
+$archived     = 1;
 
 $kanban = new kanbanTest();
 
@@ -50,3 +52,7 @@ r($kanban->getImportedCardstest($kanbanIDList[6], $fromType[3])) && p() && e(',1
 r($kanban->getImportedCardstest($kanbanIDList[6], $fromType[0])) && p() && e(',177,178,179,180,181,182,183,184');                                  // 查看看板23的普通卡片和productplan片
 r($kanban->getImportedCardstest($kanbanIDList[7], $fromType[3])) && p() && e(',193,194,195,196,197,198,199,200,993,994,995,996,997,998,999,1000'); // 查看看板25的普通卡片和build卡片
 r($kanban->getImportedCardstest($kanbanIDList[7], $fromType[0])) && p() && e(',193,194,195,196,197,198,199,200');                                  // 查看看板25的普通卡片和productplan片
+global $tester;
+$tester->dao->update(TABLE_KANBANCARD)->set('archived')->eq(1)->where('id')->gt('5')->exec();
+r($kanban->getImportedCardsTest($kanbanIDList[0], $fromType[0], $archived)) && p() && e(',6,7,8,801,802,803,804,805,806,807,808');                 // 查看看板1已归档的普通卡片和productplan卡片
+$tester->dao->update(TABLE_KANBANCARD)->set('archived')->eq(0)->where('id')->gt('5')->exec();
