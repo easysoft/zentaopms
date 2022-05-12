@@ -1390,6 +1390,9 @@ class baseRouter
 
         if($this->checkModuleName($moduleName))
         {
+            $modulePath = $this->getExtensionRoot() . 'saas' . DS . $moduleName . DS;
+            if(is_dir($modulePath) and (file_exists($modulePath . 'control.php') or file_exists($modulePath . 'model.php'))) return $modulePath;
+
             /* 1. 最后尝试在定制开发中寻找。 Finally, try to find the module in the custom dir. */
             $modulePath = $this->getExtensionRoot() . 'custom' . DS . $moduleName . DS;
             if(is_dir($modulePath) and (file_exists($modulePath . 'control.php') or file_exists($modulePath . 'model.php'))) return $modulePath;
@@ -1432,8 +1435,10 @@ class baseRouter
      */
     public function getModuleExtPath($appName, $moduleName, $ext)
     {
+        $saasExtPath = $this->getExtensionRoot() . 'saas' . DS . $moduleName . DS . 'ext' . DS . $ext . DS;
+
         /* 检查失败或者extensionLevel为0，直接返回空。If check failed or extensionLevel == 0, return empty array. */
-        if(!$this->checkModuleName($moduleName) or $this->config->framework->extensionLevel == 0) return array();
+        if(!$this->checkModuleName($moduleName) or $this->config->framework->extensionLevel == 0) return array('saas' => $saasExtPath);
 
         $paths = array();
 
@@ -1442,10 +1447,16 @@ class baseRouter
         $paths['xuan']   = $this->getExtensionRoot() . 'xuan' . DS . $moduleName . DS . 'ext' . DS . $ext . DS;
         $paths['vision'] = $this->config->vision == 'rnd' ? '' : $this->basePath . 'extension' . DS . $this->config->vision . DS . $moduleName . DS . 'ext' . DS . $ext . DS;
         $paths['custom'] = $this->getExtensionRoot() . 'custom' . DS . $moduleName . DS . 'ext' . DS . $ext . DS;
-        if($this->config->framework->extensionLevel == 1) return $paths;
+        if($this->config->framework->extensionLevel == 1)
+        {
+            $paths['saas']   = $saasExtPath;
+            return $paths;
+        }
 
         /* When extensionLevel == 2. */
         $paths['site'] = empty($this->siteCode) ? '' : $this->getExtensionRoot() . $this->config->edition . DS . $moduleName . DS . 'ext' . DS . '_' . $this->siteCode . DS . $ext . DS;
+        $paths['saas'] = $saasExtPath;
+
         return $paths;
     }
 
@@ -1493,6 +1504,12 @@ class baseRouter
 
         /* 如果扩展目录为空，不包含任何扩展文件。If there's no ext paths return false.*/
         if(empty($moduleExtPaths)) return false;
+
+        if(!empty( $moduleExtPaths['saas']))
+        {
+            $this->extActionFile = $moduleExtPaths['saas'] . $this->methodName . '.php';
+            if(file_exists($this->extActionFile)) return true;
+        }
 
         /* 1. 如果extensionLevel == 2，且扩展文件存在，返回该站点扩展文件。 If extensionLevel == 2 and site extensionFile exists, return it. */
         if($this->config->framework->extensionLevel == 2 and !empty( $moduleExtPaths['site']))
@@ -2322,6 +2339,7 @@ class baseRouter
             if(!empty($extConfigPath['common'])) $commonExtConfigFiles = helper::ls($extConfigPath['common'], '.php');
             if(!empty($extConfigPath['xuan']))   $commonExtConfigFiles = array_merge($commonExtConfigFiles, helper::ls($extConfigPath['xuan'], '.php'));
             if(!empty($extConfigPath['vision'])) $commonExtConfigFiles = array_merge($commonExtConfigFiles, helper::ls($extConfigPath['vision'], '.php'));
+            if(!empty($extConfigPath['saas']))   $commonExtConfigFiles = array_merge($commonExtConfigFiles, helper::ls($extConfigPath['saas'], '.php'));
             if(!empty($extConfigPath['custom'])) $commonExtConfigFiles = array_merge($commonExtConfigFiles, helper::ls($extConfigPath['custom'], '.php'));
         }
         if($config->framework->extensionLevel == 2 and !empty($extConfigPath['site']))   $siteExtConfigFiles   = helper::ls($extConfigPath['site'], '.php');
@@ -2427,6 +2445,9 @@ class baseRouter
     {
         $path = $moduleName . DS . 'lang' . DS . $this->clientLang . '.php';
 
+        $modulePath = $this->getExtensionRoot() . 'saas' . DS;
+        if(file_exists($modulePath . $path)) return $modulePath . $path;
+
         /* 1. 如果通用版本里有此模块，优先使用。 If module is in the open edition, use it. */
         $modulePath = $this->getModuleRoot($appName);
         if(file_exists($modulePath . $path)) return $modulePath . $path;
@@ -2489,6 +2510,7 @@ class baseRouter
                 if(!empty($extLangPath['xuan'])) $commonExtLangFiles = array_merge($commonExtLangFiles, helper::ls($extLangPath['xuan'] . $this->clientLang, '.php'));
                 if(!empty($extLangPath['vision'])) $commonExtLangFiles = array_merge($commonExtLangFiles, helper::ls($extLangPath['vision'] . $this->clientLang, '.php'));
                 if(!empty($extLangPath['custom'])) $commonExtLangFiles = array_merge($commonExtLangFiles, helper::ls($extLangPath['custom'] . $this->clientLang, '.php'));
+                if(!empty($extLangPath['saas']))   $commonExtLangFiles = array_merge($commonExtLangFiles, helper::ls($extLangPath['saas'] . $this->clientLang, '.php'));
             }
             if($this->config->framework->extensionLevel == 2 and !empty($extLangPath['site']))   $siteExtLangFiles   = helper::ls($extLangPath['site'] . $this->clientLang, '.php');
             $extLangFiles  = array_merge($commonExtLangFiles, $siteExtLangFiles);

@@ -119,9 +119,9 @@
           </div>
           <?php endif;?>
           <?php $class = $program->model == 'kanban' ? 'disabled' : '';?>
-          <?php common::printIcon('project', 'edit', "projectID=$program->id", $program, 'list', 'edit', '', 'iframe', true);?>
-          <?php common::printIcon('project', 'team', "projectID=$program->id", $program, 'list', 'group', '', "$class", '', 'data-app="project"');?>
-          <?php common::printIcon('project', 'group',         "projectID=$program->id", $program, 'list', 'lock', '', "$class", '', 'data-app="project"');?>
+          <?php common::printIcon('project', 'edit',  "projectID=$program->id", $program, 'list', 'edit',  '', 'iframe', true);?>
+          <?php common::printIcon('project', 'team',  "projectID=$program->id", $program, 'list', 'group', '', "$class", '', 'data-app="project"');?>
+          <?php common::printIcon('project', 'group', "projectID=$program->id", $program, 'list', 'lock',  '', "$class", '', 'data-app="project"');?>
           <?php if(common::hasPriv('project', 'manageProducts') || common::hasPriv('project', 'whitelist') || common::hasPriv('project', 'delete')):?>
           <div class='btn-group'>
             <button type='button' class='btn dropdown-toggle' data-toggle='dropdown' title="<?php echo $this->lang->more;?>"><i class='icon-more-alt'></i></button>
@@ -138,6 +138,7 @@
       <?php endforeach;?>
     </tbody>
   </table>
+  <div class='table-footer'><?php $pager->show('right', 'pagerjs');?></div>
 </form>
 <style>
 #programTableList.sortable-sorting > tr {opacity: 0.7}

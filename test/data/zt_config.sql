@@ -8,7 +8,7 @@ INSERT INTO `zt_config` (`id`, `vision`, `owner`, `module`, `section`, `key`, `v
 (6,	'rnd',	'system',	'project',	'',	'unitList',	'CNY,USD'),
 (7,	'rnd',	'system',	'project',	'',	'defaultCurrency',	'CNY'),
 (8,	'rnd',	'system',	'story',	'',	'reviewRules',	'allpass'),
-(10,	'rnd',	'system',	'common',	'global',	'version',	'16.5'),
+(10,	'rnd',	'system',	'common',	'global',	'version',	'17.0.beta1'),
 (11,	'rnd',	'system',	'common',	'global',	'sn',	'c8aa3269e181f2b9258ce96625de1497'),
 (12,	'rnd',	'system',	'common',	'global',	'flow',	'full'),
 (13,	'rnd',	'system',	'common',	'safe',	'mode',	'1'),
@@ -33,4 +33,5 @@ INSERT INTO `zt_config` (`id`, `vision`, `owner`, `module`, `section`, `key`, `v
 (32,	'rnd',	'admin',	'my',	'block',	'initVersion',	'2'),
 (33,	'rnd',	'system',	'common',	'global',	'skipIntroduction',	',admin'),
 (34,	'rnd',	'system',	'common',	'global',	'skipTutorial',	',admin'),
-(35,	'rnd',	'system',	'common',	'global',	'skipYoungBlueTheme',	',admin');
+(35,	'rnd',	'system',	'common',	'global',	'skipYoungBlueTheme',	',admin'),
+(36,	'rnd',	'system',	'common',	'global',	' scoreStatus',	'1');

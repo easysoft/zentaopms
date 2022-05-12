@@ -10,10 +10,14 @@ title=测试 docModel->getToAndCcList();
 cid=1
 pid=1
 
-
-
+查询文档type为text的数据 >> admin;
+查询文档type为markdown的数据 >>admin;
+查询文档type为url的数据 >>admin;
 */
+$docID = array('1', '2', '3');
 
 $doc = new docTest();
 
-r($doc->getToAndCcListTest()) && p() && e();
+r($doc->getToAndCcListTest($docID[0])) && p('0;1') && e('admin;'); //查询文档type为text的数据
+r($doc->getToAndCcListTest($docID[1])) && p('0;1') && e('admin;'); //查询文档type为markdown的数据
+r($doc->getToAndCcListTest($docID[2])) && p('0;1') && e('admin;'); //查询文档type为url的数据

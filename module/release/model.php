@@ -80,7 +80,7 @@ class releaseModel extends model
         return $this->dao->select('id, name')->from(TABLE_RELEASE)
             ->where('product')->eq((int)$productID)
             ->beginIF($branch)->andWhere('branch')->eq($branch)->fi()
-            ->orderBy('date DESC')
+            ->orderBy('id DESC')
             ->limit(1)
             ->fetch();
     }
@@ -120,9 +120,6 @@ class releaseModel extends model
 
         /* Check build if build is required. */
         if(strpos($this->config->release->create->requiredFields, 'build') !== false and $this->post->build == false) return dao::$errors[] = sprintf($this->lang->error->notempty, $this->lang->release->build);
-
-        /* Check date must be not more than today. */
-        if($this->post->date > date('Y-m-d')) return dao::$errors[] = $this->lang->release->errorDate;
 
         $release = fixer::input('post')
             ->add('product', (int)$productID)
@@ -191,7 +188,8 @@ class releaseModel extends model
         $this->dao->insert(TABLE_RELEASE)->data($release)
             ->autoCheck()
             ->batchCheck($this->config->release->create->requiredFields, 'notempty')
-            ->check('name', 'unique', "product = '{$release->product}' AND branch = '{$release->branch}' AND deleted = '0'");
+            ->check('name', 'unique', "product = '{$release->product}' AND branch = '{$release->branch}' AND deleted = '0'")
+            ->checkFlow();
 
         if(dao::isError())
         {
@@ -248,6 +246,7 @@ class releaseModel extends model
         $branch     = $this->dao->select('branch')->from(TABLE_BUILD)->where('id')->eq((int)$this->post->build)->fetch('branch');
 
         $release = fixer::input('post')->stripTags($this->config->release->editor->edit['id'], $this->config->allowedTags)
+            ->add('id', $releaseID)
             ->add('branch',  (int)$branch)
             ->join('mailto', ',')
             ->setIF(!$this->post->marker, 'marker', 0)
@@ -269,6 +268,7 @@ class releaseModel extends model
             ->autoCheck()
             ->batchCheck($this->config->release->edit->requiredFields, 'notempty')
             ->check('name', 'unique', "id != '$releaseID' AND product = '{$release->product}' AND branch = '$branch' AND deleted = '0'")
+            ->checkFlow()
             ->where('id')->eq((int)$releaseID)
             ->exec();
         if(!dao::isError())
@@ -669,5 +669,81 @@ class releaseModel extends model
             if($bugNames)   $mailContent .= sprintf($this->lang->release->bugList,   $bugNames);
             $this->loadModel('mail')->send(implode(',', $toList), $subject, $mailContent, '', false, $emails);
         }
+    }
+
+    /**
+     * Build release action menu.
+     *
+     * @param  object $release
+     * @param  string $type
+     * @access public
+     * @return string
+     */
+    public function buildOperateMenu($release, $type = 'view')
+    {
+        $function = 'buildOperate' . ucfirst($type) . 'Menu';
+        return $this->$function($release);
+    }
+
+    /**
+     * Build release view action menu.
+     *
+     * @param  object $release
+     * @access public
+     * @return string
+     */
+    public function buildOperateViewMenu($release)
+    {
+        $canBeChanged = common::canBeChanged('release', $release);
+        if($release->deleted || !$canBeChanged || isonlybody()) return '';
+
+        $menu   = '';
+        $params = "releaseID=$release->id";
+
+        if(common::hasPriv('release', 'changeStatus', $release))
+        {
+            $changedStatus = $release->status == 'normal' ? 'terminate' : 'normal';
+            $menu .= html::a(inlink('changeStatus', "releaseID=$release->id&status=$changedStatus"), '<i class="icon-' . ($release->status == 'normal' ? 'pause' : 'play') . '"></i> ' . $this->lang->release->changeStatusList[$changedStatus], 'hiddenwin', "class='btn btn-link' title='{$this->lang->release->changeStatusList[$changedStatus]}'");
+        }
+
+        $menu .= "<div class='divider'></div>";
+        $menu .= $this->buildFlowMenu('release', $release, 'view', 'direct');
+        $menu .= "<div class='divider'></div>";
+
+        $menu .= $this->buildMenu('release', 'edit',   $params, $release, 'view');
+        $menu .= $this->buildMenu('release', 'delete', $params, $release, 'view', 'trash', 'hiddenwin');
+
+        return $menu;
+    }
+
+    /**
+     * Build release browse action menu.
+     *
+     * @param  object $release
+     * @access public
+     * @return string
+     */
+    public function buildOperateBrowseMenu($release)
+    {
+        $canBeChanged = common::canBeChanged('release', $release);
+        if(!$canBeChanged) return '';
+
+        $menu          = '';
+        $params        = "releaseID=$release->id";
+        $changedStatus = $release->status == 'normal' ? 'terminate' : 'normal';
+
+        if(common::hasPriv('release', 'linkStory')) $menu .= html::a(inlink('view', "$params&type=story&link=true"), '<i class="icon-link"></i> ', '', "class='btn' title='{$this->lang->release->linkStory}'");
+        if(common::hasPriv('release', 'linkBug'))   $menu .= html::a(inlink('view', "$params&type=bug&link=true"),   '<i class="icon-bug"></i> ',  '', "class='btn' title='{$this->lang->release->linkBug}'");
+        $menu .= $this->buildMenu('release', 'changeStatus', "$params&status=$changedStatus", $release, 'browse', $release->status == 'normal' ? 'pause' : 'play', 'hiddenwin', '', '', '',$this->lang->release->changeStatusList[$changedStatus]);
+        $menu .= $this->buildMenu('release', 'edit',   "release=$release->id", $release, 'browse');
+        $menu .= $this->buildMenu('release', 'notify', "release=$release->id", $release, 'browse', 'bullhorn', '', 'iframe', true);
+
+        if(common::hasPriv('release', 'delete', $release))
+        {
+            $deleteURL = helper::createLink('release', 'delete', "releaseID=$release->id&confirm=yes");
+            $menu .= html::a("javascript:ajaxDelete(\"$deleteURL\", \"releaseList\", confirmDelete)", '<i class="icon-trash"></i>', '', "class='btn' title='{$this->lang->release->delete}'");
+        }
+
+        return $menu;
     }
 }

@@ -94,6 +94,7 @@ class bugModel extends model
             ->autoCheck()
             ->checkIF($bug->notifyEmail, 'notifyEmail', 'email')
             ->batchCheck($this->config->bug->create->requiredFields, 'notempty')
+            ->checkFlow()
             ->exec();
 
         if(!dao::isError())
@@ -225,8 +226,6 @@ class bugModel extends model
                 if(is_array($bug->{$extendField->field})) $bug->{$extendField->field} = join(',', $bug->{$extendField->field});
 
                 $bug->{$extendField->field} = htmlSpecialString($bug->{$extendField->field});
-                $message = $this->checkFlowRule($extendField, $bug->{$extendField->field});
-                if($message) return print(js::alert($message));
             }
 
             /* Required field check. */
@@ -282,6 +281,7 @@ class bugModel extends model
             $this->dao->insert(TABLE_BUG)->data($bug)
                 ->autoCheck()
                 ->batchCheck($this->config->bug->create->requiredFields, 'notempty')
+                ->checkFlow()
                 ->exec();
             if(dao::isError()) return false;
 
@@ -675,6 +675,7 @@ class bugModel extends model
         }
         $now = helper::now();
         $bug = fixer::input('post')
+            ->add('id', $bugID)
             ->cleanInt('product,module,severity,project,execution,story,task,branch')
             ->stripTags($this->config->bug->editor->edit['id'], $this->config->allowedTags)
             ->setDefault('product,module,execution,story,task,duplicateBug,branch', 0)
@@ -717,6 +718,7 @@ class bugModel extends model
             ->checkIF($bug->notifyEmail, 'notifyEmail', 'email')
             ->checkIF($bug->resolution == 'duplicate', 'duplicateBug', 'notempty')
             ->checkIF($bug->resolution == 'fixed',     'resolvedBuild','notempty')
+            ->checkFlow()
             ->where('id')->eq((int)$bugID)
             ->exec();
 
@@ -788,6 +790,7 @@ class bugModel extends model
                 $oldBug = $oldBugs[$bugID];
 
                 $bug = new stdclass();
+                $bug->id             = $bugID;
                 $bug->lastEditedBy   = $this->app->user->account;
                 $bug->lastEditedDate = $now;
                 $bug->type           = $data->types[$bugID];
@@ -827,8 +830,6 @@ class bugModel extends model
                     if(is_array($bug->{$extendField->field})) $bug->{$extendField->field} = join(',', $bug->{$extendField->field});
 
                     $bug->{$extendField->field} = htmlSpecialString($bug->{$extendField->field});
-                    $message = $this->checkFlowRule($extendField, $bug->{$extendField->field});
-                    if($message) return print(js::alert($message));
                 }
 
                 $bugs[$bugID] = $bug;
@@ -845,6 +846,7 @@ class bugModel extends model
                     ->batchCheck($this->config->bug->edit->requiredFields, 'notempty')
                     ->checkIF($bug->resolvedBy, 'resolution', 'notempty')
                     ->checkIF($bug->resolution == 'duplicate', 'duplicateBug', 'notempty')
+                    ->checkFlow()
                     ->where('id')->eq((int)$bugID)
                     ->exec();
 
@@ -930,6 +932,7 @@ class bugModel extends model
         $now = helper::now();
         $oldBug = $this->getById($bugID);
         $bug = fixer::input('post')
+            ->add('id', $bugID)
             ->setDefault('lastEditedBy', $this->app->user->account)
             ->setDefault('lastEditedDate', $now)
             ->setDefault('assignedDate', $now)
@@ -940,6 +943,7 @@ class bugModel extends model
         $this->dao->update(TABLE_BUG)
             ->data($bug)
             ->autoCheck()
+            ->checkFlow()
             ->where('id')->eq($bugID)->exec();
 
         if(!dao::isError()) return common::createChanges($oldBug, $bug);
@@ -962,6 +966,7 @@ class bugModel extends model
         $oldBug = $this->getById($bugID);
 
         $bug = fixer::input('post')
+            ->add('id', $bugID)
             ->setDefault('confirmed', 1)
             ->setDefault('lastEditedBy', $this->app->user->account)
             ->setDefault('lastEditedDate', $now)
@@ -970,7 +975,7 @@ class bugModel extends model
             ->join('mailto', ',')
             ->get();
 
-        $this->dao->update(TABLE_BUG)->data($bug)->where('id')->eq($bugID)->exec();
+        $this->dao->update(TABLE_BUG)->data($bug)->autoCheck()->checkFlow()->where('id')->eq($bugID)->exec();
 
         if(!dao::isError())
         {
@@ -1027,6 +1032,7 @@ class bugModel extends model
         $now    = helper::now();
         $oldBug = $this->getById($bugID);
         $bug    = fixer::input('post')
+            ->add('id', $bugID)
             ->add('status',    'resolved')
             ->add('confirmed', 1)
             ->setDefault('lastEditedBy',   $this->app->user->account)
@@ -1100,6 +1106,7 @@ class bugModel extends model
             ->batchCheck($this->config->bug->resolve->requiredFields, 'notempty')
             ->checkIF($bug->resolution == 'duplicate', 'duplicateBug', 'notempty')
             ->checkIF($bug->resolution == 'fixed',     'resolvedBuild','notempty')
+            ->checkFlow()
             ->where('id')->eq((int)$bugID)
             ->exec();
 
@@ -1310,6 +1317,7 @@ class bugModel extends model
             ->setDefault('lastEditedDate', $now)
             ->setDefault('activatedDate',  $now)
             ->setDefault('activatedCount', (int)$oldBug->activatedCount)
+            ->add('id', $bugID)
             ->add('resolution', '')
             ->add('status', 'active')
             ->add('resolvedDate', '0000-00-00')
@@ -1324,7 +1332,7 @@ class bugModel extends model
             ->remove('comment,files,labels')
             ->get();
 
-        $this->dao->update(TABLE_BUG)->data($bug)->autoCheck()->where('id')->eq((int)$bugID)->exec();
+        $this->dao->update(TABLE_BUG)->data($bug)->autoCheck()->checkFlow()->where('id')->eq((int)$bugID)->exec();
         $this->dao->update(TABLE_BUG)->set('activatedCount = activatedCount + 1')->where('id')->eq((int)$bugID)->exec();
 
         if($solveBuild)
@@ -1361,6 +1369,7 @@ class bugModel extends model
         $now    = helper::now();
         $oldBug = $this->getById($bugID);
         $bug    = fixer::input('post')
+            ->add('id', $bugID)
             ->add('assignedTo', 'closed')
             ->add('status',     'closed')
             ->add('confirmed',  1)
@@ -1372,7 +1381,7 @@ class bugModel extends model
             ->remove('comment')
             ->get();
 
-        $this->dao->update(TABLE_BUG)->data($bug)->autoCheck()->where('id')->eq((int)$bugID)->exec();
+        $this->dao->update(TABLE_BUG)->data($bug)->autoCheck()->checkFlow()->where('id')->eq((int)$bugID)->exec();
         if($oldBug->execution)
         {
             $this->loadModel('kanban');
@@ -1670,12 +1679,7 @@ class bugModel extends model
                 }
             }
 
-            $allProduct = "`product` = 'all'";
-            $bugQuery   = $this->session->projectBugQuery;
-            if(strpos($this->session->projectBugQuery, $allProduct) !== false)
-            {
-                $bugQuery = str_replace($allProduct, '1', $this->session->projectBugQuery);
-            }
+            $bugQuery = $this->getBugQuery($this->session->projectBugQuery);
 
             $bugs = $this->dao->select('*')->from(TABLE_BUG)
                 ->where($bugQuery)
@@ -1737,12 +1741,7 @@ class bugModel extends model
                 }
             }
 
-            $allProduct = "`product` = 'all'";
-            $bugQuery   = $this->session->executionBugQuery;
-            if(strpos($this->session->executionBugQuery, $allProduct) !== false)
-            {
-                $bugQuery = str_replace($allProduct, '1', $this->session->executionBugQuery);
-            }
+            $bugQuery = $this->getBugQuery($this->session->executionBugQuery);
 
             $bugs = $this->dao->select('*')->from(TABLE_BUG)
                 ->where($bugQuery)
@@ -2694,33 +2693,14 @@ class bugModel extends model
             if($this->session->bugQuery == false) $this->session->set('bugQuery', ' 1 = 1');
         }
 
-        $allProduct = "`product` = 'all'";
-        $bugQuery   = $this->session->bugQuery;
+        $bugQuery = $this->getBugQuery($this->session->bugQuery);
+
         if(is_array($productIDList)) $productIDList = implode(',', $productIDList);
         if(strpos($bugQuery, '`product` =') === false) $bugQuery .= ' AND `product` in (' . $productIDList . ')';
-        if(strpos($bugQuery, $allProduct) !== false)
-        {
-            $products = $this->app->user->view->products;
-            $bugQuery = str_replace($allProduct, '1', $bugQuery);
-            $bugQuery = $bugQuery . ' AND `product` ' . helper::dbIN($products);
-        }
 
         $allBranch = "`branch` = 'all'";
         if($branch !== 'all' and strpos($bugQuery, '`branch` =') === false) $bugQuery .= " AND `branch` in('0','$branch')";
         if(strpos($bugQuery, $allBranch) !== false) $bugQuery = str_replace($allBranch, '1', $bugQuery);
-
-        $allProject = "`project` = 'all'";
-        if(strpos($bugQuery, $allProject) !== false)
-        {
-            $projectIDList = $this->getAllProjectIds();
-            if(is_array($projectIDList)) $projectIDList = implode(',', $projectIDList);
-            $bugQuery = str_replace($allProject, '1', $bugQuery);
-            $bugQuery = $bugQuery . ' AND `project` in (' . $projectIDList . ')';
-        }
-
-        /* Fix bug #2878. */
-        if(strpos($bugQuery, ' `resolvedDate` ') !== false) $bugQuery = str_replace(' `resolvedDate` ', " `resolvedDate` != '0000-00-00 00:00:00' AND `resolvedDate` ", $bugQuery);
-        if(strpos($bugQuery, ' `closedDate` ') !== false)   $bugQuery = str_replace(' `closedDate` ', " `closedDate` != '0000-00-00 00:00:00' AND `closedDate` ", $bugQuery);
 
         $bugs = $this->dao->select('*')->from(TABLE_BUG)->where($bugQuery)
             ->beginIF(!$this->app->user->admin)->andWhere('execution')->in('0,' . $this->app->user->view->sprints)->fi()
@@ -2736,6 +2716,58 @@ class bugModel extends model
             ->andWhere('deleted')->eq(0)
             ->orderBy($orderBy)->page($pager)->fetchAll();
         return $bugs;
+    }
+
+    /**
+     * Get bug query.
+     *
+     * @param  string $bugQuery
+     * @access public
+     * @return string
+     */
+    public function getBugQuery($bugQuery)
+    {
+        $allProduct = "`product` = 'all'";
+        if(strpos($bugQuery, $allProduct) !== false)
+        {
+            $products = $this->app->user->view->products;
+            $bugQuery = str_replace($allProduct, '1', $bugQuery);
+            $bugQuery = $bugQuery . ' AND `product` ' . helper::dbIN($products);
+        }
+
+        $allProject = "`project` = 'all'";
+        if(strpos($bugQuery, $allProject) !== false)
+        {
+            $projectIDList = $this->getAllProjectIds();
+            if(is_array($projectIDList)) $projectIDList = implode(',', $projectIDList);
+            $bugQuery = str_replace($allProject, '1', $bugQuery);
+            $bugQuery = $bugQuery . ' AND `project` in (' . $projectIDList . ')';
+        }
+
+        /* Fix bug #2878. */
+        if(strpos($bugQuery, ' `resolvedDate` ') !== false) $bugQuery = str_replace(' `resolvedDate` ', " `resolvedDate` != '0000-00-00 00:00:00' AND `resolvedDate` ", $bugQuery);
+        if(strpos($bugQuery, ' `closedDate` ') !== false)   $bugQuery = str_replace(' `closedDate` ', " `closedDate` != '0000-00-00 00:00:00' AND `closedDate` ", $bugQuery);
+        if(strpos($bugQuery, ' `story` ') !== false)
+        {
+            preg_match_all("/`story`[ ]+(NOT *)?LIKE[ ]+'%([^%]*)%'/Ui", $bugQuery, $out);
+            if(!empty($out[2]))
+            {
+                foreach($out[2] as $searchValue)
+                {
+                    $story = $this->dao->select('id')->from(TABLE_STORY)->alias('t1')
+                        ->leftJoin(TABLE_STORYSPEC)->alias('t2')->on('t1.id=t2.story')
+                        ->where('t1.title')->like("%$searchValue%")
+                        ->orWhere('t1.keywords')->like("%$searchValue%")
+                        ->orWhere('t2.spec')->like("%$searchValue%")
+                        ->orWhere('t2.verify')->like("%$searchValue%")
+                        ->fetchPairs('id');
+
+                    $bugQuery = preg_replace("/`story`[ ]+(NOT[ ]*)?LIKE[ ]+'%$searchValue%'/Ui", '`story` $1 IN (' . implode(',', $story) .')', $bugQuery);
+                }
+            }
+            $bugQuery .= ' AND `story` != 0';
+        }
+        return $bugQuery;
     }
 
     /**
@@ -2784,18 +2816,19 @@ class bugModel extends model
      *
      * @param  string $bug
      * @param  string $action
+     * @param  string $module
      * @access public
      * @return void
      */
-    public static function isClickable($object, $action)
+    public static function isClickable($object, $action, $module = 'bug')
     {
         $action = strtolower($action);
 
-        if($action == 'confirmbug') return $object->status == 'active' and $object->confirmed == 0;
-        if($action == 'resolve')    return $object->status == 'active';
-        if($action == 'close')      return $object->status == 'resolved';
-        if($action == 'activate')   return $object->status != 'active';
-        if($action == 'tostory')    return $object->status == 'active';
+        if($module == 'bug' && $action == 'confirmbug') return $object->status == 'active' and $object->confirmed == 0;
+        if($module == 'bug' && $action == 'resolve')    return $object->status == 'active';
+        if($module == 'bug' && $action == 'close')      return $object->status == 'resolved';
+        if($module == 'bug' && $action == 'activate')   return $object->status != 'active';
+        if($module == 'bug' && $action == 'tostory')    return $object->status == 'active';
 
         return true;
     }
@@ -3105,19 +3138,7 @@ class bugModel extends model
                 echo substr($bug->lastEditedDate, 5, 11);
                 break;
             case 'actions':
-                $params = "bugID=$bug->id";
-                if($canBeChanged)
-                {
-                    common::printIcon('bug', 'confirmBug', $params, $bug, 'list', 'ok',      '', 'iframe', true);
-                    common::printIcon('bug', 'resolve',    $params, $bug, 'list', 'checked', '', 'iframe', true);
-                    common::printIcon('bug', 'close',      $params, $bug, 'list', '',        '', 'iframe', true);
-                    common::printIcon('bug', 'edit',       $params, $bug, 'list');
-                    common::printIcon('bug', 'create',     "product=$bug->product&branch=$bug->branch&extra=$params", $bug, 'list', 'copy');
-                }
-                else
-                {
-                    common::printIcon('bug', 'close', $params, $bug, 'list', '', '', 'iframe', true);
-                }
+                echo $this->buildOperateMenu($bug, 'browse');
                 break;
             }
             echo '</td>';
@@ -3232,5 +3253,47 @@ class bugModel extends model
             ->where('type')->eq('project')
             ->andWhere('deleted')->eq(0)
             ->fetchPairs('id');
+    }
+
+    /**
+     * Build bug menu.
+     *
+     * @param  object $bug
+     * @param  string $type
+     * @access public
+     * @return string
+     */
+    public function buildOperateMenu($bug, $type = 'view')
+    {
+        $menu          = '';
+        $params        = "bugID=$bug->id";
+        $extraParams   = "extras=bugID=$bug->id";
+        if($this->app->tab == 'project')   $extraParams .= ",projectID={$bug->project}";
+        if($this->app->tab == 'execution') $extraParams .= ",executionID={$bug->execution}";
+        $copyParams    = "productID=$bug->product&branch=$bug->branch&$extraParams";
+        $convertParams = "productID=$bug->product&branch=$bug->branch&moduleID=0&from=bug&bugID=$bug->id";
+        $toStoryParams = "product=$bug->product&branch=$bug->branch&module=0&story=0&execution=0&bugID=$bug->id";
+
+        $menu .= $this->buildMenu('bug', 'confirmBug', $params, $bug, $type, 'ok', '', "iframe", true);
+        if($type == 'view') $menu .= $this->buildMenu('bug', 'assignTo', $params, $bug, $type, '', '', "iframe", true);
+        $menu .= $this->buildMenu('bug', 'resolve', $params, $bug, $type, 'checked', '', "iframe", true);
+        $menu .= $this->buildMenu('bug', 'close', $params, $bug, $type, '', '', "text-danger iframe showinonlybody", true);
+        if($type == 'view') $menu .= $this->buildMenu('bug', 'activate', $params, $bug, $type, '', '', "text-success iframe showinonlybody", true);
+        if($type == 'view' && $this->app->tab != 'product')
+        {
+            $menu .= $this->buildMenu('bug', 'toStory', $toStoryParams, $bug, $type, $this->lang->icons['story'], '', '', '', "data-app='product'", $this->lang->bug->toStory);
+            $menu .= $this->buildMenu('bug', 'createCase', $convertParams, $bug, $type, 'sitemap');
+        }
+        if($type == 'view')
+        {
+            $menu .= "<div class='divider'></div>";
+            $menu .= $this->buildFlowMenu('bug', $bug, $type, 'direct');
+            $menu .= "<div class='divider'></div>";
+        }
+        $menu .= $this->buildMenu('bug', 'edit', $params, $bug, $type);
+        if($this->app->tab != 'product') $menu .= $this->buildMenu('bug', 'create', $copyParams, $bug, $type, 'copy');
+        if($type == 'view') $menu .= $this->buildMenu('bug', 'delete', $params, $bug, $type, 'trash', 'hiddenwin', "showinonlybody");
+
+        return $menu;
     }
 }

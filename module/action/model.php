@@ -610,17 +610,19 @@ class actionModel extends model
     /**
      * Get deleted objects.
      *
+     * @param  string    $objectType
      * @param  string    $type all|hidden
      * @param  string    $orderBy
      * @param  object    $pager
      * @access public
      * @return array
      */
-    public function getTrashes($type, $orderBy, $pager)
+    public function getTrashes($objectType, $type, $orderBy, $pager)
     {
-        $extra = $type == 'hidden' ? self::BE_HIDDEN : self::CAN_UNDELETED;
+        $extra   = $type == 'hidden' ? self::BE_HIDDEN : self::CAN_UNDELETED;
         $trashes = $this->dao->select('*')->from(TABLE_ACTION)
             ->where('action')->eq('deleted')
+            ->beginIF($objectType != 'all')->andWhere('objectType')->eq($objectType)->fi()
             ->andWhere('extra')->eq($extra)
             ->andWhere('vision')->eq($this->config->vision)
             ->orderBy($orderBy)->page($pager)->fetchAll();
@@ -665,7 +667,21 @@ class actionModel extends model
 
             $trash->objectName = isset($objectNames[$objectType][$trash->objectID]) ? $objectNames[$objectType][$trash->objectID] : '';
         }
+
         return $trashes;
+    }
+
+    /**
+     * Get object type list of trashes.
+     *
+     * @param  string  $type
+     * @access public
+     * @return array
+     */
+    public function getTrashObjectTypes($type)
+    {
+        $extra = $type == 'hidden' ? self::BE_HIDDEN : self::CAN_UNDELETED;
+        return $this->dao->select('objectType')->from(TABLE_ACTION)->where('action')->eq('deleted')->andWhere('extra')->eq($extra)->andWhere('vision')->eq($this->config->vision)->fetchAll('objectType');
     }
 
     /**

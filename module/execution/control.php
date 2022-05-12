@@ -1677,9 +1677,15 @@ class execution extends control
 
         if($this->app->tab == 'project')
         {
-            $projectID = $this->session->project;
+            $projectID   = $this->session->project;
+            $project     = $this->project->getById($projectID);
+            $allProjects = $this->project->getPairsByModel($project->model, 0, 'noclosed', isset($projectID) ? $projectID : 0);
             $this->project->setMenu($projectID);
-            $this->view->project = $this->project->getById($projectID);
+            $this->view->project = $project;
+        }
+        else
+        {
+            $allProjects = $this->project->getPairsByModel('all', 0, 'noclosed', isset($projectID) ? $projectID : 0);
         }
 
         if(!$this->post->executionIDList) return print(js::locate($this->session->executionList, 'parent'));
@@ -1717,7 +1723,7 @@ class execution extends control
         $this->view->position[]      = $this->lang->execution->batchEdit;
         $this->view->executionIDList = $executionIDList;
         $this->view->executions      = $executions;
-        $this->view->allProjects     = $this->project->getPairsByModel('all', 0, 'noclosed', isset($projectID) ? $projectID : 0);
+        $this->view->allProjects     = $allProjects;
         $this->view->pmUsers         = $pmUsers;
         $this->view->poUsers         = $poUsers;
         $this->view->qdUsers         = $qdUsers;
@@ -3148,7 +3154,16 @@ class execution extends control
         }
 
         $projectExecutions = array();
-        foreach($orderedExecutions as $execution) $projectExecutions[$execution->project][] = $execution;
+        $parentIdList = array();
+        foreach($orderedExecutions as $execution)
+        {
+            $projectExecutions[$execution->project][] = $execution;
+            if($execution->type != 'stage') continue;
+            if($execution->grade == 2 and $execution->project != $execution->parent) $parentIdList[$execution->parent] = $execution->parent;
+        }
+
+        $parents = array();
+        if($parentIdList) $parents = $this->execution->getByIdList($parentIdList);
 
         $this->view->link        = $this->execution->getLink($module, $method, $extra);
         $this->view->module      = $module;
@@ -3157,6 +3172,7 @@ class execution extends control
         $this->view->extra       = $extra;
         $this->view->projects    = $projectPairs;
         $this->view->executions  = $projectExecutions;
+        $this->view->parents     = $parents;
         $this->display();
     }
 

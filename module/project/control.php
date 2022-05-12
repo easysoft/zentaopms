@@ -127,6 +127,7 @@ class project extends control
             unset($projects[$project->id]);
         }
 
+        $this->view->link      = $this->project->getProjectLink($module, $method, $projectID);
         $this->view->projectID = $projectID;
         $this->view->projects  = $orderedProjects;
         $this->view->module    = $module;
@@ -306,6 +307,11 @@ class project extends control
         $queryID = ($browseType == 'bysearch') ? (int)$param : 0;
         $programTitle = $this->loadModel('setting')->getItem('owner=' . $this->app->user->account . '&module=project&key=programTitle');
         $projectStats = $this->loadModel('program')->getProjectStats($programID, $browseType, $queryID, $orderBy, $pager, $programTitle);
+
+        $actionURL = $this->createLink('project', 'browse', "&programID=$programID&browseType=bySearch&queryID=myQueryID");
+        $this->project->buildSearchFrom($queryID, $actionURL);
+        $projectQuery = $this->session->projectQuery;
+        if($browseType == 'bySearch') $projectStats = $this->project->getBySearch($projectQuery);
 
         $this->view->title      = $this->lang->project->browse;
         $this->view->position[] = $this->lang->project->browse;

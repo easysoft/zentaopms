@@ -54,6 +54,136 @@ class model extends baseModel
     }
 
     /**
+     * Build menu of a module.
+     *
+     * @param  string $moduleName
+     * @param  string $methodName
+     * @param  string $params
+     * @param  object $data
+     * @param  string $type
+     * @param  string $icon
+     * @param  string $target
+     * @param  string $misc
+     * @param  bool   $onlyBody
+     * @access public
+     * @return string
+     */
+
+    public function buildMenu($moduleName, $methodName, $params, $data, $type = 'view', $icon = '', $target = '', $class = '', $onlyBody = false, $misc = '' , $title = '')
+    {
+        if(strpos($moduleName, '.') !== false) list($appName, $moduleName) = explode('.', $moduleName);
+
+        if(strpos($methodName, '_') !== false && strpos($methodName, '_') > 0) list($module, $method) = explode('_', $methodName);
+
+        if(empty($module)) $module = $moduleName;
+        if(empty($method)) $method = $methodName;
+
+        if(!common::hasPriv($module, $method)) return '';
+
+        if(isset($this->config->bizVersion))
+        {
+            static $actions;
+            if(empty($actions))
+            {
+                $actions = $this->dao->select('*')->from(TABLE_WORKFLOWACTION)
+                    ->where('module')->eq($moduleName)
+                    ->andWhere('buildin')->eq('1')
+                    ->andWhere('status')->eq('enable')
+                    ->beginIF(!empty($this->config->vision))->andWhere('vision')->eq($this->config->vision)->fi()
+                    ->fetchAll('action');
+            }
+        }
+
+        $enabled = true;
+        if(isset($actions[$methodName]))
+        {
+            $action = $actions[$methodName];
+
+            if($action->extensionType == 'override') return $this->loadModel('flow')->buildActionMenu($moduleName, $action, $data, $type);
+
+            $conditions = json_decode($action->conditions);
+            if($action->extensionType == 'extend' && $conditions)
+            {
+                $enabled = $this->loadModel('flow')->checkConditions($conditions, $data);
+                $label   = $action->name;
+            }
+            else
+            {
+                if(method_exists($this, 'isClickable')) $enabled = $this->isClickable($data, $method, $module);
+            }
+        }
+        else
+        {
+            if(method_exists($this, 'isClickable')) $enabled = $this->isClickable($data, $method, $module);
+        }
+
+        $html = '';
+        $type = $type == 'browse' ? 'list' : 'button';
+        $html = common::buildIconButton($module, $method, $params, $data, $type, $icon, $target, $class, $onlyBody, $misc, $title, '', $enabled);
+        return $html;
+    }
+
+    /**
+     * Build menu of actions created by workflow action.
+     *
+     * @param  string $module
+     * @param  int    $data
+     * @param  string $type         browse | view
+     * @param  string $show         direct | dropdownlist
+     * @access public
+     * @return string
+     */
+    public function buildFlowMenu($module, $data, $type = 'browse', $show = '')
+    {
+        if(!isset($this->config->bizVersion)) return '';
+
+        $moduleName = $module;
+        if(strpos($module, '.') !== false) list($appName, $moduleName) = explode('.', $module);
+
+        static $actions;
+        if(empty($actions))
+        {
+            $actions = $this->dao->select('*')->from(TABLE_WORKFLOWACTION)
+                ->where('module')->eq($moduleName)
+                ->andWhere('buildin')->eq('0')
+                ->andWhere('status')->eq('enable')
+                ->beginIF(!empty($this->config->vision))->andWhere('vision')->eq($this->config->vision)->fi()
+                ->orderBy('order_asc')
+                ->fetchAll();
+        }
+
+        $menu = '';
+        if($show)
+        {
+            foreach($actions as $action)
+            {
+                if(strpos($action->position, $type) === false || $action->show != $show) continue;
+
+                $menu .= $this->loadModel('flow')->buildActionMenu($moduleName, $action, $data, $type);
+            }
+        }
+        else
+        {
+            $dropdownMenu = '';
+            foreach($actions as $action)
+            {
+                if(strpos($action->position, $type) === false) continue;
+
+                if($type == 'view' || $action->show == 'direct')         $menu         .= $this->loadModel('flow')->buildActionMenu($moduleName, $action, $data, $type);
+                if($type == 'browse' && $action->show == 'dropdownlist') $dropdownMenu .= $this->loadModel('flow')->buildActionMenu($moduleName, $action, $data, $type);
+            }
+
+            if($type == 'browse' && $dropdownMenu)
+            {
+                $menu .= "<div class='dropdown'><a href='javascript:;' data-toggle='dropdown'>{$this->lang->more}<span class='caret'> </span></a>";
+                $menu .= "<ul class='dropdown-menu pull-right'>{$dropdownMenu}</ul></div>";
+            }
+        }
+
+        return $menu;
+    }
+
+    /**
      * Process status of an object according to its subStatus.
      *
      * @param  string $module   product | release | story | project | task | bug | testcase | testtask | feedback
@@ -66,6 +196,48 @@ class model extends baseModel
         if(!isset($this->config->bizVersion) or empty($record->subStatus)) return zget($this->lang->$module->statusList, $record->status);
 
         return $this->loadModel('workflowfield')->processSubStatus($module, $record);
+    }
+
+    /**
+     * Process workflow export data.
+     *
+     * @param  object    $data
+     * @access public
+     * @return object
+     */
+    public function processExportData($data)
+    {
+        if(!isset($this->config->bizVersion)) return $data;
+
+        return $this->loadModel('workflowfield')->processExportData($data);
+    }
+
+    /**
+     * Process workflow export options.
+     *
+     * @param  object    $data
+     * @access public
+     * @return object
+     */
+    public function processExportOptions($data)
+    {
+        if(!isset($this->config->bizVersion)) return $data;
+
+        return $this->loadModel('workflowfield')->processExportOptions($data);
+    }
+
+    /**
+     * Process workflow import data.
+     *
+     * @param  object    $data
+     * @access public
+     * @return object
+     */
+    public function processImportData($data)
+    {
+        if(!isset($this->config->bizVersion)) return $data;
+
+        return $this->loadModel('workflowfield')->processImportData($data);
     }
 
     /**
@@ -82,18 +254,16 @@ class model extends baseModel
     }
 
     /**
-     * Check flow rule.
+     * Set workflow export fields.
      *
-     * @param  object $field
-     * @param  string $value
      * @access public
-     * @return bool|string
+     * @return string
      */
-    public function checkFlowRule($field, $value)
+    public function getFlowExportFields()
     {
-        if(!isset($this->config->bizVersion)) return false;
+        if(!isset($this->config->bizVersion)) return array();
 
-        return $this->loadModel('flow')->checkRule($field, $value);
+        return $this->loadModel('workflowfield')->getExportFields($this->app->getModuleName());
     }
 
     /**
@@ -112,6 +282,17 @@ class model extends baseModel
 
         $action = $this->loadModel('workflowaction')->getByModuleAndAction($moduleName, $methodName);
         if(empty($action) or $action->extensionType == 'none') return false;
+
+        $this->loadModel('file');
+        if($this->post->uid) $this->file->updateObjectID($this->post->uid, $objectID, $moduleName);
+        $fields = $this->workflowaction->getFields($moduleName, $action->action, false);
+        foreach($fields as $field)
+        {
+            if($field->control == 'file' && $field->show && !$field->readonly)
+            {
+                $this->file->saveUpload($moduleName, $objectID, $field->field, $field->field, $field->field);
+            }
+        }
 
         $flow = $this->loadModel('workflow')->getByModule($moduleName);
         if($flow && $action) $this->loadModel('workflowhook')->execute($flow, $action, $objectID);

@@ -276,6 +276,48 @@ class productModel extends model
     }
 
     /**
+     * Get list by search.
+     *
+     * @param  int    $queryID
+     * @access public
+     * @return array
+     */
+    public function getListBySearch($queryID = 0)
+    {
+        if($queryID)
+        {
+            $query = $this->loadModel('search')->getQuery($queryID);
+            if($query)
+            {
+                $this->session->set('productQuery', $query->sql);
+                $this->session->set('productForm', $query->form);
+            }
+            else
+            {
+                $this->session->set('productQuery', ' 1 = 1');
+            }
+        }
+        else
+        {
+            if($this->session->productQuery == false) $this->session->set('productQuery', ' 1 = 1');
+        }
+
+        $productQuery = $this->session->productQuery;
+        $productQuery = preg_replace('/`(\w+)`/', 't1.`$1`', $productQuery);
+
+        $products = $this->dao->select('t1.id as id,t1.*')->from(TABLE_PRODUCT)->alias('t1')
+            ->leftJoin(TABLE_PROGRAM)->alias('t2')->on('t1.program = t2.id')
+            ->where($productQuery)
+            ->andWhere('t1.deleted')->eq(0)
+            ->beginIF(!$this->app->user->admin)->andWhere('t1.id')->in($this->app->user->view->products)->fi()
+            ->andWhere('t1.vision')->eq($this->config->vision)->fi()
+            ->orderBy('t1.order_asc')
+            ->fetchAll('id');
+
+        return $products;
+    }
+
+    /**
      * Get product pairs.
      *
      * @param  string       $mode
@@ -609,6 +651,7 @@ class productModel extends model
             ->batchCheck($this->config->product->create->requiredFields, 'notempty')
             ->checkIF((!empty($product->name) and $this->config->systemMode == 'new'), 'name', 'unique', "`program` = $programID")
             ->checkIF(!empty($product->code), 'code', 'unique')
+            ->checkFlow()
             ->exec();
 
         if(!dao::isError())
@@ -683,6 +726,7 @@ class productModel extends model
         if($oldProduct->bind) $this->config->product->edit->requiredFields = 'name';
 
         $product = fixer::input('post')
+            ->add('id', $productID)
             ->callFunc('name', 'trim')
             ->setDefault('line', 0)
             ->setIF(!isset($_POST['whitelist']), 'whitelist', '')
@@ -717,6 +761,7 @@ class productModel extends model
             ->batchCheck($this->config->product->edit->requiredFields, 'notempty')
             ->checkIF((!empty($product->name) and $this->config->systemMode == 'new'), 'name', 'unique', "id != $productID and `program` = $programID")
             ->checkIF(!empty($product->code), 'code', 'unique', "id != $productID")
+            ->checkFlow()
             ->where('id')->eq($productID)
             ->exec();
 
@@ -764,6 +809,7 @@ class productModel extends model
             $products[$productID]->status  = $data->statuses[$productID];
             $products[$productID]->desc    = strip_tags($this->post->descs[$productID], $this->config->allowedTags);
             $products[$productID]->acl     = $data->acls[$productID];
+            $products[$productID]->id      = $productID;
 
             foreach($extendFields as $extendField)
             {
@@ -771,8 +817,6 @@ class productModel extends model
                 if(is_array($products[$productID]->{$extendField->field})) $products[$productID]->{$extendField->field} = join(',', $products[$productID]->{$extendField->field});
 
                 $products[$productID]->{$extendField->field} = htmlSpecialString($products[$productID]->{$extendField->field});
-                $message = $this->checkFlowRule($extendField, $products[$productID]->{$extendField->field});
-                if($message) return print(js::alert($message));
             }
         }
         if(dao::isError()) return print(js::error(dao::getError()));
@@ -789,6 +833,7 @@ class productModel extends model
                 ->autoCheck()
                 ->batchCheck($this->config->product->edit->requiredFields , 'notempty')
                 ->checkIF((!empty($product->name) and $this->config->systemMode == 'new'), 'name', 'unique', "id != $productID and `program` = $programID")
+                ->checkFlow()
                 ->where('id')->eq($productID)
                 ->exec();
             if(dao::isError()) return print(js::error('product#' . $productID . dao::getError(true)));
@@ -820,11 +865,13 @@ class productModel extends model
         $oldProduct = $this->getById($productID);
         $now        = helper::now();
         $product= fixer::input('post')
+            ->add('id', $productID)
             ->setDefault('status', 'closed')
             ->remove('comment')->get();
 
         $this->dao->update(TABLE_PRODUCT)->data($product)
             ->autoCheck()
+            ->checkFlow()
             ->where('id')->eq((int)$productID)
             ->exec();
 
@@ -970,13 +1017,15 @@ class productModel extends model
      * @param  int    $queryID
      * @param  int    $actionURL
      * @param  int    $branch
+     * @param  int    $projectID
      * @access public
      * @return void
      */
-    public function buildSearchForm($productID, $products, $queryID, $actionURL, $branch = 0)
+    public function buildSearchForm($productID, $products, $queryID, $actionURL, $branch = 0, $projectID = 0)
     {
         $productIdList = ($this->app->tab == 'project' and empty($productID)) ? array_keys($products) : $productID;
         $branchParam   = ($this->app->tab == 'project' and empty($productID)) ? '' : $branch;
+        $projectID     = ($this->app->tab == 'project' and empty($projectID)) ? $this->session->project : $projectID;
 
         $this->config->product->search['actionURL'] = $actionURL;
         $this->config->product->search['queryID']   = $queryID;
@@ -992,7 +1041,7 @@ class productModel extends model
             if($productID)
             {
                 $modules          = array();
-                $branchList       = $this->loadModel('branch')->getPairs($productID, '', $this->session->project);
+                $branchList       = $this->loadModel('branch')->getPairs($productID, '', $projectID);
                 $branchModuleList = $this->tree->getOptionMenu($productID, 'story', 0, array_keys($branchList));
                 foreach($branchModuleList as $branchID => $branchModules) $modules[] = $branchModules;
             }
@@ -1000,7 +1049,7 @@ class productModel extends model
             {
                 $moduleList  = array();
                 $modules     = array('/');
-                $branchGroup = $this->loadModel('execution')->getBranchByProduct(array_keys($products), $this->session->project, '');
+                $branchGroup = $this->loadModel('execution')->getBranchByProduct(array_keys($products), $projectID, '');
                 foreach($products as $productID => $productName)
                 {
                     if(isset($branchGroup[$productID]))
@@ -1040,6 +1089,31 @@ class productModel extends model
         }
 
         $this->loadModel('search')->setSearchParams($this->config->product->search);
+    }
+
+    /**
+     * Build search form for all method of product module.
+     *
+     * @param  int       $queryID
+     * @param  string    $actionURL
+     * @access public
+     * @return void
+     */
+    public function buildProductSearchForm($queryID, $actionURL)
+    {
+        $this->config->product->all->search['queryID']   = $queryID;
+        $this->config->product->all->search['actionURL'] = $actionURL;
+
+        $linePairs = $this->getLinePairs();
+        $this->config->product->all->search['params']['line']['values'] = array('' => '') + $linePairs;
+
+        if($this->config->systemMode == 'new')
+        {
+            $programPairs = $this->loadModel('program')->getTopPairs('', 'noclosed');
+            $this->config->product->all->search['params']['program']['values'] = array('' => '') + $programPairs;
+        }
+
+        $this->loadModel('search')->setSearchParams($this->config->product->all->search);
     }
 
     /**
@@ -1562,13 +1636,13 @@ class productModel extends model
      * @access public
      * @return array
      */
-    public function getStats($orderBy = 'order_asc', $pager = null, $status = 'noclosed', $line = 0, $storyType = 'story', $programID = 0)
+    public function getStats($orderBy = 'order_asc', $pager = null, $status = 'noclosed', $line = 0, $storyType = 'story', $programID = 0, $param = 0)
     {
         $this->loadModel('report');
         $this->loadModel('story');
         $this->loadModel('bug');
 
-        $products = $this->getList($programID, $status, $limit = 0, $line);
+        $products = $status == 'bySearch' ? $this->getListBySearch($param) : $this->getList($programID, $status, $limit = 0, $line);
         if(empty($products)) return array();
 
         $productKeys = array_keys($products);
@@ -2015,6 +2089,37 @@ class productModel extends model
         if($action == 'close') return $product->status != 'closed';
 
         return true;
+    }
+
+    /**
+     * Build operate menu.
+     *
+     * @param  object $product
+     * @param  string $type
+     * @access public
+     * @return string
+     */
+    public function buildOperateMenu($product, $type = 'view')
+    {
+        $menu   = '';
+        $params = "product=$product->id";
+
+        if($type == 'view')
+        {
+            $menu .= "<div class='divider'></div>";
+            $menu .= $this->buildFlowMenu('product', $product, $type, 'direct');
+            $menu .= "<div class='divider'></div>";
+
+            $menu .= $this->buildMenu('product', 'close', $params, $product, $type, '', '', 'iframe', true, "data-app='product'");
+            $menu .= "<div class='divider'></div>";
+        }
+
+        $menu .= $this->buildMenu('product', 'edit', $params, $product, $type);
+
+        if($type == 'view') $menu .= $this->buildMenu('product', 'delete', $params, $product, $type, 'trash', 'hiddenwin');
+        if($type == 'browse' && common::hasPriv('product', 'updateOrder')) $menu .= "<i class='icon icon-move text-blue'></i>";
+
+        return $menu;
     }
 
     /**

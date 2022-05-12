@@ -300,6 +300,7 @@ class buildModel extends model
             ->autoCheck()
             ->batchCheck($this->config->build->create->requiredFields, 'notempty')
             ->check('name', 'unique', "product = {$build->product} AND branch = {$build->branch} AND deleted = '0'")
+            ->checkFlow()
             ->exec();
 
         if(!dao::isError())
@@ -324,6 +325,7 @@ class buildModel extends model
         $buildID  = (int)$buildID;
         $oldBuild = $this->dao->select('*')->from(TABLE_BUILD)->where('id')->eq($buildID)->fetch();
         $build    = fixer::input('post')->stripTags($this->config->build->editor->edit['id'], $this->config->allowedTags)
+            ->add('id', $buildID)
             ->setIF(!isset($_POST['branch']), 'branch', $oldBuild->branch)
             ->setDefault('product', $oldBuild->product)
             ->cleanInt('product,branch,execution')
@@ -336,6 +338,7 @@ class buildModel extends model
             ->batchCheck($this->config->build->edit->requiredFields, 'notempty')
             ->where('id')->eq($buildID)
             ->check('name', 'unique', "id != $buildID AND product = {$build->product} AND branch = {$build->branch} AND deleted = '0'")
+            ->checkFlow()
             ->exec();
         if(isset($build->branch) and $oldBuild->branch != $build->branch) $this->dao->update(TABLE_RELEASE)->set('branch')->eq($build->branch)->where('build')->eq($buildID)->exec();
         if(!dao::isError())
@@ -502,7 +505,6 @@ class buildModel extends model
      */
     public function batchUnlinkBug($buildID)
     {
-
         $bugList = $this->post->unlinkBugs;
         if(empty($bugList)) return true;
 
@@ -514,5 +516,28 @@ class buildModel extends model
 
         $this->loadModel('action');
         foreach($this->post->unlinkBugs as $unlinkBugID) $this->action->create('bug', $unlinkBugID, 'unlinkedfrombuild', '', $buildID);
+    }
+
+    /**
+     * Build action menu.
+     *
+     * @param  object $build
+     * @param  string $type
+     * @access public
+     * @return string
+     */
+    public function buildOperateMenu($build, $type = 'view')
+    {
+        $canBeChanged = common::canBeChanged('build', $build);
+        if($build->deleted || !$canBeChanged) return '';
+
+        $menu   = '';
+        $params = "buildID=$build->id";
+
+        $menu .= $this->buildFlowMenu('build', $build, 'view', 'direct');
+        $menu .= $this->buildMenu('build', 'edit',   $params, $build, $type);
+        $menu .= $this->buildMenu('build', 'delete', $params, $build, $type, 'trash', 'hiddenwin');
+
+        return $menu;
     }
 }

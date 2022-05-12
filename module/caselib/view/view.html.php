@@ -37,15 +37,9 @@
     <div class='main-actions'>
       <nav class="container"></nav>
       <div class="btn-toolbar">
-        <?php
-        common::printBack($browseLink);
-        if(!$lib->deleted)
-        {
-            echo "<div class='divider'></div>";
-            common::printIcon('caselib', 'edit',   "libID=$lib->id");
-            common::printIcon('caselib', 'delete', "libID=$lib->id", '', 'button', 'trash', 'hiddenwin');
-        }
-        ?>
+        <?php common::printBack($browseLink);?>
+        <?php echo "<div class='divider'></div>";?>
+        <?php echo $this->caselib->buildOperateMenu($lib, 'view');?>
       </div>
     </div>
   </div>

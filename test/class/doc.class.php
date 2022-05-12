@@ -217,81 +217,18 @@ class docTest
         return $objects;
     }
 
-    public function extractKETableCSSTest($content)
+    /**
+     * Function getAllLibsByType test by doc
+     *
+     * @param mixed $type
+     * @param mixed $product
+     * @param mixed $pager
+     * @access public
+     * @return void
+     */
+    public function getAllLibsByTypeTest($type, $product, $pager = null)
     {
-        $objects = $this->objectModel->extractKETableCSS($content);
-
-        if(dao::isError()) return dao::getError();
-
-        return $objects;
-    }
-
-    public function checkPrivLibTest($object, $extra = '')
-    {
-        $objects = $this->objectModel->checkPrivLib($object, $extra = '');
-
-        if(dao::isError()) return dao::getError();
-
-        return $objects;
-    }
-
-    public function checkPrivDocTest($object)
-    {
-        $objects = $this->objectModel->checkPrivDoc($object);
-
-        if(dao::isError()) return dao::getError();
-
-        return $objects;
-    }
-
-    public function getAllLibsByTypeTest($type, $pager = null, $product = '')
-    {
-        $objects = $this->objectModel->getAllLibsByType($type, $pager = null, $product = '');
-
-        if(dao::isError()) return dao::getError();
-
-        return $objects;
-    }
-
-    public function getAllLibGroupsTest($appendLibs = '')
-    {
-        $objects = $this->objectModel->getAllLibGroups($appendLibs = '');
-
-        if(dao::isError()) return dao::getError();
-
-        return $objects;
-    }
-
-    public function getLimitLibsTest($type, $limit = 0)
-    {
-        $objects = $this->objectModel->getLimitLibs($type, $limit = 0);
-
-        if(dao::isError()) return dao::getError();
-
-        return $objects;
-    }
-
-    public function getSubLibGroupsTest($type, $idList)
-    {
-        $objects = $this->objectModel->getSubLibGroups($type, $idList);
-
-        if(dao::isError()) return dao::getError();
-
-        return $objects;
-    }
-
-    public function getLibsByObjectTest($type, $objectID, $mode = '', $appendLib = 0)
-    {
-        $objects = $this->objectModel->getLibsByObject($type, $objectID, $mode = '', $appendLib = 0);
-
-        if(dao::isError()) return dao::getError();
-
-        return $objects;
-    }
-
-    public function getOrderedObjectsTest($objectType = 'product')
-    {
-        $objects = $this->objectModel->getOrderedObjects($objectType = 'product');
+        $objects = $this->objectModel->getAllLibsByType($type, $pager, $product);
 
         if(dao::isError()) return dao::getError();
 
@@ -556,8 +493,16 @@ class docTest
         return $objects;
     }
 
-    public function getToAndCcListTest($doc)
+    /**
+     * Get toList and ccList.
+     *
+     * @param  int    $docID
+     * @access public
+     * @return bool|array
+     */
+    public function getToAndCcListTest($docID)
     {
+        $doc     = $this->objectModel->getByID($docID);
         $objects = $this->objectModel->getToAndCcList($doc);
 
         if(dao::isError()) return dao::getError();
@@ -610,8 +555,16 @@ class docTest
         return $objects;
     }
 
-    public function checkAutoloadPageTest($doc)
+    /**
+     * Whether the url of link type documents needs to be autoloaded.
+     *
+     * @param  int    $docID
+     * @access public
+     * @return bool
+     */
+    public function checkAutoloadPageTest($docID)
     {
+        $doc     = $this->objectModel->getByID($docID);
         $objects = $this->objectModel->checkAutoloadPage($doc);
 
         if(dao::isError()) return dao::getError();

@@ -96,29 +96,7 @@
         <?php common::printBack($browseLink);?>
         <?php if(!$bug->deleted):?>
         <div class='divider'></div>
-        <?php
-        common::printIcon('bug', 'confirmBug', $params, $bug, 'button', 'ok', '', 'iframe', true);
-        common::printIcon('bug', 'assignTo',   $params, $bug, 'button', '', '', 'iframe', true);
-        common::printIcon('bug', 'resolve',    $params, $bug, 'button', 'checked', '', 'iframe showinonlybody', true);
-        common::printIcon('bug', 'close',      $params, $bug, 'button', '', '', 'text-danger iframe showinonlybody', true);
-        common::printIcon('bug', 'activate',   $params, $bug, 'button', '', '', 'text-success iframe showinonlybody', true);
-
-        if($this->app->tab != 'product')
-        {
-            common::printIcon('bug', 'toStory', "product=$bug->product&branch=$bug->branch&module=0&story=0&execution=0&bugID=$bug->id", $bug, 'button', $lang->icons['story'], '', '', '', "data-app='product'", $lang->bug->toStory);
-            common::printIcon('bug', 'createCase', $convertParams, $bug, 'button', 'sitemap');
-        }
-
-        echo $this->buildOperateMenu($bug, 'view');
-
-        echo "<div class='divider'></div>";
-        common::printIcon('bug', 'edit', $params, $bug);
-        if($this->app->tab != 'product')
-        {
-            common::printIcon('bug', 'create', $copyParams, $bug, 'button', 'copy');
-        }
-        common::printIcon('bug', 'delete', $params, $bug, 'button', 'trash', 'hiddenwin', 'showinonlybody');
-        ?>
+        <?php echo $this->bug->buildOperateMenu($bug, 'view');?>
         <?php endif;?>
       </div>
     </div>

@@ -40,6 +40,7 @@ $lang->kanban->moveCard            = '移动卡片';
 $lang->kanban->cardColor           = '卡片颜色';
 $lang->kanban->setCardColor        = '设置卡片颜色';
 $lang->kanban->deleteCard          = '删除卡片';
+$lang->kanban->removeCard          = '移除卡片';
 $lang->kanban->assigntoCard        = '指派';
 $lang->kanban->setting             = '设置';
 $lang->kanban->enableArchived      = '设置归档功能';
@@ -365,6 +366,7 @@ $lang->kanbancard->confirmArchive    = '您确认归档该卡片吗？归档卡�
 $lang->kanbancard->confirmDelete     = '您确认删除该卡片吗？删除卡片后，该卡片将从看板中删除，您只能通过系统回收站查看。';
 $lang->kanbancard->confirmRestore    = '您确定要还原该卡片吗？还原卡片后，该卡片将还原到“%s”看板列中。';
 $lang->kanbancard->confirmRestoreTip = '该卡片所属的看板列已被归档或删除，请先还原“%s”看板列。';
+$lang->kanbancard->confirmRemove     = '您确认移除该卡片吗？移除卡片后，源数据不会受到影响，卡片将从看板中移除且无法恢复。';
 
 $lang->kanbancard->priList[1] = 1;
 $lang->kanbancard->priList[2] = 2;

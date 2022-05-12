@@ -432,6 +432,7 @@ class productplanModel extends model
             ->autoCheck()
             ->batchCheck($this->config->productplan->create->requiredFields, 'notempty')
             ->checkIF(!$this->post->future && !empty($_POST['begin']) && !empty($_POST['end']), 'end', 'ge', $plan->begin)
+            ->checkFlow()
             ->exec();
         if(!dao::isError())
         {
@@ -475,6 +476,7 @@ class productplanModel extends model
         $plan = fixer::input('post')->stripTags($this->config->productplan->editor->edit['id'], $this->config->allowedTags)
             ->setIF($this->post->future or empty($_POST['begin']), 'begin', $this->config->productplan->future)
             ->setIF($this->post->future or empty($_POST['end']), 'end', $this->config->productplan->future)
+            ->add('id', $planID)
             ->remove('delta,uid,future')
             ->get();
 
@@ -512,6 +514,7 @@ class productplanModel extends model
             ->autoCheck()
             ->batchCheck($this->config->productplan->edit->requiredFields, 'notempty')
             ->checkIF(!$this->post->future && !empty($_POST['begin']) && !empty($_POST['end']), 'end', 'ge', $plan->begin)
+            ->checkFlow()
             ->where('id')->eq((int)$planID)
             ->exec();
         if(dao::isError()) return false;
@@ -638,6 +641,7 @@ class productplanModel extends model
             $plan->end    = isset($data->end[$planID]) ? $data->end[$planID] : '';
             $plan->status = isset($data->status[$planID]) ? $data->status[$planID] : $oldPlans[$planID]->status;
             $plan->parent = $oldPlans[$planID]->parent;
+            $plan->id     = $planID;
 
             if(empty($plan->title)) return print(js::alter(sprintf($this->lang->productplan->errorNoTitle, $planID)));
             if($plan->begin > $plan->end and !empty($plan->end)) return print(js::alert(sprintf($this->lang->productplan->beginGeEnd, $planID)));
@@ -651,8 +655,6 @@ class productplanModel extends model
                 if(is_array($plan->{$extendField->field})) $plan->{$extendField->field} = join(',', $plan->{$extendField->field});
 
                 $plan->{$extendField->field} = htmlSpecialString($plan->{$extendField->field});
-                $message = $this->checkFlowRule($extendField, $plan->{$extendField->field});
-                if($message) return print(js::alert($message));
             }
 
             $plans[$planID] = $plan;
@@ -695,7 +697,7 @@ class productplanModel extends model
             if($change)
             {
                 if($parentID > 0 and !isset($parents[$parentID])) $parents[$parentID] = $parentID;
-                $this->dao->update(TABLE_PRODUCTPLAN)->data($plan)->autoCheck()->where('id')->eq($planID)->exec();
+                $this->dao->update(TABLE_PRODUCTPLAN)->data($plan)->autoCheck()->checkFlow()->where('id')->eq($planID)->exec();
                 if(dao::isError()) return print(js::error(dao::getError()));
                 $changes[$planID] = $change;
             }
@@ -1000,17 +1002,21 @@ class productplanModel extends model
      *
      * @param  object $plan
      * @param  string $action
+     * @param  string $module
      * @access public
      * @return void
      */
-    public static function isClickable($plan, $action)
+    public static function isClickable($plan, $action, $module = 'productplan')
     {
         $action    = strtolower($action);
-        $clickable = commonModel::hasPriv('productplan', $action);
+        $clickable = commonModel::hasPriv($module, $action);
         if(!$clickable) return false;
 
         switch($action)
         {
+            case 'create' :
+                if($plan->parent > 0 or strpos('done,closed', $plan->status) !== false) return false;
+                break;
             case 'start' :
                 if($plan->status != 'wait' or $plan->parent < 0) return false;
                 break;
@@ -1023,8 +1029,100 @@ class productplanModel extends model
             case 'activate' :
                 if($plan->status == 'wait' or $plan->status == 'doing' or $plan->parent < 0) return false;
                 break;
+            case 'delete' :
+                if($plan->parent < 0) return false;
+                break;
+        }
+
+        if($module == 'execution' && $action == 'create')
+        {
+            if($plan->parent < 0 || $plan->expired || in_array($plan->status, array('done', 'closed'))) return false;
+
+            $product     = $this->loadModel('product')->getById($plan->product);
+            $branchList  = $this->loadModel('branch')->getList($plan->product, 0, 'all');
+
+            $branchStatusList = array();
+            foreach($branchList as $productBranch) $branchStatusList[$productBranch->id] = $productBranch->status;
+
+            if($product->type != 'normal')
+            {
+                $branchStatus = isset($branchStatusList[$plan->branch]) ? $branchStatusList[$plan->branch] : '';
+                if($branchStatus == 'closed') return false;
+            }
         }
 
         return true;
+    }
+
+    /**
+     * Build operate menu.
+     *
+     * @param  object $plan
+     * @param  string $type
+     * @access public
+     * @return string
+     */
+    public function buildOperateMenu($plan, $type = 'view')
+    {
+        $params = "planID=$plan->id";
+
+        $menu  = '';
+        $menu .= $this->buildMenu('productplan', 'start', $params, $plan, $type, 'play', 'hiddenwin', '', false, '', $this->lang->productplan->startAB);
+        $menu .= $this->buildMenu('productplan', 'finish', $params, $plan, $type, 'checked', 'hiddenwin', '', false, '', $this->lang->productplan->finishAB);
+        $menu .= $this->buildMenu('productplan', 'close', $params, $plan, $type, 'off', 'hiddenwin', 'iframe', true, '', $this->lang->productplan->closeAB);
+
+        if($type == 'view') $menu .= $this->buildMenu('productplan', 'activate', $params, $plan, $type, 'magic', 'hiddenwin', '', false, '', $this->lang->productplan->activateAB);
+
+        if($type == 'browse')
+        {
+            if($this->isClickable($plan, 'create', 'execution'))
+            {
+                $executionLink = $this->config->systemMode == 'new' ? '#projects' : helper::createLink('execution', 'create', "projectID=0&executionID=0&copyExecutionID=0&plan=$plan->id&confirm=no&productID=$plan->product");
+                if($this->config->systemMode == 'new')
+                {
+                    $menu .= html::a($executionLink, '<i class="icon-plus"></i>', '', "data-toggle='modal' data-id='$plan->id' onclick='getPlanID(this, $plan->branch)' class='btn' title='{$this->lang->productplan->createExecution}'");
+                }
+                else
+                {
+                    $menu .= html::a($executionLink, '<i class="icon-plus"></i>', '', "class='btn' title='{$this->lang->productplan->createExecution}'");
+                }
+            }
+            else
+            {
+                $menu .= "<button type='button' class='btn disabled'><i class='icon-plus' title='{$this->lang->productplan->createExecution}'></i></button>";
+            }
+
+            if(common::hasPriv('productplan', 'linkStory', $plan) and $plan->parent >= 0)
+            {
+                $menu .= $this->buildMenu('productplan', 'view', "{$params}&type=story&orderBy=id_desc&link=true", $plan, $type, 'link', '', '', '', '', $this->lang->productplan->linkStory);
+            }
+            else
+            {
+                $menu .= "<button type='button' class='disabled btn'><i class='icon-link' title='{$this->lang->productplan->linkStory}'></i></button>";
+            }
+
+            if(common::hasPriv('productplan', 'linkBug', $plan) and $plan->parent >= 0)
+            {
+                $menu .= $this->buildMenu('productplan', 'view', "{$params}&type=bug&orderBy=id_desc&link=true", $plan, $type, 'bug', '', '', '', '',  $this->lang->productplan->linkBug);
+            }
+            else
+            {
+                $menu .= "<button type='button' class='disabled btn'><i class='icon-bug' title='{$this->lang->productplan->linkBug}'></i></button>";
+            }
+
+            $menu .= $this->buildMenu('productplan', 'edit', $params, $plan, $type);
+        }
+
+        $menu .= $this->buildMenu('productplan', 'create', "product={$plan->product}&branch={$plan->branch}&parent={$plan->id}", $plan, $type, 'split', '', '', '', '', $this->lang->productplan->children);
+
+        if($type == 'browse') $menu .= $this->buildMenu('productplan', 'delete', "{$params}&confirm=no", $plan, $type, 'trash', 'hiddenwin', '', '', $this->lang->productplan->delete);
+
+        if($type == 'view')
+        {
+            if(common::hasPriv('productplan', 'edit', $plan)) $menu .= html::a(helper::createLink('productplan', 'edit', $params), "<i class='icon-common-edit icon-edit'></i> " . $this->lang->edit, '', "class='btn btn-link' title='{$this->lang->edit}'");
+            if($plan->parent >= 0 && common::hasPriv('productplan', 'delete', $plan)) $menu .= html::a(helper::createLink('productplan', 'delete', $params), "<i class='icon-common-delete icon-trash'></i> " . $this->lang->delete, '', "class='btn btn-link' title='{$this->lang->delete}' target='hiddenwin'");
+        }
+
+        return $menu;
     }
 }

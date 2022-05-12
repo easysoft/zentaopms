@@ -25,6 +25,9 @@ switch($argv[1])
     case 'admin':
         ztfRun('model/admin');
         break;
+    case 'block':
+        ztfRun('model/block');
+        break;
     case 'branch':
         ztfRun('model/branch');
         break;
@@ -36,6 +39,9 @@ switch($argv[1])
         break;
     case 'caselib':
         ztfRun('model/caselib');
+        break;
+    case 'ci':
+        ztfRun('model/ci');
         break;
     case 'company':
         ztfRun('model/company');
@@ -51,6 +57,9 @@ switch($argv[1])
         break;
     case 'design':
         ztfRun('model/design');
+        break;
+    case 'dev':
+        ztfRun('model/dev');
         break;
     case 'entry':
         ztfRun('model/entry');
@@ -73,8 +82,14 @@ switch($argv[1])
     case 'jenkins':
         ztfRun('model/jenkins');
         break;
+    case 'job':
+        ztfRun('model/job');
+        break;
     case 'kanban':
         ztfRun('model/kanban');
+        break;
+    case 'message':
+        ztfRun('model/message');
         break;
     case 'model':
         ztfRun('model');
@@ -112,6 +127,8 @@ switch($argv[1])
     case 'report':
         ztfRun('model/report');
         break;
+    case 'sso':
+        ztfRun('model/sso');
     case 'setting':
         ztfRun('model/setting');
         break;
@@ -133,8 +150,11 @@ switch($argv[1])
     case 'todo':
         ztfRun('model/todo');
         break;
-    case 'message':
-        ztfRun('model/message');
+    case 'tutorial':
+        ztfRun('model/tutorial');
+        break;
+    case 'mail':
+        ztfRun('model/mail');
         break;
     case 'tree':
         ztfRun('model/tree');
