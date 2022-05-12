@@ -498,6 +498,10 @@ class projectModel extends model
             {
                 $link = helper::createLink($module, $method, "projectID=%s");
             }
+            elseif($module == 'projectstory' and $method = 'track')
+            {
+                $link = helper::createLink($module, $method, "projectID=%s");
+            }
             elseif($module == 'bug')
             {
                 if($method == 'create')
@@ -611,14 +615,10 @@ class projectModel extends model
             }
         }
 
-        if(in_array($module, $this->config->waterfallModules + array('projectstory'=>'projectstory')))
+        if(in_array($module, $this->config->waterfallModules))
         {
             $link = helper::createLink($module, 'browse', "projectID=%s");
-            if($module == 'projectstory' and $method = 'track')
-            {
-                $link = helper::createLink($module, $method, "projectID=%s");
-            }
-            elseif($module == 'reviewissue')
+            if($module == 'reviewissue')
             {
                 $link = helper::createLink($module, 'issue', "projectID=%s");
             }
