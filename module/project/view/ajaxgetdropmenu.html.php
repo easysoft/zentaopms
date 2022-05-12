@@ -73,9 +73,9 @@ foreach($projects as $programID => $programProjects)
         $selected    = $project->id == $projectID ? 'selected' : '';
         $icon        = '<i class="icon icon-sprint"></i> ';
 
-        if($project->model == 'waterfall' and $module == 'design')
+        if($project->model != 'waterfall' and (in_array($module, $config->waterfallModules) or $method == 'track'))
         {
-            $link = helper::createLink('design', 'browse', "projectID=%s");
+            $link = helper::createLink('project', 'index', "projectID=%s");
         }
         elseif($project->model == 'kanban')
         {
