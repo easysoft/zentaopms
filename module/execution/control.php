@@ -1149,7 +1149,7 @@ class execution extends control
      * @access public
      * @return void
      */
-    public function burn($executionID = 0, $type = 'noweekend,nodelay', $interval = 0, $burnBy = 'left')
+    public function burn($executionID = 0, $type = 'noweekend', $interval = 0, $burnBy = 'left')
     {
         $this->loadModel('report');
         $execution   = $this->commonAction($executionID);
@@ -1162,11 +1162,16 @@ class execution extends control
         $position[] = $this->lang->execution->burn;
 
         /* Get date list. */
-        $executionInfo = $this->execution->getByID($executionID);
-        $deadline      = $execution->status == 'closed' ? substr($execution->closedDate, 0, 10) : $execution->suspendedDate;
-        $deadline      = strpos('closed,suspended', $execution->status) === false ? helper::today() : $deadline;
-        $endDate       = strpos($type, 'withdelay') !== false ? $deadline : $executionInfo->end;
-        list($dateList, $interval) = $this->execution->getDateList($executionInfo->begin, $endDate, $type, $interval, 'Y-m-d');
+        if(((strpos('closed,suspended', $execution->status) === false and helper::today() > $execution->end)
+            or ($execution->status == 'closed'    and substr($execution->closedDate, 0, 10) > $execution->end)
+            or ($execution->status == 'suspended' and $execution->suspendedDate > $execution->end))
+            and strpos($type, 'delay') === false)
+        $type .= ',withdelay';
+
+        $deadline = $execution->status == 'closed' ? substr($execution->closedDate, 0, 10) : $execution->suspendedDate;
+        $deadline = strpos('closed,suspended', $execution->status) === false ? helper::today() : $deadline;
+        $endDate  = strpos($type, 'withdelay') !== false ? $deadline : $execution->end;
+        list($dateList, $interval) = $this->execution->getDateList($execution->begin, $endDate, $type, $interval, 'Y-m-d', $execution->end);
         $chartData = $this->execution->buildBurnData($executionID, $dateList, $type, $burnBy);
 
         $dayList = array_fill(1, floor((int)$execution->days / $this->config->execution->maxBurnDay) + 5, '');
