@@ -577,9 +577,9 @@ class executionModel extends model
                 foreach($diffProductIdList as $key => $newProductID)
                 {
                     $data = $this->dao->select('*')->from(TABLE_PROJECTPRODUCT)
-                                                   ->where('project')->eq($executionID)
-                                                   ->andWhere('product')->eq($newProductID)
-                                                   ->fetch();
+                        ->where('project')->eq($executionID)
+                        ->andWhere('product')->eq($newProductID)
+                        ->fetch();
                     $data->project = $execution->project;
                     $this->dao->insert(TABLE_PROJECTPRODUCT)->data($data)->exec();
                 }
