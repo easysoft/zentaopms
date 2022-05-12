@@ -96,7 +96,7 @@ class dao extends baseDAO
      */
     public function processData($data)
     {
-        global $app,$config;
+        global $app, $config;
 
         if(!isset($config->bizVersion)) return $this;
 
