@@ -1187,7 +1187,9 @@ class story extends control
         }
         else
         {
-            $this->story->delete(TABLE_STORY, $storyID);
+            $this->dao->update(TABLE_STORY)->set('deleted')->eq(1)->where('id')->eq($storyID)->exec();
+            $this->loadModel('action')->create($story->type, $storyID, 'deleted', '', ACTIONMODEL::CAN_UNDELETED);
+
             if($story->parent > 0)
             {
                 $this->story->updateParentStatus($story->id);

@@ -1,6 +1,7 @@
 <?php
 $config->action->objectNameFields['product']      = 'name';
 $config->action->objectNameFields['story']        = 'title';
+$config->action->objectNameFields['requirement']  = 'title';
 $config->action->objectNameFields['productplan']  = 'title';
 $config->action->objectNameFields['release']      = 'name';
 $config->action->objectNameFields['program']      = 'name';
