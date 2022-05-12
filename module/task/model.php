@@ -1142,21 +1142,21 @@ class taskModel extends model
         {
             if(isset($data->modules[$taskID]) and ($data->modules[$taskID] == 'ditto')) $data->modules[$taskID] = isset($prev['module']) ? $prev['module'] : 0;
             if($data->types[$taskID]       == 'ditto') $data->types[$taskID]       = isset($prev['type'])       ? $prev['type']       : '';
-            if($data->assignedTos[$taskID] == 'ditto') $data->assignedTos[$taskID] = isset($prev['assignedTo']) ? $prev['assignedTo'] : '';
             if($data->pris[$taskID]        == 'ditto') $data->pris[$taskID]        = isset($prev['pri'])        ? $prev['pri']        : 0;
             if($data->finishedBys[$taskID] == 'ditto') $data->finishedBys[$taskID] = isset($prev['finishedBy']) ? $prev['finishedBy'] : '';
             if($data->canceledBys[$taskID] == 'ditto') $data->canceledBys[$taskID] = isset($prev['canceledBy']) ? $prev['canceledBy'] : '';
             if($data->closedBys[$taskID]   == 'ditto') $data->closedBys[$taskID]   = isset($prev['closedBy'])   ? $prev['closedBy']   : '';
             if($data->estStarteds[$taskID] == '0000-00-00') $data->estStarteds[$taskID] = '';
             if($data->deadlines[$taskID]   == '0000-00-00') $data->deadlines[$taskID]   = '';
+            if(isset($data->assignedTos[$taskID]) and $data->assignedTos[$taskID] == 'ditto') $data->assignedTos[$taskID] = isset($prev['assignedTo']) ? $prev['assignedTo'] : '';
 
             $prev['module']     = $data->modules[$taskID];
             $prev['type']       = $data->types[$taskID];
-            $prev['assignedTo'] = $data->assignedTos[$taskID];
             $prev['pri']        = $data->pris[$taskID];
             $prev['finishedBy'] = $data->finishedBys[$taskID];
             $prev['canceledBy'] = $data->canceledBys[$taskID];
             $prev['closedBy']   = $data->closedBys[$taskID];
+            if(isset($data->assignedTos[$taskID])) $prev['assignedTo'] = $data->assignedTos[$taskID];
         }
 
         /* Initialize tasks from the post data.*/
@@ -1174,7 +1174,6 @@ class taskModel extends model
             $task->module         = isset($data->modules[$taskID]) ? $data->modules[$taskID] : 0;
             $task->type           = $data->types[$taskID];
             $task->status         = isset($data->statuses[$taskID]) ? $data->statuses[$taskID] : $oldTask->status;
-            $task->assignedTo     = $task->status == 'closed' ? 'closed' : $data->assignedTos[$taskID];
             $task->pri            = $data->pris[$taskID];
             $task->estimate       = isset($data->estimates[$taskID]) ? $data->estimates[$taskID] : $oldTask->estimate;
             $task->left           = isset($data->lefts[$taskID]) ? $data->lefts[$taskID] : $oldTask->left;
@@ -1184,7 +1183,6 @@ class taskModel extends model
             $task->canceledBy     = $data->canceledBys[$taskID];
             $task->closedBy       = $data->closedBys[$taskID];
             $task->closedReason   = $data->closedReasons[$taskID];
-            $task->assignedDate   = $oldTask->assignedTo ==$task->assignedTo  ? $oldTask->assignedDate : $now;
             $task->finishedDate   = $oldTask->finishedBy == $task->finishedBy ? $oldTask->finishedDate : $now;
             $task->canceledDate   = $oldTask->canceledBy == $task->canceledBy ? $oldTask->canceledDate : $now;
             $task->closedDate     = $oldTask->closedBy == $task->closedBy ? $oldTask->closedDate : $now;
@@ -1192,6 +1190,10 @@ class taskModel extends model
             $task->lastEditedDate = $now;
             $task->consumed       = $oldTask->consumed;
             $task->parent         = $oldTask->parent;
+
+            if(isset($data->assignedTos[$taskID])) $task->assignedTo = $data->assignedTos[$taskID];
+            if($task->status == 'closed')          $task->assignedTo = 'closed';
+            if(isset($task->assignedTo) and $oldTask->assignedTo != $task->assignedTo) $task->assignedDate = $now;
 
             if(strpos(',doing,pause,', $task->status) and empty($teams) and empty($task->left))
             {

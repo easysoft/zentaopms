@@ -1517,6 +1517,7 @@ class projectModel extends model
                 /* When acl is open, white list set empty. When acl is private,update user view. */
                 if($project->acl == 'open') $this->loadModel('personnel')->updateWhitelist(array(), 'project', $projectID);
                 if($project->acl != 'open') $this->loadModel('user')->updateUserView($projectID, 'project');
+                $this->executeHooks($projectID);
             }
             $allChanges[$projectID] = common::createChanges($oldProject, $project);
         }
