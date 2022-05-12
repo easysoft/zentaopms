@@ -49,6 +49,7 @@ class action extends control
         $this->session->set('researchplanList',   $uri, 'project');
         $this->session->set('researchreportList', $uri, 'project');
         $this->session->set('meetingList',        $uri, 'project');
+        $this->session->set('designList',         $uri, 'project');
         $this->session->set('storyLibList',       $uri, 'assetlib');
         $this->session->set('issueLibList',       $uri, 'assetlib');
         $this->session->set('riskLibList',        $uri, 'assetlib');
