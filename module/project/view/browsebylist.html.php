@@ -68,13 +68,13 @@
   </div>
   <?php endif;?>
   <div class="main-col">
-    <div class="cell<?php if($browseType == 'bysearch') echo ' show';?>" id="queryBox" data-module='project'></div>
+    <div class="cell<?php if($browseType == 'bySearch') echo ' show';?>" id="queryBox" data-module='project'></div>
     <?php if(empty($projectStats)):?>
     <div class="table-empty-tip">
       <p>
         <span class="text-muted"><?php echo $lang->project->empty;?></span>
         <?php if(!defined('TUTORIAL')):?>
-        <?php if(common::hasPriv('project', 'create')) common::printLink('project', 'createGuide', "programID=$programID", '<i class="icon icon-plus"></i> ' . $lang->project->create, '', 'class="btn btn-info" data-toggle="modal"');?>
+        <?php if(common::hasPriv('project', 'create') and $browseType != 'bySearch') common::printLink('project', 'createGuide', "programID=$programID", '<i class="icon icon-plus"></i> ' . $lang->project->create, '', 'class="btn btn-info" data-toggle="modal"');?>
         <?php else:?>
         <?php common::printLink('execution', 'create', '', '<i class="icon icon-plus"></i> ' . $lang->execution->create, '', 'class="btn btn-info"');?>
         <?php endif;?>
