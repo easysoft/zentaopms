@@ -478,7 +478,7 @@ class projectModel extends model
             {
                 $link = helper::createLink($module, $method, "status=all&projectID=%s");
             }
-            elseif($module == 'project' and strpos(',bug,testcase,testtask,testreport,build,dynamic,view,manageproducts,team,managemembers,whitelist,addwhitelist,group,', ',' . $method . ','))
+            elseif($module == 'project' and strpos(',bug,testcase,testtask,testreport,build,dynamic,view,manageproducts,team,managemembers,whitelist,addwhitelist,group,', ',' . $method . ',') !== false)
             {
                 $link = helper::createLink($module, $method, "projectID=%s");
             }
