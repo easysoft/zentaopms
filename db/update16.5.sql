@@ -101,6 +101,7 @@ UPDATE `zt_workflowfield` set `control` = 'richtext' WHERE `module` = 'testsuite
 UPDATE `zt_workflowfield` set `control` = 'datetime' WHERE `module` = 'feedback' and `field` IN ('openedDate','reviewedDate','processedDate','closedDate','editedDate','assignedDate');
 
 UPDATE `zt_workflowfield` SET `control` = 'datetime' WHERE `module` = 'product' and `field` = 'createdDate';
+UPDATE `zt_workflowfield` SET `control` = 'radio' WHERE `module` = 'product' and `field` = 'deleted';
 UPDATE `zt_workflowfield` SET `control` = 'date' WHERE `module` = 'productplan' and `field` = 'begin';
 UPDATE `zt_workflowfield` SET `control` = 'date' WHERE `module` = 'productplan' and `field` = 'end';
 UPDATE `zt_workflowfield` SET `control` = 'radio' WHERE `module` = 'productplan' and `field` = 'deleted';
@@ -108,6 +109,7 @@ UPDATE `zt_workflowfield` SET `control` = 'select', `options` = 12 WHERE `module
 UPDATE `zt_workflowfield` SET `control` = 'date' WHERE `module` = 'release' and `field` = 'date';
 UPDATE `zt_workflowfield` SET `control` = 'richtext' WHERE `module` = 'release' and `field` = 'desc';
 UPDATE `zt_workflowfield` SET `control` = 'radio' WHERE `module` = 'release' and `field` = 'deleted';
+UPDATE `zt_workflowfield` SET `control` = 'datetime' WHERE `module` = 'story' and `field` = 'openedDate';
 UPDATE `zt_workflowfield` SET `control` = 'datetime' WHERE `module` = 'story' and `field` = 'assignedDate';
 UPDATE `zt_workflowfield` SET `control` = 'datetime' WHERE `module` = 'story' and `field` = 'lastEditedDate';
 UPDATE `zt_workflowfield` SET `control` = 'date' WHERE `module` = 'story' and `field` = 'reviewedDate';
@@ -128,7 +130,10 @@ UPDATE `zt_workflowaction` SET `type` = 'batch' WHERE `module` = 'story' and `ac
 UPDATE `zt_workflowaction` SET `position` = 'browse' WHERE `module` = 'story' and `action` = 'browse' and `vision` = 'rnd';
 UPDATE `zt_workflowaction` SET `position` = 'browse' WHERE `module` = 'story' and `action` = 'exporttemplate' and `vision` = 'rnd';
 UPDATE `zt_workflowaction` SET `position` = 'browse' WHERE `module` = 'story' and `action` = 'import' and `vision` = 'rnd';
-UPDATE `zt_workflowaction` SET `position` = 'view' WHERE `module` = 'story' and `action` = 'view' and `vision` = 'rnd';
+UPDATE `zt_workflowaction` SET `position` = 'browse' WHERE `module` = 'story' and `action` = 'view' and `vision` = 'rnd';
+UPDATE `zt_workflowaction` SET `show` = 'direct' WHERE `module` = 'story'  and `vision` = 'rnd' and action NOT IN ('exporttemplate', 'import');
+UPDATE `zt_workflowaction` SET `show` = 'direct' WHERE `module` = 'program'  and `vision` = 'rnd'
+
 DELETE FROM `zt_workflowfield` WHERE `module`='execution' AND `field`='stage';
 DELETE FROM `zt_workflowfield` WHERE `module`='program' AND `field`='stage';
 DELETE FROM `zt_workflowfield` WHERE `module`='project' AND `field`='stage';
