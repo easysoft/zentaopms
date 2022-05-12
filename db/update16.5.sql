@@ -454,7 +454,9 @@ REPLACE INTO `zt_workflowfield` (`module`, `field`, `type`, `length`, `name`, `c
 
 UPDATE `zt_workflowaction` SET `position`='browse' WHERE `action` IN ('view','exporttemplate');
 
+UPDATE `zt_workflowaction` SET `method`=`action` WHERE `method`='';
 UPDATE `zt_workflowaction` SET `method`='browse' WHERE `action`='admin';
-UPDATE `zt_workflowaction` SET `method`='operate' WHERE `action` IN ('review','assignTo','comment','close','activate','start','block');
-UPDATE `zt_workflowaction` SET `method`='batchoperate' WHERE `action`='batchedit';
+UPDATE `zt_workflowaction` SET `method`='operate' WHERE `action` IN ('review','assignTo','comment','close','activate','start','block', 'suspend', 'putoff', 'confirmBug', 'resolve', 'cancel', 'confirmStoryChange', 'finish', 'pause', 'restart');
+UPDATE `zt_workflowaction` SET `method`='batchoperate' WHERE `action` IN('batchedit', 'batchconfirm', 'batchresolve');
 UPDATE `zt_workflowaction` SET `method`='view' WHERE `action`='adminview';
+UPDATE `zt_workflowaction` SET `method`='browse' WHERE module='execution' and `action` IN('all', 'task');
