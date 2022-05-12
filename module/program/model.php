@@ -168,12 +168,11 @@ class programModel extends model
      * Get program list by search.
      *
      * @param string $orderBy
-     * @param object $pager
      * @param int $queryID
      * @access public
      * @return void
      */
-    public function getListBySearch($orderBy = 'id_asc', $pager = NULL, $queryID = 0)
+    public function getListBySearch($orderBy = 'id_asc', $queryID = 0)
     {
         if($queryID)
         {
@@ -194,7 +193,7 @@ class programModel extends model
         }
         $query = $this->session->programQuery;
 
-        return $this->dao->select('*')->from(TABLE_PROGRAM)
+        $programs = $this->dao->select('*')->from(TABLE_PROGRAM)
             ->where('deleted')->eq(0)
             ->andWhere('vision')->eq($this->config->vision)
             ->andWhere('((type')->eq('program')
@@ -206,8 +205,14 @@ class programModel extends model
             ->beginIF(!$this->cookie->showClosed)->andWhere('status')->ne('closed')->fi()
             ->beginIF($query)->andWhere($query)->fi()
             ->orderBy($orderBy)
-            ->page($pager)
             ->fetchAll('id');
+
+        /* Do not display project separately. */
+        foreach($programs as $id => $program)
+        {
+            if($program->type == 'project' and !isset($programs[$program->parent])) unset($programs[$id]);
+        }
+        return $programs;
     }
 
     /**

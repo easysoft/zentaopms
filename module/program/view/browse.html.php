@@ -15,7 +15,6 @@
 <?php js::set('orderBy', $orderBy);?>
 <?php js::set('edit', $lang->edit);?>
 <?php js::set('selectAll', $lang->selectAll);?>
-<?php js::set('pageSize', $lang->program->pageSize);?>
 <?php if($programType == 'bygrid'):?>
 <style> #mainMenu{padding-left: 10px; padding-right: 10px;} </style>
 <?php endif;?>
