@@ -419,7 +419,6 @@ UPDATE `zt_workflowaction` SET `type`='single', `position`='browse', `show`='dir
 UPDATE `zt_workflowaction` SET `type`='batch' WHERE `module`IN ('feedback','caselib','testsuite','testtask','testcase') AND `action` IN ('admin','browse','batchedit','batchcreate','import','showimport');
 UPDATE `zt_workflowaction` SET `position`='browse' WHERE `module`IN ('feedback','caselib','testsuite','testtask','testcase') AND `action` IN ('batchedit','batchcreate','import','showimport');
 
-
 UPDATE `zt_workflowfield` SET `control` = 'radio' WHERE `module` = 'program' and `field` = 'deleted';
 UPDATE `zt_workflowfield` SET `type` = 'char', `length` => '30', `control` = 'radio' WHERE `module` = 'program' and `field` = 'type';
 UPDATE `zt_workflowfield` SET `control` = 'date' WHERE `module` = 'program' and `field` = 'begin';
@@ -432,15 +431,6 @@ UPDATE `zt_workflowfield` SET `control` = 'datetime' WHERE `module` = 'program' 
 UPDATE `zt_workflowfield` SET `control` = 'datetime' WHERE `module` = 'program' and `field` = 'canceledDate';
 UPDATE `zt_workflowfield` SET `type` => 'char', `length` => '30' WHERE `module` = 'program' and `field` = 'acl';
 UPDATE `zt_workflowfield` SET `control` = 'multi-select', `options` = 'user' WHERE `module` = 'program' and `field` = 'whitelist';
-UPDATE `zt_workflowfield` SET `control` = 'radio' WHERE `module` = 'program' and `field` = 'deleted';
-UPDATE `zt_workflowfield` SET `control` = 'radio' WHERE `module` = 'program' and `field` = 'deleted';
-UPDATE `zt_workflowfield` SET `control` = 'radio' WHERE `module` = 'program' and `field` = 'deleted';
-UPDATE `zt_workflowfield` SET `control` = 'radio' WHERE `module` = 'program' and `field` = 'deleted';
-UPDATE `zt_workflowfield` SET `control` = 'radio' WHERE `module` = 'program' and `field` = 'deleted';
-UPDATE `zt_workflowfield` SET `control` = 'radio' WHERE `module` = 'program' and `field` = 'deleted';
-UPDATE `zt_workflowfield` SET `control` = 'radio' WHERE `module` = 'program' and `field` = 'deleted';
-
-
 
 REPLACE INTO `zt_workflowfield` (`module`, `field`, `type`, `length`, `name`, `control`, `expression`, `options`, `default`, `rules`, `placeholder`, `order`, `searchOrder`, `exportOrder`, `canExport`, `canSearch`, `isValue`, `readonly`, `buildin`, `desc`, `createdBy`, `createdDate`, `editedBy`, `editedDate`) VALUES
 ('program', 'lifetime', 	'char', 	'30', 	'项目周期', 		'input', 	'', '',   	'',  '', '', 29, 0, 0, '0', '0', '0', '1', 1, '', '', '2022-04-19 10:14:25', '', '0000-00-00 00:00:00'),
