@@ -478,55 +478,7 @@ class projectModel extends model
             {
                 $link = helper::createLink($module, $method, "status=all&projectID=%s");
             }
-            elseif($module == 'project' and $method == 'bug')
-            {
-                $link = helper::createLink($module, $method, "projectID=%s");
-            }
-            elseif($module == 'project' and $method == 'testcase')
-            {
-                $link = helper::createLink($module, $method, "projectID=%s");
-            }
-            elseif($module == 'project' and $method == 'testtask')
-            {
-                $link = helper::createLink($module, $method, "projectID=%s");
-            }
-            elseif($module == 'project' and $method == 'testreport')
-            {
-                $link = helper::createLink($module, $method, "projectID=%s");
-            }
-            elseif($module == 'project' and $method == 'build')
-            {
-                $link = helper::createLink($module, $method, "projectID=%s");
-            }
-            elseif($module == 'project' and $method == 'dynamic')
-            {
-                $link = helper::createLink($module, $method, "projectID=%s");
-            }
-            elseif($module == 'project' and $method == 'view')
-            {
-                $link = helper::createLink($module, $method, "projectID=%s");
-            }
-            elseif($module == 'project' and $method == 'manageproducts')
-            {
-                $link = helper::createLink($module, $method, "projectID=%s");
-            }
-            elseif($module == 'project' and $method == 'team')
-            {
-                $link = helper::createLink($module, $method, "projectID=%s");
-            }
-            elseif($module == 'project' and $method == 'managemembers')
-            {
-                $link = helper::createLink($module, $method, "projectID=%s");
-            }
-            elseif($module == 'project' and $method == 'whitelist')
-            {
-                $link = helper::createLink($module, $method, "projectID=%s");
-            }
-            elseif($module == 'project' and $method == 'addwhitelist')
-            {
-                $link = helper::createLink($module, $method, "projectID=%s");
-            }
-            elseif($module == 'project' and $method == 'group')
+            elseif($module == 'project' and strpos(',bug,testcase,testtask,testreport,build,dynamic,view,manageproducts,team,managemembers,whitelist,addwhitelist,group', $method))
             {
                 $link = helper::createLink($module, $method, "projectID=%s");
             }
@@ -557,17 +509,20 @@ class projectModel extends model
                     $link = helper::createLink('project', 'bug', "projectID=%s");
                 }
             }
-            elseif($module == 'story' and $method == 'create')
+            elseif($module == 'story')
             {
-                $link = helper::createLink($module, $method);
-            }
-            elseif($module == 'story' and $method == 'change')
-            {
-                $link = helper::createLink('projectstory', 'story', "projectID=%s");
-            }
-            elseif($module == 'story' and $method == 'zerocase')
-            {
-                $link = helper::createLink('project', 'testcase', "projectID=%s");
+                if($method == 'create')
+                {
+                    $link = helper::createLink($module, $method);
+                }
+                elseif($method == 'change')
+                {
+                    $link = helper::createLink('projectstory', 'story', "projectID=%s");
+                }
+                elseif($method == 'zerocase')
+                {
+                    $link = helper::createLink('project', 'testcase', "projectID=%s");
+                }
             }
             elseif($module == 'testcase' and $method == 'create')
             {
