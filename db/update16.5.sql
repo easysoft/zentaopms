@@ -453,3 +453,8 @@ REPLACE INTO `zt_workflowfield` (`module`, `field`, `type`, `length`, `name`, `c
 ('program', 'fluidBoard', 	'enum', 	'', 	'fluidBoard', 		'radio', 	'', '[\"\\u672a\\u5220\\u9664\",\"\\u5df2\\u5220\\u9664\"]',   '0',  '', '', 46, 0, 0, '0', '0', '0', '1', 1, '', '', '2022-04-19 10:14:25', '', '0000-00-00 00:00:00');
 
 UPDATE `zt_workflowaction` SET `position`='browse' WHERE `action` IN ('view','exporttemplate');
+
+UPDATE `zt_workflowaction` SET `method`='browse' WHERE `action`='admin';
+UPDATE `zt_workflowaction` SET `method`='operate' WHERE `action` IN ('review','assignTo','comment','close','activate','start','block');
+UPDATE `zt_workflowaction` SET `method`='batchoperate' WHERE `action`='batchedit';
+UPDATE `zt_workflowaction` SET `method`='view' WHERE `action`='adminview';
