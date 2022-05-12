@@ -1034,23 +1034,6 @@ class productplanModel extends model
                 break;
         }
 
-        if($module == 'execution' && $action == 'create')
-        {
-            if($plan->parent < 0 || $plan->expired || in_array($plan->status, array('done', 'closed'))) return false;
-
-            $product     = $this->loadModel('product')->getById($plan->product);
-            $branchList  = $this->loadModel('branch')->getList($plan->product, 0, 'all');
-
-            $branchStatusList = array();
-            foreach($branchList as $productBranch) $branchStatusList[$productBranch->id] = $productBranch->status;
-
-            if($product->type != 'normal')
-            {
-                $branchStatus = isset($branchStatusList[$plan->branch]) ? $branchStatusList[$plan->branch] : '';
-                if($branchStatus == 'closed') return false;
-            }
-        }
-
         return true;
     }
 
@@ -1075,7 +1058,25 @@ class productplanModel extends model
 
         if($type == 'browse')
         {
-            if($this->isClickable($plan, 'create', 'execution'))
+            $canClickExecution = true;
+            if($plan->parent < 0 || $plan->expired || in_array($plan->status, array('done', 'closed')) || !common::hasPriv('execution', 'create', $plan)) $canClickExecution = false;
+
+            if($canClickExecution)
+            {
+                $product     = $this->loadModel('product')->getById($plan->product);
+                $branchList  = $this->loadModel('branch')->getList($plan->product, 0, 'all');
+
+                $branchStatusList = array();
+                foreach($branchList as $productBranch) $branchStatusList[$productBranch->id] = $productBranch->status;
+
+                if($product->type != 'normal')
+                {
+                    $branchStatus = isset($branchStatusList[$plan->branch]) ? $branchStatusList[$plan->branch] : '';
+                    if($branchStatus == 'closed') $canClickExecution = false;
+                }
+            }
+
+            if(!$canClickExecution)
             {
                 $executionLink = $this->config->systemMode == 'new' ? '#projects' : helper::createLink('execution', 'create', "projectID=0&executionID=0&copyExecutionID=0&plan=$plan->id&confirm=no&productID=$plan->product");
                 if($this->config->systemMode == 'new')
