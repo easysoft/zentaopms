@@ -15,6 +15,7 @@
 <?php js::set('orderBy', $orderBy);?>
 <?php js::set('edit', $lang->edit);?>
 <?php js::set('selectAll', $lang->selectAll);?>
+<?php js::set('pageSize', $lang->program->pageSize);?>
 <?php if($programType == 'bygrid'):?>
 <style> #mainMenu{padding-left: 10px; padding-right: 10px;} </style>
 <?php endif;?>
@@ -27,6 +28,7 @@
     <?php endforeach;?>
     <?php echo html::checkbox('showClosed', array('1' => $lang->program->showClosed), '', $this->cookie->showClosed ? 'checked=checked' : '');?>
     <?php if(common::hasPriv('project', 'batchEdit') and $programType != 'bygrid') echo html::checkbox('editProject', array('1' => $lang->project->edit), '', $this->cookie->editProject ? 'checked=checked' : '');?>
+    <a class="btn btn-link querybox-toggle" id='bysearchTab'><i class="icon icon-search muted"></i> <?php echo $lang->user->search;?></a>
   </div>
   <div class='pull-right'>
     <?php if(common::hasPriv('project', 'create')) common::printLink('project', 'createGuide', "programID=0&from=PGM", '<i class="icon icon-plus"></i> ' . $lang->project->create, '', 'class="btn btn-secondary" data-toggle="modal" data-target="#guideDialog"');?>
@@ -35,6 +37,7 @@
 </div>
 <div id='mainContent' class='main-row'>
   <?php if(empty($programs)):?>
+  <div class="cell<?php if($status == 'bySearch') echo ' show';?>" id="queryBox" data-module='program'></div>
   <div class="table-empty-tip">
     <p>
       <span class="text-muted"><?php echo $lang->program->noProgram;?></span>
@@ -43,6 +46,7 @@
   </div>
   <?php else:?>
   <div class='main-col'>
+    <div class="cell<?php if($status == 'bySearch') echo ' show';?>" id="queryBox" data-module='program'></div>
     <?php
     if($programType == 'bygrid')
     {

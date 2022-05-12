@@ -161,7 +161,7 @@
         $browseLink = $this->session->productList ? $this->session->productList : inlink('browse', "productID=$product->id");
         common::printBack($browseLink);
 
-        if(!$product->deleted) echo $this->buildOperateMenu($product, 'view');
+        if(!$product->deleted) echo $this->product->buildOperateMenu($product, 'view');
         ?>
       </div>
     </div>

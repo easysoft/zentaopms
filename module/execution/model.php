@@ -684,6 +684,27 @@ class executionModel extends model
             $projectID    = isset($execution->project) ? $execution->project : $oldExecution->project;
             $project      = $this->project->getByID($projectID);
 
+            if(isset($execution->project))
+            {
+                $executionProductList   = $this->loadModel('product')->getProducts($executionID);
+                $projectProductList     = $this->product->getProducts($execution->project);
+                $executionProductIdList = array_keys($executionProductList);
+                $projectProductIdList   = array_keys($projectProductList);
+                $diffProductIdList      = array_diff($executionProductIdList, $projectProductIdList);
+                if(!empty($diffProductIdList))
+                {
+                    foreach($diffProductIdList as $key => $newProductID)
+                    {
+                        $data = $this->dao->select('*')->from(TABLE_PROJECTPRODUCT)
+                            ->where('project')->eq($executionID)
+                            ->andWhere('product')->eq($newProductID)
+                            ->fetch();
+                        $data->project = $execution->project;
+                        $this->dao->insert(TABLE_PROJECTPRODUCT)->data($data)->exec();
+                    }
+                }
+            }
+
             if($project  and $execution->begin < $project->begin)
             {
                 dao::$errors['begin'] = sprintf($this->lang->execution->errorLetterProject, $project->begin);
@@ -2791,15 +2812,70 @@ class executionModel extends model
     public function computeBurn()
     {
         $today = helper::today();
-        $burns = array();
-
         $executions = $this->dao->select('id, code')->from(TABLE_EXECUTION)
             ->where('end')->ge($today)
-            ->andWhere('type')->ne('ops')
+            ->andWhere('type')->in('sprint,stage')
+            ->andWhere('lifetime')->ne('ops')
             ->andWhere('status')->notin('done,closed,suspended')
             ->fetchPairs();
-        if(!$executions) return $burns;
+        if(!$executions) return array();
 
+        /* Update historical data of burn. */
+        $table = $this->config->edition == 'open' ? TABLE_TASKESTIMATE : TABLE_EFFORT;
+        $field = $this->config->edition == 'open' ? 'task' : 'objectID';
+        $totalConsumed = $this->dao->select("t2.execution as execution, t1.$field as task, t1.date as date, sum(t1.consumed) as totalConsumed")->from($table)->alias('t1')
+            ->leftJoin(TABLE_TASK)->alias('t2')->on("t1.$field=t2.id")
+            ->where('t2.execution')->in(array_keys($executions))
+            ->beginIF($this->config->edition != 'open')->andWhere('t1.objectType')->eq('task')->fi()
+            ->andWhere('t2.deleted')->eq('0')
+            ->andWhere('t2.parent')->ge('0')
+            ->andWhere('t2.status')->ne('cancel')
+            ->andWhere('t1.date')->ne($today)
+            ->groupBy("t1.$field, t1.date")
+            ->orderBy('t1.id_desc')
+            ->fetchGroup('task', 'date');
+
+        $latestIdList = $this->dao->select('max(id) as id')->from($table)
+            ->where($field)->in(array_keys($totalConsumed))
+            ->beginIF($this->config->edition != 'open')->andWhere('objectType')->eq('task')->fi()
+            ->groupBy("$field,date")->fetchAll('id');
+        $latestLefts = $this->dao->select("$field, date, `left`")->from($table)
+            ->where('id')->in(array_keys($latestIdList))
+            ->fetchGroup($field, 'date');
+
+        $burnList = array();
+        foreach($totalConsumed as $taskID => $consumedList)
+        {
+            foreach($consumedList as $date => $consumed)
+            {
+                $executionID = $consumed->execution;
+                if(!isset($burnList[$executionID])) $burnList[$executionID] = array();
+
+                if(!isset($burnList[$executionID][$date]))
+                {
+                    $burnList[$executionID][$date] = new stdclass();
+                    $burnList[$executionID][$date]->consumed = 0;
+                    $burnList[$executionID][$date]->left     = 0;
+                }
+
+                $burnList[$executionID][$date]->consumed += $consumed->totalConsumed;
+                $burnList[$executionID][$date]->left     += $latestLefts[$taskID][$date]->left;
+            }
+        }
+
+        foreach($burnList as $executionID => $burns)
+        {
+            foreach($burns as $date => $burn)
+            {
+                $burn->execution = $executionID;
+                $burn->date      = $date;
+
+                $this->dao->replace(TABLE_BURN)->data($burn)->exec();
+                $burn->executionName = $executions[$burn->execution];
+            }
+        }
+
+        /* Update today's data of burn. */
         $burns = $this->dao->select("execution, '$today' AS date, sum(estimate) AS `estimate`, sum(`left`) AS `left`, SUM(consumed) AS `consumed`")
             ->from(TABLE_TASK)
             ->where('execution')->in(array_keys($executions))
@@ -2852,8 +2928,10 @@ class executionModel extends model
 
             $this->dao->replace(TABLE_BURN)->data($burn)->exec();
             $burn->executionName = $executions[$burn->execution];
+            $burnList[$executionID][$today] = $burn;
         }
-        return $burns;
+
+        return $burnList;
     }
 
     /**
@@ -3954,5 +4032,37 @@ class executionModel extends model
             $path['grade'] = $parent->grade + 1;
         }
         $this->dao->update(TABLE_PROJECT)->set('path')->eq($path['path'])->set('grade')->eq($path['grade'])->where('id')->eq($execution->id)->exec();
+    }
+
+    /**
+     * Build execution action menu.
+     *
+     * @param  object $execution
+     * @param  string $type
+     * @access public
+     * @return string
+     */
+    public function buildOperateMenu($execution, $type = 'view')
+    {
+        if($execution->deleted) return '';
+
+        $menu   = '';
+        $params = "executionID=$execution->id";
+
+        $menu .= "<div class='divider'></div>";
+        $menu .= $this->buildMenu('execution', 'start',    $params, $execution, $type, '', '', 'iframe', true);
+        $menu .= $this->buildMenu('execution', 'activate', $params, $execution, $type, '', '', 'iframe', true);
+        $menu .= $this->buildMenu('execution', 'putoff',   $params, $execution, $type, '', '', 'iframe', true);
+        $menu .= $this->buildMenu('execution', 'suspend',  $params, $execution, $type, '', '', 'iframe', true);
+        $menu .= $this->buildMenu('execution', 'close',    $params, $execution, $type, '', '', 'iframe', true);
+
+        $menu .= "<div class='divider'></div>";
+        $menu .= $this->buildFlowMenu('execution', $execution, 'view', 'direct');
+        $menu .= "<div class='divider'></div>";
+
+        $menu .= $this->buildMenu('execution', 'edit',   "execution=$execution->id", $execution);
+        $menu .= $this->buildMenu('execution', 'delete', "execution=$execution->id", $execution, 'button', 'trash', 'hiddenwin');
+
+        return $menu;
     }
 }

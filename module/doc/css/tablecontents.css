@@ -20,3 +20,21 @@ span.dotted-line+a {display: block;}
 .tree li.has-list.open:before {content: unset;}
 #modules i.icon-file-text {color: #D0D2D6; font-size: 14px;}
 .tree li>a {max-width: 80%;}
+
+.sortable-sorting .module-name > a {cursor: move;}
+.sortable-sorting li >.tree-group {opacity: .5;}
+.sortable-sorting .drop-here .tree-group {background-color: #fff3e0;}
+.sortable-sorting .drop-here .tree-group > * {opacity: .1;}
+.sortable-sorting .drag-shadow .tree-group {opacity: 1!important;}
+.sortable-sorting .drag-shadow .tree-actions {visibility: hidden;}
+.is-sorting > li > .tree-group {opacity: 1; border-radius: 4px;}
+.is-sorting > li ul {display: none!important;}
+
+.tree-group {position: relative;}
+.tree-group > .module-name {white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 100%; display: block;}
+.tree-group .tree-actions {display: none; position: absolute; right: 0; top: 0; background-color: #fff; white-space: nowrap;}
+.tree-group:hover > .module-name {width: calc(100% - 20px);}
+.tree-group:hover .tree-actions {display: block}
+.tree li.has-list.open:before {left: 6px;}
+.sortDoc>.tail-info{right: 20px;}
+.sortDoc>.tree-actions{position: absolute; right: 0px; background: #fff;}

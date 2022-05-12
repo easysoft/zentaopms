@@ -102,7 +102,7 @@ $status = $this->session->testTaskVersionStatus;
       </td>
       <?php foreach($extendFields as $extendField) echo "<td>" . $this->loadModel('flow')->getFieldValue($extendField, $task) . "</td>";?>
       <td class='c-actions'>
-        <?php echo $this->buildOperateMenu($task, 'browse');?>
+        <?php echo $this->testtask->buildOperateMenu($task, 'browse');?>
       </td>
     </tr>
     <?php endforeach;?>

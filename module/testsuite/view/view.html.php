@@ -31,7 +31,7 @@
     <?php
     if(!$suite->deleted and $canBeChanged)
     {
-        echo $this->buildOperateMenu($suite, 'view');
+        echo $this->testsuite->buildOperateMenu($suite, 'view');
     }
     ?>
   </div>

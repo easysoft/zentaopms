@@ -38,7 +38,7 @@
     </div>
   </div>
   <div class='btn-toolbar pull-right' id='actionsBox'>
-    <?php if(!$plan->deleted && !isonlybody()) echo $this->buildOperateMenu($plan, 'view'); ?>
+    <?php if(!$plan->deleted && !isonlybody()) echo $this->productplan->buildOperateMenu($plan, 'view'); ?>
   </div>
 </div>
 <div id='mainContent' class='main-content'>

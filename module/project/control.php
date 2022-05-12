@@ -307,6 +307,11 @@ class project extends control
         $programTitle = $this->loadModel('setting')->getItem('owner=' . $this->app->user->account . '&module=project&key=programTitle');
         $projectStats = $this->loadModel('program')->getProjectStats($programID, $browseType, $queryID, $orderBy, $pager, $programTitle);
 
+        $actionURL = $this->createLink('project', 'browse', "&programID=$programID&browseType=bySearch&queryID=myQueryID");
+        $this->project->buildSearchFrom($queryID, $actionURL);
+        $projectQuery = $this->session->projectQuery;
+        if($browseType == 'bySearch') $projectStats = $this->project->getBySearch($projectQuery);
+
         $this->view->title      = $this->lang->project->browse;
         $this->view->position[] = $this->lang->project->browse;
 

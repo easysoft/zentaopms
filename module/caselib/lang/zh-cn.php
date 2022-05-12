@@ -25,7 +25,8 @@ $lang->caselib->exportTemplet    = '导出模板';
 $lang->caselib->batchCreateCase  = '批量创建用例';
 $lang->caselib->import           = '导入';
 $lang->caselib->showImport       = '显示导入数据';
-
+$lang->caselib->type             = '类型';
+$lang->caselib->product          = '所属' . $lang->productCommon;
 $lang->caselib->browseAction     = '用例库列表';
 $lang->caselib->deleteAction     = "删除用例库";
 $lang->caselib->importAction     = '导入用例';

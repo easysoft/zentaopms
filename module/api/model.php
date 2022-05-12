@@ -764,6 +764,7 @@ class apiModel extends model
     public function createDemoData($name, $baseUrl, $version = '16.0')
     {
         /* Replace the doc lib name to api lib name. */
+        $this->app->loadLang('doc');
         $this->lang->doclib->name = $this->lang->doclib->apiLibName;
 
         $firstAccount   = $this->dao->select('account')->from(TABLE_USER)->orderBy('id_asc')->limit(1)->fetch('account');

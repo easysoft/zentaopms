@@ -96,7 +96,7 @@
         <?php common::printBack($browseLink);?>
         <?php if(!$bug->deleted):?>
         <div class='divider'></div>
-        <?php echo $this->buildOperateMenu($bug, 'view');?>
+        <?php echo $this->bug->buildOperateMenu($bug, 'view');?>
         <?php endif;?>
       </div>
     </div>

@@ -276,6 +276,48 @@ class productModel extends model
     }
 
     /**
+     * Get list by search.
+     *
+     * @param  int    $queryID
+     * @access public
+     * @return array
+     */
+    public function getListBySearch($queryID = 0)
+    {
+        if($queryID)
+        {
+            $query = $this->loadModel('search')->getQuery($queryID);
+            if($query)
+            {
+                $this->session->set('productQuery', $query->sql);
+                $this->session->set('productForm', $query->form);
+            }
+            else
+            {
+                $this->session->set('productQuery', ' 1 = 1');
+            }
+        }
+        else
+        {
+            if($this->session->productQuery == false) $this->session->set('productQuery', ' 1 = 1');
+        }
+
+        $productQuery = $this->session->productQuery;
+        $productQuery = preg_replace('/`(\w+)`/', 't1.`$1`', $productQuery);
+
+        $products = $this->dao->select('t1.id as id,t1.*')->from(TABLE_PRODUCT)->alias('t1')
+            ->leftJoin(TABLE_PROGRAM)->alias('t2')->on('t1.program = t2.id')
+            ->where($productQuery)
+            ->andWhere('t1.deleted')->eq(0)
+            ->beginIF(!$this->app->user->admin)->andWhere('t1.id')->in($this->app->user->view->products)->fi()
+            ->andWhere('t1.vision')->eq($this->config->vision)->fi()
+            ->orderBy('t1.order_asc')
+            ->fetchAll('id');
+
+        return $products;
+    }
+
+    /**
      * Get product pairs.
      *
      * @param  string       $mode
@@ -1048,6 +1090,31 @@ class productModel extends model
     }
 
     /**
+     * Build search form for all method of product module.
+     *
+     * @param  int       $queryID
+     * @param  string    $actionURL
+     * @access public
+     * @return void
+     */
+    public function buildProductSearchForm($queryID, $actionURL)
+    {
+        $this->config->product->all->search['queryID']   = $queryID;
+        $this->config->product->all->search['actionURL'] = $actionURL;
+
+        $linePairs = $this->getLinePairs();
+        $this->config->product->all->search['params']['line']['values'] = array('' => '') + $linePairs;
+
+        if($this->config->systemMode == 'new')
+        {
+            $programPairs = $this->loadModel('program')->getTopPairs('', 'noclosed');
+            $this->config->product->all->search['params']['program']['values'] = array('' => '') + $programPairs;
+        }
+
+        $this->loadModel('search')->setSearchParams($this->config->product->all->search);
+    }
+
+    /**
      * Get project pairs by product.
      *
      * @param  int    $productID
@@ -1567,13 +1634,13 @@ class productModel extends model
      * @access public
      * @return array
      */
-    public function getStats($orderBy = 'order_asc', $pager = null, $status = 'noclosed', $line = 0, $storyType = 'story', $programID = 0)
+    public function getStats($orderBy = 'order_asc', $pager = null, $status = 'noclosed', $line = 0, $storyType = 'story', $programID = 0, $param = 0)
     {
         $this->loadModel('report');
         $this->loadModel('story');
         $this->loadModel('bug');
 
-        $products = $this->getList($programID, $status, $limit = 0, $line);
+        $products = $status == 'bySearch' ? $this->getListBySearch($param) : $this->getList($programID, $status, $limit = 0, $line);
         if(empty($products)) return array();
 
         $productKeys = array_keys($products);
@@ -2041,7 +2108,7 @@ class productModel extends model
             $menu .= $this->buildFlowMenu('product', $product, $type, 'direct');
             $menu .= "<div class='divider'></div>";
 
-            $menu .= $this->buildMenu('product', 'close', $params, $product, $type, '', '', '', '', "data-app='product'");
+            $menu .= $this->buildMenu('product', 'close', $params, $product, $type, '', '', 'iframe', true, "data-app='product'");
             $menu .= "<div class='divider'></div>";
         }
 
