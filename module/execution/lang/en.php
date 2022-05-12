@@ -359,7 +359,9 @@ $lang->execution->linkStory                   = 'Link Story';
 $lang->execution->createTask                  = 'Create Task';
 $lang->execution->goback                      = "Go Back";
 $lang->execution->noweekend                   = 'Exclude Weekend';
+$lang->execution->nowdelay                    = 'Exclude Delay Date';
 $lang->execution->withweekend                 = 'Include Weekend';
+$lang->execution->withdelay                   = 'Include Delay Date';
 $lang->execution->interval                    = 'Intervals ';
 $lang->execution->fixFirstWithLeft            = 'Update hours left too';
 $lang->execution->unfinishedExecution         = "This {$lang->executionCommon} has ";
@@ -384,6 +386,7 @@ $lang->execution->charts->burn->graph->rotateNames  = 1;
 $lang->execution->charts->burn->graph->showValues   = 0;
 $lang->execution->charts->burn->graph->reference    = 'Ideal';
 $lang->execution->charts->burn->graph->actuality    = 'Actual';
+$lang->execution->charts->burn->graph->delay        = 'Delay';
 
 $lang->execution->placeholder = new stdclass();
 $lang->execution->placeholder->code      = "Abbreviation of {$lang->executionCommon} name";
