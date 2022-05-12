@@ -641,6 +641,7 @@ class projectModel extends model
             ->where($projectQuery)
             ->andWhere('type')->eq('project')
             ->fetchAll('id');
+        if(empty($projects)) $projects = 'noProject';
         $projects = $this->loadModel('program')->getProjectStats(0, 'undone', 0, 'id_desc', null, 0, 0, false, $projects);
         return $projects;
     }
