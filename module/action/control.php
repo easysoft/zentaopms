@@ -104,8 +104,15 @@ class action extends control
      */
     public function undelete($actionID)
     {
+        $oldAction = $this->action->getById($actionID);
+        $extra     = $oldAction->extra == ACTIONMODEL::BE_HIDDEN ? 'hidden' : 'all';
+
         $this->action->undelete($actionID);
-        echo js::reload('parent');
+
+        $sameTypeObjects = $this->action->getTrashes($oldAction->objectType, $extra, 'id_desc', null);
+        $browseType      = $sameTypeObjects ? $oldAction->objectType : 'all';
+
+        return print(js::locate($this->createLink('action', 'trash', "browseType=$browseType&type=$extra"), 'parent'));
     }
 
     /**
@@ -117,8 +124,14 @@ class action extends control
      */
     public function hideOne($actionID)
     {
+        $oldAction = $this->action->getById($actionID);
+
         $this->action->hideOne($actionID);
-        echo js::reload('parent');
+
+        $sameTypeObjects = $this->action->getTrashes($oldAction->objectType, 'all', 'id_desc', null);
+        $browseType      = $sameTypeObjects ? $oldAction->objectType : 'all';
+
+        return print(js::locate($this->createLink('action', 'trash', "browseType=$browseType"), 'parent'));
     }
 
     /**
