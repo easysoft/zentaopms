@@ -20,16 +20,6 @@
   <div class='btn-toolbar pull-left'><?php // common::printAdminSubMenu('system');?></div>
 </div>
 <div id='mainContent' class="main-row">
-  <div class='side-col' id='sidebar'>
-    <div class='cell'>
-      <div class='list-group'>
-        <?php
-        echo html::a($this->inLink('index'), $lang->backup->common, '', "class='active'");
-        echo html::a($this->createLink('action', 'trash'), $lang->action->trash);
-        ?>
-      </div>
-    </div>
-  </div>
   <div class="main-col main-content">
     <div class='main-header'>
       <h2>

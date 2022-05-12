@@ -31,6 +31,20 @@ $lang->program->days           = '可用工作日';
 $lang->program->acl            = '访问控制';
 $lang->program->whitelist      = '白名单';
 $lang->program->deleted        = '已删除';
+$lang->program->lifetime       = '项目周期';
+$lang->program->output         = '输出';
+$lang->program->auth           = '权限控制';
+$lang->program->path           = '路径';
+$lang->program->grade          = '层级';
+$lang->program->realBegan      = '实际开始日期';
+$lang->program->realEnd        = '实际完成日期';
+$lang->program->version        = '版本';
+$lang->program->parentVersion  = '父版本';
+$lang->program->planDuration   = '计划周期天数';
+$lang->program->realDuration   = '实际周期天数';
+$lang->program->openedVersion  = '创建版本';
+$lang->program->lastEditedBy   = '最后编辑人';
+$lang->program->lastEditedDate = '最后编辑日期';
 
 /* Actions. */
 $lang->program->common                  = '项目集';
