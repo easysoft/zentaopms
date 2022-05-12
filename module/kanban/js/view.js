@@ -604,6 +604,12 @@ function renderProductplanItem(item, $item)
         '</div>'
     ].join('')).appendTo($item);
 
+    var $descBox = $info.children('.productplanDesc');
+    if(!$descBox.length)
+    {
+        $descBox = $('<div class="productplanDesc cardDesc" title="' + item.desc + '">' + item.desc + '</div>').appendTo($info);
+    }
+
     var $statusBox = $info.children('.productplanStatus');
     if(!$statusBox.length)
     {
@@ -669,6 +675,12 @@ function renderBuildItem(item, $item)
         $title.append('<i class="icon icon-ver"></i>' + item.title);
     }
     $title.attr('title', name);
+
+    var $descBox = $item.children('.buildDesc');
+    if(!$descBox.length)
+    {
+        $descBox = $('<div class="buildDesc cardDesc" title="' + item.desc + '">' + item.desc + '</div>').appendTo($item);
+    }
 
     var $info = $item.children('.info');
     if(!$info.length) $info = $(

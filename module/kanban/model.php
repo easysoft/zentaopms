@@ -1169,6 +1169,7 @@ class kanbanModel extends model
                         $objectCard->execType = $object->type;
                     }
 
+                    $objectCard->desc         = strip_tags(htmlspecialchars_decode($object->desc));
                     $objectCard->objectStatus = $objectCard->status;
                     $objectCard->status       = $objectCard->progress == 100 ? 'done' : 'doing';
                     $cards[$cardID] = $objectCard;
