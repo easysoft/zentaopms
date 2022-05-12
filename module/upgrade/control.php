@@ -521,11 +521,15 @@ class upgrade extends control
             }
 
             /* Get products that are not merged by sprints. */
-            $noMergedProducts = $this->dao->select('t1.*')->from(TABLE_PRODUCT)->alias('t1')
-                ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t2')->on('t1.id=t2.product')
-                ->where('t2.project')->in(array_keys($noMergedSprints))
-                ->andWhere('t1.vision')->eq('rnd')
-                ->fetchAll('id');
+            $noMergedProducts = array();
+            if($noMergedSprints)
+            {
+                $noMergedProducts = $this->dao->select('t1.*')->from(TABLE_PRODUCT)->alias('t1')
+                    ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t2')->on('t1.id=t2.product')
+                    ->where('t2.project')->in(array_keys($noMergedSprints))
+                    ->andWhere('t1.vision')->eq('rnd')
+                    ->fetchAll('id');
+            }
 
             /* Add products without sprints. */
             $noMergedProducts += $this->dao->select('*')->from(TABLE_PRODUCT)->where('program')->eq(0)->andWhere('vision')->eq('rnd')->fetchAll('id');
