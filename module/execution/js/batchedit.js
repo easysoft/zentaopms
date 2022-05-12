@@ -14,7 +14,6 @@ function changeProject(obj, executionID, projectID)
     if(!confirmVal)
     {
         $(obj).val(lastSelected).trigger("chosen:updated");
-        return false;
     }
     else
     {
