@@ -414,3 +414,8 @@ UPDATE `zt_workflowaction` SET `type`='single', `position`='browse', `show`='dir
 UPDATE `zt_workflowaction` SET `type`='batch' WHERE `module`IN ('feedback','caselib','testsuite','testtask','testcase') AND `action` IN ('admin','browse','batchedit','batchcreate','import','showimport');
 UPDATE `zt_workflowaction` SET `position`='browse' WHERE `module`IN ('feedback','caselib','testsuite','testtask','testcase') AND `action` IN ('batchedit','batchcreate','import','showimport');
 UPDATE `zt_workflowaction` SET `position`='browse' WHERE `action` IN ('view','exporttemplate');
+
+UPDATE `zt_workflowaction` SET `method`='browse' WHERE `action`='admin';
+UPDATE `zt_workflowaction` SET `method`='operate' WHERE `action` IN ('review','assignTo','comment','close','activate','start','block');
+UPDATE `zt_workflowaction` SET `method`='batchOperate' WHERE `action`='batchedit';
+UPDATE `zt_workflowaction` SET `method`='view' WHERE `action`='adminview';
