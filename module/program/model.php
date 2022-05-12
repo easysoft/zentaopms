@@ -1339,6 +1339,7 @@ class programModel extends model
 
         /* Init vars. */
         $projects = $this->getProjectList($programID, $browseType, $queryID, $orderBy, $pager, $programTitle, $involved, $queryAll);
+
         if(empty($projects)) return array();
 
         $projectKeys = array_keys($projects);
