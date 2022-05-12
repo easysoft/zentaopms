@@ -31,6 +31,20 @@ $lang->program->days           = 'Days';
 $lang->program->acl            = 'Access Control';
 $lang->program->whitelist      = 'WhiteList';
 $lang->program->deleted        = 'Deleted';
+$lang->program->lifetime       = 'Lifetime';
+$lang->program->output         = 'Output';
+$lang->program->auth           = 'Auth';
+$lang->program->path           = 'Path';
+$lang->program->grade          = 'Grade';
+$lang->program->realBegan      = 'RealBegan';
+$lang->program->realEnd        = 'RealEnd';
+$lang->program->version        = 'Version';
+$lang->program->parentVersion  = 'ParentVersion';
+$lang->program->planDuration   = 'PlanDuration';
+$lang->program->realDuration   = 'RealDuration';
+$lang->program->openedVersion  = 'OpenedVersion';
+$lang->program->lastEditedBy   = 'LastEditedBy';
+$lang->program->lastEditedDate = 'LastEditedDate';
 
 /* Actions. */
 $lang->program->common                  = 'Program';

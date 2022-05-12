@@ -132,7 +132,7 @@ UPDATE `zt_workflowaction` SET `position` = 'browse' WHERE `module` = 'story' an
 UPDATE `zt_workflowaction` SET `position` = 'browse' WHERE `module` = 'story' and `action` = 'import' and `vision` = 'rnd';
 UPDATE `zt_workflowaction` SET `position` = 'browse' WHERE `module` = 'story' and `action` = 'view' and `vision` = 'rnd';
 UPDATE `zt_workflowaction` SET `show` = 'direct' WHERE `module` = 'story'  and `vision` = 'rnd' and action NOT IN ('exporttemplate', 'import');
-UPDATE `zt_workflowaction` SET `show` = 'direct' WHERE `module` = 'program'  and `vision` = 'rnd'
+UPDATE `zt_workflowaction` SET `show` = 'direct' WHERE `module` = 'program'  and `vision` = 'rnd';
 
 DELETE FROM `zt_workflowfield` WHERE `module`='execution' AND `field`='stage';
 DELETE FROM `zt_workflowfield` WHERE `module`='program' AND `field`='stage';
@@ -418,3 +418,47 @@ UPDATE `zt_workflowaction` SET `type`='single', `position`='browseandview', `sho
 UPDATE `zt_workflowaction` SET `type`='single', `position`='browse', `show`='direct', `open`='normal', `layout`='side' WHERE `module`='task' AND `action`='view';
 UPDATE `zt_workflowaction` SET `type`='batch' WHERE `module`IN ('feedback','caselib','testsuite','testtask','testcase') AND `action` IN ('admin','browse','batchedit','batchcreate','import','showimport');
 UPDATE `zt_workflowaction` SET `position`='browse' WHERE `module`IN ('feedback','caselib','testsuite','testtask','testcase') AND `action` IN ('batchedit','batchcreate','import','showimport');
+
+
+UPDATE `zt_workflowfield` SET `control` = 'radio' WHERE `module` = 'program' and `field` = 'deleted';
+UPDATE `zt_workflowfield` SET `type` = 'char', `length` => '30', `control` = 'radio' WHERE `module` = 'program' and `field` = 'type';
+UPDATE `zt_workflowfield` SET `control` = 'date' WHERE `module` = 'program' and `field` = 'begin';
+UPDATE `zt_workflowfield` SET `control` = 'date' WHERE `module` = 'program' and `field` = 'end';
+UPDATE `zt_workflowfield` SET `control` = 'integer' WHERE `module` = 'program' and `field` = 'days';
+UPDATE `zt_workflowfield` SET `control` = 'select', `options` = '[1,2,3,4]' WHERE `module` = 'program' and `field` = 'pri';
+UPDATE `zt_workflowfield` SET `control` = 'richtext' WHERE `module` = 'program' and `field` = 'desc';
+UPDATE `zt_workflowfield` SET `control` = 'datetime' WHERE `module` = 'program' and `field` = 'openedDate';
+UPDATE `zt_workflowfield` SET `control` = 'datetime' WHERE `module` = 'program' and `field` = 'closedDate';
+UPDATE `zt_workflowfield` SET `control` = 'datetime' WHERE `module` = 'program' and `field` = 'canceledDate';
+UPDATE `zt_workflowfield` SET `type` => 'char', `length` => '30' WHERE `module` = 'program' and `field` = 'acl';
+UPDATE `zt_workflowfield` SET `control` = 'multi-select', `options` = 'user' WHERE `module` = 'program' and `field` = 'whitelist';
+UPDATE `zt_workflowfield` SET `control` = 'radio' WHERE `module` = 'program' and `field` = 'deleted';
+UPDATE `zt_workflowfield` SET `control` = 'radio' WHERE `module` = 'program' and `field` = 'deleted';
+UPDATE `zt_workflowfield` SET `control` = 'radio' WHERE `module` = 'program' and `field` = 'deleted';
+UPDATE `zt_workflowfield` SET `control` = 'radio' WHERE `module` = 'program' and `field` = 'deleted';
+UPDATE `zt_workflowfield` SET `control` = 'radio' WHERE `module` = 'program' and `field` = 'deleted';
+UPDATE `zt_workflowfield` SET `control` = 'radio' WHERE `module` = 'program' and `field` = 'deleted';
+UPDATE `zt_workflowfield` SET `control` = 'radio' WHERE `module` = 'program' and `field` = 'deleted';
+
+
+
+REPLACE INTO `zt_workflowfield` (`module`, `field`, `type`, `length`, `name`, `control`, `expression`, `options`, `default`, `rules`, `placeholder`, `order`, `searchOrder`, `exportOrder`, `canExport`, `canSearch`, `isValue`, `readonly`, `buildin`, `desc`, `createdBy`, `createdDate`, `editedBy`, `editedDate`) VALUES
+('program', 'lifetime', 	'char', 	'30', 	'项目周期', 		'input', 	'', '',   	'',  '', '', 29, 0, 0, '0', '0', '0', '1', 1, '', '', '2022-04-19 10:14:25', '', '0000-00-00 00:00:00'),
+('program', 'output',   	'text', 	'',   	'输出',    		'textarea', '', '',   	'',  '', '', 30, 0, 0, '0', '0', '0', '1', 1, '', '', '2022-04-19 10:14:25', '', '0000-00-00 00:00:00'),
+('program', 'auth',     	'char', 	'30', 	'权限控制', 		'input', 	'', '',   	'',  '', '', 31, 0, 0, '0', '0', '0', '1', 1, '', '', '2022-04-19 10:14:25', '', '0000-00-00 00:00:00'),
+('program', 'path',     	'varchar', 	'255', 	'路径', 		'input', 	'', '',   	'',  '', '', 32, 0, 0, '0', '0', '0', '1', 1, '', '', '2022-04-19 10:14:25', '', '0000-00-00 00:00:00'),
+('program', 'grade',    	'tinyint', 	'3', 	'层级', 		'integer', 	'', '',   	'',  '', '', 33, 0, 0, '0', '0', '0', '1', 1, '', '', '2022-04-19 10:14:25', '', '0000-00-00 00:00:00'),
+('program', 'realBegan', 	'date', 	'', 	'实际开始日期', 	'date', 	'', '',   	'',  '', '', 34, 0, 0, '0', '0', '0', '1', 1, '', '', '2022-04-19 10:14:25', '', '0000-00-00 00:00:00'),
+('program', 'realEnd', 		'date', 	'', 	'实际完成日期', 	'date', 	'', '',   	'',  '', '', 35, 0, 0, '0', '0', '0', '1', 1, '', '', '2022-04-19 10:14:25', '', '0000-00-00 00:00:00'),
+('program', 'version', 		'smallint',     '6', 	'版本', 		'integer', 	'', '',   	'',  '', '', 36, 0, 0, '0', '0', '0', '1', 1, '', '', '2022-04-19 10:14:25', '', '0000-00-00 00:00:00'),
+('program', 'parentVersion',	'smallint',     '6', 	'父版本', 		'integer', 	'', '',   	'',  '', '', 37, 0, 0, '0', '0', '0', '1', 1, '', '', '2022-04-19 10:14:25', '', '0000-00-00 00:00:00'),
+('program', 'planDuration', 	'smallint',     '6', 	'计划周期天数', 	'integer', 	'', '',   	'',  '', '', 38, 0, 0, '0', '0', '0', '1', 1, '', '', '2022-04-19 10:14:25', '', '0000-00-00 00:00:00'),
+('program', 'realDuration', 	'smallint',     '6', 	'实际周期天数', 	'integer', 	'', '',   	'',  '', '', 39, 0, 0, '0', '0', '0', '1', 1, '', '', '2022-04-19 10:14:25', '', '0000-00-00 00:00:00'),
+('program', 'openedVersion', 	'smallint',     '6', 	'创建版本', 		'integer', 	'', '',   	'',  '', '', 40, 0, 0, '0', '0', '0', '1', 1, '', '', '2022-04-19 10:14:25', '', '0000-00-00 00:00:00'),
+('program', 'lastEditedBy', 	'varchar', 	'30', 	'最后编辑人', 		'select', 	'', 'user', '',  '', '', 41, 0, 0, '0', '0', '0', '1', 1, '', '', '2022-04-19 10:14:25', '', '0000-00-00 00:00:00'),
+('program', 'lastEditedDate', 	'datetime',     '', 	'最后编辑日期', 	'datetime', '', '',   	'',  	'', '', 42, 0, 0, '0', '0', '0', '1', 1, '', '', '2022-04-19 10:14:25', '', '0000-00-00 00:00:00'),
+('program', 'suspendedDate', 	'date', 	'', 	'suspendedDate',	'date', 	'', '',   	'',  	'', '', 43, 0, 0, '0', '0', '0', '1', 1, '', '', '2022-04-19 10:14:25', '', '0000-00-00 00:00:00'),
+('program', 'vision', 		'varchar', 	'10', 	'vision', 		'input', 	'', '',   	'rnd', 	'', '', 44, 0, 0, '0', '0', '0', '1', 1, '', '', '2022-04-19 10:14:25', '', '0000-00-00 00:00:00'),
+('program', 'displayCards', 	'enum', 	'', 	'displayCards', 	'radio', 	'', '[\"\\u672a\\u5220\\u9664\",\"\\u5df2\\u5220\\u9664\"]',   '0',  '', '', 45, 0, 0, '0', '0', '0', '1', 1, '', '', '2022-04-19 10:14:25', '', '0000-00-00 00:00:00'),
+('program', 'fluidBoard', 	'enum', 	'', 	'fluidBoard', 		'radio', 	'', '[\"\\u672a\\u5220\\u9664\",\"\\u5df2\\u5220\\u9664\"]',   '0',  '', '', 46, 0, 0, '0', '0', '0', '1', 1, '', '', '2022-04-19 10:14:25', '', '0000-00-00 00:00:00');
+
