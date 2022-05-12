@@ -472,7 +472,7 @@ class projectModel extends model
         $link    = helper::createLink('project', 'index', "projectID=%s");
         $project = $this->getByID($projectID);
 
-        if(strpos(',project,product,projectstory,story,bug,doc,testcase,testtask,testreport,build,projectrelease,stakeholder,issue,risk,meeting,report,measrecord', ',' . $module . ',') !== false)
+        if(strpos(',project,product,projectstory,story,bug,doc,testcase,testtask,testreport,repo,build,projectrelease,stakeholder,issue,risk,meeting,report,measrecord', ',' . $module . ',') !== false)
         {
             if($module == 'project' and $method == 'execution')
             {
