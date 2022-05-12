@@ -9,14 +9,14 @@
  * @version     $Id: date.class.php 2605 2013-01-09 07:22:58Z wwccss $
  * @link        http://www.zentao.net
  */
-class date 
+class date
 {
     /**
      * Build hour time list.
-     * 
-     * @param  int $begin 
-     * @param  int $end 
-     * @param  int $delta 
+     *
+     * @param  int $begin
+     * @param  int $end
+     * @param  int $delta
      * @access public
      * @return array
      */
@@ -37,7 +37,7 @@ class date
 
     /**
      * Get today.
-     * 
+     *
      * @access public
      * @return date
      */
@@ -47,8 +47,8 @@ class date
     }
 
     /**
-     * Get yesterday 
-     * 
+     * Get yesterday
+     *
      * @access public
      * @return date
      */
@@ -59,7 +59,7 @@ class date
 
     /**
      * Get tomorrow.
-     * 
+     *
      * @access public
      * @return date
      */
@@ -70,7 +70,7 @@ class date
 
     /**
      * Get the day before yesterday.
-     * 
+     *
      * @access public
      * @return date
      */
@@ -81,8 +81,8 @@ class date
 
     /**
      * Get now time period.
-     * 
-     * @param  int    $delta 
+     *
+     * @param  int    $delta
      * @access public
      * @return string the current time period, like 0915
      */
@@ -114,8 +114,8 @@ class date
 
     /**
      * Format time 0915 to 09:15
-     * 
-     * @param  string $time 
+     *
+     * @param  string $time
      * @access public
      * @return string
      */
@@ -127,7 +127,7 @@ class date
 
     /**
      * Get the begin and end date of this week.
-     * 
+     *
      * @access public
      * @return array
      */
@@ -141,7 +141,7 @@ class date
 
     /**
      * Get the begin and end date of last week.
-     * 
+     *
      * @access public
      * @return array
      */
@@ -155,7 +155,7 @@ class date
 
     /**
      * Get the time at the middle of this week.
-     * 
+     *
      * If today in week is 1, move it one day in future. Else is 7, move it back one day. To keep the time geted in this week.
      *
      * @access public
@@ -172,7 +172,7 @@ class date
 
     /**
      * Get middle of last week.
-     * 
+     *
      * @access public
      * @return time
      */
@@ -188,7 +188,7 @@ class date
 
     /**
      * Get begin and end time of this month.
-     * 
+     *
      * @access public
      * @return array
      */
@@ -201,7 +201,7 @@ class date
 
     /**
      * Get begin and end time of last month.
-     * 
+     *
      * @access public
      * @return array
      */
@@ -213,11 +213,11 @@ class date
     }
 
     /**
-     * Get begin and end time of this season. 
-     * 
+     * Get begin and end time of this season.
+     *
      * @static
      * @access public
-     * @return array 
+     * @return array
      */
     public static function getThisSeason()
     {
@@ -230,11 +230,11 @@ class date
     }
 
     /**
-     * Get begin and end time of last season. 
-     * 
+     * Get begin and end time of last season.
+     *
      * @static
      * @access public
-     * @return array 
+     * @return array
      */
     public static function getLastSeason()
     {
@@ -242,43 +242,43 @@ class date
         $begin  = date('Y-m-d H:i:s', mktime(0, 0, 0, $season * 3 - 2, 1, date('Y')));
         $endDay = date('t', mktime(0, 0 , 0, $season * 3, 1, date("Y")));                // Get end day.
         $end    = date('Y-m-d H:i:s', mktime(23, 59, 59, $season * 3, $endDay, date('Y')));
-        
+
         return array('begin' => $begin, 'end' => $end);
     }
 
     /**
      * Get begin and end time of this year.
-     * 
+     *
      * @static
      * @access public
-     * @return array 
+     * @return array
      */
     public static function getThisYear()
     {
         $begin = date(DT_DATE1, strtotime('1/1 this year')) . ' 00:00:00';
-        $end   = date(DT_DATE1, strtotime('1/1 next year -1 day')) . ' 23:59:59';  
+        $end   = date(DT_DATE1, strtotime('1/1 next year -1 day')) . ' 23:59:59';
         return array('begin' => $begin, 'end' => $end);
     }
 
     /**
      * Get begin and end time of last year.
-     * 
+     *
      * @static
      * @access public
-     * @return array 
+     * @return array
      */
     public static function getLastYear()
     {
         $begin = date(DT_DATE1, strtotime('1/1 last year')) . ' 00:00:00';
-        $end   = date(DT_DATE1, strtotime('1/1 this year -1 day')) . ' 23:59:59';  
+        $end   = date(DT_DATE1, strtotime('1/1 this year -1 day')) . ' 23:59:59';
         return array('begin' => $begin, 'end' => $end);
     }
 
     /**
-     * Get date list 
-     * 
-     * @param  string $begin 
-     * @param  string $end 
+     * Get date list
+     *
+     * @param  string $begin
+     * @param  string $end
      * @param  string $format     m/d/Y|Y-m-d
      * @param  string $type       noweekend|withweekend
      * @param  int    $weekend    2|1
@@ -295,7 +295,7 @@ class date
         for($date = $begin; $date <= $end; $date += 24 * 3600)
         {
             $weekDay = date('w', $date);
-            if($type == 'noweekend' and (($weekend == 2 and $weekDay == 6) or $weekDay == 0)) continue;
+            if(strpos($type, 'noweekend') !== false and (($weekend == 2 and $weekDay == 6) or $weekDay == 0)) continue;
 
             $dateList[] = date($format, $date);
         }

@@ -1149,12 +1149,12 @@ class execution extends control
      * @access public
      * @return void
      */
-    public function burn($executionID = 0, $type = 'noweekend', $interval = 0, $burnBy = 'left')
+    public function burn($executionID = 0, $type = 'noweekend,nodelay', $interval = 0, $burnBy = 'left')
     {
         $this->loadModel('report');
         $execution   = $this->commonAction($executionID);
         $executionID = $execution->id;
-        $burnBy    = $this->cookie->burnBy ? $this->cookie->burnBy : $burnBy;
+        $burnBy      = $this->cookie->burnBy ? $this->cookie->burnBy : $burnBy;
 
         /* Header and position. */
         $title      = $execution->name . $this->lang->colon . $this->lang->execution->burn;
@@ -1163,7 +1163,10 @@ class execution extends control
 
         /* Get date list. */
         $executionInfo = $this->execution->getByID($executionID);
-        list($dateList, $interval) = $this->execution->getDateList($executionInfo->begin, $executionInfo->end, $type, $interval, 'Y-m-d');
+        $deadline      = $execution->status == 'closed' ? substr($execution->closedDate, 0, 10) : $execution->suspendedDate;
+        $deadline      = strpos('closed,suspended', $execution->status) === false ? helper::today() : $deadline;
+        $endDate       = strpos($type, 'withdelay') !== false ? $deadline : $executionInfo->end;
+        list($dateList, $interval) = $this->execution->getDateList($executionInfo->begin, $endDate, $type, $interval, 'Y-m-d');
         $chartData = $this->execution->buildBurnData($executionID, $dateList, $type, $burnBy);
 
         $dayList = array_fill(1, floor((int)$execution->days / $this->config->execution->maxBurnDay) + 5, '');
@@ -1838,6 +1841,7 @@ class execution extends control
         if(!empty($_POST))
         {
             $this->loadModel('action');
+            $this->execution->computeBurn($executionID);
             $changes = $this->execution->suspend($executionID);
             if(dao::isError()) return print(js::error(dao::getError()));
 
@@ -1933,6 +1937,7 @@ class execution extends control
         if(!empty($_POST))
         {
             $this->loadModel('action');
+            $this->execution->computeBurn($executionID);
             $changes = $this->execution->close($executionID);
             if(dao::isError()) return print(js::error(dao::getError()));
 
