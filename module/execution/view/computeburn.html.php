@@ -11,8 +11,11 @@
  */
 ?>
 <?php
-foreach($burns as $burn)
+foreach($burns as $executionID => $burnList)
 {
-    echo $burn->execution . "\t" . $burn->executionName . "\t" . $burn->date . "\t" . $burn->left . "\n";
+    foreach($burnList as $date => $burn)
+    {
+        echo $burn->execution . "\t" . $burn->executionName . "\t" . $burn->date . "\t" . $burn->left . "\n";
+    }
 }
 ?>

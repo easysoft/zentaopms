@@ -138,6 +138,7 @@ class taskModel extends model
                 ->batchCheck($requiredFields, 'notempty')
                 ->checkIF($task->estimate != '', 'estimate', 'float')
                 ->checkIF(!helper::isZeroDate($task->deadline), 'deadline', 'ge', $task->estStarted)
+                ->checkFlow()
                 ->exec();
 
             if(dao::isError()) return false;
@@ -363,12 +364,6 @@ class taskModel extends model
                 if(is_array($data[$i]->{$extendField->field})) $data[$i]->{$extendField->field} = join(',', $data[$i]->{$extendField->field});
 
                 $data[$i]->{$extendField->field} = htmlSpecialString($data[$i]->{$extendField->field});
-                $message = $this->checkFlowRule($extendField, $data[$i]->{$extendField->field});
-                if($message)
-                {
-                    dao::$errors['message'][] = sprintf($message);
-                    return false;
-                }
             }
         }
 
@@ -423,6 +418,7 @@ class taskModel extends model
             $this->dao->insert(TABLE_TASK)->data($task)
                 ->autoCheck()
                 ->checkIF($task->estimate != '', 'estimate', 'float')
+                ->checkFlow()
                 ->exec();
 
             if(dao::isError()) return false;
@@ -1049,6 +1045,7 @@ class taskModel extends model
             ->batchCheckIF($task->status == 'done', 'canceledBy, canceledDate', 'empty')
 
             ->batchCheckIF($task->closedReason == 'cancel', 'finishedBy, finishedDate', 'empty')
+            ->checkFlow()
             ->where('id')->eq((int)$taskID)->exec();
 
         if(!dao::isError())
@@ -1219,8 +1216,6 @@ class taskModel extends model
                 if(is_array($task->{$extendField->field})) $task->{$extendField->field} = join(',', $task->{$extendField->field});
 
                 $task->{$extendField->field} = htmlSpecialString($task->{$extendField->field});
-                $message = $this->checkFlowRule($extendField, $task->{$extendField->field});
-                if($message) return print(js::alert($message));
             }
 
             if(isset($data->consumeds[$taskID]))
@@ -1355,6 +1350,7 @@ class taskModel extends model
                 ->batchCheckIF($task->status == 'done', 'canceledBy, canceledDate', 'empty')
 
                 ->batchCheckIF($task->closedReason == 'cancel', 'finishedBy, finishedDate', 'empty')
+                ->checkFlow()
                 ->where('id')->eq((int)$taskID)
                 ->exec();
             if(dao::isError())
@@ -1472,6 +1468,7 @@ class taskModel extends model
             ->data($task)
             ->autoCheck()
             ->check('left', 'float')
+            ->checkFlow()
             ->where('id')->eq($taskID)
             ->exec();
 
@@ -1559,6 +1556,7 @@ class taskModel extends model
         $this->dao->update(TABLE_TASK)->data($task)
             ->autoCheck()
             ->check('consumed,left', 'float')
+            ->checkFlow()
             ->where('id')->eq((int)$taskID)->exec();
 
         if($oldTask->parent > 0)
@@ -1830,6 +1828,7 @@ class taskModel extends model
 
         $this->dao->update(TABLE_TASK)->data($task)
             ->autoCheck()
+            ->checkFlow()
             ->where('id')->eq((int)$taskID)
             ->exec();
 
@@ -1869,7 +1868,7 @@ class taskModel extends model
             ->remove('comment')
             ->get();
 
-        $this->dao->update(TABLE_TASK)->data($task)->autoCheck()->where('id')->eq((int)$taskID)->exec();
+        $this->dao->update(TABLE_TASK)->data($task)->autoCheck()->checkFlow()->where('id')->eq((int)$taskID)->exec();
 
         if($oldTask->parent > 0) $this->updateParentStatus($taskID);
 
@@ -1908,7 +1907,7 @@ class taskModel extends model
             ->remove('comment')
             ->get();
 
-        $this->dao->update(TABLE_TASK)->data($task)->autoCheck()->where('id')->eq((int)$taskID)->exec();
+        $this->dao->update(TABLE_TASK)->data($task)->autoCheck()->checkFlow()->where('id')->eq((int)$taskID)->exec();
 
         if(!dao::isError())
         {
@@ -1953,7 +1952,7 @@ class taskModel extends model
             ->remove('comment')
             ->get();
 
-        $this->dao->update(TABLE_TASK)->data($task)->autoCheck()->where('id')->eq((int)$taskID)->exec();
+        $this->dao->update(TABLE_TASK)->data($task)->autoCheck()->checkFlow()->where('id')->eq((int)$taskID)->exec();
         if($oldTask->fromBug) $this->dao->update(TABLE_BUG)->set('toTask')->eq(0)->where('id')->eq($oldTask->fromBug)->exec();
         if($oldTask->parent > 0) $this->updateParentStatus($taskID);
         if($oldTask->parent == '-1')
@@ -2036,6 +2035,7 @@ class taskModel extends model
         $this->dao->update(TABLE_TASK)->data($task)
             ->autoCheck()
             ->batchCheck($this->config->task->activate->requiredFields, 'notempty')
+            ->checkFlow()
             ->where('id')->eq((int)$taskID)
             ->exec();
 
@@ -3399,20 +3399,7 @@ class taskModel extends model
                 echo helper::isZeroDate($task->activatedDate) ? '' : substr($task->activatedDate, 5, 11);
                 break;
             case 'actions':
-                if($storyChanged)
-                {
-                    common::printIcon('task', 'confirmStoryChange', "taskid=$task->id", $task, 'list', '', 'hiddenwin');
-                    break;
-                }
-
-                if($task->status != 'pause') common::printIcon('task', 'start', "taskID=$task->id", $task, 'list', '', '', 'iframe', true);
-                if($task->status == 'pause') common::printIcon('task', 'restart', "taskID=$task->id", $task, 'list', '', '', 'iframe', true);
-                common::printIcon('task', 'close',  "taskID=$task->id", $task, 'list', '', '', 'iframe', true);
-                common::printIcon('task', 'finish', "taskID=$task->id", $task, 'list', '', '', 'iframe', true);
-
-                common::printIcon('task', 'recordEstimate', "taskID=$task->id", $task, 'list', 'time', '', 'iframe', true);
-                common::printIcon('task', 'edit',   "taskID=$task->id", $task, 'list');
-                if($this->config->vision == 'rnd') common::printIcon('task', 'batchCreate', "execution=$task->execution&storyID=$task->story&moduleID=$task->module&taskID=$task->id&ifame=0", $task, 'list', 'split', '', '', '', '', $this->lang->task->children);
+                echo $this->buildOperateMenu($task, 'browse');
                 break;
             }
             echo '</td>';
@@ -3534,5 +3521,87 @@ class taskModel extends model
             if(isset($users[$member->account])) $members[$member->account] = $users[$member->account];
         }
         return $members;
+    }
+
+    /**
+     * Build task menu.
+     *
+     * @param  object $task
+     * @param  string $type
+     * @access public
+     * @return string
+     */
+    public function buildOperateMenu($task, $type = 'view')
+    {
+        $function = 'buildOperate' . ucfirst($type) . 'Menu';
+        return $this->$function($task);
+    }
+
+    /**
+     * Build task view menu.
+     *
+     * @param  object $task
+     * @access public
+     * @return string
+     */
+    public function buildOperateViewMenu($task)
+    {
+        if($task->deleted) return '';
+
+        $menu   = '';
+        $params = "taskID=$task->id";
+        if((empty($task->team) || empty($task->children)) && $task->executionList->type != 'kanban')
+        {
+            $menu .= $this->buildMenu('task', 'batchCreate', "execution=$task->execution&storyID=$task->story&moduleID=$task->module&taskID=$task->id", $task, 'view', 'split', '', '', '', "title='{$this->lang->task->children}'", $this->lang->task->children);
+        }
+        $menu .= $this->buildMenu('task', 'assignTo',       "executionID=$task->execution&taskID=$task->id", $task, 'button', '', '', 'iframe', true, '', empty($task->team) ? $this->lang->task->assignTo : $this->lang->task->transfer);
+        $menu .= $this->buildMenu('task', 'start',          $params, $task, 'view', '', '', 'iframe showinonlybody', true);
+        $menu .= $this->buildMenu('task', 'restart',        $params, $task, 'view', '', '', 'iframe showinonlybody', true);
+        $menu .= $this->buildMenu('task', 'recordEstimate', $params, $task, 'view', '', '', 'iframe showinonlybody', true);
+        $menu .= $this->buildMenu('task', 'pause',          $params, $task, 'view', '', '', 'iframe showinonlybody', true);
+        $menu .= $this->buildMenu('task', 'finish',         $params, $task, 'view', '', '', 'iframe showinonlybody text-success', true);
+        $menu .= $this->buildMenu('task', 'activate',       $params, $task, 'view', '', '', 'iframe showinonlybody text-success', true);
+        $menu .= $this->buildMenu('task', 'close',          $params, $task, 'view', '', '', 'iframe showinonlybody', true);
+        $menu .= $this->buildMenu('task', 'cancel',         $params, $task, 'view', '', '', 'iframe showinonlybody', true);
+
+        $menu .= "<div class='divider'></div>";
+        $menu .= $this->buildFlowMenu('task', $task, 'view', 'direct');
+        $menu .= "<div class='divider'></div>";
+
+        $menu .= $this->buildMenu('task', 'edit', $params, $task, 'view', '', '', 'showinonlybody');
+        $menu .= $this->buildMenu('task', 'create', "projctID={$task->execution}&storyID=0&moduleID=0&taskID=$task->id", $task, 'view', 'copy');
+        $menu .= $this->buildMenu('task', 'delete', "executionID=$task->execution&taskID=$task->id", $task, 'view', 'trash', 'hiddenwin', 'showinonlybody', true);
+        if($task->parent > 0) $menu .= $this->buildMenu('task', 'view', "taskID=$task->parent", $task, 'view', 'chevron-double-up', '', '', '', '', $this->lang->task->parent);
+
+        return $menu;
+    }
+
+    /**
+     * Build task browse action menu.
+     *
+     * @param  object $task
+     * @access public
+     * @return string
+     */
+    public function buildOperateBrowseMenu($task)
+    {
+        $menu   = '';
+        $params = "taskID=$task->id";
+
+        $storyChanged = !empty($task->storyStatus) && $task->storyStatus == 'active' && $task->latestStoryVersion > $task->storyVersion && !in_array($task->status, array('cancel', 'closed'));
+        if($storyChanged) return $this->buildMenu('task', 'confirmStoryChange', $params, $task, 'browse', '', 'hiddenwin');
+
+        if($task->status != 'pause') $menu .= $this->buildMenu('task', 'start',   $params, $task, 'browse', '', '', 'iframe', true);
+        if($task->status == 'pause') $menu .= $this->buildMenu('task', 'restart', $params, $task, 'browse', '', '', 'iframe', true);
+        $menu .= $this->buildMenu('task', 'close',          $params, $task, 'browse', '', '', 'iframe', true);
+        $menu .= $this->buildMenu('task', 'finish',         $params, $task, 'browse', '', '', 'iframe', true);
+        $menu .= $this->buildMenu('task', 'recordEstimate', $params, $task, 'browse', 'time', '', 'iframe', true);
+        $menu .= $this->buildMenu('task', 'edit',           $params, $task, 'browse');
+        if($this->config->vision == 'rnd')
+        {
+            $menu .= $this->buildMenu('task', 'batchCreate', "execution=$task->execution&storyID=$task->story&moduleID=$task->module&taskID=$task->id&ifame=0", $task, 'browse', 'split', '', '', '', '', $this->lang->task->children);
+        }
+
+        return $menu;
     }
 }

@@ -50,25 +50,8 @@
     <div class='main-actions'>
       <div class="btn-toolbar">
         <?php echo html::backButton('<i class="icon icon-back icon-sm"></i> ' . $lang->goback, '', 'btn btn-secondary');?>
-        <?php if(!$task->deleted):?>
         <div class='divider'></div>
-        <?php
-        common::printIcon('testtask', 'start',    "taskID=$task->id", $task, 'button', '', '', 'iframe showinonlybody', true);
-        common::printIcon('testtask', 'close',    "taskID=$task->id", $task, 'button', '', '', 'iframe showinonlybody', true);
-        common::printIcon('testtask', 'block',    "taskID=$task->id", $task, 'button', 'pause', '', 'iframe showinonlybody', true);
-        common::printIcon('testtask', 'activate', "taskID=$task->id", $task, 'button', 'magic', '', 'iframe showinonlybody', true);
-        common::printIcon('testtask', 'cases',    "taskID=$task->id", $task, 'button', 'sitemap');
-        common::printIcon('testtask', 'linkCase', "taskID=$task->id", $task, 'button', 'link');
-        ?>
-
-        <?php echo $this->buildOperateMenu($task, 'view');?>
-
-        <div class='divider'></div>
-        <?php
-        common::printIcon('testtask', 'edit',     "taskID=$task->id", $task);
-        common::printIcon('testtask', 'delete',   "taskID=$task->id", $task, 'button', 'trash', 'hiddenwin');
-        ?>
-        <?php endif;?>
+        <?php echo $this->testtask->buildOperateMenu($task, 'view');?>
       </div>
     </div>
   </div>

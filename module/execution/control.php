@@ -1149,12 +1149,12 @@ class execution extends control
      * @access public
      * @return void
      */
-    public function burn($executionID = 0, $type = 'noweekend', $interval = 0, $burnBy = 'left')
+    public function burn($executionID = 0, $type = 'noweekend,nodelay', $interval = 0, $burnBy = 'left')
     {
         $this->loadModel('report');
         $execution   = $this->commonAction($executionID);
         $executionID = $execution->id;
-        $burnBy    = $this->cookie->burnBy ? $this->cookie->burnBy : $burnBy;
+        $burnBy      = $this->cookie->burnBy ? $this->cookie->burnBy : $burnBy;
 
         /* Header and position. */
         $title      = $execution->name . $this->lang->colon . $this->lang->execution->burn;
@@ -1163,7 +1163,10 @@ class execution extends control
 
         /* Get date list. */
         $executionInfo = $this->execution->getByID($executionID);
-        list($dateList, $interval) = $this->execution->getDateList($executionInfo->begin, $executionInfo->end, $type, $interval, 'Y-m-d');
+        $deadline      = $execution->status == 'closed' ? substr($execution->closedDate, 0, 10) : $execution->suspendedDate;
+        $deadline      = strpos('closed,suspended', $execution->status) === false ? helper::today() : $deadline;
+        $endDate       = strpos($type, 'withdelay') !== false ? $deadline : $executionInfo->end;
+        list($dateList, $interval) = $this->execution->getDateList($executionInfo->begin, $endDate, $type, $interval, 'Y-m-d');
         $chartData = $this->execution->buildBurnData($executionID, $dateList, $type, $burnBy);
 
         $dayList = array_fill(1, floor((int)$execution->days / $this->config->execution->maxBurnDay) + 5, '');
@@ -1677,10 +1680,15 @@ class execution extends control
 
         if($this->app->tab == 'project')
         {
-            $projectID = $this->session->project;
-            $project   = $this->project->getById($projectID);
+            $projectID   = $this->session->project;
+            $project     = $this->project->getById($projectID);
+            $allProjects = $this->project->getPairsByModel($project->model, 0, 'noclosed', isset($projectID) ? $projectID : 0);
             $this->project->setMenu($projectID);
             $this->view->project = $project;
+        }
+        else
+        {
+            $allProjects = $this->project->getPairsByModel('all', 0, 'noclosed', isset($projectID) ? $projectID : 0);
         }
 
         if(!$this->post->executionIDList) return print(js::locate($this->session->executionList, 'parent'));
@@ -1718,7 +1726,7 @@ class execution extends control
         $this->view->position[]      = $this->lang->execution->batchEdit;
         $this->view->executionIDList = $executionIDList;
         $this->view->executions      = $executions;
-        $this->view->allProjects     = $this->project->getPairsByModel($project->model, 0, 'noclosed', isset($projectID) ? $projectID : 0);
+        $this->view->allProjects     = $allProjects;
         $this->view->pmUsers         = $pmUsers;
         $this->view->poUsers         = $poUsers;
         $this->view->qdUsers         = $qdUsers;
@@ -1833,6 +1841,7 @@ class execution extends control
         if(!empty($_POST))
         {
             $this->loadModel('action');
+            $this->execution->computeBurn($executionID);
             $changes = $this->execution->suspend($executionID);
             if(dao::isError()) return print(js::error(dao::getError()));
 
@@ -1928,6 +1937,7 @@ class execution extends control
         if(!empty($_POST))
         {
             $this->loadModel('action');
+            $this->execution->computeBurn($executionID);
             $changes = $this->execution->close($executionID);
             if(dao::isError()) return print(js::error(dao::getError()));
 
@@ -3149,7 +3159,16 @@ class execution extends control
         }
 
         $projectExecutions = array();
-        foreach($orderedExecutions as $execution) $projectExecutions[$execution->project][] = $execution;
+        $parentIdList = array();
+        foreach($orderedExecutions as $execution)
+        {
+            $projectExecutions[$execution->project][] = $execution;
+            if($execution->type != 'stage') continue;
+            if($execution->grade == 2 and $execution->project != $execution->parent) $parentIdList[$execution->parent] = $execution->parent;
+        }
+
+        $parents = array();
+        if($parentIdList) $parents = $this->execution->getByIdList($parentIdList);
 
         $this->view->link        = $this->execution->getLink($module, $method, $extra);
         $this->view->module      = $module;
@@ -3158,6 +3177,7 @@ class execution extends control
         $this->view->extra       = $extra;
         $this->view->projects    = $projectPairs;
         $this->view->executions  = $projectExecutions;
+        $this->view->parents     = $parents;
         $this->display();
     }
 

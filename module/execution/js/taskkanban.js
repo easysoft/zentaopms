@@ -480,6 +480,10 @@ if(!window.kanbanDropRules)
         {
             backlog: ['ready'],
             ready: ['backlog'],
+            tested: ['verified'],
+            verified: ['tested', 'released'],
+            released: ['verified', 'closed'],
+            closed: ['released'],
         },
         bug:
         {
@@ -495,7 +499,7 @@ if(!window.kanbanDropRules)
         {
             'wait': ['developing', 'developed', 'canceled', 'closed'],
             'developing': ['developed', 'pause', 'canceled'],
-            'developed': ['closed'],
+            'developed': ['developing', 'closed'],
             'pause': ['developing'],
             'canceled': ['developing'],
             'closed': ['developing'],
@@ -683,7 +687,12 @@ function changeCardColType(cardID, fromColID, toColID, fromLaneID, toLaneID, car
     /* Story lane. */
     if(cardType == 'story')
     {
-        if(toColType == 'ready' || toColType == 'backlog')
+        if(toColType == 'closed' && priv.canCloseStory)
+        {
+            var link = createLink('story', 'close', 'storyID=' + objectID, '', true);
+            showIframe = true;
+        }
+        else
         {
             if(toColType == 'ready' && typeof(reviewStoryParis[objectID]) != 'undefined')
             {
@@ -706,7 +715,7 @@ function changeCardColType(cardID, fromColID, toColID, fromLaneID, toLaneID, car
                         updateKanban(browseType, kanbanGroup[groupBy]);
                     }
                 }
-            })
+            });
         }
     }
 

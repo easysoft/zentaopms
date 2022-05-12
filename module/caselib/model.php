@@ -103,6 +103,7 @@ class caselibModel extends model
         $this->dao->update(TABLE_TESTSUITE)->data($lib)
             ->autoCheck()
             ->batchcheck($this->config->caselib->edit->requiredFields, 'notempty')
+            ->checkFlow()
             ->where('id')->eq($libID)
             ->checkFlow()
             ->exec();
@@ -593,5 +594,66 @@ class caselibModel extends model
                 $actionID = $this->action->create('case', $caseID, 'Opened');
             }
         }
+    }
+
+    /**
+     * Build case lib menu. 
+     * 
+     * @param  object $object 
+     * @param  string $type 
+     * @access public
+     * @return string
+     */
+    public function buildOperateMenu($object, $type = 'view')
+    {
+        $function = 'buildOperate' . ucfirst($type) . 'Menu';
+        return $this->$function($object);
+    }
+
+    /**
+     * Build case lib view menu. 
+     * 
+     * @param  object $lib 
+     * @access public
+     * @return string
+     */
+    public function buildOperateViewMenu($lib)
+    {
+        if($lib->deleted) return '';
+
+        $menu   = '';
+        $params = "libID=$lib->id";
+        $menu  .= $this->buildFlowMenu('caselib', $lib, 'view', 'direct');
+        $menu  .= "<div class='divider'></div>";
+        $menu  .= $this->buildMenu('caselib', 'edit', $params, $lib, 'view');
+        $menu  .= $this->buildMenu('caselib', 'delete', $params, $lib, 'view', 'trash', 'hiddenwin');
+
+        return $menu;
+    }
+
+    /**
+     * Build case lib browse menu. 
+     * 
+     * @param  object $case 
+     * @access public
+     * @return string
+     */
+    public function buildOperateBrowseMenu($case)
+    {
+        $menu   = '';
+        $params = "caseID=$case->id";
+
+        if($this->config->testcase->needReview || !empty($this->config->testcase->forceReview))
+        {
+            $menu .= $this->buildMenu('testcase', 'review', $params, $case, 'browse', 'glasses', '', 'iframe');
+        }
+        $menu .= $this->buildMenu('testcase', 'edit', $params, $case, 'browse');
+        if(common::hasPriv('testcase', 'delete'))
+        {
+            $deleteURL = helper::createLink('testcase', 'delete', "$params&confirm=yes");
+            $menu .= html::a("javascript:ajaxDelete(\"$deleteURL\", \"caseList\", confirmDelete)", '<i class="icon icon-trash"></i>', '', "title='{$this->lang->testcase->delete}' class='btn'");
+        }
+
+        return $menu;
     }
 }

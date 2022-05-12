@@ -12,9 +12,53 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <div id='mainMenu' class='clearfix'>
+  <div class='btn-toolbar pull-left'>
+    <?php $activeClass = $currentObjectType == 'all' ? 'btn-active-text' : '';?>
+    <?php echo html::a($this->createLink('action', 'trash', "objectType=all&type=$type"), "<span class='text'>" . $lang->all . "</span>", '', "class='btn btn-link $activeClass'");?>
+    <?php
+    /* Output the objectType order by preferredTypeConfig. */
+    foreach($preferredTypeConfig as $objectType)
+    {
+        if(in_array($objectType, $preferredType))
+        {
+            $activeClass = $objectType == $currentObjectType ? 'btn-active-text' : '';
+            echo html::a($this->createLink('action', 'trash', "objectType=$objectType&type=$type"), "<span class='text'>" . zget($lang->action->objectTypes, $objectType) . "</span>", '', "class='btn btn-link $activeClass'");
+            unset($preferredType[$objectType]);
+        }
+    }
+
+    /* Output the remaining types which transformed from more type. */
+    foreach($preferredType as $objectType)
+    {
+        $activeClass = $objectType == $currentObjectType ? 'btn-active-text' : '';
+        echo html::a($this->createLink('action', 'trash', "objectType=$objectType&type=$type"), "<span class='text'>" . zget($lang->action->objectTypes, $objectType) . "</span>", '', "class='btn btn-link $activeClass'");
+    }
+
+    /* Output the more types. */
+    if(!empty($moreType))
+    {
+        $moreLabel       = $lang->more;
+        $moreLabelActive = '';
+        if(in_array($currentObjectType, $moreType))
+        {
+            $moreLabel       = "<span class='text'>" . zget($lang->action->objectTypes, $currentObjectType) . "</span>";
+            $moreLabelActive = 'btn-active-text';
+        }
+        echo '<div class="btn-group" id="more">';
+        echo html::a('javascript:;', $moreLabel . " <span class='caret'></span>", '', "data-toggle='dropdown' class='btn btn-link $moreLabelActive'");
+        echo "<ul class='dropdown-menu'>";
+        foreach($moreType as $objectType)
+        {
+            $activeClass = $objectType == $currentObjectType ? 'btn-active-text' : '';
+            echo '<li>' . html::a($this->createLink('action', 'trash', "objectType=$objectType&type=$type"), "<span class='text'>" . zget($lang->action->objectTypes, $objectType) . "</span>", '', "class='btn btn-link $activeClass'") . '</li>';
+        }
+        echo '</ul></div>';
+    }
+    ?>
+  </div>
   <div class='btn-toolbar pull-right'>
-    <?php if($type == 'hidden') echo html::a(inLink('trash', "type=all"),    $lang->goback, '', "class='btn'");?>
-    <?php if($type == 'all')    echo html::a(inLink('trash', "type=hidden"), "<i class='icon-eye-close'></i> " . $lang->action->dynamic->hidden, '', "class='btn btn-danger'");?>
+    <?php if($type == 'hidden') echo html::a(inLink('trash', "browseType=all&type=all"),    $lang->goback, '', "class='btn'");?>
+    <?php if($type == 'all')    echo html::a(inLink('trash', "browseType=all&type=hidden"), "<i class='icon-eye-close'></i> " . $lang->action->dynamic->hidden, '', "class='btn btn-danger'");?>
   </div>
 </div>
 
@@ -31,7 +75,7 @@
   </div>
   <div class='main-table' data-ride='table'>
     <table class='table has-sort-head'>
-      <?php $vars = "type=$type&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"; ?>
+      <?php $vars = "browseType=$currentObjectType&type=$type&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"; ?>
       <thead>
         <tr class='colhead'>
           <th class='c-object-type'><?php common::printOrderLink('objectType', $orderBy, $vars, $lang->action->objectType);?></th>

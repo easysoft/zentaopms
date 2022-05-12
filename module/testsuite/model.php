@@ -71,6 +71,7 @@ class testsuiteModel extends model
         $suite = $this->loadModel('file')->processImgURL($suite, $this->config->testsuite->editor->create['id'], $this->post->uid);
         $this->dao->insert(TABLE_TESTSUITE)->data($suite)
             ->batchcheck($this->config->testsuite->create->requiredFields, 'notempty')
+            ->checkFlow()
             ->exec();
         if(!dao::isError())
         {
@@ -158,6 +159,7 @@ class testsuiteModel extends model
         $this->dao->update(TABLE_TESTSUITE)->data($suite)
             ->autoCheck()
             ->batchcheck($this->config->testsuite->edit->requiredFields, 'notempty')
+            ->checkFlow()
             ->where('id')->eq($suiteID)
             ->exec();
         if(!dao::isError())
@@ -324,5 +326,28 @@ class testsuiteModel extends model
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id');
+    }
+
+    
+    /**
+     * Build testsuite menu. 
+     * 
+     * @param  object $suite 
+     * @param  string $type 
+     * @access public
+     * @return string
+     */
+    public function buildOperateMenu($suite, $type = 'view')
+    {
+        $menu   = '';
+        $params = "suiteID=$suite->id";
+
+        if($type == 'view') $menu .= $this->buildFlowMenu('testsuite', $suite, $type, 'direct');
+
+        $menu .= $this->buildMenu('testsuite', 'linkCase', $params, $suite, $type, 'link', '', '', '', '', $this->lang->testsuite->linkCase);
+        $menu .= $this->buildMenu('testsuite', 'edit',     $params, $suite, $type);
+        $menu .= $this->buildMenu('testsuite', 'delete',   $params, $suite, $type, 'trash', 'hiddenwin');
+
+        return $menu;
     }
 }

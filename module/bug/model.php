@@ -1679,12 +1679,7 @@ class bugModel extends model
                 }
             }
 
-            $allProduct = "`product` = 'all'";
-            $bugQuery   = $this->session->projectBugQuery;
-            if(strpos($this->session->projectBugQuery, $allProduct) !== false)
-            {
-                $bugQuery = str_replace($allProduct, '1', $this->session->projectBugQuery);
-            }
+            $bugQuery = $this->getBugQuery($this->session->projectBugQuery);
 
             $bugs = $this->dao->select('*')->from(TABLE_BUG)
                 ->where($bugQuery)
@@ -1746,12 +1741,7 @@ class bugModel extends model
                 }
             }
 
-            $allProduct = "`product` = 'all'";
-            $bugQuery   = $this->session->executionBugQuery;
-            if(strpos($this->session->executionBugQuery, $allProduct) !== false)
-            {
-                $bugQuery = str_replace($allProduct, '1', $this->session->executionBugQuery);
-            }
+            $bugQuery = $this->getBugQuery($this->session->executionBugQuery);
 
             $bugs = $this->dao->select('*')->from(TABLE_BUG)
                 ->where($bugQuery)
@@ -2703,33 +2693,14 @@ class bugModel extends model
             if($this->session->bugQuery == false) $this->session->set('bugQuery', ' 1 = 1');
         }
 
-        $allProduct = "`product` = 'all'";
-        $bugQuery   = $this->session->bugQuery;
+        $bugQuery = $this->getBugQuery($this->session->bugQuery);
+
         if(is_array($productIDList)) $productIDList = implode(',', $productIDList);
         if(strpos($bugQuery, '`product` =') === false) $bugQuery .= ' AND `product` in (' . $productIDList . ')';
-        if(strpos($bugQuery, $allProduct) !== false)
-        {
-            $products = $this->app->user->view->products;
-            $bugQuery = str_replace($allProduct, '1', $bugQuery);
-            $bugQuery = $bugQuery . ' AND `product` ' . helper::dbIN($products);
-        }
 
         $allBranch = "`branch` = 'all'";
         if($branch !== 'all' and strpos($bugQuery, '`branch` =') === false) $bugQuery .= " AND `branch` in('0','$branch')";
         if(strpos($bugQuery, $allBranch) !== false) $bugQuery = str_replace($allBranch, '1', $bugQuery);
-
-        $allProject = "`project` = 'all'";
-        if(strpos($bugQuery, $allProject) !== false)
-        {
-            $projectIDList = $this->getAllProjectIds();
-            if(is_array($projectIDList)) $projectIDList = implode(',', $projectIDList);
-            $bugQuery = str_replace($allProject, '1', $bugQuery);
-            $bugQuery = $bugQuery . ' AND `project` in (' . $projectIDList . ')';
-        }
-
-        /* Fix bug #2878. */
-        if(strpos($bugQuery, ' `resolvedDate` ') !== false) $bugQuery = str_replace(' `resolvedDate` ', " `resolvedDate` != '0000-00-00 00:00:00' AND `resolvedDate` ", $bugQuery);
-        if(strpos($bugQuery, ' `closedDate` ') !== false)   $bugQuery = str_replace(' `closedDate` ', " `closedDate` != '0000-00-00 00:00:00' AND `closedDate` ", $bugQuery);
 
         $bugs = $this->dao->select('*')->from(TABLE_BUG)->where($bugQuery)
             ->beginIF(!$this->app->user->admin)->andWhere('execution')->in('0,' . $this->app->user->view->sprints)->fi()
@@ -2745,6 +2716,58 @@ class bugModel extends model
             ->andWhere('deleted')->eq(0)
             ->orderBy($orderBy)->page($pager)->fetchAll();
         return $bugs;
+    }
+
+    /**
+     * Get bug query.
+     *
+     * @param  string $bugQuery
+     * @access public
+     * @return string
+     */
+    public function getBugQuery($bugQuery)
+    {
+        $allProduct = "`product` = 'all'";
+        if(strpos($bugQuery, $allProduct) !== false)
+        {
+            $products = $this->app->user->view->products;
+            $bugQuery = str_replace($allProduct, '1', $bugQuery);
+            $bugQuery = $bugQuery . ' AND `product` ' . helper::dbIN($products);
+        }
+
+        $allProject = "`project` = 'all'";
+        if(strpos($bugQuery, $allProject) !== false)
+        {
+            $projectIDList = $this->getAllProjectIds();
+            if(is_array($projectIDList)) $projectIDList = implode(',', $projectIDList);
+            $bugQuery = str_replace($allProject, '1', $bugQuery);
+            $bugQuery = $bugQuery . ' AND `project` in (' . $projectIDList . ')';
+        }
+
+        /* Fix bug #2878. */
+        if(strpos($bugQuery, ' `resolvedDate` ') !== false) $bugQuery = str_replace(' `resolvedDate` ', " `resolvedDate` != '0000-00-00 00:00:00' AND `resolvedDate` ", $bugQuery);
+        if(strpos($bugQuery, ' `closedDate` ') !== false)   $bugQuery = str_replace(' `closedDate` ', " `closedDate` != '0000-00-00 00:00:00' AND `closedDate` ", $bugQuery);
+        if(strpos($bugQuery, ' `story` ') !== false)
+        {
+            preg_match_all("/`story`[ ]+(NOT *)?LIKE[ ]+'%([^%]*)%'/Ui", $bugQuery, $out);
+            if(!empty($out[2]))
+            {
+                foreach($out[2] as $searchValue)
+                {
+                    $story = $this->dao->select('id')->from(TABLE_STORY)->alias('t1')
+                        ->leftJoin(TABLE_STORYSPEC)->alias('t2')->on('t1.id=t2.story')
+                        ->where('t1.title')->like("%$searchValue%")
+                        ->orWhere('t1.keywords')->like("%$searchValue%")
+                        ->orWhere('t2.spec')->like("%$searchValue%")
+                        ->orWhere('t2.verify')->like("%$searchValue%")
+                        ->fetchPairs('id');
+
+                    $bugQuery = preg_replace("/`story`[ ]+(NOT[ ]*)?LIKE[ ]+'%$searchValue%'/Ui", '`story` $1 IN (' . implode(',', $story) .')', $bugQuery);
+                }
+            }
+            $bugQuery .= ' AND `story` != 0';
+        }
+        return $bugQuery;
     }
 
     /**
@@ -3234,9 +3257,9 @@ class bugModel extends model
 
     /**
      * Build bug menu.
-     * 
-     * @param  object $bug 
-     * @param  string $type 
+     *
+     * @param  object $bug
+     * @param  string $type
      * @access public
      * @return string
      */

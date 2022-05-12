@@ -70,11 +70,7 @@
       <td><?php echo $suite->addedDate;?></td>
       <?php foreach($extendFields as $extendField) echo "<td>" . $this->loadModel('flow')->getFieldValue($extendField, $suite) . "</td>";?>
       <td class='c-actions'>
-        <?php
-        common::printIcon('testsuite', 'linkCase', "suiteID=$suite->id", $suite, 'list', 'link');
-        common::printIcon('testsuite', 'edit',     "suiteID=$suite->id", $suite, 'list');
-        common::printIcon('testsuite', 'delete',   "suiteID=$suite->id", $suite, 'list', 'trash', 'hiddenwin');
-        ?>
+        <?php echo $this->testsuite->buildOperateMenu($suite, 'browse');?>
       </td>
     </tr>
     <?php endforeach;?>

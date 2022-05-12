@@ -144,67 +144,7 @@
           <div title='<?php echo $desc;?>'><?php echo nl2br($desc);?></div>
         </td>
         <?php foreach($extendFields as $extendField) echo "<td>" . $this->loadModel('flow')->getFieldValue($extendField, $plan) . "</td>";?>
-        <td class='c-actions'>
-          <?php
-          if($plan->parent >= 0 )
-          {
-              $attr = "target='hiddenwin'";
-              common::printIcon('productplan', 'start', "planID=$plan->id", $plan, 'list', 'play', '', '', false, $attr);
-              common::printIcon('productplan', 'finish', "planID=$plan->id", $plan, 'list', 'checked', '', '', false, $attr);
-              common::printIcon('productplan', 'close', "planID=$plan->id", $plan, 'list', 'off', '', 'iframe', true);
-          }
-
-          $attr  = $plan->expired ? "disabled='disabled'" : '';
-          $class = '';
-          if($product->type != 'normal')
-          {
-              $branchStatus = isset($branchStatusList[$plan->branch]) ? $branchStatusList[$plan->branch] : '';
-              if($branchStatus == 'closed') $class = 'disabled';
-          }
-          if(common::hasPriv('execution', 'create', $plan) and $plan->parent >= 0)
-          {
-              $disabled      = '';
-              $executionLink = $config->systemMode == 'new' ? '#projects' : $this->createLink('execution', 'create', "projectID=0&executionID=0&copyExecutionID=0&plan=$plan->id&confirm=no&productID=$productID");
-
-              if(in_array($plan->status, array('done', 'closed'))) $disabled = 'disabled';
-
-              if($config->systemMode == 'new')
-              {
-                  echo html::a($executionLink, '<i class="icon-plus"></i>', '', "data-toggle='modal' data-id='$plan->id' onclick='getPlanID(this, $plan->branch)' class='btn {$disabled} {$class}' title='{$lang->productplan->createExecution}' $attr");
-              }
-              else
-              {
-                  echo html::a($executionLink, '<i class="icon-plus"></i>', '', "class='btn {$disabled}' title='{$lang->productplan->createExecution}' $attr");
-              }
-          }
-          if(common::hasPriv('productplan', 'linkStory', $plan) and $plan->parent >= 0) echo html::a(inlink('view', "planID=$plan->id&type=story&orderBy=id_desc&link=true"), '<i class="icon-link"></i>', '', "class='btn' title='{$lang->productplan->linkStory}'");
-          if(common::hasPriv('productplan', 'linkBug', $plan) and $plan->parent >= 0) echo html::a(inlink('view', "planID=$plan->id&type=bug&orderBy=id_desc&link=true"), '<i class="icon-bug"></i>', '', "class='btn' title='{$lang->productplan->linkBug}'");
-          common::printIcon('productplan', 'edit', "planID=$plan->id", $plan, 'list');
-          if(common::hasPriv('productplan', 'create', $plan))
-          {
-              if($plan->parent > 0 or strpos('done,closed', $plan->status) !== false)
-              {
-                  echo "<button type='button' class='disabled btn'><i class='disabled icon-split' title='{$this->lang->productplan->children}'></i></button> ";
-              }
-              else
-              {
-                  echo html::a($this->createLink('productplan', 'create', "product=$productID&branch=$branch&parent={$plan->id}"), "<i class='icon-split'></i>", '', "class='btn {$class}' title='{$this->lang->productplan->children}'");
-              }
-          }
-
-          if(common::hasPriv('productplan', 'delete', $plan))
-          {
-              $deleteURL = '###';
-              $disabled  = 'disabled';
-              if($plan->parent >= 0)
-              {
-                  $deleteURL = $this->createLink('productplan', 'delete', "planID=$plan->id&confirm=no");
-                  $disabled  = '';
-              }
-              echo html::a($deleteURL, '<i class="icon-trash"></i>', 'hiddenwin', "class='btn {$disabled}' title='{$lang->productplan->delete}'");
-          }
-          ?>
-        </td>
+        <td class='c-actions'><?php echo $this->productplan->buildOperateMenu($plan, 'browse'); ?></td>
       </tr>
       <?php endforeach;?>
       </tbody>

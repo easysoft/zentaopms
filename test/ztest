@@ -153,6 +153,9 @@ switch($argv[1])
     case 'tutorial':
         ztfRun('model/tutorial');
         break;
+    case 'mail':
+        ztfRun('model/mail');
+        break;
     case 'tree':
         ztfRun('model/tree');
         break;

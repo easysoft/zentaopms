@@ -481,6 +481,8 @@ class executionModel extends model
             ->remove('products, branch, uid, plans, syncStories, contactListMenu, teamMembers')
             ->get();
 
+        if(in_array($execution->status, array('closed', 'suspended'))) $this->computeBurn($executionID);
+
         if($this->config->systemMode == 'new' and (empty($execution->project) or $execution->project == $oldExecution->project)) $this->checkBeginAndEndDate($oldExecution->project, $execution->begin, $execution->end);
         if(dao::isError()) return false;
 
@@ -516,6 +518,7 @@ class executionModel extends model
             ->checkIF($execution->end != '', 'end', 'ge', $execution->begin)
             ->checkIF((!empty($execution->name) and $this->config->systemMode == 'new'), 'name', 'unique', "id != $executionID and type in ('sprint','stage') and `project` = $executionProject")
             ->checkIF(!empty($execution->code), 'code', 'unique', "id != $executionID and type in ('sprint','stage')")
+            ->checkFlow()
             ->where('id')->eq($executionID)
             ->checkFlow()
             ->limit(1)
@@ -694,13 +697,6 @@ class executionModel extends model
                 if(is_array($executions[$executionID]->{$extendField->field})) $executions[$executionID]->{$extendField->field} = join(',', $executions[$executionID]->{$extendField->field});
 
                 $executions[$executionID]->{$extendField->field} = htmlSpecialString($executions[$executionID]->{$extendField->field});
-                $message = $this->checkFlowRule($extendField, $executions[$executionID]->{$extendField->field});
-
-                if($message)
-                {
-                    dao::$errors['message'][] = $message;
-                    return false;
-                }
             }
         }
 
@@ -751,6 +747,7 @@ class executionModel extends model
                 ->checkIF($execution->end != '', 'end', 'ge', $execution->begin)
                 ->checkIF((!empty($execution->name) and $this->config->systemMode == 'new'), 'name', 'unique', "id != $executionID and type in ('sprint','stage') and `project` = $projectID")
                 ->checkIF(!empty($execution->code), 'code', 'unique', "id != $executionID and type in ('sprint','stage')")
+                ->checkFlow()
                 ->where('id')->eq($executionID)
                 ->limit(1)
                 ->exec();
@@ -814,6 +811,7 @@ class executionModel extends model
             ->autoCheck()
             ->check($this->config->execution->start->requiredFields, 'notempty')
             ->checkIF($execution->realBegan != '', 'realBegan', 'le', helper::today())
+            ->checkFlow()
             ->where('id')->eq((int)$executionID)
             ->exec();
 
@@ -847,6 +845,7 @@ class executionModel extends model
 
         $this->dao->update(TABLE_EXECUTION)->data($execution)
             ->autoCheck()
+            ->checkFlow()
             ->where('id')->eq((int)$executionID)
             ->exec();
 
@@ -870,10 +869,12 @@ class executionModel extends model
             ->setDefault('status', 'suspended')
             ->setDefault('lastEditedBy', $this->app->user->account)
             ->setDefault('lastEditedDate', $now)
+            ->setDefault('suspendedDate', helper::today())
             ->remove('comment')->get();
 
         $this->dao->update(TABLE_EXECUTION)->data($execution)
             ->autoCheck()
+            ->checkFlow()
             ->where('id')->eq((int)$executionID)
             ->exec();
 
@@ -909,6 +910,7 @@ class executionModel extends model
 
         $this->dao->update(TABLE_EXECUTION)->data($execution)
             ->autoCheck()
+            ->checkFlow()
             ->where('id')->eq((int)$executionID)
             ->exec();
 
@@ -979,6 +981,7 @@ class executionModel extends model
             ->check($this->config->execution->close->requiredFields,'notempty')
             ->checkIF($execution->realEnd != '', 'realEnd', 'le', helper::today())
             ->checkIF($execution->realEnd != '', 'realEnd', 'ge', $oldExecution->realBegan)
+            ->checkFlow()
             ->where('id')->eq((int)$executionID)
             ->exec();
 
@@ -2827,21 +2830,77 @@ class executionModel extends model
     /**
      * Compute burn of a execution.
      *
+     * @param  int    $executionID
      * @access public
      * @return array
      */
-    public function computeBurn()
+    public function computeBurn($executionID = 0)
     {
         $today = helper::today();
-        $burns = array();
-
         $executions = $this->dao->select('id, code')->from(TABLE_EXECUTION)
-            ->where('end')->ge($today)
-            ->andWhere('type')->ne('ops')
+            ->where('type')->in('sprint,stage')
+            ->andWhere('lifetime')->ne('ops')
             ->andWhere('status')->notin('done,closed,suspended')
+            ->beginIF($executionID)->andWhere('id')->eq($executionID)->fi()
             ->fetchPairs();
-        if(!$executions) return $burns;
+        if(!$executions) return array();
 
+        /* Update historical data of burn. */
+        $table = $this->config->edition == 'open' ? TABLE_TASKESTIMATE : TABLE_EFFORT;
+        $field = $this->config->edition == 'open' ? 'task' : 'objectID';
+        $totalConsumed = $this->dao->select("t2.execution as execution, t1.$field as task, t1.date as date, sum(t1.consumed) as totalConsumed")->from($table)->alias('t1')
+            ->leftJoin(TABLE_TASK)->alias('t2')->on("t1.$field=t2.id")
+            ->where('t2.execution')->in(array_keys($executions))
+            ->beginIF($this->config->edition != 'open')->andWhere('t1.objectType')->eq('task')->fi()
+            ->andWhere('t2.deleted')->eq('0')
+            ->andWhere('t2.parent')->ge('0')
+            ->andWhere('t2.status')->ne('cancel')
+            ->andWhere('t1.date')->ne($today)
+            ->groupBy("t1.$field, t1.date")
+            ->orderBy('t1.id_desc')
+            ->fetchGroup('task', 'date');
+
+        $latestIdList = $this->dao->select('max(id) as id')->from($table)
+            ->where($field)->in(array_keys($totalConsumed))
+            ->beginIF($this->config->edition != 'open')->andWhere('objectType')->eq('task')->fi()
+            ->groupBy("$field,date")->fetchAll('id');
+        $latestLefts = $this->dao->select("$field, date, `left`")->from($table)
+            ->where('id')->in(array_keys($latestIdList))
+            ->fetchGroup($field, 'date');
+
+        $burnList = array();
+        foreach($totalConsumed as $taskID => $consumedList)
+        {
+            foreach($consumedList as $date => $consumed)
+            {
+                $executionID = $consumed->execution;
+                if(!isset($burnList[$executionID])) $burnList[$executionID] = array();
+
+                if(!isset($burnList[$executionID][$date]))
+                {
+                    $burnList[$executionID][$date] = new stdclass();
+                    $burnList[$executionID][$date]->consumed = 0;
+                    $burnList[$executionID][$date]->left     = 0;
+                }
+
+                $burnList[$executionID][$date]->consumed += $consumed->totalConsumed;
+                $burnList[$executionID][$date]->left     += $latestLefts[$taskID][$date]->left;
+            }
+        }
+
+        foreach($burnList as $executionID => $burns)
+        {
+            foreach($burns as $date => $burn)
+            {
+                $burn->execution = $executionID;
+                $burn->date      = $date;
+
+                $this->dao->replace(TABLE_BURN)->data($burn)->exec();
+                $burn->executionName = $executions[$burn->execution];
+            }
+        }
+
+        /* Update today's data of burn. */
         $burns = $this->dao->select("execution, '$today' AS date, sum(estimate) AS `estimate`, sum(`left`) AS `left`, SUM(consumed) AS `consumed`")
             ->from(TABLE_TASK)
             ->where('execution')->in(array_keys($executions))
@@ -2861,8 +2920,9 @@ class executionModel extends model
             ->where('execution')->in(array_keys($executions))
             ->andWhere('deleted')->eq('0')
             ->andWhere('parent')->ge('0')
-            ->andWhere('status')->eq('done')
+            ->andWhere('status', true)->eq('done')
             ->orWhere('status')->eq('closed')
+            ->markRight(1)
             ->groupBy('execution')
             ->fetchAll('execution');
         $storyPoints = $this->dao->select('t1.project, sum(t2.estimate) AS `storyPoint`')->from(TABLE_PROJECTSTORY)->alias('t1')
@@ -2893,8 +2953,10 @@ class executionModel extends model
 
             $this->dao->replace(TABLE_BURN)->data($burn)->exec();
             $burn->executionName = $executions[$burn->execution];
+            $burnList[$executionID][$today] = $burn;
         }
-        return $burns;
+
+        return $burnList;
     }
 
     /**
@@ -2927,10 +2989,12 @@ class executionModel extends model
      *
      * @param  int    $executionID
      * @param  string $burnBy
+     * @param  bool   $showDelay
+     * @param  array  $dateList
      * @access public
      * @return array
      */
-    public function getBurnDataFlot($executionID = 0, $burnBy = '')
+    public function getBurnDataFlot($executionID = 0, $burnBy = '', $showDelay = false, $dateList = array())
     {
         /* Get execution and burn counts. */
         $execution    = $this->getById($executionID);
@@ -2943,11 +3007,29 @@ class executionModel extends model
         foreach($sets as $date => $set)
         {
             if($date < $execution->begin) continue;
-            if($date > $execution->end) continue;
+            if(!$showDelay and $date > $execution->end) $set->value = 'null';
+            if($showDelay  and $date < $execution->end) $set->value = 'null';
 
             $burnData[$date] = $set;
             $count++;
         }
+
+        if($showDelay)
+        {
+            foreach($dateList as $date)
+            {
+                if(!isset($burnData[$date]))
+                {
+                    $set = new stdClass();
+                    $set->name  = $date;
+                    $set->left  = 0;
+                    $set->value = 'null';
+
+                    $burnData[$date] = $set;
+                }
+            }
+        }
+
         $burnData = array_reverse($burnData);
 
         return $burnData;
@@ -3632,6 +3714,15 @@ class executionModel extends model
         $chartData['burnLine'] = $this->report->createSingleJSON($sets, $dateList);
         $chartData['baseLine'] = $baselineJSON;
 
+        $execution = $this->getById($executionID);
+        if((strpos('closed,suspended', $execution->status) === false and helper::today() > $execution->end)
+            or ($execution->status == 'closed'    and substr($execution->closedDate, 0, 10) > $execution->end)
+            or ($execution->status == 'suspended' and $execution->suspendedDate > $execution->end))
+        {
+            $delaySets = $this->getBurnDataFlot($executionID, $burnBy, true, $dateList);
+            $chartData['delayLine'] = $this->report->createSingleJSON($delaySets, $dateList);
+        }
+
         return $chartData;
     }
 
@@ -3995,5 +4086,37 @@ class executionModel extends model
             $path['grade'] = $parent->grade + 1;
         }
         $this->dao->update(TABLE_PROJECT)->set('path')->eq($path['path'])->set('grade')->eq($path['grade'])->where('id')->eq($execution->id)->exec();
+    }
+
+    /**
+     * Build execution action menu.
+     *
+     * @param  object $execution
+     * @param  string $type
+     * @access public
+     * @return string
+     */
+    public function buildOperateMenu($execution, $type = 'view')
+    {
+        if($execution->deleted) return '';
+
+        $menu   = '';
+        $params = "executionID=$execution->id";
+
+        $menu .= "<div class='divider'></div>";
+        $menu .= $this->buildMenu('execution', 'start',    $params, $execution, $type, '', '', 'iframe', true);
+        $menu .= $this->buildMenu('execution', 'activate', $params, $execution, $type, '', '', 'iframe', true);
+        $menu .= $this->buildMenu('execution', 'putoff',   $params, $execution, $type, '', '', 'iframe', true);
+        $menu .= $this->buildMenu('execution', 'suspend',  $params, $execution, $type, '', '', 'iframe', true);
+        $menu .= $this->buildMenu('execution', 'close',    $params, $execution, $type, '', '', 'iframe', true);
+
+        $menu .= "<div class='divider'></div>";
+        $menu .= $this->buildFlowMenu('execution', $execution, 'view', 'direct');
+        $menu .= "<div class='divider'></div>";
+
+        $menu .= $this->buildMenu('execution', 'edit',   "execution=$execution->id", $execution);
+        $menu .= $this->buildMenu('execution', 'delete', "execution=$execution->id", $execution, 'button', 'trash', 'hiddenwin');
+
+        return $menu;
     }
 }

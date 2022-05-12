@@ -93,6 +93,7 @@ $lang->doc->collector    = 'Collector';
 $lang->doc->main         = 'Main Document Library';
 $lang->doc->order        = 'Order';
 $lang->doc->doc          = 'Document';
+$lang->doc->updateOrder  = 'Update Order';
 
 $lang->doc->moduleDoc     = 'By Module';
 $lang->doc->searchDoc     = 'Search';

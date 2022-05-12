@@ -18,13 +18,24 @@
 <?php js::set('burnXUnit', $lang->execution->burnXUnit);?>
 <?php js::set('burnYUnit', $lang->execution->burnYUnit);?>
 <?php js::set('type', $type);?>
+<?php js::set('interval', $interval);?>
 <div id='mainMenu' class='clearfix'>
   <div class='btn-toolbar pull-left'>
     <?php
-    $weekend = ($type == 'noweekend') ? 'withweekend' : "noweekend";
-    common::printLink('execution', 'computeBurn', 'reload=yes', '<i class="icon icon-refresh"></i> ' . $lang->execution->computeBurn, 'hiddenwin', "title='{$lang->execution->computeBurn}{$lang->execution->burn}' class='btn btn-primary' id='computeBurn'");
-    echo '<div class="space"></div>';
-    echo html::a($this->createLink('execution', 'burn', "executionID=$executionID&type=$weekend&interval=$interval"), $lang->execution->$weekend, '', "class='btn btn-link'");
+    if(strpos('wait,doing', $execution->status) !== false)
+    {
+        common::printLink('execution', 'computeBurn', 'reload=yes', '<i class="icon icon-refresh"></i> ' . $lang->execution->computeBurn, 'hiddenwin', "title='{$lang->execution->computeBurn}' class='btn btn-primary' id='computeBurn'");
+        echo '<div class="space"></div>';
+    }
+
+    $weekend = strpos($type, 'noweekend') !== false ? 'withweekend' : 'noweekend';
+    $delay   = strpos($type, 'withdelay') !== false ? 'nodelay'     : 'withdelay';
+    echo html::a('#', $lang->execution->$weekend, '', "class='btn btn-link' id='weekend'");
+    if((strpos('closed,suspended', $execution->status) === false and helper::today() > $execution->end)
+        or ($execution->status == 'closed'    and substr($execution->closedDate, 0, 10) > $execution->end)
+        or ($execution->status == 'suspended' and $execution->suspendedDate > $execution->end))
+    echo html::a('#', $lang->execution->$delay, '', "class='btn btn-link' id='delay'");
+
     if(common::canModify('execution', $execution)) common::printLink('execution', 'fixFirst', "execution=$execution->id", $lang->execution->fixFirst, '', "class='btn btn-link iframe' data-width='700'");
     echo $lang->execution->howToUpdateBurn;
     ?>
@@ -54,6 +65,9 @@
     <div id="burnLegend">
       <div class="line-ref"><div class='barline'></div><?php echo $lang->execution->charts->burn->graph->reference;?></div>
       <div class="line-real"><div class='barline bg-primary'></div><?php echo $lang->execution->charts->burn->graph->actuality;?></div>
+      <?php if(strpos($type, 'withdelay') !== false):?>
+      <div class="line-real"><div class='barline bg-delay'></div><?php echo $lang->execution->charts->burn->graph->delay;?></div>
+      <?php endif;?>
     </div>
   </div>
 </div>
@@ -93,6 +107,19 @@ function initBurnChar()
             data: <?php echo $chartData['burnLine']?>
         }]
     };
+
+    var delaySets =
+    {
+        label: "<?php echo $lang->execution->charts->burn->graph->delay;?>",
+        color: 'red',
+        pointStrokeColor: 'red',
+        pointHighlightStroke: 'red',
+        pointColor: 'red',
+        fillColor: 'rgba(0,106,241, .07)',
+        pointHighlightFill: '#fff',
+        data: <?php echo isset($chartData['delayLine']) ? $chartData['delayLine'] : '[]';?>
+    }
+    if(type.match('withdelay')) data.datasets.push(delaySets);
 
     var burnChart = $("#burnCanvas").lineChart(data,
     {

@@ -227,6 +227,7 @@ $lang->project->currencySymbol['NZD'] = 'NZ$';
 $lang->project->currencySymbol['THB'] = '฿';
 $lang->project->currencySymbol['SGD'] = 'S$';
 
+$lang->project->modelList['']          = "";
 $lang->project->modelList['scrum']     = "Scrum";
 $lang->project->modelList['waterfall'] = "瀑布";
 $lang->project->modelList['kanban']    = "看板";
@@ -257,6 +258,7 @@ $lang->project->kanbanSubAclList['program'] = '项目集内公开（所有上级
 $lang->project->authList['extend'] = '继承 (取系统权限与项目权限的合集)';
 $lang->project->authList['reset']  = '重新定义 (只取项目权限)';
 
+$lang->project->statusList['']          = '';
 $lang->project->statusList['wait']      = '未开始';
 $lang->project->statusList['doing']     = '进行中';
 $lang->project->statusList['suspended'] = '已挂起';
