@@ -43,6 +43,13 @@ $(function()
             $('#programForm').removeClass('has-row-checked');
         }
     });
+
+    var myPager = $('.pager').data('zui.pager');
+    if(status != 'bySearch' && myPager)
+    {
+        myPager.lang.pageSize = pageSize;
+        myPager.set();
+    }
 });
 
 function showEditCheckbox(show)

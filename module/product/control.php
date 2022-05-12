@@ -1197,7 +1197,7 @@ class product extends control
      * @access public
      * @return void
      */
-    public function all($browseType = 'noclosed', $orderBy = 'order_asc', $param = 0)
+    public function all($browseType = 'noclosed', $orderBy = 'order_asc', $param = 0, $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         /* Load module and set session. */
         $this->loadModel('program');
@@ -1211,8 +1211,11 @@ class product extends control
             $this->product->setMenu($productID);
         }
 
+        $this->app->loadClass('pager', $static = true);
+        $pager = new pager($recTotal, $recPerPage, $pageID);
+
         /* Process product structure. */
-        $productStats     = $this->product->getStats($orderBy, '', $browseType, '', 'story', '', $queryID);
+        $productStats     = $this->product->getStats($orderBy, $pager, $browseType, '', 'story', '', $queryID);
         $productStructure = $this->product->statisticProgram($productStats);
 
         $actionURL = $this->createLink('product', 'all', "browseType=bySearch&orderBy=order_asc&queryID=myQueryID");
@@ -1226,6 +1229,7 @@ class product extends control
         $this->view->productStructure = $productStructure;
         $this->view->orderBy          = $orderBy;
         $this->view->browseType       = $browseType;
+        $this->view->pager            = $pager;
 
         $this->display();
     }
