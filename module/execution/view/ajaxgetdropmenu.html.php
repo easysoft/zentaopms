@@ -71,6 +71,7 @@ foreach($executions as $projectID => $projectExecutions)
         if($executionCounts[$projectID]['others']) $normalExecutionsHtml  .= '<li><div class="hide-in-search"><a class="text-muted not-list-item" title="' . $projectName . '">' . $projectName . '</a> <label class="label">' . $lang->project->common . '</label></div><ul>';
         if($executionCounts[$projectID]['closed']) $closedExecutionsHtml  .= '<li><div class="hide-in-search"><a class="text-muted not-list-item" title="' . $projectName . '">' . $projectName . '</a> <label class="label">' . $lang->project->common . '</label></div><ul>';
     }
+
     foreach($projectExecutions as $index => $execution)
     {
         $kanbanLink = $this->createLink('execution', 'kanban', "executionID=%s");
@@ -108,11 +109,7 @@ foreach($executions as $projectID => $projectExecutions)
                 }
             }
         }
-        elseif($execution->grade == 2 and $execution->parent != $execution->project)
-        {
-            continue;
-        }
-        else
+        elseif($execution->grade ==1)
         {
             if($execution->status != 'done' and $execution->status != 'closed' and ($execution->PM == $this->app->user->account or isset($execution->teams[$this->app->user->account])))
             {
