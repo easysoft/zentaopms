@@ -469,18 +469,8 @@ UPDATE `zt_workflowaction` SET `method`='operate' WHERE `action` IN ('review','a
 UPDATE `zt_workflowaction` SET `method`='batchoperate' WHERE `action` IN('batchedit', 'batchconfirm', 'batchresolve');
 UPDATE `zt_workflowaction` SET `method`='view' WHERE `action`='adminview';
 UPDATE `zt_workflowaction` SET `method`='browse' WHERE module='execution' and `action` IN('all', 'task');
+UPDATE `zt_workflowaction` SET `type`  ='single' WHERE `action`='browse' AND module IN ('testcase','testtask','testsuite','caselib','feedback');
 UPDATE `zt_workflowaction` SET `method`='browse' WHERE module='product' and `action` = 'all';
 UPDATE `zt_workflowaction` SET `type`  ='single' WHERE `action`='browse' AND `type`='batch' AND `buildin`=1;
 
 UPDATE `zt_workflowaction` SET `show`='direct' WHERE `buildin`=1;
-REPLACE INTO `zt_workflowaction` (`module`, `action`, `method`, `name`, `type`, `batchMode`, `extensionType`, `open`, `position`, `layout`, `show`, `order`, `buildin`, `virtual`, `conditions`, `verifications`, `hooks`, `linkages`, `js`, `css`, `toList`, `blocks`, `desc`, `status`, `vision`, `createdBy`, `createdDate`, `editedBy`, `editedDate`) VALUES
-('story',   'exporttemplate', 'exporttemplate', '下载模板', 'single', 'different', 'extend', 'modal', 'browse', 'normal', 'dropdownlist', 0, 1, 0, '', '', '', '', '', '', '', '', '', 'enable', 'rnd', '', '2022-05-13 09:34:30', '', '0000-00-00 00:00:00'),
-('story',   'import',  'import',  '导入Excel', 'single', 'different', 'extend', 'modal', 'browse',        'normal', 'dropdownlist', 0, 1, 0, '', '', '', '', '', '', '', '', '', 'enable', 'rnd', '', '2022-05-13 09:34:30', '', '0000-00-00 00:00:00'),
-('project', 'delete',  'delete',  '删除项目',  'single', 'different', 'extend', 'none',  'browseandview', 'normal', 'dropdownlist', 0, 1, 0, '', '', '', '', '', '', '', '', '', 'enable', 'rnd', '', '2022-05-13 09:34:30', '', '0000-00-00 00:00:00'),
-('project', 'close',   'operate', '关闭项目',  'single', 'different', 'extend', 'modal', 'browseandview', 'normal', 'dropdownlist', 0, 1, 0, '', '', '', '', '', '', '', '', '', 'enable', 'rnd', '', '2022-05-13 09:34:30', '', '0000-00-00 00:00:00'),
-('project', 'activate','operate', '激活项目',  'single', 'different', 'extend', 'modal', 'browseandview', 'normal', 'dropdownlist', 0, 1, 0, '', '', '', '', '', '', '', '', '', 'enable', 'rnd', '', '2022-05-13 09:34:30', '', '0000-00-00 00:00:00'),
-('project', 'suspend', 'operate', '挂起项目',  'single', 'different', 'extend', 'modal', 'browseandview', 'normal', 'dropdownlist', 0, 1, 0, '', '', '', '', '', '', '', '', '', 'enable', 'rnd', '', '2022-05-13 09:34:30', '', '0000-00-00 00:00:00'),
-('project', 'activate','operate', '激活项目',  'single', 'different', 'extend', 'modal', 'browseandview', 'normal', 'dropdownlist', 0, 1, 0, '', '', '', '', '', '', '', '', '', 'enable', 'lite', '', '2022-05-13 09:34:30', '', '0000-00-00 00:00:00'),
-('project', 'close',   'operate', '关闭项目',  'single', 'different', 'extend', 'modal', 'browseandview', 'normal', 'dropdownlist', 0, 1, 0, '', '', '', '', '', '', '', '', '', 'enable', 'lite', '', '2022-05-13 09:34:30', '', '0000-00-00 00:00:00'),
-('project', 'delete',  'delete',  '删除项目',  'single', 'different', 'extend', 'none',  'browseandview', 'normal', 'dropdownlist', 0, 1, 0, '', '', '', '', '', '', '', '', '', 'enable', 'lite', '', '2022-05-13 09:34:30', '', '0000-00-00 00:00:00'),
-('project', 'suspend', 'operate', '挂起项目',  'single', 'different', 'extend', 'modal', 'browseandview', 'normal', 'dropdownlist', 0, 1, 0, '', '', '', '', '', '', '', '', '', 'enable', 'lite', '', '2022-05-13 09:34:30', '', '0000-00-00 00:00:00');
