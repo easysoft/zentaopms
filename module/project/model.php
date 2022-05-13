@@ -545,14 +545,7 @@ class projectModel extends model
             }
             elseif($module == 'repo')
             {
-                if($method == 'create')
-                {
-                    $link = helper::createLink($module, $method, "objectID=%s#app=project");
-                }
-                else
-                {
-                    $link = helper::createLink($module, 'browse', "repoID=&branchID=&objectID=%s#app=project");
-                }
+                $link = helper::createLink($module, 'browse', "repoID=&branchID=&objectID=%s#app=project");
             }
             elseif($module == 'doc')
             {
