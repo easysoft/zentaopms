@@ -35,5 +35,5 @@ $compile = new compileTest();
 
 r($compile->getBuildUrlTest($jenkins1)) && p('userPWD') && e('123456:zxd');                                    //检测password为空时获取的信息
 r($compile->getBuildUrlTest($jenkins2)) && p('url')     && e('pms.cc.cc/job/11/buildWithParameters/api/json'); //检测token为空时获取的信息
-r($compile->getBuildUrlTest($jenkins3)) && p('url')     && e('/job//buildWithParameters/api/json');          //检测jenkins为空时获取的信息
+r($compile->getBuildUrlTest($jenkins3)) && p('url')     && e('/job//buildWithParameters/api/json');            //检测jenkins为空时获取的信息
 r($compile->getBuildUrlTest($jenkins3)) && p('userPWD') && e(':');                                             //检测jenkins为空时获取的信息
