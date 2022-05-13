@@ -7,13 +7,30 @@ class blockTest
          $this->objectModel = $tester->loadModel('block');
     }
 
-    public function saveTest($id, $source, $type, $module = 'my')
+    /**
+     * Test save params.
+     *
+     * @param  object $block
+     * @param  int    $id
+     * @param  string $source
+     * @param  string $type
+     * @param  string $module
+     * @access public
+     * @return object
+     */
+    public function saveTest($block, $id, $source, $type, $module = 'my')
     {
-        $objects = $this->objectModel->save($id, $source, $type, $module = 'my');
+        foreach($block as $key => $value) $_POST[$key] = $value;
 
+        $this->objectModel->save($id, $source, $type, $module);
+
+        unset($_POST);
+
+        if(dao::isError()) a(dao::getError());
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        $object = $this->objectModel->getByID($id);
+        return $object;
     }
 
     /**
