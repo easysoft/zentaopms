@@ -157,7 +157,7 @@ class productModel extends model
         if(!isset($products[$this->session->product]))
         {
             $product = $this->getById($productID);
-            if(empty($product)) $productID = key($products);
+            if(empty($product) or $product->deleted == 1) $productID = key($products);
             $this->session->set('product', (int)$productID, $this->app->tab);
             if($productID && strpos(",{$this->app->user->view->products},", ",{$productID},") === false)
             {
