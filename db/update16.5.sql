@@ -301,8 +301,8 @@ REPLACE INTO `zt_workflowfield` (`module`, `field`, `type`, `length`, `name`, `c
 ('task',	'mr',           	'mediumint',	'8',	'mr',	                'input',	'',	'',	'',	'',	'',	42,	0,	0,	'0',	'0',	'0',	'1',	1,	'',	'',	'0000-00-00 00:00:00',	'',	'0000-00-00 00:00:00'),
 ('task',	'entry',        	'text', 	'',	'entry',	        'input',	'',	'',	'',	'',	'',	43,	0,	0,	'0',	'0',	'0',	'1',	1,	'',	'',	'0000-00-00 00:00:00',	'',	'0000-00-00 00:00:00'),
 ('task',	'lines',        	'varchar',	'10',	'lines',	        'input',	'',	'',	'',	'',	'',	44,	0,	0,	'0',	'0',	'0',	'1',	1,	'',	'',	'0000-00-00 00:00:00',	'',	'0000-00-00 00:00:00'),
-('task',	'v1',           	'varchar',	'40',	'v1',   	        'input',	'',     	'',	'',	'',	'',	45,	0,	0,	'0',	'0',	'0',	'1',	1,	'',	'',	'0000-00-00 00:00:00',	'',	'0000-00-00 00:00:00'),
-('task',	'v2',           	'varchar',	'40',	'v2',   	        'input',	'',     	'',	'',	'',	'',	46,	0,	0,	'0',	'0',	'0',	'1',	1,	'',	'',	'0000-00-00 00:00:00',	'',	'0000-00-00 00:00:00'),
+('task',	'v1',           	'varchar',	'40',	'v1',   	        'input',	'',     '',	'',	'',	'',	45,	0,	0,	'0',	'0',	'0',	'1',	1,	'',	'',	'0000-00-00 00:00:00',	'',	'0000-00-00 00:00:00'),
+('task',	'v2',           	'varchar',	'40',	'v2',   	        'input',	'',     '',	'',	'',	'',	46,	0,	0,	'0',	'0',	'0',	'1',	1,	'',	'',	'0000-00-00 00:00:00',	'',	'0000-00-00 00:00:00'),
 ('task',	'vision',	        'varchar',	'10',	'vision',	        'input',	'',	'',	'',	'',	'',	47,	0,	0,	'0',	'0',	'0',	'1',	1,	'',	'',	'0000-00-00 00:00:00',	'',	'0000-00-00 00:00:00'),
 ('feedback',	'type',	                'char',	        '30',	'反馈类型',	        'select',	'',	'',	'',	'',	'',	4,	0,	0,	'0',	'0',	'0',	'1',	1,	'',	'',	'0000-00-00 00:00:00',	'',	'0000-00-00 00:00:00'),
 ('feedback',	'notifyEmail',	        'varchar',	'100',	'通知邮箱',	        'input',	'',	'',	'',	'',	'',	9,	0,	0,	'0',	'0',	'0',	'1',	1,	'',	'',	'0000-00-00 00:00:00',	'',	'0000-00-00 00:00:00'),
@@ -319,7 +319,9 @@ REPLACE INTO `zt_workflowfield` (`module`, `field`, `type`, `length`, `name`, `c
 ('testcase',	'frequency',	        'char', 	'30',	'使用频率',	        'input',	'',	'',	'',	'',	'',	28,	0,	0,	'0',	'0',	'0',	'1',	1,	'',	'',	'0000-00-00 00:00:00',	'',	'0000-00-00 00:00:00'),
 ('testcase',	'fromCaseID',	        'char', 	'30',	'用例来源ID',	        'input',	'',	'',	'',	'',	'',	28,	0,	0,	'0',	'0',	'0',	'1',	1,	'',	'',	'0000-00-00 00:00:00',	'',	'0000-00-00 00:00:00'),
 ('testcase',	'fromCaseVersion',	'char', 	'30',	'用例来源版本',	        'input',	'',	'',	'',	'',	'',	5,	0,	0,	'0',	'0',	'0',	'1',	1,	'',	'',	'0000-00-00 00:00:00',	'',	'0000-00-00 00:00:00'),
-('testcase',    'subStatus',            'varchar',      '30',   '子状态', 		'select',       '',     '',     '',     '',     '',     17,     0,      0,      '0',    '0',    '0',    '0',    1,      '',     '',     '0000-00-00 00:00:00',  '',     '0000-00-00 00:00:00');
+('testcase',	'precondition', 	'text', 	'',	'前置条件',	        'textarea',	'',	'',	'',	'',	'',	5,	0,	0,	'0',	'0',	'0',	'1',	1,	'',	'',	'0000-00-00 00:00:00',	'',	'0000-00-00 00:00:00'),
+('testcase',    'subStatus',            'varchar',      '30',   '子状态', 		'select',       '',     '',     '',     '',     '',     17,     0,      0,      '0',    '0',    '0',    '0',    1,      '',     '',     '0000-00-00 00:00:00',  '',     '0000-00-00 00:00:00'),
+('testsuite',   'type',                 'text',         '',     '类型', 		'redio',        '',     '[\"\\u672a\\u5220\\u9664\",\"\\u5df2\\u5220\\u9664\"]',     '',     '',     '',     17,     0,      0,      '0',    '0',    '0',    '0',    1,      '',     '',     '0000-00-00 00:00:00',  '',     '0000-00-00 00:00:00');
 UPDATE `zt_workflowfield` SET `options`=(SELECT id FROM `zt_workflowdatasource` WHERE `code`='projectModel' LIMIT 1)     WHERE `module`='project'  AND `field`='model';
 UPDATE `zt_workflowfield` SET `options`=(SELECT id FROM `zt_workflowdatasource` WHERE `code`='feedbackType' LIMIT 1)     WHERE `module`='feedback' AND `field`='type';
 UPDATE `zt_workflowfield` SET `options`=(SELECT id FROM `zt_workflowdatasource` WHERE `code`='feedbackSolution' LIMIT 1) WHERE `module`='feedback' AND `field`='solution';
@@ -453,6 +455,7 @@ REPLACE INTO `zt_workflowfield` (`module`, `field`, `type`, `length`, `name`, `c
 ('program', 'fluidBoard', 	'enum', 	'', 	'fluidBoard', 		'radio', 	'', '[\"\\u672a\\u5220\\u9664\",\"\\u5df2\\u5220\\u9664\"]',   '0',  '', '', 46, 0, 0, '0', '0', '0', '1', 1, '', '', '2022-04-19 10:14:25', '', '0000-00-00 00:00:00');
 
 UPDATE `zt_workflowaction` SET `position`='browse' WHERE `action` IN ('view','exporttemplate');
+UPDATE `zt_workflowaction` SET `position`='browse' WHERE `action`='create' AND `module`='testtask';
 
 UPDATE `zt_workflowaction` SET `method`=`action` WHERE `method`='';
 UPDATE `zt_workflowaction` SET `method`='browse' WHERE `action`='admin';
