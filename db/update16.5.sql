@@ -460,4 +460,10 @@ UPDATE `zt_workflowaction` SET `method`='operate' WHERE `action` IN ('review','a
 UPDATE `zt_workflowaction` SET `method`='batchoperate' WHERE `action` IN('batchedit', 'batchconfirm', 'batchresolve');
 UPDATE `zt_workflowaction` SET `method`='view' WHERE `action`='adminview';
 UPDATE `zt_workflowaction` SET `method`='browse' WHERE module='execution' and `action` IN('all', 'task');
-UPDATE `zt_workflowaction` SET `method`='operate' WHERE module='story' and `action` IN('exporttemplate', 'import', 'showimport');
+UPDATE `zt_workflowaction` SET `method`='operate' WHERE module='story' and `action` IN('close', 'activate', 'assignTo', 'review', 'change');
+UPDATE `zt_workflowaction` SET `method`='batchoperate' WHERE module='story' and `action` = 'batchedit';
+UPDATE `zt_workflowaction` SET `method`='operate' WHERE module='product' and `action` = 'close';
+UPDATE `zt_workflowaction` SET `method`='batchoperate' WHERE module='product' and `action` = 'batcheditl';
+UPDATE `zt_workflowaction` SET `method`='browse' WHERE module='product' and `action` = 'all';
+UPDATE `zt_workflowaction` SET `method`='batchoperate' WHERE module='productplan' and `action` = 'batchedit';
+UPDATE `zt_workflowaction` SET `method`='operate' WHERE module='program' and `action` IN('close', 'activate', 'start', 'suspend');
