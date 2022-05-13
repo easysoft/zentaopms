@@ -8763,22 +8763,29 @@ INSERT INTO `zt_workflowdatasource` (`type`, `name`, `code`, `buildin`, `datasou
 ('sql',         '用例',           'cases',           '1', 'select id,title from zt_case where deleted=\"0\"',     'view_datasource_41',   'id',   'title'),
 ('system',      '反馈分支',       'feedbackModules', '1', '{\"app\":\"system\",\"module\":\"tree\",\"method\":\"getOptionMenu\",\"methodDesc\":\"Create an option menu in html.\",\"params\":[{\"name\":\"rootID\",\"type\":\"int\",\"desc\":\"\",\"value\":\"0\"},{\"name\":\"type\",\"type\":\"string\",\"desc\":\"\",\"value\":\"feedback\"},{\"name\":\"startModule\",\"type\":\"int\",\"desc\":\"\",\"value\":\"0\"},{\"name\":\"branch\",\"type\":\"\",\"desc\":\"\",\"value\":\"0\"}]}',   '',     '',     ''),
 ('lang',        '需求类型',       'storyType',       '1', 'storyType',    '',     '',     ''),
-('system',	'执行',	          'executions',      '1', '{\"app\":\"system\",\"module\":\"execution\",\"method\":\"getPairs\",\"methodDesc\":\"Get execution pairs.\",\"params\":[{\"name\":\"projectID\",\"type\":\"int\",\"desc\":\"\",\"value\":\"0\"},{\"name\":\"type\",\"type\":\"string\",\"desc\":\"all|sprint|stage|kanban\",\"value\":\"all\"},{\"name\":\"mode\",\"type\":\"string\",\"desc\":\"all|noclosed|stagefilter or empty\",\"value\":\"\"}]}',  '',     '',     '');
+('system',	'执行',	          'executions',      '1', '{\"app\":\"system\",\"module\":\"execution\",\"method\":\"getPairs\",\"methodDesc\":\"Get execution pairs.\",\"params\":[{\"name\":\"projectID\",\"type\":\"int\",\"desc\":\"\",\"value\":\"0\"},{\"name\":\"type\",\"type\":\"string\",\"desc\":\"all|sprint|stage|kanban\",\"value\":\"all\"},{\"name\":\"mode\",\"type\":\"string\",\"desc\":\"all|noclosed|stagefilter or empty\",\"value\":\"\"}]}',  '',     '',     ''),
+('lang', '项目模型', 'projectModel', '1', 'projectModel', '', '', ''),
+('lang', '反馈类型', 'feedbackType', '1', 'feedbackType', '', '', ''),
+('lang', '反馈处理方案', 'feedbackSolution',     '1', 'feedbackSolution',     '', '', ''),
+('lang', '反馈关闭原因', 'feedbackclosedReason', '1', 'feedbackclosedReason', '', '', '');
 
 INSERT INTO `zt_workflowdatasource` (`type`, `name`, `code`, `buildin`, `vision`, `datasource`, `view`, `keyField`, `valueField`) VALUES
-('system',      '项目',           'liteprojects',        '1', 'lite', '{\"app\":\"system\",\"module\":\"project\",\"method\":\"getPairsByModel\",\"methodDesc\":\"Get project pairs by model and project.\",\"params\":[{\"name\":\"model\",\"type\":\"string\",\"desc\":\"all|scrum|waterfall\",\"value\":\"all\"},{\"name\":\"programID\",\"type\":\"int\",\"desc\":\"\",\"value\":\"0\"},{\"name\":\"param\",\"type\":\"\",\"desc\":\"\",\"value\":\"\"}]}',  '',     '',     ''),
-('sql',         '任务',           'litetasks',           '1', 'lite', 'select id,name from zt_task where deleted=\"0\" and vision=\"lite\"',      'view_datasource_46',    'id',   'name'),
-('system',      '权限分组',       'litegroups',          '1', 'lite', '{\"app\":\"system\",\"module\":\"group\",\"method\":\"getPairs\",\"methodDesc\":\"\",\"params\":[]}',  '',     '',     ''),
-('system',      '用户',           'liteusers',           '1', 'lite', '{\"app\":\"system\",\"module\":\"user\",\"method\":\"getPairs\",\"methodDesc\":\"\",\"params\":[{\"name\":\"params\",\"type\":\"\",\"desc\":\"\",\"value\":\"noclosed|noletter\"},{\"name\":\"usersToAppended\",\"type\":\"\",\"desc\":\"\",\"value\":\"\"}]}',        '',     '',     ''),
-('sql',         '模块',           'litemodules',         '1', 'lite', 'select id,name from zt_module where deleted=\"0\"',    'view_datasource_11',   'id',   'name'),
-('lang',        '项目类型',       'liteprojectType',     '1', 'lite', 'projectType',    '',     '',     ''),
-('lang',        '项目状态',       'liteprojectStatus',   '1', 'lite', 'projectStatus',  '',     '',     ''),
-('lang',        '项目访问控制',   'liteprojectAcl',      '1', 'lite', 'projectAcl',     '',     '',     ''),
-('lang',        '任务类型',       'litetaskType',        '1', 'lite', 'taskType',       '',     '',     ''),
-('lang',        '任务优先级',     'litetaskPri',         '1', 'lite', 'taskPri',        '',     '',     ''),
-('lang',        '任务状态',       'litetaskStatus',      '1', 'lite', 'taskStatus',     '',     '',     ''),
-('lang',        '反馈状态',       'litefeedbackStatus',  '1', 'lite', 'feedbackStatus', '',     '',     ''),
-('system',      '反馈分支',       'litefeedbackModules', '1', 'lite', '{\"app\":\"system\",\"module\":\"tree\",\"method\":\"getOptionMenu\",\"methodDesc\":\"Create an option menu in html.\",\"params\":[{\"name\":\"rootID\",\"type\":\"int\",\"desc\":\"\",\"value\":\"0\"},{\"name\":\"type\",\"type\":\"string\",\"desc\":\"\",\"value\":\"feedback\"},{\"name\":\"startModule\",\"type\":\"int\",\"desc\":\"\",\"value\":\"0\"},{\"name\":\"branch\",\"type\":\"\",\"desc\":\"\",\"value\":\"0\"}]}',   '',     '',     '');
+('system',      '项目',           'liteprojects',             '1', 'lite', '{\"app\":\"system\",\"module\":\"project\",\"method\":\"getPairsByModel\",\"methodDesc\":\"Get project pairs by model and project.\",\"params\":[{\"name\":\"model\",\"type\":\"string\",\"desc\":\"all|scrum|waterfall\",\"value\":\"all\"},{\"name\":\"programID\",\"type\":\"int\",\"desc\":\"\",\"value\":\"0\"},{\"name\":\"param\",\"type\":\"\",\"desc\":\"\",\"value\":\"\"}]}',  '',     '',     ''),
+('sql',         '任务',           'litetasks',                '1', 'lite', 'select id,name from zt_task where deleted=\"0\" and vision=\"lite\"',      'view_datasource_46',    'id',   'name'),
+('system',      '权限分组',       'litegroups',               '1', 'lite', '{\"app\":\"system\",\"module\":\"group\",\"method\":\"getPairs\",\"methodDesc\":\"\",\"params\":[]}',  '',     '',     ''),
+('system',      '用户',           'liteusers',                '1', 'lite', '{\"app\":\"system\",\"module\":\"user\",\"method\":\"getPairs\",\"methodDesc\":\"\",\"params\":[{\"name\":\"params\",\"type\":\"\",\"desc\":\"\",\"value\":\"noclosed|noletter\"},{\"name\":\"usersToAppended\",\"type\":\"\",\"desc\":\"\",\"value\":\"\"}]}',        '',     '',     ''),
+('sql',         '模块',           'litemodules',              '1', 'lite', 'select id,name from zt_module where deleted=\"0\"',    'view_datasource_11',   'id',   'name'),
+('lang',        '项目类型',       'liteprojectType',          '1', 'lite', 'projectType',    '',     '',     ''),
+('lang',        '项目状态',       'liteprojectStatus',        '1', 'lite', 'projectStatus',  '',     '',     ''),
+('lang',        '项目访问控制',   'liteprojectAcl',           '1', 'lite', 'projectAcl',     '',     '',     ''),
+('lang',        '任务类型',       'litetaskType',             '1', 'lite', 'taskType',       '',     '',     ''),
+('lang',        '任务优先级',     'litetaskPri',              '1', 'lite', 'taskPri',        '',     '',     ''),
+('lang',        '任务状态',       'litetaskStatus',           '1', 'lite', 'taskStatus',     '',     '',     ''),
+('lang',        '反馈状态',       'litefeedbackStatus',       '1', 'lite', 'feedbackStatus', '',     '',     ''),
+('system',      '反馈分支',       'litefeedbackModules',      '1', 'lite', '{\"app\":\"system\",\"module\":\"tree\",\"method\":\"getOptionMenu\",\"methodDesc\":\"Create an option menu in html.\",\"params\":[{\"name\":\"rootID\",\"type\":\"int\",\"desc\":\"\",\"value\":\"0\"},{\"name\":\"type\",\"type\":\"string\",\"desc\":\"\",\"value\":\"feedback\"},{\"name\":\"startModule\",\"type\":\"int\",\"desc\":\"\",\"value\":\"0\"},{\"name\":\"branch\",\"type\":\"\",\"desc\":\"\",\"value\":\"0\"}]}',   '',     '',     ''),
+('lang',        '反馈类型',       'litefeedbackType',         '1', 'lite', 'feedbackType',         '', '', ''),
+('lang',        '反馈处理方案',   'litefeedbackSolution',     '1', 'lite', 'feedbackSolution',     '', '', ''),
+('lang',        '反馈关闭原因',   'litefeedbackclosedReason', '1', 'lite', 'feedbackclosedReason', '', '', '');
 
 DROP VIEW IF EXISTS `view_datasource_4`;
 DROP VIEW IF EXISTS `view_datasource_5`;

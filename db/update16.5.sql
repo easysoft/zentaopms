@@ -90,7 +90,7 @@ DELETE FROM `zt_config` WHERE `section` = 'customMenu';
 
 UPDATE `zt_story` SET `plan` = '' WHERE `plan` = 0;
 
-UPDATE `zt_workflowfield` set `control` = 'datetime' WHERE `module` = 'testcase' and `field` IN ('openedDate','reviewedDate','lastEditedDate','lastRunDate');
+UPDATE `zt_workflowfield` set `type` = 'datetime', `control` = 'datetime' WHERE `module` = 'testcase' and `field` IN ('openedDate','reviewedDate','lastEditedDate','lastRunDate');
 
 UPDATE `zt_workflowfield` set `control` = 'date'     WHERE `module` = 'testtask' and `field` IN ('begin','end');
 UPDATE `zt_workflowfield` set `control` = 'richtext' WHERE `module` = 'testtask' and `field` = 'desc';
@@ -112,7 +112,7 @@ UPDATE `zt_workflowfield` SET `control` = 'radio' WHERE `module` = 'release' and
 UPDATE `zt_workflowfield` SET `control` = 'datetime' WHERE `module` = 'story' and `field` = 'openedDate';
 UPDATE `zt_workflowfield` SET `control` = 'datetime' WHERE `module` = 'story' and `field` = 'assignedDate';
 UPDATE `zt_workflowfield` SET `control` = 'datetime' WHERE `module` = 'story' and `field` = 'lastEditedDate';
-UPDATE `zt_workflowfield` SET `control` = 'date' WHERE `module` = 'story' and `field` = 'reviewedDate';
+UPDATE `zt_workflowfield` SET `type` = 'datetime', `control` = 'datetime' WHERE `module` = 'story' and `field` = 'reviewedDate';
 UPDATE `zt_workflowfield` SET `control` = 'datetime' WHERE `module` = 'story' and `field` = 'closedDate';
 UPDATE `zt_workflowfield` SET `control` = 'radio' WHERE `module` = 'story' and `field` = 'deleted';
 
@@ -145,6 +145,11 @@ REPLACE INTO `zt_workflowdatasource` (`type`, `name`, `code`, `buildin`, `dataso
 ('lang', '反馈类型', 'feedbackType', '1', 'feedbackType', '', '', ''),
 ('lang', '反馈处理方案', 'feedbackSolution',     '1', 'feedbackSolution',     '', '', ''),
 ('lang', '反馈关闭原因', 'feedbackclosedReason', '1', 'feedbackclosedReason', '', '', '');
+
+INSERT INTO `zt_workflowdatasource` (`type`, `name`, `code`, `buildin`, `vision`, `datasource`, `view`, `keyField`, `valueField`) VALUES
+('lang',        '反馈类型',       'litefeedbackType',         '1', 'lite', 'feedbackType',         '', '', ''),
+('lang',        '反馈处理方案',   'litefeedbackSolution',     '1', 'lite', 'feedbackSolution',     '', '', ''),
+('lang',        '反馈关闭原因',   'litefeedbackclosedReason', '1', 'lite', 'feedbackclosedReason', '', '', '');
 
 REPLACE INTO `zt_workflowfield` (`module`, `field`, `type`, `length`, `name`, `control`, `expression`, `options`, `default`, `rules`, `placeholder`, `order`, `searchOrder`, `exportOrder`, `canExport`, `canSearch`, `isValue`, `readonly`, `buildin`, `desc`, `createdBy`, `createdDate`, `editedBy`, `editedDate`) VALUES
 ('execution',	'type', 	        'char', 	'30',	'迭代类型',	        'select',	'',	'16',	'sprint',	'',	'',	3,	0,	0,	'0',	'0',	'0',	'1',	1,	'',	'',	'0000-00-00 00:00:00',	'',	'0000-00-00 00:00:00'),
@@ -205,16 +210,17 @@ REPLACE INTO `zt_workflowfield` (`module`, `field`, `type`, `length`, `name`, `c
 ('bug',	        'lastEditedDate',	'datetime',	'30',	'修改日期',	        'datetime',	'',	'',	'',	'',	'',	58,	0,	0,	'0',	'0',	'0',	'1',	1,	'',	'',	'0000-00-00 00:00:00',	'',	'0000-00-00 00:00:00'),
 ('bug',	        'deleted',      	'enum', 	'',	'已删除',	        'radio',	'',	'[\"\\u672a\\u5220\\u9664\",\"\\u5df2\\u5220\\u9664\"]',	'0',	'',	'',	59,	0,	0,	'0',	'0',	'0',	'1',	1,	'',	'',	'0000-00-00 00:00:00',	'',	'0000-00-00 00:00:00'),
 ('task',	'project',      	'mediumint',	'8',	'所属项目',	        'select',	'',	'2',	'0',	'',	'',	2,	0,	0,	'0',	'0',	'0',	'1',	1,	'',	'',	'0000-00-00 00:00:00',	'',	'0000-00-00 00:00:00'),
+('task',	'parent',       	'mediumint',	'8',	'父任务',	        'select',	'',	'9',	'0',	'',	'',	3,	0,	0,	'0',	'0',	'0',	'1',	1,	'',	'',	'0000-00-00 00:00:00',	'',	'0000-00-00 00:00:00'),
 ('task',	'storyVersion', 	'smallint',	'6',	'研发需求版本',	        'integer',	'',	'',	'1',	'',	'',	7,	0,	0,	'0',	'0',	'0',	'1',	1,	'',	'',	'0000-00-00 00:00:00',	'',	'0000-00-00 00:00:00'),
-('task',	'estimate',     	'float',	'',	'最初预计',	        'decimal',	'',	'',	'',	'',	'',	13,	0,	0,	'0',	'0',	'0',	'1',	1,	'',	'',	'0000-00-00 00:00:00',	'',	'0000-00-00 00:00:00'),
-('task',	'consumed',     	'float',	'',	'总计消耗',	        'decimal',	'',	'',	'',	'',	'',	14,	0,	0,	'0',	'0',	'0',	'1',	1,	'',	'',	'0000-00-00 00:00:00',	'',	'0000-00-00 00:00:00'),
-('task',	'left',         	'float',	'',	'预计剩余',	        'decimal',	'',	'',	'',	'',	'',	15,	0,	0,	'0',	'0',	'0',	'1',	1,	'',	'',	'0000-00-00 00:00:00',	'',	'0000-00-00 00:00:00'),
+('task',	'estimate',     	'float',	'',	'最初预计',	        'input',	'',	'',	'',	'',	'',	13,	0,	0,	'0',	'0',	'0',	'1',	1,	'',	'',	'0000-00-00 00:00:00',	'',	'0000-00-00 00:00:00'),
+('task',	'consumed',     	'float',	'',	'总计消耗',	        'input',	'',	'',	'',	'',	'',	14,	0,	0,	'0',	'0',	'0',	'1',	1,	'',	'',	'0000-00-00 00:00:00',	'',	'0000-00-00 00:00:00'),
+('task',	'left',         	'float',	'',	'预计剩余',	        'input',	'',	'',	'',	'',	'',	15,	0,	0,	'0',	'0',	'0',	'1',	1,	'',	'',	'0000-00-00 00:00:00',	'',	'0000-00-00 00:00:00'),
 ('task',	'deadline',     	'date', 	'',	'截止日期',	        'date',	'',	'',	'',	'',	'',	16,	0,	0,	'0',	'0',	'0',	'1',	1,	'',	'',	'0000-00-00 00:00:00',	'',	'0000-00-00 00:00:00'),
 ('task',	'desc',         	'text', 	'',	'任务描述',	        'richtext',	'',	'',	'',	'',	'',	20,	0,	0,	'0',	'0',	'0',	'1',	1,	'',	'',	'0000-00-00 00:00:00',	'',	'0000-00-00 00:00:00'),
 ('task',	'openedDate',   	'datetime',	'',	'创建日期',	        'datetime',	'',	'',	'',	'',	'',	23,	0,	0,	'0',	'0',	'0',	'1',	1,	'',	'',	'0000-00-00 00:00:00',	'',	'0000-00-00 00:00:00'),
 ('task',	'assignedDate', 	'datetime',	'30',	'指派日期',	        'datetime',	'',	'',	'',	'',	'',	25,	0,	0,	'0',	'0',	'0',	'1',	1,	'',	'',	'0000-00-00 00:00:00',	'',	'0000-00-00 00:00:00'),
 ('task',	'estStarted',   	'date', 	'',	'预计开始',	        'date',	'',	'',	'',	'',	'',	26,	0,	0,	'0',	'0',	'0',	'1',	1,	'',	'',	'0000-00-00 00:00:00',	'',	'0000-00-00 00:00:00'),
-('task',	'realStarted',  	'date', 	'',	'实际开始',	        'date',	'',	'',	'',	'',	'',	27,	0,	0,	'0',	'0',	'0',	'1',	1,	'',	'',	'0000-00-00 00:00:00',	'',	'0000-00-00 00:00:00'),
+('task',	'realStarted',  	'datetime', 	'',	'实际开始',	        'datetime',	'',	'',	'',	'',	'',	27,	0,	0,	'0',	'0',	'0',	'1',	1,	'',	'',	'0000-00-00 00:00:00',	'',	'0000-00-00 00:00:00'),
 ('task',	'finishedDate', 	'datetime',	'',	'实际完成',	        'datetime',	'',	'',	'',	'',	'',	29,	0,	0,	'0',	'0',	'0',	'1',	1,	'',	'',	'0000-00-00 00:00:00',	'',	'0000-00-00 00:00:00'),
 ('task',	'canceledDate', 	'datetime',	'',	'取消时间',	        'datetime',	'',	'',	'',	'',	'',	32,	0,	0,	'0',	'0',	'0',	'1',	1,	'',	'',	'0000-00-00 00:00:00',	'',	'0000-00-00 00:00:00'),
 ('task',	'closedDate',   	'datetime',	'',	'关闭时间',	        'datetime',	'',	'',	'',	'',	'',	34,	0,	0,	'0',	'0',	'0',	'1',	1,	'',	'',	'0000-00-00 00:00:00',	'',	'0000-00-00 00:00:00'),
@@ -350,7 +356,7 @@ UPDATE `zt_workflowaction` SET `type`='single', `position`='browseandview', `sho
 UPDATE `zt_workflowaction` SET `type`='single', `position`='browseandview', `show`='direct', `open`='normal', `layout`='normal' WHERE `module`='execution' AND `action`='all';
 UPDATE `zt_workflowaction` SET `type`='single', `position`='browseandview', `show`='direct', `open`='normal', `layout`='normal' WHERE `module`='task' AND `action`='browse';
 UPDATE `zt_workflowaction` SET `type`='single', `position`='browseandview', `show`='direct', `open`='normal', `layout`='normal' WHERE `module`='task' AND `action`='create';
-UPDATE `zt_workflowaction` SET `type`='batch', `position`='browseandview', `show`='direct', `open`='normal', `layout`='normal' WHERE `module`='task' AND `action`='batchcreate';
+UPDATE `zt_workflowaction` SET `type`='batch', `position`='browse', `show`='direct', `open`='normal', `layout`='normal' WHERE `module`='task' AND `action`='batchcreate';
 UPDATE `zt_workflowaction` SET `type`='batch', `position`='browse', `show`='direct', `open`='normal', `layout`='normal' WHERE `module`='task' AND `action`='batchedit';
 UPDATE `zt_workflowaction` SET `type`='single', `position`='browse', `show`='direct', `open`='modal', `layout`='normal' WHERE `module`='task' AND `action`='exporttemplate';
 UPDATE `zt_workflowaction` SET `type`='single', `position`='browse', `show`='direct', `open`='modal', `layout`='normal' WHERE `module`='task' AND `action`='import';
@@ -422,7 +428,7 @@ UPDATE `zt_workflowaction` SET `type`='batch' WHERE `module`IN ('feedback','case
 UPDATE `zt_workflowaction` SET `position`='browse' WHERE `module`IN ('feedback','caselib','testsuite','testtask','testcase') AND `action` IN ('batchedit','batchcreate','import','showimport');
 
 UPDATE `zt_workflowfield` SET `control` = 'radio' WHERE `module` = 'program' and `field` = 'deleted';
-UPDATE `zt_workflowfield` SET `type` = 'char', `length` => '30', `control` = 'radio' WHERE `module` = 'program' and `field` = 'type';
+UPDATE `zt_workflowfield` SET `type` = 'char', `length` = '30', `control` = 'radio' WHERE `module` = 'program' and `field` = 'type';
 UPDATE `zt_workflowfield` SET `control` = 'date' WHERE `module` = 'program' and `field` = 'begin';
 UPDATE `zt_workflowfield` SET `control` = 'date' WHERE `module` = 'program' and `field` = 'end';
 UPDATE `zt_workflowfield` SET `control` = 'integer' WHERE `module` = 'program' and `field` = 'days';
@@ -431,7 +437,7 @@ UPDATE `zt_workflowfield` SET `control` = 'richtext' WHERE `module` = 'program' 
 UPDATE `zt_workflowfield` SET `control` = 'datetime' WHERE `module` = 'program' and `field` = 'openedDate';
 UPDATE `zt_workflowfield` SET `control` = 'datetime' WHERE `module` = 'program' and `field` = 'closedDate';
 UPDATE `zt_workflowfield` SET `control` = 'datetime' WHERE `module` = 'program' and `field` = 'canceledDate';
-UPDATE `zt_workflowfield` SET `type` => 'char', `length` => '30' WHERE `module` = 'program' and `field` = 'acl';
+UPDATE `zt_workflowfield` SET `type` = 'char', `length` = '30' WHERE `module` = 'program' and `field` = 'acl';
 UPDATE `zt_workflowfield` SET `control` = 'multi-select', `options` = 'user' WHERE `module` = 'program' and `field` = 'whitelist';
 
 REPLACE INTO `zt_workflowfield` (`module`, `field`, `type`, `length`, `name`, `control`, `expression`, `options`, `default`, `rules`, `placeholder`, `order`, `searchOrder`, `exportOrder`, `canExport`, `canSearch`, `isValue`, `readonly`, `buildin`, `desc`, `createdBy`, `createdDate`, `editedBy`, `editedDate`) VALUES
@@ -459,10 +465,12 @@ UPDATE `zt_workflowaction` SET `position`='browse' WHERE `action`='create' AND `
 
 UPDATE `zt_workflowaction` SET `method`=`action` WHERE `method`='';
 UPDATE `zt_workflowaction` SET `method`='browse' WHERE `action`='admin';
-UPDATE `zt_workflowaction` SET `method`='operate' WHERE `action` IN ('review','assignTo','comment','close','activate','start','block', 'suspend', 'putoff', 'confirmBug', 'resolve', 'cancel', 'confirmStoryChange', 'finish', 'pause', 'restart');
+UPDATE `zt_workflowaction` SET `method`='operate' WHERE `action` IN ('review','assignTo','comment','close','activate','start','block', 'suspend', 'putoff', 'confirmBug', 'resolve', 'cancel', 'confirmStoryChange', 'finish', 'pause', 'restart', 'change');
 UPDATE `zt_workflowaction` SET `method`='batchoperate' WHERE `action` IN('batchedit', 'batchconfirm', 'batchresolve');
 UPDATE `zt_workflowaction` SET `method`='view' WHERE `action`='adminview';
 UPDATE `zt_workflowaction` SET `method`='browse' WHERE module='execution' and `action` IN('all', 'task');
+UPDATE `zt_workflowaction` SET `method`='browse' WHERE module='product' and `action` = 'all';
+
 UPDATE `zt_workflowaction` SET `show`='direct' WHERE `buildin`=1;
 REPLACE INTO `zt_workflowaction` (`module`, `action`, `method`, `name`, `type`, `batchMode`, `extensionType`, `open`, `position`, `layout`, `show`, `order`, `buildin`, `virtual`, `conditions`, `verifications`, `hooks`, `linkages`, `js`, `css`, `toList`, `blocks`, `desc`, `status`, `vision`, `createdBy`, `createdDate`, `editedBy`, `editedDate`) VALUES
 ('story', 'exporttemplate', 'exporttemplate', '下载模板', 'single', 'different', 'extend', 'modal', 'browse', 'normal', 'dropdownlist', 0, 1, 0, '', '', '', '', '', '', '', '', '', 'enable', 'rnd', '', '2022-05-13 09:34:30', '', '0000-00-00 00:00:00'),

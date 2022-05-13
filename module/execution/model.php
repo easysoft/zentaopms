@@ -2997,12 +2997,11 @@ class executionModel extends model
     public function getBurnDataFlot($executionID = 0, $burnBy = '', $showDelay = false, $dateList = array())
     {
         /* Get execution and burn counts. */
-        $execution    = $this->getById($executionID);
+        $execution = $this->getById($executionID);
 
         /* If the burnCounts > $itemCounts, get the latest $itemCounts records. */
         $sets = $this->dao->select("date AS name, `$burnBy` AS value, `$burnBy`")->from(TABLE_BURN)->where('execution')->eq((int)$executionID)->andWhere('task')->eq(0)->orderBy('date DESC')->fetchAll('name');
 
-        $count    = 0;
         $burnData = array();
         foreach($sets as $date => $set)
         {
@@ -3011,25 +3010,25 @@ class executionModel extends model
             if($showDelay  and $date < $execution->end) $set->value = 'null';
 
             $burnData[$date] = $set;
-            $count++;
         }
 
-        if($showDelay)
+        foreach($dateList as $date)
         {
-            foreach($dateList as $date)
+            if(!isset($burnData[$date]))
             {
-                if(!isset($burnData[$date]))
+                if(($showDelay and $date < $execution->end) or (!$showDelay and $date > $execution->end))
                 {
                     $set = new stdClass();
-                    $set->name  = $date;
-                    $set->left  = 0;
-                    $set->value = 'null';
+                    $set->name    = $date;
+                    $set->value   = 'null';
+                    $set->$burnBy = 0;
 
                     $burnData[$date] = $set;
                 }
             }
         }
 
+        krsort($burnData);
         $burnData = array_reverse($burnData);
 
         return $burnData;
@@ -3257,10 +3256,11 @@ class executionModel extends model
      * @param  string     $type
      * @param  string|int $interval
      * @param  string     $format
+     * @param  string     $executionDeadline
      * @access public
      * @return array
      */
-    public function getDateList($begin, $end, $type, $interval = '', $format = 'm/d/Y')
+    public function getDateList($begin, $end, $type, $interval = '', $format = 'm/d/Y', $executionDeadline = '')
     {
         $this->app->loadClass('date', true);
         $dateList = date::getDateList($begin, $end, $format, $type, $this->config->execution->weekend);
@@ -3276,6 +3276,7 @@ class executionModel extends model
             foreach($dateList as $i => $date)
             {
                 $counter ++;
+                if($date == $executionDeadline) continue;
                 if($counter <= $spaces)
                 {
                     unset($dateList[$i]);
@@ -3698,9 +3699,9 @@ class executionModel extends model
         $this->loadModel('report');
         $burnBy = $burnBy ? $burnBy : 'left';
 
-        $sets          = $this->getBurnDataFlot($executionID, $burnBy);
-        $limitJSON     = '[]';
-        $baselineJSON  = '[]';
+        $sets         = $this->getBurnDataFlot($executionID, $burnBy, false, $dateList);
+        $limitJSON    = '[]';
+        $baselineJSON = '[]';
 
         $firstBurn    = empty($sets) ? 0 : reset($sets);
         $firstTime    = !empty($firstBurn->$burnBy) ? $firstBurn->$burnBy : (!empty($firstBurn->value) ? $firstBurn->value : 0);

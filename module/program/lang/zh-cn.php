@@ -88,7 +88,7 @@ $lang->program->moreProgram      = '更多项目集';
 $lang->program->stakeholderType  = '干系人类型';
 $lang->program->parentBudget     = '所属项目集剩余预算：';
 $lang->program->isStakeholderKey = '关键干系人';
-$lang->program->pageSize         = '每页 <strong>{recPerPage}</strong> 项顶级项目集';
+$lang->program->summary          = '本页共 %d 个顶级项目集，%d 个独立项目。';
 
 $lang->program->stakeholderTypeList['inside']  = '内部';
 $lang->program->stakeholderTypeList['outside'] = '外部';

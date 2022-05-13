@@ -43,13 +43,6 @@ $(function()
             $('#programForm').removeClass('has-row-checked');
         }
     });
-
-    var myPager = $('.pager').data('zui.pager');
-    if(status != 'bySearch' && myPager)
-    {
-        myPager.lang.pageSize = pageSize;
-        myPager.set();
-    }
 });
 
 function showEditCheckbox(show)
@@ -76,13 +69,15 @@ function showEditCheckbox(show)
     });
     if(show)
     {
-        var tableFooter = "<div class='table-footer'><div class='checkbox-primary check-all'><input type='checkbox' id='checkAll' /><label>" + selectAll + "</label></div><div class='table-actions btn-toolbar'><button type='submit' class='btn'>" + edit + "</button></div></div>";
-        $('#programForm').attr('action', createLink('project', 'batchEdit', 'from=program')).append(tableFooter);
+        var tableFooter = "<div class='editCheckbox'><div class='checkbox-primary check-all'><input type='checkbox' id='checkAll' /><label>" + selectAll + "</label></div><div class='table-actions btn-toolbar'><button type='submit' class='btn'>" + edit + "</button></div></div>";
+        $('#programForm').attr('action', createLink('project', 'batchEdit', 'from=program'));
+        $('.table-footer').prepend(tableFooter).show();
         $('body').scroll();
     }
     else
     {
-        $('#programForm').find('.table-footer').remove();
+        $('#programForm').find('.editCheckbox').remove();
+        if($('#programForm .pager').length == 0) $('.table-footer').hide();
         $('#programForm').removeAttr('action');
     }
 }
