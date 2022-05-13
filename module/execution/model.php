@@ -475,6 +475,8 @@ class executionModel extends model
             ->setIF(helper::isZeroDate($this->post->begin), 'begin', '')
             ->setIF(helper::isZeroDate($this->post->end), 'end', '')
             ->setIF(!isset($_POST['whitelist']), 'whitelist', '')
+            ->setIF($this->post->status == 'closed', 'closedDate', helper::now())
+            ->setIF($this->post->status == 'suspended', 'suspendedDate', helper::today())
             ->setDefault('team', $this->post->name)
             ->join('whitelist', ',')
             ->stripTags($this->config->execution->editor->edit['id'], $this->config->allowedTags)
@@ -664,6 +666,8 @@ class executionModel extends model
             $executions[$executionID]->lastEditedDate = helper::now();
             if(isset($data->projects))   $executions[$executionID]->project   = zget($data->projects, $executionID, 0);
             if(isset($data->attributes)) $executions[$executionID]->attribute = zget($data->attributes, $executionID, '');
+            if($executions[$executionID]->status == 'closed') $executions[$executionID]->closedDate = helper::now();
+            if($executions[$executionID]->status == 'suspended') $executions[$executionID]->suspendedDate = helper::today();
 
             /* Check unique code for edited executions. */
             if($projectModel == 'scrum' and empty($executionCode))
@@ -700,10 +704,16 @@ class executionModel extends model
             }
         }
 
+        /* Update burn before close execution. */
+        $closedIDList = array();
         foreach($executions as $executionID => $execution)
         {
-            if(isset($execution->status) and in_array($execution->status, array('done', 'closed', 'suspended'))) $this->computeBurn($executionID);
+            if(isset($execution->status) and in_array($execution->status, array('done', 'closed', 'suspended'))) $closedIDList[$executionID] = $executionID;
+        }
+        $this->computeBurn($closedIDList);
 
+        foreach($executions as $executionID => $execution)
+        {
             $oldExecution = $oldExecutions[$executionID];
             $team         = $this->loadModel('user')->getTeamMemberPairs($executionID, 'execution');
             $projectID    = isset($execution->project) ? $execution->project : $oldExecution->project;
@@ -2843,7 +2853,7 @@ class executionModel extends model
             ->where('type')->in('sprint,stage')
             ->andWhere('lifetime')->ne('ops')
             ->andWhere('status')->notin('done,closed,suspended')
-            ->beginIF($executionID)->andWhere('id')->eq($executionID)->fi()
+            ->beginIF($executionID)->andWhere('id')->in($executionID)->fi()
             ->fetchPairs();
         if(!$executions) return array();
 
