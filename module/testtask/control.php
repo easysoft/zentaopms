@@ -97,7 +97,6 @@ class testtask extends control
         $endTime   = $endTime   ? date('Y-m-d', strtotime($endTime))   : '';
 
         /* Set menu. */
-        if(empty($this->products[$productID])) $productID = array_key_first($this->products);
         $productID = $this->product->saveState($productID, $this->products);
         $branch    = ($this->cookie->preBranch !== '' and $branch === '') ? $this->cookie->preBranch : $branch;
         $this->loadModel('qa')->setMenu($this->products, $productID, $branch, $type);
