@@ -1,4 +1,3 @@
-<?php include $this->app->getExtensionRoot() . 'biz/workflowfield/ext/view/' . basename(__FILE__);?>
 <?php if($config->visions == ',lite,'):?>
 <?php $feedbackDatasources = $this->dao->select('id')->from(TABLE_WORKFLOWDATASOURCE)->where('code')->like('litefeedback%')->andWhere('vision')->eq('lite')->fetchPairs('id', 'id');?>
 <?php if($feedbackDatasources):?>
