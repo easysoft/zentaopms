@@ -355,7 +355,7 @@ UPDATE `zt_workflowaction` SET `type`='single', `position`='browseandview', `sho
 UPDATE `zt_workflowaction` SET `type`='single', `position`='browseandview', `show`='direct', `open`='normal', `layout`='normal' WHERE `module`='execution' AND `action`='all';
 UPDATE `zt_workflowaction` SET `type`='single', `position`='browseandview', `show`='direct', `open`='normal', `layout`='normal' WHERE `module`='task' AND `action`='browse';
 UPDATE `zt_workflowaction` SET `type`='single', `position`='browseandview', `show`='direct', `open`='normal', `layout`='normal' WHERE `module`='task' AND `action`='create';
-UPDATE `zt_workflowaction` SET `type`='batch', `position`='browseandview', `show`='direct', `open`='normal', `layout`='normal' WHERE `module`='task' AND `action`='batchcreate';
+UPDATE `zt_workflowaction` SET `type`='batch', `position`='browse', `show`='direct', `open`='normal', `layout`='normal' WHERE `module`='task' AND `action`='batchcreate';
 UPDATE `zt_workflowaction` SET `type`='batch', `position`='browse', `show`='direct', `open`='normal', `layout`='normal' WHERE `module`='task' AND `action`='batchedit';
 UPDATE `zt_workflowaction` SET `type`='single', `position`='browse', `show`='direct', `open`='modal', `layout`='normal' WHERE `module`='task' AND `action`='exporttemplate';
 UPDATE `zt_workflowaction` SET `type`='single', `position`='browse', `show`='direct', `open`='modal', `layout`='normal' WHERE `module`='task' AND `action`='import';
