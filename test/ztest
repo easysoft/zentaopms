@@ -46,6 +46,9 @@ switch($argv[1])
     case 'company':
         ztfRun('model/company');
         break;
+    case 'compile':
+        ztfRun('model/compile');
+        break;
     case 'cron':
         ztfRun('model/cron');
         break;
