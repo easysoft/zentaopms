@@ -470,7 +470,6 @@ class projectModel extends model
     public function getProjectLink($module, $method, $projectID)
     {
         $link    = helper::createLink('project', 'index', "projectID=%s");
-        $project = $this->getByID($projectID);
 
         if(strpos(',project,product,projectstory,story,bug,doc,testcase,testtask,testreport,repo,build,projectrelease,stakeholder,issue,risk,meeting,report,measrecord', ',' . $module . ',') !== false)
         {
@@ -629,8 +628,6 @@ class projectModel extends model
                 $link = helper::createLink($module, $method, "projectID=%s");
             }
         }
-
-        if(!empty($project) and $project->model == 'kanban') $link = helper::createLink('project', 'index', "projectID=%s");
 
         return $link;
     }
