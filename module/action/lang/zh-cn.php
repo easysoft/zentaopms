@@ -138,6 +138,7 @@ $lang->action->objectTypes['kanbancolumn']     = '看板列';
 $lang->action->objectTypes['kanbancard']       = '看板卡片';
 $lang->action->objectTypes['sonarqube']        = 'SonarQube服务器';
 $lang->action->objectTypes['sonarqubeproject'] = 'SonarQube项目';
+$lang->action->objectTypes['stage']            = '阶段';
 
 /* 用来描述操作历史记录。*/
 $lang->action->desc = new stdclass();
