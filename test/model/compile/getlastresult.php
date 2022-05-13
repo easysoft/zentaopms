@@ -15,4 +15,4 @@ pid=1
 $compile = new compileTest();
 
 r($compile->getLastResultTest('1')) && p('createdBy') && e('admin'); //检查id存在的时候是否能拿到数据
-r($compile->getLastResultTest('3')) && p('createdBy') && e('0'); //检查id不存在的时候返回的结果
+r($compile->getLastResultTest('3')) && p('createdBy') && e('0');     //检查id不存在的时候返回的结果
