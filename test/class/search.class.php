@@ -12,7 +12,7 @@ class searchTest
      *
      * @param  int    $queryID
      * @access public
-     * @return void
+     * @return array
      */
     public function getQueryTest($queryID)
     {
@@ -37,7 +37,7 @@ class searchTest
      *
      * @param  int    $queryID
      * @access public
-     * @return void
+     * @return array
      */
     public function getByIDTest($queryID)
     {
@@ -53,7 +53,7 @@ class searchTest
      *
      * @param  int    $queryID
      * @access public
-     * @return void
+     * @return int
      */
     public function deleteQueryTest($queryID)
     {
@@ -69,9 +69,9 @@ class searchTest
     /**
      * Test get query pairs.
      *
-     * @param  int    $module
+     * @param  string $module
      * @access public
-     * @return void
+     * @return array
      */
     public function getQueryPairsTest($module)
     {
@@ -85,10 +85,10 @@ class searchTest
     /**
      * Test get list.
      *
-     * @param  int    $keywords
-     * @param  int    $type
+     * @param  string $keywords
+     * @param  sreing $type
      * @access public
-     * @return void
+     * @return int
      */
     public function getListTest($keywords, $type)
     {
@@ -119,10 +119,10 @@ class searchTest
     /**
      * Test save index.
      *
-     * @param  int    $objectType
+     * @param  string $objectType
      * @param  int    $objectID
      * @access public
-     * @return void
+     * @return bool
      */
     public function saveIndexTest($objectType, $objectID)
     {
@@ -150,7 +150,7 @@ class searchTest
      *
      * @param  string $word
      * @access public
-     * @return void
+     * @return int
      */
     public function saveDictTest($word)
     {
@@ -171,69 +171,110 @@ class searchTest
     /**
      * Test decode.
      *
-     * @param  int    $string
+     * @param  int    $key
      * @access public
-     * @return void
+     * @return string
      */
-    public function decodeTest($string)
+    public function decodeTest($key)
     {
-        $objects = $this->objectModel->decode($string);
+        global $tester;
+        $tester->dao->delete()->from(TABLE_SEARCHINDEX)->exec();
+        $tester->dao->delete()->from(TABLE_SEARCHDICT)->exec();
 
+        $result = array();
+        while(!isset($result['finished']))
+        {
+            if(empty($result))
+            {
+                $result = $this->objectModel->buildAllIndex();
+            }
+            else
+            {
+                $result = $this->objectModel->buildAllIndex($result['type'], $result['lastID']);
+            }
+        }
+
+        $objects = $this->objectModel->decode($key);
         if(dao::isError()) return dao::getError();
+
+        $tester->dao->delete()->from(TABLE_SEARCHINDEX)->exec();
+        $tester->dao->delete()->from(TABLE_SEARCHDICT)->exec();
 
         return $objects;
     }
 
-    public function getSummaryTest($content, $words)
+    /**
+     * Test get summary.
+     *
+     * @param  int    $indexID
+     * @param  string $words
+     * @access public
+     * @return array
+     */
+    public function getSummaryTest($indexID, $words)
     {
-        $objects = $this->objectModel->getSummary($content, $words);
+        global $tester;
+        $tester->dao->delete()->from(TABLE_SEARCHINDEX)->exec();
+        $tester->dao->delete()->from(TABLE_SEARCHDICT)->exec();
 
+        $result = array();
+        while(!isset($result['finished']))
+        {
+            if(empty($result))
+            {
+                $result = $this->objectModel->buildAllIndex();
+            }
+            else
+            {
+                $result = $this->objectModel->buildAllIndex($result['type'], $result['lastID']);
+            }
+        }
+
+        $searchIndex = $tester->dao->select('*')->from(TABLE_SEARCHINDEX)->where('id')->eq($indexID)->fetch();
+
+        $objects = $this->objectModel->getSummary($searchIndex->content, $words);
         if(dao::isError()) return dao::getError();
+
+        $tester->dao->delete()->from(TABLE_SEARCHINDEX)->exec();
+        $tester->dao->delete()->from(TABLE_SEARCHDICT)->exec();
 
         return $objects;
     }
 
-    public function checkPrivTest($results)
+    /**
+     * Test mark keywords.
+     *
+     * @param  int    $indexID
+     * @param  string $keywords
+     * @access public
+     * @return string
+     */
+    public function markKeywordsTest($indexID, $keywords)
     {
-        $objects = $this->objectModel->checkPriv($results);
+        global $tester;
+        $tester->dao->delete()->from(TABLE_SEARCHINDEX)->exec();
+        $tester->dao->delete()->from(TABLE_SEARCHDICT)->exec();
 
+        $result = array();
+        while(!isset($result['finished']))
+        {
+            if(empty($result))
+            {
+                $result = $this->objectModel->buildAllIndex();
+            }
+            else
+            {
+                $result = $this->objectModel->buildAllIndex($result['type'], $result['lastID']);
+            }
+        }
+
+        $searchIndex = $tester->dao->select('*')->from(TABLE_SEARCHINDEX)->where('id')->eq($indexID)->fetch();
+
+        $objects = $this->objectModel->markKeywords($searchIndex->content, $keywords);
         if(dao::isError()) return dao::getError();
 
-        return $objects;
-    }
-
-    public function markKeywordsTest($content, $keywords)
-    {
-        $objects = $this->objectModel->markKeywords($content, $keywords);
-
-        if(dao::isError()) return dao::getError();
-
-        return $objects;
-    }
-
-    public function buildAllIndexTest($type = '', $lastID = 0)
-    {
-        $objects = $this->objectModel->buildAllIndex($type = '', $lastID = 0);
-
-        if(dao::isError()) return dao::getError();
-
-        return $objects;
-    }
-
-    public function deleteIndexTest($objectType, $objectID)
-    {
-        $objects = $this->objectModel->deleteIndex($objectType, $objectID);
-
-        if(dao::isError()) return dao::getError();
-
-        return $objects;
-    }
-
-    public function appendFilesTest($object)
-    {
-        $objects = $this->objectModel->appendFiles($object);
-
-        if(dao::isError()) return dao::getError();
+        $tester->dao->delete()->from(TABLE_SEARCHINDEX)->exec();
+        $tester->dao->delete()->from(TABLE_SEARCHDICT)->exec();
 
         return $objects;
     }
