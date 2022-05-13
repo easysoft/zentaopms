@@ -531,15 +531,16 @@ class blockModel extends model
     /**
      * Get statistic params.
      *
+     * @param  string $module product|project|execution|qa
      * @access public
      * @return string
      */
     public function getStatisticParams($module = 'product')
     {
-        if($module == 'product')   return $this->getProductStatisticParams($module);
-        if($module == 'project')   return $this->getProjectStatisticParams($module);
-        if($module == 'execution') return $this->getExecutionStatisticParams($module);
-        if($module == 'qa')        return $this->getQaStatisticParams($module);
+        if($module == 'product')   return $this->getProductStatisticParams();
+        if($module == 'project')   return $this->getProjectStatisticParams();
+        if($module == 'execution') return $this->getExecutionStatisticParams();
+        if($module == 'qa')        return $this->getQaStatisticParams();
 
         $params = new stdclass();
         $params = $this->appendCountParams($params);
@@ -876,12 +877,11 @@ class blockModel extends model
 
     /**
      * Get testtask params.
-     *▫
-     * @param  string $module
+     *
      * @access public
-     * @return void
+     * @return string
      */
-    public function getScrumTestParams($module = '')
+    public function getScrumTestParams()
     {
         $params = $this->appendCountParams();
         $params->type['name']    = $this->lang->block->type;
@@ -923,11 +923,10 @@ class blockModel extends model
     /**
      * Get scrum roadmap list params.
      *
-     * @param  string $module
      * @access public
-     * @return string
+     * @return bool
      */
-    public function getScrumRoadMapParams($module = '')
+    public function getScrumRoadMapParams()
     {
         return false;
     }
