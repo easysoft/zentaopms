@@ -62,7 +62,7 @@ $lang->project->workdaysExceed     = '可用工作日不能超过『%s』天';
 
 /* Fields. */
 $lang->project->common             = '项目';
-$lang->project->id                 = '项目编号';
+$lang->project->id                 = '项目ID';
 $lang->project->project            = '所属项目';
 $lang->project->stage              = '阶段';
 $lang->project->model              = '项目管理方式';
