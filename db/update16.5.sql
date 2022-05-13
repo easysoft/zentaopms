@@ -420,7 +420,7 @@ UPDATE `zt_workflowaction` SET `type`='batch' WHERE `module`IN ('feedback','case
 UPDATE `zt_workflowaction` SET `position`='browse' WHERE `module`IN ('feedback','caselib','testsuite','testtask','testcase') AND `action` IN ('batchedit','batchcreate','import','showimport');
 
 UPDATE `zt_workflowfield` SET `control` = 'radio' WHERE `module` = 'program' and `field` = 'deleted';
-UPDATE `zt_workflowfield` SET `type` = 'char', `length` => '30', `control` = 'radio' WHERE `module` = 'program' and `field` = 'type';
+UPDATE `zt_workflowfield` SET `type` = 'char', `length` = '30', `control` = 'radio' WHERE `module` = 'program' and `field` = 'type';
 UPDATE `zt_workflowfield` SET `control` = 'date' WHERE `module` = 'program' and `field` = 'begin';
 UPDATE `zt_workflowfield` SET `control` = 'date' WHERE `module` = 'program' and `field` = 'end';
 UPDATE `zt_workflowfield` SET `control` = 'integer' WHERE `module` = 'program' and `field` = 'days';
@@ -429,7 +429,7 @@ UPDATE `zt_workflowfield` SET `control` = 'richtext' WHERE `module` = 'program' 
 UPDATE `zt_workflowfield` SET `control` = 'datetime' WHERE `module` = 'program' and `field` = 'openedDate';
 UPDATE `zt_workflowfield` SET `control` = 'datetime' WHERE `module` = 'program' and `field` = 'closedDate';
 UPDATE `zt_workflowfield` SET `control` = 'datetime' WHERE `module` = 'program' and `field` = 'canceledDate';
-UPDATE `zt_workflowfield` SET `type` => 'char', `length` => '30' WHERE `module` = 'program' and `field` = 'acl';
+UPDATE `zt_workflowfield` SET `type` = 'char', `length` = '30' WHERE `module` = 'program' and `field` = 'acl';
 UPDATE `zt_workflowfield` SET `control` = 'multi-select', `options` = 'user' WHERE `module` = 'program' and `field` = 'whitelist';
 
 REPLACE INTO `zt_workflowfield` (`module`, `field`, `type`, `length`, `name`, `control`, `expression`, `options`, `default`, `rules`, `placeholder`, `order`, `searchOrder`, `exportOrder`, `canExport`, `canSearch`, `isValue`, `readonly`, `buildin`, `desc`, `createdBy`, `createdDate`, `editedBy`, `editedDate`) VALUES
