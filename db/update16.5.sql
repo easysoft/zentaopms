@@ -90,7 +90,7 @@ DELETE FROM `zt_config` WHERE `section` = 'customMenu';
 
 UPDATE `zt_story` SET `plan` = '' WHERE `plan` = 0;
 
-UPDATE `zt_workflowfield` set `control` = 'datetime' WHERE `module` = 'testcase' and `field` IN ('openedDate','reviewedDate','lastEditedDate','lastRunDate');
+UPDATE `zt_workflowfield` set `type` = 'datetime', `control` = 'datetime' WHERE `module` = 'testcase' and `field` IN ('openedDate','reviewedDate','lastEditedDate','lastRunDate');
 
 UPDATE `zt_workflowfield` set `control` = 'date'     WHERE `module` = 'testtask' and `field` IN ('begin','end');
 UPDATE `zt_workflowfield` set `control` = 'richtext' WHERE `module` = 'testtask' and `field` = 'desc';
@@ -112,7 +112,7 @@ UPDATE `zt_workflowfield` SET `control` = 'radio' WHERE `module` = 'release' and
 UPDATE `zt_workflowfield` SET `control` = 'datetime' WHERE `module` = 'story' and `field` = 'openedDate';
 UPDATE `zt_workflowfield` SET `control` = 'datetime' WHERE `module` = 'story' and `field` = 'assignedDate';
 UPDATE `zt_workflowfield` SET `control` = 'datetime' WHERE `module` = 'story' and `field` = 'lastEditedDate';
-UPDATE `zt_workflowfield` SET `control` = 'date' WHERE `module` = 'story' and `field` = 'reviewedDate';
+UPDATE `zt_workflowfield` SET `type` = 'datetime', `control` = 'datetime' WHERE `module` = 'story' and `field` = 'reviewedDate';
 UPDATE `zt_workflowfield` SET `control` = 'datetime' WHERE `module` = 'story' and `field` = 'closedDate';
 UPDATE `zt_workflowfield` SET `control` = 'radio' WHERE `module` = 'story' and `field` = 'deleted';
 
@@ -219,7 +219,7 @@ REPLACE INTO `zt_workflowfield` (`module`, `field`, `type`, `length`, `name`, `c
 ('task',	'openedDate',   	'datetime',	'',	'创建日期',	        'datetime',	'',	'',	'',	'',	'',	23,	0,	0,	'0',	'0',	'0',	'1',	1,	'',	'',	'0000-00-00 00:00:00',	'',	'0000-00-00 00:00:00'),
 ('task',	'assignedDate', 	'datetime',	'30',	'指派日期',	        'datetime',	'',	'',	'',	'',	'',	25,	0,	0,	'0',	'0',	'0',	'1',	1,	'',	'',	'0000-00-00 00:00:00',	'',	'0000-00-00 00:00:00'),
 ('task',	'estStarted',   	'date', 	'',	'预计开始',	        'date',	'',	'',	'',	'',	'',	26,	0,	0,	'0',	'0',	'0',	'1',	1,	'',	'',	'0000-00-00 00:00:00',	'',	'0000-00-00 00:00:00'),
-('task',	'realStarted',  	'date', 	'',	'实际开始',	        'date',	'',	'',	'',	'',	'',	27,	0,	0,	'0',	'0',	'0',	'1',	1,	'',	'',	'0000-00-00 00:00:00',	'',	'0000-00-00 00:00:00'),
+('task',	'realStarted',  	'datetime', 	'',	'实际开始',	        'datetime',	'',	'',	'',	'',	'',	27,	0,	0,	'0',	'0',	'0',	'1',	1,	'',	'',	'0000-00-00 00:00:00',	'',	'0000-00-00 00:00:00'),
 ('task',	'finishedDate', 	'datetime',	'',	'实际完成',	        'datetime',	'',	'',	'',	'',	'',	29,	0,	0,	'0',	'0',	'0',	'1',	1,	'',	'',	'0000-00-00 00:00:00',	'',	'0000-00-00 00:00:00'),
 ('task',	'canceledDate', 	'datetime',	'',	'取消时间',	        'datetime',	'',	'',	'',	'',	'',	32,	0,	0,	'0',	'0',	'0',	'1',	1,	'',	'',	'0000-00-00 00:00:00',	'',	'0000-00-00 00:00:00'),
 ('task',	'closedDate',   	'datetime',	'',	'关闭时间',	        'datetime',	'',	'',	'',	'',	'',	34,	0,	0,	'0',	'0',	'0',	'1',	1,	'',	'',	'0000-00-00 00:00:00',	'',	'0000-00-00 00:00:00'),
