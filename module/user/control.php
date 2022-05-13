@@ -80,7 +80,8 @@ class user extends control
         $account = $user->account;
         $todos   = $this->todo->getList($type, $account, $status, 0, $pager, $sort);
         $date    = (int)$type == 0 ? helper::today() : $type;
-        $users   = $this->loadModel('dept')->getDeptUserPairs($this->app->user->dept, 'id');
+        $deptID  = $this->app->user->admin ? 0 : $this->app->user->dept;
+        $users   = $this->loadModel('dept')->getDeptUserPairs($deptID, 'id');
         if(!isset($users[$userID])) return print(js::error($this->lang->user->error->noAccess) . js::locate('back'));
 
         /* set menus. */
