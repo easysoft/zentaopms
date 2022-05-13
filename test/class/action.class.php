@@ -131,15 +131,32 @@ class actionTest
     /**
      * Test get deleted objects.
      *
+     * @param  string $objectType
      * @param  string $type
      * @param  string $orderBy
      * @param  object $pager
      * @access public
      * @return array
      */
-    public function getTrashesTest($type, $orderBy, $pager)
+    public function getTrashesTest($objectType, $type, $orderBy, $pager)
     {
-        $objects = $this->objectModel->getTrashes($type, $orderBy, $pager);
+        $objects = $this->objectModel->getTrashes($objectType, $type, $orderBy, $pager);
+
+        if(dao::isError()) return dao::getError();
+
+        return $objects;
+    }
+
+    /**
+     * Test get object type list of trashes.
+     *
+     * @param  string $type
+     * @access public
+     * @return array
+     */
+    public function getTrashObjectTypesTest($type)
+    {
+        $objects = $this->objectModel->getTrashObjectTypes($type);
 
         if(dao::isError()) return dao::getError();
 

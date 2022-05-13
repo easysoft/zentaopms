@@ -383,7 +383,7 @@ class repo extends control
             $error = sprintf($this->lang->repo->error->notFound, $repo->name, $repo->path);
             return print(js::error($error) . js::locate($this->repo->createLink('maintain')));
         }
-        if(!$repo->synced) $this->locate($this->repo->createLink('showSyncCommit', "repoID=$repoID"));
+        if(!$repo->synced) $this->locate($this->repo->createLink('showSyncCommit', "repoID=$repoID&objectID=$objectID"));
 
         /* Set branch for git. */
         $branches = array();

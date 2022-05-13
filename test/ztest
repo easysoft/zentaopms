@@ -141,6 +141,9 @@ switch($argv[1])
     case 'stakeholder':
         ztfRun('model/stakeholder');
         break;
+    case 'search':
+        ztfRun('model/search');
+        break;
     case 'story':
         ztfRun('model/story');
         break;

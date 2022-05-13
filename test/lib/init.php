@@ -82,6 +82,7 @@ function p($keys = '', $delimiter = ',')
     if(is_array($_result) and isset($_result['code']) and $_result['code'] == 'fail') return print(">> " . (string) $_result['message'] . "\n");
 
     /* Print $_result. */
+    if(!$keys and is_array($_result)) return print(">> " . (string)$_result[''] . "\n");
     if(!$keys or !is_array($_result) and !is_object($_result)) return print(">> " . (string) $_result . "\n");
 
     $parts  = explode(';', $keys);

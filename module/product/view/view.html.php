@@ -151,7 +151,7 @@
               </table>
             </div>
           </div>
-          <?php $this->printExtendFields($product, 'div', "position=right&inForm=0&inCell=1");?>
+          <?php $this->printExtendFields($product, 'div', "position=left&inForm=0&inCell=1");?>
         </div>
       </div>
     </div>
@@ -169,6 +169,7 @@
   <div class="col-4 side-col">
     <div class="row">
       <div class="col-sm-12">
+        <?php $this->printExtendFields($product, 'div', "position=right&inForm=0&inCell=1");?>
         <?php $blockHistory = true;?>
         <?php $actionFormLink = $this->createLink('action', 'comment', "objectType=product&objectID=$product->id");?>
         <?php include '../../common/view/action.html.php';?>

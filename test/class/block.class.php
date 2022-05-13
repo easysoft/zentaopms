@@ -7,13 +7,30 @@ class blockTest
          $this->objectModel = $tester->loadModel('block');
     }
 
-    public function saveTest($id, $source, $type, $module = 'my')
+    /**
+     * Test save params.
+     *
+     * @param  object $block
+     * @param  int    $id
+     * @param  string $source
+     * @param  string $type
+     * @param  string $module
+     * @access public
+     * @return object
+     */
+    public function saveTest($block, $id, $source, $type, $module = 'my')
     {
-        $objects = $this->objectModel->save($id, $source, $type, $module = 'my');
+        foreach($block as $key => $value) $_POST[$key] = $value;
 
+        $this->objectModel->save($id, $source, $type, $module);
+
+        unset($_POST);
+
+        if(dao::isError()) a(dao::getError());
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        $object = $this->objectModel->getByID($id);
+        return $object;
     }
 
     /**
@@ -103,13 +120,19 @@ class blockTest
         return $objects;
     }
 
+    /**
+     * Test get data of welcome block.
+     *
+     * @access public
+     * @return string
+     */
     public function getWelcomeBlockDataTest()
     {
         $objects = $this->objectModel->getWelcomeBlockData();
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        return json_encode($objects);
     }
 
     public function initBlockTest($module, $type = '')
@@ -149,22 +172,36 @@ class blockTest
         return $objects;
     }
 
+    /**
+     * Test get todo param.
+     *
+     * @param  string $module
+     * @access public
+     * @return string
+     */
     public function getTodoParamsTest($module = '')
     {
         $objects = $this->objectModel->getTodoParams($module = '');
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        return json_encode(json_decode($objects), JSON_UNESCAPED_UNICODE);
     }
 
+    /**
+     * Test get task params.
+     *
+     * @param  string $module
+     * @access public
+     * @return string
+     */
     public function getTaskParamsTest($module = '')
     {
         $objects = $this->objectModel->getTaskParams($module = '');
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        return json_encode(json_decode($objects), JSON_UNESCAPED_UNICODE);
     }
 
     /**
@@ -197,22 +234,36 @@ class blockTest
         return $objects;
     }
 
+    /**
+     * Test get testtask params.
+     *
+     * @param  string $module
+     * @access public
+     * @return string
+     */
     public function getTesttaskParamsTest($module = '')
     {
         $objects = $this->objectModel->getTesttaskParams($module = '');
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        return json_encode(json_decode($objects), JSON_UNESCAPED_UNICODE);
     }
 
+    /**
+     * Test get story params.
+     *
+     * @param  string $module
+     * @access public
+     * @return void
+     */
     public function getStoryParamsTest($module = '')
     {
-        $objects = $this->objectModel->getStoryParams($module = '');
+        $objects = $this->objectModel->getStoryParams($module);
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        return json_encode(json_decode($objects), JSON_UNESCAPED_UNICODE);
     }
 
     /**
@@ -319,13 +370,19 @@ class blockTest
         return $objects;
     }
 
+    /**
+     * Test get project statistic params.
+     *
+     * @access public
+     * @return string
+     */
     public function getProjectStatisticParamsTest()
     {
         $objects = $this->objectModel->getProjectStatisticParams();
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        return json_encode(json_decode($objects), JSON_UNESCAPED_UNICODE);
     }
 
     /**
@@ -361,22 +418,36 @@ class blockTest
         return $objects;
     }
 
+    /**
+     * Test get waterfall issue param.
+     *
+     * @param  string $module
+     * @access public
+     * @return string
+     */
     public function getWaterfallIssueParamsTest($module = '')
     {
         $objects = $this->objectModel->getWaterfallIssueParams($module = '');
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        return json_encode(json_decode($objects), JSON_UNESCAPED_UNICODE);
     }
 
+    /**
+     * Test get waterfall risk param.
+     *
+     * @param  string $module
+     * @access public
+     * @return string
+     */
     public function getWaterfallRiskParamsTest($module = '')
     {
         $objects = $this->objectModel->getWaterfallRiskParams($module = '');
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        return json_encode(json_decode($objects), JSON_UNESCAPED_UNICODE);
     }
 
     /**
@@ -431,22 +502,52 @@ class blockTest
         return $objects;
     }
 
+    /**
+     * Test append count params.
+     *
+     * @param  string|object $params
+     * @access public
+     * @return object
+     */
     public function appendCountParamsTest($params = '')
     {
-        $objects = $this->objectModel->appendCountParams($params = '');
+        $objects = $this->objectModel->appendCountParams($params);
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        $string = '';
+        foreach($objects as $key => $param)
+        {
+            if(is_array($param))
+            {
+                $string .= "$key:{";
+                foreach($param as $key => $value) $string .= "$key:$value,";
+                $string = trim($string, ',');
+                $string .= '}';
+            }
+            else
+            {
+                $string .= "$key:$param";
+            }
+            $string .= ';';
+        }
+        return $string;
     }
 
+    /**
+     * Test check whether long block.
+     *
+     * @param  object $block
+     * @access public
+     * @return bool
+     */
     public function isLongBlockTest($block)
     {
-        $objects = $this->objectModel->isLongBlock($block);
+        $bool = $this->objectModel->isLongBlock($block);
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        return $bool ? 1 : 2;
     }
 
     public function checkAPITest($hash)
@@ -521,12 +622,19 @@ class blockTest
         return $objects;
     }
 
+    /**
+     * Test get the total estimated man hours required.
+     *
+     * @param  int    $storyID
+     * @access public
+     * @return string
+     */
     public function getStorysEstimateHoursTest($storyID)
     {
-        $objects = $this->objectModel->getStorysEstimateHours($storyID);
+        $object = $this->objectModel->getStorysEstimateHours($storyID);
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        return $object;
     }
 }
