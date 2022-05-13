@@ -2465,7 +2465,7 @@ class projectModel extends model
 
         $this->lang->switcherMenu = $this->getSwitcher($objectID, $this->app->rawModule, $this->app->rawMethod);
 
-        $this->saveState($objectID, $this->project->getPairsByProgram());
+        $this->saveState($objectID, $this->getPairsByProgram());
 
         common::setMenuVars('project', $objectID);
     }
