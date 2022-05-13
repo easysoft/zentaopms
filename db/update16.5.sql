@@ -112,6 +112,7 @@ UPDATE `zt_workflowfield` SET `control` = 'radio' WHERE `module` = 'release' and
 UPDATE `zt_workflowfield` SET `control` = 'datetime' WHERE `module` = 'story' and `field` = 'openedDate';
 UPDATE `zt_workflowfield` SET `control` = 'datetime' WHERE `module` = 'story' and `field` = 'assignedDate';
 UPDATE `zt_workflowfield` SET `control` = 'datetime' WHERE `module` = 'story' and `field` = 'lastEditedDate';
+UPDATE `zt_workflowfield` SET `control` = 'select', `options` = '48' WHERE `module` = 'story' and `field` = 'closedReason';
 UPDATE `zt_workflowfield` SET `type` = 'datetime', `control` = 'datetime' WHERE `module` = 'story' and `field` = 'reviewedDate';
 UPDATE `zt_workflowfield` SET `control` = 'datetime' WHERE `module` = 'story' and `field` = 'closedDate';
 UPDATE `zt_workflowfield` SET `control` = 'radio' WHERE `module` = 'story' and `field` = 'deleted';
@@ -133,6 +134,7 @@ UPDATE `zt_workflowaction` SET `position` = 'browse' WHERE `module` = 'story' an
 UPDATE `zt_workflowaction` SET `position` = 'browse' WHERE `module` = 'story' and `action` = 'view' and `vision` = 'rnd';
 UPDATE `zt_workflowaction` SET `show` = 'direct' WHERE `module` = 'story'  and `vision` = 'rnd' and action NOT IN ('exporttemplate', 'import');
 UPDATE `zt_workflowaction` SET `show` = 'direct' WHERE `module` = 'program'  and `vision` = 'rnd';
+UPDATE `zt_workflowaction` SET `position` = 'browse' WHERE `module` = 'program'  and `vision` = 'rnd';
 
 DELETE FROM `zt_workflowfield` WHERE `module`='execution' AND `field`='stage';
 DELETE FROM `zt_workflowfield` WHERE `module`='program' AND `field`='stage';
@@ -150,6 +152,9 @@ INSERT INTO `zt_workflowdatasource` (`type`, `name`, `code`, `buildin`, `vision`
 ('lang',        '反馈类型',       'litefeedbackType',         '1', 'lite', 'feedbackType',         '', '', ''),
 ('lang',        '反馈处理方案',   'litefeedbackSolution',     '1', 'lite', 'feedbackSolution',     '', '', ''),
 ('lang',        '反馈关闭原因',   'litefeedbackclosedReason', '1', 'lite', 'feedbackclosedReason', '', '', '');
+
+REPLACE INTO `zt_workflowdatasource` (`type`, `name`, `code`, `buildin`, `datasource`, `view`, `keyField`, `valueField`) VALUES
+('lang', '需求关闭原因', 'storyClosedReason', '1', 'storyClosedReason', '', '', '');
 
 REPLACE INTO `zt_workflowfield` (`module`, `field`, `type`, `length`, `name`, `control`, `expression`, `options`, `default`, `rules`, `placeholder`, `order`, `searchOrder`, `exportOrder`, `canExport`, `canSearch`, `isValue`, `readonly`, `buildin`, `desc`, `createdBy`, `createdDate`, `editedBy`, `editedDate`) VALUES
 ('execution',	'type', 	        'char', 	'30',	'迭代类型',	        'select',	'',	'16',	'sprint',	'',	'',	3,	0,	0,	'0',	'0',	'0',	'1',	1,	'',	'',	'0000-00-00 00:00:00',	'',	'0000-00-00 00:00:00'),
@@ -328,9 +333,10 @@ REPLACE INTO `zt_workflowfield` (`module`, `field`, `type`, `length`, `name`, `c
 ('testcase',	'precondition', 	'text', 	'',	'前置条件',	        'textarea',	'',	'',	'',	'',	'',	5,	0,	0,	'0',	'0',	'0',	'1',	1,	'',	'',	'0000-00-00 00:00:00',	'',	'0000-00-00 00:00:00'),
 ('testcase',    'subStatus',            'varchar',      '30',   '子状态', 		'select',       '',     '',     '',     '',     '',     17,     0,      0,      '0',    '0',    '0',    '0',    1,      '',     '',     '0000-00-00 00:00:00',  '',     '0000-00-00 00:00:00'),
 ('testsuite',   'type',                 'text',         '',     '类型', 		'redio',        '',     '[\"\\u672a\\u5220\\u9664\",\"\\u5df2\\u5220\\u9664\"]',     '',     '',     '',     17,     0,      0,      '0',    '0',    '0',    '0',    1,      '',     '',     '0000-00-00 00:00:00',  '',     '0000-00-00 00:00:00');
-UPDATE `zt_workflowfield` SET `options`=(SELECT id FROM `zt_workflowdatasource` WHERE `code`='projectModel' LIMIT 1)     WHERE `module`='project'  AND `field`='model';
-UPDATE `zt_workflowfield` SET `options`=(SELECT id FROM `zt_workflowdatasource` WHERE `code`='feedbackType' LIMIT 1)     WHERE `module`='feedback' AND `field`='type';
-UPDATE `zt_workflowfield` SET `options`=(SELECT id FROM `zt_workflowdatasource` WHERE `code`='feedbackSolution' LIMIT 1) WHERE `module`='feedback' AND `field`='solution';
+UPDATE `zt_workflowfield` SET `options`=(SELECT id FROM `zt_workflowdatasource` WHERE `code`='projectModel' ORDER BY id DESC LIMIT 1)     WHERE `module`='project'  AND `field`='model';
+UPDATE `zt_workflowfield` SET `options`=(SELECT id FROM `zt_workflowdatasource` WHERE `code`='feedbackType' ORDER BY id DESC LIMIT 1)     WHERE `module`='feedback' AND `field`='type';
+UPDATE `zt_workflowfield` SET `options`=(SELECT id FROM `zt_workflowdatasource` WHERE `code`='feedbackSolution' ORDER BY id DESC LIMIT 1) WHERE `module`='feedback' AND `field`='solution';
+UPDATE `zt_workflowfield` SET `options`=(SELECT id FROM `zt_workflowdatasource` WHERE `code`='storyClosedReason' ORDER BY id DESC LIMIT 1) WHERE `module`='story' AND `field`='closedReason';
 
 UPDATE `zt_workflowaction` SET `type`='single', `position`='browseandview', `show`='direct', `open`='normal', `layout`='normal' WHERE `module`='project' AND `action`='browse';
 UPDATE `zt_workflowaction` SET `type`='single', `position`='browse', `show`='direct', `open`='normal', `layout`='normal' WHERE `module`='project' AND `action`='create';
@@ -428,7 +434,7 @@ UPDATE `zt_workflowaction` SET `type`='batch' WHERE `module`IN ('feedback','case
 UPDATE `zt_workflowaction` SET `position`='browse' WHERE `module`IN ('feedback','caselib','testsuite','testtask','testcase') AND `action` IN ('batchedit','batchcreate','import','showimport');
 
 UPDATE `zt_workflowfield` SET `control` = 'radio' WHERE `module` = 'program' and `field` = 'deleted';
-UPDATE `zt_workflowfield` SET `type` = 'char', `length` = '30', `control` = 'radio' WHERE `module` = 'program' and `field` = 'type';
+UPDATE `zt_workflowfield` SET `control` = 'radio', `type` = 'char', `length` = '30' WHERE `module` = 'program' and `field` = 'type';
 UPDATE `zt_workflowfield` SET `control` = 'date' WHERE `module` = 'program' and `field` = 'begin';
 UPDATE `zt_workflowfield` SET `control` = 'date' WHERE `module` = 'program' and `field` = 'end';
 UPDATE `zt_workflowfield` SET `control` = 'integer' WHERE `module` = 'program' and `field` = 'days';
