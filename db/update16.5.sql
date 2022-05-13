@@ -460,3 +460,4 @@ UPDATE `zt_workflowaction` SET `method`='operate' WHERE `action` IN ('review','a
 UPDATE `zt_workflowaction` SET `method`='batchoperate' WHERE `action` IN('batchedit', 'batchconfirm', 'batchresolve');
 UPDATE `zt_workflowaction` SET `method`='view' WHERE `action`='adminview';
 UPDATE `zt_workflowaction` SET `method`='browse' WHERE module='execution' and `action` IN('all', 'task');
+UPDATE `zt_workflowaction` SET `method`='operate' WHERE module='story' and `action` IN('exporttemplate', 'import', 'showimport');
