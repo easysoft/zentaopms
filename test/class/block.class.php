@@ -112,13 +112,32 @@ class blockTest
         return $objects;
     }
 
+    /**
+     * Init block when account use first.
+     *
+     * @param  string    $module project|product|execution|qa|my
+     * @param  string    $type   scrum|waterfall|kanban
+     * @access public
+     * @return bool
+     */
     public function initBlockTest($module, $type = '')
     {
-        $objects = $this->objectModel->initBlock($module, $type = '');
+        global $tester;
+        $this->objectModel->initBlock($module, $type);
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        $object  = new stdclass();
+        $account = $tester->app->user->account;
+        $section = $module == 'project' ? $type . 'common' : 'common';
+
+        $object->blockInited  = $tester->loadModel('setting')->getItem("owner=$account&module=$module&section=$section&key=blockInited");
+        $object->blockversion = $tester->loadModel('setting')->getItem("owner=$account&module=$module&section=block&key=initVersion");
+
+        $blockData = $this->objectModel->getBlockList($module, $type);
+        $object->blockData = current($blockData);
+
+        return $object;
     }
 
     /**

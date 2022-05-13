@@ -232,7 +232,8 @@ class blockModel extends model
     /**
      * Init block when account use first.
      *
-     * @param  string    $appName
+     * @param  string    $module project|product|execution|qa|my
+     * @param  string    $type   scrum|waterfall|kanban
      * @access public
      * @return bool
      */
