@@ -2522,7 +2522,8 @@ EOT;
         }
         else
         {
-            $li = "<div class='tree-group'><span class='module-name'><a class='sort-module' title='{$module->name}'>" . $module->name . '</a></span>';
+            $moduleClass = common::hasPriv('tree', 'updateOrder') ? 'sort-module' : '';
+            $li          = "<div class='tree-group'><span class='module-name'><a class='$moduleClass' title='{$module->name}'>" . $module->name . '</a></span>';
             if($currentMethod != 'tablecontents')
             {
                 if(common::hasPriv('tree', 'edit') or common::hasPriv('tree', 'browse') or common::hasPriv('tree', 'browse') or common::hasPriv('tree', 'updateOrder'))
