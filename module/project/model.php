@@ -630,7 +630,7 @@ class projectModel extends model
             }
         }
 
-        if($project->model == 'kanban') $link = helper::createLink('project', 'index', "projectID=%s");
+        if(!empty($project) and $project->model == 'kanban') $link = helper::createLink('project', 'index', "projectID=%s");
 
         return $link;
     }
