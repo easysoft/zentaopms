@@ -138,7 +138,10 @@
       <?php endforeach;?>
     </tbody>
   </table>
-  <div class='table-footer'><?php $pager->show('right', 'pagerjs');?></div>
+  <div class='table-footer <?php if($status == 'bySearch') echo 'hide';?>'>
+    <div class="table-statistic"><?php echo $summary;?></div>
+    <?php if($status != 'bySearch') $pager->show('right', 'pagerjs');?>
+  </div>
 </form>
 <style>
 #programTableList.sortable-sorting > tr {opacity: 0.7}

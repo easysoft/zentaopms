@@ -47,14 +47,21 @@ class program extends control
             if(strtolower($status) == 'bysearch')
             {
                 $queryID  = (int)$param;
-                $programs = $this->program->getListBySearch($orderBy, $pager, $queryID);
+                $programs = $this->program->getListBySearch($orderBy, $queryID);
             }
             else
             {
                 $topPrograms = $this->program->getList($status, $orderBy, $pager, 'top');
-                $programIds  = array();
-                foreach($topPrograms as $programID => $program) $programIds[] = $programID;
-                $programs = $this->program->getList($status, $orderBy, null, 'child', $programIds);
+                $programs    = $this->program->getList($status, $orderBy, null, 'child', $topPrograms);
+
+                /* Get summary. */
+                $topCount = $indCount = 0;
+                foreach($programs as $program)
+                {
+                    if($program->type == 'program' and $program->parent == 0) $topCount ++;
+                    if($program->type == 'project' and $program->parent == 0) $indCount ++;
+                }
+                $summary = sprintf($this->lang->program->summary, $topCount, $indCount);
             }
         }
 
@@ -78,6 +85,7 @@ class program extends control
         $this->view->programs     = $programs;
         $this->view->status       = $status;
         $this->view->orderBy      = $orderBy;
+        $this->view->summary      = isset($summary) ? $summary : '';
         $this->view->pager        = $pager;
         $this->view->users        = $this->user->getPairs('noletter');
         $this->view->userIdPairs  = $this->user->getPairs('noletter|showid');
