@@ -22,7 +22,7 @@ class feedbackCloseEntry extends Entry
     {
         $feedback = $this->loadModel('feedback')->getById($feedbackID);
 
-        $fields = 'comment';
+        $fields = 'closedReason,comment';
         $this->batchSetPost($fields);
 
         $control = $this->loadController('feedback', 'close');
