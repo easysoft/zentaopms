@@ -196,22 +196,12 @@ class programModel extends model
         $programs = $this->dao->select('*')->from(TABLE_PROGRAM)
             ->where('deleted')->eq(0)
             ->andWhere('vision')->eq($this->config->vision)
-            ->andWhere('((type')->eq('program')
+            ->andWhere('type')->eq('program')
             ->beginIF(!$this->app->user->admin and $this->app->rawMethod != 'browse')->andWhere('id')->in($this->app->user->view->programs)->fi()
-            ->markRight(1)
-            ->orWhere('(type')->eq('project')
-            ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->projects)->fi()
-            ->markRight(2)
             ->beginIF(!$this->cookie->showClosed)->andWhere('status')->ne('closed')->fi()
             ->beginIF($query)->andWhere($query)->fi()
             ->orderBy($orderBy)
             ->fetchAll('id');
-
-        /* Do not display project separately. */
-        foreach($programs as $id => $program)
-        {
-            if($program->type == 'project' and !isset($programs[$program->parent])) unset($programs[$id]);
-        }
         return $programs;
     }
 
@@ -758,6 +748,8 @@ class programModel extends model
             ->add('id', $programID)
             ->setDefault('team', $this->post->name)
             ->setDefault('end', '')
+            ->setDefault('lastEditedBy', $this->app->user->account)
+            ->setDefault('lastEditedDate', helper::now())
             ->setIF($this->post->begin == '0000-00-00', 'begin', '')
             ->setIF($this->post->end   == '0000-00-00', 'end', '')
             ->setIF($this->post->delta == 999, 'end', LONG_TIME)
