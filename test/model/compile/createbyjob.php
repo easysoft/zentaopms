@@ -13,6 +13,6 @@ pid=1
 */
 
 $compile = new compileTest();
-r($compile->createByJobTest('1', '123')) && p('0:name') && e('这是一个Job1'); //检查是否可以拿到通过id为1的job数据创建的compile。
-r($compile->createByJobTest('3', '123')) && p('0:name') && e('0');            //检查是否可以拿到通过不存在的job数据创建的compile。
+r($compile->createByJobTest('1', '123')) && p('0:name') && e('这是一个Job1'); //检查是否可以拿到通过id为1的job数据创建的compile
+r($compile->createByJobTest('3', '123')) && p('0:name') && e('0');            //检查是否可以拿到通过不存在的job数据创建的compile
 system("../../ztest init");
