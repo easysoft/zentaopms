@@ -422,7 +422,7 @@ UPDATE `zt_workflowaction` SET `type`='batch' WHERE `module`IN ('feedback','case
 UPDATE `zt_workflowaction` SET `position`='browse' WHERE `module`IN ('feedback','caselib','testsuite','testtask','testcase') AND `action` IN ('batchedit','batchcreate','import','showimport');
 
 UPDATE `zt_workflowfield` SET `control` = 'radio' WHERE `module` = 'program' and `field` = 'deleted';
-UPDATE `zt_workflowfield` SET `type` = 'char', `length` => '30', `control` = 'radio' WHERE `module` = 'program' and `field` = 'type';
+UPDATE `zt_workflowfield` SET `type` = 'char', `length` = '30', `control` = 'radio' WHERE `module` = 'program' and `field` = 'type';
 UPDATE `zt_workflowfield` SET `control` = 'date' WHERE `module` = 'program' and `field` = 'begin';
 UPDATE `zt_workflowfield` SET `control` = 'date' WHERE `module` = 'program' and `field` = 'end';
 UPDATE `zt_workflowfield` SET `control` = 'integer' WHERE `module` = 'program' and `field` = 'days';
@@ -431,7 +431,7 @@ UPDATE `zt_workflowfield` SET `control` = 'richtext' WHERE `module` = 'program' 
 UPDATE `zt_workflowfield` SET `control` = 'datetime' WHERE `module` = 'program' and `field` = 'openedDate';
 UPDATE `zt_workflowfield` SET `control` = 'datetime' WHERE `module` = 'program' and `field` = 'closedDate';
 UPDATE `zt_workflowfield` SET `control` = 'datetime' WHERE `module` = 'program' and `field` = 'canceledDate';
-UPDATE `zt_workflowfield` SET `type` => 'char', `length` => '30' WHERE `module` = 'program' and `field` = 'acl';
+UPDATE `zt_workflowfield` SET `type` = 'char', `length` = '30' WHERE `module` = 'program' and `field` = 'acl';
 UPDATE `zt_workflowfield` SET `control` = 'multi-select', `options` = 'user' WHERE `module` = 'program' and `field` = 'whitelist';
 
 REPLACE INTO `zt_workflowfield` (`module`, `field`, `type`, `length`, `name`, `control`, `expression`, `options`, `default`, `rules`, `placeholder`, `order`, `searchOrder`, `exportOrder`, `canExport`, `canSearch`, `isValue`, `readonly`, `buildin`, `desc`, `createdBy`, `createdDate`, `editedBy`, `editedDate`) VALUES
@@ -463,3 +463,10 @@ UPDATE `zt_workflowaction` SET `method`='operate' WHERE `action` IN ('review','a
 UPDATE `zt_workflowaction` SET `method`='batchoperate' WHERE `action` IN('batchedit', 'batchconfirm', 'batchresolve');
 UPDATE `zt_workflowaction` SET `method`='view' WHERE `action`='adminview';
 UPDATE `zt_workflowaction` SET `method`='browse' WHERE module='execution' and `action` IN('all', 'task');
+UPDATE `zt_workflowaction` SET `method`='operate' WHERE module='story' and `action` IN('close', 'activate', 'assignTo', 'review', 'change');
+UPDATE `zt_workflowaction` SET `method`='batchoperate' WHERE module='story' and `action` = 'batchedit';
+UPDATE `zt_workflowaction` SET `method`='operate' WHERE module='product' and `action` = 'close';
+UPDATE `zt_workflowaction` SET `method`='batchoperate' WHERE module='product' and `action` = 'batcheditl';
+UPDATE `zt_workflowaction` SET `method`='browse' WHERE module='product' and `action` = 'all';
+UPDATE `zt_workflowaction` SET `method`='batchoperate' WHERE module='productplan' and `action` = 'batchedit';
+UPDATE `zt_workflowaction` SET `method`='operate' WHERE module='program' and `action` IN('close', 'activate', 'start', 'suspend');
