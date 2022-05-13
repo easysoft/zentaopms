@@ -75,7 +75,6 @@ class program extends control
 
         /* Build the search form. */
         $actionURL = $this->createLink('program', 'browse', "status=bySearch&orderBy={$orderBy}&recTotal={$recTotal}&recPerPage={$recPerPage}&pageID={$pageID}&param=myQueryID");
-        $this->config->program->search['onMenuBar'] = 'yes';
         $this->config->program->search['actionURL'] = $actionURL;
         $this->loadModel('search')->setSearchParams($this->config->program->search);
 
