@@ -146,6 +146,11 @@ REPLACE INTO `zt_workflowdatasource` (`type`, `name`, `code`, `buildin`, `dataso
 ('lang', '反馈处理方案', 'feedbackSolution',     '1', 'feedbackSolution',     '', '', ''),
 ('lang', '反馈关闭原因', 'feedbackclosedReason', '1', 'feedbackclosedReason', '', '', '');
 
+INSERT INTO `zt_workflowdatasource` (`type`, `name`, `code`, `buildin`, `vision`, `datasource`, `view`, `keyField`, `valueField`) VALUES
+('lang',        '反馈类型',       'litefeedbackType',         '1', 'lite', 'feedbackType',         '', '', ''),
+('lang',        '反馈处理方案',   'litefeedbackSolution',     '1', 'lite', 'feedbackSolution',     '', '', ''),
+('lang',        '反馈关闭原因',   'litefeedbackclosedReason', '1', 'lite', 'feedbackclosedReason', '', '', '');
+
 REPLACE INTO `zt_workflowfield` (`module`, `field`, `type`, `length`, `name`, `control`, `expression`, `options`, `default`, `rules`, `placeholder`, `order`, `searchOrder`, `exportOrder`, `canExport`, `canSearch`, `isValue`, `readonly`, `buildin`, `desc`, `createdBy`, `createdDate`, `editedBy`, `editedDate`) VALUES
 ('execution',	'type', 	        'char', 	'30',	'迭代类型',	        'select',	'',	'16',	'sprint',	'',	'',	3,	0,	0,	'0',	'0',	'0',	'1',	1,	'',	'',	'0000-00-00 00:00:00',	'',	'0000-00-00 00:00:00'),
 ('execution',	'begin',	        'date', 	'',	'计划开始',	        'date',	'',	'',	'',	'',	'',	14,	0,	0,	'0',	'0',	'0',	'1',	1,	'',	'',	'0000-00-00 00:00:00',	'',	'0000-00-00 00:00:00'),
@@ -206,9 +211,9 @@ REPLACE INTO `zt_workflowfield` (`module`, `field`, `type`, `length`, `name`, `c
 ('bug',	        'deleted',      	'enum', 	'',	'已删除',	        'radio',	'',	'[\"\\u672a\\u5220\\u9664\",\"\\u5df2\\u5220\\u9664\"]',	'0',	'',	'',	59,	0,	0,	'0',	'0',	'0',	'1',	1,	'',	'',	'0000-00-00 00:00:00',	'',	'0000-00-00 00:00:00'),
 ('task',	'project',      	'mediumint',	'8',	'所属项目',	        'select',	'',	'2',	'0',	'',	'',	2,	0,	0,	'0',	'0',	'0',	'1',	1,	'',	'',	'0000-00-00 00:00:00',	'',	'0000-00-00 00:00:00'),
 ('task',	'storyVersion', 	'smallint',	'6',	'研发需求版本',	        'integer',	'',	'',	'1',	'',	'',	7,	0,	0,	'0',	'0',	'0',	'1',	1,	'',	'',	'0000-00-00 00:00:00',	'',	'0000-00-00 00:00:00'),
-('task',	'estimate',     	'float',	'',	'最初预计',	        'decimal',	'',	'',	'',	'',	'',	13,	0,	0,	'0',	'0',	'0',	'1',	1,	'',	'',	'0000-00-00 00:00:00',	'',	'0000-00-00 00:00:00'),
-('task',	'consumed',     	'float',	'',	'总计消耗',	        'decimal',	'',	'',	'',	'',	'',	14,	0,	0,	'0',	'0',	'0',	'1',	1,	'',	'',	'0000-00-00 00:00:00',	'',	'0000-00-00 00:00:00'),
-('task',	'left',         	'float',	'',	'预计剩余',	        'decimal',	'',	'',	'',	'',	'',	15,	0,	0,	'0',	'0',	'0',	'1',	1,	'',	'',	'0000-00-00 00:00:00',	'',	'0000-00-00 00:00:00'),
+('task',	'estimate',     	'float',	'',	'最初预计',	        'input',	'',	'',	'',	'',	'',	13,	0,	0,	'0',	'0',	'0',	'1',	1,	'',	'',	'0000-00-00 00:00:00',	'',	'0000-00-00 00:00:00'),
+('task',	'consumed',     	'float',	'',	'总计消耗',	        'input',	'',	'',	'',	'',	'',	14,	0,	0,	'0',	'0',	'0',	'1',	1,	'',	'',	'0000-00-00 00:00:00',	'',	'0000-00-00 00:00:00'),
+('task',	'left',         	'float',	'',	'预计剩余',	        'input',	'',	'',	'',	'',	'',	15,	0,	0,	'0',	'0',	'0',	'1',	1,	'',	'',	'0000-00-00 00:00:00',	'',	'0000-00-00 00:00:00'),
 ('task',	'deadline',     	'date', 	'',	'截止日期',	        'date',	'',	'',	'',	'',	'',	16,	0,	0,	'0',	'0',	'0',	'1',	1,	'',	'',	'0000-00-00 00:00:00',	'',	'0000-00-00 00:00:00'),
 ('task',	'desc',         	'text', 	'',	'任务描述',	        'richtext',	'',	'',	'',	'',	'',	20,	0,	0,	'0',	'0',	'0',	'1',	1,	'',	'',	'0000-00-00 00:00:00',	'',	'0000-00-00 00:00:00'),
 ('task',	'openedDate',   	'datetime',	'',	'创建日期',	        'datetime',	'',	'',	'',	'',	'',	23,	0,	0,	'0',	'0',	'0',	'1',	1,	'',	'',	'0000-00-00 00:00:00',	'',	'0000-00-00 00:00:00'),
