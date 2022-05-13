@@ -140,9 +140,9 @@ class programModel extends model
         $projectIdList = array();
         if($type === 'child')
         {
-            foreach($idList as $topID)
+            foreach($idList as $topID => $topProgram)
             {
-                $projectIdList += $this->dao->select('id')->from(TABLE_PROGRAM)->Where('path')->like(",$topID,%")->fetchPairs('id');
+                $projectIdList += $topProgram->type == 'project' ? array($topID => $topID) : $this->dao->select('id')->from(TABLE_PROGRAM)->Where('path')->like(",$topID,%")->fetchPairs('id');
             }
         }
 
