@@ -21,3 +21,5 @@ th.c-name {min-width: 240px;}
 
 .table-responsive {overflow: auto !important;}
 .checkbox-primary {margin-right: 10px;}
+#sidebar {padding: 0px; width: 200px;}
+#sidebar .cell {width: 180px;}
