@@ -132,6 +132,8 @@ UPDATE `zt_workflowaction` SET `position` = 'browse' WHERE `module` = 'story' an
 UPDATE `zt_workflowaction` SET `position` = 'browse' WHERE `module` = 'story' and `action` = 'exporttemplate' and `vision` = 'rnd';
 UPDATE `zt_workflowaction` SET `position` = 'browse' WHERE `module` = 'story' and `action` = 'import' and `vision` = 'rnd';
 UPDATE `zt_workflowaction` SET `position` = 'browse' WHERE `module` = 'story' and `action` = 'view' and `vision` = 'rnd';
+UPDATE `zt_workflowaction` SET `position` = 'browse' WHERE `module` = 'story' and `action` = 'batchcreate' and `vision` = 'rnd';
+UPDATE `zt_workflowaction` SET `position` = 'browse' WHERE `module` = 'story' and `action` = 'batchedit' and `vision` = 'rnd';
 UPDATE `zt_workflowaction` SET `show` = 'direct' WHERE `module` = 'story'  and `vision` = 'rnd' and action NOT IN ('exporttemplate', 'import');
 UPDATE `zt_workflowaction` SET `show` = 'direct' WHERE `module` = 'program'  and `vision` = 'rnd';
 UPDATE `zt_workflowaction` SET `position` = 'browse' WHERE `module` = 'program'  and `vision` = 'rnd';
