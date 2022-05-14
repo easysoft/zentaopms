@@ -38,6 +38,7 @@
     <?php endforeach;?>
     <?php if($from == 'execution' and $this->config->systemMode == 'new'):?>
     <div class='input-control w-180px'>
+
       <?php echo html::select('project', $projects, $projectID, "class='form-control chosen' data-placeholder='{$lang->execution->selectProject}'");?>
     </div>
     <?php endif;?>
@@ -127,18 +128,12 @@
             <?php endif;?>
             <?php printf('%03d', $execution->id);?>
           </td>
-          <?php
-          $executionName  = $execution->name;
-          $onlyChildStage = ($execution->grade == 2 and $execution->project != $execution->parent);
-          if($onlyChildStage and isset($parents[$execution->parent])) $executionName = $parents[$execution->parent]->name . '/' . $executionName;
-          ?>
-          <td class='text-left c-name <?php if(!empty($execution->children)) echo 'has-child';?> flex' title='<?php echo $executionName?>'>
+          <td class='text-left c-name <?php if(!empty($execution->children)) echo 'has-child';?> flex' title='<?php echo $execution->name?>'>
             <?php if($config->systemMode == 'new'):?>
             <span class='project-type-label label label-outline <?php echo $execution->type == 'stage' ? 'label-warning' : 'label-info';?>'><?php echo $lang->execution->typeList[$execution->type]?></span>
             <?php endif;?>
             <?php
-            $executionLink = $execution->projectModel == 'kanban' ? html::a($this->createLink('execution', 'kanban', 'executionID=' . $execution->id), $executionName, '', "class='text-ellipsis'") : html::a($this->createLink('execution', 'task', 'execution=' . $execution->id), $executionName, '', "class='text-ellipsis'");
-            if($onlyChildStage) echo "<span class='label label-badge label-light label-children'>{$lang->programplan->childrenAB}</span> ";
+            $executionLink = $execution->projectModel == 'kanban' ? html::a($this->createLink('execution', 'kanban', 'executionID=' . $execution->id), $execution->name, '', "class='text-ellipsis'") : html::a($this->createLink('execution', 'task', 'execution=' . $execution->id), $execution->name, '', "class='text-ellipsis'");
             echo !empty($execution->children) ? $execution->name :  $executionLink;
             if(isset($execution->delay)) echo "<span class='label label-danger label-badge'>{$lang->execution->delayed}</span> ";
             ?>
@@ -146,7 +141,7 @@
               <a class="plan-toggle" data-id="<?php echo $execution->id;?>"><i class="icon icon-angle-double-right"></i></a>
             <?php endif;?>
           </td>
-          <?php if(!$isStage):?>
+          <?php if($from == 'execution'):?>
           <td title='<?php echo $execution->code;?>'><?php echo $execution->code;?></td>
           <?php endif;?>
           <?php if($config->systemMode == 'new' and $this->app->tab == 'execution'):?>
@@ -228,6 +223,10 @@
                if(isset($child->delay)) echo "<span class='label label-danger label-badge'>{$lang->execution->delayed}</span> ";
                ?>
              </td>
+             <?php if($from == 'execution'): ?>
+             <td title = '<?php echo $child->code;?>'><?php echo $child->code;?>
+             <td title = '<?php echo $child->projectName?>'><?php echo $child->projectName;?>
+             <?php endif;?>
              <td><?php echo zget($users, $child->PM);?></td>
              <?php $executionStatus = $this->processStatus('execution', $child);?>
              <td class='c-status text-center' title='<?php echo $executionStatus;?>'>
@@ -236,7 +235,7 @@
              <td class="c-progress">
                <?php echo html::ring($child->hours->progress); ?>
              </td>
-             <?php if($isStage):?>
+             <?php if($from == 'project' and $isStage):?>
              <td><?php echo $child->percent . '%';?></td>
              <td><?php echo zget($lang->stage->typeList, $child->attribute, '');?></td>
              <td><?php echo helper::isZeroDate($child->begin)     ? '' : $child->begin;?></td>
@@ -269,11 +268,11 @@
                 ?>
              </td>
              <?php else:?>
+             <td class='c-begin' title='<?php echo helper::isZeroDate($child->begin)     ? '' : $child->begin;?>'><?php echo helper::isZeroDate($child->begin)     ? '' : $child->begin;?></td>
+             <td class='c-begin' title='<?php echo helper::isZeroDate($child->end)       ? '' : $child->end;?>'><?php echo helper::isZeroDate($child->end)       ? '' : $child->end;?></td>
              <td class='hours' title='<?php echo $child->hours->totalEstimate . ' ' . $this->lang->execution->workHour;?>'><?php echo $child->hours->totalEstimate . ' ' . $this->lang->execution->workHourUnit;?></td>
              <td class='hours' title='<?php echo $child->hours->totalConsumed . ' ' . $this->lang->execution->workHour;?>'><?php echo $child->hours->totalConsumed . ' ' . $this->lang->execution->workHourUnit;?></td>
              <td class='hours' title='<?php echo $child->hours->totalLeft     . ' ' . $this->lang->execution->workHour;?>'><?php echo $child->hours->totalLeft     . ' ' . $this->lang->execution->workHourUnit;?></td>
-             <?php endif;?>
-             <?php if(!$isStage):?>
              <td id='spark-<?php echo $child->id?>' class='sparkline text-left no-padding' values='<?php echo join(',', $child->burns);?>'></td>
              <?php endif;?>
              <?php foreach($extendFields as $extendField) echo "<td>" . $this->loadModel('flow')->getFieldValue($extendField, $child) . "</td>";?>
