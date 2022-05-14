@@ -141,7 +141,7 @@
               <a class="plan-toggle" data-id="<?php echo $execution->id;?>"><i class="icon icon-angle-double-right"></i></a>
             <?php endif;?>
           </td>
-          <?php if($from == 'execution'):?>
+          <?php if(!$isStage):?>
           <td title='<?php echo $execution->code;?>'><?php echo $execution->code;?></td>
           <?php endif;?>
           <?php if($config->systemMode == 'new' and $this->app->tab == 'execution'):?>
