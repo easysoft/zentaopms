@@ -225,7 +225,9 @@
              </td>
              <?php if($from == 'execution'): ?>
              <td title = '<?php echo $child->code;?>'><?php echo $child->code;?>
-             <td title = '<?php echo $child->projectName?>'><?php echo $child->projectName;?>
+               <?php if($config->systemMode == 'new'):?>
+                 <td title = '<?php echo $child->projectName?>'><?php echo $child->projectName;?>
+               <?php endif;?>
              <?php endif;?>
              <td><?php echo zget($users, $child->PM);?></td>
              <?php $executionStatus = $this->processStatus('execution', $child);?>
