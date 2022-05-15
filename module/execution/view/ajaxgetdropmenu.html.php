@@ -109,7 +109,7 @@ foreach($executions as $projectID => $projectExecutions)
                 }
             }
         }
-        elseif($execution->grade ==1)
+        elseif($execution->grade == 1 or $config->systemMode == 'classic')
         {
             if($execution->status != 'done' and $execution->status != 'closed' and ($execution->PM == $this->app->user->account or isset($execution->teams[$this->app->user->account])))
             {
