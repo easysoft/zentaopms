@@ -2857,61 +2857,6 @@ class executionModel extends model
             ->fetchPairs();
         if(!$executions) return array();
 
-        /* Update historical data of burn. */
-        $table = $this->config->edition == 'open' ? TABLE_TASKESTIMATE : TABLE_EFFORT;
-        $field = $this->config->edition == 'open' ? 'task' : 'objectID';
-        $totalConsumed = $this->dao->select("t2.execution as execution, t1.$field as task, t1.date as date, sum(t1.consumed) as totalConsumed")->from($table)->alias('t1')
-            ->leftJoin(TABLE_TASK)->alias('t2')->on("t1.$field=t2.id")
-            ->where('t2.execution')->in(array_keys($executions))
-            ->beginIF($this->config->edition != 'open')->andWhere('t1.objectType')->eq('task')->fi()
-            ->andWhere('t2.deleted')->eq('0')
-            ->andWhere('t2.parent')->ge('0')
-            ->andWhere('t2.status')->ne('cancel')
-            ->andWhere('t1.date')->ne($today)
-            ->groupBy("t1.$field, t1.date")
-            ->orderBy('t1.id_desc')
-            ->fetchGroup('task', 'date');
-
-        $latestIdList = $this->dao->select('max(id) as id')->from($table)
-            ->where($field)->in(array_keys($totalConsumed))
-            ->beginIF($this->config->edition != 'open')->andWhere('objectType')->eq('task')->fi()
-            ->groupBy("$field,date")->fetchAll('id');
-        $latestLefts = $this->dao->select("$field, date, `left`")->from($table)
-            ->where('id')->in(array_keys($latestIdList))
-            ->fetchGroup($field, 'date');
-
-        $burnList = array();
-        foreach($totalConsumed as $taskID => $consumedList)
-        {
-            foreach($consumedList as $date => $consumed)
-            {
-                $executionID = $consumed->execution;
-                if(!isset($burnList[$executionID])) $burnList[$executionID] = array();
-
-                if(!isset($burnList[$executionID][$date]))
-                {
-                    $burnList[$executionID][$date] = new stdclass();
-                    $burnList[$executionID][$date]->consumed = 0;
-                    $burnList[$executionID][$date]->left     = 0;
-                }
-
-                $burnList[$executionID][$date]->consumed += $consumed->totalConsumed;
-                $burnList[$executionID][$date]->left     += $latestLefts[$taskID][$date]->left;
-            }
-        }
-
-        foreach($burnList as $executionID => $burns)
-        {
-            foreach($burns as $date => $burn)
-            {
-                $burn->execution = $executionID;
-                $burn->date      = $date;
-
-                $this->dao->replace(TABLE_BURN)->data($burn)->exec();
-                $burn->executionName = $executions[$burn->execution];
-            }
-        }
-
         /* Update today's data of burn. */
         $burns = $this->dao->select("execution, '$today' AS date, sum(estimate) AS `estimate`, sum(`left`) AS `left`, SUM(consumed) AS `consumed`")
             ->from(TABLE_TASK)
@@ -2965,10 +2910,9 @@ class executionModel extends model
 
             $this->dao->replace(TABLE_BURN)->data($burn)->exec();
             $burn->executionName = $executions[$burn->execution];
-            $burnList[$executionID][$today] = $burn;
         }
 
-        return $burnList;
+        return $burns;
     }
 
     /**
