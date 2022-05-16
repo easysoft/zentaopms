@@ -139,8 +139,8 @@
             <?php endif;?>
             <?php
             $executionLink = $execution->projectModel == 'kanban' ? html::a($this->createLink('execution', 'kanban', 'executionID=' . $execution->id), $executionName, '', "class='text-ellipsis'") : html::a($this->createLink('execution', 'task', 'execution=' . $execution->id), $executionName, '', "class='text-ellipsis'");
-            echo !empty($execution->children) ? $execution->name :  $executionLink;
             if($onlyChildStage) echo "<span class='label label-badge label-light label-children'>{$lang->programplan->childrenAB}</span> ";
+            echo !empty($execution->children) ? $execution->name :  $executionLink;
             if(isset($execution->delay)) echo "<span class='label label-danger label-badge'>{$lang->execution->delayed}</span> ";
             ?>
             <?php if(!empty($execution->children)):?>
