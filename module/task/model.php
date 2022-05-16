@@ -1069,7 +1069,11 @@ class taskModel extends model
                 $this->dao->insert(TABLE_TASKSPEC)->data($taskSpec)->autoCheck()->exec();
             }
 
-            if($this->post->story != false) $this->loadModel('story')->setStage($this->post->story);
+            if($this->post->story != $oldTask->story)
+            {
+                $this->loadModel('story')->setStage($this->post->story);
+                $this->story->setStage($oldTask->story);
+            }
             if($task->status == 'done')   $this->loadModel('score')->create('task', 'finish', $taskID);
             if($task->status == 'closed') $this->loadModel('score')->create('task', 'close', $taskID);
             if($task->status != $oldTask->status) $this->loadModel('kanban')->updateLane($task->execution, 'task', $taskID);
