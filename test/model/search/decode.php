@@ -14,4 +14,4 @@ pid=1
 
 $search = new searchTest();
 
-r($search->decodeTest()) && p() && e();
+r($search->decodeTest(20135)) && p() && e('产'); //测试将搜索字转化为正确的汉字
