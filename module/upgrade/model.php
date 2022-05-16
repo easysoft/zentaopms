@@ -6106,7 +6106,7 @@ class upgradeModel extends model
         $content = file_get_contents($filePath);
         if(strpos(basename($filePath), 'html'))
         {
-            $content = preg_replace('#(include )(\'|")((../){2,})([a-z]+/)(?!ext/)([a-z]+/)#', '$1' . '$app->getModuleRoot() . ' . '"$5$6', $content);
+            $content = preg_replace('#(include )(\'|")((../){2,})([a-z]+/)(?!ext/)([a-z]+/)#', '$1' . '$app->getModuleRoot() . ' . '$2$5$6', $content);
 
             $systemFiles = file_get_contents('systemfiles.txt');
             $systemFiles = str_replace('/', DS, $systemFiles);
