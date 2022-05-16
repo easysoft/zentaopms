@@ -306,7 +306,9 @@ class blockTest
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        $objects = json_decode($objects);
+
+        return $objects->count;
     }
 
     public function getProjectParamsTest()
@@ -428,11 +430,11 @@ class blockTest
 
     public function getQaStatisticParamsTest()
     {
-        $objects = $this->objectModel->getQaStatisticParams();
+        $object = $this->objectModel->getQaStatisticParams();
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        return json_decode($object);
     }
 
     public function getRecentProjectParamsTest()
@@ -606,7 +608,9 @@ class blockTest
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        $objects = json_decode($objects);
+
+        return $objects->type;
     }
 
     public function getScrumOverviewParamsTest($module = '')
