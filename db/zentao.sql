@@ -8769,6 +8769,7 @@ INSERT INTO `zt_workflowdatasource` (`type`, `name`, `code`, `buildin`, `datasou
 ('lang', '反馈处理方案', 'feedbackSolution',     '1', 'feedbackSolution',     '', '', ''),
 ('lang', '反馈关闭原因', 'feedbackclosedReason', '1', 'feedbackclosedReason', '', '', ''),
 ('lang', '任务关闭原因', 'taskReason', '1', 'taskReason', '', '', ''),
+('lang',        '套件权限',       'testsuiteAuth', '1', 'testsuiteAuth', '', '', ''),
 ('system',     '项目集',         'programs', '1', '{\"app\":\"system\",\"module\":\"program\",\"method\":\"getPairs\",\"methodDesc\":\"Get program pairs.\",\"params\":[{\"name\":\"isQueryAll\",\"type\":\"bool\",\"desc\":\"\",\"value\":\"\"},{\"name\":\"orderBy\",\"type\":\"string\",\"desc\":\"\",\"value\":\"id_desc\"}]}',  '',     '',     ''),
 ('lang', '需求关闭原因', 'storyClosedReason', '1', 'storyClosedReason', '', '', '');
 
