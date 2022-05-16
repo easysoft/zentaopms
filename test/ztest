@@ -16,6 +16,9 @@ switch($argv[1])
     case 'api':
         ztfRun('api');
         break;
+    case 'mapi':
+        ztfRun('model/api');
+        break;
     case 'control':
         ztfRun('control');
         break;
