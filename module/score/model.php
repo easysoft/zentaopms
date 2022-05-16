@@ -33,7 +33,7 @@ class scoreModel extends model
      * @param string $time
      *
      * @access public
-     * @return bool
+     * @return bool|object
      */
     public function create($module = '', $method = '', $param = '', $account = '', $time = '')
     {
