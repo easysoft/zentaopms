@@ -26,6 +26,7 @@
 #closed {width: 90px; height: 25px; line-height: 25px; background-color: #ddd; color: #3c495c; text-align: center; margin-left: 15px; border-radius: 2px;}
 #gray-line {width: 230px;height: 1px; margin-left: 10px; margin-bottom:2px; background-color: #ddd;}
 #dropMenu.has-search-text .hide-in-search {display: flex;}
+#swapper li>.selected {color: #0c64eb!important; background: #e9f2fb!important;}
 </style>
 <?php
 $executionCounts      = array();
@@ -109,7 +110,7 @@ foreach($executions as $projectID => $projectExecutions)
                 }
             }
         }
-        elseif($execution->grade == 1 or $config->systemMode == 'classic')
+        else if($execution->grade == 1 or $config->systemMode == 'classic')
         {
             if($execution->status != 'done' and $execution->status != 'closed' and ($execution->PM == $this->app->user->account or isset($execution->teams[$this->app->user->account])))
             {

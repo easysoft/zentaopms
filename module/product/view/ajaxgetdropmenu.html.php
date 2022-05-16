@@ -28,6 +28,7 @@
 #subHeader .tree ul {display: block;}
 #closed {width: 90px; height: 25px; line-height: 25px; background-color: #ddd; color: #3c495c; text-align: center; margin-left: 15px; border-radius: 2px;}
 #gray-line {width: 230px; height: 1px; margin-left: 10px; margin-bottom:2px; background-color: #ddd;}
+#swapper li >.selected {color: #0c64eb!important;background: #e9f2fb!important;}
 </style>
 <?php
 $productCounts      = array();
