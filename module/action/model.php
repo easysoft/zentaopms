@@ -789,7 +789,7 @@ class actionModel extends model
             if(is_array($desc))
             {
                 if($key == 'extra') continue;
-                if($action->objectType == 'story' and $action->action = 'reviewed' and strpos($action->extra, '|') !== false and $key == 'actor')
+                if($action->objectType == 'story' and $action->action == 'reviewed' and strpos($action->extra, '|') !== false and $key == 'actor')
                 {
                     $desc['main'] = str_replace('$actor', $this->lang->action->superReviewer . ' ' . $value, $desc['main']);
                 }
