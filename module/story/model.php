@@ -1588,10 +1588,15 @@ class storyModel extends model
         /* Update parent story status and stage. */
         if($oldStory->parent > 0)
         {
+
             $this->updateParentStatus($storyID, $oldStory->parent);
             $this->setStage($oldStory->parent);
         }
-        if(!dao::isError()) $this->loadModel('score')->create('story', 'close', $storyID);
+        if(!dao::isError())
+        {
+            $this->setStage($storyID);
+            $this->loadModel('score')->create('story', 'close', $storyID);
+        }
         return common::createChanges($oldStory, $story);
     }
 
