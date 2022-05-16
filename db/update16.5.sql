@@ -340,8 +340,7 @@ REPLACE INTO `zt_workflowfield` (`module`, `field`, `type`, `length`, `name`, `c
 ('testcase',	'fromCaseID',	        'char', 	'30',	'用例来源ID',	        'input',	'',	'',	'',	'',	'',	28,	0,	0,	'0',	'0',	'0',	'1',	1,	'',	'',	'0000-00-00 00:00:00',	'',	'0000-00-00 00:00:00'),
 ('testcase',	'fromCaseVersion',	'char', 	'30',	'用例来源版本',	        'input',	'',	'',	'',	'',	'',	5,	0,	0,	'0',	'0',	'0',	'1',	1,	'',	'',	'0000-00-00 00:00:00',	'',	'0000-00-00 00:00:00'),
 ('testcase',	'precondition', 	'text', 	'',	'前置条件',	        'textarea',	'',	'',	'',	'',	'',	5,	0,	0,	'0',	'0',	'0',	'1',	1,	'',	'',	'0000-00-00 00:00:00',	'',	'0000-00-00 00:00:00'),
-('testcase',    'subStatus',            'varchar',      '30',   '子状态', 		'select',       '',     '',     '',     '',     '',     17,     0,      0,      '0',    '0',    '0',    '0',    1,      '',     '',     '0000-00-00 00:00:00',  '',     '0000-00-00 00:00:00'),
-('testsuite',   'type',                 'text',         '',     '类型', 		'radio',        '',     '',     '',     '',     '',     17,     0,      0,      '0',    '0',    '0',    '0',    1,      '',     '',     '0000-00-00 00:00:00',  '',     '0000-00-00 00:00:00');
+('testcase',    'subStatus',            'varchar',      '30',   '子状态', 		'select',       '',     '',     '',     '',     '',     17,     0,      0,      '0',    '0',    '0',    '0',    1,      '',     '',     '0000-00-00 00:00:00',  '',     '0000-00-00 00:00:00');
 
 UPDATE `zt_workflowfield` SET `options`=(SELECT id FROM `zt_workflowdatasource` WHERE `code`='projectModel' ORDER BY id DESC LIMIT 1)     WHERE `module`='project'  AND `field`='model';
 UPDATE `zt_workflowfield` SET `options`=(SELECT id FROM `zt_workflowdatasource` WHERE `code`='feedbackType' ORDER BY id DESC LIMIT 1)     WHERE `module`='feedback' AND `field`='type';
@@ -352,7 +351,7 @@ UPDATE `zt_workflowfield` SET `options`=(SELECT id FROM `zt_workflowdatasource` 
 UPDATE `zt_workflowfield` SET `options`=(SELECT id FROM `zt_workflowdatasource` WHERE `code`='programs' ORDER BY id DESC LIMIT 1), `control`='select' WHERE `module`='project' AND `field`='parent';
 UPDATE `zt_workflowfield` SET `options`=(SELECT id FROM `zt_workflowdatasource` WHERE `code`='projects' ORDER BY id DESC LIMIT 1), `control`='select' WHERE `module`='execution' AND `field`='parent';
 UPDATE `zt_workflowfield` SET `options`=(SELECT id FROM `zt_workflowdatasource` WHERE `code`='feedbackclosedReason' ORDER BY id DESC LIMIT 1), `control`='select' WHERE `module`='feedback' AND `field`='closedReason';
-UPDATE `zt_workflowfield` SET `options`=(SELECT id FROM `zt_workflowdatasource` WHERE `code`='testsuiteAuth' ORDER BY id DESC LIMIT 1), `control`='redio' WHERE `module`='testsuite' AND `field`='type';
+UPDATE `zt_workflowfield` SET `options`=(SELECT id FROM `zt_workflowdatasource` WHERE `code`='testsuiteAuth' ORDER BY id DESC LIMIT 1), `control`='radio' WHERE `module`='testsuite' AND `field`='type';
 
 UPDATE `zt_workflowaction` SET `type`='single', `position`='browseandview', `show`='direct', `open`='normal', `layout`='normal' WHERE `module`='project' AND `action`='browse';
 UPDATE `zt_workflowaction` SET `type`='single', `position`='browse', `show`='direct', `open`='normal', `layout`='normal' WHERE `module`='project' AND `action`='create';
