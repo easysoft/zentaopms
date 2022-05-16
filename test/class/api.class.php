@@ -178,27 +178,9 @@ class apiTest
         return current($objects);
     }
 
-    public function getStructByQueryTest($libID, $pager = '', $orderBy = '')
-    {
-        $objects = $this->objectModel->getStructByQuery($libID, $pager = '', $orderBy = '');
-
-        if(dao::isError()) return dao::getError();
-
-        return $objects;
-    }
-
     public function getStructListByReleaseTest($release, $where = '1 = 1 ', $orderBy = 'id')
     {
         $objects = $this->objectModel->getStructListByRelease($release, $where = '1 = 1 ', $orderBy = 'id');
-
-        if(dao::isError()) return dao::getError();
-
-        return $objects;
-    }
-
-    public function getReleaseByQueryTest($libID, $pager = '', $orderBy = '')
-    {
-        $objects = $this->objectModel->getReleaseByQuery($libID, $pager = '', $orderBy = '');
 
         if(dao::isError()) return dao::getError();
 
@@ -214,39 +196,4 @@ class apiTest
         return $objects;
     }
 
-    public function getMethodTest($filePath, $ext = '')
-    {
-        $objects = $this->objectModel->getMethod($filePath, $ext = '');
-
-        if(dao::isError()) return dao::getError();
-
-        return $objects;
-    }
-
-    public function requestTest($moduleName, $methodName, $action)
-    {
-        $objects = $this->objectModel->request($moduleName, $methodName, $action);
-
-        if(dao::isError()) return dao::getError();
-
-        return $objects;
-    }
-
-    public function sqlTest($sql, $keyField = '')
-    {
-        $objects = $this->objectModel->sql($sql, $keyField = '');
-
-        if(dao::isError()) return dao::getError();
-
-        return $objects;
-    }
-
-    public function getTypeListTest($libID)
-    {
-        $objects = $this->objectModel->getTypeList($libID);
-
-        if(dao::isError()) return dao::getError();
-
-        return $objects;
-    }
 }
