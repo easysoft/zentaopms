@@ -162,8 +162,8 @@ body {margin-bottom: 25px;}
       ?>
       <button type='button' class='btn btn-primary dropdown-toggle' data-toggle='dropdown'><span class='caret'></span></button>
       <ul class='dropdown-menu pull-right'>
-        <li><?php echo html::a($taskCreateLink, $lang->task->create);?></li>
-        <li><?php echo html::a($this->createLink('task', 'batchCreate', "executionID=$executionID" . (isset($moduleID) ? "&storyID=0&moduleID=$moduleID" : "")), $lang->task->batchCreate);?></li>
+        <li><?php echo html::a($taskCreateLink, "<i class='icon icon-plus'></i> " .  $lang->task->create);?></li>
+        <li><?php echo html::a($this->createLink('task', 'batchCreate', "executionID=$executionID" . (isset($moduleID) ? "&storyID=0&moduleID=$moduleID" : "")), "<i class='icon icon-plus'></i> " .  $lang->task->batchCreate);?></li>
       </ul>
     </div>
     <?php endif;?>
@@ -178,6 +178,7 @@ body {margin-bottom: 25px;}
       <li <?php echo $disabled?>>
       <?php
         $batchLink = $this->createLink('task', 'batchCreate', "execution=$executionID" . (isset($moduleID) ? "&storyID=&moduleID=$moduleID" : ''));
+        echo "<li>" . html::a($taskCreateLink, "<i class='icon icon-plus'></i> " . $lang->task->create) . "</li>";
         echo "<li>" . html::a($batchLink, "<i class='icon icon-plus'></i> " . $lang->task->batchCreate) . "</li>";
       ?>
       </li>
