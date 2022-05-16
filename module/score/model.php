@@ -47,6 +47,8 @@ class scoreModel extends model
 
         if(is_numeric($param)) $desc .= 'ID:' . $param;
 
+        $object = '';
+
         switch($module)
         {
             case 'user':
@@ -65,12 +67,13 @@ class scoreModel extends model
                 if($method == 'close')
                 {
                     $openedBy = $this->dao->findById($param)->from(TABLE_STORY)->fetch('openedBy');
+                    $object   = true;
 
                     if(!empty($openedBy))
                     {
                         $newRule          = $rule;
                         $newRule['score'] = $extended['createID'];
-                        $this->saveScore($openedBy, $newRule, $module, $method, $desc, $time);
+                        $object = $this->saveScore($openedBy, $newRule, $module, $method, $desc, $time);
                         unset($newRule);
                     }
                 }
@@ -93,7 +96,7 @@ class scoreModel extends model
 
                     if(!empty($task->estimate))
                     {
-                        $rule['score'] = $rule['score'] + (empty($task->consumed) ? 0 : round($task->consumed / 10 * $task->estimate / $task->consumed));
+                        $rule['score'] = $rule['score'] + (empty($task->consumed) ? 0 : round($task->consumed / 10.0 * $task->estimate / $task->consumed));
                     }
                 }
                 break;
@@ -130,6 +133,7 @@ class scoreModel extends model
                 {
                     $desc      = $this->lang->score->methods[$module][$method] . ',' . $desc . 'ID:' . $param->id;
                     $timestamp = empty($time) ? time() : strtotime($time);
+                    $object    = true;
 
                     /* Project PM. */
                     if(!empty($param->PM))
@@ -139,7 +143,7 @@ class scoreModel extends model
                         {
                             $rule['score'] += $extended['manager']['onTime'];
                         }
-                        $this->saveScore($param->PM, $rule, $module, $method, $desc, $time);
+                        $object = $this->saveScore($param->PM, $rule, $module, $method, $desc, $time);
                     }
 
                     /* Project team user. */
@@ -154,13 +158,11 @@ class scoreModel extends model
 
                         foreach($teams as $user)
                         {
-                            if($user != $param->PM) $this->saveScore($user, $rule, $module, $method, $desc, $time);
+                            if($user != $param->PM) $object = $this->saveScore($user, $rule, $module, $method, $desc, $time);
                         }
                     }
-
-                    /* When the execution is closed, no more user get score. */
-                    return true;
                 }
+
                 break;
             case 'search':
                 if($method == 'saveQueryAdvanced') $desc = $this->lang->score->methods[$module][$method];
@@ -169,7 +171,10 @@ class scoreModel extends model
                 $desc = $this->lang->score->methods[$module][$method];
                 break;
         }
-        $this->saveScore($user, $rule, $module, $method, $desc, $time);
+
+        $object = $object === '' ? $this->saveScore($user, $rule, $module, $method, $desc, $time) : $object;
+
+        return $object;
     }
 
     /**
@@ -182,8 +187,8 @@ class scoreModel extends model
      * @param string $desc
      * @param string $time
      *
-     * @access private
-     * @return bool
+     * @access public
+     * @return object|bool
      */
     public function saveScore($account = '', $rule = array(), $module = '', $method = '', $desc = '', $time = '')
     {
@@ -222,6 +227,8 @@ class scoreModel extends model
         $this->dao->insert(TABLE_SCORE)->data($data)->exec();
 
         $this->dao->update(TABLE_USER)->set("`score`=`score` + " . (int)$rule['score'])->set("`scoreLevel`=`scoreLevel` + " . (int)$rule['score'])->where('account')->eq($account)->exec();
+
+        return $data;
     }
 
     /**
