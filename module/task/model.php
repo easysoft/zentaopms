@@ -1075,7 +1075,7 @@ class taskModel extends model
                 $this->story->setStage($oldTask->story);
             }
             if($task->status == 'done')   $this->loadModel('score')->create('task', 'finish', $taskID);
-            if($task->status == 'closed') $this->loadModel('score')->create('task', 'close', $taskID);
+            if($task->status == 'closed') $this->score->create('task', 'close', $taskID);
             if($task->status != $oldTask->status) $this->loadModel('kanban')->updateLane($task->execution, 'task', $taskID);
             $this->loadModel('action');
             $changed = $task->parent != $oldTask->parent;
