@@ -341,7 +341,7 @@ REPLACE INTO `zt_workflowfield` (`module`, `field`, `type`, `length`, `name`, `c
 ('testcase',	'fromCaseVersion',	'char', 	'30',	'用例来源版本',	        'input',	'',	'',	'',	'',	'',	5,	0,	0,	'0',	'0',	'0',	'1',	1,	'',	'',	'0000-00-00 00:00:00',	'',	'0000-00-00 00:00:00'),
 ('testcase',	'precondition', 	'text', 	'',	'前置条件',	        'textarea',	'',	'',	'',	'',	'',	5,	0,	0,	'0',	'0',	'0',	'1',	1,	'',	'',	'0000-00-00 00:00:00',	'',	'0000-00-00 00:00:00'),
 ('testcase',    'subStatus',            'varchar',      '30',   '子状态', 		'select',       '',     '',     '',     '',     '',     17,     0,      0,      '0',    '0',    '0',    '0',    1,      '',     '',     '0000-00-00 00:00:00',  '',     '0000-00-00 00:00:00'),
-('testsuite',   'type',                 'text',         '',     '类型', 		'redio',        '',     '',     '',     '',     '',     17,     0,      0,      '0',    '0',    '0',    '0',    1,      '',     '',     '0000-00-00 00:00:00',  '',     '0000-00-00 00:00:00');
+('testsuite',   'type',                 'text',         '',     '类型', 		'radio',        '',     '',     '',     '',     '',     17,     0,      0,      '0',    '0',    '0',    '0',    1,      '',     '',     '0000-00-00 00:00:00',  '',     '0000-00-00 00:00:00');
 
 UPDATE `zt_workflowfield` SET `options`=(SELECT id FROM `zt_workflowdatasource` WHERE `code`='projectModel' ORDER BY id DESC LIMIT 1)     WHERE `module`='project'  AND `field`='model';
 UPDATE `zt_workflowfield` SET `options`=(SELECT id FROM `zt_workflowdatasource` WHERE `code`='feedbackType' ORDER BY id DESC LIMIT 1)     WHERE `module`='feedback' AND `field`='type';
