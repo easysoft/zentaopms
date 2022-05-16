@@ -20,7 +20,7 @@ class programTest
      *
      * @param  array $data
      * @access public
-     * @return object 
+     * @return object
      */
     public function create($data)
     {
@@ -54,13 +54,17 @@ class programTest
      * Test get list.
      *
      * @param  mixed  $status
+     * @param  string $orderBy
+     * @param  object $pager
+     * @param  string $type       top|child
+     * @param  mixed  $idList
      * @access public
      * @return void
      */
-    public function getList($status = 'all', $orderBy = 'id_asc', $pager = NULL)
+    public function getList($status = 'all', $orderBy = 'id_asc', $pager = NULL, $type = '', $idList = '')
     {
         $this->program->cookie->showClosed = 'ture';
-        $programs = $this->program->getList($status, $orderBy, $pager);
+        $programs = $this->program->getList($status, $orderBy, $pager, $type, $idList);
 
         if(dao::isError()) return array('message' => dao::getError());
 
