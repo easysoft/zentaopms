@@ -1072,7 +1072,7 @@ class taskModel extends model
             if($this->post->story != $oldTask->story)
             {
                 $this->loadModel('story')->setStage($this->post->story);
-                $this->loadModel('story')->setStage($oldTask->story);
+                $this->story->setStage($oldTask->story);
             }
             if($task->status == 'done')   $this->loadModel('score')->create('task', 'finish', $taskID);
             if($task->status == 'closed') $this->loadModel('score')->create('task', 'close', $taskID);
