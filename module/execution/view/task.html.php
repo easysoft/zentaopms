@@ -149,7 +149,6 @@ body {margin-bottom: 25px;}
     $checkObject->execution = $executionID;
     $taskCreateLink = $this->createLink('task', 'create', "executionID=$executionID" . (isset($moduleID) ? "&storyID=0&moduleID=$moduleID" : ""));
     ?>
-    <?php if(!common::checkNotCN()):?>
     <?php if($canBeChanged and (common::hasPriv('task', 'batchCreate', $checkObject) or common::hasPriv('task', 'create', $checkObject))):?>
     <div class='btn-group dropdown'>
       <?php
@@ -178,7 +177,6 @@ body {margin-bottom: 25px;}
       <li <?php echo $disabled?>>
       <?php
         $batchLink = $this->createLink('task', 'batchCreate', "execution=$executionID" . (isset($moduleID) ? "&storyID=&moduleID=$moduleID" : ''));
-        echo "<li>" . html::a($taskCreateLink, "<i class='icon icon-plus'></i> " . $lang->task->create) . "</li>";
         echo "<li>" . html::a($batchLink, "<i class='icon icon-plus'></i> " . $lang->task->batchCreate) . "</li>";
       ?>
       </li>
@@ -186,7 +184,6 @@ body {margin-bottom: 25px;}
     <?php echo "</div>";?>
     <?php endif;?>
   </div>
-  <?php endif; ?>
 </div>
 <?php if($this->app->getViewType() == 'xhtml'):?>
 <div id="xx-title">
