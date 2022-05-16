@@ -12,6 +12,7 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
+<?php js::set('type', $type);?>
 <?php $style = isonlybody() ? 'style="padding-top: 0px;"' : '';?>
   <div id='mainContent' class="main-row" <?php echo $style;?>>
     <div class="col-8 main-col">
@@ -320,6 +321,19 @@ $(function()
             data: <?php echo $chartData['burnLine']?>
         }]
     };
+
+    var delaySets =
+    {
+        label: "<?php echo $lang->execution->charts->burn->graph->delay;?>",
+        color: 'red',
+        pointStrokeColor: 'red',
+        pointHighlightStroke: 'red',
+        pointColor: 'red',
+        fillColor: 'rgba(0,106,241, .07)',
+        pointHighlightFill: '#fff',
+        data: <?php echo isset($chartData['delayLine']) ? $chartData['delayLine'] : '[]';?>
+    }
+    if(type.match('withdelay')) data.datasets.push(delaySets);
 
     var burnChart = $("#burnCanvas").lineChart(data,
     {

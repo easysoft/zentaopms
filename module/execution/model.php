@@ -475,6 +475,8 @@ class executionModel extends model
             ->setIF(helper::isZeroDate($this->post->begin), 'begin', '')
             ->setIF(helper::isZeroDate($this->post->end), 'end', '')
             ->setIF(!isset($_POST['whitelist']), 'whitelist', '')
+            ->setIF($this->post->status == 'closed', 'closedDate', helper::now())
+            ->setIF($this->post->status == 'suspended', 'suspendedDate', helper::today())
             ->setDefault('team', $this->post->name)
             ->join('whitelist', ',')
             ->stripTags($this->config->execution->editor->edit['id'], $this->config->allowedTags)
@@ -664,6 +666,8 @@ class executionModel extends model
             $executions[$executionID]->lastEditedDate = helper::now();
             if(isset($data->projects))   $executions[$executionID]->project   = zget($data->projects, $executionID, 0);
             if(isset($data->attributes)) $executions[$executionID]->attribute = zget($data->attributes, $executionID, '');
+            if($executions[$executionID]->status == 'closed') $executions[$executionID]->closedDate = helper::now();
+            if($executions[$executionID]->status == 'suspended') $executions[$executionID]->suspendedDate = helper::today();
 
             /* Check unique code for edited executions. */
             if($projectModel == 'scrum' and empty($executionCode))
@@ -699,6 +703,14 @@ class executionModel extends model
                 $executions[$executionID]->{$extendField->field} = htmlSpecialString($executions[$executionID]->{$extendField->field});
             }
         }
+
+        /* Update burn before close execution. */
+        $closedIDList = array();
+        foreach($executions as $executionID => $execution)
+        {
+            if(isset($execution->status) and in_array($execution->status, array('done', 'closed', 'suspended'))) $closedIDList[$executionID] = $executionID;
+        }
+        $this->computeBurn($closedIDList);
 
         foreach($executions as $executionID => $execution)
         {
@@ -2841,64 +2853,9 @@ class executionModel extends model
             ->where('type')->in('sprint,stage')
             ->andWhere('lifetime')->ne('ops')
             ->andWhere('status')->notin('done,closed,suspended')
-            ->beginIF($executionID)->andWhere('id')->eq($executionID)->fi()
+            ->beginIF($executionID)->andWhere('id')->in($executionID)->fi()
             ->fetchPairs();
         if(!$executions) return array();
-
-        /* Update historical data of burn. */
-        $table = $this->config->edition == 'open' ? TABLE_TASKESTIMATE : TABLE_EFFORT;
-        $field = $this->config->edition == 'open' ? 'task' : 'objectID';
-        $totalConsumed = $this->dao->select("t2.execution as execution, t1.$field as task, t1.date as date, sum(t1.consumed) as totalConsumed")->from($table)->alias('t1')
-            ->leftJoin(TABLE_TASK)->alias('t2')->on("t1.$field=t2.id")
-            ->where('t2.execution')->in(array_keys($executions))
-            ->beginIF($this->config->edition != 'open')->andWhere('t1.objectType')->eq('task')->fi()
-            ->andWhere('t2.deleted')->eq('0')
-            ->andWhere('t2.parent')->ge('0')
-            ->andWhere('t2.status')->ne('cancel')
-            ->andWhere('t1.date')->ne($today)
-            ->groupBy("t1.$field, t1.date")
-            ->orderBy('t1.id_desc')
-            ->fetchGroup('task', 'date');
-
-        $latestIdList = $this->dao->select('max(id) as id')->from($table)
-            ->where($field)->in(array_keys($totalConsumed))
-            ->beginIF($this->config->edition != 'open')->andWhere('objectType')->eq('task')->fi()
-            ->groupBy("$field,date")->fetchAll('id');
-        $latestLefts = $this->dao->select("$field, date, `left`")->from($table)
-            ->where('id')->in(array_keys($latestIdList))
-            ->fetchGroup($field, 'date');
-
-        $burnList = array();
-        foreach($totalConsumed as $taskID => $consumedList)
-        {
-            foreach($consumedList as $date => $consumed)
-            {
-                $executionID = $consumed->execution;
-                if(!isset($burnList[$executionID])) $burnList[$executionID] = array();
-
-                if(!isset($burnList[$executionID][$date]))
-                {
-                    $burnList[$executionID][$date] = new stdclass();
-                    $burnList[$executionID][$date]->consumed = 0;
-                    $burnList[$executionID][$date]->left     = 0;
-                }
-
-                $burnList[$executionID][$date]->consumed += $consumed->totalConsumed;
-                $burnList[$executionID][$date]->left     += $latestLefts[$taskID][$date]->left;
-            }
-        }
-
-        foreach($burnList as $executionID => $burns)
-        {
-            foreach($burns as $date => $burn)
-            {
-                $burn->execution = $executionID;
-                $burn->date      = $date;
-
-                $this->dao->replace(TABLE_BURN)->data($burn)->exec();
-                $burn->executionName = $executions[$burn->execution];
-            }
-        }
 
         /* Update today's data of burn. */
         $burns = $this->dao->select("execution, '$today' AS date, sum(estimate) AS `estimate`, sum(`left`) AS `left`, SUM(consumed) AS `consumed`")
@@ -2953,10 +2910,9 @@ class executionModel extends model
 
             $this->dao->replace(TABLE_BURN)->data($burn)->exec();
             $burn->executionName = $executions[$burn->execution];
-            $burnList[$executionID][$today] = $burn;
         }
 
-        return $burnList;
+        return $burns;
     }
 
     /**
