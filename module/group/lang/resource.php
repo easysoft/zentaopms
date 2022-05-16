@@ -478,9 +478,9 @@ $lang->branch->methodOrder[5]  = 'create';
 $lang->branch->methodOrder[10] = 'edit';
 $lang->branch->methodOrder[15] = 'close';
 $lang->branch->methodOrder[20] = 'activate';
-$lang->branch->methodOrder[35] = 'sort';
+$lang->branch->methodOrder[25] = 'sort';
 $lang->branch->methodOrder[30] = 'batchEdit';
-$lang->branch->methodOrder[45] = 'mergeBranch';
+$lang->branch->methodOrder[35] = 'mergeBranch';
 
 /* Story. */
 $lang->resource->story = new stdclass();
