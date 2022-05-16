@@ -3342,10 +3342,20 @@ class execution extends control
 
         $executionStats = $this->project->getStats($projectID, $status, $productID, 0, 30, $orderBy, $pager);
 
+        $parentIdList = array();
+        foreach($executionStats as $execution)
+        {
+            if($execution->type != 'stage') continue;
+            if($execution->grade == 2 and $execution->project != $execution->parent) $parentIdList[$execution->parent] = $execution->parent;
+        }
+        $parents = array();
+        if($parentIdList) $parents = $this->execution->getByIdList($parentIdList);
+
         $this->view->executionStats = $executionStats;
         $this->view->productList    = $this->loadModel('product')->getProductPairsByProject($projectID);
         $this->view->productID      = $productID;
         $this->view->projectID      = $projectID;
+        $this->view->parents        = $parents;
         $this->view->projects       = array('') + $this->project->getPairsByProgram();
         $this->view->pager          = $pager;
         $this->view->orderBy        = $orderBy;
