@@ -275,8 +275,8 @@
                 ?>
              </td>
              <?php else:?>
-             <td class='c-begin' title='<?php echo helper::isZeroDate($child->begin)     ? '' : $child->begin;?>'><?php echo helper::isZeroDate($child->begin)     ? '' : $child->begin;?></td>
-             <td class='c-begin' title='<?php echo helper::isZeroDate($child->end)       ? '' : $child->end;?>'><?php echo helper::isZeroDate($child->end)       ? '' : $child->end;?></td>
+             <td class='c-begin' title='<?php echo helper::isZeroDate($child->begin) ? '' : $child->begin;?>'><?php echo helper::isZeroDate($child->begin) ? '' : $child->begin;?></td>
+             <td class='c-begin' title='<?php echo helper::isZeroDate($child->end) ? '' : $child->end;?>'><?php echo helper::isZeroDate($child->end) ? '' : $child->end;?></td>
              <td class='hours' title='<?php echo $child->hours->totalEstimate . ' ' . $this->lang->execution->workHour;?>'><?php echo $child->hours->totalEstimate . ' ' . $this->lang->execution->workHourUnit;?></td>
              <td class='hours' title='<?php echo $child->hours->totalConsumed . ' ' . $this->lang->execution->workHour;?>'><?php echo $child->hours->totalConsumed . ' ' . $this->lang->execution->workHourUnit;?></td>
              <td class='hours' title='<?php echo $child->hours->totalLeft     . ' ' . $this->lang->execution->workHour;?>'><?php echo $child->hours->totalLeft     . ' ' . $this->lang->execution->workHourUnit;?></td>
