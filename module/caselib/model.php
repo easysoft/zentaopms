@@ -258,7 +258,7 @@ class caselibModel extends model
 
             $cases = $this->dao->select('*')->from(TABLE_CASE)->where($caseQuery)
                 ->beginIF($queryLibID != 'all')->andWhere('lib')->eq((int)$libID)->fi()
-                ->beginIF($this->config->systemMode == 'new' and $this->lang->navGroup->caselib != 'qa')->andWhere('project')->eq($this->session->project)->fi()
+                ->beginIF($this->config->systemMode == 'new' and $this->app->tab != 'qa')->andWhere('project')->eq($this->session->project)->fi()
                 ->andWhere('product')->eq(0)
                 ->andWhere('deleted')->eq(0)
                 ->orderBy($sort)->page($pager)->fetchAll();
@@ -282,7 +282,7 @@ class caselibModel extends model
         $this->config->testcase->search['params']['lib']['values']    = array('' => '', $libID => $libraries[$libID], 'all' => $this->lang->caselib->all);
         $this->config->testcase->search['params']['lib']['operator']  = '=';
         $this->config->testcase->search['params']['lib']['control']   = 'select';
-        $this->config->testcase->search['params']['module']['values'] = $this->loadModel('tree')->getOptionMenu($libID, $viewType = 'caselib');
+        $this->config->testcase->search['params']['module']['values'] = $this->loadModel('tree')->getOptionMenu($libID, 'caselib');
         if(!$this->config->testcase->needReview) unset($this->config->testcase->search['params']['status']['values']['wait']);
         unset($this->config->testcase->search['fields']['product']);
         unset($this->config->testcase->search['params']['product']);
