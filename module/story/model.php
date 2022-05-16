@@ -1588,7 +1588,6 @@ class storyModel extends model
         /* Update parent story status and stage. */
         if($oldStory->parent > 0)
         {
-
             $this->updateParentStatus($storyID, $oldStory->parent);
             $this->setStage($oldStory->parent);
         }
