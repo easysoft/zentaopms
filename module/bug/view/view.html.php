@@ -217,7 +217,7 @@
                   <th><?php echo $lang->bug->deadline;?></th>
                   <td>
                     <?php
-                    if($bug->deadline) echo  $bug->deadline;
+                    if($bug->deadline) echo $bug->deadline;
                     if(isset($bug->delay)) printf($lang->bug->delayWarning, $bug->delay);
                     ?>
                   </td>
