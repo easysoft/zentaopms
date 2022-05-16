@@ -161,29 +161,13 @@ body {margin-bottom: 25px;}
       ?>
       <button type='button' class='btn btn-primary dropdown-toggle' data-toggle='dropdown'><span class='caret'></span></button>
       <ul class='dropdown-menu pull-right'>
-        <li><?php echo html::a($taskCreateLink, "<i class='icon icon-plus'></i> " .  $lang->task->create);?></li>
-        <li><?php echo html::a($this->createLink('task', 'batchCreate', "executionID=$executionID" . (isset($moduleID) ? "&storyID=0&moduleID=$moduleID" : "")), "<i class='icon icon-plus'></i> " .  $lang->task->batchCreate);?></li>
+        <li><?php echo html::a($taskCreateLink, $lang->task->create);?></li>
+        <li><?php echo html::a($this->createLink('task', 'batchCreate', "executionID=$executionID" . (isset($moduleID) ? "&storyID=0&moduleID=$moduleID" : "")), $lang->task->batchCreate);?></li>
       </ul>
     </div>
     <?php endif;?>
-    <?php else:?>
-    <?php
-    echo "<div class='btn-group dropdown-hover'>";
-    $link = $this->createLink('task', 'create', "execution=$executionID" . (isset($moduleID) ? "&storyID=0&moduleID=$moduleID" : ""));
-    if($canBeChanged and common::hasPriv('task', 'create', $checkObject)) echo html::a($link, "<i class='icon icon-plus'></i> {$lang->task->create} </span><span class='caret'>", '', "class='btn btn-primary'");
-    ?>
-    <ul class='dropdown-menu'>
-      <?php $disabled = common::hasPriv('task', 'batchCreate') ? '' : "class='disabled'";?>
-      <li <?php echo $disabled?>>
-      <?php
-        $batchLink = $this->createLink('task', 'batchCreate', "execution=$executionID" . (isset($moduleID) ? "&storyID=&moduleID=$moduleID" : ''));
-        echo "<li>" . html::a($batchLink, "<i class='icon icon-plus'></i> " . $lang->task->batchCreate) . "</li>";
-      ?>
-      </li>
-    </ul>
-    <?php echo "</div>";?>
-    <?php endif;?>
   </div>
+  <?php endif;?>
 </div>
 <?php if($this->app->getViewType() == 'xhtml'):?>
 <div id="xx-title">
