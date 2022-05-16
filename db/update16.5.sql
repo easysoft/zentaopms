@@ -364,7 +364,7 @@ UPDATE `zt_workflowaction` SET `position` = 'browse' WHERE `module` = 'productpl
 UPDATE `zt_workflowaction` SET `show` = 'direct' WHERE `module` = 'productplan' and `vision` = 'rnd';
 UPDATE `zt_workflowaction` SET `position` = 'browse' WHERE `module` = 'release' and `action` = 'browse' and `vision` = 'rnd';
 UPDATE `zt_workflowaction` SET `show` = 'direct' WHERE `module` = 'release' and `vision` = 'rnd';
-UPDATE `zt_workflowaction` SET `type` = 'batch' WHERE `module` = 'story' and `action` = 'batchcreate' and `vision` = 'rnd';
+UPDATE `zt_workflowaction` SET `type` = 'batch', `position` = 'browseandview' WHERE `module` = 'story' and `action` = 'batchcreate' and `vision` = 'rnd';
 UPDATE `zt_workflowaction` SET `type` = 'batch' WHERE `module` = 'story' and `action` = 'batchedit' and `vision` = 'rnd';
 UPDATE `zt_workflowaction` SET `position` = 'browse' WHERE `module` = 'story' and `action` = 'browse' and `vision` = 'rnd';
 UPDATE `zt_workflowaction` SET `position` = 'browse' WHERE `module` = 'story' and `action` = 'exporttemplate' and `vision` = 'rnd';
@@ -396,7 +396,7 @@ UPDATE `zt_workflowaction` SET `type`='single', `position`='browseandview', `sho
 UPDATE `zt_workflowaction` SET `type`='single', `position`='browseandview', `show`='direct', `open`='normal', `layout`='normal' WHERE `module`='execution' AND `action`='all';
 UPDATE `zt_workflowaction` SET `type`='single', `position`='browseandview', `show`='direct', `open`='normal', `layout`='normal' WHERE `module`='task' AND `action`='browse';
 UPDATE `zt_workflowaction` SET `type`='single', `position`='browseandview', `show`='direct', `open`='normal', `layout`='normal' WHERE `module`='task' AND `action`='create';
-UPDATE `zt_workflowaction` SET `type`='batch', `position`='browse', `show`='direct', `open`='normal', `layout`='normal' WHERE `module`='task' AND `action`='batchcreate';
+UPDATE `zt_workflowaction` SET `type`='batch', `position`='browseandview', `show`='direct', `open`='normal', `layout`='normal' WHERE `module`='task' AND `action`='batchcreate';
 UPDATE `zt_workflowaction` SET `type`='batch', `position`='browse', `show`='direct', `open`='normal', `layout`='normal' WHERE `module`='task' AND `action`='batchedit';
 UPDATE `zt_workflowaction` SET `type`='single', `position`='browse', `show`='direct', `open`='modal', `layout`='normal' WHERE `module`='task' AND `action`='exporttemplate';
 UPDATE `zt_workflowaction` SET `type`='single', `position`='browse', `show`='direct', `open`='modal', `layout`='normal' WHERE `module`='task' AND `action`='import';
@@ -435,7 +435,7 @@ UPDATE `zt_workflowaction` SET `type`='single', `position`='browseandview', `sho
 UPDATE `zt_workflowaction` SET `type`='single', `position`='browseandview', `show`='direct', `open`='modal', `layout`='normal' WHERE `module`='bug' AND `action`='resolve';
 UPDATE `zt_workflowaction` SET `type`='batch', `position`='browse', `show`='direct', `open`='none', `layout`='normal' WHERE `module`='bug' AND `action`='batchconfirm';
 UPDATE `zt_workflowaction` SET `type`='batch', `position`='browse', `show`='direct', `open`='none', `layout`='normal' WHERE `module`='bug' AND `action`='batchresolve';
-UPDATE `zt_workflowaction` SET `type`='batch' WHERE `module`IN ('feedback','caselib','testsuite','testtask','testcase') AND `action` IN ('admin','browse','batchedit','batchcreate','import','showimport');
+UPDATE `zt_workflowaction` SET `type`='batch' WHERE `module`IN ('feedback','caselib','testsuite','testtask','testcase') AND `action` IN ('batchedit','batchcreate');
 UPDATE `zt_workflowaction` SET `position`='browse' WHERE `module`IN ('feedback','caselib','testsuite','testtask','testcase') AND `action` IN ('batchedit','batchcreate','import','showimport');
 
 UPDATE `zt_workflowaction` SET `position`='browse' WHERE `action` IN ('view','exporttemplate');
