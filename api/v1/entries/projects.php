@@ -86,6 +86,7 @@ class projectsEntry extends entry
         $this->setPost('whitelist', $this->request('whitelist', array()));
         $this->setPost('PM', $this->request('PM', ''));
         $this->setPost('model', $this->request('model', 'scrum'));
+        $this->setPost('parent', $this->request('parent', 0));
 
         $control = $this->loadController('project', 'create');
         $this->requireFields('name,code,begin,end,products');
