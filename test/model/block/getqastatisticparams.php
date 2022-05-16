@@ -16,4 +16,5 @@ pid=1
 
 $block = new blockTest();
 
-r($block->getQaStatisticParamsTest()) && p() && e();
+r($block->getQaStatisticParamsTest()) && p('type:name')    && e('类型');  //测试name
+r($block->getQaStatisticParamsTest()) && p('type:control') && e('select');//测试control
