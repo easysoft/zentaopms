@@ -312,6 +312,7 @@ $config->delete['17_0_beta1'][] = 'extension/biz/group/ext/lang/zh-cn/aflow.php'
 $config->delete['17_0_beta1'][] = 'extension/biz/group/ext/lang/zh-cn/zflow.php';
 $config->delete['17_0_beta1'][] = 'extension/biz/group/ext/model/class/flow.class.php';
 $config->delete['17_0_beta1'][] = 'extension/biz/group/ext/model/flow.php';
+$config->delete['17_0_beta1'][] = 'extension/biz/user/ext/model/bizext.php';
 $config->delete['17_0_beta1'][] = 'extension/max/action/ext/model/class/flow.class.php';
 $config->delete['17_0_beta1'][] = 'extension/max/action/ext/model/flow.php';
 $config->delete['17_0_beta1'][] = 'extension/max/flow/ext/control/export.php';
@@ -325,6 +326,7 @@ $config->delete['17_0_beta1'][] = 'extension/max/group/ext/lang/zh-cn/aflow.php'
 $config->delete['17_0_beta1'][] = 'extension/max/group/ext/lang/zh-cn/zflow.php';
 $config->delete['17_0_beta1'][] = 'extension/max/group/ext/model/class/flow.class.php';
 $config->delete['17_0_beta1'][] = 'extension/max/group/ext/model/flow.php';
+$config->delete['17_0_beta1'][] = 'extension/max/user/ext/model/bizext.php';
 
 $config->upgrade->openModules = array('action', 'admin', 'api', 'automation', 'backup', 'block', 'branch', 'budget', 'bug', 'build', 'caselib', 'ci', 'client', 'common', 'company', 'compile', 'convert', 'cron', 'custom', 'datatable', 'dept', 'design', 'dev', 'doc', 'durationestimation', 'entry', 'execution', 'extension', 'file', 'git', 'gitlab', 'group', 'holiday', 'im', 'index', 'index.html', 'install', 'issue', 'jenkins', 'job', 'kanban', 'license', 'mail', 'message', 'misc', 'mr', 'my', 'personnel', 'pipeline', 'product', 'productplan', 'productset', 'program', 'programplan', 'project', 'projectbuild', 'projectrelease', 'projectstory', 'qa', 'release', 'repo', 'report', 'risk', 'score', 'search', 'setting', 'sonarqube', 'sso', 'stage', 'stakeholder', 'story', 'subject', 'svn', 'task', 'testcase', 'testreport', 'testsuite', 'testtask', 'todo', 'tree', 'tutorial', 'upgrade', 'user', 'webhook', 'weekly', 'workestimation');
 
