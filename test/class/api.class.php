@@ -7,6 +7,14 @@ class apiTest
          $this->objectModel = $tester->loadModel('api');
     }
 
+    /**
+     * Test publish a lib.
+     *
+     * @param  object $data
+     * @param  bool   $confirm
+     * @access public
+     * @return object
+     */
     public function publishLibTest($data, $confirm = true)
     {
         $objectID = $this->objectModel->publishLib($data);
@@ -20,6 +28,14 @@ class apiTest
         return $objects;
     }
 
+    /**
+     * Test delete a release.
+     *
+     * @param  int    $id
+     * @param  int    $libID
+     * @access public
+     * @return object
+     */
     public function deleteReleaseTest($id, $libID = 0)
     {
         $this->objectModel->deleteRelease($id);
@@ -31,6 +47,14 @@ class apiTest
         return $objects;
     }
 
+    /**
+     * Test create a api.
+     *
+     * @param  array  $params
+     * @param  bool   $confirm
+     * @access public
+     * @return object
+     */
     public function createTest($params, $confirm = true)
     {
         global $tester;
@@ -45,6 +69,14 @@ class apiTest
         return $objects;
     }
 
+    /**
+     * Test create a data struct.
+     *
+     * @param  object $data
+     * @param  bool   $confirm
+     * @access public
+     * @return object
+     */
     public function createStructTest($data, $confirm = true)
     {
         global $tester;
@@ -60,6 +92,15 @@ class apiTest
         return $objects;
     }
 
+    /**
+     * Test update a data struct.
+     *
+     * @param  int    $id
+     * @param  array  $params
+     * @param  bool   $confirm
+     * @access public
+     * @return object
+     */
     public function updateStructTest($id, $params, $confirm = true)
     {
         global $tester;
@@ -74,6 +115,15 @@ class apiTest
         return $objects;
     }
 
+    /**
+     * Test update a api.
+     *
+     * @param  int    $apiID
+     * @param  array  $params
+     * @param  bool   $confirm
+     * @access public
+     * @return object
+     */
     public function updateTest($apiID, $params, $confirm = true)
     {
         global $tester;
@@ -88,6 +138,14 @@ class apiTest
         return $objects;
     }
 
+    /**
+     * Test get data struct list by libID.
+     *
+     * @param  int    $id
+     * @param  bool   $confirm
+     * @access public
+     * @return object
+     */
     public function getStructListByLibIDTest($id, $confirm = true)
     {
         global $tester;
@@ -101,6 +159,14 @@ class apiTest
         return $objects;
     }
 
+    /**
+     * Test get a data struct by ID.
+     *
+     * @param  int    $id
+     * @param  bool   $confirm
+     * @access public
+     * @return object
+     */
     public function getStructByIDTest($id, $confirm = true)
     {
         global $tester;
@@ -114,6 +180,16 @@ class apiTest
         return $objects;
     }
 
+    /**
+     * Test get release by libID.
+     *
+     * @param  int    $libID
+     * @param  string $type
+     * @param  int    $params
+     * @param  bool   $confirm
+     * @access public
+     * @return object
+     */
     public function getReleaseTest($libID = 0, $type = '', $param = 0, $confirm = true)
     {
         $objects = $this->objectModel->getRelease($libID = 0, $type = '', $param = 0);
@@ -125,6 +201,15 @@ class apiTest
         return $objects;
     }
 
+    /**
+     * Test get release list by api.
+     *
+     * @param  int    $libID
+     * @param  int    $id
+     * @param  bool   $confirm
+     * @access public
+     * @return object
+     */
     public function getReleaseListByApiTest($libID, $id = 0, $confirm = true)
     {
         $objects = $this->objectModel->getReleaseListByApi($libID);
@@ -137,6 +222,15 @@ class apiTest
         return $objects;
     }
 
+    /**
+     * Test get lib by ID.
+     *
+     * @param  int    $id
+     * @param  int    $version
+     * @param  int    $release
+     * @access public
+     * @return object
+     */
     public function getLibByIdTest($id, $version = 0, $release = 0)
     {
         $objects = $this->objectModel->getLibById($id, $version = 0, $release = 0);
@@ -146,6 +240,15 @@ class apiTest
         return $objects;
     }
 
+    /**
+     * Test get lib by ID.
+     *
+     * @param  int    $id
+     * @param  int    $version
+     * @param  int    $release
+     * @access public
+     * @return object
+     */
     public function getApiListByReleaseTest($release, $where = '1 = 1 ')
     {
         global $tester;
@@ -161,7 +264,7 @@ class apiTest
     }
 
     /**
-     * Get list by module ID.
+     * Test get list by module ID.
      *
      * @param  int    $libID
      * @param  int    $moduleID
@@ -178,6 +281,15 @@ class apiTest
         return current($objects);
     }
 
+    /**
+     * Test get struct list by release.
+     *
+     * @param  object $release
+     * @param  string $where
+     * @param  string $orderBy
+     * @access public
+     * @return object
+     */
     public function getStructListByReleaseTest($release, $where = '1 = 1 ', $orderBy = 'id')
     {
         $objects = $this->objectModel->getStructListByRelease($release, $where = '1 = 1 ', $orderBy = 'id');
@@ -186,14 +298,4 @@ class apiTest
 
         return $objects;
     }
-
-    public function getStructTreeByLibTest($libID = 0, $structID = 0)
-    {
-        $objects = $this->objectModel->getStructTreeByLib($libID = 0, $structID = 0);
-
-        if(dao::isError()) return dao::getError();
-
-        return $objects;
-    }
-
 }
