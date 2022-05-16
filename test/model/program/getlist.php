@@ -35,7 +35,7 @@ $namedescPrograms  = $program->getList('all', 'name_desc');
 $idascPrograms     = $program->getList('all', 'id_asc');
 $topPrograms       = $program->getList('all', 'id_asc', null, 'top');
 $topPagePrograms   = $program->getList('all', 'id_asc', $pager, 'top');
-$childPrograms       = $program->getList('all', 'id_asc', null, 'child', $topPrograms);
+$childPrograms     = $program->getList('all', 'id_asc', null, 'child', $topPrograms);
 
 r(count($allPorgrams))       && p() && e('120'); // 查看所有项目和项目集的个数
 r(count($pagerPrograms))     && p() && e('10');  // 查看分页后项目集和项目的个数
