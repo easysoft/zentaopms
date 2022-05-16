@@ -38,7 +38,6 @@
     <?php endforeach;?>
     <?php if($from == 'execution' and $this->config->systemMode == 'new'):?>
     <div class='input-control w-180px'>
-
       <?php echo html::select('project', $projects, $projectID, "class='form-control chosen' data-placeholder='{$lang->execution->selectProject}'");?>
     </div>
     <?php endif;?>
