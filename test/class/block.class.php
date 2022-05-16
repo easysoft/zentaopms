@@ -135,13 +135,32 @@ class blockTest
         return json_encode($objects);
     }
 
+    /**
+     * Init block when account use first.
+     *
+     * @param  string    $module project|product|execution|qa|my
+     * @param  string    $type   scrum|waterfall|kanban
+     * @access public
+     * @return bool
+     */
     public function initBlockTest($module, $type = '')
     {
-        $objects = $this->objectModel->initBlock($module, $type = '');
+        global $tester;
+        $this->objectModel->initBlock($module, $type);
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        $object  = new stdclass();
+        $account = $tester->app->user->account;
+        $section = $module == 'project' ? $type . 'common' : 'common';
+
+        $object->blockInited  = $tester->loadModel('setting')->getItem("owner=$account&module=$module&section=$section&key=blockInited");
+        $object->blockversion = $tester->loadModel('setting')->getItem("owner=$account&module=$module&section=block&key=initVersion");
+
+        $blockData = $this->objectModel->getBlockList($module, $type);
+        $object->blockData = current($blockData);
+
+        return $object;
     }
 
     /**
@@ -287,7 +306,9 @@ class blockTest
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        $objects = json_decode($objects);
+
+        return $objects->count;
     }
 
     public function getProjectParamsTest()
@@ -352,13 +373,20 @@ class blockTest
         return $objects;
     }
 
+    /**
+     * Get statistic params.
+     *
+     * @param  string $module product|project|execution|qa
+     * @access public
+     * @return string
+     */
     public function getStatisticParamsTest($module = 'product')
     {
-        $objects = $this->objectModel->getStatisticParams($module = 'product');
+        $objects = $this->objectModel->getStatisticParams($module);
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        return json_encode(json_decode($objects), JSON_UNESCAPED_UNICODE);
     }
 
     public function getProductStatisticParamsTest()
@@ -402,11 +430,11 @@ class blockTest
 
     public function getQaStatisticParamsTest()
     {
-        $objects = $this->objectModel->getQaStatisticParams();
+        $object = $this->objectModel->getQaStatisticParams();
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        return json_decode($object);
     }
 
     public function getRecentProjectParamsTest()
@@ -559,9 +587,15 @@ class blockTest
         return $objects;
     }
 
-    public function getScrumTestParamsTest($module = '')
+    /**
+     * Get testtask params.
+     *
+     * @access public
+     * @return string
+     */
+    public function getScrumTestParamsTest()
     {
-        $objects = $this->objectModel->getScrumTestParams($module = '');
+        $objects = json_decode($this->objectModel->getScrumTestParams());
 
         if(dao::isError()) return dao::getError();
 
@@ -574,7 +608,9 @@ class blockTest
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        $objects = json_decode($objects);
+
+        return $objects->type;
     }
 
     public function getScrumOverviewParamsTest($module = '')
@@ -586,18 +622,30 @@ class blockTest
         return $objects;
     }
 
-    public function getScrumRoadMapParamsTest($module = '')
+    /**
+     * Get scrum roadmap list params.
+     *
+     * @access public
+     * @return string
+     */
+    public function getScrumRoadMapParamsTest()
     {
-        $objects = $this->objectModel->getScrumRoadMapParams($module = '');
+        $objects = $this->objectModel->getScrumRoadMapParams();
 
         if(dao::isError()) return dao::getError();
 
         return $objects;
     }
 
-    public function getScrumProductParamsTest($module = '')
+    /**
+     * Get scrum product list params.
+     *
+     * @access public
+     * @return string
+     */
+    public function getScrumProductParamsTest()
     {
-        $objects = $this->objectModel->getScrumProductParams($module = '');
+        $objects = json_decode($this->objectModel->getScrumProductParams());
 
         if(dao::isError()) return dao::getError();
 

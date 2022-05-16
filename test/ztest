@@ -130,8 +130,12 @@ switch($argv[1])
     case 'report':
         ztfRun('model/report');
         break;
+    case 'score':
+        ztfRun('model/score');
+        break;
     case 'sso':
         ztfRun('model/sso');
+        break;
     case 'setting':
         ztfRun('model/setting');
         break;

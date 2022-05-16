@@ -2011,8 +2011,18 @@ class execution extends control
         $this->execution->setMenu($execution->id);
         $this->app->loadLang('bug');
 
-        list($dateList, $interval) = $this->execution->getDateList($execution->begin, $execution->end, 'noweekend', 0, 'Y-m-d');
-        $chartData = $this->execution->buildBurnData($executionID, $dateList, 'noweekend');
+        $type = 'noweekend';
+        if(((strpos('closed,suspended', $execution->status) === false and helper::today() > $execution->end)
+            or ($execution->status == 'closed'    and substr($execution->closedDate, 0, 10) > $execution->end)
+            or ($execution->status == 'suspended' and $execution->suspendedDate > $execution->end))
+            and strpos($type, 'delay') === false)
+        $type .= ',withdelay';
+
+        $deadline = $execution->status == 'closed' ? substr($execution->closedDate, 0, 10) : $execution->suspendedDate;
+        $deadline = strpos('closed,suspended', $execution->status) === false ? helper::today() : $deadline;
+        $endDate  = strpos($type, 'withdelay') !== false ? $deadline : $execution->end;
+        list($dateList, $interval) = $this->execution->getDateList($execution->begin, $endDate, $type, 0, 'Y-m-d', $execution->end);
+        $chartData = $this->execution->buildBurnData($executionID, $dateList, $type);
 
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
@@ -2036,6 +2046,7 @@ class execution extends control
         $this->view->statData     = $this->execution->statRelatedData($executionID);
         $this->view->chartData    = $chartData;
         $this->view->canBeChanged = common::canModify('execution', $execution); // Determines whether an object is editable.
+        $this->view->type         = $type;
 
         $this->display();
     }

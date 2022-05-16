@@ -39,7 +39,7 @@ html[lang='en'] #deadlineTd .input-group-addon {padding: 5px 18px;}
 .title-group #pri + .chosen-container > .chosen-single {border-top-left-radius: 0 !important; border-bottom-left-radius: 0 !important;}
 #mainContent .center-block {padding-bottom: 40px;}
 
-#typeBox {width: 195px;}
+#typeBox {width: 180px;}
 #typeBox .required:after {right: 1px;}
 #osBox .required:after {right: 1px;}
 #osBox {width: 190px;}

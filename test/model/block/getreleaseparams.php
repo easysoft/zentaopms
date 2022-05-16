@@ -16,4 +16,4 @@ pid=1
 
 $block = new blockTest();
 
-r($block->getReleaseParamsTest()) && p() && e();
+r($block->getReleaseParamsTest()) && p('name,default,control') && e('数量,20,input');  //测试name

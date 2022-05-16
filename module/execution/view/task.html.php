@@ -149,7 +149,6 @@ body {margin-bottom: 25px;}
     $checkObject->execution = $executionID;
     $taskCreateLink = $this->createLink('task', 'create', "executionID=$executionID" . (isset($moduleID) ? "&storyID=0&moduleID=$moduleID" : ""));
     ?>
-    <?php if(!common::checkNotCN()):?>
     <?php if($canBeChanged and (common::hasPriv('task', 'batchCreate', $checkObject) or common::hasPriv('task', 'create', $checkObject))):?>
     <div class='btn-group dropdown'>
       <?php
@@ -167,25 +166,8 @@ body {margin-bottom: 25px;}
       </ul>
     </div>
     <?php endif;?>
-    <?php else:?>
-    <?php
-    echo "<div class='btn-group dropdown-hover'>";
-    $link = $this->createLink('task', 'create', "execution=$executionID" . (isset($moduleID) ? "&storyID=0&moduleID=$moduleID" : ""));
-    if($canBeChanged and common::hasPriv('task', 'create', $checkObject)) echo html::a($link, "<i class='icon icon-plus'></i> {$lang->task->create} </span><span class='caret'>", '', "class='btn btn-primary'");
-    ?>
-    <ul class='dropdown-menu'>
-      <?php $disabled = common::hasPriv('task', 'batchCreate') ? '' : "class='disabled'";?>
-      <li <?php echo $disabled?>>
-      <?php
-        $batchLink = $this->createLink('task', 'batchCreate', "execution=$executionID" . (isset($moduleID) ? "&storyID=&moduleID=$moduleID" : ''));
-        echo "<li>" . html::a($batchLink, "<i class='icon icon-plus'></i> " . $lang->task->batchCreate) . "</li>";
-      ?>
-      </li>
-    </ul>
-    <?php echo "</div>";?>
-    <?php endif;?>
   </div>
-  <?php endif; ?>
+  <?php endif;?>
 </div>
 <?php if($this->app->getViewType() == 'xhtml'):?>
 <div id="xx-title">

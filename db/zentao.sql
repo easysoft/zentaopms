@@ -7355,8 +7355,8 @@ CREATE TABLE IF NOT EXISTS `zt_domain`(
 DROP VIEW IF EXISTS `view_datasource_5`;
 CREATE VIEW `view_datasource_5`  AS select `id`,`name` from `zt_task` where `deleted` = '0' and vision = 'rnd';
 
-DROP VIEW IF EXISTS `view_datasource_53`;
-CREATE VIEW `view_datasource_53` AS select `id`,`name` from `zt_task` where `deleted` = '0' and vision = 'lite';
+DROP VIEW IF EXISTS `view_datasource_54`;
+CREATE VIEW `view_datasource_54` AS select `id`,`name` from `zt_task` where `deleted` = '0' and vision = 'lite';
 
 UPDATE `zt_user` SET `visions` = 'lite', `feedback` = '0' WHERE `feedback` = '1';
 
@@ -8769,11 +8769,13 @@ INSERT INTO `zt_workflowdatasource` (`type`, `name`, `code`, `buildin`, `datasou
 ('lang', '反馈处理方案', 'feedbackSolution',     '1', 'feedbackSolution',     '', '', ''),
 ('lang', '反馈关闭原因', 'feedbackclosedReason', '1', 'feedbackclosedReason', '', '', ''),
 ('lang', '任务关闭原因', 'taskReason', '1', 'taskReason', '', '', ''),
-('system',     '项目集',         'programs', '1', '{\"app\":\"system\",\"module\":\"program\",\"method\":\"getPairs\",\"methodDesc\":\"Get program pairs.\",\"params\":[{\"name\":\"isQueryAll\",\"type\":\"bool\",\"desc\":\"\",\"value\":\"\"},{\"name\":\"orderBy\",\"type\":\"string\",\"desc\":\"\",\"value\":\"id_desc\"}]}',  '',     '',     '');
+('lang',        '套件权限',       'testsuiteAuth', '1', 'testsuiteAuth', '', '', ''),
+('system',     '项目集',         'programs', '1', '{\"app\":\"system\",\"module\":\"program\",\"method\":\"getPairs\",\"methodDesc\":\"Get program pairs.\",\"params\":[{\"name\":\"isQueryAll\",\"type\":\"bool\",\"desc\":\"\",\"value\":\"\"},{\"name\":\"orderBy\",\"type\":\"string\",\"desc\":\"\",\"value\":\"id_desc\"}]}',  '',     '',     ''),
+('lang', '需求关闭原因', 'storyClosedReason', '1', 'storyClosedReason', '', '', '');
 
 INSERT INTO `zt_workflowdatasource` (`type`, `name`, `code`, `buildin`, `vision`, `datasource`, `view`, `keyField`, `valueField`) VALUES
 ('system',      '项目',           'liteprojects',             '1', 'lite', '{\"app\":\"system\",\"module\":\"project\",\"method\":\"getPairsByModel\",\"methodDesc\":\"Get project pairs by model and project.\",\"params\":[{\"name\":\"model\",\"type\":\"string\",\"desc\":\"all|scrum|waterfall\",\"value\":\"all\"},{\"name\":\"programID\",\"type\":\"int\",\"desc\":\"\",\"value\":\"0\"},{\"name\":\"param\",\"type\":\"\",\"desc\":\"\",\"value\":\"\"}]}',  '',     '',     ''),
-('sql',         '任务',           'litetasks',                '1', 'lite', 'select id,name from zt_task where deleted=\"0\" and vision=\"lite\"',      'view_datasource_53',    'id',   'name'),
+('sql',         '任务',           'litetasks',                '1', 'lite', 'select id,name from zt_task where deleted=\"0\" and vision=\"lite\"',      'view_datasource_54',    'id',   'name'),
 ('system',      '权限分组',       'litegroups',               '1', 'lite', '{\"app\":\"system\",\"module\":\"group\",\"method\":\"getPairs\",\"methodDesc\":\"\",\"params\":[]}',  '',     '',     ''),
 ('system',      '用户',           'liteusers',                '1', 'lite', '{\"app\":\"system\",\"module\":\"user\",\"method\":\"getPairs\",\"methodDesc\":\"\",\"params\":[{\"name\":\"params\",\"type\":\"\",\"desc\":\"\",\"value\":\"noclosed|noletter\"},{\"name\":\"usersToAppended\",\"type\":\"\",\"desc\":\"\",\"value\":\"\"}]}',        '',     '',     ''),
 ('sql',         '模块',           'litemodules',              '1', 'lite', 'select id,name from zt_module where deleted=\"0\"',    'view_datasource_11',   'id',   'name'),
@@ -8797,7 +8799,7 @@ DROP VIEW IF EXISTS `view_datasource_10`;
 DROP VIEW IF EXISTS `view_datasource_11`;
 DROP VIEW IF EXISTS `view_datasource_12`;
 DROP VIEW IF EXISTS `view_datasource_41`;
-DROP VIEW IF EXISTS `view_datasource_53`;
+DROP VIEW IF EXISTS `view_datasource_54`;
 
 CREATE VIEW `view_datasource_4`  AS select `id`,`title` from `zt_story` where `deleted` = '0';
 CREATE VIEW `view_datasource_5`  AS select `id`,`name` from `zt_task` where `deleted` = '0' and vision = 'rnd';
@@ -8806,7 +8808,7 @@ CREATE VIEW `view_datasource_10` AS select `id`,`name` from `zt_build` where `de
 CREATE VIEW `view_datasource_11` AS select `id`,`name` from `zt_module` where `deleted` = '0';
 CREATE VIEW `view_datasource_12` AS select `id`,`title` from `zt_productplan` where `deleted` = '0';
 CREATE VIEW `view_datasource_41` AS select `id`,`title` from `zt_case` where `deleted` = '0';
-CREATE VIEW `view_datasource_53` AS select `id`,`name` from `zt_task` where `deleted` = '0' and vision = 'lite';
+CREATE VIEW `view_datasource_54` AS select `id`,`name` from `zt_task` where `deleted` = '0' and vision = 'lite';
 
 ALTER TABLE `zt_doc` ADD `template` varchar(30) COLLATE 'utf8_general_ci' NOT NULL AFTER `lib`;
 ALTER TABLE `zt_doc` ADD `templateType` varchar(30) COLLATE 'utf8_general_ci' NOT NULL AFTER `template`;

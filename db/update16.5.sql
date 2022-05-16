@@ -126,6 +126,7 @@ UPDATE `zt_workflowfield` SET `control` = 'radio' WHERE `module` = 'release' and
 UPDATE `zt_workflowfield` SET `control` = 'datetime' WHERE `module` = 'story' and `field` = 'openedDate';
 UPDATE `zt_workflowfield` SET `control` = 'datetime' WHERE `module` = 'story' and `field` = 'assignedDate';
 UPDATE `zt_workflowfield` SET `control` = 'datetime' WHERE `module` = 'story' and `field` = 'lastEditedDate';
+UPDATE `zt_workflowfield` SET `control` = 'select', `options` = '48' WHERE `module` = 'story' and `field` = 'closedReason';
 UPDATE `zt_workflowfield` SET `type` = 'datetime', `control` = 'datetime' WHERE `module` = 'story' and `field` = 'reviewedDate';
 UPDATE `zt_workflowfield` SET `control` = 'datetime' WHERE `module` = 'story' and `field` = 'closedDate';
 UPDATE `zt_workflowfield` SET `control` = 'radio' WHERE `module` = 'story' and `field` = 'deleted';
@@ -308,7 +309,7 @@ REPLACE INTO `zt_workflowfield` (`module`, `field`, `type`, `length`, `name`, `c
 ('testcase',	'fromCaseVersion',	'char', 	'30',	'用例来源版本',	        'input',	'',	'',	'',	'',	'',	5,	0,	0,	'0',	'0',	'0',	'1',	1,	'',	'',	'0000-00-00 00:00:00',	'',	'0000-00-00 00:00:00'),
 ('testcase',	'precondition', 	'text', 	'',	'前置条件',	        'textarea',	'',	'',	'',	'',	'',	5,	0,	0,	'0',	'0',	'0',	'1',	1,	'',	'',	'0000-00-00 00:00:00',	'',	'0000-00-00 00:00:00'),
 ('testcase',    'subStatus',            'varchar',      '30',   '子状态', 		'select',       '',     '',     '',     '',     '',     17,     0,      0,      '0',    '0',    '0',    '0',    1,      '',     '',     '0000-00-00 00:00:00',  '',     '0000-00-00 00:00:00'),
-('testsuite',   'type',                 'text',         '',     '类型', 		'redio',        '',     '[\"\\u672a\\u5220\\u9664\",\"\\u5df2\\u5220\\u9664\"]',     '',     '',     '',     17,     0,      0,      '0',    '0',    '0',    '0',    1,      '',     '',     '0000-00-00 00:00:00',  '',     '0000-00-00 00:00:00');
+('testsuite',   'type',                 'text',         '',     '类型', 		'radio',        '',     '[\"\\u672a\\u5220\\u9664\",\"\\u5df2\\u5220\\u9664\"]',     '',     '',     '',     17,     0,      0,      '0',    '0',    '0',    '0',    1,      '',     '',     '0000-00-00 00:00:00',  '',     '0000-00-00 00:00:00');
 
 UPDATE `zt_workflowfield` SET `control` = 'radio' WHERE `module` = 'program' and `field` = 'deleted';
 UPDATE `zt_workflowfield` SET `type` = 'char', `length` = '30', `control` = 'radio' WHERE `module` = 'program' and `field` = 'type';

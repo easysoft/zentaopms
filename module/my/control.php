@@ -170,7 +170,8 @@ class my extends control
             $riskCount = $pager->recTotal;
 
             /* Get the number of reviews assigned to me. */
-            $reviewList  = $this->review->getUserReviews('needreview', 'id_desc', $pager);
+            $pendingList = $this->loadModel('approval')->getPendingReviews('review');
+            $reviewList  = $this->review->getByList($pendingList, 'id_desc', $pager);
             $reviewCount = $pager->recTotal;
 
             /* Get the number of nc assigned to me. */
@@ -811,19 +812,28 @@ EOF;
         $this->app->loadClass('pager', true);
         $pager = pager::init($recTotal, $recPerPage, $pageID);
 
-        $reviewList = $this->loadModel('review')->getUserReviews($browseType, $orderBy, $pager);
+        $pendingList = $this->loadModel('approval')->getPendingReviews('review');
+        if($browseType == 'needreview')
+        {
+            $reviewList  = $this->loadModel('review')->getByList($pendingList, $orderBy, $pager);
+        }
+        else
+        {
+            $reviewList = $this->loadModel('review')->getUserReviews($browseType, $orderBy, $pager);
+        }
 
-        $this->view->title      = $this->lang->my->myReview;
-        $this->view->users      = $this->loadModel('user')->getPairs('noclosed|noletter');
-        $this->view->reviewList = $reviewList;
-        $this->view->products   = $this->my->getProductPairs();
-        $this->view->recTotal   = $recTotal;
-        $this->view->recPerPage = $recPerPage;
-        $this->view->pageID     = $pageID;
-        $this->view->browseType = $browseType;
-        $this->view->orderBy    = $orderBy;
-        $this->view->pager      = $pager;
-        $this->view->mode       = 'audit';
+        $this->view->title       = $this->lang->my->myReview;
+        $this->view->users       = $this->loadModel('user')->getPairs('noclosed|noletter');
+        $this->view->reviewList  = $reviewList;
+        $this->view->pendingList = $pendingList;
+        $this->view->products    = $this->my->getProductPairs();
+        $this->view->recTotal    = $recTotal;
+        $this->view->recPerPage  = $recPerPage;
+        $this->view->pageID      = $pageID;
+        $this->view->browseType  = $browseType;
+        $this->view->orderBy     = $orderBy;
+        $this->view->pager       = $pager;
+        $this->view->mode        = 'audit';
         $this->display();
     }
 
