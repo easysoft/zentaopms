@@ -3661,6 +3661,7 @@ class executionModel extends model
 
         $firstBurn    = empty($sets) ? 0 : reset($sets);
         $firstTime    = !empty($firstBurn->$burnBy) ? $firstBurn->$burnBy : (!empty($firstBurn->value) ? $firstBurn->value : 0);
+        $firstTime    = $firstTime == 'null' ? 0 : $firstTime;
         $days         = count($dateList) - 1;
         $rate         = $days ? $firstTime / $days : '';
         $baselineJSON = '[';
