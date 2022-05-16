@@ -16,4 +16,8 @@ pid=1
 
 $block = new blockTest();
 
-r($block->getScrumListParamsTest()) && p() && e();
+r($block->getScrumListParamsTest()) && p('name,control')     && e('类型,select');  //测试name和select
+r($block->getScrumListParamsTest()) && p('options:undone')   && e('未完成');  //测试options
+r($block->getScrumListParamsTest()) && p('options:doing')    && e('进行中');  //测试options
+r($block->getScrumListParamsTest()) && p('options:all')      && e('全部');  //测试options
+r($block->getScrumListParamsTest()) && p('options:involved') && e('我参与');  //测试options
