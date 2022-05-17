@@ -2264,6 +2264,17 @@ class projectModel extends model
         }
 
         /* In the case of the waterfall model, calculate the sub-stage. */
+        if($projectID == 0)
+        {
+            foreach($executions as $key => $execution)
+            {
+                if($execution->type == 'stage')
+                {
+                    $execution->children = isset($children[$execution->id]) ? $children[$execution->id] : array();
+                    unset($children[$execution->id]);
+                }
+            }
+        }
         $project = $this->getByID($projectID);
         if($project and $project->model == 'waterfall')
         {

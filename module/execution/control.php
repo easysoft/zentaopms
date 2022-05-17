@@ -3154,7 +3154,7 @@ class execution extends control
 
                 foreach($executions as $execution)
                 {
-                    if(isset($orderedExecutions[$execution->parent])) unset($orderedExecutions[$execution->parent]);
+                    if(isset($orderedExecutions[$execution->parent]) and $project->model != 'waterfall') unset($orderedExecutions[$execution->parent]);
                     $execution->teams = zget($teams, $execution->id, array());
                     $orderedExecutions[$execution->id] = $execution;
                 }
@@ -3176,11 +3176,20 @@ class execution extends control
 
         $projectExecutions = array();
         $parentIdList = array();
+        $childrenIdList = array();
         foreach($orderedExecutions as $execution)
         {
-            $projectExecutions[$execution->project][] = $execution;
             if($execution->type != 'stage') continue;
-            if($execution->grade == 2 and $execution->project != $execution->parent) $parentIdList[$execution->parent] = $execution->parent;
+            if($execution->grade == 2 and $execution->project != $execution->parent)
+            {
+                $parentIdList[$execution->parent] = $execution->parent;
+                $childrenIdList[$execution->parent][] = $execution->id;
+            }
+        }
+        foreach($orderedExecutions as $id => $execution)
+        {
+            $execution->children = isset($childrenIdList[$execution->id]) ? $childrenIdList[$execution->id] : array();
+            $projectExecutions[$execution->project][] = $execution;
         }
 
         $parents = array();
