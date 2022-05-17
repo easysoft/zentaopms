@@ -96,7 +96,8 @@ REPLACE INTO `zt_workflowdatasource` (`type`, `name`, `code`, `buildin`, `dataso
 ('lang', '反馈处理方案', 'feedbackSolution',     '1', 'feedbackSolution',     '', '', ''),
 ('lang', '反馈关闭原因', 'feedbackclosedReason', '1', 'feedbackclosedReason', '', '', ''),
 ('lang', '任务关闭原因', 'taskReason', '1', 'taskReason', '', '', ''),
-('system',     '项目集',         'programs', '1', '{\"app\":\"system\",\"module\":\"program\",\"method\":\"getPairs\",\"methodDesc\":\"Get program pairs.\",\"params\":[{\"name\":\"isQueryAll\",\"type\":\"bool\",\"desc\":\"\",\"value\":\"\"},{\"name\":\"orderBy\",\"type\":\"string\",\"desc\":\"\",\"value\":\"id_desc\"}]}',  '',     '',     '');
+('system',     '项目集',         'programs', '1', '{\"app\":\"system\",\"module\":\"program\",\"method\":\"getPairs\",\"methodDesc\":\"Get program pairs.\",\"params\":[{\"name\":\"isQueryAll\",\"type\":\"bool\",\"desc\":\"\",\"value\":\"\"},{\"name\":\"orderBy\",\"type\":\"string\",\"desc\":\"\",\"value\":\"id_desc\"}]}',  '',     '',     ''),
+('lang', '需求关闭原因', 'storyClosedReason', '1', 'storyClosedReason', '', '', '');
 
 INSERT INTO `zt_workflowdatasource` (`type`, `name`, `code`, `buildin`, `vision`, `datasource`, `view`, `keyField`, `valueField`) VALUES
 ('lang',        '反馈类型',       'litefeedbackType',         '1', 'lite', 'feedbackType',         '', '', ''),
@@ -349,6 +350,7 @@ UPDATE `zt_workflowfield` SET `options`=(SELECT id FROM `zt_workflowdatasource` 
 UPDATE `zt_workflowfield` SET `options`=(SELECT id FROM `zt_workflowdatasource` WHERE `code`='feedbackType' LIMIT 1)     WHERE `module`='feedback' AND `field`='type';
 UPDATE `zt_workflowfield` SET `options`=(SELECT id FROM `zt_workflowdatasource` WHERE `code`='feedbackSolution' LIMIT 1) WHERE `module`='feedback' AND `field`='solution';
 UPDATE `zt_workflowfield` SET `options`=(SELECT id FROM `zt_workflowdatasource` WHERE `code`='taskReason' LIMIT 1) WHERE `module`='task' AND `field`='closedReason';
+UPDATE `zt_workflowfield` SET `options`=(SELECT id FROM `zt_workflowdatasource` WHERE `code`='storyClosedReason' LIMIT 1) WHERE `module`='story' AND `field`='closedReason';
 UPDATE `zt_workflowfield` SET `options`=(SELECT id FROM `zt_workflowdatasource` WHERE `code`='programs' LIMIT 1), `control`='select' WHERE `module`='program' AND `field`='parent';
 UPDATE `zt_workflowfield` SET `options`=(SELECT id FROM `zt_workflowdatasource` WHERE `code`='programs' LIMIT 1), `control`='select' WHERE `module`='project' AND `field`='parent';
 UPDATE `zt_workflowfield` SET `options`=(SELECT id FROM `zt_workflowdatasource` WHERE `code`='projects' LIMIT 1), `control`='select' WHERE `module`='execution' AND `field`='parent';
