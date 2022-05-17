@@ -429,7 +429,9 @@ class project extends control
                 }
             }
 
-            $this->executeHooks($projectID);
+            $message = $this->executeHooks($projectID);
+            if($message) $this->lang->saveSuccess = $message;
+
             if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $projectID));
 
             if($this->app->tab == 'program')
@@ -588,7 +590,9 @@ class project extends control
                 $this->loadModel('productplan')->linkProject($projectID, $newPlans);
             }
 
-            $this->executeHooks($projectID);
+            $message = $this->executeHooks($projectID);
+            if($message) $this->lang->saveSuccess = $message;
+
             if(isonlybody()) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
 
             $locateLink = ($this->session->projectList and $from != 'view') ? $this->session->projectList : inLink('view', "projectID=$projectID");
@@ -1726,7 +1730,9 @@ class project extends control
             $url = $this->createLink('project', 'browse');
             if($this->app->tab == 'program') $url = $this->createLink('program', 'browse');
 
-            $this->executeHooks($projectID);
+            $message = $this->executeHooks($projectID);
+            if($message) $this->lang->saveSuccess = $message;
+
             if(empty($executionIdList))
             {
                 if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess));

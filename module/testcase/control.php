@@ -343,7 +343,8 @@ class testcase extends control
             /* If the story is linked project, make the case link the project. */
             $this->testcase->syncCase2Project($caseResult['caseInfo'], $caseID);
 
-            $this->executeHooks($caseID);
+            $message = $this->executeHooks($caseID);
+            if($message) $this->lang->saveSuccess = $message;
 
             if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $caseID));
             /* If link from no head then reload. */
@@ -1173,7 +1174,8 @@ class testcase extends control
             $case = $this->testcase->getById($caseID);
             $this->testcase->delete(TABLE_CASE, $caseID);
 
-            $this->executeHooks($caseID);
+            $message = $this->executeHooks($caseID);
+            if($message) $response['message'] = $message;
 
             /* if ajax request, send result. */
             if($this->server->ajax)

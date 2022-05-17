@@ -38,7 +38,8 @@ class build extends control
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             $this->loadModel('action')->create('build', $buildID, 'opened');
 
-            $this->executeHooks($buildID);
+            $message = $this->executeHooks($buildID);
+            if($message) $this->lang->saveSuccess = $message;
 
             if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $buildID));
             if(isonlybody()) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => "parent.loadExecutionBuilds($executionID, $buildID)")); // Code for task #5126.
@@ -130,7 +131,8 @@ class build extends control
                 if(!empty($changes)) $this->action->logHistory($actionID, $changes);
             }
 
-            $this->executeHooks($buildID);
+            $message = $this->executeHooks($buildID);
+            if($message) $this->lang->saveSuccess = $message;
 
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('view', "buildID=$buildID")));
         }
@@ -316,7 +318,8 @@ class build extends control
             $build = $this->build->getById($buildID);
             $this->build->delete(TABLE_BUILD, $buildID);
 
-            $this->executeHooks($buildID);
+            $message = $this->executeHooks($buildID);
+            if($message) $response['message'] = $message;
 
             /* if ajax request, send result. */
             if($this->server->ajax)

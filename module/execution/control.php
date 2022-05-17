@@ -1379,7 +1379,8 @@ class execution extends control
 
             $this->loadModel('action')->create($this->objectType, $executionID, 'opened', '', join(',', $_POST['products']));
 
-            $this->executeHooks($executionID);
+            $message = $this->executeHooks($executionID);
+            if($message) $this->lang->saveSuccess = $message;
 
             if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $executionID));
 
@@ -1553,7 +1554,9 @@ class execution extends control
                 $this->productplan->linkProject($projectID, $newPlans);
             }
 
-            $this->executeHooks($executionID);
+            $message = $this->executeHooks($executionID);
+            if($message) $this->lang->saveSuccess = $message;
+
             if($_POST['status'] == 'doing') $this->loadModel('common')->syncPPEStatus($executionID);
             if($execution->type == 'kanban') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('view', "executionID=$executionID")));
@@ -2549,7 +2552,8 @@ class execution extends control
             $this->execution->updateUserView($executionID);
 
             $this->session->set('execution', '');
-            $this->executeHooks($executionID);
+            $message = $this->executeHooks($executionID);
+            if($message) $this->lang->saveSuccess = $message;
 
             if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess));
             return print(js::reload('parent'));
