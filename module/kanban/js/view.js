@@ -79,7 +79,7 @@ function exitFullScreen()
 {
     $('.region-actions > div > .action').show();
     $(".title").attr("disabled", false).css("pointer-events", "auto");
-    if(kanban.status == 'closed') return;
+    if(!CRKanban && kanban.status == 'closed') return;
     $('#kanbanContainer').removeClass('fullscreen')
         .off('scroll', tryUpdateKanbanAffix);
     $('.actions').show();
