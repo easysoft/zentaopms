@@ -66,12 +66,20 @@ $('#future').on('change', function()
 $('#branch').change(function()
 {
     var branchID = $(this).val();
-    var link     = createLink('productplan', 'ajaxGetLast', "productID=" + productID + "&branch=" + branchID);
+    var getLastLink    = createLink('productplan', 'ajaxGetLast', "productID=" + productID + "&branch=" + branchID);
+    var getTopPlanLink = createLink('productplan', 'ajaxGetTopPlan', "productID=" + productID + "&branch=" + branchID);
 
-    $.post(link, function(data)
+    $.post(getLastLink, function(data)
     {
         data = JSON.parse(data);
         var planTitle = data ? '(' + lastLang + ': ' + data.title + ')' : '';
         $('#title').parent().next('td').html(planTitle);
     })
-})
+
+    $.post(getTopPlanLink, function(data)
+    {
+        $('#parent').replaceWith(data);
+        $('#parent_chosen').remove();
+        $('#parent').chosen();
+    })
+});
