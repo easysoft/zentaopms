@@ -3276,7 +3276,7 @@ class bugModel extends model
 
         $menu .= $this->buildMenu('bug', 'confirmBug', $params, $bug, $type, 'ok', '', "iframe", true);
         if($type == 'view') $menu .= $this->buildMenu('bug', 'assignTo', $params, $bug, $type, '', '', "iframe", true);
-        $menu .= $this->buildMenu('bug', 'resolve', $params, $bug, $type, 'checked', '', "iframe", true);
+        $menu .= $this->buildMenu('bug', 'resolve', $params, $bug, $type, 'checked', '', "iframe showinonlybody", true);
         $menu .= $this->buildMenu('bug', 'close', $params, $bug, $type, '', '', "text-danger iframe showinonlybody", true);
         if($type == 'view') $menu .= $this->buildMenu('bug', 'activate', $params, $bug, $type, '', '', "text-success iframe showinonlybody", true);
         if($type == 'view' && $this->app->tab != 'product')

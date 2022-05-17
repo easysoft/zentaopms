@@ -96,6 +96,7 @@ REPLACE INTO `zt_workflowdatasource` (`type`, `name`, `code`, `buildin`, `dataso
 ('lang', '反馈处理方案', 'feedbackSolution',     '1', 'feedbackSolution',     '', '', ''),
 ('lang', '反馈关闭原因', 'feedbackclosedReason', '1', 'feedbackclosedReason', '', '', ''),
 ('lang', '任务关闭原因', 'taskReason', '1', 'taskReason', '', '', ''),
+('lang', '套件类型', 'testsuiteAuth', '1', 'testsuiteAuth', '', '', ''),
 ('system',     '项目集',         'programs', '1', '{\"app\":\"system\",\"module\":\"program\",\"method\":\"getPairs\",\"methodDesc\":\"Get program pairs.\",\"params\":[{\"name\":\"isQueryAll\",\"type\":\"bool\",\"desc\":\"\",\"value\":\"\"},{\"name\":\"orderBy\",\"type\":\"string\",\"desc\":\"\",\"value\":\"id_desc\"}]}',  '',     '',     ''),
 ('lang', '需求关闭原因', 'storyClosedReason', '1', 'storyClosedReason', '', '', '');
 
@@ -306,8 +307,7 @@ REPLACE INTO `zt_workflowfield` (`module`, `field`, `type`, `length`, `name`, `c
 ('testcase',	'fromCaseID',	        'char', 	'30',	'用例来源ID',	        'input',	'',	'',	'',	'',	'',	28,	0,	0,	'0',	'0',	'0',	'1',	1,	'',	'',	'0000-00-00 00:00:00',	'',	'0000-00-00 00:00:00'),
 ('testcase',	'fromCaseVersion',	'char', 	'30',	'用例来源版本',	        'input',	'',	'',	'',	'',	'',	5,	0,	0,	'0',	'0',	'0',	'1',	1,	'',	'',	'0000-00-00 00:00:00',	'',	'0000-00-00 00:00:00'),
 ('testcase',	'precondition', 	'text', 	'',	'前置条件',	        'textarea',	'',	'',	'',	'',	'',	5,	0,	0,	'0',	'0',	'0',	'1',	1,	'',	'',	'0000-00-00 00:00:00',	'',	'0000-00-00 00:00:00'),
-('testcase',    'subStatus',            'varchar',      '30',   '子状态', 		'select',       '',     '',     '',     '',     '',     17,     0,      0,      '0',    '0',    '0',    '0',    1,      '',     '',     '0000-00-00 00:00:00',  '',     '0000-00-00 00:00:00'),
-('testsuite',	'type',	                'text',	        '',	'类型',	                'radio',	'',	'50',	'',	'',	'',	5,	0,	0,	'0',	'0',	'0',	'1',	1,	'',	'',	'0000-00-00 00:00:00',	'',	'0000-00-00 00:00:00');
+('testcase',    'subStatus',            'varchar',      '30',   '子状态', 		'select',       '',     '',     '',     '',     '',     17,     0,      0,      '0',    '0',    '0',    '0',    1,      '',     '',     '0000-00-00 00:00:00',  '',     '0000-00-00 00:00:00');
 
 UPDATE `zt_workflowfield` SET `control` = 'radio' WHERE `module` = 'program' and `field` = 'deleted';
 UPDATE `zt_workflowfield` SET `type` = 'char', `length` = '30', `control` = 'radio' WHERE `module` = 'program' and `field` = 'type';
@@ -323,16 +323,16 @@ UPDATE `zt_workflowfield` SET `type` = 'char', `length` = '30', `control`='radio
 UPDATE `zt_workflowfield` SET `control`='radio' WHERE `module` = 'product' and `field` = 'acl';
 UPDATE `zt_workflowfield` SET `control` = 'multi-select', `options` = 'user' WHERE `module` = 'program' and `field` = 'whitelist';
 
-UPDATE `zt_workflowfield` SET `options`=(SELECT id FROM `zt_workflowdatasource` WHERE `code`='projectModel' LIMIT 1)     WHERE `module`='project'  AND `field`='model';
-UPDATE `zt_workflowfield` SET `options`=(SELECT id FROM `zt_workflowdatasource` WHERE `code`='feedbackType' LIMIT 1)     WHERE `module`='feedback' AND `field`='type';
-UPDATE `zt_workflowfield` SET `options`=(SELECT id FROM `zt_workflowdatasource` WHERE `code`='feedbackSolution' LIMIT 1) WHERE `module`='feedback' AND `field`='solution';
-UPDATE `zt_workflowfield` SET `options`=(SELECT id FROM `zt_workflowdatasource` WHERE `code`='taskReason' LIMIT 1) WHERE `module`='task' AND `field`='closedReason';
-UPDATE `zt_workflowfield` SET `options`=(SELECT id FROM `zt_workflowdatasource` WHERE `code`='storyClosedReason' LIMIT 1) WHERE `module`='story' AND `field`='closedReason';
-UPDATE `zt_workflowfield` SET `options`=(SELECT id FROM `zt_workflowdatasource` WHERE `code`='programs' LIMIT 1), `control`='select' WHERE `module`='program' AND `field`='parent';
-UPDATE `zt_workflowfield` SET `options`=(SELECT id FROM `zt_workflowdatasource` WHERE `code`='programs' LIMIT 1), `control`='select' WHERE `module`='project' AND `field`='parent';
-UPDATE `zt_workflowfield` SET `options`=(SELECT id FROM `zt_workflowdatasource` WHERE `code`='projects' LIMIT 1), `control`='select' WHERE `module`='execution' AND `field`='parent';
-UPDATE `zt_workflowfield` SET `options`=(SELECT id FROM `zt_workflowdatasource` WHERE `code`='feedbackclosedReason' LIMIT 1), `control`='select' WHERE `module`='feedback' AND `field`='closedReason';
-UPDATE `zt_workflowfield` SET `options`=(SELECT id FROM `zt_workflowdatasource` WHERE `code`='testsuiteAuth' LIMIT 1) WHERE `module`='testsuite' AND `field`='type';
+UPDATE `zt_workflowfield` SET `options`=(SELECT id FROM `zt_workflowdatasource` WHERE `code`='projectModel' ORDER BY `id` DESC LIMIT 1) WHERE `module`='project'  AND `field`='model';
+UPDATE `zt_workflowfield` SET `options`=(SELECT id FROM `zt_workflowdatasource` WHERE `code`='feedbackType' ORDER BY `id` DESC LIMIT 1) WHERE `module`='feedback' AND `field`='type';
+UPDATE `zt_workflowfield` SET `options`=(SELECT id FROM `zt_workflowdatasource` WHERE `code`='feedbackSolution' ORDER BY `id` DESC LIMIT 1) WHERE `module`='feedback' AND `field`='solution';
+UPDATE `zt_workflowfield` SET `options`=(SELECT id FROM `zt_workflowdatasource` WHERE `code`='taskReason' ORDER BY `id` DESC LIMIT 1) WHERE `module`='task' AND `field`='closedReason';
+UPDATE `zt_workflowfield` SET `options`=(SELECT id FROM `zt_workflowdatasource` WHERE `code`='storyClosedReason' ORDER BY `id` DESC LIMIT 1) WHERE `module`='story' AND `field`='closedReason';
+UPDATE `zt_workflowfield` SET `options`=(SELECT id FROM `zt_workflowdatasource` WHERE `code`='programs' ORDER BY `id` DESC LIMIT 1), `control`='select' WHERE `module`='program' AND `field`='parent';
+UPDATE `zt_workflowfield` SET `options`=(SELECT id FROM `zt_workflowdatasource` WHERE `code`='programs' ORDER BY `id` DESC LIMIT 1), `control`='select' WHERE `module`='project' AND `field`='parent';
+UPDATE `zt_workflowfield` SET `options`=(SELECT id FROM `zt_workflowdatasource` WHERE `code`='projects' ORDER BY `id` DESC LIMIT 1), `control`='select' WHERE `module`='execution' AND `field`='parent';
+UPDATE `zt_workflowfield` SET `options`=(SELECT id FROM `zt_workflowdatasource` WHERE `code`='feedbackclosedReason' ORDER BY `id` DESC LIMIT 1), `control`='select' WHERE `module`='feedback' AND `field`='closedReason';
+UPDATE `zt_workflowfield` SET `options`=(SELECT id FROM `zt_workflowdatasource` WHERE `code`='testsuiteAuth' ORDER BY `id` DESC LIMIT 1), `control`='radio' WHERE `module`='testsuite' AND `field`='type';
 
 UPDATE `zt_workflowaction` SET `show`='direct' WHERE `buildin`=1;
 UPDATE `zt_workflowaction` SET `position` = 'browse' WHERE `module` = 'product' and `action` = 'all' and `vision` = 'rnd';
