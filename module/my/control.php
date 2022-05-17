@@ -856,7 +856,7 @@ EOF;
         $this->app->loadClass('pager', $static = true);
         if($this->app->getViewType() == 'mhtml') $recPerPage = 10;
         $pager  = pager::init($recTotal, $recPerPage, $pageID);
-        $ncList = $this->my->getNcList($browseType, $orderBy, $pager, 'active');
+        $ncList = $browseType == 'assignedBy' ? $this->loadModel('my')->getAssignedByMe($this->app->user->account, $browseType, '', $pager, $orderBy, '', 'nc') : $this->my->getNcList($browseType, $orderBy, $pager, 'active');
 
         foreach($ncList as $nc) $ncIdList[] = $nc->id;
         $this->session->set('ncIdList', isset($ncIdList) ? $ncIdList : '');
