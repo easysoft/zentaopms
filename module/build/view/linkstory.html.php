@@ -42,7 +42,7 @@
         <?php foreach($allStories as $story):?>
         <tr>
           <td class='c-id text-left'>
-            <?php echo html::checkbox('stories', array($story->id => sprintf('%03d', $story->id)), ($story->stage == 'developed' or $story->status == 'closed') ? $story->id : '');?>
+            <?php echo html::checkbox('stories', array($story->id => sprintf('%03d', $story->id)), (in_array($story->stage, array('developed', 'closed', 'tested'))) ? $story->id : '');?>
           </td>
           <td><span class='label-pri label-pri-<?php echo $story->pri;?>' title='<?php echo zget($lang->story->priList, $story->pri, $story->pri);?>'><?php echo zget($lang->story->priList, $story->pri, $story->pri)?></span></td>
           <td class='text-left nobr' title='<?php echo $story->title?>'>
