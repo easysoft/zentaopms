@@ -75,6 +75,7 @@ $lang->execution->QD                  = '测试负责人';
 $lang->execution->RD                  = '发布负责人';
 $lang->execution->release             = '发布';
 $lang->execution->acl                 = '访问控制';
+$lang->execution->auth                = '权限控制';
 $lang->execution->teamname            = '团队名称';
 $lang->execution->updateOrder         = '排序';
 $lang->execution->order               = $lang->executionCommon . '排序';
