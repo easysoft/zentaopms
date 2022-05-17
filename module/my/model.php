@@ -336,5 +336,6 @@ class myModel extends model
             if($objectList) return $this->loadModel('task')->processTasks($objectList);
             return array();
         }
+        return $objectList;
     }
 }
