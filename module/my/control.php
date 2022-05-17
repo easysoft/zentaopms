@@ -392,6 +392,7 @@ EOF;
      */
     public function task($type = 'assignedTo', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
+        $this->loadModel('task');
         /* Save session. */
         if($this->app->viewType != 'json') $this->session->set('taskList', $this->app->getURI(true), 'execution');
 
@@ -404,7 +405,14 @@ EOF;
         $sort = common::appendOrder($orderBy);
 
         /* Get tasks. */
-        $tasks = $this->loadModel('task')->getUserTasks($this->app->user->account, $type, 0, $pager, $sort);
+        if($type == 'assignedBy')
+        {
+            $tasks = $this->my->getAssignedByMe($this->app->user->account, $type, 0, $pager, $sort, 0, 'task');
+        }
+        else
+        {
+            $tasks = $this->task->getUserTasks($this->app->user->account, $type, 0, $pager, $sort);
+        }
 
         $parents         = array();
         $executionIDList = array();

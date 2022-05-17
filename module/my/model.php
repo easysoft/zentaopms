@@ -309,4 +309,32 @@ class myModel extends model
 
         return $actions;
     }
+    public function getAssignedByMe($account, $type = 'assignedBy', $limit = 0, $pager = null, $orderBy = "id_desc", $projectID = 0, $objectType = '')
+    {
+        $this->loadModel($objectType);
+        $objectList = $this->dao->select('t1.*')
+            ->from($this->config->objectTables[$objectType])->alias('t1')
+            ->leftJoin(TABLE_ACTION)->alias('t2')->on("t1.id = t2.objectID and t2.objectType='{$objectType}'")
+            ->where('t2.actor')->eq($account)
+            ->andWhere('t2.action')->eq('assigned')
+            ->andWhere('t1.deleted')->eq(0)
+            ->orderBy($orderBy)
+            ->page($pager, 't1.id')
+            ->fetchAll('id');
+        if($objectType == 'task')
+        {
+            $projectList = array();
+            foreach($objectList as $task) $projectList[$task->project] = $task->project;
+            $projectPairs = $this->dao->select('id,name')->from(TABLE_PROJECT)->where('id')->in($projectList)->fetchPairs('id');
+            foreach($objectList as $task) $task->projectName = zget($projectPairs, $task->project);
+
+            $executionList = array();
+            foreach($objectList as $task) $executionList[$task->execution] = $task->execution;
+            $executionPairs = $this->dao->select('id,name')->from(TABLE_PROJECT)->where('id')->in($executionList)->fetchPairs('id');
+            foreach($objectList as $task) $task->executionName = zget($executionPairs, $task->execution);
+
+            if($objectList) return $this->loadModel('task')->processTasks($objectList);
+            return array();
+        }
+    }
 }
