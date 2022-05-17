@@ -127,7 +127,7 @@
 .kanban-card .releaseTitle .icon, .kanban-card .title .icon, .kanban-card .productplanTitle .icon, .kanban-card .title .icon, .kanban-card .buildTitle .icon{padding-right: 5px;}
 .kanban-card .label-finish {margin-right: 7px; margin-top: -1px; padding: 3px 5px; float: left; background-color:#2a5f29;}
 .kanban-card .releaseTitle, .kanban-card .productplanTitle {width: 100%; float: left;}
-.kanban-card .productplanDesc {width: 235px;}
+.kanban-card .productplanDesc {min-width: 200px;}
 
 .progress-box {width:100%; display: flex; flex-direction: row; margin-top: 10px;}
 .progress {flex: auto; margin: 5px auto 5px;}
