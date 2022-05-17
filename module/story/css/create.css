@@ -6,3 +6,4 @@
 
 #source_chosen {min-width: 50px !important;}
 #feedback.input-group + #notifyEmailLabel {position: relative; width: 50%; left: 48%}
+#product + .picker{min-width: 400px}
