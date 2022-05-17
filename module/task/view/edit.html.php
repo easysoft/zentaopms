@@ -17,6 +17,7 @@
 <?php js::set('oldStoryID', $task->story);?>
 <?php js::set('oldAssignedTo', $task->assignedTo);?>
 <?php js::set('oldExecutionID', $task->execution);?>
+<?php js::set('oldConsumed', $task->consumed);?>
 <?php js::set('confirmChangeExecution', $lang->task->confirmChangeExecution);?>
 <?php js::set('changeExecutionConfirmed', false);?>
 <?php js::set('newRowCount', count($task->team) < 6 ? 6 - count($task->team) : 1);?>
