@@ -3843,6 +3843,9 @@ class storyModel extends model
             if($this->app->tab == 'execution' and strpos('draft,closed', $story->status) === false) $menu .= $this->buildMenu('task', 'create', "execution={$this->session->project}&{$params}&moduleID=$story->module", $story, $type, 'plus', '', 'showinonly body');
 
             $menu .= "<div class='divider'></div>";
+            $menu .= $this->buildFlowMenu('story', $story, $type, 'direct');
+            $menu .= "<div class='divider'></div>";
+
             $menu .= $this->buildMenu('story', 'edit', $params, $story, $type);
             $menu .= $this->buildMenu('story', 'create', "productID=$story->product&branch=$story->branch&moduleID=$story->module&{$params}&executionID=0&bugID=0&planID=0&todoID=0&extra=&type=$story->type", $story, $type, 'copy', '', '', '     ', "data-width='1050'");
             $menu .= $this->buildMenu('story', 'delete', $params, $story, 'button', 'trash', 'hiddenwin', 'showinonlybody', true);
