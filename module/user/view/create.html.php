@@ -111,7 +111,7 @@ $showVisionList = count($visionList) > 1;
           <td class='text-center form-actions'>
             <?php if(!$showVisionList) echo html::hidden("visions[]", $this->config->vision);?>
             <?php echo html::submitButton();?>
-            <?php echo html::a($this->createLink('company', 'browse'), $lang->goback, '', 'class="btn btn-wide"')?>
+            <?php echo html::a($this->createLink('company', 'browse'), $lang->goback, '', "class='btn btn-wide'")?>
           </td>
         </tr>
       </table>
