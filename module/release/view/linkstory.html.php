@@ -42,7 +42,7 @@
         <tr>
           <td class='c-id text-left'>
             <div class="checkbox-primary">
-              <input type='checkbox' name='stories[]'  value='<?php echo $story->id;?>' <?php if($story->stage == 'developed' or $story->status == 'closed') echo 'checked';?> />
+              <input type='checkbox' name='stories[]'  value='<?php echo $story->id;?>' <?php if(in_array($story->stage, array('developed', 'closed', 'tested'))) echo 'checked';?> />
               <label></label>
             </div>
             <?php printf('%03d', $story->id);?>
