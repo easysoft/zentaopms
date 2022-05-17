@@ -718,11 +718,11 @@ class projectModel extends model
             ->orderBy('grade desc')
             ->fetch();
 
-        $projects = $this->dao->select('*')->from(TABLE_PROJECT)
+        $projects = $this->dao->select('id')->from(TABLE_PROJECT)
             ->where('type')->eq('project')
             ->andWhere('deleted')->eq(0)
             ->andWhere('path')->like("{$parentProgram->path}%")
-            ->fetchAll('id');
+            ->fetchPairs('id');
         return $projects;
     }
 
