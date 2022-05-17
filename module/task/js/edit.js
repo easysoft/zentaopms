@@ -162,7 +162,7 @@ $('#confirmButton').click(function()
     var memberCount   = '';
     var assignedTo    = '';
     var totalEstimate = 0;
-    var totalConsumed = 0;
+    var totalConsumed = oldConsumed;
     var totalLeft     = 0;
     $('select[name^=team]').each(function()
     {

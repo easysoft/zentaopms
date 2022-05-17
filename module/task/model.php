@@ -818,6 +818,7 @@ class taskModel extends model
                 $currentTask->consumed += (float)$member->consumed;
                 $currentTask->left     += (float)$member->left;
             }
+            $currentTask->consumed += (float)$oldTask->consumed;
 
             if(!empty($task))
             {
