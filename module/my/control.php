@@ -938,6 +938,7 @@ EOF;
         $this->view->title      = $this->lang->my->team;
         $this->view->position[] = $this->lang->my->team;
         $this->view->users      = $users;
+        $this->view->deptID     = $deptID;
         $this->view->orderBy    = $orderBy;
         $this->view->pager      = $pager;
 

@@ -13,6 +13,11 @@
 <?php
 include '../../common/view/header.html.php';
 ?>
+<div id="mainMenu" class="clearfix">
+  <div class="btn-toolbar pull-right">
+    <?php common::printLink('user', 'create', "dept=$deptID", "<i class='icon icon-plus'></i> " . $lang->user->create, '', "class='btn btn-primary create-user-btn' data-app='admin'");?>
+  </div>
+</div>
 <div id='mainContent' class='main-row fade'>
   <div class='main-col'>
     <div class="cell" id="queryBox" data-module='user'></div>
