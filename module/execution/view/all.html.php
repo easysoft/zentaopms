@@ -132,7 +132,7 @@
           $onlyChildStage = ($execution->grade == 2 and $execution->project != $execution->parent);
           if($onlyChildStage and isset($parents[$execution->parent])) $executionName = $parents[$execution->parent]->name . '/' . $executionName;
           ?>
-          <td class='text-left c-name <?php if(!empty($execution->children)) echo 'has-child';?> flex' title='<?php echo $executionName?>'>
+          <td class='text-left c-name sort-handler <?php if(!empty($execution->children)) echo 'has-child';?> flex' title='<?php echo $executionName?>'>
             <?php if($config->systemMode == 'new'):?>
             <span class='project-type-label label label-outline <?php echo $execution->type == 'stage' ? 'label-warning' : 'label-info';?>'><?php echo $lang->execution->typeList[$execution->type]?></span>
             <?php endif;?>
