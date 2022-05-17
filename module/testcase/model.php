@@ -179,7 +179,7 @@ class testcaseModel extends model
             foreach(explode(',', $this->config->testcase->create->requiredFields) as $field)
             {
                 $field = trim($field);
-                if($field and empty($data[$i]->$field)) return print(js::alert(sprintf($this->lang->error->notempty, $this->lang->testcase->$field)));
+                if($field and empty($data[$i]->$field)) return helper::end(js::alert(sprintf($this->lang->error->notempty, $this->lang->testcase->$field)));
             }
         }
 
@@ -1018,7 +1018,7 @@ class testcaseModel extends model
             }
             else
             {
-                return print(js::error('case#' . $caseID . dao::getError(true)));
+                return helper::end(js::error('case#' . $caseID . dao::getError(true)));
             }
         }
 
@@ -2005,8 +2005,8 @@ class testcaseModel extends model
     /**
      * Build test case menu.
      *
-     * @param  object $case 
-     * @param  string $type 
+     * @param  object $case
+     * @param  string $type
      * @access public
      * @return string
      */
@@ -2019,7 +2019,7 @@ class testcaseModel extends model
     /**
      * Build test case view menu.
      *
-     * @param  object $case 
+     * @param  object $case
      * @access public
      * @return string
      */
@@ -2067,11 +2067,11 @@ class testcaseModel extends model
         {
             if(!isonlybody()) $menu .= $this->buildMenu('testcase', 'edit', $params, $case, 'view', '', '', 'showinonlybody');
             if(!$case->isLibCase && $case->auto != 'unit')
-            { 
+            {
                 $menu .= $this->buildMenu('testcase', 'create', "productID=$case->product&branch=$case->branch&moduleID=$case->module&from=testcase&param=$case->id", $case, 'view', 'copy');
             }
             if($case->isLibCase && common::hasPriv('caselib', 'createCase'))
-            { 
+            {
                 echo html::a(helper::createLink('caselib', 'createCase', "libID=$case->lib&moduleID=$case->module&param=$case->id"), "<i class='icon-copy'></i>", '', "class='btn' title='{$this->lang->testcase->copy}'");
             }
 
@@ -2084,7 +2084,7 @@ class testcaseModel extends model
     /**
      * Build test case browse menu.
      *
-     * @param  object $case 
+     * @param  object $case
      * @access public
      * @return string
      */
