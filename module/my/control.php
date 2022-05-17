@@ -780,6 +780,7 @@ EOF;
     public function risk($type = 'assignedTo', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         /* Set the pager. */
+        $this->loadModel('risk');
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
@@ -787,7 +788,7 @@ EOF;
 
         $this->view->title      = $this->lang->my->risk;
         $this->view->position[] = $this->lang->my->risk;
-        $this->view->risks      = $this->loadModel('risk')->getUserRisks($type, $this->app->user->account, $orderBy, $pager);
+        $this->view->risks      = $type == 'assignedBy' ? $this->loadModel('my')->getAssignedByMe($this->app->user->account, $type, '', $pager, $orderBy, '', 'risk') : $this->loadModel('risk')->getUserRisks($type, $this->app->user->account, $orderBy, $pager);
         $this->view->users      = $this->loadModel('user')->getPairs('noclosed|noletter');
         $this->view->orderBy    = $orderBy;
         $this->view->pager      = $pager;
