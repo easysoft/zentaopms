@@ -1391,16 +1391,9 @@ class kanban extends control
         }
         else
         {
-            if($card->fromType == '')
-            {
-                $this->kanban->delete(TABLE_KANBANCARD, $cardID);
-                $this->loadModel('action')->create('kanbancard', $cardID, 'Deleted', '', $cardID);
-            }
+            if($card->fromType == '') $this->kanban->delete(TABLE_KANBANCARD, $cardID);
 
-            if($card->fromType != '')
-            {
-                $this->dao->delete()->from(TABLE_KANBANCARD)->where('id')->eq($cardID)->exec();
-            }
+            if($card->fromType != '') $this->dao->delete()->from(TABLE_KANBANCARD)->where('id')->eq($cardID)->exec();
 
             if(isonlybody()) return print(js::reload('parent.parent'));
             return print(js::reload('parent'));
