@@ -833,6 +833,7 @@ class user extends control
             $response['result']  = 'success';
             if(strpos($this->referer, $loginLink) === false and
                strpos($this->referer, $denyLink)  === false and
+               strpos($this->referer, 'ajax') === false and
                strpos($this->referer, 'block')  === false and $this->referer
             )
             {

@@ -3250,13 +3250,11 @@ EOD;
         if(empty($markdown)) return false;
 
         global $app;
-        $app->loadClass('parsedownextraplugin');
+        $app->loadClass('michelf');
 
-        $Parsedown = new parsedownextraplugin;
+        $Michelf = new michelf;
 
-        $Parsedown->voidElementSuffix = '>'; // HTML5
-
-        return $Parsedown->text($markdown);
+        return $Michelf->parse($markdown);
     }
 }
 
