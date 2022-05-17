@@ -178,6 +178,29 @@ class productplanModel extends model
     }
 
     /**
+     * Get top plan pairs.
+     *
+     * @param int    $productID
+     * @param int    $branch
+     * @param int    $exclude
+     * @access public
+     * @return array
+     */
+    public function getTopPlanPairs($productID, $branch = '', $exclude = '')
+    {
+        $planPairs = $this->dao->select("id,title")->from(TABLE_PRODUCTPLAN)
+            ->where('product')->eq($productID)
+            ->beginIF($branch !== '')->andWhere('branch')->eq($branch)->fi()
+            ->andWhere('parent')->le(0)
+            ->andWhere('deleted')->eq(0)
+            ->fetchPairs();
+
+        if($exclude) unset($planPairs[$exclude]);
+
+        return $planPairs;
+    }
+
+    /**
      * Get plan pairs.
      *
      * @param  array|int        $product
@@ -404,18 +427,16 @@ class productplanModel extends model
 
         if($plan->parent > 0)
         {
-            if($plan->parentBegin != $this->config->productplan->future)
+            $parentPlan = $this->getByID($plan->parent);
+            if($parentPlan->begin != $this->config->productplan->future)
             {
-                if($plan->begin < $plan->parentBegin) dao::$errors['begin'] = sprintf($this->lang->productplan->beginLetterParent, $plan->parentBegin);
+                if($plan->begin < $parentPlan->begin) dao::$errors['begin'] = sprintf($this->lang->productplan->beginLetterParent, $parentPlan->begin);
             }
-            if($plan->parentEnd != $this->config->productplan->future)
+            if($parentPlan->end != $this->config->productplan->future)
             {
-                if($plan->end !== $this->config->productplan->future and $plan->end > $plan->parentEnd) dao::$errors['end'] = sprintf($this->lang->productplan->endGreaterParent, $plan->parentEnd);
+                if($plan->end !== $this->config->productplan->future and $plan->end > $parentPlan->end) dao::$errors['end'] = sprintf($this->lang->productplan->endGreaterParent, $parentPlan->end);
             }
         }
-
-        unset($plan->parentBegin);
-        unset($plan->parentEnd);
 
         if(!$this->post->future and strpos($this->config->productplan->create->requiredFields, 'begin') !== false and empty($_POST['begin']))
         {
@@ -442,7 +463,6 @@ class productplanModel extends model
             $this->loadModel('score')->create('productplan', 'create', $planID);
             if(!empty($plan->parent))
             {
-                $parentPlan = $this->getByID($plan->parent);
                 if($parentPlan->parent == '0')
                 {
                     $this->dao->update(TABLE_PRODUCTPLAN)->set('parent')->eq('-1')->where('id')->eq($plan->parent)->andWhere('parent')->eq('0')->exec();
@@ -473,7 +493,7 @@ class productplanModel extends model
      */
     public function update($planID)
     {
-        $oldPlan = $this->dao->findByID((int)$planID)->from(TABLE_PRODUCTPLAN)->fetch();
+        $oldPlan = $this->getByID($planID);
         $plan = fixer::input('post')->stripTags($this->config->productplan->editor->edit['id'], $this->config->allowedTags)
             ->setIF($this->post->future or empty($_POST['begin']), 'begin', $this->config->productplan->future)
             ->setIF($this->post->future or empty($_POST['end']), 'end', $this->config->productplan->future)
@@ -481,9 +501,11 @@ class productplanModel extends model
             ->remove('delta,uid,future')
             ->get();
 
-        if($oldPlan->parent > 0)
+        $parentPlan = $this->getByID($plan->parent);
+
+
+        if($plan->parent > 0)
         {
-            $parentPlan = $this->getByID($oldPlan->parent);
             if($parentPlan->begin !== $this->config->productplan->future)
             {
                 if($plan->begin < $parentPlan->begin) dao::$errors['begin'] = sprintf($this->lang->productplan->beginLetterParent, $parentPlan->begin);
@@ -493,9 +515,9 @@ class productplanModel extends model
                 if($plan->end !== $this->config->productplan->future and $plan->end > $parentPlan->end) dao::$errors['end'] = sprintf($this->lang->productplan->endGreaterParent, $parentPlan->end);
             }
         }
-        elseif($oldPlan->parent == -1 and $plan->begin != $this->config->productplan->future)
+        elseif($parentPlan and $plan->begin != $this->config->productplan->future)
         {
-            $childPlans = $this->dao->select('*')->from(TABLE_PRODUCTPLAN)->where('parent')->eq($planID)->andWhere('deleted')->eq(0)->fetchAll('id');
+            $childPlans = $this->getChildren($parentPlan->id);
             $minBegin   = $plan->begin;
             $maxEnd     = $plan->end;
             foreach($childPlans as $childID => $childPlan)
@@ -520,11 +542,31 @@ class productplanModel extends model
             ->exec();
         if(dao::isError()) return false;
 
+        if($plan->parent > 0) $this->updateParentStatus($plan->parent);
         if($oldPlan->parent > 0) $this->updateParentStatus($oldPlan->parent);
 
         if(!dao::isError())
         {
             $this->file->updateObjectID($this->post->uid, $planID, 'plan');
+            if(!empty($plan->parent))
+            {
+                if($parentPlan->parent == '0')
+                {
+                    $this->dao->update(TABLE_PRODUCTPLAN)->set('parent')->eq('-1')->where('id')->eq($plan->parent)->andWhere('parent')->eq('0')->exec();
+
+                    /* Transfer stories and bugs linked with the parent plan to the child plan. */
+                    $this->dao->update(TABLE_PLANSTORY)->set('plan')->eq($planID)->where('plan')->eq($plan->parent)->exec();
+                    $this->dao->update(TABLE_BUG)->set('plan')->eq($planID)->where('plan')->eq($plan->parent)->exec();
+                    $stories = $this->dao->select('*')->from(TABLE_STORY)->where("CONCAT(',', plan, ',')")->like("%,{$plan->parent},%")->fetchAll('id');
+                    foreach($stories as $storyID => $story)
+                    {
+                        $storyPlan = str_replace(",{$plan->parent},", ",$planID,", ",$story->plan,");
+                        $storyPlan = trim($storyPlan, ',');
+
+                        $this->dao->update(TABLE_STORY)->set('plan')->eq($storyPlan)->where('id')->eq($storyID)->exec();
+                    }
+                }
+            }
             return common::createChanges($oldPlan, $plan);
         }
     }

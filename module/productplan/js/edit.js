@@ -25,10 +25,22 @@ function getConflictStories(planID, branch)
 {
     $.get(createLink('productplan', 'ajaxGetConflictStory', 'planID=' + planID + '&newBranch=' + branch), function(conflictStories)
     {
-        if(conflictStories != '' && !confirm(conflictStories))
+        var result = confirm(conflictStories) ? true : false;
+        if(conflictStories != '' && !result)
         {
             $('#branch').val(oldBranch[planID]);
             $('#branch').trigger("chosen:updated");
+        }
+
+        if(result)
+        {
+            var link = createLink('productplan', 'ajaxGetTopPlan', "productID=" + productID + "&branch=" + branch);
+            $.post(link, function(data)
+            {
+              $('#parent').replaceWith(data);
+              $('#parent_chosen').remove();
+              $('#parent').chosen();
+            })
         }
     });
 }
@@ -73,4 +85,3 @@ $('#future').on('change', function()
     }
 });
 
-$('#future').change();
