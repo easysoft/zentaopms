@@ -519,6 +519,27 @@ class custom extends control
     }
 
     /**
+     * Set whether the kanban is read-only.
+     *
+     * @access public
+     * @return void
+     */
+    public function kanban()
+    {
+        if($_POST)
+        {
+            $this->loadModel('setting')->setItem("system.common.CRKanban@{$this->config->vision}", $this->post->kanban);
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'reload'));
+        }
+
+        $this->view->title      = $this->lang->custom->kanban;
+        $this->view->position[] = $this->lang->custom->common;
+        $this->view->position[] = $this->view->title;
+
+        $this->display();
+    }
+
+    /**
      * Set flow.
      *
      * @access public
