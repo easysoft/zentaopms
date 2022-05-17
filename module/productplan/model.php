@@ -71,20 +71,21 @@ class productplanModel extends model
      *
      * @param  int    $product
      * @param  int    $branch
-     * @param  string $browseType
+     * @param  string $browseType all|undone|wait|doing|done|closed
      * @param  object $pager
      * @param  string $orderBy
      * @param  string $param skipparent
      * @access public
      * @return object
      */
-    public function getList($product = 0, $branch = 0, $browseType = 'doing', $pager = null, $orderBy = 'begin_desc', $param = '')
+    public function getList($product = 0, $branch = 0, $browseType = 'undone', $pager = null, $orderBy = 'begin_desc', $param = '')
     {
         $date  = date('Y-m-d');
         $plans = $this->dao->select('*')->from(TABLE_PRODUCTPLAN)->where('product')->eq($product)
             ->andWhere('deleted')->eq(0)
             ->beginIF(!empty($branch) and $branch != 'all')->andWhere('branch')->eq($branch)->fi()
-            ->beginIF($browseType != 'all')->andWhere('status')->eq($browseType)->fi()
+            ->beginIF(strpos(',all,undone,', ",$browseType,") === false)->andWhere('status')->eq($browseType)->fi()
+            ->beginIF($browseType == 'undone')->andWhere('status')->in('wait,doing')->fi()
             ->beginIF(strpos($param, 'skipparent') !== false)->andWhere('parent')->ne(-1)->fi()
             ->orderBy($orderBy)
             ->page($pager)
