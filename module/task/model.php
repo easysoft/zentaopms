@@ -1022,7 +1022,7 @@ class taskModel extends model
             $requiredFields = str_replace(',estimate,', ',', $requiredFields);
         }
 
-        if(strpos(',doing,pause,', $task->status) && empty($teams) && empty($task->left))
+        if(strpos(',doing,pause,', $task->status) && empty($task->left))
         {
             dao::$errors[] = sprintf($this->lang->task->error->leftEmptyAB, $this->lang->task->statusList[$task->status]);
             return false;
