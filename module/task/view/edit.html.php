@@ -22,6 +22,7 @@
 <?php js::set('changeExecutionConfirmed', false);?>
 <?php js::set('newRowCount', count($task->team) < 6 ? 6 - count($task->team) : 1);?>
 <?php js::set('teamMemberError', $lang->task->error->teamMember);?>
+<?php js::set('totalLeftError', sprintf($this->lang->task->error->leftEmptyAB, $this->lang->task->statusList[$task->status]));?>
 <div class='main-content' id='mainContent'>
   <form method='post' enctype='multipart/form-data' target='hiddenwin' id='dataform'>
     <div class='main-header'>
@@ -252,7 +253,7 @@
     <div class="modal fade modal-team" id="modalTeam"  data-scroll-inside='false'>
       <div class="modal-dialog">
         <div class="modal-header">
-          <button type="button" class="close" data-dismiss="modal">
+          <button type="button" class="close hidden" data-dismiss="modal">
             <i class="icon icon-close"></i>
           </button>
           <h4 class="modal-title"><?php echo $lang->task->team?></h4>
