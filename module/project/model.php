@@ -709,7 +709,7 @@ class projectModel extends model
      */
     public function getBrotherProjects($project)
     {
-        if($project->parent == 0) return array($project->id => $project);
+        if($project->parent == 0) return array($project->id => $project->id);
 
         $projectIds    = array_filter(explode(',', $project->path));
         $parentProgram = $this->dao->select('*')->from(TABLE_PROGRAM)

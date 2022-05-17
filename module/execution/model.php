@@ -2012,7 +2012,7 @@ class executionModel extends model
         $project         = $this->loadModel('project')->getById($execution->project);
         $brotherProjects = $this->project->getBrotherProjects($project);
         $executions      = $this->dao->select('id')->from(TABLE_EXECUTION)
-            ->where('project')->in(array_keys($brotherProjects))
+            ->where('project')->in($brotherProjects)
             ->andWhere('status')->ne('closed')
             ->fetchPairs('id');
 
