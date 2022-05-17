@@ -113,6 +113,7 @@ class dao extends baseDAO
         $app->loadLang('workflowfield');
         $app->loadConfig('flow');
         $app->loadConfig('workflowfield');
+
         foreach($fields as $field)
         {
             if(isset($data->{$field->field}))
@@ -187,7 +188,7 @@ class dao extends baseDAO
      */
     public function checkflow()
     {
-        global $app, $config, $lang;
+        global $app, $config;
 
         if(!isset($config->bizVersion)) return $this;
 
@@ -204,9 +205,6 @@ class dao extends baseDAO
         $rawrules = $this->dbh->query("select * from " . TABLE_WORKFLOWRULE)->fetchall();
         foreach($rawrules as $rule) $rules[$rule->id] = $rule;
 
-        $table = strtolower(str_replace(array($config->db->prefix, '`'), '', $this->table));
-        if(!isset($lang->$table)) $lang->$table = new stdclass();
-
         foreach($flowfields as $key => $field)
         {
             if(!$field)
@@ -214,8 +212,6 @@ class dao extends baseDAO
                 unset($flowfields[$key]);
                 continue;
             }
-
-            $lang->$table->{$field->field} = $field->name;
 
             $ruleids = explode(',', trim($field->rules, ',') . ',' . trim($field->layoutrules, ','));
             $ruleids = array_unique($ruleids);
