@@ -193,7 +193,7 @@ $('#confirmButton').click(function()
         alert(teamMemberError);
         return false;
     }
-    if(totalLeft == 0)
+    if(totalLeft == 0 && (taskStatus == 'doing' || taskStatus == 'pause'))
     {
         alert(totalLeftError);
         return false;
