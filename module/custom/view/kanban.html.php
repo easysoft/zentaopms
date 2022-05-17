@@ -16,7 +16,7 @@
       <tr>
         <th class='w-150px'><?php echo $lang->custom->closedKanban;?></th>
         <td class='w-300px text-left'>
-          <?php $checkedKey = isset($config->CRKanban) ? $config->CRKanban : 0;?>
+          <?php $checkedKey = isset($config->CRKanban) ? $config->CRKanban : 1;?>
           <?php foreach($lang->custom->CRKanban as $key => $value):?>
           <label class="radio-inline"><input type="radio" name="kanban" value="<?php echo $key?>"<?php echo $key == $checkedKey ? " checked='checked'" : ''?> id="kanban<?php echo $key;?>"><?php echo $value;?></label>
           <?php endforeach;?>

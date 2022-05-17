@@ -78,13 +78,13 @@ function fullScreen()
 function exitFullScreen()
 {
     $('.region-actions > div > .action').show();
+    $(".title").attr("disabled", false).css("pointer-events", "auto");
     if(kanban.status == 'closed') return;
     $('#kanbanContainer').removeClass('fullscreen')
         .off('scroll', tryUpdateKanbanAffix);
     $('.actions').show();
     $('.action').show();
     $('.kanban-group-header').show();
-    $(".title").attr("disabled", false).css("pointer-events", "auto");
     $('.kanban-col.kanban-header-col').css('padding', '0px 30px');
     window.sortableDisabled = false;
     $.cookie('isFullScreen', 0);
@@ -1417,6 +1417,7 @@ $(function()
     {
         fullScreen();
         $('.region-actions > div > .action').show();
+        $(".title").attr("disabled", false).css("pointer-events", "auto");
     }
 });
 
