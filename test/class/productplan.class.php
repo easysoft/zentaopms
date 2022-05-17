@@ -65,7 +65,7 @@ class productPlan
      * @access public
      * @return array
      */
-    public function getList($product, $branch, $browseType, $pager, $orderBy, $param)
+    public function getList($product = 0, $branch = 0, $browseType = 'undone', $pager = null, $orderBy = 'begin_desc', $param = '')
     {
         $productplans = $this->productplan->getList($product, $branch, $browseType, $pager, $orderBy, $param);
         if(dao::isError()) return dao::getError();

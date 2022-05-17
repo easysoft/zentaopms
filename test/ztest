@@ -112,8 +112,8 @@ switch($argv[1])
     case 'projectstory':
         ztfRun('model/projectstory');
         break;
-    case 'productsonplan':
-        ztfRun('model/productsonplan');
+    case 'productplan':
+        ztfRun('model/productplan');
         break;
     case 'program':
         ztfRun('model/program');
