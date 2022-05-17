@@ -64,6 +64,7 @@ class messageModel extends model
      */
     public function send($objectType, $objectID, $actionType, $actionID, $actor = '')
     {
+        $objectType     = strtolower($objectType);
         $messageSetting = $this->config->message->setting;
         if(is_string($messageSetting)) $messageSetting = json_decode($messageSetting, true);
 

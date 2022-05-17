@@ -3573,6 +3573,42 @@ class kanbanModel extends model
     }
 
     /**
+     * Get toList and ccList.
+     *
+     * @param  object    $card
+     * @access public
+     * @return bool|array
+     */
+    public function getToAndCcList($card)
+    {
+        /* Set toList and ccList. */
+        $toList = $card->createdBy;
+        $ccList = trim($card->assignedTo, ',');
+        if(strpos(",$ccList,", ",$card->createdBy,") === false)
+        {
+            $ccList .= ",$card->createdBy";
+        }
+
+        if(empty($toList))
+        {
+            if(empty($ccList)) return false;
+            if(strpos($ccList, ',') === false)
+            {
+                $toList = $ccList;
+                $ccList = '';
+            }
+            else
+            {
+                $commaPos = strpos($ccList, ',');
+                $toList   = substr($ccList, 0, $commaPos);
+                $ccList   = substr($ccList, $commaPos + 1);
+            }
+        }
+
+        return array($toList, $ccList);
+    }
+
+    /**
      * Check if user can execute an action.
      *
      * @param  object $object
