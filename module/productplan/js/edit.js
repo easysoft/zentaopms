@@ -37,9 +37,9 @@ function getConflictStories(planID, branch)
             var link = createLink('productplan', 'ajaxGetTopPlan', "productID=" + productID + "&branch=" + branch);
             $.post(link, function(data)
             {
-              $('#parent').replaceWith(data);
-              $('#parent_chosen').remove();
-              $('#parent').chosen();
+                $('#parent').replaceWith(data);
+                $('#parent_chosen').remove();
+                $('#parent').chosen();
             })
         }
     });
