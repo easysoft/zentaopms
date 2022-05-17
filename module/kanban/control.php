@@ -741,6 +741,9 @@ class kanban extends control
             }
         }
 
+        $region = $this->kanban->getRegionByID($regionID);
+
+        $this->view->kanban  = $this->kanban->getByID($region->kanban);
         $this->view->columns = $columnsData;
 
         $this->display();

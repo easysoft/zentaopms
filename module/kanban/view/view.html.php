@@ -21,6 +21,7 @@ $laneCount = 0;
 foreach($regions as $region) $laneCount += $region->laneCount;
 
 js::set('vision', $this->config->vision);
+js::set('CRKanban', $this->config->CRKanban);
 js::set('regions', $regions);
 js::set('kanban', $kanban);
 js::set('kanbanLang', $lang->kanban);

@@ -2940,24 +2940,26 @@ class kanbanModel extends model
         $actions .= "<div class='btn-group'>";
         $actions .= "<a href='javascript:fullScreen();' id='fullScreenBtn' $btnColor class='btn btn-link'><i class='icon icon-fullscreen'></i> {$this->lang->kanban->fullScreen}</a>";
 
-        $printSettingBtn = (common::hasPriv('kanban', 'createRegion') or $printSetHeightBtn or common::hasPriv('kanban', 'performable') or common::hasPriv('kanban', 'edit') or common::hasPriv('kanban', 'close') or common::hasPriv('kanban', 'enableArchived') or common::hasPriv('kanban', 'delete'));
+        $CRKanban = ($this->config->CRKanban or $kanban->status != 'closed');
+        $printRegionBtn = ($CRKanban and (common::hasPriv('kanban', 'createRegion') or $printSetHeightBtn or common::hasPriv('kanban', 'performable') or common::hasPriv('kanban', 'enableArchived') or common::hasPriv('kanban', 'import') or common::hasPriv('kanban', 'setColumnWidth')));
+        $printKanbanBtn = (common::hasPriv('kanban', 'edit') or common::hasPriv('kanban', 'close') or common::hasPriv('kanban', 'delete'));
 
-        if($printSettingBtn)
+        if($printRegionBtn or $printKanbanBtn)
         {
             $actions .= "<a data-toggle='dropdown' $btnColor class='btn btn-link dropdown-toggle setting' type='button'>" . '<i class="icon icon-cog-outline"></i> ' . $this->lang->kanban->setting . '</a>';
             $actions .= "<ul id='kanbanActionMenu' class='dropdown-menu text-left'>";
-            if(common::hasPriv('kanban', 'createRegion')) $actions .= '<li>' . html::a(helper::createLink('kanban', 'createRegion', "kanbanID=$kanban->id", '', true), '<i class="icon icon-plus"></i>' . $this->lang->kanban->createRegion, '', "class='iframe btn btn-link'") . '</li>';
+            if(common::hasPriv('kanban', 'createRegion') and $CRKanban) $actions .= '<li>' . html::a(helper::createLink('kanban', 'createRegion', "kanbanID=$kanban->id", '', true), '<i class="icon icon-plus"></i>' . $this->lang->kanban->createRegion, '', "class='iframe btn btn-link'") . '</li>';
             $importWidth = $this->app->getClientLang() == 'en' ? '700' : '550';
-            if(common::hasPriv('kanban', 'import')) $actions .= '<li>' . html::a(helper::createLink('kanban', 'import', "kanbanID=$kanban->id", '', true), '<i class="icon icon-import"></i>' . $this->lang->kanban->import, '', "class='iframe btn btn-link' data-width=$importWidth") . '</li>';
-            if(common::hasPriv('kanban', 'enableArchived')) $actions .= '<li>' . html::a(helper::createLink('kanban', 'enableArchived', "kanbanID=$kanban->id", '', true), '<i class="icon icon-card-archive"></i>' . $this->lang->kanban->archived, '', "class='iframe btn btn-link' data-width=400") . '</li>';
-            if($printSetHeightBtn)
+            if(common::hasPriv('kanban', 'import') and $CRKanban) $actions .= '<li>' . html::a(helper::createLink('kanban', 'import', "kanbanID=$kanban->id", '', true), '<i class="icon icon-import"></i>' . $this->lang->kanban->import, '', "class='iframe btn btn-link' data-width=$importWidth") . '</li>';
+            if(common::hasPriv('kanban', 'enableArchived') and $CRKanban) $actions .= '<li>' . html::a(helper::createLink('kanban', 'enableArchived', "kanbanID=$kanban->id", '', true), '<i class="icon icon-card-archive"></i>' . $this->lang->kanban->archived, '', "class='iframe btn btn-link' data-width=400") . '</li>';
+            if($printSetHeightBtn and $CRKanban)
             {
                 $width    = $this->app->getClientLang() == 'en' ? '750' : '650';
                 $actions .= '<li>' . html::a(helper::createLink('kanban', 'setLaneHeight', "kanbanID=$kanban->id", '', true), '<i class="icon icon-size-height"></i>' . $this->lang->kanban->laneHeight, '', "class='iframe btn btn-link' data-width='$width'") . '</li>';
 
             }
-            if(common::hasPriv('kanban', 'setColumnWidth')) $actions .= '<li>' . html::a(helper::createLink('kanban', 'setColumnWidth', "kanbanID=$kanban->id", '', true), '<i class="icon icon-size-width"></i>' . $this->lang->kanban->columnWidth, '', "class='iframe btn btn-link' data-width=400") . '</li>';
-            if(common::hasPriv('kanban', 'performable')) $actions .= '<li>' . html::a(helper::createLink('kanban', 'performable', "kanbanID=$kanban->id", '', true), '<i class="icon icon-checked"></i>' . $this->lang->kanban->manageProgress, '', "class='iframe btn btn-link' data-width=40%") . '</li>';
+            if(common::hasPriv('kanban', 'setColumnWidth') and $CRKanban) $actions .= '<li>' . html::a(helper::createLink('kanban', 'setColumnWidth', "kanbanID=$kanban->id", '', true), '<i class="icon icon-size-width"></i>' . $this->lang->kanban->columnWidth, '', "class='iframe btn btn-link' data-width=400") . '</li>';
+            if(common::hasPriv('kanban', 'performable') and $CRKanban) $actions .= '<li>' . html::a(helper::createLink('kanban', 'performable', "kanbanID=$kanban->id", '', true), '<i class="icon icon-checked"></i>' . $this->lang->kanban->manageProgress, '', "class='iframe btn btn-link' data-width=40%") . '</li>';
 
             $kanbanActions = '';
             $attr          = $kanban->status == 'closed' ? "disabled='disabled'" : '';
@@ -2966,7 +2968,7 @@ class kanbanModel extends model
             if(common::hasPriv('kanban', 'delete')) $kanbanActions .= '<li>' . html::a(helper::createLink('kanban', 'delete', "kanbanID=$kanban->id"), '<i class="icon icon-trash"></i>' . $this->lang->kanban->delete, 'hiddenwin', "class='btn btn-link'") . '</li>';
             if($kanbanActions)
             {
-                $actions .= ((common::hasPriv('kanban', 'createRegion') or $printSetHeightBtn or common::hasPriv('kanban', 'performable') or common::hasPriv('kanban', 'setColumnWidth')) and (common::hasPriv('kanban', 'edit') or common::hasPriv('kanban', 'close') or common::hasPriv('kanban', 'enableArchived') or common::hasPriv('kanban', 'delete'))) ? "<li class='divider'></li>" . $kanbanActions : $kanbanActions;
+                $actions .= $printRegionBtn ? "<li class='divider'></li>" . $kanbanActions : $kanbanActions;
             }
             $actions .= "</ul>";
         }
