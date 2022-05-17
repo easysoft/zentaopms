@@ -84,7 +84,7 @@ class productplanModel extends model
         $plans = $this->dao->select('*')->from(TABLE_PRODUCTPLAN)->where('product')->eq($product)
             ->andWhere('deleted')->eq(0)
             ->beginIF(!empty($branch) and $branch != 'all')->andWhere('branch')->eq($branch)->fi()
-            ->beginIF(strpos(',all,undone,', $browseType) === false)->andWhere('status')->eq($browseType)->fi()
+            ->beginIF(strpos(',all,undone,', ",$browseType,") === false)->andWhere('status')->eq($browseType)->fi()
             ->beginIF($browseType == 'undone')->andWhere('status')->in('wait,doing')->fi()
             ->beginIF(strpos($param, 'skipparent') !== false)->andWhere('parent')->ne(-1)->fi()
             ->orderBy($orderBy)
