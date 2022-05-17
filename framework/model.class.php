@@ -65,11 +65,12 @@ class model extends baseModel
      * @param  string $target
      * @param  string $misc
      * @param  bool   $onlyBody
+     * @param  bool   $returnHtml
      * @access public
      * @return string
      */
 
-    public function buildMenu($moduleName, $methodName, $params, $data, $type = 'view', $icon = '', $target = '', $class = '', $onlyBody = false, $misc = '' , $title = '')
+    public function buildMenu($moduleName, $methodName, $params, $data, $type = 'view', $icon = '', $target = '', $class = '', $onlyBody = false, $misc = '' , $title = '', $returnHtml = true)
     {
         if(strpos($moduleName, '.') !== false) list($appName, $moduleName) = explode('.', $moduleName);
 
@@ -114,6 +115,8 @@ class model extends baseModel
         {
             if(method_exists($this, 'isClickable')) $enabled = $this->isClickable($data, $method, $module);
         }
+
+        if(!$returnHtml) return $enabled;
 
         $html = '';
         $type = $type == 'browse' ? 'list' : 'button';
