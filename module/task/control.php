@@ -162,7 +162,8 @@ class task extends control
                 $this->action->create('todo', $todoID, 'finished', '', "TASK:$taskID");
             }
 
-            $this->executeHooks($taskID);
+            $message = $this->executeHooks($taskID);
+            if($message) $this->lang->saveSuccess = $message;
 
             /* Return task id when call the API. */
             if($this->viewType == 'json' or (defined('RUN_MODE') && RUN_MODE == 'api')) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $taskID));

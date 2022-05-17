@@ -397,7 +397,8 @@ class bug extends control
                 $this->action->create('todo', $output['todoID'], 'finished', '', "BUG:$bugID");
             }
 
-            $this->executeHooks($bugID);
+            $message = $this->executeHooks($bugID);
+            if($message) $this->lang->saveSuccess = $message;
 
             /* Return bug id when call the API. */
             if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $bugID));

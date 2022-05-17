@@ -92,7 +92,8 @@ class caselib extends control
                 $this->action->logHistory($actionID, $changes);
             }
 
-            $this->executeHooks($libID);
+            $message = $this->executeHooks($libID);
+            if($message) $response['message'] = $message;
 
             $response['locate']  = inlink('view', "libID=$libID");
             return $this->send($response);
@@ -130,7 +131,8 @@ class caselib extends control
         {
             $this->caselib->delete($libID);
 
-            $this->executeHooks($libID);
+            $message = $this->executeHooks($libID);
+            if($message) $response['message'] = $message;
 
             /* if ajax request, send result. */
             if($this->server->ajax)

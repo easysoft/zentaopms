@@ -178,7 +178,8 @@ class story extends control
                 $this->action->create('todo', $todoID, 'finished', '', "STORY:$storyID");
             }
 
-            $this->executeHooks($storyID);
+            $message = $this->executeHooks($storyID);
+            if($message) $this->lang->saveSuccess = $message;
 
             if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $storyID));
 
