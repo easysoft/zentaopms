@@ -538,15 +538,14 @@ class user extends control
 
         $title      = $this->lang->company->common . $this->lang->colon . $this->lang->user->create;
         $position[] = $this->lang->user->create;
-        $this->view->title      = $title;
-        $this->view->gobackLink = $this->createLink('company', 'browse');
-        $this->view->position   = $position;
-        $this->view->depts      = $this->dept->getOptionMenu();
-        $this->view->groupList  = $groupList;
-        $this->view->roleGroup  = $roleGroup;
-        $this->view->deptID     = $deptID;
-        $this->view->rand       = $this->user->updateSessionRandom();
-        $this->view->companies  = $this->loadModel('company')->getOutsideCompanies();
+        $this->view->title     = $title;
+        $this->view->position  = $position;
+        $this->view->depts     = $this->dept->getOptionMenu();
+        $this->view->groupList = $groupList;
+        $this->view->roleGroup = $roleGroup;
+        $this->view->deptID    = $deptID;
+        $this->view->rand      = $this->user->updateSessionRandom();
+        $this->view->companies = $this->loadModel('company')->getOutsideCompanies();
 
         $this->display();
     }
