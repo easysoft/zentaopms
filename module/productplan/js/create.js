@@ -65,7 +65,7 @@ $('#future').on('change', function()
 
 $('#branch').change(function()
 {
-    var branchID = $(this).val();
+    var branchID     = $(this).val();
     var lastPlanLink = createLink('productplan', 'ajaxGetLast', "productID=" + productID + "&branch=" + branchID);
     var topPlanLink  = createLink('productplan', 'ajaxGetTopPlan', "productID=" + productID + "&branch=" + branchID);
 
