@@ -367,7 +367,7 @@ EOF;
         }
         else
         {
-            $stories = $this->getUserStories($this->app->user->account, $type, $sort, $pager, 'requirement');
+            $stories = $this->loadModel('story')->getUserStories($this->app->user->account, $type, $sort, $pager, 'requirement');
         }
 
         if(!empty($stories)) $stories = $this->story->mergeReviewer($stories);
