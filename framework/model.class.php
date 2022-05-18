@@ -63,8 +63,10 @@ class model extends baseModel
      * @param  string $type
      * @param  string $icon
      * @param  string $target
-     * @param  string $misc
+     * @param  string $class
      * @param  bool   $onlyBody
+     * @param  string $misc
+     * @param  string $title
      * @param  bool   $returnHtml
      * @access public
      * @return string
