@@ -309,6 +309,18 @@ class myModel extends model
 
         return $actions;
     }
+
+    /**
+     * getAssignedByMe
+     *
+     * @param string $account
+     * @param int $limit
+     * @param string $orderBy
+     * @param int $projectID
+     * @param string $objectType
+     * @access public
+     * @return array
+     */
     public function getAssignedByMe($account, $limit = 0, $pager = null, $orderBy = "id_desc", $projectID = 0, $objectType = '')
     {
         $this->loadModel($objectType);
