@@ -66,6 +66,7 @@ $lang->my->taskMenu->openedByMe   = '由我创建';
 $lang->my->taskMenu->finishedByMe = '由我完成';
 $lang->my->taskMenu->closedByMe   = '由我关闭';
 $lang->my->taskMenu->canceledByMe = '由我取消';
+$lang->my->taskMenu->assignedByMe = '由我指派';
 
 $lang->my->storyMenu = new stdclass();
 $lang->my->storyMenu->assignedToMe = '指派给我';

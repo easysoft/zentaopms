@@ -1295,7 +1295,9 @@ class kanbanModel extends model
 
                     if($cell->type == 'task')
                     {
-                        $cardData['name'] = $object->name;
+                        $cardData['name']     = $object->name;
+                        $cardData['status']   = $object->status;
+                        $cardData['left']     = $object->left;
                     }
                     else
                     {
@@ -2940,7 +2942,7 @@ class kanbanModel extends model
         $actions .= "<div class='btn-group'>";
         $actions .= "<a href='javascript:fullScreen();' id='fullScreenBtn' $btnColor class='btn btn-link'><i class='icon icon-fullscreen'></i> {$this->lang->kanban->fullScreen}</a>";
 
-        $CRKanban       = !($this->config->CRKanban === '0' and $kanban->status === 'closed');
+        $CRKanban       = !(isset($this->config->CRKanban) and $this->config->CRKanban === '0' and $kanban->status === 'closed');
         $printRegionBtn = ($CRKanban and (common::hasPriv('kanban', 'createRegion') or $printSetHeightBtn or common::hasPriv('kanban', 'performable') or common::hasPriv('kanban', 'enableArchived') or common::hasPriv('kanban', 'import') or common::hasPriv('kanban', 'setColumnWidth')));
         $printKanbanBtn = (common::hasPriv('kanban', 'edit') or common::hasPriv('kanban', 'close') or common::hasPriv('kanban', 'delete'));
 
@@ -3572,6 +3574,38 @@ class kanbanModel extends model
                 break;
         }
         return $menus;
+    }
+
+    /**
+     * Get toList and ccList.
+     *
+     * @param  object    $card
+     * @access public
+     * @return bool|array
+     */
+    public function getToAndCcList($card)
+    {
+        /* Set toList and ccList. */
+        $toList = $card->createdBy;
+        $ccList = trim($card->assignedTo, ',');
+
+        if(empty($toList))
+        {
+            if(empty($ccList)) return false;
+            if(strpos($ccList, ',') === false)
+            {
+                $toList = $ccList;
+                $ccList = '';
+            }
+            else
+            {
+                $commaPos = strpos($ccList, ',');
+                $toList   = substr($ccList, 0, $commaPos);
+                $ccList   = substr($ccList, $commaPos + 1);
+            }
+        }
+
+        return array($toList, $ccList);
     }
 
     /**

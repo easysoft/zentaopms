@@ -191,9 +191,12 @@ $('#confirmButton').click(function()
     if(memberCount < 2)
     {
         alert(teamMemberError);
+        return false;
     }
-    else
+    if(totalLeft == 0 && (taskStatus == 'doing' || taskStatus == 'pause'))
     {
-        $('.close').click();
+        alert(totalLeftError);
+        return false;
     }
+    $('.close').click();
 });

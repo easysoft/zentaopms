@@ -334,6 +334,7 @@ $lang->kanbancard->delete  = '删除';
 $lang->kanbancard->name            = '卡片名称';
 $lang->kanbancard->legendBasicInfo = '基本信息';
 $lang->kanbancard->legendLifeTime  = '卡片的一生';
+$lang->kanbancard->legendDesc      = '卡片描述';
 $lang->kanbancard->space           = '所属空间';
 $lang->kanbancard->region          = '所属区域';
 $lang->kanbancard->kanban          = '所属看板';
