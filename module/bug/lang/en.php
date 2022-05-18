@@ -134,6 +134,7 @@ $lang->bug->assignToMe         = 'AssignedToMe';
 $lang->bug->openedByMe         = 'ReportedByMe';
 $lang->bug->resolvedByMe       = 'ResolvedByMe';
 $lang->bug->closedByMe         = 'ClosedByMe';
+$lang->bug->assignedByMe       = 'AssignedByMe';
 $lang->bug->assignToNull       = 'Unassigned';
 $lang->bug->unResolved         = 'Active';
 $lang->bug->toClosed           = 'ToBeClosed';
