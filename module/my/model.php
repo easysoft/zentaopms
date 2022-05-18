@@ -309,4 +309,56 @@ class myModel extends model
 
         return $actions;
     }
+
+    /**
+     * Get assigned by me objects.
+     *
+     * @param string $account
+     * @param int    $limit
+     * @param string $orderBy
+     * @param int    $pager
+     * @param int    $projectID
+     * @param string $objectType
+     * @access public
+     * @return array
+     */
+    public function getAssignedByMe($account, $limit = 0, $pager = null, $orderBy = "id_desc", $projectID = 0, $objectType = '')
+    {
+        $this->loadModel($objectType);
+        $objectList = $this->dao->select('t1.*')
+            ->from($this->config->objectTables[$objectType])->alias('t1')
+            ->leftJoin(TABLE_ACTION)->alias('t2')->on("t1.id = t2.objectID and t2.objectType='{$objectType}'")
+            ->where('t2.actor')->eq($account)
+            ->andWhere('t2.action')->eq('assigned')
+            ->andWhere('t1.deleted')->eq(0)
+            ->orderBy($orderBy)
+            ->page($pager, 't1.id')
+            ->fetchAll('id');
+
+        if($objectType == 'task')
+        {
+            $projectList = array();
+            foreach($objectList as $task) $projectList[$task->project] = $task->project;
+            $projectPairs = $this->dao->select('id,name')->from(TABLE_PROJECT)->where('id')->in($projectList)->fetchPairs('id');
+            foreach($objectList as $task) $task->projectName = zget($projectPairs, $task->project);
+
+            $executionList = array();
+            foreach($objectList as $task) $executionList[$task->execution] = $task->execution;
+            $executionPairs = $this->dao->select('id,name')->from(TABLE_PROJECT)->where('id')->in($executionList)->fetchPairs('id');
+            foreach($objectList as $task) $task->executionName = zget($executionPairs, $task->execution);
+
+            if($objectList) return $this->loadModel('task')->processTasks($objectList);
+            return array();
+        }
+
+        if($objectType == 'bug')
+        {
+            $productList = array();
+            foreach($objectList as $bug) $productList[$bug->product] = $bug->product;
+            $productPairs = $this->dao->select('id,name')->from(TABLE_PRODUCT)->where('id')->in($productList)->fetchPairs('id');
+            foreach($objectList as $bug) $bug->productName = zget($productPairs, $bug->product);
+        }
+
+        return $objectList;
+    }
 }
