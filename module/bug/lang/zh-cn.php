@@ -134,6 +134,7 @@ $lang->bug->assignToMe         = '指派给我';
 $lang->bug->openedByMe         = '由我创建';
 $lang->bug->resolvedByMe       = '由我解决';
 $lang->bug->closedByMe         = '由我关闭';
+$lang->bug->assignedByMe       = '由我指派';
 $lang->bug->assignToNull       = '未指派';
 $lang->bug->unResolved         = '未解决';
 $lang->bug->toClosed           = '待关闭';
