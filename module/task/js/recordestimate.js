@@ -8,7 +8,15 @@ $(function()
         {
             if($(this).val() !== '') left = $(this).val();
         });
-        if(left === '0') return confirm(confirmRecord);
+        if(left == '0')
+        {
+            var confirmMsg = confirm(confirmRecord);
+            if(confirmMsg == false)
+            {
+                $('#submit').attr("disabled",false);
+                return false;
+            }
+        }
     });
 
     $('#recordForm .showinonlybody').each(function()
