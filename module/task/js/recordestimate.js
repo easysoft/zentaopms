@@ -13,7 +13,7 @@ $(function()
             var confirmMsg = confirm(confirmRecord);
             if(confirmMsg == false)
             {
-                $('#submit').attr("disabled",false);
+                $('#submit').attr("disabled", false);
                 return false;
             }
         }
