@@ -372,7 +372,7 @@ EOF;
 
         if($type == 'assignedBy')
         {
-            $stories = $this->loadModel('my')->getAssignedByMe($this->app->user->account, '', $pager, $orderBy, '', 'requirment');
+            $stories = $this->loadModel('my')->getAssignedByMe($this->app->user->account, '', $pager, $orderBy, '', 'requirement');
         }
         else
         {
