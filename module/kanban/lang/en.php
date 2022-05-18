@@ -334,6 +334,7 @@ $lang->kanbancard->delete  = 'Delete';
 $lang->kanbancard->name            = 'Card Name';
 $lang->kanbancard->legendBasicInfo = 'Basic Info';
 $lang->kanbancard->legendLifeTime  = 'Card Life';
+$lang->kanbancard->legendDesc      = 'Card Description';
 $lang->kanbancard->space           = 'Space';
 $lang->kanbancard->region          = 'Region';
 $lang->kanbancard->kanban          = 'Kanban';

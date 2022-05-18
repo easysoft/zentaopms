@@ -978,6 +978,9 @@ class kanban extends control
     {
         $this->kanban->moveCard($cardID, $fromColID, $toColID, $fromLaneID, $toLaneID, $kanbanID);
         if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+        $this->loadModel('action')->create('kanbanCard', $cardID, 'moved');
+
         $kanbanGroup = $this->kanban->getKanbanData($kanbanID);
         echo json_encode($kanbanGroup);
     }
@@ -1392,11 +1395,8 @@ class kanban extends control
         else
         {
             if($card->fromType == '') $this->kanban->delete(TABLE_KANBANCARD, $cardID);
-            if($card->fromType != '')
-            {
-                $this->dao->delete()->from(TABLE_KANBANCARD)->where('id')->eq($cardID)->exec();
-                $this->loadModel('action')->create('kanbancard', $cardID, 'Deleted', '', $cardID);
-            }
+
+            if($card->fromType != '') $this->dao->delete()->from(TABLE_KANBANCARD)->where('id')->eq($cardID)->exec();
 
             if(isonlybody()) return print(js::reload('parent.parent'));
             return print(js::reload('parent'));

@@ -1734,6 +1734,22 @@ class kanbanTest
     }
 
     /**
+     * Get toList and ccList.
+     *
+     * @param  object $card
+     * @access public
+     * @return array
+     */
+    public function getToAndCcListTest($card)
+    {
+        $objects = $this->objectModel->getToAndCcList($card);
+
+        if(dao::isError()) return dao::getError();
+
+        return $objects;
+    }
+
+    /**
      * Test check if user can execute an action.
      *
      * @param  string $objectType
