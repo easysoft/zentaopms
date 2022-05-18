@@ -74,6 +74,7 @@ $lang->my->storyMenu->reviewByMe   = 'ReviewByMe';
 $lang->my->storyMenu->openedByMe   = 'CreatedByMe';
 $lang->my->storyMenu->reviewedByMe = 'ReviewedByMe';
 $lang->my->storyMenu->closedByMe   = 'ClosedByMe';
+$lang->my->storyMenu->assignedByMe = 'AssignedByMe';
 
 $lang->my->projectMenu = new stdclass();
 $lang->my->projectMenu->doing      = 'Doing';

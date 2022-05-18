@@ -350,6 +350,7 @@ EOF;
     public function requirement($type = 'assignedTo', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         /* Save session. */
+        $this->loadModel('story');
         if($this->app->viewType != 'json') $this->session->set('storyList', $this->app->getURI(true), 'my');
 
         /* Load pager. */
@@ -360,7 +361,15 @@ EOF;
         /* Append id for secend sort. */
         $sort = common::appendOrder($orderBy);
 
-        $stories = $this->loadModel('story')->getUserStories($this->app->user->account, $type, $sort, $pager, 'requirement');
+        if($type == 'assignedBy')
+        {
+            $stories = $this->loadModel('my')->getAssignedByMe($this->app->user->account, '', $pager, $orderBy, '', 'story');
+        }
+        else
+        {
+            $stories = $this->getUserStories($this->app->user->account, $type, $sort, $pager, 'requirement');
+        }
+
         if(!empty($stories)) $stories = $this->story->mergeReviewer($stories);
 
         /* Assign. */
