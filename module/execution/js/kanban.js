@@ -600,14 +600,13 @@ function renderTaskItem(item, $item, col)
 
     if(scaleSize <= 2)
     {
-        var idHtml     = scaleSize <= 1 ? ('<span class="info info-id text-muted">#' + item.id + '</span>') : '';
         var priHtml    = '<span class="info info-pri label-pri label-pri-' + item.pri + '" title="' + item.pri + '">' + item.pri + '</span>';
-        var hoursHtml  = (item.estimate && scaleSize <= 1) ? ('<span class="info info-estimate text-muted">' + item.estimate + 'h</span>') : '';
+        var hoursHtml  = scaleSize <= 1 && item.status != 'wait' ? ('<span class="info info-estimate text-muted">' + taskLang.leftAB + ' ' + item.left + 'h</span>') : ('<span class="info info-estimate text-muted">' + taskLang.estimateAB + ' ' + item.estimate + 'h</span>');
         var avatarHtml = renderUserAvatar(item.assignedTo, 'task', item.id);
 
         var $infos = $item.find('.infos');
         if(!$infos.length) $infos = $('<div class="infos"></div>');
-        $infos.html([idHtml, priHtml, hoursHtml].join(''));
+        $infos.html([priHtml, hoursHtml].join(''));
         if(item.deadline && scaleSize <= 1) $infos.append(renderDeadline(item.deadline));
         $infos[scaleSize <= 1 ? 'append' : 'prepend'](avatarHtml);
 

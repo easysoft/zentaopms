@@ -136,6 +136,7 @@ $lang->productplan->beginLetterParentTip = "子计划[%s]的开始日期：%s，
 $lang->productplan->endGreaterParentTip  = "子计划[%s]的完成日期：%s，不能大于父计划的完成日期: %s";
 
 $lang->productplan->featureBar['browse']['all']    = '所有';
+$lang->productplan->featureBar['browse']['undone'] = '未完成';
 $lang->productplan->featureBar['browse']['wait']   = '未开始';
 $lang->productplan->featureBar['browse']['doing']  = '进行中';
 $lang->productplan->featureBar['browse']['done']   = '已完成';

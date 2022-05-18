@@ -16,6 +16,9 @@ switch($argv[1])
     case 'api':
         ztfRun('api');
         break;
+    case 'mapi':
+        ztfRun('model/api');
+        break;
     case 'control':
         ztfRun('control');
         break;
@@ -109,8 +112,8 @@ switch($argv[1])
     case 'projectstory':
         ztfRun('model/projectstory');
         break;
-    case 'productsonplan':
-        ztfRun('model/productsonplan');
+    case 'productplan':
+        ztfRun('model/productplan');
         break;
     case 'program':
         ztfRun('model/program');
@@ -130,8 +133,12 @@ switch($argv[1])
     case 'report':
         ztfRun('model/report');
         break;
+    case 'score':
+        ztfRun('model/score');
+        break;
     case 'sso':
         ztfRun('model/sso');
+        break;
     case 'setting':
         ztfRun('model/setting');
         break;

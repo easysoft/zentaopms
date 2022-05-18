@@ -132,7 +132,7 @@
           $onlyChildStage = ($execution->grade == 2 and $execution->project != $execution->parent);
           if($onlyChildStage and isset($parents[$execution->parent])) $executionName = $parents[$execution->parent]->name . '/' . $executionName;
           ?>
-          <td class='text-left c-name <?php if(!empty($execution->children)) echo 'has-child';?> flex' title='<?php echo $executionName?>'>
+          <td class='text-left c-name sort-handler <?php if(!empty($execution->children)) echo 'has-child';?> flex' title='<?php echo $executionName?>'>
             <?php if($config->systemMode == 'new'):?>
             <span class='project-type-label label label-outline <?php echo $execution->type == 'stage' ? 'label-warning' : 'label-info';?>'><?php echo $lang->execution->typeList[$execution->type]?></span>
             <?php endif;?>
@@ -228,6 +228,12 @@
                if(isset($child->delay)) echo "<span class='label label-danger label-badge'>{$lang->execution->delayed}</span> ";
                ?>
              </td>
+             <?php if($from == 'execution'): ?>
+             <td title = '<?php echo $child->code;?>'><?php echo $child->code;?>
+               <?php if($config->systemMode == 'new'):?>
+                 <td title = '<?php echo $child->projectName?>'><?php echo $child->projectName;?>
+               <?php endif;?>
+             <?php endif;?>
              <td><?php echo zget($users, $child->PM);?></td>
              <?php $executionStatus = $this->processStatus('execution', $child);?>
              <td class='c-status text-center' title='<?php echo $executionStatus;?>'>
@@ -236,7 +242,7 @@
              <td class="c-progress">
                <?php echo html::ring($child->hours->progress); ?>
              </td>
-             <?php if($isStage):?>
+             <?php if($from == 'project' and $isStage):?>
              <td><?php echo $child->percent . '%';?></td>
              <td><?php echo zget($lang->stage->typeList, $child->attribute, '');?></td>
              <td><?php echo helper::isZeroDate($child->begin)     ? '' : $child->begin;?></td>
@@ -269,11 +275,11 @@
                 ?>
              </td>
              <?php else:?>
+             <td class='c-begin' title='<?php echo helper::isZeroDate($child->begin) ? '' : $child->begin;?>'><?php echo helper::isZeroDate($child->begin) ? '' : $child->begin;?></td>
+             <td class='c-begin' title='<?php echo helper::isZeroDate($child->end) ? '' : $child->end;?>'><?php echo helper::isZeroDate($child->end) ? '' : $child->end;?></td>
              <td class='hours' title='<?php echo $child->hours->totalEstimate . ' ' . $this->lang->execution->workHour;?>'><?php echo $child->hours->totalEstimate . ' ' . $this->lang->execution->workHourUnit;?></td>
              <td class='hours' title='<?php echo $child->hours->totalConsumed . ' ' . $this->lang->execution->workHour;?>'><?php echo $child->hours->totalConsumed . ' ' . $this->lang->execution->workHourUnit;?></td>
              <td class='hours' title='<?php echo $child->hours->totalLeft     . ' ' . $this->lang->execution->workHour;?>'><?php echo $child->hours->totalLeft     . ' ' . $this->lang->execution->workHourUnit;?></td>
-             <?php endif;?>
-             <?php if(!$isStage):?>
              <td id='spark-<?php echo $child->id?>' class='sparkline text-left no-padding' values='<?php echo join(',', $child->burns);?>'></td>
              <?php endif;?>
              <?php foreach($extendFields as $extendField) echo "<td>" . $this->loadModel('flow')->getFieldValue($extendField, $child) . "</td>";?>

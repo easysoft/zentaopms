@@ -2330,7 +2330,7 @@ class bug extends control
      */
     public function ajaxGetProjectTeamMembers($projectID, $selectedUser = '')
     {
-        $users       = $this->loadModel('user')->getPairs('noclosed');
+        $users       = $this->loadModel('user')->getPairs('noclosed|all');
         $teamMembers = empty($projectID) ? array() : $this->loadModel('project')->getTeamMemberPairs($projectID);
         foreach($teamMembers as $account => $member) $teamMembers[$account] = $users[$account];
 

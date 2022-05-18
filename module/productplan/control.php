@@ -91,6 +91,10 @@ class productplan extends control
         if($parent) $this->view->parentPlan = $this->productplan->getById($parent);
         $branchPairs = $product->type == 'normal' ? array() : $this->loadModel('branch')->getPairs($productID, 'active');
 
+        /* Get parent plan pairs. */
+        $parentPlanPairs = $this->productplan->getTopPlanPairs($productID, $branchID);
+        $this->view->parentPlanPairs = $parentPlanPairs;
+
         /*Get default branch.*/
         $branchList = $this->loadModel('branch')->getList($productID);
         foreach($branchList as $branch)
@@ -140,10 +144,12 @@ class productplan extends control
         $oldBranch = array($planID => $plan->branch);
 
         $this->commonAction($plan->product, $plan->branch);
-        $this->view->title      = $this->view->product->name . $this->lang->colon . $this->lang->productplan->edit;
-        $this->view->position[] = $this->lang->productplan->edit;
-        $this->view->oldBranch  = $oldBranch;
-        $this->view->plan       = $plan;
+        $this->view->title           = $this->view->product->name . $this->lang->colon . $this->lang->productplan->edit;
+        $this->view->position[]      = $this->lang->productplan->edit;
+        $this->view->productID       = $plan->product;
+        $this->view->oldBranch       = $oldBranch;
+        $this->view->plan            = $plan;
+        $this->view->parentPlanPairs = $this->productplan->getTopPlanPairs($plan->product, $plan->branch, $planID);
         $this->display();
     }
 
@@ -282,7 +288,7 @@ class productplan extends control
      * @access public
      * @return void
      */
-    public function browse($productID = 0, $branch = '', $browseType = 'doing', $orderBy = 'begin_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1 )
+    public function browse($productID = 0, $branch = '', $browseType = 'undone', $orderBy = 'begin_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1 )
     {
         $branchID = $branch === '' ? 'all' : $branch;
         if(!$branch) $branch = 0;
@@ -941,5 +947,19 @@ class productplan extends control
     {
         $lastPlan = $this->productplan->getLast($productID, $branch, $parent);
         echo json_encode($lastPlan);
+    }
+
+    /**
+     * AJAX: Get top plan.
+     *
+     * @param  int    $productID
+     * @param  int    $branch
+     * @access public
+     * @return object
+     */
+    public function ajaxGetTopPlan($productID, $branch = 0)
+    {
+        $parentPlanPairs = $this->productplan->getTopPlanPairs($productID, $branch);
+        return print(html::select('parent', array('0' => '') + $parentPlanPairs, '', 'class="form-control"'));
     }
 }

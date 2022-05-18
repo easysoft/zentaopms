@@ -857,7 +857,7 @@ class convertModel extends model
                 $bug->openedBy    = $this->getJiraAccount($data->CREATOR, $method);
                 $bug->openedDate  = substr($data->CREATED, 0, 19);
                 $bug->openedBuild = 'trunk';
-                $bug->assignedTo  = $this->getJiraAccount($data->ASSIGNEE, $method);
+                $bug->assignedTo  = $bug->status == 'closed' ? 'closed' : $this->getJiraAccount($data->ASSIGNEE, $method);
 
                 if($data->RESOLUTION)
                 {

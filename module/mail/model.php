@@ -691,7 +691,7 @@ class mailModel extends model
         $action     = $this->action->getById($actionID);
         $history    = $this->action->getHistory($actionID);
         $objectType = $action->objectType;
-        $object     = $this->loadModel($objectType)->getByID($objectID);
+        $object     = $objectType == 'kanbancard' ? $this->loadModel('kanban')->getCardByID($objectID) : $this->loadModel($objectType)->getByID($objectID);
         $nameFields = $this->config->action->objectNameFields[$objectType];
         $title      = zget($object, $nameFields, '');
         $subject    = $this->getSubject($objectType, $object, $title, $action->action);
@@ -726,6 +726,8 @@ class mailModel extends model
         if($objectType == 'review') $this->app->loadLang('baseline');
 
         /* Get mail content. */
+        if($objectType == 'kanbancard') $objectType = 'kanban';
+
         $modulePath = $this->app->getModulePath($appName = '', $objectType);
         $oldcwd     = getcwd();
         $viewFile   = $modulePath . 'view/sendmail.html.php';

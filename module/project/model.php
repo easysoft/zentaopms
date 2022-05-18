@@ -701,6 +701,32 @@ class projectModel extends model
     }
 
     /**
+     * Get all the projects under the program set to which an project belongs.
+     *
+     * @param object $project
+     * @access public
+     * @return void
+     */
+    public function getBrotherProjects($project)
+    {
+        if($project->parent == 0) return array($project->id => $project->id);
+
+        $projectIds    = array_filter(explode(',', $project->path));
+        $parentProgram = $this->dao->select('*')->from(TABLE_PROGRAM)
+            ->where('id')->in($projectIds)
+            ->andWhere('`type`')->eq('program')
+            ->orderBy('grade desc')
+            ->fetch();
+
+        $projects = $this->dao->select('id')->from(TABLE_PROJECT)
+            ->where('type')->eq('project')
+            ->andWhere('deleted')->eq(0)
+            ->andWhere('path')->like("{$parentProgram->path}%")
+            ->fetchPairs('id');
+        return $projects;
+    }
+
+    /**
      * Get project by id list.
      *
      * @param  array    $projectIdList
@@ -2264,6 +2290,17 @@ class projectModel extends model
         }
 
         /* In the case of the waterfall model, calculate the sub-stage. */
+        if($projectID == 0)
+        {
+            foreach($executions as $key => $execution)
+            {
+                if($execution->type == 'stage')
+                {
+                    $execution->children = isset($children[$execution->id]) ? $children[$execution->id] : array();
+                    unset($children[$execution->id]);
+                }
+            }
+        }
         $project = $this->getByID($projectID);
         if($project and $project->model == 'waterfall')
         {

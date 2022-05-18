@@ -2216,7 +2216,7 @@ EOD;
     {
         if($this->app->getModuleName() == 'upgrade' and $this->session->upgrading) return false;
 
-        $statusFile = $this->app->getAppRoot() . 'www' . DIRECTORY_SEPARATOR . 'ok.txt';
+        $statusFile = $this->app->getAppRoot() . 'www' . DIRECTORY_SEPARATOR . 'data' . DIRECTORY_SEPARATOR . 'ok.txt';
         return (!is_file($statusFile) or (time() - filemtime($statusFile)) > 3600) ? $statusFile : false;
     }
 
@@ -3250,13 +3250,11 @@ EOD;
         if(empty($markdown)) return false;
 
         global $app;
-        $app->loadClass('parsedownextraplugin');
+        $app->loadClass('michelf');
 
-        $Parsedown = new parsedownextraplugin;
+        $Michelf = new michelf;
 
-        $Parsedown->voidElementSuffix = '>'; // HTML5
-
-        return $Parsedown->text($markdown);
+        return $Michelf->parse($markdown);
     }
 }
 

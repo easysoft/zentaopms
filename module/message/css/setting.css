@@ -2,5 +2,3 @@
 .checkbox-primary {margin: 0px; width: 120px; float: left;}
 .checkbox-primary label {white-space: nowrap; overflow: hidden; text-overflow: ellipsis;}
 div.chosen-container + select + div.chosen-container > .chosen-choices {border-top: 0px;}
-
-.table-bordered thead .checkbox-primary {width: 200px;}

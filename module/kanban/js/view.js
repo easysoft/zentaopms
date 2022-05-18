@@ -40,6 +40,7 @@ function fullScreen()
             $('.action').hide();
             $('.kanban-group-header').hide();
             $(".title").attr("disabled", true).css("pointer-events", "none");
+            $('.kanban-col.kanban-header-col').css('padding', '0px 0px 0px 0px');
             window.sortableDisabled = true;
             $.cookie('isFullScreen', 1);
         };
@@ -76,12 +77,15 @@ function fullScreen()
  */
 function exitFullScreen()
 {
+    $('.region-actions > div > .action').show();
+    $(".title").attr("disabled", false).css("pointer-events", "auto");
+    if(!CRKanban && kanban.status == 'closed') return;
     $('#kanbanContainer').removeClass('fullscreen')
         .off('scroll', tryUpdateKanbanAffix);
     $('.actions').show();
     $('.action').show();
     $('.kanban-group-header').show();
-    $(".title").attr("disabled", false).css("pointer-events", "auto");
+    $('.kanban-col.kanban-header-col').css('padding', '0px 30px');
     window.sortableDisabled = false;
     $.cookie('isFullScreen', 0);
 }
@@ -1408,6 +1412,13 @@ $(function()
     initSortable();
 
     resetRegionHeight('open');
+
+    if(!CRKanban && kanban.status == "closed")
+    {
+        fullScreen();
+        $('.region-actions > div > .action').show();
+        $(".title").attr("disabled", false).css("pointer-events", "auto");
+    }
 });
 
 function initSortable()

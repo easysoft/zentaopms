@@ -2008,17 +2008,15 @@ class executionModel extends model
      */
     public function getTasks2Imported($toExecution, $branches)
     {
-        $products = $this->loadModel('product')->getProducts($toExecution);
-        if(empty($products)) return array();
+        $execution       = $this->getById($toExecution);
+        $project         = $this->loadModel('project')->getById($execution->project);
+        $brotherProjects = $this->project->getBrotherProjects($project);
+        $executions      = $this->dao->select('id')->from(TABLE_EXECUTION)
+            ->where('project')->in($brotherProjects)
+            ->andWhere('status')->ne('closed')
+            ->fetchPairs('id');
 
-        $execution  = $this->getById($toExecution);
-        $executions = $this->dao->select('t1.product, t1.project')->from(TABLE_PROJECTPRODUCT)->alias('t1')
-            ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.project=t2.id')
-            ->where('t1.product')->in(array_keys($products))
-            ->andWhere('t2.project')->eq($execution->project)
-            ->fetchGroup('project');
         $branches = str_replace(',', "','", $branches);
-
         $tasks = $this->dao->select('t1.*, t2.id AS storyID, t2.title AS storyTitle, t2.version AS latestStoryVersion, t2.status AS storyStatus, t3.realname AS assignedToRealName')->from(TABLE_TASK)->alias('t1')
             ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
             ->leftJoin(TABLE_USER)->alias('t3')->on('t1.assignedTo = t3.account')
@@ -3661,6 +3659,7 @@ class executionModel extends model
 
         $firstBurn    = empty($sets) ? 0 : reset($sets);
         $firstTime    = !empty($firstBurn->$burnBy) ? $firstBurn->$burnBy : (!empty($firstBurn->value) ? $firstBurn->value : 0);
+        $firstTime    = $firstTime == 'null' ? 0 : $firstTime;
         $days         = count($dateList) - 1;
         $rate         = $days ? $firstTime / $days : '';
         $baselineJSON = '[';

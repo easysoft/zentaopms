@@ -76,4 +76,6 @@ $(document).ready(function()
 {
     toggleCopy(false);
     $('[data-id="edit"] a').modalTrigger({type: 'iframe', width: 500});
+
+    parent.$('#triggerModal .modal-content .modal-header .close').on('click', function(){parent.location.reload();});
 });

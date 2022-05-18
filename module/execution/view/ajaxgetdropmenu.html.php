@@ -26,6 +26,7 @@
 #closed {width: 90px; height: 25px; line-height: 25px; background-color: #ddd; color: #3c495c; text-align: center; margin-left: 15px; border-radius: 2px;}
 #gray-line {width: 230px;height: 1px; margin-left: 10px; margin-bottom:2px; background-color: #ddd;}
 #dropMenu.has-search-text .hide-in-search {display: flex;}
+#swapper li>.selected {color: #0c64eb!important; background: #e9f2fb!important;}
 </style>
 <?php
 $executionCounts      = array();
@@ -80,27 +81,59 @@ foreach($executions as $projectID => $projectExecutions)
         if($execution->type == 'kanban' and $link != $kanbanLink) $link = $kanbanLink;
 
         $selected = $execution->id == $executionID ? 'selected' : '';
-        if($execution->status != 'done' and $execution->status != 'closed' and ($execution->PM == $this->app->user->account or isset($execution->teams[$this->app->user->account])))
+        if(!empty($execution->children))
         {
-            $myExecutionsHtml .= '<li>' . html::a(sprintf($link, $execution->id), $executionNames[$execution->id], '', "class='$selected clickable' title='{$execution->name}' data-key='" . zget($executionsPinYin, $execution->name, '') . "' data-app='{$this->app->tab}'") . '</li>';
+            foreach($execution->children as $id)
+            {
+                $selected = $id == $executionID ? 'selected' : '';
+                if($execution->status != 'done' and $execution->status != 'closed' and ($execution->PM == $this->app->user->account or isset($execution->teams[$this->app->user->account])))
+                {
+                    $myExecutionsHtml .= '<li>' . html::a(sprintf($link, $id), $executionNames[$id], '', "class='$selected clickable' title='{$executionNames[$id]}' data-key='" . zget($executionsPinYin, $executionNames[$id], '') . "' data-app='{$this->app->tab}'") . '</li>';
 
-            if($selected == 'selected') $tabActive = 'myExecution';
+                    if($selected == 'selected') $tabActive = 'myExecution';
 
-            $myExecutions ++;
+                    $myExecutions ++;
+                }
+                else if($execution->status != 'done' and $execution->status != 'closed' and $execution->PM != $this->app->user->account and !isset($execution->teams[$this->app->user->account]))
+                {
+                    $normalExecutionsHtml .= '<li>' . html::a(sprintf($link, $id), $executionNames[$id], '', "class='$selected clickable' title='{$executionNames[$id]}' data-key='" . zget($executionsPinYin, $executionNames[$id], '') . "' data-app='{$this->app->tab}'") . '</li>';
+
+                    if($selected == 'selected') $tabActive = 'other';
+
+                    $others ++;
+                }
+                else if($execution->status == 'done' or $execution->status == 'closed')
+                {
+                    $closedExecutionsHtml .= '<li>' . html::a(sprintf($link, $id), $executionNames[$id], '', "class='$selected clickable' title='{$executionNames[$id]}' data-key='" . zget($executionsPinYin, $executionNames[$id], '') . "' data-app='{$this->app->tab}'") . '</li>';
+
+                    if($selected == 'selected') $tabActive = 'closed';
+                }
+            }
         }
-        else if($execution->status != 'done' and $execution->status != 'closed' and $execution->PM != $this->app->user->account and !isset($execution->teams[$this->app->user->account]))
+        else if($execution->grade == 1 or $config->systemMode == 'classic')
         {
-            $normalExecutionsHtml .= '<li>' . html::a(sprintf($link, $execution->id), $executionNames[$execution->id], '', "class='$selected clickable' title='{$execution->name}' data-key='" . zget($executionsPinYin, $execution->name, '') . "' data-app='{$this->app->tab}'") . '</li>';
+            if($execution->status != 'done' and $execution->status != 'closed' and ($execution->PM == $this->app->user->account or isset($execution->teams[$this->app->user->account])))
+            {
+                $myExecutionsHtml .= '<li>' . html::a(sprintf($link, $execution->id), $executionNames[$execution->id], '', "class='$selected clickable' title='{$executionNames[$execution->id]}' data-key='" . zget($executionsPinYin, $execution->name, '') . "' data-app='{$this->app->tab}'") . '</li>';
 
-            if($selected == 'selected') $tabActive = 'other';
+                if($selected == 'selected') $tabActive = 'myExecution';
 
-            $others ++;
-        }
-        else if($execution->status == 'done' or $execution->status == 'closed')
-        {
-            $closedExecutionsHtml .= '<li>' . html::a(sprintf($link, $execution->id), $executionNames[$execution->id], '', "class='$selected clickable' title='$execution->name' data-key='" . zget($executionsPinYin, $execution->name, '') . "' data-app='{$this->app->tab}'") . '</li>';
+                $myExecutions ++;
+            }
+            else if($execution->status != 'done' and $execution->status != 'closed' and $execution->PM != $this->app->user->account and !isset($execution->teams[$this->app->user->account]))
+            {
+                $normalExecutionsHtml .= '<li>' . html::a(sprintf($link, $execution->id), $executionNames[$execution->id], '', "class='$selected clickable' title='{$executionNames[$execution->id]}' data-key='" . zget($executionsPinYin, $execution->name, '') . "' data-app='{$this->app->tab}'") . '</li>';
 
-            if($selected == 'selected') $tabActive = 'closed';
+                if($selected == 'selected') $tabActive = 'other';
+
+                $others ++;
+            }
+            else if($execution->status == 'done' or $execution->status == 'closed')
+            {
+                $closedExecutionsHtml .= '<li>' . html::a(sprintf($link, $execution->id), $executionNames[$execution->id], '', "class='$selected clickable' title='{$executionNames[$execution->id]}' data-key='" . zget($executionsPinYin, $execution->name, '') . "' data-app='{$this->app->tab}'") . '</li>';
+
+                if($selected == 'selected') $tabActive = 'closed';
+            }
         }
 
         /* If the execution is the last one in the project, print the closed label. */

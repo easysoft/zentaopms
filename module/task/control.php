@@ -333,7 +333,7 @@ class task extends control
         if(!empty($_POST))
         {
             $mails = $this->task->batchCreate($executionID, $extra);
-            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            if(dao::isError()) return print(js::error(dao::getError()));
 
             $taskIDList = array();
             foreach($mails as $mail) $taskIDList[] = $mail->taskID;
@@ -349,14 +349,14 @@ class task extends control
                     $kanbanData = $this->loadModel('kanban')->getRDKanban($executionID, $this->session->execLaneType ? $this->session->execLaneType : 'all');
                     $kanbanData = json_encode($kanbanData);
 
-                    return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => "parent.updateKanban($kanbanData, 0)"));
+                    return print(js::closeModal('parent.parent', '', "parent.parent.updateKanban($kanbanData, 0)"));
                 }
                 else
                 {
-                    return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
+                    return print(js::reload('parent.parent'));
                 }
             }
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $taskLink));
+            return print(js::locate($taskLink, 'parent'));
         }
 
         $story = $this->story->getByID($storyID);

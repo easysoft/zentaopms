@@ -79,7 +79,7 @@ class bugModel extends model
             ->remove('files,labels,uid,oldTaskID,contactListMenu,region,lane')
             ->get();
 
-        if($bug->execution != 0) $bug->project = $this->dao->select('parent')->from(TABLE_EXECUTION)->where('id')->eq($bug->execution)->fetch('parent');
+        if($bug->execution != 0) $bug->project = $this->dao->select('project')->from(TABLE_EXECUTION)->where('id')->eq($bug->execution)->fetch('project');
 
         /* Check repeat bug. */
         $result = $this->loadModel('common')->removeDuplicate('bug', $bug, "product={$bug->product}");
@@ -211,7 +211,7 @@ class bugModel extends model
 
             if(isset($data->lanes[$i])) $bug->laneID = $data->lanes[$i];
 
-            if($bug->execution != 0) $bug->project = $this->dao->select('parent')->from(TABLE_EXECUTION)->where('id')->eq($bug->execution)->fetch('parent');
+            if($bug->execution != 0) $bug->project = $this->dao->select('project')->from(TABLE_EXECUTION)->where('id')->eq($bug->execution)->fetch('project');
 
             /* Assign the bug to the person in charge of the module. */
             if(!empty($moduleOwners[$bug->module]))
@@ -349,7 +349,7 @@ class bugModel extends model
         $bug->task         = 0;
         $bug->pri          = 3;
         $bug->severity     = 3;
-        $bug->project      = $this->dao->select('parent')->from(TABLE_EXECUTION)->where('id')->eq($executionID)->fetch('parent');
+        $bug->project      = $this->dao->select('project')->from(TABLE_EXECUTION)->where('id')->eq($executionID)->fetch('project');
 
         $this->dao->insert(TABLE_BUG)->data($bug, $skip = 'gitlab,gitlabProject')->autoCheck()->batchCheck($this->config->bug->create->requiredFields, 'notempty')->exec();
         if(!dao::isError()) return $this->dao->lastInsertID();
@@ -3276,12 +3276,12 @@ class bugModel extends model
 
         $menu .= $this->buildMenu('bug', 'confirmBug', $params, $bug, $type, 'ok', '', "iframe", true);
         if($type == 'view') $menu .= $this->buildMenu('bug', 'assignTo', $params, $bug, $type, '', '', "iframe", true);
-        $menu .= $this->buildMenu('bug', 'resolve', $params, $bug, $type, 'checked', '', "iframe", true);
+        $menu .= $this->buildMenu('bug', 'resolve', $params, $bug, $type, 'checked', '', "iframe showinonlybody", true);
         $menu .= $this->buildMenu('bug', 'close', $params, $bug, $type, '', '', "text-danger iframe showinonlybody", true);
         if($type == 'view') $menu .= $this->buildMenu('bug', 'activate', $params, $bug, $type, '', '', "text-success iframe showinonlybody", true);
         if($type == 'view' && $this->app->tab != 'product')
         {
-            $menu .= $this->buildMenu('bug', 'toStory', $toStoryParams, $bug, $type, $this->lang->icons['story'], '', '', '', "data-app='product'", $this->lang->bug->toStory);
+            $menu .= $this->buildMenu('bug', 'toStory', $toStoryParams, $bug, $type, $this->lang->icons['story'], '', '', '', "data-app='qa'", $this->lang->bug->toStory);
             $menu .= $this->buildMenu('bug', 'createCase', $convertParams, $bug, $type, 'sitemap');
         }
         if($type == 'view')
