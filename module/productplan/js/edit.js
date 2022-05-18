@@ -85,3 +85,5 @@ $('#future').on('change', function()
     }
 });
 
+
+$('#future').change();
