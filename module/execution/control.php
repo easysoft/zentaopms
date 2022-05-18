@@ -2204,9 +2204,10 @@ class execution extends control
         }
 
         $userList = $this->dao->select('account, realname, avatar')->from(TABLE_USER)->where('deleted')->eq(0)->fetchAll('account');
-        $userList['closed']['account']  = 'Closed';
-        $userList['closed']['realname'] = 'Closed';
-        $userList['closed']['avatar']   = '';
+        $userList['closed'] = new stdclass();
+        $userList['closed']->account  = 'Closed';
+        $userList['closed']->realname = 'Closed';
+        $userList['closed']->avatar   = '';
 
         $this->view->title            = $this->lang->execution->kanban;
         $this->view->realnames        = $this->loadModel('user')->getPairs('noletter');
