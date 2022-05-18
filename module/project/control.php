@@ -434,7 +434,14 @@ class project extends control
 
             if($this->app->tab == 'program')
             {
-                return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('program', 'browse')));
+                if(empty($programID))
+                {
+                    return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('program', 'browse')));
+                }
+                else
+                {
+                    return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('program', 'project', 'program=' . $programID)));
+                }
             }
             elseif($this->app->tab == 'doc')
             {
