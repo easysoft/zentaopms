@@ -311,12 +311,13 @@ class myModel extends model
     }
 
     /**
-     * getAssignedByMe
+     * Get tasks/bugs/issus/risks/... assigned by me
      *
      * @param string $account
-     * @param int $limit
+     * @param int    $limit
      * @param string $orderBy
-     * @param int $projectID
+     * @param int    $pager
+     * @param int    $projectID
      * @param string $objectType
      * @access public
      * @return array
