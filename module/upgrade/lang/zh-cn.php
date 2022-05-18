@@ -21,6 +21,7 @@ $lang->upgrade->warnning        = '警告';
 $lang->upgrade->checkExtension  = '检查插件';
 $lang->upgrade->consistency     = '一致性检查';
 $lang->upgrade->warnningContent = <<<EOT
+<p>升级对数据库权限要求较高，请使用root用户。</p>
 <p>升级有危险，请先备份数据库，以防万一。</p>
 <pre>
 1. 可以通过phpMyAdmin进行备份。
