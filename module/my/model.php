@@ -325,6 +325,7 @@ class myModel extends model
     public function getAssignedByMe($account, $limit = 0, $pager = null, $orderBy = "id_desc", $projectID = 0, $objectType = '')
     {
         $table = $objectType == 'requirement' ? 'story' : $objectType;
+        $this->loadModel($table);
         $objectList = $this->dao->select('DISTINCT t1.*')
             ->from($this->config->objectTables[$table])->alias('t1')
             ->leftJoin(TABLE_ACTION)->alias('t2')->on("t1.id = t2.objectID and t2.objectType='{$table}'")
