@@ -1452,7 +1452,7 @@ class execution extends control
         $this->view->name                = $name;
         $this->view->code                = $code;
         $this->view->team                = $team;
-        $this->view->teams               = array(0 => '') + $this->execution->getCanCopyObjects((int)$projectID);
+        $this->view->teams               = array(0 => '', $projectID => $project->name) + $this->execution->getCanCopyObjects((int)$projectID);
         $this->view->allProjects         = array(0 => '') + $this->project->getPairsByModel('all', 0, 'noclosed');
         $this->view->executionID         = $executionID;
         $this->view->productID           = $productID;
