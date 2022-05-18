@@ -962,7 +962,7 @@ function findDropColumns($element, $root)
 
     return $root.find('.kanban-lane-col:not([data-type="EMPTY"],[data-type=""])').filter(function()
     {
-        if($.cookie('isFullScreen') == 1) return false;
+        if($.cookie('isFullScreen') == 1 || (!CRKanban && kanban.status == 'closed')) return false;
         var $newCol = $(this);
         var newCol = $newCol.data();
         var $newLane = $newCol.closest('.kanban-lane');
@@ -1416,6 +1416,7 @@ $(function()
     if(!CRKanban && kanban.status == "closed")
     {
         fullScreen();
+        $.cookie('isFullScreen', 0);
         $('.region-actions > div > .action').show();
         $(".title").attr("disabled", false).css("pointer-events", "auto");
     }
