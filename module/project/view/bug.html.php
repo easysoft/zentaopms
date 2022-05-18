@@ -11,6 +11,7 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
+<?php include '../../common/view/datatable.fix.html.php';?>
 <style>
 #subHeader #dropMenu .col-left .list-group {margin-bottom: 0px; padding-top: 10px;}
 #subHeader #dropMenu .col-left {padding-bottom: 0px;}
@@ -41,86 +42,54 @@
     </p>
   </div>
   <?php else:?>
-  <form class='main-table' method='post' id='projectBugForm' data-ride="table">
-    <table class='table has-sort-head' id='bugList'>
-      <?php $canBatchAssignTo = common::hasPriv('bug', 'batchAssignTo');?>
-      <?php $vars = "projectID={$project->id}&productID=$productID&orderBy=%s&build=$buildID&type=$type&param=$param&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"; ?>
+  <?php
+  $datatableId  = $this->moduleName . ucfirst($this->methodName);
+  $useDatatable = (isset($config->datatable->$datatableId->mode) and $config->datatable->$datatableId->mode == 'datatable');
+  ?>
+  <form class='main-table' method='post' id='projectBugForm' <?php if(!$useDatatable) echo "data-ride='table'";?>>
+    <div class="table-header fixed-right">
+      <nav class="btn-toolbar pull-right setting"></nav>
+    </div>
+    <?php
+    $vars = "projectID={$project->id}&productID=$productID&orderBy=%s&build=$buildID&type=$type&param=$param&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}";
+    if($useDatatable) include '../../common/view/datatable.html.php';
+    else              include '../../common/view/tablesorter.html.php';
+
+    $setting = $this->datatable->getSetting('project');
+    $widths  = $this->datatable->setFixedFieldWidth($setting);
+    $columns = 0;
+
+    $canBatchAssignTo = common::hasPriv('bug', 'batchAssignTo');
+    ?>
+    <?php if(!$useDatatable) echo '<div class="table-responsive">';?>
+    <table class='table has-sort-head<?php if($useDatatable) echo ' datatable';?>' id='bugList' data-fixed-left-width='<?php echo $widths['leftWidth']?>' data-fixed-right-width='<?php echo $widths['rightWidth']?>'>
       <thead>
         <tr>
-          <th class='c-id'>
-            <?php if($canBatchAssignTo):?>
-            <div class="checkbox-primary check-all" title="<?php echo $lang->selectAll?>">
-              <label></label>
-            </div>
-            <?php endif;?>
-            <?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?>
-          </th>
-          <th class='c-severity' title=<?php echo $lang->bug->severity;?>><?php common::printOrderLink('severity', $orderBy, $vars, $lang->bug->severityAB);?></th>
-          <th class='c-pri' title=<?php echo $lang->project->pri;?>><?php common::printOrderLink('pri', $orderBy, $vars, $lang->priAB);?></th>
-          <th><?php common::printOrderLink('title', $orderBy, $vars, $lang->bug->title);?></th>
-          <th class='c-user'><?php common::printOrderLink('openedBy', $orderBy, $vars, $lang->openedByAB);?></th>
-          <th class='c-user'><?php common::printOrderLink('assignedTo', $orderBy, $vars, $lang->assignedToAB);?></th>
-          <th class='c-user'><?php common::printOrderLink('resolvedBy', $orderBy, $vars, $lang->bug->resolvedBy);?></th>
-          <th class='c-resolution'><?php common::printOrderLink('resolution', $orderBy, $vars, $lang->bug->resolutionAB);?></th>
-          <th class='c-actions-5'><?php echo $lang->actions;?></th>
+          <?php
+          foreach($setting as $key => $value)
+          {
+              if($value->show)
+              {
+                  $this->datatable->printHead($value, $orderBy, $vars, $canBatchAssignTo);
+                  $columns ++;
+              }
+          }
+          ?>
         </tr>
       </thead>
-      <?php
-      $hasCustomSeverity = false;
-      foreach($lang->bug->severityList as $severityKey => $severityValue)
-      {
-          if(!empty($severityKey) and (string)$severityKey != (string)$severityValue)
-          {
-              $hasCustomSeverity = true;
-              break;
-          }
-      }
-      ?>
       <tbody>
       <?php foreach($bugs as $bug):?>
       <?php
       $canBeChanged = common::canBeChanged('bug', $bug);
       $arrtibute    = $canBeChanged ? '' : 'disabled';
-      $viewLink     = helper::createLink('bug', 'view', "bugID=$bug->id");
       ?>
-      <tr>
-        <td class='cell-id'>
-          <?php if($canBatchAssignTo):?>
-          <?php echo html::checkbox('bugIDList', array($bug->id => ''), '', $arrtibute) . html::a($viewLink, sprintf('%03d', $bug->id), '', "data-app={$this->app->tab}");?>
-          <?php else:?>
-          <?php printf('%03d', $bug->id);?>
-          <?php endif;?>
-        </td>
-        <td>
-          <?php if($hasCustomSeverity):?>
-          <span class='<?php echo 'label-severity-custom';?>' title='<?php echo zget($lang->bug->severityList, $bug->severity);?>' data-severity='<?php echo $bug->severity;?>'><?php echo zget($lang->bug->severityList, $bug->severity, $bug->severity);?></span>
-          <?php else:?>
-          <span class='<?php echo 'label-severity';?>' title='<?php echo zget($lang->bug->severityList, $bug->severity);?>' data-severity='<?php echo $bug->severity;?>'></span>
-          <?php endif;?>
-        </td>
-        <td><span class='label-pri <?php echo 'label-pri-' . $bug->pri?>' title='<?php echo zget($lang->bug->priList, $bug->pri, $bug->pri)?>'><?php echo zget($lang->bug->priList, $bug->pri, $bug->pri)?></span></td>
-        <td class='text-left c-name' title="<?php echo $bug->title?>"><?php echo html::a($viewLink, $bug->title, null, "style='color: $bug->color' data-app={$this->app->tab}");?></td>
-        <td><?php echo zget($users, $bug->openedBy, $bug->openedBy);?></td>
-        <td class='c-assignedTo has-btn text-left'><?php $this->bug->printAssignedHtml($bug, $users);?></td>
-        <td><?php echo zget($users, $bug->resolvedBy, $bug->resolvedBy);?></td>
-        <td><?php echo zget($lang->bug->resolutionList, $bug->resolution);?></td>
-        <td class='c-actions'>
-          <?php
-          if($canBeChanged)
-          {
-              $params = "bugID=$bug->id";
-              common::printIcon('bug', 'confirmBug', $params, $bug, 'list', 'ok',      '', 'iframe', true);
-              common::printIcon('bug', 'resolve',    $params, $bug, 'list', 'checked', '', 'iframe', true);
-              common::printIcon('bug', 'close',      $params, $bug, 'list', '',        '', 'iframe', true);
-              common::printIcon('bug', 'create', "product=$bug->product&branch=$bug->branch&extra=$params,projectID={$bug->project}", $bug, 'list', 'copy');
-              common::printIcon('bug', 'edit', $params, $bug, 'list');
-          }
-          ?>
-        </td>
+      <tr data-id='<?php echo $bug->id?>'>
+        <?php foreach($setting as $value) $this->bug->printCell($value, $bug, $users, $builds, $branchOption, $modulePairs, $executions, $plans, $stories, $tasks, $useDatatable ? 'datatable' : 'table', $projectPairs);?>
       </tr>
       <?php endforeach;?>
       </tbody>
     </table>
+    <?php if(!$useDatatable) echo '</div>';?>
     <div class='table-footer'>
       <?php if($canBatchAssignTo):?>
       <div class="checkbox-primary check-all"><label><?php echo $lang->selectAll?></label></div>
@@ -166,4 +135,9 @@
 </div>
 <?php js::set('replaceID', 'bugList');?>
 <?php js::set('browseType', $type);?>
+<script>
+<?php if(!empty($useDatatable)):?>
+$(function(){$('#projectBugForm').table();})
+<?php endif;?>
+</script>
 <?php include '../../common/view/footer.html.php';?>
