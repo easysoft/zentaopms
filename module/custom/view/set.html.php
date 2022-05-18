@@ -36,6 +36,18 @@ EOT;
 <style>
 .checkbox-primary {width: 170px; margin: 0 10px 10px 0; display: inline-block;}
 </style>
+<?php if($module == 'story' and $field == 'review'):?>
+<style>
+.reviewBox > th {width: 95px !important;}
+.reviewBox > td {width: 500px !important;}
+.checkbox-primary {margin-bottom: 0px; width: 82px !important;}
+.storyReviewTip {padding-left: 95px;}
+<?php if($app->getClientLang() != 'zh-cn' and $app->getClientLang() !== 'zh-tw'):?>
+.reviewBox > th {width: 160px !important;}
+.storyReviewTip {padding-left: 160px;}
+<?php endif;?>
+</style>
+<?php endif;?>
 <div id='mainContent' class='main-row'>
   <div class='side-col' id='sidebar'>
     <div class='cell'>
@@ -88,18 +100,39 @@ EOT;
         </tr>
       </table>
       <?php elseif(($module == 'story' or $module == 'testcase') and $field == 'review'):?>
-      <table class='table table-form mw-800px'>
-        <tr>
+      <table class='table table-form'>
+        <tr class='reviewBox'>
           <th class='thWidth'><?php echo $lang->custom->storyReview;?></th>
           <td><?php echo html::radio('needReview', $lang->custom->reviewList, $needReview);?></td>
-          <td></td>
         </tr>
-        <tr <?php if($needReview and $module == 'testcase') echo "class='hidden'"?>>
+        <?php if($module == 'story'):?>
+        <tr>
+          <?php $space = ($app->getClientLang() != 'zh-cn' and $app->getClientLang() !== 'zh-tw') ? ' ': '';?>
+          <td colspan='3'><div class='storyReviewTip'><?php echo sprintf($lang->custom->notice->forceReview, $lang->$module->common) . $lang->custom->notice->storyReviewTip;?></td>
+        </tr>
+        <tr id='userBox'>
+          <th><?php echo $lang->custom->forceReview . $space . $lang->custom->account;?></th>
+          <td><?php echo html::select('forceReviewUsers[]', $users, $forceReviewUsers, "class='form-control chosen' multiple");?></td>
+          <td>
+            <?php echo html::checkbox('forceReviewAll', array('1' => $lang->custom->allUsers), $forceReviewAll);?>
+            <icon class='icon icon-help' data-toggle='popover' data-trigger='focus hover' data-placement='right' data-tip-class='text-muted popover-sm' data-content="<?php echo $lang->custom->notice->selectAllTip;?>"></icon>
+          </td>
+        </tr>
+        <tr id='roleBox'>
+          <th><?php echo $lang->custom->forceReview . $space . $lang->custom->role;?></th>
+          <td><?php echo html::select('forceReviewRoles[]', $lang->user->roleList, $forceReviewRoles, "class='form-control chosen' multiple");?></td>
+        </tr>
+        <tr id='deptBox'>
+          <th><?php echo $lang->custom->forceReview . $space . $lang->custom->dept;?></th>
+          <td><?php echo html::select('forceReviewDepts[]', $depts, $forceReviewDepts, "class='form-control chosen' multiple");?></td>
+        </tr>
+        <?php endif;?>
+        <?php if($module == 'testcase'):?>
+        <tr <?php if($needReview) echo "class='hidden'"?>>
           <th><?php echo $lang->custom->forceReview;?></th>
           <td><?php echo html::select('forceReview[]', $users, $forceReview, "class='form-control chosen' multiple");?></td>
           <td style='width:300px'><?php printf($lang->custom->notice->forceReview, $lang->$module->common);?></td>
         </tr>
-        <?php if($module == 'testcase'):?>
         <tr <?php if(!$needReview) echo "class='hidden'"?>>
           <th><?php echo $lang->custom->forceNotReview;?></th>
           <td><?php echo html::select('forceNotReview[]', $users, $forceNotReview, "class='form-control chosen' multiple");?></td>
@@ -231,6 +264,42 @@ EOT;
     </form>
   </div>
 </div>
+<?php if($module == 'story' and $field == 'review'):?>
+<script>
+$(function()
+{
+    $('[data-toggle="popover"]').popover();
+
+    toggleBox($("input[name^='forceReviewAll']").prop('checked'));
+
+    $("input[name^='forceReviewAll']").click(function()
+    {
+        toggleBox($(this).prop('checked'));
+    });
+
+    /**
+     * Toggle box.
+     *
+     * @param  bool $checked
+     * @access public
+     * @return void
+     */
+    function toggleBox(checked)
+    {
+        $('#roleBox').toggleClass('hidden', checked);
+        $('#deptBox').toggleClass('hidden', checked);
+        if(checked)
+        {
+            $('#forceReviewUsers').val('').attr('disabled', 'disabled').trigger('chosen:updated');
+        }
+        else
+        {
+            $('#forceReviewUsers').removeAttr('disabled', 'disabled').trigger('chosen:updated');
+        }
+    }
+})
+</script>
+<?php endif;?>
 <?php if($module == 'testcase' and $field == 'review'):?>
 <script>
 $(function()

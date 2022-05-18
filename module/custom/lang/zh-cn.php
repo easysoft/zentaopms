@@ -50,6 +50,10 @@ $lang->custom->oneUnit              = "一个{$lang->hourCommon}";
 $lang->custom->convertRelationTitle = "请先设置{$lang->hourCommon}转换为%s的换算系数";
 $lang->custom->superReviewers       = "超级评审人";
 $lang->custom->kanban               = "看板";
+$lang->custom->allUsers             = '所有人员';
+$lang->custom->account              = '人员';
+$lang->custom->role                 = '职位';
+$lang->custom->dept                 = '部门';
 
 if($config->systemMode == 'new') $lang->custom->execution = '执行';
 if($config->systemMode == 'classic' || !$config->systemMode) $lang->custom->execution = $lang->executionCommon;
@@ -181,6 +185,8 @@ $lang->custom->notice->readOnlyOfKanban    = "禁止修改后，已关闭{$lang-
 $lang->custom->notice->URSREmpty           = '自定义需求名称不能为空！';
 $lang->custom->notice->confirmDelete       = '您确定要删除吗？';
 $lang->custom->notice->confirmReviewCase   = '是否将待评审的用例修改为正常状态？';
+$lang->custom->notice->storyReviewTip      = '按人员、职位、部门勾选后，取所有人员的并集。';
+$lang->custom->notice->selectAllTip        = '勾选所有人员后，会清空并置灰评审人员，同时隐藏职位、部门。';
 
 $lang->custom->notice->indexPage['product'] = "从8.2版本起增加了产品主页视图，是否默认进入产品主页？";
 $lang->custom->notice->indexPage['project'] = "从8.2版本起增加了项目主页视图，是否默认进入项目主页？";

@@ -71,7 +71,18 @@ class custom extends control
         if(($module == 'story' or $module == 'testcase') and $field == 'review')
         {
             $this->app->loadConfig($module);
-            $this->view->users = $this->loadModel('user')->getPairs('noclosed|nodeleted');
+            $this->loadModel('user');
+
+            if($module == 'story')
+            {
+                $this->view->depts            = $this->loadModel('dept')->getDeptPairs();
+                $this->view->forceReviewAll   = zget($this->config->$module, 'forceReviewAll', 'false');
+                $this->view->forceReviewUsers = zget($this->config->$module, 'forceReviewUsers', '');
+                $this->view->forceReviewRoles = zget($this->config->$module, 'forceReviewRoles', '');
+                $this->view->forceReviewDepts = zget($this->config->$module, 'forceReviewDepts', '');
+            }
+
+            $this->view->users          = $module == 'story' ? $this->user->getCanCreateStoryUsers() : $this->user->getPairs('noclosed|nodeleted');
             $this->view->needReview     = zget($this->config->$module, 'needReview', 1);
             $this->view->forceReview    = zget($this->config->$module, 'forceReview', '');
             $this->view->forceNotReview = zget($this->config->$module, 'forceNotReview', '');
@@ -112,7 +123,15 @@ class custom extends control
             }
             elseif($module == 'story' and $field == 'review')
             {
-                $data = fixer::input('post')->join('forceReview', ',')->get();
+                $data = fixer::input('post')
+                    ->setDefault('forceReviewDepts', '')
+                    ->join('forceReviewUsers', ',')
+                    ->join('forceReviewRoles', ',')
+                    ->join('forceReviewDepts', ',')
+                    ->get();
+
+                $data->forceReviewAll = isset($data->forceReviewAll) ? 1 : 0;
+
                 $this->loadModel('setting')->setItems("system.$module@{$this->config->vision}", $data);
             }
             elseif($module == 'story' and $field == 'reviewRules')

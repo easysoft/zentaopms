@@ -2767,6 +2767,38 @@ class userModel extends model
     }
 
     /**
+     * Get users who have authority to create stories.
+     *
+     * @access public
+     * @return array
+     */
+    public function getCanCreateStoryUsers()
+    {
+        $users  = $this->getPairs('noclosed|nodeleted');
+        $groups = $this->dao->select('*')->from(TABLE_USERGROUP)
+            ->where('account')->in(array_keys($users))
+            ->fetchGroup('account', 'group');
+
+        foreach($users as $account => $user)
+        {
+            if(empty($user) or strpos($this->app->company->admins, ",{$account},") !== false) continue;
+
+            $group = $groups[$account];
+            $priv  = $this->dao->select('*')->from(TABLE_GROUPPRIV)
+                ->where('`group`')->in(array_keys($group))
+                ->andWhere('module')->eq('story')
+                ->andWhere('(method')->eq('create')
+                ->orWhere('method')->eq('batchCreate')
+                ->markRight(1)
+                ->fetch();
+
+            if(empty($priv)) unset($users[$account]);
+        }
+
+        return $users;
+    }
+
+    /**
      * Switch admin of ZenTao.
      *
      * @access public
