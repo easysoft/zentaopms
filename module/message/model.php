@@ -146,9 +146,11 @@ class messageModel extends model
         if($isonlybody) unset($_GET['onlybody']);
 
         $moduleName = $objectType == 'case' ? 'testcase' : $objectType;
+        $moduleName = $objectType == 'kanbancard' ? 'kanban' : $objectType;
         $space = common::checkNotCN() ? ' ' : '';
         $data  = $user->realname . $space . $this->lang->action->label->$actionType . $space . $this->lang->action->objectTypes[$objectType];
-        $data .= ' ' . html::a($sysURL . helper::createLink($moduleName, 'view', "id=$objectID"), "[#{$objectID}::{$object->$field}]");
+        $dataID = $objectType == 'kanbancard' ? $object->kanban : $objectID;
+        $data  .= ' ' . html::a($sysURL . helper::createLink($moduleName, 'view', "id=$dataID"), "[#{$objectID}::{$object->$field}]");
 
         if($isonlybody) $_GET['onlybody'] = 'yes';
 
