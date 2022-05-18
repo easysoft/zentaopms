@@ -2232,10 +2232,11 @@ class testtaskModel extends model
         $menu .= $this->buildMenu('testtask',   'view',     $params, $task, 'browse', 'list-alt', '', 'iframe', true, "data-width='90%'");
         $menu .= $this->buildMenu('testtask',   'edit',     $params, $task, 'browse');
         $deleteIconEnabled = $this->buildMenu('testtask', 'delete', $params, $task, 'browse', '', '', '', '', '', '', false);
-        if(common::hasPriv('testtask', 'delete', $task) && $deleteIconEnabled)
+        if(common::hasPriv('testtask', 'delete', $task))
         {
             $deleteURL = helper::createLink('testtask', 'delete', "taskID=$task->id&confirm=yes");
-            $menu .= html::a("javascript:ajaxDelete(\"$deleteURL\",\"taskList\",confirmDelete)", '<i class="icon-common-delete icon-trash"></i>', '', "title='{$this->lang->testtask->delete}' class='btn'");
+            $class = $deleteIconEnabled ? 'btn disabled' : 'btn';
+            $menu .= html::a("javascript:ajaxDelete(\"$deleteURL\",\"taskList\",confirmDelete)", '<i class="icon-common-delete icon-trash"></i>', '', "title='{$this->lang->testtask->delete}' class='{$class}'");
         }
         return $menu;
     }
