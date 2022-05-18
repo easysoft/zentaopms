@@ -324,11 +324,11 @@ class myModel extends model
      */
     public function getAssignedByMe($account, $limit = 0, $pager = null, $orderBy = "id_desc", $projectID = 0, $objectType = '')
     {
-        $table = $objectType == 'requirement' ? 'story' : $objectType;
-        $this->loadModel($table);
+        $module = $objectType == 'requirement' ? 'story' : $objectType;
+        $this->loadModel($module);
         $objectList = $this->dao->select('DISTINCT t1.*')
-            ->from($this->config->objectTables[$table])->alias('t1')
-            ->leftJoin(TABLE_ACTION)->alias('t2')->on("t1.id = t2.objectID and t2.objectType='{$table}'")
+            ->from($this->config->objectTables[$module])->alias('t1')
+            ->leftJoin(TABLE_ACTION)->alias('t2')->on("t1.id = t2.objectID and t2.objectType='{$module}'")
             ->where('t2.actor')->eq($account)
             ->andWhere('t2.action')->eq('assigned')
             ->beginIF($objectType == 'requirement' or $objectType == 'story')->andWhere('t1.type')->eq($objectType)->fi()
