@@ -957,7 +957,8 @@ class baseRouter
             if(!$writable)
             {
                 $savePath = $this->getTmpRoot() . 'session';
-                if(!file_exists($savePath) and !mkdir($savePath, 0777, true)) $writable = true;
+                if(!is_dir($savePath)) mkdir($savePath, 0777, true);
+                $writable = is_writable($savePath);
                 if($writable) session_save_path($this->getTmpRoot() . 'session');
             }
 
@@ -3151,11 +3152,10 @@ class ztSessionHandler
         {
             ($this->tagID and file_exists($this->rawFile)) ? copy($this->rawFile, $sessFile) : touch($sessFile);
         }
-        elseif(!file_exists($this->rawFile))
-        {
-            if(strpos(file_get_contents($sessFile), 'user|') !== false) copy($sessFile, $this->rawFile);
-        }
-        return (string) file_get_contents($sessFile);
+
+        $sessContent = (string) file_get_contents($sessFile);
+        if(!file_exists($this->rawFile) and strpos($sessContent, 'user|') !== false) copy($sessFile, $this->rawFile);
+        return $sessContent;
     }
 
     /**
