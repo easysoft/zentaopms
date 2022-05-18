@@ -309,7 +309,7 @@ class myModel extends model
 
         return $actions;
     }
-    public function getAssignedByMe($account, $type = 'assignedBy', $limit = 0, $pager = null, $orderBy = "id_desc", $projectID = 0, $objectType = '')
+    public function getAssignedByMe($account, $limit = 0, $pager = null, $orderBy = "id_desc", $projectID = 0, $objectType = '')
     {
         $this->loadModel($objectType);
         $objectList = $this->dao->select('t1.*')
@@ -321,6 +321,7 @@ class myModel extends model
             ->orderBy($orderBy)
             ->page($pager, 't1.id')
             ->fetchAll('id');
+
         if($objectType == 'task')
         {
             $projectList = array();
