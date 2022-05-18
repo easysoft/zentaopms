@@ -1060,7 +1060,6 @@ class project extends control
         $this->view->builds          = $this->loadModel('build')->getBuildPairs($productID);
         $this->view->users           = $this->user->getPairs('noletter');
         $this->view->memberPairs     = $this->user->getPairs('noletter|noclosed');
-        $this->view->openedBuilds    = $this->build->getBuildPairs($productID, $bug->branch, 'noempty,noterminate,nodone,withbranch', $projectID, 'project');
         $this->view->branchOption    = $branchOption;
         $this->view->branchTagOption = $branchTagOption;
         $this->view->executions      = $executions;
