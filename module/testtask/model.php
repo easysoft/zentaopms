@@ -2168,10 +2168,10 @@ class testtaskModel extends model
     }
 
     /**
-     * Build test task menu. 
-     * 
-     * @param  object $task 
-     * @param  string $type 
+     * Build test task menu.
+     *
+     * @param  object $task
+     * @param  string $type
      * @access public
      * @return string
      */
@@ -2182,9 +2182,9 @@ class testtaskModel extends model
     }
 
     /**
-     * Build test task view menu. 
-     * 
-     * @param  object $task 
+     * Build test task view menu.
+     *
+     * @param  object $task
      * @access public
      * @return string
      */
@@ -2208,14 +2208,14 @@ class testtaskModel extends model
 
         $menu .= $this->buildMenu('testtask', 'edit',   $params, $task, 'view');
         $menu .= $this->buildMenu('testtask', 'delete', $params, $task, 'view', 'trash', 'hiddenwin');
-        
+
         return $menu;
     }
 
     /**
      * Build test task browse menu.
-     * 
-     * @param  object $task 
+     *
+     * @param  object $task
      * @access public
      * @return string
      */
@@ -2231,7 +2231,8 @@ class testtaskModel extends model
         $menu .= '</div>';
         $menu .= $this->buildMenu('testtask',   'view',     $params, $task, 'browse', 'list-alt', '', 'iframe', true, "data-width='90%'");
         $menu .= $this->buildMenu('testtask',   'edit',     $params, $task, 'browse');
-        if(common::hasPriv('testtask', 'delete', $task))
+        $deleteIconEnabled = $this->buildMenu('testtask', 'delete', $params, $task, 'browse', '', '', '', '', '', '', false);
+        if(common::hasPriv('testtask', 'delete', $task) && $deleteIconEnabled)
         {
             $deleteURL = helper::createLink('testtask', 'delete', "taskID=$task->id&confirm=yes");
             $menu .= html::a("javascript:ajaxDelete(\"$deleteURL\",\"taskList\",confirmDelete)", '<i class="icon-common-delete icon-trash"></i>', '', "title='{$this->lang->testtask->delete}' class='btn'");

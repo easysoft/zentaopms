@@ -597,10 +597,10 @@ class caselibModel extends model
     }
 
     /**
-     * Build case lib menu. 
-     * 
-     * @param  object $object 
-     * @param  string $type 
+     * Build case lib menu.
+     *
+     * @param  object $object
+     * @param  string $type
      * @access public
      * @return string
      */
@@ -611,9 +611,9 @@ class caselibModel extends model
     }
 
     /**
-     * Build case lib view menu. 
-     * 
-     * @param  object $lib 
+     * Build case lib view menu.
+     *
+     * @param  object $lib
      * @access public
      * @return string
      */
@@ -632,9 +632,9 @@ class caselibModel extends model
     }
 
     /**
-     * Build case lib browse menu. 
-     * 
-     * @param  object $case 
+     * Build case lib browse menu.
+     *
+     * @param  object $case
      * @access public
      * @return string
      */
@@ -648,7 +648,8 @@ class caselibModel extends model
             $menu .= $this->buildMenu('testcase', 'review', $params, $case, 'browse', 'glasses', '', 'iframe');
         }
         $menu .= $this->buildMenu('testcase', 'edit', $params, $case, 'browse');
-        if(common::hasPriv('testcase', 'delete'))
+        $deleteIconEnabled = $this->buildMenu('testcase', 'delete', $params, $case, 'browse', '', '', '', '', '', '', false);
+        if(common::hasPriv('testcase', 'delete') && $deleteIconEnabled)
         {
             $deleteURL = helper::createLink('testcase', 'delete', "$params&confirm=yes");
             $menu .= html::a("javascript:ajaxDelete(\"$deleteURL\", \"caseList\", confirmDelete)", '<i class="icon icon-trash"></i>', '', "title='{$this->lang->testcase->delete}' class='btn'");
