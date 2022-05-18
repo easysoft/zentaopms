@@ -87,6 +87,7 @@
           <th><?php echo $lang->project->realBegan;?></th>
           <td><?php echo html::input('realBegan', helper::isZeroDate($program->realBegan) ? '' : $program->realBegan, "class='form-control form-date'");?></td>
         </tr>
+        <?php $this->printExtendFields($program, 'table');?>
         <tr>
           <th><?php echo $lang->program->desc;?></th>
           <td colspan='3'>
