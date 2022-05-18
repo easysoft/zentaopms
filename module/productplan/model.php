@@ -907,6 +907,8 @@ class productplanModel extends model
             $this->action->create('story', $storyID, 'linked2plan', '', $planID);
             $this->story->setStage($storyID);
         }
+
+        $this->action->create('productplan', $planID, 'linkedstory', '', implode(',', $this->post->stories));
     }
 
     /**
@@ -953,6 +955,8 @@ class productplanModel extends model
             $this->dao->update(TABLE_BUG)->set('plan')->eq($planID)->where('id')->eq((int)$bugID)->exec();
             $this->action->create('bug', $bugID, 'linked2plan', '', $planID);
         }
+
+        $this->action->create('productplan', $planID, 'linkedbug', '', implode(',', $this->post->bugs));
     }
 
     /**
