@@ -430,9 +430,10 @@ function renderUserAvatar(user, objectType, objectID, size)
 /**
  * Render deadline
  * @param {String|Date} deadline Deadline
+ * @param {string}      status
  * @returns {JQuery}
  */
-function renderDeadline(deadline)
+function renderDeadline(deadline, status)
 {
     if(deadline == '0000-00-00') return;
 
@@ -444,8 +445,10 @@ function renderDeadline(deadline)
     now.setMilliseconds(0);
     var isEarlyThanToday = date.getTime() < now.getTime();
     var deadlineDate     = $.zui.formatDate(date, 'MM-dd');
+    var statusList       = ['wait','doing','pause'];
+    var textColor        = isEarlyThanToday && typeof(status) != 'undefined' && statusList.indexOf(status) != -1 ? 'text-red' : 'text-muted';
 
-    return $('<span class="info info-deadline"/>').text(deadlineLang + ' ' + deadlineDate).addClass(isEarlyThanToday ? 'text-red' : 'text-muted');
+    return $('<span class="info info-deadline"/>').text(deadlineLang + ' ' + deadlineDate).addClass(textColor);
 }
 
 /**
@@ -607,7 +610,7 @@ function renderTaskItem(item, $item, col)
         var $infos = $item.find('.infos');
         if(!$infos.length) $infos = $('<div class="infos"></div>');
         $infos.html([priHtml, hoursHtml].join(''));
-        if(item.deadline && scaleSize <= 1) $infos.append(renderDeadline(item.deadline));
+        if(item.deadline && scaleSize <= 1) $infos.append(renderDeadline(item.deadline, item.status));
         $infos[scaleSize <= 1 ? 'append' : 'prepend'](avatarHtml);
 
         if(scaleSize <= 1) $infos.appendTo($item);
