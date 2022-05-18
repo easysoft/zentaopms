@@ -10,7 +10,7 @@ $(function()
     $('#gitlabHost').change(function()
     {
         host  = $('#gitlabHost').val();
-        url   = createLink('repo', 'ajaxgetgitlabprojects', "host=" + host);
+        url   = createLink('repo', 'ajaxgetgitlabprojects', "host=" + host + "&projectIdList=&filter=ALL");
         if(host == '') return false;
 
         $.get(url, function(response)
