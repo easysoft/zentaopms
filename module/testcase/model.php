@@ -731,7 +731,6 @@ class testcaseModel extends model
             ->get();
 
         $requiredFields = $this->config->testcase->edit->requiredFields;
-
         if($oldCase->lib != 0)
         {
             /* Remove the require field named story when the case is a lib case.*/

@@ -37,7 +37,7 @@
               <div class='input-group' id='moduleIdBox'>
               <span class="input-group-addon w-80px"><?php echo $lang->testcase->module?></span>
               <?php
-              echo html::select('module', $moduleOptionMenu, $currentModuleID, "onchange='loadModuleRelated();' class='form-control chosen required'");
+              echo html::select('module', $moduleOptionMenu, $currentModuleID, "onchange='loadModuleRelated();' class='form-control chosen'");
               if(count($moduleOptionMenu) == 1)
               {
                   echo "<span class='input-group-btn'>";
