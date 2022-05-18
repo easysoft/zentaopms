@@ -205,6 +205,7 @@ class program extends control
         $this->view->programList    = $this->program->getList();
         $this->view->budgetUnitList = $this->project->getBudgetUnitList();
         $this->view->budgetLeft     = $this->program->getBudgetLeft($parentProgram);
+        $this->view->disabled       = isset($parentProgram->id) ? 'disabled' : '';
 
         $this->display();
     }
