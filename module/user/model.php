@@ -2781,7 +2781,7 @@ class userModel extends model
 
         foreach($users as $account => $user)
         {
-            if(empty($user) or strpos($this->app->company->admins, ",{$account},") !== false) continue;
+            if(empty($user) or strpos($this->app->company->admins, ",{$account},") !== false or !isset($groups[$account])) continue;
 
             $group = $groups[$account];
             $priv  = $this->dao->select('*')->from(TABLE_GROUPPRIV)
