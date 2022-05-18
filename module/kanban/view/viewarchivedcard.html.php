@@ -172,7 +172,7 @@ $app->loadLang('productplan');
       </div>
       <div class='col-xs-2 card-actions' <?php if($kanban->performable) echo "id='performable'";?>>
         <?php
-        $CRKanban   = !(isset($this->config->CRKanban) and $this->config->CRKanban === '0' and $kanban->status === 'closed');
+        $CRKanban   = !(isset($this->config->CRKanban) and $this->config->CRKanban == '0' and $kanban->status == 'closed');
         $canRestore = (commonModel::hasPriv('kanban', 'restoreCard') and $CRKanban);
         $canDelete  = (commonModel::hasPriv('kanban', 'deleteCard') and $CRKanban);
 
