@@ -10,7 +10,7 @@ function setPreview()
         storyLink = createLink('story', 'view', "storyID=" + $('#story').val());
         if(!isonlybody)
         {
-            var concat = config.requestType != 'GET' ? '?'  : '&';
+            var concat = storyLink.indexOf('?') < 0 ? '?'  : '&';
             storyLink  = storyLink + concat + 'onlybody=yes';
         }
 

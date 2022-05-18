@@ -19,7 +19,6 @@ $onlybody     = zget($_GET, 'onlybody', 'no');
   <?php
   echo html::title($title . ' - ' . $lang->zentaoPMS);
   js::exportConfigVars();
-  echo '<script>config.onlybody = "' . $onlybody . '";</script>';
   if($config->debug)
   {
       $timestamp = time();
