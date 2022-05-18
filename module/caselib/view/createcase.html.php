@@ -33,11 +33,11 @@
                 <?php echo html::select('lib', $libraries, $libID, "onchange='loadLibModules(this.value);' class='form-control chosen'");?>
               </div>
             </td>
-            <td style='padding-left:15px;'>
+            <td style='padding-left:15px;'<?php echo strpos($config->testcase->create->requiredFields, 'module') ? ' class="required"' : '';?>>
               <div class='input-group' id='moduleIdBox'>
               <span class="input-group-addon w-80px"><?php echo $lang->testcase->module?></span>
               <?php
-              echo html::select('module', $moduleOptionMenu, $currentModuleID, "onchange='loadModuleRelated();' class='form-control chosen'");
+              echo html::select('module', $moduleOptionMenu, $currentModuleID, "onchange='loadModuleRelated();' class='form-control chosen required'");
               if(count($moduleOptionMenu) == 1)
               {
                   echo "<span class='input-group-btn'>";
