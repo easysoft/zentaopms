@@ -249,7 +249,6 @@ class caselib extends control
         if(!empty($_POST))
         {
             $this->loadModel('testcase');
-            $this->config->testcase->create->requiredFields = $this->config->caselib->createcase->requiredFields;
             setcookie('lastLibCaseModule', (int)$this->post->module, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, false);
             $caseResult = $this->testcase->create($bugID = 0);
             if(!$caseResult or dao::isError()) return print(js::error(dao::getError()));

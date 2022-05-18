@@ -112,8 +112,11 @@ class userModel extends model
         {
             if(is_array($usersToAppended)) $usersToAppended = join(',', $usersToAppended);
             $moreLinkParams = "params={$params}&usersToAppended={$usersToAppended}";
-            $connectString  = $this->config->requestType == 'GET' ? '&' : '?';
-            $this->config->user->moreLink = helper::createLink('user', 'ajaxGetMore') . $connectString . "params=" . base64_encode($moreLinkParams);
+
+            $moreLink  = helper::createLink('user', 'ajaxGetMore');
+            $moreLink .= strpos($moreLink, '?') === false ? '?' : '&';
+            $moreLink .= "params=" . base64_encode($moreLinkParams);
+            $this->config->user->moreLink = $moreLink;
         }
 
         if($usersToAppended) $users += $this->dao->select($fields)->from(TABLE_USER)->where('account')->in($usersToAppended)->fetchAll($keyField);

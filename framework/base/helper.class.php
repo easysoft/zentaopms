@@ -160,9 +160,12 @@ class baseHelper
     public static function processOnlyBodyParam($link, $onlyBody = false)
     {
         global $config;
-        if(!$onlyBody and !self::inOnlyBodyMode()) return $link;
-        $onlybodyString = strpos($link, '?') === false ? "?onlybody=yes" : "&onlybody=yes";
-        return $link . $onlybodyString;
+
+        $sign = strpos($link, '?') === false ? "?" : "&";
+        $appendString = '';
+        if($onlyBody or self::inOnlyBodyMode()) $appendString = $sign . "onlybody=yes";
+        if(self::isWithTID()) $appendString .= empty($appendString) ? "{$sign}tid={$_GET['tid']}" : "&tid={$_GET['tid']}";
+        return $link . $appendString;
     }
 
     /**
@@ -175,6 +178,19 @@ class baseHelper
     public static function inOnlyBodyMode()
     {
         return (isset($_GET['onlybody']) and $_GET['onlybody'] == 'yes');
+    }
+
+    /**
+     * Is with tid.
+     *
+     * @static
+     * @access public
+     * @return bool
+     */
+    public static function isWithTID()
+    {
+        global $config;
+        return (!empty($config->tabSession) and isset($_GET['tid']));
     }
 
     /**

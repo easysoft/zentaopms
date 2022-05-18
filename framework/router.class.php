@@ -584,13 +584,15 @@ class router extends baseRouter
      */
     public function getURI($full = false)
     {
-        $URI = !empty($this->rawURI) ? $this->rawURI : $this->URI;
+        $URI      = !empty($this->rawURI) ? $this->rawURI : $this->URI;
+        $tidParam = ($this->config->requestType == 'PATH_INFO' and helper::isWithTID()) ? "?tid={$_GET['tid']}" : '';
+
         if($full and $this->config->requestType == 'PATH_INFO')
         {
-            if($URI) return $this->config->webRoot . $URI . '.' . $this->viewType;
-            return $this->config->webRoot;
+            if($URI) return $this->config->webRoot . $URI . '.' . $this->viewType . $tidParam;
+            return $this->config->webRoot . $tidParam;
         }
-        return $URI;
+        return $URI . $tidParam;
     }
 
     /**

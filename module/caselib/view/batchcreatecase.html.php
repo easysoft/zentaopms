@@ -25,7 +25,7 @@
       <thead>
         <tr class='text-center'>
           <th class='c-id'><?php echo $lang->idAB;?></th>
-          <th class='c-module'><?php echo $lang->testcase->module;?></th>
+          <th class='c-module<?php echo strpos($config->testcase->create->requiredFields, 'module') ? ' required' : '';?>'><?php echo $lang->testcase->module;?></th>
           <th class='required'><?php echo $lang->testcase->title;?></th>
           <th class='c-status required'><?php echo $lang->testcase->type;?></th>
           <th class='c-status'><?php echo $lang->testcase->pri;?></th>

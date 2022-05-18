@@ -1040,11 +1040,13 @@ class repoModel extends model
      */
     public function setBackSession($type = 'list', $withOtherModule = false)
     {
-        $backKey = 'repo' . ucfirst(strtolower($type));
         session_start();
         $uri = $this->app->getURI(true);
-        if(!empty($_GET) and $this->config->requestType == 'PATH_INFO') $uri .= "?" . http_build_query($_GET);
-        $_SESSION[$backKey] = $uri;
+        if(!empty($_GET) and $this->config->requestType == 'PATH_INFO') $uri .= (strpos($uri, '?') === false ? '?' : '&') . http_build_query($_GET);
+
+        $backKey = 'repo' . ucfirst(strtolower($type));
+        $this->session->set($backKey, $uri);
+
         if($type == 'list') unset($_SESSION['repoView']);
         if($withOtherModule)
         {

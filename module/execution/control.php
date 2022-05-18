@@ -1452,7 +1452,7 @@ class execution extends control
         $this->view->name                = $name;
         $this->view->code                = $code;
         $this->view->team                = $team;
-        $this->view->teams               = array(0 => '') + $this->execution->getCanCopyObjects((int)$projectID);
+        $this->view->teams               = array(0 => '', $projectID => $project->name) + $this->execution->getCanCopyObjects((int)$projectID);
         $this->view->allProjects         = array(0 => '') + $this->project->getPairsByModel('all', 0, 'noclosed');
         $this->view->executionID         = $executionID;
         $this->view->productID           = $productID;
@@ -2204,9 +2204,10 @@ class execution extends control
         }
 
         $userList = $this->dao->select('account, realname, avatar')->from(TABLE_USER)->where('deleted')->eq(0)->fetchAll('account');
-        $userList['closed']['account']  = 'Closed';
-        $userList['closed']['realname'] = 'Closed';
-        $userList['closed']['avatar']   = '';
+        $userList['closed'] = new stdclass();
+        $userList['closed']->account  = 'Closed';
+        $userList['closed']->realname = 'Closed';
+        $userList['closed']->avatar   = '';
 
         $this->view->title            = $this->lang->execution->kanban;
         $this->view->realnames        = $this->loadModel('user')->getPairs('noletter');

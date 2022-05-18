@@ -80,10 +80,10 @@
                   $imageWidth = $imageSize ? $imageSize[0] : 0;
               }
 
-              $sessionString  = $config->requestType == 'PATH_INFO' ? '?' : '&';
-              $sessionString .= session_name() . '=' . session_id();
-              $fileID         = $file->id;
-              $url            = helper::createLink('file', 'download', 'fileID=' . $fileID) . $sessionString ;
+              $fileID = $file->id;
+              $url    = helper::createLink('file', 'download', 'fileID=' . $fileID);
+              $url   .= strpos($url, '?') === false ? '?' : '&';
+              $url   .= session_name() . '=' . session_id();
               ?>
               <div class='file'>
                 <a href='<?php echo $url;?>' title='<?php echo $file->title;?>' target='_blank' onclick="return downloadFile(<?php echo $file->id?>, '<?php echo $file->extension?>', <?php echo $imageWidth?>)">
@@ -125,18 +125,18 @@
 <?php js::set('type', $type);?>
 <?php js::set('tab', $this->app->tab);?>
 <script>
-<?php
-$sessionString  = $config->requestType == 'PATH_INFO' ? '?' : '&';
-$sessionString .= session_name() . '=' . session_id();
-?>
+<?php $sessionString = session_name() . '=' . session_id();?>
 function downloadFile(fileID, extension, imageWidth)
 {
     if(!fileID) return;
-    var fileTypes     = 'jpg,jpeg,gif,png,bmp';
-    var sessionString = '<?php echo $sessionString;?>';
-    var windowWidth   = $(window).width();
-    var url           = createLink('file', 'download', 'fileID=' + fileID + '&mouse=left') + sessionString;
-    width = (windowWidth > imageWidth) ? ((imageWidth < windowWidth*0.5) ? windowWidth*0.5 : imageWidth) : windowWidth;
+    var fileTypes   = 'jpg,jpeg,gif,png,bmp';
+    var windowWidth = $(window).width();
+
+    var url = createLink('file', 'download', 'fileID=' + fileID + '&mouse=left');
+    url    += url.indexOf('?') >= 0 ? '&' : '?';
+    url    += '<?php echo $sessionString;?>';
+
+    width = (windowWidth > imageWidth) ? ((imageWidth < windowWidth * 0.5) ? windowWidth * 0.5 : imageWidth) : windowWidth;
     if(fileTypes.indexOf(extension) >= 0)
     {
         $('<a>').modalTrigger({url: url, type: 'iframe', width: width}).trigger('click');

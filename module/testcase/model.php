@@ -62,6 +62,8 @@ class testcaseModel extends model
         $result = $this->loadModel('common')->removeDuplicate('case', $case, $param);
         if($result and $result['stop']) return array('status' => 'exists', 'id' => $result['duplicate']);
 
+        if(empty($case->product)) $this->config->testcase->create->requiredFields = str_replace('story', '', $this->config->testcase->create->requiredFields);
+
         /* Value of story may be showmore. */
         $case->story = (int)$case->story;
         $this->dao->insert(TABLE_CASE)->data($case)->autoCheck()->batchCheck($this->config->testcase->create->requiredFields, 'notempty')->checkFlow()->exec();
@@ -974,6 +976,8 @@ class testcaseModel extends model
             $cases[$caseID] = $case;
             unset($case);
         }
+
+        if(empty($case->product)) $this->config->testcase->edit->requiredFields = str_replace('story', '', $this->config->testcase->edit->requiredFields);
 
         /* Update cases. */
         $this->loadModel('action');

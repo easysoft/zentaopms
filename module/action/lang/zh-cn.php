@@ -624,6 +624,7 @@ else
 {
     $lang->action->label->execution = "$lang->executionCommon|execution|task|executionID=%s";
 }
+
 $lang->action->label->task         = '任务|task|view|taskID=%s';
 $lang->action->label->build        = '版本|build|view|buildID=%s';
 $lang->action->label->bug          = 'Bug|bug|view|bugID=%s';

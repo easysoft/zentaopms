@@ -73,7 +73,7 @@ $(function()
         });
     })
 
-    if(copyExecutionID != 0) $('#teams').change();
+    if(copyExecutionID != 0 || projectID != 0) $('#teams').change();
 
     var acl = $("[name^='acl']:checked").val();
     setWhite(acl);

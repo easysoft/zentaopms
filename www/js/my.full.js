@@ -1,3 +1,108 @@
+/* Tab session */
+(function($)
+{
+    if(!config.tabSession) return;
+
+    /** Store current tab id */
+    var _tid = '';
+
+    /**
+     * Get current tab id
+     * @returns {string} Tab id
+     */
+    function getTid(){return _tid;}
+
+    /**
+     * Convert url with tab id
+     * @param {string}  url
+     * @param {string}  [tid]
+     * @param {boolean} [force]
+     * @returns {string} Tab id
+     */
+    function convertUrlWithTid(url, tid, force)
+    {
+        var link = $.parseLink(url);
+        if(!link.moduleName) return url;
+
+        tid = tid || _tid;
+        if(!force && link.tid === tid) return url;
+
+        link.tid = tid;
+        return $.createLink(link);
+    }
+
+    /** Init */
+    function init()
+    {
+        /* Check tid */
+        if(window.parent !== window)
+        {
+            if(window.parent.$.tabSession) _tid = window.parent.$.tabSession.getTid();
+        }
+        else
+        {
+            var isIndexOrLoginPage = (config.currentModule === 'index' && config.currentMethod === 'index') || (config.currentModule === 'user' && config.currentMethod === 'login');
+            var link = $.parseLink(window.location.href);
+
+            _tid = sessionStorage.getItem('TID');
+            if(!_tid)
+            {
+                if(link.tid && isIndexOrLoginPage)
+                {
+                    _tid = link.tid
+                }
+
+                if(!_tid)
+                {
+                    _tid = $.zui.uuid();
+                    _tid = _tid.substr(_tid.length - 8);
+                }
+            }
+            sessionStorage.setItem('TID', _tid);
+
+            if(isIndexOrLoginPage && !link.tid)
+            {
+                window.location.href = convertUrlWithTid(window.location.href, _tid);
+            }
+        }
+
+        $.tabSession =
+        {
+            getTid:            getTid,
+            convertUrlWithTid: convertUrlWithTid,
+        };
+
+        /* Handle all links in page */
+        $('a').each(function()
+        {
+            var $a         = $(this);
+            var url        = $a.attr('href');
+            var urlWithTid = convertUrlWithTid(url);
+
+            if(urlWithTid !== url) $a.attr('href', urlWithTid);
+        });
+        $('[data-url]').each(function()
+        {
+            var $e         = $(this);
+            var url        = $e.attr('data-url');
+            var urlWithTid = convertUrlWithTid(url);
+            if(urlWithTid !== url) $e.attr('data-url', urlWithTid);
+        });
+
+        if(config.debug > 2)
+        {
+            console.log(document.title || location.href, 'tid', _tid);
+
+            $(function()
+            {
+                $('#tid').prepend('<code class="bg-blue">localtid=' + _tid + '</code>');
+            });
+        }
+    }
+
+    init();
+}(jQuery));
+
 /**
  * Set the ping url.
  *

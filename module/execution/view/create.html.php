@@ -183,7 +183,7 @@
         </tr>
         <tr>
           <th><?php echo $lang->execution->copyTeam;?></th>
-          <td><?php echo html::select('teams', $teams, $copyExecutionID, "class='form-control chosen' data-placeholder='{$lang->execution->copyTeamTip}'"); ?></td>
+          <td><?php echo html::select('teams', $teams, empty($copyExecution) ? $projectID : $copyExecutionID, "class='form-control chosen' data-placeholder='{$lang->execution->copyTeamTip}'"); ?></td>
         </tr>
         <tr>
           <th rowspan='2'><?php echo $lang->execution->owner;?></th>
