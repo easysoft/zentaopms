@@ -586,8 +586,7 @@ class caselibModel extends model
 
                 if(dao::isError())
                 {
-                    echo js::error(dao::getError());
-                    return print(js::reload('parent'));
+                    return helper::end(js::error(dao::getError()));
                 }
 
                 $caseID   = $this->dao->lastInsertID();
@@ -597,10 +596,10 @@ class caselibModel extends model
     }
 
     /**
-     * Build case lib menu. 
-     * 
-     * @param  object $object 
-     * @param  string $type 
+     * Build case lib menu.
+     *
+     * @param  object $object
+     * @param  string $type
      * @access public
      * @return string
      */
@@ -611,9 +610,9 @@ class caselibModel extends model
     }
 
     /**
-     * Build case lib view menu. 
-     * 
-     * @param  object $lib 
+     * Build case lib view menu.
+     *
+     * @param  object $lib
      * @access public
      * @return string
      */
@@ -632,9 +631,9 @@ class caselibModel extends model
     }
 
     /**
-     * Build case lib browse menu. 
-     * 
-     * @param  object $case 
+     * Build case lib browse menu.
+     *
+     * @param  object $case
      * @access public
      * @return string
      */
