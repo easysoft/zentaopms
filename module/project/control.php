@@ -1032,7 +1032,6 @@ class project extends control
         $showModule  = !empty($this->config->datatable->bugBrowse->showModule) ? $this->config->datatable->bugBrowse->showModule : '';
 
         $storyIdList = $taskIdList = array();
-        a($bugs);
         foreach($bugs as $bug)
         {
             if($bug->story)  $storyIdList[$bug->story] = $bug->story;
@@ -1065,7 +1064,7 @@ class project extends control
         $this->view->branchOption    = $branchOption;
         $this->view->branchTagOption = $branchTagOption;
         $this->view->executions      = $executions;
-        $this->view->modulePairs     = $showModule ? $this->tree->getModulePairs($productID, 'bug', $showModule) : array();
+        $this->view->modulePairs     = $showModule ? $this->loadModel('tree')->getModulePairs($productID, 'bug', $showModule) : array();
         $this->view->plans           = $this->loadModel('productplan')->getPairs($productID);
         $this->view->stories         = $storyList;
         $this->view->tasks           = $taskList;
