@@ -735,7 +735,7 @@ class testtaskModel extends model
     {
         $oldTask = $this->dao->select("*")->from(TABLE_TESTTASK)->where('id')->eq((int)$taskID)->fetch();
         $task = fixer::input('post')
-            ->add('id')
+            ->add('id', $taskID)
             ->stripTags($this->config->testtask->editor->edit['id'], $this->config->allowedTags)
             ->join('mailto', ',')
             ->join('type', ',')
