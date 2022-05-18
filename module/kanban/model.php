@@ -2940,7 +2940,7 @@ class kanbanModel extends model
         $actions .= "<div class='btn-group'>";
         $actions .= "<a href='javascript:fullScreen();' id='fullScreenBtn' $btnColor class='btn btn-link'><i class='icon icon-fullscreen'></i> {$this->lang->kanban->fullScreen}</a>";
 
-        $CRKanban       = !(isset($this->config->CRKanban) and $this->config->CRKanban === '0'  and $kanban->status === 'closed');
+        $CRKanban       = !(isset($this->config->CRKanban) and $this->config->CRKanban === '0' and $kanban->status === 'closed');
         $printRegionBtn = ($CRKanban and (common::hasPriv('kanban', 'createRegion') or $printSetHeightBtn or common::hasPriv('kanban', 'performable') or common::hasPriv('kanban', 'enableArchived') or common::hasPriv('kanban', 'import') or common::hasPriv('kanban', 'setColumnWidth')));
         $printKanbanBtn = (common::hasPriv('kanban', 'edit') or common::hasPriv('kanban', 'close') or common::hasPriv('kanban', 'delete'));
 
