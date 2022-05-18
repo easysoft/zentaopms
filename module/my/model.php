@@ -311,7 +311,7 @@ class myModel extends model
     }
 
     /**
-     * Get tasks/bugs/issus/risks/... assigned by me
+     * Get assigned by me objects.
      *
      * @param string $account
      * @param int    $limit
