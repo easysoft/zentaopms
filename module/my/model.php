@@ -337,6 +337,15 @@ class myModel extends model
             if($objectList) return $this->loadModel('task')->processTasks($objectList);
             return array();
         }
+
+        if($objectType == 'bug')
+        {
+            $productList = array();
+            foreach($objectList as $bug) $productList[$bug->product] = $bug->product;
+            $productPairs = $this->dao->select('id,name')->from(TABLE_PRODUCT)->where('id')->in($productList)->fetchPairs('id');
+            foreach($objectList as $bug) $bug->productName = zget($productPairs, $bug->product);
+        }
+
         return $objectList;
     }
 }
