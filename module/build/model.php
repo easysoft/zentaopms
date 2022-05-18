@@ -246,7 +246,10 @@ class buildModel extends model
             foreach($releases as $buildID => $releaseName)
             {
                 $branchName = $allBuilds[$buildID]->branchName ? $allBuilds[$buildID]->branchName : $this->lang->branch->main;
-                $builds[$buildID] = (strpos($params, 'withbranch') !== false ? $branchName . '/' : '') . $releaseName;
+                if($allBuilds[$buildID]->productType != 'normal')
+                {
+                    $builds[$buildID] = (strpos($params, 'withbranch') !== false ? $branchName . '/' : '') . $releaseName;
+                }
             }
         }
 
