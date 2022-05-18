@@ -440,7 +440,7 @@ class project extends control
                 }
                 else
                 {
-                    return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('program', 'project', 'program=' . $programID)));
+                    return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('program', 'project', "programID=$programID")));
                 }
             }
             elseif($this->app->tab == 'doc')
@@ -498,6 +498,7 @@ class project extends control
         }
 
         if($this->app->tab == 'doc') unset($this->lang->doc->menu->project['subMenu']);
+        if($this->app->tab == 'product' and isset($output['productID'])) $this->loadModel('product')->setMenu($output['productID']);
 
         $topProgramID = $this->program->getTopByID($programID);
 
