@@ -648,11 +648,13 @@ class caselibModel extends model
             $menu .= $this->buildMenu('testcase', 'review', $params, $case, 'browse', 'glasses', '', 'iframe');
         }
         $menu .= $this->buildMenu('testcase', 'edit', $params, $case, 'browse');
-        $deleteIconEnabled = $this->buildMenu('testcase', 'delete', $params, $case, 'browse', '', '', '', '', '', '', false);
-        if(common::hasPriv('testcase', 'delete') && $deleteIconEnabled)
+        $clickable = $this->buildMenu('testcase', 'delete', $params, $case, 'browse', '', '', '', '', '', '', false);
+        if(common::hasPriv('testcase', 'delete'))
         {
             $deleteURL = helper::createLink('testcase', 'delete', "$params&confirm=yes");
-            $menu .= html::a("javascript:ajaxDelete(\"$deleteURL\", \"caseList\", confirmDelete)", '<i class="icon icon-trash"></i>', '', "title='{$this->lang->testcase->delete}' class='btn'");
+            $class = 'btn';
+            if(!$clickable) $class .= ' disabled';
+            $menu .= html::a("javascript:ajaxDelete(\"$deleteURL\", \"caseList\", confirmDelete)", '<i class="icon icon-trash"></i>', '', "title='{$this->lang->testcase->delete}' class='{$class}'");
         }
 
         return $menu;

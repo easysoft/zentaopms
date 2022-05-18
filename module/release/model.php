@@ -737,12 +737,14 @@ class releaseModel extends model
         $menu .= $this->buildMenu('release', 'changeStatus', "$params&status=$changedStatus", $release, 'browse', $release->status == 'normal' ? 'pause' : 'play', 'hiddenwin', '', '', '',$this->lang->release->changeStatusList[$changedStatus]);
         $menu .= $this->buildMenu('release', 'edit',   "release=$release->id", $release, 'browse');
         $menu .= $this->buildMenu('release', 'notify', "release=$release->id", $release, 'browse', 'bullhorn', '', 'iframe', true);
-        $deleteIconEnabled = $this->buildMenu('release', 'delete', "release=$release->id", $release, 'browse', '', '', '', '', '', '', false);
+        $clickable = $this->buildMenu('release', 'delete', "release=$release->id", $release, 'browse', '', '', '', '', '', '', false);
 
-        if(common::hasPriv('release', 'delete', $release) && $deleteIconEnabled)
+        if(common::hasPriv('release', 'delete', $release))
         {
             $deleteURL = helper::createLink('release', 'delete', "releaseID=$release->id&confirm=yes");
-            $menu .= html::a("javascript:ajaxDelete(\"$deleteURL\", \"releaseList\", confirmDelete)", '<i class="icon-trash"></i>', '', "class='btn' title='{$this->lang->release->delete}'");
+            $class = 'btn';
+            if(!$clickable) $class .= ' disabled';
+            $menu .= html::a("javascript:ajaxDelete(\"$deleteURL\", \"releaseList\", confirmDelete)", '<i class="icon-trash"></i>', '', "class='{$class}' title='{$this->lang->release->delete}'");
         }
 
         return $menu;
