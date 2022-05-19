@@ -58,7 +58,7 @@ class productEntry extends Entry
                     $product->bugStatistic = $this->loadModel('bug')->getStatistic($productID);
                     break;
                 case 'moduleoptionmenu':
-                    $product->moduleOptionMenu = $this->loadModel('tree')->getOptionMenu($productID, 'story', 0, '0');
+                    $product->moduleOptionMenu = $this->loadModel('tree')->getOptionMenu($productID, $this->param('moduleType', 'story'), 0, '0');
                     break;
                 case 'parentstories':
                     $product->parentstories= $this->loadModel('story')->getParentStoryPairs($productID);
