@@ -50,9 +50,11 @@
       <table class='table table-form'>
         <tr>
           <th><?php echo $lang->program->parent;?></th>
-          <?php $disabled = isset($parentProgram->id) ? 'disabled' : '';?>
-          <td><?php echo html::select('parent', $parents, isset($parentProgram->id) ? $parentProgram->id : 0, "class='form-control chosen' onchange=setBudgetTipsAndAclList(this.value) $disabled");?>
-          <td><?php if($disabled) echo html::hidden('parent', $parentProgram->id);?></td>
+          <td>
+            <?php $disabled = isset($parentProgram->id) ? 'disabled' : '';?>
+            <?php echo html::select('parent', $parents, isset($parentProgram->id) ? $parentProgram->id : 0, "class='form-control chosen' onchange=setBudgetTipsAndAclList(this.value) $disabled");?>
+            <?php if($disabled) echo html::hidden('parent', $parentProgram->id);?>
+          </td>
           <td></td>
         </tr>
         <tr>
