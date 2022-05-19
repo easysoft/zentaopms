@@ -2649,14 +2649,20 @@ class bugModel extends model
 
     /**
      * Get by assigned by me.
+     * @param  array      $productIDList
+     * @param  int|string $branch
+     * @param  array      $modules
+     * @param  array      $executions
+     * @param  string     $sort
+     * @param  object     $pager
+     * @param  int        $projectID
      *
-     * @param  int    $sonarqubeID
      * @access public
      * @return array
      */
     public function getByAssignedbyme($productIDList, $branch, $modules, $executions, $sort, $pager, $projectID)
     {
-        $actionID = $this->dao->select('objectID')->from(TABLE_ACTION)->where('objectType')->eq('bug')->andWhere('action')->eq('assigned')->andWhere('actor')->eq($this->app->user->account)->fetchPairs('objectID', 'objectID');
+        $actionIDList = $this->dao->select('objectID')->from(TABLE_ACTION)->where('objectType')->eq('bug')->andWhere('action')->eq('assigned')->andWhere('actor')->eq($this->app->user->account)->fetchPairs('objectID', 'objectID');
         return $this->dao->select('*')->from(TABLE_BUG)
             ->where('product')->in($productIDList)
             ->beginIF($branch !== 'all')->andWhere('branch')->in($branch)->fi()
@@ -2665,7 +2671,7 @@ class bugModel extends model
             ->andWhere('execution')->in(array_keys($executions))
             ->andWhere('deleted')->eq(0)
             ->andWhere('status')->ne('closed')
-            ->andWhere('id')->in($actionID)
+            ->andWhere('id')->in($actionIDList)
             ->orderBy($sort)
             ->page($pager)
             ->fetchAll();
