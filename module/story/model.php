@@ -4319,7 +4319,30 @@ class storyModel extends model
     public function checkForceReview()
     {
         $forceReview = false;
-        if(!empty($this->config->story->forceReview)) $forceReview = strpos(",{$this->config->story->forceReview},", ",{$this->app->user->account},") !== false;
+
+        if(isset($this->config->story->forceReviewAll) and $this->config->story->forceReviewAll) return true;
+
+        $forceUsers = '';
+        if(!empty($this->config->story->forceReview)) $forceUsers = $this->config->story->forceReview;
+
+        if(!empty($this->config->story->forceReviewRoles) or !empty($this->config->story->forceReviewDepts))
+        {
+            $users = $this->dao->select('account')->from(TABLE_USER)
+                ->where('deleted')->eq(0)
+                ->andWhere(true, true)
+                ->beginIF(!empty($this->config->story->forceReviewRoles))
+                ->andWhere('role', true)->in($this->config->story->forceReviewRoles)
+                ->andWhere('role')->ne('')
+                ->markRight(1)
+                ->fi()
+                ->beginIF(!empty($this->config->story->forceReviewDepts))->orWhere('dept')->in($this->config->story->forceReviewDepts)->fi()
+                ->markRight(1)
+                ->fetchAll('account');
+
+            $forceUsers .= "," . implode(',', array_keys($users));
+        }
+
+        $forceReview = strpos(",{$forceUsers},", ",{$this->app->user->account},") !== false;
 
         return $forceReview;
     }

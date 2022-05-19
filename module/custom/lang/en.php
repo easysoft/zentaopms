@@ -50,6 +50,10 @@ $lang->custom->oneUnit              = "One {$lang->hourCommon}";
 $lang->custom->convertRelationTitle = "Please firstly set the conversion factor from {$lang->hourCommon} to %s";
 $lang->custom->superReviewers       = "Super Reviewer";
 $lang->custom->kanban               = "Kanban";
+$lang->custom->allUsers             = 'All Users';
+$lang->custom->account              = 'Users';
+$lang->custom->role                 = 'Role';
+$lang->custom->dept                 = 'Dept';
 
 if($config->systemMode == 'new') $lang->custom->execution = 'Execution';
 if($config->systemMode == 'classic' || !$config->systemMode) $lang->custom->execution = $lang->executionCommon;
@@ -181,6 +185,8 @@ $lang->custom->notice->readOnlyOfKanban    = "If Change Forbidden, any change on
 $lang->custom->notice->URSREmpty           = 'Custom requirement name can not be empty!';
 $lang->custom->notice->confirmDelete       = 'Are you sure you want to delete it?';
 $lang->custom->notice->confirmReviewCase   = 'Set the case in Wait to Normal?';
+$lang->custom->notice->storyReviewTip      = 'After selecting by individual, position, and department, take the union of these three filters. ';
+$lang->custom->notice->selectAllTip        = 'After selecting all people, the reviewers will be emptied and grayed out while hiding their positions and departments.';
 
 $lang->custom->notice->indexPage['product'] = "ZenTao 8.2+ has Product Home. Do you want to go to Product Home?";
 $lang->custom->notice->indexPage['project'] = "ZenTao 8.2+ has Project Home. Do you want to go to Project Home?";
