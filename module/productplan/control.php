@@ -835,7 +835,7 @@ class productplan extends control
      * @access public
      * @return void
      */
-    public function unlinkBug($bugID, $confirm = 'no')
+    public function unlinkBug($bugID, $planID, $confirm = 'no')
     {
         if($confirm == 'no')
         {
