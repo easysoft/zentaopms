@@ -3741,9 +3741,9 @@ class storyModel extends model
     {
         $action = strtolower($action);
 
-        if($story->parent < 0 and $action != 'edit' and $action != 'batchcreate' and $action != 'change' and $action != 'review') return false;
-
         global $app, $config;
+
+        if($story->parent < 0 and strpos($config->story->list->actionsOpratedParentStory, ",$action,") === false) return false;
 
         $story->reviewer  = isset($story->reviewer)  ? $story->reviewer  : array();
         $story->notReview = isset($story->notReview) ? $story->notReview : array();
