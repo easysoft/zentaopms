@@ -517,7 +517,7 @@ class productplanModel extends model
         }
         elseif($oldPlan->parent == -1 and $plan->begin != $this->config->productplan->future)
         {
-            $childPlans = $this->getChildren($oldPlan->id);
+            $childPlans = $this->getChildren($planID);
             $minBegin   = $plan->begin;
             $maxEnd     = $plan->end;
             foreach($childPlans as $childID => $childPlan)
