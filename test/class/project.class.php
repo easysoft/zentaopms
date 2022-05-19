@@ -16,7 +16,7 @@ class Project
     }
 
     /**
-     * Test start a project. 
+     * Test start a project.
      *
      * @param  int    $projectID
      * @access public
@@ -35,8 +35,8 @@ class Project
 
     /**
      * Test create project.
-     * 
-     * @param  array $params 
+     *
+     * @param  array $params
      * @access public
      * @return void
      */
@@ -87,5 +87,20 @@ class Project
         if(dao::isError()) return array('message' => dao::getError());
 
         return $this->project->getByIdList($data['projectIdList']);
+    }
+
+    /**
+     *  Test get all the projects under the program set to which an project belongs
+     *
+     * @param object $project
+     * @access public
+     * @return void
+     */
+    public function getBrotherProjectsTest($project)
+    {
+        $projectIds = $this->project->getBrotherProjects($project);
+
+        if(dao::isError()) return array('message' => dao::getError());
+        return $projectIds;
     }
 }

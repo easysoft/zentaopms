@@ -73,7 +73,7 @@ class actionModel extends model
         if($this->post->uid) $this->file->updateObjectID($this->post->uid, $objectID, $objectType);
 
         /* Call the message notification function. */
-        $this->loadModel('message')->send($objectType, $objectID, $actionType, $actionID, $actor);
+        $this->loadModel('message')->send(strtolower($objectType), $objectID, $actionType, $actionID, $actor);
 
         /* Add index for global search. */
         $this->saveIndex($objectType, $objectID, $actionType);

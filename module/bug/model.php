@@ -396,6 +396,7 @@ class bugModel extends model
         elseif($browseType == 'needconfirm')   $bugs = $this->getByNeedconfirm($productIDList, $branch, $modules, $executions, $sort, $pager, $projectID);
         elseif($browseType == 'bysearch')      $bugs = $this->getBySearch($productIDList, $branch, $queryID, $sort, '', $pager, $projectID);
         elseif($browseType == 'overduebugs')   $bugs = $this->getOverdueBugs($productIDList, $branch, $modules, $executions, $sort, $pager, $projectID);
+        elseif($browseType == 'assignedbyme')  $bugs = $this->getByAssignedbyme($productIDList, $branch, $modules, $executions, $sort, $pager, $projectID);
 
         return $this->checkDelayedBugs($bugs);
     }
@@ -2642,6 +2643,36 @@ class bugModel extends model
             ->andWhere('t1.execution')->in(array_keys($executions))
             ->andWhere('t1.deleted')->eq(0)
             ->orderBy($orderBy)
+            ->page($pager)
+            ->fetchAll();
+    }
+
+    /**
+     * Get by assigned by me.
+     * @param  array      $productIDList
+     * @param  int|string $branch
+     * @param  array      $modules
+     * @param  array      $executions
+     * @param  string     $sort
+     * @param  object     $pager
+     * @param  int        $projectID
+     *
+     * @access public
+     * @return array
+     */
+    public function getByAssignedbyme($productIDList, $branch, $modules, $executions, $sort, $pager, $projectID)
+    {
+        $actionIDList = $this->dao->select('objectID')->from(TABLE_ACTION)->where('objectType')->eq('bug')->andWhere('action')->eq('assigned')->andWhere('actor')->eq($this->app->user->account)->fetchPairs('objectID', 'objectID');
+        return $this->dao->select('*')->from(TABLE_BUG)
+            ->where('product')->in($productIDList)
+            ->beginIF($branch !== 'all')->andWhere('branch')->in($branch)->fi()
+            ->beginIF($modules)->andWhere('module')->in($modules)->fi()
+            ->beginIF($projectID)->andWhere('project')->eq($projectID)->fi()
+            ->andWhere('execution')->in(array_keys($executions))
+            ->andWhere('deleted')->eq(0)
+            ->andWhere('status')->ne('closed')
+            ->andWhere('id')->in($actionIDList)
+            ->orderBy($sort)
             ->page($pager)
             ->fetchAll();
     }

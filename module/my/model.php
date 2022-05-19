@@ -324,12 +324,14 @@ class myModel extends model
      */
     public function getAssignedByMe($account, $limit = 0, $pager = null, $orderBy = "id_desc", $projectID = 0, $objectType = '')
     {
-        $this->loadModel($objectType);
-        $objectList = $this->dao->select('t1.*')
-            ->from($this->config->objectTables[$objectType])->alias('t1')
-            ->leftJoin(TABLE_ACTION)->alias('t2')->on("t1.id = t2.objectID and t2.objectType='{$objectType}'")
+        $module = $objectType == 'requirement' ? 'story' : $objectType;
+        $this->loadModel($module);
+        $objectList = $this->dao->select('DISTINCT t1.*')
+            ->from($this->config->objectTables[$module])->alias('t1')
+            ->leftJoin(TABLE_ACTION)->alias('t2')->on("t1.id = t2.objectID and t2.objectType='{$module}'")
             ->where('t2.actor')->eq($account)
             ->andWhere('t2.action')->eq('assigned')
+            ->beginIF($objectType == 'requirement' or $objectType == 'story')->andWhere('t1.type')->eq($objectType)->fi()
             ->andWhere('t1.deleted')->eq(0)
             ->orderBy($orderBy)
             ->page($pager, 't1.id')
@@ -358,7 +360,18 @@ class myModel extends model
             $productPairs = $this->dao->select('id,name')->from(TABLE_PRODUCT)->where('id')->in($productList)->fetchPairs('id');
             foreach($objectList as $bug) $bug->productName = zget($productPairs, $bug->product);
         }
+        if($objectType == 'requirement' or $objectType == 'story')
+        {
+            $productList = array();
+            foreach($objectList as $story) $productList[$story->product] = $story->product;
+            $productPairs = $this->dao->select('id,name')->from(TABLE_PRODUCT)->where('id')->in($productList)->fetchPairs('id');
+            foreach($objectList as $story) $story->productTitle = zget($productPairs, $story->product);
 
+            $planList = array();
+            foreach($objectList as $story) $planList[$story->plan] = $story->plan;
+            $planPairs = $this->dao->select('id,title')->from(TABLE_PRODUCTPLAN)->where('id')->in($planList)->fetchPairs('id');
+            foreach($objectList as $story) $story->planTitle = zget($planPairs, $story->plan);
+        }
         return $objectList;
     }
 }

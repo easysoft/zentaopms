@@ -260,6 +260,7 @@ $lang->execution->RDKanban          = 'Research & Development Kanban';
 $lang->execution->allTasks     = 'All';
 $lang->execution->assignedToMe = 'My';
 $lang->execution->myInvolved   = 'Involved';
+$lang->execution->assignedByMe = 'AssignedByMe';
 
 $lang->execution->statusSelects['']             = 'More';
 $lang->execution->statusSelects['wait']         = 'Waiting';
@@ -443,6 +444,7 @@ $lang->execution->featureBar['task']['all']          = $lang->execution->allTask
 $lang->execution->featureBar['task']['unclosed']     = $lang->execution->unclosed;
 $lang->execution->featureBar['task']['assignedtome'] = $lang->execution->assignedToMe;
 $lang->execution->featureBar['task']['myinvolved']   = $lang->execution->myInvolved;
+$lang->execution->featureBar['task']['assignedbyme'] = $lang->execution->assignedByMe;
 $lang->execution->featureBar['task']['delayed']      = 'Delayed';
 $lang->execution->featureBar['task']['needconfirm']  = 'Changed';
 $lang->execution->featureBar['task']['status']       = $lang->execution->statusSelects[''];
