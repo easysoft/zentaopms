@@ -434,7 +434,7 @@ UPDATE `zt_workflowaction` SET `type`  ='single' WHERE `action`='browse' AND `ty
 
 UPDATE `zt_workflowlayout` SET `mobileShow`='0' WHERE `mobileShow`='1' AND `module` IN('product', 'story', 'productplan', 'release', 'project', 'task', 'build', 'bug', 'testcase', 'testtask', 'testsuite', 'caselib', 'feedback');
 
-UPDATE `zt_project` SET `status` = 'doing' WHERE `type` = 'program'  and `status` = 'wait' and `realBegan` != '0000-00-00' and `realBegan` != '';
+UPDATE `zt_project` SET `status` = 'doing' WHERE `type` = 'program'  and `status` = 'wait' and `realBegan` != '0000-00-00';
 
 CREATE TABLE `zt_approval` (
   `id` mediumint(8) NOT NULL AUTO_INCREMENT,
