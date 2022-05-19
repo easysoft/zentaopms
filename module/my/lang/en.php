@@ -42,6 +42,7 @@ $lang->my->testtask        = 'My Test Task';
 $lang->my->testcase        = 'My Case';
 $lang->my->storyConcept    = 'Story Concept';
 $lang->my->pri             = 'Priority';
+$thid->my->alert           = 'Later, you can click the avatar at the top right and select "Preference" to modify the information.';
 
 $lang->my->indexAction      = 'My Index';
 $lang->my->calendarAction   = 'My Calendar';
