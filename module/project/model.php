@@ -1344,6 +1344,7 @@ class projectModel extends model
             ->checkFlow()
             ->where('id')->eq($projectID)
             ->exec();
+        if(dao::isError()) return false;
 
         /* Get team and language item. */
         $this->loadModel('user');
