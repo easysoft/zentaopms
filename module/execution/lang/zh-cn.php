@@ -260,6 +260,7 @@ $lang->execution->RDKanban          = '研发看板';
 $lang->execution->allTasks     = '所有';
 $lang->execution->assignedToMe = '指派给我';
 $lang->execution->myInvolved   = '由我参与';
+$lang->execution->assignedByMe = '由我指派';
 
 $lang->execution->statusSelects['']             = '更多';
 $lang->execution->statusSelects['wait']         = '未开始';
@@ -443,6 +444,7 @@ $lang->execution->featureBar['task']['all']          = $lang->execution->allTask
 $lang->execution->featureBar['task']['unclosed']     = $lang->execution->unclosed;
 $lang->execution->featureBar['task']['assignedtome'] = $lang->execution->assignedToMe;
 $lang->execution->featureBar['task']['myinvolved']   = $lang->execution->myInvolved;
+$lang->execution->featureBar['task']['assignedbyme'] = $lang->execution->assignedByMe;
 $lang->execution->featureBar['task']['delayed']      = '已延期';
 $lang->execution->featureBar['task']['needconfirm']  = "{$lang->SRCommon}变更";
 $lang->execution->featureBar['task']['status']       = $lang->execution->statusSelects[''];
