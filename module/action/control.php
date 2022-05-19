@@ -175,7 +175,8 @@ class action extends control
         {
             $story      = $this->loadModel('story')->getById($objectID);
             $executions = explode(',', $this->app->user->view->sprints);
-            if(!array_intersect(array_keys($story->executions), $executions)) return print(js::error($this->lang->error->accessDenied));
+            $products   = explode(',', $this->app->user->view->products);
+            if(!array_intersect(array_keys($story->executions), $executions) and !in_array($story->product, $products)) return print(js::error($this->lang->error->accessDenied));
         }
 
         $actionID = $this->action->create($objectType, $objectID, 'Commented', $this->post->comment);
