@@ -144,6 +144,7 @@ class model extends baseModel
         if(strpos($module, '.') !== false) list($appName, $moduleName) = explode('.', $module);
 
         static $actions;
+        static $relations;
         if(empty($actions))
         {
             $actions = $this->dao->select('*')->from(TABLE_WORKFLOWACTION)
@@ -154,6 +155,7 @@ class model extends baseModel
                 ->orderBy('order_asc')
                 ->fetchAll();
         }
+        if(empty($relations)) $relations = $this->dao->select('next, actions')->from(TABLE_WORKFLOWRELATION)->where('prev')->eq($moduleName)->fetchPairs();
 
         $menu = '';
         if($show)
@@ -162,7 +164,7 @@ class model extends baseModel
             {
                 if(strpos($action->position, $type) === false || $action->show != $show) continue;
 
-                $menu .= $this->loadModel('flow')->buildActionMenu($moduleName, $action, $data, $type);
+                $menu .= $this->loadModel('flow')->buildActionMenu($moduleName, $action, $data, $type, $relations);
             }
         }
         else
@@ -172,8 +174,8 @@ class model extends baseModel
             {
                 if(strpos($action->position, $type) === false) continue;
 
-                if($type == 'view' || $action->show == 'direct')         $menu         .= $this->loadModel('flow')->buildActionMenu($moduleName, $action, $data, $type);
-                if($type == 'browse' && $action->show == 'dropdownlist') $dropdownMenu .= $this->loadModel('flow')->buildActionMenu($moduleName, $action, $data, $type);
+                if($type == 'view' || $action->show == 'direct')         $menu         .= $this->loadModel('flow')->buildActionMenu($moduleName, $action, $data, $type, $relations);
+                if($type == 'browse' && $action->show == 'dropdownlist') $dropdownMenu .= $this->loadModel('flow')->buildActionMenu($moduleName, $action, $data, $type, $relations);
             }
 
             if($type == 'browse' && $dropdownMenu)
