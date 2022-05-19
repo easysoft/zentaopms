@@ -908,7 +908,7 @@ class productplanModel extends model
             $this->story->setStage($storyID);
         }
 
-        $this->action->create('productplan', $planID, 'linkedstory', '', implode(',', $this->post->stories));
+        $this->action->create('productplan', $planID, 'linkstory', '', implode(',', $this->post->stories));
     }
 
     /**
@@ -956,7 +956,7 @@ class productplanModel extends model
             $this->action->create('bug', $bugID, 'linked2plan', '', $planID);
         }
 
-        $this->action->create('productplan', $planID, 'linkedbug', '', implode(',', $this->post->bugs));
+        $this->action->create('productplan', $planID, 'linkbug', '', implode(',', $this->post->bugs));
     }
 
     /**

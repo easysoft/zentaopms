@@ -702,7 +702,7 @@ class productplan extends control
         else
         {
             $this->productplan->unlinkStory($storyID, $planID);
-            $this->loadModel('action')->create('productplan', $planID, 'unlinkedstory', '', $storyID);
+            $this->loadModel('action')->create('productplan', $planID, 'unlinkstory', '', $storyID);
 
             /* if ajax request, send result. */
             if($this->server->ajax)
@@ -735,7 +735,7 @@ class productplan extends control
     public function batchUnlinkStory($planID, $orderBy = 'id_desc')
     {
         foreach($this->post->storyIdList as $storyID) $this->productplan->unlinkStory($storyID, $planID);
-        $this->loadModel('action')->create('productplan', $planID, 'unlinkedstory', '', implode(',', $this->post->storyIdList));
+        $this->loadModel('action')->create('productplan', $planID, 'unlinkstory', '', implode(',', $this->post->storyIdList));
         echo js::locate($this->createLink('productplan', 'view', "planID=$planID&type=story&orderBy=$orderBy"), 'parent');
     }
 
@@ -844,7 +844,7 @@ class productplan extends control
         else
         {
             $this->productplan->unlinkBug($bugID);
-            $this->loadModel('action')->create('productplan', $planID, 'unlinkedbug', '', $bugID);
+            $this->loadModel('action')->create('productplan', $planID, 'unlinkbug', '', $bugID);
 
             /* if ajax request, send result. */
             if($this->server->ajax)
@@ -877,7 +877,7 @@ class productplan extends control
     public function batchUnlinkBug($planID, $orderBy = 'id_desc')
     {
         foreach($this->post->bugIDList as $bugID) $this->productplan->unlinkBug($bugID);
-        $this->loadModel('action')->create('productplan', $planID, 'unlinkedbug', '', implode(',', $this->post->bugIDList));
+        $this->loadModel('action')->create('productplan', $planID, 'unlinkbug', '', implode(',', $this->post->bugIDList));
         echo js::locate($this->createLink('productplan', 'view', "planID=$planID&type=bug&orderBy=$orderBy"), 'parent');
     }
 
