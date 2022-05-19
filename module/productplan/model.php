@@ -497,7 +497,6 @@ class productplanModel extends model
         $plan = fixer::input('post')->stripTags($this->config->productplan->editor->edit['id'], $this->config->allowedTags)
             ->setIF($this->post->future or empty($_POST['begin']), 'begin', $this->config->productplan->future)
             ->setIF($this->post->future or empty($_POST['end']), 'end', $this->config->productplan->future)
-            ->setIF(!isset($_POST['parent']), 'parent', -1)
             ->add('id', $planID)
             ->remove('delta,uid,future')
             ->get();
@@ -516,7 +515,7 @@ class productplanModel extends model
                 if($plan->end !== $this->config->productplan->future and $plan->end > $parentPlan->end) dao::$errors['end'] = sprintf($this->lang->productplan->endGreaterParent, $parentPlan->end);
             }
         }
-        elseif($plan->parent == -1 and $plan->begin != $this->config->productplan->future)
+        elseif($oldPlan->parent == -1 and $plan->begin != $this->config->productplan->future)
         {
             $childPlans = $this->getChildren($oldPlan->id);
             $minBegin   = $plan->begin;
