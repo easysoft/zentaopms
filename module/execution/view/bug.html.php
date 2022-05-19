@@ -68,8 +68,8 @@
     </div>
     <?php
     $vars = "executionID={$execution->id}&productID={$productID}&orderBy=%s&build=$buildID&type=$type&param=$param&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}";
-    if($useDatatable) include '../../common/view/datatable.html.php';
-    else              include '../../common/view/tablesorter.html.php';
+
+    $useDatatable ? include '../../common/view/datatable.html.php' : include '../../common/view/tablesorter.html.php';
 
     $setting = $this->datatable->getSetting('execution');
     $widths  = $this->datatable->setFixedFieldWidth($setting);
@@ -87,8 +87,6 @@
           {
               if($value->id == 'title' || $value->id == 'id' || $value->id == 'pri' || $value->id == 'status')
               {
-                  if($storyType == 'requirement' and (in_array($value->id, array('plan', 'stage')))) $value->show = false;
-
                   $this->datatable->printHead($value, $orderBy, $vars, $canBatchAssignTo);
                   $columns ++;
               }
