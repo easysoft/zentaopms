@@ -1215,7 +1215,7 @@ function initKanban($kanban)
         calcColHeight:     calcColHeight,
         minColWidth:       240,
         maxColWidth:       240,
-        cardHeight:        60,
+        cardHeight:        getCardHeight(),
         fluidBoardWidth:   fluidBoard,
         displayCards:      displayCards,
         createColumnText:  kanbanLang.createColumn,
@@ -1226,6 +1226,8 @@ function initKanban($kanban)
         onRenderHeaderCol: renderHeaderCol,
         onRenderCount:     renderCount,
         droppable:         groupBy == 'default' ? {target: findDropColumns, finish:handleFinishDrop} : false,
+        virtualize:        true,
+        virtualCardList:   true
     });
 
     $kanban.on('click', '.action-cancel', hideKanbanAction);

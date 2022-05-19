@@ -1057,6 +1057,7 @@ $(function()
         virtualize:           true,
         onAction:             handleKanbanAction,
         virtualRenderOptions: {container: '#kanbanContainer>.panel-body'},
+        virtualCardList:      true,
         droppable:
         {
             target:       findDropColumns,

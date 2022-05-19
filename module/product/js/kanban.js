@@ -148,6 +148,13 @@ $(function()
         var $kanban = $('#kanban-' + key);
         if(!$kanban.length) return;
         var data = processKanbanData(key, programsData);
-        $kanban.kanban({data: data, noLaneName: isClassicMode, calcColHeight: calcColHeight});
+        $kanban.kanban(
+        {
+            data:            data,
+            noLaneName:      isClassicMode,
+            virtualize:      true,
+            virtualCardList: true,
+            calcColHeight:   calcColHeight
+        });
     });
 });
