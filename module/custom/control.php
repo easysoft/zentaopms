@@ -124,13 +124,14 @@ class custom extends control
             elseif($module == 'story' and $field == 'review')
             {
                 $data = fixer::input('post')
+                    ->setDefault('forceReviewAll', 0)
                     ->setDefault('forceReviewDepts', '')
                     ->join('forceReviewUsers', ',')
                     ->join('forceReviewRoles', ',')
                     ->join('forceReviewDepts', ',')
+                    ->join('forceReviewAll', ',')
+                    ->setIF(isset($this->post->forceReviewAll), 'forceReviewAll', 1)
                     ->get();
-
-                $data->forceReviewAll = isset($data->forceReviewAll) ? 1 : 0;
 
                 $this->loadModel('setting')->setItems("system.$module@{$this->config->vision}", $data);
             }
