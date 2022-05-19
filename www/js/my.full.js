@@ -91,8 +91,6 @@
 
         if(config.debug > 2)
         {
-            console.log(document.title || location.href, 'tid', _tid);
-
             $(function()
             {
                 $('#tid').prepend('<code class="bg-blue">localtid=' + _tid + '</code>');
