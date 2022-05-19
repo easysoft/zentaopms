@@ -178,7 +178,7 @@
                 if(empty($label) and empty($data)) continue;
                 ?>
                 <?php $colorList = $infoKey == 'bugSeverityGroups' ? $config->bug->colorList->severity : array();?>
-                <tr class='text-center' data-color="<?php echo !empty($colorList) ? zget($colorList, $label, '#eee') : '';?>">
+                <tr class='text-center' data-color="<?php echo !empty($colorList) ? zget($colorList, $label, '#C0C0C0') : '';?>">
                   <td class='chart-color c-icon'><i class='chart-color-dot'></i></td>
                   <td class='chart-label'><?php echo $label;?></td>
                   <td class='chart-value'><?php echo $data;?></td>
