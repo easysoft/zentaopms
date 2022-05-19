@@ -7,3 +7,12 @@ tbody.sortable > tr > td.sort-handler .table-nest-toggle:before {cursor: pointer
 label[for^="projectIdList"]:before {top: 1px; width:14px; height:14px;}
 label[for^="projectIdList"]:after {width: 14px; height:14px;}
 tbody.sortable > tr > td.sort-handler {color: #3c4353 !important;}
+
+.has-prefix {position: relative; display: flex; align-items: center;}
+.has-suffix > span,
+.has-prefix > span {flex: none;}
+.has-suffix > a {color: #0c60e1; display: inline-block; max-width: calc(100% - 50px);}
+.has-prefix > a,
+.has-suffix > a {max-width: calc(100% - 100px);}
+.has-prefix > a {padding-left: 5px;}
+.has-suffix > a {padding-right: 5px;}
