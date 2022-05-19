@@ -70,7 +70,7 @@ html,body {height: 100%;}
       <tr>
         <td colspan='2' class='text-center form-actions'>
           <?php echo html::submitButton();?>
-          <?php if($showTip):?>
+          <?php if($showTip == 'true'):?>
           <div>
             <p class='text-muted tip'><?php echo $lang->my->alert;?></p>
           </div>
