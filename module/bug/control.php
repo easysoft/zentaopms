@@ -126,7 +126,7 @@ class bug extends control
         $queryID  = ($browseType == 'bysearch') ? (int)$param : 0;
 
         /* Set session. */
-        $this->session->set('bugList', $this->app->getURI(true), 'qa');
+        $this->session->set('bugList', $this->app->getURI(true) . "#app={$this->app->tab}", 'qa');
 
         /* Set moduleTree. */
         if($browseType == '')
