@@ -515,9 +515,9 @@ class productplanModel extends model
                 if($plan->end !== $this->config->productplan->future and $plan->end > $parentPlan->end) dao::$errors['end'] = sprintf($this->lang->productplan->endGreaterParent, $parentPlan->end);
             }
         }
-        elseif($parentPlan and $plan->begin != $this->config->productplan->future)
+        elseif($oldPlan->parent == -1 and $plan->begin != $this->config->productplan->future)
         {
-            $childPlans = $this->getChildren($parentPlan->id);
+            $childPlans = $this->getChildren($planID);
             $minBegin   = $plan->begin;
             $maxEnd     = $plan->end;
             foreach($childPlans as $childID => $childPlan)

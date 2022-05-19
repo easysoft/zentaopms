@@ -39,12 +39,10 @@
             <th><?php echo $lang->productplan->title;?></th>
             <td><?php echo html::input('title', $plan->title, "class='form-control' required");?></td><td></td><td></td>
           </tr>
-          <?php if($plan->parent != '-1'):?>
-          <tr>
+          <tr <?php echo $plan->parent == '-1' ? "class='hidden'": '';?>>
             <th><?php echo $lang->productplan->parent;?></th>
             <td><?php echo html::select('parent', array('0' => '') + $parentPlanPairs, $plan->parent, "class='form-control chosen'");?>
           </tr>
-          <?php endif;?>
           <tr>
             <th><?php echo $lang->productplan->status;?></th>
             <?php $disabled = $plan->parent == -1 ? "disabled='disabled'" : '' ;?>
