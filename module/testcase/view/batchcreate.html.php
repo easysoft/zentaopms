@@ -14,6 +14,7 @@
 <?php js::set('testcaseBatchCreateNum', $config->testcase->batchCreate);?>
 <?php js::set('productID', $productID);?>
 <?php js::set('branch', $branch);?>
+<?php js::set('requiredFields', $config->testcase->create->requiredFields)?>
 <div id="mainContent" class="main-content fade">
   <div class="main-header">
     <h2>
