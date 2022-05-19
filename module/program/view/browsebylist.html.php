@@ -49,7 +49,7 @@
       ?>
 
       <tr <?php echo $trAttrs;?>>
-        <td class='c-name text-left <?php if($canOrder) echo 'sort-handler';?> has-prefix' title='<?php echo $program->name?>'>
+        <td class='c-name text-left <?php if($canOrder) echo 'sort-handler';?> has-prefix has-suffix' title='<?php echo $program->name?>'>
           <?php
           $icon = '';
           if($program->type == 'program') $icon = ' icon-program';
