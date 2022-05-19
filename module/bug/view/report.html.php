@@ -65,8 +65,19 @@
                   <th class='w-60px text-right'><?php echo $lang->report->percent;?></th>
                 </tr>
               </thead>
+              <?php
+              $colorList = array();
+              if(strpos(strtolower($chartType), 'pri') !== false)
+              {
+                  $colorList = $config->bug->colorList->pri;
+              }
+              elseif(strpos(strtolower($chartType), 'severity') !== false)
+              {
+                  $colorList = $config->bug->colorList->severity;
+              }
+              ?>
               <?php foreach($datas[$chartType] as $key => $data):?>
-              <tr>
+              <tr data-color="<?php echo !empty($colorList) ? zget($colorList, $key, '#eee') : '';?>">
                 <td class='chart-color'><i class='chart-color-dot'></i></td>
                 <td class='chart-label text-left' title='<?php echo isset($data->title) ? $data->title : $data->name;?>'><?php echo $data->name;?></td>
                 <td class='chart-value text-right'><?php echo $data->value;?></td>
