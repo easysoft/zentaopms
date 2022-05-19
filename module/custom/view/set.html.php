@@ -42,7 +42,7 @@ EOT;
 .reviewBox > td {width: 500px !important;}
 .checkbox-primary {margin-bottom: 0px; width: 82px !important;}
 .storyReviewTip {padding-left: 95px;}
-<?php if($app->getClientLang() != 'zh-cn' and $app->getClientLang() !== 'zh-tw'):?>
+<?php if($app->getClientLang() != 'zh-cn' and $app->getClientLang() != 'zh-tw'):?>
 .reviewBox > th {width: 160px !important;}
 .storyReviewTip {padding-left: 160px;}
 <?php endif;?>
@@ -107,7 +107,7 @@ EOT;
         </tr>
         <?php if($module == 'story'):?>
         <tr>
-          <?php $space = ($app->getClientLang() != 'zh-cn' and $app->getClientLang() !== 'zh-tw') ? ' ': '';?>
+          <?php $space = ($app->getClientLang() != 'zh-cn' and $app->getClientLang() != 'zh-tw') ? ' ': '';?>
           <td colspan='3'><div class='storyReviewTip'><?php echo sprintf($lang->custom->notice->forceReview, $lang->$module->common) . $lang->custom->notice->storyReviewTip;?></td>
         </tr>
         <tr id='userBox'>

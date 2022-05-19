@@ -1,0 +1,2 @@
+insert into zt_config(vision, owner, module, `key`, value) select 'rnd', 'system', 'story', 'forceReviewUsers', `value` from zt_config where vision='rnd' and owner='system' and module='story' and `key`='forceReview';
+insert into zt_config(vision, owner, module, `key`, value) select 'lite', 'system', 'story', 'forceReviewUsers', `value` from zt_config where vision='lite' and owner='system' and module='story' and `key`='forceReview';

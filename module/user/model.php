@@ -2774,25 +2774,40 @@ class userModel extends model
      */
     public function getCanCreateStoryUsers()
     {
-        $users  = $this->getPairs('noclosed|nodeleted');
-        $groups = $this->dao->select('*')->from(TABLE_USERGROUP)
+        $users     = $this->getPairs('noclosed|nodeleted');
+        $groupList = $this->dao->select('*')->from(TABLE_USERGROUP)
             ->where('account')->in(array_keys($users))
             ->fetchGroup('account', 'group');
 
+        $hasPrivGroups = $this->dao->select('*')->from(TABLE_GROUPPRIV)
+            ->where('module')->eq('story')
+            ->andWhere('(method')->eq('create')
+            ->orWhere('method')->eq('batchCreate')
+            ->markRight(1)
+            ->fetchAll('group');
+
         foreach($users as $account => $user)
         {
-            if(empty($user) or strpos($this->app->company->admins, ",{$account},") !== false or !isset($groups[$account])) continue;
+            if(empty($user) or strpos($this->app->company->admins, ",{$account},") !== false) continue;
 
-            $group = $groups[$account];
-            $priv  = $this->dao->select('*')->from(TABLE_GROUPPRIV)
-                ->where('`group`')->in(array_keys($group))
-                ->andWhere('module')->eq('story')
-                ->andWhere('(method')->eq('create')
-                ->orWhere('method')->eq('batchCreate')
-                ->markRight(1)
-                ->fetch();
+            if(!isset($groupList[$account]))
+            {
+                unset($users[$account]);
+                continue;
+            }
 
-            if(empty($priv)) unset($users[$account]);
+            $groups  = $groupList[$account];
+            $hasPriv = false;
+            foreach($groups as $groupID => $group)
+            {
+                if(isset($hasPrivGroups[$groupID]))
+                {
+                    $hasPriv = true;
+                    break;
+                }
+            }
+
+            if(!$hasPriv) unset($users[$account]);
         }
 
         return $users;
