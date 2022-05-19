@@ -3806,7 +3806,7 @@ class storyModel extends model
             $menu .= $this->buildMenu('story', 'recall', $params, $story, $type, 'undo', '', 'showinonlybody');
             $menu .= $this->buildMenu('story', 'review', $params, $story, $type, 'search', '', 'showinonlybody');
 
-            if(!isonlybody()) $menu .= $this->buildMenu('story', 'batchCreate', "productID=$story->product&branch=$story->branch&moduleID=$story->module&$params", $story, $type, 'split', '', 'divideStory', '', "data-toggle='modal' data-type='iframe' data-width='95%'", $this->lang->story->subdivide);
+            if(!isonlybody()) $menu .= $this->buildMenu('story', 'batchCreate', "productID=$story->product&branch=$story->branch&moduleID=$story->module&$params", $story, $type, 'split', '', 'divideStory', true, "data-toggle='modal' data-type='iframe' data-width='95%'", $this->lang->story->subdivide);
 
             $menu .= $this->buildMenu('story', 'assignTo', $params, $story, $type, '', '', 'iframe showinonlybody', true);
             $menu .= $this->buildMenu('story', 'close',    $params, $story, $type, '', '', 'iframe showinonlybody', true);
