@@ -38,7 +38,7 @@
           <?php if($product->type != 'normal'):?>
           <tr>
             <th><?php echo $lang->product->branch;?></th>
-            <td><?php echo html::select('branch', $branches, $defaultBranch, "class='form-control chosen'");?></td><td></td><td></td>
+            <td><?php echo html::select('branch', $branches, $branch, "class='form-control chosen'");?></td><td></td><td></td>
           </tr>
           <?php endif;?>
           <?php endif;?>
