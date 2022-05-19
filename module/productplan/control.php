@@ -702,6 +702,7 @@ class productplan extends control
         else
         {
             $this->productplan->unlinkStory($storyID, $planID);
+            $this->loadModel('action')->create('productplan', $planID, 'unlinkstory', '', $storyID);
 
             /* if ajax request, send result. */
             if($this->server->ajax)
@@ -734,6 +735,7 @@ class productplan extends control
     public function batchUnlinkStory($planID, $orderBy = 'id_desc')
     {
         foreach($this->post->storyIdList as $storyID) $this->productplan->unlinkStory($storyID, $planID);
+        $this->loadModel('action')->create('productplan', $planID, 'unlinkstory', '', implode(',', $this->post->storyIdList));
         echo js::locate($this->createLink('productplan', 'view', "planID=$planID&type=story&orderBy=$orderBy"), 'parent');
     }
 
@@ -833,7 +835,7 @@ class productplan extends control
      * @access public
      * @return void
      */
-    public function unlinkBug($bugID, $confirm = 'no')
+    public function unlinkBug($bugID, $planID, $confirm = 'no')
     {
         if($confirm == 'no')
         {
@@ -842,6 +844,7 @@ class productplan extends control
         else
         {
             $this->productplan->unlinkBug($bugID);
+            $this->loadModel('action')->create('productplan', $planID, 'unlinkbug', '', $bugID);
 
             /* if ajax request, send result. */
             if($this->server->ajax)
@@ -874,6 +877,7 @@ class productplan extends control
     public function batchUnlinkBug($planID, $orderBy = 'id_desc')
     {
         foreach($this->post->bugIDList as $bugID) $this->productplan->unlinkBug($bugID);
+        $this->loadModel('action')->create('productplan', $planID, 'unlinkbug', '', implode(',', $this->post->bugIDList));
         echo js::locate($this->createLink('productplan', 'view', "planID=$planID&type=bug&orderBy=$orderBy"), 'parent');
     }
 

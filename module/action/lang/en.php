@@ -224,6 +224,12 @@ $lang->action->desc->deletechildrenstory = '$date, <strong>$actor</strong> delet
 $lang->action->desc->linkrelatedcase   = '$date, <strong>$actor</strong> linked a case <strong>$extra</strong>.' . "\n";
 $lang->action->desc->unlinkrelatedcase = '$date, <strong>$actor</strong> unlinked a case <strong>$extra</strong>.' . "\n";
 
+/* Used to describe the history of operations link story and bug to productplan. */
+$lang->action->desc->linkstory   = '$date, 由 <strong>$actor</strong> 关联需求 <strong>$extra</strong> 到计划。' . "\n";
+$lang->action->desc->linkbug     = '$date, 由 <strong>$actor</strong> 关联BUG <strong>$extra</strong> 到计划。' . "\n";
+$lang->action->desc->unlinkstory = '$date, 由 <strong>$actor</strong> 从计划移除需求 <strong>$extra</strong>。' . "\n";
+$lang->action->desc->unlinkbug   = '$date, 由 <strong>$actor</strong> 从计划移除BUG <strong>$extra</strong>。' . "\n";
+
 /* Used to display dynamic information. */
 $lang->action->label                        = new stdclass();
 $lang->action->label->created               = 'created ';
@@ -352,6 +358,10 @@ $lang->action->label->importedbuild         = 'imported';
 $lang->action->label->fromsonarqube         = 'created a bug from SonarQube Issue named:';
 $lang->action->label->bind                  = 'bound';
 $lang->action->label->unbind                = 'unbound';
+$lang->action->label->linkstory             = 'link stories to';
+$lang->action->label->linkbug               = 'link bugs to';
+$lang->action->label->unlinkstory           = 'unlink stories from';
+$lang->action->label->unlindbug             = 'unlink bugs from';
 
 /* Dynamic information is grouped by object. */
 $lang->action->dynamicAction                    = new stdclass;
@@ -392,12 +402,16 @@ $lang->action->dynamicAction->branch['activated']        = 'Activate Branch';
 $lang->action->dynamicAction->branch['setdefaultbranch'] = 'Set Default Branch';
 $lang->action->dynamicAction->branch['mergebranch']      = 'Merge Branch';
 
-$lang->action->dynamicAction->productplan['opened']    = 'Create Plan';
-$lang->action->dynamicAction->productplan['edited']    = 'Edit Plan';
-$lang->action->dynamicAction->productplan['started']   = "Start Plan";
-$lang->action->dynamicAction->productplan['finished']  = "Finish Plan";
-$lang->action->dynamicAction->productplan['closed']    = "Close Plan";
-$lang->action->dynamicAction->productplan['activated'] = "Activate Plan";
+$lang->action->dynamicAction->productplan['opened']      = 'Create Plan';
+$lang->action->dynamicAction->productplan['edited']      = 'Edit Plan';
+$lang->action->dynamicAction->productplan['started']     = "Start Plan";
+$lang->action->dynamicAction->productplan['finished']    = "Finish Plan";
+$lang->action->dynamicAction->productplan['closed']      = "Close Plan";
+$lang->action->dynamicAction->productplan['activated']   = "Activate Plan";
+$lang->action->dynamicAction->productplan['linkstory']   = "Link Story";
+$lang->action->dynamicAction->productplan['unlinkstory'] = "Unlink Story";
+$lang->action->dynamicAction->productplan['linkbug']     = "Link Bug";
+$lang->action->dynamicAction->productplan['unlinkbug']   = "Unlink Bug";
 
 $lang->action->dynamicAction->release['opened']       = 'Create Release';
 $lang->action->dynamicAction->release['edited']       = 'Edit Release';
