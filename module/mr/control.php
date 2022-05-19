@@ -873,6 +873,8 @@ class mr extends control
         $this->loadModel('repo');
         if(!empty($_POST))
         {
+            $v1 = helper::safe64Decode($v1);
+            $v2 = helper::safe64Decode($v2);
             if($this->post->reviewType == 'bug')  $result = $this->mr->saveBug($repoID, $mr, $v1, $v2);
             if($this->post->reviewType == 'task') $result = $this->mr->saveTask($repoID, $mr, $v1, $v2);
             if($result['result'] == 'fail') return print(json_encode($result));
