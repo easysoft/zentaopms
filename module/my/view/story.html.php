@@ -60,13 +60,13 @@
             <?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?>
           </th>
           <th class='c-pri' title=<?php echo $lang->my->pri;?>><?php common::printOrderLink('pri',          $orderBy, $vars, $lang->priAB);?></th>
-          <th class='c-name'>     <?php common::printOrderLink('title',        $orderBy, $vars, $lang->my->name);?></th>
-          <th class='c-product'>  <?php common::printOrderLink('productTitle', $orderBy, $vars, $lang->story->product);?></th>
-          <th class='c-plan'>     <?php common::printOrderLink('plan',         $orderBy, $vars, $lang->story->plan);?></th>
-          <th class='c-user'>     <?php common::printOrderLink('openedBy',     $orderBy, $vars, $lang->openedByAB);?></th>
-          <th class='c-hours'>    <?php common::printOrderLink('estimate',     $orderBy, $vars, $lang->story->estimateAB);?></th>
-          <th class='c-status'>   <?php common::printOrderLink('status',       $orderBy, $vars, $lang->statusAB);?></th>
-          <th class='c-stage'>    <?php common::printOrderLink('stage',        $orderBy, $vars, $lang->story->stageAB);?></th>
+          <th class='c-name'>     <?php common::printOrderLink('title',    $orderBy, $vars, $lang->my->name);?></th>
+          <th class='c-product'>  <?php common::printOrderLink('product',  $orderBy, $vars, $lang->story->product);?></th>
+          <th class='c-plan'>     <?php common::printOrderLink('plan',     $orderBy, $vars, $lang->story->plan);?></th>
+          <th class='c-user'>     <?php common::printOrderLink('openedBy', $orderBy, $vars, $lang->openedByAB);?></th>
+          <th class='c-hours'>    <?php common::printOrderLink('estimate', $orderBy, $vars, $lang->story->estimateAB);?></th>
+          <th class='c-status'>   <?php common::printOrderLink('status',   $orderBy, $vars, $lang->statusAB);?></th>
+          <th class='c-stage'>    <?php common::printOrderLink('stage',    $orderBy, $vars, $lang->story->stageAB);?></th>
           <th class='c-actions-6'><?php echo $lang->actions;?></th>
         </tr>
       </thead>
