@@ -326,7 +326,7 @@ $config->bug->datatable->fieldList['closedDate']['required'] = 'no';
 
 $config->bug->datatable->fieldList['lastEditedBy']['title']    = 'lastEditedBy';
 $config->bug->datatable->fieldList['lastEditedBy']['fixed']    = 'no';
-$config->bug->datatable->fieldList['lastEditedBy']['width']    = '80';
+$config->bug->datatable->fieldList['lastEditedBy']['width']    = '90';
 $config->bug->datatable->fieldList['lastEditedBy']['required'] = 'no';
 
 $config->bug->datatable->fieldList['lastEditedDate']['title']    = 'lastEditedDateAB';
