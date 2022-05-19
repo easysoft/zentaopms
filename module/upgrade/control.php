@@ -298,7 +298,7 @@ class upgrade extends control
                 }
 
                 /* When upgrading historical data as a project, handle products that are not linked with the project. */
-                if(!empty($singleProducts)) $this->upgrade->computeProductAcl($singleProducts, $programID);
+                if(!empty($singleProducts)) $this->upgrade->computeProductAcl($singleProducts, $programID, $lineID);
 
                 /* Process unlinked sprint and product. */
                 foreach($linkedProducts as $productID => $product)
@@ -353,7 +353,7 @@ class upgrade extends control
                 }
 
                 /* When upgrading historical data as a project, handle products that are not linked with the project. */
-                if(!empty($singleProducts)) $this->upgrade->computeProductAcl($singleProducts, $programID);
+                if(!empty($singleProducts)) $this->upgrade->computeProductAcl($singleProducts, $programID, $lineID);
             }
             elseif($type == 'sprint')
             {
