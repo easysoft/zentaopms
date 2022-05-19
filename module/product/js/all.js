@@ -13,7 +13,9 @@ $(function()
         /* Set movable conditions. */
         canMoveHere: function($ele, $target)
         {
-            return $ele.data('parent') === $target.data('parent');
+            var canMove = true;
+            if($ele.hasClass('no-nest')) canMove = $target.hasClass('no-nest') ? true : false;
+            return $ele.data('parent') === $target.data('parent') && canMove;
         },
         start: function(e)
         {
