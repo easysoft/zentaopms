@@ -112,7 +112,7 @@ EOT;
         </tr>
         <tr id='userBox'>
           <th><?php echo $lang->custom->forceReview . $space . $lang->custom->account;?></th>
-          <td><?php echo html::select('forceReviewUsers[]', $users, $forceReviewUsers, "class='form-control chosen' multiple");?></td>
+          <td><?php echo html::select('forceReview[]', $users, $forceReview, "class='form-control chosen' multiple");?></td>
           <td>
             <?php echo html::checkbox('forceReviewAll', array('1' => $lang->custom->allUsers), $forceReviewAll);?>
             <icon class='icon icon-help' data-toggle='popover' data-trigger='focus hover' data-placement='right' data-tip-class='text-muted popover-sm' data-content="<?php echo $lang->custom->notice->selectAllTip;?>"></icon>
@@ -290,11 +290,11 @@ $(function()
         $('#deptBox').toggleClass('hidden', checked);
         if(checked)
         {
-            $('#forceReviewUsers').val('').attr('disabled', 'disabled').trigger('chosen:updated');
+            $('#forceReview').val('').attr('disabled', 'disabled').trigger('chosen:updated');
         }
         else
         {
-            $('#forceReviewUsers').removeAttr('disabled', 'disabled').trigger('chosen:updated');
+            $('#forceReview').removeAttr('disabled', 'disabled').trigger('chosen:updated');
         }
     }
 })

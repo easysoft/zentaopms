@@ -4323,7 +4323,7 @@ class storyModel extends model
         if(isset($this->config->story->forceReviewAll) and $this->config->story->forceReviewAll) return true;
 
         $forceUsers = '';
-        if(!empty($this->config->story->forceReviewUsers)) $forceUsers = $this->config->story->forceReviewUsers;
+        if(!empty($this->config->story->forceReview)) $forceUsers = $this->config->story->forceReview;
 
         if(!empty($this->config->story->forceReviewRoles) or !empty($this->config->story->forceReviewDepts))
         {

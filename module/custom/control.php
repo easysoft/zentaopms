@@ -77,7 +77,7 @@ class custom extends control
             {
                 $this->view->depts            = $this->loadModel('dept')->getDeptPairs();
                 $this->view->forceReviewAll   = zget($this->config->$module, 'forceReviewAll', 'false');
-                $this->view->forceReviewUsers = zget($this->config->$module, 'forceReviewUsers', '');
+                $this->view->forceReview      = zget($this->config->$module, 'forceReview', '');
                 $this->view->forceReviewRoles = zget($this->config->$module, 'forceReviewRoles', '');
                 $this->view->forceReviewDepts = zget($this->config->$module, 'forceReviewDepts', '');
             }
@@ -126,7 +126,7 @@ class custom extends control
                 $data = fixer::input('post')
                     ->setDefault('forceReviewAll', 0)
                     ->setDefault('forceReviewDepts', '')
-                    ->join('forceReviewUsers', ',')
+                    ->join('forceReview', ',')
                     ->join('forceReviewRoles', ',')
                     ->join('forceReviewDepts', ',')
                     ->join('forceReviewAll', ',')
