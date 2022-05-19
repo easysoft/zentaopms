@@ -201,9 +201,10 @@ $(function()
         if(!$kanban.length) return;
         $kanban.kanban(
         {
-            data:          processKanbanData(key, programGroup),
-            calcColHeight: calcColHeight,
-            virtualize:    true,
+            data:            processKanbanData(key, programGroup),
+            calcColHeight:   calcColHeight,
+            virtualize:      true,
+            virtualCardList: true,
             droppable:
             {
                 selector:     '.kanban-card:not(.execution-item)',

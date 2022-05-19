@@ -1281,6 +1281,7 @@ function initKanban($kanban)
         onRenderHeaderCol: renderHeaderCol,
         onRenderCount:     renderCount,
         sortable:          handleSortCards,
+        /* virtualCardList:   true, */
         droppable:
         {
             target:       findDropColumns,

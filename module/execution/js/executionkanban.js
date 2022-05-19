@@ -169,9 +169,10 @@ $(function()
 
     $('#kanban').kanban(
     {
-        data:          processKanbanData(),
-        laneNameWidth: 5,
-        virtualize:    true,
+        data:            processKanbanData(),
+        laneNameWidth:   5,
+        virtualize:      true,
+        virtualCardList: true,
         droppable:
         {
             selector:     '.kanban-item:not(.kanban-item-span)',
