@@ -42,7 +42,7 @@ $lang->my->testtask        = 'My Test Task';
 $lang->my->testcase        = 'My Case';
 $lang->my->storyConcept    = 'Story Concept';
 $lang->my->pri             = 'Priority';
-$thid->my->alert           = 'You can click on your profile at the top right and select "Preference" to modify your information. ';
+$lang->my->alert           = 'You can click on your profile at the top right and select "Preference" to modify your information. ';
 
 $lang->my->indexAction      = 'My Index';
 $lang->my->calendarAction   = 'My Calendar';
