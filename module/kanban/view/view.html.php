@@ -24,6 +24,7 @@ js::set('vision', $this->config->vision);
 js::set('CRKanban', isset($this->config->CRKanban) ? $this->config->CRKanban : 1);
 js::set('regions', $regions);
 js::set('kanban', $kanban);
+js::set('kanbanInfo', $kanban);
 js::set('kanbanLang', $lang->kanban);
 js::set('kanbanlaneLang', $lang->kanbanlane);
 js::set('kanbancolumnLang', $lang->kanbancolumn);
@@ -58,7 +59,7 @@ $canCreateLane   = commonModel::hasPriv('kanban', 'createLane');
           <strong><?php echo $region->name;?></strong>
           <a class="text-muted"><i class="icon icon-chevron-double-up" data-id="<?php echo $region->id;?>"></i></a>
           <div class='region-actions'>
-            <?php if($canEditRegion || $canCreateLane || $canDeleteRegion):?>
+            <?php if(($canEditRegion || $canCreateLane || $canDeleteRegion) and !(isset($this->config->CRKanban) and $this->config->CRKanban == '0' and $kanban->status == 'closed')):?>
             <button class="btn btn-link action" type="button" data-toggle="dropdown"><i class="icon icon-ellipsis-v"></i></button>
             <ul class="dropdown-menu pull-right">
               <?php if($canEditRegion) echo '<li>' . html::a(inlink('editRegion', "regionID={$region->id}", '', 1), '<i class="icon icon-edit"></i>' . $this->lang->kanban->editRegion, '', 'class="iframe" data-toggle="modal" data-width="600px"') . '</li>';?>

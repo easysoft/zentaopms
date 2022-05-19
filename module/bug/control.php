@@ -1446,7 +1446,7 @@ class bug extends control
             $this->loadModel('score')->create('ajax', 'batchOther');
         }
 
-        if($type == 'product' || $type == 'my') return print(js::locate($this->session->bugList, 'parent'));
+        if($type == 'product' || $type == 'my') return print(js::reload('parent'));
         if($type == 'execution') return print(js::locate($this->createLink('execution', 'bug', "executionID=$objectID")));
         if($type == 'project')   return print(js::locate($this->createLink('project', 'bug', "projectID=$objectID")));
     }
