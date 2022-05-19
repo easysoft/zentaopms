@@ -2595,8 +2595,8 @@ class storyModel extends model
     {
         if(!$this->loadModel('common')->checkField(TABLE_STORY, $fieldName) and $fieldName != 'reviewBy' and $fieldName != 'assignedBy') return array();
 
-        $actionID = array();
-        if($fieldName == 'assignedBy') $actionID = $this->dao->select('objectID')->from(TABLE_ACTION)->where('objectType')->eq('story')->andWhere('action')->eq('assigned')->andWhere('actor')->eq($fieldValue)->fetchPairs('objectID', 'objectID');
+        $actionIDList = array();
+        if($fieldName == 'assignedBy') $actionIDList = $this->dao->select('objectID')->from(TABLE_ACTION)->where('objectType')->eq('story')->andWhere('action')->eq('assigned')->andWhere('actor')->eq($fieldValue)->fetchPairs('objectID', 'objectID');
 
         $sql = $this->dao->select('t1.*')->from(TABLE_STORY)->alias('t1');
         if($fieldName == 'reviewBy') $sql = $sql->leftJoin(TABLE_STORYREVIEW)->alias('t2')->on('t1.id = t2.story and t1.version = t2.version');
@@ -2613,7 +2613,7 @@ class storyModel extends model
             ->andWhere('t2.result')->eq('')
             ->andWhere('t1.status')->in('draft,changed')
             ->fi()
-            ->beginIF($fieldName == 'assignedBy')->andWhere('t1.id')->in($actionID)->andWhere('t1.status')->ne('closed')->fi()
+            ->beginIF($fieldName == 'assignedBy')->andWhere('t1.id')->in($actionIDList)->andWhere('t1.status')->ne('closed')->fi()
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id');
