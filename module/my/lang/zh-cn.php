@@ -74,6 +74,7 @@ $lang->my->storyMenu->reviewByMe   = '待我评审';
 $lang->my->storyMenu->openedByMe   = '由我创建';
 $lang->my->storyMenu->reviewedByMe = '由我评审';
 $lang->my->storyMenu->closedByMe   = '由我关闭';
+$lang->my->storyMenu->assignedByMe = '由我指派';
 
 $lang->my->projectMenu = new stdclass();
 $lang->my->projectMenu->doing      = '进行中';
