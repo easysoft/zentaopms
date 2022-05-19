@@ -883,7 +883,7 @@ class execution extends control
         $this->loadModel('datatable');
 
         /* Save session. */
-        $this->session->set('bugList', $this->app->getURI(true), 'execution');
+        $this->session->set('bugList', $this->app->getURI(true), 'qa');
 
         $type        = strtolower($type);
         $queryID     = ($type == 'bysearch') ? (int)$param : 0;
@@ -893,7 +893,7 @@ class execution extends control
         $branchID    = isset($products[$productID]) ? current($products[$productID]->branches) : 0;
 
         $productPairs = array('0' => $this->lang->product->all);
-        foreach($products as $product) $productPairs[$product->id] = $product->name;
+        foreach($products as $productData) $productPairs[$productData->id] = $productData->name;
         $this->lang->modulePageNav = $this->product->select($productPairs, $productID, 'execution', 'bug', $executionID, $branchID, 0, '', false);
 
         /* Header and position. */
@@ -922,6 +922,7 @@ class execution extends control
         $actionURL = $this->createLink('execution', 'bug', "executionID=$executionID&productID=$productID&orderBy=$orderBy&build=$build&type=bysearch&queryID=myQueryID");
         $this->execution->buildBugSearchForm($products, $queryID, $actionURL);
 
+        $product = $this->loadModel('product')->getById($productID);
         $showBranch      = false;
         $branchOption    = array();
         $branchTagOption = array();
