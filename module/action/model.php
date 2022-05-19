@@ -555,25 +555,13 @@ class actionModel extends model
                     if($history->field == 'git') $history->diff = str_replace('+', '%2B', $history->diff);
                 }
             }
-            elseif($actionName == 'linkstory')
+            elseif($actionName == 'linkstory' or $actionName == 'unlinkstory')
             {
                 $extra = '';
                 foreach(explode(',', $action->extra) as $id) $extra .= common::hasPriv('story', 'view') ? html::a(helper::createLink('story', 'view', "storyID=$id"), "#$id ") . ', ' : "#$id, ";
                 $action->extra = trim(trim($extra), ',');
             }
-            elseif($actionName == 'unlinkstory')
-            {
-                $extra = '';
-                foreach(explode(',', $action->extra) as $id) $extra .= common::hasPriv('story', 'view') ? html::a(helper::createLink('story', 'view', "storyID=$id"), "#$id ") . ', ' : "#$id, ";
-                $action->extra = trim(trim($extra), ',');
-            }
-            elseif($actionName == 'linkbug')
-            {
-                $extra = '';
-                foreach(explode(',', $action->extra) as $id) $extra .= common::hasPriv('bug', 'view') ? html::a(helper::createLink('bug', 'view', "bugID=$id"), "#$id ") . ', ' : "#$id, ";
-                $action->extra = trim(trim($extra), ',');
-            }
-            elseif($actionName == 'unlinkbug')
+            elseif($actionName == 'linkbug' or $actionName == 'unlinkbug')
             {
                 $extra = '';
                 foreach(explode(',', $action->extra) as $id) $extra .= common::hasPriv('bug', 'view') ? html::a(helper::createLink('bug', 'view', "bugID=$id"), "#$id ") . ', ' : "#$id, ";
