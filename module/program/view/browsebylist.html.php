@@ -62,8 +62,11 @@
           <?php else:?>
           <?php echo html::a($this->createLink('project', 'index', "projectID=$program->id", '', '', $program->id), $program->name, '', 'class="text-ellipsis text-primary"');?>
           <?php
-          $delay = helper::diffDate(helper::today(), $program->end);
-          if($delay > 0) echo "<span class='label label-danger label-badge'>{$lang->project->statusList['delay']}</span>";
+          if($program->status != 'done' and $program->status != 'closed' and $program->status != 'suspended')
+          {
+              $delay = helper::diffDate(helper::today(), $program->end);
+              if($delay > 0) echo "<span class='label label-danger label-badge'>{$lang->project->statusList['delay']}</span>";
+          }
           ?>
           <?php endif;?>
         </td>
