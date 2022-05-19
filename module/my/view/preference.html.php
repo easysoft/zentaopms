@@ -72,8 +72,7 @@ html,body {height: 100%;}
           <?php echo html::submitButton();?>
           <?php if(!isonlybody()):?>
           <div>
-            <br>
-            <span class='text-muted'><?php echo $lang->my->alert;?></span>
+            <p class='text-muted tip'><?php echo $lang->my->alert;?></p>
           </div>
           <?php endif;?>
         </td>
