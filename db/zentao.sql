@@ -12979,6 +12979,7 @@ REPLACE INTO `zt_grouppriv` (`group`, `module`, `method`) VALUES
 
 REPLACE INTO `zt_approvalflow` (`id`, `name`, `code`, `desc`, `version`, `createdBy`, `createdDate`, `type`, `deleted`) VALUES
 (1, '最简审批', 'simple', '', 1, 'admin', '2022-04-29 08:46:40', 'project', 0);
+
 REPLACE INTO `zt_approvalflowspec` (`id`, `flow`, `version`, `nodes`, `createdBy`, `createdDate`) VALUES
 (1, 1, 1, '[{\"type\":\"start\",\"ccs\":[]},{\"id\":\"3ewcj92p55e\",\"type\":\"approval\",\"title\":\"审批\",\"reviewType\":\"manual\",\"multiple\":\"and\",\"agentType\":\"pass\",\"reviewers\":[{\"type\":\"select\"}],\"ccs\":[]},{\"type\":\"end\",\"ccs\":[]}]', 'admin', '2022-04-29 08:46:40');
 
