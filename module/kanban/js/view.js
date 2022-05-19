@@ -151,7 +151,7 @@ function renderHeaderCol($column, column, $header, kanbanData)
         }
 
         var moreAction = ' <button class="btn btn-link action"  title="' + kanbanLang.moreAction + '" data-contextmenu="column" data-column="' + column.id + '"><i class="icon icon-ellipsis-v"></i></button>';
-        $actions.html(addItemBtn + moreAction);
+        if(CRKanban || kanban.status != 'closed') $actions.html(addItemBtn + moreAction);
 
     }
     if(columnPrivs.includes('sortColumn'))
@@ -219,7 +219,7 @@ function renderLaneName($lane, lane, $kanban, columns, kanban)
 
     $lane.parent().toggleClass('sort', canSort);
 
-    if(!$lane.children('.actions').length && (canSet || canDelete))
+    if(!$lane.children('.actions').length && (canSet || canDelete) && (CRKanban || kanbanInfo.status != 'closed') )
     {
         $([
           '<div class="actions" title="' + kanbanLang.more + '">',
@@ -286,7 +286,7 @@ function renderKanbanItem(item, $item)
     var printMoreBtn = (privs.includes('editCard') || privs.includes('archiveCard') || privs.includes('copyCard') || privs.includes('deleteCard') || privs.includes('moveCard') || privs.includes('setCardColor'));
     var $actions     = $item.children('.actions');
     var $title       = $item.children('.title');
-    if(printMoreBtn && !$actions.length)
+    if(printMoreBtn && !$actions.length && (CRKanban || kanban.status != 'closed'))
     {
         $(
         [
@@ -962,7 +962,7 @@ function findDropColumns($element, $root)
 
     return $root.find('.kanban-lane-col:not([data-type="EMPTY"],[data-type=""])').filter(function()
     {
-        if($.cookie('isFullScreen') == 1 || (!CRKanban && kanban.status == 'closed')) return false;
+        if($.cookie('isFullScreen') == 1 || (!CRKanban && kanbanInfo.status == 'closed')) return false;
         var $newCol = $(this);
         var newCol = $newCol.data();
         var $newLane = $newCol.closest('.kanban-lane');
@@ -1309,6 +1309,8 @@ $(function()
 {
     window.isMultiLanes = laneCount > 1;
 
+    $.cookie('isFullScreen', 0);
+
     /* Init first kanban */
     $('.kanban').each(function()
     {
@@ -1419,20 +1421,14 @@ $(function()
     initSortable();
 
     resetRegionHeight('open');
-
-    if(!CRKanban && kanban.status == "closed")
-    {
-        fullScreen();
-        $.cookie('isFullScreen', 0);
-        $('.region-actions > div > .action').show();
-        $(".title").attr("disabled", false).css("pointer-events", "auto");
-    }
+    if(!CRKanban && kanbanInfo.status == 'closed') $('.kanban-col.kanban-header-col').css('padding', '0px 0px 0px 0px');
 });
 
 function initSortable()
 {
     var sortType  = '';
     var $cards    = null;
+    if(!CRKanban && kanbanInfo.status == 'closed') return;
     $('#kanban').sortable(
     {
         selector: '.region, .kanban-board, .kanban-lane, .kanban-col',
