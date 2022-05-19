@@ -44,7 +44,7 @@
 <div id='mainContent' class='main-content'>
   <div class='center-block'>
     <div class='main-header'>
-      <h2><?php echo isset($parentProgram->id) ?$lang->program->children : $lang->program->create;?></h2>
+      <h2><?php echo isset($parentProgram->id) ? $lang->program->children : $lang->program->create;?></h2>
     </div>
     <form class='form-indicator main-form form-ajax' method='post' target='hiddenwin' id='dataform'>
       <table class='table table-form'>
