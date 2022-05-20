@@ -179,6 +179,9 @@ function loadBranches(product)
         }
     });
 
+    $("input[name='products[" + index + "]']").remove();
+    $("input[name='branch[" + index + "]']").remove();
+
     loadPlans(product);
 }
 
@@ -189,6 +192,9 @@ function loadPlans(product, branchID)
     var productID = $(product).val();
     var branchID  = typeof(branchID) == 'undefined' ? 0 : branchID;
     var index     = $(product).attr('id').replace('products', '');
+
+    $("input[name='products[" + index + "]']").remove();
+    $("input[name='branch[" + index + "]']").remove();
 
     $.get(createLink('product', 'ajaxGetPlans', "productID=" + productID + '&branch=0,' + branchID + '&planID=0&fieldID&needCreate=&expired=' + (config.currentMethod == 'create' ? 'unexpired' : '') + '&param=skipParent'), function(data)
     {
