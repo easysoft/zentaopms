@@ -679,7 +679,7 @@ class execution extends control
      * @access public
      * @return void
      */
-    public function story($executionID = 0, $orderBy = 'order_desc', $type = 'all', $param = 0, $recTotal = 0, $recPerPage = 50, $pageID = 1)
+    public function story($executionID = 0, $orderBy = 'order_asc', $type = 'all', $param = 0, $recTotal = 0, $recPerPage = 50, $pageID = 1)
     {
         /* Load these models. */
         $this->loadModel('story');

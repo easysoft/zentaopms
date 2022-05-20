@@ -372,7 +372,7 @@ class productplan extends control
      * @access public
      * @return void
      */
-    public function view($planID = 0, $type = 'story', $orderBy = 'id_desc', $link = 'false', $param = '', $recTotal = 0, $recPerPage = 100, $pageID = 1)
+    public function view($planID = 0, $type = 'story', $orderBy = 'order_asc', $link = 'false', $param = '', $recTotal = 0, $recPerPage = 100, $pageID = 1)
     {
         $planID = (int)$planID;
         $plan   = $this->productplan->getByID($planID, true);
