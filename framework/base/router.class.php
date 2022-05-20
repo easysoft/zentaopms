@@ -617,6 +617,20 @@ class baseRouter
      */
     public function setSuperVars()
     {
+        $URI = $_SERVER['REQUEST_URI'];
+        if(strpos($URI, '?') !== false)
+        {
+            $parsedURL = parse_url($URI);
+            if(isset($parsedURL['query']))
+            {
+                parse_str($parsedURL['query'], $parsedQuery);
+                foreach($parsedQuery as $key => $value)
+                {
+                    if(!isset($_GET[$key])) $_GET[$key] = $value;
+                }
+            }
+        }
+
         $this->post    = new super('post');
         $this->get     = new super('get');
         $this->server  = new super('server');

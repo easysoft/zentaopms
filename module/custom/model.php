@@ -261,6 +261,7 @@ class customModel extends model
 
                 if($module == 'execution' and $method == 'more') $hasPriv = true;
                 if($module == 'project' and $method == 'other')  $hasPriv = true;
+                if(!$hasPriv and isset($vars)) unset($vars);
             }
 
             if($isTutorialMode || $hasPriv)
