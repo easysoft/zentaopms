@@ -27,6 +27,7 @@ pid=1
 查看看板25的普通卡片和build卡片 >> ,193,194,195,196,197,198,199,200,993,994,995,996,997,998,999,1000
 查看看板25的普通卡片和productplan片 >> ,193,194,195,196,197,198,199,200
 查看看板1已归档的普通卡片和productplan卡片 >> ,6,7,8,801,802,803,804,805,806,807,808
+查看区域ID=1中看板1已归档的普通卡片和productplan卡片 >> ,6,7,8,801,802,803,804,805,806,807,808
 
 */
 
@@ -55,4 +56,5 @@ r($kanban->getImportedCardstest($kanbanIDList[7], $fromType[0])) && p() && e(',1
 global $tester;
 $tester->dao->update(TABLE_KANBANCARD)->set('archived')->eq(1)->where('id')->gt('5')->exec();
 r($kanban->getImportedCardsTest($kanbanIDList[0], $fromType[0], $archived)) && p() && e(',6,7,8,801,802,803,804,805,806,807,808');                 // 查看看板1已归档的普通卡片和productplan卡片
+r($kanban->getImportedCardsTest($kanbanIDList[0], $fromType[0], $archived, 1)) && p() && e(',6,7,8,801,802,803,804,805,806,807,808');              // 查看区域ID=1中看板1已归档的普通卡片和productplan卡片
 $tester->dao->update(TABLE_KANBANCARD)->set('archived')->eq(0)->where('id')->gt('5')->exec();
