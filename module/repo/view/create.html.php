@@ -111,11 +111,12 @@
 <script>
 $('#repoForm').bind('DOMNodeInserted', function(e)
 {
-    if ( $("#clientLabel").length > 0 ) {
+    if ($("#clientLabel").length > 0)
+    {
         if($("#client").val() !== '')
         {
-            $("#clientLabel").css('color','blue');
-            $("#client").attr('style', 'border-color: blue !important;');
+            $("#clientLabel").css('color','#0c64eb');
+            $("#client").attr('style', 'border-color: #0c64eb !important;');
         }
         else
         {
