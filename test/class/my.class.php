@@ -83,6 +83,18 @@ class myTest
         return $objects;
     }
 
+    /**
+     * Function getAssignedByMe test by my
+     *
+     * @param string $account
+     * @param int    $limit
+     * @param int    $pager
+     * @param string $orderBy
+     * @param int    $projectID
+     * @param string $objectType
+     * @access public
+     * @return int
+     */
     public function getAssignedByMeTest($account, $limit, $pager, $orderBy, $projectID, $objectType)
     {
         global $tester;
