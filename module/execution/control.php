@@ -3152,8 +3152,12 @@ class execution extends control
      */
     public function tips($executionID)
     {
-        $this->view->execution   = $this->execution->getById($executionID);
+        $execution = $this->execution->getById($executionID);
+        $projectID = $execution->project;
+
+        $this->view->execution   = $execution;
         $this->view->executionID = $executionID;
+        $this->view->projectID   = $projectID;
         $this->display('execution', 'tips');
     }
 

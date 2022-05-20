@@ -359,6 +359,7 @@ $lang->execution->setTeam                     = '设置团队';
 $lang->execution->linkStory                   = "关联{$lang->SRCommon}";
 $lang->execution->createTask                  = '创建任务';
 $lang->execution->goback                      = "返回任务列表";
+$lang->execution->gobackExecution             = "返回迭代列表";
 $lang->execution->noweekend                   = '去除周末';
 $lang->execution->nodelay                     = '去除延期日期';
 $lang->execution->withweekend                 = '显示周末';
