@@ -42,7 +42,9 @@
       <table class='table table-form'>
         <tr>
           <th class='w-120px'><?php echo $lang->project->parent;?></th>
-          <td><?php echo html::select('parent', $programList, $programID, "class='form-control chosen' onchange='setParentProgram(this.value)'");?></td>
+          <?php $disabled = $this->app->tab == 'product' ? 'disabled' : '';?>
+          <td><?php echo html::select('parent', $programList, $programID, "class='form-control chosen' onchange='setParentProgram(this.value)' $disabled");?></td>
+          <?php if($disabled) echo html::hidden('parent', $programID);?>
           <td>
             <icon class='icon icon-help' data-toggle='popover' data-trigger='focus hover' data-placement='right' data-tip-class='text-muted popover-sm' data-content="<?php echo $lang->program->tips;?>"></icon>
           </td>

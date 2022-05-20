@@ -32,6 +32,7 @@ class program extends control
 
         $this->session->set('programList', $this->app->getURI(true), 'program');
         $this->session->set('projectList', $this->app->getURI(true), 'program');
+        $this->session->set('createProjectLocate', $this->app->getURI(true), 'program');
 
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
@@ -454,6 +455,7 @@ class program extends control
         $uri = $this->app->getURI(true);
         $this->app->session->set('programProject', $uri, 'program');
         $this->app->session->set('projectList', $uri, 'program');
+        $this->app->session->set('createProjectLocate', $uri, 'program');
 
         $this->loadModel('datatable');
 

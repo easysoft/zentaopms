@@ -128,7 +128,7 @@ $lang->my->dividerMenu = ',work,dynamic,';
 
 /* Program menu. */
 $lang->program->homeMenu         = new stdclass();
-$lang->program->homeMenu->browse = array('link' => "{$lang->program->list}|program|browse|", 'alias' => 'create,edit');
+$lang->program->homeMenu->browse = array('link' => "{$lang->program->list}|program|browse|", 'alias' => 'create,edit', 'subModule' => 'project');
 $lang->program->homeMenu->kanban = array('link' => "{$lang->program->kanban}|program|kanban|");
 
 $lang->program->menu              = new stdclass();
