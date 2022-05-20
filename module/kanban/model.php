@@ -1114,10 +1114,11 @@ class kanbanModel extends model
      * @param  object $cards
      * @param  string $fromType
      * @param  int    $archived
+     * @param  int    $regionID
      * @access public
      * @return array
      */
-    public function getImportedCards($kanbanID, $cards, $fromType, $archived = 0)
+    public function getImportedCards($kanbanID, $cards, $fromType, $archived = 0, $regionID = 0)
     {
         /* Get imported cards based on imported object type. */
         $objectCards = $this->dao->select('*')->from(TABLE_KANBANCARD)
@@ -1125,6 +1126,7 @@ class kanbanModel extends model
             ->andWhere('kanban')->eq($kanbanID)
             ->andWhere('archived')->eq($archived)
             ->andWhere('fromType')->eq($fromType)
+            ->beginIF($regionID)->andWhere('region')->eq($regionID)->fi()
             ->fetchGroup('fromID', 'id');
 
         if(!empty($objectCards))
