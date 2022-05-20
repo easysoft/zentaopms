@@ -432,13 +432,9 @@ class project extends control
             $this->executeHooks($projectID);
             if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $projectID));
 
-            if($this->app->tab == 'program')
+            if($this->app->tab != 'project' and $this->session->createProjectLocate)
             {
-                return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('program', 'browse')));
-            }
-            elseif($this->app->tab == 'doc')
-            {
-                return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('doc', 'objectLibs', "type=project&objectID=$projectID")));
+                return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->session->createProjectLocate));
             }
             else
             {
@@ -454,7 +450,7 @@ class project extends control
             }
         }
 
-        if($this->app->tab == 'program') $this->loadModel('program')->setMenu($programID);
+        if($this->app->tab == 'program' and $programID) $this->loadModel('program')->setMenu($programID);
         $this->session->set('projectModel', $model);
 
         $extra = str_replace(array(',', ' '), array('&', ''), $extra);
@@ -491,6 +487,7 @@ class project extends control
         }
 
         if($this->app->tab == 'doc') unset($this->lang->doc->menu->project['subMenu']);
+        if($this->app->tab == 'product' and isset($output['productID'])) $this->loadModel('product')->setMenu($output['productID']);
 
         $topProgramID = $this->program->getTopByID($programID);
 
