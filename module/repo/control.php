@@ -1004,7 +1004,7 @@ class repo extends control
         }
 
         $this->dao->update(TABLE_REPO)->set('commits=commits + ' . $commitCount)->where('id')->eq($repoID)->exec();
-        echo ($type == 'batch' and $commitCount) ?  $commitCount : 'finish';
+        echo $type == 'batch' ?  $commitCount : 'finish';
     }
 
     /**
