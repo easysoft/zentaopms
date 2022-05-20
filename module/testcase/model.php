@@ -39,6 +39,17 @@ class testcaseModel extends model
      */
     function create($bugID)
     {
+        $steps   = $this->post->steps;
+        $expects = $this->post->expects;
+        foreach($expects as $key => $value)
+        {
+            if(!empty($value) and empty($steps[$key]))
+            {
+                dao::$errors[] = sprintf($this->lang->testcase->stepsEmpty, $key);
+                return false;
+            }
+        }
+
         $now    = helper::now();
         $status = $this->getStatus('create');
         $case   = fixer::input('post')
@@ -705,6 +716,17 @@ class testcaseModel extends model
      */
     public function update($caseID, $testtasks = array())
     {
+        $steps   = $this->post->steps;
+        $expects = $this->post->expects;
+        foreach($expects as $key => $value)
+        {
+            if(!empty($value) and empty($steps[$key]))
+            {
+                dao::$errors[] = sprintf($this->lang->testcase->stepsEmpty, $key);
+                return false;
+            }
+        }
+
         $now     = helper::now();
         $oldCase = $this->getById($caseID);
 
@@ -1202,6 +1224,19 @@ class testcaseModel extends model
         $now    = helper::now();
         $branch = (int)$branch;
         $data   = fixer::input('post')->get();
+
+        $steps = $data->desc;
+        foreach($data->expect as $key => $expects)
+        {
+            foreach($expects as $exportID => $value)
+            {
+                if(!empty($value) and (!isset($steps[$key][$exportID]) or empty($steps[$key][$exportID])))
+                {
+                    dao::$errors = sprintf($this->lang->testcase->whichLine, $key) . sprintf($this->lang->testcase->stepsEmpty, $exportID);
+                    return false;
+                }
+            }
+        }
 
         if(!empty($_POST['id']))
         {
