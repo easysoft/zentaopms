@@ -519,10 +519,11 @@ class kanbanTest
      * @param  int    $kanbanID
      * @param  string $fromType
      * @param  int    $archived
+     * @param  int    $regionID
      * @access public
      * @return string
      */
-    public function getImportedCardsTest($kanbanID, $fromType, $archived = 0)
+    public function getImportedCardsTest($kanbanID, $fromType, $archived = 0, $regionID = 0)
     {
         global $tester;
         $cards = $tester->dao->select('*')->from(TABLE_KANBANCARD)
@@ -530,9 +531,10 @@ class kanbanTest
             ->andWhere('kanban')->eq($kanbanID)
             ->andWhere('archived')->eq($archived)
             ->andWhere('fromID')->eq(0)
+            ->beginIF($regionID)->andWhere('region')->eq($regionID)->fi()
             ->fetchAll('id');
 
-        $objects = $this->objectModel->getImportedCards($kanbanID, $cards, $fromType, $archived);
+        $objects = $this->objectModel->getImportedCards($kanbanID, $cards, $fromType, $archived, $regionID);
 
         if(dao::isError()) return dao::getError();
 
