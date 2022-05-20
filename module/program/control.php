@@ -67,9 +67,11 @@ class program extends control
 
         /* Get PM id list. */
         $accounts = array();
+        $hasProject = false;
         foreach($programs as $program)
         {
             if(!empty($program->PM) and !in_array($program->PM, $accounts)) $accounts[] = $program->PM;
+            if($hasProject === false and $program->type != 'program') $hasProject = true;
         }
         $PMList = $this->loadModel('user')->getListByAccounts($accounts, 'account');
 
@@ -92,6 +94,7 @@ class program extends control
         $this->view->programType  = $programType;
         $this->view->PMList       = $PMList;
         $this->view->progressList = $this->program->getProgressList();
+        $this->view->hasProject   = $hasProject;
 
         $this->display();
     }

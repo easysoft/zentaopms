@@ -15,6 +15,7 @@
 <?php js::set('orderBy', $orderBy);?>
 <?php js::set('edit', $lang->edit);?>
 <?php js::set('selectAll', $lang->selectAll);?>
+<?php js::set('hasProject', $hasProject);?>
 <?php if($programType == 'bygrid'):?>
 <style> #mainMenu{padding-left: 10px; padding-right: 10px;} </style>
 <?php endif;?>
@@ -26,7 +27,7 @@
     <?php echo html::a(inlink('browse', "status=$key&orderBy=$orderBy"), $label, '', "class='btn btn-link $active'");?>
     <?php endforeach;?>
     <?php echo html::checkbox('showClosed', array('1' => $lang->program->showClosed), '', $this->cookie->showClosed ? 'checked=checked' : '');?>
-    <?php if(common::hasPriv('project', 'batchEdit') and $programType != 'bygrid') echo html::checkbox('editProject', array('1' => $lang->project->edit), '', $this->cookie->editProject ? 'checked=checked' : '');?>
+    <?php if(common::hasPriv('project', 'batchEdit') and $programType != 'bygrid' and $hasProject === true) echo html::checkbox('editProject', array('1' => $lang->project->edit), '', $this->cookie->editProject ? 'checked=checked' : '');?>
     <a class="btn btn-link querybox-toggle" id='bysearchTab'><i class="icon icon-search muted"></i> <?php echo $lang->user->search;?></a>
   </div>
   <div class='pull-right'>
