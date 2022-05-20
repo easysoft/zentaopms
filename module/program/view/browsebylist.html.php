@@ -146,7 +146,7 @@
     </tbody>
   </table>
   <div class='table-footer <?php if($status == 'bySearch') echo 'hide';?>'>
-    <div class="table-statistic"><?php echo $summary;?></div>
+    <div class="table-statistic">&nbsp;<?php echo $summary;?></div>
     <?php if($status != 'bySearch') $pager->show('right', 'pagerjs');?>
   </div>
 </form>
