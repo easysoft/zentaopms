@@ -229,7 +229,7 @@
           <?php endforeach;?>
         </tbody>
       </table>
-</div>
+    </div>
     <div class="table-footer">
       <?php if($canBatchClose or $canBatchEdit):?>
       <div class="checkbox-primary check-all"><label><?php echo $lang->selectAll?></label></div>
