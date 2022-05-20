@@ -111,7 +111,7 @@
 <script>
 $('#repoForm').bind('DOMNodeInserted', function(e)
 {
-    if ($("#clientLabel").length > 0)
+    if($("#clientLabel").length > 0)
     {
         if($("#client").val() !== '')
         {
