@@ -67,7 +67,7 @@
           <th class='c-hours'>    <?php common::printOrderLink('estimate', $orderBy, $vars, $lang->story->estimateAB);?></th>
           <th class='c-status'>   <?php common::printOrderLink('status',   $orderBy, $vars, $lang->statusAB);?></th>
           <th class='c-stage'>    <?php common::printOrderLink('stage',    $orderBy, $vars, $lang->story->stageAB);?></th>
-          <th class='c-actions-6'><?php echo $lang->actions;?></th>
+          <th class="c-actions-6 text-center"><?php echo $lang->actions;?></th>
         </tr>
       </thead>
       <tbody>
