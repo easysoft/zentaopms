@@ -969,9 +969,12 @@ class projectModel extends model
      */
     public function getStoriesByProject($projectID = 0)
     {
-        return $this->dao->select('*')->from(TABLE_PROJECTSTORY)
-            ->beginIF($projectID)->where('project')->eq($projectID)->fi()
-            ->fetchGroup('product', 'branch');
+        return $this->dao->select("t2.product, t2.branch, GROUP_CONCAT(t2.story) as storyIDList")->from(TABLE_STORY)->alias('t1')
+           ->leftJoin(TABLE_PROJECTSTORY)->alias('t2')->on('t1.id=t2.story')
+           ->where('t1.deleted')->eq(0)
+           ->beginIF($projectID)->andWhere('t2.project')->eq($projectID)->fi()
+           ->groupBy('product, branch')
+           ->fetchGroup('product', 'branch');
     }
 
     /**

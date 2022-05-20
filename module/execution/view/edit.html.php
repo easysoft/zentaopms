@@ -218,6 +218,7 @@
 <?php js::set('errorSameBranches', $lang->execution->errorSameBranches);?>
 <?php js::set('unmodifiableProducts',$unmodifiableProducts);?>
 <?php js::set('unmodifiableBranches', $unmodifiableBranches)?>
+<?php js::set('linkedStoryIDList', $linkedStoryIDList)?>
 <?php js::set('multiBranchProducts', $multiBranchProducts);?>
 <?php js::set('tip', $lang->execution->notAllowRemoveProducts);?>
 <?php js::set('confirmSync', $lang->execution->confirmSync);?>
