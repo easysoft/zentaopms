@@ -224,7 +224,7 @@ function loadPlans(product, branchID)
 
     if(productID != 0)
     {
-        $.get(createLink('product', 'ajaxGetPlans', "productID=" + productID + '&branch=0,' + branchID + '&planID=0&fieldID&needCreate=&expired=unexpired|noclosed&param=skipParent'), function(data)
+        $.get(createLink('product', 'ajaxGetPlans', "productID=" + productID + '&branch=0,' + branchID + '&planID=0&fieldID&needCreate=&expired=unexpired,noclosed&param=skipParent'), function(data)
         {
             if(data)
             {
