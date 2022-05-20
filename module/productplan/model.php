@@ -518,17 +518,18 @@ class productplanModel extends model
         }
         elseif($oldPlan->parent == -1 and $plan->begin != $this->config->productplan->future)
         {
-            $childPlans = $this->getChildren($planID);
-            $minBegin   = $plan->begin;
-            $maxEnd     = $plan->end;
+            $plan->parent = -1;
+            $childPlans   = $this->getChildren($planID);
+            $minBegin     = $plan->begin;
+            $maxEnd       = $plan->end;
             foreach($childPlans as $childID => $childPlan)
             {
                 $childPlan = isset($plans[$childID]) ? $plans[$childID] : $childPlan;
                 if($childPlan->begin < $minBegin) $minBegin = $childPlan->begin;
                 if($childPlan->end > $maxEnd) $maxEnd = $childPlan->end;
             }
-            if($minBegin < $plan->begin and $minBegin != $this->config->productplan->future) dao::$errors['begin'] = sprintf($this->lang->productplan->beginGreaterChildTip, $planID, $plan->begin, $minBegin);
-            if($maxEnd > $plan->end and $maxEnd != $this->config->productplan->future) dao::$errors['end'] = sprintf($this->lang->productplan->endLetterChildTip, $planID, $plan->end, $maxEnd);
+            if($minBegin < $plan->begin and $minBegin != $this->config->productplan->future) dao::$errors['begin'] = sprintf($this->lang->productplan->beginGreaterChildTip, $oldPlan->title, $plan->begin, $minBegin);
+            if($maxEnd > $plan->end and $maxEnd != $this->config->productplan->future) dao::$errors['end'] = sprintf($this->lang->productplan->endLetterChildTip, $oldPlan->title, $plan->end, $maxEnd);
         }
 
         if(dao::isError()) return false;
