@@ -39,6 +39,17 @@ class testcaseModel extends model
      */
     function create($bugID)
     {
+        $steps   = $this->post->steps;
+        $expects = $this->post->expects;
+        foreach($expects as $key => $value)
+        {
+            if(empty($steps[$key]))
+            {
+                dao::$errors[] = sprintf($this->lang->testcase->stepsEmpty, $key);
+                return false;
+            }
+        }
+
         $now    = helper::now();
         $status = $this->getStatus('create');
         $case   = fixer::input('post')
@@ -705,6 +716,17 @@ class testcaseModel extends model
      */
     public function update($caseID, $testtasks = array())
     {
+        $steps   = $this->post->steps;
+        $expects = $this->post->expects;
+        foreach($expects as $key => $value)
+        {
+            if(empty($steps[$key]))
+            {
+                dao::$errors[] = sprintf($this->lang->testcase->stepsEmpty, $key);
+                return false;
+            }
+        }
+
         $now     = helper::now();
         $oldCase = $this->getById($caseID);
 

@@ -220,6 +220,7 @@ $lang->testcase->resultList['blocked'] = '阻塞';
 
 $lang->testcase->buttonToList = '返回';
 
+$lang->testcase->stepsEmpty       = '用例%s步骤不能为空';
 $lang->testcase->errorEncode      = '无数据，请选择正确的编码重新上传！';
 $lang->testcase->noFunction       = '不存在iconv和mb_convert_encoding转码方法，不能将数据转成想要的编码！';
 $lang->testcase->noRequire        = "%s行的“%s”是必填字段，不能为空";
