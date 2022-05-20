@@ -43,7 +43,7 @@ class testcaseModel extends model
         $expects = $this->post->expects;
         foreach($expects as $key => $value)
         {
-            if(empty($steps[$key]))
+            if(!empty($value) and empty($steps[$key]))
             {
                 dao::$errors[] = sprintf($this->lang->testcase->stepsEmpty, $key);
                 return false;
@@ -720,7 +720,7 @@ class testcaseModel extends model
         $expects = $this->post->expects;
         foreach($expects as $key => $value)
         {
-            if(empty($steps[$key]))
+            if(!empty($value) and empty($steps[$key]))
             {
                 dao::$errors[] = sprintf($this->lang->testcase->stepsEmpty, $key);
                 return false;
