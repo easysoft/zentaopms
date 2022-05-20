@@ -7,6 +7,7 @@ $lang->execution->createKanban    = 'Create Kanban';
 $lang->execution->noExecution     = "No Executions.";
 $lang->execution->importTask      = 'Import Tsak';
 $lang->execution->batchCreateTask = 'Batch Create Task';
+$lang->execution->linkStory       = "创建{$lang->SRCommon}";
 
 $lang->execution->kanbanGroup['default']    = 'Default';
 $lang->execution->kanbanGroup['story']      = 'Target';
@@ -24,4 +25,3 @@ $lang->execution->icons['grouptask'] = 'sitemap';
 $lang->execution->aclList['private'] = "Private (Accessible to team members and project leaders)";
 
 $lang->execution->common = 'Project Execution';
-$lang->execution->gantt  = 'Gantt Chart';
