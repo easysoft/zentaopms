@@ -401,6 +401,7 @@ class productplanModel extends model
             ->andWhere('deleted')->eq(0)
             ->beginIF($branches != '')->andWhere('branch')->in($branches)->fi()
             ->beginIF($skipParent)->andWhere('parent')->ne(-1)->fi()
+            ->orderBy('begin desc')
             ->fetchAll('id');
 
         $planPairs = array();
