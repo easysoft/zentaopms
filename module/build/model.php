@@ -561,8 +561,8 @@ class buildModel extends model
 
             $editClickable   = $this->buildMenu('build', 'edit',   $params, $build, $type, '', '', '', '', '', '', false);
             $deleteClickable = $this->buildMenu('build', 'delete',   $params, $build, $type, '', '', '', '', '', '', false);
-            if($editClickable)   $menu .= html::a(helper::createLink('build', 'edit',   $params), "<i class='icon-common-edit icon-edit'></i> "    . $this->lang->edit,   '', "class='btn btn-link' title='{$this->lang->build->edit}' data-app='{$app->tab}'");
-            if($deleteClickable) $menu .= html::a(helper::createLink('build', 'delete', $params), "<i class='icon-common-delete icon-trash'></i> " . $this->lang->delete, '', "class='btn btn-link' title='{$this->lang->build->delete}' target='hiddenwin' data-app='{$app->tab}'");
+            if(common::hasPriv('build', 'edit')   and $editClickable)   $menu .= html::a(helper::createLink('build', 'edit',   $params), "<i class='icon-common-edit icon-edit'></i> "    . $this->lang->edit,   '', "class='btn btn-link' title='{$this->lang->build->edit}' data-app='{$app->tab}'");
+            if(common::hasPriv('build', 'delete') and $deleteClickable) $menu .= html::a(helper::createLink('build', 'delete', $params), "<i class='icon-common-delete icon-trash'></i> " . $this->lang->delete, '', "class='btn btn-link' title='{$this->lang->build->delete}' target='hiddenwin' data-app='{$app->tab}'");
         }
 
         return $menu;

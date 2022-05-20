@@ -711,9 +711,9 @@ class releaseModel extends model
         $menu .= "<div class='divider'></div>";
 
         $editClickable   = $this->buildMenu('release', 'edit',   $params, $release, 'view', '', '', '', '', '', '', false);
-        $deleteClickable = $this->buildMenu('release', 'delete',   $params, $release, 'view', '', '', '', '', '', '', false);
-        if($editClickable)   $menu .= html::a(helper::createLink('release', 'edit', $params), "<i class='icon-common-edit icon-edit'></i> " . $this->lang->edit, '', "class='btn btn-link' title='{$this->lang->edit}'");
-        if($deleteClickable) $menu .= html::a(helper::createLink('release', 'delete', $params), "<i class='icon-common-delete icon-trash'></i> " . $this->lang->delete, '', "class='btn btn-link' title='{$this->lang->delete}' target='hiddenwin'");
+        $deleteClickable = $this->buildMenu('release', 'delete', $params, $release, 'view', '', '', '', '', '', '', false);
+        if(common::hasPriv('release', 'edit')   and $editClickable)   $menu .= html::a(helper::createLink('release', 'edit', $params), "<i class='icon-common-edit icon-edit'></i> " . $this->lang->edit, '', "class='btn btn-link' title='{$this->lang->edit}'");
+        if(common::hasPriv('release', 'delete') and $deleteClickable) $menu .= html::a(helper::createLink('release', 'delete', $params), "<i class='icon-common-delete icon-trash'></i> " . $this->lang->delete, '', "class='btn btn-link' title='{$this->lang->delete}' target='hiddenwin'");
 
         return $menu;
     }
