@@ -344,16 +344,9 @@ class myModel extends model
         if($objectType == 'task')
         {
             $executionList = array();
-            foreach($objectList as $task)
-            {
-                $executionList[$task->execution] = $task->execution;
-            }
-
-            $objectPairs = $this->dao->select('id,name')->from(TABLE_PROJECT)->Where('id')->in($executionList)->fetchPairs('id');
-            foreach($objectList as $task)
-            {
-                $task->executionName = zget($objectPairs, $task->execution, '');
-            }
+            foreach($objectList as $task) $executionList[$task->execution] = $task->execution;
+            $objectPairs = $this->dao->select('id,name')->from(TABLE_PROJECT)->where('id')->in($executionList)->fetchPairs('id');
+            foreach($objectList as $task) $task->executionName = zget($objectPairs, $task->execution, '');
 
             if($objectList) return $this->loadModel('task')->processTasks($objectList);
             return $objectList;
