@@ -1225,6 +1225,19 @@ class testcaseModel extends model
         $branch = (int)$branch;
         $data   = fixer::input('post')->get();
 
+        $steps = $data->desc;
+        foreach($data->expect as $key => $expects)
+        {
+            foreach($expects as $exportID => $value)
+            {
+                if(!empty($value) and (!isset($steps[$key][$exportID]) or empty($steps[$key][$exportID])))
+                {
+                    dao::$errors = sprintf($this->lang->testcase->whichLine, $key) . sprintf($this->lang->testcase->stepsEmpty, $exportID);
+                    return false;
+                }
+            }
+        }
+
         if(!empty($_POST['id']))
         {
             $oldSteps = $this->dao->select('t2.*')->from(TABLE_CASE)->alias('t1')

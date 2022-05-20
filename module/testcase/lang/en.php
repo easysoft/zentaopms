@@ -220,7 +220,8 @@ $lang->testcase->resultList['blocked'] = 'Blocked';
 
 $lang->testcase->buttonToList = 'Back';
 
-$lang->testcase->stepsEmpty       = 'Case step %s cannot be empty.';
+$lang->testcase->whichLine        = 'Line No.%s : ';
+$lang->testcase->stepsEmpty       = 'Step %s cannot be empty.';
 $lang->testcase->errorEncode      = 'No data. Please select right encoding and upload again!';
 $lang->testcase->noFunction       = 'Iconv and mb_convert_encoding are not found. You cannot convert the data to the encoding you want!';
 $lang->testcase->noRequire        = "Row %s has“%s ”which is a required field and it should not be blank.";
