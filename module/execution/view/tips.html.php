@@ -1,4 +1,5 @@
-<div style='margin: 0 auto; max-width: 580px'>
+<?php $width = $this->app->getClientLang() == 'en' ? '580px' : '500px';?>
+<?php echo "<div style='margin: 0 auto; max-width: $width'";?>
   <p><strong><?php echo $lang->execution->afterInfo;?></strong></p>
   <div>
     <?php echo html::a($this->createLink('execution', 'team', "executionID=$executionID"), $lang->execution->setTeam, '', "class='btn' data-app='execution'");?>
