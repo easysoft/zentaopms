@@ -983,7 +983,7 @@ class commonModel extends model
             }
 
             /* Check whether other methods under the module have permissions. If yes, point to other methods. */
-            if($display == false and isset($lang->$currentModule->menu))
+            if($display == false and isset($lang->$currentModule->menu) and !in_array($currentModule, array('program', 'product', 'project', 'execution')))
             {
                 foreach($lang->$currentModule->menu as $menu)
                 {
