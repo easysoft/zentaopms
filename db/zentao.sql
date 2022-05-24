@@ -1457,6 +1457,7 @@ CREATE TABLE IF NOT EXISTS `zt_task` (
   `storyVersion` smallint(6) NOT NULL default '1',
   `designVersion` smallint(6) unsigned NOT NULL,
   `fromBug` mediumint(8) unsigned NOT NULL default '0',
+  `fromIssue` mediumint(8) unsigned NOT NULL default '0',
   `name` varchar(255) NOT NULL,
   `type` varchar(20) NOT NULL,
   `pri` tinyint(3) unsigned NOT NULL default '0',
