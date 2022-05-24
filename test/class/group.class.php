@@ -35,13 +35,18 @@ class groupTest
      * @access public
      * @return void
      */
-    public function updateTest($groupID)
+    public function updateTest($groupID, $param)
     {
-        $objects = $this->objectModel->update($groupID);
+        foreach($param as $k => $v) $_POST[$k] = $v;
+
+        $object = $this->objectModel->update($groupID);
+        unset($_POST);
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        $object = $this->objectModel->getByID($groupID);
+
+        return $object;
     }
 
     /**
