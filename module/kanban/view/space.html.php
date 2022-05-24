@@ -68,7 +68,7 @@
                 <?php endif;?>
                 <strong title='<?php echo $kanban->name;?>'><?php echo $kanban->name;?></strong>
               </div>
-              <?php $canActions = (common::hasPriv('kanban','edit') or common::hasPriv('kanban','close') or common::hasPriv('kanban','delete'));?>
+              <?php $canActions = (common::hasPriv('kanban','edit') or (common::hasPriv('kanban','close') and $kanban->status == 'active') or common::hasPriv('kanban','delete') or (common::hasPriv('kanban','activate') and $kanban->status == 'closed'));?>
               <?php if($canActions):?>
               <div class='kanban-actions kanban-actions<?php echo $kanbanID;?>'>
                 <div class='dropdown'>
@@ -81,11 +81,16 @@
                         common::printLink('kanban', 'edit',   "kanbanID={$kanban->id}", '<i class="icon icon-edit"></i> ' . $lang->kanban->edit, '', "class='iframe' data-width='75%'", '', true);
                         echo '</li>';
                     }
-                    if(common::hasPriv('kanban','close'))
+                    if(common::hasPriv('kanban','close') and $kanban->status == 'active')
                     {
-                        $class = $kanban->status == 'closed' ? 'disabled' : '';
-                        echo "<li class='{$class}'>";
-                        common::printLink('kanban', 'close',  "kanbanID={$kanban->id}", '<i class="icon icon-off"></i> ' . $lang->kanban->close, '', "class='iframe {$class}' data-width='75%'", '', true);
+                        echo "<li>";
+                        common::printLink('kanban', 'close',  "kanbanID={$kanban->id}", '<i class="icon icon-off"></i> ' . $lang->kanban->close, '', "class='iframe' data-width='75%'", '', true);
+                        echo '</li>';
+                    }
+                    if(common::hasPriv('kanban','activate') and $kanban->status == 'closed')
+                    {
+                        echo "<li>";
+                        common::printLink('kanban', 'activate',  "kanbanID={$kanban->id}", '<i class="icon icon-magic"></i> ' . $lang->kanban->activate, '', "class='iframe' data-width='75%'", '', true);
                         echo '</li>';
                     }
                     if(common::hasPriv('kanban','delete'))
