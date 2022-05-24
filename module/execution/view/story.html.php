@@ -206,7 +206,7 @@
             <th class='c-name {sorter:false}'><?php common::printOrderLink('title', $orderBy, $vars, $lang->execution->storyTitle);?></th>
             <th class='c-category {sorter:false}'><?php common::printOrderLink('category', $orderBy, $vars, $lang->story->category);?></th>
             <th class='c-user {sorter:false}'> <?php common::printOrderLink('openedBy', $orderBy, $vars, $lang->openedByAB);?></th>
-            <th class='c-user {sorter:false} text-center'id='assignedTo'> <?php common::printOrderLink('assignedTo', $orderBy, $vars, $lang->assignedToAB);?></th>
+            <th class='c-user {sorter:false} text-center' id='assignedTo'> <?php common::printOrderLink('assignedTo', $orderBy, $vars, $lang->assignedToAB);?></th>
             <th class='c-estimate {sorter:false} text-right'> <?php common::printOrderLink('estimate', $orderBy, $vars, $lang->story->estimateAB);?></th>
             <th class='c-status {sorter:false}'> <?php common::printOrderLink('status', $orderBy, $vars, $lang->statusAB);?></th>
             <th class='c-stage {sorter:false}'> <?php common::printOrderLink('stage', $orderBy, $vars, $lang->story->stageAB);?></th>
