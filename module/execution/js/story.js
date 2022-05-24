@@ -9,7 +9,7 @@ $(function()
             var $target = $(data.element[0]);
             $target.hide();
             $target.fadeIn(1000);
-            order = 'order_asc'
+            order = 'order_desc'
             history.pushState({}, 0, createLink('execution', 'story', "executionID=" + executionID + '&orderBy=' + order));
         });
     });

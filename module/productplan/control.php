@@ -375,7 +375,7 @@ class productplan extends control
      * @access public
      * @return void
      */
-    public function view($planID = 0, $type = 'story', $orderBy = 'order_asc', $link = 'false', $param = '', $recTotal = 0, $recPerPage = 100, $pageID = 1)
+    public function view($planID = 0, $type = 'story', $orderBy = 'order_desc', $link = 'false', $param = '', $recTotal = 0, $recPerPage = 100, $pageID = 1)
     {
         $planID = (int)$planID;
         $plan   = $this->productplan->getByID($planID, true);
@@ -610,7 +610,7 @@ class productplan extends control
      * @access public
      * @return void
      */
-    public function linkStory($planID = 0, $browseType = '', $param = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 100, $pageID = 1)
+    public function linkStory($planID = 0, $browseType = '', $param = 0, $orderBy = 'order_desc', $recTotal = 0, $recPerPage = 100, $pageID = 1)
     {
         if(!empty($_POST['stories']))
         {
