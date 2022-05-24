@@ -961,6 +961,15 @@ class executionModel extends model
             }
         }
 
+        if($oldExecution->type == 'stage')
+        {
+            $parent   = $this->getByID($oldExecution->parent);
+            if($parent->type == 'stage' and $parent->status == 'closed')
+            {
+                $this->dao->update(TABLE_EXECUTION)->set('status')->eq('doing')->where('id')->eq($parent->id)->exec();
+            }
+        }
+
         if(!dao::isError()) return common::createChanges($oldExecution, $execution);
     }
 
@@ -1002,6 +1011,22 @@ class executionModel extends model
 
         if(!dao::isError())
         {
+            if($oldExecution->type == 'stage')
+            {
+                $parent   = $this->getByID($oldExecution->parent);
+                if($parent->type == 'stage')
+                {
+                    $isClosed = true;
+                    $children = $this->getChildExecutions($oldExecution->parent);
+                    foreach($children as $childID => $childExecution)
+                    {
+                        if($childExecution->status != 'closed') $isClosed = false;
+                    }
+
+                    if($isClosed) $this->dao->update(TABLE_EXECUTION)->set('status')->eq('closed')->where('id')->eq($parent->id)->exec();
+                }
+            }
+
             $this->loadModel('score')->create('execution', 'close', $oldExecution);
             return common::createChanges($oldExecution, $execution);
         }
@@ -1575,7 +1600,7 @@ class executionModel extends model
      */
     public function getChildExecutions($executionID)
     {
-        return $this->dao->select('id, name')->from(TABLE_EXECUTION)->where('parent')->eq((int)$executionID)->fetchPairs();
+        return $this->dao->select('id, name, status')->from(TABLE_EXECUTION)->where('deleted')->eq(0)->andWhere('parent')->eq((int)$executionID)->fetchAll('id');
     }
 
     /**
