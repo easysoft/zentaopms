@@ -1,4 +1,4 @@
-<?php $width = $this->app->getClientLang() == 'en' ? '580px' : '500px';?>
+<?php $width = $this->app->getClientLang() == 'zh-cn' ? '500px' : '580px';?>
 <?php echo "<div style='margin: 0 auto; max-width: $width'";?>
   <p><strong><?php echo $lang->execution->afterInfo;?></strong></p>
   <div>
