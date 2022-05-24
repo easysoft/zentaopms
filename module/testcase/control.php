@@ -1457,7 +1457,7 @@ class testcase extends control
                 if($taskID) $caseIDList = $this->dao->select('`case`')->from(TABLE_TESTRUN)->where('task')->eq($taskID)->fetchPairs();
 
                 $cases = $this->dao->select('*')->from(TABLE_CASE)->where($this->session->testcaseQueryCondition)
-                    ->beginIF(!empty($caseIDList))->andWhere('id')->in($caseIDList)->fi()
+                    ->beginIF($taskID)->andWhere('id')->in($caseIDList)->fi()
                     ->beginIF($this->post->exportType == 'selected')->andWhere('id')->in($this->cookie->checkedItem)->fi()
                     ->orderBy($orderBy)
                     ->beginIF($this->post->limit)->limit($this->post->limit)->fi()
