@@ -1383,6 +1383,19 @@ class task extends control
             {
                 $task      = $this->task->getById($taskID);
                 $execution = $this->execution->getByID($task->execution);
+
+                if(isset($task->fromIssue) and $task->fromIssue > 0)
+                {
+                    $fromIssue = $this->loadModel('issue')->getByID($task->fromIssue);
+                    if($fromIssue->status != 'closed')
+                    {
+                        $confirmURL = $this->createLink('issue', 'close', "id=$task->fromIssue");
+                        unset($_GET['onlybody']);
+                        $cancelURL  = $this->createLink('task', 'view', "taskID=$taskID");
+                        return print(js::confirm(sprintf($this->lang->task->remindIssue, $task->fromIssue), $confirmURL, $cancelURL, 'parent', 'parent.parent'));
+                    }
+                }
+
                 if($execution->type == 'kanban' and $this->app->tab == 'execution')
                 {
                     $regionID   = isset($output['regionID']) ? $output['regionID'] : 0;
