@@ -961,6 +961,7 @@ class executionModel extends model
             }
         }
 
+        /* Update the status of the parent stage. */
         if($oldExecution->type == 'stage')
         {
             $parent   = $this->getByID($oldExecution->parent);
@@ -1011,6 +1012,7 @@ class executionModel extends model
 
         if(!dao::isError())
         {
+            /* Update the status of the parent stage. */
             if($oldExecution->type == 'stage')
             {
                 $parent   = $this->getByID($oldExecution->parent);
