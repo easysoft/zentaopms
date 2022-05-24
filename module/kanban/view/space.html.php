@@ -68,32 +68,37 @@
                 <?php endif;?>
                 <strong title='<?php echo $kanban->name;?>'><?php echo $kanban->name;?></strong>
               </div>
-              <?php $canActions = (common::hasPriv('kanban','edit') or (common::hasPriv('kanban','close') and $kanban->status == 'active') or common::hasPriv('kanban','delete') or (common::hasPriv('kanban','activate') and $kanban->status == 'closed'));?>
-              <?php if($canActions):?>
+              <?php
+              $canEdit     = common::hasPriv('kanban','edit');
+              $canDelete   = common::hasPriv('kanban','delete');
+              $canClose    = (common::hasPriv('kanban', 'close') and $kanban->status == 'active');
+              $canActivate = (common::hasPriv('kanban', 'activate') and $kanban->status == 'close');
+              ?>
+              <?php if($canEdit or $canDelete or $canClose or $canActivate):?>
               <div class='kanban-actions kanban-actions<?php echo $kanbanID;?>'>
                 <div class='dropdown'>
                   <?php echo html::a('javascript:;', "<i class='icon icon-ellipsis-v'></i>", '', "data-toggle='dropdown' class='btn btn-link'");?>
                   <ul class='dropdown-menu <?php echo $kanbanCount % 4 == 0 ? 'pull-left' : 'pull-right';?>'>
                     <?php
-                    if(common::hasPriv('kanban','edit'))
+                    if($canEdit)
                     {
                         echo '<li>';
                         common::printLink('kanban', 'edit',   "kanbanID={$kanban->id}", '<i class="icon icon-edit"></i> ' . $lang->kanban->edit, '', "class='iframe' data-width='75%'", '', true);
                         echo '</li>';
                     }
-                    if(common::hasPriv('kanban','close') and $kanban->status == 'active')
+                    if($canClose)
                     {
                         echo "<li>";
                         common::printLink('kanban', 'close',  "kanbanID={$kanban->id}", '<i class="icon icon-off"></i> ' . $lang->kanban->close, '', "class='iframe' data-width='75%'", '', true);
                         echo '</li>';
                     }
-                    if(common::hasPriv('kanban','activate') and $kanban->status == 'closed')
+                    if($canActivate)
                     {
                         echo "<li>";
                         common::printLink('kanban', 'activate',  "kanbanID={$kanban->id}", '<i class="icon icon-magic"></i> ' . $lang->kanban->activate, '', "class='iframe' data-width='75%'", '', true);
                         echo '</li>';
                     }
-                    if(common::hasPriv('kanban','delete'))
+                    if($canDelete)
                     {
                         echo '<li>';
                         common::printLink('kanban', 'delete', "kanbanID={$kanban->id}", '<i class="icon icon-trash"></i> ' . $lang->kanban->delete, 'hiddenwin');
