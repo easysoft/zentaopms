@@ -7,7 +7,7 @@ $config->execution->weekend          = '2';
 $config->execution->ownerFields      = array('PO', 'PM', 'QD', 'RD');
 
 $config->execution->list = new stdclass();
-$config->execution->list->exportFields = 'id,name,projectName,code,PM,end,status,totalEstimate,totalConsumed,totalLeft,progress';
+$config->execution->list->exportFields = 'id,name,projectName,code,PM,begin,end,status,totalEstimate,totalConsumed,totalLeft,progress';
 
 $config->execution->modelList['scrum']     = 'sprint';
 $config->execution->modelList['waterfall'] = 'stage';
