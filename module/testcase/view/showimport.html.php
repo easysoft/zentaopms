@@ -31,18 +31,19 @@ $(function()
       <table class='table table-form' id='showData'>
         <thead>
           <tr>
+            <?php $requiredFields = $config->testcase->create->requiredFields;?>
             <th class='c-line-number'><?php echo $lang->lineNumber?></th>
             <th class='c-id'><?php echo $lang->idAB?></th>
             <?php if($product->type != 'normal'):?>
             <th class='c-branch'><?php echo $lang->testcase->branch?></th>
             <?php endif;?>
-            <th class='c-name required'><?php echo $lang->testcase->title?></th>
-            <th class='c-module'><?php echo $lang->testcase->module?></th>
-            <th class='c-story'><?php echo $lang->testcase->story?></th>
-            <th class='c-pri-box'><?php echo $lang->testcase->pri?></th>
-            <th class='c-type required'><?php echo $lang->testcase->type?></th>
-            <th class='c-stage'><?php echo $lang->testcase->stage?></th>
-            <th class='c-condition'><?php echo $lang->testcase->precondition?></th>
+            <th class='c-name      <?php if(strpos(",$requiredFields,", ',title,')        !== false) echo 'required';?>'><?php echo $lang->testcase->title?></th>
+            <th class='c-module    <?php if(strpos(",$requiredFields,", ',module,')       !== false) echo 'required';?>'><?php echo $lang->testcase->module?></th>
+            <th class='c-story     <?php if(strpos(",$requiredFields,", ',story,')        !== false) echo 'required';?>'><?php echo $lang->testcase->story?></th>
+            <th class='c-pri-box   <?php if(strpos(",$requiredFields,", ',pri,')          !== false) echo 'required';?>'><?php echo $lang->testcase->pri?></th>
+            <th class='c-type      <?php if(strpos(",$requiredFields,", ',type,')         !== false) echo 'required';?>'><?php echo $lang->testcase->type?></th>
+            <th class='c-stage     <?php if(strpos(",$requiredFields,", ',stage,')        !== false) echo 'required';?>'><?php echo $lang->testcase->stage?></th>
+            <th class='c-condition <?php if(strpos(",$requiredFields,", ',precondition,') !== false) echo 'required';?>'><?php echo $lang->testcase->precondition?></th>
             <?php if(!empty($appendFields)):?>
             <?php foreach($appendFields as $appendField):?>
             <th class='c-extend'><?php echo $lang->testcase->{$appendField->field}?></th>
