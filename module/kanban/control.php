@@ -137,7 +137,7 @@ class kanban extends control
             return print(js::reload('parent.parent'));
         }
 
-        $this->view->space   = $this->kanban->getById($spaceID);
+        $this->view->space   = $this->kanban->getSpaceById($spaceID);
         $this->view->actions = $this->action->getList('kanbanSpace', $spaceID);
         $this->view->users   = $this->loadModel('user')->getPairs('noletter');
 
