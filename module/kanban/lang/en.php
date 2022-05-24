@@ -4,6 +4,7 @@ $lang->kanban->create              = 'Create Kanban';
 $lang->kanban->createSpace         = 'Create Space';
 $lang->kanban->editSpace           = 'Edit Space';
 $lang->kanban->closeSpace          = 'Close Space';
+$lang->kanban->activateSpace       = 'Activate Space';
 $lang->kanban->deleteSpace         = 'Delete Space';
 $lang->kanban->sortSpace           = 'Sort Space';
 $lang->kanban->edit                = 'Edit Kanban';

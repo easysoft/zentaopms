@@ -1847,6 +1847,39 @@ class kanbanModel extends model
             ->setDefault('closedDate', $now)
             ->setDefault('lastEditedBy', $account)
             ->setDefault('lastEditedDate', $now)
+            ->setDefault('activatedBy', '')
+            ->setDefault('activatedDate', '0000-00-00 00:00:00')
+            ->remove('comment')
+            ->get();
+
+        $this->dao->update(TABLE_KANBANSPACE)->data($space)
+            ->autoCheck()
+            ->where('id')->eq($spaceID)
+            ->exec();
+
+        if(!dao::isError()) return common::createChanges($oldSpace, $space);
+    }
+
+    /**
+     * Activate a space.
+     *
+     * @param int     $spaceID
+     * @access public
+     * @return array
+     */
+    function activateSpace($spaceID)
+    {
+        $spaceID  = (int)$spaceID;
+        $oldSpace = $this->getSpaceById($spaceID);
+        $now      = helper::now();
+        $space    = fixer::input('post')
+            ->setDefault('status', 'active')
+            ->setDefault('activatedBy', $this->app->user->account)
+            ->setDefault('activatedDate', $now)
+            ->setDefault('lastEditedBy', $this->app->user->account)
+            ->setDefault('lastEDitedDate', $now)
+            ->setDefault('closedBy', '')
+            ->setDefault('closedDate', '0000-00-00 00:00:00')
             ->remove('comment')
             ->get();
 
