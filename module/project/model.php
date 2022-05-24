@@ -906,7 +906,7 @@ class projectModel extends model
      * @access public
      * @return array
      */
-    public function getPairsByModel($model = 'all', $programID = 0, $param = '', $append = '')
+    public function getPairsByModel($model = 'all', $programID = 0, $param = '', $append = '', $orderBy = 'order_asc')
     {
         if(defined('TUTORIAL')) return $this->loadModel('tutorial')->getProjectPairs();
 
@@ -920,7 +920,7 @@ class projectModel extends model
             ->beginIF(strpos($param, 'noclosed') !== false)->andWhere('status')->ne('closed')->fi()
             ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->projects)->fi()
             ->beginIF(!empty($append))->orWhere('id')->in($append)->fi()
-            ->orderBy('id_desc')
+            ->orderBy($orderBy)
             ->fetchAll();
 
         $programIdList  = array();
@@ -932,16 +932,29 @@ class projectModel extends model
             $projectProgram[$project->id] = $programID;
         }
 
-        $programs = $this->dao->select('id, name')->from(TABLE_PROGRAM)->where('id')->in($programIdList)->fetchPairs('id', 'name');
-        $pairs    = array();
+        $programs = $this->dao->select('id, name')->from(TABLE_PROGRAM)->where('id')->in($programIdList)->orderBy($orderBy)->fetchPairs('id', 'name');
+
+        /* Sort by project order in the program list. */
+        $allProjects = array();
+        foreach($programs as $programID => $program) $allProjects[$programID] = array();
         foreach($projects as $project)
         {
-            $projectName = $project->name;
-
             $programID = zget($projectProgram, $project->id, '');
-            if($programID != $project->id) $projectName = zget($programs, $programID, '') . ' / ' . $projectName;
+            $allProjects[$programID][] = $project;
+        }
 
-            $pairs[$project->id] = $projectName;
+        $pairs = array();
+        foreach($allProjects as $programID => $projects)
+        {
+            foreach($projects as $project)
+            {
+                $projectName = $project->name;
+
+                $programID = zget($projectProgram, $project->id, '');
+                if($programID != $project->id) $projectName = zget($programs, $programID, '') . ' / ' . $projectName;
+
+                $pairs[$project->id] = $projectName;
+            }
         }
 
         return $pairs;
@@ -956,9 +969,12 @@ class projectModel extends model
      */
     public function getStoriesByProject($projectID = 0)
     {
-        return $this->dao->select('*')->from(TABLE_PROJECTSTORY)
-            ->beginIF($projectID)->where('project')->eq($projectID)->fi()
-            ->fetchGroup('product', 'branch');
+        return $this->dao->select("t2.product, t2.branch, GROUP_CONCAT(t2.story) as storyIDList")->from(TABLE_STORY)->alias('t1')
+           ->leftJoin(TABLE_PROJECTSTORY)->alias('t2')->on('t1.id=t2.story')
+           ->where('t1.deleted')->eq(0)
+           ->beginIF($projectID)->andWhere('t2.project')->eq($projectID)->fi()
+           ->groupBy('product, branch')
+           ->fetchGroup('product', 'branch');
     }
 
     /**

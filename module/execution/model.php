@@ -1929,18 +1929,14 @@ class executionModel extends model
      */
     public function getToImport($executionIds, $type)
     {
-        $executions = $this->dao->select('*')->from(TABLE_EXECUTION)
-            ->where('id')->in($executionIds)
-            ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->sprints)->fi()
-            ->andWhere('type')->eq($type)
-            ->andWhere('deleted')->eq(0)
-            ->orderBy('id desc')
-            ->fetchAll('id');
-
-        $pairs = array();
-        $now   = date('Y-m-d');
-        foreach($executions as $id => $execution) $pairs[$id] = $execution->name;
-        return $pairs;
+        return $this->dao->select('t1.id,concat_ws(" / ", t2.name, t1.name) as name')->from(TABLE_EXECUTION)->alias('t1')
+            ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t2.id=t1.project')
+            ->where('t1.id')->in($executionIds)
+            ->beginIF(!$this->app->user->admin)->andWhere('t1.id')->in($this->app->user->view->sprints)->fi()
+            ->andWhere('t1.type')->eq($type)
+            ->andWhere('t1.deleted')->eq(0)
+            ->orderBy('t1.id desc')
+            ->fetchPairs('id', 'name');
     }
 
     /**

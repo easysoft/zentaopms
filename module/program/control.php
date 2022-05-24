@@ -32,6 +32,7 @@ class program extends control
 
         $this->session->set('programList', $this->app->getURI(true), 'program');
         $this->session->set('projectList', $this->app->getURI(true), 'program');
+        $this->session->set('createProjectLocate', $this->app->getURI(true), 'program');
 
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
@@ -67,9 +68,11 @@ class program extends control
 
         /* Get PM id list. */
         $accounts = array();
+        $hasProject = false;
         foreach($programs as $program)
         {
             if(!empty($program->PM) and !in_array($program->PM, $accounts)) $accounts[] = $program->PM;
+            if($hasProject === false and $program->type != 'program') $hasProject = true;
         }
         $PMList = $this->loadModel('user')->getListByAccounts($accounts, 'account');
 
@@ -92,6 +95,7 @@ class program extends control
         $this->view->programType  = $programType;
         $this->view->PMList       = $PMList;
         $this->view->progressList = $this->program->getProgressList();
+        $this->view->hasProject   = $hasProject;
 
         $this->display();
     }
@@ -454,6 +458,7 @@ class program extends control
         $uri = $this->app->getURI(true);
         $this->app->session->set('programProject', $uri, 'program');
         $this->app->session->set('projectList', $uri, 'program');
+        $this->app->session->set('createProjectLocate', $uri, 'program');
 
         $this->loadModel('datatable');
 

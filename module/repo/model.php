@@ -57,7 +57,7 @@ class repoModel extends model
         }
 
         common::setMenuVars('devops', $repoID);
-        session_start();
+        if(!session_id()) session_start();
         $this->session->set('repoID', $repoID);
         session_write_close();
     }

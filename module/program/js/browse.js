@@ -67,7 +67,7 @@ function showEditCheckbox(show)
             $tr.find('td:first').find('[name^="projectIdList"]').parent().remove();
         }
     });
-    if(show)
+    if(show && hasProject)
     {
         var tableFooter = "<div class='editCheckbox'><div class='checkbox-primary check-all'><input type='checkbox' id='checkAll' /><label>" + selectAll + "</label></div><div class='table-actions btn-toolbar'><button type='submit' class='btn'>" + edit + "</button></div></div>";
         $('#programForm').attr('action', createLink('project', 'batchEdit', 'from=program'));

@@ -1205,7 +1205,7 @@ EOF;
      * @access public
      * @return void
      */
-    public function preference()
+    public function preference($showTip = true)
     {
         $this->loadModel('setting');
 
@@ -1221,6 +1221,7 @@ EOF;
 
         $this->view->title      = $this->lang->my->common . $this->lang->colon . $this->lang->my->preference;
         $this->view->position[] = $this->lang->my->preference;
+        $this->view->showTip    = $showTip;
 
         $this->view->URSRList         = $this->loadModel('custom')->getURSRPairs();
         $this->view->URSR             = $this->setting->getURSR();

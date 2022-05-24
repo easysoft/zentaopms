@@ -1329,7 +1329,7 @@ class kanban extends control
         $cards = $this->kanban->getCardsByObject('region', $regionID, 1);
         foreach($this->config->kanban->fromType as $fromType)
         {
-            $cards = $this->kanban->getImportedCards($region->kanban, $cards, $fromType, 1);
+            $cards = $this->kanban->getImportedCards($region->kanban, $cards, $fromType, 1, $regionID);
         }
 
         $this->view->kanban      = $this->kanban->getByID($region->kanban);

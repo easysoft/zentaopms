@@ -450,7 +450,7 @@ class commonModel extends model
                         echo '<li class="user-tutorial">' . html::a(helper::createLink('tutorial', 'start'), "<i class='icon icon-guide'></i> " . $lang->tutorialAB, '', "class='iframe' data-class-name='modal-inverse' data-width='800' data-headerless='true' data-backdrop='true' data-keyboard='true'") . '</li>';
                     }
 
-                    echo '<li>' . html::a(helper::createLink('my', 'preference', '', '', true), "<i class='icon icon-controls'></i> " . $lang->preference, '', "class='iframe' data-width='700'") . '</li>';
+                    echo '<li>' . html::a(helper::createLink('my', 'preference', 'showTip=false', '', true), "<i class='icon icon-controls'></i> " . $lang->preference, '', "class='iframe' data-width='700'") . '</li>';
                 }
 
                 if(common::hasPriv('my', 'changePassword')) echo '<li>' . html::a(helper::createLink('my', 'changepassword', '', '', true), "<i class='icon icon-cog-outline'></i> " . $lang->changePassword, '', "class='iframe' data-width='600'") . '</li>';
@@ -664,7 +664,12 @@ class commonModel extends model
                         $params = "productID=$productID&branch=&moduleID=0&from=&param=0&storyID=0&extras=from=global";
                         break;
                     case 'execution':
-                        $params = "projectID=&executionID=0&copyExecutionID=0&planID=0&confirm=no&productID=0&extra=from=global";
+                        $projectID = 0;
+                        if(in_array($app->tab, array('project', 'execution')) and isset($lang->switcherMenu))
+                        {
+                            $projectID = isset($_SESSION['project']) ? $_SESSION['project'] : 0;
+                        }
+                        $params = "projectID={$projectID}&executionID=0&copyExecutionID=0&planID=0&confirm=no&productID=0&extra=from=global";
                         break;
                     case 'product':
                         $params = "programID=&extra=from=global";

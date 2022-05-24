@@ -602,6 +602,7 @@ class story extends control
         $this->view->branches         = $branches;
         /* When the user is product owner or add story in project or not set review, the default is not to review. */
         $this->view->needReview       = ($this->app->user->account == $product->PO || $executionID > 0 || $this->config->story->needReview == 0) ? 0 : 1;
+        $this->view->forceReview      = $this->story->checkForceReview();
         $this->view->executionID      = $executionID;
 
         $this->display();

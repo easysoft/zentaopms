@@ -10,7 +10,7 @@ $(function()
             $target.hide();
             $target.fadeIn(1000);
             order = 'order_asc'
-            history.pushState({}, 0, createLink('project', 'story', "executionID=" + executionID + '&orderBy=' + order));
+            history.pushState({}, 0, createLink('execution', 'story', "executionID=" + executionID + '&orderBy=' + order));
         });
     });
 

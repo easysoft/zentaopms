@@ -1109,6 +1109,7 @@ class doc extends control
     public function tableContents($type, $objectID = 0, $libID = 0)
     {
         list($libs, $libID, $object, $objectID) = $this->doc->setMenuByType($type, $objectID, $libID);
+        $this->session->set('createProjectLocate', $this->app->getURI(true), 'doc');
 
         $libID = (int)$libID;
 

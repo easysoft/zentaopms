@@ -679,7 +679,7 @@ class execution extends control
      * @access public
      * @return void
      */
-    public function story($executionID = 0, $orderBy = 'order_desc', $type = 'all', $param = 0, $recTotal = 0, $recPerPage = 50, $pageID = 1)
+    public function story($executionID = 0, $orderBy = 'order_asc', $type = 'all', $param = 0, $recTotal = 0, $recPerPage = 50, $pageID = 1)
     {
         /* Load these models. */
         $this->loadModel('story');
@@ -1626,6 +1626,7 @@ class execution extends control
         /* If the story of the product which linked the execution, you don't allow to remove the product. */
         $unmodifiableProducts = array();
         $unmodifiableBranches = array();
+        $linkedStoryIDList    = array();
         foreach($linkedProducts as $productID => $linkedProduct)
         {
             if(!isset($allProducts[$productID])) $allProducts[$productID] = $linkedProduct->name;
@@ -1639,6 +1640,7 @@ class execution extends control
                 {
                     array_push($unmodifiableProducts, $productID);
                     array_push($unmodifiableBranches, $branchID);
+                    $linkedStoryIDList[$productID][$branchID] = $executionStories[$productID][$branchID]->storyIDList;
                 }
             }
         }
@@ -1672,6 +1674,7 @@ class execution extends control
         $this->view->allProducts          = $allProducts;
         $this->view->linkedProducts       = $linkedProducts;
         $this->view->linkedBranches       = $linkedBranches;
+        $this->view->linkedStoryIDList    = $linkedStoryIDList;
         $this->view->branches             = $branches;
         $this->view->unmodifiableProducts = $unmodifiableProducts;
         $this->view->unmodifiableBranches = $unmodifiableBranches;
@@ -2655,6 +2658,7 @@ class execution extends control
         /* If the story of the product which linked the execution, you don't allow to remove the product. */
         $unmodifiableProducts = array();
         $unmodifiableBranches = array();
+        $linkedStoryIDList    = array();
         foreach($linkedProducts as $productID => $linkedProduct)
         {
             $linkedBranches[$productID] = array();
@@ -2666,6 +2670,7 @@ class execution extends control
                 {
                     array_push($unmodifiableProducts, $productID);
                     array_push($unmodifiableBranches, $branchID);
+                    $linkedStoryIDList[$productID][$branchID] = $executionStories[$productID][$branchID]->storyIDList;
                 }
             }
         }
@@ -2679,6 +2684,7 @@ class execution extends control
         $this->view->unmodifiableProducts = $unmodifiableProducts;
         $this->view->unmodifiableBranches = $unmodifiableBranches;
         $this->view->linkedBranches       = $linkedBranches;
+        $this->view->linkedStoryIDList    = $linkedStoryIDList;
         $this->view->branchGroups         = $this->execution->getBranchByProduct(array_keys($allProducts), $this->config->systemMode == 'new' ? $execution->project : 0, 'ignoreNormal|noclosed');
         $this->view->allBranches          = $this->execution->getBranchByProduct(array_keys($allProducts), $this->config->systemMode == 'new' ? $execution->project : 0, 'ignoreNormal');
 
@@ -3152,8 +3158,12 @@ class execution extends control
      */
     public function tips($executionID)
     {
-        $this->view->execution   = $this->execution->getById($executionID);
+        $execution = $this->execution->getById($executionID);
+        $projectID = $execution->project;
+
+        $this->view->execution   = $execution;
         $this->view->executionID = $executionID;
+        $this->view->projectID   = $projectID;
         $this->display('execution', 'tips');
     }
 
