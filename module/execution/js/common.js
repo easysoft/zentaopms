@@ -184,7 +184,7 @@ function loadPlans(product, branchID)
     var branchID  = typeof(branchID) == 'undefined' ? 0 : branchID;
     var index     = $(product).attr('id').replace('products', '');
 
-    $.get(createLink('product', 'ajaxGetPlans', "productID=" + productID + '&branch=0,' + branchID + '&planID=0&fieldID&needCreate=&expired=noclosed|' + (config.currentMethod == 'create' ? 'unexpired' : '') + '&param=skipParent'), function(data)
+    $.get(createLink('product', 'ajaxGetPlans', "productID=" + productID + '&branch=0,' + branchID + '&planID=0&fieldID&needCreate=&expired=noclosed,' + (config.currentMethod == 'create' ? 'unexpired' : '') + '&param=skipParent'), function(data)
     {
         if(data)
         {

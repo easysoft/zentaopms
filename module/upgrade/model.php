@@ -652,6 +652,9 @@ class upgradeModel extends model
             case 'max2_2':
                 $this->addDefaultKanbanPri();
                 break;
+            case 'max3_0':
+                $this->moveResult2Node();
+                break;
         }
     }
 

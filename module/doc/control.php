@@ -154,7 +154,11 @@ class doc extends control
         $executions = $this->execution->getList();
 
         /* Splice project name. */
-        foreach($executions as $executionID => $execution) $executions[$executionID] = $projects[$execution->project] . '/' . $execution->name;
+        foreach($executions as $executionID => $execution)
+        {
+            $executionPrefix          = isset($projects[$execution->project]) ? $projects[$execution->project] . '/' : '';
+            $executions[$executionID] = $executionPrefix . $execution->name;
+        }
 
         /* Get the project that has permission to view. */
         foreach($projects as $projectID => $project) if(!$this->app->user->admin and strpos(',' . $this->app->user->view->projects . ',', ',' . $projectID . ',') === false) unset($projects[$projectID]);

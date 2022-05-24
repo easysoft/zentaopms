@@ -181,54 +181,54 @@ class dao extends baseDAO
     }
 
     /**
-     * check workflow field rule. 
+     * Check workFlow field rule.
      * 
      * @access public
      * @return object the dao object self.
      */
-    public function checkflow()
+    public function checkFlow()
     {
-        global $app, $config;
+        global $app, $config, $lang;
 
         if(!isset($config->bizVersion)) return $this;
 
-        $module = $app->getmodulename();
-        $method = $app->getmethodname();
+        $module = $app->getModuleName();
+        $method = $app->getMethodName();
 
-        $flowaction = $this->dbh->query("select * from " . TABLE_WORKFLOWACTION . " where `module` = '{$module}' and `action` = '{$method}' and `buildin` = '1' and `extensiontype` = 'extend'")->fetch(PDO::FETCH_OBJ);
-        if(!$flowaction) return $this;
+        $flowAction = $this->dbh->query("SELECT * FROM " . TABLE_WORKFLOWACTION . " WHERE `module` = '{$module}' AND `action` = '{$method}' AND `buildin` = '1' AND `extensionType` = 'extend'")->fetch(PDO::FETCH_OBJ);
+        if(!$flowAction) return $this;
 
-        $flowfields = $this->dbh->query("select t2.name,t2.rules,t2.control,t2.field,t1.layoutrules from " . TABLE_WORKFLOWLAYOUT . " as t1 left join " . TABLE_WORKFLOWFIELD . " as t2 on t1.module = t2.module and t1.field = t2.field where t1.module = '{$module}' and t1.action = '{$method}' and t1.readonly = '0'")->fetchall();
-        if(!$flowfields) return $this;
+        $flowFields = $this->dbh->query("SELECT t2.name,t2.rules,t2.control,t2.field,t1.layoutRules FROM " . TABLE_WORKFLOWLAYOUT . " AS t1 LEFT JOIN " . TABLE_WORKFLOWFIELD . " AS t2 ON t1.module = t2.module AND t1.field = t2.field WHERE t1.module = '{$module}' AND t1.action = '{$method}' AND t1.readonly = '0'")->fetchAll();
+        if(!$flowFields) return $this;
 
         $rules    = array();
-        $rawrules = $this->dbh->query("select * from " . TABLE_WORKFLOWRULE)->fetchall();
-        foreach($rawrules as $rule) $rules[$rule->id] = $rule;
+        $rawRules = $this->dbh->query("SELECT * FROM " . TABLE_WORKFLOWRULE)->fetchAll();
+        foreach($rawRules as $rule) $rules[$rule->id] = $rule;
 
-        foreach($flowfields as $key => $field)
+        foreach($flowFields as $key => $field)
         {
             if(!$field)
             {
-                unset($flowfields[$key]);
+                unset($flowFields[$key]);
                 continue;
             }
 
-            $ruleids = explode(',', trim($field->rules, ',') . ',' . trim($field->layoutrules, ','));
-            $ruleids = array_unique($ruleids);
+            $ruleIDs = explode(',', trim($field->rules, ',') . ',' . trim($field->layoutRules, ','));
+            $ruleIDs = array_unique($ruleIDs);
 
-            $fieldrules = array();
-            foreach($ruleids as $ruleid)
+            $fieldRules = array();
+            foreach($ruleIDs as $ruleID)
             {
-                if(!$ruleid || !isset($rules[$ruleid])) continue;
+                if(!$ruleID || !isset($rules[$ruleID])) continue;
 
-                $fieldrules[] = $rules[$ruleid];
+                $fieldRules[] = $rules[$ruleID];
             }
 
-            $field->ruledata = $fieldrules;
-            $field->rules    = join(',', $ruleids);
+            $field->ruleData = $fieldRules;
+            $field->rules    = join(',', $ruleIDs);
         }
 
-        return $this->checkextend($flowfields);
+        return $this->checkExtend($flowFields);
     }
 
     /**
@@ -239,24 +239,24 @@ class dao extends baseDAO
      * @access public
      * @return object the dao object self
      */
-    public function checkextend($fields)
+    public function checkExtend($fields)
     {
         global $lang;
 
         if(!$fields) return $this;
         foreach($fields as $field)
         {
-            /* if the field don't have rule, don't check it. */
+            /* If the field don't have rule, don't check it. */
             if(empty($field->rules)) continue;
 
             if($field->control == 'file')
             {
-                foreach($field->ruledata as $rule)
+                foreach($field->ruleData as $rule)
                 {
                     if(empty($rule)) continue;
                     if($rule->type != 'system' || $rule->rule != 'notempty') continue;
 
-                    $files = !empty($_files[$field->field]) ? $_files[$field->field] : '';
+                    $files = !empty($_FILES[$field->field]) ? $_FILES[$field->field] : '';
                     if(empty($files)) dao::$errors[$field->field][] = sprintf($lang->error->notempty, $field->name);
                     break;
                 }
@@ -265,8 +265,8 @@ class dao extends baseDAO
 
             if(!isset($this->sqlobj->data->{$field->field})) $this->sqlobj->data->{$field->field} = false;
 
-            /* check rules of fields. */
-            foreach($field->ruledata as $rule)
+            /* Check rules of fields. */
+            foreach($field->ruleData as $rule)
             {
                 if(empty($rule)) continue;
 

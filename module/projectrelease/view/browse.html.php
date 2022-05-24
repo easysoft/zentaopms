@@ -55,7 +55,6 @@
     </thead>
     <tbody>
       <?php foreach($releases as $release):?>
-      <?php $canBeChanged = common::canBeChanged('projectrelease', $release);?>
       <tr>
         <td><?php echo html::a(inlink('view', "releaseID=$release->id"), sprintf('%03d', $release->id));?></td>
         <td>
@@ -73,27 +72,7 @@
           <span class="status-release status-<?php echo $release->status?>"><?php echo $status;?></span>
         </td>
         <?php foreach($extendFields as $extendField) echo "<td>" . $this->loadModel('flow')->getFieldValue($extendField, $release) . "</td>";?>
-        <td class='c-actions'>
-          <?php
-          if($canBeChanged)
-          {
-              if(common::hasPriv('projectrelease', 'linkStory')) echo html::a(inlink('view', "releaseID=$release->id&type=story&link=true"), '<i class="icon-link"></i> ', '', "class='btn' title='{$lang->release->linkStory}'");
-              if(common::hasPriv('projectrelease', 'linkBug')) echo html::a(inlink('view', "releaseID=$release->id&type=bug&link=true"), '<i class="icon-bug"></i> ', '', "class='btn' title='{$lang->release->linkBug}'");
-              if(common::hasPriv('projectrelease', 'changeStatus', $release))
-              {
-                  $changedStatus = $release->status == 'normal' ? 'terminate' : 'normal';
-                  echo html::a($this->createLink('projectrelease', 'changeStatus', "releaseID=$release->id&status=$changedStatus"), '<i class="icon-' . ($release->status == 'normal' ? 'pause' : 'play') . '"></i> ', 'hiddenwin', "class='btn' title='{$lang->release->changeStatusList[$changedStatus]}'");
-              }
-              common::printIcon('projectrelease', 'edit', "release=$release->id", $release, 'list');
-              common::printIcon('projectrelease', 'notify', "release=$release->id", $release, 'list', 'bullhorn', '', 'iframe', true);
-              if(common::hasPriv('projectrelease', 'delete', $release))
-              {
-                  $deleteURL = $this->createLink('projectrelease', 'delete', "releaseID=$release->id&confirm=yes");
-                  echo html::a("javascript:ajaxDelete(\"$deleteURL\", \"releaseList\", confirmDelete)", '<i class="icon-trash"></i>', '', "class='btn' title='{$lang->release->delete}'");
-              }
-          }
-          ?>
-        </td>
+        <td class='c-actions'><?php echo $this->projectrelease->buildOperateMenu($release, 'browse');?></td>
       </tr>
       <?php endforeach;?>
     </tbody>

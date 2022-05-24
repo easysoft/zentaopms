@@ -1169,8 +1169,14 @@ class productplanModel extends model
 
         if($type == 'view')
         {
-            if(common::hasPriv('productplan', 'edit', $plan)) $menu .= html::a(helper::createLink('productplan', 'edit', $params), "<i class='icon-common-edit icon-edit'></i> " . $this->lang->edit, '', "class='btn btn-link' title='{$this->lang->edit}'");
-            if($plan->parent >= 0 && common::hasPriv('productplan', 'delete', $plan)) $menu .= html::a(helper::createLink('productplan', 'delete', $params), "<i class='icon-common-delete icon-trash'></i> " . $this->lang->delete, '', "class='btn btn-link' title='{$this->lang->delete}' target='hiddenwin'");
+            $menu .= "<div class='divider'></div>";
+            $menu .= $this->buildFlowMenu('productplan', $plan, $type, 'direct');
+            $menu .= "<div class='divider'></div>";
+
+            $editClickable   = $this->buildMenu('productplan', 'edit',   $params, $plan, $type, '', '', '', '', '', '', false);
+            $deleteClickable = $this->buildMenu('productplan', 'delete', $params, $plan, $type, '', '', '', '', '', '', false);
+            if(common::hasPriv('productplan', 'edit')   and $editClickable)   $menu .= html::a(helper::createLink('productplan', 'edit', $params), "<i class='icon-common-edit icon-edit'></i> " . $this->lang->edit, '', "class='btn btn-link' title='{$this->lang->edit}'");
+            if(common::hasPriv('productplan', 'delete') and $deleteClickable) $menu .= html::a(helper::createLink('productplan', 'delete', $params), "<i class='icon-common-delete icon-trash'></i> " . $this->lang->delete, '', "class='btn btn-link' title='{$this->lang->delete}' target='hiddenwin'");
         }
 
         return $menu;

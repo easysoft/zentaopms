@@ -1499,4 +1499,91 @@ class programModel extends model
         $this->lang->switcherMenu = $this->getSwitcher($programID);
         common::setMenuVars('program', $programID);
     }
+
+    /**
+     * Build program action menu.
+     *
+     * @param  object $program
+     * @param  string $type
+     * @access public
+     * @return string
+     */
+    public function buildOperateMenu($program, $type = 'view')
+    {
+        $menu   = '';
+        $params = "programID=$program->id";
+        if($program->type == 'program' && strpos(",{$this->app->user->view->programs},", ",$program->id,") !== false)
+        {
+            if($program->status == 'wait' || $program->status == 'suspended')
+            {
+                $menu .= $this->buildMenu('program', 'start', $params, $program, $type, 'play', '', 'iframe', true, '', $this->lang->program->start);
+            }
+            if($program->status == 'doing')
+            {
+                $menu .= $this->buildMenu('program', 'close', $params, $program, $type, 'off', '', 'iframe', true);
+            }
+            if($program->status == 'closed')
+            {
+                $menu .= $this->buildMenu('program', 'activate', $params, $program, $type, 'magic', '', 'iframe', true);
+            }
+            if(common::hasPriv('program', 'suspend') || (common::hasPriv('program', 'close') && $program->status != 'doing') || (common::hasPriv('program', 'activate') && $program->status != 'closed'))
+            {
+                $menu .= "<div class='btn-group'>";
+                $menu .= "<button type='button' class='btn icon-caret-down dropdown-toggle' data-toggle='dropdown' title='{$this->lang->more}' style='width: 16px; padding-left: 0px;'></button>";
+                $menu .= "<ul class='dropdown-menu pull-right text-center' role='menu' style='min-width:auto; padding: 5px 10px;'>";
+                $menu .= $this->buildMenu('program', 'suspend', $params, $program, $type, 'pause', '', 'iframe', true, '', $this->lang->program->suspend);
+                if($program->status != 'doing')  $menu .= $this->buildMenu('program', 'close',    $params, $program, $type, 'off', '',   'iframe', true);
+                if($program->status != 'closed') $menu .= $this->buildMenu('program', 'activate', $params, $program, $type, 'magic', '', 'iframe', true);
+                $menu .= "</ul>";
+                $menu .= "</div>";
+            }
+
+            $disabled = $program->status == 'closed' ? 'disabled' : '';
+            $menu .= $this->buildMenu('program', 'edit',   $params, $program, $type, 'edit');
+            $menu .= $this->buildMenu('program', 'create', $params, $program, $type, 'split', '', '', '', $disabled, $this->lang->program->children);
+            if(common::hasPriv('program', 'delete'))
+            {
+                $menu .= $this->buildMenu('program', 'delete', $params, $program, $type, 'trash', 'hiddenwin', '', '', '', $this->lang->program->delete);
+            }
+        }
+        else if($program->type == 'project')
+        {
+            if($program->status == 'wait' || $program->status == 'suspended')
+            {
+                $menu .= $this->buildMenu('project', 'start', $params, $program, $type, 'play', '', 'iframe', true);
+            }
+            if($program->status == 'doing')  $menu .= $this->buildMenu('project', 'close',    $params, $program, $type, 'off',   '', 'iframe', true);
+            if($program->status == 'closed') $menu .= $this->buildMenu('project', 'activate', $params, $program, $type, 'magic', '', 'iframe', true);
+            if(common::hasPriv('project', 'suspend') || (common::hasPriv('project', 'close') && $program->status != 'doing') || (common::hasPriv('project', 'activate') && $program->status != 'closed'))
+            {
+                $menu .= "<div class='btn-group'>";
+                $menu .= "<button type='button' class='btn icon-caret-down dropdown-toggle' data-toggle='dropdown' title='{$this->lang->more}' style='width: 16px; padding-left: 0px;'></button>";
+                $menu .= "<ul class='dropdown-menu pull-right text-center' role='menu' style='min-width:auto; padding: 5px 10px;'>";
+                $menu .= $this->buildMenu('project', 'suspend', $params, $program, $type, 'pause', '', 'iframe', true);
+                if($program->status != 'doing')  $menu .= $this->buildMenu('project', 'close',    $params, $program, $type, 'off',   '', 'iframe', true);
+                if($program->status != 'closed') $menu .= $this->buildMenu('project', 'activate', $params, $program, $type, 'magic', '', 'iframe', true);
+                $menu .= "</ul>";
+                $menu .= "</div>";
+            }
+            $class = $program->model == 'kanban' ? 'disabled' : '';
+            $menu .= $this->buildMenu('project', 'edit',  $params, $program, $type, 'edit',  '', 'iframe', true);
+            $menu .= $this->buildMenu('project', 'team',  $params, $program, $type, 'group', '', $class,   '', 'data-app="project"');
+            $menu .= $this->buildMenu('project', 'group', $params, $program, $type, 'lock',  '', $class,   '', 'data-app="project"');
+            if(common::hasPriv('project', 'manageProducts') || common::hasPriv('project', 'whitelist') || common::hasPriv('project', 'delete'))
+            {
+                $menu .= "<div class='btn-group'>";
+                $menu .= "<button type='button' class='btn dropdown-toggle' data-toggle='dropdown' title='{$this->lang->more}'><i class='icon-more-alt'></i></button>";
+                $menu .= "<ul class='dropdown-menu pull-right text-center' role='menu'>";
+                $menu .= $this->buildMenu('project', 'manageProducts', "$params&from=browse",                $program, $type, 'link',         '', $class, '', "data-app={$this->app->tab}");
+                $menu .= $this->buildMenu('project', 'whitelist',      "$params&module=project&from=browse", $program, $type, 'shield-check', '', $class, '', "data-app='project'");
+                if(common::hasPriv('project','delete'))
+                {
+                    $menu .= $this->buildMenu("project", "delete", $params, $program, $type, 'trash', 'hiddenwin', '', '', "data-group='program'", $this->lang->delete);
+                }
+                $menu .= "</ul>";
+                $menu .= "</div>";
+            }
+        }
+        return $menu;
+    }
 }
