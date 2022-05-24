@@ -188,11 +188,15 @@
                 common::printIcon('programplan', 'edit', "stageID=$execution->id&projectID=$projectID", $execution, 'list', '', '', 'iframe', true);
 
                 $disabled = !empty($execution->children) ? ' disabled' : '';
-                if(common::hasPriv('execution', 'close', $execution))
+                if($execution->status != 'closed' and common::hasPriv('execution', 'close', $execution))
                 {
-                    if($execution->status != 'closed') common::printIcon('execution', 'close', "stageID=$execution->id", $execution, 'list', 'off', 'hiddenwin' , $disabled . ' iframe', true, '', $this->lang->programplan->close);
-                    if($execution->status == 'closed') common::printIcon('execution', 'activate', "stageID=$execution->id", $execution, 'list', 'magic', 'hiddenwin' , $disabled . ' iframe', true, '', $this->lang->programplan->activate);
+                    common::printIcon('execution', 'close', "stageID=$execution->id", $execution, 'list', 'off', 'hiddenwin' , $disabled . ' iframe', true, '', $this->lang->programplan->close);
                 }
+                elseif($execution->status == 'closed' and common::hasPriv('execution', 'activate', $execution))
+                {
+                    common::printIcon('execution', 'activate', "stageID=$execution->id", $execution, 'list', 'magic', 'hiddenwin' , $disabled . ' iframe', true, '', $this->lang->programplan->activate);
+                }
+
                 if(common::hasPriv('execution', 'delete', $execution))
                 {
                     common::printIcon('execution', 'delete', "stageID=$execution->id&confirm=no", $execution, 'list', 'trash', 'hiddenwin' , $disabled, '', '', $this->lang->programplan->delete);
@@ -273,11 +277,15 @@
                   common::printIcon('programplan', 'edit', "stageID=$child->id&projectID=$projectID", $child, 'list', '', '', 'iframe', true);
 
                   $disabled = !empty($child->children) ? ' disabled' : '';
-                  if(common::hasPriv('execution', 'close', $child))
+                  if(common::hasPriv('execution', 'close', $child) and $execution->status != 'closed')
                   {
-                      if($execution->status != 'closed') common::printIcon('execution', 'close', "stageID=$child->id", $child, 'list', 'off', '' , $disabled . ' iframe', true, '', $this->lang->programplan->close);
-                      if($execution->status == 'closed') common::printIcon('execution', 'activate', "stageID=$child->id", $child, 'list', 'magic', 'hiddenwin' , $disabled . ' iframe', true, '', $this->lang->programplan->activate);
+                      common::printIcon('execution', 'close', "stageID=$child->id", $child, 'list', 'off', '' , $disabled . ' iframe', true, '', $this->lang->programplan->close);
                   }
+                  elseif(common::hasPriv('execution', 'activate', $child) and $execution->status == 'closed')
+                  {
+                      common::printIcon('execution', 'activate', "stageID=$child->id", $child, 'list', 'magic', 'hiddenwin' , $disabled . ' iframe', true, '', $this->lang->programplan->activate);
+                  }
+
                   if(common::hasPriv('execution', 'delete', $child))
                   {
                       common::printIcon('execution', 'delete', "stageID=$child->id&confirm=no", $child, 'list', 'trash', 'hiddenwin' , $disabled, '', '', $this->lang->programplan->delete);
