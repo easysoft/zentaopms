@@ -72,7 +72,7 @@
               $canEdit     = common::hasPriv('kanban','edit');
               $canDelete   = common::hasPriv('kanban','delete');
               $canClose    = (common::hasPriv('kanban', 'close') and $kanban->status == 'active');
-              $canActivate = (common::hasPriv('kanban', 'activate') and $kanban->status == 'close');
+              $canActivate = (common::hasPriv('kanban', 'activate') and $kanban->status == 'closed');
               ?>
               <?php if($canEdit or $canDelete or $canClose or $canActivate):?>
               <div class='kanban-actions kanban-actions<?php echo $kanbanID;?>'>
