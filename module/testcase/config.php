@@ -20,7 +20,7 @@ $config->testcase->export->listFields   = array('type', 'stage', 'pri', 'status'
 $config->testcase->exportFields = '
     id, product, branch, module, story,
     title, precondition, stepDesc, stepExpect, real, keywords,
-    pri, type, stage, status, bugsAB, resultsAB, stepNumberAB, lastRunResult, openedBy, openedDate,
+    pri, type, stage, status, bugsAB, resultsAB, stepNumberAB, lastRunner, lastRunDate, lastRunResult, openedBy, openedDate,
     lastEditedBy, lastEditedDate, version, linkCase, files';
 
 $config->testcase->customCreateFields      = 'story,stage,pri,keywords';
