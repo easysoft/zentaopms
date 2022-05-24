@@ -157,18 +157,20 @@
       <?php echo html::commonButton($lang->edit, "data-form-action='$actionLink'");?>
       <?php endif;?>
       <?php if(common::hasPriv('productplan', 'batchChangeStatus')):?>
-        <button data-toggle="dropdown" type="button" class="btn"><?php echo $lang->productplan->planStatus;?> <span class="caret"></span></button>
-        <div class="dropdown-menu search-list">
-          <div class="list-group">
-            <?php
-            foreach($lang->productplan->statusList as $key => $status)
-            {
-                $isHiddenwin = $key == 'closed' ? '' : 'hiddenwin';
+        <div class="btn-group dropup">
+          <button data-toggle="dropdown" type="button" class="btn"><?php echo $lang->productplan->planStatus;?> <span class="caret"></span></button>
+          <div class="dropdown-menu search-list">
+            <div class="list-group">
+              <?php
+              foreach($lang->productplan->statusList as $key => $status)
+              {
+                  $isHiddenwin = $key == 'closed' ? '' : 'hiddenwin';
 
-                $actionLink = $this->createLink('productplan', 'batchChangeStatus', "status=$key&productID=$product->id");
-                echo html::a('javascript:;', $status, '', "onclick=\"setFormAction('$actionLink', '$isHiddenwin')\"");
-            }
-            ?>
+                  $actionLink = $this->createLink('productplan', 'batchChangeStatus', "status=$key&productID=$product->id");
+                  echo html::a('javascript:;', $status, '', "onclick=\"setFormAction('$actionLink', '$isHiddenwin')\"");
+              }
+              ?>
+            </div>
           </div>
         </div>
       <?php endif;?>
