@@ -287,22 +287,6 @@ class groupTest
     }
 
     /**
-     * Update view priv.
-     *
-     * @param  int    $groupID
-     * @access public
-     * @return bool
-     */
-    public function updateViewTest($groupID)
-    {
-        $objects = $this->objectModel->updateView($groupID);
-
-        if(dao::isError()) return dao::getError();
-
-        return $objects;
-    }
-
-    /**
      * Update privilege by module.
      *
      * @access public
