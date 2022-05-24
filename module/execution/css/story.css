@@ -14,3 +14,4 @@ th.c-pri{width:50px;}
 .closed-story {color: #e5e5e5;}
 .stageBox {height: 180px; overflow: scroll; background: #ffffff;}
 #executionStoryForm tbody tr td .label {max-width: 100px; text-overflow: unset;}
+#assignedTo{width:90px;}
