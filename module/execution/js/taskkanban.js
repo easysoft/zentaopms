@@ -9,7 +9,7 @@ function changeView(view)
  * @param {String|{account: string, avatar: string}} user User account or user object
  * @returns {string}
  */
-function renderUserAvatar(user, objectType, objectID, size)
+function renderUserAvatar(user, objectType, objectID, size, objectStatus)
 {
     var avatarSizeClass = 'avatar-' + (size || 'sm');
     var $noPrivAndNoAssigned = $('<div class="avatar has-text ' + avatarSizeClass + ' avatar-circle" title="' + noAssigned + '" style="background: #ccc"><i class="icon icon-person"></i></div>');
@@ -29,7 +29,7 @@ function renderUserAvatar(user, objectType, objectID, size)
         var link = createLink('bug', 'assignto', 'id=' + objectID, '', true);
     }
 
-    if(!user) return $('<a class="avatar has-text ' + avatarSizeClass + ' avatar-circle iframe" title="' + noAssigned + '" style="background: #ccc" href="' + link + '"><i class="icon icon-person"></i></a>');
+    if(!user) return objectStatus == 'closed' ? '' : $('<a class="avatar has-text ' + avatarSizeClass + ' avatar-circle iframe" title="' + noAssigned + '" style="background: #ccc" href="' + link + '"><i class="icon icon-person"></i></a>');
 
     if(typeof user === 'string') user = {account: user};
     if(!user.avatar && window.userList && window.userList[user.account]) user = window.userList[user.account];
@@ -39,7 +39,7 @@ function renderUserAvatar(user, objectType, objectID, size)
     if(objectType == 'story' && !priv.canAssignStory) return $noPrivAvatar;
     if(objectType == 'bug'   && !priv.canAssignBug)   return $noPrivAvatar;
 
-    return $('<a class="avatar has-text ' + avatarSizeClass + ' avatar-circle iframe" title="' + user.realname + '" href="' + link + '"/>').avatar({user: user});
+    return objectStatus == 'closed' ? '' : $('<a class="avatar has-text ' + avatarSizeClass + ' avatar-circle iframe" title="' + user.realname + '" href="' + link + '"/>').avatar({user: user});
 }
 
 /**
@@ -95,7 +95,7 @@ function renderStoryItem(item, $item, col)
         var idHtml     = scaleSize <= 1 ? ('<span class="info info-id text-muted">#' + item.id + '</span>') : '';
         var priHtml    = '<span class="info info-pri label-pri label-pri-' + item.pri + '" title="' + item.pri + '">' + item.pri + '</span>';
         var hoursHtml  = (item.estimate && scaleSize <= 1) ? ('<span class="info info-estimate text-muted">' + item.estimate + 'h</span>') : '';
-        var avatarHtml = renderUserAvatar(item.assignedTo, 'story', item.id);
+        var avatarHtml = renderUserAvatar(item.assignedTo, 'story', item.id, '', col.type);
         var $infos = $item.find('.infos');
         if(!$infos.length) $infos = $('<div class="infos"></div>');
         $infos.html([idHtml, priHtml, hoursHtml].join(''));
@@ -157,7 +157,7 @@ function renderBugItem(item, $item, col)
         var idHtml       = scaleSize <= 1 ? ('<span class="info info-id text-muted">#' + item.id + '</span>') : '';
         var severityHtml = scaleSize <= 1 ? ('<span class="info info-severity label-severity" data-severity="' + item.severity + '" title="' + item.severity + '"></span>') : '';
         var priHtml      = '<span class="info info-pri label-pri label-pri-' + item.pri + '" title="' + item.pri + '">' + item.pri + '</span>';
-        var avatarHtml   = renderUserAvatar(item.assignedTo, 'bug', item.id);
+        var avatarHtml   = renderUserAvatar(item.assignedTo, 'bug', item.id, '', col.type);
 
         var $infos = $item.find('.infos');
         if(!$infos.length) $infos = $('<div class="infos"></div>');
@@ -220,7 +220,7 @@ function renderTaskItem(item, $item, col)
     {
         var priHtml    = '<span class="info info-pri label-pri label-pri-' + item.pri + '" title="' + item.pri + '">' + item.pri + '</span>';
         var hoursHtml  = scaleSize <= 1 && item.status != 'wait' ? ('<span class="info info-estimate text-muted">' + taskLang.leftAB + ' ' + item.left + 'h</span>') : ('<span class="info info-estimate text-muted">' + taskLang.estimateAB + ' ' + item.estimate + 'h</span>');
-        var avatarHtml = renderUserAvatar(item.assignedTo, 'task', item.id);
+        var avatarHtml = renderUserAvatar(item.assignedTo, 'task', item.id, '', col.type);
 
         var $infos = $item.find('.infos');
         if(!$infos.length) $infos = $('<div class="infos"></div>');
