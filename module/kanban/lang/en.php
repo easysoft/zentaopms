@@ -8,6 +8,7 @@ $lang->kanban->deleteSpace         = 'Delete Space';
 $lang->kanban->sortSpace           = 'Sort Space';
 $lang->kanban->edit                = 'Edit Kanban';
 $lang->kanban->view                = 'View Kanban';
+$lang->kanban->activate            = 'Activate Kanban';
 $lang->kanban->close               = 'Close Kanban';
 $lang->kanban->delete              = 'Delete Kanban';
 $lang->kanban->createRegion        = 'Create Region';
