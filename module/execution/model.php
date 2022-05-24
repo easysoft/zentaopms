@@ -964,7 +964,7 @@ class executionModel extends model
         /* Update the status of the parent stage. */
         if($oldExecution->type == 'stage')
         {
-            $parent   = $this->getByID($oldExecution->parent);
+            $parent = $this->getByID($oldExecution->parent);
             if($parent->type == 'stage' and $parent->status == 'closed')
             {
                 $this->dao->update(TABLE_EXECUTION)->set('status')->eq('doing')->where('id')->eq($parent->id)->exec();
@@ -1015,7 +1015,7 @@ class executionModel extends model
             /* Update the status of the parent stage. */
             if($oldExecution->type == 'stage')
             {
-                $parent   = $this->getByID($oldExecution->parent);
+                $parent = $this->getByID($oldExecution->parent);
                 if($parent->type == 'stage')
                 {
                     $isClosed = true;
