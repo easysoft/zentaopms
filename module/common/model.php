@@ -918,6 +918,9 @@ class commonModel extends model
     public static function getMainNavList($moduleName)
     {
         global $lang;
+        global $app;
+
+        $app->loadLang('my');
 
         $menuOrder = $lang->mainNav->menuOrder;
         ksort($menuOrder);
@@ -954,6 +957,22 @@ class commonModel extends model
                 $methodList = array('caselib', 'issuelib', 'risklib', 'opportunitylib', 'practicelib', 'componentlib');
                 foreach($methodList as $method)
                 {
+                    if(common::hasPriv($currentModule, $method))
+                    {
+                        $display       = true;
+                        $currentMethod = $method;
+                        break;
+                    }
+                }
+            }
+
+            /* Check whether other preference item under the module have permissions. If yes, point to other methods. */
+            $moduleLinkList = $currentModule . 'LinkList';
+            if(!$display and isset($lang->my->$moduleLinkList))
+            {
+                foreach($lang->my->$moduleLinkList as $key => $linkList)
+                {
+                    $method = explode('-', $key)[1];
                     if(common::hasPriv($currentModule, $method))
                     {
                         $display       = true;
