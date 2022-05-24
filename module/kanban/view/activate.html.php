@@ -6,7 +6,7 @@
  * @license     ZPL (http://zpl.pub/page/zplv12.html)
  * @author      Mengyi Liu <liumengyi@easycorp.ltd>
  * @package     kanban
- * @version     $Id: activate.html.php 935 2021-12-09 10:49:24Z $
+ * @version     $Id: activate.html.php 935 2022-05-25 13:18:24Z $
  * @link        https://www.zentao.net
  */
 ?>
