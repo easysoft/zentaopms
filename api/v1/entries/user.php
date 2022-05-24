@@ -192,7 +192,7 @@ class userEntry extends Entry
                     break;
                 case 'task':
                     $info->task = array('total' => 0, 'tasks' => array());
-                    if(!common::hasPriv('my', 'task')) break;
+                    if(!common::hasPriv('my', 'work')) break;
 
                     $control = $this->loadController('my', 'task');
                     $control->task($this->param('type', 'assignedTo'), $this->param('order', 'id_desc'), $this->param('total', 0), $this->param('limit', 5), $this->param('page', 1));
@@ -207,7 +207,7 @@ class userEntry extends Entry
                     break;
                 case 'bug':
                     $info->bug = array('total' => 0, 'bugs' => array());
-                    if(!common::hasPriv('my', 'bug')) break;
+                    if(!common::hasPriv('my', 'work')) break;
 
                     $control = $this->loadController('my', 'bug');
                     $control->bug($this->param('type', 'assignedTo'), $this->param('order', 'id_desc'), $this->param('total', 0), $this->param('limit', 5), $this->param('page', 1));
@@ -263,7 +263,7 @@ class userEntry extends Entry
                     break;
                 case 'story':
                     $info->story = array('total' => 0, 'stories' => array());
-                    if(!common::hasPriv('my', 'story')) break;
+                    if(!common::hasPriv('my', 'work')) break;
 
                     $control = $this->loadController('my', 'story');
                     $control->story($this->param('type', 'assignedTo'), $this->param('order', 'id_desc'), $this->param('total', 0), $this->param('limit', 5), $this->param('page', 1));
@@ -285,7 +285,7 @@ class userEntry extends Entry
                     break;
                 case 'issue':
                     $info->issue = array('total' => 0, 'issues' => array());
-                    if(!common::hasPriv('my', 'issue')) break;
+                    if(!common::hasPriv('my', 'work')) break;
 
                     if($this->config->edition == 'max')
                     {
@@ -302,7 +302,7 @@ class userEntry extends Entry
                     break;
                 case 'risk':
                     $info->risk = array('total' => 0, 'risks' => array());
-                    if(!common::hasPriv('my', 'risk')) break;
+                    if(!common::hasPriv('my', 'work')) break;
 
                     if($this->config->edition == 'max')
                     {
@@ -319,7 +319,7 @@ class userEntry extends Entry
                     break;
                 case 'meeting':
                     $info->meeting = array('total' => 0, 'meetings' => array());
-                    if(!common::hasPriv('my', 'myMeeting')) break;
+                    if(!common::hasPriv('my', 'work')) break;
 
                     if($this->config->edition == 'max')
                     {
