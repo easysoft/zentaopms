@@ -250,17 +250,18 @@ class doc extends control
      *
      * @param int $libID
      * @param string $confirm yes|no
-     * @param string $from lib|book
+     * @param string $type    lib|book
+     * @param string $from    tableContents|objectLibs
      * @access public
      * @return void
      */
-    public function deleteLib($libID, $confirm = 'no', $from = 'lib')
+    public function deleteLib($libID, $confirm = 'no', $type = 'lib', $from = 'objectLibs')
     {
         if($libID == 'product' or $libID == 'execution') return;
         if($confirm == 'no')
         {
-            $deleteTip = $from == 'book' ? $this->lang->doc->confirmDeleteBook : $this->lang->doc->confirmDeleteLib;
-            return print(js::confirm($deleteTip, $this->createLink('doc', 'deleteLib', "libID=$libID&confirm=yes")));
+            $deleteTip = $type == 'book' ? $this->lang->doc->confirmDeleteBook : $this->lang->doc->confirmDeleteLib;
+            return print(js::confirm($deleteTip, $this->createLink('doc', 'deleteLib', "libID=$libID&confirm=yes&type=$lib&from=$from")));
         }
         else
         {
@@ -274,13 +275,9 @@ class doc extends control
                 return print(js::locate($this->createLink('doc', 'objectLibs', 'type=book'), 'parent.parent'));
             }
 
-            $browseLink = $this->createLink('doc', 'index');
-            if(in_array($this->app->tab, array('product', 'project', 'execution')))
-            {
-                $objectType = $lib->type;
-                $objectID   = $lib->{$objectType};
-                $browseLink = $this->createLink('doc', 'objectLibs', "type=$objectType&objectID=$objectID");
-            }
+            $objectType = $lib->type;
+            $objectID   = strpos(',product,project,execution,', ",$objectType,") !== false ? $lib->{$objectType} : 0;
+            $browseLink = $this->createLink('doc', $from, "type=$objectType&objectID=$objectID");
 
             return print(js::locate($browseLink, 'parent'));
         }

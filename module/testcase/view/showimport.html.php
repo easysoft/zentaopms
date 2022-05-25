@@ -31,18 +31,20 @@ $(function()
       <table class='table table-form' id='showData'>
         <thead>
           <tr>
+            <?php $requiredFields = $config->testcase->create->requiredFields;?>
             <th class='c-line-number'><?php echo $lang->lineNumber?></th>
             <th class='c-id'><?php echo $lang->idAB?></th>
             <?php if($product->type != 'normal'):?>
             <th class='c-branch'><?php echo $lang->testcase->branch?></th>
             <?php endif;?>
-            <th class='c-name required'><?php echo $lang->testcase->title?></th>
-            <th class='c-module'><?php echo $lang->testcase->module?></th>
-            <th class='c-story'><?php echo $lang->testcase->story?></th>
-            <th class='c-pri-box'><?php echo $lang->testcase->pri?></th>
-            <th class='c-type required'><?php echo $lang->testcase->type?></th>
-            <th class='c-stage'><?php echo $lang->testcase->stage?></th>
-            <th class='c-condition'><?php echo $lang->testcase->precondition?></th>
+            <th class='c-name      <?php if(strpos(",$requiredFields,", ',title,')        !== false) echo 'required';?>'><?php echo $lang->testcase->title?></th>
+            <th class='c-module    <?php if(strpos(",$requiredFields,", ',module,')       !== false) echo 'required';?>'><?php echo $lang->testcase->module?></th>
+            <th class='c-story     <?php if(strpos(",$requiredFields,", ',story,')        !== false) echo 'required';?>'><?php echo $lang->testcase->story?></th>
+            <th class='c-pri-box   <?php if(strpos(",$requiredFields,", ',pri,')          !== false) echo 'required';?>'><?php echo $lang->testcase->pri?></th>
+            <th class='c-type      <?php if(strpos(",$requiredFields,", ',type,')         !== false) echo 'required';?>'><?php echo $lang->testcase->type?></th>
+            <th class='c-stage     <?php if(strpos(",$requiredFields,", ',stage,')        !== false) echo 'required';?>'><?php echo $lang->testcase->stage?></th>
+            <th class='c-condition <?php if(strpos(",$requiredFields,", ',precondition,') !== false) echo 'required';?>'><?php echo $lang->testcase->precondition?></th>
+            <th class='c-keywords  <?php if(strpos(",$requiredFields,", ',keywords,')     !== false) echo 'required';?>'><?php echo $lang->testcase->keywords?></th>
             <?php if(!empty($appendFields)):?>
             <?php foreach($appendFields as $appendField):?>
             <th class='c-extend'><?php echo $lang->testcase->{$appendField->field}?></th>
@@ -79,7 +81,6 @@ $(function()
                   echo "<sub class='gray' style='vertical-align:sub;'>{$lang->testcase->new}</sub>";
               }
               echo html::hidden("product[$key]", $productID);
-              echo html::hidden("keywords[$key]", isset($case->keywords) ? $case->keywords : "");
               ?>
             </td>
             <?php $branchID = $branch;?>
@@ -104,6 +105,7 @@ $(function()
             <td><?php echo html::select("type[$key]", $lang->testcase->typeList, isset($case->type) ? $case->type : '', "class='form-control chosen'")?></td>
             <td style='overflow:visible'><?php echo html::select("stage[$key][]", $lang->testcase->stageList, !empty($case->stage) ? $case->stage : ((!empty($case->id) and isset($cases[$case->id])) ? $cases[$case->id]->stage : ''), "multiple='multiple' class='form-control chosen'")?></td>
             <td><?php echo html::textarea("precondition[$key]", isset($case->precondition) ? htmlSpecialString($case->precondition) : "", "class='form-control'")?></td>
+            <td><?php echo html::input("keywords[$key]", isset($case->keywords) ? $case->keywords : '', "class='form-control'")?></td>
             <?php if(!empty($appendFields)):?>
             <?php $this->loadModel('flow');?>
             <?php foreach($appendFields as $appendField):?>

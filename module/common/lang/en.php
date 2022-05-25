@@ -56,6 +56,7 @@ $lang->create         = 'Create';
 $lang->edit           = 'Edit';
 $lang->delete         = 'Delete';
 $lang->close          = 'Close';
+$lang->activate       = 'Activate';
 $lang->unlink         = 'Unlink';
 $lang->import         = 'Import';
 $lang->export         = 'Export';

@@ -5,6 +5,7 @@
 .c-story, .c-module, .c-type {width: 120px;}
 .c-stage {width: 160px;}
 .c-condition {width: 80px;}
+.c-keywords {width: 70px;}
 .c-step {width: 300px;}
 .form-actions .btn {margin-right: 20px;}
 .table td textarea {height: 32px;}

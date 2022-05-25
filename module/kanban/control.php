@@ -114,6 +114,36 @@ class kanban extends control
         $this->display();
     }
 
+    /**
+     * Activate a space.
+     *
+     * @param int     $spaceID
+     * @access public
+     * @return array
+     */
+    public function activateSpace($spaceID)
+    {
+        $this->loadModel('action');
+
+        if(!empty($_POST))
+        {
+            $changes = $this->kanban->activateSpace($spaceID);
+
+            if(dao::isError()) return print(js::error(dao::getError()));
+
+            $actionID = $this->action->create('kanbanSpace', $spaceID, 'activated', $this->post->comment);
+            $this->action->logHistory($actionID, $changes);
+
+            return print(js::reload('parent.parent'));
+        }
+
+        $this->view->space   = $this->kanban->getSpaceById($spaceID);
+        $this->view->actions = $this->action->getList('kanbanSpace', $spaceID);
+        $this->view->users   = $this->loadModel('user')->getPairs('noletter');
+
+        $this->display();
+    }
+
     /*
      * Close a space.
      *

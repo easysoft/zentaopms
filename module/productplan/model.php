@@ -99,6 +99,7 @@ class productplanModel extends model
             $planProjects = $this->dao->select('t1.*,t2.type')->from(TABLE_PROJECTPRODUCT)->alias('t1')
                 ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')
                 ->where('t1.product')->eq($product)
+                ->andWhere('t2.deleted')->eq(0)
                 ->andWhere('t1.plan')->in(array_keys($plans))
                 ->andWhere('t2.type')->in('sprint,stage,kanban')
                 ->fetchPairs('plan', 'project');

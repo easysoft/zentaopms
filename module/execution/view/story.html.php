@@ -46,8 +46,8 @@
     <?php
     if(common::hasPriv('execution', 'story'))
     {
-        echo html::a($this->createLink('execution', 'story', "executionID=$execution->id&orderBy=order_asc&type=all"), "<span class='text'>{$lang->story->allStories}</span>" . ($type == 'all' ? " <span class='label label-light label-badge'>{$pager->recTotal}</span>" : ''), '', "class='btn btn-link" . ($type == 'all' ? " btn-active-text" : '') . "'");
-        echo html::a($this->createLink('execution', 'story', "executionID=$execution->id&orderBy=order_asc&type=unclosed"), "<span class='text'>{$lang->story->unclosed}</span>" . ($type == 'unclosed' ? " <span class='label label-light label-badge'>{$pager->recTotal}</span>" : ''), '', "class='btn btn-link" . ($type == 'unclosed' ? " btn-active-text" : '') . "'");
+        echo html::a($this->createLink('execution', 'story', "executionID=$execution->id&orderBy=order_desc&type=all"), "<span class='text'>{$lang->story->allStories}</span>" . ($type == 'all' ? " <span class='label label-light label-badge'>{$pager->recTotal}</span>" : ''), '', "class='btn btn-link" . ($type == 'all' ? " btn-active-text" : '') . "'");
+        echo html::a($this->createLink('execution', 'story', "executionID=$execution->id&orderBy=order_desc&type=unclosed"), "<span class='text'>{$lang->story->unclosed}</span>" . ($type == 'unclosed' ? " <span class='label label-light label-badge'>{$pager->recTotal}</span>" : ''), '', "class='btn btn-link" . ($type == 'unclosed' ? " btn-active-text" : '') . "'");
     }
     if(common::hasPriv('execution', 'storykanban')) echo html::a($this->createLink('execution', 'storykanban', "executionID=$execution->id"), "<span class='text'>{$lang->execution->kanban}</span>", '', "class='btn btn-link'");
     ?>
@@ -206,7 +206,7 @@
             <th class='c-name {sorter:false}'><?php common::printOrderLink('title', $orderBy, $vars, $lang->execution->storyTitle);?></th>
             <th class='c-category {sorter:false}'><?php common::printOrderLink('category', $orderBy, $vars, $lang->story->category);?></th>
             <th class='c-user {sorter:false}'> <?php common::printOrderLink('openedBy', $orderBy, $vars, $lang->openedByAB);?></th>
-            <th class='c-user {sorter:false}'> <?php common::printOrderLink('assignedTo', $orderBy, $vars, $lang->assignedToAB);?></th>
+            <th class='c-assignedTo {sorter:false} text-center'> <?php common::printOrderLink('assignedTo', $orderBy, $vars, $lang->assignedToAB);?></th>
             <th class='c-estimate {sorter:false} text-right'> <?php common::printOrderLink('estimate', $orderBy, $vars, $lang->story->estimateAB);?></th>
             <th class='c-status {sorter:false}'> <?php common::printOrderLink('status', $orderBy, $vars, $lang->statusAB);?></th>
             <th class='c-stage {sorter:false}'> <?php common::printOrderLink('stage', $orderBy, $vars, $lang->story->stageAB);?></th>
@@ -243,7 +243,7 @@
             </td>
             <td class='c-category' title='<?php echo zget($lang->story->categoryList, $story->category);?>'><?php echo zget($lang->story->categoryList, $story->category);?></td>
             <td class='c-user' title='<?php echo zget($users, $story->openedBy);?>'><?php echo zget($users, $story->openedBy);?></td>
-            <td class='c-assignedTo <?php if(zget($users, $story->assignedTo) == 'Closed') echo 'closed-story'?>' title='<?php echo zget($users, $story->assignedTo);?>'><?php echo zget($users, $story->assignedTo);?></td>
+            <td class='c-assignedTo <?php if(zget($users, $story->assignedTo) == 'Closed') echo 'closed-story'?> text-center' title='<?php echo zget($users, $story->assignedTo);?>'><?php $this->loadModel('story')->printAssignedHtml($story,$users);?></td>
             <td class='c-estimate text-right' title="<?php echo $story->estimate . ' ' . $lang->hourCommon;?>"><?php echo $story->estimate . $config->hourUnit;?></td>
             <?php $status = $this->processStatus('story', $story);?>
             <td class='c-status' title='<?php echo $status;?>'>

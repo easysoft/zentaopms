@@ -16,6 +16,8 @@ $lang->programplan->list          = '阶段列表';
 $lang->programplan->create        = '设置阶段';
 $lang->programplan->edit          = '编辑';
 $lang->programplan->delete        = '删除阶段';
+$lang->programplan->close         = '关闭阶段';
+$lang->programplan->activate      = '激活阶段';
 $lang->programplan->createSubPlan = '创建二级阶段';
 
 $lang->programplan->parent           = '父阶段';

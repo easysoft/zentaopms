@@ -233,15 +233,14 @@ $('.c-group').change(function()
  */
 function createLaneMenu(options)
 {
-    var lane      = options.$trigger.closest('.kanban-lane').data('lane');
-    var laneCount = options.$trigger.closest('.kanban-board').children('.kanban-lane').length;
+    var lane = options.$trigger.closest('.kanban-lane').data('lane');
 
     var privs = lane.actions;
     if(!privs.length) return [];
 
     var items = [];
     if(privs.includes('setLane')) items.push({label: kanbanLang.setLane, icon: 'edit', url: createLink('kanban', 'setLane', 'laneID=' + lane.id + '&executionID=0&from=kanban'), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width': '635px'}});
-    if(privs.includes('deleteLane') && laneCount > 1) items.push({label: kanbanLang.deleteLane, icon: 'trash', url: createLink('kanban', 'deleteLane', 'lane=' + lane.id), attrs: {'target': 'hiddenwin'}});
+    if(privs.includes('deleteLane')) items.push({label: kanbanLang.deleteLane, icon: 'trash', url: createLink('kanban', 'deleteLane', 'lane=' + lane.id), attrs: {'target': 'hiddenwin'}});
 
     var bounds = options.$trigger[0].getBoundingClientRect();
     items.$options = {x: bounds.right, y: bounds.top};

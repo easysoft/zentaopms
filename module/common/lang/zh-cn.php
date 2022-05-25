@@ -55,6 +55,7 @@ $lang->refresh        = '刷新';
 $lang->create         = '新建';
 $lang->edit           = '编辑';
 $lang->delete         = '删除';
+$lang->activate       = '激活';
 $lang->close          = '关闭';
 $lang->unlink         = '移除';
 $lang->import         = '导入';
