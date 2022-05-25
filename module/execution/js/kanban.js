@@ -391,8 +391,14 @@ function findDropColumns($element, $root)
 
 /**
  * Render user avatar
- * @param {String|{account: string, avatar: string}} user User account or user object
- * @returns {string}
+ *
+ * @param  array $user
+ * @param  string $objectType
+ * @param  int $objectID
+ * @param  int $size
+ * @param  string $objectStatus
+ * @access public
+ * @return void
  */
 function renderUserAvatar(user, objectType, objectID, size, objectStatus)
 {
