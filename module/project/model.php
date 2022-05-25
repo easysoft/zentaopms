@@ -2482,15 +2482,6 @@ class projectModel extends model
         global $lang;
         $project = $this->getByID($objectID);
 
-        if(isset($project->model) and $project->model == 'waterfall')
-        {
-            global $lang;
-            $this->loadModel('execution');
-            $lang->executionCommon = $lang->project->stage;
-
-            include $this->app->getModulePath('', 'execution') . 'lang/' . $this->app->getClientLang() . '.php';
-        }
-
         $model = 'scrum';
         if($project) $model = $project->model;
 
@@ -2506,6 +2497,15 @@ class projectModel extends model
         $methodName = $this->app->rawMethod;
         $this->loadModel('common')->resetProjectPriv($objectID);
         if(!$this->common->isOpenMethod($moduleName, $methodName) and !commonModel::hasPriv($moduleName, $methodName)) $this->common->deny($moduleName, $methodName, false);
+
+        if(isset($project->model) and $project->model == 'waterfall')
+        {
+            global $lang;
+            $this->loadModel('execution');
+            $lang->executionCommon = $lang->project->stage;
+
+            include $this->app->getModulePath('', 'execution') . 'lang/' . $this->app->getClientLang() . '.php';
+        }
 
         $this->lang->switcherMenu = $this->getSwitcher($objectID, $this->app->rawModule, $this->app->rawMethod);
 
