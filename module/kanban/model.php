@@ -1863,7 +1863,7 @@ class kanbanModel extends model
     /**
      * Activate a space.
      *
-     * @param int     $spaceID
+     * @param  int    $spaceID
      * @access public
      * @return array
      */

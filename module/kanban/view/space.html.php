@@ -55,7 +55,7 @@
           <?php if($class == 'disabled'):?>
           <?php common::printLink('kanban', 'activateSpace', "spaceID={$space->id}", '<i class="icon icon-magic"></i> ' . $lang->activate, '', "class='iframe'", '', true);?>
           <?php else:?>
-          <?php common::printLink('kanban', 'closeSpace', "spaceID={$space->id}", '<i class="icon icon-close"></i> ' . $lang->close, '', "class='iframe'", '', true);?>
+          <?php common::printLink('kanban', 'closeSpace', "spaceID={$space->id}", '<i class="icon icon-off"></i> ' . $lang->close, '', "class='iframe'", '', true);?>
           <?php endif;?>
           <?php common::printLink('kanban', 'deleteSpace', "spaceID={$space->id}", '<i class="icon icon-trash"></i> ' . $lang->delete, 'hiddenwin', '', '', true);?>
         </div>
