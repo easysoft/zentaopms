@@ -2218,7 +2218,7 @@ class bugModel extends model
     {
         $datas = $this->dao->select('severity AS name, COUNT(*) AS value')->from(TABLE_BUG)->where($this->reportCondition())->groupBy('name')->orderBy('value DESC')->fetchAll('name');
         if(!$datas) return array();
-        foreach($datas as $severity => $data) if(isset($this->lang->bug->severityList[$severity])) $data->name = $this->lang->bug->severityList[$severity];
+        foreach($datas as $severity => $data) if(isset($this->lang->bug->severityList[$severity])) $data->name = $this->lang->bug->report->bugsPerSeverity->graph->xAxisName . ':' . $this->lang->bug->severityList[$severity];
         return $datas;
     }
 
