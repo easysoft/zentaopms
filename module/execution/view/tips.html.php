@@ -9,6 +9,13 @@
   </div>
 </div>
 <script>
+/**
+ * Click the return to iteration list button to close tipModal.
+ *
+ * @param  int $projectID
+ * @access public
+ * @return void
+ */
 function closeTipModal(projectID)
 {
     $(".close").trigger("click");
