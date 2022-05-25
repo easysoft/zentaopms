@@ -18,12 +18,16 @@
 <div id='mainContent' class='main-content'>
   <?php
   /* IF it is multi-task, the suspened can only be restarted by the current user who it is assigned to. */
-  if(!empty($task->team) && $task->assignedTo != $this->app->user->account):
+  if(!empty($task->team) and (!isset($task->team[$app->user->account]) or ($task->assignedTo != $app->user->account and $task->mode == 'linear'))):
   ?>
   <div class="alert with-icon">
     <i class="icon-exclamation-sign"></i>
     <div class="content">
+      <?php if($task->assignedTo != $app->user->account and $task->mode == 'linear'):?>
       <p><?php echo sprintf($lang->task->deniedNotice, '<strong>' . $task->assignedToRealName . '</strong>', $lang->task->start);?></p>
+      <?php else:?>
+      <p><?php echo sprintf($lang->task->deniedNotice, '<strong>' . $lang->task->teamMember . '</strong>', $lang->task->start);?></p>
+      <?php endif;?>
     </div>
   </div>
   <?php else:?>

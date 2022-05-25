@@ -71,14 +71,18 @@
           <?php endif;?>
           <?php endforeach;?>
           <?php endif;?>
-      <?php if(!empty($task->team) && $task->assignedTo != $this->app->user->account):?>
+      <?php if(!empty($task->team) and (!isset($task->team[$app->user->account]) or ($task->assignedTo != $app->user->account and $task->mode == 'linear'))):?>
         </tbody>
       </table>
     </form>
     <div class="alert with-icon">
       <i class="icon-exclamation-sign"></i>
       <div class="content">
+        <?php if($task->assignedTo != $app->user->account and $task->mode == 'linear'):?>
         <p><?php echo sprintf($lang->task->deniedNotice, '<strong>' . $task->assignedToRealName . '</strong>', $lang->task->logEfforts);?></p>
+        <?php else:?>
+        <p><?php echo sprintf($lang->task->deniedNotice, '<strong>' . $lang->task->teamMember . '</strong>', $lang->task->logEfforts);?></p>
+        <?php endif;?>
       </div>
     </div>
     <?php else:?>

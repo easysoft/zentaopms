@@ -268,6 +268,12 @@
                   <th><?php echo $lang->task->assignedTo;?></th>
                   <td><?php echo $task->assignedTo ? $task->assignedToRealName . $lang->at . $task->assignedDate : $lang->noData;?></td>
                 </tr>
+                <?php if($task->mode):?>
+                <tr>
+                  <th><?php echo $lang->task->mode;?></th>
+                  <td><?php echo zget($lang->task->modeList, $task->mode);?></td>
+                </tr>
+                <?php endif;?>
                 <tr>
                   <th><?php echo $lang->task->type;?></th>
                   <td><?php echo $lang->task->typeList[$task->type];?></td>

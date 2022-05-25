@@ -87,7 +87,7 @@ js::set('dittoNotice', $dittoNotice);
           }
           ?>
           <tr>
-            <?php $disableAssignedTo = (isset($teams[$taskID]) and $tasks[$taskID]->assignedTo != $this->app->user->account) ? "disabled='disabled'" : '';?>
+            <?php $disableAssignedTo = (isset($teams[$taskID]) and (($tasks[$taskID]->assignedTo != $this->app->user->account and $tasks[$taskID]->mode == 'linear') or !isset($teams[$taskID][$app->user->account]))) ? "disabled='disabled'" : '';?>
             <?php $disableHour = (isset($teams[$taskID]) or $tasks[$taskID]->parent < 0) ? "disabled='disabled'" : '';?>
             <?php
             $members      = array('' => '', 'ditto' => $this->lang->task->ditto);

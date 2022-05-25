@@ -895,6 +895,12 @@ class taskModel extends model
             return false;
         }
 
+        /* If a multiple task is assigned to a team member who is not the task, assign to the team member instead. */
+        if(!$this->post->assignedTo and !empty($_POST['team']) and !in_array($oldTask->assignedTo, $this->post->team))
+        {
+            $_POST['assignedTo'] = reset($_POST['team']);
+        }
+
         /* When the selected parent task is a common task and has consumption, select other parent tasks. */
         if($this->post->parent > 0)
         {
@@ -942,7 +948,7 @@ class taskModel extends model
 
             ->setIF($oldTask->name != $this->post->name || $oldTask->estStarted != $this->post->estStarted || $oldTask->deadline != $this->post->deadline, 'version', $oldTask->version + 1)
 
-            ->setDefault('lastEditedBy',   $this->app->user->account)
+            ->setDefault('lastEditedBy', $this->app->user->account)
             ->add('lastEditedDate', $now)
             ->stripTags($this->config->task->editor->edit['id'], $this->config->allowedTags)
             ->cleanINT('execution,story,module')
@@ -1006,6 +1012,10 @@ class taskModel extends model
                 reset($teams);
                 $task->assignedTo = key($teams);
             }
+        }
+        else
+        {
+            $task->mode = '';
         }
 
         $executionType  = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($task->execution)->fetch('type');
