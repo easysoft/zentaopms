@@ -807,3 +807,22 @@ function setBranchRelated(branchID, productID, num)
         });
     }
 }
+$(document).ready(function()
+{
+    $('#customField').click(function()
+    {
+        $('#formSettingForm > .checkboxes > .checkbox-primary > input').each(function()
+        {
+            var field    = ',' + $(this).val() + ',';
+            var required = ',' + requiredFields + ',';
+            if(required.indexOf(field) >= 0) $(this).attr('disabled', 'disabled');
+        });
+    });
+
+    $('#formSettingForm .btn-primary').click(function()
+    {
+        $('#formSettingForm > .checkboxes > .checkbox-primary > input').removeAttr('disabled');
+    });
+
+
+});
