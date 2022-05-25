@@ -111,8 +111,6 @@
             $this->loadModel('flow');
             foreach($extendFields as $extendField)
             {
-                $object = new stdclass();
-                $object->{$extendField->field} = $extendField->default;
                 echo "<td" . (($extendField->control == 'select' or $extendField->control == 'multi-select') ? " style='overflow:visible'" : '') . ">" . $this->flow->getFieldControl($extendField, $object, $extendField->field . "[$i]") . "</td>";
             }
             ?>
@@ -160,8 +158,6 @@
       $this->loadModel('flow');
       foreach($extendFields as $extendField) 
       {   
-          $object = new stdclass();
-          $object->{$extendField->field} = $extendField->default;
           echo "<td" . (($extendField->control == 'select' or $extendField->control == 'multi-select') ? " style='overflow:visible'" : '') . ">" . $this->flow->getFieldControl($extendField, $object, $extendField->field . "[%s]") . "</td>";
       }   
       ?>
