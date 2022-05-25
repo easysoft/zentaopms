@@ -137,10 +137,11 @@ if($this->app->tab == 'project')   js::set('objectID', $bug->project);
                 </tr>
                 <tr>
                   <th><?php echo $lang->bug->status;?></th>
-                  <td><?php
-                            echo zget($lang->bug->statusList, $bug->status);
-                            echo html::hidden('status', $bug->status);
-                      ?>
+                  <td>
+                    <?php
+                    echo zget($lang->bug->statusList, $bug->status);
+                    echo html::hidden('status', $bug->status);
+                    ?>
                  </td>
                 </tr>
                 <tr>
