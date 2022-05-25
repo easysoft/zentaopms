@@ -13,8 +13,8 @@ $(function()
         {
             if($("#client").val() !== '' && $("#client").val().indexOf(" ") == -1)
             {
-                $("#clientLabel").css('color','#0c64eb');
-                $("#client").attr('style', 'border-color: #0c64eb !important; box-shadow: 0 0 6px #0c64eb !important;');
+                $("#clientLabel").css('color', '#0c64eb');
+                $("#client").attr('style', 'border-color: #0c64eb !important;box-shadow: 0 0 6px #0c64eb !important;');
             }
             else
             {
