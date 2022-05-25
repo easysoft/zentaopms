@@ -340,6 +340,7 @@ $config->bug->datatable->fieldList['actions']['width']    = '150';
 $config->bug->datatable->fieldList['actions']['required'] = 'yes';
 
 $config->bug->colorList = new stdclass();
+$config->bug->colorList->pri[0]      = '#c0c0c0';
 $config->bug->colorList->pri[1]      = '#d50000';
 $config->bug->colorList->pri[2]      = '#ff9800';
 $config->bug->colorList->pri[3]      = '#2098ee';

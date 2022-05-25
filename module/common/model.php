@@ -664,11 +664,7 @@ class commonModel extends model
                         $params = "productID=$productID&branch=&moduleID=0&from=&param=0&storyID=0&extras=from=global";
                         break;
                     case 'execution':
-                        $projectID = 0;
-                        if(in_array($app->tab, array('project', 'execution')) and isset($lang->switcherMenu))
-                        {
-                            $projectID = isset($_SESSION['project']) ? $_SESSION['project'] : 0;
-                        }
+                        $projectID = isset($_SESSION['project']) ? $_SESSION['project'] : 0;
                         $params = "projectID={$projectID}&executionID=0&copyExecutionID=0&planID=0&confirm=no&productID=0&extra=from=global";
                         break;
                     case 'product':
@@ -2300,7 +2296,7 @@ EOD;
 
             if(isset($this->app->user))
             {
-                if(in_array($module, $this->config->programPriv->waterfall) and $this->app->tab == 'project') return true;
+                if(in_array($module, $this->config->programPriv->waterfall) and $this->app->tab == 'project' and $method != 'browse') return true;
 
                 $this->app->user = $this->session->user;
                 if(!commonModel::hasPriv($module, $method)) $this->deny($module, $method);

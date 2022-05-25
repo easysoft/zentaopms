@@ -128,6 +128,7 @@ EOT;
         </tr>
         <?php endif;?>
         <?php if($module == 'testcase'):?>
+        <?php js::set('oldNeedReview', $needReview);?>
         <tr <?php if($needReview) echo "class='hidden'"?>>
           <th><?php echo $lang->custom->forceReview;?></th>
           <td><?php echo html::select('forceReview[]', $users, $forceReview, "class='form-control chosen' multiple");?></td>

@@ -277,13 +277,13 @@
                   common::printIcon('programplan', 'edit', "stageID=$child->id&projectID=$projectID", $child, 'list', '', '', 'iframe', true);
 
                   $disabled = !empty($child->children) ? ' disabled' : '';
-                  if(common::hasPriv('execution', 'close', $child) and $execution->status != 'closed')
+                  if(common::hasPriv('execution', 'close', $child) and $child->status != 'closed')
                   {
                       common::printIcon('execution', 'close', "stageID=$child->id", $child, 'list', 'off', '' , $disabled . ' iframe', true, '', $this->lang->programplan->close);
                   }
-                  elseif(common::hasPriv('execution', 'activate', $child) and $execution->status == 'closed')
+                  elseif(common::hasPriv('execution', 'activate', $child) and $child->status == 'closed')
                   {
-                      common::printIcon('execution', 'activate', "stageID=$child->id", $child, 'list', 'magic', 'hiddenwin' , $disabled . ' iframe', true, '', $this->lang->programplan->activate);
+                      common::printIcon('execution', 'activate', "stageID=$child->id", $child, 'list', 'magic', '' , $disabled . ' iframe', true, '', $this->lang->programplan->activate);
                   }
 
                   if(common::hasPriv('execution', 'delete', $child))

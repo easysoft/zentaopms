@@ -1,4 +1,5 @@
 .table table td,.outer .table table tbody > tr:last-child td {padding: 2px 0 2px 5px !important; border: none !important;}
+.c-name {min-width: 120px;}
 .c-branch {width: 120px;}
 .c-line-number {width: 50px;}
 .c-id {width: 40px;}

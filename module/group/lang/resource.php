@@ -620,6 +620,7 @@ $lang->resource->kanban->createSpace        = 'createSpace';
 $lang->resource->kanban->editSpace          = 'editSpace';
 $lang->resource->kanban->closeSpace         = 'closeSpace';
 $lang->resource->kanban->deleteSpace        = 'deleteSpace';
+$lang->resource->kanban->activateSpace      = 'activateSpace';
 $lang->resource->kanban->sortSpace          = 'sortSpace';
 $lang->resource->kanban->create             = 'create';
 $lang->resource->kanban->edit               = 'edit';
@@ -714,6 +715,7 @@ $lang->kanban->methodOrder[225] = 'batchCreateCard';
 $lang->kanban->methodorder[230] = 'import';
 $lang->kanban->methodorder[235] = 'enableArchived';
 $lang->kanban->methodorder[240] = 'activate';
+$lang->kanban->methodorder[245] = 'activateSpace';
 
 /* Execution. */
 $lang->resource->execution = new stdclass();

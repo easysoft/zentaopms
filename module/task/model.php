@@ -133,6 +133,7 @@ class taskModel extends model
 
             /* Fix Bug #2466 */
             if($this->post->multiple) $task->assignedTo = '';
+            if(!$this->post->multiple or count(array_filter($this->post->team)) < 1) $task->mode = '';
             $this->dao->insert(TABLE_TASK)->data($task, $skip = 'gitlab,gitlabProject')
                 ->autoCheck()
                 ->batchCheck($requiredFields, 'notempty')
@@ -895,6 +896,12 @@ class taskModel extends model
             return false;
         }
 
+        /* If a multiple task is assigned to a team member who is not the task, assign to the team member instead. */
+        if(!$this->post->assignedTo and !empty($_POST['team']) and !in_array($oldTask->assignedTo, $this->post->team))
+        {
+            $_POST['assignedTo'] = reset($_POST['team']);
+        }
+
         /* When the selected parent task is a common task and has consumption, select other parent tasks. */
         if($this->post->parent > 0)
         {
@@ -942,7 +949,7 @@ class taskModel extends model
 
             ->setIF($oldTask->name != $this->post->name || $oldTask->estStarted != $this->post->estStarted || $oldTask->deadline != $this->post->deadline, 'version', $oldTask->version + 1)
 
-            ->setDefault('lastEditedBy',   $this->app->user->account)
+            ->setDefault('lastEditedBy', $this->app->user->account)
             ->add('lastEditedDate', $now)
             ->stripTags($this->config->task->editor->edit['id'], $this->config->allowedTags)
             ->cleanINT('execution,story,module')
@@ -1006,6 +1013,10 @@ class taskModel extends model
                 reset($teams);
                 $task->assignedTo = key($teams);
             }
+        }
+        else
+        {
+            $task->mode = '';
         }
 
         $executionType  = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($task->execution)->fetch('type');
@@ -1966,6 +1977,7 @@ class taskModel extends model
         {
             $oldChildrenTasks = $this->dao->select('*')->from(TABLE_TASK)->where('parent')->eq($taskID)->fetchAll('id');
             unset($task->assignedTo);
+            unset($task->id);
             $this->dao->update(TABLE_TASK)->data($task)->autoCheck()->where('parent')->eq((int)$taskID)->exec();
             $this->dao->update(TABLE_TASK)->set('assignedTo=openedBy')->where('parent')->eq((int)$taskID)->exec();
             if(!dao::isError() and count($oldChildrenTasks) > 0)
@@ -2051,6 +2063,7 @@ class taskModel extends model
         {
             $oldChildrenTasks = $this->dao->select('*')->from(TABLE_TASK)->where('parent')->eq($taskID)->fetchAll('id');
             unset($task->left);
+            unset($task->id);
             $this->dao->update(TABLE_TASK)->data($task)->autoCheck()->where('parent')->eq((int)$taskID)->exec();
             $this->computeWorkingHours($taskID);
             if(!dao::isError() and count($oldChildrenTasks) > 0)

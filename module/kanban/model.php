@@ -1863,7 +1863,7 @@ class kanbanModel extends model
     /**
      * Activate a space.
      *
-     * @param int     $spaceID
+     * @param  int    $spaceID
      * @access public
      * @return array
      */
@@ -3703,7 +3703,6 @@ class kanbanModel extends model
                 $count = $this->dao->select('COUNT(id) AS count')->from(TABLE_KANBANLANE)
                     ->where('deleted')->eq('0')
                     ->andWhere('region')->eq($object->region)
-                    ->beginIF($action == 'deletelane')->andWhere('type')->eq($object->type)->fi()
                     ->beginIF($action == 'sortlane')->andWhere('`group`')->eq($object->group)->fi()
                     ->fetch('count');
                 return $count > 1;

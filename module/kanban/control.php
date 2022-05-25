@@ -117,7 +117,7 @@ class kanban extends control
     /**
      * Activate a space.
      *
-     * @param int     $spaceID
+     * @param  int    $spaceID
      * @access public
      * @return array
      */

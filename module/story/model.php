@@ -437,9 +437,12 @@ class storyModel extends model
     public function batchCreate($productID = 0, $branch = 0, $type = 'story')
     {
         $forceReview = $this->checkForceReview();
+
+        $reviewers = '';
         foreach($_POST['title'] as $index => $value)
         {
-            if($_POST['title'][$index] and isset($_POST['reviewer'][$index])) $_POST['reviewer'][$index] = array_filter($_POST['reviewer'][$index]);
+            if($_POST['title'][$index] and isset($_POST['reviewer'][$index]) and empty($_POST['reviewDitto'][$index])) $reviewers = $_POST['reviewer'][$index] = array_filter($_POST['reviewer'][$index]);
+            if($_POST['title'][$index] and isset($_POST['reviewer'][$index]) and !empty($_POST['reviewDitto'][$index])) $_POST['reviewer'][$index] = $reviewers;
             if($_POST['title'][$index] and empty($_POST['reviewer'][$index]) and $forceReview)
             {
                 dao::$errors[] = $this->lang->story->errorEmptyReviewedBy;
@@ -478,15 +481,11 @@ class storyModel extends model
 
         $extendFields = $this->getFlowExtendFields();
         $data         = array();
-        $reviewers    = '';
         foreach($stories->title as $i => $title)
         {
             if(empty($title)) continue;
 
             if(empty($stories->reviewer[$i]) and empty($stories->reviewerDitto[$i])) $stories->reviewer[$i] = array();
-            $reviewers = (isset($stories->reviewDitto[$i])) ? $reviewers : $stories->reviewer[$i];
-            $_POST['reviewer'][$i] = $reviewers;
-            $stories->reviewer[$i] = $reviewers;
 
             $story = new stdclass();
             $story->type       = $type;

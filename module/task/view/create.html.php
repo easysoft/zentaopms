@@ -77,6 +77,10 @@
             <button id='selectAllUser' type="button" class="btn btn-link<?php if($task->type !== 'affair') echo ' hidden';?>"><?php echo $lang->task->selectAllUser;?></button>
           </td>
         </tr>
+        <tr class='hidden modeBox'>
+          <th><?php echo $lang->task->mode;?></th>
+          <td><?php echo html::select('mode', $lang->task->modeList, '', "class='form-control chosen'");?></td>
+        </tr>
         <?php if($execution->type == 'kanban'):?>
         <tr>
           <th><?php echo $lang->kanbancard->region;?></th>
@@ -98,7 +102,7 @@
           <td colspan='3'>
             <span id='storyBox' class="<?php if(!empty($stories)) echo 'hidden';?> "><?php printf($lang->task->noticeLinkStory, html::a($this->createLink('execution', 'linkStory', "executionID=$execution->id"), $lang->execution->linkStory, '', 'class="text-primary"'), html::a("javascript:loadStories($execution->id)", $lang->refresh, '', 'class="text-primary"'));?></span>
             <div class='input-group <?php if(empty($stories)) echo "hidden";?>'>
-              <?php echo html::select('story', array($task->story => (empty($stories) or !isset($stories[$task->story])) ? '': $stories[$task->story]), $task->story, "class='form-control chosen' onchange='setStoryRelated();'");?>
+              <?php echo html::select('story', $stories, $task->story, "class='form-control chosen' onchange='setStoryRelated();'");?>
               <span class='input-group-btn' id='preview'><a href='#' class='btn iframe'><?php echo $lang->preview;?></a></span>
             </div>
           </td>

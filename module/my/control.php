@@ -695,10 +695,11 @@ EOF;
      * @param  int     $recTotal
      * @param  int     $recPerPage
      * @param  int     $pageID
+     * @param  string  $orderBy
      * @access public
      * @return void
      */
-    public function project($status = 'doing', $recTotal = 0, $recPerPage = 15, $pageID = 1)
+    public function project($status = 'doing', $recTotal = 0, $recPerPage = 15, $pageID = 1, $orderBy = 'id_desc')
     {
         $this->loadModel('program');
         $this->app->loadLang('project');
@@ -713,7 +714,7 @@ EOF;
 
         /* Get PM id list. */
         $accounts = array();
-        $projects = $this->user->getObjects($this->app->user->account, 'project', $status, 'id_desc', $pager);
+        $projects = $this->user->getObjects($this->app->user->account, 'project', $status, $orderBy, $pager);
         foreach($projects as $project)
         {
             if(!empty($project->PM) and !in_array($project->PM, $accounts)) $accounts[] = $project->PM;
@@ -727,6 +728,10 @@ EOF;
         $this->view->PMList     = $PMList;
         $this->view->pager      = $pager;
         $this->view->status     = $status;
+        $this->view->recTotal   = $recTotal;
+        $this->view->recPerPage = $recPerPage;
+        $this->view->pageID     = $pageID;
+        $this->view->orderBy    = $orderBy;
         $this->display();
     }
 

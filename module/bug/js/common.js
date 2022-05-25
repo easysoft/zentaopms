@@ -807,6 +807,7 @@ function setBranchRelated(branchID, productID, num)
         });
     }
 }
+
 $(document).ready(function()
 {
     $('#customField').click(function()
@@ -823,6 +824,4 @@ $(document).ready(function()
     {
         $('#formSettingForm > .checkboxes > .checkbox-primary > input').removeAttr('disabled');
     });
-
-
 });

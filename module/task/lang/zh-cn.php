@@ -72,6 +72,7 @@ $lang->task->color             = '标题颜色';
 $lang->task->name              = '任务名称';
 $lang->task->type              = '任务类型';
 $lang->task->typeAB            = '类型';
+$lang->task->mode              = '任务模式';
 $lang->task->sync2Gitlab       = '同步到GitLab';
 $lang->task->pri               = '优先级';
 $lang->task->mailto            = '抄送给';
@@ -149,6 +150,7 @@ $lang->task->parentAB          = '父';
 $lang->task->lblPri            = 'P';
 $lang->task->lblHour           = '(h)';
 $lang->task->lblTestStory      = "测试{$lang->SRCommon}";
+$lang->task->teamMember        = '团队成员';
 
 /* Fields of zt_taskestimate. */
 $lang->task->task    = '任务';
@@ -197,6 +199,9 @@ $lang->task->priList[4] = '4';
 $lang->task->reasonList['']       = '';
 $lang->task->reasonList['done']   = '已完成';
 $lang->task->reasonList['cancel'] = '已取消';
+
+$lang->task->modeList['linear'] = '串行';
+$lang->task->modeList['multi']  = '并行';
 
 $lang->task->afterChoices['continueAdding'] = "继续为该{$lang->SRCommon}添加任务";
 $lang->task->afterChoices['toTaskList']     = '返回任务列表';
