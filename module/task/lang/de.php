@@ -68,6 +68,7 @@ $lang->task->color             = 'Color';
 $lang->task->name              = 'Name';
 $lang->task->type              = 'Typ';
 $lang->task->typeAB            = 'Typ';
+$lang->task->mode              = 'Mode';
 $lang->task->pri               = 'Priorität';
 $lang->task->mailto            = 'Mail an';
 $lang->task->estimate          = 'Geplant(h)';
@@ -131,6 +132,7 @@ $lang->task->parentAB          = 'Hauptaufgabe';
 $lang->task->lblPri            = 'P';
 $lang->task->lblHour           = '(h)';
 $lang->task->lblTestStory      = 'Story Tested';
+$lang->task->teamMember        = 'Team Member';
 
 $lang->task->ditto             = 'Dito';
 $lang->task->dittoNotice       = "Diese Aufgabe gehört nicht zum %s wie die Vorherige!";
@@ -171,6 +173,9 @@ $lang->task->priList[4]  = '4';
 $lang->task->reasonList['']       = '';
 $lang->task->reasonList['done']   = 'Erledigt';
 $lang->task->reasonList['cancel'] = 'Abgebrochen';
+
+$lang->task->modeList['linear'] = 'Serial';
+$lang->task->modeList['multi']  = 'Parallel';
 
 $lang->task->afterChoices['continueAdding'] = ' Weitere Aufgaben erfassen';
 $lang->task->afterChoices['toTaskList']     = 'Zurück zur Aufgabenliste';

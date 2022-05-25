@@ -68,6 +68,7 @@ $lang->task->color             = 'Couleur';
 $lang->task->name              = 'Nom';
 $lang->task->type              = 'Type';
 $lang->task->typeAB            = 'Type';
+$lang->task->mode              = 'Mode';
 $lang->task->pri               = 'Priorité';
 $lang->task->mailto            = 'Mailto';
 $lang->task->estimate          = 'Estimés';
@@ -131,6 +132,7 @@ $lang->task->parentAB          = 'Parent';
 $lang->task->lblPri            = 'P';
 $lang->task->lblHour           = '(h)';
 $lang->task->lblTestStory      = 'Story Testée';
+$lang->task->teamMember        = 'Team Member';
 
 $lang->task->ditto             = 'Idem';
 $lang->task->dittoNotice       = "Cette Tâche n'est pas associée au %s comme la précédente peut l'être !";
@@ -171,6 +173,9 @@ $lang->task->priList[4]  = '4';
 $lang->task->reasonList['']       = '';
 $lang->task->reasonList['done']   = 'Fait';
 $lang->task->reasonList['cancel'] = 'Annulé';
+
+$lang->task->modeList['linear'] = 'Serial';
+$lang->task->modeList['multi']  = 'Parallel';
 
 $lang->task->afterChoices['continueAdding'] = ' Continuer Ajouter Tâches';
 $lang->task->afterChoices['toTaskList']     = 'Aller à la liste des Tâches';

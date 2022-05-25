@@ -5,7 +5,7 @@ $(function()
         $('.table-wrapper').each(function()
         {
             var $this = $(this);
-            $this.css('max-height', $this.closest('.table').find('.chart-wrapper').outerHeight());
+            $this.css('max-height', $this.closest('.table-row.chart-row').find('.chart-wrapper').outerHeight());
         });
     };
     resizeChartTable();

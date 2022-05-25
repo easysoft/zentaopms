@@ -23,6 +23,7 @@ function loadExecutionMembers(executionID)
 {
     $("#multipleBox").removeAttr("checked");
     $('.team-group').addClass('hidden');
+    $(".modeBox").addClass("hidden");
     $.get(createLink('execution', 'ajaxGetMembers', 'executionID=' + executionID + '&assignedTo=' + $('#assignedTo').val()), function(data)
     {
         $('#assignedTo_chosen').remove();
@@ -141,6 +142,7 @@ function setOwners(result)
 {
     $("#multipleBox").removeAttr("checked");
     $('.team-group').addClass('hidden');
+    $('.modeBox').addClass('hidden');
     $('#assignedTo, #assignedTo_chosen').removeClass('hidden');
     $('#assignedTo').next('.picker').removeClass('hidden');
     if(result == 'affair')
@@ -150,6 +152,7 @@ function setOwners(result)
         $('#assignedTo').chosen();
         $('.affair').hide();
         $('.team-group').addClass('hidden');
+        $('.modeBox').addClass('hidden');
         $('#selectAllUser').removeClass('hidden');
     }
     else if($('#assignedTo').attr('multiple') == 'multiple')
@@ -421,7 +424,7 @@ $(document).ready(function()
 
     $(window).resize();
 
-    /* show team menu. */
+    /* Show team menu. */
     $('[name^=multiple]').change(function()
     {
         if($(this).prop('checked'))
@@ -429,6 +432,7 @@ $(document).ready(function()
             $('#assignedTo, #assignedTo_chosen').addClass('hidden');
             $('#assignedTo').next('.picker').addClass('hidden');
             $('.team-group').removeClass('hidden');
+            $('.modeBox').removeClass('hidden');
             $('#estimate').attr('readonly', true);
         }
         else
@@ -436,6 +440,7 @@ $(document).ready(function()
             $('#assignedTo, #assignedTo_chosen').removeClass('hidden');
             $('#assignedTo').next('.picker').removeClass('hidden');
             $('.team-group').addClass('hidden');
+            $('.modeBox').addClass('hidden');
             $('#estimate').attr('readonly', false);
         }
         $('#dataPlanGroup').fixInputGroup();

@@ -19,6 +19,9 @@
 <?php js::set('oldExecutionID', $task->execution);?>
 <?php js::set('oldConsumed', $task->consumed);?>
 <?php js::set('taskStatus', $task->status);?>
+<?php js::set('currentUser', $app->user->account);?>
+<?php js::set('team', $task->team);?>
+<?php js::set('members', $members);?>
 <?php js::set('confirmChangeExecution', $lang->task->confirmChangeExecution);?>
 <?php js::set('changeExecutionConfirmed', false);?>
 <?php js::set('newRowCount', count($task->team) < 6 ? 6 - count($task->team) : 1);?>
@@ -127,7 +130,7 @@
               <?php endif;?>
               <tr>
                 <th><?php echo $lang->task->assignedTo;?></th>
-                <?php $disableAssignedTo = (!empty($task->team) and $task->assignedTo != $this->app->user->account) ? "disabled='disabled'" :'';?>
+                <?php $disableAssignedTo = (!empty($task->team) and (($task->assignedTo != $this->app->user->account and $task->mode == 'linear') or !isset($task->team[$app->user->account]))) ? "disabled='disabled'" :'';?>
                 <?php
                 $taskMembers = array();
                 if(!empty($task->team))
@@ -145,6 +148,11 @@
                 }
                 ?>
                 <td><span id="assignedToIdBox"><?php echo html::select('assignedTo', $taskMembers, $task->assignedTo, "class='form-control chosen' {$disableAssignedTo}");?></span></td>
+              </tr>
+              <tr class="modeBox <?php echo $task->mode ? '' : 'hidden';?>">
+                <th><?php echo $lang->task->mode;?></th>
+                <?php $disabledMode = isset($task->team[$app->user->account]) ? '' : "disabled='disabled'"?>
+                <td><?php echo html::select('mode', $lang->task->modeList, $task->mode, "class='form-control chosen' $disabledMode onchange='updateAssignedTo()'");?></td>
               </tr>
               <tr class='<?php echo empty($task->team) ? 'hidden' : ''?>' id='teamTr'>
                 <th><?php echo $lang->task->team;?></th>

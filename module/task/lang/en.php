@@ -72,6 +72,7 @@ $lang->task->color             = 'Color';
 $lang->task->name              = 'Name';
 $lang->task->type              = 'Type';
 $lang->task->typeAB            = 'Type';
+$lang->task->mode              = 'Mode';
 $lang->task->sync2Gitlab       = 'Sync to GitLab';
 $lang->task->pri               = 'Priority';
 $lang->task->mailto            = 'Mailto';
@@ -149,6 +150,7 @@ $lang->task->parentAB          = 'Parent';
 $lang->task->lblPri            = 'P';
 $lang->task->lblHour           = '(h)';
 $lang->task->lblTestStory      = 'Story Tested';
+$lang->task->teamMember        = 'Team Member';
 
 /* Fields of zt_taskestimate. */
 $lang->task->task    = 'Task';
@@ -197,6 +199,9 @@ $lang->task->priList[4]  = '4';
 $lang->task->reasonList['']       = '';
 $lang->task->reasonList['done']   = 'Done';
 $lang->task->reasonList['cancel'] = 'Cancelled';
+
+$lang->task->modeList['linear'] = 'Serial';
+$lang->task->modeList['multi']  = 'Parallel';
 
 $lang->task->afterChoices['continueAdding'] = ' Continue Adding Tasks';
 $lang->task->afterChoices['toTaskList']     = 'Go to Task List';

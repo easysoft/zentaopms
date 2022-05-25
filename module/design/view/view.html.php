@@ -71,7 +71,7 @@
             </tr>
             <tr>
               <th><?php echo $lang->design->story;?></th>
-              <td><?php echo $design->story ? html::a($this->createLink('story', 'view', "id=$design->story", '', true), zget($stories, $design->story), '',"class=iframe") : '';?></td>
+              <td><?php echo $design->story ? html::a($this->createLink('story', 'view', "id=$design->story"), zget($stories, $design->story)) : '';?></td>
             </tr>
             <tr>
               <th><?php echo $lang->design->submission;?></th>
