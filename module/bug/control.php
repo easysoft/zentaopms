@@ -66,7 +66,8 @@ class bug extends control
         }
         else
         {
-            $products = $this->product->getPairs('', 0, 'program_asc');
+            $mode     = (empty($this->config->CRProduct)) ? 'noclosed' : '';
+            $products = $this->product->getPairs($mode, 0, 'program_asc');
         }
         $this->view->products = $this->products = $products;
     }
