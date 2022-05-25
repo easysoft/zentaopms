@@ -220,8 +220,11 @@ class design extends control
      */
     public function view($designID = 0)
     {
-        $design = $this->design->getByID($designID);
+        $design    = $this->design->getByID($designID);
         $productID = $this->commonAction($design->project, $design->product, $designID);
+
+        $this->session->set('revisionList', $this->app->getURI(true));
+        $this->session->set('storyList', $this->app->getURI(true), 'product');
 
         $this->view->title      = $this->lang->design->common . $this->lang->colon . $this->lang->design->view;
         $this->view->position[] = $this->lang->design->view;
