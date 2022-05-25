@@ -108,21 +108,4 @@
     </div>
   </div>
 </div>
-<script>
-$('#repoForm').bind('DOMNodeInserted', function(e)
-{
-    if($("#clientLabel").length > 0)
-    {
-        if($("#client").val() !== '')
-        {
-            $("#clientLabel").css('color','#0c64eb');
-            $("#client").attr('style', 'border-color: #0c64eb !important;');
-        }
-        else
-        {
-            $("#client").removeAttr("style");
-        }
-    }
-});
-</script>
 <?php include '../../common/view/footer.html.php'; ?>
