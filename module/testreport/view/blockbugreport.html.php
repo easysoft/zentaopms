@@ -216,6 +216,7 @@ for(var key in bugPriList)
     var pri = {
         label: priName,
         color: currentColor,
+        fillColor: currentColor,
         data:  [bugStageGroups[key]['generated'], bugStageGroups[key]['legacy'], bugStageGroups[key]['resolved']]
     }
     priList.push(pri);
