@@ -309,4 +309,69 @@ class myModel extends model
 
         return $actions;
     }
+
+    /**
+     * Get assigned by me objects.
+     *
+     * @param string $account
+     * @param int    $limit
+     * @param string $orderBy
+     * @param int    $pager
+     * @param int    $projectID
+     * @param string $objectType
+     * @access public
+     * @return array
+     */
+    public function getAssignedByMe($account, $limit = 0, $pager = null, $orderBy = "id_desc", $projectID = 0, $objectType = '')
+    {
+        $module = $objectType == 'requirement' ? 'story' : $objectType;
+        $this->loadModel($module);
+
+        $objectIDList = $this->dao->select('objectID')->from(TABLE_ACTION)
+            ->where('actor')->eq($account)
+            ->andWhere('objectType')->eq($module)
+            ->andWhere('action')->eq('assigned')
+            ->fetchAll('objectID');
+
+        $objectList = $this->dao->select('*')->from($this->config->objectTables[$module])
+            ->where('deleted')->eq(0)
+            ->andWhere('id')->in(array_keys($objectIDList))
+            ->beginIF($objectType == 'requirement' or $objectType == 'story')->andWhere('type')->eq($objectType)->fi()
+            ->orderBy($orderBy)
+            ->page($pager)
+            ->fetchAll('id');
+
+        if($objectType == 'task')
+        {
+            $executionList = array();
+            foreach($objectList as $task) $executionList[$task->execution] = $task->execution;
+            $objectPairs = $this->dao->select('id,name')->from(TABLE_PROJECT)->where('id')->in($executionList)->fetchPairs('id');
+            foreach($objectList as $task) $task->executionName = zget($objectPairs, $task->execution, '');
+
+            if($objectList) return $this->loadModel('task')->processTasks($objectList);
+            return $objectList;
+        }
+
+        if($objectType == 'bug')
+        {
+            $productList = array();
+            foreach($objectList as $bug) $productList[$bug->product] = $bug->product;
+            $productPairs = $this->dao->select('id,name')->from(TABLE_PRODUCT)->where('id')->in($productList)->fetchPairs('id');
+            foreach($objectList as $bug) $bug->productName = zget($productPairs, $bug->product, '');
+        }
+
+        if($objectType == 'requirement' or $objectType == 'story')
+        {
+            $productList = array();
+            foreach($objectList as $story) $productList[$story->product] = $story->product;
+            $productPairs = $this->dao->select('id,name')->from(TABLE_PRODUCT)->where('id')->in($productList)->fetchPairs('id');
+            foreach($objectList as $story) $story->productTitle = zget($productPairs, $story->product, '');
+
+            $planList = array();
+            foreach($objectList as $story) $planList[$story->plan] = $story->plan;
+            $planPairs = $this->dao->select('id,title')->from(TABLE_PRODUCTPLAN)->where('id')->in($planList)->fetchPairs('id');
+            foreach($objectList as $story) $story->planTitle = zget($planPairs, $story->plan, '');
+        }
+        return $objectList;
+    }
 }

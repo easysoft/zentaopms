@@ -136,15 +136,11 @@ $lang->productplan->beginLetterParentTip = "The start date of the child plan[%s]
 $lang->productplan->endGreaterParentTip  = "The completion date of the child plan[%s]: %s, cannot be greater than the completion date of the parent plan: %s.";
 
 $lang->productplan->featureBar['browse']['all']    = 'All';
+$lang->productplan->featureBar['browse']['undone'] = 'Undone';
 $lang->productplan->featureBar['browse']['wait']   = 'Waiting';
 $lang->productplan->featureBar['browse']['doing']  = 'Doing';
 $lang->productplan->featureBar['browse']['done']   = 'Done';
 $lang->productplan->featureBar['browse']['closed'] = 'Closed';
-
-$lang->productplan->statusList['wait']   = 'Wait';
-$lang->productplan->statusList['doing']  = 'Doing';
-$lang->productplan->statusList['done']   = 'Done';
-$lang->productplan->statusList['closed'] = 'Closed';
 
 $lang->productplan->orderList['begin_desc'] = 'Begin Descend';
 $lang->productplan->orderList['begin_asc']  = 'Begin Ascend';

@@ -14,6 +14,7 @@
 <?php js::set('testcaseBatchCreateNum', $config->testcase->batchCreate);?>
 <?php js::set('productID', $productID);?>
 <?php js::set('branch', $branch);?>
+<?php js::set('requiredFields', $config->testcase->create->requiredFields)?>
 <div id="mainContent" class="main-content fade">
   <div class="main-header">
     <h2>
@@ -108,12 +109,7 @@
             <td class='<?php echo zget($visibleFields, 'review', 'hidden')?>'><?php echo html::select("needReview[$i]", $lang->testcase->reviewList, $needReview, "class='form-control'");?></td>
             <?php
             $this->loadModel('flow');
-            foreach($extendFields as $extendField)
-            {
-                $object = new stdclass();
-                $object->{$extendField->field} = $extendField->default;
-                echo "<td" . (($extendField->control == 'select' or $extendField->control == 'multi-select') ? " style='overflow:visible'" : '') . ">" . $this->flow->getFieldControl($extendField, $object, $extendField->field . "[$i]") . "</td>";
-            }
+            foreach($extendFields as $extendField) echo "<td" . (($extendField->control == 'select' or $extendField->control == 'multi-select') ? " style='overflow:visible'" : '') . ">" . $this->flow->getFieldControl($extendField, '', $extendField->field . "[$i]") . "</td>";
             ?>
           </tr>
           <?php endfor;?>
@@ -157,12 +153,7 @@
       <td class='<?php echo zget($visibleFields, 'review', 'hidden')?>'><?php echo html::select("needReview[%s]", $lang->testcase->reviewList, $needReview, "class='form-control chosen'");?></td>
       <?php 
       $this->loadModel('flow');
-      foreach($extendFields as $extendField) 
-      {   
-          $object = new stdclass();
-          $object->{$extendField->field} = $extendField->default;
-          echo "<td" . (($extendField->control == 'select' or $extendField->control == 'multi-select') ? " style='overflow:visible'" : '') . ">" . $this->flow->getFieldControl($extendField, $object, $extendField->field . "[%s]") . "</td>";
-      }   
+      foreach($extendFields as $extendField) echo "<td" . (($extendField->control == 'select' or $extendField->control == 'multi-select') ? " style='overflow:visible'" : '') . ">" . $this->flow->getFieldControl($extendField, '', $extendField->field . "[%s]") . "</td>";
       ?>
     </tr>
   </tbody>

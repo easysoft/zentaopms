@@ -128,7 +128,7 @@ $lang->my->dividerMenu = ',work,dynamic,';
 
 /* Program menu. */
 $lang->program->homeMenu         = new stdclass();
-$lang->program->homeMenu->browse = array('link' => "{$lang->program->list}|program|browse|", 'alias' => 'create,edit');
+$lang->program->homeMenu->browse = array('link' => "{$lang->program->list}|program|browse|", 'alias' => 'create,edit', 'subModule' => 'project');
 $lang->program->homeMenu->kanban = array('link' => "{$lang->program->kanban}|program|kanban|");
 
 $lang->program->menu              = new stdclass();
@@ -476,7 +476,7 @@ $lang->company->menuOrder[30] = 'addUser';
 $lang->admin->menu            = new stdclass();
 $lang->admin->menu->index     = array('link' => "$lang->indexPage|admin|index", 'alias' => 'register,certifytemail,certifyztmobile,ztcompany');
 $lang->admin->menu->company   = array('link' => "{$lang->personnel->common}|company|browse|", 'subModule' => ',user,dept,group,');
-$lang->admin->menu->model     = array('link' => "$lang->model|custom|browsestoryconcept|", 'class' => 'dropdown dropdown-hover', 'exclude' => 'custom-index,custom-set,custom-product,custom-execution,custom-required,custom-flow,custom-score,custom-feedback,custom-timezone,custom-mode');
+$lang->admin->menu->model     = array('link' => "$lang->model|custom|browsestoryconcept|", 'class' => 'dropdown dropdown-hover', 'exclude' => 'custom-index,custom-set,custom-product,custom-execution,custom-kanban,custom-required,custom-flow,custom-score,custom-feedback,custom-timezone,custom-mode');
 $lang->admin->menu->custom    = array('link' => "{$lang->custom->common}|custom|index", 'exclude' => 'custom-browsestoryconcept,custom-timezone,custom-estimate');
 $lang->admin->menu->extension = array('link' => "{$lang->extension->common}|extension|browse", 'subModule' => 'extension');
 $lang->admin->menu->dev       = array('link' => "$lang->redev|dev|api", 'alias' => 'db', 'subModule' => 'dev,editor,entry');

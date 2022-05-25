@@ -334,7 +334,7 @@ class task extends control
         if(!empty($_POST))
         {
             $mails = $this->task->batchCreate($executionID, $extra);
-            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            if(dao::isError()) return print(js::error(dao::getError()));
 
             $taskIDList = array();
             foreach($mails as $mail) $taskIDList[] = $mail->taskID;
@@ -350,14 +350,14 @@ class task extends control
                     $kanbanData = $this->loadModel('kanban')->getRDKanban($executionID, $this->session->execLaneType ? $this->session->execLaneType : 'all');
                     $kanbanData = json_encode($kanbanData);
 
-                    return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => "parent.updateKanban($kanbanData, 0)"));
+                    return print(js::closeModal('parent.parent', '', "parent.parent.updateKanban($kanbanData, 0)"));
                 }
                 else
                 {
-                    return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
+                    return print(js::reload('parent.parent'));
                 }
             }
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $taskLink));
+            return print(js::locate($taskLink, 'parent'));
         }
 
         $story = $this->story->getByID($storyID);
@@ -1063,8 +1063,9 @@ class task extends control
             return print(js::locate($this->createLink('task', 'view', "taskID=$taskID"), 'parent'));
         }
 
-        $this->session->set('estimateList', $this->app->getURI(true), 'execution');
-        if(isonlybody() && $this->config->requestType != 'GET') $this->session->set('estimateList', $this->app->getURI(true) . '?onlybody=yes', 'execution');
+        $uri = $this->app->getURI(true);
+        $this->session->set('estimateList', $uri, 'execution');
+        if(isonlybody()) $this->session->set('estimateList', $uri . (strpos($uri, '?') === false ? '?' : '&')  . 'onlybody=yes', 'execution');
 
         $this->view->task      = $this->task->getById($taskID);
         $this->view->estimates = $this->task->getTaskEstimate($taskID);
@@ -1382,6 +1383,19 @@ class task extends control
             {
                 $task      = $this->task->getById($taskID);
                 $execution = $this->execution->getByID($task->execution);
+
+                if(isset($task->fromIssue) and $task->fromIssue > 0)
+                {
+                    $fromIssue = $this->loadModel('issue')->getByID($task->fromIssue);
+                    if($fromIssue->status != 'closed')
+                    {
+                        $confirmURL = $this->createLink('issue', 'close', "id=$task->fromIssue");
+                        unset($_GET['onlybody']);
+                        $cancelURL  = $this->createLink('task', 'view', "taskID=$taskID");
+                        return print(js::confirm(sprintf($this->lang->task->remindIssue, $task->fromIssue), $confirmURL, $cancelURL, 'parent', 'parent.parent'));
+                    }
+                }
+
                 if($execution->type == 'kanban' and $this->app->tab == 'execution')
                 {
                     $regionID   = isset($output['regionID']) ? $output['regionID'] : 0;

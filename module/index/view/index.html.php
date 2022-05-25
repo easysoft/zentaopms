@@ -18,7 +18,7 @@ js::set('vision',        $config->vision);
 js::set('navGroup',      $lang->navGroup);
 js::set('appsLang',      $lang->index->app);
 js::set('appsMenuItems', commonModel::getMainNavList($app->rawModule));
-js::set('defaultOpen',   $open);
+js::set('defaultOpen',   (isset($open) and !empty($open)) ? $open : '');
 js::set('manualText',    $lang->manual);
 js::set('manualUrl',     ((!empty($config->isINT)) ? $config->manualUrl['int'] : $config->manualUrl['home']) . '&theme=' . $_COOKIE['theme']);
 js::set('showFeatures', $showFeatures);

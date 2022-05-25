@@ -83,6 +83,7 @@ class product extends control
 
         $branch = ($this->cookie->preBranch !== '' and $branch === '') ? $this->cookie->preBranch : $branch;
         setcookie('preBranch', $branch, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, true);
+        $this->session->set('createProjectLocate', $this->app->getURI(true), 'product');
 
         $this->product->setMenu($productID, $branch);
 
@@ -1200,7 +1201,7 @@ class product extends control
      * @access public
      * @return void
      */
-    public function all($browseType = 'noclosed', $orderBy = 'program_asc', $param = 0, $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function all($browseType = 'noclosed', $orderBy = 'program_asc,order_asc', $param = 0, $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         /* Load module and set session. */
         $this->loadModel('program');

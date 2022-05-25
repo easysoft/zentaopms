@@ -48,12 +48,13 @@ class xuanxuanMessage extends messageModel
                 $server   = $this->loadModel('im')->getServer('zentao');
                 $onlybody = isset($_GET['onlybody']) ? $_GET['onlybody'] : '';
                 unset($_GET['onlybody']);
-                $url = $server . helper::createLink($objectType, 'view', "id=$objectID", 'html');
+                $dataID = $objectType == 'kanbancard' ? $object->kanban : $objectID;
+                $url    = $server . helper::createLink($objectType == 'kanbancard' ? 'kanban' : $objectType, 'view', "id=$dataID", 'html');
 
                 $target = '';
                 if(!empty($object->assignedTo)) $target .= $object->assignedTo;
                 if(!empty($object->mailto))     $target .= ",{$object->mailto}";
-                if($objectType == 'mr' && !empty($object->createdBy)) $target .= ",{$object->createdBy}";
+                if(($objectType == 'mr' or $objectType == 'kanbancard') and !empty($object->createdBy)) $target .= ",{$object->createdBy}";
                 $target = trim($target, ',');
                 $target = $this->dao->select('id')->from(TABLE_USER)
                     ->where('account')->in($target)

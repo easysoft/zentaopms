@@ -143,6 +143,7 @@ $lang->product->closedStory  = '已关闭';
 $lang->product->unclosed     = '未关闭';
 $lang->product->unplan       = "未计划";
 $lang->product->viewByUser   = '按用户查看';
+$lang->product->assignedByMe = '我指派';
 
 /* Product Kanban. */
 $lang->product->myProduct             = '我负责的' . $lang->productCommon;
@@ -213,6 +214,7 @@ $lang->product->featureBar['all']['all']      = '所有' . $lang->productCommon;
 $lang->product->featureBar['all']['noclosed'] = $lang->product->unclosed;
 $lang->product->featureBar['all']['closed']   = $lang->product->statusList['closed'];
 
+$lang->product->moreSelects['assignedbyme'] = $lang->product->assignedByMe;
 $lang->product->moreSelects['closedbyme']   = $lang->product->closedByMe;
 $lang->product->moreSelects['activestory']  = $lang->product->activeStory;
 $lang->product->moreSelects['changedstory'] = $lang->product->changedStory;

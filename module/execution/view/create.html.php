@@ -15,7 +15,7 @@
 <?php $defaultURL = $this->createLink('execution', 'task', "execution=$executionID");?>
 <?php include '../../common/view/header.html.php';?>
 <body>
-  <div class='modal-dialog mw-500px' id='tipsModal'>
+  <div class='modal-dialog' id='tipsModal'>
     <div class='modal-header'>
       <a href='<?php echo $defaultURL;?>' class='close'><i class="icon icon-close"></i></a>
       <h4 class='modal-title' id='myModalLabel'><?php echo $lang->execution->tips;?></h4>
@@ -183,7 +183,7 @@
         </tr>
         <tr>
           <th><?php echo $lang->execution->copyTeam;?></th>
-          <td><?php echo html::select('teams', $teams, $copyExecutionID, "class='form-control chosen' data-placeholder='{$lang->execution->copyTeamTip}'"); ?></td>
+          <td><?php echo html::select('teams', $teams, empty($copyExecution) ? $projectID : $copyExecutionID, "class='form-control chosen' data-placeholder='{$lang->execution->copyTeamTip}'"); ?></td>
         </tr>
         <tr>
           <th rowspan='2'><?php echo $lang->execution->owner;?></th>

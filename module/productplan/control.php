@@ -92,6 +92,10 @@ class productplan extends control
         if($parent) $this->view->parentPlan = $this->productplan->getById($parent);
         $branchPairs = $product->type == 'normal' ? array() : $this->loadModel('branch')->getPairs($productID, 'active');
 
+        /* Get parent plan pairs. */
+        $parentPlanPairs = $this->productplan->getTopPlanPairs($productID, $branchID);
+        $this->view->parentPlanPairs = $parentPlanPairs;
+
         /*Get default branch.*/
         $branchList = $this->loadModel('branch')->getList($productID);
         foreach($branchList as $branch)
@@ -142,10 +146,12 @@ class productplan extends control
         $oldBranch = array($planID => $plan->branch);
 
         $this->commonAction($plan->product, $plan->branch);
-        $this->view->title      = $this->view->product->name . $this->lang->colon . $this->lang->productplan->edit;
-        $this->view->position[] = $this->lang->productplan->edit;
-        $this->view->oldBranch  = $oldBranch;
-        $this->view->plan       = $plan;
+        $this->view->title           = $this->view->product->name . $this->lang->colon . $this->lang->productplan->edit;
+        $this->view->position[]      = $this->lang->productplan->edit;
+        $this->view->productID       = $plan->product;
+        $this->view->oldBranch       = $oldBranch;
+        $this->view->plan            = $plan;
+        $this->view->parentPlanPairs = $this->productplan->getTopPlanPairs($plan->product, $plan->branch, $planID);
         $this->display();
     }
 
@@ -285,7 +291,7 @@ class productplan extends control
      * @access public
      * @return void
      */
-    public function browse($productID = 0, $branch = '', $browseType = 'doing', $orderBy = 'begin_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1 )
+    public function browse($productID = 0, $branch = '', $browseType = 'undone', $orderBy = 'begin_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1 )
     {
         $branchID = $branch === '' ? 'all' : $branch;
         if(!$branch) $branch = 0;
@@ -369,7 +375,7 @@ class productplan extends control
      * @access public
      * @return void
      */
-    public function view($planID = 0, $type = 'story', $orderBy = 'id_desc', $link = 'false', $param = '', $recTotal = 0, $recPerPage = 100, $pageID = 1)
+    public function view($planID = 0, $type = 'story', $orderBy = 'order_desc', $link = 'false', $param = '', $recTotal = 0, $recPerPage = 100, $pageID = 1)
     {
         $planID = (int)$planID;
         $plan   = $this->productplan->getByID($planID, true);
@@ -604,7 +610,7 @@ class productplan extends control
      * @access public
      * @return void
      */
-    public function linkStory($planID = 0, $browseType = '', $param = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 100, $pageID = 1)
+    public function linkStory($planID = 0, $browseType = '', $param = 0, $orderBy = 'order_desc', $recTotal = 0, $recPerPage = 100, $pageID = 1)
     {
         if(!empty($_POST['stories']))
         {
@@ -700,6 +706,7 @@ class productplan extends control
         else
         {
             $this->productplan->unlinkStory($storyID, $planID);
+            $this->loadModel('action')->create('productplan', $planID, 'unlinkstory', '', $storyID);
 
             /* if ajax request, send result. */
             if($this->server->ajax)
@@ -732,6 +739,7 @@ class productplan extends control
     public function batchUnlinkStory($planID, $orderBy = 'id_desc')
     {
         foreach($this->post->storyIdList as $storyID) $this->productplan->unlinkStory($storyID, $planID);
+        $this->loadModel('action')->create('productplan', $planID, 'unlinkstory', '', implode(',', $this->post->storyIdList));
         echo js::locate($this->createLink('productplan', 'view', "planID=$planID&type=story&orderBy=$orderBy"), 'parent');
     }
 
@@ -831,7 +839,7 @@ class productplan extends control
      * @access public
      * @return void
      */
-    public function unlinkBug($bugID, $confirm = 'no')
+    public function unlinkBug($bugID, $planID, $confirm = 'no')
     {
         if($confirm == 'no')
         {
@@ -840,6 +848,7 @@ class productplan extends control
         else
         {
             $this->productplan->unlinkBug($bugID);
+            $this->loadModel('action')->create('productplan', $planID, 'unlinkbug', '', $bugID);
 
             /* if ajax request, send result. */
             if($this->server->ajax)
@@ -872,6 +881,7 @@ class productplan extends control
     public function batchUnlinkBug($planID, $orderBy = 'id_desc')
     {
         foreach($this->post->bugIDList as $bugID) $this->productplan->unlinkBug($bugID);
+        $this->loadModel('action')->create('productplan', $planID, 'unlinkbug', '', implode(',', $this->post->bugIDList));
         echo js::locate($this->createLink('productplan', 'view', "planID=$planID&type=bug&orderBy=$orderBy"), 'parent');
     }
 
@@ -945,5 +955,19 @@ class productplan extends control
     {
         $lastPlan = $this->productplan->getLast($productID, $branch, $parent);
         echo json_encode($lastPlan);
+    }
+
+    /**
+     * AJAX: Get top plan.
+     *
+     * @param  int    $productID
+     * @param  int    $branch
+     * @access public
+     * @return object
+     */
+    public function ajaxGetTopPlan($productID, $branch = 0)
+    {
+        $parentPlanPairs = $this->productplan->getTopPlanPairs($productID, $branch);
+        return print(html::select('parent', array('0' => '') + $parentPlanPairs, '', 'class="form-control"'));
     }
 }

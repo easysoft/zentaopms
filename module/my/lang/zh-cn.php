@@ -42,6 +42,7 @@ $lang->my->testtask        = '我的测试单';
 $lang->my->testcase        = '我的用例';
 $lang->my->storyConcept    = $config->URAndSR ? '默认需求概念组合' : '默认需求概念';
 $lang->my->pri             = '优先级';
+$lang->my->alert           = '后续您可以点击右上方的头像，选择“个性化设置”修改信息。';
 
 $lang->my->indexAction      = '地盘仪表盘';
 $lang->my->calendarAction   = '我的日程';
@@ -66,6 +67,7 @@ $lang->my->taskMenu->openedByMe   = '由我创建';
 $lang->my->taskMenu->finishedByMe = '由我完成';
 $lang->my->taskMenu->closedByMe   = '由我关闭';
 $lang->my->taskMenu->canceledByMe = '由我取消';
+$lang->my->taskMenu->assignedByMe = '由我指派';
 
 $lang->my->storyMenu = new stdclass();
 $lang->my->storyMenu->assignedToMe = '指派给我';
@@ -73,6 +75,7 @@ $lang->my->storyMenu->reviewByMe   = '待我评审';
 $lang->my->storyMenu->openedByMe   = '由我创建';
 $lang->my->storyMenu->reviewedByMe = '由我评审';
 $lang->my->storyMenu->closedByMe   = '由我关闭';
+$lang->my->storyMenu->assignedByMe = '由我指派';
 
 $lang->my->projectMenu = new stdclass();
 $lang->my->projectMenu->doing      = '进行中';

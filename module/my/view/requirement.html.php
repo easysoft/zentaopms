@@ -20,9 +20,10 @@
     $recTotalLabel = " <span class='label label-light label-badge'>{$pager->recTotal}</span>";
     if($app->rawMethod == 'contribute')
     {
-        echo html::a(inlink($app->rawMethod, "mode=requirement&type=openedBy&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pagerID=$pageID"),   "<span class='text'>{$lang->my->storyMenu->openedByMe}</span>"   . ($type == 'openedBy'   ? $recTotalLabel : ''), '', "class='btn btn-link" . ($type == 'openedBy'   ? ' btn-active-text' : '') . "'");
-        echo html::a(inlink($app->rawMethod, "mode=requirement&type=reviewedBy&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pagerID=$pageID"), "<span class='text'>{$lang->my->storyMenu->reviewedByMe}</span>" . ($type == 'reviewedBy' ? $recTotalLabel : ''), '', "class='btn btn-link" . ($type == 'reviewedBy' ? ' btn-active-text' : '') . "'");
-        echo html::a(inlink($app->rawMethod, "mode=requirement&type=closedBy&&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pagerID=$pageID"),  "<span class='text'>{$lang->my->storyMenu->closedByMe}</span>"   . ($type == 'closedBy'   ? $recTotalLabel : ''), '', "class='btn btn-link" . ($type == 'closedBy'   ? ' btn-active-text' : '') . "'");
+        echo html::a(inlink($app->rawMethod, "mode=requirement&type=openedBy&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pagerID=$pageID"),    "<span class='text'>{$lang->my->storyMenu->openedByMe}</span>"   . ($type == 'openedBy'   ? $recTotalLabel : ''), '', "class='btn btn-link" . ($type == 'openedBy'   ? ' btn-active-text' : '') . "'");
+        echo html::a(inlink($app->rawMethod, "mode=requirement&type=reviewedBy&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pagerID=$pageID"),  "<span class='text'>{$lang->my->storyMenu->reviewedByMe}</span>" . ($type == 'reviewedBy' ? $recTotalLabel : ''), '', "class='btn btn-link" . ($type == 'reviewedBy' ? ' btn-active-text' : '') . "'");
+        echo html::a(inlink($app->rawMethod, "mode=requirement&type=closedBy&&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pagerID=$pageID"),   "<span class='text'>{$lang->my->storyMenu->closedByMe}</span>"   . ($type == 'closedBy'   ? $recTotalLabel : ''), '', "class='btn btn-link" . ($type == 'closedBy'   ? ' btn-active-text' : '') . "'");
+        echo html::a(inlink($app->rawMethod, "mode=requirement&type=assignedBy&&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pagerID=$pageID"), "<span class='text'>{$lang->my->storyMenu->assignedByMe}</span>" . ($type == 'assignedBy' ? $recTotalLabel : ''), '', "class='btn btn-link" . ($type == 'assignedBy' ? ' btn-active-text' : '') . "'");
     }
     else
     {
@@ -65,7 +66,7 @@
           <th class='c-hours'>     <?php common::printOrderLink('estimate',     $orderBy, $vars, $lang->story->estimateAB);?></th>
           <th class='c-status'>    <?php common::printOrderLink('status',       $orderBy, $vars, $lang->statusAB);?></th>
           <th class='c-stage'>     <?php common::printOrderLink('stage',        $orderBy, $vars, $lang->story->stageAB);?></th>
-          <th class='c-actions-6'> <?php echo $lang->actions;?></th>
+          <th class='c-actions-6 text-center'> <?php echo $lang->actions;?></th>
         </tr>
       </thead>
       <tbody>

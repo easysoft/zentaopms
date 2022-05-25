@@ -162,7 +162,7 @@ $lang->action->desc->hidden               = '$date, 由 <strong>$actor</strong> 
 $lang->action->desc->commented            = '$date, 由 <strong>$actor</strong> 添加备注。' . "\n";
 $lang->action->desc->activated            = '$date, 由 <strong>$actor</strong> 激活。' . "\n";
 $lang->action->desc->blocked              = '$date, 由 <strong>$actor</strong> 阻塞。' . "\n";
-$lang->action->desc->moved                = '$date, 由 <strong>$actor</strong> 移动，之前为 "$extra"。' . "\n";
+$lang->action->desc->moved                = '$date, 由 <strong>$actor</strong> 移动。' . "\n";
 $lang->action->desc->confirmed            = '$date, 由 <strong>$actor</strong> 确认' . $lang->SRCommon . '变动，最新版本为<strong>#$extra</strong>。' . "\n";
 $lang->action->desc->caseconfirmed        = '$date, 由 <strong>$actor</strong> 确认用例变动，最新版本为<strong>#$extra</strong>。' . "\n";
 $lang->action->desc->bugconfirmed         = '$date, 由 <strong>$actor</strong> 确认Bug。' . "\n";
@@ -223,6 +223,12 @@ $lang->action->desc->deletechildrenstory = '$date, 由 <strong>$actor</strong> �
 /* 关联用例和移除用例时的历史操作记录。*/
 $lang->action->desc->linkrelatedcase   = '$date, 由 <strong>$actor</strong> 关联相关用例 <strong>$extra</strong>。' . "\n";
 $lang->action->desc->unlinkrelatedcase = '$date, 由 <strong>$actor</strong> 移除相关用例 <strong>$extra</strong>。' . "\n";
+
+/* 用来描述计划关联和移除需求、bug时的历史操作记录。*/
+$lang->action->desc->linkstory   = '$date, 由 <strong>$actor</strong> 关联需求 <strong>$extra</strong> 到计划。' . "\n";
+$lang->action->desc->linkbug     = '$date, 由 <strong>$actor</strong> 关联BUG <strong>$extra</strong> 到计划。' . "\n";
+$lang->action->desc->unlinkstory = '$date, 由 <strong>$actor</strong> 从计划移除需求 <strong>$extra</strong>。' . "\n";
+$lang->action->desc->unlinkbug   = '$date, 由 <strong>$actor</strong> 从计划移除BUG <strong>$extra</strong>。' . "\n";
 
 /* 用来显示动态信息。*/
 $lang->action->label                        = new stdclass();
@@ -352,6 +358,10 @@ $lang->action->label->importedbuild         = '导入了';
 $lang->action->label->fromsonarqube         = '由SonarQube问题创建';
 $lang->action->label->bind                  = '绑定了';
 $lang->action->label->unbind                = '取消绑定了';
+$lang->action->label->linkstory             = '关联需求到';
+$lang->action->label->linkbug               = '关联BUG到';
+$lang->action->label->unlinkstory           = '移除需求从';
+$lang->action->label->unlinkbug             = '移除BUG从';
 
 /* 动态信息按照对象分组 */
 $lang->action->dynamicAction                    = new stdclass();
@@ -392,12 +402,16 @@ $lang->action->dynamicAction->branch['activated']        = '激活分支';
 $lang->action->dynamicAction->branch['setdefaultbranch'] = '设置默认分支';
 $lang->action->dynamicAction->branch['mergebranch']      = '合并分支';
 
-$lang->action->dynamicAction->productplan['opened']    = "创建计划";
-$lang->action->dynamicAction->productplan['edited']    = "编辑计划";
-$lang->action->dynamicAction->productplan['started']   = "开始计划";
-$lang->action->dynamicAction->productplan['finished']  = "完成计划";
-$lang->action->dynamicAction->productplan['closed']    = "关闭计划";
-$lang->action->dynamicAction->productplan['activated'] = "激活计划";
+$lang->action->dynamicAction->productplan['opened']      = "创建计划";
+$lang->action->dynamicAction->productplan['edited']      = "编辑计划";
+$lang->action->dynamicAction->productplan['started']     = "开始计划";
+$lang->action->dynamicAction->productplan['finished']    = "完成计划";
+$lang->action->dynamicAction->productplan['closed']      = "关闭计划";
+$lang->action->dynamicAction->productplan['activated']   = "激活计划";
+$lang->action->dynamicAction->productplan['linkstory']   = "关联需求";
+$lang->action->dynamicAction->productplan['unlinkstory'] = "移除需求";
+$lang->action->dynamicAction->productplan['linkbug']     = "关联BUG";
+$lang->action->dynamicAction->productplan['unlinkbug']   = "移除BUG";
 
 $lang->action->dynamicAction->release['opened']       = '创建发布';
 $lang->action->dynamicAction->release['edited']       = '编辑发布';
@@ -624,6 +638,7 @@ else
 {
     $lang->action->label->execution = "$lang->executionCommon|execution|task|executionID=%s";
 }
+
 $lang->action->label->task         = '任务|task|view|taskID=%s';
 $lang->action->label->build        = '版本|build|view|buildID=%s';
 $lang->action->label->bug          = 'Bug|bug|view|bugID=%s';

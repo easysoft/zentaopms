@@ -257,6 +257,7 @@ if($isCustomExport)
     {
         $field                    = trim($field);
         $exportFieldPairs[$field] = isset($moduleLang->$field) ? $moduleLang->$field : (isset($lang->$field) ? $lang->$field : $field);
+        if(!is_string($exportFieldPairs[$field])) $exportFieldPairs[$field] = $field;
         if(!$hasDefaultField)$selectedFields[] = $field;
     }
     js::set('defaultExportFields', join(',', $selectedFields));

@@ -162,7 +162,7 @@ $('#confirmButton').click(function()
     var memberCount   = '';
     var assignedTo    = '';
     var totalEstimate = 0;
-    var totalConsumed = 0;
+    var totalConsumed = oldConsumed;
     var totalLeft     = 0;
     $('select[name^=team]').each(function()
     {
@@ -191,9 +191,12 @@ $('#confirmButton').click(function()
     if(memberCount < 2)
     {
         alert(teamMemberError);
+        return false;
     }
-    else
+    if(totalLeft == 0 && (taskStatus == 'doing' || taskStatus == 'pause'))
     {
-        $('.close').click();
+        alert(totalLeftError);
+        return false;
     }
+    $('.close').click();
 });

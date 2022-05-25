@@ -49,6 +49,11 @@ $lang->custom->switch               = "Switch";
 $lang->custom->oneUnit              = "One {$lang->hourCommon}";
 $lang->custom->convertRelationTitle = "Please firstly set the conversion factor from {$lang->hourCommon} to %s";
 $lang->custom->superReviewers       = "Super Reviewer";
+$lang->custom->kanban               = "Kanban";
+$lang->custom->allUsers             = 'All Users';
+$lang->custom->account              = 'Users';
+$lang->custom->role                 = 'Role';
+$lang->custom->dept                 = 'Dept';
 
 if($config->systemMode == 'new') $lang->custom->execution = 'Execution';
 if($config->systemMode == 'classic' || !$config->systemMode) $lang->custom->execution = $lang->executionCommon;
@@ -79,11 +84,13 @@ $lang->custom->saveTips            = 'After clicking save, the current %s will b
 $lang->custom->numberError = 'The interval must be greater than zero!';
 
 $lang->custom->closedExecution = 'Closed ' . $lang->executionCommon;
+$lang->custom->closedKanban    = 'Closed ' . $lang->custom->kanban;
 $lang->custom->closedProduct   = 'Closed ' . $lang->productCommon;
 
 if($config->systemMode == 'new') $lang->custom->object['project']   = 'Project';
 $lang->custom->object['product']   = $lang->productCommon;
 $lang->custom->object['execution'] = $lang->custom->execution;
+$lang->custom->object['kanban']    = $lang->custom->kanban;
 $lang->custom->object['story']     = 'Story';
 $lang->custom->object['task']      = 'Task';
 $lang->custom->object['bug']       = 'Bug';
@@ -174,9 +181,12 @@ $lang->custom->notice->conceptResult       = 'According to your preference, <b> 
 $lang->custom->notice->conceptPath         = 'Go to Admin -> Custom -> Concept to set it.';
 $lang->custom->notice->readOnlyOfProduct   = 'If Change Forbidden, any change on stories, bugs, cases, efforts, releases and plans of the closed product is also forbidden.';
 $lang->custom->notice->readOnlyOfExecution = "If Change Forbidden, any change on tasks, builds, efforts and stories of the closed {$lang->executionCommon} is also forbidden.";
+$lang->custom->notice->readOnlyOfKanban    = "If Change Forbidden, any change on kanban card and related operations of {$lang->custom->kanban} is also forbidden.";
 $lang->custom->notice->URSREmpty           = 'Custom requirement name can not be empty!';
 $lang->custom->notice->confirmDelete       = 'Are you sure you want to delete it?';
 $lang->custom->notice->confirmReviewCase   = 'Set the case in Wait to Normal?';
+$lang->custom->notice->storyReviewTip      = 'After selecting by individual, position, and department, take the union of these three filters. ';
+$lang->custom->notice->selectAllTip        = 'After selecting all people, the reviewers will be emptied and grayed out while hiding their positions and departments.';
 
 $lang->custom->notice->indexPage['product'] = "ZenTao 8.2+ has Product Home. Do you want to go to Product Home?";
 $lang->custom->notice->indexPage['project'] = "ZenTao 8.2+ has Project Home. Do you want to go to Project Home?";
@@ -231,6 +241,9 @@ $lang->custom->CRProduct[0] = 'Change Forbidden';
 
 $lang->custom->CRExecution[1] = 'Change Allowed';
 $lang->custom->CRExecution[0] = 'Change Forbidden';
+
+$lang->custom->CRKanban[1] = 'Change Allowed';
+$lang->custom->CRKanban[0] = 'Change Forbidden';
 
 $lang->custom->moduleName['product']     = $lang->productCommon;
 $lang->custom->moduleName['productplan'] = 'Plan';

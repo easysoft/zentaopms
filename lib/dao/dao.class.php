@@ -113,6 +113,7 @@ class dao extends baseDAO
         $app->loadLang('workflowfield');
         $app->loadConfig('flow');
         $app->loadConfig('workflowfield');
+
         foreach($fields as $field)
         {
             if(isset($data->{$field->field}))

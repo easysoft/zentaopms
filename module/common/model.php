@@ -450,7 +450,7 @@ class commonModel extends model
                         echo '<li class="user-tutorial">' . html::a(helper::createLink('tutorial', 'start'), "<i class='icon icon-guide'></i> " . $lang->tutorialAB, '', "class='iframe' data-class-name='modal-inverse' data-width='800' data-headerless='true' data-backdrop='true' data-keyboard='true'") . '</li>';
                     }
 
-                    echo '<li>' . html::a(helper::createLink('my', 'preference', '', '', true), "<i class='icon icon-controls'></i> " . $lang->preference, '', "class='iframe' data-width='700'") . '</li>';
+                    echo '<li>' . html::a(helper::createLink('my', 'preference', 'showTip=false', '', true), "<i class='icon icon-controls'></i> " . $lang->preference, '', "class='iframe' data-width='700'") . '</li>';
                 }
 
                 if(common::hasPriv('my', 'changePassword')) echo '<li>' . html::a(helper::createLink('my', 'changepassword', '', '', true), "<i class='icon icon-cog-outline'></i> " . $lang->changePassword, '', "class='iframe' data-width='600'") . '</li>';
@@ -664,7 +664,12 @@ class commonModel extends model
                         $params = "productID=$productID&branch=&moduleID=0&from=&param=0&storyID=0&extras=from=global";
                         break;
                     case 'execution':
-                        $params = "projectID=&executionID=0&copyExecutionID=0&planID=0&confirm=no&productID=0&extra=from=global";
+                        $projectID = 0;
+                        if(in_array($app->tab, array('project', 'execution')) and isset($lang->switcherMenu))
+                        {
+                            $projectID = isset($_SESSION['project']) ? $_SESSION['project'] : 0;
+                        }
+                        $params = "projectID={$projectID}&executionID=0&copyExecutionID=0&planID=0&confirm=no&productID=0&extra=from=global";
                         break;
                     case 'product':
                         $params = "programID=&extra=from=global";
@@ -913,6 +918,9 @@ class commonModel extends model
     public static function getMainNavList($moduleName)
     {
         global $lang;
+        global $app;
+
+        $app->loadLang('my');
 
         $menuOrder = $lang->mainNav->menuOrder;
         ksort($menuOrder);
@@ -958,8 +966,24 @@ class commonModel extends model
                 }
             }
 
+            /* Check whether other preference item under the module have permissions. If yes, point to other methods. */
+            $moduleLinkList = $currentModule . 'LinkList';
+            if(!$display and isset($lang->my->$moduleLinkList))
+            {
+                foreach($lang->my->$moduleLinkList as $key => $linkList)
+                {
+                    $method = explode('-', $key)[1];
+                    if(common::hasPriv($currentModule, $method))
+                    {
+                        $display       = true;
+                        $currentMethod = $method;
+                        break;
+                    }
+                }
+            }
+
             /* Check whether other methods under the module have permissions. If yes, point to other methods. */
-            if($display == false and isset($lang->$currentModule->menu))
+            if($display == false and isset($lang->$currentModule->menu) and !in_array($currentModule, array('program', 'product', 'project', 'execution')))
             {
                 foreach($lang->$currentModule->menu as $menu)
                 {
@@ -2216,7 +2240,7 @@ EOD;
     {
         if($this->app->getModuleName() == 'upgrade' and $this->session->upgrading) return false;
 
-        $statusFile = $this->app->getAppRoot() . 'www' . DIRECTORY_SEPARATOR . 'ok.txt';
+        $statusFile = $this->app->getAppRoot() . 'www' . DIRECTORY_SEPARATOR . 'data' . DIRECTORY_SEPARATOR . 'ok.txt';
         return (!is_file($statusFile) or (time() - filemtime($statusFile)) > 3600) ? $statusFile : false;
     }
 
@@ -3250,13 +3274,11 @@ EOD;
         if(empty($markdown)) return false;
 
         global $app;
-        $app->loadClass('parsedownextraplugin');
+        $app->loadClass('michelf');
 
-        $Parsedown = new parsedownextraplugin;
+        $Michelf = new michelf;
 
-        $Parsedown->voidElementSuffix = '>'; // HTML5
-
-        return $Parsedown->text($markdown);
+        return $Michelf->parse($markdown);
     }
 }
 

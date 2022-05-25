@@ -71,7 +71,18 @@ class custom extends control
         if(($module == 'story' or $module == 'testcase') and $field == 'review')
         {
             $this->app->loadConfig($module);
-            $this->view->users = $this->loadModel('user')->getPairs('noclosed|nodeleted');
+            $this->loadModel('user');
+
+            if($module == 'story')
+            {
+                $this->view->depts            = $this->loadModel('dept')->getDeptPairs();
+                $this->view->forceReviewAll   = zget($this->config->$module, 'forceReviewAll', 'false');
+                $this->view->forceReview      = zget($this->config->$module, 'forceReview', '');
+                $this->view->forceReviewRoles = zget($this->config->$module, 'forceReviewRoles', '');
+                $this->view->forceReviewDepts = zget($this->config->$module, 'forceReviewDepts', '');
+            }
+
+            $this->view->users          = $module == 'story' ? $this->user->getCanCreateStoryUsers() : $this->user->getPairs('noclosed|nodeleted');
             $this->view->needReview     = zget($this->config->$module, 'needReview', 1);
             $this->view->forceReview    = zget($this->config->$module, 'forceReview', '');
             $this->view->forceNotReview = zget($this->config->$module, 'forceNotReview', '');
@@ -112,7 +123,16 @@ class custom extends control
             }
             elseif($module == 'story' and $field == 'review')
             {
-                $data = fixer::input('post')->join('forceReview', ',')->get();
+                $data = fixer::input('post')
+                    ->setDefault('forceReviewAll', 0)
+                    ->setDefault('forceReviewDepts', '')
+                    ->join('forceReview', ',')
+                    ->join('forceReviewRoles', ',')
+                    ->join('forceReviewDepts', ',')
+                    ->join('forceReviewAll', ',')
+                    ->setIF(isset($this->post->forceReviewAll), 'forceReviewAll', 1)
+                    ->get();
+
                 $this->loadModel('setting')->setItems("system.$module@{$this->config->vision}", $data);
             }
             elseif($module == 'story' and $field == 'reviewRules')
@@ -512,6 +532,27 @@ class custom extends control
         }
 
         $this->view->title      = $this->lang->custom->product;
+        $this->view->position[] = $this->lang->custom->common;
+        $this->view->position[] = $this->view->title;
+
+        $this->display();
+    }
+
+    /**
+     * Set whether the kanban is read-only.
+     *
+     * @access public
+     * @return void
+     */
+    public function kanban()
+    {
+        if($_POST)
+        {
+            $this->loadModel('setting')->setItem("system.common.CRKanban@{$this->config->vision}", $this->post->kanban);
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'reload'));
+        }
+
+        $this->view->title      = $this->lang->custom->kanban;
         $this->view->position[] = $this->lang->custom->common;
         $this->view->position[] = $this->view->title;
 

@@ -79,7 +79,7 @@ class bugModel extends model
             ->remove('files,labels,uid,oldTaskID,contactListMenu,region,lane')
             ->get();
 
-        if($bug->execution != 0) $bug->project = $this->dao->select('parent')->from(TABLE_EXECUTION)->where('id')->eq($bug->execution)->fetch('parent');
+        if($bug->execution != 0) $bug->project = $this->dao->select('project')->from(TABLE_EXECUTION)->where('id')->eq($bug->execution)->fetch('project');
 
         /* Check repeat bug. */
         $result = $this->loadModel('common')->removeDuplicate('bug', $bug, "product={$bug->product}");
@@ -211,7 +211,7 @@ class bugModel extends model
 
             if(isset($data->lanes[$i])) $bug->laneID = $data->lanes[$i];
 
-            if($bug->execution != 0) $bug->project = $this->dao->select('parent')->from(TABLE_EXECUTION)->where('id')->eq($bug->execution)->fetch('parent');
+            if($bug->execution != 0) $bug->project = $this->dao->select('project')->from(TABLE_EXECUTION)->where('id')->eq($bug->execution)->fetch('project');
 
             /* Assign the bug to the person in charge of the module. */
             if(!empty($moduleOwners[$bug->module]))
@@ -349,7 +349,7 @@ class bugModel extends model
         $bug->task         = 0;
         $bug->pri          = 3;
         $bug->severity     = 3;
-        $bug->project      = $this->dao->select('parent')->from(TABLE_EXECUTION)->where('id')->eq($executionID)->fetch('parent');
+        $bug->project      = $this->dao->select('project')->from(TABLE_EXECUTION)->where('id')->eq($executionID)->fetch('project');
 
         $this->dao->insert(TABLE_BUG)->data($bug, $skip = 'gitlab,gitlabProject')->autoCheck()->batchCheck($this->config->bug->create->requiredFields, 'notempty')->exec();
         if(!dao::isError()) return $this->dao->lastInsertID();
@@ -396,6 +396,7 @@ class bugModel extends model
         elseif($browseType == 'needconfirm')   $bugs = $this->getByNeedconfirm($productIDList, $branch, $modules, $executions, $sort, $pager, $projectID);
         elseif($browseType == 'bysearch')      $bugs = $this->getBySearch($productIDList, $branch, $queryID, $sort, '', $pager, $projectID);
         elseif($browseType == 'overduebugs')   $bugs = $this->getOverdueBugs($productIDList, $branch, $modules, $executions, $sort, $pager, $projectID);
+        elseif($browseType == 'assignedbyme')  $bugs = $this->getByAssignedbyme($productIDList, $branch, $modules, $executions, $sort, $pager, $projectID);
 
         return $this->checkDelayedBugs($bugs);
     }
@@ -2327,7 +2328,7 @@ class bugModel extends model
         $commonOption = $this->lang->bug->report->options;
 
         $chartOption->graph->caption = $this->lang->bug->report->charts[$chartType];
-        if(!isset($chartOption->type))    $chartOption->type    = $commonOption->type;
+        if(!isset($chartOption->type))   $chartOption->type   = $commonOption->type;
         if(!isset($chartOption->width))  $chartOption->width  = $commonOption->width;
         if(!isset($chartOption->height)) $chartOption->height = $commonOption->height;
 
@@ -2642,6 +2643,36 @@ class bugModel extends model
             ->andWhere('t1.execution')->in(array_keys($executions))
             ->andWhere('t1.deleted')->eq(0)
             ->orderBy($orderBy)
+            ->page($pager)
+            ->fetchAll();
+    }
+
+    /**
+     * Get by assigned by me.
+     * @param  array      $productIDList
+     * @param  int|string $branch
+     * @param  array      $modules
+     * @param  array      $executions
+     * @param  string     $sort
+     * @param  object     $pager
+     * @param  int        $projectID
+     *
+     * @access public
+     * @return array
+     */
+    public function getByAssignedbyme($productIDList, $branch, $modules, $executions, $sort, $pager, $projectID)
+    {
+        $actionIDList = $this->dao->select('objectID')->from(TABLE_ACTION)->where('objectType')->eq('bug')->andWhere('action')->eq('assigned')->andWhere('actor')->eq($this->app->user->account)->fetchPairs('objectID', 'objectID');
+        return $this->dao->select('*')->from(TABLE_BUG)
+            ->where('product')->in($productIDList)
+            ->beginIF($branch !== 'all')->andWhere('branch')->in($branch)->fi()
+            ->beginIF($modules)->andWhere('module')->in($modules)->fi()
+            ->beginIF($projectID)->andWhere('project')->eq($projectID)->fi()
+            ->andWhere('execution')->in(array_keys($executions))
+            ->andWhere('deleted')->eq(0)
+            ->andWhere('status')->ne('closed')
+            ->andWhere('id')->in($actionIDList)
+            ->orderBy($sort)
             ->page($pager)
             ->fetchAll();
     }
@@ -3282,7 +3313,7 @@ class bugModel extends model
         if($type == 'view') $menu .= $this->buildMenu('bug', 'activate', $params, $bug, $type, '', '', "text-success iframe showinonlybody", true);
         if($type == 'view' && $this->app->tab != 'product')
         {
-            $menu .= $this->buildMenu('bug', 'toStory', $toStoryParams, $bug, $type, $this->lang->icons['story'], '', '', '', "data-app='product'", $this->lang->bug->toStory);
+            $menu .= $this->buildMenu('bug', 'toStory', $toStoryParams, $bug, $type, $this->lang->icons['story'], '', '', '', "data-app='qa'", $this->lang->bug->toStory);
             $menu .= $this->buildMenu('bug', 'createCase', $convertParams, $bug, $type, 'sitemap');
         }
         if($type == 'view')

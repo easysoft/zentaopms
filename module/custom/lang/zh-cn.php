@@ -49,6 +49,11 @@ $lang->custom->switch               = "切换";
 $lang->custom->oneUnit              = "一个{$lang->hourCommon}";
 $lang->custom->convertRelationTitle = "请先设置{$lang->hourCommon}转换为%s的换算系数";
 $lang->custom->superReviewers       = "超级评审人";
+$lang->custom->kanban               = "看板";
+$lang->custom->allUsers             = '所有人员';
+$lang->custom->account              = '人员';
+$lang->custom->role                 = '职位';
+$lang->custom->dept                 = '部门';
 
 if($config->systemMode == 'new') $lang->custom->execution = '执行';
 if($config->systemMode == 'classic' || !$config->systemMode) $lang->custom->execution = $lang->executionCommon;
@@ -79,11 +84,13 @@ $lang->custom->saveTips            = '点击保存后，则以当前%s为默认�
 $lang->custom->numberError = '区间必须大于零';
 
 $lang->custom->closedExecution = '已关闭' . $lang->custom->execution;
+$lang->custom->closedKanban    = '已关闭' . $lang->custom->kanban;
 $lang->custom->closedProduct   = '已关闭' . $lang->productCommon;
 
 if($config->systemMode == 'new') $lang->custom->object['project']   = '项目';
 $lang->custom->object['product']   = $lang->productCommon;
 $lang->custom->object['execution'] = $lang->custom->execution;
+$lang->custom->object['kanban']    = $lang->custom->kanban;
 $lang->custom->object['story']     = $lang->SRCommon;
 $lang->custom->object['task']      = '任务';
 $lang->custom->object['bug']       = 'Bug';
@@ -174,9 +181,12 @@ $lang->custom->notice->conceptResult       = '我们已经根据您的选择为�
 $lang->custom->notice->conceptPath         = '您可以在：后台 -> 自定义 -> 流程页面修改。';
 $lang->custom->notice->readOnlyOfProduct   = '禁止修改后，已关闭' . $lang->productCommon . '下的' . $lang->SRCommon . '、Bug、用例、日志、发布、计划都禁止修改。';
 $lang->custom->notice->readOnlyOfExecution = "禁止修改后，已关闭{$lang->custom->execution}下的任务、版本、日志以及关联需求都禁止修改。";
+$lang->custom->notice->readOnlyOfKanban    = "禁止修改后，已关闭{$lang->custom->kanban}下的卡片以及相关设置都禁止修改。";
 $lang->custom->notice->URSREmpty           = '自定义需求名称不能为空！';
 $lang->custom->notice->confirmDelete       = '您确定要删除吗？';
 $lang->custom->notice->confirmReviewCase   = '是否将待评审的用例修改为正常状态？';
+$lang->custom->notice->storyReviewTip      = '按人员、职位、部门勾选后，取所有人员的并集。';
+$lang->custom->notice->selectAllTip        = '勾选所有人员后，会清空并置灰评审人员，同时隐藏职位、部门。';
 
 $lang->custom->notice->indexPage['product'] = "从8.2版本起增加了产品主页视图，是否默认进入产品主页？";
 $lang->custom->notice->indexPage['project'] = "从8.2版本起增加了项目主页视图，是否默认进入项目主页？";
@@ -231,6 +241,9 @@ $lang->custom->CRProduct[0] = '禁止修改';
 
 $lang->custom->CRExecution[1] = '允许修改';
 $lang->custom->CRExecution[0] = '禁止修改';
+
+$lang->custom->CRKanban[1] = '允许修改';
+$lang->custom->CRKanban[0] = '禁止修改';
 
 $lang->custom->moduleName['product']     = $lang->productCommon;
 $lang->custom->moduleName['productplan'] = '计划';

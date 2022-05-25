@@ -880,9 +880,10 @@ class execution extends control
         $this->loadModel('bug');
         $this->loadModel('user');
         $this->loadModel('product');
+        $this->loadModel('datatable');
 
         /* Save session. */
-        $this->session->set('bugList', $this->app->getURI(true), 'execution');
+        $this->session->set('bugList', $this->app->getURI(true), 'qa');
 
         $type        = strtolower($type);
         $queryID     = ($type == 'bysearch') ? (int)$param : 0;
@@ -892,7 +893,7 @@ class execution extends control
         $branchID    = isset($products[$productID]) ? current($products[$productID]->branches) : 0;
 
         $productPairs = array('0' => $this->lang->product->all);
-        foreach($products as $product) $productPairs[$product->id] = $product->name;
+        foreach($products as $productData) $productPairs[$productData->id] = $productData->name;
         $this->lang->modulePageNav = $this->product->select($productPairs, $productID, 'execution', 'bug', $executionID, $branchID, 0, '', false);
 
         /* Header and position. */
@@ -921,22 +922,61 @@ class execution extends control
         $actionURL = $this->createLink('execution', 'bug', "executionID=$executionID&productID=$productID&orderBy=$orderBy&build=$build&type=bysearch&queryID=myQueryID");
         $this->execution->buildBugSearchForm($products, $queryID, $actionURL);
 
+        $product = $this->loadModel('product')->getById($productID);
+        $showBranch      = false;
+        $branchOption    = array();
+        $branchTagOption = array();
+        if($product and $product->type != 'normal')
+        {
+            /* Display of branch label. */
+            $showBranch = $this->loadModel('branch')->showBranch($productID);
+
+            /* Display status of branch. */
+            $branches = $this->loadModel('branch')->getList($productID, 0, 'all');
+            foreach($branches as $branchInfo)
+            {
+                $branchOption[$branchInfo->id]    = $branchInfo->name;
+                $branchTagOption[$branchInfo->id] = $branchInfo->name . ($branchInfo->status == 'closed' ? ' (' . $this->lang->branch->statusList['closed'] . ')' : '');
+            }
+        }
+
+        /* Get story and task id list. */
+        $storyIdList = $taskIdList = array();
+        foreach($bugs as $bug)
+        {
+            if($bug->story)  $storyIdList[$bug->story] = $bug->story;
+            if($bug->task)   $taskIdList[$bug->task]   = $bug->task;
+            if($bug->toTask) $taskIdList[$bug->toTask] = $bug->toTask;
+        }
+        $storyList = $storyIdList ? $this->loadModel('story')->getByList($storyIdList) : array();
+        $taskList  = $taskIdList  ? $this->loadModel('task')->getByList($taskIdList)   : array();
+
+        $showModule  = !empty($this->config->datatable->bugBrowse->showModule) ? $this->config->datatable->bugBrowse->showModule : '';
+
         /* Assign. */
-        $this->view->title          = $title;
-        $this->view->position       = $position;
-        $this->view->bugs           = $bugs;
-        $this->view->tabID          = 'bug';
-        $this->view->build          = $this->loadModel('build')->getById($build);
-        $this->view->buildID        = $this->view->build ? $this->view->build->id : 0;
-        $this->view->pager          = $pager;
-        $this->view->orderBy        = $orderBy;
-        $this->view->users          = $users;
-        $this->view->productID      = $productID;
-        $this->view->branchID       = empty($this->view->build->branch) ? $branchID : $this->view->build->branch;
-        $this->view->memberPairs    = $memberPairs;
-        $this->view->type           = $type;
-        $this->view->param          = $param;
-        $this->view->defaultProduct = (empty($productID) and !empty($products)) ? current(array_keys($products)) : $productID;
+        $this->view->title           = $title;
+        $this->view->position        = $position;
+        $this->view->bugs            = $bugs;
+        $this->view->tabID           = 'bug';
+        $this->view->build           = $this->loadModel('build')->getById($build);
+        $this->view->buildID         = $this->view->build ? $this->view->build->id : 0;
+        $this->view->pager           = $pager;
+        $this->view->orderBy         = $orderBy;
+        $this->view->users           = $users;
+        $this->view->productID       = $productID;
+        $this->view->branchID        = empty($this->view->build->branch) ? $branchID : $this->view->build->branch;
+        $this->view->memberPairs     = $memberPairs;
+        $this->view->type            = $type;
+        $this->view->param           = $param;
+        $this->view->defaultProduct  = (empty($productID) and !empty($products)) ? current(array_keys($products)) : $productID;
+        $this->view->builds          = $this->loadModel('build')->getBuildPairs($productID);
+        $this->view->branchOption    = $branchOption;
+        $this->view->branchTagOption = $branchTagOption;
+        $this->view->modulePairs     = $showModule ? $this->loadModel('tree')->getModulePairs($productID, 'bug', $showModule) : array();
+        $this->view->plans           = $this->loadModel('productplan')->getPairs($productID);
+        $this->view->stories         = $storyList;
+        $this->view->tasks           = $taskList;
+        $this->view->projectPairs    = $this->loadModel('project')->getPairsByProgram();
 
         $this->display();
     }
@@ -1453,7 +1493,7 @@ class execution extends control
         $this->view->name                = $name;
         $this->view->code                = $code;
         $this->view->team                = $team;
-        $this->view->teams               = array(0 => '') + $this->execution->getCanCopyObjects((int)$projectID);
+        $this->view->teams               = array(0 => '', $projectID => (isset($project->name) ? $project->name : '')) + $this->execution->getCanCopyObjects((int)$projectID);
         $this->view->allProjects         = array(0 => '') + $this->project->getPairsByModel('all', 0, 'noclosed');
         $this->view->executionID         = $executionID;
         $this->view->productID           = $productID;
@@ -1589,6 +1629,7 @@ class execution extends control
         /* If the story of the product which linked the execution, you don't allow to remove the product. */
         $unmodifiableProducts = array();
         $unmodifiableBranches = array();
+        $linkedStoryIDList    = array();
         foreach($linkedProducts as $productID => $linkedProduct)
         {
             if(!isset($allProducts[$productID])) $allProducts[$productID] = $linkedProduct->name;
@@ -1602,6 +1643,7 @@ class execution extends control
                 {
                     array_push($unmodifiableProducts, $productID);
                     array_push($unmodifiableBranches, $branchID);
+                    $linkedStoryIDList[$productID][$branchID] = $executionStories[$productID][$branchID]->storyIDList;
                 }
             }
         }
@@ -1635,6 +1677,7 @@ class execution extends control
         $this->view->allProducts          = $allProducts;
         $this->view->linkedProducts       = $linkedProducts;
         $this->view->linkedBranches       = $linkedBranches;
+        $this->view->linkedStoryIDList    = $linkedStoryIDList;
         $this->view->branches             = $branches;
         $this->view->unmodifiableProducts = $unmodifiableProducts;
         $this->view->unmodifiableBranches = $unmodifiableBranches;
@@ -2207,9 +2250,10 @@ class execution extends control
         }
 
         $userList = $this->dao->select('account, realname, avatar')->from(TABLE_USER)->where('deleted')->eq(0)->fetchAll('account');
-        $userList['closed']['account']  = 'Closed';
-        $userList['closed']['realname'] = 'Closed';
-        $userList['closed']['avatar']   = '';
+        $userList['closed'] = new stdclass();
+        $userList['closed']->account  = 'Closed';
+        $userList['closed']->realname = 'Closed';
+        $userList['closed']->avatar   = '';
 
         $this->view->title            = $this->lang->execution->kanban;
         $this->view->realnames        = $this->loadModel('user')->getPairs('noletter');
@@ -2618,6 +2662,7 @@ class execution extends control
         /* If the story of the product which linked the execution, you don't allow to remove the product. */
         $unmodifiableProducts = array();
         $unmodifiableBranches = array();
+        $linkedStoryIDList    = array();
         foreach($linkedProducts as $productID => $linkedProduct)
         {
             $linkedBranches[$productID] = array();
@@ -2629,6 +2674,7 @@ class execution extends control
                 {
                     array_push($unmodifiableProducts, $productID);
                     array_push($unmodifiableBranches, $branchID);
+                    $linkedStoryIDList[$productID][$branchID] = $executionStories[$productID][$branchID]->storyIDList;
                 }
             }
         }
@@ -2642,6 +2688,7 @@ class execution extends control
         $this->view->unmodifiableProducts = $unmodifiableProducts;
         $this->view->unmodifiableBranches = $unmodifiableBranches;
         $this->view->linkedBranches       = $linkedBranches;
+        $this->view->linkedStoryIDList    = $linkedStoryIDList;
         $this->view->branchGroups         = $this->execution->getBranchByProduct(array_keys($allProducts), $this->config->systemMode == 'new' ? $execution->project : 0, 'ignoreNormal|noclosed');
         $this->view->allBranches          = $this->execution->getBranchByProduct(array_keys($allProducts), $this->config->systemMode == 'new' ? $execution->project : 0, 'ignoreNormal');
 
@@ -3115,8 +3162,12 @@ class execution extends control
      */
     public function tips($executionID)
     {
-        $this->view->execution   = $this->execution->getById($executionID);
+        $execution = $this->execution->getById($executionID);
+        $projectID = $execution->project;
+
+        $this->view->execution   = $execution;
         $this->view->executionID = $executionID;
+        $this->view->projectID   = $projectID;
         $this->display('execution', 'tips');
     }
 
@@ -3158,7 +3209,7 @@ class execution extends control
 
                 foreach($executions as $execution)
                 {
-                    if(isset($orderedExecutions[$execution->parent])) unset($orderedExecutions[$execution->parent]);
+                    if(isset($orderedExecutions[$execution->parent]) and $project->model != 'waterfall') unset($orderedExecutions[$execution->parent]);
                     $execution->teams = zget($teams, $execution->id, array());
                     $orderedExecutions[$execution->id] = $execution;
                 }
@@ -3180,11 +3231,20 @@ class execution extends control
 
         $projectExecutions = array();
         $parentIdList = array();
+        $childrenIdList = array();
         foreach($orderedExecutions as $execution)
         {
-            $projectExecutions[$execution->project][] = $execution;
             if($execution->type != 'stage') continue;
-            if($execution->grade == 2 and $execution->project != $execution->parent) $parentIdList[$execution->parent] = $execution->parent;
+            if($execution->grade == 2 and $execution->project != $execution->parent)
+            {
+                $parentIdList[$execution->parent] = $execution->parent;
+                $childrenIdList[$execution->parent][] = $execution->id;
+            }
+        }
+        foreach($orderedExecutions as $id => $execution)
+        {
+            $execution->children = isset($childrenIdList[$execution->id]) ? $childrenIdList[$execution->id] : array();
+            $projectExecutions[$execution->project][] = $execution;
         }
 
         $parents = array();
@@ -3235,6 +3295,7 @@ class execution extends control
         $orderBy  = $this->post->orderBy;
 
         $order = $this->dao->select('*')->from(TABLE_PROJECTSTORY)->where('story')->in($idList)->andWhere('project')->eq($executionID)->orderBy('order_asc')->fetch('order');
+        if(strpos($orderBy, 'order_desc') !== false) $idList = array_reverse($idList);
         foreach($idList as $storyID)
         {
             $this->dao->update(TABLE_PROJECTSTORY)->set('`order`')->eq($order)->where('story')->eq($storyID)->andWhere('project')->eq($executionID)->exec();

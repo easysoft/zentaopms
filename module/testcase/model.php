@@ -39,6 +39,17 @@ class testcaseModel extends model
      */
     function create($bugID)
     {
+        $steps   = $this->post->steps;
+        $expects = $this->post->expects;
+        foreach($expects as $key => $value)
+        {
+            if(!empty($value) and empty($steps[$key]))
+            {
+                dao::$errors[] = sprintf($this->lang->testcase->stepsEmpty, $key);
+                return false;
+            }
+        }
+
         $now    = helper::now();
         $status = $this->getStatus('create');
         $case   = fixer::input('post')
@@ -61,6 +72,8 @@ class testcaseModel extends model
         if(!empty($case->product))$param = "product={$case->product}";
         $result = $this->loadModel('common')->removeDuplicate('case', $case, $param);
         if($result and $result['stop']) return array('status' => 'exists', 'id' => $result['duplicate']);
+
+        if(empty($case->product)) $this->config->testcase->create->requiredFields = str_replace('story', '', $this->config->testcase->create->requiredFields);
 
         /* Value of story may be showmore. */
         $case->story = (int)$case->story;
@@ -179,7 +192,7 @@ class testcaseModel extends model
             foreach(explode(',', $this->config->testcase->create->requiredFields) as $field)
             {
                 $field = trim($field);
-                if($field and empty($data[$i]->$field)) return print(js::alert(sprintf($this->lang->error->notempty, $this->lang->testcase->$field)));
+                if($field and empty($data[$i]->$field)) return helper::end(js::alert(sprintf($this->lang->error->notempty, $this->lang->testcase->$field)));
             }
         }
 
@@ -703,6 +716,17 @@ class testcaseModel extends model
      */
     public function update($caseID, $testtasks = array())
     {
+        $steps   = $this->post->steps;
+        $expects = $this->post->expects;
+        foreach($expects as $key => $value)
+        {
+            if(!empty($value) and empty($steps[$key]))
+            {
+                dao::$errors[] = sprintf($this->lang->testcase->stepsEmpty, $key);
+                return false;
+            }
+        }
+
         $now     = helper::now();
         $oldCase = $this->getById($caseID);
 
@@ -975,6 +999,8 @@ class testcaseModel extends model
             unset($case);
         }
 
+        if(empty($case->product)) $this->config->testcase->edit->requiredFields = str_replace('story', '', $this->config->testcase->edit->requiredFields);
+
         /* Update cases. */
         $this->loadModel('action');
         foreach($cases as $caseID => $case)
@@ -1018,7 +1044,7 @@ class testcaseModel extends model
             }
             else
             {
-                return print(js::error('case#' . $caseID . dao::getError(true)));
+                return helper::end(js::error('case#' . $caseID . dao::getError(true)));
             }
         }
 
@@ -1198,6 +1224,19 @@ class testcaseModel extends model
         $now    = helper::now();
         $branch = (int)$branch;
         $data   = fixer::input('post')->get();
+
+        $steps = $data->desc;
+        foreach($data->expect as $key => $expects)
+        {
+            foreach($expects as $exportID => $value)
+            {
+                if(!empty($value) and (!isset($steps[$key][$exportID]) or empty($steps[$key][$exportID])))
+                {
+                    dao::$errors = sprintf($this->lang->testcase->whichLine, $key) . sprintf($this->lang->testcase->stepsEmpty, $exportID);
+                    return false;
+                }
+            }
+        }
 
         if(!empty($_POST['id']))
         {
@@ -2005,8 +2044,8 @@ class testcaseModel extends model
     /**
      * Build test case menu.
      *
-     * @param  object $case 
-     * @param  string $type 
+     * @param  object $case
+     * @param  string $type
      * @access public
      * @return string
      */
@@ -2019,7 +2058,7 @@ class testcaseModel extends model
     /**
      * Build test case view menu.
      *
-     * @param  object $case 
+     * @param  object $case
      * @access public
      * @return string
      */
@@ -2067,11 +2106,11 @@ class testcaseModel extends model
         {
             if(!isonlybody()) $menu .= $this->buildMenu('testcase', 'edit', $params, $case, 'view', '', '', 'showinonlybody');
             if(!$case->isLibCase && $case->auto != 'unit')
-            { 
+            {
                 $menu .= $this->buildMenu('testcase', 'create', "productID=$case->product&branch=$case->branch&moduleID=$case->module&from=testcase&param=$case->id", $case, 'view', 'copy');
             }
             if($case->isLibCase && common::hasPriv('caselib', 'createCase'))
-            { 
+            {
                 echo html::a(helper::createLink('caselib', 'createCase', "libID=$case->lib&moduleID=$case->module&param=$case->id"), "<i class='icon-copy'></i>", '', "class='btn' title='{$this->lang->testcase->copy}'");
             }
 
@@ -2084,7 +2123,7 @@ class testcaseModel extends model
     /**
      * Build test case browse menu.
      *
-     * @param  object $case 
+     * @param  object $case
      * @access public
      * @return string
      */

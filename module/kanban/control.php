@@ -240,6 +240,36 @@ class kanban extends control
     }
 
     /*
+     * Activate a kanban.
+     *
+     * @param  int    $kanbanID
+     * @access public
+     * @return void
+     */
+    public function activate($kanbanID)
+    {
+        $this->loadModel('action');
+
+        if(!empty($_POST))
+        {
+            $changes = $this->kanban->activate($kanbanID);
+
+            if(dao::isError()) return print(js::error(dao::getError()));
+
+            $actionID = $this->action->create('kanban', $kanbanID, 'activated', $this->post->comment);
+            $this->action->logHistory($actionID, $changes);
+
+            return print(js::reload('parent.parent'));
+        }
+
+        $this->view->kanban  = $this->kanban->getByID($kanbanID);
+        $this->view->actions = $this->action->getList('kanban', $kanbanID);
+        $this->view->users   = $this->loadModel('user')->getPairs('noletter');
+
+        $this->display();
+    }
+
+    /*
      * Close a kanban.
      *
      * @param  int    $kanbanID
@@ -741,6 +771,9 @@ class kanban extends control
             }
         }
 
+        $region = $this->kanban->getRegionByID($regionID);
+
+        $this->view->kanban  = $this->kanban->getByID($region->kanban);
         $this->view->columns = $columnsData;
 
         $this->display();
@@ -975,6 +1008,9 @@ class kanban extends control
     {
         $this->kanban->moveCard($cardID, $fromColID, $toColID, $fromLaneID, $toLaneID, $kanbanID);
         if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+        $this->loadModel('action')->create('kanbanCard', $cardID, 'moved');
+
         $kanbanGroup = $this->kanban->getKanbanData($kanbanID);
         echo json_encode($kanbanGroup);
     }
@@ -1323,7 +1359,7 @@ class kanban extends control
         $cards = $this->kanban->getCardsByObject('region', $regionID, 1);
         foreach($this->config->kanban->fromType as $fromType)
         {
-            $cards = $this->kanban->getImportedCards($region->kanban, $cards, $fromType, 1);
+            $cards = $this->kanban->getImportedCards($region->kanban, $cards, $fromType, 1, $regionID);
         }
 
         $this->view->kanban      = $this->kanban->getByID($region->kanban);
@@ -1389,11 +1425,8 @@ class kanban extends control
         else
         {
             if($card->fromType == '') $this->kanban->delete(TABLE_KANBANCARD, $cardID);
-            if($card->fromType != '')
-            {
-                $this->dao->delete()->from(TABLE_KANBANCARD)->where('id')->eq($cardID)->exec();
-                $this->loadModel('action')->create('kanbancard', $cardID, 'Deleted', '', $cardID);
-            }
+
+            if($card->fromType != '') $this->dao->delete()->from(TABLE_KANBANCARD)->where('id')->eq($cardID)->exec();
 
             if(isonlybody()) return print(js::reload('parent.parent'));
             return print(js::reload('parent'));

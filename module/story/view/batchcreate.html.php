@@ -62,7 +62,7 @@
             <th class='c-category'><?php echo $lang->story->category;?></th>
             <th class='c-pri<?php echo zget($visibleFields, 'pri', ' hidden') . zget($requiredFields, 'pri', '', ' required');?>'><?php echo $lang->story->pri;?></th>
             <th class='c-estimate<?php echo zget($visibleFields, 'estimate', ' hidden') . zget($requiredFields, 'estimate', '', ' required');?>'><?php echo $lang->story->estimate;?></th>
-            <th class='<?php echo zget($visibleFields, 'review',   ' hidden');?>' style="width: 200px !important"><?php echo $lang->story->reviewedBy;?></th>
+            <th class='<?php echo zget($visibleFields, 'review',   ' hidden');?><?php if($forceReview) echo ' required'?>' style="width: 200px !important"><?php echo $lang->story->reviewedBy;?></th>
             <th class='c-keywords<?php echo zget($visibleFields, 'keywords', ' hidden') . zget($requiredFields, 'keywords', '', ' required');?>'><?php echo $lang->story->keywords;?></th>
             <?php
             $extendFields = $this->story->getFlowExtendFields();
@@ -116,12 +116,7 @@
             <td class='<?php echo zget($visibleFields, 'keywords', 'hidden')?>'><?php echo html::input('keywords[$id]', '', "class='form-control'");?></td>
             <?php
             $this->loadModel('flow');
-            foreach($extendFields as $extendField)
-            {
-                $object = new stdclass();
-                $object->{$extendField->field} = $extendField->default;
-                echo "<td" . (($extendField->control == 'select' or $extendField->control == 'multi-select') ? " style='overflow:visible'" : '') . ">" . $this->flow->getFieldControl($extendField, $object, $extendField->field . '[$id]') . "</td>";
-            }
+            foreach($extendFields as $extendField) echo "<td" . (($extendField->control == 'select' or $extendField->control == 'multi-select') ? " style='overflow:visible'" : '') . ">" . $this->flow->getFieldControl($extendField, '', $extendField->field . '[$id]') . "</td>";
             ?>
           </tr>
         </tbody>

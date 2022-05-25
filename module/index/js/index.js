@@ -33,6 +33,12 @@
         {
             if(item === 'divider') return $menuMainNav.append('<li class="divider"></li>');
 
+            /* Append tid param to app url */
+            if($.tabSession && item.url)
+            {
+                item.url = $.tabSession.convertUrlWithTid(item.url);
+            }
+
             var $link= $('<a data-pos="menu"></a>')
                 .attr('data-app', item.code)
                 .attr('data-toggle', 'tooltip')
@@ -429,6 +435,8 @@
         if(!app) return;
 
         if(url === true) url = app.url;
+        else if($.tabSession) url = $.tabSession.convertUrlWithTid(url);
+
         var iframe = app.$iframe[0];
 
         /* Add hook to page before reload it */
@@ -720,7 +728,8 @@ $.extend(
             var reg = /[^0-9]/;
             if(reg.test(objectValue) || objectType == 'all')
             {
-                var searchLink = createLink('search', 'index') + (config.requestType == 'PATH_INFO' ? '?' : '&') + 'words=' + objectValue;
+                var searchLink = createLink('search', 'index');
+                searchLink += (searchLink.indexOf('?') >= 0 ? '&' : '?') + 'words=' + objectValue;
                 $.apps.open(searchLink);
             }
             else

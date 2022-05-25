@@ -375,9 +375,12 @@ class apiModel extends model
     public function getApiListByRelease($release, $where = '1 = 1 ')
     {
         $strJoin = array();
-        foreach($release->snap['apis'] as $api)
+        if(isset($release->snap['apis']))
         {
-            $strJoin[] = "(spec.doc = {$api['id']} and spec.version = {$api['version']} )";
+            foreach($release->snap['apis'] as $api)
+            {
+                $strJoin[] = "(spec.doc = {$api['id']} and spec.version = {$api['version']} )";
+            }
         }
 
         if($strJoin) $where .= 'and (' . implode(' or ', $strJoin) . ')';
@@ -404,7 +407,7 @@ class apiModel extends model
             $rel = $this->getRelease(0, 'byId', $release);
 
             $where = "1=1 and lib = $libID ";
-            if($moduleID > 0)
+            if($moduleID > 0 and isset($rel->snap['modules']))
             {
                 $sub = array();
                 foreach($rel->snap['modules'] as $module)
@@ -497,9 +500,12 @@ class apiModel extends model
     public function getStructListByRelease($release, $where = '1 = 1 ', $orderBy = 'id')
     {
         $strJoin = array();
-        foreach($release->snap['structs'] as $struct)
+        if(isset($release->snap['structs']))
         {
-            $strJoin[] = "(object.id = {$struct['id']} and spec.version = {$struct['version']} )";
+            foreach($release->snap['structs'] as $struct)
+            {
+                $strJoin[] = "(object.id = {$struct['id']} and spec.version = {$struct['version']} )";
+            }
         }
 
         if($strJoin) $where .= 'and (' . implode(' or ', $strJoin) . ')';
@@ -619,8 +625,8 @@ class apiModel extends model
                 foreach($_POST as $key => $value) $param .= ',' . $key . '=' . $value;
                 $param = ltrim($param, ',');
             }
-            $url  = rtrim($host, '/') . inlink('getModel', "moduleName=$moduleName&methodName=$methodName&params=$param", 'json');
-            $url .= $this->config->requestType == "PATH_INFO" ? '?' : '&';
+            $url  = rtrim($host, '/') . inlink('getModel',  "moduleName=$moduleName&methodName=$methodName&params=$param", 'json');
+            $url .= strpos($url, '?') === false ? '?' : '&';
             $url .= $this->config->sessionVar . '=' . session_id();
         }
         else
@@ -631,7 +637,7 @@ class apiModel extends model
                 $param = ltrim($param, '&');
             }
             $url  = rtrim($host, '/') . helper::createLink($moduleName, $methodName, $param, 'json');
-            $url .= $this->config->requestType == "PATH_INFO" ? '?' : '&';
+            $url .= strpos($url, '?') === false ? '?' : '&';
             $url .= $this->config->sessionVar . '=' . session_id();
         }
 

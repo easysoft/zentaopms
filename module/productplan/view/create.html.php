@@ -28,8 +28,6 @@
           <tr>
             <th><?php echo $lang->productplan->parent;?></th>
             <td class='muted'><?php echo $parentPlan->title;?>
-            <?php echo html::hidden('parentBegin', $parentPlan->begin);?>
-            <?php echo html::hidden('parentEnd', $parentPlan->end);?>
             </td><td></td><td></td>
           </tr>
           <?php else:?>
@@ -40,7 +38,7 @@
           <?php if($product->type != 'normal'):?>
           <tr>
             <th><?php echo $lang->product->branch;?></th>
-            <td><?php echo html::select('branch', $branches, $defaultBranch, "class='form-control chosen'");?></td><td></td><td></td>
+            <td><?php echo html::select('branch', $branches, $branch, "class='form-control chosen'");?></td><td></td><td></td>
           </tr>
           <?php endif;?>
           <?php endif;?>
@@ -49,6 +47,12 @@
             <td><?php echo html::input('title', '', "class='form-control' required");?></td>
             <td colspan='2' class='muted'><?php if($lastPlan) echo '(' . $lang->productplan->last . ': ' . $lastPlan->title . ')';?></td>
           </tr>
+          <?php if(!$parent):?>
+          <tr>
+            <th><?php echo $lang->productplan->parent;?></th>
+            <td><?php echo html::select('parent', array('0' => '') + $parentPlanPairs, '', "class='form-control chosen'");?>
+          </tr>
+          <?php endif;?>
           <tr>
             <th><?php echo $lang->productplan->begin;?></th>
             <td><?php echo html::input('begin', formatTime($begin), "class='form-control form-date'");?></td>
@@ -74,8 +78,10 @@
               <?php echo html::submitButton();?>
               <?php echo html::backButton();?>
               <?php echo html::hidden('product', $product->id);?>
-              <?php if($parent) echo html::hidden('branch', $parentPlan->branch);?>
+              <?php if($parent):?>
+              <?php echo html::hidden('branch', $parentPlan->branch);?>
               <?php echo html::hidden('parent', $parent);?>
+              <?php endif;?>
             </td>
           </tr>
         </tbody>

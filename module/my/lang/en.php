@@ -42,6 +42,7 @@ $lang->my->testtask        = 'My Test Task';
 $lang->my->testcase        = 'My Case';
 $lang->my->storyConcept    = 'Story Concept';
 $lang->my->pri             = 'Priority';
+$lang->my->alert           = 'You can click on your profile at the top right and select "Preference" to modify your information. ';
 
 $lang->my->indexAction      = 'My Index';
 $lang->my->calendarAction   = 'My Calendar';
@@ -66,6 +67,7 @@ $lang->my->taskMenu->openedByMe   = 'CreatedByMe';
 $lang->my->taskMenu->finishedByMe = 'FinishedByMe';
 $lang->my->taskMenu->closedByMe   = 'ClosedByMe';
 $lang->my->taskMenu->canceledByMe = 'CancelledByMe';
+$lang->my->taskMenu->assignedByMe = 'AssignedByMe';
 
 $lang->my->storyMenu = new stdclass();
 $lang->my->storyMenu->assignedToMe = 'AssignedToMe';
@@ -73,6 +75,7 @@ $lang->my->storyMenu->reviewByMe   = 'ReviewByMe';
 $lang->my->storyMenu->openedByMe   = 'CreatedByMe';
 $lang->my->storyMenu->reviewedByMe = 'ReviewedByMe';
 $lang->my->storyMenu->closedByMe   = 'ClosedByMe';
+$lang->my->storyMenu->assignedByMe = 'AssignedByMe';
 
 $lang->my->projectMenu = new stdclass();
 $lang->my->projectMenu->doing      = 'Doing';

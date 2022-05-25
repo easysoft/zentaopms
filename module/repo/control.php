@@ -1004,7 +1004,7 @@ class repo extends control
         }
 
         $this->dao->update(TABLE_REPO)->set('commits=commits + ' . $commitCount)->where('id')->eq($repoID)->exec();
-        echo ($type == 'batch' and $commitCount) ?  $commitCount : 'finish';
+        echo $type == 'batch' ?  $commitCount : 'finish';
     }
 
     /**
@@ -1152,9 +1152,10 @@ class repo extends control
      */
     public function ajaxGetGitlabProjects($gitlabID, $projectIdList = '', $filter = '')
     {
-        if($this->app->user->admin)
+        $showAll = ($filter == 'ALL' and common::hasPriv('repo', 'create')) ? true : false;
+        if($this->app->user->admin or $showAll)
         {
-            $projects = $this->loadModel('gitlab')->apiGetProjects($gitlabID);
+            $projects = $this->loadModel('gitlab')->apiGetProjects($gitlabID, true, 0, 0, false);
         }
         else
         {

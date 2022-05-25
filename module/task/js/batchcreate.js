@@ -72,7 +72,7 @@ function copyStoryTitle(num)
 {
     var storyTitle = $('#story' + num).find('option:selected').text();
     var storyValue = $('#story' + num).find('option:selected').val();
-    
+
     if(storyValue === 'ditto')
     {
         for(var i = num; i <= num && i >= 1; i--)
@@ -80,13 +80,13 @@ function copyStoryTitle(num)
             var selectedValue = $('select[id="story' + i +'"]').val();
             var selectedTitle = $('select[id="story' + i +'"]').find('option:selected').text();
             if(selectedValue !== 'ditto')
-            { 
+            {
                 storyTitle = selectedTitle;
                 break;
             }
         }
     }
-    
+
     startPosition  = storyTitle.indexOf(':') + 1;
     endPosition    = storyTitle.lastIndexOf('[');
     storyTitle     = storyTitle.substr(startPosition, endPosition - startPosition);
@@ -132,7 +132,7 @@ function setPreview(num)
         storyLink  = createLink('story', 'view', "storyID=" + storyID);
         if(!isonlybody)
         {
-            var concat = config.requestType != 'GET' ? '?'  : '&';
+            var concat = storyLink.indexOf('?') >= 0 ? '&' : '?';
             storyLink  = storyLink + concat + 'onlybody=yes';
         }
         $('#preview' + num).removeAttr('disabled');

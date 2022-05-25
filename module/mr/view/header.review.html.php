@@ -38,8 +38,8 @@ if($repoExecution)
 }
 
 $reviews = $this->mr->getReview($repoID, $MR->id);
-$v1      = str_replace('-', '*', $sourceBranch);
-$v2      = str_replace('-', '*', $targetBranch);
+$v1      = helper::safe64Encode($sourceBranch);
+$v2      = helper::safe64Encode($targetBranch);
 
 $this->loadModel('repo');
 

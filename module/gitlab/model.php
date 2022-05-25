@@ -690,12 +690,13 @@ class gitlabModel extends model
      * @param  string $simple
      * @param  int    $minID
      * @param  int    $maxID
+     * @param  bool   $sudo
      * @access public
      * @return array
      */
-    public function apiGetProjects($gitlabID, $simple = 'true', $minID = 0, $maxID = 0)
+    public function apiGetProjects($gitlabID, $simple = 'true', $minID = 0, $maxID = 0, $sudo = true)
     {
-        $apiRoot = $this->getApiRoot($gitlabID);
+        $apiRoot = $this->getApiRoot($gitlabID, $sudo);
         if(!$apiRoot) return array();
 
         $url = sprintf($apiRoot, "/projects");

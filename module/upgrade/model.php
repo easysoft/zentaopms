@@ -455,9 +455,6 @@ class upgradeModel extends model
             case '16_0_beta1':
                 $this->loadModel('api')->createDemoData($this->lang->api->zentaoAPI, 'http://' . $_SERVER['HTTP_HOST'] . $this->app->config->webRoot . 'api.php/v1', '16.0');
                 break;
-            case '16_1':
-                $this->moveKanbanData();
-                break;
             case '16_2':
                 $this->updateSpaceTeam();
                 $this->updateDocField();
@@ -4808,7 +4805,7 @@ class upgradeModel extends model
         $this->dao->update(TABLE_RELEASE)->set('project')->eq($projectID)->where('product')->in($productIdList)->exec();
 
         /* Compute product acl. */
-        $this->computeProductAcl($productIdList, $programID);
+        $this->computeProductAcl($productIdList, $programID, $lineID);
 
         /* No project is created when there are no sprints. */
         if(!$sprintIdList) return;
@@ -4947,10 +4944,11 @@ class upgradeModel extends model
      *
      * @param  array  $productIdList
      * @param  int    $programID
+     * @param  int    $lineID
      * @access public
      * @return void
      */
-    public function computeProductAcl($productIdList = array(), $programID = 0)
+    public function computeProductAcl($productIdList = array(), $programID = 0, $lineID = 0)
     {
         /* Compute product acl. */
         $products = $this->dao->select('id,program,acl')->from(TABLE_PRODUCT)->where('id')->in($productIdList)->fetchAll();
@@ -4961,6 +4959,7 @@ class upgradeModel extends model
             $data = new stdclass();
             $data->program = $programID;
             $data->acl     = $product->acl == 'custom' ? 'private' : $product->acl;
+            $data->line    = $lineID;
 
             $this->dao->update(TABLE_PRODUCT)->data($data)->where('id')->eq($product->id)->exec();
         }
@@ -5576,80 +5575,6 @@ class upgradeModel extends model
         }
 
         return true;
-    }
-
-    /**
-     * Move kanban card data to kanbancell table.
-     *
-     * @access public
-     * @return void
-     */
-    public function moveKanbanData()
-    {
-        /* Move common kanban data. */
-        $cards = $this->dao->select('id,kanban,`column`,lane')->from(TABLE_KANBANCARD)->fetchAll('id');
-
-        $cellGroup = array();
-        foreach($cards as $cardID => $card)
-        {
-            if(!$card->lane or !$card->column) continue;
-
-            $key   = $card->kanban . '-' . $card->lane . '-' . $card->column;
-            $cards = isset($cellGroup[$key]) ? $cellGroup[$key] . "$cardID," : ",$cardID,";
-            $cellGroup[$key] = $cards;
-        }
-
-        foreach($cellGroup as $key => $cards)
-        {
-            $key = explode('-', $key);
-            if(!is_array($key)) continue;
-
-            $cell = new stdclass();
-            $cell->kanban = $key[0];
-            $cell->lane   = $key[1];
-            $cell->column = $key[2];
-            $cell->type   = 'common';
-            $cell->cards  = $cards;
-
-            $this->dao->insert(TABLE_KANBANCELL)->data($cell)->exec();
-        }
-
-        /* Drop group kanban data. */
-        $groupLanePairs = $this->dao->select('id')->from(TABLE_KANBANLANE)->where('`groupby`')->ne('')->fetchPairs();
-        if(!empty($groupLanePairs))
-        {
-            $this->dao->delete()->from(TABLE_KANBANLANE)->where('id')->in($groupLanePairs)->exec();
-            $this->dao->delete()->from(TABLE_KANBANCOLUMN)->where('lane')->in($groupLanePairs)->exec();
-        }
-
-        /* Move execution kanban data. */
-        $executionKanban = $this->dao->select('t1.id as `lane`, t1.execution, t1.type, t2.id as `column`, t2.cards')->from(TABLE_KANBANLANE)->alias('t1')
-            ->leftJoin(TABLE_KANBANCOLUMN)->alias('t2')->on('t1.id = t2.lane')
-            ->where('t1.execution')->gt(0)
-            ->fetchGroup('lane');
-
-        foreach($executionKanban as $laneID => $laneGroup)
-        {
-            foreach($laneGroup as $colData)
-            {
-                if(!$laneID or !$colData->column) continue;
-
-                $cell = new stdclass();
-                $cell->kanban = $colData->execution;
-                $cell->lane   = $laneID;
-                $cell->column = $colData->column;
-                $cell->type   = $colData->type;
-                $cell->cards  = $colData->cards;
-
-                $this->dao->insert(TABLE_KANBANCELL)->data($cell)->exec();
-            }
-        }
-
-        /* Drop unused field. */
-        $this->dao->exec("ALTER TABLE " . TABLE_KANBANCARD . " DROP COLUMN `lane`;");
-        $this->dao->exec("ALTER TABLE " . TABLE_KANBANCARD . " DROP COLUMN `column`;");
-        $this->dao->exec("ALTER TABLE " . TABLE_KANBANCOLUMN . " DROP COLUMN `lane`;");
-        $this->dao->exec("ALTER TABLE " . TABLE_KANBANCOLUMN . " DROP COLUMN `cards`;");
     }
 
     /**

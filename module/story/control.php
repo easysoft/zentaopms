@@ -206,7 +206,7 @@ class story extends control
                 setcookie('storyModuleParam', 0, 0, $this->config->webRoot, '', $this->config->cookieSecure, true);
                 $execution          = $this->dao->findById((int)$objectID)->from(TABLE_EXECUTION)->fetch();
                 $moduleName         = $execution->type == 'project' ? 'projectstory' : 'execution';
-                $param              = $execution->type == 'project' ? "projectID=$objectID&productID=$productID" : "executionID=$objectID&orderBy=id_desc&browseType=unclosed";
+                $param              = $execution->type == 'project' ? "projectID=$objectID&productID=$productID" : "executionID=$objectID&orderBy=order_desc&browseType=unclosed";
                 $response['locate'] = $this->createLink($moduleName, 'story', $param);
             }
             if($this->app->getViewType() == 'xhtml') $response['locate'] = $this->createLink('story', 'view', "storyID=$storyID", 'html');
@@ -603,6 +603,7 @@ class story extends control
         $this->view->branches         = $branches;
         /* When the user is product owner or add story in project or not set review, the default is not to review. */
         $this->view->needReview       = ($this->app->user->account == $product->PO || $executionID > 0 || $this->config->story->needReview == 0) ? 0 : 1;
+        $this->view->forceReview      = $this->story->checkForceReview();
         $this->view->executionID      = $executionID;
 
         $this->display();

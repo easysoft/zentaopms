@@ -126,7 +126,7 @@ class bug extends control
         $queryID  = ($browseType == 'bysearch') ? (int)$param : 0;
 
         /* Set session. */
-        $this->session->set('bugList', $this->app->getURI(true), 'qa');
+        $this->session->set('bugList', $this->app->getURI(true) . "#app={$this->app->tab}", 'qa');
 
         /* Set moduleTree. */
         if($browseType == '')
@@ -267,7 +267,7 @@ class bug extends control
     public function report($productID, $browseType, $branchID, $moduleID, $chartType = 'default')
     {
         $this->loadModel('report');
-        $this->view->charts   = array();
+        $this->view->charts = array();
 
         if(!empty($_POST))
         {
@@ -1447,7 +1447,7 @@ class bug extends control
             $this->loadModel('score')->create('ajax', 'batchOther');
         }
 
-        if($type == 'product' || $type == 'my') return print(js::locate($this->session->bugList, 'parent'));
+        if($type == 'product' || $type == 'my') return print(js::reload('parent'));
         if($type == 'execution') return print(js::locate($this->createLink('execution', 'bug', "executionID=$objectID")));
         if($type == 'project')   return print(js::locate($this->createLink('project', 'bug', "projectID=$objectID")));
     }

@@ -624,6 +624,7 @@ $lang->resource->kanban->sortSpace          = 'sortSpace';
 $lang->resource->kanban->create             = 'create';
 $lang->resource->kanban->edit               = 'edit';
 $lang->resource->kanban->view               = 'view';
+$lang->resource->kanban->activate           = 'activate';
 $lang->resource->kanban->close              = 'close';
 $lang->resource->kanban->delete             = 'delete';
 $lang->resource->kanban->createRegion       = 'createRegion';
@@ -712,6 +713,7 @@ $lang->kanban->methodorder[220] = 'setColumnWidth';
 $lang->kanban->methodOrder[225] = 'batchCreateCard';
 $lang->kanban->methodorder[230] = 'import';
 $lang->kanban->methodorder[235] = 'enableArchived';
+$lang->kanban->methodorder[240] = 'activate';
 
 /* Execution. */
 $lang->resource->execution = new stdclass();
@@ -1270,6 +1272,7 @@ $lang->resource->custom->editStoryConcept   = 'editStoryConcept';
 $lang->resource->custom->browseStoryConcept = 'browseStoryConcept';
 $lang->resource->custom->setDefaultConcept  = 'setDefaultConcept';
 $lang->resource->custom->deleteStoryConcept = 'deleteStoryConcept';
+$lang->resource->custom->kanban             = 'kanban';
 
 $lang->custom->methodOrder[5]  = 'index';
 $lang->custom->methodOrder[10] = 'set';

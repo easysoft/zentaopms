@@ -173,8 +173,9 @@ js::set('systemMode', $this->config->systemMode);
       </div>
       <div class='col-xs-2 card-actions' <?php if($kanban->performable) echo "id='performable'";?>>
         <?php
-        $canRestore = commonModel::hasPriv('kanban', 'restoreCard');
-        $canDelete  = commonModel::hasPriv('kanban', 'deleteCard');
+        $CRKanban   = !(isset($this->config->CRKanban) and $this->config->CRKanban == '0' and $kanban->status == 'closed');
+        $canRestore = (commonModel::hasPriv('kanban', 'restoreCard') and $CRKanban);
+        $canDelete  = (commonModel::hasPriv('kanban', 'deleteCard') and $CRKanban);
 
         if($canRestore) echo html::a(inlink('restoreCard', "cardID={$card->id}"), $lang->kanban->restore, '', "class='btn btn-xs btn-primary' target='hiddenwin'");
 

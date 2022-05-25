@@ -65,7 +65,7 @@ class productPlan
      * @access public
      * @return array
      */
-    public function getList($product, $branch, $browseType, $pager, $orderBy, $param)
+    public function getList($product = 0, $branch = 0, $browseType = 'undone', $pager = null, $orderBy = 'begin_desc', $param = '')
     {
         $productplans = $this->productplan->getList($product, $branch, $browseType, $pager, $orderBy, $param);
         if(dao::isError()) return dao::getError();
@@ -177,6 +177,28 @@ class productPlan
         $productplans = $this->productplan->getBranchPlanPairs($productID, $branches);
         if(dao::isError()) return dao::getError();
         return $productplans;
+    }
+
+    /**
+     * Get top plan pairs
+     *
+     * @param  int  $productID
+     * @param  int  $branch
+     * @param  int  $exclude
+     * @access public
+     * @return array
+     */
+    public function getTopPlanPairsTest($param)
+    {
+        $productID = $param['productID'];
+        $branch    = $param['branch'];
+        $exclude   = $param['exclude'];
+
+        $planPairs = $this->productplan->getTopPlanPairs($productID, $branch, $exclude);
+
+        if(dao::isError()) return dao::getError();
+
+        return $planPairs;
     }
 
     /**

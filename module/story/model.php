@@ -2437,6 +2437,7 @@ class storyModel extends model
      * Get stories by assignedTo.
      *
      * @param  int    $productID
+     * @param  string $branch
      * @param  string $account
      * @param  string $type    requirement|story
      * @param  string $orderBy
@@ -2453,6 +2454,8 @@ class storyModel extends model
      * Get stories by openedBy.
      *
      * @param  int    $productID
+     * @param  int    $branch
+     * @param  string $modules
      * @param  string $account
      * @param  string $type    requirement|story
      * @param  string $orderBy
@@ -2469,6 +2472,8 @@ class storyModel extends model
      * Get stories by reviewedBy.
      *
      * @param  int    $productID
+     * @param  int    $branch
+     * @param  string $modules
      * @param  string $account
      * @param  string $type    requirement|story
      * @param  string $orderBy
@@ -2503,6 +2508,8 @@ class storyModel extends model
      * Get stories by closedBy.
      *
      * @param  int    $productID
+     * @param  int    $branch
+     * @param  string $modules
      * @param  string $account
      * @param  string $type    requirement|story
      * @param  string $orderBy
@@ -2518,6 +2525,8 @@ class storyModel extends model
      * Get stories by status.
      *
      * @param  int    $productID
+     * @param  int    $branch
+     * @param  string $modules
      * @param  string $status
      * @param  string $type    requirement|story
      * @param  string $orderBy
@@ -2533,19 +2542,38 @@ class storyModel extends model
     /**
      * Get stories by plan.
      *
-     * @param int    $productID
-     * @param int    $branch
-     * @param array  $modules
-     * @param int    $plan
-     * @param string $type    requirement|story
-     * @param string $orderBy
-     * @param object $pager
+     * @param  int    $productID
+     * @param  int    $branch
+     * @param  array  $modules
+     * @param  int    $plan
+     * @param  string $type    requirement|story
+     * @param  string $orderBy
+     * @param  object $pager
      *
+     * @access public
      * @return array
      */
     public function getByPlan($productID, $branch, $modules, $plan, $type = 'story', $orderBy = '', $pager = null)
     {
         return $this->getByField($productID, $branch, $modules, 'plan', $plan, $type, $orderBy, $pager);
+    }
+
+    /**
+     * Get stories by assignedBy.
+     *
+     * @param  int    $productID
+     * @param  int    $branch
+     * @param  string $modules
+     * @param  string $account
+     * @param  string $type    requirement|story
+     * @param  string $orderBy
+     * @param  object $pager
+     * @access public
+     * @return array
+     */
+    public function getByAssignedBy($productID, $branch, $modules, $account, $type = 'story', $orderBy = '', $pager = null)
+    {
+        return $this->getByField($productID, $branch, $modules, 'assignedBy', $account, $type, $orderBy, $pager);
     }
 
     /**
@@ -2565,7 +2593,10 @@ class storyModel extends model
      */
     public function getByField($productID, $branch, $modules, $fieldName, $fieldValue, $type = 'story', $orderBy = '', $pager = null, $operator = 'equal')
     {
-        if(!$this->loadModel('common')->checkField(TABLE_STORY, $fieldName) and $fieldName != 'reviewBy') return array();
+        if(!$this->loadModel('common')->checkField(TABLE_STORY, $fieldName) and $fieldName != 'reviewBy' and $fieldName != 'assignedBy') return array();
+
+        $actionIDList = array();
+        if($fieldName == 'assignedBy') $actionIDList = $this->dao->select('objectID')->from(TABLE_ACTION)->where('objectType')->eq('story')->andWhere('action')->eq('assigned')->andWhere('actor')->eq($fieldValue)->fetchPairs('objectID', 'objectID');
 
         $sql = $this->dao->select('t1.*')->from(TABLE_STORY)->alias('t1');
         if($fieldName == 'reviewBy') $sql = $sql->leftJoin(TABLE_STORYREVIEW)->alias('t2')->on('t1.id = t2.story and t1.version = t2.version');
@@ -2575,13 +2606,14 @@ class storyModel extends model
             ->andWhere('t1.type')->eq($type)
             ->beginIF($branch != 'all')->andWhere("t1.branch")->eq($branch)->fi()
             ->beginIF($modules)->andWhere("t1.module")->in($modules)->fi()
-            ->beginIF($operator == 'equal' and $fieldName != 'reviewBy')->andWhere('t1.' . $fieldName)->eq($fieldValue)->fi()
-            ->beginIF($operator == 'include' and $fieldName != 'reviewBy')->andWhere('t1.' . $fieldName)->like("%$fieldValue%")->fi()
+            ->beginIF($operator == 'equal' and $fieldName != 'reviewBy' and $fieldName != 'assignedBy')->andWhere('t1.' . $fieldName)->eq($fieldValue)->fi()
+            ->beginIF($operator == 'include' and $fieldName != 'reviewBy' and $fieldName != 'assignedBy')->andWhere('t1.' . $fieldName)->like("%$fieldValue%")->fi()
             ->beginIF($fieldName == 'reviewBy')
             ->andWhere('t2.reviewer')->eq($this->app->user->account)
             ->andWhere('t2.result')->eq('')
             ->andWhere('t1.status')->in('draft,changed')
             ->fi()
+            ->beginIF($fieldName == 'assignedBy')->andWhere('t1.id')->in($actionIDList)->andWhere('t1.status')->ne('closed')->fi()
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id');
@@ -2592,6 +2624,8 @@ class storyModel extends model
      * Get to be closed stories.
      *
      * @param  int    $productID
+     * @param  int    $branch
+     * @param  string $modules
      * @param  string $type requirement|story
      * @param  string $orderBy
      * @param  object $pager
@@ -4322,7 +4356,30 @@ class storyModel extends model
     public function checkForceReview()
     {
         $forceReview = false;
-        if(!empty($this->config->story->forceReview)) $forceReview = strpos(",{$this->config->story->forceReview},", ",{$this->app->user->account},") !== false;
+
+        if(isset($this->config->story->forceReviewAll) and $this->config->story->forceReviewAll) return true;
+
+        $forceUsers = '';
+        if(!empty($this->config->story->forceReview)) $forceUsers = $this->config->story->forceReview;
+
+        if(!empty($this->config->story->forceReviewRoles) or !empty($this->config->story->forceReviewDepts))
+        {
+            $users = $this->dao->select('account')->from(TABLE_USER)
+                ->where('deleted')->eq(0)
+                ->andWhere(true, true)
+                ->beginIF(!empty($this->config->story->forceReviewRoles))
+                ->andWhere('role', true)->in($this->config->story->forceReviewRoles)
+                ->andWhere('role')->ne('')
+                ->markRight(1)
+                ->fi()
+                ->beginIF(!empty($this->config->story->forceReviewDepts))->orWhere('dept')->in($this->config->story->forceReviewDepts)->fi()
+                ->markRight(1)
+                ->fetchAll('account');
+
+            $forceUsers .= "," . implode(',', array_keys($users));
+        }
+
+        $forceReview = strpos(",{$forceUsers},", ",{$this->app->user->account},") !== false;
 
         return $forceReview;
     }
@@ -4828,7 +4885,7 @@ class storyModel extends model
 
         /* Merge to get a new sort list. */
         $newSortIDList = array_merge($frontStoryIDList, $sortIDList, $behindStoryIDList);
-        if(strpos($orderBy, 'order_desc')) array_reverse($newSortIDList);
+        if(strpos($orderBy, 'order_desc') !== false) $newSortIDList = array_reverse($newSortIDList);
 
         /* Loop update the story order of plan. */
         $order = 1;

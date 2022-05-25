@@ -326,7 +326,7 @@ $config->bug->datatable->fieldList['closedDate']['required'] = 'no';
 
 $config->bug->datatable->fieldList['lastEditedBy']['title']    = 'lastEditedBy';
 $config->bug->datatable->fieldList['lastEditedBy']['fixed']    = 'no';
-$config->bug->datatable->fieldList['lastEditedBy']['width']    = '80';
+$config->bug->datatable->fieldList['lastEditedBy']['width']    = '90';
 $config->bug->datatable->fieldList['lastEditedBy']['required'] = 'no';
 
 $config->bug->datatable->fieldList['lastEditedDate']['title']    = 'lastEditedDateAB';
@@ -338,3 +338,19 @@ $config->bug->datatable->fieldList['actions']['title']    = 'actions';
 $config->bug->datatable->fieldList['actions']['fixed']    = 'right';
 $config->bug->datatable->fieldList['actions']['width']    = '150';
 $config->bug->datatable->fieldList['actions']['required'] = 'yes';
+
+$config->bug->colorList = new stdclass();
+$config->bug->colorList->pri[1]      = '#d50000';
+$config->bug->colorList->pri[2]      = '#ff9800';
+$config->bug->colorList->pri[3]      = '#2098ee';
+$config->bug->colorList->pri[4]      = '#009688';
+$config->bug->colorList->pri[5]      = '#919090';
+$config->bug->colorList->pri[6]      = '#B6B4B4';
+$config->bug->colorList->pri[7]      = '#BDBEBD';
+$config->bug->colorList->severity[1] = '#c62828';
+$config->bug->colorList->severity[2] = '#ff8f00';
+$config->bug->colorList->severity[3] = '#fdd835';
+$config->bug->colorList->severity[4] = '#cddc39';
+$config->bug->colorList->severity[5] = '#8bc34a';
+$config->bug->colorList->severity[6] = '#B6B4B4';
+$config->bug->colorList->severity[7] = '#BDBEBD';

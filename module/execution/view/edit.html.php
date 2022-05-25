@@ -25,7 +25,7 @@
     </div>
     <form class='load-indicator main-form form-ajax' method='post' target='hiddenwin' id='dataform'>
       <table class='table table-form'>
-        <?php if($config->systemMode == 'new'):?>
+        <?php if($config->systemMode == 'new' and isset($project) and $project->model == 'scrum'):?>
         <tr>
           <th class='w-120px'><?php echo $lang->execution->projectName;?></th>
           <td><?php echo html::select('project', $allProjects, $execution->project, "class='form-control chosen' onchange='changeProject(this.value)' required");?></td><td></td>
@@ -218,6 +218,7 @@
 <?php js::set('errorSameBranches', $lang->execution->errorSameBranches);?>
 <?php js::set('unmodifiableProducts',$unmodifiableProducts);?>
 <?php js::set('unmodifiableBranches', $unmodifiableBranches)?>
+<?php js::set('linkedStoryIDList', $linkedStoryIDList)?>
 <?php js::set('multiBranchProducts', $multiBranchProducts);?>
 <?php js::set('tip', $lang->execution->notAllowRemoveProducts);?>
 <?php js::set('confirmSync', $lang->execution->confirmSync);?>

@@ -348,7 +348,7 @@ if(!window.kanbanDropRules)
             'wait': ['wait', 'developing', 'developed', 'canceled'],
             'developing': ['developing', 'developed', 'pause', 'canceled'],
             'developed': ['developed', 'developing', 'closed'],
-            'pause': ['pause', 'developing', 'developed', 'canceled'],
+            'pause': ['pause', 'developing', 'canceled'],
             'canceled': ['canceled', 'developing', 'closed'],
             'closed': ['closed', 'developing'],
         }
@@ -430,9 +430,10 @@ function renderUserAvatar(user, objectType, objectID, size)
 /**
  * Render deadline
  * @param {String|Date} deadline Deadline
+ * @param {string}      status
  * @returns {JQuery}
  */
-function renderDeadline(deadline)
+function renderDeadline(deadline, status)
 {
     if(deadline == '0000-00-00') return;
 
@@ -444,8 +445,10 @@ function renderDeadline(deadline)
     now.setMilliseconds(0);
     var isEarlyThanToday = date.getTime() < now.getTime();
     var deadlineDate     = $.zui.formatDate(date, 'MM-dd');
+    var statusList       = ['wait','doing','pause'];
+    var textColor        = isEarlyThanToday && typeof(status) != 'undefined' && statusList.indexOf(status) != -1 ? 'text-red' : 'text-muted';
 
-    return $('<span class="info info-deadline"/>').text(deadlineLang + ' ' + deadlineDate).addClass(isEarlyThanToday ? 'text-red' : 'text-muted');
+    return $('<span class="info info-deadline"/>').text(deadlineLang + ' ' + deadlineDate).addClass(textColor);
 }
 
 /**
@@ -600,15 +603,14 @@ function renderTaskItem(item, $item, col)
 
     if(scaleSize <= 2)
     {
-        var idHtml     = scaleSize <= 1 ? ('<span class="info info-id text-muted">#' + item.id + '</span>') : '';
         var priHtml    = '<span class="info info-pri label-pri label-pri-' + item.pri + '" title="' + item.pri + '">' + item.pri + '</span>';
-        var hoursHtml  = (item.estimate && scaleSize <= 1) ? ('<span class="info info-estimate text-muted">' + item.estimate + 'h</span>') : '';
+        var hoursHtml  = scaleSize <= 1 && item.status != 'wait' ? ('<span class="info info-estimate text-muted">' + taskLang.leftAB + ' ' + item.left + 'h</span>') : ('<span class="info info-estimate text-muted">' + taskLang.estimateAB + ' ' + item.estimate + 'h</span>');
         var avatarHtml = renderUserAvatar(item.assignedTo, 'task', item.id);
 
         var $infos = $item.find('.infos');
         if(!$infos.length) $infos = $('<div class="infos"></div>');
-        $infos.html([idHtml, priHtml, hoursHtml].join(''));
-        if(item.deadline && scaleSize <= 1) $infos.append(renderDeadline(item.deadline));
+        $infos.html([priHtml, hoursHtml].join(''));
+        if(item.deadline && scaleSize <= 1) $infos.append(renderDeadline(item.deadline, item.status));
         $infos[scaleSize <= 1 ? 'append' : 'prepend'](avatarHtml);
 
         if(scaleSize <= 1) $infos.appendTo($item);
@@ -1213,7 +1215,7 @@ function initKanban($kanban)
         calcColHeight:     calcColHeight,
         minColWidth:       240,
         maxColWidth:       240,
-        cardHeight:        60,
+        cardHeight:        getCardHeight(),
         fluidBoardWidth:   fluidBoard,
         displayCards:      displayCards,
         createColumnText:  kanbanLang.createColumn,
@@ -1224,6 +1226,8 @@ function initKanban($kanban)
         onRenderHeaderCol: renderHeaderCol,
         onRenderCount:     renderCount,
         droppable:         groupBy == 'default' ? {target: findDropColumns, finish:handleFinishDrop} : false,
+        virtualize:        true,
+        virtualCardList:   true
     });
 
     $kanban.on('click', '.action-cancel', hideKanbanAction);

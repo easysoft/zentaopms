@@ -82,7 +82,7 @@ $lang->program->exRateNotNegative       = '『汇率』不能是负数。';
 $lang->program->changePRJUnit           = '更新项目预算单位';
 
 $lang->program->progress         = '项目进度';
-$lang->program->children         = '子项目集';
+$lang->program->children         = '添加子项目集';
 $lang->program->allInvest        = '项目集总投入';
 $lang->program->teamCount        = '总人数';
 $lang->program->longTime         = '长期';

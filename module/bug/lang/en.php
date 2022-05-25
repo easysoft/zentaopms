@@ -137,6 +137,7 @@ $lang->bug->assignToMe         = 'AssignedToMe';
 $lang->bug->openedByMe         = 'ReportedByMe';
 $lang->bug->resolvedByMe       = 'ResolvedByMe';
 $lang->bug->closedByMe         = 'ClosedByMe';
+$lang->bug->assignedByMe       = 'AssignedByMe';
 $lang->bug->assignToNull       = 'Unassigned';
 $lang->bug->unResolved         = 'Active';
 $lang->bug->toClosed           = 'ToBeClosed';
@@ -420,6 +421,7 @@ $lang->bug->featureBar['browse']['unclosed']     = $lang->bug->unclosed;
 $lang->bug->featureBar['browse']['openedbyme']   = $lang->bug->openedByMe;
 $lang->bug->featureBar['browse']['assigntome']   = $lang->bug->assignToMe;
 $lang->bug->featureBar['browse']['resolvedbyme'] = $lang->bug->resolvedByMe;
+$lang->bug->featureBar['browse']['assignedbyme'] = $lang->bug->assignedByMe;
 
 $lang->bug->featureBar['browse']['unresolved']   = $lang->bug->unResolved;
 $lang->bug->featureBar['browse']['more']         = $lang->more;

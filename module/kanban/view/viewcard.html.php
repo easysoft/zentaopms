@@ -34,7 +34,7 @@
     </div>
     <div class='main-actions'>
       <div class="btn-toolbar">
-        <?php if(!$card->deleted and !$card->archived):?>
+        <?php if(!$card->deleted and !$card->archived and !(isset($this->config->CRKanban) and $this->config->CRKanban == '0' and $kanban->status == 'closed')):?>
         <?php
         //common::printLink('kanban', 'assigntoCard', "cardID=$card->id", "<i class='icon icon-hand-right'></i><span class='text'>{$lang->kanbancard->assign}</span>", '', "class='btn btn-link iframe' title='{$lang->kanbancard->assign}'", true, true);
         if($kanban->archived)

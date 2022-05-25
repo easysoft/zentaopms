@@ -16,6 +16,7 @@
 <?php js::set('testtasks', $testtasks);?>
 <?php js::set('confirmUnlinkTesttask', $lang->testcase->confirmUnlinkTesttask);?>
 <?php js::set('isLibCase', $isLibCase);?>
+<?php js::set('requiredFields', $config->testcase->edit->requiredFields)?>
 <div id="mainContent" class="main-content">
   <div class="main-header">
     <h2><?php echo $lang->testcase->common . $lang->colon . $lang->testcase->batchEdit;?></h2>
@@ -54,7 +55,7 @@
             <?php if($branchProduct):?>
             <th class='c-branch'><?php echo $lang->testcase->branch;?></th>
             <?php endif;?>
-            <th class='c-module<?php echo zget($visibleFields, 'module', ' hidden')?>'><?php echo $lang->testcase->module;?></th>
+            <th class='c-module<?php echo zget($visibleFields, 'module', ' hidden') . zget($requiredFields, 'module', '', ' required');?>'><?php echo $lang->testcase->module;?></th>
             <th class='c-story<?php echo zget($visibleFields, 'story', ' hidden') . zget($requiredFields, 'story', '', ' required');?>'><?php echo $lang->testcase->story;?></th>
             <th class='text-left c-title required'><?php echo $lang->testcase->title;?></th>
             <th class='c-type required'><?php echo $lang->testcase->type;?></th>

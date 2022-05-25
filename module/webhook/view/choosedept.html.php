@@ -58,8 +58,9 @@ $(function()
         }
         if(selectedDepts) selectedDepts = selectedDepts.substr(1);
 
-        var sign = config.requestType == 'PATH_INFO' ? '?' : '&';
-        var link = createLink('webhook', 'bind', "id=<?php echo $webhookID;?>") + sign + "selectedDepts=" + selectedDepts;
+        var link = createLink('webhook', 'bind', "id=<?php echo $webhookID;?>");
+        link    += link.indexOf('?') >= 0 ? '&' : '?';
+        link    += "selectedDepts=" + selectedDepts;
         location.href = link;
 
         return false;

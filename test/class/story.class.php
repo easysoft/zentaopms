@@ -5,13 +5,13 @@ class storyTest
     {
          global $tester;
          $this->objectModel = $tester->loadModel('story');
-    } 
-    
+    }
+
     /**
      * Test get by id.
-     * 
-     * @param  int    $storyID 
-     * @param  int    $version 
+     *
+     * @param  int    $storyID
+     * @param  int    $version
      * @access public
      * @return void
      */
@@ -26,9 +26,9 @@ class storyTest
 
     /**
      * Test get by list.
-     * 
-     * @param  int    $storyIdList 
-     * @param  string $type 
+     *
+     * @param  int    $storyIdList
+     * @param  string $type
      * @access public
      * @return void
      */
@@ -43,9 +43,9 @@ class storyTest
 
     /**
      * Test get test stories.
-     * 
-     * @param  array  $storyIdList 
-     * @param  int    $executionID 
+     *
+     * @param  array  $storyIdList
+     * @param  int    $executionID
      * @access public
      * @return void
      */
@@ -60,8 +60,8 @@ class storyTest
 
     /**
      * Test get story specs.
-     * 
-     * @param  array $storyIdList 
+     *
+     * @param  array $storyIdList
      * @access public
      * @return void
      */
@@ -76,7 +76,7 @@ class storyTest
 
     /**
      * Test get affected scope.
-     * 
+     *
      * @param  int    $storyID
      * @access public
      * @return void
@@ -84,7 +84,7 @@ class storyTest
     public function getAffectedScopeTest($storyID)
     {
         global $tester;
-        $story = $tester->loadModel('story')->getById($storyID); 
+        $story = $tester->loadModel('story')->getById($storyID);
         $scope = $this->objectModel->getAffectedScope($story);
 
         if(dao::isError()) return dao::getError();
@@ -94,8 +94,8 @@ class storyTest
 
     /**
      * Test get requierements.
-     * 
-     * @param  int    $productID 
+     *
+     * @param  int    $productID
      * @access public
      * @return void
      */
@@ -110,11 +110,11 @@ class storyTest
 
     /**
      * Test create story.
-     * 
-     * @param  int    $executionID 
-     * @param  int    $bugID 
-     * @param  string $from 
-     * @param  string $extra 
+     *
+     * @param  int    $executionID
+     * @param  int    $bugID
+     * @param  string $from
+     * @param  string $extra
      * @access public
      * @return void
      */
@@ -128,14 +128,14 @@ class storyTest
 
         global $tester;
         $storyID = $result['id'];
-        return $tester->loadModel('story')->getById($storyID); 
+        return $tester->loadModel('story')->getById($storyID);
     }
 
     /**
      * Test create story from gitlab issue.
-     * 
-     * @param  int    $story 
-     * @param  int    $executionID 
+     *
+     * @param  int    $story
+     * @param  int    $executionID
      * @access public
      * @return void
      */
@@ -146,15 +146,15 @@ class storyTest
         if(dao::isError()) return dao::getError();
 
         global $tester;
-        return $tester->loadModel('story')->getById($storyID); 
+        return $tester->loadModel('story')->getById($storyID);
     }
 
     /**
      * Test batch create stories.
-     * 
-     * @param  int    $productID 
-     * @param  int    $branch 
-     * @param  string $type 
+     *
+     * @param  int    $productID
+     * @param  int    $branch
+     * @param  string $type
      * @param  array  $params
      * @access public
      * @return void
@@ -176,8 +176,8 @@ class storyTest
 
     /**
      * Test change story.
-     * 
-     * @param  int    $storyID 
+     *
+     * @param  int    $storyID
      * @param  array  $params
      * @access public
      * @return void
@@ -196,8 +196,8 @@ class storyTest
 
     /**
      * Test update story.
-     * 
-     * @param  int    $storyID 
+     *
+     * @param  int    $storyID
      * @param  array  $params
      * @access public
      * @return void
@@ -215,10 +215,10 @@ class storyTest
 
     /**
      * Test update story order of plan.
-     * 
-     * @param  int    $storyID 
-     * @param  string $planIDList 
-     * @param  string $oldPlanIDList 
+     *
+     * @param  int    $storyID
+     * @param  string $planIDList
+     * @param  string $oldPlanIDList
      * @access public
      * @return void
      */
@@ -234,8 +234,8 @@ class storyTest
 
     /**
      * Test compute estimate.
-     * 
-     * @param  int    $storyID 
+     *
+     * @param  int    $storyID
      * @access public
      * @return void
      */
@@ -250,7 +250,7 @@ class storyTest
 
     /**
      * Test batch update stories.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -268,8 +268,8 @@ class storyTest
 
     /**
      * Test review story.
-     * 
-     * @param  int    $storyID 
+     *
+     * @param  int    $storyID
      * @param  array  $params
      * @access public
      * @return void
@@ -287,10 +287,10 @@ class storyTest
 
     /**
      * Test batch review.
-     * 
-     * @param  int    $storyIdList 
-     * @param  int    $result 
-     * @param  int    $reason 
+     *
+     * @param  int    $storyIdList
+     * @param  int    $result
+     * @param  int    $reason
      * @access public
      * @return void
      */
@@ -306,9 +306,9 @@ class storyTest
 
     /**
      * Test story subdivide.
-     * 
-     * @param  int    $storyID 
-     * @param  array  $stories 
+     *
+     * @param  int    $storyID
+     * @param  array  $stories
      * @access public
      * @return void
      */
@@ -331,8 +331,8 @@ class storyTest
 
     /**
      * Test close a story.
-     * 
-     * @param  int    $storyID 
+     *
+     * @param  int    $storyID
      * @param  array  $params
      * @access public
      * @return void
@@ -350,8 +350,8 @@ class storyTest
 
     /**
      * Test batch close story.
-     * 
-     * @param  array $params 
+     *
+     * @param  array $params
      * @access public
      * @return void
      */
@@ -369,9 +369,9 @@ class storyTest
 
     /**
      * Test batch change story module.
-     * 
-     * @param  int    $storyIdList 
-     * @param  int    $moduleID 
+     *
+     * @param  int    $storyIdList
+     * @param  int    $moduleID
      * @access public
      * @return void
      */
@@ -387,10 +387,10 @@ class storyTest
 
     /**
      * Test batch change story plan.
-     * 
-     * @param  arary  $storyIdList 
-     * @param  int    $planID 
-     * @param  int    $oldPlanID 
+     *
+     * @param  arary  $storyIdList
+     * @param  int    $planID
+     * @param  int    $oldPlanID
      * @access public
      * @return void
      */
@@ -406,11 +406,11 @@ class storyTest
 
     /**
      * Test batch change story branch.
-     * 
-     * @param  arary  $storyIdList 
-     * @param  int    $branchID 
-     * @param  string $confirm 
-     * @param  array  $plans 
+     *
+     * @param  arary  $storyIdList
+     * @param  int    $branchID
+     * @param  string $confirm
+     * @param  array  $plans
      * @access public
      * @return void
      */
@@ -426,9 +426,9 @@ class storyTest
 
     /**
      * Test batch change stage.
-     * 
-     * @param  arrau  $storyIdList 
-     * @param  string $stage 
+     *
+     * @param  arrau  $storyIdList
+     * @param  string $stage
      * @access public
      * @return void
      */
@@ -444,9 +444,9 @@ class storyTest
 
     /**
      * Test story batch to task.
-     * 
-     * @param  int    $executionID 
-     * @param  int    $projectID 
+     *
+     * @param  int    $executionID
+     * @param  int    $projectID
      * @param  array  $params
      * @access public
      * @return void
@@ -465,8 +465,8 @@ class storyTest
 
     /**
      * Test assign a story.
-     * 
-     * @param  int    $storyID 
+     *
+     * @param  int    $storyID
      * @param  string $assignedTo
      * @access public
      * @return void
@@ -484,8 +484,8 @@ class storyTest
 
     /**
      * Test batch assign story.
-     * 
-     * @param  array  $params 
+     *
+     * @param  array  $params
      * @access public
      * @return void
      */
@@ -499,5 +499,31 @@ class storyTest
 
         $storyIdList = array_keys($changes);
         return $this->objectModel->getByList($storyIdList);
+    }
+
+    /**
+     * Test get stories by assignedBy.
+     *
+     * @param  int    $productID
+     * @param  int    $branch
+     * @access public
+     * @return string
+     */
+    public function getByAssignedByTest($productID, $branch)
+    {
+        global $tester;
+        $stories = $this->objectModel->getByAssignedBy($productID, $branch, $modules = array(), $account = $tester->app->user->account, $type = 'story', $orderBy = '', $pager = null);
+
+        $title = '';
+        foreach($stories as $story)
+        {
+            $title .= ',' . $story->title;
+        }
+        $title = trim($title, ',');
+        $title = str_replace("'", '', $title);
+
+        if(dao::isError()) return dao::getError();
+
+        return $title;
     }
 }

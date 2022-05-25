@@ -478,7 +478,7 @@
                   <?php
                   if($canBeChanged and common::hasPriv('productplan', 'unlinkBug'))
                   {
-                      $unlinkURL = $this->createLink('productplan', 'unlinkBug', "story=$bug->id&confirm=yes");
+                      $unlinkURL = $this->createLink('productplan', 'unlinkBug', "bugID=$bug->id&planID=$plan->id&confirm=yes");
                       echo html::a("javascript:ajaxDelete(\"$unlinkURL\", \"bugList\", confirmUnlinkBug)", '<i class="icon-unlink"></i>', '', "class='btn' title='{$lang->productplan->unlinkBug}'");
                   }
                   ?>

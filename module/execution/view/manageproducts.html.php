@@ -28,9 +28,9 @@
           <?php foreach($allProducts as $productID => $productName):?>
           <?php if(isset($linkedProducts[$productID])):?>
           <?php foreach($linkedBranches[$productID] as $branchID):?>
-          <?php if(($execution->grade < 2 and in_array($productID, $unmodifiableProducts) and in_array($branchID, $unmodifiableBranches))) $attr = "disabled='disabled'";?>
-          <?php if(($execution->grade < 2 and !(in_array($productID, $unmodifiableProducts) and in_array($branchID, $unmodifiableBranches)))) $attr = '';?>
-          <?php $title = (in_array($productID, $unmodifiableProducts) and in_array($branchID, $unmodifiableBranches)) ? $lang->execution->notAllowRemoveProducts : $productName;?>
+          <?php if(($execution->grade < 2 and in_array($productID, $unmodifiableProducts) and in_array($branchID, $unmodifiableBranches)) and !empty($linkedStoryIDList[$productID][$branchID])) $attr = "disabled='disabled'";?>
+          <?php if($execution->grade < 2 and (!(in_array($productID, $unmodifiableProducts) and in_array($branchID, $unmodifiableBranches)) or empty($linkedStoryIDList[$productID][$branchID]))) $attr = '';?>
+          <?php $title = (in_array($productID, $unmodifiableProducts) and in_array($branchID, $unmodifiableBranches) and !empty($linkedStoryIDList[$productID][$branchID])) ? sprintf($lang->execution->notAllowRemoveProducts, $linkedStoryIDList[$productID][$branchID]) : $productName;?>
           <?php $checked = 'checked';?>
           <div class='col-sm-4'>
             <div class='product <?php echo $checked . (isset($allBranches[$productID]) ? ' has-branch' : '')?>'>

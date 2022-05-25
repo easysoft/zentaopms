@@ -369,12 +369,12 @@ class executionModel extends model
             $this->lang->project->code = $this->lang->execution->execCode;
         }
 
-        $sprintProject = isset($sprint->project) ? $sprint->project : '';
+        $sprintProject = isset($sprint->project) ? $sprint->project : '0';
         $this->dao->insert(TABLE_EXECUTION)->data($sprint)
             ->autoCheck($skipFields = 'begin,end')
             ->batchcheck($this->config->execution->create->requiredFields, 'notempty')
             ->checkIF((!empty($sprint->name) and $this->config->systemMode == 'new'), 'name', 'unique', "`type` in ('sprint','stage', 'kanban') and `project` = $sprintProject")
-            ->checkIF(!empty($sprint->code), 'code', 'unique', "`type` in ('sprint','stage')")
+            ->checkIF(!empty($sprint->code), 'code', 'unique', "`type` in ('sprint','stage', 'kanban')")
             ->checkIF($sprint->begin != '', 'begin', 'date')
             ->checkIF($sprint->end != '', 'end', 'date')
             ->checkIF($sprint->end != '', 'end', 'ge', $sprint->begin)
@@ -511,18 +511,17 @@ class executionModel extends model
         }
 
         /* Update data. */
-        $executionProject = isset($execution->project) ? $execution->project : '';
+        $executionProject = isset($execution->project) ? $execution->project : '0';
         $this->dao->update(TABLE_EXECUTION)->data($execution)
             ->autoCheck($skipFields = 'begin,end')
             ->batchcheck($this->config->execution->edit->requiredFields, 'notempty')
             ->checkIF($execution->begin != '', 'begin', 'date')
             ->checkIF($execution->end != '', 'end', 'date')
             ->checkIF($execution->end != '', 'end', 'ge', $execution->begin)
-            ->checkIF((!empty($execution->name) and $this->config->systemMode == 'new'), 'name', 'unique', "id != $executionID and type in ('sprint','stage') and `project` = $executionProject")
-            ->checkIF(!empty($execution->code), 'code', 'unique', "id != $executionID and type in ('sprint','stage')")
+            ->checkIF((!empty($execution->name) and $this->config->systemMode == 'new'), 'name', 'unique', "id != $executionID and type in ('sprint','stage', 'kanban') and `project` = $executionProject")
+            ->checkIF(!empty($execution->code), 'code', 'unique', "id != $executionID and type in ('sprint','stage', 'kanban')")
             ->checkFlow()
             ->where('id')->eq($executionID)
-            ->checkFlow()
             ->limit(1)
             ->exec();
 
@@ -961,6 +960,16 @@ class executionModel extends model
             }
         }
 
+        /* Update the status of the parent stage. */
+        if($oldExecution->type == 'stage')
+        {
+            $parent = $this->getByID($oldExecution->parent);
+            if($parent->type == 'stage' and $parent->status == 'closed')
+            {
+                $this->dao->update(TABLE_EXECUTION)->set('status')->eq('doing')->where('id')->eq($parent->id)->exec();
+            }
+        }
+
         if(!dao::isError()) return common::createChanges($oldExecution, $execution);
     }
 
@@ -1002,6 +1011,23 @@ class executionModel extends model
 
         if(!dao::isError())
         {
+            /* Update the status of the parent stage. */
+            if($oldExecution->type == 'stage')
+            {
+                $parent = $this->getByID($oldExecution->parent);
+                if($parent->type == 'stage')
+                {
+                    $isClosed = true;
+                    $children = $this->getChildExecutions($oldExecution->parent);
+                    foreach($children as $childID => $childExecution)
+                    {
+                        if($childExecution->status != 'closed') $isClosed = false;
+                    }
+
+                    if($isClosed) $this->dao->update(TABLE_EXECUTION)->set('status')->eq('closed')->where('id')->eq($parent->id)->exec();
+                }
+            }
+
             $this->loadModel('score')->create('execution', 'close', $oldExecution);
             return common::createChanges($oldExecution, $execution);
         }
@@ -1575,7 +1601,7 @@ class executionModel extends model
      */
     public function getChildExecutions($executionID)
     {
-        return $this->dao->select('id, name')->from(TABLE_EXECUTION)->where('parent')->eq((int)$executionID)->fetchPairs();
+        return $this->dao->select('id, name, status')->from(TABLE_EXECUTION)->where('deleted')->eq(0)->andWhere('parent')->eq((int)$executionID)->fetchAll('id');
     }
 
     /**
@@ -1929,18 +1955,14 @@ class executionModel extends model
      */
     public function getToImport($executionIds, $type)
     {
-        $executions = $this->dao->select('*')->from(TABLE_EXECUTION)
-            ->where('id')->in($executionIds)
-            ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->sprints)->fi()
-            ->andWhere('type')->eq($type)
-            ->andWhere('deleted')->eq(0)
-            ->orderBy('id desc')
-            ->fetchAll('id');
-
-        $pairs = array();
-        $now   = date('Y-m-d');
-        foreach($executions as $id => $execution) $pairs[$id] = $execution->name;
-        return $pairs;
+        return $this->dao->select('t1.id,concat_ws(" / ", t2.name, t1.name) as name')->from(TABLE_EXECUTION)->alias('t1')
+            ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t2.id=t1.project')
+            ->where('t1.id')->in($executionIds)
+            ->beginIF(!$this->app->user->admin)->andWhere('t1.id')->in($this->app->user->view->sprints)->fi()
+            ->andWhere('t1.type')->eq($type)
+            ->andWhere('t1.deleted')->eq(0)
+            ->orderBy('t1.id desc')
+            ->fetchPairs('id', 'name');
     }
 
     /**
@@ -2008,17 +2030,15 @@ class executionModel extends model
      */
     public function getTasks2Imported($toExecution, $branches)
     {
-        $products = $this->loadModel('product')->getProducts($toExecution);
-        if(empty($products)) return array();
+        $execution       = $this->getById($toExecution);
+        $project         = $this->loadModel('project')->getById($execution->project);
+        $brotherProjects = $this->project->getBrotherProjects($project);
+        $executions      = $this->dao->select('id')->from(TABLE_EXECUTION)
+            ->where('project')->in($brotherProjects)
+            ->andWhere('status')->ne('closed')
+            ->fetchPairs('id');
 
-        $execution  = $this->getById($toExecution);
-        $executions = $this->dao->select('t1.product, t1.project')->from(TABLE_PROJECTPRODUCT)->alias('t1')
-            ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.project=t2.id')
-            ->where('t1.product')->in(array_keys($products))
-            ->andWhere('t2.project')->eq($execution->project)
-            ->fetchGroup('project');
         $branches = str_replace(',', "','", $branches);
-
         $tasks = $this->dao->select('t1.*, t2.id AS storyID, t2.title AS storyTitle, t2.version AS latestStoryVersion, t2.status AS storyStatus, t3.realname AS assignedToRealName')->from(TABLE_TASK)->alias('t1')
             ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
             ->leftJoin(TABLE_USER)->alias('t3')->on('t1.assignedTo = t3.account')
@@ -2705,6 +2725,7 @@ class executionModel extends model
 
         $objectPairs = $this->dao->select('id,name')->from(TABLE_PROJECT)
             ->where('deleted')->eq(0)
+            ->andWhere('type')->ne('project')
             ->andWhere('(project')->eq($projectID)
             ->orWhere('id')->eq($projectID)
             ->markRight(1)

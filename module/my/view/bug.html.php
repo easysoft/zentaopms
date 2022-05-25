@@ -23,6 +23,7 @@
         echo html::a(inlink($app->rawMethod, "mode=$mode&type=openedBy"),   "<span class='text'>{$lang->bug->openedByMe}</span>" . ($type == 'openedBy'   ? $recTotalLabel : ''),   '', "class='btn btn-link" . ($type == 'openedBy'   ? ' btn-active-text' : '') . "'");
         echo html::a(inlink($app->rawMethod, "mode=$mode&type=resolvedBy"), "<span class='text'>{$lang->bug->resolvedByMe}</span>" . ($type == 'resolvedBy' ? $recTotalLabel : ''), '', "class='btn btn-link" . ($type == 'resolvedBy' ? ' btn-active-text' : '') . "'");
         echo html::a(inlink($app->rawMethod, "mode=$mode&type=closedBy"),   "<span class='text'>{$lang->bug->closedByMe}</span>" . ($type == 'closedBy'   ? $recTotalLabel : ''),   '', "class='btn btn-link" . ($type == 'closedBy'   ? ' btn-active-text' : '') . "'");
+        echo html::a(inlink($app->rawMethod, "mode=$mode&type=assignedBy"), "<span class='text'>{$lang->bug->assignedByMe}</span>" . ($type == 'assignedBy' ? $recTotalLabel : ''), '', "class='btn btn-link" . ($type == 'assignedBy' ? ' btn-active-text' : '') . "'");
     }
     ?>
   </div>
@@ -58,7 +59,7 @@
           <th class='c-confirm' title='<?php echo $lang->bug->confirmedAB;?>'><?php common::printOrderLink('confirmed', $orderBy, $vars, $lang->bug->confirmedAB);?></th>
 
           <th><?php common::printOrderLink('title', $orderBy, $vars, $lang->bug->title);?></th>
-          <th class='c-product'><?php common::printOrderLink('productName', $orderBy, $vars, $lang->bug->product);?></th>
+          <th class='c-product'><?php common::printOrderLink('product', $orderBy, $vars, $lang->bug->product);?></th>
           <th class='c-type'><?php common::printOrderLink('type', $orderBy, $vars, $lang->typeAB);?></th>
           <?php if($type != 'openedBy'): ?>
           <th class='c-user'><?php common::printOrderLink('openedBy', $orderBy, $vars, $lang->openedByAB);?></th>
@@ -73,7 +74,7 @@
           <th class='c-user'><?php common::printOrderLink('resolvedBy', $orderBy, $vars, $lang->bug->resolvedByAB);?></th>
           <?php endif;?>
           <th class='c-resolution'><?php common::printOrderLink('resolution', $orderBy, $vars, $lang->bug->resolutionAB);?></th>
-          <th class='c-actions-5'><?php echo $lang->actions;?></th>
+          <th class='c-actions-5 text-center'><?php echo $lang->actions;?></th>
         </tr>
       </thead>
       <?php

@@ -112,8 +112,11 @@ class userModel extends model
         {
             if(is_array($usersToAppended)) $usersToAppended = join(',', $usersToAppended);
             $moreLinkParams = "params={$params}&usersToAppended={$usersToAppended}";
-            $connectString  = $this->config->requestType == 'GET' ? '&' : '?';
-            $this->config->user->moreLink = helper::createLink('user', 'ajaxGetMore') . $connectString . "params=" . base64_encode($moreLinkParams);
+
+            $moreLink  = helper::createLink('user', 'ajaxGetMore');
+            $moreLink .= strpos($moreLink, '?') === false ? '?' : '&';
+            $moreLink .= "params=" . base64_encode($moreLinkParams);
+            $this->config->user->moreLink = $moreLink;
         }
 
         if($usersToAppended) $users += $this->dao->select($fields)->from(TABLE_USER)->where('account')->in($usersToAppended)->fetchAll($keyField);
@@ -2764,6 +2767,53 @@ class userModel extends model
         }
 
         return $visionList;
+    }
+
+    /**
+     * Get users who have authority to create stories.
+     *
+     * @access public
+     * @return array
+     */
+    public function getCanCreateStoryUsers()
+    {
+        $users     = $this->getPairs('noclosed|nodeleted');
+        $groupList = $this->dao->select('*')->from(TABLE_USERGROUP)
+            ->where('account')->in(array_keys($users))
+            ->fetchGroup('account', 'group');
+
+        $hasPrivGroups = $this->dao->select('*')->from(TABLE_GROUPPRIV)
+            ->where('module')->eq('story')
+            ->andWhere('(method')->eq('create')
+            ->orWhere('method')->eq('batchCreate')
+            ->markRight(1)
+            ->fetchAll('group');
+
+        foreach($users as $account => $user)
+        {
+            if(empty($user) or strpos($this->app->company->admins, ",{$account},") !== false) continue;
+
+            if(!isset($groupList[$account]))
+            {
+                unset($users[$account]);
+                continue;
+            }
+
+            $groups  = $groupList[$account];
+            $hasPriv = false;
+            foreach($groups as $groupID => $group)
+            {
+                if(isset($hasPrivGroups[$groupID]))
+                {
+                    $hasPriv = true;
+                    break;
+                }
+            }
+
+            if(!$hasPriv) unset($users[$account]);
+        }
+
+        return $users;
     }
 
     /**

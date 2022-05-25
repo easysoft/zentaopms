@@ -488,6 +488,7 @@ class user extends control
     {
         $this->referer = $this->server->http_referer ? $this->server->http_referer: '';
         if(!empty($referer)) $this->referer = helper::safe64Decode($referer);
+        if($this->post->referer) $this->referer = $this->post->referer;
 
         /* Build zentao link regular. */
         $webRoot = $this->config->webRoot;
@@ -791,7 +792,7 @@ class user extends control
             $canModifyDIR = false;
             $floderPath   = $this->app->tmpRoot;
         }
-        elseif(!is_dir($this->app->dataRoot) or substr(base_convert(@fileperms($this->app->dataRoot),10,8),-4) != '0777')
+        elseif(!is_dir($this->app->dataRoot) or substr(base_convert(@fileperms($this->app->dataRoot), 10, 8), -4) != '0777')
         {
             $canModifyDIR = false;
             $floderPath   = $this->app->dataRoot;
@@ -830,18 +831,20 @@ class user extends control
                 return print(helper::removeUTF8Bom(json_encode(array('status' => 'success') + $data)));
             }
 
-            $response['result']  = 'success';
+            $response['result'] = 'success';
             if(strpos($this->referer, $loginLink) === false and
                strpos($this->referer, $denyLink)  === false and
+               strpos($this->referer, 'ajax') === false and
                strpos($this->referer, 'block')  === false and $this->referer
             )
             {
-                $response['locate']  = $this->referer;
+                $response['locate'] = $this->referer;
+                if(helper::isWithTID() and strpos($response['locate'], 'tid=') === false) $response['locate'] .= (strpos($response['locate'], '?') === false ? '?' : '&') . "tid={$this->get->tid}";
                 return $this->send($response);
             }
             else
             {
-                $response['locate']  = $this->config->webRoot;
+                $response['locate'] = $this->config->webRoot . (helper::isWithTID() ? "?tid={$this->get->tid}" : '');
                 return $this->send($response);
             }
         }
@@ -911,12 +914,13 @@ class user extends control
                     $response['result']  = 'success';
                     if(common::hasPriv($module, $method))
                     {
-                        $response['locate']  = $this->post->referer;
+                        $response['locate'] = $this->post->referer;
+                        if(helper::isWithTID() and strpos($response['locate'], 'tid=') === false) $response['locate'] .= (strpos($response['locate'], '?') === false ? '?' : '&') . "tid={$this->get->tid}";
                         return $this->send($response);
                     }
                     else
                     {
-                        $response['locate']  = $this->config->webRoot;
+                        $response['locate'] = $this->config->webRoot . (helper::isWithTID() ? "?tid={$this->get->tid}" : '');
                         return $this->send($response);
                     }
                 }
@@ -928,7 +932,7 @@ class user extends control
                         return print(helper::removeUTF8Bom(json_encode(array('status' => 'success') + $data)));
                     }
 
-                    $response['locate']  = $this->config->webRoot;
+                    $response['locate']  = $this->config->webRoot . (helper::isWithTID() ? "?tid={$this->get->tid}" : '');
                     $response['result']  = 'success';
                     return $this->send($response);
                 }
@@ -1062,7 +1066,7 @@ class user extends control
 
         /* Remove the real path for security reason. */
         $pathPos       = strrpos($this->app->getBasePath(), DIRECTORY_SEPARATOR, -2);
-        $resetFileName = substr($resetFileName, $pathPos+1);
+        $resetFileName = substr($resetFileName, $pathPos + 1);
 
         $this->view->title          = $this->lang->user->resetPassword;
         $this->view->status         = 'reset';
