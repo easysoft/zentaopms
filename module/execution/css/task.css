@@ -7,3 +7,4 @@ th.c-deadline {text-align: center;}
 .c-consumed {text-align: right;}
 .c-left {text-align: right;}
 .table-footer {z-index: 1;}
+.btn-toolbar > .btn {margin-right: 5px !important;}
