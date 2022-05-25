@@ -1966,6 +1966,7 @@ class taskModel extends model
         {
             $oldChildrenTasks = $this->dao->select('*')->from(TABLE_TASK)->where('parent')->eq($taskID)->fetchAll('id');
             unset($task->assignedTo);
+            unset($task->id);
             $this->dao->update(TABLE_TASK)->data($task)->autoCheck()->where('parent')->eq((int)$taskID)->exec();
             $this->dao->update(TABLE_TASK)->set('assignedTo=openedBy')->where('parent')->eq((int)$taskID)->exec();
             if(!dao::isError() and count($oldChildrenTasks) > 0)
@@ -2051,6 +2052,7 @@ class taskModel extends model
         {
             $oldChildrenTasks = $this->dao->select('*')->from(TABLE_TASK)->where('parent')->eq($taskID)->fetchAll('id');
             unset($task->left);
+            unset($task->id);
             $this->dao->update(TABLE_TASK)->data($task)->autoCheck()->where('parent')->eq((int)$taskID)->exec();
             $this->computeWorkingHours($taskID);
             if(!dao::isError() and count($oldChildrenTasks) > 0)
