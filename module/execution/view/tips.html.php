@@ -5,6 +5,14 @@
     <?php if($execution->lifetime != 'ops') echo html::a($this->createLink('execution', 'linkstory', "executionID=$executionID"), $lang->execution->linkStory, '', "class='btn' data-app='execution'");?>
     <?php echo html::a($this->createLink('task', 'create', "execution=$executionID"), $lang->execution->createTask, '', "class='btn' data-app='execution'");?>
     <?php echo html::a($this->createLink('execution', 'task', "executionID=$executionID"), $lang->execution->goback, '', "class='btn' data-app='execution'");?>
-    <?php echo html::a($this->createLink('project', 'execution', "status=all&projectID=$projectID"), $lang->execution->gobackExecution, '', "class='btn' data-app='project'");?>
+    <?php echo html::a('javascript:void(0)', $lang->execution->gobackExecution, '', "class='btn' onclick='closeTipModal($projectID)' data-app='project'");?>
   </div>
 </div>
+<script>
+function closeTipModal(projectID)
+{
+    $(".close").trigger("click");
+    var link = createLink('project', 'execution', 'status=all&projectID=' + projectID);
+    $.apps.open(link, 'project');
+}
+</script>
