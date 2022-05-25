@@ -490,7 +490,7 @@ $(document).ready(function()
     });
 });
 
-$(document).on('click', '#testStory_chosen,#story_chosen', function()
+$(document).on('click', '#testStory_chosen', function()
 {
     var $obj  = $(this).prev('select');
     var value = $obj.val();

@@ -30,18 +30,19 @@
   </div>
   <?php else:?>
   <form class='main-table' id='projectForm' method='post' data-ride='table' data-checkable='false'>
-    <table class='table table-fixed' id='projectList'>
+    <table class='table has-sort-head table-fixed' id='projectList'>
+      <?php $vars = "status=$status&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID&orderBy=%s"; ?>
       <thead>
         <tr>
-          <th class='c-id'><?php echo $lang->idAB;?></th>
-          <th><?php echo $lang->project->name;?></th>
+          <th class='c-id'><?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?></th>
+          <th><?php common::printOrderLink('name', $orderBy, $vars, $lang->project->name);?></th>
           <?php if($status == 'openedbyme'):?>
-          <th class='c-status'> <?php echo $lang->project->status;?></th>
+          <th class='c-status'><?php common::printOrderLink('status', $orderBy, $vars, $lang->project->status);?></th>
           <?php endif;?>
-          <th class='c-date'><?php echo $lang->project->begin;?></th>
-          <th class='c-date'><?php echo $lang->project->end;?></th>
-          <th class='text-right c-budget'><?php echo $lang->project->budget;?></th>
-          <th class='c-user'><?php echo $lang->project->PM;?></th>
+          <th class='c-date'><?php common::printOrderLink('begin', $orderBy, $vars, $lang->project->begin);?></th>
+          <th class='c-date'><?php common::printOrderLink('end', $orderBy, $vars, $lang->project->end);?></th>
+          <th class='text-right c-budget'><?php common::printOrderLink('budget', $orderBy, $vars, $lang->project->budget);?></th>
+          <th class='c-user'><?php common::printOrderLink('PM', $orderBy, $vars, $lang->project->PM);?></th>
           <th class='text-center c-actions-6'><?php echo $lang->actions;?></th>
         </tr>
       </thead>
