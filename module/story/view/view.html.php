@@ -436,19 +436,16 @@
                       $executionName = $executions[$task->execution];
                       $taskInfo      = $task->id . '&nbsp<span class="label label-success label-outline">' . $this->lang->task->statusList[$task->status]  . '</span>&nbsp' . $task->name;
                       $class         = isonlybody() ? 'showinonlybody' : 'iframe';
-                      echo "<li title='$task->name'>" . html::a($this->createLink('task', 'view', "taskID=$task->id", '', true), $taskInfo, '', "class=$class data-width='80%'");
                       $execution = isset($story->executions[$task->execution]) ? $story->executions[$task->execution] : '';
                       $execName  = (isset($execution->type) and $execution->type == 'kanban' and isonlybody()) ? $executionName : html::a($this->createLink('execution', 'view', "executionID=$task->execution"), $executionName, '', "class='text-muted'");
-                      echo $execName . '</li>';
+                      echo "<li title='$task->name'>" . $execName . html::a($this->createLink('task', 'view', "taskID=$task->id", '', true), $taskInfo, '', "class=$class data-width='80%'") . '</li>';
                   }
               }
-              if(count($story->tasks) == 0)
+              foreach($story->executions as $executionID => $execution)
               {
-                  foreach($story->executions as $executionID => $execution)
-                  {
-                      $execName = ($execution->type == 'kanban' and isonlybody()) ? $execution->name : html::a($this->createLink('execution', 'view', "executionID=$executionID"), $execution->name, '', "class='text-muted'");
-                      echo "<li title='$execution->name'>" . $execName . '</li>';
-                  }
+                  if(isset($story->tasks[$executionID])) continue;
+                  $execName = ($execution->type == 'kanban' and isonlybody()) ? $execution->name : html::a($this->createLink('execution', 'view', "executionID=$executionID"), $execution->name, '', "class='text-muted'");
+                  echo "<li title='$execution->name'>" . $execName . '</li>';
               }
               ?>
             </ul>

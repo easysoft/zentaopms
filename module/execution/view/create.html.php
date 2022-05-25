@@ -15,7 +15,7 @@
 <?php $defaultURL = $this->createLink('execution', 'task', "execution=$executionID");?>
 <?php include '../../common/view/header.html.php';?>
 <body>
-  <div class='modal-dialog mw-700px' id='tipsModal'>
+  <div class='modal-dialog' id='tipsModal'>
     <div class='modal-header'>
       <a href='<?php echo $defaultURL;?>' class='close'><i class="icon icon-close"></i></a>
       <h4 class='modal-title' id='myModalLabel'><?php echo $lang->execution->tips;?></h4>

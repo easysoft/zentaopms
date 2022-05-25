@@ -270,6 +270,36 @@ class kanban extends control
     }
 
     /*
+     * Activate a kanban.
+     *
+     * @param  int    $kanbanID
+     * @access public
+     * @return void
+     */
+    public function activate($kanbanID)
+    {
+        $this->loadModel('action');
+
+        if(!empty($_POST))
+        {
+            $changes = $this->kanban->activate($kanbanID);
+
+            if(dao::isError()) return print(js::error(dao::getError()));
+
+            $actionID = $this->action->create('kanban', $kanbanID, 'activated', $this->post->comment);
+            $this->action->logHistory($actionID, $changes);
+
+            return print(js::reload('parent.parent'));
+        }
+
+        $this->view->kanban  = $this->kanban->getByID($kanbanID);
+        $this->view->actions = $this->action->getList('kanban', $kanbanID);
+        $this->view->users   = $this->loadModel('user')->getPairs('noletter');
+
+        $this->display();
+    }
+
+    /*
      * Close a kanban.
      *
      * @param  int    $kanbanID

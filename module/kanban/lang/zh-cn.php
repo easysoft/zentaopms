@@ -9,6 +9,7 @@ $lang->kanban->activateSpace       = '激活空间';
 $lang->kanban->sortSpace           = '空间排序';
 $lang->kanban->edit                = '设置看板';
 $lang->kanban->view                = '查看看板';
+$lang->kanban->activate            = '激活看板';
 $lang->kanban->close               = '关闭看板';
 $lang->kanban->delete              = '删除看板';
 $lang->kanban->createRegion        = '新增区域';

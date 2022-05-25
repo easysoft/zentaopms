@@ -77,7 +77,7 @@ class settingModel extends model
         $item->section = $section;
         $item->key     = $key;
         $item->value   = $value;
-        $item->vision  = empty($vision) ? '' : $vision;
+        if(!empty($vision)) $item->vision = $vision;
 
         $this->dao->replace(TABLE_CONFIG)->data($item)->exec();
     }

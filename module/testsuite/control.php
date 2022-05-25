@@ -118,7 +118,8 @@ class testsuite extends control
             }
             $actionID = $this->loadModel('action')->create('testsuite', $suiteID, 'opened');
 
-            $this->executeHooks($suiteID);
+            $message = $this->executeHooks($suiteID);
+            if($message) $response['message'] = $message;
 
             if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $suiteID));
 
@@ -221,7 +222,8 @@ class testsuite extends control
                 $this->action->logHistory($actionID, $changes);
             }
 
-            $this->executeHooks($suiteID);
+            $messgae = $this->executeHooks($suiteID);
+            if($message) $response['message'] = $message;
 
             $response['locate']  = inlink('view', "suiteID=$suiteID");
             return $this->send($response);
@@ -263,7 +265,8 @@ class testsuite extends control
 
             $this->testsuite->delete($suiteID);
 
-            $this->executeHooks($suiteID);
+            $message = $this->executeHooks($suiteID);
+            if($message) $response['message'] = $message;
 
             /* if ajax request, send result. */
             if($this->server->ajax)

@@ -162,7 +162,8 @@ class task extends control
                 $this->action->create('todo', $todoID, 'finished', '', "TASK:$taskID");
             }
 
-            $this->executeHooks($taskID);
+            $message = $this->executeHooks($taskID);
+            if($message) $this->lang->saveSuccess = $message;
 
             /* Return task id when call the API. */
             if($this->viewType == 'json' or (defined('RUN_MODE') && RUN_MODE == 'api')) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $taskID));
@@ -1382,6 +1383,19 @@ class task extends control
             {
                 $task      = $this->task->getById($taskID);
                 $execution = $this->execution->getByID($task->execution);
+
+                if(isset($task->fromIssue) and $task->fromIssue > 0)
+                {
+                    $fromIssue = $this->loadModel('issue')->getByID($task->fromIssue);
+                    if($fromIssue->status != 'closed')
+                    {
+                        $confirmURL = $this->createLink('issue', 'close', "id=$task->fromIssue");
+                        unset($_GET['onlybody']);
+                        $cancelURL  = $this->createLink('task', 'view', "taskID=$taskID");
+                        return print(js::confirm(sprintf($this->lang->task->remindIssue, $task->fromIssue), $confirmURL, $cancelURL, 'parent', 'parent.parent'));
+                    }
+                }
+
                 if($execution->type == 'kanban' and $this->app->tab == 'execution')
                 {
                     $regionID   = isset($output['regionID']) ? $output['regionID'] : 0;

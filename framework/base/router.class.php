@@ -617,6 +617,20 @@ class baseRouter
      */
     public function setSuperVars()
     {
+        $URI = $_SERVER['REQUEST_URI'];
+        if(strpos($URI, '?') !== false)
+        {
+            $parsedURL = parse_url($URI);
+            if(isset($parsedURL['query']))
+            {
+                parse_str($parsedURL['query'], $parsedQuery);
+                foreach($parsedQuery as $key => $value)
+                {
+                    if(!isset($_GET[$key])) $_GET[$key] = $value;
+                }
+            }
+        }
+
         $this->post    = new super('post');
         $this->get     = new super('get');
         $this->server  = new super('server');
@@ -724,7 +738,7 @@ class baseRouter
      */
     public function getInstalledVersion()
     {
-        $version = $this->dbh->query("SELECT value FROM " . TABLE_CONFIG . " WHERE owner = 'system' AND `key` = 'version' LIMIT 1")->fetch();
+        $version = $this->dbh->query("SELECT value FROM " . TABLE_CONFIG . " WHERE `owner` = 'system' AND `key` = 'version' AND `module` = 'common' AND `section` = 'global' LIMIT 1")->fetch();
         $version = $version ? $version->value : '0.3.beta';                  // No version, set as 0.3.beta.
         if($version == '3.0.stable') $version = '3.0';    // convert 3.0.stable to 3.0.
         return $version;
@@ -987,7 +1001,11 @@ class baseRouter
 
         $this->sessionID = isset($ztSessionHandler) ? $ztSessionHandler->getSessionID() : session_id();
 
-        if(isset($_GET[$this->config->sessionVar])) helper::restartSession($_GET[$this->config->sessionVar]);
+        if(isset($_GET[$this->config->sessionVar]))
+        {
+            helper::restartSession($_GET[$this->config->sessionVar]);
+            $this->sessionID = isset($ztSessionHandler) ? $ztSessionHandler->getSessionID() : session_id();
+        }
 
         define('SESSION_STARTED', true);
     }
@@ -3153,9 +3171,7 @@ class ztSessionHandler
             ($this->tagID and file_exists($this->rawFile)) ? copy($this->rawFile, $sessFile) : touch($sessFile);
         }
 
-        $sessContent = (string) file_get_contents($sessFile);
-        if(!file_exists($this->rawFile) and strpos($sessContent, 'user|') !== false) copy($sessFile, $this->rawFile);
-        return $sessContent;
+        return (string) file_get_contents($sessFile);
     }
 
     /**
@@ -3169,7 +3185,23 @@ class ztSessionHandler
     public function write($id, $sessData)
     {
         $sessFile = $this->getSessionFile($id);
-        if(file_put_contents($sessFile, $sessData)) return true;
+        if(file_put_contents($sessFile, $sessData))
+        {
+            if(strpos($sessData, 'user|') !== false)
+            {
+                if(file_exists($this->rawFile))
+                {
+                    $rawSessContent = (string) file_get_contents($this->rawFile);
+                    if(strpos($rawSessContent, 'user|') === false) copy($sessFile, $this->rawFile);
+                }
+                else
+                {
+                    copy($sessFile, $this->rawFile);
+                }
+            }
+
+            return true;
+        }
         return false;
     }
 

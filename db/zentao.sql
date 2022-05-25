@@ -760,6 +760,8 @@ CREATE TABLE `zt_kanbanspace` (
   `lastEditedDate` datetime NOT NULL,
   `closedBy` char(30) NOT NULL,
   `closedDate` datetime NOT NULL,
+  `activatedBy` char(30) NOT NULL,
+  `activatedDate` datetime NOT NULL,
   `deleted` enum('0', '1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
@@ -786,6 +788,8 @@ CREATE TABLE `zt_kanban` (
   `lastEditedDate` datetime NOT NULL,
   `closedBy` char(30) NOT NULL,
   `closedDate` datetime NOT NULL,
+  `activatedBy` char(30) NOT NULL,
+  `activatedDate` datetime NOT NULL,
   `deleted` enum('0', '1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
@@ -1457,6 +1461,7 @@ CREATE TABLE IF NOT EXISTS `zt_task` (
   `storyVersion` smallint(6) NOT NULL default '1',
   `designVersion` smallint(6) unsigned NOT NULL,
   `fromBug` mediumint(8) unsigned NOT NULL default '0',
+  `fromIssue` mediumint(8) unsigned NOT NULL default '0',
   `name` varchar(255) NOT NULL,
   `type` varchar(20) NOT NULL,
   `pri` tinyint(3) unsigned NOT NULL default '0',

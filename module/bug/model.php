@@ -2792,6 +2792,7 @@ class bugModel extends model
                         ->orWhere('t2.spec')->like("%$searchValue%")
                         ->orWhere('t2.verify')->like("%$searchValue%")
                         ->fetchPairs('id');
+                    if(empty($story)) $story = array(0);
 
                     $bugQuery = preg_replace("/`story`[ ]+(NOT[ ]*)?LIKE[ ]+'%$searchValue%'/Ui", '`story` $1 IN (' . implode(',', $story) .')', $bugQuery);
                 }

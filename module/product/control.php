@@ -365,7 +365,8 @@ class product extends control
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             $this->loadModel('action')->create('product', $productID, 'opened');
 
-            $this->executeHooks($productID);
+            $message = $this->executeHooks($productID);
+            if($message) $this->lang->saveSuccess = $message;
             if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $productID));
 
             $tab = $this->app->tab;
@@ -519,7 +520,8 @@ class product extends control
                 $this->action->logHistory($actionID, $changes);
             }
 
-            $this->executeHooks($productID);
+            $message = $this->executeHooks($productID);
+            if($message) $this->lang->saveSuccess = $message;
 
             $moduleName = $programID ? 'program'    : 'product';
             $methodName = $programID ? 'product' : 'view';
@@ -779,7 +781,8 @@ class product extends control
             $this->product->delete(TABLE_PRODUCT, $productID);
             $this->dao->update(TABLE_DOCLIB)->set('deleted')->eq(1)->where('product')->eq($productID)->exec();
             $this->session->set('product', '');
-            $this->executeHooks($productID);
+            $message = $this->executeHooks($productID);
+            if($message) $this->lang->saveSuccess = $message;
 
             if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess));
             return print(js::locate($this->createLink('product', 'all'), 'parent'));

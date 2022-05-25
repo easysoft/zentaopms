@@ -3775,9 +3775,9 @@ class storyModel extends model
     {
         $action = strtolower($action);
 
-        if($story->parent < 0 and $action != 'edit' and $action != 'batchcreate' and $action != 'change' and $action != 'review') return false;
-
         global $app, $config;
+
+        if($story->parent < 0 and strpos($config->story->list->actionsOpratedParentStory, ",$action,") === false) return false;
 
         $story->reviewer  = isset($story->reviewer)  ? $story->reviewer  : array();
         $story->notReview = isset($story->notReview) ? $story->notReview : array();
@@ -3840,7 +3840,7 @@ class storyModel extends model
             $menu .= $this->buildMenu('story', 'recall', $params, $story, $type, 'undo', '', 'showinonlybody');
             $menu .= $this->buildMenu('story', 'review', $params, $story, $type, 'search', '', 'showinonlybody');
 
-            if(!isonlybody()) $menu .= $this->buildMenu('story', 'batchCreate', "productID=$story->product&branch=$story->branch&moduleID=$story->module&$params", $story, $type, 'split', '', 'divideStory', '', "data-toggle='modal' data-type='iframe' data-width='95%'", $this->lang->story->subdivide);
+            if(!isonlybody()) $menu .= $this->buildMenu('story', 'batchCreate', "productID=$story->product&branch=$story->branch&moduleID=$story->module&$params", $story, $type, 'split', '', 'divideStory', true, "data-toggle='modal' data-type='iframe' data-width='95%'", $this->lang->story->subdivide);
 
             $menu .= $this->buildMenu('story', 'assignTo', $params, $story, $type, '', '', 'iframe showinonlybody', true);
             $menu .= $this->buildMenu('story', 'close',    $params, $story, $type, '', '', 'iframe showinonlybody', true);
@@ -3877,6 +3877,9 @@ class storyModel extends model
             if($this->app->tab == 'execution' and strpos('draft,closed', $story->status) === false) $menu .= $this->buildMenu('task', 'create', "execution={$this->session->project}&{$params}&moduleID=$story->module", $story, $type, 'plus', '', 'showinonly body');
 
             $menu .= "<div class='divider'></div>";
+            $menu .= $this->buildFlowMenu('story', $story, $type, 'direct');
+            $menu .= "<div class='divider'></div>";
+
             $menu .= $this->buildMenu('story', 'edit', $params, $story, $type);
             $menu .= $this->buildMenu('story', 'create', "productID=$story->product&branch=$story->branch&moduleID=$story->module&{$params}&executionID=0&bugID=0&planID=0&todoID=0&extra=&type=$story->type", $story, $type, 'copy', '', '', '     ', "data-width='1050'");
             $menu .= $this->buildMenu('story', 'delete', $params, $story, 'button', 'trash', 'hiddenwin', 'showinonlybody', true);
@@ -4882,7 +4885,7 @@ class storyModel extends model
 
         /* Merge to get a new sort list. */
         $newSortIDList = array_merge($frontStoryIDList, $sortIDList, $behindStoryIDList);
-        if(strpos($orderBy, 'order_desc')) array_reverse($newSortIDList);
+        if(strpos($orderBy, 'order_desc') !== false) $newSortIDList = array_reverse($newSortIDList);
 
         /* Loop update the story order of plan. */
         $order = 1;

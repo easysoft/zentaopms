@@ -64,7 +64,8 @@ class productplan extends control
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             $this->loadModel('action')->create('productplan', $planID, 'opened');
 
-            $this->executeHooks($planID);
+            $message = $this->executeHooks($planID);
+            if($message) $this->lang->saveSuccess = $message;
 
             if($parent > 0) $this->productplan->updateParentStatus($parent);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
@@ -136,7 +137,8 @@ class productplan extends control
                 $actionID = $this->loadModel('action')->create('productplan', $planID, 'edited');
                 $this->action->logHistory($actionID, $changes);
             }
-            $this->executeHooks($planID);
+            $message = $this->executeHooks($planID);
+            if($message) $this->lang->saveSuccess = $message;
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('view', "planID=$planID")));
         }
 
@@ -252,7 +254,8 @@ class productplan extends control
         {
             $this->productplan->delete(TABLE_PRODUCTPLAN, $planID);
             if($plan->parent > 0) $this->productplan->changeParentField($planID);
-            $this->executeHooks($planID);
+            $message = $this->executeHooks($planID);
+            if($message) $this->lang->saveSuccess = $message;
 
             /* if ajax request, send result. */
             if($this->server->ajax)
@@ -372,7 +375,7 @@ class productplan extends control
      * @access public
      * @return void
      */
-    public function view($planID = 0, $type = 'story', $orderBy = 'order_asc', $link = 'false', $param = '', $recTotal = 0, $recPerPage = 100, $pageID = 1)
+    public function view($planID = 0, $type = 'story', $orderBy = 'order_desc', $link = 'false', $param = '', $recTotal = 0, $recPerPage = 100, $pageID = 1)
     {
         $planID = (int)$planID;
         $plan   = $this->productplan->getByID($planID, true);
@@ -407,6 +410,7 @@ class productplan extends control
         $planStories = $this->story->getPlanStories($planID, 'all', $type == 'story' ? $sort : 'id_desc', $storyPager);
 
         $this->executeHooks($planID);
+
         if($plan->parent > 0)     $this->view->parentPlan    = $this->productplan->getById($plan->parent);
         if($plan->parent == '-1') $this->view->childrenPlans = $this->productplan->getChildren($plan->id);
 
@@ -606,7 +610,7 @@ class productplan extends control
      * @access public
      * @return void
      */
-    public function linkStory($planID = 0, $browseType = '', $param = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 100, $pageID = 1)
+    public function linkStory($planID = 0, $browseType = '', $param = 0, $orderBy = 'order_desc', $recTotal = 0, $recPerPage = 100, $pageID = 1)
     {
         if(!empty($_POST['stories']))
         {

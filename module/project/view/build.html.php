@@ -71,23 +71,7 @@
           <td class="c-url" title="<?php echo $build->filePath?>"><?php echo strpos($build->filePath, 'http') === 0 ? html::a($build->filePath) : $build->filePath;?></td>
           <td class="c-date"><?php echo $build->date?></td>
           <td class="c-user em"><?php echo zget($users, $build->builder);?></td>
-          <td class="c-actions">
-            <?php
-            if(common::hasPriv('build', 'linkstory') and common::hasPriv('build', 'view') and common::canBeChanged('build', $build))
-            {
-                echo html::a($this->createLink('build', 'view', "buildID=$build->id&type=story&link=true"), "<i class='icon icon-link'></i>", '', "class='btn' title='{$lang->build->linkStory}' data-app='project'");
-            }
-            common::printIcon('testtask', 'create', "product=$build->product&executionID={$build->execution}&build=$build->id&projectID=$projectID", $build, 'list', 'bullhorn', '', '', '', "data-app='project'");
-            $lang->build->view = $lang->project->bug;
-            common::printIcon('build', 'view', "buildID=$build->id&type=generatedBug", $build, 'list', 'bug', '', '', '', "data-app='project'");
-            common::printIcon('build',   'edit', "buildID=$build->id", $build, 'list');
-            if(common::hasPriv('build',  'delete', $build))
-            {
-                $deleteURL = $this->createLink('build', 'delete', "buildID=$build->id&confirm=yes");
-                echo html::a("###", '<i class="icon-trash"></i>', '', "onclick='ajaxDelete(\"$deleteURL\", \"buildList\", confirmDelete)' class='btn' title='{$lang->build->delete}'");
-            }
-            ?>
-          </td>
+          <td class="c-actions"><?php echo $this->build->buildOperateMenu($build, 'browse');?></td>
         </tr>
         <?php endforeach;?>
         <?php endforeach;?>

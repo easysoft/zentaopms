@@ -41,6 +41,7 @@ $config->kanban->editor->editspace     = array('id' => 'desc', 'tools' => 'simpl
 $config->kanban->editor->closespace    = array('id' => 'comment', 'tools' => 'simpleTools');
 $config->kanban->editor->activatespace = array('id' => 'comment', 'tools' => 'simpleTools');
 $config->kanban->editor->createcard    = array('id' => 'desc', 'tools' => 'simpleTools');
+$config->kanban->editor->activate      = array('id' => 'comment', 'tools' => 'simpleTools');
 $config->kanban->editor->close         = array('id' => 'comment', 'tools' => 'simpleTools');
 $config->kanban->editor->editcard      = array('id' => 'desc', 'tools' => 'simpleTools');
 $config->kanban->editor->viewcard      = array('id' => 'comment', 'tools' => 'simpleTools');

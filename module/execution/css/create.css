@@ -1,4 +1,5 @@
-#tipsModal {margin-top: 10%;}
+[lang^='en'] #tipsModal {margin-top: 10%; max-width: 620px;}
+[lang^='zh-cn'] #tipsModal {margin-top: 10%; max-width: 530px;}
 .chosen-container-single .chosen-single > span {max-width: 100%;}
 
 #copyProjectModal {padding: 0;}

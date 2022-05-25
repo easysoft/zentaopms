@@ -343,7 +343,8 @@ class testcase extends control
             /* If the story is linked project, make the case link the project. */
             $this->testcase->syncCase2Project($caseResult['caseInfo'], $caseID);
 
-            $this->executeHooks($caseID);
+            $message = $this->executeHooks($caseID);
+            if($message) $this->lang->saveSuccess = $message;
 
             if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $caseID));
             /* If link from no head then reload. */
@@ -1173,7 +1174,8 @@ class testcase extends control
             $case = $this->testcase->getById($caseID);
             $this->testcase->delete(TABLE_CASE, $caseID);
 
-            $this->executeHooks($caseID);
+            $message = $this->executeHooks($caseID);
+            if($message) $response['message'] = $message;
 
             /* if ajax request, send result. */
             if($this->server->ajax)
@@ -1453,23 +1455,15 @@ class testcase extends control
             /* Get cases. */
             if($this->session->testcaseOnlyCondition)
             {
-                if($taskID)
-                {
-                    $caseIDList = $this->dao->select('`case`')->from(TABLE_TESTRUN)->where('task')->eq($taskID)->fetchPairs();
-                    $cases = $this->dao->select('*')->from(TABLE_CASE)->where($this->session->testcaseQueryCondition)->andWhere('id')->in($caseIDList)
-                        ->beginIF($this->post->exportType == 'selected')->andWhere('id')->in($this->cookie->checkedItem)->fi()
-                        ->orderBy($orderBy)
-                        ->beginIF($this->post->limit)->limit($this->post->limit)->fi()
-                        ->fetchAll('id');
-                }
-                else
-                {
-                    $cases = $this->dao->select('*')->from(TABLE_CASE)->where($this->session->testcaseQueryCondition)
-                        ->beginIF($this->post->exportType == 'selected')->andWhere('id')->in($this->cookie->checkedItem)->fi()
-                        ->orderBy($orderBy)
-                        ->beginIF($this->post->limit)->limit($this->post->limit)->fi()
-                        ->fetchAll('id');
-                }
+                $caseIDList = array();
+                if($taskID) $caseIDList = $this->dao->select('`case`')->from(TABLE_TESTRUN)->where('task')->eq($taskID)->fetchPairs();
+
+                $cases = $this->dao->select('*')->from(TABLE_CASE)->where($this->session->testcaseQueryCondition)
+                    ->beginIF($taskID)->andWhere('id')->in($caseIDList)->fi()
+                    ->beginIF($this->post->exportType == 'selected')->andWhere('id')->in($this->cookie->checkedItem)->fi()
+                    ->orderBy($orderBy)
+                    ->beginIF($this->post->limit)->limit($this->post->limit)->fi()
+                    ->fetchAll('id');
             }
             else
             {
@@ -1588,6 +1582,7 @@ class testcase extends control
                 if(isset($caseLang->statusList[$case->status]))        $case->status        = $this->processStatus('testcase', $case);
                 if(isset($users[$case->openedBy]))                     $case->openedBy      = $users[$case->openedBy];
                 if(isset($users[$case->lastEditedBy]))                 $case->lastEditedBy  = $users[$case->lastEditedBy];
+                if(isset($users[$case->lastRunner]))                   $case->lastRunner    = $users[$case->lastRunner];
                 if(isset($caseLang->resultList[$case->lastRunResult])) $case->lastRunResult = $caseLang->resultList[$case->lastRunResult];
 
                 $case->bugsAB       = $case->bugs;       unset($case->bugs);

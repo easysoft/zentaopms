@@ -526,20 +526,47 @@ class buildModel extends model
      *
      * @param  object $build
      * @param  string $type
+     * @param  string $extra
      * @access public
      * @return string
      */
-    public function buildOperateMenu($build, $type = 'view')
+    public function buildOperateMenu($build, $type = 'view', $extra = '')
     {
-        $canBeChanged = common::canBeChanged('build', $build);
-        if($build->deleted || !$canBeChanged) return '';
+        $extraParams = array();
+        if($extra) parse_str($extra, $extraParams);
 
         $menu   = '';
         $params = "buildID=$build->id";
 
-        $menu .= $this->buildFlowMenu('build', $build, 'view', 'direct');
-        $menu .= $this->buildMenu('build', 'edit',   $params, $build, $type);
-        $menu .= $this->buildMenu('build', 'delete', $params, $build, $type, 'trash', 'hiddenwin');
+        global $app;
+        $tab = $app->tab;
+
+        if($type == 'browse')
+        {
+            $executionID = $tab == 'execution' ? $extraParams['executionID'] : $build->execution;
+
+            if(common::hasPriv('build', 'linkstory') and common::canBeChanged('build', $build)) $menu .= $this->buildMenu('build', 'view', "{$params}&type=story&link=true", $build, $type, 'link', '', '', '', "data-app={$tab}", $this->lang->build->linkStory);
+
+            $menu .= $this->buildMenu('testtask', 'create', "product=$build->product&execution={$executionID}&build=$build->id", $build, $type, 'bullhorn', '', '', '', "data-app='{$tab}'");
+
+            if($tab == 'execution') $menu .= $this->buildMenu('execution', 'bug', "execution={$extraParams['executionID']}&productID={$extraParams['productID']}&orderBy=status&build=$build->id", $build, $type, '', '', '', '', $this->lang->execution->viewBug);
+            if($tab == 'project')   $menu .= $this->buildMenu('build', 'view', "{$params}&type=generatedBug", $build, $type, 'bug', '', '', '', "data-app='project'", $this->lang->project->bug);
+
+            $menu .= $this->buildMenu('build', 'edit',   $params, $build, $type);
+            $menu .= $this->buildMenu('build', 'delete', $params, $build, $type, 'trash', 'hiddenwin');
+        }
+        else
+        {
+            $canBeChanged = common::canBeChanged('build', $build);
+            if($build->deleted || !$canBeChanged) return '';
+
+            $menu .= $this->buildFlowMenu('build', $build, 'view', 'direct');
+
+            $editClickable   = $this->buildMenu('build', 'edit',   $params, $build, $type, '', '', '', '', '', '', false);
+            $deleteClickable = $this->buildMenu('build', 'delete',   $params, $build, $type, '', '', '', '', '', '', false);
+            if(common::hasPriv('build', 'edit')   and $editClickable)   $menu .= html::a(helper::createLink('build', 'edit',   $params), "<i class='icon-common-edit icon-edit'></i> "    . $this->lang->edit,   '', "class='btn btn-link' title='{$this->lang->build->edit}' data-app='{$app->tab}'");
+            if(common::hasPriv('build', 'delete') and $deleteClickable) $menu .= html::a(helper::createLink('build', 'delete', $params), "<i class='icon-common-delete icon-trash'></i> " . $this->lang->delete, '', "class='btn btn-link' title='{$this->lang->build->delete}' target='hiddenwin' data-app='{$app->tab}'");
+        }
 
         return $menu;
     }

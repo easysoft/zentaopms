@@ -48,7 +48,7 @@ if(empty($type)) $type = 'product';
               echo "<li class='divider'></li>";
           }
           if($canEditLib) echo '<li>' . html::a($this->createLink('doc', 'editLib', "rootID=$libID"), '<i class="icon-edit"></i> ' . $lang->doc->editLib, '', "class='iframe'") . '</li>';
-          if($canDeleteLib) echo '<li>' . html::a($this->createLink('doc', 'deleteLib', "rootID=$libID"), '<i class="icon-trash"></i> ' . $lang->doc->deleteLib, 'hiddenwin') . '</li>';
+          if($canDeleteLib) echo '<li>' . html::a($this->createLink('doc', 'deleteLib', "rootID=$libID&confirm=no&type=lib&from=tableContents"), '<i class="icon-trash"></i> ' . $lang->doc->deleteLib, 'hiddenwin') . '</li>';
           echo '</ul></div>';
       }
 

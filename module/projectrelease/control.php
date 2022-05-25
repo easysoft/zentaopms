@@ -109,7 +109,9 @@ class projectrelease extends control
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             $this->loadModel('action')->create('release', $releaseID, 'opened');
 
-            $this->executeHooks($releaseID);
+            $message = $this->executeHooks($releaseID);
+            if($message) $this->lang->saveSuccess = $message;
+
             if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $releaseID));
 
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('view', "releaseID=$releaseID")));
@@ -161,7 +163,10 @@ class projectrelease extends control
                 $actionID = $this->loadModel('action')->create('release', $releaseID, 'Edited', $fileAction);
                 if(!empty($changes)) $this->action->logHistory($actionID, $changes);
             }
-            $this->executeHooks($releaseID);
+
+            $message = $this->executeHooks($releaseID);
+            if($message) $this->lang->saveSuccess = $message;
+
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('view', "releaseID=$releaseID")));
         }
 
@@ -328,7 +333,8 @@ class projectrelease extends control
             $build   = $this->dao->select('*')->from(TABLE_BUILD)->where('id')->eq((int)$release->build)->fetch();
             if(empty($build->execution)) $this->loadModel('build')->delete(TABLE_BUILD, $build->id);
 
-            $this->executeHooks($releaseID);
+            $message = $this->executeHooks($releaseID);
+            if($message) $response['message'] = $message;
 
             /* if ajax request, send result. */
             if($this->server->ajax)

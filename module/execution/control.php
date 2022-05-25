@@ -679,7 +679,7 @@ class execution extends control
      * @access public
      * @return void
      */
-    public function story($executionID = 0, $orderBy = 'order_asc', $type = 'all', $param = 0, $recTotal = 0, $recPerPage = 50, $pageID = 1)
+    public function story($executionID = 0, $orderBy = 'order_desc', $type = 'all', $param = 0, $recTotal = 0, $recPerPage = 50, $pageID = 1)
     {
         /* Load these models. */
         $this->loadModel('story');
@@ -1419,7 +1419,8 @@ class execution extends control
 
             $this->loadModel('action')->create($this->objectType, $executionID, 'opened', '', join(',', $_POST['products']));
 
-            $this->executeHooks($executionID);
+            $message = $this->executeHooks($executionID);
+            if($message) $this->lang->saveSuccess = $message;
 
             if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $executionID));
 
@@ -1593,7 +1594,9 @@ class execution extends control
                 $this->productplan->linkProject($projectID, $newPlans);
             }
 
-            $this->executeHooks($executionID);
+            $message = $this->executeHooks($executionID);
+            if($message) $this->lang->saveSuccess = $message;
+
             if($_POST['status'] == 'doing') $this->loadModel('common')->syncPPEStatus($executionID);
             if($execution->type == 'kanban') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('view', "executionID=$executionID")));
@@ -2593,7 +2596,8 @@ class execution extends control
             $this->execution->updateUserView($executionID);
 
             $this->session->set('execution', '');
-            $this->executeHooks($executionID);
+            $message = $this->executeHooks($executionID);
+            if($message) $this->lang->saveSuccess = $message;
 
             if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess));
             return print(js::reload('parent'));
@@ -3291,6 +3295,7 @@ class execution extends control
         $orderBy  = $this->post->orderBy;
 
         $order = $this->dao->select('*')->from(TABLE_PROJECTSTORY)->where('story')->in($idList)->andWhere('project')->eq($executionID)->orderBy('order_asc')->fetch('order');
+        if(strpos($orderBy, 'order_desc') !== false) $idList = array_reverse($idList);
         foreach($idList as $storyID)
         {
             $this->dao->update(TABLE_PROJECTSTORY)->set('`order`')->eq($order)->where('story')->eq($storyID)->andWhere('project')->eq($executionID)->exec();
