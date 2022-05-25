@@ -99,6 +99,8 @@ $lang->kanban->closedDate     = '关闭日期';
 $lang->kanban->empty          = '暂时没有看板';
 $lang->kanban->teamSumCount   = '共%s人';
 $lang->kanban->cardCount      = '卡片数量';
+$lang->kanban->activatedBy    = '由谁激活';
+$lang->kanban->activatedDate  = '激活日期';
 
 $lang->kanban->createColumnOnLeft  = '在左侧添加看板列';
 $lang->kanban->createColumnOnRight = '在右侧添加看板列';
@@ -264,6 +266,8 @@ $lang->kanbanspace->lastEditedDate = '最后修改日期';
 $lang->kanbanspace->closedBy       = '由谁关闭';
 $lang->kanbanspace->closedDate     = '关闭日期';
 $lang->kanbanspace->type           = '空间类型';
+$lang->kanbanspace->activatedBy    = '由谁激活';
+$lang->kanbanspace->activatedDate  = '激活日期';
 
 $lang->kanbanspace->empty = '暂时没有空间';
 

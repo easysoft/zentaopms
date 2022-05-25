@@ -99,6 +99,8 @@ $lang->kanban->closedDate     = 'Closed Date';
 $lang->kanban->empty          = 'No Kanban';
 $lang->kanban->teamSumCount   = '%s people in total';
 $lang->kanban->cardCount      = 'Card Count';
+$lang->kanban->activatedBy    = 'Activated By';
+$lang->kanban->activatedDate  = 'Activated Date';
 
 $lang->kanban->createColumnOnLeft  = 'Create Column On Left';
 $lang->kanban->createColumnOnRight = 'Create Column On Right';
@@ -264,6 +266,8 @@ $lang->kanbanspace->lastEditedDate = 'Edited Date';
 $lang->kanbanspace->closedBy       = 'Closed By';
 $lang->kanbanspace->closedDate     = 'Closed Date';
 $lang->kanbanspace->type           = 'Type';
+$lang->kanbanspace->activatedBy    = 'Activated By';
+$lang->kanbanspace->activatedDate  = 'Activated Date';
 
 $lang->kanbanspace->empty = 'No Space';
 
