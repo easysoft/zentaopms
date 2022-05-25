@@ -1001,7 +1001,11 @@ class baseRouter
 
         $this->sessionID = isset($ztSessionHandler) ? $ztSessionHandler->getSessionID() : session_id();
 
-        if(isset($_GET[$this->config->sessionVar])) helper::restartSession($_GET[$this->config->sessionVar]);
+        if(isset($_GET[$this->config->sessionVar]))
+        {
+            helper::restartSession($_GET[$this->config->sessionVar]);
+            $this->sessionID = isset($ztSessionHandler) ? $ztSessionHandler->getSessionID() : session_id();
+        }
 
         define('SESSION_STARTED', true);
     }
@@ -3167,9 +3171,7 @@ class ztSessionHandler
             ($this->tagID and file_exists($this->rawFile)) ? copy($this->rawFile, $sessFile) : touch($sessFile);
         }
 
-        $sessContent = (string) file_get_contents($sessFile);
-        if(!file_exists($this->rawFile) and strpos($sessContent, 'user|') !== false) copy($sessFile, $this->rawFile);
-        return $sessContent;
+        return (string) file_get_contents($sessFile);
     }
 
     /**
@@ -3183,7 +3185,23 @@ class ztSessionHandler
     public function write($id, $sessData)
     {
         $sessFile = $this->getSessionFile($id);
-        if(file_put_contents($sessFile, $sessData)) return true;
+        if(file_put_contents($sessFile, $sessData))
+        {
+            if(strpos($sessData, 'user|') !== false)
+            {
+                if(file_exists($this->rawFile))
+                {
+                    $rawSessContent = (string) file_get_contents($this->rawFile);
+                    if(strpos($rawSessContent, 'user|') === false) copy($sessFile, $this->rawFile);
+                }
+                else
+                {
+                    copy($sessFile, $this->rawFile);
+                }
+            }
+
+            return true;
+        }
         return false;
     }
 

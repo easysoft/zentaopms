@@ -679,7 +679,7 @@ class execution extends control
      * @access public
      * @return void
      */
-    public function story($executionID = 0, $orderBy = 'order_asc', $type = 'all', $param = 0, $recTotal = 0, $recPerPage = 50, $pageID = 1)
+    public function story($executionID = 0, $orderBy = 'order_desc', $type = 'all', $param = 0, $recTotal = 0, $recPerPage = 50, $pageID = 1)
     {
         /* Load these models. */
         $this->loadModel('story');
@@ -3295,6 +3295,7 @@ class execution extends control
         $orderBy  = $this->post->orderBy;
 
         $order = $this->dao->select('*')->from(TABLE_PROJECTSTORY)->where('story')->in($idList)->andWhere('project')->eq($executionID)->orderBy('order_asc')->fetch('order');
+        if(strpos($orderBy, 'order_desc') !== false) $idList = array_reverse($idList);
         foreach($idList as $storyID)
         {
             $this->dao->update(TABLE_PROJECTSTORY)->set('`order`')->eq($order)->where('story')->eq($storyID)->andWhere('project')->eq($executionID)->exec();

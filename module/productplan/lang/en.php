@@ -142,11 +142,6 @@ $lang->productplan->featureBar['browse']['doing']  = 'Doing';
 $lang->productplan->featureBar['browse']['done']   = 'Done';
 $lang->productplan->featureBar['browse']['closed'] = 'Closed';
 
-$lang->productplan->statusList['wait']   = 'Wait';
-$lang->productplan->statusList['doing']  = 'Doing';
-$lang->productplan->statusList['done']   = 'Done';
-$lang->productplan->statusList['closed'] = 'Closed';
-
 $lang->productplan->orderList['begin_desc'] = 'Begin Descend';
 $lang->productplan->orderList['begin_asc']  = 'Begin Ascend';
 $lang->productplan->orderList['title_desc'] = 'Title Descend';

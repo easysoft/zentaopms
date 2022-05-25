@@ -131,12 +131,7 @@
             <td class='<?php echo zget($visibleFields, 'keywords', 'hidden')?>'><?php echo html::input("keywords[$i]", '', "class='form-control'");?></td>
             <?php 
             $this->loadModel('flow');
-            foreach($extendFields as $extendField) 
-            {
-                $object = new stdclass();
-                $object->{$extendField->field} = $extendField->default;
-                echo "<td" . (($extendField->control == 'select' or $extendField->control == 'multi-select') ? " style='overflow:visible'" : '') . ">" . $this->flow->getFieldControl($extendField, $object, $extendField->field . "[$i]") . "</td>";
-            }
+            foreach($extendFields as $extendField) echo "<td" . (($extendField->control == 'select' or $extendField->control == 'multi-select') ? " style='overflow:visible'" : '') . ">" . $this->flow->getFieldControl($extendField, '', $extendField->field . "[$i]") . "</td>";
             ?>
           </tr>
           <?php $i++;?>
@@ -186,12 +181,7 @@
             <td class='<?php echo zget($visibleFields, 'keywords', 'hidden')?>'><?php echo html::input("keywords[$i]", '', "class='form-control'");?></td>
             <?php 
             $this->loadModel('flow');
-            foreach($extendFields as $extendField) 
-            {
-                $object = new stdclass();
-                $object->{$extendField->field} = $extendField->default;
-                echo "<td" . (($extendField->control == 'select' or $extendField->control == 'multi-select') ? " style='overflow:visible'" : '') . ">" . $this->flow->getFieldControl($extendField, $object, $extendField->field . "[$i]") . "</td>";
-            }
+            foreach($extendFields as $extendField) echo "<td" . (($extendField->control == 'select' or $extendField->control == 'multi-select') ? " style='overflow:visible'" : '') . ">" . $this->flow->getFieldControl($extendField, '', $extendField->field . "[$i]") . "</td>";
             ?>
           </tr>
           <?php endfor;?>
@@ -240,12 +230,7 @@
       <td class='<?php echo zget($visibleFields, 'keywords', 'hidden')?>'><?php echo html::input("keywords[%s]", '', "class='form-control'");?></td>
       <?php 
       $this->loadModel('flow');
-      foreach($extendFields as $extendField) 
-      {
-          $object = new stdclass();
-          $object->{$extendField->field} = $extendField->default;
-          echo "<td" . (($extendField->control == 'select' or $extendField->control == 'multi-select') ? " style='overflow:visible'" : '') . ">" . $this->flow->getFieldControl($extendField, $object, $extendField->field . "[%s]") . "</td>";
-      }
+      foreach($extendFields as $extendField) echo "<td" . (($extendField->control == 'select' or $extendField->control == 'multi-select') ? " style='overflow:visible'" : '') . ">" . $this->flow->getFieldControl($extendField, '', $extendField->field . "[%s]") . "</td>";
       ?>
     </tr>
   </tbody>

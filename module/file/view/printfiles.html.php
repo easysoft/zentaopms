@@ -36,6 +36,10 @@
       }
       else
       {
+          url = url.replace('?onlybody=yes&', '?');
+          url = url.replace('?onlybody=yes', '?');
+          url = url.replace('&onlybody=yes', '');
+
           window.open(url, '_blank');
       }
       return false;
