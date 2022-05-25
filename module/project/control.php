@@ -63,7 +63,6 @@ class project extends control
                 $project->PM       = zget($users, $project->PM);
                 $project->status   = $this->processStatus('project', $project);
                 $project->model    = zget($projectLang->modelList, $project->model);
-                $project->product  = zget($projectLang->productList, $project->product);
                 $project->budget   = $project->budget . zget($projectLang->unitList, $project->budgetUnit);
                 $project->parent   = $project->parentName;
 
@@ -76,9 +75,7 @@ class project extends control
                     if(strpos(",$checkedItem,", ",{$project->id},") === false) unset($projects[$i]);
                 }
             }
-
-            if($this->config->edition != 'open') list($fields, $projectStats) = $this->loadModel('workflowfield')->appendDataFromFlow($fields, $projectStats);
-
+            if($this->config->edition != 'open') list($fields, $projects) = $this->loadModel('workflowfield')->appendDataFromFlow($fields, $projects);
             $this->post->set('fields', $fields);
             $this->post->set('rows', $projects);
             $this->post->set('kind', 'project');
