@@ -824,7 +824,7 @@ class task extends control
             $this->loadModel('action');
             foreach($tasks as $taskID => $task)
             {
-                if(isset($muletipleTasks[$taskID]) and $task->assignedTo != $this->app->user->account) continue;
+                if(isset($muletipleTasks[$taskID]) and $task->assignedTo != $this->app->user->account and $task->mode == 'linear') continue;
                 if(isset($muletipleTasks[$taskID]) and !isset($muletipleTasks[$taskID][$this->post->assignedTo])) continue;
 
                 $changes = $this->task->assign($taskID);
@@ -1207,7 +1207,7 @@ class task extends control
         }
 
         $task         = $this->view->task;
-        $members      = $this->loadModel('user')->getTeamMemberPairs($task->execution, 'execution', 'nodeleted');
+        $members      = $task->team ? $this->task->getMemberPairs($task) : $this->loadModel('user')->getTeamMemberPairs($task->execution, 'execution', 'nodeleted');
         $task->nextBy = $task->openedBy;
 
         $this->view->users = $members;

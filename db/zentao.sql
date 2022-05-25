@@ -1464,6 +1464,7 @@ CREATE TABLE IF NOT EXISTS `zt_task` (
   `fromIssue` mediumint(8) unsigned NOT NULL default '0',
   `name` varchar(255) NOT NULL,
   `type` varchar(20) NOT NULL,
+  `mode` varchar(10) NOT NULL,
   `pri` tinyint(3) unsigned NOT NULL default '0',
   `estimate` float unsigned NOT NULL,
   `consumed` float unsigned NOT NULL,

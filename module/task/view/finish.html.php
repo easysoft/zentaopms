@@ -15,11 +15,15 @@
 <?php include '../../common/view/datepicker.html.php';?>
 <div id='mainContent' class='main-content'>
   <div class='center-block'>
-    <?php if(!empty($task->team) && $task->assignedTo != $this->app->user->account):?>
+    <?php if(!empty($task->team) and (!isset($task->team[$app->user->account]) or ($task->assignedTo != $app->user->account and $task->mode == 'linear'))):?>
     <div class="alert with-icon">
       <i class="icon-exclamation-sign"></i>
       <div class="content">
+        <?php if($task->assignedTo != $app->user->account and $task->mode == 'linear'):?>
         <p><?php echo sprintf($lang->task->deniedNotice, '<strong>' . $task->assignedToRealName . '</strong>', $lang->task->finish);?></p>
+        <?php else:?>
+        <p><?php echo sprintf($lang->task->deniedNotice, '<strong>' . $lang->task->teamMember . '</strong>', $lang->task->finish);?></p>
+        <?php endif;?>
       </div>
     </div>
     <?php else:?>

@@ -77,6 +77,10 @@
             <button id='selectAllUser' type="button" class="btn btn-link<?php if($task->type !== 'affair') echo ' hidden';?>"><?php echo $lang->task->selectAllUser;?></button>
           </td>
         </tr>
+        <tr class='hidden modeBox'>
+          <th><?php echo $lang->task->mode;?></th>
+          <td><?php echo html::select('mode', $lang->task->modeList, '', "class='form-control chosen'");?></td>
+        </tr>
         <?php if($execution->type == 'kanban'):?>
         <tr>
           <th><?php echo $lang->kanbancard->region;?></th>
