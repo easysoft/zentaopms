@@ -48,3 +48,4 @@ html[lang='en'] #deadlineTd .input-group-addon {padding: 5px 18px;}
 #notifyEmailTd .input-group-addon, #deadlineTd .input-group-addon {border-radius: 2px 0px 2px 0px !important;}
 
 #feedback.input-group + #notifyEmailLabel {position: relative; width: 50%; left: 48%}
+#executionLabel {position: relative; width: 50%; left: 48%}

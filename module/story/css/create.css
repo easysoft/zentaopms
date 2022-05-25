@@ -5,5 +5,5 @@
 .pri-selector > .dropdown-menu {padding: 10px;}
 
 #source_chosen {min-width: 50px !important;}
-#feedback.input-group + #notifyEmailLabel {position: relative; width: 50%; left: 48%}
+#feedbackBox > .input-group + #notifyEmailLabel {position: relative; width: 50%; left: 48%}
 #product + .picker{min-width: 400px}
