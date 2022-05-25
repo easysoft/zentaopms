@@ -133,6 +133,7 @@ class taskModel extends model
 
             /* Fix Bug #2466 */
             if($this->post->multiple) $task->assignedTo = '';
+            if(!$this->post->multiple or count(array_filter($this->post->team)) < 1) $task->mode = '';
             $this->dao->insert(TABLE_TASK)->data($task, $skip = 'gitlab,gitlabProject')
                 ->autoCheck()
                 ->batchCheck($requiredFields, 'notempty')
