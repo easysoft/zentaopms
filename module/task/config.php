@@ -31,7 +31,7 @@ $config->task->exportFields = '
     id, execution, module, story,
     name, desc,
     type, pri,estStarted, realStarted, deadline, status,estimate, consumed, left,
-    mailto, progress,
+    mailto, progress, mode,
     openedBy, openedDate, assignedTo, assignedDate,
     finishedBy, finishedDate, canceledBy, canceledDate,
     closedBy, closedDate, closedReason,
