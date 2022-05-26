@@ -969,7 +969,7 @@ class user extends control
             $this->view->keepLogin     = $this->cookie->keepLogin ? $this->cookie->keepLogin : 'off';
             $this->view->rand          = $this->user->updateSessionRandom();
             $this->view->unsafeSites   = $this->misc->checkOneClickPackage();
-            $this->view->plugins       = $this->extension->getExpirePlugins();
+            $this->view->plugins       = $this->extension->getExpiringPlugins();
             $this->display();
         }
     }

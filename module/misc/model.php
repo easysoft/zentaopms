@@ -69,7 +69,7 @@ class miscModel extends model
      */
     public function getPluginRemind()
     {
-        $plugins = $this->loadModel('extension')->getExpirePlugins();
+        $plugins = $this->loadModel('extension')->getExpiringPlugins();
         $remind  = '';
 
         $today = helper::today();

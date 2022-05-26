@@ -917,7 +917,7 @@ class extensionModel extends model
      * @access public
      * @return array()
      */
-    public function getExpirePlugins()
+    public function getExpiringPlugins()
     {
         $extensions = $this->getLocalExtensions('installed');
 
