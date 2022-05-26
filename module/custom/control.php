@@ -143,8 +143,9 @@ class custom extends control
             elseif($module == 'testcase' and $field == 'review')
             {
                 $review = fixer::input('post')->get();
-                if($review->needReview) $data = fixer::input('post')->join('forceNotReview', ',')->remove('forceReview')->get();
+                if($review->needReview)  $data = fixer::input('post')->join('forceNotReview', ',')->remove('forceReview')->get();
                 if(!$review->needReview) $data = fixer::input('post')->join('forceReview', ',')->remove('forceNotReview')->get();
+                if(!isset($data->forceReview)) $data->forceReview = '';
                 $this->loadModel('setting')->setItems("system.$module", $data);
 
                 $reviewCase = isset($review->reviewCase) ? $review->reviewCase : 0;
