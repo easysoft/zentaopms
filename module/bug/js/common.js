@@ -485,7 +485,7 @@ function loadProjectBuilds(projectID)
 
     if(page == 'create')
     {
-        var link = createLink('build', 'ajaxGetProjectBuilds', 'projectID=' + projectID + '&productID=' + productID + '&varName=openedBuild&build=' + oldOpenedBuild + "&branch=" + branch);
+        var link = createLink('build', 'ajaxGetProjectBuilds', 'projectID=' + projectID + '&productID=' + productID + '&varName=openedBuild' + "&branch=" + branch);
         $.get(link, function(data)
         {
             if(!data) data = '<select id="openedBuild" name="openedBuild" class="form-control" multiple=multiple></select>';
