@@ -1,7 +1,7 @@
-[lang^='en'] #tipsModalNew {margin-top: 10%; max-width: 620px;}
-[lang^='zh-cn'] #tipsModalNew {margin-top: 10%; max-width: 530px;}
-[lang^='zh-cn'] #tipsModalClassic {margin-top: 10%; max-width: 420px;}
-[lang^='en'] #tipsModalClassic {margin-top: 10%; max-width: 450px;}
+[lang^='en'] #newTipsModal {margin-top: 10%; max-width: 620px;}
+[lang^='zh-cn'] #newTipsModal {margin-top: 10%; max-width: 530px;}
+[lang^='zh-cn'] #classicTipsModal {margin-top: 10%; max-width: 420px;}
+[lang^='en'] #classicTipsModal {margin-top: 10%; max-width: 450px;}
 .chosen-container-single .chosen-single > span {max-width: 100%;}
 
 #copyProjectModal {padding: 0;}
