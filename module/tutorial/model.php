@@ -291,6 +291,7 @@ class tutorialModel extends model
         $execution->end           = date('Y-m-d', strtotime('+7 days'));
         $execution->realBegan     = '';
         $execution->realEnd       = '';
+        $execution->suspendedDate = '';
         $execution->days          = 10;
         $execution->status        = 'wait';
         $execution->pri           = '1';
