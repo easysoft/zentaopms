@@ -18,3 +18,6 @@ UPDATE `zt_workflow` SET `app`='execution' WHERE `module`='task' AND `vision`='r
 UPDATE `zt_workflow` SET `app`='execution' WHERE `module`='build' AND `vision`='rnd';
 UPDATE `zt_workflow` SET `app`='execution' WHERE `module`='execution' AND `vision`='rnd';
 UPDATE `zt_workflow` SET `app`='program'   WHERE `module`='program' AND `vision`='rnd';
+
+REPLACE INTO `zt_workflowaction` (`module`, `action`, `method`, `name`, `type`, `batchMode`, `extensionType`, `open`, `position`, `layout`, `show`, `order`, `buildin`, `virtual`, `conditions`, `verifications`, `hooks`, `linkages`, `js`, `css`, `toList`, `blocks`, `desc`, `status`, `vision`, `createdBy`, `createdDate`, `editedBy`, `editedDate`) VALUES
+('execution','build','browse','所有版本','single','different','none','normal','browseandview','normal','direct',0,1,0,'','','','','','','','','','enable','rnd','','0000-00-00 00:00:00','','0000-00-00 00:00:00');
