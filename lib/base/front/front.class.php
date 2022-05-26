@@ -501,6 +501,8 @@ class baseHTML
         $gobackList    = isset($_COOKIE['goback']) ? json_decode($_COOKIE['goback'], true) : array();
         $gobackLink    = isset($gobackList[$tab]) ? $gobackList[$tab] : '';
 
+        if(strpos($misc, 'data-app') === false) $misc .= " data-app='" . $tab . "'";
+
         /* If the link of the referer is not the link of the current page or the link of the index,  the cookie and gobackLink will be updated. */
         if(!preg_match("/(m=|\/)(index|search|$currentModule)(&f=|-)(index|buildquery|$currentMethod)(&|-|\.)?/", strtolower($refererLink)))
         {
@@ -509,7 +511,7 @@ class baseHTML
             setcookie('goback', json_encode($gobackList), $config->cookieLife, $config->webRoot, '', $config->cookieSecure, false);
         }
 
-        return "<a href='{$gobackLink}' class='btn btn-back $class' data-app='$tab' $misc>{$label}</a>";
+        return "<a href='{$gobackLink}' class='btn btn-back $class' $misc>{$label}</a>";
     }
 
     /**
