@@ -18,6 +18,7 @@ $lang->execution->name                = "{$lang->executionCommon} Name";
 $lang->execution->code                = "{$lang->executionCommon} Code";
 $lang->execution->projectName         = 'Project';
 $lang->execution->project             = 'Project';
+$lang->execution->execId              = "{$lang->execution->common} ID";
 $lang->execution->execName            = "{$lang->execution->common} Name";
 $lang->execution->execCode            = "{$lang->execution->common} Code";
 $lang->execution->execType            = 'Execution Type';

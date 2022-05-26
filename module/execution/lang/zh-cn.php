@@ -18,6 +18,7 @@ $lang->execution->name                = $lang->executionCommon . '名称';
 $lang->execution->code                = $lang->executionCommon . '代号';
 $lang->execution->projectName         = '所属项目';
 $lang->execution->project             = '所属项目';
+$lang->execution->execId              = "{$lang->execution->common}编号";
 $lang->execution->execName            = "{$lang->execution->common}名称";
 $lang->execution->execCode            = "{$lang->execution->common}代号";
 $lang->execution->execType            = "{$lang->execution->common}类型";
