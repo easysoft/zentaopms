@@ -56,18 +56,18 @@ class program extends control
                 $programs    = $this->program->getList($status, $orderBy, null, 'child', $topPrograms);
 
                 /* Filter programs that do not need to be displayed. */
-                $copyPrograms = $programs;
-                ksort($copyPrograms);
-                foreach($copyPrograms as $programInfo)
+                $authorizedPrograms = $programs;
+                ksort($authorizedPrograms);
+                foreach($authorizedPrograms as $programInfo)
                 {
                     if($programInfo->type == 'program' and strpos(",{$this->app->user->view->programs},", ",$programInfo->id,") === false)
                     {
-                        unset($copyPrograms[$programInfo->id]);
+                        unset($authorizedPrograms[$programInfo->id]);
                         continue;
                     }
                     foreach(explode(',', trim($programInfo->path, ',')) as $pathID)
                     {
-                        if(!isset($copyPrograms[$pathID])) $copyPrograms[$pathID] = $programs[$pathID];
+                        if(!isset($authorizedPrograms[$pathID])) $authorizedPrograms[$pathID] = $programs[$pathID];
                     }
                 }
 
@@ -75,7 +75,7 @@ class program extends control
                 $topCount = $indCount = 0;
                 foreach($programs as $program)
                 {
-                    if(!isset($copyPrograms[$program->id]))
+                    if(!isset($authorizedPrograms[$program->id]))
                     {
                         unset($programs[$program->id]);
                         continue;
