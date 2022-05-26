@@ -3873,7 +3873,7 @@ class storyModel extends model
                 $menu .= "</ul></div>";
             }
 
-            if($this->app->tab == 'execution' and strpos('draft,closed', $story->status) === false) $menu .= $this->buildMenu('task', 'create', "execution={$this->session->project}&{$params}&moduleID=$story->module", $story, $type, 'plus', '', 'showinonly body');
+            if($this->app->tab == 'execution' and strpos('draft,closed', $story->status) === false) $menu .= $this->buildMenu('task', 'create', "execution={$this->session->execution}&{$params}&moduleID=$story->module", $story, $type, 'plus', '', 'showinonly body');
 
             $menu .= "<div class='divider'></div>";
             $menu .= $this->buildFlowMenu('story', $story, $type, 'direct');
