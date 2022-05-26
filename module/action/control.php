@@ -12,6 +12,47 @@
 class action extends control
 {
     /**
+     * Create a action or delete all patch actions, this method is used by the Ztools.
+     *
+     * @param  string $objectType
+     * @param  string $actionType
+     * @param  string $objectName
+     * @param  bool   $confirmDelete delete all patch actions when upgrade zentao.
+     * @access public
+     * @return int
+     */
+    public function create($objectType, $actionType, $objectName, $confirmDelete = false)
+    {
+        if($confirmDelete)
+        {
+            $this->dao->delete()->from(TABLE_ACTION)->where('objectType')->eq('patch')->exec();
+
+            if(!dao::isError())
+            {
+                $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess));
+            }
+            else
+            {
+                $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            }
+        }
+        else
+        {
+            $actionID = $this->action->create($objectType, 0, $actionType, '', $objectName);
+
+            if($actionID)
+            {
+                $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess));
+            }
+            else
+            {
+                $this->send(array('result' => 'fail', 'message' => 'error'));
+            }
+        }
+    }
+
+
+    /**
      * Trash.
      *
      * @param  string $browseType

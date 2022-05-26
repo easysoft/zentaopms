@@ -139,6 +139,7 @@ $lang->action->objectTypes['kanbancard']       = '看板卡片';
 $lang->action->objectTypes['sonarqube']        = 'SonarQube服务器';
 $lang->action->objectTypes['sonarqubeproject'] = 'SonarQube项目';
 $lang->action->objectTypes['stage']            = '阶段';
+$lang->action->objectTypes['patch']            = '补丁';
 
 /* 用来描述操作历史记录。*/
 $lang->action->desc = new stdclass();
@@ -232,6 +233,8 @@ $lang->action->desc->unlinkbug   = '$date, 由 <strong>$actor</strong> 从计划
 
 /* 用来显示动态信息。*/
 $lang->action->label                        = new stdclass();
+$lang->action->label->install               = '安装';
+$lang->action->label->revert                = '还原';
 $lang->action->label->created               = '创建';
 $lang->action->label->opened                = '创建';
 $lang->action->label->openedbysystem        = '系统创建';
