@@ -72,12 +72,18 @@ if(empty($config->notMd5Pwd))js::import($jsRoot . 'md5.js');
           </form>
         </div>
       </div>
-      <?php if(count($plugins) > 0):?>
+      <?php if(count($plugins['expired']) > 0 or count($plugins['expiring']) > 0):?>
       <div class="table-row-extension">
         <div id="notice" class="alert alert-info">
-        <?php $pluginName = implode('、', $plugins)?>
-        <?php $expiredPluginTips = sprintf($lang->misc->expiredPluginTips, $pluginName);?>
-        <div class="content"><i class="icon-exclamation-sign text-blue"></i>&nbsp;<?php echo sprintf($lang->misc->expiredCountTips, $expiredPluginTips, count($plugins));?></div>
+        <?php $expiredPlugins  = implode('、', $plugins['expired']);?>
+        <?php $expiringPlugins = implode('、', $plugins['expiring']);?>
+        <?php $expiredTips     = sprintf($lang->misc->expiredPluginTips, $expiredPlugins);?>
+        <?php $expiringTips    = sprintf($lang->misc->expiringPluginTips, $expiringPlugins);?>
+        <?php if($expiredPlugins)  $pluginTips = $expiredTips;?>
+        <?php if($expiringPlugins) $pluginTips = $expiringTips;?>
+        <?php if($expiredPlugins and $expiringPlugins) $pluginTips = $expiredTips . $pluginTips;?>
+        <?php $pluginTotal = count($plugins['expired']) + count($plugins['expiring']);?>
+        <div class="content"><i class="icon-exclamation-sign text-blue"></i>&nbsp;<?php echo sprintf($lang->misc->expiredCountTips, $pluginTips, $pluginTotal);?></div>
         </div>
       </div>
       <?php endif;?>
