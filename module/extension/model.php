@@ -910,4 +910,28 @@ class extensionModel extends model
 
         return $expiredDate;
     }
+
+    /**
+     * Get plugins that are about to expire or have expired.
+     *
+     * @access public
+     * @return array()
+     */
+    public function getExpirePlugins()
+    {
+        $extensions = $this->getLocalExtensions('installed');
+
+        $plugins = array();
+        $today   = helper::today();
+        foreach($extensions as $extension)
+        {
+            $expiredDate = $this->getExpireDate($extension);
+            if(!empty($expiredDate))
+            {
+                $dateDiff = helper::diffDate($expiredDate, $today);
+                if($dateDiff == 30 or $dateDiff == 14 or $dateDiff <= 0) $plugins[] = $extension->name;
+            }
+        }
+        return $plugins;
+    }
 }

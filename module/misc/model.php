@@ -62,6 +62,32 @@ class miscModel extends model
     }
 
     /**
+     * Get the notification information about plugin expiration.
+     *
+     * @access public
+     * @return void
+     */
+    public function getPluginRemind()
+    {
+        $plugins = $this->loadModel('extension')->getExpirePlugins();
+        $remind  = '';
+
+        $today = helper::today();
+        if(!isset($this->config->global->showPluginRemind)) $this->config->global->showPluginRemind = '';
+        $showPluginRemind = empty($this->config->global->showPluginRemind) or $this->config->global->showPluginRemind != $today;
+        if(!empty($plugins) and $this->app->user->admin and $showPluginRemind)
+        {
+            $pluginButton = html::a(helper::createLink('extension', 'browse'), $this->lang->misc->view, '', "id='pluginButton' class='btn btn-primary btn-wide' data-app='admin'");
+            $cancelButton = html::a('javascript: void(0);', $this->lang->misc->cancel, '', "id='cancelButton' class='btn btn-back btn-wide'");
+            $remind  = '<p>' . sprintf($this->lang->misc->expiredTipsForAdmin, count($plugins)) . '</p>';
+            $remind .= '<p class="text-right">' . $pluginButton . $cancelButton . '</p>';
+
+            $this->loadModel('setting')->setItem("{$this->app->user->account}.common.global.showPluginRemind", $today);
+        }
+        return $remind;
+    }
+
+    /**
      * Check one click package.
      *
      * @access public

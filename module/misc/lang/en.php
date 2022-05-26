@@ -12,6 +12,8 @@
 $lang->misc = new stdclass();
 $lang->misc->common  = 'Misc';
 $lang->misc->ping    = 'Ping';
+$lang->misc->view    = 'Click to view';
+$lang->misc->cancel  = 'Cancel';
 
 $lang->misc->zentao = new stdclass();
 $lang->misc->zentao->version           = 'Version %s';
@@ -69,6 +71,11 @@ $lang->misc->novice      = "New to ZenTao? Do you want to start ZenTao Tutorial?
 $lang->misc->showAnnual  = 'Add Annual Summary';
 $lang->misc->annualDesc  = 'After version 12.0, Annual Summary can be viewed on 『Report->Annual Summary』 page. <a href="%s" target="_blank" id="showAnnual" class="btn btn-mini btn-primary">See now</a>.';
 $lang->misc->remind      = 'New feature reminders';
+
+$lang->misc->expiredTipsTitle    = 'Dear system administrator, hello:';
+$lang->misc->expiredCountTips    = 'There are <span class="expired-tips text-blue" data-toggle="tooltip" data-placement="bottom" title="%s">%s plug-ins</span> in the system that will expire soon. To avoid affecting your regular use, please get in touch with the administrator to renew or uninstall them in time.';
+$lang->misc->expiredPluginTips   = 'The plug-ins that will expire are: %s.';
+$lang->misc->expiredTipsForAdmin = 'There are %s plug-ins in the current system that will expire soon. To avoid affecting the regular use of the function, please renew or uninstall them in the system background plug-in management as soon as possible.';
 
 $lang->misc->noticeRepair = "<h5>If you are not Administrator, contact your ZenTao Administrator to repair tables.</h5>
     <h5>If you are the Administrator, login your ZenTao host and create a file named <span>%s</span>.</h5>

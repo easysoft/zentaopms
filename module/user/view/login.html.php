@@ -72,6 +72,15 @@ if(empty($config->notMd5Pwd))js::import($jsRoot . 'md5.js');
           </form>
         </div>
       </div>
+      <?php if(count($plugins) > 0):?>
+      <div class="table-row-extension">
+        <div id="notice" class="alert alert-info">
+        <?php $pluginName = implode('、', $plugins)?>
+        <?php $expiredPluginTips = sprintf($lang->misc->expiredPluginTips, $pluginName);?>
+        <div class="content"><i class="icon-exclamation-sign text-blue"></i>&nbsp;<?php echo sprintf($lang->misc->expiredCountTips, $expiredPluginTips, count($plugins));?></div>
+        </div>
+      </div>
+      <?php endif;?>
       <?php if(!empty($this->config->global->showDemoUsers)):?>
       <?php
       $demoPassword = '123456';
