@@ -929,7 +929,7 @@ class extensionModel extends model
             if(!empty($expiredDate))
             {
                 $dateDiff = helper::diffDate($expiredDate, $today);
-                if($dateDiff == 30 or $dateDiff == 14 or $dateDiff <= 0) $plugins[] = $extension->name;
+                if($dateDiff == 30 or $dateDiff == 14 or $dateDiff <= 7) $plugins[] = $extension->name;
             }
         }
         return $plugins;

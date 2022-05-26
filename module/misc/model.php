@@ -73,8 +73,7 @@ class miscModel extends model
         $remind  = '';
 
         $today = helper::today();
-        if(!isset($this->config->global->showPluginRemind)) $this->config->global->showPluginRemind = '';
-        $showPluginRemind = empty($this->config->global->showPluginRemind) or $this->config->global->showPluginRemind != $today;
+        $showPluginRemind = (empty($this->config->global->showPluginRemind) or $this->config->global->showPluginRemind != $today) ? true : false;
         if(!empty($plugins) and $this->app->user->admin and $showPluginRemind)
         {
             $pluginButton = html::a(helper::createLink('extension', 'browse'), $this->lang->misc->view, '', "id='pluginButton' class='btn btn-primary btn-wide' data-app='admin'");
