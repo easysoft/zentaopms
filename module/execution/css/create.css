@@ -1,5 +1,7 @@
-[lang^='en'] #tipsModal {margin-top: 10%; max-width: 620px;}
-[lang^='zh-cn'] #tipsModal {margin-top: 10%; max-width: 530px;}
+[lang^='en'] #tipsModalNew {margin-top: 10%; max-width: 620px;}
+[lang^='zh-cn'] #tipsModalNew {margin-top: 10%; max-width: 530px;}
+[lang^='zh-cn'] #tipsModalClassic {margin-top: 10%; max-width: 420px;}
+[lang^='en'] #tipsModalClassic {margin-top: 10%; max-width: 450px;}
 .chosen-container-single .chosen-single > span {max-width: 100%;}
 
 #copyProjectModal {padding: 0;}
