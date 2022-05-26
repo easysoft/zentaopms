@@ -498,6 +498,16 @@ class upgradeModel extends model
                 $this->updateProjectStatus();
                 $this->updateStoryReviewer($fromVersion);
                 break;
+            case '17_0_beta1':
+                if(empty($this->config->isINT))
+                {
+                    if(!$executedXuanxuan)
+                    {
+                        $xuanxuanSql = $this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan5.5.sql';
+                        $this->execSQL($xuanxuanSql);
+                    }
+                }
+                break;
         }
 
         $this->deletePatch();
