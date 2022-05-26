@@ -819,6 +819,7 @@ class taskModel extends model
                 $currentTask->consumed += (float)$member->consumed;
                 $currentTask->left     += (float)$member->left;
             }
+            if(empty($oldTask->team)) $currentTask->consumed += (float)$oldTask->consumed;
 
             if(!empty($task))
             {
@@ -840,7 +841,8 @@ class taskModel extends model
 
                 if($currentTask->consumed > 0 and $currentTask->left == 0)
                 {
-                    if(($oldTask->mode == 'linear' and isset($team[$currentTask->assignedTo]) and $oldTask->assignedTo != $teams[count($teams) - 1]) or ($oldTask->mode == 'multi' and count($finisedUsers) != count($teams)))
+                    $finisedUsers = $this->getFinishedUsers($oldTask->id, $teams);
+                    if(($oldTask->mode == 'linear' and isset($team[$currentTask->assignedTo]) and $oldTask->assignedTo != $teams[count($teams) - 1]) or ($oldTask->mode == 'multi' and count($finisedUsers) != (count($teams) -1)))
                     {
                         $currentTask->status       = 'doing';
                         $currentTask->finishedBy   = '';
@@ -3557,11 +3559,13 @@ class taskModel extends model
      */
     public function getFinishedUsers($taskID = 0, $team = array())
     {
+        $task = $this->getById($taskID);
         return $this->dao->select('actor')->from(TABLE_ACTION)
             ->where('objectType')->eq('task')
             ->andWhere('objectID')->eq($taskID)
             ->andWhere('actor')->in($team)
             ->andWhere('action')->eq('finished')
+            ->andWhere('date')->ge($task->activatedDate)
             ->fetchPairs('actor');
     }
 
