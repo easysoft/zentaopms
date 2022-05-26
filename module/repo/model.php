@@ -204,6 +204,7 @@ class repoModel extends model
         {
             if($this->post->gitlabHost == '')    dao::$errors['gitlabHost']    = sprintf($this->lang->error->notempty, $this->lang->repo->gitlabHost);
             if($this->post->gitlabProject == '') dao::$errors['gitlabProject'] = sprintf($this->lang->error->notempty, $this->lang->repo->gitlabProject);
+            if(dao::isError()) return false;
         }
 
         $data = fixer::input('post')
