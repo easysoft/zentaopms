@@ -184,10 +184,9 @@ function renderProjectItem(item, $item)
             $title = $('<div class="title" />');
         }
         $title.appendTo($item);
+        if(item.delay) $title.after("&nbsp;<div><span class='label label-danger label-badge'>" + delayText + "</span></div>");
     }
     $title.text(item.name).attr('title', item.name);
-
-    if(item.delay) $title.after("&nbsp;<div><span class='label label-danger label-badge'>" + delayText + "</span></div>");
 
     if(item.status === 'doing')
     {
@@ -218,6 +217,7 @@ function renderProjectItem(item, $item)
 function renderExecutionItem(item, $item)
 {
     var $title = $item.find('.title');
+
     if(!$title.length)
     {
         if((item.type == 'kanban' && window.userPrivs.kanban) || (item.type != 'kanban' && window.userPrivs.execution))
@@ -233,10 +233,9 @@ function renderExecutionItem(item, $item)
             $title = $('<div class="title" />');
         }
         $title.appendTo($item);
+        if(item.delay) $title.after("&nbsp;<div><span class='label label-danger label-badge'>" + delayText + "</span></div>");
     }
     $title.text(item.name).attr('title', item.name);
-
-    if(item.delay) $title.after("&nbsp;<div><span class='label label-danger label-badge'>" + delayText + "</span></div>");
 
     if(window.statusColorList && window.statusColorList[item.status])
     {
