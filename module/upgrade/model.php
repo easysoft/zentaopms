@@ -499,13 +499,10 @@ class upgradeModel extends model
                 $this->updateStoryReviewer($fromVersion);
                 break;
             case '17_0_beta1':
-                if(empty($this->config->isINT))
+                if(!$executedXuanxuan)
                 {
-                    if(!$executedXuanxuan)
-                    {
-                        $xuanxuanSql = $this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan5.5.sql';
-                        $this->execSQL($xuanxuanSql);
-                    }
+                    $xuanxuanSql = $this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan5.5.sql';
+                    $this->execSQL($xuanxuanSql);
                 }
                 break;
         }
