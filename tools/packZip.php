@@ -16,12 +16,12 @@ if(!file_exists($releasePath . '/zentaopms.zip')) die("Please give me encrypted 
 
 /* Encrypted packages list. */
 $fileList   = array();
-$fileList[] = "{$basePath}/zentaobiz.php5.3_5.6.zip";
+$fileList[] = "{$basePath}/zentaobiz.php5.4_5.6.zip";
 $fileList[] = "{$basePath}/zentaobiz.php7.0.zip";
 $fileList[] = "{$basePath}/zentaobiz.php7.1.zip";
 $fileList[] = "{$basePath}/zentaobiz.php7.2_7.4.zip";
 
-$fileList[] = "{$basePath}/zentaomax.php5.3_5.6.zip";
+$fileList[] = "{$basePath}/zentaomax.php5.4_5.6.zip";
 $fileList[] = "{$basePath}/zentaomax.php7.0.zip";
 $fileList[] = "{$basePath}/zentaomax.php7.1.zip";
 $fileList[] = "{$basePath}/zentaomax.php7.2_7.4.zip";
@@ -39,7 +39,7 @@ foreach(array('zh-cn', 'en') as $langType)
     if(!empty($liteVersion)) $liteVersionAB = $langType == 'zh-cn' ? $liteVersion : $liteVersion . '.int';
 
     /* Cycle the php versions. */
-    foreach(array('5.3_5.6', '7.0', '7.1', '7.2_7.4', '8.0') as $phpVersion)
+    foreach(array('5.4_5.6', '7.0', '7.1', '7.2_7.4', '8.0') as $phpVersion)
     {
         /* File name. */
         $workDir   = "tmp/$packPrefix.{$version}.{$phpVersion}/";
