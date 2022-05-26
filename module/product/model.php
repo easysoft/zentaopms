@@ -150,7 +150,7 @@ class productModel extends model
     {
         if(defined('TUTORIAL')) return $productID;
 
-        if($productID == 0 and $this->cookie->preProductID)   $productID = $this->cookie->preProductID;
+        if($productID == 0 and $this->cookie->preProductID and isset($products[$this->cookie->preProductID])) $productID = $this->cookie->preProductID;
         if($productID == 0 and $this->session->product == '') $productID = key($products);
         $this->session->set('product', (int)$productID, $this->app->tab);
 
