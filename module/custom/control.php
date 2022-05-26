@@ -145,7 +145,8 @@ class custom extends control
                 $review = fixer::input('post')->get();
                 if($review->needReview)  $data = fixer::input('post')->join('forceNotReview', ',')->remove('forceReview')->get();
                 if(!$review->needReview) $data = fixer::input('post')->join('forceReview', ',')->remove('forceNotReview')->get();
-                if(!isset($data->forceReview)) $data->forceReview = '';
+                if(!isset($data->forceReview))    $data->forceReview    = '';
+                if(!isset($data->forceNotReview)) $data->forceNotReview = '';
                 $this->loadModel('setting')->setItems("system.$module", $data);
 
                 $reviewCase = isset($review->reviewCase) ? $review->reviewCase : 0;
