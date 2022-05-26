@@ -45,7 +45,7 @@
             <th class="thWidth"><?php echo $lang->task->consumed;?></th>
             <th class="thWidth"><?php echo $lang->task->left;?></th>
             <th><?php echo $lang->comment;?></th>
-            <th class='c-actions-2'><?php if(empty($task->team) or $task->assignedTo == $this->app->user->account) echo $lang->actions;?></th>
+            <th class='c-actions-2'><?php if(empty($task->team) or ($task->assignedTo == $this->app->user->account or ($task->mode == 'multi' and isset($task->team[$app->user->account])))) echo $lang->actions;?></th>
           </tr>
         </thead>
         <tbody>
@@ -57,7 +57,7 @@
             <td title="<?php echo $estimate->consumed . ' ' . $lang->execution->workHour;?>"><?php echo $estimate->consumed . ' ' . $lang->execution->workHourUnit;?></td>
             <td title="<?php echo $estimate->left     . ' ' . $lang->execution->workHour;?>"><?php echo $estimate->left     . ' ' . $lang->execution->workHourUnit;?></td>
             <td class="text-left" title="<?php echo $estimate->work;?>"><?php echo $estimate->work;?></td>
-            <?php if(empty($task->team) or $task->assignedTo == $this->app->user->account):?>
+            <?php if(empty($task->team) or ($task->assignedTo == $this->app->user->account or ($task->mode == 'multi' and isset($task->team[$app->user->account])))):?>
             <td align='center' class='c-actions'>
               <?php
               if($this->app->user->admin or $this->app->user->account == $estimate->account)
