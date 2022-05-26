@@ -1841,7 +1841,7 @@ class taskModel extends model
             foreach($skipMembers as $account => $team) $this->dao->update(TABLE_TEAM)->set('left')->eq(0)->where('root')->eq($taskID)->andWhere('type')->eq('task')->andWhere('account')->eq($account)->exec();
 
             $task = $this->computeHours4Multiple($oldTask, $task);
-            if($oldTask->mode == 'multi' and count($skipMembers) == (count($oldTask->team) - 1))
+            if($oldTask->mode == 'multi' and count($skipMembers) == (count($oldTask->team) - 1) and !isset($skipMembers[$this->app->user->account]))
             {
                 $task->status       = 'done';
                 $task->finishedBy   = $this->app->user->account;
