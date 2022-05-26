@@ -136,6 +136,7 @@ class upgradeModel extends model
             if($fromEdition == 'open' or $fromEdition == 'pro')
             {
                 $this->importBuildinModules();
+                $this->importLiteModules();
                 $this->addSubStatus();
             }
         }
