@@ -55,7 +55,7 @@
   }
   $colspan = count($visibleFields) + 3;
   ?>
-  <form method='post' class='load-indicator batch-actions-form form-ajax' enctype='multipart/form-data' id="batchCreateForm">
+  <form method='post' class='batch-actions-form' target='hiddenwin' enctype='multipart/form-data' id="batchCreateForm">
     <div class="table-responsive">
       <table class="table table-form" id="tableBody">
         <thead>
