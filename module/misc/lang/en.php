@@ -12,7 +12,7 @@
 $lang->misc = new stdclass();
 $lang->misc->common  = 'Misc';
 $lang->misc->ping    = 'Ping';
-$lang->misc->view    = 'Click to view';
+$lang->misc->view    = 'Click to check';
 $lang->misc->cancel  = 'Cancel';
 
 $lang->misc->zentao = new stdclass();
