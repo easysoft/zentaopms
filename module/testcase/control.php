@@ -453,7 +453,7 @@ class testcase extends control
             if(empty($moduleID)) $moduleID = $story->module;
         }
 
-        $currentModuleID = $moduleID  ? (int)$moduleID : (int)$this->cookie->lastCaseModule;
+        $currentModuleID = $moduleID ? (int)$moduleID : (int)$this->cookie->lastCaseModule;
         /* Get the status of stories are not closed. */
         $storyStatus = $this->lang->story->statusList;
         unset($storyStatus['closed']);
@@ -465,8 +465,9 @@ class testcase extends control
             $modules        = $this->loadModel('tree')->getStoryModule($storyModuleID);
             $modules        = $this->tree->getAllChildID($modules);
         }
+
         $stories = $this->story->getProductStoryPairs($productID, $branch, $modules, array_keys($storyStatus), 'id_desc', 50, 'null', 'story', false);
-        if($this->app->tab != 'qa')
+        if($this->app->tab != 'qa' and $this->app->tab != 'product')
         {
             $projectID = $this->app->tab == 'project' ? $this->session->project : $this->session->execution;
             $stories   = $this->story->getExecutionStoryPairs($projectID, $productID, $branch, $modules);
@@ -476,7 +477,6 @@ class testcase extends control
 
         /* Set custom. */
         foreach(explode(',', $this->config->testcase->customCreateFields) as $field) $customFields[$field] = $this->lang->testcase->$field;
-
 
         $this->view->customFields = $customFields;
         $this->view->showFields   = $this->config->testcase->custom->createFields;

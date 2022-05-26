@@ -17,7 +17,7 @@
 <?php js::set('lblBefore', $lang->testcase->insertBefore);?>
 <?php js::set('lblAfter', $lang->testcase->insertAfter);?>
 <?php js::set('isonlybody', isonlybody());?>
-<?php js::set('executionID', $projectID);?>
+<?php js::set('executionID', $executionID);?>
 <?php js::set('tab', $this->app->tab);?>
 <?php if($this->app->tab == 'execution') js::set('objectID', $executionID);?>
 <?php if($this->app->tab == 'project') js::set('objectID', $projectID);?>
