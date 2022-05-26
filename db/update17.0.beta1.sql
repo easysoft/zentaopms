@@ -10,9 +10,6 @@ ALTER TABLE `zt_task` ADD COLUMN `mode` varchar(10) NOT NULL AFTER `type`;
 UPDATE `zt_task` SET mode = 'linear' WHERE `id` IN (SELECT root FROM `zt_team` WHERE type = 'task');
 
 DELETE FROM `zt_workflowaction` WHERE `module`='program' AND `action`='view';
-DELETE FROM `zt_workflowaction` WHERE `module`='story'   AND `action`='browse';
-DELETE FROM `zt_workflowaction` WHERE `module`='task'    AND `action`='browse';
-DELETE FROM `zt_workflowaction` WHERE `module`='build'   AND `action`='browse';
 
 UPDATE `zt_workflow` SET `app`='execution' WHERE `module`='task' AND `vision`='rnd';
 UPDATE `zt_workflow` SET `app`='execution' WHERE `module`='build' AND `vision`='rnd';
