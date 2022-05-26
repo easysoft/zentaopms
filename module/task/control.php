@@ -1215,11 +1215,12 @@ class task extends control
         {
             $teams = array_keys($task->team);
 
-            $task->nextBy     = $this->task->getNextUser($teams, $task->assignedTo);
-            $task->myConsumed = $task->team[$task->assignedTo]->consumed;
+            $task->nextBy     = $this->task->getNextUser($teams, $this->app->user->account);
+            $task->myConsumed = $task->team[$this->app->user->account]->consumed;
 
-            $lastAccount = end($teams);
-            if($lastAccount != $task->assignedTo)
+            $lastAccount   = end($teams);
+            $finishedUsers = $this->task->getFinishedUsers($taskID, $teams);
+            if(($lastAccount != $task->assignedTo and $task->mode == 'linear') or ($task->mode == 'multi' and count($teams) != count($finishedUsers)))
             {
                 $members = $this->task->getMemberPairs($task);
             }
