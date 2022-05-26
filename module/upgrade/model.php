@@ -1306,6 +1306,18 @@ class upgradeModel extends model
             }
         }
 
+        /* Delete all patch files when upgrade zentao. */
+        $patchPath = $this->app->getTmpRoot() . 'patch';
+        $isDir     = is_dir($patchPath);
+        if(file_exists($patchPath))
+        {
+            if(!is_writable($patchPath) or ($isDir and !$zfile->removeDir($patchPath)) or
+                (!$isDir and !$zfile->removeDir($patchPath)))
+            {
+                $result[] = 'rm -f ' . ($isDir ? '-r ' : '') . $patchPath;
+            }
+        }
+
         return $result;
     }
 

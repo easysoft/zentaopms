@@ -17,37 +17,20 @@ class action extends control
      * @param  string $objectType
      * @param  string $actionType
      * @param  string $objectName
-     * @param  bool   $confirmDelete delete all patch actions when upgrade zentao.
      * @access public
      * @return int
      */
-    public function create($objectType, $actionType, $objectName, $confirmDelete = false)
+    public function create($objectType, $actionType, $objectName)
     {
-        if($confirmDelete)
-        {
-            $this->dao->delete()->from(TABLE_ACTION)->where('objectType')->eq('patch')->exec();
+        $actionID = $this->action->create($objectType, 0, $actionType, '', $objectName);
 
-            if(!dao::isError())
-            {
-                $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess));
-            }
-            else
-            {
-                $this->send(array('result' => 'fail', 'message' => dao::getError()));
-            }
+        if($actionID)
+        {
+            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess));
         }
         else
         {
-            $actionID = $this->action->create($objectType, 0, $actionType, '', $objectName);
-
-            if($actionID)
-            {
-                $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess));
-            }
-            else
-            {
-                $this->send(array('result' => 'fail', 'message' => 'error'));
-            }
+            $this->send(array('result' => 'fail', 'message' => 'error'));
         }
     }
 

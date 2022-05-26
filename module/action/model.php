@@ -1556,6 +1556,18 @@ class actionModel extends model
     }
 
     /**
+     * delete action by objectType.
+     *
+     * @param  string $objectType
+     * @access public
+     * @return void
+     */
+    public function deleteByType($objectType)
+    {
+        $this->dao->delete()->from(TABLE_ACTION)->where('objectType')->eq($objectType)->exec();
+    }
+
+    /**
      * Undelete a record.
      *
      * @param  int      $actionID
