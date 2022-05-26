@@ -413,6 +413,12 @@ class fileModel extends model
             ->join('content', ',')
             ->get();
 
+        if($template->title == $this->lang->file->defaultTPL)
+        {
+            dao::$errors[] = sprintf($this->lang->error->unique, $this->lang->file->tplTitle, $this->lang->file->defaultTPL);
+            return false;
+        }
+
         $condition = "`type`='export$module' and account='{$this->app->user->account}'";
         $this->dao->insert(TABLE_USERTPL)->data($template)->batchCheck('title, content', 'notempty')->check('title', 'unique', $condition)->exec();
         return $this->dao->lastInsertId();

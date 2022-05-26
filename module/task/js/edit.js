@@ -234,7 +234,6 @@ function updateAssignedTo()
             var selected = account == assignedTo ? 'selected' : '';
 
             html += "<option value='" + account + "' title='" + realName + "'" + selected + ">" + realName + "</option>";
-
         });
 
         if(mode == 'multi' && isTeamMember)
