@@ -842,7 +842,7 @@ class taskModel extends model
                 if($currentTask->consumed > 0 and $currentTask->left == 0)
                 {
                     $finisedUsers = $this->getFinishedUsers($oldTask->id, $teams);
-                    if(($oldTask->mode == 'linear' and isset($team[$currentTask->assignedTo]) and $oldTask->assignedTo != $teams[count($teams) - 1]) or ($oldTask->mode == 'multi' and count($finisedUsers) != (count($teams) -1)))
+                    if(($oldTask->mode == 'linear' and isset($team[$currentTask->assignedTo]) and $oldTask->assignedTo != $teams[count($teams) - 1]) or ($oldTask->mode == 'multi' and count($finisedUsers) != count($teams)))
                     {
                         $currentTask->status       = 'doing';
                         $currentTask->finishedBy   = '';
@@ -1841,6 +1841,12 @@ class taskModel extends model
             foreach($skipMembers as $account => $team) $this->dao->update(TABLE_TEAM)->set('left')->eq(0)->where('root')->eq($taskID)->andWhere('type')->eq('task')->andWhere('account')->eq($account)->exec();
 
             $task = $this->computeHours4Multiple($oldTask, $task);
+            if($oldTask->mode == 'multi' and count($skipMembers) == (count($oldTask->team) - 1))
+            {
+                $task->status       = 'done';
+                $task->finishedBy   = $this->app->user->account;
+                $task->finishedDate = $task->finishedDate;
+            }
         }
 
         if($task->finishedDate == substr($now, 0, 10)) $task->finishedDate = $now;
