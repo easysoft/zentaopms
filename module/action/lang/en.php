@@ -361,7 +361,7 @@ $lang->action->label->unbind                = 'unbound';
 $lang->action->label->linkstory             = 'link stories to';
 $lang->action->label->linkbug               = 'link bugs to';
 $lang->action->label->unlinkstory           = 'unlink stories from';
-$lang->action->label->unlindbug             = 'unlink bugs from';
+$lang->action->label->unlinkbug             = 'unlink bugs from';
 
 /* Dynamic information is grouped by object. */
 $lang->action->dynamicAction                    = new stdclass;
@@ -638,6 +638,7 @@ else
 {
     $lang->action->label->execution = "$lang->executionCommon|execution|task|executionID=%s";
 }
+
 $lang->action->label->task         = 'Task|task|view|taskID=%s';
 $lang->action->label->build        = 'Build|build|view|buildID=%s';
 $lang->action->label->bug          = 'Bug|bug|view|bugID=%s';

@@ -25,7 +25,8 @@ $lang->caselib->exportTemplet    = 'Export Template';
 $lang->caselib->batchCreateCase  = 'Batch Create';
 $lang->caselib->import           = 'Import';
 $lang->caselib->showImport       = 'Imported Data';
-
+$lang->caselib->type             = 'Type';
+$lang->caselib->product          = $lang->productCommon;
 $lang->caselib->browseAction     = 'Caselib List';
 $lang->caselib->deleteAction     = "Delete Caselib";
 $lang->caselib->importAction     = 'Import Case';
