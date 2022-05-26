@@ -636,6 +636,9 @@ class upgradeModel extends model
             case 'biz6_4':
                 $this->importLiteModules();
                 break;
+            case 'biz7.0.beta1':
+                $this->processViewFields();
+                break;
         }
     }
 
