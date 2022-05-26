@@ -18,7 +18,7 @@
  */
 function closeTipModal(projectID)
 {
-    $(".close").trigger("click");
+    $.apps.close('execution');
     var link = createLink('project', 'execution', 'status=all&projectID=' + projectID);
     $.apps.open(link, 'project');
 }
