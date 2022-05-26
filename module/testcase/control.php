@@ -688,12 +688,6 @@ class testcase extends control
             if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'fail', 'message' => '404 Not found'));
             return print(js::error($this->lang->notFound) . js::locate($this->createLink('qa', 'index')));
         }
-        if($case->auto == 'unit')
-        {
-            $this->lang->testcase->subMenu->testcase->feature['alias']  = '';
-            $this->lang->testcase->subMenu->testcase->unit['alias']     = 'view';
-            $this->lang->testcase->subMenu->testcase->unit['subModule'] = 'testcase';
-        }
 
         if($from == 'testtask')
         {
