@@ -1216,7 +1216,7 @@ class task extends control
             $teams = array_keys($task->team);
 
             $task->nextBy     = $this->task->getNextUser($teams, $this->app->user->account);
-            $task->myConsumed = $task->team[$this->app->user->account]->consumed;
+            $task->myConsumed = isset($task->team[$this->app->user->account]) ? $task->team[$this->app->user->account]->consumed : 0;
 
             $lastAccount   = end($teams);
             $finishedUsers = $this->task->getFinishedUsers($taskID, $teams);
