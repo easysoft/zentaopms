@@ -634,6 +634,7 @@ class installModel extends model
             if($this->config->edition == 'open') $this->dao->update(TABLE_USER)->set('deleted')->eq('0')->where('deleted')->eq('1')->exec();
         }
 
+        $config = new stdclass();
         $config->module  = 'common';
         $config->owner   = 'system';
         $config->section = 'global';
