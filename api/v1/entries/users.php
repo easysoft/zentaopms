@@ -62,9 +62,13 @@ class usersEntry extends entry
 
         $password = $this->request('password', '') ? md5($this->request('password')) : '';
 
+        $visions = $this->request('visions', 'rnd');
+        if(is_array($visions)) $visions = implode(',', $visions);
+
         $this->setPost('password1', $password);
         $this->setPost('password2', $password);
         $this->setPost('passwordStrength', 3);
+        $this->setPost('visions', $visions);
         $this->setPost('verifyPassword', md5($this->app->user->password . $this->app->session->rand));
 
         $control = $this->loadController('user', 'create');
