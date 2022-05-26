@@ -159,7 +159,9 @@ public function getCardGroupByExecution($executionID, $browseType = 'all', $orde
 
                 if($cell->type == 'task')
                 {
-                    $cardData['name'] = $object->name;
+                    $cardData['name']   = $object->name;
+                    $cardData['status'] = $object->status;
+                    $cardData['left']   = $object->left;
                 }
                 else
                 {
