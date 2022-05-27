@@ -40,7 +40,7 @@
           <th class='c-status'><?php common::printOrderLink('status', $orderBy, $vars, $lang->project->status);?></th>
           <?php endif;?>
           <th class='c-date c-begin'><?php common::printOrderLink('begin', $orderBy, $vars, $lang->project->begin);?></th>
-          <th class='c-date'><?php common::printOrderLink('end', $orderBy, $vars, $lang->project->end);?></th>
+          <th class='c-date c-end'><?php common::printOrderLink('end', $orderBy, $vars, $lang->project->end);?></th>
           <th class='text-right c-budget'><?php common::printOrderLink('budget', $orderBy, $vars, $lang->project->budget);?></th>
           <th class='c-user'><?php common::printOrderLink('PM', $orderBy, $vars, $lang->project->PM);?></th>
           <th class='text-center c-actions-6'><?php echo $lang->actions;?></th>
