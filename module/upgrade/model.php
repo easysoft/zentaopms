@@ -5646,15 +5646,15 @@ class upgradeModel extends model
      */
     public function updateObjectBranch()
     {
-        $moduleBranchPairs = $this->dao->select('id,branch')->from(TABLE_MODULE)->fetchPairs();
+        $moduleBranchPairs = $this->dao->select('id,branch')->from(TABLE_MODULE)->where('branch')->ne(0)->fetchPairs();
 
-        $storyModulePairs = $this->dao->select('module')->from(TABLE_STORY)->where('module')->ne(0)->fetchPairs();
+        $storyModulePairs = $this->dao->select('module')->from(TABLE_STORY)->where('module')->in(array_keys($moduleBranchPairs))->andWhere('branch')->eq(0)->fetchPairs();
         foreach($storyModulePairs as $moduleID) $this->dao->update(TABLE_STORY)->set('`branch`')->eq($moduleBranchPairs[$moduleID])->where('module')->eq($moduleID)->exec();
 
-        $bugModulePairs = $this->dao->select('module')->from(TABLE_BUG)->where('module')->ne(0)->fetchPairs();
+        $bugModulePairs = $this->dao->select('module')->from(TABLE_BUG)->where('module')->in(array_keys($moduleBranchPairs))->andWhere('branch')->eq(0)->fetchPairs();
         foreach($bugModulePairs as $moduleID) $this->dao->update(TABLE_BUG)->set('`branch`')->eq($moduleBranchPairs[$moduleID])->where('module')->eq($moduleID)->exec();
 
-        $caseModulePairs = $this->dao->select('module')->from(TABLE_CASE)->where('module')->ne(0)->fetchPairs();
+        $caseModulePairs = $this->dao->select('module')->from(TABLE_CASE)->where('module')->in(array_keys($moduleBranchPairs))->andWhere('branch')->eq(0)->fetchPairs();
         foreach($caseModulePairs as $moduleID) $this->dao->update(TABLE_CASE)->set('`branch`')->eq($moduleBranchPairs[$moduleID])->where('module')->eq($moduleID)->exec();
 
         return true;
