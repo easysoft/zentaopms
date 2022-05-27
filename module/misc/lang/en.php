@@ -74,7 +74,7 @@ $lang->misc->remind      = 'New feature reminders';
 
 $lang->misc->expiredTipsTitle    = 'Dear system administrator, hello:';
 $lang->misc->expiredCountTips    = 'There are <span class="expired-tips text-blue" data-toggle="tooltip" data-placement="bottom" title="%s">%s plug-ins</span> in the system that will expire soon. To avoid affecting your regular use, please get in touch with the administrator to renew or uninstall them in time.';
-$lang->misc->expiredPluginTips   = 'Expired plugins are: %s; ';
+$lang->misc->expiredPluginTips   = 'Expired plugins are: %s. ';
 $lang->misc->expiringPluginTips  = 'The plug-ins that will expire are: %s.';
 $lang->misc->expiredTipsForAdmin = 'There are %s plug-ins in the current system that will expire soon. To avoid affecting the regular use of the function, please renew or uninstall them in the system background plug-in management as soon as possible.';
 

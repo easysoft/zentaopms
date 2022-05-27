@@ -74,7 +74,7 @@ $lang->misc->remind      = '新功能提醒';
 
 $lang->misc->expiredTipsTitle    = '尊敬的系统管理员，您好：';
 $lang->misc->expiredCountTips    = '系统中有<span class="expired-tips text-blue" data-toggle="tooltip" data-placement="bottom" title="%s">%s个插件</span>即将到期，为避免影响您的正常使用，请联系管理员及时续费或卸载。';
-$lang->misc->expiredPluginTips   = '已到期的插件为：%s；';
+$lang->misc->expiredPluginTips   = '已到期的插件为：%s。';
 $lang->misc->expiringPluginTips  = '即将到期的插件为：%s。';
 $lang->misc->expiredTipsForAdmin = '当前系统中有%s个插件即将到期，为避免影响功能的正常使用，请尽快到系统后台插件管理中进行续费或卸载处理。';
 
