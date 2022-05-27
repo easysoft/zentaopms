@@ -18,4 +18,4 @@ $fromGroup = 6;
 $toGroup   = 7;
 
 $group = new groupTest();
-r($group->copyPrivTest($fromGroup, $toGroup)) && p() && e('1');
+r($group->copyPrivTest($fromGroup, $toGroup)) && p() && e('1'); // 复制分组6权限到分组7
