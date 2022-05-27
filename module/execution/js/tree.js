@@ -1,4 +1,9 @@
-/* Expand or collapse text */
+/**
+ * Expand or collapse text.
+ *
+ * @access public
+ * @return void
+ */
 function limitText()
 {
     var fullText;
