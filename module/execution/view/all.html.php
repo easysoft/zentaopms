@@ -97,7 +97,7 @@
           <th class='c-end'><?php common::printOrderLink('end', $orderBy, $vars, $lang->execution->end);?></th>
           <th class='c-realBegan'><?php common::printOrderLink('realBegan', $orderBy, $vars, $lang->execution->realBegan);?></th>
           <th class='c-realEnd'><?php common::printOrderLink('realEnd', $orderBy, $vars, $lang->execution->realEnd);?></th>
-          <th class='c-action'><?php echo $lang->actions;?></th>
+          <th class='c-actions-6 text-center'><?php echo $lang->actions;?></th>
           <?php else:;?>
           <th class='c-begin'><?php common::printOrderLink('begin', $orderBy, $vars, $lang->execution->begin);?></th>
           <th class='c-end'><?php common::printOrderLink('end', $orderBy, $vars, $lang->execution->end);?></th>
@@ -169,7 +169,7 @@
           <td><?php echo helper::isZeroDate($execution->end)       ? '' : $execution->end;?></td>
           <td><?php echo helper::isZeroDate($execution->realBegan) ? '' : $execution->realBegan;?></td>
           <td><?php echo helper::isZeroDate($execution->realEnd)   ? '' : $execution->realEnd;?></td>
-          <td class="c-actions text-center c-actions">
+          <td class="c-actions text-center">
             <?php
                 common::printIcon('execution', 'start', "executionID={$execution->id}", $execution, 'list', '', '', 'iframe', true);
                 $class = !empty($execution->children) ? 'disabled' : '';
