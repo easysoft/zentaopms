@@ -55,32 +55,10 @@ class program extends control
                 $topPrograms = $this->program->getList($status, $orderBy, $pager, 'top');
                 $programs    = $this->program->getList($status, $orderBy, null, 'child', $topPrograms);
 
-                /* Filter programs that do not need to be displayed. */
-                $authorizedPrograms = $programs;
-                ksort($authorizedPrograms);
-                foreach($authorizedPrograms as $programInfo)
-                {
-                    if($programInfo->type == 'program' and strpos(",{$this->app->user->view->programs},", ",$programInfo->id,") === false)
-                    {
-                        unset($authorizedPrograms[$programInfo->id]);
-                        continue;
-                    }
-                    foreach(explode(',', trim($programInfo->path, ',')) as $pathID)
-                    {
-                        if(!isset($authorizedPrograms[$pathID])) $authorizedPrograms[$pathID] = $programs[$pathID];
-                    }
-                }
-
                 /* Get summary. */
                 $topCount = $indCount = 0;
                 foreach($programs as $program)
                 {
-                    if(!isset($authorizedPrograms[$program->id]))
-                    {
-                        unset($programs[$program->id]);
-                        continue;
-                    }
-
                     if($program->type == 'program' and $program->parent == 0) $topCount ++;
                     if($program->type == 'project' and $program->parent == 0) $indCount ++;
                 }
