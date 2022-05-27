@@ -12,7 +12,7 @@
 $lang->misc = new stdclass();
 $lang->misc->common  = '杂项';
 $lang->misc->ping    = '防超时';
-$lang->misc->view    = '点击查看';
+$lang->misc->view    = '查看';
 $lang->misc->cancel  = '取消';
 
 $lang->misc->zentao = new stdclass();
