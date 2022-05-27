@@ -482,6 +482,7 @@ class bugModel extends model
             ->beginIF($projectID)->andWhere('project')->eq($projectID)->fi()
             ->andWhere('execution')->in(array_keys($executions))
             ->andWhere('deleted')->eq(0)
+            ->beginIF(!$this->app->user->admin)->andWhere('project')->in('0,' . $this->app->user->view->projects)->fi()
             ->orderBy($orderBy)->page($pager)->fetchAll();
     }
 
@@ -2378,6 +2379,7 @@ class bugModel extends model
             ->beginIF($modules)->andWhere('t1.module')->in($modules)->fi()
             ->beginIF($projectID)->andWhere('t1.project')->eq($projectID)->fi()
             ->andWhere('t1.deleted')->eq(0)
+            ->beginIF(!$this->app->user->admin)->andWhere('t1.project')->in('0,' . $this->app->user->view->projects)->fi()
             ->orderBy($orderBy)->page($pager)->fetchAll();
 
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'bug');
@@ -2406,6 +2408,7 @@ class bugModel extends model
             ->beginIF($projectID)->andWhere('project')->eq($projectID)->fi()
             ->andWhere('execution')->in(array_keys($executions))
             ->andWhere('deleted')->eq(0)
+            ->beginIF(!$this->app->user->admin)->andWhere('project')->in('0,' . $this->app->user->view->projects)->fi()
             ->orderBy($orderBy)->page($pager)->fetchAll();
     }
 
@@ -2430,6 +2433,7 @@ class bugModel extends model
             ->beginIF($projectID)->andWhere('project')->eq($projectID)->fi()
             ->andWhere('execution')->in(array_keys($executions))
             ->andWhere('deleted')->eq(0)
+            ->beginIF(!$this->app->user->admin)->andWhere('project')->in('0,' . $this->app->user->view->projects)->fi()
             ->orderBy($orderBy)->page($pager)->fetchAll();
     }
 
@@ -2454,6 +2458,7 @@ class bugModel extends model
             ->beginIF($projectID)->andWhere('project')->eq($projectID)->fi()
             ->andWhere('execution')->in(array_keys($executions))
             ->andWhere('deleted')->eq(0)
+            ->beginIF(!$this->app->user->admin)->andWhere('project')->in('0,' . $this->app->user->view->projects)->fi()
             ->orderBy($orderBy)->page($pager)->fetchAll();
     }
 
@@ -2479,6 +2484,7 @@ class bugModel extends model
             ->beginIF($projectID)->andWhere('project')->eq($projectID)->fi()
             ->andWhere('execution')->in(array_keys($executions))
             ->andWhere('deleted')->eq(0)
+            ->beginIF(!$this->app->user->admin)->andWhere('project')->in('0,' . $this->app->user->view->projects)->fi()
             ->orderBy($orderBy)->page($pager)->fetchAll();
     }
 
@@ -2505,6 +2511,7 @@ class bugModel extends model
             ->beginIF($branch !== 'all')->andWhere('branch')->in($branch)->fi()
             ->beginIF($modules)->andWhere('module')->in($modules)->fi()
             ->beginIF($projectID)->andWhere('project')->eq($projectID)->fi()
+            ->beginIF(!$this->app->user->admin)->andWhere('project')->in('0,' . $this->app->user->view->projects)->fi()
             ->orderBy($orderBy)->page($pager)->fetchAll();
     }
 
@@ -2534,6 +2541,7 @@ class bugModel extends model
             ->andWhere('deleted')->eq(0)
             ->andWhere('deadline')->ne('0000-00-00')
             ->andWhere('deadline')->lt(helper::today())
+            ->beginIF(!$this->app->user->admin)->andWhere('project')->in('0,' . $this->app->user->view->projects)->fi()
             ->orderBy($orderBy)->page($pager)->fetchAll();
     }
 
@@ -2563,6 +2571,7 @@ class bugModel extends model
             ->beginIF($status == 'toclosed')->andWhere('status')->eq('resolved')->fi()
             ->beginIF($projectID)->andWhere('project')->eq($projectID)->fi()
             ->andWhere('deleted')->eq(0)
+            ->beginIF(!$this->app->user->admin)->andWhere('project')->in('0,' . $this->app->user->view->projects)->fi()
             ->orderBy($orderBy)->page($pager)
             ->fetchAll();
     }
@@ -2590,6 +2599,7 @@ class bugModel extends model
             ->beginIF($projectID)->andWhere('project')->eq($projectID)->fi()
             ->andWhere('openedDate')->lt($lastEditedDate)
             ->andWhere('deleted')->eq(0)
+            ->beginIF(!$this->app->user->admin)->andWhere('project')->in('0,' . $this->app->user->view->projects)->fi()
             ->andWhere('status')->ne('closed')->orderBy($orderBy)->page($pager)->fetchAll();
     }
 
@@ -2614,6 +2624,7 @@ class bugModel extends model
             ->beginIF($projectID)->andWhere('project')->eq($projectID)->fi()
             ->andWhere('execution')->in(array_keys($executions))
             ->andWhere('deleted')->eq(0)
+            ->beginIF(!$this->app->user->admin)->andWhere('project')->in('0,' . $this->app->user->view->projects)->fi()
             ->orderBy($orderBy)->page($pager)->fetchAll();
     }
 
@@ -2642,6 +2653,7 @@ class bugModel extends model
             ->andWhere('t2.version > t1.storyVersion')
             ->andWhere('t1.execution')->in(array_keys($executions))
             ->andWhere('t1.deleted')->eq(0)
+            ->beginIF(!$this->app->user->admin)->andWhere('t1.project')->in('0,' . $this->app->user->view->projects)->fi()
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll();
@@ -2672,6 +2684,7 @@ class bugModel extends model
             ->andWhere('deleted')->eq(0)
             ->andWhere('status')->ne('closed')
             ->andWhere('id')->in($actionIDList)
+            ->beginIF(!$this->app->user->admin)->andWhere('project')->in('0,' . $this->app->user->view->projects)->fi()
             ->orderBy($sort)
             ->page($pager)
             ->fetchAll();
@@ -2745,6 +2758,7 @@ class bugModel extends model
             ->fi()
 
             ->andWhere('deleted')->eq(0)
+            ->beginIF(!$this->app->user->admin)->andWhere('project')->in('0,' . $this->app->user->view->projects)->fi()
             ->orderBy($orderBy)->page($pager)->fetchAll();
         return $bugs;
     }
