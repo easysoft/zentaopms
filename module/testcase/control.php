@@ -126,7 +126,6 @@ class testcase extends control
 
         $uri = $this->app->getURI(true);
         $this->session->set('caseList', $uri, $this->app->tab);
-        $this->session->set('bugList',  $uri, $this->app->tab);
         $this->session->set('productID', $productID);
         $this->session->set('moduleID', $moduleID);
         $this->session->set('browseType', $browseType);
