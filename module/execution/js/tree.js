@@ -1,3 +1,40 @@
+/**
+ * Expand or collapse text.
+ *
+ * @access public
+ * @return void
+ */
+function limitText()
+{
+    var fullText;
+    var limitText;
+    var $text   = $(this);
+    var options = $.extend({limitSize: 40, suffix: '…'}, $text.data());
+    var text    = $text.text();
+    if(text.length > options.limitSize)
+    {
+        fullText  = $text.html();
+        limitText = text.substring(0, options.limitSize) + options.suffix;
+        $text.text(limitText).addClass('limit-text-on');
+
+        var $toggleBtn = options.toggleBtn ? $(options.toggleBtn) : $text.next('.text-limit-toggle');
+        $toggleBtn.text($toggleBtn.data('textExpand'));
+        $toggleBtn.on('click', function()
+        {
+            var isLimitOn = $text.toggleClass('limit-text-on').hasClass('limit-text-on');
+            if(isLimitOn) $text.text(limitText);
+            else $text.html(fullText);
+            $toggleBtn.text($toggleBtn.data(isLimitOn ? 'textExpand' : 'textCollapse'));
+        });
+    }
+    else
+    {
+        (options.toggleBtn ? $(options.toggleBtn) : $text.next('.text-limit-toggle')).hide();
+    }
+    $text.removeClass('hidden');
+};
+$.fn.textLimit = function(){return this.each(limitText);};
+
 $(function()
 {
     var $taskTree = $('#taskTree').tree(
@@ -157,7 +194,7 @@ $(function()
 
     $itemContent.on('click', function(event)
     {
-        if(!$(event.target).closest('a[data-app]').length) event.stopPropagation();
+        if(!$(event.target).closest('a[data-app]').length || $(event.target).closest('a').hasClass('iframe')) event.stopPropagation();
     });
     $taskTree.on('click', stopPropagation);
     $(window).on('resize scroll', adjustSidePosition);
