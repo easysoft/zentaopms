@@ -10,8 +10,12 @@ title=测试 groupModel->copyPriv();
 cid=1
 pid=1
 
+复制分组6权限到分组7 >> 1
+
 */
 
-$group = new groupTest();
+$fromGroup = 6;
+$toGroup   = 7;
 
-r($group->copyPrivTest()) && p() && e();
+$group = new groupTest();
+r($group->copyPrivTest($fromGroup, $toGroup)) && p() && e('1');
