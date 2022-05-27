@@ -1975,6 +1975,7 @@ class task extends control
                 if(isset($taskLang->statusList[$task->status]))       $task->status       = $this->processStatus('task', $task);
                 if(isset($taskLang->reasonList[$task->closedReason])) $task->closedReason = $taskLang->reasonList[$task->closedReason];
                 if(isset($relatedModules[$task->module]))             $task->module       = $relatedModules[$task->module] . "(#$task->module)";
+                if(isset($taskLang->modeList[$task->mode]))           $task->mode         = $taskLang->modeList[$task->mode];
 
                 if(isset($users[$task->openedBy]))     $task->openedBy     = $users[$task->openedBy];
                 if(isset($users[$task->assignedTo]))   $task->assignedTo   = $users[$task->assignedTo];
