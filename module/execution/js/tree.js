@@ -191,7 +191,6 @@ $(function()
     {
         if(!$(event.target).closest('a[data-app]').length || $(event.target).closest('a').hasClass('iframe')) event.stopPropagation();
     });
-
     $taskTree.on('click', stopPropagation);
     $(window).on('resize scroll', adjustSidePosition);
 
