@@ -1590,6 +1590,7 @@ class testcase extends control
 
                 $case->openedDate     = substr($case->openedDate, 0, 10);
                 $case->lastEditedDate = substr($case->lastEditedDate, 0, 10);
+                $case->lastRunDate    = helper::isZeroDate($case->lastRunDate) ? '' : $case->lastRunDate;
 
                 if($case->linkCase)
                 {
