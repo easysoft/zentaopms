@@ -52,8 +52,8 @@ class program extends control
             }
             else
             {
-                $topPrograms = $this->program->getList($status, $orderBy, $pager, 'top');
-                $programs    = $this->program->getList($status, $orderBy, null, 'child', $topPrograms);
+                $this->program->getList($status, $orderBy, $pager, 'top');
+                $programs = $this->program->getList($status, $orderBy);
 
                 /* Get summary. */
                 $topCount = $indCount = 0;

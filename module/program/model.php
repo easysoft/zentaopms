@@ -131,18 +131,22 @@ class programModel extends model
      * @param  string $orderBy
      * @param  object $pager
      * @param  string $type       top|child
-     * @param  mixed  $idList
      * @access public
      * @return array
      */
-    public function getList($status = 'all', $orderBy = 'id_asc', $pager = NULL, $type = '', $idList = '')
+    public function getList($status = 'all', $orderBy = 'id_asc', $pager = NULL, $type = '')
     {
-        $projectIdList = array();
-        if($type === 'child')
+        $objectIdList = array();
+        if(!$this->app->user->admin and $this->app->rawMethod == 'browse')
         {
-            foreach($idList as $topID => $topProgram)
+            $authorizedObjects = trim($this->app->user->view->programs, ',') . ',' . trim($this->app->user->view->projects, ',');
+            $authorizedObjects = array_filter(explode(',', $authorizedObjects));
+            asort($authorizedObjects);
+
+            $pathList = $this->dao->select('id,path')->from(TABLE_PROJECT)->where('id')->in($authorizedObjects)->fetchPairs('id');
+            foreach($pathList as $path)
             {
-                $projectIdList += $topProgram->type == 'project' ? array($topID => $topID) : $this->dao->select('id')->from(TABLE_PROGRAM)->Where('path')->like(",$topID,%")->fetchPairs('id');
+                foreach(explode(',', trim($path, ',')) as $pathID) $objectIdList[$pathID] = $pathID;
             }
         }
 
@@ -158,7 +162,7 @@ class programModel extends model
             ->beginIF($status != 'all')->andWhere('status')->eq($status)->fi()
             ->beginIF(!$this->cookie->showClosed)->andWhere('status')->ne('closed')->fi()
             ->beginIF($type === 'top')->andWhere('parent')->eq(0)->fi()
-            ->beginIF(!empty($projectIdList))->andWhere('id')->in($projectIdList)->fi()
+            ->beginIF(!empty($objectIdList))->andWhere('id')->in($objectIdList)->fi()
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id');
@@ -193,6 +197,20 @@ class programModel extends model
         }
         $query = $this->session->programQuery;
 
+        $objectIdList = array();
+        if(!$this->app->user->admin and $this->app->rawMethod == 'browse')
+        {
+            $authorizedObjects = trim($this->app->user->view->programs, ',') . ',' . trim($this->app->user->view->projects, ',');
+            $authorizedObjects = array_filter(explode(',', $authorizedObjects));
+            asort($authorizedObjects);
+
+            $pathList = $this->dao->select('id,path')->from(TABLE_PROJECT)->where('id')->in($authorizedObjects)->fetchPairs('id');
+            foreach($pathList as $path)
+            {
+                foreach(explode(',', trim($path, ',')) as $pathID) $objectIdList[$pathID] = $pathID;
+            }
+        }
+
         $programs = $this->dao->select('*')->from(TABLE_PROGRAM)
             ->where('deleted')->eq(0)
             ->andWhere('vision')->eq($this->config->vision)
@@ -200,8 +218,10 @@ class programModel extends model
             ->beginIF(!$this->app->user->admin and $this->app->rawMethod != 'browse')->andWhere('id')->in($this->app->user->view->programs)->fi()
             ->beginIF(!$this->cookie->showClosed)->andWhere('status')->ne('closed')->fi()
             ->beginIF($query)->andWhere($query)->fi()
+            ->beginIF(!empty($objectIdList))->andWhere('id')->in($objectIdList)->fi()
             ->orderBy($orderBy)
             ->fetchAll('id');
+
         return $programs;
     }
 
