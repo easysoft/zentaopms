@@ -15,7 +15,10 @@
 <?php js::set('noAccess', $lang->user->error->noAccess)?>
 <div id='mainMenu' class='clearfix'>
   <div class='btn-toolbar pull-left'>
-    <span class='btn btn-link btn-active-text'><span class='text'><?php echo $lang->execution->team;?><span class="label label-light label-badge"><?php echo count($teamMembers);?></span></span></span>
+    <span class='btn btn-link btn-active-text'>
+      <span class='text'><?php echo $lang->execution->team;?></span>
+      <span class="label label-light label-badge"><?php echo count($teamMembers);?></span>
+    </span>
   </div>
   <div class='btn-toolbar pull-right'>
     <?php
