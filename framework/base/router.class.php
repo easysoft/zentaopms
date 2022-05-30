@@ -617,16 +617,19 @@ class baseRouter
      */
     public function setSuperVars()
     {
-        $URI = $_SERVER['REQUEST_URI'];
-        if(strpos($URI, '?') !== false)
+        if(isset($_SERVER['REQUEST_URI']))
         {
-            $parsedURL = parse_url($URI);
-            if(isset($parsedURL['query']))
+            $URI = $_SERVER['REQUEST_URI'];
+            if(strpos($URI, '?') !== false)
             {
-                parse_str($parsedURL['query'], $parsedQuery);
-                foreach($parsedQuery as $key => $value)
+                $parsedURL = parse_url($URI);
+                if(isset($parsedURL['query']))
                 {
-                    if(!isset($_GET[$key])) $_GET[$key] = $value;
+                    parse_str($parsedURL['query'], $parsedQuery);
+                    foreach($parsedQuery as $key => $value)
+                    {
+                        if(!isset($_GET[$key])) $_GET[$key] = $value;
+                    }
                 }
             }
         }
