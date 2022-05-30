@@ -69,18 +69,18 @@
         <div class='article-content comment'>
           <div class='comment-content'>
             <?php
-              if(strpos($action->comment, '<pre class="prettyprint lang-html">') !== false)
-              {
+            if(strpos($action->comment, '<pre class="prettyprint lang-html">') !== false)
+            {
                 $before   = explode('<pre class="prettyprint lang-html">', $action->comment);
                 $after    = explode('</pre>', $before[1]);
                 $htmlCode = $after[0];
                 $text     = $before[0] . htmlspecialchars($htmlCode) . $after[1];
                 echo $text;
-              }
-              else
-              {
+            }
+            else
+            {
                 echo strip_tags($action->comment) == $action->comment ? nl2br($action->comment) : $action->comment;
-              }
+            }
             ?>
           </div>
         </div>
