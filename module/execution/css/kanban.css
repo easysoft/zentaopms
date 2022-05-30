@@ -97,14 +97,15 @@
 .kanban-card > .actions > a {display: block; float: left; width: 20px; height: 20px; line-height: 20px; text-align: center; border-radius: 4px; opacity: .7;}
 .kanban-card > .actions > a:hover {background-color: rgba(0,0,0,.075); opacity: 1;}
 
-#kanban .kanban-card[data-scale-size="4"] {padding: 8px !important; min-height: 47px !important; height: 47px !important;}
+#kanban .kanban-card[data-scale-size="4"] {padding: 10px !important; min-height: 47px !important; height: 47px !important;}
 #kanban .kanban-card[data-scale-size="3"] {padding: 3px 4px;}
 #kanban .kanban-card[data-scale-size="3"] > .title {white-space: normal; max-height: 100%;}
-#kanban .kanban-card[data-scale-size="2"] {padding: 3px 4px; overflow: hidden;}
+#kanban .kanban-card[data-scale-size="2"] {padding: 3px 8px; overflow: hidden;}
 #kanban .kanban-card[data-scale-size="2"] > .title {display: inline; line-height: 18px; white-space: normal; max-height: 100%; word-break: break-all;}
 #kanban .kanban-card[data-scale-size="2"] > .infos {display: inline-block; height: 18px; vertical-align: top; margin: 0;}
 #kanban .kanban-card[data-scale-size="2"] > .infos > .info-pri {transform: scale(.8); vertical-align: top;}
 #kanban .kanban-card[data-scale-size="2"] > .infos > .avatar {display: inline-block; transform: scale(.8); position: relative; top: -2px; vertical-align: top; margin-right: -1px;}
+#kanban .kanban-card[data-scale-size="2"] > .infos > .info-estimate {top: -1px;}
 
 #mainMenu .divider {margin: 10px}
 
