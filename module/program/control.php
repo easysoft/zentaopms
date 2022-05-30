@@ -52,6 +52,7 @@ class program extends control
             }
             else
             {
+                /* Get pager for top program and projects whithout program. */
                 $this->program->getList($status, $orderBy, $pager, 'top');
                 $programs = $this->program->getList($status, $orderBy);
 
