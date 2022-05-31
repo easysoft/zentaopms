@@ -2483,7 +2483,14 @@ class projectModel extends model
         $project = $this->getByID($objectID);
 
         $model = 'scrum';
-        if($project) $model = $project->model;
+        if($project and $project->model == 'waterfall') $model = $project->model;
+        if($project and $project->model == 'kanban')
+        {
+            $model = $project->model . 'Project';
+
+            global $lang;
+            $lang->executionCommon = $lang->project->kanban;
+        }
 
         if(isset($lang->$model))
         {
