@@ -5719,6 +5719,7 @@ class upgradeModel extends model
     public function updateObjectBranch()
     {
         $moduleBranchPairs = $this->dao->select('id,branch')->from(TABLE_MODULE)->where('branch')->ne(0)->fetchPairs();
+        if(empty($moduleBranchPairs)) return true;
 
         $storyModulePairs = $this->dao->select('module')->from(TABLE_STORY)->where('module')->in(array_keys($moduleBranchPairs))->andWhere('branch')->eq(0)->fetchPairs();
         foreach($storyModulePairs as $moduleID) $this->dao->update(TABLE_STORY)->set('`branch`')->eq($moduleBranchPairs[$moduleID])->where('module')->eq($moduleID)->exec();
