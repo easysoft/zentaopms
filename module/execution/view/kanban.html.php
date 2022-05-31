@@ -232,8 +232,12 @@ js::set('hasTaskButton', $hasTaskButton);
 </div>
 <?php else:?>
 <div class='panel' id='kanbanContainer'>
-  <div class='panel-body region'>
-    <div id='kanban' class='kanban'></div>
+  <div class='panel-body'>
+    <div id='kanban'>
+      <div class='region'>
+        <div id='kanban<?php echo $execution->id;?>' data-id='<?php echo $execution->id;?>' class='kanban'></div>
+      </div>
+    </div>
   </div>
 </div>
 <?php endif;?>

@@ -180,7 +180,7 @@ function changeKanbanScaleSize(newScaleSize)
     }
     else
     {
-        var kanban = $('#kanban').data('zui.kanban');
+        var kanban = $('#kanban' + executionID).data('zui.kanban');
         if(!kanban) return;
         kanban.setOptions({cardsPerRow: newScaleSize, cardHeight: getCardHeight()});
     }
@@ -272,7 +272,7 @@ function createColumnCreateMenu(options)
     var col      = $col.data('col');
     var items    = [];
     var laneID   = col.$kanbanData.lanes[0].id ? col.$kanbanData.lanes[0].id : 0;
-    var regionID = col.$kanbanData.region;
+    var regionID = col.$kanbanData.region == undefined ? 0 : col.$kanbanData.region;
 
     if(col.type == 'backlog')
     {
@@ -690,8 +690,6 @@ function renderCount($count, count, column)
  */
 function renderHeaderCol($column, column, $header, kanbanData)
 {
-    if(groupBy != 'default') return;
-
     /* Render group header. */
     var privs       = kanbanData.actions;
     var columnPrivs = kanbanData.columns[0].actions;
@@ -703,7 +701,7 @@ function renderHeaderCol($column, column, $header, kanbanData)
         $actions = $column.children('.actions');
     }
 
-    if(privs.includes('sortGroup'))
+    if(groupBy == 'default' && privs.includes('sortGroup'))
     {
         var groups = regions[column.region].groups;
         if($header.closest('.kanban').data('zui.kanban'))
@@ -784,7 +782,8 @@ function updateRegion(regionID, regionData = [])
     if(!$region.length) return false;
     if(!regionData) regionData = regions[regionID];
 
-    $region.data('zui.kanban').render(regionData.groups);
+    var data = groupBy == 'default' ? regionData.groups : regionData;
+    $region.data('zui.kanban').render(data);
     resetRegionHeight('open');
     return true;
 }
@@ -1053,7 +1052,7 @@ function updateKanban(kanbanData, regionID = 0)
     setTimeout(function()
     {
         $.zui.closeModal();
-        if(regionID)
+        if(regionID && groupBy == 'default')
         {
             updateRegion(regionID, kanbanData[regionID]);
         }
@@ -1062,7 +1061,8 @@ function updateKanban(kanbanData, regionID = 0)
             $('#kanban').children('.region').children("div[id^='kanban']").each(function()
             {
                 var regionID = $(this).attr('data-id');
-                updateRegion(regionID, kanbanData[regionID]);
+                var data     = groupBy == 'default' ? kanbanData[regionID] : kanbanData[groupBy]
+                updateRegion(regionID, data);
             });
         }
     }, 200);
@@ -1317,8 +1317,9 @@ $(function()
         var planID = $('#plan').val();
         if(planID)
         {
-            var vars = $('.linkStoryByPlanButton').data('lane') != null ? '&extra=laneID='+ $('.linkStoryByPlanButton').data('lane') + ',columnID=' + $('.linkStoryByPlanButton').data('col') : '';
-            location.href = createLink('execution', 'importPlanStories', 'executionID=' + executionID + '&planID=' + planID + '&productID=0&fromMethod=kanban' + vars);
+            var vars  = $('.linkStoryByPlanButton').data('lane') != null ? '&extra=laneID='+ $('.linkStoryByPlanButton').data('lane') + ',columnID=' + $('.linkStoryByPlanButton').data('col') : '';
+            var param = "&param=executionID=" + executionID + ",browseType=" + browseType + ",orderBy=id_asc,groupBy=" + groupBy;
+            location.href = createLink('execution', 'importPlanStories', 'executionID=' + executionID + '&planID=' + planID + '&productID=0&fromMethod=kanban' + vars + param);
             $.closeModal();
         }
     });

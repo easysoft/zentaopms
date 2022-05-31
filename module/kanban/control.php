@@ -1508,9 +1508,11 @@ class kanban extends control
             if($from == 'RDKanban')
             {
                 if(dao::isError()) return $this->sendError(dao::getError());
-                $regionID   = $column->region;
-                $kanbanData = $this->loadModel('kanban')->getRDKanban($executionID, $this->session->execLaneType ? $this->session->execLaneType : 'all', 'id_desc', $regionID);
-                $kanbanData = json_encode($kanbanData);
+                $regionID     = $column->region;
+                $execLaneType = $this->session->execLaneType ? $this->session->execLaneType : 'all';
+                $execGroupBy  = $this->session->execGroupBy ? $this->session->execGroupBy : 'default';
+                $kanbanData   = $this->loadModel('kanban')->getRDKanban($executionID, $execLaneType, 'id_desc', $regionID, $execGroupBy);
+                $kanbanData   = json_encode($kanbanData);
 
                 return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => "parent.updateKanban($kanbanData, $regionID)"));
             }
@@ -1589,9 +1591,11 @@ class kanban extends control
             if($from == 'RDKanban')
             {
                 if(dao::isError()) return $this->sendError(dao::getError());
-                $regionID   = $column->region;
-                $kanbanData = $this->loadModel('kanban')->getRDKanban($executionID, $this->session->execLaneType ? $this->session->execLaneType : 'all', 'id_desc', $regionID);
-                $kanbanData = json_encode($kanbanData);
+                $regionID     = $column->region;
+                $execLaneType = $this->session->execLaneType ? $this->session->execLaneType : 'all';
+                $execGroupBy  = $this->session->execGroupBy ? $this->session->execGroupBy : 'default';
+                $kanbanData   = $this->loadModel('kanban')->getRDKanban($executionID, $execLaneType, 'id_desc', $regionID, $execGroupBy);
+                $kanbanData   = json_encode($kanbanData);
 
                 return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => "parent.updateKanban($kanbanData, $regionID)"));
             }
