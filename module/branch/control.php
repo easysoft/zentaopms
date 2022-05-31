@@ -266,15 +266,18 @@ class branch extends control
         if(empty($product) or $product->type == 'normal') return;
 
         $branches = $this->loadModel('branch')->getList($productID, $projectID, $param, 'order', null, $withMainBranch);
-        $branchOption    = array();
         $branchTagOption = array();
         foreach($branches as $branchInfo)
         {
-            $branchOption[$branchInfo->id]    = $branchInfo->name;
             $branchTagOption[$branchInfo->id] = $branchInfo->name . ($branchInfo->status == 'closed' ? ' (' . $this->lang->branch->statusList['closed'] . ')' : '');
         }
+        if(!isset($branchTagOption[$oldBranch]))
+        {
+            $branch = $this->branch->getById($oldBranch, 0, '');
+            $branchTagOption[$oldBranch] = $branch->name . ($branch->status == 'closed' ? ' (' . $this->lang->branch->statusList['closed'] . ')' : '');
+        }
 
-        return print(html::select('branch', strpos($param, 'active') !== false ? $branchOption : $branchTagOption, $oldBranch, "class='form-control' onchange='loadBranch(this)'"));
+        return print(html::select('branch', $branchTagOption, $oldBranch, "class='form-control' onchange='loadBranch(this)'"));
     }
 
     /**
