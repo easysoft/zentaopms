@@ -1328,7 +1328,7 @@ class storyModel extends model
             ->setDefault('status', $oldStory->status)
             ->setDefault('reviewedDate', $date)
             ->setIF($this->post->result == 'revert', 'version', $this->post->preVersion)
-            ->setIF($this->post->result == 'clarify', 'assignedTo', $oldStory->lastEditedBy)
+            ->setIF($this->post->result == 'clarify', 'assignedTo', $oldStory->lastEditedBy ? $oldStory->lastEditedBy : $oldStory->openedBy)
             ->removeIF($this->post->result != 'reject', 'closedReason, duplicateStory, childStories')
             ->removeIF($this->post->result == 'reject' and $this->post->closedReason != 'duplicate', 'duplicateStory')
             ->removeIF($this->post->result == 'reject' and $this->post->closedReason != 'subdivided', 'childStories')
