@@ -2486,7 +2486,8 @@ class projectModel extends model
         if($project and $project->model == 'waterfall') $model = $project->model;
         if($project and $project->model == 'kanban')
         {
-            $model                 = $project->model . 'Project';
+            $model = $project->model . 'Project';
+
             $lang->executionCommon = $lang->project->kanban;
         }
 
