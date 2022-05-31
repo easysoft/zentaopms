@@ -523,7 +523,7 @@ class project extends control
         $this->view->parentProgram       = $parentProgram;
         $this->view->URSRPairs           = $this->loadModel('custom')->getURSRPairs();
         $this->view->availableBudget     = $this->program->getBudgetLeft($parentProgram);
-        $this->view->budgetUnitList      = $this->program->getBudgetUnitList();
+        $this->view->budgetUnitList      = $this->project->getBudgetUnitList();
 
         $this->display();
     }

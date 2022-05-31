@@ -252,7 +252,7 @@ class program extends control
         $this->view->program         = $program;
         $this->view->parents         = $parents;
         $this->view->programList     = $this->program->getList();
-        $this->view->budgetUnitList  = $this->program->getBudgetUnitList();
+        $this->view->budgetUnitList  = $this->loadModel('project')->getBudgetUnitList();
         $this->view->parentProgram   = $parentProgram;
         $this->view->availableBudget = $this->program->getBudgetLeft($parentProgram) + (float)$program->budget;
 
