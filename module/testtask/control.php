@@ -248,6 +248,13 @@ class testtask extends control
         $executions = empty($productID) ? array() : $this->loadModel('product')->getExecutionPairsByProduct($productID, '', 'id_desc', $projectID);
         $builds     = empty($productID) ? array() : $this->loadModel('build')->getBuildPairs($productID, 'all', 'notrunk');
 
+        $execution = $this->loadModel('execution')->getByID($executionID);
+        if(!empty($execution) and $execution->type == 'kanban')
+        {
+            global $lang;
+            $this->lang->testtask->execution = str_replace($lang->execution->common, $lang->kanban->common, $this->lang->testtask->execution);
+        }
+
         /* Set menu. */
         $productID = $this->product->saveState($productID, $this->products);
 
