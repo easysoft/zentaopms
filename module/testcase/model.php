@@ -2104,7 +2104,13 @@ class testcaseModel extends model
 
         if(!$case->needconfirm)
         {
-            if(!isonlybody()) $menu .= $this->buildMenu('testcase', 'edit', $params, $case, 'view', '', '', 'showinonlybody');
+            if(!isonlybody())
+            {
+                $editParams = $params;
+                if($this->app->tab == 'project')   $editParams .= "&comment=false&projectID={$this->session->project}";
+                if($this->app->tab == 'execution') $editParams .= "&comment=false&executionID={$this->session->execution}";
+                $menu .= $this->buildMenu('testcase', 'edit', $editParams, $case, 'view', '', '', 'showinonlybody');
+            }
             if(!$case->isLibCase && $case->auto != 'unit')
             {
                 $menu .= $this->buildMenu('testcase', 'create', "productID=$case->product&branch=$case->branch&moduleID=$case->module&from=testcase&param=$case->id", $case, 'view', 'copy');
@@ -2142,7 +2148,12 @@ class testcaseModel extends model
 
         $menu .= $this->buildMenu('testtask', 'results', "runID=0&$params", $case, 'browse', '', '', 'iframe', true, "data-width='95%'");
         $menu .= $this->buildMenu('testtask', 'runCase', "runID=0&$params&version=$case->version", $case, 'browse', 'play', '', 'runCase iframe', false, "data-width='95%'");
-        $menu .= $this->buildMenu('testcase', 'edit',    "caseID=$case->id", $case, 'browse');
+
+        $editParams = $params;
+        if($this->app->tab == 'project')   $editParams .= "&comment=false&projectID={$this->session->project}";
+        if($this->app->tab == 'execution') $editParams .= "&comment=false&executionID={$this->session->execution}";
+        $menu .= $this->buildMenu('testcase', 'edit', $editParams, $case, 'browse');
+
         if($this->config->testcase->needReview || !empty($this->config->testcase->forceReview))
         {
             common::printIcon('testcase', 'review', $params, $case, 'browse', 'glasses', '', 'iframe');
