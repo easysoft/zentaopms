@@ -883,7 +883,7 @@ class execution extends control
         $this->loadModel('datatable');
 
         /* Save session. */
-        $this->session->set('bugList', $this->app->getURI(true), 'qa');
+        $this->session->set('bugList', $this->app->getURI(true), 'execution');
 
         $type        = strtolower($type);
         $queryID     = ($type == 'bysearch') ? (int)$param : 0;
