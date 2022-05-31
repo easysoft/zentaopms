@@ -2496,13 +2496,16 @@ class baseRouter
         $modulePath = $this->getExtensionRoot() . 'saas' . DS;
         if(file_exists($modulePath . $path)) return $modulePath . $path;
 
-        /* 1. 如果通用版本里有此模块，优先使用。 If module is in the open edition, use it. */
-        $modulePath = $this->getModuleRoot($appName);
+        /* 1. 最后尝试在定制开发中寻找。 Finally, try to find the module in the custom dir. */
+        $modulePath = $this->getExtensionRoot() . 'custom' . DS;
         if(file_exists($modulePath . $path)) return $modulePath . $path;
 
-        /* 2. 尝试查找喧喧是否有此模块。 Try to find the module in other editon. */
-        $modulePath = $this->getExtensionRoot() . 'xuan' . DS;
-        if(file_exists($modulePath . $path)) return $modulePath . $path;
+        /* 2. 如果设置过vision，尝试在vision中查找。 If vision is set, try to find the module in the vision. */
+        if($this->config->vision != 'rnd')
+        {
+            $modulePath = $this->getExtensionRoot() . $this->config->vision . DS;
+            if(file_exists($modulePath . $path)) return $modulePath . $path;
+        }
 
         /* 3. 尝试查找商业版本是否有此模块。 Try to find the module in other editon. */
         if($this->config->edition != 'open')
@@ -2511,15 +2514,12 @@ class baseRouter
             if(file_exists($modulePath . $path)) return $modulePath . $path;
         }
 
-        /* 4. 如果设置过vision，尝试在vision中查找。 If vision is set, try to find the module in the vision. */
-        if($this->config->vision != 'rnd')
-        {
-            $modulePath = $this->getExtensionRoot() . $this->config->vision . DS;
-            if(file_exists($modulePath . $path)) return $modulePath . $path;
-        }
+        /* 4. 尝试查找喧喧是否有此模块。 Try to find the module in other editon. */
+        $modulePath = $this->getExtensionRoot() . 'xuan' . DS;
+        if(file_exists($modulePath . $path)) return $modulePath . $path;
 
-        /* 5. 最后尝试在定制开发中寻找。 Finally, try to find the module in the custom dir. */
-        $modulePath = $this->getExtensionRoot() . 'custom' . DS;
+        /* 5. 如果通用版本里有此模块，优先使用。 If module is in the open edition, use it. */
+        $modulePath = $this->getModuleRoot($appName);
         if(file_exists($modulePath . $path)) return $modulePath . $path;
 
         return '';
