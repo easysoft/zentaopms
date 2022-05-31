@@ -292,6 +292,7 @@ $lang->execution->statusSelects['finishedbyme'] = 'FinishedByMe';
 $lang->execution->statusSelects['done']         = 'Done';
 $lang->execution->statusSelects['closed']       = 'Closed';
 $lang->execution->statusSelects['cancel']       = 'Cancelled';
+$lang->execution->statusSelects['delayed']      = 'Delayed';
 
 $lang->execution->groups['']           = 'View by Groups';
 $lang->execution->groups['story']      = 'Group by Story';
@@ -468,7 +469,6 @@ $lang->execution->featureBar['task']['unclosed']     = $lang->execution->unclose
 $lang->execution->featureBar['task']['assignedtome'] = $lang->execution->assignedToMe;
 $lang->execution->featureBar['task']['myinvolved']   = $lang->execution->myInvolved;
 $lang->execution->featureBar['task']['assignedbyme'] = $lang->execution->assignedByMe;
-$lang->execution->featureBar['task']['delayed']      = 'Delayed';
 $lang->execution->featureBar['task']['needconfirm']  = 'Changed';
 $lang->execution->featureBar['task']['status']       = $lang->execution->statusSelects[''];
 
