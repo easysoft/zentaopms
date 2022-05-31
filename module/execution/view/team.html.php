@@ -105,7 +105,7 @@
       </tbody>
     </table>
     <div class='table-footer'>
-      <div class='table-statistic'><?php echo $lang->team->totalHours . '：' .  "<strong>$totalHours{$lang->execution->workHour}" . ', ' . sprintf($lang->project->teamMembersCount, count($teamMembers)) . "</strong>";?></div>
+      <div class='table-statistic'><?php echo $lang->team->totalHours . '：' .  "<strong>$totalHours{$lang->execution->workHour}" . sprintf($lang->project->teamMembersCount, count($teamMembers)) . "</strong>";?></div>
     </div>
   </form>
   <?php endif;?>

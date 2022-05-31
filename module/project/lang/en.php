@@ -59,7 +59,7 @@ $lang->project->copyTeamTitle      = 'Select a project team to copy';
 $lang->project->daysGreaterProject = 'Days cannot be greater than days of project『%s』';
 $lang->project->errorHours         = 'Hours/Day cannot be greater than『24』';
 $lang->project->workdaysExceed     = 'No more than『%s』working days';
-$lang->project->teamMembersCount   = 'there are %s team members.';
+$lang->project->teamMembersCount   = ', there are %s team members.';
 
 /* Fields. */
 $lang->project->common             = 'Project';
