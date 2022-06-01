@@ -2293,7 +2293,7 @@ class bug extends control
     public function ajaxGetDropMenu($productID, $module, $method, $extra = '')
     {
         $products = array();
-        if(!empty($extra)) $products = $this->product->getProducts($extra, $this->config->CRProduct ? 'all' : 'noclosed', 'program desc, line desc, ');
+        if(!empty($extra)) $products = $this->product->getProducts($extra, 'all', 'program desc, line desc, ');
 
         $this->view->link      = $this->product->getProductLink($module, $method, $extra);
         $this->view->productID = $productID;

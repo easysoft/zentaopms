@@ -20,3 +20,7 @@ html[lang='en'] #loginPanel .table-form > tbody > tr > th {width: 80px;}
 
 .showNotice {color: yellow;}
 .showNotice:hover {color: yellow;}
+
+.table-row-extension .alert {margin-bottom: 0px !important;}
+.table-row-extension .content {color: #3c4353;}
+.table-row-extension .expired-tips {cursor: pointer;}

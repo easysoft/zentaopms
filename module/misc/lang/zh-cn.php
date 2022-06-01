@@ -12,6 +12,8 @@
 $lang->misc = new stdclass();
 $lang->misc->common  = '杂项';
 $lang->misc->ping    = '防超时';
+$lang->misc->view    = '查看';
+$lang->misc->cancel  = '取消';
 
 $lang->misc->zentao = new stdclass();
 $lang->misc->zentao->version           = '版本%s';
@@ -69,6 +71,12 @@ $lang->misc->novice      = "您可能初次使用禅道，是否进入新手模�
 $lang->misc->showAnnual  = '新增年度总结功能';
 $lang->misc->annualDesc  = '12.0版本后，新增年度总结功能，可以到『统计->年度总结』页面查看。 是否现在<a href="%s" target="_blank" id="showAnnual" class="btn btn-mini btn-primary">查看</a>';
 $lang->misc->remind      = '新功能提醒';
+
+$lang->misc->expiredTipsTitle    = '尊敬的系统管理员，您好：';
+$lang->misc->expiredCountTips    = '系统中有<span class="expired-tips text-blue" data-toggle="tooltip" data-placement="bottom" title="%s">%s个插件</span>即将到期，为避免影响您的正常使用，请联系管理员及时续费或卸载。';
+$lang->misc->expiredPluginTips   = '已到期的插件为：%s。';
+$lang->misc->expiringPluginTips  = '即将到期的插件为：%s。';
+$lang->misc->expiredTipsForAdmin = '当前系统中有%s个插件即将到期，为避免影响功能的正常使用，请尽快到系统后台插件管理中进行续费或卸载处理。';
 
 $lang->misc->noticeRepair = "<h5>普通用户请联系管理员进行修复</h5>
     <h5>管理员请登录禅道所在的服务器，创建<span>%s</span>文件。</h5>
