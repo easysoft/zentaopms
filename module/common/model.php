@@ -1703,8 +1703,8 @@ EOD;
         $executionList  = $app->dbh->query("SELECT id,name,parent FROM " . TABLE_EXECUTION . " WHERE `project` = '{$object->project}' AND `deleted` = '0' $userCondition $orderBy")->fetchAll();
         foreach($executionList as $execution)
         {
-            if($execution->id == $executionID) continue;
             if(isset($executionPairs[$execution->parent])) unset($executionPairs[$execution->parent]);
+            if($execution->id == $executionID) continue;
             $executionPairs[$execution->id] = $execution->name;
         }
 
