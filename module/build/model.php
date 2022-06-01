@@ -551,8 +551,8 @@ class buildModel extends model
 
             $menu .= $this->buildMenu('testtask', 'create', "product=$build->product&execution={$executionID}&build=$build->id", $build, $type, 'bullhorn', '', '', '', $testtaskApp);
 
-            if($tab == 'execution') $menu .= $this->buildMenu('execution', 'bug', "execution={$extraParams['executionID']}&productID={$extraParams['productID']}&orderBy=status&build=$build->id", $build, $type, '', '', '', '', $this->lang->execution->viewBug);
-            if($tab == 'project')   $menu .= $this->buildMenu('build', 'view', "{$params}&type=generatedBug", $build, $type, 'bug', '', '', '', "data-app='project'", $this->lang->project->bug);
+            if($tab == 'execution' and !empty($execution->type) and $execution->type != 'kanban') $menu .= $this->buildMenu('execution', 'bug', "execution={$extraParams['executionID']}&productID={$extraParams['productID']}&orderBy=status&build=$build->id", $build, $type, '', '', '', '', $this->lang->execution->viewBug);
+            if($tab == 'project' or empty($execution->type) or $execution->type == 'kanban') $menu .= $this->buildMenu('build', 'view', "{$params}&type=generatedBug", $build, $type, 'bug', '', '', '', "data-app='$tab'", $this->lang->project->bug);
 
             $menu .= $this->buildMenu('build', 'edit',   $params, $build, $type);
             $menu .= $this->buildMenu('build', 'delete', $params, $build, $type, 'trash', 'hiddenwin');
