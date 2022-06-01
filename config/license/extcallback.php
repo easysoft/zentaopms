@@ -14,7 +14,7 @@ function ioncube_event_handler($err_code, $params)
         </head>
         <body>
         <h2 style='color:red;text-align:center'>您使用的插件已经过期</h2>
-        <p style='text-align:left; margin: 0px 20%;'>您的插件已过期，如果需要继续使用，请点击下载更新按钮，跳转到禅道官网插件页面进行下载后在更新插件。</p>
+        <p style='text-align:left; margin: 0px 20%;'>您的插件已过期，如果需要继续使用，请点击下载更新按钮，跳转到禅道官网插件页面进行下载后再更新插件。</p>
         <p style='text-align:left; margin: 0px 20%;'>如果不需要继续使用，可以点击卸载插件按钮，跳转到插件页面卸载插件。</p>
         <p style='text-align:left; margin: 0px 20%;'>如果您无法操作，请联系系统管理员进行处理。</p>
         <p style='text-align:center'>
