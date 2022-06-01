@@ -276,7 +276,7 @@ class story extends control
             $title     = $oldBug->title;
             $keywords  = $oldBug->keywords;
             $spec      = $oldBug->steps;
-            $pri       = $oldBug->pri;
+            $pri       = !empty($oldBug->pri) ? $oldBug->pri : '3';
             if(strpos($oldBug->mailto, $oldBug->openedBy) === false)
             {
                 $mailto = $oldBug->mailto . $oldBug->openedBy . ',';
