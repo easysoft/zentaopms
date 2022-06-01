@@ -297,6 +297,8 @@ $(function()
     var simplemde = new SimpleMDE({element: $("#markdownContent")[0],toolbar:false, status: false});
     simplemde.value(markdownText);
     simplemde.togglePreview();
+
+    $('#content .CodeMirror .editor-preview a').attr('target', '_blank');
 })
 </script>
 <?php endif;?>
