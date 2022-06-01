@@ -135,23 +135,22 @@ class programModel extends model
      * @access public
      * @return array
      */
-    public function getList($status = 'all', $orderBy = 'id_asc', $pager = NULL, $type = '', $topIdList = '')
+    public function getList($status = 'all', $orderBy = 'id_asc', $pager = NULL, $type = '', $topIdList = array())
     {
-        $objectIdList = array();
-        if(!$this->app->user->admin)
-        {
-            $objectIdList = trim($this->app->user->view->programs, ',') . ',' . trim($this->app->user->view->projects, ',');
-            $objectIdList = array_filter(explode(',', $objectIdList));
-            asort($objectIdList);
+        $userViewIdList = trim($this->app->user->view->programs, ',') . ',' . trim($this->app->user->view->projects, ',');
+        $userViewIdList = array_filter(explode(',', $userViewIdList));
+        asort($userViewIdList);
 
-            if($this->app->rawMethod == 'browse')
+        $objectIdList = array();
+        if($this->app->rawMethod == 'browse')
+        {
+            if(!$this->app->user->admin)
             {
                 $pathList = $this->dao->select('id,path')->from(TABLE_PROJECT)
-                    ->where('id')->in($objectIdList)
+                    ->where('id')->in($userViewIdList)
                     ->andWhere('deleted')->eq(0)
                     ->fetchPairs('id');
 
-                $objectIdList = array();
                 foreach($pathList as $path)
                 {
                     if($type == 'child' and !empty($topIdList))
@@ -163,6 +162,13 @@ class programModel extends model
                     foreach(explode(',', trim($path, ',')) as $pathID) $objectIdList[$pathID] = $pathID;
                 }
             }
+            else
+            {
+                foreach($topIdList as $topID)
+                {
+                    $objectIdList += $this->dao->select('id')->from(TABLE_PROGRAM)->where('path')->like(",$topID,%")->fetchPairs('id');
+                }
+            }
         }
 
         return $this->dao->select('*')->from(TABLE_PROGRAM)
@@ -171,8 +177,11 @@ class programModel extends model
             ->andWhere('vision')->eq($this->config->vision)
             ->beginIF($status != 'all')->andWhere('status')->eq($status)->fi()
             ->beginIF(!$this->cookie->showClosed)->andWhere('status')->ne('closed')->fi()
+            ->beginIF($this->app->rawMethod == 'browse')
             ->beginIF($type === 'top')->andWhere('parent')->eq(0)->fi()
-            ->beginIF(!$this->app->user->admin)->andWhere('id')->in($objectIdList)->fi()
+            ->beginIF($type === 'child' or !$this->app->user->admin)->andWhere('id')->in($objectIdList)->fi()
+            ->fi()
+            ->beginIF(!$this->app->user->admin and $this->app->rawMethod != 'browse')->andWhere('id')->in($userViewIdList)->fi()
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id');
