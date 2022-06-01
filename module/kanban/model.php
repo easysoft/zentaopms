@@ -1454,14 +1454,18 @@ class kanbanModel extends model
         $lanes = $this->getLanes4Group($executionID, $browseType, $groupBy, $cardList);
         if(empty($lanes)) return array();
 
+        $execution = $this->loadModel('execution')->getByID($executionID);
+
         $columns = $this->dao->select('t1.*, GROUP_CONCAT(t1.cards) as cards, t2.`type` as columnType, t2.limit, t2.name as columnName, t2.color')->from(TABLE_KANBANCELL)->alias('t1')
             ->leftJoin(TABLE_KANBANCOLUMN)->alias('t2')->on('t1.`column` = t2.id')
             ->leftJoin(TABLE_KANBANLANE)->alias('t3')->on('t1.lane = t3.id')
             ->leftJoin(TABLE_KANBANREGION)->alias('t4')->on('t1.kanban = t4.kanban')
             ->where('t1.kanban')->eq($executionID)
             ->andWhere('t1.`type`')->eq($browseType)
+            ->beginIF(isset($execution->type) and $execution->type == 'kanban')
             ->andWhere('t3.deleted')->eq(0)
             ->andWhere('t4.deleted')->eq(0)
+            ->fi()
             ->groupBy('columnType')
             ->orderBy('column_asc')
             ->fetchAll('columnType');
