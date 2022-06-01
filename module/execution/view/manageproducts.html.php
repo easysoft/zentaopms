@@ -76,11 +76,12 @@
         <?php if(common::canModify('execution', $execution)) echo html::submitButton();?>
       </div>
       <?php endif;?>
+      <?php if($execution->grade == 2):?>
       <div class='detail'>
         <div class='detail-title'><?php echo $lang->execution->unlinkedProducts;?></div>
         <div class='detail-content row'>
         <?php foreach($allProducts as $productID => $productName):?>
-        <?php if($execution->grade == 2 and isset($linkedProducts[$productID]) and $linkedProducts[$productID]->type != 'normal'):?>
+        <?php if(isset($linkedProducts[$productID]) and $linkedProducts[$productID]->type != 'normal'):?>
           <div class='col-sm-4'>
             <div class='product<?php echo isset($branchGroups[$productID]) ? ' has-branch' : ''?>'>
               <div class="checkbox-primary" title='<?php echo $productName;?>'>
@@ -99,6 +100,7 @@
         <?php echo html::hidden("post", 'post');?>
         <?php if(common::canModify('execution', $execution)) echo html::submitButton();?>
       </div>
+      <?php endif;?>
     </form>
   </div>
 </div>
