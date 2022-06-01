@@ -102,7 +102,10 @@ class projectModel extends model
     public function getBudgetUnitList()
     {
         $budgetUnitList = array();
-        if($this->config->vision != 'lite') foreach(explode(',', $this->config->project->unitList) as $unit) $budgetUnitList[$unit] = zget($this->lang->project->unitList, $unit, '');
+        if($this->config->vision != 'lite')
+        {
+            foreach(explode(',', $this->config->project->unitList) as $unit) $budgetUnitList[$unit] = zget($this->lang->project->unitList, $unit, '');
+        } 
 
         return $budgetUnitList;
     }
