@@ -783,7 +783,6 @@ var kanbanActionHandlers =
  */
 function handleKanbanAction(action, $element, event, kanban)
 {
-    if(groupBy && groupBy != 'default') return false;
     $('.kanban').attr('data-action-enabled', action);
     var handler = kanbanActionHandlers[action];
     if(handler) handler($element, event, kanban);
@@ -1074,8 +1073,6 @@ $(function()
         onRenderCount:     renderColumnCount
     };
 
-    if(groupBy != 'default') commonOptions.droppable = false;
-
     /* Create kanban */
     if(groupBy == 'default')
     {
@@ -1141,7 +1138,8 @@ $(function()
         var planID = $('#plan').val();
         if(planID)
         {
-            location.href = createLink('execution', 'importPlanStories', 'executionID=' + executionID + '&planID=' + planID + '&productID=0&fromMethod=kanban');
+            var param = "&param=executionID=" + executionID + ",browseType=" + browseType + ",orderBy=id_asc,groupBy=" + groupBy;
+            location.href = createLink('execution', 'importPlanStories', 'executionID=' + executionID + '&planID=' + planID + '&productID=0&fromMethod=taskKanban&extra=' + param);
         }
     });
 
