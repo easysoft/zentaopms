@@ -139,35 +139,26 @@ class programModel extends model
     {
         $userViewIdList = trim($this->app->user->view->programs, ',') . ',' . trim($this->app->user->view->projects, ',');
         $userViewIdList = array_filter(explode(',', $userViewIdList));
-        asort($userViewIdList);
 
         $objectIdList = array();
         if($this->app->rawMethod == 'browse')
         {
-            if(!$this->app->user->admin)
-            {
-                $pathList = $this->dao->select('id,path')->from(TABLE_PROJECT)
-                    ->where('id')->in($userViewIdList)
-                    ->andWhere('deleted')->eq(0)
-                    ->fetchPairs('id');
+            $pathList = $this->dao->select('id,path')->from(TABLE_PROJECT)
+                 ->where('type')->in('program,project')
+                 ->beginIF(!$this->app->user->admin)->andWhere('id')->in($userViewIdList)->fi()
+                 ->andWhere('deleted')->eq(0)
+                 ->orderBy('id_asc')
+                 ->fetchPairs('id');
 
-                foreach($pathList as $path)
-                {
-                    if($type == 'child' and !empty($topIdList))
-                    {
-                        $topID = $this->getTopByPath($path);
-                        if(!in_array($topID, $topIdList)) continue;
-                    }
-
-                    foreach(explode(',', trim($path, ',')) as $pathID) $objectIdList[$pathID] = $pathID;
-                }
-            }
-            else
+            foreach($pathList as $path)
             {
-                foreach($topIdList as $topID)
+                if($type == 'child' and !empty($topIdList))
                 {
-                    $objectIdList += $this->dao->select('id')->from(TABLE_PROGRAM)->where('path')->like(",$topID,%")->fetchPairs('id');
+                    $topID = $this->getTopByPath($path);
+                    if(!in_array($topID, $topIdList)) continue;
                 }
+
+                foreach(explode(',', trim($path, ',')) as $pathID) $objectIdList[$pathID] = $pathID;
             }
         }
 
