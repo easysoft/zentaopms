@@ -161,6 +161,9 @@
   </div>
   <div class="main-col">
     <div id='queryBox' data-module='executionStory' class='cell <?php if($type =='bysearch') echo 'show';?>'></div>
+      <div class="table-header fixed-right">
+        <nav class="btn-toolbar pull-right setting"></nav>
+      </div>
     <?php if(empty($stories)):?>
     <div class="table-empty-tip">
       <p>
@@ -172,25 +175,44 @@
     </div>
     <?php else:?>
     <form class='main-table table-story skip-iframe-modal' method='post' id='executionStoryForm'>
-      <div class="table-header fixed-right">
-        <nav class="btn-toolbar pull-right"></nav>
-      </div>
-      <table class='table tablesorter has-sort-head' id='storyList'>
+      <?php
+      $datatableId  = $this->moduleName . ucfirst($this->methodName);
+      $useDatatable = (isset($config->datatable->$datatableId->mode) and $config->datatable->$datatableId->mode == 'datatable');
+      $vars = "executionID={$execution->id}&orderBy=%s&type=$type&param=$param&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}";
+
+      if($useDatatable) include '../../common/view/datatable.html.php';
+      $setting = $this->datatable->getSetting('execution');
+      $widths  = $this->datatable->setFixedFieldWidth($setting);
+      $columns = 0;
+
+      $checkObject = new stdclass();
+      $checkObject->execution = $execution->id;
+
+      $totalEstimate       = 0;
+      $canBatchEdit        = common::hasPriv('story', 'batchEdit');
+      $canBatchClose       = common::hasPriv('story', 'batchClose');
+      $canBatchChangeStage = common::hasPriv('story', 'batchChangeStage');
+      $canBatchUnlink      = common::hasPriv('execution', 'batchUnlinkStory');
+      $canBatchToTask      = common::hasPriv('story', 'batchToTask', $checkObject);
+      $canBatchAction      = ($canBeChanged and ($canBatchEdit or $canBatchClose or $canBatchChangeStage or $canBatchUnlink or $canBatchToTask));
+      ?>
+      <?php if(!$useDatatable) echo '<div class="table-responsive">';?>
+      <table class='table tablesorter has-sort-head<?php if($useDatatable) echo ' datatable';?>' id='storyList' data-fixed-left-width='<?php echo $widths['leftWidth']?>' data-fixed-right-width='<?php echo $widths['rightWidth']?>'>
         <thead>
           <tr>
           <?php
-          $checkObject = new stdclass();
-          $checkObject->execution = $execution->id;
-
-          $totalEstimate       = 0;
-          $canBatchEdit        = common::hasPriv('story', 'batchEdit');
-          $canBatchClose       = common::hasPriv('story', 'batchClose');
-          $canBatchChangeStage = common::hasPriv('story', 'batchChangeStage');
-          $canBatchUnlink      = common::hasPriv('execution', 'batchUnlinkStory');
-          $canBatchToTask      = common::hasPriv('story', 'batchToTask', $checkObject);
-          $canBatchAction      = ($canBeChanged and ($canBatchEdit or $canBatchClose or $canBatchChangeStage or $canBatchUnlink or $canBatchToTask));
+          foreach($setting as $key => $value)
+          {
+              if($value->show)
+              {
+                  $this->datatable->printHead($value, $orderBy, $vars, $canBatchAction);
+                  $columns ++;
+              }
+          }
           ?>
-          <?php $vars = "executionID={$execution->id}&orderBy=%s&type=$type&param=$param&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"; ?>
+          </tr>
+<!--
+          <tr>
             <th class='c-id {sorter:false}'>
               <?php if($canBatchAction):?>
               <div class="checkbox-primary check-all" title="<?php echo $lang->selectAll?>">
@@ -200,21 +222,22 @@
               <?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?>
             </th>
             <?php if($canOrder):?>
-            <th class='c-sort {sorter:false}'><?php common::printOrderLink('order', $orderBy, $vars, $lang->execution->orderAB);?></th>
+            <th class='c-sort'><?php common::printOrderLink('order', $orderBy, $vars, $lang->execution->orderAB);?></th>
             <?php endif;?>
-            <th class='c-pri {sorter:false}' title=<?php echo $lang->execution->pri;?>><?php common::printOrderLink('pri', $orderBy, $vars, $lang->priAB);?></th>
-            <th class='c-name {sorter:false}'><?php common::printOrderLink('title', $orderBy, $vars, $lang->execution->storyTitle);?></th>
-            <th class='c-category {sorter:false}'><?php common::printOrderLink('category', $orderBy, $vars, $lang->story->category);?></th>
-            <th class='c-user {sorter:false}'> <?php common::printOrderLink('openedBy', $orderBy, $vars, $lang->openedByAB);?></th>
-            <th class='c-assignedTo {sorter:false} text-center'> <?php common::printOrderLink('assignedTo', $orderBy, $vars, $lang->assignedToAB);?></th>
-            <th class='c-estimate {sorter:false} text-right'> <?php common::printOrderLink('estimate', $orderBy, $vars, $lang->story->estimateAB);?></th>
-            <th class='c-status {sorter:false}'> <?php common::printOrderLink('status', $orderBy, $vars, $lang->statusAB);?></th>
-            <th class='c-stage {sorter:false}'> <?php common::printOrderLink('stage', $orderBy, $vars, $lang->story->stageAB);?></th>
+            <th class='c-pri' title=<?php echo $lang->execution->pri;?>><?php common::printOrderLink('pri', $orderBy, $vars, $lang->priAB);?></th>
+            <th class='c-name'><?php common::printOrderLink('title', $orderBy, $vars, $lang->execution->storyTitle);?></th>
+            <th class='c-category'><?php common::printOrderLink('category', $orderBy, $vars, $lang->story->category);?></th>
+            <th class='c-user'> <?php common::printOrderLink('openedBy', $orderBy, $vars, $lang->openedByAB);?></th>
+            <th class='c-assignedTo text-center'> <?php common::printOrderLink('assignedTo', $orderBy, $vars, $lang->assignedToAB);?></th>
+            <th class='c-estimate text-right'> <?php common::printOrderLink('estimate', $orderBy, $vars, $lang->story->estimateAB);?></th>
+            <th class='c-status'> <?php common::printOrderLink('status', $orderBy, $vars, $lang->statusAB);?></th>
+            <th class='c-stage'> <?php common::printOrderLink('stage', $orderBy, $vars, $lang->story->stageAB);?></th>
             <th title='<?php echo $lang->story->taskCount?>' class='c-count'><?php echo $lang->story->taskCountAB;?></th>
             <th title='<?php echo $lang->story->bugCount?>'  class='c-count'><?php echo $lang->story->bugCountAB;?></th>
             <th title='<?php echo $lang->story->caseCount?>' class='c-count'><?php echo $lang->story->caseCountAB;?></th>
-            <th class='c-actions-7 text-center {sorter:false}'><?php echo $lang->actions;?></th>
+            <th class='c-actions-7 text-center'><?php echo $lang->actions;?></th>
           </tr>
+-->
         </thead>
         <tbody id='storyTableList' class='sortable'>
           <?php foreach($stories as $key => $story):?>
@@ -223,6 +246,12 @@
           $totalEstimate += $story->estimate;
           ?>
           <tr id="story<?php echo $story->id;?>" data-id='<?php echo $story->id;?>' data-order='<?php echo $story->order ?>' data-estimate='<?php echo $story->estimate?>' data-cases='<?php echo zget($storyCases, $story->id, 0)?>'>
+          <?php foreach($setting as $key => $value)
+          {
+              $this->story->printCell($value, $story, $users, '', $storyStages, $modulePairs, $storyTasks, $storyBugs, $storyCases, $useDatatable ? 'datatable' : 'table', '', $execution, $showBranch, $productID);
+          }
+          ?>
+<!--
             <td class='cell-id'>
               <?php if($canBatchAction):?>
               <?php echo html::checkbox('storyIdList', array($story->id => '')) . html::a(helper::createLink('story', 'view', "storyID=$story->id&version=$story->version&from=execution&param=$execution->id"), sprintf('%03d', $story->id), null, "data-app='execution'");?>
@@ -322,11 +351,13 @@
                   }
               }
               ?>
+-->
             </td>
           </tr>
           <?php endforeach;?>
         </tbody>
       </table>
+      <?php if(!$useDatatable) echo '</div>';?>
       <div class='table-footer'>
         <?php if($canBatchAction):?>
         <div class="checkbox-primary check-all"><label><?php echo $lang->selectAll?></label></div>
@@ -491,6 +522,9 @@ function handleLinkButtonClick()
   var xxcUrl = "xxc:openInApp/zentao-integrated/" + encodeURIComponent(window.location.href.replace(/.display=card/, '').replace(/\.xhtml/, '.html'));
   window.open(xxcUrl);
 }
+<?php if(!empty($useDatatable)):?>
+$(function(){$('#executionStoryForm').table();})
+<?php endif;?>
 </script>
 <?php if(commonModel::isTutorialMode()): ?>
 <style>

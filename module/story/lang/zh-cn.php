@@ -67,6 +67,7 @@ $lang->story->toTask             = '转任务';
 $lang->story->batchToTask        = '批量转任务';
 $lang->story->convertRelations   = '换算关系';
 $lang->story->undetermined       = '待定';
+$lang->story->order              = '排序';
 
 $lang->story->editAction      = "编辑{$lang->SRCommon}";
 $lang->story->changeAction    = "变更{$lang->SRCommon}";

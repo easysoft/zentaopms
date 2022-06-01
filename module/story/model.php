@@ -3806,7 +3806,7 @@ class storyModel extends model
      * @access public
      * @return string
      */
-    public function buildOperateMenu($story, $type = 'view')
+    public function buildOperateMenu($story, $type = 'view', $execution = '', $productID = 0)
     {
         $menu   = '';
         $params = "storyID=$story->id";
@@ -3882,6 +3882,63 @@ class storyModel extends model
             $menu .= $this->buildMenu('story', 'edit', $params, $story, $type);
             $menu .= $this->buildMenu('story', 'create', "productID=$story->product&branch=$story->branch&moduleID=$story->module&{$params}&executionID=0&bugID=0&planID=0&todoID=0&extra=&type=$story->type", $story, $type, 'copy', '', '', '     ', "data-width='1050'");
             $menu .= $this->buildMenu('story', 'delete', $params, $story, 'button', 'trash', 'hiddenwin', 'showinonlybody', true);
+        }
+
+        if($type == 'execution')
+        {
+            $hasDBPriv    = common::hasDBPriv($execution, 'execution');
+            $canBeChanged = common::canModify('execution', $execution);
+            if($canBeChanged)
+            {
+                $param = "executionID={$execution->id}&story={$story->id}&moduleID={$story->module}";
+
+                $story->reviewer  = isset($story->reviewer)  ? $story->reviewer  : array();
+                $story->notReview = isset($story->notReview) ? $story->notReview : array();
+
+                if(common::hasPriv('story', 'review'))
+                {
+                    $reviewDisabled = in_array($this->app->user->account, $story->notReview) and ($story->status == 'draft' or $story->status == 'changed') ? '' : 'disabled';
+                    $story->from = 'execution';
+                    $menu .= common::printIcon('story', 'review', "story={$story->id}&from=story", $story, 'list', 'search', '', $reviewDisabled, false, "data-group=execution");
+                }
+
+                if(common::hasPriv('story', 'recall'))
+                {
+                    $recallDisabled = empty($story->reviewedBy) and strpos('draft,changed', $story->status) !== false and !empty($story->reviewer) ? '' : 'disabled';
+                    $menu .= common::printIcon('story', 'recall', "story={$story->id}", $story, 'list', 'undo', 'hiddenwin', $recallDisabled, '', '', $this->lang->story->recall);
+                }
+
+                $this->lang->task->create = $this->lang->execution->wbs;
+                $toTaskDisabled = strpos('draft,closed', $story->status) !== false ? 'disabled' : '';
+                if(commonModel::isTutorialMode())
+                {
+                    $wizardParams = helper::safe64Encode($param);
+                    $menu .=  html::a(helper::createLink('tutorial', 'wizard', "module=task&method=create&params=$wizardParams"), "<i class='icon-plus'></i>",'', "class='btn btn-task-create' title='{$this->lang->execution->wbs}' data-app='execution'");
+                }
+                else
+                {
+                    if($hasDBPriv) $menu .= common::printIcon('task', 'create', $param, '', 'list', 'plus', '', 'btn-task-create ' . $toTaskDisabled);
+                }
+
+                $this->lang->task->batchCreate = $this->lang->execution->batchWBS;
+                if($hasDBPriv) $menu .= common::printIcon('task', 'batchCreate', "executionID={$execution->id}&story={$story->id}", '', 'list', 'pluses', '', $toTaskDisabled);
+
+                $this->lang->testcase->batchCreate = $this->lang->testcase->create;
+                if($productID and $hasDBPriv and common::hasPriv('testcase', 'create'))
+                {
+                    $menu .= html::a(helper::createLink('testcase', 'create', "productID=$story->product&branch=$story->branch&moduleID=$story->module&form=&param=0&storyID=$story->id"), '<i class="icon-testcase-create icon-sitemap"></i>', '', "class='btn' title='{$this->lang->testcase->create}' data-app='qa'");
+                }
+
+                if($canBeChanged and common::hasPriv('execution', 'storyEstimate', $execution))
+                {
+                    $menu .= common::printIcon('execution', 'storyEstimate', "executionID=$execution->id&storyID=$story->id", '', 'list', 'estimate', '', 'iframe', true, "data-width='600px'");
+                }
+
+                if($canBeChanged and common::hasPriv('execution', 'unlinkStory', $execution))
+                {
+                    $menu .= common::printIcon('execution', 'unlinkStory', "executionID=$execution->id&storyID=$story->id&confirm=no", '', 'list', 'unlink', 'hiddenwin');
+                }
+            }
         }
 
         return $menu;
@@ -4047,10 +4104,17 @@ class storyModel extends model
      * @access public
      * @return void
      */
-    public function printCell($col, $story, $users, $branches, $storyStages, $modulePairs = array(), $storyTasks = array(), $storyBugs = array(), $storyCases = array(), $mode = 'datatable', $storyType = 'story')
+    public function printCell($col, $story, $users, $branches, $storyStages, $modulePairs = array(), $storyTasks = array(), $storyBugs = array(), $storyCases = array(), $mode = 'datatable', $storyType = 'story', $execution = '', $isShowBranch = '', $productID = 0)
     {
+        $module    = $this->app->rawModule == 'product' ? 'story' : $this->app->rawModule;
+        $canView   = common::hasPriv($module, 'view');
+        $tab       = $this->app->tab;
+        $storyLink = $tab == 'execution' ? helper::createLink('story', 'view', "storyID=$story->id&version=$story->version&from=execution&param=$execution->id") : helper::createLink($module, 'view', "storyID=$story->id");
+        $account   = $this->app->user->account;
+
         /* Check the product is closed. */
         $canBeChanged = common::canBeChanged('story', $story);
+        $canOrder     = common::hasPriv('execution', 'storySort');
 
         $canBatchEdit         = common::hasPriv('story',        'batchEdit');
         $canBatchClose        = common::hasPriv('story',        'batchClose');
@@ -4061,15 +4125,25 @@ class storyModel extends model
         $canBatchChangePlan   = common::hasPriv('story',        'batchChangePlan');
         $canBatchAssignTo     = common::hasPriv('story',        'batchAssignTo');
         $canBatchUnlinkStory  = common::hasPriv('projectstory', 'batchUnlinkStory');
+        $canBatchUnlink       = common::hasPriv('execution',    'batchUnlinkStory');
 
-        $canBatchAction       = ($canBatchEdit or $canBatchClose or $canBatchReview or $canBatchChangeStage or $canBatchChangeBranch or $canBatchChangeModule or $canBatchChangePlan or $canBatchAssignTo or $canBatchUnlinkStory);
+        if($tab == 'execution')
+        {
+            $checkObject = new stdclass();
+            $checkObject->execution = $execution->id;
+            $canBatchToTask       = common::hasPriv('story', 'batchToTask', $checkObject);
+        }
 
-        $module    = $this->app->rawModule == 'projectstory' ? 'projectstory' : 'story';
-        $canView   = common::hasPriv($module, 'view');
-        $tab       = $this->app->rawModule == 'projectstory' ? 'project' : 'product';
-        $storyLink = helper::createLink($module, 'view', "storyID=$story->id");
-        $account   = $this->app->user->account;
-        $id        = $col->id;
+        if($tab == 'execution')
+        {
+            $canBatchAction = ($canBeChanged and ($canBatchEdit or $canBatchClose or $canBatchChangeStage or $canBatchUnlink or $canBatchToTask));
+        }
+        else
+        {
+            $canBatchAction = ($canBatchEdit or $canBatchClose or $canBatchReview or $canBatchChangeStage or $canBatchChangeBranch or $canBatchChangeModule or $canBatchChangePlan or $canBatchAssignTo or $canBatchUnlinkStory);
+        }
+
+        $id = $col->id;
         if($col->show)
         {
             $class = "c-{$id}";
@@ -4140,6 +4214,10 @@ class storyModel extends model
             {
                 $class .= ' text-center';
             }
+            elseif($id == 'order')
+            {
+                $class = 'sort-handler c-sort';
+            }
 
             echo "<td class='" . $class . "' title='$title' style='$style'>";
             if($this->config->edition != 'open') $this->loadModel('flow')->printFlowCell('story', $story, $id);
@@ -4155,15 +4233,22 @@ class storyModel extends model
                     printf('%03d', $story->id);
                 }
                 break;
+            case 'order':
+                echo "<i class='icon-move'>";
+                break;
             case 'pri':
                 echo "<span class='label-pri label-pri-" . $story->pri . "' title='" . zget($this->lang->story->priList, $story->pri, $story->pri) . "'>";
                 echo zget($this->lang->story->priList, $story->pri, $story->pri);
                 echo "</span>";
                 break;
             case 'title':
-                if($this->app->tab == 'project')
+                if($tab == 'project')
                 {
                     $showBranch = isset($this->config->projectstory->story->showBranch) ? $this->config->projectstory->story->showBranch : 1;
+                }
+                elseif($tab == 'execution')
+                {
+                    if($isShowBranch) $showBranch = isset($this->config->execution->story->showBranch) ? $this->config->execution->story->showBranch : 1;
                 }
                 else
                 {
@@ -4291,7 +4376,16 @@ class storyModel extends model
                 echo $story->version;
                 break;
             case 'actions':
-                echo $this->buildOperateMenu($story, 'browse');
+                if($tab == 'execution')
+                {
+                    $menuType = 'execution';
+                }
+                else
+                {
+                    $menuType = 'browse';
+                    $execution = '';
+                }
+                echo $this->buildOperateMenu($story, $menuType, $execution, $productID);
                 break;
             }
             echo '</td>';
