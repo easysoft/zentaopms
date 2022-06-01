@@ -1308,7 +1308,7 @@ class projectModel extends model
         $project = fixer::input('post')
             ->add('id', $projectID)
             ->callFunc('name', 'trim')
-            ->setDefault('team', substr($this->post->name, 0, 30))
+            ->setDefault('team', mb_substr($this->post->name, 0, 30))
             ->setDefault('lastEditedBy', $this->app->user->account)
             ->setDefault('lastEditedDate', helper::now())
             ->setIF($this->post->delta == 999, 'end', LONG_TIME)

@@ -94,8 +94,7 @@
             <?php
             if (common::hasPriv('execution', 'unlinkMember', $member))
             {
-                $unlinkURL = $this->createLink('execution', 'unlinkMember', "executionID=$execution->id&userID=$member->userID&confirm=yes");
-                echo html::a("javascript:ajaxDelete(\"$unlinkURL\", \"mainContent\", confirmUnlinkMember)", '<i class="icon-green-execution-unlinkMember icon-unlink"></i>', '', "class='btn' title='{$lang->execution->unlinkMember}'");
+                echo html::a("javascript:deleteMember($execution->id, $member->userID)", '<i class="icon-green-execution-unlinkMember icon-unlink"></i>', '', "class='btni' title='{$lang->execution->unlinkMember}'");
             }
             ?>
           </td>
