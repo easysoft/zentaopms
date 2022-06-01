@@ -1726,11 +1726,7 @@ class kanban extends control
             ->fi()
             ->fetch();
 
-        if($groupBy and $groupBy != 'default')
-        {
-            $fromLaneID = $fromCell->lane;
-            $toLaneID   = $fromCell->lane;
-        }
+        if($groupBy and $groupBy != 'default') $fromLaneID = $toLaneID = $fromCell->lane;
 
         $toCell = $this->dao->select('id, cards')->from(TABLE_KANBANCELL)
             ->where('kanban')->eq($executionID)

@@ -3156,11 +3156,7 @@ class kanbanModel extends model
             ->fi()
             ->fetch();
 
-        if($groupBy and $groupBy != 'default')
-        {
-            $fromLaneID = $fromCell->lane;
-            $toLaneID   = $fromCell->lane;
-        }
+        if($groupBy and $groupBy != 'default') $fromLaneID = $toLaneID = $fromCell->lane;
 
         $fromCellCards = $fromCell->cards;
         $toCell        = $this->dao->select('*')->from(TABLE_KANBANCELL)->where('lane')->eq($toLaneID)->andWhere('`column`')->eq($toColID)->fetch();
