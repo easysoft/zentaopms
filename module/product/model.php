@@ -83,6 +83,8 @@ class productModel extends model
             $productID = key($products);
         }
 
+        if(empty($products)) return;
+
         $this->app->loadLang('product');
         if(!$isQaModule and !$productID)
         {
