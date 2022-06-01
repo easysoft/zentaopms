@@ -273,8 +273,8 @@ class branch extends control
         }
         if(!isset($branchTagOption[$oldBranch]))
         {
-            $branch = $this->branch->getById($oldBranch, 0, '');
-            $branchTagOption[$oldBranch] = $branch->name . ($branch->status == 'closed' ? ' (' . $this->lang->branch->statusList['closed'] . ')' : '');
+            $branch = $this->branch->getById($oldBranch, $productID, '');
+            $branchTagOption[$oldBranch] = $oldBranch == BRANCH_MAIN ? $branch : ($branch->name . ($branch->status == 'closed' ? ' (' . $this->lang->branch->statusList['closed'] . ')' : ''));
         }
 
         return print(html::select('branch', $branchTagOption, $oldBranch, "class='form-control' onchange='loadBranch(this)'"));
