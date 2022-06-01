@@ -1444,20 +1444,6 @@ class programModel extends model
     }
 
     /**
-     * Get budget unit list.
-     *
-     * @access public
-     * @return array
-     */
-    public function getBudgetUnitList()
-    {
-        $budgetUnitList = array();
-        foreach(explode(',', $this->config->project->unitList) as $unit) $budgetUnitList[$unit] = zget($this->lang->project->unitList, $unit, '');
-
-        return $budgetUnitList;
-    }
-
-    /**
      * Get program team member pairs.
      *
      * @param  int  $programID

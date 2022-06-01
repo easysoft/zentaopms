@@ -41,10 +41,12 @@
   <div class="detail-content">
     <table class="table table-data">
       <tbody>
+      <?php if($this->config->vision != 'lite'):?>
       <tr>
         <th class='w-100px'><?php echo $lang->story->product;?></th>
         <td><?php echo html::a($this->createLink('product', 'view', "productID=$story->product"), $product->name, '', "data-app='product'");?></td>
       </tr>
+      <?php endif;?>
       <?php if($product->type != 'normal'):?>
         <tr>
           <th><?php echo sprintf($lang->product->branch, zget($lang->product->branchName, $product->type));?></th>
