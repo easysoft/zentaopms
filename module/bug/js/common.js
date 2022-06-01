@@ -629,7 +629,8 @@ function loadProductBranches(productID, param)
     $('#branch').next('.picker').remove();
 
     var branchStatus = page == 'create' ? 'active' : 'all';
-    var param        = "productID=" + productID + "&oldBranch=0&param=" + branchStatus;
+    var oldBranch    = page == 'edit' ? bugBranch : 0;
+    var param        = "productID=" + productID + "&oldBranch=" + oldBranch + "&param=" + branchStatus;
     if(typeof(tab) != 'undefined' && (tab == 'execution' || tab == 'project')) param += "&projectID=" + objectID;
     $.get(createLink('branch', 'ajaxGetBranches', param), function(data)
     {
