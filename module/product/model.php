@@ -77,6 +77,14 @@ class productModel extends model
     {
         $isQaModule = (strpos(',project,execution,', ",{$this->app->tab},") !== false and strpos(',bug,testcase,testtask,ajaxselectstory,', ",{$this->app->rawMethod},") !== false and isset($products[0])) ? true : false;
 
+        if(count($products) <= 2 and isset($products[0]))
+        {
+            unset($products[0]);
+            $productID = key($products);
+        }
+
+        if(empty($products)) return;
+
         $this->app->loadLang('product');
         if(!$isQaModule and !$productID)
         {
