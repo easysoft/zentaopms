@@ -938,10 +938,12 @@ class bugModel extends model
             ->setDefault('lastEditedBy', $this->app->user->account)
             ->setDefault('lastEditedDate', $now)
             ->setDefault('assignedDate', $now)
+            ->stripTags($this->config->bug->editor->assignto['id'], $this->config->allowedTags)
             ->remove('comment,showModule')
             ->join('mailto', ',')
             ->get();
 
+        $bug = $this->loadModel('file')->processImgURL($bug, $this->config->bug->editor->assignto['id'], $this->post->uid);
         $this->dao->update(TABLE_BUG)
             ->data($bug)
             ->autoCheck()
@@ -973,10 +975,12 @@ class bugModel extends model
             ->setDefault('lastEditedBy', $this->app->user->account)
             ->setDefault('lastEditedDate', $now)
             ->setDefault('assignedDate', $now)
+            ->stripTags($this->config->bug->editor->confirmbug['id'], $this->config->allowedTags)
             ->remove('comment')
             ->join('mailto', ',')
             ->get();
 
+        $bug = $this->loadModel('file')->processImgURL($bug, $this->config->bug->editor->confirmbug['id'], $this->post->uid);
         $this->dao->update(TABLE_BUG)->data($bug)->autoCheck()->checkFlow()->where('id')->eq($bugID)->exec();
 
         if(!dao::isError())
@@ -1044,8 +1048,10 @@ class bugModel extends model
             ->setDefault('resolvedDate',   $now)
             ->setDefault('assignedTo',     $oldBug->openedBy)
             ->removeIF($this->post->resolution != 'duplicate', 'duplicateBug')
+            ->stripTags($this->config->bug->editor->resolve['id'], $this->config->allowedTags)
             ->remove('files,labels')
             ->get();
+        $bug = $this->loadModel('file')->processImgURL($bug, $this->config->bug->editor->resolve['id'], $this->post->uid);
 
         /* Set comment lang for alert error. */
         $this->lang->bug->comment = $this->lang->comment;
@@ -1319,6 +1325,7 @@ class bugModel extends model
             ->setDefault('lastEditedDate', $now)
             ->setDefault('activatedDate',  $now)
             ->setDefault('activatedCount', (int)$oldBug->activatedCount)
+            ->stripTags($this->config->bug->editor->activate['id'], $this->config->allowedTags)
             ->add('id', $bugID)
             ->add('resolution', '')
             ->add('status', 'active')
@@ -1334,6 +1341,7 @@ class bugModel extends model
             ->remove('comment,files,labels')
             ->get();
 
+        $bug = $this->loadModel('file')->processImgURL($bug, $this->config->bug->editor->activate['id'], $this->post->uid);
         $this->dao->update(TABLE_BUG)->data($bug)->autoCheck()->checkFlow()->where('id')->eq((int)$bugID)->exec();
         $this->dao->update(TABLE_BUG)->set('activatedCount = activatedCount + 1')->where('id')->eq((int)$bugID)->exec();
 
@@ -1380,9 +1388,11 @@ class bugModel extends model
             ->setDefault('lastEditedDate', $now)
             ->setDefault('closedBy',       $this->app->user->account)
             ->setDefault('closedDate',     $now)
+            ->stripTags($this->config->bug->editor->close['id'], $this->config->allowedTags)
             ->remove('comment')
             ->get();
 
+        $bug = $this->loadModel('file')->processImgURL($bug, $this->config->bug->editor->close['id'], $this->post->uid);
         $this->dao->update(TABLE_BUG)->data($bug)->autoCheck()->checkFlow()->where('id')->eq((int)$bugID)->exec();
         if($oldBug->execution)
         {

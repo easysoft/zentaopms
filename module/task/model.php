@@ -1459,6 +1459,7 @@ class taskModel extends model
             ->setDefault('lastEditedBy', $this->app->user->account)
             ->setDefault('lastEditedDate', $now)
             ->setDefault('assignedDate', $now)
+            ->stripTags($this->config->task->editor->assignto['id'], $this->config->allowedTags)
             ->remove('comment,showModule')
             ->get();
         if($oldTask->status != 'done' and $oldTask->status != 'closed' and isset($task->left) and $task->left == 0)
@@ -1483,6 +1484,7 @@ class taskModel extends model
 
         if($oldTask->parent > 0) $this->updateParentStatus($taskID);
 
+        $task = $this->file->processImgURL($task, $this->config->task->editor->assignto['id'], $this->post->uid);
         $this->dao->update(TABLE_TASK)
             ->data($task)
             ->autoCheck()
@@ -1519,6 +1521,8 @@ class taskModel extends model
         }
         if(dao::isError()) return false;
 
+        $editorIdList = $this->config->task->editor->start['id'];
+        if($this->app->getMethodName() == 'restart') $editorIdList = $this->config->task->editor->restart['id'];
         $now  = helper::now();
         $task = fixer::input('post')
             ->add('id', $taskID)
@@ -1526,9 +1530,11 @@ class taskModel extends model
             ->setDefault('lastEditedDate', $now)
             ->setDefault('status', 'doing')
             ->setIF($oldTask->assignedTo != $this->app->user->account, 'assignedDate', $now)
+            ->stripTags($editorIdList, $this->config->allowedTags)
             ->removeIF(!empty($oldTask->team), 'consumed,left')
             ->remove('comment')->get();
 
+        $task = $this->file->processImgURL($task, $editorIdList, $this->post->uid);
         if($this->post->left == 0)
         {
             if(isset($task->consumed) and $task->consumed == 0)
@@ -1757,6 +1763,7 @@ class taskModel extends model
             ->setDefault('status', 'done')
             ->setDefault('finishedBy, lastEditedBy', $this->app->user->account)
             ->setDefault('finishedDate, lastEditedDate', $now)
+            ->stripTags($this->config->task->editor->finish['id'], $this->config->allowedTags)
             ->removeIF(!empty($oldTask->team), 'finishedBy,status,left')
             ->remove('comment,files,labels,currentConsumed')
             ->get();
@@ -1851,6 +1858,7 @@ class taskModel extends model
 
         if($task->finishedDate == substr($now, 0, 10)) $task->finishedDate = $now;
 
+        $task = $this->file->processImgURL($task, $this->config->task->editor->finish['id'], $this->post->uid);
         $this->dao->update(TABLE_TASK)->data($task)
             ->autoCheck()
             ->checkFlow()
@@ -1890,9 +1898,11 @@ class taskModel extends model
             ->setDefault('status', 'pause')
             ->setDefault('lastEditedBy', $this->app->user->account)
             ->setDefault('lastEditedDate', helper::now())
+            ->stripTags($this->config->task->editor->pause['id'], $this->config->allowedTags)
             ->remove('comment')
             ->get();
 
+        $task = $this->file->processImgURL($task, $this->config->task->editor->pause['id'], $this->post->uid);
         $this->dao->update(TABLE_TASK)->data($task)->autoCheck()->checkFlow()->where('id')->eq((int)$taskID)->exec();
 
         if($oldTask->parent > 0) $this->updateParentStatus($taskID);
@@ -1926,12 +1936,14 @@ class taskModel extends model
             ->setDefault('assignedDate', $now)
             ->setDefault('closedBy, lastEditedBy', $this->app->user->account)
             ->setDefault('closedDate, lastEditedDate', $now)
+            ->stripTags($this->config->task->editor->close['id'], $this->config->allowedTags)
             ->setIF($oldTask->status == 'done',   'closedReason', 'done')
             ->setIF($oldTask->status == 'cancel', 'closedReason', 'cancel')
             ->remove('_recPerPage')
             ->remove('comment')
             ->get();
 
+        $task = $this->file->processImgURL($task, $this->config->task->editor->close['id'], $this->post->uid);
         $this->dao->update(TABLE_TASK)->data($task)->autoCheck()->checkFlow()->where('id')->eq((int)$taskID)->exec();
 
         if(!dao::isError())
@@ -1974,9 +1986,11 @@ class taskModel extends model
             ->setDefault('finishedDate', '0000-00-00')
             ->setDefault('canceledBy, lastEditedBy', $this->app->user->account)
             ->setDefault('canceledDate, lastEditedDate', $now)
+            ->stripTags($this->config->task->editor->cancel['id'], $this->config->allowedTags)
             ->remove('comment')
             ->get();
 
+        $task = $this->file->processImgURL($task, $this->config->task->editor->cancel['id'], $this->post->uid);
         $this->dao->update(TABLE_TASK)->data($task)->autoCheck()->checkFlow()->where('id')->eq((int)$taskID)->exec();
         if($oldTask->fromBug) $this->dao->update(TABLE_BUG)->set('toTask')->eq(0)->where('id')->eq($oldTask->fromBug)->exec();
         if($oldTask->parent > 0) $this->updateParentStatus($taskID);
@@ -2038,6 +2052,7 @@ class taskModel extends model
             ->setDefault('lastEditedDate', helper::now())
             ->setDefault('assignedDate', helper::now())
             ->setDefault('activatedDate', helper::now())
+            ->stripTags($this->config->task->editor->activate['id'], $this->config->allowedTags)
             ->remove('comment')
             ->get();
 
@@ -2058,6 +2073,7 @@ class taskModel extends model
             $task = $this->computeHours4Multiple($oldTask, $task);
         }
 
+        $task = $this->file->processImgURL($task, $this->config->task->editor->activate['id'], $this->post->uid);
         $this->dao->update(TABLE_TASK)->data($task)
             ->autoCheck()
             ->batchCheck($this->config->task->activate->requiredFields, 'notempty')

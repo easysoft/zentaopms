@@ -61,6 +61,7 @@ class testcaseModel extends model
             ->setIF($this->config->systemMode == 'new' and $this->app->tab == 'project', 'project', $this->session->project)
             ->setIF($this->app->tab == 'execution', 'execution', $this->session->execution)
             ->setIF($this->post->story != false, 'storyVersion', $this->loadModel('story')->getVersion((int)$this->post->story))
+            ->stripTags($this->config->testcase->editor->create['id'], $this->config->allowedTags)
             ->remove('steps,expects,files,labels,stepType,forceNotReview')
             ->setDefault('story', 0)
             ->cleanInt('story,product,branch,module')
@@ -77,6 +78,7 @@ class testcaseModel extends model
 
         /* Value of story may be showmore. */
         $case->story = (int)$case->story;
+        $case = $this->loadModel('file')->processImgURL($case, $this->config->testcase->editor->create['id'], $this->post->uid);
         $this->dao->insert(TABLE_CASE)->data($case)->autoCheck()->batchCheck($this->config->testcase->create->requiredFields, 'notempty')->checkFlow()->exec();
         if(!$this->dao->isError())
         {
@@ -749,6 +751,7 @@ class testcaseModel extends model
             ->join('linkCase', ',')
             ->setForce('status', $status)
             ->cleanInt('story,product,branch,module')
+            ->stripTags($this->config->testcase->editor->edit['id'], $this->config->allowedTags)
             ->remove('comment,steps,expects,files,labels,stepType')
             ->get();
 
@@ -761,6 +764,7 @@ class testcaseModel extends model
             array_splice($requiredFieldsArr, $fieldIndex, 1);
             $requiredFields    = implode(',', $requiredFieldsArr);
         }
+        $case = $this->loadModel('file')->processImgURL($case, $this->config->testcase->editor->edit['id'], $this->post->uid);
         $this->dao->update(TABLE_CASE)->data($case)->autoCheck()->batchCheck($requiredFields, 'notempty')->checkFlow()->where('id')->eq((int)$caseID)->exec();
         if(!$this->dao->isError())
         {
@@ -864,10 +868,12 @@ class testcaseModel extends model
             ->setDefault('reviewedDate', substr($now, 0, 10))
             ->setDefault('lastEditedBy', $this->app->user->account)
             ->setDefault('lastEditedDate', $now)
+            ->stripTags($this->config->testcase->editor->review['id'], $this->config->allowedTags)
             ->setForce('status', $status)
             ->join('reviewedBy', ',')
             ->get();
 
+        $case = $this->loadModel('file')->processImgURL($case, $this->config->testcase->editor->review['id'], $this->post->uid);
         $this->dao->update(TABLE_CASE)->data($case)->autoCheck()->checkFlow()->where('id')->eq($caseID)->exec();
 
         if(dao::isError()) return false;
