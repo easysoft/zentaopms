@@ -141,7 +141,7 @@ class custom extends control
                 foreach($data as $key => $value)
                 {
                     if($key == 'needReview') continue;
-                    if(strpos($key, 'Not') and $data->needReview == 0) $data->$key = '';
+                    if(strpos($key, 'Not')  and $data->needReview == 0) $data->$key = '';
                     if(!strpos($key, 'Not') and $data->needReview == 1) $data->$key = '';
                 }
 

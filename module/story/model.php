@@ -4381,7 +4381,7 @@ class storyModel extends model
             $forceUsers .= "," . implode(',', array_keys($users));
         }
 
-        $forceReview = $this->config->story->needReview == 0 ? strpos(",{$forceUsers},", ",{$this->app->user->account},") : !strpos(",{$forceUsers},", ",{$this->app->user->account},");
+        $forceReview = $this->config->story->needReview == 0 ? strpos(",{$forceUsers},", ",{$this->app->user->account},") !== false : strpos(",{$forceUsers},", ",{$this->app->user->account},") === false;
 
         return $forceReview;
     }
