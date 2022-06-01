@@ -82,7 +82,7 @@ class story extends control
                 $regionPairs = $this->kanban->getRegionPairs($execution->id, 0, 'execution');
                 $regionID    = !empty($output['regionID']) ? $output['regionID'] : key($regionPairs);
                 $lanePairs   = $this->kanban->getLanePairsByRegion($regionID, 'story');
-                $laneID      = isset($output['laneID']) ? $output['laneID'] : key($lanePairs);
+                $laneID      = !empty($output['laneID']) ? $output['laneID'] : key($lanePairs);
 
                 $this->view->executionType = $execution->type;
                 $this->view->regionID      = $regionID;
@@ -407,10 +407,13 @@ class story extends control
                 if($execution->type == 'kanban')
                 {
                     $this->loadModel('kanban');
+                    $extra = str_replace(array(',', ' '), array('&', ''), $extra);
+                    parse_str($extra, $output);
+
                     $regionPairs = $this->kanban->getRegionPairs($executionID, 0, 'execution');
-                    $regionID    = isset($output['regionID']) ? $output['regionID'] : key($regionPairs);
+                    $regionID    = !empty($output['regionID']) ? $output['regionID'] : key($regionPairs);
                     $lanePairs   = $this->kanban->getLanePairsByRegion($regionID, 'story');
-                    $laneID      = isset($output['laneID']) ? $output['laneID'] : key($lanePairs);
+                    $laneID      = !empty($output['laneID']) ? $output['laneID'] : key($lanePairs);
 
                     $this->view->regionID    = $regionID;
                     $this->view->laneID      = $laneID;

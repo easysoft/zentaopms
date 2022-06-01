@@ -324,7 +324,7 @@ class bug extends control
         if($this->app->tab == 'execution')
         {
             if(isset($output['executionID'])) $this->loadModel('execution')->setMenu($output['executionID']);
-            $execution = $this->dao->findById((int)$output['executionID'])->from(TABLE_EXECUTION)->fetch();
+            $execution = $this->dao->findById($this->session->execution)->from(TABLE_EXECUTION)->fetch();
             if($execution->type == 'kanban')
             {
                 $this->loadModel('kanban');
@@ -742,7 +742,7 @@ class bug extends control
                 $regionPairs = $this->kanban->getRegionPairs($executionID, 0, 'execution');
                 $regionID    = !empty($output['regionID']) ? $output['regionID'] : key($regionPairs);
                 $lanePairs   = $this->kanban->getLanePairsByRegion($regionID, 'bug');
-                $laneID      = isset($output['laneID']) ? $output['laneID'] : key($lanePairs);
+                $laneID      = !empty($output['laneID']) ? $output['laneID'] : key($lanePairs);
 
                 $this->view->executionType = $execution->type;
                 $this->view->regionID      = $regionID;

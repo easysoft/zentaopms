@@ -1634,7 +1634,6 @@ class kanbanModel extends model
         foreach($objectPairs as $objectID => $objectName)
         {
             if(!isset($groupByList[$objectID]) and $objectID) continue;
-            if($browseType == 'task' and $groupBy == 'type' and !$objectID) continue;
 
             $lane = new stdclass();
             $lane->id        = $groupBy . $objectID;
