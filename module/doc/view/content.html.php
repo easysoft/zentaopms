@@ -100,6 +100,10 @@
                     echo "</div></div>";
                 }
             }
+            elseif($doc->contentType == 'markdown')
+            {
+                echo "<textarea id='markdownContent' /></textarea>";
+            }
             else
             {
                 echo $doc->content;
@@ -283,3 +287,16 @@
 </div>
 <?php endif;?>
 <?php include '../../common/view/syntaxhighlighter.html.php';?>
+<?php if($doc->contentType == 'markdown'):?>
+<?php css::import($jsRoot . "markdown/simplemde.min.css");?>
+<?php js::import($jsRoot . 'markdown/simplemde.min.js'); ?>
+<?php js::set('markdownText', $doc->content);?>
+<script>
+$(function()
+{
+    var simplemde = new SimpleMDE({element: $("#markdownContent")[0],toolbar:false, status: false});
+    simplemde.value(markdownText);
+    simplemde.togglePreview();
+})
+</script>
+<?php endif;?>
