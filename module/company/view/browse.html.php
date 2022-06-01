@@ -29,19 +29,31 @@ js::set('confirmDelete', $lang->user->confirmDelete);
     <a class="btn btn-link querybox-toggle" id='bysearchTab'><i class="icon icon-search muted"></i> <?php echo $lang->user->search;?></a>
   </div>
   <div class='btn-toolbar pull-right'>
-    <?php common::printLink('user', 'batchCreate', "dept={$deptID}", "<i class='icon icon-plus'></i> " . $lang->user->batchCreate, '', "class='btn btn-secondary'");?>
+    <?php if(commonModel::isTutorialMode()):?>
     <?php
-      if(commonModel::isTutorialMode())
-      {
-          $wizardParams = helper::safe64Encode("dept=$deptID");
-          $link = $this->createLink('tutorial', 'wizard', "module=user&method=create&params=$wizardParams");
-          echo html::a($link, "<i class='icon icon-plus'></i> {$lang->user->create}", '', "class='btn btn-primary create-user-btn'");
-      }
-      else
-      {
-          common::printLink('user', 'create', "dept={$deptID}", "<i class='icon icon-plus'></i> " . $lang->user->create, '', "class='btn btn-primary create-user-btn'");
-      }
+    $wizardParams = helper::safe64Encode("dept=$deptID");
+    $link = $this->createLink('tutorial', 'wizard', "module=user&method=create&params=$wizardParams");
+    echo html::a($link, "<i class='icon icon-plus'></i> {$lang->user->create}", '', "class='btn btn-primary create-user-btn'");
     ?>
+    <?php else:?>
+      <?php if(common::hasPriv('user', 'create') and common::hasPriv('user', 'batchCreate')):?>
+      <?php
+      $createUserLink      = $this->createLink('user', 'create', "dept={$deptID}");
+      $batchCreateUserLink = $this->createLink('user', 'batchCreate', "dept={$deptID}");
+      ?>
+      <div class='btn-group dropdown'>
+      <?php common::printLink('user', 'create', "dept={$deptID}", "<i class='icon icon-plus'></i> " . $lang->user->create, '', "class='btn btn-primary create-user-btn'");?>
+        <button type='button' class='btn btn-primary dropdown-toggle' data-toggle='dropdown'><span class='caret'></span></button>
+        <ul class='dropdown-menu'>
+          <li><?php echo html::a($createUserLink, $lang->user->create);?></li>
+          <li><?php echo html::a($batchCreateUserLink, $lang->user->batchCreate);?></li>
+        </ul>
+      </div>
+      <?php else:?>
+      <?php common::printLink('user', 'batchCreate', "dept={$deptID}", "<i class='icon icon-plus'></i> " . $lang->user->batchCreate, '', "class='btn btn-secondary'");?>
+      <?php common::printLink('user', 'create', "dept={$deptID}", "<i class='icon icon-plus'></i> " . $lang->user->create, '', "class='btn btn-primary'");?>
+      <?php endif;?>
+    <?php endif;?>
   </div>
 </div>
 <div id='mainContent' class='main-row fade'>
