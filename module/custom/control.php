@@ -76,10 +76,14 @@ class custom extends control
             if($module == 'story')
             {
                 $this->view->depts            = $this->loadModel('dept')->getDeptPairs();
-                $this->view->forceReviewAll   = zget($this->config->$module, 'forceReviewAll', 'false');
+
                 $this->view->forceReview      = zget($this->config->$module, 'forceReview', '');
                 $this->view->forceReviewRoles = zget($this->config->$module, 'forceReviewRoles', '');
                 $this->view->forceReviewDepts = zget($this->config->$module, 'forceReviewDepts', '');
+
+                $this->view->forceNotReview      = zget($this->config->$module, 'forceNotReview', '');
+                $this->view->forceNotReviewRoles = zget($this->config->$module, 'forceNotReviewRoles', '');
+                $this->view->forceNotReviewDepts = zget($this->config->$module, 'forceNotReviewDepts', '');
             }
 
             $this->view->users          = $module == 'story' ? $this->user->getCanCreateStoryUsers() : $this->user->getPairs('noclosed|nodeleted');
@@ -124,14 +128,22 @@ class custom extends control
             elseif($module == 'story' and $field == 'review')
             {
                 $data = fixer::input('post')
-                    ->setDefault('forceReviewAll', 0)
                     ->setDefault('forceReviewDepts', '')
+                    ->setDefault('forceNotReviewDepts', '')
                     ->join('forceReview', ',')
                     ->join('forceReviewRoles', ',')
                     ->join('forceReviewDepts', ',')
-                    ->join('forceReviewAll', ',')
-                    ->setIF(isset($this->post->forceReviewAll), 'forceReviewAll', 1)
+                    ->join('forceNotReview', ',')
+                    ->join('forceNotReviewRoles', ',')
+                    ->join('forceNotReviewDepts', ',')
                     ->get();
+
+                foreach($data as $key => $value)
+                {
+                    if($key == 'needReview') continue;
+                    if(strpos($key, 'Not') and $data->needReview == 0) $data->$key = '';
+                    if(!strpos($key, 'Not') and $data->needReview == 1) $data->$key = '';
+                }
 
                 $this->loadModel('setting')->setItems("system.$module@{$this->config->vision}", $data);
             }
