@@ -45,7 +45,8 @@ function renderUserAvatar(user, objectType, objectID, size, objectStatus)
     if(objectType == 'story' && !priv.canAssignStory) return $noPrivAvatar;
     if(objectType == 'bug'   && !priv.canAssignBug)   return $noPrivAvatar;
 
-    return objectStatus == 'closed' ? '' : $('<a class="avatar has-text ' + avatarSizeClass + ' avatar-circle iframe" title="' + user.realname + '" href="' + link + '"/>').avatar({user: user});
+    var realname = user.realname ? user.realname : user.account;
+    return objectStatus == 'closed' ? '' : $('<a class="avatar has-text ' + avatarSizeClass + ' avatar-circle iframe" title="' + realname + '" href="' + link + '"/>').avatar({user: user});
 }
 
 /**
