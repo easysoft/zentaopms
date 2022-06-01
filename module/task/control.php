@@ -992,7 +992,7 @@ class task extends control
                 $execution = $this->execution->getByID($task->execution);
                 if($execution->type == 'kanban' and $this->app->tab == 'execution')
                 {
-                    $regionID     = isset($output['regionID']) ? $output['regionID'] : 0;
+                    $regionID     = !empty($output['regionID']) ? $output['regionID'] : 0;
                     $execLaneType = $this->session->execLaneType ? $this->session->execLaneType : 'all';
                     $execGroupBy  = $this->session->execGroupBy ? $this->session->execGroupBy : 'default';
                     $kanbanData   = $this->loadModel('kanban')->getRDKanban($task->execution, $execLaneType, 'id_desc', $regionID, $execGroupBy);

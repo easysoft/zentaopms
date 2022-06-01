@@ -1592,9 +1592,9 @@ class kanban extends control
             if($from == 'RDKanban')
             {
                 if(dao::isError()) return $this->sendError(dao::getError());
-                $regionID     = $column->region;
                 $execLaneType = $this->session->execLaneType ? $this->session->execLaneType : 'all';
                 $execGroupBy  = $this->session->execGroupBy ? $this->session->execGroupBy : 'default';
+                $regionID     = $execGroupBy == 'default' ? $column->region : 0;
                 $kanbanData   = $this->loadModel('kanban')->getRDKanban($executionID, $execLaneType, 'id_desc', $regionID, $execGroupBy);
                 $kanbanData   = json_encode($kanbanData);
 

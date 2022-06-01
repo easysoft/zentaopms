@@ -3692,7 +3692,7 @@ class execution extends control
         }
 
         $moduleName = 'execution';
-        if(empty($param)) $param = "executionID=$executionID";
+        if(empty($param))  $param = "executionID=$executionID";
         if(!empty($param)) $param = str_replace(array(',', ' '), array('&', ''), $param);
         if($execution->type == 'project')
         {

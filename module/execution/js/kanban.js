@@ -778,6 +778,8 @@ function renderLaneName($lane, lane, $kanban, columns, kanban)
  */
 function updateRegion(regionID, regionData = [])
 {
+    if(groupBy != 'default') regionID = executionID;
+
     if(!regionID) return false;
 
     var $region = $('#kanban'+ regionID).kanban();
@@ -819,7 +821,7 @@ function handleDropTask($element, event, kanban)
     var cardID      = $card.data().id;
     var fromColType = $oldCol.data('type');
     var toColType   = $newCol.data('type');
-    var regionID    = groupBy == 'default' ? $card.closest('.region').data().id : executionID;
+    var regionID    = $card.closest('.region').data().id;
 
     changeCardColType(cardID, oldCol.id, newCol.id, oldLane.id, newLane.id, cardType, fromColType, toColType, regionID);
 }
@@ -859,6 +861,8 @@ function changeCardColType(cardID, fromColID, toColID, fromLaneID, toLaneID, car
     var objectID   = cardID;
     var showIframe = false;
     var moveCard   = false;
+
+    regionID = regionID ? regionID : 0;
 
     /* Task lane. */
     if(cardType == 'task')
@@ -1037,8 +1041,7 @@ function deleteCard(objectType, objectID, regionID)
             url:      url,
             success: function(data)
             {
-                data     = groupBy == 'default' ? data[regionID] : data[groupBy];
-                regionID = groupBy == 'default' ? regionID : executionID;
+                data = groupBy == 'default' ? data[regionID] : data[groupBy];
                 updateRegion(regionID, data);
             }
         });
