@@ -1,5 +1,7 @@
 $(function()
 {
+    if($('#storyList thead th.c-title').width() < 150) $('#storyList thead th.c-title').width(150);
+
     $('#storyList').on('sort.sortable', function(e, data)
     {
         var list = '';
