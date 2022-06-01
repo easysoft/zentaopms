@@ -1097,7 +1097,8 @@ function shiftCard(objectID, fromColID, toColID, fromLaneID, toLaneID, regionID)
         url:       link,
         success: function(data)
         {
-            updateRegion(regionID, data[regionID]);
+            data = groupBy == 'default' ? data[regionID] : data[groupBy];
+            updateRegion(regionID, data);
         },
         error: function(xhr, status, error)
         {
