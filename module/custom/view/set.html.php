@@ -39,12 +39,11 @@ EOT;
 <?php if($module == 'story' and $field == 'review'):?>
 <style>
 .table-form>tbody>tr>th {width: 120px !important}
-.reviewBox > th {width: 95px !important;}
-.reviewBox > td {width: 500px !important;}
 .checkbox-primary {margin-bottom: 0px; width: 82px !important;}
 .storyReviewTip  > div , .storyNotReviewTip  > div {padding-left: 120px;}
 <?php if($app->getClientLang() != 'zh-cn' and $app->getClientLang() != 'zh-tw'):?>
-.reviewBox > th {width: 160px !important;}
+.table-form>tbody>tr>th {width: 180px !important;}
+.storyReviewTip  > div , .storyNotReviewTip  > div {padding-left: 180px;}
 <?php endif;?>
 </style>
 <?php endif;?>
