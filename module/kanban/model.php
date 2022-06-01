@@ -3137,7 +3137,7 @@ class kanbanModel extends model
      */
     public function moveCard($cardID, $fromColID, $toColID, $fromLaneID, $toLaneID, $kanbanID = 0)
     {
-        $groupBy = $this->session->execGroupBy ? $this->session->execGroupBy : '';
+        $groupBy = ($this->session->execGroupBy and $this->app->tab == 'execution') ? $this->session->execGroupBy : '';
 
         $fromCell = $this->dao->select('cards, lane')->from(TABLE_KANBANCELL)
             ->where('`column`')->eq($fromColID)

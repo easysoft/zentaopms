@@ -370,19 +370,22 @@ function findDropColumns($element, $root)
 
     if(!kanbanRules) return $root.find('.kanban-lane-col:not([data-type="' + col.type + '"])');
 
-    var colRules = kanbanRules[col.type];
-    var groupID  = $col.closest('.kanban-board').data().id;
+    var colRules  = kanbanRules[col.type];
+    var groupID   = $col.closest('.kanban-board').data().id;
+    var oldLaneID = $col.closest('.kanban-lane').data().id;
     return $root.find('.kanban-lane-col').filter(function()
     {
         if(!colRules) return false;
         if(colRules === true) return true;
         if($.cookie('isFullScreen') == 1) return false;
 
-        var $newCol = $(this);
-        var newCol = $newCol.data();
-        var newGroupID =  $newCol.closest('.kanban-board').data().id;
+        var $newCol    = $(this);
+        var newCol     = $newCol.data();
+        var newGroupID = $newCol.closest('.kanban-board').data().id;
+        var newLaneID  = $newCol.closest('.kanban-lane').data().id;
 
         var canDropHere = colRules.indexOf(newCol.type) > -1 && newGroupID === groupID;
+        if(groupBy && groupBy != 'default' && canDropHere) canDropHere = oldLaneID === newLaneID;
         if(canDropHere) $newCol.addClass('can-drop-here');
         return canDropHere;
     });
@@ -1034,7 +1037,8 @@ function deleteCard(objectType, objectID, regionID)
             url:      url,
             success: function(data)
             {
-                data = groupBy == 'default' ? data[regionID] : data[groupBy];
+                data     = groupBy == 'default' ? data[regionID] : data[groupBy];
+                regionID = groupBy == 'default' ? regionID : executionID;
                 updateRegion(regionID, data);
             }
         });
