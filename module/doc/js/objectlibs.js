@@ -8,6 +8,8 @@ $(function()
     })
 
     $('.menu-actions > a').blur(function() {$(this).css('background', 'none');})
+
+    $('#content .table-row .markdown-print a').attr('target', '_blank');
 })
 
 /**
