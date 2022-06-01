@@ -505,11 +505,11 @@ if(!window.kanbanDropRules)
         },
         task:
         {
-            'wait': ['developing', 'developed', 'canceled', 'closed'],
+            'wait': ['developing', 'developed', 'canceled'],
             'developing': ['developed', 'pause', 'canceled'],
             'developed': ['developing', 'closed'],
             'pause': ['developing'],
-            'canceled': ['developing'],
+            'canceled': ['developing', 'closed'],
             'closed': ['developing'],
         }
     }
