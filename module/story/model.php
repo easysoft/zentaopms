@@ -4361,7 +4361,6 @@ class storyModel extends model
         $forceReviewRoles = !empty($this->config->story->{$forceField . 'Roles'}) ? $this->config->story->{$forceField . 'Roles'} : '';
         $forceReviewDepts = !empty($this->config->story->{$forceField . 'Depts'}) ? $this->config->story->{$forceField . 'Depts'} : '';
 
-
         $forceUsers = '';
         if(!empty($this->config->story->{$forceField})) $forceUsers = $this->config->story->{$forceField};
 
@@ -4371,7 +4370,7 @@ class storyModel extends model
                 ->where('deleted')->eq(0)
                 ->andWhere(0, true)
                 ->beginIF(!empty($forceReviewRoles))
-                ->andWhere('role', true)->in($forceReviewRoles)
+                ->orWhere('(role', true)->in($forceReviewRoles)
                 ->andWhere('role')->ne('')
                 ->markRight(1)
                 ->fi()
