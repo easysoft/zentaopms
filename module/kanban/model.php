@@ -1451,6 +1451,11 @@ class kanbanModel extends model
         if($browseType == 'bug')   $cardList = $this->loadModel('bug')->getExecutionBugs($executionID);
         if($browseType == 'task')  $cardList = $this->loadModel('execution')->getKanbanTasks($executionID, "id");
 
+        /* Get objects cards menus. */
+        if($browseType == 'story') $storyCardMenu = $this->getKanbanCardMenu($executionID, $cardList, 'story');
+        if($browseType == 'bug')   $bugCardMenu   = $this->getKanbanCardMenu($executionID, $cardList, 'bug');
+        if($browseType == 'task')  $taskCardMenu  = $this->getKanbanCardMenu($executionID, $cardList, 'task');
+
         $lanes = $this->getLanes4Group($executionID, $browseType, $groupBy, $cardList);
         if(empty($lanes)) return array();
 
@@ -1539,6 +1544,10 @@ class kanbanModel extends model
                     $cardData['assignedTo'] = $object->assignedTo;
                     $cardData['deadline']   = $browseType == 'story' ? '' : $object->deadline;
                     $cardData['severity']   = $browseType == 'bug' ? $object->severity : '';
+
+                    if($lane->type == 'story') $cardData['menus'] = $storyCardMenu[$object->id];
+                    if($lane->type == 'bug')   $cardData['menus'] = $bugCardMenu[$object->id];
+                    if($lane->type == 'task')  $cardData['menus'] = $taskCardMenu[$object->id];
 
                     if($browseType == 'task')
                     {

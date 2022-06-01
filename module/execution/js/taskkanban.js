@@ -783,7 +783,6 @@ var kanbanActionHandlers =
  */
 function handleKanbanAction(action, $element, event, kanban)
 {
-    if(groupBy && groupBy != 'default') return false;
     $('.kanban').attr('data-action-enabled', action);
     var handler = kanbanActionHandlers[action];
     if(handler) handler($element, event, kanban);
@@ -1073,8 +1072,6 @@ $(function()
         onRenderLaneName:  renderLaneName,
         onRenderCount:     renderColumnCount
     };
-
-    if(groupBy != 'default') commonOptions.droppable = false;
 
     /* Create kanban */
     if(groupBy == 'default')
