@@ -4357,29 +4357,31 @@ class storyModel extends model
     {
         $forceReview = false;
 
-        if(isset($this->config->story->forceReviewAll) and $this->config->story->forceReviewAll) return true;
+        $forceField       = $this->config->story->needReview == 0 ? 'forceReview' : 'forceNotReview';
+        $forceReviewRoles = !empty($this->config->story->{$forceField . 'Roles'}) ? $this->config->story->{$forceField . 'Roles'} : '';
+        $forceReviewDepts = !empty($this->config->story->{$forceField . 'Depts'}) ? $this->config->story->{$forceField . 'Depts'} : '';
 
         $forceUsers = '';
-        if(!empty($this->config->story->forceReview)) $forceUsers = $this->config->story->forceReview;
+        if(!empty($this->config->story->{$forceField})) $forceUsers = $this->config->story->{$forceField};
 
-        if(!empty($this->config->story->forceReviewRoles) or !empty($this->config->story->forceReviewDepts))
+        if(!empty($forceReviewRoles) or !empty($forceReviewDepts))
         {
             $users = $this->dao->select('account')->from(TABLE_USER)
                 ->where('deleted')->eq(0)
-                ->andWhere(true, true)
-                ->beginIF(!empty($this->config->story->forceReviewRoles))
-                ->andWhere('role', true)->in($this->config->story->forceReviewRoles)
+                ->andWhere(0, true)
+                ->beginIF(!empty($forceReviewRoles))
+                ->orWhere('(role', true)->in($forceReviewRoles)
                 ->andWhere('role')->ne('')
                 ->markRight(1)
                 ->fi()
-                ->beginIF(!empty($this->config->story->forceReviewDepts))->orWhere('dept')->in($this->config->story->forceReviewDepts)->fi()
+                ->beginIF(!empty($forceReviewDepts))->orWhere('dept')->in($forceReviewDepts)->fi()
                 ->markRight(1)
                 ->fetchAll('account');
 
             $forceUsers .= "," . implode(',', array_keys($users));
         }
 
-        $forceReview = strpos(",{$forceUsers},", ",{$this->app->user->account},") !== false;
+        $forceReview = $this->config->story->needReview == 0 ? strpos(",{$forceUsers},", ",{$this->app->user->account},") !== false : strpos(",{$forceUsers},", ",{$this->app->user->account},") === false;
 
         return $forceReview;
     }
