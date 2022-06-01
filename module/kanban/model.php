@@ -1456,7 +1456,7 @@ class kanbanModel extends model
 
         $columns = $this->dao->select('t1.*, GROUP_CONCAT(t1.cards) as cards, t2.`type` as columnType, t2.limit, t2.name as columnName, t2.color')->from(TABLE_KANBANCELL)->alias('t1')
             ->leftJoin(TABLE_KANBANCOLUMN)->alias('t2')->on('t1.`column` = t2.id')
-            ->leftJoin(TABLE_KANBANLANE)->alias('t3')->on('t2.group = t3.group')
+            ->leftJoin(TABLE_KANBANLANE)->alias('t3')->on('t1.lane = t3.id')
             ->leftJoin(TABLE_KANBANREGION)->alias('t4')->on('t1.kanban = t4.kanban')
             ->where('t1.kanban')->eq($executionID)
             ->andWhere('t1.`type`')->eq($browseType)
@@ -1490,6 +1490,7 @@ class kanbanModel extends model
             $laneData['name']            = (($groupBy == 'pri' or $groupBy == 'severity') and $laneID) ? $this->lang->$browseType->$groupBy . ':' . $lane->name : $lane->name;
             $laneData['color']           = $lane->color;
             $laneData['order']           = $lane->order;
+            $laneData['type']            = $browseType;
             $laneData['defaultCardType'] = $browseType;
 
             /* Construct kanban column data. */
@@ -1506,7 +1507,6 @@ class kanbanModel extends model
                 {
                     if($this->isClickable($column, $action)) $column->actions[] = $action;
                 }
-
 
                 $columnData[$column->column]['id']         = $column->column;
                 $columnData[$column->column]['type']       = $column->columnType;
@@ -1621,6 +1621,7 @@ class kanbanModel extends model
         foreach($objectPairs as $objectID => $objectName)
         {
             if(!isset($groupByList[$objectID]) and $objectID) continue;
+            if($browseType == 'task' and $groupBy == 'type' and !$objectID) continue;
 
             $lane = new stdclass();
             $lane->id        = $groupBy . $objectID;
@@ -3132,7 +3133,24 @@ class kanbanModel extends model
      */
     public function moveCard($cardID, $fromColID, $toColID, $fromLaneID, $toLaneID, $kanbanID = 0)
     {
-        $fromCellCards = $this->dao->select('cards')->from(TABLE_KANBANCELL)->where('lane')->eq($fromLaneID)->andWhere('`column`')->eq($fromColID)->fetch('cards');
+        $groupBy = $this->session->execGroupBy ? $this->session->execGroupBy : '';
+
+        $fromCell = $this->dao->select('cards, lane')->from(TABLE_KANBANCELL)
+            ->where('`column`')->eq($fromColID)
+            ->beginIF(!$groupBy or $groupBy == 'default')->andWhere('lane')->eq($fromLaneID)->fi()
+            ->beginIF($groupBy and $groupBy != 'default')
+            ->andWhere('type')->eq($this->session->execLaneType)
+            ->andWhere('cards')->like("%,$cardID,%")
+            ->fi()
+            ->fetch();
+
+        if($groupBy and $groupBy != 'default')
+        {
+            $fromLaneID = $fromCell->lane;
+            $toLaneID   = $fromCell->lane;
+        }
+
+        $fromCellCards = $fromCell->cards;
         $toCell        = $this->dao->select('*')->from(TABLE_KANBANCELL)->where('lane')->eq($toLaneID)->andWhere('`column`')->eq($toColID)->fetch();
         $toCellCards   = $this->dao->select('cards')->from(TABLE_KANBANCELL)->where('lane')->eq($toLaneID)->andWhere('`column`')->eq($toColID)->fetch('cards');
 

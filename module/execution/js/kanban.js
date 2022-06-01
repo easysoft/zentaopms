@@ -816,7 +816,7 @@ function handleDropTask($element, event, kanban)
     var cardID      = $card.data().id;
     var fromColType = $oldCol.data('type');
     var toColType   = $newCol.data('type');
-    var regionID    = $card.closest('.region').data().id;
+    var regionID    = groupBy == 'default' ? $card.closest('.region').data().id : executionID;
 
     changeCardColType(cardID, oldCol.id, newCol.id, oldLane.id, newLane.id, cardType, fromColType, toColType, regionID);
 }
@@ -831,8 +831,6 @@ var kanbanActionHandlers =
  */
 function handleKanbanAction(action, $element, event, kanban)
 {
-    if(groupBy && groupBy != 'default') return false;
-
     $('.kanban').attr('data-action-enabled', action);
     var handler = kanbanActionHandlers[action];
     if(handler) handler($element, event, kanban);
@@ -988,7 +986,8 @@ function changeCardColType(cardID, fromColID, toColID, fromLaneID, toLaneID, car
                 url:       link,
                 success: function(data)
                 {
-                    updateRegion(regionID, data[regionID]);
+                    data = groupBy == 'default' ? data[regionID] : data[groupBy];
+                    updateRegion(regionID, data);
                 },
                 error: function(xhr, status, error)
                 {
@@ -1017,6 +1016,8 @@ function changeCardColType(cardID, fromColID, toColID, fromLaneID, toLaneID, car
 function deleteCard(objectType, objectID, regionID)
 {
     $.zui.ContextMenu.hide();
+
+    regionID = regionID ? regionID : 0;
     setTimeout(function()
     {
         var objectLang = objectType + 'Lang';
@@ -1033,7 +1034,8 @@ function deleteCard(objectType, objectID, regionID)
             url:      url,
             success: function(data)
             {
-                updateRegion(regionID, data[regionID]);
+                data = groupBy == 'default' ? data[regionID] : data[groupBy];
+                updateRegion(regionID, data);
             }
         });
     }, 200)
@@ -1230,7 +1232,7 @@ function initKanban($kanban)
         onRenderLaneName:  renderLaneName,
         onRenderHeaderCol: renderHeaderCol,
         onRenderCount:     renderCount,
-        droppable:         groupBy == 'default' ? {target: findDropColumns, finish:handleFinishDrop} : false,
+        droppable:         {target: findDropColumns, finish:handleFinishDrop},
         virtualize:        true,
         virtualCardList:   true
     });
