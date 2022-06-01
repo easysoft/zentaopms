@@ -3806,7 +3806,7 @@ class storyModel extends model
      * @access public
      * @return string
      */
-    public function buildOperateMenu($story, $type = 'view', $execution = '', $productID = 0)
+    public function buildOperateMenu($story, $type = 'view', $execution = '')
     {
         $menu   = '';
         $params = "storyID=$story->id";
@@ -3924,7 +3924,7 @@ class storyModel extends model
                 if($hasDBPriv) $menu .= common::printIcon('task', 'batchCreate', "executionID={$execution->id}&story={$story->id}", '', 'list', 'pluses', '', $toTaskDisabled);
 
                 $this->lang->testcase->batchCreate = $this->lang->testcase->create;
-                if($productID and $hasDBPriv and common::hasPriv('testcase', 'create'))
+                if($hasDBPriv and common::hasPriv('testcase', 'create'))
                 {
                     $menu .= html::a(helper::createLink('testcase', 'create', "productID=$story->product&branch=$story->branch&moduleID=$story->module&form=&param=0&storyID=$story->id"), '<i class="icon-testcase-create icon-sitemap"></i>', '', "class='btn' title='{$this->lang->testcase->create}' data-app='qa'");
                 }
@@ -4104,7 +4104,7 @@ class storyModel extends model
      * @access public
      * @return void
      */
-    public function printCell($col, $story, $users, $branches, $storyStages, $modulePairs = array(), $storyTasks = array(), $storyBugs = array(), $storyCases = array(), $mode = 'datatable', $storyType = 'story', $execution = '', $isShowBranch = '', $productID = 0)
+    public function printCell($col, $story, $users, $branches, $storyStages, $modulePairs = array(), $storyTasks = array(), $storyBugs = array(), $storyCases = array(), $mode = 'datatable', $storyType = 'story', $execution = '', $isShowBranch = '')
     {
         $module    = $this->app->rawModule == 'product' ? 'story' : $this->app->rawModule;
         $canView   = common::hasPriv($module, 'view');
@@ -4385,7 +4385,7 @@ class storyModel extends model
                     $menuType = 'browse';
                     $execution = '';
                 }
-                echo $this->buildOperateMenu($story, $menuType, $execution, $productID);
+                echo $this->buildOperateMenu($story, $menuType, $execution);
                 break;
             }
             echo '</td>';
