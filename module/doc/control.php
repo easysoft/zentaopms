@@ -527,11 +527,7 @@ class doc extends control
             if(!(defined('RUN_MODE') && RUN_MODE == 'api')) $this->locate($browseLink);
         }
 
-        if($doc->contentType == 'markdown')
-        {
-            $doc->content = commonModel::processMarkdown($doc->content);
-            $doc->digest  = commonModel::processMarkdown($doc->digest);
-        }
+        if($doc->contentType == 'markdown') $doc->digest = commonModel::processMarkdown($doc->digest);
 
         /* Check priv when lib is product or project. */
         $lib  = $this->doc->getLibByID($doc->lib);
@@ -1001,8 +997,6 @@ class doc extends control
 
             if($doc->contentType == 'markdown')
             {
-                $doc->content = commonModel::processMarkdown($doc->content);
-                $doc->digest  = commonModel::processMarkdown($doc->digest);
             }
         }
 
