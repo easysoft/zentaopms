@@ -68,7 +68,7 @@ js::set('confirmDelete', $lang->user->confirmDelete);
   </div>
   <div class='main-col'>
     <div class="cell<?php if($type == 'bysearch') echo ' show';?>" id="queryBox" data-module='user'></div>
-    <form class='main-table table-user skip-iframe-modal' data-ride='table' action='<?php echo $this->createLink('user', 'batchEdit', "deptID=$deptID")?>' method='post' id='userListForm'>
+    <form class='main-table table-user' data-ride='table' action='<?php echo $this->createLink('user', 'batchEdit', "deptID=$deptID")?>' method='post' id='userListForm'>
       <?php $canBatchEdit = common::hasPriv('user', 'batchEdit');?>
       <table class='table has-sort-head' id='userList'>
         <thead>
