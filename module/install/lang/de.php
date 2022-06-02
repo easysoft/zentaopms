@@ -87,7 +87,7 @@ $lang->install->sessionFail  = 'Bearbeiten Sie die PHP ini Datei um den session.
 $lang->install->mkdirWin     = '<p>%s Verzeichnis muss erstellt werden.<br /> Befehl <code>mkdir %s</code> zur Erstellung.</p>';
 $lang->install->chmodWin     = ' "%s" Berechtigung muss geändert werden.';
 $lang->install->mkdirLinux   = '<p>%s Verzeichnis muss erstellt werden.<br /> Befehl <code>mkdir -p %s</code> zur Erstellung.</p>';
-$lang->install->chmodLinux   = ' "%s" Berechtigung muss geändert werden.<br /> Befehl <code>chmod o=rwx -R %s</code> für die Anpassung.';
+$lang->install->chmodLinux   = ' "%s" Berechtigung muss geändert werden.<br /> Befehl <code>chmod 777 -R %s</code> für die Anpassung.';
 
 $lang->install->timezone       = 'Set Timezone';
 $lang->install->defaultLang    = 'Standard Sprache';

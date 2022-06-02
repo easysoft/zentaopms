@@ -25,11 +25,15 @@
     </div>
     <form class='load-indicator main-form form-ajax' method='post' target='hiddenwin' id='dataform'>
       <table class='table table-form'>
-        <?php if($config->systemMode == 'new' and isset($project) and $project->model == 'scrum'):?>
+        <?php if($config->systemMode == 'new' and isset($project)):?>
+        <?php if($project->model == 'scrum'):?>
         <tr>
           <th class='w-120px'><?php echo $lang->execution->projectName;?></th>
           <td><?php echo html::select('project', $allProjects, $execution->project, "class='form-control chosen' onchange='changeProject(this.value)' required");?></td><td></td>
         </tr>
+        <?php elseif($project->model == 'kanban'):?>
+        <?php echo html::hidden('project', $project->id);?>
+        <?php endif;?>
         <?php endif;?>
         <tr>
           <th class='w-120px'><?php echo $lang->execution->name;?></th>

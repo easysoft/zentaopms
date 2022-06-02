@@ -138,15 +138,16 @@ js::set('hasTaskButton', $hasTaskButton);
   <div class='btn-toolbar pull-right'>
     <?php
     echo html::a('javascript:fullScreen()', "<i class='icon-fullscreen muted'></i> " . $lang->kanban->fullScreen, '', "class='btn btn-link'");
-    $actions = '';
-    $printSettingBtn = (common::hasPriv('kanban', 'createRegion') or (common::hasPriv('kanban', 'setLaneHeight')) or (common::hasPriv('kanban', 'setColumnWidth')) or common::hasPriv('execution', 'edit') or common::hasPriv('execution', 'close') or common::hasPriv('execution', 'delete') or !empty($executionActions));
+    $actions           = '';
+    $printCreateRegion = (common::hasPriv('kanban', 'createRegion') and $groupBy == 'default');
+    $printSettingBtn   = ($printCreateRegion or (common::hasPriv('kanban', 'setLaneHeight')) or (common::hasPriv('kanban', 'setColumnWidth')) or common::hasPriv('execution', 'edit') or common::hasPriv('execution', 'close') or common::hasPriv('execution', 'delete') or !empty($executionActions));
 
     if($printSettingBtn)
     {
         $actions .= html::a('javascript:;', "<i class='icon icon-cog-outline'></i>" . $lang->kanban->setting, '', "data-toggle='dropdown' class='btn btn-link'");
         $actions .= "<ul id='kanbanActionMenu' class='dropdown-menu pull-right'>";
         $width    = $this->app->getClientLang() == 'en' ? '750' : '650';
-        if(common::hasPriv('kanban', 'createRegion')) $actions .= '<li>' . html::a(helper::createLink('kanban', 'createRegion', "kanbanID=$execution->id&from=execution", '', true), '<i class="icon icon-plus"></i>' . $lang->kanban->createRegion, '', "class='iframe btn btn-link text-left'") . '</li>';
+        if($printCreateRegion) $actions .= '<li>' . html::a(helper::createLink('kanban', 'createRegion', "kanbanID=$execution->id&from=execution", '', true), '<i class="icon icon-plus"></i>' . $lang->kanban->createRegion, '', "class='iframe btn btn-link text-left'") . '</li>';
         if(common::hasPriv('kanban', 'setLaneHeight')) $actions .= '<li>' . html::a(helper::createLink('kanban', 'setLaneHeight', "kanbanID=$execution->id&from=execution", '', true), '<i class="icon icon-size-height"></i>' . $lang->kanban->laneHeight, '', "class='iframe btn btn-link text-left' data-width=$width") . '</li>';
         if(common::hasPriv('kanban', 'setColumnWidth')) $actions .= '<li>' . html::a(helper::createLink('kanban', 'setColumnWidth', "kanbanID=$execution->id&from=execution", '', true), '<i class="icon icon-size-width"></i>' . $lang->kanban->columnWidth, '', "class='iframe btn btn-link text-left' data-width='400'") . '</li>';
         $kanbanActions = '';
@@ -232,8 +233,12 @@ js::set('hasTaskButton', $hasTaskButton);
 </div>
 <?php else:?>
 <div class='panel' id='kanbanContainer'>
-  <div class='panel-body region'>
-    <div id='kanban' class='kanban'></div>
+  <div class='panel-body'>
+    <div id='kanban'>
+      <div class='region'>
+        <div id='kanban<?php echo $execution->id;?>' data-id='<?php echo $execution->id;?>' class='kanban'></div>
+      </div>
+    </div>
   </div>
 </div>
 <?php endif;?>

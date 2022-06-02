@@ -298,7 +298,7 @@
           <tr>
             <td colspan="5" class="text-center form-actions">
               <?php echo html::hidden('type', $type) . html::submitButton();?>
-              <?php echo $gobackLink ? html::a($gobackLink, $lang->goback, '', 'class="btn btn-wide"') : html::backButton();?>
+              <?php echo $gobackLink ? html::a($gobackLink, $lang->goback, '', 'class="btn btn-wide"') : html::backButton('', $source == 'bug' ? 'data-app=qa' : '');?>
             </td>
           </tr>
         </tfoot>

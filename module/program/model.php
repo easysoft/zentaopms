@@ -131,10 +131,11 @@ class programModel extends model
      * @param  string $orderBy
      * @param  object $pager
      * @param  string $type       top|child
+     * @param  array  $topIdList
      * @access public
      * @return array
      */
-    public function getList($status = 'all', $orderBy = 'id_asc', $pager = NULL, $type = '')
+    public function getList($status = 'all', $orderBy = 'id_asc', $pager = NULL, $type = '', $topIdList = '')
     {
         $objectIdList = array();
         if(!$this->app->user->admin)
@@ -145,9 +146,20 @@ class programModel extends model
 
             if($this->app->rawMethod == 'browse')
             {
-                $pathList = $this->dao->select('id,path')->from(TABLE_PROJECT)->where('id')->in($objectIdList)->andWhere('deleted')->eq(0)->fetchPairs('id');
+                $pathList = $this->dao->select('id,path')->from(TABLE_PROJECT)
+                    ->where('id')->in($objectIdList)
+                    ->andWhere('deleted')->eq(0)
+                    ->fetchPairs('id');
+
+                $objectIdList = array();
                 foreach($pathList as $path)
                 {
+                    if($type == 'child' and !empty($topIdList))
+                    {
+                        $topID = $this->getTopByPath($path);
+                        if(!in_array($topID, $topIdList)) continue;
+                    }
+
                     foreach(explode(',', trim($path, ',')) as $pathID) $objectIdList[$pathID] = $pathID;
                 }
             }
