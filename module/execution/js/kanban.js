@@ -1243,7 +1243,8 @@ function initKanban($kanban)
         onRenderCount:     renderCount,
         droppable:         {target: findDropColumns, finish:handleFinishDrop},
         virtualize:        true,
-        virtualCardList:   true
+        virtualCardList:   true,
+        virtualRenderOptions: {container: $(window).add($('#kanbanContainer'))}
     });
 
     $kanban.on('click', '.action-cancel', hideKanbanAction);

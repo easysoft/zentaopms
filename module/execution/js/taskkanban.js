@@ -1062,7 +1062,7 @@ $(function()
         cardsPerRow:          window.kanbanScaleSize,
         virtualize:           true,
         onAction:             handleKanbanAction,
-        virtualRenderOptions: {container: '#kanbanContainer>.panel-body'},
+        virtualRenderOptions: {container: '#kanbanContainer>.panel-body,#kanbanContainer'},
         virtualCardList:      true,
         droppable:
         {
@@ -1071,7 +1071,7 @@ $(function()
         },
         onRenderHeaderCol: renderHeaderCol,
         onRenderLaneName:  renderLaneName,
-        onRenderCount:     renderColumnCount
+        onRenderCount:     renderColumnCount,
     };
 
     /* Create kanban */
