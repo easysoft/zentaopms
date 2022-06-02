@@ -113,7 +113,7 @@ class taskModel extends model
                 }
             }
 
-            $task = $this->file->processImgURL($task, $this->config->task->editor->create['id'], $this->post->uid);
+            $task = $this->loadModel('file')->processImgURL($task, $this->config->task->editor->create['id'], $this->post->uid);
 
             /* Fix Bug #1525 */
             $executionType = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($executionID)->fetch('type');
@@ -1484,7 +1484,7 @@ class taskModel extends model
 
         if($oldTask->parent > 0) $this->updateParentStatus($taskID);
 
-        $task = $this->file->processImgURL($task, $this->config->task->editor->assignto['id'], $this->post->uid);
+        $task = $this->loadModel('file')->processImgURL($task, $this->config->task->editor->assignto['id'], $this->post->uid);
         $this->dao->update(TABLE_TASK)
             ->data($task)
             ->autoCheck()
@@ -1534,7 +1534,7 @@ class taskModel extends model
             ->removeIF(!empty($oldTask->team), 'consumed,left')
             ->remove('comment')->get();
 
-        $task = $this->file->processImgURL($task, $editorIdList, $this->post->uid);
+        $task = $this->loadModel('file')->processImgURL($task, $editorIdList, $this->post->uid);
         if($this->post->left == 0)
         {
             if(isset($task->consumed) and $task->consumed == 0)
@@ -1858,7 +1858,7 @@ class taskModel extends model
 
         if($task->finishedDate == substr($now, 0, 10)) $task->finishedDate = $now;
 
-        $task = $this->file->processImgURL($task, $this->config->task->editor->finish['id'], $this->post->uid);
+        $task = $this->loadModel('file')->processImgURL($task, $this->config->task->editor->finish['id'], $this->post->uid);
         $this->dao->update(TABLE_TASK)->data($task)
             ->autoCheck()
             ->checkFlow()
@@ -1902,7 +1902,7 @@ class taskModel extends model
             ->remove('comment')
             ->get();
 
-        $task = $this->file->processImgURL($task, $this->config->task->editor->pause['id'], $this->post->uid);
+        $task = $this->loadModel('file')->processImgURL($task, $this->config->task->editor->pause['id'], $this->post->uid);
         $this->dao->update(TABLE_TASK)->data($task)->autoCheck()->checkFlow()->where('id')->eq((int)$taskID)->exec();
 
         if($oldTask->parent > 0) $this->updateParentStatus($taskID);
@@ -1943,7 +1943,7 @@ class taskModel extends model
             ->remove('comment')
             ->get();
 
-        $task = $this->file->processImgURL($task, $this->config->task->editor->close['id'], $this->post->uid);
+        $task = $this->loadModel('file')->processImgURL($task, $this->config->task->editor->close['id'], $this->post->uid);
         $this->dao->update(TABLE_TASK)->data($task)->autoCheck()->checkFlow()->where('id')->eq((int)$taskID)->exec();
 
         if(!dao::isError())
@@ -1990,7 +1990,7 @@ class taskModel extends model
             ->remove('comment')
             ->get();
 
-        $task = $this->file->processImgURL($task, $this->config->task->editor->cancel['id'], $this->post->uid);
+        $task = $this->loadModel('file')->processImgURL($task, $this->config->task->editor->cancel['id'], $this->post->uid);
         $this->dao->update(TABLE_TASK)->data($task)->autoCheck()->checkFlow()->where('id')->eq((int)$taskID)->exec();
         if($oldTask->fromBug) $this->dao->update(TABLE_BUG)->set('toTask')->eq(0)->where('id')->eq($oldTask->fromBug)->exec();
         if($oldTask->parent > 0) $this->updateParentStatus($taskID);
@@ -2073,7 +2073,7 @@ class taskModel extends model
             $task = $this->computeHours4Multiple($oldTask, $task);
         }
 
-        $task = $this->file->processImgURL($task, $this->config->task->editor->activate['id'], $this->post->uid);
+        $task = $this->loadModel('file')->processImgURL($task, $this->config->task->editor->activate['id'], $this->post->uid);
         $this->dao->update(TABLE_TASK)->data($task)
             ->autoCheck()
             ->batchCheck($this->config->task->activate->requiredFields, 'notempty')
