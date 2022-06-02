@@ -20,6 +20,22 @@ function loadMore(type, regionID)
 }
 
 /**
+ * Hide kanban actions.
+ *
+ * @access public
+ * @return void
+ */
+function hideAllAction()
+{
+    $('.actions').hide();
+    $('.action').hide();
+    $('.kanban-group-header').hide();
+    $(".title").attr("disabled", true).css("pointer-events", "none");
+    $('.kanban-col.kanban-header-col').css('padding', '0px 0px 0px 0px');
+    window.sortableDisabled = true;
+}
+
+/**
  * Display the kanban in full screen.
  *
  * @access public
@@ -36,12 +52,7 @@ function fullScreen()
         {
             $('#kanbanContainer').addClass('fullscreen')
                 .on('scroll', tryUpdateKanbanAffix);
-            $('.actions').hide();
-            $('.action').hide();
-            $('.kanban-group-header').hide();
-            $(".title").attr("disabled", true).css("pointer-events", "none");
-            $('.kanban-col.kanban-header-col').css('padding', '0px 0px 0px 0px');
-            window.sortableDisabled = true;
+            hideAllAction();
             $.cookie('isFullScreen', 1);
         };
 
@@ -219,7 +230,7 @@ function renderLaneName($lane, lane, $kanban, columns, kanban)
 
     $lane.parent().toggleClass('sort', canSort);
 
-    if(!$lane.children('.actions').length && (canSet || canDelete) && (CRKanban || kanbanInfo.status != 'closed') )
+    if(!$lane.children('.actions').length && (canSet || canDelete) && (CRKanban || kanbanInfo.status != 'closed'))
     {
         $([
           '<div class="actions" title="' + kanbanLang.more + '">',
@@ -229,6 +240,7 @@ function renderLaneName($lane, lane, $kanban, columns, kanban)
           '</div>'
         ].join('')).appendTo($lane);
     }
+    if($.cookie('isFullScreen') == 1) hideAllAction();
 }
 
 /**
@@ -414,6 +426,7 @@ function renderKanbanItem(item, $item)
         $title.css('color', '');
         $title.children('.label-finish').hide();
     }
+    if($.cookie('isFullScreen') == 1) hideAllAction();
 }
 
 /**
