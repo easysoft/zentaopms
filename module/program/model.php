@@ -137,6 +137,7 @@ class programModel extends model
      */
     public function getList($status = 'all', $orderBy = 'id_asc', $pager = NULL, $type = '', $topIdList = '')
     {
+        $objectIdList = array();
         if(!$this->app->user->admin)
         {
             $objectIdList = trim($this->app->user->view->programs, ',') . ',' . trim($this->app->user->view->projects, ',');
