@@ -1255,11 +1255,26 @@ class testcaseModel extends model
                 ->fetchGroup('case');
             $oldCases = $this->dao->select('*')->from(TABLE_CASE)->where('id')->in($_POST['id'])->fetchAll('id');
         }
+
+        $cases             = array();
+        $line              = 1;
+        $fieldNames        = array();
         $storyVersionPairs = $this->story->getVersions($data->story);
 
-        $cases      = array();
-        $line       = 1;
-        $fieldNames = array();
+        if($this->config->edition != 'open')
+        {
+            $extendFields = $this->getFlowExtendFields();
+            $notEmptyRule = $this->loadModel('workflowrule')->getByTypeAndRule('system', 'notempty');
+
+            foreach($extendFields as $extendField)
+            {
+                if(strpos(",$extendField->rules,", ",$notEmptyRule->id,") !== false)
+                {
+                    $this->config->testcase->create->requiredFields .= ',' . $extendField->field;
+                }
+            }
+        }
+
         foreach($data->product as $key => $product)
         {
             $caseData = new stdclass();
@@ -1276,6 +1291,18 @@ class testcaseModel extends model
             $caseData->frequency    = 1;
             $caseData->precondition = $data->precondition[$key];
 
+            if($this->config->edition != 'open')
+            {
+                foreach($extendFields as $extendField)
+                {
+                    $dataArray = $_POST[$extendField->field];
+                    $caseData->{$extendField->field} = $dataArray[$key];
+                    if(is_array($caseData->{$extendField->field})) $caseData->{$extendField->field} = join(',', $caseData->{$extendField->field});
+
+                    $caseData->{$extendField->field} = htmlSpecialString($caseData->{$extendField->field});
+                }
+            }
+
             if(isset($this->config->testcase->create->requiredFields))
             {
                 $requiredFields = explode(',', $this->config->testcase->create->requiredFields);
@@ -1284,16 +1311,6 @@ class testcaseModel extends model
                     $requiredField = trim($requiredField);
                     if(!isset($caseData->$requiredField)) continue;
                     if(empty($caseData->$requiredField) and !isset($fieldNames[$requiredField])) $fieldNames[$requiredField] = $this->lang->testcase->$requiredField;
-                }
-            }
-
-            if(isset($this->config->testcase->appendFields))
-            {
-                foreach(explode(',', $this->config->testcase->appendFields) as $appendField)
-                {
-                    if(empty($appendField)) continue;
-                    $caseData->$appendField = zget($_POST[$appendField], $key, '');
-                    if(is_array($caseData->$appendField)) $caseData->$appendField = join(',', $caseData->$appendField);
                 }
             }
 
@@ -1369,34 +1386,38 @@ class testcaseModel extends model
                     $caseData->lastEditedBy   = $this->app->user->account;
                     $caseData->lastEditedDate = $now;
                     if($stepChanged and !$forceNotReview) $caseData->status = 'wait';
-                    $this->dao->update(TABLE_CASE)->data($caseData)->where('id')->eq($caseID)->autoCheck()->exec();
-                    if($stepChanged)
+                    $this->dao->update(TABLE_CASE)->data($caseData)->where('id')->eq($caseID)->autoCheck()->checkFlow()->exec();
+
+                    if(!dao::isError())
                     {
-                        $parentStepID = 0;
-                        foreach($steps as $id => $step)
+                        if($stepChanged)
                         {
-                            $step = (array)$step;
-                            if(empty($step['desc'])) continue;
-                            $stepData = new stdclass();
-                            $stepData->type    = ($step['type'] == 'item' and $parentStepID == 0) ? 'step' : $step['type'];
-                            $stepData->parent  = ($stepData->type == 'item') ? $parentStepID : 0;
-                            $stepData->case    = $caseID;
-                            $stepData->version = $version;
-                            $stepData->desc    = $step['desc'];
-                            $stepData->expect  = $step['expect'];
-                            $this->dao->insert(TABLE_CASESTEP)->data($stepData)->autoCheck()->exec();
-                            if($stepData->type == 'group') $parentStepID = $this->dao->lastInsertID();
-                            if($stepData->type == 'step')  $parentStepID = 0;
+                            $parentStepID = 0;
+                            foreach($steps as $id => $step)
+                            {
+                                $step = (array)$step;
+                                if(empty($step['desc'])) continue;
+                                $stepData = new stdclass();
+                                $stepData->type    = ($step['type'] == 'item' and $parentStepID == 0) ? 'step' : $step['type'];
+                                $stepData->parent  = ($stepData->type == 'item') ? $parentStepID : 0;
+                                $stepData->case    = $caseID;
+                                $stepData->version = $version;
+                                $stepData->desc    = $step['desc'];
+                                $stepData->expect  = $step['expect'];
+                                $this->dao->insert(TABLE_CASESTEP)->data($stepData)->autoCheck()->exec();
+                                if($stepData->type == 'group') $parentStepID = $this->dao->lastInsertID();
+                                if($stepData->type == 'step')  $parentStepID = 0;
+                            }
                         }
+                        $oldCase->steps  = $this->joinStep($oldStep);
+                        $caseData->steps = $this->joinStep($steps);
+                        $changes  = common::createChanges($oldCase, $caseData);
+
+                        $this->updateCase2Project($oldCase, $caseData, $caseID);
+
+                        $actionID = $this->action->create('case', $caseID, 'Edited');
+                        $this->action->logHistory($actionID, $changes);
                     }
-                    $oldCase->steps  = $this->joinStep($oldStep);
-                    $caseData->steps = $this->joinStep($steps);
-                    $changes  = common::createChanges($oldCase, $caseData);
-
-                    $this->updateCase2Project($oldCase, $caseData, $caseID);
-
-                    $actionID = $this->action->create('case', $caseID, 'Edited');
-                    $this->action->logHistory($actionID, $changes);
                 }
             }
             else
@@ -1408,7 +1429,7 @@ class testcaseModel extends model
                 $caseData->branch     = isset($data->branch[$key]) ? $data->branch[$key] : $branch;
                 if($caseData->story) $caseData->storyVersion = zget($storyVersionPairs, $caseData->story, 1);
                 $caseData->status = !$forceNotReview ? 'wait' : 'normal';
-                $this->dao->insert(TABLE_CASE)->data($caseData)->autoCheck()->exec();
+                $this->dao->insert(TABLE_CASE)->data($caseData)->autoCheck()->checkFlow()->exec();
 
                 if(!dao::isError())
                 {
