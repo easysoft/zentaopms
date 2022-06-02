@@ -73,6 +73,9 @@ class company extends control
         /* Get users. */
         $users = $this->company->getUsers($browseType, $type, $queryID, $deptID, $sort, $pager);
 
+        /* Process the sql, get the conditon partion, save it to session. */
+        $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'user', true);
+
         /* Remove passwd. */
         foreach($users as $user) unset($user->password);
 
