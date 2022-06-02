@@ -422,9 +422,16 @@ class testcaseModel extends model
 
         if($case->linkCase or $case->fromCaseID) $case->linkCaseTitles = $this->dao->select('id,title')->from(TABLE_CASE)->where('id')->in($case->linkCase)->orWhere('id')->eq($case->fromCaseID)->fetchPairs();
         if($version == 0) $version = $case->version;
-        $case->steps = $this->dao->select('*')->from(TABLE_CASESTEP)->where('`case`')->eq($caseID)->andWhere('version')->eq($version)->orderBy('id')->fetchAll('id');
         $case->files = $this->loadModel('file')->getByObject('testcase', $caseID);
         $case->currentVersion = $version ? $version : $case->version;
+
+        $case->steps = $this->dao->select('*')->from(TABLE_CASESTEP)->where('`case`')->eq($caseID)->andWhere('version')->eq($version)->orderBy('id')->fetchAll('id');
+        foreach($case->steps as $key => $step)
+        {
+            $step->desc   = html_entity_decode($step->desc);
+            $step->expect = html_entity_decode($step->expect);
+        }
+
         return $case;
     }
 
