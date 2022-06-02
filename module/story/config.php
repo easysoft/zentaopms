@@ -50,13 +50,31 @@ $config->story->custom->createFields      = $config->story->list->customCreateFi
 $config->story->custom->batchCreateFields = 'module,plan,spec,pri,estimate,review,%s';
 $config->story->custom->batchEditFields   = 'branch,module,plan,estimate,pri,source,stage,closedBy,closedReason';
 
+global $lang, $app;
 $config->story->datatable = new stdclass();
-$config->story->datatable->defaultField = array('id', 'pri', 'title', 'plan', 'openedBy', 'assignedTo', 'estimate', 'status', 'stage', 'taskCount', 'actions');
+if($app->tab == 'execution')
+{
+    $config->story->datatable->defaultField = array('id','order', 'pri', 'title', 'plan', 'openedBy', 'assignedTo', 'estimate', 'status', 'stage', 'taskCount', 'actions');
+}
+else
+{
+    $config->story->datatable->defaultField = array('id', 'pri', 'title', 'plan', 'openedBy', 'assignedTo', 'estimate', 'status', 'stage', 'taskCount', 'actions');
+}
 
 $config->story->datatable->fieldList['id']['title']    = 'idAB';
 $config->story->datatable->fieldList['id']['fixed']    = 'left';
 $config->story->datatable->fieldList['id']['width']    = '60';
 $config->story->datatable->fieldList['id']['required'] = 'yes';
+
+if($app->tab == 'execution')
+{
+    $config->story->datatable->fieldList['order']['title']    = 'order';
+    $config->story->datatable->fieldList['order']['fixed']    = 'left';
+    $config->story->datatable->fieldList['order']['width']    = '60';
+    $config->story->datatable->fieldList['order']['sort']     = 'no';
+    $config->story->datatable->fieldList['order']['required'] = 'no';
+    $config->story->datatable->fieldList['order']['name']     = $this->lang->story->order;
+}
 
 $config->story->datatable->fieldList['pri']['title']    = 'priAB';
 $config->story->datatable->fieldList['pri']['fixed']    = 'left';
@@ -194,7 +212,6 @@ $config->story->datatable->fieldList['version']['fixed']    = 'no';
 $config->story->datatable->fieldList['version']['width']    = '60';
 $config->story->datatable->fieldList['version']['required'] = 'no';
 
-global $lang, $app;
 $config->story->datatable->fieldList['taskCount']['title']    = 'T';
 $config->story->datatable->fieldList['taskCount']['fixed']    = 'no';
 $config->story->datatable->fieldList['taskCount']['width']    = '30';

@@ -291,9 +291,15 @@ $lang->waterfall->menu->design['subMenu']->ads      = array('link' => "{$lang->d
 $lang->waterfall->menu->design['subMenu']->bysearch = array('link' => '<a href="javascript:;" class="querybox-toggle"><i class="icon-search icon"></i> ' . $lang->searchAB . '</a>');
 
 /* Kanban project menu. */
-$lang->kanban->menu        = new stdclass();
-$lang->kanban->menuOrder   = array();
-$lang->kanban->dividerMenu = '';
+$lang->kanbanProject              = new stdclass();
+$lang->kanbanProject->menu        = new stdclass();
+$lang->kanbanProject->menu->index = array('link' => "{$lang->kanban->common}|project|index|project=%s");
+$lang->kanbanProject->menu->build = array('link' => "{$lang->build->common}|project|build|project=%s");
+
+$lang->kanbanProject->menuOrder   = array();
+$lang->kanbanProject->menuOrder[5] = 'index';
+$lang->kanbanProject->menuOrder[10] = 'build';
+$lang->kanbanProject->dividerMenu = '';
 
 /* Execution menu. */
 $lang->execution->homeMenu      = new stdclass();

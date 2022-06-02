@@ -1479,9 +1479,10 @@ class kanban extends control
         $this->loadModel($objectType)->delete(constant($table), $objectID);
         if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-        $kanbanID    = $this->kanban->getKanbanIDByregion($regionID);
+        $kanbanID    = $regionID ? $this->kanban->getKanbanIDByregion($regionID) : $this->session->execution;
         $browseType  = $this->config->vision == 'lite' ? 'task' : $this->session->execLaneType;
-        $kanbanGroup = $this->kanban->getRDKanban($kanbanID, $browseType);
+        $groupBy     = $this->session->execGroupBy ? $this->session->execGroupBy : 'default';
+        $kanbanGroup = $this->kanban->getRDKanban($kanbanID, $browseType, 'id_desc', 0, $groupBy);
 
         return print(json_encode($kanbanGroup));
     }
@@ -1508,9 +1509,11 @@ class kanban extends control
             if($from == 'RDKanban')
             {
                 if(dao::isError()) return $this->sendError(dao::getError());
-                $regionID   = $column->region;
-                $kanbanData = $this->loadModel('kanban')->getRDKanban($executionID, $this->session->execLaneType ? $this->session->execLaneType : 'all', 'id_desc', $regionID);
-                $kanbanData = json_encode($kanbanData);
+                $regionID     = $column->region;
+                $execLaneType = $this->session->execLaneType ? $this->session->execLaneType : 'all';
+                $execGroupBy  = $this->session->execGroupBy ? $this->session->execGroupBy : 'default';
+                $kanbanData   = $this->loadModel('kanban')->getRDKanban($executionID, $execLaneType, 'id_desc', $regionID, $execGroupBy);
+                $kanbanData   = json_encode($kanbanData);
 
                 return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => "parent.updateKanban($kanbanData, $regionID)"));
             }
@@ -1589,9 +1592,11 @@ class kanban extends control
             if($from == 'RDKanban')
             {
                 if(dao::isError()) return $this->sendError(dao::getError());
-                $regionID   = $column->region;
-                $kanbanData = $this->loadModel('kanban')->getRDKanban($executionID, $this->session->execLaneType ? $this->session->execLaneType : 'all', 'id_desc', $regionID);
-                $kanbanData = json_encode($kanbanData);
+                $execLaneType = $this->session->execLaneType ? $this->session->execLaneType : 'all';
+                $execGroupBy  = $this->session->execGroupBy ? $this->session->execGroupBy : 'default';
+                $regionID     = $execGroupBy == 'default' ? $column->region : 0;
+                $kanbanData   = $this->loadModel('kanban')->getRDKanban($executionID, $execLaneType, 'id_desc', $regionID, $execGroupBy);
+                $kanbanData   = json_encode($kanbanData);
 
                 return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => "parent.updateKanban($kanbanData, $regionID)"));
             }
@@ -1711,11 +1716,17 @@ class kanban extends control
      */
     public function ajaxMoveCard($cardID = 0, $fromColID = 0, $toColID = 0, $fromLaneID = 0, $toLaneID = 0, $executionID = 0, $browseType = 'all', $groupBy = '', $regionID = 0, $orderBy = '')
     {
-        $fromCell = $this->dao->select('id, cards')->from(TABLE_KANBANCELL)
+        $fromCell = $this->dao->select('id, cards, lane')->from(TABLE_KANBANCELL)
             ->where('kanban')->eq($executionID)
-            ->andWhere('lane')->eq($fromLaneID)
             ->andWhere('`column`')->eq($fromColID)
+            ->beginIF(!$groupBy or $groupBy == 'default')->andWhere('lane')->eq($fromLaneID)->fi()
+            ->beginIF($groupBy and $groupBy != 'default')
+            ->andWhere('type')->eq($browseType)
+            ->andWhere('cards')->like("%,$cardID,%")
+            ->fi()
             ->fetch();
+
+        if($groupBy and $groupBy != 'default') $fromLaneID = $toLaneID = $fromCell->lane;
 
         $toCell = $this->dao->select('id, cards')->from(TABLE_KANBANCELL)
             ->where('kanban')->eq($executionID)
