@@ -2,7 +2,8 @@
 #projectList .c-actions {overflow: visible;}
 #projectTableList > tr:last-child .c-actions .dropdown-menu {top: auto; bottom: 100%; margin-bottom: -5px;}
 
-.c-budget {width: 100px;}
+.c-date {width: 80px;}
+.c-budget {width: 80px;}
 .label-warning, .label-info {width: 60px !important;}
 .project-type-label.label-outline {width: 50px; min-width: 50px;}
 .c-date {width: 120px;}

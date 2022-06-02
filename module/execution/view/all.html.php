@@ -169,7 +169,7 @@
           <td><?php echo helper::isZeroDate($execution->end)       ? '' : $execution->end;?></td>
           <td><?php echo helper::isZeroDate($execution->realBegan) ? '' : $execution->realBegan;?></td>
           <td><?php echo helper::isZeroDate($execution->realEnd)   ? '' : $execution->realEnd;?></td>
-          <td class="c-actions text-center c-actions">
+          <td class="c-actions text-center">
             <?php
                 common::printIcon('execution', 'start', "executionID={$execution->id}", $execution, 'list', '', '', 'iframe', true);
                 $class = !empty($execution->children) ? 'disabled' : '';

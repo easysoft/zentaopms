@@ -2996,13 +2996,30 @@ class storyModel extends model
      */
     public function getPlanStories($planID, $status = 'all', $orderBy = 'id_desc', $pager = null)
     {
-        $stories = $this->dao->select('distinct t1.story, t1.plan, t1.order, t2.*')
-            ->from(TABLE_PLANSTORY)->alias('t1')
-            ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
-            ->where('t1.plan')->eq($planID)
-            ->beginIF($status and $status != 'all')->andWhere('t2.status')->in($status)->fi()
-            ->andWhere('t2.deleted')->eq(0)
-            ->orderBy($orderBy)->page($pager)->fetchAll('id');
+        if(strpos($orderBy, 'module') !== false)
+        {
+            $orderBy = (strpos($orderBy, 'module_asc') !== false) ? 't3.path asc' : 't3.path desc';
+            $stories = $this->dao->select('distinct t1.story, t1.plan, t1.order, t2.*')
+                ->from(TABLE_PLANSTORY)->alias('t1')
+                ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
+                ->leftJoin(TABLE_MODULE)->alias('t3')->on('t2.module = t3.id')
+                ->where('t1.plan')->eq($planID)
+                ->beginIF($status and $status != 'all')->andWhere('t2.status')->in($status)->fi()
+                ->andWhere('t2.deleted')->eq(0)
+                ->orderBy($orderBy)->page($pager)
+                ->fetchAll('id');
+        }
+        else
+        {
+            $stories = $this->dao->select('distinct t1.story, t1.plan, t1.order, t2.*')
+                ->from(TABLE_PLANSTORY)->alias('t1')
+                ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
+                ->where('t1.plan')->eq($planID)
+                ->beginIF($status and $status != 'all')->andWhere('t2.status')->in($status)->fi()
+                ->andWhere('t2.deleted')->eq(0)
+                ->orderBy($orderBy)->page($pager)
+                ->fetchAll('id');
+        }
 
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'story', false);
 
