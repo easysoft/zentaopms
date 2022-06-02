@@ -67,6 +67,9 @@ class executionModel extends model
         if($execution and $execution->type == 'kanban')
         {
             $this->lang->execution->menu         = new stdclass();
+            $this->lang->execution->menu->kanban = array('link' => "{$this->lang->kanban->common}|execution|kanban|executionID=%s");
+            $this->lang->execution->menu->build  = array('link' => "{$this->lang->build->common}|execution|build|executionID=%s");
+            $this->lang->execution->dividerMenu  = '';
             $this->lang->execution->accessDenied = str_replace($this->lang->executionCommon, $this->lang->execution->kanban, $this->lang->execution->accessDenied);
         }
 

@@ -67,6 +67,7 @@ $lang->story->toTask             = 'Convert to Task';
 $lang->story->batchToTask        = 'Batch Convert to Task';
 $lang->story->convertRelations   = 'Convert Relations';
 $lang->story->undetermined       = 'undetermined';
+$lang->story->order              = 'Order';
 
 $lang->story->editAction      = "Edit {$lang->SRCommon}";
 $lang->story->changeAction    = "Change {$lang->SRCommon}";
