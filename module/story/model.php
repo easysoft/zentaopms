@@ -3881,7 +3881,7 @@ class storyModel extends model
             $menu .= "<div class='divider'></div>";
 
             $menu .= $this->buildMenu('story', 'edit', $params, $story, $type);
-            $menu .= $this->buildMenu('story', 'create', "productID=$story->product&branch=$story->branch&moduleID=$story->module&{$params}&executionID=0&bugID=0&planID=0&todoID=0&extra=&type=$story->type", $story, $type, 'copy', '', '', '     ', "data-width='1050'");
+            $menu .= $this->buildMenu('story', 'create', "productID=$story->product&branch=$story->branch&moduleID=$story->module&{$params}&executionID=0&bugID=0&planID=0&todoID=0&extra=&type=$story->type", $story, $type, 'copy', '', '', '', "data-width='1050'");
             $menu .= $this->buildMenu('story', 'delete', $params, $story, 'button', 'trash', 'hiddenwin', 'showinonlybody', true);
         }
 
