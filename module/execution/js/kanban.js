@@ -52,6 +52,23 @@ function changeStatus(executionStatus)
 }
 
 /**
+ * Hide all action.
+ *
+ * @access public
+ * @return void
+ */
+function hideAction()
+{
+    $('.actions').hide();
+    $('.action').hide();
+    $('.avatar').removeAttr('data-toggle');
+    $('.kanban-group-header').hide();
+    $(".title").attr("disabled", true).css("pointer-events", "none");
+    $(".avatar").attr("disabled", true).css("pointer-events", "none");
+    window.sortableDisabled = true;
+}
+
+/**
  * Display the kanban in full screen.
  *
  * @access public
@@ -68,22 +85,8 @@ function fullScreen()
         {
             $('#kanbanContainer').addClass('fullscreen')
                 .on('scroll', tryUpdateKanbanAffix);
-            $('.actions').hide();
-            $('.action').hide();
-            $('.avatar').removeAttr('data-toggle');
-            $('#kanbanContainer a.iframe').each(function()
-            {
-                if($(this).hasClass('iframe'))
-                {
-                    var href = $(this).attr('href');
-                    $(this).removeClass('iframe');
-                    $(this).attr('href', 'javascript:void(0)');
-                    $(this).attr('href-bak', href);
-                }
-            })
-            $('.kanban-group-header').hide();
-            $(".title").attr("disabled", true).css("pointer-events", "none");
-            window.sortableDisabled = true;
+
+            hideAction();
             $.cookie('isFullScreen', 1);
         };
 
@@ -124,17 +127,9 @@ function exitFullScreen()
     $('.actions').show();
     $('.action').show();
     $('.avatar').attr('data-toggle', 'modal');
-    $('#kanbanContainer a').each(function()
-    {
-        var hrefBak = $(this).attr('href-bak');
-        if(hrefBak)
-        {
-            $(this).addClass('iframe');
-            $(this).attr('href', hrefBak);
-        }
-    })
     $('.kanban-group-header').show();
     $(".title").attr("disabled", false).css("pointer-events", "auto");
+    $(".avatar").attr("disabled", false).css("pointer-events", "auto");
     window.sortableDisabled = false;
     $.cookie('isFullScreen', 0);
 }
@@ -521,6 +516,8 @@ function renderStoryItem(item, $item, col)
         }
     }
 
+    if($.cookie('isFullScreen') == 1) hideAction();
+
     return $item.attr('data-type', 'story').addClass('kanban-item-story');
 }
 
@@ -584,6 +581,8 @@ function renderBugItem(item, $item, col)
             ].join('')).appendTo($item);
         }
     }
+
+    if($.cookie('isFullScreen') == 1) hideAction();
 
     return $item.attr('data-type', 'bug').addClass('kanban-item-bug');
 }
@@ -649,6 +648,8 @@ function renderTaskItem(item, $item, col)
     }
 
     $item.attr('data-type', 'task').addClass('kanban-item-task');
+
+    if($.cookie('isFullScreen') == 1) hideAction();
 
     return $item;
 }
