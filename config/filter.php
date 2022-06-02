@@ -151,6 +151,7 @@ $filter->user->login              = new stdclass();
 $filter->user->edit               = new stdclass();
 $filter->webhook->bind            = new stdclass();
 $filter->user->ajaxgetmore        = new stdclass();
+$filter->user->export             = new stdclass();
 $filter->repo->ajaxsynccommit     = new stdclass();
 $filter->repo->apigetrepobyurl    = new stdclass();
 $filter->search->index            = new stdclass();
@@ -320,7 +321,8 @@ $filter->testtask->default->cookie['preProductID'] = 'int';
 
 $filter->todo->export->cookie['checkedItem'] = 'reg::checked';
 
-$filter->user->login->cookie['keepLogin'] = 'equal::on';
+$filter->user->login->cookie['keepLogin']    = 'equal::on';
+$filter->user->export->cookie['checkedItem'] = 'reg::any';
 
 $filter->block->default->get['hash']    = 'reg::md5';
 $filter->block->main->get['blockid']    = 'code';
