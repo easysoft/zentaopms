@@ -18,8 +18,8 @@ $builder->extension   = array('rows' => 10,  'extends' => array('extension'));
 
 $builder->program      = array('rows' => 10, 'extends' => array('project', 'program'));
 $builder->project      = array('rows' => 90, 'extends' => array('project', 'project'));
-$builder->projectalone = array('rows' => 20, 'extends' => array('project', 'projectalone'));
 $builder->sprint       = array('rows' => 600, 'extends' => array('project', 'execution'));
+$builder->projectalone = array('rows' => 20, 'extends' => array('project', 'projectalone'));
 
 $builder->story          = array('rows' => 400, 'extends' => array('story'));
 $builder->childstory     = array('rows' => 50, 'extends' => array('story','childstory'));
