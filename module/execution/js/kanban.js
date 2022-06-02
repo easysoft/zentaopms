@@ -83,6 +83,7 @@ function fullScreen()
             })
             $('.kanban-group-header').hide();
             $(".title").attr("disabled", true).css("pointer-events", "none");
+            window.sortableDisabled = true;
             $.cookie('isFullScreen', 1);
         };
 
@@ -134,6 +135,7 @@ function exitFullScreen()
     })
     $('.kanban-group-header').show();
     $(".title").attr("disabled", false).css("pointer-events", "auto");
+    window.sortableDisabled = false;
     $.cookie('isFullScreen', 0);
 }
 
@@ -1413,6 +1415,10 @@ $(function()
                 return $ele.parent().children('.kanban-lane');
             }
         },
+        before: function()
+        {
+            return !window.sortableDisabled;
+        },
         start: function(e)
         {
             if(sortType == 'region')
@@ -1430,6 +1436,8 @@ $(function()
         },
         finish: function(e)
         {
+            if(!e.changed) return;
+
             var url = '';
             var orders = [];
 
