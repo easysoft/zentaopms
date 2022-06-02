@@ -23,7 +23,7 @@ $lang->install->start            = 'Start';
 $lang->install->keepInstalling   = 'Continue installing this version';
 $lang->install->seeLatestRelease = 'View the latest version';
 $lang->install->welcome          = 'Thanks for choosing ZenTao!';
-$lang->install->license          = 'ZenTao is under Z PUBLIC LICENSE(ZPL) 1.2';
+$lang->install->license          = 'License';
 $lang->install->desc             = <<<EOT
 ZenTao ALM is an open source software released under <a href='http://zpl.pub/page/zplv12.html' target='_blank'>Z Public License</a>. It integrates with Product Management, Project Management, Test Management, Document Management, CI Management, etc. ZenTao is a perfect choice for managing software development projects.
 
