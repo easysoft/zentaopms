@@ -1633,12 +1633,12 @@ class kanbanModel extends model
 
         $laneColor = 0;
         $order     = 1;
-        foreach($objectPairs as $objectID => $objectName)
+        foreach($objectPairs as $objectType => $objectName)
         {
-            if(!isset($groupByList[$objectID]) and $objectID and !in_array($objectID, array('feature', 'design'))) continue;
+            if(!isset($groupByList[$objectType]) and $objectType and !in_array($objectType, array('feature', 'design'))) continue;
 
             $lane = new stdclass();
-            $lane->id        = $groupBy . $objectID;
+            $lane->id        = $groupBy . $objectType;
             $lane->type      = $browseType;
             $lane->execution = $executionID;
             $lane->name      = $objectName;
@@ -1648,7 +1648,7 @@ class kanbanModel extends model
             $order     += 1;
             $laneColor += 1;
             if($laneColor == count($this->config->kanban->laneColorList)) $laneColor = 0;
-            $lanes[$objectID] = $lane;
+            $lanes[$objectType] = $lane;
         }
 
         return $lanes;
