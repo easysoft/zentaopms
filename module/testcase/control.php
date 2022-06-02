@@ -896,8 +896,8 @@ class testcase extends control
             }
             if(!isset($branchTagOption[$case->branch]))
             {
-                $caseBranch = $this->branch->getById($case->branch, 0, '');
-                $branchTagOption[$case->branch] = $caseBranch->name . ($caseBranch->status == 'closed' ? ' (' . $this->lang->branch->statusList['closed'] . ')' : '');
+                $caseBranch = $this->branch->getById($case->branch, $case->product, '');
+                $branchTagOption[$case->branch] = $case->branch == BRANCH_MAIN ? $caseBranch : ($caseBranch->name . ($caseBranch->status == 'closed' ? ' (' . $this->lang->branch->statusList['closed'] . ')' : ''));
             }
 
             $this->view->productID        = $productID;

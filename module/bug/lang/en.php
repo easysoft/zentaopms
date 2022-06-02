@@ -208,6 +208,7 @@ $lang->bug->executionAccessDenied = "You access to the {$lang->executionCommon} 
 $lang->bug->stepsNotEmpty         = "The reproduction step cannot be empty.";
 $lang->bug->confirmUnlinkBuild    = "Replacing the solution version will disassociate the bug from the old version. Are you sure you want to disassociate the bug from %s?";
 $lang->bug->noSwitchBranch        = 'The linked module of Bug%s is not in the current branch. It will be omitted.';
+$lang->bug->confirmToStory        = 'The bug will be closed automatically after transferring to requirements, and the reason for closing is that the bug has been converted to requirements status.';
 
 /* Template. */
 $lang->bug->tplStep   = "<p>[Steps]</p><br/>";

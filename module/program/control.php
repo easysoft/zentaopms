@@ -52,9 +52,9 @@ class program extends control
             }
             else
             {
-                /* Get pager for top program and projects whithout program. */
-                $this->program->getList($status, $orderBy, $pager, 'top');
-                $programs = $this->program->getList($status, $orderBy);
+                /* Get top programs and projects. */
+                $topObjects = $this->program->getList($status, $orderBy, $pager, 'top');
+                $programs   = $this->program->getList($status, $orderBy, NULL, 'child', array_keys($topObjects));
 
                 /* Get summary. */
                 $topCount = $indCount = 0;
