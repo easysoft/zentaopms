@@ -109,6 +109,14 @@ config.cannotPlaceInRight = '<?php echo $lang->block->cannotPlaceInRight; ?>';
 var module   = '<?php echo $module?>';
 var useGuest = <?php echo $useGuest ? 'true' : 'false';?>;
 
+<?php $remind = $this->loadModel('misc')->getPluginRemind();?>
+<?php if(!empty($remind)):?>
+var myModalTrigger = new $.zui.ModalTrigger({title:'<?php echo $lang->misc->expiredTipsTitle;?>', custom: function(){return <?php echo json_encode($remind);?>}, width:'600px'});
+var result = myModalTrigger.show();
+$('#pluginButton').click(function(){myModalTrigger.close()});
+$('#cancelButton').click(function(){myModalTrigger.close()});
+<?php endif;?>
+
 <?php /* Check annual remind */ ?>
 $(function()
 {

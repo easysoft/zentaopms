@@ -2739,8 +2739,9 @@ class bugModel extends model
 
         $bugQuery = $this->getBugQuery($this->session->bugQuery);
 
+        /* If search criteria don't have products, append the selected product from the top left dropdown-menu. */
         if(is_array($productIDList)) $productIDList = implode(',', $productIDList);
-        if(strpos($bugQuery, '`product` =') === false) $bugQuery .= ' AND `product` in (' . $productIDList . ')';
+        if(strpos($bugQuery, '`product`') === false) $bugQuery .= ' AND `product` IN (' . $productIDList . ')';
 
         $allBranch = "`branch` = 'all'";
         if($branch !== 'all' and strpos($bugQuery, '`branch` =') === false) $bugQuery .= " AND `branch` in('0','$branch')";
@@ -3327,7 +3328,7 @@ class bugModel extends model
         if($type == 'view') $menu .= $this->buildMenu('bug', 'activate', $params, $bug, $type, '', '', "text-success iframe showinonlybody", true);
         if($type == 'view' && $this->app->tab != 'product')
         {
-            $menu .= $this->buildMenu('bug', 'toStory', $toStoryParams, $bug, $type, $this->lang->icons['story'], '', '', '', "data-app='qa'", $this->lang->bug->toStory);
+            $menu .= $this->buildMenu('bug', 'toStory', $toStoryParams, $bug, $type, $this->lang->icons['story'], '', '', '', "data-app='product' id='tostory'", $this->lang->bug->toStory);
             $menu .= $this->buildMenu('bug', 'createCase', $convertParams, $bug, $type, 'sitemap');
         }
         if($type == 'view')

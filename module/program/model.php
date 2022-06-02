@@ -131,34 +131,48 @@ class programModel extends model
      * @param  string $orderBy
      * @param  object $pager
      * @param  string $type       top|child
-     * @param  mixed  $idList
+     * @param  array  $topIdList
      * @access public
      * @return array
      */
-    public function getList($status = 'all', $orderBy = 'id_asc', $pager = NULL, $type = '', $idList = '')
+    public function getList($status = 'all', $orderBy = 'id_asc', $pager = NULL, $type = '', $topIdList = '')
     {
-        $projectIdList = array();
-        if($type === 'child')
+        $objectIdList = array();
+        if(!$this->app->user->admin)
         {
-            foreach($idList as $topID => $topProgram)
+            $objectIdList = trim($this->app->user->view->programs, ',') . ',' . trim($this->app->user->view->projects, ',');
+            $objectIdList = array_filter(explode(',', $objectIdList));
+            asort($objectIdList);
+
+            if($this->app->rawMethod == 'browse')
             {
-                $projectIdList += $topProgram->type == 'project' ? array($topID => $topID) : $this->dao->select('id')->from(TABLE_PROGRAM)->Where('path')->like(",$topID,%")->fetchPairs('id');
+                $pathList = $this->dao->select('id,path')->from(TABLE_PROJECT)
+                    ->where('id')->in($objectIdList)
+                    ->andWhere('deleted')->eq(0)
+                    ->fetchPairs('id');
+
+                $objectIdList = array();
+                foreach($pathList as $path)
+                {
+                    if($type == 'child' and !empty($topIdList))
+                    {
+                        $topID = $this->getTopByPath($path);
+                        if(!in_array($topID, $topIdList)) continue;
+                    }
+
+                    foreach(explode(',', trim($path, ',')) as $pathID) $objectIdList[$pathID] = $pathID;
+                }
             }
         }
 
         return $this->dao->select('*')->from(TABLE_PROGRAM)
-            ->where('deleted')->eq(0)
+            ->where('type')->in('program,project')
+            ->andWhere('deleted')->eq(0)
             ->andWhere('vision')->eq($this->config->vision)
-            ->andWhere('((type')->eq('program')
-            ->beginIF(!$this->app->user->admin and $this->app->rawMethod != 'browse')->andWhere('id')->in($this->app->user->view->programs)->fi()
-            ->markRight(1)
-            ->orWhere('(type')->eq('project')
-            ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->projects)->fi()
-            ->markRight(2)
             ->beginIF($status != 'all')->andWhere('status')->eq($status)->fi()
             ->beginIF(!$this->cookie->showClosed)->andWhere('status')->ne('closed')->fi()
             ->beginIF($type === 'top')->andWhere('parent')->eq(0)->fi()
-            ->beginIF(!empty($projectIdList))->andWhere('id')->in($projectIdList)->fi()
+            ->beginIF(!$this->app->user->admin)->andWhere('id')->in($objectIdList)->fi()
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id');
@@ -193,15 +207,33 @@ class programModel extends model
         }
         $query = $this->session->programQuery;
 
+        $objectIdList = array();
+        if(!$this->app->user->admin)
+        {
+            $objectIdList = trim($this->app->user->view->programs, ',') . ',' . trim($this->app->user->view->projects, ',');
+            $objectIdList = array_filter(explode(',', $objectIdList));
+            asort($objectIdList);
+
+            if($this->app->rawMethod == 'browse')
+            {
+                $pathList = $this->dao->select('id,path')->from(TABLE_PROJECT)->where('id')->in($objectIdList)->andWhere('deleted')->eq(0)->fetchPairs('id');
+                foreach($pathList as $path)
+                {
+                    foreach(explode(',', trim($path, ',')) as $pathID) $objectIdList[$pathID] = $pathID;
+                }
+            }
+        }
+
         $programs = $this->dao->select('*')->from(TABLE_PROGRAM)
             ->where('deleted')->eq(0)
             ->andWhere('vision')->eq($this->config->vision)
             ->andWhere('type')->eq('program')
-            ->beginIF(!$this->app->user->admin and $this->app->rawMethod != 'browse')->andWhere('id')->in($this->app->user->view->programs)->fi()
             ->beginIF(!$this->cookie->showClosed)->andWhere('status')->ne('closed')->fi()
             ->beginIF($query)->andWhere($query)->fi()
+            ->beginIF(!$this->app->user->admin)->andWhere('id')->in($objectIdList)->fi()
             ->orderBy($orderBy)
             ->fetchAll('id');
+
         return $programs;
     }
 
@@ -1441,20 +1473,6 @@ class programModel extends model
             $stats[$key] = $project;
         }
         return $stats;
-    }
-
-    /**
-     * Get budget unit list.
-     *
-     * @access public
-     * @return array
-     */
-    public function getBudgetUnitList()
-    {
-        $budgetUnitList = array();
-        foreach(explode(',', $this->config->project->unitList) as $unit) $budgetUnitList[$unit] = zget($this->lang->project->unitList, $unit, '');
-
-        return $budgetUnitList;
     }
 
     /**

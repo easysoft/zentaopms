@@ -1216,7 +1216,7 @@ class mrModel extends model
         $task->repo       = (int)$repoID;
         $task->mr         = (int)$mr;
         $task->lines      = $this->post->begin . ',' . $this->post->end;
-        $task->entry      = $data->entry;
+        $task->entry      = helper::safe64Decode($data->entry);
         $task->v1         = $v1;
         $task->v2         = $v2;
         $task->desc       = $this->loadModel('file')->pasteImage($data->commentText, $this->post->uid);

@@ -102,7 +102,10 @@ class projectModel extends model
     public function getBudgetUnitList()
     {
         $budgetUnitList = array();
-        foreach(explode(',', $this->config->project->unitList) as $unit) $budgetUnitList[$unit] = zget($this->lang->project->unitList, $unit, '');
+        if($this->config->vision != 'lite')
+        {
+            foreach(explode(',', $this->config->project->unitList) as $unit) $budgetUnitList[$unit] = zget($this->lang->project->unitList, $unit, '');
+        } 
 
         return $budgetUnitList;
     }
@@ -1305,7 +1308,7 @@ class projectModel extends model
         $project = fixer::input('post')
             ->add('id', $projectID)
             ->callFunc('name', 'trim')
-            ->setDefault('team', substr($this->post->name, 0, 30))
+            ->setDefault('team', mb_substr($this->post->name, 0, 30))
             ->setDefault('lastEditedBy', $this->app->user->account)
             ->setDefault('lastEditedDate', helper::now())
             ->setIF($this->post->delta == 999, 'end', LONG_TIME)
@@ -2483,7 +2486,13 @@ class projectModel extends model
         $project = $this->getByID($objectID);
 
         $model = 'scrum';
-        if($project) $model = $project->model;
+        if($project and $project->model == 'waterfall') $model = $project->model;
+        if($project and $project->model == 'kanban')
+        {
+            $model = $project->model . 'Project';
+
+            $lang->executionCommon = $lang->project->kanban;
+        }
 
         if(isset($lang->$model))
         {

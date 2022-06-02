@@ -848,6 +848,9 @@ class testcase extends control
         else
         {
             $productID  = $case->product;
+            $product    = $this->product->getById($productID);
+            if(!isset($this->products[$productID])) $this->products[$productID] = $product->name;
+
             $title      = $this->products[$productID] . $this->lang->colon . $this->lang->testcase->edit;
             $position[] = html::a($this->createLink('testcase', 'browse', "productID=$productID"), $this->products[$productID]);
 
@@ -879,7 +882,6 @@ class testcase extends control
             if(!isset($moduleOptionMenu[$case->module])) $moduleOptionMenu += $this->tree->getModulesName($case->module);
 
             /* Get product and branches. */
-            $product = $this->product->getById($productID);
             if($this->app->tab == 'execution' or $this->app->tab == 'project')
             {
                 $objectID = $this->app->tab == 'project' ? $case->project : $executionID;
@@ -892,9 +894,15 @@ class testcase extends control
             {
                 $branchTagOption[$branchInfo->id] = $branchInfo->name . ($branchInfo->status == 'closed' ? ' (' . $this->lang->branch->statusList['closed'] . ')' : '');
             }
+            if(!isset($branchTagOption[$case->branch]))
+            {
+                $caseBranch = $this->branch->getById($case->branch, $case->product, '');
+                $branchTagOption[$case->branch] = $case->branch == BRANCH_MAIN ? $caseBranch : ($caseBranch->name . ($caseBranch->status == 'closed' ? ' (' . $this->lang->branch->statusList['closed'] . ')' : ''));
+            }
 
             $this->view->productID        = $productID;
             $this->view->product          = $product;
+            $this->view->products         = $this->products;
             $this->view->branchTagOption  = $branchTagOption;
             $this->view->productName      = $this->products[$productID];
             $this->view->moduleOptionMenu = $moduleOptionMenu;

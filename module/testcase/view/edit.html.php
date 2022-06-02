@@ -21,6 +21,7 @@
 <?php js::set('tab', $this->app->tab);?>
 <?php js::set('isLibCase', $isLibCase);?>
 <?php js::set('testtasks', $testtasks);?>
+<?php js::set('caseBranch', $case->branch);?>
 <?php js::set('confirmUnlinkTesttask', $lang->testcase->confirmUnlinkTesttask);?>
 <?php if($this->app->tab == 'execution') js::set('objectID', $case->execution);?>
 <?php if($this->app->tab == 'project') js::set('objectID', $case->project);?>

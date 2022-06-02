@@ -855,6 +855,7 @@ class execution extends control
         $this->view->branchGroups      = $branchGroups;
         $this->view->canBeChanged      = common::canModify('execution', $execution); // Determines whether an object is editable.
         $this->view->showBranch        = $showBranch;
+        $this->view->storyStages     = $this->product->batchGetStoryStage($stories);
 
         $this->display();
     }
@@ -883,7 +884,7 @@ class execution extends control
         $this->loadModel('datatable');
 
         /* Save session. */
-        $this->session->set('bugList', $this->app->getURI(true), 'qa');
+        $this->session->set('bugList', $this->app->getURI(true), 'execution');
 
         $type        = strtolower($type);
         $queryID     = ($type == 'bysearch') ? (int)$param : 0;
@@ -2115,8 +2116,10 @@ class execution extends control
         $this->loadModel('story');
 
         if(empty($groupBy)) $groupBy = 'default';
+
         /* Set Session. */
         $this->session->set('execLaneType', $browseType);
+        $this->session->set('execGroupBy', $groupBy);
         $this->session->set('storyList', $this->app->getURI(true), 'execution');
 
         $this->lang->execution->menu = new stdclass();
@@ -2197,16 +2200,16 @@ class execution extends control
      * @access public
      * @return void
      */
-    public function taskKanban($executionID, $browseType = '', $orderBy = 'order_asc', $groupBy = '')
+    public function taskKanban($executionID, $browseType = 'all', $orderBy = 'order_asc', $groupBy = '')
     {
-        if(empty($browseType)) $browseType = $this->session->kanbanType ? $this->session->kanbanType : 'all';
         if(empty($groupBy)) $groupBy = 'default';
 
         /* Save to session. */
         $uri = $this->app->getURI(true);
         $this->app->session->set('taskList', $uri, 'execution');
         $this->app->session->set('bugList',  $uri, 'qa');
-        $this->app->session->set('kanbanType', $browseType, 'execution');
+        $this->app->session->set('execLaneType', $browseType);
+        $this->app->session->set('execGroupBy', $groupBy);
 
         /* Load language. */
         $this->app->loadLang('task');
@@ -2853,8 +2856,10 @@ class execution extends control
             {
                 if($this->app->tab == 'execution' and $object->type == 'kanban')
                 {
-                    $kanbanData = $this->loadModel('kanban')->getRDKanban($objectID, $this->session->execLaneType ? $this->session->execLaneType : 'all');
-                    $kanbanData = json_encode($kanbanData);
+                    $execLaneType = $this->session->execLaneType ? $this->session->execLaneType : 'all';
+                    $execGroupBy  = $this->session->execGroupBy ? $this->session->execGroupBy : 'default';
+                    $kanbanData   = $this->loadModel('kanban')->getRDKanban($objectID, $execLaneType, 'id_desc', 0, $execGroupBy);
+                    $kanbanData   = json_encode($kanbanData);
 
                     return print(js::closeModal('parent', '', "parent.updateKanban($kanbanData)"));
                 }
@@ -3656,10 +3661,11 @@ class execution extends control
      * @param  int    $productID
      * @param  string $fromMethod
      * @param  string $extra
+     * @param  string $param
      * @access public
      * @return void
      */
-    public function importPlanStories($executionID, $planID, $productID = 0, $fromMethod = 'story', $extra = '')
+    public function importPlanStories($executionID, $planID, $productID = 0, $fromMethod = 'story', $extra = '', $param = '')
     {
         $planStories = $planProducts = array();
         $planStory   = $this->loadModel('story')->getPlanStories($planID);
@@ -3687,7 +3693,8 @@ class execution extends control
         }
 
         $moduleName = 'execution';
-        $param      = "executionID=$executionID";
+        if(empty($param))  $param = "executionID=$executionID";
+        if(!empty($param)) $param = str_replace(array(',', ' '), array('&', ''), $param);
         if($execution->type == 'project')
         {
             $moduleName = 'projectstory';
@@ -3700,7 +3707,8 @@ class execution extends control
             $lang->executionCommon = $lang->execution->kanban;
             include $this->app->getModulePath('', 'execution') . 'lang/' . $this->app->getClientLang() . '.php';
         }
-        if($count != 0) echo js::alert(sprintf($this->lang->execution->haveDraft, $count)) . js::locate($this->createLink($moduleName, in_array($execution->type, array('sprint','project')) ? 'story' : 'kanban', $param));
+
+        if($count != 0) echo js::alert(sprintf($this->lang->execution->haveDraft, $count)) . js::locate($this->createLink($moduleName, $fromMethod, $param));
         return print(js::locate(helper::createLink($moduleName, $fromMethod, $param)));
     }
 

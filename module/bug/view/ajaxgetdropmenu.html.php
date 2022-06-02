@@ -17,7 +17,7 @@ foreach($products as $product)
 }
 $productsPinYin = common::convert2Pinyin($productNames);
 $linkHtml       = $this->product->setParamsForLink($module, $link, $projectID, 0);
-$productsHtml   = html::a($linkHtml, $this->lang->bug->allProduct, '', "class='text-important' title='{$this->lang->bug->allProduct}' data-key='" . zget($productsPinYin, $this->lang->bug->allProduct, '') . "' data-app='{$this->app->tab}'");
+$productsHtml   = count($products) > 1 ? html::a($linkHtml, $this->lang->bug->allProduct, '', "class='text-important' title='{$this->lang->bug->allProduct}' data-key='" . zget($productsPinYin, $this->lang->bug->allProduct, '') . "' data-app='{$this->app->tab}'") : '';
 
 foreach($products as $product)
 {
