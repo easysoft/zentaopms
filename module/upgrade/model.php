@@ -940,6 +940,7 @@ class upgradeModel extends model
             case '16_5_beta1': $confirmContent .= file_get_contents($this->getUpgradeFile('16.5.beta1'));
             case '16_5': $confirmContent .= file_get_contents($this->getUpgradeFile('16.5'));
             case '17_0_beta1': $confirmContent .= file_get_contents($this->getUpgradeFile('17.0.beta1'));
+            case '17_0_beta2':
         }
 
         return $confirmContent;
