@@ -2064,7 +2064,7 @@ class kanbanModel extends model
         $this->dao->insert(TABLE_KANBAN)->data($kanban)
             ->autoCheck()
             ->batchCheck($this->config->kanban->create->requiredFields, 'notempty')
-            ->check('name', 'unique')
+            ->check('name', 'unique', "space = {$kanban->space}")
             ->exec();
 
         if(!dao::isError())
