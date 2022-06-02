@@ -562,7 +562,7 @@ class custom extends control
     {
         if($_POST)
         {
-            $this->loadModel('setting')->setItem("system.common.CRKanban@{$this->config->vision}", $this->post->kanban);
+            $this->loadModel('setting')->setItem("system.common.CRKanban", $this->post->kanban);
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'reload'));
         }
 
