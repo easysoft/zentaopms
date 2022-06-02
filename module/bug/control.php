@@ -982,7 +982,14 @@ class bug extends control
         $executionID     = $bug->execution;
         $projectID       = $bug->project;
         $currentModuleID = $bug->module;
+        $product         = $this->loadModel('product')->getByID($productID);
         $this->bug->checkBugExecutionPriv($bug);
+
+        if(!isset($this->products[$bug->product]))
+        {
+            $this->products[$bug->product] = $product->name;
+            $this->view->products = $this->products;
+        }
 
         /* Set the menu. */
         if($this->app->tab == 'project') $this->loadModel('project')->setMenu($bug->project);
@@ -1010,7 +1017,7 @@ class bug extends control
         {
             $products = array();
             $productList = $this->config->CRProduct ? $this->product->getOrderedProducts('all', 40, $bug->project) : $this->product->getOrderedProducts('normal', 40, $bug->project);
-            foreach($productList as $product) $products[$product->id] = $product->name;
+            foreach($productList as $productInfo) $products[$productInfo->id] = $productInfo->name;
             $this->view->products = $products;
         }
 
@@ -1020,7 +1027,6 @@ class bug extends control
         $this->view->position[] = $this->lang->bug->edit;
 
         /* Assign. */
-        $product   = $this->loadModel('product')->getByID($productID);
         $allBuilds = $this->loadModel('build')->getBuildPairs($productID, 'all', 'noempty');
         if($executionID)
         {
@@ -1063,6 +1069,11 @@ class bug extends control
         {
             $branchOption[$branchInfo->id]    = $branchInfo->name;
             $branchTagOption[$branchInfo->id] = $branchInfo->name . ($branchInfo->status == 'closed' ? ' (' . $this->lang->branch->statusList['closed'] . ')' : '');
+        }
+        if(!isset($branchTagOption[$bug->branch]))
+        {
+            $bugBranch = $this->branch->getById($bug->branch, $bug->product, '');
+            $branchTagOption[$bug->branch] = $bug->branch == BRANCH_MAIN ? $bugBranch : ($bugBranch->name . ($bugBranch->status == 'closed' ? ' (' . $this->lang->branch->statusList['closed'] . ')' : ''));
         }
 
         $moduleOptionMenu = $this->tree->getOptionMenu($productID, $viewType = 'bug', $startModuleID = 0, $bug->branch);
