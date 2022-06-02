@@ -2400,12 +2400,15 @@ EOD;
             if($inProject && $app->session->project && strpos(",{$app->user->rights['projects']},", ",{$app->session->project},") !== false) return true;
         }
 
-        /* White list of method. */
-        if(in_array($module, array('user', 'task', 'story', 'bug', 'testcase')) and $method == 'showimport') return true;
-
         /* If not super admin, check the rights. */
         $rights = $app->user->rights['rights'];
         $acls   = $app->user->rights['acls'];
+
+        /* White list of method. */
+        if(in_array($module, array('user', 'task', 'story', 'bug', 'testcase')) and $method == 'showimport')
+        {
+            if(isset($rights[$module]['import']) and commonModel::hasDBPriv($object, $module, 'import')) return true;
+        }
 
         if(isset($rights[$module][$method]))
         {
