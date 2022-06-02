@@ -2404,6 +2404,12 @@ EOD;
         $rights = $app->user->rights['rights'];
         $acls   = $app->user->rights['acls'];
 
+        /* White list of import method. */
+        if(in_array($module, array('user', 'task', 'story', 'bug', 'testcase')) and $method == 'showimport')
+        {
+            if(isset($rights[$module]['import']) and commonModel::hasDBPriv($object, $module, 'import')) return true;
+        }
+
         if(isset($rights[$module][$method]))
         {
             if(!commonModel::hasDBPriv($object, $module, $method)) return false;
