@@ -60,6 +60,8 @@ $lang->project->daysGreaterProject = '可用工日不能大于项目的可用工
 $lang->project->errorHours         = '可用工时/天不能大于『24』';
 $lang->project->workdaysExceed     = '可用工作日不能超过『%s』天';
 $lang->project->teamMembersCount   = '，团队成员共%s人。';
+$lang->project->budgetNumber       = '『预算』金额必须为数字。';
+$lang->project->budgetGe0          = '『预算』金额必须大于等于0。';
 
 /* Fields. */
 $lang->project->common             = '项目';
