@@ -48,6 +48,7 @@
 <script>
 $(function()
 {
+    sessionStorage.removeItem('TID');
     $.get('<?php echo inlink('afterExec', "fromVersion=$fromVersion&processed=yes&skipMoveFile=yes")?>');
 })
 
