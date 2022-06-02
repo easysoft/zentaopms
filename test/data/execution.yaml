@@ -30,6 +30,16 @@ fields:
   - field: desc
     range: 1-10000
     prefix: "迭代描述"
+  - field: begin
+    range: "(-2M)-(+M):1D"
+    type: timestamp
+    format: "YY/MM/DD"
+    postfix: "\t"
+  - field: end
+    range: "(+1w)-(+2M):1D"
+    type: timestamp
+    format: "YY/MM/DD"
+    postfix: "\t"
   - field: grade
     range: 1
   - field: parent

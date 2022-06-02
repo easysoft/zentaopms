@@ -39,6 +39,16 @@ fields:
   - field: code
     range: 1-10000
     prefix: "program"
+  - field: begin
+    range: "(-5M)-(+M):1D"
+    type: timestamp
+    format: "YY/MM/DD"
+    postfix: "\t"
+  - field: end
+    range: "(+10w)-(+2M):1D"
+    type: timestamp
+    format: "YY/MM/DD"
+    postfix: "\t"
   - field: desc
     range: 1-10000
     prefix: "项目集描述"

@@ -42,9 +42,16 @@ fields:
   - field: parent
     range: 0
   - field: path
-    range: 731-750
-    prefix: ","
-    postfix: ","
+    fields:
+      - field: path1
+        prefix: ","
+        range: 731-750
+      - field: path2
+        range: []
+        postfix: ","
+      - field: path3
+        range: []
+        postfix: ","
   - field: grade
     range: "1"
   - field: code
