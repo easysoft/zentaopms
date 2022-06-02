@@ -1595,9 +1595,6 @@ class kanbanModel extends model
             if(!isset($groupByList[$item->$groupBy])) $groupByList[$item->$groupBy] = $item->$groupBy;
         }
 
-        if(in_array($groupBy, array('module', 'story', 'pri', 'severity'))) $objectPairs[0]  = $this->lang->$browseType->$groupBy . ': ' . $this->lang->kanban->noGroup;
-        if(in_array($groupBy, array('assignedTo', 'type', 'category', 'source'))) $objectPairs[''] = $this->lang->$browseType->$groupBy . ': ' . $this->lang->kanban->noGroup;
-
         if(in_array($groupBy, array('module', 'story', 'assignedTo')))
         {
             if($groupBy == 'module')
@@ -1626,14 +1623,19 @@ class kanbanModel extends model
         }
         else
         {
+            unset($this->lang->$browseType->{$groupBy . 'List'}[0]);
+            unset($this->lang->$browseType->{$groupBy . 'List'}['']);
             $objectPairs += $this->lang->$browseType->{$groupBy . 'List'};
         }
+
+        if(in_array($groupBy, array('module', 'story', 'pri', 'severity'))) $objectPairs[0] = $this->lang->$browseType->$groupBy . ': ' . $this->lang->kanban->noGroup;
+        if(in_array($groupBy, array('assignedTo', 'source'))) $objectPairs[] = $this->lang->$browseType->$groupBy . ': ' . $this->lang->kanban->noGroup;
 
         $laneColor = 0;
         $order     = 1;
         foreach($objectPairs as $objectID => $objectName)
         {
-            if(!isset($groupByList[$objectID]) and $objectID) continue;
+            if(!isset($groupByList[$objectID]) and $objectID and !in_array($objectID, array('feature', 'design'))) continue;
 
             $lane = new stdclass();
             $lane->id        = $groupBy . $objectID;
