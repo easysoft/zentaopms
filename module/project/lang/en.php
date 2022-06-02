@@ -60,6 +60,8 @@ $lang->project->daysGreaterProject = 'Days cannot be greater than days of projec
 $lang->project->errorHours         = 'Hours/Day cannot be greater than『24』';
 $lang->project->workdaysExceed     = 'No more than『%s』working days';
 $lang->project->teamMembersCount   = ', there are %s team members.';
+$lang->project->budgetNumber       = '『Budget』must be numbers.';
+$lang->project->budgetGe0          = '『Budget』must be greater than or equal to 0.';
 
 /* Fields. */
 $lang->project->common             = 'Project';
