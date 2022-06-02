@@ -193,7 +193,7 @@ function changeKanbanScaleSize(newScaleSize)
 /** Get card height */
 function getCardHeight()
 {
-    return [59, 59, 62, 62, 47][window.kanbanScaleSize];
+    return [60, 60, 62, 62, 47][window.kanbanScaleSize];
 }
 
 $('#type').change(function()
