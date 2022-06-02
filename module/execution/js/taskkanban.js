@@ -459,15 +459,7 @@ function exitFullScreen()
     $('#kanbans .kanban-header').removeClass('headerTop');
     $('#kanbanContainer').removeClass('scrollbar-hover');
     $('.actions').show();
-    $('#kanbanContainer a').each(function()
-    {
-        var hrefBak = $(this).attr('href-bak');
-        if(hrefBak)
-        {
-            $(this).addClass('iframe');
-            $(this).attr('href', hrefBak);
-        }
-    })
+    $(".title, .avatar.iframe").attr("disabled", false).css("pointer-events", "auto");
     $.cookie('isFullScreen', 0);
 }
 
