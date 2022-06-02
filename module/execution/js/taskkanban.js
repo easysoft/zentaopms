@@ -132,6 +132,7 @@ function renderStoryItem(item, $item, col)
         }
     }
 
+    if($.cookie('isFullScreen') == 1) hideAllAction();
     return $item.attr('data-type', 'story').addClass('kanban-item-story');
 }
 
@@ -196,6 +197,7 @@ function renderBugItem(item, $item, col)
         }
     }
 
+    if($.cookie('isFullScreen') == 1) hideAllAction();
     return $item.attr('data-type', 'bug').addClass('kanban-item-bug');
 }
 
@@ -261,6 +263,7 @@ function renderTaskItem(item, $item, col)
 
     $item.attr('data-type', 'task').addClass('kanban-item-task');
 
+    if($.cookie('isFullScreen') == 1) hideAllAction();
     return $item;
 }
 
@@ -389,6 +392,24 @@ function createKanban(kanbanID, data, options)
     $kanban.kanban($.extend({data: data, calcColHeight: calcColHeight, displayCards: displayCards}, options));
 }
 
+/**
+ * Hide all actions.
+ *
+ * @access public
+ * @return void
+ */
+function hideAllAction()
+{
+    $('.actions').hide();
+    $(".title, .avatar.iframe").attr("disabled", true).css("pointer-events", "none");
+}
+
+/**
+ * Display the kanban in full screen.
+ *
+ * @access public
+ * @return void
+ */
 function fullScreen()
 {
     $('#kanbans .kanban-header').addClass('headerTop');
@@ -399,17 +420,7 @@ function fullScreen()
         var afterEnterFullscreen = function()
         {
             $('#kanbanContainer').addClass('scrollbar-hover');
-            $('.actions').hide();
-            $('#kanbanContainer a.iframe').each(function()
-            {
-                if($(this).hasClass('iframe'))
-                {
-                    var href = $(this).attr('href');
-                    $(this).removeClass('iframe');
-                    $(this).attr('href', 'javascript:void(0)');
-                    $(this).attr('href-bak', href);
-                }
-            })
+            hideAllAction();
             $.cookie('isFullScreen', 1);
         }
 
