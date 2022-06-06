@@ -273,16 +273,18 @@ class projectModel extends model
      * @param  string|int $param
      * @param  string     $orderBy
      * @param  int        $limit
+     * @param  string     $excludedModel
      * @access public
      * @return array
      */
-    public function getOverviewList($queryType = 'byStatus', $param = 'all', $orderBy = 'id_desc', $limit = 15)
+    public function getOverviewList($queryType = 'byStatus', $param = 'all', $orderBy = 'id_desc', $limit = 15, $excludedModel = '')
     {
         $queryType = strtolower($queryType);
         $projects = $this->dao->select('*')->from(TABLE_PROJECT)
             ->where('type')->eq('project')
             ->andWhere('vision')->eq($this->config->vision)
             ->andWhere('deleted')->eq(0)
+            ->beginIF($excludedModel)->andWhere('model')->ne($excludedModel)->fi()
             ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->projects)->fi()
             ->beginIF($queryType == 'bystatus' and $param == 'undone')->andWhere('status')->notIN('done,closed')->fi()
             ->beginIF($queryType == 'bystatus' and $param != 'all' and $param != 'undone')->andWhere('status')->eq($param)->fi()
