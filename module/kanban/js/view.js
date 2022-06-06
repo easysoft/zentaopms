@@ -20,6 +20,22 @@ function loadMore(type, regionID)
 }
 
 /**
+ * Hide kanban actions.
+ *
+ * @access public
+ * @return void
+ */
+function hideAllAction()
+{
+    $('.actions').hide();
+    $('.action').hide();
+    $('.kanban-group-header').hide();
+    $(".title").attr("disabled", true).css("pointer-events", "none");
+    $('.kanban-col.kanban-header-col').css('padding', '0px 0px 0px 0px');
+    window.sortableDisabled = true;
+}
+
+/**
  * Display the kanban in full screen.
  *
  * @access public
@@ -36,12 +52,7 @@ function fullScreen()
         {
             $('#kanbanContainer').addClass('fullscreen')
                 .on('scroll', tryUpdateKanbanAffix);
-            $('.actions').hide();
-            $('.action').hide();
-            $('.kanban-group-header').hide();
-            $(".title").attr("disabled", true).css("pointer-events", "none");
-            $('.kanban-col.kanban-header-col').css('padding', '0px 0px 0px 0px');
-            window.sortableDisabled = true;
+            hideAllAction();
             $.cookie('isFullScreen', 1);
         };
 
@@ -219,7 +230,7 @@ function renderLaneName($lane, lane, $kanban, columns, kanban)
 
     $lane.parent().toggleClass('sort', canSort);
 
-    if(!$lane.children('.actions').length && (canSet || canDelete) && (CRKanban || kanbanInfo.status != 'closed') )
+    if(!$lane.children('.actions').length && (canSet || canDelete) && (CRKanban || kanbanInfo.status != 'closed'))
     {
         $([
           '<div class="actions" title="' + kanbanLang.more + '">',
@@ -229,6 +240,7 @@ function renderLaneName($lane, lane, $kanban, columns, kanban)
           '</div>'
         ].join('')).appendTo($lane);
     }
+    if($.cookie('isFullScreen') == 1) hideAllAction();
 }
 
 /**
@@ -414,6 +426,7 @@ function renderKanbanItem(item, $item)
         $title.css('color', '');
         $title.children('.label-finish').hide();
     }
+    if($.cookie('isFullScreen') == 1) hideAllAction();
 }
 
 /**
@@ -1269,25 +1282,26 @@ function initKanban($kanban)
 
     $kanban.kanban(
     {
-        data:              region.groups,
-        maxColHeight:      510,
-        calcColHeight:     calcColHeight,
-        fluidBoardWidth:   fluidBoard,
-        minColWidth:       285,
-        maxColWidth:       285,
-        cardHeight:        60,
-        displayCards:      displayCards,
-        createColumnText:  kanbanLang.createColumn,
-        addItemText:       '',
-        itemRender:        renderKanbanItem,
-        onAction:          handleKanbanAction,
-        onRenderKanban:    adjustAddBtnPosition,
-        onRenderLaneName:  renderLaneName,
-        onRenderHeaderCol: renderHeaderCol,
-        onRenderCount:     renderCount,
-        sortable:          handleSortCards,
-        virtualize:        true,
-        virtualCardList:   true,
+        data:                  region.groups,
+        maxColHeight:          510,
+        calcColHeight:         calcColHeight,
+        fluidBoardWidth:       fluidBoard,
+        minColWidth:           285,
+        maxColWidth:           285,
+        cardHeight:            60,
+        displayCards:          displayCards,
+        createColumnText:      kanbanLang.createColumn,
+        addItemText:           '',
+        itemRender:            renderKanbanItem,
+        onAction:              handleKanbanAction,
+        onRenderKanban:        adjustAddBtnPosition,
+        onRenderLaneName:      renderLaneName,
+        onRenderHeaderCol:     renderHeaderCol,
+        onRenderCount:         renderCount,
+        sortable:              handleSortCards,
+        virtualize:            true,
+        virtualRenderOptions:  {container: $(window).add($('#kanbanContainer'))},
+        virtualCardList:       true,
         droppable:
         {
             target:       findDropColumns,

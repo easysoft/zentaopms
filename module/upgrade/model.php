@@ -456,6 +456,9 @@ class upgradeModel extends model
             case '16_0_beta1':
                 $this->loadModel('api')->createDemoData($this->lang->api->zentaoAPI, 'http://' . $_SERVER['HTTP_HOST'] . $this->app->config->webRoot . 'api.php/v1', '16.0');
                 break;
+            case '16_1':
+                $this->moveKanbanData();
+                break;
             case '16_2':
                 $this->updateSpaceTeam();
                 $this->updateDocField();
@@ -497,6 +500,13 @@ class upgradeModel extends model
             case '16_5':
                 $this->updateProjectStatus();
                 $this->updateStoryReviewer($fromVersion);
+                break;
+            case '17_0_beta1':
+                if(!$executedXuanxuan)
+                {
+                    $xuanxuanSql = $this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan5.5.sql';
+                    $this->execSQL($xuanxuanSql);
+                }
                 break;
         }
 
@@ -635,6 +645,9 @@ class upgradeModel extends model
                 break;
             case 'biz6_4':
                 $this->importLiteModules();
+                break;
+            case 'biz7.0.beta1':
+                $this->processViewFields();
                 break;
         }
     }
@@ -927,6 +940,7 @@ class upgradeModel extends model
             case '16_5_beta1': $confirmContent .= file_get_contents($this->getUpgradeFile('16.5.beta1'));
             case '16_5': $confirmContent .= file_get_contents($this->getUpgradeFile('16.5'));
             case '17_0_beta1': $confirmContent .= file_get_contents($this->getUpgradeFile('17.0.beta1'));
+            case '17_0_beta2':
         }
 
         return $confirmContent;
@@ -4833,7 +4847,7 @@ class upgradeModel extends model
         /* Project linked objects. */
         $this->dao->update(TABLE_TASK)->set('project')->eq($projectID)->where('execution')->in($sprintIdList)->exec();
         $this->dao->update(TABLE_BUILD)->set('project')->eq($projectID)->where('execution')->in($sprintIdList)->andWhere('project')->eq(0)->exec();
-        $this->dao->update(TABLE_BUG)->set('project')->eq($projectID)->where('execution')->in($sprintIdList)->andWhere('project')->eq(0)->exec();
+        $this->dao->update(TABLE_BUG)->set('project')->eq($projectID)->where('execution')->in($sprintIdList)->exec();
         $this->dao->update(TABLE_DOC)->set('project')->eq($projectID)->set('type')->eq('execution')->where("lib IN(SELECT id from " . TABLE_DOCLIB . " WHERE type = 'project' and execution " . helper::dbIN($sprintIdList) . ')')->exec();
         $this->dao->update(TABLE_DOCLIB)->set('project')->eq($projectID)->where('type')->eq('execution')->andWhere('execution')->in($sprintIdList)->exec();
         $this->dao->update(TABLE_TESTTASK)->set('project')->eq($projectID)->where('execution')->in($sprintIdList)->exec();
@@ -5592,6 +5606,75 @@ class upgradeModel extends model
     }
 
     /**
+     * Move kanban card data to kanbancell table.
+     *
+     * @access public
+     * @return void
+     *
+     */
+    public function moveKanbanData()
+    {
+        /* Move common kanban data. */
+        $cards = $this->dao->select('id,kanban,`column`,lane')->from(TABLE_KANBANCARD)->fetchAll('id');
+
+        $cellGroup = array();
+        foreach($cards as $cardID => $card)
+        {
+            if(!$card->lane or !$card->column) continue;
+
+            $key   = $card->kanban . '-' . $card->lane . '-' . $card->column;
+            $cards = isset($cellGroup[$key]) ? $cellGroup[$key] . "$cardID," : ",$cardID,";
+            $cellGroup[$key] = $cards;
+        }
+
+        foreach($cellGroup as $key => $cards)
+        {
+            $key = explode('-', $key);
+            if(!is_array($key)) continue;
+
+            $cell = new stdclass();
+            $cell->kanban = $key[0];
+            $cell->lane   = $key[1];
+            $cell->column = $key[2];
+            $cell->type   = 'common';
+            $cell->cards  = $cards;
+
+            $this->dao->insert(TABLE_KANBANCELL)->data($cell)->exec();
+        }
+
+        /* Drop group kanban data. */
+        $groupLanePairs = $this->dao->select('id')->from(TABLE_KANBANLANE)->where('`groupby`')->ne('')->fetchPairs();
+        if(!empty($groupLanePairs))
+        {
+            $this->dao->delete()->from(TABLE_KANBANLANE)->where('id')->in($groupLanePairs)->exec();
+            $this->dao->delete()->from(TABLE_KANBANCOLUMN)->where('lane')->in($groupLanePairs)->exec();
+        }
+
+        /* Move execution kanban data. */
+        $executionKanban = $this->dao->select('t1.id as `lane`, t1.execution, t1.type, t2.id as `column`, t2.cards')->from(TABLE_KANBANLANE)->alias('t1')
+            ->leftJoin(TABLE_KANBANCOLUMN)->alias('t2')->on('t1.id = t2.lane')
+            ->where('t1.execution')->gt(0)
+            ->fetchGroup('lane');
+
+        foreach($executionKanban as $laneID => $laneGroup)
+        {
+            foreach($laneGroup as $colData)
+            {
+                if(!$laneID or !$colData->column) continue;
+
+                $cell = new stdclass();
+                $cell->kanban = $colData->execution;
+                $cell->lane   = $laneID;
+                $cell->column = $colData->column;
+                $cell->type   = $colData->type;
+                $cell->cards  = $colData->cards;
+
+                $this->dao->insert(TABLE_KANBANCELL)->data($cell)->exec();
+            }
+        }
+    }
+
+    /**
      * Update kanban space team.
      *
      * @access public
@@ -5648,15 +5731,16 @@ class upgradeModel extends model
      */
     public function updateObjectBranch()
     {
-        $moduleBranchPairs = $this->dao->select('id,branch')->from(TABLE_MODULE)->fetchPairs();
+        $moduleBranchPairs = $this->dao->select('id,branch')->from(TABLE_MODULE)->where('branch')->ne(0)->fetchPairs();
+        if(empty($moduleBranchPairs)) return true;
 
-        $storyModulePairs = $this->dao->select('module')->from(TABLE_STORY)->where('module')->ne(0)->fetchPairs();
+        $storyModulePairs = $this->dao->select('module')->from(TABLE_STORY)->where('module')->in(array_keys($moduleBranchPairs))->andWhere('branch')->eq(0)->fetchPairs();
         foreach($storyModulePairs as $moduleID) $this->dao->update(TABLE_STORY)->set('`branch`')->eq($moduleBranchPairs[$moduleID])->where('module')->eq($moduleID)->exec();
 
-        $bugModulePairs = $this->dao->select('module')->from(TABLE_BUG)->where('module')->ne(0)->fetchPairs();
+        $bugModulePairs = $this->dao->select('module')->from(TABLE_BUG)->where('module')->in(array_keys($moduleBranchPairs))->andWhere('branch')->eq(0)->fetchPairs();
         foreach($bugModulePairs as $moduleID) $this->dao->update(TABLE_BUG)->set('`branch`')->eq($moduleBranchPairs[$moduleID])->where('module')->eq($moduleID)->exec();
 
-        $caseModulePairs = $this->dao->select('module')->from(TABLE_CASE)->where('module')->ne(0)->fetchPairs();
+        $caseModulePairs = $this->dao->select('module')->from(TABLE_CASE)->where('module')->in(array_keys($moduleBranchPairs))->andWhere('branch')->eq(0)->fetchPairs();
         foreach($caseModulePairs as $moduleID) $this->dao->update(TABLE_CASE)->set('`branch`')->eq($moduleBranchPairs[$moduleID])->where('module')->eq($moduleID)->exec();
 
         return true;

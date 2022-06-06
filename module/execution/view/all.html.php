@@ -97,7 +97,7 @@
           <th class='c-end'><?php common::printOrderLink('end', $orderBy, $vars, $lang->execution->end);?></th>
           <th class='c-realBegan'><?php common::printOrderLink('realBegan', $orderBy, $vars, $lang->execution->realBegan);?></th>
           <th class='c-realEnd'><?php common::printOrderLink('realEnd', $orderBy, $vars, $lang->execution->realEnd);?></th>
-          <th class='c-action'><?php echo $lang->actions;?></th>
+          <th class='c-actions-6 text-center'><?php echo $lang->actions;?></th>
           <?php else:;?>
           <th class='c-begin'><?php common::printOrderLink('begin', $orderBy, $vars, $lang->execution->begin);?></th>
           <th class='c-end'><?php common::printOrderLink('end', $orderBy, $vars, $lang->execution->end);?></th>
@@ -139,7 +139,7 @@
             <?php
             $executionLink = $execution->projectModel == 'kanban' ? html::a($this->createLink('execution', 'kanban', 'executionID=' . $execution->id), $executionName, '', "class='text-ellipsis'") : html::a($this->createLink('execution', 'task', 'execution=' . $execution->id), $executionName, '', "class='text-ellipsis'");
             if($onlyChildStage) echo "<span class='label label-badge label-light label-children'>{$lang->programplan->childrenAB}</span> ";
-            echo !empty($execution->children) ? $execution->name :  $executionLink;
+            echo !empty($execution->children) ? "<span class='text-ellipsis'>$execution->name</span>" :  $executionLink;
             if(isset($execution->delay)) echo "<span class='label label-danger label-badge'>{$lang->execution->delayed}</span> ";
             ?>
             <?php if(!empty($execution->children)):?>
@@ -169,7 +169,7 @@
           <td><?php echo helper::isZeroDate($execution->end)       ? '' : $execution->end;?></td>
           <td><?php echo helper::isZeroDate($execution->realBegan) ? '' : $execution->realBegan;?></td>
           <td><?php echo helper::isZeroDate($execution->realEnd)   ? '' : $execution->realEnd;?></td>
-          <td class="c-actions text-center c-actions">
+          <td class="c-actions text-center">
             <?php
                 common::printIcon('execution', 'start', "executionID={$execution->id}", $execution, 'list', '', '', 'iframe', true);
                 $class = !empty($execution->children) ? 'disabled' : '';
@@ -230,10 +230,10 @@
                <?php endif;?>
                <?php printf('%03d', $child->id);?>
              </td>
-             <td class='text-left' title='<?php echo $child->name?>'>
+             <td class='text-left c-name flex' title='<?php echo $child->name?>'>
                <?php
                echo "<span class='label label-badge label-light' title='{$lang->programplan->children}'>{$lang->programplan->childrenAB}</span>";
-               echo html::a($this->createLink('execution', 'task', 'execution=' . $child->id), $child->name);
+               echo html::a($this->createLink('execution', 'task', 'execution=' . $child->id), $child->name, '', "class='text-ellipsis'");
                if(isset($child->delay)) echo "<span class='label label-danger label-badge'>{$lang->execution->delayed}</span> ";
                ?>
              </td>

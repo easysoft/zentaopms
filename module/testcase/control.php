@@ -126,7 +126,6 @@ class testcase extends control
 
         $uri = $this->app->getURI(true);
         $this->session->set('caseList', $uri, $this->app->tab);
-        $this->session->set('bugList',  $uri, $this->app->tab);
         $this->session->set('productID', $productID);
         $this->session->set('moduleID', $moduleID);
         $this->session->set('browseType', $browseType);
@@ -453,7 +452,7 @@ class testcase extends control
             if(empty($moduleID)) $moduleID = $story->module;
         }
 
-        $currentModuleID = $moduleID  ? (int)$moduleID : (int)$this->cookie->lastCaseModule;
+        $currentModuleID = $moduleID ? (int)$moduleID : (int)$this->cookie->lastCaseModule;
         /* Get the status of stories are not closed. */
         $storyStatus = $this->lang->story->statusList;
         unset($storyStatus['closed']);
@@ -465,8 +464,9 @@ class testcase extends control
             $modules        = $this->loadModel('tree')->getStoryModule($storyModuleID);
             $modules        = $this->tree->getAllChildID($modules);
         }
+
         $stories = $this->story->getProductStoryPairs($productID, $branch, $modules, array_keys($storyStatus), 'id_desc', 50, 'null', 'story', false);
-        if($this->app->tab != 'qa')
+        if($this->app->tab != 'qa' and $this->app->tab != 'product')
         {
             $projectID = $this->app->tab == 'project' ? $this->session->project : $this->session->execution;
             $stories   = $this->story->getExecutionStoryPairs($projectID, $productID, $branch, $modules);
@@ -476,7 +476,6 @@ class testcase extends control
 
         /* Set custom. */
         foreach(explode(',', $this->config->testcase->customCreateFields) as $field) $customFields[$field] = $this->lang->testcase->$field;
-
 
         $this->view->customFields = $customFields;
         $this->view->showFields   = $this->config->testcase->custom->createFields;
@@ -688,12 +687,6 @@ class testcase extends control
             if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'fail', 'message' => '404 Not found'));
             return print(js::error($this->lang->notFound) . js::locate($this->createLink('qa', 'index')));
         }
-        if($case->auto == 'unit')
-        {
-            $this->lang->testcase->subMenu->testcase->feature['alias']  = '';
-            $this->lang->testcase->subMenu->testcase->unit['alias']     = 'view';
-            $this->lang->testcase->subMenu->testcase->unit['subModule'] = 'testcase';
-        }
 
         if($from == 'testtask')
         {
@@ -855,6 +848,9 @@ class testcase extends control
         else
         {
             $productID  = $case->product;
+            $product    = $this->product->getById($productID);
+            if(!isset($this->products[$productID])) $this->products[$productID] = $product->name;
+
             $title      = $this->products[$productID] . $this->lang->colon . $this->lang->testcase->edit;
             $position[] = html::a($this->createLink('testcase', 'browse', "productID=$productID"), $this->products[$productID]);
 
@@ -886,7 +882,6 @@ class testcase extends control
             if(!isset($moduleOptionMenu[$case->module])) $moduleOptionMenu += $this->tree->getModulesName($case->module);
 
             /* Get product and branches. */
-            $product = $this->product->getById($productID);
             if($this->app->tab == 'execution' or $this->app->tab == 'project')
             {
                 $objectID = $this->app->tab == 'project' ? $case->project : $executionID;
@@ -899,9 +894,15 @@ class testcase extends control
             {
                 $branchTagOption[$branchInfo->id] = $branchInfo->name . ($branchInfo->status == 'closed' ? ' (' . $this->lang->branch->statusList['closed'] . ')' : '');
             }
+            if(!isset($branchTagOption[$case->branch]))
+            {
+                $caseBranch = $this->branch->getById($case->branch, $case->product, '');
+                $branchTagOption[$case->branch] = $case->branch == BRANCH_MAIN ? $caseBranch : ($caseBranch->name . ($caseBranch->status == 'closed' ? ' (' . $this->lang->branch->statusList['closed'] . ')' : ''));
+            }
 
             $this->view->productID        = $productID;
             $this->view->product          = $product;
+            $this->view->products         = $this->products;
             $this->view->branchTagOption  = $branchTagOption;
             $this->view->productName      = $this->products[$productID];
             $this->view->moduleOptionMenu = $moduleOptionMenu;
@@ -1596,6 +1597,7 @@ class testcase extends control
 
                 $case->openedDate     = substr($case->openedDate, 0, 10);
                 $case->lastEditedDate = substr($case->lastEditedDate, 0, 10);
+                $case->lastRunDate    = helper::isZeroDate($case->lastRunDate) ? '' : $case->lastRunDate;
 
                 if($case->linkCase)
                 {

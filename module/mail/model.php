@@ -722,7 +722,7 @@ class mailModel extends model
             }
         }
 
-        if($objectType == 'meeting') $rooms = $this->loadmodel('meetingroom')->getpairs();
+        if($objectType == 'meeting') $rooms = $this->loadModel('meetingroom')->getpairs();
         if($objectType == 'review') $this->app->loadLang('baseline');
 
         /* Get mail content. */

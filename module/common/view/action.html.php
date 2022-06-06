@@ -67,7 +67,22 @@
         <style>.comment .comment-content{width: 98%}</style>
         <?php endif;?>
         <div class='article-content comment'>
-          <div class='comment-content'><?php echo strip_tags($action->comment) == $action->comment ? nl2br($action->comment) : $action->comment;?></div>
+          <div class='comment-content'>
+            <?php
+            if(strpos($action->comment, '<pre class="prettyprint lang-html">') !== false)
+            {
+                $before   = explode('<pre class="prettyprint lang-html">', $action->comment);
+                $after    = explode('</pre>', $before[1]);
+                $htmlCode = $after[0];
+                $text     = $before[0] . htmlspecialchars($htmlCode) . $after[1];
+                echo $text;
+            }
+            else
+            {
+                echo strip_tags($action->comment) == $action->comment ? nl2br($action->comment) : $action->comment;
+            }
+            ?>
+          </div>
         </div>
         <?php if($canEditComment):?>
         <form method='post' class='comment-edit-form' action='<?php echo $this->createLink('action', 'editComment', "actionID=$action->id")?>'>

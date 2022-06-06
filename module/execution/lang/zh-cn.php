@@ -292,6 +292,7 @@ $lang->execution->statusSelects['finishedbyme'] = '我完成';
 $lang->execution->statusSelects['done']         = '已完成';
 $lang->execution->statusSelects['closed']       = '已关闭';
 $lang->execution->statusSelects['cancel']       = '已取消';
+$lang->execution->statusSelects['delayed']      = '已延期';
 
 $lang->execution->groups['']           = '分组查看';
 $lang->execution->groups['story']      = "{$lang->SRCommon}分组";
@@ -468,7 +469,6 @@ $lang->execution->featureBar['task']['unclosed']     = $lang->execution->unclose
 $lang->execution->featureBar['task']['assignedtome'] = $lang->execution->assignedToMe;
 $lang->execution->featureBar['task']['myinvolved']   = $lang->execution->myInvolved;
 $lang->execution->featureBar['task']['assignedbyme'] = $lang->execution->assignedByMe;
-$lang->execution->featureBar['task']['delayed']      = '已延期';
 $lang->execution->featureBar['task']['needconfirm']  = "{$lang->SRCommon}变更";
 $lang->execution->featureBar['task']['status']       = $lang->execution->statusSelects[''];
 

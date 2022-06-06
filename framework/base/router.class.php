@@ -617,16 +617,19 @@ class baseRouter
      */
     public function setSuperVars()
     {
-        $URI = $_SERVER['REQUEST_URI'];
-        if(strpos($URI, '?') !== false)
+        if(isset($_SERVER['REQUEST_URI']))
         {
-            $parsedURL = parse_url($URI);
-            if(isset($parsedURL['query']))
+            $URI = $_SERVER['REQUEST_URI'];
+            if(strpos($URI, '?') !== false)
             {
-                parse_str($parsedURL['query'], $parsedQuery);
-                foreach($parsedQuery as $key => $value)
+                $parsedURL = parse_url($URI);
+                if(isset($parsedURL['query']))
                 {
-                    if(!isset($_GET[$key])) $_GET[$key] = $value;
+                    parse_str($parsedURL['query'], $parsedQuery);
+                    foreach($parsedQuery as $key => $value)
+                    {
+                        if(!isset($_GET[$key])) $_GET[$key] = $value;
+                    }
                 }
             }
         }
@@ -2075,6 +2078,19 @@ class baseRouter
                 $defaultParams[$name] = $default;
             }
 
+            /**
+             * 根据PATH_INFO或者GET方式设置请求的参数。
+             * Set params according PATH_INFO or GET.
+             */
+            if($this->config->requestType != 'GET')
+            {
+                $this->setParamsByPathInfo($defaultParams);
+            }
+            else
+            {
+                $this->setParamsByGET($defaultParams);
+            }
+
             if ('cli' === PHP_SAPI)
             {
                 if ($this->params)
@@ -2088,19 +2104,6 @@ class baseRouter
             }
             else
             {
-                /**
-                 * 根据PATH_INFO或者GET方式设置请求的参数。
-                 * Set params according PATH_INFO or GET.
-                 */
-                if($this->config->requestType != 'GET')
-                {
-                    $this->setParamsByPathInfo($defaultParams);
-                }
-                else
-                {
-                    $this->setParamsByGET($defaultParams);
-                }
-
                 if($this->config->framework->filterParam == 2)
                 {
                     $_GET     = validater::filterParam($_GET, 'get');
@@ -2493,13 +2496,16 @@ class baseRouter
         $modulePath = $this->getExtensionRoot() . 'saas' . DS;
         if(file_exists($modulePath . $path)) return $modulePath . $path;
 
-        /* 1. 如果通用版本里有此模块，优先使用。 If module is in the open edition, use it. */
-        $modulePath = $this->getModuleRoot($appName);
+        /* 1. 最后尝试在定制开发中寻找。 Finally, try to find the module in the custom dir. */
+        $modulePath = $this->getExtensionRoot() . 'custom' . DS;
         if(file_exists($modulePath . $path)) return $modulePath . $path;
 
-        /* 2. 尝试查找喧喧是否有此模块。 Try to find the module in other editon. */
-        $modulePath = $this->getExtensionRoot() . 'xuan' . DS;
-        if(file_exists($modulePath . $path)) return $modulePath . $path;
+        /* 2. 如果设置过vision，尝试在vision中查找。 If vision is set, try to find the module in the vision. */
+        if($this->config->vision != 'rnd')
+        {
+            $modulePath = $this->getExtensionRoot() . $this->config->vision . DS;
+            if(file_exists($modulePath . $path)) return $modulePath . $path;
+        }
 
         /* 3. 尝试查找商业版本是否有此模块。 Try to find the module in other editon. */
         if($this->config->edition != 'open')
@@ -2508,15 +2514,12 @@ class baseRouter
             if(file_exists($modulePath . $path)) return $modulePath . $path;
         }
 
-        /* 4. 如果设置过vision，尝试在vision中查找。 If vision is set, try to find the module in the vision. */
-        if($this->config->vision != 'rnd')
-        {
-            $modulePath = $this->getExtensionRoot() . $this->config->vision . DS;
-            if(file_exists($modulePath . $path)) return $modulePath . $path;
-        }
+        /* 4. 尝试查找喧喧是否有此模块。 Try to find the module in other editon. */
+        $modulePath = $this->getExtensionRoot() . 'xuan' . DS;
+        if(file_exists($modulePath . $path)) return $modulePath . $path;
 
-        /* 5. 最后尝试在定制开发中寻找。 Finally, try to find the module in the custom dir. */
-        $modulePath = $this->getExtensionRoot() . 'custom' . DS;
+        /* 5. 如果通用版本里有此模块，优先使用。 If module is in the open edition, use it. */
+        $modulePath = $this->getModuleRoot($appName);
         if(file_exists($modulePath . $path)) return $modulePath . $path;
 
         return '';

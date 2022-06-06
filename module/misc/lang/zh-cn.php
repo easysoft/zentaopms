@@ -12,6 +12,8 @@
 $lang->misc = new stdclass();
 $lang->misc->common  = '杂项';
 $lang->misc->ping    = '防超时';
+$lang->misc->view    = '查看';
+$lang->misc->cancel  = '取消';
 
 $lang->misc->zentao = new stdclass();
 $lang->misc->zentao->version           = '版本%s';
@@ -70,6 +72,12 @@ $lang->misc->showAnnual  = '新增年度总结功能';
 $lang->misc->annualDesc  = '12.0版本后，新增年度总结功能，可以到『统计->年度总结』页面查看。 是否现在<a href="%s" target="_blank" id="showAnnual" class="btn btn-mini btn-primary">查看</a>';
 $lang->misc->remind      = '新功能提醒';
 
+$lang->misc->expiredTipsTitle    = '尊敬的系统管理员，您好：';
+$lang->misc->expiredCountTips    = '系统中有<span class="expired-tips text-blue" data-toggle="tooltip" data-placement="bottom" title="%s">%s个插件</span>即将到期，为避免影响您的正常使用，请联系管理员及时续费或卸载。';
+$lang->misc->expiredPluginTips   = '已到期的插件为：%s。';
+$lang->misc->expiringPluginTips  = '即将到期的插件为：%s。';
+$lang->misc->expiredTipsForAdmin = '当前系统中有%s个插件即将到期，为避免影响功能的正常使用，请尽快到系统后台插件管理中进行续费或卸载处理。';
+
 $lang->misc->noticeRepair = "<h5>普通用户请联系管理员进行修复</h5>
     <h5>管理员请登录禅道所在的服务器，创建<span>%s</span>文件。</h5>
     <p>注意：</p>
@@ -95,6 +103,7 @@ $lang->misc->feature->themeDesc      = "<p>禅道15系列上线了全新的“�
 $lang->misc->feature->visionsDesc    = "<p>从16.5开始增加了界面概念，用户可以在<span style='color:#0c60e1'>[研发综合界面]</span>中处理研发事务、在<span style='color:#0c60e1'>[迅捷界面]</span>处理日常办公事务。</p><p>在头像右侧即可查看当前所处界面，点击当前界面名称可查看和切换其他的界面。</p>";
 $lang->misc->feature->visionsImage   = 'theme/default/images/main/visions.png';
 
+$lang->misc->releaseDate['17.0']        = '2022-06-02';
 $lang->misc->releaseDate['17.0.beta2']  = '2022-05-26';
 $lang->misc->releaseDate['17.0.beta1']  = '2022-05-06';
 $lang->misc->releaseDate['16.5']        = '2022-03-24';
@@ -173,6 +182,7 @@ $lang->misc->releaseDate['7.2.stable']  = '2015-05-22';
 $lang->misc->releaseDate['7.1.stable']  = '2015-03-07';
 $lang->misc->releaseDate['6.3.stable']  = '2014-11-07';
 
+$lang->misc->feature->all['17.0'][]       = array('title' => '细节体验优化。修复Bug。', 'desc' => '');
 $lang->misc->feature->all['17.0.beta2'][] = array('title' => '细节体验优化。修复Bug。', 'desc' => '');
 $lang->misc->feature->all['17.0.beta1'][] = array('title' => '完成客户巴高优先级需求。修复Bug。', 'desc' => '');
 $lang->misc->feature->all['16.5'][]       = array('title' => '修复Bug。', 'desc' => '');

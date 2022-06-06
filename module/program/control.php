@@ -52,8 +52,9 @@ class program extends control
             }
             else
             {
-                $topPrograms = $this->program->getList($status, $orderBy, $pager, 'top');
-                $programs    = $this->program->getList($status, $orderBy, null, 'child', $topPrograms);
+                /* Get top programs and projects. */
+                $topObjects = $this->program->getList($status, $orderBy, $pager, 'top');
+                $programs   = $this->program->getList($status, $orderBy, NULL, 'child', array_keys($topObjects));
 
                 /* Get summary. */
                 $topCount = $indCount = 0;
@@ -252,7 +253,7 @@ class program extends control
         $this->view->program         = $program;
         $this->view->parents         = $parents;
         $this->view->programList     = $this->program->getList();
-        $this->view->budgetUnitList  = $this->program->getBudgetUnitList();
+        $this->view->budgetUnitList  = $this->loadModel('project')->getBudgetUnitList();
         $this->view->parentProgram   = $parentProgram;
         $this->view->availableBudget = $this->program->getBudgetLeft($parentProgram) + (float)$program->budget;
 

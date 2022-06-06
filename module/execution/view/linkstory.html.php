@@ -55,7 +55,7 @@
       <tbody>
       <?php $storyCount = 0;?>
       <?php foreach($allStories as $story):?>
-      <?php $storyLink = $this->createLink('story', 'view', "storyID=$story->id");?>
+      <?php $storyLink = $this->createLink('story', 'view', "storyID=$story->id", '', true);?>
       <tr>
         <td class='cell-id'>
           <?php echo html::checkbox('stories', array($story->id => sprintf('%03d', $story->id)));?>
@@ -65,10 +65,10 @@
         <td class='text-left nobr' title="<?php echo $story->title?>">
           <?php
           if($story->parent > 0) echo "<span class='label'>{$lang->story->childrenAB}</span>";
-          echo html::a($storyLink, $story->title);
+          echo html::a($storyLink, $story->title, '', "class='iframe' data-width='80%'");
           ?>
         </td>
-        <td class='text-left' title='<?php echo $products[$story->product]->name?>'><?php echo html::a($this->createLink('product', 'browse', "productID=$story->product&branch=$story->branch"), $products[$story->product]->name, '_blank');?></td>
+        <td class='text-left' title='<?php echo $products[$story->product]->name?>'><?php echo html::a($this->createLink('product', 'browse', "productID=$story->product&branch=$story->branch"), $products[$story->product]->name);?></td>
         <td class='c-module text-left' title='<?php echo zget($modules, $story->module, '')?>'><?php echo zget($modules, $story->module, '')?></td>
         <td class='text-ellipsis' title='<?php echo $story->planTitle;?>'><?php echo $story->planTitle;?></td>
         <td><?php echo zget($lang->story->stageList, $story->stage);?></td>

@@ -47,10 +47,11 @@ function loadBranch()
  */
 function loadProductBranches(productID)
 {
-    var param = '';
-    if(page == 'create') param = 'active';
     $('#branch').remove();
-    var param = "productID=" + productID + "&oldBranch=0&param=" + param;
+
+    var param     = page == 'create' ? 'active' : 'all';
+    var oldBranch = page == 'edit' ? caseBranch : 0;
+    var param     = "productID=" + productID + "&oldBranch=" + oldBranch + "&param=" + param;
     if(typeof(tab) != 'undefined' && (tab == 'execution' || tab == 'project')) param += "&projectID=" + objectID;
     $.get(createLink('branch', 'ajaxGetBranches', param), function(data)
     {

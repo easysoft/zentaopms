@@ -1703,8 +1703,8 @@ EOD;
         $executionList  = $app->dbh->query("SELECT id,name,parent FROM " . TABLE_EXECUTION . " WHERE `project` = '{$object->project}' AND `deleted` = '0' $userCondition $orderBy")->fetchAll();
         foreach($executionList as $execution)
         {
-            if($execution->id == $executionID) continue;
             if(isset($executionPairs[$execution->parent])) unset($executionPairs[$execution->parent]);
+            if($execution->id == $executionID) continue;
             $executionPairs[$execution->id] = $execution->name;
         }
 
@@ -2289,7 +2289,7 @@ EOD;
                 'my'      => array('changepassword'),
                 'message' => array('ajaxgetmessage'),
             );
-            if(!empty($this->app->user->modifyPassword) and (!isset($beforeValidMethods[$module]) or !in_array($method, $beforeValidMethods[$module]))) return print(js::locate(helper::createLink('my', 'changepassword', '', '', true)));
+            if(!empty($this->app->user->modifyPassword) and (!isset($beforeValidMethods[$module]) or !in_array($method, $beforeValidMethods[$module]))) return print(js::locate(helper::createLink('my', 'changepassword')));
             if($this->isOpenMethod($module, $method)) return true;
             if(!$this->loadModel('user')->isLogon() and $this->server->php_auth_user) $this->user->identifyByPhpAuth();
             if(!$this->loadModel('user')->isLogon() and $this->cookie->za) $this->user->identifyByCookie();
@@ -2403,6 +2403,12 @@ EOD;
         /* If not super admin, check the rights. */
         $rights = $app->user->rights['rights'];
         $acls   = $app->user->rights['acls'];
+
+        /* White list of import method. */
+        if(in_array($module, array('user', 'task', 'story', 'bug', 'testcase')) and $method == 'showimport')
+        {
+            if(isset($rights[$module]['import']) and commonModel::hasDBPriv($object, $module, 'import')) return true;
+        }
 
         if(isset($rights[$module][$method]))
         {

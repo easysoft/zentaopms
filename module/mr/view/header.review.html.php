@@ -152,6 +152,7 @@ js::set('revision', '');
       <tr>
         <th></th>
         <td colspan="3" class='form-actions'>
+          <?php echo html::hidden('entry');?>
           <?php echo html::submitButton($lang->repo->submit, '', 'btn btn-wide btn-primary reviewSubmit');?>
           <?php echo html::commonButton($lang->cancel, "onclick='hiddenForm()'", 'btn btn-wide');?>
         </td>

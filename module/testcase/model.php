@@ -396,15 +396,27 @@ class testcaseModel extends model
         foreach($case as $key => $value) if(strpos($key, 'Date') !== false and !(int)substr($value, 0, 4)) $case->$key = '';
 
         /* Get project and execution. */
-        $objects = $this->dao->select('t1.*, t1.project as objectID, t2.type')->from(TABLE_PROJECTCASE)->alias('t1')
-            ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.project=t2.id')
-            ->where('t1.case')->eq($caseID)
-            ->fetchAll('objectID');
-
-        foreach($objects as $objectID => $object)
+        if($this->app->tab == 'project')
         {
-            if($object->type == 'project') $case->project = $objectID;
-            if(in_array($object->type, array('sprint', 'stage'))) $case->execution = $objectID;
+            $case->project = $this->session->project;
+        }
+        elseif($this->app->tab == 'execution')
+        {
+            $case->execution = $this->session->execution;
+            $case->project   = $this->dao->select('project')->from(TABLE_PROJECT)->where('id')->eq($case->execution)->fetch('project');
+        }
+        else
+        {
+            $objects = $this->dao->select('t1.*, t1.project as objectID, t2.type')->from(TABLE_PROJECTCASE)->alias('t1')
+                ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.project=t2.id')
+                ->where('t1.case')->eq($caseID)
+                ->fetchAll('objectID');
+
+            foreach($objects as $objectID => $object)
+            {
+                if($object->type == 'project') $case->project = $objectID;
+                if(in_array($object->type, array('sprint', 'stage', 'kanban'))) $case->execution = $objectID;
+            }
         }
 
         if($case->story)
@@ -422,9 +434,16 @@ class testcaseModel extends model
 
         if($case->linkCase or $case->fromCaseID) $case->linkCaseTitles = $this->dao->select('id,title')->from(TABLE_CASE)->where('id')->in($case->linkCase)->orWhere('id')->eq($case->fromCaseID)->fetchPairs();
         if($version == 0) $version = $case->version;
-        $case->steps = $this->dao->select('*')->from(TABLE_CASESTEP)->where('`case`')->eq($caseID)->andWhere('version')->eq($version)->orderBy('id')->fetchAll('id');
         $case->files = $this->loadModel('file')->getByObject('testcase', $caseID);
         $case->currentVersion = $version ? $version : $case->version;
+
+        $case->steps = $this->dao->select('*')->from(TABLE_CASESTEP)->where('`case`')->eq($caseID)->andWhere('version')->eq($version)->orderBy('id')->fetchAll('id');
+        foreach($case->steps as $key => $step)
+        {
+            $step->desc   = html_entity_decode($step->desc);
+            $step->expect = html_entity_decode($step->expect);
+        }
+
         return $case;
     }
 

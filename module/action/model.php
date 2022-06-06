@@ -949,7 +949,7 @@ class actionModel extends model
             ->beginIF($libs and !$this->app->user->admin)->andWhere("IF(objectType != 'doclib', '1=1', objectID " . helper::dbIN(array_keys($libs)) . ') ')->fi()
             ->beginIF($actionCondition)->andWhere("($actionCondition)")->fi()
             /* Filter out client login/logout actions. */
-            ->andWhere('action')->notin('disconnectxuanxuan,loginxuanxuan')
+            ->andWhere('action')->notin('disconnectxuanxuan,reconnectxuanxuan,loginxuanxuan,logoutxuanxuan')
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll();

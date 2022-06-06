@@ -45,7 +45,8 @@ function renderUserAvatar(user, objectType, objectID, size, objectStatus)
     if(objectType == 'story' && !priv.canAssignStory) return $noPrivAvatar;
     if(objectType == 'bug'   && !priv.canAssignBug)   return $noPrivAvatar;
 
-    return objectStatus == 'closed' ? '' : $('<a class="avatar has-text ' + avatarSizeClass + ' avatar-circle iframe" title="' + user.realname + '" href="' + link + '"/>').avatar({user: user});
+    var realname = user.realname ? user.realname : user.account;
+    return objectStatus == 'closed' ? '' : $('<a class="avatar has-text ' + avatarSizeClass + ' avatar-circle iframe" title="' + realname + '" href="' + link + '"/>').avatar({user: user});
 }
 
 /**
@@ -131,6 +132,7 @@ function renderStoryItem(item, $item, col)
         }
     }
 
+    if($.cookie('isFullScreen') == 1) hideAllAction();
     return $item.attr('data-type', 'story').addClass('kanban-item-story');
 }
 
@@ -195,6 +197,7 @@ function renderBugItem(item, $item, col)
         }
     }
 
+    if($.cookie('isFullScreen') == 1) hideAllAction();
     return $item.attr('data-type', 'bug').addClass('kanban-item-bug');
 }
 
@@ -260,6 +263,7 @@ function renderTaskItem(item, $item, col)
 
     $item.attr('data-type', 'task').addClass('kanban-item-task');
 
+    if($.cookie('isFullScreen') == 1) hideAllAction();
     return $item;
 }
 
@@ -388,6 +392,24 @@ function createKanban(kanbanID, data, options)
     $kanban.kanban($.extend({data: data, calcColHeight: calcColHeight, displayCards: displayCards}, options));
 }
 
+/**
+ * Hide all actions.
+ *
+ * @access public
+ * @return void
+ */
+function hideAllAction()
+{
+    $('.actions').hide();
+    $(".title, .avatar.iframe").attr("disabled", true).css("pointer-events", "none");
+}
+
+/**
+ * Display the kanban in full screen.
+ *
+ * @access public
+ * @return void
+ */
 function fullScreen()
 {
     $('#kanbans .kanban-header').addClass('headerTop');
@@ -398,17 +420,7 @@ function fullScreen()
         var afterEnterFullscreen = function()
         {
             $('#kanbanContainer').addClass('scrollbar-hover');
-            $('.actions').hide();
-            $('#kanbanContainer a.iframe').each(function()
-            {
-                if($(this).hasClass('iframe'))
-                {
-                    var href = $(this).attr('href');
-                    $(this).removeClass('iframe');
-                    $(this).attr('href', 'javascript:void(0)');
-                    $(this).attr('href-bak', href);
-                }
-            })
+            hideAllAction();
             $.cookie('isFullScreen', 1);
         }
 
@@ -447,15 +459,7 @@ function exitFullScreen()
     $('#kanbans .kanban-header').removeClass('headerTop');
     $('#kanbanContainer').removeClass('scrollbar-hover');
     $('.actions').show();
-    $('#kanbanContainer a').each(function()
-    {
-        var hrefBak = $(this).attr('href-bak');
-        if(hrefBak)
-        {
-            $(this).addClass('iframe');
-            $(this).attr('href', hrefBak);
-        }
-    })
+    $(".title, .avatar.iframe").attr("disabled", false).css("pointer-events", "auto");
     $.cookie('isFullScreen', 0);
 }
 
@@ -505,11 +509,11 @@ if(!window.kanbanDropRules)
         },
         task:
         {
-            'wait': ['developing', 'developed', 'canceled', 'closed'],
+            'wait': ['developing', 'developed', 'canceled'],
             'developing': ['developed', 'pause', 'canceled'],
             'developed': ['developing', 'closed'],
             'pause': ['developing'],
-            'canceled': ['developing'],
+            'canceled': ['developing', 'closed'],
             'closed': ['developing'],
         }
     }
@@ -783,7 +787,6 @@ var kanbanActionHandlers =
  */
 function handleKanbanAction(action, $element, event, kanban)
 {
-    if(groupBy && groupBy != 'default') return false;
     $('.kanban').attr('data-action-enabled', action);
     var handler = kanbanActionHandlers[action];
     if(handler) handler($element, event, kanban);
@@ -1062,7 +1065,7 @@ $(function()
         cardsPerRow:          window.kanbanScaleSize,
         virtualize:           true,
         onAction:             handleKanbanAction,
-        virtualRenderOptions: {container: '#kanbanContainer>.panel-body'},
+        virtualRenderOptions: {container: '#kanbanContainer>.panel-body,#kanbanContainer'},
         virtualCardList:      true,
         droppable:
         {
@@ -1071,10 +1074,8 @@ $(function()
         },
         onRenderHeaderCol: renderHeaderCol,
         onRenderLaneName:  renderLaneName,
-        onRenderCount:     renderColumnCount
+        onRenderCount:     renderColumnCount,
     };
-
-    if(groupBy != 'default') commonOptions.droppable = false;
 
     /* Create kanban */
     if(groupBy == 'default')
@@ -1141,7 +1142,8 @@ $(function()
         var planID = $('#plan').val();
         if(planID)
         {
-            location.href = createLink('execution', 'importPlanStories', 'executionID=' + executionID + '&planID=' + planID + '&productID=0&fromMethod=kanban');
+            var param = "&param=executionID=" + executionID + ",browseType=" + browseType + ",orderBy=id_asc,groupBy=" + groupBy;
+            location.href = createLink('execution', 'importPlanStories', 'executionID=' + executionID + '&planID=' + planID + '&productID=0&fromMethod=taskKanban&extra=' + param);
         }
     });
 

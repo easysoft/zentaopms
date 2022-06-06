@@ -15,7 +15,10 @@
 <?php js::set('noAccess', $lang->user->error->noAccess)?>
 <div id='mainMenu' class='clearfix'>
   <div class='btn-toolbar pull-left'>
-    <span class='btn btn-link btn-active-text'><span class='text'><?php echo $lang->execution->team;?></span></span>
+    <span class='btn btn-link btn-active-text'>
+      <span class='text'><?php echo $lang->execution->team;?></span>
+      <span class="label label-light label-badge"><?php echo count($teamMembers);?></span>
+    </span>
   </div>
   <div class='btn-toolbar pull-right'>
     <?php
@@ -91,8 +94,7 @@
             <?php
             if (common::hasPriv('execution', 'unlinkMember', $member))
             {
-                $unlinkURL = $this->createLink('execution', 'unlinkMember', "executionID=$execution->id&userID=$member->userID&confirm=yes");
-                echo html::a("javascript:ajaxDelete(\"$unlinkURL\", \"mainContent\", confirmUnlinkMember)", '<i class="icon-green-execution-unlinkMember icon-unlink"></i>', '', "class='btn' title='{$lang->execution->unlinkMember}'");
+                echo html::a("javascript:deleteMember($execution->id, $member->userID)", '<i class="icon-green-execution-unlinkMember icon-unlink"></i>', '', "class='btni' title='{$lang->execution->unlinkMember}'");
             }
             ?>
           </td>
@@ -102,7 +104,7 @@
       </tbody>
     </table>
     <div class='table-footer'>
-      <div class='table-statistic'><?php echo $lang->team->totalHours . '：' .  "<strong>$totalHours{$lang->execution->workHour}</strong>";?></div>
+      <div class='table-statistic'><?php echo $lang->team->totalHours . '：' .  "<strong>$totalHours{$lang->execution->workHour}" . sprintf($lang->project->teamMembersCount, count($teamMembers)) . "</strong>";?></div>
     </div>
   </form>
   <?php endif;?>

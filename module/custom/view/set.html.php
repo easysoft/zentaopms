@@ -38,13 +38,12 @@ EOT;
 </style>
 <?php if($module == 'story' and $field == 'review'):?>
 <style>
-.reviewBox > th {width: 95px !important;}
-.reviewBox > td {width: 500px !important;}
+.table-form>tbody>tr>th {width: 120px !important}
 .checkbox-primary {margin-bottom: 0px; width: 82px !important;}
-.storyReviewTip {padding-left: 95px;}
+.storyReviewTip  > div , .storyNotReviewTip  > div {padding-left: 120px;}
 <?php if($app->getClientLang() != 'zh-cn' and $app->getClientLang() != 'zh-tw'):?>
-.reviewBox > th {width: 160px !important;}
-.storyReviewTip {padding-left: 160px;}
+.table-form>tbody>tr>th {width: 180px !important;}
+.storyReviewTip  > div , .storyNotReviewTip  > div {padding-left: 180px;}
 <?php endif;?>
 </style>
 <?php endif;?>
@@ -108,23 +107,32 @@ EOT;
         <?php if($module == 'story'):?>
         <tr>
           <?php $space = ($app->getClientLang() != 'zh-cn' and $app->getClientLang() != 'zh-tw') ? ' ': '';?>
-          <td colspan='3'><div class='storyReviewTip'><?php echo sprintf($lang->custom->notice->forceReview, $lang->$module->common) . $lang->custom->notice->storyReviewTip;?></td>
+          <td colspan='3' class='storyReviewTip<?php if($needReview) echo " hidden"?>'><div><?php echo sprintf($lang->custom->notice->forceReview, $lang->$module->common) . $lang->custom->notice->storyReviewTip;?></td>
+          <td colspan='3' class='storyNotReviewTip<?php if(!$needReview) echo " hidden"?>'><div><?php echo sprintf($lang->custom->notice->forceNotReview, $lang->$module->common) . $lang->custom->notice->storyReviewTip;?></td>
         </tr>
-        <tr id='userBox'>
+        <tr id='userBox' class='forceReview<?php if($needReview) echo " hidden"?>'>
           <th><?php echo $lang->custom->forceReview . $space . $lang->custom->account;?></th>
           <td><?php echo html::select('forceReview[]', $users, $forceReview, "class='form-control chosen' multiple");?></td>
-          <td>
-            <?php echo html::checkbox('forceReviewAll', array('1' => $lang->custom->allUsers), $forceReviewAll);?>
-            <icon class='icon icon-help' data-toggle='popover' data-trigger='focus hover' data-placement='right' data-tip-class='text-muted popover-sm' data-content="<?php echo $lang->custom->notice->selectAllTip;?>"></icon>
-          </td>
         </tr>
-        <tr id='roleBox'>
+        <tr id='roleBox' class='forceReview<?php if($needReview) echo " hidden"?>'>
           <th><?php echo $lang->custom->forceReview . $space . $lang->custom->role;?></th>
           <td><?php echo html::select('forceReviewRoles[]', $lang->user->roleList, $forceReviewRoles, "class='form-control chosen' multiple");?></td>
         </tr>
-        <tr id='deptBox'>
+        <tr id='deptBox' class='forceReview<?php if($needReview) echo " hidden"?>'>
           <th><?php echo $lang->custom->forceReview . $space . $lang->custom->dept;?></th>
           <td><?php echo html::select('forceReviewDepts[]', $depts, $forceReviewDepts, "class='form-control chosen' multiple");?></td>
+        </tr>
+        <tr id='userBox' class='forceNotReview<?php if(!$needReview) echo " hidden"?>'>
+          <th><?php echo $lang->custom->forceNotReview . $space . $lang->custom->account;?></th>
+          <td><?php echo html::select('forceNotReview[]', $users, $forceNotReview, "class='form-control chosen' multiple");?></td>
+        </tr>
+        <tr id='roleBox' class='forceNotReview<?php if(!$needReview) echo " hidden"?>'>
+          <th><?php echo $lang->custom->forceNotReview . $space . $lang->custom->role;?></th>
+          <td><?php echo html::select('forceNotReviewRoles[]', $lang->user->roleList, $forceNotReviewRoles, "class='form-control chosen' multiple");?></td>
+        </tr>
+        <tr id='deptBox' class='forceNotReview<?php if(!$needReview) echo " hidden"?>'>
+          <th><?php echo $lang->custom->forceNotReview . $space . $lang->custom->dept;?></th>
+          <td><?php echo html::select('forceNotReviewDepts[]', $depts, $forceNotReviewDepts, "class='form-control chosen' multiple");?></td>
         </tr>
         <?php endif;?>
         <?php if($module == 'testcase'):?>
@@ -271,31 +279,33 @@ $(function()
 {
     $('[data-toggle="popover"]').popover();
 
-    toggleBox($("input[name^='forceReviewAll']").prop('checked'));
-
-    $("input[name^='forceReviewAll']").click(function()
+    $("input[name='needReview']").change(function()
     {
-        toggleBox($(this).prop('checked'));
-    });
+        needReviewChange();
+    })
 
     /**
-     * Toggle box.
+     * When needReview change.
      *
-     * @param  bool $checked
      * @access public
      * @return void
      */
-    function toggleBox(checked)
+    function needReviewChange()
     {
-        $('#roleBox').toggleClass('hidden', checked);
-        $('#deptBox').toggleClass('hidden', checked);
-        if(checked)
+        var needReview = $("input[name='needReview']:checked").val();
+        if(needReview == 1)
         {
-            $('#forceReview').val('').attr('disabled', 'disabled').trigger('chosen:updated');
+            $('.storyReviewTip').addClass('hidden');
+            $('.forceReview').addClass('hidden');
+            $('.storyNotReviewTip').removeClass('hidden');
+            $('.forceNotReview').removeClass('hidden');
         }
         else
         {
-            $('#forceReview').removeAttr('disabled', 'disabled').trigger('chosen:updated');
+            $('.forceReview').removeClass('hidden');
+            $('.storyReviewTip').removeClass('hidden');
+            $('.forceNotReview').addClass('hidden');
+            $('.storyNotReviewTip').addClass('hidden');
         }
     }
 })

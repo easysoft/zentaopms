@@ -658,7 +658,7 @@ class user extends control
     {
         if(isset($_POST['users']))
         {
-            $this->view->users = $this->dao->select('*')->from(TABLE_USER)->where('account')->in($this->post->users)->orderBy('id')->fetchAll('id');
+            $this->view->users = $this->dao->select('*')->from(TABLE_USER)->where('id')->in($this->post->users)->orderBy('id')->fetchAll('id');
         }
         elseif($_POST)
         {
@@ -961,13 +961,15 @@ class user extends control
         else
         {
             $this->loadModel('misc');
-            $this->view->noGDLib     = sprintf($this->lang->misc->noGDLib, common::getSysURL() . $this->config->webRoot, '', false, true);
-            $this->view->title       = $this->lang->user->login;
-            $this->view->referer     = $this->referer;
-            $this->view->s           = zget($this->config->global, 'sn', '');
-            $this->view->keepLogin   = $this->cookie->keepLogin ? $this->cookie->keepLogin : 'off';
-            $this->view->rand        = $this->user->updateSessionRandom();
-            $this->view->unsafeSites = $this->misc->checkOneClickPackage();
+            $this->loadModel('extension');
+            $this->view->noGDLib       = sprintf($this->lang->misc->noGDLib, common::getSysURL() . $this->config->webRoot, '', false, true);
+            $this->view->title         = $this->lang->user->login;
+            $this->view->referer       = $this->referer;
+            $this->view->s             = zget($this->config->global, 'sn', '');
+            $this->view->keepLogin     = $this->cookie->keepLogin ? $this->cookie->keepLogin : 'off';
+            $this->view->rand          = $this->user->updateSessionRandom();
+            $this->view->unsafeSites   = $this->misc->checkOneClickPackage();
+            $this->view->plugins       = $this->extension->getExpiringPlugins(true);
             $this->display();
         }
     }

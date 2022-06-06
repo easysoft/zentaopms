@@ -317,7 +317,7 @@ class doc extends control
             if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $docID));
             $objectID = zget($lib, $lib->type, '');
             $params   = "type={$lib->type}&objectID=$objectID&libID={$lib->id}&docID=" . $docResult['id'];
-            $link     = isonlybody() ? 'parent' : $this->createLink('doc', 'objectLibs', $params, 'html');
+            $link     = isonlybody() ? 'parent' : $this->createLink('doc', 'objectLibs', $params, 'html') . '#app=' . $this->app->tab;
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $link));
         }
 
@@ -525,12 +525,6 @@ class doc extends control
 
             $browseLink = inLink('objectLibs', "type=$type&objectID=$objectID&libID=$libID&docID=$docID");
             if(!(defined('RUN_MODE') && RUN_MODE == 'api')) $this->locate($browseLink);
-        }
-
-        if($doc->contentType == 'markdown')
-        {
-            $doc->content = commonModel::processMarkdown($doc->content);
-            $doc->digest  = commonModel::processMarkdown($doc->digest);
         }
 
         /* Check priv when lib is product or project. */
@@ -997,12 +991,6 @@ class doc extends control
             {
                 $doc->keywords = str_replace("，", ',', $doc->keywords);
                 $doc->keywords = explode(',', $doc->keywords);
-            }
-
-            if($doc->contentType == 'markdown')
-            {
-                $doc->content = commonModel::processMarkdown($doc->content);
-                $doc->digest  = commonModel::processMarkdown($doc->digest);
             }
         }
 

@@ -42,7 +42,7 @@
         <tr>
           <td colspan='2'><?php echo html::checkbox('importObjectList', $lang->kanban->importObjectList, $importObjects);?></td>
         </tr>
-        <tr id='emptyTip' class='hidden'><td colspan='3' style='color: red;'><?php echo $lang->kanban->error->importObjNotEmpty;?></td></tr>
+        <tr id='emptyTip' class='hidden'><td colspan='2' style='color: red;'><?php echo $lang->kanban->error->importObjNotEmpty;?></td></tr>
         <tr>
           <td class='form-actions'><?php echo html::submitButton();?></td>
         </tr>

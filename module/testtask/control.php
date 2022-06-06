@@ -248,6 +248,9 @@ class testtask extends control
         $executions = empty($productID) ? array() : $this->loadModel('product')->getExecutionPairsByProduct($productID, '', 'id_desc', $projectID);
         $builds     = empty($productID) ? array() : $this->loadModel('build')->getBuildPairs($productID, 'all', 'notrunk');
 
+        $execution = $this->loadModel('execution')->getByID($executionID);
+        if(!empty($execution) and $execution->type == 'kanban') $this->lang->testtask->execution = str_replace($this->lang->execution->common, $this->lang->kanban->common, $this->lang->testtask->execution);
+
         /* Set menu. */
         $productID = $this->product->saveState($productID, $this->products);
 
@@ -749,6 +752,12 @@ class testtask extends control
             $this->loadModel('qa')->setMenu($this->products, $productID, $task->branch, $taskID);
         }
 
+        if(!isset($this->products[$productID]))
+        {
+            $product = $this->product->getByID($productID);
+            $this->products[$productID] = $product->name;
+        }
+
         $this->view->title      = $this->products[$productID] . $this->lang->colon . $this->lang->testtask->edit;
         $this->view->position[] = html::a($this->createLink('testtask', 'browse', "productID=$productID"), $this->products[$productID]);
         $this->view->position[] = $this->lang->testtask->common;
@@ -759,11 +768,15 @@ class testtask extends control
         $projectID   = $this->lang->navGroup->testtask == 'qa' ? 0 : $this->session->project;
         $executions  = empty($productID) ? array() : $this->product->getExecutionPairsByProduct($productID, 0, 'id_desc', $projectID);
         $executionID = $task->execution;
-        $builds      = empty($productID) ? array() : $this->loadModel('build')->getBuildPairs($productID, 'all', 'noempty,notrunk', $executionID, 'execution');
+        if(!isset($executions[$executionID]))
+        {
+            $appendExecution = $this->loadModel('execution')->getByID($executionID);
+            $executions[$executionID] = $appendExecution->name;
+        }
 
         $this->view->task         = $task;
         $this->view->executions   = $executions;
-        $this->view->builds       = $builds;
+        $this->view->builds       = empty($productID) ? array() : $this->loadModel('build')->getBuildPairs($productID, 'all', 'noempty,notrunk', $executionID, 'execution');
         $this->view->testreports  = $this->loadModel('testreport')->getPairs($task->product, $task->testreport);
         $this->view->users        = $this->loadModel('user')->getPairs('nodeleted|noclosed', $task->owner);
         $this->view->contactLists = $this->user->getContactLists($this->app->user->account, 'withnote');

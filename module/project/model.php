@@ -99,10 +99,14 @@ class projectModel extends model
      * @access public
      * @return array
      */
+
     public function getBudgetUnitList()
     {
         $budgetUnitList = array();
-        foreach(explode(',', $this->config->project->unitList) as $unit) $budgetUnitList[$unit] = zget($this->lang->project->unitList, $unit, '');
+        if($this->config->vision != 'lite')
+        {
+            foreach(explode(',', $this->config->project->unitList) as $unit) $budgetUnitList[$unit] = zget($this->lang->project->unitList, $unit, '');
+        }
 
         return $budgetUnitList;
     }
@@ -1052,7 +1056,6 @@ class projectModel extends model
             ->setIF($this->post->delta == 999, 'end', LONG_TIME)
             ->setIF($this->post->delta == 999, 'days', 0)
             ->setIF($this->post->acl   == 'open', 'whitelist', '')
-            ->setIF($this->post->budget != 0, 'budget', round((float)$this->post->budget, 2))
             ->setIF(!isset($_POST['whitelist']), 'whitelist', '')
             ->setDefault('openedBy', $this->app->user->account)
             ->setDefault('openedDate', helper::now())
@@ -1111,6 +1114,24 @@ class projectModel extends model
         {
             dao::$errors['days'] = sprintf($this->lang->project->workdaysExceed, $workdays);
             return false;
+        }
+
+        if(!empty($project->budget))
+        {
+            if(!is_numeric($project->budget))
+            {
+                dao::$errors['budget'] = sprintf($this->lang->project->budgetNumber);
+                return false;
+            }
+            else if(is_numeric($project->budget) and ($project->budget < 0))
+            {
+                dao::$errors['budget'] = sprintf($this->lang->project->budgetGe0);
+                return false;
+            }
+            else
+            {
+                $project->budget = round((float)$this->post->budget, 2);
+            }
         }
 
         /* When select create new product, product name cannot be empty and duplicate. */
@@ -1305,7 +1326,7 @@ class projectModel extends model
         $project = fixer::input('post')
             ->add('id', $projectID)
             ->callFunc('name', 'trim')
-            ->setDefault('team', substr($this->post->name, 0, 30))
+            ->setDefault('team', mb_substr($this->post->name, 0, 30))
             ->setDefault('lastEditedBy', $this->app->user->account)
             ->setDefault('lastEditedDate', helper::now())
             ->setIF($this->post->delta == 999, 'end', LONG_TIME)
@@ -2483,7 +2504,13 @@ class projectModel extends model
         $project = $this->getByID($objectID);
 
         $model = 'scrum';
-        if($project) $model = $project->model;
+        if($project and $project->model == 'waterfall') $model = $project->model;
+        if($project and $project->model == 'kanban')
+        {
+            $model = $project->model . 'Project';
+
+            $lang->executionCommon = $lang->project->kanban;
+        }
 
         if(isset($lang->$model))
         {

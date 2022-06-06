@@ -109,6 +109,9 @@ class projectreleaseModel extends model
         $oldRelease = $this->dao->select('*')->from(TABLE_RELEASE)->where('id')->eq($releaseID)->fetch();
         $branch     = $this->dao->select('branch')->from(TABLE_BUILD)->where('id')->eq((int)$this->post->build)->fetch('branch');
 
+        /* Check build if build is required. */
+        if(strpos($this->config->release->edit->requiredFields, 'build') !== false and $this->post->build == false) return dao::$errors['build'] = sprintf($this->lang->error->notempty, $this->lang->release->build);
+
         $release = fixer::input('post')->stripTags($this->config->release->editor->edit['id'], $this->config->allowedTags)
             ->add('branch',  (int)$branch)
             ->join('mailto', ',')

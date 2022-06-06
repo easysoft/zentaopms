@@ -819,7 +819,7 @@ class taskModel extends model
                 $currentTask->consumed += (float)$member->consumed;
                 $currentTask->left     += (float)$member->left;
             }
-            $currentTask->consumed += (float)$oldTask->consumed;
+            if(empty($oldTask->team)) $currentTask->consumed += (float)$oldTask->consumed;
 
             if(!empty($task))
             {
@@ -839,15 +839,16 @@ class taskModel extends model
                     $currentTask->finishedDate = '';
                 }
 
-                if($currentTask->consumed > 0 && $currentTask->left == 0)
+                if($currentTask->consumed > 0 and $currentTask->left == 0)
                 {
-                    if(isset($team[$currentTask->assignedTo]) && $oldTask->assignedTo != $teams[count($teams) - 1])
+                    $finisedUsers = $this->getFinishedUsers($oldTask->id, $teams);
+                    if(($oldTask->mode == 'linear' and isset($team[$currentTask->assignedTo]) and $oldTask->assignedTo != $teams[count($teams) - 1]) or ($oldTask->mode == 'multi' and count($finisedUsers) != count($teams)))
                     {
                         $currentTask->status       = 'doing';
                         $currentTask->finishedBy   = '';
                         $currentTask->finishedDate = '';
                     }
-                    elseif($oldTask->assignedTo == $teams[count($teams) - 1])
+                    elseif(($oldTask->mode == 'linear' and $oldTask->assignedTo == $teams[count($teams) - 1]) or $oldTask->mode == 'multi')
                     {
                         $currentTask->status = 'done';
                         $currentTask->finishedBy   = $this->app->user->account;
@@ -1834,12 +1835,18 @@ class taskModel extends model
             $this->dao->update(TABLE_TEAM)->set('left')->eq(0)->set('consumed')->eq($task->consumed)
                 ->where('root')->eq((int)$taskID)
                 ->andWhere('type')->eq('task')
-                ->andWhere('account')->eq($oldTask->assignedTo)->exec();
+                ->andWhere('account')->eq($this->app->user->account)->exec();
 
-            $skipMembers = $this->loadModel('execution')->getTeamSkip($oldTask->team, $oldTask->assignedTo, $task->assignedTo);
+            $skipMembers = $oldTask->mode == 'linear' ? $this->loadModel('execution')->getTeamSkip($oldTask->team, $oldTask->assignedTo, $task->assignedTo) : $this->getFinishedUsers($oldTask->id, array_keys($oldTask->team));
             foreach($skipMembers as $account => $team) $this->dao->update(TABLE_TEAM)->set('left')->eq(0)->where('root')->eq($taskID)->andWhere('type')->eq('task')->andWhere('account')->eq($account)->exec();
 
             $task = $this->computeHours4Multiple($oldTask, $task);
+            if($oldTask->mode == 'multi' and count($skipMembers) == (count($oldTask->team) - 1) and !isset($skipMembers[$this->app->user->account]))
+            {
+                $task->status       = 'done';
+                $task->finishedBy   = $this->app->user->account;
+                $task->finishedDate = $task->finishedDate;
+            }
         }
 
         if($task->finishedDate == substr($now, 0, 10)) $task->finishedDate = $now;
@@ -3546,6 +3553,26 @@ class taskModel extends model
             if(isset($users[$member->account])) $members[$member->account] = $users[$member->account];
         }
         return $members;
+    }
+
+    /**
+     * Get the users who finished the multiple task.
+     *
+     * @param  int          $taskID
+     * @param  string|array $team
+     * @access public
+     * @return array
+     */
+    public function getFinishedUsers($taskID = 0, $team = array())
+    {
+        $task = $this->getById($taskID);
+        return $this->dao->select('actor')->from(TABLE_ACTION)
+            ->where('objectType')->eq('task')
+            ->andWhere('objectID')->eq($taskID)
+            ->andWhere('actor')->in($team)
+            ->andWhere('action')->eq('finished')
+            ->andWhere('date')->ge($task->activatedDate)
+            ->fetchPairs('actor');
     }
 
     /**

@@ -24,7 +24,7 @@
     ?>
   </div>
   <div class='btn-toolbar pull-right'>
-    <?php common::printLink('execution', 'create', "projectID=$project->id", '<i class="icon icon-plus"></i> ' . $lang->project->createKanban, '', 'class="btn btn-primary"');?>
+    <?php common::printLink('execution', 'create', "projectID=$project->id", '<i class="icon icon-plus"></i> ' . $lang->project->createKanban, '', 'class="btn btn-primary" data-app="execution"');?>
   </div>
 </div>
 <div id="mainContent">
@@ -33,7 +33,7 @@
     <div class="table-empty-tip">
       <p>
         <span class="text-muted"><?php echo $lang->noData;?></span>
-        <?php common::printLink('execution', 'create', "projectID=$project->id", '<i class="icon icon-plus"></i> ' . $lang->project->createKanban, '', 'class="btn btn-info"');?>
+        <?php common::printLink('execution', 'create', "projectID=$project->id", '<i class="icon icon-plus"></i> ' . $lang->project->createKanban, '', 'class="btn btn-info" data-app="execution"');?>
       </p>
     </div>
     <?php else:?>

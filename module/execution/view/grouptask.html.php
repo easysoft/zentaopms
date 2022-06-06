@@ -66,7 +66,7 @@
         $class = common::hasPriv('execution', 'importBug') ? '' : "class=disabled";
         $misc  = common::hasPriv('execution', 'importBug') ? "class='import'" : "class=disabled";
         $link  = common::hasPriv('execution', 'importBug') ? $this->createLink('execution', 'importBug', "execution=$execution->id") : '#';
-        echo "<li $class>" . html::a($link, $lang->execution->importBug, '', $misc) . "</li>";
+        echo "<li $class id='importBug'>" . html::a($link, $lang->execution->importBug, '', $misc) . "</li>";
         ?>
       </ul>
     </div>

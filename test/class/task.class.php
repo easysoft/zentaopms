@@ -1444,4 +1444,21 @@ class taskTest
             return $object ? 1 : 2;
         }
     }
+
+    /**
+     * Get the users who finished the multiple task.
+     *
+     * @param  int          $taskID
+     * @param  string|array $team
+     * @access public
+     * @return array
+     */
+    public function getFinishedUsersTest($taskID = 0, $team = array())
+    {
+        $object = $this->objectModel->getFinishedUsers($taskID, $team);
+
+        if(dao::isError()) return dao::getError();
+
+        return $object;
+    }
 }

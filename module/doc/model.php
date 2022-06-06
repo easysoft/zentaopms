@@ -2307,7 +2307,7 @@ EOT;
         {
             foreach($rel->snap['modules'] as $module)
             {
-                $this->buildTree($treeMenu, 'api', 0, $rootID, $module, $moduleDocs, $docID, $moduleID);
+                $this->buildTree($treeMenu, 'api', 0, $rootID, (object)$module, $moduleDocs, $docID, $moduleID);
             }
         }
         else

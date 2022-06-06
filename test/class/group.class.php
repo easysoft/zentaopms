@@ -56,13 +56,20 @@ class groupTest
      * @access public
      * @return void
      */
-    public function copyTest($groupID)
+    public function copyTest($groupID, $param)
     {
+        foreach($param as $k => $v) $_POST[$k] = $v;
+
         $objects = $this->objectModel->copy($groupID);
+        unset($_POST);
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        $newGroupID = $this->objectModel->dao->lastInsertID();
+        $object     = $this->objectModel->getByID($newGroupID);
+
+        $this->objectModel->delete($newGroupID);
+        return $object;
     }
 
     /**
@@ -79,7 +86,22 @@ class groupTest
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        $fromPrivs = $this->objectModel->getPrivs($fromGroup);
+        $toPrivs   = $this->objectModel->getPrivs($toGroup);
+
+        $result = true;
+        foreach($fromPrivs as $group => $privs)
+        {
+            foreach($privs as $key => $priv)
+            {
+                if(!isset($toPrivs[$group][$key]) or $toPrivs[$group][$key] != $fromPrivs[$group][$key])
+                {
+                    $result = false;
+                    break;
+                }
+            }
+        }
+        return $result;
     }
 
     /**
@@ -96,7 +118,19 @@ class groupTest
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        $fromUsers = $this->objectModel->getUserPairs($fromGroup);
+        $toUsers   = $this->objectModel->getUserPairs($toGroup);
+
+        $result = true;
+        foreach($fromUsers as $account => $name)
+        {
+                if(!isset($toUsers[$account]) or $toUsers[$account] != $fromUsers[$account])
+                {
+                    $result = false;
+                    break;
+                }
+        }
+        return $result;
     }
 
     /**
@@ -268,11 +302,11 @@ class groupTest
      */
     public function deleteTest($groupID, $null = null)
     {
-        $objects = $this->objectModel->delete($groupID, $null = null);
+        $this->objectModel->delete($groupID, $null = null);
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        return true;
     }
 
     /**
