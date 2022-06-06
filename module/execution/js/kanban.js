@@ -1225,7 +1225,6 @@ function initKanban($kanban)
 {
     var id           = $kanban.data('id');
     var region       = regions[id];
-    var displayCards = window.displayCards == 'undefined' ? 2 : window.displayCards;
 
     $kanban.kanban(
     {
@@ -1236,7 +1235,7 @@ function initKanban($kanban)
         maxColWidth:       240,
         cardHeight:        getCardHeight(),
         fluidBoardWidth:   fluidBoard,
-        displayCards:      displayCards,
+        displayCards:      typeof window.displayCards === 'number' ? window.displayCards : 2,
         createColumnText:  kanbanLang.createColumn,
         addItemText:       '',
         cardsPerRow:       window.kanbanScaleSize,
@@ -1533,7 +1532,7 @@ $(function()
 function calcColHeight(col, lane, colCards, colHeight, kanban)
 {
     var options = kanban.options;
-    if(!options.displayCards) return 0;
+    if(!options.displayCards) return colHeight;
 
     var displayCards = +(options.displayCards || 2);
 
