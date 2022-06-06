@@ -30,7 +30,11 @@
   <?php if(empty($projectStats)):?>
   <div class="table-empty-tip">
     <p>
+    <?php if($config->systemMode == 'new'):?>
       <span class="text-muted"><?php echo $lang->project->empty;?></span>
+    <?php else:?>
+      <span class="text-muted"><?php echo $lang->execution->noExecution;?></span>
+    <?php endif;?>
     </p>
   </div>
   <?php else:?>
