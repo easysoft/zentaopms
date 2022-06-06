@@ -2379,6 +2379,7 @@ class kanbanModel extends model
             $cell->lane   = $laneID;
             $cell->column = $colID;
             $cell->type   = $type;
+            $cell->cards  = $cardID ? ",$cardID," : '';
 
             $this->dao->insert(TABLE_KANBANCELL)->data($cell)->exec();
         }
