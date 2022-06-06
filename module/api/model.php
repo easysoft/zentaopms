@@ -106,7 +106,7 @@ class apiModel extends model
             ->autoCheck()
             ->batchCheck($this->config->api->create->requiredFields, 'notempty')
             ->check('title', 'unique', "lib = $data->lib AND module = $data->module")
-            ->check('path', 'unique', "lib = $data->lib AND module = $data->module")
+            ->check('path', 'unique', "lib = $data->lib AND module = $data->module AND method = '$data->method'")
             ->exec();
 
         if(dao::isError()) return false;
