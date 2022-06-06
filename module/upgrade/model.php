@@ -508,6 +508,9 @@ class upgradeModel extends model
                     $this->execSQL($xuanxuanSql);
                 }
                 break;
+            case '17_0_beta2':
+                $this->changeStoryNeedReview();
+                break;
         }
 
         $this->deletePatch();
@@ -6286,5 +6289,30 @@ class upgradeModel extends model
         if(empty($executions)) return;
 
         foreach ($executions as $execution) $this->dao->update(TABLE_PROJECT)->set('realBegan')->eq($execution->minBegan)->where('id')->eq($execution->project)->exec();
+    }
+
+    /**
+     * Change story need Review.
+     *
+     * @access public
+     * @return void
+     */
+    public function changeStoryNeedReview()
+    {
+        $this->loadModel('story');
+        $this->loadModel('setting');
+
+        if(!empty($this->config->story->needReview))
+        {
+            $data = new stdclass();
+            $data->forceReview      = '';
+            $data->forceReviewDepts = '';
+            $data->forceReviewRoles = '';
+
+            $this->setting->setItems("system.story@rnd", $data);
+            $this->setting->setItems("system.story@lite", $data);
+        }
+
+        $this->setting->deleteItems('owner=system&module=story&section=&key=forceReviewAll');
     }
 }
