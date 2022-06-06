@@ -417,6 +417,7 @@ class testcase extends control
 
         /* Set branch. */
         $product = $this->product->getById($productID);
+        if(!isset($this->products[$productID])) $this->products[$productID] = $product->name;
         if($this->app->tab == 'execution' or $this->app->tab == 'project')
         {
             $objectID        = $this->app->tab == 'project' ? $this->session->project : $executionID;
@@ -657,6 +658,12 @@ class testcase extends control
         }
 
         if(!$case) return print(js::error($this->lang->notFound) . js::locate('back', 'parent'));
+
+        if(!isset($this->products[$productID]))
+        {
+            $product = $this->product->getByID($productID);
+            $this->products[$productID] = $product->name;
+        }
 
         $this->view->title   = $this->products[$productID] . $this->lang->colon . $this->lang->testcase->createBug;
         $this->view->runID   = $runID;
