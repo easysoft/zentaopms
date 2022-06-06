@@ -139,6 +139,7 @@ $lang->action->objectTypes['kanbancard']       = 'Kanban Card';
 $lang->action->objectTypes['sonarqube']        = 'SonarQube Server';
 $lang->action->objectTypes['sonarqubeproject'] = 'SonarQube Project';
 $lang->action->objectTypes['stage']            = 'Stage';
+$lang->action->objectTypes['patch']            = 'Patch';
 
 /* Used to describe operation history. */
 $lang->action->desc = new stdclass();
@@ -232,6 +233,8 @@ $lang->action->desc->unlinkbug   = '$date, 由 <strong>$actor</strong> 从计划
 
 /* Used to display dynamic information. */
 $lang->action->label                        = new stdclass();
+$lang->action->label->install               = 'install ';
+$lang->action->label->revert                = 'revert ';
 $lang->action->label->created               = 'created ';
 $lang->action->label->opened                = 'opened ';
 $lang->action->label->openedbysystem        = 'Opened by system ';

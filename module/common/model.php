@@ -3276,11 +3276,13 @@ EOD;
         if(empty($markdown)) return false;
 
         global $app;
-        $app->loadClass('michelf');
+        $app->loadClass('parsedownextraplugin');
 
-        $Michelf = new michelf;
+        $Parsedown = new parsedownextraplugin;
 
-        return $Michelf->parse($markdown);
+        $Parsedown->voidElementSuffix = '>'; // HTML5
+
+        return $Parsedown->text($markdown);
     }
 }
 

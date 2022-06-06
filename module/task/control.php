@@ -464,6 +464,7 @@ class task extends control
     public function edit($taskID, $comment = false, $kanbanGroup = '')
     {
         $this->commonAction($taskID);
+        $task = $this->task->getById($taskID);
 
         if(!empty($_POST))
         {
@@ -478,7 +479,6 @@ class task extends control
                 if(empty($files) and $this->post->uid != '' and isset($_SESSION['album']['used'][$this->post->uid])) $files = $this->file->getPairs($_SESSION['album']['used'][$this->post->uid]);
             }
 
-            $task = $this->task->getById($taskID);
             if($this->post->comment != '' or !empty($changes) or !empty($files))
             {
                 $action     = (!empty($changes) or !empty($files)) ? 'Edited' : 'Commented';
@@ -533,21 +533,6 @@ class task extends control
         $tasks = $this->task->getParentTaskPairs($this->view->execution->id, $this->view->task->parent);
         if(isset($tasks[$taskID])) unset($tasks[$taskID]);
 
-        if($this->config->systemMode == 'classic')
-        {
-            $executionsPair = $this->execution->getPairs();
-        }
-        else
-        {
-            $executionsPair = array();
-            $executions     = $this->execution->getByProject(0, 'all', 0);
-            $projects       = $this->project->getPairsByProgram('', 'noclosed');
-            foreach($executions as $executionId => $execution)
-            {
-                $executionsPair[$executionId] = (isset($projects[$execution->project]) ? $projects[$execution->project] . ' / ' : '') . $execution->name;
-            }
-        }
-
         if(!isset($this->view->members[$this->view->task->assignedTo])) $this->view->members[$this->view->task->assignedTo] = $this->view->task->assignedTo;
         if(isset($this->view->members['closed']) or $this->view->task->status == 'closed') $this->view->members['closed']  = 'Closed';
 
@@ -559,7 +544,7 @@ class task extends control
         $this->view->users         = $this->loadModel('user')->getPairs('nodeleted', "{$this->view->task->openedBy},{$this->view->task->canceledBy},{$this->view->task->closedBy}");
         $this->view->showAllModule = isset($this->config->execution->task->allModule) ? $this->config->execution->task->allModule : '';
         $this->view->modules       = $this->tree->getTaskOptionMenu($this->view->task->execution, 0, 0, $this->view->showAllModule ? 'allModule' : '');
-        $this->view->executions    = $executionsPair;
+        $this->view->executions    = $this->config->systemMode == 'classic' ? $this->execution->getPairs() : $this->execution->getByProject($task->project, 'all', 0, true);
         $this->display();
     }
 

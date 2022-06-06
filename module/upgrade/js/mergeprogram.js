@@ -573,6 +573,53 @@ $(function()
         $('[name=programAcl]').attr('disabled', 'disabled');
         $('[name=projectAcl]').removeAttr('disabled');
     }
+
+    $('#submit').click(function()
+    {
+        if(type == 'productline')
+        {
+            var checkedProductCount = $("input[name^='products']:checked").length;
+            if(checkedProductCount <= 0)
+            {
+                alert(errorNoProduct);
+                return false;
+            }
+        }
+        else if(type == 'product')
+        {
+            var checkedProductCount = $("input[name^='products']:checked").length;
+            if(checkedProductCount <= 0)
+            {
+                alert(errorNoProduct);
+                return false;
+            }
+
+            var executionCount        = 0;
+            var checkedExecutionCount = 0;
+            $("input[name^='products']:checked").each(function()
+            {
+                var productID = $(this).val()
+
+                executionCount        += $("[data-product='" + productID + "']").length;
+                checkedExecutionCount += $("[data-product='" + productID + "']:checked").length;
+            });
+
+            if(executionCount !== 0 && checkedExecutionCount === 0)
+            {
+                alert(errorNoExecution);
+                return false;
+            }
+        }
+        else
+        {
+            var checkedExecutionCount = $("input[name^='sprints']:checked").length;
+            if(checkedExecutionCount === 0)
+            {
+                alert(errorNoExecution);
+                return false;
+            }
+        }
+    })
 });
 
 /**

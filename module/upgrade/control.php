@@ -153,6 +153,10 @@ class upgrade extends control
         if(!$this->upgrade->isError())
         {
             $systemMode = $this->loadModel('setting')->getItem('owner=system&module=common&section=global&key=mode');
+
+            /* Delete all patch actions if upgrade success. */
+            $this->loadModel('action')->deleteByType('patch');
+
             if((empty($systemMode) && !isset($this->config->qcVersion) && strpos($fromVersion, 'max') === false) or
                ($systemMode != 'new' && strpos($fromVersion, 'max') === false && strpos($this->config->version, 'max') !== false))
             {
