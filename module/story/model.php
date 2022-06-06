@@ -2996,13 +2996,30 @@ class storyModel extends model
      */
     public function getPlanStories($planID, $status = 'all', $orderBy = 'id_desc', $pager = null)
     {
-        $stories = $this->dao->select('distinct t1.story, t1.plan, t1.order, t2.*')
-            ->from(TABLE_PLANSTORY)->alias('t1')
-            ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
-            ->where('t1.plan')->eq($planID)
-            ->beginIF($status and $status != 'all')->andWhere('t2.status')->in($status)->fi()
-            ->andWhere('t2.deleted')->eq(0)
-            ->orderBy($orderBy)->page($pager)->fetchAll('id');
+        if(strpos($orderBy, 'module') !== false)
+        {
+            $orderBy = (strpos($orderBy, 'module_asc') !== false) ? 't3.path asc' : 't3.path desc';
+            $stories = $this->dao->select('distinct t1.story, t1.plan, t1.order, t2.*')
+                ->from(TABLE_PLANSTORY)->alias('t1')
+                ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
+                ->leftJoin(TABLE_MODULE)->alias('t3')->on('t2.module = t3.id')
+                ->where('t1.plan')->eq($planID)
+                ->beginIF($status and $status != 'all')->andWhere('t2.status')->in($status)->fi()
+                ->andWhere('t2.deleted')->eq(0)
+                ->orderBy($orderBy)->page($pager)
+                ->fetchAll('id');
+        }
+        else
+        {
+            $stories = $this->dao->select('distinct t1.story, t1.plan, t1.order, t2.*')
+                ->from(TABLE_PLANSTORY)->alias('t1')
+                ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
+                ->where('t1.plan')->eq($planID)
+                ->beginIF($status and $status != 'all')->andWhere('t2.status')->in($status)->fi()
+                ->andWhere('t2.deleted')->eq(0)
+                ->orderBy($orderBy)->page($pager)
+                ->fetchAll('id');
+        }
 
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'story', false);
 
@@ -3881,7 +3898,7 @@ class storyModel extends model
             $menu .= "<div class='divider'></div>";
 
             $menu .= $this->buildMenu('story', 'edit', $params, $story, $type);
-            $menu .= $this->buildMenu('story', 'create', "productID=$story->product&branch=$story->branch&moduleID=$story->module&{$params}&executionID=0&bugID=0&planID=0&todoID=0&extra=&type=$story->type", $story, $type, 'copy', '', '', '     ', "data-width='1050'");
+            $menu .= $this->buildMenu('story', 'create', "productID=$story->product&branch=$story->branch&moduleID=$story->module&{$params}&executionID=0&bugID=0&planID=0&todoID=0&extra=&type=$story->type", $story, $type, 'copy', '', '', '', "data-width='1050'");
             $menu .= $this->buildMenu('story', 'delete', $params, $story, 'button', 'trash', 'hiddenwin', 'showinonlybody', true);
         }
 

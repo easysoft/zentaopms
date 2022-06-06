@@ -149,8 +149,10 @@ $filter->todo->export             = new stdclass();
 $filter->upgrade->license         = new stdclass();
 $filter->user->login              = new stdclass();
 $filter->user->edit               = new stdclass();
+$filter->user->export             = new stdclass();
 $filter->webhook->bind            = new stdclass();
 $filter->user->ajaxgetmore        = new stdclass();
+$filter->user->export             = new stdclass();
 $filter->repo->ajaxsynccommit     = new stdclass();
 $filter->repo->apigetrepobyurl    = new stdclass();
 $filter->search->index            = new stdclass();
@@ -320,7 +322,8 @@ $filter->testtask->default->cookie['preProductID'] = 'int';
 
 $filter->todo->export->cookie['checkedItem'] = 'reg::checked';
 
-$filter->user->login->cookie['keepLogin'] = 'equal::on';
+$filter->user->login->cookie['keepLogin']    = 'equal::on';
+$filter->user->export->cookie['checkedItem'] = 'reg::any';
 
 $filter->block->default->get['hash']    = 'reg::md5';
 $filter->block->main->get['blockid']    = 'code';
@@ -359,13 +362,15 @@ $filter->sso->logout->get['token']      = 'reg::md5';
 
 $filter->upgrade->license->get['agree'] = 'equal::true';
 
-$filter->user->login->get['account']      = 'account';
-$filter->user->login->get['lang']         = 'reg::lang';
-$filter->user->login->get['password']     = 'reg::any';
-$filter->user->edit->get['from']          = 'reg::word';
-$filter->user->ajaxgetmore->get['search'] = 'reg::any';
-$filter->user->ajaxgetmore->get['limit']  = 'int';
-$filter->user->ajaxgetmore->get['params'] = 'reg::base64';
+$filter->user->export->cookie['checkedItem'] = 'reg::checked';
+$filter->user->login->cookie['keepLogin']    = 'equal::on';
+$filter->user->login->get['account']         = 'account';
+$filter->user->login->get['lang']            = 'reg::lang';
+$filter->user->login->get['password']        = 'reg::any';
+$filter->user->edit->get['from']             = 'reg::word';
+$filter->user->ajaxgetmore->get['search']    = 'reg::any';
+$filter->user->ajaxgetmore->get['limit']     = 'int';
+$filter->user->ajaxgetmore->get['params']    = 'reg::base64';
 
 $filter->git->cat->get['repoUrl']  = 'reg::base64';
 $filter->git->diff->get['repoUrl'] = 'reg::base64';

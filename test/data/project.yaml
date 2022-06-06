@@ -56,12 +56,12 @@ fields:
     range: 1-10000
     prefix: "project"
   - field: begin
-    range: "(-2M)-(+M):1D"
+    range: "(-3M)-(+M):1D"
     type: timestamp
     format: "YY/MM/DD"
     postfix: "\t"
   - field: end
-    range: "(+1w)-(+2M):1D"
+    range: "(+5w)-(+2M):1D"
     type: timestamp
     format: "YY/MM/DD"
     postfix: "\t"

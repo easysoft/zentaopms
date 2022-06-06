@@ -135,33 +135,30 @@ class programModel extends model
      * @access public
      * @return array
      */
-    public function getList($status = 'all', $orderBy = 'id_asc', $pager = NULL, $type = '', $topIdList = '')
+    public function getList($status = 'all', $orderBy = 'id_asc', $pager = NULL, $type = '', $topIdList = array())
     {
+        $userViewIdList = trim($this->app->user->view->programs, ',') . ',' . trim($this->app->user->view->projects, ',');
+        $userViewIdList = array_filter(explode(',', $userViewIdList));
+
         $objectIdList = array();
-        if(!$this->app->user->admin)
+        if($this->app->rawMethod == 'browse')
         {
-            $objectIdList = trim($this->app->user->view->programs, ',') . ',' . trim($this->app->user->view->projects, ',');
-            $objectIdList = array_filter(explode(',', $objectIdList));
-            asort($objectIdList);
+            $pathList = $this->dao->select('id,path')->from(TABLE_PROJECT)
+                 ->where('type')->in('program,project')
+                 ->beginIF(!$this->app->user->admin)->andWhere('id')->in($userViewIdList)->fi()
+                 ->andWhere('deleted')->eq(0)
+                 ->orderBy('id_asc')
+                 ->fetchPairs('id');
 
-            if($this->app->rawMethod == 'browse')
+            foreach($pathList as $path)
             {
-                $pathList = $this->dao->select('id,path')->from(TABLE_PROJECT)
-                    ->where('id')->in($objectIdList)
-                    ->andWhere('deleted')->eq(0)
-                    ->fetchPairs('id');
-
-                $objectIdList = array();
-                foreach($pathList as $path)
+                if($type == 'child' and !empty($topIdList))
                 {
-                    if($type == 'child' and !empty($topIdList))
-                    {
-                        $topID = $this->getTopByPath($path);
-                        if(!in_array($topID, $topIdList)) continue;
-                    }
-
-                    foreach(explode(',', trim($path, ',')) as $pathID) $objectIdList[$pathID] = $pathID;
+                    $topID = $this->getTopByPath($path);
+                    if(!in_array($topID, $topIdList)) continue;
                 }
+
+                foreach(explode(',', trim($path, ',')) as $pathID) $objectIdList[$pathID] = $pathID;
             }
         }
 
@@ -171,8 +168,11 @@ class programModel extends model
             ->andWhere('vision')->eq($this->config->vision)
             ->beginIF($status != 'all')->andWhere('status')->eq($status)->fi()
             ->beginIF(!$this->cookie->showClosed)->andWhere('status')->ne('closed')->fi()
+            ->beginIF($this->app->rawMethod == 'browse')
             ->beginIF($type === 'top')->andWhere('parent')->eq(0)->fi()
-            ->beginIF(!$this->app->user->admin)->andWhere('id')->in($objectIdList)->fi()
+            ->beginIF($type === 'child' or !$this->app->user->admin)->andWhere('id')->in($objectIdList)->fi()
+            ->fi()
+            ->beginIF(!$this->app->user->admin and $this->app->rawMethod != 'browse')->andWhere('id')->in($userViewIdList)->fi()
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id');

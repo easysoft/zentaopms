@@ -658,7 +658,7 @@ class user extends control
     {
         if(isset($_POST['users']))
         {
-            $this->view->users = $this->dao->select('*')->from(TABLE_USER)->where('account')->in($this->post->users)->orderBy('id')->fetchAll('id');
+            $this->view->users = $this->dao->select('*')->from(TABLE_USER)->where('id')->in($this->post->users)->orderBy('id')->fetchAll('id');
         }
         elseif($_POST)
         {

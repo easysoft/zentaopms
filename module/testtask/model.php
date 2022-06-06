@@ -1360,6 +1360,8 @@ class testtaskModel extends model
                 foreach($relatedStep as $stepID => $step)
                 {
                     $relatedStep[$stepID] = (array)$step;
+                    $relatedStep[$stepID]['desc']   = html_entity_decode($relatedStep[$stepID]['desc']);
+                    $relatedStep[$stepID]['expect'] = html_entity_decode($relatedStep[$stepID]['expect']);
                     if(isset($result->stepResults[$stepID]))
                     {
                         $relatedStep[$stepID]['result'] = $result->stepResults[$stepID]['result'];

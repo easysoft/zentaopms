@@ -10,8 +10,14 @@ title=测试 groupModel->delete();
 cid=1
 pid=1
 
+删除id为10的组 >> 1
+删除id为0的组  >> 1
+
 */
 
-$group = new groupTest();
+$groupID = 10;
 
-r($group->deleteTest()) && p() && e();
+$group = new groupTest();
+r($group->deleteTest($groupID)) && p() && e('1'); // 删除id为10的组
+r($group->deleteTest(0))        && p() && e('1'); // 删除id为0的组
+system("./ztest init");

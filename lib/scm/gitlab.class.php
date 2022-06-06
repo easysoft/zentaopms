@@ -359,6 +359,7 @@ class gitlab
             if($parent == '.') $parent = '/';
             if($parent == '')  $parent = '/';
             $list = $this->tree($parent, 0);
+            $file = new stdclass();
 
             foreach($list as $node) if($node->path == $entry) $file = $node;
 
