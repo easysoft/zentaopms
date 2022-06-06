@@ -13,6 +13,8 @@
 <?php include '../../common/view/header.lite.html.php';?>
 <?php js::set('weekend', $config->execution->weekend);?>
 <?php js::set('type', $type);?>
+<?php js::set('errorNoProduct', $lang->upgrade->errorNoProduct);?>
+<?php js::set('errorNoExecution', $lang->upgrade->errorNoExecution);?>
 <div class='container'>
   <form method='post' target='hiddenwin'>
     <div class='modal-dialog'>

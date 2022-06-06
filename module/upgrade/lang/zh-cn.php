@@ -134,6 +134,8 @@ $lang->upgrade->duplicateProject   = "同一个项目集内项目名称不能重
 $lang->upgrade->upgradeTips        = "历史删除数据不参与升级，升级后将不支持还原，请知悉";
 $lang->upgrade->moveEXTFileFail    = '迁移文件失败， 请执行上面命令后刷新！';
 $lang->upgrade->deleteDirTip       = '升级后，如下文件夹会影响系统功能的使用，请删除。';
+$lang->upgrade->errorNoProduct     = "请选择需要归并的{$lang->productCommon}。";
+$lang->upgrade->errorNoExecution   = "请选择需要归并的{$lang->projectCommon}。";
 $lang->upgrade->moveExtFileTip     = <<<EOT
 <p>新版本将对历史的定制/插件进行扩展机制兼容处理，需要将定制/插件相关的文件迁移到extension/custom下，否则定制/插件功能将无法使用。</p>
 <p>请您确认系统是否有做过定制/插件，如没有做过定制/插件，可取消勾选如下文件；如果不清楚是否做过定制/插件，也可保持文件勾选。</p>
