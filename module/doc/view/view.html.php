@@ -114,6 +114,10 @@ js::set('docID', $doc->id);
                   echo "</div></div>";
               }
           }
+          elseif($doc->contentType == 'markdown')
+          {
+              echo "<textarea id='markdownContent' /></textarea>";
+          }
           else
           {
               echo $doc->content;
@@ -237,4 +241,19 @@ js::set('docID', $doc->id);
 </div>
 <?php js::set('canDeleteFile', common::hasPriv('doc', 'deleteFile'));?>
 <?php include '../../common/view/syntaxhighlighter.html.php';?>
+<?php if($doc->contentType == 'markdown'):?>
+<?php css::import($jsRoot . "markdown/simplemde.min.css");?>
+<?php js::import($jsRoot . 'markdown/simplemde.min.js'); ?>
+<?php js::set('markdownText', $doc->content);?>
+<script>
+$(function()
+{
+    var simplemde = new SimpleMDE({element: $("#markdownContent")[0],toolbar:false, status: false});
+    simplemde.value(markdownText);
+    simplemde.togglePreview();
+
+    $('#content .CodeMirror .editor-preview a').attr('target', '_blank');
+})
+</script>
+<?php endif;?>
 <?php include '../../common/view/footer.html.php';?>

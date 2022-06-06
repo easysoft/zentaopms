@@ -21,3 +21,5 @@
 .right-icon a {color: #1183fb;}
 .cell th,td {word-break: break-word;}
 .main-actions {width: 100% !important;}
+.main-col .editor-preview {background: #fff}
+.main-col .CodeMirror{border: none}
