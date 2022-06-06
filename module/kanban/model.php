@@ -353,15 +353,15 @@ class kanbanModel extends model
             $childColumn->limit  = isset($data->noLimit[$i]) ? -1 : $data->WIPCount[$i];
             $childColumn->order  = $order;
 
-            if(!preg_match("/^-?\d+$/", $childColumn->limit) or (!isset($data->noLimit[$i]) and $childColumn->limit <= 0))
-            {
-                dao::$errors['limit'] = $this->lang->kanban->error->mustBeInt;
-                return false;
-            }
-
             if(empty($childColumn->name))
             {
                 dao::$errors['name'] = sprintf($this->lang->error->notempty, $this->lang->kanbancolumn->name);
+                return false;
+            }
+
+            if(!preg_match("/^-?\d+$/", $childColumn->limit) or (!isset($data->noLimit[$i]) and $childColumn->limit <= 0))
+            {
+                dao::$errors['limit'] = $this->lang->kanban->error->mustBeInt;
                 return false;
             }
 

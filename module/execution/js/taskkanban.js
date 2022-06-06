@@ -384,12 +384,11 @@ function updateKanban(kanbanID, data)
  */
 function createKanban(kanbanID, data, options)
 {
-    var $kanban      = $('#kanban-' + kanbanID);
-    var displayCards = window.displayCards == 'undefined' ? 2 : window.displayCards;
+    var $kanban = $('#kanban-' + kanbanID);
     if($kanban.length) return updateKanban(kanbanID, data);
 
     $kanban = $('<div id="kanban-' + kanbanID + '" data-id="' + kanbanID + '"></div>').appendTo('#kanbans');
-    $kanban.kanban($.extend({data: data, calcColHeight: calcColHeight, displayCards: displayCards}, options));
+    $kanban.kanban($.extend({data: data, calcColHeight: calcColHeight, displayCards: typeof window.displayCards === 'number' ? window.displayCards : 2}, options));
 }
 
 /**
@@ -1224,7 +1223,7 @@ $('.c-group').change(function()
 function calcColHeight(col, lane, colCards, colHeight, kanban)
 {
     var options = kanban.options;
-    if(!options.displayCards) return 0;
+    if(!options.displayCards) return colHeight;
 
     var displayCards = +(options.displayCards || 2);
 
