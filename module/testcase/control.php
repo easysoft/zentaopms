@@ -964,9 +964,9 @@ class testcase extends control
 
         $branchProduct = false;
 
-        if($this->app->tab == 'project')   $this->loadModel('project')->setMenu($this->session->project);
-        if($this->app->tab == 'qa')        $this->testcase->setMenu($this->products, $productID, $branch);
-        if($this->app->tab == 'execution') $this->loadModel('execution')->setMenu($this->session->execution);
+        if($this->app->tab == 'project')               $this->loadModel('project')->setMenu($this->session->project);
+        if($this->app->tab == 'qa' and $type != 'lib') $this->testcase->setMenu($this->products, $productID, $branch);
+        if($this->app->tab == 'execution')             $this->loadModel('execution')->setMenu($this->session->execution);
 
         /* The cases of a product. */
         if($productID)
