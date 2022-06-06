@@ -30,8 +30,8 @@ if($config->edition != 'open')
 /* Menu order. */
 $lang->mainNav->menuOrder     = array();
 $lang->mainNav->menuOrder[5]  = 'my';
-$lang->mainNav->menuOrder[20] = 'project';
-$lang->mainNav->menuOrder[30] = 'kanban';
+$lang->mainNav->menuOrder[10] = 'project';
+$lang->mainNav->menuOrder[15] = 'kanban';
 $lang->mainNav->menuOrder[35] = 'doc';
 $lang->mainNav->menuOrder[45] = 'system';
 $lang->mainNav->menuOrder[65] = 'admin';
@@ -75,24 +75,24 @@ $lang->my->dividerMenu = ',calendar,';
 $lang->project->target = 'Story';
 
 /* Scrum menu. */
-$lang->kanban->menu            = new stdclass();
-$lang->kanban->menu->index     = array('link' => "{$lang->dashboard}|project|index|project=%s");
-$lang->kanban->menu->execution = array('link' => "$lang->executionKanban|project|execution|status=all&projectID=%s", 'subModule' => 'execution,task');
-$lang->kanban->menu->story     = array('link' => "{$lang->project->target}|projectstory|story|projectID=%s", 'subModule' => 'projectstory,tree,story', 'alias' => 'story,track');
-$lang->kanban->menu->doc       = array('link' => "{$lang->doc->common}|doc|tableContents|type=project&objectID=%s", 'subModule' => 'doc');
-$lang->kanban->menu->dynamic   = array('link' => "$lang->dynamic|project|dynamic|project=%s");
-$lang->kanban->menu->settings  = array('link' => "$lang->settings|project|view|project=%s", 'subModule' => 'stakeholder', 'alias' => 'edit,manageproducts,group,managemembers,manageview,managepriv,whitelist,addwhitelist,team');
+$lang->kanbanProject->menu            = new stdclass();
+$lang->kanbanProject->menu->index     = array('link' => "{$lang->dashboard}|project|index|project=%s");
+$lang->kanbanProject->menu->execution = array('link' => "$lang->executionKanban|project|execution|status=all&projectID=%s", 'subModule' => 'execution,task');
+$lang->kanbanProject->menu->story     = array('link' => "{$lang->project->target}|projectstory|story|projectID=%s", 'subModule' => 'projectstory,tree,story', 'alias' => 'story,track');
+$lang->kanbanProject->menu->doc       = array('link' => "{$lang->doc->common}|doc|tableContents|type=project&objectID=%s", 'subModule' => 'doc');
+$lang->kanbanProject->menu->dynamic   = array('link' => "$lang->dynamic|project|dynamic|project=%s");
+$lang->kanbanProject->menu->settings  = array('link' => "$lang->settings|project|view|project=%s", 'subModule' => 'stakeholder', 'alias' => 'edit,manageproducts,group,managemembers,manageview,managepriv,whitelist,addwhitelist,team');
 
-$lang->kanban->dividerMenu = ',execution,settings,';
+$lang->kanbanProject->dividerMenu = ',execution,settings,';
 
 /* Scrum menu order. */
-$lang->kanban->menuOrder     = array();
-$lang->kanban->menuOrder[5]  = 'index';
-$lang->kanban->menuOrder[10] = 'execution';
-$lang->kanban->menuOrder[15] = 'story';
-$lang->kanban->menuOrder[20] = 'doc';
-$lang->kanban->menuOrder[25] = 'dynamic';
-$lang->kanban->menuOrder[30] = 'settings';
+$lang->kanbanProject->menuOrder     = array();
+$lang->kanbanProject->menuOrder[5]  = 'index';
+$lang->kanbanProject->menuOrder[10] = 'execution';
+$lang->kanbanProject->menuOrder[15] = 'story';
+$lang->kanbanProject->menuOrder[20] = 'doc';
+$lang->kanbanProject->menuOrder[25] = 'dynamic';
+$lang->kanbanProject->menuOrder[30] = 'settings';
 
 $lang->execution->menu            = new stdclass();
 $lang->execution->menu->kanban    = array('link' => "Kanban view|execution|kanban|executionID=%s");
@@ -102,12 +102,12 @@ if($config->edition != 'open') $lang->execution->menu->gantt    = array('link' =
 $lang->execution->menu->tree      = array('link' => "Tree|execution|tree|executionID=%s");
 $lang->execution->menu->grouptask = array('link' => "Group view|execution|grouptask|executionID=%s");
 
-$lang->kanban->menu->doc['subMenu'] = new stdclass();
+$lang->kanbanProject->menu->doc['subMenu'] = new stdclass();
 
-$lang->kanban->menu->settings['subMenu']              = new stdclass();
-$lang->kanban->menu->settings['subMenu']->view        = array('link' => "$lang->overview|project|view|project=%s", 'alias' => 'edit');
-$lang->kanban->menu->settings['subMenu']->members     = array('link' => "{$lang->team->common}|project|team|project=%s", 'alias' => 'managemembers,team');
-$lang->kanban->menu->settings['subMenu']->whitelist   = array('link' => "{$lang->whitelist}|project|whitelist|project=%s", 'subModule' => 'personnel');
+$lang->kanbanProject->menu->settings['subMenu']              = new stdclass();
+$lang->kanbanProject->menu->settings['subMenu']->view        = array('link' => "$lang->overview|project|view|project=%s", 'alias' => 'edit');
+$lang->kanbanProject->menu->settings['subMenu']->members     = array('link' => "{$lang->team->common}|project|team|project=%s", 'alias' => 'managemembers,team');
+$lang->kanbanProject->menu->settings['subMenu']->whitelist   = array('link' => "{$lang->whitelist}|project|whitelist|project=%s", 'subModule' => 'personnel');
 
 unset($lang->doc->menu->product);
 unset($lang->doc->menu->api);
@@ -222,6 +222,7 @@ $lang->searchObjects['task']      = 'Task';
 $lang->searchObjects['doc']       = 'Doc';
 $lang->searchObjects['project']   = 'Project';
 $lang->searchObjects['execution'] = 'Kanban';
+$lang->searchObjects['user']      = 'User';
 
 if($config->edition != 'open') $lang->searchObjects['feedback'] = 'Feedback';
 if($config->visions == ',lite,') unset($lang->searchObjects['feedback']);
@@ -239,7 +240,6 @@ unset($lang->searchObjects['testtask']);
 unset($lang->searchObjects['caselib']);
 unset($lang->searchObjects['testreport']);
 unset($lang->searchObjects['program']);
-unset($lang->searchObjects['user']);
 
 /* biz search. */
 unset($lang->searchObjects['service']);
