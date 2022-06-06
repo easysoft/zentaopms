@@ -20,7 +20,8 @@ class taskRecordEstimateEntry extends Entry
      */
     public function get($taskID)
     {
-        if($this->loadModel('effort'))
+        $issetEffort = $this->loadModel('effort') ? true : false;
+        if($issetEffort)
         {
             $control = $this->loadController('effort', 'createForObject');
             $control->createForObject('task', $taskID);
@@ -36,8 +37,8 @@ class taskRecordEstimateEntry extends Entry
         if(isset($data->status) and $data->status == 'fail') return $this->sendError(zget($data, 'code', 400), $data->message);
 
         $effort = array();
-        if($this->loadModel('effort') and $data->data->efforts)    $effort = $data->data->efforts;
-        if(!$this->loadModel('effort') and $data->data->estimates) $effort = $data->data->estimates;
+        if($issetEffort and $data->data->efforts)    $effort = $data->data->efforts;
+        if(!$issetEffort and $data->data->estimates) $effort = $data->data->estimates;
         $this->send(200, array('effort' => $effort));
 
     }
