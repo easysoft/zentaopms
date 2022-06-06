@@ -18,7 +18,7 @@ class action extends control
      * @param  string $actionType
      * @param  string $objectName
      * @access public
-     * @return int
+     * @return void
      */
     public function create($objectType, $actionType, $objectName)
     {
