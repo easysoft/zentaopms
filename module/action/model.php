@@ -1556,7 +1556,7 @@ class actionModel extends model
     }
 
     /**
-     * delete action by objectType.
+     * Delete action by objectType.
      *
      * @param  string $objectType
      * @access public
