@@ -2033,13 +2033,28 @@ class executionModel extends model
      */
     public function getTasks2Imported($toExecution, $branches)
     {
-        $execution       = $this->getById($toExecution);
-        $project         = $this->loadModel('project')->getById($execution->project);
-        $brotherProjects = $this->project->getBrotherProjects($project);
-        $executions      = $this->dao->select('id')->from(TABLE_EXECUTION)
-            ->where('project')->in($brotherProjects)
-            ->andWhere('status')->ne('closed')
-            ->fetchPairs('id');
+        if($this->config->systemMode == 'classic')
+        {
+            $products = $this->loadModel('product')->getProducts($toExecution);
+            if(empty($products)) return array();
+
+            $execution  = $this->getById($toExecution);
+            $executions = $this->dao->select('t1.product, t1.project')->from(TABLE_PROJECTPRODUCT)->alias('t1')
+                ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.project=t2.id')
+                ->where('t1.product')->in(array_keys($products))
+                ->andWhere('t2.project')->eq($execution->project)
+                ->fetchGroup('project');
+        }
+        else
+        {
+            $execution       = $this->getById($toExecution);
+            $project         = $this->loadModel('project')->getById($execution->project);
+            $brotherProjects = $this->project->getBrotherProjects($project);
+            $executions      = $this->dao->select('id')->from(TABLE_EXECUTION)
+                ->where('project')->in($brotherProjects)
+                ->andWhere('status')->ne('closed')
+                ->fetchPairs('id');
+        }
 
         $branches = str_replace(',', "','", $branches);
         $tasks = $this->dao->select('t1.*, t2.id AS storyID, t2.title AS storyTitle, t2.version AS latestStoryVersion, t2.status AS storyStatus, t3.realname AS assignedToRealName')->from(TABLE_TASK)->alias('t1')
