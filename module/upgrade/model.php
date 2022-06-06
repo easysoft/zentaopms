@@ -6302,16 +6302,16 @@ class upgradeModel extends model
         $this->loadModel('story');
         $this->loadModel('setting');
 
-        if(!empty($this->config->story->needReview))
-        {
-            $data = new stdclass();
-            $data->forceReview      = '';
-            $data->forceReviewDepts = '';
-            $data->forceReviewRoles = '';
+        $rndNeedReview  = $this->setting->getItem('owner=system&vision=rnd&module=story&section=&key=needReview');
+        $liteNeedReview = $this->setting->getItem('owner=system&vision=lite&module=story&section=&key=needReview');
 
-            $this->setting->setItems("system.story@rnd", $data);
-            $this->setting->setItems("system.story@lite", $data);
-        }
+        $data = new stdclass();
+        $data->forceReview      = '';
+        $data->forceReviewDepts = '';
+        $data->forceReviewRoles = '';
+
+        if(!empty($rndNeedReview))  $this->setting->setItems("system.story@rnd", $data);
+        if(!empty($liteNeedReview)) $this->setting->setItems("system.story@lite", $data);
 
         $this->setting->deleteItems('owner=system&module=story&section=&key=forceReviewAll');
     }
