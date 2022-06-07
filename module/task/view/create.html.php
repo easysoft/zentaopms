@@ -16,6 +16,7 @@
 <?php js::set('toTaskList', !empty($task->id));?>
 <?php js::set('blockID', $blockID);?>
 <?php js::set('teamMemberError', $lang->task->error->teamMember);?>
+<?php js::set('vision', $config->vision);?>
 <?php if(!empty($storyID)):?>
 <style> .title-group.required > .required:after {right: 110px;}</style>
 <?php endif;?>
