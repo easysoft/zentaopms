@@ -326,7 +326,7 @@ function renderHeaderCol($col, col, $header, kanban)
     if(priv.canCreateTask  || priv.canBatchCreateTask) printTaskButton = true;
     if(priv.canCreateBug   || priv.canBatchCreateBug)  printBugButton  = true;
 
-    if(col.type === 'backlog' || (col.type === 'wait' && printTaskButton) || col.type == 'unconfirmed')
+    if(col.type === 'backlog' || col.type === 'wait' || col.type == 'unconfirmed')
     {
         var tips = (productID) ? '' : 'onclick="tips()"';
         $actions.append([
