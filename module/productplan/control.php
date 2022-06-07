@@ -397,7 +397,8 @@ class productplan extends control
         if($this->app->getViewType() == 'xhtml') $recPerPage = 10;
 
         /* Append id for secend sort. */
-        $sort = common::appendOrder($orderBy);
+        $orderBy = ($type == 'bug' and $orderBy == 'order_desc') ? 'id_desc' : $orderBy;
+        $sort    = common::appendOrder($orderBy);
 
         $this->commonAction($plan->product, $plan->branch);
         $products = $this->product->getProductPairsByProject($this->session->project);
