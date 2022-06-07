@@ -738,7 +738,7 @@ function renderHeaderCol($column, column, $header, kanbanData)
     /* Render more menu. */
     if(column.type == 'backlog' || column.type == 'wait' || column.type == 'unconfirmed'  && $actions.children('.text-primary').length == 0)
     {
-        var tips = (productID) ? '' : 'onclick="tips()"';
+        var tips = productID ? '' : 'onclick="tips()"';
         $actions.append([
                 '<a data-contextmenu="columnCreate" data-type="' + column.type + '" data-kanban="' + kanban.id + '" data-parent="' + (column.parentType || '') +  '" class="text-primary"' + ((column.type !== 'wait') ? tips : '') + '>',
                 '<i class="icon icon-expand-alt"></i>',

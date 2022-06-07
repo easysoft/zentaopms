@@ -328,7 +328,7 @@ function renderHeaderCol($col, col, $header, kanban)
 
     if(col.type === 'backlog' || col.type === 'wait' || col.type == 'unconfirmed')
     {
-        var tips = (productID) ? '' : 'onclick="tips()"';
+        var tips = productID ? '' : 'onclick="tips()"';
         $actions.append([
                 '<a data-contextmenu="columnCreate" data-type="' + col.type + '" data-kanban="' + kanban.id + '" data-parent="' + (col.parentType || '') +  '" class="text-primary"' + ((col.laneType !== 'task') ? tips : '') + '>',
                 '<i class="icon icon-expand-alt"></i>',

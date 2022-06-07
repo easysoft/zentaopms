@@ -110,9 +110,6 @@ js::set('priv',
         'canUnlinkStory'        => common::hasPriv('execution', 'unlinkStory'),
     )
 );
-js::set('hasStoryButton', $hasStoryButton);
-js::set('hasBugButton', $hasBugButton);
-js::set('hasTaskButton', $hasTaskButton);
 ?>
 <div id='mainMenu' class='clearfix'>
   <div class='btn-toolbar pull-left'>
