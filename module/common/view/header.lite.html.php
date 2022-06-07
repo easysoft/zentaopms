@@ -8,7 +8,7 @@ $defaultTheme = $webRoot . 'theme/default/';
 $langTheme    = $themeRoot . 'lang/' . $clientLang . '.css';
 $clientTheme  = $this->app->getClientTheme();
 $onlybody     = zget($_GET, 'onlybody', 'no');
-$supportLang  = array('ru', 'vi', 'de', 'fr', 'ja', 'esp');
+$defaultLang  = array('zh-cn', 'zh-tw', 'en');
 ?>
 <!DOCTYPE html>
 <html lang='<?php echo $clientLang;?>'>
@@ -32,7 +32,7 @@ $supportLang  = array('ru', 'vi', 'de', 'fr', 'ja', 'esp');
 
       js::import($jsRoot . 'jquery/lib.js');
       js::import($jsRoot . 'zui/min.js?t=' . $timestamp);
-      if(in_array($clientLang, $supportLang)) js::import($jsRoot . 'zui/lang.' . $clientLang . '.min.js?t=' . $timestamp);
+      if(!in_array($clientLang, $defaultLang)) js::import($jsRoot . 'zui/lang.' . $clientLang . '.min.js?t=' . $timestamp);
       js::import($jsRoot . 'my.full.js?t=' . $timestamp);
 
   }
@@ -42,7 +42,7 @@ $supportLang  = array('ru', 'vi', 'de', 'fr', 'ja', 'esp');
       if(!file_exists($this->app->getThemeRoot() . 'default/' . $this->cookie->lang . '.' . $this->cookie->theme . '.css')) $minCssFile = $defaultTheme . 'en.' . $this->cookie->theme . '.css';
       css::import($minCssFile);
       js::import($jsRoot . 'all.js');
-      if(in_array($clientLang, $supportLang)) js::import($jsRoot . 'zui/lang.' . $clientLang . '.min.js');
+      if(!in_array($clientLang, $defaultLang)) js::import($jsRoot . 'zui/lang.' . $clientLang . '.min.js');
   }
   if($this->app->getViewType() == 'xhtml') css::import($defaultTheme . 'x.style.css');
 
