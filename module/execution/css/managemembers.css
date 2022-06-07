@@ -17,6 +17,9 @@
 #execution_chosen .chosen-single {width: 230px;}
 #execution_chosen .chosen-drop ul li .label {margin-top: 2px; background: #fff; color: #838a9d; border: 1px solid #d8d8d8;}
 .radio-inline {line-height: normal;}
+#dept + .picker {width: 220px;}
+#execution + .picker {width: 230px;}
+#mainMenu .picker-has-value {float: left;}
 
 #teamForm .table tr > td:first-child {padding-left: 10px;}
 #teamForm .table tr > td:last-child {padding-right: 10px;}
