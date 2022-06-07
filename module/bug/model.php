@@ -1868,6 +1868,8 @@ class bugModel extends model
             if(!empty($this->config->isINT)) $firstLetter = '';
             $users[$account] =  $firstLetter . ($user->realname ? $user->realname : $user->account);
         }
+
+        $users = $this->loadModel('user')->processAccountSort($users);
         return array('' => '') + $users;
     }
 
