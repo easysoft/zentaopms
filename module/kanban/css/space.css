@@ -8,6 +8,8 @@
 .space .menu {margin-left: 5px; margin-right:5px;}
 .space .table-empty-tip {padding: 40px 10px;}
 .space .spaceTitle.pull-left {overflow: hidden; white-space: nowrap; max-width: calc(100% - 255px)}
+.font-style {font-size: 16px; font-weight: bold;}
+.icon-size {font-size: 16px;}
 
 .kanbans > .col {width: 25% !important;}
 @media screen and (max-width: 1500px) {.kanbans > .col {width: 25%;}}
