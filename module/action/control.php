@@ -12,6 +12,30 @@
 class action extends control
 {
     /**
+     * Create a action or delete all patch actions, this method is used by the Ztools.
+     *
+     * @param  string $objectType
+     * @param  string $actionType
+     * @param  string $objectName
+     * @access public
+     * @return void
+     */
+    public function create($objectType, $actionType, $objectName)
+    {
+        $actionID = $this->action->create($objectType, 0, $actionType, '', $objectName);
+
+        if($actionID)
+        {
+            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess));
+        }
+        else
+        {
+            $this->send(array('result' => 'fail', 'message' => 'error'));
+        }
+    }
+
+
+    /**
      * Trash.
      *
      * @param  string $browseType

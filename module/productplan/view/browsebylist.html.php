@@ -150,7 +150,9 @@
       </tbody>
     </table>
     <div class="table-footer">
+      <?php if(common::hasPriv('productplan', 'batchEdit') or common::hasPriv('productplan', 'batchChangeStatus')):?>
       <div class="checkbox-primary check-all"><label><?php echo $lang->selectAll?></label></div>
+      <?php endif;?>
       <div class="table-actions btn-toolbar">
       <?php if(common::hasPriv('productplan', 'batchEdit')):?>
       <?php $actionLink = $this->inlink('batchEdit', "productID=$product->id&branch=$branch");?>

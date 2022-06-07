@@ -296,6 +296,12 @@ class testtask extends control
         $productID = $task->product;
         $buildID   = $task->build;
 
+        if(!isset($this->products[$productID]))
+        {
+            $product = $this->product->getByID($productID);
+            $this->products[$productID] = $product->name;
+        }
+
         $build   = $this->loadModel('build')->getByID($buildID);
         $stories = array();
         $bugs    = array();
@@ -466,6 +472,12 @@ class testtask extends control
         if(!$task) return print(js::error($this->lang->testtask->checkLinked) . js::locate('back'));
 
         $productID = $task->product;
+        if(!isset($this->products[$productID]))
+        {
+            $product = $this->product->getByID($productID);
+            $this->products[$productID] = $product->name;
+        }
+
         if($this->app->tab == 'project')
         {
             $this->loadModel('project')->setMenu($task->project);
@@ -609,6 +621,12 @@ class testtask extends control
         unset($this->lang->testtask->report->charts['bugStageGroups']);
         unset($this->lang->testtask->report->charts['bugHandleGroups']);
 
+        if(!isset($this->products[$productID]))
+        {
+            $product = $this->product->getByID($productID);
+            $this->products[$productID] = $product->name;
+        }
+
         $this->view->title         = $this->products[$productID] . $this->lang->colon . $this->lang->testtask->common . $this->lang->colon . $this->lang->testtask->reportChart;
         $this->view->position[]    = html::a($this->createLink('testtask', 'cases', "taskID=$taskID"), $this->products[$productID]);
         $this->view->position[]    = $this->lang->testtask->reportChart;
@@ -644,7 +662,14 @@ class testtask extends control
         $groupBy = empty($groupBy) ? 'story' : $groupBy;
         $task    = $this->testtask->getById($taskID);
         if(!$task) return print(js::error($this->lang->notFound) . js::locate('back'));
+
         $productID = $task->product;
+        if(!isset($this->products[$productID]))
+        {
+            $product = $this->product->getByID($productID);
+            $this->products[$productID] = $product->name;
+        }
+
         if($this->app->tab == 'project')
         {
             $this->loadModel('project')->setMenu($this->session->project);
@@ -1024,6 +1049,11 @@ class testtask extends control
         /* Get task and product id. */
         $task      = $this->testtask->getById($taskID);
         $productID = $this->product->saveState($task->product, $this->products);
+        if(!isset($this->products[$productID]))
+        {
+            $product = $this->product->getByID($productID);
+            $this->products[$productID] = $product->name;
+        }
 
         /* Save session. */
         if($this->app->tab == 'project')

@@ -508,6 +508,9 @@ class upgradeModel extends model
                     $this->execSQL($xuanxuanSql);
                 }
                 break;
+            case '17_0_beta2':
+                $this->changeStoryNeedReview();
+                break;
         }
 
         $this->deletePatch();
@@ -1317,6 +1320,18 @@ class upgradeModel extends model
                         $result[] = 'rm -f ' . ($isDir ? '-r ' : '') . $fullPath;
                     }
                 }
+            }
+        }
+
+        /* Delete all patch files when upgrade zentao. */
+        $patchPath = $this->app->getTmpRoot() . 'patch';
+        $isDir     = is_dir($patchPath);
+        if(file_exists($patchPath))
+        {
+            if(!is_writable($patchPath) or ($isDir and !$zfile->removeDir($patchPath)) or
+                (!$isDir and !$zfile->removeDir($patchPath)))
+            {
+                $result[] = 'rm -f ' . ($isDir ? '-r ' : '') . $patchPath;
             }
         }
 
@@ -6274,5 +6289,30 @@ class upgradeModel extends model
         if(empty($executions)) return;
 
         foreach ($executions as $execution) $this->dao->update(TABLE_PROJECT)->set('realBegan')->eq($execution->minBegan)->where('id')->eq($execution->project)->exec();
+    }
+
+    /**
+     * Change story need Review.
+     *
+     * @access public
+     * @return void
+     */
+    public function changeStoryNeedReview()
+    {
+        $this->loadModel('story');
+        $this->loadModel('setting');
+
+        $rndNeedReview  = $this->setting->getItem('owner=system&vision=rnd&module=story&section=&key=needReview');
+        $liteNeedReview = $this->setting->getItem('owner=system&vision=lite&module=story&section=&key=needReview');
+
+        $data = new stdclass();
+        $data->forceReview      = '';
+        $data->forceReviewDepts = '';
+        $data->forceReviewRoles = '';
+
+        if(!empty($rndNeedReview))  $this->setting->setItems("system.story@rnd", $data);
+        if(!empty($liteNeedReview)) $this->setting->setItems("system.story@lite", $data);
+
+        $this->setting->deleteItems('owner=system&module=story&section=&key=forceReviewAll');
     }
 }

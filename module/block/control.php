@@ -896,7 +896,8 @@ class block extends control
         $count  = isset($this->params->count) ? (int)$this->params->count : 15;
 
         /* Get projects. */
-        $projects = $this->loadModel('project')->getOverviewList('byStatus', $status, 'id_desc', $count);
+        $excludedModel = $this->config->edition == 'max' ? '' : 'waterfall';
+        $projects      = $this->loadModel('project')->getOverviewList('byStatus', $status, 'id_desc', $count, $excludedModel);
         if(empty($projects))
         {
             $this->view->projects = $projects;
