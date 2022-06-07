@@ -103,6 +103,7 @@ body {margin-bottom: 25px;}
     ?>
     <a class="btn btn-link querybox-toggle" id='bysearchTab'><i class="icon icon-search muted"></i> <?php echo $lang->product->searchStory;?></a>
   </div>
+  <?php $taskCreateLink = $this->createLink('task', 'create', "executionID=$executionID" . (isset($moduleID) ? "&storyID=0&moduleID=$moduleID" : ""));?>
   <?php if(!isonlybody()): ?>
   <div class="btn-toolbar pull-right">
     <?php
@@ -147,7 +148,6 @@ body {margin-bottom: 25px;}
     <?php
     $checkObject = new stdclass();
     $checkObject->execution = $executionID;
-    $taskCreateLink = $this->createLink('task', 'create', "executionID=$executionID" . (isset($moduleID) ? "&storyID=0&moduleID=$moduleID" : ""));
     ?>
     <?php if($canBeChanged and (common::hasPriv('task', 'batchCreate', $checkObject) or common::hasPriv('task', 'create', $checkObject))):?>
     <div class='btn-group dropdown'>
