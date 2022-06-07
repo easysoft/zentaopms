@@ -3908,7 +3908,8 @@ class storyModel extends model
             $canBeChanged = common::canModify('execution', $execution);
             if($canBeChanged)
             {
-                $param = "executionID={$execution->id}&story={$story->id}&moduleID={$story->module}";
+                $executionID = empty($execution) ? $this->session->execution : $execution->id;
+                $param       = "executionID=$executionID&story={$story->id}&moduleID={$story->module}";
 
                 $story->reviewer  = isset($story->reviewer)  ? $story->reviewer  : array();
                 $story->notReview = isset($story->notReview) ? $story->notReview : array();
@@ -3939,7 +3940,7 @@ class storyModel extends model
                 }
 
                 $this->lang->task->batchCreate = $this->lang->execution->batchWBS;
-                if($hasDBPriv) $menu .= common::printIcon('task', 'batchCreate', "executionID={$execution->id}&story={$story->id}", '', 'list', 'pluses', '', $toTaskDisabled);
+                if($hasDBPriv) $menu .= common::printIcon('task', 'batchCreate', "executionID=$executionID&story={$story->id}", '', 'list', 'pluses', '', $toTaskDisabled);
 
                 $this->lang->testcase->batchCreate = $this->lang->testcase->create;
                 if($hasDBPriv and common::hasPriv('testcase', 'create'))
@@ -3949,12 +3950,12 @@ class storyModel extends model
 
                 if($canBeChanged and common::hasPriv('execution', 'storyEstimate', $execution))
                 {
-                    $menu .= common::printIcon('execution', 'storyEstimate', "executionID=$execution->id&storyID=$story->id", '', 'list', 'estimate', '', 'iframe', true, "data-width='600px'");
+                    $menu .= common::printIcon('execution', 'storyEstimate', "executionID=$executionID&storyID=$story->id", '', 'list', 'estimate', '', 'iframe', true, "data-width='600px'");
                 }
 
                 if($canBeChanged and common::hasPriv('execution', 'unlinkStory', $execution))
                 {
-                    $menu .= common::printIcon('execution', 'unlinkStory', "executionID=$execution->id&storyID=$story->id&confirm=no", '', 'list', 'unlink', 'hiddenwin');
+                    $menu .= common::printIcon('execution', 'unlinkStory', "executionID=$executionID&storyID=$story->id&confirm=no", '', 'list', 'unlink', 'hiddenwin');
                 }
             }
         }
@@ -4124,11 +4125,12 @@ class storyModel extends model
      */
     public function printCell($col, $story, $users, $branches, $storyStages, $modulePairs = array(), $storyTasks = array(), $storyBugs = array(), $storyCases = array(), $mode = 'datatable', $storyType = 'story', $execution = '', $isShowBranch = '')
     {
-        $module    = $this->app->rawModule == 'product' ? 'story' : $this->app->rawModule;
-        $canView   = common::hasPriv($module, 'view');
-        $tab       = $this->app->tab;
-        $storyLink = $tab == 'execution' ? helper::createLink('story', 'view', "storyID=$story->id&version=$story->version&from=execution&param=$execution->id") : helper::createLink($module, 'view', "storyID=$story->id");
-        $account   = $this->app->user->account;
+        $module      = $this->app->rawModule == 'product' ? 'story' : $this->app->rawModule;
+        $canView     = common::hasPriv($module, 'view');
+        $tab         = $this->app->tab;
+        $executionID = empty($execution) ? $this->session->execution : $execution->id;
+        $storyLink   = $tab == 'execution' ? helper::createLink('story', 'view', "storyID=$story->id&version=$story->version&from=execution&param=$executionID") : helper::createLink($module, 'view', "storyID=$story->id");
+        $account     = $this->app->user->account;
 
         /* Check the product is closed. */
         $canBeChanged = common::canBeChanged('story', $story);
@@ -4148,8 +4150,9 @@ class storyModel extends model
         if($tab == 'execution')
         {
             $checkObject = new stdclass();
-            $checkObject->execution = $execution->id;
-            $canBatchToTask       = common::hasPriv('story', 'batchToTask', $checkObject);
+            $checkObject->execution = $executionID;
+
+            $canBatchToTask = common::hasPriv('story', 'batchToTask', $checkObject);
         }
 
         if($tab == 'execution')
