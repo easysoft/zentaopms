@@ -213,4 +213,5 @@ js::set('priv',
 <?php js::set('fluidBoard', $execution->fluidBoard);?>
 <?php js::set('displayCards', $execution->displayCards);?>
 <?php js::set('reviewStoryParis', $reviewStoryParis);?>
+<?php js::set('linkProducts', $lang->execution->linkProducts);?>
 <?php include '../../common/view/footer.html.php';?>

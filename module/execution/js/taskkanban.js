@@ -298,6 +298,17 @@ function renderColumnCount($count, count, col)
 }
 
 /**
+ * Alert to link product.
+ *
+ * @access public
+ * @return void
+ */
+function tips()
+{
+    bootbox.alert(linkProducts);
+}
+
+/**
  * Render header column
  * @param {JQuery} $col    Header column element
  * @param {Object} col     Header column object
@@ -315,10 +326,11 @@ function renderHeaderCol($col, col, $header, kanban)
     if(priv.canCreateTask  || priv.canBatchCreateTask) printTaskButton = true;
     if(priv.canCreateBug   || priv.canBatchCreateBug)  printBugButton  = true;
 
-    if((col.type === 'backlog' && printStoryButton) || (col.type === 'wait' && printTaskButton) || (col.type == 'unconfirmed' && printBugButton))
+    if(col.type === 'backlog' || (col.type === 'wait' && printTaskButton) || col.type == 'unconfirmed')
     {
+        var tips = (productID) ? '' : 'onclick="tips()"';
         $actions.append([
-                '<a data-contextmenu="columnCreate" data-type="' + col.type + '" data-kanban="' + kanban.id + '" data-parent="' + (col.parentType || '') +  '" class="text-primary">',
+                '<a data-contextmenu="columnCreate" data-type="' + col.type + '" data-kanban="' + kanban.id + '" data-parent="' + (col.parentType || '') +  '" class="text-primary"' + ((col.laneType !== 'task') ? tips : '') + '>',
                 '<i class="icon icon-expand-alt"></i>',
                 '</a>'
         ].join(''));
