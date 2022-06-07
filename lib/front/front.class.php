@@ -91,7 +91,7 @@ class html extends baseHTML
             $string .= "<input type='checkbox' name='{$name}[]' value='$key' ";
             $string .= (strpos($checked, ",$key,") !== false) ? " checked ='checked'" : "";
             $string .= $attrib;
-            $string .= " id='$name$key' /> ";
+            $string .= " id='$name$key' title='{$value}'/> ";
             $string .= "<label for='$name$key'>" . $value . '</label></div>';
         }
         return $string;
