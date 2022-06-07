@@ -1,6 +1,5 @@
 $(function()
 {
-
     $('#execution_chosen, #execution + .picker').click(function()
     {
         if(systemMode == 'new')
