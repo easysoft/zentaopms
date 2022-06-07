@@ -1,10 +1,11 @@
 $(function()
 {
-    $('#execution_chosen').click(function()
+
+    $('#execution_chosen, #execution + .picker').click(function()
     {
         if(systemMode == 'new')
         {
-            $('#execution_chosen ul li').each(function(index)
+            $('#execution_chosen ul li, #pickerDropMenu-pk_execution div a').each(function(index)
             {
                 if(index == 0)
                 {
