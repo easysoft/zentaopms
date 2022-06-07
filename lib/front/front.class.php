@@ -391,6 +391,19 @@ class html extends baseHTML
  */
 class js extends baseJS
 {
+    /**
+     * Open a new app window.
+     *
+     * @param  string    $app
+     * @param  string    $url
+     * @static
+     * @access public
+     * @return string
+     */
+    static public function openEntry($app, $url)
+    {
+        return self::start() . "$.apps.open('$url', '$app')" . self::end();
+    }
 }
 
 /**
