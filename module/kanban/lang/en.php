@@ -280,9 +280,9 @@ $lang->kanbanspace->featureBar['cooperation'] = 'Cooperation Space';
 $lang->kanbanspace->featureBar['public']      = 'Public Space';
 $lang->kanbanspace->featureBar['private']     = 'Private Space';
 
-$lang->kanbanspace->typeList['private']     = 'Private Space';
 $lang->kanbanspace->typeList['cooperation'] = 'Cooperation Space';
 $lang->kanbanspace->typeList['public']      = 'Public Space';
+$lang->kanbanspace->typeList['private']     = 'Private Space';
 
 $lang->kanbancolumn = new stdclass();
 $lang->kanbancolumn->name       = $lang->kanban->columnName;

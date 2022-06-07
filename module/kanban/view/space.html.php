@@ -47,6 +47,7 @@
               <?php echo $space->name;?>
             </h4>
           </div>
+          <p class="desc-style text-ellipsis text-primary" title='<?php echo $space->desc;?>'><?php echo $space->desc;?></p>
         </div>
         <div class='spaceActions pull-right'>
           <?php $class = $space->status == 'closed' ? 'disabled' : '';?>
