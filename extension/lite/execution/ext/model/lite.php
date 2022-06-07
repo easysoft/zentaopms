@@ -7,8 +7,8 @@ public function setMenu($executionID, $buildID = 0, $extra = '')
     if(isset($this->lang->execution->menu->kanban))
     {
         $this->loadModel('project')->setMenu($execution->project);
-        $this->lang->kanban->menu->execution['subMenu'] = new stdClass();
-        if($this->app->rawModule == 'tree') unset($this->lang->kanban->menu->execution['subMenu']);
+        $this->lang->kanbanProject->menu->execution['subMenu'] = new stdClass();
+        if($this->app->rawModule == 'tree') unset($this->lang->kanbanProject->menu->execution['subMenu']);
     }
 
     $kanbanList    = $this->getList($execution->project, 'kanban', 'all');
@@ -140,7 +140,7 @@ public function getTRActions($currentMethod)
             unset($subMenu->$key);
         }
     }
-    
+
     $TRActions  = '';
     $TRActions .= "<div class='btn-group dropdown'>";
     $TRActions .= html::a("javascript:;", "<i class='icon icon-" . $this->lang->execution->icons[$currentMethod]."'> </i>" . $subMenu->{$currentMethod}['name'] . " <span class='caret'></span>", '', "class='btn btn-link' data-toggle='dropdown'");
