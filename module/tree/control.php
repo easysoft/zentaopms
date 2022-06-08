@@ -250,6 +250,19 @@ class tree extends control
                 }
             }
         }
+        else
+        {
+            $manageChild  = 'manage' . ucfirst($viewType) . 'Child';
+
+            $title      = $this->lang->tree->common;
+            $position[] = $this->lang->tree->common;
+
+            $this->lang->tree->$manageChild = $title;
+
+            $root = new stdclass();
+            $root->name = $title;
+            $this->view->root = $root;
+        }
 
         $parentModules               = $this->tree->getParents($currentModuleID);
         $this->view->title           = $title;
