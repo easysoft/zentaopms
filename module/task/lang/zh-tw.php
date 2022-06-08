@@ -3,7 +3,7 @@
  * The task module zh-tw file of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青島易軟天創網絡科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL (http://zpl.pub/page/zplv12.html) or AGPL
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     task
  * @version     $Id: zh-tw.php 5040 2013-07-06 06:22:18Z zhujinyonging@gmail.com $

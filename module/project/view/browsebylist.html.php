@@ -3,7 +3,7 @@
  * The browsebylist view file of project module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2021 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL (http://zpl.pub/page/zplv12.html) or AGPL
  * @author      Shujie Tian <tianshujie@easycorp.ltd>
  * @package     project
  * @version     $Id: browsebylist.html.php 4769 2021-07-23 11:16:21Z $

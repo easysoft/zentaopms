@@ -3,7 +3,7 @@
  * The performable file of kanban module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2022 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL (http://zpl.pub/page/zplv12.html) or AGPL
  * @author      Yue Ma <mayue@easycorp.ltd>
  * @package     kanban
  * @version     $Id: performable.html.php 935 2022-01-1 14:20:24Z $

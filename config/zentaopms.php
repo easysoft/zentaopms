@@ -3,7 +3,7 @@
 * The config file of zentaophp.  Don't modify this file directly, copy the item to my.php and change it.
 *
 * @copyright   Copyright 2009-2017 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
-* @license     ZPL (http://zpl.pub/page/zplv12.html)
+* @license     ZPL (http://zpl.pub/page/zplv12.html) or AGPL
 * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
 * @package     config
 * @version     $Id: zentaopms.php 5068 2017-06-20 15:35:22Z pengjx $

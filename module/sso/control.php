@@ -3,7 +3,7 @@
  * The control file of sso module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL (http://zpl.pub/page/zplv12.html) or AGPL
  * @author      Yidong Wang <yidong@cnezsoft.com>
  * @package     sso
  * @version     $Id: control.php 4460 2013-02-26 02:28:02Z chencongzhi520@gmail.com $

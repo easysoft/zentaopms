@@ -3,7 +3,7 @@
  * The admin module zh-tw file of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青島易軟天創網絡科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL (http://zpl.pub/page/zplv12.html) or AGPL
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     admin
  * @version     $Id: zh-tw.php 4767 2013-05-05 06:10:13Z wwccss $

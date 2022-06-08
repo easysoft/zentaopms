@@ -3,7 +3,7 @@
  * The import execution view of kanban module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2022 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL (http://zpl.pub/page/zplv12.html) or AGPL
  * @author      Qiyu Xie<xieqiyu@cnezsoft.com>
  * @package     kanban
  * @version     $Id: importexecution.html.php 5090 2022-01-19 14:19:24Z xieqiyu@cnezsoft.com $

@@ -3,7 +3,7 @@
  * The select lib type view file of doc module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2021 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.zentao.net)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL (http://zpl.pub/page/zplv12.html) or AGPL
  * @author      Yuchun Li <liyuchun@easycorp.ltd>
  * @package     doc
  * @version     $Id: selectlibtype.html.php 958 2021-09-3 17:09:42Z liyuchun $

@@ -3,7 +3,7 @@
  * The setlaneheight file of kanban module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2022 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL (http://zpl.pub/page/zplv12.html) or AGPL
  * @author      Shujie Tian <tianshujie@easycorp.ltd>
  * @package     kanban
  * @version     $Id: setlaneheight.html.php 935 2022-01-11 10:49:24Z $

@@ -3,7 +3,7 @@
  * The team view file of project module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2021 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL (http://zpl.pub/page/zplv12.html) or AGPL
  * @author      Qiyu Xie
  * @package     project
  * @version     $Id: team.html.php 4143 2021-08-11 11:01:06Z $

@@ -3,7 +3,7 @@
  * The enableArchived file of kanban module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2022 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL (http://zpl.pub/page/zplv12.html) or AGPL
  * @author      Runyu Zheng <zhengrunyu@easycorp.ltd>
  * @package     kanban
  * @version     $Id: enableArchived.html.php 935 2022-01-21 11:02:24Z $
