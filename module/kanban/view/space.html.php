@@ -47,17 +47,23 @@
               <?php echo $space->name;?>
             </h4>
           </div>
+          <p class="spaceDesc text-ellipsis text-primary" title='<?php echo empty($space->desc) ? $lang->kanban->emptyDesc : $space->desc;?>'><?php echo empty($space->desc) ? $lang->kanban->emptyDesc : $space->desc;?></p>
         </div>
         <div class='spaceActions pull-right'>
           <?php $class = $space->status == 'closed' ? 'disabled' : '';?>
           <?php if($space->status != 'closed' and $browseType != 'involved' and !empty($unclosedSpace)) common::printLink('kanban', 'create', "spaceID={$space->id}&type={$space->type}", '<i class="icon icon-plus"></i> ' . $lang->kanban->create, '', "class='iframe' data-width='75%'", '', true);?>
-          <?php common::printLink('kanban', 'editSpace', "spaceID={$space->id}", '<i class="icon icon-cog-outline"></i> ' . $lang->kanban->setting, '', "class='iframe' data-width='75%'", '', true);?>
-          <?php if($class == 'disabled'):?>
-          <?php common::printLink('kanban', 'activateSpace', "spaceID={$space->id}", '<i class="icon icon-magic"></i> ' . $lang->activate, '', "class='iframe'", '', true);?>
-          <?php else:?>
-          <?php common::printLink('kanban', 'closeSpace', "spaceID={$space->id}", '<i class="icon icon-off"></i> ' . $lang->close, '', "class='iframe'", '', true);?>
-          <?php endif;?>
-          <?php common::printLink('kanban', 'deleteSpace', "spaceID={$space->id}", '<i class="icon icon-trash"></i> ' . $lang->delete, 'hiddenwin', '', '', true);?>
+          <div class="btn-group" id="more">
+            <a href="javascript:;" data-toggle="dropdown" class="btn btn-link " style="border-radius: 4px;"><?php echo $lang->kanban->setting;?><span class="caret"></span></a>
+            <ul class="dropdown-menu setting">
+              <li><?php common::printLink('kanban', 'editSpace', "spaceID={$space->id}", '<i class="icon icon-cog-outline"></i> ' . $lang->kanban->setting, '', "class='iframe' data-width='75%'", '', true);?></li>
+              <li><?php if($class == 'disabled'):?>
+              <?php common::printLink('kanban', 'activateSpace', "spaceID={$space->id}", '<i class="icon icon-magic"></i> ' . $lang->activate, '', "class='iframe'", '', true);?>
+              <?php else:?>
+              <?php common::printLink('kanban', 'closeSpace', "spaceID={$space->id}", '<i class="icon icon-off"></i> ' . $lang->close, '', "class='iframe'", '', true);?>
+              <?php endif;?></li>
+              <li><?php common::printLink('kanban', 'deleteSpace', "spaceID={$space->id}", '<i class="icon icon-trash"></i> ' . $lang->delete, 'hiddenwin', '', '', true);?></li>
+            <ul>
+         </div>
         </div>
       </div>
       <?php if(isset($space->kanbans)):?>
