@@ -28,7 +28,7 @@
         echo html::a(inlink($app->rawMethod, "mode=$mode&type=assigntome"), "<span class='text'>{$lang->my->assignedToMe}</span>" . ($type == 'assigntome' ? $recTotalLabel : ''), '', "class='btn btn-link" . ($type == 'assigntome' ? ' btn-active-text' : '') . "'");
     }
     ?>
-    <a class="btn btn-link querybox-toggle" id='bysearchTab'><i class="icon icon-search muted"></i> <?php $this->loadModel('search');echo $lang->search->common;?></a>
+    <a class="btn btn-link querybox-toggle" id='bysearchTab'><i class="icon icon-search muted"></i><?php $this->loadModel('search');echo $lang->search->common;?></a>
   </div>
 </div>
 <div id="mainContent">

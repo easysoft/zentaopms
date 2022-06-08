@@ -637,7 +637,7 @@ EOF;
 
         /* Build the search form. */
         $currentMethod = $this->app->rawMethod;
-        $actionURL = $this->createLink('my', $currentMethod, "mode=testcase&type=bysearch&param=myQueryID&orderBy={$orderBy}&recTotal={$recTotal}&recPerPage={$recPerPage}&pageID={$pageID}");
+        $actionURL     = $this->createLink('my', $currentMethod, "mode=testcase&type=bysearch&param=myQueryID&orderBy={$orderBy}&recTotal={$recTotal}&recPerPage={$recPerPage}&pageID={$pageID}");
         $this->config->testcase->search['onMenuBar'] = 'yes';
         $this->my->buildTestcaseSearchForm($queryID, $actionURL, $currentMethod);
 

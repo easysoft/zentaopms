@@ -424,7 +424,7 @@ class myModel extends model
             if($query)
             {
                 $this->session->set($queryName, $query->sql);
-                $this->session->set($queryName . 'Form',  $query->form);
+                $this->session->set($queryName . 'Form', $query->form);
             }
             else
             {
