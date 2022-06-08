@@ -3,7 +3,7 @@
  * The start view of productplan module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2021 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html) or AGPL
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      MengYi Liu <liumengyi@easycorp.ltd>
  * @package     productplan
  * @version     $Id: start.html.php 4728 2021-12-28 09:57:34Z $

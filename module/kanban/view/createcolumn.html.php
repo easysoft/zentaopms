@@ -3,7 +3,7 @@
  * The create lane view file of kanban module of ZentaoPMS.
  *
  * @copyright   Copyright 2009-2020 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html) or AGPL
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Guangming Sun<sunguangming@easycorp.ltd>
  * @package     kanban
  * @version     $Id$
