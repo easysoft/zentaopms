@@ -844,11 +844,11 @@ class kanbanModel extends model
                     $this->refreshCards($lane);
                     $lane->items           = isset($cardGroup[$lane->id]) ? $cardGroup[$lane->id] : array();
                     $lane->defaultCardType = $lane->type;
-                    if(!empty($searchValue) and count($lane->items) == 0) unset($lanes[$key]);
+                    if($searchValue != '' and count($lane->items) == 0) unset($lanes[$key]);
                 }
                 $lanes = array_values($lanes);
 
-                if(!empty($searchValue) and empty($lanes)) continue;
+                if($searchValue != '' and empty($lanes)) continue;
                 $group->columns = zget($columnGroup, $group->id, array());
                 $group->lanes   = $lanes;
                 $group->actions = array();
@@ -1303,14 +1303,14 @@ class kanbanModel extends model
 
                     if($cell->type == 'task')
                     {
-                        if(!empty($searchValue) and strpos($object->name, $searchValue) === false) continue;
+                        if($searchValue != '' and strpos($object->name, $searchValue) === false) continue;
                         $cardData['name']     = $object->name;
                         $cardData['status']   = $object->status;
                         $cardData['left']     = $object->left;
                     }
                     else
                     {
-                        if(!empty($searchValue) and strpos($object->title, $searchValue) === false) continue;
+                        if($searchValue != '' and strpos($object->title, $searchValue) === false) continue;
                         $cardData['title'] = $object->title;
                     }
                     $cardGroup[$laneID][$cell->columnType][] = $cardData;
@@ -1414,14 +1414,14 @@ class kanbanModel extends model
 
                     if($lane->type == 'task')
                     {
-                        if(!empty($searchValue) and strpos($object->name, $searchValue) === false) continue;
+                        if($searchValue != '' and strpos($object->name, $searchValue) === false) continue;
                         $cardData['name']   = $object->name;
                         $cardData['status'] = $object->status;
                         $cardData['left']   = $object->left;
                     }
                     else
                     {
-                        if(!empty($searchValue) and strpos($object->title, $searchValue) === false) continue;
+                        if($searchValue != '' and strpos($object->title, $searchValue) === false) continue;
                         $cardData['title'] = $object->title;
                     }
 
@@ -1563,14 +1563,14 @@ class kanbanModel extends model
 
                     if($browseType == 'task')
                     {
-                        if(!empty($searchValue) and strpos($object->name, $searchValue) === false) continue;
+                        if($searchValue != '' and strpos($object->name, $searchValue) === false) continue;
                         $cardData['name']   = $object->name;
                         $cardData['status'] = $object->status;
                         $cardData['left']   = $object->left;
                     }
                     else
                     {
-                        if(!empty($searchValue) and strpos($object->title, $searchValue) === false) continue;
+                        if($searchValue != '' and strpos($object->title, $searchValue) === false) continue;
                         $cardData['title'] = $object->title;
                     }
 
@@ -1580,7 +1580,7 @@ class kanbanModel extends model
                 if(empty($searchValue) and !isset($laneData['cards'][$column->columnType])) $laneData['cards'][$column->columnType] = array();
             }
 
-            if(!empty($searchValue) and empty($laneData['cards'])) continue;;
+            if($searchValue != '' and empty($laneData['cards'])) continue;
             $kanbanGroup[$groupBy]['id']              = $groupBy . $laneID;
             $kanbanGroup[$groupBy]['columns']         = array_values($columnData);
             $kanbanGroup[$groupBy]['lanes'][]         = $laneData;
