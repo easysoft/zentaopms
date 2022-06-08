@@ -1619,13 +1619,23 @@ function searchCards(value)
     rdSearchValue = value;
     $.get(createLink('execution', 'ajaxUpdateKanban', "executionID=" + executionID + "&entertime=0&browseType=" + browseType + "&groupBy=" + groupBy + '&from=RD&searchValue=' + value), function(data)
     {
-        kanbanData = $.parseJSON(data);
+        var kanbanData = $.parseJSON(data);
+        var hideAll    = true;
         $('#kanban').children('.region').children("div[id^='kanban']").each(function()
         {
             var regionID = $(this).attr('data-id');
             if(kanbanData != null) data = groupBy == 'default' ? kanbanData[regionID] : kanbanData[groupBy];
 
-            updateRegion(regionID, data);
+            hideAll = hideAll && !updateRegion(regionID, data);
         });
+
+        if(hideAll && rdSearchValue != '')
+        {
+            if($('.table-empty-tip').length == 0) $('#kanban').append('<div class="table-empty-tip"><p><span class="text-muted">' + kanbanLang.empty + '</span></p></div>');
+        }
+        else
+        {
+            $('.table-empty-tip').remove();
+        }
     });
 }
