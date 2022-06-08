@@ -478,7 +478,9 @@ function renderStoryItem(item, $item, col)
                     .attr('href', $.createLink('story', 'view', 'storyID=' + item.id + '&version=0&param=' + execution.id, '', true)).attr('data-toggle', 'modal').attr('data-width', '95%');
             $title.appendTo($item);
         }
-        $title.attr('title', item.title).find('.text').text(item.title);
+        var reg   = new RegExp('((' + rdSearchValue + ')+)', "g");
+        var title = rdSearchValue != '' ? "<span class='text'>" + item.title.replace(reg, "<span class='text-danger'>$1</span>") + "</span>": "<span class='text'>" + item.title + "</span>";
+        $title.attr('title', item.title).find('.text').replaceWith(title);
     }
 
     if(scaleSize <= 2)
@@ -542,7 +544,9 @@ function renderBugItem(item, $item, col)
                     .attr('href', $.createLink('bug', 'view', 'bugID=' + item.id, '', true)).attr('data-toggle', 'modal').attr('data-width', '80%');
             $title.appendTo($item);
         }
-        $title.attr('title', item.title).find('.text').text(item.title);
+        var reg   = new RegExp('((' + rdSearchValue + ')+)', "g");
+        var title = rdSearchValue != '' ? "<span class='text'>" + item.title.replace(reg, "<span class='text-danger'>$1</span>") + "</span>": "<span class='text'>" + item.title + "</span>";
+        $title.attr('title', item.title).find('.text').replaceWith(title);
     }
 
     if(scaleSize <= 2)
@@ -608,7 +612,9 @@ function renderTaskItem(item, $item, col)
                     .attr('href', $.createLink('task', 'view', 'taskID=' + item.id, '', true)).attr('data-toggle', 'modal').attr('data-width', '80%');
             $title.appendTo($item);
         }
-        $title.attr('title', item.name).find('.text').text(item.name);
+        var reg  = new RegExp('((' + rdSearchValue + ')+)', "g");
+        var name = rdSearchValue != '' ? "<span class='text'>" + item.name.replace(reg, "<span class='text-danger'>$1</span>") + "</span>": "<span class='text'>" + item.name + "</span>";
+        $title.attr('title', item.name).find('.text').replaceWith(name);
     }
 
     if(scaleSize <= 2)
@@ -792,6 +798,10 @@ function updateRegion(regionID, regionData = [])
     if(!regionData) regionData = regions[regionID];
 
     var data = groupBy == 'default' ? regionData.groups : regionData;
+    if(data == null)
+    {
+        $("div[data-id^=" + regionID + "].region").hide();
+    }
     $region.data('zui.kanban').render(data);
     resetRegionHeight('open');
     return true;
@@ -1504,7 +1514,7 @@ $(function()
         var lastUpdateData;
         setInterval(function()
         {
-            $.get(createLink('execution', 'ajaxUpdateKanban', "executionID=" + executionID + "&entertime=" + entertime + "&browseType=" + browseType + "&groupBy=" + groupBy + '&from=RD'), function(data)
+            $.get(createLink('execution', 'ajaxUpdateKanban', "executionID=" + executionID + "&entertime=" + entertime + "&browseType=" + browseType + "&groupBy=" + groupBy + '&from=RD&searchValue' + rdSearchValue), function(data)
             {
                 if(data && lastUpdateData !== data)
                 {
@@ -1579,4 +1589,40 @@ function resetRegionHeight(fold)
     {
         $('.region').css('height', regionHeaderHeight);
     }
+}
+
+/**
+ * Toggle RDSearchBox.
+ *
+ * @access public
+ * @return void
+ */
+function toggleRDSearchBox()
+{
+    $('#rdSearchBox').fadeToggle();
+    rdSearchValue = '';
+    if($('#rdSearchBox').css('display') == 'block')
+    {
+        $(".querybox-toggle").css("color", "#0c64eb");
+    }
+    else
+    {
+        $(".querybox-toggle").css("color", "");
+    }
+}
+
+function searchCards(value)
+{
+    rdSearchValue = value;
+    $.get(createLink('execution', 'ajaxUpdateKanban', "executionID=" + executionID + "&entertime=" + entertime + "&browseType=" + browseType + "&groupBy=" + groupBy + '&from=RD&searchValue=' + value), function(data)
+    {
+        kanbanData = $.parseJSON(data);
+        $('#kanban').children('.region').children("div[id^='kanban']").each(function()
+        {
+            var regionID = $(this).attr('data-id');
+            if(kanbanData != null) data = groupBy == 'default' ? kanbanData[regionID] : kanbanData[groupBy];
+
+            updateRegion(regionID, data);
+        });
+    });
 }

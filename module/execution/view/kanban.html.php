@@ -52,6 +52,7 @@ js::set('vision', $this->config->vision);
 js::set('productCount', count($productNames));
 js::set('executionID', $execution->id);
 js::set('reviewStoryParis', $reviewStoryParis);
+js::set('rdSearchValue', '');
 
 $canSortRegion       = commonModel::hasPriv('kanban', 'sortRegion') && count($regions) > 1;
 $canEditRegion       = commonModel::hasPriv('kanban', 'editRegion');
@@ -136,7 +137,13 @@ js::set('hasTaskButton', $hasTaskButton);
     </span>
   </div>
   <div class='btn-toolbar pull-right'>
+    <div class="input-group" id="rdKanbanSearch">
+      <div class="input-control search-box" id="rdSearchBox">
+        <input type="text" name="rdKanbanSearchInput" id="rdKanbanSearchInput" value="" class="form-control" oninput="searchCards(this.value)" placeholder="请输入">
+      </div>
+    </div>
     <?php
+    echo html::a('javascript:toggleRDSearchBox()', "<i class='icon-search muted'></i> " . $lang->searchAB, '', "class='btn btn-link querybox-toggle'");
     echo html::a('javascript:fullScreen()', "<i class='icon-fullscreen muted'></i> " . $lang->kanban->fullScreen, '', "class='btn btn-link'");
     $actions           = '';
     $printCreateRegion = (common::hasPriv('kanban', 'createRegion') and $groupBy == 'default');
