@@ -40,12 +40,12 @@
         <div class='spaceTitle pull-left'>
           <div><i class='icon-cube'></i></div>
           <div>
-            <h4 title="<?php echo $space->name;?>">
+            <p class='spaceName' title="<?php echo $space->name;?>">
               <?php if($space->status == 'closed'):?>
               <span class="label label-closed"><?php echo $lang->kanban->closed;?></span>
               <?php endif;?>
               <?php echo $space->name;?>
-            </h4>
+            </p>
           </div>
         </div>
         <div class='spaceActions pull-right'>
