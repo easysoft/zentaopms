@@ -42,6 +42,7 @@ $lang->action->hideAll     = '全部隐藏';
 $lang->action->editComment = '修改备注';
 $lang->action->create      = '添加备注';
 $lang->action->comment     = '备注';
+$lang->action->byQuery     = '搜索';
 
 $lang->action->undeleteAction = '还原数据';
 $lang->action->hideOneAction  = '隐藏数据';
