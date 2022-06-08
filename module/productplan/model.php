@@ -75,6 +75,7 @@ class productplanModel extends model
      * @param  object $pager
      * @param  string $orderBy
      * @param  string $param skipparent
+     * @param  int    $queryID
      * @access public
      * @return object
      */
