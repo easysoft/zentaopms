@@ -374,4 +374,88 @@ class myModel extends model
         }
         return $objectList;
     }
+
+    /**
+     * Build search form.
+     *
+     * @param  int    $queryID
+     * @param  string $actionURL
+     * @param  string $type
+     * @access public
+     * @return void
+     */
+    public function buildTestCaseSearchForm($queryID, $actionURL, $type)
+    {
+        $products = $this->dao->select('id,name')->from(TABLE_PRODUCT)
+            ->where('deleted')->eq(0)
+            ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->products)->fi()
+            ->orderBy('order_asc')
+            ->fetchPairs();
+
+        $queryName = $type == 'contribute' ? 'contributeTestcase' : 'workTestcase';
+        $this->app->loadConfig('testcase');
+        $this->config->testcase->search['module']                      = $queryName;
+        $this->config->testcase->search['queryID']                     = $queryID;
+        $this->config->testcase->search['actionURL']                   = $actionURL;
+        $this->config->testcase->search['params']['product']['values'] = $products;
+        $this->config->testcase->search['params']['lib']['values']     = $this->loadModel('caselib')->getLibraries();
+
+        unset($this->config->testcase->search['fields']['module']);
+
+        $this->loadModel('search')->setSearchParams($this->config->testcase->search);
+    }
+
+    /**
+     * Get testcases by search.
+     *
+     * @param  int    $queryID
+     * @param  string $type
+     * @param  string $orderBy
+     * @param  int    $pager
+     * @access public
+     * @return array
+     */
+    public function getTestcasesBySearch($queryID, $type, $orderBy, $pager)
+    {
+        $queryName = $type == 'contribute' ? 'contributeTestcaseQuery' : 'workTestcaseQuery';
+        if($queryID)
+        {
+            $query = $this->loadModel('search')->getQuery($queryID);
+            if($query)
+            {
+                $this->session->set($queryName, $query->sql);
+                $this->session->set($queryName . 'Form',  $query->form);
+            }
+            else
+            {
+                $this->session->set($queryName, ' 1 = 1');
+            }
+        }
+        else
+        {
+            if($this->session->$queryName  == false) $this->session->set($queryName, ' 1 = 1');
+        }
+
+        $myTestcaseQuery = $this->session->$queryName;
+        $myTestcaseQuery = preg_replace('/`(\w+)`/', 't1.`$1`', $myTestcaseQuery);
+
+        if($type == 'openedbyme')
+        {
+            $cases = $this->dao->select('*')->from(TABLE_CASE)->alias('t1')
+                ->where($myTestcaseQuery)
+                ->andWhere('t1.openedBy')->eq($this->app->user->account)
+                ->andWhere('t1.deleted')->eq(0)
+                ->orderBy($orderBy)->page($pager)->fetchAll('id');
+        }
+        else
+        {
+            $cases = $this->dao->select('t1.*')->from(TABLE_CASE)->alias('t1')
+                ->leftJoin(TABLE_TESTRUN)->alias('t2')->on('t1.id = t2.case')
+                ->where($myTestcaseQuery)
+                ->andWhere('t2.assignedTo')->eq($this->app->user->account)
+                ->andWhere('t1.deleted')->eq(0)
+                ->orderBy($orderBy)->page($pager)->fetchAll('id');
+        }
+        return $cases;
+    }
 }
