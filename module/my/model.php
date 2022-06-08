@@ -417,7 +417,7 @@ class myModel extends model
      */
     public function getTestcasesBySearch($queryID, $type, $orderBy, $pager)
     {
-        $queryName = $type == 'contribute' ? 'contributeTestcaseQuery' : 'workTestcaseQuery';
+        $queryName = $type == 'openedbyme' ? 'contributeTestcaseQuery' : 'workTestcaseQuery';
         if($queryID)
         {
             $query = $this->loadModel('search')->getQuery($queryID);
