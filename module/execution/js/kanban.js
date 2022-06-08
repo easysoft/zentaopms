@@ -1611,6 +1611,8 @@ function toggleRDSearchBox()
     else
     {
         $(".querybox-toggle").css("color", "");
+        $('#rdKanbanSearchInput').attr('value', '');
+        searchCards('');
     }
 }
 
