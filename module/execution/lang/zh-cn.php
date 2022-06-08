@@ -396,6 +396,7 @@ $lang->execution->projectNotEmpty             = '所属项目不能为空。';
 $lang->execution->confirmStoryToTask          = '%s' . $lang->SRCommon . '已经在当前' . $lang->execution->common . '中转了任务，请确认是否重复转任务。';
 $lang->execution->ge                          = "『%s』应当不小于实际开始时间『%s』。";
 $lang->execution->storyDragError              = "该{$lang->SRCommon}还是草稿或已变更状态，请评审通过后再拖动";
+$lang->execution->countTip                    = '（%s人）';
 
 /* 统计。*/
 $lang->execution->charts = new stdclass();

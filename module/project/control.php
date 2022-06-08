@@ -1455,7 +1455,7 @@ class project extends control
         $this->view->depts          = array('' => '') + $this->dept->getOptionMenu();
         $this->view->currentMembers = $currentMembers;
         $this->view->members2Import = $members2Import;
-        $this->view->teams2Import   = array('' => '') + $this->loadModel('personnel')->getCopiedObjects($projectID, 'project');
+        $this->view->teams2Import   = array('' => '') + $this->loadModel('personnel')->getCopiedObjects($projectID, 'project', true);
         $this->view->copyProjectID  = $copyProjectID;
         $this->display();
     }
