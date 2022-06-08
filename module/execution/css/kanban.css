@@ -110,3 +110,7 @@
 #mainMenu .divider {margin: 10px}
 
 .modal-header {padding: 15px 0;}
+#rdKanbanSearch.input-group {float: left; width: min-content;}
+#rdKanbanSearchInput {width: 150px;}
+#rdSearchBox {display: none; width: 150px;}
+.btn-link.querybox-toggle {background-color: rgba(0,0,0,0);}
