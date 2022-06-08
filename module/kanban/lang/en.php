@@ -79,6 +79,7 @@ $lang->kanban->importBuild         = 'Build';
 $lang->kanban->allKanban           = 'All Kanban';
 $lang->kanban->allProjects         = 'All ' . ($this->config->systemMode == 'classic' ? $lang->executionCommon : 'Projects');
 $lang->kanban->allProducts         = 'All Products';
+$lang->kanban->mine                = 'Mine';
 
 /* Fields. */
 $lang->kanban->space          = 'Space';
