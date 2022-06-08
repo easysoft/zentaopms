@@ -1602,8 +1602,8 @@ function resetRegionHeight(fold)
  */
 function toggleRDSearchBox()
 {
-    $('#rdSearchBox').fadeToggle();
     rdSearchValue = '';
+    $('#rdSearchBox').toggle();
     if($('#rdSearchBox').css('display') == 'block')
     {
         $(".querybox-toggle").css("color", "#0c64eb");
