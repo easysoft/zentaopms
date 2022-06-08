@@ -3419,15 +3419,26 @@ class kanbanModel extends model
             ->andWhere('space')->in($spaceIdList)
             ->beginIF($kanbanIdList)->andWhere('id')->in($kanbanIdList)->fi()
             ->fetchGroup('space', 'id');
+
+        $kanbanIDList = array();
         foreach($kanbanList as $kanbanPairs)
         {
             foreach($kanbanPairs as $kanban)
             {
-                $cards = $this->dao->select('*')->from(TABLE_KANBANCARD)
-                    ->where('deleted')->eq(0)
-                    ->andWhere('kanban')->eq($kanban->id)
-                    ->fetchAll();
-                $kanban->cardsCount = count($cards);
+                $kanbanIDList[$kanban->id] = $kanban->id;
+            }
+        }
+        $cardsCount = $this->dao->select('kanban, COUNT(*) as count')->from(TABLE_KANBANCARD)
+            ->where('deleted')->eq(0)
+            ->andWhere('kanban')->in($kanbanIDList)
+            ->groupBy('kanban')
+            ->fetchPairs('kanban');
+
+        foreach($kanbanList as $kanbanPairs)
+        {
+            foreach($kanbanPairs as $kanban)
+            {
+                if(isset($cardsCount[$kanban->id])) $kanban->cardsCount = $cardsCount[$kanban->id];
             }
         }
         return $kanbanList;
