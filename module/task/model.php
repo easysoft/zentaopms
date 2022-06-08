@@ -295,7 +295,11 @@ class taskModel extends model
             if($storyID == 'ditto') $storyID = $preStory;
             $preStory = $storyID;
 
-            if(!isset($tasks->story[$key - 1]) and $key > 1 and !empty($tasks->name[$key - 1])) $taskNames[] = $tasks->name[$key - 1];
+            if(!isset($tasks->story[$key - 1]) and $key > 1 and !empty($tasks->name[$key - 1]))
+            {
+                $storyIDs[]  = 0;
+                $taskNames[] = $tasks->name[$key - 1];
+            }
 
             $inNames = in_array($tasks->name[$key], $taskNames);
             if(!$inNames || ($inNames && !in_array($storyID, $storyIDs)))
