@@ -1614,6 +1614,13 @@ function toggleRDSearchBox()
     }
 }
 
+/**
+ * Search all cards.
+ *
+ * @param  string $value
+ * @access public
+ * @return void
+ */
 function searchCards(value)
 {
     rdSearchValue = value;
