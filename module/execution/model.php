@@ -2743,13 +2743,30 @@ class executionModel extends model
 
         $objectPairs = $this->dao->select('id,name')->from(TABLE_PROJECT)
             ->where('deleted')->eq(0)
+            ->andWhere('project', true)->eq($projectID)
             ->andWhere('type')->ne('project')
-            ->andWhere('(project')->eq($projectID)
-            ->orWhere('id')->eq($projectID)
             ->markRight(1)
+            ->orWhere('id')->eq($projectID)
             ->orderBy('type_asc,openedDate_desc')
             ->limit('9')
             ->fetchPairs();
+
+        $countPairs = $this->dao->select('root, COUNT(*) as count')->from(TABLE_TEAM)
+            ->where('( type')->eq('project')
+            ->andWhere('root')->eq($projectID)
+            ->markRight(1)
+            ->orWhere('( type')->eq('execution')
+            ->andWhere('root')->in(array_keys($objectPairs))
+            ->markRight(1)
+            ->groupBy('root')
+            ->fetchPairs('root');
+
+        foreach($objectPairs as $objectID => $objectName)
+        {
+            $memberCount = zget($countPairs, $objectID, 0);
+            $countTip    = $memberCount > 1 ? str_replace('member', 'members', $this->lang->execution->countTip) : $this->lang->execution->countTip;
+            $objectPairs[$objectID] = $objectName . sprintf($countTip, $memberCount);
+        }
 
         return $objectPairs;
     }
