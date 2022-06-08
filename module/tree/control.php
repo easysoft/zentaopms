@@ -252,6 +252,7 @@ class tree extends control
                 }
             }
         }
+        /* viewType is workflow building category. */
         else if(strpos($viewType, '_') !== false)
         {
             $params = explode('_', $viewType);
