@@ -1209,16 +1209,17 @@ class productplanModel extends model
      *
      * @param  int    $queryID
      * @param  string $actionURL
-     * @param  int    $productID
+     * @param  object $product
      * @access public
      * @return void
      */
-    public function buildSearchForm($queryID, $actionURL, $productID)
+    public function buildSearchForm($queryID, $actionURL, $product)
     {
         $this->config->productplan->search['actionURL'] = $actionURL;
         $this->config->productplan->search['queryID']   = $queryID;
 
-        $this->config->productplan->search['params']['branch']['values']  = array('' => '', '0' => $this->lang->branch->main) + $this->loadModel('branch')->getPairs($productID, 'noempty');
+        if($product->type != 'normal') $this->config->productplan->search['params']['branch']['values']  = array('' => '', '0' => $this->lang->branch->main) + $this->loadModel('branch')->getPairs($product->id, 'noempty');
+        if($product->type == 'normal') unset($this->config->productplan->search['fields']['branch']);
         $this->loadModel('search')->setSearchParams($this->config->productplan->search);
     }
 }
