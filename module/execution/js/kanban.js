@@ -478,8 +478,7 @@ function renderStoryItem(item, $item, col)
                     .attr('href', $.createLink('story', 'view', 'storyID=' + item.id + '&version=0&param=' + execution.id, '', true)).attr('data-toggle', 'modal').attr('data-width', '95%');
             $title.appendTo($item);
         }
-        var reg   = new RegExp('((' + rdSearchValue + ')+)', "g");
-        var title = rdSearchValue != '' ? "<span class='text'>" + item.title.replace(reg, "<span class='text-danger'>$1</span>") + "</span>": "<span class='text'>" + item.title + "</span>";
+        var title = rdSearchValue != '' ? "<span class='text'>" + item.title.replaceAll(rdSearchValue, "<span class='text-danger'>" + rdSearchValue + "</span>") + "</span>": "<span class='text'>" + item.title + "</span>";
         $title.attr('title', item.title).find('.text').replaceWith(title);
     }
 
@@ -544,8 +543,7 @@ function renderBugItem(item, $item, col)
                     .attr('href', $.createLink('bug', 'view', 'bugID=' + item.id, '', true)).attr('data-toggle', 'modal').attr('data-width', '80%');
             $title.appendTo($item);
         }
-        var reg   = new RegExp('((' + rdSearchValue + ')+)', "g");
-        var title = rdSearchValue != '' ? "<span class='text'>" + item.title.replace(reg, "<span class='text-danger'>$1</span>") + "</span>": "<span class='text'>" + item.title + "</span>";
+        var title = rdSearchValue != '' ? "<span class='text'>" + item.title.replaceAll(rdSearchValue, "<span class='text-danger'>" + rdSearchValue + "</span>") + "</span>": "<span class='text'>" + item.title + "</span>";
         $title.attr('title', item.title).find('.text').replaceWith(title);
     }
 
@@ -612,8 +610,7 @@ function renderTaskItem(item, $item, col)
                     .attr('href', $.createLink('task', 'view', 'taskID=' + item.id, '', true)).attr('data-toggle', 'modal').attr('data-width', '80%');
             $title.appendTo($item);
         }
-        var reg  = new RegExp('((' + rdSearchValue + ')+)', "g");
-        var name = rdSearchValue != '' ? "<span class='text'>" + item.name.replace(reg, "<span class='text-danger'>$1</span>") + "</span>": "<span class='text'>" + item.name + "</span>";
+        var name = rdSearchValue != '' ? "<span class='text'>" + item.name.replaceAll(rdSearchValue, "<span class='text-danger'>" + rdSearchValue + "</span>") + "</span>": "<span class='text'>" + item.name + "</span>";
         $title.attr('title', item.name).find('.text').replaceWith(name);
     }
 
@@ -801,7 +798,13 @@ function updateRegion(regionID, regionData = [])
     if(data == null)
     {
         $("div[data-id^=" + regionID + "].region").hide();
+        return false;
     }
+    else
+    {
+        $("div[data-id^=" + regionID + "].region").show();
+    }
+    $region.empty();
     $region.data('zui.kanban').render(data);
     resetRegionHeight('open');
     return true;
@@ -1614,7 +1617,7 @@ function toggleRDSearchBox()
 function searchCards(value)
 {
     rdSearchValue = value;
-    $.get(createLink('execution', 'ajaxUpdateKanban', "executionID=" + executionID + "&entertime=" + entertime + "&browseType=" + browseType + "&groupBy=" + groupBy + '&from=RD&searchValue=' + value), function(data)
+    $.get(createLink('execution', 'ajaxUpdateKanban', "executionID=" + executionID + "&entertime=0&browseType=" + browseType + "&groupBy=" + groupBy + '&from=RD&searchValue=' + value), function(data)
     {
         kanbanData = $.parseJSON(data);
         $('#kanban').children('.region').children("div[id^='kanban']").each(function()
