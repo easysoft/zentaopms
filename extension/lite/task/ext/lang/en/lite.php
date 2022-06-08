@@ -3,7 +3,7 @@
  * The task module en file of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2022 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL (http://zpl.pub/page/zplv12.html) or AGPL
  * @author      Shujie Tian <tianshujie@cnezsoft.com>
  * @package     task
  * @version     $Id: en.php 5040 2022-02-28 09:36:18Z $

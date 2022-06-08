@@ -3,7 +3,7 @@
  * The browse view file of client module of XXB.
  *
  * @copyright   Copyright 2009-2017 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL (http://zpl.pub/page/zplv12.html) or AGPL
  * @author      Memory <lvtao@cnezsoft.com>
  * @package     client
  * @version     $Id$
