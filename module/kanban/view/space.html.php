@@ -153,6 +153,7 @@
                   </div>
                   <?php endif;?>
                   <div class='kanban-members-total pull-left'><?php echo sprintf($lang->kanban->teamSumCount, $teamCount);?></div>
+                  <div class='kanban-members-total pull-right'><?php echo empty($kanban->cardsCount) ? $lang->kanban->noCard : sprintf($lang->kanban->cardsCount, $kanban->cardsCount)?></div>
                 </div>
               </div>
             </div>
