@@ -153,14 +153,8 @@
                   </div>
                   <?php endif;?>
                   <div class='kanban-members-total pull-left'><?php echo sprintf($lang->kanban->teamSumCount, $teamCount);?></div>
-                  <?php
-                  $cardsCount = $lang->kanban->cardsCount;
-                  if($kanban->cardsCount > 1)
-                  {
-                     $cardsCount = str_replace("card", "cards", $cardsCount);
-                  }
-                  ?>
-                  <div class='kanban-members-total pull-right'><?php echo empty($kanban->cardsCount) ? $lang->kanban->noCard : sprintf($cardsCount, $kanban->cardsCount)?></div>
+                  <?php $cardsCount = ($kanban->cardsCount > 1) ? str_replace("card", "cards", $lang->kanban->cardsCount) : $lang->kanban->cardsCount;?>
+                  <div class='kanban-members-total pull-right'><?php echo empty($kanban->cardsCount) ? $lang->kanban->noCard : sprintf($cardsCount, $kanban->cardsCount);?></div>
                 </div>
               </div>
             </div>
