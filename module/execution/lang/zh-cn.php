@@ -271,6 +271,7 @@ $lang->execution->treeOnlyStory     = "树状图只看{$lang->SRCommon}";
 $lang->execution->storyKanban       = "{$lang->SRCommon}看板";
 $lang->execution->storySort         = "{$lang->SRCommon}排序";
 $lang->execution->importPlanStory   = '创建' . $lang->executionCommon . '成功！\n是否导入计划关联的相关' . $lang->SRCommon . '？';
+$lang->execution->needLinkProducts  = '该执行还未关联任何产品，相关功能无法使用，请先关联产品后再试。';
 $lang->execution->iteration         = '版本迭代';
 $lang->execution->iterationInfo     = '迭代%s次';
 $lang->execution->viewAll           = '查看所有';
