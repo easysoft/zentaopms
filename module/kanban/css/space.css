@@ -9,6 +9,7 @@
 .space .table-empty-tip {padding: 40px 10px;}
 .space .spaceTitle.pull-left {overflow: hidden; white-space: nowrap; max-width: calc(100% - 150px)}
 .desc-style {font-size: 13px; color: #838A9D; margin: -5px 0 5px 18px;}
+.menu-style {margin-left: -25px; min-width: 80px}
 
 .kanbans > .col {width: 25% !important;}
 @media screen and (max-width: 1500px) {.kanbans > .col {width: 25%;}}
