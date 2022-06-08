@@ -12,10 +12,6 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
-<style>
-#assignedTo a {border-color: transparent;}
-#assignedTo a:hover {border-color: rgba(0,0,0,.2);}
-</style>
 <?php $browseLink = $app->session->taskList != false ? $app->session->taskList : $this->createLink('execution', 'browse', "executionID=$task->execution");?>
 <?php js::set('sysurl', common::getSysUrl());?>
 <?php if(strpos($_SERVER["QUERY_STRING"], 'isNotice=1') === false):?>
