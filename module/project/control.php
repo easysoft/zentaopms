@@ -2004,7 +2004,7 @@ class project extends control
      */
     public function ajaxGetExecutions($projectID, $executionID = 0)
     {
-        $executions = array('' => '') + $this->loadModel('execution')->getpairs($projectID, 'all');
+        $executions = array('' => '') + $this->loadModel('execution')->getPairs($projectID, 'all');
 
         if($this->app->getViewType() == 'json') return print(json_encode($executionList));
         return print(html::select('execution', $executions, $executionID, "class='form-control'"));
