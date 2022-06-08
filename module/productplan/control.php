@@ -283,15 +283,16 @@ class productplan extends control
      *
      * @param  int    $productID
      * @param  int    $branch
-     * @param  string $orderBy
      * @param  string $browseType
+     * @param  int    $queryID
+     * @param  string $orderBy
      * @param  int    $recTotal
      * @param  int    $recPerPage
      * @param  int    $pageID
      * @access public
      * @return void
      */
-    public function browse($productID = 0, $branch = '', $browseType = 'undone', $orderBy = 'begin_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1 )
+    public function browse($productID = 0, $branch = '', $browseType = 'undone', $queryID = 0, $orderBy = 'begin_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1 )
     {
         $branchID = $branch === '' ? 'all' : $branch;
         if(!$branch) $branch = 0;
@@ -312,6 +313,11 @@ class productplan extends control
         $branchList       = $this->branch->getList($productID, 0, 'all');
         $branchStatusList = array();
         foreach($branchList as $productBranch) $branchStatusList[$productBranch->id] = $productBranch->status;
+
+        /* Build the search form. */
+        $queryID   = $browseType == 'bySearch' ? (int)$queryID : 0;
+        $actionURL = $this->createLink('productplan', 'browse', "productID=$productID&branch=$branch&browseType=bySearch&queryID=$queryID&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID");
+        $this->productplan->buildSearchForm($queryID, $actionURL, $productID);
 
         if($viewType == 'kanban')
         {
@@ -353,10 +359,11 @@ class productplan extends control
         $this->view->browseType       = $browseType;
         $this->view->viewType         = $viewType;
         $this->view->orderBy          = $orderBy;
-        $this->view->plans            = $this->productplan->getList($productID, $branch, $browseType, $pager, $sort);
+        $this->view->plans            = $this->productplan->getList($productID, $branch, $browseType, $pager, $sort, "", $queryID);
         $this->view->pager            = $pager;
         $this->view->projects         = $this->product->getProjectPairsByProduct($productID, $branch);
         $this->view->statusList       = $this->lang->productplan->featureBar['browse'];
+        $this->view->queryID          = $queryID;
         $this->display();
     }
 
