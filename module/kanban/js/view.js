@@ -1116,6 +1116,7 @@ function createCardMenu(options)
 
     var items = [];
     if(privs.includes('editCard') && card.fromType == '') items.push({label: kanbanLang.editCard, icon: 'edit', url: createLink('kanban', 'editCard', 'cardID=' + card.id, '', 'true'), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width': '80%'}});
+    if(privs.includes('deleteCard')) items.push({label: card.fromType == '' ? kanbanLang.deleteCard : kanbanLang.removeCard, icon: card.fromType == '' ? 'trash' : 'unlink', url: createLink('kanban', 'deleteCard', 'cardID=' + card.id), attrs: {'target': 'hiddenwin'}});
     if(privs.includes('performable') && kanban.performable == 1)
     {
         if(card.status == 'done')
@@ -1127,6 +1128,25 @@ function createCardMenu(options)
             items.push({label: kanbanLang.finishCard, icon: 'checked', onClick: function(){finishCard(card.id, card.kanban, card.region);}});
         }
     }
+    if(privs.includes('archiveCard') && kanban.archived == '1') items.push({label: kanbanLang.archiveCard, icon: 'card-archive', url: createLink('kanban', 'archiveCard', 'cardID=' + card.id), attrs: {'target': 'hiddenwin'}});
+
+    var editCard     = (privs.includes('editCard') && card.fromType == '') ? true : false;
+    var deleteCard   = privs.includes('deleteCard');
+    var archiveCard  = (privs.includes('archiveCard') && kanban.archived == '1') ? true : false;
+
+    var performable  = (privs.includes('performable') && kanban.performable == 1) ? true : false;
+
+    var moveCard     = privs.includes('moveCard');
+    var setCardColor = privs.includes('setCardColor');
+
+    var basicOperation = (editCard && deleteCard && archiveCard) ? true : false;
+    var otherOperation = (moveCard && setCardColor) ? true : false;
+
+    if((performable || basicOperation) && otherOperation)
+    {
+        items.push({type: 'divider'});
+    }
+
     if(privs.includes('moveCard'))
     {
         var moveCardItems = [];
@@ -1150,7 +1170,7 @@ function createCardMenu(options)
         moveCardItems = moveCardItems.reverse();
         items.push({label: kanbanLang.moveCard, icon: 'move', items: moveCardItems});
     }
-    if(privs.includes('archiveCard') && kanban.archived == '1') items.push({label: kanbanLang.archiveCard, icon: 'card-archive', url: createLink('kanban', 'archiveCard', 'cardID=' + card.id), attrs: {'target': 'hiddenwin'}});
+
     if(privs.includes('setCardColor'))
     {
         var cardColoritems = [];
@@ -1164,7 +1184,6 @@ function createCardMenu(options)
         };
         items.push({label: kanbanLang.cardColor, icon: 'color', items: cardColoritems});
     }
-    if(privs.includes('deleteCard')) items.push({label: card.fromType == '' ? kanbanLang.deleteCard : kanbanLang.removeCard, icon: card.fromType == '' ? 'trash' : 'unlink', url: createLink('kanban', 'deleteCard', 'cardID=' + card.id), attrs: {'target': 'hiddenwin'}});
 
     var bounds = options.$trigger[0].getBoundingClientRect();
     items.$options = {x: bounds.right, y: bounds.top};
