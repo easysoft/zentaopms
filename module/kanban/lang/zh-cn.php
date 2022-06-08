@@ -26,6 +26,7 @@ $lang->kanban->columnWidth         = '列宽度';
 $lang->kanban->setColumnWidth      = '设置列宽度';
 $lang->kanban->deleteLane          = '删除泳道';
 $lang->kanban->createColumn        = '创建看板列';
+$lang->kanban->emptyDesc           = '暂无描述';
 $lang->kanban->editColumn          = '编辑看板列';
 $lang->kanban->sortColumn          = '看板列排序';
 $lang->kanban->deleteColumn        = '删除看板列';

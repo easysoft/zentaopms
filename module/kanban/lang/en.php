@@ -26,6 +26,7 @@ $lang->kanban->columnWidth         = 'Column Width';
 $lang->kanban->setColumnWidth      = 'Set Column Width';
 $lang->kanban->deleteLane          = 'Delete Lane';
 $lang->kanban->createColumn        = 'Create Column';
+$lang->kanban->emptyDesc           = 'No description';
 $lang->kanban->editColumn          = 'Edit Column';
 $lang->kanban->sortColumn          = 'Sort Column';
 $lang->kanban->deleteColumn        = 'Delete Column';

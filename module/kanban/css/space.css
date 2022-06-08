@@ -7,8 +7,8 @@
 #spaceList .spaceActions > a{margin-left: 10px;}
 .space .menu {margin-left: 5px; margin-right:5px;}
 .space .table-empty-tip {padding: 40px 10px;}
-.space .spaceTitle.pull-left {overflow: hidden; white-space: nowrap; max-width: calc(100% - 255px)}
-.desc-style {font-size: 13px; color: #838A9D; margin: 10px 0 16px 0;}
+.space .spaceTitle.pull-left {overflow: hidden; white-space: nowrap; max-width: calc(100% - 150px)}
+.desc-style {font-size: 13px; color: #838A9D; margin: -5px 0 16px 18px;}
 
 .kanbans > .col {width: 25% !important;}
 @media screen and (max-width: 1500px) {.kanbans > .col {width: 25%;}}
