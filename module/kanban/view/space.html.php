@@ -54,7 +54,7 @@
           <?php if($space->status != 'closed' and $browseType != 'involved' and !empty($unclosedSpace)) common::printLink('kanban', 'create', "spaceID={$space->id}&type={$space->type}", '<i class="icon icon-plus"></i> ' . $lang->kanban->create, '', "class='iframe' data-width='75%'", '', true);?>
           <div class="btn-group" id="more">
             <a href="javascript:;" data-toggle="dropdown" class="btn btn-link " style="border-radius: 4px;"><?php echo $lang->kanban->setting;?><span class="caret"></span></a>
-            <ul class="dropdown-menu settingDropdown">
+            <ul class="dropdown-menu setting">
               <li><?php common::printLink('kanban', 'editSpace', "spaceID={$space->id}", '<i class="icon icon-cog-outline"></i> ' . $lang->kanban->setting, '', "class='iframe' data-width='75%'", '', true);?></li>
               <li><?php if($class == 'disabled'):?>
               <?php common::printLink('kanban', 'activateSpace', "spaceID={$space->id}", '<i class="icon icon-magic"></i> ' . $lang->activate, '', "class='iframe'", '', true);?>
