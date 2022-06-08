@@ -3,7 +3,7 @@
  * The model file of task module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     task
  * @version     $Id: model.php 5154 2013-07-16 05:51:02Z chencongzhi520@gmail.com $
@@ -295,7 +295,11 @@ class taskModel extends model
             if($storyID == 'ditto') $storyID = $preStory;
             $preStory = $storyID;
 
-            if(!isset($tasks->story[$key - 1]) and $key > 1 and !empty($tasks->name[$key - 1])) $taskNames[] = $tasks->name[$key - 1];
+            if(!isset($tasks->story[$key - 1]) and $key > 1 and !empty($tasks->name[$key - 1]))
+            {
+                $storyIDs[]  = 0;
+                $taskNames[] = $tasks->name[$key - 1];
+            }
 
             $inNames = in_array($tasks->name[$key], $taskNames);
             if(!$inNames || ($inNames && !in_array($storyID, $storyIDs)))
