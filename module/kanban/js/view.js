@@ -1139,8 +1139,8 @@ function createCardMenu(options)
     var moveCard     = privs.includes('moveCard');
     var setCardColor = privs.includes('setCardColor');
 
-    var basicOperation = (editCard && deleteCard && archiveCard) ? true : false;
-    var otherOperation = (moveCard && setCardColor) ? true : false;
+    var basicOperation = (editCard || deleteCard || archiveCard) ? true : false;
+    var otherOperation = (moveCard || setCardColor) ? true : false;
 
     if((performable || basicOperation) && otherOperation)
     {
@@ -1199,6 +1199,15 @@ function createColumnMenu(options)
     var items = [];
     if(privs.includes('setColumn')) items.push({label: kanbanLang.editColumn, icon: 'edit', url: createLink('kanban', 'setColumn', 'columnID=' + column.id, '', 'true'), className: 'iframe', attrs: {'data-toggle': 'modal'}});
     if(privs.includes('setWIP')) items.push({label: kanbanLang.setWIP, icon: 'alert', url: createLink('kanban', 'setWIP', 'columnID=' + column.id), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width' : '500px'}});
+
+    var basicOperation  = (privs.includes('setColumn') || privs.includes('setWIP')) ? true : false;
+    var columnOperation = (privs.includes('splitColumn') || privs.includes('createColumn') || privs.includes('copyColumn')) ? true : false;
+
+    if(basicOperation && columnOperation)
+    {
+        items.push({type: 'divider'});
+    }
+
     if(privs.includes('splitColumn')) items.push({label: kanbanLang.splitColumn, icon: 'col-split', url: createLink('kanban', 'splitColumn', 'columnID=' + column.id, '', true), className: 'iframe', attrs: {'data-toggle': 'modal'}});
     if(privs.includes('createColumn'))
     {
@@ -1206,6 +1215,13 @@ function createColumnMenu(options)
         items.push({label: kanbanLang.createColumnOnRight, icon: 'col-add-right', url: createLink('kanban', 'createColumn', 'columnID=' + column.id + '&position=right'), className: 'iframe', attrs: {'data-toggle': 'modal'}});
     }
     if(privs.includes('copyColumn')) items.push({label: kanbanLang.copyColumn, icon: 'copy', url: createLink('kanban', 'copyColumn', 'columnID=' + column.id), className: 'iframe', attrs: {'data-toggle': 'modal'}});
+
+    var otherOperation = ((privs.includes('archiveColumn') && kanban.archived == '1') || privs.includes('deleteColumn')) ? true : false;
+    if(columnOperation && otherOperation)
+    {
+        items.push({type: 'divider'});
+    }
+
     if(privs.includes('archiveColumn') && kanban.archived == '1') items.push({label: kanbanLang.archiveColumn, icon: 'card-archive', url: createLink('kanban', 'archiveColumn', 'columnID=' + column.id), attrs: {'target': 'hiddenwin'}});
     if(privs.includes('deleteColumn')) items.push({label: kanbanLang.deleteColumn, icon: 'trash', url: createLink('kanban', 'deleteColumn', 'columnID=' + column.id), attrs: {'target': 'hiddenwin'}});
 
