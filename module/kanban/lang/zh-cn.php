@@ -79,6 +79,7 @@ $lang->kanban->importBuild         = '版本';
 $lang->kanban->allKanban           = '所有看板';
 $lang->kanban->allProjects         = '所有' . ($this->config->systemMode == 'classic' ? $lang->executionCommon : '项目');
 $lang->kanban->allProducts         = '所有产品';
+$lang->kanban->mine                = '我负责';
 
 /* Fields. */
 $lang->kanban->space          = '所属空间';
