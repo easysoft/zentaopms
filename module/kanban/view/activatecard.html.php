@@ -3,7 +3,7 @@
  * The activate card file of kanban module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2021 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html) or AGPL
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Mengyi Liu <liumengyi@easycorp.ltd>
  * @package     kanban
  * @version     $Id: close.html.php 935 2021-12-09 10:49:24Z $

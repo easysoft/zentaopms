@@ -3,7 +3,7 @@
  * The reprot file of sonarqubemodule of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2021 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html) or AGPL
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Yuchun Li <liyuchun@easycorp.ltd>
  * @package     sonarqube
  * @version     $Id: reprotview.html.php 935 2022-01-25 10:52:24Z liyuchun@easycorp.ltd $
