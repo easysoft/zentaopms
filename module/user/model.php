@@ -136,7 +136,7 @@ class userModel extends model
             }
         }
 
-        // Put the current user first.
+        /* Put the current user first. */
         $users = $this->processAccountSort($users);
 
         /* Append empty, closed, and guest users. */
@@ -2627,7 +2627,7 @@ class userModel extends model
             $users[$account] =  $firstLetter . ($user->realname ? $user->realname : $user->account);
         }
 
-        // Put the current user first.
+        /* Put the current user first. */
         $users = $this->processAccountSort($users);
 
         return array('' => '') + $users;
