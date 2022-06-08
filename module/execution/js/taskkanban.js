@@ -305,7 +305,7 @@ function renderColumnCount($count, count, col)
  */
 function tips()
 {
-    bootbox.alert(linkProducts);
+    bootbox.alert(needLinkProducts);
 }
 
 /**

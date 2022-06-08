@@ -699,7 +699,7 @@ function renderCount($count, count, column)
  */
 function tips()
 {
-    bootbox.alert(linkProducts);
+    bootbox.alert(needLinkProducts);
 }
 
 /**
