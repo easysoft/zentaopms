@@ -1920,7 +1920,7 @@ EOD;
             if(strtolower($key) == 'closeddate'   && $value == '')     continue;
             if(strtolower($key) == 'actualcloseddate' && $value == '') continue;
 
-            if(isset($old->$key) and $value != stripslashes($old->$key))
+            if(array_key_exists($key, $old) and $value != stripslashes($old->$key))
             {
                 $diff = '';
                 if(substr_count($value, "\n") > 1     or

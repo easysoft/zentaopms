@@ -1582,13 +1582,18 @@ class projectModel extends model
         $oldProject = $this->getById($projectID, $type);
         $now        = helper::now();
 
+        $editorIdList = $this->config->project->editor->start['id'];
+        if($this->app->rawModule == 'program') $editorIdList = $this->config->program->editor->start['id'];
+
         $project = fixer::input('post')
             ->add('id', $projectID)
             ->setDefault('status', 'doing')
             ->setDefault('lastEditedBy', $this->app->user->account)
             ->setDefault('lastEditedDate', $now)
+            ->stripTags($editorIdList, $this->config->allowedTags)
             ->remove('comment')->get();
 
+        $project = $this->loadModel('file')->processImgURL($project, $editorIdList, $this->post->uid);
         $this->dao->update(TABLE_PROJECT)->data($project)
             ->autoCheck()
             ->check($this->config->project->start->requiredFields, 'notempty')
@@ -1640,15 +1645,20 @@ class projectModel extends model
      */
     public function suspend($projectID)
     {
+        $editorIdList = $this->config->project->editor->suspend['id'];
+        if($this->app->rawModule == 'program') $editorIdList = $this->config->program->editor->suspend['id'];
+
         $oldProject = $this->getById($projectID);
-        $project = fixer::input('post')
+        $project    = fixer::input('post')
             ->add('id', $projectID)
             ->setDefault('status', 'suspended')
             ->setDefault('lastEditedBy', $this->app->user->account)
             ->setDefault('lastEditedDate', helper::now())
             ->setDefault('suspendedDate', helper::today())
+            ->stripTags($editorIdList, $this->config->allowedTags)
             ->remove('comment')->get();
 
+        $project = $this->loadModel('file')->processImgURL($project, $editorIdList, $this->post->uid);
         $this->dao->update(TABLE_PROJECT)->data($project)
             ->autoCheck()
             ->checkFlow()
@@ -1670,6 +1680,9 @@ class projectModel extends model
         $oldProject = $this->getById($projectID);
         $now        = helper::now();
 
+        $editorIdList = $this->config->project->editor->activate['id'];
+        if($this->app->rawModule == 'program') $editorIdList = $this->config->program->editor->activate['id'];
+
         $project = fixer::input('post')
             ->add('id', $projectID)
             ->setDefault('realEnd','')
@@ -1677,6 +1690,7 @@ class projectModel extends model
             ->setDefault('lastEditedBy', $this->app->user->account)
             ->setDefault('lastEditedDate', $now)
             ->setIF($oldProject->realBegan == '0000-00-00', 'realBegan', helper::today())
+            ->stripTags($editorIdList, $this->config->allowedTags)
             ->remove('comment,readjustTime,readjustTask')
             ->get();
 
@@ -1686,6 +1700,7 @@ class projectModel extends model
             unset($project->end);
         }
 
+        $project = $this->loadModel('file')->processImgURL($project, $editorIdList, $this->post->uid);
         $this->dao->update(TABLE_PROJECT)->data($project)
             ->autoCheck()
             ->checkFlow()
@@ -1742,6 +1757,9 @@ class projectModel extends model
         $oldProject = $this->getById($projectID);
         $now        = helper::now();
 
+        $editorIdList = $this->config->project->editor->close['id'];
+        if($this->app->rawModule == 'program') $editorIdList = $this->config->program->editor->close['id'];
+
         $project = fixer::input('post')
             ->add('id', $projectID)
             ->setDefault('status', 'closed')
@@ -1749,10 +1767,13 @@ class projectModel extends model
             ->setDefault('closedDate', $now)
             ->setDefault('lastEditedBy', $this->app->user->account)
             ->setDefault('lastEditedDate', $now)
+            ->stripTags($editorIdList, $this->config->allowedTags)
             ->remove('comment')
             ->get();
 
         $this->lang->error->ge = $this->lang->project->ge;
+
+        $project = $this->loadModel('file')->processImgURL($project, $editorIdList, $this->post->uid);
 
         $this->dao->update(TABLE_PROJECT)->data($project)
             ->autoCheck()

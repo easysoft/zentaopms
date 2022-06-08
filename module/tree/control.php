@@ -229,6 +229,40 @@ class tree extends control
             $title      = $this->lang->tree->manageTrainpost;
             $position[] = $this->lang->tree->manageTrainpost;
         }
+        elseif(strpos($viewType, 'datasource') !== false)
+        {
+            $params = explode('_', $viewType);
+            if(count($params) == 2)
+            {
+                $datasourceID = $params[1];
+                $manageChild  = 'manage' . ucfirst($viewType) . 'Child';
+                $datasource   = $this->loadModel('workflowdatasource', 'flow')->getByID($datasourceID);
+                if($datasource)
+                {
+                    $title      = $datasource->name;
+                    $position[] = $datasource->name;
+
+                    $this->lang->tree->$manageChild = $title;
+
+                    $root = new stdclass();
+                    $root->name = $title;
+                    $this->view->root = $root;
+                }
+            }
+        }
+        else
+        {
+            $manageChild  = 'manage' . ucfirst($viewType) . 'Child';
+
+            $title      = $this->lang->tree->common;
+            $position[] = $this->lang->tree->common;
+
+            $this->lang->tree->$manageChild = $title;
+
+            $root = new stdclass();
+            $root->name = $title;
+            $this->view->root = $root;
+        }
 
         $parentModules               = $this->tree->getParents($currentModuleID);
         $this->view->title           = $title;
