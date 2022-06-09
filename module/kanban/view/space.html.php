@@ -72,7 +72,7 @@
         <div class='col' data-id='<?php echo $kanbanID?>'>
           <div class='panel' data-url='<?php echo $this->createLink('kanban', 'view', "kanbanID=$kanbanID");?>'>
             <div class='panel-heading'>
-              <?php if($kanban->space == 2 and $kanban->owner == $this->app->user->account):?>
+              <?php if($browseType == 'cooperation' and $kanban->owner == $this->app->user->account):?>
               <span class="label label-outline label-info kanban-label"><?php echo $lang->kanban->mine;?></span>
               <?php endif;?>
               <div class='kanban-name'>
