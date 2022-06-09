@@ -521,7 +521,7 @@ class router extends baseRouter
             if($moduleName == 'flow' and $methodName == 'browse')
             {
                 $mode = 'browse';
-                if(count($params) > 0) $mode = array_shift($params);
+                if(count($params) > 0 and !is_numeric($params[0])) $mode = array_shift($params);
                 array_unshift($params, $mode);
             }
 
@@ -546,9 +546,13 @@ class router extends baseRouter
 
             if($moduleName == 'flow' and $methodName == 'browse')
             {
-                $mode = 'browse';
-                if(count($params) > 0) $mode = array_pop($params);
+                $mode = zget($params, 'mode', 'browse');
+                if(is_numeric($mode)) $mode = 'browse';
                 $params['mode'] = $mode;
+
+                $get = array_reverse($_GET);
+                $get['mode'] = $mode;
+                $_GET = array_reverse($get);
             }
             $params[$this->config->methodVar] = $methodName;        // $param = array('id' => 1, 'f' => 'operate');
             $params[$this->config->moduleVar] = $moduleName;        // $param = array('id' => 1, 'f' => 'operate', 'm' => 'flow');

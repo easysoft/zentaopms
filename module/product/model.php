@@ -339,19 +339,35 @@ class productModel extends model
 
         if(!empty($append) and is_array($append)) $append = implode(',', $append);
 
-        $views    = empty($append) ? $this->app->user->view->products : $this->app->user->view->products . ",$append";
-        $orderBy  = !empty($this->config->product->orderBy) ? $this->config->product->orderBy : 'isClosed';
-        $products = $this->dao->select('*,  IF(INSTR(" closed", status) < 2, 0, 1) AS isClosed')
-            ->from(TABLE_PRODUCT)
-            ->where(1)
-            ->beginIF(strpos($mode, 'all') === false)->andWhere('deleted')->eq(0)->fi()
-            ->beginIF($programID)->andWhere('program')->eq($programID)->fi()
-            ->beginIF(strpos($mode, 'noclosed') !== false)->andWhere('status')->ne('closed')->fi()
-            ->beginIF(!$this->app->user->admin and $this->config->vision == 'rnd')->andWhere('id')->in($views)->fi()
-            ->andWhere('vision')->eq($this->config->vision)
-            ->orderBy($orderBy)
-            ->fetchPairs('id', 'name');
-        return $products;
+        $views = empty($append) ? $this->app->user->view->products : $this->app->user->view->products . ",$append";
+        if($this->config->systemMode == 'new')
+        {
+            /* Order by program. */
+            return $this->dao->select('t1.*,  IF(INSTR(" closed", t1.status) < 2, 0, 1) AS isClosed')->from(TABLE_PRODUCT)->alias('t1')
+                ->leftJoin(TABLE_PROGRAM)->alias('t2')->on('t1.program = t2.id')
+                ->where(1)
+                ->beginIF(strpos($mode, 'all') === false)->andWhere('t1.deleted')->eq(0)->fi()
+                ->beginIF($programID)->andWhere('t1.program')->eq($programID)->fi()
+                ->beginIF(strpos($mode, 'noclosed') !== false)->andWhere('t1.status')->ne('closed')->fi()
+                ->beginIF(!$this->app->user->admin and $this->config->vision == 'rnd')->andWhere('t1.id')->in($views)->fi()
+                ->andWhere('t1.vision')->eq($this->config->vision)
+                ->orderBy('isClosed, t2.order_asc, t1.line_desc, t1.order_desc')
+                ->fetchPairs('id', 'name');
+        }
+        else
+        {
+            $orderBy = !empty($this->config->product->orderBy) ? $this->config->product->orderBy : 'isClosed';
+            return $this->dao->select('*,  IF(INSTR(" closed", status) < 2, 0, 1) AS isClosed')
+                ->from(TABLE_PRODUCT)
+                ->where(1)
+                ->beginIF(strpos($mode, 'all') === false)->andWhere('deleted')->eq(0)->fi()
+                ->beginIF($programID)->andWhere('program')->eq($programID)->fi()
+                ->beginIF(strpos($mode, 'noclosed') !== false)->andWhere('status')->ne('closed')->fi()
+                ->beginIF(!$this->app->user->admin and $this->config->vision == 'rnd')->andWhere('id')->in($views)->fi()
+                ->andWhere('vision')->eq($this->config->vision)
+                ->orderBy($orderBy)
+                ->fetchPairs('id', 'name');
+        }
     }
 
     /**

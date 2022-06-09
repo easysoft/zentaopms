@@ -61,6 +61,7 @@ $lang->bug->openedDate       = '创建日期';
 $lang->bug->openedDateAB     = '创建日期';
 $lang->bug->openedBuild      = '影响版本';
 $lang->bug->assignedTo       = '指派给';
+$lang->bug->assignedToMe     = '指派给我';
 $lang->bug->assignBug        = '指派给';
 $lang->bug->assignedToAB     = '指派给';
 $lang->bug->assignedDate     = '指派日期';

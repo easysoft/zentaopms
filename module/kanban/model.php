@@ -1304,9 +1304,10 @@ class kanbanModel extends model
                     if($cell->type == 'task')
                     {
                         if($searchValue != '' and strpos($object->name, $searchValue) === false) continue;
-                        $cardData['name']     = $object->name;
-                        $cardData['status']   = $object->status;
-                        $cardData['left']     = $object->left;
+                        $cardData['name']       = $object->name;
+                        $cardData['status']     = $object->status;
+                        $cardData['left']       = $object->left;
+                        $cardData['estStarted'] = $object->estStarted;
                     }
                     else
                     {
@@ -1414,9 +1415,10 @@ class kanbanModel extends model
 
                     if($lane->type == 'task')
                     {
-                        $cardData['name']   = $object->name;
-                        $cardData['status'] = $object->status;
-                        $cardData['left']   = $object->left;
+                        $cardData['name']       = $object->name;
+                        $cardData['status']     = $object->status;
+                        $cardData['left']       = $object->left;
+                        $cardData['estStarted'] = $object->estStarted;
                     }
                     else
                     {

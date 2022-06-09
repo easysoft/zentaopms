@@ -34,6 +34,7 @@ js::set('executionLang', $lang->execution);
 js::set('bugLang', $lang->bug);
 js::set('taskLang', $lang->task);
 js::set('deadlineLang', $lang->task->deadlineAB);
+js::set('estStartedLang', $lang->task->estStarted);
 js::set('kanbancolumnLang', $lang->kanbancolumn);
 js::set('kanbancardLang', $lang->kanbancard);
 js::set('executionID', $execution->id);

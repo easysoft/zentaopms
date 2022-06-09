@@ -458,4 +458,168 @@ class myModel extends model
         }
         return $cases;
     }
+
+    /**
+     * Build search form for task page of work.
+     *
+     * @param  int    $queryID
+     * @param  string $actionURL
+     * @access public
+     * @return void
+     */
+    public function buildTaskSearchForm($queryID, $actionURL)
+    {
+        $rawMethod = $this->app->rawMethod;
+        $this->loadModel('execution');
+        $this->app->loadConfig('execution');
+
+        $this->config->execution->search['module']    = $rawMethod . 'Task';
+        $this->config->execution->search['actionURL'] = $actionURL;
+        $this->config->execution->search['queryID']   = $queryID;
+
+        if($rawMethod == 'work')
+        {
+            unset($this->config->execution->search['fields']['closedReason']);
+            unset($this->config->execution->search['fields']['closedBy']);
+            unset($this->config->execution->search['fields']['canceledBy']);
+            unset($this->config->execution->search['fields']['closedDate']);
+            unset($this->config->execution->search['fields']['canceledDate']);
+        }
+
+        $projects = $this->loadModel('project')->getPairsByProgram();
+        $this->config->execution->search['params']['project']['values'] = $projects + array('all' => $this->lang->project->allProjects);
+
+        $executions = $this->execution->getPairs();
+        $this->config->execution->search['params']['execution']['values'] = $executions + array('all' => $this->lang->execution->allExecutions);
+
+        $this->config->execution->search['params']['module']['values'] = $this->loadModel('tree')->getAllModulePairs();
+
+        $this->loadModel('search')->setSearchParams($this->config->execution->search);
+    }
+
+    /**
+     * Get tasks by search.
+     *
+     * @param  string $account
+     * @param  int    $limit
+     * @param  object $pager
+     * @param  string $orderBy
+     * @param  int    $queryID
+     * @access public
+     * @return array
+     */
+    public function getTasksBySearch($account, $limit = 0, $pager = null, $orderBy = 'id_desc', $queryID = 0)
+    {
+        $moduleName = $this->app->rawMethod == 'work' ? 'workTask' : 'contributeTask';
+        $queryName  = $moduleName . 'Query';
+        $formName   = $moduleName . 'Form';
+
+        $taskIDList = array();
+        if($moduleName == 'contributeTask')
+        {
+            $tasksAssignedByMe = $this->getAssignedByMe($account, 0, $pager, $orderBy, 0, 'task');
+            foreach($tasksAssignedByMe as $taskID => $task)
+            {
+                $taskIDList[$taskID] = $taskID;
+            }
+        }
+
+        if($queryID)
+        {
+            $query = $this->loadModel('search')->getQuery($queryID);
+            if($query)
+            {
+                $this->session->set($queryName, $query->sql);
+                $this->session->set($formName, $query->form);
+            }
+            else
+            {
+                $this->session->set($queryName, ' 1 = 1');
+            }
+        }
+        else
+        {
+            if($this->session->$queryName == false) $this->session->set($queryName, ' 1 = 1');
+        }
+
+        $query = $this->session->$queryName;
+
+        $query = preg_replace('/`(\w+)`/', 't1.`$1`', $query);
+        $query = str_replace('t1.`project`', 't2.`project`', $query);
+
+        $tasks = $this->dao->select('t1.*, t2.id as executionID, t2.name as executionName, t2.type as executionType, t3.id as storyID, t3.title as storyTitle, t3.status AS storyStatus, t3.version AS latestStoryVersion')
+            ->from(TABLE_TASK)->alias('t1')
+            ->leftJoin(TABLE_EXECUTION)->alias('t2')->on("t1.execution = t2.id")
+            ->leftJoin(TABLE_STORY)->alias('t3')->on('t1.story = t3.id')
+            ->leftJoin(TABLE_PROJECT)->alias('t4')->on("t1.project = t4.id")
+            ->where($query)
+            ->andWhere('t1.deleted')->eq(0)
+            ->andWhere('t2.deleted')->eq(0)
+            ->andWhere('(t2.status')->ne('suspended')->orWhere('t4.status')->ne('suspended')->markRight(1)
+            ->beginIF($moduleName == 'workTask')->andWhere("t1.assignedTo")->eq($account)
+            ->beginIF($moduleName == 'contributeTask')
+            ->andWhere('t1.openedBy', 1)->eq($account)
+            ->orWhere('t1.closedBy')->eq($account)
+            ->orWhere('t1.canceledBy')->eq($account)
+            ->orWhere('t1.finishedby', 1)->eq($account)
+            ->orWhere('t1.finishedList')->like("%,{$account},%")
+            ->orWhere('t1.id')->in($taskIDList)
+            ->markRight(1)
+            ->fi()
+            ->beginIF($this->config->vision)->andWhere('t1.vision')->eq($this->config->vision)->fi()
+            ->beginIF($this->config->vision)->andWhere('t2.vision')->eq($this->config->vision)->fi()
+            ->beginIF(!$this->app->user->admin)->andWhere('t1.execution')->in($this->app->user->view->sprints)->fi()
+            ->orderBy($orderBy)
+            ->beginIF($limit > 0)->limit($limit)->fi()
+            ->page($pager)
+            ->fetchAll('id');
+
+        $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'task', false);
+
+        $taskTeam = $this->dao->select('*')->from(TABLE_TEAM)->where('root')->in(array_keys($tasks))->andWhere('type')->eq('task')->fetchGroup('root');
+        if(!empty($taskTeam))
+        {
+            foreach($taskTeam as $taskID => $team) $tasks[$taskID]->team = $team;
+        }
+
+        if($tasks) return $this->loadModel('task')->processTasks($tasks);
+        return array();
+    }
+
+    /**
+     * Build search form for bug page of work.
+     *
+     * @param  int    $queryID
+     * @param  string $actionURL
+     * @access public
+     * @return void
+     */
+    public function buildBugSearchForm($queryID, $actionURL)
+    {
+        $rawMethod = $this->app->rawMethod;
+        $this->loadModel('bug');
+        $this->app->loadConfig('bug');
+
+        $products = $this->loadModel('product')->getPairs();
+
+        $this->config->bug->search['module']    = $rawMethod . 'Bug';
+        $this->config->bug->search['actionURL'] = $actionURL;
+        $this->config->bug->search['queryID']   = $queryID;
+        if($rawMethod == 'work')
+        {
+            unset($this->config->bug->search['fields']['closedDate']);
+            unset($this->config->bug->search['fields']['closedBy']);
+        }
+
+        if($this->config->systemMode == 'new') $this->config->bug->search['params']['project']['values'] = $this->loadModel('project')->getPairsByProgram() + array('all' => $this->lang->bug->allProject) + array('' => '');
+        $this->config->bug->search['params']['execution']['values']     = $this->loadModel('execution')->getPairs();
+        $this->config->bug->search['params']['product']['values']       = $products + array('' => '');
+        $this->config->bug->search['params']['plan']['values']          = $this->loadModel('productplan')->getPairs();
+        $this->config->bug->search['params']['module']['values']        = $this->loadModel('tree')->getAllModulePairs();
+        $this->config->bug->search['params']['severity']['values']      = array(0 => '') + $this->lang->bug->severityList;
+        $this->config->bug->search['params']['openedBuild']['values']   = $this->loadModel('build')->getBuildPairs($products);
+        $this->config->bug->search['params']['resolvedBuild']['values'] = $this->config->bug->search['params']['openedBuild']['values'];
+
+        $this->loadModel('search')->setSearchParams($this->config->bug->search);
+    }
 }

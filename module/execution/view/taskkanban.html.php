@@ -207,6 +207,7 @@ js::set('priv',
 <?php js::set('sortColumn', $lang->execution->sortColumn);?>
 <?php js::set('kanbanLang', $lang->kanban);?>
 <?php js::set('deadlineLang', $lang->task->deadlineAB);?>
+<?php js::set('estStartedLang', $lang->task->estStarted);?>
 <?php js::set('noAssigned', $lang->task->noAssigned);?>
 <?php js::set('userList', $userList);?>
 <?php js::set('entertime', time());?>

@@ -72,7 +72,7 @@
         <div class='col' data-id='<?php echo $kanbanID?>'>
           <div class='panel' data-url='<?php echo $this->createLink('kanban', 'view', "kanbanID=$kanbanID");?>'>
             <div class='panel-heading'>
-              <?php if($kanban->space == 2 and $kanban->owner == $this->app->user->account):?>
+              <?php if($browseType == 'cooperation' and $kanban->owner == $this->app->user->account):?>
               <span class="label label-outline label-info kanban-label"><?php echo $lang->kanban->mine;?></span>
               <?php endif;?>
               <div class='kanban-name'>
@@ -128,7 +128,8 @@
               <div class='kanban-desc' title="<?php echo strip_tags(htmlspecialchars_decode($kanban->desc));?>"><?php echo strip_tags(htmlspecialchars_decode($kanban->desc));?></div>
               <div class='kanban-footer'>
               <?php $count     = 0;?>
-              <?php $teamPairs = array_filter(explode(',', $kanban->team));?>
+              <?php $teamPairs = array_filter(explode(',', ",$kanban->createdBy,$kanban->owner,$kanban->team"));?>
+              <?php $teamPairs = array_unique($teamPairs);?>
               <?php
               foreach($teamPairs as $index => $team)
               {
