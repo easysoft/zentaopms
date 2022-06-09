@@ -1562,14 +1562,9 @@ function calcColHeight(col, lane, colCards, colHeight, kanban)
  */
 function resetRegionHeight(fold)
 {
-    var laneCount = 0;
-    $('.kanban-lane').each(function()
-    {
-        laneCount ++;
-        if(laneCount > 1) return;
-    });
+    var laneCount = $('.kanban-lane').length;
 
-    if(laneCount > 1) return;
+    if(laneCount > 1 || $('.region').length > 0) return;
 
     var regionHeaderHeight = $('.region-header').outerHeight();
     if(fold == 'open')
@@ -1602,16 +1597,11 @@ function resetRegionHeight(fold)
  */
 function toggleRDSearchBox()
 {
-    rdSearchValue = '';
     $('#rdSearchBox').toggle();
-    if($('#rdSearchBox').css('display') == 'block')
-    {
-        $(".querybox-toggle").css("color", "#0c64eb");
-    }
-    else
-    {
-        $(".querybox-toggle").css("color", "");
-    }
+
+    rdSearchValue = '';
+    var color     = $('#rdSearchBox').css('display') == 'block' ? "#0c64eb" : "#3c495c";
+    $(".querybox-toggle").css("color", color);
 }
 
 /**
