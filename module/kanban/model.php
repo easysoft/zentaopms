@@ -1577,7 +1577,7 @@ class kanbanModel extends model
                     $laneData['cards'][$column->columnType][] = $cardData;
                     $cardOrder ++;
                 }
-                if($searchValue != '' and !isset($laneData['cards'][$column->columnType])) $laneData['cards'][$column->columnType] = array();
+                if($searchValue == '' and !isset($laneData['cards'][$column->columnType])) $laneData['cards'][$column->columnType] = array();
             }
 
             if($searchValue != '' and empty($laneData['cards'])) continue;

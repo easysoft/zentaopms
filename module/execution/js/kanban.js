@@ -1668,19 +1668,18 @@ function searchCards(value)
     rdSearchValue = value;
     $.get(createLink('execution', 'ajaxUpdateKanban', "executionID=" + executionID + "&entertime=0&browseType=" + browseType + "&groupBy=" + groupBy + '&from=RD&searchValue=' + rdSearchValue), function(data)
     {
-        if(lastUpdateData === data) return;
         lastUpdateData = data;
-        var kanbanData = $.parseJSON(data);
+        kanbanData     = $.parseJSON(data);
         var hideAll    = true;
         $('#kanban').children('.region').children("div[id^='kanban']").each(function()
         {
             var regionID = $(this).attr('data-id');
             if(kanbanData != null) data = groupBy == 'default' ? kanbanData[regionID] : kanbanData[groupBy];
 
-            if(rdSearchValue != '' && data.laneCount != 0) $(this).parent().show();
-            if(rdSearchValue != '' && data.laneCount == 0) $(this).parent().hide();
+            if(rdSearchValue != '' && groupBy == 'default' && data.laneCount != 0) $(this).parent().show();
+            if(rdSearchValue != '' && groupBy == 'default' && data.laneCount == 0) $(this).parent().hide();
 
-            hideAll = hideAll && !updateRegion(regionID, data);
+            hideAll = !updateRegion(regionID, data) && hideAll;
         });
 
         if(hideAll && rdSearchValue != '')
