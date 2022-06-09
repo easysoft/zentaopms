@@ -34,6 +34,7 @@ js::set('executionLang', $lang->execution);
 js::set('bugLang', $lang->bug);
 js::set('taskLang', $lang->task);
 js::set('deadlineLang', $lang->task->deadlineAB);
+js::set('estStartedLang', $lang->task->estStarted);
 js::set('kanbancolumnLang', $lang->kanbancolumn);
 js::set('kanbancardLang', $lang->kanbancard);
 js::set('executionID', $execution->id);
@@ -52,7 +53,6 @@ js::set('vision', $this->config->vision);
 js::set('productCount', count($productNames));
 js::set('executionID', $execution->id);
 js::set('reviewStoryParis', $reviewStoryParis);
-js::set('estStartedLang', $lang->task->estStarted);
 js::set('rdSearchValue', '');
 
 $canSortRegion       = commonModel::hasPriv('kanban', 'sortRegion') && count($regions) > 1;
