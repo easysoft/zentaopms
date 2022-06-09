@@ -27,6 +27,7 @@ $lang->kanban->columnWidth         = 'Column Width';
 $lang->kanban->setColumnWidth      = 'Set Column Width';
 $lang->kanban->deleteLane          = 'Delete Lane';
 $lang->kanban->createColumn        = 'Create Column';
+$lang->kanban->emptyDesc           = 'No description';
 $lang->kanban->editColumn          = 'Edit Column';
 $lang->kanban->sortColumn          = 'Sort Column';
 $lang->kanban->deleteColumn        = 'Delete Column';
@@ -278,14 +279,14 @@ $lang->kanbanspace->empty = 'No Space';
 $lang->kanbanspace->aclList['open']    = 'Open (Accessible with kanban view permissions)';
 $lang->kanbanspace->aclList['private'] = 'Private (For the space owner, team and whitelist members only)';
 
-$lang->kanbanspace->featureBar['private']     = 'Private Space';
+$lang->kanbanspace->featureBar['involved']    = 'Involved';
 $lang->kanbanspace->featureBar['cooperation'] = 'Cooperation Space';
 $lang->kanbanspace->featureBar['public']      = 'Public Space';
-$lang->kanbanspace->featureBar['involved']    = 'Involved';
+$lang->kanbanspace->featureBar['private']     = 'Private Space';
 
-$lang->kanbanspace->typeList['private']     = 'Private Space';
 $lang->kanbanspace->typeList['cooperation'] = 'Cooperation Space';
 $lang->kanbanspace->typeList['public']      = 'Public Space';
+$lang->kanbanspace->typeList['private']     = 'Private Space';
 
 $lang->kanbancolumn = new stdclass();
 $lang->kanbancolumn->name       = $lang->kanban->columnName;

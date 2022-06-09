@@ -3,7 +3,7 @@
  * The kanban file of execution module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2022 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Mengyi Liu<liumengyi@easycorp.ltd>
  * @package     execution
  * @version     $Id: kanban.html.php 935 2022-01-11 16:49:24Z $
@@ -53,6 +53,7 @@ js::set('productCount', count($productNames));
 js::set('executionID', $execution->id);
 js::set('reviewStoryParis', $reviewStoryParis);
 js::set('needLinkProducts', $lang->execution->needLinkProducts);
+js::set('rdSearchValue', '');
 
 $canSortRegion       = commonModel::hasPriv('kanban', 'sortRegion') && count($regions) > 1;
 $canEditRegion       = commonModel::hasPriv('kanban', 'editRegion');
@@ -134,7 +135,13 @@ js::set('priv',
     </span>
   </div>
   <div class='btn-toolbar pull-right'>
+    <div class="input-group" id="rdKanbanSearch">
+      <div class="input-control search-box" id="rdSearchBox">
+        <input type="text" name="rdKanbanSearchInput" id="rdKanbanSearchInput" value="" class="form-control" oninput="searchCards(this.value)" placeholder="<?php echo $lang->execution->pleaseInput?>">
+      </div>
+    </div>
     <?php
+    echo html::a('javascript:toggleRDSearchBox()', "<i class='icon-search muted'></i> " . $lang->searchAB, '', "class='btn btn-link querybox-toggle'");
     echo html::a('javascript:fullScreen()', "<i class='icon-fullscreen muted'></i> " . $lang->kanban->fullScreen, '', "class='btn btn-link'");
     $actions           = '';
     $printCreateRegion = (common::hasPriv('kanban', 'createRegion') and $groupBy == 'default');

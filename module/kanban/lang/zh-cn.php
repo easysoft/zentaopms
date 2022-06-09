@@ -27,6 +27,7 @@ $lang->kanban->columnWidth         = '列宽度';
 $lang->kanban->setColumnWidth      = '设置列宽度';
 $lang->kanban->deleteLane          = '删除泳道';
 $lang->kanban->createColumn        = '创建看板列';
+$lang->kanban->emptyDesc           = '暂无描述';
 $lang->kanban->editColumn          = '编辑看板列';
 $lang->kanban->sortColumn          = '看板列排序';
 $lang->kanban->deleteColumn        = '删除看板列';
@@ -278,14 +279,14 @@ $lang->kanbanspace->empty = '暂时没有空间';
 $lang->kanbanspace->aclList['open']    = '公开（有看板空间视图权限即可访问）';
 $lang->kanbanspace->aclList['private'] = '私有（只有看板空间负责人、团队成员、白名单可访问）';
 
-$lang->kanbanspace->featureBar['private']     = '私人空间';
+$lang->kanbanspace->featureBar['involved']    = '我参与的';
 $lang->kanbanspace->featureBar['cooperation'] = '协作空间';
 $lang->kanbanspace->featureBar['public']      = '公共空间';
-$lang->kanbanspace->featureBar['involved']    = '我参与的';
+$lang->kanbanspace->featureBar['private']     = '私人空间';
 
-$lang->kanbanspace->typeList['private']     = '私人空间';
 $lang->kanbanspace->typeList['cooperation'] = '协作空间';
 $lang->kanbanspace->typeList['public']      = '公共空间';
+$lang->kanbanspace->typeList['private']     = '私人空间';
 
 $lang->kanbancolumn = new stdclass();
 $lang->kanbancolumn->name       = $lang->kanban->columnName;

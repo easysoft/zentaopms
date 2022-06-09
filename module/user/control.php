@@ -3,7 +3,7 @@
  * The control file of user module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     user
  * @version     $Id: control.php 5005 2013-07-03 08:39:11Z chencongzhi520@gmail.com $
@@ -1187,19 +1187,21 @@ class user extends control
      * @param  int    $contactListID
      * @param  string $dropdownName mailto|whitelist
      * @param  string $oldUsers
+     * @param  string $extra
      * @access public
      * @return string
      */
-    public function ajaxGetContactUsers($contactListID, $dropdownName = 'mailto', $oldUsers = '')
+    public function ajaxGetContactUsers($contactListID, $dropdownName = 'mailto', $oldUsers = '', $extra = '')
     {
         $list = $contactListID ? $this->user->getContactListByID($contactListID) : '';
-
         $attr = $dropdownName == 'mailto' ? "data-placeholder='{$this->lang->chooseUsersToMail}'" : '';
 
         $users = $this->user->getPairs('devfirst|nodeleted|noclosed', $list ? $list->userList : '', $this->config->maxCount);
+        if(!empty($extra) && $extra == 'flow') $users = array_merge(array('deptManager' => $this->lang->workflowdatasource->options['deptManager']), $users);
         if(isset($this->config->user->moreLink)) $this->config->moreLinks[$dropdownName . "[]"] = $this->config->user->moreLink;
 
         $defaultUsers = empty($contactListID) ? '' : $list->userList . ',' . trim($oldUsers);
+        if($extra == 'flow' && empty($defaultUsers)) $defaultUsers = trim($oldUsers);
         return print(html::select($dropdownName . "[]", $users, $defaultUsers, "class='form-control chosen' multiple $attr"));
     }
 

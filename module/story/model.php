@@ -3,7 +3,7 @@
  * The model file of story module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     story
  * @version     $Id: model.php 5145 2013-07-15 06:47:26Z chencongzhi520@gmail.com $
@@ -830,7 +830,6 @@ class storyModel extends model
         if(isset($story->stage) and $oldStory->stage != $story->stage) $story->stagedBy = (strpos('tested|verified|released|closed', $story->stage) !== false) ? $this->app->user->account : '';
         $story = $this->loadModel('file')->processImgURL($story, $this->config->story->editor->edit['id'], $this->post->uid);
 
-
         if(isset($_POST['reviewer']))
         {
             $_POST['reviewer'] = array_filter($_POST['reviewer']);
@@ -1327,6 +1326,7 @@ class storyModel extends model
             ->setDefault('lastEditedDate', $now)
             ->setDefault('status', $oldStory->status)
             ->setDefault('reviewedDate', $date)
+            ->stripTags($this->config->story->editor->review['id'], $this->config->allowedTags)
             ->setIF($this->post->result == 'revert', 'version', $this->post->preVersion)
             ->setIF($this->post->result == 'clarify', 'assignedTo', $oldStory->lastEditedBy ? $oldStory->lastEditedBy : $oldStory->openedBy)
             ->removeIF($this->post->result != 'reject', 'closedReason, duplicateStory, childStories')
@@ -1336,6 +1336,7 @@ class storyModel extends model
             ->add('id', $storyID)
             ->remove('result,preVersion,comment')
             ->get();
+        $story = $this->loadModel('file')->processImgURL($story, $this->config->story->editor->review['id'], $this->post->uid);
 
         /* Fix bug #671. */
         $this->lang->story->closedReason = $this->lang->story->rejectedReason;
@@ -1563,6 +1564,7 @@ class storyModel extends model
             ->setDefault('closedDate',     $now)
             ->setDefault('closedBy',       $this->app->user->account)
             ->setDefault('assignedDate',   $now)
+            ->stripTags($this->config->story->editor->close['id'], $this->config->allowedTags)
             ->removeIF($this->post->closedReason != 'duplicate', 'duplicateStory')
             ->removeIF($this->post->closedReason != 'subdivided', 'childStories')
             ->get();
@@ -1578,6 +1580,7 @@ class storyModel extends model
         }
 
         $this->lang->story->comment = $this->lang->comment;
+        $story = $this->loadModel('file')->processImgURL($story, $this->config->story->editor->close['id'], $this->post->uid);
         $this->dao->update(TABLE_STORY)->data($story, 'comment')
             ->autoCheck()
             ->batchCheck($this->config->story->close->requiredFields, 'notempty')
@@ -1991,9 +1994,11 @@ class storyModel extends model
             ->add('lastEditedBy', $this->app->user->account)
             ->add('lastEditedDate', $now)
             ->add('assignedDate', $now)
+            ->stripTags($this->config->story->editor->assignto['id'], $this->config->allowedTags)
             ->remove('comment')
             ->get();
 
+        $story = $this->loadModel('file')->processImgURL($story, $this->config->story->editor->assignto['id'], $this->post->uid);
         $this->dao->update(TABLE_STORY)->data($story)->autoCheck()->checkFlow()->where('id')->eq((int)$storyID)->exec();
         if(!dao::isError()) return common::createChanges($oldStory, $story);
         return false;
@@ -2054,8 +2059,10 @@ class storyModel extends model
             ->setDefault('lastEditedDate', $now)
             ->setDefault('assignedDate',   $now)
             ->setDefault('activatedDate', $now)
+            ->stripTags($this->config->story->editor->activate['id'], $this->config->allowedTags)
             ->remove('comment')
             ->get();
+        $story = $this->loadModel('file')->processImgURL($story, $this->config->story->editor->activate['id'], $this->post->uid);
         $this->dao->update(TABLE_STORY)->data($story)->autoCheck()->checkFlow()->where('id')->eq($storyID)->exec();
 
         if($this->post->status == 'active') $this->dao->delete()->from(TABLE_STORYREVIEW)->where('story')->eq($storyID)->exec();
@@ -3908,7 +3915,8 @@ class storyModel extends model
             $canBeChanged = common::canModify('execution', $execution);
             if($canBeChanged)
             {
-                $param = "executionID={$execution->id}&story={$story->id}&moduleID={$story->module}";
+                $executionID = empty($execution) ? $this->session->execution : $execution->id;
+                $param       = "executionID=$executionID&story={$story->id}&moduleID={$story->module}";
 
                 $story->reviewer  = isset($story->reviewer)  ? $story->reviewer  : array();
                 $story->notReview = isset($story->notReview) ? $story->notReview : array();
@@ -3939,7 +3947,7 @@ class storyModel extends model
                 }
 
                 $this->lang->task->batchCreate = $this->lang->execution->batchWBS;
-                if($hasDBPriv) $menu .= common::printIcon('task', 'batchCreate', "executionID={$execution->id}&story={$story->id}", '', 'list', 'pluses', '', $toTaskDisabled);
+                if($hasDBPriv) $menu .= common::printIcon('task', 'batchCreate', "executionID=$executionID&story={$story->id}", '', 'list', 'pluses', '', $toTaskDisabled);
 
                 $this->lang->testcase->batchCreate = $this->lang->testcase->create;
                 if($hasDBPriv and common::hasPriv('testcase', 'create'))
@@ -3949,12 +3957,12 @@ class storyModel extends model
 
                 if($canBeChanged and common::hasPriv('execution', 'storyEstimate', $execution))
                 {
-                    $menu .= common::printIcon('execution', 'storyEstimate', "executionID=$execution->id&storyID=$story->id", '', 'list', 'estimate', '', 'iframe', true, "data-width='600px'");
+                    $menu .= common::printIcon('execution', 'storyEstimate', "executionID=$executionID&storyID=$story->id", '', 'list', 'estimate', '', 'iframe', true, "data-width='600px'");
                 }
 
                 if($canBeChanged and common::hasPriv('execution', 'unlinkStory', $execution))
                 {
-                    $menu .= common::printIcon('execution', 'unlinkStory', "executionID=$execution->id&storyID=$story->id&confirm=no", '', 'list', 'unlink', 'hiddenwin');
+                    $menu .= common::printIcon('execution', 'unlinkStory', "executionID=$executionID&storyID=$story->id&confirm=no", '', 'list', 'unlink', 'hiddenwin');
                 }
             }
         }
@@ -4124,11 +4132,12 @@ class storyModel extends model
      */
     public function printCell($col, $story, $users, $branches, $storyStages, $modulePairs = array(), $storyTasks = array(), $storyBugs = array(), $storyCases = array(), $mode = 'datatable', $storyType = 'story', $execution = '', $isShowBranch = '')
     {
-        $module    = $this->app->rawModule == 'product' ? 'story' : $this->app->rawModule;
-        $canView   = common::hasPriv($module, 'view');
-        $tab       = $this->app->tab;
-        $storyLink = $tab == 'execution' ? helper::createLink('story', 'view', "storyID=$story->id&version=$story->version&from=execution&param=$execution->id") : helper::createLink($module, 'view', "storyID=$story->id");
-        $account   = $this->app->user->account;
+        $module      = $this->app->rawModule == 'product' ? 'story' : $this->app->rawModule;
+        $canView     = common::hasPriv($module, 'view');
+        $tab         = $this->app->tab;
+        $executionID = empty($execution) ? $this->session->execution : $execution->id;
+        $storyLink   = $tab == 'execution' ? helper::createLink('story', 'view', "storyID=$story->id&version=$story->version&from=execution&param=$executionID") : helper::createLink($module, 'view', "storyID=$story->id");
+        $account     = $this->app->user->account;
 
         /* Check the product is closed. */
         $canBeChanged = common::canBeChanged('story', $story);
@@ -4148,8 +4157,9 @@ class storyModel extends model
         if($tab == 'execution')
         {
             $checkObject = new stdclass();
-            $checkObject->execution = $execution->id;
-            $canBatchToTask       = common::hasPriv('story', 'batchToTask', $checkObject);
+            $checkObject->execution = $executionID;
+
+            $canBatchToTask = common::hasPriv('story', 'batchToTask', $checkObject);
         }
 
         if($tab == 'execution')

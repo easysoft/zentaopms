@@ -3,7 +3,7 @@
  * The control file of doc module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     doc
  * @version     $Id: control.php 933 2010-07-06 06:53:40Z wwccss $
@@ -790,6 +790,28 @@ class doc extends control
         $childModules = $this->tree->getOptionMenu($libID, 'doc');
         $select       = ($type == 'module') ? html::select('module', $childModules, '', "class='form-control chosen'") : html::select('parent', $childModules, '', "class='form-control chosen'");
         return print($select);
+    }
+
+    /**
+     * Ajax get docs by lib.
+     *
+     * @param  int    $libID
+     * @access public
+     * @return void
+     */
+    public function ajaxGetDocs($libID)
+    {
+        if(!$libID) return print(html::select('doc', '', '', "class='form-control chosen'"));
+
+        $docIdList = $this->doc->getPrivDocs($libID, 0);
+        $docs = $this->dao->select('id, title')->from(TABLE_DOC)
+            ->where('lib')->eq($libID)
+            ->andWhere('deleted')->eq(0)
+            ->andWhere('id')->in($docIdList)
+            ->orderBy('`order` asc')
+            ->fetchPairs();
+
+        return print(html::select('doc', $docs, '', "class='form-control chosen'"));
     }
 
     /**

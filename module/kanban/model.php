@@ -3,7 +3,7 @@
  * The model file of kanban module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2021 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Shujie Tian <tianshujie@easycorp.ltd>
  * @package     kanban
  * @version     $Id: model.php 5118 2021-10-22 10:18:41Z $
@@ -808,13 +808,14 @@ class kanbanModel extends model
      * @param  string $orderBy
      * @param  int    $regionID
      * @param  string $groupBy
+     * @param  string $searchValue
      *
      * @access public
      * @return array
      */
-    public function getRDKanban($executionID, $browseType = 'all', $orderBy = 'id_desc', $regionID = 0, $groupBy = 'default')
+    public function getRDKanban($executionID, $browseType = 'all', $orderBy = 'id_desc', $regionID = 0, $groupBy = 'default', $searchValue = '')
     {
-        if($groupBy != 'default') return $this->getKanban4Group($executionID, $browseType, $groupBy);
+        if($groupBy != 'default') return $this->getKanban4Group($executionID, $browseType, $groupBy, $searchValue);
 
         $kanbanData   = array();
         $actions      = array('sortGroup');
@@ -823,7 +824,7 @@ class kanbanModel extends model
         $groupGroup   = $this->getGroupGroupByRegions($regionIDList);
         $laneGroup    = $this->getLaneGroupByRegions($regionIDList, $browseType);
         $columnGroup  = $this->getRDColumnGroupByRegions($regionIDList, array_keys($laneGroup));
-        $cardGroup    = $this->getCardGroupByExecution($executionID, $browseType, $orderBy);
+        $cardGroup    = $this->getCardGroupByExecution($executionID, $browseType, $orderBy, $searchValue);
 
         foreach($regions as $regionID => $regionName)
         {
@@ -838,13 +839,16 @@ class kanbanModel extends model
                 $lanes = zget($laneGroup, $group->id, array());
                 if(!$lanes) continue;
 
-                foreach($lanes as $lane)
+                foreach($lanes as $key => $lane)
                 {
                     $this->refreshCards($lane);
                     $lane->items           = isset($cardGroup[$lane->id]) ? $cardGroup[$lane->id] : array();
                     $lane->defaultCardType = $lane->type;
+                    if($searchValue != '' and count($lane->items) == 0) unset($lanes[$key]);
                 }
+                $lanes = array_values($lanes);
 
+                if($searchValue != '' and empty($lanes)) continue;
                 $group->columns = zget($columnGroup, $group->id, array());
                 $group->lanes   = $lanes;
                 $group->actions = array();
@@ -1250,10 +1254,12 @@ class kanbanModel extends model
      * @param  int    $kanbanID
      * @param  string $browseType all|task|bug|story
      * @param  string $orderBy
+     * @param  string $searchValue
+     *
      * @access public
      * @return array
      */
-    public function getCardGroupByExecution($executionID, $browseType = 'all', $orderBy = 'id_asc')
+    public function getCardGroupByExecution($executionID, $browseType = 'all', $orderBy = 'id_asc', $searchValue = '')
     {
         $cards = $this->dao->select('t1.*, t2.type as columnType')
             ->from(TABLE_KANBANCELL)->alias('t1')
@@ -1297,12 +1303,14 @@ class kanbanModel extends model
 
                     if($cell->type == 'task')
                     {
+                        if($searchValue != '' and strpos($object->name, $searchValue) === false) continue;
                         $cardData['name']     = $object->name;
                         $cardData['status']   = $object->status;
                         $cardData['left']     = $object->left;
                     }
                     else
                     {
+                        if($searchValue != '' and strpos($object->title, $searchValue) === false) continue;
                         $cardData['title'] = $object->title;
                     }
                     $cardGroup[$laneID][$cell->columnType][] = $cardData;
@@ -1440,10 +1448,12 @@ class kanbanModel extends model
      * @param  int    $executionID
      * @param  string $browseType
      * @param  string $groupBy
+     * @param  string $searchValue
+     *
      * @access public
      * @return array
      */
-    public function getKanban4Group($executionID, $browseType, $groupBy)
+    public function getKanban4Group($executionID, $browseType, $groupBy, $searchValue = '')
     {
         /* Get card  data. */
         $cardList = array();
@@ -1551,21 +1561,24 @@ class kanbanModel extends model
 
                     if($browseType == 'task')
                     {
+                        if($searchValue != '' and strpos($object->name, $searchValue) === false) continue;
                         $cardData['name']   = $object->name;
                         $cardData['status'] = $object->status;
                         $cardData['left']   = $object->left;
                     }
                     else
                     {
+                        if($searchValue != '' and strpos($object->title, $searchValue) === false) continue;
                         $cardData['title'] = $object->title;
                     }
 
                     $laneData['cards'][$column->columnType][] = $cardData;
                     $cardOrder ++;
                 }
-                if(!isset($laneData['cards'][$column->columnType])) $laneData['cards'][$column->columnType] = array();
+                if(empty($searchValue) and !isset($laneData['cards'][$column->columnType])) $laneData['cards'][$column->columnType] = array();
             }
 
+            if($searchValue != '' and empty($laneData['cards'])) continue;
             $kanbanGroup[$groupBy]['id']              = $groupBy . $laneID;
             $kanbanGroup[$groupBy]['columns']         = array_values($columnData);
             $kanbanGroup[$groupBy]['lanes'][]         = $laneData;

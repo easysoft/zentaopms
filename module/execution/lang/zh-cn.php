@@ -3,7 +3,7 @@
  * The execution module zh-cn file of ZenTaoMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     execution
  * @version     $Id: zh-cn.php 5094 2013-07-10 08:46:15Z chencongzhi520@gmail.com $
@@ -398,6 +398,7 @@ $lang->execution->confirmStoryToTask          = '%s' . $lang->SRCommon . '已经
 $lang->execution->ge                          = "『%s』应当不小于实际开始时间『%s』。";
 $lang->execution->storyDragError              = "该{$lang->SRCommon}还是草稿或已变更状态，请评审通过后再拖动";
 $lang->execution->countTip                    = '（%s人）';
+$lang->execution->pleaseInput                 = "请输入";
 
 /* 统计。*/
 $lang->execution->charts = new stdclass();

@@ -75,17 +75,39 @@ class productplanModel extends model
      * @param  object $pager
      * @param  string $orderBy
      * @param  string $param skipparent
+     * @param  int    $queryID
      * @access public
      * @return object
      */
-    public function getList($product = 0, $branch = 0, $browseType = 'undone', $pager = null, $orderBy = 'begin_desc', $param = '')
+    public function getList($product = 0, $branch = 0, $browseType = 'undone', $pager = null, $orderBy = 'begin_desc', $param = '', $queryID = 0)
     {
+        if(!empty($queryID))
+        {
+            $query = $this->loadModel('search')->getQuery($queryID);
+            if($query)
+            {
+                $this->session->set('productplanQuery', $query->sql);
+                $this->session->set('productplanForm', $query->form);
+            }
+            else
+            {
+                $this->session->set('productplanQuery', ' 1 = 1');
+            }
+        }
+        else
+        {
+            if($this->session->productplanQuery == false) $this->session->set('productplanQuery', ' 1 = 1');
+        }
+
+        $productplanQuery = $this->session->productplanQuery;
+
         $date  = date('Y-m-d');
         $plans = $this->dao->select('*')->from(TABLE_PRODUCTPLAN)->where('product')->eq($product)
             ->andWhere('deleted')->eq(0)
             ->beginIF(!empty($branch) and $branch != 'all')->andWhere('branch')->eq($branch)->fi()
-            ->beginIF(strpos(',all,undone,', ",$browseType,") === false)->andWhere('status')->eq($browseType)->fi()
+            ->beginIF(strpos(',all,undone,bySearch,', ",$browseType,") === false)->andWhere('status')->eq($browseType)->fi()
             ->beginIF($browseType == 'undone')->andWhere('status')->in('wait,doing')->fi()
+            ->beginIF($browseType == 'bySearch')->andWhere($productplanQuery)->fi()
             ->beginIF(strpos($param, 'skipparent') !== false)->andWhere('parent')->ne(-1)->fi()
             ->orderBy($orderBy)
             ->page($pager)
@@ -1181,5 +1203,24 @@ class productplanModel extends model
         }
 
         return $menu;
+    }
+
+    /**
+     * Build search form.
+     *
+     * @param  int    $queryID
+     * @param  string $actionURL
+     * @param  object $product
+     * @access public
+     * @return void
+     */
+    public function buildSearchForm($queryID, $actionURL, $product)
+    {
+        $this->config->productplan->search['actionURL'] = $actionURL;
+        $this->config->productplan->search['queryID']   = $queryID;
+
+        if($product->type != 'normal') $this->config->productplan->search['params']['branch']['values']  = array('' => '', '0' => $this->lang->branch->main) + $this->loadModel('branch')->getPairs($product->id, 'noempty');
+        if($product->type == 'normal') unset($this->config->productplan->search['fields']['branch']);
+        $this->loadModel('search')->setSearchParams($this->config->productplan->search);
     }
 }

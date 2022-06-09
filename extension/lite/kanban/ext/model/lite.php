@@ -5,7 +5,7 @@ public function __construct($appName = '')
     if($this->app->getModuleName() == 'kanban') $this->lang->kanban->menu = new stdclass();
 }
 
-public function getKanban4Group($executionID, $browseType, $groupBy)
+public function getKanban4Group($executionID, $browseType, $groupBy, $searchValue = '')
 {
     /* Get card  data. */
     $cardList = array();
@@ -16,13 +16,24 @@ public function getKanban4Group($executionID, $browseType, $groupBy)
     $lanes = $this->getLanes4Group($executionID, $browseType, $groupBy, $cardList);
     if(empty($lanes)) return array();
 
-    $columns = $this->dao->select('t1.*, t2.`type` as columnType')->from(TABLE_KANBANCELL)->alias('t1')
+    $execution = $this->loadModel('execution')->getByID($executionID);
+
+    $columns = $this->dao->select('t1.*, GROUP_CONCAT(t1.cards) as cards, t2.`type` as columnType, t2.limit, t2.name as columnName, t2.color')->from(TABLE_KANBANCELL)->alias('t1')
         ->leftJoin(TABLE_KANBANCOLUMN)->alias('t2')->on('t1.`column` = t2.id')
+        ->leftJoin(TABLE_KANBANLANE)->alias('t3')->on('t1.lane = t3.id')
+        ->leftJoin(TABLE_KANBANREGION)->alias('t4')->on('t1.kanban = t4.kanban')
         ->where('t1.kanban')->eq($executionID)
         ->andWhere('t1.`type`')->eq($browseType)
-        ->fetchAll();
+        ->beginIF(isset($execution->type) and $execution->type == 'kanban')
+        ->andWhere('t3.deleted')->eq(0)
+        ->andWhere('t4.deleted')->eq(0)
+        ->fi()
+        ->groupBy('columnType')
+        ->orderBy('column_asc')
+        ->fetchAll('columnType');
 
     $cardGroup = array();
+    $actions   = array('setColumn', 'setWIP');
     foreach($columns as $column)
     {
         if(empty($column->cards)) continue;
@@ -48,11 +59,20 @@ public function getKanban4Group($executionID, $browseType, $groupBy)
         $laneData['defaultCardType'] = $browseType;
 
         /* Construct kanban column data. */
-        foreach($columnList as $columnID => $columnName)
+        foreach($columns as $column)
         {
+            $columnID   = $column->column;
+            $columnName = $column->columnName;
             $parentColumn = '';
             if(in_array($columnID, array('testing', 'tested')))       $parentColumn = 'test';
             if(in_array($columnID, array('fixing', 'fixed')))         $parentColumn = 'resolving';
+
+            /* Judge column action priv. */
+            $column->actions = array();
+            foreach($actions as $action)
+            {
+                if($this->isClickable($column, $action)) $column->actions[] = $action;
+            }
 
             $columnData[$columnID]['id']         = $columnID;
             $columnData[$columnID]['type']       = $columnID;
@@ -62,6 +82,7 @@ public function getKanban4Group($executionID, $browseType, $groupBy)
             $columnData[$columnID]['laneType']   = $browseType;
             $columnData[$columnID]['asParent']   = in_array($columnID, array('develop', 'test', 'resolving')) ? true : false;
             $columnData[$columnID]['parentType'] = $parentColumn;
+            $columnData[$columnID]['actions']    = $column->actions;
 
             $cardOrder = 1;
             $objects   = zget($cardGroup, $columnID, array());
@@ -114,7 +135,7 @@ public function getKanban4Group($executionID, $browseType, $groupBy)
  * @access public
  * @return array
  */
-public function getCardGroupByExecution($executionID, $browseType = 'all', $orderBy = 'id_asc')
+public function getCardGroupByExecution($executionID, $browseType = 'all', $orderBy = 'id_asc', $searchValue = '')
 {
     $cards = $this->dao->select('t1.*, t2.type as columnType')
         ->from(TABLE_KANBANCELL)->alias('t1')

@@ -478,7 +478,8 @@ function renderStoryItem(item, $item, col)
                     .attr('href', $.createLink('story', 'view', 'storyID=' + item.id + '&version=0&param=' + execution.id, '', true)).attr('data-toggle', 'modal').attr('data-width', '95%');
             $title.appendTo($item);
         }
-        $title.attr('title', item.title).find('.text').text(item.title);
+        var title = rdSearchValue != '' ? "<span class='text'>" + item.title.replaceAll(rdSearchValue, "<span class='text-danger'>" + rdSearchValue + "</span>") + "</span>": "<span class='text'>" + item.title + "</span>";
+        $title.attr('title', item.title).find('.text').replaceWith(title);
     }
 
     if(scaleSize <= 2)
@@ -542,7 +543,8 @@ function renderBugItem(item, $item, col)
                     .attr('href', $.createLink('bug', 'view', 'bugID=' + item.id, '', true)).attr('data-toggle', 'modal').attr('data-width', '80%');
             $title.appendTo($item);
         }
-        $title.attr('title', item.title).find('.text').text(item.title);
+        var title = rdSearchValue != '' ? "<span class='text'>" + item.title.replaceAll(rdSearchValue, "<span class='text-danger'>" + rdSearchValue + "</span>") + "</span>": "<span class='text'>" + item.title + "</span>";
+        $title.attr('title', item.title).find('.text').replaceWith(title);
     }
 
     if(scaleSize <= 2)
@@ -608,7 +610,8 @@ function renderTaskItem(item, $item, col)
                     .attr('href', $.createLink('task', 'view', 'taskID=' + item.id, '', true)).attr('data-toggle', 'modal').attr('data-width', '80%');
             $title.appendTo($item);
         }
-        $title.attr('title', item.name).find('.text').text(item.name);
+        var name = rdSearchValue != '' ? "<span class='text'>" + item.name.replaceAll(rdSearchValue, "<span class='text-danger'>" + rdSearchValue + "</span>") + "</span>": "<span class='text'>" + item.name + "</span>";
+        $title.attr('title', item.name).find('.text').replaceWith(name);
     }
 
     if(scaleSize <= 2)
@@ -804,6 +807,18 @@ function updateRegion(regionID, regionData = [])
     if(!regionData) regionData = regions[regionID];
 
     var data = groupBy == 'default' ? regionData.groups : regionData;
+    if(data == null || data.length == 0)
+    {
+        if(groupBy == 'default') $("div[data-id^=" + regionID + "].region").hide();
+        if(groupBy != 'default') $("div[data-id^=" + regionID + "].kanban").hide();
+        return false;
+    }
+    else
+    {
+        if(groupBy == 'default') $("div[data-id^=" + regionID + "].region").show();
+        if(groupBy != 'default') $("div[data-id^=" + regionID + "].kanban").show();
+    }
+    $region.empty();
     $region.data('zui.kanban').render(data);
     resetRegionHeight('open');
     return true;
@@ -1516,7 +1531,7 @@ $(function()
         var lastUpdateData;
         setInterval(function()
         {
-            $.get(createLink('execution', 'ajaxUpdateKanban', "executionID=" + executionID + "&entertime=" + entertime + "&browseType=" + browseType + "&groupBy=" + groupBy + '&from=RD'), function(data)
+            $.get(createLink('execution', 'ajaxUpdateKanban', "executionID=" + executionID + "&entertime=" + entertime + "&browseType=" + browseType + "&groupBy=" + groupBy + '&from=RD&searchValue' + rdSearchValue), function(data)
             {
                 if(data && lastUpdateData !== data)
                 {
@@ -1591,4 +1606,59 @@ function resetRegionHeight(fold)
     {
         $('.region').css('height', regionHeaderHeight);
     }
+}
+
+/**
+ * Toggle RDSearchBox.
+ *
+ * @access public
+ * @return void
+ */
+function toggleRDSearchBox()
+{
+    rdSearchValue = '';
+    $('#rdSearchBox').toggle();
+    if($('#rdSearchBox').css('display') == 'block')
+    {
+        $(".querybox-toggle").css("color", "#0c64eb");
+    }
+    else
+    {
+        $(".querybox-toggle").css("color", "");
+        $('#rdKanbanSearchInput').attr('value', '');
+        searchCards('');
+    }
+}
+
+/**
+ * Search all cards.
+ *
+ * @param  string $value
+ * @access public
+ * @return void
+ */
+function searchCards(value)
+{
+    rdSearchValue = value;
+    $.get(createLink('execution', 'ajaxUpdateKanban', "executionID=" + executionID + "&entertime=0&browseType=" + browseType + "&groupBy=" + groupBy + '&from=RD&searchValue=' + value), function(data)
+    {
+        var kanbanData = $.parseJSON(data);
+        var hideAll    = true;
+        $('#kanban').children('.region').children("div[id^='kanban']").each(function()
+        {
+            var regionID = $(this).attr('data-id');
+            if(kanbanData != null) data = groupBy == 'default' ? kanbanData[regionID] : kanbanData[groupBy];
+
+            hideAll = hideAll && !updateRegion(regionID, data);
+        });
+
+        if(hideAll && rdSearchValue != '')
+        {
+            if($('.table-empty-tip').length == 0) $('#kanban').append('<div class="table-empty-tip"><p><span class="text-muted">' + kanbanLang.empty + '</span></p></div>');
+        }
+        else
+        {
+            $('.table-empty-tip').remove();
+        }
+    });
 }

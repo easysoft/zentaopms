@@ -3,7 +3,7 @@
  * The model file of test task module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     testtask
  * @version     $Id: model.php 5114 2013-07-12 06:02:59Z chencongzhi520@gmail.com $
@@ -772,8 +772,10 @@ class testtaskModel extends model
         $testtask = fixer::input('post')
             ->add('id', $taskID)
             ->setDefault('status', 'doing')
+            ->stripTags($this->config->testtask->editor->start['id'], $this->config->allowedTags)
             ->remove('comment')->get();
 
+        $testtask = $this->loadModel('file')->processImgURL($testtask, $this->config->testtask->editor->start['id'], $this->post->uid);
         $this->dao->update(TABLE_TESTTASK)->data($testtask)
             ->autoCheck()
             ->checkFlow()
@@ -838,8 +840,10 @@ class testtaskModel extends model
         $testtask = fixer::input('post')
             ->add('id', $taskID)
             ->setDefault('status', 'blocked')
+            ->stripTags($this->config->testtask->editor->block['id'], $this->config->allowedTags)
             ->remove('comment')->get();
 
+        $testtask = $this->loadModel('file')->processImgURL($testtask, $this->config->testtask->editor->block['id'], $this->post->uid);
         $this->dao->update(TABLE_TESTTASK)->data($testtask)
             ->autoCheck()
             ->checkFlow()
@@ -861,8 +865,10 @@ class testtaskModel extends model
         $oldTesttask = $this->getById($taskID);
         $testtask = fixer::input('post')
             ->setDefault('status', 'doing')
+            ->stripTags($this->config->testtask->editor->activate['id'], $this->config->allowedTags)
             ->remove('comment')->get();
 
+        $testtask = $this->loadModel('file')->processImgURL($testtask, $this->config->testtask->editor->activate['id'], $this->post->uid);
         $this->dao->update(TABLE_TESTTASK)->data($testtask)
             ->autoCheck()
             ->checkFlow()
