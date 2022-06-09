@@ -1130,17 +1130,17 @@ function createCardMenu(options)
     }
     if(privs.includes('archiveCard') && kanban.archived == '1') items.push({label: kanbanLang.archiveCard, icon: 'card-archive', url: createLink('kanban', 'archiveCard', 'cardID=' + card.id), attrs: {'target': 'hiddenwin'}});
 
-    var editCard     = (privs.includes('editCard') && card.fromType == '') ? true : false;
-    var deleteCard   = privs.includes('deleteCard');
-    var archiveCard  = (privs.includes('archiveCard') && kanban.archived == '1') ? true : false;
+    var editCardAction    = (privs.includes('editCard') && card.fromType == '') ? true : false;
+    var deleteCardAction  = privs.includes('deleteCard');
+    var archiveCardAction = (privs.includes('archiveCard') && kanban.archived == '1') ? true : false;
 
     var performable  = (privs.includes('performable') && kanban.performable == 1) ? true : false;
 
-    var moveCard     = privs.includes('moveCard');
-    var setCardColor = privs.includes('setCardColor');
+    var moveCardAction     = privs.includes('moveCard');
+    var setCardColorAction = privs.includes('setCardColor');
 
-    var basicActions = (editCard || deleteCard || archiveCard) ? true : false;
-    var otherActions = (moveCard || setCardColor) ? true : false;
+    var basicActions = (editCardAction || deleteCardAction || archiveCardAction) ? true : false;
+    var otherActions = (moveCardAction || setCardColorAction) ? true : false;
 
     if((performable || basicActions) && otherActions)
     {
