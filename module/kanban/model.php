@@ -3065,18 +3065,18 @@ class kanbanModel extends model
             }
             $actions .= $columnActions;
 
-            $oftenActions = '';
-            if(common::hasPriv('kanban', 'createRegion') and $CRKanban) $oftenActions .= '<li>' . html::a(helper::createLink('kanban', 'createRegion', "kanbanID=$kanban->id", '', true), '<i class="icon icon-plus"></i>' . $this->lang->kanban->createRegion, '', "class='iframe btn btn-link'") . '</li>';
+            $commonActions = '';
+            if(common::hasPriv('kanban', 'createRegion') and $CRKanban) $commonActions .= '<li>' . html::a(helper::createLink('kanban', 'createRegion', "kanbanID=$kanban->id", '', true), '<i class="icon icon-plus"></i>' . $this->lang->kanban->createRegion, '', "class='iframe btn btn-link'") . '</li>';
             $importWidth = $this->app->getClientLang() == 'en' ? '700' : '550';
-            if(common::hasPriv('kanban', 'import') and $CRKanban) $oftenActions .= '<li>' . html::a(helper::createLink('kanban', 'import', "kanbanID=$kanban->id", '', true), '<i class="icon icon-import"></i>' . $this->lang->kanban->import, '', "class='iframe btn btn-link' data-width=$importWidth") . '</li>';
-            if(common::hasPriv('kanban', 'enableArchived') and $CRKanban) $oftenActions .= '<li>' . html::a(helper::createLink('kanban', 'enableArchived', "kanbanID=$kanban->id", '', true), '<i class="icon icon-card-archive"></i>' . $this->lang->kanban->archived, '', "class='iframe btn btn-link' data-width=400") . '</li>';
-            if(common::hasPriv('kanban', 'performable') and $CRKanban) $oftenActions .= '<li>' . html::a(helper::createLink('kanban', 'performable', "kanbanID=$kanban->id", '', true), '<i class="icon icon-checked"></i>' . $this->lang->kanban->manageProgress, '', "class='iframe btn btn-link' data-width=40%") . '</li>';
+            if(common::hasPriv('kanban', 'import') and $CRKanban) $commonActions .= '<li>' . html::a(helper::createLink('kanban', 'import', "kanbanID=$kanban->id", '', true), '<i class="icon icon-import"></i>' . $this->lang->kanban->import, '', "class='iframe btn btn-link' data-width=$importWidth") . '</li>';
+            if(common::hasPriv('kanban', 'enableArchived') and $CRKanban) $commonActions .= '<li>' . html::a(helper::createLink('kanban', 'enableArchived', "kanbanID=$kanban->id", '', true), '<i class="icon icon-card-archive"></i>' . $this->lang->kanban->archived, '', "class='iframe btn btn-link' data-width=400") . '</li>';
+            if(common::hasPriv('kanban', 'performable') and $CRKanban) $commonActions .= '<li>' . html::a(helper::createLink('kanban', 'performable', "kanbanID=$kanban->id", '', true), '<i class="icon icon-checked"></i>' . $this->lang->kanban->manageProgress, '', "class='iframe btn btn-link' data-width=40%") . '</li>';
 
-            if($columnActions and $oftenActions)
+            if($columnActions and $commonActions)
             {
                 $actions .= "<li class='divider'></li>";
             }
-            $actions .= $oftenActions;
+            $actions .= $commonActions;
 
             $kanbanActions = '';
             if(common::hasPriv('kanban', 'edit'))  $kanbanActions .= '<li>' . html::a(helper::createLink('kanban', 'edit', "kanbanID=$kanban->id", '', true), '<i class="icon icon-edit"></i>' . $this->lang->kanban->edit, '', "class='iframe btn btn-link' data-width='75%'") . '</li>';
@@ -3084,7 +3084,7 @@ class kanbanModel extends model
             if(common::hasPriv('kanban', 'activate') and $kanban->status == 'closed') $kanbanActions .= '<li>' . html::a(helper::createLink('kanban', 'activate', "kanbanID=$kanban->id", '', true), '<i class="icon icon-magic"></i>' . $this->lang->kanban->activate, '', "class='iframe btn btn-link'") . '</li>';
             if(common::hasPriv('kanban', 'delete')) $kanbanActions .= '<li>' . html::a(helper::createLink('kanban', 'delete', "kanbanID=$kanban->id"), '<i class="icon icon-trash"></i>' . $this->lang->kanban->delete, 'hiddenwin', "class='btn btn-link'") . '</li>';
 
-            if($oftenActions and $kanbanActions)
+            if($commonActions and $kanbanActions)
             {
                 $actions .= "<li class='divider'></li>";
             }

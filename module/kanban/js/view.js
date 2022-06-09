@@ -1139,10 +1139,10 @@ function createCardMenu(options)
     var moveCard     = privs.includes('moveCard');
     var setCardColor = privs.includes('setCardColor');
 
-    var basicOperation = (editCard || deleteCard || archiveCard) ? true : false;
-    var otherOperation = (moveCard || setCardColor) ? true : false;
+    var basicActions = (editCard || deleteCard || archiveCard) ? true : false;
+    var otherActions = (moveCard || setCardColor) ? true : false;
 
-    if((performable || basicOperation) && otherOperation)
+    if((performable || basicActions) && otherActions)
     {
         items.push({type: 'divider'});
     }
@@ -1200,10 +1200,10 @@ function createColumnMenu(options)
     if(privs.includes('setColumn')) items.push({label: kanbanLang.editColumn, icon: 'edit', url: createLink('kanban', 'setColumn', 'columnID=' + column.id, '', 'true'), className: 'iframe', attrs: {'data-toggle': 'modal'}});
     if(privs.includes('setWIP')) items.push({label: kanbanLang.setWIP, icon: 'alert', url: createLink('kanban', 'setWIP', 'columnID=' + column.id), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width' : '500px'}});
 
-    var basicOperation  = (privs.includes('setColumn') || privs.includes('setWIP')) ? true : false;
-    var columnOperation = (privs.includes('splitColumn') || privs.includes('createColumn') || privs.includes('copyColumn')) ? true : false;
+    var basicActions  = (privs.includes('setColumn') || privs.includes('setWIP')) ? true : false;
+    var columnActions = (privs.includes('splitColumn') || privs.includes('createColumn') || privs.includes('copyColumn')) ? true : false;
 
-    if(basicOperation && columnOperation)
+    if(basicActions && columnActions)
     {
         items.push({type: 'divider'});
     }
@@ -1216,8 +1216,8 @@ function createColumnMenu(options)
     }
     if(privs.includes('copyColumn')) items.push({label: kanbanLang.copyColumn, icon: 'copy', url: createLink('kanban', 'copyColumn', 'columnID=' + column.id), className: 'iframe', attrs: {'data-toggle': 'modal'}});
 
-    var otherOperation = ((privs.includes('archiveColumn') && kanban.archived == '1') || privs.includes('deleteColumn')) ? true : false;
-    if(columnOperation && otherOperation)
+    var otherActions = ((privs.includes('archiveColumn') && kanban.archived == '1') || privs.includes('deleteColumn')) ? true : false;
+    if(columnActions && otherActions)
     {
         items.push({type: 'divider'});
     }
