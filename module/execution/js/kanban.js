@@ -451,7 +451,7 @@ function renderDeadline(deadline, status)
     now.setMilliseconds(0);
     var isEarlyThanToday = date.getTime() < now.getTime();
     var deadlineDate     = $.zui.formatDate(date, 'MM-dd');
-    var statusList       = ['wait','doing','pause'];
+    var statusList       = ['doing','done','pause'];
     var textColor        = isEarlyThanToday && typeof(status) != 'undefined' && statusList.indexOf(status) != -1 ? 'text-red' : 'text-muted';
 
     return $('<span class="info info-deadline"/>').text(deadlineLang + ' ' + deadlineDate).addClass(textColor);
@@ -477,8 +477,7 @@ function renderEstStarted(estStarted, status)
     now.setMilliseconds(0);
     var isEarlyThanToday = date.getTime() < now.getTime();
     var estStartedDate   = $.zui.formatDate(date, 'MM-dd');
-    var statusList       = ['wait','doing','pause'];
-    var textColor        = isEarlyThanToday && typeof(status) != 'undefined' && statusList.indexOf(status) != -1 ? 'text-red' : 'text-muted';
+    var textColor        = isEarlyThanToday && typeof(status) != 'undefined' && status =='wait' ? 'text-red' : 'text-muted';
 
     return $('<span class="info info-deadline"/>').text(estStartedLang + ' ' + estStartedDate).addClass(textColor);
 }
@@ -648,7 +647,7 @@ function renderTaskItem(item, $item, col)
         var $infos = $item.find('.infos');
         if(!$infos.length) $infos = $('<div class="infos"></div>');
         $infos.html([priHtml, hoursHtml].join(''));
-        if(item.deadline && scaleSize <= 1 && (item.status == 'doing' || item.status == 'pause')) $infos.append(renderDeadline(item.deadline, item.status));
+        if(item.deadline && scaleSize <= 1 && (item.status == 'doing' || item.status == 'pause' || item.status == 'done')) $infos.append(renderDeadline(item.deadline, item.status));
         if(item.estStarted && scaleSize <= 1 && item.status == 'wait') $infos.append(renderEstStarted(item.estStarted, item.status));
         $infos[scaleSize <= 1 ? 'append' : 'prepend'](avatarHtml);
 
