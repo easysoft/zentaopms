@@ -795,14 +795,16 @@ function updateRegion(regionID, regionData = [])
     if(!regionData) regionData = regions[regionID];
 
     var data = groupBy == 'default' ? regionData.groups : regionData;
-    if(data == null)
+    if(data == null || data.length == 0)
     {
-        $("div[data-id^=" + regionID + "].region").hide();
+        if(groupBy == 'default') $("div[data-id^=" + regionID + "].region").hide();
+        if(groupBy != 'default') $("div[data-id^=" + regionID + "].kanban").hide();
         return false;
     }
     else
     {
-        $("div[data-id^=" + regionID + "].region").show();
+        if(groupBy == 'default') $("div[data-id^=" + regionID + "].region").show();
+        if(groupBy != 'default') $("div[data-id^=" + regionID + "].kanban").show();
     }
     $region.empty();
     $region.data('zui.kanban').render(data);
