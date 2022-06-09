@@ -803,7 +803,8 @@ function updateRegion(regionID, regionData = [])
     }
     else
     {
-        $("div[data-id^=" + regionID + "].region").show();
+        if(groupBy == 'default') $("div[data-id^=" + regionID + "].region").show();
+        if(groupBy != 'default') $("div[data-id^=" + regionID + "].kanban").show();
     }
     $region.empty();
     $region.data('zui.kanban').render(data);
