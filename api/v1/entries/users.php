@@ -62,8 +62,8 @@ class usersEntry extends entry
 
         $password = $this->request('password', '') ? md5($this->request('password')) : '';
 
-        $visions = $this->request('visions', 'rnd');
-        if(is_array($visions)) $visions = implode(',', $visions);
+        $visions = $this->request('visions', array('rnd'));
+        if(!is_array($visions)) $visions = explode(',', $visions);
 
         $this->setPost('password1', $password);
         $this->setPost('password2', $password);

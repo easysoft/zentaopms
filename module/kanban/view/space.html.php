@@ -40,12 +40,12 @@
         <div class='spaceTitle pull-left'>
           <div><i class='icon-cube'></i></div>
           <div>
-            <h4 title="<?php echo $space->name;?>">
+            <p class='spaceName' title="<?php echo $space->name;?>">
               <?php if($space->status == 'closed'):?>
               <span class="label label-closed"><?php echo $lang->kanban->closed;?></span>
               <?php endif;?>
               <?php echo $space->name;?>
-            </h4>
+            </p>
           </div>
           <p class="spaceDesc text-ellipsis text-primary" title='<?php echo empty($space->desc) ? $lang->kanban->emptyDesc : $space->desc;?>'><?php echo empty($space->desc) ? $lang->kanban->emptyDesc : $space->desc;?></p>
         </div>
@@ -72,6 +72,9 @@
         <div class='col' data-id='<?php echo $kanbanID?>'>
           <div class='panel' data-url='<?php echo $this->createLink('kanban', 'view', "kanbanID=$kanbanID");?>'>
             <div class='panel-heading'>
+              <?php if($browseType == 'cooperation' and $kanban->owner == $this->app->user->account):?>
+              <span class="label label-outline label-info kanban-label"><?php echo $lang->kanban->mine;?></span>
+              <?php endif;?>
               <div class='kanban-name'>
                 <?php if($kanban->status == 'closed'):?>
                 <span class="label label-closed"><?php echo $lang->kanban->closed;?></span>
@@ -158,7 +161,10 @@
                     <?php endif;?>
                   </div>
                   <?php endif;?>
-                  <div class='kanban-members-total pull-left'><?php echo sprintf($lang->kanban->teamSumCount, $teamCount);?></div>
+                  <?php $teamCountLang = ($teamCount > 1) ? $lang->kanban->teamSumCount : str_replace("Pers", "Person", $lang->kanban->teamSumCount);?>
+                  <div class='kanban-members-total pull-left'><?php echo sprintf($teamCountLang, $teamCount);?></div>
+                  <?php $cardsCount = ($kanban->cardsCount > 1) ? str_replace("Card", "Cards", $lang->kanban->cardsCount) : $lang->kanban->cardsCount;?>
+                  <div class='kanban-members-total pull-right'><?php echo empty($kanban->cardsCount) ? $lang->kanban->noCard : sprintf($cardsCount, $kanban->cardsCount);?></div>
                 </div>
               </div>
             </div>

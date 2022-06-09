@@ -136,6 +136,9 @@ class userModel extends model
             }
         }
 
+        /* Put the current user first. */
+        $users = $this->processAccountSort($users);
+
         /* Append empty, closed, and guest users. */
         if(strpos($params, 'noempty')   === false) $users = array('' => '') + $users;
         if(strpos($params, 'noclosed')  === false) $users = $users + array('closed' => 'Closed');
@@ -2623,6 +2626,10 @@ class userModel extends model
             if(!empty($this->config->isINT)) $firstLetter = '';
             $users[$account] =  $firstLetter . ($user->realname ? $user->realname : $user->account);
         }
+
+        /* Put the current user first. */
+        $users = $this->processAccountSort($users);
+
         return array('' => '') + $users;
     }
 
@@ -2827,5 +2834,24 @@ class userModel extends model
         $company = $this->dao->select('admins')->from(TABLE_COMPANY)->fetch();
         $admins  = explode(',', trim($company->admins, ','));
         $this->app->user = $this->dao->select('*')->from(TABLE_USER)->where('account')->eq($admins[0])->fetch();
+    }
+
+    /**
+     * Put the current user first.
+     *
+     * @param  array    $users
+     * @access public
+     * @return array
+     */
+    public function processAccountSort($users = array())
+    {
+        if(isset($users[$this->app->user->account]))
+        {
+            $currentUser = array();
+            $currentUser[$this->app->user->account] = $users[$this->app->user->account];
+            unset($users[$this->app->user->account]);
+            $users = $currentUser + $users;
+        }
+        return $users;
     }
 }

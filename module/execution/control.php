@@ -115,6 +115,7 @@ class execution extends control
         $this->loadModel('datatable');
         $this->loadModel('setting');
         $this->loadModel('product');
+        $this->loadModel('user');
 
         if(common::hasPriv('execution', 'create')) $this->lang->TRActions = html::a($this->createLink('execution', 'create'), "<i class='icon icon-sm icon-plus'></i> " . $this->lang->execution->create, '', "class='btn btn-primary'");
 
@@ -211,6 +212,7 @@ class execution extends control
         /* team member pairs. */
         $memberPairs = array();
         foreach($this->view->teamMembers as $key => $member) $memberPairs[$key] = $member->realname;
+        $memberPairs = $this->user->processAccountSort($memberPairs);
 
         $showAllModule = isset($this->config->execution->task->allModule) ? $this->config->execution->task->allModule : '';
         $extra         = (isset($this->config->execution->task->allModule) && $this->config->execution->task->allModule == 1) ? 'allModule' : '';
@@ -227,7 +229,7 @@ class execution extends control
         $this->view->orderBy      = $orderBy;
         $this->view->browseType   = $browseType;
         $this->view->status       = $status;
-        $this->view->users        = $this->loadModel('user')->getPairs('noletter|all');
+        $this->view->users        = $this->user->getPairs('noletter|all');
         $this->view->param        = $param;
         $this->view->executionID  = $executionID;
         $this->view->execution    = $execution;
@@ -918,6 +920,7 @@ class execution extends control
         {
             $memberPairs[$key] = $member->realname;
         }
+        $memberPairs = $this->user->processAccountSort($memberPairs);
 
         /* Build the search form. */
         $actionURL = $this->createLink('execution', 'bug', "executionID=$executionID&productID=$productID&orderBy=$orderBy&build=$build&type=bysearch&queryID=myQueryID");
@@ -1496,7 +1499,7 @@ class execution extends control
         $this->view->name                = $name;
         $this->view->code                = $code;
         $this->view->team                = $team;
-        $this->view->teams               = array(0 => '', $projectID => (isset($project->name) ? $project->name : '')) + $this->execution->getCanCopyObjects((int)$projectID);
+        $this->view->teams               = array(0 => '') + $this->execution->getCanCopyObjects((int)$projectID);
         $this->view->allProjects         = array(0 => '') + $this->project->getPairsByModel('all', 0, 'noclosed');
         $this->view->executionID         = $executionID;
         $this->view->productID           = $productID;
@@ -2730,7 +2733,7 @@ class execution extends control
 
         $currentMembers = $this->execution->getTeamMembers($executionID);
         $members2Import = $this->execution->getMembers2Import($team2Import, array_keys($currentMembers));
-        $teams2Import   = $this->loadModel('personnel')->getCopiedObjects($executionID, 'sprint');
+        $teams2Import   = $this->loadModel('personnel')->getCopiedObjects($executionID, 'sprint', true);
         $teams2Import   = array('' => '') + $teams2Import;
 
         /* Append users for get users. */

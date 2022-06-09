@@ -721,6 +721,17 @@ function renderCount($count, count, column)
 }
 
 /**
+ * Alert to link product.
+ *
+ * @access public
+ * @return void
+ */
+function tips()
+{
+    bootbox.alert(needLinkProducts);
+}
+
+/**
  * Render header of a column.
  */
 function renderHeaderCol($column, column, $header, kanbanData)
@@ -754,10 +765,11 @@ function renderHeaderCol($column, column, $header, kanbanData)
     var printMoreBtn = (columnPrivs.includes('setColumn') || columnPrivs.includes('setWIP'));
 
     /* Render more menu. */
-    if(((column.type == 'backlog' && hasStoryButton) || (column.type == 'wait' && hasTaskButton) || (column.type == 'unconfirmed' && hasBugButton)) && $actions.children('.text-primary').length == 0)
+    if(column.type == 'backlog' || column.type == 'wait' || column.type == 'unconfirmed'  && $actions.children('.text-primary').length == 0)
     {
+        var tips = productID ? '' : 'onclick="tips()"';
         $actions.append([
-                '<a data-contextmenu="columnCreate" data-type="' + column.type + '" data-kanban="' + kanban.id + '" data-parent="' + (column.parentType || '') +  '" class="text-primary">',
+                '<a data-contextmenu="columnCreate" data-type="' + column.type + '" data-kanban="' + kanban.id + '" data-parent="' + (column.parentType || '') +  '" class="text-primary"' + ((column.type !== 'wait') ? tips : '') + '>',
                 '<i class="icon icon-expand-alt"></i>',
                 '</a>'
         ].join(''));
@@ -820,14 +832,16 @@ function updateRegion(regionID, regionData = [])
     if(!regionData) regionData = regions[regionID];
 
     var data = groupBy == 'default' ? regionData.groups : regionData;
-    if(data == null)
+    if(data == null || data.length == 0)
     {
-        $("div[data-id^=" + regionID + "].region").hide();
+        if(groupBy == 'default') $("div[data-id^=" + regionID + "].region").hide();
+        if(groupBy != 'default') $("div[data-id^=" + regionID + "].kanban").hide();
         return false;
     }
     else
     {
-        $("div[data-id^=" + regionID + "].region").show();
+        if(groupBy == 'default') $("div[data-id^=" + regionID + "].region").show();
+        if(groupBy != 'default') $("div[data-id^=" + regionID + "].kanban").show();
     }
     $region.empty();
     $region.data('zui.kanban').render(data);

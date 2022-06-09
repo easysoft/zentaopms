@@ -62,6 +62,7 @@ $lang->project->workdaysExceed     = 'No more than『%s』working days';
 $lang->project->teamMembersCount   = ', there are %s team members.';
 $lang->project->budgetNumber       = '『Budget』must be numbers.';
 $lang->project->budgetGe0          = '『Budget』must be greater than or equal to 0.';
+$lang->project->allProjects        = 'All Projects';
 
 /* Fields. */
 $lang->project->common             = 'Project';

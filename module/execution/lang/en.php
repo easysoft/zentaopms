@@ -271,6 +271,7 @@ $lang->execution->treeOnlyStory     = 'Show Story Only';
 $lang->execution->storyKanban       = 'Story Kanban';
 $lang->execution->storySort         = 'Rank Story';
 $lang->execution->importPlanStory   = $lang->executionCommon . ' is created!\nDo you want to import stories that have been linked to the plan?';
+$lang->execution->needLinkProducts  = 'The execution has not been linked with any product, and the related functions cannot be used. Please link the product first and try again.';
 $lang->execution->iteration         = 'Iterations';
 $lang->execution->iterationInfo     = '%s Iterations';
 $lang->execution->viewAll           = 'View All';
@@ -396,6 +397,7 @@ $lang->execution->projectNotEmpty             = 'Project cannot be empty.';
 $lang->execution->confirmStoryToTask          = $lang->SRCommon . '%s are converted to tasks in the current. Do you want to convert them anyways?';
 $lang->execution->ge                          = "『%s』should be >= actual begin『%s』.";
 $lang->execution->storyDragError              = "The {$lang->SRCommon} is still a draft or has been changed, please drag it after the review";
+$lang->execution->countTip                    = ' (%s member)';
 $lang->execution->pleaseInput                 = "Enter";
 
 /* Statistics. */

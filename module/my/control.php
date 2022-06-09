@@ -411,9 +411,12 @@ EOF;
      * @access public
      * @return void
      */
-    public function task($type = 'assignedTo', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function task($type = 'assignedTo', $param = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         $this->loadModel('task');
+        $this->loadModel('execution');
+        $queryID  = ($type == 'bySearch') ? (int)$param : 0;
+
         /* Save session. */
         if($this->app->viewType != 'json') $this->session->set('taskList', $this->app->getURI(true), 'execution');
 
@@ -430,9 +433,13 @@ EOF;
         {
             $tasks = $this->my->getAssignedByMe($this->app->user->account, 0, $pager, $sort, 0, 'task');
         }
+        elseif($type == 'bySearch')
+        {
+            $tasks = $this->my->getTasksBySearch($this->app->user->account, 0, $pager, $sort, $queryID);
+        }
         else
         {
-            $tasks = $this->task->getUserTasks($this->app->user->account, $type, 0, $pager, $sort);
+            $tasks = $this->task->getUserTasks($this->app->user->account, $type, 0, $pager, $sort, $queryID);
         }
 
         $parents         = array();
@@ -473,6 +480,9 @@ EOF;
         /* Get the story language configuration. */
         $this->app->loadLang('story');
 
+        $actionURL = $this->createLink('my', $this->app->rawMethod, "mode=task&browseType=bySearch&queryID=myQueryID");
+        $this->my->buildTaskSearchForm($queryID, $actionURL);
+
         /* Assign. */
         $this->view->title      = $this->lang->my->common . $this->lang->colon . $this->lang->my->task;
         $this->view->position[] = $this->lang->my->task;
@@ -505,12 +515,13 @@ EOF;
      * @access public
      * @return void
      */
-    public function bug($type = 'assignedTo', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function bug($type = 'assignedTo', $param = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         /* Save session. load Lang. */
         $this->loadModel('bug');
-        if($this->app->viewType != 'json') $this->session->set('bugList', $this->app->getURI(true), 'qa');
         $this->app->loadLang('bug');
+        $queryID  = ($type == 'bySearch') ? (int)$param : 0;
+        if($this->app->viewType != 'json') $this->session->set('bugList', $this->app->getURI(true), 'qa');
 
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
@@ -525,11 +536,15 @@ EOF;
         }
         else
         {
-            $bugs = $this->loadModel('bug')->getUserBugs($this->app->user->account, $type, $sort, 0, $pager);
+            $bugs = $this->loadModel('bug')->getUserBugs($this->app->user->account, $type, $sort, 0, $pager, '', $queryID);
         }
 
         $bugs = $this->bug->checkDelayedBugs($bugs);
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'bug', false);
+
+
+        $actionURL = $this->createLink('my', $this->app->rawMethod, "mode=bug&browseType=bySearch&queryID=myQueryID");
+        $this->my->buildBugSearchForm($queryID, $actionURL);
 
         /* assign. */
         $this->view->title       = $this->lang->my->common . $this->lang->colon . $this->lang->my->bug;
