@@ -17,4 +17,4 @@
 .checkbox input[type=checkbox], .checkbox-inline input[type=checkbox], .radio input[type=radio], .radio-inline input[type=radio] {margin-top: 1px;}
 
 #lifeTimeTips {display: none;}
-#teams_chosen ul .label {margin-top: 3px;}
+#teams_chosen .chosen-drop ul li .label {margin-top: 3px; background: #fff; color: #838a9d; border: 1px solid #d8d8d8;}
