@@ -643,8 +643,8 @@ EOF;
         $cases = array();
         if($type == 'assigntome') $cases = $this->testcase->getByAssignedTo($this->app->user->account, $sort, $pager, 'skip');
         if($type == 'openedbyme') $cases = $this->testcase->getByOpenedBy($this->app->user->account, $sort, $pager, 'skip');
-        if($type == 'bysearch' and $this->app->rawMethod == 'contribute') $cases = $this->my->getTestcasesBySearch($queryID, 'openedbyme', $orderBy, $pager);
-        if($type == 'bysearch' and $this->app->rawMethod == 'work')       $cases = $this->my->getTestcasesBySearch($queryID, 'assigntome', $orderBy, $pager);
+        if($type == 'bysearch' and $this->app->rawMethod == 'contribute') $cases = $this->my->getTestcasesBySearch($queryID, 'contribute', $orderBy, $pager);
+        if($type == 'bysearch' and $this->app->rawMethod == 'work')       $cases = $this->my->getTestcasesBySearch($queryID, 'work', $orderBy, $pager);
 
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'testcase', $type == 'assigntome' ? false : true);
 
@@ -832,18 +832,37 @@ EOF;
      * @param  int    $pageID
      * @return void
      */
-    public function risk($type = 'assignedTo', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function risk($type = 'assignedTo', $param = 0,$orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         /* Set the pager. */
         $this->loadModel('risk');
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
+        /* Build the search form. */
+        $currentMethod = $this->app->rawMethod;
+        $queryID       = ($type == 'bysearch') ? (int)$param : 0;
+        $actionURL     = $this->createLink('my', $currentMethod, "mode=risk&type=bysearch&param=myQueryID");
+        $this->my->buildRiskSearchForm($queryID, $actionURL, $currentMethod);
+
+        /* Get risks by type*/
+        if($type == 'assignedBy')
+        {
+            $risks = $this->my->getAssignedByMe($this->app->user->account, '', $pager, $orderBy, '', 'risk');
+        }
+        else
+        {
+            if($type != 'bysearch') $risks = $this->risk->getUserRisks($type, $this->app->user->account, $orderBy, $pager);
+        }
+
+        if($type == 'bysearch' and $currentMethod == 'contribute') $risks = $this->my->getRisksBySearch($queryID, $currentMethod, $orderBy, $pager);
+        if($type == 'bysearch' and $currentMethod == 'work') $risks = $this->my->getRisksBySearch($queryID, $currentMethod, $orderBy, $pager);
+
         $this->app->session->set('riskList', $this->app->getURI(true), 'project');
 
         $this->view->title      = $this->lang->my->risk;
         $this->view->position[] = $this->lang->my->risk;
-        $this->view->risks      = $type == 'assignedBy' ? $this->loadModel('my')->getAssignedByMe($this->app->user->account, '', $pager, $orderBy, '', 'risk') : $this->loadModel('risk')->getUserRisks($type, $this->app->user->account, $orderBy, $pager);
+        $this->view->risks      = $risks;
         $this->view->users      = $this->loadModel('user')->getPairs('noclosed|noletter');
         $this->view->orderBy    = $orderBy;
         $this->view->pager      = $pager;
