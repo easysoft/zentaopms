@@ -34,6 +34,7 @@ $config->product->search['fields']['estimate'] = $lang->story->estimate;
 $config->product->search['fields']['source']     = $lang->story->source;
 $config->product->search['fields']['sourceNote'] = $lang->story->sourceNote;
 $config->product->search['fields']['fromBug']    = $lang->story->fromBug;
+$config->product->search['fields']['category']   = $lang->story->category;
 
 $config->product->search['fields']['openedBy']     = $lang->story->openedBy;
 $config->product->search['fields']['reviewedBy']   = $lang->story->reviewedBy;
@@ -68,6 +69,7 @@ $config->product->search['params']['estimate']       = array('operator' => '=', 
 $config->product->search['params']['source']         = array('operator' => '=',       'control' => 'select', 'values' => $lang->story->sourceList);
 $config->product->search['params']['sourceNote']     = array('operator' => 'include', 'control' => 'input',  'values' => '');
 $config->product->search['params']['fromBug']        = array('operator' => '=',       'control' => 'input',  'values' => '');
+$config->product->search['params']['category']       = array('operator' => '=',       'control' => 'select', 'values' => $lang->story->categoryList);
 
 $config->product->search['params']['openedBy']       = array('operator' => '=',       'control' => 'select', 'values' => 'users');
 $config->product->search['params']['reviewedBy']     = array('operator' => 'include', 'control' => 'select', 'values' => 'users');
