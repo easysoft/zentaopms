@@ -239,6 +239,8 @@ class tree extends control
                 $datasource   = $this->loadModel('workflowdatasource', 'flow')->getByID($datasourceID);
                 if($datasource)
                 {
+                    $this->app->rawModule = 'workflowdatasource';
+
                     $title      = $datasource->name;
                     $position[] = $datasource->name;
 
@@ -250,18 +252,25 @@ class tree extends control
                 }
             }
         }
-        else
+        /* viewType is workflow building category. */
+        else if(strpos($viewType, '_') !== false)
         {
-            $manageChild  = 'manage' . ucfirst($viewType) . 'Child';
+            $params = explode('_', $viewType);
+            if(count($params) == 2)
+            {
+                $this->app->rawModule = $params[0];
 
-            $title      = $this->lang->tree->common;
-            $position[] = $this->lang->tree->common;
+                $manageChild  = 'manage' . ucfirst($viewType) . 'Child';
 
-            $this->lang->tree->$manageChild = $title;
+                $title      = $this->lang->tree->common;
+                $position[] = $this->lang->tree->common;
 
-            $root = new stdclass();
-            $root->name = $title;
-            $this->view->root = $root;
+                $this->lang->tree->$manageChild = $title;
+
+                $root = new stdclass();
+                $root->name = $title;
+                $this->view->root = $root;
+            }
         }
 
         $parentModules               = $this->tree->getParents($currentModuleID);

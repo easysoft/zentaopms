@@ -466,10 +466,11 @@ class personnelModel extends model
      *
      * @param  int    $objectID
      * @param  int    $objectType
+     * @param  bool   $addCount
      * @access public
      * @return array
      */
-    public function getCopiedObjects($objectID, $objectType)
+    public function getCopiedObjects($objectID, $objectType, $addCount = false)
     {
         $objects = array();
 
@@ -512,6 +513,28 @@ class personnelModel extends model
         }
 
         unset($objects[$objectID]);
+
+        if($addCount)
+        {
+            $objectType = $objectType == 'sprint' ? 'execution' : $objectType;
+            $countPairs = $this->dao->select('root, COUNT(*) as count')->from(TABLE_TEAM)
+                ->where('type')->eq($objectType)
+                ->andWhere('root')->in(array_keys($objects))
+                ->beginIF($objectType == 'execution')
+                ->orWhere('( type')->eq('project')
+                ->andWhere('root')->eq($parentID)->markRight(1)
+                ->fi()
+                ->groupBy('root')
+                ->fetchPairs('root');
+
+            foreach($objects as $objectID => $objectName)
+            {
+                $memberCount = zget($countPairs, $objectID, 0);
+                $countTip    = $memberCount > 1 ? str_replace('member', 'members', $this->lang->personnel->countTip) : $this->lang->personnel->countTip;
+                $objects[$objectID] = $objectName . sprintf($countTip, $memberCount);
+            }
+        }
+
         return $objects;
     }
 

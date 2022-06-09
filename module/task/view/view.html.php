@@ -112,7 +112,7 @@
                 <th class='w-40px'> <?php echo $lang->task->lblPri;?></th>
                 <th>                <?php echo $lang->task->name;?></th>
                 <th class='w-100px'><?php echo $lang->task->deadline;?></th>
-                <th class='w-80px'> <?php echo $lang->task->assignedTo;?></th>
+                <th class='w-120px'> <?php echo $lang->task->assignedTo;?></th>
                 <th class='w-80px'> <?php echo $lang->task->status;?></th>
                 <th class='w-60px visible-lg'><?php echo $lang->task->consumedAB . $lang->task->lblHour;?></th>
                 <th class='w-60px visible-lg'><?php echo $lang->task->leftAB . $lang->task->lblHour;?></th>
@@ -132,13 +132,12 @@
                 </td>
                 <td class='text-left' title='<?php echo $child->name;?>'><a class="iframe" data-width="90%" href="<?php echo $this->createLink('task', 'view', "taskID=$child->id", '', true); ?>"><?php echo $child->name;?></a></td>
                 <td><?php echo $child->deadline;?></td>
-                <td><?php echo zget($users, $child->assignedTo);?></td>
+                <td id='assignedTo'><?php $this->task->printAssignedHtml($child, $users);?></td>
                 <td><?php echo $this->processStatus('task', $child);?></td>
                 <td class='visible-lg'><?php echo $child->consumed;?></td>
                 <td class='visible-lg'><?php echo $child->left;?></td>
                 <td class='c-actions'>
                   <?php
-                  common::printIcon('task', 'assignTo', "executionID=$child->execution&taskID=$child->id", $child, 'list', '', '', 'iframe showinonlybody', true);
                   common::printIcon('task', 'start',    "taskID=$child->id", $child, 'list', '', '', 'iframe showinonlybody', true);
                   common::printIcon('task', 'activate', "taskID=$child->id", $child, 'list', '', '', 'iframe showinonlybody', true);
                   common::printIcon('task', 'close',    "taskID=$child->id", $child, 'list', '', '', 'iframe showinonlybody', true);

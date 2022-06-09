@@ -9,10 +9,10 @@
 .dropdown-menu > li {padding: 0 10px;}
 .dropdown-menu > li > a > .icon {position: relative; left: -5px;}
 
-#kanbanContainer {padding-bottom: 0; margin-bottom: 0;}
+#kanbanContainer {padding-bottom: 0; margin-bottom: 0; border: unset;}
 #kanbanContainer.fullscreen {overflow: auto;}
 
-.region {border: 1px solid #dcdcdc; background-color: #fff;}
+.region {border: 0px solid #dcdcdc; background-color: #fff;}
 .region + .region {margin-top: 20px;}
 .region .region-header {padding: 10px;}
 .region .region-header strong {font-size: 14px; color: #999EAB}
@@ -136,3 +136,7 @@
 @-moz-document url-prefix(){ .region .kanban-lane-items{scrollbar-width:thin; padding:5px 0px 5px 5px !important;} .region .kanban-card .info .user{right: -6px !important;}}
 #archivedCards .table-empty-tip {border-style: hidden;}
 #archivedColumns .table-empty-tip {border-style: hidden;}
+
+#main > .container {padding: 0px 0px 0px 10px; margin: -10px 0px 0px 0px;}
+@media screen and (max-width: 1366px){#main > .container {padding: 0px 10px 0px 10px; margin: -10px 0px 0px 0px;}}
+.panel-body {padding: 0px;}

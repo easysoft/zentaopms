@@ -52,6 +52,7 @@ js::set('vision', $this->config->vision);
 js::set('productCount', count($productNames));
 js::set('executionID', $execution->id);
 js::set('reviewStoryParis', $reviewStoryParis);
+js::set('needLinkProducts', $lang->execution->needLinkProducts);
 js::set('rdSearchValue', '');
 
 $canSortRegion       = commonModel::hasPriv('kanban', 'sortRegion') && count($regions) > 1;
@@ -110,9 +111,6 @@ js::set('priv',
         'canUnlinkStory'        => common::hasPriv('execution', 'unlinkStory'),
     )
 );
-js::set('hasStoryButton', $hasStoryButton);
-js::set('hasBugButton', $hasBugButton);
-js::set('hasTaskButton', $hasTaskButton);
 ?>
 <div id='mainMenu' class='clearfix'>
   <div class='btn-toolbar pull-left'>

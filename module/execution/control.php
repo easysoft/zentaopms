@@ -1496,7 +1496,7 @@ class execution extends control
         $this->view->name                = $name;
         $this->view->code                = $code;
         $this->view->team                = $team;
-        $this->view->teams               = array(0 => '', $projectID => (isset($project->name) ? $project->name : '')) + $this->execution->getCanCopyObjects((int)$projectID);
+        $this->view->teams               = array(0 => '') + $this->execution->getCanCopyObjects((int)$projectID);
         $this->view->allProjects         = array(0 => '') + $this->project->getPairsByModel('all', 0, 'noclosed');
         $this->view->executionID         = $executionID;
         $this->view->productID           = $productID;
@@ -2730,7 +2730,7 @@ class execution extends control
 
         $currentMembers = $this->execution->getTeamMembers($executionID);
         $members2Import = $this->execution->getMembers2Import($team2Import, array_keys($currentMembers));
-        $teams2Import   = $this->loadModel('personnel')->getCopiedObjects($executionID, 'sprint');
+        $teams2Import   = $this->loadModel('personnel')->getCopiedObjects($executionID, 'sprint', true);
         $teams2Import   = array('' => '') + $teams2Import;
 
         /* Append users for get users. */

@@ -1414,14 +1414,12 @@ class kanbanModel extends model
 
                     if($lane->type == 'task')
                     {
-                        if($searchValue != '' and strpos($object->name, $searchValue) === false) continue;
                         $cardData['name']   = $object->name;
                         $cardData['status'] = $object->status;
                         $cardData['left']   = $object->left;
                     }
                     else
                     {
-                        if($searchValue != '' and strpos($object->title, $searchValue) === false) continue;
                         $cardData['title'] = $object->title;
                     }
 
@@ -3070,28 +3068,41 @@ class kanbanModel extends model
         {
             $actions .= "<a data-toggle='dropdown' $btnColor class='btn btn-link dropdown-toggle setting' type='button'>" . '<i class="icon icon-cog-outline"></i> ' . $this->lang->kanban->setting . '</a>';
             $actions .= "<ul id='kanbanActionMenu' class='dropdown-menu text-left'>";
-            if(common::hasPriv('kanban', 'createRegion') and $CRKanban) $actions .= '<li>' . html::a(helper::createLink('kanban', 'createRegion', "kanbanID=$kanban->id", '', true), '<i class="icon icon-plus"></i>' . $this->lang->kanban->createRegion, '', "class='iframe btn btn-link'") . '</li>';
-            $importWidth = $this->app->getClientLang() == 'en' ? '700' : '550';
-            if(common::hasPriv('kanban', 'import') and $CRKanban) $actions .= '<li>' . html::a(helper::createLink('kanban', 'import', "kanbanID=$kanban->id", '', true), '<i class="icon icon-import"></i>' . $this->lang->kanban->import, '', "class='iframe btn btn-link' data-width=$importWidth") . '</li>';
-            if(common::hasPriv('kanban', 'enableArchived') and $CRKanban) $actions .= '<li>' . html::a(helper::createLink('kanban', 'enableArchived', "kanbanID=$kanban->id", '', true), '<i class="icon icon-card-archive"></i>' . $this->lang->kanban->archived, '', "class='iframe btn btn-link' data-width=400") . '</li>';
+
+            $columnActions = '';
+            if(common::hasPriv('kanban', 'setColumnWidth') and $CRKanban) $columnActions .= '<li>' . html::a(helper::createLink('kanban', 'setColumnWidth', "kanbanID=$kanban->id", '', true), '<i class="icon icon-size-width"></i>' . $this->lang->kanban->columnWidth, '', "class='iframe btn btn-link' data-width=400") . '</li>';
             if($printSetHeightBtn and $CRKanban)
             {
-                $width    = $this->app->getClientLang() == 'en' ? '750' : '650';
-                $actions .= '<li>' . html::a(helper::createLink('kanban', 'setLaneHeight', "kanbanID=$kanban->id", '', true), '<i class="icon icon-size-height"></i>' . $this->lang->kanban->laneHeight, '', "class='iframe btn btn-link' data-width='$width'") . '</li>';
-
+                $width = $this->app->getClientLang() == 'en' ? '750' : '650';
+                $columnActions .= '<li>' . html::a(helper::createLink('kanban', 'setLaneHeight', "kanbanID=$kanban->id", '', true), '<i class="icon icon-size-height"></i>' . $this->lang->kanban->laneHeight, '', "class='iframe btn btn-link' data-width='$width'") . '</li>';
             }
-            if(common::hasPriv('kanban', 'setColumnWidth') and $CRKanban) $actions .= '<li>' . html::a(helper::createLink('kanban', 'setColumnWidth', "kanbanID=$kanban->id", '', true), '<i class="icon icon-size-width"></i>' . $this->lang->kanban->columnWidth, '', "class='iframe btn btn-link' data-width=400") . '</li>';
-            if(common::hasPriv('kanban', 'performable') and $CRKanban) $actions .= '<li>' . html::a(helper::createLink('kanban', 'performable', "kanbanID=$kanban->id", '', true), '<i class="icon icon-checked"></i>' . $this->lang->kanban->manageProgress, '', "class='iframe btn btn-link' data-width=40%") . '</li>';
+            $actions .= $columnActions;
+
+            $commonActions = '';
+            if(common::hasPriv('kanban', 'createRegion') and $CRKanban) $commonActions .= '<li>' . html::a(helper::createLink('kanban', 'createRegion', "kanbanID=$kanban->id", '', true), '<i class="icon icon-plus"></i>' . $this->lang->kanban->createRegion, '', "class='iframe btn btn-link'") . '</li>';
+            $importWidth = $this->app->getClientLang() == 'en' ? '700' : '550';
+            if(common::hasPriv('kanban', 'import') and $CRKanban) $commonActions .= '<li>' . html::a(helper::createLink('kanban', 'import', "kanbanID=$kanban->id", '', true), '<i class="icon icon-import"></i>' . $this->lang->kanban->import, '', "class='iframe btn btn-link' data-width=$importWidth") . '</li>';
+            if(common::hasPriv('kanban', 'enableArchived') and $CRKanban) $commonActions .= '<li>' . html::a(helper::createLink('kanban', 'enableArchived', "kanbanID=$kanban->id", '', true), '<i class="icon icon-card-archive"></i>' . $this->lang->kanban->archived, '', "class='iframe btn btn-link' data-width=400") . '</li>';
+            if(common::hasPriv('kanban', 'performable') and $CRKanban) $commonActions .= '<li>' . html::a(helper::createLink('kanban', 'performable', "kanbanID=$kanban->id", '', true), '<i class="icon icon-checked"></i>' . $this->lang->kanban->manageProgress, '', "class='iframe btn btn-link' data-width=40%") . '</li>';
+
+            if($columnActions and $commonActions)
+            {
+                $actions .= "<li class='divider'></li>";
+            }
+            $actions .= $commonActions;
 
             $kanbanActions = '';
             if(common::hasPriv('kanban', 'edit'))  $kanbanActions .= '<li>' . html::a(helper::createLink('kanban', 'edit', "kanbanID=$kanban->id", '', true), '<i class="icon icon-edit"></i>' . $this->lang->kanban->edit, '', "class='iframe btn btn-link' data-width='75%'") . '</li>';
             if(common::hasPriv('kanban', 'close') and $kanban->status == 'active') $kanbanActions .= '<li>' . html::a(helper::createLink('kanban', 'close', "kanbanID=$kanban->id", '', true), '<i class="icon icon-off"></i>' . $this->lang->kanban->close, '', "class='iframe btn btn-link'") . '</li>';
             if(common::hasPriv('kanban', 'activate') and $kanban->status == 'closed') $kanbanActions .= '<li>' . html::a(helper::createLink('kanban', 'activate', "kanbanID=$kanban->id", '', true), '<i class="icon icon-magic"></i>' . $this->lang->kanban->activate, '', "class='iframe btn btn-link'") . '</li>';
             if(common::hasPriv('kanban', 'delete')) $kanbanActions .= '<li>' . html::a(helper::createLink('kanban', 'delete', "kanbanID=$kanban->id"), '<i class="icon icon-trash"></i>' . $this->lang->kanban->delete, 'hiddenwin', "class='btn btn-link'") . '</li>';
-            if($kanbanActions)
+
+            if($commonActions and $kanbanActions)
             {
-                $actions .= $printRegionBtn ? "<li class='divider'></li>" . $kanbanActions : $kanbanActions;
+                $actions .= "<li class='divider'></li>";
             }
+            $actions .= $kanbanActions;
+
             $actions .= "</ul>";
         }
 
@@ -3429,11 +3440,29 @@ class kanbanModel extends model
      */
     public function getGroupBySpaceList($spaceIdList, $kanbanIdList = '')
     {
-        return $this->dao->select('*')->from(TABLE_KANBAN)
+        $spaceList = $this->dao->select('*')->from(TABLE_KANBAN)
             ->where('deleted')->eq(0)
             ->andWhere('space')->in($spaceIdList)
             ->beginIF($kanbanIdList)->andWhere('id')->in($kanbanIdList)->fi()
             ->fetchGroup('space', 'id');
+
+        $kanbanIDList = array();
+        foreach($spaceList as $kanbanList) $kanbanIDList = array_merge_recursive($kanbanIDList, array_keys($kanbanList));
+        $cardsCount = $this->dao->select('kanban, COUNT(*) as count')->from(TABLE_KANBANCARD)
+            ->where('deleted')->eq(0)
+            ->andWhere('kanban')->in($kanbanIDList)
+            ->groupBy('kanban')
+            ->fetchPairs('kanban');
+
+        foreach($spaceList as $kanbanList)
+        {
+            foreach($kanbanList as $kanban)
+            {
+                $kanban->cardsCount = zget($cardsCount, $kanban->id, 0);
+            }
+        }
+
+        return $spaceList;
     }
 
     /**
