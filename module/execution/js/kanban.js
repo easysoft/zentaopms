@@ -765,7 +765,7 @@ function renderHeaderCol($column, column, $header, kanbanData)
     var printMoreBtn = (columnPrivs.includes('setColumn') || columnPrivs.includes('setWIP'));
 
     /* Render more menu. */
-    if(column.type == 'backlog' || column.type == 'wait' || column.type == 'unconfirmed'  && $actions.children('.text-primary').length == 0)
+    if((column.type == 'backlog' || column.type == 'wait' || column.type == 'unconfirmed') && $actions.children('.text-primary').length == 0)
     {
         var tips = productID ? '' : 'onclick="tips()"';
         $actions.append([
