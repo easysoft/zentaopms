@@ -518,6 +518,13 @@ class router extends baseRouter
             /* Remove module and method. */
             $params = array_slice($params, 2);                              // $params = array(1);
 
+            if($moduleName == 'flow' and $methodName == 'browse')
+            {
+                $mode = 'browse';
+                if(count($params) > 0) $mode = array_shift($params);
+                array_unshift($params, $mode);
+            }
+
             array_unshift($params, $methodName);                            // $params = array('operate', 1);
             array_unshift($params, $moduleName);                            // $params = array('flow', 'operate', 1);
 
@@ -537,6 +544,12 @@ class router extends baseRouter
 
             $params = array_reverse($params);                       // $params = array('id' => 1);
 
+            if($moduleName == 'flow' and $methodName == 'browse')
+            {
+                $mode = 'browse';
+                if(count($params) > 0) $mode = array_pop($params);
+                $params['mode'] = $mode;
+            }
             $params[$this->config->methodVar] = $methodName;        // $param = array('id' => 1, 'f' => 'operate');
             $params[$this->config->moduleVar] = $moduleName;        // $param = array('id' => 1, 'f' => 'operate', 'm' => 'flow');
 
