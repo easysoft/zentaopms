@@ -2205,6 +2205,7 @@ class execution extends control
         if(empty($groupBy)) $groupBy = 'default';
 
         /* Save to session. */
+        $this->session->set('taskSearchValue', '');
         $uri = $this->app->getURI(true);
         $this->app->session->set('taskList', $uri, 'execution');
         $this->app->session->set('bugList',  $uri, 'qa');
@@ -3831,6 +3832,7 @@ class execution extends control
 
         if($lastEditedTime > $enterTime or $groupBy != 'default' or !empty($searchValue))
         {
+            if($from == 'execution') $this->session->set('taskSearchValue', $searchValue);
             $kanbanGroup = $from == 'execution' ? $this->loadModel('kanban')->getExecutionKanban($executionID, $browseType, $groupBy, $searchValue) : $this->loadModel('kanban')->getRDKanban($executionID, $browseType, 'id_asc', 0, $groupBy, $searchValue);
             return print(json_encode($kanbanGroup));
         }

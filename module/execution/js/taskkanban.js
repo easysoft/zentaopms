@@ -384,18 +384,14 @@ function updateKanban(kanbanID, data)
 
     if(data == null)
     {
-        $("#kanbans").hide();
-        $("#emptyBox").removeClass('hidden');
+        $kanban.hide();
         return false;
     }
-    else
-    {
-        $("#kanbans").show();
-        $("#emptyBox").addClass('hidden');
-    }
+    $kanban.show();
 
     $kanban.data('zui.kanban').render(data);
     resetKanbanHeight();
+    return true;
 }
 
 /**
@@ -1185,7 +1181,7 @@ $(function()
     var lastUpdateData;
     setInterval(function()
     {
-        $.get(createLink('execution', 'ajaxUpdateKanban', "executionID=" + executionID + "&entertime=" + entertime + "&browseType=" + browseType + "&groupBy=" + groupBy), function(data)
+        $.get(createLink('execution', 'ajaxUpdateKanban', "executionID=" + executionID + "&entertime=" + entertime + "&browseType=" + browseType + "&groupBy=" + groupBy + '&from=execution&searchValue=' + searchValue), function(data)
         {
             if(data && lastUpdateData !== data)
             {
@@ -1315,7 +1311,9 @@ function searchCards(value)
     searchValue = value;
     $.get(createLink('execution', 'ajaxUpdateKanban', "executionID=" + executionID + "&entertime=0&browseType=" + browseType + "&groupBy=" + groupBy + '&from=execution&searchValue=' + value), function(data)
     {
+        lastUpdateData = data;
         var kanbanData = $.parseJSON(data);
+        var hideAll    = true;
         if(groupBy == 'default')
         {
             var kanbanLane = '';
@@ -1325,12 +1323,21 @@ function searchCards(value)
                 if(kanbanList[i] == 'bug')   kanbanLane = kanbanData.bug;
                 if(kanbanList[i] == 'task')  kanbanLane = kanbanData.task;
 
-                if(browseType == kanbanList[i] || browseType == 'all') updateKanban(kanbanList[i], kanbanLane);
+                if(browseType == kanbanList[i] || browseType == 'all') hideAll = !updateKanban(kanbanList[i], kanbanLane) && hideAll;
             }
         }
         else
         {
-            updateKanban(browseType, kanbanGroup[groupBy]);
+            hideAll = !updateKanban(browseType, kanbanData[groupBy]) && hideAll;
+        }
+
+        if(hideAll)
+        {
+            $("#emptyBox").removeClass('hidden');
+        }
+        else
+        {
+            $("#emptyBox").addClass('hidden');
         }
     });
 }
