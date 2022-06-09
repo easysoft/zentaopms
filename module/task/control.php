@@ -241,9 +241,7 @@ class task extends control
             if(!isset($moduleOptionMenu[$task->module])) $task->module = 0;
         }
 
-        $stories = $this->story->getExecutionStoryPairs($executionID, 0, 'all', '', 'full', 'unclosed');
-
-        if($this->config->vision == 'lite') $stories = $stories + array('', '');
+        $stories = $this->story->getExecutionStoryPairs($executionID, 0, 'all', '', 'full', 'active');
 
         /* Get block id of assinge to me. */
         $blockID = 0;
@@ -542,7 +540,7 @@ class task extends control
         $this->view->title         = $this->lang->task->edit . 'TASK' . $this->lang->colon . $this->view->task->name;
         $this->view->position[]    = $this->lang->task->common;
         $this->view->position[]    = $this->lang->task->edit;
-        $this->view->stories       = $this->story->getExecutionStoryPairs($this->view->execution->id);
+        $this->view->stories       = $this->story->getExecutionStoryPairs($this->view->execution->id, 0, 'all', '', 'full', 'active');
         $this->view->tasks         = $tasks;
         $this->view->users         = $this->loadModel('user')->getPairs('nodeleted', "{$this->view->task->openedBy},{$this->view->task->canceledBy},{$this->view->task->closedBy}");
         $this->view->showAllModule = isset($this->config->execution->task->allModule) ? $this->config->execution->task->allModule : '';
