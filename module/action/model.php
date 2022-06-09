@@ -3,7 +3,7 @@
  * The model file of action module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     action
  * @version     $Id: model.php 5028 2013-07-06 02:59:41Z wyd621@gmail.com $
@@ -678,6 +678,79 @@ class actionModel extends model
             }
 
             $trash->objectName = isset($objectNames[$objectType][$trash->objectID]) ? $objectNames[$objectType][$trash->objectID] : '';
+        }
+
+        return $trashes;
+    }
+
+    /**
+     * Get deleted objects by search.
+     *
+     * @param  string $objectType
+     * @param  string $type all|hidden
+     * @param  int    $queryID
+     * @param  string $orderBy
+     * @param  object $pager
+     * @access public
+     * @return void
+     */
+    public function getTrashesBySearch($objectType, $type, $queryID, $orderBy, $pager = null)
+    {
+        if($queryID and $queryID != 'myQueryID')
+        {
+            $query = $this->loadModel('search')->getQuery($queryID);
+            if($query)
+            {
+                $this->session->set('trashQuery', $query->sql);
+                $this->session->set('trashForm', $query->form);
+            }
+            else
+            {
+                $this->session->set('trashQuery', ' 1 = 1');
+            }
+        }
+        else
+        {
+            if($this->session->trashQuery == false) $this->session->set('trashQuery', ' 1 = 1');
+        }
+
+        $extra      = $type == 'hidden' ? self::BE_HIDDEN : self::CAN_UNDELETED;
+        $trashQuery = $this->session->trashQuery;
+        $trashQuery = preg_replace("/`objectID`/", 't1.`objectID`', $trashQuery);
+        $trashQuery = preg_replace("/`actor`/", 't1.`actor`', $trashQuery);
+        $trashQuery = preg_replace("/`date`/", 't1.`date`', $trashQuery);
+        $table      = $this->config->objectTables[$objectType];
+        $nameField  = isset($this->config->action->objectNameFields[$objectType]) ? 't2.' . "`{$this->config->action->objectNameFields[$objectType]}`" : '';
+
+        if($nameField) $trashQuery = preg_replace("/`objectName`/", $nameField, $trashQuery);
+
+        if($objectType != 'pipeline')
+        {
+            $trashes = $this->dao->select("t1.*, $nameField as objectName")->from(TABLE_ACTION)->alias('t1')
+                ->leftJoin($table)->alias('t2')->on('t1.objectID=t2.id')
+                ->where('t1.action')->eq('deleted')
+                ->andWhere($trashQuery)
+                ->andWhere('t1.extra')->eq($extra)
+                ->andWhere('t1.vision')->eq($this->config->vision)
+                ->beginIF($objectType != 'all')->andWhere('t1.objectType')->eq($objectType)->fi()
+                ->orderBy($orderBy)
+                ->page($pager)
+                ->fetchAll('objectID');
+        }
+        else
+        {
+            $trashes = $this->dao->select("t1.*, t1.objectType as type, t2.name as objectName, t2.type as objectType")->from(TABLE_ACTION)->alias('t1')
+                ->leftJoin(TABLE_PIPELINE)->alias('t2')->on('t1.objectID=t2.id')
+                ->where('t1.action')->eq('deleted')
+                ->andWhere($trashQuery)
+                ->andWhere('t1.extra')->eq($extra)
+                ->andWhere('t1.vision')->eq($this->config->vision)
+                ->andWhere('(t2.type')->eq('gitlab')
+                ->orWhere('t2.type')->eq('jenkins')
+                ->markRight(1)
+                ->orderBy($orderBy)
+                ->page($pager)
+                ->fetchAll('objectID');
         }
 
         return $trashes;
@@ -1930,5 +2003,21 @@ class actionModel extends model
         }
 
         return $actions;
+    }
+
+    /**
+     * Build search form.
+     *
+     * @param  int    $queryID
+     * @param  string $actionURL
+     * @access public
+     * @return void
+     */
+    public function buildTrashSearchForm($queryID, $actionURL)
+    {
+        $this->config->trash->search['actionURL'] = $actionURL;
+        $this->config->trash->search['queryID']   = $queryID;
+
+        $this->loadModel('search')->setSearchParams($this->config->trash->search);
     }
 }

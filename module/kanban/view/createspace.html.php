@@ -3,7 +3,7 @@
  * The createspace file of kanban module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2021 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Shujie Tian <tianshujie@easycorp.ltd>
  * @package     kanban
  * @version     $Id: createspace.html.php 935 2021-12-08 14:04:24Z $
@@ -20,7 +20,7 @@
     <table class='table table-form'>
       <tr>
         <th><?php echo $lang->kanbanspace->type;?></th>
-        <td><?php echo html::select('type', $typeList, $type, "onchange='changeType(this.value)' class='form-control chosen'");?></td>
+        <td><?php echo html::radio('type', $typeList, $type, "onchange='changeType(this.value)'");?></td>
         <td></td>
       </tr>
       <tr>

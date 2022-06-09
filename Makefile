@@ -23,6 +23,7 @@ clean:
 	rm -fr zentaoxx
 	rm -fr tmp/
 	rm -f  *.sh
+	rm -f *.deb *.rpm
 common:
 	mkdir zentaopms
 	cp -fr api zentaopms/
@@ -176,7 +177,7 @@ deb:
 	cp ZenTaoPMS.${VERSION}.zip buildroot/opt
 	cd buildroot/opt; unzip ZenTaoPMS.${VERSION}.zip; mv zentaopms zentao; rm ZenTaoPMS.${VERSION}.zip
 	sed -i 's/index.php/\/zentao\/index.php/' buildroot/opt/zentao/www/.htaccess
-	sudo dpkg -b buildroot/ ZenTaoPMS_${VERSION}_1_all.deb
+	sudo dpkg -b buildroot/ ZenTaoPMS.${VERSION}.1.all.deb
 	rm -rf buildroot
 rpm:
 	mkdir ~/rpmbuild/SPECS -p
@@ -252,6 +253,9 @@ ciCommon:
 	rm -fr zentaopms zentaoxx zentaoxx.*.zip
 	make en
 	rm -fr zentaopms zentaoxx zentaoxx.*.zip
+	rm -f $(BUILD_PATH)/ZenTao*.zip $(RELEASE_PATH)/ZenTaoPMS.$(VERSION).zip $(RELEASE_PATH)/ZenTaoALM.$(VERSION).int.zip
+	cp ZenTaoPMS.$(VERSION).zip $(BUILD_PATH)
+	cp ZenTaoPMS.$(VERSION).zip ZenTaoALM.$(VERSION).int.zip $(RELEASE_PATH)
 ci:
 	make ciCommon
 	php tools/packZip.php $(VERSION)
@@ -263,12 +267,7 @@ ci:
 	php tools/packRpm.php $(VERSION)
 	sh rpm.sh
 	rm -rf tmp/
-	rm -f zentaobiz*.zip zentaomax*.zip $(BUILD_PATH)/ZenTaoPMS.$(VERSION).zip $(RELEASE_PATH)/ZenTaoALM.$(VERSION)*.zip $(RELEASE_PATH)/ZenTaoPMS.$(VERSION)*.zip $(RELEASE_PATH)/*.deb $(RELEASE_PATH)/*.rpm *.sh
-	cp ZenTaoPMS.$(VERSION).zip $(BUILD_PATH)
-	mv *.zip *.deb *.rpm $(RELEASE_PATH)
-lite:
-	make ciCommon
-	php tools/packZip.php $(VERSION) $(LITEVERSION)
-	rm -f zentaobiz*.zip zentaomax*.zip $(BUILD_PATH)/ZenTaoPMS.$(VERSION).zip $(RELEASE_PATH)/ZenTaoALM.$(VERSION)*.zip $(RELEASE_PATH)/ZenTaoPMS.$(VERSION)*.zip $(RELEASE_PATH)/ZenTaoALM.$(LITEVERSION)*.zip $(RELEASE_PATH)/ZenTaoPMS.$(LITEVERSION)*.zip *.sh
-	cp ZenTaoPMS.$(VERSION).zip $(BUILD_PATH)
-	mv *.zip $(RELEASE_PATH)
+	rm -f zentaobiz*.zip zentaomax*.zip $(RELEASE_PATH)/ZenTaoALM.$(VERSION)*.zip $(RELEASE_PATH)/ZenTaoPMS.$(VERSION)*.zip $(RELEASE_PATH)/*.deb $(RELEASE_PATH)/*.rpm *.sh $(RELEASE_PATH)/pmsPack/*.zip $(RELEASE_PATH)/pmsPack/deb/* $(RELEASE_PATH)/pmsPack/rpm/*
+	mv ZenTaoALM.$(VERSION).int.php*.zip ZenTaoPMS.$(VERSION).php*.zip $(RELEASE_PATH)/pmsPack
+	mv *.deb $(RELEASE_PATH)/pmsPack/deb
+	mv *.rpm $(RELEASE_PATH)/pmsPack/rpm

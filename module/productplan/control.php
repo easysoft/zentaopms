@@ -3,7 +3,7 @@
  * The control file of productplan module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     productplan
  * @version     $Id: control.php 4659 2013-04-17 06:45:08Z chencongzhi520@gmail.com $
@@ -283,15 +283,16 @@ class productplan extends control
      *
      * @param  int    $productID
      * @param  int    $branch
-     * @param  string $orderBy
      * @param  string $browseType
+     * @param  int    $queryID
+     * @param  string $orderBy
      * @param  int    $recTotal
      * @param  int    $recPerPage
      * @param  int    $pageID
      * @access public
      * @return void
      */
-    public function browse($productID = 0, $branch = '', $browseType = 'undone', $orderBy = 'begin_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1 )
+    public function browse($productID = 0, $branch = '', $browseType = 'undone', $queryID = 0, $orderBy = 'begin_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1 )
     {
         $branchID = $branch === '' ? 'all' : $branch;
         if(!$branch) $branch = 0;
@@ -312,6 +313,11 @@ class productplan extends control
         $branchList       = $this->branch->getList($productID, 0, 'all');
         $branchStatusList = array();
         foreach($branchList as $productBranch) $branchStatusList[$productBranch->id] = $productBranch->status;
+
+        /* Build the search form. */
+        $queryID   = $browseType == 'bySearch' ? (int)$queryID : 0;
+        $actionURL = $this->createLink('productplan', 'browse', "productID=$productID&branch=$branch&browseType=bySearch&queryID=myQueryID&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID");
+        $this->productplan->buildSearchForm($queryID, $actionURL, $product);
 
         if($viewType == 'kanban')
         {
@@ -353,10 +359,11 @@ class productplan extends control
         $this->view->browseType       = $browseType;
         $this->view->viewType         = $viewType;
         $this->view->orderBy          = $orderBy;
-        $this->view->plans            = $this->productplan->getList($productID, $branch, $browseType, $pager, $sort);
+        $this->view->plans            = $this->productplan->getList($productID, $branch, $browseType, $pager, $sort, "", $queryID);
         $this->view->pager            = $pager;
         $this->view->projects         = $this->product->getProjectPairsByProduct($productID, $branch);
         $this->view->statusList       = $this->lang->productplan->featureBar['browse'];
+        $this->view->queryID          = $queryID;
         $this->display();
     }
 

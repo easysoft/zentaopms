@@ -3,7 +3,7 @@
  * The model file of product module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     product
  * @version     $Id: model.php 5118 2013-07-12 07:41:41Z chencongzhi520@gmail.com $
@@ -872,11 +872,14 @@ class productModel extends model
     {
         $oldProduct = $this->getById($productID);
         $now        = helper::now();
-        $product= fixer::input('post')
+        $product    = fixer::input('post')
             ->add('id', $productID)
             ->setDefault('status', 'closed')
-            ->remove('comment')->get();
+            ->stripTags($this->config->product->editor->close['id'], $this->config->allowedTags)
+            ->remove('comment')
+            ->get();
 
+        $product = $this->loadModel('file')->processImgURL($product, $this->config->product->editor->close['id'], $this->post->uid);
         $this->dao->update(TABLE_PRODUCT)->data($product)
             ->autoCheck()
             ->checkFlow()

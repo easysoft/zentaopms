@@ -54,7 +54,7 @@ foreach(array('zh-cn', 'en') as $langType)
 
         $command .= "sed -i 's/index.php/\/zentao\/index.php/' zentao/www/.htaccess\n";
         $command .= "cd ../../\n";
-        $command .= "sudo dpkg -b buildroot/ {$packPrefix}_{$version}_php{$phpVersion}_1_all.deb\n";
+        $command .= "sudo dpkg -b buildroot/ {$packPrefix}.{$version}.php{$phpVersion}.1.all.deb\n";
         $command .= "mv *.deb ../../\n";
 
         $command .= "rm -rf buildroot\n";

@@ -3,7 +3,7 @@
  * The action module zh-cn file of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     action
  * @version     $Id: zh-cn.php 4955 2013-07-02 01:47:21Z chencongzhi520@gmail.com $
@@ -42,6 +42,7 @@ $lang->action->hideAll     = '全部隐藏';
 $lang->action->editComment = '修改备注';
 $lang->action->create      = '添加备注';
 $lang->action->comment     = '备注';
+$lang->action->byQuery     = '搜索';
 
 $lang->action->undeleteAction = '还原数据';
 $lang->action->hideOneAction  = '隐藏数据';

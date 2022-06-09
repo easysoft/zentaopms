@@ -3,7 +3,7 @@
  * The create view of task module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     task
  * @version     $Id: create.html.php 5090 2013-07-10 05:49:24Z zhujinyonging@gmail.com $
@@ -16,6 +16,7 @@
 <?php js::set('toTaskList', !empty($task->id));?>
 <?php js::set('blockID', $blockID);?>
 <?php js::set('teamMemberError', $lang->task->error->teamMember);?>
+<?php js::set('vision', $config->vision);?>
 <?php if(!empty($storyID)):?>
 <style> .title-group.required > .required:after {right: 110px;}</style>
 <?php endif;?>
