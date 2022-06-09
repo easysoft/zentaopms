@@ -793,6 +793,28 @@ class doc extends control
     }
 
     /**
+     * Ajax get docs by lib.
+     *
+     * @param  int    $libID
+     * @access public
+     * @return void
+     */
+    public function ajaxGetDocs($libID)
+    {
+        if(!$libID) return print(html::select('doc', '', '', "class='form-control chosen'"));
+
+        $docIdList = $this->doc->getPrivDocs($libID, 0);
+        $docs = $this->dao->select('id, title')->from(TABLE_DOC)
+            ->where('lib')->eq($libID)
+            ->andWhere('deleted')->eq(0)
+            ->andWhere('id')->in($docIdList)
+            ->orderBy('`order` asc')
+            ->fetchPairs();
+
+        return print(html::select('doc', $docs, '', "class='form-control chosen'"));
+    }
+
+    /**
      * Ajax save draft.
      *
      * @param int $docID
