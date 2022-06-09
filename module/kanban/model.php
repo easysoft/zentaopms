@@ -1810,8 +1810,6 @@ class kanbanModel extends model
         if(strpos(",{$space->team},", ",$account,") === false) $space->team .= ",$account";
         if(strpos(",{$space->team},", ",$space->owner,") === false) $space->team .= ",$space->owner";
 
-         $space = $this->loadModel('file')->processImgURL($space, $this->config->kanban->editor->createspace['id'], $this->post->uid);
-
         $this->dao->insert(TABLE_KANBANSPACE)->data($space)
             ->autoCheck()
             ->batchCheck($this->config->kanban->createspace->requiredFields, 'notempty')
@@ -1821,7 +1819,7 @@ class kanbanModel extends model
         {
             $spaceID = $this->dao->lastInsertID();
             $this->dao->update(TABLE_KANBANSPACE)->set('`order`')->eq($spaceID)->where('id')->eq($spaceID)->exec();
-            $this->file->saveUpload('kanbanspace', $spaceID);
+            $this->loadModel('file')->saveUpload('kanbanspace', $spaceID);
             $this->file->updateObjectID($this->post->uid, $spaceID, 'kanbanspace');
 
             return $spaceID;
@@ -1850,8 +1848,6 @@ class kanbanModel extends model
 
         if($type == 'cooperation' or $type == 'public') $space->whitelist = '';
 
-        $space = $this->loadModel('file')->processImgURL($space, $this->config->kanban->editor->editspace['id'], $this->post->uid);
-
         $this->dao->update(TABLE_KANBANSPACE)->data($space)
             ->autoCheck()
             ->batchCheck($this->config->kanban->editspace->requiredFields, 'notempty')
@@ -1869,7 +1865,7 @@ class kanbanModel extends model
 
         if(!dao::isError())
         {
-            $this->file->saveUpload('kanbanspace', $spaceID);
+            $this->loadModel('file')->saveUpload('kanbanspace', $spaceID);
             $this->file->updateObjectID($this->post->uid, $spaceID, 'kanbanspace');
             return common::createChanges($oldSpace, $space);
         }
@@ -2063,8 +2059,6 @@ class kanbanModel extends model
         if(strpos(",{$kanban->team},", ",$account,") === false) $kanban->team .= ",$account";
         if(strpos(",{$kanban->team},", ",$kanban->owner,") === false) $kanban->team .= ",$kanban->owner";
 
-        $kanban = $this->loadModel('file')->processImgURL($kanban, $this->config->kanban->editor->create['id'], $this->post->uid);
-
         if(!empty($kanban->space))
         {
             $maxOrder = $this->dao->select('MAX(`order`) AS maxOrder')->from(TABLE_KANBAN)
@@ -2088,7 +2082,7 @@ class kanbanModel extends model
             $kanban   = $this->getByID($kanbanID);
 
             $this->createDefaultRegion($kanban);
-            $this->file->saveUpload('kanban', $kanbanID);
+            $this->loadModel('file')->saveUpload('kanban', $kanbanID);
             $this->file->updateObjectID($this->post->uid, $kanbanID, 'kanban');
 
             return $kanbanID;
@@ -2116,8 +2110,6 @@ class kanbanModel extends model
             ->remove('uid,contactListMenu')
             ->get();
 
-        $kanban = $this->loadModel('file')->processImgURL($kanban, $this->config->kanban->editor->edit['id'], $this->post->uid);
-
         $this->dao->update(TABLE_KANBAN)->data($kanban)
             ->autoCheck()
             ->batchCheck($this->config->kanban->edit->requiredFields, 'notempty')
@@ -2126,7 +2118,7 @@ class kanbanModel extends model
 
         if(!dao::isError())
         {
-            $this->file->saveUpload('kanban', $kanbanID);
+            $this->loadModel('file')->saveUpload('kanban', $kanbanID);
             $this->file->updateObjectID($this->post->uid, $kanbanID, 'kanban');
 
             return common::createChanges($oldKanban, $kanban);

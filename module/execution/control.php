@@ -460,6 +460,14 @@ class execution extends control
         if(!empty($_POST))
         {
             $this->execution->importTask($toExecution);
+
+            /* If link from no head then reload. */
+            if(isonlybody())
+            {
+                $kanbanData = $this->loadModel('kanban')->getRDKanban($toExecution, $this->session->execLaneType ? $this->session->execLaneType : 'all');
+                return print(js::reload('parent'));
+            }
+
             return print(js::locate(inlink('importTask', "toExecution=$toExecution&fromExecution=$fromExecution"), 'parent'));
         }
 

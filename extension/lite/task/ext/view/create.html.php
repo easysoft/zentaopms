@@ -101,7 +101,7 @@
           <td colspan='3'>
             <span id='storyBox' class="<?php if(!empty($stories)) echo 'hidden';?> "><?php printf($lang->task->noticeLinkStory, html::a($this->createLink('story', 'create', "productID=$productID&branch=0&moduleID=0&storyID=0&projectID=$projectID&bugID=0&planID=0&todoID=0&extra=&type=story"), $lang->execution->linkStory, '_blank', 'class="text-primary"'), html::a("javascript:loadStories($execution->id)", $lang->refresh, '', 'class="text-primary"'));?></span>
             <div class='input-group <?php if(empty($stories)) echo "hidden";?>'>
-              <?php echo html::select('story', array($task->story => empty($stories) ? '': $stories[$task->story]), $task->story, "class='form-control chosen' onchange='setStoryRelated();'");?>
+              <?php echo html::select('story', $stories, $task->story, "class='form-control chosen' onchange='setStoryRelated();'");?>
               <span class='input-group-btn' id='preview'><a href='#' class='btn iframe'><?php echo $lang->preview;?></a></span>
             </div>
           </td>

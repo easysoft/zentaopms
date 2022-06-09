@@ -11,6 +11,7 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
+<?php js::set('isonlybody', isonlybody());?>
 <div id='mainMenu' class='clearfix'>
   <div class='pull-left btn-toolbar'>
     <?php echo html::a($this->createLink('execution', 'importTask', "execution=$executionID"), "<span class='text'>{$lang->execution->importTask}</span>", '', "class='btn btn-link btn-active-text'");?>
@@ -83,6 +84,13 @@
     <div class='table-footer'>
       <div class="checkbox-primary check-all"><label><?php echo $lang->selectAll?></label></div>
       <div class="table-actions btn-toolbar show-always"><?php echo html::submitButton('<i class="icon icon-import icon-sm"></i> ' . $lang->execution->importTask, '', 'btn btn-secondary btn-wide');?></div>
+      <div class='btn-toolbar'>
+        <?php if(isonlybody()):?>
+        <?php echo html::commonButton('<i class="icon icon-sm"></i> ' . $lang->goback, 'onclick="goback()"', 'btn');?>
+        <?php else:?>
+        <?php echo html::backButton('','','btn');?>
+        <?php endif;?>
+      </div>
     </div>
     <?php endif;?>
   </form>

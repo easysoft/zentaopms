@@ -47,7 +47,8 @@
               <?php echo $space->name;?>
             </p>
           </div>
-          <p class="spaceDesc text-ellipsis text-primary" title='<?php echo empty($space->desc) ? $lang->kanban->emptyDesc : $space->desc;?>'><?php echo empty($space->desc) ? $lang->kanban->emptyDesc : $space->desc;?></p>
+          <?php $space->desc = empty($space->desc) ? $lang->kanban->emptyDesc : strip_tags(htmlspecialchars_decode($space->desc));?>
+          <p class="spaceDesc text-ellipsis text-primary" title='<?php echo $space->desc;?>'><?php echo $space->desc;?></p>
         </div>
         <div class='spaceActions pull-right'>
           <?php $class = $space->status == 'closed' ? 'disabled' : '';?>
@@ -72,7 +73,7 @@
         <div class='col' data-id='<?php echo $kanbanID?>'>
           <div class='panel' data-url='<?php echo $this->createLink('kanban', 'view', "kanbanID=$kanbanID");?>'>
             <div class='panel-heading'>
-              <?php if($browseType == 'cooperation' and $kanban->owner == $this->app->user->account):?>
+              <?php if($space->type == 'cooperation' and $kanban->owner == $this->app->user->account):?>
               <span class="label label-outline label-info kanban-label"><?php echo $lang->kanban->mine;?></span>
               <?php endif;?>
               <div class='kanban-name'>
