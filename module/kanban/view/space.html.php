@@ -129,7 +129,8 @@
               <div class='kanban-desc' title="<?php echo strip_tags(htmlspecialchars_decode($kanban->desc));?>"><?php echo strip_tags(htmlspecialchars_decode($kanban->desc));?></div>
               <div class='kanban-footer'>
               <?php $count     = 0;?>
-              <?php $teamPairs = array_filter(explode(',', $kanban->team));?>
+              <?php $teamPairs = array_filter(explode(',', ",$kanban->createdBy,$kanban->owner,$kanban->team"));?>
+              <?php $teamPairs = array_unique($teamPairs);?>
               <?php
               foreach($teamPairs as $index => $team)
               {

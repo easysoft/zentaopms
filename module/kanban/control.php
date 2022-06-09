@@ -1609,7 +1609,7 @@ class kanban extends control
 
         $this->view->canEdit = $from == 'RDKanban' ? 0 : 1;
         $this->view->column  = $column;
-        $this->view->title   = $column->name . $this->lang->colon . $this->lang->kanban->setColumn;
+        $this->view->title   = $column->name . $this->lang->colon . $this->lang->kanban->editColumn;
         $this->display();
     }
 
@@ -1767,7 +1767,8 @@ class kanban extends control
             $this->dao->update(TABLE_STORYSTAGE)->set('stage')->eq($toColumn->type)->where('story')->eq($cardID)->exec();
         }
 
-        $kanbanGroup = $regionID == 0 ? $this->kanban->getExecutionKanban($executionID, $browseType, $groupBy) : $this->kanban->getRDKanban($executionID, $browseType, $orderBy, $regionID, $groupBy);
+        $rdSearchValue = $this->session->rdSearchValue ? $this->session->rdSearchValue : '';
+        $kanbanGroup   = $regionID == 0 ? $this->kanban->getExecutionKanban($executionID, $browseType, $groupBy) : $this->kanban->getRDKanban($executionID, $browseType, $orderBy, $regionID, $groupBy, $rdSearchValue);
         echo json_encode($kanbanGroup);
     }
 

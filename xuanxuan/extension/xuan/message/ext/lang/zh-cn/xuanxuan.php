@@ -3,7 +3,7 @@ $lang->message->typeList['xuanxuan'] = '聊天';
 
 $lang->message->sender = '禅道项目管理';
 
-$lang->message->notifyTitle = '%s 给您%s%d个%s';
+$lang->message->notifyTitle = '%s %s%d个%s';
 
 $lang->message->mr = new stdClass();
 $lang->message->mr->logTitle    = '构建日志';

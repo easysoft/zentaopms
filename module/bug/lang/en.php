@@ -61,6 +61,7 @@ $lang->bug->openedDate       = 'ReportedDate';
 $lang->bug->openedDateAB     = 'Reported';
 $lang->bug->openedBuild      = 'Open Build';
 $lang->bug->assignedTo       = 'AssignTo';
+$lang->bug->assignedToMe     = 'AssignToMe';
 $lang->bug->assignBug        = 'AssignedTo';
 $lang->bug->assignedToAB     = 'AssignedTo';
 $lang->bug->assignedDate     = 'AssignedDate';

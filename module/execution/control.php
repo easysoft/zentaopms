@@ -115,6 +115,7 @@ class execution extends control
         $this->loadModel('datatable');
         $this->loadModel('setting');
         $this->loadModel('product');
+        $this->loadModel('user');
 
         if(common::hasPriv('execution', 'create')) $this->lang->TRActions = html::a($this->createLink('execution', 'create'), "<i class='icon icon-sm icon-plus'></i> " . $this->lang->execution->create, '', "class='btn btn-primary'");
 
@@ -211,6 +212,7 @@ class execution extends control
         /* team member pairs. */
         $memberPairs = array();
         foreach($this->view->teamMembers as $key => $member) $memberPairs[$key] = $member->realname;
+        $memberPairs = $this->user->processAccountSort($memberPairs);
 
         $showAllModule = isset($this->config->execution->task->allModule) ? $this->config->execution->task->allModule : '';
         $extra         = (isset($this->config->execution->task->allModule) && $this->config->execution->task->allModule == 1) ? 'allModule' : '';
@@ -227,7 +229,7 @@ class execution extends control
         $this->view->orderBy      = $orderBy;
         $this->view->browseType   = $browseType;
         $this->view->status       = $status;
-        $this->view->users        = $this->loadModel('user')->getPairs('noletter|all');
+        $this->view->users        = $this->user->getPairs('noletter|all');
         $this->view->param        = $param;
         $this->view->executionID  = $executionID;
         $this->view->execution    = $execution;
@@ -458,6 +460,14 @@ class execution extends control
         if(!empty($_POST))
         {
             $this->execution->importTask($toExecution);
+
+            /* If link from no head then reload. */
+            if(isonlybody())
+            {
+                $kanbanData = $this->loadModel('kanban')->getRDKanban($toExecution, $this->session->execLaneType ? $this->session->execLaneType : 'all');
+                return print(js::reload('parent'));
+            }
+
             return print(js::locate(inlink('importTask', "toExecution=$toExecution&fromExecution=$fromExecution"), 'parent'));
         }
 
@@ -918,6 +928,7 @@ class execution extends control
         {
             $memberPairs[$key] = $member->realname;
         }
+        $memberPairs = $this->user->processAccountSort($memberPairs);
 
         /* Build the search form. */
         $actionURL = $this->createLink('execution', 'bug', "executionID=$executionID&productID=$productID&orderBy=$orderBy&build=$build&type=bysearch&queryID=myQueryID");
@@ -2121,6 +2132,7 @@ class execution extends control
         $this->session->set('execLaneType', $browseType);
         $this->session->set('execGroupBy', $groupBy);
         $this->session->set('storyList', $this->app->getURI(true), 'execution');
+        $this->session->set('rdSearchValue', '');
 
         $this->lang->execution->menu = new stdclass();
         $execution = $this->commonAction($executionID);
@@ -3831,6 +3843,7 @@ class execution extends control
 
         if($lastEditedTime > $enterTime or $groupBy != 'default' or !empty($searchValue))
         {
+            if($from == 'RD') $this->session->set('rdSearchValue', $searchValue);
             $kanbanGroup = $from == 'execution' ? $this->loadModel('kanban')->getExecutionKanban($executionID, $browseType, $groupBy) : $this->loadModel('kanban')->getRDKanban($executionID, $browseType, 'id_asc', 0, $groupBy, $searchValue);
             return print(json_encode($kanbanGroup));
         }

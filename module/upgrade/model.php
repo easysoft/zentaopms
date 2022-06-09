@@ -652,6 +652,9 @@ class upgradeModel extends model
             case 'biz7.0.beta1':
                 $this->processViewFields();
                 break;
+            case 'biz7.0':
+                $this->processFlowPosition();
+                break;
         }
     }
 

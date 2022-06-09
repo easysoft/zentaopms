@@ -5,6 +5,16 @@ public function __construct($appName = '')
     if($this->app->getModuleName() == 'kanban') $this->lang->kanban->menu = new stdclass();
 }
 
+/**
+ * Get kanban group by execution id.
+ *
+ * @param  int    $executionID
+ * @param  int    $browseType
+ * @param  int    $groupBy
+ * @param  string $searchValue
+ * @access public
+ * @return array
+ */
 public function getKanban4Group($executionID, $browseType, $groupBy, $searchValue = '')
 {
     /* Get card  data. */
@@ -85,7 +95,7 @@ public function getKanban4Group($executionID, $browseType, $groupBy, $searchValu
             $columnData[$columnID]['actions']    = $column->actions;
 
             $cardOrder = 1;
-            $objects   = zget($cardGroup, $columnID, array());
+            $objects   = zget($cardGroup, $column->columnType, array());
             foreach($objects as $object)
             {
                 if(empty($object)) continue;
@@ -104,10 +114,14 @@ public function getKanban4Group($executionID, $browseType, $groupBy, $searchValu
 
                 if($browseType == 'task')
                 {
+                    if($searchValue != '' and strpos($object->name, $searchValue) === false) continue;
                     $cardData['name'] = $object->name;
+                    $cardData['status'] = $object->status;
+                    $cardData['left']   = $object->left;
                 }
                 else
                 {
+                    if($searchValue != '' and strpos($object->name, $searchValue) === false) continue;
                     $cardData['title'] = $object->title;
                 }
 
@@ -132,6 +146,7 @@ public function getKanban4Group($executionID, $browseType, $groupBy, $searchValu
  * @param  int    $kanbanID
  * @param  string $browseType all|task|bug|story
  * @param  string $orderBy
+ * @param  string $searchValue
  * @access public
  * @return array
  */

@@ -34,6 +34,7 @@ js::set('executionLang', $lang->execution);
 js::set('bugLang', $lang->bug);
 js::set('taskLang', $lang->task);
 js::set('deadlineLang', $lang->task->deadlineAB);
+js::set('estStartedLang', $lang->task->estStarted);
 js::set('kanbancolumnLang', $lang->kanbancolumn);
 js::set('kanbancardLang', $lang->kanbancard);
 js::set('executionID', $execution->id);
@@ -53,6 +54,7 @@ js::set('productCount', count($productNames));
 js::set('executionID', $execution->id);
 js::set('reviewStoryParis', $reviewStoryParis);
 js::set('needLinkProducts', $lang->execution->needLinkProducts);
+js::set('lastUpdateData', '');
 js::set('rdSearchValue', '');
 
 $canSortRegion       = commonModel::hasPriv('kanban', 'sortRegion') && count($regions) > 1;
@@ -64,6 +66,7 @@ $canBatchCreateTask  = common::hasPriv('task', 'batchCreate');
 $canCreateBug        = ($productID and common::hasPriv('bug', 'create'));
 $canBatchCreateBug   = ($productID and common::hasPriv('bug', 'batchCreate'));
 $canImportBug        = ($productID and common::hasPriv('execution', 'importBug'));
+$canImportTask       = ($productID and common::hasPriv('execution', 'importTask'));
 $canCreateStory      = ($productID and common::hasPriv('story', 'create'));
 $canBatchCreateStory = ($productID and common::hasPriv('story', 'batchCreate'));
 $canLinkStory        = ($productID and common::hasPriv('execution', 'linkStory'));
@@ -203,7 +206,8 @@ js::set('priv',
         }?>
         <?php if(($hasStoryButton or $hasBugButton) and $hasTaskButton) echo '<li class="divider"></li>';?>
         <?php if($canCreateTask) echo '<li>' . html::a(helper::createLink('task', 'create', "execution=$execution->id", '', true), $lang->task->create, '', "class='iframe'") . '</li>';?>
-        <?php if($canImportBug) echo '<li>' . html::a(helper::createLink('execution', 'importBug', "executionID=$execution->id", '', true), $lang->execution->importBug, '', "class='iframe' data-width=80%") . '</li>';?>
+        <?php if($canImportBug) echo '<li>' . html::a(helper::createLink('execution', 'importBug', "executionID=$execution->id", '', true), $lang->execution->importBug, '', "class='iframe' data-width=90%") . '</li>';?>
+        <?php if($canImportTask) echo '<li>' . html::a(helper::createLink('execution', 'importTask', "toExecution=$execution->id", '', true), $lang->execution->importTask, '', "class='iframe' data-width=90%") . '</li>';?>
         <?php if($canBatchCreateTask) echo '<li>' . html::a(helper::createLink('task', 'batchCreate', "execution=$execution->id", '', true), $lang->execution->batchCreateTask, '', "class='iframe'") . '</li>';?>
       </ul>
     </div>

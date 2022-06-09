@@ -161,7 +161,7 @@ $lang->task->recordEstimateAction = '添加工时';
 
 $lang->task->ditto             = '同上';
 $lang->task->dittoNotice       = "该任务与上一任务不属于同一%s！";
-$lang->task->selectTestStory   = "选择测试需求";
+$lang->task->selectTestStory   = "选择测试{$lang->SRCommon}";
 $lang->task->selectAllUser     = '全部';
 $lang->task->noStory           = "无{$lang->SRCommon}";
 $lang->task->noAssigned        = '未指派';
