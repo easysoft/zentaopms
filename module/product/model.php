@@ -872,11 +872,14 @@ class productModel extends model
     {
         $oldProduct = $this->getById($productID);
         $now        = helper::now();
-        $product= fixer::input('post')
+        $product    = fixer::input('post')
             ->add('id', $productID)
             ->setDefault('status', 'closed')
-            ->remove('comment')->get();
+            ->stripTags($this->config->product->editor->close['id'], $this->config->allowedTags)
+            ->remove('comment')
+            ->get();
 
+        $product = $this->loadModel('file')->processImgURL($product, $this->config->product->editor->close['id'], $this->post->uid);
         $this->dao->update(TABLE_PRODUCT)->data($product)
             ->autoCheck()
             ->checkFlow()

@@ -285,7 +285,7 @@ function formatTime($time, $format = '')
 {
     $time = str_replace('0000-00-00', '', $time);
     $time = str_replace('00:00:00', '', $time);
-    if(trim($time) == '') return ;
+    if(trim($time) == '') return '';
     if($format) return date($format, strtotime($time));
     return trim($time);
 }

@@ -830,7 +830,6 @@ class storyModel extends model
         if(isset($story->stage) and $oldStory->stage != $story->stage) $story->stagedBy = (strpos('tested|verified|released|closed', $story->stage) !== false) ? $this->app->user->account : '';
         $story = $this->loadModel('file')->processImgURL($story, $this->config->story->editor->edit['id'], $this->post->uid);
 
-
         if(isset($_POST['reviewer']))
         {
             $_POST['reviewer'] = array_filter($_POST['reviewer']);
@@ -1327,6 +1326,7 @@ class storyModel extends model
             ->setDefault('lastEditedDate', $now)
             ->setDefault('status', $oldStory->status)
             ->setDefault('reviewedDate', $date)
+            ->stripTags($this->config->story->editor->review['id'], $this->config->allowedTags)
             ->setIF($this->post->result == 'revert', 'version', $this->post->preVersion)
             ->setIF($this->post->result == 'clarify', 'assignedTo', $oldStory->lastEditedBy ? $oldStory->lastEditedBy : $oldStory->openedBy)
             ->removeIF($this->post->result != 'reject', 'closedReason, duplicateStory, childStories')
@@ -1336,6 +1336,7 @@ class storyModel extends model
             ->add('id', $storyID)
             ->remove('result,preVersion,comment')
             ->get();
+        $story = $this->loadModel('file')->processImgURL($story, $this->config->story->editor->review['id'], $this->post->uid);
 
         /* Fix bug #671. */
         $this->lang->story->closedReason = $this->lang->story->rejectedReason;
@@ -1563,6 +1564,7 @@ class storyModel extends model
             ->setDefault('closedDate',     $now)
             ->setDefault('closedBy',       $this->app->user->account)
             ->setDefault('assignedDate',   $now)
+            ->stripTags($this->config->story->editor->close['id'], $this->config->allowedTags)
             ->removeIF($this->post->closedReason != 'duplicate', 'duplicateStory')
             ->removeIF($this->post->closedReason != 'subdivided', 'childStories')
             ->get();
@@ -1578,6 +1580,7 @@ class storyModel extends model
         }
 
         $this->lang->story->comment = $this->lang->comment;
+        $story = $this->loadModel('file')->processImgURL($story, $this->config->story->editor->close['id'], $this->post->uid);
         $this->dao->update(TABLE_STORY)->data($story, 'comment')
             ->autoCheck()
             ->batchCheck($this->config->story->close->requiredFields, 'notempty')
@@ -1991,9 +1994,11 @@ class storyModel extends model
             ->add('lastEditedBy', $this->app->user->account)
             ->add('lastEditedDate', $now)
             ->add('assignedDate', $now)
+            ->stripTags($this->config->story->editor->assignto['id'], $this->config->allowedTags)
             ->remove('comment')
             ->get();
 
+        $story = $this->loadModel('file')->processImgURL($story, $this->config->story->editor->assignto['id'], $this->post->uid);
         $this->dao->update(TABLE_STORY)->data($story)->autoCheck()->checkFlow()->where('id')->eq((int)$storyID)->exec();
         if(!dao::isError()) return common::createChanges($oldStory, $story);
         return false;
@@ -2054,8 +2059,10 @@ class storyModel extends model
             ->setDefault('lastEditedDate', $now)
             ->setDefault('assignedDate',   $now)
             ->setDefault('activatedDate', $now)
+            ->stripTags($this->config->story->editor->activate['id'], $this->config->allowedTags)
             ->remove('comment')
             ->get();
+        $story = $this->loadModel('file')->processImgURL($story, $this->config->story->editor->activate['id'], $this->post->uid);
         $this->dao->update(TABLE_STORY)->data($story)->autoCheck()->checkFlow()->where('id')->eq($storyID)->exec();
 
         if($this->post->status == 'active') $this->dao->delete()->from(TABLE_STORYREVIEW)->where('story')->eq($storyID)->exec();

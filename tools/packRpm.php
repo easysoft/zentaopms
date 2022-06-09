@@ -60,9 +60,7 @@ foreach(array('zh-cn', 'en') as $langType)
 
         $command .= "cd ../../\n";
         $command .= "rpmbuild --define \"_topdir \${PWD}/rpmbuild\" -ba rpmbuild/SPECS/zentaopms.spec\n";
-        $command .= "cp rpmbuild/RPMS/noarch/$dirName-$version-1.noarch.rpm ./{$dirName}-{$version}-php{$phpVersion}-1.noarch.rpm\n";
-
-        $command .= "mv {$dirName}-{$version}-php{$phpVersion}-1.noarch.rpm ../../\n";
+        $command .= "cp rpmbuild/RPMS/noarch/$dirName-$version-1.noarch.rpm ../../{$packPrefix}.{$version}.php{$phpVersion}.1.noarch.rpm\n";
 
         $command .= "rm -rf rpmbuild\n";
 

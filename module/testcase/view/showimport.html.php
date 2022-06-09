@@ -45,11 +45,19 @@ $(function()
             <th class='c-stage     <?php if(strpos(",$requiredFields,", ',stage,')        !== false) echo 'required';?>'><?php echo $lang->testcase->stage?></th>
             <th class='c-condition <?php if(strpos(",$requiredFields,", ',precondition,') !== false) echo 'required';?>'><?php echo $lang->testcase->precondition?></th>
             <th class='c-keywords  <?php if(strpos(",$requiredFields,", ',keywords,')     !== false) echo 'required';?>'><?php echo $lang->testcase->keywords?></th>
-            <?php if(!empty($appendFields)):?>
-            <?php foreach($appendFields as $appendField):?>
-            <th class='c-extend'><?php echo $lang->testcase->{$appendField->field}?></th>
-            <?php endforeach;?>
-            <?php endif;?>
+            <?php
+            if(!empty($appendFields))
+            {
+                foreach($appendFields as $field)
+                {
+                    if(!$field->show) continue;
+
+                    $width    = ($field->width && $field->width != 'auto' ? $field->width . 'px' : 'auto');
+                    $required = strpos(",$field->rules,", ",$notEmptyRule->id,") !== false ? 'required' : '';
+                    echo "<th class='$required c-extend' style='width: $width'>$field->name</th>";
+                }
+            }
+            ?>
             <th class='c-step'>
               <table class='w-p100 table-borderless'>
                 <tr>
@@ -106,12 +114,18 @@ $(function()
             <td style='overflow:visible'><?php echo html::select("stage[$key][]", $lang->testcase->stageList, !empty($case->stage) ? $case->stage : ((!empty($case->id) and isset($cases[$case->id])) ? $cases[$case->id]->stage : ''), "multiple='multiple' class='form-control chosen'")?></td>
             <td><?php echo html::textarea("precondition[$key]", isset($case->precondition) ? htmlSpecialString($case->precondition) : "", "class='form-control'")?></td>
             <td><?php echo html::input("keywords[$key]", isset($case->keywords) ? $case->keywords : '', "class='form-control'")?></td>
-            <?php if(!empty($appendFields)):?>
-            <?php $this->loadModel('flow');?>
-            <?php foreach($appendFields as $appendField):?>
-            <td><?php echo $this->flow->buildControl($appendField, zget($case, $appendField->field, ''), "{$appendField->field}[$key]");?></td>
-            <?php endforeach;?>
-            <?php endif;?>
+            <?php
+            if(!empty($appendFields))
+            {
+                $this->loadModel('flow');
+                foreach($appendFields as $field)
+                {
+                    if(!$field->show) continue;
+                    $value = $field->defaultValue ? $field->defaultValue : zget($case, $field->field, '');
+                    echo '<td>' . $this->flow->buildControl($field, $value, "$field->field[$key]", true) . '</td>';
+                }
+            }
+            ?>
             <td>
               <?php if(isset($stepData[$key]['desc'])):?>
               <table class='w-p100 bd-0'>

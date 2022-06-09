@@ -818,9 +818,11 @@ class executionModel extends model
             ->setDefault('status', 'doing')
             ->setDefault('lastEditedBy', $this->app->user->account)
             ->setDefault('lastEditedDate', $now)
+            ->stripTags($this->config->execution->editor->start['id'], $this->config->allowedTags)
             ->remove('comment')
             ->get();
 
+        $execution = $this->loadModel('file')->processImgURL($execution, $this->config->execution->editor->start['id'], $this->post->uid);
         $this->dao->update(TABLE_EXECUTION)->data($execution)
             ->autoCheck()
             ->check($this->config->execution->start->requiredFields, 'notempty')
@@ -849,6 +851,7 @@ class executionModel extends model
 
         $execution = fixer::input('post')
             ->add('id', $executionID)
+            ->stripTags($this->config->execution->editor->putoff['id'], $this->config->allowedTags)
             ->setDefault('lastEditedBy', $this->app->user->account)
             ->setDefault('lastEditedDate', $now)
             ->remove('comment')
@@ -857,6 +860,7 @@ class executionModel extends model
         if($this->config->systemMode == 'new') $this->checkBeginAndEndDate($oldExecution->project, $execution->begin, $execution->end);
         if(dao::isError()) return false;
 
+        $execution = $this->loadModel('file')->processImgURL($execution, $this->config->execution->editor->putoff['id'], $this->post->uid);
         $this->dao->update(TABLE_EXECUTION)->data($execution)
             ->autoCheck()
             ->checkFlow()
@@ -884,8 +888,10 @@ class executionModel extends model
             ->setDefault('lastEditedBy', $this->app->user->account)
             ->setDefault('lastEditedDate', $now)
             ->setDefault('suspendedDate', helper::today())
+            ->stripTags($this->config->execution->editor->suspend['id'], $this->config->allowedTags)
             ->remove('comment')->get();
 
+        $execution = $this->loadModel('file')->processImgURL($execution, $this->config->execution->editor->suspend['id'], $this->post->uid);
         $this->dao->update(TABLE_EXECUTION)->data($execution)
             ->autoCheck()
             ->checkFlow()
@@ -913,6 +919,7 @@ class executionModel extends model
             ->setDefault('status', 'doing')
             ->setDefault('lastEditedBy', $this->app->user->account)
             ->setDefault('lastEditedDate', $now)
+            ->stripTags($this->config->execution->editor->activate['id'], $this->config->allowedTags)
             ->remove('comment,readjustTime,readjustTask')
             ->get();
 
@@ -922,6 +929,7 @@ class executionModel extends model
             unset($execution->end);
         }
 
+        $execution = $this->loadModel('file')->processImgURL($execution, $this->config->execution->editor->activate['id'], $this->post->uid);
         $this->dao->update(TABLE_EXECUTION)->data($execution)
             ->autoCheck()
             ->checkFlow()
@@ -995,11 +1003,13 @@ class executionModel extends model
             ->setDefault('closedDate', $now)
             ->setDefault('lastEditedBy', $this->app->user->account)
             ->setDefault('lastEditedDate', $now)
+            ->stripTags($this->config->execution->editor->close['id'], $this->config->allowedTags)
             ->remove('comment')
             ->get();
 
         $this->lang->error->ge = $this->lang->execution->ge;
 
+        $execution = $this->loadModel('file')->processImgURL($execution, $this->config->execution->editor->close['id'], $this->post->uid);
         $this->dao->update(TABLE_EXECUTION)->data($execution)
             ->autoCheck()
             ->check($this->config->execution->close->requiredFields,'notempty')

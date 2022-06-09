@@ -5,7 +5,7 @@ public function __construct($appName = '')
     if($this->app->getModuleName() == 'kanban') $this->lang->kanban->menu = new stdclass();
 }
 
-public function getKanban4Group($executionID, $browseType, $groupBy)
+public function getKanban4Group($executionID, $browseType, $groupBy, $searchValue = '')
 {
     /* Get card  data. */
     $cardList = array();
@@ -135,7 +135,7 @@ public function getKanban4Group($executionID, $browseType, $groupBy)
  * @access public
  * @return array
  */
-public function getCardGroupByExecution($executionID, $browseType = 'all', $orderBy = 'id_asc')
+public function getCardGroupByExecution($executionID, $browseType = 'all', $orderBy = 'id_asc', $searchValue = '')
 {
     $cards = $this->dao->select('t1.*, t2.type as columnType')
         ->from(TABLE_KANBANCELL)->alias('t1')

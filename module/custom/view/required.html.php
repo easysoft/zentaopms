@@ -16,7 +16,8 @@
     <div class='cell'>
       <div class='list-group'>
         <?php
-        foreach($config->custom->requiredModules as $requiredModule)
+        $reruiredModules = ksort($config->custom->requiredModules);
+        foreach($requiredModules as $requiredModule)
         {
             $requiredModuleName = zget($lang->custom->moduleName, $requiredModule, $lang->$requiredModule->common);
             echo html::a(inlink('required', "module=$requiredModule"), $requiredModuleName, '', "id='{$requiredModule}Tab'");

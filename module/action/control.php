@@ -40,6 +40,8 @@ class action extends control
      *
      * @param  string $browseType
      * @param  string $type all|hidden
+     * @param  bool   $byQuery
+     * @param  int    $queryID
      * @param  string $orderBy
      * @param  int    $recTotal
      * @param  int    $recPerPage
@@ -47,7 +49,7 @@ class action extends control
      * @access public
      * @return void
      */
-    public function trash($browseType = 'all', $type = 'all', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function trash($browseType = 'all', $type = 'all', $byQuery = false, $queryID = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         $this->loadModel('backup');
 
@@ -81,13 +83,18 @@ class action extends control
         $this->session->set('practiceLibList',    $uri, 'assetlib');
         $this->session->set('componentLibList',   $uri, 'assetlib');
 
+        /* Build the search form. */
+        $queryID   = (int)$queryID;
+        $actionURL = $this->createLink('action', 'trash', "browseType=$browseType&type=$type&byQuery=true&queryID=myQueryID");
+        $this->action->buildTrashSearchForm($queryID, $actionURL);
+
         /* Get deleted objects. */
         $this->app->loadClass('pager', $static = true);
         $pager = pager::init($recTotal, $recPerPage, $pageID);
 
         /* Append id for secend sort. */
         $sort           = common::appendOrder($orderBy);
-        $trashes        = $this->action->getTrashes($browseType, $type, $sort, $pager);
+        $trashes        = $byQuery ? $this->action->getTrashesBySearch($browseType, $type, $queryID, $sort, $pager) : $this->action->getTrashes($browseType, $type, $sort, $pager);
         $objectTypeList = $this->action->getTrashObjectTypes($type);
         $objectTypeList = array_keys($objectTypeList);
 
@@ -96,6 +103,7 @@ class action extends control
         $preferredTypeConfig = $this->config->systemMode == 'new' ? $this->config->action->preferredType->new : $this->config->action->preferredType->classic;
         foreach($objectTypeList as $objectType)
         {
+            if(!isset($this->config->objectTables[$objectType])) continue;
             in_array($objectType, $preferredTypeConfig) ? $preferredType[$objectType] = $objectType : $moreType[$objectType] = $objectType;
         }
         if(count($preferredType) < $this->config->action->preferredTypeNum)
@@ -117,6 +125,9 @@ class action extends control
         $this->view->preferredType       = $preferredType;
         $this->view->moreType            = $moreType;
         $this->view->preferredTypeConfig = $preferredTypeConfig;
+        $this->view->byQuery             = $byQuery;
+        $this->view->queryID             = $queryID;
+
         $this->display();
     }
 
