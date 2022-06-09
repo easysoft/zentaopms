@@ -38,7 +38,7 @@
 .kanbans .kanban-members > span:after {right: -4px;}
 .kanbans .kanban-members-total {display: inline-block; margin-left: 6px; position: relative; top: 3px}
 .kanbans .kanbanAcl {position: absolute; right: 0px; bottom: 2px; color: #838a9d;}
-.kanbans .kanban-label {margin: 8px 6px 0px 0px; padding: 2px 4px; float: left; color: #ff8a53; border: 1px solid #ff8a53;}
+.kanbans .kanban-label {margin: 8px 6px 0px 0px; padding: 2.5px 4px; float: left; color: #ff8a53; border: 0.8px solid #ff8a53;}
 @media screen and (max-width: 1366px){.kanbans .kanban-name {width: 66%;}}
 
 a.disabled {pointer-events: none;}
