@@ -3414,11 +3414,29 @@ class kanbanModel extends model
      */
     public function getGroupBySpaceList($spaceIdList, $kanbanIdList = '')
     {
-        return $this->dao->select('*')->from(TABLE_KANBAN)
+        $spaceList = $this->dao->select('*')->from(TABLE_KANBAN)
             ->where('deleted')->eq(0)
             ->andWhere('space')->in($spaceIdList)
             ->beginIF($kanbanIdList)->andWhere('id')->in($kanbanIdList)->fi()
             ->fetchGroup('space', 'id');
+
+        $kanbanIDList = array();
+        foreach($spaceList as $kanbanList) $kanbanIDList = array_merge_recursive($kanbanIDList, array_keys($kanbanList));
+        $cardsCount = $this->dao->select('kanban, COUNT(*) as count')->from(TABLE_KANBANCARD)
+            ->where('deleted')->eq(0)
+            ->andWhere('kanban')->in($kanbanIDList)
+            ->groupBy('kanban')
+            ->fetchPairs('kanban');
+
+        foreach($spaceList as $kanbanList)
+        {
+            foreach($kanbanList as $kanban)
+            {
+                $kanban->cardsCount = zget($cardsCount, $kanban->id, 0);
+            }
+        }
+
+        return $spaceList;
     }
 
     /**

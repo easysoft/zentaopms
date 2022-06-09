@@ -155,7 +155,10 @@
                     <?php endif;?>
                   </div>
                   <?php endif;?>
-                  <div class='kanban-members-total pull-left'><?php echo sprintf($lang->kanban->teamSumCount, $teamCount);?></div>
+                  <?php $teamCountLang = ($teamCount > 1) ? $lang->kanban->teamSumCount : str_replace("Pers", "Person", $lang->kanban->teamSumCount);?>
+                  <div class='kanban-members-total pull-left'><?php echo sprintf($teamCountLang, $teamCount);?></div>
+                  <?php $cardsCount = ($kanban->cardsCount > 1) ? str_replace("Card", "Cards", $lang->kanban->cardsCount) : $lang->kanban->cardsCount;?>
+                  <div class='kanban-members-total pull-right'><?php echo empty($kanban->cardsCount) ? $lang->kanban->noCard : sprintf($cardsCount, $kanban->cardsCount);?></div>
                 </div>
               </div>
             </div>

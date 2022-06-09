@@ -1,5 +1,6 @@
 <?php
 /* Actions. */
+$lang->kanban->noCard              = 'No card';
 $lang->kanban->create              = 'Create Kanban';
 $lang->kanban->createSpace         = 'Create Space';
 $lang->kanban->editSpace           = 'Edit Space';
@@ -99,7 +100,8 @@ $lang->kanban->closed         = 'Closed';
 $lang->kanban->closedBy       = 'Closed By';
 $lang->kanban->closedDate     = 'Closed Date';
 $lang->kanban->empty          = 'No Kanban';
-$lang->kanban->teamSumCount   = '%s people in total';
+$lang->kanban->teamSumCount   = '%s Pers';
+$lang->kanban->cardsCount     = '%s Card';
 $lang->kanban->cardCount      = 'Card Count';
 $lang->kanban->activatedBy    = 'Activated By';
 $lang->kanban->activatedDate  = 'Activated Date';
