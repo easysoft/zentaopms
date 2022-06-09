@@ -52,6 +52,7 @@
     ?>
     <table class="table has-sort-head table-fixed" id='bugList'>
       <?php $vars = "mode=$mode&type=$type&param=myQueryID&orderBy=%s&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID"; ?>
+      <?php $type = $type == 'bySearch' ? $this->session->myBugType : $type;?>
       <thead>
         <tr>
           <th class="c-id">
