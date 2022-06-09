@@ -75,18 +75,19 @@ class my extends control
     /**
      * My work view.
      *
-     * @param  string $mode
-     * @param  string $type
-     * @param  string $orderBy
-     * @param  int    $recTotal
-     * @param  int    $recPerPage
-     * @param  int    $pageID
+     * @param  string     $mode
+     * @param  string     $type
+     * @param  string|int $param
+     * @param  string     $orderBy
+     * @param  int        $recTotal
+     * @param  int        $recPerPage
+     * @param  int        $pageID
      * @access public
      * @return void
      */
-    public function work($mode = 'task', $type = 'assignedTo', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function work($mode = 'task', $type = 'assignedTo', $param = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
-        echo $this->fetch('my', $mode, "type=$type&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID");
+        echo $this->fetch('my', $mode, "type=$type&param=$param&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID");
 
         $this->showWorkCount($recTotal, $recPerPage, $pageID);
     }
@@ -210,20 +211,21 @@ EOF;
     /**
      * My contribute view.
      *
-     * @param  string $mode
-     * @param  string $type
-     * @param  string $orderBy
-     * @param  int    $recTotal
-     * @param  int    $recPerPage
-     * @param  int    $pageID
+     * @param  string     $mode
+     * @param  string     $type
+     * @param  string|int $param
+     * @param  string     $orderBy
+     * @param  int        $recTotal
+     * @param  int        $recPerPage
+     * @param  int        $pageID
      * @access public
      * @return void
      */
-    public function contribute($mode = 'task', $type = 'openedBy', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function contribute($mode = 'task', $type = 'openedBy', $param = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         if(($mode == 'issue' or $mode == 'risk') and $type == 'openedBy') $type = 'createdBy';
 
-        echo $this->fetch('my', $mode, "type=$type&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID");
+        echo $this->fetch('my', $mode, "type=$type&param=$param&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID");
     }
 
     /**
@@ -596,15 +598,16 @@ EOF;
     /**
      * My test case.
      *
-     * @param  string $type      assigntome|openedbyme
-     * @param  string $orderBy
-     * @param  int    $recTotal
-     * @param  int    $recPerPage
-     * @param  int    $pageID
+     * @param  string     $type      assigntome|openedbyme
+     * @param  string|int $param
+     * @param  string     $orderBy
+     * @param  int        $recTotal
+     * @param  int        $recPerPage
+     * @param  int        $pageID
      * @access public
      * @return void
      */
-    public function testcase($type = 'assigntome', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function testcase($type = 'assigntome', $param = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         $this->loadModel('testcase');
         $this->loadModel('testtask');
@@ -620,19 +623,23 @@ EOF;
 
         /* Append id for secend sort. */
         $sort = common::appendOrder($orderBy);
+        $queryID = ($type == 'bysearch') ? (int)$param : 0;
 
         $cases = array();
-        if($type == 'assigntome')
-        {
-            $cases = $this->testcase->getByAssignedTo($this->app->user->account, $sort, $pager, 'skip');
-        }
-        elseif($type == 'openedbyme')
-        {
-            $cases = $this->testcase->getByOpenedBy($this->app->user->account, $sort, $pager, 'skip');
-        }
+        if($type == 'assigntome') $cases = $this->testcase->getByAssignedTo($this->app->user->account, $sort, $pager, 'skip');
+        if($type == 'openedbyme') $cases = $this->testcase->getByOpenedBy($this->app->user->account, $sort, $pager, 'skip');
+        if($type == 'bysearch' and $this->app->rawMethod == 'contribute') $cases = $this->my->getTestcasesBySearch($queryID, 'openedbyme', $orderBy, $pager);
+        if($type == 'bysearch' and $this->app->rawMethod == 'work')       $cases = $this->my->getTestcasesBySearch($queryID, 'assigntome', $orderBy, $pager);
+
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'testcase', $type == 'assigntome' ? false : true);
 
         $cases = $this->testcase->appendData($cases, $type == 'assigntome' ? 'run' : 'case');
+
+        /* Build the search form. */
+        $currentMethod = $this->app->rawMethod;
+        $actionURL     = $this->createLink('my', $currentMethod, "mode=testcase&type=bysearch&param=myQueryID&orderBy={$orderBy}&recTotal={$recTotal}&recPerPage={$recPerPage}&pageID={$pageID}");
+        $this->config->testcase->search['onMenuBar'] = 'yes';
+        $this->my->buildTestcaseSearchForm($queryID, $actionURL, $currentMethod);
 
         /* Assign. */
         $this->view->title      = $this->lang->my->common . $this->lang->colon . $this->lang->my->myTestCase;

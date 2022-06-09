@@ -55,17 +55,20 @@
         echo '</ul></div>';
     }
     ?>
+    <?php if($currentObjectType != 'all'):?>
+    <a class="btn btn-link querybox-toggle" id='bysearchTab'><i class="icon icon-search muted"></i> <?php echo $lang->action->byQuery;?></a>
+    <?php endif;?>
   </div>
   <div class='btn-toolbar pull-right'>
     <?php if($type == 'hidden') echo html::a(inLink('trash', "browseType=all&type=all"),    $lang->goback, '', "class='btn'");?>
     <?php if($type == 'all')    echo html::a(inLink('trash', "browseType=all&type=hidden"), "<i class='icon-eye-close'></i> " . $lang->action->dynamic->hidden, '', "class='btn btn-danger'");?>
   </div>
 </div>
-
+<div class="cell<?php if($byQuery) echo ' show';?>" id="queryBox" data-module='trash'></div>
 <div id='mainContent' class="main-row">
   <div class='main-table' data-ride='table'>
     <table class='table has-sort-head'>
-      <?php $vars = "browseType=$currentObjectType&type=$type&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"; ?>
+      <?php $vars = "browseType=$currentObjectType&type=$type&byQuery=$byQuery&queryID=$queryID&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"; ?>
       <thead>
         <tr class='colhead'>
           <th class='c-object-type'><?php common::printOrderLink('objectType', $orderBy, $vars, $lang->action->objectType);?></th>

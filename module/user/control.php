@@ -1187,19 +1187,21 @@ class user extends control
      * @param  int    $contactListID
      * @param  string $dropdownName mailto|whitelist
      * @param  string $oldUsers
+     * @param  string $extra
      * @access public
      * @return string
      */
-    public function ajaxGetContactUsers($contactListID, $dropdownName = 'mailto', $oldUsers = '')
+    public function ajaxGetContactUsers($contactListID, $dropdownName = 'mailto', $oldUsers = '', $extra = '')
     {
         $list = $contactListID ? $this->user->getContactListByID($contactListID) : '';
-
         $attr = $dropdownName == 'mailto' ? "data-placeholder='{$this->lang->chooseUsersToMail}'" : '';
 
         $users = $this->user->getPairs('devfirst|nodeleted|noclosed', $list ? $list->userList : '', $this->config->maxCount);
+        if(!empty($extra) && $extra == 'flow') $users = array_merge(array('deptManager' => $this->lang->workflowdatasource->options['deptManager']), $users);
         if(isset($this->config->user->moreLink)) $this->config->moreLinks[$dropdownName . "[]"] = $this->config->user->moreLink;
 
         $defaultUsers = empty($contactListID) ? '' : $list->userList . ',' . trim($oldUsers);
+        if($extra == 'flow' && empty($defaultUsers)) $defaultUsers = trim($oldUsers);
         return print(html::select($dropdownName . "[]", $users, $defaultUsers, "class='form-control chosen' multiple $attr"));
     }
 

@@ -3820,17 +3820,18 @@ class execution extends control
      * @param  string $browseType
      * @param  string $groupBy
      * @param  string $from execution|RD
+     * @param  string $searchValue
      * @access public
      * @return array
      */
-    public function ajaxUpdateKanban($executionID = 0, $enterTime = '', $browseType = '', $groupBy = '', $from = 'execution')
+    public function ajaxUpdateKanban($executionID = 0, $enterTime = '', $browseType = '', $groupBy = '', $from = 'execution', $searchValue = '')
     {
         $enterTime = date('Y-m-d H:i:s', $enterTime);
         $lastEditedTime = $this->dao->select("max(lastEditedTime) as lastEditedTime")->from(TABLE_KANBANLANE)->where('execution')->eq($executionID)->fetch('lastEditedTime');
 
-        if($lastEditedTime > $enterTime or $groupBy != 'default')
+        if($lastEditedTime > $enterTime or $groupBy != 'default' or !empty($searchValue))
         {
-            $kanbanGroup = $from == 'execution' ? $this->loadModel('kanban')->getExecutionKanban($executionID, $browseType, $groupBy) : $this->loadModel('kanban')->getRDKanban($executionID, $browseType, 'id_asc', 0, $groupBy);
+            $kanbanGroup = $from == 'execution' ? $this->loadModel('kanban')->getExecutionKanban($executionID, $browseType, $groupBy) : $this->loadModel('kanban')->getRDKanban($executionID, $browseType, 'id_asc', 0, $groupBy, $searchValue);
             return print(json_encode($kanbanGroup));
         }
     }
