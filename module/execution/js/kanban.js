@@ -765,7 +765,7 @@ function renderHeaderCol($column, column, $header, kanbanData)
     var printMoreBtn = (columnPrivs.includes('setColumn') || columnPrivs.includes('setWIP'));
 
     /* Render more menu. */
-    if(column.type == 'backlog' || column.type == 'wait' || column.type == 'unconfirmed'  && $actions.children('.text-primary').length == 0)
+    if((column.type == 'backlog' || column.type == 'wait' || column.type == 'unconfirmed') && $actions.children('.text-primary').length == 0)
     {
         var tips = productID ? '' : 'onclick="tips()"';
         $actions.append([
@@ -843,7 +843,6 @@ function updateRegion(regionID, regionData = [])
         if(groupBy == 'default') $("div[data-id^=" + regionID + "].region").show();
         if(groupBy != 'default') $("div[data-id^=" + regionID + "].kanban").show();
     }
-    $region.empty();
     $region.data('zui.kanban').render(data);
     resetRegionHeight('open');
     return true;
@@ -1553,21 +1552,23 @@ $(function()
     /* Ajax update kanban. */
     if(groupBy == 'default')
     {
-        var lastUpdateData;
         setInterval(function()
         {
-            $.get(createLink('execution', 'ajaxUpdateKanban', "executionID=" + executionID + "&entertime=" + entertime + "&browseType=" + browseType + "&groupBy=" + groupBy + '&from=RD&searchValue' + rdSearchValue), function(data)
+            if(rdSearchValue == '')
             {
-                if(data && lastUpdateData !== data)
+                $.get(createLink('execution', 'ajaxUpdateKanban', "executionID=" + executionID + "&entertime=" + entertime + "&browseType=" + browseType + "&groupBy=" + groupBy + '&from=RD&searchValue=' + rdSearchValue), function(data)
                 {
-                    lastUpdateData = data;
-                    kanbanData     = $.parseJSON(data);
-                    for(var region in kanbanData)
+                    if(data && lastUpdateData !== data)
                     {
-                        updateRegion(region, kanbanData[region]);
+                        lastUpdateData = data;
+                        kanbanData     = $.parseJSON(data);
+                        for(var region in kanbanData)
+                        {
+                            updateRegion(region, kanbanData[region]);
+                        }
                     }
-                }
-            });
+                });
+            }
         }, 10000);
     }
 
@@ -1665,14 +1666,19 @@ function toggleRDSearchBox()
 function searchCards(value)
 {
     rdSearchValue = value;
-    $.get(createLink('execution', 'ajaxUpdateKanban', "executionID=" + executionID + "&entertime=0&browseType=" + browseType + "&groupBy=" + groupBy + '&from=RD&searchValue=' + value), function(data)
+    $.get(createLink('execution', 'ajaxUpdateKanban', "executionID=" + executionID + "&entertime=0&browseType=" + browseType + "&groupBy=" + groupBy + '&from=RD&searchValue=' + rdSearchValue), function(data)
     {
+        if(lastUpdateData === data) return;
+        lastUpdateData = data;
         var kanbanData = $.parseJSON(data);
         var hideAll    = true;
         $('#kanban').children('.region').children("div[id^='kanban']").each(function()
         {
             var regionID = $(this).attr('data-id');
             if(kanbanData != null) data = groupBy == 'default' ? kanbanData[regionID] : kanbanData[groupBy];
+
+            if(rdSearchValue != '' && data.laneCount != 0) $(this).parent().show();
+            if(rdSearchValue != '' && data.laneCount == 0) $(this).parent().hide();
 
             hideAll = hideAll && !updateRegion(regionID, data);
         });

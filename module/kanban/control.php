@@ -1764,7 +1764,8 @@ class kanban extends control
             $this->dao->update(TABLE_STORYSTAGE)->set('stage')->eq($toColumn->type)->where('story')->eq($cardID)->exec();
         }
 
-        $kanbanGroup = $regionID == 0 ? $this->kanban->getExecutionKanban($executionID, $browseType, $groupBy) : $this->kanban->getRDKanban($executionID, $browseType, $orderBy, $regionID, $groupBy);
+        $rdSearchValue = $this->session->rdSearchValue ? $this->session->rdSearchValue : '';
+        $kanbanGroup   = $regionID == 0 ? $this->kanban->getExecutionKanban($executionID, $browseType, $groupBy) : $this->kanban->getRDKanban($executionID, $browseType, $orderBy, $regionID, $groupBy, $rdSearchValue);
         echo json_encode($kanbanGroup);
     }
 
