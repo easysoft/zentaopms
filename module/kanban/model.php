@@ -1414,14 +1414,12 @@ class kanbanModel extends model
 
                     if($lane->type == 'task')
                     {
-                        if($searchValue != '' and strpos($object->name, $searchValue) === false) continue;
                         $cardData['name']   = $object->name;
                         $cardData['status'] = $object->status;
                         $cardData['left']   = $object->left;
                     }
                     else
                     {
-                        if($searchValue != '' and strpos($object->title, $searchValue) === false) continue;
                         $cardData['title'] = $object->title;
                     }
 
