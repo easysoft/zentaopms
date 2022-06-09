@@ -11,7 +11,6 @@ $(function()
     if(isonlybody == true) parent.$('#triggerModal .modal-content .modal-header .close').hide();
 });
 
-
 /**
  * Go back.
  *
