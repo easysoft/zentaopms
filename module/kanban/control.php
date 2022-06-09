@@ -90,6 +90,7 @@ class kanban extends control
         }
 
         $space = $this->kanban->getSpaceById($spaceID);
+        $space->desc = strip_tags($space->desc);
 
         $typeList = $this->lang->kanbanspace->typeList;
         if($space->type == 'cooperation' or $space->type == 'public') unset($typeList['private']);
@@ -254,7 +255,9 @@ class kanban extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
         }
 
-        $kanban     = $this->kanban->getByID($kanbanID);
+        $kanban       = $this->kanban->getByID($kanbanID);
+        $kanban->desc = strip_tags($kanban->desc);
+
         $space      = $this->kanban->getSpaceById($kanban->space);
         $spaceUsers = trim($space->owner) . ',' . trim($space->team);
         $users      = $this->loadModel('user')->getPairs('noclosed|nodeleted', '', 0, $spaceUsers);

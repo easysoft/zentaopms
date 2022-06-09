@@ -47,7 +47,8 @@
               <?php echo $space->name;?>
             </p>
           </div>
-          <p class="spaceDesc text-ellipsis text-primary" title='<?php echo empty($space->desc) ? $lang->kanban->emptyDesc : $space->desc;?>'><?php echo empty($space->desc) ? $lang->kanban->emptyDesc : $space->desc;?></p>
+          <?php $space->desc = empty($space->desc) ? $lang->kanban->emptyDesc : strip_tags($space->desc);?>
+          <p class="spaceDesc text-ellipsis text-primary" title='<?php echo $space->desc;?>'><?php echo $space->desc;?></p>
         </div>
         <div class='spaceActions pull-right'>
           <?php $class = $space->status == 'closed' ? 'disabled' : '';?>

@@ -46,6 +46,10 @@
 .region .kanban-header-parent-col > .actions {position: absolute; right: 0px; top: 0px !important;}
 .region .kanban-header-sub-cols .actions {position: absolute; right: 0px; top: 0px !important;}
 
+.kanban-affixed .kanban-header-col > .title > .count {opacity:1; color: #fff!important;}
+.kanban-affixed .kanban-header-col > .title > .text-grey {opacity:1; color: #fff!important;}
+.kanban-affixed .kanban-header-col > .actions > .btn > .icon {opacity:1; color: #fff!important;}
+
 .region .kanban-lane {position: relative; border-bottom: none!important; min-height: 200px !important}
 
 .region .kanban-lane > .kanban-lane-name > .text {margin: auto 0; max-height: 150px; overflow: hidden; text-overflow: ellipsis}
