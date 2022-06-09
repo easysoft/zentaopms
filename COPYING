@@ -1,11 +1,6 @@
-本仓库的源代码由以下双重许可涵盖：
-  (1) Z PUBLIC LICENSE(以下简称ZPL) v1.2。
-  (2) Affero General Public License(以下简称AGPL) 授权协议。
-默认授权协议为ZPL协议。
-您也可以选择遵守AGPL协议使用我们的源代码。
+The source code of zentao is covered by the following dual licenses:
 
-The source code of this repository is covered by the following dual licenses：
-(1) Z PUBLIC LICENSE(ZPL) v1.2
-(2) Affero General Public License(AGPL)
-The default license agreement is the ZPL.
-Or you can choose to use our source code under the AGPL.
+(1) ZPL  1.2: http://zpl.pub/page/zplv12.html
+(2) AGPL 3.0: https://www.gnu.org/licenses/agpl-3.0.en.html
+
+You can choose ZPL or AGPL to use zentao.

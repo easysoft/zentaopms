@@ -555,7 +555,7 @@ $('#modalTeam .btn').click(function()
     }
     else
     {
-        if(config.onlybody == 'yes')
+        if(config.onlybody == 'yes' && vision == 'lite')
         {
             $('.close').parent().click();
         }

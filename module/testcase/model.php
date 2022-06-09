@@ -3,7 +3,7 @@
  * The model file of case module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     case
  * @version     $Id: model.php 5108 2013-07-12 01:59:04Z chencongzhi520@gmail.com $
@@ -61,6 +61,7 @@ class testcaseModel extends model
             ->setIF($this->config->systemMode == 'new' and $this->app->tab == 'project', 'project', $this->session->project)
             ->setIF($this->app->tab == 'execution', 'execution', $this->session->execution)
             ->setIF($this->post->story != false, 'storyVersion', $this->loadModel('story')->getVersion((int)$this->post->story))
+            ->stripTags($this->config->testcase->editor->create['id'], $this->config->allowedTags)
             ->remove('steps,expects,files,labels,stepType,forceNotReview')
             ->setDefault('story', 0)
             ->cleanInt('story,product,branch,module')
@@ -77,6 +78,7 @@ class testcaseModel extends model
 
         /* Value of story may be showmore. */
         $case->story = (int)$case->story;
+        $case = $this->loadModel('file')->processImgURL($case, $this->config->testcase->editor->create['id'], $this->post->uid);
         $this->dao->insert(TABLE_CASE)->data($case)->autoCheck()->batchCheck($this->config->testcase->create->requiredFields, 'notempty')->checkFlow()->exec();
         if(!$this->dao->isError())
         {
@@ -607,7 +609,7 @@ class testcaseModel extends model
      */
     public function getByAssignedTo($account, $orderBy = 'id_desc', $pager = null, $auto = 'no')
     {
-        return $this->dao->select('t1.*,t2.project,t2.pri,t2.title,t2.type,t2.openedBy,t2.color,t2.product,t2.branch,t2.module,t2.status,t3.name as taskName')->from(TABLE_TESTRUN)->alias('t1')
+        return $this->dao->select('t1.task,t1.case,t1.version,t1.assignedTo,t1.lastRunner,t1.lastRunDate,t1.lastRunResult,t1.status,t2.id as id,t2.project,t2.pri,t2.title,t2.type,t2.openedBy,t2.color,t2.product,t2.branch,t2.module,t2.status,t3.name as taskName')->from(TABLE_TESTRUN)->alias('t1')
             ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case = t2.id')
             ->leftJoin(TABLE_TESTTASK)->alias('t3')->on('t1.task = t3.id')
             ->where('t1.assignedTo')->eq($account)
@@ -768,6 +770,7 @@ class testcaseModel extends model
             ->join('linkCase', ',')
             ->setForce('status', $status)
             ->cleanInt('story,product,branch,module')
+            ->stripTags($this->config->testcase->editor->edit['id'], $this->config->allowedTags)
             ->remove('comment,steps,expects,files,labels,stepType')
             ->get();
 
@@ -780,6 +783,7 @@ class testcaseModel extends model
             array_splice($requiredFieldsArr, $fieldIndex, 1);
             $requiredFields    = implode(',', $requiredFieldsArr);
         }
+        $case = $this->loadModel('file')->processImgURL($case, $this->config->testcase->editor->edit['id'], $this->post->uid);
         $this->dao->update(TABLE_CASE)->data($case)->autoCheck()->batchCheck($requiredFields, 'notempty')->checkFlow()->where('id')->eq((int)$caseID)->exec();
         if(!$this->dao->isError())
         {
@@ -883,10 +887,12 @@ class testcaseModel extends model
             ->setDefault('reviewedDate', substr($now, 0, 10))
             ->setDefault('lastEditedBy', $this->app->user->account)
             ->setDefault('lastEditedDate', $now)
+            ->stripTags($this->config->testcase->editor->review['id'], $this->config->allowedTags)
             ->setForce('status', $status)
             ->join('reviewedBy', ',')
             ->get();
 
+        $case = $this->loadModel('file')->processImgURL($case, $this->config->testcase->editor->review['id'], $this->post->uid);
         $this->dao->update(TABLE_CASE)->data($case)->autoCheck()->checkFlow()->where('id')->eq($caseID)->exec();
 
         if(dao::isError()) return false;
@@ -1268,11 +1274,26 @@ class testcaseModel extends model
                 ->fetchGroup('case');
             $oldCases = $this->dao->select('*')->from(TABLE_CASE)->where('id')->in($_POST['id'])->fetchAll('id');
         }
+
+        $cases             = array();
+        $line              = 1;
+        $fieldNames        = array();
         $storyVersionPairs = $this->story->getVersions($data->story);
 
-        $cases      = array();
-        $line       = 1;
-        $fieldNames = array();
+        if($this->config->edition != 'open')
+        {
+            $extendFields = $this->getFlowExtendFields();
+            $notEmptyRule = $this->loadModel('workflowrule')->getByTypeAndRule('system', 'notempty');
+
+            foreach($extendFields as $extendField)
+            {
+                if(strpos(",$extendField->rules,", ",$notEmptyRule->id,") !== false)
+                {
+                    $this->config->testcase->create->requiredFields .= ',' . $extendField->field;
+                }
+            }
+        }
+
         foreach($data->product as $key => $product)
         {
             $caseData = new stdclass();
@@ -1289,6 +1310,18 @@ class testcaseModel extends model
             $caseData->frequency    = 1;
             $caseData->precondition = $data->precondition[$key];
 
+            if($this->config->edition != 'open')
+            {
+                foreach($extendFields as $extendField)
+                {
+                    $dataArray = $_POST[$extendField->field];
+                    $caseData->{$extendField->field} = $dataArray[$key];
+                    if(is_array($caseData->{$extendField->field})) $caseData->{$extendField->field} = join(',', $caseData->{$extendField->field});
+
+                    $caseData->{$extendField->field} = htmlSpecialString($caseData->{$extendField->field});
+                }
+            }
+
             if(isset($this->config->testcase->create->requiredFields))
             {
                 $requiredFields = explode(',', $this->config->testcase->create->requiredFields);
@@ -1297,16 +1330,6 @@ class testcaseModel extends model
                     $requiredField = trim($requiredField);
                     if(!isset($caseData->$requiredField)) continue;
                     if(empty($caseData->$requiredField) and !isset($fieldNames[$requiredField])) $fieldNames[$requiredField] = $this->lang->testcase->$requiredField;
-                }
-            }
-
-            if(isset($this->config->testcase->appendFields))
-            {
-                foreach(explode(',', $this->config->testcase->appendFields) as $appendField)
-                {
-                    if(empty($appendField)) continue;
-                    $caseData->$appendField = zget($_POST[$appendField], $key, '');
-                    if(is_array($caseData->$appendField)) $caseData->$appendField = join(',', $caseData->$appendField);
                 }
             }
 
@@ -1382,34 +1405,38 @@ class testcaseModel extends model
                     $caseData->lastEditedBy   = $this->app->user->account;
                     $caseData->lastEditedDate = $now;
                     if($stepChanged and !$forceNotReview) $caseData->status = 'wait';
-                    $this->dao->update(TABLE_CASE)->data($caseData)->where('id')->eq($caseID)->autoCheck()->exec();
-                    if($stepChanged)
+                    $this->dao->update(TABLE_CASE)->data($caseData)->where('id')->eq($caseID)->autoCheck()->checkFlow()->exec();
+
+                    if(!dao::isError())
                     {
-                        $parentStepID = 0;
-                        foreach($steps as $id => $step)
+                        if($stepChanged)
                         {
-                            $step = (array)$step;
-                            if(empty($step['desc'])) continue;
-                            $stepData = new stdclass();
-                            $stepData->type    = ($step['type'] == 'item' and $parentStepID == 0) ? 'step' : $step['type'];
-                            $stepData->parent  = ($stepData->type == 'item') ? $parentStepID : 0;
-                            $stepData->case    = $caseID;
-                            $stepData->version = $version;
-                            $stepData->desc    = $step['desc'];
-                            $stepData->expect  = $step['expect'];
-                            $this->dao->insert(TABLE_CASESTEP)->data($stepData)->autoCheck()->exec();
-                            if($stepData->type == 'group') $parentStepID = $this->dao->lastInsertID();
-                            if($stepData->type == 'step')  $parentStepID = 0;
+                            $parentStepID = 0;
+                            foreach($steps as $id => $step)
+                            {
+                                $step = (array)$step;
+                                if(empty($step['desc'])) continue;
+                                $stepData = new stdclass();
+                                $stepData->type    = ($step['type'] == 'item' and $parentStepID == 0) ? 'step' : $step['type'];
+                                $stepData->parent  = ($stepData->type == 'item') ? $parentStepID : 0;
+                                $stepData->case    = $caseID;
+                                $stepData->version = $version;
+                                $stepData->desc    = $step['desc'];
+                                $stepData->expect  = $step['expect'];
+                                $this->dao->insert(TABLE_CASESTEP)->data($stepData)->autoCheck()->exec();
+                                if($stepData->type == 'group') $parentStepID = $this->dao->lastInsertID();
+                                if($stepData->type == 'step')  $parentStepID = 0;
+                            }
                         }
+                        $oldCase->steps  = $this->joinStep($oldStep);
+                        $caseData->steps = $this->joinStep($steps);
+                        $changes  = common::createChanges($oldCase, $caseData);
+
+                        $this->updateCase2Project($oldCase, $caseData, $caseID);
+
+                        $actionID = $this->action->create('case', $caseID, 'Edited');
+                        $this->action->logHistory($actionID, $changes);
                     }
-                    $oldCase->steps  = $this->joinStep($oldStep);
-                    $caseData->steps = $this->joinStep($steps);
-                    $changes  = common::createChanges($oldCase, $caseData);
-
-                    $this->updateCase2Project($oldCase, $caseData, $caseID);
-
-                    $actionID = $this->action->create('case', $caseID, 'Edited');
-                    $this->action->logHistory($actionID, $changes);
                 }
             }
             else
@@ -1421,7 +1448,7 @@ class testcaseModel extends model
                 $caseData->branch     = isset($data->branch[$key]) ? $data->branch[$key] : $branch;
                 if($caseData->story) $caseData->storyVersion = zget($storyVersionPairs, $caseData->story, 1);
                 $caseData->status = !$forceNotReview ? 'wait' : 'normal';
-                $this->dao->insert(TABLE_CASE)->data($caseData)->autoCheck()->exec();
+                $this->dao->insert(TABLE_CASE)->data($caseData)->autoCheck()->checkFlow()->exec();
 
                 if(!dao::isError())
                 {
@@ -2123,7 +2150,13 @@ class testcaseModel extends model
 
         if(!$case->needconfirm)
         {
-            if(!isonlybody()) $menu .= $this->buildMenu('testcase', 'edit', $params, $case, 'view', '', '', 'showinonlybody');
+            if(!isonlybody())
+            {
+                $editParams = $params;
+                if($this->app->tab == 'project')   $editParams .= "&comment=false&projectID={$this->session->project}";
+                if($this->app->tab == 'execution') $editParams .= "&comment=false&executionID={$this->session->execution}";
+                $menu .= $this->buildMenu('testcase', 'edit', $editParams, $case, 'view', '', '', 'showinonlybody');
+            }
             if(!$case->isLibCase && $case->auto != 'unit')
             {
                 $menu .= $this->buildMenu('testcase', 'create', "productID=$case->product&branch=$case->branch&moduleID=$case->module&from=testcase&param=$case->id", $case, 'view', 'copy');
@@ -2161,7 +2194,12 @@ class testcaseModel extends model
 
         $menu .= $this->buildMenu('testtask', 'results', "runID=0&$params", $case, 'browse', '', '', 'iframe', true, "data-width='95%'");
         $menu .= $this->buildMenu('testtask', 'runCase', "runID=0&$params&version=$case->version", $case, 'browse', 'play', '', 'runCase iframe', false, "data-width='95%'");
-        $menu .= $this->buildMenu('testcase', 'edit',    "caseID=$case->id", $case, 'browse');
+
+        $editParams = $params;
+        if($this->app->tab == 'project')   $editParams .= "&comment=false&projectID={$this->session->project}";
+        if($this->app->tab == 'execution') $editParams .= "&comment=false&executionID={$this->session->execution}";
+        $menu .= $this->buildMenu('testcase', 'edit', $editParams, $case, 'browse');
+
         if($this->config->testcase->needReview || !empty($this->config->testcase->forceReview))
         {
             common::printIcon('testcase', 'review', $params, $case, 'browse', 'glasses', '', 'iframe');

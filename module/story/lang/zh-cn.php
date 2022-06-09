@@ -3,7 +3,7 @@
  * The story module zh-cn file of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     story
  * @version     $Id: zh-cn.php 5141 2013-07-15 05:57:15Z chencongzhi520@gmail.com $
@@ -98,7 +98,7 @@ $lang->story->sourceNote     = '来源备注';
 $lang->story->fromBug        = '来源Bug';
 $lang->story->title          = "{$lang->SRCommon}名称";
 $lang->story->type           = "需求类型";
-$lang->story->category       = "类型";
+$lang->story->category       = "类别";
 $lang->story->color          = '标题颜色';
 $lang->story->toBug          = '转Bug';
 $lang->story->spec           = "描述";

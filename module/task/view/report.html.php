@@ -3,7 +3,7 @@
  * The report view file of task module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      wenjie<wenjie@cnezsoft.com>
  * @package     execution
  * @version     $Id: report.html.php 1594 2011-04-10 11:00:00Z wj $

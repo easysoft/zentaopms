@@ -4,7 +4,7 @@
  * The control file of tree module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     tree
  * @version     $Id: control.php 5002 2013-07-03 08:25:39Z chencongzhi520@gmail.com $
@@ -228,6 +228,49 @@ class tree extends control
 
             $title      = $this->lang->tree->manageTrainpost;
             $position[] = $this->lang->tree->manageTrainpost;
+        }
+        elseif(strpos($viewType, 'datasource') !== false)
+        {
+            $params = explode('_', $viewType);
+            if(count($params) == 2)
+            {
+                $datasourceID = $params[1];
+                $manageChild  = 'manage' . ucfirst($viewType) . 'Child';
+                $datasource   = $this->loadModel('workflowdatasource', 'flow')->getByID($datasourceID);
+                if($datasource)
+                {
+                    $this->app->rawModule = 'workflowdatasource';
+
+                    $title      = $datasource->name;
+                    $position[] = $datasource->name;
+
+                    $this->lang->tree->$manageChild = $title;
+
+                    $root = new stdclass();
+                    $root->name = $title;
+                    $this->view->root = $root;
+                }
+            }
+        }
+        /* viewType is workflow building category. */
+        else if(strpos($viewType, '_') !== false)
+        {
+            $params = explode('_', $viewType);
+            if(count($params) == 2)
+            {
+                $this->app->rawModule = $params[0];
+
+                $manageChild  = 'manage' . ucfirst($viewType) . 'Child';
+
+                $title      = $this->lang->tree->common;
+                $position[] = $this->lang->tree->common;
+
+                $this->lang->tree->$manageChild = $title;
+
+                $root = new stdclass();
+                $root->name = $title;
+                $this->view->root = $root;
+            }
         }
 
         $parentModules               = $this->tree->getParents($currentModuleID);

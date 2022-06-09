@@ -2,7 +2,7 @@
 * The css file of ZenTaoPMS.
 *
 * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
-* @license     ZPL (http://zpl.pub/page/zplv12.html)
+* @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
 * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
 * @package     front
 * @version     $Id: style.css 1454 2009-10-23 01:45:26Z wwccss $
@@ -91,3 +91,4 @@ a.showMoreImage:hover {opacity: 1;}
 #headerActions .dropdown-menu:before, #headerActions .dropdown-menu:hover:before {position: absolute; top: -9px; right: 50%; width: 0; height: 0; content: ' '; border-color: transparent transparent #fff transparent; border-style: solid; border-width: 0 10px 10px 10px;}
 
 .icon-size-width:before {content: "\e9c5"; transform: rotate(90deg); -ms-transform: rotate(90deg); -moz-transform: rotate(90deg); -webkit-transform: rotate(90deg); -o-transform: rotate(90deg);}
+.checkbox-primary > label{overflow: hidden;}
