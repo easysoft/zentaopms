@@ -2121,6 +2121,7 @@ class execution extends control
         $this->session->set('execLaneType', $browseType);
         $this->session->set('execGroupBy', $groupBy);
         $this->session->set('storyList', $this->app->getURI(true), 'execution');
+        $this->session->set('rdSearchValue', '');
 
         $this->lang->execution->menu = new stdclass();
         $execution = $this->commonAction($executionID);
@@ -3831,6 +3832,7 @@ class execution extends control
 
         if($lastEditedTime > $enterTime or $groupBy != 'default' or !empty($searchValue))
         {
+            if($from == 'RD') $this->session->set('rdSearchValue', $searchValue);
             $kanbanGroup = $from == 'execution' ? $this->loadModel('kanban')->getExecutionKanban($executionID, $browseType, $groupBy) : $this->loadModel('kanban')->getRDKanban($executionID, $browseType, 'id_asc', 0, $groupBy, $searchValue);
             return print(json_encode($kanbanGroup));
         }

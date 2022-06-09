@@ -173,10 +173,11 @@ class task extends control
             {
                 if($execution->type == 'kanban' and $this->app->tab == 'execution')
                 {
-                    $execLaneType = $this->session->execLaneType ? $this->session->execLaneType : 'all';
-                    $execGroupBy  = $this->session->execGroupBy ? $this->session->execGroupBy : 'default';
-                    $kanbanData   = $this->loadModel('kanban')->getRDKanban($executionID, $execLaneType, 'id_desc', 0, $execGroupBy);
-                    $kanbanData   = json_encode($kanbanData);
+                    $execLaneType  = $this->session->execLaneType ? $this->session->execLaneType : 'all';
+                    $execGroupBy   = $this->session->execGroupBy ? $this->session->execGroupBy : 'default';
+                    $rdSearchValue = $this->session->rdSearchValue ? $this->session->rdSearchValue : '';
+                    $kanbanData    = $this->loadModel('kanban')->getRDKanban($executionID, $execLaneType, 'id_desc', 0, $execGroupBy, $rdSearchValue);
+                    $kanbanData    = json_encode($kanbanData);
 
                     return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => "parent.updateKanban($kanbanData, 0)"));
                 }
@@ -349,10 +350,11 @@ class task extends control
             {
                 if($execution->type == 'kanban' and $this->app->tab == 'execution')
                 {
-                    $execLaneType = $this->session->execLaneType ? $this->session->execLaneType : 'all';
-                    $execGroupBy  = $this->session->execGroupBy ? $this->session->execGroupBy : 'default';
-                    $kanbanData   = $this->loadModel('kanban')->getRDKanban($executionID, $execLaneType, 'id_desc', 0, $execGroupBy);
-                    $kanbanData   = json_encode($kanbanData);
+                    $execLaneType  = $this->session->execLaneType ? $this->session->execLaneType : 'all';
+                    $execGroupBy   = $this->session->execGroupBy ? $this->session->execGroupBy : 'default';
+                    $rdSearchValue = $this->session->rdSearchValue ? $this->session->rdSearchValue : '';
+                    $kanbanData    = $this->loadModel('kanban')->getRDKanban($executionID, $execLaneType, 'id_desc', 0, $execGroupBy, $rdSearchValue);
+                    $kanbanData    = json_encode($kanbanData);
 
                     return print(js::closeModal('parent.parent', '', "parent.parent.updateKanban($kanbanData, 0)"));
                 }
@@ -509,8 +511,9 @@ class task extends control
                 $execution = $this->execution->getByID($task->execution);
                 if($execution->type == 'kanban' and $this->app->tab == 'execution')
                 {
-                    $kanbanData = $this->loadModel('kanban')->getRDKanban($task->execution, $this->session->execLaneType ? $this->session->execLaneType : 'all', 'id_desc', 0, $kanbanGroup);
-                    $kanbanData = json_encode($kanbanData);
+                    $rdSearchValue = $this->session->rdSearchValue ? $this->session->rdSearchValue : '';
+                    $kanbanData    = $this->loadModel('kanban')->getRDKanban($task->execution, $this->session->execLaneType ? $this->session->execLaneType : 'all', 'id_desc', 0, $kanbanGroup, $rdSearchValue);
+                    $kanbanData    = json_encode($kanbanData);
 
                     return print(js::closeModal('parent.parent', '', "parent.parent.updateKanban($kanbanData)"));
                 }
@@ -729,8 +732,9 @@ class task extends control
                 $execution = $this->execution->getByID($task->execution);
                 if($execution->type == 'kanban' and $this->app->tab == 'execution')
                 {
-                    $kanbanData = $this->loadModel('kanban')->getRDKanban($task->execution, $this->session->execLaneType ? $this->session->execLaneType : 'all', 'id_desc', 0, $kanbanGroup);
-                    $kanbanData = json_encode($kanbanData);
+                    $rdSearchValue = $this->session->rdSearchValue ? $this->session->rdSearchValue : '';
+                    $kanbanData    = $this->loadModel('kanban')->getRDKanban($task->execution, $this->session->execLaneType ? $this->session->execLaneType : 'all', 'id_desc', 0, $kanbanGroup, $rdSearchValue);
+                    $kanbanData    = json_encode($kanbanData);
 
                     return print(js::closeModal('parent.parent', '', "parent.parent.updateKanban($kanbanData)"));
                 }
@@ -977,11 +981,12 @@ class task extends control
                 $execution = $this->execution->getByID($task->execution);
                 if($execution->type == 'kanban' and $this->app->tab == 'execution')
                 {
-                    $regionID     = !empty($output['regionID']) ? $output['regionID'] : 0;
-                    $execLaneType = $this->session->execLaneType ? $this->session->execLaneType : 'all';
-                    $execGroupBy  = $this->session->execGroupBy ? $this->session->execGroupBy : 'default';
-                    $kanbanData   = $this->loadModel('kanban')->getRDKanban($task->execution, $execLaneType, 'id_desc', $regionID, $execGroupBy);
-                    $kanbanData   = json_encode($kanbanData);
+                    $regionID      = !empty($output['regionID']) ? $output['regionID'] : 0;
+                    $execLaneType  = $this->session->execLaneType ? $this->session->execLaneType : 'all';
+                    $execGroupBy   = $this->session->execGroupBy ? $this->session->execGroupBy : 'default';
+                    $rdSearchValue = $this->session->rdSearchValue ? $this->session->rdSearchValue : '';
+                    $kanbanData    = $this->loadModel('kanban')->getRDKanban($task->execution, $execLaneType, 'id_desc', $regionID, $execGroupBy, $rdSearchValue);
+                    $kanbanData    = json_encode($kanbanData);
 
                     return print(js::closeModal('parent.parent', '', "parent.parent.updateKanban($kanbanData, $regionID)"));
                 }
@@ -1041,10 +1046,11 @@ class task extends control
                 $execution = $this->execution->getByID($task->execution);
                 if($execution->type == 'kanban' and $this->app->tab == 'execution')
                 {
-                    $execLaneType = $this->session->execLaneType ? $this->session->execLaneType : 'all';
-                    $execGroupBy  = $this->session->execGroupBy ? $this->session->execGroupBy : 'default';
-                    $kanbanData   = $this->loadModel('kanban')->getRDKanban($task->execution, $execLaneType, 'id_desc', 0, $execGroupBy);
-                    $kanbanData   = json_encode($kanbanData);
+                    $execLaneType  = $this->session->execLaneType ? $this->session->execLaneType : 'all';
+                    $execGroupBy   = $this->session->execGroupBy ? $this->session->execGroupBy : 'default';
+                    $rdSearchValue = $this->session->rdSearchValue ? $this->session->rdSearchValue : '';
+                    $kanbanData    = $this->loadModel('kanban')->getRDKanban($task->execution, $execLaneType, 'id_desc', 0, $execGroupBy, $rdSearchValue);
+                    $kanbanData    = json_encode($kanbanData);
 
                     return print(js::closeModal('parent.parent', '', "parent.parent.updateKanban($kanbanData)"));
                 }
@@ -1177,11 +1183,12 @@ class task extends control
                 $execution = $this->execution->getByID($task->execution);
                 if($execution->type == 'kanban' and $this->app->tab == 'execution')
                 {
-                    $regionID     = !empty($output['regionID']) ? $output['regionID'] : 0;
-                    $execLaneType = $this->session->execLaneType ? $this->session->execLaneType : 'all';
-                    $execGroupBy  = $this->session->execGroupBy ? $this->session->execGroupBy : 'default';
-                    $kanbanData   = $this->loadModel('kanban')->getRDKanban($task->execution, $execLaneType, 'id_desc', $regionID, $execGroupBy);
-                    $kanbanData   = json_encode($kanbanData);
+                    $regionID      = !empty($output['regionID']) ? $output['regionID'] : 0;
+                    $execLaneType  = $this->session->execLaneType ? $this->session->execLaneType : 'all';
+                    $execGroupBy   = $this->session->execGroupBy ? $this->session->execGroupBy : 'default';
+                    $rdSearchValue = $this->session->rdSearchValue ? $this->session->rdSearchValue : '';
+                    $kanbanData    = $this->loadModel('kanban')->getRDKanban($task->execution, $execLaneType, 'id_desc', $regionID, $execGroupBy, $rdSearchValue);
+                    $kanbanData    = json_encode($kanbanData);
 
                     return print(js::closeModal('parent.parent', '', "parent.parent.updateKanban($kanbanData, $regionID)"));
                 }
@@ -1267,11 +1274,12 @@ class task extends control
                 $execution = $this->execution->getByID($task->execution);
                 if($execution->type == 'kanban' and $this->app->tab == 'execution')
                 {
-                    $regionID     = !empty($output['regionID']) ? $output['regionID'] : 0;
-                    $execLaneType = $this->session->execLaneType ? $this->session->execLaneType : 'all';
-                    $execGroupBy  = $this->session->execGroupBy ? $this->session->execGroupBy : 'default';
-                    $kanbanData   = $this->loadModel('kanban')->getRDKanban($task->execution, $execLaneType, 'id_desc', $regionID, $execGroupBy);
-                    $kanbanData   = json_encode($kanbanData);
+                    $regionID      = !empty($output['regionID']) ? $output['regionID'] : 0;
+                    $execLaneType  = $this->session->execLaneType ? $this->session->execLaneType : 'all';
+                    $execGroupBy   = $this->session->execGroupBy ? $this->session->execGroupBy : 'default';
+                    $rdSearchValue = $this->session->rdSearchValue ? $this->session->rdSearchValue : '';
+                    $kanbanData    = $this->loadModel('kanban')->getRDKanban($task->execution, $execLaneType, 'id_desc', $regionID, $execGroupBy, $rdSearchValue);
+                    $kanbanData    = json_encode($kanbanData);
 
                     return print(js::closeModal('parent.parent', '', "parent.parent.updateKanban($kanbanData, $regionID)"));
                 }
@@ -1325,10 +1333,11 @@ class task extends control
                 $execution = $this->execution->getByID($task->execution);
                 if($execution->type == 'kanban' and $this->app->tab == 'execution')
                 {
-                    $execLaneType = $this->session->execLaneType ? $this->session->execLaneType : 'all';
-                    $execGroupBy  = $this->session->execGroupBy ? $this->session->execGroupBy : 'default';
-                    $kanbanData   = $this->loadModel('kanban')->getRDKanban($task->execution, $execLaneType, 'id_desc', 0, $execGroupBy);
-                    $kanbanData   = json_encode($kanbanData);
+                    $execLaneType  = $this->session->execLaneType ? $this->session->execLaneType : 'all';
+                    $execGroupBy   = $this->session->execGroupBy ? $this->session->execGroupBy : 'default';
+                    $rdSearchValue = $this->session->rdSearchValue ? $this->session->rdSearchValue : '';
+                    $kanbanData    = $this->loadModel('kanban')->getRDKanban($task->execution, $execLaneType, 'id_desc', 0, $execGroupBy, $rdSearchValue);
+                    $kanbanData    = json_encode($kanbanData);
 
                     return print(js::closeModal('parent.parent', '', "parent.parent.updateKanban($kanbanData)"));
                 }
@@ -1398,11 +1407,12 @@ class task extends control
 
                 if($execution->type == 'kanban' and $this->app->tab == 'execution')
                 {
-                    $regionID     = !empty($output['regionID']) ? $output['regionID'] : 0;
-                    $execLaneType = $this->session->execLaneType ? $this->session->execLaneType : 'all';
-                    $execGroupBy  = $this->session->execGroupBy ? $this->session->execGroupBy : 'default';
-                    $kanbanData   = $this->loadModel('kanban')->getRDKanban($task->execution, $execLaneType, 'id_desc', $regionID, $execGroupBy);
-                    $kanbanData   = json_encode($kanbanData);
+                    $regionID      = !empty($output['regionID']) ? $output['regionID'] : 0;
+                    $execLaneType  = $this->session->execLaneType ? $this->session->execLaneType : 'all';
+                    $execGroupBy   = $this->session->execGroupBy ? $this->session->execGroupBy : 'default';
+                    $rdSearchValue = $this->session->rdSearchValue ? $this->session->rdSearchValue : '';
+                    $kanbanData    = $this->loadModel('kanban')->getRDKanban($task->execution, $execLaneType, 'id_desc', $regionID, $execGroupBy, $rdSearchValue);
+                    $kanbanData    = json_encode($kanbanData);
 
                     return print(js::closeModal('parent.parent', '', "parent.parent.updateKanban($kanbanData, $regionID)"));
                 }
@@ -1563,11 +1573,12 @@ class task extends control
                 $execution = $this->execution->getByID($task->execution);
                 if($execution->type == 'kanban' and $this->app->tab == 'execution')
                 {
-                    $regionID     = !empty($output['regionID']) ? $output['regionID'] : 0;
-                    $execLaneType = $this->session->execLaneType ? $this->session->execLaneType : 'all';
-                    $execGroupBy  = $this->session->execGroupBy ? $this->session->execGroupBy : 'default';
-                    $kanbanData   = $this->loadModel('kanban')->getRDKanban($task->execution, $execLaneType, 'id_desc', $regionID, $execGroupBy);
-                    $kanbanData   = json_encode($kanbanData);
+                    $regionID      = !empty($output['regionID']) ? $output['regionID'] : 0;
+                    $execLaneType  = $this->session->execLaneType ? $this->session->execLaneType : 'all';
+                    $execGroupBy   = $this->session->execGroupBy ? $this->session->execGroupBy : 'default';
+                    $rdSearchValue = $this->session->rdSearchValue ? $this->session->rdSearchValue : '';
+                    $kanbanData    = $this->loadModel('kanban')->getRDKanban($task->execution, $execLaneType, 'id_desc', $regionID, $execGroupBy, $rdSearchValue);
+                    $kanbanData    = json_encode($kanbanData);
 
                     return print(js::closeModal('parent.parent', '', "parent.parent.updateKanban($kanbanData, $regionID)"));
                 }
@@ -1621,11 +1632,12 @@ class task extends control
                 $execution = $this->execution->getByID($task->execution);
                 if($execution->type == 'kanban' and $this->app->tab == 'execution')
                 {
-                    $regionID     = !empty($output['regionID']) ? $output['regionID'] : 0;
-                    $execLaneType = $this->session->execLaneType ? $this->session->execLaneType : 'all';
-                    $execGroupBy  = $this->session->execGroupBy ? $this->session->execGroupBy : 'default';
-                    $kanbanData   = $this->loadModel('kanban')->getRDKanban($task->execution, $execLaneType, 'id_desc', $regionID, $execGroupBy);
-                    $kanbanData   = json_encode($kanbanData);
+                    $regionID      = !empty($output['regionID']) ? $output['regionID'] : 0;
+                    $execLaneType  = $this->session->execLaneType ? $this->session->execLaneType : 'all';
+                    $execGroupBy   = $this->session->execGroupBy ? $this->session->execGroupBy : 'default';
+                    $rdSearchValue = $this->session->rdSearchValue ? $this->session->rdSearchValue : '';
+                    $kanbanData    = $this->loadModel('kanban')->getRDKanban($task->execution, $execLaneType, 'id_desc', $regionID, $execGroupBy, $rdSearchValue);
+                    $kanbanData    = json_encode($kanbanData);
 
                     return print(js::closeModal('parent.parent', '', "parent.parent.updateKanban($kanbanData, $regionID)"));
                 }
