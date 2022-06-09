@@ -417,9 +417,9 @@ EOF;
         $this->loadModel('execution');
         $queryID  = ($type == 'bySearch') ? (int)$param : 0;
 
-        if($type != 'bySearch') $this->session->set('myTaskType', $type);
 
         /* Save session. */
+        if($type != 'bySearch')            $this->session->set('myTaskType', $type);
         if($this->app->viewType != 'json') $this->session->set('taskList', $this->app->getURI(true), 'execution');
 
         /* Load pager. */
@@ -523,9 +523,9 @@ EOF;
         $this->loadModel('bug');
         $this->app->loadLang('bug');
         $queryID  = ($type == 'bySearch') ? (int)$param : 0;
+        if($type != 'bySearch')            $this->session->set('myBugType', $type);
         if($this->app->viewType != 'json') $this->session->set('bugList', $this->app->getURI(true), 'qa');
 
-        if($type != 'bySearch') $this->session->set('myBugType', $type);
 
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
