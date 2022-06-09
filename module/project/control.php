@@ -1993,4 +1993,20 @@ class project extends control
         }
         echo json_encode($response);
     }
+
+   /**
+     * AJAX: get executions of a project in html select.
+     *
+     * @param  int    $projectID
+     * @param  int    $executionID
+     * @access public
+     * @return void
+     */
+    public function ajaxGetExecutions($projectID, $executionID = 0)
+    {
+        $executions = array('' => '') + $this->loadModel('execution')->getPairs($projectID, 'all');
+
+        if($this->app->getViewType() == 'json') return print(json_encode($executionList));
+        return print(html::select('execution', $executions, $executionID, "class='form-control'"));
+    }
 }
