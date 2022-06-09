@@ -70,7 +70,7 @@
             <th class='c-project'><?php common::printOrderLink('execution', $orderBy, $vars, $lang->my->executions);?></th>
             <?php endif;?>
             <?php if($type != 'openedBy'): ?>
-            <th class='c-user'><?php common::printOrderLink('openedBy', $orderBy, $vars, $lang->openedByAB);?></th>
+            <th class='c-user-short'><?php common::printOrderLink('openedBy', $orderBy, $vars, $lang->openedByAB);?></th>
             <?php endif;?>
             <th class='c-date text-center'><?php common::printOrderLink('deadline', $orderBy, $vars, $lang->task->deadlineAB);?></th>
             <?php if($type != 'assignedTo'): ?>
