@@ -242,8 +242,6 @@ class task extends control
 
         $stories = $this->story->getExecutionStoryPairs($executionID, 0, 'all', '', 'full', 'unclosed');
 
-        if($this->config->vision == 'lite') $stories = $stories + array('', '');
-
         /* Get block id of assinge to me. */
         $blockID = 0;
         if(isonlybody())

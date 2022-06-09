@@ -5,6 +5,16 @@ public function __construct($appName = '')
     if($this->app->getModuleName() == 'kanban') $this->lang->kanban->menu = new stdclass();
 }
 
+/**
+ * Get kanban group by execution id.
+ *
+ * @param  int    $executionID
+ * @param  int    $browseType
+ * @param  int    $groupBy
+ * @param  string $searchValue
+ * @access public
+ * @return array
+ */
 public function getKanban4Group($executionID, $browseType, $groupBy, $searchValue = '')
 {
     /* Get card  data. */
@@ -132,6 +142,7 @@ public function getKanban4Group($executionID, $browseType, $groupBy, $searchValu
  * @param  int    $kanbanID
  * @param  string $browseType all|task|bug|story
  * @param  string $orderBy
+ * @param  string $searchValue
  * @access public
  * @return array
  */
