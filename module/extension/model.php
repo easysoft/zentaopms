@@ -927,7 +927,7 @@ class extensionModel extends model
         foreach($extensions as $extension)
         {
             $expiredDate = $this->getExpireDate($extension);
-            if(!empty($expiredDate))
+            if(!empty($expiredDate) and $expiredDate != 'life')
             {
                 $dateDiff = helper::diffDate($expiredDate, $today);
                 if($category)
