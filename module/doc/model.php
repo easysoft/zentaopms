@@ -337,6 +337,44 @@ class docModel extends model
         {
             $docs = $this->getDocs(0, 0, $sort, $pager);
         }
+        elseif($browseType == 'bySearch')
+        {
+            if($queryID)
+            {
+                $query = $this->loadModel('search')->getQuery($queryID);
+                if($query)
+                {
+                    $this->session->set('contributeDocQuery', $query->sql);
+                    $this->session->set('contributeDocForm', $query->form);
+                }
+                else
+                {
+                    $this->session->set('contributeDocQuery', ' 1 = 1');
+                }
+            }
+            else
+            {
+                if($this->session->contributeDocQuery == false) $this->session->set('contributeDocQuery', ' 1 = 1');
+            }
+
+            $query     = $this->getDocQuery($this->session->contributeDocQuery);
+            $docIDList = $this->dao->select('objectID')->from(TABLE_ACTION)
+                ->where('objectType')->eq('doc')
+                ->andWhere('actor')->eq($this->app->user->account)
+                ->andWhere('action')->eq('edited')
+                ->fetchAll('objectID');
+            $docs = $this->dao->select('*')->from(TABLE_DOC)
+                ->where('deleted')->eq(0)
+                ->andWhere($query)
+                ->andWhere('lib')->in($allLibs)
+                ->beginIF($this->config->doc->notArticleType)->andWhere('type')->notIN($this->config->doc->notArticleType)->fi()
+                ->andWhere('addedBy', 1)->eq($this->app->user->account)
+                ->orWhere('id')->in(array_keys($docIDList))
+                ->markRight(1)
+                ->orderBy($sort)
+                ->page($pager)
+                ->fetchAll('id');
+        }
         elseif($browseType == "openedbyme")
         {
             $docs = $this->dao->select('*')->from(TABLE_DOC)
@@ -441,6 +479,51 @@ class docModel extends model
         }
 
         return $docs;
+    }
+
+    /**
+     * Replace all in query.
+     *
+     * @param  string    $query
+     * @access public
+     * @return string
+     */
+    public function getDocQuery($query)
+    {
+        $allLibs = "`lib` = 'all'";
+        if(strpos($query, $allLibs) !== false)
+        {
+            $libs  = $this->loadModel('doc')->getLibs('all', 'withObject');
+            $query = str_replace($allLibs, '1', $query);
+            $query = $query . ' AND `lib` ' . helper::dbIN($libs);
+        }
+
+        $allProject = "`project` = 'all'";
+        if(strpos($query, $allProject) !== false)
+        {
+            $projectIDList = $this->loadModel('bug')->getAllProjectIds();
+            if(is_array($projectIDList)) $projectIDList = implode(',', $projectIDList);
+            $query = str_replace($allProject, '1', $query);
+            $query = $query . ' AND `project` in (' . $projectIDList . ')';
+        }
+
+        $allProduct = "`product` = 'all'";
+        if(strpos($query, $allProduct) !== false)
+        {
+            $products = $this->app->user->view->products;
+            $query    = str_replace($allProduct, '1', $query);
+            $query    = $query . ' AND `product` ' . helper::dbIN($products);
+        }
+
+        $allExecutions = "`execution` = 'all'";
+        if(strpos($query, $allExecutions) !== false)
+        {
+            $executions = $this->loadModel('execution')->getPairs();
+            $query      = str_replace($allExecutions, '1', $query);
+            $query      = $query . ' AND `execution` ' . helper::dbIN(array_keys($executions));
+        }
+
+        return $query;
     }
 
     /**
@@ -838,17 +921,35 @@ class docModel extends model
      */
     public function buildSearchForm($libID, $libs, $queryID, $actionURL, $type)
     {
+        $this->loadModel('product');
+
+        if($this->app->rawMethod == 'contribute')
+        {
+            $this->config->doc->search['module'] = 'contributeDoc';
+            $products = $this->product->getPairs();
+            $this->config->doc->search['params']['project']['values']   = array('' => '') + $this->loadModel('project')->getPairsByProgram() + array('all' => $this->lang->doc->allProjects);
+            $this->config->doc->search['params']['execution']['values'] = array('' => '') + $this->loadModel('execution')->getPairs() + array('all' => $this->lang->doc->allExecutions);
+            $this->config->doc->search['params']['lib']['values']       = array('' => '') + $this->loadModel('doc')->getLibs('all', 'withObject') + array('all' => $this->lang->doclib->all);
+
+            unset($this->config->doc->search['fields']['module']);
+        }
+        else
+        {
+            $products = $this->product->getPairs('nocode', $this->session->project);
+            $this->config->doc->search['params']['execution']['values'] = array('' => '') + $this->loadModel('execution')->getPairs($this->session->project, 'all', 'noclosed') + array('all' => $this->lang->doc->allExecutions);
+            $this->config->doc->search['params']['lib']['values']       = array('' => '', $libID => ($libID ? $libs[$libID] : 0), 'all' => $this->lang->doclib->all);
+        }
+
+
         $this->config->doc->search['actionURL']                     = $actionURL;
         $this->config->doc->search['queryID']                       = $queryID;
-        $this->config->doc->search['params']['product']['values']   = array('' => '') + $this->loadModel('product')->getPairs('nocode', $this->session->project) + array('all' => $this->lang->doc->allProduct);
-        $this->config->doc->search['params']['execution']['values'] = array('' => '') + $this->loadModel('execution')->getPairs($this->session->project, 'all', 'noclosed') + array('all' => $this->lang->doc->allExecutions);
-        $this->config->doc->search['params']['lib']['values']       = array('' => '', $libID => ($libID ? $libs[$libID] : 0), 'all' => $this->lang->doclib->all);
+        $this->config->doc->search['params']['product']['values']   = array('' => '') + $products + array('all' => $this->lang->doc->allProduct);
 
         /* Get the modules. */
         $moduleOptionMenu                                        = $this->loadModel('tree')->getOptionMenu($libID, 'doc', $startModuleID = 0);
         $this->config->doc->search['params']['module']['values'] = $moduleOptionMenu;
 
-        if($type == 'index' || $type == 'objectLibs' || $libID == 0)
+        if($type == 'index' || $type == 'objectLibs' || ($this->app->rawMethod != 'contribute' and $libID == 0))
         {
             unset($this->config->doc->search['fields']['module']);
             unset($this->config->doc->search['fields']['lib']);
