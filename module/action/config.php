@@ -74,7 +74,7 @@ $config->trash->search['module']               = 'trash';
 $config->trash->search['fields']['objectName'] = $lang->action->objectName;
 $config->trash->search['fields']['objectID']   = $lang->action->objectID;
 $config->trash->search['fields']['actor']      = $lang->action->actor;
-$config->trash->search['fields']['date']       = $lang->action->date;
+$config->trash->search['fields']['date']       = $lang->action->dateAB;
 
 $config->trash->search['params']['objectName'] = array('operator' => 'include', 'control' => 'input',  'values' => '');
 $config->trash->search['params']['objectID']   = array('operator' => 'include', 'control' => 'input',  'values' => '');
