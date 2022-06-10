@@ -922,8 +922,8 @@ class productModel extends model
             $oldLineID = 'id' . $oldLine->id;
             if($data->programs[$oldLineID] != $oldLine->root)
             {
-                $product = $this->dao->select('*')->from(TABLE_PRODUCT)->where('line')->eq($oldLine->id)->fetchAll('id');
-                if(!empty($product)) return print(js::error($this->lang->product->changeLineError) . js::locate('parent'));
+                $product = $this->dao->select('*')->from(TABLE_PRODUCT)->where('line')->eq($oldLine->id)->fetch();
+                if(!empty($product)) return print(js::error($this->lang->product->changeLineError));
             }
         }
 
