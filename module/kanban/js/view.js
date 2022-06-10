@@ -1095,7 +1095,7 @@ function createLaneMenu(options)
 
     var items = [];
     if(privs.includes('editLaneName')) items.push({label: kanbanLang.editLaneName, icon: 'edit', url: createLink('kanban', 'editLaneName', 'laneID=' + lane.id + '&executionID=0&from=kanban'), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width': '635px'}});
-    if(privs.includes('editLaneColor')) items.push({label: kanbanLang.editLaneColor, icon: 'edit', url: createLink('kanban', 'editLaneColor', 'laneID=' + lane.id + '&executionID=0&from=kanban'), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width': '635px'}});
+    if(privs.includes('editLaneColor')) items.push({label: kanbanLang.editLaneColor, icon: 'color', url: createLink('kanban', 'editLaneColor', 'laneID=' + lane.id + '&executionID=0&from=kanban'), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width': '635px'}});
     if(privs.includes('deleteLane')) items.push({label: kanbanLang.deleteLane, icon: 'trash', url: createLink('kanban', 'deleteLane', 'lane=' + lane.id), attrs: {'target': 'hiddenwin'}});
 
     var bounds = options.$trigger[0].getBoundingClientRect();
