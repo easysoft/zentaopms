@@ -922,7 +922,7 @@ class myModel extends model
                 ->andWhere('t1.type')->eq('requirement')
                 ->andWhere('t1.openedBy',1)->eq($this->app->user->account)
                 ->orWhere('t1.closedBy')->eq($this->app->user->account)
-                ->orWhere('t5.reviewer')->eq($this->app->user->account)
+                ->orWhere('t3.reviewer')->eq($this->app->user->account)
                 ->orWhere('t1.id')->in($requirementIDList)
                 ->markRight(1)
                 ->andWhere('t1.deleted')->eq(0)
