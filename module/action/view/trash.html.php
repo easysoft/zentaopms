@@ -50,7 +50,10 @@
         foreach($moreType as $objectType)
         {
             $activeClass = $objectType == $currentObjectType ? 'btn-active-text' : '';
-            echo '<li>' . html::a($this->createLink('action', 'trash', "objectType=$objectType&type=$type"), "<span class='text'>" . zget($lang->action->objectTypes, $objectType) . "</span>", '', "class='btn btn-link $activeClass'") . '</li>';
+            $objectName  = zget($lang->action->objectTypes, $objectType, '');
+            if(empty($objectName)) continue;
+
+            echo '<li>' . html::a($this->createLink('action', 'trash', "objectType=$objectType&type=$type"), "<span class='text'>" . $objectName . "</span>", '', "class='btn btn-link $activeClass'") . '</li>';
         }
         echo '</ul></div>';
     }
