@@ -1638,13 +1638,14 @@ function resetRegionHeight(fold)
 function toggleRDSearchBox()
 {
     $('#rdSearchBox').toggle();
+
     if($('#rdSearchBox').css('display') == 'block')
     {
         $(".querybox-toggle").css("color", "#0c64eb");
     }
     else
     {
-        $(".querybox-toggle").css("color", "");
+        $(".querybox-toggle").css("color", "3c495c");
         $('#rdKanbanSearchInput').attr('value', '');
         searchCards('');
     }
