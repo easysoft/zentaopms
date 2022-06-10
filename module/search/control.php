@@ -51,7 +51,7 @@ class search extends control
 
         if($module == 'trash' and $this->session->objectName)
         {
-            $space = in_array($this->app->getClientLang(), array('zh-cn','zh-tw')) ? '' : ' ';
+            $space = common::checkNotCN() ? ' ' : '';
             $this->lang->search->common = $this->lang->search->common . $space . $this->session->objectName;
         }
 
