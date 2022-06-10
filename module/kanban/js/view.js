@@ -200,15 +200,16 @@ function renderCount($count, count, column)
         $count.parents('.title').parent('.kanban-header-col').css('background-color', 'transparent');
         $count.parents('.title').find('.text').css('max-width', $count.parents('.title').width() - 200);
         $count.css({'color': '#FF5D5D', 'opacity': '1'});
-        if(!$count.parent().find('.error').length) $count.parent().find('.include-last').after("<span class='error text-grey'><icon class='icon icon-exclamation-sign' title='" + kanbanLang.limitExceeded + "'></icon></span>");
+        if(!$count.parent().find('.error').length) $count.parent().find('.include-last').after("<span class='error text-grey'><icon class='icon icon-exclamation-sign' data-toggle='tooltip' data-original-title='" + kanbanLang.limitExceeded + "'></icon></span>");
         $count.parents('.title').find('.text-grey').css({'color': '#FF5D5D', 'opacity': '1'});
     }
     else
     {
         $count.parents('.title').parent('.kanban-header-col').css('background-color', 'transparent');
         $count.parents('.title').find('.text').css('max-width', $count.parents('.title').width() - 120);
-        $count.css('color', '#8B91A2');
+        $count.css({'color': '#8b91a2', 'opacity': '0.5'});
         $count.parent().find('.error').remove();
+        $count.parents('.title').find('.text-grey').css({'color': '#8b91a2', 'opacity': '0.5'});
     }
 }
 
@@ -798,6 +799,7 @@ function moveCard(cardID, fromColID, toColID, fromLaneID, toLaneID, kanbanID, re
                 $('.kanban-group-header').hide();
                 $(".title").attr("disabled", true).css("pointer-events", "none");
             }
+            setTooltip();
         },
         error: function(xhr, status, error)
         {
@@ -1477,6 +1479,8 @@ $(function()
 
     resetRegionHeight('open');
     if(!CRKanban && kanbanInfo.status == 'closed') $('.kanban-col.kanban-header-col').css('padding', '0px 0px 0px 0px');
+
+    setTooltip();
 });
 
 function initSortable()
@@ -1696,3 +1700,8 @@ $(document).on('click', '.dropdown-menu', function()
 {
     $.zui.ContextMenu.hide();
 });
+
+function setTooltip()
+{
+    $('[data-toggle="tooltip"]').tooltip({container: 'body'});
+}
