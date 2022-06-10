@@ -41,7 +41,7 @@
   <form id='myCaseForm' class="main-table table-case" data-ride="table" method="post">
     <table class="table has-sort-head" id='caseList'>
       <?php
-      $vars = "mode=$mode&type=$type&orderBy=%s&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID";
+      $vars = "mode=$mode&type=$type&param=$param&orderBy=%s&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID";
       $this->app->loadLang('testtask');
       $canBatchRun    = (common::hasPriv('testtask', 'batchRun')  and $type == 'assigntome');
       $canBatchEdit   = (common::hasPriv('testcase', 'batchEdit') and $type == 'assigntome');
