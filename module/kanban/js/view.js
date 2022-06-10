@@ -1263,7 +1263,11 @@ function calcColHeight(col, lane, colCards, colHeight, kanban)
 
     var options = kanban.options;
 
-    if(!options.displayCards) return colHeight;
+    var fontSize        = 13;
+    var moreLabelHeight = 20;
+    var laneNameHeight  = lane.name.length * fontSize;
+
+    if(!options.displayCards) return laneNameHeight > colHeight ? laneNameHeight + 2 * moreLabelHeight : colHeight;
     var displayCards = +(options.displayCards || 2);
 
     if (typeof displayCards !== 'number' || displayCards < 2) displayCards = 2;

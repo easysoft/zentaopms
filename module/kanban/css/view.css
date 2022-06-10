@@ -52,7 +52,7 @@
 
 .region .kanban-lane {position: relative; border-bottom: none!important; min-height: 200px !important}
 
-.region .kanban-lane > .kanban-lane-name > .text {margin: auto 0; max-height: 150px; overflow: hidden; text-overflow: ellipsis}
+.region .kanban-lane > .kanban-lane-name > .text {margin: auto 0;}
 .region .kanban-lane > .kanban-lane-name > .actions {position: absolute; top: 0; left: 0; right: 0; opacity: 0;}
 .region .kanban-lane > .kanban-lane-name > .actions > a {display: block; width: 20px; height: 20px; line-height: 20px; text-align: center; opacity: .7; color: #fff;}
 .region .kanban-lane > .kanban-lane-name > .actions > a:hover {background-color: rgba(0,0,0,.2); opacity: 1;}

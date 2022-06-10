@@ -316,7 +316,7 @@ $lang->kanbanlane->confirmDeleteTip = '您确认删除该泳道吗？删除泳�
 $lang->kanbanlane->modeList['sameAsOther'] = '与其他泳道使用相同看板列';
 $lang->kanbanlane->modeList['independent'] = '采用独立的看板列';
 
-$lang->kanbanlane->heightTypeList['auto']   = '自适应（根据卡片高度自适应）';
+$lang->kanbanlane->heightTypeList['auto']   = '自适应（根据卡片高度和泳道名称高度自适应）';
 $lang->kanbanlane->heightTypeList['custom'] = '自定义（根据卡片数量自定义泳道高度）';
 
 $lang->kanbancolumn->fluidBoardList['0'] = '固定列宽';

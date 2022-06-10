@@ -3067,7 +3067,7 @@ class kanbanModel extends model
             if(common::hasPriv('kanban', 'setColumnWidth') and $CRKanban) $columnActions .= '<li>' . html::a(helper::createLink('kanban', 'setColumnWidth', "kanbanID=$kanban->id", '', true), '<i class="icon icon-size-width"></i>' . $this->lang->kanban->columnWidth, '', "class='iframe btn btn-link' data-width=400") . '</li>';
             if($printSetHeightBtn and $CRKanban)
             {
-                $width = $this->app->getClientLang() == 'en' ? '750' : '650';
+                $width = $this->app->getClientLang() == 'en' ? '920' : '770';
                 $columnActions .= '<li>' . html::a(helper::createLink('kanban', 'setLaneHeight', "kanbanID=$kanban->id", '', true), '<i class="icon icon-size-height"></i>' . $this->lang->kanban->laneHeight, '', "class='iframe btn btn-link' data-width='$width'") . '</li>';
             }
             $actions .= $columnActions;
