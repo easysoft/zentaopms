@@ -685,18 +685,13 @@ class myModel extends model
 
         if($type == 'contribute')
         {
-            $riskIDList = array();
-            $AssignedByMe = $this->getAssignedByMe($this->app->user->account, '', $pager, $orderBy, '', 'risk');
-            foreach($AssignedByMe as $riskID => $risk)
-            {
-                $riskIDList[$riskID] = $riskID;
-            }
+            $assignedByMe = $this->getAssignedByMe($this->app->user->account, '', $pager, $orderBy, '', 'risk');
 
             $risks = $this->dao->select('*')->from(TABLE_RISK)
                 ->where($riskQuery)
                 ->andWhere('deleted')->eq('0')
                 ->orWhere('createdBy',1)->eq($this->app->user->account)
-                ->orWhere('id')->in($riskIDList)
+                ->orWhere('id')->in(array_keys($assignedByMe))
                 ->orWhere('closedBy')->eq($this->app->user->account)
                 ->orderBy($orderBy)
                 ->page($pager)
