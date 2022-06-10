@@ -55,6 +55,9 @@ js::set('requiredFields', $config->bug->create->requiredFields);
             <th class='c-id'><?php echo $lang->idAB;?></th>
             <th class='c-branch<?php echo zget($visibleFields, $product->type, ' hidden')?>'> <?php echo $lang->product->branch;?></th>
             <th class='c-module<?php echo zget($requiredFields, 'module', '', ' required');?>'> <?php echo $lang->bug->module;?></th>
+            <?php if($config->systemMode == 'new'):?>
+            <th class='c-project<?php echo zget($visibleFields, 'project', ' hidden') . zget($requiredFields, 'project', '', ' required');?>'><?php echo (isset($project->model) and $project->model == 'kanban') ? $lang->bug->kanban : $lang->bug->project;?></th>
+            <?php endif;?>
             <th class='c-execution<?php echo zget($visibleFields, 'execution', ' hidden') . zget($requiredFields, 'execution', '', ' required');?>'><?php echo (isset($project->model) and $project->model == 'kanban') ? $lang->bug->kanban : $lang->bug->execution;?></th>
             <th class='c-build required'><?php echo $lang->bug->openedBuild;?></th>
             <th class='c-title required'><?php echo $lang->bug->title;?></th>
@@ -83,6 +86,7 @@ js::set('requiredFields', $config->bug->create->requiredFields);
         <tbody>
           <?php
           $moduleOptionMenu       += array('ditto' => $lang->bug->ditto);
+          $projects               += array('ditto' => $lang->bug->ditto);
           $executions             += array('ditto' => $lang->bug->ditto);
           $lang->bug->typeList    += array('ditto' => $lang->bug->ditto);
           $lang->bug->priList     += array('ditto' => $lang->bug->ditto);
@@ -94,6 +98,7 @@ js::set('requiredFields', $config->bug->create->requiredFields);
           <?php foreach($titles as $bugTitle => $fileName):?>
           <?php
           $moduleID    = $i == 1 ? $moduleID : 'ditto';
+          $projectID   = $i == 1 ? $projectID : 'ditto';
           $executionID = $i == 1 ? $executionID : 'ditto';
           $type        = $i == 1 ? '' : 'ditto';
           $pri         = $i == 1 ? 0  : 'ditto';
@@ -104,6 +109,9 @@ js::set('requiredFields', $config->bug->create->requiredFields);
             <td class='text-center'><?php echo $i;?></td>
             <td class='<?php echo zget($visibleFields, $product->type, ' hidden')?>' style='overflow:visible'><?php echo html::select("branches[$i]", $branches, $branch, "class='form-control chosen' onchange='setBranchRelated(this.value, $productID, $i)'");?></td>
             <td><?php echo html::select("modules[$i]", $moduleOptionMenu, $moduleID, "class='form-control chosen'");?></td>
+            <?php if($config->systemMode == 'new'):?>
+            <td class='<?php echo zget($visibleFields, 'project', ' hidden')?>' style='overflow:visible'><?php echo html::select("projects[$i]", $projects, $projectID, "class='form-control chosen' onchange = 'loadProductExecutionsByProject($productID, this.value, $i)'");?></td>
+            <?php endif;?>
             <td class='<?php echo zget($visibleFields, 'execution', ' hidden')?>' style='overflow:visible'><?php echo html::select("executions[$i]", $executions, $executionID, "class='form-control chosen' onchange='loadExecutionBuilds($productID, this.value, $i)'");?></td>
             <td id='buildBox<?php echo $i;?>'><?php echo html::select("openedBuilds[$i][]", $builds, 'trunk', "class='form-control chosen' multiple");?></td>
             <td>
@@ -144,6 +152,7 @@ js::set('requiredFields', $config->bug->create->requiredFields);
           <?php for($i = $nextStart; $i <= $config->bug->batchCreate; $i++):?>
           <?php
           $moduleID    = $i - $nextStart == 0 ? $moduleID : 'ditto';
+          $projectID   = $i - $nextStart == 0 ? $projectID : 'ditto';
           $executionID = $i - $nextStart == 0 ? $executionID : 'ditto';
           $type        = $i - $nextStart == 0 ? '' : 'ditto';
           $pri         = $i - $nextStart == 0 ? 0  : 'ditto';
@@ -154,6 +163,9 @@ js::set('requiredFields', $config->bug->create->requiredFields);
             <td><?php echo $i;?></td>
             <td class='<?php echo zget($visibleFields, $product->type, ' hidden')?>' style='overflow:visible'><?php echo html::select("branches[$i]", $branches, $branch, "class='form-control chosen' onchange='setBranchRelated(this.value, $productID, $i)'");?></td>
             <td><?php echo html::select("modules[$i]", $moduleOptionMenu, $moduleID, "class='form-control chosen'");?></td>
+            <?php if($config->systemMode == 'new'):?>
+            <td class='<?php echo zget($visibleFields, 'project', ' hidden')?>' style='overflow:visible'><?php echo html::select("projects[$i]", $projects, $projectID, "class='form-control chosen' onchange = 'loadProductExecutionsByProject($productID, this.value, $i)'");?></td>
+            <?php endif;?>
             <td class='<?php echo zget($visibleFields, 'execution', ' hidden')?>' style='overflow:visible'><?php echo html::select("executions[$i]", $executions, $executionID, "class='form-control chosen' onchange='loadExecutionBuilds($productID, this.value, $i)'");?></td>
             <td id='buildBox<?php echo $i;?>'><?php echo html::select("openedBuilds[$i][]", $builds, '', "class='form-control chosen' multiple");?></td>
             <td>
@@ -207,6 +219,9 @@ js::set('requiredFields', $config->bug->create->requiredFields);
       <td>%s</td>
       <td class='<?php echo zget($visibleFields, $product->type, ' hidden')?>' style='overflow:visible'><?php echo html::select("branches[%s]", $branches, $branch, "class='form-control chosen' onchange='setBranchRelated(this.value, $productID, \"%s\")'");?></td>
       <td><?php echo html::select("modules[%s]", $moduleOptionMenu, $moduleID, "class='form-control'");?></td>
+      <?php if($config->systemMode == 'new'):?>
+      <td class='<?php echo zget($visibleFields, 'project', ' hidden')?>' style='overflow:visible'><?php echo html::select("projects[%s]", $projects, $projectID, "class='form-control chosen' onchange = 'loadProductExecutionsByProject($productID, this.value, \"%s\")'");?></td>
+      <?php endif;?>
       <td class='<?php echo zget($visibleFields, 'execution', ' hidden')?>' style='overflow:visible'><?php echo html::select("executions[%s]", $executions, $executionID, "class='form-control chosen' onchange='loadExecutionBuilds($productID, this.value, \"%s\")'");?></td>
       <td id='buildBox%s'><?php echo html::select("openedBuilds[%s][]", $builds, '', "class='form-control chosen' multiple");?></td>
       <td>

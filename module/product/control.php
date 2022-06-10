@@ -963,6 +963,23 @@ class product extends control
         return print(html::select('project', $projects, $projectID, "class='form-control' onchange='loadProductExecutions({$productID}, this.value)'"));
     }
 
+     /**
+     * AJAX: get projects of a product in html select.
+     *
+     * @param  int    $productID
+     * @param  int    $branch
+     * @param  int    $number
+     * @access public
+     * @return void
+     */
+    public function ajaxGetProjectsByBranch($productID, $branch = 0, $number = 0)
+    {
+        $projects  = array('' => '');
+        $projects += $this->product->getProjectPairsByProduct($productID, $branch);
+
+        return print(html::select('projects' . "[$number]", array('' => '') + $projects, 0, "class='form-control' onchange='loadProductExecutionsByProject($productID, this.value, $number)'"));
+    }
+
     /**
      * AJAX: get executions of a product in html select.
      *
@@ -997,6 +1014,22 @@ class product extends control
             $misc           = $from == 'showImport' ? "class='form-control' onchange='loadImportExecutionRelated(this.value, $number)'" : "class='form-control' onchange='loadExecutionBuilds($productID, this.value, $number)'";
             return print(html::select($executionsName, $executions, '', $misc));
         }
+    }
+
+    /**
+     * AJAX: get executions of a product in html select.
+     *
+     * @param  int    $productID
+     * @param  int    $projectID
+     * @param  int    $branch
+     * @param  int    $number
+     * @access public
+     * @return void
+     */
+    public function ajaxGetExecutionsByProject($productID, $projectID = 0, $branch = 0, $number = 0)
+    {
+        $executions = $this->product->getExecutionPairsByProduct($productID, $branch, 'id_desc', $projectID, '');
+        return print(html::select('executions' . "[$number]", array('' => '') + $executions, 0, "class='form-control' onchange='loadExecutionBuilds($productID, this.value, $number)'"));
     }
 
     /**
