@@ -945,7 +945,7 @@ class kanbanModel extends model
             ->orderBy('order')
             ->fetchGroup('group');
 
-        $actions = array('setLane', 'sortLane', 'deleteLane');
+        $actions = array('sortLane', 'deleteLane', 'editLaneName', 'editLaneColor');
         foreach($laneGroup as $lanes)
         {
             foreach($lanes as $lane)

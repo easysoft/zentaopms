@@ -1,0 +1,47 @@
+<?php
+/**
+ * The set lane file of task module of ZenTaoPMS.
+ *
+ * @copyright   Copyright 2009-2021 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
+ * @author      Yuchun Li <liyuchun@easycorp.ltd>
+ * @package     kanban
+ * @version     $Id: setlane.html.php 935 2021-10-26 16:24:24Z liyuchun@easycorp.ltd $
+ * @link        https://www.zentao.net
+ */
+?>
+<?php include '../../common/view/header.lite.html.php';?>
+<div id='mainContent' class='main-content'>
+  <div class='center-block'>
+    <div class='main-header'>
+      <h2>
+        <?php echo $lang->kanban->editLaneName;?>
+      </h2>
+    </div>
+    <form class="load-indicator main-form form-ajax" method='post' target='hiddenwin'>
+      <table align='center' class='table table-form'>
+        <tr>
+          <th><?php echo $lang->kanban->laneName;?></th>
+          <td colspan='2'>
+            <?php echo html::input('name', $lane->name, "class='form-control'");?>
+          </td>
+          <td></td>
+        </tr>
+        <?php if($from != 'kanban'):?>
+        <tr>
+          <th><?php echo $lang->kanban->WIPType;?></th>
+          <td colspan='2'>
+            <?php echo html::input('type', zget($lang->kanban->laneTypeList, $lane->type), "class='form-control' disabled");?>
+          </td>
+        </tr>
+        <?php endif;?>
+        <tr>
+          <td colspan='4' class='text-center form-actions'>
+            <?php echo html::submitButton();?>
+          </td>
+        </tr>
+      </table>
+    </form>
+  </div>
+</div>
+<?php include '../../common/view/footer.html.php';?>
