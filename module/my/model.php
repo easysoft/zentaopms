@@ -634,7 +634,14 @@ class myModel extends model
      */
     public function buildRiskSearchForm($queryID, $actionURL, $type)
     {
-        $projects  = $this->loadModel('project')->getPairsByProgram();
+        $projects  = $this->dao->select('id, name')->from(TABLE_PROJECT)
+            ->where('type')->eq('project')
+            ->andWhere('deleted')->eq('0')
+            ->andWhere('vision')->eq($this->config->vision)
+            ->andWhere('model')->ne('kanban')
+            ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->projects)->fi()
+            ->orderBy('order_asc')
+            ->fetchPairs();
         $queryName = $type == 'contribute' ? 'contributeRisk' : 'workRisk';
 
         $this->app->loadConfig('risk');
@@ -642,7 +649,7 @@ class myModel extends model
         $this->config->risk->search['actionURL']         = $actionURL;
         $this->config->risk->search['queryID']           = $queryID;
 
-        $this->config->risk->search['params']['project']['value'] = array('') + $projects;
+        $this->config->risk->search['params']['project']['values'] = array('') + $projects;
 
         if($this->config->systemMode == 'classic') unset($this->config->risk->search['fields']['project']);
         unset($this->config->risk->search['fields']['module']);
@@ -690,9 +697,10 @@ class myModel extends model
             $risks = $this->dao->select('*')->from(TABLE_RISK)
                 ->where($riskQuery)
                 ->andWhere('deleted')->eq('0')
-                ->orWhere('createdBy',1)->eq($this->app->user->account)
+                ->andWhere('createdBy',1)->eq($this->app->user->account)
                 ->orWhere('id')->in(array_keys($assignedByMe))
                 ->orWhere('closedBy')->eq($this->app->user->account)
+                ->markRight(1)
                 ->orderBy($orderBy)
                 ->page($pager)
                 ->fetchAll('id');
