@@ -357,7 +357,7 @@ class docModel extends model
                 if($this->session->contributeDocQuery == false) $this->session->set('contributeDocQuery', ' 1 = 1');
             }
 
-            $query = $this->getDocQuery($this->session->contributeDocQuery);
+            $query     = $this->getDocQuery($this->session->contributeDocQuery);
             $docIDList = $this->dao->select('objectID')->from(TABLE_ACTION)
                 ->where('objectType')->eq('doc')
                 ->andWhere('actor')->eq($this->app->user->account)
