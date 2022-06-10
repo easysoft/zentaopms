@@ -37,13 +37,12 @@
 </div>
 <div id="mainContent">
 <?php $dataModule = $app->rawMethod == 'work' ? 'workTask' : 'contributeTask';?>
+<div class="cell<?php if($type == 'bySearch') echo ' show';?>" id="queryBox" data-module=<?php echo $dataModule;?>></div>
   <?php if(empty($tasks)):?>
-  <div class="cell<?php if($type == 'bySearch') echo ' show';?>" id="queryBox" data-module=<?php echo $dataModule;?>></div>
   <div class="table-empty-tip">
     <p><span class="text-muted"><?php echo $lang->task->noTask;?></span></p>
   </div>
   <?php else:?>
-  <div class="cell<?php if($type == 'bySearch') echo ' show';?>" id="queryBox" data-module=<?php echo $dataModule;?>></div>
   <form id='myTaskForm' class="main-table table-task skip-iframe-modal" method="post">
     <?php $canBatchEdit  = (common::hasPriv('task', 'batchEdit')  and $type == 'assignedTo');?>
     <?php $canBatchClose = (common::hasPriv('task', 'batchClose') and $type != 'closedBy');?>
