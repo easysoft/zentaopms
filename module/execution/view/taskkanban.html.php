@@ -225,4 +225,5 @@ js::set('priv',
 <?php js::set('displayCards', $execution->displayCards);?>
 <?php js::set('reviewStoryParis', $reviewStoryParis);?>
 <?php js::set('needLinkProducts', $lang->execution->needLinkProducts);?>
+<?php js::set('hourUnit', $config->hourUnit);?>
 <?php include '../../common/view/footer.html.php';?>
