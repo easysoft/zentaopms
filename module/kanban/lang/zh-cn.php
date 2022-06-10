@@ -1,5 +1,6 @@
 <?php
 /* Actions. */
+$lang->kanban->noCard              = '暂无卡片';
 $lang->kanban->create              = '创建看板';
 $lang->kanban->createSpace         = '创建空间';
 $lang->kanban->editSpace           = '设置空间';
@@ -80,6 +81,7 @@ $lang->kanban->importBuild         = '版本';
 $lang->kanban->allKanban           = '所有看板';
 $lang->kanban->allProjects         = '所有' . ($this->config->systemMode == 'classic' ? $lang->executionCommon : '项目');
 $lang->kanban->allProducts         = '所有产品';
+$lang->kanban->mine                = '我负责';
 
 /* Fields. */
 $lang->kanban->space          = '所属空间';
@@ -100,6 +102,7 @@ $lang->kanban->closedBy       = '由谁关闭';
 $lang->kanban->closedDate     = '关闭日期';
 $lang->kanban->empty          = '暂时没有看板';
 $lang->kanban->teamSumCount   = '共%s人';
+$lang->kanban->cardsCount     = '共%s张卡片';
 $lang->kanban->cardCount      = '卡片数量';
 $lang->kanban->activatedBy    = '由谁激活';
 $lang->kanban->activatedDate  = '激活日期';

@@ -75,18 +75,19 @@ class my extends control
     /**
      * My work view.
      *
-     * @param  string $mode
-     * @param  string $type
-     * @param  string $orderBy
-     * @param  int    $recTotal
-     * @param  int    $recPerPage
-     * @param  int    $pageID
+     * @param  string     $mode
+     * @param  string     $type
+     * @param  string|int $param
+     * @param  string     $orderBy
+     * @param  int        $recTotal
+     * @param  int        $recPerPage
+     * @param  int        $pageID
      * @access public
      * @return void
      */
-    public function work($mode = 'task', $type = 'assignedTo', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function work($mode = 'task', $type = 'assignedTo', $param = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
-        echo $this->fetch('my', $mode, "type=$type&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID");
+        echo $this->fetch('my', $mode, "type=$type&param=$param&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID");
 
         $this->showWorkCount($recTotal, $recPerPage, $pageID);
     }
@@ -162,7 +163,7 @@ class my extends control
             $this->loadModel('meeting');
 
             /* Get the number of issues assigned to me. */
-            $issues     = $this->issue->getUserIssues('assignedTo', $this->app->user->account, 'id_desc', $pager);
+            $issues     = $this->issue->getUserIssues('assignedTo', 0, $this->app->user->account, 'id_desc', $pager);
             $issueCount = $pager->recTotal;
 
             /* Get the number of risks assigned to me. */
@@ -210,20 +211,21 @@ EOF;
     /**
      * My contribute view.
      *
-     * @param  string $mode
-     * @param  string $type
-     * @param  string $orderBy
-     * @param  int    $recTotal
-     * @param  int    $recPerPage
-     * @param  int    $pageID
+     * @param  string     $mode
+     * @param  string     $type
+     * @param  string|int $param
+     * @param  string     $orderBy
+     * @param  int        $recTotal
+     * @param  int        $recPerPage
+     * @param  int        $pageID
      * @access public
      * @return void
      */
-    public function contribute($mode = 'task', $type = 'openedBy', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function contribute($mode = 'task', $type = 'openedBy', $param = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         if(($mode == 'issue' or $mode == 'risk') and $type == 'openedBy') $type = 'createdBy';
 
-        echo $this->fetch('my', $mode, "type=$type&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID");
+        echo $this->fetch('my', $mode, "type=$type&param=$param&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID");
     }
 
     /**
@@ -409,10 +411,15 @@ EOF;
      * @access public
      * @return void
      */
-    public function task($type = 'assignedTo', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function task($type = 'assignedTo', $param = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         $this->loadModel('task');
+        $this->loadModel('execution');
+        $queryID  = ($type == 'bySearch') ? (int)$param : 0;
+
+
         /* Save session. */
+        if($type != 'bySearch')            $this->session->set('myTaskType', $type);
         if($this->app->viewType != 'json') $this->session->set('taskList', $this->app->getURI(true), 'execution');
 
         /* Load pager. */
@@ -428,9 +435,13 @@ EOF;
         {
             $tasks = $this->my->getAssignedByMe($this->app->user->account, 0, $pager, $sort, 0, 'task');
         }
+        elseif($type == 'bySearch')
+        {
+            $tasks = $this->my->getTasksBySearch($this->app->user->account, 0, $pager, $sort, $queryID);
+        }
         else
         {
-            $tasks = $this->task->getUserTasks($this->app->user->account, $type, 0, $pager, $sort);
+            $tasks = $this->task->getUserTasks($this->app->user->account, $type, 0, $pager, $sort, $queryID);
         }
 
         $parents         = array();
@@ -471,6 +482,9 @@ EOF;
         /* Get the story language configuration. */
         $this->app->loadLang('story');
 
+        $actionURL = $this->createLink('my', $this->app->rawMethod, "mode=task&browseType=bySearch&queryID=myQueryID");
+        $this->my->buildTaskSearchForm($queryID, $actionURL);
+
         /* Assign. */
         $this->view->title      = $this->lang->my->common . $this->lang->colon . $this->lang->my->task;
         $this->view->position[] = $this->lang->my->task;
@@ -503,12 +517,15 @@ EOF;
      * @access public
      * @return void
      */
-    public function bug($type = 'assignedTo', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function bug($type = 'assignedTo', $param = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         /* Save session. load Lang. */
         $this->loadModel('bug');
-        if($this->app->viewType != 'json') $this->session->set('bugList', $this->app->getURI(true), 'qa');
         $this->app->loadLang('bug');
+        $queryID  = ($type == 'bySearch') ? (int)$param : 0;
+        if($type != 'bySearch')            $this->session->set('myBugType', $type);
+        if($this->app->viewType != 'json') $this->session->set('bugList', $this->app->getURI(true), 'qa');
+
 
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
@@ -523,11 +540,15 @@ EOF;
         }
         else
         {
-            $bugs = $this->loadModel('bug')->getUserBugs($this->app->user->account, $type, $sort, 0, $pager);
+            $bugs = $this->loadModel('bug')->getUserBugs($this->app->user->account, $type, $sort, 0, $pager, '', $queryID);
         }
 
         $bugs = $this->bug->checkDelayedBugs($bugs);
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'bug', false);
+
+
+        $actionURL = $this->createLink('my', $this->app->rawMethod, "mode=bug&browseType=bySearch&queryID=myQueryID");
+        $this->my->buildBugSearchForm($queryID, $actionURL);
 
         /* assign. */
         $this->view->title       = $this->lang->my->common . $this->lang->colon . $this->lang->my->bug;
@@ -596,15 +617,16 @@ EOF;
     /**
      * My test case.
      *
-     * @param  string $type      assigntome|openedbyme
-     * @param  string $orderBy
-     * @param  int    $recTotal
-     * @param  int    $recPerPage
-     * @param  int    $pageID
+     * @param  string     $type      assigntome|openedbyme
+     * @param  string|int $param
+     * @param  string     $orderBy
+     * @param  int        $recTotal
+     * @param  int        $recPerPage
+     * @param  int        $pageID
      * @access public
      * @return void
      */
-    public function testcase($type = 'assigntome', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function testcase($type = 'assigntome', $param = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         $this->loadModel('testcase');
         $this->loadModel('testtask');
@@ -620,19 +642,23 @@ EOF;
 
         /* Append id for secend sort. */
         $sort = common::appendOrder($orderBy);
+        $queryID = ($type == 'bysearch') ? (int)$param : 0;
 
         $cases = array();
-        if($type == 'assigntome')
-        {
-            $cases = $this->testcase->getByAssignedTo($this->app->user->account, $sort, $pager, 'skip');
-        }
-        elseif($type == 'openedbyme')
-        {
-            $cases = $this->testcase->getByOpenedBy($this->app->user->account, $sort, $pager, 'skip');
-        }
+        if($type == 'assigntome') $cases = $this->testcase->getByAssignedTo($this->app->user->account, $sort, $pager, 'skip');
+        if($type == 'openedbyme') $cases = $this->testcase->getByOpenedBy($this->app->user->account, $sort, $pager, 'skip');
+        if($type == 'bysearch' and $this->app->rawMethod == 'contribute') $cases = $this->my->getTestcasesBySearch($queryID, 'contribute', $orderBy, $pager);
+        if($type == 'bysearch' and $this->app->rawMethod == 'work')       $cases = $this->my->getTestcasesBySearch($queryID, 'work', $orderBy, $pager);
+
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'testcase', $type == 'assigntome' ? false : true);
 
         $cases = $this->testcase->appendData($cases, $type == 'assigntome' ? 'run' : 'case');
+
+        /* Build the search form. */
+        $currentMethod = $this->app->rawMethod;
+        $actionURL     = $this->createLink('my', $currentMethod, "mode=testcase&type=bysearch&param=myQueryID&orderBy={$orderBy}&recTotal={$recTotal}&recPerPage={$recPerPage}&pageID={$pageID}");
+        $this->config->testcase->search['onMenuBar'] = 'yes';
+        $this->my->buildTestcaseSearchForm($queryID, $actionURL, $currentMethod);
 
         /* Assign. */
         $this->view->title      = $this->lang->my->common . $this->lang->colon . $this->lang->my->myTestCase;
@@ -777,11 +803,17 @@ EOF;
      * @param  int    $pageID
      * @return void
      */
-    public function issue($type = 'assignedTo', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function issue($type = 'assignedTo', $param = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         /* Set the pager. */
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
+
+        /* Build the search form. */
+        $browseType = strtolower($type);
+        $queryID    = ($browseType == 'bysearch') ? (int)$param : 0;
+        $actionURL  = $this->createLink('my', $this->app->rawMethod, "mode=issue&type=bySearch&param=myQueryID");
+        $this->loadModel('issue')->buildSearchForm($actionURL, $queryID);
 
         $this->app->session->set('issueList', $this->app->getURI(true), 'project');
 
@@ -792,7 +824,8 @@ EOF;
         $this->view->orderBy    = $orderBy;
         $this->view->pager      = $pager;
         $this->view->type       = $type;
-        $this->view->issues     = $type == 'assignedBy' ? $this->loadModel('my')->getAssignedByMe($this->app->user->account, '', $pager,  $orderBy, '', 'issue') : $this->loadModel('issue')->getUserIssues($type, $this->app->user->account, $orderBy, $pager);
+        $this->view->param      = $param;
+        $this->view->issues     = $type == 'assignedBy' ? $this->loadModel('my')->getAssignedByMe($this->app->user->account, '', $pager,  $orderBy, '', 'issue') : $this->loadModel('issue')->getUserIssues($type, $queryID, $this->app->user->account, $orderBy, $pager);
 
         $this->view->projectList = $this->loadModel('project')->getPairsByProgram();
 
@@ -810,18 +843,37 @@ EOF;
      * @param  int    $pageID
      * @return void
      */
-    public function risk($type = 'assignedTo', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function risk($type = 'assignedTo', $param = 0,$orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         /* Set the pager. */
         $this->loadModel('risk');
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
+        /* Build the search form. */
+        $currentMethod = $this->app->rawMethod;
+        $queryID       = ($type == 'bysearch') ? (int)$param : 0;
+        $actionURL     = $this->createLink('my', $currentMethod, "mode=risk&type=bysearch&param=myQueryID");
+        $this->my->buildRiskSearchForm($queryID, $actionURL, $currentMethod);
+
+        /* Get risks by type*/
+        if($type == 'assignedBy')
+        {
+            $risks = $this->my->getAssignedByMe($this->app->user->account, '', $pager, $orderBy, '', 'risk');
+        }
+        else
+        {
+            if($type != 'bysearch') $risks = $this->risk->getUserRisks($type, $this->app->user->account, $orderBy, $pager);
+        }
+
+        if($type == 'bysearch' and $currentMethod == 'contribute') $risks = $this->my->getRisksBySearch($queryID, $currentMethod, $orderBy, $pager);
+        if($type == 'bysearch' and $currentMethod == 'work') $risks = $this->my->getRisksBySearch($queryID, $currentMethod, $orderBy, $pager);
+
         $this->app->session->set('riskList', $this->app->getURI(true), 'project');
 
         $this->view->title      = $this->lang->my->risk;
         $this->view->position[] = $this->lang->my->risk;
-        $this->view->risks      = $type == 'assignedBy' ? $this->loadModel('my')->getAssignedByMe($this->app->user->account, '', $pager, $orderBy, '', 'risk') : $this->loadModel('risk')->getUserRisks($type, $this->app->user->account, $orderBy, $pager);
+        $this->view->risks      = $risks;
         $this->view->users      = $this->loadModel('user')->getPairs('noclosed|noletter');
         $this->view->orderBy    = $orderBy;
         $this->view->pager      = $pager;

@@ -451,10 +451,35 @@ function renderDeadline(deadline, status)
     now.setMilliseconds(0);
     var isEarlyThanToday = date.getTime() < now.getTime();
     var deadlineDate     = $.zui.formatDate(date, 'MM-dd');
-    var statusList       = ['wait','doing','pause'];
+    var statusList       = ['doing','pause'];
     var textColor        = isEarlyThanToday && typeof(status) != 'undefined' && statusList.indexOf(status) != -1 ? 'text-red' : 'text-muted';
 
     return $('<span class="info info-deadline"/>').text(deadlineLang + ' ' + deadlineDate).addClass(textColor);
+}
+
+/**
+ * Render estStarted
+ *
+ * @param  {String|Date} estStarted EstStarted
+ * @param  {string}      status
+ * @access public
+ * @return void
+ */
+function renderEstStarted(estStarted, status)
+{
+    if(estStarted == '0000-00-00') return;
+
+    var date = $.zui.createDate(estStarted);
+    var now  = new Date();
+    now.setHours(0);
+    now.setMinutes(0);
+    now.setSeconds(0);
+    now.setMilliseconds(0);
+    var isEarlyThanToday = date.getTime() < now.getTime();
+    var estStartedDate   = $.zui.formatDate(date, 'MM-dd');
+    var textColor        = isEarlyThanToday && typeof(status) != 'undefined' && status == 'wait' ? 'text-red' : 'text-muted';
+
+    return $('<span class="info info-deadline"/>').text(estStartedLang + ' ' + estStartedDate).addClass(textColor);
 }
 
 /**
@@ -606,8 +631,7 @@ function renderTaskItem(item, $item, col)
         var $title = $item.find('.title');
         if(!$title.length)
         {
-            $title = $('<a class="title iframe" data-width="95%">' + (scaleSize <= 1 ? '<i class="icon icon-checked text-muted"></i> ' : '') + '<span class="text"></span></a>')
-                    .attr('href', $.createLink('task', 'view', 'taskID=' + item.id, '', true)).attr('data-toggle', 'modal').attr('data-width', '80%');
+            $title = $('<a class="title iframe" data-width="95%">' + (scaleSize <= 1 ? '<i class="icon icon-checked text-muted"></i> ' : '') + '<span class="text"></span></a>').attr('href', $.createLink('task', 'view', 'taskID=' + item.id, '', true)).attr('data-toggle', 'modal').attr('data-width', '80%');
             $title.appendTo($item);
         }
         var name = rdSearchValue != '' ? "<span class='text'>" + item.name.replaceAll(rdSearchValue, "<span class='text-danger'>" + rdSearchValue + "</span>") + "</span>": "<span class='text'>" + item.name + "</span>";
@@ -623,7 +647,8 @@ function renderTaskItem(item, $item, col)
         var $infos = $item.find('.infos');
         if(!$infos.length) $infos = $('<div class="infos"></div>');
         $infos.html([priHtml, hoursHtml].join(''));
-        if(item.deadline && scaleSize <= 1) $infos.append(renderDeadline(item.deadline, item.status));
+        if(item.deadline && scaleSize <= 1 && (item.status == 'doing' || item.status == 'pause')) $infos.append(renderDeadline(item.deadline, item.status));
+        if(item.estStarted && scaleSize <= 1 && item.status == 'wait') $infos.append(renderEstStarted(item.estStarted, item.status));
         $infos[scaleSize <= 1 ? 'append' : 'prepend'](avatarHtml);
 
         if(scaleSize <= 1) $infos.appendTo($item);
@@ -696,6 +721,17 @@ function renderCount($count, count, column)
 }
 
 /**
+ * Alert to link product.
+ *
+ * @access public
+ * @return void
+ */
+function tips()
+{
+    bootbox.alert(needLinkProducts);
+}
+
+/**
  * Render header of a column.
  */
 function renderHeaderCol($column, column, $header, kanbanData)
@@ -729,10 +765,11 @@ function renderHeaderCol($column, column, $header, kanbanData)
     var printMoreBtn = (columnPrivs.includes('setColumn') || columnPrivs.includes('setWIP'));
 
     /* Render more menu. */
-    if(((column.type == 'backlog' && hasStoryButton) || (column.type == 'wait' && hasTaskButton) || (column.type == 'unconfirmed' && hasBugButton)) && $actions.children('.text-primary').length == 0)
+    if((column.type == 'backlog' || column.type == 'wait' || column.type == 'unconfirmed') && $actions.children('.text-primary').length == 0)
     {
+        var tips = productID ? '' : 'onclick="tips()"';
         $actions.append([
-                '<a data-contextmenu="columnCreate" data-type="' + column.type + '" data-kanban="' + kanban.id + '" data-parent="' + (column.parentType || '') +  '" class="text-primary">',
+                '<a data-contextmenu="columnCreate" data-type="' + column.type + '" data-kanban="' + kanban.id + '" data-parent="' + (column.parentType || '') +  '" class="text-primary"' + ((column.type !== 'wait') ? tips : '') + '>',
                 '<i class="icon icon-expand-alt"></i>',
                 '</a>'
         ].join(''));
@@ -795,16 +832,17 @@ function updateRegion(regionID, regionData = [])
     if(!regionData) regionData = regions[regionID];
 
     var data = groupBy == 'default' ? regionData.groups : regionData;
-    if(data == null)
+    if(data == null || data.length == 0)
     {
-        $("div[data-id^=" + regionID + "].region").hide();
+        if(groupBy == 'default') $("div[data-id^=" + regionID + "].region").hide();
+        if(groupBy != 'default') $("div[data-id^=" + regionID + "].kanban").hide();
         return false;
     }
     else
     {
-        $("div[data-id^=" + regionID + "].region").show();
+        if(groupBy == 'default') $("div[data-id^=" + regionID + "].region").show();
+        if(groupBy != 'default') $("div[data-id^=" + regionID + "].kanban").show();
     }
-    $region.empty();
     $region.data('zui.kanban').render(data);
     resetRegionHeight('open');
     return true;
@@ -1514,21 +1552,23 @@ $(function()
     /* Ajax update kanban. */
     if(groupBy == 'default')
     {
-        var lastUpdateData;
         setInterval(function()
         {
-            $.get(createLink('execution', 'ajaxUpdateKanban', "executionID=" + executionID + "&entertime=" + entertime + "&browseType=" + browseType + "&groupBy=" + groupBy + '&from=RD&searchValue' + rdSearchValue), function(data)
+            if(rdSearchValue == '')
             {
-                if(data && lastUpdateData !== data)
+                $.get(createLink('execution', 'ajaxUpdateKanban', "executionID=" + executionID + "&entertime=" + entertime + "&browseType=" + browseType + "&groupBy=" + groupBy + '&from=RD&searchValue=' + rdSearchValue), function(data)
                 {
-                    lastUpdateData = data;
-                    kanbanData     = $.parseJSON(data);
-                    for(var region in kanbanData)
+                    if(data && lastUpdateData !== data)
                     {
-                        updateRegion(region, kanbanData[region]);
+                        lastUpdateData = data;
+                        kanbanData     = $.parseJSON(data);
+                        for(var region in kanbanData)
+                        {
+                            updateRegion(region, kanbanData[region]);
+                        }
                     }
-                }
-            });
+                });
+            }
         }, 10000);
     }
 
@@ -1598,10 +1638,16 @@ function resetRegionHeight(fold)
 function toggleRDSearchBox()
 {
     $('#rdSearchBox').toggle();
-
-    rdSearchValue = '';
-    var color     = $('#rdSearchBox').css('display') == 'block' ? "#0c64eb" : "#3c495c";
-    $(".querybox-toggle").css("color", color);
+    if($('#rdSearchBox').css('display') == 'block')
+    {
+        $(".querybox-toggle").css("color", "#0c64eb");
+    }
+    else
+    {
+        $(".querybox-toggle").css("color", "");
+        $('#rdKanbanSearchInput').attr('value', '');
+        searchCards('');
+    }
 }
 
 /**
@@ -1614,16 +1660,20 @@ function toggleRDSearchBox()
 function searchCards(value)
 {
     rdSearchValue = value;
-    $.get(createLink('execution', 'ajaxUpdateKanban', "executionID=" + executionID + "&entertime=0&browseType=" + browseType + "&groupBy=" + groupBy + '&from=RD&searchValue=' + value), function(data)
+    $.get(createLink('execution', 'ajaxUpdateKanban', "executionID=" + executionID + "&entertime=0&browseType=" + browseType + "&groupBy=" + groupBy + '&from=RD&searchValue=' + rdSearchValue), function(data)
     {
-        var kanbanData = $.parseJSON(data);
+        lastUpdateData = data;
+        kanbanData     = $.parseJSON(data);
         var hideAll    = true;
         $('#kanban').children('.region').children("div[id^='kanban']").each(function()
         {
             var regionID = $(this).attr('data-id');
             if(kanbanData != null) data = groupBy == 'default' ? kanbanData[regionID] : kanbanData[groupBy];
 
-            hideAll = hideAll && !updateRegion(regionID, data);
+            if(rdSearchValue != '' && groupBy == 'default' && data.laneCount != 0) $(this).parent().show();
+            if(rdSearchValue != '' && groupBy == 'default' && data.laneCount == 0) $(this).parent().hide();
+
+            hideAll = !updateRegion(regionID, data) && hideAll;
         });
 
         if(hideAll && rdSearchValue != '')

@@ -5,7 +5,17 @@ public function __construct($appName = '')
     if($this->app->getModuleName() == 'kanban') $this->lang->kanban->menu = new stdclass();
 }
 
-public function getKanban4Group($executionID, $browseType, $groupBy)
+/**
+ * Get kanban group by execution id.
+ *
+ * @param  int    $executionID
+ * @param  int    $browseType
+ * @param  int    $groupBy
+ * @param  string $searchValue
+ * @access public
+ * @return array
+ */
+public function getKanban4Group($executionID, $browseType, $groupBy, $searchValue = '')
 {
     /* Get card  data. */
     $cardList = array();
@@ -85,7 +95,7 @@ public function getKanban4Group($executionID, $browseType, $groupBy)
             $columnData[$columnID]['actions']    = $column->actions;
 
             $cardOrder = 1;
-            $objects   = zget($cardGroup, $columnID, array());
+            $objects   = zget($cardGroup, $column->columnType, array());
             foreach($objects as $object)
             {
                 if(empty($object)) continue;
@@ -104,10 +114,14 @@ public function getKanban4Group($executionID, $browseType, $groupBy)
 
                 if($browseType == 'task')
                 {
+                    if($searchValue != '' and strpos($object->name, $searchValue) === false) continue;
                     $cardData['name'] = $object->name;
+                    $cardData['status'] = $object->status;
+                    $cardData['left']   = $object->left;
                 }
                 else
                 {
+                    if($searchValue != '' and strpos($object->name, $searchValue) === false) continue;
                     $cardData['title'] = $object->title;
                 }
 
@@ -132,10 +146,11 @@ public function getKanban4Group($executionID, $browseType, $groupBy)
  * @param  int    $kanbanID
  * @param  string $browseType all|task|bug|story
  * @param  string $orderBy
+ * @param  string $searchValue
  * @access public
  * @return array
  */
-public function getCardGroupByExecution($executionID, $browseType = 'all', $orderBy = 'id_asc')
+public function getCardGroupByExecution($executionID, $browseType = 'all', $orderBy = 'id_asc', $searchValue = '')
 {
     $cards = $this->dao->select('t1.*, t2.type as columnType')
         ->from(TABLE_KANBANCELL)->alias('t1')

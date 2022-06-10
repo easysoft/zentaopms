@@ -74,10 +74,35 @@ function renderDeadline(deadline, status)
     now.setMilliseconds(0);
     var isEarlyThanToday = date.getTime() < now.getTime();
     var deadlineDate     = $.zui.formatDate(date, 'MM-dd');
-    var statusList       = ['wait','doing','pause'];
+    var statusList       = ['doing','pause'];
     var textColor        = isEarlyThanToday && typeof(status) != 'undefined' && statusList.indexOf(status) != -1 ? 'text-red' : 'text-muted';
 
     return $('<span class="info info-deadline"/>').text(deadlineLang + ' ' + deadlineDate).addClass(textColor);
+}
+
+/**
+ * Render estStarted
+ *
+ * @param  {String|Date} estStarted EstStarted
+ * @param  {string}      status
+ * @access public
+ * @return void
+ */
+function renderEstStarted(estStarted, status)
+{
+    if(estStarted == '0000-00-00') return;
+
+    var date = $.zui.createDate(estStarted);
+    var now  = new Date();
+    now.setHours(0);
+    now.setMinutes(0);
+    now.setSeconds(0);
+    now.setMilliseconds(0);
+    var isEarlyThanToday = date.getTime() < now.getTime();
+    var estStartedDate   = $.zui.formatDate(date, 'MM-dd');
+    var textColor        = isEarlyThanToday && typeof(status) != 'undefined' && status == 'wait' ? 'text-red' : 'text-muted';
+
+    return $('<span class="info info-deadline"/>').text(estStartedLang + ' ' + estStartedDate).addClass(textColor);
 }
 
 /**
@@ -227,8 +252,7 @@ function renderTaskItem(item, $item, col)
         var $title = $item.find('.title');
         if(!$title.length)
         {
-            $title = $('<a class="title iframe" data-width="95%">' + (scaleSize <= 1 ? '<i class="icon icon-checked text-muted"></i> ' : '') + '<span class="text"></span></a>')
-                    .attr('href', $.createLink('task', 'view', 'taskID=' + item.id, '', true));
+            $title = $('<a class="title iframe" data-width="95%">' + (scaleSize <= 1 ? '<i class="icon icon-checked text-muted"></i> ' : '') + '<span class="text"></span></a>').attr('href', $.createLink('task', 'view', 'taskID=' + item.id, '', true));
             $title.appendTo($item);
         }
         var name = searchValue != '' ? "<span class='text'>" + item.name.replaceAll(searchValue, "<span class='text-danger'>" + searchValue + "</span>") + "</span>": "<span class='text'>" + item.name + "</span>";
@@ -244,7 +268,8 @@ function renderTaskItem(item, $item, col)
         var $infos = $item.find('.infos');
         if(!$infos.length) $infos = $('<div class="infos"></div>');
         $infos.html([priHtml, hoursHtml].join(''));
-        if(item.deadline && scaleSize <= 1) $infos.append(renderDeadline(item.deadline, item.status));
+        if(item.deadline && scaleSize <= 1 && (item.status == 'doing' || item.status == 'pause')) $infos.append(renderDeadline(item.deadline, item.status));
+        if(item.estStarted && scaleSize <= 1 && item.status == 'wait') $infos.append(renderEstStarted(item.estStarted, item.status));
         $infos[scaleSize <= 1 ? 'append' : 'prepend'](avatarHtml);
 
         if(scaleSize <= 1) $infos.appendTo($item);
@@ -311,6 +336,17 @@ function renderColumnCount($count, count, col)
 }
 
 /**
+ * Alert to link product.
+ *
+ * @access public
+ * @return void
+ */
+function tips()
+{
+    bootbox.alert(needLinkProducts);
+}
+
+/**
  * Render header column
  * @param {JQuery} $col    Header column element
  * @param {Object} col     Header column object
@@ -328,10 +364,11 @@ function renderHeaderCol($col, col, $header, kanban)
     if(priv.canCreateTask  || priv.canBatchCreateTask) printTaskButton = true;
     if(priv.canCreateBug   || priv.canBatchCreateBug)  printBugButton  = true;
 
-    if((col.type === 'backlog' && printStoryButton) || (col.type === 'wait' && printTaskButton) || (col.type == 'unconfirmed' && printBugButton))
+    if(col.type === 'backlog' || col.type === 'wait' || col.type == 'unconfirmed')
     {
+        var tips = productID ? '' : 'onclick="tips()"';
         $actions.append([
-                '<a data-contextmenu="columnCreate" data-type="' + col.type + '" data-kanban="' + kanban.id + '" data-parent="' + (col.parentType || '') +  '" class="text-primary">',
+                '<a data-contextmenu="columnCreate" data-type="' + col.type + '" data-kanban="' + kanban.id + '" data-parent="' + (col.parentType || '') +  '" class="text-primary"' + ((col.laneType !== 'task') ? tips : '') + '>',
                 '<i class="icon icon-expand-alt"></i>',
                 '</a>'
         ].join(''));

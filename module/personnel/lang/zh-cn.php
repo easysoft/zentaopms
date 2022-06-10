@@ -38,3 +38,4 @@ $lang->personnel->copy            = '复制白名单';
 
 $lang->personnel->openedPGMTip     = '该项目集是公开状态，有项目集视图权限的人员即可访问。';
 $lang->personnel->selectObjectTips = '请选择一个%s白名单来复制';
+$lang->personnel->countTip         = '（%s人）';

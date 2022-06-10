@@ -938,10 +938,12 @@ class bugModel extends model
             ->setDefault('lastEditedBy', $this->app->user->account)
             ->setDefault('lastEditedDate', $now)
             ->setDefault('assignedDate', $now)
+            ->stripTags($this->config->bug->editor->assignto['id'], $this->config->allowedTags)
             ->remove('comment,showModule')
             ->join('mailto', ',')
             ->get();
 
+        $bug = $this->loadModel('file')->processImgURL($bug, $this->config->bug->editor->assignto['id'], $this->post->uid);
         $this->dao->update(TABLE_BUG)
             ->data($bug)
             ->autoCheck()
@@ -973,10 +975,12 @@ class bugModel extends model
             ->setDefault('lastEditedBy', $this->app->user->account)
             ->setDefault('lastEditedDate', $now)
             ->setDefault('assignedDate', $now)
+            ->stripTags($this->config->bug->editor->confirmbug['id'], $this->config->allowedTags)
             ->remove('comment')
             ->join('mailto', ',')
             ->get();
 
+        $bug = $this->loadModel('file')->processImgURL($bug, $this->config->bug->editor->confirmbug['id'], $this->post->uid);
         $this->dao->update(TABLE_BUG)->data($bug)->autoCheck()->checkFlow()->where('id')->eq($bugID)->exec();
 
         if(!dao::isError())
@@ -1044,8 +1048,10 @@ class bugModel extends model
             ->setDefault('resolvedDate',   $now)
             ->setDefault('assignedTo',     $oldBug->openedBy)
             ->removeIF($this->post->resolution != 'duplicate', 'duplicateBug')
+            ->stripTags($this->config->bug->editor->resolve['id'], $this->config->allowedTags)
             ->remove('files,labels')
             ->get();
+        $bug = $this->loadModel('file')->processImgURL($bug, $this->config->bug->editor->resolve['id'], $this->post->uid);
 
         /* Set comment lang for alert error. */
         $this->lang->bug->comment = $this->lang->comment;
@@ -1319,6 +1325,7 @@ class bugModel extends model
             ->setDefault('lastEditedDate', $now)
             ->setDefault('activatedDate',  $now)
             ->setDefault('activatedCount', (int)$oldBug->activatedCount)
+            ->stripTags($this->config->bug->editor->activate['id'], $this->config->allowedTags)
             ->add('id', $bugID)
             ->add('resolution', '')
             ->add('status', 'active')
@@ -1334,6 +1341,7 @@ class bugModel extends model
             ->remove('comment,files,labels')
             ->get();
 
+        $bug = $this->loadModel('file')->processImgURL($bug, $this->config->bug->editor->activate['id'], $this->post->uid);
         $this->dao->update(TABLE_BUG)->data($bug)->autoCheck()->checkFlow()->where('id')->eq((int)$bugID)->exec();
         $this->dao->update(TABLE_BUG)->set('activatedCount = activatedCount + 1')->where('id')->eq((int)$bugID)->exec();
 
@@ -1380,9 +1388,11 @@ class bugModel extends model
             ->setDefault('lastEditedDate', $now)
             ->setDefault('closedBy',       $this->app->user->account)
             ->setDefault('closedDate',     $now)
+            ->stripTags($this->config->bug->editor->close['id'], $this->config->allowedTags)
             ->remove('comment')
             ->get();
 
+        $bug = $this->loadModel('file')->processImgURL($bug, $this->config->bug->editor->close['id'], $this->post->uid);
         $this->dao->update(TABLE_BUG)->data($bug)->autoCheck()->checkFlow()->where('id')->eq((int)$bugID)->exec();
         if($oldBug->execution)
         {
@@ -1591,18 +1601,62 @@ class bugModel extends model
      * @param  int    $limit
      * @param  object $pager
      * @param  int    $executionID
+     * @param  int    $queryID
      * @access public
-     * @return void
+     * @return array
      */
-    public function getUserBugs($account, $type = 'assignedTo', $orderBy = 'id_desc', $limit = 0, $pager = null, $executionID = 0)
+    public function getUserBugs($account, $type = 'assignedTo', $orderBy = 'id_desc', $limit = 0, $pager = null, $executionID = 0, $queryID = 0)
     {
-        if(!$this->loadModel('common')->checkField(TABLE_BUG, $type)) return array();
+        $moduleName = $this->app->rawMethod == 'work' ? 'workBug' : 'contributeBug';
+        $queryName  = $moduleName . 'Query';
+        $formName   = $moduleName . 'Form';
+
+        $bugIDList = array();
+        if($moduleName == 'contributeBug')
+        {
+            $bugsAssignedByMe = $this->loadModel('my')->getAssignedByMe($account, 0, $pager, $orderBy, 0, 'bug');
+            foreach($bugsAssignedByMe as $bugID => $bug)
+            {
+                $bugIDList[$bugID] = $bugID;
+            }
+        }
+
+        if($queryID)
+        {
+            $query = $this->loadModel('search')->getQuery($queryID);
+            if($query)
+            {
+                $this->session->set($queryName, $query->sql);
+                $this->session->set($formName, $query->form);
+            }
+            else
+            {
+                $this->session->set($queryName, ' 1 = 1');
+            }
+        }
+        else
+        {
+            if($this->session->$queryName == false) $this->session->set($queryName, ' 1 = 1');
+        }
+        $query = $this->session->$queryName;
+        $query = preg_replace('/`(\w+)`/', 't1.`$1`', $query);
+
+        if($type != 'bySearch' and !$this->loadModel('common')->checkField(TABLE_BUG, $type)) return array();
         $bugs = $this->dao->select('t1.*,t2.name as productName')->from(TABLE_BUG)->alias('t1')
             ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product = t2.id')
             ->where('t1.deleted')->eq(0)
+            ->beginIF($type == 'bySearch')->andWhere($query)->fi()
             ->beginIF($executionID)->andWhere('t1.execution')->eq($executionID)->fi()
             ->beginIF($type != 'closedBy' and $this->app->moduleName == 'block')->andWhere('t1.status')->ne('closed')->fi()
-            ->beginIF($type != 'all')->andWhere("t1.`$type`")->eq($account)->fi()
+            ->beginIF($type != 'all' and $type != 'bySearch')->andWhere("t1.`$type`")->eq($account)->fi()
+            ->beginIF($type == 'bySearch' and $moduleName == 'workBug')->andWhere("t1.assignedTo")->eq($account)->fi()
+            ->beginIF($type == 'bySearch' and $moduleName == 'contributeBug')
+            ->andWhere('t1.openedBy', 1)->eq($account)
+            ->orWhere('t1.closedBy')->eq($account)
+            ->orWhere('t1.resolvedBy')->eq($account)
+            ->orWhere('t1.id')->in($bugIDList)
+            ->markRight(1)
+            ->fi()
             ->orderBy($orderBy)
             ->beginIF($limit > 0)->limit($limit)->fi()
             ->page($pager)
@@ -1868,6 +1922,8 @@ class bugModel extends model
             if(!empty($this->config->isINT)) $firstLetter = '';
             $users[$account] =  $firstLetter . ($user->realname ? $user->realname : $user->account);
         }
+
+        $users = $this->loadModel('user')->processAccountSort($users);
         return array('' => '') + $users;
     }
 

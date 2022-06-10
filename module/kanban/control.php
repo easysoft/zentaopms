@@ -90,6 +90,7 @@ class kanban extends control
         }
 
         $space = $this->kanban->getSpaceById($spaceID);
+        $space->desc = strip_tags(htmlspecialchars_decode($space->desc));
 
         $typeList = $this->lang->kanbanspace->typeList;
         if($space->type == 'cooperation' or $space->type == 'public') unset($typeList['private']);
@@ -254,7 +255,9 @@ class kanban extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
         }
 
-        $kanban     = $this->kanban->getByID($kanbanID);
+        $kanban       = $this->kanban->getByID($kanbanID);
+        $kanban->desc = strip_tags(htmlspecialchars_decode($kanban->desc));
+
         $space      = $this->kanban->getSpaceById($kanban->space);
         $spaceUsers = trim($space->owner) . ',' . trim($space->team);
         $users      = $this->loadModel('user')->getPairs('noclosed|nodeleted', '', 0, $spaceUsers);
@@ -1606,7 +1609,7 @@ class kanban extends control
 
         $this->view->canEdit = $from == 'RDKanban' ? 0 : 1;
         $this->view->column  = $column;
-        $this->view->title   = $column->name . $this->lang->colon . $this->lang->kanban->setColumn;
+        $this->view->title   = $column->name . $this->lang->colon . $this->lang->kanban->editColumn;
         $this->display();
     }
 
@@ -1765,7 +1768,8 @@ class kanban extends control
         }
 
         $taskSearchValue = $this->session->taskSearchValue ? $this->session->taskSearchValue : '';
-        $kanbanGroup     = $regionID == 0 ? $this->kanban->getExecutionKanban($executionID, $browseType, $groupBy, $taskSearchValue) : $this->kanban->getRDKanban($executionID, $browseType, $orderBy, $regionID, $groupBy);
+        $rdSearchValue   = $this->session->rdSearchValue ? $this->session->rdSearchValue : '';
+        $kanbanGroup     = $regionID == 0 ? $this->kanban->getExecutionKanban($executionID, $browseType, $groupBy, $taskSearchValue) : $this->kanban->getRDKanban($executionID, $browseType, $orderBy, $regionID, $groupBy, $rdSearchValue);
         echo json_encode($kanbanGroup);
     }
 

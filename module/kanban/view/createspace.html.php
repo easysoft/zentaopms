@@ -43,7 +43,6 @@
       <tr>
         <th><?php echo $lang->kanbanspace->desc;?></th>
         <td colspan='2'>
-          <?php echo $this->fetch('user', 'ajaxPrintTemplates', 'type=kanbanSpace&link=desc');?>
           <?php echo html::textarea('desc', '', "rows='10' class='form-control'");?>
         </td>
       </tr>

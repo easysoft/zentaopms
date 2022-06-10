@@ -51,7 +51,7 @@ $lang->execution->canceledBy          = '由谁取消';
 $lang->execution->canceledDate        = '取消日期';
 $lang->execution->begin               = '计划开始';
 $lang->execution->end                 = '计划完成';
-$lang->execution->dateRange           = '起始日期';
+$lang->execution->dateRange           = '计划起止日期';
 $lang->execution->realBeganAB         = '实际开始';
 $lang->execution->realEndAB           = '实际完成';
 $lang->execution->realBegan           = '实际开始日期';
@@ -271,6 +271,7 @@ $lang->execution->treeOnlyStory     = "树状图只看{$lang->SRCommon}";
 $lang->execution->storyKanban       = "{$lang->SRCommon}看板";
 $lang->execution->storySort         = "{$lang->SRCommon}排序";
 $lang->execution->importPlanStory   = '创建' . $lang->executionCommon . '成功！\n是否导入计划关联的相关' . $lang->SRCommon . '？';
+$lang->execution->needLinkProducts  = '该执行还未关联任何产品，相关功能无法使用，请先关联产品后再试。';
 $lang->execution->iteration         = '版本迭代';
 $lang->execution->iterationInfo     = '迭代%s次';
 $lang->execution->viewAll           = '查看所有';
@@ -396,6 +397,7 @@ $lang->execution->projectNotEmpty             = '所属项目不能为空。';
 $lang->execution->confirmStoryToTask          = '%s' . $lang->SRCommon . '已经在当前' . $lang->execution->common . '中转了任务，请确认是否重复转任务。';
 $lang->execution->ge                          = "『%s』应当不小于实际开始时间『%s』。";
 $lang->execution->storyDragError              = "该{$lang->SRCommon}还是草稿或已变更状态，请评审通过后再拖动";
+$lang->execution->countTip                    = '（%s人）';
 $lang->execution->pleaseInput                 = "请输入";
 
 /* 统计。*/

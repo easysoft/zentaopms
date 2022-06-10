@@ -25,15 +25,23 @@
         echo html::a(inlink($app->rawMethod, "mode=$mode&type=closedBy"),   "<span class='text'>{$lang->bug->closedByMe}</span>" . ($type == 'closedBy'   ? $recTotalLabel : ''),   '', "class='btn btn-link" . ($type == 'closedBy'   ? ' btn-active-text' : '') . "'");
         echo html::a(inlink($app->rawMethod, "mode=$mode&type=assignedBy"), "<span class='text'>{$lang->bug->assignedByMe}</span>" . ($type == 'assignedBy' ? $recTotalLabel : ''), '', "class='btn btn-link" . ($type == 'assignedBy' ? ' btn-active-text' : '') . "'");
     }
+    else
+    {
+        echo html::a(inlink($app->rawMethod, "mode=$mode&type=assignedTo"), "<span class='text'>{$lang->bug->assignedToMe}</span>" . ($type == 'assignedTo' ? $recTotalLabel : ''), '', "class='btn btn-link" . ($type == 'assignedTo' ? ' btn-active-text' : '') . "'");
+    }
     ?>
   </div>
+  <a class="btn btn-link querybox-toggle" id='bysearchTab'><i class="icon icon-search muted"></i> <?php echo $lang->my->byQuery;?></a>
 </div>
 <div id="mainContent">
+  <?php $dataModule = $app->rawMethod == 'work' ? 'workBug' : 'contributeBug';?>
   <?php if(empty($bugs)):?>
+  <div class="cell<?php if($type == 'bySearch') echo ' show';?>" id="queryBox" data-module=<?php echo $dataModule;?>></div>
   <div class="table-empty-tip">
     <p><span class="text-muted"><?php echo $lang->bug->noBug;?></span></p>
   </div>
   <?php else:?>
+  <div class="cell<?php if($type == 'bySearch') echo ' show';?>" id="queryBox" data-module=<?php echo $dataModule;?>></div>
   <form id='myBugForm' class="main-table table-bug" data-ride="table" method="post" action='<?php echo $this->createLink('bug', 'batchEdit', "productID=0");?>'>
     <?php
     $canBatchEdit     = (common::hasPriv('bug', 'batchEdit') and $type == 'assignedTo');
@@ -43,7 +51,8 @@
     $canBatchAction   = ($canBatchEdit or $canBatchConfirm or $canBatchClose or $canBatchAssignTo);
     ?>
     <table class="table has-sort-head table-fixed" id='bugList'>
-      <?php $vars = "mode=$mode&type=$type&orderBy=%s&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID"; ?>
+      <?php $vars = "mode=$mode&type=$type&param=myQueryID&orderBy=%s&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID"; ?>
+      <?php $type = $type == 'bySearch' ? $this->session->myBugType : $type;?>
       <thead>
         <tr>
           <th class="c-id">

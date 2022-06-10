@@ -231,14 +231,13 @@ class control extends baseControl
             if(!is_file($viewFile)) die(js::error($this->lang->notPage) . js::locate('back'));
 
             /* Get ext hook files. */
-            if(empty($viewExtPath['vision']))
+            $commonExtHookFiles = glob($viewExtPath['common'] . $this->devicePrefix . $methodName . ".*.{$viewType}.hook.php");
+            if(!empty($viewExtPath['vision']))
             {
-                $commonExtHookFiles = glob($viewExtPath['common'] . $this->devicePrefix . $methodName . ".*.{$viewType}.hook.php");
+                $visionExtHookFiles = glob($viewExtPath['vision'] . $this->devicePrefix . $methodName . ".*.{$viewType}.hook.php");
+                $commonExtHookFiles = array_merge((array)$commonExtHookFiles, (array)$visionExtHookFiles);
             }
-            else
-            {
-                $commonExtHookFiles = glob($viewExtPath['vision'] . $this->devicePrefix . $methodName . ".*.{$viewType}.hook.php");
-            }
+
             $xuanExtHookFiles   = glob($viewExtPath['xuan']   . $this->devicePrefix . $methodName . ".*.{$viewType}.hook.php");
             $saasExtHookFiles   = glob($viewExtPath['saas']   . $this->devicePrefix . $methodName . ".*.{$viewType}.hook.php");
             $customExtHookFiles = glob($viewExtPath['custom'] . $this->devicePrefix . $methodName . ".*.{$viewType}.hook.php");

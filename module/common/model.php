@@ -1920,7 +1920,7 @@ EOD;
             if(strtolower($key) == 'closeddate'   && $value == '')     continue;
             if(strtolower($key) == 'actualcloseddate' && $value == '') continue;
 
-            if(isset($old->$key) and $value != stripslashes($old->$key))
+            if(array_key_exists($key, $old) and $value != stripslashes($old->$key))
             {
                 $diff = '';
                 if(substr_count($value, "\n") > 1     or
@@ -2349,7 +2349,7 @@ EOD;
            $module == 'tutorial' ||
            $module == 'install' ||
            $module == 'upgrade' ||
-          ($module == 'user' && strpos('|login|deny|logout|', "|{$method}|") !== false) ||
+          ($module == 'user' && strpos('|login|deny|logout|reset|', "|{$method}|") !== false) ||
           ($module == 'my' && strpos('|changepassword|preference|', "|{$method}|") !== false) ||
           ($module == 'file' && strpos('|read|download|uploadimages|ajaxwopifiles|', "|{$method}|") !== false) ||
           ($module == 'sso' && $method == 'login'))

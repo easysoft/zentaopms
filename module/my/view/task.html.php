@@ -18,29 +18,39 @@
 <div id="mainMenu" class="clearfix">
   <div class="btn-toolbar pull-left">
     <?php $recTotalLabel = " <span class='label label-light label-badge'>{$pager->recTotal}</span>"; ?>
-    <?php if($app->rawMethod == 'contribute'):?>
     <?php
-    echo html::a(inlink($app->rawMethod, "mode=$mode&type=openedBy"),   "<span class='text'>{$lang->my->taskMenu->openedByMe}</span>"   . ($type == 'openedBy'   ? $recTotalLabel : ''), '', "class='btn btn-link" . ($type == 'openedBy'   ? ' btn-active-text' : '') . "'");
-    echo html::a(inlink($app->rawMethod, "mode=$mode&type=finishedBy"), "<span class='text'>{$lang->my->taskMenu->finishedByMe}</span>" . ($type == 'finishedBy' ? $recTotalLabel : ''), '', "class='btn btn-link" . ($type == 'finishedBy' ? ' btn-active-text' : '') . "'");
-    echo html::a(inlink($app->rawMethod, "mode=$mode&type=closedBy"),   "<span class='text'>{$lang->my->taskMenu->closedByMe}</span>"   . ($type == 'closedBy'   ? $recTotalLabel : ''), '', "class='btn btn-link" . ($type == 'closedBy'   ? ' btn-active-text' : '') . "'");
-    echo html::a(inlink($app->rawMethod, "mode=$mode&type=canceledBy"), "<span class='text'>{$lang->my->taskMenu->canceledByMe}</span>" . ($type == 'canceledBy' ? $recTotalLabel : ''), '', "class='btn btn-link" . ($type == 'canceledBy' ? ' btn-active-text' : '') . "'");
-    echo html::a(inlink($app->rawMethod, "mode=$mode&type=assignedBy"), "<span class='text'>{$lang->my->taskMenu->assignedByMe}</span>" . ($type == 'assignedBy' ? $recTotalLabel : ''), '', "class='btn btn-link" . ($type == 'assignedBy' ? ' btn-active-text' : '') . "'");
+    if($app->rawMethod == 'contribute')
+    {
+        echo html::a(inlink($app->rawMethod, "mode=$mode&type=openedBy"),   "<span class='text'>{$lang->my->taskMenu->openedByMe}</span>"   . ($type == 'openedBy'   ? $recTotalLabel : ''), '', "class='btn btn-link" . ($type == 'openedBy'   ? ' btn-active-text' : '') . "'");
+        echo html::a(inlink($app->rawMethod, "mode=$mode&type=finishedBy"), "<span class='text'>{$lang->my->taskMenu->finishedByMe}</span>" . ($type == 'finishedBy' ? $recTotalLabel : ''), '', "class='btn btn-link" . ($type == 'finishedBy' ? ' btn-active-text' : '') . "'");
+        echo html::a(inlink($app->rawMethod, "mode=$mode&type=closedBy"),   "<span class='text'>{$lang->my->taskMenu->closedByMe}</span>"   . ($type == 'closedBy'   ? $recTotalLabel : ''), '', "class='btn btn-link" . ($type == 'closedBy'   ? ' btn-active-text' : '') . "'");
+        echo html::a(inlink($app->rawMethod, "mode=$mode&type=canceledBy"), "<span class='text'>{$lang->my->taskMenu->canceledByMe}</span>" . ($type == 'canceledBy' ? $recTotalLabel : ''), '', "class='btn btn-link" . ($type == 'canceledBy' ? ' btn-active-text' : '') . "'");
+        echo html::a(inlink($app->rawMethod, "mode=$mode&type=assignedBy"), "<span class='text'>{$lang->my->taskMenu->assignedByMe}</span>" . ($type == 'assignedBy' ? $recTotalLabel : ''), '', "class='btn btn-link" . ($type == 'assignedBy' ? ' btn-active-text' : '') . "'");
+    }
+    else
+    {
+        echo html::a(inlink($app->rawMethod, "mode=$mode&type=assignedTo"), "<span class='text'>{$lang->my->taskMenu->assignedToMe}</span>" . ($type == 'assignedTo' ? $recTotalLabel : ''), '', "class='btn btn-link" . ($type == 'assignedTo' ? ' btn-active-text' : '') . "'");
+    }
     ?>
-    <?php endif;?>
   </div>
+  <a class="btn btn-link querybox-toggle" id='bysearchTab'><i class="icon icon-search muted"></i> <?php echo $lang->my->byQuery;?></a>
 </div>
 <div id="mainContent">
+<?php $dataModule = $app->rawMethod == 'work' ? 'workTask' : 'contributeTask';?>
   <?php if(empty($tasks)):?>
+  <div class="cell<?php if($type == 'bySearch') echo ' show';?>" id="queryBox" data-module=<?php echo $dataModule;?>></div>
   <div class="table-empty-tip">
     <p><span class="text-muted"><?php echo $lang->task->noTask;?></span></p>
   </div>
   <?php else:?>
+  <div class="cell<?php if($type == 'bySearch') echo ' show';?>" id="queryBox" data-module=<?php echo $dataModule;?>></div>
   <form id='myTaskForm' class="main-table table-task skip-iframe-modal" method="post">
     <?php $canBatchEdit  = (common::hasPriv('task', 'batchEdit')  and $type == 'assignedTo');?>
     <?php $canBatchClose = (common::hasPriv('task', 'batchClose') and $type != 'closedBy');?>
     <div class="table-responsive">
       <table class="table has-sort-head table-fixed" id='taskTable'>
-        <?php $vars = "mode=$mode&type=$type&orderBy=%s&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID"; ?>
+        <?php $vars = "mode=$mode&type=$type&param=myQueryID&orderBy=%s&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID"; ?>
+        <?php $type = $type == 'bySearch' ? $this->session->myTaskType : $type;?>
         <thead>
           <tr>
             <th class="c-id">
@@ -60,7 +70,7 @@
             <th class='c-project'><?php common::printOrderLink('execution', $orderBy, $vars, $lang->my->executions);?></th>
             <?php endif;?>
             <?php if($type != 'openedBy'): ?>
-            <th class='c-user'><?php common::printOrderLink('openedBy', $orderBy, $vars, $lang->openedByAB);?></th>
+            <th class='c-user-short'><?php common::printOrderLink('openedBy', $orderBy, $vars, $lang->openedByAB);?></th>
             <?php endif;?>
             <th class='c-date text-center'><?php common::printOrderLink('deadline', $orderBy, $vars, $lang->task->deadlineAB);?></th>
             <?php if($type != 'assignedTo'): ?>

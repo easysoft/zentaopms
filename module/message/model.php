@@ -89,8 +89,14 @@ class messageModel extends model
                     }
                 }
 
-                $moduleName = $objectType == 'case' ? 'testcase' : $objectType;
-                $this->loadModel('mail')->sendmail($objectID, $actionID);
+                if($objectType == 'feedback')
+                {
+                    $this->loadModel('feedback')->sendmail($objectID, $actionID);
+                }
+                else
+                {
+                    $this->loadModel('mail')->sendmail($objectID, $actionID);
+                }
 
                 if(defined('RUN_MODE') and RUN_MODE == 'api') $config->requestType = $requestType;
             }
