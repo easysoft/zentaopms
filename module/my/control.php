@@ -996,7 +996,6 @@ EOF;
         $actionURL = $this->createLink('my', 'work', "mode=myMeeting&browseType=bysearch&param=myQueryID");
         $this->meeting->buildSearchForm($queryID, $actionURL);
 
-
         $this->view->title      = $this->lang->my->common . $this->lang->colon . $this->lang->my->myMeeting;
         $this->view->browseType = $browseType;
         $this->view->meetings   = $this->meeting->getListByUser($browseType, $orderBy, $queryID, $pager);

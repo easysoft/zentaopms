@@ -23,6 +23,7 @@ $lang->action->actor         = 'User';
 $lang->action->action        = 'Action';
 $lang->action->actionID      = 'Action ID';
 $lang->action->date          = 'Date';
+$lang->action->dateAB        = 'Action Date';
 $lang->action->extra         = 'Extra';
 $lang->action->system        = 'System';
 $lang->action->url           = 'URL';

@@ -1331,9 +1331,16 @@ function toggleSearchBox()
 {
     $('#searchBox').toggle();
 
-    searchValue = '';
-    var color   = $('#searchBox').css('display') == 'block' ? "#0c64eb" : "#3c495c";
-    $(".querybox-toggle").css("color", color);
+    if($('#searchBox').css('display') == 'block')
+    {
+        $(".querybox-toggle").css("color", "#0c64eb");
+    }
+    else
+    {
+        $(".querybox-toggle").css("color", "3c495c");
+        $('#taskKanbanSearchInput').attr('value', '');
+        searchCards('');
+    }
 }
 
 /**
