@@ -524,8 +524,8 @@ $(function()
     {
         for(i = 1; i <= groupItems * 2; i ++)
         {
-            if($searchForm.find('#value' + i).css('display') != 'none') $searchForm.find('#value' + i).val('').trigger('chosen:updated');
-            if($searchForm.find('#value' + i).css('display') == 'none') $searchForm.find('#value' + i).data('zui.picker').setValue('');
+            if(!$searchForm.find('#value' + i).hasClass('picker-select')) $searchForm.find('#value' + i).val('').trigger('chosen:updated');
+            if($searchForm.find('#value' + i).hasClass('picker-select'))  $searchForm.find('#value' + i).data('zui.picker').setValue('');
             $searchForm.find('#dateValue' + i).val('').attr('placeholder','');
         }
     };
