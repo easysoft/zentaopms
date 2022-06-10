@@ -163,7 +163,7 @@ class my extends control
             $this->loadModel('meeting');
 
             /* Get the number of issues assigned to me. */
-            $issues     = $this->issue->getUserIssues('assignedTo', $this->app->user->account, 'id_desc', $pager);
+            $issues     = $this->issue->getUserIssues('assignedTo', 0, $this->app->user->account, 'id_desc', $pager);
             $issueCount = $pager->recTotal;
 
             /* Get the number of risks assigned to me. */
@@ -803,11 +803,17 @@ EOF;
      * @param  int    $pageID
      * @return void
      */
-    public function issue($type = 'assignedTo', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function issue($type = 'assignedTo', $param = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         /* Set the pager. */
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
+
+        /* Build the search form. */
+        $browseType = strtolower($type);
+        $queryID    = ($browseType == 'bysearch') ? (int)$param : 0;
+        $actionURL  = $this->createLink('my', $this->app->rawMethod, "mode=issue&type=bySearch&param=myQueryID");
+        $this->loadModel('issue')->buildSearchForm($actionURL, $queryID);
 
         $this->app->session->set('issueList', $this->app->getURI(true), 'project');
 
@@ -818,7 +824,8 @@ EOF;
         $this->view->orderBy    = $orderBy;
         $this->view->pager      = $pager;
         $this->view->type       = $type;
-        $this->view->issues     = $type == 'assignedBy' ? $this->loadModel('my')->getAssignedByMe($this->app->user->account, '', $pager,  $orderBy, '', 'issue') : $this->loadModel('issue')->getUserIssues($type, $this->app->user->account, $orderBy, $pager);
+        $this->view->param      = $param;
+        $this->view->issues     = $type == 'assignedBy' ? $this->loadModel('my')->getAssignedByMe($this->app->user->account, '', $pager,  $orderBy, '', 'issue') : $this->loadModel('issue')->getUserIssues($type, $queryID, $this->app->user->account, $orderBy, $pager);
 
         $this->view->projectList = $this->loadModel('project')->getPairsByProgram();
 
