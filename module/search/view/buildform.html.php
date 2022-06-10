@@ -524,7 +524,8 @@ $(function()
     {
         for(i = 1; i <= groupItems * 2; i ++)
         {
-            $searchForm.find('#value' + i).val('').trigger('chosen:updated');
+            if($searchForm.find('#value' + i).css('display') != 'none') $searchForm.find('#value' + i).val('').trigger('chosen:updated');
+            if($searchForm.find('#value' + i).css('display') == 'none') $searchForm.find('pk_#value' + i + '-search').val('').trigger('chosen:updated');
             $searchForm.find('#dateValue' + i).val('').attr('placeholder','');
         }
     };
