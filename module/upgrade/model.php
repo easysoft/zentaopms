@@ -6320,6 +6320,12 @@ class upgradeModel extends model
         $this->setting->deleteItems('owner=system&module=story&section=&key=forceReviewAll');
     }
 
+    /**
+     * The setlane permission is deleted. We need to replace setlane with editlanename and editlanecolor.
+     *
+     * @access public
+     * @return void
+     */
     public function replaceSetLanePriv()
     {
         $groupIDList = $this->dao->select('group')->from(TABLE_GROUPPRIV)
