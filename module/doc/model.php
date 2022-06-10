@@ -357,7 +357,7 @@ class docModel extends model
                 if($this->session->contributeDocQuery == false) $this->session->set('contributeDocQuery', ' 1 = 1');
             }
 
-            $query = $this->session->contributeDocQuery;
+            $query = $this->getDocQuery($this->session->contributeDocQuery);
             $docIDList = $this->dao->select('objectID')->from(TABLE_ACTION)
                 ->where('objectType')->eq('doc')
                 ->andWhere('actor')->eq($this->app->user->account)
@@ -479,6 +479,51 @@ class docModel extends model
         }
 
         return $docs;
+    }
+
+    /**
+     * Replace all in query.
+     *
+     * @param  string    $query
+     * @access public
+     * @return string
+     */
+    public function getDocQuery($query)
+    {
+        $allLibs = "`lib` = 'all'";
+        if(strpos($query, $allLibs) !== false)
+        {
+            $libs = $this->loadModel('doc')->getLibs('all', 'withObject');
+            $query = str_replace($allLibs, '1', $query);
+            $query = $query . ' AND `lib` ' . helper::dbIN($libs);
+        }
+
+        $allProject = "`project` = 'all'";
+        if(strpos($query, $allProject) !== false)
+        {
+            $projectIDList = $this->loadModel('bug')->getAllProjectIds();
+            if(is_array($projectIDList)) $projectIDList = implode(',', $projectIDList);
+            $query = str_replace($allProject, '1', $query);
+            $query = $query . ' AND `project` in (' . $projectIDList . ')';
+        }
+
+        $allProduct = "`product` = 'all'";
+        if(strpos($query, $allProduct) !== false)
+        {
+            $products = $this->app->user->view->products;
+            $query = str_replace($allProduct, '1', $query);
+            $query = $query . ' AND `product` ' . helper::dbIN($products);
+        }
+
+        $allExecutions = "`execution` = 'all'";
+        if(strpos($query, $allExecutions) !== false)
+        {
+            $executions = $this->loadModel('execution')->getPairs();
+            $query = str_replace($allExecutions, '1', $query);
+            $query = $query . ' AND `execution` ' . helper::dbIN(array_keys($executions));
+        }
+
+        return $query;
     }
 
     /**
