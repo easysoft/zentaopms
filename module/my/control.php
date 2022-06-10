@@ -970,15 +970,16 @@ EOF;
     /**
      * My meeting list.
      *
-     * @param  string $browseType
-     * @param  string $orderBy
-     * @param  int    $recTotal
-     * @param  int    $recPerPage
-     * @param  int    $pageID
+     * @param  string     $browseType
+     * @param  string|int $param
+     * @param  string     $orderBy
+     * @param  int        $recTotal
+     * @param  int        $recPerPage
+     * @param  int        $pageID
      * @access public
      * @return void
      */
-    public function myMeeting($browseType = 'futureMeeting', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function myMeeting($browseType = 'futureMeeting', $param = '', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         $this->loadModel('meeting');
 
@@ -990,13 +991,20 @@ EOF;
         if($this->app->getViewType() == 'mhtml') $recPerPage = 10;
         $pager = pager::init($recTotal, $recPerPage, $pageID);
 
+        /* Build the search form. */
+        $queryID   = ($browseType == 'bysearch') ? (int)$param : 0;
+        $actionURL = $this->createLink('my', 'work', "mode=myMeeting&browseType=bysearch&param=myQueryID");
+        $this->meeting->buildSearchForm($queryID, $actionURL);
+
+
         $this->view->title      = $this->lang->my->common . $this->lang->colon . $this->lang->my->myMeeting;
         $this->view->browseType = $browseType;
-        $this->view->meetings   = $this->meeting->getListByUser($browseType, $orderBy, 0, $pager);
+        $this->view->meetings   = $this->meeting->getListByUser($browseType, $orderBy, $queryID, $pager);
         $this->view->orderBy    = $orderBy;
         $this->view->pager      = $pager;
         $this->view->depts      = $this->loadModel('dept')->getOptionMenu();
         $this->view->users      = $this->loadModel('user')->getPairs('all,noletter');
+        $this->view->queryID    = $queryID;
         $this->view->mode       = 'myMeeting';
 
         $this->display();
