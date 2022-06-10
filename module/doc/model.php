@@ -493,7 +493,7 @@ class docModel extends model
         $allLibs = "`lib` = 'all'";
         if(strpos($query, $allLibs) !== false)
         {
-            $libs = $this->loadModel('doc')->getLibs('all', 'withObject');
+            $libs  = $this->loadModel('doc')->getLibs('all', 'withObject');
             $query = str_replace($allLibs, '1', $query);
             $query = $query . ' AND `lib` ' . helper::dbIN($libs);
         }
@@ -511,16 +511,16 @@ class docModel extends model
         if(strpos($query, $allProduct) !== false)
         {
             $products = $this->app->user->view->products;
-            $query = str_replace($allProduct, '1', $query);
-            $query = $query . ' AND `product` ' . helper::dbIN($products);
+            $query    = str_replace($allProduct, '1', $query);
+            $query    = $query . ' AND `product` ' . helper::dbIN($products);
         }
 
         $allExecutions = "`execution` = 'all'";
         if(strpos($query, $allExecutions) !== false)
         {
             $executions = $this->loadModel('execution')->getPairs();
-            $query = str_replace($allExecutions, '1', $query);
-            $query = $query . ' AND `execution` ' . helper::dbIN(array_keys($executions));
+            $query      = str_replace($allExecutions, '1', $query);
+            $query      = $query . ' AND `execution` ' . helper::dbIN(array_keys($executions));
         }
 
         return $query;
