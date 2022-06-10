@@ -1334,10 +1334,12 @@ function searchCards(value)
         if(hideAll)
         {
             $("#emptyBox").removeClass('hidden');
+            $("#kanbanContainer .panel-body").addClass('hidden');
         }
         else
         {
             $("#emptyBox").addClass('hidden');
+            $("#kanbanContainer .panel-body").removeClass('hidden');
         }
     });
 }

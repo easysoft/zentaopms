@@ -129,9 +129,9 @@
 <div class='panel' id='kanbanContainer'>
   <div class='panel-body'>
     <div id='kanbans'></div>
-    <div class='table-empty-tip hidden' id='emptyBox'>
-      <p><span class="text-muted"><?php echo $lang->kanban->empty?></span></p>
-    </div>
+  </div>
+  <div class='table-empty-tip hidden' id='emptyBox'>
+    <p><span class="text-muted"><?php echo $lang->kanban->empty?></span></p>
   </div>
 </div>
 
