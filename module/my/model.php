@@ -376,7 +376,7 @@ class myModel extends model
     }
 
     /**
-     * Build search form.
+     * Build case search form.
      *
      * @param  int    $queryID
      * @param  string $actionURL
@@ -417,7 +417,7 @@ class myModel extends model
      */
     public function getTestcasesBySearch($queryID, $type, $orderBy, $pager)
     {
-        $queryName = $type == 'openedbyme' ? 'contributeTestcaseQuery' : 'workTestcaseQuery';
+        $queryName = $type == 'contribute' ? 'contributeTestcaseQuery' : 'workTestcaseQuery';
         if($queryID)
         {
             $query = $this->loadModel('search')->getQuery($queryID);
@@ -439,7 +439,7 @@ class myModel extends model
         $myTestcaseQuery = $this->session->$queryName;
         $myTestcaseQuery = preg_replace('/`(\w+)`/', 't1.`$1`', $myTestcaseQuery);
 
-        if($type == 'openedbyme')
+        if($type == 'contribute')
         {
             $cases = $this->dao->select('*')->from(TABLE_CASE)->alias('t1')
                 ->where($myTestcaseQuery)
@@ -621,5 +621,98 @@ class myModel extends model
         $this->config->bug->search['params']['resolvedBuild']['values'] = $this->config->bug->search['params']['openedBuild']['values'];
 
         $this->loadModel('search')->setSearchParams($this->config->bug->search);
+    }
+
+    /*
+     * Build risk search form.
+     *
+     * @param  int    $queryID
+     * @param  string $actionURL
+     * @param  string $type risk|contribute
+     * @access public
+     * @return void
+     */
+    public function buildRiskSearchForm($queryID, $actionURL, $type)
+    {
+        $projects  = $this->loadModel('project')->getPairsByProgram();
+        $queryName = $type == 'contribute' ? 'contributeRisk' : 'workRisk';
+
+        $this->app->loadConfig('risk');
+        $this->config->risk->search['module']            = $queryName;
+        $this->config->risk->search['actionURL']         = $actionURL;
+        $this->config->risk->search['queryID']           = $queryID;
+
+        $this->config->risk->search['params']['project']['value'] = array('') + $projects;
+
+        if($this->config->systemMode == 'classic') unset($this->config->risk->search['fields']['project']);
+        unset($this->config->risk->search['fields']['module']);
+
+        $this->loadModel('search')->setSearchParams($this->config->risk->search);
+    }
+
+    /**
+     * Get risks by search.
+     *
+     * @param  int    $queryID
+     * @param  string $type
+     * @param  string $orderBy
+     * @param  int    $pager
+     * @access public
+     * @return array
+     */
+    public function getRisksBySearch($queryID, $type, $orderBy, $pager)
+    {
+        $queryName = $type == 'contribute' ? 'contributeRiskQuery' : 'workRiskQuery';
+        if($queryID && $queryID != 'myQueryID')
+        {
+            $query = $this->loadModel('search')->getQuery($queryID);
+            if($query)
+            {
+                $this->session->set($queryName, $query->sql);
+                $this->session->set($queryName . 'Form', $query->form);
+            }
+            else
+            {
+                $this->session->set($queryName, ' 1 = 1');
+            }
+        }
+        else
+        {
+            if($this->session->$queryName == false) $this->session->set($queryName, ' 1 = 1');
+        }
+
+        $riskQuery = $this->session->$queryName;
+
+        if($type == 'contribute')
+        {
+            $riskIDList = array();
+            $AssignedByMe = $this->getAssignedByMe($this->app->user->account, '', $pager, $orderBy, '', 'risk');
+            foreach($AssignedByMe as $riskID => $risk)
+            {
+                $riskIDList[$riskID] = $riskID;
+            }
+
+            $risks = $this->dao->select('*')->from(TABLE_RISK)
+                ->where($riskQuery)
+                ->andWhere('deleted')->eq('0')
+                ->orWhere('createdBy',1)->eq($this->app->user->account)
+                ->orWhere('id')->in($riskIDList)
+                ->orWhere('closedBy')->eq($this->app->user->account)
+                ->orderBy($orderBy)
+                ->page($pager)
+                ->fetchAll('id');
+        }
+        elseif($type == 'work')
+        {
+            $risks = $this->dao->select('*')->from(TABLE_RISK)
+                ->where($riskQuery)
+                ->andWhere('deleted')->eq('0')
+                ->andWhere('assignedTo')->eq($this->app->user->account)
+                ->orderBy($orderBy)
+                ->page($pager)
+                ->fetchAll('id');
+        }
+
+        return $risks;
     }
 }
