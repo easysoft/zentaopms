@@ -1367,9 +1367,9 @@ $(function()
 
     if(navigator.userAgent.toLowerCase().indexOf("qqbrowser") > -1) $('.region .kanban-header-col > .actions').css('top', '30%');
 
-    $('.icon-chevron-double-up,.icon-chevron-double-down').on('click', function()
+    $('.icon-angle-top,.icon-angle-down').on('click', function()
     {
-        $(this).toggleClass('icon-chevron-double-up icon-chevron-double-down');
+        $(this).toggleClass('icon-angle-top icon-angle-down');
         $(this).parents('.region').find('.kanban').toggle();
         hideKanbanAction();
         resetRegionHeight($(this).hasClass('icon-chevron-double-up') ? 'open' : 'close');
@@ -1527,10 +1527,10 @@ function initSortable()
             if(sortType == 'region')
             {
                 showRegionIdList = '';
-                $('.icon-chevron-double-up').each(function()
+                $('.icon-angle-top').each(function()
                 {
                     showRegionIdList += $(this).attr('data-id') + ',';
-                    $(this).attr('class', 'icon-chevron-double-down');
+                    $(this).attr('class', 'icon-angle-down');
                 });
 
                 $('.region').find('.kanban').hide();
@@ -1561,7 +1561,7 @@ function initSortable()
                 {
                     if(showRegionIdList.includes($(this).attr('data-id')))
                     {
-                        $(this).find('.icon-chevron-double-down').attr('class', 'icon-chevron-double-up');
+                        $(this).find('.icon-angle-down').attr('class', 'icon-angle-top');
                         $(this).find('.kanban').show();
                     }
                 })
