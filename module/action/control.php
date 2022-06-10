@@ -83,6 +83,9 @@ class action extends control
         $this->session->set('practiceLibList',    $uri, 'assetlib');
         $this->session->set('componentLibList',   $uri, 'assetlib');
 
+        /* Save the object name used to replace the search language item. */
+        $this->session->set('objectName', zget($this->lang->action->objectTypes, $browseType, ''), 'admin');
+
         /* Build the search form. */
         $queryID   = (int)$queryID;
         $actionURL = $this->createLink('action', 'trash', "browseType=$browseType&type=$type&byQuery=true&queryID=myQueryID");

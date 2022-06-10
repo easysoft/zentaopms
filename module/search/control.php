@@ -49,6 +49,8 @@ class search extends control
         $_SESSION['searchParams']['module'] = $module;
         $this->search->initSession($module, $fields, $params);
 
+        if($module == 'trash' and $this->session->objectName) $this->lang->search->common = $this->lang->search->common . $this->session->objectName;
+
         $this->view->module       = $module;
         $this->view->groupItems   = $this->config->search->groupItems;
         $this->view->searchFields = $fields;
