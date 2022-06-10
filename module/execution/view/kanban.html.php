@@ -27,6 +27,7 @@ js::set('orderBy', $orderBy);
 js::set('groupBy', $groupBy);
 js::set('execution', $execution);
 js::set('productID', $productID);
+js::set('hourUnit', $config->hourUnit);
 js::set('kanbanLang', $lang->kanban);
 js::set('kanbanlaneLang', $lang->kanbanlane);
 js::set('storyLang', $lang->story);
