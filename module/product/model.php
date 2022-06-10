@@ -920,7 +920,7 @@ class productModel extends model
         foreach($oldLines as $oldLine)
         {
             $oldLineID = 'id' . $oldLine->id;
-            if($data->modules[$oldLineID] != $oldLine->name or $data->programs[$oldLineID] != $oldLine->root)
+            if($data->programs[$oldLineID] != $oldLine->root)
             {
                 $product = $this->dao->select('*')->from(TABLE_PRODUCT)->where('line')->eq($oldLine->id)->fetchAll('id');
                 if(!empty($product)) return print(js::error($this->lang->product->changeLineError) . js::locate('parent'));
