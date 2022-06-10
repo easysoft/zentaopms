@@ -20,16 +20,19 @@
     echo html::a(inlink($app->rawMethod, "mode=doc&type=editedbyme"), "<span class='text'>{$lang->doc->editedByMe}</span>" . ($type == 'editedbyme' ? $recTotalLabel : ''), '', "class='btn btn-link" . ($type == 'editedbyme' ? ' btn-active-text' : '') . "'");
     ?>
   </div>
+  <a class="btn btn-link querybox-toggle" id='bysearchTab'><i class="icon icon-search muted"></i> <?php echo $lang->my->byQuery;?></a>
 </div>
-<div id="mainContent" class='main-table'>
+<div id="mainContent">
   <?php if(empty($docs)):?>
+  <div class="cell<?php if($type == 'bySearch') echo ' show';?>" id="queryBox" data-module=<?php echo 'contributeDoc';?>></div>
   <div class="table-empty-tip">
     <p>
       <span class="text-muted"><?php echo $lang->doc->noDoc;?></span>
     </p>
   </div>
   <?php else:?>
-  <form id='projectForm' method='post' data-ride='table' data-checkable='false'>
+  <div class="cell<?php if($type == 'bySearch') echo ' show';?>" id="queryBox" data-module=<?php echo 'contributeDoc';?>></div>
+  <form id='projectForm' class="main-table" method='post' data-ride='table' data-checkable='false'>
     <table class='table table-fixed' id='docList'>
       <thead>
         <tr>

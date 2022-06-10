@@ -156,6 +156,7 @@ global $config;
 /* 查询条件列表 */
 $lang->doc->allProduct    = '所有' . $lang->productCommon;
 $lang->doc->allExecutions = '所有' . $lang->executionCommon;
+$lang->doc->allProjects   = '所有' . $lang->projectCommon;
 
 $lang->doc->libTypeList['product']   = $lang->productCommon . '文档库';
 if($config->systemMode == 'new') $lang->doc->libTypeList['project'] = '项目文档库';

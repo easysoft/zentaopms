@@ -678,12 +678,14 @@ EOF;
         $this->display();
     }
 
-    public function doc($type = 'openedbyme', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function doc($type = 'openedbyme', $param = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         /* Save session, load lang. */
         $uri = $this->app->getURI(true);
-        if($this->app->viewType != 'json') $this->session->set('docList', $uri, 'doc');
         $this->loadModel('doc');
+        if($this->app->viewType != 'json') $this->session->set('docList', $uri, 'doc');
+
+        $queryID = ($type == 'bySearch') ? (int)$param : 0;
 
         $this->session->set('productList',   $uri, 'product');
         $this->session->set('executionList', $uri, 'execution');
@@ -696,7 +698,10 @@ EOF;
         /* Append id for secend sort. */
         $sort = common::appendOrder($orderBy);
 
-        $docs = $this->doc->getDocsByBrowseType($type, 0, 0, $sort, $pager);
+        $docs = $this->doc->getDocsByBrowseType($type, $queryID, 0, $sort, $pager);
+
+        $actionURL = $this->createLink('my', $this->app->rawMethod, "mode=doc&browseType=bySearch&queryID=myQueryID");
+        $this->loadModel('doc')->buildSearchForm(0, array(), $queryID, $actionURL, 'contribute');
 
         /* Assign. */
         $this->view->title      = $this->lang->my->common . $this->lang->colon . $this->lang->my->doc;
