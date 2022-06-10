@@ -6319,4 +6319,32 @@ class upgradeModel extends model
 
         $this->setting->deleteItems('owner=system&module=story&section=&key=forceReviewAll');
     }
+
+    public function replaceSetLanePriv()
+    {
+        $groupIDList = $this->dao->select('group')->from(TABLE_GROUPPRIV)
+            ->where('module')->eq('kanban')
+            ->andWhere('method')->eq('setLane')
+            ->fetchAll();
+
+        if(!empty($groupIDList))
+        {
+            $this->dao->delete()->from(TABLE_GROUPPRIV)
+                ->where('module')->eq('kanban')
+                ->andWhere('method')->eq('setLane')
+                ->exec();
+        }
+
+        foreach($groupIDList as $groupID)
+        {
+            $data = new stdClass();
+            $data->group  = $groupID;
+            $data->module = 'kanban';
+            $data->method = 'editLaneName';
+            $this->dao->insert(TABLE_GROUPPRIV)->data($data)->exec();
+
+            $data->method = 'editLaneColor';
+            $this->dao->insert(TABLE_GROUPPRIV)->data($data)->exec();
+        }
+    }
 }
