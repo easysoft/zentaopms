@@ -32,7 +32,7 @@
   </div>
 </div>
 <div id="mainContent">
-<div class="cell<?php if($type == 'bysearch') echo ' show';?>" id="queryBox" data-module=<?php echo ($app->rawMethod == 'contribute' ? 'contributeTestcase' : 'workTestcase');?>></div>
+  <div class="cell<?php if($type == 'bysearch') echo ' show';?>" id="queryBox" data-module=<?php echo ($app->rawMethod == 'contribute' ? 'contributeTestcase' : 'workTestcase');?>></div>
   <?php if(empty($cases)):?>
   <div class="table-empty-tip">
     <p><span class="text-muted"><?php echo $lang->testcase->noCase;?></span></p>
