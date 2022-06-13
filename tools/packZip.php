@@ -66,7 +66,7 @@ foreach(array('zh-cn', 'en') as $langType)
         $command .= "cp -rf ../../zentaomax.php$encryptedPhpVersion/* $dirName/\n";
         $command .= "zip -r ../../$packPrefix.{$version}.php{$phpVersion}.zip $dirName\n";
 
-        $command .= "rm -rf $dirName/ biz/ max/\n";
+        $command .= "rm -rf $dirName/\n";
 
         file_put_contents($shellName, $command);
 
