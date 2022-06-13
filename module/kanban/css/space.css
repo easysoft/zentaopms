@@ -7,7 +7,7 @@
 #spaceList .spaceActions > a{margin-left: 10px;}
 .space .menu {margin-left: 5px; margin-right:5px;}
 .space .table-empty-tip {padding: 40px 10px;}
-.space .spaceTitle.pull-left {overflow: hidden; white-space: nowrap; max-width: calc(100% - 200px)}
+.space .spaceTitle.pull-left {overflow: hidden; white-space: nowrap; max-width: calc(100% - 220px)}
 .spaceName {font-size: 16px; font-weight: bold;}
 .spaceTitle .icon-cube {font-size: 16px;}
 .spaceDesc {font-size: 13px; color: #838A9D; margin: -5px 0 5px 0;}
