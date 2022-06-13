@@ -503,10 +503,11 @@ class testtask extends control
 
         if($browseType == 'bymodule') setcookie('taskCaseModule', (int)$param, 0, $this->config->webRoot, '', $this->config->cookieSecure, true);
         if($browseType != 'bymodule') $this->session->set('taskCaseBrowseType', $browseType);
+        if($browseType == 'bysuite')  $suiteName = $this->loadModel('testsuite')->getById($param)->name;
 
         /* Set the browseType, moduleID and queryID. */
         $moduleID   = ($browseType == 'bymodule') ? (int)$param : ($browseType == 'bysearch' ? 0 : ($this->cookie->taskCaseModule ? $this->cookie->taskCaseModule : 0));
-        $queryID    = ($browseType == 'bysearch') ? (int)$param : 0;
+        $queryID    = ($browseType == 'bysearch' or $browseType == 'bysuite') ? (int)$param : 0;
 
         /* Get execution type and set assignedToList. */
         $execution = $this->execution->getById($task->execution);
@@ -533,8 +534,6 @@ class testtask extends control
         $this->config->testcase->search['params']['module']['values']  = $this->loadModel('tree')->getOptionMenu($productID, $viewType = 'case');
         $this->config->testcase->search['params']['status']['values']  = array('' => '') + $this->lang->testtask->statusList;
         $this->config->testcase->search['params']['lib']['values']     = $this->loadModel('caselib')->getLibraries();
-        $this->config->testcase->search['fields']['suite']             = $this->lang->testcase->suite;
-        $this->config->testcase->search['params']['suite']             = array('operator' => '=', 'control' => 'select', 'values' => $this->loadModel('testsuite')->getSuitePairs($productID));
 
         $this->config->testcase->search['queryID']              = $queryID;
         $this->config->testcase->search['fields']['assignedTo'] = $this->lang->testtask->assignedTo;
@@ -570,6 +569,8 @@ class testtask extends control
         $this->view->pager          = $pager;
         $this->view->branches       = $this->loadModel('branch')->getPairs($productID);
         $this->view->setModule      = false;
+        $this->view->suites         = $this->loadModel('testsuite')->getSuitePairs($productID);
+        $this->view->suiteName      = isset($suiteName) ? $suiteName : $this->lang->testtask->browseBySuite;
         $this->view->canBeChanged   = $canBeChanged;
 
         $this->display();

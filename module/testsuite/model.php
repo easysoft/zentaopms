@@ -248,7 +248,7 @@ class testsuiteModel extends model
     public function getLinkedCasePairs($suiteID)
     {
         $suite = $this->getById($suiteID);
-        return $this->dao->select('t1.*,t2.version as caseVersion')->from(TABLE_CASE)->alias('t1')
+        return $this->dao->select('t1.id, t1.title')->from(TABLE_CASE)->alias('t1')
             ->leftJoin(TABLE_SUITECASE)->alias('t2')->on('t1.id=t2.case')
             ->where('t2.suite')->eq($suiteID)
             ->beginIF($this->config->systemMode == 'new' and $this->lang->navGroup->testsuite != 'qa')->andWhere('t1.project')->eq($this->session->project)->fi()
@@ -256,7 +256,7 @@ class testsuiteModel extends model
             ->andWhere('t1.product')->eq($suite->product)
             ->andWhere('t1.deleted')->eq(0)
             ->orderBy('id_desc')
-            ->fetchAll('id');
+            ->fetchPairs('id');
     }
 
     /**

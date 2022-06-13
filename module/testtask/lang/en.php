@@ -128,6 +128,7 @@ $lang->testtask->linkByBuild   = 'Copy from build';
 $lang->testtask->linkByStory   = 'Link by Story';
 $lang->testtask->linkByBug     = 'Link by Bug';
 $lang->testtask->linkBySuite   = 'Link by Suite';
+$lang->testtask->browseBySuite = 'Browse by Suite';
 $lang->testtask->passAll       = 'Pass All';
 $lang->testtask->pass          = 'Pass';
 $lang->testtask->fail          = 'Failed';

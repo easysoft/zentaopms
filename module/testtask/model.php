@@ -949,6 +949,35 @@ class testtaskModel extends model
     }
 
     /**
+     * Get test runs of a suite.
+     *
+     * @param  int    $taskID
+     * @param  int    $moduleID
+     * @param  object $pager
+     * @access public
+     * @return array
+     */
+    public function getRunsBySuite($taskID, $suiteID, $orderBy, $pager = null)
+    {
+        /* Select the table for these special fields. */
+        $specialFields = ',assignedTo,status,lastRunResult,lastRunner,lastRunDate,';
+        $fieldToSort   = substr($orderBy, 0, strpos($orderBy, '_'));
+        $orderBy       = strpos($specialFields, ',' . $fieldToSort . ',') !== false ? ('t1.' . $orderBy) : ('t2.' . $orderBy);
+
+        $cases = $this->loadModel('testsuite')->getLinkedCasePairs($suiteID);
+
+        return $this->dao->select('t2.*,t1.*,t2.version as caseVersion,t3.title as storyTitle,t2.status as caseStatus')->from(TABLE_TESTRUN)->alias('t1')
+            ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case = t2.id')
+            ->leftJoin(TABLE_STORY)->alias('t3')->on('t2.story = t3.id')
+            ->where('t1.task')->eq((int)$taskID)
+            ->andWhere('t2.deleted')->eq(0)
+            ->andWhere('t2.id')->in(array_keys($cases))
+            ->orderBy($orderBy)
+            ->page($pager)
+            ->fetchAll('id');
+    }
+
+    /**
      * Get test runs of a user.
      *
      * @param  int    $taskID
@@ -1000,6 +1029,10 @@ class testtaskModel extends model
         {
             $runs = $this->getRuns($task->id, $modules, $sort, $pager);
         }
+        elseif($browseType == 'bysuite')
+        {
+            $runs = $this->getRunsBySuite($task->id, $queryID, $sort, $pager);
+        }
         elseif($browseType == 'assignedtome')
         {
             $runs = $this->getUserRuns($task->id, $this->session->user->account, $modules, $sort, $pager);
@@ -1030,22 +1063,6 @@ class testtaskModel extends model
 
             $caseQuery = preg_replace('/`(\w+)`/', 't2.`$1`', $caseQuery);
             $caseQuery = str_replace(array('t2.`assignedTo`', 't2.`lastRunner`', 't2.`lastRunDate`', 't2.`lastRunResult`', 't2.`status`'), array('t1.`assignedTo`', 't1.`lastRunner`', 't1.`lastRunDate`', 't1.`lastRunResult`', 't1.`status`'), $caseQuery);
-            if(strpos($caseQuery, "t2.`suite`") !== false)
-            {
-                preg_match("/ t2.`suite` = '\d+'/", $caseQuery, $match);
-                if(!empty($match))
-                {
-                    $match = current($match);
-                    $suiteQuery = str_replace(' t2.`suite` = ', '', $match);
-                    $suiteQuery = trim($suiteQuery, "'");
-                    $suiteID    = intval($suiteQuery);
-
-                    $suiteCases = $this->loadModel('testsuite')->getLinkedCasePairs($suiteID);
-
-                    $query     = " t2.`id` " . helper::dbIN(array_keys($suiteCases));
-                    $caseQuery = preg_replace("/ t2.`suite` = '\d+'/", $query, $caseQuery, 1);
-                }
-            }
 
             /* Select the table for these special fields. */
             $specialFields = ',assignedTo,status,lastRunResult,lastRunner,lastRunDate,';
