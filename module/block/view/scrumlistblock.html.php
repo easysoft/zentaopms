@@ -13,6 +13,7 @@
 <style>
 .table .c-progress {width: 60px;}
 .table .c-estimate {width: 85px;}
+.table .c-burn     {width: 150px;}
 </style>
 <?php if(empty($executionStats)): ?>
 <div class='empty-tip'><?php echo $lang->block->emptyTip;?></div>
@@ -32,7 +33,7 @@
         <?php endif;?>
         <th class="c-progress"><?php echo $lang->execution->progress;?></th>
         <?php if($longBlock):?>
-        <th><?php echo $lang->execution->burn;?></th>
+        <th class='c-burn'><?php echo $lang->execution->burn;?></th>
         <?php endif;?>
       </tr>
     </thead>
