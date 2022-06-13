@@ -526,7 +526,7 @@ $(function()
         {
             if(!$searchForm.find('#value' + i).hasClass('picker-select')) $searchForm.find('#value' + i).val('').trigger('chosen:updated');
             if($searchForm.find('#value' + i).hasClass('picker-select'))  $searchForm.find('#value' + i).data('zui.picker').setValue('');
-            $searchForm.find('#value' + i).val('').attr('placeholder','');
+            $searchForm.find('#value' + i + '.date').val('').attr('placeholder','');
         }
     };
 
