@@ -804,7 +804,7 @@ function setBranchRelated(branchID, productID, num)
         $("#modules" + num).chosen();
     });
 
-  var projectLink = createLink('product', 'ajaxGetProjectsByBranch', 'productID=' + productID + '&branch=' + branchID + '&num=' + num);
+    var projectLink = createLink('product', 'ajaxGetProjectsByBranch', 'productID=' + productID + '&branch=' + branchID + '&num=' + num);
     $.get(projectLink, function(projects)
     {
         if(!projects) projects = '<select id="projects' + num + '" name="projects[' + num + ']" class="form-control"></select>';
