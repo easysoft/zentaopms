@@ -31,7 +31,7 @@
         echo html::a(inlink($app->rawMethod, "mode=story&type=reviewBy&param=$param&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pagerID=$pageID"),   "<span class='text'>{$lang->my->storyMenu->reviewByMe}</span>"   . ($type == 'reviewBy' ? $recTotalLabel : ''),   '', "class='btn btn-link" . ($type == 'reviewBy'   ? ' btn-active-text' : '') . "'");
     }
     ?>
-    <a class="btn btn-link querybox-toggle" id='bysearchTab'><i class="icon icon-search muted"></i><?php $this->loadModel('search');echo $lang->search->common;?></a>
+    <a class="btn btn-link querybox-toggle" id='bysearchTab'><i class="icon icon-search muted"></i> <?php $this->loadModel('search');echo $lang->search->common;?></a>
   </div>
 </div>
 <div id="mainContent">

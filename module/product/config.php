@@ -69,7 +69,7 @@ $config->product->search['params']['estimate']       = array('operator' => '=', 
 $config->product->search['params']['source']         = array('operator' => '=',       'control' => 'select', 'values' => $lang->story->sourceList);
 $config->product->search['params']['sourceNote']     = array('operator' => 'include', 'control' => 'input',  'values' => '');
 $config->product->search['params']['fromBug']        = array('operator' => '=',       'control' => 'input',  'values' => '');
-$config->product->search['params']['category']       = array('operator' => '=',       'control' => 'select', 'values' => $lang->story->categoryList);
+$config->product->search['params']['category']       = array('operator' => '=',       'control' => 'select', 'values' => array('' => '') + $lang->story->categoryList);
 
 $config->product->search['params']['openedBy']       = array('operator' => '=',       'control' => 'select', 'values' => 'users');
 $config->product->search['params']['reviewedBy']     = array('operator' => 'include', 'control' => 'select', 'values' => 'users');
