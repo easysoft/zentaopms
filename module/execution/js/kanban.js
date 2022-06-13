@@ -1674,6 +1674,7 @@ function searchCards(value)
             if(rdSearchValue != '' && groupBy == 'default' && data.laneCount != 0) $(this).parent().show();
             if(rdSearchValue != '' && groupBy == 'default' && data.laneCount == 0) $(this).parent().hide();
 
+            $(this).empty();
             hideAll = !updateRegion(regionID, data) && hideAll;
         });
 
