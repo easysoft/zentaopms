@@ -340,6 +340,39 @@ function loadProductExecutions(productID, projectID = 0)
 }
 
 /**
+ * Load executions of product and project.
+ *
+ * @param  int    $productID
+ * @param  int    $projectID
+ * @param  int    $num
+ * @access public
+ * @return void
+ */
+function loadProductExecutionsByProject(productID, projectID = 0, num = 0)
+{
+    var branch = $('#branches' + num).val();
+    if(typeof(branch) == 'undefined') branch = 0;
+
+    if(projectID == 'ditto')
+    {
+        for(var i = num - 1; i > 0, projectID == 'ditto'; i--)
+        {
+            projectID = $('#projects' + i).val();
+        }
+    }
+
+    var link = createLink('product', 'ajaxGetExecutionsByProject', 'productID=' + productID + '&projectID=' + projectID + '&branch=' + branch + '&number=' + num);
+    $.get(link, function(executions)
+    {
+        if(!executions) executions = '<select id="executions' + num + '" name="executions[' + num + ']" class="form-control"></select>';
+        $('#executions' + num).replaceWith(executions);
+        $("#executions" + num + "_chosen").remove();
+        $("#executions" + num).next('.picker').remove();
+        $("#executions" + num).chosen();
+    });
+}
+
+/**
  * Load product plans.
  *
  * @param  productID $productID
@@ -761,7 +794,7 @@ function notice()
 function setBranchRelated(branchID, productID, num)
 {
     var currentModuleID = config.currentMethod == 'batchedit' ? $('#modules' + num).val() : 0;
-    moduleLink = createLink('tree', 'ajaxGetModules', 'productID=' + productID + '&viewType=bug&branch=' + branchID + '&num=' + num + '&currentModuleID=' + currentModuleID);
+    var moduleLink      = createLink('tree', 'ajaxGetModules', 'productID=' + productID + '&viewType=bug&branch=' + branchID + '&num=' + num + '&currentModuleID=' + currentModuleID);
     $.get(moduleLink, function(modules)
     {
         if(!modules) modules = '<select id="modules' + num + '" name="modules[' + num + ']" class="form-control"></select>';
@@ -771,7 +804,17 @@ function setBranchRelated(branchID, productID, num)
         $("#modules" + num).chosen();
     });
 
-    executionLink = createLink('product', 'ajaxGetExecutions', 'productID=' + productID + '&projectID=0&branch=' + branchID + '&num=' + num);
+    var projectLink = createLink('product', 'ajaxGetProjectsByBranch', 'productID=' + productID + '&branch=' + branchID + '&num=' + num);
+    $.get(projectLink, function(projects)
+    {
+        if(!projects) projects = '<select id="projects' + num + '" name="projects[' + num + ']" class="form-control"></select>';
+        $('#projects' + num).replaceWith(projects);
+        $("#projects" + num + "_chosen").remove();
+        $("#projects" + num).next('.picker').remove();
+        $("#projects" + num).chosen();
+    });
+
+    var executionLink = createLink('product', 'ajaxGetExecutions', 'productID=' + productID + '&projectID=0&branch=' + branchID + '&num=' + num);
     $.get(executionLink, function(executions)
     {
         if(!executions) executions = '<select id="executions' + num + '" name="executions[' + num + ']" class="form-control"></select>';
@@ -781,7 +824,7 @@ function setBranchRelated(branchID, productID, num)
         $("#executions" + num).chosen();
     });
 
-    buildLink = createLink('build', 'ajaxGetProductBuilds', 'productID=' + productID + "&varName=openedBuilds&build=&branch=" + branchID + "&index=" + num);
+    var buildLink = createLink('build', 'ajaxGetProductBuilds', 'productID=' + productID + "&varName=openedBuilds&build=&branch=" + branchID + "&index=" + num);
 
     /* If the branch of the current row is inconsistent with the one below, clear the module and execution of the nex row. */
     if(config.currentMethod == 'batchcreate')
