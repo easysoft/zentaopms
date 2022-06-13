@@ -3,8 +3,9 @@
 * This file is used to compress css and js files.
 */
 
-$baseDir = dirname(dirname(__FILE__));
-$jarPath = getenv('JAR_YUI_PATH');
+$baseDir     = dirname(dirname(__FILE__));
+$miniCSSTool = getenv('MINIFY_CSS_PATH');
+$miniJSTool  = getenv('MINIFY_JS_PATH');
 
 //--------------------------------- PROCESS JS FILES ------------------------------ //
 
@@ -26,7 +27,7 @@ foreach($jsFiles as $jsFile) $jsCode .= "\n". str_replace('/*!', '/*', file_get_
 file_put_contents($allJSFile, $jsCode);
 
 /* Compress it. */
-`java -jar $jarPath/yuicompressor.jar --type js $allJSFile -o $allJSFile`;
+`php $miniJSTool $allJSFile $allJSFile`;
 
 //-------------------------------- PROCESS CSS FILES ------------------------------ //
 
@@ -79,6 +80,6 @@ foreach($langs as $lang)
         file_put_contents($cssFile, $cssCode);
 
         /* Compress it. */
-        `java -jar $jarPath/yuicompressor.jar --type css $cssFile -o $cssFile`;
+        `php $miniCSSTool $cssFile $cssFile`;
     }
 }
