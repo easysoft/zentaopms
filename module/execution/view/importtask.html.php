@@ -35,7 +35,11 @@
           </th>
           <th class='c-name'><?php echo $lang->execution->name ?></th>
           <th class='c-pri' title=<?php echo $lang->execution->pri;?>><?php echo $lang->priAB;?></th>
+          <?php if(isonlybody()):?>
+          <th class='w-p25'><?php echo $lang->task->name;?></th>
+          <?php else:?>
           <th class='w-p30'><?php echo $lang->task->name;?></th>
+          <?php endif;?>
           <th class='c-user'><?php echo $lang->task->assignedTo;?></th>
           <th class='c-hour'><?php echo $lang->task->leftAB;?></th>
           <th class='c-date'><?php echo $lang->task->deadlineAB;?></th>
