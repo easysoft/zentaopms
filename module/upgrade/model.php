@@ -6328,7 +6328,7 @@ class upgradeModel extends model
      */
     public function replaceSetLanePriv()
     {
-        $groupIDList = $this->dao->select('group')->from(TABLE_GROUPPRIV)
+        $groupIDList = $this->dao->select('`group`')->from(TABLE_GROUPPRIV)
             ->where('module')->eq('kanban')
             ->andWhere('method')->eq('setLane')
             ->fetchAll();
@@ -6344,7 +6344,7 @@ class upgradeModel extends model
         foreach($groupIDList as $groupID)
         {
             $data = new stdClass();
-            $data->group  = $groupID;
+            $data->group  = $groupID->group;
             $data->module = 'kanban';
             $data->method = 'editLaneName';
             $this->dao->insert(TABLE_GROUPPRIV)->data($data)->exec();
@@ -6352,5 +6352,7 @@ class upgradeModel extends model
             $data->method = 'editLaneColor';
             $this->dao->insert(TABLE_GROUPPRIV)->data($data)->exec();
         }
+
+        return true;
     }
 }
