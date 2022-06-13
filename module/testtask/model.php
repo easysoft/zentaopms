@@ -1030,6 +1030,22 @@ class testtaskModel extends model
 
             $caseQuery = preg_replace('/`(\w+)`/', 't2.`$1`', $caseQuery);
             $caseQuery = str_replace(array('t2.`assignedTo`', 't2.`lastRunner`', 't2.`lastRunDate`', 't2.`lastRunResult`', 't2.`status`'), array('t1.`assignedTo`', 't1.`lastRunner`', 't1.`lastRunDate`', 't1.`lastRunResult`', 't1.`status`'), $caseQuery);
+            if(strpos($caseQuery, "t2.`suite`") !== false)
+            {
+                preg_match("/ t2.`suite` = '\d+'/", $caseQuery, $match);
+                if(!empty($match))
+                {
+                    $match = current($match);
+                    $suiteQuery = str_replace(' t2.`suite` = ', '', $match);
+                    $suiteQuery = trim($suiteQuery, "'");
+                    $suiteID    = intval($suiteQuery);
+
+                    $suiteCases = $this->loadModel('testsuite')->getLinkedCasePairs($suiteID);
+
+                    $query     = " t2.`id` " . helper::dbIN(array_keys($suiteCases));
+                    $caseQuery = preg_replace("/ t2.`suite` = '\d+'/", $query, $caseQuery, 1);
+                }
+            }
 
             /* Select the table for these special fields. */
             $specialFields = ',assignedTo,status,lastRunResult,lastRunner,lastRunDate,';

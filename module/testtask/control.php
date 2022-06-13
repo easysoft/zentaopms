@@ -533,6 +533,8 @@ class testtask extends control
         $this->config->testcase->search['params']['module']['values']  = $this->loadModel('tree')->getOptionMenu($productID, $viewType = 'case');
         $this->config->testcase->search['params']['status']['values']  = array('' => '') + $this->lang->testtask->statusList;
         $this->config->testcase->search['params']['lib']['values']     = $this->loadModel('caselib')->getLibraries();
+        $this->config->testcase->search['fields']['suite']             = $this->lang->testcase->suite;
+        $this->config->testcase->search['params']['suite']             = array('operator' => '=', 'control' => 'select', 'values' => $this->loadModel('testsuite')->getSuitePairs($productID));
 
         $this->config->testcase->search['queryID']              = $queryID;
         $this->config->testcase->search['fields']['assignedTo'] = $this->lang->testtask->assignedTo;
