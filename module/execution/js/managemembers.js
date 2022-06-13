@@ -51,7 +51,7 @@ function addItem(obj)
 
     if($accounts.attr('data-pickertype') != 'remote')
     {
-        $accounts.chosen();
+        $accounts.picker({type: 'user'});
     }
     else
     {
