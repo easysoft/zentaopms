@@ -95,6 +95,10 @@ $lang->bug->toCase           = 'To Case';
 $lang->bug->colorTag         = 'Color';
 $lang->bug->fixedRate        = 'Fixed Rate';
 $lang->bug->noticefeedbackBy = 'NoticeFeedbackBy';
+$lang->bug->selectProjects   = 'Select Projects';
+$lang->bug->nextStep         = 'Next Step';
+$lang->bug->noProject        = 'Haven’t chosen a project yet';
+$lang->bug->noExecution      = 'Haven’t chosen a execution yet';
 
 /* Method list. */
 $lang->bug->index              = 'Bug Home';
@@ -405,6 +409,7 @@ $lang->bug->action = new stdclass();
 $lang->bug->action->resolved            = array('main' => '$date, resolved by <strong>$actor</strong> and the resolution is <strong>$extra</strong> $appendLink.', 'extra' => 'resolutionList');
 $lang->bug->action->tostory             = array('main' => '$date, converted by <strong>$actor</strong> to <strong>Story</strong> with ID <strong>$extra</strong>.');
 $lang->bug->action->totask              = array('main' => '$date, imported by <strong>$actor</strong> as <strong>Task</strong> with ID <strong>$extra</strong>.');
+$lang->bug->action->converttotask       = array('main' => '$date, imported by <strong>$actor</strong> as <strong>Task</strong>，with ID <strong>$extra</strong>。');
 $lang->bug->action->linked2plan         = array('main' => '$date, linked by <strong>$actor</strong> to Plan <strong>$extra</strong>.');
 $lang->bug->action->unlinkedfromplan    = array('main' => '$date, deleted by <strong>$actor</strong> from Plan <strong>$extra</strong>.');
 $lang->bug->action->linked2build        = array('main' => '$date, linked by <strong>$actor</strong> to Build <strong>$extra</strong>.');

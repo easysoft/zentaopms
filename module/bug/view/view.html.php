@@ -14,6 +14,12 @@
 <?php include '../../common/view/kindeditor.html.php';?>
 <?php js::set('sysurl', common::getSysUrl());?>
 <?php js::set('confrimToStory', $lang->bug->confirmToStory);?>
+<?php js::set('systemMode', $config->systemMode);?>
+<?php js::set('tab', $app->tab);?>
+<?php js::set('bugID', $bug->id);?>
+<?php js::set('branchID', $bug->branch);?>
+<?php js::set('errorNoExecution', $lang->bug->noExecution);?>
+<?php js::set('errorNoProject', $lang->bug->noProject);?>
 <?php $browseLink = $app->session->bugList ? $app->session->bugList : inlink('browse', "productID=$bug->product");?>
 <?php if(strpos($_SERVER["QUERY_STRING"], 'isNotice=1') === false):?>
 <div id="mainMenu" class="clearfix">
@@ -424,6 +430,40 @@
 
 <div id="mainActions" class='main-actions'>
   <?php common::printPreAndNext($preAndNext);?>
+</div>
+<div class="modal fade" id="toTask">
+  <div class="modal-dialog mw-500px">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title"><?php echo $lang->bug->selectProjects;?></h4>
+      </div>
+      <div class="modal-body">
+        <table class='table table-form'>
+          <?php if($this->config->systemMode == 'new'):?>
+          <tr>
+            <th><?php echo $lang->bug->project;?></th>
+            <td class='required'><?php echo html::select('taskProjects', $projects, '', "class='form-control chosen' onchange='loadProductExecutions({$productID}, this.value)'");?></td>
+          </tr>
+          <tr>
+            <th id='executionHead'><?php echo $lang->bug->execution;?></th>
+            <td id='executionBox' class='required'><?php echo html::select('execution', '', '', "class='form-control chosen'");?></td>
+          </tr>
+          <?php else:?>
+          <tr>
+            <th><?php echo $lang->execution->common;?></th>
+            <td><?php echo html::select('execution', $projects, '', "class='form-control chosen'");?></td>
+          </tr>
+          <?php endif;?>
+          <tr>
+            <td colspan='2' class='text-center'>
+              <?php echo html::commonButton($lang->bug->nextStep, "id='toTaskButton'", 'btn btn-primary btn-wide');?>
+              <?php echo html::commonButton($lang->cancel, "id='cancelButton' data-dismiss='modal'", 'btn btn-default btn-wide');?>
+            </td>
+          </tr>
+        </table>
+      </div>
+    </div>
+  </div>
 </div>
 <script>
 function handleLinkButtonClick()

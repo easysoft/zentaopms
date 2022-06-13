@@ -983,12 +983,14 @@ class product extends control
             if($execution->type == 'kanban') $projectID = $execution->project;
         }
 
-        $executions = $from == 'showImport' ? $this->product->getAllExecutionPairsByProduct($productID, $branch, $projectID) : $this->product->getExecutionPairsByProduct($productID, $branch, 'id_desc', $projectID, empty($this->config->CRExecution) ? 'noclosed' : '');
+        $notClosed  = ($from == 'bugToTask' or empty($this->config->CRExecution)) ? 'noclosed' : '';
+        $executions = $from == 'showImport' ? $this->product->getAllExecutionPairsByProduct($productID, $branch, $projectID) : $this->product->getExecutionPairsByProduct($productID, $branch, 'id_desc', $projectID, $notClosed);
         if($this->app->getViewType() == 'json') return print(json_encode($executions));
 
         if($number === '')
         {
-            return print(html::select('execution', array('' => '') + $executions, $executionID, "class='form-control' onchange='loadExecutionRelated(this.value)'"));
+            $event = $from == 'bugToTask' ? '' : " onchange='loadExecutionRelated(this.value)'";
+            return print(html::select('execution', array('' => '') + $executions, $executionID, "class='form-control' $event"));
         }
         else
         {
