@@ -89,6 +89,7 @@ $config->product->search['params']['closedDate']     = array('operator' => '=', 
 $config->product->search['params']['lastEditedDate'] = array('operator' => '=', 'control' => 'input', 'values' => '', 'class' => 'date');
 $config->product->search['params']['activatedDate']  = array('operator' => '=', 'control' => 'input', 'values' => '', 'class' => 'date');
 
+$app->loadLang('product');
 $config->product->all = new stdclass();
 $config->product->all->search['module']                = 'product';
 $config->product->all->search['fields']['name']        = $lang->product->name;

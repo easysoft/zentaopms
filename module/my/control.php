@@ -163,7 +163,7 @@ class my extends control
             $this->loadModel('meeting');
 
             /* Get the number of issues assigned to me. */
-            $issues     = $this->issue->getUserIssues('assignedTo', $this->app->user->account, 'id_desc', $pager);
+            $issues     = $this->issue->getUserIssues('assignedTo', 0, $this->app->user->account, 'id_desc', $pager);
             $issueCount = $pager->recTotal;
 
             /* Get the number of risks assigned to me. */
@@ -305,7 +305,7 @@ EOF;
      * @access public
      * @return void
      */
-    public function story($type = 'assignedTo', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function story($type = 'assignedTo', $param = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         $this->loadModel('story');
         /* Save session. */
@@ -318,10 +318,15 @@ EOF;
 
         /* Append id for secend sort. */
         $sort = common::appendOrder($orderBy);
+        $queryID = ($type == 'bysearch') ? (int)$param : 0;
 
         if($type == 'assignedBy')
         {
             $stories = $this->loadModel('my')->getAssignedByMe($this->app->user->account, '', $pager, $orderBy, '', 'story');
+        }
+        elseif($type == 'bysearch')
+        {
+            $stories = $this->my->getStoriesBySearch($queryID, $this->app->rawMethod, $orderBy, $pager);
         }
         else
         {
@@ -330,6 +335,11 @@ EOF;
 
         if(!empty($stories)) $stories = $this->story->mergeReviewer($stories);
 
+         /* Build the search form. */
+        $currentMethod = $this->app->rawMethod;
+        $actionURL     = $this->createLink('my', $currentMethod, "mode=story&type=bysearch&param=myQueryID&orderBy={$orderBy}&recTotal={$recTotal}&recPerPage={$recPerPage}&pageID={$pageID}");
+        $this->my->buildStorySearchForm($queryID, $actionURL, $currentMethod);
+
         /* Assign. */
         $this->view->title      = $this->lang->my->common . $this->lang->colon . $this->lang->my->story;
         $this->view->position[] = $this->lang->my->story;
@@ -337,6 +347,7 @@ EOF;
         $this->view->users      = $this->user->getPairs('noletter');
         $this->view->projects   = $this->loadModel('project')->getPairsByProgram();
         $this->view->type       = $type;
+        $this->view->param      = $param;
         $this->view->recTotal   = $recTotal;
         $this->view->recPerPage = $recPerPage;
         $this->view->pageID     = $pageID;
@@ -358,7 +369,7 @@ EOF;
      * @access public
      * @return void
      */
-    public function requirement($type = 'assignedTo', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function requirement($type = 'assignedTo', $param = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         /* Save session. */
         $this->loadModel('story');
@@ -371,10 +382,15 @@ EOF;
 
         /* Append id for secend sort. */
         $sort = common::appendOrder($orderBy);
+        $queryID = ($type == 'bysearch') ? (int)$param : 0;
 
         if($type == 'assignedBy')
         {
             $stories = $this->loadModel('my')->getAssignedByMe($this->app->user->account, '', $pager, $orderBy, '', 'requirement');
+        }
+        elseif($type == 'bysearch')
+        {
+            $stories = $this->my->getRequirementsBySearch($queryID, $this->app->rawMethod, $orderBy, $pager);
         }
         else
         {
@@ -383,6 +399,11 @@ EOF;
 
         if(!empty($stories)) $stories = $this->story->mergeReviewer($stories);
 
+         /* Build the search form. */
+        $currentMethod = $this->app->rawMethod;
+        $actionURL     = $this->createLink('my', $currentMethod, "mode=requirement&type=bysearch&param=myQueryID&orderBy={$orderBy}&recTotal={$recTotal}&recPerPage={$recPerPage}&pageID={$pageID}");
+        $this->my->buildRequirementSearchForm($queryID, $actionURL, $currentMethod);
+
         /* Assign. */
         $this->view->title      = $this->lang->my->common . $this->lang->colon . $this->lang->my->story;
         $this->view->position[] = $this->lang->my->story;
@@ -390,6 +411,7 @@ EOF;
         $this->view->users      = $this->user->getPairs('noletter');
         $this->view->projects   = $this->loadModel('project')->getPairsByProgram();
         $this->view->type       = $type;
+        $this->view->param      = $param;
         $this->view->recTotal   = $recTotal;
         $this->view->recPerPage = $recPerPage;
         $this->view->pageID     = $pageID;
@@ -647,8 +669,8 @@ EOF;
         $cases = array();
         if($type == 'assigntome') $cases = $this->testcase->getByAssignedTo($this->app->user->account, $sort, $pager, 'skip');
         if($type == 'openedbyme') $cases = $this->testcase->getByOpenedBy($this->app->user->account, $sort, $pager, 'skip');
-        if($type == 'bysearch' and $this->app->rawMethod == 'contribute') $cases = $this->my->getTestcasesBySearch($queryID, 'openedbyme', $orderBy, $pager);
-        if($type == 'bysearch' and $this->app->rawMethod == 'work')       $cases = $this->my->getTestcasesBySearch($queryID, 'assigntome', $orderBy, $pager);
+        if($type == 'bysearch' and $this->app->rawMethod == 'contribute') $cases = $this->my->getTestcasesBySearch($queryID, 'contribute', $orderBy, $pager);
+        if($type == 'bysearch' and $this->app->rawMethod == 'work')       $cases = $this->my->getTestcasesBySearch($queryID, 'work', $orderBy, $pager);
 
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'testcase', $type == 'assigntome' ? false : true);
 
@@ -657,7 +679,6 @@ EOF;
         /* Build the search form. */
         $currentMethod = $this->app->rawMethod;
         $actionURL     = $this->createLink('my', $currentMethod, "mode=testcase&type=bysearch&param=myQueryID&orderBy={$orderBy}&recTotal={$recTotal}&recPerPage={$recPerPage}&pageID={$pageID}");
-        $this->config->testcase->search['onMenuBar'] = 'yes';
         $this->my->buildTestcaseSearchForm($queryID, $actionURL, $currentMethod);
 
         /* Assign. */
@@ -667,6 +688,7 @@ EOF;
         $this->view->users      = $this->user->getPairs('noletter');
         $this->view->tabID      = 'test';
         $this->view->type       = $type;
+        $this->view->param      = $param;
         $this->view->summary    = $this->testcase->summary($cases);
         $this->view->recTotal   = $recTotal;
         $this->view->recPerPage = $recPerPage;
@@ -678,12 +700,26 @@ EOF;
         $this->display();
     }
 
-    public function doc($type = 'openedbyme', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    /**
+     * doc page of my.
+     *
+     * @param  string $type
+     * @param  int    $param
+     * @param  string $orderBy
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
+     * @access public
+     * @return void
+     */
+    public function doc($type = 'openedbyme', $param = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         /* Save session, load lang. */
         $uri = $this->app->getURI(true);
-        if($this->app->viewType != 'json') $this->session->set('docList', $uri, 'doc');
         $this->loadModel('doc');
+        if($this->app->viewType != 'json') $this->session->set('docList', $uri, 'doc');
+
+        $queryID = ($type == 'bySearch') ? (int)$param : 0;
 
         $this->session->set('productList',   $uri, 'product');
         $this->session->set('executionList', $uri, 'execution');
@@ -696,7 +732,10 @@ EOF;
         /* Append id for secend sort. */
         $sort = common::appendOrder($orderBy);
 
-        $docs = $this->doc->getDocsByBrowseType($type, 0, 0, $sort, $pager);
+        $docs = $this->doc->getDocsByBrowseType($type, $queryID, 0, $sort, $pager);
+
+        $actionURL = $this->createLink('my', $this->app->rawMethod, "mode=doc&browseType=bySearch&queryID=myQueryID");
+        $this->loadModel('doc')->buildSearchForm(0, array(), $queryID, $actionURL, 'contribute');
 
         /* Assign. */
         $this->view->title      = $this->lang->my->common . $this->lang->colon . $this->lang->my->doc;
@@ -803,11 +842,17 @@ EOF;
      * @param  int    $pageID
      * @return void
      */
-    public function issue($type = 'assignedTo', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function issue($type = 'assignedTo', $param = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         /* Set the pager. */
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
+
+        /* Build the search form. */
+        $browseType = strtolower($type);
+        $queryID    = ($browseType == 'bysearch') ? (int)$param : 0;
+        $actionURL  = $this->createLink('my', $this->app->rawMethod, "mode=issue&type=bySearch&param=myQueryID");
+        $this->loadModel('issue')->buildSearchForm($actionURL, $queryID);
 
         $this->app->session->set('issueList', $this->app->getURI(true), 'project');
 
@@ -818,7 +863,8 @@ EOF;
         $this->view->orderBy    = $orderBy;
         $this->view->pager      = $pager;
         $this->view->type       = $type;
-        $this->view->issues     = $type == 'assignedBy' ? $this->loadModel('my')->getAssignedByMe($this->app->user->account, '', $pager,  $orderBy, '', 'issue') : $this->loadModel('issue')->getUserIssues($type, $this->app->user->account, $orderBy, $pager);
+        $this->view->param      = $param;
+        $this->view->issues     = $type == 'assignedBy' ? $this->loadModel('my')->getAssignedByMe($this->app->user->account, '', $pager,  $orderBy, '', 'issue') : $this->loadModel('issue')->getUserIssues($type, $queryID, $this->app->user->account, $orderBy, $pager);
 
         $this->view->projectList = $this->loadModel('project')->getPairsByProgram();
 
@@ -836,18 +882,37 @@ EOF;
      * @param  int    $pageID
      * @return void
      */
-    public function risk($type = 'assignedTo', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function risk($type = 'assignedTo', $param = 0,$orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         /* Set the pager. */
         $this->loadModel('risk');
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
+        /* Build the search form. */
+        $currentMethod = $this->app->rawMethod;
+        $queryID       = ($type == 'bysearch') ? (int)$param : 0;
+        $actionURL     = $this->createLink('my', $currentMethod, "mode=risk&type=bysearch&param=myQueryID");
+        $this->my->buildRiskSearchForm($queryID, $actionURL, $currentMethod);
+
+        /* Get risks by type*/
+        if($type == 'assignedBy')
+        {
+            $risks = $this->my->getAssignedByMe($this->app->user->account, '', $pager, $orderBy, '', 'risk');
+        }
+        else
+        {
+            if($type != 'bysearch') $risks = $this->risk->getUserRisks($type, $this->app->user->account, $orderBy, $pager);
+        }
+
+        if($type == 'bysearch' and $currentMethod == 'contribute') $risks = $this->my->getRisksBySearch($queryID, $currentMethod, $orderBy, $pager);
+        if($type == 'bysearch' and $currentMethod == 'work') $risks = $this->my->getRisksBySearch($queryID, $currentMethod, $orderBy, $pager);
+
         $this->app->session->set('riskList', $this->app->getURI(true), 'project');
 
         $this->view->title      = $this->lang->my->risk;
         $this->view->position[] = $this->lang->my->risk;
-        $this->view->risks      = $type == 'assignedBy' ? $this->loadModel('my')->getAssignedByMe($this->app->user->account, '', $pager, $orderBy, '', 'risk') : $this->loadModel('risk')->getUserRisks($type, $this->app->user->account, $orderBy, $pager);
+        $this->view->risks      = $risks;
         $this->view->users      = $this->loadModel('user')->getPairs('noclosed|noletter');
         $this->view->orderBy    = $orderBy;
         $this->view->pager      = $pager;
@@ -944,15 +1009,16 @@ EOF;
     /**
      * My meeting list.
      *
-     * @param  string $browseType
-     * @param  string $orderBy
-     * @param  int    $recTotal
-     * @param  int    $recPerPage
-     * @param  int    $pageID
+     * @param  string     $browseType
+     * @param  string|int $param
+     * @param  string     $orderBy
+     * @param  int        $recTotal
+     * @param  int        $recPerPage
+     * @param  int        $pageID
      * @access public
      * @return void
      */
-    public function myMeeting($browseType = 'futureMeeting', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function myMeeting($browseType = 'futureMeeting', $param = '', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         $this->loadModel('meeting');
 
@@ -964,13 +1030,19 @@ EOF;
         if($this->app->getViewType() == 'mhtml') $recPerPage = 10;
         $pager = pager::init($recTotal, $recPerPage, $pageID);
 
+        /* Build the search form. */
+        $queryID   = ($browseType == 'bysearch') ? (int)$param : 0;
+        $actionURL = $this->createLink('my', 'work', "mode=myMeeting&browseType=bysearch&param=myQueryID");
+        $this->meeting->buildSearchForm($queryID, $actionURL);
+
         $this->view->title      = $this->lang->my->common . $this->lang->colon . $this->lang->my->myMeeting;
         $this->view->browseType = $browseType;
-        $this->view->meetings   = $this->meeting->getListByUser($browseType, $orderBy, 0, $pager);
+        $this->view->meetings   = $this->meeting->getListByUser($browseType, $orderBy, $queryID, $pager);
         $this->view->orderBy    = $orderBy;
         $this->view->pager      = $pager;
         $this->view->depts      = $this->loadModel('dept')->getOptionMenu();
         $this->view->users      = $this->loadModel('user')->getPairs('all,noletter');
+        $this->view->queryID    = $queryID;
         $this->view->mode       = 'myMeeting';
 
         $this->display();

@@ -401,7 +401,7 @@ class user extends control
 
         $this->view->title      = $this->lang->user->common . $this->lang->colon . $this->lang->user->issue;
         $this->view->position[] = $this->lang->user->issue;
-        $this->view->issues     = $this->loadModel('issue')->getUserIssues($type, $account, $orderBy, $pager);
+        $this->view->issues     = $this->loadModel('issue')->getUserIssues($type, 0, $account, $orderBy, $pager);
         $this->view->user       = $user;
         $this->view->users      = $this->loadModel('user')->getPairs('noletter');
         $this->view->type       = $type;

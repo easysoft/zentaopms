@@ -50,7 +50,10 @@
         foreach($moreType as $objectType)
         {
             $activeClass = $objectType == $currentObjectType ? 'btn-active-text' : '';
-            echo '<li>' . html::a($this->createLink('action', 'trash', "objectType=$objectType&type=$type"), "<span class='text'>" . zget($lang->action->objectTypes, $objectType) . "</span>", '', "class='btn btn-link $activeClass'") . '</li>';
+            $objectName  = zget($lang->action->objectTypes, $objectType, '');
+            if(empty($objectName)) continue;
+
+            echo '<li>' . html::a($this->createLink('action', 'trash', "objectType=$objectType&type=$type"), "<span class='text'>" . $objectName . "</span>", '', "class='btn btn-link $activeClass'") . '</li>';
         }
         echo '</ul></div>';
     }
@@ -66,6 +69,11 @@
 </div>
 <div class="cell<?php if($byQuery) echo ' show';?>" id="queryBox" data-module='trash'></div>
 <div id='mainContent' class="main-row">
+  <?php if(empty($trashes)):?>
+  <div class="table-empty-tip">
+    <p><span class="text-muted"><?php echo $lang->noData;?></span></p>
+  </div>
+  <?php else:?>
   <div class='main-table' data-ride='table'>
     <table class='table has-sort-head'>
       <?php $vars = "browseType=$currentObjectType&type=$type&byQuery=$byQuery&queryID=$queryID&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"; ?>
@@ -147,5 +155,6 @@
       <?php $pager->show('right', 'pagerjs');?>
     </div>
   </div>
+  <?php endif;?>
 </div>
 <?php include '../../common/view/footer.html.php';?>

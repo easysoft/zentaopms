@@ -15,7 +15,7 @@
 .region {border: 0px solid #dcdcdc; background-color: #fff;}
 .region + .region {margin-top: 20px;}
 .region .region-header {padding: 10px;}
-.region .region-header strong {font-size: 14px; color: #999EAB}
+.region .region-header strong {font-size: 14px; color: #3C4353; float: left;}
 .region .region-header label {color: #999; background: transparent; border: 1px solid #ddd; margin-left: 10px; margin-right: 10px}
 .region .region-header .action {float: right}
 .region .region-actions {float: right; position: relative; top: -6px; right: -6px;}
@@ -52,7 +52,7 @@
 
 .region .kanban-lane {position: relative; border-bottom: none!important; min-height: 200px !important}
 
-.region .kanban-lane > .kanban-lane-name > .text {margin: auto 0; max-height: 150px; overflow: hidden; text-overflow: ellipsis}
+.region .kanban-lane > .kanban-lane-name > .text {margin: auto 0;}
 .region .kanban-lane > .kanban-lane-name > .actions {position: absolute; top: 0; left: 0; right: 0; opacity: 0;}
 .region .kanban-lane > .kanban-lane-name > .actions > a {display: block; width: 20px; height: 20px; line-height: 20px; text-align: center; opacity: .7; color: #fff;}
 .region .kanban-lane > .kanban-lane-name > .actions > a:hover {background-color: rgba(0,0,0,.2); opacity: 1;}
@@ -102,6 +102,7 @@
 .cardcolor {width:40px; height: 14px; float: left; margin-left: 5px; margin-right: 5px; margin-top: 2px; border-radius: 2px;}
 #cardcolormenu {padding:2px 2px; width: 100px;}
 
+.position {margin-top: -6px;}
 .kanban-col[data-type=ADD] {display: none;}
 .kanban-col[data-type=EMPTY] {display: none;}
 .kanban-col {padding-right: 0px !important;}
@@ -136,12 +137,13 @@
 .progress-box {width:100%; display: flex; flex-direction: row; margin-top: 10px;}
 .progress {flex: auto; margin: 5px auto 5px;}
 .progress-number {padding-left: 5px;}
+.region .region-header .action {float: left;}
 
 @-moz-document url-prefix(){ .region .kanban-lane-items{scrollbar-width:thin; padding:5px 0px 5px 5px !important;} .region .kanban-card .info .user{right: -6px !important;}}
 #archivedCards .table-empty-tip {border-style: hidden;}
 #archivedColumns .table-empty-tip {border-style: hidden;}
 
-#main > .container {padding: 0px 0px 0px 10px; margin: -10px 0px 0px 0px;}
+#main > .container {padding: 0px 0px 0px 5px; margin-top: -5px; margin-right: auto; margin-left: auto;}
 @media screen and (max-width: 1366px){#main > .container {padding: 0px 10px 0px 10px; margin: -10px 0px 0px 0px;}}
 .panel-body {padding: 0px;}
 #kanbanContainer {background: #efefef; box-shadow: none;}

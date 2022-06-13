@@ -62,3 +62,8 @@
 .createButton {margin-right: 5px;}
 .headerTop {top: 0px !important;}
 .kanban-header-col>.actions>a {padding: 0px !important;}
+
+#taskKanbanSearch.input-group {float: left; width: min-content;}
+#teskKanbanSearchInput {width: 150px;}
+#searchBox {display: none; width: 150px;}
+.btn-link.querybox-toggle {background-color: rgba(0,0,0,0);}

@@ -68,13 +68,15 @@ $config->action->preferredType = new stdclass();
 $config->action->preferredType->new     = array('user', 'story', 'task', 'bug', 'case', 'doc', 'program', 'product', 'project', 'execution');
 $config->action->preferredType->classic = array('user', 'story', 'task', 'bug', 'case', 'doc', 'product', 'execution', 'productplan', 'build');
 
-global $lang;
+global $app, $lang;
+$app->loadLang('action');
+
 $config->trash = new stdclass();
 $config->trash->search['module']               = 'trash';
 $config->trash->search['fields']['objectName'] = $lang->action->objectName;
 $config->trash->search['fields']['objectID']   = $lang->action->objectID;
 $config->trash->search['fields']['actor']      = $lang->action->actor;
-$config->trash->search['fields']['date']       = $lang->action->date;
+$config->trash->search['fields']['date']       = $lang->action->dateAB;
 
 $config->trash->search['params']['objectName'] = array('operator' => 'include', 'control' => 'input',  'values' => '');
 $config->trash->search['params']['objectID']   = array('operator' => 'include', 'control' => 'input',  'values' => '');

@@ -197,17 +197,19 @@ function renderCount($count, count, column)
 
     if(column.limit != -1 && column.limit < count)
     {
-        $count.parents('.title').parent('.kanban-header-col').css('background-color', '#F6A1A1');
+        $count.parents('.title').parent('.kanban-header-col').css('background-color', 'transparent');
         $count.parents('.title').find('.text').css('max-width', $count.parents('.title').width() - 200);
-        $count.css('color', '#E33030');
-        if(!$count.parent().find('.error').length) $count.parent().find('.include-last').after("<span class='error text-grey'><icon class='icon icon-help' title='" + kanbanLang.limitExceeded + "'></icon></span>");
+        $count.css({'color': '#FF5D5D', 'opacity': '1'});
+        if(!$count.parent().find('.error').length) $count.parent().find('.include-last').after("<span class='error text-grey'><icon class='icon icon-exclamation-sign' data-toggle='tooltip' data-original-title='" + kanbanLang.limitExceeded + "'></icon></span>");
+        $count.parents('.title').find('.text-grey').css({'color': '#FF5D5D', 'opacity': '1'});
     }
     else
     {
         $count.parents('.title').parent('.kanban-header-col').css('background-color', 'transparent');
         $count.parents('.title').find('.text').css('max-width', $count.parents('.title').width() - 120);
-        $count.css('color', '#8B91A2');
+        $count.css({'color': '#8b91a2', 'opacity': '0.5'});
         $count.parent().find('.error').remove();
+        $count.parents('.title').find('.text-grey').css({'color': '#8b91a2', 'opacity': '0.5'});
     }
 }
 
@@ -224,13 +226,14 @@ function renderCount($count, count, column)
  */
 function renderLaneName($lane, lane, $kanban, columns, kanban)
 {
-    var canSet    = lane.actions.includes('setLane');
-    var canSort   = lane.actions.includes('sortLane') && kanban.lanes.length > 1;
-    var canDelete = lane.actions.includes('deleteLane');
+    var canEditLaneColor = lane.actions.includes('editLaneColor');
+    var canEditLaneName  = lane.actions.includes('editLaneName');
+    var canSort          = lane.actions.includes('sortLane') && kanban.lanes.length > 1;
+    var canDelete        = lane.actions.includes('deleteLane');
 
     $lane.parent().toggleClass('sort', canSort);
 
-    if(!$lane.children('.actions').length && (canSet || canDelete) && (CRKanban || kanbanInfo.status != 'closed'))
+    if(!$lane.children('.actions').length && (canEditLaneColor || canEditLaneName || canDelete) && (CRKanban || kanbanInfo.status != 'closed'))
     {
         $([
           '<div class="actions" title="' + kanbanLang.more + '">',
@@ -796,6 +799,7 @@ function moveCard(cardID, fromColID, toColID, fromLaneID, toLaneID, kanbanID, re
                 $('.kanban-group-header').hide();
                 $(".title").attr("disabled", true).css("pointer-events", "none");
             }
+            setTooltip();
         },
         error: function(xhr, status, error)
         {
@@ -1093,7 +1097,8 @@ function createLaneMenu(options)
     if(!privs.length) return [];
 
     var items = [];
-    if(privs.includes('setLane')) items.push({label: kanbanLang.setLane, icon: 'edit', url: createLink('kanban', 'setLane', 'laneID=' + lane.id + '&executionID=0&from=kanban'), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width': '635px'}});
+    if(privs.includes('editLaneName')) items.push({label: kanbanLang.editLaneName, icon: 'edit', url: createLink('kanban', 'editLaneName', 'laneID=' + lane.id + '&executionID=0&from=kanban'), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width': '635px'}});
+    if(privs.includes('editLaneColor')) items.push({label: kanbanLang.editLaneColor, icon: 'color', url: createLink('kanban', 'editLaneColor', 'laneID=' + lane.id + '&executionID=0&from=kanban'), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width': '635px'}});
     if(privs.includes('deleteLane')) items.push({label: kanbanLang.deleteLane, icon: 'trash', url: createLink('kanban', 'deleteLane', 'lane=' + lane.id), attrs: {'target': 'hiddenwin'}});
 
     var bounds = options.$trigger[0].getBoundingClientRect();
@@ -1263,7 +1268,11 @@ function calcColHeight(col, lane, colCards, colHeight, kanban)
 
     var options = kanban.options;
 
-    if(!options.displayCards) return colHeight;
+    var fontSize        = 13;
+    var moreLabelHeight = 20;
+    var laneNameHeight  = lane.name.length * fontSize;
+
+    if(!options.displayCards) return laneNameHeight > colHeight ? laneNameHeight + 2 * moreLabelHeight : colHeight;
     var displayCards = +(options.displayCards || 2);
 
     if (typeof displayCards !== 'number' || displayCards < 2) displayCards = 2;
@@ -1367,9 +1376,9 @@ $(function()
 
     if(navigator.userAgent.toLowerCase().indexOf("qqbrowser") > -1) $('.region .kanban-header-col > .actions').css('top', '30%');
 
-    $('.icon-chevron-double-up,.icon-chevron-double-down').on('click', function()
+    $('.icon-angle-top,.icon-angle-down').on('click', function()
     {
-        $(this).toggleClass('icon-chevron-double-up icon-chevron-double-down');
+        $(this).toggleClass('icon-angle-top icon-angle-down');
         $(this).parents('.region').find('.kanban').toggle();
         hideKanbanAction();
         resetRegionHeight($(this).hasClass('icon-chevron-double-up') ? 'open' : 'close');
@@ -1470,6 +1479,8 @@ $(function()
 
     resetRegionHeight('open');
     if(!CRKanban && kanbanInfo.status == 'closed') $('.kanban-col.kanban-header-col').css('padding', '0px 0px 0px 0px');
+
+    setTooltip();
 });
 
 function initSortable()
@@ -1527,10 +1538,10 @@ function initSortable()
             if(sortType == 'region')
             {
                 showRegionIdList = '';
-                $('.icon-chevron-double-up').each(function()
+                $('.icon-angle-top').each(function()
                 {
                     showRegionIdList += $(this).attr('data-id') + ',';
-                    $(this).attr('class', 'icon-chevron-double-down');
+                    $(this).attr('class', 'icon-angle-down');
                 });
 
                 $('.region').find('.kanban').hide();
@@ -1561,7 +1572,7 @@ function initSortable()
                 {
                     if(showRegionIdList.includes($(this).attr('data-id')))
                     {
-                        $(this).find('.icon-chevron-double-down').attr('class', 'icon-chevron-double-up');
+                        $(this).find('.icon-angle-down').attr('class', 'icon-angle-top');
                         $(this).find('.kanban').show();
                     }
                 })
@@ -1689,3 +1700,8 @@ $(document).on('click', '.dropdown-menu', function()
 {
     $.zui.ContextMenu.hide();
 });
+
+function setTooltip()
+{
+    $('[data-toggle="tooltip"]').tooltip({container: 'body'});
+}

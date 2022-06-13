@@ -174,7 +174,9 @@ $lang->kanban->WIPType            = '在制品类型';
 $lang->kanban->WIPCount           = '在制品数量';
 $lang->kanban->noLimit            = '不限制∞';
 $lang->kanban->setLane            = '泳道设置';
+$lang->kanban->editLaneName       = '修改泳道名';
 $lang->kanban->laneName           = '泳道名称';
+$lang->kanban->editLaneColor      = '设置背景色';
 $lang->kanban->laneColor          = '泳道颜色';
 $lang->kanban->setColumn          = '看板列设置';
 $lang->kanban->columnName         = '看板列名称';
@@ -316,7 +318,7 @@ $lang->kanbanlane->confirmDeleteTip = '您确认删除该泳道吗？删除泳�
 $lang->kanbanlane->modeList['sameAsOther'] = '与其他泳道使用相同看板列';
 $lang->kanbanlane->modeList['independent'] = '采用独立的看板列';
 
-$lang->kanbanlane->heightTypeList['auto']   = '自适应（根据卡片高度自适应）';
+$lang->kanbanlane->heightTypeList['auto']   = '自适应（根据卡片高度和泳道名称高度自适应）';
 $lang->kanbanlane->heightTypeList['custom'] = '自定义（根据卡片数量自定义泳道高度）';
 
 $lang->kanbancolumn->fluidBoardList['0'] = '固定列宽';

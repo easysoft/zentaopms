@@ -32,7 +32,7 @@
   </div>
 </div>
 <div id="mainContent">
-<div class="cell<?php if($type == 'bysearch') echo ' show';?>" id="queryBox" data-module=<?php echo ($app->rawMethod == 'contribute' ? 'contributeTestcase' : 'workTestcase');?>></div>
+  <div class="cell<?php if($type == 'bysearch') echo ' show';?>" id="queryBox" data-module=<?php echo ($app->rawMethod == 'contribute' ? 'contributeTestcase' : 'workTestcase');?>></div>
   <?php if(empty($cases)):?>
   <div class="table-empty-tip">
     <p><span class="text-muted"><?php echo $lang->testcase->noCase;?></span></p>
@@ -41,7 +41,7 @@
   <form id='myCaseForm' class="main-table table-case" data-ride="table" method="post">
     <table class="table has-sort-head" id='caseList'>
       <?php
-      $vars = "mode=$mode&type=$type&orderBy=%s&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID";
+      $vars = "mode=$mode&type=$type&param=$param&orderBy=%s&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID";
       $this->app->loadLang('testtask');
       $canBatchRun    = (common::hasPriv('testtask', 'batchRun')  and $type == 'assigntome');
       $canBatchEdit   = (common::hasPriv('testcase', 'batchEdit') and $type == 'assigntome');

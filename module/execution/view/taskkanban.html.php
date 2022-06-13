@@ -33,7 +33,13 @@
     </span>
   </div>
   <div class='btn-toolbar pull-right'>
+    <div class="input-group" id="taskKanbanSearch">
+      <div class="input-control search-box" id="searchBox">
+      <input type="text" name="taskKanbanSearchInput" id="taskKanbanSearchInput" value="" class="form-control" oninput="searchCards(this.value)" placeholder="<?php echo $lang->execution->pleaseInput;?>">
+      </div>
+    </div>
     <?php
+    echo html::a('javascript:toggleSearchBox()', "<i class='icon-search muted'></i> " . $lang->searchAB, '', "class='btn btn-link querybox-toggle'");
     $link = $this->createLink('task', 'export', "execution=$executionID&orderBy=$orderBy&type=unclosed");
     if(common::hasPriv('task', 'export')) echo html::a($link, "<i class='icon-export muted'></i> " . $lang->export, '', "class='btn btn-link iframe export' data-width='700'");
     ?>
@@ -124,6 +130,9 @@
   <div class='panel-body'>
     <div id='kanbans'></div>
   </div>
+  <div class='table-empty-tip hidden' id='emptyBox'>
+    <p><span class="text-muted"><?php echo $lang->kanban->empty?></span></p>
+  </div>
 </div>
 
 <div class="modal fade" id="linkStoryByPlan">
@@ -166,6 +175,7 @@
 <?php js::set('browseType', $browseType);?>
 <?php js::set('groupBy', $groupBy);?>
 <?php js::set('productNum', $productNum);?>
+<?php js::set('searchValue', '');?>
 <?php
 js::set('priv',
     array(
@@ -215,4 +225,5 @@ js::set('priv',
 <?php js::set('displayCards', $execution->displayCards);?>
 <?php js::set('reviewStoryParis', $reviewStoryParis);?>
 <?php js::set('needLinkProducts', $lang->execution->needLinkProducts);?>
+<?php js::set('hourUnit', $config->hourUnit);?>
 <?php include '../../common/view/footer.html.php';?>

@@ -174,7 +174,9 @@ $lang->kanban->WIPType            = 'WIP Type';
 $lang->kanban->WIPCount           = 'WIP Count';
 $lang->kanban->noLimit            = 'No Limit ∞';
 $lang->kanban->setLane            = 'Lane Settings';
+$lang->kanban->editLaneName       = 'Edit Lane Name';
 $lang->kanban->laneName           = 'Lane Name';
+$lang->kanban->editLaneColor      = 'Edit Lane Color';
 $lang->kanban->laneColor          = 'Lane Color';
 $lang->kanban->setColumn          = 'Column Settings';
 $lang->kanban->columnName         = 'Column Name';
@@ -316,7 +318,7 @@ $lang->kanbanlane->confirmDeleteTip = 'Are you sure to delete this lane? After d
 $lang->kanbanlane->modeList['sameAsOther'] = 'Use the same Kanban column';
 $lang->kanbanlane->modeList['independent'] = 'Independent Kanban column';
 
-$lang->kanbanlane->heightTypeList['auto']   = 'Adaptive (Adaptive according to the card height)';
+$lang->kanbanlane->heightTypeList['auto']   = 'Adaptive (Adaptive to card height and lane name height)';
 $lang->kanbanlane->heightTypeList['custom'] = 'Custom (Customize lane height based on number of cards)';
 
 $lang->kanbancolumn->fluidBoardList['0'] = 'Fixed';

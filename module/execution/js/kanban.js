@@ -511,7 +511,7 @@ function renderStoryItem(item, $item, col)
     {
         var idHtml     = scaleSize <= 1 ? ('<span class="info info-id text-muted">#' + item.id + '</span>') : '';
         var priHtml    = '<span class="info info-pri label-pri label-pri-' + item.pri + '" title="' + item.pri + '">' + item.pri + '</span>';
-        var hoursHtml  = (item.estimate && scaleSize <= 1) ? ('<span class="info info-estimate text-muted">' + item.estimate + 'h</span>') : '';
+        var hoursHtml  = (item.estimate && scaleSize <= 1) ? ('<span class="info info-estimate text-muted">' + item.estimate + hourUnit + '</span>') : '';
         var avatarHtml = renderUserAvatar(item.assignedTo, 'story', item.id, '', col.type);
         var $infos = $item.find('.infos');
         if(!$infos.length) $infos = $('<div class="infos"></div>');
@@ -1602,14 +1602,9 @@ function calcColHeight(col, lane, colCards, colHeight, kanban)
  */
 function resetRegionHeight(fold)
 {
-    var laneCount = 0;
-    $('.kanban-lane').each(function()
-    {
-        laneCount ++;
-        if(laneCount > 1) return;
-    });
+    var laneCount = $('.kanban-lane').length;
 
-    if(laneCount > 1) return;
+    if(laneCount > 1 || $('.region').length > 0) return;
 
     var regionHeaderHeight = $('.region-header').outerHeight();
     if(fold == 'open')
@@ -1642,15 +1637,15 @@ function resetRegionHeight(fold)
  */
 function toggleRDSearchBox()
 {
-    rdSearchValue = '';
     $('#rdSearchBox').toggle();
+
     if($('#rdSearchBox').css('display') == 'block')
     {
         $(".querybox-toggle").css("color", "#0c64eb");
     }
     else
     {
-        $(".querybox-toggle").css("color", "");
+        $(".querybox-toggle").css("color", "3c495c");
         $('#rdKanbanSearchInput').attr('value', '');
         searchCards('');
     }

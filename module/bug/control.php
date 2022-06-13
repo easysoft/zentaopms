@@ -508,6 +508,7 @@ class bug extends control
             $deadline    = $bug->deadline;
             $color       = $bug->color;
             $testtask    = $bug->testtask;
+            if($pri == 0) $pri = '3';
         }
 
         if($testtask)

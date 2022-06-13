@@ -1,3 +1,10 @@
+/**
+ * Change view.
+ *
+ * @param  string $view
+ * @access public
+ * @return void
+ */
 function changeView(view)
 {
     var link = createLink('execution', 'taskKanban', "executionID=" + executionID + '&type=' + view);
@@ -119,14 +126,15 @@ function renderStoryItem(item, $item, col)
                     .attr('href', $.createLink('story', 'view', 'storyID=' + item.id, '', true));
             $title.appendTo($item);
         }
-        $title.attr('title', item.title).find('.text').text(item.title);
+        var title = searchValue != '' ? "<span class='text'>" + item.title.replaceAll(searchValue, "<span class='text-danger'>" + searchValue + "</span>") + "</span>": "<span class='text'>" + item.title + "</span>";
+        $title.attr('title', item.title).find('.text').replaceWith(title);
     }
 
     if(scaleSize <= 2)
     {
         var idHtml     = scaleSize <= 1 ? ('<span class="info info-id text-muted">#' + item.id + '</span>') : '';
         var priHtml    = '<span class="info info-pri label-pri label-pri-' + item.pri + '" title="' + item.pri + '">' + item.pri + '</span>';
-        var hoursHtml  = (item.estimate && scaleSize <= 1) ? ('<span class="info info-estimate text-muted">' + item.estimate + 'h</span>') : '';
+        var hoursHtml  = (item.estimate && scaleSize <= 1) ? ('<span class="info info-estimate text-muted">' + item.estimate + hourUnit +'</span>') : '';
         var avatarHtml = renderUserAvatar(item.assignedTo, 'story', item.id, '', col.type);
         var $infos = $item.find('.infos');
         if(!$infos.length) $infos = $('<div class="infos"></div>');
@@ -182,7 +190,8 @@ function renderBugItem(item, $item, col)
                     .attr('href', $.createLink('bug', 'view', 'bugID=' + item.id, '', true));
             $title.appendTo($item);
         }
-        $title.attr('title', item.title).find('.text').text(item.title);
+        var title = searchValue != '' ? "<span class='text'>" + item.title.replaceAll(searchValue, "<span class='text-danger'>" + searchValue + "</span>") + "</span>": "<span class='text'>" + item.title + "</span>";
+        $title.attr('title', item.title).find('.text').replaceWith(title);
     }
 
     if(scaleSize <= 2)
@@ -246,7 +255,8 @@ function renderTaskItem(item, $item, col)
             $title = $('<a class="title iframe" data-width="95%">' + (scaleSize <= 1 ? '<i class="icon icon-checked text-muted"></i> ' : '') + '<span class="text"></span></a>').attr('href', $.createLink('task', 'view', 'taskID=' + item.id, '', true));
             $title.appendTo($item);
         }
-        $title.attr('title', item.name).find('.text').text(item.name);
+        var name = searchValue != '' ? "<span class='text'>" + item.name.replaceAll(searchValue, "<span class='text-danger'>" + searchValue + "</span>") + "</span>": "<span class='text'>" + item.name + "</span>";
+        $title.attr('title', item.name).find('.text').replaceWith(name);
     }
 
     if(scaleSize <= 2)
@@ -409,8 +419,16 @@ function updateKanban(kanbanID, data)
     var $kanban = $('#kanban-' + kanbanID);
     if(!$kanban.length) return;
 
+    if(data == null)
+    {
+        $kanban.hide();
+        return false;
+    }
+    $kanban.show();
+
     $kanban.data('zui.kanban').render(data);
     resetKanbanHeight();
+    return true;
 }
 
 /**
@@ -1200,7 +1218,7 @@ $(function()
     var lastUpdateData;
     setInterval(function()
     {
-        $.get(createLink('execution', 'ajaxUpdateKanban', "executionID=" + executionID + "&entertime=" + entertime + "&browseType=" + browseType + "&groupBy=" + groupBy), function(data)
+        $.get(createLink('execution', 'ajaxUpdateKanban', "executionID=" + executionID + "&entertime=" + entertime + "&browseType=" + browseType + "&groupBy=" + groupBy + '&from=execution&searchValue=' + searchValue), function(data)
         {
             if(data && lastUpdateData !== data)
             {
@@ -1282,12 +1300,7 @@ $('.panel-body').scroll(function()
  */
 function resetKanbanHeight()
 {
-    var laneCount = 0;
-    $('.kanban-lane').each(function()
-    {
-        laneCount ++;
-        if(laneCount > 1) return;
-    });
+    var laneCount = $('.kanban-lane').length;
 
     if(laneCount > 1) return;
 
@@ -1307,3 +1320,70 @@ $(document).on('click', '.dropdown-menu', function()
 {
     $.zui.ContextMenu.hide();
 });
+
+/**
+ * Toggle kanban search box.
+ *
+ * @access public
+ * @return void
+ */
+function toggleSearchBox()
+{
+    $('#searchBox').toggle();
+
+    if($('#searchBox').css('display') == 'block')
+    {
+        $(".querybox-toggle").css("color", "#0c64eb");
+    }
+    else
+    {
+        $(".querybox-toggle").css("color", "3c495c");
+        $('#taskKanbanSearchInput').attr('value', '');
+        searchCards('');
+    }
+}
+
+/**
+ * Search kanban cards.
+ *
+ * @param  string value
+ * @access public
+ * @return void
+ */
+function searchCards(value)
+{
+    searchValue = value;
+    $.get(createLink('execution', 'ajaxUpdateKanban', "executionID=" + executionID + "&entertime=0&browseType=" + browseType + "&groupBy=" + groupBy + '&from=execution&searchValue=' + value), function(data)
+    {
+        lastUpdateData = data;
+        var kanbanData = $.parseJSON(data);
+        var hideAll    = true;
+        if(groupBy == 'default')
+        {
+            var kanbanLane = '';
+            for(var i in kanbanList)
+            {
+                if(kanbanList[i] == 'story') kanbanLane = kanbanData.story;
+                if(kanbanList[i] == 'bug')   kanbanLane = kanbanData.bug;
+                if(kanbanList[i] == 'task')  kanbanLane = kanbanData.task;
+
+                if(browseType == kanbanList[i] || browseType == 'all') hideAll = !updateKanban(kanbanList[i], kanbanLane) && hideAll;
+            }
+        }
+        else
+        {
+            hideAll = !updateKanban(browseType, kanbanData[groupBy]) && hideAll;
+        }
+
+        if(hideAll)
+        {
+            $("#emptyBox").removeClass('hidden');
+            $("#kanbanContainer .panel-body").addClass('hidden');
+        }
+        else
+        {
+            $("#emptyBox").addClass('hidden');
+            $("#kanbanContainer .panel-body").removeClass('hidden');
+        }
+    });
+}

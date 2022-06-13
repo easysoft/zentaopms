@@ -945,7 +945,7 @@ class kanbanModel extends model
             ->orderBy('order')
             ->fetchGroup('group');
 
-        $actions = array('setLane', 'sortLane', 'deleteLane');
+        $actions = array('sortLane', 'deleteLane', 'editLaneName', 'editLaneColor');
         foreach($laneGroup as $lanes)
         {
             foreach($lanes as $lane)
@@ -1328,12 +1328,13 @@ class kanbanModel extends model
      * @param  int    $executionID
      * @param  string $browseType all|story|bug|task
      * @param  string $groupBy
+     * @param  string $searchValue
      * @access public
      * @return array
      */
-    public function getExecutionKanban($executionID, $browseType = 'all', $groupBy = 'default')
+    public function getExecutionKanban($executionID, $browseType = 'all', $groupBy = 'default', $searchValue = '')
     {
-        if($groupBy != 'default') return $this->getKanban4Group($executionID, $browseType, $groupBy);
+        if($groupBy != 'default') return $this->getKanban4Group($executionID, $browseType, $groupBy, $searchValue);
 
         $lanes = $this->dao->select('*')->from(TABLE_KANBANLANE)
             ->where('execution')->eq($executionID)
@@ -1415,6 +1416,7 @@ class kanbanModel extends model
 
                     if($lane->type == 'task')
                     {
+                        if($searchValue != '' and strpos($object->name, $searchValue) === false) continue;
                         $cardData['name']       = $object->name;
                         $cardData['status']     = $object->status;
                         $cardData['left']       = $object->left;
@@ -1422,6 +1424,7 @@ class kanbanModel extends model
                     }
                     else
                     {
+                        if($searchValue != '' and strpos($object->title, $searchValue) === false) continue;
                         $cardData['title'] = $object->title;
                     }
 
@@ -1432,9 +1435,10 @@ class kanbanModel extends model
                     $laneData['cards'][$column->type][] = $cardData;
                     $cardOrder ++;
                 }
-                if(!isset($laneData['cards'][$column->type])) $laneData['cards'][$column->type] = array();
+                if($searchValue == '' and !isset($laneData['cards'][$column->type])) $laneData['cards'][$column->type] = array();
             }
 
+            if($searchValue != '' and empty($laneData['cards'])) continue;
             $kanbanGroup[$lane->type]['id']              = $laneID;
             $kanbanGroup[$lane->type]['columns']         = array_values($columnData);
             $kanbanGroup[$lane->type]['lanes'][]         = $laneData;
@@ -3067,7 +3071,7 @@ class kanbanModel extends model
             if(common::hasPriv('kanban', 'setColumnWidth') and $CRKanban) $columnActions .= '<li>' . html::a(helper::createLink('kanban', 'setColumnWidth', "kanbanID=$kanban->id", '', true), '<i class="icon icon-size-width"></i>' . $this->lang->kanban->columnWidth, '', "class='iframe btn btn-link' data-width=400") . '</li>';
             if($printSetHeightBtn and $CRKanban)
             {
-                $width = $this->app->getClientLang() == 'en' ? '750' : '650';
+                $width = $this->app->getClientLang() == 'en' ? '920' : '770';
                 $columnActions .= '<li>' . html::a(helper::createLink('kanban', 'setLaneHeight', "kanbanID=$kanban->id", '', true), '<i class="icon icon-size-height"></i>' . $this->lang->kanban->laneHeight, '', "class='iframe btn btn-link' data-width='$width'") . '</li>';
             }
             $actions .= $columnActions;

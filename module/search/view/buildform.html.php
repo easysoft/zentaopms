@@ -524,8 +524,9 @@ $(function()
     {
         for(i = 1; i <= groupItems * 2; i ++)
         {
-            $searchForm.find('#value' + i).val('').trigger('chosen:updated');
-            $searchForm.find('#dateValue' + i).val('').attr('placeholder','');
+            if(!$searchForm.find('#value' + i).hasClass('picker-select')) $searchForm.find('#value' + i).val('').trigger('chosen:updated');
+            if($searchForm.find('#value' + i).hasClass('picker-select'))  $searchForm.find('#value' + i).data('zui.picker').setValue('');
+            $searchForm.find('#value' + i).val('').attr('placeholder','');
         }
     };
 
