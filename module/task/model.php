@@ -20,7 +20,7 @@ class taskModel extends model
      * @access public
      * @return void
      */
-    public function create($executionID)
+    public function create($executionID, $bugID)
     {
         if((float)$this->post->estimate < 0)
         {
@@ -145,6 +145,12 @@ class taskModel extends model
             if(dao::isError()) return false;
 
             $taskID = $this->dao->lastInsertID();
+
+            if($bugID > 0)
+            {
+                $this->dao->update(TABLE_TASK)->set('fromBug')->eq($bugID)->where('id')->eq($taskID)->exec();
+                $this->loadModel('action')->create('bug', $bugID, 'converttotask', '', $taskID);
+            }
 
             /* Mark design version.*/
             if(isset($task->design) && !empty($task->design))

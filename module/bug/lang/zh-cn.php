@@ -95,6 +95,10 @@ $lang->bug->toCase           = '生成用例';
 $lang->bug->colorTag         = '颜色标签';
 $lang->bug->fixedRate        = '修复率';
 $lang->bug->noticefeedbackBy = '通知反馈者';
+$lang->bug->selectProjects   = '选择项目';
+$lang->bug->nextStep         = '下一步';
+$lang->bug->noProject        = '还没有选择项目！';
+$lang->bug->noExecution      = '还没有选择执行！';
 
 /* 方法列表。*/
 $lang->bug->index              = '首页';
@@ -405,6 +409,7 @@ $lang->bug->action = new stdclass();
 $lang->bug->action->resolved            = array('main' => '$date, 由 <strong>$actor</strong> 解决，方案为 <strong>$extra</strong> $appendLink。', 'extra' => 'resolutionList');
 $lang->bug->action->tostory             = array('main' => '$date, 由 <strong>$actor</strong> 转为<strong> ' . $lang->SRCommon . '</strong>，编号为 <strong>$extra</strong>。');
 $lang->bug->action->totask              = array('main' => '$date, 由 <strong>$actor</strong> 导入为<strong>任务</strong>，编号为 <strong>$extra</strong>。');
+$lang->bug->action->converttotask       = array('main' => '$date, 由 <strong>$actor</strong> 转为<strong>任务</strong>，编号为 <strong>$extra</strong>。');
 $lang->bug->action->linked2plan         = array('main' => '$date, 由 <strong>$actor</strong> 关联到计划 <strong>$extra</strong>。');
 $lang->bug->action->unlinkedfromplan    = array('main' => '$date, 由 <strong>$actor</strong> 从计划 <strong>$extra</strong> 移除。');
 $lang->bug->action->linked2build        = array('main' => '$date, 由 <strong>$actor</strong> 关联到版本 <strong>$extra</strong>。');

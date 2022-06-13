@@ -880,6 +880,8 @@ class bug extends control
         $product   = $this->loadModel('product')->getByID($productID);
         $branches  = $product->type == 'normal' ? array() : $this->loadModel('branch')->getPairs($bug->product);
 
+        $projects = $this->loadModel('product')->getProjectPairsByProduct($productID, $bug->branch);
+
         $this->executeHooks($bugID);
 
         /* Header and positon. */
@@ -901,6 +903,8 @@ class bug extends control
         $this->view->builds      = $this->loadModel('build')->getBuildPairs($productID, 'all', '');
         $this->view->preAndNext  = $this->loadModel('common')->getPreAndNextObject('bug', $bugID);
         $this->view->product     = $product;
+
+        $this->view->projects = array('' => '') + $projects;
 
         $this->display();
     }
