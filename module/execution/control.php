@@ -979,6 +979,7 @@ class execution extends control
         $this->view->branchID        = empty($this->view->build->branch) ? $branchID : $this->view->build->branch;
         $this->view->memberPairs     = $memberPairs;
         $this->view->type            = $type;
+        $this->view->summary         = $this->loadModel('bug')->summary($bugs);
         $this->view->param           = $param;
         $this->view->defaultProduct  = (empty($productID) and !empty($products)) ? current(array_keys($products)) : $productID;
         $this->view->builds          = $this->loadModel('build')->getBuildPairs($productID);
