@@ -181,7 +181,7 @@
               </div>
               <div class="detail-content">
                 <div class="row row-grid">
-                  <div class="col-xs-6">
+                  <div class="col-xs-12">
                   <?php if($execution->projectInfo->grade > 1):?>
                     <i class='icon icon-program text-muted'></i>
                     <?php
@@ -191,7 +191,7 @@
                     {
                         if($name != $end)
                         {
-                            echo html::a($this->createLink('program', 'product', "programID=$ID"), $name) . '/';
+                            echo html::a($this->createLink('program', 'product', "programID=$ID"), $name) . '/ ';
                         }
                         else
                         {
@@ -212,7 +212,7 @@
               </div>
               <div class="detail-content">
                 <div class="row row-grid">
-                  <div class="col-xs-6">
+                  <div class="col-xs-12">
                     <i class='icon icon-project text-muted'></i>
                     <?php echo html::a($this->createLink('project', 'index', "projectID=$execution->project", '', '', $execution->project), $execution->projectInfo->name, '', 'class="text-ellipsis text-primary"')?>
                   </div>
