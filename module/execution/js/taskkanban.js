@@ -1098,7 +1098,7 @@ window.affixKanbanHeader = function($kanbanBoard, affixed)
  */
 function handleSortCards(event)
 {
-    if(groupBy != 'default' || rdSearchValue != '') return;
+    if(groupBy != 'default' || searchValue != '') return;
     var newLaneID = event.element.closest('.kanban-lane').data('id');
     var newColID  = event.element.closest('.kanban-col').data('id');
     var cards     = event.element.closest('.kanban-lane-items').data('cards');
