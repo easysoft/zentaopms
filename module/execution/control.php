@@ -1594,9 +1594,16 @@ class execution extends control
             $newPlans = array();
             if(isset($_POST['plans']))
             {
+
                 foreach($_POST['plans'] as $plans)
                 {
-                    foreach($plans as $planID) $newPlans[$planID] = $planID;
+                    foreach($plans as $planList)
+                    {
+                        foreach($planList as $planID)
+                        {
+                            $newPlans[$planID] = $planID;
+                        }
+                    }
                 }
             }
 
