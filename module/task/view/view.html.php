@@ -105,7 +105,7 @@
       <div class='detail'>
         <div class='detail-title'><?php echo $this->lang->task->children;?></div>
         <div class='detail-content article-content'>
-          <table class='table table-hover table-fixed'>
+          <table class='table table-hover table-fixed' id='childrenTable'>
             <thead>
               <tr class='text-center'>
                 <th class='w-50px'> <?php echo $lang->task->id;?></th>
