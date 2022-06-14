@@ -115,7 +115,10 @@ class testcase extends control
         /* Set menu, save session. */
         if($this->app->tab == 'project')
         {
-            $this->products = array('0' => $this->lang->product->all) + $this->product->getProducts($projectID, 'all', '', false);
+            $linkedProducts = $this->product->getProducts($projectID, 'all', '', false);
+            $this->products = count($linkedProducts) > 1 ? array('0' => $this->lang->product->all) + $linkedProducts : $linkedProducts;
+            $productID      = count($linkedProducts) > 1 ? $productID : key($linkedProducts);
+
             $branch = 'all';
             $this->loadModel('project')->setMenu($projectID);
         }
