@@ -3846,7 +3846,7 @@ class execution extends control
 
         if($from == 'execution') $this->session->set('taskSearchValue', $searchValue);
         if($from == 'RD')        $this->session->set('rdSearchValue', $searchValue);
-        if($lastEditedTime > $enterTime or $groupBy != 'default' or !empty($searchValue))
+        if(strtotime($lastEditedTime) < 0 or $lastEditedTime > $enterTime or $groupBy != 'default' or !empty($searchValue))
         {
             $kanbanGroup = $from == 'execution' ? $this->loadModel('kanban')->getExecutionKanban($executionID, $browseType, $groupBy, $searchValue) : $this->loadModel('kanban')->getRDKanban($executionID, $browseType, 'id_asc', 0, $groupBy, $searchValue);
             return print(json_encode($kanbanGroup));
