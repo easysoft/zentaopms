@@ -77,7 +77,7 @@
             </div>
           </td>
           <td>
-            <div class='checkbox-primary'>
+            <div class='checkbox-primary c-future'>
               <input type='checkbox' id='future' name='future' value='1' />
               <label for='future'><?php echo $lang->project->future;?></label>
             </div>
