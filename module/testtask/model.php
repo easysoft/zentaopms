@@ -952,7 +952,8 @@ class testtaskModel extends model
      * Get test runs of a suite.
      *
      * @param  int    $taskID
-     * @param  int    $moduleID
+     * @param  int    $suiteID
+     * @param  string $orderBy
      * @param  object $pager
      * @access public
      * @return array
