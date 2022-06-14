@@ -2120,14 +2120,14 @@ class projectModel extends model
             if(isset($oldProjectProducts[$productID][$branch]))
             {
                 $oldProjectProduct = $oldProjectProducts[$productID][$branch];
-                $oldPlan           = $oldProjectProduct->plan;
+                if($this->app->rawMethod != 'edit') $oldPlan = $oldProjectProduct->plan;
             }
 
             $data = new stdclass();
             $data->project = $projectID;
             $data->product = $productID;
             $data->branch  = $branch;
-            $data->plan    = isset($plans[$productID][$branch]) ? $plans[$productID][$branch] : $oldPlan;
+            $data->plan    = isset($plans[$productID][$branch]) ? implode(',', $plans[$productID][$branch]) : $oldPlan;
             $this->dao->insert(TABLE_PROJECTPRODUCT)->data($data)->exec();
             $existedProducts[$productID][$branch] = true;
         }
