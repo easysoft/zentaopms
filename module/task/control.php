@@ -38,7 +38,7 @@ class task extends control
      * @access public
      * @return void
      */
-    public function create($executionID = 0, $storyID = 0, $moduleID = 0, $taskID = 0, $todoID = 0, $extra = '')
+    public function create($executionID = 0, $storyID = 0, $moduleID = 0, $taskID = 0, $todoID = 0, $extra = '', $bugID = 0)
     {
         if(empty($this->app->user->view->sprints) and !$executionID) $this->locate($this->createLink('execution', 'create'));
         $extra = str_replace(array(',', ' '), array('&', ''), $extra);
@@ -83,6 +83,15 @@ class task extends control
             $task->desc = $todo->desc;
         }
 
+        if($bugID > 0)
+        {
+            $bug = $this->loadModel('bug')->getById($bugID);
+            $task->name       = $bug->title;
+            $task->pri        = $bug->pri;
+            $task->pri        = !empty($bug->pri) ? $bug->pri : '3';
+            $task->assignedTo = array($bug->assignedTo);
+        }
+
         $execution = $this->execution->getById($executionID);
         $taskLink  = $this->createLink('execution', 'browse', "executionID=$executionID&tab=task");
 
@@ -111,7 +120,7 @@ class task extends control
             if($this->post->execution) $executionID = (int)$this->post->execution;
 
             /* Create task here. */
-            $tasksID = $this->task->create($executionID);
+            $tasksID = $this->task->create($executionID, $bugID);
             if(dao::isError())
             {
                 $response['result']  = 'fail';

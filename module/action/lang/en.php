@@ -266,6 +266,7 @@ $lang->action->label->tostory               = 'converted to Story ';
 $lang->action->label->frombug               = 'converted from Bug ';
 $lang->action->label->fromlib               = 'imported from Library ';
 $lang->action->label->totask                = 'converted to Task ';
+$lang->action->label->converttotask         = 'converted to Task ';
 $lang->action->label->svncommited           = 'committed SVN ';
 $lang->action->label->gitcommited           = 'committed Git ';
 $lang->action->label->linked2plan           = 'linked to Plan ';

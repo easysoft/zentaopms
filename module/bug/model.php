@@ -159,6 +159,7 @@ class bugModel extends model
         while($module = $stmt->fetch()) $moduleOwners[$module->id] = $module->owner;
 
         $module    = 0;
+        $project   = 0;
         $execution = 0;
         $type      = '';
         $pri       = 0;
@@ -167,6 +168,7 @@ class bugModel extends model
         foreach($data->title as $i => $title)
         {
             if($data->modules[$i]    != 'ditto') $module    = (int)$data->modules[$i];
+            if($data->projects[$i]   != 'ditto') $project   = (int)$data->projects[$i];
             if($data->executions[$i] != 'ditto') $execution = (int)$data->executions[$i];
             if($data->types[$i]      != 'ditto') $type      = $data->types[$i];
             if($data->pris[$i]       != 'ditto') $pri       = $data->pris[$i];
@@ -174,6 +176,7 @@ class bugModel extends model
             if($data->browsers[$i]   != 'ditto') $browser   = $data->browsers[$i];
 
             $data->modules[$i]    = (int)$module;
+            $data->projects[$i]   = (int)$project;
             $data->executions[$i] = (int)$execution;
             $data->types[$i]      = $type;
             $data->pris[$i]       = $pri;
@@ -196,6 +199,7 @@ class bugModel extends model
             $bug->product     = (int)$productID;
             $bug->branch      = isset($data->branches) ? (int)$data->branches[$i] : 0;
             $bug->module      = (int)$data->modules[$i];
+            $bug->project     = (int)$data->projects[$i];
             $bug->execution   = (int)$data->executions[$i];
             $bug->openedBuild = implode(',', $data->openedBuilds[$i]);
             $bug->color       = $data->color[$i];
@@ -3385,6 +3389,7 @@ class bugModel extends model
         if($type == 'view' && $this->app->tab != 'product')
         {
             $menu .= $this->buildMenu('bug', 'toStory', $toStoryParams, $bug, $type, $this->lang->icons['story'], '', '', '', "data-app='product' id='tostory'", $this->lang->bug->toStory);
+            if(common::hasPriv('task', 'create')) $menu .= html::a('#toTask', "<i class='icon icon-check'></i><span class='text'>{$this->lang->bug->toTask}</span>", '', "data-app='qa' data-toggle='modal' class='btn btn-link'");
             $menu .= $this->buildMenu('bug', 'createCase', $convertParams, $bug, $type, 'sitemap');
         }
         if($type == 'view')

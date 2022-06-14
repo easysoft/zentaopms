@@ -11,3 +11,14 @@ sonarqube:
   allow_failure: true
   only:
     - master # or the name of your main branch
+packages:
+  script:
+    - make cizip
+  only:
+    - merge_request
+    - master
+    - tags
+cleanup_packages:
+  script:
+    - make clean
+  when: on_failure

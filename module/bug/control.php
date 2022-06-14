@@ -823,6 +823,8 @@ class bug extends control
         $this->view->stories          = $stories;
         $this->view->builds           = $builds;
         $this->view->users            = $this->user->getPairs('devfirst|noclosed');
+        $this->view->projects         = array('' => '') + $this->product->getProjectPairsByProduct($productID, $branch ? "0,$branch" : 0, 'id_desc', $projectID);
+        $this->view->projectID        = $projectID;
         $this->view->executions       = array('' => '') + $this->product->getExecutionPairsByProduct($productID, $branch ? "0,$branch" : 0, 'id_desc', $projectID);
         $this->view->executionID      = $executionID;
         $this->view->moduleOptionMenu = $this->tree->getOptionMenu($productID, $viewType = 'bug', $startModuleID = 0, $branch === 'all' ? 0 : $branch);
@@ -880,6 +882,8 @@ class bug extends control
         $product   = $this->loadModel('product')->getByID($productID);
         $branches  = $product->type == 'normal' ? array() : $this->loadModel('branch')->getPairs($bug->product);
 
+        $projects = $this->loadModel('product')->getProjectPairsByProduct($productID, $bug->branch);
+
         $this->executeHooks($bugID);
 
         /* Header and positon. */
@@ -901,6 +905,8 @@ class bug extends control
         $this->view->builds      = $this->loadModel('build')->getBuildPairs($productID, 'all', '');
         $this->view->preAndNext  = $this->loadModel('common')->getPreAndNextObject('bug', $bugID);
         $this->view->product     = $product;
+
+        $this->view->projects = array('' => '') + $projects;
 
         $this->display();
     }

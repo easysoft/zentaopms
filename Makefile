@@ -143,8 +143,9 @@ zentaoxx:
 	mkdir zentaoxx/tools; cp tools/cn2tw.php zentaoxx/tools; cd zentaoxx/tools; php cn2tw.php
 	cp tools/en2de.php zentaoxx/tools; cd zentaoxx/tools; php en2de.php ../
 	rm -rf zentaoxx/tools
-	zip -rqm -9 zentaoxx.$(VERSION).zip zentaoxx/*
-	rm -rf xuan.zip xuan zentaoxx
+	#zip -rqm -9 zentaoxx.$(VERSION).zip zentaoxx/*
+	#rm -rf xuan.zip xuan zentaoxx
+	rm -rf xuan.zip xuan
 package:
 	# change mode.
 	chmod -R 777 zentaopms/tmp/
@@ -244,18 +245,31 @@ ciCommon:
 
         ifneq ($(XUANPATH), )
 	    make zentaoxx
-	    unzip zentaoxx.*.zip
 	    cp zentaoxx/* zentaopms/ -r
+	    rm -rf zentaoxx
         endif
 
 	make package
 	zip -rq -9 ZenTaoPMS.$(VERSION).zip zentaopms
-	rm -fr zentaopms zentaoxx zentaoxx.*.zip
-	make en
-	rm -fr zentaopms zentaoxx zentaoxx.*.zip
+	# en
+	cd zentaopms/; grep -rl 'zentao.net'|xargs sed -i 's/zentao.net/zentao.pm/g';
+	cd zentaopms/; grep -rl 'http://www.zentao.pm'|xargs sed -i 's/http:\/\/www.zentao.pm/https:\/\/www.zentao.pm/g';
+	cd zentaopms/config/; echo >> config.php; echo '$$config->isINT = true;' >> config.php
+	mv zentaopms zentaoalm
+	zip -r -9 ZenTaoALM.$(VERSION).int.zip zentaoalm
+	rm -fr zentaoalm
+	# move pms zip to build and release path.
 	rm -f $(BUILD_PATH)/ZenTao*.zip $(RELEASE_PATH)/ZenTaoPMS.$(VERSION).zip $(RELEASE_PATH)/ZenTaoALM.$(VERSION).int.zip
 	cp ZenTaoPMS.$(VERSION).zip $(BUILD_PATH)
 	cp ZenTaoPMS.$(VERSION).zip ZenTaoALM.$(VERSION).int.zip $(RELEASE_PATH)
+cizip:
+	make ciCommon
+	php tools/packZip.php $(VERSION)
+	sh zip.sh
+	rm -rf tmp/ *.sh
+	rm -rf zentaobiz* zentaomax* $(RELEASE_PATH)/ZenTaoALM.$(VERSION)*.zip $(RELEASE_PATH)/ZenTaoPMS.$(VERSION)*.zip  $(RELEASE_PATH)/pmsPack/*.zip
+	mv ZenTaoPMS.$(VERSION).zip ZenTaoALM.$(VERSION).int.zip $(RELEASE_PATH)
+	mv ZenTaoALM.$(VERSION).int.php*.zip ZenTaoPMS.$(VERSION).php*.zip $(RELEASE_PATH)/pmsPack
 ci:
 	make ciCommon
 	php tools/packZip.php $(VERSION)
@@ -267,7 +281,8 @@ ci:
 	php tools/packRpm.php $(VERSION)
 	sh rpm.sh
 	rm -rf tmp/
-	rm -f zentaobiz*.zip zentaomax*.zip $(RELEASE_PATH)/ZenTaoALM.$(VERSION)*.zip $(RELEASE_PATH)/ZenTaoPMS.$(VERSION)*.zip $(RELEASE_PATH)/*.deb $(RELEASE_PATH)/*.rpm *.sh $(RELEASE_PATH)/pmsPack/*.zip $(RELEASE_PATH)/pmsPack/deb/* $(RELEASE_PATH)/pmsPack/rpm/*
+	rm -rf zentaobiz* zentaomax* $(RELEASE_PATH)/ZenTaoALM.$(VERSION)*.zip $(RELEASE_PATH)/ZenTaoPMS.$(VERSION)*.zip $(RELEASE_PATH)/*.deb $(RELEASE_PATH)/*.rpm *.sh $(RELEASE_PATH)/pmsPack/*.zip $(RELEASE_PATH)/pmsPack/deb/* $(RELEASE_PATH)/pmsPack/rpm/*
+	mv ZenTaoPMS.$(VERSION).zip ZenTaoALM.$(VERSION).int.zip $(RELEASE_PATH)
 	mv ZenTaoALM.$(VERSION).int.php*.zip ZenTaoPMS.$(VERSION).php*.zip $(RELEASE_PATH)/pmsPack
 	mv *.deb $(RELEASE_PATH)/pmsPack/deb
 	mv *.rpm $(RELEASE_PATH)/pmsPack/rpm

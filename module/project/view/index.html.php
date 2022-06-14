@@ -64,7 +64,7 @@
                  {
                      $this->app->loadLang('kanban');
                      echo '<li>';
-                     common::printLink('execution', 'edit', "executionID={$kanbanID}", '<i class="icon icon-edit"></i> ' . $lang->kanban->edit, '', "class='iframe' data-width='75%'", '', true);
+                     common::printLink('execution', 'edit', "executionID={$kanbanID}", '<i class="icon icon-edit"></i>' . $lang->kanban->edit, '', "class='iframe' data-width='75%'", '', true);
                      echo '</li>';
                  }
                  if(!empty($executionActions[$kanbanID]))

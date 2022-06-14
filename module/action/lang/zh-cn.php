@@ -266,6 +266,7 @@ $lang->action->label->tostory               = "转{$lang->SRCommon}";
 $lang->action->label->frombug               = "转{$lang->SRCommon}";
 $lang->action->label->fromlib               = '从用例库导入';
 $lang->action->label->totask                = '转任务';
+$lang->action->label->converttotask         = '转任务';
 $lang->action->label->svncommited           = '提交代码';
 $lang->action->label->gitcommited           = '提交代码';
 $lang->action->label->linked2plan           = "关联计划";

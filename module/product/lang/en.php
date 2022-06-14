@@ -89,6 +89,7 @@ $lang->product->programChangeTip     = "The projects linked with this {$lang->pr
 $lang->product->notChangeProgramTip  = "The {$lang->SRCommon} of {$lang->productCommon} has been linked to the following projects, please cancel the link before proceeding";
 $lang->product->confirmChangeProgram = "The projects linked with this {$lang->productCommon}: %s is also linked with other products, whether to transfer projects to the modified program set.";
 $lang->product->changeProgramError   = "The {$lang->SRCommon} of this {$lang->productCommon} has been linked to the project, please unlink it before proceeding";
+$lang->product->changeLineError      = "Products already exist under the product line, so the program within them cannot be modified.";
 $lang->product->programEmpty         = 'Program should not be empty!';
 $lang->product->nameIsDuplicate      = "『%s』 product line already exists, please reset!";
 $lang->product->nameIsDuplicated     = "Product Line『%s』 exists. Go to Admin->System->Data->Recycle Bin to restore it, if you are sure it is deleted.";
