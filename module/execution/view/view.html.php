@@ -214,7 +214,7 @@
                 <div class="row row-grid">
                   <div class="col-xs-12">
                     <i class='icon icon-project text-muted'></i>
-                    <?php echo html::a($this->createLink('project', 'index', "projectID=$execution->project", '', '', $execution->project), $execution->projectInfo->name, '', 'class="text-ellipsis text-primary"')?>
+                    <?php echo html::a($this->createLink('project', 'index', "projectID=$execution->project", '', '', $execution->project), $execution->projectInfo->name)?>
                   </div>
                 </div>
               </div>
