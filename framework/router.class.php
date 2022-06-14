@@ -119,7 +119,7 @@ class router extends baseRouter
                 if(isset($nullKey))$lang->{$moduleName}->{$section}[$nullKey] = $nullValue;
                 foreach($fields as $key => $value)
                 {
-                    if($section == 'priList' and $key > 0 and $value === '') continue; // Fix bug #23538.
+                    if($section == 'priList' and $key > 0 and trim($value) === '') continue; // Fix bug #23538.
 
                     if(!isset($lang->{$moduleName})) $lang->{$moduleName} = new stdclass();
                     if(!isset($lang->{$moduleName}->{$section})) $lang->{$moduleName}->{$section} = array();

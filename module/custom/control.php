@@ -236,7 +236,7 @@ class custom extends control
 
                     $value  = $data->values[$index];
                     $system = $data->systems[$index];
-                    if($key and $value === '') return $this->send(array('result' => 'fail', 'message' => $this->lang->custom->notice->valueEmpty)); // Fix bug #23538.
+                    if($key and trim($value) === '') return $this->send(array('result' => 'fail', 'message' => $this->lang->custom->notice->valueEmpty)); // Fix bug #23538.
 
                     $this->custom->setItem("{$lang}.{$module}.{$field}.{$key}.{$system}", $value);
                 }
