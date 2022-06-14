@@ -1,3 +1,23 @@
+/* Update other picker on change */
+$.zui.Picker.DEFAULTS.onChange = function(event)
+{
+    var picker = event.picker;
+    if(!picker.$formItem.is('[name^=accounts]')) return;
+
+    var select  = picker.$formItem[0];
+    var newItem = event.value.length ? $.extend({}, picker.getListItem(event.value), {disabled: true}) : $.extend({}, picker.getListItem(event.oldValue), {disabled: false});
+
+    $('.picker-select[name^=accounts]').each(function()
+    {
+        if(this === select) return;
+
+        var $select      = $(this);
+        var selectPicker = $select.data('zui.picker');
+
+        if(selectPicker) selectPicker.updateOptionList([newItem]);
+    });
+}
+
 $(function()
 {
     $('#execution_chosen, #execution + .picker').click(function()
@@ -18,7 +38,7 @@ $(function()
                 }
             })
         }
-    })
+    });
 })
 
 /**
@@ -51,15 +71,27 @@ function addItem(obj)
 
     if($accounts.attr('data-pickertype') != 'remote')
     {
-        $accounts.picker({type: 'user'});
+        $accounts.addClass('picker-select').picker({chosenMode: true});
     }
     else
     {
         $accounts.parent().find('.picker.picker-ready').remove();
         var pickerremote = $accounts.attr('data-pickerremote');
-        $accounts.picker({chosenMode: true, remote: pickerremote});
+        $accounts.addClass('picker-select').picker({chosenMode: true, remote: pickerremote});
     }
     itemIndex ++;
+
+    var disabledItems = [];
+    $('.picker-select[name^=accounts]').each(function()
+    {
+        if(this === $accounts[0]) return;
+        var $select = $(this);
+        var picker = $select.data('zui.picker');
+        if(!picker) return;
+        var selectItem = picker.getListItem(picker.getValue());
+        if(selectItem) disabledItems.push($.extend({}, selectItem, {disabled: true}));
+    });
+    if(disabledItems.length) $accounts.data('zui.picker').updateOptionList(disabledItems);
 }
 
 /**
