@@ -70,8 +70,7 @@ zentaoxx:
 	mkdir -p zentaoxx/db
 	mkdir -p zentaoxx/www
 	mkdir -p zentaoxx/extension/xuan/common/ext/model/
-	#cd $(XUANPATH); git pull; git archive --format=zip --prefix=xuan/ $(XUANVERSION) > xuan.zip
-	cd $(XUANPATH); git archive --format=zip --prefix=xuan/ $(XUANVERSION) > xuan.zip
+	cd $(XUANPATH); git pull; git archive --format=zip --prefix=xuan/ $(XUANVERSION) > xuan.zip
 	mv $(XUANPATH)/xuan.zip .
 	unzip xuan.zip
 	cp xuan/xxb/config/ext/_0_xuanxuan.php zentaoxx/config/ext/
