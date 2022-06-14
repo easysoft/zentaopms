@@ -130,7 +130,7 @@
             </div>
             <div class="detail-content">
               <div class="row row-grid">
-                <div class="col-xs-6">
+                <div class="col-xs-12">
                 <?php if($project->grade > 1):?>
                   <i class='icon icon-program text-muted'></i>
                   <?php
@@ -140,7 +140,7 @@
                   {
                       if($name != $end)
                       {
-                          echo html::a($this->createLink('program', 'product', "programID=$ID"), $name) . '/';
+                          echo html::a($this->createLink('program', 'product', "programID=$ID"), $name) . '/ ';
                       }
                       else
                       {
