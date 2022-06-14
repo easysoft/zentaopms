@@ -2737,8 +2737,8 @@ class execution extends control
         $this->loadModel('user');
         $this->loadModel('dept');
 
-        $execution   = $this->execution->getById($executionID);
-        $users     = $this->user->getPairs('noclosed|nodeleted|devfirst', '', $this->config->maxCount);
+        $execution = $this->execution->getById($executionID);
+        $users     = $this->user->getPairs('noclosed|nodeleted|devfirst');
         $roles     = $this->user->getUserRoles(array_keys($users));
         $deptUsers = empty($dept) ? array() : $this->dept->getDeptUserPairs($dept);
 
@@ -2753,7 +2753,7 @@ class execution extends control
         foreach($members2Import as $member) $appendUsers[$member->account] = $member->account;
         foreach($deptUsers as $deptAccount => $userName) $appendUsers[$deptAccount] = $deptAccount;
 
-        $users = $this->user->getPairs('noclosed|nodeleted|devfirst', $appendUsers, $this->config->maxCount);
+        $users = $this->user->getPairs('noclosed|nodeleted|devfirst', $appendUsers);
         $roles = $this->user->getUserRoles(array_keys($users));
 
         /* Set menu. */
