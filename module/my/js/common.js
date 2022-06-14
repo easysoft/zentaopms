@@ -13,6 +13,7 @@ $(function()
 
             if(isOpenedURAndSR !== 0) $("#subNavbar li[data-id='requirement'] a").append('<span class="label label-light label-badge">' + requirementCount + '</span>');
 
+            if(isBiz !== 0 || isMax !== 0) $("#subNavbar li[data-id='feedback'] a").append('<span class="label label-light label-badge">' + feedbackCount + '</span>');
             if(isMax !== 0)
             {
                 $("#subNavbar li[data-id='issue'] a").append('<span class="label label-light label-badge">' + issueCount + '</span>');

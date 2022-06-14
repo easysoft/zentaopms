@@ -155,6 +155,16 @@ class my extends control
         $ncCount      = 0;
         $meetingCount = 0;
         $isMax        = $this->config->edition == 'max' ? 1 : 0;
+
+        $feedbackCount = 0;
+        $isBiz         = $this->config->edition == 'biz' ? 1 : 0;
+
+        if($isBiz or $isMax)
+        {
+            $feedbacks     = $this->loadModel('feedback')->getList('assigntome', 'id_desc', $pager);
+            $feedbackCount = $pager->recTotal;
+        }
+
         if($isMax)
         {
             $this->loadModel('issue');
@@ -196,6 +206,10 @@ var isOpenedURAndSR = $isOpenedURAndSR;
 if(isOpenedURAndSR !== 0) var requirementCount = $requirementCount;
 
 var isMax = $isMax;
+var isBiz = $isBiz;
+
+if(isBiz !== 0 || isMax !== 0) var feedbackCount = $feedbackCount;
+
 if(isMax !== 0)
 {
     var issueCount   = $issueCount;
