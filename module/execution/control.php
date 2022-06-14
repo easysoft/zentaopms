@@ -934,7 +934,7 @@ class execution extends control
         $actionURL = $this->createLink('execution', 'bug', "executionID=$executionID&productID=$productID&orderBy=$orderBy&build=$build&type=bysearch&queryID=myQueryID");
         $this->execution->buildBugSearchForm($products, $queryID, $actionURL);
 
-        $product = $this->loadModel('product')->getById($productID);
+        $product = $this->product->getById($productID);
         $showBranch      = false;
         $branchOption    = array();
         $branchTagOption = array();
@@ -944,7 +944,7 @@ class execution extends control
             $showBranch = $this->loadModel('branch')->showBranch($productID);
 
             /* Display status of branch. */
-            $branches = $this->loadModel('branch')->getList($productID, 0, 'all');
+            $branches = $this->branch->getList($productID, 0, 'all');
             foreach($branches as $branchInfo)
             {
                 $branchOption[$branchInfo->id]    = $branchInfo->name;
@@ -979,9 +979,10 @@ class execution extends control
         $this->view->branchID        = empty($this->view->build->branch) ? $branchID : $this->view->build->branch;
         $this->view->memberPairs     = $memberPairs;
         $this->view->type            = $type;
+        $this->view->summary         = $this->bug->summary($bugs);
         $this->view->param           = $param;
         $this->view->defaultProduct  = (empty($productID) and !empty($products)) ? current(array_keys($products)) : $productID;
-        $this->view->builds          = $this->loadModel('build')->getBuildPairs($productID);
+        $this->view->builds          = $this->build->getBuildPairs($productID);
         $this->view->branchOption    = $branchOption;
         $this->view->branchTagOption = $branchTagOption;
         $this->view->modulePairs     = $showModule ? $this->loadModel('tree')->getModulePairs($productID, 'bug', $showModule) : array();
