@@ -5,9 +5,10 @@ XVERSION    = $(shell head -n 1 xuanxuan/XVERSION)
 #XUANPATH     := $(XUANXUAN_SRC_PATH)
 #BUILD_PATH   := $(if $(ZENTAO_BUILD_PATH),$(ZENTAO_BUILD_PATH),$(shell pwd))
 #RELEASE_PATH := $(if $(ZENTAO_RELEASE_PATH),$(ZENTAO_RELEASE_PATH),$(shell pwd))
-XUANPATH     := /home/gitlab-runner/ci/gitlab/xuan/
-BUILD_PATH   := /home/z/ci/build/
-RELEASE_PATH := /home/z/ci/release/
+XUANPATH      := /home/gitlab-runner/ci/gitlab/xuan/
+XUAN_WEB_PATH := /home/gitlab-runner/ci/packages/web
+BUILD_PATH    := /home/z/ci/build/
+RELEASE_PATH  := /home/z/ci/release/
 
 all:
 	make clean
@@ -97,6 +98,7 @@ zentaoxx:
 	cp -r xuanxuan/config/* zentaoxx/config/
 	cp -r xuanxuan/extension/xuan/* zentaoxx/extension/xuan/
 	cp -r xuanxuan/www/* zentaoxx/www/
+	cp -r $(XUAN_WEB_PATH) zentaoxx/www/data/xuanxuan/
 	mv zentaoxx/db/ zentaoxx/db_bak
 	mkdir zentaoxx/db/
 	cp zentaoxx/db_bak/upgradexuanxuan*.sql zentaoxx/db_bak/xuanxuan.sql zentaoxx/db/
