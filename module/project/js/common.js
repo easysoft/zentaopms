@@ -196,7 +196,7 @@ function loadPlans(product, branchID)
     $("input[name='products[" + index + "]']").remove();
     $("input[name='branch[" + index + "]']").remove();
 
-    $.get(createLink('product', 'ajaxGetPlans', "productID=" + productID + '&branch=0,' + branchID + '&planID=0&fieldID&needCreate=&expired=' + (config.currentMethod == 'create' ? 'unexpired' : '') + '&param=skipParent,multiple'), function(data)
+    $.get(createLink('product', 'ajaxGetPlans', "productID=" + productID + '&branch=0,' + branchID + '&planID=0&fieldID&needCreate=&expired=unexpired&param=skipParent,multiple'), function(data)
     {
         if(data)
         {
