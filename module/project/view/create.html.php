@@ -41,7 +41,7 @@
     <form class='form-indicator main-form form-ajax' method='post' target='hiddenwin' id='dataform'>
       <table class='table table-form'>
         <tr>
-          <th class='w-120px'><?php echo $lang->project->parent;?></th>
+          <th class='w-130px'><?php echo $lang->project->parent;?></th>
           <?php $disabled = $this->app->tab == 'product' ? 'disabled' : '';?>
           <td><?php echo html::select('parent', $programList, $programID, "class='form-control chosen' onchange='setParentProgram(this.value)' $disabled");?></td>
           <?php if($disabled) echo html::hidden('parent', $programID);?>
@@ -56,7 +56,7 @@
         </tr>
         <tr>
           <th><?php echo $lang->project->code;?></th>
-          <td><?php echo html::input('code', '', "class='form-control' required");?></td>
+          <td><?php echo html::input('code', $code, "class='form-control' required");?></td>
         </tr>
         <tr>
           <th><?php echo $lang->project->PM;?></th>
@@ -147,11 +147,11 @@
               <?php $i = 0;?>
               <?php foreach($products as $product):?>
               <?php $plans = zget($productPlans, $product->id, array(0 => ''));?>
-              <div class="col-sm-4" id="plan<?php echo $i;?>"><?php echo html::select("plans[" . $product->id . "]", $plans, '', "class='form-control chosen'");?></div>
+              <div class="col-sm-4" id="plan<?php echo $i;?>"><?php echo html::select("plans[" . $product->id . "]", $plans, '', "class='form-control chosen' multiple");?></div>
               <?php $i++;?>
               <?php endforeach;?>
               <?php else:?>
-              <div class="col-sm-4" id="plan0" style="padding-right: 6px;"><?php echo html::select("plans[][]", '', '', "class='form-control chosen'");?></div>
+              <div class="col-sm-4" id="plan0" style="padding-right: 6px;"><?php echo html::select("plans[][]", '', '', "class='form-control chosen' multiple");?></div>
               <?php endif;?>
             </div>
           </td>

@@ -59,7 +59,8 @@ $account = $this->app->user->account;
     <thead>
       <tr>
         <?php foreach ($cols as $col):?>
-        <th class='c-board s-<?php echo $col?>'><?php echo $lang->story->stageList[$col];?></th>
+        <?php $storiesCount = empty($stories[$col]) ? 0 : count($stories[$col]);?>
+        <th class='c-board s-<?php echo $col?>'><?php echo $lang->story->stageList[$col] . ' (' . $storiesCount . ')';?></th>
         <?php endforeach;?>
       </tr>
     </thead>

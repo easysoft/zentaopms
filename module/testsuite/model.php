@@ -105,6 +105,24 @@ class testsuiteModel extends model
     }
 
     /**
+     * Get test suites pairs of a product.
+     *
+     * @param  int    $productID
+     * @access public
+     * @return array
+     */
+    public function getSuitePairs($productID)
+    {
+        return $this->dao->select("id, name")->from(TABLE_TESTSUITE)
+            ->where('product')->eq((int)$productID)
+            ->beginIF($this->config->systemMode == 'new' and $this->lang->navGroup->testsuite != 'qa')->andWhere('project')->eq($this->session->project)->fi()
+            ->andWhere('deleted')->eq(0)
+            ->andWhere("(`type` = 'public' OR (`type` = 'private' and addedBy = '{$this->app->user->account}'))")
+            ->orderBy('id_desc')
+            ->fetchPairs();
+    }
+
+    /**
      * Get unit suite.
      *
      * @param  int    $productID
@@ -218,6 +236,27 @@ class testsuiteModel extends model
 
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'testcase', false);
         return $this->loadModel('testcase')->appendData($cases);
+    }
+
+    /**
+     * Get linked cases pairs of suite.
+     *
+     * @param  int    $suiteID
+     * @access public
+     * @return array
+     */
+    public function getLinkedCasePairs($suiteID)
+    {
+        $suite = $this->getById($suiteID);
+        return $this->dao->select('t1.id, t1.title')->from(TABLE_CASE)->alias('t1')
+            ->leftJoin(TABLE_SUITECASE)->alias('t2')->on('t1.id=t2.case')
+            ->where('t2.suite')->eq($suiteID)
+            ->beginIF($this->config->systemMode == 'new' and $this->lang->navGroup->testsuite != 'qa')->andWhere('t1.project')->eq($this->session->project)->fi()
+            ->andWhere('t1.product')->eq($suite->product)
+            ->andWhere('t1.product')->eq($suite->product)
+            ->andWhere('t1.deleted')->eq(0)
+            ->orderBy('id_desc')
+            ->fetchPairs('id');
     }
 
     /**

@@ -1251,6 +1251,40 @@ function createBugMenu(options)
     return items;
 }
 
+/**
+ * Handle sort cards.
+ *
+ * @param  object event
+*  @access public
+ * @return void
+ */
+function handleSortCards(event)
+{
+    if(window.sortableDisabled || groupBy != 'default') return;
+    var newLaneID = event.element.closest('.kanban-lane').data('id');
+    var newColID  = event.element.closest('.kanban-col').data('id');
+    var cards     = event.element.closest('.kanban-lane-items').data('cards');
+    var orders    = cards.map(function(card){return card.id});
+    var fromID    = String(event.element.data('id'));
+    var toID      = String(event.target.data('id'));
+
+    orders.splice(orders.indexOf(fromID), 1);
+    orders.splice(orders.indexOf(toID) + (event.insert === 'before' ?  0 : 1), 0, fromID);
+
+    var url = createLink('kanban', 'sortCard', 'kanbanID=' + executionID + '&laneID=' + newLaneID + '&columnID=' + newColID + '&cards=' + orders.join(','));
+    $.getJSON(url, function(response)
+    {
+        if(response.result === 'fail')
+        {
+            if(typeof response.message === 'string' && response.message.length)
+            {
+                bootbox.alert(response.message);
+            }
+            setTimeout(function(){return location.reload()}, 3000);
+        }
+    });
+}
+
 /* Define menu creators */
 window.menuCreators =
 {
@@ -1262,9 +1296,6 @@ window.menuCreators =
     bug:          createBugMenu,
 };
 
-/**
- * init Kanban
- */
 /**
  * Init kanban.
  *
@@ -1295,6 +1326,7 @@ function initKanban($kanban)
         onRenderHeaderCol: renderHeaderCol,
         onRenderCount:     renderCount,
         droppable:         {target: findDropColumns, finish:handleFinishDrop},
+        sortable:          handleSortCards,
         virtualize:        true,
         virtualCardList:   true,
         virtualRenderOptions: {container: $(window).add($('#kanbanContainer'))}

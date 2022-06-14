@@ -37,7 +37,7 @@
       <table class='table table-form'>
         <?php if($project->model != 'kanban'):?>
         <tr>
-          <th><?php echo $lang->project->model;?></th>
+          <th class='w-130px'><?php echo $lang->project->model;?></th>
           <td><?php echo html::select('model', $lang->project->modelList, $model, "class='form-control chosen' required $disableModel");?></td>
         </tr>
         <?php endif;?>
@@ -156,11 +156,11 @@
               <?php foreach($linkedProducts as $product):?>
                 <?php foreach($linkedBranches[$product->id] as $branchID => $branch):?>
                 <?php $plans = isset($productPlans[$product->id][$branchID]) ? $productPlans[$product->id][$branchID] : array();?>
-                <div class="col-sm-4" id="plan<?php echo $i;?>" style="padding-right: 6px;"><?php echo html::select("plans[{$product->id}][{$branchID}]", $plans, $branches[$product->id][$branchID]->plan, "class='form-control chosen'");?></div>
+                <div class="col-sm-4" id="plan<?php echo $i;?>" style="padding-right: 6px;"><?php echo html::select("plans[{$product->id}][{$branchID}][]", $plans, $branches[$product->id][$branchID]->plan, "class='form-control chosen' multiple");?></div>
                 <?php $i++;?>
                 <?php endforeach;?>
               <?php endforeach;?>
-              <div class="col-sm-4" id="planDefault" style="padding-right: 6px;"><?php echo html::select("plans[0][0]", array(), 0, "class='form-control chosen'");?></div>
+              <div class="col-sm-4" id="planDefault" style="padding-right: 6px;"><?php echo html::select("plans[0][0][]", array(), 0, "class='form-control chosen' multiple");?></div>
             </div>
           </td>
         </tr>

@@ -511,6 +511,9 @@ class upgradeModel extends model
             case '17_0_beta2':
                 $this->changeStoryNeedReview();
                 break;
+            case '17_0':
+                $this->replaceSetLanePriv();
+                break;
         }
 
         $this->deletePatch();
@@ -6318,5 +6321,41 @@ class upgradeModel extends model
         if(!empty($liteNeedReview)) $this->setting->setItems("system.story@lite", $data);
 
         $this->setting->deleteItems('owner=system&module=story&section=&key=forceReviewAll');
+    }
+
+    /**
+     * The setlane permission is deleted. We need to replace setlane with editlanename and editlanecolor.
+     *
+     * @access public
+     * @return void
+     */
+    public function replaceSetLanePriv()
+    {
+        $groupIDList = $this->dao->select('`group`')->from(TABLE_GROUPPRIV)
+            ->where('module')->eq('kanban')
+            ->andWhere('method')->eq('setLane')
+            ->fetchAll();
+
+        if(!empty($groupIDList))
+        {
+            $this->dao->delete()->from(TABLE_GROUPPRIV)
+                ->where('module')->eq('kanban')
+                ->andWhere('method')->eq('setLane')
+                ->exec();
+        }
+
+        foreach($groupIDList as $groupID)
+        {
+            $data = new stdClass();
+            $data->group  = $groupID->group;
+            $data->module = 'kanban';
+            $data->method = 'editLaneName';
+            $this->dao->insert(TABLE_GROUPPRIV)->data($data)->exec();
+
+            $data->method = 'editLaneColor';
+            $this->dao->insert(TABLE_GROUPPRIV)->data($data)->exec();
+        }
+
+        return true;
     }
 }

@@ -115,7 +115,7 @@ public function getKanban4Group($executionID, $browseType, $groupBy, $searchValu
                 if($browseType == 'task')
                 {
                     if($searchValue != '' and strpos($object->name, $searchValue) === false) continue;
-                    $cardData['name'] = $object->name;
+                    $cardData['name']   = $object->name;
                     $cardData['status'] = $object->status;
                     $cardData['left']   = $object->left;
                 }
@@ -195,9 +195,10 @@ public function getCardGroupByExecution($executionID, $browseType = 'all', $orde
 
                 if($cell->type == 'task')
                 {
-                    $cardData['name']   = $object->name;
-                    $cardData['status'] = $object->status;
-                    $cardData['left']   = $object->left;
+                    $cardData['name']       = $object->name;
+                    $cardData['status']     = $object->status;
+                    $cardData['left']       = $object->left;
+                    $cardData['estStarted'] = $object->estStarted;
                 }
                 else
                 {

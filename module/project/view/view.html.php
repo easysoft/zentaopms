@@ -146,10 +146,13 @@
             <div class="detail-content">
               <div class="row row-grid">
                 <?php foreach($products as $productID => $product):?>
-                <?php foreach($product->plans as $planID):?>
+                <?php foreach($product->plans as $planIDList):?>
+                <?php $planIDList = explode(',', $planIDList);?>
+                <?php foreach($planIDList as $planID):?>
                 <?php if(isset($planGroup[$productID][$planID])):?>
                 <div class="col-xs-12"><?php echo html::a($this->createLink('productplan', 'view', "planID={$planID}"), $product->name . '/' . $planGroup[$productID][$planID]);?></div>
                 <?php endif;?>
+                <?php endforeach;?>
                 <?php endforeach;?>
                 <?php endforeach;?>
               </div>

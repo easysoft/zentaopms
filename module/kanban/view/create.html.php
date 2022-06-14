@@ -21,7 +21,7 @@
     <table class='table table-form'>
       <tr>
         <th><?php echo $lang->kanbanspace->type;?></th>
-        <td><?php echo html::select('type', $typeList, $type, "onchange='changeValue({$spaceID}, this.value)' class='form-control chosen'");?></td>
+        <td><?php echo html::radio('type', $typeList, $type, "onchange='changeValue({$spaceID}, this.value)'");?></td>
         <td></td>
       </tr>
       <tr>

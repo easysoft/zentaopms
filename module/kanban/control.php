@@ -21,7 +21,7 @@ class kanban extends control
      * @access public
      * @return void
      */
-    public function space($browseType = 'private', $recTotal = 0, $recPerPage = 15, $pageID = 1)
+    public function space($browseType = 'involved', $recTotal = 0, $recPerPage = 15, $pageID = 1)
     {
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);

@@ -949,6 +949,36 @@ class testtaskModel extends model
     }
 
     /**
+     * Get test runs of a suite.
+     *
+     * @param  int    $taskID
+     * @param  int    $suiteID
+     * @param  string $orderBy
+     * @param  object $pager
+     * @access public
+     * @return array
+     */
+    public function getRunsBySuite($taskID, $suiteID, $orderBy, $pager = null)
+    {
+        /* Select the table for these special fields. */
+        $specialFields = ',assignedTo,status,lastRunResult,lastRunner,lastRunDate,';
+        $fieldToSort   = substr($orderBy, 0, strpos($orderBy, '_'));
+        $orderBy       = strpos($specialFields, ',' . $fieldToSort . ',') !== false ? ('t1.' . $orderBy) : ('t2.' . $orderBy);
+
+        $cases = $this->loadModel('testsuite')->getLinkedCasePairs($suiteID);
+
+        return $this->dao->select('t2.*,t1.*,t2.version as caseVersion,t3.title as storyTitle,t2.status as caseStatus')->from(TABLE_TESTRUN)->alias('t1')
+            ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case = t2.id')
+            ->leftJoin(TABLE_STORY)->alias('t3')->on('t2.story = t3.id')
+            ->where('t1.task')->eq((int)$taskID)
+            ->andWhere('t2.deleted')->eq(0)
+            ->andWhere('t2.id')->in(array_keys($cases))
+            ->orderBy($orderBy)
+            ->page($pager)
+            ->fetchAll('id');
+    }
+
+    /**
      * Get test runs of a user.
      *
      * @param  int    $taskID
@@ -999,6 +1029,10 @@ class testtaskModel extends model
         if($browseType == 'bymodule' or $browseType == 'all')
         {
             $runs = $this->getRuns($task->id, $modules, $sort, $pager);
+        }
+        elseif($browseType == 'bysuite')
+        {
+            $runs = $this->getRunsBySuite($task->id, $queryID, $sort, $pager);
         }
         elseif($browseType == 'assignedtome')
         {

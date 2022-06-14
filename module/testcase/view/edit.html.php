@@ -233,12 +233,13 @@
                 <th><?php echo $lang->testcase->keywords;?></th>
                 <td><?php echo html::input('keywords', $case->keywords, "class='form-control'");?></td>
               </tr>
-              <?php if(!$isLibCase):?>
+              <?php if(!$isLibCase and common::hasPriv('testcase', 'linkCases')):?>
               <tr>
                 <th><?php echo $lang->testcase->linkCase;?></th>
                 <td><?php echo html::a($this->createLink('testcase', 'linkCases', "caseID=$case->id", '', true), $lang->testcase->linkCases, '', "data-type='iframe' data-toggle='modal' data-width='95%'");?></td>
               </tr>
-              <tr>
+              <?php $class = isset($case->linkCaseTitles) ? '' : 'hide';?>
+              <tr class=<?php echo $class;?>>
                 <th></th>
                 <td>
                   <ul class='list-unstyled'>
@@ -255,6 +256,33 @@
                     }
                     ?>
                     <span id='linkCaseBox'></span>
+                  </ul>
+                </td>
+              </tr>
+              <?php endif;?>
+              <?php if(!$isLibCase and common::hasPriv('testcase', 'linkBugs')):?>
+              <tr>
+                <th><?php echo $lang->testcase->linkBug;?></th>
+                <td><?php echo html::a($this->createLink('testcase', 'linkBugs', "caseID=$case->id", '', true), $lang->testcase->linkBugs, '', "data-type='iframe' data-toggle='modal' data-width='95%'");?></td>
+              </tr>
+              <?php $class = !empty($case->toBugs) ? '' : 'hide';?>
+              <tr class=<?php echo $class;?>>
+                <th></th>
+                <td>
+                  <ul class='list-unstyled'>
+                    <?php
+                    if(isset($case->toBugs))
+                    {
+                        foreach($case->toBugs as $bugID => $bugTitle)
+                        {
+                            echo "<li><div class='checkbox-primary'>";
+                            echo "<input type='checkbox' checked='checked' name='linkBug[]' value=$bugID />";
+                            echo "<label>#{$bugID} {$bugTitle}</label>";
+                            echo '</div></li>';
+                        }
+                    }
+                    ?>
+                    <span id='linkBugBox'></span>
                   </ul>
                 </td>
               </tr>

@@ -3,15 +3,15 @@
 #spaceList .spaceTitle > div {display: inline-block;}
 #spaceList .spaceTitle .label-closed {background: #AAA !important; color: #FFF;}
 #spaceList .spaceTitle .icon-zone {color: #838a9d; margin-top:100px;}
-#spaceList .spaceActions {margin-top: 10px;}
+#spaceList .spaceActions {margin-top: -4px;}
 #spaceList .spaceActions > a{margin-left: 10px;}
 .space .menu {margin-left: 5px; margin-right:5px;}
 .space .table-empty-tip {padding: 40px 10px;}
-.space .spaceTitle.pull-left {overflow: hidden; white-space: nowrap; max-width: calc(100% - 155px)}
+.space .spaceTitle.pull-left {overflow: hidden; white-space: nowrap; max-width: calc(100% - 220px)}
 .spaceName {font-size: 16px; font-weight: bold;}
 .spaceTitle .icon-cube {font-size: 16px;}
-.spaceDesc {font-size: 13px; color: #838A9D; margin: -5px 0 5px 18px;}
-#more .setting {margin-left: -25px; min-width: 80px}
+.spaceDesc {font-size: 13px; color: #838A9D; margin: -5px 0 5px 0;}
+#setting .setting {margin-left: -25px; min-width: 80px}
 
 .kanbans > .col {width: 25% !important;}
 @media screen and (max-width: 1500px) {.kanbans > .col {width: 25%;}}
@@ -43,4 +43,5 @@
 
 a.disabled {pointer-events: none;}
 
-.noBorder{border: 0px;}
+.noBorder {border: 0px;}
+.position {padding-right: 5px;}

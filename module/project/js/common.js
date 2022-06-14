@@ -196,12 +196,12 @@ function loadPlans(product, branchID)
     $("input[name='products[" + index + "]']").remove();
     $("input[name='branch[" + index + "]']").remove();
 
-    $.get(createLink('product', 'ajaxGetPlans', "productID=" + productID + '&branch=0,' + branchID + '&planID=0&fieldID&needCreate=&expired=' + (config.currentMethod == 'create' ? 'unexpired' : '') + '&param=skipParent'), function(data)
+    $.get(createLink('product', 'ajaxGetPlans', "productID=" + productID + '&branch=0,' + branchID + '&planID=0&fieldID&needCreate=&expired=unexpired&param=skipParent,multiple'), function(data)
     {
         if(data)
         {
             if($("div#plan" + index).size() == 0) $("#plansBox .row").append('<div class="col-sm-4" id="plan' + index + '"></div>');
-            $("div#plan" + index).html(data).find('select').attr('name', 'plans[' + productID + ']' + '[' + branchID + ']').attr('id', 'plans' + productID).chosen();
+            $("div#plan" + index).html(data).find('select').attr('name', 'plans[' + productID + ']' + '[' + branchID + '][]').attr('id', 'plans' + productID).chosen();
 
             adjustPlanBoxMargin();
         }
@@ -323,12 +323,17 @@ $(document).on('change', "#plansBox select[name^='plans']", function()
     var $plan = $(this);
     $("#plansBox select[name^='plans']").each(function()
     {
-        if($plan.val() != 0 && $plan.val() == $(this).val() && $plan.closest('div').attr('id') != $(this).closest('div').attr('id'))
+        var planIDList = $plan.val() == null ? 0 : $plan.val();
+        for(var i = 0; i < planIDList.length; i++)
         {
-            bootbox.alert(errorSamePlans);
-            $plan.val(0);
-            $plan.trigger("chosen:updated");
-            return false;
+            var planID = planIDList[i];
+            if(planID != 0 && $(this).val() && $(this).val().includes(planID) && $plan.closest('div').attr('id') != $(this).closest('div').attr('id'))
+            {
+                bootbox.alert(errorSamePlans);
+                $plan.val(0);
+                $plan.trigger("chosen:updated");
+                return false;
+            }
         }
     });
 });
