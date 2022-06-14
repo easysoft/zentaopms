@@ -5,7 +5,7 @@ XVERSION    = $(shell head -n 1 xuanxuan/XVERSION)
 #XUANPATH     := $(XUANXUAN_SRC_PATH)
 #BUILD_PATH   := $(if $(ZENTAO_BUILD_PATH),$(ZENTAO_BUILD_PATH),$(shell pwd))
 #RELEASE_PATH := $(if $(ZENTAO_RELEASE_PATH),$(ZENTAO_RELEASE_PATH),$(shell pwd))
-XUANPATH     := /home/z/ci/gitlab/xuan/
+XUANPATH     := /home/gitlab-runner/ci/gitlab/xuan/
 BUILD_PATH   := /home/z/ci/build/
 RELEASE_PATH := /home/z/ci/release/
 
