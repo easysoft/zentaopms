@@ -59,7 +59,7 @@
         <?php foreach($deptUsers as $deptAccount => $userName):?>
         <?php if(!isset($users[$deptAccount])) continue;?>
         <tr class='addedItem'>
-          <td><?php echo html::select("accounts[$i]", $users, $deptAccount, "class='form-control chosen' onchange='setRole(this.value, $i)'");?></td>
+          <td><?php echo html::select("accounts[$i]", $users, $deptAccount, "class='form-control user-picker' onchange='setRole(this.value, $i)'");?></td>
           <td><?php echo html::input("roles[$i]", $roles[$deptAccount], "class='form-control'");?></td>
           <td><?php echo html::input("days[$i]", $project->days, "class='form-control'");?></td>
           <td><?php echo html::input("hours[$i]", $config->execution->defaultWorkhours, "class='form-control'");?></td>
