@@ -511,6 +511,9 @@ class upgradeModel extends model
             case '17_0_beta2':
                 $this->changeStoryNeedReview();
                 break;
+            case '17_0':
+                $this->replaceSetLanePriv();
+                break;
         }
 
         $this->deletePatch();
