@@ -1401,8 +1401,12 @@ class testcase extends control
         $case    = $this->testcase->getById($caseID);
         $libCase = $this->testcase->getById($libcaseID);
         $version = $case->version + 1;
-        $this->dao->update(TABLE_CASE)->set('version')->eq($version)->set('fromCaseVersion')->eq($version)->where('id')->eq($caseID)->exec();
-        $this->dao->update(TABLE_CASE)->set('precondition')->eq($libCase->precondition)->where('id')->eq($caseID)->exec();
+        $this->dao->update(TABLE_CASE)
+            ->set('version')->eq($version)
+            ->set('fromCaseVersion')->eq($version)
+            ->set('precondition')->eq($libCase->precondition)
+            ->where('id')->eq($caseID)
+            ->exec();
 
         foreach($libCase->steps as $step)
         {
