@@ -37,7 +37,7 @@
       <table class='table table-form'>
         <?php if($project->model != 'kanban'):?>
         <tr>
-          <th><?php echo $lang->project->model;?></th>
+          <th class='w-130px'><?php echo $lang->project->model;?></th>
           <td><?php echo html::select('model', $lang->project->modelList, $model, "class='form-control chosen' required $disableModel");?></td>
         </tr>
         <?php endif;?>

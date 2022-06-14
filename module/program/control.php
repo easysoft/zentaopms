@@ -429,7 +429,7 @@ class program extends control
         if($productCount) return print(js::alert($this->lang->program->hasProduct));
 
         $program = $this->dao->select('*')->from(TABLE_PROGRAM)->where('id')->eq($programID)->fetch();
-        if($confirm == 'no') return print(js::confirm($this->lang->program->confirmDelete, $this->createLink('program', 'delete', "programID=$programID&confirm=yes")));
+        if($confirm == 'no') return print(js::confirm(sprintf($this->lang->program->confirmDelete, $program->name), $this->createLink('program', 'delete', "programID=$programID&confirm=yes")));
 
         $this->dao->update(TABLE_PROGRAM)->set('deleted')->eq(1)->where('id')->eq($programID)->exec();
         $this->loadModel('action')->create('program', $programID, 'deleted', '', ACTIONMODEL::CAN_UNDELETED);
@@ -543,7 +543,7 @@ class program extends control
     {
         if($confirm == 'no')
         {
-            return print(js::confirm($this->lang->program->confirmDelete, $this->inlink('unlinkStakeholder', "stakeholderID=$stakeholderID&programID=$programID&confirm=yes")));
+            return print(js::confirm($this->lang->program->unlinkStakeholder, $this->inlink('unlinkStakeholder', "stakeholderID=$stakeholderID&programID=$programID&confirm=yes")));
         }
         else
         {
