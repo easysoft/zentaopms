@@ -6,7 +6,7 @@ sonarqube:
     key: "${CI_JOB_NAME}"
     paths:
       - .sonar/cache
-  script: 
+  script:
       - sonar-scanner -Dsonar.inclusions=$(git diff --name-only HEAD~1|tr '\n' ',')
   allow_failure: true
   only:
@@ -14,6 +14,7 @@ sonarqube:
 packages:
   script:
     - make cizip
+  allow_failure: true
   only:
     - merge_request
     - master
