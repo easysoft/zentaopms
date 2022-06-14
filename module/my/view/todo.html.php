@@ -36,8 +36,14 @@
   </div>
   <div class="btn-toolbar pull-right">
     <?php if(common::hasPriv('todo', 'export')) echo html::a(helper::createLink('todo', 'export', "userID={$user->id}&orderBy=$orderBy", 'html', true), "<i class='icon-export muted'> </i> " . $lang->todo->export, '', "class='btn btn-link export' data-width='600px'");?>
-    <?php common::printLink('todo', 'batchCreate', '', "<i class='icon icon-plus'></i> " . $lang->todo->batchCreate, '', "id='batchCreate' class='btn btn-secondary iframe' data-width='80%'", '', 'true');?>
+    <div class='btn-group dropdown'>
     <?php common::printLink('todo', 'create', '', "<i class='icon icon-plus'></i> " . $lang->todo->create, '', "id='create' class='btn btn-primary iframe' data-width='80%' data-app='my'", '', 'true');?>
+    <button type='button' class='btn btn-primary dropdown-toggle' data-toggle='dropdown'><span class='caret'></span></button>
+    <ul class='dropdown-menu pull-right'>
+      <li><?php echo html::a($this->createLink('todo', 'create', '', '', true), $lang->todo->create, '', "class='iframe' data-width='80%'");?></li>
+      <li><?php echo html::a($this->createLink('todo', 'batchCreate', '', '', true), $lang->todo->batchCreate, '', "class='iframe' data-width='80%'");?></li>
+    </ul>
+    </div>
   </div>
 </div>
 <div id="mainContent">
