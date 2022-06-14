@@ -123,6 +123,37 @@
               </p>
             </div>
           </div>
+          <?php if($this->config->systemMode == 'new'):?>
+          <div class="detail">
+            <div class="detail-title">
+              <strong><?php echo $lang->project->parent;?></strong>
+            </div>
+            <div class="detail-content">
+              <div class="row row-grid">
+                <div class="col-xs-6">
+                <?php if($project->grade > 1):?>
+                  <i class='icon icon-program text-muted'></i>
+                  <?php
+                  $end = end($programList);
+                  reset($programList);
+                  foreach($programList as $ID => $name)
+                  {
+                      if($name != $end)
+                      {
+                          echo html::a($this->createLink('program', 'product', "programID=$ID"), $name) . '/';
+                      }
+                      else
+                      {
+                          echo html::a($this->createLink('program', 'product', "programID=$ID"), $name);
+                      }
+                  }
+                  ?>
+                <?php endif;?>
+                </div>
+              </div>
+            </div>
+          </div>
+          <?php endif;?>
           <div class="detail">
             <div class="detail-title">
               <strong><?php echo $lang->project->manageProducts;?></strong>

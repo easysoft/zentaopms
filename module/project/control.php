@@ -732,6 +732,14 @@ class project extends control
         $this->session->set('teamList', $this->app->getURI(true), 'project');
 
         $project = $this->project->getById($projectID);
+
+        if($this->config->systemMode == 'new')
+        {
+            $programList = array_filter(explode(',', $project->path));
+            array_pop($programList);
+            $this->view->programList = $this->loadModel('program')->getPairsByList($programList);
+        }
+
         if(empty($project) || strpos('scrum,waterfall,kanban', $project->model) === false)
         {
             if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'fail', 'code' => 404, 'message' => '404 Not found'));
