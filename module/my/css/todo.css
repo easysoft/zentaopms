@@ -1,2 +1,4 @@
 .datepicker-wrapper {width: 110px !important;}
 .datepicker-wrapper .form-control {max-width: 110px; line-height: 25px; height: 26px !important;}
+.btn-group button.dropdown-toggle.btn-primary {padding: 6px;}
+.btn-group a.btn-primary {border-right: 1px solid rgba(255,255,255,0.2);}
