@@ -3373,6 +3373,7 @@ class execution extends control
         $this->view->team         = $team;
         $this->view->executionID  = $executionID;
         $this->view->storyID      = $storyID;
+        $this->view->story        = $this->story->getById($storyID);
         $this->display();
     }
 
