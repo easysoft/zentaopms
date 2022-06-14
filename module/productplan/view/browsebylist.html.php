@@ -9,7 +9,7 @@
  * @link        https://www.zentao.net
  */
 ?>
-<style> .c-actions {width: 240px;} </style>
+<style> .c-actions {width: 250px;} </style>
 <div id="mainMenu" class="clearfix">
   <div class="btn-toolbar pull-left">
     <?php foreach(customModel::getFeatureMenu($this->moduleName, $this->methodName) as $menuItem):?>
