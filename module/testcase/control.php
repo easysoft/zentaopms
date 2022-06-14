@@ -1335,6 +1335,42 @@ class testcase extends control
     }
 
     /**
+     * Link related bugs.
+     *
+     * @param  int    $caseID
+     * @param  string $browseType
+     * @param  int    $param
+     * @access public
+     * @return void
+     */
+    public function linkBugs($caseID, $browseType = '', $param = 0)
+    {
+        $this->loadModel('bug');
+
+        /* Get case and queryID. */
+        $case    = $this->testcase->getById($caseID);
+        $queryID = ($browseType == 'bySearch') ? (int)$param : 0;
+
+        /* Build the search form. */
+        $actionURL = $this->createLink('testcase', 'linkBugs', "caseID=$caseID&browseType=bySearch&queryID=myQueryID", '', true);
+        $objectID  = 0;
+        if($this->app->tab == 'project')   $objectID = $case->project;
+        if($this->app->tab == 'execution') $objectID = $case->execution;
+        $this->bug->buildSearchForm($case->product, $this->products, $queryID, $actionURL, $objectID);
+
+        /* Get cases to link. */
+        $bugs2Link = $this->testcase->getBugs2Link($caseID, $browseType, $queryID);
+
+        /* Assign. */
+        $this->view->position[] = $this->lang->testcase->linkBugs;
+        $this->view->case       = $case;
+        $this->view->bugs2Link  = $bugs2Link;
+        $this->view->users      = $this->loadModel('user')->getPairs('noletter');
+
+        $this->display();
+    }
+
+    /**
      * Confirm testcase changed.
      *
      * @param  int    $caseID

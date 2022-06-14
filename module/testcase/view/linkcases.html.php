@@ -89,6 +89,7 @@ $(function()
         });
         $.closeModal();
         parent.$('#linkCaseBox').html(output);
+        parent.$('#linkCaseBox').closest('tr').removeClass('hide');
         return false;
     });
 });
