@@ -2044,6 +2044,16 @@ class execution extends control
 
         $executionID = $this->execution->saveState((int)$executionID, $this->executions);
         $execution   = $this->execution->getById($executionID, true);
+
+        $execution->projectInfo = $this->loadModel('project')->getByID($execution->project);
+
+        if($this->config->systemMode == 'new')
+        {
+            $programList = array_filter(explode(',', $execution->projectInfo->path));
+            array_pop($programList);
+            $this->view->programList = $this->loadModel('program')->getPairsByList($programList);
+        }
+
         $type = $this->config->vision == 'lite' ? 'kanban' : 'stage,sprint,kanban';
         if(empty($execution) || strpos($type, $execution->type) === false) return print(js::error($this->lang->notFound) . js::locate('back'));
 

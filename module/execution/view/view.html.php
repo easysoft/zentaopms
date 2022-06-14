@@ -174,6 +174,52 @@
                 </p>
               </div>
             </div>
+            <?php if($this->config->systemMode == 'new'):?>
+            <div class="detail">
+              <div class="detail-title">
+                <strong><?php echo $lang->project->parent;?></strong>
+              </div>
+              <div class="detail-content">
+                <div class="row row-grid">
+                  <div class="col-xs-6">
+                  <?php if($execution->projectInfo->grade > 1):?>
+                    <i class='icon icon-program text-muted'></i>
+                    <?php
+                    $end = end($programList);
+                    reset($programList);
+                    foreach($programList as $ID => $name)
+                    {
+                        if($name != $end)
+                        {
+                            echo html::a($this->createLink('program', 'product', "programID=$ID"), $name) . '/';
+                        }
+                        else
+                        {
+                            echo html::a($this->createLink('program', 'product', "programID=$ID"), $name);
+                        }
+                    }
+                    ?>
+                  <?php endif;?>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <?php endif;?>
+            <?php if($this->config->systemMode == 'new'):?>
+            <div class="detail">
+              <div class="detail-title">
+                <strong><?php echo $lang->project->project;?></strong>
+              </div>
+              <div class="detail-content">
+                <div class="row row-grid">
+                  <div class="col-xs-6">
+                    <i class='icon icon-project text-muted'></i>
+                    <?php echo html::a($this->createLink('project', 'index', "projectID=$execution->project", '', '', $execution->project), $execution->projectInfo->name, '', 'class="text-ellipsis text-primary"')?>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <?php endif;?>
             <?php if(!in_array($execution->attribute, array('request', 'design', 'review'))): ?>
             <div class="detail">
               <div class="detail-title">
