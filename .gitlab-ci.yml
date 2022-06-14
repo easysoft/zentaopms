@@ -22,7 +22,6 @@ packages:
 notify:
   script:
     - 'curl --location --request POST ''http://api.lf.oop.cc/api/v1/xuan/chatMessage'' --header ''Content-Type: application/json'' --data-raw ''{"gid": "84be4c6e-02e3-4fdc-b081-318c0c1eca02", "title": "开源包下载地址", "content": "点击查看详情链接", "url": "http://10.0.7.242:8080/allpacks/"}'''
-  needs: [packages]
   when: on_success
   only:
     - merge_request
