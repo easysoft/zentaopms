@@ -856,13 +856,6 @@ function handleFinishDrop(event)
     $('#kanbans').find('.can-drop-here').removeClass('can-drop-here');
 }
 
-/** Handle sort cards in column */
-function handleSortColCards()
-{
-    /* TODO: handle sort cards from column contextmenu */
-    return false;
-}
-
 /**
  * Create column menu
  * @returns {Object[]}
@@ -1096,6 +1089,60 @@ window.affixKanbanHeader = function($kanbanBoard, affixed)
     $kanbanBoard.css('padding-top', affixed ? $header.outerHeight() : '');
 }
 
+/**
+ * Handle sort cards.
+ *
+ * @param  object event
+*  @access public
+ * @return void
+ */
+function handleSortCards(event)
+{
+    if(groupBy != 'default' || rdSearchValue != '') return;
+    var newLaneID = event.element.closest('.kanban-lane').data('id');
+    var newColID  = event.element.closest('.kanban-col').data('id');
+    var cards     = event.element.closest('.kanban-lane-items').data('cards');
+    var orders    = cards.map(function(card){return card.id});
+    var fromID    = String(event.element.data('id'));
+    var toID      = String(event.target.data('id'));
+
+    orders.splice(orders.indexOf(fromID), 1);
+    orders.splice(orders.indexOf(toID) + (event.insert === 'before' ?  0 : 1), 0, fromID);
+
+    var url = createLink('kanban', 'sortCard', 'kanbanID=' + executionID + '&laneID=' + newLaneID + '&columnID=' + newColID + '&cards=' + orders.join(','));
+    $.getJSON(url, function(response)
+    {
+        if(response.result === 'fail')
+        {
+            if(typeof response.message === 'string' && response.message.length)
+            {
+                bootbox.alert(response.message);
+            }
+            setTimeout(function(){return location.reload()}, 3000);
+        }
+        else
+        {
+            $.get(createLink('execution', 'ajaxUpdateKanban', "executionID=" + executionID + "&entertime=0&browseType=" + browseType + "&groupBy=" + groupBy + '&from=execution'), function(data)
+            {
+                if(data && lastUpdateData !== data)
+                {
+                    lastUpdateData = data;
+                    kanbanGroup    = $.parseJSON(data);
+                    var kanbanLane = '';
+                    for(var i in kanbanList)
+                    {
+                        if(kanbanList[i] == 'story') kanbanLane = kanbanGroup.story;
+                        if(kanbanList[i] == 'bug')   kanbanLane = kanbanGroup.bug;
+                        if(kanbanList[i] == 'task')  kanbanLane = kanbanGroup.task;
+
+                        if(browseType == kanbanList[i] || browseType == 'all') updateKanban(kanbanList[i], kanbanLane);
+                    }
+                }
+            });
+        }
+    });
+}
+
 /* Example code: */
 $(function()
 {
@@ -1129,6 +1176,7 @@ $(function()
         onRenderHeaderCol: renderHeaderCol,
         onRenderLaneName:  renderLaneName,
         onRenderCount:     renderColumnCount,
+        sortable:          handleSortCards,
     };
 
     /* Create kanban */
@@ -1215,7 +1263,7 @@ $(function()
     $('#group_chosen .chosen-single span').prepend(kanbanLang.laneGroup + ': ');
 
     /* Ajax update kanban. */
-    var lastUpdateData;
+    lastUpdateData = '';
     setInterval(function()
     {
         $.get(createLink('execution', 'ajaxUpdateKanban', "executionID=" + executionID + "&entertime=" + entertime + "&browseType=" + browseType + "&groupBy=" + groupBy + '&from=execution&searchValue=' + searchValue), function(data)
