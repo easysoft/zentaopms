@@ -87,11 +87,7 @@
         <?php if(!isset($users[$deptAccount])) continue;?>
         <?php if(isset($members2Import[$deptAccount])) continue;?>
         <tr class='addedItem'>
-<<<<<<< HEAD
-          <td><?php echo html::select("accounts[]", $users, $deptAccount, "class='form-control user-picker' onchange='setRole(this.value, $i)' data-max-list-count=" . $config->maxCount);?></td>
-=======
-          <td><?php echo html::select("accounts[]", $users, $deptAccount, "class='form-control picker-select' onchange='setRole(this.value, $i)'");?></td>
->>>>>>> sprint/sunhao/task56391
+          <td><?php echo html::select("accounts[]", $users, $deptAccount, "class='form-control picker-select' onchange='setRole(this.value, $i)' data-max-list-count=" . $config->maxCount);?></td>
           <td><input type='text' name='roles[]' id='role<?php echo $i;?>' class='form-control' value='<?php echo $roles[$deptAccount]?>'/></td>
           <td><input type='text' name='days[]'  id='days<?php echo $i;?>' class='form-control' value='<?php echo $execution->days?>'/></td>
           <td>
@@ -109,11 +105,7 @@
 
         <?php for($j = 0; $j < 5; $j ++):?>
         <tr class='addedItem'>
-<<<<<<< HEAD
-          <td><?php echo html::select("accounts[]", $users, '', "class='form-control user-picker' onchange='setRole(this.value, $i)' data-max-list-count=" . $config->maxCount);?></td>
-=======
-          <td><?php echo html::select("accounts[]", $users, '', "class='form-control picker-select' onchange='setRole(this.value, $i)'");?></td>
->>>>>>> sprint/sunhao/task56391
+          <td><?php echo html::select("accounts[]", $users, '', "class='form-control picker-select' onchange='setRole(this.value, $i)' data-max-list-count=" . $config->maxCount);?></td>
           <td><input type='text' name='roles[]' id='role<?php  echo ($i);?>' class='form-control' /></td>
           <td><input type='text' name='days[]'  id='days<?php  echo ($i);?>' class='form-control' value='<?php echo $execution->days?>'/></td>
           <td>
