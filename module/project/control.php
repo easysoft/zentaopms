@@ -401,7 +401,13 @@ class project extends control
                 $planIdList = array();
                 foreach($_POST['plans'] as $plans)
                 {
-                    foreach($plans as $planID) $planIdList[$planID] = $planID;
+                    foreach($plans as $planList)
+                    {
+                        foreach($planList as $planID)
+                        {
+                            $planIdList[$planID] = $planID;
+                        }
+                    }
                 }
 
                 $planStoryGroup = $this->loadModel('story')->getStoriesByPlanIdList($planIdList);
@@ -557,7 +563,17 @@ class project extends control
 
         if($_POST)
         {
-            $oldPlans = $this->dao->select('plan')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($projectID)->andWhere('plan')->ne(0)->fetchPairs('plan');
+            $oldPlanList = $this->dao->select('plan')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($projectID)->andWhere('plan')->ne(0)->fetchPairs('plan');
+            $oldPlans    = array();
+            foreach($oldPlanList as $oldPlanIDList)
+            {
+                if(is_numeric($oldPlanIDList)) $oldPlans[$oldPlanIDList] = $oldPlanIDList;
+                if(!is_numeric($oldPlanIDList))
+                {
+                    $oldPlanIDList = explode(',', $oldPlanIDList);
+                    foreach($oldPlanIDList as $oldPlanID) $oldPlans[$oldPlanID] = $oldPlanID;
+                }
+            }
 
             $changes = $this->project->update($projectID);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
@@ -574,7 +590,10 @@ class project extends control
             {
                 foreach($_POST['plans'] as $plans)
                 {
-                    foreach($plans as $planID) $newPlans[$planID] = $planID;
+                    foreach($plans as $planIDList)
+                    {
+                        foreach($planIDList as $planID) $newPlans[$planID] = $planID;
+                    }
                 }
             }
 
