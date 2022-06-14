@@ -1155,7 +1155,7 @@ EOF;
      * @access public
      * @return void
      */
-    public function manageContacts($listID = 0, $mode = '')
+    public function manageContacts($listID = 0, $mode = 'new')
     {
         if($_POST)
         {
@@ -1217,7 +1217,6 @@ EOF;
         }
 
         $listID = $listID ? $listID : key($lists);
-        if(!$listID) $mode = 'new';
 
         /* Create or manage list according to mode. */
         if($mode == 'new')
