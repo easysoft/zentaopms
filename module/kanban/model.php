@@ -1499,6 +1499,7 @@ class kanbanModel extends model
             if(empty($column->cards)) continue;
             foreach($cardList as $card)
             {
+                if($card->assignedTo == '') $card->assignedTo = 0;
                 if(strpos($column->cards, ",$card->id,") !== false) $cardGroup[$column->columnType][$card->id] = $card;
             }
         }
@@ -1551,7 +1552,7 @@ class kanbanModel extends model
 
                     $cardData = array();
                     if(in_array($groupBy, array('module', 'story', 'pri', 'severity')) and (int)$object->$groupBy !== $laneID) continue;
-                    if(in_array($groupBy, array('assignedTo', 'type', 'category', 'source')) and $object->$groupBy != $laneID) continue;
+                    if(in_array($groupBy, array('assignedTo', 'type', 'category', 'source')) and $object->$groupBy !== $laneID) continue;
 
                     $cardData['id']         = $object->id;
                     $cardData['order']      = $cardOrder;
