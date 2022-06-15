@@ -45,6 +45,7 @@ $lang->my->pri             = 'Priority';
 $lang->my->alert           = 'You can click on your profile at the top right and select "Preference" to modify your information. ';
 $lang->my->assignedToMe    = 'AssignedToMe';
 $lang->my->byQuery         = 'Search';
+$lang->my->contactList     = 'Contact List';
 
 $lang->my->indexAction      = 'My Index';
 $lang->my->calendarAction   = 'My Calendar';

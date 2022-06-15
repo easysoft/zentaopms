@@ -11,10 +11,20 @@
 <?php include '../../common/view/header.html.php';?>
 <?php js::set('confirmUnlinkStory', $lang->execution->confirmUnlinkStory)?>
 <?php js::set('canBeChanged', $canBeChanged)?>
+<?php
+$cols    = array('projected', 'developing', 'developed', 'testing', 'tested', 'verified', 'released');
+$account = $this->app->user->account;
+?>
 <div id="mainMenu" class="clearfix">
   <div class="btn-toolbar pull-left">
-    <?php $total = 0;?>
-    <?php foreach($stories as $colStories) $total += count($colStories);?>
+    <?php
+    $total = 0;
+    foreach($stories as $col => $colStories)
+    {
+        if(!in_array($col, $cols)) continue;
+        $total += count($colStories);
+    }
+    ?>
     <?php if(common::hasPriv('execution', 'story')) echo html::a($this->createLink('execution', 'story', "executionID=$execution->id"), "<span class='text'>{$lang->story->allStories}</span>", '', "class='btn btn-link'");?>
     <?php if(common::hasPriv('execution', 'storykanban')) echo html::a($this->createLink('execution', 'storykanban', "executionID=$execution->id"), "<span class='text'>{$lang->execution->kanban}</span> <span class='label label-light label-badge'>{$total}</span>", '', "class='btn btn-link btn-active-text'");?>
   </div>
@@ -40,10 +50,6 @@
     <?php if($canBeChanged and $productID and !$this->loadModel('story')->checkForceReview()) common::printLink('story', 'create', "productID=$productID&branch=&moduleID=0&story=0&execution=$execution->id", "<i class='icon icon-plus'></i> " . $lang->execution->createStory, '', "class='btn btn-primary' class='btn btn-link export' data-group='execution'");?>
   </div>
 </div>
-<?php
-$cols    = array('projected', 'developing', 'developed', 'testing', 'tested', 'verified', 'released');
-$account = $this->app->user->account;
-?>
 <div id="kanban" class="main-table" data-ride="table" data-checkable="false" data-group="true">
   <?php if(empty($stories)):?>
   <div class="table-empty-tip">

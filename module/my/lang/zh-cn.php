@@ -45,6 +45,7 @@ $lang->my->pri             = '优先级';
 $lang->my->alert           = '后续您可以点击右上方的头像，选择“个性化设置”修改信息。';
 $lang->my->assignedToMe    = '指派给我';
 $lang->my->byQuery         = '搜索';
+$lang->my->contactList     = '联系人列表';
 
 $lang->my->indexAction      = '地盘仪表盘';
 $lang->my->calendarAction   = '我的日程';

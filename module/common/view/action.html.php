@@ -7,6 +7,7 @@
 <style>
 .histories-list > li {word-break: break-word; word-wrap: break-word;}
 .history-changes del {padding-left: 3px;}
+#actionbox > .detail-content {width:100%; max-height: 800px; overflow: scroll;}
 </style>
   <script>
   $(function()

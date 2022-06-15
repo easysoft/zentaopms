@@ -67,6 +67,9 @@ $(function()
             }
         }
     });
+
+    nonClickableSelectedProduct();
+    $(document).on('change', "select[id^='products']", nonClickableSelectedProduct);
 })
 var lastProjectID = $("#project").val();
 
