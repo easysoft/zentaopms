@@ -1,11 +1,14 @@
 VERSION     = $(shell head -n 1 VERSION)
-LITEVERSION = $(shell head -n 1 extension/lite/LITEVERSION)
 XUANVERSION = $(shell head -n 1 xuanxuan/XUANVERSION)
 XVERSION    = $(shell head -n 1 xuanxuan/XVERSION)
 
-XUANPATH     := $(XUANXUAN_SRC_PATH)
-BUILD_PATH   := $(if $(ZENTAO_BUILD_PATH),$(ZENTAO_BUILD_PATH),$(shell pwd))
-RELEASE_PATH := $(if $(ZENTAO_RELEASE_PATH),$(ZENTAO_RELEASE_PATH),$(shell pwd))
+#XUANPATH     := $(XUANXUAN_SRC_PATH)
+#BUILD_PATH   := $(if $(ZENTAO_BUILD_PATH),$(ZENTAO_BUILD_PATH),$(shell pwd))
+#RELEASE_PATH := $(if $(ZENTAO_RELEASE_PATH),$(ZENTAO_RELEASE_PATH),$(shell pwd))
+XUANPATH      := /home/gitlab-runner/ci/gitlab/xuan/
+XUAN_WEB_PATH := /home/gitlab-runner/ci/packages/web
+BUILD_PATH    := /home/z/ci/build/
+RELEASE_PATH  := /home/z/ci/release/
 
 all:
 	make clean
@@ -94,6 +97,7 @@ zentaoxx:
 	cp -r xuanxuan/config/* zentaoxx/config/
 	cp -r xuanxuan/extension/xuan/* zentaoxx/extension/xuan/
 	cp -r xuanxuan/www/* zentaoxx/www/
+	cp -r $(XUAN_WEB_PATH) zentaoxx/www/data/xuanxuan/
 	mv zentaoxx/db/ zentaoxx/db_bak
 	mkdir zentaoxx/db/
 	cp zentaoxx/db_bak/upgradexuanxuan*.sql zentaoxx/db_bak/xuanxuan.sql zentaoxx/db/
@@ -263,11 +267,31 @@ ciCommon:
 	cp ZenTaoPMS.$(VERSION).zip $(BUILD_PATH)
 	cp ZenTaoPMS.$(VERSION).zip ZenTaoALM.$(VERSION).int.zip $(RELEASE_PATH)
 cizip:
-	make ciCommon
+	make common
+
+        ifneq ($(XUANPATH), )
+	    make zentaoxx
+	    cp zentaoxx/* zentaopms/ -r
+	    rm -rf zentaoxx
+        endif
+
+	make package
+	zip -rq -9 ZenTaoPMS.$(VERSION).zip zentaopms
+	# en
+	cd zentaopms/; grep -rl 'zentao.net'|xargs sed -i 's/zentao.net/zentao.pm/g';
+	cd zentaopms/; grep -rl 'http://www.zentao.pm'|xargs sed -i 's/http:\/\/www.zentao.pm/https:\/\/www.zentao.pm/g';
+	cd zentaopms/config/; echo >> config.php; echo '$$config->isINT = true;' >> config.php
+	mv zentaopms zentaoalm
+	zip -r -9 ZenTaoALM.$(VERSION).int.zip zentaoalm
+	rm -fr zentaoalm
+	# move pms zip to build and release path.
+	rm -f $(BUILD_PATH)/ZenTao*.zip $(RELEASE_PATH)/ZenTaoPMS.$(VERSION).zip $(RELEASE_PATH)/ZenTaoALM.$(VERSION).int.zip
+	cp ZenTaoPMS.$(VERSION).zip $(BUILD_PATH)
+	cp ZenTaoPMS.$(VERSION).zip ZenTaoALM.$(VERSION).int.zip $(RELEASE_PATH)
+	# make zip packages.
 	php tools/packZip.php $(VERSION)
 	sh zip.sh
-	rm -rf tmp/ *.sh
-	rm -rf zentaobiz* zentaomax* $(RELEASE_PATH)/ZenTaoALM.$(VERSION)*.zip $(RELEASE_PATH)/ZenTaoPMS.$(VERSION)*.zip  $(RELEASE_PATH)/pmsPack/*.zip
+	rm -rf tmp/ *.sh zentaobiz* zentaomax* $(RELEASE_PATH)/ZenTaoALM.$(VERSION)*.zip $(RELEASE_PATH)/ZenTaoPMS.$(VERSION)*.zip  $(RELEASE_PATH)/pmsPack/*.zip
 	mv ZenTaoPMS.$(VERSION).zip ZenTaoALM.$(VERSION).int.zip $(RELEASE_PATH)
 	mv ZenTaoALM.$(VERSION).int.php*.zip ZenTaoPMS.$(VERSION).php*.zip $(RELEASE_PATH)/pmsPack
 ci:

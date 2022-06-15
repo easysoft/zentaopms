@@ -61,7 +61,7 @@
     {
         $this->lang->story->create = $this->lang->execution->createStory;
 
-        if($productID and !$this->loadModel('story')->checkForceReview())
+        if($productID)
         {
             $storyModuleID   = (int)$this->cookie->storyModuleParam;
             $createStoryLink = $this->createLink('story', 'create', "productID=$productID&branch=0&moduleID={$storyModuleID}&story=0&execution=$execution->id");

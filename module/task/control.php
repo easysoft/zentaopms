@@ -1170,6 +1170,7 @@ class task extends control
             }
 
             $this->executeHooks($taskID);
+            $this->loadModel('common')->syncPPEStatus($taskID);
 
             if($this->task->needUpdateBugStatus($task))
             {

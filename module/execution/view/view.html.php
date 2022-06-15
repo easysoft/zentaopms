@@ -174,6 +174,52 @@
                 </p>
               </div>
             </div>
+            <?php if($this->config->systemMode == 'new'):?>
+            <div class="detail">
+              <div class="detail-title">
+                <strong><?php echo $lang->project->parent;?></strong>
+              </div>
+              <div class="detail-content">
+                <div class="row row-grid">
+                  <div class="col-xs-12">
+                  <?php if($execution->projectInfo->grade > 1):?>
+                    <i class='icon icon-program text-muted'></i>
+                    <?php
+                    $end = end($programList);
+                    reset($programList);
+                    foreach($programList as $id => $name)
+                    {
+                        if($name != $end)
+                        {
+                            echo common::hasPriv('program', 'product')? html::a($this->createLink('program', 'product', "programID=$id"), $name) . '/ ' : $name . '/ ';
+                        }
+                        else
+                        {
+                            echo common::hasPriv('program', 'product') ? html::a($this->createLink('program', 'product', "programID=$id"), $name) : $name;
+                        }
+                    }
+                    ?>
+                  <?php endif;?>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <?php endif;?>
+            <?php if($this->config->systemMode == 'new'):?>
+            <div class="detail">
+              <div class="detail-title">
+                <strong><?php echo $lang->project->project;?></strong>
+              </div>
+              <div class="detail-content">
+                <div class="row row-grid">
+                  <div class="col-xs-12">
+                    <i class='icon icon-project text-muted'></i>
+                    <?php echo common::hasPriv('project', 'index') ? html::a($this->createLink('project', 'index', "projectID=$execution->project", '', '', $execution->project), $execution->projectInfo->name) : $execution->projectInfo->name;?>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <?php endif;?>
             <?php if(!in_array($execution->attribute, array('request', 'design', 'review'))): ?>
             <div class="detail">
               <div class="detail-title">
@@ -198,13 +244,19 @@
               <div class="detail-title"><strong><?php echo $lang->execution->linkPlan;?></strong></div>
               <div class="detail-content">
                 <div class="row row-grid">
-                  <?php foreach($products as $productID => $product):?>
-                  <?php foreach($product->plans as $planID):?>
-                  <?php if(isset($planGroups[$productID][$planID])):?>
-                  <div class="col-xs-12"><?php echo html::a($this->createLink('productplan', 'view', "planID={$planID}"), $product->name . '/' . $planGroups[$productID][$planID]);?></div>
-                  <?php endif;?>
-                  <?php endforeach;?>
-                  <?php endforeach;?>
+                <?php
+                foreach($products as $productID => $product)
+                {
+                    foreach($product->plans as $planIDList)
+                    {
+                        $planIDList = explode(',', $planIDList);
+                        foreach($planIDList as $planID)
+                        {
+                            if(isset($planGroups[$productID][$planID])) echo '<div class="col-xs-12">' . html::a($this->createLink('productplan', 'view', "planID={$planID}"), $product->name . '/' . $planGroups[$productID][$planID]) . '</div>';
+                        }
+                    }
+                }
+                ?>
                 </div>
               </div>
             </div>

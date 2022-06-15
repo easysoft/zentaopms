@@ -115,7 +115,10 @@ class testcase extends control
         /* Set menu, save session. */
         if($this->app->tab == 'project')
         {
-            $this->products = array('0' => $this->lang->product->all) + $this->product->getProducts($projectID, 'all', '', false);
+            $linkedProducts = $this->product->getProducts($projectID, 'all', '', false);
+            $this->products = count($linkedProducts) > 1 ? array('0' => $this->lang->product->all) + $linkedProducts : $linkedProducts;
+            $productID      = count($linkedProducts) > 1 ? $productID : key($linkedProducts);
+
             $branch = 'all';
             $this->loadModel('project')->setMenu($projectID);
         }
@@ -1335,6 +1338,42 @@ class testcase extends control
     }
 
     /**
+     * Link related bugs.
+     *
+     * @param  int    $caseID
+     * @param  string $browseType
+     * @param  int    $param
+     * @access public
+     * @return void
+     */
+    public function linkBugs($caseID, $browseType = '', $param = 0)
+    {
+        $this->loadModel('bug');
+
+        /* Get case and queryID. */
+        $case    = $this->testcase->getById($caseID);
+        $queryID = ($browseType == 'bySearch') ? (int)$param : 0;
+
+        /* Build the search form. */
+        $actionURL = $this->createLink('testcase', 'linkBugs', "caseID=$caseID&browseType=bySearch&queryID=myQueryID", '', true);
+        $objectID  = 0;
+        if($this->app->tab == 'project')   $objectID = $case->project;
+        if($this->app->tab == 'execution') $objectID = $case->execution;
+        $this->bug->buildSearchForm($case->product, $this->products, $queryID, $actionURL, $objectID);
+
+        /* Get cases to link. */
+        $bugs2Link = $this->testcase->getBugs2Link($caseID, $browseType, $queryID);
+
+        /* Assign. */
+        $this->view->position[] = $this->lang->testcase->linkBugs;
+        $this->view->case       = $case;
+        $this->view->bugs2Link  = $bugs2Link;
+        $this->view->users      = $this->loadModel('user')->getPairs('noletter');
+
+        $this->display();
+    }
+
+    /**
      * Confirm testcase changed.
      *
      * @param  int    $caseID
@@ -1365,7 +1404,13 @@ class testcase extends control
         $case    = $this->testcase->getById($caseID);
         $libCase = $this->testcase->getById($libcaseID);
         $version = $case->version + 1;
-        $this->dao->update(TABLE_CASE)->set('version')->eq($version)->set('fromCaseVersion')->eq($version)->where('id')->eq($caseID)->exec();
+        $this->dao->update(TABLE_CASE)
+            ->set('version')->eq($version)
+            ->set('fromCaseVersion')->eq($version)
+            ->set('precondition')->eq($libCase->precondition)
+            ->where('id')->eq($caseID)
+            ->exec();
+
         foreach($libCase->steps as $step)
         {
             unset($step->id);

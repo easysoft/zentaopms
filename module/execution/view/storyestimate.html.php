@@ -20,7 +20,10 @@
 <?php js::set('storyID', $storyID);?>
 <div id='mainContent' class='main-content'>
   <div class="main-header">
-    <h2><?php echo $lang->execution->storyEstimate;?></h2>
+    <h2>
+      <span class='label label-id'><?php echo $storyID;?></span>
+      <span title='<?php echo $story->title;?>'><?php echo $story->title;?></span>
+    </h2>
   </div>
   <?php if(empty($team)):?>
   <div class="table-empty-tip">

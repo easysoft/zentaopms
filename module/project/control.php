@@ -401,7 +401,13 @@ class project extends control
                 $planIdList = array();
                 foreach($_POST['plans'] as $plans)
                 {
-                    foreach($plans as $planID) $planIdList[$planID] = $planID;
+                    foreach($plans as $planList)
+                    {
+                        foreach($planList as $planID)
+                        {
+                            $planIdList[$planID] = $planID;
+                        }
+                    }
                 }
 
                 $planStoryGroup = $this->loadModel('story')->getStoriesByPlanIdList($planIdList);
@@ -557,7 +563,17 @@ class project extends control
 
         if($_POST)
         {
-            $oldPlans = $this->dao->select('plan')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($projectID)->andWhere('plan')->ne(0)->fetchPairs('plan');
+            $oldPlanList = $this->dao->select('plan')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($projectID)->andWhere('plan')->ne(0)->fetchPairs('plan');
+            $oldPlans    = array();
+            foreach($oldPlanList as $oldPlanIDList)
+            {
+                if(is_numeric($oldPlanIDList)) $oldPlans[$oldPlanIDList] = $oldPlanIDList;
+                if(!is_numeric($oldPlanIDList))
+                {
+                    $oldPlanIDList = explode(',', $oldPlanIDList);
+                    foreach($oldPlanIDList as $oldPlanID) $oldPlans[$oldPlanID] = $oldPlanID;
+                }
+            }
 
             $changes = $this->project->update($projectID);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
@@ -574,7 +590,10 @@ class project extends control
             {
                 foreach($_POST['plans'] as $plans)
                 {
-                    foreach($plans as $planID) $newPlans[$planID] = $planID;
+                    foreach($plans as $planIDList)
+                    {
+                        foreach($planIDList as $planID) $newPlans[$planID] = $planID;
+                    }
                 }
             }
 
@@ -732,6 +751,14 @@ class project extends control
         $this->session->set('teamList', $this->app->getURI(true), 'project');
 
         $project = $this->project->getById($projectID);
+
+        if($this->config->systemMode == 'new')
+        {
+            $programList = array_filter(explode(',', $project->path));
+            array_pop($programList);
+            $this->view->programList = $this->loadModel('program')->getPairsByList($programList);
+        }
+
         if(empty($project) || strpos('scrum,waterfall,kanban', $project->model) === false)
         {
             if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'fail', 'code' => 404, 'message' => '404 Not found'));

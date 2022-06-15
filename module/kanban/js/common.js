@@ -14,6 +14,7 @@ function setMailto(field, value)
         $('#team').replaceWith(data);
         $('#team_chosen').remove();
         $('#team').chosen();
+        $('.picker.picker-multi').remove();
     })
 }
 

@@ -183,6 +183,7 @@ $lang->custom->notice->readOnlyOfProduct   = 'If Change Forbidden, any change on
 $lang->custom->notice->readOnlyOfExecution = "If Change Forbidden, any change on tasks, builds, efforts and stories of the closed {$lang->executionCommon} is also forbidden.";
 $lang->custom->notice->readOnlyOfKanban    = "If Change Forbidden, any change on kanban card and related operations of {$lang->custom->kanban} is also forbidden.";
 $lang->custom->notice->URSREmpty           = 'Custom requirement name can not be empty!';
+$lang->custom->notice->valueEmpty          = 'Value can not be empty!';
 $lang->custom->notice->confirmDelete       = 'Are you sure you want to delete it?';
 $lang->custom->notice->confirmReviewCase   = 'Set the case in Wait to Normal?';
 $lang->custom->notice->storyReviewTip      = 'After selecting by individual, position, and department, take the union of these three filters. ';

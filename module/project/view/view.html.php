@@ -123,6 +123,37 @@
               </p>
             </div>
           </div>
+          <?php if($this->config->systemMode == 'new'):?>
+          <div class="detail">
+            <div class="detail-title">
+              <strong><?php echo $lang->project->parent;?></strong>
+            </div>
+            <div class="detail-content">
+              <div class="row row-grid">
+                <div class="col-xs-12">
+                <?php if($project->grade > 1):?>
+                  <i class='icon icon-program text-muted'></i>
+                  <?php
+                  $end = end($programList);
+                  reset($programList);
+                  foreach($programList as $id => $name)
+                  {
+                      if($name != $end)
+                      {
+                          echo common::hasPriv('program', 'product') ? html::a($this->createLink('program', 'product', "programID=$id"), $name) . '/ ' : $name . '/ ';
+                      }
+                      else
+                      {
+                          echo common::hasPriv('program', 'product') ? html::a($this->createLink('program', 'product', "programID=$id"), $name) : $name;
+                      }
+                  }
+                  ?>
+                <?php endif;?>
+                </div>
+              </div>
+            </div>
+          </div>
+          <?php endif;?>
           <div class="detail">
             <div class="detail-title">
               <strong><?php echo $lang->project->manageProducts;?></strong>
@@ -146,10 +177,13 @@
             <div class="detail-content">
               <div class="row row-grid">
                 <?php foreach($products as $productID => $product):?>
-                <?php foreach($product->plans as $planID):?>
+                <?php foreach($product->plans as $planIDList):?>
+                <?php $planIDList = explode(',', $planIDList);?>
+                <?php foreach($planIDList as $planID):?>
                 <?php if(isset($planGroup[$productID][$planID])):?>
                 <div class="col-xs-12"><?php echo html::a($this->createLink('productplan', 'view', "planID={$planID}"), $product->name . '/' . $planGroup[$productID][$planID]);?></div>
                 <?php endif;?>
+                <?php endforeach;?>
                 <?php endforeach;?>
                 <?php endforeach;?>
               </div>

@@ -4,8 +4,10 @@
 */
 
 $baseDir     = dirname(dirname(__FILE__));
-$miniCSSTool = getenv('MINIFY_CSS_PATH');
-$miniJSTool  = getenv('MINIFY_JS_PATH');
+//$miniCSSTool = getenv('MINIFY_CSS_PATH');
+//$miniJSTool  = getenv('MINIFY_JS_PATH');
+$miniCSSTool = '/home/z/ci/minify/minifyCSS.php';
+$miniJSTool  = '/home/z/ci/minify/minifyJS.php';
 
 //--------------------------------- PROCESS JS FILES ------------------------------ //
 

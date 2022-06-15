@@ -771,7 +771,7 @@ class testcaseModel extends model
             ->setForce('status', $status)
             ->cleanInt('story,product,branch,module')
             ->stripTags($this->config->testcase->editor->edit['id'], $this->config->allowedTags)
-            ->remove('comment,steps,expects,files,labels,stepType')
+            ->remove('comment,steps,expects,files,labels,linkBug,stepType')
             ->get();
 
         $requiredFields = $this->config->testcase->edit->requiredFields;
@@ -835,6 +835,38 @@ class testcaseModel extends model
                 }
             }
 
+            /* Link bugs to case. */
+            $this->post->linkBug = $this->post->linkBug ? $this->post->linkBug : array();
+            $linkedBugs = array_keys($oldCase->toBugs);
+            $linkBugs   = $this->post->linkBug;
+            $newBugs    = array_diff($linkBugs, $linkedBugs);
+            $removeBugs = array_diff($linkedBugs, $linkBugs);
+
+            if($newBugs)
+            {
+                foreach($newBugs as $bugID)
+                {
+                    $this->dao->update(TABLE_BUG)
+                        ->set('`case`')->eq($caseID)
+                        ->set('caseVersion')->eq($case->version)
+                        ->set('`story`')->eq($case->story)
+                        ->set('storyVersion')->eq($case->storyVersion)
+                        ->where('id')->eq($bugID)->exec();
+                }
+            }
+
+            if($removeBugs)
+            {
+                foreach($removeBugs as $bugID)
+                {
+                    $this->dao->update(TABLE_BUG)
+                        ->set('`case`')->eq(0)
+                        ->set('caseVersion')->eq(0)
+                        ->set('`story`')->eq(0)
+                        ->set('storyVersion')->eq(0)
+                        ->where('id')->eq($bugID)->exec();
+                }
+            }
 
             /* Join the steps to diff. */
             if($stepChanged and $this->post->steps)
@@ -953,6 +985,34 @@ class testcaseModel extends model
                 if(in_array($case2Link->id, explode(',', $case->linkCase))) unset($cases2Link[$key]);
             }
             return $cases2Link;
+        }
+        else
+        {
+            return array();
+        }
+    }
+
+    /**
+     * Get bugs to link.
+     *
+     * @param  int    $caseID
+     * @param  string $browseType
+     * @param  int    $queryID
+     * @access public
+     * @return array
+     */
+    public function getBugs2Link($caseID, $browseType = 'bySearch', $queryID = 0)
+    {
+        $this->loadModel('bug');
+        if($browseType == 'bySearch')
+        {
+            $case      = $this->getById($caseID);
+            $bugs2Link = $this->bug->getBySearch($case->product, $case->branch, $queryID, 'id');
+            foreach($bugs2Link as $key => $bug2Link)
+            {
+                if($bug2Link->case != 0) unset($bugs2Link[$key]);
+            }
+            return $bugs2Link;
         }
         else
         {

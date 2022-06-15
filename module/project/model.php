@@ -1496,11 +1496,13 @@ class projectModel extends model
         {
             $projectID   = (int)$projectID;
             $projectName = $data->names[$projectID];
+            $projectCode = $data->codes[$projectID];
 
             $projects[$projectID] = new stdClass();
             if(isset($data->parents[$projectID])) $projects[$projectID]->parent = $data->parents[$projectID];
             $projects[$projectID]->id             = $projectID;
             $projects[$projectID]->name           = $projectName;
+            $projects[$projectID]->code           = $projectCode;
             $projects[$projectID]->PM             = $data->PMs[$projectID];
             $projects[$projectID]->begin          = $data->begins[$projectID];
             $projects[$projectID]->end            = isset($data->ends[$projectID]) ? $data->ends[$projectID] : LONG_TIME;
@@ -2120,14 +2122,14 @@ class projectModel extends model
             if(isset($oldProjectProducts[$productID][$branch]))
             {
                 $oldProjectProduct = $oldProjectProducts[$productID][$branch];
-                $oldPlan           = $oldProjectProduct->plan;
+                if($this->app->rawMethod != 'edit') $oldPlan = $oldProjectProduct->plan;
             }
 
             $data = new stdclass();
             $data->project = $projectID;
             $data->product = $productID;
             $data->branch  = $branch;
-            $data->plan    = isset($plans[$productID][$branch]) ? $plans[$productID][$branch] : $oldPlan;
+            $data->plan    = isset($plans[$productID][$branch]) ? implode(',', $plans[$productID][$branch]) : $oldPlan;
             $this->dao->insert(TABLE_PROJECTPRODUCT)->data($data)->exec();
             $existedProducts[$productID][$branch] = true;
         }

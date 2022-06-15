@@ -167,6 +167,7 @@
         </div>
       </div>
       <?php endif;?>
+      <div class="table-statistic"><?php echo $summary;?></div>
       <?php $pager->show('right', 'pagerjs');?>
     </div>
   </form>
