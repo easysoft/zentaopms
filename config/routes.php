@@ -153,6 +153,7 @@ $routes['/docs/:id']     = 'doc';
 
 $routes['/repos']       = 'repos';
 $routes['/repos/rules'] = 'reporules';
+$routes['/jobs']        = 'jobs';
 
 $routes['/modules'] = 'modules';
 

@@ -20,18 +20,34 @@ class reposEntry extends entry
     public function get()
     {
         $control = $this->loadController('repo', 'maintain');
-        $control->maintain(0, $this->param('order', 'id_desc'), 0, $this->param('limit', 100), $this->param('page', 1));
+        $repoUrl = $this->param('repoUrl', '');
 
-        /* Response */
-        $data = $this->getData();
+        if(empty($repoUrl))
+        {
+            $control->maintain(0, $this->param('order', 'id_desc'), 0, $this->param('limit', 100), $this->param('page', 1));
+            /* Response */
+            $data = $this->getData();
+        }
+        else
+        {
+            $data = (object)$this->loadModel('repo')->getRepoListByUrl($repoUrl);
+        }
+
         if(isset($data->status) and $data->status == 'success')
         {
-            $result = array();
-            $pager  = $data->data->pager;
-            $repos  = $data->data->repoList;
-            foreach($repos as $repo) $result[] = $this->format($repo, 'deleted:bool,lastSync:datetime,synced:bool,product:idList');
+            if(empty($repoUrl))
+            {
+                $result = array();
+                $pager  = $data->data->pager;
+                $repos  = $data->data->repoList;
+                foreach($repos as $repo) $result[] = $this->format($repo, 'deleted:bool,lastSync:datetime,synced:bool,product:idList');
 
-            return $this->send(200, array('page' => $pager->pageID, 'total' => $pager->recTotal, 'limit' => $pager->recPerPage, 'repos' => $result));
+                return $this->send(200, array('page' => $pager->pageID, 'total' => $pager->recTotal, 'limit' => $pager->recPerPage, 'repos' => $result));
+            }
+            else
+            {
+                return $this->send(200, array('repos' => $data->repos));
+            }
         }
 
         if(isset($data->status) and $data->status == 'fail') return $this->sendError(zget($data, 'code', 400), $data->message);
