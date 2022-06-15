@@ -26,6 +26,8 @@ td.flex span.project-type-label {min-width: 40px;}
 .c-name > a, .table-children .text-left > a {padding-left: 5px;}
 .has-child > span {margin-right: 5px;}
 .c-name > .text-ellipsis {text-overflow: clip;}
+.c-code, .c-project {overflow: hidden; white-space: nowrap;}
 
 .c-project{text-overflow: unset !important;}
 canvas {height: 28px;}
+.has-child.c-name.flex, .table-child-bottom > .c-name.flex {border-bottom: 1px solid #cbd0db;}

@@ -4188,6 +4188,7 @@ class executionModel extends model
             }
 
             if($id == 'project') $title = " title='{$execution->projectName}'";
+            if($id == 'code')    $title = " title='{$execution->code}'";
 
             if($id == 'status')
             {
