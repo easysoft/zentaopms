@@ -140,11 +140,11 @@
                   {
                       if($name != $end)
                       {
-                          echo strpos(",{$app->user->view->programs},", ",$ID,") !== false ? html::a($this->createLink('program', 'product', "programID=$ID"), $name) . '/ ' : $name . '/ ';
+                          echo common::hasPriv('program', 'product') ? html::a($this->createLink('program', 'product', "programID=$ID"), $name) . '/ ' : $name . '/ ';
                       }
                       else
                       {
-                          echo strpos(",{$app->user->view->programs},", ",$ID,") !== false ? html::a($this->createLink('program', 'product', "programID=$ID"), $name) : $name;
+                          echo common::hasPriv('program', 'product') ? html::a($this->createLink('program', 'product', "programID=$ID"), $name) : $name;
                       }
                   }
                   ?>
