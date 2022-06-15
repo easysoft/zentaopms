@@ -191,11 +191,11 @@
                     {
                         if($name != $end)
                         {
-                            echo html::a($this->createLink('program', 'product', "programID=$ID"), $name) . '/ ';
+                            echo strpos(",{$app->user->view->programs},", ",$ID,") !== false ? html::a($this->createLink('program', 'product', "programID=$ID"), $name) . '/ ' : $name . '/ ';
                         }
                         else
                         {
-                            echo html::a($this->createLink('program', 'product', "programID=$ID"), $name);
+                            echo strpos(",{$app->user->view->programs},", ",$ID,") !== false ? html::a($this->createLink('program', 'product', "programID=$ID"), $name) : $name;
                         }
                     }
                     ?>
@@ -214,7 +214,7 @@
                 <div class="row row-grid">
                   <div class="col-xs-12">
                     <i class='icon icon-project text-muted'></i>
-                    <?php echo html::a($this->createLink('project', 'index', "projectID=$execution->project", '', '', $execution->project), $execution->projectInfo->name)?>
+                    <?php echo strpos(",{$app->user->view->projects},", ",$execution->project,") !== false ? html::a($this->createLink('project', 'index', "projectID=$execution->project", '', '', $execution->project), $execution->projectInfo->name) : $execution->projectInfo->name;?>
                   </div>
                 </div>
               </div>
