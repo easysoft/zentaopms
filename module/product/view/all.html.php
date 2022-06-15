@@ -94,23 +94,8 @@
                   if(!isset($program[$lineID]))
                   {
                       $program[$lineID] = array();
-                      $program[$lineID]['product'] = '';
+                      $program[$lineID]['product']  = '';
                       $program[$lineID]['lineName'] = $lineName;
-                      $program[$lineID]['totalRequirements'] = 0;
-                      $program[$lineID]['draftRequirements'] = 0;
-                      $program[$lineID]['activeRequirements'] = 0;
-                      $program[$lineID]['changedRequirements'] = 0;
-                      $program[$lineID]['closedRequirements'] = 0;
-                      $program[$lineID]['totalStories'] = 0;
-                      $program[$lineID]['draftStories'] = 0;
-                      $program[$lineID]['activeStories'] = 0;
-                      $program[$lineID]['changedStories'] = 0;
-                      $program[$lineID]['closedStories'] = 0;
-                      $program[$lineID]['unResolvedBugs'] = 0;
-                      $program[$lineID]['closedBugs'] = 0;
-                      $program[$lineID]['fixedBugs'] = 0;
-                      $program[$lineID]['plans'] = 0;
-                      $program[$lineID]['releases'] = 0;
                   }
               }
           }
@@ -170,20 +155,20 @@
               <?php echo $line['lineName']?>
             </td>
             <?php if($this->config->URAndSR):?>
-            <td><?php echo $line['draftRequirements'];?></td>
-            <td><?php echo $line['activeRequirements'];?></td>
-            <td><?php echo $line['changedRequirements'];?></td>
-            <td><?php echo $line['totalRequirements'] == 0 ? 0 : round($line['closedRequirements'] / $line['totalRequirements'], 3) * 100;?>%</td>
+            <td><?php echo isset($line['draftRequirements']) ? $line['draftRequirements'] : 0;?></td>
+            <td><?php echo isset($line['activeRequirements']) ? $line['activeRequirements'] : 0;?></td>
+            <td><?php echo isset($line['changedRequirements']) ? $line['changedRequirements'] : 0;?></td>
+            <td><?php echo (isset($line['totalRequirements']) and $line['totalRequirements'] != 0) ? round($line['closedRequirements'] / $line['totalRequirements'], 3) * 100 : 0;?>%</td>
             <?php endif;?>
-            <td><?php echo $line['draftStories'];?></td>
-            <td><?php echo $line['activeStories'];?></td>
-            <td><?php echo $line['changedStories'];?></td>
-            <td><?php echo $line['totalStories'] == 0 ? 0 : round($line['closedStories'] / $line['totalStories'], 3) * 100;?>%</td>
-            <td><?php echo $line['unResolvedBugs'];?></td>
-            <td><?php echo $line['closedBugs'];?></td>
-            <td><?php echo ($line['unResolvedBugs'] + $line['fixedBugs']) == 0 ? 0 : round($line['fixedBugs'] / ($line['unResolvedBugs'] + $line['fixedBugs']), 3) * 100;?>%</td>
-            <td><?php echo $line['plans'];?></td>
-            <td><?php echo $line['releases'];?></td>
+            <td><?php echo isset($line['draftStories']) ? $line['draftStories'] : 0;?></td>
+            <td><?php echo isset($line['activeStories']) ? $line['activeStories'] : 0;?></td>
+            <td><?php echo isset($line['changedStories']) ? $line['changedStories'] : 0;?></td>
+            <td><?php echo (isset($line['totalStories']) and $line['totalStories'] != 0) ? round($line['closedStories'] / $line['totalStories'], 3) * 100 : 0;?>%</td>
+            <td><?php echo isset($line['unResolvedBugs']) ? $line['unResolvedBugs'] : 0;?></td>
+            <td><?php echo isset($line['closedBugs']) ? $line['closedBugs'] : 0;?></td>
+            <td><?php echo (isset($line['fixedBugs']) and ($line['unResolvedBugs'] + $line['fixedBugs'] != 0)) ? round($line['fixedBugs'] / ($line['unResolvedBugs'] + $line['fixedBugs']), 3) * 100 : 0;?>%</td>
+            <td><?php echo isset($line['plans']) ? $line['plans'] : 0;?></td>
+            <td><?php echo isset($line['releases']) ? $line['releases'] : 0;?></td>
             <?php foreach($extendFields as $extendField) echo "<td></td>";?>
             <td></td>
           </tr>
