@@ -22,7 +22,8 @@ td.flex span.project-type-label {margin-left: 5px; min-width: 36px;}
 .c-estimate, .c-consumed, .c-left, .c-pm {width: 70px;}
 .c-progress {width: 40px;}
 .c-burn {width: 60px;}
-.c-code, .c-percent, .c-realBegan, .c-realEnd{width: 90px;}
+.c-percent, .c-realBegan, .c-realEnd{width: 90px;}
+.c-code {width: 140px;}
 .c-name > span {margin-right: 2px;}
 td.flex span.project-type-label {min-width: 40px;}
 
