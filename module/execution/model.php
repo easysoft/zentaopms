@@ -2016,7 +2016,7 @@ class executionModel extends model
             if(isset($oldProducts[$productID][$branch]))
             {
                 $oldProduct = $oldProducts[$productID][$branch];
-                $oldPlan    = $oldProduct->plan;
+                if($this->app->rawMethod != 'edit') $oldPlan = $oldProduct->plan;
             }
 
             $data = new stdclass();
