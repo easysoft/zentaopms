@@ -658,21 +658,33 @@ class kanbanModel extends model
      * @access public
      * @return array
      */
-    public function getKanbanData($kanbanID)
+    public function getKanbanData($kanbanID, $regionIDList = '')
     {
-        $kanbanData  = array();
-        $actions     = array('sortGroup');
-        $regions     = $this->getRegionPairs($kanbanID);
-        $groupGroup  = $this->getGroupGroupByRegions(array_keys($regions));
-        $laneGroup   = $this->getLaneGroupByRegions(array_keys($regions));
-        $columnGroup = $this->getColumnGroupByRegions(array_keys($regions));
+        $kanbanData   = array();
+        $actions      = array('sortGroup');
+        $regions      = $this->getRegionPairs($kanbanID);
+        $singleRegion = false;
+
+        if(empty($regionIDList))
+        {
+            $regionIDList = array_keys($regions);
+        }
+        else if(!is_array($regionIDList))
+        {
+            $singleRegion = $regionIDList;
+            $regionIDList = array($regionIDList);
+        }
+
+        $groupGroup  = $this->getGroupGroupByRegions($regionIDList);
+        $laneGroup   = $this->getLaneGroupByRegions($regionIDList);
+        $columnGroup = $this->getColumnGroupByRegions($regionIDList);
         $cardGroup   = $this->getCardGroupByKanban($kanbanID);
 
-        foreach($regions as $regionID => $regionName)
+        foreach($regionIDList as $regionID)
         {
             $region = new stdclass();
             $region->id        = $regionID;
-            $region->name      = $regionName;
+            $region->name      = $regions[$regionID];
             $region->laneCount = 0;
 
             $groups = zget($groupGroup, $regionID, array());
@@ -699,7 +711,7 @@ class kanbanModel extends model
             $kanbanData[$regionID] = $region;
         }
 
-        return $kanbanData;
+        return $singleRegion ? $kanbanData[$singleRegion] : $kanbanData;
     }
 
     /**

@@ -448,7 +448,7 @@ class kanban extends control
             $actionID = $this->action->create('kanbanregion', $regionID, 'edited');
             $this->action->logHistory($actionID, $changes);
 
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => 1, 'callback' => array('target' => 'parent', 'name' => 'updateRegionName', 'params' => array($regionID, $this->post->name))));
         }
 
         $this->view->region  = $this->kanban->getRegionByID($regionID);
@@ -536,7 +536,9 @@ class kanban extends control
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $this->loadModel('action')->create('kanbanLane', $laneID, 'created');
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
+
+            $kanbanGroup = $this->kanban->getKanbanData($kanbanID, $regionID);
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => 1, 'callback' => array('target' => 'parent', 'name' => 'updateRegion', 'params' => array($regionID, $kanbanGroup))));
         }
 
         $this->view->lanes    = $this->kanban->getLanePairsByRegion($regionID, $from == 'kanban' ? 'all' : 'story');
@@ -856,7 +858,8 @@ class kanban extends control
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             $this->loadModel('action')->create('kanbancard', $cardID, 'created');
 
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
+            $kanbanGroup = $this->kanban->getKanbanData($kanbanID, $regionID);
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => 1, 'callback' => array('target' => 'parent', 'name' => 'updateRegion', 'params' => array($regionID, $kanbanGroup))));
         }
 
         $kanban      = $this->kanban->getById($kanbanID);
@@ -922,7 +925,9 @@ class kanban extends control
             $actionID = $this->action->create('kanbanCard', $cardID, 'edited');
             $this->action->logHistory($actionID, $changes);
 
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
+            $card        = $this->kanban->getCardByID($cardID);
+            $kanbanGroup = $this->kanban->getKanbanData($card->kanban, $card->region);
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => 1, 'callback' => array('target' => 'parent', 'name' => 'updateRegion', 'params' => array($card->region, $kanbanGroup))));
         }
 
         $card        = $this->kanban->getCardByID($cardID);
@@ -1374,7 +1379,10 @@ class kanban extends control
             $this->action->logHistory($actionID, $changes);
 
             if(isonlybody()) return print(js::reload('parent.parent'));
-            echo js::reload('parent');
+            $card        = $this->kanban->getCardByID($cardID);
+            $kanbanGroup = $this->kanban->getKanbanData($card->kanban, $card->region);
+            $kanbanGroupParam = json_encode($kanbanGroup);
+            return print("<script>parent.updateRegion({$card->region}, $kanbanGroupParam)</script>");
         }
     }
 
@@ -1458,11 +1466,14 @@ class kanban extends control
         else
         {
             if($card->fromType == '') $this->kanban->delete(TABLE_KANBANCARD, $cardID);
-
             if($card->fromType != '') $this->dao->delete()->from(TABLE_KANBANCARD)->where('id')->eq($cardID)->exec();
 
             if(isonlybody()) return print(js::reload('parent.parent'));
-            return print(js::reload('parent'));
+
+            $card        = $this->kanban->getCardByID($cardID);
+            $kanbanGroup = $this->kanban->getKanbanData($card->kanban, $card->region);
+            $kanbanGroupParam = json_encode($kanbanGroup);
+            return print("<script>parent.updateRegion({$card->region}, $kanbanGroupParam)</script>");
         }
     }
 
@@ -1587,7 +1598,7 @@ class kanban extends control
 
             $this->loadModel('action')->create('kanbanlane', $laneID, 'Edited', '', $executionID);
 
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent', 'lane' => $lane));
         }
 
         $lane = $this->kanban->getLaneById($laneID);

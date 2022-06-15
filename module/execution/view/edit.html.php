@@ -179,7 +179,7 @@
               <?php foreach($linkedProducts as $product):?>
               <?php foreach($linkedBranches[$product->id] as $branchID => $branch):?>
               <?php $plans = isset($productPlans[$product->id][$branchID]) ? $productPlans[$product->id][$branchID] : array();?>
-              <div class="col-sm-4" id="plan<?php echo $i;?>"><?php echo html::select("plans[{$product->id}][{$branchID}]", $plans, $branches[$product->id][$branchID]->plan, "class='form-control chosen'");?></div>
+              <div class="col-sm-4" id="plan<?php echo $i;?>"><?php echo html::select("plans[{$product->id}][{$branchID}][]", $plans, $branches[$product->id][$branchID]->plan, "class='form-control chosen' multiple");?></div>
               <?php $i++;?>
               <?php endforeach;?>
               <?php endforeach;?>

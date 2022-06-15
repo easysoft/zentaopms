@@ -874,6 +874,7 @@ function finishCard(cardID, kanbanID, regionID)
  */
 function updateRegion(regionID, regionData)
 {
+    console.log('> updateRegion', {regionID, regionData});
     if(typeof(regionData) == 'undefined') regionData = [];
     if(!regionID) return false;
 
@@ -885,6 +886,11 @@ function updateRegion(regionID, regionData)
     $region.data('zui.kanban').render(regionData.groups);
     resetRegionHeight('open');
     return true;
+}
+
+function updateRegionName(regionID, name)
+{
+    $('.region[data-id="' + regionID + '"] > .region-header > strong:first').text(name);
 }
 
 /**
