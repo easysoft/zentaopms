@@ -30,4 +30,4 @@ td.flex span.project-type-label {min-width: 40px;}
 
 .c-project{text-overflow: unset !important;}
 canvas {height: 28px;}
-.has-child.c-name.flex, .table-child-bottom > .c-name.flex {border-bottom: 1px solid #cbd0db;}
+.parent.has-child.c-name.flex, .table-child-bottom > .c-name.flex {border-bottom: 1px solid #cbd0db;}

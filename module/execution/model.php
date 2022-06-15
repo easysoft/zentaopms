@@ -4178,6 +4178,7 @@ class executionModel extends model
             if($id == 'actions') $class .= ' text-center';
 
             if($id == 'name' and !$child) $class .= ' sort-handler';
+            if($id == 'name' and !empty($execution->children)) $class .= ' parent';
             if(in_array($id, array('estimate', 'consumed', 'left'))) $class .= ' hours';
 
             $title = '';

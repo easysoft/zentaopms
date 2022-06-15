@@ -16,8 +16,16 @@ $(function()
     {
         var fold = $(this).hasClass('collapsed');
         var parentID = $(this).closest('tr').attr('data-id');
-        if(fold) $('.parent-' + parentID).hide();
-        if(!fold) $('.parent-' + parentID).show();
+        if(fold)
+        {
+            $('.parent-' + parentID).hide();
+            $(this).closest('td').removeClass('parent');
+        }
+        else
+        {
+            $('.parent-' + parentID).show();
+            $(this).closest('td').addClass('parent');
+        }
     });
 
     if(useDatatable)
@@ -26,6 +34,15 @@ $(function()
         {
             var parentID = $(this).closest('tr').attr('data-id');
             $('.parent-' + parentID).toggle();
+
+            if($('.parent-' + parentID).css('display') == 'none')
+            {
+                $(this).closest('td').removeClass('parent');
+            }
+            else
+            {
+                $(this).closest('td').addClass('parent');
+            }
         });
     }
 });
