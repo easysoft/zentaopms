@@ -488,7 +488,7 @@ $(function()
                     chosenMode: true,
                     dropWidth: 'auto',
                     minAutoDropWidth: '100%',
-                    maxAutoDropWidth: '400',
+                    maxAutoDropWidth: 400,
                     remote: $searchForm.find("#value" + fieldNO).attr('data-pickerremote')
                 });
             }
@@ -499,7 +499,7 @@ $(function()
                     chosenMode: true,
                     dropWidth: 'auto',
                     minAutoDropWidth: '100%',
-                    maxAutoDropWidth: '400'
+                    maxAutoDropWidth: 400
                 });
             }
         }
