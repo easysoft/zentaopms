@@ -2529,9 +2529,9 @@ class executionModel extends model
      */
     public function linkStories($executionID)
     {
-        $plans = $this->dao->select('plan,product')->from(TABLE_PROJECTPRODUCT)
+        $plans = $this->dao->select('product,plan')->from(TABLE_PROJECTPRODUCT)
             ->where('project')->eq($executionID)
-            ->fetchPairs('plan', 'product');
+            ->fetchPairs('product', 'plan');
 
         $planStories  = array();
         $planProducts = array();
@@ -2539,23 +2539,27 @@ class executionModel extends model
         $this->loadModel('story');
         if(!empty($plans))
         {
-            foreach($plans as $planID => $productID)
+            foreach($plans as $productID => $planIDList)
             {
-                if(empty($planID)) continue;
-                $planStory = $this->story->getPlanStories($planID);
-                if(!empty($planStory))
+                if(empty($planIDList)) continue;
+                $planIDList = explode(',', $planIDList);
+                foreach($planIDList as $planID)
                 {
-                    foreach($planStory as $id => $story)
+                    $planStory = $this->story->getPlanStories($planID);
+                    if(!empty($planStory))
                     {
-                        if($story->status == 'draft')
+                        foreach($planStory as $id => $story)
                         {
-                            $count++;
-                            unset($planStory[$id]);
-                            continue;
+                            if($story->status == 'draft')
+                            {
+                                $count++;
+                                unset($planStory[$id]);
+                                continue;
+                            }
+                            $planProducts[$story->id] = $story->product;
                         }
-                        $planProducts[$story->id] = $story->product;
+                        $planStories = array_merge($planStories, array_keys($planStory));
                     }
-                    $planStories = array_merge($planStories, array_keys($planStory));
                 }
             }
         }
