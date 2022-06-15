@@ -142,6 +142,10 @@ js::set('confirmSync', $lang->execution->confirmSync);
 js::set('emptyBegin', $lang->programplan->emptyBegin);
 js::set('emptyEnd', $lang->programplan->emptyEnd);
 js::set('planFinishSmall', $lang->programplan->error->planFinishSmall);
+js::set('errorBegin', $lang->execution->errorLetterProject);
+js::set('errorEnd', $lang->execution->errorGreaterProject);
+js::set('projectBeginDate', $project->begin);
+js::set('projectEndDate', $project->end);
 ?>
 
 <script>
@@ -188,6 +192,26 @@ $('#executionForm').submit(function()
             var emptyEndHtml = '<div id="help' + endDateID + '" class="text-danger help-text">' + planFinishSmall + '</div>';
             $('#' + endDateID).after(emptyEndHtml);
             alert(planFinishSmall);
+            return false;
+        }
+
+        if(beginDate < projectBeginDate)
+        {
+            submitForm = false;
+            var errorBeginTip  = errorBegin.replace('%s', projectBeginDate);
+            var errorBeginHtml = '<div id="help' + beginDateID + '" class="text-danger help-text">' + errorBeginTip + '</div>';
+            $('#' + beginDateID).after(errorBeginHtml);
+            alert(errorBeginTip);
+            return false;
+        }
+
+        if(endDate > projectEndDate)
+        {
+            submitForm = false;
+            var errorEndTip  = errorEnd.replace('%s', projectEndDate);
+            var errorEndHtml = '<div id="help' + endDateID + '" class="text-danger help-text">' + errorEndTip + '</div>';
+            $('#' + endDateID).after(errorEndHtml);
+            alert(errorEndTip);
             return false;
         }
     });
