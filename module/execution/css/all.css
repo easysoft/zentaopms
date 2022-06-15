@@ -1,3 +1,4 @@
+body {margin-bottom: 25px;}
 #product_chosen .chosen-single {width: 180px;}
 
 .table-children {border-left: 2px solid #cbd0db; border-right: 2px solid #cbd0db;}
@@ -12,22 +13,21 @@
 .table th.hours {padding-right: 8px !important;}
 .main-table tbody > tr.table-children > td:first-child::before {width: 3px;}
 td.hours {text-align: right; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;}
-td.flex {display: flex; flex-flow: row nowrap; justify-content: flex-start; align-items: center;}
+td.flex {display: flex; flex-flow: row nowrap; justify-content: flex-start; align-items: center; margin-bottom: -2px;}
 td.flex span.label-badge {margin-left: 5px; min-width: 50px;}
 td.flex span.label-badge.label-light {min-width: 22px;}
 td.flex span.project-type-label {margin-left: 5px; min-width: 36px;}
 @-moz-document url-prefix() {.main-table tbody > tr.table-children > td:first-child::before {width: 4px;}}
 
-.c-status, .c-date, .c-percent, .c-attribute, .c-end, .c-begin {width: 80px;}
-.c-estimate, .c-consumed, .c-left, .c-pm {width: 70px;}
-.c-progress {width: 40px;}
-.c-burn {width: 60px;}
-.c-percent, .c-realBegan, .c-realEnd{width: 90px;}
-.c-code {width: 140px;}
 .c-name > span {margin-right: 2px;}
 td.flex span.project-type-label {min-width: 40px;}
 
 .label-children {min-width:22px !important;}
 .c-name > a, .table-children .text-left > a {padding-left: 5px;}
 .has-child > span {margin-right: 5px;}
-.c-name > .text-ellipsis {text-overflow: clip}
+.c-name > .text-ellipsis {text-overflow: clip;}
+.c-code, .c-project {overflow: hidden; white-space: nowrap;}
+
+.c-project{text-overflow: unset !important;}
+canvas {height: 28px;}
+.parent.has-child.c-name.flex, .table-child-bottom > .c-name.flex {border-bottom: 1px solid #cbd0db;}
