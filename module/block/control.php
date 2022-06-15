@@ -1515,8 +1515,8 @@ class block extends control
         $status = isset($this->params->type)  ? $this->params->type : '';
         $count  = isset($this->params->count) ? (int)$this->params->count : 0;
 
-        $projectID = $this->lang->navGroup->qa == 'project' ? $this->session->project : 0;
-        $products  = $this->loadModel('product')->getOrderedProducts($status, $count, $projectID);
+        $projectID  = $this->lang->navGroup->qa == 'project' ? $this->session->project : 0;
+        $products   = $this->loadModel('product')->getOrderedProducts($status, $count, $projectID);
         $executions = $this->loadModel('execution')->getPairs($projectID, 'all', 'empty|withdelete');
         if(empty($products))
         {
