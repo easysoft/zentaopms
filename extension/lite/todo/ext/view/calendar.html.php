@@ -14,6 +14,11 @@
 <?php include $app->getExtensionRoot() . 'biz/common/ext/view/calendar.html.php';?>
 <style>
 #todoLists .todo-item[data-type="todo"] {padding-left: 5px;}
+#sidebar {width: 275px;}
+#sidebar > .cell {width: 100%; left: 8px;}
+#sidebar > .sidebar-toggle {left: 3px; right: auto;}
+.hide-sidebar #sidebar > .cell {display: none;}
+.hide-sidebar #sidebar > .sidebar-toggle > .icon:before {content: "\e314";}
 </style>
 <?php js::set('moreLang', $this->lang->side->more);?>
 <?php js::set('moduleList', $config->todo->moduleList);?>
@@ -56,7 +61,7 @@
       </div>
     </div>
   </div>
-  <div class="side-col">
+  <div class="side-col" id="sidebar">
     <?php
     $todos = $this->dao->select('id,account,date,name,status,assignedTo')->from(TABLE_TODO)
         ->where('status')->in('wait,doing')
@@ -78,6 +83,7 @@
         }
     }
     ?>
+    <div class="sidebar-toggle" style='left: 5px;'><i class="icon icon-angle-right"></i></div>
     <div class="cell">
       <ul class="nav nav-secondary nav-justified">
         <li class="active"><a href="#tab_undone" data-toggle='tab' class="object-calendar"><?php echo $lang->todo->periods['before'];?><span class="label label-light label-badge label-todo" id="'undoneTotal';?>" data-object="undone"><?php echo count($undoneTodos);?></span></a></li>
