@@ -1714,6 +1714,7 @@ class execution extends control
     public function batchEdit($executionID = 0)
     {
         $this->app->loadLang('stage');
+        $this->app->loadLang('programplan');
 
         if($this->post->names)
         {
