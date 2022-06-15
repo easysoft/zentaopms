@@ -236,9 +236,14 @@ function nonClickableSelectedProduct()
         if(selectedProduct != 0 && $.inArray(selectedProduct, selectedVal) < 0 && !multiBranchProducts[selectedProduct]) selectedVal.push(selectedProduct);
     })
 
-    $.each(selectedVal, function(index, value)
+    $("select[id^='products']").each(function()
     {
-        $("select[id^='products'] option[value='" + value +"']").attr('disabled', 'disabled');
+        var selectedProduct = $(this).val();
+        $(this).find('option').each(function()
+        {
+            var optionVal = $(this).attr('value');
+            if(optionVal != selectedProduct && $.inArray(optionVal, selectedVal) >= 0) $(this).attr('disabled', 'disabled');
+        })
     })
 
     $("select[id^=products]").trigger('chosen:updated');
