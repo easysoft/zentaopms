@@ -187,15 +187,15 @@
                     <?php
                     $end = end($programList);
                     reset($programList);
-                    foreach($programList as $ID => $name)
+                    foreach($programList as $id => $name)
                     {
                         if($name != $end)
                         {
-                            echo strpos(",{$app->user->view->programs},", ",$ID,") !== false ? html::a($this->createLink('program', 'product', "programID=$ID"), $name) . '/ ' : $name . '/ ';
+                            echo  common::hasPriv('program', 'product')? html::a($this->createLink('program', 'product', "programID=$id"), $name) . '/ ' : $name . '/ ';
                         }
                         else
                         {
-                            echo strpos(",{$app->user->view->programs},", ",$ID,") !== false ? html::a($this->createLink('program', 'product', "programID=$ID"), $name) : $name;
+                            echo common::hasPriv('program', 'product') ? html::a($this->createLink('program', 'product', "programID=$id"), $name) : $name;
                         }
                     }
                     ?>
@@ -214,7 +214,7 @@
                 <div class="row row-grid">
                   <div class="col-xs-12">
                     <i class='icon icon-project text-muted'></i>
-                    <?php echo strpos(",{$app->user->view->projects},", ",$execution->project,") !== false ? html::a($this->createLink('project', 'index', "projectID=$execution->project", '', '', $execution->project), $execution->projectInfo->name) : $execution->projectInfo->name;?>
+                    <?php echo common::hasPriv('project', 'index') ? html::a($this->createLink('project', 'index', "projectID=$execution->project", '', '', $execution->project), $execution->projectInfo->name) : $execution->projectInfo->name;?>
                   </div>
                 </div>
               </div>
