@@ -28,23 +28,21 @@ $(function()
         }
     });
 
-    if(useDatatable)
+    /* Expand and fold substages. */
+    $('.table td.has-child > .plan-toggle').click(function()
     {
-        $('.table td.has-child > .plan-toggle').click(function()
-        {
-            var parentID = $(this).closest('tr').attr('data-id');
-            $('.parent-' + parentID).toggle();
+        var parentID = $(this).closest('tr').attr('data-id');
+        $('.parent-' + parentID).toggle();
 
-            if($('.parent-' + parentID).css('display') == 'none')
-            {
-                $(this).closest('td').removeClass('parent');
-            }
-            else
-            {
-                $(this).closest('td').addClass('parent');
-            }
-        });
-    }
+        if($('.parent-' + parentID).css('display') == 'none')
+        {
+            $(this).closest('td').removeClass('parent');
+        }
+        else
+        {
+            $(this).closest('td').addClass('parent');
+        }
+    });
 });
 
 function byProduct(productID, projectID, status)
