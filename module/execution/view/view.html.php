@@ -191,7 +191,7 @@
                     {
                         if($name != $end)
                         {
-                            echo  common::hasPriv('program', 'product')? html::a($this->createLink('program', 'product', "programID=$id"), $name) . '/ ' : $name . '/ ';
+                            echo common::hasPriv('program', 'product')? html::a($this->createLink('program', 'product', "programID=$id"), $name) . '/ ' : $name . '/ ';
                         }
                         else
                         {
