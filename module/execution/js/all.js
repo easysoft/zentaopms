@@ -43,6 +43,21 @@ $(function()
             $(this).closest('td').addClass('parent');
         }
     });
+
+    $(document).on('click', "#toggleFold", function()
+    {
+        var fold = $(this).hasClass('collapsed');
+        if(fold)
+        {
+            $('.has-child.c-name.flex').removeClass('parent');
+            $('.table td.has-child > .plan-toggle').addClass('collapsed');
+        }
+        else
+        {
+            $('.has-child.c-name.flex').addClass('parent');
+            $('.table td.has-child > .plan-toggle').removeClass('collapsed');
+        }
+    });
 });
 
 function byProduct(productID, projectID, status)
