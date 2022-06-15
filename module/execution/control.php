@@ -1615,7 +1615,7 @@ class execution extends control
                     {
                         foreach($planList as $planID)
                         {
-                            if(!array_search($planID, $oldPlans)) $newPlans[$planID] = $planID;
+                            if(array_search($planID, $oldPlans) === false) $newPlans[$planID] = $planID;
                         }
                     }
                 }
