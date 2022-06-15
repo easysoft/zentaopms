@@ -125,7 +125,7 @@ foreach($fieldParams as $fieldName => $param)
                 /* Print value. */
                 echo "<td id='valueBox$fieldNO' style='overflow:visible'>";
                 if(isset($config->moreLinks["field{$currentField}"])) $config->moreLinks["value$fieldNO"] = $config->moreLinks["field{$currentField}"];
-                if($param['control'] == 'select') echo html::select("value$fieldNO", $param['values'], $formSession["value$fieldNO"], "class='form-control searchSelect chosen'");
+                if($param['control'] == 'select') echo html::select("value$fieldNO", $param['values'], $formSession["value$fieldNO"], "class='form-control searchSelect chosen' max_drop_width='400'");
                 if($param['control'] == 'input')
                 {
                     $fieldName  = $formSession["field$fieldNO"];
@@ -486,12 +486,21 @@ $(function()
                 $searchForm.find("#value" + fieldNO).picker(
                 {
                     chosenMode: true,
+                    dropWidth: 'auto',
+                    minAutoDropWidth: '100%',
+                    maxAutoDropWidth: '400',
                     remote: $searchForm.find("#value" + fieldNO).attr('data-pickerremote')
                 });
             }
             else
             {
-                $searchForm.find("#value" + fieldNO).picker({chosenMode: true});
+                $searchForm.find("#value" + fieldNO).picker(
+                {
+                    chosenMode: true,
+                    dropWidth: 'auto',
+                    minAutoDropWidth: '100%',
+                    maxAutoDropWidth: '400'
+                });
             }
         }
     };
