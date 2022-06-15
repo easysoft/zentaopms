@@ -1222,7 +1222,7 @@ class product extends control
         $productStats     = $this->product->getStats($orderBy, $pager, $browseType, '', 'story', '', $queryID);
         $productStructure = $this->product->statisticProgram($productStats);
         $productLines     = $this->dao->select('*')->from(TABLE_MODULE)->where('type')->eq('line')->andWhere('deleted')->eq(0)->orderBy('`order`')->fetchAll();
-        krsort($productLines);
+        array_multisort(array_column($productLines, 'order'), SORT_ASC, $productLines);
         $programLines     = array();
 
         foreach($productLines as $index => $productLine)
