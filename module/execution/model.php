@@ -2529,9 +2529,9 @@ class executionModel extends model
      */
     public function linkStories($executionID)
     {
-        $plans = $this->dao->select('product,plan')->from(TABLE_PROJECTPRODUCT)
+        $plans = $this->dao->select('plan')->from(TABLE_PROJECTPRODUCT)
             ->where('project')->eq($executionID)
-            ->fetchPairs('product', 'plan');
+            ->fetchPairs('plan');
 
         $planStories  = array();
         $planProducts = array();
@@ -2539,7 +2539,7 @@ class executionModel extends model
         $this->loadModel('story');
         if(!empty($plans))
         {
-            foreach($plans as $productID => $planIDList)
+            foreach($plans as $planIDList)
             {
                 if(empty($planIDList)) continue;
                 $planIDList = explode(',', $planIDList);
