@@ -140,11 +140,11 @@
                   {
                       if($name != $end)
                       {
-                          echo html::a($this->createLink('program', 'product', "programID=$ID"), $name) . '/ ';
+                          echo strpos(",{$app->user->view->programs},", ",$ID,") !== false ? html::a($this->createLink('program', 'product', "programID=$ID"), $name) . '/ ' : $name . '/ ';
                       }
                       else
                       {
-                          echo html::a($this->createLink('program', 'product', "programID=$ID"), $name);
+                          echo strpos(",{$app->user->view->programs},", ",$ID,") !== false ? html::a($this->createLink('program', 'product', "programID=$ID"), $name) : $name;
                       }
                   }
                   ?>
