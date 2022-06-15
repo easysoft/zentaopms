@@ -1517,6 +1517,7 @@ class block extends control
 
         $projectID = $this->lang->navGroup->qa == 'project' ? $this->session->project : 0;
         $products  = $this->loadModel('product')->getOrderedProducts($status, $count, $projectID);
+        $executions = $this->loadModel('execution')->getPairs($projectID, 'all', 'empty|withdelete');
         if(empty($products))
         {
             $this->view->products = $products;
@@ -1536,6 +1537,7 @@ class block extends control
             count((closedDate >= '$yesterday' and closedDate < '$today') or null) as yesterdayClosed")
             ->from(TABLE_BUG)
             ->where('product')->in($productIdList)
+            ->andWhere('execution')->in(array_keys($executions))
             ->andWhere('deleted')->eq(0)
             ->groupBy('product')
             ->fetchAll('product');
