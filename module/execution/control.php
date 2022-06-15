@@ -1542,7 +1542,7 @@ class execution extends control
      * @access public
      * @return void
      */
-    public function edit($executionID, $action = 'edit', $extra = '')
+    public function edit($executionID, $action = 'edit', $extra = '', $newPlans = '', $confirm = 'no')
     {
         /* Load language files and get browseExecutionLink. */
         $this->loadModel('product');
@@ -1559,6 +1559,19 @@ class execution extends control
             global $lang;
             $lang->executionCommon = $lang->execution->kanban;
             include $this->app->getModulePath('', 'execution') . 'lang/' . $this->app->getClientLang() . '.php';
+        }
+
+        if(!empty($newPlans) and $confirm == 'yes')
+        {
+            $newPlans = explode(',', $newPlans);
+            $projectID = $this->dao->select('project')->from(TABLE_EXECUTION)->where('id')->eq($executionID)->fetch('project');
+            $this->loadModel('productplan')->linkProject($executionID, $newPlans);
+            $this->productplan->linkProject($projectID, $newPlans);
+            return $this->send(array('result' => 'success', 'locate' => inlink('view', "executionID=$executionID")));
+        }
+        elseif(!empty($newPlans))
+        {
+            return print(js::confirm($this->lang->execution->importEditPlanStory, inlink('edit', "executionID=$executionID&action=edit&extra=&newPlans=$newPlans&confirm=yes"), inlink('view', "executionID=$executionID")));
         }
 
         if(!empty($_POST))
@@ -1591,6 +1604,7 @@ class execution extends control
             }
 
             /* Link the plan stories. */
+            $oldPlans = explode(',', implode(',' ,$oldPlans));
             $newPlans = array();
             if(isset($_POST['plans']))
             {
@@ -1601,19 +1615,17 @@ class execution extends control
                     {
                         foreach($planList as $planID)
                         {
-                            $newPlans[$planID] = $planID;
+                            if(!array_search($planID, $oldPlans)) $newPlans[$planID] = $planID;
                         }
                     }
                 }
             }
 
-            $diffResult = array_diff($oldPlans, $newPlans);
-            $diffResult = array_merge($diffResult, array_diff($newPlans, $oldPlans));
-            if(!empty($newPlans) and !empty($diffResult))
+            $newPlans = array_filter($newPlans);
+            if(!empty($newPlans))
             {
-                $projectID = $this->dao->select('project')->from(TABLE_EXECUTION)->where('id')->eq($executionID)->fetch('project');
-                $this->loadModel('productplan')->linkProject($executionID, $newPlans);
-                $this->productplan->linkProject($projectID, $newPlans);
+                $newPlans = implode(',', $newPlans);
+                return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('edit', "executionID=$executionID&action=edit&extra=&newPlans=$newPlans&confirm=no")));
             }
 
             $message = $this->executeHooks($executionID);
