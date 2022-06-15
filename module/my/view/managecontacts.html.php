@@ -13,7 +13,7 @@
 <?php include '../../common/view/header.html.php';?>
 <div id='mainContent' class='main-content main-row'>
   <div class='side-col'>
-  <div class='main-header'><h2 class='title'><?php echo $lang->my->contactList;?></h2></div>
+  <div class='main-header'><h2 class='contactListTitle'><?php echo $lang->my->contactList;?></h2></div>
     <div>
     <?php echo html::a(inlink('managecontacts', "listID=0&mode=new"), '<i class="icon icon-plus"></i> ' . $lang->user->contacts->createList, '', "class='btn btn-secondary createBtn'"); ?>
     <?php
@@ -28,11 +28,11 @@
   </div>
   <div class='main-col'>
     <div class='main-header'>
-      <h2>
+      <h2 class='title'>
         <?php if($mode == 'new'):?>
-        <i class='icon-plus'></i> <strong><?php echo $lang->user->contacts->createList;?></strong>
+        <strong><?php echo $lang->user->contacts->createList;?></strong>
         <?php else:?>
-        <i class='icon-cogs'></i> <strong><?php echo $lang->user->contacts->manage;?></strong>
+        <strong><?php echo $lang->user->contacts->manage;?></strong>
         <?php endif;?>
       </h2>
     </div>

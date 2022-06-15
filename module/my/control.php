@@ -1177,7 +1177,7 @@ EOF;
                 }
                 $this->user->setGlobalContacts($listID, isset($data->share));
                 if(isonlybody()) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => "parent.parent.ajaxGetContacts('#mailto')"));
-                return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('manageContacts', "listID=$listID")));
+                return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('manageContacts', "listID=$listID&mode=edit")));
             }
             elseif($data->mode == 'edit')
             {
@@ -1194,7 +1194,7 @@ EOF;
                     return $this->send($response);
                 }
 
-                $response['locate'] = inlink('manageContacts', "listID=$listID");
+                $response['locate'] = inlink('manageContacts', "listID=$listID&mode=edit");
                 return $this->send($response);
             }
         }
