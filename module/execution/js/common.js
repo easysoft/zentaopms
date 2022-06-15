@@ -124,18 +124,6 @@ function computeEndDate(delta)
  */
 function loadBranches(product)
 {
-    $("#productsBox select[name^='products']").each(function()
-    {
-        var $product = $(product);
-        if($product.val() != 0 && $product.val() == $(this).val() && $product.attr('id') != $(this).attr('id') && !multiBranchProducts[$product.val()])
-        {
-            alert(errorSameProducts);
-            $product.val(0);
-            $product.trigger("chosen:updated");
-            return false;
-        }
-    });
-
     if($('#productsBox .input-group:last select:first').val() != 0)
     {
         var length = $('#productsBox .input-group').size();
@@ -230,6 +218,30 @@ function adjustPlanBoxMargin()
             $('#plansBox .col-sm-4:lt(' + (j * 3) + ')').css('margin-bottom', '10px');
         }
     }
+}
+
+/**
+ * Make the selected product non clickable.
+ *
+ * @return void
+ */
+function nonClickableSelectedProduct()
+{
+    $("select[id^='products'] option[disabled='disabled']").removeAttr('disabled');
+
+    var selectedVal = [];
+    $("select[id^='products']").each(function()
+    {
+        var selectedProduct = $(this).val();
+        if(selectedProduct != 0 && $.inArray(selectedProduct, selectedVal) < 0 && !multiBranchProducts[selectedProduct]) selectedVal.push(selectedProduct);
+    })
+
+    $.each(selectedVal, function(index, value)
+    {
+        $("select[id^='products'] option[value='" + value +"']").attr('disabled', 'disabled');
+    })
+
+    $("select[id^=products]").trigger('chosen:updated');
 }
 
 /* Auto compute the work days. */
