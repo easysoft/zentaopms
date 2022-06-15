@@ -3394,6 +3394,7 @@ class execution extends control
         $this->app->loadLang('product');
         $this->app->loadLang('stage');
         $this->app->loadLang('programplan');
+        $this->loadModel('datatable');
 
         $from = $this->app->tab;
         if($from == 'execution') $this->session->set('executionList', $this->app->getURI(true), 'execution');
@@ -3443,6 +3444,16 @@ class execution extends control
         $parents = array();
         if($parentIdList) $parents = $this->execution->getByIdList($parentIdList);
 
+        $isStage = (isset($project->model) and $project->model == 'waterfall') ? true : false;
+        if($isStage) 
+        {
+            $this->config->execution->datatable->defaultField = array('id', 'name', 'PM', 'status', 'progress', 'percent', 'attribute', 'begin', 'end', 'realBegan', 'realEnd', 'actions');
+        }
+        elseif($this->app->tab == 'project')
+        {
+            $this->config->execution->datatable->defaultField = array('id', 'name', 'code', 'PM', 'status', 'progress', 'begin', 'end', 'estimate', 'consumed', 'left', 'burn');
+        }
+
         $this->view->executionStats = $executionStats;
         $this->view->productList    = $this->loadModel('product')->getProductPairsByProject($projectID);
         $this->view->productID      = $productID;
@@ -3454,7 +3465,7 @@ class execution extends control
         $this->view->users          = $this->loadModel('user')->getPairs('noletter');
         $this->view->status         = $status;
         $this->view->from           = $from;
-        $this->view->isStage        = (isset($project->model) and $project->model == 'waterfall') ? true : false;
+        $this->view->isStage        = $isStage;
         $this->display();
     }
 

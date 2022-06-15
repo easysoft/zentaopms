@@ -24,6 +24,12 @@ $(function()
             {
                 $dropmenu.append("<li><a href='<?php echo $this->createLink('datatable', 'ajaxCustom', 'id=' . $this->moduleName . '&method=' . $this->methodName . '&extra=requirement')?>' data-toggle='modal' data-type='ajax'><?php echo $lang->datatable->custom?></a></li>");
             }
+            else if(typeof(from) != 'undefined')
+            {
+                <?php $from = isset($from) ? $from : '';?>
+                <?php $from = ($from == 'project' and isset($isStage) and $isStage) ? 'stage' : $from;?>
+                $dropmenu.append("<li><a href='<?php echo $this->createLink('datatable', 'ajaxCustom', 'id=' . $this->moduleName . '&method=' . $this->methodName . "&extra=$from")?>' data-toggle='modal' data-type='ajax'><?php echo $lang->datatable->custom?></a></li>");
+            }
             else
             {
                 $dropmenu.append("<li><a href='<?php echo $this->createLink('datatable', 'ajaxCustom', 'id=' . $this->moduleName . '&method=' . $this->methodName)?>' data-toggle='modal' data-type='ajax'><?php echo $lang->datatable->custom?></a></li>");
