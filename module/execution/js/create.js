@@ -109,6 +109,9 @@ $(function()
             return false;
         }
     });
+
+    nonClickableSelectedProduct();
+    $(document).on('change', "select[id^='products']", nonClickableSelectedProduct);
 });
 
 function showLifeTimeTips()
