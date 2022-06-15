@@ -36,7 +36,7 @@ $config->bug->list->exportFields = 'id, product, branch, module, project, execut
     duplicateBug, linkBug,
     case,
     lastEditedBy,
-    lastEditedDate, files';
+    lastEditedDate, files ,feedbackBy, notifyEmail';
 if($config->systemMode == 'classic') $config->bug->list->exportFields = str_replace(' project,', '', $config->bug->list->exportFields);
 
 $config->bug->list->customCreateFields      = 'execution,noticefeedbackBy,story,task,pri,severity,os,browser,deadline,mailto,keywords';
