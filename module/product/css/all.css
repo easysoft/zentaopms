@@ -85,3 +85,6 @@ th.c-actions {width: 60px;}
     [lang^='zh-'] th.c-requirement {width: 220px;}
     [lang^='zh-'] th.c-story {width: 220px;}
 }
+
+#productTableList > tr.row-line.is-nest-child > td.text-left.table-nest-title > span.table-nest-icon.icon:before{content: '\e6f2'; background-color: white; display: inline;}
+#productTableList > tr.row-line.no-nest > td.text-left.table-nest-title > span.table-nest-icon.icon:before{content: '\e6f2'; background-color: white; display: inline;}

@@ -86,6 +86,35 @@
         $trClass  = 'is-top-level table-nest-child text-center';
         $trAttrs .= " class='$trClass'";
         ?>
+          <?php
+          if(isset($programLines[$programID]))
+          {
+              foreach($programLines[$programID] as $lineID => $lineName)
+              {
+                  if(!isset($program[$lineID]))
+                  {
+                      $program[$lineID] = array();
+                      $program[$lineID]['product'] = '';
+                      $program[$lineID]['lineName'] = $lineName;
+                      $program[$lineID]['totalRequirements'] = 0;
+                      $program[$lineID]['draftRequirements'] = 0;
+                      $program[$lineID]['activeRequirements'] = 0;
+                      $program[$lineID]['changedRequirements'] = 0;
+                      $program[$lineID]['closedRequirements'] = 0;
+                      $program[$lineID]['totalStories'] = 0;
+                      $program[$lineID]['draftStories'] = 0;
+                      $program[$lineID]['activeStories'] = 0;
+                      $program[$lineID]['changedStories'] = 0;
+                      $program[$lineID]['closedStories'] = 0;
+                      $program[$lineID]['unResolvedBugs'] = 0;
+                      $program[$lineID]['closedBugs'] = 0;
+                      $program[$lineID]['fixedBugs'] = 0;
+                      $program[$lineID]['plans'] = 0;
+                      $program[$lineID]['releases'] = 0;
+                  }
+              }
+          }
+          ;?>
           <?php if(isset($program['programName']) and $config->systemMode == 'new'):?>
           <tr class="row-program" <?php echo $trAttrs;?>>
             <?php if($canBatchEdit):?>
@@ -115,7 +144,6 @@
           </tr>
           <?php unset($program['programName']);?>
           <?php endif;?>
-
           <?php foreach($program as $lineID => $line):?>
           <?php if(isset($line['lineName'])):?>
           <?php $lineNames[] = $line['lineName'];?>
