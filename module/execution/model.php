@@ -2531,7 +2531,7 @@ class executionModel extends model
     {
         $plans = $this->dao->select('plan')->from(TABLE_PROJECTPRODUCT)
             ->where('project')->eq($executionID)
-            ->fetchAll();
+            ->fetchPairs('plan');
 
         $planStories  = array();
         $planProducts = array();
@@ -2539,10 +2539,10 @@ class executionModel extends model
         $this->loadModel('story');
         if(!empty($plans))
         {
-            foreach($plans as $plan)
+            foreach($plans as $planIDList)
             {
-                if(empty($plan)) continue;
-                $planIDList = explode(',', $plan->plan);
+                if(empty($planIDList)) continue;
+                $planIDList = explode(',', $planIDList);
                 foreach($planIDList as $planID)
                 {
                     $planStory = $this->story->getPlanStories($planID);
