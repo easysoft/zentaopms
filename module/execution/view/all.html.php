@@ -12,7 +12,10 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/sortable.html.php';?>
 <?php include '../../common/view/datatable.fix.html.php';?>
-<?php $useDatatable = (isset($config->datatable->$datatableId->mode) and $config->datatable->$datatableId->mode == 'datatable');?>
+<?php
+$datatableId  = $this->moduleName . ucfirst($this->methodName);
+$useDatatable = (isset($config->datatable->$datatableId->mode) and $config->datatable->$datatableId->mode == 'datatable');
+?>
 <?php js::set('useDatatable', $useDatatable);?>
 <?php js::set('from', $from);?>
 <?php js::set('projectID', $projectID);?>
@@ -21,8 +24,8 @@
 $unfoldExecutions = isset($config->execution->all->unfoldExecutions) ? json_decode($config->execution->all->unfoldExecutions, true) : array();
 $unfoldExecutions = zget($unfoldExecutions, $projectID, array());
 js::set('unfoldExecutions', $unfoldExecutions);
-js::set('unfoldAll',   $lang->execution->treeLevel['all']);
-js::set('foldAll',     $lang->execution->treeLevel['root']);
+js::set('unfoldAll', $lang->execution->treeLevel['all']);
+js::set('foldAll', $lang->execution->treeLevel['root']);
 ?>
 <div id='mainMenu' class='clearfix'>
   <div class='btn-toolbar pull-left'>
@@ -79,9 +82,6 @@ js::set('foldAll',     $lang->execution->treeLevel['root']);
     </p>
   </div>
   <?php else:?>
-  <?php
-  $datatableId  = $this->moduleName . ucfirst($this->methodName);
-  ?>
   <?php $canBatchEdit = common::hasPriv('execution', 'batchEdit'); ?>
   <form class='main-table' id='executionsForm' method='post' action='<?php echo inLink('batchEdit');?>' <?php if(!$useDatatable) echo "data-ride='table'";?>>
     <div class="table-header fixed-right">
