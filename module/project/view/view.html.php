@@ -136,15 +136,15 @@
                   <?php
                   $end = end($programList);
                   reset($programList);
-                  foreach($programList as $ID => $name)
+                  foreach($programList as $id => $name)
                   {
                       if($name != $end)
                       {
-                          echo common::hasPriv('program', 'product') ? html::a($this->createLink('program', 'product', "programID=$ID"), $name) . '/ ' : $name . '/ ';
+                          echo common::hasPriv('program', 'product') ? html::a($this->createLink('program', 'product', "programID=$id"), $name) . '/ ' : $name . '/ ';
                       }
                       else
                       {
-                          echo common::hasPriv('program', 'product') ? html::a($this->createLink('program', 'product', "programID=$ID"), $name) : $name;
+                          echo common::hasPriv('program', 'product') ? html::a($this->createLink('program', 'product', "programID=$id"), $name) : $name;
                       }
                   }
                   ?>
