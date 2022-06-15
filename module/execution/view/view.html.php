@@ -198,13 +198,19 @@
               <div class="detail-title"><strong><?php echo $lang->execution->linkPlan;?></strong></div>
               <div class="detail-content">
                 <div class="row row-grid">
-                  <?php foreach($products as $productID => $product):?>
-                  <?php foreach($product->plans as $planID):?>
-                  <?php if(isset($planGroups[$productID][$planID])):?>
-                  <div class="col-xs-12"><?php echo html::a($this->createLink('productplan', 'view', "planID={$planID}"), $product->name . '/' . $planGroups[$productID][$planID]);?></div>
-                  <?php endif;?>
-                  <?php endforeach;?>
-                  <?php endforeach;?>
+                <?php
+                foreach($products as $productID => $product)
+                {
+                    foreach($product->plans as $planIDList)
+                    {
+                        $planIDList = explode(',', $planIDList);
+                        foreach($planIDList as $planID)
+                        {
+                            if(isset($planGroups[$productID][$planID])) echo '<div class="col-xs-12">' . html::a($this->createLink('productplan', 'view', "planID={$planID}"), $product->name . '/' . $planGroups[$productID][$planID]) . '</div>';
+                        }
+                    }
+                }
+                ?>
                 </div>
               </div>
             </div>

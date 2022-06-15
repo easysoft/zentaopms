@@ -1,1 +1,4 @@
 .chosen-container-single .chosen-single > span {max-width: 100%;}
+
+#plansBox .row {display: inline-table; width: 102%;}
+#plansBox .row .col-sm-4 {display: inline-block; float: none;}
