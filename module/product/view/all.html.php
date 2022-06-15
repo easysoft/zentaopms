@@ -144,6 +144,7 @@
           </tr>
           <?php unset($program['programName']);?>
           <?php endif;?>
+
           <?php foreach($program as $lineID => $line):?>
           <?php if(isset($line['lineName'])):?>
           <?php $lineNames[] = $line['lineName'];?>
