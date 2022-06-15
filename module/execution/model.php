@@ -2454,7 +2454,7 @@ class executionModel extends model
         parse_str($extra, $output);
         foreach($stories as $key => $storyID)
         {
-            $notAllowedStatus = 'closed';
+            $notAllowedStatus = $this->app->rawMethod == 'batchcreate' ? 'closed' : 'draft,closed';
             if(strpos($notAllowedStatus, $storyList[$storyID]->status) !== false) continue;
             if(isset($linkedStories[$storyID])) continue;
 
@@ -2547,7 +2547,16 @@ class executionModel extends model
                     $planStory = $this->story->getPlanStories($planID);
                     if(!empty($planStory))
                     {
-                        foreach($planStory as $id => $story) $planProducts[$story->id] = $story->product;
+                        foreach($planStory as $id => $story)
+                        {
+                            if($story->status == 'draft')
+                            {
+                                $count++;
+                                unset($planStory[$id]);
+                                continue;
+                            }
+                            $planProducts[$story->id] = $story->product;
+                        }
                         $planStories = array_merge($planStories, array_keys($planStory));
                     }
                 }
@@ -2557,6 +2566,7 @@ class executionModel extends model
         $projectID = $this->dao->select('project')->from(TABLE_EXECUTION)->where('id')->eq($executionID)->fetch('project');
         $this->linkStory($executionID, $planStories, $planProducts);
         if($this->config->systemMode == 'new') $this->linkStory($projectID, $planStories, $planProducts);
+        if($count != 0) echo js::alert(sprintf($this->lang->execution->haveDraft, $count)) . js::locate(helper::createLink('execution', 'create', "projectID=$projectID&executionID=$executionID"));
     }
 
     /**
