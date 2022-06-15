@@ -2535,6 +2535,7 @@ class executionModel extends model
 
         $planStories  = array();
         $planProducts = array();
+        $count        = 0;
         $this->loadModel('story');
         if(!empty($plans))
         {
