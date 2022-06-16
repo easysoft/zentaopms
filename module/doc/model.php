@@ -1084,7 +1084,7 @@ class docModel extends model
             if(strpos(",{$object->users},", $account) !== false) return true;
         }
 
-        if(strpos($extra, 'notdoc') === false)
+        if(strpos($extra, 'notdoc') !== false)
         {
             static $extraDocLibs;
             if($extraDocLibs === null) $extraDocLibs = $this->getPrivLibsByDoc();
@@ -1118,7 +1118,7 @@ class docModel extends model
         if($extraDocLibs === null) $extraDocLibs = $this->getPrivLibsByDoc();
 
         static $libs;
-        if($libs === null) $libs = $this->getLibs('all', 'notdoc');
+        if($libs === null) $libs = $this->getLibs('all');
         if(isset($libs[$object->lib]) and isset($extraDocLibs[$object->lib])) unset($extraDocLibs[$object->lib]);
 
         if($object->acl == 'open' and !isset($extraDocLibs[$object->lib])) return true;
