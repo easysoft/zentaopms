@@ -16,7 +16,7 @@
 #productsBox a {border-radius: 2px !important;}
 #productsBox .col-sm-4 {padding-right: 5px;}
 #productsBox .addProduct {padding-left: 0px !important;}
-#productsBox > .required:after{right: -6px !important;}
+#productsBox .required:after{right: -6px !important;}
 #productsBox .input-group-addon > div {display: inline-block !important;}
 #plansBox .row {display: inline-table; width: 102%;}
 #plansBox .col-sm-4 {float: none; display: inline-block; padding-right: 5px;}
