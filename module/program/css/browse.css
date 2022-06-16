@@ -4,7 +4,6 @@
 tbody.sortable > tr > td.sort-handler .table-nest-toggle:before {cursor: pointer !important;}
 .table .avatar {display: inline-block; top: 6px;}
 
-
 label[for^="projectIdList"]:after {width: 14px; height:14px;}
 tbody.sortable > tr > td.sort-handler {color: #3c4353 !important;}
 
