@@ -1024,7 +1024,6 @@ class testcase extends control
                 }
 
                 $this->view->branchTagOption = array($productID => $branchTagOption);
-                $this->view->position[]      = html::a($this->createLink('testcase', 'browse', "productID=$productID"), $this->products[$productID]);
                 $this->view->title           = $product->name . $this->lang->colon . $this->lang->testcase->batchEdit;
                 $this->view->product         = $product;
             }
