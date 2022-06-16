@@ -4167,7 +4167,7 @@ class executionModel extends model
         $id             = $col->id;
         $onlyChildStage = ($execution->grade == 2 and $execution->project != $execution->parent);
 
-        if(!$isStage and $col->id == 'actions') return;
+        if(!$isStage and in_array($col->id, array('percent', 'attribute', 'actions'))) return;
         if(($this->config->systemMode == 'classic' or ($this->config->systemMode == 'new' and $this->app->tab != 'execution')) and $col->id == 'project') return;
 
         if($col->show)
