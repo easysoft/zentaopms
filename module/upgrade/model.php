@@ -513,7 +513,7 @@ class upgradeModel extends model
                 break;
             case '17_0':
                 $this->replaceSetLanePriv();
-                $this->updateObjectData();
+                $this->updateProjectData();
                 break;
         }
 
@@ -6366,7 +6366,7 @@ class upgradeModel extends model
      * @access public
      * @return bool
      */
-    public function updateObjectData()
+    public function updateProjectData()
     {
         /* Process programs. */
         $programs = $this->dao->select('id,parent,grade,path')->from(TABLE_PROJECT)->where('type')->eq('program')->orderBy('parent_asc')->fetchAll('id');
