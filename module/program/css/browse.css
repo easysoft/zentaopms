@@ -12,3 +12,5 @@ tbody.sortable > tr > td.sort-handler {color: #3c4353 !important;}
 .has-prefix > a {padding-left: 5px;}
 
 .has-suffix > a {max-width: calc(100% - 100px); padding-right: 5px; color: #0c60e1; display: inline-block; max-width: calc(100% - 50px);}
+
+div.checkbox-primary + span.table-nest-icon {margin-left:0px !important;}

@@ -54,9 +54,9 @@ function showEditCheckbox(show)
         projectID = $tr.attr('data-id');
         if(show)
         {
-            $tr.find('td:first').prepend("<div class='checkbox-primary'><input type='checkbox' name='projectIdList[]' value='" + projectID + "' id='projectIdList" + projectID + "'/><label for='projectIdList" + projectID + "'></lable></div>");
-
             var marginLeft = $tr.find('td:first').find('span.table-nest-icon').css('margin-left');
+
+            $tr.find('td:first').prepend("<div class='checkbox-primary'><input type='checkbox' name='projectIdList[]' value='" + projectID + "' id='projectIdList" + projectID + "'/><label for='projectIdList" + projectID + "'></lable></div>");
             $tr.find('td:first').find('.checkbox-primary').css('margin-left', marginLeft).css('width', '14');
             $tr.find('td:first').find('span.table-nest-icon').css('margin-left', '0');
         }
