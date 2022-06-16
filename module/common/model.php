@@ -2356,7 +2356,8 @@ EOD;
           ($module == 'user' && strpos('|login|deny|logout|reset|', "|{$method}|") !== false) ||
           ($module == 'my' && strpos('|changepassword|preference|', "|{$method}|") !== false) ||
           ($module == 'file' && strpos('|read|download|uploadimages|ajaxwopifiles|', "|{$method}|") !== false) ||
-          ($module == 'sso' && $method == 'login'))
+          ($module == 'sso' && $method == 'login') ||
+          ($module == 'traincourse' && $method == 'ajaxuploadlargefile'))
         {
             return;
         }

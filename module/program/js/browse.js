@@ -47,7 +47,7 @@ $(function()
 
 function showEditCheckbox(show)
 {
-    $('.icon-project,.icon-waterfall,.icon-scrum').each(function()
+    $('.icon-project,.icon-waterfall,.icon-scrum,.icon-kanban').each(function()
     {
         $this     = $(this);
         $tr       = $(this).closest('tr');
