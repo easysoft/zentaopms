@@ -1337,7 +1337,7 @@ class programModel extends model
         {
             $path = substr($childNode->path, strpos($childNode->path, ",{$programID},"));
 
-            /* Only program sets update grade. */
+            /* Only program and project sets update grade. */
             $grade = in_array($childNode->type, array('program', 'project')) ? $childNode->grade - $oldGrade + 1 : $childNode->grade;
             if($parent)
             {
