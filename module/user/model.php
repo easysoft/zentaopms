@@ -1490,6 +1490,7 @@ class userModel extends model
         }
 
         $this->dao->insert(TABLE_USERCONTACT)->data($data)
+            ->check('listName', 'unique')
             ->autoCheck()
             ->exec();
         if(dao::isError()) return false;
