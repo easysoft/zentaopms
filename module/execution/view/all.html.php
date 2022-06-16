@@ -26,6 +26,7 @@ $unfoldExecutions = zget($unfoldExecutions, $projectID, array());
 js::set('unfoldExecutions', $unfoldExecutions);
 js::set('unfoldAll', $lang->execution->treeLevel['all']);
 js::set('foldAll', $lang->execution->treeLevel['root']);
+js::set('isCNLang', !$this->loadModel('common')->checkNotCN())
 ?>
 <div id='mainMenu' class='clearfix'>
   <div class='btn-toolbar pull-left'>

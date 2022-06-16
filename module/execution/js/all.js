@@ -8,7 +8,8 @@ $(function()
     });
 
     var nameWidth = $('#executionsForm thead th.c-name').width();
-    if(nameWidth < 150 && !useDatatable) $('#executionsForm thead th.c-name').css('width', '150px');
+    if(isCNLang && nameWidth < 150 && !useDatatable) $('#executionsForm thead th.c-name').css('width', '150px');
+    if(!isCNLang && nameWidth < 200 && !useDatatable) $('#executionsForm thead th.c-name').css('width', '200px');
 
     toggleFold('#executionsForm', unfoldExecutions, projectID, 'execution');
 
