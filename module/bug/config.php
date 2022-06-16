@@ -308,7 +308,7 @@ $config->bug->datatable->fieldList['resolvedBy']['required'] = 'no';
 
 $config->bug->datatable->fieldList['resolution']['title']    = 'resolutionAB';
 $config->bug->datatable->fieldList['resolution']['fixed']    = 'no';
-$config->bug->datatable->fieldList['resolution']['width']    = '100';
+$config->bug->datatable->fieldList['resolution']['width']    = '110';
 $config->bug->datatable->fieldList['resolution']['required'] = 'no';
 
 $config->bug->datatable->fieldList['resolvedDate']['title']    = 'resolvedDateAB';
