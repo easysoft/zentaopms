@@ -10,6 +10,7 @@
  * @link        http://www.zentao.net
  */
 ?>
+<?php js::set('maxCount', $this->config->maxCount);?>
 <?php if($docType != '' and strpos($config->doc->officeTypes, $docType) !== false):?>
 <?php include '../../common/view/header.lite.html.php';?>
 <div id="mainContent" class="main-content">

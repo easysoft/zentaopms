@@ -827,19 +827,57 @@ class doc extends control
     }
 
     /**
-     * Ajax get doclib whitelist.
+     * Ajax get whitelist.
      *
      * @param  int    $doclibID
      * @param  string $acl open|custom|private
+     * @param  string $control user|group
      * @access public
      * @return string
      */
-    public function ajaxGetWhitelist($doclibID, $acl)
+    public function ajaxGetWhitelist($doclibID, $acl = '', $control = '')
     {
-        $doclib = $this->doc->getLibById($doclibID);
-        $users  = $this->user->getPairs('noletter|noempty|noclosed');
-
+        $doclib       = $this->doc->getLibById($doclibID);
+        $users        = $this->user->getPairs('noletter|noempty|noclosed');
         $selectedUser = $doclib->users;
+
+
+        if($control == 'group')
+        {
+            $groups        = $this->loadModel('group')->getPairs();
+            $selectedGroup = $doclib->groups;
+            if($doclib->acl == 'custom')
+            {
+                foreach($groups as $groupID => $group)
+                {
+                    if(strpos($doclib->groups, (string)$groupID) === false) unset($groups[$groupID]);
+                }
+                return print(html::select('groups[]', $groups, $selectedGroup, "class='form-control chosen' multiple"));
+            }
+            if($doclib->acl == 'open') return print(html::select('groups[]', $groups, $selectedGroup, "class='form-control chosen' multiple"));
+            if($doclib->acl == 'private') echo 'private';
+            if($doclib->acl == 'default') echo 'default';
+            return false;
+        }
+
+        if($control == 'user')
+        {
+            foreach($users as $account => $user)
+            {
+                if(($doclib->acl == 'custom' or $doclib->acl == 'private') and strpos($doclib->users, (string)$account) === false ) unset($users[$account]);
+            }
+
+            if($doclib->acl == 'custom')
+            {
+                return print(html::select('users[]', $users, $selectedUser, "multiple class='form-control"));
+            }
+            if($doclib->acl == 'open') return print(html::select('users[]', $users, $selectedUser, "multiple class='form-control"));
+            if($doclib->acl == 'private') echo 'private';
+            if($doclib->acl == 'default') echo 'default';
+            return false;
+        }
+
+        /* Sync whitelist when doclib permissions changed. */
         if($doclib->acl != 'custom' and !empty($doclib->project) and $acl == 'custom')
         {
             $project      = $this->loadModel('project')->getById($doclib->project);

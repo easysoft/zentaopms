@@ -21,15 +21,18 @@ function loadModules(libID)
  */
 function toggleAcl(acl, type)
 {
+    var libID = $('#lib').val();
     if(acl == 'custom')
     {
         $('#whiteListBox').removeClass('hidden');
         $('#groupBox').removeClass('hidden');
+        if(type == 'doc') loadWhitelist(libID);
     }
     else if(acl == 'private')
     {
         $('#whiteListBox').removeClass('hidden');
         $('#groupBox').addClass('hidden');
+        if(type == 'doc') loadWhitelist(libID);
     }
     else
     {
@@ -77,6 +80,61 @@ function loadDocModule(libID)
         $('#module').replaceWith(data);
         $('#module_chosen').remove();
         $('#module').chosen();
+    });
+
+    loadWhitelist(libID);
+}
+
+/**
+ * Load whitelist by libID.
+ *
+ * @param  int    $libID
+ * @access public
+ * @return void
+ */
+function loadWhitelist(libID)
+{
+    var groupLink = createLink('doc', 'ajaxGetWhitelist', 'libID=' + libID + '&acl=&control=group');
+    var userLink  = createLink('doc', 'ajaxGetWhitelist', 'libID=' + libID + '&acl=&control=user');
+    $.post(groupLink, function(groups)
+    {
+        if(!(groups == 'default' || groups == 'private'))
+        {
+          $('#groups').replaceWith(groups);
+          $('#groups_chosen').remove();
+          $('#groups').chosen();
+        }
+    });
+
+    $.post(userLink, function(users)
+    {
+        if(users != 'default')
+        {
+            if(users == 'private')
+            {
+                $('#aclopen').parent('.radio-inline').addClass('hidden');
+                $('#aclcustom').parent('.radio-inline').addClass('hidden');
+                $('#aclprivate').prop('checked', true);
+            }
+            else
+            {
+                $('#aclopen').parent('.radio-inline').removeClass('hidden');
+                $('#aclcustom').parent('.radio-inline').removeClass('hidden');
+                $('#aclprivate').prop('checked', false);
+
+                $('#users').replaceWith(users);
+                $('#users_chosen').remove();
+                $('#whiteListBox .picker').remove();
+                if($('#users option').length < maxCount)
+                {
+                  $('#users').chosen();
+                }
+                else
+                {
+                  $('#users').picker();
+                }
+            }
+        }
     });
 }
 
