@@ -710,8 +710,6 @@ class project extends control
             return print(js::locate($this->session->projectList, 'parent'));
         }
 
-        if($this->app->tab == 'program') $this->loadModel('program')->setMenu(0);
-
         if(!$this->post->projectIdList) return print(js::locate($this->session->projectList, 'parent'));
         $projectIdList = $this->post->projectIdList;
         $projects      = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->in($projectIdList)->fetchAll('id');

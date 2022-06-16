@@ -3104,7 +3104,7 @@ EOD;
             return;
         }
 
-        if($currentModule == $tab && $currentMethod== 'create')
+        if($currentModule == $tab && $currentMethod == 'create')
         {
             $lang->menu = $lang->$tab->homeMenu;
             return;
@@ -3124,6 +3124,12 @@ EOD;
             }
 
             if(isset($menu['alias']) and in_array($currentMethod, explode(',', strtolower($menu['alias']))))
+            {
+                $lang->menu = $lang->$tab->homeMenu;
+                return;
+            }
+
+            if(isset($menu['subModule']) and strpos(",{$menu['subModule']},", ",$currentModule,") !== false)
             {
                 $lang->menu = $lang->$tab->homeMenu;
                 return;
