@@ -1258,8 +1258,7 @@ class product extends control
         if($this->config->systemMode == 'classic' and $orderBy == 'program_asc') $orderBy = 'order_desc';
         $productStats     = $this->product->getStats($orderBy, $pager, $browseType, '', 'story', '', $queryID);
         $productStructure = $this->product->statisticProgram($productStats);
-        $productLines     = $this->dao->select('*')->from(TABLE_MODULE)->where('type')->eq('line')->andWhere('deleted')->eq(0)->orderBy('`order`')->fetchAll();
-        array_multisort(array_column($productLines, 'order'), SORT_ASC, $productLines);
+        $productLines     = $this->dao->select('*')->from(TABLE_MODULE)->where('type')->eq('line')->andWhere('deleted')->eq(0)->orderBy('order asc')->fetchAll();
         $programLines     = array();
 
         foreach($productLines as $index => $productLine)
