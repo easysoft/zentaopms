@@ -1387,7 +1387,7 @@ $(function()
         $(this).toggleClass('icon-angle-top icon-angle-down');
         $(this).parents('.region').find('.kanban').toggle();
         hideKanbanAction();
-        resetRegionHeight($(this).hasClass('icon-chevron-double-up') ? 'open' : 'close');
+        resetRegionHeight($(this).hasClass('icon-angle-top') ? 'open' : 'close');
     });
 
     $('.region-header').on('click', '.action', hideKanbanAction);
@@ -1700,6 +1700,7 @@ function resetRegionHeight(fold)
     {
         $('.region').css('height', regionHeaderHeight);
     }
+
 }
 
 $(document).on('click', '.dropdown-menu', function()

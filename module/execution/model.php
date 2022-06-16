@@ -3105,7 +3105,6 @@ class executionModel extends model
             if($currentTime > time() and !$todayTag)
             {
                 $todayTag = $i + 1;
-                break;
             }
 
             if(!isset($sets[$current]) and $mode == 'noempty')
