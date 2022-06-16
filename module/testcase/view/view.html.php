@@ -285,18 +285,16 @@
           <table class='table table-data'>
             <?php if($case->fromBug):?>
             <tr>
-              <th class='thWidth'><?php echo $lang->testcase->fromBug;?></th>
               <td><?php echo html::a($this->createLink('bug', 'view', "bugID=$case->fromBug", '', true), $case->fromBugTitle, '', "class='iframe' data-width='80%'");?></td>
             </tr>
             <?php endif;?>
             <?php if($case->toBugs):?>
             <tr>
-              <th class='thWidth' valign="top"><?php echo $lang->testcase->toBug;?></th>
               <td>
               <?php
               foreach($case->toBugs as $bugID => $bugTitle)
               {
-                  echo '<p style="margin-bottom:0;">' . html::a($this->createLink('bug', 'view', "bugID=$bugID", '', true), $bugTitle, '', "class='iframe' data-width='80%'") . '</p>';
+                  echo '<p style="margin-bottom:0;">' . html::a($this->createLink('bug', 'view', "bugID=$bugID", '', true), "#$bugID " . $bugTitle, '', "class='iframe' data-width='80%'") . '</p>';
               }
               ?>
               </td>
