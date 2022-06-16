@@ -1,4 +1,5 @@
 body {margin-bottom: 25px;}
+.table-responsive {overflow-y: hidden !important;}
 #product_chosen .chosen-single {width: 180px;}
 
 .table-children {border-left: 2px solid #cbd0db; border-right: 2px solid #cbd0db;}
