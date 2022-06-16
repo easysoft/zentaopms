@@ -106,7 +106,11 @@ js::set('foldAll', $lang->execution->treeLevel['root']);
               $hasActions = false;
               foreach($setting as $key => $value)
               {
-                  if($value->id == 'actions') $hasActions = true;
+                  if($value->id == 'actions')
+                  {
+                      $hasActions  = true;
+                      $value->show = true;
+                  }
               }
 
               if(!$hasActions)
@@ -126,9 +130,9 @@ js::set('foldAll', $lang->execution->treeLevel['root']);
 
           foreach($setting as $key => $value)
           {
-              if($value->show || $value->id == 'actions')
+              if($value->show)
               {
-                  if($isStage and $value->id == 'actions') $value->show = true;
+                  if(!$isStage and in_array($value->id, array('percent', 'attribute', 'actions'))) continue;
                   if(($config->systemMode == 'classic' or ($config->systemMode == 'new' and $this->app->tab != 'execution')) and $value->id == 'project') continue;
 
                   $this->datatable->printHead($value, $orderBy, $vars, $canBatchEdit);
