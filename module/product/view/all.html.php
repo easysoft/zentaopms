@@ -207,7 +207,7 @@
             <?php if($canBatchEdit):?>
             <td class='c-checkbox'><?php echo html::checkbox('productIDList', array($product->id => ''));?></td>
             <?php endif;?>
-            <td class="c-name text-left table-nest-title" title='<?php echo $product->name?>'>
+            <td class="c-name text-left sort-handler table-nest-title" title='<?php echo $product->name?>'>
               <?php
               $productLink = html::a($this->createLink('product', 'browse', 'productID=' . $product->id), $product->name);
               echo "<span class='table-nest-icon icon icon-product'></span>" . $productLink;
@@ -229,7 +229,7 @@
             <td><?php echo $product->plans;?></td>
             <td><?php echo $product->releases;?></td>
             <?php foreach($extendFields as $extendField) echo "<td>" . $this->loadModel('flow')->getFieldValue($extendField, $product) . "</td>";?>
-            <td class='c-actions sort-handler'><?php echo $this->product->buildOperateMenu($product, 'browse');?></td>
+            <td class='c-actions'><?php echo $this->product->buildOperateMenu($product, 'browse');?></td>
           </tr>
           <?php endforeach;?>
           <?php endif;?>
