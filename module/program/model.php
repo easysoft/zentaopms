@@ -1326,7 +1326,7 @@ class programModel extends model
     {
         $parent = $this->dao->select('id,parent,path,grade')->from(TABLE_PROGRAM)->where('id')->eq($parentID)->fetch();
 
-        $childNodes = $this->dao->select('id,parent,path,grade')->from(TABLE_PROGRAM)
+        $childNodes = $this->dao->select('id,parent,path,grade,type')->from(TABLE_PROGRAM)
             ->where('path')->like("{$oldPath}%")
             ->andWhere('deleted')->eq(0)
             ->orderBy('grade')
@@ -1335,13 +1335,16 @@ class programModel extends model
         /* Process child node path and grade field. */
         foreach($childNodes as $childNode)
         {
-            $path  = substr($childNode->path, strpos($childNode->path, ",{$programID},"));
-            $grade = $childNode->grade - $oldGrade + 1;
+            $path = substr($childNode->path, strpos($childNode->path, ",{$programID},"));
+
+            /* Only program and project sets update grade. */
+            $grade = in_array($childNode->type, array('program', 'project')) ? $childNode->grade - $oldGrade + 1 : $childNode->grade;
             if($parent)
             {
                 $path  = rtrim($parent->path, ',') . $path;
-                $grade = $parent->grade + $grade;
+                $grade =  in_array($childNode->type, array('program', 'project'))? $parent->grade + $grade : $grade;
             }
+
             $this->dao->update(TABLE_PROGRAM)->set('path')->eq($path)->set('grade')->eq($grade)->where('id')->eq($childNode->id)->exec();
         }
 
