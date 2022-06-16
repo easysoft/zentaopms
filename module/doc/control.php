@@ -841,7 +841,6 @@ class doc extends control
         $users        = $this->user->getPairs('noletter|noempty|noclosed');
         $selectedUser = $doclib->users;
 
-
         if($control == 'group')
         {
             $groups        = $this->loadModel('group')->getPairs();
