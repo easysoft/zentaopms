@@ -1326,7 +1326,7 @@ class programModel extends model
     {
         $parent = $this->dao->select('id,parent,path,grade')->from(TABLE_PROGRAM)->where('id')->eq($parentID)->fetch();
 
-        $childNodes = $this->dao->select('id,parent,path,grade')->from(TABLE_PROGRAM)
+        $childNodes = $this->dao->select('id,parent,path,grade,type')->from(TABLE_PROGRAM)
             ->where('path')->like("{$oldPath}%")
             ->andWhere('deleted')->eq(0)
             ->orderBy('grade')
@@ -1342,6 +1342,10 @@ class programModel extends model
                 $path  = rtrim($parent->path, ',') . $path;
                 $grade = $parent->grade + $grade;
             }
+
+            /* Only program sets update grade. */
+            if($childNode->type != 'program') $grade = $childNode->grade;
+
             $this->dao->update(TABLE_PROGRAM)->set('path')->eq($path)->set('grade')->eq($grade)->where('id')->eq($childNode->id)->exec();
         }
 
