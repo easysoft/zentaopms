@@ -308,13 +308,14 @@ $lang->kanbancolumn->confirmDeleteChild = '您确认删除该列吗？删除列�
 $lang->kanbancolumn->confirmRestore     = '您确定要还原该看板列吗？还原后，该看板列将回到之前的位置。';
 
 $lang->kanbanlane = new stdclass();
-$lang->kanbanlane->name      = $lang->kanban->laneName;
-$lang->kanbanlane->common    = '泳道';
-$lang->kanbanlane->default   = '默认泳道';
-$lang->kanbanlane->column    = '泳道看板列';
-$lang->kanbanlane->otherlane = '选择共享看板列的泳道';
-$lang->kanbanlane->color     = '泳道颜色';
-$lang->kanbanlane->WIPType   = '泳道在制品类型';
+$lang->kanbanlane->name         = $lang->kanban->laneName;
+$lang->kanbanlane->common       = '泳道';
+$lang->kanbanlane->default      = '默认泳道';
+$lang->kanbanlane->column       = '泳道看板列';
+$lang->kanbanlane->otherlane    = '选择共享看板列的泳道';
+$lang->kanbanlane->color        = '泳道颜色';
+$lang->kanbanlane->WIPType      = '泳道在制品类型';
+$lang->kanbanlane->heightByCard = '自适应（根据卡片高度自适应）';
 
 $lang->kanbanlane->confirmDelete    = '您确认删除该泳道吗？删除泳道后，该泳道中所有数据（列、卡片）也会被删除。';
 $lang->kanbanlane->confirmDeleteTip = '您确认删除该泳道吗？删除泳道后，该泳道中所有的%s将被隐藏。';
