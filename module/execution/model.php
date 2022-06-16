@@ -4220,7 +4220,7 @@ class executionModel extends model
                 {
                     echo "<div class='checkbox-primary'><input type='checkbox' name='executionIDList[$execution->id]' value='$execution->id' autocomplete='off'/><label></label></div>";
                 }
-                echo printf('%03d', $execution->id);
+                echo sprintf('%03d', $execution->id);
                 break;
             case 'name':
                 $label         = $execution->type == 'stage' ? 'label-warning' : 'label-info';

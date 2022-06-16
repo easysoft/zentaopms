@@ -513,6 +513,7 @@ class upgradeModel extends model
                 break;
             case '17_0':
                 $this->replaceSetLanePriv();
+                $this->updateProjectData();
                 break;
         }
 
@@ -6354,6 +6355,84 @@ class upgradeModel extends model
 
             $data->method = 'editLaneColor';
             $this->dao->insert(TABLE_GROUPPRIV)->data($data)->exec();
+        }
+
+        return true;
+    }
+
+    /**
+     * Update path and grade of program, project and execution.
+     *
+     * @access public
+     * @return bool
+     */
+    public function updateProjectData()
+    {
+        /* Process programs. */
+        $programs = $this->dao->select('id,parent,grade,path')->from(TABLE_PROJECT)->where('type')->eq('program')->orderBy('parent_asc')->fetchAll('id');
+        foreach($programs as $program)
+        {
+            if(!$program->parent)
+            {
+                $program->grade = 1;
+                $program->path  = ",$program->id,";
+            }
+            else
+            {
+                $program->grade = $programs[$program->parent]->grade + 1;
+                $program->path  = $programs[$program->parent]->path . "$program->id,";
+            }
+
+            $this->dao->update(TABLE_PROGRAM)
+                ->set('path')->eq($program->path)
+                ->set('grade')->eq($program->grade)
+                ->where('id')->eq($program->id)->exec();
+        }
+
+        /* Process projects. */
+        $projects = $this->dao->select('id,project,parent,grade,path')->from(TABLE_PROJECT)->where('type')->eq('project')->orderBy('parent_asc')->fetchAll('id');
+        foreach($projects as $project)
+        {
+            if(!$project->parent)
+            {
+                $project->grade = 1;
+                $project->path  = ",$project->id,";
+            }
+            else
+            {
+                $project->grade = $programs[$project->parent]->grade + 1;
+                $project->path  = $programs[$project->parent]->path . "$project->id,";
+            }
+
+            $this->dao->update(TABLE_PROJECT)
+                ->set('path')->eq($project->path)
+                ->set('grade')->eq($project->grade)
+                ->where('id')->eq($project->id)->exec();
+        }
+
+        /* Process executions. */
+        $sprints = $this->dao->select('id,project,parent,grade,path')->from(TABLE_PROJECT)
+            ->where('type')->ne('project')
+            ->andWhere('type')->ne('program')
+            ->orderBy('parent_asc')->fetchAll('id');
+
+        foreach($sprints as $sprint)
+        {
+            if($sprint->parent == $sprint->project)
+            {
+                $sprint->grade = 1;
+                $sprint->path  = ",$sprint->project,$sprint->id,";
+            }
+            else
+            {
+                $sprint->grade = 2;
+                $sprint->path  = $sprints[$sprint->parent]->path . "$sprint->id,";
+            }
+
+            $this->dao->update(TABLE_EXECUTION)
+                ->set('path')->eq($sprint->path)
+                ->set('grade')->eq($sprint->grade)
+                ->where('id')->eq($sprint->id)->exec();
         }
 
         return true;

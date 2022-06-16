@@ -740,6 +740,7 @@ class execution extends control
         else
         {
             $this->session->set('executionStoryBrowseType', $type);
+            $this->session->set('storyBrowseType', $type, 'execution');
         }
 
         /* Save session. */
@@ -1026,6 +1027,7 @@ class execution extends control
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'testcase', false);
 
         $cases = $this->testcase->appendData($cases, 'case');
+        $cases = $this->loadModel('story')->checkNeedConfirm($cases);
 
         $this->view->title       = $this->lang->execution->testcase;
         $this->view->executionID = $executionID;
