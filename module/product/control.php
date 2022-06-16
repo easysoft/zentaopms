@@ -462,33 +462,35 @@ class product extends control
         if(!empty($unmodifiableProjects)) $canChangeProgram = false;
 
         /* Get the projects linked with this product. */
-        $projectPairs = $this->dao->select('t2.id,t2.name')->from(TABLE_PROJECTPRODUCT)->alias('t1')
+        $projects = $this->dao->select('t2.id,t2.name,t2.path')->from(TABLE_PROJECTPRODUCT)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
             ->where('t1.product')->eq($productID)
             ->andWhere('t2.type')->eq('project')
             ->andWhere('t2.deleted')->eq('0')
-            ->fetchPairs();
+            ->fetchAll('id');
 
-        if(!empty($projectPairs))
+        $projectPathList = array();
+        if(!empty($projects))
         {
-            foreach($projectPairs as $projectID => $projectName)
+            foreach($projects as $projectID => $project)
             {
+                $projectPathList[$projectID] = $project->path;
                 if($canChangeProgram)
                 {
                     $products = $this->dao->select('product')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($projectID)->fetchPairs();
                     if(count($products) == 1)
                     {
-                        $singleLinkProjects[$projectID] = $projectName;
+                        $singleLinkProjects[$projectID] = $project->name;
                     }
 
                     if(count($products) > 1)
                     {
-                        $multipleLinkProjects[$projectID] = $projectName;
+                        $multipleLinkProjects[$projectID] = $project->name;
                     }
                 }
                 else
                 {
-                    if(isset($unmodifiableProjects[$projectID])) $linkStoriesProjects[$projectID] = $projectName;
+                    if(isset($unmodifiableProjects[$projectID])) $linkStoriesProjects[$projectID] = $project->name;
                 }
             }
         }
@@ -579,6 +581,7 @@ class product extends control
         $this->view->singleLinkProjects   = $singleLinkProjects;
         $this->view->multipleLinkProjects = $multipleLinkProjects;
         $this->view->linkStoriesProjects  = $linkStoriesProjects;
+        $this->view->projectPathList      = $projectPathList;
 
         unset($this->lang->product->typeList['']);
         $this->display();

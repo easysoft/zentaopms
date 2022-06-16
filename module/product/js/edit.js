@@ -3,7 +3,15 @@ $(function()
     $('#program').change(function()
     {
         var programID = $(this).val();
-        if(!canChangeProgram || singleLinkProjects.length !== 0 || multipleLinkProjects.length !== 0)
+        var canChange = true;
+        for(var i = 0; i < linkStoriesProjectIDList.length; i ++)
+        {
+            var projectID = linkStoriesProjectIDList[i];
+            var path      = projectPathList[projectID];
+            if(path.indexOf(',' + programID + ',') < 0) canChange = false;
+        }
+
+        if(!canChange && (!canChangeProgram || singleLinkProjects.length !== 0 || multipleLinkProjects.length !== 0))
         {
             $('#changeProgram').modal({show: true});
             if(!canChangeProgram)
