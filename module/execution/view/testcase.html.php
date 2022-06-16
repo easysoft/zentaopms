@@ -32,7 +32,7 @@
           <th class='c-date'>  <?php common::printOrderLink('lastRunDate',   $orderBy, $vars, $lang->testtask->lastRunTime);?></th>
           <th class='c-result'><?php common::printOrderLink('lastRunResult', $orderBy, $vars, $lang->testtask->lastRunResult);?></th>
           <th class='c-status'><?php common::printOrderLink('status',        $orderBy, $vars, $lang->statusAB);?></th>
-          <th class='c-actions-5 text-center'> <?php echo $lang->actions;?></th>
+          <th class='c-actions-6 text-center'><?php echo $lang->actions;?></th>
         </tr>
       </thead>
       <tbody>
@@ -40,7 +40,6 @@
         <?php
         $caseID = $type == 'assigntome' ? $case->case : $case->id;
         $runID  = $type == 'assigntome' ? $case->id   : 0;
-        $canBeChanged = common::canBeChanged('testcase', $case);
         ?>
         <tr>
           <td class="c-id">
@@ -55,18 +54,26 @@
           <td><?php echo zget($users, $case->lastRunner);?></td>
           <td><?php if(!helper::isZeroDate($case->lastRunDate)) echo date(DT_MONTHTIME1, strtotime($case->lastRunDate));?></td>
           <td class='<?php echo $case->lastRunResult;?>'><?php if($case->lastRunResult) echo $lang->testcase->resultList[$case->lastRunResult];?></td>
-          <td class='<?php if(isset($run)) echo $run->status;?>'><?php echo $this->processStatus('testcase', $case);?></td>
+          <td>
+          <?php
+          if($case->needconfirm)
+          {
+              echo "<span class='status-story status-changed' title='{$this->lang->story->changed}'>{$this->lang->story->changed}</span>";
+          }
+          elseif(isset($case->fromCaseVersion) and $case->fromCaseVersion > $case->version and !$case->needconfirm)
+          {
+              echo "<span class='status-story status-changed' title='{$this->lang->testcase->changed}'>{$this->lang->testcase->changed}</span>";
+          }
+          else
+          {
+              echo "<span class='status-testcase status-{$case->status}'>" . $this->processStatus('testcase', $case) . "</span>";
+          }
+          ?>
+          </td>
           <td class='c-actions'>
             <?php
-            if($canBeChanged)
-            {
-                $disabled =  $case->status == 'wait' ? 'disabled' : '';
-                common::printIcon('testcase', 'createBug', "product=$case->product&branch=$case->branch&extra=caseID=$caseID,version=$case->version,runID=$runID,executionID=$executionID", $case, 'list', 'bug', '', 'iframe', '', "data-width='90%'", '', $case->project);
-                common::printIcon('testcase', 'create',  "productID=$case->product&branch=$case->branch&moduleID=$case->module&from=testcase&param=$caseID", $case, 'list', 'copy', '', '', '', '', '', $case->project);
-                common::printIcon('testtask', 'runCase', "runID=$runID&caseID=$caseID&version=$case->version", '', 'list', 'play', '', "iframe $disabled", true, "data-width='95%'", '', $case->project);
-                common::printIcon('testtask', 'results', "runID=$runID&caseID=$caseID", '', 'list', 'list-alt', '', 'iframe', true, "data-width='95%'", '', $case->project);
-                common::printIcon('testcase', 'edit',    "caseID=$caseID&comment=false&executionID=$executionID", $case, 'list', 'edit', '', '', '', '', '', $case->project);
-            }
+            $case->browseType = $type;
+            echo $this->testcase->buildOperateMenu($case, 'browse');
             ?>
           </td>
         </tr>
