@@ -513,6 +513,7 @@ class upgradeModel extends model
                 break;
             case '17_0':
                 $this->replaceSetLanePriv();
+                $this->updateGradeOfStage();
                 break;
         }
 
@@ -6356,6 +6357,28 @@ class upgradeModel extends model
             $this->dao->insert(TABLE_GROUPPRIV)->data($data)->exec();
         }
 
+        return true;
+    }
+
+    /**
+     * Update grade of stage.
+     *
+     * @access public
+     * @return void
+     */
+    public function updateGradeOfStage()
+    {
+        $allStages    = $this->dao->select('*')->from(TABLE_EXECUTION)->where('type')->eq('stage')->fetchAll('id');
+        $updateIDList = array();
+        foreach($allStages as $stageID => $stage)
+        {
+            if($stage->project != $stage->parent) $updateIDList[$stageID] = $stageID;
+        }
+
+        if(!empty($updateIDList))
+        {
+            $this->dao->update(TABLE_EXECUTION)->set('grade')->eq(2)->where('type')->eq('stage')->andWhere('id')->in($updateIDList)->exec();
+        }
         return true;
     }
 }

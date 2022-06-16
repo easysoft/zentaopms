@@ -1335,16 +1335,15 @@ class programModel extends model
         /* Process child node path and grade field. */
         foreach($childNodes as $childNode)
         {
-            $path  = substr($childNode->path, strpos($childNode->path, ",{$programID},"));
-            $grade = $childNode->grade - $oldGrade + 1;
+            $path = substr($childNode->path, strpos($childNode->path, ",{$programID},"));
+
+            /* Only program sets update grade. */
+            $grade = $childNode->type == 'program' ? $childNode->grade - $oldGrade + 1 : $childNode->grade;
             if($parent)
             {
                 $path  = rtrim($parent->path, ',') . $path;
-                $grade = $parent->grade + $grade;
+                $grade = $childNode->type == 'program' ? $parent->grade + $grade : $grade;
             }
-
-            /* Only program sets update grade. */
-            if($childNode->type != 'program') $grade = $childNode->grade;
 
             $this->dao->update(TABLE_PROGRAM)->set('path')->eq($path)->set('grade')->eq($grade)->where('id')->eq($childNode->id)->exec();
         }
