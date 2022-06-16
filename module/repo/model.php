@@ -552,6 +552,10 @@ class repoModel extends model
             ->andWhere('deleted')->eq('0')
             ->orderBy('id_desc')
             ->fetchAll();
+        foreach($matchedRepos as $key => $repo)
+        {
+            if(!$this->checkPriv($repo)) unset($matchedRepos[$key]);
+        }
         if(empty($matchedRepos)) return array('status' => 'fail', 'message' => 'No matched gitlab.');
 
         return array('status' => 'success', 'repos' => $matchedRepos);
