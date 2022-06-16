@@ -55,7 +55,7 @@ class commonModel extends model
 
         if($this->config->systemMode == 'new')
         {
-            if($thisModule == 'task')
+            if($thisModule == 'task' or $thisModule == 'effort')
             {
                 $taskID    = $objectID;
                 $execution = $this->syncExecutionStatus($taskID);
