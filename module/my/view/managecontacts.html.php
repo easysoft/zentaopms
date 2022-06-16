@@ -14,7 +14,7 @@
 <div id='mainContent' class='main-content main-row'>
   <div class='side-col'>
   <div class='main-header'><h2 class='contactListTitle'><?php echo $lang->my->contactList;?></h2></div>
-    <div>
+    <div class="list-group">
     <?php echo html::a(inlink('managecontacts', "listID=0&mode=new"), '<i class="icon icon-plus"></i> ' . $lang->user->contacts->createList, '', "class='btn btn-secondary createBtn'"); ?>
     <?php
     foreach($lists as $id => $listName)
