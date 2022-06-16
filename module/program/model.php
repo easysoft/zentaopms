@@ -1338,11 +1338,11 @@ class programModel extends model
             $path = substr($childNode->path, strpos($childNode->path, ",{$programID},"));
 
             /* Only program sets update grade. */
-            $grade = $childNode->type == 'program' ? $childNode->grade - $oldGrade + 1 : $childNode->grade;
+            $grade = in_array($childNode->type, array('program', 'project')) ? $childNode->grade - $oldGrade + 1 : $childNode->grade;
             if($parent)
             {
                 $path  = rtrim($parent->path, ',') . $path;
-                $grade = $childNode->type == 'program' ? $parent->grade + $grade : $grade;
+                $grade =  in_array($childNode->type, array('program', 'project'))? $parent->grade + $grade : $grade;
             }
 
             $this->dao->update(TABLE_PROGRAM)->set('path')->eq($path)->set('grade')->eq($grade)->where('id')->eq($childNode->id)->exec();

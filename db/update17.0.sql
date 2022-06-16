@@ -12,4 +12,4 @@ DELETE FROM `zt_workflowaction` WHERE `module`='build'   AND `action`='browse';
 
 ALTER TABLE `zt_projectproduct` MODIFY COLUMN `plan` varchar(255) NOT NULL;
 
-UPDATE `zt_project` SET `grade`=1 WHERE `type` in ('project', 'sprint', 'kanban');
+UPDATE `zt_project` SET `grade`=1 WHERE `type` in ('sprint', 'kanban');
