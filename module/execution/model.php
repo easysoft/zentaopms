@@ -2537,7 +2537,6 @@ class executionModel extends model
 
         $planStories  = array();
         $planProducts = array();
-        $count        = 0;
         $this->loadModel('story');
         if(!empty($plans))
         {
@@ -2554,7 +2553,6 @@ class executionModel extends model
                         {
                             if($story->status == 'draft')
                             {
-                                $count++;
                                 unset($planStory[$id]);
                                 continue;
                             }
@@ -2569,7 +2567,6 @@ class executionModel extends model
         $projectID = $this->dao->select('project')->from(TABLE_EXECUTION)->where('id')->eq($executionID)->fetch('project');
         $this->linkStory($executionID, $planStories, $planProducts);
         if($this->config->systemMode == 'new') $this->linkStory($projectID, $planStories, $planProducts);
-        if($count != 0) echo js::alert(sprintf($this->lang->execution->haveDraft, $count)) . js::locate(helper::createLink('execution', 'create', "projectID=$projectID&executionID=$executionID"));
     }
 
     /**
