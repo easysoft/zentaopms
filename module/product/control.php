@@ -1048,7 +1048,7 @@ class product extends control
     public function ajaxGetPlans($productID, $branch = 0, $planID = 0, $fieldID = '', $needCreate = false, $expired = '', $param = '')
     {
         $param    = strtolower($param);
-        $plans    = $this->loadModel('productplan')->getPairs($productID, $branch == 0 ? '' : $branch, $expired, strpos($param, 'skipparent') !== false);
+        $plans    = $this->loadModel('productplan')->getPairs($productID, $branch, $expired, strpos($param, 'skipparent') !== false);
         $field    = $fieldID ? "plans[$fieldID]" : 'plan';
         $multiple = strpos($param, 'multiple') === false ? '' : 'multiple';
         $output   = html::select($field, $plans, $planID, "class='form-control chosen' $multiple");
@@ -1257,6 +1257,15 @@ class product extends control
         /* Process product structure. */
         $productStats     = $this->product->getStats($orderBy, $pager, $browseType, '', 'story', '', $queryID);
         $productStructure = $this->product->statisticProgram($productStats);
+        $productLines     = $this->dao->select('*')->from(TABLE_MODULE)->where('type')->eq('line')->andWhere('deleted')->eq(0)->orderBy('`order`')->fetchAll();
+        array_multisort(array_column($productLines, 'order'), SORT_ASC, $productLines);
+        $programLines     = array();
+
+        foreach($productLines as $index => $productLine)
+        {
+            if(!isset($programLines[$productLine->root])) $programLines[$productLine->root] = array();
+            $programLines[$productLine->root][$productLine->id] = $productLine->name;
+        }
 
         $actionURL = $this->createLink('product', 'all', "browseType=bySearch&orderBy=order_asc&queryID=myQueryID");
         $this->product->buildProductSearchForm($param, $actionURL);
@@ -1267,6 +1276,8 @@ class product extends control
         $this->view->recTotal         = count($productStats);
         $this->view->productStats     = $productStats;
         $this->view->productStructure = $productStructure;
+        $this->view->productLines     = $productLines;
+        $this->view->programLines     = $programLines;
         $this->view->orderBy          = $orderBy;
         $this->view->browseType       = $browseType;
         $this->view->pager            = $pager;

@@ -1472,7 +1472,11 @@ class commonModel extends model
             $orderBy   = "" . trim($fieldName, '`') . "" . '_' . 'asc';
             $className = 'header';
         }
-        $link = helper::createLink($module, $method, sprintf($vars, $orderBy));
+
+        $params = sprintf($vars, $orderBy);
+        if($app->getModuleName() == 'my') $params = "mode={$app->getMethodName()}&" .sprintf($vars, $orderBy);
+
+        $link = helper::createLink($module, $method, $params);
         echo $isMobile ? html::a($link, $label, '', "class='$className' data-app={$app->tab}") : html::a($link, $label, '', "class='$className' data-app={$app->tab}");
     }
 

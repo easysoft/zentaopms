@@ -495,6 +495,69 @@ class repoModel extends model
     }
 
     /**
+     * Get repo list by url.
+     *
+     * @param  string $url
+     * @access public
+     * @return array
+     */
+    public function getRepoListByUrl($url = '')
+    {
+        if(empty($url)) return array('status' => 'fail', 'message' => 'Url is empty.');
+
+        $parsedUrl = parse_url($url);
+
+        $isSSH   = $parsedUrl['scheme'] == 'ssh';
+        $baseURL = $parsedUrl['scheme'] . '://' . $parsedUrl['host'] . (isset($parsedUrl['port']) ? ":{$parsedUrl['port']}" : '');
+
+        /* Get gitlabs by URL. */
+        $gitlabs = $this->dao->select('*')->from(TABLE_PIPELINE)->where('type')->eq('gitlab')
+            ->beginIF($isSSH)->andWhere('url')->like("%{$parsedUrl['host']}%")->fi()
+            ->beginIF(!$isSSH)->andWhere('url')->eq($baseURL)->fi()
+            ->andWhere('deleted')->eq('0')
+            ->orderBy('id_desc')
+            ->fetchAll('id');
+
+        /* Convert to id by url. */
+        $this->loadModel('gitlab');
+        $url     = str_replace('https://', 'http://', strtolower($url));
+        $matches = array();
+        foreach($gitlabs as $gitlabID => $gitlab)
+        {
+            $matched = new stdclass();
+            $matched->gitlab  = 0;
+            $matched->project = 0;
+
+            $projects = $this->gitlab->apiGetProjects($gitlabID);
+            foreach($projects as $project)
+            {
+                $urlToRepo = str_replace('https://', 'http://', strtolower($project->http_url_to_repo));
+                if((!$isSSH and $urlToRepo == $url) or ($isSSH and strtolower($project->ssh_url_to_repo) == $url))
+                {
+                    $matched->gitlab  = $gitlabID;
+                    $matched->project = $project->id;
+
+                    $matches[] = $matched;
+                }
+            }
+        }
+        if(empty($matches)) return array('status' => 'fail', 'message' => 'No matched gitlab.');
+
+        $conditions = array();
+        foreach($matches as $matched) $conditions[] = "(`client`='$matched->gitlab' and `path`='$matched->project')";
+        $conditions = '(' . join(' OR ', $conditions). ')';
+
+        $matchedRepos = $this->dao->select('*')->from(TABLE_REPO)->where('SCM')->eq('Gitlab')
+            ->andWhere($conditions)
+            ->andWhere('deleted')->eq('0')
+            ->orderBy('id_desc')
+            ->fetchAll();
+        if(empty($matchedRepos)) return array('status' => 'fail', 'message' => 'No matched gitlab.');
+
+        return array('status' => 'success', 'repos' => $matchedRepos);
+    }
+
+    /**
      * Get by id list.
      *
      * @param  array  $idList

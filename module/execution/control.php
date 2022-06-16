@@ -934,7 +934,7 @@ class execution extends control
         $actionURL = $this->createLink('execution', 'bug', "executionID=$executionID&productID=$productID&orderBy=$orderBy&build=$build&type=bysearch&queryID=myQueryID");
         $this->execution->buildBugSearchForm($products, $queryID, $actionURL);
 
-        $product = $this->loadModel('product')->getById($productID);
+        $product = $this->product->getById($productID);
         $showBranch      = false;
         $branchOption    = array();
         $branchTagOption = array();
@@ -944,7 +944,7 @@ class execution extends control
             $showBranch = $this->loadModel('branch')->showBranch($productID);
 
             /* Display status of branch. */
-            $branches = $this->loadModel('branch')->getList($productID, 0, 'all');
+            $branches = $this->branch->getList($productID, 0, 'all');
             foreach($branches as $branchInfo)
             {
                 $branchOption[$branchInfo->id]    = $branchInfo->name;
@@ -979,9 +979,10 @@ class execution extends control
         $this->view->branchID        = empty($this->view->build->branch) ? $branchID : $this->view->build->branch;
         $this->view->memberPairs     = $memberPairs;
         $this->view->type            = $type;
+        $this->view->summary         = $this->bug->summary($bugs);
         $this->view->param           = $param;
         $this->view->defaultProduct  = (empty($productID) and !empty($products)) ? current(array_keys($products)) : $productID;
-        $this->view->builds          = $this->loadModel('build')->getBuildPairs($productID);
+        $this->view->builds          = $this->build->getBuildPairs($productID);
         $this->view->branchOption    = $branchOption;
         $this->view->branchTagOption = $branchTagOption;
         $this->view->modulePairs     = $showModule ? $this->loadModel('tree')->getModulePairs($productID, 'bug', $showModule) : array();
@@ -1541,7 +1542,7 @@ class execution extends control
      * @access public
      * @return void
      */
-    public function edit($executionID, $action = 'edit', $extra = '')
+    public function edit($executionID, $action = 'edit', $extra = '', $newPlans = '', $confirm = 'no')
     {
         /* Load language files and get browseExecutionLink. */
         $this->loadModel('product');
@@ -1558,6 +1559,19 @@ class execution extends control
             global $lang;
             $lang->executionCommon = $lang->execution->kanban;
             include $this->app->getModulePath('', 'execution') . 'lang/' . $this->app->getClientLang() . '.php';
+        }
+
+        if(!empty($newPlans) and $confirm == 'yes')
+        {
+            $newPlans = explode(',', $newPlans);
+            $projectID = $this->dao->select('project')->from(TABLE_EXECUTION)->where('id')->eq($executionID)->fetch('project');
+            $this->loadModel('productplan')->linkProject($executionID, $newPlans);
+            $this->productplan->linkProject($projectID, $newPlans);
+            return $this->send(array('result' => 'success', 'locate' => inlink('view', "executionID=$executionID")));
+        }
+        elseif(!empty($newPlans))
+        {
+            return print(js::confirm($this->lang->execution->importEditPlanStory, inlink('edit', "executionID=$executionID&action=edit&extra=&newPlans=$newPlans&confirm=yes"), inlink('view', "executionID=$executionID")));
         }
 
         if(!empty($_POST))
@@ -1590,22 +1604,28 @@ class execution extends control
             }
 
             /* Link the plan stories. */
+            $oldPlans = explode(',', implode(',' ,$oldPlans));
             $newPlans = array();
             if(isset($_POST['plans']))
             {
+
                 foreach($_POST['plans'] as $plans)
                 {
-                    foreach($plans as $planID) $newPlans[$planID] = $planID;
+                    foreach($plans as $planList)
+                    {
+                        foreach($planList as $planID)
+                        {
+                            if(array_search($planID, $oldPlans) === false) $newPlans[$planID] = $planID;
+                        }
+                    }
                 }
             }
 
-            $diffResult = array_diff($oldPlans, $newPlans);
-            $diffResult = array_merge($diffResult, array_diff($newPlans, $oldPlans));
-            if(!empty($newPlans) and !empty($diffResult))
+            $newPlans = array_filter($newPlans);
+            if(!empty($newPlans))
             {
-                $projectID = $this->dao->select('project')->from(TABLE_EXECUTION)->where('id')->eq($executionID)->fetch('project');
-                $this->loadModel('productplan')->linkProject($executionID, $newPlans);
-                $this->productplan->linkProject($projectID, $newPlans);
+                $newPlans = implode(',', $newPlans);
+                return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('edit', "executionID=$executionID&action=edit&extra=&newPlans=$newPlans&confirm=no")));
             }
 
             $message = $this->executeHooks($executionID);
@@ -1713,6 +1733,7 @@ class execution extends control
     public function batchEdit($executionID = 0)
     {
         $this->app->loadLang('stage');
+        $this->app->loadLang('programplan');
 
         if($this->post->names)
         {
@@ -2043,6 +2064,16 @@ class execution extends control
 
         $executionID = $this->execution->saveState((int)$executionID, $this->executions);
         $execution   = $this->execution->getById($executionID, true);
+
+        $execution->projectInfo = $this->loadModel('project')->getByID($execution->project);
+
+        if($this->config->systemMode == 'new')
+        {
+            $programList = array_filter(explode(',', $execution->projectInfo->path));
+            array_pop($programList);
+            $this->view->programList = $this->loadModel('program')->getPairsByList($programList);
+        }
+
         $type = $this->config->vision == 'lite' ? 'kanban' : 'stage,sprint,kanban';
         if(empty($execution) || strpos($type, $execution->type) === false) return print(js::error($this->lang->notFound) . js::locate('back'));
 
@@ -2736,8 +2767,8 @@ class execution extends control
         $this->loadModel('user');
         $this->loadModel('dept');
 
-        $execution   = $this->execution->getById($executionID);
-        $users     = $this->user->getPairs('noclosed|nodeleted|devfirst', '', $this->config->maxCount);
+        $execution = $this->execution->getById($executionID);
+        $users     = $this->user->getPairs('noclosed|nodeleted|devfirst');
         $roles     = $this->user->getUserRoles(array_keys($users));
         $deptUsers = empty($dept) ? array() : $this->dept->getDeptUserPairs($dept);
 
@@ -2752,7 +2783,7 @@ class execution extends control
         foreach($members2Import as $member) $appendUsers[$member->account] = $member->account;
         foreach($deptUsers as $deptAccount => $userName) $appendUsers[$deptAccount] = $deptAccount;
 
-        $users = $this->user->getPairs('noclosed|nodeleted|devfirst', $appendUsers, $this->config->maxCount);
+        $users = $this->user->getPairs('noclosed|nodeleted|devfirst', $appendUsers);
         $roles = $this->user->getUserRoles(array_keys($users));
 
         /* Set menu. */
@@ -3372,6 +3403,7 @@ class execution extends control
         $this->view->team         = $team;
         $this->view->executionID  = $executionID;
         $this->view->storyID      = $storyID;
+        $this->view->story        = $this->story->getById($storyID);
         $this->display();
     }
 
@@ -3394,6 +3426,7 @@ class execution extends control
         $this->app->loadLang('product');
         $this->app->loadLang('stage');
         $this->app->loadLang('programplan');
+        $this->loadModel('datatable');
 
         $from = $this->app->tab;
         if($from == 'execution') $this->session->set('executionList', $this->app->getURI(true), 'execution');
@@ -3443,6 +3476,16 @@ class execution extends control
         $parents = array();
         if($parentIdList) $parents = $this->execution->getByIdList($parentIdList);
 
+        $isStage = (isset($project->model) and $project->model == 'waterfall') ? true : false;
+        if($isStage) 
+        {
+            $this->config->execution->datatable->defaultField = array('id', 'name', 'PM', 'status', 'progress', 'percent', 'attribute', 'begin', 'end', 'realBegan', 'realEnd', 'actions');
+        }
+        elseif($this->app->tab == 'project')
+        {
+            $this->config->execution->datatable->defaultField = array('id', 'name', 'code', 'PM', 'status', 'progress', 'begin', 'end', 'estimate', 'consumed', 'left', 'burn');
+        }
+
         $this->view->executionStats = $executionStats;
         $this->view->productList    = $this->loadModel('product')->getProductPairsByProject($projectID);
         $this->view->productID      = $productID;
@@ -3454,7 +3497,7 @@ class execution extends control
         $this->view->users          = $this->loadModel('user')->getPairs('noletter');
         $this->view->status         = $status;
         $this->view->from           = $from;
-        $this->view->isStage        = (isset($project->model) and $project->model == 'waterfall') ? true : false;
+        $this->view->isStage        = $isStage;
         $this->display();
     }
 
@@ -3844,7 +3887,7 @@ class execution extends control
 
         if($from == 'execution') $this->session->set('taskSearchValue', $searchValue);
         if($from == 'RD')        $this->session->set('rdSearchValue', $searchValue);
-        if($lastEditedTime > $enterTime or $groupBy != 'default' or !empty($searchValue))
+        if(strtotime($lastEditedTime) < 0 or $lastEditedTime > $enterTime or $groupBy != 'default' or !empty($searchValue))
         {
             $kanbanGroup = $from == 'execution' ? $this->loadModel('kanban')->getExecutionKanban($executionID, $browseType, $groupBy, $searchValue) : $this->loadModel('kanban')->getRDKanban($executionID, $browseType, 'id_asc', 0, $groupBy, $searchValue);
             return print(json_encode($kanbanGroup));

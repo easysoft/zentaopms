@@ -36,7 +36,7 @@ $config->bug->list->exportFields = 'id, product, branch, module, project, execut
     duplicateBug, linkBug,
     case,
     lastEditedBy,
-    lastEditedDate, files';
+    lastEditedDate, files ,feedbackBy, notifyEmail';
 if($config->systemMode == 'classic') $config->bug->list->exportFields = str_replace(' project,', '', $config->bug->list->exportFields);
 
 $config->bug->list->customCreateFields      = 'execution,noticefeedbackBy,story,task,pri,severity,os,browser,deadline,mailto,keywords';
@@ -308,7 +308,7 @@ $config->bug->datatable->fieldList['resolvedBy']['required'] = 'no';
 
 $config->bug->datatable->fieldList['resolution']['title']    = 'resolutionAB';
 $config->bug->datatable->fieldList['resolution']['fixed']    = 'no';
-$config->bug->datatable->fieldList['resolution']['width']    = '100';
+$config->bug->datatable->fieldList['resolution']['width']    = '110';
 $config->bug->datatable->fieldList['resolution']['required'] = 'no';
 
 $config->bug->datatable->fieldList['resolvedDate']['title']    = 'resolvedDateAB';

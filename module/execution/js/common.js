@@ -124,18 +124,6 @@ function computeEndDate(delta)
  */
 function loadBranches(product)
 {
-    $("#productsBox select[name^='products']").each(function()
-    {
-        var $product = $(product);
-        if($product.val() != 0 && $product.val() == $(this).val() && $product.attr('id') != $(this).attr('id') && !multiBranchProducts[$product.val()])
-        {
-            alert(errorSameProducts);
-            $product.val(0);
-            $product.trigger("chosen:updated");
-            return false;
-        }
-    });
-
     if($('#productsBox .input-group:last select:first').val() != 0)
     {
         var length = $('#productsBox .input-group').size();
@@ -184,12 +172,12 @@ function loadPlans(product, branchID)
     var branchID  = typeof(branchID) == 'undefined' ? 0 : branchID;
     var index     = $(product).attr('id').replace('products', '');
 
-    $.get(createLink('product', 'ajaxGetPlans', "productID=" + productID + '&branch=0,' + branchID + '&planID=0&fieldID&needCreate=&expired=noclosed,' + (config.currentMethod == 'create' ? 'unexpired' : '') + '&param=skipParent'), function(data)
+    $.get(createLink('product', 'ajaxGetPlans', "productID=" + productID + '&branch=0,' + branchID + '&planID=0&fieldID&needCreate=&expired=noclosed,unexpired&param=skipParent,multiple'), function(data)
     {
         if(data)
         {
             if($("div#plan" + index).size() == 0) $("#plansBox .row").append('<div class="col-sm-4" id="plan' + index + '"></div>');
-            $("div#plan" + index).html(data).find('select').attr('name', 'plans[' + productID + '][' + branchID + ']').attr('id', 'plans' + productID).chosen();
+            $("div#plan" + index).html(data).find('select').attr('name', 'plans[' + productID + '][' + branchID + '][]').attr('id', 'plans' + productID).chosen();
 
             adjustPlanBoxMargin();
         }
@@ -230,6 +218,35 @@ function adjustPlanBoxMargin()
             $('#plansBox .col-sm-4:lt(' + (j * 3) + ')').css('margin-bottom', '10px');
         }
     }
+}
+
+/**
+ * Make the selected product non clickable.
+ *
+ * @return void
+ */
+function nonClickableSelectedProduct()
+{
+    $("select[id^='products'] option[disabled='disabled']").removeAttr('disabled');
+
+    var selectedVal = [];
+    $("select[id^='products']").each(function()
+    {
+        var selectedProduct = $(this).val();
+        if(selectedProduct != 0 && $.inArray(selectedProduct, selectedVal) < 0 && !multiBranchProducts[selectedProduct]) selectedVal.push(selectedProduct);
+    })
+
+    $("select[id^='products']").each(function()
+    {
+        var selectedProduct = $(this).val();
+        $(this).find('option').each(function()
+        {
+            var optionVal = $(this).attr('value');
+            if(optionVal != selectedProduct && $.inArray(optionVal, selectedVal) >= 0) $(this).attr('disabled', 'disabled');
+        })
+    })
+
+    $("select[id^=products]").trigger('chosen:updated');
 }
 
 /* Auto compute the work days. */

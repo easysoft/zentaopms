@@ -97,6 +97,18 @@ class datatable extends control
             unset($cols['caseCount']);
         }
 
+        if($module == 'execution' and $method == 'all')
+        {
+            if($extra == 'execution' or $extra == 'project')
+            {
+                unset($cols['percent']);
+                unset($cols['attribute']);
+                unset($cols['actions']);
+            }
+
+            if($extra == 'project' or $extra == 'stage') unset($cols['project']);
+        }
+
         $this->view->cols    = $cols;
         $this->view->setting = $setting;
         $this->display();

@@ -1260,7 +1260,7 @@ function createBugMenu(options)
  */
 function handleSortCards(event)
 {
-    if(window.sortableDisabled || groupBy != 'default') return;
+    if(window.sortableDisabled || groupBy != 'default' || rdSearchValue != '') return;
     var newLaneID = event.element.closest('.kanban-lane').data('id');
     var newColID  = event.element.closest('.kanban-col').data('id');
     var cards     = event.element.closest('.kanban-lane-items').data('cards');
@@ -1281,6 +1281,21 @@ function handleSortCards(event)
                 bootbox.alert(response.message);
             }
             setTimeout(function(){return location.reload()}, 3000);
+        }
+        else
+        {
+            $.get(createLink('execution', 'ajaxUpdateKanban', "executionID=" + executionID + "&entertime=0&browseType=" + browseType + "&groupBy=" + groupBy + '&from=RD'), function(data)
+            {
+                if(data && lastUpdateData !== data)
+                {
+                    lastUpdateData = data;
+                    kanbanData     = $.parseJSON(data);
+                    for(var region in kanbanData)
+                    {
+                        updateRegion(region, kanbanData[region]);
+                    }
+                }
+            });
         }
     });
 }

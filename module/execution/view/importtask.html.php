@@ -35,12 +35,16 @@
           </th>
           <th class='c-name'><?php echo $lang->execution->name ?></th>
           <th class='c-pri' title=<?php echo $lang->execution->pri;?>><?php echo $lang->priAB;?></th>
+          <?php if(isonlybody()):?>
+          <th class='w-p25'><?php echo $lang->task->name;?></th>
+          <?php else:?>
           <th class='w-p30'><?php echo $lang->task->name;?></th>
+          <?php endif;?>
           <th class='c-user'><?php echo $lang->task->assignedTo;?></th>
           <th class='c-hour'><?php echo $lang->task->leftAB;?></th>
           <th class='c-date'><?php echo $lang->task->deadlineAB;?></th>
           <th class='c-status'><?php echo $lang->statusAB;?></th>
-          <th><?php echo $lang->task->story;?></th>
+          <th class='c-story'><?php echo $lang->task->story;?></th>
         </tr>
       </thead>
       <tbody>
@@ -56,7 +60,7 @@
           </td>
           <td title="<?php echo $executions[$task->execution];?>"><?php echo $executions[$task->execution];?></td>
           <td><span class='label-pri label-pri-<?php echo $task->pri;?>' title='<?php echo zget($lang->task->priList, $task->pri, $task->pri);?>'><?php echo $task->pri == '0' ? '' : zget($lang->task->priList, $task->pri, $task->pri);?></span></td>
-          <td class='text-left nobr'><?php if(!common::printLink('task', 'view', "task=$task->id", $task->name)) echo $task->name;?></td>
+          <td class='text-left nobr'><?php if(!common::printLink('task', 'view', "task=$task->id", $task->name, '', "class='preview'", true, isonlybody())) echo $task->name;?></td>
           <td <?php echo $class;?>><?php echo $task->assignedToRealName;?></td>
           <td title="<?php echo $task->left . ' ' . $lang->execution->workHour;?>"><?php echo $task->left . ' ' . $lang->execution->workHourUnit;?></td>
           <td class=<?php if(isset($task->delay)) echo 'delayed';?>><?php if(substr($task->deadline, 0, 4) > 0) echo $task->deadline;?></td>

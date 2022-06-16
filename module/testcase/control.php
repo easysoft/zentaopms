@@ -115,7 +115,10 @@ class testcase extends control
         /* Set menu, save session. */
         if($this->app->tab == 'project')
         {
-            $this->products = array('0' => $this->lang->product->all) + $this->product->getProducts($projectID, 'all', '', false);
+            $linkedProducts = $this->product->getProducts($projectID, 'all', '', false);
+            $this->products = count($linkedProducts) > 1 ? array('0' => $this->lang->product->all) + $linkedProducts : $linkedProducts;
+            $productID      = count($linkedProducts) > 1 ? $productID : key($linkedProducts);
+
             $branch = 'all';
             $this->loadModel('project')->setMenu($projectID);
         }
@@ -1021,7 +1024,6 @@ class testcase extends control
                 }
 
                 $this->view->branchTagOption = array($productID => $branchTagOption);
-                $this->view->position[]      = html::a($this->createLink('testcase', 'browse', "productID=$productID"), $this->products[$productID]);
                 $this->view->title           = $product->name . $this->lang->colon . $this->lang->testcase->batchEdit;
                 $this->view->product         = $product;
             }
@@ -1401,7 +1403,13 @@ class testcase extends control
         $case    = $this->testcase->getById($caseID);
         $libCase = $this->testcase->getById($libcaseID);
         $version = $case->version + 1;
-        $this->dao->update(TABLE_CASE)->set('version')->eq($version)->set('fromCaseVersion')->eq($version)->where('id')->eq($caseID)->exec();
+        $this->dao->update(TABLE_CASE)
+            ->set('version')->eq($version)
+            ->set('fromCaseVersion')->eq($version)
+            ->set('precondition')->eq($libCase->precondition)
+            ->where('id')->eq($caseID)
+            ->exec();
+
         foreach($libCase->steps as $step)
         {
             unset($step->id);

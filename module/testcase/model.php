@@ -836,21 +836,35 @@ class testcaseModel extends model
             }
 
             /* Link bugs to case. */
-            if($this->post->linkBug)
+            $this->post->linkBug = $this->post->linkBug ? $this->post->linkBug : array();
+            $linkedBugs = array_keys($oldCase->toBugs);
+            $linkBugs   = $this->post->linkBug;
+            $newBugs    = array_diff($linkBugs, $linkedBugs);
+            $removeBugs = array_diff($linkedBugs, $linkBugs);
+
+            if($newBugs)
             {
-                $linkedBugs = array_keys($oldCase->toBugs);
-                $linkBugs   = $this->post->linkBug;
-                $newBugs    = array_diff($linkBugs, $linkedBugs);
-                $removeBugs = array_diff($linkedBugs, $linkBugs);
-
-                if($newBugs)
+                foreach($newBugs as $bugID)
                 {
-                    foreach($newBugs as $bugID) $this->dao->update(TABLE_BUG)->set('`case`')->eq($caseID)->set('caseVersion')->eq($case->version)->where('id')->eq($bugID)->exec();
+                    $this->dao->update(TABLE_BUG)
+                        ->set('`case`')->eq($caseID)
+                        ->set('caseVersion')->eq($case->version)
+                        ->set('`story`')->eq($case->story)
+                        ->set('storyVersion')->eq($case->storyVersion)
+                        ->where('id')->eq($bugID)->exec();
                 }
+            }
 
-                if($removeBugs)
+            if($removeBugs)
+            {
+                foreach($removeBugs as $bugID)
                 {
-                    foreach($removeBugs as $bugID) $this->dao->update(TABLE_BUG)->set('`case`')->eq(0)->set('caseVersion')->eq(0)->where('id')->eq($bugID)->exec();
+                    $this->dao->update(TABLE_BUG)
+                        ->set('`case`')->eq(0)
+                        ->set('caseVersion')->eq(0)
+                        ->set('`story`')->eq(0)
+                        ->set('storyVersion')->eq(0)
+                        ->where('id')->eq($bugID)->exec();
                 }
             }
 

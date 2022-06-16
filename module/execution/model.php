@@ -2016,14 +2016,14 @@ class executionModel extends model
             if(isset($oldProducts[$productID][$branch]))
             {
                 $oldProduct = $oldProducts[$productID][$branch];
-                $oldPlan    = $oldProduct->plan;
+                if($this->app->rawMethod != 'edit') $oldPlan = $oldProduct->plan;
             }
 
             $data = new stdclass();
             $data->project = $executionID;
             $data->product = $productID;
             $data->branch  = $branch;
-            $data->plan    = isset($plans[$productID][$branch]) ? $plans[$productID][$branch] : $oldPlan;
+            $data->plan    = isset($plans[$productID][$branch]) ? implode(',', $plans[$productID][$branch]) : $oldPlan;
             $this->dao->insert(TABLE_PROJECTPRODUCT)->data($data)->exec();
             $existedProducts[$productID][$branch] = true;
         }
@@ -2529,9 +2529,9 @@ class executionModel extends model
      */
     public function linkStories($executionID)
     {
-        $plans = $this->dao->select('plan,product')->from(TABLE_PROJECTPRODUCT)
+        $plans = $this->dao->select('plan')->from(TABLE_PROJECTPRODUCT)
             ->where('project')->eq($executionID)
-            ->fetchPairs('plan', 'product');
+            ->fetchPairs('plan');
 
         $planStories  = array();
         $planProducts = array();
@@ -2539,23 +2539,27 @@ class executionModel extends model
         $this->loadModel('story');
         if(!empty($plans))
         {
-            foreach($plans as $planID => $productID)
+            foreach($plans as $planIDList)
             {
-                if(empty($planID)) continue;
-                $planStory = $this->story->getPlanStories($planID);
-                if(!empty($planStory))
+                if(empty($planIDList)) continue;
+                $planIDList = explode(',', $planIDList);
+                foreach($planIDList as $planID)
                 {
-                    foreach($planStory as $id => $story)
+                    $planStory = $this->story->getPlanStories($planID);
+                    if(!empty($planStory))
                     {
-                        if($story->status == 'draft')
+                        foreach($planStory as $id => $story)
                         {
-                            $count++;
-                            unset($planStory[$id]);
-                            continue;
+                            if($story->status == 'draft')
+                            {
+                                $count++;
+                                unset($planStory[$id]);
+                                continue;
+                            }
+                            $planProducts[$story->id] = $story->product;
                         }
-                        $planProducts[$story->id] = $story->product;
+                        $planStories = array_merge($planStories, array_keys($planStory));
                     }
-                    $planStories = array_merge($planStories, array_keys($planStory));
                 }
             }
         }
@@ -4142,5 +4146,171 @@ class executionModel extends model
         $menu .= $this->buildMenu('execution', 'delete', "execution=$execution->id", $execution, 'button', 'trash', 'hiddenwin');
 
         return $menu;
+    }
+
+    /**
+     * printCell
+     *
+     * @param  object $col
+     * @param  object $execution
+     * @param  array  $users
+     * @param  string $mode
+     * @param  bool   $isStage
+     * @param  int    $productID
+     * @param  bool   $child
+     * @access public
+     * @return void
+     */
+    public function printCell($col, $execution, $users, $mode = 'datatable', $isStage = false, $productID = 0, $child = false)
+    {
+        $canBatchEdit   = common::hasPriv('execution', 'batchEdit');
+        $id             = $col->id;
+        $onlyChildStage = ($execution->grade == 2 and $execution->project != $execution->parent);
+
+        if(!$isStage and $col->id == 'actions') return;
+        if(($this->config->systemMode == 'classic' or ($this->config->systemMode == 'new' and $this->app->tab != 'execution')) and $col->id == 'project') return;
+
+        if($col->show)
+        {
+            $class = "c-{$id}";
+
+            if($id == 'id')      $class .= ' cell-id';
+            if($id == 'name')    $class .= ' text-left flex';
+            if($id == 'code')    $class .= ' text-left';
+            if($id == 'project') $class .= ' text-left c-name';
+            if($id == 'status')  $class .= ' text-center';
+            if($id == 'actions') $class .= ' text-center';
+
+            if($id == 'name' and !$child) $class .= ' sort-handler';
+            if($id == 'name' and !empty($execution->children)) $class .= ' parent';
+            if(in_array($id, array('estimate', 'consumed', 'left'))) $class .= ' hours';
+
+            $title = '';
+            if($id == 'name')
+            {
+                $title = " title='{$execution->name}'";
+                if(!empty($execution->children)) $class .= ' has-child';
+            }
+
+            if($id == 'project') $title = " title='{$execution->projectName}'";
+            if($id == 'code')    $title = " title='{$execution->code}'";
+
+            if($id == 'status')
+            {
+                $executionStatus = $this->processStatus('execution', $execution);
+                $title = " title='{$executionStatus}'";
+            }
+
+            if(in_array($id, array('estimate', 'consumed', 'left')))
+            {
+                $totalTitle = 'total' . ucfirst($id);
+                $title     .= $execution->hours->{$totalTitle} . $this->lang->execution->workHour;
+            }
+
+            echo "<td class='" . $class . "'" . $title . ">";
+            if($id == 'burn')
+            {
+                $burnValue = join(',', $execution->burns);
+                echo "<span id='spark-{$execution->id}' class='sparkline text-left no-padding' values='$burnValue'></span>";
+            }
+
+            switch($id)
+            {
+            case 'id':
+                if($canBatchEdit)
+                {
+                    echo "<div class='checkbox-primary'><input type='checkbox' name='executionIDList[$execution->id]' value='$execution->id' autocomplete='off'/><label></label></div>";
+                }
+                echo printf('%03d', $execution->id);
+                break;
+            case 'name':
+                $label         = $execution->type == 'stage' ? 'label-warning' : 'label-info';
+                $executionLink = $execution->projectModel == 'kanban' ? html::a(helper::createLink('execution', 'kanban', 'executionID=' . $execution->id), $execution->name, '', "class='text-ellipsis'") : html::a(helper::createLink('execution', 'task', 'execution=' . $execution->id), $execution->name, '', "class='text-ellipsis'");
+                if(!$onlyChildStage) echo "<span class='project-type-label label label-outline $label'>{$this->lang->execution->typeList[$execution->type]}</span>";
+                if($onlyChildStage) echo "<span class='label label-badge label-light label-children'>{$this->lang->programplan->childrenAB}</span> ";
+                echo !empty($execution->children) ? "<span class='text-ellipsis'>$execution->name</span>" :  $executionLink;
+                if(isset($execution->delay)) echo "<span class='label label-danger label-badge'>{$this->lang->execution->delayed}</span> ";
+                if(!empty($execution->children))
+                {
+                    echo "<a class='plan-toggle' data-id='$execution->id'><i class='icon icon-angle-double-right'></i></a>";
+                }
+                break;
+            case 'code':
+                echo $execution->code;
+                break;
+            case 'project':
+                echo "<span class='status-execution status-{$execution->projectName}'>{$execution->projectName}</span>";
+                break;
+            case 'PM':
+                echo zget($users, $execution->PM);
+                break;
+            case 'status':
+                echo "<span class='status-execution status-{$execution->status}'>$executionStatus</span>";
+                break;
+            case 'progress':
+                echo html::ring($execution->hours->progress);
+                break;
+            case 'percent':
+                echo $execution->percent . '%';
+                break;
+            case 'attribute':
+                echo zget($this->lang->stage->typeList, $execution->attribute, '');
+                break;
+            case 'begin':
+                echo helper::isZeroDate($execution->begin) ? '' : $execution->begin;
+                break;
+            case 'end':
+                echo helper::isZeroDate($execution->end) ? '' : $execution->end;
+                break;
+            case 'realBegan':
+                echo helper::isZeroDate($execution->realBegan) ? '' : $execution->realBegan;
+                break;
+            case 'realEnd':
+                echo helper::isZeroDate($execution->realEnd) ? '' : $execution->realEnd;
+                break;
+            case 'estimate':
+                echo $execution->hours->totalEstimate . $this->lang->execution->workHourUnit;
+                break;
+            case 'consumed':
+                echo $execution->hours->totalConsumed . $this->lang->execution->workHourUnit;
+                break;
+            case 'left':
+                echo $execution->hours->totalLeft . $this->lang->execution->workHourUnit;
+                break;
+            case 'actions':
+                common::printIcon('execution', 'start', "executionID={$execution->id}", $execution, 'list', '', '', 'iframe', true);
+                $class = !empty($execution->children) ? 'disabled' : '';
+                common::printIcon('task', 'create', "executionID={$execution->id}", $execution, 'list', '', '', $class, false, "data-app='execution'");
+
+                if($execution->grade == 1 && $this->loadModel('programplan')->isCreateTask($execution->id))
+                {
+                    common::printIcon('programplan', 'create', "program={$execution->parent}&productID=$productID&planID=$execution->id", $execution, 'list', 'split', '', '', '', '', $this->lang->programplan->createSubPlan);
+                }
+                else
+                {
+                    $disabled = ($execution->grade == 2) ? ' disabled' : '';
+                    echo common::hasPriv('programplan', 'create') ? html::a('javascript:alert("' . $this->lang->programplan->error->createdTask . '");', '<i class="icon-programplan-create icon-split"></i>', '', 'class="btn ' . $disabled . '"') : '';
+                }
+
+                common::printIcon('programplan', 'edit', "stageID=$execution->id&projectID=$execution->project", $execution, 'list', '', '', 'iframe', true);
+
+                $disabled = !empty($execution->children) ? ' disabled' : '';
+                if($execution->status != 'closed' and common::hasPriv('execution', 'close', $execution))
+                {
+                    common::printIcon('execution', 'close', "stageID=$execution->id", $execution, 'list', 'off', 'hiddenwin' , $disabled . ' iframe', true, '', $this->lang->programplan->close);
+                }
+                elseif($execution->status == 'closed' and common::hasPriv('execution', 'activate', $execution))
+                {
+                    common::printIcon('execution', 'activate', "stageID=$execution->id", $execution, 'list', 'magic', 'hiddenwin' , $disabled . ' iframe', true, '', $this->lang->programplan->activate);
+                }
+
+                if(common::hasPriv('execution', 'delete', $execution))
+                {
+                    common::printIcon('execution', 'delete', "stageID=$execution->id&confirm=no", $execution, 'list', 'trash', 'hiddenwin' , $disabled, '', '', $this->lang->programplan->delete);
+                }
+                break;
+            }
+            echo '</td>';
+        }
     }
 }

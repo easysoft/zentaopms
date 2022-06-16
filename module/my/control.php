@@ -155,6 +155,16 @@ class my extends control
         $ncCount      = 0;
         $meetingCount = 0;
         $isMax        = $this->config->edition == 'max' ? 1 : 0;
+
+        $feedbackCount = 0;
+        $isBiz         = $this->config->edition == 'biz' ? 1 : 0;
+
+        if($isBiz or $isMax)
+        {
+            $feedbacks     = $this->loadModel('feedback')->getList('assigntome', 'id_desc', $pager);
+            $feedbackCount = $pager->recTotal;
+        }
+
         if($isMax)
         {
             $this->loadModel('issue');
@@ -196,6 +206,10 @@ var isOpenedURAndSR = $isOpenedURAndSR;
 if(isOpenedURAndSR !== 0) var requirementCount = $requirementCount;
 
 var isMax = $isMax;
+var isBiz = $isBiz;
+
+if(isBiz !== 0 || isMax !== 0) var feedbackCount = $feedbackCount;
+
 if(isMax !== 0)
 {
     var issueCount   = $issueCount;
@@ -1155,7 +1169,7 @@ EOF;
      * @access public
      * @return void
      */
-    public function manageContacts($listID = 0, $mode = '')
+    public function manageContacts($listID = 0, $mode = 'new')
     {
         if($_POST)
         {
@@ -1177,7 +1191,7 @@ EOF;
                 }
                 $this->user->setGlobalContacts($listID, isset($data->share));
                 if(isonlybody()) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => "parent.parent.ajaxGetContacts('#mailto')"));
-                return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('manageContacts', "listID=$listID")));
+                return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('manageContacts', "listID=$listID&mode=edit")));
             }
             elseif($data->mode == 'edit')
             {
@@ -1194,7 +1208,7 @@ EOF;
                     return $this->send($response);
                 }
 
-                $response['locate'] = inlink('manageContacts', "listID=$listID");
+                $response['locate'] = inlink('manageContacts', "listID=$listID&mode=edit");
                 return $this->send($response);
             }
         }
@@ -1217,7 +1231,6 @@ EOF;
         }
 
         $listID = $listID ? $listID : key($lists);
-        if(!$listID) $mode = 'new';
 
         /* Create or manage list according to mode. */
         if($mode == 'new')

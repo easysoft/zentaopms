@@ -205,5 +205,87 @@
     </tr>
   </table>
 </div>
-<script>$('[data-toggle="popover"]').popover();</script>
+<?php
+js::set('emptyBegin', $lang->programplan->emptyBegin);
+js::set('emptyEnd', $lang->programplan->emptyEnd);
+js::set('planFinishSmall', $lang->programplan->error->planFinishSmall);
+js::set('errorBegin', $lang->programplan->errorBegin);
+js::set('errorEnd', $lang->programplan->errorEnd);
+js::set('projectBeginDate', $project->begin);
+js::set('projectEndDate', $project->end);
+?>
+<script>
+$('[data-toggle="popover"]').popover();
+
+$('#planForm').submit(function()
+{
+    var submitForm = true;
+    $('input[name^=begin]').each(function()
+    {
+        var beginDate   = $(this).val();
+        var beginDateID = $(this).attr('id');
+        if(beginDateID == 'begin%i%') return;
+
+        var nameID    = beginDateID.replace('begin', 'names');
+        var endDateID = beginDateID.replace('begin', 'end');
+        $('#help' + beginDateID).remove();
+        $('#help' + endDateID).remove();
+
+        // Invalid data is skipped.
+        var nameVal = $('#' + nameID).val()
+        if(!nameVal) return;
+
+        // Check if the begin date is empty.
+        if(!beginDate)
+        {
+            submitForm = false;
+            var emptyBeginHtml = '<div id="help' + beginDateID + '" class="text-danger help-text">' + emptyBegin + '</div>';
+            $(this).after(emptyBeginHtml);
+            alert(emptyBegin);
+            return false;
+        }
+
+        var endDate = $('#' + endDateID).val();
+        if(!endDate)
+        {
+            submitForm = false;
+            var emptyEndHtml = '<div id="help' + endDateID + '" class="text-danger help-text">' + emptyEnd + '</div>';
+            $('#' + endDateID).after(emptyEndHtml);
+            alert(emptyEnd);
+            return false;
+        }
+
+        if(endDate < beginDate)
+        {
+            submitForm = false;
+            var emptyEndHtml = '<div id="help' + endDateID + '" class="text-danger help-text">' + planFinishSmall + '</div>';
+            $('#' + endDateID).after(emptyEndHtml);
+            alert(planFinishSmall);
+            return false;
+        }
+
+        if(beginDate < projectBeginDate)
+        {
+            submitForm = false;
+            var errorBeginTip  = errorBegin.replace('%s', projectBeginDate);
+            var errorBeginHtml = '<div id="help' + beginDateID + '" class="text-danger help-text">' + errorBeginTip + '</div>';
+            $('#' + beginDateID).after(errorBeginHtml);
+            alert(errorBeginTip);
+            return false;
+        }
+
+        if(endDate > projectEndDate)
+        {
+            submitForm = false;
+            var errorEndTip  = errorEnd.replace('%s', projectEndDate);
+            var errorEndHtml = '<div id="help' + endDateID + '" class="text-danger help-text">' + errorEndTip + '</div>';
+            $('#' + endDateID).after(errorEndHtml);
+            alert(errorEndTip);
+            return false;
+        }
+    });
+
+    if(!submitForm) return false;
+});
+</script>
 <?php include '../../common/view/footer.html.php';?>
