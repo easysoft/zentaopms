@@ -2157,7 +2157,6 @@ class productModel extends model
         $menu .= $this->buildMenu('product', 'edit', $params, $product, $type);
 
         if($type == 'view') $menu .= $this->buildMenu('product', 'delete', $params, $product, $type, 'trash', 'hiddenwin');
-        if($type == 'browse' && common::hasPriv('product', 'updateOrder')) $menu .= "<i class='icon icon-move text-blue'></i>";
 
         return $menu;
     }
