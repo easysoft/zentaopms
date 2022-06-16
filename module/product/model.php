@@ -917,13 +917,16 @@ class productModel extends model
         $data     = fixer::input('post')->get();
 
         /* When there are products under the line, the program cannot be modified  */
-        foreach($oldLines as $oldLine)
+        if($this->config->systemMode == 'new')
         {
-            $oldLineID = 'id' . $oldLine->id;
-            if($data->programs[$oldLineID] != $oldLine->root)
+            foreach($oldLines as $oldLine)
             {
-                $product = $this->dao->select('*')->from(TABLE_PRODUCT)->where('line')->eq($oldLine->id)->fetch();
-                if(!empty($product)) return print(js::error($this->lang->product->changeLineError));
+                $oldLineID = 'id' . $oldLine->id;
+                if($data->programs[$oldLineID] != $oldLine->root)
+                {
+                    $product = $this->dao->select('*')->from(TABLE_PRODUCT)->where('line')->eq($oldLine->id)->fetch();
+                    if(!empty($product)) return print(js::error($this->lang->product->changeLineError));
+                }
             }
         }
 
