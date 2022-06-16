@@ -760,25 +760,6 @@ class productModel extends model
             ->remove('uid,changeProjects,contactListMenu')
             ->get();
 
-        if($this->config->systemMode == 'new')
-        {
-            if($product->program != $oldProduct->program)
-            {
-                /* Link the projects stories under this product. */
-                $unmodifiableProjects = $this->dao->select('t1.*')->from(TABLE_PROJECTSTORY)->alias('t1')
-                    ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
-                    ->where('t1.product')->eq($productID)
-                    ->andWhere('t2.type')->eq('project')
-                    ->andWhere('t2.deleted')->eq('0')
-                    ->fetchPairs('project', 'product');
-                if(!empty($unmodifiableProjects))
-                {
-                    dao::$errors[] = $this->lang->product->changeProgramError;
-                    return false;
-                }
-            }
-        }
-
         $product   = $this->loadModel('file')->processImgURL($product, $this->config->product->editor->edit['id'], $this->post->uid);
         $programID = isset($product->program) ? $product->program : '';
         $this->dao->update(TABLE_PRODUCT)->data($product)->autoCheck()
