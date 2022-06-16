@@ -740,6 +740,7 @@ class execution extends control
         else
         {
             $this->session->set('executionStoryBrowseType', $type);
+            $this->session->set('storyBrowseType', $type, 'execution');
         }
 
         /* Save session. */
