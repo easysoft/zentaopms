@@ -102,7 +102,8 @@
 .cardcolor {width:40px; height: 14px; float: left; margin-left: 5px; margin-right: 5px; margin-top: 2px; border-radius: 2px;}
 #cardcolormenu {padding:2px 2px; width: 100px;}
 
-.position {margin-top: -6px;}
+.region-header {margin-top: -6px;}
+.region-header > .icon{padding: 6px; margin-left:2px;}
 .kanban-col[data-type=ADD] {display: none;}
 .kanban-col[data-type=EMPTY] {display: none;}
 .kanban-col {padding-right: 0px !important;}

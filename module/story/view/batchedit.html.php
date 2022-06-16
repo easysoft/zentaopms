@@ -73,14 +73,14 @@ foreach(explode(',', $showFields) as $field)
           <td class='text-left<?php echo zget($visibleFields, 'branch', ' hidden')?>'>
             <?php $disabled = $products[$story->product]->type == 'normal' ? "disabled='disabled'" : '';?>
             <?php if($products[$story->product]->type == 'normal') $branchTagOption[$story->product] = array();?>
-            <?php echo html::select("branches[$storyID]", $branchTagOption[$story->product], $story->branch, "class='form-control picker-select' onchange='loadBranches($story->product, this.value, $storyID);' $disabled");?>
+            <?php echo html::select("branches[$storyID]", $branchTagOption[$story->product], $story->branch, "class='form-control picker-select' data-drop-width='auto' onchange='loadBranches($story->product, this.value, $storyID);' $disabled");?>
           </td>
           <?php endif;?>
           <td class='text-left<?php echo zget($visibleFields, 'module')?>'>
-            <?php echo html::select("modules[$storyID]", zget($moduleList, $story->id, array(0 => '/')), $story->module, "class='form-control picker-select'");?>
+            <?php echo html::select("modules[$storyID]", zget($moduleList, $story->id, array(0 => '/')), $story->module, "class='form-control picker-select' data-drop-width='auto'");?>
           </td>
           <td class='text-left<?php echo zget($visibleFields, 'plan', ' hidden')?>'>
-            <?php echo html::select("plans[$storyID]", isset($plans[$story->product][$story->branch]) ? array('' => '') + $plans[$story->product][$story->branch] : '', $story->plan, "class='form-control picker-select'");?>
+            <?php echo html::select("plans[$storyID]", isset($plans[$story->product][$story->branch]) ? array('' => '') + $plans[$story->product][$story->branch] : '', $story->plan, "class='form-control picker-select' data-drop-width='auto'");?>
           </td>
           <td title='<?php echo $story->title?>'>
             <div class="input-group">
@@ -100,15 +100,15 @@ foreach(explode(',', $showFields) as $field)
           </td>
 
           <td <?php echo zget($visibleFields, 'estimate', "class='hidden'")?>><?php echo html::input("estimates[$storyID]", $story->estimate, "class='form-control'"); ?></td>
-          <td><?php echo html::select("category[$storyID]", $lang->story->categoryList, $story->category, 'class=form-control picker-select');?></td>
+          <td><?php echo html::select("category[$storyID]", $lang->story->categoryList, $story->category, 'class="form-control picker-select" data-drop-width="auto"');?></td>
           <td <?php echo zget($visibleFields, 'pri', "class='hidden'")?>><?php echo html::select("pris[$storyID]",     $priList, $story->pri, 'class=form-control');?></td>
-          <td class='text-left<?php echo zget($visibleFields, 'assignedTo', ' hidden')?>'><?php echo html::select("assignedTo[$storyID]",     $users, $story->assignedTo, "class='form-control picker-select'");?></td>
-          <td <?php echo zget($visibleFields, 'source', "class='hidden'")?>><?php echo html::select("sources[$storyID]",  $sourceList, $story->source, "class='form-control picker-select' id='source_$storyID'");?></td>
+          <td class='text-left<?php echo zget($visibleFields, 'assignedTo', ' hidden')?>'><?php echo html::select("assignedTo[$storyID]",     $users, $story->assignedTo, "class='form-control picker-select' data-drop-width='auto'");?></td>
+          <td <?php echo zget($visibleFields, 'source', "class='hidden'")?>><?php echo html::select("sources[$storyID]",  $sourceList, $story->source, "class='form-control picker-select' data-drop-width='auto' id='source_$storyID'");?></td>
           <?php
           if($story->source == 'meeting' or $story->source == 'researchreport')
           {
               $objects = $story->source == 'meeting' ? $meetings : $researchReports;
-              $html = html::select("sourceNote[$storyID]", $objects, $story->sourceNote, "class='form-control picker-select' id='sourceNote_$storyID'");
+              $html = html::select("sourceNote[$storyID]", $objects, $story->sourceNote, "class='form-control picker-select' data-drop-width='auto' id='sourceNote_$storyID'");
           }
           else
           {
@@ -118,7 +118,7 @@ foreach(explode(',', $showFields) as $field)
           <td class='<?php echo zget($visibleFields, 'source', 'hidden')?>' data-id="<?php echo $story->sourceNote;?>"><?php echo $html;?></td>
           <td class='story-<?php echo $story->status;?>'><?php echo $this->processStatus('story', $story);?></td>
           <td <?php echo zget($visibleFields, 'stage', "class='hidden'")?>><?php echo html::select("stages[$storyID]", $stageList, $story->stage, 'class="form-control"' . ($story->status == 'draft' ? ' disabled="disabled"' : ''));?></td>
-          <td class='text-left<?php echo zget($visibleFields, 'closedBy', ' hidden')?>'><?php echo html::select("closedBys[$storyID]",     $users, $story->closedBy, "class='form-control" . ($story->status == 'closed' ? " picker-select'" : "' disabled='disabled'"));?></td>
+          <td class='text-left<?php echo zget($visibleFields, 'closedBy', ' hidden')?>'><?php echo html::select("closedBys[$storyID]", $users, $story->closedBy, "class='form-control" . ($story->status == 'closed' ? " picker-select' data-drop-width='auto'" : "' disabled='disabled'"));?></td>
 
           <?php if($story->status == 'closed'):?>
           <td <?php echo zget($visibleFields, 'closedReason', "class='hidden'")?>>
