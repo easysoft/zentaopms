@@ -99,12 +99,7 @@ class datatable extends control
 
         if($module == 'execution' and $method == 'all')
         {
-            if($extra == 'execution' or $extra == 'project')
-            {
-                unset($cols['percent']);
-                unset($cols['attribute']);
-                unset($cols['actions']);
-            }
+            if($extra == 'execution' or $extra == 'project') unset($cols['actions']);
 
             if($extra == 'project' or $extra == 'stage') unset($cols['project']);
         }
