@@ -21,6 +21,7 @@
 <?php js::set('projectPathList', $projectPathList);?>
 <style>
 #changeProgram .icon-project {padding-right: 5px;}
+#changeProgram .modal-body {padding-top: 10px;}
 </style>
 <div id="mainContent" class="main-content">
   <div class="center-block">
@@ -115,6 +116,8 @@
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="icon icon-close"></i></button>
         <?php if($canChangeProgram):?>
         <h4 class="modal-title"><?php echo $lang->product->changeProgram;?></h4>
+        <?php else:?>
+        <h4 class="modal-title"><?php echo sprintf($lang->product->changeProgramTip, $product->name);?></h4>
         <?php endif;?>
       </div>
       <div class="modal-body">
@@ -123,9 +126,11 @@
           <tr>
             <th class='text-left'><?php echo $lang->product->notChangeProgramTip;?></th>
           </tr>
-          <?php foreach($linkStoriesProjects as $project):?>
+          <?php foreach($linkStoriesProjects as $projectID => $projectName):?>
           <tr>
-            <td><i class="icon icon-project"></i><?php echo $project;?></td>
+            <td>
+              <?php echo html::a($this->createLink('projectstory', 'story', 'projectID=' . $projectID), "<i class='icon icon-project'></i>" . $projectName, '', "title='$projectName'");?>
+            </td>
           </tr>
           <?php endforeach;?>
           <?php endif;?>
