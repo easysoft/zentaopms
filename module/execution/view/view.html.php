@@ -188,7 +188,7 @@
                     $names = '';
                     foreach($programList as $id => $name)
                     {
-                        $names .=  common::hasPriv('program', 'product')? html::a($this->createLink('program', 'product', "programID=$id"), $name) . '/ ' : $name . '/ ';
+                        $names .=  common::hasPriv('program', 'product') ? html::a($this->createLink('program', 'product', "programID=$id"), $name) . '/ ' : $name . '/ ';
                     }
                     echo rtrim($names, '/ ');
                     ?>
