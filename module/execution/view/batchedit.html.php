@@ -144,8 +144,6 @@ js::set('emptyEnd', $lang->programplan->emptyEnd);
 js::set('planFinishSmall', $lang->programplan->error->planFinishSmall);
 js::set('errorBegin', $lang->execution->errorLetterProject);
 js::set('errorEnd', $lang->execution->errorGreaterProject);
-js::set('projectBeginDate', $project->begin);
-js::set('projectEndDate', $project->end);
 ?>
 
 <script>
@@ -157,14 +155,34 @@ $('#executionForm').submit(function()
         var beginDate   = $(this).val();
         var beginDateID = $(this).attr('id');
 
-        var nameID    = beginDateID.replace('begins', 'names');
-        var endDateID = beginDateID.replace('begins', 'ends');
+        var nameID      = beginDateID.replace('begins', 'names');
+        var endDateID   = beginDateID.replace('begins', 'ends');
+        var executionID = beginDateID.replace('begins', '');
         $('#help' + beginDateID).remove();
         $('#help' + endDateID).remove();
 
         // Invalid data is skipped.
         var nameVal = $('#' + nameID).val()
         if(!nameVal) return;
+
+        var projectBeginDate = '0000-00-00';
+        var projectEndDate   = '2059-12-31';
+
+        $.ajax(
+        {
+            url: createLink('execution', 'ajaxGetProjectStartDate', "executionID=" + executionID),
+            dataType: 'json',
+            method: 'post',
+            async: false,
+            success: function(data)
+            {
+                if(data)
+                {
+                    projectBeginDate = data.begin;
+                    projectEndDate   = data.end;
+                }
+            }
+        });
 
         // Check if the begin date is empty.
         if(!beginDate)
@@ -216,7 +234,11 @@ $('#executionForm').submit(function()
         }
     });
 
-    if(!submitForm) return false;
+    if(!submitForm)
+    {
+        setTimeout(function(){$('#submit').removeAttr('disabled')}, 500);
+        return false;
+    }
 });
 </script>
 <?php include '../../common/view/footer.html.php';?>

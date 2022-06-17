@@ -1576,6 +1576,9 @@ class execution extends control
             return print(js::confirm($this->lang->execution->importEditPlanStory, inlink('edit', "executionID=$executionID&action=edit&extra=&newPlans=$newPlans&confirm=yes"), inlink('view', "executionID=$executionID")));
         }
 
+        /* Set menu. */
+        $this->execution->setMenu($executionID);
+
         if(!empty($_POST))
         {
             $oldPlans    = $this->dao->select('plan')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($executionID)->andWhere('plan')->ne(0)->fetchPairs('plan');
@@ -1637,9 +1640,6 @@ class execution extends control
             if($execution->type == 'kanban') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('view', "executionID=$executionID")));
         }
-
-        /* Set menu. */
-        $this->execution->setMenu($executionID);
 
         $executions = array('' => '') + $this->executions;
         $managers   = $this->execution->getDefaultManagers($executionID);
@@ -3901,5 +3901,31 @@ class execution extends control
         if(dao::isError()) echo false;
 
         echo true;
+    }
+
+    /**
+     * AJAX: Gets the start date of the project to which the execution belongs.
+     *
+     * @param  int     $executionID
+     * @access public
+     * @return string
+     */
+    public function ajaxGetProjectStartDate($executionID = 0)
+    {
+        if($this->config->systemMode == 'new')
+        {
+            $execution = $this->dao->select('id,project')->from(TABLE_EXECUTION)->where('id')->eq($executionID)->fetch();
+            $project   = $this->dao->select('begin,end')->from(TABLE_PROJECT)->where('id')->eq($execution->project)->fetch();
+            if(empty($project))
+            {
+                echo '';
+                return false;
+            }
+
+            $date = array();
+            $date['begin'] = $project->begin;
+            $date['end']   = $project->end;
+            echo json_encode($date);
+        }
     }
 }
