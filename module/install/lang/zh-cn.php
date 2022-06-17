@@ -25,7 +25,7 @@ $lang->install->seeLatestRelease = '看看最新的版本';
 $lang->install->welcome          = '欢迎使用禅道项目管理软件！';
 $lang->install->license          = '禅道项目管理软件授权协议';
 $lang->install->desc             = <<<EOT
-禅道项目管理软件(ZenTaoPMS)是一款国产的，基于<a href='http://zpl.pub' target='_blank'>ZPL</a>协议，开源免费的项目管理软件，它集产品管理、项目管理、测试管理于一体，同时还包含了事务管理、组织管理等诸多功能，是中小型企业项目管理的首选。
+禅道项目管理软件(ZenTaoPMS)是一款国产的，基于<a href='http://zpl.pub/page/zplv12.html' target='_blank'>ZPL</a>或<a href='https://www.gnu.org/licenses/agpl-3.0.en.html' target='_blank'>AGPL</a>双授权协议，开源免费的项目管理软件，它集产品管理、项目管理、测试管理于一体，同时还包含了事务管理、组织管理等诸多功能，是中小型企业项目管理的首选。
 
 禅道项目管理软件使用PHP + MySQL开发，基于自主的PHP开发框架──ZenTaoPHP而成。第三方开发者或者企业可以非常方便的开发插件或者进行定制。
 EOT;
