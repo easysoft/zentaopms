@@ -1258,7 +1258,7 @@ class product extends control
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
         /* Process product structure. */
-        if($this->config->systemMode == 'classic' and $orderBy == 'program_asc') $orderBy = 'order_desc';
+        if($this->config->systemMode == 'classic' and $orderBy == 'program_asc') $orderBy = 'order_asc';
         $productStats     = $this->product->getStats($orderBy, $pager, $browseType, '', 'story', '', $queryID);
         $productStructure = $this->product->statisticProgram($productStats);
         $productLines     = $this->dao->select('*')->from(TABLE_MODULE)->where('type')->eq('line')->andWhere('deleted')->eq(0)->orderBy('`order` asc')->fetchAll();
@@ -1270,7 +1270,7 @@ class product extends control
             $programLines[$productLine->root][$productLine->id] = $productLine->name;
         }
 
-        $actionURL = $this->createLink('product', 'all', "browseType=bySearch&orderBy=order_desc&queryID=myQueryID");
+        $actionURL = $this->createLink('product', 'all', "browseType=bySearch&orderBy=order_asc&queryID=myQueryID");
         $this->product->buildProductSearchForm($param, $actionURL);
 
         $this->view->title        = $this->lang->product->common;
