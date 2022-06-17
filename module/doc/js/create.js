@@ -1,6 +1,6 @@
 $(function()
 {
-    toggleAcl($('[name=acl]').val(), 'doc');
+    toggleAcl($('input[name="acl"]:checked').val(), 'doc');
     setTimeout(function(){initPage(docType)}, 50);
     $('input[name="type"]').change(function()
     {
