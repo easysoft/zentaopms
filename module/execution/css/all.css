@@ -34,3 +34,4 @@ td.flex span.project-type-label {min-width: 40px;}
 canvas {height: 28px;}
 .parent.has-child.c-name.flex, .table-child-bottom > .c-name.flex {border-bottom: 1px solid #cbd0db !important;}
 .parent.has-child.c-name.flex {margin-bottom: -2px !important;}
+#tableCustomBtn {padding-bottom: 5px;}

@@ -219,6 +219,17 @@ $('[data-toggle="popover"]').popover();
 
 $('#planForm').submit(function()
 {
+    /* Clear all error messages. */
+    $('input[name^=begin]').each(function()
+    {
+        var beginDateID = $(this).attr('id');
+        if(beginDateID == 'begin%i%') return;
+
+        var endDateID = beginDateID.replace('begin', 'end');
+        $('#help' + beginDateID).remove();
+        $('#help' + endDateID).remove();
+    });
+
     var submitForm = true;
     $('input[name^=begin]').each(function()
     {
@@ -231,11 +242,11 @@ $('#planForm').submit(function()
         $('#help' + beginDateID).remove();
         $('#help' + endDateID).remove();
 
-        // Invalid data is skipped.
+        /* Invalid data is skipped. */
         var nameVal = $('#' + nameID).val()
         if(!nameVal) return;
 
-        // Check if the begin date is empty.
+        /* Check if the begin date is empty. */
         if(!beginDate)
         {
             submitForm = false;

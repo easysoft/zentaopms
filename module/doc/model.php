@@ -927,6 +927,7 @@ class docModel extends model
         {
             $this->config->doc->search['module'] = 'contributeDoc';
             $products = $this->product->getPairs();
+
             $this->config->doc->search['params']['project']['values']   = array('' => '') + $this->loadModel('project')->getPairsByProgram() + array('all' => $this->lang->doc->allProjects);
             $this->config->doc->search['params']['execution']['values'] = array('' => '') + $this->loadModel('execution')->getPairs() + array('all' => $this->lang->doc->allExecutions);
             $this->config->doc->search['params']['lib']['values']       = array('' => '') + $this->loadModel('doc')->getLibs('all', 'withObject') + array('all' => $this->lang->doclib->all);
@@ -940,10 +941,9 @@ class docModel extends model
             $this->config->doc->search['params']['lib']['values']       = array('' => '', $libID => ($libID ? $libs[$libID] : 0), 'all' => $this->lang->doclib->all);
         }
 
-
-        $this->config->doc->search['actionURL']                     = $actionURL;
-        $this->config->doc->search['queryID']                       = $queryID;
-        $this->config->doc->search['params']['product']['values']   = array('' => '') + $products + array('all' => $this->lang->doc->allProduct);
+        $this->config->doc->search['actionURL']                   = $actionURL;
+        $this->config->doc->search['queryID']                     = $queryID;
+        $this->config->doc->search['params']['product']['values'] = array('' => '') + $products + array('all' => $this->lang->doc->allProduct);
 
         /* Get the modules. */
         $moduleOptionMenu                                        = $this->loadModel('tree')->getOptionMenu($libID, 'doc', $startModuleID = 0);

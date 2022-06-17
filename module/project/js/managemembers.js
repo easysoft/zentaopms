@@ -14,7 +14,7 @@ $.zui.Picker.DEFAULTS.onChange = function(event)
         var $select      = $(this);
         var selectPicker = $select.data('zui.picker');
 
-        if(selectPicker) selectPicker.updateOptionList([newItem]);
+        if(selectPicker) selectPicker.updateOptionList([$.extend({}, newItem)]);
     });
 }
 
@@ -111,6 +111,8 @@ function addItem(obj)
 function deleteItem(obj)
 {
     if($('#teamForm .table tbody').children().length < 2) return false;
+
+    $(obj).closest('tr').find('.picker .picker-selection-remove').click();
     $(obj).closest('tr').remove();
 }
 

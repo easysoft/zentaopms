@@ -692,7 +692,7 @@ class actionModel extends model
      * @param  string $orderBy
      * @param  object $pager
      * @access public
-     * @return void
+     * @return array
      */
     public function getTrashesBySearch($objectType, $type, $queryID, $orderBy, $pager = null)
     {
@@ -716,9 +716,7 @@ class actionModel extends model
 
         $extra      = $type == 'hidden' ? self::BE_HIDDEN : self::CAN_UNDELETED;
         $trashQuery = $this->session->trashQuery;
-        $trashQuery = preg_replace("/`objectID`/", 't1.`objectID`', $trashQuery);
-        $trashQuery = preg_replace("/`actor`/", 't1.`actor`', $trashQuery);
-        $trashQuery = preg_replace("/`date`/", 't1.`date`', $trashQuery);
+        $trashQuery = str_replace(array('`objectID`', '`actor`', '`date`'), array('t1.`objectID`', 't1.`actor`', 't1.`date`'), $trashQuery);
         $table      = $this->config->objectTables[$objectType];
         $nameField  = isset($this->config->action->objectNameFields[$objectType]) ? 't2.' . "`{$this->config->action->objectNameFields[$objectType]}`" : '';
 

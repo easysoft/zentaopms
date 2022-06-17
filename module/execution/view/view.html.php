@@ -185,19 +185,12 @@
                   <?php if($execution->projectInfo->grade > 1):?>
                     <i class='icon icon-program text-muted'></i>
                     <?php
-                    $end = end($programList);
-                    reset($programList);
+                    $names = '';
                     foreach($programList as $id => $name)
                     {
-                        if($name != $end)
-                        {
-                            echo common::hasPriv('program', 'product')? html::a($this->createLink('program', 'product', "programID=$id"), $name) . '/ ' : $name . '/ ';
-                        }
-                        else
-                        {
-                            echo common::hasPriv('program', 'product') ? html::a($this->createLink('program', 'product', "programID=$id"), $name) : $name;
-                        }
+                        $names .=  common::hasPriv('program', 'product') ? html::a($this->createLink('program', 'product', "programID=$id"), $name) . '/ ' : $name . '/ ';
                     }
+                    echo rtrim($names, '/ ');
                     ?>
                   <?php endif;?>
                   </div>

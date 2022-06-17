@@ -108,8 +108,8 @@ $("a[href^='###']").click(function()
           <tr>
             <th><?php echo $lang->doclib->control;?></th>
             <td colspan='2'>
-              <?php echo html::radio('acl', $lang->doc->aclList, 'open', "onchange='toggleAcl(this.value, \"doc\")'");?>
-              <span class='text-info' id='noticeAcl'><?php echo $lang->doc->noticeAcl['doc']['open'];?></span>
+              <?php echo html::radio('acl', $lang->doc->aclList, $lib->acl, "onchange='toggleAcl(this.value, \"doc\")'");?>
+              <span class='text-info' id='noticeAcl'><?php echo $lang->doc->noticeAcl['doc'][$lib->acl];?></span>
             </td>
           </tr>
           <tr id='whiteListBox' class='hidden'>

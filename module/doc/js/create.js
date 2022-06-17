@@ -1,6 +1,6 @@
 $(function()
 {
-    toggleAcl($('[name=acl]').val(), 'doc');
+    toggleAcl($('input[name="acl"]:checked').val(), 'doc');
     setTimeout(function(){initPage(docType)}, 50);
     $('input[name="type"]').change(function()
     {
@@ -100,4 +100,57 @@ function initPage(type)
         $('#contentBox').hide();
         $('#urlBox').hide();
     }
+}
+
+/**
+ * Load whitelist by libID.
+ *
+ * @param  int    $libID
+ * @access public
+ * @return void
+ */
+function loadWhitelist(libID)
+{
+    var groupLink = createLink('doc', 'ajaxGetWhitelist', 'libID=' + libID + '&acl=&control=group');
+    var userLink  = createLink('doc', 'ajaxGetWhitelist', 'libID=' + libID + '&acl=&control=user');
+    $.post(groupLink, function(groups)
+    {
+        if(!(groups == 'default' || groups == 'private'))
+        {
+          $('#groups').replaceWith(groups);
+          $('#groups_chosen').remove();
+          $('#groups').chosen();
+        }
+    });
+
+    $.post(userLink, function(users)
+    {
+        if(users != 'default')
+        {
+            if(users == 'private')
+            {
+                $('#aclopen').parent('.radio-inline').addClass('hidden');
+                $('#aclcustom').parent('.radio-inline').addClass('hidden');
+                $('#whiteListBox').addClass('hidden');
+                $('#aclprivate').prop('checked', true);
+            }
+            else
+            {
+                $('#aclopen').parent('.radio-inline').removeClass('hidden');
+                $('#aclcustom').parent('.radio-inline').removeClass('hidden');
+
+                $('#users').replaceWith(users);
+                $('#users_chosen').remove();
+                $('#whiteListBox .picker').remove();
+                if($('#users option').length < maxCount)
+                {
+                  $('#users').chosen();
+                }
+                else
+                {
+                  $('#users').picker();
+                }
+            }
+        }
+    });
 }
