@@ -18,7 +18,7 @@ $('#tostory').click(function()
  */
 function loadProductExecutions(productID, projectID)
 {
-    link = createLink('product', 'ajaxGetExecutions', 'productID=' + productID + '&projectID=' + projectID +'&branch=' + branchID + '&number=&executionID=0&from=bugToTask');
+    var link = createLink('product', 'ajaxGetExecutions', 'productID=' + productID + '&projectID=' + projectID +'&branch=' + branchID + '&number=&executionID=0&from=bugToTask');
 
     $('#executionBox').load(link, function()
     {
@@ -41,7 +41,7 @@ $('#toTaskButton').on('click', function()
     else if(systemMode == 'classic' && executionID)
     {
         $('#cancelButton').click();
-        link = createLink('task', 'create', 'executionID=' + executionID + '&storyID=0&moduleID=0&taskID=0&todoID=0&extra=projectID=0&bugID=' + bugID);
+        var link = createLink('task', 'create', 'executionID=' + executionID + '&storyID=0&moduleID=0&taskID=0&todoID=0&extra=projectID=0&bugID=' + bugID);
         window.parent.$.apps.open(link, 'execution');
     }
     else if(executionID == 0)

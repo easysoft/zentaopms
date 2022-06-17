@@ -46,23 +46,23 @@ class commonModel extends model
     public function syncPPEStatus($objectID)
     {
         global $app;
-        $thisModule = $app->rawModule;
+        $rawModule = $app->rawModule;
 
         if($this->config->systemMode == 'classic')
         {
-            if($thisModule == 'task') $this->syncExecutionStatus($objectID);
+            if($rawModule == 'task') $this->syncExecutionStatus($objectID);
         }
 
         if($this->config->systemMode == 'new')
         {
-            if($thisModule == 'task' or $thisModule == 'effort')
+            if($rawModule == 'task' or $rawModule == 'effort')
             {
                 $taskID    = $objectID;
                 $execution = $this->syncExecutionStatus($taskID);
                 $project   = $this->syncProjectStatus($execution);
                 $this->syncProgramStatus($project);
             }
-            if($thisModule == 'execution')
+            if($rawModule == 'execution')
             {
                 $executionID = $objectID;
                 $execution   = $this->dao->select('id, project, grade, parent')->from(TABLE_EXECUTION)->where('id')->eq($executionID)->fetch();
@@ -70,13 +70,13 @@ class commonModel extends model
                 $project     = $this->syncProjectStatus($execution);
                 $this->syncProgramStatus($project);
             }
-            if($thisModule == 'project')
+            if($rawModule == 'project')
             {
                 $projectID = $objectID;
                 $project   = $this->dao->select('id, parent, path')->from(TABLE_PROJECT)->where('id')->eq($projectID)->fetch();
                 $this->syncProgramStatus($project);
             }
-            if($thisModule == 'program')
+            if($rawModule == 'program')
             {
                 $programID = $objectID;
                 $program   = $this->dao->select('id, parent, path')->from(TABLE_PROGRAM)->where('id')->eq($programID)->fetch();

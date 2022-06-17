@@ -1619,10 +1619,7 @@ class bugModel extends model
         if($moduleName == 'contributeBug')
         {
             $bugsAssignedByMe = $this->loadModel('my')->getAssignedByMe($account, 0, $pager, $orderBy, 0, 'bug');
-            foreach($bugsAssignedByMe as $bugID => $bug)
-            {
-                $bugIDList[$bugID] = $bugID;
-            }
+            foreach($bugsAssignedByMe as $bugID => $bug) $bugIDList[$bugID] = $bugID;
         }
 
         if($queryID)
