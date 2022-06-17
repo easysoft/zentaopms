@@ -111,6 +111,8 @@ function addItem(obj)
 function deleteItem(obj)
 {
     if($('#teamForm .table tbody').children().length < 2) return false;
+
+    $(obj).closest('tr').find('.picker .picker-selection-remove').click();
     $(obj).closest('tr').remove();
 }
 
