@@ -133,6 +133,10 @@ $(function()
         selector: 'tr',
         dragCssClass: 'drag-row',
         trigger: $list.find('.sort-handler').length ? '.sort-handler' : null,
+        before: function(e)
+        {
+            if($(e.event.target).closest('a,.btn').length) return false;
+        },
         canMoveHere: function($ele, $target)
         {
             return $ele.data('parent') === $target.data('parent');
