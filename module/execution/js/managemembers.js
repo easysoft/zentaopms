@@ -14,7 +14,7 @@ $.zui.Picker.DEFAULTS.onChange = function(event)
         var $select      = $(this);
         var selectPicker = $select.data('zui.picker');
 
-        if(selectPicker) selectPicker.updateOptionList([newItem]);
+        if(selectPicker) selectPicker.updateOptionList([$.extend({}, newItem)]);
     });
 }
 
