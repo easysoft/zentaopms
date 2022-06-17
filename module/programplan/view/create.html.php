@@ -225,7 +225,7 @@ $('#planForm').submit(function()
         var beginDateID = $(this).attr('id');
         if(beginDateID == 'begin%i%') return;
 
-        var endDateID   = beginDateID.replace('begin', 'end');
+        var endDateID = beginDateID.replace('begin', 'end');
         $('#help' + beginDateID).remove();
         $('#help' + endDateID).remove();
     });
