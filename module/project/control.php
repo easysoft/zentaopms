@@ -2012,7 +2012,7 @@ class project extends control
             $programIdList       = $this->dao->select('id, program')->from(TABLE_PRODUCT)->where('id')->in(array_keys($multiLinkedProducts))->fetchPairs();
             foreach($multiLinkedProducts as $productID => $product)
             {
-                if($programIdList[$productID] != $programID) $canChange = false;
+                if($programIdList[$productID] != $newTopPGM) $canChange = false;
                 $multiLinkedProjects[$productID] = $this->loadModel('product')->getProjectPairsByProduct($productID);
             }
             $response['result']              = false;
