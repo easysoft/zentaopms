@@ -234,7 +234,7 @@
                     'style="width: 100%; height: 100%; left: 0px;"',
                 '/>'
             ].join(' '));
-            var $app = $('<div class="app-container" id="app-' + appCode + '"></div>')
+            var $app = $('<div class="app-container load-indicator" id="app-' + appCode + '"></div>')
                 .append($iframe)
                 .appendTo('#apps');
 
@@ -247,7 +247,7 @@
             var iframe = $iframe.get(0);
             iframe.onload = iframe.onreadystatechange = function(e)
             {
-                $app.trigger('loadapp', app);
+                $app.removeClass('loading').trigger('loadapp', app);
             };
         }
 
@@ -456,6 +456,14 @@
         }
 
         if(!notTriggerEvent) app.$app.trigger('reloadapp', app);
+
+        app.$app.addClass('loading');
+        if(app._loadTimer) clearTimeout(app._loadTimer);
+        app._loadTimer = setTimeout(function()
+        {
+            app.$app.removeClass('loading');
+            app._loadTimer = null;
+        }, 10000);
     }
 
     /**
