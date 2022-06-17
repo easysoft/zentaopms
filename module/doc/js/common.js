@@ -32,7 +32,11 @@ function toggleAcl(acl, type)
     {
         $('#whiteListBox').removeClass('hidden');
         $('#groupBox').addClass('hidden');
-        if(type == 'doc') loadWhitelist(libID);
+        if(type == 'doc')
+        {
+            loadWhitelist(libID);
+            $('#whiteListBox').addClass('hidden');
+        }
     }
     else
     {
@@ -120,7 +124,6 @@ function loadWhitelist(libID)
             {
                 $('#aclopen').parent('.radio-inline').removeClass('hidden');
                 $('#aclcustom').parent('.radio-inline').removeClass('hidden');
-                $('#aclprivate').prop('checked', false);
 
                 $('#users').replaceWith(users);
                 $('#users_chosen').remove();
