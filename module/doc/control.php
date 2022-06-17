@@ -362,6 +362,7 @@ class doc extends control
         $this->view->objectType       = $objectType;
         $this->view->objectID         = $objectID;
         $this->view->libID            = $libID;
+        $this->view->lib              = $lib;
         $this->view->libs             = $libs;
         $this->view->gobackLink       = $gobackLink;
         $this->view->libName          = $this->dao->findByID($libID)->from(TABLE_DOCLIB)->fetch('name');
@@ -832,19 +833,21 @@ class doc extends control
      * @param  int    $doclibID
      * @param  string $acl open|custom|private
      * @param  string $control user|group
+     * @param  int    $docID
      * @access public
      * @return string
      */
-    public function ajaxGetWhitelist($doclibID, $acl = '', $control = '')
+    public function ajaxGetWhitelist($doclibID, $acl = '', $control = '', $docID = 0)
     {
-        $doclib       = $this->doc->getLibById($doclibID);
-        $users        = $this->user->getPairs('noletter|noempty|noclosed');
-        $selectedUser = $doclib->users;
+        $doclib        = $this->doc->getLibById($doclibID);
+        $doc           = $this->doc->getById($docID);
+        $users         = $this->user->getPairs('noletter|noempty|noclosed');
+        $selectedUser  = $docID ? $doc->users : $doclib->users;
+        $selectedGroup = $docID ? $doc->groups : $doclib->groups;
 
         if($control == 'group')
         {
-            $groups        = $this->loadModel('group')->getPairs();
-            $selectedGroup = $doclib->groups;
+            $groups = $this->loadModel('group')->getPairs();
             if($doclib->acl == 'custom')
             {
                 foreach($groups as $groupID => $group)
