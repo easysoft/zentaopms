@@ -149,7 +149,7 @@ js::set('errorEnd', $lang->execution->errorGreaterProject);
 <script>
 $('#executionForm').submit(function()
 {
-    // Clear all error messages.
+    /* Clear all error messages. */
     $('input[name^=begins]').each(function()
     {
         var beginDateID = $(this).attr('id');
@@ -170,7 +170,7 @@ $('#executionForm').submit(function()
         $('#help' + beginDateID).remove();
         $('#help' + endDateID).remove();
 
-        // Invalid data is skipped.
+        /* Invalid data is skipped. */
         var nameVal = $('#' + nameID).val()
         if(!nameVal) return;
 
@@ -193,7 +193,7 @@ $('#executionForm').submit(function()
             }
         });
 
-        // Check if the begin date is empty.
+        /* Check if the begin date is empty. */
         if(!beginDate)
         {
             submitForm = false;
