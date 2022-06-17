@@ -26,9 +26,9 @@ $(function()
             }
             else if(typeof(from) != 'undefined')
             {
-                <?php $from = isset($from) ? $from : '';?>
-                <?php $from = ($from == 'project' and isset($isStage) and $isStage) ? 'stage' : $from;?>
-                $dropmenu.append("<li><a href='<?php echo $this->createLink('datatable', 'ajaxCustom', 'id=' . $this->moduleName . '&method=' . $this->methodName . "&extra=$from")?>' data-toggle='modal' data-type='ajax'><?php echo $lang->datatable->custom?></a></li>");
+                <?php $fromPage = isset($fromPage) ? $fromPage : '';?>
+                <?php $fromPage = ($fromPage == 'project' and isset($isStage) and $isStage) ? 'stage' : $fromPage;?>
+                $dropmenu.append("<li><a href='<?php echo $this->createLink('datatable', 'ajaxCustom', 'id=' . $this->moduleName . '&method=' . $this->methodName . "&extra=$fromPage")?>' data-toggle='modal' data-type='ajax'><?php echo $lang->datatable->custom?></a></li>");
             }
             else
             {

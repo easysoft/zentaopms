@@ -57,7 +57,7 @@ $canCreateLane   = commonModel::hasPriv('kanban', 'createLane');
       <div class="region<?php if($canSortRegion) echo ' sort';?>" data-id="<?php echo $region->id;?>">
         <div class="region-header dropdown">
           <strong><?php echo $region->name;?></strong>
-          <button class="btn btn-link action position"><i class="icon icon-angle-top" data-id="<?php echo $region->id;?>"></i></button>
+          <i class="icon icon-angle-top btn-link" data-id="<?php echo $region->id;?>"></i>
           <div class='region-actions'>
             <?php if(($canEditRegion || $canCreateLane || $canDeleteRegion) and !(isset($this->config->CRKanban) and $this->config->CRKanban == '0' and $kanban->status == 'closed')):?>
             <button class="btn btn-link action" type="button" data-toggle="dropdown"><i class="icon icon-ellipsis-v"></i></button>

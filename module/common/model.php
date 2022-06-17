@@ -55,7 +55,7 @@ class commonModel extends model
 
         if($this->config->systemMode == 'new')
         {
-            if($thisModule == 'task')
+            if($thisModule == 'task' or $thisModule == 'effort')
             {
                 $taskID    = $objectID;
                 $execution = $this->syncExecutionStatus($taskID);
@@ -2356,7 +2356,8 @@ EOD;
           ($module == 'user' && strpos('|login|deny|logout|reset|', "|{$method}|") !== false) ||
           ($module == 'my' && strpos('|changepassword|preference|', "|{$method}|") !== false) ||
           ($module == 'file' && strpos('|read|download|uploadimages|ajaxwopifiles|', "|{$method}|") !== false) ||
-          ($module == 'sso' && $method == 'login'))
+          ($module == 'sso' && $method == 'login') ||
+          ($module == 'traincourse' && $method == 'ajaxuploadlargefile'))
         {
             return;
         }
@@ -3103,7 +3104,7 @@ EOD;
             return;
         }
 
-        if($currentModule == $tab && $currentMethod== 'create')
+        if($currentModule == $tab && $currentMethod == 'create')
         {
             $lang->menu = $lang->$tab->homeMenu;
             return;
@@ -3123,6 +3124,12 @@ EOD;
             }
 
             if(isset($menu['alias']) and in_array($currentMethod, explode(',', strtolower($menu['alias']))))
+            {
+                $lang->menu = $lang->$tab->homeMenu;
+                return;
+            }
+
+            if(isset($menu['subModule']) and strpos(",{$menu['subModule']},", ",$currentModule,") !== false)
             {
                 $lang->menu = $lang->$tab->homeMenu;
                 return;

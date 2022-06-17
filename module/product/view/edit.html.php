@@ -17,6 +17,8 @@
 <?php js::set('canChangeProgram', $canChangeProgram);?>
 <?php js::set('singleLinkProjects', $singleLinkProjects);?>
 <?php js::set('multipleLinkProjects', $multipleLinkProjects);?>
+<?php js::set('linkStoriesProjectIDList', array_keys($linkStoriesProjects));?>
+<?php js::set('projectPathList', $projectPathList);?>
 <style>
 #changeProgram .icon-project {padding-right: 5px;}
 </style>

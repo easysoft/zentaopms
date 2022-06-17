@@ -3087,7 +3087,7 @@ class bugModel extends model
             case 'id':
                 if($canBatchAction)
                 {
-                    echo html::checkbox('bugIDList', array($bug->id => '')) . html::a(helper::createLink('bug', 'view', "bugID=$bug->id"), sprintf('%03d', $bug->id));
+                    echo html::checkbox('bugIDList', array($bug->id => '')) . html::a(helper::createLink('bug', 'view', "bugID=$bug->id"), sprintf('%03d', $bug->id), '', "data-app='{$this->app->tab}'");
                 }
                 else
                 {
@@ -3389,7 +3389,7 @@ class bugModel extends model
         if($type == 'view' && $this->app->tab != 'product')
         {
             $menu .= $this->buildMenu('bug', 'toStory', $toStoryParams, $bug, $type, $this->lang->icons['story'], '', '', '', "data-app='product' id='tostory'", $this->lang->bug->toStory);
-            if(common::hasPriv('task', 'create')) $menu .= html::a('#toTask', "<i class='icon icon-check'></i><span class='text'>{$this->lang->bug->toTask}</span>", '', "data-app='qa' data-toggle='modal' class='btn btn-link'");
+            if(common::hasPriv('task', 'create') and !isonlybody()) $menu .= html::a('#toTask', "<i class='icon icon-check'></i><span class='text'>{$this->lang->bug->toTask}</span>", '', "data-app='qa' data-toggle='modal' class='btn btn-link'");
             $menu .= $this->buildMenu('bug', 'createCase', $convertParams, $bug, $type, 'sitemap');
         }
         if($type == 'view')

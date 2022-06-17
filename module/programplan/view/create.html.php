@@ -285,7 +285,11 @@ $('#planForm').submit(function()
         }
     });
 
-    if(!submitForm) return false;
+    if(!submitForm)
+    {
+        setTimeout(function(){$('#submit').removeAttr('disabled')}, 500);
+        return false;
+    }
 });
 </script>
 <?php include '../../common/view/footer.html.php';?>

@@ -760,25 +760,6 @@ class productModel extends model
             ->remove('uid,changeProjects,contactListMenu')
             ->get();
 
-        if($this->config->systemMode == 'new')
-        {
-            if($product->program != $oldProduct->program)
-            {
-                /* Link the projects stories under this product. */
-                $unmodifiableProjects = $this->dao->select('t1.*')->from(TABLE_PROJECTSTORY)->alias('t1')
-                    ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
-                    ->where('t1.product')->eq($productID)
-                    ->andWhere('t2.type')->eq('project')
-                    ->andWhere('t2.deleted')->eq('0')
-                    ->fetchPairs('project', 'product');
-                if(!empty($unmodifiableProjects))
-                {
-                    dao::$errors[] = $this->lang->product->changeProgramError;
-                    return false;
-                }
-            }
-        }
-
         $product   = $this->loadModel('file')->processImgURL($product, $this->config->product->editor->edit['id'], $this->post->uid);
         $programID = isset($product->program) ? $product->program : '';
         $this->dao->update(TABLE_PRODUCT)->data($product)->autoCheck()
@@ -917,13 +898,16 @@ class productModel extends model
         $data     = fixer::input('post')->get();
 
         /* When there are products under the line, the program cannot be modified  */
-        foreach($oldLines as $oldLine)
+        if($this->config->systemMode == 'new')
         {
-            $oldLineID = 'id' . $oldLine->id;
-            if($data->programs[$oldLineID] != $oldLine->root)
+            foreach($oldLines as $oldLine)
             {
-                $product = $this->dao->select('*')->from(TABLE_PRODUCT)->where('line')->eq($oldLine->id)->fetch();
-                if(!empty($product)) return print(js::error($this->lang->product->changeLineError));
+                $oldLineID = 'id' . $oldLine->id;
+                if($data->programs[$oldLineID] != $oldLine->root)
+                {
+                    $product = $this->dao->select('*')->from(TABLE_PRODUCT)->where('line')->eq($oldLine->id)->fetch();
+                    if(!empty($product)) return print(js::error($this->lang->product->changeLineError));
+                }
             }
         }
 
@@ -2157,7 +2141,6 @@ class productModel extends model
         $menu .= $this->buildMenu('product', 'edit', $params, $product, $type);
 
         if($type == 'view') $menu .= $this->buildMenu('product', 'delete', $params, $product, $type, 'trash', 'hiddenwin');
-        if($type == 'browse' && common::hasPriv('product', 'updateOrder')) $menu .= "<i class='icon icon-move text-blue'></i>";
 
         return $menu;
     }

@@ -740,6 +740,7 @@ class execution extends control
         else
         {
             $this->session->set('executionStoryBrowseType', $type);
+            $this->session->set('storyBrowseType', $type, 'execution');
         }
 
         /* Save session. */
@@ -1026,6 +1027,7 @@ class execution extends control
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'testcase', false);
 
         $cases = $this->testcase->appendData($cases, 'case');
+        $cases = $this->loadModel('story')->checkNeedConfirm($cases);
 
         $this->view->title       = $this->lang->execution->testcase;
         $this->view->executionID = $executionID;
@@ -1574,6 +1576,9 @@ class execution extends control
             return print(js::confirm($this->lang->execution->importEditPlanStory, inlink('edit', "executionID=$executionID&action=edit&extra=&newPlans=$newPlans&confirm=yes"), inlink('view', "executionID=$executionID")));
         }
 
+        /* Set menu. */
+        $this->execution->setMenu($executionID);
+
         if(!empty($_POST))
         {
             $oldPlans    = $this->dao->select('plan')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($executionID)->andWhere('plan')->ne(0)->fetchPairs('plan');
@@ -1635,9 +1640,6 @@ class execution extends control
             if($execution->type == 'kanban') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('view', "executionID=$executionID")));
         }
-
-        /* Set menu. */
-        $this->execution->setMenu($executionID);
 
         $executions = array('' => '') + $this->executions;
         $managers   = $this->execution->getDefaultManagers($executionID);
@@ -3476,16 +3478,6 @@ class execution extends control
         $parents = array();
         if($parentIdList) $parents = $this->execution->getByIdList($parentIdList);
 
-        $isStage = (isset($project->model) and $project->model == 'waterfall') ? true : false;
-        if($isStage) 
-        {
-            $this->config->execution->datatable->defaultField = array('id', 'name', 'PM', 'status', 'progress', 'percent', 'attribute', 'begin', 'end', 'realBegan', 'realEnd', 'actions');
-        }
-        elseif($this->app->tab == 'project')
-        {
-            $this->config->execution->datatable->defaultField = array('id', 'name', 'code', 'PM', 'status', 'progress', 'begin', 'end', 'estimate', 'consumed', 'left', 'burn');
-        }
-
         $this->view->executionStats = $executionStats;
         $this->view->productList    = $this->loadModel('product')->getProductPairsByProject($projectID);
         $this->view->productID      = $productID;
@@ -3497,7 +3489,8 @@ class execution extends control
         $this->view->users          = $this->loadModel('user')->getPairs('noletter');
         $this->view->status         = $status;
         $this->view->from           = $from;
-        $this->view->isStage        = $isStage;
+        $this->view->isStage        = (isset($project->model) and $project->model == 'waterfall') ? true : false;
+
         $this->display();
     }
 
@@ -3908,5 +3901,31 @@ class execution extends control
         if(dao::isError()) echo false;
 
         echo true;
+    }
+
+    /**
+     * AJAX: Gets the start date of the project to which the execution belongs.
+     *
+     * @param  int     $executionID
+     * @access public
+     * @return string
+     */
+    public function ajaxGetProjectStartDate($executionID = 0)
+    {
+        if($this->config->systemMode == 'new')
+        {
+            $execution = $this->dao->select('id,project')->from(TABLE_EXECUTION)->where('id')->eq($executionID)->fetch();
+            $project   = $this->dao->select('begin,end')->from(TABLE_PROJECT)->where('id')->eq($execution->project)->fetch();
+            if(empty($project))
+            {
+                echo '';
+                return false;
+            }
+
+            $date = array();
+            $date['begin'] = $project->begin;
+            $date['end']   = $project->end;
+            echo json_encode($date);
+        }
     }
 }

@@ -308,13 +308,14 @@ $lang->kanbancolumn->confirmDeleteChild = 'Are you sure to delete this column? A
 $lang->kanbancolumn->confirmRestore     = 'Are you sure you want to restore this Kanban column? After restoring the Kanban column, the Kanban column and all tasks in the Kanban column will be restored to the previous position at the same time.';
 
 $lang->kanbanlane = new stdclass();
-$lang->kanbanlane->name      = $lang->kanban->laneName;
-$lang->kanbanlane->common    = 'Lane';
-$lang->kanbanlane->default   = 'Default Lane';
-$lang->kanbanlane->column    = 'Lane Kanban Column';
-$lang->kanbanlane->otherlane = 'Select Existed Lane';
-$lang->kanbanlane->color     = 'Lane Color';
-$lang->kanbanlane->WIPType   = 'Lane WIP Type';
+$lang->kanbanlane->name         = $lang->kanban->laneName;
+$lang->kanbanlane->common       = 'Lane';
+$lang->kanbanlane->default      = 'Default Lane';
+$lang->kanbanlane->column       = 'Lane Kanban Column';
+$lang->kanbanlane->otherlane    = 'Select Existed Lane';
+$lang->kanbanlane->color        = 'Lane Color';
+$lang->kanbanlane->WIPType      = 'Lane WIP Type';
+$lang->kanbanlane->heightByCard = 'Adaptive (Adaptive to card height)';
 
 $lang->kanbanlane->confirmDelete    = 'Are you sure to delete this lane? After deleting the lane, all data (columns and cards) in the lane will also be deleted.';
 $lang->kanbanlane->confirmDeleteTip = 'Are you sure to delete this lane? After deleting the lane, all %s in the lane will be hidden.';

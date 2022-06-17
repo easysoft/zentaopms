@@ -181,7 +181,7 @@
                 <?php $planIDList = explode(',', $planIDList);?>
                 <?php foreach($planIDList as $planID):?>
                 <?php if(isset($planGroup[$productID][$planID])):?>
-                <div class="col-xs-12"><?php echo html::a($this->createLink('productplan', 'view', "planID={$planID}"), $product->name . '/' . $planGroup[$productID][$planID]);?></div>
+                <div class="col-xs-12"><?php echo html::a($this->createLink('productplan', 'view', "planID={$planID}"), "<i class='icon icon-calendar text-muted'></i> " . $product->name . '/' . $planGroup[$productID][$planID]);?></div>
                 <?php endif;?>
                 <?php endforeach;?>
                 <?php endforeach;?>

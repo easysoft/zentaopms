@@ -2024,6 +2024,8 @@ class executionModel extends model
             $data->product = $productID;
             $data->branch  = $branch;
             $data->plan    = isset($plans[$productID][$branch]) ? implode(',', $plans[$productID][$branch]) : $oldPlan;
+            $data->plan    = trim($data->plan, ',');
+            $data->plan    = empty($data->plan) ? 0 : ",$data->plan,";
             $this->dao->insert(TABLE_PROJECTPRODUCT)->data($data)->exec();
             $existedProducts[$productID][$branch] = true;
         }
@@ -2535,7 +2537,6 @@ class executionModel extends model
 
         $planStories  = array();
         $planProducts = array();
-        $count        = 0;
         $this->loadModel('story');
         if(!empty($plans))
         {
@@ -2552,7 +2553,6 @@ class executionModel extends model
                         {
                             if($story->status == 'draft')
                             {
-                                $count++;
                                 unset($planStory[$id]);
                                 continue;
                             }
@@ -2567,7 +2567,6 @@ class executionModel extends model
         $projectID = $this->dao->select('project')->from(TABLE_EXECUTION)->where('id')->eq($executionID)->fetch('project');
         $this->linkStory($executionID, $planStories, $planProducts);
         if($this->config->systemMode == 'new') $this->linkStory($projectID, $planStories, $planProducts);
-        if($count != 0) echo js::alert(sprintf($this->lang->execution->haveDraft, $count)) . js::locate(helper::createLink('execution', 'create', "projectID=$projectID&executionID=$executionID"));
     }
 
     /**
@@ -3103,7 +3102,6 @@ class executionModel extends model
             if($currentTime > time() and !$todayTag)
             {
                 $todayTag = $i + 1;
-                break;
             }
 
             if(!isset($sets[$current]) and $mode == 'noempty')
@@ -4167,7 +4165,7 @@ class executionModel extends model
         $id             = $col->id;
         $onlyChildStage = ($execution->grade == 2 and $execution->project != $execution->parent);
 
-        if(!$isStage and $col->id == 'actions') return;
+        if(!$isStage and in_array($col->id, array('percent', 'attribute', 'actions'))) return;
         if(($this->config->systemMode == 'classic' or ($this->config->systemMode == 'new' and $this->app->tab != 'execution')) and $col->id == 'project') return;
 
         if($col->show)
@@ -4221,7 +4219,7 @@ class executionModel extends model
                 {
                     echo "<div class='checkbox-primary'><input type='checkbox' name='executionIDList[$execution->id]' value='$execution->id' autocomplete='off'/><label></label></div>";
                 }
-                echo printf('%03d', $execution->id);
+                echo sprintf('%03d', $execution->id);
                 break;
             case 'name':
                 $label         = $execution->type == 'stage' ? 'label-warning' : 'label-info';

@@ -78,7 +78,7 @@ class project extends control
             if($this->config->edition != 'open') list($fields, $projects) = $this->loadModel('workflowfield')->appendDataFromFlow($fields, $projects);
             $this->post->set('fields', $fields);
             $this->post->set('rows', $projects);
-            $this->post->set('kind', 'project');
+            $this->post->set('kind', $this->lang->project->common);
             $this->fetch('file', 'export2' . $this->post->fileType, $_POST);
         }
 
@@ -709,8 +709,6 @@ class project extends control
             }
             return print(js::locate($this->session->projectList, 'parent'));
         }
-
-        if($this->app->tab == 'program') $this->loadModel('program')->setMenu(0);
 
         if(!$this->post->projectIdList) return print(js::locate($this->session->projectList, 'parent'));
         $projectIdList = $this->post->projectIdList;

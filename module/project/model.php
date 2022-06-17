@@ -2130,6 +2130,9 @@ class projectModel extends model
             $data->product = $productID;
             $data->branch  = $branch;
             $data->plan    = isset($plans[$productID][$branch]) ? implode(',', $plans[$productID][$branch]) : $oldPlan;
+            $data->plan    = trim($data->plan, ',');
+            $data->plan    = empty($data->plan) ? 0 : ",$data->plan,";
+
             $this->dao->insert(TABLE_PROJECTPRODUCT)->data($data)->exec();
             $existedProducts[$productID][$branch] = true;
         }

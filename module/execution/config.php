@@ -139,7 +139,7 @@ $config->execution->gantt->linkType['end']['end']     = 2;
 $config->execution->gantt->linkType['begin']['end']   = 3;
 
 $config->execution->datatable = new stdclass();
-$config->execution->datatable->defaultField = array('id', 'name', 'code', 'project', 'PM', 'status', 'progress', 'begin', 'end', 'estimate', 'consumed', 'left', 'burn');
+$config->execution->datatable->defaultField = array('id', 'name', 'code', 'project', 'PM', 'status', 'progress', 'percent', 'attribute', 'begin', 'end', 'estimate', 'consumed', 'left', 'burn', 'actions');
 
 $config->execution->datatable->fieldList['id']['title']    = 'idAB';
 $config->execution->datatable->fieldList['id']['fixed']    = 'left';
@@ -153,7 +153,7 @@ $config->execution->datatable->fieldList['name']['required'] = 'yes';
 
 $config->execution->datatable->fieldList['code']['title']    = 'code';
 $config->execution->datatable->fieldList['code']['fixed']    = 'no';
-$config->execution->datatable->fieldList['code']['width']    = '90';
+$config->execution->datatable->fieldList['code']['width']    = '95';
 $config->execution->datatable->fieldList['code']['required'] = 'no';
 
 $config->execution->datatable->fieldList['project']['title']    = 'project';
@@ -168,18 +168,18 @@ $config->execution->datatable->fieldList['PM']['required'] = 'no';
 
 $config->execution->datatable->fieldList['status']['title']    = 'status';
 $config->execution->datatable->fieldList['status']['fixed']    = 'no';
-$config->execution->datatable->fieldList['status']['width']    = '80';
+$config->execution->datatable->fieldList['status']['width']    = '100';
 $config->execution->datatable->fieldList['status']['required'] = 'no';
 
 $config->execution->datatable->fieldList['progress']['title']    = 'progress';
 $config->execution->datatable->fieldList['progress']['fixed']    = 'no';
-$config->execution->datatable->fieldList['progress']['width']    = '40';
+$config->execution->datatable->fieldList['progress']['width']    = '70';
 $config->execution->datatable->fieldList['progress']['required'] = 'no';
 $config->execution->datatable->fieldList['progress']['sort']     = 'no';
 
 $config->execution->datatable->fieldList['percent']['title']    = 'percent';
 $config->execution->datatable->fieldList['percent']['fixed']    = 'no';
-$config->execution->datatable->fieldList['percent']['width']    = '80';
+$config->execution->datatable->fieldList['percent']['width']    = '85';
 $config->execution->datatable->fieldList['percent']['required'] = 'no';
 $config->execution->datatable->fieldList['percent']['sort']     = 'no';
 
@@ -196,12 +196,12 @@ $config->execution->datatable->fieldList['openedDate']['required'] = 'no';
 
 $config->execution->datatable->fieldList['begin']['title']    = 'begin';
 $config->execution->datatable->fieldList['begin']['fixed']    = 'no';
-$config->execution->datatable->fieldList['begin']['width']    = '85';
+$config->execution->datatable->fieldList['begin']['width']    = '100';
 $config->execution->datatable->fieldList['begin']['required'] = 'no';
 
 $config->execution->datatable->fieldList['end']['title']    = 'end';
 $config->execution->datatable->fieldList['end']['fixed']    = 'no';
-$config->execution->datatable->fieldList['end']['width']    = '85';
+$config->execution->datatable->fieldList['end']['width']    = '90';
 $config->execution->datatable->fieldList['end']['required'] = 'no';
 
 $config->execution->datatable->fieldList['realBegan']['title']    = 'realBegan';
@@ -224,7 +224,7 @@ $config->execution->datatable->fieldList['estimate']['sort']     = 'no';
 
 $config->execution->datatable->fieldList['consumed']['title']    = 'consumed';
 $config->execution->datatable->fieldList['consumed']['fixed']    = 'no';
-$config->execution->datatable->fieldList['consumed']['width']    = '70';
+$config->execution->datatable->fieldList['consumed']['width']    = '75';
 $config->execution->datatable->fieldList['consumed']['required'] = 'no';
 $config->execution->datatable->fieldList['consumed']['sort']     = 'no';
 

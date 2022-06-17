@@ -11,3 +11,5 @@ DELETE FROM `zt_workflowaction` WHERE `module`='task'    AND `action`='browse';
 DELETE FROM `zt_workflowaction` WHERE `module`='build'   AND `action`='browse';
 
 ALTER TABLE `zt_projectproduct` MODIFY COLUMN `plan` varchar(255) NOT NULL;
+
+UPDATE `zt_project` SET status = 'closed' WHERE status='done';
