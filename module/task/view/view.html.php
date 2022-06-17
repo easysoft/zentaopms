@@ -108,15 +108,15 @@
           <table class='table table-hover table-fixed' id='childrenTable'>
             <thead>
               <tr class='text-center'>
-                <th class='w-50px'> <?php echo $lang->task->id;?></th>
-                <th class='w-40px'> <?php echo $lang->task->lblPri;?></th>
+                <th class='c-id'> <?php echo $lang->task->id;?></th>
+                <th class='c-lblPri'> <?php echo $lang->task->lblPri;?></th>
                 <th>                <?php echo $lang->task->name;?></th>
-                <th class='w-100px'><?php echo $lang->task->deadline;?></th>
-                <th class='w-120px'> <?php echo $lang->task->assignedTo;?></th>
-                <th class='w-80px'> <?php echo $lang->task->status;?></th>
-                <th class='w-60px visible-lg'><?php echo $lang->task->consumedAB . $lang->task->lblHour;?></th>
-                <th class='w-60px visible-lg'><?php echo $lang->task->leftAB . $lang->task->lblHour;?></th>
-                <th class='w-170px'><?php echo $lang->actions;?></th>
+                <th class='c-deadline'><?php echo $lang->task->deadline;?></th>
+                <th class='c-assignedTo'> <?php echo $lang->task->assignedTo;?></th>
+                <th class='c-status'> <?php echo $lang->task->status;?></th>
+                <th class='visible-lg c-consumedAB'><?php echo $lang->task->consumedAB . $lang->task->lblHour;?></th>
+                <th class='visible-lg c-leftAB'><?php echo $lang->task->leftAB . $lang->task->lblHour;?></th>
+                <th class='c-actions'><?php echo $lang->actions;?></th>
               </tr>
             </thead>
             <tbody>

@@ -799,7 +799,7 @@ function moveCard(cardID, fromColID, toColID, fromLaneID, toLaneID, kanbanID, re
                 $('.kanban-group-header').hide();
                 $(".title").attr("disabled", true).css("pointer-events", "none");
             }
-            setTooltip();
+            setToolTip();
         },
         error: function(xhr, status, error)
         {
@@ -1228,10 +1228,7 @@ function createColumnMenu(options)
     if(privs.includes('copyColumn')) items.push({label: kanbanLang.copyColumn, icon: 'copy', url: createLink('kanban', 'copyColumn', 'columnID=' + column.id), className: 'iframe', attrs: {'data-toggle': 'modal'}});
 
     var otherActions = ((privs.includes('archiveColumn') && kanban.archived == '1') || privs.includes('deleteColumn')) ? true : false;
-    if(columnActions && otherActions)
-    {
-        items.push({type: 'divider'});
-    }
+    if(columnActions && otherActions) items.push({type: 'divider'});
 
     if(privs.includes('archiveColumn') && kanban.archived == '1') items.push({label: kanbanLang.archiveColumn, icon: 'card-archive', url: createLink('kanban', 'archiveColumn', 'columnID=' + column.id), attrs: {'target': 'hiddenwin'}});
     if(privs.includes('deleteColumn')) items.push({label: kanbanLang.deleteColumn, icon: 'trash', url: createLink('kanban', 'deleteColumn', 'columnID=' + column.id), attrs: {'target': 'hiddenwin'}});
@@ -1486,7 +1483,7 @@ $(function()
     resetRegionHeight('open');
     if(!CRKanban && kanbanInfo.status == 'closed') $('.kanban-col.kanban-header-col').css('padding', '0px 0px 0px 0px');
 
-    setTooltip();
+    setToolTip();
 });
 
 function initSortable()
@@ -1700,7 +1697,6 @@ function resetRegionHeight(fold)
     {
         $('.region').css('height', regionHeaderHeight);
     }
-
 }
 
 $(document).on('click', '.dropdown-menu', function()
@@ -1708,7 +1704,13 @@ $(document).on('click', '.dropdown-menu', function()
     $.zui.ContextMenu.hide();
 });
 
-function setTooltip()
+/**
+ * Alerts for exceeding the limit.
+ *
+ * @access public
+ * @return void
+ */
+function setToolTip()
 {
     $('[data-toggle="tooltip"]').tooltip({container: 'body'});
 }

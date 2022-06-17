@@ -9,3 +9,12 @@
 #assignedTo a {border-color: transparent;}
 #assignedTo a:hover {border-color: rgba(0,0,0,.2);}
 #childrenTable tbody > tr:nth-child(odd) {background-color: #f5f5f5;}
+
+.c-id {width: 50px;}
+.c-pri {width: 40px;}
+.c-deadline {width: 100px;}
+.c-assignedTo {width: 120px;}
+.c-status {width: 80px;}
+.c-consumedAB {width: 60px;}
+.c-leftAB {width: 60px;}
+.c-actions {width: 175px;}
