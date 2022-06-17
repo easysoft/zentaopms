@@ -301,11 +301,9 @@ class mrModel extends model
         /* Exec Job */
         if($MR->hasNoConflict == '0' && $MR->mergeStatus == 'can_be_merged' && $MR->jobID)
         {
-            $extraParam = array();
-            if(!empty($repo->fileServerUrl)) $extraParam = array('ZENTAO_REPOPATH' => $repo->fileServerUrl);
-
-            $pipeline = $this->loadModel('job')->exec($MR->jobID, $extraParam);
-            $newMR    = new stdClass();
+            $extraParam = array('sourceBranch' => $MR->sourceBranch, 'targetBranch' => $MR->targetBranch);
+            $pipeline   = $this->loadModel('job')->exec($MR->jobID, $extraParam);
+            $newMR      = new stdClass();
             if(!empty($pipeline->queue))
             {
                 $compile = $this->loadModel('compile')->getByQueue($pipeline->queue);

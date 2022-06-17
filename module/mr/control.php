@@ -100,30 +100,6 @@ class mr extends control
     }
 
     /**
-     * Create MR function by api.
-     *
-     * @access public
-     * @return void
-     */
-    public function apiCreate()
-    {
-        if($_POST)
-        {
-            $this->mr->apiCreate();
-
-            $response['result']  = 'success';
-            $response['message'] = $this->lang->saveSuccess;
-            if(dao::isError())
-            {
-                $response['result']  = 'fail';
-                $response['message'] = join("\n", dao::getError());
-            }
-
-            return $this->send($response);
-        }
-    }
-
-    /**
      * Edit MR function.
      *
      * @access public
