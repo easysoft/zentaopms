@@ -132,7 +132,7 @@ class program extends control
      * @access public
      * @return void
      */
-    public function product($programID = 0, $browseType = 'noclosed', $orderBy = 'order_desc', $recTotal = 0, $recPerPage = 15, $pageID = 1)
+    public function product($programID = 0, $browseType = 'noclosed', $orderBy = 'order_asc', $recTotal = 0, $recPerPage = 15, $pageID = 1)
     {
         $programPairs = $this->program->getPairs();
 
