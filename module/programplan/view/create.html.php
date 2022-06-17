@@ -219,6 +219,17 @@ $('[data-toggle="popover"]').popover();
 
 $('#planForm').submit(function()
 {
+    // Clear all error messages.
+    $('input[name^=begin]').each(function()
+    {
+        var beginDateID = $(this).attr('id');
+        if(beginDateID == 'begin%i%') return;
+
+        var endDateID   = beginDateID.replace('begin', 'end');
+        $('#help' + beginDateID).remove();
+        $('#help' + endDateID).remove();
+    });
+
     var submitForm = true;
     $('input[name^=begin]').each(function()
     {
