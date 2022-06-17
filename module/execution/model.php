@@ -707,12 +707,12 @@ class executionModel extends model
         }
 
         /* Update burn before close execution. */
-        $closedIDList = array();
+        $closedIdList = array();
         foreach($executions as $executionID => $execution)
         {
-            if(isset($execution->status) and in_array($execution->status, array('done', 'closed', 'suspended'))) $closedIDList[$executionID] = $executionID;
+            if(isset($execution->status) and in_array($execution->status, array('done', 'closed', 'suspended'))) $closedIdList[$executionID] = $executionID;
         }
-        $this->computeBurn($closedIDList);
+        $this->computeBurn($closedIdList);
 
         foreach($executions as $executionID => $execution)
         {
@@ -2540,11 +2540,11 @@ class executionModel extends model
         $this->loadModel('story');
         if(!empty($plans))
         {
-            foreach($plans as $planIDList)
+            foreach($plans as $planIdList)
             {
-                if(empty($planIDList)) continue;
-                $planIDList = explode(',', $planIDList);
-                foreach($planIDList as $planID)
+                if(empty($planIdList)) continue;
+                $planIdList = explode(',', $planIdList);
+                foreach($planIdList as $planID)
                 {
                     $planStory = $this->story->getPlanStories($planID);
                     if(!empty($planStory))
@@ -3973,17 +3973,17 @@ class executionModel extends model
         $this->loadModel('productplan');
 
         $param        = strtolower($param);
-        $branchIDList = strpos($param, 'withmainplan') !== false ? array(BRANCH_MAIN => BRANCH_MAIN) : array();
+        $branchIdList = strpos($param, 'withmainplan') !== false ? array(BRANCH_MAIN => BRANCH_MAIN) : array();
         $branchGroups = $this->getBranchByProduct(array_keys($products), $executionID, 'noclosed');
         foreach($branchGroups as $branches)
         {
-            foreach($branches as $branchID => $branchName) $branchIDList[$branchID] = $branchID;
+            foreach($branches as $branchID => $branchName) $branchIdList[$branchID] = $branchID;
         }
 
         $plans = $this->dao->select('id,title,product,parent,begin,end')->from(TABLE_PRODUCTPLAN)
             ->where('product')->in(array_keys($products))
             ->andWhere('deleted')->eq(0)
-            ->andWhere('branch')->in($branchIDList)->fi()
+            ->andWhere('branch')->in($branchIdList)->fi()
             ->beginIF(strpos($param, 'skipparent') !== false)->andWhere('parent')->ne(-1)->fi()
             ->orderBy('begin desc')
             ->fetchAll('id');
@@ -4147,7 +4147,7 @@ class executionModel extends model
     }
 
     /**
-     * printCell
+     * Print cell data.
      *
      * @param  object $col
      * @param  object $execution
@@ -4196,7 +4196,7 @@ class executionModel extends model
             if($id == 'status')
             {
                 $executionStatus = $this->processStatus('execution', $execution);
-                $title = " title='{$executionStatus}'";
+                $title           = " title='{$executionStatus}'";
             }
 
             if(in_array($id, array('estimate', 'consumed', 'left')))
@@ -4205,7 +4205,8 @@ class executionModel extends model
                 $title     .= $execution->hours->{$totalTitle} . $this->lang->execution->workHour;
             }
 
-            echo "<td class='" . $class . "'" . $title . ">";
+            echo "<td class='{$class}' $title>";
+            if($this->config->edition != 'open') $this->loadModel('flow')->printFlowCell('execution', $execution, $id);
             if($id == 'burn')
             {
                 $burnValue = join(',', $execution->burns);
