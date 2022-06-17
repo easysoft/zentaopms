@@ -2005,17 +2005,22 @@ class project extends control
         $response['newProducts'] = html::select("newProducts", array('0' => '') + $newProducts, '', "class='form-control chosen' onchange='loadBranches(this)'");
 
         $multiLinkedProducts = $this->project->getMultiLinkedProducts($projectID);
+        $canChange           = true;
         if($multiLinkedProducts)
         {
             $multiLinkedProjects = array();
+            $programIdList       = $this->dao->select('id, program')->from(TABLE_PRODUCT)->where('id')->in(array_keys($multiLinkedProducts))->fetchPairs();
             foreach($multiLinkedProducts as $productID => $product)
             {
+                if($programIdList[$productID] != $programID) $canChange = false;
                 $multiLinkedProjects[$productID] = $this->loadModel('product')->getProjectPairsByProduct($productID);
             }
             $response['result']              = false;
             $response['message']             = $multiLinkedProducts;
             $response['multiLinkedProjects'] = $multiLinkedProjects;
         }
+
+        if($canChange) return true;
         echo json_encode($response);
     }
 
