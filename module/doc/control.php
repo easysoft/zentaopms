@@ -873,7 +873,6 @@ class doc extends control
             {
                 return print(html::select('users[]', $users, $selectedUser, "multiple class='form-control'"));
             }
-
             if($doclib->acl == 'open') return print(html::select('users[]', $users, $selectedUser, "multiple class='form-control'"));
             if($doclib->acl == 'private') echo 'private';
             if($doclib->acl == 'default') echo 'default';
