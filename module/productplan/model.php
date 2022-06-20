@@ -1,4 +1,5 @@
 <?php
+
 /**
  * The model file of productplan module of ZenTaoPMS.
  *
@@ -211,10 +212,12 @@ class productplanModel extends model
      */
     public function getTopPlanPairs($productID, $branch = '', $exclude = '')
     {
+        $statusList = array('done','closed');
         $planPairs = $this->dao->select("id,title")->from(TABLE_PRODUCTPLAN)
             ->where('product')->eq($productID)
             ->beginIF($branch !== '')->andWhere('branch')->eq($branch)->fi()
             ->andWhere('parent')->le(0)
+            ->andWhere('status')->notin($statusList)
             ->andWhere('deleted')->eq(0)
             ->orderBy('id_desc')
             ->fetchPairs();
