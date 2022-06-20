@@ -11,12 +11,14 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<?php if(strpos('|zh-cn|zh-tw|', '|' . $app->getClientLang() . '|') !== false):?>
-<style>.mailBox {width: 45px !important;}</style>
+<style>
+<?php if(!common::checkNotCN()):?>
+.mailBox {width: 45px !important;}
 <?php else:?>
-<style>.mailBox {width: 118px !important;}</style>
+.mailBox {width: 109px !important;}
 <?php endif;?>
-<style>.heading {padding-left: 15px;}</style>
+.heading {padding-left: 15px;}
+</style>
 <div class="main-row">
   <div class='side-col' id='sidebar'>
     <div class='cell'>
