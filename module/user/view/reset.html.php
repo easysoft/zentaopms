@@ -54,6 +54,5 @@
     </form>
   </div>
 </div>
-<?php else:?>
 <?php endif;?>
 <?php include '../../common/view/footer.lite.html.php';?>
