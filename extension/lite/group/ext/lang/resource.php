@@ -970,6 +970,7 @@ if($config->edition == 'biz' or $config->edition == 'max')
     $lang->resource->feedback->delete     = 'delete';
     $lang->resource->feedback->close      = 'closeAction';
     $lang->resource->feedback->export     = 'exportAction';
+    $lang->resource->feedback->assignTo   = 'assignTo';
 
     if($config->visions == ',lite,') unset($lang->resource->feedback);
 
