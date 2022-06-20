@@ -1474,7 +1474,7 @@ class commonModel extends model
         }
 
         $params = sprintf($vars, $orderBy);
-        if($app->getModuleName() == 'my') $params = "mode={$app->getMethodName()}&" .sprintf($vars, $orderBy);
+        if($app->getModuleName() == 'my' and $app->rawMethod == 'work') $params = "mode={$app->getMethodName()}&" .sprintf($vars, $orderBy);
 
         $link = helper::createLink($module, $method, $params);
         echo $isMobile ? html::a($link, $label, '', "class='$className' data-app={$app->tab}") : html::a($link, $label, '', "class='$className' data-app={$app->tab}");
