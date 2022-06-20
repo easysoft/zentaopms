@@ -8,7 +8,7 @@ $defaultTheme = $webRoot . 'theme/default/';
 $langTheme    = $themeRoot . 'lang/' . $clientLang . '.css';
 $clientTheme  = $this->app->getClientTheme();
 $onlybody     = zget($_GET, 'onlybody', 'no');
-$commonLang  = array('zh-cn', 'zh-tw', 'en');
+$commonLang   = array('zh-cn', 'zh-tw', 'en');
 ?>
 <!DOCTYPE html>
 <html lang='<?php echo $clientLang;?>'>
