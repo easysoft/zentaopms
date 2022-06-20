@@ -55,7 +55,7 @@ class productsEntry extends entry
         else
         {
             $control = $this->loadController('product', 'all');
-            $control->all($this->param('status', 'all'), $this->param('order', 'order_asc'));
+            $control->all($this->param('status', 'all'), $this->param('order', 'order_asc'), 0, 0, $this->param('limit', '20'), $this->param('page', '1') );
 
             /* Response */
             $data = $this->getData();
