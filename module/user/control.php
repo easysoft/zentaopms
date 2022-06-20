@@ -1042,6 +1042,8 @@ class user extends control
      */
     public function reset()
     {
+        if(isset($this->config->resetPWDByMail) and $this->config->resetPWDByMail) $this->locate($this->createLink('user', 'forgetPassword'));
+
         if(!isset($_SESSION['resetFileName']))
         {
             $resetFileName = $this->app->getBasePath() . 'tmp' . DIRECTORY_SEPARATOR . uniqid('reset_') . '.txt';
@@ -1075,6 +1077,17 @@ class user extends control
         $this->view->needCreateFile = $needCreateFile;
         $this->view->resetFileName  = $resetFileName;
 
+        $this->display();
+    }
+
+    /**
+     * Forget password.
+     *
+     * @access public
+     * @return void
+     */
+    public function forgetPassword()
+    {
         $this->display();
     }
 

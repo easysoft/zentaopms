@@ -9,23 +9,25 @@
  * @version     $Id: en.php 4460 2013-02-26 02:28:02Z chencongzhi520@gmail.com $
  * @link        http://www.zentao.net
  */
-$lang->admin->index         = 'Admin Home';
-$lang->admin->checkDB       = 'Check Database';
-$lang->admin->sso           = 'Zdoo';
-$lang->admin->ssoAction     = 'Link Zdoo';
-$lang->admin->safeIndex     = 'Security';
-$lang->admin->checkWeak     = 'Check Weak Password';
-$lang->admin->certifyMobile = 'Verify your cellphone';
-$lang->admin->certifyEmail  = 'Verify your Email';
-$lang->admin->ztCompany     = 'Verify your company';
-$lang->admin->captcha       = 'Verification Code';
-$lang->admin->getCaptcha    = 'Send Verification Code';
-$lang->admin->register      = 'Register';
+$lang->admin->index           = 'Admin Home';
+$lang->admin->checkDB         = 'Check Database';
+$lang->admin->sso             = 'Zdoo';
+$lang->admin->ssoAction       = 'Link Zdoo';
+$lang->admin->safeIndex       = 'Security';
+$lang->admin->checkWeak       = 'Check Weak Password';
+$lang->admin->certifyMobile   = 'Verify your cellphone';
+$lang->admin->certifyEmail    = 'Verify your Email';
+$lang->admin->ztCompany       = 'Verify your company';
+$lang->admin->captcha         = 'Verification Code';
+$lang->admin->getCaptcha      = 'Send Verification Code';
+$lang->admin->register        = 'Register';
+$lang->admin->resetPWDSetting = 'Reset password Setting';
 
-$lang->admin->api     = 'API';
-$lang->admin->log     = 'Log';
-$lang->admin->setting = 'Setting';
-$lang->admin->days    = 'Valid Day';
+$lang->admin->api            = 'API';
+$lang->admin->log            = 'Log';
+$lang->admin->setting        = 'Setting';
+$lang->admin->days           = 'Valid Day';
+$lang->admin->resetPWDByMail = 'Reset the password through the email';
 
 $lang->admin->info = new stdclass();
 $lang->admin->info->version = 'Current Version is %s. ';
@@ -53,14 +55,14 @@ $lang->admin->bind->caption = 'Link Account';
 $lang->admin->bind->success = "Account is linked!";
 
 $lang->admin->safe = new stdclass();
-$lang->admin->safe->common       = 'Security Policy';
-$lang->admin->safe->set          = 'Password Settings';
-$lang->admin->safe->password     = 'Password Strength';
-$lang->admin->safe->weak         = 'Common Weak Passwords';
-$lang->admin->safe->reason       = 'Type';
-$lang->admin->safe->checkWeak    = 'Weak Password Scan';
-$lang->admin->safe->changeWeak   = 'Force to change weak password';
-$lang->admin->safe->loginCaptcha = 'Login using CAPTCHA';
+$lang->admin->safe->common                   = 'Security Policy';
+$lang->admin->safe->set                      = 'Password Settings';
+$lang->admin->safe->password                 = 'Password Strength';
+$lang->admin->safe->weak                     = 'Common Weak Passwords';
+$lang->admin->safe->reason                   = 'Type';
+$lang->admin->safe->checkWeak                = 'Weak Password Scan';
+$lang->admin->safe->changeWeak               = 'Force to change weak password';
+$lang->admin->safe->loginCaptcha             = 'Login using CAPTCHA';
 $lang->admin->safe->modifyPasswordFirstLogin = 'Force to change password after first login';
 
 $lang->admin->safe->modeList[0] = 'I don\'t care.';
@@ -81,6 +83,9 @@ $lang->admin->safe->modifyPasswordList[0] = 'No';
 
 $lang->admin->safe->loginCaptchaList[1] = 'Yes';
 $lang->admin->safe->loginCaptchaList[0] = 'No';
+
+$lang->admin->safe->resetPWDList[1] = 'ON';
+$lang->admin->safe->resetPWDList[0] = 'Off';
 
 $lang->admin->safe->noticeMode   = 'Password will be checked when a user logs in, or a user is added or edited.';
 $lang->admin->safe->noticeStrong = '';
