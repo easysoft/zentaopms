@@ -65,8 +65,9 @@ class productsEntry extends entry
             $products = $data->data->productStats;
             if($mergeChildren) $products = $data->data->productStructure;
         }
+        $pager = $data->data->pager;
 
-        $result   = array();
+        $result = array();
         if($mergeChildren)
         {
             $programs = $this->mergeChildren($products);
@@ -95,10 +96,7 @@ class productsEntry extends entry
                 $result[] = $this->format($product, 'createdDate:time,whitelist:userList,createdBy:user,PO:user,RD:user,QD:user');
             }
 
-            $data = array();
-            $data['total']    = count($result);
-            $data['products'] = $result;
-
+            $data = array('page' => $pager->pageID, 'total' => $pager->recTotal, 'limit' => $pager->recPerPage, 'products' => $result);
             $withUser = $this->param('withUser', '');
             if(!empty($withUser)) $data['users'] = $this->loadModel('user')->getListByAccounts($accounts, 'account');
 
