@@ -2183,9 +2183,11 @@ class testtaskModel extends model
                 $stepStatus = 'pass';
                 foreach($caseResult->steps as $i => $step)
                 {
-                    $result->stepResults[$i]['result'] = $step->status ? 'pass' : 'fail';
+                    if(!$step->status) $step->status = 'fail';
+
+                    $result->stepResults[$i]['result'] = $step->status;
                     $result->stepResults[$i]['real']   = $step->checkPoints[0]->actual;
-                    if(!$step->status) $stepStatus = 'fail';
+                    if($step->status == 'fail') $stepStatus = 'fail';
 
                     $caseStep = new stdclass();
                     $caseStep->type   = 'step';

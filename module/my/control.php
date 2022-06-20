@@ -1063,6 +1063,98 @@ EOF;
     }
 
     /**
+     * Feedback .
+     *
+     * @param  string $browseType
+     * @param  int    $param
+     * @param  string $orderBy
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
+     * @access public
+     * @return void
+     */
+    public function feedback($browseType = 'assigntome', $param = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    {
+        $this->loadModel('feedback');
+
+        $this->loadModel('datatable');
+        $this->lang->datatable->moduleSetting  = str_replace($this->lang->module, $this->lang->feedback->moduleAB, $this->lang->datatable->moduleSetting);
+        $this->lang->datatable->showModule     = str_replace($this->lang->module, $this->lang->feedback->moduleAB, $this->lang->datatable->showModule);
+        $this->lang->datatable->showModuleList = str_replace($this->lang->module, $this->lang->feedback->moduleAB, $this->lang->datatable->showModuleList);
+
+        $this->session->set('feedbackList', $this->app->getURI(true), 'feedback');
+
+        $queryID = $browseType == 'bysearch' ? (int)$param : 0;
+        $this->app->loadClass('pager', $static = true);
+        $pager = pager::init($recTotal, $recPerPage, $pageID);
+
+        if($browseType != 'bysearch')
+        {
+            $feedbacks = $this->feedback->getList($browseType, $orderBy, $pager);
+        }
+        else
+        {
+            $feedbacks = $this->feedback->getBySearch($queryID, $orderBy, $pager);
+        }
+
+        $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'workFeedback');
+
+        $storyIdList = $bugIdList = $todoIdList = $taskIdList = array();
+        foreach($feedbacks as $feedback)
+        {
+            if($feedback->solution == 'tobug')   $bugIdList[]   = $feedback->result;
+            if($feedback->solution == 'tostory') $storyIdList[] = $feedback->result;
+            if($feedback->solution == 'totodo')  $todoIdList[]  = $feedback->result;
+            if($feedback->solution == 'totask')  $taskIdList[]  = $feedback->result;
+        }
+        $bugs    = $bugIdList   ? $this->loadModel('bug')->getByList($bugIdList) : array();
+        $stories = $storyIdList ? $this->loadModel('story')->getByList($storyIdList) : array();
+        $todos   = $todoIdList  ? $this->loadModel('todo')->getByList($todoIdList) : array();
+        $tasks   = $taskIdList  ? $this->loadModel('task')->getByList($taskIdList) : array();
+
+        $products = $this->loadModel('product')->getPairs();
+
+        $this->config->feedback->search['module']    = 'workFeedback';
+        $this->config->feedback->search['actionURL'] = inlink('work', "mode=feedback&browseType=bysearch&param=myQueryID&orderBy=$orderBy");
+        $this->config->feedback->search['queryID']   = $queryID;
+        $this->config->feedback->search['onMenuBar'] = 'no';
+        $this->config->feedback->search['params']['product']['values']     = array('' => '') + $products;
+        $this->config->feedback->search['params']['module']['values']      = array('' => '') + $this->loadModel('tree')->getOptionMenu(0, $viewType = 'feedback', $startModuleID = 0);
+        $this->config->feedback->search['params']['processedBy']['values'] = array('' => '') + $this->feedback->getFeedbackPairs('admin');
+
+        unset($this->config->feedback->search['fields']['assignedTo']);
+        unset($this->config->feedback->search['fields']['closedBy']);
+        unset($this->config->feedback->search['fields']['closedDate']);
+        unset($this->config->feedback->search['fields']['closedReason']);
+        unset($this->config->feedback->search['fields']['processedBy']);
+        unset($this->config->feedback->search['fields']['processedDate']);
+        unset($this->config->feedback->search['fields']['solution']);
+
+        $this->loadModel('search')->setSearchParams($this->config->feedback->search);
+
+        $this->view->title       = $this->lang->my->feedback;
+        $this->view->position[]  = $this->lang->my->feedback;
+        $this->view->mode        = 'feedback';
+        $this->view->browseType  = $browseType;
+        $this->view->feedbacks   = $feedbacks;
+        $this->view->orderBy     = $orderBy;
+        $this->view->pager       = $pager;
+        $this->view->param       = $param;
+        $this->view->bugs        = $bugs;
+        $this->view->todos       = $todos;
+        $this->view->stories     = $stories;
+        $this->view->tasks       = $tasks;
+        $this->view->depts       = $this->loadModel('dept')->getOptionMenu();
+        $this->view->users       = $this->loadModel('user')->getPairs('noletter|nodeleted|noclosed');
+        $this->view->projects    = $this->loadModel('project')->getPairsByProgram(0, 'noclosed');
+        $this->view->allProducts = $this->dao->select('*')->from(TABLE_PRODUCT)->where('deleted')->eq('0')->fetchPairs('id', 'name');
+        $this->view->modulePairs = $this->tree->getModulePairs(0, 'feedback');
+        $this->view->modules     = $this->tree->getOptionMenu(0, $viewType = 'feedback', 0);
+        $this->display();
+    }
+
+    /**
      * My team.
      *
      * @param  string $orderBy
