@@ -2,7 +2,7 @@
 helper::importControl('task');
 class myTask extends task
 {
-    public function create($executionID = 0, $storyID = 0, $moduleID = 0, $taskID = 0, $todoID = 0, $extra = '')
+    public function create($executionID = 0, $storyID = 0, $moduleID = 0, $taskID = 0, $todoID = 0, $extra = '', $bugID = 0)
     {
         $executions = $this->execution->getPairs();
         if(empty($executions))
@@ -10,7 +10,7 @@ class myTask extends task
             echo(js::alert($this->lang->task->kanbanDenied));
             die(js::locate(helper::createLink('execution', 'create')));
         }
-        
+
         $executionID = $this->execution->saveState($executionID, $executions);
         $regionList  = $this->loadModel('kanban')->getRegionPairs($executionID, 0, 'execution');
 
@@ -24,7 +24,7 @@ class myTask extends task
         $laneList = array();
         $regionID = key($lanes);
         if($regionID) $laneList = $this->kanban->getLanePairsByRegion($regionID, 'task');
-        
+
         $this->view->regionList = $regionList;
         $this->view->laneList   = $laneList;
         $this->view->extra      = $extra;
@@ -51,6 +51,6 @@ class myTask extends task
 
             $extra = "laneID=$laneID,columnID=$columnID";
         }
-        return parent::create($executionID, $storyID, $moduleID, $taskID, $todoID, $extra);
+        return parent::create($executionID, $storyID, $moduleID, $taskID, $todoID, $extra, $bugID);
     }
 }
