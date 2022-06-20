@@ -49,6 +49,7 @@ public function getKanban4Group($executionID, $browseType, $groupBy, $searchValu
         if(empty($column->cards)) continue;
         foreach($cardList as $card)
         {
+            if($card->assignedTo == '') $card->assignedTo = 0;
             if(strpos($column->cards, ",$card->id,") !== false) $cardGroup[$column->columnType][$card->id] = $card;
         }
     }
@@ -66,12 +67,13 @@ public function getKanban4Group($executionID, $browseType, $groupBy, $searchValu
         $laneData['name']            = (($groupBy == 'pri' or $groupBy == 'severity') and $laneID) ? $this->lang->$browseType->$groupBy . ':' . $lane->name : $lane->name;
         $laneData['color']           = $lane->color;
         $laneData['order']           = $lane->order;
+        $laneData['type']            = $browseType;
         $laneData['defaultCardType'] = $browseType;
 
         /* Construct kanban column data. */
         foreach($columns as $column)
         {
-            $columnID   = $column->column;
+            $columnID   = $column->columnType;
             $columnName = $column->columnName;
             $parentColumn = '';
             if(in_array($columnID, array('testing', 'tested')))       $parentColumn = 'test';
@@ -84,7 +86,7 @@ public function getKanban4Group($executionID, $browseType, $groupBy, $searchValu
                 if($this->isClickable($column, $action)) $column->actions[] = $action;
             }
 
-            $columnData[$columnID]['id']         = $columnID;
+            $columnData[$columnID]['id']         = $column->column;
             $columnData[$columnID]['type']       = $columnID;
             $columnData[$columnID]['name']       = $columnName;
             $columnData[$columnID]['color']      = '#333';
@@ -101,8 +103,9 @@ public function getKanban4Group($executionID, $browseType, $groupBy, $searchValu
                 if(empty($object)) continue;
 
                 $cardData = array();
+
                 if(in_array($groupBy, array('module', 'story', 'pri', 'severity')) and (int)$object->$groupBy !== $laneID) continue;
-                if(in_array($groupBy, array('assignedTo', 'type', 'category', 'source')) and $object->$groupBy != $laneID) continue;
+                if(in_array($groupBy, array('assignedTo', 'type', 'category', 'source')) and $object->$groupBy !== $laneID) continue;
 
                 $cardData['id']         = $object->id;
                 $cardData['order']      = $cardOrder;
