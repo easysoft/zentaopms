@@ -186,6 +186,7 @@ $config->openMethods[] = 'user.login';
 $config->openMethods[] = 'user.logout';
 $config->openMethods[] = 'user.deny';
 $config->openMethods[] = 'user.reset';
+$config->openMethods[] = 'user.forgetpassword';
 $config->openMethods[] = 'user.refreshrandom';
 $config->openMethods[] = 'api.getsessionid';
 $config->openMethods[] = 'misc.checktable';

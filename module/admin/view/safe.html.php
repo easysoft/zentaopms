@@ -24,6 +24,7 @@
         <?php
         echo html::a($this->createLink('admin', 'safe'), $lang->admin->safe->set, '', "class='active'");
         echo html::a($this->createLink('admin', 'checkWeak'), $lang->admin->safe->checkWeak);
+        echo html::a($this->createLink('admin', 'resetPWDSetting'), $lang->admin->resetPWDSetting);
         ?>
       </div>
     </div>
