@@ -27,7 +27,7 @@ $lang->admin->api            = 'API';
 $lang->admin->log            = 'Log';
 $lang->admin->setting        = 'Setting';
 $lang->admin->days           = 'Valid Day';
-$lang->admin->resetPWDByMail = 'Reset the password through the mailbox';
+$lang->admin->resetPWDByMail = 'Reset the password through the email';
 
 $lang->admin->info = new stdclass();
 $lang->admin->info->version = 'Current Version is %s. ';
