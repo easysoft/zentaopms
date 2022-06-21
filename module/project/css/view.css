@@ -1,3 +1,6 @@
 .block-dynamic .panel-body {height: 230px; overflow: auto; position: relative;}
 .block-team div.col-xs-6 {white-space: nowrap; overflow: hidden;}
 .cell .detail .row-grid {display: block;}
+
+.block-dynamic .label-action {margin-left: 12px;}
+.block-dynamic .label-action + a {color: #838A9D;}

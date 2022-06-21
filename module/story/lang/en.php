@@ -148,7 +148,6 @@ $lang->story->colorTag       = 'Color';
 $lang->story->files          = 'Files';
 $lang->story->copy           = "Copy Story";
 $lang->story->total          = "Total Stories";
-$lang->story->allStories     = 'All Stories';
 $lang->story->draft          = 'Draft';
 $lang->story->unclosed       = 'Unclosed';
 $lang->story->deleted        = 'Deleted';

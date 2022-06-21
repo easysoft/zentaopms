@@ -1743,6 +1743,7 @@ class testcaseModel extends model
                 $class .= $case->status;
                 $title  = "title='" . $this->processStatus('testcase', $case) . "'";
             }
+            if(strpos(',bugs,results,stepNumber,', ",$id,") !== false) $title = "title='{$case->$id}'";
             if($id == 'actions') $class .= ' c-actions';
             if($id == 'lastRunResult') $class .= " {$case->lastRunResult}";
             if(strpos(',stage,precondition,keywords,story,', ",{$id},") !== false) $class .= ' text-ellipsis';
