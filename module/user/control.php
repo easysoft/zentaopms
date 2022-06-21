@@ -1153,7 +1153,7 @@ class user extends control
 
             $response['result']  = 'success';
             $response['message'] = $this->lang->saveSuccess;
-            $response['locate']  = $this->createLink('index');
+            $response['locate']  = $this->createLink('login');
 
             return $this->send($response);
         }
