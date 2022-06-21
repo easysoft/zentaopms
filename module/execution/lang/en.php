@@ -133,6 +133,7 @@ $lang->execution->sortColumn          = 'Kanban Card Sorting';
 $lang->execution->batchCreateStory    = "Batch create {$lang->SRCommon}";
 $lang->execution->batchCreateTask     = 'Batch create task';
 $lang->execution->kanbanNoLinkProduct = "Kanban not linked {$lang->productCommon}";
+$lang->execution->myTask              = "My Task";
 
 /* Fields of zt_team. */
 $lang->execution->root     = 'Root';

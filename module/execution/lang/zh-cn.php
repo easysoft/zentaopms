@@ -133,6 +133,7 @@ $lang->execution->sortColumn          = '看板列卡片排序';
 $lang->execution->batchCreateStory    = "批量新建{$lang->SRCommon}";
 $lang->execution->batchCreateTask     = '批量建任务';
 $lang->execution->kanbanNoLinkProduct = "看板没有关联{$lang->productCommon}";
+$lang->execution->myTask              = "我的任务";
 
 /* Fields of zt_team. */
 $lang->execution->root     = '源ID';
