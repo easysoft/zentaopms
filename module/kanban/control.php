@@ -917,7 +917,6 @@ class kanban extends control
     public function editCard($cardID)
     {
         $this->loadModel('action');
-        $this->loadModel('user');
         if(!empty($_POST))
         {
             $changes = $this->kanban->updateCard($cardID);
@@ -935,14 +934,12 @@ class kanban extends control
         $card        = $this->kanban->getCardByID($cardID);
         $kanban      = $this->kanban->getById($card->kanban);
         $kanbanUsers = $card->kanban == 0 ? ',' : trim($kanban->owner) . ',' . trim($kanban->team);
-        $kanbanUsers = $this->user->getPairs('noclosed|nodeleted', '', 0, $kanbanUsers);
-        $users       = $this->user->getPairs('noclosed|nodeleted');
+        $users       = $this->loadModel('user')->getPairs('noclosed|nodeleted', '', 0, $kanbanUsers);
 
-        $this->view->card        = $card;
-        $this->view->actions     = $this->action->getList('kanbancard', $cardID);
-        $this->view->users       = $users;
-        $this->view->kanbanUsers = $kanbanUsers;
-        $this->view->kanban      = $kanban;
+        $this->view->card     = $card;
+        $this->view->actions  = $this->action->getList('kanbancard', $cardID);
+        $this->view->users    = $users;
+        $this->view->kanban   = $kanban;
 
         $this->display();
     }
