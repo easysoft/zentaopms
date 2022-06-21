@@ -391,7 +391,7 @@ class repo extends control
         {
             $branches = $this->repo->getBranches($repo);
 
-            if(empty($branchID) and $this->cookie->repoBranch) $branchID = $this->cookie->repoBranch;
+            if(empty($branchID) and $this->cookie->repoBranch and $this->session->repoID == $repoID) $branchID = $this->cookie->repoBranch;
             if($branchID) $this->repo->setRepoBranch($branchID);
             if(!isset($branches[$branchID]))
             {
