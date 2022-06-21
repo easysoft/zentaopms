@@ -104,6 +104,7 @@ $lang->webhook->note->typeList['dingding']  = 'Add a customized bot in dingding 
 $lang->webhook->note->typeList['weixin']    = 'Add a customized bot in WeChat and get the webhook url.';
 $lang->webhook->note->typeList['default']   = 'Get a webhook url from others';
 
-$lang->webhook->error = new stdclass();
-$lang->webhook->error->curl   = 'Load php-curl in php.ini.';
-$lang->webhook->error->noDept = 'There is no department selected. Please choose department first.';
+$lang->webhook->error               = new stdclass();
+$lang->webhook->error->curl         = 'Load php-curl in php.ini.';
+$lang->webhook->error->noDept       = 'There is no department selected. Please choose department first.';
+$lang->webhook->error->requestError = 'Request error!';

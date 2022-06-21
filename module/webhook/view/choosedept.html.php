@@ -17,6 +17,11 @@
     <div class='main-header'>
       <h2><?php echo $lang->webhook->chooseDept?></h2>
     </div>
+    <?php if($webhookType == 'feishuuser'):?>
+    <div id="notice" class="alert alert-info">
+      <div class="content"><i class="icon-exclamation-sign"></i> <?php echo $lang->webhook->loadPrompt;?></div>
+    </div>
+    <?php endif;?>
     <ul id='deptList' class="ztree"></ul>
     <div class='actions'>
       <?php echo html::commonButton($lang->save, '', 'btn btn-primary save');?>
@@ -25,27 +30,143 @@
   </div>
 </div>
 <?php js::set('deptTree', $deptTree);?>
+<?php js::set('webhookType', $webhookType);?>
+<?php js::set('webhookID', $webhookID);?>
+<?php js::set('requestError', $lang->webhook->error->requestError);?>
+<?php js::set('feishuUrl', $this->createLink('webhook', 'ajaxGetFeishuDeptList', array('webhookID' => $webhookID)));?>
 <script>
 $(function()
 {
-    var ztreeSettings =
+    if(webhookType == 'feishuuser')
     {
-        view:
+        var setting =
         {
-            showIcon: false
-        },
-        check:
+            view:
+            {
+                showIcon: false,
+                dblClickExpand: false,
+            },
+            check:
+            {
+                enable: true,
+                chkStyle: "checkbox",
+                chkboxType: {"Y" : "s", "N" : "s"}
+            },
+            data:
+            {
+                simpleData: {enable: true}
+            },
+            async:
+            {
+                enable: true,
+                url: feishuUrl,
+                autoParam:["id", "name=name"],
+                type: 'get',
+                dataFilter: filter
+            },
+            callback:
+            {
+                beforeClick: beforeClick,
+                beforeAsync: beforeAsync,
+                onClick: ztreeOnAsyncSuccess
+            }
+        };
+
+        function filter(treeId, parentNode, childNodes)
         {
-            enable: true,
-            chkStyle: "checkbox",
-            chkboxType: {"Y":"s", "N":"s"}
-        },
-        data:
-        {
-            simpleData: {enable: true}
+            if(!childNodes) return null;
+            for(var i = 0, l = childNodes.length; i < l; i++)
+            {
+                childNodes[i].name = childNodes[i].name.replace(/\.n/g, '.');
+            }
+            return childNodes;
         }
-    };
-    ztreeObj = $.fn.zTree.init($("#deptList"), ztreeSettings, deptTree);
+
+        function beforeClick(treeId, treeNode)
+        {
+            if(treeNode.isParent)
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        }
+
+        function beforeAsync(treeId, treeNode)
+        {
+            return true;
+        }
+
+        function ztreeOnAsyncSuccess(event, treeId, treeNode)
+        {
+            if(treeNode == undefined)
+            {
+                departmentID = "0";
+            }
+            else
+            {
+                departmentID = treeNode.id;
+            }
+            var url = createLink('webhook', 'ajaxGetFeishuDeptList', 'webhookID=' + webhookID);
+
+            $.ajax(
+            {
+                type: "post",
+                url: url,
+                data: {departmentID: departmentID},
+                dataType: "json",
+                async: true,
+                success: function(jsonData)
+                {
+                    if(jsonData != null)
+                    {
+                        var data = jsonData;
+                        if(data != null && data.length != 0)
+                        {
+                            if(treeNode == undefined)
+                            {
+                                ztreeObj.addNodes(null, data, true);
+                            }
+                            else
+                            {
+                                ztreeObj.addNodes(treeNode, data, true);
+                            }
+                        }
+                        ztreeObj.expandNode(treeNode, true, false, false);
+                    }
+                },
+                error: function()
+                {
+                    alert(requestError);
+                }
+            });
+        }
+
+        var ztreeObj = $.fn.zTree.init($("#deptList"), setting);
+    }
+    else
+    {
+        var ztreeSettings =
+        {
+            view:
+            {
+                showIcon: false
+            },
+            check:
+            {
+                enable: true,
+                chkStyle: "checkbox",
+                chkboxType: {"Y":"s", "N":"s"}
+            },
+            data:
+            {
+                simpleData: {enable: true}
+            }
+        };
+        ztreeObj = $.fn.zTree.init($("#deptList"), ztreeSettings, deptTree);
+    }
 
     $('.actions .save').click(function()
     {
