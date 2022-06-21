@@ -99,6 +99,29 @@ $lang->custom->object['testtask']  = '测试单';
 $lang->custom->object['todo']      = '待办';
 $lang->custom->object['user']      = '用户';
 $lang->custom->object['block']     = '区块';
+$lang->custom->object['flow']      = '流程';
+$lang->custom->object['score']     = '积分';
+
+if($config->systemMode == 'new') $lang->custom->menuOrder[5]  = 'project';
+$lang->custom->menuOrder[10] = 'product';
+$lang->custom->menuOrder[15] = 'execution';
+$lang->custom->menuOrder[20] = 'kanban';
+$lang->custom->menuOrder[25] = 'story';
+$lang->custom->menuOrder[30] = 'task';
+$lang->custom->menuOrder[35] = 'bug';
+$lang->custom->menuOrder[40] = 'testcase';
+$lang->custom->menuOrder[45] = 'testtask';
+$lang->custom->menuOrder[50] = 'todo';
+$lang->custom->menuOrder[55] = 'user';
+$lang->custom->menuOrder[60] = 'block';
+$lang->custom->menuOrder[65] = 'flow';
+$lang->custom->menuOrder[70] = 'score';
+
+$lang->custom->dividerMenu  = ',story,todo,block,';
+$lang->custom->separatePage = ',execution,product,kanban,flow,score,';
+
+$lang->custom->block = new stdclass();
+$lang->custom->block->fields['closed'] = '关闭的区块';
 
 $lang->custom->project = new stdClass();
 $lang->custom->project->currencySetting    = '货币设置';
@@ -155,11 +178,6 @@ $lang->custom->user->fields['roleList']     = '职位';
 $lang->custom->user->fields['statusList']   = '状态';
 $lang->custom->user->fields['contactField'] = '可用联系方式';
 $lang->custom->user->fields['deleted']      = '列出已删除用户';
-
-$lang->custom->system = array('required', 'flow', 'score');
-
-$lang->custom->block = new stdclass();
-$lang->custom->block->fields['closed'] = '关闭的区块';
 
 $lang->custom->currentLang = '适用当前语言';
 $lang->custom->allLang     = '适用所有语言';

@@ -99,6 +99,29 @@ $lang->custom->object['testtask']  = 'Request';
 $lang->custom->object['todo']      = 'Todo';
 $lang->custom->object['user']      = 'User';
 $lang->custom->object['block']     = 'Block';
+$lang->custom->object['flow']      = '流程';
+$lang->custom->object['score']     = '积分';
+
+if($config->systemMode == 'new') $lang->custom->menuOrder[5]  = 'project';
+$lang->custom->menuOrder[10] = 'product';
+$lang->custom->menuOrder[15] = 'execution';
+$lang->custom->menuOrder[20] = 'kanban';
+$lang->custom->menuOrder[25] = 'story';
+$lang->custom->menuOrder[30] = 'task';
+$lang->custom->menuOrder[35] = 'bug';
+$lang->custom->menuOrder[40] = 'testcase';
+$lang->custom->menuOrder[45] = 'testtask';
+$lang->custom->menuOrder[50] = 'todo';
+$lang->custom->menuOrder[55] = 'user';
+$lang->custom->menuOrder[60] = 'block';
+$lang->custom->menuOrder[65] = 'flow';
+$lang->custom->menuOrder[70] = 'score';
+
+$lang->custom->dividerMenu  = ',story,todo,block,';
+$lang->custom->separatePage = ',execution,product,kanban,flow,score,';
+
+$lang->custom->block = new stdclass();
+$lang->custom->block->fields['closed'] = 'Closed Block';
 
 $lang->custom->project = new stdClass();
 $lang->custom->project->currencySetting    = 'Currency Setting';
@@ -155,11 +178,6 @@ $lang->custom->user->fields['roleList']     = 'Role';
 $lang->custom->user->fields['statusList']   = 'Status';
 $lang->custom->user->fields['contactField'] = 'Available Contact';
 $lang->custom->user->fields['deleted']      = 'Deleted User';
-
-$lang->custom->system = array('required', 'flow', 'score');
-
-$lang->custom->block = new stdclass();
-$lang->custom->block->fields['closed'] = 'Closed Block';
 
 $lang->custom->currentLang = 'Current Language';
 $lang->custom->allLang     = 'All Languages';
