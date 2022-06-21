@@ -14,7 +14,7 @@ include '../../common/view/header.lite.html.php';
 <?php if($expired):?>
 <style>body {background: none;}</style>
 <div class="alert alert-danger">
-  <div class="content"><?php echo $lang->user->linkExpired . sprintf($lang->user->jumping, $isLogon ? helper::createLink('my', 'index') : inlink('login'));?></div>
+  <div class="content"><?php echo $lang->user->linkExpired . sprintf($lang->user->jumping, inlink('login'));?></div>
 </div>
 <?php else:?>
 <main id="main" class="fade no-padding">
@@ -35,11 +35,11 @@ include '../../common/view/header.lite.html.php';
               </div>
               <tr>
                 <td colspan='2' class="form-actions text-center">
-                <?php
-                echo html::hidden('account', $user->account);
-                echo html::submitButton($lang->user->submit);
-                echo html::backButton();
-                ?>
+                  <?php
+                  echo html::hidden('account', $user->account);
+                  echo html::submitButton($lang->user->submit);
+                  echo html::backButton();
+                  ?>
                 </td>
               </tr>
             </tbody>

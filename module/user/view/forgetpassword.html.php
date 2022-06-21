@@ -29,10 +29,10 @@ include '../../common/view/header.lite.html.php';
               <tr><?php echo html::a(inlink('reset'), $lang->user->resetTitle, '', "class='resetBox'");?></tr>
               <tr>
                 <td colspan='2' class="form-actions text-center">
-                <?php
-                echo html::submitButton($lang->user->submit);
-                echo html::a(inlink('login'), $lang->goback, '', 'class="btn btn-wide"');
-                ?>
+                  <?php
+                  echo html::submitButton($lang->user->submit);
+                  echo html::a(inlink('login'), $lang->goback, '', 'class="btn btn-wide"');
+                  ?>
                 </td>
               </tr>
             </tbody>
