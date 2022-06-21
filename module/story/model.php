@@ -4137,7 +4137,7 @@ class storyModel extends model
         $canView     = common::hasPriv($module, 'view');
         $tab         = $this->app->tab;
         $executionID = empty($execution) ? $this->session->execution : $execution->id;
-        $storyLink   = $tab == 'execution' ? helper::createLink('story', 'view', "storyID=$story->id&version=$story->version&param=$executionID") : helper::createLink($module, 'view', "storyID=$story->id");
+        $storyLink   = $tab == 'execution' ? helper::createLink('execution', 'storyView', "storyID=$story->id") : helper::createLink($module, 'view', "storyID=$story->id");
         $account     = $this->app->user->account;
 
         /* Check the product is closed. */

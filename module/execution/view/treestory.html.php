@@ -89,7 +89,7 @@
           {
               foreach($story->planTitle as $planID => $planTitle)
               {
-                  if(!common::printLink('productplan', 'view', "planID=$planID", $planTitle)) echo $lanTitle;
+                  if(!common::printLink('productplan', 'view', "planID=$planID", $planTitle)) echo $planTitle;
                   echo '<br />';
               }
           }
@@ -258,7 +258,7 @@
               <?php
               foreach($linkStories as $linkStoryID)
               {
-                  if(isset($story->extraStories[$linkStoryID])) echo '<li>' . html::a($this->createLink('story', 'view', "storyID=$linkStoryID"), "#$linkStoryID " . $story->extraStories[$linkStoryID]) . '</li>';
+                  if(isset($story->extraStories[$linkStoryID])) echo '<li>' . html::a($this->createLink('execution', 'storyView', "storyID=$linkStoryID"), "#$linkStoryID " . $story->extraStories[$linkStoryID]) . '</li>';
               }
               ?>
             </ul>
@@ -276,7 +276,7 @@
               <?php
               foreach($childStories as $childStoryID)
               {
-                  if(isset($story->extraStories[$childStoryID])) echo '<li>' . html::a($this->createLink('story', 'view', "storyID=$childStoryID"), "#$childStoryID " . $story->extraStories[$childStoryID]) . '</li>';
+                  if(isset($story->extraStories[$childStoryID])) echo '<li>' . html::a($this->createLink('execution', 'storyView', "storyID=$childStoryID"), "#$childStoryID " . $story->extraStories[$childStoryID]) . '</li>';
               }
               ?>
             </ul>

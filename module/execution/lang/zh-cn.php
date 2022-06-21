@@ -94,6 +94,7 @@ $lang->execution->viewBug             = '查看bug';
 $lang->execution->noProduct           = "无{$lang->executionCommon}";
 $lang->execution->createStory         = "提{$lang->SRCommon}";
 $lang->execution->storyTitle          = "{$lang->SRCommon}名称";
+$lang->execution->storyView           = "{$lang->SRCommon}详情";
 $lang->execution->all                 = '所有';
 $lang->execution->undone              = '未完成';
 $lang->execution->unclosed            = '未关闭';

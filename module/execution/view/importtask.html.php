@@ -69,9 +69,9 @@
             <?php
             if($task->storyID)
             {
-                if(common::hasPriv('story', 'view'))
+                if(common::hasPriv('execution', 'storyView'))
                 {
-                    echo html::a($this->createLink('story', 'view', "storyid=$task->storyID"), $task->storyTitle, '', "class='preview'", true, isonlybody());
+                    echo html::a($this->createLink('execution', 'storyView', "storyid=$task->storyID"), $task->storyTitle, '', "class='preview'", true, isonlybody());
                 }
                 else
                 {
