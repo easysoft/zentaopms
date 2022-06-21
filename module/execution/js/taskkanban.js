@@ -123,7 +123,7 @@ function renderStoryItem(item, $item, col)
         if(!$title.length)
         {
             $title = $('<a class="title iframe" data-width="95%">' + (scaleSize <= 1 ? '<i class="icon icon-lightbulb text-muted"></i> ' : '') + '<span class="text"></span></a>')
-                    .attr('href', $.createLink('story', 'view', 'storyID=' + item.id, '', true));
+                    .attr('href', $.createLink('execution', 'storyView', 'storyID=' + item.id, '', true));
             $title.appendTo($item);
         }
         var title = searchValue != '' ? "<span class='text'>" + item.title.replaceAll(searchValue, "<span class='text-danger'>" + searchValue + "</span>") + "</span>": "<span class='text'>" + item.title + "</span>";

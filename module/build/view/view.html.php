@@ -93,7 +93,7 @@ tbody tr td:first-child input {display: none;}
             <tbody class='text-center'>
               <?php $objectID = $this->app->tab == 'execution' ? $build->execution : $build->project;?>
               <?php foreach($stories as $storyID => $story):?>
-              <?php $storyLink = $this->createLink('story', 'view', "storyID=$story->id&version=0&param=$objectID", '', true);?>
+              <?php $storyLink = $this->app->tab == 'execution' ? $this->createLink('execution', 'storyView', "storyID=$story->id", '', true) : $this->createLink('story', 'view', "storyID=$story->id&version=0&param=$objectID", '', true);?>
               <tr>
                 <td class='c-id text-left'>
                   <?php if($canBatchUnlink):?>

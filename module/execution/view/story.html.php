@@ -215,7 +215,7 @@
         <tbody id='storyTableList' class='sortable'>
           <?php foreach($stories as $key => $story):?>
           <?php
-          $storyLink      = $this->createLink('story', 'view', "storyID=$story->id&version=$story->version&param=$execution->id");
+          $storyLink      = $this->createLink('execution', 'storyView', "storyID=$story->id&version=$story->version&param=$execution->id");
           $totalEstimate += $story->estimate;
           ?>
           <tr id="story<?php echo $story->id;?>" data-id='<?php echo $story->id;?>' data-order='<?php echo $story->order ?>' data-estimate='<?php echo $story->estimate?>' data-cases='<?php echo zget($storyCases, $story->id, 0)?>'>

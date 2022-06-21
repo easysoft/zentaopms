@@ -769,6 +769,7 @@ $lang->resource->execution->whitelist         = 'whitelist';
 $lang->resource->execution->addWhitelist      = 'addWhitelist';
 $lang->resource->execution->unbindWhitelist   = 'unbindWhitelist';
 $lang->resource->execution->storyEstimate     = 'storyEstimate';
+$lang->resource->execution->storyView         = 'storyView';
 if($config->systemMode == 'new') $lang->resource->execution->executionkanban = 'kanbanAction';
 $lang->resource->execution->kanban            = 'RDKanban';
 //if($config->systemMode == 'classic') $lang->resource->project->list = 'list';
