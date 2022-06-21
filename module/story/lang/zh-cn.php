@@ -148,7 +148,6 @@ $lang->story->colorTag       = '颜色标签';
 $lang->story->files          = '附件';
 $lang->story->copy           = "复制{$lang->SRCommon}";
 $lang->story->total          = "总{$lang->SRCommon}";
-$lang->story->allStories     = "所有{$lang->SRCommon}";
 $lang->story->draft          = '草稿';
 $lang->story->unclosed       = '未关闭';
 $lang->story->deleted        = '已删除';

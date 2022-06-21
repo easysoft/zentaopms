@@ -28,32 +28,42 @@
 .btn-group a.btn-secondary, .btn-group a.btn-primary {border-right: 1px solid rgba(255,255,255,0.2);}
 .btn-group button.dropdown-toggle.btn-secondary, .btn-group button.dropdown-toggle.btn-primary {padding:6px;}
 </style>
+<?php $isAllModules = (!empty($module->name) or !empty($product->name) or !empty($branch)) ? false : true;?>
+<?php $sidebarName  = $lang->tree->all;?>
+<?php $removeBtn    = '';?>
 <div id="mainMenu" class="clearfix">
-  <?php if(!empty($module->name) or !empty($product->name) or !empty($branch)):?>
   <div id="sidebarHeader">
     <?php
-    $sidebarName = isset($product) ? $product->name : (isset($branch) ? $branch : $module->name);
-    $removeType  = isset($product) ? 'byproduct' : (isset($branch) ? 'bybranch' : 'bymodule');
-    $removeLink  = inlink('story', "executionID=$execution->id&orderBy=$orderBy&type=$removeType&param=0&recTotal=0&recPerPage={$pager->recPerPage}");
+    if(!$isAllModules)
+    {
+        $sidebarName = isset($product) ? $product->name : (isset($branch) ? $branch : $module->name);
+        $removeType  = isset($product) ? 'byproduct' : (isset($branch) ? 'bybranch' : 'bymodule');
+        $removeLink  = inlink('story', "executionID=$execution->id&orderBy=$orderBy&type=$removeType&param=0&recTotal=0&recPerPage={$pager->recPerPage}");
+        $removeBtn   = html::a($removeLink, "<i class='icon icon-sm icon-close'></i>", '', "class='text-muted'");
+    }
     ?>
     <div class="title" title='<?php echo $sidebarName;?>'>
       <?php echo $sidebarName;?>
-      <?php echo html::a($removeLink, "<i class='icon icon-sm icon-close'></i>", '', "class='text-muted'");?>
+      <?php echo $removeBtn;?>
     </div>
   </div>
-  <?php endif;?>
   <div class="btn-toolbar pull-left">
     <?php
     if(common::hasPriv('execution', 'story'))
     {
-        echo html::a($this->createLink('execution', 'story', "executionID=$execution->id&orderBy=order_desc&type=all"), "<span class='text'>{$lang->story->allStories}</span>" . ($type == 'all' ? " <span class='label label-light label-badge'>{$pager->recTotal}</span>" : ''), '', "class='btn btn-link" . ($type == 'all' ? " btn-active-text" : '') . "'");
+        echo html::a($this->createLink('execution', 'story', "executionID=$execution->id&orderBy=order_desc&type=all"), "<span class='text'>{$lang->all}</span>" . ($type == 'all' ? " <span class='label label-light label-badge'>{$pager->recTotal}</span>" : ''), '', "class='btn btn-link" . ($type == 'all' ? " btn-active-text" : '') . "'");
         echo html::a($this->createLink('execution', 'story', "executionID=$execution->id&orderBy=order_desc&type=unclosed"), "<span class='text'>{$lang->story->unclosed}</span>" . ($type == 'unclosed' ? " <span class='label label-light label-badge'>{$pager->recTotal}</span>" : ''), '', "class='btn btn-link" . ($type == 'unclosed' ? " btn-active-text" : '') . "'");
     }
-    if(common::hasPriv('execution', 'storykanban')) echo html::a($this->createLink('execution', 'storykanban', "executionID=$execution->id"), "<span class='text'>{$lang->execution->kanban}</span>", '', "class='btn btn-link'");
     ?>
     <a class="btn btn-link querybox-toggle" id='bysearchTab'><i class="icon icon-search muted"></i> <?php echo $lang->product->searchStory;?></a>
   </div>
   <div class="btn-toolbar pull-right">
+    <?php if(common::hasPriv('execution', 'storykanban')):?>
+    <div class="btn-group panel-actions">
+      <?php echo html::a($this->createLink('execution', 'story', "executionID=$execution->id&orderBy=order_desc&type=all"), "<i class='icon-list'></i> &nbsp;", '', "class='btn btn-icon text-primary switchBtn' title='{$lang->execution->list}' data-type='bylist'");?>
+      <?php echo html::a($this->createLink('execution', 'storykanban', "executionID=$execution->id"), "<i class='icon-kanban'></i> &nbsp;", '', "class='btn btn-icon switchBtn' title='{$lang->execution->kanban}' data-type='bykanban'");?>
+    </div>
+    <?php endif;?>
     <?php
     common::printLink('story', 'export', "productID=$productID&orderBy=id_desc&executionID=$execution->id", "<i class='icon icon-export muted'></i> " . $lang->story->export, '', "class='btn btn-link export iframe' data-app='execution'");
 

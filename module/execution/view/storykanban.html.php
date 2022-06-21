@@ -25,10 +25,15 @@ $account = $this->app->user->account;
         $total += count($colStories);
     }
     ?>
-    <?php if(common::hasPriv('execution', 'story')) echo html::a($this->createLink('execution', 'story', "executionID=$execution->id"), "<span class='text'>{$lang->story->allStories}</span>", '', "class='btn btn-link'");?>
     <?php if(common::hasPriv('execution', 'storykanban')) echo html::a($this->createLink('execution', 'storykanban', "executionID=$execution->id"), "<span class='text'>{$lang->execution->kanban}</span> <span class='label label-light label-badge'>{$total}</span>", '', "class='btn btn-link btn-active-text'");?>
   </div>
   <div class="btn-toolbar pull-right">
+    <?php if(common::hasPriv('execution', 'story')):?>
+    <div class="btn-group panel-actions">
+      <?php echo html::a($this->createLink('execution', 'story', "executionID=$execution->id"), "<i class='icon-list'></i> &nbsp;", '', "class='btn btn-icon switchBtn' title='{$lang->execution->list}' data-type='bylist'");?>
+      <?php echo html::a($this->createLink('execution', 'storykanban', "executionID=$execution->id"), "<i class='icon-kanban'></i> &nbsp;", '', "class='btn btn-icon text-primary switchBtn' title='{$lang->execution->kanban}' data-type='bykanban'");?>
+    </div>
+    <?php endif;?>
     <div class='btn-group'>
     <?php
     common::printIcon('story', 'export', "productID=$productID&orderBy=id_desc", '', 'button', '', '', 'export', '', "data-group='execution'");
