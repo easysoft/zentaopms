@@ -33,6 +33,9 @@ if(empty($config->notMd5Pwd))js::import($jsRoot . 'md5.js');
           <form method='post' target='hiddenwin'>
             <table class='table table-form'>
               <tbody>
+                <?php if($loginExpired):?>
+                <p class='text-red'><?php echo $lang->user->loginExpired;?></p>
+                <?php endif;?>
                 <tr>
                   <th><?php echo $lang->user->account;?></th>
                   <td><input class='form-control' type='text' name='account' id='account' autocomplete='off' autofocus /></td>

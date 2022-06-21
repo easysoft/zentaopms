@@ -153,6 +153,7 @@ $lang->user->loginLocked  = "Please contact the administrator to unlock your acc
 $lang->user->weakPassword = "Your password does not meet the requirements.";
 $lang->user->errorWeak    = "Passwords cannot use [%s] weak passwords.";
 $lang->user->errorCaptcha = "Captcha Error";
+$lang->user->loginExpired = 'System login has expired, please log in again :)';
 
 $lang->user->roleList['']       = '';
 $lang->user->roleList['dev']    = 'Developer';

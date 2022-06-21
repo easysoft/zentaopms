@@ -153,6 +153,7 @@ $lang->user->loginLocked  = "密码尝试次数太多，请联系管理员解锁
 $lang->user->weakPassword = "您的密码强度小于系统设定。";
 $lang->user->errorWeak    = "密码不能使用【%s】这些常用弱口令。";
 $lang->user->errorCaptcha = "验证码不正确！";
+$lang->user->loginExpired = '系统登录已过期，请重新登录：）';
 
 $lang->user->roleList['']       = '';
 $lang->user->roleList['dev']    = '研发';

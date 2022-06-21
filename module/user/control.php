@@ -960,6 +960,8 @@ class user extends control
         }
         else
         {
+            $loginExpired = !(preg_match("/(m=|\/)(index)(&f=|-)(index)(&|-|\.)?/", strtolower($this->referer), $output) or $this->referer == '/' or $this->referer == '/zentao/');
+
             $this->loadModel('misc');
             $this->loadModel('extension');
             $this->view->noGDLib       = sprintf($this->lang->misc->noGDLib, common::getSysURL() . $this->config->webRoot, '', false, true);
@@ -970,6 +972,7 @@ class user extends control
             $this->view->rand          = $this->user->updateSessionRandom();
             $this->view->unsafeSites   = $this->misc->checkOneClickPackage();
             $this->view->plugins       = $this->extension->getExpiringPlugins(true);
+            $this->view->loginExpired  = $loginExpired;
             $this->display();
         }
     }
