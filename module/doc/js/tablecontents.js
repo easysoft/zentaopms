@@ -19,6 +19,8 @@ $(function()
 
     $('.menu-actions > a').blur(function() {$(this).css('background', 'none');})
 
+    $('#pageActions .btn-toolbar').prepend("<a class='btn btn-link querybox-toggle' id='bysearchTab'><i class='icon icon-search muted'></i>" + docLang.search + "</a>");
+
    /* Make modules tree sortable. */
    $('#modules').sortable(
    {

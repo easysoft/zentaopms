@@ -13,7 +13,11 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/datepicker.html.php';?>
 <?php js::set('browseType', $browseType);?>
+<?php js::set('docLang', $lang->doc);?>
 <?php js::set('confirmDelete', $lang->doc->confirmDelete)?>
+<?php if($browseType == 'bySearch'):?>
+<div class="cell<?php if($browseType == 'bySearch') echo ' show';?>" id="queryBox" data-module=<?php echo $type . 'Doc';?>></div>
+<?php endif;?>
 <div class="main-row fade" id="mainRow">
   <div id="mainContent">
     <div class="panel block-files block-sm no-margin">

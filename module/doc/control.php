@@ -896,13 +896,13 @@ class doc extends control
     /**
      * Show files.
      *
-     * @param string $type
-     * @param int $objectID
-     * @param string $viewType
-     * @param string $orderBy
-     * @param int $recTotal
-     * @param int $recPerPage
-     * @param int $pageID
+     * @param  string $type
+     * @param  int    $objectID
+     * @param  string $viewType
+     * @param  string $orderBy
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
      * @access public
      * @return void
      */
@@ -1151,13 +1151,15 @@ class doc extends control
     /**
      * Show the catalog of the doc library.
      *
-     * @param string $type
-     * @param int $objectID
-     * @param int $libID
+     * @param  string $type
+     * @param  int    $objectID
+     * @param  int    $libID
+     * @param  int    $queryID
+     * @param  string $param
      * @access public
      * @return void
      */
-    public function tableContents($type, $objectID = 0, $libID = 0)
+    public function tableContents($type, $objectID = 0, $libID = 0, $queryID = 0, $param = '')
     {
         list($libs, $libID, $object, $objectID) = $this->doc->setMenuByType($type, $objectID, $libID);
         $this->session->set('createProjectLocate', $this->app->getURI(true), 'doc');
@@ -1168,15 +1170,39 @@ class doc extends control
 
         $title = ($type == 'book' or $type == 'custom') ? $this->lang->doc->tableContents : $object->name . $this->lang->colon . $this->lang->doc->tableContents;
 
-        $this->view->title      = $title;
-        $this->view->type       = $type;
-        $this->view->libs       = $libs;
-        $this->view->objectID   = $objectID;
-        $this->view->libID      = $libID;
-        $this->view->moduleTree = $moduleTree;
-        $this->view->users      = $this->user->getPairs('noletter');
+        /* Build the search form. */
+        $queryID   = $param == 'bySearch' ? (int)$queryID : 0;
+        $actionURL = $this->createLink('doc', 'tableContents', "type=$type&objectID=$objectID&libID=$libID&queryID=myQueryID&param=bySearch");
+        $this->doc->buildSearchForm($libID, $libs, $queryID, $actionURL, $type);
 
-        $this->display();
+        if($param == 'bySearch')
+        {
+            /* Load pager. */
+            $this->app->loadClass('pager', $static = true);
+            $pager = new pager(0, 20, 1);
+
+            $this->view->docs       = $this->doc->getDocsBySearch($type, $objectID, $libID, $queryID);
+            $this->view->browseType = 'bySearch';
+            $this->view->pager      = $pager;
+            $this->view->param      = $param;
+            $this->view->type       = $type;
+            $this->view->users      = $this->user->getPairs('noletter');
+            $this->display('doc', 'browse', "browseType=bySearch&param=$queryID");
+        }
+        else
+        {
+            $this->view->title      = $title;
+            $this->view->type       = $type;
+            $this->view->libs       = $libs;
+            $this->view->objectID   = $objectID;
+            $this->view->libID      = $libID;
+            $this->view->moduleTree = $moduleTree;
+            $this->view->queryID    = $queryID;
+            $this->view->param      = $param;
+            $this->view->users      = $this->user->getPairs('noletter');
+
+            $this->display();
+        }
     }
 
     /**
