@@ -13,7 +13,7 @@
 <?php include '../../common/view/header.html.php';?>
 <style>
 .table-form>tbody>tr>th {width: 90px;}
-.table-form>tbody {height:130px}
+.main-form>table {min-height:125px;}
 </style>
 <div id='mainContent' class='main-content'>
   <div class='center-block'>
