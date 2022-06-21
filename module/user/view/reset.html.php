@@ -21,7 +21,10 @@
       <div class='alert alert-info'>
       <?php printf($lang->user->noticeResetFile, $resetFileName);?>
       </div>
-      <div class='text-center'><?php echo html::a(inlink('reset'), $this->lang->refresh, '', "class='btn btn-primary btn-wide'")?></div>
+      <div class='text-center'>
+        <?php echo html::a(inlink('reset'), $this->lang->refresh, '', "class='btn btn-primary btn-wide'")?>
+        <?php echo html::backButton();?>
+      </div>
     </div>
   </div>
 </div>
