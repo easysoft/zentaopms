@@ -27,7 +27,7 @@ include '../../common/view/header.lite.html.php';
             <tbody>
               <div class='form-group'>
                 <label for='password1'><?php echo $lang->user->password;?></label>
-                <?php echo html::password('password1', '', "class='form-control' required placeholder='{$lang->user->placeholder->loginPassword}' id='password'");?>
+                <?php echo html::password('password1', '', "class='form-control' required placeholder='{$lang->user->placeholder->loginPassword}'");?>
               </div>
               <div class='form-group'>
                 <label for='password2'><?php echo $lang->user->password2AB;?></label>

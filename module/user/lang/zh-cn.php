@@ -77,6 +77,7 @@ $lang->user->identity         = '身份';
 $lang->user->switchVision     = '切换到 %s';
 $lang->user->submit           = '提交';
 $lang->user->resetPWD         = '重置密码';
+$lang->user->resetTitle       = '系统管理员重置密码';
 
 $lang->user->legendBasic        = '基本资料';
 $lang->user->legendContribution = '个人贡献';

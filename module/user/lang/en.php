@@ -77,6 +77,7 @@ $lang->user->identity         = 'Identity';
 $lang->user->switchVision     = 'Switch to %s';
 $lang->user->submit           = 'Submit';
 $lang->user->resetPWD         = 'Reset Password';
+$lang->user->resetTitle       = 'Admin reset the password';
 
 $lang->user->legendBasic        = 'Basic Information';
 $lang->user->legendContribution = 'Contribution';

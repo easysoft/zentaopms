@@ -9,4 +9,6 @@ $(function()
             $('#time').text(time-1 <=0 ? 0 : time -1);
         }, 1000);
     }
+
+    $('#password1').attr('id', 'password');
 })

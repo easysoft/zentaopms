@@ -26,12 +26,12 @@ include '../../common/view/header.lite.html.php';
                 <label for='email'><?php echo $lang->user->email;?></label>
                 <?php echo html::input('email', '', "class='form-control' required placeholder='{$lang->user->placeholder->email}'");?>
               </div>
-              <tr><?php echo html::a(inlink('reset'), "系统管理员重置密码", '', "class='resetBox'");?></tr>
+              <tr><?php echo html::a(inlink('reset'), $lang->user->resetTitle, '', "class='resetBox'");?></tr>
               <tr>
                 <td colspan='2' class="form-actions text-center">
                 <?php
                 echo html::submitButton($lang->user->submit);
-                echo html::backButton();
+                echo html::a(inlink('login'), $lang->goback, '', 'class="btn btn-wide"');
                 ?>
                 </td>
               </tr>
