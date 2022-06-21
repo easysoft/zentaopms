@@ -101,6 +101,9 @@ html[lang="en"] .product-info .type-info {color: #A6AAB8; text-align: center; po
 @media screen and (max-width: 1366px){.block-statistic .statistic-title>div {width: 74%; margin-left: 30%;}}
 @media screen and (max-width: 1366px){.block-statistic .dataTitle>div {width: 74%; margin-left: 30%;}}
 
+@media screen and (max-width: 1366px){[lang^='en'] .block-statistic .statistic-title>div {width: 70%; margin-left: 34%;}}
+@media screen and (max-width: 1366px){[lang^='en'] .block-statistic .dataTitle>div {width: 70%; margin-left: 34%;}}
+
 @media screen and (max-width: 1366px){.block-statistic.block-sm .statistic-title>div {width: 102%; margin-left: 2%;}}
 @media screen and (max-width: 1366px){.block-statistic.block-sm .dataTitle>div {width: 102%; margin-left: 2%;}}
 </style>
