@@ -63,7 +63,8 @@ if(empty($config->notMd5Pwd))js::import($jsRoot . 'md5.js');
                   echo html::submitButton($lang->login, '', 'btn btn-primary');
                   if($app->company->guest) echo html::linkButton($lang->user->asGuest, $this->createLink($config->default->module));
                   echo html::hidden('referer', $referer);
-                  echo html::a(inlink('reset'), $lang->user->resetPassword);
+                  $resetLink = (isset($this->config->resetPWDByMail) and $this->config->resetPWDByMail) ? inlink('forgetPassword') : inlink('reset');
+                  echo html::a($resetLink, $lang->user->resetPassword);
                   ?>
                   </td>
                 </tr>

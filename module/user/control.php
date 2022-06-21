@@ -1042,8 +1042,6 @@ class user extends control
      */
     public function reset()
     {
-        if(isset($this->config->resetPWDByMail) and $this->config->resetPWDByMail) $this->locate($this->createLink('user', 'forgetPassword'));
-
         if(!isset($_SESSION['resetFileName']))
         {
             $resetFileName = $this->app->getBasePath() . 'tmp' . DIRECTORY_SEPARATOR . uniqid('reset_') . '.txt';
@@ -1088,7 +1086,84 @@ class user extends control
      */
     public function forgetPassword()
     {
+        $this->app->loadLang('admin');
+        $this->loadModel('mail');
+
+        if(!empty($_POST))
+        {
+            /* Check account and email. */
+            $account = $_POST['account'];
+            $email   = $_POST['email'];
+            if(empty($account)) return $this->send(array('result' => 'fail', 'message' => $this->lang->user->error->accountEmpty));
+            if(empty($email)) return $this->send(array('result' => 'fail', 'message' => $this->lang->user->error->emailEmpty));
+
+            $user = $this->dao->select('*')->from(TABLE_USER)->where('account')->eq($account)->fetch();
+            if(empty($user)) return $this->send(array('result' => 'fail', 'message' => $this->lang->user->error->noUser));
+            if(empty($user->email)) return $this->send(array('result' => 'fail', 'message' => $this->lang->user->error->noEmail));
+
+            if($user->email != $email) return $this->send(array('result' => 'fail', 'message' => $this->lang->user->error->errorEmail));
+            if(!$this->config->mail->turnon) return $this->send(array('result' => 'fail', 'message' => $this->lang->user->error->emailSetting));
+
+            $code = uniqid();
+            $this->dao->update(TABLE_USER)->set('resetToken')->eq(json_encode(array('code' => $code, 'endTime' => strtotime("+{$this->config->user->resetPasswordTimeout} minutes"))))->where('account')->eq($account)->exec();
+
+            $result = $this->mail->send($account, $this->lang->user->resetPWD, sprintf($this->lang->mail->forgetPassword, commonModel::getSysURL() . $this->inlink('resetPassword', 'code=' . $code)), true);
+            if(strstr($result, 'ERROR')) return $this->send(array('result' => 'fail', 'message' => $this->lang->user->error->sendMailFail), true);
+
+            return $this->send(array('result' => 'success', 'message' => $this->lang->user->sendEmailSuccess));
+        }
+
+        $this->view->title = $this->lang->user->resetPassword;
         $this->display();
+    }
+
+    /**
+     * Reset password.
+     *
+     * @param  string  $code 
+     * @access public
+     * @return void
+     */
+    public function resetPassword($code)
+    {
+        $expired = true;
+        $user    = $this->dao->select('account, resetToken')->from(TABLE_USER)->where('resetToken')->like('%"' . $code . '"%')->fetch();
+        if($user)
+        {
+            $resetToken = json_decode($user->resetToken);
+            if($resetToken->endTime >= time()) $expired = false; 
+        }
+
+        if(!empty($_POST))
+        {
+            if($expired) return $this->send(array('result' => 'fail', 'message' => $this->lang->user->linkExpired));
+
+            $this->user->resetPassword();
+            if(dao::isError())
+            {
+                if(empty($_POST['password2'])) dao::$errors['password2'][] = sprintf($this->lang->error->notempty, $this->lang->user->password);
+
+                $response['result']  = 'fail';
+                $response['message'] = dao::getError();
+
+                return $this->send($response);
+            }
+
+            $this->dao->update(TABLE_USER)->set('resetToken')->eq('')->where('account')->eq($this->post->account)->exec();
+
+            $response['result']  = 'success';
+            $response['message'] = $this->lang->saveSuccess;
+            $response['locate']  = $this->createLink('index');
+
+            return $this->send($response);
+        }
+
+        $this->view->title   = $this->lang->user->resetPWD;
+        $this->view->isLogon = $this->user->isLogon();
+        $this->view->expired = $expired;
+        $this->view->user    = empty($user) ? '' : $user;
+
+        $this->display(); 
     }
 
     /**
