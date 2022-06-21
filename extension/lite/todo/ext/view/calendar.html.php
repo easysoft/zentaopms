@@ -19,6 +19,7 @@
 #sidebar > .sidebar-toggle {left: 3px; right: auto;}
 .hide-sidebar #sidebar > .cell {display: none;}
 .hide-sidebar #sidebar > .sidebar-toggle > .icon:before {content: "\e314";}
+#date {float: left; margin-right: 10px; margin-left: 0px;}
 </style>
 <?php js::set('moreLang', $this->lang->side->more);?>
 <?php js::set('moduleList', $config->todo->moduleList);?>
@@ -41,10 +42,10 @@
       <div id="todoCalendar" class="calendar">
         <header class="calender-header table-row">
           <div class="btn-toolbar col-4 table-col text-middle">
-            <button type="button" class="btn btn-info btn-icon btn-mini btn-prev"><i class="icon-chevron-left"></i></button>
             <button type="button" class="btn btn-info btn-mini btn-today"><?php echo $lang->today;?></button>
+            <button type="button" class="btn btn-info btn-icon btn-mini btn-prev"><i class="icon-chevron-left"></i></button>
+            <span id="date" class="calendar-caption"></span>
             <button type="button" class="btn btn-info btn-icon btn-mini btn-next"><i class="icon-chevron-right"></i></button>
-            <span class="calendar-caption"></span>
           </div>
           <div class="col-4 text-center table-col">
             <ul class="nav nav-primary">
