@@ -188,6 +188,7 @@ $config->openMethods[] = 'user.deny';
 $config->openMethods[] = 'user.reset';
 $config->openMethods[] = 'user.forgetpassword';
 $config->openMethods[] = 'user.refreshrandom';
+$config->openMethods[] = 'user.resetpassword';
 $config->openMethods[] = 'api.getsessionid';
 $config->openMethods[] = 'misc.checktable';
 $config->openMethods[] = 'misc.qrcode';
