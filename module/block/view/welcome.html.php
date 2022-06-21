@@ -31,6 +31,7 @@
 .block-welcome .left-today{margin-left: 36px;}
 .block-welcome .done-progress{display: inline-block; color: #5B606E; font-weight: 500;}
 .block-welcome .welcome-label{background: #ffebee; border: none;}
+.block-welcome.block-sm .left-today {margin-left: 0px;}
 </style>
 <?php $progress = $tasks == 0 ? 0 : round($doneTasks / $tasks, 3) * 100;?>
 <div class='panel-move-handler'></div>
