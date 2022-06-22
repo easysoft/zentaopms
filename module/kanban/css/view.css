@@ -20,7 +20,7 @@
 .region .region-header .action {float: right}
 .region .region-actions {float: right; position: relative; top: -6px; right: -6px;}
 .region .region-header .icon-double-angle-up,.icon-double-angle-down {cursor: pointer;}
-.region .kanban-header-sub-cols {margin-left:0;}
+.region .kanban-header-sub-cols {margin-left: -2px;}
 .region .kanban-header-sub-cols .kanban-header-col > .title {max-width: 100% !important;min-width:240px;}
 .region .sort .region-header {cursor: move;}
 .region .kanban.kanban-dragging {overflow: hidden;}
