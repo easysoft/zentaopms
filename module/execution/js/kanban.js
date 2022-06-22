@@ -500,8 +500,8 @@ function renderStoryItem(item, $item, col)
         var $title = $item.find('.title');
         if(!$title.length)
         {
-            $title = $('<a class="title iframe">' + (scaleSize <= 1 ? '<i class="icon icon-lightbulb text-muted"></i> ' : '') + '<span class="text"></span></a>')
-                    .attr('href', $.createLink('execution', 'storyView', 'storyID=' + item.id + '&version=0&param=' + execution.id, '', true)).attr('data-toggle', 'modal').attr('data-width', '95%');
+            $title = $('<a class="title iframe">' + (scaleSize <= 1 ? '<i class="icon icon-lightbulb text-muted"></i> ' : '') + '<span class="text"></span></a>');
+            if(priv.canViewStory) $title = $title.attr('href', $.createLink('execution', 'storyView', 'storyID=' + item.id + '&version=0&param=' + execution.id, '', true)).attr('data-toggle', 'modal').attr('data-width', '95%');
             $title.appendTo($item);
         }
         var title = rdSearchValue != '' ? "<span class='text'>" + item.title.replaceAll(rdSearchValue, "<span class='text-danger'>" + rdSearchValue + "</span>") + "</span>": "<span class='text'>" + item.title + "</span>";
@@ -565,8 +565,8 @@ function renderBugItem(item, $item, col)
         var $title = $item.find('.title');
         if(!$title.length)
         {
-            $title = $('<a class="title iframe" data-width="95%">' + (scaleSize <= 1 ? '<i class="icon icon-bug text-muted"></i> ' : '') + '<span class="text"></span></a>')
-                    .attr('href', $.createLink('bug', 'view', 'bugID=' + item.id, '', true)).attr('data-toggle', 'modal').attr('data-width', '80%');
+            $title = $('<a class="title iframe" data-width="95%">' + (scaleSize <= 1 ? '<i class="icon icon-bug text-muted"></i> ' : '') + '<span class="text"></span></a>');
+            if(priv.canViewBug) $title =$title.attr('href', $.createLink('bug', 'view', 'bugID=' + item.id, '', true)).attr('data-toggle', 'modal').attr('data-width', '80%');
             $title.appendTo($item);
         }
         var title = rdSearchValue != '' ? "<span class='text'>" + item.title.replaceAll(rdSearchValue, "<span class='text-danger'>" + rdSearchValue + "</span>") + "</span>": "<span class='text'>" + item.title + "</span>";
@@ -632,7 +632,8 @@ function renderTaskItem(item, $item, col)
         var $title = $item.find('.title');
         if(!$title.length)
         {
-            $title = $('<a class="title iframe" data-width="95%">' + (scaleSize <= 1 ? '<i class="icon icon-checked text-muted"></i> ' : '') + '<span class="text"></span></a>').attr('href', $.createLink('task', 'view', 'taskID=' + item.id, '', true)).attr('data-toggle', 'modal').attr('data-width', '80%');
+            $title = $('<a class="title iframe" data-width="95%">' + (scaleSize <= 1 ? '<i class="icon icon-checked text-muted"></i> ' : '') + '<span class="text"></span></a>');
+            if(priv.canViewTask) $title = $title.attr('href', $.createLink('task', 'view', 'taskID=' + item.id, '', true)).attr('data-toggle', 'modal').attr('data-width', '80%');
             $title.appendTo($item);
         }
         var name = rdSearchValue != '' ? "<span class='text'>" + item.name.replaceAll(rdSearchValue, "<span class='text-danger'>" + rdSearchValue + "</span>") + "</span>": "<span class='text'>" + item.name + "</span>";
