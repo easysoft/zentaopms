@@ -2363,7 +2363,8 @@ EOD;
         }
 
         $url = helper::safe64Encode($_SERVER['REQUEST_URI']);
-        $redirectUrl = helper::createLink('index', 'index', "open=$url");
+        $redirectUrl  = helper::createLink('index', 'index');
+        $redirectUrl .= strpos($redirectUrl, '?') === false ? "?open=$url" : "&open=$url";
         die(header("location: $redirectUrl"));
     }
 
