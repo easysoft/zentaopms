@@ -46,7 +46,8 @@ class repo extends control
     public function commonAction($repoID = 0, $objectID = 0)
     {
         $tab = $this->app->tab;
-        $this->repos = $this->repo->getRepoPairs($tab, $objectID);
+        $this->repos      = $this->repo->getRepoPairs($tab, $objectID);
+        $this->reposGroup = $this->repo->getRepoGroup($tab, $objectID);
 
         if($tab == 'project')
         {
@@ -477,20 +478,21 @@ class repo extends control
         /* Synchronous commit only in root path. */
         if(strpos($repo->SCM, 'Git') !== false and empty($path) and $infos and empty($revisions)) $this->locate($this->repo->createLink('showSyncCommit', "repoID=$repoID&objectID=$objectID&branch=" . base64_encode($this->cookie->repoBranch)));
 
-        $this->view->title     = $this->lang->repo->common;
-        $this->view->repo      = $repo;
-        $this->view->repos     = $this->repos;
-        $this->view->revisions = $revisions;
-        $this->view->revision  = $revision;
-        $this->view->infos     = $infos;
-        $this->view->repoID    = $repoID;
-        $this->view->branches  = $branches;
-        $this->view->branchID  = $branchID;
-        $this->view->objectID  = $objectID;
-        $this->view->pager     = $pager;
-        $this->view->path      = urldecode($path);
-        $this->view->logType   = $logType;
-        $this->view->cacheTime = date('m-d H:i', filemtime($cacheFile));
+        $this->view->title      = $this->lang->repo->common;
+        $this->view->repo       = $repo;
+        $this->view->reposGroup = $this->reposGroup;
+        $this->view->repos      = $this->repos;
+        $this->view->revisions  = $revisions;
+        $this->view->revision   = $revision;
+        $this->view->infos      = $infos;
+        $this->view->repoID     = $repoID;
+        $this->view->branches   = $branches;
+        $this->view->branchID   = $branchID;
+        $this->view->objectID   = $objectID;
+        $this->view->pager      = $pager;
+        $this->view->path       = urldecode($path);
+        $this->view->logType    = $logType;
+        $this->view->cacheTime  = date('m-d H:i', filemtime($cacheFile));
 
         $this->display();
     }
