@@ -1443,10 +1443,13 @@ class docModel extends model
         $libs = array();
         foreach($objectLibs as $lib)
         {
-            if($this->checkPrivLib($lib)) $libs[$lib->id] = $lib;
+            if($this->checkPrivLib($lib))
+            {
+                $docCount = zget($docCountPairs, $lib->id, 0);
+                $lib->docCount = $docCount > 99 ? '99+' : $docCount;
 
-            $docCount = zget($docCountPairs, $lib->id, 0);
-            $libs[$lib->id]->docCount = $docCount > 99 ? '99+' : $docCount;
+                $libs[$lib->id] = $lib;
+            }
         }
 
         $itemCounts = $this->statLibCounts(array_keys($libs));
