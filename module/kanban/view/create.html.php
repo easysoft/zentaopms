@@ -60,10 +60,10 @@
       </tr>
       <tr>
         <th rowspan='2'><?php echo $lang->kanban->import?></th>
-        <td class='importBox'><?php echo nl2br(html::radio('import', $lang->kanban->importList, 'off'));?></td>
+        <td colspan='2' class='importBox'><?php echo nl2br(html::radio('import', $lang->kanban->importList, 'off'));?></td>
       </tr>
       <tr>
-        <td class='objectBox'><?php echo html::checkbox('importObjectList', $lang->kanban->importObjectList, array());?></td>
+        <td colspan='2' class='objectBox'><?php echo html::checkbox('importObjectList', $lang->kanban->importObjectList, array());?></td>
       </tr>
       <tr id='emptyTip' class='hidden'><th></th><td colspan='2' style='color: red;'><?php echo $lang->kanban->error->importObjNotEmpty;?></td></tr>
       <tr>
