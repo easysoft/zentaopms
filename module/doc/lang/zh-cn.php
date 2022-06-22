@@ -45,7 +45,7 @@ $lang->doclib->nameList['custom'] = '自定义文档库名称';
 
 /* 字段列表。*/
 $lang->doc->common       = '文档';
-$lang->doc->id           = '编号';
+$lang->doc->id           = '文档编号';
 $lang->doc->product      = '所属' . $lang->productCommon;
 $lang->doc->project      = '所属项目';
 $lang->doc->execution    = '所属' . $lang->execution->common;
