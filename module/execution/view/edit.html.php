@@ -195,12 +195,12 @@
         </tr>
         <tr>
           <th><?php echo $lang->kanban->columnWidth;?></th>
-          <td><?php echo nl2br(html::radio('fluidBoard', $lang->kanbancolumn->fluidBoardList, $execution->fluidBoard));?></td>
+          <td colspan='2'><?php echo nl2br(html::radio('fluidBoard', $lang->kanbancolumn->fluidBoardList, $execution->fluidBoard));?></td>
         </tr>
         <?php if($laneCount > 1):?>
         <tr>
           <th id='c-name'><?php echo $lang->kanban->laneHeight;?></th>
-          <td class='laneHeightBox'><?php echo nl2br(html::radio('heightType', $lang->kanbanlane->heightTypeList, $heightType, "onclick='setCardCount(this.value);'"));?></td>
+          <td class='laneHeightBox' colspan='2'><?php echo nl2br(html::radio('heightType', $lang->kanbanlane->heightTypeList, $heightType, "onclick='setCardCount(this.value);'"));?></td>
         </tr>
         <tr class="hidden" id='cardBox'>
           <th class='c-count'><?php echo $lang->kanban->cardCount;?></th>

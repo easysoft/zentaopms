@@ -274,6 +274,7 @@ class kanban extends control
         $this->view->displayCards  = $kanban->displayCards ? $kanban->displayCards : '';
         $this->view->enableImport  = empty($kanban->object) ? 'off' : 'on';
         $this->view->importObjects = empty($kanban->object) ? array() : explode(',', $kanban->object);
+        a($this->view->laneCount);
 
         $this->display();
     }
@@ -599,60 +600,6 @@ class kanban extends control
 
         if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
         return print(json_encode($kanbanGroup));
-    }
-
-    /**
-     * Set lane height.
-     *
-     * @param  int    $kanbanID
-     * @param  string $from     kanban|execution
-     * @access public
-     * @return void
-     */
-    public function setLaneHeight($kanbanID, $from = 'kanban')
-    {
-        if(!empty($_POST))
-        {
-            $this->kanban->setLaneHeight($kanbanID, $from);
-
-            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
-        }
-
-        $kanban = $from == 'execution' ? $this->loadModel('execution')->getByID($kanbanID) : $this->kanban->getByID($kanbanID);
-        if($from == 'execution') $this->lang->kanbanlane->heightTypeList['auto'] = $this->lang->kanbanlane->heightByCard;
-
-        $this->view->heightType   = $kanban->displayCards > 2 ? 'custom' : 'auto';
-        $this->view->displayCards = $kanban->displayCards ? $kanban->displayCards : '';
-
-        $this->display();
-    }
-
-    /**
-     * Set column width.
-     *
-     * @param  int    $kanbanID
-     * @param  string $from     kanban|execution
-     * @access public
-     * @return void
-     */
-    public function setColumnWidth($kanbanID, $from = 'kanban')
-    {
-        if(!empty($_POST))
-        {
-            $this->kanban->setColumnWidth($kanbanID, $from);
-
-            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
-        }
-
-        $kanban = $from == 'execution' ? $this->loadModel('execution')->getByID($kanbanID) : $this->kanban->getByID($kanbanID);
-
-        $this->view->kanban = $kanban;
-
-        $this->display();
     }
 
     /**
@@ -1696,50 +1643,6 @@ class kanban extends control
     }
 
     /**
-     * Setup done function.
-     *
-     * @param  int    $kanbanID
-     * @access public
-     * @return void
-     */
-    public function performable($kanbanID)
-    {
-        if(!empty($_POST))
-        {
-            $this->dao->update(TABLE_KANBAN)->set('performable')->eq($_POST['performable'])->exec();
-
-            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
-        }
-
-        $this->view->kanban = $this->kanban->getByID($kanbanID);
-
-        $this->display();
-    }
-
-    /**
-     * Set archived.
-     *
-     * @param  int    $kanbanID
-     * @access public
-     * @return void
-     */
-    public function enableArchived($kanbanID)
-    {
-        if(!empty($_POST))
-        {
-            $this->dao->update(TABLE_KANBAN)->set('archived')->eq($_POST['archived'])->exec();
-
-            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
-        }
-
-        $this->view->kanban = $this->kanban->getByID($kanbanID);
-
-        $this->display();
-    }
-
-    /**
      * AJAX: Update the cards sorting of the lane column.
      *
      * @param  string $laneType story|bug|task
@@ -1943,31 +1846,5 @@ class kanban extends control
         if($i) return print(html::select($field . "[$i]", $lanes, '', "class='form-control'"));
 
         return print(html::select($field, $lanes, '', "class='form-control'"));
-    }
-
-    /**
-     * Import.
-     *
-     * @param  int    $kanbanID
-     * @access public
-     * @return void
-     */
-    public function import($kanbanID)
-    {
-        if(!empty($_POST))
-        {
-            $this->kanban->import($kanbanID);
-
-            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
-        }
-
-        $kanban = $this->kanban->getByID($kanbanID);
-
-        $this->view->enableImport  = empty($kanban->object) ? 'off' : 'on';
-        $this->view->importObjects = empty($kanban->object) ? array() : explode(',', $kanban->object);
-
-        $this->display();
     }
 }

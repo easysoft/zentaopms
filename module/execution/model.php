@@ -502,7 +502,7 @@ class executionModel extends model
 
         if(isset($_POST['heightType']) and $this->post->heightType == 'custom')
         {
-            if(!preg_match("/^-?\d+$/", $sprint->displayCards) or $sprint->displayCards < 3)
+            if(!preg_match("/^-?\d+$/", $execution->displayCards) or $execution->displayCards < 3)
             {
                 $this->app->loadLang('kanban');
                 dao::$errors['displayCards'] = $this->lang->kanbanlane->error->mustBeInt;

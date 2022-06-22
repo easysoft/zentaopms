@@ -3014,52 +3014,6 @@ class kanbanModel extends model
     }
 
     /**
-     * Set lane height.
-     *
-     * @param  int    $kanbanID
-     * @param  string $from     kanban|execution
-     * @access public
-     * @return bool
-     */
-    public function setLaneHeight($kanbanID, $from = 'kanban')
-    {
-        $kanbanID = (int)$kanbanID;
-        $kanban   = fixer::input('post')
-            ->setIF($this->post->heightType == 'auto', 'displayCards', 0)
-            ->get();
-
-        if($kanban->heightType == 'custom')
-        {
-            if(!preg_match("/^-?\d+$/", $kanban->displayCards) or $kanban->displayCards < 3)
-            {
-                dao::$errors['displayCards'] = $this->lang->kanbanlane->error->mustBeInt;
-                return false;
-            }
-        }
-
-        $table = $this->config->objectTables[$from];
-        $this->dao->update($table)->set('displayCards')->eq((int)$kanban->displayCards)->where('id')->eq($kanbanID)->exec();
-
-        if(dao::isError()) return false;
-    }
-
-    /**
-     * Set column width.
-     *
-     * @param  int    $kanbanID
-     * @param  string $from
-     * @access public
-     * @return bool|void
-     */
-    public function setColumnWidth($kanbanID, $from = 'kanban')
-    {
-        $table = $this->config->objectTables[$from];
-        $this->dao->update($table)->set('fluidBoard')->eq($this->post->fluidBoard)->where('id')->eq($kanbanID)->exec();
-
-        if(dao::isError()) return false;
-    }
-
-    /**
      * Set kanban headerActions.
      *
      * @param  object $kanban
@@ -3840,21 +3794,6 @@ class kanbanModel extends model
     }
 
     /**
-     * Import.
-     *
-     * @param  int    $kanbanID
-     * @access public
-     * @return void
-     */
-    public function import($kanbanID)
-    {
-        $importObjects    = $_POST['import'] == 'off' ? array() : $_POST['importObjectList'];
-        $importObjectList = implode(',', $importObjects);
-
-        $this->dao->update(TABLE_KANBAN)->set('object')->eq($importObjectList)->where('id')->eq($kanbanID)->exec();
-    }
-
-    /**
      * Get kanban lane count.
      *
      * @param  int    $kanbanID
@@ -3864,7 +3803,7 @@ class kanbanModel extends model
      */
     public function getLaneCount($kanbanID, $type = 'common')
     {
-        if($type == 'common ' or $type == 'kanban')
+        if($type == 'common' or $type == 'kanban')
         {
             return $this->dao->select('COUNT(t2.id) as count')->from(TABLE_KANBANREGION)->alias('t1')
                 ->leftJoin(TABLE_KANBANLANE)->alias('t2')->on('t1.id=t2.region')

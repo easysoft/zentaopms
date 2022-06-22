@@ -1654,6 +1654,13 @@ class execution extends control
 
             if($_POST['status'] == 'doing') $this->loadModel('common')->syncPPEStatus($executionID);
             if($execution->type == 'kanban') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
+
+            /* If link from no head then reload. */
+            if(isonlybody())
+            {
+                return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
+            }
+
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('view', "executionID=$executionID")));
         }
 
