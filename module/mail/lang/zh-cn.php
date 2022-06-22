@@ -114,5 +114,11 @@ $lang->mail->ztCloudNotice    = <<<EOD
 <p>如果不同意以上条款，就不能该服务。</p>
 EOD;
 
+$lang->mail->forgetPassword = <<<EOT
+<p>您好：</p>
+<p>您正在申请重置禅道密码，重置链接三分钟内有效，过期请重新申请。</p>
+<p><a href="%s" target="_blank">点击此处重置</a></p>
+EOT;
+
 $lang->mail->placeholder = new stdclass();
 $lang->mail->placeholder->password = '有些邮箱需要填写单独申请的授权码，具体请到邮箱相关设置查询。';

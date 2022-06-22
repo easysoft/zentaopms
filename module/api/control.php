@@ -28,10 +28,12 @@ class api extends control
      * @param  int    $version
      * @param  int    $release
      * @param  int    $appendLib
+     * @param  int    $queryID
+     * @param  string $param
      * @access public
      * @return void
      */
-    public function index($libID = 0, $moduleID = 0, $apiID = 0, $version = 0, $release = 0, $appendLib = 0)
+    public function index($libID = 0, $moduleID = 0, $apiID = 0, $version = 0, $release = 0, $appendLib = 0, $queryID = 0, $param = '')
     {
         /* Get an api doc. */
         if($apiID > 0)
@@ -71,6 +73,19 @@ class api extends control
         if($libs) $this->lang->modulePageNav = $this->generateLibsDropMenu($libs, $libID, $release);
 
         $this->setMenu($libID, $moduleID);
+        if($apiID == 0) $this->lang->TRActions = '<a class="btn btn-link querybox-toggle" id="bysearchTab"><i class="icon icon-search muted"></i> ' . $this->lang->api->search . '</a>' . $this->lang->TRActions;
+
+        /* Build the search form. */
+        $queryID   = $param == 'bySearch' ? (int)$queryID : 0;
+        $actionURL = $this->createLink('api', 'index', "libID=$libID&moduleID=$moduleID&apiID=$apiID&version=$version&release=$release&appendLib=$appendLib&queryID=myQueryID&param=bySearch");
+        $this->api->buildSearchForm($lib,$queryID, $actionURL);
+
+        if($param == 'bySearch')
+        {
+            $apiList = $this->api->getApiListBySearch($libID, $queryID);
+            $this->view->apiList  = $apiList;
+            $this->view->typeList = $this->api->getTypeList($libID);
+        }
 
         $this->view->lib        = $lib;
         $this->view->isRelease  = $release > 0;
@@ -79,6 +94,7 @@ class api extends control
         $this->view->libID      = $libID;
         $this->view->apiID      = $apiID;
         $this->view->libs       = $libs;
+        $this->view->param      = $param;
         $this->view->moduleTree = $libID ? $this->doc->getApiModuleTree($libID, $apiID, $release, $moduleID) : '';
         $this->view->users      = $this->user->getPairs('noclosed,noletter');
 
@@ -674,6 +690,11 @@ EOT;
         {
             $selected = $key == $libID ? 'selected' : '';
             $output  .= html::a(inlink($methodName, "libID=$key"), $lib->name, '', "class='$selected' data-app='{$this->app->tab}'");
+        }
+        if(count($libs) >= 2 and common::hasPriv('doc', 'sortLibs'))
+        {
+            $output   .= '<li class="divider"></li>';
+            $output   .= html::a($this->createLink('doc', 'sortLibs', "type=api&objectID=0", '', true), "<i class='icon-move'></i>  {$this->lang->doc->sortLibs}", '', "data-title='{$this->lang->doc->sortLibs}' data-toggle='modal' data-type='iframe' data-width='400px' data-app='{$this->app->tab}'");
         }
         $output .= "</div></div></div></div></div>";
 

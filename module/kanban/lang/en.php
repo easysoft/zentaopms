@@ -208,7 +208,7 @@ $lang->kanban->error->childLimitEmpty   = 'Please set the WIP quantity of the su
 
 $lang->kanban->importList = array();
 $lang->kanban->importList['off'] = 'Import is not enabled';
-$lang->kanban->importList['on']  = 'Enable the import function, you can only import content that you have permission to view.';
+$lang->kanban->importList['on']  = 'Enable import function (You can import content that you have permission to view as cards.)';
 
 $lang->kanban->importObjectList = array();
 $lang->kanban->importObjectList['plans']      = 'Product Plan';

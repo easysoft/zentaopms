@@ -12,6 +12,7 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php js::set('confirmDelete', $lang->api->confirmDelete);?>
+<div class="cell<?php if($param == 'bySearch') echo ' show';?>" id="queryBox" data-module=<?php echo 'api';?>></div>
 <div class="fade main-row split-row" id="mainRow">
   <?php if($libID):?>
   <?php $sideWidth = common::checkNotCN() ? '270' : '238';?>
