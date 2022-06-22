@@ -71,7 +71,9 @@
                 <td class='chart-color w-20px'><i class='chart-color-dot'></i></td>
                 <td class='chart-label text-left'><?php echo $data->name;?></td>
                 <td class='chart-value text-right'><?php echo $data->value;?></td>
-                <td class='text-right'><?php echo ($data->percent * 100) . '%';?></td>
+                <?php $percent = $data->percent * 100;?>
+                <?php $percent = sprintf("%.2f", $percent);?>
+                <td class='text-right'><?php echo $percent . '%';?></td>
               </tr>
               <?php endforeach;?>
               </tbody>
