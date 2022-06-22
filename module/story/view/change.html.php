@@ -26,7 +26,7 @@
           <th class='w-80px'><?php echo $lang->story->reviewedBy;?></th>
           <td colspan="2">
             <div class="input-group">
-              <?php echo html::select('reviewer[]', $productReviewers, $reviewer, "class='form-control chosen' multiple" . ($this->story->checkForceReview() ? ' required' : ''));?>
+              <?php echo html::select('reviewer[]', $productReviewers, $reviewer, "class='form-control picker-select' multiple" . ($this->story->checkForceReview() ? ' required' : ''));?>
               <?php if(!$this->story->checkForceReview()):?>
               <span class="input-group-addon">
               <?php echo html::checkbox('needNotReview', $lang->story->needNotReview, '', "id='needNotReview' {$needReview}");?>

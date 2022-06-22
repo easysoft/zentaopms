@@ -56,7 +56,7 @@
             <th><?php echo $lang->release->mailto;?></th>
             <td colspan='2'>
               <div class="input-group">
-                <?php echo html::select('mailto[]', $users, $release->mailto, "class='form-control chosen' data-placeholder='{$lang->chooseUsersToMail}' multiple");?>
+                <?php echo html::select('mailto[]', $users, $release->mailto, "class='form-control picker-select' data-placeholder='{$lang->chooseUsersToMail}' multiple");?>
               </div>
             </td>
           </tr>

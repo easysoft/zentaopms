@@ -35,7 +35,7 @@
         <th><?php echo $lang->kanban->team;?></th>
         <td colspan='2'>
           <div class="input-group">
-            <?php echo html::select('team[]', $users, $kanban->team, "class='form-control chosen' multiple data-drop_direction='down'");?>
+            <?php echo html::select('team[]', $users, $kanban->team, "class='form-control picker-select' multiple data-dropDirection='bottom'");?>
           </div>
         </td>
       </tr>
@@ -49,7 +49,7 @@
       <?php if($type == 'private'):?>
       <tr id="whitelistBox">
         <th><?php echo $lang->whitelist;?></th>
-        <td><?php echo html::select('whitelist[]', $whitelist, $kanban->whitelist, 'class="form-control chosen" multiple');?></td>
+        <td><?php echo html::select('whitelist[]', $whitelist, $kanban->whitelist, 'class="form-control picker-select" multiple');?></td>
       </tr>
       <?php endif;?>
       <tr>
