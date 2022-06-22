@@ -398,6 +398,44 @@ class repoModel extends model
     }
 
     /**
+     * Get repos group by repo type.
+     *
+     * @param  string type
+     * @param  int    $projectID
+     * @access public
+     * @return array
+     */
+    public function getReposGroup($type, $projectID = 0)
+    {
+        $repoPairs = $this->getRepoPairs($type, $projectID);
+
+        $repos           = array();
+        $repos['gitlab'] = array();
+        $repos['svn']    = array();
+        $repos['git']    = array();
+
+        foreach($repoPairs as $id => $repo)
+        {
+            if(strpos($repo, '[gitlab]') !== false)
+            {
+                $repo = str_replace('[gitlab]', '', $repo);
+                $repos['gitlab'][$id] = $repo;
+            }
+            if(strpos($repo, '[svn]') !== false)
+            {
+                $repo = str_replace('[svn]', '', $repo);
+                $repos['svn'][$id] = $repo;
+            }
+            if(strpos($repo, '[git]') !== false)
+            {
+                $repo = str_replace('[git]', '', $repo);
+                $repos['git'][$id] = $repo;
+            }
+        }
+        return $repos;
+    }
+
+    /**
      * Get repo by id.
      *
      * @param  int    $repoID
