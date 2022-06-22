@@ -53,9 +53,9 @@
             <span class="timeline-text">
               <?php echo zget($users, $action->actor);?>
               <span class='label-action'><?php echo ' ' . $action->actionLabel;?></span>
-              <span class="text-muted"><?php echo $action->objectLabel;?></span>
+              <span><?php echo $action->objectLabel;?></span>
               <span class="label label-id"><?php echo $action->objectID;?></span>
-              <?php if($action->objectName) echo html::a($action->objectLink, $action->objectName);?>
+              <?php if($action->objectName) echo "<sapn class='label-name'>" . html::a($action->objectLink, $action->objectName) . '</span>';?>
             </span>
           </div>
         </li>
