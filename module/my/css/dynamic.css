@@ -11,10 +11,14 @@
 .dynamic .timeline-tag {left: -75px; font-size: 14px; color: #838A9D;}
 .dynamic .timeline-text {color: #3C4353;}
 .dynamic .text-muted {color: #838A9D;}
-.dynamic .label-id {top: -1px;}
+.dynamic .label-id {top: -1px; border: 1px solid rgba(131,138,157,0.25); color: #838A9D;}
 .dynamic.active .timeline,
 .dynamic.active .dynamic-date {border-color: #00a9fc;}
 .dynamic.active .dynamic-date:before {background-color: #00a9fc;}
 .dynamic.collapsed .timeline {max-height: 58px;}
 .dynamic.collapsed .timeline > li + li {display: none;}
 .dynamic.collapsed .dynamic-btn > .icon:before {content: '\f0d8';}
+
+.dynamic .label-action {margin-left: 12px;}
+.dynamic .label-name,
+.dynamic .label-name a {color: #838A9D;}
