@@ -1,5 +1,8 @@
 $(function()
 {
+    var heightType = $("[name='heightType']:checked").val();
+    setCardCount(heightType);
+
     if(enableImport == 'off') $("input[name^='importObjectList']").attr('disabled', 'disabled');
 
     $("input[name='import']").change(function()
@@ -33,15 +36,13 @@ $(function()
 })
 
 /**
- * When space type or space value change.
+ * Set card count.
  *
- * @oaram  int    spaceID
- * @param  string type
+ * @param  string $heightType
  * @access public
  * @return void
  */
-function changeValue(spaceID, type)
+function setCardCount(heightType)
 {
-    if(typeof type === 'undefined') type = spaceType;
-    location.href = createLink('kanban', 'create', 'spaceID=' + spaceID + '&type=' + type);
+    heightType != 'custom' ? $('#cardBox').addClass('hidden') : $('#cardBox').removeClass('hidden');
 }

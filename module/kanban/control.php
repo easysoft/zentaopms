@@ -269,6 +269,12 @@ class kanban extends control
         $this->view->kanban     = $kanban;
         $this->view->type       = $space->type;
 
+        $this->view->laneCount     = $this->kanban->getLaneCount($kanbanID);
+        $this->view->heightType    = $kanban->displayCards > 2 ? 'custom' : 'auto';
+        $this->view->displayCards  = $kanban->displayCards ? $kanban->displayCards : '';
+        $this->view->enableImport  = empty($kanban->object) ? 'off' : 'on';
+        $this->view->importObjects = empty($kanban->object) ? array() : explode(',', $kanban->object);
+
         $this->display();
     }
 

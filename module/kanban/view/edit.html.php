@@ -12,6 +12,9 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
+<?php js::set('enableImport', $enableImport);?>
+<?php js::set('vision', $this->config->vision);?>
+<?php $width = $this->app->getClientLang() == 'en' ? 'w-120px' : 'w-80px';?>
 <div id='mainContent' class='main-content'>
   <div class='main-header'>
     <h2><?php echo $lang->kanban->edit;?></h2>
@@ -40,6 +43,36 @@
         </td>
       </tr>
       <?php endif;?>
+      <tr>
+        <th class='<?php echo $width;?>'><?php echo $lang->kanban->columnWidth;?></th>
+        <td><?php echo nl2br(html::radio('fluidBoard', $lang->kanbancolumn->fluidBoardList, $kanban->fluidBoard));?></td>
+      </tr>
+      <?php if($laneCount > 1):?>
+      <tr>
+        <th id='c-name'><?php echo $lang->kanban->laneHeight;?></th>
+        <td class='laneHeightBox'><?php echo nl2br(html::radio('heightType', $lang->kanbanlane->heightTypeList, $heightType, "onclick='setCardCount(this.value);'"));?></td>
+      </tr>
+      <tr class="hidden" id='cardBox'>
+        <th class='c-count'><?php echo $lang->kanban->cardCount;?></th>
+        <td><?php echo html::input('displayCards', $displayCards, "class='form-control' required placeholder='{$lang->kanban->cardCountTip}'  autocomplete='off'");?></td>
+      </tr>
+      <?php endif;?>
+      <tr>
+        <th rowspan='2'><?php echo $lang->kanban->import?></th>
+        <td class='importBox'><?php echo nl2br(html::radio('import', $lang->kanban->importList, $enableImport));?></td>
+      </tr>
+      <tr>
+        <td class='objectBox'><?php echo html::checkbox('importObjectList', $lang->kanban->importObjectList, $importObjects);?></td>
+      </tr>
+      <tr id='emptyTip' class='hidden'><th></th><td colspan='2' style='color: red;'><?php echo $lang->kanban->error->importObjNotEmpty;?></td></tr>
+      <tr>
+        <th class='w-90px'><?php echo $lang->kanban->archive;?></th>
+        <td><?php echo nl2br(html::radio('archived', $lang->kanban->archiveList, $kanban->archived));?></td>
+      </tr>
+      <tr>
+        <th id='c-title'><?php echo $lang->kanban->manageProgress;?></th>
+        <td><?php echo nl2br(html::radio('performable', $lang->kanban->enableList, $kanban->performable));?></td>
+      </tr>
       <tr>
         <th><?php echo $lang->kanban->desc;?></th>
         <td colspan='2'>

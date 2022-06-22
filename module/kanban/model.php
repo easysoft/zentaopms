@@ -1008,7 +1008,7 @@ class kanbanModel extends model
             ->orderBy($order)
             ->fetchGroup('group');
 
-        $actions = array('createColumn', 'setColumn', 'setWIP', 'archiveColumn', 'restoreColumn', 'deleteColumn', 'createCard', 'batchCreateCard', 'splitColumn', 'import', 'sortColumn');
+        $actions = array('createColumn', 'setColumn', 'setWIP', 'archiveColumn', 'restoreColumn', 'deleteColumn', 'createCard', 'batchCreateCard', 'splitColumn', 'sortColumn');
 
         /* Group by parent. */
         $parentColumnGroup = array();
@@ -1081,7 +1081,7 @@ class kanbanModel extends model
             ->andWhere('type')->eq('common')
             ->fetchAll();
 
-        $actions   = array('editCard', 'performable', 'archiveCard', 'deleteCard', 'moveCard', 'setCardColor', 'viewCard', 'sortCard', 'viewExecution', 'viewPlan', 'viewRelease', 'viewBuild');
+        $actions   = array('editCard', 'archiveCard', 'deleteCard', 'moveCard', 'setCardColor', 'viewCard', 'sortCard', 'viewExecution', 'viewPlan', 'viewRelease', 'viewBuild');
         $cardGroup = array();
         foreach($cellList as $cell)
         {
@@ -2064,14 +2064,18 @@ class kanbanModel extends model
         $kanban  = fixer::input('post')
             ->setDefault('createdBy', $account)
             ->setDefault('createdDate', helper::now())
-            ->setdefault('owner', '')
-            ->setdefault('team', '')
-            ->setdefault('whitelist', '')
+            ->setDefault('owner', '')
+            ->setDefault('team', '')
+            ->setDefault('whitelist', '')
+            ->setDefault('displayCards', 0)
+            ->setIF($this->post->import == 'off', 'object', '')
             ->join('whitelist', ',')
             ->join('team', ',')
             ->trim('name')
-            ->remove('uid,contactListMenu,type')
+            ->remove('uid,contactListMenu,type,import,importObjectList')
             ->get();
+
+        if($this->post->import == 'on') $kanban->object = implode(',', $this->post->importObjectList);
 
         if(strpos(",{$kanban->team},", ",$account,") === false) $kanban->team .= ",$account";
         if(strpos(",{$kanban->team},", ",$kanban->owner,") === false) $kanban->team .= ",$kanban->owner";
@@ -2121,11 +2125,24 @@ class kanbanModel extends model
         $kanban    = fixer::input('post')
             ->setDefault('lastEditedBy', $account)
             ->setDefault('lastEditedDate', helper::now())
+            ->setDefault('displayCards', 0)
+            ->setIF($this->post->import == 'off', 'object', '')
             ->join('whitelist', ',')
             ->join('team', ',')
             ->trim('name')
-            ->remove('uid,contactListMenu')
+            ->remove('uid,contactListMenu,import,importObjectList,heightType')
             ->get();
+
+        if($this->post->import == 'on') $kanban->object = implode(',', $this->post->importObjectList);
+
+        if(isset($_POST['heightType']) and $this->post->heightType == 'custom')
+        {
+            if(!preg_match("/^-?\d+$/", $kanban->displayCards) or $kanban->displayCards < 3)
+            {
+                dao::$errors['displayCards'] = $this->lang->kanbanlane->error->mustBeInt;
+                return false;
+            }
+        }
 
         $this->dao->update(TABLE_KANBAN)->data($kanban)
             ->autoCheck()
@@ -3053,26 +3070,12 @@ class kanbanModel extends model
         $btnColor = '';
         if($this->app->cookie->theme == 'blue') $btnColor = 'style="color:#000000"';
 
-        $printSetHeightBtn = false;
-        if(common::hasPriv('kanban', 'setLaneHeight'))
-        {
-            $laneCount = $this->dao->select('COUNT(t2.id) as count')->from(TABLE_KANBANREGION)->alias('t1')
-                ->leftJoin(TABLE_KANBANLANE)->alias('t2')->on('t1.id=t2.region')
-                ->where('t1.kanban')->eq($kanban->id)
-                ->andWhere('t1.deleted')->eq(0)
-                ->andWhere('t2.deleted')->eq(0)
-                ->andWhere('t2.type')->eq('common')
-                ->fetch('count');
-
-            if($laneCount > 1) $printSetHeightBtn = true;
-        }
-
         $actions  = '';
         $actions .= "<div class='btn-group'>";
         $actions .= "<a href='javascript:fullScreen();' id='fullScreenBtn' $btnColor class='btn btn-link'><i class='icon icon-fullscreen'></i> {$this->lang->kanban->fullScreen}</a>";
 
         $CRKanban       = !(isset($this->config->CRKanban) and $this->config->CRKanban == '0' and $kanban->status == 'closed');
-        $printRegionBtn = ($CRKanban and (common::hasPriv('kanban', 'createRegion') or $printSetHeightBtn or common::hasPriv('kanban', 'performable') or common::hasPriv('kanban', 'enableArchived') or common::hasPriv('kanban', 'import') or common::hasPriv('kanban', 'setColumnWidth')));
+        $printRegionBtn = ($CRKanban and (common::hasPriv('kanban', 'createRegion')));
         $printKanbanBtn = (common::hasPriv('kanban', 'edit') or ($kanban->status == 'active' and common::hasPriv('kanban', 'close')) or common::hasPriv('kanban', 'delete') or ($kanban->status == 'closed' and common::hasPriv('kanban', 'activate')));
 
         if($printRegionBtn or $printKanbanBtn)
@@ -3081,20 +3084,11 @@ class kanbanModel extends model
             $actions .= "<ul id='kanbanActionMenu' class='dropdown-menu text-left'>";
 
             $columnActions = '';
-            if(common::hasPriv('kanban', 'setColumnWidth') and $CRKanban) $columnActions .= '<li>' . html::a(helper::createLink('kanban', 'setColumnWidth', "kanbanID=$kanban->id", '', true), '<i class="icon icon-size-width"></i>' . $this->lang->kanban->columnWidth, '', "class='iframe btn btn-link' data-width=400") . '</li>';
-            if($printSetHeightBtn and $CRKanban)
-            {
-                $width = $this->app->getClientLang() == 'en' ? '920' : '770';
-                $columnActions .= '<li>' . html::a(helper::createLink('kanban', 'setLaneHeight', "kanbanID=$kanban->id", '', true), '<i class="icon icon-size-height"></i>' . $this->lang->kanban->laneHeight, '', "class='iframe btn btn-link' data-width='$width'") . '</li>';
-            }
             $actions .= $columnActions;
 
             $commonActions = '';
             if(common::hasPriv('kanban', 'createRegion') and $CRKanban) $commonActions .= '<li>' . html::a(helper::createLink('kanban', 'createRegion', "kanbanID=$kanban->id", '', true), '<i class="icon icon-plus"></i>' . $this->lang->kanban->createRegion, '', "class='iframe btn btn-link'") . '</li>';
             $importWidth = $this->app->getClientLang() == 'en' ? '700' : '550';
-            if(common::hasPriv('kanban', 'import') and $CRKanban) $commonActions .= '<li>' . html::a(helper::createLink('kanban', 'import', "kanbanID=$kanban->id", '', true), '<i class="icon icon-import"></i>' . $this->lang->kanban->import, '', "class='iframe btn btn-link' data-width=$importWidth") . '</li>';
-            if(common::hasPriv('kanban', 'enableArchived') and $CRKanban) $commonActions .= '<li>' . html::a(helper::createLink('kanban', 'enableArchived', "kanbanID=$kanban->id", '', true), '<i class="icon icon-card-archive"></i>' . $this->lang->kanban->archived, '', "class='iframe btn btn-link' data-width=400") . '</li>';
-            if(common::hasPriv('kanban', 'performable') and $CRKanban) $commonActions .= '<li>' . html::a(helper::createLink('kanban', 'performable', "kanbanID=$kanban->id", '', true), '<i class="icon icon-checked"></i>' . $this->lang->kanban->manageProgress, '', "class='iframe btn btn-link' data-width=40%") . '</li>';
 
             if($columnActions and $commonActions)
             {
@@ -3857,5 +3851,25 @@ class kanbanModel extends model
         $importObjectList = implode(',', $importObjects);
 
         $this->dao->update(TABLE_KANBAN)->set('object')->eq($importObjectList)->where('id')->eq($kanbanID)->exec();
+    }
+
+    /**
+     * Get kanban lane count.
+     *
+     * @param  int    $kanbanID
+     * @param  string $type
+     * @access public
+     * @return int
+     */
+    public function getLaneCount($kanbanID, $type = 'common')
+    {
+        return $this->dao->select('COUNT(t2.id) as count')->from(TABLE_KANBANREGION)->alias('t1')
+            ->leftJoin(TABLE_KANBANLANE)->alias('t2')->on('t1.id=t2.region')
+            ->where('t1.kanban')->eq($kanbanID)
+            ->andWhere('t1.deleted')->eq(0)
+            ->andWhere('t2.deleted')->eq(0)
+            ->beginIF($type == 'common')->andWhere('t2.type')->eq('common')->fi()
+            ->beginIF($type != 'common')->andWhere('t2.type')->ne('common')->fi()
+            ->fetch('count');
     }
 }

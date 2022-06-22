@@ -1,1 +1,6 @@
 #mainContent {padding-left: 0px;}
+#mainContent .laneHeightBox, #mainContent .importBox {display: grid;}
+#mainContent .laneHeightBox .radio-inline+.radio-inline, #mainContent .importBox .radio-inline+.radio-inline {margin-left: 0px; padding-top: 5px;}
+#mainContent .objectBox {padding-top: 2px;}
+#mainContent .objectBox .checkbox-primary {display: inline-block;}
+#mainContent .objectBox .checkbox-primary:not(:first-child) {margin-left: 10px;}

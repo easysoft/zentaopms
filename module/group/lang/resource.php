@@ -628,7 +628,6 @@ $lang->resource->kanban->close              = 'close';
 $lang->resource->kanban->delete             = 'delete';
 $lang->resource->kanban->createRegion       = 'createRegion';
 $lang->resource->kanban->editRegion         = 'editRegion';
-$lang->resource->kanban->performable        = 'performable';
 $lang->resource->kanban->sortRegion         = 'sortRegion';
 $lang->resource->kanban->sortGroup          = 'sortGroup';
 $lang->resource->kanban->deleteRegion       = 'deleteRegion';
@@ -659,11 +658,7 @@ $lang->resource->kanban->laneMove           = 'laneMove';
 $lang->resource->kanban->viewArchivedColumn = 'viewArchivedColumn';
 $lang->resource->kanban->viewArchivedCard   = 'viewArchivedCard';
 $lang->resource->kanban->restoreCard        = 'restoreCard';
-$lang->resource->kanban->setLaneHeight      = 'setLaneHeight';
-$lang->resource->kanban->setColumnWidth     = 'setColumnWidth';
 $lang->resource->kanban->batchCreateCard    = 'batchCreateCard';
-$lang->resource->kanban->import             = 'import';
-$lang->resource->kanban->enableArchived     = 'enableArchived';
 
 $lang->kanban->methodOrder[5]   = 'space';
 $lang->kanban->methodOrder[10]  = 'createSpace';
@@ -708,13 +703,9 @@ $lang->kanban->methodOrder[195] = 'viewArchivedColumn';
 $lang->kanban->methodorder[200] = 'viewArchivedCard';
 $lang->kanban->methodorder[205] = 'archiveColumn';
 $lang->kanban->methodorder[210] = 'restoreCard';
-$lang->kanban->methodorder[215] = 'setLaneHeight';
-$lang->kanban->methodorder[220] = 'setColumnWidth';
-$lang->kanban->methodOrder[225] = 'batchCreateCard';
-$lang->kanban->methodorder[230] = 'import';
-$lang->kanban->methodorder[235] = 'enableArchived';
-$lang->kanban->methodorder[240] = 'activate';
-$lang->kanban->methodorder[245] = 'activateSpace';
+$lang->kanban->methodOrder[215] = 'batchCreateCard';
+$lang->kanban->methodorder[220] = 'activate';
+$lang->kanban->methodorder[225] = 'activateSpace';
 
 /* Execution. */
 $lang->resource->execution = new stdclass();

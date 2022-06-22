@@ -1128,7 +1128,7 @@ function createCardMenu(options)
     var items = [];
     if(privs.includes('editCard') && card.fromType == '') items.push({label: kanbanLang.editCard, icon: 'edit', url: createLink('kanban', 'editCard', 'cardID=' + card.id, '', 'true'), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width': '80%'}});
     if(privs.includes('deleteCard')) items.push({label: card.fromType == '' ? kanbanLang.deleteCard : kanbanLang.removeCard, icon: card.fromType == '' ? 'trash' : 'unlink', url: createLink('kanban', 'deleteCard', 'cardID=' + card.id), attrs: {'target': 'hiddenwin'}});
-    if(privs.includes('performable') && kanban.performable == 1)
+    if(kanban.performable == 1)
     {
         if(card.status == 'done')
         {
@@ -1145,7 +1145,7 @@ function createCardMenu(options)
     var deleteCardAction  = privs.includes('deleteCard');
     var archiveCardAction = (privs.includes('archiveCard') && kanban.archived == '1') ? true : false;
 
-    var performable  = (privs.includes('performable') && kanban.performable == 1) ? true : false;
+    var performable  = kanban.performable == 1 ? true : false;
 
     var moveCardAction     = privs.includes('moveCard');
     var setCardColorAction = privs.includes('setCardColor');
@@ -1257,9 +1257,9 @@ function createColumnCreateMenu(options)
 
     if(privs.includes('createCard')) items.push({label: kanbanLang.createCard, url: $.createLink('kanban', 'createCard', 'kanbanID=' + kanbanID + '&regionID=' + regionID + '&groupID=' + groupID + '&columnID=' + columnID, '', true), className: 'iframe', attrs: {'data-toggle': 'modal'}});
     if(privs.includes('batchCreateCard')) items.push({label: kanbanLang.batchCreateCard, url: $.createLink('kanban', 'batchCreateCard', 'kanbanID=' + kanbanID + '&regionID=' + regionID + '&groupID=' + groupID + '&laneID=' + laneID + '&columnID=' + columnID), attrs: {'data-width': '80%'}});
-    if(privs.includes('import') && kanban.object.indexOf('cards') != -1) items.push({label: kanbanLang.importCard, url: $.createLink('kanban', 'importCard', 'kanbanID=' + kanbanID + '&regionID=' + regionID + '&groupID=' + groupID + '&columnID=' + columnID), className: 'iframe', attrs: {'data-toggle': 'modal'}});
-    if(privs.includes('import') && kanban.object && kanban.object != 'cards' && vision != 'lite') items.push({className: 'parentDivider'});
-    if(privs.includes('import') && kanban.object && kanban.object != 'cards' && vision != 'lite') items.push({label: kanbanLang.importAB, className: 'import'});
+    if(kanban.object.indexOf('cards') != -1) items.push({label: kanbanLang.importCard, url: $.createLink('kanban', 'importCard', 'kanbanID=' + kanbanID + '&regionID=' + regionID + '&groupID=' + groupID + '&columnID=' + columnID), className: 'iframe', attrs: {'data-toggle': 'modal'}});
+    if(kanban.object && kanban.object != 'cards' && vision != 'lite') items.push({className: 'parentDivider'});
+    if(kanban.object && kanban.object != 'cards' && vision != 'lite') items.push({label: kanbanLang.importAB, className: 'import'});
 
     return items;
 }
