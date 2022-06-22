@@ -37,6 +37,9 @@ $().ready(function()
 
 $(function()
 {
+    var heightType = $("[name='heightType']:checked").val();
+    setCardCount(heightType);
+
     /* If the story of the product which linked the execution under the project, you don't allow to remove the product. */
     $("#productsBox select[name^='products']").each(function()
     {

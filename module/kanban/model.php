@@ -2127,6 +2127,7 @@ class kanbanModel extends model
             ->setDefault('lastEditedDate', helper::now())
             ->setDefault('displayCards', 0)
             ->setIF($this->post->import == 'off', 'object', '')
+            ->setIF($this->post->heightType == 'auto', 'displayCards', 0)
             ->join('whitelist', ',')
             ->join('team', ',')
             ->trim('name')
@@ -3863,13 +3864,23 @@ class kanbanModel extends model
      */
     public function getLaneCount($kanbanID, $type = 'common')
     {
-        return $this->dao->select('COUNT(t2.id) as count')->from(TABLE_KANBANREGION)->alias('t1')
-            ->leftJoin(TABLE_KANBANLANE)->alias('t2')->on('t1.id=t2.region')
-            ->where('t1.kanban')->eq($kanbanID)
-            ->andWhere('t1.deleted')->eq(0)
-            ->andWhere('t2.deleted')->eq(0)
-            ->beginIF($type == 'common')->andWhere('t2.type')->eq('common')->fi()
-            ->beginIF($type != 'common')->andWhere('t2.type')->ne('common')->fi()
-            ->fetch('count');
+        if($type == 'common ' or $type == 'kanban')
+        {
+            return $this->dao->select('COUNT(t2.id) as count')->from(TABLE_KANBANREGION)->alias('t1')
+                ->leftJoin(TABLE_KANBANLANE)->alias('t2')->on('t1.id=t2.region')
+                ->where('t1.kanban')->eq($kanbanID)
+                ->andWhere('t1.deleted')->eq(0)
+                ->andWhere('t2.deleted')->eq(0)
+                ->beginIF($type == 'common')->andWhere('t2.type')->eq('common')->fi()
+                ->beginIF($type != 'common')->andWhere('t2.type')->ne('common')->fi()
+                ->fetch('count');
+        }
+        else
+        {
+            return $this->dao->select('COUNT(id) as count')->from(TABLE_KANBANLANE)
+                ->where('execution')->eq($kanbanID)
+                ->andWhere('deleted')->eq(0)
+                ->fetch('count');
+        }
     }
 }
