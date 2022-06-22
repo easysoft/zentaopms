@@ -18,6 +18,7 @@ $lang->user->dept             = 'Abteilung';
 $lang->user->account          = 'Konto';
 $lang->user->password         = 'Passwort';
 $lang->user->password2        = 'Passwort wiederholen';
+$lang->user->password2AB      = 'Repeat Password';
 $lang->user->role             = 'Rolle';
 $lang->user->group            = 'Gruppe';
 $lang->user->realname         = 'Name';
@@ -74,6 +75,9 @@ $lang->user->projects         = 'Project';
 $lang->user->sprints          = $lang->execution->common;
 $lang->user->identity         = 'Identity';
 $lang->user->switchVision     = 'Switch to %s';
+$lang->user->submit           = 'Submit';
+$lang->user->resetPWD         = 'Reset Password';
+$lang->user->resetTitle       = 'Admin reset the password';
 
 $lang->user->legendBasic        = 'Basic Information';
 $lang->user->legendContribution = 'Contribution';
@@ -111,6 +115,8 @@ $lang->user->applyTemplate         = 'Templates';
 $lang->user->confirmDeleteTemplate = 'Do you want to delete this template?';
 $lang->user->setPublicTemplate     = 'Set as Public Template';
 $lang->user->tplContentNotEmpty    = 'Vorlageninhalt darf nicht leer sein!';
+$lang->user->sendEmailSuccess      = 'An email has been sent to your mailbox. Please check it.';
+$lang->user->linkExpired           = 'The link has expired, please apply again.';
 
 $lang->user->profile   = 'Profil';
 $lang->user->project   = $lang->executionCommon;
@@ -147,6 +153,7 @@ $lang->user->loginLocked  = "Bitte kontaktieren Sie den Administrator um Ihr Kon
 $lang->user->weakPassword = "Ihr Passwort entspricht nicht den Anforderungen.";
 $lang->user->errorWeak    = "Passwords cannot use [%s] these commonly used weak passwords.";
 $lang->user->errorCaptcha = "Captcha Error";
+$lang->user->loginExpired = 'System login has expired, please log in again :)';
 
 $lang->user->roleList['']       = '';
 $lang->user->roleList['dev']    = 'Developer';
@@ -212,6 +219,7 @@ $lang->user->placeholder->verify    = 'Bitte geben Sie Ihr Login Passwort ein.';
 $lang->user->placeholder->loginPassword = 'Enter your password';
 $lang->user->placeholder->loginAccount  = 'Enter your account';
 $lang->user->placeholder->loginUrl      = 'Enter your ZenTao address';
+$lang->user->placeholder->email         = 'Enter your email';
 
 $lang->user->placeholder->passwordStrength[1] = 'Buchstaben und Ziffern. Mindestens 6 Zeichen';
 $lang->user->placeholder->passwordStrength[2] = 'Buchstaben, Ziffern und Sonderzeichen. Mindestens 10 Zeichen';
@@ -233,6 +241,13 @@ $lang->user->error->verifyPassword   = "Verifikation fehlgeschlagen. Bitte geben
 $lang->user->error->originalPassword = "Altes Passwort ist falsch.";
 $lang->user->error->companyEmpty     = "Company name must be not empty.";
 $lang->user->error->noAccess         = "This user is not from your department. You have no access to this user information.";
+$lang->user->error->accountEmpty     = 'Account must be not empty !';
+$lang->user->error->emailEmpty       = 'Email must be not empty !';
+$lang->user->error->noUser           = 'Invalid account.';
+$lang->user->error->noEmail          = 'The user does not register email. Please get in touch with the administrator to reset the password.';
+$lang->user->error->errorEmail       = 'The account does not match the email. Please enter a new one.';
+$lang->user->error->emailSetting     = 'No email is configured in the system. Contact the admin to reset the email.';
+$lang->user->error->sendMailFail     = 'Message sending failed, please try again!';
 
 $lang->user->contactFieldList['phone']    = $lang->user->phone;
 $lang->user->contactFieldList['mobile']   = $lang->user->mobile;
@@ -293,3 +308,5 @@ $lang->user->mkdirLinux = <<<EOT
     <div style='margin-bottom:8px;'>Commond: <strong style='color:#ed980f'>chmod 777 -R %s</strong>.</div>
     </td></tr></table></body></html>
 EOT;
+
+$lang->user->jumping = "This page will redirect to the previous page in <span id='time'>3</span> seconds. <a href='%s' class='btn btn-primary btn-xs'>Redirect Now</a>";

@@ -151,6 +151,7 @@ $lang->doc->removeMenu     = 'Vom Menü entfernen';
 $lang->doc->search         = 'Suche';
 $lang->doc->allCollections = 'All Collections';
 $lang->doc->keywordsTips   = 'Please use commas to separate multiple keywords.';
+$lang->doc->sortLibs       = 'Sort Libs';
 
 global $config;
 /* Query condition list. */
