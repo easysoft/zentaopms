@@ -2402,7 +2402,10 @@ EOD;
         if($app->config->vision != 'lite')
         {
             $inProject = isset($lang->navGroup->$module) && $lang->navGroup->$module == 'project';
-            if($inProject && $app->session->project && strpos(",{$app->user->rights['projects']},", ",{$app->session->project},") !== false) return true;
+            if($inProject && $app->session->project && (strpos(",{$app->user->rights['projects']},", ",{$app->session->project},") !== false or strpos(",{$app->user->rights['projects']},", ',all,') !== false)) return true;
+
+            $inProduct = isset($lang->navGroup->$module) && $lang->navGroup->$module == 'product';
+            if($inProduct && $app->session->product && (strpos(",{$app->user->rights['products']},", ",{$app->session->product},") !== false or strpos(",{$app->user->rights['products']},", ',all,') !== false)) return true;
         }
 
         /* If not super admin, check the rights. */

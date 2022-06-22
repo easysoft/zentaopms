@@ -291,21 +291,49 @@ class groupModel extends model
     }
 
     /**
-     * Get user programs of a group.
+     * Get project admins for manage project admin.
      *
      * @param  int    $groupID
      * @access public
      * @return array
      */
-    public function getUserPrograms($groupID)
+    public function getProjectAdmins()
     {
-        return $this->dao->select('t1.account, t1.project')
-            ->from(TABLE_USERGROUP)->alias('t1')
-            ->leftJoin(TABLE_USER)->alias('t2')->on('t1.account = t2.account')
-            ->where('`group`')->eq((int)$groupID)
-            ->andWhere('t2.deleted')->eq(0)
-            ->orderBy('account')
-            ->fetchPairs();
+        $admins = $this->dao->select('*')->from(TABLE_PROJECTADMIN)->fetchGroup('group', 'account');
+
+        $projectAdmins = array();
+        foreach($admins as $groupID => $adminGroup)
+        {
+            if(!empty($adminGroup))
+            {
+                $accounts = implode(',', array_keys($adminGroup));
+                $projectAdmins[$accounts] = current($adminGroup);
+            }
+        }
+
+        return $projectAdmins;
+    }
+
+    /**
+     * Get admins by object id list.
+     * 
+     * @param  int    $idList 
+     * @param  string $field 
+     * @access public
+     * @return void
+     */
+    public function getAdmins($idList, $field = 'programs')
+    {
+        $objects = array();
+        foreach($idList as $id)
+        {
+            $objects[$id] = $this->dao->select('DISTINCT account')->from(TABLE_PROJECTADMIN)
+                ->where("CONCAT(',', $field, ',')")->like("%$id%")
+                ->orWhere($field)->eq('all')
+                ->fetchPairs();
+        }
+
+        return $objects;
     }
 
     /**
@@ -535,6 +563,8 @@ class groupModel extends model
     public function updateProjectAdmin($groupID)
     {
         $this->loadModel('user');
+
+        $allUsers = $this->dao->select('account')->from(TABLE_PROJECTADMIN)->fetchPairs();
         $this->dao->delete()->from(TABLE_PROJECTADMIN)->exec();
 
         $members      = $this->post->members      ? $this->post->members      : array();
@@ -542,10 +572,11 @@ class groupModel extends model
         $projects     = $this->post->project      ? $this->post->project      : array();
         $products     = $this->post->product      ? $this->post->product      : array();
         $executions   = $this->post->execution    ? $this->post->execution    : array();
-        $programAll   = $this->post->programAll   ? $this->post->programAll   : array();
-        $projectAll   = $this->post->projectAll   ? $this->post->projectAll   : array();
-        $productAll   = $this->post->productAll   ? $this->post->productAll   : array();
-        $executionAll = $this->post->executionAll ? $this->post->executionAll : array();
+        $programAll   = $this->post->programAll   ? $this->post->programAll   : '';
+        $projectAll   = $this->post->projectAll   ? $this->post->projectAll   : '';
+        $productAll   = $this->post->productAll   ? $this->post->productAll   : '';
+        $executionAll = $this->post->executionAll ? $this->post->executionAll : '';
+
         foreach($members as $lineID => $accounts)
         {
             if(empty($accounts)) continue;
@@ -565,12 +596,15 @@ class groupModel extends model
                 $data->executions = $execution;
 
                 $this->dao->replace(TABLE_PROJECTADMIN)->data($data)->exec();
+
+                $allUsers[$account] = $account;
             }
-            //foreach($programs[$account] as $programID)
-            //{
-            //    if(!$programID) continue;
-            //    $this->user->updateUserView($programID, 'program');
-            //}
+        }
+
+        foreach($allUsers as $account)
+        {
+            if(!$account) continue;
+            $this->user->computeUserView($account, true);
         }
 
         if(!dao::isError()) return true;

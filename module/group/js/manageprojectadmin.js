@@ -58,3 +58,19 @@ function resetProgramName(obj)
     var newName = 'program[' + $(obj).val() + '][]';
     programSelect.attr('name', newName);
 }
+
+function toggleDisabled(obj)
+{
+    var checked = $(obj).is(':checked');
+
+    if(checked)
+    {
+        $(obj).closest('tr').find('.input-group select').addClass('disabled');
+        $(obj).closest('tr').find('.input-group select').picker({chosenMode: false});
+    }
+    else
+    {
+        $(obj).closest('tr').find('.input-group select').removeClass('disabled');
+        $(obj).closest('tr').find('.input-group select').picker({chosenMode: true});
+    }
+}
