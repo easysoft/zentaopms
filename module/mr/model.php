@@ -43,10 +43,11 @@ class mrModel extends model
      * @param  string     $orderBy
      * @param  object     $pager
      * @param  array|bool $filterProjects
+     * @param  int        $repoID
      * @access public
      * @return array
      */
-    public function getList($mode = 'all', $param = 'all', $orderBy = 'id_desc', $pager = null, $filterProjects = array())
+    public function getList($mode = 'all', $param = 'all', $orderBy = 'id_desc', $pager = null, $filterProjects = array(), $repoID = 0)
     {
         /* If filterProjects equals false,it means no permission. */
         if($filterProjects === false) return array();
@@ -70,6 +71,7 @@ class mrModel extends model
             ->beginIF($mode == 'assignee' and $param != 'all')->andWhere('assignee')->eq($param)->fi()
             ->beginIF($mode == 'creator' and $param != 'all')->andWhere('createdBy')->eq($param)->fi()
             ->beginIF($filterProjectSql)->andWhere($filterProjectSql)->fi()
+            ->beginIF($repoID)->andWhere('repoID')->eq($repoID)->fi()
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id');
@@ -96,13 +98,15 @@ class mrModel extends model
     /**
      * Get all gitlab server projects. If not an administrator, the role of project member should be higher than guest.
      *
+     * @param  int    $repoID
      * @access public
      * @return array
      */
-    public function getAllGitlabProjects()
+    public function getAllGitlabProjects($repoID = 0)
     {
         $gitlabIDList = $this->dao->select('distinct gitlabID')->from(TABLE_MR)
             ->where('deleted')->eq('0')
+            ->beginIF($repoID)->andWhere('repoID')->eq($repoID)->fi()
             ->fetchPairs('gitlabID');
 
         $allProjects = array();
