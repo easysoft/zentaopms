@@ -87,6 +87,8 @@ $lang->webhook->paramsList['comment']    = 'Comment';
 $lang->webhook->paramsList['text']       = 'Action Description';
 
 $lang->webhook->confirmDelete = 'Do you want to delete this hook?';
+$lang->webhook->friendlyTips  = 'Friendly reminder: Click on a department to expand the sub-departments under the department.';
+$lang->webhook->loadPrompt    = 'There is a lot of data and the loading is slow, please wait.';
 
 $lang->webhook->trimWords = '';
 

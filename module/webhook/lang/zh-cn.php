@@ -87,7 +87,8 @@ $lang->webhook->paramsList['comment']    = '备注';
 $lang->webhook->paramsList['text']       = '操作内容';
 
 $lang->webhook->confirmDelete = '您确认要删除该webhook吗？';
-$lang->webhook->loadPrompt    = '友情提示：当部门数据较多时，数据加载可能需要较多时间；本列表优先展示一级部门数据，您可以通过点击一级部门标题，自动加载出该部门下的子部门数。';
+$lang->webhook->friendlyTips  = '友情提示：点击部门，可以展开该部门下的子部门。';
+$lang->webhook->loadPrompt    = '数据较多，加载缓慢，请稍等。';
 
 $lang->webhook->trimWords = '了';
 

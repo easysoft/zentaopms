@@ -19,8 +19,9 @@
     </div>
     <?php if($webhookType == 'feishuuser'):?>
     <div id="notice" class="alert alert-info">
-      <div class="content"><i class="icon-exclamation-sign"></i> <?php echo $lang->webhook->loadPrompt;?></div>
+      <div class="content"><i class="icon-exclamation-sign"></i> <?php echo $lang->webhook->friendlyTips;?></div>
     </div>
+    <div id='loadPrompt' class="table-empty-tip"><p><span class="text-muted"><?php echo $lang->webhook->loadPrompt;?></span></p></div>
     <?php endif;?>
     <ul id='deptList' class="ztree"></ul>
     <div class='actions'>
@@ -66,9 +67,10 @@ $(function()
             },
             callback:
             {
-                beforeClick: beforeClick,
-                beforeAsync: beforeAsync,
-                onClick: ztreeOnAsyncSuccess
+                beforeClick: ztreeBeforeClick,
+                beforeAsync: ztreeBeforeAsync,
+                onClick: ztreeOnAsyncSuccess,
+                onAsyncSuccess: zTreeOnAsyncSuccess
             }
         };
 
@@ -82,7 +84,7 @@ $(function()
             return childNodes;
         }
 
-        function beforeClick(treeId, treeNode)
+        function ztreeBeforeClick(treeId, treeNode)
         {
             if(treeNode.isParent)
             {
@@ -94,7 +96,7 @@ $(function()
             }
         }
 
-        function beforeAsync(treeId, treeNode)
+        function ztreeBeforeAsync(treeId, treeNode)
         {
             return true;
         }
@@ -142,6 +144,11 @@ $(function()
                     alert(requestError);
                 }
             });
+        }
+
+        function zTreeOnAsyncSuccess()
+        {
+            $("#loadPrompt").remove();
         }
 
         var ztreeObj = $.fn.zTree.init($("#deptList"), setting);
