@@ -1,5 +1,7 @@
 <?php
 $lang->cron->common       = 'Cron';
+$lang->cron->id           = 'ID';
+$lang->cron->buildin      = 'Build In';
 $lang->cron->index        = 'Accueil Cron';
 $lang->cron->list         = 'Tâches';
 $lang->cron->create       = 'Ajouter';
@@ -39,11 +41,11 @@ $lang->cron->toggleList['stop']  = 'Désactiver';
 $lang->cron->confirmDelete = 'Voulez-vous supprimer ce cron ?';
 $lang->cron->confirmTurnon = 'Voulez-vous arrêter le cron ?';
 $lang->cron->introduction  = <<<EOD
-<p>Cron sert à accomplire des actions récurrentes, telles que la mise à jour des graphiques d'atterrissage, des sauvegardes, etc.</p>
-<p>Les fonctionnalités du Cron ont besoin d'être plus testées, le Cron est donc désactivé par défaut.</p>
+<p>Cron is set to do scheduled actions, such as update burndown chart, backup, etc.</p>
+<p>Features of Cron need to be improved, so it is turned off by default.</p>
 EOD;
 $lang->cron->confirmOpen = <<<EOD
-<p>Voulez-vous le mettre en route ?<a href="%s" target='hiddenwin'><strong>Activer les Tâches Programmées<strong></a></p>
+<p>Do you want to turn it on?<a href="%s" target='hiddenwin'><strong>Turn On Cron<strong></a></p>
 EOD;
 
 $lang->cron->notice = new stdclass();

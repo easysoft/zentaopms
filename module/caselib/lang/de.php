@@ -24,8 +24,13 @@ $lang->caselib->deleted          = 'Deleted';
 $lang->caselib->exportTemplet    = 'Export Template';
 $lang->caselib->batchCreateCase  = 'Batch Create';
 $lang->caselib->import           = 'Import';
-$lang->caselib->importAction     = 'Import Case';
 $lang->caselib->showImport       = 'Imported Data';
+$lang->caselib->type             = 'Type';
+$lang->caselib->product          = $lang->productCommon;
+$lang->caselib->browseAction     = 'Caselib List';
+$lang->caselib->deleteAction     = "Delete Caselib";
+$lang->caselib->importAction     = 'Import Case';
+$lang->caselib->linkVersion      = "Version";
 
 $lang->caselib->id             = 'ID';
 $lang->caselib->name           = 'Name';

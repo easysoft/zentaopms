@@ -41,8 +41,8 @@ $config->themes['default'] = 'default';
 $config->langs['zh-cn']    = '简体';
 $config->langs['zh-tw']    = '繁體';
 $config->langs['en']       = 'English';
-//$config->langs['de']       = 'Deutsch';
-//$config->langs['fr']       = 'Français';
+$config->langs['de']       = 'Deutsch';
+$config->langs['fr']       = 'Français';
 //$config->langs['vi']       = 'Tiếng Việt';
 //$config->langs['ja']       = '日本語';
 
