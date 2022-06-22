@@ -1432,10 +1432,21 @@ class docModel extends model
                 ->fetchPairs('product', 'projectCount');
         }
 
+        $docCountPairs = $this->dao->select('lib, count(id) as docCount')->from(TABLE_DOC)
+            ->where('lib')->in(array_keys($objectLibs))
+            ->andWhere('vision')->eq($this->config->vision)
+            ->andWhere('type')->notin('chapter')
+            ->andWhere('deleted')->eq(0)
+            ->groupBy('lib')
+            ->fetchPairs('lib');
+
         $libs = array();
         foreach($objectLibs as $lib)
         {
             if($this->checkPrivLib($lib)) $libs[$lib->id] = $lib;
+
+            $docCount = zget($docCountPairs, $lib->id, 0);
+            $libs[$lib->id]->docCount = $docCount > 99 ? '99+' : $docCount;
         }
 
         $itemCounts = $this->statLibCounts(array_keys($libs));
@@ -2353,12 +2364,15 @@ EOT;
             foreach($libs as $key => $lib)
             {
                 $selected = $key == $libID ? 'selected' : '';
-                $output   .= html::a(inlink($methodName, "type=$type&objectID=$objectID&libID=$key"), $lib->name, '', "class='$selected' data-app='{$this->app->tab}'");
+                $docCount = isset($lib->docCount) ? $lib->docCount : 0;
+                $output  .= html::a(inlink($methodName, "type=$type&objectID=$objectID&libID=$key"), "<span style='display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;'>$lib->name</span>&nbsp;<span>($docCount)</span>", '', "class='$selected' data-app='{$this->app->tab}' title='$lib->name ($docCount)' style='display: flex; justify-content: start;'");
             }
             if($type != 'custom' and $type != 'book')
             {
-                $selected = empty($libID) ? 'selected' : '';
-                $output   .= html::a(inlink('showFiles', "type=$type&objectID=$objectID"), $this->lang->doclib->files, '', "class='$selected' data-app='{$this->app->tab}'");
+                $files     = $this->getLibFiles($type, $objectID, 't1.id_desc');
+                $fileCount = count($files) > 99 ? '99+' : count($files);
+                $selected  = empty($libID) ? 'selected' : '';
+                $output   .= html::a(inlink('showFiles', "type=$type&objectID=$objectID"), "{$this->lang->doclib->files} ($fileCount)", '', "class='$selected' data-app='{$this->app->tab}' title='{$this->lang->doclib->files} ($fileCount)'");
             }
             $output .= "</div></div></div></div></div>";
         }
