@@ -39,7 +39,7 @@ class mr extends control
 
         $repoID = $this->repo->saveState($repoID, $objectID);
         $repo   = $this->repo->getRepoByID($repoID);
-        if($repo->SCM != 'Gitlba') $repo = $repos[0];
+        if($repo->SCM != 'Gitlab') $repo = $repos[0];
         $this->loadModel('ci')->setMenu($repo->id);
 
         $projects = $this->mr->getAllGitlabProjects($repoID);
