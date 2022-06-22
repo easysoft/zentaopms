@@ -2910,8 +2910,8 @@ class execution extends control
 
         if(!empty($_POST))
         {
-            $this->execution->linkStory($objectID, array(), array(), $extra);
             if($object->type != 'project' and $object->project != 0) $this->execution->linkStory($object->project);
+            $this->execution->linkStory($objectID, array(), array(), $extra);
 
             if(isonlybody())
             {
