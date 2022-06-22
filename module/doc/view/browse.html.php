@@ -65,9 +65,10 @@
                 ?>
               </td>
               <?php else:?>
-              <?php if(common::hasPriv('doc', 'view')):?>
-              <td class="c-id"><?php echo html::a($this->createLink('doc', 'view', "docID=$doc->id&version=0", '', true), $doc->id, '', "title='{$doc->id}' class='iframe' data-width='90%'");?></td>
-              <td class="c-name"><?php echo html::a($this->createLink('doc', 'view', "docID=$doc->id&version=0", '', true), "<i class='icon icon-file-text text-muted'></i> &nbsp;" . $doc->title, '', "title='{$doc->title}' class='iframe' data-width='90%'");?></td>
+              <?php if(common::hasPriv('doc', 'objectLibs')):?>
+              <?php $objectID = $doc->{$type};?>
+              <td class="c-id"><?php echo html::a($this->createLink('doc', 'objectLibs', "type=$type&objectID=$objectID&libID=$doc->lib&docID=$doc->id"), $doc->id, '', "title='{$doc->id}' data-app='{$this->app->tab}'");?></td>
+              <td class="c-name"><?php echo html::a($this->createLink('doc', 'objectLibs', "type=$type&objectID=$objectID&libID=$doc->lib&docID=$doc->id"), "<i class='icon icon-file-text text-muted'></i> &nbsp;" . $doc->title, '', "title='{$doc->title}' data-app='{$this->app->tab}'");?></td>
               <?php else:?>
               <td class='c-id' title='<?php echo $doc->id;?>'><?php echo "<i class='icon icon-file-text text-muted'></i> {$doc->id}";?></td>
               <td class='c-name' title='<?php echo $doc->title;?>'><?php echo "<i class='icon icon-file-text text-muted'></i> {$doc->title}";?></td>
