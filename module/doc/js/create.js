@@ -115,7 +115,7 @@ function loadWhitelist(libID)
     var userLink  = createLink('doc', 'ajaxGetWhitelist', 'libID=' + libID + '&acl=&control=user');
     $.post(groupLink, function(groups)
     {
-        if(!(groups == 'default' || groups == 'private'))
+        if(groups != 'private')
         {
           $('#groups').replaceWith(groups);
           $('#groups_chosen').remove();
@@ -125,31 +125,28 @@ function loadWhitelist(libID)
 
     $.post(userLink, function(users)
     {
-        if(users != 'default')
+        if(users == 'private')
         {
-            if(users == 'private')
+            $('#aclopen').parent('.radio-inline').addClass('hidden');
+            $('#aclcustom').parent('.radio-inline').addClass('hidden');
+            $('#whiteListBox').addClass('hidden');
+            $('#aclprivate').prop('checked', true);
+        }
+        else
+        {
+            $('#aclopen').parent('.radio-inline').removeClass('hidden');
+            $('#aclcustom').parent('.radio-inline').removeClass('hidden');
+
+            $('#users').replaceWith(users);
+            $('#users_chosen').remove();
+            $('#whiteListBox .picker').remove();
+            if($('#users option').length < maxCount)
             {
-                $('#aclopen').parent('.radio-inline').addClass('hidden');
-                $('#aclcustom').parent('.radio-inline').addClass('hidden');
-                $('#whiteListBox').addClass('hidden');
-                $('#aclprivate').prop('checked', true);
+              $('#users').chosen();
             }
             else
             {
-                $('#aclopen').parent('.radio-inline').removeClass('hidden');
-                $('#aclcustom').parent('.radio-inline').removeClass('hidden');
-
-                $('#users').replaceWith(users);
-                $('#users_chosen').remove();
-                $('#whiteListBox .picker').remove();
-                if($('#users option').length < maxCount)
-                {
-                  $('#users').chosen();
-                }
-                else
-                {
-                  $('#users').picker();
-                }
+              $('#users').picker();
             }
         }
     });
