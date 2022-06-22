@@ -114,5 +114,11 @@ $lang->mail->ztCloudNotice    = <<<EOD
 
 EOD;
 
+$lang->mail->forgetPassword = <<<EOT
+<p>Hello:</p>
+<p>You are applying to reset your ZenTao password. The link is valid for three minutes. If it expires, please apply again.</p>
+<p><a href="%s" target="_blank">Click here to jump</a></p>
+EOT;
+
 $lang->mail->placeholder = new stdclass();
 $lang->mail->placeholder->password = 'Manche Mail Server benötigen einen AUTH CODE. Bitte prüfen Sie das bei Ihrem Mailprovider.';
