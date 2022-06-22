@@ -1228,4 +1228,22 @@ class doc extends control
         unset($this->lang->doc->libTypeList['book']);
         $this->display();
     }
+
+    /**
+     * Sort libs.
+     *
+     * @access public
+     * @return void
+     */
+    public function sortLibs($type, $objectID)
+    {
+        if(!empty($_POST))
+        {
+            $this->doc->updateLibOrder();
+            return print(js::reload('parent.parent'));
+        }
+        $this->view->title = $this->lang->doc->sortLibs;
+        $this->view->libs  = $this->doc->getLibs($type, '', '', $objectID);
+        $this->display();
+    }
 }

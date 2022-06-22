@@ -48,7 +48,7 @@ class docModel extends model
             ->where('deleted')->eq(0)
             ->andWhere('type')->eq('api')
             ->beginIF(!empty($appendLib))->orWhere('id')->eq($appendLib)->fi()
-            ->orderBy('id_desc')
+            ->orderBy('`order`_asc, id_desc')
             ->fetchAll('id');
         $libs = array_filter($libs, array($this, 'checkPrivLib'));
         return $libs;
@@ -61,6 +61,7 @@ class docModel extends model
      * @param  string $extra
      * @param  string $appendLibs
      * @param  int    $projectID
+     *
      * @access public
      * @return array
      */
@@ -72,7 +73,7 @@ class docModel extends model
                 ->where('type')->ne('api')
                 ->beginIF($type == 'all')->andWhere('deleted')->eq(0)->fi()
                 ->andWhere('vision')->eq($this->config->vision)
-                ->orderBy('id_desc')
+                ->orderBy('`order` asc, id_desc')
                 ->query();
         }
         else
@@ -83,7 +84,7 @@ class docModel extends model
                 ->beginIF($type)->andWhere('type')->eq($type)->fi()
                 ->beginIF(!$type)->andWhere('type')->ne('api')->fi()
                 ->beginIF($objectID and strpos(',product,project,execution,', ",$type,") !== false)->andWhere($type)->eq($objectID)->fi()
-                ->orderBy('`order`, id desc')->query();
+                ->orderBy("`order` asc, id_desc")->query();
         }
 
         $products   = $this->loadModel('product')->getPairs();
@@ -128,7 +129,7 @@ class docModel extends model
 
         if(!empty($appendLibs))
         {
-            $stmt = $this->dao->select('*')->from(TABLE_DOCLIB)->where('id')->in($appendLibs)->orderBy('`order`, id desc')->query();
+            $stmt = $this->dao->select('*')->from(TABLE_DOCLIB)->where('id')->in($appendLibs)->orderBy("`order` asc, id_desc")->query();
             while($lib = $stmt->fetch())
             {
                 if(!isset($libPairs[$lib->id]) and $this->checkPrivLib($lib, $extra)) $libPairs[$lib->id] = $lib->name;
@@ -1411,8 +1412,8 @@ class docModel extends model
                 ->andWhere('vision')->eq($this->config->vision)
                 ->andWhere('type')->eq($type)
                 ->beginIF(!empty($appendLib))->orWhere('id')->eq($appendLib)->fi()
-                ->beginIF($type == 'custom')->orderBy('`order`, id')->fi()
-                ->beginIF($type == 'book')->orderBy('id_desc')->fi()
+                ->beginIF($type == 'custom')->orderBy('`order` asc, id_desc')->fi()
+                ->beginIF($type == 'book')->orderBy('`order` asc, id_desc')->fi()
                 ->fetchAll('id');
         }
         elseif($type != 'product' and $type != 'project' and $type != 'execution')
@@ -1427,7 +1428,7 @@ class docModel extends model
                 ->andWhere($type)->eq($objectID)
                 ->beginIF(!empty($appendLib))->orWhere('id')->eq($appendLib)->fi()
                 ->beginIF($type == 'project')->andWhere('execution')->eq(0)->fi()
-                ->orderBy('`order`, id')
+                ->orderBy('`order` asc, id_desc')
                 ->fetchAll('id');
         }
 
@@ -2381,6 +2382,11 @@ EOT;
                 $selected = empty($libID) ? 'selected' : '';
                 $output   .= html::a(inlink('showFiles', "type=$type&objectID=$objectID"), $this->lang->doclib->files, '', "class='$selected' data-app='{$this->app->tab}'");
             }
+            if(count($libs) >= 2 and common::hasPriv('doc', 'sortLibs'))
+            {
+                $output   .= '<li class="divider"></li>';
+                $output   .= html::a(inlink('sortLibs', "type=$type&objectID=$objectID", '', true), "<i class='icon-move'></i>  {$this->lang->doc->sortLibs}", '', "data-title='{$this->lang->doc->sortLibs}' data-toggle='modal' data-type='iframe' data-width='400px' data-app='{$this->app->tab}'");
+            }
             $output .= "</div></div></div></div></div>";
         }
 
@@ -2788,7 +2794,7 @@ EOT;
             $table    = $this->config->objectTables[$type];
             $libs     = $this->getLibsByObject($type, $objectID, '', $appendLib);
 
-            if($libID == 0) $libID = key($libs);
+            if($libID == 0) $libID = reset($libs)->id;
             $this->lang->modulePageNav = $this->select($type, $objects, $objectID, $libs, $libID);
 
             if($this->app->tab == 'doc') $this->app->rawMethod = $type;
@@ -2920,5 +2926,27 @@ EOT;
             }
         }
         return $docs;
+    }
+
+    /**
+     * Update Lib orders.
+     *
+     * @access public
+     * @return void
+     */
+    public function updateLibOrder()
+    {
+        $libIdList = $this->post->libIdList;
+        $libIdList = explode(',', $libIdList);
+
+        $order = 1;
+        foreach($libIdList as $libID)
+        {
+            if(!$libID) continue;
+
+            $this->dao->update(TABLE_DOCLIB)->set('`order`')->eq($order * 10)->where('id')->eq($libID)->exec();
+
+            $order++;
+        }
     }
 }

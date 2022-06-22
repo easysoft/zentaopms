@@ -151,6 +151,7 @@ $lang->doc->removeMenu     = '从菜单栏移除';
 $lang->doc->search         = '搜索';
 $lang->doc->allCollections = '查看全部收藏文档';
 $lang->doc->keywordsTips   = '多个关键字请用逗号分隔。';
+$lang->doc->sortLibs       = '文档库排序';
 
 global $config;
 /* 查询条件列表 */
