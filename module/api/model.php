@@ -895,4 +895,63 @@ class apiModel extends model
         $file = $this->app->getAppRoot() . 'db' . DS . 'api' . DS . $version . DS . $table;
         return unserialize(preg_replace_callback('#s:(\d+):"(.*?)";#s', function($match){return 's:'.strlen($match[2]).':"'.$match[2].'";';}, file_get_contents($file)));
     }
+
+     /**
+     * Build search form.
+     *
+     * @param  object $lib
+     * @param  string $queryID
+     * @param  string $actionURL
+     * @access public
+     * @return void
+     */
+    public function buildSearchForm($lib, $queryID, $actionURL)
+    {
+        $lib = array($lib->id => $lib->name);
+        $this->config->api->search['module']                  = 'api';
+        $this->config->api->search['queryID']                 = $queryID;
+        $this->config->api->search['actionURL']               = $actionURL;
+        $this->config->api->search['params']['lib']['values'] = $lib + array('all' => $this->lang->api->allLibs);
+
+        $this->loadModel('search')->setSearchParams($this->config->api->search);
+    }
+
+    /**
+     * Get api by search.
+     *
+     * @param  string $libID
+     * @param  int    $queryID
+     * @access public
+     * @return array
+     */
+    public function getApiListBySearch($libID, $queryID)
+    {
+       if($queryID)
+       {
+           $query = $this->loadModel('search')->getQuery($queryID);
+           if($query)
+           {
+               $this->session->set('apiQuery', $query->sql);
+               $this->session->set('apiForm', $query->form);
+           }
+           else
+           {
+               $this->session->set('apiQuery', ' 1 = 1');
+           }
+       }
+       else
+       {
+           if($this->session->apiQuery == false) $this->session->set('apiQuery', ' 1 = 1');
+       }
+
+       $apiQuery = $this->session->apiQuery;
+       $list = $this->dao->select('*')
+           ->from(TABLE_API)
+           ->where('deleted')->eq(0)
+           ->andWhere(str_replace("`lib` = 'all'", '1', $apiQuery))
+           ->beginIF(strpos($apiQuery, "`lib` = 'all'") === false)->andWhere('lib')->eq($libID)->fi()
+           ->fetchAll();
+
+       return $list;
+    }
 }
