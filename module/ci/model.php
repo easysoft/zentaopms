@@ -12,11 +12,18 @@ class ciModel extends model
     /**
      * Set menu.
      *
+     * @param  int    $repoID
      * @access public
      * @return void
      */
-    public function setMenu()
+    public function setMenu($repoID = 0)
     {
+        if($repoID)
+        {
+            if(!session_id()) session_start();
+            $this->session->set('repoID', $repoID);
+            session_write_close();
+        }
         common::setMenuVars('devops', $this->session->repoID);
     }
 
