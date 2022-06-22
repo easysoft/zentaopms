@@ -1156,10 +1156,13 @@ class doc extends control
      * @param  int    $libID
      * @param  int    $queryID
      * @param  string $param
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
      * @access public
      * @return void
      */
-    public function tableContents($type, $objectID = 0, $libID = 0, $queryID = 0, $param = '')
+    public function tableContents($type, $objectID = 0, $libID = 0, $queryID = 0, $param = '', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         list($libs, $libID, $object, $objectID) = $this->doc->setMenuByType($type, $objectID, $libID);
         $this->session->set('createProjectLocate', $this->app->getURI(true), 'doc');
@@ -1178,10 +1181,14 @@ class doc extends control
         if($param == 'bySearch')
         {
             /* Load pager. */
+            $rawMethod = $this->app->rawMethod;
+            $this->app->rawMethod = 'tableContents';
             $this->app->loadClass('pager', $static = true);
-            $pager = new pager(0, 20, 1);
+            $pager = new pager($recTotal, $recPerPage, $pageID);
+            $this->app->rawMethod = $rawMethod;
 
-            $this->view->docs       = $this->doc->getDocsBySearch($type, $objectID, $libID, $queryID);
+            $this->view->title      = $title;
+            $this->view->docs       = $this->doc->getDocsBySearch($type, $objectID, $libID, $queryID, $pager);
             $this->view->browseType = 'bySearch';
             $this->view->pager      = $pager;
             $this->view->param      = $param;

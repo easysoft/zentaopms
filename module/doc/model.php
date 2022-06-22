@@ -2841,11 +2841,12 @@ EOT;
      * @param  int    $objectID
      * @param  int    $libID
      * @param  int    $queryID
+     * @param  object $pager
      *
      * @access public
      * @return array
      */
-    public function getDocsBySearch($type, $objectID, $libID, $queryID)
+    public function getDocsBySearch($type, $objectID, $libID, $queryID, $pager)
     {
         $queryName = $type . 'DocQuery';
         $queryForm = $type . 'DocForm';
@@ -2876,6 +2877,7 @@ EOT;
             ->andWhere('lib')->in(array_keys($libs))
             ->beginIF($this->config->doc->notArticleType)->andWhere('type')->notIN($this->config->doc->notArticleType)->fi()
             ->orderBy('id_desc')
+            ->page($pager)
             ->fetchAll('id');
 
         $docContents = $this->dao->select('*')->from(TABLE_DOCCONTENT)->where('doc')->in(array_keys($docs))->orderBy('version,doc')->fetchAll('doc');

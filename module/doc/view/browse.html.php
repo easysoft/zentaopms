@@ -30,8 +30,13 @@
         <table class="table table-borderless table-hover table-files table-fixed no-margin">
           <thead>
             <tr>
+              <?php if($browseType !== 'bySearch'):?>
               <th class="c-name"><?php echo $lang->doc->title;?></th>
               <th class="w-200px c-name"><?php echo $lang->doc->object;?></th>
+              <?php else:?>
+              <th class="c-id"><?php echo $lang->doc->id;?></th>
+              <th class="c-name"><?php echo $lang->doc->title;?></th>
+              <?php endif;?>
               <th class="c-num"><?php echo $lang->doc->size;?></th>
               <th class="c-user"><?php echo $lang->doc->addedBy;?></th>
               <th class="c-datetime"><?php echo $lang->doc->addedDate;?></th>
@@ -44,6 +49,7 @@
             <?php $star = strpos($doc->collector, ',' . $this->app->user->account . ',') !== false ? 'icon-star text-yellow' : 'icon-star-empty';?>
             <?php $collectTitle = strpos($doc->collector, ',' . $this->app->user->account . ',') !== false ? $lang->doc->cancelCollection : $lang->doc->collect;?>
             <tr>
+              <?php if($browseType !== 'bySearch'):?>
               <?php if(common::hasPriv('doc', 'view')):?>
               <td class="c-name"><?php echo html::a($this->createLink('doc', 'view', "docID=$doc->id&version=0", '', true), "<i class='icon icon-file-text text-muted'></i> &nbsp;" . $doc->title, '', "title='{$doc->title}' class='iframe' data-width='90%'");?></td>
               <?php else:?>
@@ -58,6 +64,15 @@
                 }
                 ?>
               </td>
+              <?php else:?>
+              <?php if(common::hasPriv('doc', 'view')):?>
+              <td class="c-id"><?php echo html::a($this->createLink('doc', 'view', "docID=$doc->id&version=0", '', true), $doc->id, '', "title='{$doc->id}' class='iframe' data-width='90%'");?></td>
+              <td class="c-name"><?php echo html::a($this->createLink('doc', 'view', "docID=$doc->id&version=0", '', true), "<i class='icon icon-file-text text-muted'></i> &nbsp;" . $doc->title, '', "title='{$doc->title}' class='iframe' data-width='90%'");?></td>
+              <?php else:?>
+              <td class='c-id' title='<?php echo $doc->id;?>'><?php echo "<i class='icon icon-file-text text-muted'></i> {$doc->id}";?></td>
+              <td class='c-name' title='<?php echo $doc->title;?>'><?php echo "<i class='icon icon-file-text text-muted'></i> {$doc->title}";?></td>
+              <?php endif;?>
+              <?php endif;?>
               <td class="c-num"><?php echo $doc->fileSize ? $doc->fileSize : '-';?></td>
               <td class="c-user"><?php echo zget($users, $doc->addedBy);?></td>
               <td class="c-datetime"><?php echo formatTime($doc->addedDate, 'y-m-d');?></td>

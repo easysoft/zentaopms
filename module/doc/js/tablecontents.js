@@ -98,3 +98,7 @@ $(function()
        }
    });
 })
+$(document).on("click", '#bysearchTab', function()
+{
+    $('.main-content > .cell > .detail > .menu-actions').remove();
+});
