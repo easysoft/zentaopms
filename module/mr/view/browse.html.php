@@ -11,7 +11,7 @@
 <?php include '../../common/view/header.html.php';?>
 <div id="mainMenu" class="clearfix">
   <div class='btn-toolbar pull-left'>
-    <div class='btn-group'>
+    <div class='btn-group' id="swapper">
       <a href='javascript:;' class='btn btn-link btn-limit text-ellipsis' data-toggle='dropdown' style="max-width: 120px;">
         <span class='text' title='<?php echo $repo->name;?>'><?php echo $repo->name;?></span> <span class='caret'></span>
       </a>
