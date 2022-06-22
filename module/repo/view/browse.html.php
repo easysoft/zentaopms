@@ -29,7 +29,7 @@
               <?php foreach($reposGroup as $groupName => $group):?>
               <?php if(empty($group)) continue;?>
                 <li data-idx='<?php echo $groupName;?>' data-id='<?php echo $groupName;?>' class='has-list open in' style='cursor: pointer;'><i class='list-toggle icon'></i>
-                  <div class='hide-in-search'><a class='text-muted'><?php echo $groupName;?></a></div>
+                  <div class='hide-in-search'><a class='text-muted'><?php echo $groupName;?></a><span class='label label-outline' style='margin-left:5px;'><?php echo $lang->repo->type;?></span></div>
                   <ul data-idx='<?php echo $groupName;?>'>
                   <?php
                   foreach($group as $id => $repoName)
