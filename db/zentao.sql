@@ -9645,6 +9645,13 @@ CREATE TABLE IF NOT EXISTS `zt_risk` (
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
+-- DROP TABLE IF EXISTS `zt_riskissue`;
+CREATE TABLE IF NOT EXISTS `zt_riskissue` (
+  `risk` mediumint(8) unsigned NOT NULL,
+  `issue` mediumint(8) unsigned NOT NULL,
+  UNIQUE KEY `risk_issue` (`risk`,`issue`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
 -- DROP TABLE IF EXISTS `zt_opportunity`;
 CREATE TABLE IF NOT EXISTS `zt_opportunity` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,

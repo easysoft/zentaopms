@@ -26,6 +26,8 @@ $lang->entry->editedby    = 'Edit? par';
 $lang->entry->editedDate  = 'Edit? le';
 $lang->entry->date        = 'Requesting Time';
 $lang->entry->url         = 'Requesting URL';
+$lang->entry->calledTime  = 'Called Time';
+$lang->entry->deleted     = 'Deleted';
 
 $lang->entry->confirmDelete = 'Voulez-vous supprimer cette entr?e ?';
 $lang->entry->help          = 'Aide';
@@ -55,3 +57,4 @@ $lang->entry->errmsg['ACCOUNT_UNBOUND']       = 'Compte non li?.';
 $lang->entry->errmsg['INVALID_ACCOUNT']       = 'Compte Invalide.';
 $lang->entry->errmsg['EMPTY_ENTRY']           = 'Application innexistante.';
 $lang->entry->errmsg['CALLED_TIME']           = 'Token expir?';
+$lang->entry->errmsg['ERROR_TIMESTAMP']       = 'Timestamp Error';

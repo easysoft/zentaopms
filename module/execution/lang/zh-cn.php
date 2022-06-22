@@ -94,6 +94,7 @@ $lang->execution->viewBug             = '查看bug';
 $lang->execution->noProduct           = "无{$lang->executionCommon}";
 $lang->execution->createStory         = "提{$lang->SRCommon}";
 $lang->execution->storyTitle          = "{$lang->SRCommon}名称";
+$lang->execution->storyView           = "{$lang->SRCommon}详情";
 $lang->execution->all                 = '所有';
 $lang->execution->undone              = '未完成';
 $lang->execution->unclosed            = '未关闭';
@@ -133,6 +134,7 @@ $lang->execution->sortColumn          = '看板列卡片排序';
 $lang->execution->batchCreateStory    = "批量新建{$lang->SRCommon}";
 $lang->execution->batchCreateTask     = '批量建任务';
 $lang->execution->kanbanNoLinkProduct = "看板没有关联{$lang->productCommon}";
+$lang->execution->list                = '列表';
 
 /* Fields of zt_team. */
 $lang->execution->root     = '源ID';

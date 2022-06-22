@@ -94,6 +94,7 @@ $lang->execution->viewBug             = 'Bugs';
 $lang->execution->noProduct           = "No {$lang->productCommon} yet.";
 $lang->execution->createStory         = "Create Story";
 $lang->execution->storyTitle          = "Story Name";
+$lang->execution->storyView           = "Story Detail";
 $lang->execution->all                 = "All {$lang->executionCommon}s";
 $lang->execution->undone              = 'Unfinished ';
 $lang->execution->unclosed            = 'Unclosed';
@@ -133,6 +134,7 @@ $lang->execution->sortColumn          = 'Kanban Card Sorting';
 $lang->execution->batchCreateStory    = "Batch create {$lang->SRCommon}";
 $lang->execution->batchCreateTask     = 'Batch create task';
 $lang->execution->kanbanNoLinkProduct = "Kanban not linked {$lang->productCommon}";
+$lang->execution->list                = 'List';
 
 /* Fields of zt_team. */
 $lang->execution->root     = 'Root';

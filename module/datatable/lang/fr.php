@@ -18,11 +18,15 @@ $lang->datatable->resetGlobal        = 'Réinitialisation Globale';
 $lang->datatable->branch   = 'Branche';
 $lang->datatable->platform = 'Plateforme';
 
+$lang->datatable->moduleSetting          = 'Set Module';
 $lang->datatable->displaySetting         = 'Set list';
 $lang->datatable->showModule             = 'Montrer les noms des modules dans la page de listes';
+$lang->datatable->showBranch             = 'Show branches in the list';
 $lang->datatable->showAllModule          = 'Afficher les modules de produits';
 $lang->datatable->showModuleList[]       = 'N/A';
 $lang->datatable->showModuleList['base'] = 'Base Node';
 $lang->datatable->showModuleList['end']  = 'End Node';
 $lang->datatable->showAllModuleList[0]   = 'Cacher';
 $lang->datatable->showAllModuleList[1]   = 'Montrer';
+$lang->datatable->showBranchList[0]      = 'Hide';
+$lang->datatable->showBranchList[1]      = 'Show';

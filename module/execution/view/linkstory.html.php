@@ -55,7 +55,7 @@
       <tbody>
       <?php $storyCount = 0;?>
       <?php foreach($allStories as $story):?>
-      <?php $storyLink = $this->createLink('story', 'view', "storyID=$story->id", '', true);?>
+      <?php $storyLink = $this->createLink('execution', 'storyView', "storyID=$story->id", '', true);?>
       <tr>
         <td class='cell-id'>
           <?php echo html::checkbox('stories', array($story->id => sprintf('%03d', $story->id)));?>

@@ -10,28 +10,56 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <div id="mainMenu" class="clearfix">
-  <?php if($this->config->systemMode == 'new'):?>
-  <div id="sidebarHeader">
-    <div class="title">
-      <?php echo $lang->mr->common;?>
+  <div class='btn-toolbar pull-left'>
+    <div class='btn-group' id="swapper">
+      <a href='javascript:;' class='btn btn-link btn-limit text-ellipsis' data-toggle='dropdown' style="max-width: 120px;">
+        <span class='text' title='<?php echo $repo->name;?>'><?php echo $repo->name;?></span> <span class='caret'></span>
+      </a>
+      <div id='dropMenu' class='dropdown-menu search-list' data-ride='searchList'>
+        <div class="input-control search-box has-icon-left has-icon-right search-example">
+          <input type="search" class="form-control search-input" />
+          <label class="input-control-icon-left search-icon">
+            <i class="icon icon-search"></i>
+          </label>
+          <a class="input-control-icon-right search-clear-btn">
+            <i class="icon icon-close icon-sm"></i>
+          </a>
+        </div>
+        <div class="list-group">
+          <div class="table-row">
+            <div class="table-col">
+              <ul class="tree tree-angles" data-ride="tree">
+                <?php
+                foreach($repos as $repo)
+                {
+                    echo '<li>';
+                    $selectedClass = $repo->id == $repoID ? 'selected' : '';
+                    echo html::a(inlink('browse', "repoID=$repo->id"), $repo->name, '_self', "class='clickable search-list-item $selectedClass' title='$repo->name' data-key='$repo->name'");
+                    echo '</li>';
+                }
+                ?>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
-  <?php endif;?>
   <div class="btn-toolBar pull-left">
     <?php foreach($lang->mr->statusList as $key => $label):?>
     <?php $active = $param == $key ? 'btn-active-text' : '';?>
     <?php $label = "<span class='text'>$label</span>";?>
     <?php if($param == $key) $label .= " <span class='label label-light label-badge'>{$pager->recTotal}</span>";?>
-    <?php echo html::a(inlink('browse', "mode=status&param=$key"), $label, '', "class='btn btn-link $active'");?>
+    <?php echo html::a(inlink('browse', "repoID=$repoID&mode=status&param=$key"), $label, '', "class='btn btn-link $active'");?>
     <?php endforeach;?>
     <?php $active = $mode == 'assignee' ? 'btn-active-text' : '';?>
     <?php $label = "<span class='text'>{$lang->mr->assignedToMe}</span>";?>
     <?php if($mode == 'assignee') $label .= " <span class='label label-light label-badge'>{$pager->recTotal}</span>";?>
-    <?php echo html::a(inlink('browse', "mode=assignee&param={$this->app->user->account}"), $label, '', "class='btn btn-link $active'");?>
+    <?php echo html::a(inlink('browse', "repoID=$repoID&mode=assignee&param={$this->app->user->account}"), $label, '', "class='btn btn-link $active'");?>
     <?php $active = $mode == 'creator' ? 'btn-active-text' : '';?>
     <?php $label = "<span class='text'>{$lang->mr->createdByMe}</span>";?>
     <?php if($mode == 'creator') $label .= " <span class='label label-light label-badge'>{$pager->recTotal}</span>";?>
-    <?php echo html::a(inlink('browse', "mode=creator&param={$this->app->user->account}"), $label, '', "class='btn btn-link $active'");?>
+    <?php echo html::a(inlink('browse', "repoID=$repoID&mode=creator&param={$this->app->user->account}"), $label, '', "class='btn btn-link $active'");?>
   </div>
   <div class="btn-toolbar pull-right">
     <?php common::printLink('mr', 'create', '', "<i class='icon icon-plus'></i> " . $lang->mr->create, '', "class='btn btn-primary'");?>

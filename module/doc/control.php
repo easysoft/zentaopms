@@ -482,6 +482,7 @@ class doc extends control
         $this->view->doc              = $doc;
         $this->view->moduleOptionMenu = $this->tree->getOptionMenu($libID, 'doc', $startModuleID = 0);
         $this->view->type             = $type;
+        $this->view->lib              = $lib;
         $this->view->libs             = $this->doc->getLibs('all', $extra = 'withObject|noBook', $libID, $objectID);
         $this->view->groups           = $this->loadModel('group')->getPairs();
         $this->view->users            = $this->user->getPairs('noletter|noclosed|nodeleted', $doc->users);
@@ -857,8 +858,8 @@ class doc extends control
                 return print(html::select('groups[]', $groups, $selectedGroup, "class='form-control chosen' multiple"));
             }
             if($doclib->acl == 'open') return print(html::select('groups[]', $groups, $selectedGroup, "class='form-control chosen' multiple"));
+            if($doclib->acl == 'default') return print(html::select('groups[]', $groups, $selectedGroup, "class='form-control chosen' multiple"));
             if($doclib->acl == 'private') echo 'private';
-            if($doclib->acl == 'default') echo 'default';
             return false;
         }
 
@@ -871,11 +872,11 @@ class doc extends control
 
             if($doclib->acl == 'custom')
             {
-                return print(html::select('users[]', $users, $selectedUser, "multiple class='form-control"));
+                return print(html::select('users[]', $users, $selectedUser, "multiple class='form-control'"));
             }
-            if($doclib->acl == 'open') return print(html::select('users[]', $users, $selectedUser, "multiple class='form-control"));
+            if($doclib->acl == 'open') return print(html::select('users[]', $users, $selectedUser, "multiple class='form-control'"));
+            if($doclib->acl == 'default') return print(html::select('users[]', $users, $selectedUser, "multiple class='form-control'"));
             if($doclib->acl == 'private') echo 'private';
-            if($doclib->acl == 'default') echo 'default';
             return false;
         }
 

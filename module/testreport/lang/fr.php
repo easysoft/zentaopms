@@ -1,5 +1,6 @@
 <?php
 $lang->testreport->common       = 'Rapport de Test';
+$lang->testreport->id           = 'ID';
 $lang->testreport->browse       = 'Rapports de Test';
 $lang->testreport->create       = 'Créer un Rapport';
 $lang->testreport->edit         = 'Modifier Rapport';
@@ -69,24 +70,27 @@ $lang->testreport->bugStageList['generated'] = 'Generated Bugs';
 $lang->testreport->bugStageList['legacy']    = 'Legacy Bugs';
 $lang->testreport->bugStageList['resolved']  = 'Resolved Bugs';
 
-$lang->testreport->caseSummary    = 'Total <strong>%s</strong> casTests. <strong>%s</strong> casTests joués. <strong>%s</strong> résultats générés. <strong>%s</strong> casTests ont échoué.';
-$lang->testreport->buildSummary   = 'Testé <strong>%s</strong> builds.';
-$lang->testreport->confirmDelete  = 'Voulez-vous supprimer ce rapport ?';
-$lang->testreport->moreNotice     = "Plus de fonctionnalités peuvent être étendues en référence au manuel de l'extension ZenTao, ou vous pouvez nous contacter à renee@easysoft.ltd pour la personnalisation.";
-$lang->testreport->exportNotice   = "Exporté par <a href='https://www.zentao.pm' target='_blank' style='color:grey'>ZenTao</a>";
-$lang->testreport->noReport       = "Aucun rapport n'a été généré. Vérifiez plus tard.";
-$lang->testreport->foundBugTip    = "Bugs trouvés dans cette période de build et les build affectés sont dans la période de test.";
-$lang->testreport->legacyBugTip   = "Bigs Actifs, ou bugs qui n'ont pas été résolus dans la période de test.";
-$lang->testreport->fromCaseBugTip = "Bugs trouvés en jouant des CasTests pendant la période de test.";
-$lang->testreport->errorTrunk     = "Vous ne pouvez pas créer un rapport de test pour le tronc. Modifiez le build lié !";
-$lang->testreport->noTestTask     = "Pas de campagne de test pour ce {$lang->productCommon}, aucun rapport ne peut être généré. Choisissez un {$lang->productCommon} avec des campagnes de recette et vous pourrez produire des rapports.";
-$lang->testreport->noObjectID     = "Pas de campagne de test ou un {$lang->executionCommon} est sélectionné, aucun rapport ne peut être généré.";
-$lang->testreport->moreProduct    = "Les rapports de test ne peuvent être produits que pour le même {$lang->productCommon}.";
-$lang->testreport->hiddenCase     = "Hide %s use cases";
+$lang->testreport->caseSummary     = 'Total <strong>%s</strong> casTests. <strong>%s</strong> casTests joués. <strong>%s</strong> résultats générés. <strong>%s</strong> casTests ont échoué.';
+$lang->testreport->buildSummary    = 'Testé <strong>%s</strong> builds.';
+$lang->testreport->confirmDelete   = 'Voulez-vous supprimer ce rapport ?';
+$lang->testreport->moreNotice      = "Plus de fonctionnalités peuvent être étendues en référence au manuel de l'extension ZenTao, ou vous pouvez nous contacter à renee@easysoft.ltd pour la personnalisation.";
+$lang->testreport->exportNotice    = "Exporté par <a href='https://www.zentao.pm' target='_blank' style='color:grey'>ZenTao</a>";
+$lang->testreport->noReport        = "Aucun rapport n'a été généré. Vérifiez plus tard.";
+$lang->testreport->foundBugTip     = "Bugs trouvés dans cette période de build et les build affectés sont dans la période de test.";
+$lang->testreport->legacyBugTip    = "Bigs Actifs, ou bugs qui n'ont pas été résolus dans la période de test.";
+$lang->testreport->activatedBugTip = "Reactived bugs during the testtask.";
+$lang->testreport->fromCaseBugTip  = "Bugs trouvés en jouant des CasTests pendant la période de test.";
+$lang->testreport->errorTrunk      = "Vous ne pouvez pas créer un rapport de test pour le tronc. Modifiez le build lié !";
+$lang->testreport->noTestTask      = "Pas de campagne de test pour ce {$lang->productCommon}, aucun rapport ne peut être généré. Choisissez un {$lang->productCommon} avec des campagnes de recette et vous pourrez produire des rapports.";
+$lang->testreport->noObjectID      = "Pas de campagne de test ou un {$lang->executionCommon} est sélectionné, aucun rapport ne peut être généré.";
+$lang->testreport->moreProduct     = "Les rapports de test ne peuvent être produits que pour le même {$lang->productCommon}.";
+$lang->testreport->hiddenCase      = "Hide %s use cases";
+$lang->testreport->goalTip         = "Descriptive information about the {$lang->execution->common} of this build";
 
 $lang->testreport->bugSummary = <<<EOD
-Total <strong>%s</strong> Bugs signalés <a data-toggle='tooltip' class='text-warning' title='{$lang->testreport->foundBugTip}'><i class='icon-help'></i></a>,
-<strong>%s</strong> Bugs restent non résolus <a data-toggle='tooltip' class='text-warning' title='{$lang->testreport->legacyBugTip}'><i class='icon-help'></i></a>,
-<strong>%s</strong> Bugs trouvés en jouant des CasTests<a data-toggle='tooltip' class='text-warning' title='{$lang->testreport->fromCaseBugTip}'><i class='icon-help'></i></a>.
-Taux Effectif de Bugs <a data-toggle='tooltip' class='text-warning' title='Résolution est résolue ou reportée / statut est résolu ou fermé'><i class='icon-help'></i></a>: <strong>%s</strong>，Taux de Bugs découverts par des CasTests<a data-toggle='tooltip' class='text-warning' title='Bugs découverts en jouant des CasTests / bugs'><i class='icon-help'></i></a>: <strong>%s</strong>
+Total <strong>%s</strong> Bugs reported <a data-toggle='tooltip' class='text-warning' title='{$lang->testreport->foundBugTip}'><i class='icon-help'></i></a>,
+<strong>%s</strong> Bugs remained unresolved <a data-toggle='tooltip' class='text-warning' title='{$lang->testreport->legacyBugTip}'><i class='icon-help'></i></a>,
+<strong>%s</strong> Bugs reactivated <a data-toggle='tooltip' class='text-warning' title='{$lang->testreport->activatedBugTip}'><i class='icon-help'></i></a>,
+<strong>%s</strong> Bugs found from the running of cases<a data-toggle='tooltip' class='text-warning' title='{$lang->testreport->fromCaseBugTip}'><i class='icon-help'></i></a>.
+Bug Effective Rate <a data-toggle='tooltip' class='text-warning' title='Resolution is resolved or delayed / status is resolved or closed'><i class='icon-help'></i></a>: <strong>%s</strong>，Bugs-reported-from-cases rate<a data-toggle='tooltip' class='text-warning' title='Bugs created from cases / bugs'><i class='icon-help'></i></a>: <strong>%s</strong>
 EOD;
