@@ -56,9 +56,13 @@
               <?php echo $app->user->realname;?>
               <span class='label-action'><?php echo ' ' . $action->actionLabel;?></span>
               <?php if($action->action != 'login' and $action->action != 'logout'):?>
-              <span class="text-muted"><?php echo $action->objectLabel;?></span>
+              <span><?php echo $action->objectLabel;?></span>
+              <?php if($action->objectID):?>
+              <span class="label label-id"><?php echo $action->objectID;?></span>
+              <?php endif;?>
               <?php $tab = '';?>
               <?php if($action->objectType == 'meeting') $tab = $action->project ? "data-app='project'" : "data-app='my'";?>
+              <span class='label-name'>
               <?php
               if(($config->edition == 'max' and strpos($config->action->assetType, $action->objectType) !== false) and empty($action->objectName))
               {
@@ -77,9 +81,7 @@
                   echo html::a($action->objectLink, $action->objectName, '', $tab);
               }
               ?>
-              <?php if($action->objectID):?>
-              <span class="label label-id"><?php echo $action->objectID;?></span>
-              <?php endif;?>
+              </span>
               <?php endif;?>
             </span>
           </div>
