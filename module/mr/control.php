@@ -18,13 +18,13 @@ class mr extends control
     public function browse($repoID = 0, $mode = 'status', $param = 'opened', $objectID = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         $this->app->loadClass('pager', $static = true);
-        $pager  = new pager($recTotal, $recPerPage, $pageID);
+        $pager = new pager($recTotal, $recPerPage, $pageID);
 
         $repos = $this->loadModel('repo')->getListBySCM('Gitlab');
         if(empty($repos)) $this->locate($this->repo->createLink('create'));
 
         if($repoID == 0) $repoID = $this->repo->saveState($repoID, $objectID);
-        $repo   = $this->repo->getRepoByID($repoID);
+        $repo = $this->repo->getRepoByID($repoID);
         $this->loadModel('ci')->setMenu();
 
         $projects = $this->mr->getAllGitlabProjects($repoID);
