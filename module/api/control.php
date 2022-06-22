@@ -72,7 +72,7 @@ class api extends control
         }
 
         $this->setMenu($libID, $moduleID);
-        $this->lang->TRActions = '<a class="btn btn-link querybox-toggle" id="bysearchTab"><i class="icon icon-search muted"></i> ' . $this->lang->api->search . '</a>' . $this->lang->TRActions;
+        if($apiID == 0) $this->lang->TRActions = '<a class="btn btn-link querybox-toggle" id="bysearchTab"><i class="icon icon-search muted"></i> ' . $this->lang->api->search . '</a>' . $this->lang->TRActions;
 
         /* Build the search form. */
         $queryID   = $param == 'bySearch' ? (int)$queryID : 0;

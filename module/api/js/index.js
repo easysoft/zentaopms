@@ -15,7 +15,6 @@ $(document).ready(function()
             $('#outline li.has-list>i+ul').prev('i').remove();
         });
     });
-    if(apiID > 0) $("#bysearchTab").remove();
 });
 
 /**
