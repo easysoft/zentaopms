@@ -28,10 +28,12 @@ class api extends control
      * @param  int    $version
      * @param  int    $release
      * @param  int    $appendLib
+     * @param  int    $queryID
+     * @param  string $param
      * @access public
      * @return void
      */
-    public function index($libID = 0, $moduleID = 0, $apiID = 0, $version = 0, $release = 0, $appendLib = 0)
+    public function index($libID = 0, $moduleID = 0, $apiID = 0, $version = 0, $release = 0, $appendLib = 0, $queryID = 0, $param = '')
     {
         /* Get all api doc libraries. */
         $libs = $this->doc->getApiLibs($appendLib);
@@ -71,6 +73,18 @@ class api extends control
 
         $this->setMenu($libID, $moduleID);
 
+        /* Build the search form. */
+        $queryID   = $param == 'bySearch' ? (int)$queryID : 0;
+        $actionURL = $this->createLink('api', 'index', "libID=$libID&moduleID=$moduleID&apiID=$apiID&version=$version&release=$release&appendLib=$appendLib&queryID=myQueryID&param=bySearch");
+        $this->api->buildSearchForm($lib,$queryID, $actionURL);
+
+        if($param == 'bySearch')
+        {
+            $apiList = $this->api->getApiListBySearch($libID, $queryID);
+            $this->view->apiList  = $apiList;
+            $this->view->typeList = $this->api->getTypeList($libID);
+        }
+
         $this->view->lib        = $lib;
         $this->view->isRelease  = $release > 0;
         $this->view->release    = $release;
@@ -78,6 +92,7 @@ class api extends control
         $this->view->libID      = $libID;
         $this->view->apiID      = $apiID;
         $this->view->libs       = $libs;
+        $this->view->param      = $param;
         $this->view->moduleTree = $libID ? $this->doc->getApiModuleTree($libID, $apiID, $release, $moduleID) : '';
         $this->view->users      = $this->user->getPairs('noclosed,noletter');
 
@@ -601,7 +616,7 @@ class api extends control
         common::setMenuVars('doc', $libID);
 
         /* Global struct link. */
-        $menu = '';
+        $menu = '<a class="btn btn-link querybox-toggle" id="bysearchTab"><i class="icon icon-search muted"></i> ' . $this->lang->api->search . '</a>';
 
         if($libID and common::hasPriv('api', 'createRelease'))
         {
