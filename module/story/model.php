@@ -4133,12 +4133,22 @@ class storyModel extends model
      */
     public function printCell($col, $story, $users, $branches, $storyStages, $modulePairs = array(), $storyTasks = array(), $storyBugs = array(), $storyCases = array(), $mode = 'datatable', $storyType = 'story', $execution = '', $isShowBranch = '')
     {
-        $module      = $this->app->rawModule == 'product' ? 'story' : $this->app->rawModule;
-        $canView     = common::hasPriv($module, 'view');
         $tab         = $this->app->tab;
         $executionID = empty($execution) ? $this->session->execution : $execution->id;
-        $storyLink   = $tab == 'execution' ? helper::createLink('story', 'view', "storyID=$story->id&version=$story->version&param=$executionID") : helper::createLink($module, 'view', "storyID=$story->id");
         $account     = $this->app->user->account;
+        $storyLink   = helper::createLink('story', 'view', "storyID=$story->id");
+        $canView     = common::hasPriv('story', 'view');
+
+        if($tab == 'project')
+        {
+            $storyLink = helper::createLink('projectstory', 'view', "storyID=$story->id");
+            $canView   = common::hasPriv('projectstory', 'view');
+        }
+        elseif($tab == 'execution')
+        {
+            $storyLink = helper::createLink('execution', 'storyView', "storyID=$story->id");
+            $canView   = common::hasPriv('execution', 'storyView');
+        }
 
         /* Check the product is closed. */
         $canBeChanged = common::canBeChanged('story', $story);

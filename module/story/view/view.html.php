@@ -268,7 +268,7 @@
                   {
                       foreach($story->planTitle as $planID => $planTitle)
                       {
-                          if(!common::printLink('productplan', 'view', "planID=$planID", $planTitle, '', "data-app='product'")) echo $lanTitle;
+                          if(!common::printLink('productplan', 'view', "planID=$planID", $planTitle, '', "data-app='product'")) echo $planTitle;
                           echo '<br />';
                       }
                   }

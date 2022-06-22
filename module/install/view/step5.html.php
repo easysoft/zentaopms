@@ -46,7 +46,7 @@
     </div>
     <div class='modal-body'>
       <form method='post'>
-        <table class='table table-form mw-400px' style='margin: 0 auto'>
+        <table class='table table-form mw-500px' style='margin: 0 auto'>
           <tr>
             <th class='c-company'><?php echo $lang->install->company;?></th>
             <td class='c-company-value'><?php echo html::input('company', '', "class='form-control'");?></td>
@@ -61,7 +61,8 @@
           </tr>
           <tr>
             <th><?php echo $lang->install->password;?></th>
-            <td><?php echo html::input('password', '', "class='form-control'");?></td>
+            <td><?php echo html::input('password', '', "class='form-control' oninput=\"this.value = this.value.replace(/[\u4e00-\u9fa5d]/g, '');\"");?></td>
+            <td><?php echo $lang->user->placeholder->password1;?></td>
           </tr>
           <tr>
             <th></th><td><?php echo html::checkBox('importDemoData', $lang->install->importDemoData);?></td>

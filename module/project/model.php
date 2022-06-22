@@ -1868,9 +1868,7 @@ class projectModel extends model
         $projectType = 'project';
         $accounts    = array_unique($accounts);
         $oldJoin     = $this->dao->select('`account`, `join`')->from(TABLE_TEAM)->where('root')->eq($projectID)->andWhere('type')->eq($projectType)->fetchPairs();
-        $this->dao->delete()->from(TABLE_TEAM)->where('root')->eq($projectID)->andWhere('type')->eq($projectType)->exec();
 
-        $projectMember = array();
         foreach($accounts as $key => $account)
         {
             if(empty($account)) continue;
@@ -1885,6 +1883,14 @@ class projectModel extends model
                 dao::$errors['message'][]  = $this->lang->project->errorHours;
                 return false;
             }
+        }
+
+        $this->dao->delete()->from(TABLE_TEAM)->where('root')->eq($projectID)->andWhere('type')->eq($projectType)->exec();
+
+        $projectMember = array();
+        foreach($accounts as $key => $account)
+        {
+            if(empty($account)) continue;
 
             $member          = new stdclass();
             $member->role    = $roles[$key];
