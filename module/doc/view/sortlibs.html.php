@@ -19,12 +19,14 @@
     <div class='doclib-name'><?php echo $lang->doclib->name?></div>
     <?php $libIdList = ',';?>
     <form id='libs' class='load-indicator main-form' method='post' target='hiddenwin'>
-      <?php foreach($libs as $libID => $libName):?>
-      <?php $libIdList .= "$libID,";?>
-      <div class='lib' data-id='<?php echo $libID;?>'>
-        <span class='lib-name'><?php echo $libName;?></span><i class='icon-move'></i>
+      <div class='libList'>
+        <?php foreach($libs as $libID => $libName):?>
+        <?php $libIdList .= "$libID,";?>
+        <div class='lib' data-id='<?php echo $libID;?>'>
+          <span class='lib-name'><?php echo $libName;?></span><i class='icon-move'></i>
+        </div>
+        <?php endforeach;?>
       </div>
-      <?php endforeach;?>
       <?php echo html::hidden('libIdList', trim($libIdList, ','));?>
       <div class='text-center'><?php echo html::submitButton($lang->save);?></div>
     </form>
