@@ -53,13 +53,13 @@ $lang->admin->bind->caption = 'Konto verknüpfen';
 $lang->admin->bind->success = "Konto wurde verknüpft!";
 
 $lang->admin->safe = new stdclass();
-$lang->admin->safe->common     = 'Sicherheits-Regeln';
-$lang->admin->safe->set        = 'PasswortStärke';
-$lang->admin->safe->password   = 'Passwort Stärke';
-$lang->admin->safe->weak       = 'Schwache Passwörter';
-$lang->admin->safe->reason     = 'Typ';
-$lang->admin->safe->checkWeak  = 'Schwache Passwörter prüfen';
-$lang->admin->safe->changeWeak = 'Ihr Passwort ist schwach. Bitte ändern.';
+$lang->admin->safe->common       = 'Sicherheits-Regeln';
+$lang->admin->safe->set          = 'PasswortStärke';
+$lang->admin->safe->password     = 'Passwort Stärke';
+$lang->admin->safe->weak         = 'Schwache Passwörter';
+$lang->admin->safe->reason       = 'Typ';
+$lang->admin->safe->checkWeak    = 'Schwache Passwörter prüfen';
+$lang->admin->safe->changeWeak   = 'Ihr Passwort ist schwach. Bitte ändern.';
 $lang->admin->safe->loginCaptcha = 'Login using CAPTCHA';
 $lang->admin->safe->modifyPasswordFirstLogin = 'Passwort nach der ersten Anmeldung ändern';
 

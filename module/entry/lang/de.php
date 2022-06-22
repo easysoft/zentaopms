@@ -26,6 +26,8 @@ $lang->entry->editedby    = 'Bearbeitet von';
 $lang->entry->editedDate  = 'Bearbeiten am';
 $lang->entry->date        = 'Request Zeit';
 $lang->entry->url         = 'Request URL';
+$lang->entry->calledTime  = 'Called Time';
+$lang->entry->deleted     = 'Deleted';
 
 $lang->entry->confirmDelete = 'Möchten Sie diesen Eintrag löschen?';
 $lang->entry->help          = 'Hilfe';

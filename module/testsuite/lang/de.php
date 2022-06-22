@@ -24,11 +24,14 @@ $lang->testsuite->deleted          = 'gelöscht';
 $lang->testsuite->successSaved     = 'Saved';
 
 $lang->testsuite->id             = 'ID';
+$lang->testsuite->pri            = 'Priority';
 $lang->testsuite->common         = 'Test Suite';
+$lang->testsuite->project        = 'Project';
 $lang->testsuite->product        = $lang->productCommon;
 $lang->testsuite->name           = 'Name';
 $lang->testsuite->type           = 'Type';
 $lang->testsuite->desc           = 'Beschreibung';
+$lang->testsuite->mailto         = 'Mailto';
 $lang->testsuite->author         = 'Zugriffskontrolle';
 $lang->testsuite->addedBy        = 'Ersteller';
 $lang->testsuite->addedDate      = 'Datum';

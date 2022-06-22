@@ -56,6 +56,7 @@ $lang->todo->pri          = 'Priorität';
 $lang->todo->name         = 'Titel';
 $lang->todo->status       = 'Status';
 $lang->todo->desc         = 'Beschreibung';
+$lang->todo->config       = 'Config';
 $lang->todo->private      = 'Privat';
 $lang->todo->cycleDay     = 'Tag';
 $lang->todo->cycleWeek    = 'Woche';
@@ -68,6 +69,7 @@ $lang->todo->finishedDate = 'FinishedDate';
 $lang->todo->closedBy     = 'ClosedBy';
 $lang->todo->closedDate   = 'ClosedDate';
 $lang->todo->deadline     = 'Fällig';
+$lang->todo->deleted      = 'Deleted';
 
 $lang->todo->cycleDaysLabel  = 'Interval days';
 $lang->todo->beforeDaysLabel = 'Days in advance';
@@ -110,6 +112,8 @@ $lang->todo->lblClickCreate = "Klicken um einen ToDo hinzuzufügen";
 $lang->todo->noTodo         = 'Keine ToDos dieses Typs.';
 $lang->todo->noAssignedTo   = "Zuordung an darf nicht leer sein.";
 $lang->todo->unfinishedTodo = 'The todos of ID %s are not finished, and can not close.';
+$lang->todo->today          = 'Todo Today';
+$lang->todo->selectProduct  = "Please select a product";
 
 $lang->todo->periods['all']             = 'Alle';
 $lang->todo->periods['before']          = 'Nicht abgeschlossen';

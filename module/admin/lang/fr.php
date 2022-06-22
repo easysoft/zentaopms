@@ -7,7 +7,7 @@
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     admin
  * @version     $Id: en.php 4460 2013-02-26 02:28:02Z chencongzhi520@gmail.com $
- * @link        https://www.zentao.pm
+ * @link        http://www.zentao.net
  */
 $lang->admin->index         = 'Admin Home';
 $lang->admin->checkDB       = 'Check Database';
@@ -53,13 +53,13 @@ $lang->admin->bind->caption = 'Lier au compte';
 $lang->admin->bind->success = "Le compte est associé !";
 
 $lang->admin->safe = new stdclass();
-$lang->admin->safe->common     = 'Politique de sécurité';
-$lang->admin->safe->set        = 'Paramétrages du Mot de passe';
-$lang->admin->safe->password   = 'Force du Mot de passe';
-$lang->admin->safe->weak       = 'Mots de passes non sécurisés courrants';
-$lang->admin->safe->reason     = 'Type';
-$lang->admin->safe->checkWeak  = 'Balayage des mots de passe faibles';
-$lang->admin->safe->changeWeak = 'Forcer le changement des mots de passe faibles';
+$lang->admin->safe->common       = 'Politique de sécurité';
+$lang->admin->safe->set          = 'Paramétrages du Mot de passe';
+$lang->admin->safe->password     = 'Force du Mot de passe';
+$lang->admin->safe->weak         = 'Mots de passes non sécurisés courrants';
+$lang->admin->safe->reason       = 'Type';
+$lang->admin->safe->checkWeak    = 'Balayage des mots de passe faibles';
+$lang->admin->safe->changeWeak   = 'Forcer le changement des mots de passe faibles';
 $lang->admin->safe->loginCaptcha = 'Login using CAPTCHA';
 $lang->admin->safe->modifyPasswordFirstLogin = 'Forcer le changement du mot de passe après la première connexion';
 
@@ -79,7 +79,7 @@ $lang->admin->safe->reasonList['birthday'] = 'Identique à la date de naissance'
 $lang->admin->safe->modifyPasswordList[1] = 'Oui';
 $lang->admin->safe->modifyPasswordList[0] = 'Non';
 
-$lang->admin->safe->loginCaptchaList[1] = 'Oui'
+$lang->admin->safe->loginCaptchaList[1] = 'Yes';
 $lang->admin->safe->loginCaptchaList[0] = 'Non';
 
 $lang->admin->safe->noticeMode   = "Le mot de passe sera vérifié quand un utilisateur se connectera ou qu'un utilisateur sera créé ou modifier.";

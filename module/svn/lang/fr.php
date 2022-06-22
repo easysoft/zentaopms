@@ -7,7 +7,7 @@
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     svn
  * @version     $Id$
- * @link        https://www.zentao.pm
+ * @link        http://www.zentao.net
  */
 /* Methods. */
 $lang->svn->common  = 'Subversion';
