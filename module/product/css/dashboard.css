@@ -2,3 +2,6 @@
 .block-release .panel-body {padding-bottom: 50px;}
 .block-release .panel-body > .btn.pull-right {position: absolute; right: 20px; bottom: 20px;}
 .release-line li .title {overflow: hidden; text-overflow: ellipsis; white-space: nowrap;}
+
+.block-dynamic .label-action {margin-left: 12px;}
+.block-dynamic .label-action + a {color: #838A9D;}

@@ -11,17 +11,42 @@
 <?php include '../../common/view/header.html.php';?>
 <div id='mainMenu' class='clearfix'>
   <div class='btn-toolbar pull-left'>
-    <div class='btn-group'>
-      <a href='javascript:;' class='btn btn-link btn-limit text-ellipsis' data-toggle='dropdown' style="max-width: 120px;"><span class='text' title='<?php echo $repo->name;?>'><?php echo $repo->name;?></span> <span class='caret'></span></a>
-      <ul class='dropdown-menu' style='max-height:240px; max-width: 300px; overflow-y:auto'>
-        <?php
-        foreach($repos as $id => $repoName)
-        {
-            $isSelected = $id == $repoID ? 'class="selected"' : '';
-            echo "<li $isSelected>" . html::a($this->createLink('repo', 'browse', "repoID=$id&branchID=&objectID=$objectID"), $repoName, '', "title='{$repoName}' class='text-ellipsis' data-app='{$app->tab}'") . "</li>";
-        }
-        ?>
-      </ul>
+    <div class='btn-group group'>
+      <button data-toggle='dropdown' type='button' class='btn btn-link btn-limit repo-select text-ellipsis' title='<?php $repos[$repoID];?>'>
+        <span class='text'><?php echo $repos[$repoID];?></span>
+        <span class='caret' style='margin-bottom: -1px'></span>
+      </button>
+      <div id='dropMenuRepo' class='dropdown-menu search-list' data-ride='searchList' data-url=''>
+        <div class="input-control search-box has-icon-left has-icon-right search-example">
+        <input type="search" class="form-control search-input" id="searchSource"/>
+          <label class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label>
+          <a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a>
+        </div>
+        <div class="table-row">
+          <div class="table-col col-left">
+            <div class="list-group" id="repoList">
+              <ul class='tree tree-angles' data-ride='tree'>
+              <?php foreach($repoGroup as $groupName => $group):?>
+              <?php if(empty($group)) continue;?>
+                <li data-idx='<?php echo $groupName;?>' data-id='<?php echo $groupName;?>' class='has-list open in' style='cursor: pointer;'><i class='list-toggle icon'></i>
+                  <div class='hide-in-search'><a class='text-muted'><?php echo $groupName;?></a><span class='label label-outline' style='margin-left:5px;'><?php echo $lang->repo->type;?></span></div>
+                  <ul data-idx='<?php echo $groupName;?>'>
+                  <?php
+                  foreach($group as $id => $repoName)
+                  {
+                      $isSelected = $id == $repoID ? 'selected' : '';
+                      $link = $this->createLink('repo', 'browse', "repoID=$id&branchID=&objectID=$objectID");
+                      echo "<li data-idx='$repoName' data-id='$groupName-$repoName'><a href='{$link}' id='$groupName-$repoName' class='$isSelected text-ellipsis' title='$repoName' data-key='$repoName' data-app='{$app->tab}'>$repoName</a></li>";
+                  }
+                  ?>
+                  </ul>
+                </li>
+              <?php endforeach;?>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
     <?php if(!empty($branches)):?>
     <div class='btn-group'>

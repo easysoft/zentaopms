@@ -73,8 +73,12 @@
               <span class='label-action'><?php echo ' ' . $action->actionLabel;?></span>
               <?php if($action->action != 'login' and $action->action != 'logout'):?>
               <span class="text"><?php echo $action->objectLabel;?></span>
+              <?php if($action->objectID):?>
+              <span class="label label-id"><?php echo $action->objectID;?></span>
+              <?php endif;?>
               <?php $tab = '';?>
               <?php if($action->objectType == 'meeting') $tab = $action->project ? "data-app='project'" : "data-app='my'";?>
+              <span class="label-name">
               <?php
               if(empty($action->objectName) and $action->objectID)
               {
@@ -93,9 +97,7 @@
                   echo html::a($action->objectLink, $action->objectName, '', $tab);
               }
               ?>
-              <?php if($action->objectID):?>
-              <span class="label label-id"><?php echo $action->objectID;?></span>
-              <?php endif;?>
+              </span>
               <?php endif;?>
             </span>
           </div>

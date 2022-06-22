@@ -65,13 +65,13 @@
           <td title="<?php echo $task->left . ' ' . $lang->execution->workHour;?>"><?php echo $task->left . ' ' . $lang->execution->workHourUnit;?></td>
           <td class=<?php if(isset($task->delay)) echo 'delayed';?>><?php if(substr($task->deadline, 0, 4) > 0) echo $task->deadline;?></td>
           <td><span class='status-task status-<?php echo $task->status;?>'><?php echo $this->processStatus('task', $task);?></span></td>
-          <td class='text-left nobr'>
+	  <td class='text-left text-ellipsis' title="<?php echo $task->storyTitle;?>">
             <?php
             if($task->storyID)
             {
-                if(common::hasPriv('story', 'view'))
+                if(common::hasPriv('execution', 'storyView'))
                 {
-                    echo html::a($this->createLink('story', 'view', "storyid=$task->storyID"), $task->storyTitle, '', "class='preview'", true, isonlybody());
+                    echo html::a($this->createLink('execution', 'storyView', "storyid=$task->storyID"), $task->storyTitle, '', "class='preview'", true, isonlybody());
                 }
                 else
                 {

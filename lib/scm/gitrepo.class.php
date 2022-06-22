@@ -125,6 +125,9 @@ class GitRepo
         $list = execCmd($cmd . ' 2>&1', 'array', $result);
         if($result) return array();
 
+        /* Get default branch. */
+        $defaultBranch = execCmd("$this->client symbolic-ref refs/remotes/origin/HEAD | sed 's@^refs/remotes/origin/@@'");
+
         $branches = array();
         foreach($list as $localBranch)
         {
@@ -132,9 +135,12 @@ class GitRepo
 
             $localBranch = trim($localBranch);
             if(empty($localBranch))continue;
-            $branches[$localBranch] = $localBranch;
+            if($localBranch != $defaultBranch) $branches[$localBranch] = $localBranch;
         }
+
         asort($branches);
+        $branches = array($defaultBranch => $defaultBranch) + $branches;
+
         return $branches;
     }
 
@@ -552,8 +558,10 @@ class GitRepo
             else
             {
                 $file = explode(' ', $commit);
-                $file = end($file);
-                list($action, $path) = explode("\t", $file);
+                $file = explode("\t", end($file));
+                if(!isset($file[1])) $file[1] = '';
+                list($action, $path) = $file;
+
                 $parsedFile = new stdclass();
                 $parsedFile->revision = $hash;
                 $parsedFile->path     = '/' . trim($path);

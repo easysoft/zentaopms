@@ -7,7 +7,7 @@
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     tree
  * @version     $Id: en.php 5045 2013-07-06 07:04:40Z zhujinyonging@gmail.com $
- * @link        https://www.zentao.pm
+ * @link        http://www.zentao.net
  */
 $lang->tree = new stdclass();
 $lang->tree->common             = 'Module';
@@ -24,6 +24,7 @@ $lang->tree->manageBug          = 'Gérer Bugs';
 $lang->tree->manageCase         = 'Gérer CasTests';
 $lang->tree->manageCaseLib      = 'Gérer Librairie de recette';
 $lang->tree->manageCustomDoc    = 'Gérer la librairie de Doc';
+$lang->tree->manageApiChild     = 'Manage API Directory';
 $lang->tree->updateOrder        = 'Rang Module';
 $lang->tree->manageChild        = 'Gérer Sous-Module';
 $lang->tree->manageStoryChild   = 'Gérer Sous-Module';
@@ -42,6 +43,7 @@ $lang->tree->confirmDelCategory = 'Voulez-vous supprimer cette catégorie et ses
 $lang->tree->confirmDeleteLine  = 'Voulez-vous supprimer cette ligne de produit ?';
 $lang->tree->confirmRoot        = "Les changements du {$lang->productCommon} vont impacter les stories, bugs, casTests du {$lang->productCommon} auquel ils appartiennent, ainsi que les associations de {$lang->executionCommon} et {$lang->productCommon}, ce qui est dangereux. Voulez-vous malgré tout effectuer le changement ?";
 $lang->tree->confirmRoot4Doc    = "Toute modification apportée à la bibliothèque modifiera le document de la bibliothèque à laquelle elle appartient, ce qui est dangereux. Voulez-vous le changer ?";
+$lang->tree->noSubmodule        = "There are no copyable submodules under the current module!";
 $lang->tree->successSave        = 'Sauvé.';
 $lang->tree->successFixed       = 'Corrigé.';
 $lang->tree->repeatName         = 'Le nom "%s" existe déjà !';
@@ -49,8 +51,10 @@ $lang->tree->shouldNotBlank     = 'Module name should not be blank!';
 
 $lang->tree->module       = 'Module';
 $lang->tree->name         = 'Nom';
+$lang->tree->wordName     = 'Name';
 $lang->tree->line         = 'Ligne Produit';
 $lang->tree->cate         = 'Catégorie';
+$lang->tree->dir          = 'Directory';
 $lang->tree->root         = 'Racine';
 $lang->tree->branch       = 'Plateforme/Branche';
 $lang->tree->path         = 'Chemin';

@@ -10,6 +10,10 @@
  * @link        http://www.zentao.net
  */
 $lang->search->common        = 'Suche';
+$lang->search->id            = 'ID';
+$lang->search->editedDate    = 'Edited Date';
+$lang->search->key           = 'Key';
+$lang->search->value         = 'Value';
 $lang->search->reset         = 'Zurücksetzen';
 $lang->search->saveQuery     = 'Speichern';
 $lang->search->myQuery       = 'Meine Suchen';
@@ -25,6 +29,7 @@ $lang->search->me            = 'Ich';
 $lang->search->noQuery       = 'Keine Suche gespeichert';
 $lang->search->onMenuBar     = 'In Menü anzeigen';
 $lang->search->custom        = 'Eigene';
+$lang->search->setCommon     = 'Set as public query criteria';
 
 $lang->search->account  = 'Konto';
 $lang->search->module   = 'Module';
@@ -69,6 +74,7 @@ $lang->search->result            = 'Search Results';
 $lang->search->buildSuccessfully = 'Search index initialized.';
 $lang->search->executeInfo       = '%s search results for you in %s seconds.';
 $lang->search->buildResult       = "Create index %s and created <strong class='%scount'>%s</strong> records.";
+$lang->search->queryTips         = "Separate ids with comma";
 
 $lang->search->modules['all']         = 'All';
 $lang->search->modules['task']        = 'Task';
@@ -94,5 +100,6 @@ $lang->search->objectTypeList['story']            = $lang->SRCommon;
 $lang->search->objectTypeList['requirement']      = $lang->URCommon;
 $lang->search->objectTypeList['stage']            = 'stage';
 $lang->search->objectTypeList['sprint']           = $lang->executionCommon;
+$lang->search->objectTypeList['kanban']           = 'kanban';
 $lang->search->objectTypeList['commonIssue']      = 'Issue';
 $lang->search->objectTypeList['stakeholderIssue'] = 'Stakeholder Issue';

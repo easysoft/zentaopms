@@ -60,6 +60,8 @@ $lang->api->confirmDeleteLib = "您确定删除该接口库吗？";
 $lang->api->filterStruct     = "使用数据结构填充";
 $lang->api->defaultVersion   = "当前版本";
 $lang->api->zentaoAPI        = "禅道API文档v1";
+$lang->api->search           = "搜索";
+$lang->api->allLibs          = "全部接口库";
 
 /* Common access control lang. */
 $lang->api->whiteList          = '白名单';
@@ -124,6 +126,12 @@ $lang->api->query              = '请求参数';
 $lang->api->params             = '请求体';
 $lang->api->response           = '请求响应';
 $lang->api->responseExample    = '响应示例';
+$lang->api->id                 = '接口编号';
+$lang->api->addedBy            = '由谁添加';
+$lang->api->addedDate          = '添加时间';
+$lang->api->editedBy           = '由谁更新';
+$lang->api->editedDate         = '更新时间';
+$lang->api->version            = '版本号';
 $lang->api->res                = new stdClass();
 $lang->api->res->name          = '名称';
 $lang->api->res->desc          = '描述';

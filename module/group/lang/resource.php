@@ -769,6 +769,7 @@ $lang->resource->execution->whitelist         = 'whitelist';
 $lang->resource->execution->addWhitelist      = 'addWhitelist';
 $lang->resource->execution->unbindWhitelist   = 'unbindWhitelist';
 $lang->resource->execution->storyEstimate     = 'storyEstimate';
+$lang->resource->execution->storyView         = 'storyView';
 if($config->systemMode == 'new') $lang->resource->execution->executionkanban = 'kanbanAction';
 $lang->resource->execution->kanban            = 'RDKanban';
 //if($config->systemMode == 'classic') $lang->resource->project->list = 'list';
@@ -1217,6 +1218,7 @@ $lang->resource->doc->collect       = 'collectAction';
 $lang->resource->doc->tableContents = 'tableContents';
 $lang->resource->doc->showFiles     = 'showFiles';
 $lang->resource->doc->updateOrder   = 'updateOrder';
+$lang->resource->doc->sortLibs      = 'sortLibs';
 
 $lang->doc->methodOrder[0]  = 'index';
 $lang->doc->methodOrder[5]  = 'browse';
@@ -1233,6 +1235,8 @@ $lang->doc->methodOrder[55] = 'objectLibs';
 $lang->doc->methodOrder[60] = 'collect';
 $lang->doc->methodOrder[65] = 'tableContents';
 $lang->doc->methodOrder[70] = 'showFiles';
+$lang->doc->methodOrder[75] = 'updateOrder';
+$lang->doc->methodOrder[80] = 'sortLibs';
 
 /* Mail. */
 $lang->resource->mail = new stdclass();
@@ -1588,13 +1592,14 @@ $lang->search->methodOrder[35] = 'buildIndex';
 
 /* Admin. */
 $lang->resource->admin = new stdclass();
-$lang->resource->admin->index     = 'index';
-$lang->resource->admin->checkDB   = 'checkDB';
-$lang->resource->admin->safe      = 'safeIndex';
-$lang->resource->admin->checkWeak = 'checkWeak';
-$lang->resource->admin->sso       = 'ssoAction';
-$lang->resource->admin->register  = 'register';
-$lang->resource->admin->ztCompany = 'ztCompany';
+$lang->resource->admin->index           = 'index';
+$lang->resource->admin->checkDB         = 'checkDB';
+$lang->resource->admin->safe            = 'safeIndex';
+$lang->resource->admin->checkWeak       = 'checkWeak';
+$lang->resource->admin->sso             = 'ssoAction';
+$lang->resource->admin->register        = 'register';
+$lang->resource->admin->ztCompany       = 'ztCompany';
+$lang->resource->admin->resetPWDSetting = 'resetPWDSetting';
 
 $lang->admin->methodOrder[0]  = 'index';
 $lang->admin->methodOrder[5]  = 'checkDB';
@@ -1603,6 +1608,7 @@ $lang->admin->methodOrder[15] = 'checkWeak';
 $lang->admin->methodOrder[20] = 'sso';
 $lang->admin->methodOrder[25] = 'register';
 $lang->admin->methodOrder[30] = 'ztCompany';
+$lang->admin->methodOrder[35] = 'resetPWDSetting';
 
 /* Extension. */
 $lang->resource->extension = new stdclass();

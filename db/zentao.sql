@@ -1717,6 +1717,7 @@ CREATE TABLE IF NOT EXISTS `zt_user` (
   `ranzhi` char(30) NOT NULL default '',
   `score` INT(11) NOT NULL DEFAULT '0',
   `scoreLevel` INT(11) NOT NULL DEFAULT '0',
+  `resetToken` varchar(50) NOT NULL,
   `deleted` enum('0','1') NOT NULL default '0',
   PRIMARY KEY  (`id`),
   UNIQUE KEY `account` (`account`),
@@ -9642,6 +9643,13 @@ CREATE TABLE IF NOT EXISTS `zt_risk` (
   `approvedDate` date NOT NULL,
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+-- DROP TABLE IF EXISTS `zt_riskissue`;
+CREATE TABLE IF NOT EXISTS `zt_riskissue` (
+  `risk` mediumint(8) unsigned NOT NULL,
+  `issue` mediumint(8) unsigned NOT NULL,
+  UNIQUE KEY `risk_issue` (`risk`,`issue`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- DROP TABLE IF EXISTS `zt_opportunity`;

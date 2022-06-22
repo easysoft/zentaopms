@@ -7,7 +7,7 @@
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     todo
  * @version     $Id: en.php 4676 2013-04-26 06:08:23Z chencongzhi520@gmail.com $
- * @link        https://www.zentao.pm
+ * @link        http://www.zentao.net
  */
 $lang->todo->common       = 'Agenda';
 $lang->todo->index        = "Accueil";
@@ -56,6 +56,7 @@ $lang->todo->pri          = 'Priorité';
 $lang->todo->name         = 'Titre';
 $lang->todo->status       = 'Statut';
 $lang->todo->desc         = 'Description';
+$lang->todo->config       = 'Config';
 $lang->todo->private      = 'Privé';
 $lang->todo->cycleDay     = 'Jour';
 $lang->todo->cycleWeek    = 'Semaine';
@@ -68,6 +69,7 @@ $lang->todo->finishedDate = 'FinishedDate';
 $lang->todo->closedBy     = 'ClosedBy';
 $lang->todo->closedDate   = 'ClosedDate';
 $lang->todo->deadline     = 'Expiration';
+$lang->todo->deleted      = 'Deleted';
 
 $lang->todo->cycleDaysLabel  = 'Interval days';
 $lang->todo->beforeDaysLabel = 'Days in advance';
@@ -110,6 +112,8 @@ $lang->todo->lblClickCreate = "Cliquez pour ajouter une entrée";
 $lang->todo->noTodo         = 'Aucune entrée de ce type.';
 $lang->todo->noAssignedTo   = "Le champ Assigné à ne doit pas être vide.";
 $lang->todo->unfinishedTodo = "Les entrées de l'ID %s ne sont pas terminés et ne peuvent pas se fermer.";
+$lang->todo->today          = 'Todo Today';
+$lang->todo->selectProduct  = "Please select a product";
 
 $lang->todo->periods['all']             = 'Toutes les entrées';
 $lang->todo->periods['before']          = 'Non terminée';

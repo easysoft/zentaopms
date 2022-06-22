@@ -482,6 +482,7 @@ class doc extends control
         $this->view->doc              = $doc;
         $this->view->moduleOptionMenu = $this->tree->getOptionMenu($libID, 'doc', $startModuleID = 0);
         $this->view->type             = $type;
+        $this->view->lib              = $lib;
         $this->view->libs             = $this->doc->getLibs('all', $extra = 'withObject|noBook', $libID, $objectID);
         $this->view->groups           = $this->loadModel('group')->getPairs();
         $this->view->users            = $this->user->getPairs('noletter|noclosed|nodeleted', $doc->users);
@@ -857,8 +858,8 @@ class doc extends control
                 return print(html::select('groups[]', $groups, $selectedGroup, "class='form-control chosen' multiple"));
             }
             if($doclib->acl == 'open') return print(html::select('groups[]', $groups, $selectedGroup, "class='form-control chosen' multiple"));
+            if($doclib->acl == 'default') return print(html::select('groups[]', $groups, $selectedGroup, "class='form-control chosen' multiple"));
             if($doclib->acl == 'private') echo 'private';
-            if($doclib->acl == 'default') echo 'default';
             return false;
         }
 
@@ -871,11 +872,11 @@ class doc extends control
 
             if($doclib->acl == 'custom')
             {
-                return print(html::select('users[]', $users, $selectedUser, "multiple class='form-control"));
+                return print(html::select('users[]', $users, $selectedUser, "multiple class='form-control'"));
             }
-            if($doclib->acl == 'open') return print(html::select('users[]', $users, $selectedUser, "multiple class='form-control"));
+            if($doclib->acl == 'open') return print(html::select('users[]', $users, $selectedUser, "multiple class='form-control'"));
+            if($doclib->acl == 'default') return print(html::select('users[]', $users, $selectedUser, "multiple class='form-control'"));
             if($doclib->acl == 'private') echo 'private';
-            if($doclib->acl == 'default') echo 'default';
             return false;
         }
 
@@ -896,13 +897,13 @@ class doc extends control
     /**
      * Show files.
      *
-     * @param string $type
-     * @param int $objectID
-     * @param string $viewType
-     * @param string $orderBy
-     * @param int $recTotal
-     * @param int $recPerPage
-     * @param int $pageID
+     * @param  string $type
+     * @param  int    $objectID
+     * @param  string $viewType
+     * @param  string $orderBy
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
      * @access public
      * @return void
      */
@@ -1151,13 +1152,18 @@ class doc extends control
     /**
      * Show the catalog of the doc library.
      *
-     * @param string $type
-     * @param int $objectID
-     * @param int $libID
+     * @param  string $type
+     * @param  int    $objectID
+     * @param  int    $libID
+     * @param  int    $queryID
+     * @param  string $param
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
      * @access public
      * @return void
      */
-    public function tableContents($type, $objectID = 0, $libID = 0)
+    public function tableContents($type, $objectID = 0, $libID = 0, $queryID = 0, $param = '', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         list($libs, $libID, $object, $objectID) = $this->doc->setMenuByType($type, $objectID, $libID);
         $this->session->set('createProjectLocate', $this->app->getURI(true), 'doc');
@@ -1168,15 +1174,39 @@ class doc extends control
 
         $title = ($type == 'book' or $type == 'custom') ? $this->lang->doc->tableContents : $object->name . $this->lang->colon . $this->lang->doc->tableContents;
 
+        /* Build the search form. */
+        $queryID   = $param == 'bySearch' ? (int)$queryID : 0;
+        $actionURL = $this->createLink('doc', 'tableContents', "type=$type&objectID=$objectID&libID=$libID&queryID=myQueryID&param=bySearch");
+        $this->doc->buildSearchForm($libID, $libs, $queryID, $actionURL, $type);
+
         $this->view->title      = $title;
         $this->view->type       = $type;
-        $this->view->libs       = $libs;
-        $this->view->objectID   = $objectID;
-        $this->view->libID      = $libID;
-        $this->view->moduleTree = $moduleTree;
+        $this->view->param      = $param;
+        $this->view->queryID    = $queryID;
         $this->view->users      = $this->user->getPairs('noletter');
+        if($param == 'bySearch')
+        {
+            /* Load pager. */
+            $rawMethod = $this->app->rawMethod;
+            $this->app->rawMethod = 'tableContents';
+            $this->app->loadClass('pager', $static = true);
+            $pager = new pager($recTotal, $recPerPage, $pageID);
+            $this->app->rawMethod = $rawMethod;
 
-        $this->display();
+            $this->view->docs       = $this->doc->getDocsBySearch($type, $objectID, $libID, $queryID, $pager);
+            $this->view->browseType = 'bySearch';
+            $this->view->pager      = $pager;
+            $this->display('doc', 'browse', "browseType=bySearch&param=$queryID");
+        }
+        else
+        {
+            $this->view->libs       = $libs;
+            $this->view->objectID   = $objectID;
+            $this->view->libID      = $libID;
+            $this->view->moduleTree = $moduleTree;
+
+            $this->display();
+        }
     }
 
     /**
@@ -1197,6 +1227,24 @@ class doc extends control
         }
 
         unset($this->lang->doc->libTypeList['book']);
+        $this->display();
+    }
+
+    /**
+     * Sort libs.
+     *
+     * @access public
+     * @return void
+     */
+    public function sortLibs($type, $objectID)
+    {
+        if(!empty($_POST))
+        {
+            $this->doc->updateLibOrder();
+            return print(js::reload('parent.parent'));
+        }
+        $this->view->title = $this->lang->doc->sortLibs;
+        $this->view->libs  = $this->doc->getLibs($type, '', '', $objectID);
         $this->display();
     }
 }

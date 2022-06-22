@@ -72,6 +72,13 @@ $(function()
     });
 
     $('.sorter-false a').unwrap();
+
+    /* The display of the adjusting sidebarHeader is synchronized with the sidebar. */
+    $(".sidebar-toggle").click(function()
+    {
+        $("#sidebarHeader").toggle("fast");
+    });
+    if($("main").is(".hide-sidebar")) $("#sidebarHeader").hide();
 });
 
 /**

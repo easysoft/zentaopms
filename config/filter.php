@@ -30,6 +30,7 @@ $filter->default->cookie['hideMenu']    = 'equal::true';
 $filter->default->cookie['tab']         = 'reg::word';
 $filter->default->cookie['goback']      = 'reg::any';
 
+$filter->index        = new stdclass();
 $filter->my           = new stdclass();
 $filter->bug          = new stdclass();
 $filter->caselib      = new stdclass();
@@ -68,6 +69,7 @@ $filter->tree         = new stdclass();
 $filter->productplan  = new stdclass();
 $filter->kanban       = new stdclass();
 
+$filter->index->index             = new stdclass();
 $filter->block->default           = new stdclass();
 $filter->block->main              = new stdclass();
 $filter->my->work                 = new stdclass();
@@ -165,6 +167,8 @@ $filter->execution->export        = new stdclass();
 $filter->tree->browse             = new stdclass();
 $filter->productplan->browse      = new stdclass();
 $filter->kanban->space            = new stdclass();
+
+$filter->index->index->get['open'] = 'reg::base64';
 
 $filter->my->work->cookie['pagerMyTask']        = 'int';
 $filter->my->work->cookie['pagerMyRequirement'] = 'int';

@@ -248,18 +248,13 @@ class productplanModel extends model
             ->orderBy('t1.begin desc')
             ->fetchAll('id');
 
-        $plans       = $this->reorder4Children($plans);
-        $planPairs   = array();
-        $parentTitle = array();
+        $plans     = $this->reorder4Children($plans);
+        $planPairs = array();
         $this->app->loadLang('branch');
         foreach($plans as $plan)
         {
-            if($plan->parent == '-1')
-            {
-                $parentTitle[$plan->id] = $plan->title;
-                if($skipParent) continue;
-            }
-            if($plan->parent > 0 and isset($parentTitle[$plan->parent])) $plan->title = $parentTitle[$plan->parent] . ' /' . $plan->title;
+            if($skipParent and $plan->parent == '-1') continue;
+            if($plan->parent > 0 and isset($plans[$plan->parent])) $plan->title = $plans[$plan->parent]->title . ' /' . $plan->title;
             $planPairs[$plan->id] = $plan->title . " [{$plan->begin} ~ {$plan->end}]";
             if($plan->begin == $this->config->productplan->future and $plan->end == $this->config->productplan->future) $planPairs[$plan->id] = $plan->title . ' ' . $this->lang->productplan->future;
             if($plan->productType != 'normal') $planPairs[$plan->id] = ($plan->branchName ? $plan->branchName : $this->lang->branch->main) . ' / ' . $planPairs[$plan->id];
@@ -352,7 +347,6 @@ class productplanModel extends model
         $plans = $this->dao->select('*')->from(TABLE_PRODUCTPLAN)
             ->where('deleted')->eq(0)
             ->beginIF($products)->andWhere('product')->in($products)->fi()
-            ->beginIF(strpos($param, 'skipparent') !== false)->andWhere('parent')->ne(-1)->fi()
             ->beginIF(strpos($param, 'unexpired') !== false)->andWhere('end')->ge($date)->fi()
             ->orderBy($orderBy)
             ->fetchAll('id');
@@ -367,8 +361,8 @@ class productplanModel extends model
 
             if($field == 'name')
             {
-                if($plan->parent == '-1') $parentTitle[$plan->id] = $plan->title;
-                if($plan->parent > 0 and isset($parentTitle[$plan->parent])) $plan->title = $parentTitle[$plan->parent] . ' /' . $plan->title;
+                if($plan->parent == '-1' and strpos($param, 'skipparent') !== false) continue;
+                if($plan->parent > 0 and isset($plans[$plan->parent])) $plan->title = $plans[$plan->parent]->title . ' /' . $plan->title;
                 $planGroup[$plan->product][$plan->branch][$plan->id] = $plan->title . " [{$plan->begin} ~ {$plan->end}]";
                 if($plan->begin == $this->config->productplan->future and $plan->end == $this->config->productplan->future) $planGroup[$plan->product][$plan->branch][$plan->id] = $plan->title . ' ' . $this->lang->productplan->future;
             }
@@ -420,17 +414,19 @@ class productplanModel extends model
      */
     public function getBranchPlanPairs($productID, $branches = '', $skipParent = false)
     {
-        $plans = $this->dao->select('branch,id,title,begin,end')->from(TABLE_PRODUCTPLAN)
+        $plans = $this->dao->select('parent,branch,id,title,begin,end')->from(TABLE_PRODUCTPLAN)
             ->where('product')->eq($productID)
             ->andWhere('deleted')->eq(0)
             ->beginIF($branches != '')->andWhere('branch')->in($branches)->fi()
-            ->beginIF($skipParent)->andWhere('parent')->ne(-1)->fi()
             ->orderBy('begin desc')
             ->fetchAll('id');
 
         $planPairs = array();
         foreach($plans as $planID => $plan)
         {
+            if($skipParent and $plan->parent == '-1') continue;
+
+            if($plan->parent > 0 and isset($plans[$plan->parent])) $plan->title = $plans[$plan->parent]->title . ' /' . $plan->title;
             $planPairs[$plan->branch][$planID] = $plan->title . ' [' . $plan->begin . '~' . $plan->end . ']';
         }
         return $planPairs;

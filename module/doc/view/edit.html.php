@@ -26,7 +26,6 @@
         <?php echo html::a($this->createLink('doc', 'view', "docID=$doc->id"), $doc->title, '', "title='$doc->title'");?>
         <small> <?php echo $lang->arrow . ' ' . $lang->doc->edit;?></small>
       </h2>
-      <div class='pull-right'><?php echo html::a('###', $lang->save, '', 'id="top-submit" class="btn btn-primary"');?></div>
     </div>
     <form class='load-indicator main-form form-ajax' method='post' enctype='multipart/form-data' id='dataform'>
       <table class='table table-form'>
@@ -84,8 +83,9 @@
         <tr>
           <th><?php echo $lang->doclib->control;?></th>
           <td colspan='2'>
-            <?php echo html::radio('acl', $lang->doc->aclList, $doc->acl, "onchange='toggleAcl(this.value, \"doc\")'")?>
-            <span class='text-info' id='noticeAcl'><?php echo $lang->doc->noticeAcl['doc'][$doc->acl];?></span>
+            <?php $acl = $lib->acl == 'default' ? 'open' : $lib->acl;?>
+            <?php echo html::radio('acl', $lang->doc->aclList, $acl, "onchange='toggleAcl(this.value, \"doc\")'")?>
+            <span class='text-info' id='noticeAcl'><?php echo $lang->doc->noticeAcl['doc'][$acl];?></span>
           </td>
         </tr>
         <tr id='whiteListBox' class='hidden'>
