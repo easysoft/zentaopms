@@ -176,6 +176,18 @@ function renderHeaderCol($column, column, $header, kanbanData)
           $column.addClass('sort');
         }
     }
+
+    if(alignment == 'left')
+    {
+        if($column.hasClass('kanban-header-parent-col'))
+        {
+            $column.children('.kanban-header-col').addClass('left');
+        }
+        else
+        {
+          $column.addClass('left');
+        }
+    }
 }
 
 /**
