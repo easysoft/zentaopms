@@ -72,6 +72,7 @@ class api extends control
         }
 
         $this->setMenu($libID, $moduleID);
+        $this->lang->TRActions = '<a class="btn btn-link querybox-toggle" id="bysearchTab"><i class="icon icon-search muted"></i> ' . $this->lang->api->search . '</a>' . $this->lang->TRActions;
 
         /* Build the search form. */
         $queryID   = $param == 'bySearch' ? (int)$queryID : 0;
@@ -616,7 +617,7 @@ class api extends control
         common::setMenuVars('doc', $libID);
 
         /* Global struct link. */
-        $menu = '<a class="btn btn-link querybox-toggle" id="bysearchTab"><i class="icon icon-search muted"></i> ' . $this->lang->api->search . '</a>';
+        $menu = '';
 
         if($libID and common::hasPriv('api', 'createRelease'))
         {
