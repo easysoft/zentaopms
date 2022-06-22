@@ -62,7 +62,7 @@
                 <tr>
                   <th class='chart-label' colspan='2'><?php echo $lang->task->report->$chartType->item;?></th>
                   <th class='w-60px text-right'><?php echo $lang->task->report->value;?></th>
-                  <th class='w-60px'><?php echo $lang->report->percent;?></th>
+                  <th class='w-60px text-right'><?php echo $lang->report->percent;?></th>
                 </tr>
               </thead>
               <tbody>
