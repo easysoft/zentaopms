@@ -47,7 +47,7 @@ class repo extends control
     {
         $tab = $this->app->tab;
         $this->repos      = $this->repo->getRepoPairs($tab, $objectID);
-        $this->reposGroup = $this->repo->getRepoGroup($tab, $objectID);
+        $this->repoGroup = $this->repo->getRepoGroup($tab, $objectID);
 
         if($tab == 'project')
         {
@@ -480,7 +480,7 @@ class repo extends control
 
         $this->view->title      = $this->lang->repo->common;
         $this->view->repo       = $repo;
-        $this->view->reposGroup = $this->reposGroup;
+        $this->view->repoGroup  = $this->repoGroup;
         $this->view->repos      = $this->repos;
         $this->view->revisions  = $revisions;
         $this->view->revision   = $revision;

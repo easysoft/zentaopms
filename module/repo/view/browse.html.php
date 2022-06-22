@@ -26,7 +26,7 @@
           <div class="table-col col-left">
             <div class="list-group" id="repoList">
               <ul class='tree tree-angles' data-ride='tree'>
-              <?php foreach($reposGroup as $groupName => $group):?>
+              <?php foreach($repoGroup as $groupName => $group):?>
               <?php if(empty($group)) continue;?>
                 <li data-idx='<?php echo $groupName;?>' data-id='<?php echo $groupName;?>' class='has-list open in' style='cursor: pointer;'><i class='list-toggle icon'></i>
                   <div class='hide-in-search'><a class='text-muted'><?php echo $groupName;?></a><span class='label label-outline' style='margin-left:5px;'><?php echo $lang->repo->type;?></span></div>
