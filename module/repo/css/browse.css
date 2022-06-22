@@ -3,7 +3,15 @@
 #sidebar>.sidebar-toggle>.icon {right: -2px; left: auto;}
 .main-row {width: 99%;}
 .btn-toolbar > .last-sync-time {display: inline-block; float: left; margin-right: 10px;}
+.btn-toolbar .page-title {line-height: 28px;}
 .dropdown-menu > li.selected > a:after {content: '';}
+
+li>a.selected {color: #e9f2fb; background-color: #16a8f8;}
+#branchList {line-height: 25px;}
+#branchList .hide-in-search, #branchList .tree ul {padding-left: 20px;}
+.tree li.has-list.open:before {border-left: none;}
+.tree li {padding: 0;}
+.branch-or-tag {border-radius: 4px;}
 
 .c-name {min-width: 150px;}
 .c-checkbox {width: 40px;}

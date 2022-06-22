@@ -355,10 +355,11 @@ class repo extends control
      * @param  string $path
      * @param  string $revision
      * @param  int    $refresh
+     * @param  string $branchOrTag branch|tag
      * @access public
      * @return void
      */
-    public function browse($repoID = 0, $branchID = '', $objectID = 0, $path = '', $revision = 'HEAD', $refresh = 0)
+    public function browse($repoID = 0, $branchID = '', $objectID = 0, $path = '', $revision = 'HEAD', $refresh = 0, $branchOrTag = 'branch')
     {
         $repoID = $this->repo->saveState($repoID, $objectID);
         if($branchID) $branchID = base64_decode(helper::safe64Decode($branchID));
@@ -385,15 +386,20 @@ class repo extends control
         }
         if(!$repo->synced) $this->locate($this->repo->createLink('showSyncCommit', "repoID=$repoID&objectID=$objectID"));
 
-        /* Set branch for git. */
-        $branches = array();
+        /* Set branch or tag for git. */
+        $branches = $tags = $branchesAndTags = array();
         if(strpos($repo->SCM, 'Git') !== false)
         {
-            $branches = $this->repo->getBranches($repo);
+            $scm = $this->app->loadClass('scm');
+            $scm->setEngine($repo);
+            $branches = $scm->branch();
+            $initTags = $scm->tags('');
+            foreach($initTags as $tag) $tags[$tag] = $tag;
+            $branchesAndTags = $branches + $tags;
 
             if(empty($branchID) and $this->cookie->repoBranch and $this->session->repoID == $repoID) $branchID = $this->cookie->repoBranch;
             if($branchID) $this->repo->setRepoBranch($branchID);
-            if(!isset($branches[$branchID]))
+            if(!isset($branchesAndTags[$branchID]))
             {
                 $branchID = key($branches);
                 $this->repo->setRepoBranch($branchID);
@@ -477,20 +483,23 @@ class repo extends control
         /* Synchronous commit only in root path. */
         if(strpos($repo->SCM, 'Git') !== false and empty($path) and $infos and empty($revisions)) $this->locate($this->repo->createLink('showSyncCommit', "repoID=$repoID&objectID=$objectID&branch=" . base64_encode($this->cookie->repoBranch)));
 
-        $this->view->title     = $this->lang->repo->common;
-        $this->view->repo      = $repo;
-        $this->view->repos     = $this->repos;
-        $this->view->revisions = $revisions;
-        $this->view->revision  = $revision;
-        $this->view->infos     = $infos;
-        $this->view->repoID    = $repoID;
-        $this->view->branches  = $branches;
-        $this->view->branchID  = $branchID;
-        $this->view->objectID  = $objectID;
-        $this->view->pager     = $pager;
-        $this->view->path      = urldecode($path);
-        $this->view->logType   = $logType;
-        $this->view->cacheTime = date('m-d H:i', filemtime($cacheFile));
+        $this->view->title           = $this->lang->repo->common;
+        $this->view->repo            = $repo;
+        $this->view->repos           = $this->repos;
+        $this->view->revisions       = $revisions;
+        $this->view->revision        = $revision;
+        $this->view->infos           = $infos;
+        $this->view->repoID          = $repoID;
+        $this->view->branches        = $branches;
+        $this->view->tags            = $tags;
+        $this->view->branchesAndTags = $branchesAndTags;
+        $this->view->branchID        = $branchID;
+        $this->view->objectID        = $objectID;
+        $this->view->pager           = $pager;
+        $this->view->path            = urldecode($path);
+        $this->view->logType         = $logType;
+        $this->view->cacheTime       = date('m-d H:i', filemtime($cacheFile));
+        $this->view->branchOrTag     = $branchOrTag;
 
         $this->display();
     }
