@@ -21,10 +21,10 @@ if(!$selfCall) die(include('./todolist.html.php'));
 .block-todoes .todoes {padding: 0 10px 10px 10px; margin: 0 -20px; max-height: 350px; overflow: auto; overflow-x:hidden}
 .block-todoes .todoes > li {position: relative; padding: 5px 10px 5px 35px; list-style: none; white-space:nowrap; overflow: auto; overflow-x:hidden;}
 .block-todoes .todoes > li:hover {background-color: #e9f2fb;}
-.block-todoes .todo-title {padding: 5px 15px 5px 5px;}
-.titleBox {max-width: 700px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: block;}
+.block-todoes .todo-title {padding: 0px;}
+.titleBox {max-width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: block;}
 .block-todoes .todo-pri {margin: 0 5px;}
-.block-todoes .todo-time {display: inline-block; padding: 0 5px; font-size: 12px; color: #8e939a; width: 95px;}
+.block-todoes .todo-time {display: inline-block; padding: 0 5px; font-size: 12px; color: #8e939a; width: 95px; min-width: 95px;}
 .block-todoes .todo-check {position: absolute; top: 5px; left: 10px; display: block; width: 20px; height: 20px; font-size: 20px; color: transparent; cursor: pointer; background: #fff; border: 2px solid #eee; border-radius: 50%;}
 .block-todoes .todo-check:hover {border-color: #8e939a;}
 .block-todoes .active > .todo-check {color: #00da88; background: transparent;border: none;}
@@ -34,6 +34,9 @@ if(!$selfCall) die(include('./todolist.html.php'));
 .block-todoes .todoes-form > .form-group:last-child {margin-bottom: 0;}
 .block-todoes .todoes-form > h3 {padding: 0 20px 15px; margin: 0 -20px 5px; font-size: 14px; line-height: 20px;}
 .block-todoes.show-form .todoes-form {visibility: visible; opacity: 1;}
+.block-todoes .todo-flexbetween {display: flex; justify-content: space-between;}
+.block-todoes #todoList {display: flex; overflow: hidden;}
+.block-todoes .label-todo {width: 50px; min-width: 50px!important; border: none; color: #43A047;}
 </style>
 <div class='block-todoes'>
   <div class='panel-body'>
@@ -97,14 +100,17 @@ if(!$selfCall) die(include('./todolist.html.php'));
       ?>
       <li data-id='<?php echo $todo->id?>' class='titleBox'>
         <span class="todo-check icon icon-check-circle"></span>
-        <a href="<?php echo empty($sso) ? $viewLink : $sso . $sign . 'referer=' . base64_encode($viewLink);?>" class='iframe' data-width='1000px' data-toggle='modal' <?php echo $appid?>>
-          <?php if ($todo->date == '2030-01-01') :?>
-          <span class="todo-time"><?php echo $lang->todo->periods['future'] ?></span>
-          <?php else:?>
-          <span class="todo-time"><?php echo date(DT_DATE4, strtotime($todo->date)) . ' ' . $todo->begin;?></span>
-          <?php endif;?>
-          <span class="todo-pri label-pri label-pri-<?php echo $todo->pri?>" title="<?php echo zget($lang->todo->priList, $todo->pri);?>"><?php echo zget($lang->todo->priList, $todo->pri);?></span>
-          <span class="todo-title" title='<?php echo $todo->name;?>'><?php echo $todo->name;?></span>
+        <a href="<?php echo empty($sso) ? $viewLink : $sso . $sign . 'referer=' . base64_encode($viewLink);?>" class='iframe todo-flexbetween' data-width='1000px' data-toggle='modal' <?php echo $appid?>>
+          <div id='todoList'>
+            <?php if ($todo->date == '2030-01-01') :?>
+            <div class="todo-time"><?php echo $lang->todo->periods['future'] ?></div>
+            <?php else:?>
+            <div class="todo-time"><?php echo date(DT_DATE4, strtotime($todo->date)) . ' ' . $todo->begin;?></div>
+            <?php endif;?>
+            <div class="todo-pri label-pri label-pri-<?php echo $todo->pri?>" title="<?php echo zget($lang->todo->priList, $todo->pri);?>"><?php echo zget($lang->todo->priList, $todo->pri);?></div>
+            <div class="todo-title text-ellipsis" title='<?php echo $todo->name;?>'><?php echo $todo->name;?></div>
+          </div>
+          <span class="label label-id label-todo hidden"><?php echo $lang->block->done;?></span>
         </a>
       </li>
       <?php endforeach;?>
@@ -166,6 +172,15 @@ if(!$selfCall) die(include('./todolist.html.php'));
               if(!isFinished) $liTag.addClass('active');
               if(isFinished) $liTag.removeClass('active');
           });
+
+          if(isFinished)
+          {
+              $(this).next().find('.label-todo').addClass('hidden');
+          }
+          else
+          {
+              $(this).next().find('.label-todo').removeClass('hidden');
+          }
       });
   });
 
