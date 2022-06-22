@@ -194,6 +194,20 @@
           <td colspan='2'><?php echo html::select('teamMembers[]', $users, array_keys($teamMembers), "class='form-control chosen' multiple"); ?></td>
         </tr>
         <tr>
+          <th><?php echo $lang->kanban->columnWidth;?></th>
+          <td><?php echo nl2br(html::radio('fluidBoard', $lang->kanbancolumn->fluidBoardList, $execution->fluidBoard));?></td>
+        </tr>
+        <?php if($laneCount > 1):?>
+        <tr>
+          <th id='c-name'><?php echo $lang->kanban->laneHeight;?></th>
+          <td class='laneHeightBox'><?php echo nl2br(html::radio('heightType', $lang->kanbanlane->heightTypeList, $heightType, "onclick='setCardCount(this.value);'"));?></td>
+        </tr>
+        <tr class="hidden" id='cardBox'>
+          <th class='c-count'><?php echo $lang->kanban->cardCount;?></th>
+          <td><?php echo html::input('displayCards', $displayCards, "class='form-control' required placeholder='{$lang->kanban->cardCountTip}'  autocomplete='off'");?></td>
+        </tr>
+        <?php endif;?>
+        <tr>
           <th><?php echo $lang->execution->desc;?></th>
           <td colspan='2'><?php echo html::textarea('desc', htmlSpecialString($execution->desc), "rows='6' class='form-control kindeditor' hidefocus='true'");?></td>
         </tr>
