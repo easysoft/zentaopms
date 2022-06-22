@@ -1144,6 +1144,16 @@ CREATE TABLE IF NOT EXISTS `zt_project` (
   KEY `acl` (`acl`),
   KEY `order` (`order`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+-- DROP TABLE IF EXISTS `zt_projectadmin`;
+CREATE TABLE `zt_projectadmin` (
+  `group` smallint(6) NOT NULL,
+  `account` char(30) NOT NULL,
+  `programs` text NOT NULL,
+  `projects` text NOT NULL,
+  `products` text NOT NULL,
+  `executions` text NOT NULL,
+  UNIQUE KEY `group_account` (`group`, `account`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_projectcase`;
 CREATE TABLE IF NOT EXISTS `zt_projectcase` (
   `project` mediumint(8) unsigned NOT NULL DEFAULT '0',

@@ -1727,11 +1727,33 @@ class userModel extends model
             $groups  = ',' . join(',', $groups) . ',';
 
             /* Init objects. */
-            static $allProducts, $allPrograms, $allProjects, $allSprints, $teams, $stakeholders, $productWhiteList, $whiteList;
+            static $allProducts, $allPrograms, $allProjects, $allSprints, $teams, $stakeholders, $productWhiteList, $whiteList, $manageObjects;
             if($allProducts === null) $allProducts = $this->dao->select('id,PO,QD,RD,createdBy,acl,whitelist,program,createdBy')->from(TABLE_PRODUCT)->where('acl')->ne('open')->fetchAll('id');
             if($allProjects === null) $allProjects = $this->dao->select('id,PO,PM,QD,RD,acl,type,path,parent,openedBy')->from(TABLE_PROJECT)->where('acl')->ne('open')->andWhere('type')->eq('project')->fetchAll('id');
             if($allPrograms === null) $allPrograms = $this->dao->select('id,PO,PM,QD,RD,acl,type,path,parent,openedBy')->from(TABLE_PROGRAM)->where('acl')->ne('open')->andWhere('type')->eq('program')->fetchAll('id');
             if($allSprints  === null) $allSprints  = $this->dao->select('id,PO,PM,QD,RD,acl,project,path,parent,type,openedBy')->from(TABLE_PROJECT)->where('acl')->eq('private')->beginIF($this->config->systemMode == 'new')->andWhere('type')->in('sprint,stage,kanban')->fi()->fetchAll('id');
+
+            /* Get admins. */
+            if($manageObjects === null)
+            {
+                $projectAdmins = $this->dao->select('programs,products,projects,executions')->from(TABLE_PROJECTADMIN)->where('account')->eq($account)->fetchAll('`group`');
+                foreach($projectAdmins as $projectAdmin)
+                {
+                    foreach($projectAdmin as $key => $value)
+                    {
+                        $manageObjects['list'][$key] = isset($manageObjects['list'][$key]) ? $manageObjects['list'][$key] : '';
+
+                        if($value == 'all')
+                        {
+                            $manageObjects['isAdmin'][$key] = 1;
+                        }
+                        else
+                        {
+                            $manageObjects['list'][$key] .= $value . ',';
+                        }
+                    }
+                }
+            }
 
             /* Get teams. */
             if($teams === null)
@@ -1790,43 +1812,79 @@ class userModel extends model
             else
             {
                 /* Process program userview. */
-                $programs = array();
-                foreach($allPrograms as $id => $program)
+                if(!empty($manageObjects['isAdmin']['programs']))
                 {
-                    $programStakeholders = zget($stakeholders, $id, array());
-                    if($program->acl == 'program') $programStakeholders += zget($programStakeholderGroup, $id, array());
-                    if($this->checkProgramPriv($program, $account, $programStakeholders, zget($whiteList, $id, array()))) $programs[$id] = $id;
+                    $userView->programs = join(',', array_keys($allPrograms));
                 }
-                $userView->programs = join(',', $programs);
+                else
+                {
+                    $programs       = array();
+                    $managePrograms = isset($manageObjects['list']['programs']) ? $manageObjects['list']['programs'] : '';
+                    foreach($allPrograms as $id => $program)
+                    {
+                        $programStakeholders = zget($stakeholders, $id, array());
+                        if($program->acl == 'program') $programStakeholders += zget($programStakeholderGroup, $id, array());
+                        if($this->checkProgramPriv($program, $account, $programStakeholders, zget($whiteList, $id, array()))) $programs[$id] = $id;
+                        if(strpos(",$managePrograms,", ",$id,") !== false) $programs[$id] = $id;
+                    }
+                    $userView->programs = join(',', $programs);
+                }
 
                 /* Process product userview. */
-                $products = array();
-                foreach($allProducts as $id => $product)
+                if(!empty($manageObjects['isAdmin']['products']))
                 {
-                    if($this->checkProductPriv($product, $account, $groups, zget($productTeams, $product->id, array()), zget($productStakeholders, $product->id, array()), zget($productWhiteList, $product->id, array()))) $products[$id] = $id;
+                    $userView->products = join(',', array_keys($allProducts));
                 }
-                $userView->products = join(',', $products);
+                else
+                {
+                    $products       = array();
+                    $manageProducts = isset($manageObjects['list']['products']) ? $manageObjects['list']['products'] : '';
+                    foreach($allProducts as $id => $product)
+                    {
+                        if($this->checkProductPriv($product, $account, $groups, zget($productTeams, $product->id, array()), zget($productStakeholders, $product->id, array()), zget($productWhiteList, $product->id, array()))) $products[$id] = $id;
+                        if(strpos(",$manageProducts,", ",$id,") !== false) $products[$id] = $id;
+                    }
+                    $userView->products = join(',', $products);
+                }
 
                 /* Process project userview. */
-                $projects = array();
-                foreach($allProjects as $id => $project)
+                if(!empty($manageObjects['isAdmin']['projects']))
                 {
-                    $projectTeams        = zget($teams, $id, array());
-                    $projectStakeholders = zget($stakeholders, $id, array());
-                    if($project->acl == 'program') $projectStakeholders += zget($projectStakeholderGroup, $id, array());
-                    if($this->checkProjectPriv($project, $account, $projectStakeholders, $projectTeams, zget($whiteList, $id, array()))) $projects[$id] = $id;
+                    $userView->projects = join(',', array_keys($allProjects));
                 }
-                $userView->projects = join(',', $projects);
+                else
+                {
+                    $projects       = array();
+                    $manageProjects = isset($manageObjects['list']['projects']) ? $manageObjects['list']['projects'] : '';
+                    foreach($allProjects as $id => $project)
+                    {
+                        $projectTeams        = zget($teams, $id, array());
+                        $projectStakeholders = zget($stakeholders, $id, array());
+                        if($project->acl == 'program') $projectStakeholders += zget($projectStakeholderGroup, $id, array());
+                        if($this->checkProjectPriv($project, $account, $projectStakeholders, $projectTeams, zget($whiteList, $id, array()))) $projects[$id] = $id;
+                        if(strpos(",$manageProjects,", ",$id,") !== false) $projects[$id] = $id;
+                    }
+                    $userView->projects = join(',', $projects);
+                }
 
                 /* Process sprint userview. */
-                $sprints = array();
-                foreach($allSprints as $id => $sprint)
+                if(!empty($manageObjects['isAdmin']['executions']))
                 {
-                    $sprintTeams        = zget($teams, $id, array());
-                    $sprintStakeholders = zget($stakeholders, $sprint->project, array());
-                    if($this->checkSprintPriv($sprint, $account, $sprintStakeholders, $sprintTeams, zget($whiteList, $id, array()))) $sprints[$id] = $id;
+                    $userView->sprints = join(',', array_keys($allSprints));
                 }
-                $userView->sprints = join(',', $sprints);
+                else
+                {
+                    $sprints          = array();
+                    $manageExecutions = isset($manageObjects['list']['executions']) ? $manageObjects['list']['executions'] : '';
+                    foreach($allSprints as $id => $sprint)
+                    {
+                        $sprintTeams        = zget($teams, $id, array());
+                        $sprintStakeholders = zget($stakeholders, $sprint->project, array());
+                        if($this->checkSprintPriv($sprint, $account, $sprintStakeholders, $sprintTeams, zget($whiteList, $id, array()))) $sprints[$id] = $id;
+                        if(strpos(",$manageExecutions,", ",$id,") !== false) $sprints[$id] = $id;
+                    }
+                    $userView->sprints = join(',', $sprints);
+                }
             }
             $this->dao->replace(TABLE_USERVIEW)->data($userView)->exec();
         }

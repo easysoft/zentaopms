@@ -1,16 +1,47 @@
 function addItem(obj)
 {
-    var $currentRow = $(obj).closest('tr');
-    var $newRow = $currentRow.clone().addClass('highlight');
-    $currentRow.after($newRow);
-    $newRow.find('th').text('');
-
-    $newRow.find('div[id^=members], div[id^=program]').remove();
-    $newRow.find('select[name^="members"], select[name^="program"]').val('').chosen();
-    setTimeout(function()
+    var maxNum = 0;
+    $(obj).closest('table').find("tr[class^='line']").each(function()
     {
-        $newRow.removeClass('highlight');
-    }, 1600);
+        var trname = $(this).attr('class');
+        var index  = trname.match(/\d+/g);
+        maxNum = index > maxNum ? index : maxNum;
+    })
+
+    maxNum = parseInt(maxNum);
+    maxNum += 1;
+
+    var className = $(obj).closest('tr').attr('class');
+    var lastTr    = $('table tr.' + className).last();
+    $($('table tr.' + className).get().reverse()).each(function()
+    {
+        var $newRow = $(this).clone();
+        $newRow.attr('class', className.replace(/\d+/g, maxNum));
+        $newRow.addClass('highlight');
+        $newRow.find('select').each(function()
+        {
+            var name = $(this).attr('name');
+            var id   = $(this).attr('id');
+            $(this).attr('name', name.replace(/\d+/g, maxNum));
+            $(this).attr('id', id.replace(/\d+/g, maxNum));
+        })
+
+        $newRow.find("input[type='checkbox']").each(function()
+        {
+            var name = $(this).attr('name');
+            var id   = $(this).attr('id');
+            $(this).attr('name', name.replace(/\d+/g, maxNum));
+            $(this).attr('id', id.replace(/\d+/g, maxNum));
+        })
+
+        $(lastTr).after($newRow);
+        $newRow.find('div.picker').remove();
+        $newRow.find('.picker-select').val('').picker({chosenMode: true});
+        setTimeout(function()
+        {
+            $newRow.removeClass('highlight');
+        }, 1600);
+    })
 }
 
 function deleteItem(obj)

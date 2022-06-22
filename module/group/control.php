@@ -299,6 +299,8 @@ class group extends control
         $userPrograms = $this->group->getUserPrograms($groupID);
         $allUsers     = array('' => '') + $groupUsers + $this->loadModel('dept')->getDeptUserPairs($deptID);
 
+        list($programs, $projects, $products, $executions) = $this->group->getObject4AdminGroup();
+
         $title      = $this->lang->company->common . $this->lang->colon . $group->name . $this->lang->colon . $this->lang->group->manageMember;
         $position[] = $group->name;
         $position[] = $this->lang->group->manageMember;
@@ -307,7 +309,11 @@ class group extends control
         $this->view->position     = $position;
         $this->view->allUsers     = $allUsers;
         $this->view->group        = $group;
-        $this->view->programs     = $this->dao->select('id, name')->from(TABLE_PROJECT)->where('type')->eq('project')->andWhere('vision')->eq($this->config->vision)->andWhere('deleted')->eq(0)->fetchPairs();
+        $this->view->deptID       = $deptID;
+        $this->view->programs     = $programs;
+        $this->view->projects     = $projects;
+        $this->view->products     = $products;
+        $this->view->executions   = $executions;
         $this->view->deptTree     = $this->loadModel('dept')->getTreeMenu($rooteDeptID = 0, array('deptModel', 'createManageProjectAdminLink'), $groupID);
         $this->view->groupUsers   = $groupUsers;
         $this->view->userPrograms = $userPrograms;
