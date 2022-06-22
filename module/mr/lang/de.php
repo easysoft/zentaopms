@@ -185,7 +185,7 @@ EOD;
 
 $lang->mr->noChanges = "Currently there are no changes in this merge request's source branch. Please push new commits or use a different branch.";
 
-$lang->mr->linkTask          = "Link task";
+$lang->mr->linkTask          = 'Link Tasks';
 $lang->mr->unlinkTask        = "Remove task";
 $lang->mr->linkedTasks       = 'Task';
 $lang->mr->unlinkedTasks     = 'Task not linked';

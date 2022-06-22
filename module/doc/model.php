@@ -2159,10 +2159,7 @@ class docModel extends model
             $html .= html::submitButton("<i class='icon icon-search'></i>", '', "btn  btn-icon btn-link input-control-icon-right");
             $html .= '</form></div>';
         }
-        else
-        {
-            $html  = '';
-        }
+        $html  = '<a class="btn btn-link querybox-toggle" id="bysearchTab"><i class="icon icon-search muted"></i>' . $this->lang->doc->search . '</a>';
         $html .= "<div class='btn-group dropdown-hover'>";
         $html .= "<a href='javascript:;' class='btn btn-link' data-toggle='dropdown'>{$this->lang->doc->myCollection}</a>";
         $html .= "<ul class='dropdown-menu pull-right' id='collection-menu'>";

@@ -184,6 +184,9 @@ $config->upgrade->liteVersion['lite1_0'] = '16_5_beta1';
 $config->upgrade->liteVersion['lite1_1'] = '16_5';
 $config->upgrade->liteVersion['lite1_2'] = '17_1';
 
+$config->upgrade->liteVersion['liteVIP1_1'] = 'biz6_5';
+$config->upgrade->liteVersion['liteVIP1_2'] = 'biz7_1';
+
 $config->upgrade->lowerTables = array();
 $config->upgrade->lowerTables[$config->db->prefix . 'caseStep']       = $config->db->prefix . 'casestep';
 $config->upgrade->lowerTables[$config->db->prefix . 'docLib']         = $config->db->prefix . 'doclib';

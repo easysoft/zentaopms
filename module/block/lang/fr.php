@@ -326,8 +326,8 @@ $lang->block->default['full']['my']['10']['source'] = 'project';
 $lang->block->default['full']['my']['10']['grid']   = 8;
 if($config->systemMode == 'classic')
 {
-    $lang->block->default['full']['my']['10']['block']  = 'execution';
-    $lang->block->default['full']['my']['10']['source'] = 'execution';
+    $lang->block->default['full']['my']['10']['block']  = 'project';
+    $lang->block->default['full']['my']['10']['source'] = 'project';
 }
 
 $lang->block->default['full']['my']['10']['params']['orderBy'] = 'id_desc';
@@ -567,7 +567,7 @@ $lang->block->flowchart['admin']   = array('Administrateur', 'Ajoute Compartimen
 if($config->systemMode == 'new') $lang->block->flowchart['program'] = array('Program Owner', 'Create Program', 'Link Product', "Create Project", "Budgeting and planning", 'Add Stakeholder');
 $lang->block->flowchart['product'] = array($lang->productCommon . ' Owner', 'Ajoute ' . $lang->productCommon . '/Modules', 'Ajoute ' . $lang->executionCommon . 's', 'Ajoute Stories', 'Maintient Plans', 'Crée Releases');
 $lang->block->flowchart['project'] = array('Project Manager', 'Add projects and ' . $lang->executionCommon . 's', 'Maintain Teams', 'Link Stories', 'Create Tasks', 'Track');
-if($config->systemMode == 'new') $lang->block->flowchart['project'] = array('Project Manager', 'Add ' . $lang->executionCommon . 's', 'Maintain Teams', 'Link Stories', 'Create Tasks', 'Track');
+if($config->systemMode == 'new') $lang->block->flowchart['project'] = array('Project Manager', 'Add projects and ' . $lang->executionCommon . 's', 'Maintain Teams', 'Link Stories', 'Create Tasks', 'Track');
 $lang->block->flowchart['dev']     = array('Développeurs', 'Réclament Tâches/Bugs', 'Effectuent Tâches', 'Corrigent Bugs', 'MàJ Statuts', 'Terminent Tâches/Bugs');
 $lang->block->flowchart['tester']  = array('Testeurs', 'Rédigent CasTests', 'Jouent CasTests', 'Détectent Bugs', 'Vérifient Corrections', 'Ferment Bugs');
 

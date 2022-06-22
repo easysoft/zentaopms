@@ -95,7 +95,7 @@ $lang->productplan->childrenAB = "C";
 $lang->productplan->order      = "Order";
 $lang->productplan->deleted    = "Deleted";
 $lang->productplan->mailto     = "Mailto";
-$lang->productplan->status     = "Plan Status";
+$lang->productplan->status     = 'Status';
 $lang->productplan->planStatus = "Status";
 
 $lang->productplan->statusList['wait']   = 'Wait';

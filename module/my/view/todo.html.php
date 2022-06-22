@@ -172,9 +172,9 @@
           $actionLink = $this->createLink('todo', 'import2Today');
           echo "<div class='input-control has-icon-right space'>";
           echo '<input type="text" name="date" id="importDate" value="' . date('Y-m-d') . '" class="form-control form-date">';
-          echo '<label for="importDate" class="input-control-icon-right"><i class="icon icon-delay"></i></label>';
+          echo '<label for="importDate" class="input-control-icon-right iconCenter"><i class="icon icon-delay"></i></label>';
           echo '</div>';
-          echo html::commonButton($lang->todo->import, "onclick=\"setFormAction('$actionLink')\"");
+          echo html::commonButton($lang->todo->changeDate, "onclick=\"setFormAction('$actionLink')\"");
       }
       ?>
       </div>

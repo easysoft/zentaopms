@@ -43,7 +43,7 @@
         <th class='c-user'><?php echo $lang->team->role;?></th>
         <th class='c-date'><?php echo $lang->team->join;?></th>
         <th class='c-hours'><?php echo $lang->my->hours;?></th>
-        <th class='c-user'><?php echo $lang->execution->assignedToMe;?></th>
+        <th class='c-user'><?php echo $lang->execution->myTask;?></th>
         <th class='c-progress'><?php echo $lang->execution->progress;?></th>
       </tr>
     </thead>
