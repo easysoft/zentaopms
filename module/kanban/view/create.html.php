@@ -75,6 +75,10 @@
         <td><?php echo nl2br(html::radio('performable', $lang->kanban->enableList, '0'));?></td>
       </tr>
       <tr>
+        <th id='c-title'><?php echo $lang->kanban->alignment;?></th>
+        <td><?php echo nl2br(html::radio('alignment', $lang->kanban->alignmentList, 'center'));?></td>
+      </tr>
+      <tr>
         <th><?php echo $lang->kanban->desc;?></th>
         <td colspan='2'>
           <?php echo html::textarea('desc', '', "rows='10' class='form-control'");?>

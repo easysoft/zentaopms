@@ -86,6 +86,7 @@ $lang->kanban->allKanban           = 'All Kanban';
 $lang->kanban->allProjects         = 'All ' . ($this->config->systemMode == 'classic' ? $lang->executionCommon : 'Projects');
 $lang->kanban->allProducts         = 'All Products';
 $lang->kanban->mine                = 'Mine';
+$lang->kanban->alignment           = 'Alignment';
 
 /* Fields. */
 $lang->kanban->space          = 'Space';
@@ -136,6 +137,9 @@ $lang->kanban->archiveList['1'] = 'Enable';
 
 $lang->kanban->enableList['0'] = 'Disable';
 $lang->kanban->enableList['1'] = 'Enable';
+
+$lang->kanban->alignmentList['center'] = 'Center';
+$lang->kanban->alignmentList['left']   = 'Left';
 
 $lang->kanban->type = array();
 $lang->kanban->type['all']   = "All KanBan";

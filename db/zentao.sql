@@ -782,6 +782,7 @@ CREATE TABLE `zt_kanban` (
   `displayCards` smallint(6) NOT NULL default '0',
   `fluidBoard` enum('0','1') NOT NULL DEFAULT '0',
   `object` varchar(255) NOT NULL,
+  `alignment` varchar(10) NOT NULL default 'center',
   `createdBy` char(30) NOT NULL,
   `createdDate` datetime NOT NULL,
   `lastEditedBy` char(30) NOT NULL,
