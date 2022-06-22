@@ -405,7 +405,7 @@ class repoModel extends model
      * @access public
      * @return array
      */
-    public function getReposGroup($type, $projectID = 0)
+    public function getRepoGroup($type, $projectID = 0)
     {
         $repoPairs = $this->getRepoPairs($type, $projectID);
 

@@ -47,7 +47,7 @@ class repo extends control
     {
         $tab = $this->app->tab;
         $this->repos      = $this->repo->getRepoPairs($tab, $objectID);
-        $this->reposGroup = $this->repo->getReposGroup($tab, $objectID);
+        $this->reposGroup = $this->repo->getRepoGroup($tab, $objectID);
 
         if($tab == 'project')
         {
