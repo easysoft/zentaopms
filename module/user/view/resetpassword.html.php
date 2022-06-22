@@ -38,7 +38,7 @@ include '../../common/view/header.lite.html.php';
                   <?php
                   echo html::hidden('account', $user->account);
                   echo html::submitButton($lang->user->submit);
-                  echo html::backButton();
+                  echo html::a(inlink('login'), $lang->goback, '', 'class="btn btn-wide"');
                   ?>
                 </td>
               </tr>
