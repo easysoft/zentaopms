@@ -1217,6 +1217,7 @@ $lang->resource->doc->collect       = 'collectAction';
 $lang->resource->doc->tableContents = 'tableContents';
 $lang->resource->doc->showFiles     = 'showFiles';
 $lang->resource->doc->updateOrder   = 'updateOrder';
+$lang->resource->doc->sortLibs      = 'sortLibs';
 
 $lang->doc->methodOrder[0]  = 'index';
 $lang->doc->methodOrder[5]  = 'browse';
@@ -1233,6 +1234,8 @@ $lang->doc->methodOrder[55] = 'objectLibs';
 $lang->doc->methodOrder[60] = 'collect';
 $lang->doc->methodOrder[65] = 'tableContents';
 $lang->doc->methodOrder[70] = 'showFiles';
+$lang->doc->methodOrder[75] = 'updateOrder';
+$lang->doc->methodOrder[80] = 'sortLibs';
 
 /* Mail. */
 $lang->resource->mail = new stdclass();

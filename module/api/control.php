@@ -674,6 +674,11 @@ EOT;
             $selected = $key == $libID ? 'selected' : '';
             $output  .= html::a(inlink($methodName, "libID=$key"), $lib->name, '', "class='$selected' data-app='{$this->app->tab}'");
         }
+        if(count($libs) >= 2 and common::hasPriv('doc', 'sortLibs'))
+        {
+            $output   .= '<li class="divider"></li>';
+            $output   .= html::a($this->createLink('doc', 'sortLibs', "type=api&objectID=0", '', true), "<i class='icon-move'></i>  {$this->lang->doc->sortLibs}", '', "data-title='{$this->lang->doc->sortLibs}' data-toggle='modal' data-type='iframe' data-width='400px' data-app='{$this->app->tab}'");
+        }
         $output .= "</div></div></div></div></div>";
 
         /* Get lib version */
