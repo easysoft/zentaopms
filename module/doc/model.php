@@ -2178,7 +2178,7 @@ class docModel extends model
         }
         elseif(in_array($rawMethod, array('tablecontents', 'objectlibs', 'product', 'project', 'execution', 'book', 'custom')))
         {
-            $html  = '<a class="btn btn-link querybox-toggle" id="bysearchTab"><i class="icon icon-search muted"></i>' . $this->lang->doc->search . '</a>';
+            $html  = '<a class="btn btn-link querybox-toggle" id="bysearchTab"><i class="icon icon-search muted"></i> ' . $this->lang->doc->search . '</a>';
         }
         $html .= "<div class='btn-group dropdown-hover'>";
         $html .= "<a href='javascript:;' class='btn btn-link' data-toggle='dropdown'>{$this->lang->doc->myCollection}</a>";
