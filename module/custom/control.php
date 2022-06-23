@@ -120,10 +120,13 @@ class custom extends control
         {
             $postArray = fixer::input('post');
             $keys      = array();
-            foreach($postArray->data->keys as $key)
+            if(isset($postArray->data->keys))
             {
-                if(in_array($key, $keys)) return $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->custom->notice->repeatKey, $key)));;
-                $keys[] = $key;
+                foreach($postArray->data->keys as $key)
+                {
+                    if(in_array($key, $keys)) return $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->custom->notice->repeatKey, $key)));;
+                    $keys[] = $key;
+                }
             }
 
             if($module == 'project' and $field == 'unitList')
