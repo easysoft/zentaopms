@@ -2131,6 +2131,7 @@ class repoModel extends model
      *
      * @param  object $repo
      * @param  int    $objectID
+     * @param  string $link
      * @param  string $scm
      * @access public
      * @return void
