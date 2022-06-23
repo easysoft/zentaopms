@@ -6449,7 +6449,7 @@ class upgradeModel extends model
      */
     public function addStoryViewPriv()
     {
-        $groupIdList = $this->dao->select('group')->from(TABLE_GROUPPRIV)
+        $groupIdList = $this->dao->select('`group`')->from(TABLE_GROUPPRIV)
             ->where('module')->eq('story')
             ->andWhere('method')->eq('view')
             ->fetchPairs('group');
