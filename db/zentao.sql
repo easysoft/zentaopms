@@ -780,6 +780,7 @@ CREATE TABLE `zt_kanban` (
   `status` enum('active','closed') NOT NULL default 'active',
   `order` mediumint(8) NOT NULL DEFAULT '0',
   `displayCards` smallint(6) NOT NULL default '0',
+  `showWIP` smallint(6) NOT NULL default '1',
   `fluidBoard` enum('0','1') NOT NULL DEFAULT '0',
   `object` varchar(255) NOT NULL,
   `alignment` varchar(10) NOT NULL default 'center',
@@ -1144,6 +1145,16 @@ CREATE TABLE IF NOT EXISTS `zt_project` (
   KEY `status` (`status`),
   KEY `acl` (`acl`),
   KEY `order` (`order`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+-- DROP TABLE IF EXISTS `zt_projectadmin`;
+CREATE TABLE `zt_projectadmin` (
+  `group` smallint(6) NOT NULL,
+  `account` char(30) NOT NULL,
+  `programs` text NOT NULL,
+  `projects` text NOT NULL,
+  `products` text NOT NULL,
+  `executions` text NOT NULL,
+  UNIQUE KEY `group_account` (`group`, `account`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_projectcase`;
 CREATE TABLE IF NOT EXISTS `zt_projectcase` (

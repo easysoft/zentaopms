@@ -37,7 +37,17 @@ class group extends control
 
         $groups = $this->group->getList();
         $groupUsers = array();
-        foreach($groups as $group) $groupUsers[$group->id] = $this->group->getUserPairs($group->id);
+        foreach($groups as $group)
+        {
+            if($group->role == 'projectAdmin')
+            {
+                $groupUsers[$group->id] = $this->dao->select('t1.account, t2.realname')->from(TABLE_PROJECTADMIN)->alias('t1')->leftJoin(TABLE_USER)->alias('t2')->on('t1.account = t2.account')->fetchPairs();
+            }
+            else
+            {
+                $groupUsers[$group->id] = $this->group->getUserPairs($group->id);
+            }
+        }
 
         $this->view->title      = $title;
         $this->view->position   = $position;
@@ -294,23 +304,25 @@ class group extends control
             $this->group->updateProjectAdmin($groupID);
             return print(js::locate(inlink('manageProjectAdmin', "group=$groupID"), 'parent'));
         }
-        $group        = $this->group->getById($groupID);
-        $groupUsers   = $this->group->getUserPairs($groupID);
-        $userPrograms = $this->group->getUserPrograms($groupID);
-        $allUsers     = array('' => '') + $groupUsers + $this->loadModel('dept')->getDeptUserPairs($deptID);
+
+        list($programs, $projects, $products, $executions) = $this->group->getObject4AdminGroup();
+
+        $group = $this->group->getById($groupID);
 
         $title      = $this->lang->company->common . $this->lang->colon . $group->name . $this->lang->colon . $this->lang->group->manageMember;
         $position[] = $group->name;
         $position[] = $this->lang->group->manageMember;
 
-        $this->view->title        = $title;
-        $this->view->position     = $position;
-        $this->view->allUsers     = $allUsers;
-        $this->view->group        = $group;
-        $this->view->programs     = $this->dao->select('id, name')->from(TABLE_PROJECT)->where('type')->eq('project')->andWhere('vision')->eq($this->config->vision)->andWhere('deleted')->eq(0)->fetchPairs();
-        $this->view->deptTree     = $this->loadModel('dept')->getTreeMenu($rooteDeptID = 0, array('deptModel', 'createManageProjectAdminLink'), $groupID);
-        $this->view->groupUsers   = $groupUsers;
-        $this->view->userPrograms = $userPrograms;
+        $this->view->title         = $title;
+        $this->view->position      = $position;
+        $this->view->allUsers      = array('' => '') + $this->loadModel('dept')->getDeptUserPairs($deptID);
+        $this->view->deptID        = $deptID;
+        $this->view->programs      = $programs;
+        $this->view->projects      = $projects;
+        $this->view->products      = $products;
+        $this->view->executions    = $executions;
+        $this->view->deptTree      = $this->loadModel('dept')->getTreeMenu($rooteDeptID = 0, array('deptModel', 'createManageProjectAdminLink'), $groupID);
+        $this->view->projectAdmins = $this->group->getProjectAdmins();
 
         $this->display();
     }
