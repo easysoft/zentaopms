@@ -2792,7 +2792,7 @@ EOT;
         {
             $libs                 = $this->getLibsByObject('custom', 0, '', $appendLib);
             $this->app->rawMethod = 'custom';
-            if($libID == 0) $libID = key($libs);
+            if($libID == 0) $libID = reset($libs)->id;
             $this->lang->modulePageNav = $this->select($type, $objects, $objectID, $libs, $libID);
 
             $object     = new stdclass();
