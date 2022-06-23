@@ -845,6 +845,7 @@ class doc extends control
         $users         = $this->user->getPairs('noletter|noempty|noclosed');
         $selectedUser  = $docID ? $doc->users : $doclib->users;
         $selectedGroup = $docID ? $doc->groups : $doclib->groups;
+        $dropDirection = "data-drop-direction='top'";
 
         if($control == 'group')
         {
@@ -855,10 +856,10 @@ class doc extends control
                 {
                     if(strpos($doclib->groups, (string)$groupID) === false) unset($groups[$groupID]);
                 }
-                return print(html::select('groups[]', $groups, $selectedGroup, "class='form-control chosen' multiple"));
+                return print(html::select('groups[]', $groups, $selectedGroup, "class='form-control picker-select' multiple $dropDirection"));
             }
-            if($doclib->acl == 'open') return print(html::select('groups[]', $groups, $selectedGroup, "class='form-control chosen' multiple"));
-            if($doclib->acl == 'default') return print(html::select('groups[]', $groups, $selectedGroup, "class='form-control chosen' multiple"));
+            if($doclib->acl == 'open') return print(html::select('groups[]', $groups, $selectedGroup, "class='form-control picker-select' multiple $dropDirection"));
+            if($doclib->acl == 'default') return print(html::select('groups[]', $groups, $selectedGroup, "class='form-control picker-select' multiple $dropDirection"));
             if($doclib->acl == 'private') echo 'private';
             return false;
         }
@@ -872,10 +873,10 @@ class doc extends control
 
             if($doclib->acl == 'custom')
             {
-                return print(html::select('users[]', $users, $selectedUser, "multiple class='form-control'"));
+                return print(html::select('users[]', $users, $selectedUser, "multiple class='form-control picker-select' $dropDirection"));
             }
-            if($doclib->acl == 'open') return print(html::select('users[]', $users, $selectedUser, "multiple class='form-control'"));
-            if($doclib->acl == 'default') return print(html::select('users[]', $users, $selectedUser, "multiple class='form-control'"));
+            if($doclib->acl == 'open') return print(html::select('users[]', $users, $selectedUser, "multiple class='form-control picker-select' $dropDirection"));
+            if($doclib->acl == 'default') return print(html::select('users[]', $users, $selectedUser, "multiple class='form-control picker-select' $dropDirection"));
             if($doclib->acl == 'private') echo 'private';
             return false;
         }

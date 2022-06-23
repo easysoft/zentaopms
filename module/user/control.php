@@ -1123,7 +1123,7 @@ class user extends control
     /**
      * Reset password.
      *
-     * @param  string  $code 
+     * @param  string  $code
      * @access public
      * @return void
      */
@@ -1134,7 +1134,7 @@ class user extends control
         if($user)
         {
             $resetToken = json_decode($user->resetToken);
-            if($resetToken->endTime >= time()) $expired = false; 
+            if($resetToken->endTime >= time()) $expired = false;
         }
 
         if(!empty($_POST))
@@ -1165,7 +1165,7 @@ class user extends control
         $this->view->expired = $expired;
         $this->view->user    = empty($user) ? '' : $user;
 
-        $this->display(); 
+        $this->display();
     }
 
     /**

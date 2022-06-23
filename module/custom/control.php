@@ -139,6 +139,10 @@ class custom extends control
             elseif($module == 'story' and $field == 'review')
             {
                 $data = fixer::input('post')
+                    ->setDefault('forceReview', '')
+                    ->setDefault('forceNotReview', '')
+                    ->setDefault('forceReviewRoles', '')
+                    ->setDefault('forceNotReviewRoles', '')
                     ->setDefault('forceReviewDepts', '')
                     ->setDefault('forceNotReviewDepts', '')
                     ->join('forceReview', ',')
@@ -160,16 +164,14 @@ class custom extends control
             }
             elseif($module == 'story' and $field == 'reviewRules')
             {
-                $data = fixer::input('post')->join('superReviewers', ',')->get();
+                $data = fixer::input('post')->setDefault('superReviewers', '')->join('superReviewers', ',')->get();
                 $this->loadModel('setting')->setItems("system.$module@{$this->config->vision}", $data);
             }
             elseif($module == 'testcase' and $field == 'review')
             {
                 $review = fixer::input('post')->get();
-                if($review->needReview)  $data = fixer::input('post')->join('forceNotReview', ',')->remove('forceReview')->get();
-                if(!$review->needReview) $data = fixer::input('post')->join('forceReview', ',')->remove('forceNotReview')->get();
-                if(!isset($data->forceReview))    $data->forceReview    = '';
-                if(!isset($data->forceNotReview)) $data->forceNotReview = '';
+                if($review->needReview)  $data = fixer::input('post')->setDefault('forceNotReview', '')->join('forceNotReview', ',')->remove('forceReview')->get();
+                if(!$review->needReview) $data = fixer::input('post')->setDefault('forceReview', '')->join('forceReview', ',')->remove('forceNotReview')->get();
                 $this->loadModel('setting')->setItems("system.$module", $data);
 
                 $reviewCase = isset($review->reviewCase) ? $review->reviewCase : 0;
