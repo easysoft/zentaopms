@@ -293,7 +293,6 @@ class groupModel extends model
     /**
      * Get project admins for manage project admin.
      *
-     * @param  int    $groupID
      * @access public
      * @return array
      */
