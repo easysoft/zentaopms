@@ -89,11 +89,11 @@
             <td>
               <div class='input-group mgb-10'>
                 <span class='input-group-addon'><?php echo $lang->repo->group?></span>
-                <?php echo html::select('acl[groups][]', $groups, empty($repo->acl->groups) ? '' : join(',', $repo->acl->groups), "class='form-control chosen' multiple")?>
+                <?php echo html::select('acl[groups][]', $groups, empty($repo->acl->groups) ? '' : join(',', $repo->acl->groups), "class='form-control picker-select' multiple")?>
               </div>
               <div class='input-group'>
                 <span class='input-group-addon user-addon'><?php echo $lang->repo->user?></span>
-                <?php echo html::select('acl[users][]', $users, empty($repo->acl->users) ? '' : join(',', $repo->acl->users), "class='form-control chosen' multiple")?>
+                <?php echo html::select('acl[users][]', $users, empty($repo->acl->users) ? '' : join(',', $repo->acl->users), "class='form-control picker-select' multiple")?>
               </div>
             </td>
           </tr>

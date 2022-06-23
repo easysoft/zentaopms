@@ -215,7 +215,7 @@
               </tr>
               <tr>
                 <th><?php echo $lang->testcase->stage;?></th>
-                <td><?php echo html::select('stage[]', $lang->testcase->stageList, $case->stage, "class='form-control chosen' multiple='multiple'");?></td>
+                <td><?php echo html::select('stage[]', $lang->testcase->stageList, $case->stage, "class='form-control picker-select' multiple='multiple'");?></td>
               </tr>
               <tr>
                 <th><?php echo $lang->testcase->pri;?></th>

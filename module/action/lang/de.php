@@ -6,32 +6,35 @@
  * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     action
- * @version     $Id: de.php 4729 2013-05-03 07:53:55Z chencongzhi520@gmail.com $
+ * @version     $Id: en.php 4729 2013-05-03 07:53:55Z chencongzhi520@gmail.com $
  * @link        http://www.zentao.net
  */
 global $config;
 
-$lang->action->common      = 'Log';
-$lang->action->id          = 'ID';
-$lang->action->product     = $lang->productCommon;
-$lang->action->project     = 'Project';
-$lang->action->execution   = $lang->execution->common;
-$lang->action->objectType  = 'Object Type';
-$lang->action->objectID    = 'ID';
-$lang->action->objectName  = 'Objekt Name';
-$lang->action->actor       = 'Handler';
-$lang->action->action      = 'Aktion';
-$lang->action->actionID    = 'Aktion ID';
-$lang->action->date        = 'Datum';
-$lang->action->extra       = 'Wertschöpfung';
-$lang->action->system      = 'System';
-$lang->action->url         = 'URL';
-$lang->action->contentType = 'Content Type';
-$lang->action->data        = 'Data';
-$lang->action->result      = 'Result';
-$lang->action->modified    = 'Modified';
-$lang->action->old         = 'Old';
-$lang->action->new         = 'New';
+$lang->action->common        = 'Log';
+$lang->action->id            = 'ID';
+$lang->action->product       = $lang->productCommon;
+$lang->action->project       = 'Project';
+$lang->action->execution     = $lang->execution->common;
+$lang->action->objectType    = 'Object Type';
+$lang->action->objectID      = 'ID';
+$lang->action->objectName    = 'Objekt Name';
+$lang->action->actor         = 'Handler';
+$lang->action->action        = 'Aktion';
+$lang->action->actionID      = 'Aktion ID';
+$lang->action->date          = 'Datum';
+$lang->action->dateAB        = 'Action Date';
+$lang->action->extra         = 'Wertschöpfung';
+$lang->action->system        = 'System';
+$lang->action->url           = 'URL';
+$lang->action->contentType   = 'Content Type';
+$lang->action->data          = 'Data';
+$lang->action->result        = 'Result';
+$lang->action->modified      = 'Modified';
+$lang->action->old           = 'Old';
+$lang->action->new           = 'New';
+$lang->action->to            = 'To';
+$lang->action->superReviewer = 'Super Reviewer';
 
 $lang->action->trash       = 'Aufräumen';
 $lang->action->undelete    = 'Wiederherstellen';
@@ -40,14 +43,20 @@ $lang->action->hideAll     = 'Alle verstecken';
 $lang->action->editComment = 'Bearbeiten';
 $lang->action->create      = 'Kommentar hinzufügen';
 $lang->action->comment     = 'Kommentar';
+$lang->action->byQuery     = 'Search';
 
-$lang->action->trashTips      = 'Hinweis: Alle Löschungen in ZenTao sind logische Löschungen.';
-$lang->action->textDiff       = 'Text Format';
-$lang->action->original       = 'Original Format';
-$lang->action->confirmHideAll = 'Möchten Sie alle Einträge verstecken?';
-$lang->action->needEdit       = '%s existiert bereits. Bitte bearbeiten.';
-$lang->action->historyEdit    = 'Der Verlauf darf nicht leer sein.';
-$lang->action->noDynamic      = 'Kein Verlauf. ';
+$lang->action->undeleteAction = 'Reset Data';
+$lang->action->hideOneAction  = 'Hide Data';
+
+$lang->action->trashTips          = 'Hinweis: Alle Löschungen in ZenTao sind logische Löschungen.';
+$lang->action->textDiff           = 'Text Format';
+$lang->action->original           = 'Original Format';
+$lang->action->confirmHideAll     = 'Möchten Sie alle Einträge verstecken?';
+$lang->action->needEdit           = '%s existiert bereits. Bitte bearbeiten.';
+$lang->action->historyEdit        = 'Der Verlauf darf nicht leer sein.';
+$lang->action->noDynamic          = 'Kein Verlauf. ';
+$lang->action->undeletedTips      = 'This data did not participate in the merging process during the version upgrade process, so restore is not supported.';
+$lang->action->executionNoProject = 'The execution does not belong to a project,please restore the project first';
 
 $lang->action->history = new stdclass();
 $lang->action->history->action = 'Link';
@@ -76,96 +85,129 @@ $lang->action->periods['lastweek']  = $lang->action->dynamic->lastWeek;
 $lang->action->periods['thismonth'] = $lang->action->dynamic->thisMonth;
 $lang->action->periods['lastmonth'] = $lang->action->dynamic->lastMonth;
 
-$lang->action->objectTypes['product']     = $lang->productCommon;
-$lang->action->objectTypes['branch']      = 'Branch';
-$lang->action->objectTypes['story']       = $lang->SRCommon;
-$lang->action->objectTypes['design']      = 'Design';
-$lang->action->objectTypes['productplan'] = 'Plan';
-$lang->action->objectTypes['release']     = 'Release';
-$lang->action->objectTypes['program']     = 'Program';
-$lang->action->objectTypes['project']     = 'Project';
-$lang->action->objectTypes['execution']   = $lang->executionCommon;
-$lang->action->objectTypes['task']        = 'Aufgabe';
-$lang->action->objectTypes['build']       = 'Build';
-$lang->action->objectTypes['job']         = 'Job';
-$lang->action->objectTypes['bug']         = 'Bug';
-$lang->action->objectTypes['case']        = 'Fälle';
-$lang->action->objectTypes['caseresult']  = 'Fallergebnisse';
-$lang->action->objectTypes['stepresult']  = 'Schritte';
-$lang->action->objectTypes['caselib']     = 'Bibliothek';
-$lang->action->objectTypes['testsuite']   = 'Suite';
-$lang->action->objectTypes['testtask']    = 'Test Build';
-$lang->action->objectTypes['testreport']  = 'Berichte';
-$lang->action->objectTypes['doc']         = 'Dok';
-$lang->action->objectTypes['doclib']      = 'Dok Bibliothek';
-$lang->action->objectTypes['todo']        = 'Todo';
-$lang->action->objectTypes['risk']        = 'Risk';
-$lang->action->objectTypes['issue']       = 'Issue';
-$lang->action->objectTypes['module']      = 'Modul';
-$lang->action->objectTypes['user']        = 'Benutzer';
-$lang->action->objectTypes['stakeholder'] = 'Stakeholder';
-$lang->action->objectTypes['budget']      = 'Cost Estimate';
-$lang->action->objectTypes['entry']       = 'Eintrag';
-$lang->action->objectTypes['webhook']     = 'Webhook';
-$lang->action->objectTypes['job']         = 'Job';
-$lang->action->objectTypes['team']        = 'Team';
-$lang->action->objectTypes['whitelist']   = 'Whitelist';
-$lang->action->objectTypes['pipeline']    = 'GitLib';
+$lang->action->objectTypes['product']          = $lang->productCommon;
+$lang->action->objectTypes['branch']           = 'Branch';
+$lang->action->objectTypes['story']            = $lang->SRCommon;
+$lang->action->objectTypes['requirement']      = $lang->URCommon;
+$lang->action->objectTypes['design']           = 'Design';
+$lang->action->objectTypes['productplan']      = 'Plan';
+$lang->action->objectTypes['release']          = 'Release';
+$lang->action->objectTypes['program']          = 'Program';
+$lang->action->objectTypes['project']          = 'Project';
+$lang->action->objectTypes['execution']        = $lang->executionCommon;
+$lang->action->objectTypes['task']             = 'Aufgabe';
+$lang->action->objectTypes['build']            = 'Build';
+$lang->action->objectTypes['job']              = 'Job';
+$lang->action->objectTypes['bug']              = 'Bug';
+$lang->action->objectTypes['case']             = 'Fälle';
+$lang->action->objectTypes['caseresult']       = 'Fallergebnisse';
+$lang->action->objectTypes['stepresult']       = 'Schritte';
+$lang->action->objectTypes['caselib']          = 'Bibliothek';
+$lang->action->objectTypes['testsuite']        = 'Suite';
+$lang->action->objectTypes['testtask']         = 'Test Build';
+$lang->action->objectTypes['testreport']       = 'Berichte';
+$lang->action->objectTypes['doc']              = 'Dok';
+$lang->action->objectTypes['api']              = 'Interface';
+$lang->action->objectTypes['doclib']           = 'Dok Bibliothek';
+$lang->action->objectTypes['apistruct']        = 'API struct';
+$lang->action->objectTypes['todo']             = 'Todo';
+$lang->action->objectTypes['risk']             = 'Risk';
+$lang->action->objectTypes['issue']            = 'Issue';
+$lang->action->objectTypes['module']           = 'Modul';
+$lang->action->objectTypes['user']             = 'Benutzer';
+$lang->action->objectTypes['stakeholder']      = 'Stakeholder';
+$lang->action->objectTypes['budget']           = 'Cost Estimate';
+$lang->action->objectTypes['entry']            = 'Eintrag';
+$lang->action->objectTypes['webhook']          = 'Webhook';
+$lang->action->objectTypes['team']             = 'Team';
+$lang->action->objectTypes['whitelist']        = 'Whitelist';
+$lang->action->objectTypes['pipeline']         = 'GitLib';
+$lang->action->objectTypes['gitlab']           = 'GitLab Server';
+$lang->action->objectTypes['jenkins']          = 'Jenkins';
+$lang->action->objectTypes['mr']               = 'Merge Request';
+$lang->action->objectTypes['gitlabproject']    = 'GitLab Project';
+$lang->action->objectTypes['gitlabuser']       = 'GitLab User';
+$lang->action->objectTypes['gitlabgroup']      = 'GitLab Group';
+$lang->action->objectTypes['gitlabbranch']     = 'GitLab Branch';
+$lang->action->objectTypes['gitlabbranchpriv'] = 'GitLab Protected Branches';
+$lang->action->objectTypes['gitlabtag']        = 'GitLab Tag';
+$lang->action->objectTypes['gitlabtagpriv']    = 'GitLab Tag Protected';
+$lang->action->objectTypes['kanbanspace']      = 'Kanban Space';
+$lang->action->objectTypes['kanban']           = 'Kanban';
+$lang->action->objectTypes['kanbanregion']     = 'Kanban Region';
+$lang->action->objectTypes['kanbanlane']       = 'Kanban Lane';
+$lang->action->objectTypes['kanbancolumn']     = 'Kanban Column';
+$lang->action->objectTypes['kanbancard']       = 'Kanban Card';
+$lang->action->objectTypes['sonarqube']        = 'SonarQube Server';
+$lang->action->objectTypes['sonarqubeproject'] = 'SonarQube Project';
+$lang->action->objectTypes['stage']            = 'Stage';
+$lang->action->objectTypes['patch']            = 'Patch';
 
-/* 用来描述操作历史记录。*/
+/* Used to describe operation history. */
 $lang->action->desc = new stdclass();
-$lang->action->desc->common          = '$date, <strong>$action</strong> von <strong>$actor</strong>.' . "\n";
-$lang->action->desc->extra           = '$date, <strong>$action</strong> als <strong>$extra</strong> von <strong>$actor</strong>.' . "\n";
-$lang->action->desc->opened          = '$date, erstellt von <strong>$actor</strong> .' . "\n";
-$lang->action->desc->openedbysystem  = '$date, opened by system.' . "\n";
-$lang->action->desc->created         = '$date, erstellt von  <strong>$actor</strong> .' . "\n";
-$lang->action->desc->added           = '$date, hinzugefügt durch <strong>$actor</strong> .' . "\n";
-$lang->action->desc->changed         = '$date, bearbeitet von <strong>$actor</strong> .' . "\n";
-$lang->action->desc->edited          = '$date, bearbeitet von <strong>$actor</strong> .' . "\n";
-$lang->action->desc->assigned        = '$date, <strong>$actor</strong> zugewisen an <strong>$extra</strong>.' . "\n";
-$lang->action->desc->closed          = '$date, geschlossen von <strong>$actor</strong> .' . "\n";
-$lang->action->desc->closedbysystem  = '$date, closed by system.' . "\n";
-$lang->action->desc->deleted         = '$date, gelöscht von <strong>$actor</strong> .' . "\n";
-$lang->action->desc->deletedfile     = '$date, <strong>$actor</strong> löschte <strong><i>$extra</i></strong>.' . "\n";
-$lang->action->desc->editfile        = '$date, <strong>$actor</strong> bearbeitete <strong><i>$extra</i></strong>.' . "\n";
-$lang->action->desc->erased          = '$date, gelöscht von <strong>$actor</strong> .' . "\n";
-$lang->action->desc->undeleted       = '$date, wiederhergestellt von <strong>$actor</strong> .' . "\n";
-$lang->action->desc->hidden          = '$date, versteckt von <strong>$actor</strong> .' . "\n";
-$lang->action->desc->commented       = '$date, hinzugefügt von <strong>$actor</strong>.' . "\n";
-$lang->action->desc->activated       = '$date, aktiviert von <strong>$actor</strong> .' . "\n";
-$lang->action->desc->blocked         = '$date, geblockt von <strong>$actor</strong> .' . "\n";
-$lang->action->desc->moved           = '$date, verschoben von <strong>$actor</strong> , ursprünglich "$extra".' . "\n";
-$lang->action->desc->confirmed       = '$date, <strong>$actor</strong> hat die Anpassung der Story bestätigt. Das letzte Build ist <strong>#$extra</strong>.' . "\n";
-$lang->action->desc->caseconfirmed   = '$date, <strong>$actor</strong> hat die Anpassung des Falls bestätigt. Das letzte Build ist <strong>#$extra</strong>' . "\n";
-$lang->action->desc->bugconfirmed    = '$date, <strong>$actor</strong> hat den Bug bestätigt.' . "\n";
-$lang->action->desc->frombug         = '$date, konvertiert von <strong>$actor</strong>. Die ID war <strong>$extra</strong>.';
-$lang->action->desc->started         = '$date, gestartet von <strong>$actor</strong>.' . "\n";
-$lang->action->desc->restarted       = '$date, continued by <strong>$actor</strong>.' . "\n";
-$lang->action->desc->delayed         = '$date, zurückgestellt von <strong>$actor</strong>.' . "\n";
-$lang->action->desc->suspended       = '$date, ausgesetzt von <strong>$actor</strong>.' . "\n";
-$lang->action->desc->recordestimate  = '$date, aufgenommen von <strong>$actor</strong> und hat <strong>$extra</strong> Stunden aufgebraucht.';
-$lang->action->desc->editestimate    = '$date, <strong>$actor</strong> Stunden angepaast.';
-$lang->action->desc->deleteestimate  = '$date, <strong>$actor</strong> Stunden gelöscht.';
-$lang->action->desc->canceled        = '$date, abgebrochen von <strong>$actor</strong>.' . "\n";
-$lang->action->desc->svncommited     = '$date, <strong>$actor</strong> festgelegt. Build ist <strong>#$extra</strong>.' . "\n";
-$lang->action->desc->gitcommited     = '$date, <strong>$actor</strong> festgelegt. Build ist <strong>#$extra</strong>.' . "\n";
-$lang->action->desc->finished        = '$date, abgeschlossen von <strong>$actor</strong>.' . "\n";
-$lang->action->desc->paused          = '$date, pausiert von <strong>$actor</strong>.' . "\n";
-$lang->action->desc->verified        = '$date, überprüft von <strong>$actor</strong>.' . "\n";
-$lang->action->desc->diff1           = '<strong><i>%s</i></strong> wurde geändert. Es war "%s" und ist jetzt "%s".<br />' . "\n";
-$lang->action->desc->diff2           = '<strong><i>%s</i></strong> wurde geändert. Die Differenz ist ' . "\n" . "<blockquote class='textdiff'>%s</blockquote>" . "\n<blockquote class='original'>%s</blockquote>";
-$lang->action->desc->diff3           = 'Dateiname %s wurde geändert zu %s .' . "\n";
-$lang->action->desc->linked2bug      = '$date Verknüpft mit <strong>$extra</strong> von <strong>$actor</strong>';
-$lang->action->desc->linked2testtask = '$date, linked to <strong>$extra</strong> by <strong>$actor</strong>';
-$lang->action->desc->resolved        = '$date, resolved by <strong>$actor</strong> ' . "\n";
-$lang->action->desc->managed         = '$date, by <strong>$actor</strong> managed.' . "\n";
-$lang->action->desc->estimated       = '$date, by <strong>$actor</strong> estimated.' . "\n";
-$lang->action->desc->run             = '$date, by <strong>$actor</strong> executed.' . "\n";
-$lang->action->desc->syncprogram     = '$date, started by <strong>$actor</strong>(starting the project sets the program status as Ongoing).' . "\n";
-$lang->action->desc->syncproject     = '$date, starting the execution sets the project status as Ongoing.' . "\n";
-$lang->action->desc->syncexecution   = '$date, starting the task sets the execution status as Ongoing.' . "\n";
+$lang->action->desc->common               = '$date, <strong>$action</strong> von <strong>$actor</strong>.' . "\n";
+$lang->action->desc->extra                = '$date, <strong>$action</strong> als <strong>$extra</strong> von <strong>$actor</strong>.' . "\n";
+$lang->action->desc->opened               = '$date, erstellt von <strong>$actor</strong> .' . "\n";
+$lang->action->desc->openedbysystem       = '$date, opened by system.' . "\n";
+$lang->action->desc->created              = '$date, erstellt von  <strong>$actor</strong> .' . "\n";
+$lang->action->desc->added                = '$date, hinzugefügt durch <strong>$actor</strong> .' . "\n";
+$lang->action->desc->changed              = '$date, bearbeitet von <strong>$actor</strong> .' . "\n";
+$lang->action->desc->edited               = '$date, bearbeitet von <strong>$actor</strong> .' . "\n";
+$lang->action->desc->assigned             = '$date, <strong>$actor</strong> zugewisen an <strong>$extra</strong>.' . "\n";
+$lang->action->desc->closed               = '$date, geschlossen von <strong>$actor</strong> .' . "\n";
+$lang->action->desc->closedbysystem       = '$date, closed by system.' . "\n";
+$lang->action->desc->deleted              = '$date, gelöscht von <strong>$actor</strong> .' . "\n";
+$lang->action->desc->deletedfile          = '$date, <strong>$actor</strong> löschte <strong><i>$extra</i></strong>.' . "\n";
+$lang->action->desc->editfile             = '$date, <strong>$actor</strong> bearbeitete <strong><i>$extra</i></strong>.' . "\n";
+$lang->action->desc->erased               = '$date, gelöscht von <strong>$actor</strong> .' . "\n";
+$lang->action->desc->undeleted            = '$date, wiederhergestellt von <strong>$actor</strong> .' . "\n";
+$lang->action->desc->hidden               = '$date, versteckt von <strong>$actor</strong> .' . "\n";
+$lang->action->desc->commented            = '$date, hinzugefügt von <strong>$actor</strong>.' . "\n";
+$lang->action->desc->activated            = '$date, aktiviert von <strong>$actor</strong> .' . "\n";
+$lang->action->desc->blocked              = '$date, geblockt von <strong>$actor</strong> .' . "\n";
+$lang->action->desc->moved                = '$date, verschoben von <strong>$actor</strong> , ursprünglich "$extra".' . "\n";
+$lang->action->desc->confirmed            = '$date, <strong>$actor</strong> hat die Anpassung der Story bestätigt. Das letzte Build ist <strong>#$extra</strong>.' . "\n";
+$lang->action->desc->caseconfirmed        = '$date, <strong>$actor</strong> hat die Anpassung des Falls bestätigt. Das letzte Build ist <strong>#$extra</strong>' . "\n";
+$lang->action->desc->bugconfirmed         = '$date, <strong>$actor</strong> hat den Bug bestätigt.' . "\n";
+$lang->action->desc->frombug              = '$date, konvertiert von <strong>$actor</strong>. Die ID war <strong>$extra</strong>.';
+$lang->action->desc->started              = '$date, gestartet von <strong>$actor</strong>.' . "\n";
+$lang->action->desc->restarted            = '$date, continued by <strong>$actor</strong>.' . "\n";
+$lang->action->desc->delayed              = '$date, zurückgestellt von <strong>$actor</strong>.' . "\n";
+$lang->action->desc->suspended            = '$date, ausgesetzt von <strong>$actor</strong>.' . "\n";
+$lang->action->desc->recordestimate       = '$date, aufgenommen von <strong>$actor</strong> und hat <strong>$extra</strong> Stunden aufgebraucht.';
+$lang->action->desc->editestimate         = '$date, <strong>$actor</strong> Stunden angepaast.';
+$lang->action->desc->deleteestimate       = '$date, <strong>$actor</strong> Stunden gelöscht.';
+$lang->action->desc->canceled             = '$date, abgebrochen von <strong>$actor</strong>.' . "\n";
+$lang->action->desc->svncommited          = '$date, <strong>$actor</strong> festgelegt. Build ist <strong>#$extra</strong>.' . "\n";
+$lang->action->desc->gitcommited          = '$date, <strong>$actor</strong> festgelegt. Build ist <strong>#$extra</strong>.' . "\n";
+$lang->action->desc->finished             = '$date, abgeschlossen von <strong>$actor</strong>.' . "\n";
+$lang->action->desc->paused               = '$date, pausiert von <strong>$actor</strong>.' . "\n";
+$lang->action->desc->verified             = '$date, überprüft von <strong>$actor</strong>.' . "\n";
+$lang->action->desc->diff1                = '<strong><i>%s</i></strong> wurde geändert. Es war "%s" und ist jetzt "%s".<br />' . "\n";
+$lang->action->desc->diff2                = '<strong><i>%s</i></strong> wurde geändert. Die Differenz ist ' . "\n" . "<blockquote class='textdiff'>%s</blockquote>" . "\n<blockquote class='original'>%s</blockquote>";
+$lang->action->desc->diff3                = 'Dateiname %s wurde geändert zu %s .' . "\n";
+$lang->action->desc->linked2bug           = '$date Verknüpft mit <strong>$extra</strong> von <strong>$actor</strong>';
+$lang->action->desc->linked2testtask      = '$date, linked to <strong>$extra</strong> by <strong>$actor</strong>';
+$lang->action->desc->unlinkedfromtesttask = '$date, unlinked from <strong>$extra</strong> by <strong>$actor</strong>';
+$lang->action->desc->resolved             = '$date, resolved by <strong>$actor</strong> ' . "\n";
+$lang->action->desc->managed              = '$date, by <strong>$actor</strong> managed.' . "\n";
+$lang->action->desc->estimated            = '$date, by <strong>$actor</strong> estimated.' . "\n";
+$lang->action->desc->run                  = '$date, by <strong>$actor</strong> executed.' . "\n";
+$lang->action->desc->syncprogram          = '$date, started by <strong>$actor</strong>(starting the project sets the program status as Ongoing).' . "\n";
+$lang->action->desc->syncproject          = '$date, starting the execution sets the project status as Ongoing.' . "\n";
+$lang->action->desc->syncexecution        = '$date, starting the task sets the execution status as Ongoing.' . "\n";
+$lang->action->desc->syncexecutionbychild = '$date, starting the sub stage sets the execution status as Ongoing.' . "\n";
+$lang->action->desc->importfromgitlab     = '$date, Issue associate created from gitlab by <strong>$actor</strong>.' . "\n";
+$lang->action->desc->archived             = '$date, archived by <strong>$actor</strong>.' . "\n";
+$lang->action->desc->restore              = '$date, restore by <strong>$actor</strong>.' . "\n";
+$lang->action->desc->importedcard         = '$date, imported to <strong>$extra</strong> by <strong>$actor</strong>.' . "\n";
+$lang->action->desc->importedproductplan  = '$date, imported to <strong>$extra</strong> by <strong>$actor</strong>.' . "\n";
+$lang->action->desc->importedrelease      = '$date, imported to <strong>$extra</strong> by <strong>$actor</strong>.' . "\n";
+$lang->action->desc->importedexecution    = '$date, imported to <strong>$extra</strong> by <strong>$actor</strong>.' . "\n";
+$lang->action->desc->importedbuild        = '$date, imported to <strong>$extra</strong> by <strong>$actor</strong>.' . "\n";
+$lang->action->desc->fromsonarqube        = '$date, created by <strong>$actor</strong> from <strong>SonarQube Issue</strong>.' . "\n";
 
-/* 子任务修改父任务的历史操作记录 */
+/* Used to describe the history of operations related to parent-child tasks. */
 $lang->action->desc->createchildren     = '$date, <strong>$actor</strong> created a child task <strong>$extra</strong>。' . "\n";
 $lang->action->desc->linkchildtask      = '$date, <strong>$actor</strong> linked a child task <strong>$extra</strong>。' . "\n";
 $lang->action->desc->unlinkchildrentask = '$date, <strong>$actor</strong> unlinked a child task <strong>$extra</strong>。' . "\n";
@@ -173,7 +215,7 @@ $lang->action->desc->linkparenttask     = '$date, <strong>$actor</strong> linked
 $lang->action->desc->unlinkparenttask   = '$date, <strong>$actor</strong> unlinked a parent task <strong>$extra</strong>。' . "\n";
 $lang->action->desc->deletechildrentask = '$date, <strong>$actor</strong> deleted a child task <strong>$extra</strong>。' . "\n";
 
-/* 用来描述和父子需求相关的操作历史记录。*/
+/* Used to describe the history of operations related to parent-child requirements. */
 $lang->action->desc->createchildrenstory = '$date, <strong>$actor</strong> created a child story <strong>$extra</strong>。' . "\n";
 $lang->action->desc->linkchildstory      = '$date, <strong>$actor</strong> linked a child story <strong>$extra</strong>。' . "\n";
 $lang->action->desc->unlinkchildrenstory = '$date, <strong>$actor</strong> unlinked a child story <strong>$extra</strong>。' . "\n";
@@ -181,12 +223,20 @@ $lang->action->desc->linkparentstory     = '$date, <strong>$actor</strong> linke
 $lang->action->desc->unlinkparentstory   = '$date, <strong>$actor</strong> unlinked a parent story <strong>$extra</strong>。' . "\n";
 $lang->action->desc->deletechildrenstory = '$date, <strong>$actor</strong> deleted a child story <strong>$extra</strong>。' . "\n";
 
-/* 关联用例和移除用例时的历史操作记录。*/
+/* Historical record of actions when associating and removing cases. */
 $lang->action->desc->linkrelatedcase   = '$date, <strong>$actor</strong> hat einen Fall verknüpft <strong>$extra</strong>.' . "\n";
 $lang->action->desc->unlinkrelatedcase = '$date, <strong>$actor</strong> hate eine Fallverknüpfung aufgelöst <strong>$extra</strong>.' . "\n";
 
-/* 用来显示动态信息。*/
+/* Used to describe the history of operations link story and bug to productplan. */
+$lang->action->desc->linkstory   = '$date, 由 <strong>$actor</strong> 关联需求 <strong>$extra</strong> 到计划。' . "\n";
+$lang->action->desc->linkbug     = '$date, 由 <strong>$actor</strong> 关联BUG <strong>$extra</strong> 到计划。' . "\n";
+$lang->action->desc->unlinkstory = '$date, 由 <strong>$actor</strong> 从计划移除需求 <strong>$extra</strong>。' . "\n";
+$lang->action->desc->unlinkbug   = '$date, 由 <strong>$actor</strong> 从计划移除BUG <strong>$extra</strong>。' . "\n";
+
+/* Used to display dynamic information. */
 $lang->action->label                        = new stdclass();
+$lang->action->label->install               = 'install ';
+$lang->action->label->revert                = 'revert ';
 $lang->action->label->created               = 'created ';
 $lang->action->label->opened                = 'opened ';
 $lang->action->label->openedbysystem        = 'Opened by system ';
@@ -216,6 +266,7 @@ $lang->action->label->tostory               = 'Convert to Story';
 $lang->action->label->frombug               = 'Converted from Bug';
 $lang->action->label->fromlib               = 'Import from library';
 $lang->action->label->totask                = 'Convert to Task';
+$lang->action->label->converttotask         = 'converted to Task ';
 $lang->action->label->svncommited           = 'SVN Commit';
 $lang->action->label->gitcommited           = 'Git Commit';
 $lang->action->label->linked2plan           = 'Link to Plan';
@@ -224,6 +275,7 @@ $lang->action->label->changestatus          = 'Change Status';
 $lang->action->label->marked                = 'marked';
 $lang->action->label->linked2execution      = "Link {$lang->executionCommon}";
 $lang->action->label->unlinkedfromexecution = "Unlink {$lang->executionCommon}";
+$lang->action->label->linked2kanban         = 'linked to kanban';
 $lang->action->label->linked2project        = "Link Project";
 $lang->action->label->unlinkedfromproject   = "Unlink Project";
 $lang->action->label->unlinkedfrombuild     = "Unlink Build";
@@ -280,12 +332,44 @@ $lang->action->label->reviewrejected        = 'Reject';
 $lang->action->label->reviewclarified       = 'Clarify';
 $lang->action->label->commitsummary         = 'Commit Summary';
 $lang->action->label->updatetrainee         = 'Update Trainee';
+$lang->action->label->setdefaultbranch      = 'Set default branch';
 $lang->action->label->syncprogram           = 'start';
 $lang->action->label->syncproject           = 'start';
 $lang->action->label->syncexecution         = 'start';
+$lang->action->label->syncexecutionbychild  = 'start';
 $lang->action->label->startProgram          = '(The start of the project sets the status of the program as Ongoing)';
+$lang->action->label->createmr              = 'Merge Request Linked';
+$lang->action->label->deletemr              = 'Merge Request Unlinked';
+$lang->action->label->mergedmr              = 'Merge Request Merged';
+$lang->action->label->compilepass           = 'Compile Success';
+$lang->action->label->compilefail           = 'Compile Fail';
+$lang->action->label->reopen                = 'Reopen';
+$lang->action->label->approve               = 'Passed';
+$lang->action->label->reject                = 'Rejected';
+$lang->action->label->importfromgitlab      = 'Issue associate created';
+$lang->action->label->archived              = 'Archived';
+$lang->action->label->restore               = 'Restore';
+$lang->action->label->mergedbranch          = 'Merge Branch';
+$lang->action->label->startedbychild        = 'started';
+$lang->action->label->finishedbychild       = 'finished';
+$lang->action->label->closedbychild         = 'closed';
+$lang->action->label->activatedbychild      = 'activated';
+$lang->action->label->createchild           = 'activated';
+$lang->action->label->executed              = 'executed';
+$lang->action->label->importedcard          = 'imported';
+$lang->action->label->importedproductplan   = 'imported';
+$lang->action->label->importedrelease       = 'imported';
+$lang->action->label->importedexecution     = 'imported';
+$lang->action->label->importedbuild         = 'imported';
+$lang->action->label->fromsonarqube         = 'created a bug from SonarQube Issue named:';
+$lang->action->label->bind                  = 'bound';
+$lang->action->label->unbind                = 'unbound';
+$lang->action->label->linkstory             = 'link stories to';
+$lang->action->label->linkbug               = 'link bugs to';
+$lang->action->label->unlinkstory           = 'unlink stories from';
+$lang->action->label->unlinkbug             = 'unlink bugs from';
 
-/* 动态信息按照对象分组 */
+/* Dynamic information is grouped by object. */
 $lang->action->dynamicAction                    = new stdclass;
 $lang->action->dynamicAction->todo['opened']    = 'Create Todo';
 $lang->action->dynamicAction->todo['edited']    = 'Edit Todo';
@@ -297,18 +381,18 @@ $lang->action->dynamicAction->todo['assigned']  = 'Assign Todo';
 $lang->action->dynamicAction->todo['undeleted'] = 'Restore Todo';
 $lang->action->dynamicAction->todo['hidden']    = 'Hide Todo';
 
-$lang->action->dynamicAction->program['create']   = 'Create Program';
-$lang->action->dynamicAction->program['edit']     = 'Edit Program';
-$lang->action->dynamicAction->program['activate'] = 'Activate Program';
-$lang->action->dynamicAction->program['delete']   = 'Delete Program';
-$lang->action->dynamicAction->program['close']    = 'Close Program';
+$lang->action->dynamicAction->program['opened']    = 'Create Program';
+$lang->action->dynamicAction->program['edited']    = 'Edit Program';
+$lang->action->dynamicAction->program['activated'] = 'Activate Program';
+$lang->action->dynamicAction->program['deleted']   = 'Delete Program';
+$lang->action->dynamicAction->program['closed']    = 'Close Program';
 
-$lang->action->dynamicAction->project['create']   = 'Create Project';
-$lang->action->dynamicAction->project['edit']     = 'Edit Project';
-$lang->action->dynamicAction->project['start']    = 'Start Project';
-$lang->action->dynamicAction->project['suspend']  = 'Suspend Project';
-$lang->action->dynamicAction->project['activate'] = 'Activate Project';
-$lang->action->dynamicAction->project['close']    = 'Close Project';
+$lang->action->dynamicAction->project['opened']    = 'Create Project';
+$lang->action->dynamicAction->project['edited']    = 'Edit Project';
+$lang->action->dynamicAction->project['started']   = 'Start Project';
+$lang->action->dynamicAction->project['suspended'] = 'Suspend Project';
+$lang->action->dynamicAction->project['activated'] = 'Activate Project';
+$lang->action->dynamicAction->project['closed']    = 'Close Project';
 
 $lang->action->dynamicAction->product['opened']    = 'Create ' . $lang->productCommon;
 $lang->action->dynamicAction->product['edited']    = 'Edit ' . $lang->productCommon;
@@ -317,8 +401,23 @@ $lang->action->dynamicAction->product['closed']    = 'Close ' . $lang->productCo
 $lang->action->dynamicAction->product['undeleted'] = 'Restore ' . $lang->productCommon;
 $lang->action->dynamicAction->product['hidden']    = 'Hide ' . $lang->productCommon;
 
-$lang->action->dynamicAction->productplan['opened'] = 'Create Plan';
-$lang->action->dynamicAction->productplan['edited'] = 'Edit Plan';
+$lang->action->dynamicAction->branch['opened']           = 'Create Branch';
+$lang->action->dynamicAction->branch['edited']           = 'Edit Branch';
+$lang->action->dynamicAction->branch['closed']           = 'Close Branch';
+$lang->action->dynamicAction->branch['activated']        = 'Activate Branch';
+$lang->action->dynamicAction->branch['setdefaultbranch'] = 'Set Default Branch';
+$lang->action->dynamicAction->branch['mergebranch']      = 'Merge Branch';
+
+$lang->action->dynamicAction->productplan['opened']      = 'Create Plan';
+$lang->action->dynamicAction->productplan['edited']      = 'Edit Plan';
+$lang->action->dynamicAction->productplan['started']     = "Start Plan";
+$lang->action->dynamicAction->productplan['finished']    = "Finish Plan";
+$lang->action->dynamicAction->productplan['closed']      = "Close Plan";
+$lang->action->dynamicAction->productplan['activated']   = "Activate Plan";
+$lang->action->dynamicAction->productplan['linkstory']   = "Link Story";
+$lang->action->dynamicAction->productplan['unlinkstory'] = "Unlink Story";
+$lang->action->dynamicAction->productplan['linkbug']     = "Link Bug";
+$lang->action->dynamicAction->productplan['unlinkbug']   = "Unlink Bug";
 
 $lang->action->dynamicAction->release['opened']       = 'Create Release';
 $lang->action->dynamicAction->release['edited']       = 'Edit Release';
@@ -328,6 +427,7 @@ $lang->action->dynamicAction->release['notified']     = 'Notify Release';
 $lang->action->dynamicAction->release['hidden']       = 'Hide Release';
 
 $lang->action->dynamicAction->story['opened']                = 'Create Story';
+$lang->action->dynamicAction->story['importfromgitlab']      = "Issue associate create story";
 $lang->action->dynamicAction->story['edited']                = 'Edit Story';
 $lang->action->dynamicAction->story['activated']             = 'Activate Story';
 $lang->action->dynamicAction->story['reviewed']              = 'Review Story';
@@ -346,6 +446,7 @@ $lang->action->dynamicAction->story['undeleted']             = 'Restore Story';
 $lang->action->dynamicAction->story['hidden']                = 'Hide Story';
 $lang->action->dynamicAction->story['linked2execution']      = "Link Story";
 $lang->action->dynamicAction->story['unlinkedfromexecution'] = "Unlink Story";
+$lang->action->dynamicAction->story['linked2kanban']         = "Link Story";
 $lang->action->dynamicAction->story['estimated']             = "Estimate $lang->SRCommon";
 
 $lang->action->dynamicAction->execution['opened']    = 'Create ' . $lang->executionCommon;
@@ -361,9 +462,42 @@ $lang->action->dynamicAction->execution['undeleted'] = 'Restore ' . $lang->execu
 $lang->action->dynamicAction->execution['hidden']    = 'Hide ' . $lang->executionCommon;
 $lang->action->dynamicAction->execution['moved']     = 'Improt Task';
 
+$lang->action->dynamicAction->kanban['created'] = 'Create Kanban';
+$lang->action->dynamicAction->kanban['edited']  = 'Kanban Settings';
+$lang->action->dynamicAction->kanban['closed']  = 'Close Kanban';
+$lang->action->dynamicAction->kanban['deleted'] = 'Delete Kanban';
+
+$lang->action->dynamicAction->kanbanspace['created'] = 'Create Space';
+$lang->action->dynamicAction->kanbanspace['edited']  = 'Space Settings';
+$lang->action->dynamicAction->kanbanspace['closed']  = 'Close Space';
+$lang->action->dynamicAction->kanbanspace['deleted'] = 'Deleted Space';
+
+$lang->action->dynamicAction->kanbanregion['created'] = 'Create Region';
+$lang->action->dynamicAction->kanbanregion['edited']  = 'Edit Region';
+$lang->action->dynamicAction->kanbanregion['deleted'] = 'Delete Region';
+
+$lang->action->dynamicAction->kanbancolumn['created']  = 'Create Column';
+$lang->action->dynamicAction->kanbancolumn['edited']   = 'Column Settings';
+$lang->action->dynamicAction->kanbancolumn['archived'] = 'Archive Column';
+$lang->action->dynamicAction->kanbancolumn['restore']  = 'Restore Column';
+$lang->action->dynamicAction->kanbancolumn['deleted']  = 'Delete Column';
+
+$lang->action->dynamicAction->kanbanlane['created'] = 'Create Lane';
+$lang->action->dynamicAction->kanbanlane['edited']  = 'Lane Settings';
+$lang->action->dynamicAction->kanbanlane['moved']   = 'Move Lane';
+$lang->action->dynamicAction->kanbanlane['deleted'] = 'Delete Lane';
+
+$lang->action->dynamicAction->kanbancard['created']   = 'Create Card';
+$lang->action->dynamicAction->kanbancard['edited']    = 'Edit Card';
+$lang->action->dynamicAction->kanbancard['commented'] = 'Comment Card';
+$lang->action->dynamicAction->kanbancard['archived']  = 'Archive Card';
+$lang->action->dynamicAction->kanbancard['restore']   = 'Restore Card';
+$lang->action->dynamicAction->kanbancard['deleted']   = 'Delete Card';
+
 $lang->action->dynamicAction->team['managedTeam'] = 'Manage Team';
 
 $lang->action->dynamicAction->task['opened']              = 'Create Task';
+$lang->action->dynamicAction->task['importfromgitlab']    = "Issue associate create task";
 $lang->action->dynamicAction->task['edited']              = 'Edit Task';
 $lang->action->dynamicAction->task['commented']           = 'Task Comment';
 $lang->action->dynamicAction->task['assigned']            = 'Assign Task';
@@ -397,6 +531,7 @@ $lang->action->dynamicAction->build['edited']  = 'Edit Build';
 $lang->action->dynamicAction->build['deleted'] = 'Delete Build';
 
 $lang->action->dynamicAction->bug['opened']              = 'Report Bug';
+$lang->action->dynamicAction->bug['importfromgitlab']    = "Issue associate create bug";
 $lang->action->dynamicAction->bug['edited']              = 'Edit Bug';
 $lang->action->dynamicAction->bug['activated']           = 'Activate Bug';
 $lang->action->dynamicAction->bug['assigned']            = 'Assign Bug';
@@ -415,6 +550,7 @@ $lang->action->dynamicAction->bug['linked2release']      = 'Link Release';
 $lang->action->dynamicAction->bug['unlinkedfromrelease'] = 'Unlink Plan';
 $lang->action->dynamicAction->bug['linked2bug']          = 'Link Build';
 $lang->action->dynamicAction->bug['unlinkedfrombuild']   = 'Unlink Build';
+$lang->action->dynamicAction->bug['fromsonarqube']       = 'Create Bug from SonarQube Issue';
 
 $lang->action->dynamicAction->testtask['opened']    = 'Create Test Request';
 $lang->action->dynamicAction->testtask['edited']    = 'Edit Test Request';
@@ -461,6 +597,10 @@ $lang->action->dynamicAction->doc['deleted']   = 'Delete Document';
 $lang->action->dynamicAction->doc['undeleted'] = 'Restore Document';
 $lang->action->dynamicAction->doc['hidden']    = 'Hide Document';
 
+$lang->action->dynamicAction->api['created'] = 'Create Interface';
+$lang->action->dynamicAction->api['edited']  = 'Edit Interface';
+$lang->action->dynamicAction->api['deleted'] = 'Delete Interface';
+
 $lang->action->dynamicAction->user['created']       = 'Create User';
 $lang->action->dynamicAction->user['edited']        = 'Edit User';
 $lang->action->dynamicAction->user['deleted']       = 'Delete User';
@@ -473,8 +613,23 @@ $lang->action->dynamicAction->user['loginxuanxuan'] = 'Login Desktop';
 $lang->action->dynamicAction->entry['created'] = 'Add Application';
 $lang->action->dynamicAction->entry['edited']  = 'Edit Application';
 
-/* 用来生成相应对象的链接。*/
-global $config;
+$lang->action->dynamicAction->job['created']   = 'Create Job';
+$lang->action->dynamicAction->job['edited']    = 'Edit Job';
+$lang->action->dynamicAction->job['executed']  = 'Execute Job';
+$lang->action->dynamicAction->job['deleted']   = 'Delete Job';
+$lang->action->dynamicAction->job['undeleted'] = 'Undelete Job';
+
+$lang->action->dynamicAction->sonarqube['created'] = 'Create SonarQube Server';
+$lang->action->dynamicAction->sonarqube['edited']  = 'Edit SonarQube Server';
+$lang->action->dynamicAction->sonarqube['deleted'] = 'Delete SonarQube Server';
+
+$lang->action->dynamicAction->sonarqubeproject['deleted'] = 'Delete SonarQube Project';
+
+$lang->action->dynamicAction->gitlab['created'] = 'Create GitLab Server';
+$lang->action->dynamicAction->gitlab['edited']  = 'Edit GitLab Server';
+$lang->action->dynamicAction->gitlab['deleted'] = 'Delete GitLab Server';
+
+/* Generate the corresponding object link. */
 $lang->action->label->product     = $lang->productCommon . '|product|view|productID=%s';
 $lang->action->label->productplan = 'Plan|productplan|view|productID=%s';
 $lang->action->label->release     = 'Release|release|view|productID=%s';
@@ -487,27 +642,38 @@ if($config->systemMode == 'new')
 }
 else
 {
-    $lang->action->label->execution = "$lang->executionCommon|execution|task|executionID=%s";
+    $lang->action->label->execution = "Execution|execution|task|executionID=%s";
 }
-$lang->action->label->task        = 'Aufgaben|task|view|taskID=%s';
-$lang->action->label->build       = 'Builds|build|view|buildID=%s';
-$lang->action->label->bug         = 'Bugs|bug|view|bugID=%s';
-$lang->action->label->case        = 'Fälle|testcase|view|caseID=%s';
-$lang->action->label->testtask    = 'Testaufgaben|testtask|view|caseID=%s';
-$lang->action->label->testsuite   = 'Test Suite|testsuite|view|suiteID=%s';
-$lang->action->label->caselib     = 'Fallbibliothek|testsuite|libview|libID=%s';
-$lang->action->label->todo        = 'Todo|todo|view|todoID=%s';
-$lang->action->label->doclib      = 'Dok Bibliothek|doc|browse|libID=%s';
-$lang->action->label->doc         = 'Dok|doc|view|docID=%s';
-$lang->action->label->user        = 'Benutzer|user|view|account=%s';
-$lang->action->label->testreport  = 'Berichte|testreport|view|report=%s';
-$lang->action->label->entry       = 'Eintrag|entry|browse|';
-$lang->action->label->webhook     = 'Webhook|webhook|browse|';
-$lang->action->label->space       = ' ';
-$lang->action->label->risk        = 'Risk|risk|view|riskID=%s';
-$lang->action->label->issue       = 'Issue|issue|view|issueID=%s';
-$lang->action->label->design      = 'Design|design|view|designID=%s';
-$lang->action->label->stakeholder = 'Stakeholder|stakeholder|view|userID=%s';
+
+$lang->action->label->task         = 'Aufgaben|task|view|taskID=%s';
+$lang->action->label->build        = 'Builds|build|view|buildID=%s';
+$lang->action->label->bug          = 'Bugs|bug|view|bugID=%s';
+$lang->action->label->case         = 'Fälle|testcase|view|caseID=%s';
+$lang->action->label->testtask     = 'Testaufgaben|testtask|view|caseID=%s';
+$lang->action->label->testsuite    = 'Test Suite|testsuite|view|suiteID=%s';
+$lang->action->label->caselib      = 'Fallbibliothek|testsuite|libview|libID=%s';
+$lang->action->label->todo         = 'Todo|todo|view|todoID=%s';
+$lang->action->label->doclib       = 'Dok Bibliothek|doc|browse|libID=%s';
+$lang->action->label->doc          = 'Dok|doc|view|docID=%s';
+$lang->action->label->user         = 'Benutzer|user|view|account=%s';
+$lang->action->label->testreport   = 'Berichte|testreport|view|report=%s';
+$lang->action->label->entry        = 'Eintrag|entry|browse|';
+$lang->action->label->webhook      = 'Webhook|webhook|browse|';
+$lang->action->label->space        = ' ';
+$lang->action->label->risk         = 'Risk|risk|view|riskID=%s';
+$lang->action->label->issue        = 'Issue|issue|view|issueID=%s';
+$lang->action->label->design       = 'Design|design|view|designID=%s';
+$lang->action->label->stakeholder  = 'Stakeholder|stakeholder|view|userID=%s';
+$lang->action->label->api          = 'Interface|api|index|libID=%s&moduleID=%s&apiID=%s';
+$lang->action->label->kanbanspace  = 'Kanban Space|kanban|space|browseType=%s';
+$lang->action->label->kanbanregion = 'Kanban Region|kanban|view|kanbanID=%s';
+$lang->action->label->kanban       = 'Kanban|kanban|view|kanbanID=%s';
+$lang->action->label->kanbancolumn = 'Kanban Column|execution|kanban|execution=%s';
+$lang->action->label->kanbanlane   = 'Kanban Lane|execution|kanban|execution=%s&type=all';
+$lang->action->label->kanbancard   = 'Kanban Card|kanban|view|kanbanID=%s';
+$lang->action->label->mr           = 'Merge Request|mr|view|id=%s';
+$lang->action->label->gitlab       = 'GitLab Server|gitlab|view|id=%s';
+$lang->action->label->stage        = 'Stage|stage|browse|';
 
 /* Object type. */
 $lang->action->search = new stdclass();
@@ -535,7 +701,7 @@ $lang->action->search->objectTypeList['testsuite']   = 'Suite';
 $lang->action->search->objectTypeList['caselib']     = 'Bibliothek';
 $lang->action->search->objectTypeList['testreport']  = 'Berichte';
 
-/* 用来在动态显示中显示动作 */
+/* Used to display actions in dynamic method. */
 $lang->action->search->label['']                      = '';
 $lang->action->search->label['created']               = $lang->action->label->created;
 $lang->action->search->label['opened']                = $lang->action->label->opened;
@@ -570,6 +736,7 @@ $lang->action->search->label['linked2project']        = $lang->action->label->li
 $lang->action->search->label['unlinkedfromproject']   = $lang->action->label->unlinkedfromproject;
 $lang->action->search->label['linked2execution']      = $lang->action->label->linked2execution;
 $lang->action->search->label['unlinkedfromexecution'] = $lang->action->label->unlinkedfromexecution;
+$lang->action->search->label['linked2kanban']         = $lang->action->label->linked2kanban;
 $lang->action->search->label['started']               = $lang->action->label->started;
 $lang->action->search->label['restarted']             = $lang->action->label->restarted;
 $lang->action->search->label['recordestimate']        = $lang->action->label->recordestimate;
@@ -578,5 +745,114 @@ $lang->action->search->label['canceled']              = $lang->action->label->ca
 $lang->action->search->label['finished']              = $lang->action->label->finished;
 $lang->action->search->label['paused']                = $lang->action->label->paused;
 $lang->action->search->label['verified']              = $lang->action->label->verified;
+$lang->action->search->label['importfromgitlab']      = $lang->action->label->importfromgitlab;
 $lang->action->search->label['login']                 = $lang->action->label->login;
 $lang->action->search->label['logout']                = $lang->action->label->logout;
+
+/* Action language config for API(JIHU) */
+$lang->action->apiTitle = new stdclass();
+$lang->action->apiTitle->opened                = 'Opened.';
+$lang->action->apiTitle->created               = 'Created.';
+$lang->action->apiTitle->added                 = 'Added.';
+$lang->action->apiTitle->changed               = 'Changed.';
+$lang->action->apiTitle->edited                = 'Edited.';
+$lang->action->apiTitle->assigned              = 'Assigned to <strong>%s</strong>.';
+$lang->action->apiTitle->closed                = 'Closed.';
+$lang->action->apiTitle->deleted               = 'Deleted.';
+$lang->action->apiTitle->deletedfile           = 'Deleted: <strong><i>%s</i></strong>.';
+$lang->action->apiTitle->editfile              = 'Edited: <strong><i>%s</i></strong>.';
+$lang->action->apiTitle->erased                = 'Erased.';
+$lang->action->apiTitle->undeleted             = 'Restored.';
+$lang->action->apiTitle->hidden                = 'Hidden.';
+$lang->action->apiTitle->commented             = 'Commented';
+$lang->action->apiTitle->activated             = 'Activated.';
+$lang->action->apiTitle->confirmed             = 'Confirmed.';
+$lang->action->apiTitle->caseconfirmed         = '<strong>$actor</strong> confirmed the case change. The latest build is <strong>#$extra</strong>';
+$lang->action->apiTitle->bugconfirmed          = '<strong>$actor</strong> confirmed Bug.';
+$lang->action->apiTitle->frombug               = 'Converted from <strong>$actor</strong>. Its ID was <strong>$extra</strong>.';
+$lang->action->apiTitle->started               = 'Started by <strong>$actor</strong>.';
+$lang->action->apiTitle->restarted             = 'Continued by <strong>$actor</strong>.';
+$lang->action->apiTitle->delayed               = 'Postponed by <strong>$actor</strong>.';
+$lang->action->apiTitle->suspended             = 'Suspended by <strong>$actor</strong>.';
+$lang->action->apiTitle->recordestimate        = 'Recorded by <strong>$actor</strong> and it cost <strong>$extra</strong> hours.';
+$lang->action->apiTitle->editestimate          = '<strong>$actor</strong> edited Hour.';
+$lang->action->apiTitle->deleteestimate        = '<strong>$actor</strong> deleted Hour.';
+$lang->action->apiTitle->canceled              = 'Cancelled by <strong>$actor</strong>.';
+$lang->action->apiTitle->svncommited           = '<strong>$actor</strong> committed and the build is <strong>#$extra</strong>.';
+$lang->action->apiTitle->gitcommited           = '<strong>$actor</strong> committed and the build is <strong>#$extra</strong>.';
+$lang->action->apiTitle->finished              = 'Finished by <strong>$actor</strong>.';
+$lang->action->apiTitle->paused                = 'Paused by <strong>$actor</strong>.';
+$lang->action->apiTitle->linked2bug            = 'Linked to <strong>$extra</strong> by <strong>$actor</strong>';
+$lang->action->apiTitle->linked2testtask       = 'Linked to <strong>$extra</strong> by <strong>$actor</strong>';
+$lang->action->apiTitle->resolved              = 'Resolved by <strong>$actor</strong> ';
+$lang->action->apiTitle->managed               = 'By <strong>$actor</strong> managed.';
+$lang->action->apiTitle->estimated             = 'By <strong>$actor</strong> estimated.';
+$lang->action->apiTitle->run                   = 'By <strong>$actor</strong> executed.';
+$lang->action->apiTitle->tostory               = "To story: {$lang->SRCommon}";
+$lang->action->apiTitle->createchildren        = 'Create children <strong>%s</strong>.';
+$lang->action->apiTitle->linkchildtask         = 'Link a child task <strong>%s</strong>.';
+$lang->action->apiTitle->unlinkchildrentask    = 'Unlink a child task <strong>%s</strong>.';
+$lang->action->apiTitle->linkparenttask        = 'Link a parent task <strong>%s</strong>.';
+$lang->action->apiTitle->unlinkparenttask      = 'Unlink a parent task <strong>%s</strong>.';
+$lang->action->apiTitle->deletechildrentask    = 'Delete a child task<strong>%s</strong>.';
+$lang->action->apiTitle->createchildrenstory   = 'Create a child story <strong>%s</strong>.';
+$lang->action->apiTitle->linkchildstory        = 'Link a child story <strong>%s</strong>.';
+$lang->action->apiTitle->unlinkchildrenstory   = 'Unlink a child story <strong>%s</strong>.';
+$lang->action->apiTitle->linkparentstory       = 'Link parent story <strong>%s</strong>.';
+$lang->action->apiTitle->unlinkparentstory     = 'Unlink parent story from <strong>%s</strong>.';
+$lang->action->apiTitle->deletechildrenstory   = 'Deleted a child story <strong>%s</strong>.';
+$lang->action->apiTitle->linkrelatedcase       = 'Link related case <strong>%s</strong>.';
+$lang->action->apiTitle->unlinkrelatedcase     = 'Unlink related case <strong>%s</strong>.';
+$lang->action->apiTitle->openedbysystem        = 'Opened by system';
+$lang->action->apiTitle->closedbysystem        = 'Closed by system';
+$lang->action->apiTitle->communicated          = 'Communicated';
+$lang->action->apiTitle->blocked               = 'Blocked';
+$lang->action->apiTitle->reviewed              = 'Reviewed';
+$lang->action->apiTitle->recalled              = 'Recalled';
+$lang->action->apiTitle->moved                 = 'Moved';
+$lang->action->apiTitle->fromlib               = 'Import from lib';
+$lang->action->apiTitle->totask                = 'To task';
+$lang->action->apiTitle->linked2plan           = "Link to plan";
+$lang->action->apiTitle->unlinkedfromplan      = "Unlinked from plan";
+$lang->action->apiTitle->changestatus          = 'Changed status';
+$lang->action->apiTitle->marked                = 'Marked';
+$lang->action->apiTitle->linked2execution      = "Linked to {$lang->executionCommon}";
+$lang->action->apiTitle->unlinkedfromexecution = "Unlinked from {$lang->executionCommon}";
+$lang->action->apiTitle->linked2kanban         = 'Linked to Kanban';
+$lang->action->apiTitle->linked2project        = "Linked to project";
+$lang->action->apiTitle->unlinkedfromproject   = "Unlinked from project";
+$lang->action->apiTitle->unlinkedfrombuild     = "Unlinked from build";
+$lang->action->apiTitle->linked2release        = "Linked to release";
+$lang->action->apiTitle->unlinkedfromrelease   = "Unlinked from release";
+$lang->action->apiTitle->linkrelatedbug        = "Linked related Bug";
+$lang->action->apiTitle->unlinkrelatedbug      = "Unlinked related Bug";
+$lang->action->apiTitle->linkrelatedstory      = "Link related story {$lang->SRCommon}";
+$lang->action->apiTitle->unlinkrelatedstory    = "Unlink related story {$lang->SRCommon}";
+$lang->action->apiTitle->subdividestory        = "Subdivided story: {$lang->SRCommon}";
+$lang->action->apiTitle->unlinkchildstory      = "Unlink child story: {$lang->SRCommon}";
+$lang->action->apiTitle->verified              = 'Verified';
+$lang->action->apiTitle->login                 = 'Login';
+$lang->action->apiTitle->logout                = "Logout";
+$lang->action->apiTitle->linked2build          = "Linked to build";
+$lang->action->apiTitle->unlinkedfromtesttask  = "Unlinked from test task";
+$lang->action->apiTitle->batchcreate           = "Batch create";
+$lang->action->apiTitle->managedteam           = "Managed team";
+$lang->action->apiTitle->managedwhitelist      = "Managed white list";
+$lang->action->apiTitle->tracked               = 'Tracked';
+$lang->action->apiTitle->hangup                = 'Hangup';
+$lang->action->apiTitle->reviewpassed          = 'Review passed';
+$lang->action->apiTitle->reviewrejected        = 'Review rejected';
+$lang->action->apiTitle->reviewclarified       = 'Review clarified';
+$lang->action->apiTitle->commitsummary         = 'Commit summary';
+$lang->action->apiTitle->updatetrainee         = 'Update trainee';
+
+/* Code Review in Repo or Merge Request module. */
+$lang->action->desc->repocreated                  = '$date, created and reviewed by <strong>$actor</strong>: $extra.' . "\n";
+$lang->action->label->repocreated                 = "create and review";
+$lang->action->dynamicAction->task['gitcommited'] = 'GIT Commit';
+$lang->action->dynamicAction->bug['repocreated']  = $lang->action->label->repocreated;
+$lang->action->desc->createmr                     = '$extra';
+$lang->action->desc->deletemr                     = '$date, <strong>$actor</strong> unlink <a href="$extra">merge request</a>。';
+$lang->action->desc->mergedmr                     = '$date, <strong>$actor</strong> merged <a href="$extra">code</a>.';
+$lang->action->desc->approve                      = '$date, <strong>$actor</strong> approved.';
+$lang->action->desc->reject                       = '$date, <strong>$actor</strong> rejected.';

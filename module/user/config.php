@@ -13,10 +13,11 @@ $config->user->custom = new stdclass();
 $config->user->custom->batchCreateFields = 'dept,join,email,gender';
 $config->user->custom->batchEditFields   = 'dept,join,email,commiter';
 
-$config->user->contactField = 'mobile,phone,qq,dingding,weixin,skype,whatsapp,slack';
-$config->user->failTimes    = 6;
-$config->user->lockMinutes  = 10;
-$config->user->batchCreate  = 10;
+$config->user->contactField         = 'mobile,phone,qq,dingding,weixin,skype,whatsapp,slack';
+$config->user->failTimes            = 6;
+$config->user->lockMinutes          = 10;
+$config->user->batchCreate          = 10;
+$config->user->resetPasswordTimeout = 3;
 
 /* User detail fields for API against JIHU GitLab. */
 $config->user->detailFields = 'id,account,realname,avatar';

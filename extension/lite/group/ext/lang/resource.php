@@ -551,6 +551,8 @@ $lang->resource->task->recordEstimate     = 'recordEstimateAction';
 $lang->resource->task->editEstimate       = 'editEstimate';
 $lang->resource->task->deleteEstimate     = 'deleteEstimate';
 $lang->resource->task->report             = 'reportChart';
+$lang->resource->task->exportTemplet      = 'exportTemplet';
+$lang->resource->task->import             = 'import';
 
 $lang->task->methodOrder[5]   = 'create';
 $lang->task->methodOrder[10]  = 'batchCreate';
@@ -575,6 +577,8 @@ $lang->task->methodOrder[100] = 'editEstimate';
 $lang->task->methodOrder[105] = 'deleteEstimate';
 $lang->task->methodOrder[110] = 'report';
 $lang->task->methodOrder[115] = 'batchChangeModule';
+$lang->task->methodOrder[120] = 'exportTemplet';
+$lang->task->methodOrder[125] = 'import';
 
 /* Doc. */
 $lang->resource->doc = new stdclass();
@@ -970,7 +974,6 @@ if($config->edition == 'biz' or $config->edition == 'max')
     $lang->resource->feedback->delete     = 'delete';
     $lang->resource->feedback->close      = 'closeAction';
     $lang->resource->feedback->export     = 'exportAction';
-    $lang->resource->feedback->assignTo   = 'assignTo';
 
     if($config->visions == ',lite,') unset($lang->resource->feedback);
 

@@ -11,38 +11,11 @@
 <?php include '../../common/view/header.html.php';?>
 <div id="mainMenu" class="clearfix">
   <div class='btn-toolbar pull-left'>
-    <div class='btn-group'>
-      <a href='javascript:;' class='btn btn-link btn-limit text-ellipsis' data-toggle='dropdown' style="max-width: 120px;">
-        <span class='text' title='<?php echo $repo->name;?>'><?php echo $repo->name;?></span> <span class='caret'></span>
-      </a>
-      <div id='dropMenu' class='dropdown-menu search-list' data-ride='searchList'>
-        <div class="input-control search-box has-icon-left has-icon-right search-example">
-          <input type="search" class="form-control search-input" />
-          <label class="input-control-icon-left search-icon">
-            <i class="icon icon-search"></i>
-          </label>
-          <a class="input-control-icon-right search-clear-btn">
-            <i class="icon icon-close icon-sm"></i>
-          </a>
-        </div>
-        <div class="list-group">
-          <div class="table-row">
-            <div class="table-col">
-              <ul class="tree tree-angles" data-ride="tree">
-                <?php
-                foreach($repos as $repo)
-                {
-                    echo '<li>';
-                    $selectedClass = $repo->id == $repoID ? 'selected' : '';
-                    echo html::a(inlink('browse', "repoID=$repo->id"), $repo->name, '_self', "class='clickable search-list-item $selectedClass' title='$repo->name' data-key='$repo->name'");
-                    echo '</li>';
-                }
-                ?>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </div>
+    <div class='btn-group' id="swapper">
+      <?php
+      $link = inlink('browse', 'repoID=%s');
+      echo $this->repo->getReposMenu($repo, $objectID, $link, 'Gitlab');
+      ?>
     </div>
   </div>
   <div class="btn-toolBar pull-left">

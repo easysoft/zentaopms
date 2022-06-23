@@ -42,3 +42,7 @@
 
 .table-grouped > tbody > tr,
 .table-grouped > tbody > tr:hover {background: #fff !important;}
+
+.panel-actions {position: relative; padding: 0;}
+.switchBtn {background-color: #fff !important;}
+.switchBtn > i {padding-left: 7px;}

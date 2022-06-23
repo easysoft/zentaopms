@@ -333,7 +333,7 @@ if($this->app->tab == 'project')   js::set('objectID', $projectID);
             <td>
               <div class='input-group' id='contactListGroup'>
                 <?php
-                echo html::select('mailto[]', $users, str_replace(' ', '', $mailto), "class='form-control chosen' multiple");
+                echo html::select('mailto[]', $users, str_replace(' ', '', $mailto), "class='form-control picker-select' multiple");
                 echo $this->fetch('my', 'buildContactLists');
                 ?>
               </div>

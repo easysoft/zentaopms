@@ -432,7 +432,7 @@
   <?php common::printPreAndNext($preAndNext);?>
 </div>
 <div class="modal fade" id="toTask">
-  <div class="modal-dialog mw-500px">
+  <div class="modal-dialog mw-500px select-project-modal">
     <div class="modal-content">
       <div class="modal-header">
         <h4 class="modal-title"><?php echo $lang->bug->selectProjects;?></h4>

@@ -19,6 +19,8 @@
 <?php js::set('defaultType', $todo->type);?>
 <?php js::set('nameBoxLabel', array('custom' => $lang->todo->name, 'idvalue' => $lang->todo->idvalue));?>
 <?php js::set('vision', $config->vision);?>
+<?php js::set('noOptions', $lang->todo->noOptions);?>
+<?php js::set('chosenType', $lang->todo->typeList);?>
 <?php if(common::checkNotCN()):?>
 <style> label.col-sm-1{width:100px;} </style>
 <?php endif;?>

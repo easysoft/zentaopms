@@ -1,3 +1,9 @@
-#dropMenu li > a{margin-top: 4px; margin-bottom: 4px; border-radius: 4px;}
-.tree li{padding: 0 0 0 8px;}
-.tree li a.selected{color: #3123ae; background: #f2eafc;}
+#repoList .tree li {padding: 0 0 0 10px;}
+#repoList .tree li > a {padding: 5px;}
+#repoList .hide-in-search .hidden {display: block !important; visibility: inherit !important;}
+#dropMenuRepo > div.table-row > div > div > ul > li > div {padding-left: 20px;}
+#repoList li > a.selected {color: #e9f2fb; background-color: #16a8f8; line-height: 20px; border-radius: 5px;}
+#repoList .tree li.has-list.open:before {border-left: 0px;}
+#repoList ul.tree-angles {margin-bottom: 0;}
+#repoList {margin: 0;}
+#repoList .tree > li {padding: 2px;}

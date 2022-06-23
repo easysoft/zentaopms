@@ -24,7 +24,8 @@ $lang->tutorial->openTargetPage   = 'Offen <strong class="task-page-name">target
 $lang->tutorial->atTargetPage     = 'Auf <strong class="task-page-name">target</strong>';
 $lang->tutorial->reloadTargetPage = 'Neu laden';
 $lang->tutorial->target           = 'Ziel';
-$lang->tutorial->targetPageTip     = 'Öffne 【%s】 Seite durch befolgen dieser Schritte.';
+$lang->tutorial->targetPageTip    = 'Öffne 【%s】 Seite durch befolgen dieser Schritte.';
+$lang->tutorial->targetAppTip     = 'Open <strong class="task-page-name">%s</strong>';
 $lang->tutorial->requiredTip      = '【%s】 ist erforderlich.';
 $lang->tutorial->congratulateTask = 'Glückwunsch! Sie sind fertig【<span class="task-name-current"></span>】!';
 $lang->tutorial->serverErrorTip   = 'Fehler!';
@@ -38,6 +39,11 @@ $lang->tutorial->tasks['createAccount']         = array('title' => 'Benutzer ers
 $lang->tutorial->tasks['createAccount']['nav']  = array('module' => 'user', 'method' => 'create', 'menuModule' => 'company', 'menu' => 'browseUser', 'form' => '#createForm', 'submit' => '#submit', 'target' => '.create-user-btn', 'targetPageName' => 'Benutzer erstellen');
 $lang->tutorial->tasks['createAccount']['desc'] = "<p>Einen Benutzer erstellen: </p><ul><li data-target='nav'>Öffne <span class='task-nav'>Unternehmen <i class='icon icon-angle-right'></i> Benutzer<i class='icon icon-angle-right'></i> Neu;</span></li><li data-target='form'>Tragen Sie bitte die Daten ein;</li><li data-target='submit'>Speichern</li></ul>";
 
+$lang->tutorial->tasks['createProgram']         = array('title' => 'Create a program');
+$lang->tutorial->tasks['createProgram']['mode'] = 'new';
+$lang->tutorial->tasks['createProgram']['nav']  = array('app' => 'program', 'module' => 'program', 'method' => 'create', 'menuModule' => 'program', 'menu' => '#heading>.header-btn:first,#navbar>.nav>li[data-id="browse"],.create-program-btn', 'form' => '#dataform', 'submit' => '#submit', 'target' => '.create-program-btn', 'targetPageName' => 'Create program');
+$lang->tutorial->tasks['createProgram']['desc'] = "<p>Create a new program：</p><ul><li data-target='nav'>Open <span class='task-nav'>Program <i class='icon icon-angle-right'></i> Program list <i class='icon icon-angle-right'></i> Create program</span>;</li><li data-target='form'>Fill the form with program information;</li><li data-target='submit'>Save</li></ul>";
+
 $lang->tutorial->tasks['createProduct']         = array('title' => 'Produkt erstellen');
 $lang->tutorial->tasks['createProduct']['nav']  = array('module' => 'product', 'method' => 'create', 'menu' => '#pageNav', 'form' => '#createForm', 'submit' => '#submit', 'target' => '.create-product-btn', 'targetPageName' => 'Produkt');
 $lang->tutorial->tasks['createProduct']['desc'] = "<p>Produkt erstellen: </p><ul><li data-target='nav'> Öffnen <span class='task-nav'>Produkt <i class='icon icon-angle-right'></i> Neu;</span></li><li data-target='form'>Tragen Sie die Produktdaten ein;</li><li data-target='submit'>Speichern</li></ul>";
@@ -47,20 +53,53 @@ $lang->tutorial->tasks['createStory']['nav']  = array('module' => 'story', 'meth
 $lang->tutorial->tasks['createStory']['desc'] = "<p>Story erstellen: </p><ul><li data-target='nav'>Öffnen <span class='task-nav'>Produkt <i class='icon icon-angle-right'></i>Story <i class='icon icon-angle-right'></i>Erstellen;</span></li><li data-target='form'>Tragen Sie die Informationen ein;</li><li data-target='submit'>Speichern</li></ul>";
 
 $lang->tutorial->tasks['createProject']         = array('title' => 'Projekt erstellen');
+$lang->tutorial->tasks['createProject']['mode'] = 'new';
 $lang->tutorial->tasks['createProject']['nav']  = array('module' => 'execution', 'method' => 'create', 'menu' => '#pageNav', 'form' => '#dataform', 'submit' => '#submit', 'target' => '.create-project-btn', 'targetPageName' => 'Projekt erstellen');
 $lang->tutorial->tasks['createProject']['desc'] = "<p>Projekt erstellen: </p><ul><li data-target='nav'>Öffnen <span class='task-nav'> Projekt <i class='icon icon-angle-right'></i> New</span> Page;</li><li data-target='form'>Tragen Sie die Projektinformationen ein;</li><li data-target='submit'>Speichern</li></ul>";
 
 $lang->tutorial->tasks['manageTeam']         = array('title' => 'Projektteam verwalten');
+$lang->tutorial->tasks['manageTeam']['mode'] = 'new';
 $lang->tutorial->tasks['manageTeam']['nav']  = array('module' => 'execution', 'method' => 'managemembers', 'menu' => 'team', 'target' => '.manage-team-btn', 'form' => '#teamForm', 'requiredFields' => 'account1', 'submit' => '#submit', 'targetPageName' => 'Projektteam verwalten');
 $lang->tutorial->tasks['manageTeam']['desc'] = "<p>Projektteam verwalten: </p><ul><li data-target='nav'>Öffnen <span class='task-nav'> Project <i class='icon icon-angle-right'></i> Team <i class='icon icon-angle-right'></i> Teammitglieder verwalten</span> Seite；</li><li data-target='form'>Wählen Sie Benutzer für das Team.</li><li data-target='submit'>Speichern</li></ul>";
 
+$lang->tutorial->tasks['createProjectExecution']         = array('title' => 'Create a ' . $lang->executionCommon);
+$lang->tutorial->tasks['createProjectExecution']['mode'] = 'new';
+$lang->tutorial->tasks['createProjectExecution']['nav']  = array('app' => 'project', 'module' => 'execution', 'method' => 'create', 'menuModule' => 'browse', 'menu' => '#navbar>.nav>li[data-id="browse"],#cards>.col>.panel:first .project-name,#projectForm td.c-name:first a,#navbar>.nav>li[data-id="execution"],.create-execution-btn', 'form' => '#dataform', 'submit' => '#submit', 'target' => '.create-execution-btn', 'targetPageName' => 'Create' . $lang->executionCommon);
+$lang->tutorial->tasks['createProjectExecution']['desc'] = "<p>Create a new {$lang->executionCommon}：</p><ul><li data-target='nav'>Open <span class='task-nav'> Project <i class='icon icon-angle-right'></i> {$lang->executionCommon} list <i class='icon icon-angle-right'></i> Create {$lang->executionCommon}</span>;</li><li data-target='form'>Fill the form with {$lang->executionCommon} information；</li><li data-target='submit'>Save {$lang->executionCommon}</li></ul>";
+
+$lang->tutorial->tasks['createExecution']         = array('title' => 'Create a ' . $lang->executionCommon);
+$lang->tutorial->tasks['createExecution']['mode'] = 'classic';
+$lang->tutorial->tasks['createExecution']['nav']  = array('app' => 'execution', 'module' => 'execution', 'method' => 'create', 'menuModule' => 'browse', 'menu' => '#heading>.header-btn:first,#navbar>.nav>li[data-id="all"],.create-execution-btn', 'form' => '#dataform', 'submit' => '#submit', 'target' => '.create-execution-btn', 'targetPageName' => 'Create ' . $lang->executionCommon);
+$lang->tutorial->tasks['createExecution']['desc'] = "<p>Create a new {$lang->executionCommon}：</p><ul><li data-target='nav'>Open <span class='task-nav'> Project <i class='icon icon-angle-right'></i> {$lang->executionCommon} list <i class='icon icon-angle-right'></i> Create {$lang->executionCommon}</span>;</li><li data-target='form'>Fill the form with {$lang->executionCommon} information；</li><li data-target='submit'>Save {$lang->executionCommon}</li></ul>";
+
+$lang->tutorial->tasks['manageExecutionTeam']         = array('title' => "Manage Team");
+$lang->tutorial->tasks['manageExecutionTeam']['mode'] = 'classic';
+$lang->tutorial->tasks['manageExecutionTeam']['nav']  = array('app' => 'execution', 'module' => 'execution', 'method' => 'managemembers', 'menuModule' => '', 'menu' => '#navbar>.nav>li[data-id="browse"],#cards>.col>.panel:first .project-name,#executionTableList>tr:first>.c-name>a,#navbar>.nav>li[data-id="settings"],#subNavbar>.nav>li[data-id="team"],.manage-team-btn', 'target' => '.manage-team-btn', 'form' => '#teamForm', 'requiredFields' => 'account1', 'submit' => '#submit', 'targetPageName' => 'Manage team members');
+$lang->tutorial->tasks['manageExecutionTeam']['desc'] = "<p>Manage project team members: </p><ul><li data-target='nav'>Open <span class='task-nav'> Project <i class='icon icon-angle-right'></i> Team <i class='icon icon-angle-right'></i> Manage Team Members</span> Page；</li><li data-target='form'>Choose users for the team.</li><li data-target='submit'>Save</li></ul>";
+
 $lang->tutorial->tasks['linkStory']         = array('title' => 'Story verknüpfen');
+$lang->tutorial->tasks['linkStory']['mode'] = 'new';
 $lang->tutorial->tasks['linkStory']['nav']  = array('module' => 'execution', 'method' => 'linkStory', 'menu' => 'story', 'target' => '.link-story-btn', 'form' => '#linkStoryForm', 'formType' => 'table', 'submit' => '#submit', 'targetPageName' => 'Story verknüpfen');
 $lang->tutorial->tasks['linkStory']['desc'] = "<p>Eine Story mit dem Projekt verknüpfen: </p><ul><li data-target='nav'>Öffnen <span class='task-nav'> Projekt <i class='icon icon-angle-right'></i> Story <i class='icon icon-angle-right'></i>Story verknüpfen;</span></li><li data-target='form'>Wählen Sie Storys aus der Liste um sie zu verknüpfen;</li><li data-target='submit'>Speichern</li></ul>";
 
+$lang->tutorial->tasks['linkExecutionStory']         = array('title' => 'Link a Story');
+$lang->tutorial->tasks['linkExecutionStory']['mode'] = 'classic';
+$lang->tutorial->tasks['linkExecutionStory']['nav']  = array('app' => 'execution', 'module' => 'execution', 'method' => 'linkStory', 'menuModule' => 'story', 'menu' => '#heading>.header-btn:first,#navbar>.nav>li[data-id="all"],#navbar>.nav>li[data-id="story"],#executionTableList>tr:first>.c-name>a,.link-story-btn', 'target' => '.link-story-btn', 'form' => '#linkStoryForm', 'formType' => 'table', 'submit' => '#submit', 'targetPageName' => "Link {$lang->SRCommon}");
+$lang->tutorial->tasks['linkExecutionStory']['desc'] = "<p>Link a Story to {$lang->executionCommon}: </p><ul><li data-target='nav'>Open <span class='task-nav'> {$lang->executionCommon} <i class='icon icon-angle-right'></i> Story <i class='icon icon-angle-right'></i>Link Story;</span></li><li data-target='form'>Select stories from story list to relate;</li><li data-target='submit'>Save</li></ul>";
+
 $lang->tutorial->tasks['createTask']         = array('title' => 'Aufgaben aufteilen');
+$lang->tutorial->tasks['createTask']['mode'] = 'new';
 $lang->tutorial->tasks['createTask']['nav']  = array('module' => 'task', 'method' => 'create', 'menuModule' => 'execution', 'menu' => 'story', 'target' => '.btn-task-create', 'form' => '#dataform', 'submit' => '#submit', 'targetPageName' => 'Aufgabe erstellen');
 $lang->tutorial->tasks['createTask']['desc'] = "<p>Aufgaben aufteilen: </p><ul><li data-target='nav'>Öffnen <span class='task-nav'> Projekt <i class='icon icon-angle-right'></i> Story <i class='icon icon-angle-right'></i> WBS;</span></li><li data-target='form'>Tragen Sie die Aufgabeninformationen ein;</li><li data-target='submit'>Speichern</li></ul>";
+
+$lang->tutorial->tasks['createExecutionTask']         = array('title' => 'Task Breakdown');
+$lang->tutorial->tasks['createExecutionTask']['mode'] = 'classic';
+$lang->tutorial->tasks['createExecutionTask']['nav']  = array('app' => 'execution', 'module' => 'task', 'method' => 'create', 'menuModule' => 'story', 'menu' => '', 'target' => '.btn-task-create', 'form' => '#dataform', 'submit' => '#submit', 'targetPageName' => 'Create Task');
+$lang->tutorial->tasks['createExecutionTask']['desc'] = "<p>Task breakdown for a story: </p><ul><li data-target='nav'>Open <span class='task-nav'> {$lang->executionCommon} <i class='icon icon-angle-right'></i> Story <i class='icon icon-angle-right'></i> WBS;</span></li><li data-target='form'>Fill the form with task information;</li><li data-target='submit'>Save</li></ul>";
+
+$lang->tutorial->tasks['createBug']         = array('title' => 'Bug melden');
+$lang->tutorial->tasks['createBug']['nav']  = array('module' => 'bug', 'method' => 'create', 'menuModule' => 'qa', 'menu' => 'bug', 'target' => '.btn-bug-create', 'form' => '#dataform', 'submit' => '#submit', 'targetPageName' => 'Bug erstellen');
+$lang->tutorial->tasks['createBug']['desc'] = "<p>Bug erstellen: </p><ul><li data-target='nav'>Öffnen <span class='task-nav'> Test <i class='icon icon-angle-right'></i> Bug <i class='icon icon-angle-right'></i> Einen Bug erstellen</span>；</li><li data-target='form'>Tragen Sie die Bug Informationen ein:</li><li data-target='submit'>Speichern</li></ul>";
 
 $lang->tutorial->tasks['createBug']         = array('title' => 'Bug melden');
 $lang->tutorial->tasks['createBug']['nav']  = array('module' => 'bug', 'method' => 'create', 'menuModule' => 'qa', 'menu' => 'bug', 'target' => '.btn-bug-create', 'form' => '#dataform', 'submit' => '#submit', 'targetPageName' => 'Bug erstellen');

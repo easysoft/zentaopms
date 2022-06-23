@@ -9,6 +9,8 @@ $lang->webhook->chooseDept = 'Choose department';
 $lang->webhook->assigned   = 'Assign';
 $lang->webhook->setting    = 'Paramétrages';
 
+$lang->webhook->logAction = 'Webhook Log';
+
 $lang->webhook->browse = 'Consulter';
 $lang->webhook->create = 'Créer';
 $lang->webhook->edit   = 'Modifier';
@@ -34,12 +36,18 @@ $lang->webhook->editedDate  = 'DateEditedDate';
 $lang->webhook->date        = 'Date envoi';
 $lang->webhook->data        = 'Donnée';
 $lang->webhook->result      = 'Résultat';
+$lang->webhook->products    = $lang->productCommon;
+$lang->webhook->executions  = $lang->execution->common;
+$lang->webhook->actions     = 'Log';
+$lang->webhook->deleted     = 'Deleted';
 
 $lang->webhook->typeList['']            = '';
 $lang->webhook->typeList['dinggroup']   = 'Dingding Robot';
 $lang->webhook->typeList['dinguser']    = 'Dingding Notifier';
 $lang->webhook->typeList['wechatgroup'] = 'Enterprise WeChat Robot';
 $lang->webhook->typeList['wechatuser']  = 'Enterprise WeChat Notifier';
+$lang->webhook->typeList['feishugroup'] = 'Feishu Robot';
+$lang->webhook->typeList['feishuuser']  = 'Feishu Notifier';
 $lang->webhook->typeList['default']     = 'Others';
 
 $lang->webhook->sendTypeList['sync']  = 'Synchrone';
@@ -57,6 +65,11 @@ $lang->webhook->wechatCorpSecret = 'Corp Secret';
 $lang->webhook->wechatAgentId    = 'Agent ID';
 $lang->webhook->wechatUserid     = 'Wechat Userid';
 $lang->webhook->wechatBindStatus = 'Bind Status';
+
+$lang->webhook->feishuAppId       = 'Feishu App ID';
+$lang->webhook->feishuAppSecret   = 'Feishu App Secret';
+$lang->webhook->feishuUserid      = 'Feishu Users';
+$lang->webhook->feishuBindStatus  = 'Feishu Bind Status';
 
 $lang->webhook->zentaoUser  = 'Zentao User';
 

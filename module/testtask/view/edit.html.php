@@ -41,7 +41,7 @@
         </tr>
         <tr>
           <th><?php echo $lang->testtask->type;?></th>
-          <td><?php echo html::select('type[]', $lang->testtask->typeList, $task->type, "class='form-control chosen' multiple");?></td>
+          <td><?php echo html::select('type[]', $lang->testtask->typeList, $task->type, "class='form-control picker-select' multiple");?></td>
         </tr>
         <tr>
           <th><?php echo $lang->testtask->owner;?></th>
@@ -91,7 +91,7 @@
           <th><?php echo $lang->testtask->mailto;?></th>
           <td colspan='2'>
             <div class='input-group'>
-              <?php echo html::select('mailto[]', $users, str_replace(' ' , '', $task->mailto), "multiple class='form-control chosen'");?>
+              <?php echo html::select('mailto[]', $users, str_replace(' ' , '', $task->mailto), "multiple class='form-control picker-select'");?>
               <?php echo $this->fetch('my', 'buildContactLists');?>
             </div>
           </td>

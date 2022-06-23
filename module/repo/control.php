@@ -46,7 +46,8 @@ class repo extends control
     public function commonAction($repoID = 0, $objectID = 0)
     {
         $tab = $this->app->tab;
-        $this->repos = $this->repo->getRepoPairs($tab, $objectID);
+        $this->repos      = $this->repo->getRepoPairs($tab, $objectID);
+        $this->repoGroup = $this->repo->getRepoGroup($tab, $objectID);
 
         if($tab == 'project')
         {
@@ -487,6 +488,7 @@ class repo extends control
         $this->view->repo            = $repo;
         $this->view->repos           = $this->repos;
         $this->view->revisions       = $revisions;
+        $this->view->repoGroup       = $this->repoGroup;
         $this->view->revision        = $revision;
         $this->view->infos           = $infos;
         $this->view->repoID          = $repoID;

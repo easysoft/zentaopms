@@ -36,6 +36,7 @@ $lang->todo->cycleConfig  = "周期设置";
 $lang->todo->project      = "所属项目";
 $lang->todo->product      = "所属产品";
 $lang->todo->execution    = "所属{$lang->execution->common}";
+$lang->todo->changeDate   = "修改日期";
 
 $lang->todo->reasonList['story'] = "转{$lang->SRCommon}";
 $lang->todo->reasonList['task']  = "转任务";
@@ -84,6 +85,7 @@ $lang->todo->specifiedDay = array(1 => 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13
 $lang->todo->confirmBug   = '该待办关联的是Bug #%s，需要修改它吗？';
 $lang->todo->confirmTask  = '该待办关联的是Task #%s，需要修改它吗？';
 $lang->todo->confirmStory = '该待办关联的是Story #%s，需要修改它吗？';
+$lang->todo->noOptions    = '您暂时没有待处理的%s，请重新选择待办类型。';
 
 $lang->todo->statusList['wait']   = '未开始';
 $lang->todo->statusList['doing']  = '进行中';

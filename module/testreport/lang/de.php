@@ -1,5 +1,6 @@
 <?php
 $lang->testreport->common       = 'Test Bericht';
+$lang->testreport->id           = 'ID';
 $lang->testreport->browse       = 'Test Bericht';
 $lang->testreport->create       = 'Erstellen';
 $lang->testreport->edit         = 'Bearbeiten';
@@ -69,24 +70,27 @@ $lang->testreport->bugStageList['generated'] = 'Generated Bugs';
 $lang->testreport->bugStageList['legacy']    = 'Legacy Bugs';
 $lang->testreport->bugStageList['resolved']  = 'Resolved Bugs';
 
-$lang->testreport->caseSummary    = ' <strong>%s</strong> Fälle in Summe : <strong>%s</strong> ausgeführt, <strong>%s</strong> Ergebnisse, <strong>%s</strong> fehlgeschlagen.';
-$lang->testreport->buildSummary   = 'Getsetetes <strong>%s</strong> Build.';
-$lang->testreport->confirmDelete  = 'Möchten Sie diesen Bericht löschen?';
-$lang->testreport->moreNotice     = 'Mehr Funktionen können mit Hilfe der Erweiterungen hinzugefügt werden, oder Sie kontaktieren uns für Anpassungen.';
-$lang->testreport->exportNotice   = "Exportiert von <a href='http://www.zentao.net' target='_blank' style='color:grey'>ZenTaoPMS</a>";
-$lang->testreport->noReport       = "Es wurde kein Bericht erstellt. Bitte prüfen Sie später noch mal.";
-$lang->testreport->foundBugTip    = "Bugs erstellt in diesem Build und innerhalb der Testperiode.";
-$lang->testreport->legacyBugTip   = "Aktive Bugs, oder gelöst nach der Testperiode.";
-$lang->testreport->fromCaseBugTip = "Bugs created after case-failure in the test period.";
-$lang->testreport->errorTrunk     = "Die Trunk Version kann kein Testbericht erstellen. Bitte passen Sie die zugeordnete Version an!";
-$lang->testreport->noTestTask     = "No test requests for this {$lang->productCommon}, so no reports can be generated. Please go to {$lang->productCommon} which has test requests and then generate the report.";
-$lang->testreport->noObjectID     = "No test request or {$lang->executionCommon} is selected, so no report can be generated.";
-$lang->testreport->moreProduct    = "Ein Testbericht kann nur innerhalb des selben Produkts erstellt werden.";
-$lang->testreport->hiddenCase     = "Hide %s use cases";
+$lang->testreport->caseSummary     = ' <strong>%s</strong> Fälle in Summe : <strong>%s</strong> ausgeführt, <strong>%s</strong> Ergebnisse, <strong>%s</strong> fehlgeschlagen.';
+$lang->testreport->buildSummary    = 'Getsetetes <strong>%s</strong> Build.';
+$lang->testreport->confirmDelete   = 'Möchten Sie diesen Bericht löschen?';
+$lang->testreport->moreNotice      = 'Mehr Funktionen können mit Hilfe der Erweiterungen hinzugefügt werden, oder Sie kontaktieren uns für Anpassungen.';
+$lang->testreport->exportNotice    = "Exportiert von <a href='http://www.zentao.net' target='_blank' style='color:grey'>ZenTaoPMS</a>";
+$lang->testreport->noReport        = "Es wurde kein Bericht erstellt. Bitte prüfen Sie später noch mal.";
+$lang->testreport->foundBugTip     = "Bugs erstellt in diesem Build und innerhalb der Testperiode.";
+$lang->testreport->legacyBugTip    = "Aktive Bugs, oder gelöst nach der Testperiode.";
+$lang->testreport->activatedBugTip = "Reactived bugs during the testtask.";
+$lang->testreport->fromCaseBugTip  = "Bugs created after case-failure in the test period.";
+$lang->testreport->errorTrunk      = "Die Trunk Version kann kein Testbericht erstellen. Bitte passen Sie die zugeordnete Version an!";
+$lang->testreport->noTestTask      = "No test requests for this {$lang->productCommon}, so no reports can be generated. Please go to {$lang->productCommon} which has test requests and then generate the report.";
+$lang->testreport->noObjectID      = "No test request or {$lang->executionCommon} is selected, so no report can be generated.";
+$lang->testreport->moreProduct     = "Ein Testbericht kann nur innerhalb des selben Produkts erstellt werden.";
+$lang->testreport->hiddenCase      = "Hide %s use cases";
+$lang->testreport->goalTip         = "Descriptive information about the {$lang->execution->common} of this build";
 
 $lang->testreport->bugSummary = <<<EOD
-<strong>%s</strong> Bug(s) in Summe erstellt <a data-toggle='tooltip' class='text-warning' title='{$lang->testreport->foundBugTip}'><i class='icon-exclamation-sign'></i></a>,
-<strong>%s</strong> Bug(s) bleiben ungelöst <a data-toggle='tooltip' class='text-warning' title='{$lang->testreport->legacyBugTip}'><i class='icon-exclamation-sign'></i></a>,
-<strong>%s</strong> Bug(s) im Fall fehlgeschlagen <a data-toggle='tooltip' class='text-warning' title='{$lang->testreport->fromCaseBugTip}'><i class='icon-exclamation-sign'></i></a>.
-Bug Effektivitätsrate <a data-toggle='tooltip' class='text-warning' title='Lösung ist gelöst oder verzögert / Status ist gelöst oder geschlossen'><i class='icon-exclamation-sign'></i></a>: <strong>%s</strong>，Bugs aus Fällen Rate<a data-toggle='tooltip' class='text-warning' title='Bugs aus Fällen erstellt / Bugs'><i class='icon-exclamation-sign'></i></a>: <strong>%s</strong>
+Total <strong>%s</strong> Bugs reported <a data-toggle='tooltip' class='text-warning' title='{$lang->testreport->foundBugTip}'><i class='icon-help'></i></a>,
+<strong>%s</strong> Bugs remained unresolved <a data-toggle='tooltip' class='text-warning' title='{$lang->testreport->legacyBugTip}'><i class='icon-help'></i></a>,
+<strong>%s</strong> Bugs reactivated <a data-toggle='tooltip' class='text-warning' title='{$lang->testreport->activatedBugTip}'><i class='icon-help'></i></a>,
+<strong>%s</strong> Bugs found from the running of cases<a data-toggle='tooltip' class='text-warning' title='{$lang->testreport->fromCaseBugTip}'><i class='icon-help'></i></a>.
+Bug Effective Rate <a data-toggle='tooltip' class='text-warning' title='Resolution is resolved or delayed / status is resolved or closed'><i class='icon-help'></i></a>: <strong>%s</strong>，Bugs-reported-from-cases rate<a data-toggle='tooltip' class='text-warning' title='Bugs created from cases / bugs'><i class='icon-help'></i></a>: <strong>%s</strong>
 EOD;

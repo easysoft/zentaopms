@@ -872,6 +872,21 @@ class execution extends control
     }
 
     /**
+     * View a story.
+     *
+     * @param  int    $storyID
+     * @access public
+     * @return void
+     */
+    public function storyView($storyID)
+    {
+        $this->session->set('productList', $this->app->getURI(true), 'product');
+
+        $story = $this->loadModel('story')->getByID($storyID);
+        echo $this->fetch('story', 'view', "storyID=$storyID&version=$story->version&param=" . $this->session->execution);
+    }
+
+    /**
      * Browse bugs of a execution.
      *
      * @param  int    $executionID
@@ -2895,8 +2910,8 @@ class execution extends control
 
         if(!empty($_POST))
         {
-            $this->execution->linkStory($objectID, array(), array(), $extra);
             if($object->type != 'project' and $object->project != 0) $this->execution->linkStory($object->project);
+            $this->execution->linkStory($objectID, array(), array(), $extra);
 
             if(isonlybody())
             {
@@ -3203,7 +3218,7 @@ class execution extends control
         $users   = $this->loadModel('user')->getPairs('nodeleted|noclosed');
         $members = $this->user->getTeamMemberPairs($objectID, $type);
 
-        return print(html::select('teamMembers[]', $users, array_keys($members), "class='form-control chosen' multiple"));
+        return print(html::select('teamMembers[]', $users, array_keys($members), "class='form-control picker-select' multiple"));
     }
 
     /**

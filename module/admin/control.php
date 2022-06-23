@@ -355,4 +355,22 @@ class admin extends control
         $this->dao->delete()->from(TABLE_LOG)->where('date')->lt($date)->exec();
         return !dao::isError();
     }
+
+    /**
+     * Reset password setting.
+     *
+     * @access public
+     * @return void
+     */
+    public function resetPWDSetting()
+    {
+        if($_POST)
+        {
+            $this->loadModel('setting')->setItem('system.common.resetPWDByMail', $this->post->resetPWDByMail);
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'reload'));
+        }
+
+        $this->view->title = $this->lang->admin->resetPWDSetting;
+        $this->display();
+    }
 }

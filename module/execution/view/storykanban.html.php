@@ -25,29 +25,33 @@ $account = $this->app->user->account;
         $total += count($colStories);
     }
     ?>
-    <?php if(common::hasPriv('execution', 'story')) echo html::a($this->createLink('execution', 'story', "executionID=$execution->id"), "<span class='text'>{$lang->story->allStories}</span>", '', "class='btn btn-link'");?>
     <?php if(common::hasPriv('execution', 'storykanban')) echo html::a($this->createLink('execution', 'storykanban', "executionID=$execution->id"), "<span class='text'>{$lang->execution->kanban}</span> <span class='label label-light label-badge'>{$total}</span>", '', "class='btn btn-link btn-active-text'");?>
   </div>
   <div class="btn-toolbar pull-right">
+    <?php if(common::hasPriv('execution', 'story')):?>
+    <div class="btn-group panel-actions">
+      <?php echo html::a($this->createLink('execution', 'story', "executionID=$execution->id"), "<i class='icon-list'></i> &nbsp;", '', "class='btn btn-icon switchBtn' title='{$lang->execution->list}' data-type='bylist'");?>
+      <?php echo html::a($this->createLink('execution', 'storykanban', "executionID=$execution->id"), "<i class='icon-kanban'></i> &nbsp;", '', "class='btn btn-icon text-primary switchBtn' title='{$lang->execution->kanban}' data-type='bykanban'");?>
+    </div>
+    <?php endif;?>
     <div class='btn-group'>
+      <?php common::printIcon('story', 'export', "productID=$productID&orderBy=id_desc", '', 'button', '', '', 'export', '', "data-group='execution'");?>
+    </div>
+    <?php if($canBeChanged and $productID and !$this->loadModel('story')->checkForceReview()) common::printLink('story', 'create', "productID=$productID&branch=&moduleID=0&story=0&execution=$execution->id", "<i class='icon icon-plus'></i> " . $lang->execution->createStory, '', "class='btn btn-secondary' class='btn btn-link export' data-group='execution'");?>
     <?php
-    common::printIcon('story', 'export', "productID=$productID&orderBy=id_desc", '', 'button', '', '', 'export', '', "data-group='execution'");
-
     if($canBeChanged)
     {
         if(commonModel::isTutorialMode())
         {
             $wizardParams = helper::safe64Encode("execution=$execution->id");
-            echo html::a($this->createLink('tutorial', 'wizard', "module=execution&method=linkStory&params=$wizardParams"), "<i class='icon-link'></i> {$lang->execution->linkStory}",'', "class='btn btn-link link-story-btn'");
+            echo html::a($this->createLink('tutorial', 'wizard', "module=execution&method=linkStory&params=$wizardParams"), "<i class='icon-link'></i> {$lang->execution->linkStory}", '', "class='btn btn-primary'");
         }
         else
         {
-            common::printIcon('execution', 'linkStory', "execution=$execution->id", '', 'button', 'link', '', 'btn-link link-story-btn');
+            common::printLink('execution', 'linkStory', "execution=$execution->id", "<i class='icon icon-link'></i> " . $lang->execution->linkStory, '', "class='btn btn-primary'");
         }
     }
     ?>
-    </div>
-    <?php if($canBeChanged and $productID and !$this->loadModel('story')->checkForceReview()) common::printLink('story', 'create', "productID=$productID&branch=&moduleID=0&story=0&execution=$execution->id", "<i class='icon icon-plus'></i> " . $lang->execution->createStory, '', "class='btn btn-primary' class='btn btn-link export' data-group='execution'");?>
   </div>
 </div>
 <div id="kanban" class="main-table" data-ride="table" data-checkable="false" data-group="true">
@@ -80,7 +84,7 @@ $account = $this->app->user->account;
                 <?php if(!empty($stories[$col])):?>
                 <?php foreach($stories[$col] as $story):?>
                 <div class='board-item' data-id='<?php echo $story->id?>' id='story-<?php echo $story->id?>' data-type='story'>
-                  <?php echo html::a($this->createLink('story', 'view', "story=$story->id", '', true), "#{$story->id} {$story->title}", '', 'class="title kanbaniframe" title="' . $story->title . '"');?>
+                  <?php echo html::a($this->createLink('execution', 'storyView', "story=$story->id", '', true), "#{$story->id} {$story->title}", '', 'class="title kanbaniframe" title="' . $story->title . '"');?>
                   <div class='info'>
                     <span class='label-pri label-pri-<?php echo $story->pri?>' title='<?php echo $lang->story->pri?>'><?php echo zget($lang->story->priList, $story->pri);?></span>
                     <span class='status status-story status-<?php echo $story->status;?>' title='<?php echo $lang->story->status?>'><span class="label label-dot"></span> <?php echo $lang->story->statusList[$story->status];?></span>

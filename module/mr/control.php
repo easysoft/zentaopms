@@ -2,6 +2,20 @@
 class mr extends control
 {
     /**
+     * The gitlab constructor.
+     * @param string $moduleName
+     * @param string $methodName
+     */
+    public function __construct($moduleName = '', $methodName = '')
+    {
+        parent::__construct($moduleName, $methodName);
+
+        /* This is essential when changing tab(menu) from gitlab to repo. */
+        /* Optional: common::setMenuVars('devops', $this->session->repoID); */
+        if($this->app->getMethodName() != 'browse') $this->loadModel('ci')->setMenu();
+    }
+
+    /**
      * Browse mr.
      *
      * @param  int    $repoID
@@ -23,9 +37,10 @@ class mr extends control
         $repos = $this->loadModel('repo')->getListBySCM('Gitlab');
         if(empty($repos)) $this->locate($this->repo->createLink('create'));
 
-        if($repoID == 0) $repoID = $this->repo->saveState($repoID, $objectID);
-        $repo = $this->repo->getRepoByID($repoID);
-        $this->loadModel('ci')->setMenu();
+        $repoID = $this->repo->saveState($repoID, $objectID);
+        $repo   = $this->repo->getRepoByID($repoID);
+        if($repo->SCM != 'Gitlab') $repo = $repos[0];
+        $this->loadModel('ci')->setMenu($repo->id);
 
         $projects = $this->mr->getAllGitlabProjects($repoID);
         $MRList   = $this->mr->getList($mode, $param, $orderBy, $pager, empty($projects) ? false : $projects, $repoID);

@@ -398,6 +398,44 @@ class repoModel extends model
     }
 
     /**
+     * Get repos group by repo type.
+     *
+     * @param  string type
+     * @param  int    $projectID
+     * @access public
+     * @return array
+     */
+    public function getRepoGroup($type, $projectID = 0)
+    {
+        $repoPairs = $this->getRepoPairs($type, $projectID);
+
+        $repos           = array();
+        $repos['Gitlab'] = array();
+        $repos['SVN']    = array();
+        $repos['Git']    = array();
+
+        foreach($repoPairs as $id => $repo)
+        {
+            if(strpos($repo, '[gitlab]') !== false)
+            {
+                $repo = str_replace('[gitlab]', '', $repo);
+                $repos['Gitlab'][$id] = $repo;
+            }
+            if(strpos($repo, '[svn]') !== false)
+            {
+                $repo = str_replace('[svn]', '', $repo);
+                $repos['SVN'][$id] = $repo;
+            }
+            if(strpos($repo, '[git]') !== false)
+            {
+                $repo = str_replace('[git]', '', $repo);
+                $repos['Git'][$id] = $repo;
+            }
+        }
+        return $repos;
+    }
+
+    /**
      * Get repo by id.
      *
      * @param  int    $repoID
@@ -2086,5 +2124,66 @@ class repoModel extends model
         $executions = $this->loadModel('execution')->getList(0, 'all', 'undone', 0, $product, $branch);
         foreach($executions as $execution) $pairs[$execution->id] = $execution->name;
         return $pairs;
+    }
+
+    /**
+     * Get repos select menu.
+     *
+     * @param  object $repo
+     * @param  int    $objectID
+     * @param  string $link
+     * @param  string $scm
+     * @access public
+     * @return void
+     */
+    public function getReposMenu($repo, $objectID = 0, $link = '', $scm = '')
+    {
+        if(empty($link)) $link = helper::createLink('repo', 'browse', "repoID=%s&branchID=&objectID=$objectID");
+        $html  = "<button data-toggle='dropdown' type='button' class='btn btn-link btn-limit text-ellipsis' title='{$repo->name}'>";
+        $html .= "<span class='text'>{$repo->name}</span>";
+        $html .= "<span class='caret' style='margin-bottom: -1px'></span>";
+        $html .= "</button>";
+        $html .= "<div id='dropMenuRepo' class='dropdown-menu search-list' data-ride='searchList' data-url=''>";
+        $html .= '<div class="input-control search-box has-icon-left has-icon-right">';
+        $html .= '<input type="search" class="form-control search-input"/>';
+        $html .= '<label class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label>';
+        $html .= '<a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a>';
+        $html .= '</div>';
+        $html .= '<div class="table-row">';
+        $html .= '<div class="table-col col-left">';
+        $html .= '<div class="list-group" id="repoList">';
+        $html .= "<ul class='tree tree-angles' data-ride='tree'>";
+
+        $tabName    = $this->app->tab;
+        $reposGroup = $this->getRepoGroup($tabName, $objectID);
+        foreach($reposGroup as $groupName => $group)
+        {
+            if(empty($group)) continue;
+            if($scm and strtolower($groupName) != strtolower($scm)) continue;
+
+            $html .= "<li data-idx='$groupName' data-id='$groupName' class='has-list open in'>";
+            $html .= "<i class='list-toggle icon'></i>";
+            $html .= "<div class='hide-in-search'>";
+            $html .= "<a class='text-muted'>{$groupName} <span class='label label-outline'> {$this->lang->repo->type}</span></a>";
+            $html .= "</div>";
+            $html .= "<ul data-idx='$groupName'>";
+            foreach($group as $id => $repoName)
+            {
+                $isSelected = $id == $repo->id ? 'selected' : '';
+                $repoName   = trim($repoName);
+
+                $html .= "<li data-idx='$repoName' data-id='$groupName-$repoName'>";
+                $html .= "<a href='" . sprintf($link, $id) . "' id='$groupName-$repoName' class='$isSelected text-ellipsis' title='$repoName' data-key='$repoName' data-app='{$tabName}'>$repoName</a>";
+                $html .= "</li>";
+            }
+            $html .= '</ul>';
+            $html .= '</li>';
+        }
+        $html .= '</ul>';
+        $html .= '</div>';
+        $html .= '</div>';
+        $html .= '</div>';
+        $html .= '</div>';
+        return $html;
     }
 }

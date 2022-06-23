@@ -11,17 +11,8 @@
 <?php include '../../common/view/header.html.php';?>
 <div id='mainMenu' class='clearfix'>
   <div class='btn-toolbar pull-left'>
-    <div class='btn-group'>
-      <a href='javascript:;' class='btn btn-link btn-limit text-ellipsis' data-toggle='dropdown' style="max-width: 120px;"><span class='text' title='<?php echo $repo->name;?>'><?php echo $repo->name;?></span> <span class='caret'></span></a>
-      <ul class='dropdown-menu' style='max-height:240px; max-width: 300px; overflow-y:auto'>
-        <?php
-        foreach($repos as $id => $repoName)
-        {
-            $isSelected = $id == $repoID ? 'class="selected"' : '';
-            echo "<li $isSelected>" . html::a($this->createLink('repo', 'browse', "repoID=$id&branchID=&objectID=$objectID"), $repoName, '', "title='{$repoName}' class='text-ellipsis' data-app='{$app->tab}'") . "</li>";
-        }
-        ?>
-      </ul>
+    <div class='btn-group' id="swapper">
+      <?php echo $this->repo->getReposMenu($repo, $objectID);?>
     </div>
     <?php if(!empty($branchesAndTags)):?>
     <div class='btn-group'>
