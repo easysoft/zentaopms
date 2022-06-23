@@ -14,7 +14,6 @@
 #showAverage {margin: 0;}
 .chosen-container-single .chosen-single div b {top: 8px !important;}
 .chosen-container .chosen-drop {bottom: auto !important;}
-#showAverage {margin: 0;}
 .pull-left {margin: 24px 0px;}
 </style>
 <?php include '../../common/view/header.html.php';?>
