@@ -27,7 +27,7 @@
           <tr>
             <th class='text-center w-300px'><?php echo $lang->group->inside;?></th>
             <th class='text-center'><?php echo $lang->group->object;?></th>
-            <th class='w-100px'><?php echo $lang->group->allCheck . " <span data-toggle='tooltip' class='text-help' title='{$lang->group->allTips}' ><i class='icon-help'></i></sapn>";?></th>
+            <th class='w-70px'><?php echo $lang->group->allCheck . " <span data-toggle='tooltip' class='text-help' title='{$lang->group->allTips}' ><i class='icon-help'></i></sapn>";?></th>
             <th class='w-100px'></th>
           </tr>
           <?php if($config->systemMode == 'new'):?>
