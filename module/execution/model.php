@@ -345,12 +345,7 @@ class executionModel extends model
 
         if(isset($_POST['heightType']) and $this->post->heightType == 'custom')
         {
-            if(!preg_match("/^-?\d+$/", $sprint->displayCards) or $sprint->displayCards < 3)
-            {
-                $this->app->loadLang('kanban');
-                dao::$errors['displayCards'] = $this->lang->kanbanlane->error->mustBeInt;
-                return false;
-            }
+            if(!$this->loadModel('kanban')->checkDisplayCards($sprint->displayCards)) return;
         }
 
         /* Check the workload format and total. */
@@ -500,12 +495,7 @@ class executionModel extends model
 
         if(isset($_POST['heightType']) and $this->post->heightType == 'custom')
         {
-            if(!preg_match("/^-?\d+$/", $execution->displayCards) or $execution->displayCards < 3)
-            {
-                $this->app->loadLang('kanban');
-                dao::$errors['displayCards'] = $this->lang->kanbanlane->error->mustBeInt;
-                return false;
-            }
+            if(!$this->loadModel('kanban')->checkDisplayCards($execution->displayCards)) return;
         }
 
         if(in_array($execution->status, array('closed', 'suspended'))) $this->computeBurn($executionID);

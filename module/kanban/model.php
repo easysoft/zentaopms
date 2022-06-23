@@ -2138,11 +2138,7 @@ class kanbanModel extends model
 
         if(isset($_POST['heightType']) and $this->post->heightType == 'custom')
         {
-            if(!preg_match("/^-?\d+$/", $kanban->displayCards) or $kanban->displayCards < 3)
-            {
-                dao::$errors['displayCards'] = $this->lang->kanbanlane->error->mustBeInt;
-                return false;
-            }
+            if(!$this->checkDisplayCards($kanban->displayCards)) return;
         }
 
         $this->dao->update(TABLE_KANBAN)->data($kanban)
@@ -3821,5 +3817,18 @@ class kanbanModel extends model
                 ->andWhere('deleted')->eq(0)
                 ->fetch('count');
         }
+    }
+
+    /**
+     * Check display card count.
+     *
+     * @param  int    $count
+     * @access public
+     * @return bool
+     */
+    public function checkDisplayCards($count)
+    {
+        if(!preg_match("/^-?\d+$/", $count) or $count <= DEFAULT_CARDCOUNT) dao::$errors['displayCards'] = $this->lang->kanbanlane->error->mustBeInt;
+        return !dao::isError();
     }
 }

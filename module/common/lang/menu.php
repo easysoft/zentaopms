@@ -544,7 +544,7 @@ $lang->admin->menu->dev['menuOrder'][20] = 'entry';
 $lang->admin->menu->system['subMenu']              = new stdclass();
 $lang->admin->menu->system['subMenu']->backup      = array('link' => "{$lang->backup->common}|backup|index");
 $lang->admin->menu->system['subMenu']->trash       = array('link' => "{$lang->action->trash}|action|trash");
-$lang->admin->menu->system['subMenu']->safe        = array('link' => "$lang->security|admin|safe", 'alias' => 'checkweak');
+$lang->admin->menu->system['subMenu']->safe        = array('link' => "$lang->security|admin|safe", 'alias' => 'checkweak,resetpwdsetting');
 $lang->admin->menu->system['subMenu']->cron        = array('link' => "{$lang->admin->cron}|cron|index", 'subModule' => 'cron');
 $lang->admin->menu->system['subMenu']->timezone    = array('link' => "$lang->timezone|custom|timezone");
 $lang->admin->menu->system['subMenu']->buildIndex  = array('link' => "{$lang->admin->buildIndex}|search|buildindex|");

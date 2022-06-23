@@ -37,7 +37,7 @@
 .region .kanban-header {border-bottom: none!important; min-width: max-content; min-width: -moz-max-content;}
 .region .kanban-header-col > .title {max-width: 80% !important;}
 .region .kanban-header-col > .title {margin: 0}
-.region .kanban-header-col > .title > span {display: inline-block; overflow: hidden; padding-right:2px; position: initial; max-width:95px !important; vertical-align: middle;}
+.region .kanban-header-col > .title > span {display: inline-block; overflow: hidden; padding-right:2px; position: initial; vertical-align: middle;}
 .region .kanban-header-col > .title > .text-grey {opacity: .5; font-weight: bold; color: #8b91a2;}
 .region .kanban-header-col > .title > .count {opacity: .5; font-weight: bold; color: #8b91a2;}
 .region .kanban-header-col > .title > .error {color: #333333; padding-left: 2px; font-size: 10px; padding-top: 1px; padding-right: 2px;}
@@ -149,4 +149,9 @@
 .panel-body {padding: 0px;}
 #kanbanContainer {background: #efefef; box-shadow: none;}
 
-.region .kanban-board .kanban-header-col.left > .title {justify-content: flex-start;}
+.region .kanban-board .kanban-header-col.left {padding-left: 5px;}
+.region .kanban-board .kanban-header-col.left > .title, .region .kanban-board .kanban-header-parent-col > .kanban-header-col.left {justify-content: flex-start;}
+.region .kanban-board .kanban-header-col > .title > span {max-width: calc(100% - 70px) !important;}
+.region .kanban-board .kanban-header-parent-col > .kanban-header-col > .title {max-width: 100% !important;}
+.region .kanban-board .kanban-header-sub-cols .kanban-header-col > .title > span {max-width: calc(100% - 165px) !important;}
+.region .kanban-board .kanban-header-sub-cols .kanban-header-col.left > .title > span {max-width: calc(100% - 120px) !important;}
