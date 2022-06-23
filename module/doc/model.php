@@ -2792,7 +2792,7 @@ EOT;
         {
             $libs                 = $this->getLibsByObject('custom', 0, '', $appendLib);
             $this->app->rawMethod = 'custom';
-            if($libID == 0) $libID = reset($libs)->id;
+            if($libID == 0 and !empty($libs)) $libID = reset($libs)->id;
             $this->lang->modulePageNav = $this->select($type, $objects, $objectID, $libs, $libID);
 
             $object     = new stdclass();
@@ -2814,7 +2814,7 @@ EOT;
             $table    = $this->config->objectTables[$type];
             $libs     = $this->getLibsByObject($type, $objectID, '', $appendLib);
 
-            if($libID == 0) $libID = reset($libs)->id;
+            if($libID == 0 and !empty($libs)) $libID = reset($libs)->id;
             $this->lang->modulePageNav = $this->select($type, $objects, $objectID, $libs, $libID);
 
             if($this->app->tab == 'doc') $this->app->rawMethod = $type;
