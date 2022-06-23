@@ -14,7 +14,7 @@
     <div class='btn-group' id="swapper">
       <?php
       $link = inlink('browse', 'repoID=%s');
-      echo $this->repo->ajaxGetRepoSelect($repo, $objectID, $link, 'Gitlab');
+      echo $this->repo->getReposMenu($repo, $objectID, $link, 'Gitlab');
       ?>
     </div>
   </div>

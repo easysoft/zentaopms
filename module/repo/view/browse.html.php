@@ -12,7 +12,7 @@
 <div id='mainMenu' class='clearfix'>
   <div class='btn-toolbar pull-left'>
     <div class='btn-group' id="swapper">
-      <?php echo $this->repo->ajaxGetRepoSelect($repo, $objectID);?>
+      <?php echo $this->repo->getReposMenu($repo, $objectID);?>
     </div>
     <?php if(!empty($branches)):?>
     <div class='btn-group'>

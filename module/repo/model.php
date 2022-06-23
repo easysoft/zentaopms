@@ -2127,7 +2127,7 @@ class repoModel extends model
     }
 
     /**
-     * Ajax get repo select.
+     * Get repos select menu.
      *
      * @param  object $repo
      * @param  int    $objectID
@@ -2135,7 +2135,7 @@ class repoModel extends model
      * @access public
      * @return void
      */
-    public function ajaxGetRepoSelect($repo, $objectID = 0, $link = '', $scm = '')
+    public function getReposMenu($repo, $objectID = 0, $link = '', $scm = '')
     {
         if(empty($link)) $link = helper::createLink('repo', 'browse', "repoID=%s&branchID=&objectID=$objectID");
         $html  = "<button data-toggle='dropdown' type='button' class='btn btn-link btn-limit text-ellipsis' title='{$repo->name}'>";
