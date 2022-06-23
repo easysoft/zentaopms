@@ -84,7 +84,7 @@ $lang->todo->specifiedDay = array(1 => 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13
 $lang->todo->confirmBug   = 'This Todo is linked to Bug #%s. Do you want to edit it?';
 $lang->todo->confirmTask  = 'This Todo is linked to Task #%s，Do you want to edit it?';
 $lang->todo->confirmStory = 'This Todo is linked to Story #%s，Do you want to edit it?';
-$lang->todo->noOptions    = 'You have no pending %s, please re select the todo type.';
+$lang->todo->noOptions    = 'You have no %s todo at the moment. Please reselect the Todo type.';
 
 $lang->todo->statusList['wait']   = 'Waiting';
 $lang->todo->statusList['doing']  = 'Doing';

@@ -84,6 +84,7 @@ $lang->todo->specifiedDay = array(1 => 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13
 $lang->todo->confirmBug   = 'Dieser Todo steht in Beziehung mit Bug #%s. Möchten Sie das bearbeiten?';
 $lang->todo->confirmTask  = 'Dieser Todo steht in Beziehung mit Task #%s， Möchten Sie das bearbeiten?';
 $lang->todo->confirmStory = 'Dieser Todo steht in Beziehung mit Story #%s， Möchten Sie das bearbeiten?';
+$lang->todo->noOptions    = 'You have no %s todo at the moment. Please reselect the Todo type.';
 
 $lang->todo->statusList['wait']   = 'Wartend';
 $lang->todo->statusList['doing']  = 'In Arbeit';
