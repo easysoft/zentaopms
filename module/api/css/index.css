@@ -20,7 +20,7 @@
 .main-col .doc-title .actions i {font-size: 15px; color: #8c8c8c;}
 #content h2.title {margin: 0; font-size: 17px;}
 #content h3.title {font-weight: 500; font-size: 17px!important;}
-#content .desc  {margin: 10px 0; color: #57585b;}
+#content .desc  {margin: 10px 0; color: #57585b; word-wrap: break-word;}
 #content .detail-content {padding-left: 10px;}
 #mainContent .scrollbar-hover {max-height: 2000px; overflow: scroll;}
 #sidebar {width: 275px;}
