@@ -515,6 +515,9 @@ class upgradeModel extends model
                 $this->replaceSetLanePriv();
                 $this->updateProjectData();
                 break;
+            case '17_1':
+                $this->moveProjectAdmins();
+                break;
         }
 
         $this->deletePatch();
@@ -6436,5 +6439,28 @@ class upgradeModel extends model
         }
 
         return true;
+    }
+
+    public function moveProjectAdmins()
+    {
+        $adminGroupID  = $this->dao->select('id')->from(TABLE_GROUP)->where('role')->eq('projectAdmin')->fetch('id');
+        $projectAdmins = $this->dao->select('account, project')->from(TABLE_USERGROUP)->where('`group`')->eq($adminGroupID)->fetchPairs();
+
+        $i = 1;
+        foreach($projectAdmins as $account => $projects)
+        {
+            if(!$account or !$projects) continue;
+
+            $data = new stdclass();
+            $data->group    = $i;
+            $data->account  = $account;
+            $data->projects = $projects;
+
+            $this->dao->replace(TABLE_PROJECTADMIN)->data($data)->exec();
+
+            $i ++;
+        }
+
+        $this->dao->delete()->from(TABLE_USERGROUP)->where('`group`')->eq($adminGroupID)->exec();
     }
 }
