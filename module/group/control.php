@@ -37,7 +37,17 @@ class group extends control
 
         $groups = $this->group->getList();
         $groupUsers = array();
-        foreach($groups as $group) $groupUsers[$group->id] = $this->group->getUserPairs($group->id);
+        foreach($groups as $group)
+        {
+            if($group->role == 'projectAdmin')
+            {
+                $groupUsers[$group->id] = $this->dao->select('t1.account, t2.realname')->from(TABLE_PROJECTADMIN)->alias('t1')->leftJoin(TABLE_USER)->alias('t2')->on('t1.account = t2.account')->fetchPairs();
+            }
+            else
+            {
+                $groupUsers[$group->id] = $this->group->getUserPairs($group->id);
+            }
+        }
 
         $this->view->title      = $title;
         $this->view->position   = $position;

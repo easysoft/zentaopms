@@ -2398,7 +2398,7 @@ EOD;
         /* Check is the super admin or not. */
         if(!empty($app->user->admin) || strpos($app->company->admins, ",{$app->user->account},") !== false) return true;
 
-        /* If is the program admin, have all program privs. */
+        /* If is the program/project/product/execution admin, have all program privs. */
         if($app->config->vision != 'lite')
         {
             $inProject = isset($lang->navGroup->$module) && $lang->navGroup->$module == 'project';
@@ -2406,6 +2406,12 @@ EOD;
 
             $inProduct = isset($lang->navGroup->$module) && $lang->navGroup->$module == 'product';
             if($inProduct && $app->session->product && (strpos(",{$app->user->rights['products']},", ",{$app->session->product},") !== false or strpos(",{$app->user->rights['products']},", ',all,') !== false)) return true;
+
+            $inProgram = isset($lang->navGroup->$module) && $lang->navGroup->$module == 'program';
+            if($inProgram && $app->session->program && (strpos(",{$app->user->rights['programs']},", ",{$app->session->program},") !== false or strpos(",{$app->user->rights['programs']},", ',all,') !== false)) return true;
+
+            $inExecution = isset($lang->navGroup->$module) && $lang->navGroup->$module == 'execution';
+            if($inExecution && $app->session->execution && (strpos(",{$app->user->rights['executions']},", ",{$app->session->execution},") !== false or strpos(",{$app->user->rights['executions']},", ',all,') !== false)) return true;
         }
 
         /* If not super admin, check the rights. */

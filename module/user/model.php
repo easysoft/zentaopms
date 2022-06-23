@@ -2447,7 +2447,7 @@ class userModel extends model
      * @access public
      * @return bool
      */
-    public function checkProgramPriv($program, $account, $stakeholders, $whiteList, $admins)
+    public function checkProgramPriv($program, $account, $stakeholders, $whiteList, $admins = array())
     {
         if(strpos($this->app->company->admins, ',' . $account . ',') !== false) return true;
 
@@ -2482,7 +2482,7 @@ class userModel extends model
      * @access public
      * @return bool
      */
-    public function checkProjectPriv($project, $account, $stakeholders, $teams, $whiteList, $admins)
+    public function checkProjectPriv($project, $account, $stakeholders, $teams, $whiteList, $admins = array())
     {
         if(strpos($this->app->company->admins, ',' . $account . ',') !== false) return true;
         if($project->PO == $account OR $project->QD == $account OR $project->RD == $account OR $project->PM == $account) return true;
@@ -2524,7 +2524,7 @@ class userModel extends model
      * @access public
      * @return bool
      */
-    public function checkSprintPriv($sprint, $account, $stakeholders, $teams, $whiteList, $admins)
+    public function checkSprintPriv($sprint, $account, $stakeholders, $teams, $whiteList, $admins = array())
     {
         return $this->checkProjectPriv($sprint, $account, $stakeholders, $teams, $whiteList, $admins);
     }
@@ -2542,7 +2542,7 @@ class userModel extends model
      * @access public
      * @return bool
      */
-    public function checkProductPriv($product, $account, $groups, $teams, $stakeholders, $whiteList, $admins)
+    public function checkProductPriv($product, $account, $groups, $teams, $stakeholders, $whiteList, $admins = array())
     {
         if(strpos($this->app->company->admins, ',' . $account . ',') !== false) return true;
         if($product->PO == $account OR $product->QD == $account OR $product->RD == $account OR $product->createdBy == $account OR (isset($product->feedback) && $product->feedback == $account)) return true;

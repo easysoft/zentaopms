@@ -27,9 +27,10 @@
           <tr>
             <th class='text-center w-300px'><?php echo $lang->group->inside;?></th>
             <th class='text-center'><?php echo $lang->group->object;?></th>
-            <th class='w-100px'><?php echo $lang->group->allCheck;?></th>
+            <th class='w-100px'><?php echo $lang->group->allCheck . " <span data-toggle='tooltip' class='text-help' title='{$lang->group->allTips}' ><i class='icon-help'></i></sapn>";?></th>
             <th class='w-100px'></th>
           </tr>
+          <?php if($config->systemMode == 'new'):?>
           <?php if($projectAdmins):?>
           <?php foreach($projectAdmins as $account => $group):?>
           <tr class="line<?php echo $group->group;?>">
@@ -141,6 +142,73 @@
             </td>
           </tr>
           <?php endif;?>
+          <?php else:?>
+          <?php if($projectAdmins):?>
+          <?php foreach($projectAdmins as $account => $group):?>
+          <tr class="line<?php echo $group->group;?>">
+            <td rowspan='2'>
+              <div class='group-item'><?php echo html::select("members[$group->group][]", $allUsers, $account, "class='form-control picker-select' multiple");?></div>
+            </td>
+            <td>
+              <div class='input-group'>
+                <?php $disabled = $group->products == 'all' ? "disabled='disabled'" : '';?>
+                <span class='input-group-addon addon-align'> <?php echo $lang->group->manageProduct;?></span>
+                <?php echo html::select("product[$group->group][]", $products, $group->products == 'all' ? '' : $group->products, "class='form-control picker-select' multiple $disabled");?>
+              </div>
+            </td>
+            <td>
+              <?php echo html::checkbox("productAll[$group->group]", array(1 => ''), $group->products == 'all' ? 1 : '', "onchange=toggleDisabled(this);");?>
+            </td>
+            <td rowspan='2'>
+              <button type="button" class="btn btn-link btn-icon btn-add" onclick="addItem(this)"><i class="icon icon-plus"></i></button>
+              <button type="button" class="btn btn-link btn-icon btn-delete" onclick="deleteItem(this)"><i class="icon icon-close"></i></button>
+            </td>
+          </tr>
+          <tr class="line<?php echo $group->group;?>">
+            <td>
+              <div class='input-group'>
+                <?php $disabled = $group->executions == 'all' ? "disabled='disabled'" : '';?>
+                <span class='input-group-addon addon-align'> <?php echo $lang->group->manageExecution;?></span>
+                <?php echo html::select("execution[$group->group][]", $executions, $group->executions == 'all' ? '' : $group->executions, "class='form-control picker-select' multiple $disabled");?>
+              </div>
+            </td>
+            <td>
+              <?php echo html::checkbox("executionAll[$group->group]", array(1 => ''), $group->executions == 'all' ? 1 : '', "onchange=toggleDisabled(this);");?>
+            </td>
+          </tr>
+          <?php endforeach;?>
+          <?php else:?>
+          <tr class='line1'>
+            <td rowspan='2'>
+              <div class='group-item'><?php echo html::select('members[1][]', $allUsers, '', "class='form-control picker-select' multiple");?></div>
+            </td>
+            <td>
+              <div class='input-group'>
+                <span class='input-group-addon addon-align'> <?php echo $lang->group->manageProduct;?></span>
+                <?php echo html::select('product[1][]', $products, '', "class='form-control picker-select' multiple");?>
+              </div>
+            </td>
+            <td>
+              <?php echo html::checkbox('productAll[1]', array(1 => ''), '', "onchange=toggleDisabled(this);");?>
+            </td>
+            <td rowspan='2'>
+              <button type="button" class="btn btn-link btn-icon btn-add" onclick="addItem(this)"><i class="icon icon-plus"></i></button>
+              <button type="button" class="btn btn-link btn-icon btn-delete" onclick="deleteItem(this)"><i class="icon icon-close"></i></button>
+            </td>
+          </tr>
+          <tr class='line1'>
+            <td>
+              <div class='input-group'>
+                <span class='input-group-addon addon-align'> <?php echo $lang->group->manageExecution;?></span>
+                <?php echo html::select('execution[1][]', $executions, '', "class='form-control picker-select' multiple");?>
+              </div>
+            </td>
+            <td>
+              <?php echo html::checkbox('executionAll[1]', array(1 => ''), '', "onchange=toggleDisabled(this);");?>
+            </td>
+          </tr>
+          <?php endif;?>
+          <?php endif;?>
           <tr>
             <td class='text-center form-actions' colspan='4'>
               <?php
@@ -157,6 +225,13 @@
 </div>
 <?php js::set('deptID', $deptID);?>
 <script>
-$(function(){ $('#dept' + deptID).closest('li').addClass('active');})
+$(function()
+{
+    $('#dept' + deptID).closest('li').addClass('active');
+    $('[data-toggle="tooltip"]').tooltip
+    ({
+        placement: 'right'
+    });
+})
 </script>
 <?php include '../../common/view/footer.html.php';?>

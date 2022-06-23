@@ -46,10 +46,10 @@ function addItem(obj)
 
 function deleteItem(obj)
 {
-    if($("table tr").size() < 3) return false;
+    if($("table tr").size() < 7) return false;
 
-    var $currentLine= $(obj).closest('tr');
-    $currentLine.remove();
+    var currentClass = $(obj).closest('tr').attr('class');
+    $(obj).closest('table').find('tr.' + currentClass).remove();
 }
 
 function resetProgramName(obj)
@@ -62,15 +62,14 @@ function resetProgramName(obj)
 function toggleDisabled(obj)
 {
     var checked = $(obj).is(':checked');
+    var $picker = $(obj).closest('tr').find('.input-group select').data('zui.picker');
 
     if(checked)
     {
-        $(obj).closest('tr').find('.input-group select').addClass('disabled');
-        $(obj).closest('tr').find('.input-group select').picker({chosenMode: false});
+        $picker.setDisabled(true);
     }
     else
     {
-        $(obj).closest('tr').find('.input-group select').removeClass('disabled');
-        $(obj).closest('tr').find('.input-group select').picker({chosenMode: true});
+        $picker.setDisabled(false);
     }
 }

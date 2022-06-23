@@ -276,14 +276,14 @@ class groupModel extends model
                     unset($executions[$object->parent]);
                 }
 
-                $object->name = isset($objects[$object->project]) ? $objects[$object->project]->name . '/' . $object->name : $object->name;
+                $object->name = (isset($objects[$object->project]) and $this->config->systemMode == 'new') ? $objects[$object->project]->name . '/' . $object->name : $object->name;
                 $executions[$object->id] = $object->name;
             }
         }
 
         foreach($productList as $id => $product)
         {
-            if(isset($programs[$product->program])) $product->name = $programs[$product->program] . '/' . $product->name;
+            if(isset($programs[$product->program]) and $this->config->systemMode == 'new') $product->name = $programs[$product->program] . '/' . $product->name;
             $products[$product->id] = $product->name;
         }
 

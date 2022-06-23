@@ -20,6 +20,7 @@ $lang->group->managePriv         = 'Manage Privileges';
 $lang->group->managePrivByGroup  = 'Manage Privileges by Group';
 $lang->group->managePrivByModule = 'Manage Privileges by Module';
 $lang->group->byModuleTips       = '<span class="tips">(Press Shift/Ctrl to Multi-select)</span>';
+$lang->group->allTips            = 'After checking this option, the administrator can manage all objects in the system, including objects created later.';
 $lang->group->manageMember       = 'Manage Members';
 $lang->group->manageProjectAdmin = 'Manage Program Admins';
 $lang->group->confirmDelete      = "Do you want to delete '%s'?";

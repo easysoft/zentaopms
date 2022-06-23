@@ -20,6 +20,7 @@ $lang->group->managePriv         = '权限维护';
 $lang->group->managePrivByGroup  = '权限维护';
 $lang->group->managePrivByModule = '按模块分配权限';
 $lang->group->byModuleTips       = '<span class="tips">（可以按住Shift或者Ctrl键进行多选）</span>';
+$lang->group->allTips            = '勾选此项后，管理员可管理系统中所有对象，包括后续创建的对象。';
 $lang->group->manageMember       = '成员维护';
 $lang->group->manageProjectAdmin = '维护项目管理员';
 $lang->group->confirmDelete      = '您确定删除“%s”用户分组吗？';
