@@ -42,6 +42,7 @@ js::set('colorList', $this->config->kanban->cardColorList);
 js::set('displayCards', $kanban->displayCards);
 js::set('fluidBoard', $kanban->fluidBoard);
 js::set('mode', $config->systemMode);
+js::set('alignment', $kanban->alignment);
 js::set('priv', array('canAssignCard' => common::hasPriv('kanban', 'assigncard')));
 
 $canSortRegion   = commonModel::hasPriv('kanban', 'sortRegion') && count($regions) > 1;

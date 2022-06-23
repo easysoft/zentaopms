@@ -220,6 +220,18 @@
           <td colspan='3'><?php echo html::select('teamMembers[]', $users, '', "class='form-control picker-select' multiple"); ?></td>
         </tr>
         <tr>
+          <th><?php echo $lang->kanban->columnWidth;?></th>
+          <td colspan='2'><?php echo nl2br(html::radio('fluidBoard', $lang->kanbancolumn->fluidBoardList, 0));?></td>
+        </tr>
+        <tr>
+          <th id='c-name'><?php echo $lang->kanban->laneHeight;?></th>
+          <td class='laneHeightBox' colspan='2'><?php echo nl2br(html::radio('heightType', $lang->kanbanlane->heightTypeList, 'auto', "onclick='setCardCount(this.value);'"));?></td>
+        </tr>
+        <tr class="hidden" id='cardBox'>
+          <th class='c-count'><?php echo $lang->kanban->cardCount;?></th>
+          <td><?php echo html::input('displayCards', '', "class='form-control' required placeholder='{$lang->kanban->cardCountTip}'  autocomplete='off'");?></td>
+        </tr>
+        <tr>
           <th><?php echo $showExecutionExec ? $lang->execution->execDesc : $lang->execution->desc;?></th>
           <td colspan='3'>
             <?php echo $this->fetch('user', 'ajaxPrintTemplates', 'type=execution&link=desc');?>

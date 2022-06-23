@@ -54,7 +54,7 @@ $lang->kanban->deleteSpace         = 'Delete Space';
 $lang->kanban->enableArchived      = 'Enable Archived';
 $lang->kanban->archive             = 'Archive';
 $lang->kanban->performable         = 'Set progress management';
-$lang->kanban->manageProgress      = 'Manage Progress';
+$lang->kanban->manageProgress      = 'Progress';
 $lang->kanban->splitColumn         = 'Split Column';
 $lang->kanban->createColumnOnLeft  = 'Create Column On Left';
 $lang->kanban->createColumnOnRight = 'Create Column On Right';
@@ -86,6 +86,7 @@ $lang->kanban->allKanban           = 'All Kanban';
 $lang->kanban->allProjects         = 'All ' . ($this->config->systemMode == 'classic' ? $lang->executionCommon : 'Projects');
 $lang->kanban->allProducts         = 'All Products';
 $lang->kanban->mine                = 'Mine';
+$lang->kanban->alignment           = 'Alignment';
 
 /* Fields. */
 $lang->kanban->space          = 'Space';
@@ -136,6 +137,9 @@ $lang->kanban->archiveList['1'] = 'Enable';
 
 $lang->kanban->enableList['0'] = 'Disable';
 $lang->kanban->enableList['1'] = 'Enable';
+
+$lang->kanban->alignmentList['center'] = 'Center';
+$lang->kanban->alignmentList['left']   = 'Left';
 
 $lang->kanban->type = array();
 $lang->kanban->type['all']   = "All KanBan";
@@ -323,8 +327,8 @@ $lang->kanbanlane->confirmDeleteTip = 'Are you sure to delete this lane? After d
 $lang->kanbanlane->modeList['sameAsOther'] = 'Use the same Kanban column';
 $lang->kanbanlane->modeList['independent'] = 'Independent Kanban column';
 
-$lang->kanbanlane->heightTypeList['auto']   = 'Adaptive (Adaptive to card height and lane name height)';
-$lang->kanbanlane->heightTypeList['custom'] = 'Custom (Customize lane height based on number of cards)';
+$lang->kanbanlane->heightTypeList['auto']   = "Adaptive <span class='tip'>(Adaptive to card height and lane name height)</span>";
+$lang->kanbanlane->heightTypeList['custom'] = "Custom <span class='tip'>(Customize lane height based on number of cards)</span>";
 
 $lang->kanbancolumn->fluidBoardList['0'] = 'Fixed';
 $lang->kanbancolumn->fluidBoardList['1'] = 'Auto Width';

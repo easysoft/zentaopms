@@ -69,13 +69,8 @@
     echo "<div class='btn-group menu-actions'>";
     echo html::a('javascript:;', "<i class='icon icon-ellipsis-v'></i>", '', "data-toggle='dropdown' class='btn btn-link'");
     echo "<ul class='dropdown-menu pull-right'>";
-    if(common::hasPriv('kanban', 'setLaneHeight'))
-    {
-        $width = $this->app->getClientLang() == 'en' ? '70%' : '60%';
-        echo '<li>' .html::a($this->createLink('kanban', 'setLaneHeight', "executionID=$executionID&from=execution", '', true), "<i class='icon icon-size-height'></i> " . $lang->kanban->laneHeight, '', "class='iframe btn btn-link' title='{$lang->kanban->laneHeight}' data-width=$width") . '</li>';
-    }
-    if(common::hasPriv('kanban', 'setColumnWidth')) echo '<li>' .html::a($this->createLink('kanban', 'setColumnWidth', "executionID=$executionID&from=execution", '', true), "<i class='icon icon-size-width'></i> " . $lang->kanban->columnWidth, '', "class='iframe btn btn-link' title='{$lang->kanban->columnWidth}' data-width=30%") . '</li>';
-    if(common::hasPriv('execution', 'printKanban')) echo '<li>' .html::a($this->createLink('execution', 'printKanban', "executionID=$executionID"), "<i class='icon icon-printer muted'></i> " . $lang->execution->printKanban, '', "class='iframe btn btn-link' id='printKanban' title='{$lang->execution->printKanban}' data-width='500'") . '</li>';
+    if(common::hasPriv('execution', 'printKanban')) echo '<li>' . html::a($this->createLink('execution', 'printKanban', "executionID=$executionID"), "<i class='icon icon-printer muted'></i> " . $lang->execution->printKanban, '', "class='iframe btn btn-link' id='printKanban' title='{$lang->execution->printKanban}' data-width='500'") . '</li>';
+    if(common::hasPriv('execution', 'edit'))        echo '<li>' . html::a(helper::createLink('execution', 'edit', "executionID=$execution->id", '', true), '<i class="icon icon-edit"></i>' . $lang->execution->edit, '', "class='iframe btn btn-link text-left' data-width='75%'") . '</li>';
     echo '<li>' .html::a('javascript:fullScreen()', "<i class='icon icon-fullscreen muted'></i> " . $lang->execution->fullScreen, '', "class='btn btn-link' title='{$lang->execution->fullScreen}' data-width='500'") . '</li>';
     echo '</ul></div>';
     ?>

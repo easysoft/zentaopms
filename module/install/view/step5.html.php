@@ -61,7 +61,7 @@
           </tr>
           <tr>
             <th><?php echo $lang->install->password;?></th>
-            <td><?php echo html::input('password', '', "class='form-control' oninput=\"this.value = this.value.replace(/[\u4e00-\u9fa5d]/g, '');\"");?></td>
+            <td><?php echo html::input('password', '', "class='form-control' oninput=\"this.value = this.value.replace(/[\u4e00-\u9fa5]/g, '');\"");?></td>
             <td><?php echo $lang->install->placeholder->password;?></td>
           </tr>
           <tr>
