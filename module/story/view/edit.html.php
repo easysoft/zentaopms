@@ -200,7 +200,7 @@
                 <th><?php echo $lang->story->mailto;?></th>
                 <td>
                   <div class='input-group'>
-                    <?php echo html::select('mailto[]', $users, str_replace(' ' , '', $story->mailto), "class='form-control chosen' multiple");?>
+                    <?php echo html::select('mailto[]', $users, str_replace(' ' , '', $story->mailto), "class='form-control picker-select' multiple");?>
                     <?php echo $this->fetch('my', 'buildContactLists');?>
                   </div>
                 </td>
@@ -221,7 +221,7 @@
               <?php if($isShowReviewer):?>
               <tr>
                 <th><?php echo $lang->story->reviewers;?></th>
-                <td><?php echo html::select('reviewer[]', $productReviewers, $reviewers, 'class="form-control chosen" multiple')?></td>
+                <td><?php echo html::select('reviewer[]', $productReviewers, $reviewers, 'class="form-control picker-select" multiple')?></td>
               </tr>
               <?php endif;?>
               <?php if($story->status == 'closed'):?>

@@ -2353,7 +2353,7 @@ EOD;
            $module == 'tutorial' ||
            $module == 'install' ||
            $module == 'upgrade' ||
-          ($module == 'user' && strpos('|login|deny|logout|reset|', "|{$method}|") !== false) ||
+          ($module == 'user' && strpos('|login|deny|logout|reset|forgetpassword|resetpassword|', "|{$method}|") !== false) ||
           ($module == 'my' && strpos('|changepassword|preference|', "|{$method}|") !== false) ||
           ($module == 'file' && strpos('|read|download|uploadimages|ajaxwopifiles|', "|{$method}|") !== false) ||
           ($module == 'sso' && $method == 'login') ||
@@ -2363,7 +2363,8 @@ EOD;
         }
 
         $url = helper::safe64Encode($_SERVER['REQUEST_URI']);
-        $redirectUrl = helper::createLink('index', 'index', "open=$url");
+        $redirectUrl  = helper::createLink('index', 'index');
+        $redirectUrl .= strpos($redirectUrl, '?') === false ? "?open=$url" : "&open=$url";
         die(header("location: $redirectUrl"));
     }
 

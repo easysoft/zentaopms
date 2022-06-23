@@ -10,28 +10,29 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <div id="mainMenu" class="clearfix">
-  <?php if($this->config->systemMode == 'new'):?>
-  <div id="sidebarHeader">
-    <div class="title">
-      <?php echo $lang->mr->common;?>
+  <div class='btn-toolbar pull-left'>
+    <div class='btn-group' id="swapper">
+      <?php
+      $link = inlink('browse', 'repoID=%s');
+      echo $this->repo->getReposMenu($repo, $objectID, $link, 'Gitlab');
+      ?>
     </div>
   </div>
-  <?php endif;?>
   <div class="btn-toolBar pull-left">
     <?php foreach($lang->mr->statusList as $key => $label):?>
     <?php $active = $param == $key ? 'btn-active-text' : '';?>
     <?php $label = "<span class='text'>$label</span>";?>
     <?php if($param == $key) $label .= " <span class='label label-light label-badge'>{$pager->recTotal}</span>";?>
-    <?php echo html::a(inlink('browse', "mode=status&param=$key"), $label, '', "class='btn btn-link $active'");?>
+    <?php echo html::a(inlink('browse', "repoID=$repoID&mode=status&param=$key"), $label, '', "class='btn btn-link $active'");?>
     <?php endforeach;?>
     <?php $active = $mode == 'assignee' ? 'btn-active-text' : '';?>
     <?php $label = "<span class='text'>{$lang->mr->assignedToMe}</span>";?>
     <?php if($mode == 'assignee') $label .= " <span class='label label-light label-badge'>{$pager->recTotal}</span>";?>
-    <?php echo html::a(inlink('browse', "mode=assignee&param={$this->app->user->account}"), $label, '', "class='btn btn-link $active'");?>
+    <?php echo html::a(inlink('browse', "repoID=$repoID&mode=assignee&param={$this->app->user->account}"), $label, '', "class='btn btn-link $active'");?>
     <?php $active = $mode == 'creator' ? 'btn-active-text' : '';?>
     <?php $label = "<span class='text'>{$lang->mr->createdByMe}</span>";?>
     <?php if($mode == 'creator') $label .= " <span class='label label-light label-badge'>{$pager->recTotal}</span>";?>
-    <?php echo html::a(inlink('browse', "mode=creator&param={$this->app->user->account}"), $label, '', "class='btn btn-link $active'");?>
+    <?php echo html::a(inlink('browse', "repoID=$repoID&mode=creator&param={$this->app->user->account}"), $label, '', "class='btn btn-link $active'");?>
   </div>
   <div class="btn-toolbar pull-right">
     <?php common::printLink('mr', 'create', '', "<i class='icon icon-plus'></i> " . $lang->mr->create, '', "class='btn btn-primary'");?>

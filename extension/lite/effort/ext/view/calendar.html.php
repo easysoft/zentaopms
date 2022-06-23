@@ -13,6 +13,9 @@
 <?php include $app->getModuleRoot() . 'common/view/header.html.php';?>
 <?php include $app->getModuleRoot() . 'common/view/datepicker.html.php';?>
 <?php include $app->getExtensionRoot() . 'biz/common/ext/view/calendar.html.php';?>
+<style>
+#date {float: left; margin-right: 10px; margin-left: 0px;}
+</style>
 <div id="mainMenu" class="clearfix">
   <div class="btn-toolbar pull-left">
     <?php if(common::hasPriv('my', 'todo')) echo html::a(helper::createLink('my', 'todo', "type=all"), $lang->todo->all . " <span class='label label-light label-badge'>{$todoCount}</span>", '', "class='btn btn-link'");?>
@@ -34,10 +37,10 @@
       <div id="effortCalendar" class="calendar">
         <header class="calender-header table-row">
           <div class="btn-toolbar col-4 table-col text-middle">
-            <button type="button" class="btn btn-info btn-icon btn-mini btn-prev"><i class="icon-chevron-left"></i></button>
             <button type="button" class="btn btn-info btn-mini btn-today"><?php echo $lang->today;?></button>
+            <button type="button" class="btn btn-info btn-icon btn-mini btn-prev"><i class="icon-chevron-left"></i></button>
+            <span id="date" class="calendar-caption"></span>
             <button type="button" class="btn btn-info btn-icon btn-mini btn-next"><i class="icon-chevron-right"></i></button>
-            <span class="calendar-caption"></span>
           </div>
           <div class="col-4 text-center table-col">
             <ul class="nav nav-primary">

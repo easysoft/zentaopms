@@ -43,10 +43,11 @@ class mrModel extends model
      * @param  string     $orderBy
      * @param  object     $pager
      * @param  array|bool $filterProjects
+     * @param  int        $repoID
      * @access public
      * @return array
      */
-    public function getList($mode = 'all', $param = 'all', $orderBy = 'id_desc', $pager = null, $filterProjects = array())
+    public function getList($mode = 'all', $param = 'all', $orderBy = 'id_desc', $pager = null, $filterProjects = array(), $repoID = 0)
     {
         /* If filterProjects equals false,it means no permission. */
         if($filterProjects === false) return array();
@@ -70,6 +71,7 @@ class mrModel extends model
             ->beginIF($mode == 'assignee' and $param != 'all')->andWhere('assignee')->eq($param)->fi()
             ->beginIF($mode == 'creator' and $param != 'all')->andWhere('createdBy')->eq($param)->fi()
             ->beginIF($filterProjectSql)->andWhere($filterProjectSql)->fi()
+            ->beginIF($repoID)->andWhere('repoID')->eq($repoID)->fi()
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id');
@@ -96,13 +98,15 @@ class mrModel extends model
     /**
      * Get all gitlab server projects. If not an administrator, the role of project member should be higher than guest.
      *
+     * @param  int    $repoID
      * @access public
      * @return array
      */
-    public function getAllGitlabProjects()
+    public function getAllGitlabProjects($repoID = 0)
     {
         $gitlabIDList = $this->dao->select('distinct gitlabID')->from(TABLE_MR)
             ->where('deleted')->eq('0')
+            ->beginIF($repoID)->andWhere('repoID')->eq($repoID)->fi()
             ->fetchPairs('gitlabID');
 
         $allProjects = array();
@@ -236,6 +240,12 @@ class mrModel extends model
 
         /* Update MR in Zentao database. */
         $this->dao->update(TABLE_MR)->data($newMR)->where('id')->eq($MRID)->autoCheck()->exec();
+
+        /* Link stories,bugs and tasks. */
+        $MR->id    = $MRID;
+        $MR->mriid = $newMR->mriid;
+        $this->linkObjects($MR);
+
         if(dao::isError()) return array('result' => 'fail', 'message' => dao::getError());
         return array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => helper::createLink('mr', 'browse'));
     }
@@ -388,7 +398,9 @@ class mrModel extends model
             ->batchCheck($this->config->mr->edit->requiredFields, 'notempty')
             ->autoCheck()
             ->exec();
+
         $MR = $this->getByID($MRID);
+        $this->linkObjects($MR);
 
         if(dao::isError()) return array('result' => 'fail', 'message' => dao::getError());
         return array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => helper::createLink('mr', 'browse'));
@@ -672,6 +684,22 @@ class mrModel extends model
     public function apiGetSingleMR($gitlabID, $projectID, $MRID)
     {
         $url = sprintf($this->gitlab->getApiRoot($gitlabID), "/projects/$projectID/merge_requests/$MRID");
+        return json_decode(commonModel::http($url));
+    }
+
+    /**
+     * Get MR commits by API.
+     *
+     * @link   https://docs.gitlab.com/ee/api/merge_requests.html#get-commits
+     * @param  int    $gitlabID
+     * @param  int    $projectID  targetProject
+     * @param  int    $MRID
+     * @access public
+     * @return object
+     */
+    public function apiGetMRCommits($gitlabID, $projectID, $MRID)
+    {
+        $url = sprintf($this->gitlab->getApiRoot($gitlabID), "/projects/$projectID/merge_requests/$MRID/commits");
         return json_decode(commonModel::http($url));
     }
 
@@ -1432,6 +1460,78 @@ class mrModel extends model
             if($type == 'story') $this->action->create('story', $linkID, 'createmr', '', $MRCreateAction);
             if($type == 'bug')   $this->action->create('bug', $linkID, 'createmr', '', $MRCreateAction);
             if($type == 'task')  $this->action->create('task', $linkID, 'createmr', '', $MRCreateAction);
+        }
+    }
+
+    /**
+     * Link objects.
+     *
+     * @param  object $MR
+     * @access public
+     * @return void
+     */
+    public function linkObjects($MR)
+    {
+        $this->loadModel('repo');
+        $this->loadModel('action');
+
+        /* Init objects. */
+        $stories = $bugs = $tasks = array();
+
+        /* Get commits by MR. */
+        $commits = $this->apiGetMRCommits($MR->gitlabID, $MR->targetProject, $MR->mriid);
+        foreach($commits as $commit)
+        {
+            $objects = $this->repo->parseComment($commit->message);
+            $stories = array_merge($stories, $objects['stories']);
+            $bugs    = array_merge($bugs,    $objects['bugs']);
+            $tasks   = array_merge($tasks,   $objects['tasks']);
+        }
+
+        $users          = $this->loadModel('user')->getPairs('noletter');
+        $MRCreateAction = $MR->createdDate . '::' . zget($users, $MR->createdBy) . '::' . helper::createLink('mr', 'view', "mr={$MR->id}");
+        $product        = $this->getMRProduct($MR);
+
+        foreach($stories as $storyID)
+        {
+            $relation           = new stdclass;
+            $relation->product  = $product->id;
+            $relation->AType    = 'mr';
+            $relation->AID      = $MR->id;
+            $relation->relation = 'interrated';
+            $relation->BType    = 'story';
+            $relation->BID      = $storyID;
+
+            $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
+            $this->action->create('story', $linkID, 'createmr', '', $MRCreateAction);
+        }
+
+        foreach($bugs as $bugID)
+        {
+            $relation           = new stdclass;
+            $relation->product  = $product->id;
+            $relation->AType    = 'mr';
+            $relation->AID      = $MR->id;
+            $relation->relation = 'interrated';
+            $relation->BType    = 'bug';
+            $relation->BID      = $bugID;
+
+            $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
+            $this->action->create('bug', $linkID, 'createmr', '', $MRCreateAction);
+        }
+
+        foreach($tasks as $taskID)
+        {
+            $relation           = new stdclass;
+            $relation->product  = $product->id;
+            $relation->AType    = 'mr';
+            $relation->AID      = $MR->id;
+            $relation->relation = 'interrated';
+            $relation->BType    = 'task';
+            $relation->BID      = $taskID;
+
+            $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
+            $this->action->create('task', $linkID, 'createmr', '', $MRCreateAction);
         }
     }
 

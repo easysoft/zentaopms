@@ -628,7 +628,6 @@ $lang->resource->kanban->close              = 'close';
 $lang->resource->kanban->delete             = 'delete';
 $lang->resource->kanban->createRegion       = 'createRegion';
 $lang->resource->kanban->editRegion         = 'editRegion';
-$lang->resource->kanban->performable        = 'performable';
 $lang->resource->kanban->sortRegion         = 'sortRegion';
 $lang->resource->kanban->sortGroup          = 'sortGroup';
 $lang->resource->kanban->deleteRegion       = 'deleteRegion';
@@ -659,11 +658,7 @@ $lang->resource->kanban->laneMove           = 'laneMove';
 $lang->resource->kanban->viewArchivedColumn = 'viewArchivedColumn';
 $lang->resource->kanban->viewArchivedCard   = 'viewArchivedCard';
 $lang->resource->kanban->restoreCard        = 'restoreCard';
-$lang->resource->kanban->setLaneHeight      = 'setLaneHeight';
-$lang->resource->kanban->setColumnWidth     = 'setColumnWidth';
 $lang->resource->kanban->batchCreateCard    = 'batchCreateCard';
-$lang->resource->kanban->import             = 'import';
-$lang->resource->kanban->enableArchived     = 'enableArchived';
 
 $lang->kanban->methodOrder[5]   = 'space';
 $lang->kanban->methodOrder[10]  = 'createSpace';
@@ -708,13 +703,9 @@ $lang->kanban->methodOrder[195] = 'viewArchivedColumn';
 $lang->kanban->methodorder[200] = 'viewArchivedCard';
 $lang->kanban->methodorder[205] = 'archiveColumn';
 $lang->kanban->methodorder[210] = 'restoreCard';
-$lang->kanban->methodorder[215] = 'setLaneHeight';
-$lang->kanban->methodorder[220] = 'setColumnWidth';
-$lang->kanban->methodOrder[225] = 'batchCreateCard';
-$lang->kanban->methodorder[230] = 'import';
-$lang->kanban->methodorder[235] = 'enableArchived';
-$lang->kanban->methodorder[240] = 'activate';
-$lang->kanban->methodorder[245] = 'activateSpace';
+$lang->kanban->methodOrder[215] = 'batchCreateCard';
+$lang->kanban->methodorder[220] = 'activate';
+$lang->kanban->methodorder[225] = 'activateSpace';
 
 /* Execution. */
 $lang->resource->execution = new stdclass();
@@ -1218,6 +1209,7 @@ $lang->resource->doc->collect       = 'collectAction';
 $lang->resource->doc->tableContents = 'tableContents';
 $lang->resource->doc->showFiles     = 'showFiles';
 $lang->resource->doc->updateOrder   = 'updateOrder';
+$lang->resource->doc->sortLibs      = 'sortLibs';
 
 $lang->doc->methodOrder[0]  = 'index';
 $lang->doc->methodOrder[5]  = 'browse';
@@ -1234,6 +1226,8 @@ $lang->doc->methodOrder[55] = 'objectLibs';
 $lang->doc->methodOrder[60] = 'collect';
 $lang->doc->methodOrder[65] = 'tableContents';
 $lang->doc->methodOrder[70] = 'showFiles';
+$lang->doc->methodOrder[75] = 'updateOrder';
+$lang->doc->methodOrder[80] = 'sortLibs';
 
 /* Mail. */
 $lang->resource->mail = new stdclass();
@@ -1589,13 +1583,14 @@ $lang->search->methodOrder[35] = 'buildIndex';
 
 /* Admin. */
 $lang->resource->admin = new stdclass();
-$lang->resource->admin->index     = 'index';
-$lang->resource->admin->checkDB   = 'checkDB';
-$lang->resource->admin->safe      = 'safeIndex';
-$lang->resource->admin->checkWeak = 'checkWeak';
-$lang->resource->admin->sso       = 'ssoAction';
-$lang->resource->admin->register  = 'register';
-$lang->resource->admin->ztCompany = 'ztCompany';
+$lang->resource->admin->index           = 'index';
+$lang->resource->admin->checkDB         = 'checkDB';
+$lang->resource->admin->safe            = 'safeIndex';
+$lang->resource->admin->checkWeak       = 'checkWeak';
+$lang->resource->admin->sso             = 'ssoAction';
+$lang->resource->admin->register        = 'register';
+$lang->resource->admin->ztCompany       = 'ztCompany';
+$lang->resource->admin->resetPWDSetting = 'resetPWDSetting';
 
 $lang->admin->methodOrder[0]  = 'index';
 $lang->admin->methodOrder[5]  = 'checkDB';
@@ -1604,6 +1599,7 @@ $lang->admin->methodOrder[15] = 'checkWeak';
 $lang->admin->methodOrder[20] = 'sso';
 $lang->admin->methodOrder[25] = 'register';
 $lang->admin->methodOrder[30] = 'ztCompany';
+$lang->admin->methodOrder[35] = 'resetPWDSetting';
 
 /* Extension. */
 $lang->resource->extension = new stdclass();

@@ -12,6 +12,7 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php js::set('moduleTree', $moduleTree);?>
+<?php js::set('docLang', $lang->doc);?>
 <?php
 $sideLibs = array();
 foreach($lang->doclib->tabList as $libType => $typeName) $sideLibs[$libType] = $this->doc->getLimitLibs($libType);
@@ -27,6 +28,7 @@ if($this->methodName != 'browse')
 }
 if(empty($type)) $type = 'product';
 ?>
+<div class="cell<?php if($param == 'bySearch') echo ' show';?>" id="queryBox" data-module=<?php echo $type . 'Doc';?>></div>
 <div class="main-content">
   <div class="cell" id="<?php echo $type;?>">
     <div class="detail">

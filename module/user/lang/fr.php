@@ -7,7 +7,7 @@
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     user
  * @version     $Id: en.php 5053 2013-07-06 08:17:37Z wyd621@gmail.com $
- * @link        https://www.zentao.pm
+ * @link        http://www.zentao.net
  */
 $lang->user->common           = 'Utilisateur';
 $lang->user->id               = 'ID';
@@ -18,6 +18,7 @@ $lang->user->dept             = 'Compartiment';
 $lang->user->account          = 'Compte';
 $lang->user->password         = 'Mot de Passe';
 $lang->user->password2        = 'Répétez Password';
+$lang->user->password2AB      = 'Repeat Password';
 $lang->user->role             = 'Rôle';
 $lang->user->group            = 'Groupe de Privilèges';
 $lang->user->realname         = 'Nom';
@@ -42,6 +43,7 @@ $lang->user->address          = 'Adresse';
 $lang->user->zipcode          = 'Code Postal';
 $lang->user->join             = 'Ajouté le';
 $lang->user->visits           = 'Nb Visites';
+$lang->user->visions          = 'Version Type';
 $lang->user->ip               = 'Dernière IP';
 $lang->user->last             = 'Dernier Login';
 $lang->user->ranzhi           = 'Compte Zdoo';
@@ -56,6 +58,26 @@ $lang->user->type             = 'User Type';
 $lang->user->cropAvatar       = 'Crop Avatar';
 $lang->user->cropAvatarTip    = 'Drag and drop the box to select the image clipping range.';
 $lang->user->cropImageTip     = 'The image used is too small, the recommended image size is at least 48x48, the current image size is %s';
+$lang->user->captcha          = 'Captcha';
+$lang->user->avatar           = 'Avatar';
+$lang->user->birthday         = 'Birthday';
+$lang->user->nature           = 'Nature';
+$lang->user->analysis         = 'Analysis';
+$lang->user->strategy         = 'Strategy';
+$lang->user->fails            = 'number of failures';
+$lang->user->locked           = 'Lock Time';
+$lang->user->scoreLevel       = 'Score Level';
+$lang->user->clientStatus     = 'Client Status';
+$lang->user->clientLang       = 'Client Language';
+$lang->user->programs         = 'Program';
+$lang->user->products         = $lang->productCommon;
+$lang->user->projects         = 'Project';
+$lang->user->sprints          = $lang->execution->common;
+$lang->user->identity         = 'Identity';
+$lang->user->switchVision     = 'Switch to %s';
+$lang->user->submit           = 'Submit';
+$lang->user->resetPWD         = 'Reset Password';
+$lang->user->resetTitle       = 'Admin reset the password';
 
 $lang->user->legendBasic        = 'Informations de Base';
 $lang->user->legendContribution = 'Contribution';
@@ -93,6 +115,8 @@ $lang->user->applyTemplate         = 'Modèles';
 $lang->user->confirmDeleteTemplate = 'Voulez-vous vraiment supprimer ce modèle ?';
 $lang->user->setPublicTemplate     = 'Définir comme Modèle Public';
 $lang->user->tplContentNotEmpty    = 'Le contenu du modèle ne peut pas être vide !';
+$lang->user->sendEmailSuccess      = 'An email has been sent to your mailbox. Please check it.';
+$lang->user->linkExpired           = 'The link has expired, please apply again.';
 
 $lang->user->profile   = 'Profil';
 $lang->user->project   = $lang->executionCommon . 's';
@@ -128,6 +152,8 @@ $lang->user->lockWarning  = "Vous avez %s essais.";
 $lang->user->loginLocked  = "Votre compte est bloqué. Contactez l'administrateur pour débloquer votre compte ou attendez %s minutes pour une nouvelle tentative.";
 $lang->user->weakPassword = "Votre mot de passe ne respecte pas les règles de sécurité.";
 $lang->user->errorWeak    = "Les mots de passe ne peuvent pas utiliser ces [%s] mots de passe faibles couramment utilisés.";
+$lang->user->errorCaptcha = "Captcha Error";
+$lang->user->loginExpired = 'System login has expired, please log in again :)';
 
 $lang->user->roleList['']       = '';
 $lang->user->roleList['dev']    = 'Développeur';
@@ -169,8 +195,9 @@ $lang->user->personalData['createdIssues']       = 'Issues Created';
 $lang->user->personalData['resolvedIssues']      = 'Issues Resolved';
 $lang->user->personalData['createdDocs']         = 'Docs Created';
 
-$lang->user->keepLogin['on']      = 'Rester connecté';
-$lang->user->loginWithDemoUser    = "Se connecté en tant qu'invité :";
+$lang->user->keepLogin['on']   = 'Rester connecté';
+$lang->user->loginWithDemoUser = "Se connecté en tant qu'invité :";
+$lang->user->scanToLogin       = 'Scan QR Code';
 
 $lang->user->tpl = new stdclass();
 $lang->user->tpl->type    = 'Type';
@@ -189,22 +216,38 @@ $lang->user->placeholder->group     = "Groupe correspond aux privilèges utilisa
 $lang->user->placeholder->commiter  = 'Compte SVN/Git';
 $lang->user->placeholder->verify    = 'Entrez votre Mot de passe.';
 
+$lang->user->placeholder->loginPassword = 'Enter your password';
+$lang->user->placeholder->loginAccount  = 'Enter your account';
+$lang->user->placeholder->loginUrl      = 'Enter your ZenTao address';
+$lang->user->placeholder->email         = 'Enter your email';
+
 $lang->user->placeholder->passwordStrength[1] = '>= 6 lettres et chiffres';
 $lang->user->placeholder->passwordStrength[2] = '>= 10 lettres, chiffres et caractères spéciaux';
 
 $lang->user->error = new stdclass();
-$lang->user->error->account       = "ID %s，compte doit être >= 3 lettres, souligné ou chiffres";
-$lang->user->error->accountDupl   = "ID %s，compte déjà utilisé par quelqu'un d'autre.";
-$lang->user->error->realname      = "ID %s，doit être votre véritable nom";
-$lang->user->error->password      = "ID %s，Mot de passe doit être >= 6 caractères.";
-$lang->user->error->mail          = "ID %s，entrez une adresse mail valide";
-$lang->user->error->reserved      = "ID %s，compte réservé. Vous ne pouvez pas l'utiliser.";
+$lang->user->error->account        = "ID %s，compte doit être >= 3 lettres, souligné ou chiffres";
+$lang->user->error->accountDupl    = "ID %s，compte déjà utilisé par quelqu'un d'autre.";
+$lang->user->error->realname       = "ID %s，doit être votre véritable nom";
+$lang->user->error->visions        = "ID %s，must be version type";
+$lang->user->error->password       = "ID %s，Mot de passe doit être >= 6 caractères.";
+$lang->user->error->mail           = "ID %s，entrez une adresse mail valide";
+$lang->user->error->reserved       = "ID %s，compte réservé. Vous ne pouvez pas l'utiliser.";
 $lang->user->error->weakPassword   = "ID %s，la force du mot de passe est inférieure au paramètrage système.";
 $lang->user->error->dangerPassword = "ID %s，Les mots de passe ne peuvent pas utiliser ces [%s] mots de passe faibles couramment utilisés.";
 
+$lang->user->error->url              = "Invalid address. Please contact your ZenTao Admin.";
+$lang->user->error->verify           = "Wrong account or password.";
 $lang->user->error->verifyPassword   = "Vérification en échec. Entrez votre Mot de Passe de Connexion.";
 $lang->user->error->originalPassword = "Ancien Mot de Passe incorrect.";
+$lang->user->error->companyEmpty     = "Company name must be not empty.";
 $lang->user->error->noAccess         = "This user is not from your department. You have no access to this user information.";
+$lang->user->error->accountEmpty     = 'Account must be not empty !';
+$lang->user->error->emailEmpty       = 'Email must be not empty !';
+$lang->user->error->noUser           = 'Invalid account.';
+$lang->user->error->noEmail          = 'The user does not register email. Please get in touch with the administrator to reset the password.';
+$lang->user->error->errorEmail       = 'The account does not match the email. Please enter a new one.';
+$lang->user->error->emailSetting     = 'No email is configured in the system. Contact the admin to reset the email.';
+$lang->user->error->sendMailFail     = 'Message sending failed, please try again!';
 
 $lang->user->contactFieldList['phone']    = $lang->user->phone;
 $lang->user->contactFieldList['mobile']   = $lang->user->mobile;
@@ -223,6 +266,9 @@ $lang->user->contacts->common   = 'Contacts';
 $lang->user->contacts->listName = 'Nom de la Liste';
 $lang->user->contacts->userList = 'Liste Utilisateurs';
 
+$lang->usercontact = new stdclass;
+$lang->usercontact->listName = 'List Name';
+
 $lang->user->contacts->manage        = 'Gérer la Liste';
 $lang->user->contacts->contactsList  = 'Liste de Contacts';
 $lang->user->contacts->selectedUsers = 'Utilisateurs';
@@ -236,12 +282,12 @@ $lang->user->resetFail        = "ECHEC. Vérifiez votre compte.";
 $lang->user->resetSuccess     = "Reset ! Utilisez votre nouveau mot de passe pour vous connecter.";
 $lang->user->noticeDelete     = 'Do you want to delete "%s" from ZenTao?';
 $lang->user->noticeHasDeleted = "This user has been deleted. If you want to view it, please go to the Admin-System-Data-Recycle to restore it.";
-$lang->user->noticeResetFile  = "<h5>Contactez l'administrateur pour réinitialiser votre mot de passe.</h5>
-    <h5>Si vous êtres l'administrateur, connectez-vous au serveur Zentao et créez un fichier vide nommé <span> '%s' </span>.</h5>
-    <p>Note :</p>
+$lang->user->noticeResetFile  = "<h5>Contact the Administrator to reset your password.</h5>
+    <h5>If you are, please login your Zentao host and create a file named <span> '%s' </span>.</h5>
+    <p>Note:</p>
     <ol>
-    <li>Gardez ce fichier vide.</li>
-    <li>Si le fichier existe déjà, supprimez le et créez le à nouveau.</li><li>Bonne chance.</li>
+    <li>Keep the file empty.</li>
+    <li>If the file exists, remove it and create it again.</li>
     </ol>";
 $lang->user->notice4Safe = "Warning: Weak password of one click package detected";
 $lang->user->process4DIR = "It is detected that you may be using the one click installation package environment. Other sites in the environment are still using simple passwords. For security reasons, if you do not use other sites, please handle them in time. Delete or rename the %s directory. Visit: <a href='https://www.zentao.pm/book/zentaomanual/fix-weak-password-564.html' target='_blank'>https://www.zentao.pm/book/zentaomanual/fix-weak-password-564.html</a>";
@@ -250,7 +296,7 @@ $lang->user->mkdirWin = <<<EOT
     <html><head><meta charset='utf-8'></head>
     <body><table align='center' style='width:700px; margin-top:100px; border:1px solid gray; font-size:14px;'><tr><td style='padding:8px'>
     <div style='margin-bottom:8px;'>不能创建临时目录，请确认目录<strong style='color:#ed980f'>%s</strong>是否存在并有操作权限。</div>
-    <div>Can't create tmp directory, make sure the directory <strong style='color:#ed980f'>%s</strong> exists and has permission to operate.</div>
+    <div>A tmp directory cannot be created. Make sure the directory <strong style='color:#ed980f'>%s</strong> exists and you have the right permission.</div>
     </td></tr></table></body></html>
 EOT;
 $lang->user->mkdirLinux = <<<EOT
@@ -258,7 +304,9 @@ $lang->user->mkdirLinux = <<<EOT
     <body><table align='center' style='width:700px; margin-top:100px; border:1px solid gray; font-size:14px;'><tr><td style='padding:8px'>
     <div style='margin-bottom:8px;'>不能创建临时目录，请确认目录<strong style='color:#ed980f'>%s</strong>是否存在并有操作权限。</div>
     <div style='margin-bottom:8px;'>命令为：<strong style='color:#ed980f'>chmod 777 -R %s</strong>。</div>
-    <div>Can't create tmp directory, make sure the directory <strong style='color:#ed980f'>%s</strong> exists and has permission to operate.</div>
+    <div>A tmp directory cannot be created. Make sure the directory <strong style='color:#ed980f'>%s</strong> exists and you have the right permission.</div>
     <div style='margin-bottom:8px;'>Commond: <strong style='color:#ed980f'>chmod 777 -R %s</strong>.</div>
     </td></tr></table></body></html>
 EOT;
+
+$lang->user->jumping = "This page will redirect to the previous page in <span id='time'>3</span> seconds. <a href='%s' class='btn btn-primary btn-xs'>Redirect Now</a>";

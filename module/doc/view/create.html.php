@@ -99,7 +99,7 @@ $("a[href^='###']").click(function()
             <td colspan="2">
               <div class="input-group">
                 <?php
-                echo html::select('mailto[]', $users, '', "multiple class='form-control chosen'");
+                echo html::select('mailto[]', $users, '', "multiple class='form-control picker-select' data-dropDirection='top'");
                 echo $this->fetch('my', 'buildContactLists');
                 ?>
               </div>
@@ -108,8 +108,9 @@ $("a[href^='###']").click(function()
           <tr>
             <th><?php echo $lang->doclib->control;?></th>
             <td colspan='2'>
-              <?php echo html::radio('acl', $lang->doc->aclList, $lib->acl, "onchange='toggleAcl(this.value, \"doc\")'");?>
-              <span class='text-info' id='noticeAcl'><?php echo $lang->doc->noticeAcl['doc'][$lib->acl];?></span>
+              <?php $acl = $lib->acl == 'default' ? 'open' : $lib->acl;?>
+              <?php echo html::radio('acl', $lang->doc->aclList, $acl, "onchange='toggleAcl(this.value, \"doc\")'");?>
+              <span class='text-info' id='noticeAcl'><?php echo $lang->doc->noticeAcl['doc'][$acl];?></span>
             </td>
           </tr>
           <tr id='whiteListBox' class='hidden'>
@@ -117,11 +118,11 @@ $("a[href^='###']").click(function()
             <td colspan='2'>
               <div class='input-group'>
                 <span class='input-group-addon groups-addon'><?php echo $lang->doclib->group?></span>
-                <?php echo html::select('groups[]', $groups, '', "class='form-control chosen' multiple")?>
+                <?php echo html::select('groups[]', $groups, '', "class='form-control picker-select' multiple data-dropDirection='top'")?>
               </div>
               <div class='input-group'>
                 <span class='input-group-addon'><?php echo $lang->doclib->user?></span>
-                <?php echo html::select('users[]', $users, '', "class='form-control chosen' multiple")?>
+                <?php echo html::select('users[]', $users, '', "class='form-control picker-select' multiple data-dropDirection='top'")?>
               </div>
             </td>
           </tr>

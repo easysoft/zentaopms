@@ -186,21 +186,21 @@ $config->testcase->datatable->fieldList['story']['required'] = 'no';
 
 $config->testcase->datatable->fieldList['bugs']['title']    = 'B';
 $config->testcase->datatable->fieldList['bugs']['fixed']    = 'no';
-$config->testcase->datatable->fieldList['bugs']['width']    = '30';
+$config->testcase->datatable->fieldList['bugs']['width']    = '32';
 $config->testcase->datatable->fieldList['bugs']['required'] = 'no';
 $config->testcase->datatable->fieldList['bugs']['sort']     = 'no';
 $config->testcase->datatable->fieldList['bugs']['name']     = $lang->testcase->bugs;
 
 $config->testcase->datatable->fieldList['results']['title']    = 'R';
 $config->testcase->datatable->fieldList['results']['fixed']    = 'no';
-$config->testcase->datatable->fieldList['results']['width']    = '30';
+$config->testcase->datatable->fieldList['results']['width']    = '32';
 $config->testcase->datatable->fieldList['results']['required'] = 'no';
 $config->testcase->datatable->fieldList['results']['sort']     = 'no';
 $config->testcase->datatable->fieldList['results']['name']     = $lang->testcase->results;
 
 $config->testcase->datatable->fieldList['stepNumber']['title']    = 'S';
 $config->testcase->datatable->fieldList['stepNumber']['fixed']    = 'no';
-$config->testcase->datatable->fieldList['stepNumber']['width']    = '30';
+$config->testcase->datatable->fieldList['stepNumber']['width']    = '32';
 $config->testcase->datatable->fieldList['stepNumber']['required'] = 'no';
 $config->testcase->datatable->fieldList['stepNumber']['sort']     = 'no';
 $config->testcase->datatable->fieldList['stepNumber']['name']     = $lang->testcase->stepNumber;

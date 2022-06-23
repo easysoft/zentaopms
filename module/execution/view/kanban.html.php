@@ -149,7 +149,7 @@ js::set('priv',
     echo html::a('javascript:fullScreen()', "<i class='icon-fullscreen muted'></i> " . $lang->kanban->fullScreen, '', "class='btn btn-link'");
     $actions           = '';
     $printCreateRegion = (common::hasPriv('kanban', 'createRegion') and $groupBy == 'default');
-    $printSettingBtn   = ($printCreateRegion or (common::hasPriv('kanban', 'setLaneHeight')) or (common::hasPriv('kanban', 'setColumnWidth')) or common::hasPriv('execution', 'edit') or common::hasPriv('execution', 'close') or common::hasPriv('execution', 'delete') or !empty($executionActions));
+    $printSettingBtn   = ($printCreateRegion or common::hasPriv('execution', 'edit') or common::hasPriv('execution', 'close') or common::hasPriv('execution', 'delete') or !empty($executionActions));
 
     if($printSettingBtn)
     {
@@ -157,8 +157,6 @@ js::set('priv',
         $actions .= "<ul id='kanbanActionMenu' class='dropdown-menu pull-right'>";
         $width    = $this->app->getClientLang() == 'en' ? '750' : '650';
         if($printCreateRegion) $actions .= '<li>' . html::a(helper::createLink('kanban', 'createRegion', "kanbanID=$execution->id&from=execution", '', true), '<i class="icon icon-plus"></i>' . $lang->kanban->createRegion, '', "class='iframe btn btn-link text-left'") . '</li>';
-        if(common::hasPriv('kanban', 'setLaneHeight')) $actions .= '<li>' . html::a(helper::createLink('kanban', 'setLaneHeight', "kanbanID=$execution->id&from=execution", '', true), '<i class="icon icon-size-height"></i>' . $lang->kanban->laneHeight, '', "class='iframe btn btn-link text-left' data-width=$width") . '</li>';
-        if(common::hasPriv('kanban', 'setColumnWidth')) $actions .= '<li>' . html::a(helper::createLink('kanban', 'setColumnWidth', "kanbanID=$execution->id&from=execution", '', true), '<i class="icon icon-size-width"></i>' . $lang->kanban->columnWidth, '', "class='iframe btn btn-link text-left' data-width='400'") . '</li>';
         $kanbanActions = '';
         if(common::hasPriv('execution', 'edit')) $kanbanActions .= '<li>' . html::a(helper::createLink('execution', 'edit', "executionID=$execution->id", '', true), '<i class="icon icon-edit"></i>' . $lang->kanban->edit, '', "class='iframe btn btn-link text-left' data-width='75%'") . '</li>';
         if(common::hasPriv('execution', 'start')) $kanbanActions .= '<li class="startButton hidden">' . html::a(helper::createLink('execution', 'start', "executionID=$execution->id&from=kanban", '', true), '<i class="icon icon-play"></i>' . $lang->execution->start, '', "class='iframe btn btn-link text-left' data-width='75%'") . '</li>';
@@ -169,7 +167,7 @@ js::set('priv',
         if(common::hasPriv('execution', 'delete')) $kanbanActions .= '<li>' . html::a(helper::createLink('execution', 'delete', "executionID=$execution->id"), '<i class="icon icon-trash"></i>' . $lang->delete, 'hiddenwin', "class='btn btn-link text-left'") . '</li>';
         if($kanbanActions)
         {
-            $actions .= ((common::hasPriv('kanban', 'createRegion') or common::hasPriv('kanban', 'setLaneHeight') or common::hasPriv('kanban', 'setColumnWidth')) and (common::hasPriv('execution', 'edit') or common::hasPriv('execution', 'delete') or !empty($executionActions))) ? "<div class='divider'></div>" . $kanbanActions : $kanbanActions;
+            $actions .= (common::hasPriv('kanban', 'createRegion') and (common::hasPriv('execution', 'edit') or common::hasPriv('execution', 'delete') or !empty($executionActions))) ? "<div class='divider'></div>" . $kanbanActions : $kanbanActions;
         }
         $actions .= "</ul>";
     }

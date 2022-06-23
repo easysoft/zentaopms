@@ -161,9 +161,11 @@ $lang->upgrade->fromVersions['17_0_beta2'] = '17.0.beta2';
 $lang->upgrade->fromVersions['17_0']       = '17.0';
 $lang->upgrade->fromVersions['17_1']       = '17.1';
 
+global $config;
 /* Lite. */
 $lang->upgrade->fromVersions['lite1_0'] = 'Lite1.0';
 $lang->upgrade->fromVersions['lite1_1'] = 'Lite1.1';
+if($config->edition != 'open') $lang->upgrade->fromVersions['liteVIP1_1'] = 'LiteVIP1.1';
 
 /* Pro. */
 $lang->upgrade->fromVersions['pro1_0']        = 'Pro1.0';
