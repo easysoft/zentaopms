@@ -25,6 +25,11 @@
         <td></td>
       </tr>
       <tr>
+        <th><?php echo $lang->kanban->WIPCount;?></th>
+        <td><?php echo html::radio('showWIP', $lang->kanban->showWIPList, 1);?></td>
+        <td></td>
+      </tr>
+      <tr>
         <th><?php echo $lang->kanban->space;?></th>
         <td><?php echo html::select('space', $spacePairs, $spaceID, "onchange='changeValue(this.value)' class='form-control chosen'");?></td>
         <td></td>

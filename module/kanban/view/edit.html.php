@@ -23,6 +23,11 @@
         <td><?php echo html::select('space', $spacePairs, $kanban->space, "class='form-control chosen'");?></td>
       </tr>
       <tr>
+        <th><?php echo $lang->kanban->WIPCount;?></th>
+        <td><?php echo html::radio('showWIP', $lang->kanban->showWIPList, $kanban->showWIP);?></td>
+        <td></td>
+      </tr>
+      <tr>
         <th><?php echo $lang->kanban->name;?></th>
         <td><?php echo html::input('name', $kanban->name, "class='form-control'");?></td>
       </tr>

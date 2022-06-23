@@ -1344,6 +1344,7 @@ function initKanban($kanban)
         onRenderLaneName:      renderLaneName,
         onRenderHeaderCol:     renderHeaderCol,
         onRenderCount:         renderCount,
+        showCount:             kanban.showWIP == '1' ? true : false,
         sortable:              handleSortCards,
         virtualize:            true,
         virtualRenderOptions:  {container: $(window).add($('#kanbanContainer'))},
