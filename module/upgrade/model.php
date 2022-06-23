@@ -6456,8 +6456,8 @@ class upgradeModel extends model
 
         foreach($groupIdList as $groupID)
         {
-            $this->dao->insert(TABLE_GROUPPRIV)
-                ->set('group')->eq($groupID)
+            $this->dao->replace(TABLE_GROUPPRIV)
+                ->set('`group`')->eq($groupID)
                 ->set('module')->eq('execution')
                 ->set('method')->eq('storyView')
                 ->exec();
