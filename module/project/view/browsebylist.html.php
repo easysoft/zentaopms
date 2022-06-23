@@ -11,9 +11,9 @@
  */
 ?>
 <style>
+.export {margin-left: 0px !important;}
 .project-type-label.label-outline {width: 50px; min-width: 50px;}
 .project-type-label.label {overflow: unset !important; text-overflow: unset !important; white-space: unset !important;}
-
 .project-name {position: relative; display: flex; align-items: center;}
 .project-name > span,
 .project-name > span {flex: none;}
