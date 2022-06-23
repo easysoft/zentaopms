@@ -73,7 +73,7 @@
           </tr>
           <tr>
             <th><?php echo $lang->product->reviewer;?></th>
-            <td><?php echo html::select('reviewer[]', $users, '', "class='form-control chosen' multiple");?></td>
+            <td><?php echo html::select('reviewer[]', $users, '', "class='form-control picker-select' multiple");?></td>
           </tr>
           <tr>
             <th><?php echo $lang->product->type;?></th>
@@ -107,7 +107,7 @@
             <th><?php echo $lang->whitelist;?></th>
             <td colspan='1'>
               <div class='input-group'>
-                <?php echo html::select('whitelist[]', $users, '', 'class="form-control chosen" multiple');?>
+                <?php echo html::select('whitelist[]', $users, '', 'class="form-control picker-select" multiple');?>
                 <?php echo $this->fetch('my', 'buildContactLists', "dropdownName=whitelist");?>
               </div>
             </td>

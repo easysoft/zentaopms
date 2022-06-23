@@ -808,6 +808,7 @@ class docModel extends model
             ->setDefault('groups', '')
             ->setDefault('product', 0)
             ->setDefault('execution', 0)
+            ->setDefault('mailto', '')
             ->add('editedBy', $this->app->user->account)
             ->add('editedDate', $now)
             ->cleanInt('module')

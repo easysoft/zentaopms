@@ -766,6 +766,7 @@ class testcaseModel extends model
             ->setDefault('lastEditedBy',   $this->app->user->account)
             ->add('lastEditedDate', $now)
             ->setDefault('story,branch', 0)
+            ->setDefault('stage', '')
             ->join('stage', ',')
             ->join('linkCase', ',')
             ->setForce('status', $status)
