@@ -1747,7 +1747,7 @@ class execution extends control
         $this->view->teamMembers          = $this->execution->getTeamMembers($executionID);
         if($this->config->systemMode == 'new') $this->view->allProjects = $this->project->getPairsByModel($project->model, 0, 'noclosed', $project->id);
 
-        $this->view->laneCount     = $this->kanban->getLaneCount($executionID, $execution->model);
+        $this->view->laneCount     = $this->kanban->getLaneCount($executionID, $execution->type);
         $this->view->heightType    = $execution->displayCards > 2 ? 'custom' : 'auto';
         $this->view->displayCards  = $execution->displayCards ? $execution->displayCards : '';
 

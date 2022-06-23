@@ -274,7 +274,6 @@ class kanban extends control
         $this->view->displayCards  = $kanban->displayCards ? $kanban->displayCards : '';
         $this->view->enableImport  = empty($kanban->object) ? 'off' : 'on';
         $this->view->importObjects = empty($kanban->object) ? array() : explode(',', $kanban->object);
-        a($this->view->laneCount);
 
         $this->display();
     }
