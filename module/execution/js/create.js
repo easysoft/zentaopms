@@ -69,7 +69,7 @@ $(function()
         $.get(createLink('execution', 'ajaxGetTeamMembers', 'objectID=' + objectID), function(data)
         {
             $('#teamMembers').parent().html(data);
-            $('#teamMembers').chosen();
+            $('#teamMembers').picker({chosenMode: true});
         });
     })
 

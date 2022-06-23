@@ -107,7 +107,7 @@
               <div class="table-row">
                 <?php if(!$this->story->checkForceReview()):?>
                 <div class="table-col">
-                  <?php echo html::select('reviewer[]', $reviewers, empty($needReview) ? $product->PO : '', "class='form-control chosen' multiple");?>
+                  <?php echo html::select('reviewer[]', $reviewers, empty($needReview) ? $product->PO : '', "class='form-control picker-select' multiple");?>
                 </div>
                 <div class="table-col w-130px">
                   <span class="input-group-addon" style="border: 1px solid #dcdcdc; border-left-width: 0px;">
@@ -119,7 +119,7 @@
                 </div>
                 <?php else:?>
                 <div class="table-col">
-                  <?php echo html::select('reviewer[]', $reviewers, empty($needReview) ? $product->PO : '', "class='form-control chosen' multiple required");?>
+                  <?php echo html::select('reviewer[]', $reviewers, empty($needReview) ? $product->PO : '', "class='form-control picker-select' multiple required");?>
                 </div>
                 <?php endif;?>
               </div>

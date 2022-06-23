@@ -47,7 +47,7 @@
           </tr>
           <tr>
             <th><?php echo $lang->testreport->members?></th>
-            <td colspan='2'><?php echo html::select('members[]', $users, $report->members, "class='form-control chosen' multiple")?></td>
+            <td colspan='2'><?php echo html::select('members[]', $users, $report->members, "class='form-control picker-select' multiple")?></td>
             <td></td>
           </tr>
           <tr>

@@ -1289,7 +1289,7 @@ class user extends control
         if(isset($this->config->user->moreLink)) $this->config->moreLinks[$dropdownName . "[]"] = $this->config->user->moreLink;
 
         $defaultUsers = empty($contactListID) ? '' : $list->userList . ',' . trim($oldUsers);
-        return print(html::select($dropdownName . "[]", $users, $defaultUsers, "class='form-control chosen' multiple $attr"));
+        return print(html::select($dropdownName . "[]", $users, $defaultUsers, "class='form-control picker-select' multiple $attr"));
     }
 
     /**
