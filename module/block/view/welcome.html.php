@@ -24,7 +24,7 @@
 .block-welcome.block-sm .col-right .tiles {border-left: none; padding-left: 0}
 .block-welcome.block-sm .tile-title {font-size: 12px; margin: 0 -10px;}
 .block-welcome .progress-group{margin-top: 42px;}
-.block-welcome .progress{margin-top: 10px; width: 85%}
+.block-welcome .progress{margin-top: 10px; width: 85%;}
 .block-welcome .user-welcome{margin-top: 28px !important;}
 .block-welcome .col-right{border-left: 1px solid #e5e8ec;}
 .block-welcome.block-sm .col-right {border: none;}
@@ -32,6 +32,7 @@
 .block-welcome .done-progress{display: inline-block; color: #5B606E; font-weight: 500;}
 .block-welcome .welcome-label{background: #ffebee; border: none;}
 .block-welcome.block-sm .left-today {margin-left: 0px;}
+.block-welcome .progress-num{display: flex; justify-content: space-between; width: 85%;}
 </style>
 <?php $progress = $tasks == 0 ? 0 : round($doneTasks / $tasks, 3) * 100;?>
 <div class='panel-move-handler'></div>
@@ -41,10 +42,12 @@
       <h4><small class="text-muted"><?php echo date(DT_DATE3)?></small></h4>
       <h4 class="user-welcome"><?php printf($lang->block->welcomeList[$welcomeType], $app->user->realname)?></h4>
       <div class="progress-group">
-        <span class="progress-num">
-          <strong><?php echo $lang->block->assignToMe;?></strong>
+        <div class="progress-num">
+          <div>
+            <strong><?php echo $lang->block->assignToMe;?></strong>
+          </div>
           <div class="done-progress"><?php echo $lang->block->done . " $progress" . '%';?></div>
-        </span>
+        </div>
         <div class="progress">
           <div class="progress-bar" role="progressbar" aria-valuenow="82" aria-valuemin="0" aria-valuemax="100" style="width: <?php echo $progress;?>%">
           </div>
