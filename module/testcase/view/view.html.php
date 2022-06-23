@@ -186,7 +186,17 @@
                 <?php
                 $class = isonlybody() ? 'showinonlybody' : 'iframe';
                 $param = $this->app->tab == 'project' ? "&version=0&projectID={$this->session->project}" : '';
-                if(isset($case->storyTitle)) echo html::a($this->createLink('story', 'view', "storyID=$case->story" . $param, '', true), "#$case->story:$case->storyTitle", '', "class=$class data-width='80%'");
+                if(isset($case->storyTitle))
+                {
+                    if(common::hasPriv('story', 'view'))
+                    {
+                        echo html::a($this->createLink('story', 'view', "storyID=$case->story" . $param, '', true), "#$case->story:$case->storyTitle", '', "class=$class data-width='80%'");
+                    }
+                    else
+                    {
+                        echo '<a style="color: #3c4353">' . "#$case->story:$case->storyTitle" . '</a>';
+                    }
+                }
                 if($case->story and $case->storyStatus == 'active' and $case->latestStoryVersion > $case->storyVersion)
                 {
                     echo "(<span class='warning'>{$lang->story->changed}</span> ";
