@@ -18,6 +18,8 @@ class entry extends baseEntry
     {
         parent::__construct();
 
+        if($this->app->action == 'options') return $this->send(204);
+        
         if(!isset($this->app->user) or $this->app->user->account == 'guest') $this->sendError(401, 'Unauthorized');
 
         $this->dao = $this->loadModel('common')->dao;
