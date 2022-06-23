@@ -6441,6 +6441,12 @@ class upgradeModel extends model
         return true;
     }
 
+    /**
+     * Move project admins to new table.
+     *
+     * @access public
+     * @return void
+     */
     public function moveProjectAdmins()
     {
         $adminGroupID  = $this->dao->select('id')->from(TABLE_GROUP)->where('role')->eq('projectAdmin')->fetch('id');
