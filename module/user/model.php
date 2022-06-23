@@ -2687,6 +2687,14 @@ class userModel extends model
                 ->fetchPairs();
         }
 
+        if($admins === '')
+        {
+            $admins = $this->dao->select('account')->from(TABLE_PROJECTADMIN)
+                ->where("CONCAT(',', products, ',')")->like("%,$product->id,%")
+                ->orWhere('products')->eq('all')
+                ->fetchPairs();
+        }
+
         $users += $teams ? $teams : array();
         $users += $stakeholders ? $stakeholders : array();
         $users += $whiteList ? $whiteList : array();

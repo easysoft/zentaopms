@@ -184,7 +184,7 @@ function setPreview()
     }
     else
     {
-        storyLink  = createLink('story', 'view', "storyID=" + $('#story').val());
+        storyLink  = createLink('execution', 'storyView', "storyID=" + $('#story').val());
         var concat = storyLink.indexOf('?') < 0 ? '?' : '&';
 
         if(storyLink.indexOf("onlybody=yes") < 0) storyLink = storyLink + concat + 'onlybody=yes';

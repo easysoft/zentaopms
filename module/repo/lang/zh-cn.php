@@ -23,6 +23,7 @@ $lang->repo->encrypt         = '加密方式';
 $lang->repo->repo            = '代码库';
 $lang->repo->parent          = '父文件夹';
 $lang->repo->branch          = '分支';
+$lang->repo->tag             = '标签';
 $lang->repo->addWebHook      = '添加Webhook';
 $lang->repo->apiGetRepoByUrl = '接口：通过URL获取版本库';
 

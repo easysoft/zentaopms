@@ -104,7 +104,9 @@
             <span id='storyBox' class="<?php if(!empty($stories)) echo 'hidden';?> "><?php printf($lang->task->noticeLinkStory, html::a($this->createLink('execution', 'linkStory', "executionID=$execution->id"), $lang->execution->linkStory, '', 'class="text-primary"'), html::a("javascript:loadStories($execution->id)", $lang->refresh, '', 'class="text-primary"'));?></span>
             <div class='input-group <?php if(empty($stories)) echo "hidden";?>'>
               <?php echo html::select('story', $stories, $task->story, "class='form-control chosen' onchange='setStoryRelated();'");?>
+              <?php if(common::hasPriv('execution', 'storyView')):?>
               <span class='input-group-btn' id='preview'><a href='#' class='btn iframe'><?php echo $lang->preview;?></a></span>
+              <?php endif;?>
             </div>
           </td>
         </tr>

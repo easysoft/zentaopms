@@ -517,6 +517,7 @@ class upgradeModel extends model
                 break;
             case '17_1':
                 $this->moveProjectAdmins();
+                $this->addStoryViewPriv();
                 break;
         }
 
@@ -6468,5 +6469,30 @@ class upgradeModel extends model
         }
 
         $this->dao->delete()->from(TABLE_USERGROUP)->where('`group`')->eq($adminGroupID)->exec();
+    }
+
+    /*
+     * Insert story view of execution.
+     *
+     * @access public
+     * @return bool
+     */
+    public function addStoryViewPriv()
+    {
+        $groupIdList = $this->dao->select('`group`')->from(TABLE_GROUPPRIV)
+            ->where('module')->eq('story')
+            ->andWhere('method')->eq('view')
+            ->fetchPairs('group');
+
+        foreach($groupIdList as $groupID)
+        {
+            $this->dao->replace(TABLE_GROUPPRIV)
+                ->set('`group`')->eq($groupID)
+                ->set('module')->eq('execution')
+                ->set('method')->eq('storyView')
+                ->exec();
+        }
+
+        return true;
     }
 }

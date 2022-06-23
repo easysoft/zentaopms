@@ -91,9 +91,7 @@ tbody tr td:first-child input {display: none;}
               </tr>
             </thead>
             <tbody class='text-center'>
-              <?php $objectID = $this->app->tab == 'execution' ? $build->execution : $build->project;?>
               <?php foreach($stories as $storyID => $story):?>
-              <?php $storyLink = $this->app->tab == 'execution' ? $this->createLink('execution', 'storyView', "storyID=$story->id", '', true) : $this->createLink('story', 'view', "storyID=$story->id&version=0&param=$objectID", '', true);?>
               <tr>
                 <td class='c-id text-left'>
                   <?php if($canBatchUnlink):?>
@@ -106,7 +104,18 @@ tbody tr td:first-child input {display: none;}
                 <td class='text-left nobr' title='<?php echo $story->title?>'>
                   <?php
                   if($story->parent > 0) echo "<span class='label'>{$lang->story->childrenAB}</span>";
-                  echo html::a($storyLink,$story->title, '', isonlybody() ? "data-width='1000'" : "class='iframe' data-width='1000'");
+                  if($this->app->tab == 'execution' and common::hasPriv('execution', 'storyView'))
+                  {
+                      echo html::a($this->createLink('execution', 'storyView', "storyID=$story->id", '', true), $story->title, '', isonlybody() ? "data-width='1000'" : "class='iframe' data-width='1000'");
+                  }
+                  elseif($this->app->tab == 'project' and common::hasPriv('projectstory', 'view'))
+                  {
+                      echo html::a($this->createLink('projectstory', 'view', "storyID=$story->id&version=0&param=$build->project", '', true), $story->title, '', isonlybody() ? "data-width='1000'" : "class='iframe' data-width='1000'");
+                  }
+                  else
+                  {
+                      echo '<a>' . $story->title . '</a>';
+                  }
                   ?>
                 </td>
                 <td><?php echo zget($users, $story->openedBy);?></td>
