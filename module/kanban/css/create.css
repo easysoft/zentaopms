@@ -1,1 +1,11 @@
+#mainContent .table-form>tbody>tr>th {width: 105px;}
 #mainContent {padding-left: 0px;}
+#mainContent .importBox .radio-inline+.radio-inline {padding-left: 20px;}
+#mainContent .objectBox {padding-top: 2px;}
+#mainContent .objectBox .checkbox-primary {display: inline-block;}
+#mainContent .objectBox .checkbox-primary:not(:first-child) {margin-left: 10px;}
+#mainContent .objectBox .checkbox-primary>label:not(:first-child) {padding-left: 20px;}
+#mainContent .objectBox .checkbox-primary>label:before {top: 1px; left: -2px;}
+#mainContent .objectBox .checkbox-primary>label:after {width: 14px; height: 14px;}
+[lang^='en'] .columnWidth {width: 120px;}
+[lang^='zh-cn'] .columnWidth {width: 80px;}

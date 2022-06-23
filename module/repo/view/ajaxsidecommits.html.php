@@ -15,7 +15,7 @@ $pathInfo = '&root=' . $this->repo->encodePath(empty($path) ? '/' : $path);
 if(isset($entry)) $pathInfo .= '&type=file';
 ?>
 <?php js::set('paramsBase', "repoID=$repoID&path=" . $this->repo->encodePath($path) . "&objectID=$objectID&type=$logType");?>
-<form id='logForm' class='main-table' data-ride='table' method='post' onsubmit='logsubmit()'>
+<form id='logForm' class='main-table' method='post' onsubmit='logsubmit()'>
   <table class='table table-fixed'>
     <thead>
       <tr>

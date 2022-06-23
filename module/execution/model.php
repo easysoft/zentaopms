@@ -333,14 +333,25 @@ class executionModel extends model
             ->setDefault('lastEditedBy', $this->app->user->account)
             ->setDefault('lastEditedDate', helper::now())
             ->setDefault('team', substr($this->post->name, 0, 30))
+            ->setIF($this->post->heightType == 'auto', 'displayCards', 0)
             ->setIF(!isset($_POST['whitelist']), 'whitelist', '')
             ->setIF($this->config->systemMode == 'new', 'parent', $this->post->project)
             ->setIF($this->post->acl == 'open', 'whitelist', '')
             ->join('whitelist', ',')
             ->setDefault('type', $type)
             ->stripTags($this->config->execution->editor->create['id'], $this->config->allowedTags)
-            ->remove('products, workDays, delta, branch, uid, plans, teams, teamMembers, contactListMenu')
+            ->remove('products, workDays, delta, branch, uid, plans, teams, teamMembers, contactListMenu, heightType')
             ->get();
+
+        if(isset($_POST['heightType']) and $this->post->heightType == 'custom')
+        {
+            if(!preg_match("/^-?\d+$/", $sprint->displayCards) or $sprint->displayCards < 3)
+            {
+                $this->app->loadLang('kanban');
+                dao::$errors['displayCards'] = $this->lang->kanbanlane->error->mustBeInt;
+                return false;
+            }
+        }
 
         /* Check the workload format and total. */
         if(!empty($sprint->percent)) $this->checkWorkload('create', $sprint->percent);
@@ -475,6 +486,7 @@ class executionModel extends model
             ->add('id', $executionID)
             ->setDefault('lastEditedBy', $this->app->user->account)
             ->setDefault('lastEditedDate', helper::now())
+            ->setIF($this->post->heightType == 'auto', 'displayCards', 0)
             ->setIF(helper::isZeroDate($this->post->begin), 'begin', '')
             ->setIF(helper::isZeroDate($this->post->end), 'end', '')
             ->setIF(!isset($_POST['whitelist']), 'whitelist', '')
@@ -483,8 +495,18 @@ class executionModel extends model
             ->setDefault('team', $this->post->name)
             ->join('whitelist', ',')
             ->stripTags($this->config->execution->editor->edit['id'], $this->config->allowedTags)
-            ->remove('products, branch, uid, plans, syncStories, contactListMenu, teamMembers')
+            ->remove('products, branch, uid, plans, syncStories, contactListMenu, teamMembers, heightType')
             ->get();
+
+        if(isset($_POST['heightType']) and $this->post->heightType == 'custom')
+        {
+            if(!preg_match("/^-?\d+$/", $execution->displayCards) or $execution->displayCards < 3)
+            {
+                $this->app->loadLang('kanban');
+                dao::$errors['displayCards'] = $this->lang->kanbanlane->error->mustBeInt;
+                return false;
+            }
+        }
 
         if(in_array($execution->status, array('closed', 'suspended'))) $this->computeBurn($executionID);
 

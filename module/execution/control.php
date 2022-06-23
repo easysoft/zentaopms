@@ -1498,6 +1498,7 @@ class execution extends control
             }
         }
 
+        $this->app->loadLang('kanban');
         $this->loadModel('user');
         $poUsers = $this->user->getPairs('noclosed|nodeleted|pofirst', '', $this->config->maxCount);
         if(!empty($this->config->user->moreLink)) $this->config->moreLinks["PM"] = $this->config->user->moreLink;
@@ -1653,6 +1654,13 @@ class execution extends control
 
             if($_POST['status'] == 'doing') $this->loadModel('common')->syncPPEStatus($executionID);
             if($execution->type == 'kanban') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
+
+            /* If link from no head then reload. */
+            if(isonlybody())
+            {
+                return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
+            }
+
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('view', "executionID=$executionID")));
         }
 
@@ -1700,6 +1708,7 @@ class execution extends control
         }
 
         $this->loadModel('user');
+        $this->loadModel('kanban');
         $poUsers = $this->user->getPairs('noclosed|nodeleted|pofirst', $execution->PO, $this->config->maxCount);
         if(!empty($this->config->user->moreLink)) $this->config->moreLinks["PM"] = $this->config->user->moreLink;
 
@@ -1737,6 +1746,11 @@ class execution extends control
         $this->view->branchGroups         = $this->execution->getBranchByProduct(array_keys($linkedProducts), $this->config->systemMode == 'new' ? $execution->project : 0, 'noclosed', $linkedBranchList);
         $this->view->teamMembers          = $this->execution->getTeamMembers($executionID);
         if($this->config->systemMode == 'new') $this->view->allProjects = $this->project->getPairsByModel($project->model, 0, 'noclosed', $project->id);
+
+        $this->view->laneCount     = $this->kanban->getLaneCount($executionID, $execution->type);
+        $this->view->heightType    = $execution->displayCards > 2 ? 'custom' : 'auto';
+        $this->view->displayCards  = $execution->displayCards ? $execution->displayCards : '';
+
         $this->display();
     }
 
@@ -3218,7 +3232,7 @@ class execution extends control
         $users   = $this->loadModel('user')->getPairs('nodeleted|noclosed');
         $members = $this->user->getTeamMemberPairs($objectID, $type);
 
-        return print(html::select('teamMembers[]', $users, array_keys($members), "class='form-control chosen' multiple"));
+        return print(html::select('teamMembers[]', $users, array_keys($members), "class='form-control picker-select' multiple"));
     }
 
     /**

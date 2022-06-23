@@ -3,16 +3,23 @@
 #sidebar>.sidebar-toggle>.icon {right: -2px; left: auto;}
 .main-row {width: 99%;}
 .btn-toolbar > .last-sync-time {display: inline-block; float: left; margin-right: 10px;}
+.btn-toolbar .page-title {line-height: 28px;}
 .dropdown-menu > li.selected > a:after {content: '';}
 .pull-left li > a.selected {color: #e9f2fb; background-color: #16a8f8;}
 .pull-left li > a {line-height: 20px; border-radius: 5px;}
 .tree li.has-list.open:before {border-left: 0px;}
 #mainMenu > div.btn-toolbar.pull-left > div.btn-group.open {line-height: 20px;}
-#dropMenuRepo > div.table-row > div > div > ul > li {padding: 0}
 #dropMenuRepo > div.table-row > div > div > ul > li > div {padding-left: 20px;}
 #dropMenuRepo > div.table-row > div > div > ul > li > ul {padding-left: 10px;}
 #repoList .hide-in-search .hidden {display: block !important; visibility: inherit !important;}
 #repoList > ul > li > ul > li > a:hover {color: white; background-color: #0c64eb; text-decoration: none;}
+
+li>a.selected {color: #e9f2fb; background-color: #16a8f8;}
+#branchList {line-height: 25px;}
+#branchList .hide-in-search, #branchList .tree ul {padding-left: 20px;}
+.tree li.has-list.open:before {border-left: none;}
+.tree li {padding: 0;}
+.branch-or-tag {border-radius: 4px;}
 
 .c-name {min-width: 150px;}
 .c-checkbox {width: 40px;}

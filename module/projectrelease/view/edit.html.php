@@ -22,7 +22,7 @@
       </h2>
     </div>
     <form class='load-indicator main-form form-ajax' method='post' target='hiddenwin' id='dataform' enctype='multipart/form-data'>
-      <table class='table table-form'> 
+      <table class='table table-form'>
         <tbody>
           <tr>
             <th><?php echo $lang->release->name;?></th>
@@ -34,7 +34,7 @@
                 <label for='marker'><?php echo $lang->release->marker;?></label>
               </div>
             </td>
-          </tr>  
+          </tr>
           <tr>
             <th><?php echo $lang->release->build;?></th>
             <td><?php echo html::select('build', $builds, $release->build, "class='form-control chosen' required"); ?></td><td></td>
@@ -42,28 +42,28 @@
           <tr>
             <th><?php echo $lang->release->date;?></th>
             <td><?php echo html::input('date', $release->date, "class='form-control form-date' required");?></td><td></td>
-          </tr>  
+          </tr>
           <tr>
             <th><?php echo $lang->release->status;?></th>
             <td><?php echo html::select('status', $lang->release->statusList, $release->status, "class='form-control'");?></td><td></td>
-          </tr>  
+          </tr>
           <?php $this->printExtendFields($release, 'table');?>
           <tr>
             <th><?php echo $lang->release->desc;?></th>
             <td colspan='2'><?php echo html::textarea('desc', htmlSpecialString($release->desc), "rows=10 class='form-control kindeditor' hidefocus='true'");?></td>
-          </tr>  
+          </tr>
           <tr>
             <th><?php echo $lang->release->mailto;?></th>
             <td colspan='2'>
               <div class="input-group">
-                <?php echo html::select('mailto[]', $users, $release->mailto, "class='form-control chosen' data-placeholder='{$lang->chooseUsersToMail}' multiple");?>
+                <?php echo html::select('mailto[]', $users, $release->mailto, "class='form-control picker-select' data-placeholder='{$lang->chooseUsersToMail}' multiple");?>
               </div>
             </td>
           </tr>
           <tr>
             <th><?php echo $lang->files;?></th>
             <td colspan='2'><?php echo $this->fetch('file', 'buildform');?></td>
-          </tr>  
+          </tr>
           <tr>
             <td colspan='3' class='text-center form-actions'>
               <?php echo html::submitButton();?>
@@ -73,7 +73,7 @@
           </tr>
         </tbody>
       </table>
-    </form>  
+    </form>
   </div>
 </div>
 <?php include '../../common/view/footer.html.php';?>

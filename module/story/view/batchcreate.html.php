@@ -109,7 +109,7 @@
             <td class='<?php echo zget($visibleFields, 'estimate', 'hidden')?>'><?php echo html::input('estimate[$id]', $estimate, "class='form-control'");?></td>
             <td class='<?php echo zget($visibleFields, 'review', 'hidden')?>'>
               <div class='input-group'>
-                <?php echo html::select('reviewer[$id][]', $reviewers, '', "class='form-control chosen' multiple");?>
+                <?php echo html::select('reviewer[$id][]', $reviewers, '', "class='form-control picker-select' multiple");?>
                 <span class='input-group-addon reviewerDitto'><input type='checkbox' name='reviewDitto[$id]' value='ditto' checked='checked' id='dittocheck$id'/> <?php echo $lang->story->ditto;?></span>
               </div>
             </td>

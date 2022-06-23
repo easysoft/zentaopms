@@ -167,7 +167,7 @@
         <?php if($project->model == 'kanban'):?>
         <tr>
           <th><?php echo $lang->execution->team;?></th>
-          <td colspan='2'><?php echo html::select('teamMembers[]', $users, array_keys($teamMembers), "class='form-control chosen' multiple"); ?></td>
+          <td colspan='2'><?php echo html::select('teamMembers[]', $users, array_keys($teamMembers), "class='form-control picker-select' multiple"); ?></td>
         </tr>
         <?php endif;?>
         <tr>
@@ -185,7 +185,7 @@
           <th><?php echo $lang->whitelist;?></th>
           <td colspan='2'>
             <div class='input-group'>
-              <?php echo html::select('whitelist[]', $users, $project->whitelist, 'class="form-control chosen" multiple');?>
+              <?php echo html::select('whitelist[]', $users, $project->whitelist, 'class="form-control picker-select" multiple');?>
               <?php echo $this->fetch('my', 'buildContactLists', "dropdownName=whitelist");?>
             </div>
           </td>

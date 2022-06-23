@@ -24,3 +24,6 @@
 #productsBox .row .col-sm-4 {padding-right: 13px;}
 #plansBox .row {display: inline-table; width: 102%;}
 #plansBox .row .col-sm-4 {display: inline-block; float: none; padding-right: 13px;}
+
+#mainContent .laneHeightBox .radio-inline+.radio-inline {margin-left: 20px;}
+#mainContent .laneHeightBox .tip {color: #999;}

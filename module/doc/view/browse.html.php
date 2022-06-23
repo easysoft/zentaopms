@@ -66,7 +66,7 @@
               </td>
               <?php else:?>
               <?php if(common::hasPriv('doc', 'objectLibs')):?>
-              <?php $objectID = $doc->{$type};?>
+              <?php $objectID = isset($doc->{$type}) ? $doc->{$type} : 0;?>
               <td class="c-id"><?php echo html::a($this->createLink('doc', 'objectLibs', "type=$type&objectID=$objectID&libID=$doc->lib&docID=$doc->id"), $doc->id, '', "title='{$doc->id}' data-app='{$this->app->tab}'");?></td>
               <td class="c-name"><?php echo html::a($this->createLink('doc', 'objectLibs', "type=$type&objectID=$objectID&libID=$doc->lib&docID=$doc->id"), "<i class='icon icon-file-text text-muted'></i> &nbsp;" . $doc->title, '', "title='{$doc->title}' data-app='{$this->app->tab}'");?></td>
               <?php else:?>

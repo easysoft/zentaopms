@@ -11,12 +11,13 @@
 <?php include '../../common/view/header.html.php';?>
 <div id='mainMenu' class='clearfix'>
   <div class='btn-toolbar pull-left'>
-    <div class='btn-group group'>
-      <button data-toggle='dropdown' type='button' class='btn btn-link btn-limit repo-select text-ellipsis' title='<?php $repos[$repoID];?>'>
-        <span class='text'><?php echo $repos[$repoID];?></span>
-        <span class='caret' style='margin-bottom: -1px'></span>
-      </button>
-      <div id='dropMenuRepo' class='dropdown-menu search-list' data-ride='searchList' data-url=''>
+    <div class='btn-group' id="swapper">
+      <?php echo $this->repo->getReposMenu($repo, $objectID);?>
+    </div>
+    <?php if(!empty($branchesAndTags)):?>
+    <div class='btn-group'>
+      <a href='javascript:;' class='btn btn-link btn-limit text-ellipsis' data-toggle='dropdown' style="max-width: 120px;"><span class='text' title='<?php echo $branchesAndTags[$branchID];?>'><?php echo $branchesAndTags[$branchID];?></span> <span class='caret'></span></a>
+      <div id='dropMenuBranch' class='dropdown-menu search-list' data-ride='searchList' data-url=''>
         <div class="input-control search-box has-icon-left has-icon-right search-example">
         <input type="search" class="form-control search-input" id="searchSource"/>
           <label class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label>
@@ -24,43 +25,43 @@
         </div>
         <div class="table-row">
           <div class="table-col col-left">
-            <div class="list-group" id="repoList">
-              <ul class='tree tree-angles' data-ride='tree'>
-              <?php foreach($repoGroup as $groupName => $group):?>
-              <?php if(empty($group)) continue;?>
-                <li data-idx='<?php echo $groupName;?>' data-id='<?php echo $groupName;?>' class='has-list open in' style='cursor: pointer;'><i class='list-toggle icon'></i>
-                  <div class='hide-in-search'><a class='text-muted'><?php echo $groupName;?></a><span class='label label-outline' style='margin-left:5px;'><?php echo $lang->repo->type;?></span></div>
-                  <ul data-idx='<?php echo $groupName;?>'>
-                  <?php
-                  foreach($group as $id => $repoName)
-                  {
-                      $isSelected = $id == $repoID ? 'selected' : '';
-                      $link = $this->createLink('repo', 'browse', "repoID=$id&branchID=&objectID=$objectID");
-                      echo "<li data-idx='$repoName' data-id='$groupName-$repoName'><a href='{$link}' id='$groupName-$repoName' class='$isSelected text-ellipsis' title='$repoName' data-key='$repoName' data-app='{$app->tab}'>$repoName</a></li>";
-                  }
-                  ?>
+            <div class="list-group" id="branchList">
+              <ul class="tree tree-angles" data-ride="tree" data-idx="0">
+                <li data-idx='branch' data-id='branch' class='has-list open in' style='cursor: pointer;'>
+                  <i class='list-toggle icon'></i>
+                  <div class='hide-in-search'><a class='text-muted' title='<?php echo $lang->repo->branch;?>'><?php echo $lang->repo->branch;?></a></div>
+                  <ul data-idx='branch'>
+                    <?php
+                    foreach($branches as $branchName)
+                    {
+                        $selected       = ($branchName == $branchID and $branchOrTag == 'branch') ? 'selected' : '';
+                        $base64BranchID = helper::safe64Encode(base64_encode($branchName));
+                        $branchLink     = $this->createLink('repo', 'browse', "repoID=$repoID&branchID=$base64BranchID&objectID=$objectID");
+                        echo "<li data-idx='$branchName' data-id='branch-$branchName'><a href='$branchLink' id='branch-$branchName' class='$selected branch-or-tag text-ellipsis' title='$branchName' data-key='$branchName'>$branchName</a></li>";
+                    }
+                    ?>
                   </ul>
                 </li>
-              <?php endforeach;?>
+                <li data-idx='tag' data-id='tag' class='has-list open in' style='cursor: pointer;'>
+                  <i class='list-toggle icon'></i>
+                  <div class='hide-in-search'><a class='text-muted' title='<?php echo $lang->repo->tag;?>'><?php echo $lang->repo->tag;?></a></div>
+                  <ul data-idx='tag'>
+                    <?php
+                    foreach($tags as $tagName)
+                    {
+                        $selected    = ($tagName == $branchID and $branchOrTag == 'tag') ? 'selected' : '';
+                        $base64TagID = helper::safe64Encode(base64_encode($tagName));
+                        $tagLink     = $this->createLink('repo', 'browse', "repoID=$repoID&branchID=$base64TagID&objectID=$objectID&path=&revision=HEAD&refresh=0&branchOrTag=tag");
+                        echo "<li data-idx='$tagName' data-id='tag-$tagName'><a href='$tagLink' id='tag-$tagName' class='$selected branch-or-tag text-ellipsis' title='$tagName' data-key='$tagName'>$tagName</a></li>";
+                    }
+                    ?>
+                  </ul>
+                </li>
               </ul>
             </div>
           </div>
         </div>
       </div>
-    </div>
-    <?php if(!empty($branches)):?>
-    <div class='btn-group'>
-      <a href='javascript:;' class='btn btn-link btn-limit text-ellipsis' data-toggle='dropdown' style="max-width: 120px;"><span class='text' title='<?php echo $branches[$branchID];?>'><?php echo $branches[$branchID];?></span> <span class='caret'></span></a>
-      <ul class='dropdown-menu' style='max-height:240px; max-width: 300px; overflow-y:auto'>
-        <?php
-        foreach($branches as $id => $branchName)
-        {
-            $isSelected = $id == $branchID ? 'class="selected"' : '';
-            $base64BranchID = helper::safe64Encode(base64_encode($id));
-            echo "<li $isSelected>" . html::a($this->createLink('repo', 'browse', "repoID=$repoID&branchID=$base64BranchID&objectID=$objectID"), $branchName, '', "title='{$branchName}' class='text-ellipsis' data-app='{$app->tab}'") . "</li>";
-        }
-        ?>
-      </ul>
     </div>
     <?php endif;?>
     <div class="page-title">

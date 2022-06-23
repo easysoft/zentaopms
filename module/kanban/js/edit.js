@@ -1,5 +1,8 @@
 $(function()
 {
+    var heightType = $("[name='heightType']:checked").val();
+    setCardCount(heightType);
+
     if(enableImport == 'off') $("input[name^='importObjectList']").attr('disabled', 'disabled');
 
     $("input[name='import']").change(function()
@@ -31,3 +34,15 @@ $(function()
         }
     })
 })
+
+/**
+ * Set card count.
+ *
+ * @param  string $heightType
+ * @access public
+ * @return void
+ */
+function setCardCount(heightType)
+{
+    heightType != 'custom' ? $('#cardBox').addClass('hidden') : $('#cardBox').removeClass('hidden');
+}
