@@ -307,7 +307,8 @@ class group extends control
 
         list($programs, $projects, $products, $executions) = $this->group->getObject4AdminGroup();
 
-        $group = $this->group->getById($groupID);
+        $group      = $this->group->getById($groupID);
+        $groupUsers = $this->dao->select('t1.account, t2.realname')->from(TABLE_PROJECTADMIN)->alias('t1')->leftJoin(TABLE_USER)->alias('t2')->on('t1.account = t2.account')->fetchPairs();
 
         $title      = $this->lang->company->common . $this->lang->colon . $group->name . $this->lang->colon . $this->lang->group->manageMember;
         $position[] = $group->name;
@@ -315,7 +316,7 @@ class group extends control
 
         $this->view->title         = $title;
         $this->view->position      = $position;
-        $this->view->allUsers      = array('' => '') + $this->loadModel('dept')->getDeptUserPairs($deptID);
+        $this->view->allUsers      = array('' => '') + $groupUsers + $this->loadModel('dept')->getDeptUserPairs($deptID);
         $this->view->deptID        = $deptID;
         $this->view->programs      = $programs;
         $this->view->projects      = $projects;
