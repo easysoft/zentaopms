@@ -92,7 +92,7 @@ EOT;
         </tr>
         <tr>
           <th class="thWidth"><?php echo $lang->custom->superReviewers;?></th>
-          <td><?php echo html::select('superReviewers[]', $users, $superReviewers, "class='form-control chosen' multiple");?></td>
+          <td><?php echo html::select('superReviewers[]', $users, $superReviewers, "class='form-control picker-select' multiple");?></td>
         </tr>
         <tr>
           <td colspan='2' class='text-center'><?php echo html::submitButton();?></td>
@@ -112,39 +112,39 @@ EOT;
         </tr>
         <tr id='userBox' class='forceReview<?php if($needReview) echo " hidden"?>'>
           <th><?php echo $lang->custom->forceReview . $space . $lang->custom->account;?></th>
-          <td><?php echo html::select('forceReview[]', $users, $forceReview, "class='form-control chosen' multiple");?></td>
+          <td><?php echo html::select('forceReview[]', $users, $forceReview, "class='form-control picker-select' multiple");?></td>
         </tr>
         <tr id='roleBox' class='forceReview<?php if($needReview) echo " hidden"?>'>
           <th><?php echo $lang->custom->forceReview . $space . $lang->custom->role;?></th>
-          <td><?php echo html::select('forceReviewRoles[]', $lang->user->roleList, $forceReviewRoles, "class='form-control chosen' multiple");?></td>
+          <td><?php echo html::select('forceReviewRoles[]', $lang->user->roleList, $forceReviewRoles, "class='form-control picker-select' multiple");?></td>
         </tr>
         <tr id='deptBox' class='forceReview<?php if($needReview) echo " hidden"?>'>
           <th><?php echo $lang->custom->forceReview . $space . $lang->custom->dept;?></th>
-          <td><?php echo html::select('forceReviewDepts[]', $depts, $forceReviewDepts, "class='form-control chosen' multiple");?></td>
+          <td><?php echo html::select('forceReviewDepts[]', $depts, $forceReviewDepts, "class='form-control picker-select' multiple");?></td>
         </tr>
         <tr id='userBox' class='forceNotReview<?php if(!$needReview) echo " hidden"?>'>
           <th><?php echo $lang->custom->forceNotReview . $space . $lang->custom->account;?></th>
-          <td><?php echo html::select('forceNotReview[]', $users, $forceNotReview, "class='form-control chosen' multiple");?></td>
+          <td><?php echo html::select('forceNotReview[]', $users, $forceNotReview, "class='form-control picker-select' multiple");?></td>
         </tr>
         <tr id='roleBox' class='forceNotReview<?php if(!$needReview) echo " hidden"?>'>
           <th><?php echo $lang->custom->forceNotReview . $space . $lang->custom->role;?></th>
-          <td><?php echo html::select('forceNotReviewRoles[]', $lang->user->roleList, $forceNotReviewRoles, "class='form-control chosen' multiple");?></td>
+          <td><?php echo html::select('forceNotReviewRoles[]', $lang->user->roleList, $forceNotReviewRoles, "class='form-control picker-select' multiple");?></td>
         </tr>
         <tr id='deptBox' class='forceNotReview<?php if(!$needReview) echo " hidden"?>'>
           <th><?php echo $lang->custom->forceNotReview . $space . $lang->custom->dept;?></th>
-          <td><?php echo html::select('forceNotReviewDepts[]', $depts, $forceNotReviewDepts, "class='form-control chosen' multiple");?></td>
+          <td><?php echo html::select('forceNotReviewDepts[]', $depts, $forceNotReviewDepts, "class='form-control picker-select' multiple");?></td>
         </tr>
         <?php endif;?>
         <?php if($module == 'testcase'):?>
         <?php js::set('oldNeedReview', $needReview);?>
         <tr <?php if($needReview) echo "class='hidden'"?>>
           <th><?php echo $lang->custom->forceReview;?></th>
-          <td><?php echo html::select('forceReview[]', $users, $forceReview, "class='form-control chosen' multiple");?></td>
+          <td><?php echo html::select('forceReview[]', $users, $forceReview, "class='form-control picker-select' multiple");?></td>
           <td style='width:300px'><?php printf($lang->custom->notice->forceReview, $lang->$module->common);?></td>
         </tr>
         <tr <?php if(!$needReview) echo "class='hidden'"?>>
           <th><?php echo $lang->custom->forceNotReview;?></th>
-          <td><?php echo html::select('forceNotReview[]', $users, $forceNotReview, "class='form-control chosen' multiple");?></td>
+          <td><?php echo html::select('forceNotReview[]', $users, $forceNotReview, "class='form-control picker-select' multiple");?></td>
           <td style='width:300px'><?php printf($lang->custom->notice->forceNotReview, $lang->$module->common);?></td>
         </tr>
         <?php endif;?>
@@ -212,7 +212,7 @@ EOT;
       <table class='table table-form mw-800px'>
         <tr>
           <th class='w-150px'><?php echo $lang->custom->user->fields['contactField'];?></th>
-          <td><?php echo html::select('contactField[]', $lang->user->contactFieldList, $config->user->contactField, "class='form-control chosen' multiple");?></td>
+          <td><?php echo html::select('contactField[]', $lang->user->contactFieldList, $config->user->contactField, "class='form-control picker-select' multiple");?></td>
         </tr>
         <tr>
           <td></td>

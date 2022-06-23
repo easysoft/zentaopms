@@ -18,7 +18,7 @@
 .flow-item > div:after {left: auto; right: -10px; z-index: 2}
 .flow-item > div > span {display: flow-root; overflow: hidden;}
 .ie-8 .flow-item > div {margin-right: 10px}
-.flow-item-0 > div {color: #838A9D; font-weight: bold; padding-left: 0;}
+.flow-item-0 > div {color: #3C4353; font-weight: bold; padding-left: 0;}
 .flow-item-0 > div:before {display: none}
 .flow-item-1 > div {background: #E3F2FD}
 .flow-item-1 > div:after {border-left-color: #E3F2FD}

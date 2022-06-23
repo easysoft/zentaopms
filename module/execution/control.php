@@ -2924,8 +2924,8 @@ class execution extends control
 
         if(!empty($_POST))
         {
-            $this->execution->linkStory($objectID, array(), array(), $extra);
             if($object->type != 'project' and $object->project != 0) $this->execution->linkStory($object->project);
+            $this->execution->linkStory($objectID, array(), array(), $extra);
 
             if(isonlybody())
             {
@@ -3232,7 +3232,7 @@ class execution extends control
         $users   = $this->loadModel('user')->getPairs('nodeleted|noclosed');
         $members = $this->user->getTeamMemberPairs($objectID, $type);
 
-        return print(html::select('teamMembers[]', $users, array_keys($members), "class='form-control chosen' multiple"));
+        return print(html::select('teamMembers[]', $users, array_keys($members), "class='form-control picker-select' multiple"));
     }
 
     /**

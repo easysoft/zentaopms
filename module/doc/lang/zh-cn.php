@@ -45,7 +45,7 @@ $lang->doclib->nameList['custom'] = '自定义文档库名称';
 
 /* 字段列表。*/
 $lang->doc->common       = '文档';
-$lang->doc->id           = '编号';
+$lang->doc->id           = '文档编号';
 $lang->doc->product      = '所属' . $lang->productCommon;
 $lang->doc->project      = '所属项目';
 $lang->doc->execution    = '所属' . $lang->execution->common;
@@ -151,6 +151,7 @@ $lang->doc->removeMenu     = '从菜单栏移除';
 $lang->doc->search         = '搜索';
 $lang->doc->allCollections = '查看全部收藏文档';
 $lang->doc->keywordsTips   = '多个关键字请用逗号分隔。';
+$lang->doc->sortLibs       = '文档库排序';
 
 global $config;
 /* 查询条件列表 */

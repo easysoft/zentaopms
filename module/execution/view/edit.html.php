@@ -191,7 +191,7 @@
         <?php endif; ?>
         <tr>
           <th><?php echo $lang->execution->team;?></th>
-          <td colspan='2'><?php echo html::select('teamMembers[]', $users, array_keys($teamMembers), "class='form-control chosen' multiple"); ?></td>
+          <td colspan='2'><?php echo html::select('teamMembers[]', $users, array_keys($teamMembers), "class='form-control picker-select' multiple"); ?></td>
         </tr>
         <tr>
           <th><?php echo $lang->kanban->columnWidth;?></th>
@@ -221,7 +221,7 @@
           <th><?php echo $lang->whitelist;?></th>
           <td>
             <div class='input-group'>
-              <?php echo html::select('whitelist[]', $users, $execution->whitelist, 'class="form-control chosen" multiple');?>
+              <?php echo html::select('whitelist[]', $users, $execution->whitelist, 'class="form-control picker-select" multiple');?>
               <?php echo $this->fetch('my', 'buildContactLists', "dropdownName=whitelist");?>
             </div>
           </td>

@@ -91,7 +91,7 @@ $lang->kanban->alignment           = 'Alignment';
 /* Fields. */
 $lang->kanban->space          = 'Space';
 $lang->kanban->name           = 'Name';
-$lang->kanban->archived       = 'Archive';
+$lang->kanban->archived       = 'Archived';
 $lang->kanban->owner          = 'Owner';
 $lang->kanban->team           = 'Team';
 $lang->kanban->desc           = 'Description';

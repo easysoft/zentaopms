@@ -161,6 +161,9 @@ $lang->install->company            = 'Firmenname';
 $lang->install->account            = 'Admin Konto';
 $lang->install->password           = 'Admin Passwort';
 
+$lang->install->placeholder = new stdclass();
+$lang->install->placeholder->password = 'Combination of letters, numbers and special symbols, at least 6 characters';
+
 $lang->install->errorEmpty['company']  = "{$lang->install->company} should not be blank.";
 $lang->install->errorEmpty['account']  = "{$lang->install->account} should not be blank.";
 $lang->install->errorEmpty['password'] = "{$lang->install->password} should not be blank.";

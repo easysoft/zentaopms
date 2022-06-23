@@ -167,6 +167,7 @@ class gitlab
         $params['per_page'] = '100';
 
         $branches = array();
+        $default  = array();
         for($page = 1; true; $page ++)
         {
             $params['page'] = $page;
@@ -176,15 +177,24 @@ class gitlab
             foreach($branchList as $branch)
             {
                 if(!isset($branch->name)) continue;
-                $branches[$branch->name] = $branch->name;
+                if($branch->default)
+                {
+                    $default[$branch->name] = $branch->name;
+                }
+                else
+                {
+                    $branches[$branch->name] = $branch->name;
+                }
             }
 
             /* Last page. */
             if(count($branchList) < $params['per_page']) break;
         }
 
-        if(empty($branches)) $branches['master'] = 'master';
+        if(empty($branches) and empty($default)) $branches['master'] = 'master';
         asort($branches);
+
+        $branches = $default + $branches;
         return $branches;
     }
 

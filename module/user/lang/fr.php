@@ -18,6 +18,7 @@ $lang->user->dept             = 'Compartiment';
 $lang->user->account          = 'Compte';
 $lang->user->password         = 'Mot de Passe';
 $lang->user->password2        = 'Répétez Password';
+$lang->user->password2AB      = 'Repeat Password';
 $lang->user->role             = 'Rôle';
 $lang->user->group            = 'Groupe de Privilèges';
 $lang->user->realname         = 'Nom';
@@ -74,6 +75,9 @@ $lang->user->projects         = 'Project';
 $lang->user->sprints          = $lang->execution->common;
 $lang->user->identity         = 'Identity';
 $lang->user->switchVision     = 'Switch to %s';
+$lang->user->submit           = 'Submit';
+$lang->user->resetPWD         = 'Reset Password';
+$lang->user->resetTitle       = 'Admin reset the password';
 
 $lang->user->legendBasic        = 'Informations de Base';
 $lang->user->legendContribution = 'Contribution';
@@ -111,6 +115,8 @@ $lang->user->applyTemplate         = 'Modèles';
 $lang->user->confirmDeleteTemplate = 'Voulez-vous vraiment supprimer ce modèle ?';
 $lang->user->setPublicTemplate     = 'Définir comme Modèle Public';
 $lang->user->tplContentNotEmpty    = 'Le contenu du modèle ne peut pas être vide !';
+$lang->user->sendEmailSuccess      = 'An email has been sent to your mailbox. Please check it.';
+$lang->user->linkExpired           = 'The link has expired, please apply again.';
 
 $lang->user->profile   = 'Profil';
 $lang->user->project   = $lang->executionCommon . 's';
@@ -147,6 +153,7 @@ $lang->user->loginLocked  = "Votre compte est bloqué. Contactez l'administrateu
 $lang->user->weakPassword = "Votre mot de passe ne respecte pas les règles de sécurité.";
 $lang->user->errorWeak    = "Les mots de passe ne peuvent pas utiliser ces [%s] mots de passe faibles couramment utilisés.";
 $lang->user->errorCaptcha = "Captcha Error";
+$lang->user->loginExpired = 'System login has expired, please log in again :)';
 
 $lang->user->roleList['']       = '';
 $lang->user->roleList['dev']    = 'Développeur';
@@ -212,6 +219,7 @@ $lang->user->placeholder->verify    = 'Entrez votre Mot de passe.';
 $lang->user->placeholder->loginPassword = 'Enter your password';
 $lang->user->placeholder->loginAccount  = 'Enter your account';
 $lang->user->placeholder->loginUrl      = 'Enter your ZenTao address';
+$lang->user->placeholder->email         = 'Enter your email';
 
 $lang->user->placeholder->passwordStrength[1] = '>= 6 lettres et chiffres';
 $lang->user->placeholder->passwordStrength[2] = '>= 10 lettres, chiffres et caractères spéciaux';
@@ -233,6 +241,13 @@ $lang->user->error->verifyPassword   = "Vérification en échec. Entrez votre Mo
 $lang->user->error->originalPassword = "Ancien Mot de Passe incorrect.";
 $lang->user->error->companyEmpty     = "Company name must be not empty.";
 $lang->user->error->noAccess         = "This user is not from your department. You have no access to this user information.";
+$lang->user->error->accountEmpty     = 'Account must be not empty !';
+$lang->user->error->emailEmpty       = 'Email must be not empty !';
+$lang->user->error->noUser           = 'Invalid account.';
+$lang->user->error->noEmail          = 'The user does not register email. Please get in touch with the administrator to reset the password.';
+$lang->user->error->errorEmail       = 'The account does not match the email. Please enter a new one.';
+$lang->user->error->emailSetting     = 'No email is configured in the system. Contact the admin to reset the email.';
+$lang->user->error->sendMailFail     = 'Message sending failed, please try again!';
 
 $lang->user->contactFieldList['phone']    = $lang->user->phone;
 $lang->user->contactFieldList['mobile']   = $lang->user->mobile;
@@ -293,3 +308,5 @@ $lang->user->mkdirLinux = <<<EOT
     <div style='margin-bottom:8px;'>Commond: <strong style='color:#ed980f'>chmod 777 -R %s</strong>.</div>
     </td></tr></table></body></html>
 EOT;
+
+$lang->user->jumping = "This page will redirect to the previous page in <span id='time'>3</span> seconds. <a href='%s' class='btn btn-primary btn-xs'>Redirect Now</a>";

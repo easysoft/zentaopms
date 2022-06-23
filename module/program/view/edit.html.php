@@ -102,7 +102,7 @@
           <th><?php echo $lang->whitelist;?></th>
           <td colspan='2'>
             <div class='input-group'>
-              <?php echo html::select('whitelist[]', $users, $program->whitelist, 'class="form-control chosen" multiple data-drop_direction="up"');?>
+              <?php echo html::select('whitelist[]', $users, $program->whitelist, 'class="form-control picker-select" multiple data-dropDirection="top"');?>
               <?php echo $this->fetch('my', 'buildContactLists', "dropdownName=whitelist");?>
             </div>
           </td>

@@ -118,6 +118,14 @@ class custom extends control
 
         if(strtolower($this->server->request_method) == "post")
         {
+            $postArray = fixer::input('post');
+            $keys      = array();
+            foreach($postArray->data->keys as $key)
+            {
+                if(in_array($key, $keys)) return $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->custom->notice->repeatKey, $key)));;
+                $keys[] = $key;
+            }
+
             if($module == 'project' and $field == 'unitList')
             {
                 $data = fixer::input('post')->join('unitList', ',')->get();

@@ -48,7 +48,7 @@ class docModel extends model
             ->where('deleted')->eq(0)
             ->andWhere('type')->eq('api')
             ->beginIF(!empty($appendLib))->orWhere('id')->eq($appendLib)->fi()
-            ->orderBy('id_desc')
+            ->orderBy('`order`_asc, id_desc')
             ->fetchAll('id');
         $libs = array_filter($libs, array($this, 'checkPrivLib'));
         return $libs;
@@ -61,6 +61,7 @@ class docModel extends model
      * @param  string $extra
      * @param  string $appendLibs
      * @param  int    $projectID
+     *
      * @access public
      * @return array
      */
@@ -72,7 +73,7 @@ class docModel extends model
                 ->where('type')->ne('api')
                 ->beginIF($type == 'all')->andWhere('deleted')->eq(0)->fi()
                 ->andWhere('vision')->eq($this->config->vision)
-                ->orderBy('id_desc')
+                ->orderBy('`order` asc, id_desc')
                 ->query();
         }
         else
@@ -83,7 +84,7 @@ class docModel extends model
                 ->beginIF($type)->andWhere('type')->eq($type)->fi()
                 ->beginIF(!$type)->andWhere('type')->ne('api')->fi()
                 ->beginIF($objectID and strpos(',product,project,execution,', ",$type,") !== false)->andWhere($type)->eq($objectID)->fi()
-                ->orderBy('`order`, id desc')->query();
+                ->orderBy("`order` asc, id_desc")->query();
         }
 
         $products   = $this->loadModel('product')->getPairs();
@@ -128,7 +129,7 @@ class docModel extends model
 
         if(!empty($appendLibs))
         {
-            $stmt = $this->dao->select('*')->from(TABLE_DOCLIB)->where('id')->in($appendLibs)->orderBy('`order`, id desc')->query();
+            $stmt = $this->dao->select('*')->from(TABLE_DOCLIB)->where('id')->in($appendLibs)->orderBy("`order` asc, id_desc")->query();
             while($lib = $stmt->fetch())
             {
                 if(!isset($libPairs[$lib->id]) and $this->checkPrivLib($lib, $extra)) $libPairs[$lib->id] = $lib->name;
@@ -931,7 +932,17 @@ class docModel extends model
             $this->config->doc->search['params']['project']['values']   = array('' => '') + $this->loadModel('project')->getPairsByProgram() + array('all' => $this->lang->doc->allProjects);
             $this->config->doc->search['params']['execution']['values'] = array('' => '') + $this->loadModel('execution')->getPairs() + array('all' => $this->lang->doc->allExecutions);
             $this->config->doc->search['params']['lib']['values']       = array('' => '') + $this->loadModel('doc')->getLibs('all', 'withObject') + array('all' => $this->lang->doclib->all);
+            $this->config->doc->search['params']['product']['values']   = array('' => '') + $products + array('all' => $this->lang->doc->allProduct);
 
+            unset($this->config->doc->search['fields']['module']);
+        }
+        elseif(in_array($type, array('product', 'project', 'execution', 'custom', 'book')))
+        {
+            $queryName = $type . 'Doc';
+            $this->config->doc->search['module']                  = $queryName;
+            $this->config->doc->search['params']['lib']['values'] = array('' => '', $libID => (isset($libs[$libID]) ? $libs[$libID]->name : $libID), 'all' => $this->lang->doclib->all);
+            unset($this->config->doc->search['fields']['product']);
+            unset($this->config->doc->search['fields']['execution']);
             unset($this->config->doc->search['fields']['module']);
         }
         else
@@ -939,11 +950,11 @@ class docModel extends model
             $products = $this->product->getPairs('nocode', $this->session->project);
             $this->config->doc->search['params']['execution']['values'] = array('' => '') + $this->loadModel('execution')->getPairs($this->session->project, 'all', 'noclosed') + array('all' => $this->lang->doc->allExecutions);
             $this->config->doc->search['params']['lib']['values']       = array('' => '', $libID => ($libID ? $libs[$libID] : 0), 'all' => $this->lang->doclib->all);
+            $this->config->doc->search['params']['product']['values']   = array('' => '') + $products + array('all' => $this->lang->doc->allProduct);
         }
 
-        $this->config->doc->search['actionURL']                   = $actionURL;
-        $this->config->doc->search['queryID']                     = $queryID;
-        $this->config->doc->search['params']['product']['values'] = array('' => '') + $products + array('all' => $this->lang->doc->allProduct);
+        $this->config->doc->search['actionURL'] = $actionURL;
+        $this->config->doc->search['queryID']   = $queryID;
 
         /* Get the modules. */
         $moduleOptionMenu                                        = $this->loadModel('tree')->getOptionMenu($libID, 'doc', $startModuleID = 0);
@@ -1401,8 +1412,8 @@ class docModel extends model
                 ->andWhere('vision')->eq($this->config->vision)
                 ->andWhere('type')->eq($type)
                 ->beginIF(!empty($appendLib))->orWhere('id')->eq($appendLib)->fi()
-                ->beginIF($type == 'custom')->orderBy('`order`, id')->fi()
-                ->beginIF($type == 'book')->orderBy('id_desc')->fi()
+                ->beginIF($type == 'custom')->orderBy('`order` asc, id_desc')->fi()
+                ->beginIF($type == 'book')->orderBy('`order` asc, id_desc')->fi()
                 ->fetchAll('id');
         }
         elseif($type != 'product' and $type != 'project' and $type != 'execution')
@@ -1417,7 +1428,7 @@ class docModel extends model
                 ->andWhere($type)->eq($objectID)
                 ->beginIF(!empty($appendLib))->orWhere('id')->eq($appendLib)->fi()
                 ->beginIF($type == 'project')->andWhere('execution')->eq(0)->fi()
-                ->orderBy('`order`, id')
+                ->orderBy('`order` asc, id_desc')
                 ->fetchAll('id');
         }
 
@@ -1432,10 +1443,24 @@ class docModel extends model
                 ->fetchPairs('product', 'projectCount');
         }
 
+        $docCountPairs = $this->dao->select('lib, count(id) as docCount')->from(TABLE_DOC)
+            ->where('lib')->in(array_keys($objectLibs))
+            ->andWhere('vision')->eq($this->config->vision)
+            ->andWhere('type')->notin('chapter')
+            ->andWhere('deleted')->eq(0)
+            ->groupBy('lib')
+            ->fetchPairs('lib');
+
         $libs = array();
         foreach($objectLibs as $lib)
         {
-            if($this->checkPrivLib($lib)) $libs[$lib->id] = $lib;
+            if($this->checkPrivLib($lib))
+            {
+                $docCount = zget($docCountPairs, $lib->id, 0);
+                $lib->docCount = $docCount > 99 ? '99+' : $docCount;
+
+                $libs[$lib->id] = $lib;
+            }
         }
 
         $itemCounts = $this->statLibCounts(array_keys($libs));
@@ -1638,7 +1663,7 @@ class docModel extends model
 
         $idList      = array_keys($docs);
         $docIdList   = $this->dao->select('id')->from(TABLE_DOC)->where($type)->eq($objectID)->andWhere('id')->in($idList)->get();
-        $searchTitle = $this->get->title;
+        $searchTitle = $this->post->title;
         if($type == 'product')
         {
             $storyIdList = $this->dao->select('id')->from(TABLE_STORY)->where('product')->eq($objectID)->andWhere('deleted')->eq('0')->andWhere('product')->in($userView)->get();
@@ -1699,7 +1724,7 @@ class docModel extends model
             ->orWhere("(objectType = 'build' and objectID in ($buildIdList))")
             ->fi()
             ->markRight(1)
-            ->beginIF($searchTitle)->andWhere('title')->like("%{$searchTitle}%")->fi()
+            ->beginIF($searchTitle !== false)->andWhere('title')->like("%{$searchTitle}%")->fi()
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id');
@@ -2141,7 +2166,21 @@ class docModel extends model
             ->limit($favoritesLimit)
             ->fetchAll();
 
-        $html = "<div class='btn-group dropdown-hover'>";
+        $html = '';
+        $rawMethod = $this->app->rawMethod;
+        if($this->app->rawMethod == 'showfiles')
+        {
+            $html  = '<div class="btn-group">';
+            $html .= '<form class="input-control has-icon-right table-col" method="post">';
+            $html .= html::input('title', $this->post->title, "class='form-control' placeholder='{$this->lang->doc->fileTitle}'");
+            $html .= html::submitButton("<i class='icon icon-search'></i>", '', "btn  btn-icon btn-link input-control-icon-right");
+            $html .= '</form></div>';
+        }
+        elseif(in_array($rawMethod, array('tablecontents', 'objectlibs', 'product', 'project', 'execution', 'book', 'custom')))
+        {
+            $html  = '<a class="btn btn-link querybox-toggle" id="bysearchTab"><i class="icon icon-search muted"></i>' . $this->lang->doc->search . '</a>';
+        }
+        $html .= "<div class='btn-group dropdown-hover'>";
         $html .= "<a href='javascript:;' class='btn btn-link' data-toggle='dropdown'>{$this->lang->doc->myCollection}</a>";
         $html .= "<ul class='dropdown-menu pull-right' id='collection-menu'>";
 
@@ -2353,12 +2392,20 @@ EOT;
             foreach($libs as $key => $lib)
             {
                 $selected = $key == $libID ? 'selected' : '';
-                $output   .= html::a(inlink($methodName, "type=$type&objectID=$objectID&libID=$key"), $lib->name, '', "class='$selected' data-app='{$this->app->tab}'");
+                $docCount = isset($lib->docCount) ? $lib->docCount : 0;
+                $output  .= html::a(inlink($methodName, "type=$type&objectID=$objectID&libID=$key"), "<span style='display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;'>$lib->name</span>&nbsp;<span>($docCount)</span>", '', "class='$selected' data-app='{$this->app->tab}' title='$lib->name ($docCount)' style='display: flex; justify-content: start;'");
             }
             if($type != 'custom' and $type != 'book')
             {
-                $selected = empty($libID) ? 'selected' : '';
-                $output   .= html::a(inlink('showFiles', "type=$type&objectID=$objectID"), $this->lang->doclib->files, '', "class='$selected' data-app='{$this->app->tab}'");
+                $files     = $this->getLibFiles($type, $objectID, 't1.id_desc');
+                $fileCount = count($files) > 99 ? '99+' : count($files);
+                $selected  = empty($libID) ? 'selected' : '';
+                $output   .= html::a(inlink('showFiles', "type=$type&objectID=$objectID"), "{$this->lang->doclib->files} ($fileCount)", '', "class='$selected' data-app='{$this->app->tab}' title='{$this->lang->doclib->files} ($fileCount)'");
+            }
+            if(count($libs) >= 2 and common::hasPriv('doc', 'sortLibs'))
+            {
+                $output   .= '<li class="divider"></li>';
+                $output   .= html::a(inlink('sortLibs', "type=$type&objectID=$objectID", '', true), "<i class='icon-move'></i>  {$this->lang->doc->sortLibs}", '', "data-title='{$this->lang->doc->sortLibs}' data-toggle='modal' data-type='iframe' data-width='400px' data-app='{$this->app->tab}'");
             }
             $output .= "</div></div></div></div></div>";
         }
@@ -2767,7 +2814,7 @@ EOT;
             $table    = $this->config->objectTables[$type];
             $libs     = $this->getLibsByObject($type, $objectID, '', $appendLib);
 
-            if($libID == 0) $libID = key($libs);
+            if($libID == 0) $libID = reset($libs)->id;
             $this->lang->modulePageNav = $this->select($type, $objects, $objectID, $libs, $libID);
 
             if($this->app->tab == 'doc') $this->app->rawMethod = $type;
@@ -2811,5 +2858,115 @@ EOT;
         }
 
         return $autoloadPage;
+    }
+
+    /**
+     * Get docs by search.
+     *
+     * @param  string $type
+     * @param  int    $objectID
+     * @param  int    $libID
+     * @param  int    $queryID
+     * @param  object $pager
+     *
+     * @access public
+     * @return array
+     */
+    public function getDocsBySearch($type, $objectID, $libID, $queryID, $pager)
+    {
+        $queryName = $type . 'DocQuery';
+        $queryForm = $type . 'DocForm';
+        if($queryID)
+        {
+            $query = $this->loadModel('search')->getQuery($queryID);
+            if($query)
+            {
+                $this->session->set($queryName, $query->sql);
+                $this->session->set($queryForm, $query->form);
+            }
+            else
+            {
+                $this->session->set($queryName, ' 1 = 1');
+            }
+        }
+        else
+        {
+            if($this->session->$queryName == false) $this->session->set($queryName, ' 1 = 1');
+        }
+
+        $libs  = $this->getLibsByObject($type, $objectID);
+        $query = $this->session->$queryName;
+        $docs  = $this->dao->select('*')->from(TABLE_DOC)
+            ->where('deleted')->eq(0)
+            ->andWhere(str_replace("`lib` = 'all'", '1', $query))
+            ->beginIF(strpos($query, "`lib` = 'all'") === false)->andWhere('lib')->eq($libID)->fi()
+            ->andWhere('lib')->in(array_keys($libs))
+            ->beginIF($this->config->doc->notArticleType)->andWhere('type')->notIN($this->config->doc->notArticleType)->fi()
+            ->orderBy('id_desc')
+            ->page($pager)
+            ->fetchAll('id');
+
+        $docContents = $this->dao->select('*')->from(TABLE_DOCCONTENT)->where('doc')->in(array_keys($docs))->orderBy('version,doc')->fetchAll('doc');
+
+        $files = $this->dao->select('*')->from(TABLE_FILE)
+            ->where('objectType')->eq('doc')
+            ->andWhere('objectID')->in(array_keys($docs))
+            ->fetchGroup('objectID');
+        foreach($docs as $docID => $doc)
+        {
+            $docs[$docID]->fileSize = 0;
+            if(isset($files[$docID]))
+            {
+                $docContent = $docContents[$docID];
+                $fileSize   = 0;
+                foreach($files[$docID] as $file)
+                {
+                    if(strpos(",{$docContent->files},", ",{$file->id},") === false) continue;
+                    $fileSize += $file->size;
+                }
+
+                if($fileSize < 1024)
+                {
+                    $fileSize .= 'B';
+                }
+                elseif($fileSize < 1024 * 1024)
+                {
+                    $fileSize = round($fileSize / 1024, 2) . 'KB';
+                }
+                elseif($fileSize < 1024 * 1024 * 1024)
+                {
+                    $fileSize = round($fileSize / 1024 / 1024, 2) . 'MB';
+                }
+                else
+                {
+                    $fileSize = round($fileSize / 1024 / 1024 / 1024, 2) . 'G';
+                }
+
+                $docs[$docID]->fileSize = $fileSize;
+            }
+        }
+        return $docs;
+    }
+
+    /**
+     * Update Lib orders.
+     *
+     * @access public
+     * @return void
+     */
+    public function updateLibOrder()
+    {
+        $libIdList = $this->post->libIdList;
+        $libIdList = explode(',', $libIdList);
+
+        $order = 1;
+        foreach($libIdList as $libID)
+        {
+            if(!$libID) continue;
+
+            $this->dao->update(TABLE_DOCLIB)->set('`order`')->eq($order * 10)->where('id')->eq($libID)->exec();
+
+            $order++;
+        }
     }
 }

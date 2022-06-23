@@ -1718,6 +1718,7 @@ CREATE TABLE IF NOT EXISTS `zt_user` (
   `ranzhi` char(30) NOT NULL default '',
   `score` INT(11) NOT NULL DEFAULT '0',
   `scoreLevel` INT(11) NOT NULL DEFAULT '0',
+  `resetToken` varchar(50) NOT NULL,
   `deleted` enum('0','1') NOT NULL default '0',
   PRIMARY KEY  (`id`),
   UNIQUE KEY `account` (`account`),

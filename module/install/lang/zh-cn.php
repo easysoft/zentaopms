@@ -161,6 +161,9 @@ $lang->install->company            = '公司名称';
 $lang->install->account            = '管理员帐号';
 $lang->install->password           = '管理员密码';
 
+$lang->install->placeholder = new stdclass();
+$lang->install->placeholder->password = '六位及以上，包含数字、字母和特殊字符';
+
 $lang->install->errorEmpty['company']  = "{$lang->install->company}不能为空";
 $lang->install->errorEmpty['account']  = "{$lang->install->account}不能为空";
 $lang->install->errorEmpty['password'] = "{$lang->install->password}不能为空";

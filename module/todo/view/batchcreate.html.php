@@ -14,6 +14,8 @@
 <?php include '../../common/view/datepicker.html.php';?>
 <?php js::set('moduleList', $config->todo->moduleList)?>
 <?php js::set('objectsMethod', $config->todo->getUserObjectsMethod)?>
+<?php js::set('noOptions', $lang->todo->noOptions);?>
+<?php js::set('chosenType', $lang->todo->typeList);?>
 <div id="mainContent">
   <div class="main-header">
     <h2><?php echo $lang->todo->batchCreate . $lang->todo->common;?></h2>

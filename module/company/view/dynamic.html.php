@@ -35,7 +35,7 @@
     <?php if($config->systemMode == 'new'):?>
     <div class="input-control space c-project"><?php echo html::select('project', $projects, $projectID, 'class="form-control chosen" data-max_drop_width="215"');?></div>
     <?php endif;?>
-    <div class="input-control space c-execution"><?php echo html::select('execution', $executions, $executionID, 'class="form-control chosen" data-max_drop_width="215"'); ?></div>
+    <div class="input-control space c-execution"><?php echo html::select('execution', $executions, $executionID, 'class="form-control chosen" data-max_drop_width="350"'); ?></div>
     <div class="input-control space c-order"><?php echo html::select('orderBy', $lang->company->order, $orderBy, 'class="form-control chosen" data-max_drop_width="215" data-disable_search="true"'); ?></div>
     <a class="btn btn-link querybox-toggle" id="bysearchTab"><i class="icon icon-search muted"></i> <?php echo $lang->action->dynamic->search;?></a>
   </div>
@@ -73,8 +73,12 @@
               <span class='label-action'><?php echo ' ' . $action->actionLabel;?></span>
               <?php if($action->action != 'login' and $action->action != 'logout'):?>
               <span class="text"><?php echo $action->objectLabel;?></span>
+              <?php if($action->objectID):?>
+              <span class="label label-id"><?php echo $action->objectID;?></span>
+              <?php endif;?>
               <?php $tab = '';?>
               <?php if($action->objectType == 'meeting') $tab = $action->project ? "data-app='project'" : "data-app='my'";?>
+              <span class="label-name">
               <?php
               if(empty($action->objectName) and $action->objectID)
               {
@@ -93,9 +97,7 @@
                   echo html::a($action->objectLink, $action->objectName, '', $tab);
               }
               ?>
-              <?php if($action->objectID):?>
-              <span class="label label-id"><?php echo $action->objectID;?></span>
-              <?php endif;?>
+              </span>
               <?php endif;?>
             </span>
           </div>

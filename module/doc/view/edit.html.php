@@ -26,7 +26,6 @@
         <?php echo html::a($this->createLink('doc', 'view', "docID=$doc->id"), $doc->title, '', "title='$doc->title'");?>
         <small> <?php echo $lang->arrow . ' ' . $lang->doc->edit;?></small>
       </h2>
-      <div class='pull-right'><?php echo html::a('###', $lang->save, '', 'id="top-submit" class="btn btn-primary"');?></div>
     </div>
     <form class='load-indicator main-form form-ajax' method='post' enctype='multipart/form-data' id='dataform'>
       <table class='table table-form'>
@@ -75,7 +74,7 @@
           <td colspan="2">
             <div class="input-group">
               <?php
-              echo html::select('mailto[]', $users, $doc->mailto, "multiple class='form-control chosen'");
+              echo html::select('mailto[]', $users, $doc->mailto, "multiple class='form-control picker-select'");
               echo $this->fetch('my', 'buildContactLists');
               ?>
             </div>
@@ -94,11 +93,11 @@
           <td colspan='2'>
             <div class='input-group w-p100'>
               <span class='input-group-addon groups-addon'><?php echo $lang->doclib->group?></span>
-              <?php echo html::select('groups[]', $groups, $doc->groups, "class='form-control chosen' multiple")?>
+              <?php echo html::select('groups[]', $groups, $doc->groups, "class='form-control picker-select' multiple")?>
             </div>
             <div class='input-group w-p100'>
               <span class='input-group-addon'><?php echo $lang->doclib->user?></span>
-              <?php echo html::select('users[]', $users, $doc->users, "class='form-control chosen' multiple")?>
+              <?php echo html::select('users[]', $users, $doc->users, "class='form-control picker-select' multiple")?>
             </div>
           </td>
         </tr>

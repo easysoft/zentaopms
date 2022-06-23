@@ -206,6 +206,7 @@ $lang->custom->notice->confirmDelete       = '您确定要删除吗？';
 $lang->custom->notice->confirmReviewCase   = '是否将待评审的用例修改为正常状态？';
 $lang->custom->notice->storyReviewTip      = '按人员、职位、部门勾选后，取所有人员的并集。';
 $lang->custom->notice->selectAllTip        = '勾选所有人员后，会清空并置灰评审人员，同时隐藏职位、部门。';
+$lang->custom->notice->repeatKey           = '%s键重复';
 
 $lang->custom->notice->indexPage['product'] = "从8.2版本起增加了产品主页视图，是否默认进入产品主页？";
 $lang->custom->notice->indexPage['project'] = "从8.2版本起增加了项目主页视图，是否默认进入项目主页？";

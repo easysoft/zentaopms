@@ -2,7 +2,7 @@
 class mr extends control
 {
     /**
-     * The mr constructor.
+     * The gitlab constructor.
      * @param string $moduleName
      * @param string $methodName
      */
@@ -12,12 +12,13 @@ class mr extends control
 
         /* This is essential when changing tab(menu) from gitlab to repo. */
         /* Optional: common::setMenuVars('devops', $this->session->repoID); */
-        $this->loadModel('ci')->setMenu();
+        if($this->app->getMethodName() != 'browse') $this->loadModel('ci')->setMenu();
     }
 
     /**
      * Browse mr.
      *
+     * @param  int    $repoID
      * @param  string $mode
      * @param  string $param
      * @param  int    $objectID
@@ -28,13 +29,21 @@ class mr extends control
      * @access public
      * @return void
      */
-    public function browse($mode = 'all', $param = 'all', $objectID = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function browse($repoID = 0, $mode = 'status', $param = 'opened', $objectID = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         $this->app->loadClass('pager', $static = true);
-        $pager  = new pager($recTotal, $recPerPage, $pageID);
+        $pager = new pager($recTotal, $recPerPage, $pageID);
 
-        $projects = $this->mr->getAllGitlabProjects();
-        $MRList   = $this->mr->getList($mode, $param, $orderBy, $pager, empty($projects) ? false : $projects);
+        $repos = $this->loadModel('repo')->getListBySCM('Gitlab');
+        if(empty($repos)) $this->locate($this->repo->createLink('create'));
+
+        $repoID = $this->repo->saveState($repoID, $objectID);
+        $repo   = $this->repo->getRepoByID($repoID);
+        if($repo->SCM != 'Gitlab') $repo = $repos[0];
+        $this->loadModel('ci')->setMenu($repo->id);
+
+        $projects = $this->mr->getAllGitlabProjects($repoID);
+        $MRList   = $this->mr->getList($mode, $param, $orderBy, $pager, empty($projects) ? false : $projects, $repoID);
 
         /* Save current URI to session. */
         $this->session->set('mrList', $this->app->getURI(true), 'repo');
@@ -62,7 +71,10 @@ class mr extends control
         $this->view->pager      = $pager;
         $this->view->mode       = $mode;
         $this->view->param      = $param;
+        $this->view->repoID     = $repoID;
         $this->view->objectID   = $objectID;
+        $this->view->repos      = $repos;
+        $this->view->repo       = $repo;
         $this->view->orderBy    = $orderBy;
         $this->view->openIDList = $openIDList;
         $this->view->users      = $this->loadModel('user')->getPairs('noletter');

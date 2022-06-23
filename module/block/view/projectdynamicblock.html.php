@@ -4,6 +4,8 @@
 <style>
 .timeline > li .timeline-text {display: block; overflow: hidden; text-overflow: ellipsis; max-height: 20px; display: -webkit-box; -webkit-line-clamp: 1; -webkit-box-orient: vertical; }
 .panel-body {padding-top: 0;}
+.block-projectdynamic .label-action {margin-left: 12px;}
+.block-projectdynamic .label-action + a {color: #838A9D;}
 </style>
 <div class='panel-body scrollbar-hover'>
   <ul class="timeline timeline-tag-left no-margin">

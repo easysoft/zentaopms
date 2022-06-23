@@ -212,7 +212,7 @@ $lang->kanban->error->childLimitEmpty   = '请先设置子列的在制品数量�
 
 $lang->kanban->importList = array();
 $lang->kanban->importList['off'] = '不启用导入功能';
-$lang->kanban->importList['on']  = '启用导入功能，只能导入自己有权限查看的内容';
+$lang->kanban->importList['on']  = '启用导入功能（可以导入自己有权查看的内容作为卡片）';
 
 $lang->kanban->importObjectList = array();
 $lang->kanban->importObjectList['plans']      = '计划';
