@@ -2165,6 +2165,9 @@ class docModel extends model
             ->orderBy('t1.id_desc')
             ->limit($favoritesLimit)
             ->fetchAll();
+
+        $html = '';
+        $rawMethod = $this->app->rawMethod;
         if($this->app->rawMethod == 'showfiles')
         {
             $html  = '<div class="btn-group">';
@@ -2173,7 +2176,10 @@ class docModel extends model
             $html .= html::submitButton("<i class='icon icon-search'></i>", '', "btn  btn-icon btn-link input-control-icon-right");
             $html .= '</form></div>';
         }
-        $html  = '<a class="btn btn-link querybox-toggle" id="bysearchTab"><i class="icon icon-search muted"></i>' . $this->lang->doc->search . '</a>';
+        elseif(in_array($rawMethod, array('tablecontents', 'objectlibs', 'product', 'project', 'execution', 'book', 'custom')))
+        {
+            $html  = '<a class="btn btn-link querybox-toggle" id="bysearchTab"><i class="icon icon-search muted"></i>' . $this->lang->doc->search . '</a>';
+        }
         $html .= "<div class='btn-group dropdown-hover'>";
         $html .= "<a href='javascript:;' class='btn btn-link' data-toggle='dropdown'>{$this->lang->doc->myCollection}</a>";
         $html .= "<ul class='dropdown-menu pull-right' id='collection-menu'>";
