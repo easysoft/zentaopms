@@ -194,7 +194,7 @@
                     }
                     else
                     {
-                        echo '<a style="color: #3c4353">' . "#$case->story:$case->storyTitle" . '</a>';
+                        echo "#$case->story:$case->storyTitle";
                     }
                 }
                 if($case->story and $case->storyStatus == 'active' and $case->latestStoryVersion > $case->storyVersion)
