@@ -1,9 +1,8 @@
 <?php if(isset($pageCSS)) css::internal($pageCSS);?>
 <div class="detail">
   <h2 class="detail-title">
-    <span class="label-id"><?php echo $task->id?></span>
-    <span class="label label-task"><?php echo $lang->task->common?></span>
-    <span class="label label-task"><?php echo $this->processStatus('task', $task);?></span>
+    <span class="label-id taskID"><?php echo $task->id?></span>
+    <span class="label <?php echo "status-{$task->status}";?>"><?php echo $this->processStatus('task', $task);?></span>
     <span class="title">
       <?php if($task->parent > 0) echo '<span class="label no-margin label-badge label-light">' . $this->lang->task->childrenAB . '</span>';?>
       <?php if(!empty($task->team)) echo '<span class="label no-margin label-badge label-light">' . $this->lang->task->multipleAB . '</span>';?>
@@ -12,13 +11,15 @@
   </h2>
   <div class="detail-content article-content">
     <div class="infos">
-      <span><?php echo $lang->task->estimate;?> <?php echo $task->estimate . ' ' . $lang->workingHour;?></span>
-      <span><?php echo $lang->task->consumedAB;?> <?php echo round($task->consumed, 2) . ' ' . $lang->workingHour;?></span>
-      <span><?php echo $lang->task->leftAB;?> <?php echo $task->left . ' ' . $lang->workingHour;?></span>
+      <span><span class="title"><?php echo $lang->task->estimate;?></span> <span><?php echo $task->estimate . ' ' . $lang->workingHour;?></span></span>
+      <span><span class="title"><?php echo $lang->task->consumedAB;?></span> <span><?php echo round($task->consumed, 2) . ' ' . $lang->workingHour;?></span></span>
+      <span><span class="title"><?php echo $lang->task->leftAB;?></span> <span><?php echo $task->left . ' ' . $lang->workingHour;?></span></span>
     </div>
     <div class="infos">
-      <span><?php echo $lang->task->type;?> <?php echo $lang->task->typeList[$task->type];?></span>
-      <span><?php echo $lang->task->deadline;?> <?php echo $task->deadline; if(isset($task->delay)) printf($lang->task->delayWarning, $task->delay);?></span>
+      <span><span class="title"><?php echo $lang->task->type;?></span> <span><?php echo $lang->task->typeList[$task->type];?></span></span>
+    </div>
+    <div class="infos">
+      <span><span class="title"><?php echo $lang->task->deadline;?></span> <span><?php echo $task->deadline; if(isset($task->delay)) printf($lang->task->delayWarning, $task->delay);?></span></span>
     </div>
     <div class="btn-toolbar">
       <?php
