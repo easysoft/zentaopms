@@ -3828,10 +3828,7 @@ class kanbanModel extends model
      */
     public function checkDisplayCards($count)
     {
-        if(!preg_match("/^-?\d+$/", $count) or $count <= DEFAULT_CARDCOUNT)
-        {
-            dao::$errors['displayCards'] = $this->lang->kanbanlane->error->mustBeInt;
-        }
+        if(!preg_match("/^-?\d+$/", $count) or $count <= DEFAULT_CARDCOUNT) dao::$errors['displayCards'] = $this->lang->kanbanlane->error->mustBeInt;
         return !dao::isError();
     }
 }
