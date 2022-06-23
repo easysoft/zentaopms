@@ -65,7 +65,14 @@
         <td class='text-left nobr' title="<?php echo $story->title?>">
           <?php
           if($story->parent > 0) echo "<span class='label'>{$lang->story->childrenAB}</span>";
-          echo html::a($storyLink, $story->title, '', "class='iframe' data-width='80%'");
+          if(common::hasPriv('execution', 'storyView'))
+          {
+              echo html::a($storyLink, $story->title, '', "class='iframe' data-width='80%'");
+          }
+          else
+          {
+              echo '<a>' . $story->title . '</a>';
+          }
           ?>
         </td>
         <td class='text-left' title='<?php echo $products[$story->product]->name?>'><?php echo html::a($this->createLink('product', 'browse', "productID=$story->product&branch=$story->branch"), $products[$story->product]->name);?></td>

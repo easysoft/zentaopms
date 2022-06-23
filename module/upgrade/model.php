@@ -515,6 +515,9 @@ class upgradeModel extends model
                 $this->replaceSetLanePriv();
                 $this->updateProjectData();
                 break;
+            case '17_1':
+                $this->addStoryViewPriv();
+                break;
         }
 
         $this->deletePatch();
@@ -6433,6 +6436,31 @@ class upgradeModel extends model
                 ->set('path')->eq($sprint->path)
                 ->set('grade')->eq($sprint->grade)
                 ->where('id')->eq($sprint->id)->exec();
+        }
+
+        return true;
+    }
+
+    /**
+     * Insert story view of execution.
+     *
+     * @access public
+     * @return bool
+     */
+    public function addStoryViewPriv()
+    {
+        $groupIdList = $this->dao->select('`group`')->from(TABLE_GROUPPRIV)
+            ->where('module')->eq('story')
+            ->andWhere('method')->eq('view')
+            ->fetchPairs('group');
+
+        foreach($groupIdList as $groupID)
+        {
+            $this->dao->replace(TABLE_GROUPPRIV)
+                ->set('`group`')->eq($groupID)
+                ->set('module')->eq('execution')
+                ->set('method')->eq('storyView')
+                ->exec();
         }
 
         return true;
