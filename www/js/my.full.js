@@ -243,6 +243,9 @@ function setMailto(mailto, contactListID)
     link = createLink('user', 'ajaxGetContactUsers', 'listID=' + contactListID + '&dropdownName=' + mailto + '&oldUsers=' + oldUsers);
     $.get(link, function(users)
     {
+        var picker = $('#' + mailto).data('zui.picker');
+        if(picker) picker.destroy();
+
         $('#' + mailto).replaceWith(users);
         $('#' + mailto + '_chosen').remove();
         $('#' + mailto).siblings('.picker').remove();
