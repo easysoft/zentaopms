@@ -4456,7 +4456,7 @@ class storyModel extends model
         $assignToLink = helper::createLink('story', 'assignTo', "storyID=$story->id", '', true);
         $assignToHtml = html::a($assignToLink, "<i class='icon icon-hand-right'></i> <span class='{$btnTextClass}'>{$assignedToText}</span>", '', "class='$btnClass'");
 
-        echo !common::hasPriv('story', 'assignTo', $story) ? "<span style='padding-left: 21px' class='{$btnTextClass}'>{$assignedToText}</span>" : $assignToHtml;
+        echo !common::hasPriv('story', 'assignTo', $story) ? "<span style='padding-left: 21px'>{$assignedToText}</span>" : $assignToHtml;
     }
 
     /**
