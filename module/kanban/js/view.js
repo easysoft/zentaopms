@@ -185,7 +185,7 @@ function renderHeaderCol($column, column, $header, kanbanData)
         }
         else
         {
-          $column.addClass('left');
+            $column.addClass('left');
         }
     }
 }
