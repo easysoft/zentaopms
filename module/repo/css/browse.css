@@ -8,7 +8,6 @@
 .pull-left li > a {line-height: 20px; border-radius: 5px;}
 .tree li.has-list.open:before {border-left: 0px;}
 #mainMenu > div.btn-toolbar.pull-left > div.btn-group.open {line-height: 20px;}
-#dropMenuRepo > div.table-row > div > div > ul > li {padding: 0}
 #dropMenuRepo > div.table-row > div > div > ul > li > div {padding-left: 20px;}
 #dropMenuRepo > div.table-row > div > div > ul > li > ul {padding-left: 10px;}
 #repoList .hide-in-search .hidden {display: block !important; visibility: inherit !important;}
