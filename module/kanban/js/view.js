@@ -1335,8 +1335,9 @@ window.menuCreators =
  */
 function initKanban($kanban)
 {
-    var id     = $kanban.data('id');
-    var region = regions[id];
+    var id         = $kanban.data('id');
+    var region     = regions[id];
+    var cardHeight = kanbanInfo.performable == 1 ? 87 : 60;
 
     $kanban.kanban(
     {
@@ -1346,7 +1347,7 @@ function initKanban($kanban)
         fluidBoardWidth:       fluidBoard,
         minColWidth:           285,
         maxColWidth:           285,
-        cardHeight:            60,
+        cardHeight:            cardHeight,
         displayCards:          typeof window.displayCards === 'number' ? window.displayCards : 2,
         createColumnText:      kanbanLang.createColumn,
         addItemText:           '',
