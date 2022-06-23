@@ -202,6 +202,7 @@ $lang->kanban->fullScreen         = '全屏';
 $lang->kanban->setting            = '设置';
 $lang->kanban->my                 = '我的看板';
 $lang->kanban->other              = '其他';
+$lang->kanban->showWIP            = '显示在制品限制';
 
 $lang->kanban->error = new stdclass();
 $lang->kanban->error->mustBeInt         = '在制品数量必须是正整数。';
@@ -220,6 +221,9 @@ $lang->kanban->importObjectList['releases']   = '发布';
 $lang->kanban->importObjectList['builds']     = '版本';
 $lang->kanban->importObjectList['executions'] = $lang->execution->common;
 $lang->kanban->importObjectList['cards']      = '其他看板卡片';
+
+$lang->kanban->showWIPList[1] = '显示';
+$lang->kanban->showWIPList[0] = '不显示';
 
 $lang->kanban->defaultColumn = array();
 $lang->kanban->defaultColumn['wait']   = '未开始';

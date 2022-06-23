@@ -158,7 +158,7 @@ class feishuapi
         $index     = 0;
         while(true)
         {
-            $response = $this->queryAPI($this->apiUrl . "contact/v3/departments?parent_department_id={$departmentID}" . ($pageToken ? "&page_token={$pageToken}" : '') . "&fetch_child=true&page_size=50", '', array(CURLOPT_CUSTOMREQUEST => "GET"));
+            $response = $this->queryAPI($this->apiUrl . "contact/v3/departments?parent_department_id={$departmentID}" . ($pageToken ? "&page_token={$pageToken}" : '') . "&fetch_child=false&page_size=50", '', array(CURLOPT_CUSTOMREQUEST => "GET"));
             if(isset($response->data->items))
             {
                 foreach($response->data->items as $key => $dept)

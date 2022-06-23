@@ -221,6 +221,9 @@ $lang->kanban->importObjectList['builds']     = 'Build';
 $lang->kanban->importObjectList['executions'] = 'Execution';
 $lang->kanban->importObjectList['cards']      = 'Other Kanban Cards';
 
+$lang->kanban->showWIPList[1] = 'Show';
+$lang->kanban->showWIPList[0] = 'Hide';
+
 $lang->kanban->defaultColumn = array();
 $lang->kanban->defaultColumn['wait']   = 'wait';
 $lang->kanban->defaultColumn['doing']  = 'doing';
