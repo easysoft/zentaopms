@@ -14,7 +14,6 @@
 <?php include '../../common/view/kindeditor.html.php';?>
 <?php js::set('enableImport', $enableImport);?>
 <?php js::set('vision', $this->config->vision);?>
-<?php $width = $this->app->getClientLang() == 'en' ? 'w-120px' : 'w-80px';?>
 <div id='mainContent' class='main-content'>
   <div class='main-header'>
     <h2><?php echo $lang->kanban->edit;?></h2>
@@ -44,7 +43,7 @@
       </tr>
       <?php endif;?>
       <tr>
-        <th class='<?php echo $width;?>'><?php echo $lang->kanban->columnWidth;?></th>
+        <th class='columnWidth'><?php echo $lang->kanban->columnWidth;?></th>
         <td><?php echo nl2br(html::radio('fluidBoard', $lang->kanbancolumn->fluidBoardList, $kanban->fluidBoard));?></td>
       </tr>
       <?php if($laneCount > 1):?>

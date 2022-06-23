@@ -15,7 +15,6 @@
 <?php js::set('spaceType', $type);?>
 <?php js::set('enableImport', 'off');?>
 <?php js::set('vision', $this->config->vision);?>
-<?php $width = $this->app->getClientLang() == 'en' ? 'w-120px' : 'w-80px';?>
 <div id='mainContent' class='main-content'>
   <div class='main-header'>
     <h2><?php echo $lang->kanban->create;?></h2>
@@ -51,7 +50,7 @@
       </tr>
       <?php endif;?>
       <tr>
-        <th class='<?php echo $width;?>'><?php echo $lang->kanban->columnWidth;?></th>
+        <th class='columnWidth'><?php echo $lang->kanban->columnWidth;?></th>
         <td><?php echo nl2br(html::radio('fluidBoard', $lang->kanbancolumn->fluidBoardList, 0));?></td>
       </tr>
       <tr class="hidden" id='cardBox'>
