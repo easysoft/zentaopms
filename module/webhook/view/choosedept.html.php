@@ -69,8 +69,9 @@ $(function()
             {
                 beforeClick: ztreeBeforeClick,
                 beforeAsync: ztreeBeforeAsync,
-                onClick: ztreeOnAsyncSuccess,
-                onAsyncSuccess: zTreeOnAsyncSuccess
+                onClick: ztreeOnClick,
+                onAsyncSuccess: zTreeOnAsyncSuccess,
+                onAsyncError: zTreeOnAsyncError
             }
         };
 
@@ -101,8 +102,12 @@ $(function()
             return true;
         }
 
-        function ztreeOnAsyncSuccess(event, treeId, treeNode)
+        function ztreeOnClick(event, treeId, treeNode)
         {
+            var treeID = treeNode.tId;
+            if($('#' + treeID).hasClass('loading')) return false;
+            $('#' + treeID).addClass('loading');
+
             if(treeNode == undefined)
             {
                 departmentID = "0";
@@ -149,6 +154,12 @@ $(function()
         function zTreeOnAsyncSuccess()
         {
             $("#loadPrompt").remove();
+        }
+
+        function zTreeOnAsyncError(event, treeId, treeNode, XMLHttpRequest, textStatus, errorThrown)
+        {
+            var errorMsg = XMLHttpRequest.responseText;
+            alert(errorMsg);
         }
 
         var ztreeObj = $.fn.zTree.init($("#deptList"), setting);
