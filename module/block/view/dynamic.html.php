@@ -4,9 +4,13 @@
 <style>
 .block-dynamic .timeline > li .timeline-text {max-width: 600px; display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-height: 20px;}
 .block-dynamic .panel-body {padding-top: 0;}
-.block-dynamic .label-action {margin-left: 12px;}
-.block-dynamic .label-action + a,
-.block-dynamic .label-name {color: #838A9D;}
+.timeline>li:before {left: -26px;}
+.timeline>li+li:after {left: -23px;}
+.timeline-text {margin-left: -18px;}
+.block-dynamic .label-action {padding: 0 6px;}
+.block-dynamic .label-action + a {padding-left: 6px;}
+.timeline>li.active:before {left: -30px;}
+.timeline>li>div:after {left: -27px;}
 </style>
 <div class='panel-body scrollbar-hover'>
   <ul class="timeline timeline-tag-left no-margin">

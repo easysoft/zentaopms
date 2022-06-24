@@ -90,8 +90,8 @@ $lang->block->remove             = 'Entfernen';
 $lang->block->refresh            = 'Aktualisieren';
 $lang->block->nbsp               = '';
 $lang->block->hidden             = 'Verstecken';
-$lang->block->dynamicInfo        = "<span class='timeline-tag'>%s</span> <span class='timeline-text'>%s <em>%s</em> %s <a href='%s'>%s</a></span>";
-$lang->block->noLinkDynamic      = "<span class='timeline-tag'>%s</span> <span class='timeline-text' title='%s'>%s <em>%s</em> %s %s</span>";
+$lang->block->dynamicInfo        = "<span class='timeline-tag'>%s</span> <span class='timeline-text'>%s<em class='label-action'>%s</em>%s<a href='%s' title='%s'>%s</a></span>";
+$lang->block->noLinkDynamic      = "<span class='timeline-tag'>%s</span> <span class='timeline-text' title='%s'>%s<em class='label-action'>%s</em>%s<span class='label-name'>%s</span></span>";
 $lang->block->cannotPlaceInLeft  = 'Kann den Block nicht auf der linken Seite platzieren.';
 $lang->block->cannotPlaceInRight = 'Kann den Block nicht auf der rechten Seite platzieren.';
 
