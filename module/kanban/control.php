@@ -1302,9 +1302,15 @@ class kanban extends control
      * @access public
      * @return void
      */
-    public function sortCard($kanbanID, $laneID, $columnID, $cards = '')
+    public function sortCard($kanbanID, $laneID, $columnID, $cards = '', $cardID = 0)
     {
         if(empty($cards)) return;
+
+        if($cardID)
+        {
+            $fromCell = $this->dao->select('cards, lane, column')->from(TABLE_KANBANCELL)->where('cards')->like("%,$cardID,%")->fetch();
+            if($fromCell->lane != $laneID or $fromCell->column != $columnID) return;
+        }
 
         $this->dao->update(TABLE_KANBANCELL)->set('cards')->eq(",$cards,")->where('kanban')->eq($kanbanID)->andWhere('lane')->eq($laneID)->andWhere('`column`')->eq($columnID)->exec();
 
