@@ -21,7 +21,7 @@ class tokensEntry extends baseEntry
     {
         $account   = $this->request('account');
         $password  = $this->request('password');
-        $addAction = $this->request('addAction', true);
+        $addAction = $this->request('addAction', false);
 
         if($this->loadModel('user')->checkLocked($account)) return $this->sendError(400, sprintf($this->lang->user->loginLocked, $this->config->user->lockMinutes));
 
