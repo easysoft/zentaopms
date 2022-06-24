@@ -111,6 +111,7 @@ $lang->program->unlinkStakeholder  = '您确定要移除干系人吗？';
 $lang->program->readjustTime       = '重新调整项目集起止时间';
 $lang->program->accessDenied       = '你无权访问该项目集';
 $lang->program->beyondParentBudget = '已超出所属项目集的剩余预算';
+$lang->program->checkedProjects    = '已选择%s项';
 
 $lang->program->endList[31]  = '一个月';
 $lang->program->endList[93]  = '三个月';
