@@ -379,6 +379,8 @@ class weeklyModel extends model
         $tasks = $this->dao->select('*')->from(TABLE_TASK)
             ->where('execution')->in($executionIdList)
             ->andWhere("(estStarted < '$nextMonday' or estStarted='0000-00-00')")
+            ->andWhere("parent")->ge(0)
+            ->andWhere("deleted")->eq(0)
             ->fetchAll('id');
 
         $PV = 0;
