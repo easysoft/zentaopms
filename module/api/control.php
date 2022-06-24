@@ -73,11 +73,11 @@ class api extends control
         if($libs) $this->lang->modulePageNav = $this->generateLibsDropMenu($libs, $libID, $release);
 
         $this->setMenu($libID, $moduleID);
-        if($apiID == 0) $this->lang->TRActions = '<a class="btn btn-link querybox-toggle" id="bysearchTab"><i class="icon icon-search muted"></i> ' . $this->lang->api->search . '</a>' . $this->lang->TRActions;
+        $this->lang->TRActions = '<a class="btn btn-link querybox-toggle" id="bysearchTab"><i class="icon icon-search muted"></i> ' . $this->lang->api->search . '</a>' . $this->lang->TRActions;
 
         /* Build the search form. */
         $queryID   = $param == 'bySearch' ? (int)$queryID : 0;
-        $actionURL = $this->createLink('api', 'index', "libID=$libID&moduleID=$moduleID&apiID=$apiID&version=$version&release=$release&appendLib=$appendLib&queryID=myQueryID&param=bySearch");
+        $actionURL = $this->createLink('api', 'index', "libID=$libID&moduleID=0&apiID=0&version=0&release=0&appendLib=0&queryID=myQueryID&param=bySearch");
         $this->api->buildSearchForm($lib,$queryID, $actionURL);
 
         if($param == 'bySearch')

@@ -379,6 +379,8 @@ class weeklyModel extends model
         $tasks = $this->dao->select('*')->from(TABLE_TASK)
             ->where('execution')->in($executionIdList)
             ->andWhere("(estStarted < '$nextMonday' or estStarted='0000-00-00')")
+            ->andWhere("parent")->ge(0)
+            ->andWhere("deleted")->eq(0)
             ->fetchAll('id');
 
         $PV = 0;
@@ -428,6 +430,8 @@ class weeklyModel extends model
             ->where('execution')->in($executionIdList)
             ->andWhere('consumed')->gt(0)
             ->andWhere("(estStarted < '$nextMonday' or estStarted='0000-00-00')")
+            ->andWhere("parent")->ge(0)
+            ->andWhere("deleted")->eq(0)
             ->andWhere('status')->ne('cancel')
             ->fetchAll('id');
 
@@ -462,23 +466,28 @@ class weeklyModel extends model
 
         if(!$date) $date = date('Y-m-d');
 
-        $monday        = $this->getThisMonday($date);
-        $nextMonday    = date('Y-m-d', strtotime("$monday +7 days"));
+        $monday          = $this->getThisMonday($date);
+        $nextMonday      = date('Y-m-d', strtotime("$monday +7 days"));
         $executions      = $this->loadModel('execution')->getList($project, 'all', 'all', 0, 0, 0);
         $executionIdList = array_keys($executions);
+        $taskIdList      = $this->dao->select('id')->from(TABLE_TASK)
+            ->where('execution')->in($executionIdList)
+            ->andWhere("parent")->ge(0)
+            ->andWhere("deleted")->eq(0)
+            ->fetchPairs();
 
         if($this->config->edition != 'open')
         {
             $AC = $this->dao->select('sum(consumed) as consumed')
                 ->from(TABLE_EFFORT)
                 ->where('objectType')->eq('task')
+                ->andWhere('objectID')->in($taskIdList)
                 ->andWhere('execution')->in($executionIdList)
                 ->andWhere('date')->lt($nextMonday)
                 ->fetch('consumed');
         }
         else
         {
-            $taskIdList = $this->dao->select('id')->from(TABLE_TASK)->where('execution')->in($executionIdList)->fetchPairs();
             $AC = $this->dao->select('sum(consumed) as consumed')
                 ->from(TABLE_TASKESTIMATE)
                 ->where('task')->in($taskIdList)

@@ -20,5 +20,11 @@
 .dynamic.collapsed .timeline > li + li {display: none;}
 .dynamic.collapsed .dynamic-btn > .icon:before {content: '\f0d8';}
 
-.dynamic .label-action {margin-left: 12px;}
-.dynamic .label-id + a {color: #838A9D;}
+.timeline>li:before {left: -26px;}
+.timeline>li+li:after {left: -23px;}
+.timeline-text {margin-left: -18px;}
+.label-action {padding: 0 4px;}
+.label-id {margin-left: 4px;}
+.timeline>li.active:before {left: -30px;}
+.timeline>li>div:after {left: -27px;}
+.timeline .timeline-text {display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;}

@@ -1,4 +1,5 @@
 #mainMenu .pull-left .checkbox-primary {display: inline-block; margin-left: 10px;}
+#projectsSummary {padding-left: 10px;}
 .main-table tbody>tr>td:first-child, .main-table thead>tr>th:first-child {padding-left: 8px;}
 .table tbody>tr>td .dropdown {display: inline-block; line-height: 1;}
 tbody.sortable > tr > td.sort-handler .table-nest-toggle:before {cursor: pointer !important;}

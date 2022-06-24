@@ -61,11 +61,11 @@ html[lang="en"] .product-info .type-info {color: #A6AAB8; text-align: center; po
 .block-statistic .project-info .col-xs-5 {padding-left: 0;}
 
 .block-statistic .data {width: 40%; text-align: left; padding: 10px 0px; font-size: 14px; font-weight: 700;}
-.block-statistic .dataTitle {width: 60%; text-align: left; padding: 10px 0px; font-size: 14px;}
+.block-statistic .dataTitle {width: 60%; text-align: right; padding: 10px 0px; font-size: 14px;}
 .block-statistic .executionName {padding: 2px 10px; font-size: 14px; text-overflow: ellipsis; overflow: hidden; white-space: nowrap;}
 .block-statistic .lastIteration {padding-top: 6px;}
 .block-statistic .progress-text-left {margin-right: 90px}
-.block-statistic .progress-text-left .progress-text {padding-top: 2px; font-size: 14px; padding-right:5px; left: -50px;}
+.block-statistic .progress-text-left .progress-text {padding-top: 2px; font-size: 14px; padding-right:5px; left: -45px;}
 
 .status-count {margin: auto;}
 .status-count tr:first-child td:last-child {color: #000; font-weight: bold;}
@@ -86,26 +86,6 @@ html[lang="en"] .product-info .type-info {color: #A6AAB8; text-align: center; po
 .block-statistic .col-12 .waterfall-title .col {padding-right: 0px; padding-left: 0px;}
 
 .forty-percent {width: 40%;}
-.block-statistic .statistic-title{font-weight: 700; line-height: 1.1; color: inherit; font-size: 14px; margin-top: 10px; margin-bottom: 10px; width: 60%; text-align: left; padding: 0px;}
-.block-statistic .statistic-title>div{width: 40%; margin-left: 64%; padding: 0px 10px; text-align: left;}
-.block-statistic .dataTitle>div {width: 40%; text-align: left; font-size: 14px; padding: 0px 10px;     margin-left: 64%; text-align-last: justify;}
-
-.block-statistic.block-sm .statistic-title>div {width: 94%; margin-left: 10%;}
-.block-statistic.block-sm .dataTitle>div {width: 94%; margin-left: 10%;}
-
-[lang^='en'] .block-statistic .statistic-title>div {width: 62%; margin-left: 42%;}
-[lang^='en'] .block-statistic .dataTitle>div {width: 62%; margin-left: 42%;}
-[lang^='en'] .block-statistic.block-sm .statistic-title>div {width: 94%; margin-left: 10%;}
-[lang^='en'] .block-statistic.block-sm .dataTitle>div {width: 94%; margin-left: 10%;}
-
-@media screen and (max-width: 1366px){.block-statistic .statistic-title>div {width: 74%; margin-left: 30%;}}
-@media screen and (max-width: 1366px){.block-statistic .dataTitle>div {width: 74%; margin-left: 30%;}}
-
-@media screen and (max-width: 1366px){[lang^='en'] .block-statistic .statistic-title>div {width: 70%; margin-left: 34%;}}
-@media screen and (max-width: 1366px){[lang^='en'] .block-statistic .dataTitle>div {width: 70%; margin-left: 34%;}}
-
-@media screen and (max-width: 1366px){.block-statistic.block-sm .statistic-title>div {width: 102%; margin-left: 2%;}}
-@media screen and (max-width: 1366px){.block-statistic.block-sm .dataTitle>div {width: 102%; margin-left: 2%;}}
 </style>
 <script>
 <?php $blockNavId = 'nav-' . uniqid(); ?>
@@ -157,57 +137,48 @@ $(function()
           <?php if($project->model == 'scrum' or $project->model == 'kanban'):?>
           <div class='table-row'>
             <div class="col-4 text-center">
+              <div><h4><?php echo $lang->block->story;?></h4></div>
               <div>
-                <div class="col statistic-title"><div><?php echo $lang->block->story;?></div></div>
-                <div class="col data"></div>
+                <div class="col dataTitle"><?php echo $lang->project->allStories . "：";?></div>
+                <div class="col data"><?php echo $project->allStories;?></div>
               </div>
               <div>
-                <div class="col dataTitle"><div><?php echo $lang->project->allStories;?></div></div>
-                <div class="col data"><?php echo  "：" . $project->allStories;?></div>
+                <div class="col dataTitle"><?php echo $lang->project->doneStories . "：";?></div>
+                <div class="col data"><?php echo $project->doneStories;?></div>
               </div>
               <div>
-                <div class="col dataTitle"><div><?php echo $lang->project->doneStories;?></div></div>
-                <div class="col data"><?php echo "：" . $project->doneStories;?></div>
-              </div>
-              <div>
-                <div class="col dataTitle"><div><?php echo $lang->project->surplus;?></div></div>
-                <div class="col data"><?php echo "：" . $project->leftStories;?></div>
+                <div class="col dataTitle"><?php echo $lang->project->surplus . "：";?></div>
+                <div class="col data"><?php echo $project->leftStories;?></div>
               </div>
             </div>
             <div class="col-4 text-center">
+              <div><h4><?php echo $lang->block->investment;?></h4></div>
               <div>
-                <div class="col statistic-title"><div><?php echo $lang->block->investment;?></div></div>
-                <div class="col data"></div>
+                <div class="col dataTitle"><?php echo $lang->block->totalPeople . "：";?></div>
+                <div class="col data"><?php echo $project->teamCount;?></div>
               </div>
               <div>
-                <div class="col dataTitle"><div><?php echo $lang->block->totalPeople;?></div></div>
-                <div class="col data"><?php echo "：" . $project->teamCount;?></div>
+                <div class="col dataTitle"><?php echo $lang->block->estimate . "：";?></div>
+                <div class="col data"><?php echo $project->estimate;?></div>
               </div>
               <div>
-                <div class="col dataTitle"><div><?php echo $lang->block->estimate;?></div></div>
-                <div class="col data"><?php echo "：" . $project->estimate;?></div>
-              </div>
-              <div>
-                <div class="col dataTitle"><div><?php echo $lang->block->consumedHours;?></div></div>
-                <div class="col data"><?php echo "：" . $project->consumed;?></div>
+                <div class="col dataTitle"><?php echo $lang->block->consumedHours . "：";?></div>
+                <div class="col data"><?php echo $project->consumed;?></div>
               </div>
             </div>
             <div class="col-4 text-center">
+              <div><h4><?php echo $lang->bug->common;?></h4></div>
               <div>
-                <div class="col statistic-title"><div><?php echo $lang->block->common;?></div></div>
-                <div class="col data"></div>
+                <div class="col dataTitle"><?php echo $lang->block->totalBug . "：";?></div>
+                <div class="col data"><?php echo $project->allBugs;?></div>
               </div>
               <div>
-                <div class="col dataTitle"><div><?php echo $lang->block->totalBug;?></div></div>
-                <div class="col data"><?php echo "：" . $project->allBugs;?></div>
+                <div class="col dataTitle"><?php echo $lang->bug->statusList['resolved'] . "：";?></div>
+                <div class="col data"><?php echo $project->doneBugs;?></div>
               </div>
               <div>
-                <div class="col dataTitle"><div><?php echo $lang->bug->statusList['resolved'];?></div></div>
-                <div class="col data"><?php echo "：" . $project->doneBugs;?></div>
-              </div>
-              <div>
-                <div class="col dataTitle"><div><?php echo $lang->bug->unResolved;?></div></div>
-                <div class="col data"><?php echo "：" . $project->leftBugs;?></div>
+                <div class="col dataTitle"><?php echo $lang->bug->unResolved . "：";?></div>
+                <div class="col data"><?php echo $project->leftBugs;?></div>
               </div>
             </div>
           </div>

@@ -886,7 +886,6 @@ function finishCard(cardID, kanbanID, regionID)
  */
 function updateRegion(regionID, regionData)
 {
-    console.log('> updateRegion', {regionID, regionData});
     if(typeof(regionData) == 'undefined') regionData = [];
     if(!regionID) return false;
 
@@ -1307,7 +1306,7 @@ function handleSortCards(event)
     orders.splice(orders.indexOf(fromID), 1);
     orders.splice(orders.indexOf(toID) + (event.insert === 'before' ?  0 : 1), 0, fromID);
 
-    var url = createLink('kanban', 'sortCard', 'kanbanID=' + kanbanID + '&laneID=' + newLaneID + '&columnID=' + newColID + '&cards=' + orders.join(','));
+    var url = createLink('kanban', 'sortCard', 'kanbanID=' + kanbanID + '&laneID=' + newLaneID + '&columnID=' + newColID + '&cards=' + orders.join(',') + '&cardID=' + fromID);
     $.getJSON(url, function(response)
     {
         if(response.result === 'fail')

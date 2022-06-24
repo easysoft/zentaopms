@@ -12,20 +12,20 @@
 ?>
 <style>
 .block-welcome .col-left {width: 25%;}
-.block-welcome .col-left > h4 {margin: 5px 0;line-height: 30px;}
-.block-welcome .col-left .timeline {margin: 10px 0 0;font-size: 12px;}
-.block-welcome .col-right > h4 small {display: inline-block;margin-right: 8px;font-size: 14px;}
+.block-welcome .col-left > h4 {margin: 5px 0; line-height: 30px;}
+.block-welcome .col-left .timeline {margin: 10px 0 0; font-size: 12px;}
+.block-welcome .col-right > h4 small {display: inline-block;margin-right: 8px; font-size: 14px;}
 .block-welcome .col-right .tiles {padding: 10px 0 0 16px;}
 .block-welcome .col-right .tile {width: 33%;}
 .block-welcome .panel-body {padding-top: 15px;}
-.block-welcome .user-notification-icon {position: relative;display: inline-block;margin-left: 5px;}
-.block-welcome .user-notification-icon .label-badge {position: absolute;top: 1px;right: -8px;min-width: 16px;padding: 2px;font-size: 12px;font-weight: normal;}
+.block-welcome .user-notification-icon {position: relative; display: inline-block; margin-left: 5px;}
+.block-welcome .user-notification-icon .label-badge {position: absolute;top: 1px; right: -8px; min-width: 16px; padding: 2px; font-size: 12px; font-weight: normal;}
 .block-welcome.block-sm .col-right {padding: 0;}
 .block-welcome.block-sm .col-right .tiles {border-left: none; padding-left: 0}
 .block-welcome.block-sm .tile-title {font-size: 12px; margin: 0 -10px;}
-.block-welcome .progress-group{margin-top: 42px;}
+.block-welcome .progress-group{margin-top: 25px;}
 .block-welcome .progress{margin-top: 10px; width: 85%;}
-.block-welcome .user-welcome{margin-top: 28px !important;}
+.block-welcome .user-welcome{margin-top: 10px !important;}
 .block-welcome .col-right{border-left: 1px solid #e5e8ec;}
 .block-welcome.block-sm .col-right {border: none;}
 .block-welcome .left-today{margin-left: 36px;}

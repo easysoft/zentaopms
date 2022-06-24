@@ -210,7 +210,7 @@ function setImageSize(image, maxWidth, maxHeight)
     setTimeout(function()
     {
         maxHeightStyle = $image.height() > 0 ? 'max-height:' + maxHeight + 'px' : '';
-        if($image.width() > 0 && $image.width() > maxWidth) $image.attr('width', maxWidth);
+        if(!document.getElementsByClassName('xxc-embed').length && $image.width() > 0 && $image.width() > maxWidth) $image.attr('width', maxWidth);
         $image.wrap('<a href="' + $image.attr('src') + '" style="display:inline-block;position:relative;overflow:hidden;' + maxHeightStyle + '" target="_blank"></a>');
         if($image.height() > 0 && $image.height() > maxHeight) $image.closest('a').append("<a href='###' class='showMoreImage' onclick='showMoreImage(this)'>" + lang.expand + " <i class='icon-angle-down'></i></a>");
     }, 50);

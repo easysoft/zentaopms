@@ -1274,7 +1274,7 @@ function handleSortCards(event)
     orders.splice(orders.indexOf(fromID), 1);
     orders.splice(orders.indexOf(toID) + (event.insert === 'before' ?  0 : 1), 0, fromID);
 
-    var url = createLink('kanban', 'sortCard', 'kanbanID=' + executionID + '&laneID=' + newLaneID + '&columnID=' + newColID + '&cards=' + orders.join(','));
+    var url = createLink('kanban', 'sortCard', 'kanbanID=' + executionID + '&laneID=' + newLaneID + '&columnID=' + newColID + '&cards=' + orders.join(',') + '&cardID=' + toID);
     $.getJSON(url, function(response)
     {
         if(response.result === 'fail')
