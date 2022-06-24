@@ -1,5 +1,5 @@
-<?php if($extView = $this->getExtViewFile(__FILE__)){include $extView; return helper::cd();}?>
-<?php
+<?php 
+if($extView = $this->getExtViewFile(__FILE__)){include $extView; return helper::cd();}
 $clientLang   = $app->getClientLang();
 $webRoot      = $this->app->getWebRoot();
 $jsRoot       = $webRoot . "js/";
@@ -81,13 +81,13 @@ $xuanExtFile = $extensionRoot . 'xuan/common/ext/view/header.xuanxuan.html.hook.
 if(file_exists($xuanExtFile)) include $xuanExtFile;
 ?>
 </head>
-<?php $singleClass = $this->app->getViewType() == 'xhtml' ? 'allow-self-open' : '';?>
-<?php if(isset($pageBodyClass)) $singleClass = $singleClass . ' ' . $pageBodyClass; ?>
-<?php if($this->moduleName == 'index' && $this->methodName == 'index'): ?>
-<body class='menu-<?php echo $this->cookie->hideMenu ? 'hide' : 'show'; ?> <?php echo $singleClass;?>'>
-<?php else: ?>
-<body class='<?php echo $singleClass;?>'>
-<?php endif; ?>
+<?php 
+$bodyClass = $this->app->getViewType() == 'xhtml' ? 'allow-self-open' : '';
+if(isset($pageBodyClass)) $bodyClass = $bodyClass . ' ' . $pageBodyClass;
+if($this->moduleName == 'index' && $this->methodName == 'index') $bodyClass .= ' menu-' . ($this->cookie->hideMenu ? 'hide' : 'show');
+if(strpos($_SERVER['HTTP_USER_AGENT'], 'xuanxuan') !== false) $bodyClass .= ' xxc-embed';
+?>
+<body class='<?php echo $bodyClass; ?>'>
 <?php if($this->app->getViewType() == 'xhtml'):?>
   <style>
     .main-actions-holder {display: none !important;}
