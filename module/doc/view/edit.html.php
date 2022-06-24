@@ -74,7 +74,7 @@
           <td colspan="2">
             <div class="input-group">
               <?php
-              echo html::select('mailto[]', $users, $doc->mailto, "multiple class='form-control picker-select'");
+              echo html::select('mailto[]', $users, $doc->mailto, "multiple class='form-control picker-select' data-drop-direction='top'");
               echo $this->fetch('my', 'buildContactLists');
               ?>
             </div>
@@ -83,9 +83,8 @@
         <tr>
           <th><?php echo $lang->doclib->control;?></th>
           <td colspan='2'>
-            <?php $acl = $lib->acl == 'default' ? 'open' : $lib->acl;?>
-            <?php echo html::radio('acl', $lang->doc->aclList, $acl, "onchange='toggleAcl(this.value, \"doc\")'")?>
-            <span class='text-info' id='noticeAcl'><?php echo $lang->doc->noticeAcl['doc'][$acl];?></span>
+            <?php echo html::radio('acl', $lang->doc->aclList, $doc->acl, "onchange='toggleAcl(this.value, \"doc\")'")?>
+            <span class='text-info' id='noticeAcl'><?php echo $lang->doc->noticeAcl['doc'][$doc->acl];?></span>
           </td>
         </tr>
         <tr id='whiteListBox' class='hidden'>
@@ -93,11 +92,11 @@
           <td colspan='2'>
             <div class='input-group w-p100'>
               <span class='input-group-addon groups-addon'><?php echo $lang->doclib->group?></span>
-              <?php echo html::select('groups[]', $groups, $doc->groups, "class='form-control picker-select' multiple")?>
+              <?php echo html::select('groups[]', $groups, $doc->groups, "class='form-control picker-select' multiple data-drop-direction='top'")?>
             </div>
             <div class='input-group w-p100'>
               <span class='input-group-addon'><?php echo $lang->doclib->user?></span>
-              <?php echo html::select('users[]', $users, $doc->users, "class='form-control picker-select' multiple")?>
+              <?php echo html::select('users[]', $users, $doc->users, "class='form-control picker-select' multiple data-drop-direction='top'")?>
             </div>
           </td>
         </tr>

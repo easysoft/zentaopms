@@ -16,8 +16,9 @@
 <?php js::set('edit', $lang->edit);?>
 <?php js::set('selectAll', $lang->selectAll);?>
 <?php js::set('hasProject', $hasProject);?>
+<?php js::set('checkedProjects', $lang->program->checkedProjects);?>
 <?php if($programType == 'bygrid'):?>
-<style> #mainMenu{padding-left: 10px; padding-right: 10px;} </style>
+<style>#mainMenu{padding-left: 10px; padding-right: 10px;}</style>
 <?php endif;?>
 <div id='mainMenu' class='clearfix'>
   <div class="btn-toolBar pull-left">

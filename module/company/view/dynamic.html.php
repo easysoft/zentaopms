@@ -70,7 +70,7 @@
             <span class="timeline-tag"><?php echo $action->time?></span>
             <span class="timeline-text">
               <?php echo zget($accountPairs, $action->actor);?>
-              <span class='label-action'><?php echo ' ' . $action->actionLabel;?></span>
+              <span class='label-action'><?php echo $action->actionLabel;?></span>
               <?php if($action->action != 'login' and $action->action != 'logout'):?>
               <span class="text"><?php echo $action->objectLabel;?></span>
               <?php if($action->objectID):?>

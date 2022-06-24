@@ -111,6 +111,7 @@ $lang->program->unlinkStakeholder  = 'Do you want to remove the Stakeholder?';
 $lang->program->readjustTime       = 'Change the program begin&end date.';
 $lang->program->accessDenied       = 'You have no access to the program.';
 $lang->program->beyondParentBudget = 'The remaining budget of the owned program has been exceeded.';
+$lang->program->checkedProjects    = 'Seleted %s items';
 
 $lang->program->endList[31]  = 'One month';
 $lang->program->endList[93]  = 'Trimester';

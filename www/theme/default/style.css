@@ -39,7 +39,7 @@ a.showMoreImage:hover {opacity: 1;}
 #mainMenu .pull-right > .btn-group > .btn-icon {background: transparent;}
 #mainMenu .pull-right > .btn-group > .btn-icon:hover {background: #fff;}
 
-.table-actions .btn {background: #78bdf5; color: #fff; border-color: #78bdf5}
+.table-actions .btn {background: #16a8f8; color: #fff; border-color: #16a8f8}
 .table-actions > .btn-group:first-child > .btn:first-child {border-right: 1px solid rgba(255,255,255,0.2);}
 .table-footer .checked+div .btn, .table-actions .btn:hover {background: #16a8f8; border-color: #16a8f8}
 

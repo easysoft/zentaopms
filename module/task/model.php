@@ -928,6 +928,7 @@ class taskModel extends model
             ->add('id', $taskID)
             ->setDefault('story, estimate, left, consumed', 0)
             ->setDefault('realStarted', '0000-00-00 00:00:00')
+            ->setDefault('mailto', '')
             ->setIF(is_numeric($this->post->estimate), 'estimate', (float)$this->post->estimate)
             ->setIF(is_numeric($this->post->consumed), 'consumed', (float)$this->post->consumed)
             ->setIF(is_numeric($this->post->left),     'left',     (float)$this->post->left)

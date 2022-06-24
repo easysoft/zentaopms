@@ -1,11 +1,12 @@
 <?php if(isset($pageCSS)) css::internal($pageCSS);?>
 <div class="detail">
-  <h2 class="detail-title"><span class="label-id"><?php echo $story->id?></span> <span class="label label-story"><?php echo $lang->story->common?></span> <span class="title"><?php echo $story->title;?></span></h2>
+  <h2 class="detail-title"><span class="label-id storyID"><?php echo $story->id?></span> <span class="label status-story status-<?php echo $story->status?>"><?php echo $this->processStatus('story', $story);?></span> <span class="title"><?php echo $story->title;?></span></h2>
   <div class="detail-content article-content">
     <div class="infos">
-      <span class="status-story status-draft"><span class="label label-dot"></span> <?php echo $this->processStatus('story', $story);?></span>
-      <span><?php echo $lang->story->stage;?> <?php echo $lang->story->stageList[$story->stage];?></span>
-      <span><?php echo $lang->story->estimate;?> <?php echo $story->estimate;?></span>
+      <span><span class="title"><?php echo $lang->story->stage;?></span> <span><?php echo $lang->story->stageList[$story->stage];?></span></span>
+    </div>
+    <div class="infos">
+      <span><span class="title"><?php echo $lang->story->estimate;?></span> <span><?php echo $story->estimate;?></span></span>
     </div>
     <div class="btn-toolbar">
       <?php

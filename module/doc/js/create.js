@@ -119,7 +119,7 @@ function loadWhitelist(libID)
         {
           $('#groups').replaceWith(groups);
           $('#groups_chosen').remove();
-          $('#groups').chosen();
+          $('#groups').picker();
         }
     });
 
@@ -140,14 +140,7 @@ function loadWhitelist(libID)
             $('#users').replaceWith(users);
             $('#users_chosen').remove();
             $('#whiteListBox .picker').remove();
-            if($('#users option').length < maxCount)
-            {
-              $('#users').chosen();
-            }
-            else
-            {
-              $('#users').picker();
-            }
+            $('#users').picker();
         }
     });
 }

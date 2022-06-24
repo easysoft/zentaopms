@@ -1,5 +1,4 @@
 #repoList .tree li {padding: 0 0 0 10px;}
-#repoList .tree li > a {padding: 5px;}
 #repoList .hide-in-search .hidden {display: block !important; visibility: inherit !important;}
 #dropMenuRepo > div.table-row > div > div > ul > li > div {padding-left: 20px;}
 #repoList li > a.selected {color: #e9f2fb; background-color: #16a8f8; line-height: 20px; border-radius: 5px;}

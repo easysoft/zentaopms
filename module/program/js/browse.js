@@ -28,6 +28,21 @@ $(function()
             $('.table-footer #checkAll').prop('checked', false);
             $('#programForm').removeClass('has-row-checked');
         }
+
+        var summary = checkedProjects.replace('%s', checkedLength);
+        var statistic = "<div id='projectsSummary' class='table-statistic'>" + summary + "</div>";
+        if(checkedLength > 0)
+        {
+            $('#programSummary').addClass('hidden');
+            $('#projectsSummary').remove();
+            $('.editCheckbox').after(statistic);
+        }
+        else
+        {
+            $('#programSummary').removeClass('hidden');
+            $('#projectsSummary').addClass('hidden');
+        }
+
     });
 
     $(document).on('click', ".table-footer #checkAll", function()
@@ -36,11 +51,19 @@ $(function()
         {
             $(":checkbox[name^='projectIdList']").prop('checked', true);
             $('#programForm').addClass('has-row-checked');
+            var checkedLength = $(":checkbox[name^='projectIdList']:checked").length;
+            var summary = checkedProjects.replace('%s', checkedLength);
+            var statistic = "<div id='projectsSummary' class='table-statistic'>" + summary + "</div>";
+            $('#programSummary').addClass('hidden');
+            $('#projectsSummary').remove();
+            $('.editCheckbox').after(statistic);
         }
         else
         {
             $(":checkbox[name^='projectIdList']").prop('checked', false);
             $('#programForm').removeClass('has-row-checked');
+            $('#programSummary').removeClass('hidden');
+            $('#projectsSummary').addClass('hidden');
         }
     });
 });
