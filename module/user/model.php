@@ -1100,11 +1100,12 @@ class userModel extends model
     /**
      * login function.
      *
-     * @param  object    $user
+     * @param  object $user
+     * @param  bool   $addAction
      * @access public
      * @return bool|object
      */
-    public function login($user)
+    public function login($user, $addAction = true)
     {
         if(!$user) return false;
 
@@ -1118,7 +1119,7 @@ class userModel extends model
 
         $this->session->set('user', $user);
         $this->app->user = $this->session->user;
-        if(isset($user->id)) $this->loadModel('action')->create('user', $user->id, 'login');
+        if(isset($user->id) and $addAction) $this->loadModel('action')->create('user', $user->id, 'login');
         $this->loadModel('score')->create('user', 'login');
 
         /* Keep login. */

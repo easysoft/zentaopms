@@ -19,15 +19,16 @@ class tokensEntry extends baseEntry
      */
     public function post()
     {
-        $account  = $this->request('account');
-        $password = $this->request('password');
+        $account   = $this->request('account');
+        $password  = $this->request('password');
+        $addAction = $this->request('addAction', true);
 
         if($this->loadModel('user')->checkLocked($account)) return $this->sendError(400, sprintf($this->lang->user->loginLocked, $this->config->user->lockMinutes));
 
         $user = $this->user->identify($account, $password);
         if($user)
         {
-            $this->user->login($user);
+            $this->user->login($user, $addAction);
             $this->send(201, array('token' => session_id()));
         }
         else
