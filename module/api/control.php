@@ -77,7 +77,7 @@ class api extends control
 
         /* Build the search form. */
         $queryID   = $browseType == 'bySearch' ? (int)$param : 0;
-        $actionURL = $this->createLink('api', 'index', "libID=$libID&moduleID=0&apiID=0&version=0&release=0&appendLib=0&browseType=bySearch&queryID=myQueryID");
+        $actionURL = $this->createLink('api', 'index', "libID=$libID&moduleID=0&apiID=0&version=0&release=0&appendLib=0&browseType=bySearch&param=myQueryID");
         $this->api->buildSearchForm($lib,$queryID, $actionURL);
 
         if($browseType == 'bySearch')
