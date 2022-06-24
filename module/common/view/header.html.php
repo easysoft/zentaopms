@@ -7,13 +7,6 @@ include 'chosen.html.php';
 <?php if(empty($_GET['onlybody']) or $_GET['onlybody'] != 'yes'):?>
 <?php $this->app->loadConfig('sso');?>
 <?php if(!empty($config->sso->redirect)) js::set('ssoRedirect', $config->sso->redirect);?>
-<style>
-    body.xxc-embed {overflow-x: auto; overflow-y: hidden;}
-    .xxc-embed #header {position: fixed;top: 0;width: 100%;z-index: 10;}
-    .xxc-embed #toolbar {position: fixed;right: 120px!important;}
-    .xxc-embed #main {position: absolute;top: 50px;bottom: 0;left: 0;right: 0;overflow: auto;}
-    .xxc-embed .fix-table-copy-wrapper {top: 50px!important;}
-</style>
 <header id='header'>
   <div id='mainHeader'>
     <div class='container'>
