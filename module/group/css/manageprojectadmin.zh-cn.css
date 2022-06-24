@@ -1,3 +1,1 @@
-.addon-project{padding: 0px 18px;}
-.addon-product{padding: 0px 18px;}
-.addon-execution{padding: 0px 18px;}
+.addon-project, .addon-product, .addon-execution{padding: 0px 18px;}
