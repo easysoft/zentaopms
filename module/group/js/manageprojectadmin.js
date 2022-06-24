@@ -42,14 +42,23 @@ function addItem(obj)
             $newRow.removeClass('highlight');
         }, 1600);
     })
+
+    if($("table tr").size() > 6)
+    {
+        $('.btn-delete').removeClass('hidden');
+    }
 }
 
 function deleteItem(obj)
 {
-    if($("table tr").size() < 7) return false;
-
     var currentClass = $(obj).closest('tr').attr('class');
     $(obj).closest('table').find('tr.' + currentClass).remove();
+
+    if($("table tr").size() <= 6)
+    {
+        $('.btn-delete').addClass('hidden');
+        return false;
+    }
 }
 
 function resetProgramName(obj)
