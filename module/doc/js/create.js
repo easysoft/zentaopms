@@ -117,9 +117,9 @@ function loadWhitelist(libID)
     {
         if(groups != 'private')
         {
-          $('#groups').replaceWith(groups);
-          $('#groups_chosen').remove();
-          $('#groups').picker();
+            $('#groups').replaceWith(groups);
+            $('#groups').next('.picker').remove();
+            $('#groups').picker();
         }
     });
 
@@ -132,14 +132,20 @@ function loadWhitelist(libID)
             $('#whiteListBox').addClass('hidden');
             $('#aclprivate').prop('checked', true);
         }
+        else if(users == 'project')
+        {
+            $('#aclprivate').parent('.radio-inline').addClass('hidden');
+            $('#aclcustom').parent('.radio-inline').addClass('hidden');
+            $('#whiteListBox').addClass('hidden');
+            $('#aclopen').prop('checked', true);
+        }
         else
         {
             $('#aclopen').parent('.radio-inline').removeClass('hidden');
             $('#aclcustom').parent('.radio-inline').removeClass('hidden');
 
             $('#users').replaceWith(users);
-            $('#users_chosen').remove();
-            $('#whiteListBox .picker').remove();
+            $('#users').next('.picker').remove();
             $('#users').picker();
         }
     });

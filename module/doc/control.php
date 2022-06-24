@@ -860,6 +860,7 @@ class doc extends control
             if($doclib->acl == 'open') return print(html::select('groups[]', $groups, $selectedGroup, "class='form-control picker-select' multiple $dropDirection"));
             if($doclib->acl == 'default') return print(html::select('groups[]', $groups, $selectedGroup, "class='form-control picker-select' multiple $dropDirection"));
             if($doclib->acl == 'private') echo 'private';
+
             return false;
         }
 
@@ -876,7 +877,15 @@ class doc extends control
             }
             if($doclib->acl == 'open') return print(html::select('users[]', $users, $selectedUser, "multiple class='form-control picker-select' $dropDirection"));
             if($doclib->acl == 'default') return print(html::select('users[]', $users, $selectedUser, "multiple class='form-control picker-select' $dropDirection"));
-            if($doclib->acl == 'private') echo 'private';
+            if($doclib->acl == 'private' and $doclib->type == 'project')
+            {
+                echo 'project';
+            }
+            else
+            {
+                echo 'private';
+            }
+
             return false;
         }
 
@@ -891,7 +900,7 @@ class doc extends control
             $selectedUser = $whitelist;
         }
 
-        return print(html::select('users[]', $users, $selectedUser, "class='form-control chosen' multiple"));
+        return print(html::select('users[]', $users, $selectedUser, "class='form-control picker-select' multiple"));
     }
 
     /**

@@ -41,6 +41,7 @@ function toggleAcl(acl, type)
     else
     {
         $('#whiteListBox').addClass('hidden');
+        if(type == 'doc') loadWhitelist(libID);
     }
 
     if(type == 'lib')
@@ -57,8 +58,8 @@ function toggleAcl(acl, type)
             $.get(link, function(users)
             {
                 $('#users').replaceWith(users);
-                $('#users_chosen').remove();
-                $('#users').chosen();
+                $('#user').next(' .picker').remove();
+                $('#users').picker();
             })
         }
     }

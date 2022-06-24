@@ -141,9 +141,9 @@ function loadWhitelist(libID)
     {
         if(groups != 'private')
         {
-          $('#groups').replaceWith(groups);
-          $('#groups_chosen').remove();
-          $('#groups').picker();
+            $('#groups').replaceWith(groups);
+            $('#groups').next('.picker').remove();
+            $('#groups').picker();
         }
     });
 
@@ -162,8 +162,7 @@ function loadWhitelist(libID)
             $('#aclcustom').parent('.radio-inline').removeClass('hidden');
 
             $('#users').replaceWith(users);
-            $('#users_chosen').remove();
-            $('#whiteListBox .picker').remove();
+            $('#user').next('.picker').remove();
             $('#users').picker();
         }
     });

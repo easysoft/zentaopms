@@ -10,7 +10,6 @@
  * @link        http://www.zentao.net
  */
 ?>
-<?php js::set('maxCount', $this->config->maxCount);?>
 <?php if($docType != '' and strpos($config->doc->officeTypes, $docType) !== false):?>
 <?php include '../../common/view/header.lite.html.php';?>
 <div id="mainContent" class="main-content">
@@ -109,6 +108,7 @@ $("a[href^='###']").click(function()
             <th><?php echo $lang->doclib->control;?></th>
             <td colspan='2'>
               <?php $acl = $lib->acl == 'default' ? 'open' : $lib->acl;?>
+              <?php $acl = ($lib->type == 'project' and $acl == 'private') ? 'open' : $acl;?>
               <?php echo html::radio('acl', $lang->doc->aclList, $acl, "onchange='toggleAcl(this.value, \"doc\")'");?>
               <span class='text-info' id='noticeAcl'><?php echo $lang->doc->noticeAcl['doc'][$acl];?></span>
             </td>

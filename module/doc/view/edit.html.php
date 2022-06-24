@@ -17,7 +17,6 @@
 <?php js::set('confirmUpdateContent', $lang->doc->confirmUpdateContent);?>
 <?php js::set('docID', $doc->id);?>
 <?php js::set('draft', $doc->draft);?>
-<?php js::set('maxCount', $this->config->maxCount);?>
 <div id='mainContent' class='main-content'>
   <div class='center-block'>
     <div class='main-header'>
