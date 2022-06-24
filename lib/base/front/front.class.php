@@ -1224,11 +1224,8 @@ EOT;
             $viewOBJOut = true;
         }
 
-        if(is_numeric($value))
-        {
-            $js .= "{$prefix}{$key} = {$value};";
-        }
-        elseif(is_array($value) or is_object($value) or is_string($value))
+        /* Fix value is '0123' error. */
+        if(is_array($value) or is_object($value) or is_string($value))
         {
             /* Fix for auto-complete when user is number.*/
             if(is_array($value) or is_object($value))
@@ -1243,6 +1240,10 @@ EOT;
             $value = json_encode($value);
             $js .= "{$prefix}{$key} = {$value};";
         }
+        elseif(is_numeric($value))
+        {
+            $js .= "{$prefix}{$key} = {$value};";
+        }
         elseif(is_bool($value))
         {
             $value = $value ? 'true' : 'false';
@@ -1251,7 +1252,7 @@ EOT;
         else
         {
             $value = addslashes($value);
-            $js .= "{$prefix}{$key} = '{$value};'";
+            $js .= "{$prefix}{$key} = '{$value}';";
         }
         $js .= self::end($newline = false);
         echo $js;
