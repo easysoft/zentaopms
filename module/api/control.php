@@ -28,12 +28,12 @@ class api extends control
      * @param  int    $version
      * @param  int    $release
      * @param  int    $appendLib
-     * @param  int    $queryID
-     * @param  string $param
+     * @param  string $browseType
+     * @param  int    $param
      * @access public
      * @return void
      */
-    public function index($libID = 0, $moduleID = 0, $apiID = 0, $version = 0, $release = 0, $appendLib = 0, $queryID = 0, $param = '')
+    public function index($libID = 0, $moduleID = 0, $apiID = 0, $version = 0, $release = 0, $appendLib = 0, $browseType = '', $param = 0)
     {
         /* Get an api doc. */
         if($apiID > 0)
@@ -76,14 +76,13 @@ class api extends control
         $this->lang->TRActions = '<a class="btn btn-link querybox-toggle" id="bysearchTab"><i class="icon icon-search muted"></i> ' . $this->lang->api->search . '</a>' . $this->lang->TRActions;
 
         /* Build the search form. */
-        $queryID   = $param == 'bySearch' ? (int)$queryID : 0;
-        $actionURL = $this->createLink('api', 'index', "libID=$libID&moduleID=0&apiID=0&version=0&release=0&appendLib=0&queryID=myQueryID&param=bySearch");
+        $queryID   = $browseType == 'bySearch' ? (int)$param : 0;
+        $actionURL = $this->createLink('api', 'index', "libID=$libID&moduleID=0&apiID=0&version=0&release=0&appendLib=0&browseType=bySearch&param=myQueryID");
         $this->api->buildSearchForm($lib,$queryID, $actionURL);
 
-        if($param == 'bySearch')
+        if($browseType == 'bySearch')
         {
-            $apiList = $this->api->getApiListBySearch($libID, $queryID);
-            $this->view->apiList  = $apiList;
+            $this->view->apiList  = $this->api->getApiListBySearch($libID, $queryID);
             $this->view->typeList = $this->api->getTypeList($libID);
         }
 
@@ -94,7 +93,7 @@ class api extends control
         $this->view->libID      = $libID;
         $this->view->apiID      = $apiID;
         $this->view->libs       = $libs;
-        $this->view->param      = $param;
+        $this->view->browseType = $browseType;
         $this->view->moduleTree = $libID ? $this->doc->getApiModuleTree($libID, $apiID, $release, $moduleID) : '';
         $this->view->users      = $this->user->getPairs('noclosed,noletter');
 

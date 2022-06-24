@@ -28,7 +28,7 @@ if($this->methodName != 'browse')
 }
 if(empty($type)) $type = 'product';
 ?>
-<div class="cell<?php if($param == 'bySearch') echo ' show';?>" id="queryBox" data-module=<?php echo $type . 'Doc';?>></div>
+<div class="cell<?php if($browseType == 'bySearch') echo ' show';?>" id="queryBox" data-module=<?php echo $type . 'Doc';?>></div>
 <div class="main-content">
   <div class="cell" id="<?php echo $type;?>">
     <div class="detail">

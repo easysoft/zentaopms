@@ -2411,8 +2411,8 @@ EOT;
             }
             if(count($libs) >= 2 and common::hasPriv('doc', 'sortLibs'))
             {
-                $output   .= '<li class="divider"></li>';
-                $output   .= html::a(inlink('sortLibs', "type=$type&objectID=$objectID", '', true), "<i class='icon-move'></i>  {$this->lang->doc->sortLibs}", '', "data-title='{$this->lang->doc->sortLibs}' data-toggle='modal' data-type='iframe' data-width='400px' data-app='{$this->app->tab}'");
+                $output .= '<li class="divider"></li>';
+                $output .= html::a(inlink('sortLibs', "type=$type&objectID=$objectID", '', true), "<i class='icon-move'></i>  {$this->lang->doc->sortLibs}", '', "data-title='{$this->lang->doc->sortLibs}' data-toggle='modal' data-type='iframe' data-width='400px' data-app='{$this->app->tab}'");
             }
             $output .= "</div></div></div></div></div>";
         }
@@ -2903,10 +2903,10 @@ EOT;
 
         $libs  = $this->getLibsByObject($type, $objectID);
         $query = $this->session->$queryName;
+        $query = strpos($query, "`lib` = 'all'") === false ? "$query and lib = $libID" : str_replace("`lib` = 'all'", '1', $query);
         $docs  = $this->dao->select('*')->from(TABLE_DOC)
             ->where('deleted')->eq(0)
-            ->andWhere(str_replace("`lib` = 'all'", '1', $query))
-            ->beginIF(strpos($query, "`lib` = 'all'") === false)->andWhere('lib')->eq($libID)->fi()
+            ->andWhere($query)
             ->andWhere('lib')->in(array_keys($libs))
             ->beginIF($this->config->doc->notArticleType)->andWhere('type')->notIN($this->config->doc->notArticleType)->fi()
             ->orderBy('id_desc')
