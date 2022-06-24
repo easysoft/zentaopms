@@ -1161,15 +1161,15 @@ class doc extends control
      * @param  string $type
      * @param  int    $objectID
      * @param  int    $libID
-     * @param  int    $queryID
-     * @param  string $param
+     * @param  string $browseType
+     * @param  int    $param
      * @param  int    $recTotal
      * @param  int    $recPerPage
      * @param  int    $pageID
      * @access public
      * @return void
      */
-    public function tableContents($type, $objectID = 0, $libID = 0, $queryID = 0, $param = '', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function tableContents($type, $objectID = 0, $libID = 0, $browseType = '', $param = 0, $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         list($libs, $libID, $object, $objectID) = $this->doc->setMenuByType($type, $objectID, $libID);
         $this->session->set('createProjectLocate', $this->app->getURI(true), 'doc');
@@ -1181,16 +1181,16 @@ class doc extends control
         $title = ($type == 'book' or $type == 'custom') ? $this->lang->doc->tableContents : $object->name . $this->lang->colon . $this->lang->doc->tableContents;
 
         /* Build the search form. */
-        $queryID   = $param == 'bySearch' ? (int)$queryID : 0;
-        $actionURL = $this->createLink('doc', 'tableContents', "type=$type&objectID=$objectID&libID=$libID&queryID=myQueryID&param=bySearch");
+        $queryID   = $browseType == 'bySearch' ? (int)$param : 0;
+        $actionURL = $this->createLink('doc', 'tableContents', "type=$type&objectID=$objectID&libID=$libID&browseType=bySearch&param=myQueryID");
         $this->doc->buildSearchForm($libID, $libs, $queryID, $actionURL, $type);
 
         $this->view->title      = $title;
         $this->view->type       = $type;
-        $this->view->param      = $param;
-        $this->view->queryID    = $queryID;
+        $this->view->browseType = $browseType;
+        $this->view->param      = $queryID;
         $this->view->users      = $this->user->getPairs('noletter');
-        if($param == 'bySearch')
+        if($browseType == 'bySearch')
         {
             /* Load pager. */
             $rawMethod = $this->app->rawMethod;
@@ -1238,6 +1238,8 @@ class doc extends control
 
     /**
      * Sort libs.
+     * @param  string $type
+     * @param  int    $objectID
      *
      * @access public
      * @return void

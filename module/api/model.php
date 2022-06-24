@@ -907,11 +907,10 @@ class apiModel extends model
      */
     public function buildSearchForm($lib, $queryID, $actionURL)
     {
-        $lib = array($lib->id => $lib->name);
         $this->config->api->search['module']                  = 'api';
         $this->config->api->search['queryID']                 = $queryID;
         $this->config->api->search['actionURL']               = $actionURL;
-        $this->config->api->search['params']['lib']['values'] = $lib + array('all' => $this->lang->api->allLibs);
+        $this->config->api->search['params']['lib']['values'] = array($lib->id => $lib->name) + array('all' => $this->lang->api->allLibs);
 
         $this->loadModel('search')->setSearchParams($this->config->api->search);
     }
@@ -945,11 +944,12 @@ class apiModel extends model
        }
 
        $apiQuery = $this->session->apiQuery;
+       $apiQuery = strpos($apiQuery, "`lib` = 'all'") === false ? "$apiQuery and lib = $libID" : str_replace("`lib` = 'all'", '1', $apiQuery);
+
        $list = $this->dao->select('*')
            ->from(TABLE_API)
            ->where('deleted')->eq(0)
-           ->andWhere(str_replace("`lib` = 'all'", '1', $apiQuery))
-           ->beginIF(strpos($apiQuery, "`lib` = 'all'") === false)->andWhere('lib')->eq($libID)->fi()
+           ->andWhere($apiQuery)
            ->fetchAll();
 
        return $list;

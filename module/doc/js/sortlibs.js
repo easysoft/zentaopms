@@ -34,7 +34,7 @@ $(function()
             {
                 orders += $(this).attr('data-id') + ',';
             });
-            $('#libs #libIdList').attr('value', orders);
+            $('#libIdList').attr('value', orders);
         }
     });
 });
