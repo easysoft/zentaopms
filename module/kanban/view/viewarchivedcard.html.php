@@ -16,6 +16,7 @@
 #archivedCards .kanban-item {border: 1px solid #ddd; border-radius: 4px; padding: 5px;}
 #archivedCards .kanban-item > .title {display: block; max-height: 38px; overflow: hidden; color: inherit; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;}
 #archivedCards .kanban-item > .title:hover {color: #2272eb}
+#archivedCards .kanban-item > .desc {color: #838a9d; overflow: hidden; white-space:nowrap; text-overflow:ellipsis; padding-top: 5px;}
 #archivedCards .kanban-item > .info {margin-top: 5px; position: relative;}
 #archivedCards .kanban-item > .info > .pri {height: 14px; border-width: 1px; font-size: 12px; line-height: 12px; min-width: 14px; padding: 0 1px;}
 #archivedCards .kanban-item > .info > .time {margin-left: 10px; font-size: 12px}
@@ -97,6 +98,7 @@ js::set('systemMode', $this->config->systemMode);
         $name = isset($card->title) ? $card->title : $card->name;
         if(common::hasPriv($card->fromType, 'view')) echo html::a($this->createLink($card->fromType, 'view', "id=$card->fromID"), $name, '', "class='cardName' title='$name'");
         if(!common::hasPriv($card->fromType, 'view')) echo "<div class='cardName' title='$name'>$name</div>";
+        if($card->fromType == 'productplan' or $card->fromType == 'build') echo "<div class='desc' title='$card->desc'>$card->desc</div>";
         echo "<div class='info $card->fromType'>";
         if(isset($lang->{$card->fromType}->statusList[$card->objectStatus])) echo "<span class='label label-$card->objectStatus'>" . $lang->{$card->fromType}->statusList[$card->objectStatus] . '</span>';
         if(isset($card->date) and !helper::isZeroDate($card->date)) echo "<span class='time label label-light'>" . date("Y-m-d", strtotime($card->date)) . "</span>"
