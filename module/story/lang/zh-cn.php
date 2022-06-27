@@ -423,7 +423,7 @@ $lang->story->categoryList['other']       = '其他';
 $lang->story->changeTip = '该需求正在评审中，无法进行变更';
 
 $lang->story->reviewTip = array();
-$lang->story->reviewTip['active']      = '该需求已是激活状态，无需求评审';
+$lang->story->reviewTip['active']      = '该需求已是激活状态，无需评审';
 $lang->story->reviewTip['notReviewer'] = '您不是该需求的评审人员，无法进行评审操作';
 $lang->story->reviewTip['reviewed']    = '您已评审';
 $lang->story->reviewTip['recalled']    = '该需求已撤销评审，无法进行评审操作';
