@@ -19,7 +19,7 @@
   <div class="main-header">
     <h2><?php echo $lang->project->batchEdit;?></h2>
   </div>
-  <form method='post' class='load-indicator main-form' enctype='multipart/form-data' target='hiddenwin' id="batchEditForm">
+  <form method='post' class='load-indicator main-form form-ajax' enctype='multipart/form-data' id="batchEditForm">
     <table class="table table-form">
       <thead>
         <tr>
