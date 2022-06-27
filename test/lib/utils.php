@@ -208,22 +208,27 @@ function zdRun($model = '')
     }
 }
 
+/**
+ * copy init DB.
+ *
+ * @access public
+ * @return void
+ */
 function copyDB()
 {
-    global $config;
-    global $dao;
+    global $config, $dao;
 
-    $dumpCommand   = "mysqldump -u%s -p%s %s > %s";
-    $sqlFile =  TEST_BASEHPATH . DS . 'tmp/raw.sql';
+    $dumpCommand = "mysqldump -u%s -p%s %s > %s";
+    $sqlFile     = TEST_BASEHPATH . DS . 'tmp/raw.sql';
 
     $currentDBNum = $dao->query("select count(*) from information_schema.SCHEMATA where SCHEMA_NAME like '" . $config->test->dbPrefix . "%'");
-    $dumpCommand = sprintf($dumpCommand, $config->db->user, $config->db->password, $config->test->rawDB, $sqlFile);
+    $dumpCommand  = sprintf($dumpCommand, $config->db->user, $config->db->password, $config->test->rawDB, $sqlFile);
     shell_exec($dumpCommand);
 
     $dbNum = $config->test->dbNum;
 
     $dbUsed = array();
-    for ($i = 1; $i <= $dbNum; $i++)
+    for($i = 1; $i <= $dbNum; $i++)
     {
         $dbUsed[] =  $config->test->dbPrefix . $i;
     }

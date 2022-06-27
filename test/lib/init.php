@@ -12,10 +12,10 @@
  * @version     $Id: $
  * @link        http://www.zentao.net
  */
-$testPath = dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'test' . DIRECTORY_SEPARATOR;
 /* Set the error reporting. */
 error_reporting(E_ALL & E_STRICT);
 
+$testPath      = dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'test' . DIRECTORY_SEPARATOR;
 $frameworkRoot = dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'framework' . DIRECTORY_SEPARATOR;
 
 /**
@@ -44,7 +44,6 @@ include $frameworkRoot . 'control.class.php';
 include $frameworkRoot . 'model.class.php';
 include $frameworkRoot . 'helper.class.php';
 
-
 $app    = router::createApp('pms', dirname(dirname(__FILE__)), 'router');
 $tester = $app->loadCommon();
 
@@ -57,6 +56,7 @@ $config->zdPath      = dirname(dirname(__FILE__)) . '/tools/zd';
 include $testPath . 'config/config.php';
 include $testPath. 'lib/db.class.php';
 $db = new db();
+
 /**
  * Save variable to $_result.
  *
