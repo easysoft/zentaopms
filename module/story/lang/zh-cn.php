@@ -432,11 +432,10 @@ $lang->story->recallTip = array();
 $lang->story->recallTip['actived']     = '该需求未发起评审流程，无需撤销操作';
 $lang->story->recallTip['recalled']    = '该需求已经撤销评审，无法进行撤销操作';
 $lang->story->recallTip['reviewed']    = '已进入评审流程，无法进行撤销操作';
-$lang->story->recallTip['notOpenedBy'] = '您不是评审发起人，无法进行撤销操作';
+$lang->story->recallTip['notOpenedBy'] = '您不是需求创建者，无法进行撤销操作';
 
 $lang->story->subDivideTip = array();
 $lang->story->subDivideTip['subStory']  = '子需求无法细分';
 $lang->story->subDivideTip['planned']   = '该需求已计划，无法进行细分操作';
 $lang->story->subDivideTip['projected'] = '该需求已立项，无法进行细分操作';
-$lang->story->subDivideTip['reviewed']  = '已进入评审流程，无法进行细分操作';
 $lang->story->subDivideTip['notActive'] = '需求不是激活状态，无法进行细分操作';

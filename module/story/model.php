@@ -3884,6 +3884,7 @@ class storyModel extends model
                     if($story->status == 'active' and empty($story->reviewer)) $title = $this->lang->story->recallTip['actived'];
                 }
                 $menu .= $this->buildMenu('story', 'recall', $params, $story, $type, 'undo', 'hiddenwin', '', '', '', $title);
+
                 $menu .= $this->buildMenu('story', 'close', $params, $story, $type, '', '', 'iframe', true);
                 $menu .= $this->buildMenu('story', 'edit', $params . "&from=$story->from", $story, $type);
                 if($story->type != 'requirement' and $this->config->vision != 'lite') $menu .= $this->buildMenu('story', 'createCase', "productID=$story->product&branch=$story->branch&module=0&from=&param=0&$params", $story, $type, 'sitemap', '', '', false, "data-app='qa'");
@@ -3900,10 +3901,9 @@ class storyModel extends model
                         }
                         else
                         {
+                            if($story->status != 'active') $title = $this->lang->story->subDivideTip['notActive'];
                             if(!empty($story->plan)) $title = $this->lang->story->subDivideTip['planned'];
                             if($story->stage == 'projected') $title = $this->lang->story->subDivideTip['projected'];
-                            if($story->status == 'draft' and !empty($story->reviewer)) $title = $this->lang->story->subDivideTip['reviewed'];
-                            if($story->status != 'active') $title = $this->lang->story->subDivideTip['notActive'];
                         }
                     }
                     $menu .= $this->buildMenu('story', 'batchCreate', "productID=$story->product&branch=$story->branch&module=$story->module&$params&executionID={$this->session->project}", $story, $type, 'split', '', '', '', '', $title);

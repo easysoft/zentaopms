@@ -438,5 +438,4 @@ $lang->story->subDivideTip = array();
 $lang->story->subDivideTip['subStory']  = 'Les sous-stories ne peuvent pas être décomposées.';
 $lang->story->subDivideTip['planned']   = 'Cette Story est planifiée et ne peut être subdivisée.';
 $lang->story->subDivideTip['projected'] = 'Cette Story a été créée et ne peut être subdivisée.';
-$lang->story->subDivideTip['reviewed']  = 'Il est entré dans le processus de révision et ne peut être subdivisé.';
 $lang->story->subDivideTip['notActive'] = "Cette Story n'est pas active et ne peut être subdivisée.";
