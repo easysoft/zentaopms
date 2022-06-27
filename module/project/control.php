@@ -1023,7 +1023,6 @@ class project extends control
         $pager = new pager($recTotal, $recPerPage, $pageID);
         $sort  = common::appendOrder($orderBy);
         $bugs  = $this->bug->getProjectBugs($projectID, $productID, $build, $type, $param, $sort, '', $pager);
-        $users = $this->user->getPairs('noletter');
 
         /* team member pairs. */
         $memberPairs   = array();
@@ -1073,7 +1072,6 @@ class project extends control
         $this->view->buildID         = $this->view->build ? $this->view->build->id : 0;
         $this->view->pager           = $pager;
         $this->view->orderBy         = $orderBy;
-        $this->view->users           = $users;
         $this->view->productID       = $productID;
         $this->view->project         = $this->project->getById($projectID);
         $this->view->branchID        = empty($this->view->build->branch) ? $branchID : $this->view->build->branch;
@@ -1082,7 +1080,6 @@ class project extends control
         $this->view->param           = $param;
         $this->view->builds          = $this->loadModel('build')->getBuildPairs($productID);
         $this->view->users           = $this->user->getPairs('noletter');
-        $this->view->memberPairs     = $this->user->getPairs('noletter|noclosed');
         $this->view->branchOption    = $branchOption;
         $this->view->branchTagOption = $branchTagOption;
         $this->view->executions      = $executions;

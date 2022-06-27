@@ -460,6 +460,8 @@ class bugModel extends model
             echo(js::alert($this->lang->bug->executionAccessDenied));
             $loginLink = $this->config->requestType == 'GET' ? "?{$this->config->moduleVar}=user&{$this->config->methodVar}=login" : "user{$this->config->requestFix}login";
             if(strpos($this->server->http_referer, $loginLink) !== false) return print(js::locate(helper::createLink('bug', 'index', '')));
+            if($this->app->tab == 'my') print(js::reload('parent'));
+
             return print(js::locate('back'));
         }
     }
@@ -1898,14 +1900,15 @@ class bugModel extends model
      * get Product member pairs.
      *
      * @param  int    $productID
+     * @param  int    $branchID
      * @access public
      * @return void
      */
-    public function getProductMemberPairs($productID)
+    public function getProductMemberPairs($productID, $branchID = '')
     {
         if(defined('TUTORIAL')) return $this->loadModel('tutorial')->getTeamMembersPairs();
 
-        $projects = $this->loadModel('product')->getProjectPairsByProduct($productID);
+        $projects = $this->loadModel('product')->getProjectPairsByProduct($productID, $branchID);
 
         $users = $this->dao->select("t2.id, t2.account, t2.realname")->from(TABLE_TEAM)->alias('t1')
             ->leftJoin(TABLE_USER)->alias('t2')->on('t1.account = t2.account')
