@@ -11,9 +11,8 @@ class feishuapi
     /**
      * Construct
      *
-     * @param  string $appKey
+     * @param  string $appId
      * @param  string $appSecret
-     * @param  string $agentId
      * @param  string $apiUrl
      * @access public
      * @return void
@@ -147,6 +146,7 @@ class feishuapi
     /**
      * Get department tree structure.
      *
+     * @param  string    $departmentID
      * @access public
      * @return array
      */
@@ -191,7 +191,7 @@ class feishuapi
         /* Gets the enterprise name. */
         $response = $this->queryAPI($this->apiUrl . "tenant/v2/tenant/query", '', array(CURLOPT_CUSTOMREQUEST => "GET"));
         $company  = array('id' => '1', 'pId' => '0', 'name' => $response->data->tenant->name, 'open' => 1);
-        $depts = array($company);
+        $depts    = array($company);
 
         $departmentIdList = $this->getScopes();
 
@@ -229,7 +229,7 @@ class feishuapi
 
         while(true)
         {
-            $response = $this->queryAPI($this->apiUrl . "contact/v3/scopes" . "?user_id_type=open_id&department_id_type=open_department_id&page_token={$pageToken}&page_size=100", '', array(CURLOPT_CUSTOMREQUEST => "GET"));
+            $response      = $this->queryAPI($this->apiUrl . "contact/v3/scopes" . "?user_id_type=open_id&department_id_type=open_department_id&page_token={$pageToken}&page_size=100", '', array(CURLOPT_CUSTOMREQUEST => "GET"));
             $departmentIds = isset($response->data->department_ids) ? $response->data->department_ids : array();
             foreach($departmentIds as $id) $departmentIdList[] = $id;
 
@@ -243,12 +243,13 @@ class feishuapi
     /**
      * Handle the concurrency of requests.
      *
+     * @param  array    $urls
      * @access public
      * @return array
      */
     public function multiRequest($urls)
     {
-        $curl = curl_multi_init();
+        $curl        = curl_multi_init();
         $urlHandlers = array();
         $urlData     = array();
 
@@ -276,7 +277,7 @@ class feishuapi
         }
         while($mrc == CURLM_CALL_MULTI_PERFORM);
 
-        while($active && $mrc == CURLM_OK)
+        while($active and $mrc == CURLM_OK)
         {
             usleep(50000);
             if(curl_multi_select($curl) != -1)
@@ -325,13 +326,13 @@ class feishuapi
      * @access public
      * @return string
      */
-    public function queryAPI($url, $data = '', $opt = array())
+    public function queryAPI($url, $data = '', $options = array())
     {
         $headers = array();
         $headers[] = "Content-Type: application/json";
         if($this->token) $headers[] = "Authorization:Bearer {$this->token}";
 
-        $response = common::http($url, $data, $opt, $headers);
+        $response = common::http($url, $data, $options, $headers);
         $errors   = commonModel::$requestErrors;
 
         $response = json_decode($response);
@@ -342,8 +343,17 @@ class feishuapi
         if(isset($response->code)) $this->errors[$response->code] = "Errcode:{$response->code}, Errmsg:{$response->msg}";
         if(!empty($this->errors))
         {
-            echo js::error(array_shift($this->errors));
-            die(js::locate(helper::createLink('webhook', 'browse')));
+            if(helper::isAjaxRequest())
+            {
+                http_response_code(500);
+                echo array_shift($this->errors);
+                die();
+            }
+            else
+            {
+                echo js::error(array_shift($this->errors));
+                die(js::locate(helper::createLink('webhook', 'browse')));
+            }
         }
         return false;
     }
