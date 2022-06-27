@@ -72,7 +72,7 @@ function ztfExtract($dir)
  * @access public
  * @return void
  */
-function zdRun($model = '')
+function zdRun()
 {
     global $config, $dao;
 
