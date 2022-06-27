@@ -3843,7 +3843,7 @@ class storyModel extends model
         {
             if(common::canBeChanged('story', $story))
             {
-                $storyReviewer = isset($story->revierer) ? $story->reviewer : array();
+                $storyReviewer = isset($story->reviewer) ? $story->reviewer : array();
 
                 if($story->URChanged) return $this->buildMenu('story', 'processStoryChange', $params, $story, $type, 'search', '', 'iframe', true, '', $this->lang->confirm);
 
