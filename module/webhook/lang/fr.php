@@ -87,6 +87,8 @@ $lang->webhook->paramsList['comment']    = 'Commentaire';
 $lang->webhook->paramsList['text']       = "Description de l'Action";
 
 $lang->webhook->confirmDelete = 'Voulez-vous vraiment supprimer ce flux ?';
+$lang->webhook->friendlyTips  = 'Friendly reminder: Click on a department to expand the sub-departments under the department.';
+$lang->webhook->loadPrompt    = 'There is a lot of data and the loading is slow, please wait.';
 
 $lang->webhook->trimWords = '';
 
@@ -104,6 +106,7 @@ $lang->webhook->note->typeList['dingding']  = "Ajout d'un bot personnalisé dans 
 $lang->webhook->note->typeList['weixin']    = "Ajoutez un bot personnalisé dans WeChat et obtenez l'url du webhook.";
 $lang->webhook->note->typeList['default']   = "Obtenir les url d'autres flux webhook.";
 
-$lang->webhook->error = new stdclass();
-$lang->webhook->error->curl   = 'Chargez php-curl dans php.ini.';
-$lang->webhook->error->noDept = 'There is no department selected. Please choose department first.';
+$lang->webhook->error               = new stdclass();
+$lang->webhook->error->curl         = 'Chargez php-curl dans php.ini.';
+$lang->webhook->error->noDept       = 'There is no department selected. Please choose department first.';
+$lang->webhook->error->requestError = 'Request error!';
