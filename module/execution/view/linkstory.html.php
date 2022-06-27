@@ -20,7 +20,7 @@
     <span class='btn btn-link btn-active-text'><span class='text'><?php echo $lang->execution->linkStory;?></span></span>
   </div>
   <div class='btn-toolbar pull-right'>
-    <?php common::printBack($this->createLink($this->app->rawModule, 'story', "objectID=$objectID"), 'btn btn-link');?>
+    <?php echo html::a($browseLink, '<i class="icon icon-back icon-sm"></i> ' . $lang->goback, '', "class='btn btn-secondary'");?>
   </div>
 </div>
 <div id="mainContent">

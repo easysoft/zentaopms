@@ -745,6 +745,7 @@ class execution extends control
 
         /* Save session. */
         $this->app->session->set('storyList', $this->app->getURI(true), 'execution');
+        $this->app->session->set('executionStoryList', $this->app->getURI(true), 'execution');
 
         /* Process the order by field. */
         if(!$orderBy) $orderBy = $this->cookie->executionStoryOrder ? $this->cookie->executionStoryOrder : 'pri';
@@ -2608,6 +2609,8 @@ class execution extends control
         $productPairs = $this->loadModel('product')->getProductPairsByProject($executionID);
         if($productPairs) $productID = key($productPairs);
 
+        $this->app->session->set('executionStoryList', $this->app->getURI(true), 'execution');
+
         $this->view->title        = $this->lang->execution->storyKanban;
         $this->view->position[]   = html::a($this->createLink('execution', 'story', "executionID=$executionID"), $execution->name);
         $this->view->position[]   = $this->lang->execution->storyKanban;
@@ -3034,6 +3037,7 @@ class execution extends control
         $this->view->modules      = $modules;
         $this->view->users        = $this->loadModel('user')->getPairs('noletter');
         $this->view->branchGroups = $branchGroups;
+        $this->view->browseLink   = $this->session->executionStoryList;
 
         $this->display();
     }
