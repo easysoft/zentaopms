@@ -35,6 +35,12 @@
     </div>
   </div>
   <div class="btn-toolbar pull-right">
+    <?php if($config->edition != 'open' and !empty($app->user) and common::hasPriv('todo', 'calendar')):?>
+    <div class="btn-group panel-actions">
+      <?php echo html::a(helper::createLink('todo', 'calendar'), "<i class='icon-cards-view'></i> &nbsp;", '', "class='btn btn-icon' title='{$lang->todo->calendar}' id='switchButton'");?>
+      <?php echo html::a(helper::createLink('my', 'todo', "type=all"), "<i class='icon-list'></i> &nbsp;", '', "class='btn btn-icon text-primary' title='{$lang->todo->list}' id='switchButton'");?>
+    </div>
+    <?php endif;?>
     <?php if(common::hasPriv('todo', 'export')) echo html::a(helper::createLink('todo', 'export', "userID={$user->id}&orderBy=$orderBy", 'html', true), "<i class='icon-export muted'> </i> " . $lang->todo->export, '', "class='btn btn-link export' data-width='600px'");?>
     <?php if(common::hasPriv('todo', 'create') or common::hasPriv('todo', 'batchCreate')):?>
     <div class='btn-group dropdown'>
