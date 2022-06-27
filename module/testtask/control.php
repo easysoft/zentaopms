@@ -325,7 +325,7 @@ class testtask extends control
         }
         elseif($this->app->tab == 'qa')
         {
-            $this->loadModel('qa')->setMenu($this->products, $productID, $task->branch, $taskID);
+            $this->testtask->setMenu($this->products, $productID, $task->branch, $taskID);
         }
 
         $this->executeHooks($taskID);
@@ -488,7 +488,7 @@ class testtask extends control
         }
         else
         {
-            $this->loadModel('qa')->setMenu($this->products, $productID, $task->branch, $taskID);
+            $this->testtask->setMenu($this->products, $productID, $task->branch, $taskID);
         }
         setcookie('preTaskID', $taskID, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, true);
 
@@ -619,7 +619,7 @@ class testtask extends control
         }
         else
         {
-            $this->loadModel('qa')->setMenu($this->products, $productID, $branchID, $taskID);
+            $this->testtask->setMenu($this->products, $productID, $branchID, $taskID);
         }
         unset($this->lang->testtask->report->charts['bugStageGroups']);
         unset($this->lang->testtask->report->charts['bugHandleGroups']);
@@ -683,7 +683,7 @@ class testtask extends control
         }
         else
         {
-            $this->loadModel('qa')->setMenu($this->products, $productID, $task->branch, $taskID);
+            $this->testtask->setMenu($this->products, $productID, $task->branch, $taskID);
         }
 
         /* Determines whether an object is editable. */
@@ -1069,7 +1069,7 @@ class testtask extends control
         }
         else
         {
-            $this->loadModel('qa')->setMenu($this->products, $productID, $task->branch, $taskID);
+            $this->testtask->setMenu($this->products, $productID, $task->branch, $taskID);
         }
 
         /* Load pager. */
@@ -1526,5 +1526,30 @@ class testtask extends control
         /* Testreport list. */
         $pairs = $this->loadModel('testreport')->getPairs($productID);
         return print(html::select('testreport', array('') + $pairs, '', "class='form-control chosen'"));
+    }
+
+    /**
+     * Drop menu page.
+     *
+     * @param  int    $productID
+     * @param  int    $branch
+     * @param  int    $taskID
+     * @access public
+     * @return void
+     */
+    public function ajaxGetDropMenu($productID, $branch, $taskID, $module, $method)
+    {
+        $testtasks = $this->testtask->getProductTasks($productID, $branch, 'id_desc', null, array('local', 'totalStatus'));
+        $namePairs = array_column($testtasks, 'name');
+
+        $this->view->currentTaskID   = $taskID;
+        $this->view->testtasks       = $testtasks;
+        $this->view->module          = $module;
+        $this->view->method          = $method;
+        $this->view->productID       = $productID;
+        $this->view->branch          = $branch;
+        $this->view->testtasksPinyin = common::convert2Pinyin($namePairs);
+
+        $this->display();
     }
 }
