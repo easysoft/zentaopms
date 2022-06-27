@@ -973,6 +973,18 @@ function limitIframeLevel()
     }
 }
 
+/**
+ * Remove html tag.
+ *
+ * @param  str $str
+ * @access public
+ * @return void
+ */
+function removeHtmlTag(str)
+{
+    return str.replace(/<[^>]+>/g,"");
+}
+
 /* Ping the server every some minutes to keep the session. */
 needPing = true;
 
