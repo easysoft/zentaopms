@@ -12,6 +12,7 @@
 
 define('RUNTIME_ROOT', dirname(dirname(__FILE__)) . '/runtime/');
 define('LIB_ROOT', dirname(dirname(__FILE__)) . '/lib/');
+define('TEST_BASEHPATH', dirname(__FILE__, 2));
 
 include LIB_ROOT . 'init.php';
 
@@ -71,7 +72,7 @@ function ztfExtract($dir)
  * @access public
  * @return void
  */
-function zdRun()
+function zdRun($model = '')
 {
     global $config, $dao;
 
@@ -84,7 +85,6 @@ function zdRun()
     set_time_limit(0);
     try
     {
-        $versionType = getVersionType($config->version);
         $configRoot  = $zdRoot . $versionType . '/';
         include $configRoot . 'config.php';
         include $configRoot . 'processor.php';
@@ -205,6 +205,35 @@ function zdRun()
     catch (PDOException $e)
     {
         die('Error!: ' . $e->getMessage() . PHP_EOL);
+    }
+}
+
+function copyDB()
+{
+    global $config;
+    global $dao;
+
+    $dumpCommand   = "mysqldump -u%s -p%s %s > %s";
+    $sqlFile =  TEST_BASEHPATH . DS . 'tmp/raw.sql';
+
+    $currentDBNum = $dao->query("select count(*) from information_schema.SCHEMATA where SCHEMA_NAME like '" . $config->test->dbPrefix . "%'");
+    $dumpCommand = sprintf($dumpCommand, $config->db->user, $config->db->password, $config->test->rawDB, $sqlFile);
+    shell_exec($dumpCommand);
+
+    $dbNum = $config->test->dbNum;
+
+    $dbUsed = array();
+    for ($i = 1; $i <= $dbNum; $i++)
+    {
+        $dbUsed[] =  $config->test->dbPrefix . $i;
+    }
+
+    foreach($dbUsed as $db)
+    {
+        if (!empty($currentDBNum)) $dao->query('drop database ' . $db);
+        $dao->query('CREATE DATABASE ' . $db);
+        shell_exec("mysql -u" . $config->db->user . ' -p' . $config->db->password . ' ' .  $db . '  <  ' . $sqlFile);
+        echo '数据库<' . $db . '>复制成功！';
     }
 }
 
