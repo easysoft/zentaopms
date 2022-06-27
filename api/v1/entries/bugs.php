@@ -87,11 +87,14 @@ class bugsEntry extends entry
         $this->batchSetPost($fields);
 
         $caseID = $this->request('case', 0);
-        if($caseID) $case = $this->loadModel('testcase')->getById($caseID);
-        if($case)
+        if($caseID)
         {
-            $this->setPost('case', $case->id);
-            $this->setPost('caseVersion', $case->version);
+            $case = $this->loadModel('testcase')->getById($caseID);
+            if($case)
+            {
+                $this->setPost('case', $case->id);
+                $this->setPost('caseVersion', $case->version);
+            }
         }
 
         $this->setPost('product', $productID);
