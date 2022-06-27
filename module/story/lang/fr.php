@@ -419,3 +419,24 @@ $lang->story->categoryList['safe']        = 'Safe';
 $lang->story->categoryList['experience']  = 'Experience';
 $lang->story->categoryList['improve']     = 'Improve';
 $lang->story->categoryList['other']       = 'Other';
+
+$lang->story->changeTip = 'Cette Story est en cours de vérification et ne peut pas être modifiée.';
+
+$lang->story->reviewTip = array();
+$lang->story->reviewTip['active']      = "Cette Story est déjà active, il n'y a pas de demande de révision.";
+$lang->story->reviewTip['notReviewer'] = "Vous n'êtes pas l'évaluateur de cette Story et ne pouvez pas effectuer d'opérations d'évaluation.";
+$lang->story->reviewTip['reviewed']    = "Révisé";
+$lang->story->reviewTip['recalled']    = "Cette Story a été retirée pour vérification, et l'opération de révision ne peut pas être effectuée.";
+
+$lang->story->recallTip = array();
+$lang->story->recallTip['actived']     = "Aucun processus de révision n'a été lancé pour cette Story, et il n'est pas nécessaire de révoquer l'opération.";
+$lang->story->recallTip['recalled']    = "Cette Story a été retirée pour vérification, et l'opération ne peut pas être annulée.";
+$lang->story->recallTip['reviewed']    = "Il est entré dans le processus de révision, et l'opération ne peut pas être annulée.";
+$lang->story->recallTip['notOpenedBy'] = "Vous n'êtes pas l'initiateur de la révision et vous ne pouvez pas annuler l'opération.";
+
+$lang->story->subDivideTip = array();
+$lang->story->subDivideTip['subStory']  = 'Les sous-stories ne peuvent pas être décomposées.';
+$lang->story->subDivideTip['planned']   = 'Cette Story est planifiée et ne peut être subdivisée.';
+$lang->story->subDivideTip['projected'] = 'Cette Story a été créée et ne peut être subdivisée.';
+$lang->story->subDivideTip['reviewed']  = 'Il est entré dans le processus de révision et ne peut être subdivisé.';
+$lang->story->subDivideTip['notActive'] = "Cette Story n'est pas active et ne peut être subdivisée.";

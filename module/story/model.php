@@ -3843,16 +3843,71 @@ class storyModel extends model
         {
             if(common::canBeChanged('story', $story))
             {
+                $storyReviewer = isset($story->revierer) ? $story->reviewer : array();
+
                 if($story->URChanged) return $this->buildMenu('story', 'processStoryChange', $params, $story, $type, 'search', '', 'iframe', true, '', $this->lang->confirm);
 
-                $menu .= $this->buildMenu('story', 'change', $params . "&from=$story->from", $story, $type, 'alter');
-                $menu .= $this->buildMenu('story', 'review', $params . "&from=$story->from", $story, $type, 'search');
-                $menu .= $this->buildMenu('story', 'recall', $params, $story, $type, 'undo', 'hiddenwin', '', '', '', $this->lang->story->recall);
+                $isClick = $this->isClickable($story, 'change');
+                $title   = $isClick ? '' : $this->lang->story->changeTip;
+                $menu   .= $this->buildMenu('story', 'change', $params . "&from=$story->from", $story, $type, 'alter', '', '', false, '', $title);
+
+                $isClick = $this->isClickable($story, 'review');
+                $title   = $this->lang->story->review;
+                if(!$isClick)
+                {
+                    if($story->status == 'active')
+                    {
+                        $title = $this->lang->story->reviewTip['active'];
+                    }
+                    elseif($storyReviewer and in_array($this->app->user->account, $storyReviewer))
+                    {
+                        $title = $this->lang->story->reviewTip['reviewed'];
+                    }
+                    elseif($storyReviewer and !in_array($this->app->user->account, $storyReviewer))
+                    {
+                        $title = $this->lang->story->reviewTip['notReviewer'];
+                    }
+                    elseif(empty($storyReviewer))
+                    {
+                        $title = $this->lang->story->reviewTip['recalled'];
+                    }
+                }
+                $menu .= $this->buildMenu('story', 'review', $params . "&from=$story->from", $story, $type, 'search', '', '', false, '', $title);
+
+                $title   = $this->lang->story->recall;
+                $isClick = $this->isClickable($story, 'recall');
+                if(!$isClick)
+                {
+                    if($story->status == 'draft' and empty($storyReviewer)) $title = $this->lang->story->recallTip['recalled'];
+                    if($story->status == 'draft' and !empty($storyReviewer)) $title = $this->lang->story->recallTip['reviewed'];
+                    if(empty($story->reviewedBy) and strpos('draft,changed', $story->status) !== false and !empty($story->reviewer) and $this->app->user->account != $story->openedBy) $title = $this->lang->story->recallTip['notOpenedBy'];
+                    if($story->status == 'active' and empty($story->reviewer)) $title = $this->lang->story->recallTip['actived'];
+                }
+                $menu .= $this->buildMenu('story', 'recall', $params, $story, $type, 'undo', 'hiddenwin', '', '', '', $title);
                 $menu .= $this->buildMenu('story', 'close', $params, $story, $type, '', '', 'iframe', true);
                 $menu .= $this->buildMenu('story', 'edit', $params . "&from=$story->from", $story, $type);
-
                 if($story->type != 'requirement' and $this->config->vision != 'lite') $menu .= $this->buildMenu('story', 'createCase', "productID=$story->product&branch=$story->branch&module=0&from=&param=0&$params", $story, $type, 'sitemap', '', '', false, "data-app='qa'");
-                if($this->app->rawModule != 'projectstory' OR $this->config->vision == 'lite')  $menu .= $this->buildMenu('story', 'batchCreate', "productID=$story->product&branch=$story->branch&module=$story->module&$params&executionID={$this->session->project}", $story, $type, 'split', '', '', '', '', $this->lang->story->subdivide);
+
+                if($this->app->rawModule != 'projectstory' OR $this->config->vision == 'lite')
+                {
+                    $isClick = $this->isClickable($story, 'batchcreate');
+                    $title   = $this->lang->story->subdivide;
+                    if(!$isClick)
+                    {
+                        if($story->parent > 0)
+                        {
+                            $title = $this->lang->story->subDivideTip['subStory'];
+                        }
+                        else
+                        {
+                            if(!empty($story->plan)) $title = $this->lang->story->subDivideTip['planned'];
+                            if($story->stage == 'projected') $title = $this->lang->story->subDivideTip['projected'];
+                            if($story->status == 'draft' and !empty($story->reviewer)) $title = $this->lang->story->subDivideTip['reviewed'];
+                            if($story->status != 'active') $title = $this->lang->story->subDivideTip['notActive'];
+                        }
+                    }
+                    $menu .= $this->buildMenu('story', 'batchCreate', "productID=$story->product&branch=$story->branch&module=$story->module&$params&executionID={$this->session->project}", $story, $type, 'split', '', '', '', '', $title);
+                }
                 if($this->app->rawModule == 'projectstory' and $this->config->vision != 'lite') $menu .= $this->buildMenu('projectstory', 'unlinkStory', "projectID={$this->session->project}&$params", $story, $type, 'unlink', 'hiddenwin');
             }
             else
