@@ -114,7 +114,7 @@ tbody tr td:first-child input {display: none;}
                   }
                   else
                   {
-                      echo '<a>' . $story->title . '</a>';
+                      echo $story->title;
                   }
                   ?>
                 </td>
