@@ -81,6 +81,7 @@ $lang->retrack        = '收起';
 $lang->whitelist      = '访问白名单';
 $lang->globalSetting  = '全局设置';
 $lang->waterfallModel = '瀑布模型';
+$lang->scrumModel     = '敏捷模型';
 $lang->all            = '所有';
 $lang->viewDetails    = '查看详情';
 
