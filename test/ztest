@@ -9,6 +9,9 @@ switch($argv[1])
     case 'init':
         zdRun();
         break;
+    case 'copyDB':
+        copyDB();
+        break;
     case 'extract':
         ztfExtract('api');
         ztfExtract('model');

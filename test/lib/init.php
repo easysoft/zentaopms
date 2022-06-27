@@ -15,6 +15,7 @@
 /* Set the error reporting. */
 error_reporting(E_ALL & E_STRICT);
 
+$testPath      = dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'test' . DIRECTORY_SEPARATOR;
 $frameworkRoot = dirname(dirname(dirname(__FILE__))) . DIRECTORY_SEPARATOR . 'framework' . DIRECTORY_SEPARATOR;
 
 /**
@@ -50,6 +51,11 @@ $tester = $app->loadCommon();
 $config->zendataRoot = dirname(dirname(__FILE__)) . '/zendata';
 $config->ztfPath     = dirname(dirname(__FILE__)) . '/tools/ztf';
 $config->zdPath      = dirname(dirname(__FILE__)) . '/tools/zd';
+
+/* init testDB. */
+include $testPath . 'config/config.php';
+include $testPath. 'lib/db.class.php';
+$db = new db();
 
 /**
  * Save variable to $_result.
