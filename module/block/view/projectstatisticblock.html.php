@@ -65,7 +65,7 @@ html[lang="en"] .product-info .type-info {color: #A6AAB8; text-align: center; po
 .block-statistic .executionName {padding: 2px 10px; font-size: 14px; text-overflow: ellipsis; overflow: hidden; white-space: nowrap;}
 .block-statistic .lastIteration {padding-top: 6px;}
 .block-statistic .progress-text-left {margin-right: 90px}
-.block-statistic .progress-text-left .progress-text {padding-top: 2px; font-size: 14px; padding-right:5px; left: -45px;}
+.block-statistic .progress-text-left .progress-text {padding-top: 2px; font-size: 14px; padding-right:5px; left: -50px;}
 
 .status-count {margin: auto;}
 .status-count tr:first-child td:last-child {color: #000; font-weight: bold;}
