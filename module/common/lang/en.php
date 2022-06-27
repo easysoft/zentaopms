@@ -81,6 +81,7 @@ $lang->retrack        = 'Retrack';
 $lang->whitelist      = 'Access whitelist';
 $lang->globalSetting  = 'Global Setting';
 $lang->waterfallModel = 'Waterfall';
+$lang->scrumModel     = 'Scrum';
 $lang->all            = 'All';
 $lang->viewDetails    = 'View Details';
 
