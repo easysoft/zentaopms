@@ -166,6 +166,7 @@ $lang->custom->testcase->fields['review']     = 'Need Review';
 
 $lang->custom->testtask = new stdClass();
 $lang->custom->testtask->fields['priList']    = 'Priority';
+$lang->custom->testtask->fields['typeList']   = 'Type';
 $lang->custom->testtask->fields['statusList'] = 'Status';
 
 $lang->custom->todo = new stdClass();
