@@ -543,7 +543,7 @@ class program extends control
     {
         if($confirm == 'no')
         {
-            return print(js::confirm($this->lang->program->unlinkStakeholder, $this->inlink('unlinkStakeholder', "stakeholderID=$stakeholderID&programID=$programID&confirm=yes")));
+            return print(js::confirm($this->lang->program->confirmUnlink, $this->inlink('unlinkStakeholder', "stakeholderID=$stakeholderID&programID=$programID&confirm=yes")));
         }
         else
         {
