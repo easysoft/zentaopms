@@ -86,6 +86,14 @@ class bugsEntry extends entry
         $fields = 'title,project,execution,openedBuild,assignedTo,pri,module,severity,type,story,task,mailto,keywords,steps,uid';
         $this->batchSetPost($fields);
 
+        $caseID = $this->request('case', 0);
+        if($caseID) $case = $this->loadModel('testcase')->getById($caseID);
+        if($case)
+        {
+            $this->setPost('case', $case->id);
+            $this->setPost('caseVersion', $case->version);
+        }
+
         $this->setPost('product', $productID);
         $this->setPost('notifyEmail', implode(',', $this->request('notifyEmail', array())));
 
