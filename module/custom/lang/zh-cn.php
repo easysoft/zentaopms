@@ -166,6 +166,7 @@ $lang->custom->testcase->fields['review']     = '评审流程';
 
 $lang->custom->testtask = new stdClass();
 $lang->custom->testtask->fields['priList']    = '优先级';
+$lang->custom->testtask->fields['typeList']   = '测试类型';
 $lang->custom->testtask->fields['statusList'] = '状态';
 
 $lang->custom->todo = new stdClass();

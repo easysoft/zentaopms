@@ -25,7 +25,7 @@
       <div class='list-group'>
         <?php
         echo html::a($this->createLink('admin', 'safe'), $lang->admin->safe->set);
-        echo html::a($this->createLink('admin', 'checkWeak'), $lang->admin->safe->checkWeak);
+        if(common::hasPriv('admin', 'checkWeak')) echo html::a($this->createLink('admin', 'checkWeak'), $lang->admin->safe->checkWeak);
         echo html::a($this->createLink('admin', 'resetPWDSetting'), $lang->admin->resetPWDSetting, '', "class='active'");
         ?>
       </div>
