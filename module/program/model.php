@@ -709,13 +709,13 @@ class programModel extends model
             if($parentProgram)
             {
                 /* Child program begin cannot less than parent. */
-                if($program->begin < $parentProgram->begin) dao::$errors['begin'] = sprintf($this->lang->program->beginLetterParent, $program->name, $parentProgram->name, $parentProgram->begin);
+                if(!empty($program->name) and $program->begin < $parentProgram->begin) dao::$errors['begin'] = sprintf($this->lang->program->beginLetterParent, $program->name, $parentProgram->name, $parentProgram->begin);
 
                 /* When parent set end then child program end cannot greater than parent. */
-                if($parentProgram->end != '0000-00-00' and $program->end > $parentProgram->end) dao::$errors['end'] = sprintf($this->lang->program->endGreaterParent, $program->name, $parentProgram->name, $parentProgram->end);
+                if(!empty($program->name) and$parentProgram->end != '0000-00-00' and $program->end > $parentProgram->end) dao::$errors['end'] = sprintf($this->lang->program->endGreaterParent, $program->name, $parentProgram->name, $parentProgram->end);
 
                 /* When parent set end then child program cannot set longTime. */
-                if(empty($program->end) and $this->post->delta == 999 and $parentProgram->end != '0000-00-00') dao::$errors['end'] = sprintf($this->lang->program->endGreaterParent, $program->name, $parentProgram->name, $parentProgram->end);
+                if(!empty($program->name) and empty($program->end) and $this->post->delta == 999 and $parentProgram->end != '0000-00-00') dao::$errors['end'] = sprintf($this->lang->program->endGreaterParent, $program->name, $parentProgram->name, $parentProgram->end);
 
                 /* The budget of a child program cannot beyond the remaining budget of the parent program. */
                 $program->budgetUnit = $parentProgram->budgetUnit;
@@ -818,9 +818,9 @@ class programModel extends model
             $parentProgram = $this->dao->select('*')->from(TABLE_PROGRAM)->where('id')->eq($program->parent)->fetch();
             if($parentProgram)
             {
-                if($program->begin < $parentProgram->begin) dao::$errors['begin'] = sprintf($this->lang->program->beginLetterParent, $program->name, $parentProgram->name, $parentProgram->begin);
-                if($parentProgram->end != '0000-00-00' and $program->end > $parentProgram->end) dao::$errors['end'] = sprintf($this->lang->program->endGreaterParent, $program->name, $parentProgram->name, $parentProgram->end);
-                if(empty($program->end) and $this->post->delta == 999 and $parentProgram->end != '0000-00-00') dao::$errors['end'] = sprintf($this->lang->program->endGreaterParent, $program->name, $parentProgram->name, $parentProgram->end);
+                if(!empty($program->name) and $program->begin < $parentProgram->begin) dao::$errors['begin'] = sprintf($this->lang->program->beginLetterParent, $program->name, $parentProgram->name, $parentProgram->begin);
+                if(!empty($program->name) and $parentProgram->end != '0000-00-00' and $program->end > $parentProgram->end) dao::$errors['end'] = sprintf($this->lang->program->endGreaterParent, $program->name, $parentProgram->name, $parentProgram->end);
+                if(!empty($program->name) and empty($program->end) and $this->post->delta == 999 and $parentProgram->end != '0000-00-00') dao::$errors['end'] = sprintf($this->lang->program->endGreaterParent, $program->name, $parentProgram->name, $parentProgram->end);
             }
 
             /* The budget of a child program cannot beyond the remaining budget of the parent program. */
