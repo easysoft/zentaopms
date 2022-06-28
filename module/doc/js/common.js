@@ -58,7 +58,7 @@ function toggleAcl(acl, type)
             $.get(link, function(users)
             {
                 $('#users').replaceWith(users);
-                $('#user').next(' .picker').remove();
+                $('#users').next('.picker').remove();
                 $('#users').picker();
             })
         }
