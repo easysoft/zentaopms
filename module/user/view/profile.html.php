@@ -13,7 +13,12 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/tablesorter.html.php';?>
 <?php if(!isonlybody()):?>
-<style>#mainContent{width: 60%; margin-left: 20%;}</style>
+<?php include './featurebar.html.php';?>
+<style>
+#mainContent {width: 60%; margin-left: 20%;}
+.cell .avatar {left: 45% !important;}
+.user-name, .user-role {padding-left: 47% !important;}
+</style>
 <?php endif;?>
 <?php if(!zget($lang->user->roleList, $user->role, '')):?>
 <style>.user-name {line-height: 40px;}</style>
