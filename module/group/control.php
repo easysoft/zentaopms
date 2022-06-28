@@ -317,7 +317,9 @@ class group extends control
         $this->view->title         = $title;
         $this->view->position      = $position;
         $this->view->allUsers      = array('' => '') + $groupUsers + $this->loadModel('dept')->getDeptUserPairs($deptID);
+        $this->view->groupID       = $groupID;
         $this->view->deptID        = $deptID;
+        $this->view->deptName      = $deptID ? $this->dao->findById($deptID)->from(TABLE_DEPT)->fetch('name') : '';
         $this->view->programs      = $programs;
         $this->view->projects      = $projects;
         $this->view->products      = $products;
