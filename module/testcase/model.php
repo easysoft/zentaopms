@@ -2364,11 +2364,13 @@ class testcaseModel extends model
                 {
                     $menu .= $this->buildMenu('testtask', 'runCase', "$extraParams&version=$case->currentVersion", $case, 'view', 'play', '', 'showinonlybody', false, "data-width='95%'");
                     $menu .= $this->buildMenu('testtask', 'results', "$extraParams&version=$case->version",        $case, 'view', '', '', 'showinonlybody', false, "data-width='95%'");
+                    $menu .= $this->buildMenu('testcase', 'importToLib', $params,                                  $case, 'view', 'assets', '', 'showinonlybody iframe', true, "data-width='500px'");
                 }
                 else
                 {
                     $menu .= $this->buildMenu('testtask', 'runCase', "$extraParams&version=$case->currentVersion", $case, 'view', 'play', '', 'showinonlybody iframe', false, "data-width='95%'");
                     $menu .= $this->buildMenu('testtask', 'results', "$extraParams&version=$case->version",        $case, 'view', '', '', 'showinonlybody iframe', false, "data-width='95%'");
+                    $menu .= $this->buildMenu('testcase', 'importToLib', $params,                                  $case, 'view', 'assets', '', 'showinonlybody iframe', true, "data-width='500px'");
                 }
                 if($case->caseFails > 0)
                 {

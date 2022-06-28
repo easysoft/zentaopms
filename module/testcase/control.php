@@ -2172,7 +2172,8 @@ class testcase extends control
         if(!empty($_POST))
         {
             $this->testcase->importToLib($caseID);
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'reload'));
+            if(!empty($caseID)) return $this->send(array('result' => 'success', 'message' => $this->lang->importSuccess, 'closeModal' => true,));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->importSuccess, 'locate' => 'reload'));
         }
         $this->view->libraries = $this->loadModel('caselib')->getLibraries();
         $this->display();

@@ -18,7 +18,7 @@
         <small> <?php echo $lang->testcase->importToLib;?></small>
       </div>
     </div>
-    <form id='libs' method='post' target='hiddenwin'>
+    <form id='libs' method='post' class='form-ajax'>
       <table class='table table-form'>
         <tr>
           <td class='select-lib'><?php echo $lang->testcase->selectLibAB;?></td>
