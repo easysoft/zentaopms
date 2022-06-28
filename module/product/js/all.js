@@ -60,6 +60,23 @@ $(function()
         });
     }
 
+    /* Add a statistics prompt statement after the Edit button */
+    function addStatistic()
+    {
+        var checkedLength = $(":checkbox[name^='productIDList']:checked").length;
+        var summary = checkedProducts.replace('%s', checkedLength);
+        var statistic = "<div id='productsSummary' class='statistic'>" + summary + "</div>";
+        if(checkedLength > 0)
+        {
+            $('#productsSummary').remove();
+            $('#editBtn').after(statistic);
+        }
+        else
+        {
+            $('#productsSummary').addClass('hidden');
+        }
+    }
+
     $('#productTableList').on('click', '.row-program,.row-line', function(e)
     {
         if($(e.target).closest('.table-nest-toggle,a').length) return;
@@ -79,36 +96,14 @@ $(function()
         {
             updatePrarentCheckbox($('#productTableList>tr[data-id="' + parentID + '"]'));
         }
-        var checkedLength = $(":checkbox[name^='productIDList']:checked").length;
-        var summary = checkedProducts.replace('%s', checkedLength);
-        var statistic = "<div id='productsSummary' class='statistic'>" + summary + "</div>";
-        if(checkedLength > 0)
-        {
-            $('#productsSummary').remove();
-            $('#editBtn').after(statistic);
-        }
-        else
-        {
-            $('#productsSummary').addClass('hidden');
-        }
+        addStatistic()
     });
 
     $('#productListForm').on('checkChange', updateCheckboxes);
     updateCheckboxes();
     $(":checkbox[name^='productIDList']").on('click', function()
     {
-        var checkedLength = $(":checkbox[name^='productIDList']:checked").length;
-        var summary = checkedProducts.replace('%s', checkedLength);
-        var statistic = "<div id='productsSummary' class='statistic'>" + summary + "</div>";
-        if(checkedLength > 0)
-        {
-            $('#productsSummary').remove();
-            $('#editBtn').after(statistic);
-        }
-        else
-        {
-            $('#productsSummary').addClass('hidden');
-        }
+        addStatistic()
     });
 
     $(".check-all").on('click', function()
@@ -121,17 +116,6 @@ $(function()
         {
             $(":checkbox[name^='productIDList']").prop('checked', true);
         }
-        var checkedLength = $(":checkbox[name^='productIDList']:checked").length;
-        var summary = checkedProducts.replace('%s', checkedLength);
-        var statistic = "<div id='productsSummary' class='statistic'>" + summary + "</div>";
-        if(checkedLength > 0)
-        {
-            $('#productsSummary').remove();
-            $('#editBtn').after(statistic);
-        }
-        else
-        {
-            $('#productsSummary').addClass('hidden');
-        }
+        addStatistic()
     });
 });
