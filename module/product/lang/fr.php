@@ -34,7 +34,7 @@ $lang->product->changeProgram    = "{$lang->productCommon} confirmation of the s
 $lang->product->changeProgramTip = "%s > Change Program";
 $lang->product->addWhitelist     = 'Add Whitelist';
 $lang->product->unbindWhitelist  = 'Remove Whitelist';
-$lang->product->checkedProducts  = '%s produits ont étésélectionnés.'
+$lang->product->checkedProducts  = '%s produits s électionnés'
 
 $lang->product->indexAction  = "All {$lang->productCommon}";
 $lang->product->closeAction  = "Fermer {$lang->productCommon}";
