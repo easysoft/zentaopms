@@ -20,3 +20,63 @@ function setStoryModule()
     }
 }
 
+/**
+ * Checked show fields.
+ *
+ * @param  string fields
+ * @access public
+ * @return void
+ */
+function checkedShowFields(fields)
+{
+    var fieldList = ',' + fields + ',';
+    $('#formSettingForm > .checkboxes > .checkbox-primary > input').each(function()
+    {
+        var field     = ',' + $(this).val() + ',';
+        var $fieldBox = $('.' + $(this).val() + 'Box' );
+        if(fieldList.indexOf(field) >= 0)
+        {
+
+            $(this).attr('checked', true);
+            $fieldBox.removeClass('hidden');
+        }
+        else
+        {
+            if(!$fieldBox.hasClass('hidden')) $fieldBox.addClass('hidden');
+        }
+    });
+
+    if(config.currentMethod == 'create');
+    {
+        if(fieldList.indexOf(',estStarted,') >= 0 && fieldList.indexOf(',deadline,') >= 0)
+        {
+            $('.borderBox').removeClass('hidden');
+        }
+        else if(fieldList.indexOf(',estStarted,') >= 0 || fieldList.indexOf(',deadline,') >= 0)
+        {
+            $('.datePlanBox').removeClass('hidden');
+            if(!$('.borderBox').hasClass('hidden')) $('.borderBox').addClass('hidden');
+        }
+        else
+        {
+            if(!$('.borderBox').hasClass('hidden')) $('.borderBox').addClass('hidden');
+            if(!$('.datePlanBox').hasClass('hidden')) $('.datePlanBox').addClass('hidden');
+        }
+    }
+}
+
+/**
+ * Disabled require field.
+ *
+ * @access public
+ * @return void
+ */
+function disabledRequireFields()
+{
+    $('#formSettingForm > .checkboxes > .checkbox-primary > input').each(function()
+    {
+        var field    = ',' + $(this).val() + ',';
+        var required = ',' + requiredFields + ',';
+        if(required.indexOf(field) >= 0) $(this).attr('disabled', 'disabled');
+    });
+}

@@ -675,14 +675,16 @@ class custom extends control
         $account = $this->app->user->account;
         if($this->server->request_method == 'POST')
         {
-            $fields  = $this->post->fields;
+            $fields = $this->post->fields;
             if(is_array($fields)) $fields = join(',', $fields);
             $this->loadModel('setting')->setItem("$account.$module.$section.$key", $fields);
+            if(in_array($module, array('task', 'bug', 'testcase', 'story')) and $section == 'custom' and in_array($key, array('createFields', 'batchCreateFields'))) return;
         }
         else
         {
             $this->loadModel('setting')->deleteItems("owner=$account&module=$module&section=$section&key=$key");
         }
+
         return print(js::reload('parent'));
     }
 

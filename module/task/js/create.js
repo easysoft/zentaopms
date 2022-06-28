@@ -1,3 +1,31 @@
+$(function()
+{
+    $('#customField').click(function()
+    {
+        disabledRequireFields();
+    });
+
+    $('#formSettingForm .btn-primary').click(function()
+    {
+        $('#formSettingForm > .checkboxes > .checkbox-primary > input').removeAttr('disabled');
+        var fields = '';
+        $('#formSettingForm > .checkboxes > .checkbox-primary > input:checked').each(function()
+        {
+            fields += ',' + $(this).val();
+        });
+
+        var link = createLink('custom', 'ajaxSaveCustomFields', 'module=task&section=custom&key=createFields');
+        $.post(link, {'fields' : fields}, function()
+        {
+            checkedShowFields(fields);
+            disabledRequireFields();
+            $('#formSetting').parent().removeClass('open');
+        });
+
+        return false;
+    });
+})
+
 /**
  * Load module, stories and members.
  *
