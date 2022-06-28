@@ -1289,14 +1289,28 @@ class bug extends control
             }
         }
 
+        $projectMemberGroup     = $this->project->getTeamMemberGroup($projectIdList);
+        $projectMembers         = array();
         foreach($projectIdList as $projectID)
         {
-            $projectMembers[$projectID] = $this->project->getTeamMemberPairs($projectID);
+            $projectTeam = zget($projectMemberGroup, $projectID, array());
+            if(empty($projectTeam)) $projectMembers[$projectID] = array();
+            foreach($projectTeam as $user)
+            {
+                $projectMembers[$projectID][$user->account] = $user->realname;
+            }
         }
 
+        $executionMemberGroup = $this->execution->getMembersByIdList($executionIdList);
+        $executionMembers     = array();
         foreach($executionIdList as $executionID)
         {
-            $executionMembers[$executionID] = $this->user->getTeamMemberPairs($executionID, 'execution');
+            $executionTeam = zget($executionMemberGroup, $executionID, array());
+            if(empty($executionTeam)) $executionMemberGroup[$executionID] = array();
+            foreach($executionTeam as $user)
+            {
+                $executionMembers[$executionID][$user->account] = $user->realname;
+            }
         }
 
         /* Set users. */
