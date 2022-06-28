@@ -142,6 +142,16 @@ $(function()
                             }
                         }
                         ztreeObj.expandNode(treeNode, true, false, false);
+
+                        if(treeNode.checked && !treeNode.nocheck)
+                        {
+                            var childs = getChildNodes(treeNode);
+                            for(i = 0; i < childs.length; i++)
+                            {
+                                var node = ztreeObj.getNodeByParam("id", childs[i]);
+                                ztreeObj.checkNode(node, true, true);
+                            }
+                        }
                     }
                 },
                 error: function()
@@ -149,6 +159,17 @@ $(function()
                     alert(requestError);
                 }
             });
+        }
+
+        function getChildNodes(treeNode)
+        {
+            var childNodes = ztreeObj.transformToArray(treeNode);
+            var nodes      = new Array();
+            for(i = 0; i < childNodes.length; i++)
+            {
+                nodes[i] = childNodes[i].id;
+            }
+            return nodes;
         }
 
         function zTreeOnAsyncSuccess()
