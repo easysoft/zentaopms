@@ -22,7 +22,7 @@
       <table class='table table-form'>
         <tr>
           <td class='select-lib'><?php echo $lang->testcase->selectLibAB;?></td>
-          <td class='required'><?php echo html::select('lib', $libraries, '', "class='form-control chosen' id='lib'");?></td>
+          <td class='required'><?php echo html::select('lib', $libraries, '', "class='form-control chosen' id='lib' data-drop_direction='down'");?></td>
         </tr>
         <tr>
           <td colspan='2' class='text-center'><?php echo html::submitButton($lang->testcase->import);?></td>

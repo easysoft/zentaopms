@@ -46,6 +46,7 @@ $lang->block->lblFlowchart = '流程图';
 $lang->block->welcome      = '欢迎总览';
 $lang->block->lblTesttask  = '查看测试详情';
 $lang->block->contribute   = '我的贡献';
+$lang->block->finish       = '已完成';
 
 $lang->block->leftToday           = '今天剩余工作总计';
 $lang->block->myTask              = '我的任务';
@@ -79,6 +80,7 @@ $lang->block->month               = '月';
 $lang->block->selectProduct       = '选择产品';
 $lang->block->of                  = '的';
 $lang->block->remain              = '剩余工时';
+$lang->block->allStories          = '总需求';
 
 $lang->block->createBlock        = '添加区块';
 $lang->block->editBlock          = '编辑区块';

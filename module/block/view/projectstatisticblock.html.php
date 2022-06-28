@@ -139,11 +139,11 @@ $(function()
             <div class="col-4 text-center">
               <div><h4><?php echo $lang->block->storyCount;?></h4></div>
               <div>
-                <div class="col dataTitle"><?php echo $lang->project->allStories . "：";?></div>
+                <div class="col dataTitle"><?php echo $lang->block->allStories . "：";?></div>
                 <div class="col data"><?php echo $project->allStories;?></div>
               </div>
               <div>
-                <div class="col dataTitle"><?php echo $lang->project->doneStories . "：";?></div>
+                <div class="col dataTitle"><?php echo $lang->block->finish . "：";?></div>
                 <div class="col data"><?php echo $project->doneStories;?></div>
               </div>
               <div>
