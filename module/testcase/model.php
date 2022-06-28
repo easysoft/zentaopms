@@ -1660,7 +1660,7 @@ class testcaseModel extends model
     /**
      * Import cases to lib.
      *
-     * @param  int    $caseID
+     * @param  int    $caseIdList
      * @access public
      * @return void
      */
