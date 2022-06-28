@@ -1163,7 +1163,7 @@ class product extends control
         /* Init vars. */
         $idList  = explode(',', trim($this->post->products, ','));
         $orderBy = $this->post->orderBy;
-        if(strpos($orderBy, 'order') === false) return false;
+        if(strpos($orderBy, 'program') === false) return false;
 
         /* Remove programID. */
         foreach($idList as $i => $id)
@@ -1172,7 +1172,12 @@ class product extends control
         }
 
         /* Update order. */
-        $products = $this->dao->select('id,`order`')->from(TABLE_PRODUCT)->where('id')->in($idList)->orderBy($orderBy)->fetchPairs('order', 'id');
+        $products = $this->dao->select('t1.`order`')->from(TABLE_PRODUCT)->alias('t1')
+            ->leftJoin(TABLE_PROGRAM)->alias('t2')->on('t1.program = t2.id')
+            ->where('t1.id')->in($idList)
+            ->orderBy('t2.order_asc, t1.line_desc, t1.order_asc')
+            ->fetchPairs('order', 'id');
+
         foreach($products as $order => $id)
         {
             $newID = array_shift($idList);
