@@ -241,10 +241,11 @@ $lang->project->modelList['waterfall'] = "CMMI";
 $lang->project->modelList['kanban']    = "Kanban";
 
 $lang->project->featureBar['all']       = 'All';
-$lang->project->featureBar['doing']     = 'Doing';
-$lang->project->featureBar['wait']      = 'Waiting';
-$lang->project->featureBar['suspended'] = 'Suspended';
-$lang->project->featureBar['closed']    = 'Closed';
+$lang->project->featureBar['undone']    = 'Non Terminées';
+$lang->project->featureBar['wait']      = 'En Attente';
+$lang->project->featureBar['doing']     = 'En Cours';
+$lang->project->featureBar['suspended'] = 'Suspendues';
+$lang->project->featureBar['closed']    = 'Fermées';
 
 $lang->project->aclList['private'] = 'Private (For team members and stakeholders only)';
 $lang->project->aclList['open']    = "Open (accessible with project view permissions)";

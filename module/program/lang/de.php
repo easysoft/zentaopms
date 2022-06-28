@@ -138,7 +138,12 @@ $lang->program->statusList['doing']     = 'Doing';
 $lang->program->statusList['suspended'] = 'Suspended';
 $lang->program->statusList['closed']    = 'Closed';
 
-$lang->program->featureBar['all'] = 'All';
+$lang->program->featureBar['all']       = 'All';
+$lang->program->featureBar['undone']    = 'Unfinished';
+$lang->program->featureBar['wait']      = 'Waiting';
+$lang->program->featureBar['doing']     = 'Doing';
+$lang->program->featureBar['suspended'] = 'Suspended';
+$lang->program->featureBar['closed']    = 'Closed';
 
 $lang->program->kanban = new stdclass();
 $lang->program->kanban->common             = 'Program Kanban';
