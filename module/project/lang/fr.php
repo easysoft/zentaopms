@@ -317,8 +317,8 @@ $lang->project->parentBeginEnd      = "Parent begin&end date: %s ~ %s";
 $lang->project->parentBudget        = "The budget of the parent project: ";
 $lang->project->beginLetterParent   = "The begin date of the parent project: %s. It cannot be < the begin date of its parent project.";
 $lang->project->endGreaterParent    = "The end date of the parent project: %s. It cannot be > the end date of its parent project.";
-$lang->project->beginGreateChild    = 'La date de début du projet "%s" doit être supérieure ou égale à la date de début minimale du projet "%s" set : % s';
-$lang->project->endLetterChild      = 'La date d\'achèvement du projet "%s" doit être inférieure ou égale à la date d\'achèvement maximale de l\'ensemble du projet "%s" set: % s';
+$lang->project->beginGreateChild    = 'La date de début du projets "%s" doit être ≥ à la date de début du programme "%s" : %s.';
+$lang->project->endLetterChild      = 'La date de fin du projets "%s" doit être ≤ à la date de fin du programme "%s" : %s.';
 $lang->project->childLongTime       = "If a child as long-term projects, the parent should be long-term too.";
 $lang->project->confirmUnlinkMember = "Do you want to remove this user from project?";
 
