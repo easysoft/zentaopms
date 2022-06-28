@@ -64,8 +64,8 @@ $(function()
     function addStatistic()
     {
         var checkedLength = $(":checkbox[name^='productIDList']:checked").length;
-        var summary = checkedProducts.replace('%s', checkedLength);
-        var statistic = "<div id='productsSummary' class='statistic'>" + summary + "</div>";
+        var summary       = checkedProducts.replace('%s', checkedLength);
+        var statistic     = "<div id='productsSummary' class='statistic'>" + summary + "</div>";
         if(checkedLength > 0)
         {
             $('#productsSummary').remove();
