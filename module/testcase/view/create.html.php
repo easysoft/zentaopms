@@ -21,15 +21,6 @@
 <?php js::set('tab', $this->app->tab);?>
 <?php if($this->app->tab == 'execution') js::set('objectID', $executionID);?>
 <?php if($this->app->tab == 'project') js::set('objectID', $projectID);?>
-<?php js::set('requiredFields', $config->testcase->create->requiredFields);?>
-<?php
-foreach(explode(',', $config->testcase->custom->createFields) as $field)
-{
-    if(empty($field)) continue;
-    $fieldName = 'show' . ucfirst($field);
-    ${$fieldName} = strpos(",$showFields,", $field) !== false ? " {$field}Box" : "{$field}Box hidden";
-}
-?>
 <div id='mainContent' class='main-content'>
   <div class='center-block'>
     <div class='main-header'>
@@ -76,14 +67,17 @@ foreach(explode(',', $config->testcase->custom->createFields) as $field)
             <th><?php echo $lang->testcase->type;?></th>
             <?php unset($lang->testcase->typeList['unit']);?>
             <td><?php echo html::select('type', $lang->testcase->typeList, $type, "class='form-control chosen'");?></td>
-            <td style='padding-left:15px' class='<?php echo $showStage?>'>
+            <?php if(strpos(",$showFields,", 'stage') !== false):?>
+            <td style='padding-left:15px'>
               <div class='input-group'>
                 <span class='input-group-addon w-80px'><?php echo $lang->testcase->stage?></span>
                 <?php echo html::select('stage[]', $lang->testcase->stageList, $stage, "class='form-control chosen' multiple='multiple'");?>
               </div>
             </td>
+            <?php endif;?>
           </tr>
-          <tr class='<?php echo $showStory;?>'>
+          <?php if(strpos(",$showFields,", ',story,') !== false):?>
+          <tr>
             <th><?php echo $lang->testcase->lblStory;?></th>
             <td colspan='2'>
               <div class='input-group' id='storyIdBox'>
@@ -99,6 +93,7 @@ foreach(explode(',', $config->testcase->custom->createFields) as $field)
               </div>
             </td>
           </tr>
+          <?php endif;?>
           <tr>
             <th><?php echo $lang->testcase->title;?></th>
             <td colspan='2'>
@@ -113,7 +108,8 @@ foreach(explode(',', $config->testcase->custom->createFields) as $field)
                     <input type="hidden" class="colorpicker" id="color" name="color" value="" data-icon="color" data-wrapper="input-control-icon-right" data-update-color="#title"  data-provide="colorpicker">
                   </div>
                 </div>
-                <span class="input-group-addon fix-border br-0<?php echo $showPri;?>"><?php echo $lang->testcase->pri;?></span>
+                <?php if(strpos(",$showFields,", ',pri,') !== false): // begin print pri selector?>
+                <span class="input-group-addon fix-border br-0"><?php echo $lang->testcase->pri;?></span>
                 <?php
                 $hasCustomPri = false;
                 foreach($lang->testcase->priList as $priKey => $priValue)
@@ -133,10 +129,10 @@ foreach(explode(',', $config->testcase->custom->createFields) as $field)
                 }
                 ?>
                 <?php if($hasCustomPri):?>
-                <?php echo html::select('pri', (array)$priList, $pri, "class='form-control$showPri'");?>
+                <?php echo html::select('pri', (array)$priList, $pri, "class='form-control'");?>
                 <?php else: ?>
                 <?php ksort($priList);?>
-                <div class="input-group-btn pri-selector<?php echo $showPri;?>" data-type="pri">
+                <div class="input-group-btn pri-selector" data-type="pri">
                   <button type="button" class="btn dropdown-toggle br-0" data-toggle="dropdown">
                     <span class="pri-text"><span class="label-pri label-pri-<?php echo empty($pri) ? '0' : $pri?>" title="<?php echo $pri?>"><?php echo $pri?></span></span> &nbsp;<span class="caret"></span>
                   </button>
@@ -145,6 +141,7 @@ foreach(explode(',', $config->testcase->custom->createFields) as $field)
                   </div>
                 </div>
                 <?php endif; ?>
+                <?php endif; // end print pri selector ?>
                 <?php if(!$this->testcase->forceNotReview()):?>
                 <span class="input-group-addon"><?php echo html::checkbox('forceNotReview', $lang->testcase->forceNotReview, '', "id='forceNotReview0'");?></span>
                 <?php endif;?>
@@ -223,10 +220,12 @@ foreach(explode(',', $config->testcase->custom->createFields) as $field)
               </table>
             </td>
           </tr>
-          <tr class="<?php echo $showKeywords;?>">
+          <?php if(strpos(",$showFields,", ',keywords,') !== false):?>
+          <tr>
             <th><?php echo $lang->testcase->keywords;?></th>
             <td colspan='2'><?php echo html::input('keywords', $keywords, "class='form-control'");?></td>
           </tr>
+          <?php endif;?>
           <tr class='hide'>
             <th><?php echo $lang->testcase->status;?></th>
             <td><?php echo html::hidden('status', 'normal');?></td>
