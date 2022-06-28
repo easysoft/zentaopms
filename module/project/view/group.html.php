@@ -12,7 +12,6 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/tablesorter.html.php';?>
-<?php js::set('confirmDelete', $lang->group->confirmDelete);?>
 <div id='mainMenu' class='clearfix'>
   <div class='btn-toolbar pull-left'>
     <?php // echo html::backButton($lang->goback, '', 'btn-secondary');?>
@@ -35,6 +34,7 @@
     </thead>
     <tbody>
       <?php foreach($groups as $group):?>
+      <?php $confirmDelete = sprintf($lang->group->confirmDelete, $group->name);?>
       <?php $users = implode(',', $groupUsers[$group->id]);?>
       <tr>
         <td class='text-center'><?php echo $group->id;?></td>
@@ -66,4 +66,5 @@
     </tbody>
   </table>
 </div>
+<?php js::set('confirmDelete', $confirmDelete);?>
 <?php include '../../common/view/footer.html.php';?>
