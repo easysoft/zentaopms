@@ -2179,7 +2179,6 @@ class testcase extends control
         $this->display();
     }
 
-
     /**
      * Case bugs.
      *
