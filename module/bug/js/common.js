@@ -627,7 +627,6 @@ function loadExecutionBuilds(executionID, num)
 function loadProductMembers(productID)
 {
     var branchID = $('#branch').val() == undefined ? '' : $('#branch').val();
-
     var link     = createLink('bug', 'ajaxGetProductMembers', 'productID=' + productID + '&selectedUser=' + $('#assignedTo').val() + '&branchID=' + branchID);
     $.get(link, function(data)
     {
