@@ -241,8 +241,9 @@ $lang->project->modelList['waterfall'] = "瀑布";
 $lang->project->modelList['kanban']    = "看板";
 
 $lang->project->featureBar['all']       = '所有';
-$lang->project->featureBar['doing']     = '进行中';
+$lang->project->featureBar['undone']    = '未完成';
 $lang->project->featureBar['wait']      = '未开始';
+$lang->project->featureBar['doing']     = '进行中';
 $lang->project->featureBar['suspended'] = '已挂起';
 $lang->project->featureBar['closed']    = '已关闭';
 

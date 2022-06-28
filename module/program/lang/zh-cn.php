@@ -138,7 +138,12 @@ $lang->program->statusList['doing']     = '进行中';
 $lang->program->statusList['suspended'] = '已挂起';
 $lang->program->statusList['closed']    = '已关闭';
 
-$lang->program->featureBar['all'] = '所有';
+$lang->program->featureBar['all']       = '所有';
+$lang->program->featureBar['undone']    = '未完成';
+$lang->program->featureBar['wait']      = '未开始';
+$lang->program->featureBar['doing']     = '进行中';
+$lang->program->featureBar['suspended'] = '已挂起';
+$lang->program->featureBar['closed']    = '已关闭';
 
 $lang->program->kanban = new stdclass();
 $lang->program->kanban->common             = '项目集看板';
