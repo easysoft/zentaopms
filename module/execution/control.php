@@ -284,6 +284,8 @@ class execution extends control
         $allCount   = 0;
         foreach($tasks as $task)
         {
+            if($task->mode == 'multi') $task->assignedToRealName = $this->lang->task->team;
+
             $groupTasks[] = $task;
             $allCount++;
             if(isset($task->children))
