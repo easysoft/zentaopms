@@ -156,6 +156,13 @@ function loadWhitelist(libID)
             $('#whiteListBox').addClass('hidden');
             $('#aclprivate').prop('checked', true);
         }
+        else if(users == 'project')
+        {
+            $('#aclprivate').parent('.radio-inline').addClass('hidden');
+            $('#aclcustom').parent('.radio-inline').addClass('hidden');
+            $('#whiteListBox').addClass('hidden');
+            $('#aclopen').prop('checked', true);
+        }
         else
         {
             $('#aclopen').parent('.radio-inline').removeClass('hidden');
