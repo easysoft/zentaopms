@@ -5128,7 +5128,6 @@ class storyModel extends model
             $storyLang->newStory           = str_replace($SRCommon, $URCommon, $storyLang->newStory);
             $storyLang->copy               = str_replace($SRCommon, $URCommon, $storyLang->copy);
             $storyLang->total              = str_replace($SRCommon, $URCommon, $storyLang->total);
-            $storyLang->allStories         = str_replace($SRCommon, $URCommon, $storyLang->allStories);
             $storyLang->released           = str_replace($SRCommon, $URCommon, $storyLang->released);
             $storyLang->legendLifeTime     = str_replace($SRCommon, $URCommon, $storyLang->legendLifeTime);
             $storyLang->legendLinkStories  = str_replace($SRCommon, $URCommon, $storyLang->legendLinkStories);
