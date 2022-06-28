@@ -1289,8 +1289,8 @@ class bug extends control
             }
         }
 
-        $projectMemberGroup     = $this->project->getTeamMemberGroup($projectIdList);
-        $projectMembers         = array();
+        $projectMemberGroup = $this->project->getTeamMemberGroup($projectIdList);
+        $projectMembers     = array();
         foreach($projectIdList as $projectID)
         {
             $projectTeam = zget($projectMemberGroup, $projectID, array());
