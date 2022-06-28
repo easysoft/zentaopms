@@ -58,7 +58,8 @@
           </tr>
         </thead>
         <tbody class="sortable">
-          <?php foreach($investList as $personnel):?>
+          <?php foreach($investList as $role => $personnelList):?>
+          <?php foreach($personnelList as $personnel):?>
           <tr>
             <td title='<?php echo $personnel['role'];?>' style="overflow: hidden; white-space:nowrap; text-overflow: ellipsis;"><?php echo $personnel['role'];?></td>
             <td title='<?php echo $personnel['realname'];?>'><?php echo $personnel['realname'];?></td>
@@ -85,6 +86,7 @@
             <td><?php echo $personnel['pendingRisk'];?></td>
             <?php endif;?>
           </tr>
+        <?php endforeach;?>
         <?php endforeach;?>
         </tbody>
       </table>
