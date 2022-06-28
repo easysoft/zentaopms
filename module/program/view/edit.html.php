@@ -69,7 +69,7 @@
           </td>
         </tr>
         <tr>
-          <th><?php echo $lang->project->dateRange;?></th>
+          <th id="dateRange"><?php echo $lang->project->dateRange;?></th>
           <td>
             <div class='input-group'>
               <?php echo html::input('begin', $program->begin, "class='form-control form-date' placeholder='" . $lang->project->begin . "' required");?>
@@ -81,7 +81,7 @@
             </div>
           </td>
           <?php $endValue = $program->end == LONG_TIME ? 999 : (strtotime($program->end) - strtotime($program->begin)) / 3600 / 24 + 1;?>
-          <td colspan='2'><?php echo html::radio('delta', $lang->program->endList , $endValue, "onclick='computeEndDate(this.value)'");?></td>
+          <td id="endList" colspan='2'><?php echo html::radio('delta', $lang->program->endList , $endValue, "onclick='computeEndDate(this.value)'");?></td>
         </tr>
         <tr>
           <th><?php echo $lang->project->realBegan;?></th>

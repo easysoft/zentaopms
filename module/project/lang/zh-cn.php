@@ -317,8 +317,8 @@ $lang->project->parentBeginEnd      = "父项目起止时间：%s ~ %s";
 $lang->project->parentBudget        = "父项目预算：";
 $lang->project->beginLetterParent   = "父项目的开始日期：%s，开始日期不能小于父项目的开始日期";
 $lang->project->endGreaterParent    = "父项目的完成日期：%s，完成日期不能大于父项目的完成日期";
-$lang->project->beginGreateChild    = "项目集的最小开始日期：%s，项目的开始日期不能小于项目集的最小开始日期";
-$lang->project->endLetterChild      = "项目集的最大完成日期：%s，项目的完成日期不能大于项目集的最大完成日期";
+$lang->project->beginGreateChild    = '项目“%s”的开始日期应大于等于项目集“%s”的最小开始日期：%s';
+$lang->project->endLetterChild      = '项目“%s”的完成日期应小于等于项目集“%s”的最大完成日期：%s';
 $lang->project->childLongTime       = "子项目中有长期项目，父项目也应该是长期项目";
 $lang->project->confirmUnlinkMember = "您确定从该项目中移除该用户吗？";
 

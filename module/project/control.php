@@ -696,6 +696,7 @@ class project extends control
         if($this->post->names)
         {
             $allChanges = $this->project->batchUpdate();
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             if(!empty($allChanges))
             {
@@ -707,7 +708,8 @@ class project extends control
                     $this->action->logHistory($actionID, $changes);
                 }
             }
-            return print(js::locate($this->session->projectList, 'parent'));
+            $locateLink = $this->session->projectList;
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $locateLink));
         }
 
         if(!$this->post->projectIdList) return print(js::locate($this->session->projectList, 'parent'));

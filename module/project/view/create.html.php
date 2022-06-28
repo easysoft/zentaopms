@@ -84,7 +84,7 @@
           </td>
         </tr>
         <tr>
-          <th><?php echo $lang->project->dateRange;?></th>
+          <th id="dateRange"><?php echo $lang->project->dateRange;?></th>
           <td>
             <div class='input-group'>
               <?php echo html::input('begin', date('Y-m-d'), "class='form-control form-date' onchange='computeWorkDays();' placeholder='" . $lang->project->begin . "' required");?>
@@ -92,7 +92,7 @@
               <?php echo html::input('end', '', "class='form-control form-date' onchange='computeWorkDays();' placeholder='" . $lang->project->end . "' required");?>
             </div>
           </td>
-          <td colspan='2'><?php echo html::radio('delta', $lang->project->endList , '', "onclick='computeEndDate(this.value)'");?></td>
+          <td id="endList" colspan='2'><?php echo html::radio('delta', $lang->project->endList , '', "onclick='computeEndDate(this.value)'");?></td>
         </tr>
         <tr id='daysBox'>
           <th><?php echo $lang->execution->days;?></th>

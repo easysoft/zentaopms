@@ -2,3 +2,5 @@
 #budgetUnit {border-left: 0px;}
 #plansBox .row {display: inline-table; width: 102%;}
 #plansBox .col-sm-4 {float: none; display: inline-block;}
+#dateRange {vertical-align: top; padding-top: 13px;}
+#endList {vertical-align: top; padding-top: 13px;}
