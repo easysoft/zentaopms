@@ -73,7 +73,7 @@
             <?php endif;?>
             <th class='c-date text-center'><?php common::printOrderLink('deadline', $orderBy, $vars, $lang->task->deadlineAB);?></th>
             <?php if($type != 'assignedTo'): ?>
-            <th class='c-user'><?php common::printOrderLink('assignedTo', $orderBy, $vars, $lang->task->assignedTo);?></th>
+            <th class='c-user assigned-title'><?php common::printOrderLink('assignedTo', $orderBy, $vars, $lang->task->assignedTo);?></th>
             <?php endif;?>
             <?php if($type != 'finishedBy'): ?>
             <th class='c-user'><?php common::printOrderLink('finishedBy', $orderBy, $vars, $lang->task->finishedBy);?></th>
