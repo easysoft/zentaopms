@@ -206,6 +206,8 @@ $lang->action->desc->importedrelease      = '$date, 由 <strong>$actor</strong> 
 $lang->action->desc->importedexecution    = '$date, 由 <strong>$actor</strong> 从项目执行 <strong>$extra</strong> 导入。' . "\n";
 $lang->action->desc->importedbuild        = '$date, 由 <strong>$actor</strong> 从项目版本 <strong>$extra</strong> 导入。' . "\n";
 $lang->action->desc->fromsonarqube        = '$date, 由 <strong>$actor</strong> 从<strong>SonarQube问题</strong>转化而来。' . "\n";
+$lang->action->desc->tolib                = '$date, 由 <strong>$actor</strong> 导入。' . "\n";
+$lang->action->desc->updatetolib          = '$date, 由 <strong>$actor</strong> 从' . $lang->testcase->common . '更新。' . "\n";
 
 /* 用来描述和父子任务相关的操作历史记录。*/
 $lang->action->desc->createchildren     = '$date, 由 <strong>$actor</strong> 创建子任务 <strong>$extra</strong>。' . "\n";
@@ -368,6 +370,8 @@ $lang->action->label->linkstory             = '关联需求到';
 $lang->action->label->linkbug               = '关联BUG到';
 $lang->action->label->unlinkstory           = '移除需求从';
 $lang->action->label->unlinkbug             = '移除BUG从';
+$lang->action->label->tolib                 = '导入了';
+$lang->action->label->updatetolib           = '更新了';
 
 /* 动态信息按照对象分组 */
 $lang->action->dynamicAction                    = new stdclass();
@@ -559,14 +563,16 @@ $lang->action->dynamicAction->testtask['activated'] = '激活测试单';
 $lang->action->dynamicAction->testtask['closed']    = '完成测试单';
 $lang->action->dynamicAction->testtask['blocked']   = '阻塞测试单';
 
-$lang->action->dynamicAction->case['opened']    = '创建用例';
-$lang->action->dynamicAction->case['edited']    = '编辑用例';
-$lang->action->dynamicAction->case['deleted']   = '删除用例';
-$lang->action->dynamicAction->case['undeleted'] = '还原用例';
-$lang->action->dynamicAction->case['hidden']    = '隐藏用例';
-$lang->action->dynamicAction->case['reviewed']  = '评审用例';
-$lang->action->dynamicAction->case['confirmed'] = "确认{$lang->SRCommon}变更";
-$lang->action->dynamicAction->case['fromlib']   = '从用例库导入';
+$lang->action->dynamicAction->case['opened']      = '创建用例';
+$lang->action->dynamicAction->case['edited']      = '编辑用例';
+$lang->action->dynamicAction->case['deleted']     = '删除用例';
+$lang->action->dynamicAction->case['undeleted']   = '还原用例';
+$lang->action->dynamicAction->case['hidden']      = '隐藏用例';
+$lang->action->dynamicAction->case['reviewed']    = '评审用例';
+$lang->action->dynamicAction->case['confirmed']   = "确认{$lang->SRCommon}变更";
+$lang->action->dynamicAction->case['fromlib']     = '从用例库导入';
+$lang->action->dynamicAction->case['tolib']       = '导入';
+$lang->action->dynamicAction->case['updatetolib'] = '更新';
 
 $lang->action->dynamicAction->testreport['opened']    = '创建测试报告';
 $lang->action->dynamicAction->testreport['edited']    = '编辑测试报告';

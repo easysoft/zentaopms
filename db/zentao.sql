@@ -931,6 +931,7 @@ CREATE TABLE IF NOT EXISTS `zt_module` (
   `grade` tinyint(3) unsigned NOT NULL default '0',
   `order` smallint(5) unsigned NOT NULL default '0',
   `type` char(30) NOT NULL,
+  `from` mediumint(8) unsigned NOT NULL default '0',
   `owner` varchar(30) NOT NULL,
   `collector` text NOT NULL,
   `short` varchar(30) NOT NULL,

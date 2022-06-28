@@ -142,6 +142,7 @@ $lang->testcase->groupName               = '分组名称';
 $lang->testcase->step                    = '步骤';
 $lang->testcase->stepChild               = '子步骤';
 $lang->testcase->viewAll                 = '查看所有';
+$lang->testcase->importToLib             = "导入用例库";
 
 $lang->testcase->new = '新增';
 
@@ -236,6 +237,7 @@ $lang->testcase->noCase           = '暂时没有用例。';
 
 $lang->testcase->searchStories = "键入来搜索{$lang->SRCommon}";
 $lang->testcase->selectLib     = '请选择库';
+$lang->testcase->selectLibAB   = '选择用例库';
 
 $lang->testcase->action = new stdclass();
 $lang->testcase->action->fromlib               = array('main' => '$date, 由 <strong>$actor</strong> 从用例库 <strong>$extra</strong>导入。');

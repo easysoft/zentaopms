@@ -142,6 +142,7 @@ $lang->testcase->groupName               = 'Nom Groupe';
 $lang->testcase->step                    = 'Etapes';
 $lang->testcase->stepChild               = 'Sous-Etapes';
 $lang->testcase->viewAll                 = 'Tous les CasTests';
+$lang->testcase->importToLib             = "Import To Library";
 
 $lang->testcase->new = 'Nouveau';
 
@@ -236,6 +237,7 @@ $lang->testcase->noCase           = "Aucun CasTest pour l'instant. ";
 
 $lang->testcase->searchStories = 'Rechercher des stories';
 $lang->testcase->selectLib     = 'Sélectionner Library';
+$lang->testcase->selectLibAB   = 'Sélectionner Library';
 
 $lang->testcase->action = new stdclass();
 $lang->testcase->action->fromlib               = array('main' => '$date, importé par <strong>$actor</strong> depuis <strong>$extra</strong>.');

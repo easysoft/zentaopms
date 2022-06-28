@@ -226,6 +226,7 @@ class testcase extends control
         $this->view->setModule       = true;
         $this->view->modulePairs     = $showModule ? $this->tree->getModulePairs($productID, 'case', $showModule) : array();
         $this->view->showBranch      = $showBranch;
+        $this->view->libraries       = $this->loadModel('caselib')->getLibraries();
 
         $this->display();
     }
@@ -2155,6 +2156,26 @@ class testcase extends control
         $this->view->maxImport  = $maxImport;
         $this->view->dataInsert = $insert;
 
+        $this->display();
+    }
+
+    /**
+     * Import cases to library.
+     *
+     * @param  int    $caseID
+     * @access public
+     * @return void
+     */
+    public function importToLib($caseID = 0)
+    {
+        $caseIDList = $this->post->caseIDList;
+        if(!empty($_POST))
+        {
+            $this->testcase->importToLib($caseID);
+            if(!empty($caseID)) return $this->send(array('result' => 'success', 'message' => $this->lang->importSuccess, 'closeModal' => true,));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->importSuccess, 'locate' => 'reload'));
+        }
+        $this->view->libraries = $this->loadModel('caselib')->getLibraries();
         $this->display();
     }
 

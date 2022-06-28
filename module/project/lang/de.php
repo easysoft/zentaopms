@@ -241,8 +241,9 @@ $lang->project->modelList['waterfall'] = "CMMI";
 $lang->project->modelList['kanban']    = "Kanban";
 
 $lang->project->featureBar['all']       = 'All';
-$lang->project->featureBar['doing']     = 'Doing';
+$lang->project->featureBar['undone']    = 'Unfinished';
 $lang->project->featureBar['wait']      = 'Waiting';
+$lang->project->featureBar['doing']     = 'Doing';
 $lang->project->featureBar['suspended'] = 'Suspended';
 $lang->project->featureBar['closed']    = 'Closed';
 
@@ -317,8 +318,8 @@ $lang->project->parentBeginEnd      = "Parent begin&end date: %s ~ %s";
 $lang->project->parentBudget        = "The budget of the parent project: ";
 $lang->project->beginLetterParent   = "The begin date of the parent project: %s. It cannot be < the begin date of its parent project.";
 $lang->project->endGreaterParent    = "The end date of the parent project: %s. It cannot be > the end date of its parent project.";
-$lang->project->beginGreateChild    = 'The start date of project "%s" should be greater than or equal to the minimum start date of project "%s" set : %s';
-$lang->project->endLetterChild      = 'The finish date for project "%s" should be less than or equal to the maximum finish date for project "%s" set :%s';
+$lang->project->beginGreateChild    = 'The start date of the project "%s" should be ≥ the start date of program "%s": %s.';
+$lang->project->endLetterChild      = 'The finish date of the project "%s" should be ≤ the finish date of program "%s": %s.';
 $lang->project->childLongTime       = "If a child as long-term projects, the parent should be long-term too.";
 $lang->project->confirmUnlinkMember = "Do you want to remove this user from project?";
 

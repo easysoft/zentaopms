@@ -1658,6 +1658,186 @@ class testcaseModel extends model
     }
 
     /**
+     * Import cases to lib.
+     *
+     * @param  int    $caseIdList
+     * @access public
+     * @return void
+     */
+    public function importToLib($caseIdList = 0)
+    {
+        if(empty($caseIdList)) $caseIdList = $this->post->caseIdList;
+        $caseIdList = explode(',' , $caseIdList);
+        $libID      = $this->post->lib;
+
+        $this->loadModel('action');
+
+        $cases          = $this->dao->select('*')->from(TABLE_CASE)->where('deleted')->eq(0)->andWhere('id')->in($caseIdList)->fetchAll('id');
+        $caseSteps      = $this->dao->select('*')->from(TABLE_CASESTEP)->where('`case`')->in($caseIdList)->orderBy('id')->fetchGroup('case');
+        $caseFiles      = $this->dao->select('*')->from(TABLE_FILE)->where('objectID')->in($caseIdList)->andWhere('objectType')->eq('testcase')->fetchGroup('objectID', 'id');
+        $libCases       = $this->loadModel('caselib')->getLibCases($libID, 'all');
+        $libFiles       = $this->dao->select('*')->from(TABLE_FILE)->where('objectID')->in(array_keys($libCases))->andWhere('objectType')->eq('testcase')->fetchGroup('objectID', 'id');
+        $libCases       = $this->dao->select('*')->from(TABLE_CASE)->where('lib')->eq($libID)->andWhere('product')->eq(0)->andWhere('deleted')->eq('0')->fetchGroup('fromCaseID', 'id');
+        $maxOrder       = $this->dao->select('max(`order`) as maxOrder')->from(TABLE_CASE)->where('deleted')->eq(0)->fetch('maxOrder');
+        $maxModuleOrder = $this->dao->select('max(`order`) as maxOrder')->from(TABLE_MODULE)->where('deleted')->eq(0)->fetch('maxOrder');
+        foreach($cases as $caseID => $case)
+        {
+            $libCase = new stdclass();
+            $libCase->lib             = $libID;
+            $libCase->title           = $case->title;
+            $libCase->precondition    = $case->precondition;
+            $libCase->keywords        = $case->keywords;
+            $libCase->pri             = $case->pri;
+            $libCase->type            = $case->type;
+            $libCase->stage           = $case->stage;
+            $libCase->status          = $case->status;
+            $libCase->fromCaseID      = $case->id;
+            $libCase->fromCaseVersion = $case->version;
+            $libCase->order           = ++ $maxOrder;
+            $libCase->module          = $this->importCaseRelatedModules($libID, $case->module, $maxModuleOrder);
+
+            if(empty($libCases[$caseID]))
+            {
+                $libCase->openedBy   = $this->app->user->account;
+                $libCase->openedDate = helper::now();
+                $this->dao->insert(TABLE_CASE)->data($libCase)->autoCheck()->exec();
+                if(!dao::isError()) $libCaseID = $this->dao->lastInsertID();
+                $this->action->create('case', $libCaseID, 'tolib', '', $caseID);
+            }
+            else
+            {
+                $libCaseID = array_keys($libCases[$caseID])[0];
+
+                $libCase->lastEditedBy   = $this->app->user->account;
+                $libCase->lastEditedDate = helper::now();
+                $libCase->version        = $libCases[$caseID][$libCaseID]->version + 1;
+                $this->dao->update(TABLE_CASE)->data($libCase)->autoCheck()->where('id')->eq((int)$libCaseID)->exec();
+
+                $this->action->create('case', $libCaseID, 'updatetolib', '', $caseID);
+
+                $this->dao->delete()->from(TABLE_CASESTEP)->where('`case`')->eq($libCaseID)->exec();
+
+                $removeFiles = zget($libFiles, $libCaseID, array());
+                $this->dao->delete()->from(TABLE_FILE)->where('`objectID`')->eq($libCaseID)->andWhere('objectType')->eq('testcase')->exec();
+                foreach($removeFiles as $fileID => $file)
+                {
+                    $filePath = pathinfo($file->pathname, PATHINFO_BASENAME);
+                    $datePath = substr($file->pathname, 0, 6);
+                    $filePath = $this->app->getAppRoot() . "www/data/upload/{$this->app->company->id}/" . "{$datePath}/" . $filePath;
+                    unlink($filePath);
+                }
+            }
+
+            if(!dao::isError())
+            {
+                if(isset($caseSteps[$caseID]))
+                {
+                    foreach($caseSteps[$caseID] as $index => $step)
+                    {
+                        if($step->version != $case->version) continue;
+                        $oldStepID     = $step->id;
+                        $step->case    = $libCaseID;
+                        $step->version = $libCase->version;
+                        unset($step->id);
+
+                        $this->dao->insert(TABLE_CASESTEP)->data($step)->exec();
+                    }
+                }
+
+                $oldFiles = zget($caseFiles, $caseID, array());
+                foreach($oldFiles as $fileID => $file)
+                {
+                    $originName = pathinfo($file->pathname, PATHINFO_FILENAME);
+                    $datePath   = substr($file->pathname, 0, 6);
+                    $originFile = $this->app->getAppRoot() . "www/data/upload/{$this->app->company->id}/" . "{$datePath}/" . $originName;
+
+                    $copyName = $originName . 'copy' . $libCaseID;
+                    $copyFile = $this->app->getAppRoot() . "www/data/upload/{$this->app->company->id}/" . "{$datePath}/" .  $copyName;
+                    copy($originFile, $copyFile);
+
+                    $newFileName    = $file->pathname;
+                    $newFileName    = str_replace('.', "copy$libCaseID.", $newFileName);
+                    $file->pathname = $newFileName;
+
+                    $file->objectID  = $libCaseID;
+                    $file->addedBy   = $this->app->user->account;
+                    $file->addedDate = helper::now();
+                    $file->downloads = 0;
+                    unset($file->id);
+                    $this->dao->insert(TABLE_FILE)->data($file)->exec();
+                }
+            }
+        }
+    }
+
+    /**
+     * Import case related modules.
+     *
+     * @param  int    $libID
+     * @param  int    $oldModuleID
+     * @param  int    $maxOrder
+     * @access public
+     * @return void
+     */
+    public function importCaseRelatedModules($libID, $oldModuleID = 0, $maxOrder = 0)
+    {
+        $moduleID = $this->checkModuleImported($libID, $oldModuleID);
+        if($moduleID) return $moduleID;
+
+        $oldModule = $this->dao->select('name, parent, grade, `order`, short')->from(TABLE_MODULE)->where('id')->eq($oldModuleID)->fetch();
+
+        $oldModule->root   = $libID;
+        $oldModule->from   = $oldModuleID;
+        $oldModule->type   = 'caselib';
+        if(!empty($maxOrder)) $oldModule->order = $maxOrder + $oldModule->order;
+        $this->dao->insert(TABLE_MODULE)->data($oldModule)->autoCheck()->exec();
+
+        if(!dao::isError())
+        {
+            $newModuleID = $this->dao->lastInsertID();
+
+            if($oldModule->parent)
+            {
+                $parentModuleID = $this->importCaseRelatedModules($libID, $oldModule->parent, !empty($maxOrder) ? $maxOrder : 0);
+                $parentModule   = $this->dao->select('id, path')->from(TABLE_MODULE)->where('id')->eq($parentModuleID)->fetch();
+                $parent         = $parentModule->id;
+                $path           = $parentModule->path . "$newModuleID,";
+            }
+            else
+            {
+                $path   = ",$newModuleID,";
+                $parent = 0;
+            }
+
+            $this->dao->update(TABLE_MODULE)->set('parent')->eq($parent)->set('path')->eq($path)->where('id')->eq($newModuleID)->exec();
+
+            return $newModuleID;
+        }
+    }
+
+    /**
+     * Adjust module is can import.
+     *
+     * @param  int    $libID
+     * @param  int    $oldModule
+     * @access public
+     * @return int
+     */
+    public function checkModuleImported($libID, $oldModule = 0)
+    {
+        $module = $this->dao->select('id')->from(TABLE_MODULE)
+            ->where('root')->eq($libID)
+            ->andWhere('`from`')->eq($oldModule)
+            ->andWhere('type')->eq('caselib')
+            ->andWhere('deleted')->eq(0)
+            ->fetch();
+
+        if(!$module) return '';
+
+        return $module->id;
+    }
+
+    /**
      * Build search form.
      *
      * @param  int    $productID
@@ -2185,11 +2365,13 @@ class testcaseModel extends model
                 {
                     $menu .= $this->buildMenu('testtask', 'runCase', "$extraParams&version=$case->currentVersion", $case, 'view', 'play', '', 'showinonlybody', false, "data-width='95%'");
                     $menu .= $this->buildMenu('testtask', 'results', "$extraParams&version=$case->version",        $case, 'view', '', '', 'showinonlybody', false, "data-width='95%'");
+                    $menu .= $this->buildMenu('testcase', 'importToLib', $params,                                  $case, 'view', 'assets', '', 'showinonlybody iframe', true, "data-width='500px'");
                 }
                 else
                 {
                     $menu .= $this->buildMenu('testtask', 'runCase', "$extraParams&version=$case->currentVersion", $case, 'view', 'play', '', 'showinonlybody iframe', false, "data-width='95%'");
                     $menu .= $this->buildMenu('testtask', 'results', "$extraParams&version=$case->version",        $case, 'view', '', '', 'showinonlybody iframe', false, "data-width='95%'");
+                    $menu .= $this->buildMenu('testcase', 'importToLib', $params,                                  $case, 'view', 'assets', '', 'showinonlybody iframe', true, "data-width='500px'");
                 }
                 if($case->caseFails > 0)
                 {

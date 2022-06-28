@@ -142,6 +142,7 @@ $lang->testcase->groupName               = 'Gruppenname';
 $lang->testcase->step                    = 'Schritt';
 $lang->testcase->stepChild               = 'Teilschritt';
 $lang->testcase->viewAll                 = 'Alle anziegen';
+$lang->testcase->importToLib             = "Import To Library";
 
 $lang->testcase->new = 'Neu';
 
@@ -236,6 +237,7 @@ $lang->testcase->noCase           = 'Keine Fälle. ';
 
 $lang->testcase->searchStories = 'Story suchen';
 $lang->testcase->selectLib     = 'Bibliothek wählen';
+$lang->testcase->selectLibAB   = 'Bibliothek wählen';
 
 $lang->testcase->action = new stdclass();
 $lang->testcase->action->fromlib               = array('main' => '$date, importiert von <strong>$actor</strong> aus Bibliothek <strong>$extra</strong>.');

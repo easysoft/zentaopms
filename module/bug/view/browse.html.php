@@ -490,6 +490,9 @@ $(function(){$('#bugForm').table();})
 <?php if(isset($config->qa->homepage) and $config->qa->homepage != 'browse' and $config->global->flow == 'full'):?>
 $(function(){$('#modulemenu .nav li:last').after("<li class='right'><a style='font-size:12px' href='javascript:setHomepage(\"qa\", \"browse\")'><i class='icon icon-cog'></i> <?php echo $lang->homepage?></a></li>")});
 <?php endif;?>
+<?php if(count($bugs) <= 2):?>
+$('#bugForm .table-footer .table-actions #assignedTo').closest('.btn-group.dropup').removeClass('dropup').addClass('dropdown');
+<?php endif;?>
 function handleLinkButtonClick()
 {
   var xxcUrl = "xxc:openInApp/zentao-integrated/" + encodeURIComponent(window.location.href.replace(/.display=card/, '').replace(/\.xhtml/, '.html'));

@@ -128,6 +128,20 @@
           <table class='table table-data'>
             <?php if($isLibCase):?>
             <tr>
+              <th><?php echo $lang->testcase->fromCase;?></th>
+              <td>
+                <?php
+                if(isset($case->linkCaseTitles))
+                {
+                    foreach($case->linkCaseTitles as $linkCaseID => $linkCaseTitle)
+                    {
+                        echo html::a($this->createLink('testcase', 'view', "caseID=$linkCaseID", '', true), "#$linkCaseID $linkCaseTitle", '', "class='iframe' data-width='80%'") . '<br />';
+                    }
+                }
+                ?>
+              </td>
+            </tr>
+            <tr>
               <th class='thWidth'><?php echo $lang->testcase->lib;?></th>
               <td><?php echo common::hasPriv('caselib', 'browse') ? html::a($this->createLink('caselib', 'browse', "libID=$case->lib"), $libName) : $libName;?></td>
             </tr>
@@ -243,7 +257,7 @@
                     if(common::hasPriv('testcase', 'confirmchange')) echo html::a($this->createLink('testcase', 'confirmchange', "caseID=$case->id&taskID=$taskID"), $lang->testcase->sync, 'hiddenwin', "class='btn btn-mini btn-info'");
                     echo ")";
                 }
-                if(isset($case->fromCaseVersion) and $case->fromCaseVersion > $case->version and $from != 'testtask')
+                if(isset($case->fromCaseVersion) and $case->fromCaseVersion > $case->version and $from != 'testtask' and !empty($case->product))
                 {
                     echo "(<span class='warning' title={$lang->testcase->fromCaselib}>{$lang->testcase->changed}</span> ";
                     if(common::hasPriv('testcase', 'confirmLibcaseChange')) echo html::a($this->createLink('testcase', 'confirmLibcaseChange', "caseID=$case->id&libcaseID=$case->fromCaseID"), $lang->testcase->sync, 'hiddenwin', "class='btn btn-mini btn-info'");
