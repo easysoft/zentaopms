@@ -32,11 +32,15 @@ function addItem(obj)
             var id   = $(this).attr('id');
             $(this).attr('name', name.replace(/\d+/g, maxNum));
             $(this).attr('id', id.replace(/\d+/g, maxNum));
+            $(this).attr('checked', false);
         })
 
         $(lastTr).after($newRow);
         $newRow.find('div.picker').remove();
         $newRow.find('.picker-select').val('').picker({chosenMode: true});
+
+        var $picker = $newRow.find('.picker-select').data('zui.picker');
+        $picker.setDisabled(false);
         setTimeout(function()
         {
             $newRow.removeClass('highlight');

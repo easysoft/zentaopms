@@ -745,6 +745,7 @@ class execution extends control
 
         /* Save session. */
         $this->app->session->set('storyList', $this->app->getURI(true), 'execution');
+        $this->app->session->set('executionStoryList', $this->app->getURI(true), 'execution');
 
         /* Process the order by field. */
         if(!$orderBy) $orderBy = $this->cookie->executionStoryOrder ? $this->cookie->executionStoryOrder : 'pri';
@@ -2608,6 +2609,8 @@ class execution extends control
         $productPairs = $this->loadModel('product')->getProductPairsByProject($executionID);
         if($productPairs) $productID = key($productPairs);
 
+        $this->app->session->set('executionStoryList', $this->app->getURI(true), 'execution');
+
         $this->view->title        = $this->lang->execution->storyKanban;
         $this->view->position[]   = html::a($this->createLink('execution', 'story', "executionID=$executionID"), $execution->name);
         $this->view->position[]   = $this->lang->execution->storyKanban;
@@ -2910,8 +2913,9 @@ class execution extends control
         /* Get projects, executions and products. */
         $object     = $this->project->getByID($objectID, $this->app->tab == 'project' ? 'project' : 'sprint,stage,kanban');
         $products   = $this->product->getProducts($objectID);
-        $browseLink = $this->createLink($this->app->tab == 'project' ? 'projectstory' : 'execution', 'story', "objectID=$objectID");
         $queryID    = ($browseType == 'bySearch') ? (int)$param : 0;
+        $browseLink = $this->session->executionStoryList;
+        if($this->app->tab == 'project') $browseLink = $this->createLink('projectstory', 'story', "objectID=$objectID");
 
         $this->session->set('storyList', $this->app->getURI(true), $this->app->tab); // Save session.
 
@@ -3034,6 +3038,7 @@ class execution extends control
         $this->view->modules      = $modules;
         $this->view->users        = $this->loadModel('user')->getPairs('noletter');
         $this->view->branchGroups = $branchGroups;
+        $this->view->browseLink   = $browseLink;
 
         $this->display();
     }

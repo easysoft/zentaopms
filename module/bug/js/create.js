@@ -125,34 +125,6 @@ $(function()
     });
 });
 
-/**
- * Ajax change execution name.
- *
- * @param  int $projectID
- * @access public
- * @return void
- */
-function changeAssignedTo(projectID)
-{
-    if(parseInt(projectID))
-    {
-        loadProjectTeamMembers(projectID);
-        var link = createLink('bug', 'ajaxGetExecutionLang', 'projectID=' + projectID);
-        $.post(link, function(executionLang)
-        {
-            $('#executionBox').html(executionLang);
-        })
-    }
-    else if($('#execution').val() != 0)
-    {
-        loadAssignedTo($('#execution').val());
-    }
-    else
-    {
-        setAssignedTo();
-    }
-}
-
 $(window).unload(function(){
     if(blockID) window.parent.refreshBlock($('#block' + blockID));
 });

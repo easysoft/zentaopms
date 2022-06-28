@@ -87,6 +87,8 @@ $lang->webhook->paramsList['comment']    = 'Kommentar';
 $lang->webhook->paramsList['text']       = 'Aktionsbeschreibung';
 
 $lang->webhook->confirmDelete = 'Möchten Sie diesen Hook löschen?';
+$lang->webhook->friendlyTips  = 'Friendly reminder: Click on a department to expand the sub-departments under the department.';
+$lang->webhook->loadPrompt    = 'There is a lot of data and the loading is slow, please wait.';
 
 $lang->webhook->trimWords = '';
 
@@ -104,6 +106,7 @@ $lang->webhook->note->typeList['dingding']  = 'Fügen Sie einen eigenen bot in d
 $lang->webhook->note->typeList['weixin']    = 'Add a customized bot in WeChat and get the webhook url.';
 $lang->webhook->note->typeList['default']   = 'Webhookadresse on anderen erhalten.';
 
-$lang->webhook->error = new stdclass();
-$lang->webhook->error->curl   = 'Laden Sie php-curl in der php.ini.';
-$lang->webhook->error->noDept = 'There is no department selected. Please choose department first.';
+$lang->webhook->error               = new stdclass();
+$lang->webhook->error->curl         = 'Laden Sie php-curl in der php.ini.';
+$lang->webhook->error->noDept       = 'There is no department selected. Please choose department first.';
+$lang->webhook->error->requestError = 'Request error!';

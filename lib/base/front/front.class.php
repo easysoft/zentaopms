@@ -1225,7 +1225,11 @@ EOT;
         }
 
         /* Fix value is '0123' error. */
-        if(is_array($value) or is_object($value) or is_string($value))
+        if(is_numeric($value) and !preg_match('/^0[1-9]/', $value))
+        {
+            $js .= "{$prefix}{$key} = {$value};";
+        }
+        elseif(is_array($value) or is_object($value) or is_string($value))
         {
             /* Fix for auto-complete when user is number.*/
             if(is_array($value) or is_object($value))
@@ -1238,10 +1242,6 @@ EOT;
             }
 
             $value = json_encode($value);
-            $js .= "{$prefix}{$key} = {$value};";
-        }
-        elseif(is_numeric($value))
-        {
             $js .= "{$prefix}{$key} = {$value};";
         }
         elseif(is_bool($value))

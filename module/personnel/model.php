@@ -137,26 +137,28 @@ class personnelModel extends model
         }
 
         $users = $this->loadModel('user')->getListByAccounts(array_keys($accountPairs), 'account');
-        foreach($users as $user) $user->role = zget($this->lang->user->roleList, $user->role, $user->role);
 
         foreach($accountPairs as $account => $projects)
         {
             $user = zget($users, $account, '');
 
-            $personnelList[$account]['realname']   = $user ? $user->realname : $account;
-            $personnelList[$account]['account']    = $account;
-            $personnelList[$account]['role']       = $user ? $user->role : '';
-            $personnelList[$account]['projects']   = $projects;
-            $personnelList[$account]['executions'] = zget($executionPairs, $account, 0);
+            if(!empty($user) and !isset($personnelList[$user->role])) $personnelList[$user->role] = array();
 
-            $personnelList[$account] += $taskInvest[$account];
-            $personnelList[$account] += $bugAndStoryInvest[$account];
+            $personnelList[$user->role][$account]['realname']   = $user ? $user->realname : $account;
+            $personnelList[$user->role][$account]['account']    = $account;
+            $personnelList[$user->role][$account]['role']       = $user ? zget($this->lang->user->roleList, $user->role, $user->role) : '';
+            $personnelList[$user->role][$account]['projects']   = $projects;
+            $personnelList[$user->role][$account]['executions'] = zget($executionPairs, $account, 0);
+
+            $personnelList[$user->role][$account] += $taskInvest[$account];
+            $personnelList[$user->role][$account] += $bugAndStoryInvest[$account];
             if($this->config->edition == 'max')
             {
-                $personnelList[$account] += $issueInvest[$account];
-                $personnelList[$account] += $riskInvest[$account];
+                $personnelList[$user->role][$account] += $issueInvest[$account];
+                $personnelList[$user->role][$account] += $riskInvest[$account];
             }
         }
+        krsort($personnelList);
 
         return $personnelList;
     }

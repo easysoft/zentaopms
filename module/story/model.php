@@ -4015,7 +4015,7 @@ class storyModel extends model
 
                 if($canBeChanged and common::hasPriv('execution', 'storyEstimate', $execution))
                 {
-                    $menu .= common::printIcon('execution', 'storyEstimate', "executionID=$executionID&storyID=$story->id", '', 'list', 'estimate', '', 'iframe', true, "data-width='600px'");
+                    $menu .= common::printIcon('execution', 'storyEstimate', "executionID=$executionID&storyID=$story->id", '', 'list', 'estimate', '', 'iframe', true, "data-width='450px'");
                 }
 
                 if($canBeChanged and common::hasPriv('execution', 'unlinkStory', $execution))
@@ -5128,7 +5128,6 @@ class storyModel extends model
             $storyLang->newStory           = str_replace($SRCommon, $URCommon, $storyLang->newStory);
             $storyLang->copy               = str_replace($SRCommon, $URCommon, $storyLang->copy);
             $storyLang->total              = str_replace($SRCommon, $URCommon, $storyLang->total);
-            $storyLang->allStories         = str_replace($SRCommon, $URCommon, $storyLang->allStories);
             $storyLang->released           = str_replace($SRCommon, $URCommon, $storyLang->released);
             $storyLang->legendLifeTime     = str_replace($SRCommon, $URCommon, $storyLang->legendLifeTime);
             $storyLang->legendLinkStories  = str_replace($SRCommon, $URCommon, $storyLang->legendLinkStories);

@@ -13,6 +13,12 @@
 <?php include '../../common/view/header.html.php';?>
 <div id='mainContent' class='main-row fade in'>
   <div class="side-col" id="sidebar">
+    <div id="sidebarHeader">
+      <div class="title">
+      <?php echo $deptName ? $deptName : $lang->dept->common;?>
+      <?php if($deptName) echo html::a(inlink('manageProjectadmin', "groupID=$groupID"), "<i class='icon icon-sm icon-close'></i>", '', "class='text-muted'");?>
+      </div>
+    </div>
     <div class='cell'>
       <div class='panel panel-sm'>
         <div class='panel-heading nobr'><strong><?php echo $lang->dept->common;?></strong></div>

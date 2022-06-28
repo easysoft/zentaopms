@@ -29,7 +29,7 @@
             <td><?php echo html::input('name', $release->name, "class='form-control' required");?></td>
             <td>
               <?php $checked = !empty($release->marker) ? "checked='checked'" : '';?>
-              <div class='checkbox-primary'>
+              <div id='markerBox' class='checkbox-primary'>
                 <input id='marker' name='marker' value='1' type='checkbox' <?php echo $checked;?> />
                 <label for='marker'><?php echo $lang->release->marker;?></label>
               </div>

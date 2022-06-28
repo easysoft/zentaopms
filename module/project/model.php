@@ -1085,10 +1085,10 @@ class projectModel extends model
             if($program)
             {
                 /* Child project begin cannot less than parent. */
-                if($project->begin < $program->begin) dao::$errors['begin'] = sprintf($this->lang->project->beginGreateChild, $program->begin);
+                if(!empty($project->name) and $project->begin < $program->begin) dao::$errors['begin'] = sprintf($this->lang->project->beginGreateChild, $project->name, $program->name, $program->begin);
 
                 /* When parent set end then child project end cannot greater than parent. */
-                if($program->end != '0000-00-00' and $project->end > $program->end) dao::$errors['end'] = sprintf($this->lang->project->endLetterChild, $program->end);
+                if(!empty($project->name) and $$program->end != '0000-00-00' and $project->end > $program->end) dao::$errors['end'] = sprintf($this->lang->project->endLetterChild, $project->name, $program->name, $program->end);
 
                 if(dao::isError()) return false;
             }
@@ -1349,10 +1349,10 @@ class projectModel extends model
             if($program)
             {
                 /* Child project begin cannot less than parent. */
-                if($project->begin < $program->begin) dao::$errors['begin'] = sprintf($this->lang->project->beginGreateChild, $program->begin);
+                if(!empty($project->name) and $project->begin < $program->begin) dao::$errors['begin'] = sprintf($this->lang->project->beginGreateChild, $project->name, $program->name, $program->begin);
 
                 /* When parent set end then child project end cannot greater than parent. */
-                if($program->end != '0000-00-00' and $project->end > $program->end) dao::$errors['end'] = sprintf($this->lang->project->endLetterChild, $program->end);
+                if(!empty($project->name) and $program->end != '0000-00-00' and $project->end > $program->end) dao::$errors['end'] = sprintf($this->lang->project->endLetterChild, $project->name, $program->name, $program->end);
 
                 if(dao::isError()) return false;
             }
@@ -1518,11 +1518,18 @@ class projectModel extends model
                 if($parentProject)
                 {
                     /* Child project begin cannot less than parent. */
-                    if($projects[$projectID]->begin < $parentProject->begin) dao::$errors['begin'] = sprintf($this->lang->project->beginGreateChild, $parentProject->begin);
+                    if(!empty($projects[$projectID]->name) and $projects[$projectID]->begin < $parentProject->begin)
+                    {
+                        dao::$errors['begin'] = sprintf($this->lang->project->beginGreateChild, $projects[$projectID]->name, $parentProject->name, $parentProject->begin);
+                        return false;
+                    }
 
                     /* When parent set end then child project end cannot greater than parent. */
-                    if($parentProject->end != '0000-00-00' and $projects[$projectID]->end > $parentProject->end) dao::$errors['end'] =  sprintf($this->lang->project->endLetterChild, $parentProject->end);
-
+                    if(!empty($projects[$projectID]->name) and $parentProject->end != '0000-00-00' and $projects[$projectID]->end > $parentProject->end)
+                    {
+                        dao::$errors['end'] =  sprintf($this->lang->project->endLetterChild, $projects[$projectID]->name, $parentProject->name, $parentProject->end);
+                        return false;
+                    }
                 }
             }
 
@@ -1534,7 +1541,7 @@ class projectModel extends model
                 $projects[$projectID]->{$extendField->field} = htmlSpecialString($projects[$projectID]->{$extendField->field});
             }
         }
-        if(dao::isError()) return print(js::error(dao::getError()));
+        if(dao::isError()) return false;
 
         foreach($projects as $projectID => $project)
         {
@@ -2223,6 +2230,26 @@ class projectModel extends model
             ->fetchPairs('account', 'realname');
 
         return array('' => '') + $members;
+    }
+
+    /**
+     * Get team member group.
+     *
+     * @param  array|string $projectIdList
+     * @access public
+     * @return array
+     */
+    public function getTeamMemberGroup($projectIdList)
+    {
+        if(empty($projectIdList)) return array();
+
+        return $this->dao->select("t1.account, if(t2.deleted='0', t2.realname, t1.account) as realname, t1.root as project")->from(TABLE_TEAM)->alias('t1')
+            ->leftJoin(TABLE_USER)->alias('t2')->on('t1.account = t2.account')
+            ->where('t1.root')->in($projectIdList)
+            ->andWhere('t1.type')->eq('project')
+            ->andWhere('t2.deleted')->eq('0')
+            ->beginIF($this->config->vision)->andWhere("CONCAT(',', t2.visions, ',')")->like("%,{$this->config->vision},%")->fi()
+            ->fetchGroup('project', 'account');
     }
 
     /**

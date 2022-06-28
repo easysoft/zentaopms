@@ -51,7 +51,7 @@ $(function()
             {
                 enable: true,
                 chkStyle: "checkbox",
-                chkboxType: {"Y" : "s", "N" : "s"}
+                chkboxType: {"Y" : "ps", "N" : "ps"}
             },
             data:
             {
@@ -176,7 +176,7 @@ $(function()
             {
                 enable: true,
                 chkStyle: "checkbox",
-                chkboxType: {"Y":"s", "N":"s"}
+                chkboxType: {"Y" : "ps", "N" : "ps"}
             },
             data:
             {
