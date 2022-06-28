@@ -16,6 +16,12 @@ $(function()
     });
     $('#needNotReview').change();
 
+    $('#reviewer').on('change', function()
+    {
+        loadAssignedTo();
+    });
+    $('#reviewer').change();
+
     // init pri selector
     $('#pri').on('change', function()
     {
@@ -33,15 +39,41 @@ $(function()
         if($.inArray(source, feedbackSource) != -1)
         {
             $('#feedbackBox').removeClass('hidden');
-            $('#reviewerBox').attr('colspan', 2);
+            $('#reviewerBox').attr('colspan', 1);
+            $('#assignedToBox').attr('colspan', 1);
         }
         else
         {
             $('#feedbackBox').addClass('hidden');
-            $('#reviewerBox').attr('colspan', 4);
+            $('#reviewerBox').attr('colspan', 2);
+            $('#assignedToBox').attr('colspan', 2);
         }
     });
 });
+
+function loadAssignedTo()
+{
+    var assignees = $('#reviewer').val();
+    var link = createLink('story', 'ajaxGetAssignedTo', 'type=create&assignees=' + assignees);
+    $.post(link, function(data)
+    {
+        $('#assignedTo').replaceWith(data);
+        $('#assignedToBox .picker').remove();
+        $('#assignedTo').picker();
+    });
+
+    var colspan = $('#assignedToBox').attr('colspan');
+    if(assignees && assignees.length == 1)
+    {
+        $('#assignedToBox').addClass('hidden');
+        $('#reviewerBox').attr('colspan', colspan * 2);
+    }
+    else
+    {
+        $('#assignedToBox').removeClass('hidden');
+        $('#reviewerBox').attr('colspan', colspan);
+    }
+}
 
 function refreshPlan()
 {

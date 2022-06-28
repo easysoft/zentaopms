@@ -2591,4 +2591,27 @@ class story extends control
         }
         echo $status;
     }
+
+    /**
+     * Ajax get story assignee.
+     *
+     * @param  $type create|review|change
+     *
+     * @access public
+     * @return void
+     */
+    public function ajaxGetAssignedTo($type = '', $assignees = '')
+    {
+        $users = $this->loadModel('user')->getPairs('noletter|noclosed');
+
+        if($type = 'create')
+        {
+            $selectUser = is_array($assignees) ? current($assignees) : '';
+
+            return print(html::select('assignedTo', $users, $selectUser, "class='from-control picker-select'"));
+        }
+
+        return false;
+
+    }
 }

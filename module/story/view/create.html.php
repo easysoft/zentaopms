@@ -103,7 +103,7 @@
           <?php endif;?>
           <tr>
             <th><?php echo $lang->story->reviewedBy;?></th>
-            <td colspan='<?php echo $type == 'story' ? 4 : 2;?>' id='reviewerBox'>
+            <td colspan='<?php echo $type == 'story' ? 2 : 1;?>' id='reviewerBox'>
               <div class="table-row">
                 <?php if(!$this->story->checkForceReview()):?>
                 <div class="table-col">
@@ -122,6 +122,12 @@
                   <?php echo html::select('reviewer[]', $reviewers, empty($needReview) ? $product->PO : '', "class='form-control picker-select' multiple required");?>
                 </div>
                 <?php endif;?>
+              </div>
+            </td>
+            <td colspan='<?php echo $type == 'story' ? 2 : 1;?>' id='assignedToBox'>
+              <div class='input-group'>
+                <div class="input-group-addon"><?php echo $lang->story->assignedTo;?></div>
+                <?php echo html::select('assignedTo', $users, '', "class='form-control picker-select'");?>
               </div>
             </td>
             <?php if($type == 'requirement'):?>
