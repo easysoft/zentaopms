@@ -176,7 +176,7 @@
                 <th><?php echo $lang->task->mailto;?></th>
                 <td>
                   <div class='input-group'>
-                    <?php echo html::select('mailto[]', $users, str_replace(' ' , '', $task->mailto), 'class="form-control picker-select" multiple');?>
+                    <?php echo html::select('mailto[]', $users, str_replace(' ' , '', $task->mailto), 'class="form-control picker-select" multiple data-drop-direction="bottom"');?>
                     <?php echo $this->fetch('my', 'buildContactLists');?>
                   </div>
                 </td>
