@@ -1283,7 +1283,7 @@ class user extends control
     public function ajaxGetContactUsers($contactListID, $dropdownName = 'mailto', $oldUsers = '')
     {
         $list = $contactListID ? $this->user->getContactListByID($contactListID) : '';
-        $attr = $dropdownName == 'mailto' ? "data-placeholder='{$this->lang->chooseUsersToMail}'" : '';
+        $attr = $dropdownName == 'mailto' ? "data-placeholder='{$this->lang->chooseUsersToMail}' data-drop-direction='bottom'" : '';
 
         $users = $this->user->getPairs('devfirst|nodeleted|noclosed', $list ? $list->userList : '', $this->config->maxCount);
         if(isset($this->config->user->moreLink)) $this->config->moreLinks[$dropdownName . "[]"] = $this->config->user->moreLink;
