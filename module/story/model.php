@@ -4015,7 +4015,7 @@ class storyModel extends model
 
                 if($canBeChanged and common::hasPriv('execution', 'storyEstimate', $execution))
                 {
-                    $menu .= common::printIcon('execution', 'storyEstimate', "executionID=$executionID&storyID=$story->id", '', 'list', 'estimate', '', 'iframe', true, "data-width='600px'");
+                    $menu .= common::printIcon('execution', 'storyEstimate', "executionID=$executionID&storyID=$story->id", '', 'list', 'estimate', '', 'iframe', true, "data-width='450px'");
                 }
 
                 if($canBeChanged and common::hasPriv('execution', 'unlinkStory', $execution))
