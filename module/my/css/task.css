@@ -17,3 +17,4 @@ td.delayed {background: #e84e0f !important; color: white;}
 .c-hours {width: 50px;}
 .c-status, .c-date, .c-user-short {width: 70px;}
 .c-project {width: 130px;}
+#taskTable .c-user {padding-left: 29px;}
