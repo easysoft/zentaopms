@@ -134,6 +134,7 @@ $lang->execution->sortColumn          = 'Kanban Card Sorting';
 $lang->execution->batchCreateStory    = "Batch create {$lang->SRCommon}";
 $lang->execution->batchCreateTask     = 'Batch create task';
 $lang->execution->kanbanNoLinkProduct = "Kanban not linked {$lang->productCommon}";
+$lang->execution->myTask              = "My Task";
 $lang->execution->list                = "{$lang->executionCommon} List";
 
 /* Fields of zt_team. */
@@ -379,6 +380,8 @@ $lang->execution->errorBegin                  = "The start time of {$lang->execu
 $lang->execution->errorEnd                    = "The end time of {$lang->executionCommon} cannot be greater than the end time %s of the project.";
 $lang->execution->errorLetterProject          = "The start time of stage cannot be less than the start time of the project %s.";
 $lang->execution->errorGreaterProject         = "The end time of stage cannot be greater than the end time %s of the project.";
+$lang->execution->errorCommonBegin            = 'The start date of ' . $lang->executionCommon . ' "%s" should be ≥ the start date of project %s: %s.';
+$lang->execution->errorCommonEnd              = 'The deadline of ' . $lang->executionCommon .  ' "%s" should be ≤ the deadline of project %s: %s.';
 $lang->execution->accessDenied                = "Votre accès au {$lang->executionCommon} est refusé ! Désolé.";
 $lang->execution->tips                        = 'Note';
 $lang->execution->afterInfo                   = "Le {$lang->executionCommon} a été créé avec succès ! Ensuite vous pouvez ";

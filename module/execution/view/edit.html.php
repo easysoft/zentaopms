@@ -44,7 +44,7 @@
           <td><?php echo html::input('code', $execution->code, "class='form-control' required");?></td>
         </tr>
         <tr>
-          <th><?php echo $lang->execution->dateRange;?></th>
+          <th id="dateRange"><?php echo $lang->execution->dateRange;?></th>
           <td>
             <div class='input-group'>
               <?php echo html::input('begin', $execution->begin, "class='form-control form-date' onchange='computeWorkDays()' required placeholder='" . $lang->execution->begin . "'");?>
