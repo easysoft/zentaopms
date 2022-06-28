@@ -34,6 +34,7 @@ $lang->product->changeProgram    = "{$lang->productCommon}调整所属项目集�
 $lang->product->changeProgramTip = "%s > 修改项目集";
 $lang->product->addWhitelist     = '添加白名单';
 $lang->product->unbindWhitelist  = '移除白名单';
+$lang->product->checkedProducts  = '已选择%s项产品';
 
 $lang->product->indexAction  = "所有{$lang->productCommon}仪表盘";
 $lang->product->closeAction  = "关闭{$lang->productCommon}";

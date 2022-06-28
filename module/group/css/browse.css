@@ -1,5 +1,6 @@
 .user {display: block; width: 80px; float: left; overflow: hidden;}
 .c-name {width: 130px;}
 .c-desc {width: 300px;}
+.btn-admin {margin-left: 0px !important}
 
 #groupList tbody tr.even td {word-wrap: break-word;}

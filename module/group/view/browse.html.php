@@ -42,25 +42,28 @@
         <td title='<?php echo $group->desc?>'><?php echo $group->desc;?></td>
         <td title='<?php echo $users;?>' class="text-ellipsis"><?php echo $users;?></td>
         <td class='c-actions'>
-          <?php $isProjectAdmin = $group->role == 'projectAdmin';?>
-          <?php $disabled       = $isProjectAdmin ? 'disabled' : '';?>
           <?php $lang->group->managepriv = $lang->group->managePrivByGroup;?>
-          <?php common::printIcon('group', 'manageView', "groupID=$group->id", $group, 'list', 'eye', '', $disabled);?>
-          <?php common::printIcon('group', 'managepriv', "type=byGroup&param=$group->id", $group, 'list', 'lock', '', $disabled);?>
           <?php $lang->group->managemember = $lang->group->manageMember;?>
+          <?php $isProjectAdmin = $group->role == 'projectAdmin';?>
           <?php if($isProjectAdmin):?>
+          <?php echo "<button class='btn disabled'><i class='icon icon-eye disabled' title='{$lang->group->manageView}'></i></button>";?>
+          <?php echo "<button class='btn disabled'><i class='icon icon-lock disabled' title='{$lang->group->managepriv}'></i></button>";?>
           <?php common::printIcon('group', 'manageProjectAdmin', "groupID=$group->id", $group, 'list', 'persons');?>
+          <?php echo "<button class='btn disabled'><i class='icon icon-edit disabled' title='{$lang->group->edit}'></i></button>";?>
+          <?php echo "<button class='btn disabled'><i class='icon icon-copy disabled' title='{$lang->group->copy}'></i></button>";?>
           <?php else:?>
+          <?php common::printIcon('group', 'manageView', "groupID=$group->id", $group, 'list', 'eye');?>
+          <?php common::printIcon('group', 'managepriv', "type=byGroup&param=$group->id", $group, 'list', 'lock');?>
           <?php common::printIcon('group', 'manageMember', "groupID=$group->id", $group, 'list', 'persons', '', "iframe", true, "data-width='90%'");?>
+          <?php common::printIcon('group', 'edit', "groupID=$group->id", $group, 'list', '', '', "iframe", true, "data-width='550'");?>
+          <?php common::printIcon('group', 'copy', "groupID=$group->id", $group, 'list', '', '', "iframe", true, "data-width='550'");?>
           <?php endif;?>
-          <?php common::printIcon('group', 'edit', "groupID=$group->id", $group, 'list', '', '', "iframe $disabled", true, "data-width='550'");?>
-          <?php common::printIcon('group', 'copy', "groupID=$group->id", $group, 'list', '', '', "iframe $disabled", true, "data-width='550'");?>
           <?php
           if(common::hasPriv('group', 'delete'))
           {
               if($isProjectAdmin)
               {
-                  echo "<button class='btn disabled'><i class='icon icon-trash disabled' title='{$lang->group->delete}'></i></button>";
+                  echo "<a class='btn btn-admin disabled'><i class='icon icon-trash disabled' title='{$lang->group->delete}'></i></a>";
               }
               else
               {

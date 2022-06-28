@@ -880,6 +880,7 @@ class project extends control
      */
     public function dynamic($projectID = 0, $type = 'today', $param = '', $recTotal = 0, $date = '', $direction = 'next')
     {
+        $this->loadModel('execution');
         $this->project->setMenu($projectID);
 
         /* Save session. */

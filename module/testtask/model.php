@@ -2287,4 +2287,73 @@ class testtaskModel extends model
         }
         return $menu;
     }
+
+    /**
+     * Set menu.
+     *
+     * @param  array       $products
+     * @param  int         $productID
+     * @param  int|string  $branch
+     * @param  int         $taskID
+     * @access public
+     * @return void
+     */
+    public function setMenu($products, $productID, $branch = '', $taskID = 0)
+    {
+        if(!$this->app->user->admin and strpos(",{$this->app->user->view->products},", ",$productID,") === false and $productID != 0 and !defined('TUTORIAL'))
+        {
+            $this->app->loadLang('product');
+            return print(js::error($this->lang->product->accessDenied) . js::locate('back'));
+        }
+
+        $branch = ($this->cookie->preBranch !== '' and $branch === '') ? $this->cookie->preBranch : $branch;
+        setcookie('preBranch', $branch, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, true);
+
+        $product = $this->loadModel('product')->getById($productID);
+        if($product and $product->type != 'normal') $this->lang->product->branch = sprintf($this->lang->product->branch, $this->lang->product->branchName[$product->type]);
+
+        $selectHtml = $this->product->getSwitcher($productID, $taskID, $branch);
+
+        if($taskID and $this->app->viewType != 'mhtml')
+        {
+            $testtask     = $this->getById($taskID);
+            $module       = $this->app->rawModule;
+            $method       = $this->app->rawMethod;
+            $dropMenuLink = helper::createLink('testtask', 'ajaxGetDropMenu', "productID=$productID&branch=$branch&taskID=$taskID&module=$module&method=$method");
+            $selectHtml  .= "<div class='btn-group header-btn' id='swapper'><button data-toggle='dropdown' type='button' class='btn' id='currentTesttask' title='{$testtask->name}'><span class='text'>{$testtask->name}</span> <span class='caret' style='margin-bottom: -1px'></span></button><div id='dropMenu' class='dropdown-menu search-list' data-ride='searchList' data-url='$dropMenuLink'>";
+            $selectHtml .= '<div class="input-control search-box has-icon-left has-icon-right search-example"><input type="search" class="form-control search-input" /><label class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label><a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a></div>';
+            $selectHtml .= "</div></div>";
+        }
+
+        $this->lang->switcherMenu = $selectHtml;
+        common::setMenuVars('qa', $productID);
+    }
+
+    /**
+     * Create the select code of testtasks.
+     *
+     * @param  int    $productID
+     * @param  int    $testtaskID
+     * @param  string $objectType execution|project
+     * @param  int    $objectID
+     * @access public
+     * @return string
+     */
+    public function select($productID, $testtaskID, $objectType = '', $objectID = 0)
+    {
+        $output        = '';
+        $currentModule = $this->app->rawModule;
+        $currentMethod = $this->app->rawMethod;
+        if($testtaskID and $this->app->viewType != 'mhtml')
+        {
+            $dropMenuLink = helper::createLink('testtask', 'ajaxGetDropMenu', "productID=$productID&branch=&taskID=$testtaskID&module=$currentModule&method=$currentMethod&objectType=$objectType&objectID=$objectID");
+            $testtask     = $this->getById($testtaskID);
+
+            $output .= "<div class='btn-group angle-btn'><div class='btn-group'><button data-toggle='dropdown' type='button' class='btn btn-limit' id='currentTesttask' title='{$testtask->name}'><span class='text'>{$testtask->name}</span> <span class='caret'></span></button><div id='dropMenu' class='dropdown-menu search-list' data-ride='searchList' data-url='$dropMenuLink'>";
+            $output .= '<div class="input-control search-box has-icon-left has-icon-right search-example"><input type="search" class="form-control search-input" /><label class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label><a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a></div>';
+            $output .= "</div></div>";
+        }
+        $output .= '</div>';
+        return $output;
+    }
 }

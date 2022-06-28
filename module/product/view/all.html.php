@@ -242,10 +242,10 @@
         <?php if(!empty($product) and $canBatchEdit):?>
         <div class="checkbox-primary check-all"><label><?php echo $lang->selectAll?></label></div>
         <div class="table-actions btn-toolbar">
-        <?php
-        $actionLink = $this->createLink('product', 'batchEdit');
-        echo html::commonButton($lang->edit, "data-form-action='$actionLink'");
-        ?>
+          <?php
+          $actionLink = $this->createLink('product', 'batchEdit');
+          echo html::commonButton($lang->edit, "id='editBtn' data-form-action='$actionLink'");
+          ?>
         <?php endif;?>
         </div>
       </div>
@@ -255,6 +255,7 @@
 </div>
 <?php js::set('orderBy', $orderBy)?>
 <?php js::set('browseType', $browseType)?>
+<?php js::set('checkedProducts', $lang->product->checkedProducts);?>
 <?php if(commonModel::isTutorialMode()): ?>
 <style>
 #productListForm {overflow: hidden;}

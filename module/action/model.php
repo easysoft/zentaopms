@@ -950,34 +950,45 @@ class actionModel extends model
         extract($beginAndEnd);
 
         /* Build has priv condition. */
-        $condition = 1;
-        if($productID == 'all')   $products   = $this->app->user->view->products;
-        if($projectID == 'all')   $projects   = $this->app->user->view->projects;
-        if($executionID == 'all') $executions = $this->app->user->view->sprints;
-
-        if($productID == 'all' or $projectID == 'all')
+        $condition  = 1;
+        $executions = array();
+        if(!$this->app->user->admin)
         {
-            $productCondition   = $productID   == 'all' ? "product " . helper::dbIN($products) : '';
-            $projectCondition   = $projectID   == 'all' ? "project " . helper::dbIN($projects) : '';
-            $executionCondition = $executionID == 'all' ? "execution " . helper::dbIN($executions) : '';
-            if(is_numeric($productID))   $productCondition = "product like '%,$productID,%' or product = '$productID'";
-            if(is_numeric($projectID))   $projectCondition = "project = '$projectID'";
-            if(is_numeric($executionID)) $executionCondition = "execution = '$executionID'";
+            if($productID == 'all')   $products   = $this->app->user->view->products;
+            if($projectID == 'all')   $projects   = $this->app->user->view->projects;
+            if($executionID == 'all') $executions = $this->app->user->view->sprints;
+
+            if($productID == 'all' and $projectID == 'all')
+            {
+                $productCondition   = "product " . helper::dbIN($products);
+                $projectCondition   = "project " . helper::dbIN($projects);
+                $executionCondition = "execution " . helper::dbIN($executions);
+            }
+            elseif($productID == 'all' and is_numeric($projectID))
+            {
+                $products   = $this->loadModel('product')->getProductPairsByProject($projectID);
+                $executions = $this->loadModel('execution')->getPairs($projectID) + array(0 => 0);
+
+                $productCondition   = "product " . helper::dbIN(array_keys($products));
+                $projectCondition   = "project = $projectID";
+                $executionCondition = "execution " . helper::dbIN(array_keys($executions));
+            }
+            elseif(is_numeric($productID) and $projectID == 'all')
+            {
+                $this->loadModel('product');
+                $projects   = $this->product->getProjectPairsByProduct($productID);
+                $executions = $this->product->getExecutionPairsByProduct($productID);
+
+                $productCondition   = "product = $productID";
+                $projectCondition   = "project " . helper::dbIN(array_keys($projects));
+                $executionCondition = "execution " . helper::dbIN(array_keys($executions));
+            }
 
             $condition = "((product =',0,' or product=0) AND project = '0' AND execution = 0)";
-            if($productCondition)   $condition .= ' OR ' . $productCondition;
-            if($projectCondition)   $condition .= ' OR ' . $projectCondition;
-            if($executionCondition) $condition .= ' OR ' . $executionCondition;
-            if($this->app->user->admin) $condition = 1;
+            if(isset($productCondition))   $condition .= ' OR ' . $productCondition;
+            if(isset($projectCondition))   $condition .= ' OR ' . $projectCondition;
+            if(isset($executionCondition)) $condition .= ' OR ' . $executionCondition;
         }
-
-        /* If is project, select its related. */
-        $executions = array();
-        if(is_numeric($projectID) and $executionID == 'all') $executions = $this->loadModel('execution')->getPairs($projectID) + array(0 => 0);
-
-        $this->loadModel('doc');
-        $libs = $this->doc->getLibs('includeDeleted') + array('' => '');
-        $docs = $this->doc->getPrivDocs(array_keys($libs), 0, 'all');
 
         $actionCondition = $this->getActionCondition();
         if(!$actionCondition and !$this->app->user->admin and isset($this->app->user->rights['acls']['actions'])) return array();
@@ -1016,8 +1027,6 @@ class actionModel extends model
             ->beginIF($projectID == 'notzero')->andWhere('project')->gt(0)->fi()
             ->beginIF($executionID == 'notzero')->andWhere('execution')->gt(0)->fi()
             ->beginIF($productID == 'all' or $projectID == 'all' or $executionID == 'all')->andWhere("IF((objectType!= 'doc' && objectType!= 'doclib'), ($condition), '1=1')")->fi()
-            ->beginIF($docs and !$this->app->user->admin)->andWhere("IF(objectType != 'doc' || (objectType = 'doc' && (action = 'approved' || action = 'removed')), '1=1', objectID " . helper::dbIN($docs) . ")")->fi()
-            ->beginIF($libs and !$this->app->user->admin)->andWhere("IF(objectType != 'doclib', '1=1', objectID " . helper::dbIN(array_keys($libs)) . ') ')->fi()
             ->beginIF($actionCondition)->andWhere("($actionCondition)")->fi()
             /* Filter out client login/logout actions. */
             ->andWhere('action')->notin('disconnectxuanxuan,reconnectxuanxuan,loginxuanxuan,logoutxuanxuan')
