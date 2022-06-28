@@ -10,13 +10,18 @@
  * @link        https://www.zentao.net
  */
 ?>
+<style>
+#currentTesttask + #dropMenu {max-width: 250px;}
+#currentTesttask + #dropMenu > .list-group {overflow-x: hidden;}
+#currentTesttask + #dropMenu .table-row > .table-col > .list-group {max-width: 248px;}
+</style>
 <?php
 $selectHtml = '';
 foreach($testtasks as $testtaskID => $testtask)
 {
     $selected    = (string)$testtaskID == $currentTaskID ? 'selected' : '';
     $param       = $method == 'report' ? "productID=$productID&taskID=$testtaskID&browseType=all&branch=$branch" : "taskID=$testtaskID";
-    $selectHtml .= html::a($this->createLink($module, $method, $param), $testtask->name, '', "class='$selected' data-key='{$testtasksPinyin[$testtask->name]}' data-app='{$this->app->tab}'");
+    $selectHtml .= html::a($this->createLink($module, $method, $param), $testtask->name, '', "class='$selected' data-key='{$testtasksPinyin[$testtask->name]}' data-app='{$this->app->tab}' title='{$testtask->name}'");
 }
 ?>
 <div class="table-row">
@@ -24,3 +29,12 @@ foreach($testtasks as $testtaskID => $testtask)
     <div class='list-group'><?php echo $selectHtml;?></div>
   </div>
 </div>
+<script>
+$(function()
+{
+    $('#currentTesttask + #dropMenu .list-group .table-row .table-col a').mouseout(function()
+    {
+        $(this).removeClass('active');
+    })
+})
+</script>
