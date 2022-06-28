@@ -206,6 +206,8 @@ $lang->action->desc->importedrelease      = '$date, imported to <strong>$extra</
 $lang->action->desc->importedexecution    = '$date, imported to <strong>$extra</strong> by <strong>$actor</strong>.' . "\n";
 $lang->action->desc->importedbuild        = '$date, imported to <strong>$extra</strong> by <strong>$actor</strong>.' . "\n";
 $lang->action->desc->fromsonarqube        = '$date, created by <strong>$actor</strong> from <strong>SonarQube Issue</strong>.' . "\n";
+$lang->action->desc->tolib                = '$date, Importé par <strong>$actor</strong> .' . "\n";
+$lang->action->desc->updatetolib          = '$date, MàJ de ' . $lang->testcase->common . ' par  <strong>$actor</strong>.' . "\n";
 
 /* Used to describe the history of operations related to parent-child tasks. */
 $lang->action->desc->createchildren     = '$date, <strong>$actor</strong> a créé un sous-tâche <strong>$extra</strong>。' . "\n";
@@ -368,6 +370,8 @@ $lang->action->label->linkstory             = 'link stories to';
 $lang->action->label->linkbug               = 'link bugs to';
 $lang->action->label->unlinkstory           = 'unlink stories from';
 $lang->action->label->unlinkbug             = 'unlink bugs from';
+$lang->action->label->tolib                 = 'Importé';
+$lang->action->label->updatetolib           = 'MàJ';
 
 /* Dynamic information is grouped by object. */
 $lang->action->dynamicAction                    = new stdclass();
@@ -559,14 +563,16 @@ $lang->action->dynamicAction->testtask['activated'] = 'Activé Recette';
 $lang->action->dynamicAction->testtask['closed']    = 'Fermé Recette';
 $lang->action->dynamicAction->testtask['blocked']   = 'Bloqué Recette';
 
-$lang->action->dynamicAction->case['opened']    = 'Créé CasTest';
-$lang->action->dynamicAction->case['edited']    = 'Edité CasTest';
-$lang->action->dynamicAction->case['deleted']   = 'Supprimé CasTest';
-$lang->action->dynamicAction->case['undeleted'] = 'Restauré CasTest';
-$lang->action->dynamicAction->case['hidden']    = 'Masqué CasTest';
-$lang->action->dynamicAction->case['reviewed']  = 'Ajouté Revue Résultats';
-$lang->action->dynamicAction->case['confirmed'] = 'Confirmé CasTest';
-$lang->action->dynamicAction->case['fromlib']   = 'Importé de CasTest Lib';
+$lang->action->dynamicAction->case['opened']      = 'Créé CasTest';
+$lang->action->dynamicAction->case['edited']      = 'Edité CasTest';
+$lang->action->dynamicAction->case['deleted']     = 'Supprimé CasTest';
+$lang->action->dynamicAction->case['undeleted']   = 'Restauré CasTest';
+$lang->action->dynamicAction->case['hidden']      = 'Masqué CasTest';
+$lang->action->dynamicAction->case['reviewed']    = 'Ajouté Revue Résultats';
+$lang->action->dynamicAction->case['confirmed']   = 'Confirmé CasTest';
+$lang->action->dynamicAction->case['fromlib']     = 'Importé de CasTest Lib';
+$lang->action->dynamicAction->case['tolib']       = 'Importé Case';
+$lang->action->dynamicAction->case['updatetolib'] = 'MàJ Case';
 
 $lang->action->dynamicAction->testreport['opened']    = 'Créé Test Report';
 $lang->action->dynamicAction->testreport['edited']    = 'Edité Test Report';

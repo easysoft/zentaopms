@@ -90,7 +90,8 @@ js::set('suiteID',        $suiteID);
       $canBatchCaseTypeChange     = common::hasPriv('testcase', 'batchCaseTypeChange');
       $canBatchConfirmStoryChange = common::hasPriv('testcase', 'batchConfirmStoryChange');
       $canBatchChangeModule       = common::hasPriv('testcase', 'batchChangeModule');
-      $canBatchAction             = ($canBatchRun or $canBatchEdit or $canBatchDelete or $canBatchCaseTypeChange or $canBatchConfirmStoryChange or $canBatchChangeModule);
+      $canImportToLib             = common::hasPriv('testcase', 'importToLib');
+      $canBatchAction             = ($canBatchRun or $canBatchEdit or $canBatchDelete or $canBatchCaseTypeChange or $canBatchConfirmStoryChange or $canBatchChangeModule or $canImportToLib);
       ?>
       <?php if(!$useDatatable) echo '<div class="table-responsive">';?>
       <table class='table has-sort-head<?php if($useDatatable) echo ' datatable';?>' id='caseList' data-fixed-left-width='<?php echo $widths['leftWidth']?>' data-fixed-right-width='<?php echo $widths['rightWidth']?>' data-checkbox-name='caseIDList[]'>
@@ -237,12 +238,43 @@ js::set('suiteID',        $suiteID);
           </div>
           <?php endif;?>
           <?php endif;?>
+          <?php
+          if($canImportToLib)
+          {
+              $actionLink = '#importToLib';
+              echo html::a($actionLink, $lang->testcase->importToLib, '', "class='btn btn-primary' data-toggle='modal'");
+          }
+          ;?>
         </div>
         <div class="table-statistic"><?php echo $summary;?></div>
         <?php $pager->show('right', 'pagerjs');?>
       </div>
     </form>
     <?php endif;?>
+  </div>
+</div>
+<div class="modal fade" id="importToLib">
+  <div class="modal-dialog mw-500px">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="icon icon-close"></i></button>
+        <h4 class="modal-title"><?php echo $lang->testcase->importToLib;?></h4>
+      </div>
+      <div class="modal-body">
+        <form method='post' class='form-ajax' action='<?php echo $this->createLink('testcase', 'importToLib');?>'>
+          <table class='table table-form'>
+            <tr>
+              <td class='select-lib'><?php echo $lang->testcase->selectLibAB;?></td>
+              <td class='required'><?php echo html::select('lib', $libraries, '', "class='form-control chosen' id='lib'");?></td>
+            </tr>
+            <tr>
+              <?php echo html::hidden('caseIdList', '');?>
+              <td colspan='2' class='text-center'><?php echo html::submitButton($lang->testcase->import);?></td>
+            </tr>
+          </table>
+        </form>
+      </div>
+    </div>
   </div>
 </div>
 <script>
