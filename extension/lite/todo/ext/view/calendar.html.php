@@ -25,12 +25,15 @@
 <?php js::set('moduleList', $config->todo->moduleList);?>
 <div id="mainMenu" class="clearfix">
   <div class="btn-toolbar pull-left">
-    <?php if(common::hasPriv('my', 'todo')) echo html::a(helper::createLink('my', 'todo', "type=all"), $lang->todo->all . " <span class='label label-light label-badge'>{$todoCount}</span>", '', "class='btn btn-link'");?>
-    <?php if(isset($effortCount)):?>
-    <?php if(common::hasPriv('my', 'effort')) echo html::a(helper::createLink('my', 'effort', "type=all"), $lang->effort->all . " <span class='label label-light label-badge'>{$effortCount}</span>", '', "class='btn btn-link'");?>
-    <?php endif;?>
+    <?php echo html::a('#', $lang->todo->todoCalendar, '', "class='btn btn-link'");?>
   </div>
   <div class="btn-toolbar pull-right">
+    <?php if(common::hasPriv('my', 'todo')):?>
+    <div class="btn-group panel-actions">
+      <?php echo html::a(helper::createLink('todo', 'calendar'), "<i class='icon-cards-view'></i> &nbsp;", '', "class='btn btn-icon text-primary' title='{$lang->todo->calendar}' id='switchButton'");?>
+      <?php echo html::a(helper::createLink('my', 'todo', "type=all"), "<i class='icon-list'></i> &nbsp;", '', "class='btn btn-icon' title='{$lang->todo->list}' id='switchButton'");?>
+    </div>
+    <?php endif;?>
     <?php if(common::hasPriv('todo', 'export')) echo html::a('javascript:exportCalendar("' . helper::createLink('todo', 'export', "userID={$this->app->user->id}&orderBy=id_desc&date=_date_") . '")', "<i class='icon-export muted'> </i> " . $lang->todo->export, '', "class='btn btn-link'");?>
     <?php if(common::hasPriv('todo', 'create') or common::hasPriv('todo', 'batchCreate')):?>
     <div class='btn-group dropdown'>
@@ -57,17 +60,6 @@
             <span id="date" class="calendar-caption"></span>
             <button type="button" class="btn btn-info btn-icon btn-mini btn-next"><i class="icon-chevron-right"></i></button>
           </div>
-          <div class="col-4 text-center table-col">
-            <ul class="nav nav-primary">
-              <li class="active"><?php echo html::a($this->createLink('todo', 'calendar'), $lang->todo->common);?></li>
-              <?php if($this->config->edition != 'open' and common::hasPriv('effort', 'calendar')):?>
-              <li><?php echo html::a($this->createLink('effort', 'calendar'), $lang->effort->common);?></li>
-              <?php elseif(common::hasPriv('my', 'effort')):?>
-              <li><?php echo html::a($this->createLink('my', 'effort'), $lang->effort->common);?></li>
-              <?php endif;?>
-            </ul>
-          </div>
-          <div class="col-4 table-col"></div>
         </header>
       </div>
     </div>
@@ -422,6 +414,11 @@ $(function()
     {
         batchAddModalTrigger.show({url: $(this).attr('href'), showHeader:false});
         return false;
+    })
+
+    $('.pull-left .btn-link').click(function()
+    {
+        $(this).css('background', 'unset');
     })
 
     addPager('#tab_undone');

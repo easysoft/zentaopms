@@ -18,3 +18,4 @@ ALTER TABLE `zt_kanban` ADD `showWIP` enum('0','1') NOT NULL DEFAULT '1' AFTER `
 ALTER TABLE `zt_kanban` ADD `alignment` varchar(10) NOT NULL DEFAULT 'center' AFTER `object`;
 
 ALTER TABLE `zt_module` ADD `from` mediumint(8) unsigned NOT NULL DEFAULT '0' AFTER `type`;
+ALTER TABLE `zt_workflow` ADD `approval` enum('enabled', 'disabled') NOT NULL DEFAULT 'disabled' AFTER `status`;

@@ -18,12 +18,15 @@
 </style>
 <div id="mainMenu" class="clearfix">
   <div class="btn-toolbar pull-left">
-    <?php if(common::hasPriv('my', 'todo')) echo html::a(helper::createLink('my', 'todo', "type=all"), $lang->todo->all . " <span class='label label-light label-badge'>{$todoCount}</span>", '', "class='btn btn-link'");?>
-    <?php if(isset($effortCount)):?>
-    <?php if(common::hasPriv('my', 'effort')) echo html::a(helper::createLink('my', 'effort', "type=all"), $lang->effort->all . " <span class='label label-light label-badge'>{$effortCount}</span>", '', "class='btn btn-link'");?>
-    <?php endif?>
+    <?php echo html::a('#', $lang->effort->effortCalendar, '', "class='btn btn-link'");?>
   </div>
   <div class="btn-toolbar pull-right">
+    <?php if(isset($effortCount) and common::hasPriv('my', 'effort')):?>
+    <div class="btn-group panel-actions">
+      <?php echo html::a(helper::createLink('effort', 'calendar'), "<i class='icon-cards-view'></i> &nbsp;", '', "class='btn btn-icon text-primary' title='{$lang->effort->calendar}' id='switchButton'");?>
+      <?php echo html::a(helper::createLink('my', 'effort', "type=all"), "<i class='icon-list'></i> &nbsp;", '', "class='btn btn-icon' title='{$lang->effort->list}' id='switchButton'");?>
+    </div>
+    <?php endif;?>
     <?php if(common::hasPriv('effort', 'export')) echo html::a('javascript:exportCalendar("' . helper::createLink('effort', 'export', "userID={$user->id}&orderBy=date_asc&date=_date_") . '")', "<i class='icon-export muted'> </i> " . $lang->effort->export, '', "class='btn btn-link'") ?>
     <?php
     $date = str_replace('-', '', $date);
@@ -42,17 +45,6 @@
             <span id="date" class="calendar-caption"></span>
             <button type="button" class="btn btn-info btn-icon btn-mini btn-next"><i class="icon-chevron-right"></i></button>
           </div>
-          <div class="col-4 text-center table-col">
-            <ul class="nav nav-primary">
-              <?php if(common::hasPriv('todo', 'calendar')):?>
-              <li><?php echo html::a($this->createLink('todo', 'calendar'), $lang->todo->common);?></li>
-              <?php elseif(common::hasPriv('my', 'todo')):?>
-              <li><?php echo html::a($this->createLink('my', 'todo'), $lang->todo->common);?></li>
-              <?php endif;?>
-              <li class="active"><?php echo html::a($this->createLink('effort', 'calendar'), $lang->effort->common);?></li>
-            </ul>
-          </div>
-          <div class="col-4 table-col"></div>
         </header>
       </div>
     </div>
@@ -207,6 +199,11 @@ $(function()
     {
         batchAddModalTrigger.show({url: $(this).attr('href'), showHeader:false});
         return false;
+    })
+
+    $('.pull-left .btn-link').click(function()
+    {
+        $(this).css('background', 'unset');
     })
 });
 </script>

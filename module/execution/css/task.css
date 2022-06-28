@@ -8,3 +8,5 @@ th.c-deadline {text-align: center;}
 .c-left {text-align: right;}
 .table-footer {z-index: 1;}
 .btn-toolbar > .btn {margin-right: 5px !important;}
+#taskList .c-progress{padding-right: 8px; text-align: right;}
+#datatable-taskList .c-progress{padding-right: 8px; text-align: right;}

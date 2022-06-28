@@ -85,6 +85,7 @@ function zdRun()
     set_time_limit(0);
     try
     {
+        $versionType = getVersionType($config->version);
         $configRoot  = $zdRoot . $versionType . '/';
         include $configRoot . 'config.php';
         include $configRoot . 'processor.php';

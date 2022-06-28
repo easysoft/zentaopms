@@ -453,7 +453,6 @@ EOF;
         $this->loadModel('execution');
         $queryID  = ($type == 'bySearch') ? (int)$param : 0;
 
-
         /* Save session. */
         if($type != 'bySearch')            $this->session->set('myTaskType', $type);
         if($this->app->viewType != 'json') $this->session->set('taskList', $this->app->getURI(true), 'execution');

@@ -28,6 +28,7 @@ class program extends control
      */
     public function browse($status = 'all', $orderBy = 'order_asc', $recTotal = 0, $recPerPage = 10, $pageID = 1, $param = 0)
     {
+        $this->lang->program->featureBar = array('all' => $this->lang->program->featureBar['all']);
         if(common::hasPriv('program', 'create')) $this->lang->pageActions = html::a($this->createLink('program', 'create'), "<i class='icon icon-plus'></i> " . $this->lang->program->create, '', "class='btn btn-primary create-program-btn'");
 
         $this->session->set('programList', $this->app->getURI(true), 'program');
@@ -449,7 +450,7 @@ class program extends control
      * @access public
      * @return void
      */
-    public function project($programID = 0, $browseType = 'all', $orderBy = 'order_desc', $recTotal = 0, $recPerPage = 15, $pageID = 1)
+    public function project($programID = 0, $browseType = 'doing', $orderBy = 'order_desc', $recTotal = 0, $recPerPage = 15, $pageID = 1)
     {
         $programID = $this->program->saveState($programID, $this->program->getPairs());
         setCookie("lastProgram", $programID, $this->config->cookieLife, $this->config->webRoot, '', false, true);
@@ -543,7 +544,7 @@ class program extends control
     {
         if($confirm == 'no')
         {
-            return print(js::confirm($this->lang->program->unlinkStakeholder, $this->inlink('unlinkStakeholder', "stakeholderID=$stakeholderID&programID=$programID&confirm=yes")));
+            return print(js::confirm($this->lang->program->confirmUnlink, $this->inlink('unlinkStakeholder', "stakeholderID=$stakeholderID&programID=$programID&confirm=yes")));
         }
         else
         {

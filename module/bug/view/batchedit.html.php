@@ -102,7 +102,27 @@
             <?php endif;?>
             <td><?php echo html::select("modules[$bugID]", isset($modules[$bug->product][$bug->branch]) ? $modules[$bug->product][$bug->branch] : array(0 => '/'), $bug->module, "class='form-control picker-select' data-drop-width='auto'");?></td>
             <td class='<?php echo zget($visibleFields, 'productplan', ' hidden')?>' style='overflow:visible'><?php echo html::select("plans[$bugID]", $plans, $bug->plan, "class='form-control picker-select' data-drop-width='auto'");?></td>
-            <td class='<?php echo zget($visibleFields, 'assignedTo', ' hidden')?>' style='overflow:visible'><?php echo html::select("assignedTos[$bugID]", $users, $bug->assignedTo, "class='form-control picker-select' data-drop-width='auto'");?></td>
+            <?php
+            $assignedToList = array();
+            if($bug->execution)
+            {
+                $assignedToList = array('' => '', 'ditto' => $this->lang->bug->ditto) + $executionMembers[$bug->execution];
+            }
+            elseif($bug->project)
+            {
+                $assignedToList = array('' => '', 'ditto' => $this->lang->bug->ditto) + $projectMembers[$bug->project];
+            }
+            else
+            {
+                $assignedToList = $productMembers[$bug->product][$bug->branch];
+                if(empty($assignedToList))
+                {
+                    $assignedToList = $users;
+                    unset($assignedToList['closed']);
+                }
+            }
+            ?>
+            <td class='<?php echo zget($visibleFields, 'assignedTo', ' hidden')?>' style='overflow:visible'><?php echo html::select("assignedTos[$bugID]", $assignedToList, $bug->assignedTo, "class='form-control picker-select' data-drop-width='135px'");?></td>
             <td class='<?php echo zget($visibleFields, 'deadline', ' hidden')?>' style='overflow:visible'><?php echo html::input("deadlines[$bugID]", $bug->deadline, "class='form-control form-date'");?></td>
             <td <?php echo zget($visibleFields, 'os', "class='hidden'")?>><?php echo html::select("os[$bugID]", $osList, $bug->os, 'class=form-control');?></td>
             <td <?php echo zget($visibleFields, 'browser', "class='hidden'")?>><?php echo html::select("browsers[$bugID]", $browserList, $bug->browser, 'class=form-control');?></td>

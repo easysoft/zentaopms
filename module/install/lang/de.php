@@ -45,26 +45,26 @@ $lang->install->howToUse            = "How do you like to use ZenTao?";
 $lang->install->guideVideo          = 'https://dl.cnezsoft.com/vedio/zentaoconcepteng0716.mp4';
 $lang->install->introductionContent = <<<EOT
 <div>
-  <h4>Dear users, welcome to ZenTao project management system.</h4>
-  <p>ZenTao has two managment modes in version 15.0 and up. One is the classic management mode, providing two core features, Product and Project; the other is a new project management mode, with Program and Execution added. The following is an introduction to the new mode:</p>
+  <h4>Dear users,</h4>
+  <p>Welcome to ZenTao project management system. ZenTao has two managment modes in version 15.0 and up. One is the classic management mode, providing two core features, Product and Project; the other is a new project management mode, with Program and Execution added. The following is an introduction to the new mode:</p>
   <div class='block-content'>
-    <div class='block-details'><p class='block-title'><i class='icon icon-program'></i><strong>Program</strong></p><p>Program is used to manage a group of products and projects, and the company executives or PMO can use it for strategic planning.</p></div>
+    <div class='block-details'><p class='block-title'><i class='icon icon-program'></i> <strong>Program</strong></p><p>Program is used to manage a group of products and projects, and the company executives or PMO can use it for strategic planning.</p></div>
     <div class='block-details block-right'>
-      <p class='block-title'><i class='icon icon-product'></i><strong>Product</strong></p>
+      <p class='block-title'><i class='icon icon-product'></i> <strong>Product</strong></p>
       <p>Product is used to subdivide the company's strategy into requirements that can be developed, and the product manager can use it to make release plans.<p>
     </div>
     <div class='block-details'>
-      <p class='block-title'><i class='icon icon-project'></i><strong>Project</strong></p>
+      <p class='block-title'><i class='icon icon-project'></i> <strong>Project</strong></p>
       <p>Project is used to organize the manpower for development, track and manage the project process, and complete the project in a faster, better, and less costly way.</p>
     </div>
     <div class='block-details block-right'>
-      <p class='block-title'><i class='icon icon-run'></i><strong>Execution</strong></p>
+      <p class='block-title'><i class='icon icon-run'></i> <strong>Execution</strong></p>
       <p>Execution is used to decompose, assign, and track tasks to ensure that project goals can be implemented by manpower.<p>
     </div>
   </div>
   <div class='text-center introduction-link'>
-    <a href='https://dl.cnezsoft.com/zentao/zentaoconcept.pdf' target='_blank' class='btn btn-wide btn-info'><i class='icon icon-p-square'></i> Document of introduction</a>
-    <a href='javascript:showVideo()' class='btn btn-wide btn-info'><i class='icon icon-video-play'></i> Video of introduction</a>
+    <a href='https://dl.cnezsoft.com/zentao/zentaoconcept.pdf' target='_blank' class='btn btn-wide btn-info'><i class='icon icon-p-square'></i> Introduction Document</a>
+    <a href='javascript:showVideo()' class='btn btn-wide btn-info'><i class='icon icon-video-play'></i> Introduction Video</a>
   </div>
 </div>
 EOT;

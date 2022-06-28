@@ -130,6 +130,7 @@ function loadBranch()
     loadProductBuilds(productID);
     loadProductplans(productID);
     loadProductStories(productID);
+    loadProductMembers(productID);
 }
 
 /**
@@ -333,10 +334,42 @@ function loadProductExecutions(productID, projectID = 0)
         $(this).find('select').chosen();
         if(typeof(bugExecution) == 'string' && systemMode != 'classic') $('#executionIdBox').prepend("<span class='input-group-addon' id='executionBox' style='border-left-width: 0px;'>" + bugExecution + "</span>");
         if(required) $(this).find('#execution_chosen').addClass('required');
-        if(page != 'edit') changeAssignedTo(projectID);
+        changeAssignedTo(projectID);
     });
 
     projectID != 0 ? loadProjectBuilds(projectID) : loadProductBuilds(productID);
+}
+
+/**
+ * Ajax change execution name.
+ *
+ * @param  int $projectID
+ * @access public
+ * @return void
+ */
+function changeAssignedTo(projectID)
+{
+    if(parseInt(projectID))
+    {
+        loadProjectTeamMembers(projectID);
+        if(page == 'create')
+        {
+            var link = createLink('bug', 'ajaxGetExecutionLang', 'projectID=' + projectID);
+            $.post(link, function(executionLang)
+            {
+                $('#executionBox').html(executionLang);
+            })
+        }
+    }
+    else if($('#execution').val() != 0)
+    {
+        loadAssignedTo($('#execution').val());
+    }
+    else
+    {
+        var productID = $('#product').val();
+        loadProductMembers(productID);
+    }
 }
 
 /**
@@ -441,13 +474,13 @@ function loadExecutionRelated(executionID)
     }
     else
     {
-        var currentProjectID = $('#project').val();
+        var currentProjectID = $('#project').val() == 'undefined' ? 0 : $('#project').val();
         var currentProductID = $('#product').val();
 
         $('#taskIdBox').innerHTML = '<select id="task"></select>';  // Reset the task.
         loadProductStories(currentProductID);
         loadTestTasks(currentProductID);
-        if(typeof(currentProjectID) == 'undefined')
+        if(currentProjectID == 0)
         {
             loadProductMembers(currentProductID);
         }
@@ -593,7 +626,8 @@ function loadExecutionBuilds(executionID, num)
  */
 function loadProductMembers(productID)
 {
-    link = createLink('bug', 'ajaxGetProductMembers', 'productID=' + productID + '&selectedUser=' + $('#assignedTo').val());
+    var branchID = $('#branch').val() == undefined ? '' : $('#branch').val();
+    var link     = createLink('bug', 'ajaxGetProductMembers', 'productID=' + productID + '&selectedUser=' + $('#assignedTo').val() + '&branchID=' + branchID);
     $.get(link, function(data)
     {
         if(!data) data = '<select id="assignedTo" name="assignedTo" class="form-control"></select>';
@@ -678,6 +712,7 @@ function loadProductBranches(productID, param)
         loadProductProjects(productID);
         loadProductplans(productID);
         loadProductStories(productID);
+        loadProductMembers(productID);
     })
 }
 

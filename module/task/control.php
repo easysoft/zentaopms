@@ -551,7 +551,7 @@ class task extends control
         $this->view->position[]    = $this->lang->task->edit;
         $this->view->stories       = $this->story->getExecutionStoryPairs($this->view->execution->id, 0, 'all', '', 'full', 'active');
         $this->view->tasks         = $tasks;
-        $this->view->users         = $this->loadModel('user')->getPairs('nodeleted', "{$this->view->task->openedBy},{$this->view->task->canceledBy},{$this->view->task->closedBy}");
+        $this->view->users         = $this->loadModel('user')->getPairs('nodeleted|noclosed', "{$this->view->task->openedBy},{$this->view->task->canceledBy},{$this->view->task->closedBy}");
         $this->view->showAllModule = isset($this->config->execution->task->allModule) ? $this->config->execution->task->allModule : '';
         $this->view->modules       = $this->tree->getTaskOptionMenu($this->view->task->execution, 0, 0, $this->view->showAllModule ? 'allModule' : '');
         $this->view->executions    = $this->config->systemMode == 'classic' ? $this->execution->getPairs() : $this->execution->getByProject($task->project, 'all', 0, true);
