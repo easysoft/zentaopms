@@ -101,6 +101,7 @@ $(function()
 
     $('#productListForm').on('checkChange', updateCheckboxes);
     updateCheckboxes();
+
     $(":checkbox[name^='productIDList']").on('click', function()
     {
         addStatistic()
