@@ -892,23 +892,32 @@ class user extends control
                     }
 
                     /* Get the module and method of the referer. */
+                    $module = $this->config->default->module;
+                    $method = $this->config->default->method;
                     if($this->config->requestType == 'PATH_INFO')
                     {
+                        $requestFix = $this->config->requestFix;
+
                         $path = substr($this->post->referer, strrpos($this->post->referer, '/') + 1);
                         $path = rtrim($path, '.html');
-                        if(empty($path)) $path = $this->config->requestFix;
-                        list($module, $method) = explode($this->config->requestFix, $path);
+                        if($path and strpos($path, $requestFix) !== false) list($module, $method) = explode($requestFix, $path);
                     }
                     else
                     {
                         $url   = html_entity_decode($this->post->referer);
                         $param = substr($url, strrpos($url, '?') + 1);
 
-                        $module = $this->config->default->module;
-                        $method = $this->config->default->method;
                         if(strpos($param, '&') !== false) list($module, $method) = explode('&', $param);
                         $module = str_replace('m=', '', $module);
                         $method = str_replace('f=', '', $method);
+                    }
+
+                    /* Check parsed name of module and method from referer. */
+                    if(empty($module) or !$this->app->checkModuleName($module, $exit = false) or
+                       empty($method) or !$this->app->checkMethodName($module, $exit = false))
+                    {
+                        $module = $this->config->default->module;
+                        $method = $this->config->default->method;
                     }
 
                     $response['result']  = 'success';

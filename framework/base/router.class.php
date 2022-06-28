@@ -1511,14 +1511,16 @@ class baseRouter
      * 检查模块中某一个变量必须为英文字母和数字组合。Check module a variable must be ascii.
      *
      * @param  string    $var
+     * @param  bool      $exit
      * @access public
      * @return bool
      */
-    public function checkModuleName($var)
+    public function checkModuleName($var, $exit = true)
     {
         global $filter;
         $rule = $filter->default->moduleName;
         if(validater::checkByRule($var, $rule)) return true;
+        if(!$exit) return false;
         $this->triggerError("'$var' illegal. ", __FILE__, __LINE__, $exit = true);
     }
 
@@ -1526,16 +1528,18 @@ class baseRouter
      * 检查方法中某一个变量必须为英文字母和数字组合。Check method a variable must be ascii.
      *
      * @param  string    $var
+     * @param  bool      $exit
      * @access public
      * @return bool
      */
-    public function checkMethodName($var)
+    public function checkMethodName($var, $exit = true)
     {
         global $filter;
         $rule = $filter->default->methodName;
         if($this->config->framework->filterParam == 2 and isset($filter->{$this->moduleName}->methodName)) $rule = $filter->{$this->moduleName}->methodName;
 
         if(validater::checkByRule($var, $rule)) return true;
+        if(!$exit) return false;
         $this->triggerError("'$var' illegal. ", __FILE__, __LINE__, $exit = true);
     }
 
