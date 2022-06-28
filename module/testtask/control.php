@@ -318,10 +318,12 @@ class testtask extends control
         if($this->app->tab == 'project')
         {
             $this->loadModel('project')->setMenu($task->project);
+            $this->lang->modulePageNav = $this->testtask->select($productID, $taskID, 'project', $task->project);
         }
         elseif($this->app->tab == 'execution')
         {
             $this->loadModel('execution')->setMenu($task->execution);
+            $this->lang->modulePageNav = $this->testtask->select($productID, $taskID, 'execution', $task->execution);
         }
         elseif($this->app->tab == 'qa')
         {
@@ -481,10 +483,12 @@ class testtask extends control
         if($this->app->tab == 'project')
         {
             $this->loadModel('project')->setMenu($task->project);
+            $this->lang->modulePageNav = $this->testtask->select($productID, $taskID, 'project', $task->project);
         }
         elseif($this->app->tab == 'execution')
         {
             $this->loadModel('execution')->setMenu($task->execution);
+            $this->lang->modulePageNav = $this->testtask->select($productID, $taskID, 'execution', $task->execution);
         }
         else
         {
@@ -612,10 +616,12 @@ class testtask extends control
         if($this->app->tab == 'project')
         {
             $this->loadModel('project')->setMenu($task->project);
+            $this->lang->modulePageNav = $this->testtask->select($productID, $taskID, 'project', $task->project);
         }
         elseif($this->app->tab == 'execution')
         {
             $this->loadModel('execution')->setMenu($task->execution);
+            $this->lang->modulePageNav = $this->testtask->select($productID, $taskID, 'execution', $task->execution);
         }
         else
         {
@@ -676,10 +682,12 @@ class testtask extends control
         if($this->app->tab == 'project')
         {
             $this->loadModel('project')->setMenu($this->session->project);
+            $this->lang->modulePageNav = $this->testtask->select($productID, $taskID, 'project', $task->project);
         }
         elseif($this->app->tab == 'execution')
         {
             $this->loadModel('execution')->setMenu($task->execution);
+            $this->lang->modulePageNav = $this->testtask->select($productID, $taskID, 'execution', $task->execution);
         }
         else
         {
@@ -1062,10 +1070,12 @@ class testtask extends control
         if($this->app->tab == 'project')
         {
             $this->loadModel('project')->setMenu($task->project);
+            $this->lang->modulePageNav = $this->testtask->select($productID, $taskID, 'project', $task->project);
         }
         elseif($this->app->tab == 'execution')
         {
             $this->loadModel('execution')->setMenu($task->execution);
+            $this->lang->modulePageNav = $this->testtask->select($productID, $taskID, 'execution', $task->execution);
         }
         else
         {
@@ -1534,12 +1544,17 @@ class testtask extends control
      * @param  int    $productID
      * @param  int    $branch
      * @param  int    $taskID
+     * @param  string $module
+     * @param  string $method
+     * @param  string $objectType
+     * @param  int    $objectID
      * @access public
      * @return void
      */
-    public function ajaxGetDropMenu($productID, $branch, $taskID, $module, $method)
+    public function ajaxGetDropMenu($productID, $branch, $taskID, $module, $method, $objectType = '', $objectID = 0)
     {
-        $testtasks = $this->testtask->getProductTasks($productID, $branch, 'id_desc', null, array('local', 'totalStatus'));
+        $status    = empty($objectType) ? 'local' : 'totalStatus';
+        $testtasks = $this->testtask->getProductTasks($productID, $branch, 'id_desc', null, array($status, 'totalStatus'));
         $namePairs = array_column($testtasks, 'name');
 
         $this->view->currentTaskID   = $taskID;
@@ -1548,6 +1563,8 @@ class testtask extends control
         $this->view->method          = $method;
         $this->view->productID       = $productID;
         $this->view->branch          = $branch;
+        $this->view->objectType      = $objectType;
+        $this->view->objectID        = $objectID;
         $this->view->testtasksPinyin = common::convert2Pinyin($namePairs);
 
         $this->display();

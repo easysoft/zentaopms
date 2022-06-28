@@ -2328,4 +2328,32 @@ class testtaskModel extends model
         $this->lang->switcherMenu = $selectHtml;
         common::setMenuVars('qa', $productID);
     }
+
+    /**
+     * Create the select code of testtasks.
+     *
+     * @param  int    $productID
+     * @param  int    $testtaskID
+     * @param  string $objectType execution|project
+     * @param  int    $objectID
+     * @access public
+     * @return string
+     */
+    public function select($productID, $testtaskID, $objectType = '', $objectID = 0)
+    {
+        $output        = '';
+        $currentModule = $this->app->rawModule;
+        $currentMethod = $this->app->rawMethod;
+        if($testtaskID and $this->app->viewType != 'mhtml')
+        {
+            $dropMenuLink = helper::createLink('testtask', 'ajaxGetDropMenu', "productID=$productID&branch=&taskID=$testtaskID&module=$currentModule&method=$currentMethod&objectType=$objectType&objectID=$objectID");
+            $testtask     = $this->getById($testtaskID);
+
+            $output .= "<div class='btn-group angle-btn'><div class='btn-group'><button data-toggle='dropdown' type='button' class='btn btn-limit' id='currentTesttask' title='{$testtask->name}'><span class='text'>{$testtask->name}</span> <span class='caret'></span></button><div id='dropMenu' class='dropdown-menu search-list' data-ride='searchList' data-url='$dropMenuLink'>";
+            $output .= '<div class="input-control search-box has-icon-left has-icon-right search-example"><input type="search" class="form-control search-input" /><label class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label><a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a></div>';
+            $output .= "</div></div>";
+        }
+        $output .= '</div>';
+        return $output;
+    }
 }

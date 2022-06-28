@@ -19,6 +19,9 @@
 $selectHtml = '';
 foreach($testtasks as $testtaskID => $testtask)
 {
+    if($objectType == 'project' and $testtask->project != $objectID) continue;
+    if($objectType == 'execution' and $testtask->execution != $objectID) continue;
+
     $selected    = (string)$testtaskID == $currentTaskID ? 'selected' : '';
     $param       = $method == 'report' ? "productID=$productID&taskID=$testtaskID&browseType=all&branch=$branch" : "taskID=$testtaskID";
     $selectHtml .= html::a($this->createLink($module, $method, $param), $testtask->name, '', "class='$selected' data-key='{$testtasksPinyin[$testtask->name]}' data-app='{$this->app->tab}' title='{$testtask->name}'");
