@@ -954,15 +954,15 @@ class actionModel extends model
         $executions = array();
         if(!$this->app->user->admin)
         {
-            if($productID == 'all')   $products   = $this->app->user->view->products;
-            if($projectID == 'all')   $projects   = $this->app->user->view->projects;
-            if($executionID == 'all') $executions = $this->app->user->view->sprints;
+            if($productID == 'all')   $authedProducts   = $this->app->user->view->products;
+            if($projectID == 'all')   $authedProjects   = $this->app->user->view->projects;
+            if($executionID == 'all') $authedExecutions = $this->app->user->view->sprints;
 
             if($productID == 'all' and $projectID == 'all')
             {
-                $productCondition   = "product " . helper::dbIN($products);
-                $projectCondition   = "project " . helper::dbIN($projects);
-                $executionCondition = "execution " . helper::dbIN($executions);
+                $productCondition   = "product " . helper::dbIN($authedProducts);
+                $projectCondition   = "project " . helper::dbIN($authedProjects);
+                $executionCondition = "execution " . helper::dbIN($authedExecutions);
             }
             elseif($productID == 'all' and is_numeric($projectID))
             {
