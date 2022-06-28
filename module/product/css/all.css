@@ -88,3 +88,5 @@ th.c-actions {width: 50px;}
 
 #productTableList > tr.row-line.is-nest-child > td.text-left.table-nest-title > span.table-nest-icon.icon:before{content: '\e6f2'; background-color: white; display: inline;}
 #productTableList > tr.row-line.no-nest > td.text-left.table-nest-title > span.table-nest-icon.icon:before{content: '\e6f2'; background-color: white; display: inline;}
+.statistic {margin-left: 10px; color: #838a9d; float: left; position: relative; line-height: 28px;}
+.table-footer.fixed-footer .statistic {color: #fff;}
