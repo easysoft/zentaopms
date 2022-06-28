@@ -163,13 +163,13 @@ $(function()
 
         function getChildNodes(treeNode)
         {
-             var childNodes = ztreeObj.transformToArray(treeNode);
-             var nodes      = new Array();
-             for(i = 0; i < childNodes.length; i++)
-             {
+            var childNodes = ztreeObj.transformToArray(treeNode);
+            var nodes      = new Array();
+            for(i = 0; i < childNodes.length; i++)
+            {
                 nodes[i] = childNodes[i].id;
-             }
-             return nodes;
+            }
+            return nodes;
         }
 
         function zTreeOnAsyncSuccess()
