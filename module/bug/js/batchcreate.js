@@ -4,7 +4,96 @@ $(function()
 
     var $titleCol = $('#batchCreateForm table thead tr th.c-title');
     if($titleCol.width() < 150) $titleCol.width(150);
+
+    $('#customField').click(function()
+    {
+        disabledRequireFields();
+    });
+
+    $('#formSettingForm .btn-primary').click(function()
+    {
+        $('#formSettingForm > .checkboxes > .checkbox-primary > input').removeAttr('disabled');
+        var fields = '';
+        $('#formSettingForm > .checkboxes > .checkbox-primary > input:checked').each(function()
+        {
+            fields += ',' + $(this).val();
+        });
+
+        var link = createLink('custom', 'ajaxSaveCustomFields', 'module=bug&section=custom&key=batchCreateFields');
+        $.post(link, {'fields' : fields}, function()
+        {
+            checkedShowFields(fields);
+            disabledRequireFields();
+            var $titleCol = $('#batchCreateForm table thead tr th.c-title');
+            if($titleCol.width() < 150) $titleCol.width(150);
+            $('#formSetting').parent().removeClass('open');
+        });
+
+        return false;
+    });
 })
+
+/**
+ * Checked show fields.
+ *
+ * @param  string fields
+ * @access public
+ * @return void
+ */
+function checkedShowFields(fields)
+{
+    var fieldList    = ',' + fields + ',';
+    var checkedCount = $('#formSettingForm > .checkboxes > .checkbox-primary > input:checked').length;
+    if(checkedCount > 5)
+    {
+        $('.table-responsive').removeClass('scroll-none');
+        $('.table-responsive').css('overflow', 'auto');
+    }
+    else
+    {
+        $('.table-responsive').addClass('scroll-none');
+        $('.table-responsive').css('overflow', 'visible');
+    }
+
+    $('#formSettingForm > .checkboxes > .checkbox-primary > input').each(function()
+    {
+        var field     = ',' + $(this).val() + ',';
+        var required  = ',' + requiredFields + ',';
+        var $fieldBox = $('.' + $(this).val() + 'Box' );
+        if(fieldList.indexOf(field) >= 0 || required.indexOf(field) >= 0)
+        {
+
+            if(fieldList.indexOf(field) >= 0) $(this).attr('checked', true);
+            $fieldBox.removeClass('hidden');
+        }
+        else
+        {
+            if(!$fieldBox.hasClass('hidden')) $fieldBox.addClass('hidden');
+        }
+
+        var fieldCount = $('#batchCreateForm .table thead>tr>th:visible').length;
+        if(fieldCount < 4)
+        {
+            $('#batchCreateForm table thead tr th.c-title').css('width', 'auto');
+        }
+    });
+}
+
+/**
+ * Disabled require field.
+ *
+ * @access public
+ * @return void
+ */
+function disabledRequireFields()
+{
+    $('#formSettingForm > .checkboxes > .checkbox-primary > input').each(function()
+    {
+        var field    = ',' + $(this).val() + ',';
+        var required = ',' + requiredFields + ',';
+        if(required.indexOf(field) >= 0) $(this).attr('disabled', 'disabled');
+    });
+}
 
 /**
  * Set opened builds.
