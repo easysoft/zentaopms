@@ -11,6 +11,11 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
+<?php if($config->systemMode == 'classic' and $this->app->getClientLang() == 'en'):?>
+<style>
+.addon-execution {padding: 0px 20px}
+</style>
+<?php endif;?>
 <div id='mainContent' class='main-row fade in'>
   <div class="side-col" id="sidebar">
     <div id="sidebarHeader">
