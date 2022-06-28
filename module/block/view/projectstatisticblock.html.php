@@ -137,7 +137,7 @@ $(function()
           <?php if($project->model == 'scrum' or $project->model == 'kanban'):?>
           <div class='table-row'>
             <div class="col-4 text-center">
-              <div><h4><?php echo $lang->block->story;?></h4></div>
+              <div><h4><?php echo $lang->block->storyCount;?></h4></div>
               <div>
                 <div class="col dataTitle"><?php echo $lang->project->allStories . "：";?></div>
                 <div class="col data"><?php echo $project->allStories;?></div>
@@ -159,15 +159,30 @@ $(function()
               </div>
               <div>
                 <div class="col dataTitle"><?php echo $lang->block->estimate . "：";?></div>
-                <div class="col data"><?php echo $project->estimate;?></div>
+                <div class="col data"><?php echo $project->estimate . $lang->execution->workHourUnit;?></div>
               </div>
               <div>
                 <div class="col dataTitle"><?php echo $lang->block->consumedHours . "：";?></div>
-                <div class="col data"><?php echo $project->consumed;?></div>
+                <div class="col data"><?php echo $project->consumed . $lang->execution->workHourUnit;?></div>
               </div>
             </div>
             <div class="col-4 text-center">
-              <div><h4><?php echo $lang->bug->common;?></h4></div>
+              <div><h4><?php echo $lang->block->taskCount;?></h4></div>
+              <div>
+                <div class="col dataTitle"><?php echo $lang->block->wait . "：";?></div>
+                <div class="col data"><?php echo $project->waitTasks;?></div>
+              </div>
+              <div>
+                <div class="col dataTitle"><?php echo $lang->block->doing . "：";?></div>
+                <div class="col data"><?php echo $project->doingTasks;?></div>
+              </div>
+              <div>
+                <div class="col dataTitle"><?php echo $lang->block->done . "：";?></div>
+                <div class="col data"><?php echo $project->rndDoneTasks;?></div>
+              </div>
+            </div>
+            <div class="col-4 text-center">
+              <div><h4><?php echo $lang->block->bugCount;?></h4></div>
               <div>
                 <div class="col dataTitle"><?php echo $lang->block->totalBug . "：";?></div>
                 <div class="col data"><?php echo $project->allBugs;?></div>
