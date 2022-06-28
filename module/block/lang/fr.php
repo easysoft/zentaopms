@@ -46,6 +46,7 @@ $lang->block->lblFlowchart = 'Organigramme';
 $lang->block->welcome      = 'Bienvenue';
 $lang->block->lblTesttask  = 'Détail Recette';
 $lang->block->contribute   = 'Personal Contribution';
+$lang->block->finish       = 'Terminé';
 
 $lang->block->leftToday           = 'Reste à faire';
 $lang->block->myTask              = 'Mes Tâches';
@@ -79,6 +80,7 @@ $lang->block->month               = 'Month';
 $lang->block->selectProduct       = 'Product selection';
 $lang->block->of                  = ' di ';
 $lang->block->remain              = 'Left';
+$lang->block->allStories          = 'All';
 
 $lang->block->createBlock        = 'Ajouter Bloc';
 $lang->block->editBlock          = 'Editer Bloc';
@@ -104,7 +106,7 @@ $lang->block->totalRelease = 'Release The Number';
 $lang->block->totalTask    = 'The Total ' . $lang->task->common;
 
 $lang->block->totalInvestment = 'Total investment';
-$lang->block->totalPeople     = 'Total number';
+$lang->block->totalPeople     = 'Total';
 $lang->block->spent           = 'Has Been Spent';
 $lang->block->budget          = 'Budget';
 $lang->block->left            = 'Remain';
