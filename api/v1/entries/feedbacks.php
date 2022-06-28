@@ -54,8 +54,10 @@ class feedbacksEntry extends entry
      */
     public function post()
     {
-        $fields = 'module,product,type,title,public,desc,status,feedbackBy,notifyEmail,notify,uid';
+        $fields = 'module,product,type,title,public,desc,status,feedbackBy,notify,uid';
         $this->batchSetPost($fields);
+
+        $this->setPost('notifyEmail', $this->request('notifyEmail', ''));
 
         $control = $this->loadController('feedback', 'create');
         $this->requireFields('title,product');
