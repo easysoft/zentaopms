@@ -130,7 +130,7 @@ class projectrelease extends control
         $this->view->projectID   = $projectID;
         $this->view->builds      = $builds;
         $this->view->lastRelease = $this->projectrelease->getLast($projectID);
-        $this->view->users       = $this->loadModel('user')->getPairs('noletter|noclosed');
+        $this->view->users       = $this->loadModel('user')->getPairs('noclosed');
         $this->view->confirmLink = $this->lang->release->confirmLink;
         $this->display();
     }

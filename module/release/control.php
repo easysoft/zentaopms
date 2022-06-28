@@ -99,7 +99,7 @@ class release extends control
         $this->view->position[]     = $this->lang->release->create;
         $this->view->productID      = $productID;
         $this->view->builds         = $builds;
-        $this->view->users          = $this->loadModel('user')->getPairs('noletter|noclosed');
+        $this->view->users          = $this->loadModel('user')->getPairs('noclosed');
         $this->view->lastRelease    = $this->release->getLast($productID, $branch);
         $this->view->notEmptyBuilds = $notEmptyBuilds;
 
