@@ -95,7 +95,6 @@ function processKanbanData(key, programsData)
                 /* doing execution */
                 items.doingExecution = [];
                 var productExecutions = classicExecution[productID];
-                console.log('productExecutions', productID, productExecutions);
                 if(productExecutions)
                 {
                     $.each(productExecutions, function(_, execution)

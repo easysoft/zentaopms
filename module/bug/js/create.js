@@ -42,7 +42,6 @@ function loadModuleRelated()
  */
 function setLane(regionID)
 {
-    console.log(regionID);
     laneLink = createLink('kanban', 'ajaxGetLanes', 'regionID=' + regionID + '&type=bug&field=lane');
     $.get(laneLink, function(lane)
     {
