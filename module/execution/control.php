@@ -2913,7 +2913,14 @@ class execution extends control
         /* Get projects, executions and products. */
         $object     = $this->project->getByID($objectID, $this->app->tab == 'project' ? 'project' : 'sprint,stage,kanban');
         $products   = $this->product->getProducts($objectID);
-        $browseLink = $this->createLink($this->app->tab == 'project' ? 'projectstory' : 'execution', 'story', "objectID=$objectID");
+        if($this->app->tab == 'project')
+        {
+            $browseLink = $this->createLink('projectstory', 'story', "objectID=$objectID");
+        }
+        else
+        {
+            $browseLink = $this->session->executionStoryList;
+        }
         $queryID    = ($browseType == 'bySearch') ? (int)$param : 0;
 
         $this->session->set('storyList', $this->app->getURI(true), $this->app->tab); // Save session.
@@ -3037,7 +3044,7 @@ class execution extends control
         $this->view->modules      = $modules;
         $this->view->users        = $this->loadModel('user')->getPairs('noletter');
         $this->view->branchGroups = $branchGroups;
-        $this->view->browseLink   = $this->session->executionStoryList;
+        $this->view->browseLink   = $browseLink;
 
         $this->display();
     }
