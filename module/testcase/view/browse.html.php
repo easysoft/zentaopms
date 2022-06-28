@@ -244,7 +244,7 @@ js::set('suiteID',        $suiteID);
               $actionLink = '#importToLib';
               echo html::a($actionLink, $lang->testcase->importToLib, '', "class='btn btn-primary' data-toggle='modal'");
           }
-          ;?>
+          ?>
         </div>
         <div class="table-statistic"><?php echo $summary;?></div>
         <?php $pager->show('right', 'pagerjs');?>
