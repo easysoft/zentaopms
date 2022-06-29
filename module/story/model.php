@@ -693,7 +693,6 @@ class storyModel extends model
             ->get();
         if($specChanged and isset($story->status) && $story->status == 'active' and $this->checkForceReview()) $story->status = 'changed';
         $story = $this->loadModel('file')->processImgURL($story, $this->config->story->editor->change['id'], $this->post->uid);
-
         $this->dao->update(TABLE_STORY)->data($story, 'spec,verify')
             ->autoCheck()
             ->batchCheck($this->config->story->change->requiredFields, 'notempty')
