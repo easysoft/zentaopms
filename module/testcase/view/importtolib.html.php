@@ -25,6 +25,7 @@
           <td class='required'><?php echo html::select('lib', $libraries, '', "class='form-control chosen' id='lib' data-drop_direction='down'");?></td>
         </tr>
         <tr>
+          <?php echo html::hidden('case', '0');?>
           <td colspan='2' class='text-center'><?php echo html::submitButton($lang->testcase->import);?></td>
         </tr>
     </form>
