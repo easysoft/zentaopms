@@ -202,6 +202,7 @@ $lang->kanban->fullScreen         = 'Full Screen';
 $lang->kanban->setting            = 'Setting';
 $lang->kanban->my                 = 'My';
 $lang->kanban->other              = 'Other';
+$lang->kanban->showWIP            = 'Show WIP';
 
 $lang->kanban->error = new stdclass();
 $lang->kanban->error->mustBeInt         = 'The WIPs must be positive integer.';
@@ -220,6 +221,9 @@ $lang->kanban->importObjectList['releases']   = 'Release';
 $lang->kanban->importObjectList['builds']     = 'Build';
 $lang->kanban->importObjectList['executions'] = 'Execution';
 $lang->kanban->importObjectList['cards']      = 'Other Kanban Cards';
+
+$lang->kanban->showWIPList[1] = 'Show';
+$lang->kanban->showWIPList[0] = 'Hide';
 
 $lang->kanban->defaultColumn = array();
 $lang->kanban->defaultColumn['wait']   = 'wait';
