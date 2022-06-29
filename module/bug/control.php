@@ -1397,19 +1397,26 @@ class bug extends control
         }
 
         /* Get assigned to member. */
-        if($bug->execution)
+        if($this->app->tab == 'project' or $this->app->tab == 'execution')
         {
-            $users = $this->user->getTeamMemberPairs($bug->execution, 'execution');
-        }
-        elseif($bug->project)
-        {
-            $users = $this->loadModel('project')->getTeamMemberPairs($bug->project);
+            if($bug->execution)
+            {
+                $users = $this->user->getTeamMemberPairs($bug->execution, 'execution');
+            }
+            elseif($bug->project)
+            {
+                $users = $this->loadModel('project')->getTeamMemberPairs($bug->project);
+            }
+            else
+            {
+                $users = $this->bug->getProductMemberPairs($bug->product, $bug->branch);
+                $users = array_filter($users);
+                if(empty($users)) $users = $this->user->getPairs('devfirst|noclosed');
+            }
         }
         else
         {
-            $users = $this->bug->getProductMemberPairs($bug->product, $bug->branch);
-            $users = array_filter($users);
-            if(empty($users)) $users = $this->user->getPairs('devfirst|noclosed');
+            $users = $this->user->getPairs('devfirst|noclosed');
         }
 
         $this->view->title      = $this->products[$bug->product] . $this->lang->colon . $this->lang->bug->assignedTo;
