@@ -3848,12 +3848,12 @@ class storyModel extends model
                 if($story->URChanged) return $this->buildMenu('story', 'processStoryChange', $params, $story, $type, 'search', '', 'iframe', true, '', $this->lang->confirm);
 
                 $isClick = $this->isClickable($story, 'change');
-                $title   = $isClick ? '' : $this->lang->story->changeTip;
+                $title   = (!$isClick and $story->status != 'closed') ? $this->lang->story->changeTip : '';
                 $menu   .= $this->buildMenu('story', 'change', $params . "&from=$story->from", $story, $type, 'alter', '', '', false, '', $title);
 
                 $isClick = $this->isClickable($story, 'review');
                 $title   = $this->lang->story->review;
-                if(!$isClick)
+                if(!$isClick and $story->status != 'closed')
                 {
                     if($story->status == 'active')
                     {
@@ -3876,7 +3876,7 @@ class storyModel extends model
 
                 $title   = $this->lang->story->recall;
                 $isClick = $this->isClickable($story, 'recall');
-                if(!$isClick)
+                if(!$isClick and $story->status != 'closed')
                 {
                     if($story->status == 'draft' and empty($storyReviewer)) $title = $this->lang->story->recallTip['recalled'];
                     if($story->status == 'draft' and !empty($storyReviewer)) $title = $this->lang->story->recallTip['reviewed'];
@@ -3893,7 +3893,7 @@ class storyModel extends model
                 {
                     $isClick = $this->isClickable($story, 'batchcreate');
                     $title   = $this->lang->story->subdivide;
-                    if(!$isClick)
+                    if(!$isClick and $story->status != 'closed')
                     {
                         if($story->parent > 0)
                         {
