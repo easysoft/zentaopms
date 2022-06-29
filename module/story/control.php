@@ -1284,10 +1284,11 @@ class story extends control
         $this->view->position[] = $this->lang->story->common;
         $this->view->position[] = $this->lang->story->review;
 
-        $this->view->product = $product;
-        $this->view->story   = $story;
-        $this->view->actions = $this->action->getList('story', $storyID);
-        $this->view->users   = $this->loadModel('user')->getPairs('nodeleted', "$story->lastEditedBy,$story->openedBy");
+        $this->view->product   = $product;
+        $this->view->story     = $story;
+        $this->view->actions   = $this->action->getList('story', $storyID);
+        $this->view->users     = $this->loadModel('user')->getPairs('nodeleted|noletter', "$story->lastEditedBy,$story->openedBy");
+        $this->view->reviewers = $reviewers;
 
         /* Get the affcected things. */
         $this->story->getAffectedScope($this->view->story);
@@ -2590,5 +2591,70 @@ class story extends control
             if($params['result'] == 'revert') $status = 'active';
         }
         echo $status;
+    }
+
+    /**
+     * Ajax get story assignee.
+     *
+     * @param  string $type create|review|change
+     * @param  int    $storyID
+     * @param  array  $assignees
+     *
+     * @access public
+     * @return void
+     */
+    public function ajaxGetAssignedTo($type = '', $storyID = 0, $assignees = '')
+    {
+        $users = $this->loadModel('user')->getPairs('noletter|noclosed');
+
+        if($type == 'create')
+        {
+            $selectUser = is_array($assignees) ? current($assignees) : '';
+
+            return print(html::select('assignedTo', $users, $selectUser, "class='from-control picker-select'"));
+        }
+
+        if($type == 'review')
+        {
+            $story           = $this->story->getByID($storyID);
+            $reviewers       = $this->story->getReviewerPairs($storyID, $story->version);
+            $isChanged       = $story->changedBy ? true : false;
+            $isSuperReviewer = strpos(',' . trim(zget($this->config->story, 'superReviewers', ''), ',') . ',', ',' . $this->app->user->account . ',');
+
+            if(count($reviewers) == 1)
+            {
+                $selectUser = $isChanged ? $story->changedBy : $story->openedBy;
+            }
+            else
+            {
+                unset($reviewers[$this->app->user->account]);
+                foreach($reviewers as $account => $result)
+                {
+                    if(!$reviewers[$account])
+                    {
+                        $selectUser = $account;
+                        break;
+                    }
+                    else
+                    {
+                        $selectUser = $isChanged ? $story->changedBy : $story->openedBy;
+                    }
+                }
+            }
+
+            if($isSuperReviewer !== false) $selectUser = $isChanged ? $story->changedBy : $story->openedBy;
+
+            return print(html::select('assignedTo', $users, $selectUser, "class='from-control picker-select'"));
+        }
+
+        if($type == 'change')
+        {
+            $selectUser = is_array($assignees) ? current($assignees) : '';
+
+            return print(html::select('assignedTo', $users, $selectUser, "class='from-control picker-select'"));
+        }
+
+        return false;
+
     }
 }
