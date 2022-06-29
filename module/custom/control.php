@@ -124,6 +124,7 @@ class custom extends control
             {
                 foreach($postArray->data->keys as $key)
                 {
+                    if($module == 'testtask' and $field == 'typeList' and empty($key)) continue;
                     if(in_array($key, $keys)) return $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->custom->notice->repeatKey, $key)));;
                     $keys[] = $key;
                 }
