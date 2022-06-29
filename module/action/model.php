@@ -962,7 +962,7 @@ class actionModel extends model
             {
                 $productCondition   = "product " . helper::dbIN($authedProducts);
                 $projectCondition   = "project " . helper::dbIN($authedProjects);
-                $executionCondition = "execution " . helper::dbIN($authedExecutions);
+                $executionCondition = isset($authedExecutions) ? "execution " . helper::dbIN($authedExecutions) : '';
             }
             elseif($productID == 'all' and is_numeric($projectID))
             {

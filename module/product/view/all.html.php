@@ -34,7 +34,7 @@
   <?php else:?>
   <div class="main-col">
     <div class="cell<?php if($browseType == 'bySearch') echo ' show';?>" id="queryBox" data-module='product'></div>
-    <form class="main-table table-product" data-ride="table" data-nested='true' id="productListForm" method="post" action='<?php echo inLink('batchEdit', '');?>' data-preserve-nested='false' data-expand-nest-child='true'>
+    <form class="main-table table-product" data-ride="table" data-nested='true' id="productListForm" method="post" action='<?php echo inLink('batchEdit', '');?>' data-preserve-nested='true' data-expand-nest-child='true'>
       <?php $canBatchEdit = common::hasPriv('product', 'batchEdit'); ?>
       <table id="productList" class="table has-sort-head table-nested table-fixed">
         <?php $vars = "browseType=$browseType&orderBy=%s";?>
