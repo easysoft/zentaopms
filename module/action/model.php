@@ -985,9 +985,9 @@ class actionModel extends model
             }
 
             $condition = "((product =',0,' or product=0) AND project = '0' AND execution = 0)";
-            if(isset($productCondition))   $condition .= ' OR ' . $productCondition;
-            if(isset($projectCondition))   $condition .= ' OR ' . $projectCondition;
-            if(isset($executionCondition)) $condition .= ' OR ' . $executionCondition;
+            if(!empty($productCondition))   $condition .= ' OR ' . $productCondition;
+            if(!empty($projectCondition))   $condition .= ' OR ' . $projectCondition;
+            if(!empty($executionCondition)) $condition .= ' OR ' . $executionCondition;
         }
 
         $actionCondition = $this->getActionCondition();
