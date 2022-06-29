@@ -1342,7 +1342,7 @@ class storyModel extends model
             ->removeIF($this->post->result == 'reject' and $this->post->closedReason != 'subdivided', 'childStories')
             ->add('reviewedBy', $oldStory->reviewedBy . ',' . $this->app->user->account)
             ->add('id', $storyID)
-            ->remove('result,preVersion,comment,assignedTo')
+            ->remove('result,preVersion,comment')
             ->get();
         $story = $this->loadModel('file')->processImgURL($story, $this->config->story->editor->review['id'], $this->post->uid);
 
