@@ -45,6 +45,7 @@ $lang->group->project            = 'Project';
 $lang->group->group              = 'Group';
 $lang->group->more               = 'More';
 $lang->group->allCheck           = 'All';
+$lang->group->noGroup            = 'Aucun groupe';
 
 global $config;
 if($config->systemMode == 'new') $lang->group->noneProject = 'No Project';

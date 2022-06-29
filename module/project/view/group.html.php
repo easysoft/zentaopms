@@ -23,6 +23,13 @@
   </div>
 </div>
 <div id='mainContent' class='main-table'>
+  <?php if(empty($groups)):?>
+  <div class="table-empty-tip">
+    <p>
+      <span class="text-muted"><?php echo $lang->group->noGroup;?></span>
+    </p>
+  </div>
+  <?php else:?>
   <table class='table tablesorter' id='groupList'>
     <thead>
       <tr>
@@ -66,5 +73,6 @@
       <?php endforeach;?>
     </tbody>
   </table>
+  <?php endif;?>
 </div>
 <?php include '../../common/view/footer.html.php';?>
