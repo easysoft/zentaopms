@@ -51,10 +51,16 @@ $(function()
     });
 });
 
+/**
+ * Load assignedTo.
+ *
+ * @access public
+ * @return void
+ */
 function loadAssignedTo()
 {
     var assignees = $('#reviewer').val();
-    var link = createLink('story', 'ajaxGetAssignedTo', 'type=create&assignees=' + assignees);
+    var link      = createLink('story', 'ajaxGetAssignedTo', 'type=create&storyID=0&assignees=' + assignees);
     $.post(link, function(data)
     {
         $('#assignedTo').replaceWith(data);

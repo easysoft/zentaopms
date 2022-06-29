@@ -29,7 +29,11 @@
         </tr>
         <tr>
           <th><?php echo $lang->story->reviewResult;?></th>
-          <td class = 'required'><?php echo html::select('result', $lang->story->resultList, '', 'class=form-control onchange="switchShow(this.value)"');?></td><td></td>
+          <td class = 'required'><?php echo html::select('result', $lang->story->resultList, '', 'class="form-control chosen" onchange="switchShow(this.value)"');?></td><td></td>
+        </tr>
+        <tr id='assignedToBox' class='hide'>
+          <th><?php echo $lang->story->assignedTo;?></th>
+          <td><?php echo html::select('assignedTo', $users, '', "class='form-control picker-select'");?></td><td></td>
         </tr>
         <tr id='rejectedReasonBox' class='hide'>
           <th><?php echo $lang->story->rejectedReason;?></th>
@@ -85,4 +89,5 @@
 <?php js::set('storyID', $story->id);?>
 <?php js::set('storyType', $story->type);?>
 <?php js::set('rawModule', $this->app->rawModule);?>
+<?php js::set('isMultiple', count($reviewers) == 1 ? false : true);?>
 <?php include '../../common/view/footer.html.php';?>
