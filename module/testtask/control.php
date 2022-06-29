@@ -100,6 +100,7 @@ class testtask extends control
         $productID = $this->product->saveState($productID, $this->products);
         $branch    = ($this->cookie->preBranch !== '' and $branch === '') ? $this->cookie->preBranch : $branch;
         $this->loadModel('qa')->setMenu($this->products, $productID, $branch, $type);
+        $this->session->set('branch', $branch, 'qa');
 
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
@@ -1553,8 +1554,8 @@ class testtask extends control
      */
     public function ajaxGetDropMenu($productID, $branch, $taskID, $module, $method, $objectType = '', $objectID = 0)
     {
-        $status    = empty($objectType) ? 'local' : 'totalStatus';
-        $testtasks = $this->testtask->getProductTasks($productID, $branch, 'id_desc', null, array($status, 'totalStatus'));
+        $scope     = empty($objectType) ? 'local' : 'all';
+        $testtasks = $this->testtask->getProductTasks($productID, $branch, 'id_desc', null, array($scope, 'totalStatus'));
         $namePairs = array_column($testtasks, 'name');
 
         $this->view->currentTaskID   = $taskID;
