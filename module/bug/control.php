@@ -1261,56 +1261,63 @@ class bug extends control
         }
 
         /* Get assigned to member. */
-        $this->loadModel('project');
-        $this->loadModel('execution');
+        if($this->app->tab == 'execution' or $this->app->tab == 'project')
+        {
+            $this->loadModel('project');
+            $this->loadModel('execution');
 
-        $productMembers   = array();
-        $projectMembers   = array();
-        $executionMembers = array();
-        if($productID)
-        {
-            $branchList = zget($branchIdList, $productID, array());
-            foreach($branchList as $branchID)
+            $productMembers   = array();
+            $projectMembers   = array();
+            $executionMembers = array();
+            if($productID)
             {
-                $members = $this->bug->getProductMemberPairs($productID, $branchID);
-                $productMembers[$productID][$branchID] = array_filter($members);
-            }
-        }
-        else
-        {
-            foreach($productIdList as $id)
-            {
-                $branchList = zget($branchIdList, $id, array());
+                $branchList = zget($branchIdList, $productID, array());
                 foreach($branchList as $branchID)
                 {
-                    $members = $this->bug->getProductMemberPairs($id, $branchID);
-                    $productMembers[$id][$branchID] = array_filter($members);
+                    $members = $this->bug->getProductMemberPairs($productID, $branchID);
+                    $productMembers[$productID][$branchID] = array_filter($members);
                 }
             }
-        }
-
-        $projectMemberGroup = $this->project->getTeamMemberGroup($projectIdList);
-        $projectMembers     = array();
-        foreach($projectIdList as $projectID)
-        {
-            $projectTeam = zget($projectMemberGroup, $projectID, array());
-            if(empty($projectTeam)) $projectMembers[$projectID] = array();
-            foreach($projectTeam as $user)
+            else
             {
-                $projectMembers[$projectID][$user->account] = $user->realname;
+                foreach($productIdList as $id)
+                {
+                    $branchList = zget($branchIdList, $id, array());
+                    foreach($branchList as $branchID)
+                    {
+                        $members = $this->bug->getProductMemberPairs($id, $branchID);
+                        $productMembers[$id][$branchID] = array_filter($members);
+                    }
+                }
             }
-        }
 
-        $executionMemberGroup = $this->execution->getMembersByIdList($executionIdList);
-        $executionMembers     = array();
-        foreach($executionIdList as $executionID)
-        {
-            $executionTeam = zget($executionMemberGroup, $executionID, array());
-            if(empty($executionTeam)) $executionMemberGroup[$executionID] = array();
-            foreach($executionTeam as $user)
+            $projectMemberGroup = $this->project->getTeamMemberGroup($projectIdList);
+            $projectMembers     = array();
+            foreach($projectIdList as $projectID)
             {
-                $executionMembers[$executionID][$user->account] = $user->realname;
+                $projectTeam = zget($projectMemberGroup, $projectID, array());
+                if(empty($projectTeam)) $projectMembers[$projectID] = array();
+                foreach($projectTeam as $user)
+                {
+                    $projectMembers[$projectID][$user->account] = $user->realname;
+                }
             }
+
+            $executionMemberGroup = $this->execution->getMembersByIdList($executionIdList);
+            $executionMembers     = array();
+            foreach($executionIdList as $executionID)
+            {
+                $executionTeam = zget($executionMemberGroup, $executionID, array());
+                if(empty($executionTeam)) $executionMemberGroup[$executionID] = array();
+                foreach($executionTeam as $user)
+                {
+                    $executionMembers[$executionID][$user->account] = $user->realname;
+                }
+            }
+
+            $this->view->productMembers   = $productMembers;
+            $this->view->projectMembers   = $projectMembers;
+            $this->view->executionMembers = $executionMembers;
         }
 
         /* Set users. */
@@ -1330,9 +1337,6 @@ class bug extends control
         $this->view->bugs             = $bugs;
         $this->view->branch           = $branch;
         $this->view->users            = $users;
-        $this->view->productMembers   = $productMembers;
-        $this->view->projectMembers   = $projectMembers;
-        $this->view->executionMembers = $executionMembers;
         $this->view->modules          = $modules;
         $this->view->branchTagOption  = $branchTagOption;
 

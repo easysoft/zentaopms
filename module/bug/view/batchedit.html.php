@@ -104,22 +104,30 @@
             <td class='<?php echo zget($visibleFields, 'productplan', ' hidden')?>' style='overflow:visible'><?php echo html::select("plans[$bugID]", $plans, $bug->plan, "class='form-control picker-select' data-drop-width='auto'");?></td>
             <?php
             $assignedToList = array();
-            if($bug->execution)
+            if($app->tab == 'project' or $app->tab == 'execution')
             {
-                $assignedToList = array('' => '', 'ditto' => $this->lang->bug->ditto) + $executionMembers[$bug->execution];
-            }
-            elseif($bug->project)
-            {
-                $assignedToList = array('' => '', 'ditto' => $this->lang->bug->ditto) + $projectMembers[$bug->project];
+                if($bug->execution)
+                {
+                    $assignedToList = array('' => '', 'ditto' => $this->lang->bug->ditto) + $executionMembers[$bug->execution];
+                }
+                elseif($bug->project)
+                {
+                    $assignedToList = array('' => '', 'ditto' => $this->lang->bug->ditto) + $projectMembers[$bug->project];
+                }
+                else
+                {
+                    $assignedToList = $productMembers[$bug->product][$bug->branch];
+                    if(empty($assignedToList))
+                    {
+                        $assignedToList = $users;
+                        unset($assignedToList['closed']);
+                    }
+                }
             }
             else
             {
-                $assignedToList = $productMembers[$bug->product][$bug->branch];
-                if(empty($assignedToList))
-                {
-                    $assignedToList = $users;
-                    unset($assignedToList['closed']);
-                }
+                $assignedToList = $users;
+                unset($assignedToList['closed']);
             }
             ?>
             <td class='<?php echo zget($visibleFields, 'assignedTo', ' hidden')?>' style='overflow:visible'><?php echo html::select("assignedTos[$bugID]", $assignedToList, $bug->assignedTo, "class='form-control picker-select' data-drop-width='135px'");?></td>
