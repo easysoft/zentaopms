@@ -265,7 +265,18 @@
                 <?php endif;?>
                 <tr>
                   <th><?php echo $lang->task->assignedTo;?></th>
-                  <td><?php echo $task->assignedTo ? $task->assignedToRealName . $lang->at . $task->assignedDate : $lang->noData;?></td>
+                  <td>
+                    <?php
+                    if(!empty($task->team) and $task->mode == 'multi')
+                    {
+                        foreach($task->team as $member) echo ' ' . zget($users, $member->account);
+                    }
+                    else
+                    {
+                        echo $task->assignedTo ? $task->assignedToRealName . $lang->at . $task->assignedDate : $lang->noData;
+                    }
+                    ?>
+                  </td>
                 </tr>
                 <?php if($task->mode):?>
                 <tr>
