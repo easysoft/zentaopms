@@ -90,6 +90,7 @@ class testtaskModel extends model
             ->beginIF($branch !== 'all')->andWhere('t4.branch')->eq($branch)->fi()
             ->beginIF($beginTime)->andWhere('t1.begin')->ge($beginTime)->fi()
             ->beginIF($endTime)->andWhere('t1.end')->le($endTime)->fi()
+            ->beginIF($branch == BRANCH_MAIN)->orWhere('t1.build')->eq('trunk')->fi()
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id');
