@@ -85,10 +85,4 @@
     </form>
   </div>
 </div>
-<script>
-$(function()
-{
-    $(".form-date").datetimepicker('setEndDate', '<?php echo date(DT_DATE1)?>');
-});
-</script>
 <?php include '../../common/view/footer.html.php';?>
