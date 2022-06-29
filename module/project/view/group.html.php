@@ -12,6 +12,7 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/tablesorter.html.php';?>
+<?php js::set('confirmDelete', $lang->group->confirmDelete);?>
 <div id='mainMenu' class='clearfix'>
   <div class='btn-toolbar pull-left'>
     <?php // echo html::backButton($lang->goback, '', 'btn-secondary');?>
@@ -34,7 +35,6 @@
     </thead>
     <tbody>
       <?php foreach($groups as $group):?>
-      <?php $confirmDelete = sprintf($lang->group->confirmDelete, $group->name);?>
       <?php $users = implode(',', $groupUsers[$group->id]);?>
       <tr>
         <td class='text-center'><?php echo $group->id;?></td>
@@ -53,7 +53,8 @@
           if(common::hasPriv('group', 'delete') and $group->role != 'limited')
           {
               $deleteURL = $this->createLink('group', 'delete', "groupID=$group->id&confirm=yes");
-              echo html::a("###", '<i class="icon icon-trash"></i>', '', "onclick='ajaxDelete(\"$deleteURL\", \"groupList\", confirmDelete)' title='{$lang->group->delete}' class='btn btn-icon'");
+              js::set("confirmDelete{$group->id}", sprintf($lang->group->confirmDelete, $group->name));
+              echo html::a("###", '<i class="icon icon-trash"></i>', '', "onclick='ajaxDelete(\"$deleteURL\", \"groupList\", confirmDelete{$group->id})' title='{$lang->group->delete}' class='btn btn-icon'");
           }
           else
           {
@@ -66,5 +67,4 @@
     </tbody>
   </table>
 </div>
-<?php js::set('confirmDelete', $confirmDelete);?>
 <?php include '../../common/view/footer.html.php';?>
