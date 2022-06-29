@@ -29,7 +29,7 @@
         </tr>
         <tr>
           <th><?php echo $lang->story->reviewResult;?></th>
-          <td class = 'required'><?php echo html::select('result', $lang->story->resultList, '', 'class="form-control chosen" onchange="switchShow(this.value)"');?></td><td></td>
+          <td class='required'><?php echo html::select('result', $lang->story->resultList, '', 'class="form-control chosen" onchange="switchShow(this.value)"');?></td><td></td>
         </tr>
         <tr id='assignedToBox' class='hide'>
           <th><?php echo $lang->story->assignedTo;?></th>
