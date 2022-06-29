@@ -23,7 +23,7 @@ $lang->group->byModuleTips       = '<span class="tips">(Shift/Ctrl pour sélecti
 $lang->group->allTips            = 'After checking this option, the administrator can manage all objects in the system, including objects created later.';
 $lang->group->manageMember       = 'Gérer Membres';
 $lang->group->manageProjectAdmin = 'Manage Program Admins';
-$lang->group->confirmDelete      = "Voulez-vous supprimer ce groupe d'utilisateurs ?";
+$lang->group->confirmDelete      = "Voulez - vous supprimer '%s'?";
 $lang->group->successSaved       = 'Sauvé.';
 $lang->group->errorNotSaved      = 'Echec. Veuillez sélectionner actions et groupes.';
 $lang->group->viewList           = 'Accès Consultation';
