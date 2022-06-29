@@ -706,6 +706,7 @@ class docModel extends model
         $now = helper::now();
         $doc = fixer::input('post')
             ->callFunc('title', 'trim')
+            ->setDefault('content', '')
             ->add('addedBy', $this->app->user->account)
             ->add('addedDate', $now)
             ->add('editedBy', $this->app->user->account)
@@ -758,8 +759,10 @@ class docModel extends model
         unset($doc->url);
 
         $requiredFields = $this->config->doc->create->requiredFields;
-        $checkContent   = strpos(",$requiredFields,", ',content,') !== false;
-        if($checkContent)
+        if(strpos("url|word|ppt|excel", $this->post->type) !== false) $requiredFields = trim(str_replace(",content,", ",", ",{$requiredFields},"), ',');
+
+        $checkContent = strpos(",$requiredFields,", ',content,') !== false;
+        if($checkContent and strpos("url|word|ppt|excel|", $this->post->type) === false)
         {
             $requiredFields = trim(str_replace(',content,', ',', ",$requiredFields,"), ',');
             if(empty($docContent->content)) return dao::$errors['content'] = sprintf($this->lang->error->notempty, $this->lang->doc->content);
@@ -2857,6 +2860,8 @@ EOT;
         $autoloadPage = true;
         if(!empty($doc) and $doc->type == 'url')
         {
+            if(empty($doc->content)) return false;
+
             if(!preg_match('/^https?:\/\//', $doc->content)) $doc->content = 'http://' . $doc->content;
             $parsedUrl = parse_url($doc->content);
             $urlPort   = isset($parsedUrl['port']) ? ':' . $parsedUrl['port'] : '';
