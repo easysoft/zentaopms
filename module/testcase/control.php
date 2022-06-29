@@ -1131,16 +1131,16 @@ class testcase extends control
             $changes = $this->testcase->review($caseID);
             if(dao::isError()) return print(js::error(dao::getError()));
 
-            if($changes or $this->post->comment != '')
+            if(is_array($changes))
             {
                 $result = $this->post->result;
                 $actionID = $this->loadModel('action')->create('case', $caseID, 'Reviewed', $this->post->comment, ucfirst($result));
                 $this->action->logHistory($actionID, $changes);
+
+                $this->executeHooks($caseID);
+
+                return print(js::reload('parent.parent'));
             }
-
-            $this->executeHooks($caseID);
-
-            return print(js::reload('parent.parent'));
         }
 
         $this->view->users   = $this->user->getPairs('noletter|noclosed|nodeleted');
