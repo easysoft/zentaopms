@@ -2833,4 +2833,25 @@ class gitlabModel extends model
         $host = rtrim($host, '/') . "/api/v4%s?private_token=$token";
         return $this->apiGet($host, '/version');
     }
+
+    /**
+     * Check token access.
+     *
+     * @param  string $url
+     * @param  string $token
+     * @access public
+     * @return void
+     */
+    public function checkTokenAccess($url = '', $token = '')
+    {
+        $apiRoot  = rtrim($url, '/') . '/api/v4%s' . "?private_token={$token}";
+        $url      = sprintf($apiRoot, "/users") . "&per_page=5&active=true";
+        $httpData = commonModel::httpWithHeader($url);
+        $users    = json_decode($httpData['body']);
+        if(empty($users)) return false;
+        if(isset($users->message) or isset($users->error)) return null;
+
+        $apiRoot .= '&sudo=' . $users[0]->id;
+        return $this->apiGet($apiRoot, '/user');
+    }
 }

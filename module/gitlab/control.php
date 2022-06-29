@@ -256,10 +256,10 @@ class gitlab extends control
         if(strpos($gitlab->url, 'http') !== 0) return $this->send(array('result' => 'fail', 'message' => array('url' => array(sprintf($this->lang->gitlab->hostError, $this->config->gitlab->minCompatibleVersion)))));
         if(!$gitlab->token) return $this->send(array('result' => 'fail', 'message' => array('token' => array($this->lang->gitlab->tokenError))));
 
-        $user = $this->gitlab->apiGetCurrentUser($gitlab->url, $gitlab->token);
+        $user = $this->gitlab->checkTokenAccess($gitlab->url, $gitlab->token);
 
-        if(!is_object($user)) return $this->send(array('result' => 'fail', 'message' => array('url' => array(sprintf($this->lang->gitlab->hostError, $this->config->gitlab->minCompatibleVersion)))));
-        if(!isset($user->id) or !isset($user->is_admin) or !$user->is_admin) return $this->send(array('result' => 'fail', 'message' => array('token' => array($this->lang->gitlab->tokenError))));
+        if(is_bool($user)) return $this->send(array('result' => 'fail', 'message' => array('url' => array(sprintf($this->lang->gitlab->hostError, $this->config->gitlab->minCompatibleVersion)))));
+        if(!isset($user->id)) return $this->send(array('result' => 'fail', 'message' => array('token' => array($this->lang->gitlab->tokenError))));
 
         /* Verify version compatibility. */
         $result = $this->gitlab->getVersion($gitlab->url, $gitlab->token);
