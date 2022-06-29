@@ -47,6 +47,7 @@ $lang->program->realDuration   = 'RealDuration';
 $lang->program->openedVersion  = 'OpenedVersion';
 $lang->program->lastEditedBy   = 'LastEditedBy';
 $lang->program->lastEditedDate = 'LastEditedDate';
+$lang->program->childProgram   = 'Child Program';
 
 /* Actions. */
 $lang->program->common                  = 'Program';
@@ -101,8 +102,8 @@ $lang->program->tips               = 'If a parent program is selected, the produ
 $lang->program->confirmBatchUnlink = "Do you want to batch unlink these stakeholders?";
 $lang->program->beginLetterParent  = 'The start date of the program "%s" should be ≥ the start date of the parent program "%s": %s.';
 $lang->program->endGreaterParent   = 'The finish date of the program "%s" should be ≤ the finish date of the parent program "%s": %s.';
-$lang->program->beginGreateChild   = 'The start date of the parent program "%s" should be ≤the minimum start time of the subprogram "%s": %s.';
-$lang->program->endLetterChild     = 'The finish time of the parent program "%s" should be ≥ the maximum finish time of the subprogram "%s": %s.';
+$lang->program->beginGreateChild   = 'The start date of the parent program "%s" should be ≤the minimum start time of the %s "%s": %s.';
+$lang->program->endLetterChild     = 'The finish time of the parent program "%s" should be ≥ the maximum finish time of the %s "%s": %s.';
 $lang->program->closeErrorMessage  = 'There are subprograms or projects that are not closed';
 $lang->program->hasChildren        = 'The program has a child program or the project exists and can not be deleted.';
 $lang->program->hasProduct         = 'The program has products exist and can not be deleted.';

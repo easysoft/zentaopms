@@ -65,7 +65,7 @@ $lang->project->budgetGe0          = '『Budget』must be greater than or equal 
 $lang->project->allProjects        = 'All Projects';
 
 /* Fields. */
-$lang->project->common             = 'Project';
+$lang->project->common             = 'Projets';
 $lang->project->id                 = 'ID';
 $lang->project->project            = 'Project';
 $lang->project->stage              = 'Stage';

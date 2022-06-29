@@ -1375,6 +1375,19 @@ class projectModel extends model
             }
         }
 
+        $executions = $this->dao->select('*')->from(TABLE_PROJECT)
+            ->where('project')->eq($project->id)
+            ->andWhere('deleted')->eq('0')
+            ->fetch();
+        if(!empty($executions))
+        {
+            $minExecutionBegin = $this->dao->select('name, begin as minBegin')->from(TABLE_PROJECT)->where('project')->eq($project->id)->andWhere('deleted')->eq('0')->orderBy('begin_asc')->fetch();
+            $maxExecutionEnd   = $this->dao->select('name, end as maxEnd')->from(TABLE_PROJECT)->where('project')->eq($project->id)->andWhere('deleted')->eq('0')->orderBy('end_desc')->fetch();
+            if($minExecutionBegin and $project->begin > $minExecutionBegin->minBegin) dao::$errors['begin'] = sprintf($this->lang->project->begigLetterExecution, $project->name, $minExecutionBegin->name, $minExecutionBegin->minBegin);
+            if($maxExecutionEnd and $project->end < $maxExecutionEnd->maxEnd) dao::$errors['end'] = sprintf($this->lang->project->endGreateExecution, $project->name, $maxExecutionEnd->name, $maxExecutionEnd->maxEnd);
+            if(dao::isError()) return false;
+        }
+
         /* Judge products not empty. */
         $linkedProductsCount = 0;
         foreach($_POST['products'] as $product)

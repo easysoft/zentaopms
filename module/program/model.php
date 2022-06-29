@@ -772,6 +772,7 @@ class programModel extends model
      */
     public function update($programID)
     {
+        $this->app->loadLang('project');
         $programID  = (int)$programID;
         $oldProgram = $this->dao->findById($programID)->from(TABLE_PROGRAM)->fetch();
 
@@ -799,11 +800,13 @@ class programModel extends model
 
         if($children > 0)
         {
-            $minChildBegin = $this->dao->select('name, min(begin) as minBegin')->from(TABLE_PROGRAM)->where('id')->ne($programID)->andWhere('deleted')->eq(0)->andWhere('path')->like("%,{$programID},%")->fetch();
-            $maxChildEnd   = $this->dao->select('name, max(end) as maxEnd')->from(TABLE_PROGRAM)->where('id')->ne($programID)->andWhere('deleted')->eq(0)->andWhere('path')->like("%,{$programID},%")->andWhere('end')->ne('0000-00-00')->fetch();
+            $minChildBegin = $this->dao->select('name, type, begin as minBegin')->from(TABLE_PROGRAM)->where('id')->ne($programID)->andWhere('deleted')->eq(0)->andWhere('path')->like("%,{$programID},%")->orderBy('begin_asc')->fetch();
+            $maxChildEnd   = $this->dao->select('name, type, end as maxEnd')->from(TABLE_PROGRAM)->where('id')->ne($programID)->andWhere('deleted')->eq(0)->andWhere('path')->like("%,{$programID},%")->andWhere('end')->ne('0000-00-00')->orderBy('end_desc')->fetch();
 
-            if($minChildBegin and $program->begin > $minChildBegin) dao::$errors['begin'] = sprintf($this->lang->program->beginGreateChild, $program->name, $minChildBegin->name, $minChildBegin->minBegin);
-            if($maxChildEnd   and $program->end   < $maxChildEnd and $this->post->delta != 999) dao::$errors['end'] = sprintf($this->lang->program->endLetterChild, $program->name, $maxChildEnd->name, $maxChildEnd->maxEnd);
+            $minChildType = ($minChildBegin->type == 'project') ? $this->lang->project->common : $this->lang->program->childProgram;
+            $maxChildType = ($maxChildEnd->type   == 'project') ? $this->lang->project->common : $this->lang->program->childProgram;
+            if($minChildBegin and $program->begin > $minChildBegin->minBegin) dao::$errors['begin'] = sprintf($this->lang->program->beginGreateChild, $program->name, $minChildType, $minChildBegin->name, $minChildBegin->minBegin);
+            if($maxChildEnd   and $program->end   < $maxChildEnd->maxEnd and $this->post->delta != 999) dao::$errors['end'] = sprintf($this->lang->program->endLetterChild, $program->name, $maxChildType, $maxChildEnd->name, $maxChildEnd->maxEnd);
             if(dao::isError()) return false;
         }
 

@@ -47,6 +47,7 @@ $lang->program->realDuration   = '实际周期天数';
 $lang->program->openedVersion  = '创建版本';
 $lang->program->lastEditedBy   = '最后编辑人';
 $lang->program->lastEditedDate = '最后编辑日期';
+$lang->program->childProgram   = '子项目集';
 
 /* Actions. */
 $lang->program->common                  = '项目集';
@@ -101,8 +102,8 @@ $lang->program->tips               = '选择了父项目集，则可关联该父
 $lang->program->confirmBatchUnlink = "您确定要批量移除这些干系人吗？";
 $lang->program->beginLetterParent  = '项目集“%s”开始日期应大于等于父项目集“%s”的开始日期：%s。';
 $lang->program->endGreaterParent   = '项目集“%s”完成日期应小于等于父项目集“%s”的完成日期：%s。';
-$lang->program->beginGreateChild   = '父项目集“%s”的开始日期应小于等于子项目集“%s”的最小开始时间：%s。';
-$lang->program->endLetterChild     = '父项目集“%s”的完成时间应大于等于子项目集“%s”的最大完成时间：%s。';
+$lang->program->beginGreateChild   = '父项目集“%s”的开始日期应小于等于%s“%s”的最小开始时间：%s。';
+$lang->program->endLetterChild     = '父项目集“%s”的完成时间应大于等于%s“%s”的最大完成时间：%s。';
 $lang->program->closeErrorMessage  = '存在子项目集或项目为未关闭状态';
 $lang->program->hasChildren        = '该项目集有子项目集或项目存在，不能删除。';
 $lang->program->hasProduct         = '该项目集有产品存在，不能删除。';

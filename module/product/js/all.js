@@ -77,6 +77,21 @@ $(function()
         }
     }
 
+    function debounce(fn,delay)
+    {
+        var timer = null;
+        return function()
+        {
+            if(timer) clearTimeout(timer);
+            timer = setTimeout(fn,delay)
+        }
+    }
+
+    function updateStatistic()
+    {
+        debounce(addStatistic(), 200)
+    }
+
     $('#productTableList').on('click', '.row-program,.row-line', function(e)
     {
         if($(e.target).closest('.table-nest-toggle,a').length) return;
@@ -96,7 +111,7 @@ $(function()
         {
             updatePrarentCheckbox($('#productTableList>tr[data-id="' + parentID + '"]'));
         }
-        addStatistic()
+        updateStatistic()
     });
 
     $('#productListForm').on('checkChange', updateCheckboxes);
@@ -104,7 +119,7 @@ $(function()
 
     $(":checkbox[name^='productIDList']").on('click', function()
     {
-        addStatistic()
+        updateStatistic()
     });
 
     $(".check-all").on('click', function()
@@ -117,6 +132,6 @@ $(function()
         {
             $(":checkbox[name^='productIDList']").prop('checked', true);
         }
-        addStatistic()
+        updateStatistic()
     });
 });
