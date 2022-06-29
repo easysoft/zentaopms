@@ -12,6 +12,7 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/tablesorter.html.php';?>
+<?php js::set('confirmDelete', $lang->group->confirmDelete);?>
 <div id='mainMenu' class='clearfix'>
   <div class='btn-toolbar pull-left'>
     <?php // echo html::backButton($lang->goback, '', 'btn-secondary');?>
@@ -22,6 +23,13 @@
   </div>
 </div>
 <div id='mainContent' class='main-table'>
+  <?php if(empty($groups)):?>
+  <div class="table-empty-tip">
+    <p>
+      <span class="text-muted"><?php echo $lang->group->noGroup;?></span>
+    </p>
+  </div>
+  <?php else:?>
   <table class='table tablesorter' id='groupList'>
     <thead>
       <tr>
@@ -34,7 +42,6 @@
     </thead>
     <tbody>
       <?php foreach($groups as $group):?>
-      <?php $confirmDelete = sprintf($lang->group->confirmDelete, $group->name);?>
       <?php $users = implode(',', $groupUsers[$group->id]);?>
       <tr>
         <td class='text-center'><?php echo $group->id;?></td>
@@ -52,8 +59,9 @@
           <?php
           if(common::hasPriv('group', 'delete') and $group->role != 'limited')
           {
-              $deleteURL = $this->createLink('group', 'delete', "groupID=$group->id&confirm=yes");
-              echo html::a("###", '<i class="icon icon-trash"></i>', '', "onclick='ajaxDelete(\"$deleteURL\", \"groupList\", confirmDelete)' title='{$lang->group->delete}' class='btn btn-icon'");
+              $deleteURL     = $this->createLink('group', 'delete', "groupID=$group->id&confirm=yes");
+              $confirmDelete = htmlspecialchars(sprintf($lang->group->confirmDelete, $group->name));
+              echo html::a("###", '<i class="icon icon-trash"></i>', '', "onclick='ajaxDelete(\"$deleteURL\", \"groupList\", \"$confirmDelete\")' title='{$lang->group->delete}' class='btn btn-icon'");
           }
           else
           {
@@ -65,6 +73,6 @@
       <?php endforeach;?>
     </tbody>
   </table>
+  <?php endif;?>
 </div>
-<?php js::set('confirmDelete', $confirmDelete);?>
 <?php include '../../common/view/footer.html.php';?>
