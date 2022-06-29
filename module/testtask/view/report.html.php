@@ -13,7 +13,7 @@
 <?php include '../../common/view/header.html.php';?>
 <div id="mainMenu" class="clearfix">
   <div class="btn-toolbar pull-left">
-    <?php common::printBack(inlink('cases', "taskID=$taskID&browseType=$browseType"), 'btn btn-link');?>
+    <?php echo html::backButton('<i class="icon-goback icon-back"></i>  ' . $lang->goback, '', 'btn btn-link');?>
     <div class='divider'></div>
     <div class='page-title'>
       <span class='text'><?php echo $lang->testtask->report->common;?></span>
