@@ -206,6 +206,7 @@ $lang->testtask->unitTag['lastWeek']  = 'Last week';
 $lang->testtask->unitTag['thisMonth'] = 'This month';
 $lang->testtask->unitTag['lastMonth'] = 'Last month';
 
+$lang->testtask->typeList['']            = '';
 $lang->testtask->typeList['integrate']   = 'Integration';
 $lang->testtask->typeList['system']      = 'System';
 $lang->testtask->typeList['acceptance']  = 'Acceptance';
