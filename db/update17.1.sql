@@ -19,3 +19,13 @@ ALTER TABLE `zt_kanban` ADD `alignment` varchar(10) NOT NULL DEFAULT 'center' AF
 
 ALTER TABLE `zt_module` ADD `from` mediumint(8) unsigned NOT NULL DEFAULT '0' AFTER `type`;
 ALTER TABLE `zt_workflow` ADD `approval` enum('enabled', 'disabled') NOT NULL DEFAULT 'disabled' AFTER `status`;
+ALTER TABLE `zt_workflowaction` ADD `role` varchar(10) NOT NULL DEFAULT 'custom' AFTER `buildin`;
+ALTER TABLE `zt_workflowfield` ADD `role` varchar(10) NOT NULL DEFAULT 'custom' AFTER `buildin`;
+ALTER TABLE `zt_workflowlabel` ADD `role` varchar(10) NOT NULL DEFAULT 'custom' AFTER `buildin`;
+
+UPDATE `zt_workflowaction` SET `role` = 'buildin' WHERE `role` = 'custom' AND `buildin` = '1';
+UPDATE `zt_workflowaction` SET `role` = 'virtual' WHERE `role` = 'custom' AND `virtual` = '1';
+UPDATE `zt_workflowaction` SET `role` = 'default' WHERE `role` = 'custom' AND `action` IN ('browse', 'create', 'batchcreate', 'edit', 'view', 'delete', 'link', 'unlink', 'export', 'exporttemplate', 'import', 'showimport', 'report', 'assign', 'batchedit', 'batchassign');
+UPDATE `zt_workflowfield` SET `role` = 'buildin' WHERE `role` = 'custom' AND (`buildin` = '1' OR `field` = 'subStatus');
+UPDATE `zt_workflowfield` SET `role` = 'default' WHERE `role` = 'custom' AND `field` IN ('id', 'parent', 'assignedTo', 'status', 'createdBy', 'createdDate', 'editedBy', 'editedDate', 'assignedBy', 'assignedDate' 'mailto', 'deleted');
+UPDATE `zt_workflowlabel` SET `role` = 'buildin' WHERE `role` = 'custom' AND `buildin` = '1';
