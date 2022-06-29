@@ -54,6 +54,7 @@
           <td><?php common::printLink('product', 'browse', "productID=$story->product&branch=$story->branch", $branches[$story->branch], '', "data-app='product'");?></td>
         </tr>
       <?php endif;?>
+      <?php if($this->config->vision != 'lite'):?>
       <tr>
         <th><?php echo $lang->story->module;?></th>
           <?php
@@ -101,6 +102,7 @@
           ?>
         </td>
       </tr>
+      <?php endif;?>
       <tr>
         <th><?php echo $lang->story->source;?></th>
         <td id='source'><?php echo $story->source ? $lang->story->sourceList[$story->source] : $lang->noData;?></td>

@@ -593,7 +593,7 @@ class todo extends control
             {
                 $issues        = $this->loadModel('issue')->getUserIssuePairs($account);
                 $risks         = $this->loadModel('risk')->getUserRiskPairs($account);
-                $opportunities = $this->loadModel('opprotunity')->getUserOpportunityPairs($account);
+                $opportunities = $this->loadModel('opportunity')->getUserOpportunityPairs($account);
             }
             $testTasks = $this->loadModel('testtask')->getUserTesttaskPairs($account);
             if(isset($this->config->qcVersion)) $reviews = $this->loadModel('review')->getUserReviewPairs($account, 0, 'wait');
