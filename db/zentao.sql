@@ -13480,12 +13480,7 @@ REPLACE INTO `zt_zoutput` (`id`, `activity`, `name`, `content`, `optional`, `tai
 (246, 163, '《配置审计报告》', '', 'yes', '', '', 'admin', '2020-01-09 14:55:08', '', '0000-00-00 00:00:00', 605, '0'),
 (247, 166, '《度量分析计划》', '', 'yes', '', '', 'admin', '2020-01-09 14:55:08', '', '0000-00-00 00:00:00', 610, '0'),
 (248, 168, '项目度量数据库', '', 'yes', '', '', 'admin', '2020-01-09 14:55:08', '', '0000-00-00 00:00:00', 615, '0'),
-(249, 172, '《量化项目管理及跟踪计划》', '', 'no', '', '', 'admin', '2020-01-09 14:59:04', '', '0000-00-00 00:00:00', 620, '0'),
-(250, 170, '《决策分析报告》的决策分析评估表', '', 'no', '', '', 'admin', '2020-01-09 14:59:04', '', '0000-00-00 00:00:00', 625, '0'),
-(251, 169, '《量化项目计划及跟踪表》', '', 'no', '', '', 'admin', '2020-01-09 14:59:04', '', '0000-00-00 00:00:00', 630, '0'),
-(252, 173, '《决策分析报告》的评分表', '', 'no', '', '', 'admin', '2020-01-09 14:59:04', '', '0000-00-00 00:00:00', 635, '0'),
-(253, 174, '《决策分析报告》的评分表', '', 'no', '', '', 'admin', '2020-01-09 14:59:04', '', '0000-00-00 00:00:00', 640, '0'),
-(254, 175, '《决策分析报告》', '', 'no', '', '', 'admin', '2020-01-09 14:59:04', '', '0000-00-00 00:00:00', 645, '0');
+(249, 169, '《量化项目计划及跟踪表》', '', 'no', '', '', 'admin', '2020-01-09 14:59:04', '', '0000-00-00 00:00:00', 630, '0');
 
 REPLACE INTO `zt_basicmeas` VALUES
 (2,'scale','project','userRequest','项目用户需求初始规模','pgmURInitScale','故事点或功能点','CREATE FUNCTION qc_pgmurinitscale($project int) returns float (10,2)\r\nbegin\r\n    declare scale float(10,2) default 0__DELIMITER__\r\n    declare inited int default 0__DELIMITER__\r\n    select qc_cminited($project, \'URS\') into inited__DELIMITER__\r\n    IF inited = 1 THEN\r\n    select qc_initscale($project, \'URS\',\'requestEst\') into scale__DELIMITER__\r\n    return scale__DELIMITER__\r\n    ELSE \r\n    return 0__DELIMITER__\r\n    END IF__DELIMITER__\r\nend','{\"$project\":{\"showName\":\"\\u6240\\u5c5e\\u9879\\u76ee\",\"varName\":\"$project\",\"varType\":\"select\",\"options\":\"project\",\"defaultValue\":\"\"}}','项目每个产品的第一个用户需求规格说明书基线版本的规模之和','从基线表中查询该项目下面每个产品的第一个用户需求规模说明书版本，然后查询对应的需求，求和。','crontab','{\"week\":\"1,2,3,4,5,6,0\",\"type\":\"week\"}','00:00','','system','0000-00-00 00:00:00','admin','2020-07-07 14:19:41',10,'0'),
