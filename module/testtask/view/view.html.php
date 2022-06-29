@@ -97,7 +97,7 @@
             </tr>
             <tr>
               <th><?php echo $lang->testtask->pri;?></th>
-              <td><?php echo $task->pri;?></td>
+              <td><?php echo $lang->testtask->priList[$task->pri];?></td>
             </tr>
             <tr>
               <th><?php echo $lang->testtask->begin;?></th>
