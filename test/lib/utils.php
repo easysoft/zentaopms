@@ -222,7 +222,7 @@ function copyDB()
     $dumpCommand = "mysqldump -u%s -p%s %s > %s";
     $sqlFile     = TEST_BASEHPATH . DS . 'tmp/raw.sql';
 
-    $currentDBNum = $dao->query("select count(*) from information_schema.SCHEMATA where SCHEMA_NAME like '" . $config->test->dbPrefix . "%'");
+    $currentDBNum = $dao->query("select count(*) as num from information_schema.SCHEMATA where SCHEMA_NAME like '" . $config->test->dbPrefix . "%'")->fetch();
     $dumpCommand  = sprintf($dumpCommand, $config->db->user, $config->db->password, $config->test->rawDB, $sqlFile);
     shell_exec($dumpCommand);
 
@@ -236,7 +236,7 @@ function copyDB()
 
     foreach($dbUsed as $db)
     {
-        if (!empty($currentDBNum)) $dao->query('drop database ' . $db);
+        if ($currentDBNum->num > 0) $dao->query('drop database ' . $db);
         $dao->query('CREATE DATABASE ' . $db);
         shell_exec("mysql -u" . $config->db->user . ' -p' . $config->db->password . ' ' .  $db . '  <  ' . $sqlFile);
         echo '数据库<' . $db . '>复制成功！';
