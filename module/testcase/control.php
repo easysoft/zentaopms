@@ -2172,6 +2172,7 @@ class testcase extends control
         if(!empty($_POST))
         {
             $this->testcase->importToLib($caseID);
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             if(!empty($caseID)) return $this->send(array('result' => 'success', 'message' => $this->lang->importSuccess, 'closeModal' => true,));
             return $this->send(array('result' => 'success', 'message' => $this->lang->importSuccess, 'locate' => 'reload'));
         }
