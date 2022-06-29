@@ -305,7 +305,7 @@ class executionModel extends model
                 return false;
             }
 
-            if($this->config->systemMode == 'new') $this->checkBeginAndEndDate($_POST['project'], $_POST['begin'], $_POST['end']);
+            if($this->config->systemMode == 'new') $this->checkBeginAndEndDate($_POST['project'], $_POST['begin'], $_POST['end'], $_POST['name']);
             if(dao::isError()) return false;
 
             /* Determine whether to add a sprint or a stage according to the model of the execution. */
@@ -500,7 +500,7 @@ class executionModel extends model
 
         if(in_array($execution->status, array('closed', 'suspended'))) $this->computeBurn($executionID);
 
-        if($this->config->systemMode == 'new' and (empty($execution->project) or $execution->project == $oldExecution->project)) $this->checkBeginAndEndDate($oldExecution->project, $execution->begin, $execution->end);
+        if($this->config->systemMode == 'new' and (empty($execution->project) or $execution->project == $oldExecution->project)) $this->checkBeginAndEndDate($oldExecution->project, $execution->begin, $execution->end, $execution->name);
         if(dao::isError()) return false;
 
         /* Child stage inherits parent stage permissions. */
@@ -869,7 +869,7 @@ class executionModel extends model
             ->remove('comment')
             ->get();
 
-        if($this->config->systemMode == 'new') $this->checkBeginAndEndDate($oldExecution->project, $execution->begin, $execution->end);
+        if($this->config->systemMode == 'new') $this->checkBeginAndEndDate($oldExecution->project, $execution->begin, $execution->end, $oldExecution->name);
         if(dao::isError()) return false;
 
         $execution = $this->loadModel('file')->processImgURL($execution, $this->config->execution->editor->putoff['id'], $this->post->uid);
@@ -1114,17 +1114,19 @@ class executionModel extends model
     /**
      * Check begin and end date.
      *
+     * @param  int    $projectID
      * @param  string $begin
      * @param  string $end
+     * @param  string $executionName
      * @access public
      * @return void
      */
-    public function checkBeginAndEndDate($projectID, $begin, $end)
+    public function checkBeginAndEndDate($projectID, $begin, $end, $executionName)
     {
         $project = $this->loadModel('project')->getByID($projectID);
-        if($begin < $project->begin) dao::$errors['begin'] = sprintf($this->lang->execution->errorBegin, $project->begin);
 
-        if($end > $project->end) dao::$errors['end'] = sprintf($this->lang->execution->errorEnd, $project->end);
+        if($begin < $project->begin) dao::$errors['begin'] = sprintf($this->lang->execution->errorCommonBegin, $executionName, $project->name, $project->begin);
+        if($end > $project->end)     dao::$errors['end']   = sprintf($this->lang->execution->errorCommonEnd, $executionName, $project->name, $project->end);
     }
 
     /*

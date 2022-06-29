@@ -1356,6 +1356,12 @@ class execution extends control
             include $this->app->getModulePath('', 'execution') . 'lang/' . $this->app->getClientLang() . '.php';
             $lang->execution->common = $executionLang;
         }
+        elseif(!empty($project) and $project->model == 'waterfall')
+        {
+            global $lang;
+            $lang->executionCommon = $lang->execution->stage;
+            include $this->app->getModulePath('', 'execution') . 'lang/' . $this->app->getClientLang() . '.php';
+        }
 
         $extra = str_replace(array(',', ' '), array('&', ''), $extra);
         parse_str($extra, $output);

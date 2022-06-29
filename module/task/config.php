@@ -101,7 +101,7 @@ $config->task->datatable->fieldList['progress']['name']     = $lang->task->progr
 
 $config->task->datatable->fieldList['deadline']['title']    = 'deadlineAB';
 $config->task->datatable->fieldList['deadline']['fixed']    = 'no';
-$config->task->datatable->fieldList['deadline']['width']    = '60';
+$config->task->datatable->fieldList['deadline']['width']    = '70';
 $config->task->datatable->fieldList['deadline']['required'] = 'no';
 
 $config->task->datatable->fieldList['openedBy']['title']    = 'openedByAB';

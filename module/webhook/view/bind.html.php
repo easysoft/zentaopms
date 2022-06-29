@@ -1,6 +1,6 @@
 <?php include '../../common/view/header.html.php';?>
 <div id='mainContent' class='main-content'>
-  <div class='center-block mw-800px'>
+  <div class='center-block mw-900px'>
     <div class='main-header'>
       <h2><?php echo $lang->webhook->bind?></h2>
     </div>
@@ -17,7 +17,7 @@
             ?>
           </th>
           <th class='c-action'><?php echo $lang->actions;?></th>
-          <th class='c-action'>
+          <th class='c-bind'>
             <?php
             if($webhook->type == 'dinguser')   echo $lang->webhook->dingBindStatus;
             if($webhook->type == 'wechatuser') echo $lang->webhook->wechatBindStatus;
