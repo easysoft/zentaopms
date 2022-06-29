@@ -225,25 +225,24 @@ class xuanxuanIm extends imModel
                 $notificationContent = json_decode($notification->content);
                 $notificationInnerContent = json_decode($notificationContent->content);
 
-                /* Inner content: array($parentID => array($content1, $content2)) */
-                $objectGroups = array($notificationInnerContent->parent => array($notificationInnerContent));
+                /* Inner content: array($id => array($content1, $content2)) */
+                $objectGroups = array($notificationInnerContent->id => array($notificationInnerContent));
                 foreach($messages as $message)
                 {
                     $messageContent = json_decode($message->content);
                     $messageInnerContent = json_decode($messageContent->content);
-                    $objectGroups[$messageInnerContent->parent][] = $messageInnerContent;
+                    $objectGroups[$messageInnerContent->id][] = $messageInnerContent;
                 }
-                $objectTotal = 0;
-                foreach($objectGroups as $parent => $objectGroup)
+                foreach($objectGroups as $id => $objectGroup)
                 {
                     $object = current($objectGroup);
                     $object->count = count($objectGroup);
                     $object->url   = $object->parentURL;
                     unset($object->title);
 
-                    $objectGroups[$parent] = $object;
-                    $objectTotal += $object->count;
+                    $objectGroups[$id] = $object;
                 }
+                $objectTotal = count($objectGroups);
                 $notificationContent->content = json_encode(array_values($objectGroups));
                 /* Hack alert: title count replacement currently assumes that default count is 1. */
                 $notification->title = substr_replace($notification->title, "$objectTotal", strrpos($notification->title, '1'), 1);
