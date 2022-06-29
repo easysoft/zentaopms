@@ -67,9 +67,9 @@
               }
               else
               {
-                  $deleteURL = $this->createLink('group', 'delete', "groupID=$group->id&confirm=yes");
-                  js::set("confirmDelete{$group->id}", sprintf($lang->group->confirmDelete, $group->name));
-                  echo html::a("javascript:ajaxDelete(\"$deleteURL\", \"groupList\", confirmDelete{$group->id})", '<i class="icon icon-trash"></i>', '', "title='{$lang->group->delete}' class='btn'");
+                  $deleteURL     = $this->createLink('group', 'delete', "groupID=$group->id&confirm=yes");
+                  $confirmDelete = htmlspecialchars(sprintf($lang->group->confirmDelete, $group->name));
+                  echo html::a("javascript:ajaxDelete(\"$deleteURL\", \"groupList\", \"$confirmDelete\")", '<i class="icon icon-trash"></i>', '', "title='{$lang->group->delete}' class='btn'");
               }
           }
           ?>

@@ -59,9 +59,9 @@
           <?php
           if(common::hasPriv('group', 'delete') and $group->role != 'limited')
           {
-              $deleteURL = $this->createLink('group', 'delete', "groupID=$group->id&confirm=yes");
-              js::set("confirmDelete{$group->id}", sprintf($lang->group->confirmDelete, $group->name));
-              echo html::a("###", '<i class="icon icon-trash"></i>', '', "onclick='ajaxDelete(\"$deleteURL\", \"groupList\", confirmDelete{$group->id})' title='{$lang->group->delete}' class='btn btn-icon'");
+              $deleteURL     = $this->createLink('group', 'delete', "groupID=$group->id&confirm=yes");
+              $confirmDelete = htmlspecialchars(sprintf($lang->group->confirmDelete, $group->name));
+              echo html::a("###", '<i class="icon icon-trash"></i>', '', "onclick='ajaxDelete(\"$deleteURL\", \"groupList\", \"$confirmDelete\")' title='{$lang->group->delete}' class='btn btn-icon'");
           }
           else
           {
