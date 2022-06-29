@@ -206,7 +206,6 @@ $lang->testtask->unitTag['lastWeek']  = '上周';
 $lang->testtask->unitTag['thisMonth'] = '本月';
 $lang->testtask->unitTag['lastMonth'] = '上月';
 
-$lang->testtask->typeList['']            = '';
 $lang->testtask->typeList['integrate']   = '集成测试';
 $lang->testtask->typeList['system']      = '系统测试';
 $lang->testtask->typeList['acceptance']  = '验收测试';
