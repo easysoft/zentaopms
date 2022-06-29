@@ -677,6 +677,7 @@ class storyModel extends model
             ->setDefault('lastEditedBy', $this->app->user->account)
             ->add('id', $storyID)
             ->add('lastEditedDate', $now)
+            ->setIF(!$this->post->assignedTo, 'assignedTo', '')
             ->setIF($specChanged, 'version', $oldStory->version + 1)
             ->setIF($specChanged and $oldStory->status == 'active' and $this->post->needNotReview == false, 'status',  'changed')
             ->setIF($oldStory->status == 'draft' and $this->post->needNotReview, 'status', 'active')
@@ -688,13 +689,10 @@ class storyModel extends model
             ->setIF($specChanged and $oldStory->reviewedBy, 'reviewedDate', '0000-00-00')
             ->setIF($specChanged and $oldStory->closedBy, 'closedDate', '0000-00-00')
             ->stripTags($this->config->story->editor->change['id'], $this->config->allowedTags)
-            ->remove('files,labels,reviewer,comment,needNotReview,uid,assignedTo')
+            ->remove('files,labels,reviewer,comment,needNotReview,uid')
             ->get();
         if($specChanged and isset($story->status) && $story->status == 'active' and $this->checkForceReview()) $story->status = 'changed';
         $story = $this->loadModel('file')->processImgURL($story, $this->config->story->editor->change['id'], $this->post->uid);
-
-        /* Add story assignedTo. */
-        if($this->post->assignedTo) $story->assignedTo = $this->post->assignedTo;
 
         $this->dao->update(TABLE_STORY)->data($story, 'spec,verify')
             ->autoCheck()
@@ -1336,6 +1334,7 @@ class storyModel extends model
             ->setDefault('status', $oldStory->status)
             ->setDefault('reviewedDate', $date)
             ->stripTags($this->config->story->editor->review['id'], $this->config->allowedTags)
+            ->setIF(!$this->post->assignedTo, 'assignedTo', '')
             ->setIF($this->post->result == 'revert', 'version', $this->post->preVersion)
             ->setIF($this->post->result == 'clarify', 'assignedTo', $oldStory->lastEditedBy ? $oldStory->lastEditedBy : $oldStory->openedBy)
             ->removeIF($this->post->result != 'reject', 'closedReason, duplicateStory, childStories')
@@ -1361,9 +1360,6 @@ class storyModel extends model
             $reviewers = $this->getReviewerPairs($storyID, $oldStory->version);
             if(count($reviewers) > 1) $skipFields = 'closedReason';
         }
-
-        /* Add story assignedTo. */
-        if($this->post->assignedTo) $story->assignedTo = $this->post->assignedTo;
 
         $this->dao->update(TABLE_STORY)->data($story, $skipFields)
             ->autoCheck()
