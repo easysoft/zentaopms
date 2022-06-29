@@ -1557,7 +1557,7 @@ class programModel extends model
                 $menu .= "</div>";
             }
 
-            $disabled = $program->status == 'closed' ? 'disabled' : '';
+            $disabled = $program->status == 'closed' ? " disabled='disabled' style='pointer-events: none;'" : '';
             $menu .= $this->buildMenu('program', 'edit',   $params, $program, $type, 'edit');
             $menu .= $this->buildMenu('program', 'create', $params, $program, $type, 'split', '', '', '', $disabled, $this->lang->program->children);
             if(common::hasPriv('program', 'delete'))
@@ -1584,17 +1584,17 @@ class programModel extends model
                 $menu .= "</ul>";
                 $menu .= "</div>";
             }
-            $class = $program->model == 'kanban' ? 'disabled' : '';
+            $attr  = $program->model == 'kanban' ? " disabled='disabled' style='pointer-events: none;'" : '';
             $menu .= $this->buildMenu('project', 'edit',  $params, $program, $type, 'edit',  '', 'iframe', true);
-            $menu .= $this->buildMenu('project', 'team',  $params, $program, $type, 'group', '', $class,   '', 'data-app="project"');
-            $menu .= $this->buildMenu('project', 'group', $params, $program, $type, 'lock',  '', $class,   '', 'data-app="project"');
+            $menu .= $this->buildMenu('project', 'team',  $params, $program, $type, 'group', '', '',   '', 'data-app="project"' . $attr);
+            $menu .= $this->buildMenu('project', 'group', $params, $program, $type, 'lock',  '', '',   '', 'data-app="project"' . $attr);
             if(common::hasPriv('project', 'manageProducts') || common::hasPriv('project', 'whitelist') || common::hasPriv('project', 'delete'))
             {
                 $menu .= "<div class='btn-group'>";
                 $menu .= "<button type='button' class='btn dropdown-toggle' data-toggle='dropdown' title='{$this->lang->more}'><i class='icon-more-alt'></i></button>";
                 $menu .= "<ul class='dropdown-menu pull-right text-center' role='menu'>";
-                $menu .= $this->buildMenu('project', 'manageProducts', "$params&from=browse",                $program, $type, 'link',         '', $class, '', "data-app={$this->app->tab}");
-                $menu .= $this->buildMenu('project', 'whitelist',      "$params&module=project&from=browse", $program, $type, 'shield-check', '', $class, '', "data-app='project'");
+                $menu .= $this->buildMenu('project', 'manageProducts', "$params&from=browse",                $program, $type, 'link',         '', '', '', "data-app={$this->app->tab}" . $attr);
+                $menu .= $this->buildMenu('project', 'whitelist',      "$params&module=project&from=browse", $program, $type, 'shield-check', '', '', '', "data-app='project'" . $attr);
                 if(common::hasPriv('project','delete'))
                 {
                     $menu .= $this->buildMenu("project", "delete", $params, $program, $type, 'trash', 'hiddenwin', '', '', "data-group='program'", $this->lang->delete);

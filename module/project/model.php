@@ -2739,7 +2739,7 @@ class projectModel extends model
         $iframe   = ($this->app->tab == 'program' || $project->model == 'kanban') ? 'iframe' : '';
         $onlyBody = ($this->app->tab == 'program' || $project->model == 'kanban') ? true : '';
         $dataApp  = $this->config->systemMode == 'classic' ? "data-app=execution" : "data-app=project";
-        $attr     = $project->model == 'kanban' ? " disabled='disabled'" : '';
+        $attr     = $project->model == 'kanban' ? " disabled='disabled' style='pointer-events: none;'" : '';
 
         $menu .= $this->buildMenu($moduleName, 'edit', $params, $project, 'browse', 'edit', '', $iframe, $onlyBody, $dataApp);
 
