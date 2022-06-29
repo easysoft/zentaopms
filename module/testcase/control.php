@@ -2168,7 +2168,7 @@ class testcase extends control
      */
     public function importToLib($caseID = 0)
     {
-        if(!empty($_POST))
+        if($this->server->request_method == 'POST')
         {
             $this->testcase->importToLib($caseID);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
