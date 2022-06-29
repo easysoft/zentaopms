@@ -281,6 +281,7 @@ class ciModel extends model
             }
 
             $this->dao->update(TABLE_MR)->data($newMR)->where('id')->eq($relateMR->id)->exec();
+            $this->mr->linkObjects($relateMR);
         }
         elseif($status != 'success')
         {
