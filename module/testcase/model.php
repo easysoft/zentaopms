@@ -1694,7 +1694,7 @@ class testcaseModel extends model
             $libCase->fromCaseID      = $case->id;
             $libCase->fromCaseVersion = $case->version;
             $libCase->order           = ++ $maxOrder;
-            $libCase->module          = $this->importCaseRelatedModules($libID, $case->module, $maxModuleOrder);
+            $libCase->module          = empty($case->module) ? 0 : $this->importCaseRelatedModules($libID, $case->module, $maxModuleOrder);
 
             if(empty($libCases[$caseID]))
             {
