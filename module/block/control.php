@@ -1079,10 +1079,10 @@ class block extends control
 
         /* Get tasks. Fix bug #2918.*/
         $yesterday  = date('Y-m-d', strtotime('-1 day'));
-        $taskGroups = $this->dao->select("id,parent,project,status,finishedDate,estimate,consumed,`left`")->from(TABLE_TASK)
-            ->where('project')->in($executionIdList)
+        $taskGroups = $this->dao->select("id,parent,execution,status,finishedDate,estimate,consumed,`left`")->from(TABLE_TASK)
+            ->where('execution')->in($executionIdList)
             ->andWhere('deleted')->eq(0)
-            ->fetchGroup('project', 'id');
+            ->fetchGroup('execution', 'id');
 
         $tasks = array();
         foreach($taskGroups as $executionID => $taskGroup)
@@ -1095,7 +1095,7 @@ class block extends control
 
             foreach($taskGroup as $taskID => $task)
             {
-                if(strpos('wait|doing|pause', $task->status) !== false) $undoneTasks ++;
+                if(strpos('wait|doing|pause|cancel', $task->status) !== false) $undoneTasks ++;
                 if(strpos($task->finishedDate, $yesterday) !== false) $yesterdayFinished ++;
 
                 if($task->parent == '-1') continue;
@@ -1131,11 +1131,11 @@ class block extends control
         }
 
         /* Get bugs. */
-        $bugs = $this->dao->select("project, count(status) as totalBugs, count(status = 'active' or null) as activeBugs, count(resolvedDate like '{$yesterday}%' or null) as yesterdayResolved")->from(TABLE_BUG)
-            ->where('project')->in($executionIdList)
+        $bugs = $this->dao->select("execution, count(status) as totalBugs, count(status = 'active' or null) as activeBugs, count(resolvedDate like '{$yesterday}%' or null) as yesterdayResolved")->from(TABLE_BUG)
+            ->where('execution')->in($executionIdList)
             ->andWhere('deleted')->eq(0)
-            ->groupBy('project')
-            ->fetchAll('project');
+            ->groupBy('execution')
+            ->fetchAll('execution');
 
         foreach($bugs as $executionID => $bug)
         {
