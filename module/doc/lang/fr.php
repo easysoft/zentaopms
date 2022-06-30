@@ -48,7 +48,7 @@ $lang->doc->common       = 'Gestion Documentaire';
 $lang->doc->id           = 'ID';
 $lang->doc->product      = $lang->productCommon;
 $lang->doc->project      = 'Project';
-$lang->doc->execution    = $lang->executionCommon;
+$lang->doc->execution    = $lang->execution->common;
 $lang->doc->lib          = 'Bibliothèque';
 $lang->doc->module       = 'Catégorie';
 $lang->doc->object       = 'Object';
@@ -161,7 +161,7 @@ $lang->doc->allProjects   = 'All' . $lang->projectCommon . 's';
 
 $lang->doc->libTypeList['product']   = $lang->productCommon . ' Library';
 if($config->systemMode == 'new') $lang->doc->libTypeList['project'] = 'Project Library';
-$lang->doc->libTypeList['execution'] = 'Bibliothèque ' . $lang->executionCommon;
+$lang->doc->libTypeList['execution'] = 'Bibliothèque ' . $lang->execution->common;
 $lang->doc->libTypeList['api']       = 'API Library';
 $lang->doc->libTypeList['custom']    = 'Bib. Personnalisée';
 
@@ -251,8 +251,8 @@ $lang->doc->noticeAcl['lib']['project']['default']   = 'Les utilisateurs qui ont
 $lang->doc->noticeAcl['lib']['project']['open']      = 'Users who can access the selected project can access it.';
 $lang->doc->noticeAcl['lib']['project']['private']   = 'Users who can access the selected project or users in the whiltelist can access it.';
 $lang->doc->noticeAcl['lib']['project']['custom']    = 'Les utilisateurs qui ont accès au Projet ou les utilisateurs de la Liste Blanche peuvent y accéder.';
-$lang->doc->noticeAcl['lib']['execution']['default'] = "Les utilisateurs qui ont accès au {$lang->executionCommon} peuvent y accéder.";
-$lang->doc->noticeAcl['lib']['execution']['custom']  = "Les utilisateurs qui ont accès au {$lang->executionCommon} ou les utilisateurs de la Liste Blanche peuvent y accéder.";
+$lang->doc->noticeAcl['lib']['execution']['default'] = "Les utilisateurs qui ont accès au {$lang->execution->common} peuvent y accéder.";
+$lang->doc->noticeAcl['lib']['execution']['custom']  = "Les utilisateurs qui ont accès au {$lang->execution->common} ou les utilisateurs de la Liste Blanche peuvent y accéder.";
 $lang->doc->noticeAcl['lib']['api']['open']          = 'All users can access it.';
 $lang->doc->noticeAcl['lib']['api']['custom']        = 'Users in the whitelist can access it.';
 $lang->doc->noticeAcl['lib']['api']['private']       = 'Only the one who created it can access it.';
