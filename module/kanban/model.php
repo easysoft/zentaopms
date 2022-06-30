@@ -1479,6 +1479,19 @@ class kanbanModel extends model
         if($browseType == 'bug')   $cardList = $this->loadModel('bug')->getExecutionBugs($executionID);
         if($browseType == 'task')  $cardList = $this->loadModel('execution')->getKanbanTasks($executionID, "id");
 
+        if($browseType == 'task' and $groupBy == 'assignedTo')
+        {
+            foreach($cardList as $id => $task)
+            {
+                if($task->mode == 'multi')
+                {
+                    $task->team = $this->dao->select('t1.account,t2.realname')->from(TABLE_TEAM)->alias('t1')
+                        ->leftJoin(TABLE_USER)->alias('t2')->on('t1.account = t2.account')
+                        ->where('t1.root')->eq($id)->andWhere('t1.type')->eq('task')->orderBy('t1.order')->fetchPairs('account');
+                }
+            }
+        }
+
         /* Get objects cards menus. */
         if($browseType == 'story') $storyCardMenu = $this->getKanbanCardMenu($executionID, $cardList, 'story');
         if($browseType == 'bug')   $bugCardMenu   = $this->getKanbanCardMenu($executionID, $cardList, 'bug');
@@ -1564,7 +1577,12 @@ class kanbanModel extends model
 
                     $cardData = array();
                     if(in_array($groupBy, array('module', 'story', 'pri', 'severity')) and (int)$object->$groupBy !== $laneID) continue;
-                    if(in_array($groupBy, array('assignedTo', 'type', 'category', 'source')) and $object->$groupBy !== $laneID) continue;
+                    if(in_array($groupBy, array('type', 'category', 'source')) and $object->$groupBy !== $laneID) continue;
+                    if($groupBy == 'assignedTo')
+                    {
+                        if(empty($object->team) and $object->$groupBy !== $laneID) continue;
+                        if(!empty($object->team) and !in_array($laneID, array_keys($object->team))) continue;
+                    }
 
                     $cardData['id']         = $object->id;
                     $cardData['order']      = $cardOrder;
@@ -1625,6 +1643,14 @@ class kanbanModel extends model
         foreach($cardList as $item)
         {
             if(!isset($groupByList[$item->$groupBy])) $groupByList[$item->$groupBy] = $item->$groupBy;
+
+            if($groupBy == 'assignedTo' and !empty($item->team))
+            {
+                foreach($item->team as $account => $name)
+                {
+                    if(!isset($groupByList[$account])) $groupByList[$account] = $account;
+                }
+            }
         }
 
         if(in_array($groupBy, array('module', 'story', 'assignedTo')))
