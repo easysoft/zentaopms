@@ -13,6 +13,14 @@ $lang->custom->object['todo']      = 'Todo';
 $lang->custom->object['user']      = 'User';
 $lang->custom->object['block']     = 'Block';
 
+$lang->custom->menuOrder = array();
+$lang->custom->menuOrder[10] = 'execution';
+$lang->custom->menuOrder[15] = 'story';
+$lang->custom->menuOrder[20] = 'task';
+$lang->custom->menuOrder[25] = 'todo';
+$lang->custom->menuOrder[30] = 'user';
+$lang->custom->menuOrder[35] = 'block';
+
 $lang->custom->task = new stdClass();
 $lang->custom->task->fields['priList']  = 'Priority';
 $lang->custom->task->fields['typeList'] = 'Type';
