@@ -307,7 +307,7 @@
                 <?php endif;?>
                 <tr>
                   <th><?php echo $lang->story->category;?></th>
-                  <td><?php echo $lang->story->categoryList[$story->category];?></td>
+                  <td><?php echo zget($lang->story->categoryList, $story->category, $story->category)?></td>
                 </tr>
                 <tr>
                   <th><?php echo $lang->story->pri;?></th>
