@@ -1097,7 +1097,7 @@ class projectModel extends model
                 if(!empty($project->name) and $project->begin < $program->begin) dao::$errors['begin'] = sprintf($this->lang->project->beginGreateChild, $program->begin);
 
                 /* When parent set end then child project end cannot greater than parent. */
-                if(!empty($project->name) and $$program->end != '0000-00-00' and $project->end > $program->end) dao::$errors['end'] = sprintf($this->lang->project->endLetterChild, $program->end);
+                if(!empty($project->name) and $program->end != '0000-00-00' and $project->end > $program->end) dao::$errors['end'] = sprintf($this->lang->project->endLetterChild, $program->end);
 
                 if(dao::isError()) return false;
             }
