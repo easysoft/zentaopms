@@ -831,6 +831,7 @@ class task extends control
             {
                 if(isset($muletipleTasks[$taskID]) and $task->assignedTo != $this->app->user->account and $task->mode == 'linear') continue;
                 if(isset($muletipleTasks[$taskID]) and !isset($muletipleTasks[$taskID][$this->post->assignedTo])) continue;
+                if($task->status == 'closed') continue;
 
                 $changes = $this->task->assign($taskID);
                 if(dao::isError()) return print(js::error(dao::getError()));
