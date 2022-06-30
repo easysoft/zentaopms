@@ -79,7 +79,7 @@ $config->project->datatable->fieldList['begin']['pri']      = '9';
 
 $config->project->datatable->fieldList['end']['title']    = 'end';
 $config->project->datatable->fieldList['end']['fixed']    = 'no';
-$config->project->datatable->fieldList['end']['width']    = '90';
+$config->project->datatable->fieldList['end']['width']    = '100';
 $config->project->datatable->fieldList['end']['required'] = 'no';
 $config->project->datatable->fieldList['end']['pri']      = '3';
 
