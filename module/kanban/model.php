@@ -1581,7 +1581,7 @@ class kanbanModel extends model
                     if($groupBy == 'assignedTo')
                     {
                         if(empty($object->team) and $object->$groupBy !== $laneID) continue;
-                        if(!empty($object->team) and !in_array($laneID, array_keys($object->team))) continue;
+                        if(!empty($object->team) and !in_array($laneID, array_keys($object->team), true)) continue;
                     }
 
                     $cardData['id']         = $object->id;
