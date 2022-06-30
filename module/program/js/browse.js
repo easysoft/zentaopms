@@ -30,6 +30,7 @@ $(function()
         }
 
         var summary = checkedProjects.replace('%s', checkedLength);
+        if(cilentLang == "en" && checkedLength < 2) summary = summary.replace('items', 'item');
         var statistic = "<div id='projectsSummary' class='table-statistic'>" + summary + "</div>";
         if(checkedLength > 0)
         {
@@ -53,6 +54,7 @@ $(function()
             $('#programForm').addClass('has-row-checked');
             var checkedLength = $(":checkbox[name^='projectIdList']:checked").length;
             var summary = checkedProjects.replace('%s', checkedLength);
+            if(cilentLang == "en" && checkedLength < 2) summary = summary.replace('items', 'item');
             var statistic = "<div id='projectsSummary' class='table-statistic'>" + summary + "</div>";
             $('#programSummary').addClass('hidden');
             $('#projectsSummary').remove();
