@@ -50,7 +50,7 @@
     <ol class='histories-list'>
       <?php $i = 1; ?>
       <?php foreach($actions as $action):?>
-      <?php $canEditComment = ((!isset($canBeChanged) or !empty($canBeChanged)) and end($actions) == $action and trim($action->comment) != '' and $this->methodName == 'view' and $action->actor == $this->app->user->account and common::hasPriv('action', 'editComment'));?>
+      <?php $canEditComment = ((!isset($canBeChanged) or !empty($canBeChanged)) and end($actions) == $action and trim($action->comment) != '' and strpos(',view,objectlibs,viewcard,', ",$this->methodName,") and $action->actor == $this->app->user->account and common::hasPriv('action', 'editComment'));?>
       <li value='<?php echo $i ++;?>'>
         <?php
         $action->actor = zget($users, $action->actor);
