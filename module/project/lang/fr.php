@@ -65,7 +65,7 @@ $lang->project->budgetGe0          = '『Budget』must be greater than or equal 
 $lang->project->allProjects        = 'All Projects';
 
 /* Fields. */
-$lang->project->common             = 'Project';
+$lang->project->common             = 'Projets';
 $lang->project->id                 = 'ID';
 $lang->project->project            = 'Project';
 $lang->project->stage              = 'Stage';
@@ -307,21 +307,23 @@ $lang->project->programTitle['0']    = 'Hide';
 $lang->project->programTitle['base'] = 'Base-level project only';
 $lang->project->programTitle['end']  = 'End-level project only';
 
-$lang->project->accessDenied        = 'Access denied!';
-$lang->project->chooseProgramType   = 'Select the project management model';
-$lang->project->cannotCreateChild   = 'It is not empty, so you cannot add a child. You can add a parent for it, and then create a child.';
-$lang->project->hasChildren         = 'This project has a child project, so it cannot be deleted.';
-$lang->project->confirmDelete       = "Do you want to delete [%s]?";
-$lang->project->cannotChangeToCat   = "It is not empty, so you cannot change it to a parent.";
-$lang->project->cannotCancelCat     = "It has child projects, so you cannot unmark the parent.";
-$lang->project->parentBeginEnd      = "Parent begin&end date: %s ~ %s";
-$lang->project->parentBudget        = "The budget of the parent project: ";
-$lang->project->beginLetterParent   = "The begin date of the parent project: %s. It cannot be < the begin date of its parent project.";
-$lang->project->endGreaterParent    = "The end date of the parent project: %s. It cannot be > the end date of its parent project.";
-$lang->project->beginGreateChild    = 'La date de début du projets "%s" doit être ≥ à la date de début du programme "%s" : %s.';
-$lang->project->endLetterChild      = 'La date de fin du projets "%s" doit être ≤ à la date de fin du programme "%s" : %s.';
-$lang->project->childLongTime       = "If a child as long-term projects, the parent should be long-term too.";
-$lang->project->confirmUnlinkMember = "Do you want to remove this user from project?";
+$lang->project->accessDenied         = 'Access denied!';
+$lang->project->chooseProgramType    = 'Select the project management model';
+$lang->project->cannotCreateChild    = 'It is not empty, so you cannot add a child. You can add a parent for it, and then create a child.';
+$lang->project->hasChildren          = 'This project has a child project, so it cannot be deleted.';
+$lang->project->confirmDelete        = "Do you want to delete [%s]?";
+$lang->project->cannotChangeToCat    = "It is not empty, so you cannot change it to a parent.";
+$lang->project->cannotCancelCat      = "It has child projects, so you cannot unmark the parent.";
+$lang->project->parentBeginEnd       = "Parent begin&end date: %s ~ %s";
+$lang->project->parentBudget         = "The budget of the parent project: ";
+$lang->project->beginLetterParent    = "The begin date of the parent project: %s. It cannot be < the begin date of its parent project.";
+$lang->project->endGreaterParent     = "The end date of the parent project: %s. It cannot be > the end date of its parent project.";
+$lang->project->beginGreateChild     = 'La date de début du projets "%s" doit être ≥ à la date de début du programme "%s" : %s.';
+$lang->project->endLetterChild       = 'La date de fin du projets doit être ≤ à la date de fin du programme: %s.';
+$lang->project->begigLetterExecution = 'La date de début du projet "%s" doit être ≤ à la date de début minimum d\'excution: %s';
+$lang->project->endGreateExecution   = 'La date de fin du projet "%s" doit être ≥ à la date de fin maximale d\'exécution: %s.';
+$lang->project->childLongTime        = "If a child as long-term projects, the parent should be long-term too.";
+$lang->project->confirmUnlinkMember  = "Do you want to remove this user from project?";
 
 $lang->project->action = new stdclass();
 $lang->project->action->managed = '$date, managed by <strong>$actor</strong>. $extra' . "\n";
