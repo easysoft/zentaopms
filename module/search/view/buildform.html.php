@@ -284,8 +284,11 @@ function executeQuery(queryID)
 
 $(function()
 {
-    if(!canSaveQuery) $('.btn-save-form').attr('disabled', 'disabled');
-
+    if(!canSaveQuery)
+    {
+        $('.btn-save-form').attr('disabled', 'disabled');
+        $('.btn-save-form').css('pointer-events', 'none');
+    }
     var $searchForm = $('#<?php echo $formId;?>');
     $searchForm.find('select.chosen').chosen().on('chosen:showing_dropdown', function()
     {
