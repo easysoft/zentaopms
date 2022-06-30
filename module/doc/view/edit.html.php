@@ -83,7 +83,7 @@
         <tr>
           <th><?php echo $lang->doclib->control;?></th>
           <td colspan='2'>
-          <?php $acl = $lib->acl == 'private' ? 'private' : $doc->acl;?>
+            <?php $acl = $lib->acl == 'private' ? 'private' : $doc->acl;?>
             <?php echo html::radio('acl', $lang->doc->aclList, $acl, "onchange='toggleAcl(this.value, \"doc\")'")?>
             <span class='text-info' id='noticeAcl'><?php echo $lang->doc->noticeAcl['doc'][$acl];?></span>
           </td>
