@@ -1800,14 +1800,14 @@ EOD;
      * @access public
      * @return void
      */
-    static public function printBack($backLink, $class = '')
+    static public function printBack($backLink, $class = '', $misc = '')
     {
         global $lang, $app;
         if(isonlybody()) return false;
 
         if(empty($class)) $class = 'btn';
         $title = $lang->goback . $lang->backShortcutKey;
-        echo html::a($backLink, '<i class="icon-goback icon-back"></i> ' . $lang->goback, '', "id='back' class='{$class}' title={$title} data-app='{$app->tab}'");
+        echo html::a($backLink, '<i class="icon-goback icon-back"></i> ' . $lang->goback, '', "id='back' class='{$class}' title={$title} $misc");
     }
 
     /**
