@@ -463,7 +463,7 @@
         {
             app.$app.removeClass('loading');
             app._loadTimer = null;
-        }, 10000);
+        }, 15000);
     }
 
     /**
