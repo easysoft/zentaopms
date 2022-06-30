@@ -256,6 +256,7 @@
 <?php js::set('orderBy', $orderBy)?>
 <?php js::set('browseType', $browseType)?>
 <?php js::set('checkedProducts', $lang->product->checkedProducts);?>
+<?php js::set('cilentLang', $this->app->getClientLang());?>
 <?php if(commonModel::isTutorialMode()): ?>
 <style>
 #productListForm {overflow: hidden;}

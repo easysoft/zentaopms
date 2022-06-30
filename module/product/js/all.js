@@ -70,7 +70,9 @@ $(function()
     {
         var checkedLength = $(":checkbox[name^='productIDList']:checked").length;
         var summary       = checkedProducts.replace('%s', checkedLength);
+        if(cilentLang == "en" && checkedLength < 2) summary = summary.replace('products', 'product');
         var statistic     = "<div id='productsSummary' class='statistic'>" + summary + "</div>";
+
         if(checkedLength > 0)
         {
             $('#productsSummary').remove();
