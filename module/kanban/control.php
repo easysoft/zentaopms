@@ -1433,8 +1433,7 @@ class kanban extends control
 
             if(isonlybody()) return print(js::reload('parent.parent'));
 
-            $card        = $this->kanban->getCardByID($cardID);
-            $kanbanGroup = $this->kanban->getKanbanData($card->kanban, $card->region);
+            $kanbanGroup      = $this->kanban->getKanbanData($card->kanban, $card->region);
             $kanbanGroupParam = json_encode($kanbanGroup);
             return print("<script>parent.updateRegion({$card->region}, $kanbanGroupParam)</script>");
         }
