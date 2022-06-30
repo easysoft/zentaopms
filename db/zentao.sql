@@ -10,7 +10,7 @@ CREATE TABLE IF NOT EXISTS `zt_acl` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_action`;
 CREATE TABLE IF NOT EXISTS `zt_action` (
-  `id` mediumint(8) unsigned NOT NULL auto_increment,
+  `id` int(9) unsigned NOT NULL auto_increment,
   `objectType` varchar(30) NOT NULL default '',
   `objectID` mediumint(8) unsigned NOT NULL default '0',
   `product` text NOT NULL,
@@ -705,7 +705,7 @@ CREATE TABLE IF NOT EXISTS `zt_holiday` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_history`;
 CREATE TABLE IF NOT EXISTS `zt_history` (
-  `id` mediumint(8) unsigned NOT NULL auto_increment,
+  `id` int(9) unsigned NOT NULL auto_increment,
   `action` mediumint(8) unsigned NOT NULL default '0',
   `field` varchar(30) NOT NULL default '',
   `old` text NOT NULL,
@@ -1397,6 +1397,8 @@ CREATE TABLE IF NOT EXISTS `zt_story` (
   `assignedDate` datetime NOT NULL,
   `lastEditedBy` varchar(30) NOT NULL default '',
   `lastEditedDate` datetime NOT NULL,
+  `changedBy` VARCHAR(30) NOT NULL,
+  `changedDate` DATETIME NOT NULL,
   `reviewedBy` varchar(255) NOT NULL,
   `reviewedDate` datetime NOT NULL default '0000-00-00 00:00:00',
   `closedBy` varchar(30) NOT NULL default '',

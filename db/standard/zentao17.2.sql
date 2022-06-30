@@ -30,7 +30,7 @@ CREATE TABLE `zt_acl` (
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 CREATE TABLE `zt_action` (
-  `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+  `id` int(9) unsigned NOT NULL AUTO_INCREMENT,
   `objectType` varchar(30) NOT NULL DEFAULT '',
   `objectID` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `product` text NOT NULL,
@@ -1009,7 +1009,7 @@ CREATE TABLE `zt_grouppriv` (
   UNIQUE KEY `group` (`group`,`module`,`method`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 CREATE TABLE `zt_history` (
-  `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+  `id` int(9) unsigned NOT NULL AUTO_INCREMENT,
   `action` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `field` varchar(30) NOT NULL DEFAULT '',
   `old` text NOT NULL,
@@ -2560,6 +2560,8 @@ CREATE TABLE `zt_story` (
   `approvedDate` date NOT NULL,
   `lastEditedBy` varchar(30) NOT NULL DEFAULT '',
   `lastEditedDate` datetime NOT NULL,
+  `changedBy` VARCHAR(30) NOT NULL,
+  `changedDate` DATETIME NOT NULL,
   `reviewedBy` varchar(255) NOT NULL,
   `reviewedDate` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `closedBy` varchar(30) NOT NULL DEFAULT '',
@@ -3180,6 +3182,7 @@ CREATE TABLE `zt_workflowaction` (
   `show` enum('dropdownlist','direct') NOT NULL DEFAULT 'dropdownlist',
   `order` smallint(5) unsigned NOT NULL,
   `buildin` tinyint(1) unsigned NOT NULL,
+  `role` varchar(10) NOT NULL DEFAULT 'custom',
   `virtual` tinyint(1) unsigned NOT NULL,
   `conditions` text NOT NULL,
   `verifications` text NOT NULL,
@@ -3241,6 +3244,7 @@ CREATE TABLE `zt_workflowfield` (
   `isValue` enum('0','1') NOT NULL DEFAULT '0',
   `readonly` enum('0','1') NOT NULL DEFAULT '0',
   `buildin` tinyint(1) unsigned NOT NULL,
+  `role` varchar(10) NOT NULL DEFAULT 'custom',
   `desc` text NOT NULL,
   `createdBy` varchar(30) NOT NULL,
   `createdDate` datetime NOT NULL,
@@ -3262,6 +3266,7 @@ CREATE TABLE `zt_workflowlabel` (
   `orderBy` text NOT NULL,
   `order` tinyint(3) NOT NULL,
   `buildin` tinyint(1) unsigned NOT NULL,
+  `role` varchar(10) NOT NULL DEFAULT 'custom',
   `createdBy` char(30) NOT NULL,
   `createdDate` datetime NOT NULL,
   `editedBy` char(30) NOT NULL,

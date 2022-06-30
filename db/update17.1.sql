@@ -18,6 +18,13 @@ ALTER TABLE `zt_kanban` ADD `showWIP` enum('0','1') NOT NULL DEFAULT '1' AFTER `
 ALTER TABLE `zt_kanban` ADD `alignment` varchar(10) NOT NULL DEFAULT 'center' AFTER `object`;
 
 ALTER TABLE `zt_module` ADD `from` mediumint(8) unsigned NOT NULL DEFAULT '0' AFTER `type`;
+
+ALTER TABLE `zt_story` ADD `changedBy` VARCHAR(30) NOT NULL AFTER `lastEditedDate`;
+ALTER TABLE `zt_story` ADD `changedDate` DATETIME NOT NULL AFTER `changedBy`;
+
+ALTER TABLE `zt_action` CHANGE `id` `id` int(9) unsigned NOT NULL AUTO_INCREMENT FIRST;
+ALTER TABLE `zt_history` CHANGE `id` `id` int(9) unsigned NOT NULL AUTO_INCREMENT FIRST;
+
 ALTER TABLE `zt_workflow` ADD `approval` enum('enabled', 'disabled') NOT NULL DEFAULT 'disabled' AFTER `status`;
 ALTER TABLE `zt_workflowaction` ADD `role` varchar(10) NOT NULL DEFAULT 'custom' AFTER `buildin`;
 ALTER TABLE `zt_workflowfield` ADD `role` varchar(10) NOT NULL DEFAULT 'custom' AFTER `buildin`;

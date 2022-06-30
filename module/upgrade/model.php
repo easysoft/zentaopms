@@ -516,6 +516,15 @@ class upgradeModel extends model
                 $this->updateProjectData();
                 break;
             case '17_1':
+                if(!$executedXuanxuan)
+                {
+                    $xuanxuanSql = $this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan5.6.sql';
+                    $this->execSQL($xuanxuanSql);
+                    $this->xuanAddMessageIndexColumns();
+                    $this->xuanReindexMessages();
+                    $this->xuanUpdateLastReadMessageIndex();
+                    $this->xuanFixChatsWithoutLastRead();
+                }
                 $this->moveProjectAdmins();
                 $this->addStoryViewPriv();
                 break;
@@ -6495,5 +6504,151 @@ class upgradeModel extends model
         }
 
         return true;
+    }
+
+    /**
+     * Xuan: Add `index` column to all message partition tables.
+     *
+     * @access public
+     * @return bool
+     */
+    public function xuanAddMessageIndexColumns()
+    {
+        $prefix = $this->config->db->prefix;
+        $tables = $this->dbh->query("SHOW TABLES LIKE '{$prefix}im_message\_%'")->fetchAll();
+        $tables = array_filter(array_map(function($table) use ($prefix)
+        {
+            $tableName = current(array_values((array)$table));
+            if(!preg_match("/{$prefix}im_message_[a-z]+/", $tableName)) return $tableName;
+        },
+            $tables
+        ));
+        if(empty($tables)) return true;
+
+        $query = '';
+        foreach($tables as $table) $query .= "ALTER TABLE `$table` ADD `index` int(11) unsigned DEFAULT 0 AFTER `date`;";
+
+        $this->dbh->query($query);
+        return !dao::isError();
+    }
+
+    /**
+     * Xuan: Re-index messages.
+     *
+     * @access public
+     * @return bool
+     */
+    public function xuanReindexMessages()
+    {
+        /** @var array[] $chatTablePairs Associations of chats and partition tables, without main table. */
+        $chatTablePairs = array();
+
+        ini_set('memory_limit', '1024M');
+
+        /* Fetch chat and message partition table associations. */
+        $chatTableData = $this->dao->select('gid,tableName')->from(TABLE_IM_CHAT_MESSAGE_INDEX)->orderBy('id_asc')->fetchAll();
+        foreach($chatTableData as $chatTable)
+        {
+            if(isset($chatTablePairs[$chatTable->gid]))
+            {
+                $chatTablePairs[$chatTable->gid][] = $chatTable->tableName;
+                continue;
+            }
+            $chatTablePairs[$chatTable->gid] = array($chatTable->tableName);
+        }
+
+        /* Append all non-partitioned chats. */
+        $allChats = $this->dao->select('gid')->from(TABLE_IM_CHAT)->fetchPairs();
+        $nonPartitionedChats = array_diff(array_values($allChats), array_keys($chatTablePairs));
+        foreach($nonPartitionedChats as $chat) $chatTablePairs[$chat] = array();
+
+        /* Do index. */
+        foreach($chatTablePairs as $chat => $tables)
+        {
+            $result = $this->xuanDoIndex($chat, $tables);
+            if(!$result) return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Xuan: Index messages of chat in partition tables and main table.
+     *
+     * @param  string $chat
+     * @param  array  $tables
+     * @return bool
+     */
+    public function xuanDoIndex($chat, $tables)
+    {
+        $messageIndex = 0;
+        $tables[] = str_replace('`', '', TABLE_IM_MESSAGE);
+        foreach($tables as $table)
+        {
+            $idIndices = array();
+
+            $ids = $this->dao->select('id')->from("`$table`")->where('cgid')->eq($chat)->fetchAll('id');
+            $ids = array_keys($ids);
+            if(empty($ids)) continue;
+
+            for($index = 1; $index <= count($ids); $index++) $idIndices[$ids[$index - 1]] = $index + $messageIndex;
+
+            $queryData = array();
+            foreach($idIndices as $id => $index) $queryData[] = "WHEN $id THEN $index";
+
+            $query = "UPDATE `$table` SET `index` = (CASE `id` " . join(' ', $queryData) . " END) WHERE `id` IN(" . join(',', $ids) . ");";
+            $this->dao->query($query);
+
+            $messageIndex = max(array_values($idIndices));
+        }
+        $this->dao->update(TABLE_IM_CHAT)->set('lastMessageIndex')->eq($messageIndex)->where('gid')->eq($chat)->exec();
+        return !dao::isError();
+    }
+
+    /**
+     * Xuan: Set lastReadMessageIndex into table im_chatuser.
+     *
+     * @access public
+     * @return bool
+     */
+    public function xuanUpdateLastReadMessageIndex()
+    {
+        $lastReadMessages =  $this->dao->select('lastReadMessage')->from(TABLE_IM_CHATUSER)->where('lastReadMessage')->ne(0)->fetchAll('lastReadMessage');
+        $lastReadMessages = array_keys($lastReadMessages);
+        if(empty($lastReadMessages)) return true;
+
+        ini_set('memory_limit', '1024M');
+
+        $messages = $this->loadModel('im')->messageGetList('', $lastReadMessages, null, '', '', false);
+
+        foreach($messages as $message) $this->dao->update(TABLE_IM_CHATUSER)->set('lastReadMessageIndex')->eq($message->index)->where('lastReadMessage')->eq($message->id)->exec();
+        return !dao::isError();
+    }
+
+    /**
+     * Xuan: Fix chats without lastReadMessage.
+     *
+     * @access public
+     * @return bool
+     */
+    public function xuanFixChatsWithoutLastRead()
+    {
+        $zeroLastReadChats = $this->dao->select('cgid')->from(TABLE_IM_CHATUSER)->where('lastReadMessage')->eq(0)->fetchAll('cgid');
+        $zeroLastReadChats = array_keys($zeroLastReadChats);
+        if(empty($zeroLastReadChats)) return true;
+
+        ini_set('memory_limit', '1024M');
+
+        $lastMessages = $this->dao->select('MAX(`index`), cgid')->from(TABLE_IM_MESSAGE)->where('cgid')->in($zeroLastReadChats)->groupBy('cgid')->fetchAll('cgid');
+        if(empty($lastMessages)) return true;
+
+        $maxIndex = 'MAX(`index`)';
+        $queryData = array();
+        foreach($lastMessages as $cgid => $lastMessage) $queryData[] = "WHEN '{$cgid}' THEN {$lastMessage->$maxIndex}";
+
+        $query = "UPDATE " . TABLE_IM_CHATUSER . " SET `lastReadMessageIndex` = (CASE `cgid` " . join(' ', $queryData) . " END) WHERE `cgid` IN('" . join("','", array_keys($lastMessages)) . "');";
+        $this->dao->query($query);
+
+        return !dao::isError();
     }
 }
