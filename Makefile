@@ -145,7 +145,7 @@ zentaoxx:
 	sed -i "s/'..\/..\/common\/view\/footer.html.php'/\$$app->getModuleRoot() . 'common\/view\/footer.html.php'/g" zentaoxx/extension/xuan/conference/view/admin.html.php
 	echo "ALTER TABLE \`zt_user\` ADD \`pinyin\` varchar(255) NOT NULL DEFAULT '' AFTER \`realname\`;" >> zentaoxx/db/xuanxuan.sql
 	mkdir zentaoxx/tools; cp tools/cn2tw.php zentaoxx/tools; cd zentaoxx/tools; php cn2tw.php
-	cp tools/en2de.php zentaoxx/tools; cd zentaoxx/tools; php en2de.php ../
+	cp tools/en2other.php zentaoxx/tools; cd zentaoxx/tools; php en2other.php ../
 	rm -rf zentaoxx/tools
 	#zip -rqm -9 zentaoxx.$(VERSION).zip zentaoxx/*
 	#rm -rf xuan.zip xuan zentaoxx
