@@ -10,6 +10,8 @@ class myMisc extends misc
      */
     public function ajaxGetClientPackage($os = '')
     {
+        ini_set('memory_limit', '256M'); // Temporarily handle the problem that the ZenTao client file is too large.
+
         set_time_limit (0);
         session_write_close();
 
