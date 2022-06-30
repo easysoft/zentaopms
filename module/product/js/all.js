@@ -60,7 +60,12 @@ $(function()
         });
     }
 
-    /* Add a statistics prompt statement after the Edit button */
+    /**
+     * Add a statistics prompt statement after the Edit button.
+     *
+     * @access public
+     * @return void
+     */
     function addStatistic()
     {
         var checkedLength = $(":checkbox[name^='productIDList']:checked").length;
@@ -77,16 +82,30 @@ $(function()
         }
     }
 
-    function debounce(fn,delay)
+    /**
+     * Anti shake operation for jquery.
+     *
+     * @param  fn $fn
+     * @param  delay $delay
+     * @access public
+     * @return void
+     */
+    function debounce(fn, delay)
     {
         var timer = null;
         return function()
         {
             if(timer) clearTimeout(timer);
-            timer = setTimeout(fn,delay)
+            timer = setTimeout(fn, delay)
         }
     }
 
+    /**
+     * Update statistics.
+     *
+     * @access public
+     * @return void
+     */
     function updateStatistic()
     {
         debounce(addStatistic(), 200)

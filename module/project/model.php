@@ -1375,11 +1375,11 @@ class projectModel extends model
             }
         }
 
-        $executions = $this->dao->select('*')->from(TABLE_PROJECT)
+        $executionsCount = $this->dao->select('COUNT(*) as count')->from(TABLE_PROJECT)
             ->where('project')->eq($project->id)
             ->andWhere('deleted')->eq('0')
-            ->fetch();
-        if(!empty($executions))
+            ->fetchAll();
+        if(!empty($executionsCount))
         {
             $minExecutionBegin = $this->dao->select('begin as minBegin')->from(TABLE_PROJECT)->where('project')->eq($project->id)->andWhere('deleted')->eq('0')->orderBy('begin_asc')->fetch();
             $maxExecutionEnd   = $this->dao->select('end as maxEnd')->from(TABLE_PROJECT)->where('project')->eq($project->id)->andWhere('deleted')->eq('0')->orderBy('end_desc')->fetch();
