@@ -284,16 +284,19 @@ $lang->execution->taskKanban          = 'Task Kanban';
 $lang->execution->RDKanban            = 'Research & Development Kanban';
 
 /* Group browsing. */
-$lang->execution->allTasks     = 'Voir Toutes';
+$lang->execution->allTasks     = 'Toutes';
 $lang->execution->assignedToMe = 'à Moi';
-$lang->execution->myInvolved   = "Où j'ai participé";
-$lang->execution->assignedByMe = 'AssignedByMe';
+$lang->execution->myInvolved   = "Ma part";
+$lang->execution->assignedByMe = 'Assignée par moi';
 
 $lang->execution->statusSelects['']             = 'Plus...';
 $lang->execution->statusSelects['wait']         = 'En Attente';
 $lang->execution->statusSelects['doing']        = 'En Cours';
 $lang->execution->statusSelects['undone']       = 'Non terminées';
+$lang->execution->statusSelects['myinvolved']   = $lang->execution->myInvolved;
 $lang->execution->statusSelects['finishedbyme'] = 'Terminées par moi';
+$lang->execution->statusSelects['assignedbyme'] = $lang->execution->assignedByMe;
+$lang->execution->statusSelects['needconfirm']  = 'A confirmer';
 $lang->execution->statusSelects['done']         = 'Faites';
 $lang->execution->statusSelects['closed']       = 'Fermées';
 $lang->execution->statusSelects['cancel']       = 'Annulées';
@@ -476,9 +479,6 @@ $lang->execution->typeList['kanban'] = 'Kanban';
 $lang->execution->featureBar['task']['all']          = $lang->execution->allTasks;
 $lang->execution->featureBar['task']['unclosed']     = $lang->execution->unclosed;
 $lang->execution->featureBar['task']['assignedtome'] = $lang->execution->assignedToMe;
-$lang->execution->featureBar['task']['myinvolved']   = $lang->execution->myInvolved;
-$lang->execution->featureBar['task']['assignedbyme'] = $lang->execution->assignedByMe;
-$lang->execution->featureBar['task']['needconfirm']  = 'A confirmer';
 $lang->execution->featureBar['task']['status']       = $lang->execution->statusSelects[''];
 
 $lang->execution->featureBar['all']['all']       = $lang->execution->all;

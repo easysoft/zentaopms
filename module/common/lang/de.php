@@ -353,7 +353,7 @@ $lang->setLang = 'Language Setting';
 
 /* Theme style. */
 $lang->theme                = 'Theme';
-$lang->themes['default']    = 'ZenTao Blau (Standard)';
+$lang->themes['default']    = 'Standard';
 $lang->themes['blue']       = 'Young Blue';
 $lang->themes['green']      = 'Grün';
 $lang->themes['red']        = 'Rot';
