@@ -2259,6 +2259,13 @@ class bug extends control
                     $bug->steps = str_replace('&nbsp;', ' ', $bug->steps);
                 }
 
+                $bug->openedDate     = !helper::isZeroDate($bug->openedDate)     ? $bug->openedDate     : '';
+                $bug->assignedDate   = !helper::isZeroDate($bug->assignedDate)   ? $bug->assignedDate   : '';
+                $bug->resolvedDate   = !helper::isZeroDate($bug->resolvedDate)   ? $bug->resolvedDate   : '';
+                $bug->closedDate     = !helper::isZeroDate($bug->closedDate)     ? $bug->closedDate     : '';
+                $bug->lastEditedDate = !helper::isZeroDate($bug->lastEditedDate) ? $bug->lastEditedDate : '';
+                $bug->deadline       = !helper::isZeroDate($bug->deadline)       ? $bug->deadline       : '';
+
                 /* fill some field with useful value. */
                 $bug->product   = !isset($products[$bug->product])     ? '' : $products[$bug->product] . "(#$bug->product)";
                 $bug->project   = !isset($projects[$bug->project])     ? '' : $projects[$bug->project] . "(#$bug->project)";

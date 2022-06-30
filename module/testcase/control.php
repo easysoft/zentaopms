@@ -1582,6 +1582,10 @@ class testcase extends control
                 $case->real       = '';
                 $result = isset($results[$case->id]) ? $results[$case->id] : array();
 
+                $case->openedDate     = !helper::isZeroDate($case->openedDate)     ? $case->openedDate     : '';
+                $case->lastEditedDate = !helper::isZeroDate($case->lastEditedDate) ? $case->lastEditedDate : '';
+                $case->lastRunDate    = !helper::isZeroDate($case->lastRunDate)    ? $case->lastRunDate    : '';
+
                 $case->real = '';
                 if(!empty($result) and !isset($relatedSteps[$case->id]))
                 {
