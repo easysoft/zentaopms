@@ -49,7 +49,7 @@ body.menu-hide {padding-left: 0;}
 .app-container {position: absolute; left: 0; bottom: 40px; right: 0; top: 0; background-color: #efefef;}
 .menu-hide #apps {left: 40px;}
 .app-container.loading:before {background-color: rgba(0,0,0,.1);}
-.app-container.loading:before, .app-container.loading::after {transition-delay: 1s;}
+.app-container.loading:before, .app-container.loading::after {transition-delay: 3s;}
 
 #appsBar {position: fixed; left: 96px; bottom: 0; right: 0; height: 40px; z-index: 1012; background: #fff; border-top: 1px solid #eff1f7;}
 .menu-hide #appsBar {left: 40px;}
