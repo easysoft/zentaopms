@@ -11,6 +11,8 @@ class myMisc extends misc
      */
     public function downloadClient($action = 'check', $os = '')
     {
+        ini_set('memory_limit', '256M');
+
         if($_POST)
         {
             $os = $this->post->os;

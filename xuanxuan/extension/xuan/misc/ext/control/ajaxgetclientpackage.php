@@ -10,6 +10,7 @@ class myMisc extends misc
      */
     public function ajaxGetClientPackage($os = '')
     {
+        ini_set('memory_limit', '256M');
         set_time_limit (0);
         session_write_close();
 
