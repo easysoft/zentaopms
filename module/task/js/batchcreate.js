@@ -136,7 +136,6 @@ function setPreview(num)
             storyLink  = storyLink + concat + 'onlybody=yes';
         }
         $('#preview' + num).removeAttr('disabled');
-        $('#preview' + num).modalTrigger({type:'iframe'});
         $('#preview' + num).attr('href', storyLink);
     }
     else
