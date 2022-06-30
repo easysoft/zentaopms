@@ -1091,6 +1091,7 @@ CREATE TABLE `zt_im_chat` (
   `editedDate` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `lastActiveTime` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `lastMessage` int(11) unsigned NOT NULL DEFAULT '0',
+  `lastMessageIndex` int(11) unsigned NOT NULL DEFAULT 0,
   `dismissDate` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `pinnedMessages` text NOT NULL,
   PRIMARY KEY (`id`),
@@ -1107,6 +1108,8 @@ CREATE TABLE `zt_im_chat_message_index` (
   `tableName` char(64) NOT NULL,
   `start` int(11) unsigned NOT NULL,
   `end` int(11) unsigned NOT NULL,
+  `startIndex` int(11) unsigned NOT NULL,
+  `endIndex` int(11) unsigned NOT NULL,
   `startDate` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `endDate` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `count` mediumint(8) unsigned NOT NULL,
@@ -1115,7 +1118,9 @@ CREATE TABLE `zt_im_chat_message_index` (
   KEY `start` (`start`),
   KEY `end` (`end`),
   KEY `startDate` (`startDate`),
-  KEY `endDate` (`endDate`)
+  KEY `endDate` (`endDate`),
+  KEY `chatstartindex` (`gid`,`startIndex`),
+  KEY `chatendindex` (`gid`,`endIndex`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 CREATE TABLE `zt_im_chatuser` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
@@ -1130,6 +1135,7 @@ CREATE TABLE `zt_im_chatuser` (
   `quit` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `category` varchar(40) NOT NULL DEFAULT '',
   `lastReadMessage` int(11) unsigned NOT NULL DEFAULT '0',
+  `lastReadMessageIndex` int(11) unsigned NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`),
   UNIQUE KEY `chatuser` (`cgid`,`user`),
   KEY `cgid` (`cgid`),
@@ -1179,6 +1185,7 @@ CREATE TABLE `zt_im_message` (
   `cgid` char(40) NOT NULL DEFAULT '',
   `user` varchar(30) NOT NULL DEFAULT '',
   `date` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `index` int(11) unsigned NOT NULL DEFAULT 0,
   `type` enum('normal','broadcast','notify','bulletin') NOT NULL DEFAULT 'normal',
   `content` text NOT NULL,
   `contentType` enum('text','plain','emotion','image','file','object','code') NOT NULL DEFAULT 'text',
@@ -1196,6 +1203,7 @@ CREATE TABLE `zt_im_message_backup` (
   `cgid` char(40) NOT NULL DEFAULT '',
   `user` varchar(30) NOT NULL DEFAULT '',
   `date` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `index` int(11) unsigned NOT NULL DEFAULT 0,
   `type` enum('normal','broadcast','notify') NOT NULL DEFAULT 'normal',
   `content` text NOT NULL,
   `contentType` enum('text','plain','emotion','image','file','object','code') NOT NULL DEFAULT 'text',
