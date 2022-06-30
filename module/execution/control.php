@@ -984,6 +984,9 @@ class execution extends control
 
         $showModule  = !empty($this->config->datatable->bugBrowse->showModule) ? $this->config->datatable->bugBrowse->showModule : '';
 
+        /* Process the openedBuild and resolvedBuild fields. */
+        $bugs = $this->bug->processBuildForBugs($bugs);
+
         /* Assign. */
         $this->view->title           = $title;
         $this->view->position        = $position;
