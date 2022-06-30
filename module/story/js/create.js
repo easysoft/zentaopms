@@ -11,16 +11,11 @@ $(function()
         {
             $('#reviewerBox').addClass('required');
         }
+        loadAssignedTo();
 
         getStatus('create', "product=" + $('#product').val() + ",execution=" + executionID + ",needNotReview=" + ($(this).prop('checked') ? 1 : 0));
     });
     $('#needNotReview').change();
-
-    $('#reviewer').on('change', function()
-    {
-        loadAssignedTo();
-    });
-    $('#reviewer').change();
 
     // init pri selector
     $('#pri').on('change', function()
@@ -69,15 +64,15 @@ function loadAssignedTo()
     });
 
     var colspan = $('#assignedToBox').attr('colspan');
-    if(assignees && assignees.length == 1)
-    {
-        $('#assignedToBox').addClass('hidden');
-        $('#reviewerBox').attr('colspan', colspan * 2);
-    }
-    else
+    if($('#needNotReview').is(':checked'))
     {
         $('#assignedToBox').removeClass('hidden');
         $('#reviewerBox').attr('colspan', colspan);
+    }
+    else
+    {
+        $('#assignedToBox').addClass('hidden');
+        $('#reviewerBox').attr('colspan', colspan * 2);
     }
 }
 
