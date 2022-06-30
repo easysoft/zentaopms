@@ -267,7 +267,7 @@
                   <th><?php echo $lang->task->assignedTo;?></th>
                   <td>
                     <?php
-                    if(!empty($task->team) and $task->mode == 'multi' and in_array($task->assignedTo, array_keys($task->team)))
+                    if(!empty($task->team) and $task->mode == 'multi')
                     {
                         foreach($task->team as $member) echo ' ' . zget($users, $member->account);
                     }
