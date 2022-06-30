@@ -28,6 +28,7 @@ class commonModel extends model
             $this->sendHeader();
             $this->setCompany();
             $this->setUser();
+            $this->setApproval();
             $this->loadConfigFromDB();
             $this->app->setTimezone();
             $this->loadCustomFromDB();
@@ -282,6 +283,18 @@ class commonModel extends model
             $this->session->set('user', $user);
             $this->app->user = $this->session->user;
         }
+    }
+
+    /**
+     * Set approval config.
+     *
+     * @access public
+     * @return void
+     */
+    public function setApproval()
+    {
+        $this->config->openedApproval = false;
+        if($this->config->edition == 'max' && $this->config->vision == 'rnd') $this->config->openedApproval = true;
     }
 
     /**
