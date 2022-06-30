@@ -148,17 +148,17 @@ class product extends control
         }
 
         /* Set menu. */
-        if($this->app->tab == 'product')
+        if($this->app->tab == 'project')
+        {
+            $this->session->set('storyList', $this->app->getURI(true), 'project');
+            $this->loadModel('project')->setMenu($projectID);
+        }
+        else
         {
             $this->session->set('storyList',   $this->app->getURI(true), 'product');
             $this->session->set('productList', $this->app->getURI(true), 'product');
 
             $this->product->setMenu($productID, $branch, 0, '', "storyType=$storyType");
-        }
-        if($this->app->tab == 'project')
-        {
-            $this->session->set('storyList', $this->app->getURI(true), 'project');
-            $this->loadModel('project')->setMenu($projectID);
         }
 
         /* Lower browse type. */

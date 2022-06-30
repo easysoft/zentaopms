@@ -166,7 +166,7 @@
     <?php endif;?>
     <div class='main-actions'>
       <div class="btn-toolbar">
-        <?php common::printBack($browseLink);?>
+        <?php echo html::a($browseLink, '<i class="icon icon-back icon-sm"></i> ' . $lang->goback, '', "class='btn btn-secondary'");?>
         <?php if(!isonlybody()) echo "<div class='divider'></div>";?>
         <?php $task->executionList = $execution;?>
         <?php echo $this->task->buildOperateMenu($task, 'view');?>
