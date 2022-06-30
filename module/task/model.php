@@ -3729,7 +3729,8 @@ class taskModel extends model
             $menu .= $this->buildMenu('task', 'batchCreate', "execution=$task->execution&storyID=$task->story&moduleID=$task->module&taskID=$task->id", $task, 'view', 'split', '', '', '', "title='{$this->lang->task->children}'", $this->lang->task->children);
         }
 
-        if(!(!empty($task->team) and $task->mode == 'multi')) $menu .= $this->buildMenu('task', 'assignTo', "executionID=$task->execution&taskID=$task->id", $task, 'button', '', '', 'iframe', true, '', empty($task->team) ? $this->lang->task->assignTo : $this->lang->task->transfer);
+        $assignToLang = (!empty($task->team) and $task->mode == 'linear') ? $this->lang->task->transfer : $this->lang->task->assignTo;
+        $menu .= $this->buildMenu('task', 'assignTo', "executionID=$task->execution&taskID=$task->id", $task, 'button', '', '', 'iframe', true, '', $assignToLang);
 
         $menu .= $this->buildMenu('task', 'start',          $params, $task, 'view', '', '', 'iframe showinonlybody', true);
         $menu .= $this->buildMenu('task', 'restart',        $params, $task, 'view', '', '', 'iframe showinonlybody', true);

@@ -66,7 +66,7 @@
           </td>
         </tr>
         <tr>
-          <th><?php echo empty($task->team) ? $lang->task->assign : $lang->task->transferTo;?></th>
+          <th><?php echo (!empty($task->team) and $task->mode == 'linear') ? $lang->task->transferTo : $lang->task->assign;?></th>
           <td><?php echo html::select('assignedTo', $members, $task->nextBy, "class='form-control chosen'");?></td><td></td>
         </tr>
         <tr>
