@@ -1796,6 +1796,8 @@ EOD;
      * Print back link
      *
      * @param  string $backLink
+     * @param  string $class
+     * @param  string $misc
      * @static
      * @access public
      * @return void
