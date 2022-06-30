@@ -94,7 +94,7 @@ $lang->testcase->mailto           = '抄送给';
 $lang->testcase->deleted          = '是否删除';
 $lang->testcase->browseUnits      = '单元测试';
 $lang->testcase->suite            = '套件';
-$lang->testcase->lib              = '用例库';
+$lang->testcase->executionStatus  = '执行状态';
 
 $lang->case = $lang->testcase;  // 用于DAO检查时使用。因为case是系统关键字，所以无法定义该模块为case，只能使用testcase，但表还是使用的case。
 
