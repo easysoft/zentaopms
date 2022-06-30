@@ -292,7 +292,7 @@ $(function()
         var $this = $(this);
         var $chosen = $this.next('.chosen-container').removeClass('chosen-up');
         var $drop = $chosen.find('.chosen-drop');
-        $chosen.toggleClass('chosen-up', $drop.height() + $drop.offset().top - $(document).scrollTop() > $(window).height());
+        if($this.data('drop_direction') === 'auto') $chosen.toggleClass('chosen-up', $drop.height() + $drop.offset().top - $(document).scrollTop() > $(window).height());
     });
 
     $searchForm.find('.picker-select').each(function()
