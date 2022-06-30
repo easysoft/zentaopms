@@ -3,7 +3,7 @@
   <h2 class="detail-title">
     <span class="label-id taskID"><?php echo $task->id?></span>
     <span class="label <?php echo "status-{$task->status}";?>"><?php echo $this->processStatus('task', $task);?></span>
-    <span class="title">
+    <span>
       <?php if($task->parent > 0) echo '<span class="label no-margin label-badge label-light">' . $this->lang->task->childrenAB . '</span>';?>
       <?php if(!empty($task->team)) echo '<span class="label no-margin label-badge label-light">' . $this->lang->task->multipleAB . '</span>';?>
       <?php echo isset($task->parentName) ? $task->parentName . '/' : '';?><?php echo $task->name;?>
