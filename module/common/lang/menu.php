@@ -146,7 +146,7 @@ $lang->program->menuOrder[20] = 'stakeholder';
 $lang->program->menu->personnel['subMenu']             = new stdClass();
 $lang->program->menu->personnel['subMenu']->invest     = array('link' => "{$lang->personnel->invest}|personnel|invest|programID=%s");
 $lang->program->menu->personnel['subMenu']->accessible = array('link' => "{$lang->personnel->accessible}|personnel|accessible|programID=%s");
-$lang->program->menu->personnel['subMenu']->whitelist  = array('link' => "{$lang->whitelist}|personnel|whitelist|objectID=%s&module=program", 'alias' => 'addwhitelist');
+$lang->program->menu->personnel['subMenu']->whitelist  = array('link' => "{$lang->whitelist}|personnel|whitelist|objectID=%s", 'alias' => 'addwhitelist');
 
 /* Product menu. */
 $lang->product->homeMenu         = new stdclass();
