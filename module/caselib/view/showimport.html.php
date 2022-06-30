@@ -128,7 +128,8 @@ $(function()
 <style>#mainContent .col-content{display: none;}</style>
 <?php endif;?>
 <script>
-$(function(){
+$(function()
+{
     $.fixedTableHead('#showData');
     $("#showData th").each(function()
     {
