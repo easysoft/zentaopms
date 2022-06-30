@@ -34,6 +34,7 @@ class blockModel extends model
             ->setDefault('grid', '4')
             ->setDefault('source', $source)
             ->setDefault('block', $type)
+            ->setDefault('vision', $this->config->vision)
             ->setDefault('params', array())
             ->remove('uid,actionLink,modules,moduleBlock')
             ->get();
