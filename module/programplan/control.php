@@ -186,6 +186,11 @@ class programplan extends control
         $this->app->loadLang('project');
         $this->app->loadLang('execution');
         $plan = $this->programplan->getByID($planID);
+
+        global $lang;
+        $lang->executionCommon = $lang->execution->stage;
+        include $this->app->getModulePath('', 'execution') . 'lang/' . $this->app->getClientLang() . '.php';
+
         if($_POST)
         {
             $changes = $this->programplan->update($planID, $projectID);
