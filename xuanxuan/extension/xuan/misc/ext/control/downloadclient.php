@@ -11,7 +11,7 @@ class myMisc extends misc
      */
     public function downloadClient($action = 'check', $os = '')
     {
-        ini_set('memory_limit', '256M');
+        ini_set('memory_limit', '256M'); // Temporarily handle the problem that the ZenTao client file is too large.
 
         if($_POST)
         {
