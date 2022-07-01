@@ -7,7 +7,11 @@ function switchShow(result)
         $('#rejectedReasonBox').show();
         $('#preVersionBox').hide();
         $('#assignedToBox').hide();
-        if(isMultiple) loadAssignedTo();
+        if(isMultiple)
+        {
+            $('#assignedToBox').show();
+            loadAssignedTo();
+        }
     }
     else if(result == 'revert')
     {
