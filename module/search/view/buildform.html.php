@@ -63,6 +63,7 @@ $formId = 'searchForm-' . uniqid('');
 .operatorWidth {width: 110px !important;}
 html[lang^='zh-'] .fieldWidth {width: 110px !important;}
 html[lang^='zh-'] .operatorWidth {width: 90px !important;}
+.table tbody tr td input {display: block !important;}
 </style>
 <?php if($style != 'simple'):?>
   <div id='toggle-queries'>
