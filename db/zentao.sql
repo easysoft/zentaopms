@@ -10,7 +10,7 @@ CREATE TABLE IF NOT EXISTS `zt_acl` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_action`;
 CREATE TABLE IF NOT EXISTS `zt_action` (
-  `id` mediumint(8) unsigned NOT NULL auto_increment,
+  `id` int(9) unsigned NOT NULL auto_increment,
   `objectType` varchar(30) NOT NULL default '',
   `objectID` mediumint(8) unsigned NOT NULL default '0',
   `product` text NOT NULL,
@@ -705,7 +705,7 @@ CREATE TABLE IF NOT EXISTS `zt_holiday` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_history`;
 CREATE TABLE IF NOT EXISTS `zt_history` (
-  `id` mediumint(8) unsigned NOT NULL auto_increment,
+  `id` int(9) unsigned NOT NULL auto_increment,
   `action` mediumint(8) unsigned NOT NULL default '0',
   `field` varchar(30) NOT NULL default '',
   `old` text NOT NULL,
@@ -1397,6 +1397,8 @@ CREATE TABLE IF NOT EXISTS `zt_story` (
   `assignedDate` datetime NOT NULL,
   `lastEditedBy` varchar(30) NOT NULL default '',
   `lastEditedDate` datetime NOT NULL,
+  `changedBy` VARCHAR(30) NOT NULL,
+  `changedDate` DATETIME NOT NULL,
   `reviewedBy` varchar(255) NOT NULL,
   `reviewedDate` datetime NOT NULL default '0000-00-00 00:00:00',
   `closedBy` varchar(30) NOT NULL default '',
@@ -6140,6 +6142,7 @@ CREATE TABLE IF NOT EXISTS `zt_im_chat` (
   `mergedDate` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `lastActiveTime` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `lastMessage` int(11) unsigned NOT NULL DEFAULT 0,
+  `lastMessageIndex` int(11) unsigned NOT NULL DEFAULT 0,
   `dismissDate` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `pinnedMessages` text NOT NULL DEFAULT '',
   `mergedChats` text NOT NULL DEFAULT '',
@@ -6166,6 +6169,7 @@ CREATE TABLE IF NOT EXISTS `zt_im_chatuser` (
   `quit` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `category` varchar(40) NOT NULL DEFAULT '',
   `lastReadMessage` int(11) unsigned NOT NULL DEFAULT 0,
+  `lastReadMessageIndex` int(11) unsigned NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`),
   KEY `cgid` (`cgid`),
   KEY `user` (`user`),
@@ -6198,6 +6202,7 @@ CREATE TABLE IF NOT EXISTS `zt_im_message` (
   `cgid` char(40) NOT NULL DEFAULT '',
   `user` varchar(30) NOT NULL DEFAULT '',
   `date` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `index` int(11) unsigned NOT NULL DEFAULT 0,
   `type` enum('normal', 'broadcast', 'notify', 'bulletin') NOT NULL DEFAULT 'normal',
   `content` text NOT NULL DEFAULT '',
   `contentType` enum('text', 'plain', 'emotion', 'image', 'file', 'object', 'code') NOT NULL DEFAULT 'text',
@@ -6217,6 +6222,7 @@ CREATE TABLE IF NOT EXISTS `zt_im_message_backup` (
   `cgid` char(40) NOT NULL DEFAULT '',
   `user` varchar(30) NOT NULL DEFAULT '',
   `date` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `index` int(11) unsigned NOT NULL DEFAULT 0,
   `type` enum('normal', 'broadcast', 'notify') NOT NULL DEFAULT 'normal',
   `content` text NOT NULL DEFAULT '',
   `contentType` enum('text', 'plain', 'emotion', 'image', 'file', 'object', 'code') NOT NULL DEFAULT 'text',
@@ -6248,6 +6254,8 @@ CREATE TABLE IF NOT EXISTS `zt_im_chat_message_index` (
   `tableName` char(64) NOT NULL,
   `start` int(11) unsigned NOT NULL,
   `end` int(11) unsigned NOT NULL,
+  `startIndex` int(11) unsigned NOT NULL,
+  `endIndex` int(11) unsigned NOT NULL,
   `startDate` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `endDate` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `count` mediumint(8) unsigned NOT NULL,
@@ -6256,7 +6264,9 @@ CREATE TABLE IF NOT EXISTS `zt_im_chat_message_index` (
   KEY `start` (`start`),
   KEY `end` (`end`),
   KEY `startDate` (`startDate`),
-  KEY `endDate` (`endDate`)
+  KEY `endDate` (`endDate`),
+  KEY `chatstartindex` (`gid`,`startIndex`),
+  KEY `chatendindex` (`gid`,`endIndex`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- DROP TABLE IF EXISTS `zt_im_messagestatus`;
@@ -8524,6 +8534,7 @@ CREATE TABLE IF NOT EXISTS `zt_workflowaction` (
   `show` enum('dropdownlist', 'direct') NOT NULL DEFAULT 'dropdownlist',
   `order` smallint(5) unsigned NOT NULL,
   `buildin` tinyint(1) unsigned NOT NULL,
+  `role` varchar(10) NOT NULL DEFAULT 'custom',
   `virtual` tinyint(1) unsigned NOT NULL,
   `conditions` text NOT NULL,
   `verifications` text NOT NULL,
@@ -8587,6 +8598,7 @@ CREATE TABLE IF NOT EXISTS `zt_workflowfield` (
   `isValue` enum('0', '1') NOT NULL DEFAULT '0',
   `readonly` enum('0', '1') NOT NULL DEFAULT '0',
   `buildin` tinyint(1) unsigned NOT NULL,
+  `role` varchar(10) NOT NULL DEFAULT 'custom',
   `desc` text NOT NULL,
   `createdBy` varchar(30) NOT NULL,
   `createdDate` datetime NOT NULL,
@@ -8631,6 +8643,7 @@ CREATE TABLE IF NOT EXISTS `zt_workflowlabel` (
   `orderBy` text NOT NULL,
   `order` tinyint(3) NOT NULL,
   `buildin` tinyint(1) unsigned NOT NULL,
+  `role` varchar(10) NOT NULL DEFAULT 'custom',
   `createdBy` char(30) NOT NULL,
   `createdDate` datetime NOT NULL,
   `editedBy` char(30) NOT NULL,
@@ -13480,12 +13493,7 @@ REPLACE INTO `zt_zoutput` (`id`, `activity`, `name`, `content`, `optional`, `tai
 (246, 163, '《配置审计报告》', '', 'yes', '', '', 'admin', '2020-01-09 14:55:08', '', '0000-00-00 00:00:00', 605, '0'),
 (247, 166, '《度量分析计划》', '', 'yes', '', '', 'admin', '2020-01-09 14:55:08', '', '0000-00-00 00:00:00', 610, '0'),
 (248, 168, '项目度量数据库', '', 'yes', '', '', 'admin', '2020-01-09 14:55:08', '', '0000-00-00 00:00:00', 615, '0'),
-(249, 172, '《量化项目管理及跟踪计划》', '', 'no', '', '', 'admin', '2020-01-09 14:59:04', '', '0000-00-00 00:00:00', 620, '0'),
-(250, 170, '《决策分析报告》的决策分析评估表', '', 'no', '', '', 'admin', '2020-01-09 14:59:04', '', '0000-00-00 00:00:00', 625, '0'),
-(251, 169, '《量化项目计划及跟踪表》', '', 'no', '', '', 'admin', '2020-01-09 14:59:04', '', '0000-00-00 00:00:00', 630, '0'),
-(252, 173, '《决策分析报告》的评分表', '', 'no', '', '', 'admin', '2020-01-09 14:59:04', '', '0000-00-00 00:00:00', 635, '0'),
-(253, 174, '《决策分析报告》的评分表', '', 'no', '', '', 'admin', '2020-01-09 14:59:04', '', '0000-00-00 00:00:00', 640, '0'),
-(254, 175, '《决策分析报告》', '', 'no', '', '', 'admin', '2020-01-09 14:59:04', '', '0000-00-00 00:00:00', 645, '0');
+(249, 169, '《量化项目计划及跟踪表》', '', 'no', '', '', 'admin', '2020-01-09 14:59:04', '', '0000-00-00 00:00:00', 630, '0');
 
 REPLACE INTO `zt_basicmeas` VALUES
 (2,'scale','project','userRequest','项目用户需求初始规模','pgmURInitScale','故事点或功能点','CREATE FUNCTION qc_pgmurinitscale($project int) returns float (10,2)\r\nbegin\r\n    declare scale float(10,2) default 0__DELIMITER__\r\n    declare inited int default 0__DELIMITER__\r\n    select qc_cminited($project, \'URS\') into inited__DELIMITER__\r\n    IF inited = 1 THEN\r\n    select qc_initscale($project, \'URS\',\'requestEst\') into scale__DELIMITER__\r\n    return scale__DELIMITER__\r\n    ELSE \r\n    return 0__DELIMITER__\r\n    END IF__DELIMITER__\r\nend','{\"$project\":{\"showName\":\"\\u6240\\u5c5e\\u9879\\u76ee\",\"varName\":\"$project\",\"varType\":\"select\",\"options\":\"project\",\"defaultValue\":\"\"}}','项目每个产品的第一个用户需求规格说明书基线版本的规模之和','从基线表中查询该项目下面每个产品的第一个用户需求规模说明书版本，然后查询对应的需求，求和。','crontab','{\"week\":\"1,2,3,4,5,6,0\",\"type\":\"week\"}','00:00','','system','0000-00-00 00:00:00','admin','2020-07-07 14:19:41',10,'0'),

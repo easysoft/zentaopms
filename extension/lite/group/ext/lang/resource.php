@@ -551,8 +551,8 @@ $lang->resource->task->recordEstimate     = 'recordEstimateAction';
 $lang->resource->task->editEstimate       = 'editEstimate';
 $lang->resource->task->deleteEstimate     = 'deleteEstimate';
 $lang->resource->task->report             = 'reportChart';
-$lang->resource->task->exportTemplet      = 'exportTemplet';
-$lang->resource->task->import             = 'import';
+if($config->edition != 'open') $lang->resource->task->exportTemplet = 'exportTemplet';
+if($config->edition != 'open') $lang->resource->task->import        = 'import';
 
 $lang->task->methodOrder[5]   = 'create';
 $lang->task->methodOrder[10]  = 'batchCreate';

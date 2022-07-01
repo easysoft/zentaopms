@@ -44,7 +44,8 @@ class task extends control
         $extra = str_replace(array(',', ' '), array('&', ''), $extra);
         parse_str($extra, $output);
 
-        $executions  = $this->execution->getPairs(0, 'all', 'noclosed');
+        $execution   = $this->execution->getById($executionID);
+        $executions  = $this->execution->getPairs(0, 'all', !common::canModify('execution', $execution) ? 'noclosed' : '');
         $executionID = $this->execution->saveState($executionID, $executions);
         $this->execution->setMenu($executionID);
 
@@ -92,7 +93,6 @@ class task extends control
             $task->assignedTo = array($bug->assignedTo);
         }
 
-        $execution = $this->execution->getById($executionID);
         $taskLink  = $this->createLink('execution', 'browse', "executionID=$executionID&tab=task");
 
         $this->loadModel('kanban');
@@ -283,7 +283,7 @@ class task extends control
         $this->view->position         = $position;
         $this->view->gobackLink       = (isset($output['from']) and $output['from'] == 'global') ? $this->createLink('execution', 'task', "executionID=$executionID") : '';
         $this->view->execution        = $execution;
-        $this->view->executions       = $this->config->systemMode == 'classic' ? $executions : $this->execution->getByProject($projectID, 'undone', 0, true);
+        $this->view->executions       = $this->config->systemMode == 'classic' ? $executions : $this->execution->getByProject($projectID, !common::canModify('execution', $execution) ? 'noclosed' : 'all', 0, true);
         $this->view->task             = $task;
         $this->view->users            = $users;
         $this->view->storyID          = $storyID;
@@ -831,6 +831,7 @@ class task extends control
             {
                 if(isset($muletipleTasks[$taskID]) and $task->assignedTo != $this->app->user->account and $task->mode == 'linear') continue;
                 if(isset($muletipleTasks[$taskID]) and !isset($muletipleTasks[$taskID][$this->post->assignedTo])) continue;
+                if($task->status == 'closed') continue;
 
                 $changes = $this->task->assign($taskID);
                 if(dao::isError()) return print(js::error(dao::getError()));

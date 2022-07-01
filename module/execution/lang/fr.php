@@ -284,16 +284,19 @@ $lang->execution->taskKanban          = 'Task Kanban';
 $lang->execution->RDKanban            = 'Research & Development Kanban';
 
 /* Group browsing. */
-$lang->execution->allTasks     = 'Voir Toutes';
+$lang->execution->allTasks     = 'Toutes';
 $lang->execution->assignedToMe = 'à Moi';
-$lang->execution->myInvolved   = "Où j'ai participé";
-$lang->execution->assignedByMe = 'AssignedByMe';
+$lang->execution->myInvolved   = "Ma part";
+$lang->execution->assignedByMe = 'Assignée par moi';
 
 $lang->execution->statusSelects['']             = 'Plus...';
 $lang->execution->statusSelects['wait']         = 'En Attente';
 $lang->execution->statusSelects['doing']        = 'En Cours';
 $lang->execution->statusSelects['undone']       = 'Non terminées';
+$lang->execution->statusSelects['myinvolved']   = $lang->execution->myInvolved;
 $lang->execution->statusSelects['finishedbyme'] = 'Terminées par moi';
+$lang->execution->statusSelects['assignedbyme'] = $lang->execution->assignedByMe;
+$lang->execution->statusSelects['needconfirm']  = 'A confirmer';
 $lang->execution->statusSelects['done']         = 'Faites';
 $lang->execution->statusSelects['closed']       = 'Fermées';
 $lang->execution->statusSelects['cancel']       = 'Annulées';
@@ -380,8 +383,8 @@ $lang->execution->errorBegin                  = "The start time of {$lang->execu
 $lang->execution->errorEnd                    = "The end time of {$lang->executionCommon} cannot be greater than the end time %s of the project.";
 $lang->execution->errorLetterProject          = "The start time of stage cannot be less than the start time of the project %s.";
 $lang->execution->errorGreaterProject         = "The end time of stage cannot be greater than the end time %s of the project.";
-$lang->execution->errorCommonBegin            = 'The start date of ' . $lang->executionCommon . ' "%s" should be ≥ the start date of project %s: %s.';
-$lang->execution->errorCommonEnd              = 'The deadline of ' . $lang->executionCommon .  ' "%s" should be ≤ the deadline of project %s: %s.';
+$lang->execution->errorCommonBegin            = 'The start date of ' . $lang->executionCommon . ' should be ≥ the start date of project : %s.';
+$lang->execution->errorCommonEnd              = 'The deadline of ' . $lang->executionCommon .  ' should be ≤ the deadline of project : %s.';
 $lang->execution->accessDenied                = "Votre accès au {$lang->executionCommon} est refusé ! Désolé.";
 $lang->execution->tips                        = 'Note';
 $lang->execution->afterInfo                   = "Le {$lang->executionCommon} a été créé avec succès ! Ensuite vous pouvez ";
@@ -476,9 +479,6 @@ $lang->execution->typeList['kanban'] = 'Kanban';
 $lang->execution->featureBar['task']['all']          = $lang->execution->allTasks;
 $lang->execution->featureBar['task']['unclosed']     = $lang->execution->unclosed;
 $lang->execution->featureBar['task']['assignedtome'] = $lang->execution->assignedToMe;
-$lang->execution->featureBar['task']['myinvolved']   = $lang->execution->myInvolved;
-$lang->execution->featureBar['task']['assignedbyme'] = $lang->execution->assignedByMe;
-$lang->execution->featureBar['task']['needconfirm']  = 'A confirmer';
 $lang->execution->featureBar['task']['status']       = $lang->execution->statusSelects[''];
 
 $lang->execution->featureBar['all']['all']       = $lang->execution->all;

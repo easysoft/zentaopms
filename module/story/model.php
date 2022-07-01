@@ -219,6 +219,7 @@ class storyModel extends model
             ->setIF(!in_array($this->post->source, $this->config->story->feedbackSource), 'notifyEmail', '')
             ->setIF($executionID > 0, 'stage', 'projected')
             ->setIF($bugID > 0, 'fromBug', $bugID)
+            ->join('assignedTo', '')
             ->join('mailto', ',')
             ->stripTags($this->config->story->editor->create['id'], $this->config->allowedTags)
             ->remove('files,labels,reviewer,needNotReview,newStory,uid,contactListMenu,URS,region,lane')
@@ -676,10 +677,13 @@ class storyModel extends model
             ->setDefault('lastEditedBy', $this->app->user->account)
             ->add('id', $storyID)
             ->add('lastEditedDate', $now)
+            ->setIF(!$this->post->assignedTo, 'assignedTo', '')
             ->setIF($specChanged, 'version', $oldStory->version + 1)
             ->setIF($specChanged and $oldStory->status == 'active' and $this->post->needNotReview == false, 'status',  'changed')
             ->setIF($oldStory->status == 'draft' and $this->post->needNotReview, 'status', 'active')
             ->setIF($specChanged, 'reviewedBy', '')
+            ->setIF($specChanged, 'changedBy', $this->app->user->account)
+            ->setIF($specChanged, 'changedDate', $now)
             ->setIF($specChanged, 'closedBy', '')
             ->setIF($specChanged, 'closedReason', '')
             ->setIF($specChanged and $oldStory->reviewedBy, 'reviewedDate', '0000-00-00')
@@ -1329,6 +1333,7 @@ class storyModel extends model
             ->setDefault('status', $oldStory->status)
             ->setDefault('reviewedDate', $date)
             ->stripTags($this->config->story->editor->review['id'], $this->config->allowedTags)
+            ->setIF(!$this->post->assignedTo, 'assignedTo', '')
             ->setIF($this->post->result == 'revert', 'version', $this->post->preVersion)
             ->setIF($this->post->result == 'clarify', 'assignedTo', $oldStory->lastEditedBy ? $oldStory->lastEditedBy : $oldStory->openedBy)
             ->removeIF($this->post->result != 'reject', 'closedReason, duplicateStory, childStories')
@@ -3887,7 +3892,8 @@ class storyModel extends model
 
                 $menu .= $this->buildMenu('story', 'close', $params, $story, $type, '', '', 'iframe', true);
                 $menu .= $this->buildMenu('story', 'edit', $params . "&from=$story->from", $story, $type);
-                if($story->type != 'requirement' and $this->config->vision != 'lite') $menu .= $this->buildMenu('story', 'createCase', "productID=$story->product&branch=$story->branch&module=0&from=&param=0&$params", $story, $type, 'sitemap', '', '', false, "data-app='qa'");
+                $tab   = $this->app->tab == 'project' ? 'project' : 'qa';
+                if($story->type != 'requirement' and $this->config->vision != 'lite') $menu .= $this->buildMenu('story', 'createCase', "productID=$story->product&branch=$story->branch&module=0&from=&param=0&$params", $story, $type, 'sitemap', '', '', false, "data-app='$tab'");
 
                 if($this->app->rawModule != 'projectstory' OR $this->config->vision == 'lite')
                 {
@@ -4015,7 +4021,7 @@ class storyModel extends model
 
                 if($canBeChanged and common::hasPriv('execution', 'storyEstimate', $execution))
                 {
-                    $menu .= common::printIcon('execution', 'storyEstimate', "executionID=$executionID&storyID=$story->id", '', 'list', 'estimate', '', 'iframe', true, "data-width='450px'");
+                    $menu .= common::printIcon('execution', 'storyEstimate', "executionID=$executionID&storyID=$story->id", '', 'list', 'estimate', '', 'iframe', true, "data-width='470px'");
                 }
 
                 if($canBeChanged and common::hasPriv('execution', 'unlinkStory', $execution))

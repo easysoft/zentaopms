@@ -40,7 +40,7 @@ $config->kanban->editor->createcard    = array('id' => 'desc', 'tools' => 'simpl
 $config->kanban->editor->activate      = array('id' => 'comment', 'tools' => 'simpleTools');
 $config->kanban->editor->close         = array('id' => 'comment', 'tools' => 'simpleTools');
 $config->kanban->editor->editcard      = array('id' => 'desc', 'tools' => 'simpleTools');
-$config->kanban->editor->viewcard      = array('id' => 'comment', 'tools' => 'simpleTools');
+$config->kanban->editor->viewcard      = array('id' => 'comment,lastComment', 'tools' => 'simpleTools');
 $config->kanban->editor->activatecard  = array('id' => 'comment', 'tools' => 'simpleTools');
 
 $config->kanban->fromType         = array('execution', 'productplan', 'release', 'build');

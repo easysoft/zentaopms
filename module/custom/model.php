@@ -701,8 +701,10 @@ class customModel extends model
             }
         }
 
+        $vision = $this->config->vision;
+
         $this->loadModel('setting');
-        $this->setting->setItems("system.{$moduleName}", $requiredFields);
+        $this->setting->setItems("system.{$moduleName}@$vision", $requiredFields);
     }
 
     /**

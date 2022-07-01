@@ -30,7 +30,7 @@ CREATE TABLE `zt_acl` (
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 CREATE TABLE `zt_action` (
-  `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+  `id` int(9) unsigned NOT NULL AUTO_INCREMENT,
   `objectType` varchar(30) NOT NULL DEFAULT '',
   `objectID` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `product` text NOT NULL,
@@ -1009,7 +1009,7 @@ CREATE TABLE `zt_grouppriv` (
   UNIQUE KEY `group` (`group`,`module`,`method`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 CREATE TABLE `zt_history` (
-  `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+  `id` int(9) unsigned NOT NULL AUTO_INCREMENT,
   `action` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `field` varchar(30) NOT NULL DEFAULT '',
   `old` text NOT NULL,
@@ -1091,6 +1091,7 @@ CREATE TABLE `zt_im_chat` (
   `editedDate` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `lastActiveTime` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `lastMessage` int(11) unsigned NOT NULL DEFAULT '0',
+  `lastMessageIndex` int(11) unsigned NOT NULL DEFAULT 0,
   `dismissDate` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `pinnedMessages` text NOT NULL,
   PRIMARY KEY (`id`),
@@ -1107,6 +1108,8 @@ CREATE TABLE `zt_im_chat_message_index` (
   `tableName` char(64) NOT NULL,
   `start` int(11) unsigned NOT NULL,
   `end` int(11) unsigned NOT NULL,
+  `startIndex` int(11) unsigned NOT NULL,
+  `endIndex` int(11) unsigned NOT NULL,
   `startDate` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `endDate` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `count` mediumint(8) unsigned NOT NULL,
@@ -1115,7 +1118,9 @@ CREATE TABLE `zt_im_chat_message_index` (
   KEY `start` (`start`),
   KEY `end` (`end`),
   KEY `startDate` (`startDate`),
-  KEY `endDate` (`endDate`)
+  KEY `endDate` (`endDate`),
+  KEY `chatstartindex` (`gid`,`startIndex`),
+  KEY `chatendindex` (`gid`,`endIndex`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 CREATE TABLE `zt_im_chatuser` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
@@ -1130,6 +1135,7 @@ CREATE TABLE `zt_im_chatuser` (
   `quit` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `category` varchar(40) NOT NULL DEFAULT '',
   `lastReadMessage` int(11) unsigned NOT NULL DEFAULT '0',
+  `lastReadMessageIndex` int(11) unsigned NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`),
   UNIQUE KEY `chatuser` (`cgid`,`user`),
   KEY `cgid` (`cgid`),
@@ -1179,6 +1185,7 @@ CREATE TABLE `zt_im_message` (
   `cgid` char(40) NOT NULL DEFAULT '',
   `user` varchar(30) NOT NULL DEFAULT '',
   `date` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `index` int(11) unsigned NOT NULL DEFAULT 0,
   `type` enum('normal','broadcast','notify','bulletin') NOT NULL DEFAULT 'normal',
   `content` text NOT NULL,
   `contentType` enum('text','plain','emotion','image','file','object','code') NOT NULL DEFAULT 'text',
@@ -1196,6 +1203,7 @@ CREATE TABLE `zt_im_message_backup` (
   `cgid` char(40) NOT NULL DEFAULT '',
   `user` varchar(30) NOT NULL DEFAULT '',
   `date` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `index` int(11) unsigned NOT NULL DEFAULT 0,
   `type` enum('normal','broadcast','notify') NOT NULL DEFAULT 'normal',
   `content` text NOT NULL,
   `contentType` enum('text','plain','emotion','image','file','object','code') NOT NULL DEFAULT 'text',
@@ -2560,6 +2568,8 @@ CREATE TABLE `zt_story` (
   `approvedDate` date NOT NULL,
   `lastEditedBy` varchar(30) NOT NULL DEFAULT '',
   `lastEditedDate` datetime NOT NULL,
+  `changedBy` VARCHAR(30) NOT NULL,
+  `changedDate` DATETIME NOT NULL,
   `reviewedBy` varchar(255) NOT NULL,
   `reviewedDate` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
   `closedBy` varchar(30) NOT NULL DEFAULT '',
@@ -3180,6 +3190,7 @@ CREATE TABLE `zt_workflowaction` (
   `show` enum('dropdownlist','direct') NOT NULL DEFAULT 'dropdownlist',
   `order` smallint(5) unsigned NOT NULL,
   `buildin` tinyint(1) unsigned NOT NULL,
+  `role` varchar(10) NOT NULL DEFAULT 'custom',
   `virtual` tinyint(1) unsigned NOT NULL,
   `conditions` text NOT NULL,
   `verifications` text NOT NULL,
@@ -3241,6 +3252,7 @@ CREATE TABLE `zt_workflowfield` (
   `isValue` enum('0','1') NOT NULL DEFAULT '0',
   `readonly` enum('0','1') NOT NULL DEFAULT '0',
   `buildin` tinyint(1) unsigned NOT NULL,
+  `role` varchar(10) NOT NULL DEFAULT 'custom',
   `desc` text NOT NULL,
   `createdBy` varchar(30) NOT NULL,
   `createdDate` datetime NOT NULL,
@@ -3262,6 +3274,7 @@ CREATE TABLE `zt_workflowlabel` (
   `orderBy` text NOT NULL,
   `order` tinyint(3) NOT NULL,
   `buildin` tinyint(1) unsigned NOT NULL,
+  `role` varchar(10) NOT NULL DEFAULT 'custom',
   `createdBy` char(30) NOT NULL,
   `createdDate` datetime NOT NULL,
   `editedBy` char(30) NOT NULL,

@@ -2831,6 +2831,17 @@ class baseRouter
         fwrite($fh, "\n");
         fclose($fh);
     }
+
+    /**
+     * Check app if it is run in a container.
+     *
+     * @access public
+     * @return bool
+     */
+    public function isContainer()
+    {
+        return strtolower(getenv('IS_CONTAINER')) == 'true';
+    }
 }
 
 /**

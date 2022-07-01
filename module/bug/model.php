@@ -3204,11 +3204,11 @@ class bugModel extends model
                     $buildID = zget($builds, $build, '');
                     if($buildID == 'trunk')
                     {
-                        echo $build;
+                        echo $build . ' ';
                     }
                     elseif($buildID and common::hasPriv('build', 'view'))
                     {
-                        echo html::a(helper::createLink('build', 'view', "buildID=$buildID"), $build, '', "title='$bug->openedBuild'");
+                        echo html::a(helper::createLink('build', 'view', "buildID=$buildID"), $build, '', "title='$bug->openedBuild'") . ' ';
                     }
                 }
                 break;

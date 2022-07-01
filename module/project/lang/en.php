@@ -318,8 +318,10 @@ $lang->project->parentBeginEnd      = "The begin and end date of the parent proj
 $lang->project->parentBudget        = "The budget of the parent project: ";
 $lang->project->beginLetterParent   = "The begin date of the parent project: %s. It cannot be < the begin date of its parent project.";
 $lang->project->endGreaterParent    = "The end date of the parent project: %s. It cannot be > the end date of its parent project.";
-$lang->project->beginGreateChild    = 'The start date of the project "%s" should be ≥ the start date of program "%s": %s.';
-$lang->project->endLetterChild      = 'The finish date of the project "%s" should be ≤ the finish date of program "%s": %s.';
+$lang->project->beginGreateChild    = 'The start date of the project should be ≥ the start date of program: %s.';
+$lang->project->endLetterChild      = 'The finish date of the project should be ≤ the finish date of program: %s.';
+$lang->project->begigLetterExecution = 'The start date of project should be ≤ the minimum start date of the execution: %s.';
+$lang->project->endGreateExecution   = 'The finish date of the project should be ≥ the maximum finish date of the execution: %s.';
 $lang->project->childLongTime       = "There are long-term projects in the child project, and the parent project should also be a long-term project.";
 $lang->project->confirmUnlinkMember = "Do you want to remove this user from project?";
 

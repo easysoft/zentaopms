@@ -94,6 +94,7 @@ $lang->testcase->mailto           = 'Mailto';
 $lang->testcase->deleted          = 'Deleted';
 $lang->testcase->browseUnits      = 'Unit Test';
 $lang->testcase->suite            = 'Test Suite';
+$lang->testcase->lib              = 'Lib';
 
 $lang->case = $lang->testcase;  // For dao checking using. Because 'case' is a php keywords, so the module name is testcase, table name is still case.
 

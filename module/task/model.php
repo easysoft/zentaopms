@@ -831,7 +831,7 @@ class taskModel extends model
                 $currentTask->consumed += (float)$member->consumed;
                 $currentTask->left     += (float)$member->left;
             }
-            if(empty($oldTask->team)) $currentTask->consumed += (float)$oldTask->consumed;
+            if(empty($oldTask->team) and isset($oldTask->consumed)) $currentTask->consumed += (float)$oldTask->consumed;
 
             if(!empty($task))
             {
@@ -3582,7 +3582,7 @@ class taskModel extends model
 
         $btnClass     = $task->assignedTo == 'closed' ? ' disabled' : '';
         $btnClass     = "iframe btn btn-icon-left btn-sm {$btnClass}";
-        $assignToLink = helper::createLink('task', 'assignTo', "executionID=$task->execution&taskID=$task->id", '', true);
+        $assignToLink = $task->assignedTo == 'closed' ? '#' : helper::createLink('task', 'assignTo', "executionID=$task->execution&taskID=$task->id", '', true);
         $assignToHtml = html::a($assignToLink, "<i class='icon icon-hand-right'></i> <span title='" . zget($users, $task->assignedTo) . "' class='{$btnTextClass}'>{$assignedToText}</span>", '', "class='$btnClass'");
 
         echo !common::hasPriv('task', 'assignTo', $task) ? "<span style='padding-left: 21px' class='{$btnTextClass}'>{$assignedToText}</span>" : $assignToHtml;
@@ -3729,7 +3729,8 @@ class taskModel extends model
             $menu .= $this->buildMenu('task', 'batchCreate', "execution=$task->execution&storyID=$task->story&moduleID=$task->module&taskID=$task->id", $task, 'view', 'split', '', '', '', "title='{$this->lang->task->children}'", $this->lang->task->children);
         }
 
-        if(!(!empty($task->team) and $task->mode == 'multi')) $menu .= $this->buildMenu('task', 'assignTo', "executionID=$task->execution&taskID=$task->id", $task, 'button', '', '', 'iframe', true, '', empty($task->team) ? $this->lang->task->assignTo : $this->lang->task->transfer);
+        $assignToLang = (!empty($task->team) and $task->mode == 'linear') ? $this->lang->task->transfer : $this->lang->task->assignTo;
+        $menu .= $this->buildMenu('task', 'assignTo', "executionID=$task->execution&taskID=$task->id", $task, 'button', '', '', 'iframe', true, '', $assignToLang);
 
         $menu .= $this->buildMenu('task', 'start',          $params, $task, 'view', '', '', 'iframe showinonlybody', true);
         $menu .= $this->buildMenu('task', 'restart',        $params, $task, 'view', '', '', 'iframe showinonlybody', true);

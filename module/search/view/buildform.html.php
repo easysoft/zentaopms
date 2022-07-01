@@ -284,15 +284,18 @@ function executeQuery(queryID)
 
 $(function()
 {
-    if(!canSaveQuery) $('.btn-save-form').attr('disabled', 'disabled');
-
+    if(!canSaveQuery)
+    {
+        $('.btn-save-form').attr('disabled', 'disabled');
+        $('.btn-save-form').css('pointer-events', 'none');
+    }
     var $searchForm = $('#<?php echo $formId;?>');
     $searchForm.find('select.chosen').chosen().on('chosen:showing_dropdown', function()
     {
         var $this = $(this);
         var $chosen = $this.next('.chosen-container').removeClass('chosen-up');
         var $drop = $chosen.find('.chosen-drop');
-        $chosen.toggleClass('chosen-up', $drop.height() + $drop.offset().top - $(document).scrollTop() > $(window).height());
+        if($this.data('drop_direction') === 'auto') $chosen.toggleClass('chosen-up', $drop.height() + $drop.offset().top - $(document).scrollTop() > $(window).height());
     });
 
     $searchForm.find('.picker-select').each(function()

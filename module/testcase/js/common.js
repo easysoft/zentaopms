@@ -403,7 +403,7 @@ function loadStories(productID, moduleID, num)
  */
 function setModules(branchID, productID, num)
 {
-    moduleLink = createLink('tree', 'ajaxGetModules', 'productID=' + productID + '&viewType=story&branch=' + branchID + '&num=' + num);
+    moduleLink = createLink('tree', 'ajaxGetModules', 'productID=' + productID + '&viewType=case&branch=' + branchID + '&num=' + num);
     $.get(moduleLink, function(modules)
     {
         if(!modules) modules = '<select id="module' + num + '" name="module[' + num + ']" class="form-control"></select>';

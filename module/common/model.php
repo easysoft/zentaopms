@@ -28,6 +28,7 @@ class commonModel extends model
             $this->sendHeader();
             $this->setCompany();
             $this->setUser();
+            $this->setApproval();
             $this->loadConfigFromDB();
             $this->app->setTimezone();
             $this->loadCustomFromDB();
@@ -282,6 +283,18 @@ class commonModel extends model
             $this->session->set('user', $user);
             $this->app->user = $this->session->user;
         }
+    }
+
+    /**
+     * Set approval config.
+     *
+     * @access public
+     * @return void
+     */
+    public function setApproval()
+    {
+        $this->config->openedApproval = false;
+        if($this->config->edition == 'max' && $this->config->vision == 'rnd') $this->config->openedApproval = true;
     }
 
     /**
@@ -1667,19 +1680,19 @@ EOD;
                 }
                 else
                 {
-                    return html::a($link, "<i class='$class'></i>", $target, "class='btn btn-link $extraClass' title='$title' $misc", false);
+                    return html::a($link, "<i class='$class'></i>", $target, "class='btn btn-link $extraClass' title=\"$title\" $misc", false);
                 }
             }
             else
             {
-                return html::a($link, "<i class='$class'></i>", $target, "class='btn $extraClass' title='$title' $misc", false) . "\n";
+                return html::a($link, "<i class='$class'></i>", $target, "class='btn $extraClass' title=\"$title\" $misc", false) . "\n";
             }
         }
         else
         {
             if($type == 'list')
             {
-                return "<button type='button' class='disabled btn $extraClass'><i class='$class' title='$title' $misc></i></button>\n";
+                return "<button type='button' class='disabled btn $extraClass'><i class='$class' title=\"$title\" $misc></i></button>\n";
             }
         }
     }
@@ -1796,18 +1809,20 @@ EOD;
      * Print back link
      *
      * @param  string $backLink
+     * @param  string $class
+     * @param  string $misc
      * @static
      * @access public
      * @return void
      */
-    static public function printBack($backLink, $class = '')
+    static public function printBack($backLink, $class = '', $misc = '')
     {
         global $lang, $app;
         if(isonlybody()) return false;
 
         if(empty($class)) $class = 'btn';
         $title = $lang->goback . $lang->backShortcutKey;
-        echo html::a($backLink, '<i class="icon-goback icon-back"></i> ' . $lang->goback, '', "id='back' class='{$class}' title={$title} data-app='{$app->tab}'");
+        echo html::a($backLink, '<i class="icon-goback icon-back"></i> ' . $lang->goback, '', "id='back' class='{$class}' title={$title} $misc");
     }
 
     /**
