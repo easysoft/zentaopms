@@ -97,7 +97,7 @@
           <td align='left'>
             <div class='input-group'>
             <?php
-            echo html::input("password[$i]", '', "class='form-control' onkeyup='toggleCheck(this, $i)' oninput=\"this.value = this.value.replace(/[\u4e00-\u9fa5]/g, '');\"");
+            echo html::input("password[$i]", '', "class='form-control' onkeyup='toggleCheck(this, $i)' oninput=\"this.value = this.value.replace(/[^\\x00-\\xff]/g, '');\"");
             echo "<span class='input-group-addon passwordStrength'></span>";
             if($i != 1) echo "<span class='input-group-addon passwordBox'><input type='checkbox' name='ditto[$i]' id='ditto$i' " . ($i > 1 ? "checked" : '') . " /> {$lang->user->ditto}</span>";
             ?>

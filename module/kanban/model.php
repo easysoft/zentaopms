@@ -1582,13 +1582,15 @@ class kanbanModel extends model
                     {
                         if(empty($object->team) and $object->$groupBy !== $laneID) continue;
                         if(!empty($object->team) and !in_array($laneID, array_keys($object->team), true)) continue;
+
+                        if($object->$groupBy !== $laneID) $cardData['assignedTo'] = $laneID;
                     }
 
                     $cardData['id']         = $object->id;
                     $cardData['order']      = $cardOrder;
                     $cardData['pri']        = $object->pri ? $object->pri : '';
                     $cardData['estimate']   = $browseType == 'bug' ? '' : $object->estimate;
-                    $cardData['assignedTo'] = $object->assignedTo;
+                    $cardData['assignedTo'] = empty($cardData['assignedTo']) ? $object->assignedTo : $cardData['assignedTo'];
                     $cardData['deadline']   = $browseType == 'story' ? '' : $object->deadline;
                     $cardData['severity']   = $browseType == 'bug' ? $object->severity : '';
 
