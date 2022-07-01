@@ -207,14 +207,22 @@ class xuanxuanIm extends imModel
             foreach($userMessages as $message)
             {
                 /* Group by $message->content->content->objectType, ...->parentType, ...->action, ...->actor */
-                $contentData = json_decode($message->content);
-                $contentData = json_decode($contentData->content);
+                $contentDataOuter = json_decode($message->content);
+                $contentData = json_decode($contentDataOuter->content);
                 if(isset($contentData->contentType) && $contentData->contentType == 'text')
                 {
                     $messageGroups[$contentData->contentType][] = $message;
                     continue;
                 }
-                $messageGroups["$contentData->objectType-$contentData->parentType-$contentData->action-$contentData->actor"][] = $message;
+                if ($contentData->objectType == 'story' && $contentData->action == 'reviewed')
+                {
+                    $extra = explode(',', $contentDataOuter->extra)[0];
+                    $messageGroups["$contentData->objectType-$contentData->parentType-$contentData->action-$contentData->actor-$extra"][] = $message;
+                }
+                else
+                {
+                    $messageGroups["$contentData->objectType-$contentData->parentType-$contentData->action-$contentData->actor"][] = $message;
+                }
             }
             foreach($messageGroups as $groupKey => $messages)
             {

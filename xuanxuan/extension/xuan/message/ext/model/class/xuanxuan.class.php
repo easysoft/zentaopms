@@ -1,7 +1,7 @@
 <?php
 class xuanxuanMessage extends messageModel
 {
-    public function send($objectType, $objectID, $actionType, $actionID, $actor = '')
+    public function send($objectType, $objectID, $actionType, $actionID, $actor = '', $extra = '')
     {
         $messageSetting = $this->config->message->setting;
         if(is_string($messageSetting)) $messageSetting = json_decode($messageSetting, true);
@@ -44,6 +44,22 @@ class xuanxuanMessage extends messageModel
                     ->fetch();
                 $field = $this->config->action->objectNameFields[$objectType];
                 $title = $objectType == 'mr' ? '' : sprintf($this->lang->message->notifyTitle, $this->app->user->realname, $this->lang->action->label->$actionType, 1, $this->lang->action->objectTypes[$objectType]);
+                if ($objectType == 'story' && $actionType == 'reviewed' && !empty($extra))
+                {
+                    $notifyType = strtolower(explode(',', $extra)[0]);
+                    if ($notifyType == 'pass')
+                    {
+                        $title = $objectType == 'mr' ? '' : sprintf($this->lang->message->notifyPassTitle, $this->app->user->realname, 1);
+                    }
+                    if ($notifyType == 'clarify')
+                    {
+                        $title = $objectType == 'mr' ? '' : sprintf($this->lang->message->notifyClarifyTitle, $this->app->user->realname, 1);
+                    }
+                    if ($notifyType == 'reject')
+                    {
+                        $title = $objectType == 'mr' ? '' : sprintf($this->lang->message->notifyRejectTitle, $this->app->user->realname, 1);
+                    }
+                }
 
                 $server   = $this->loadModel('im')->getServer('zentao');
                 $onlybody = isset($_GET['onlybody']) ? $_GET['onlybody'] : '';
@@ -52,7 +68,7 @@ class xuanxuanMessage extends messageModel
                 $url    = $server . helper::createLink($objectType == 'kanbancard' ? 'kanban' : $objectType, 'view', "id=$dataID", 'html');
 
                 $target = '';
-                if(!empty($object->assignedTo)) $target .= $object->assignedTo;
+                if(!empty($object->assignedTo)) $target .= $object->assignedTo == 'closed' ? $object->openedBy : $object->assignedTo;
                 if(!empty($object->mailto))     $target .= ",{$object->mailto}";
                 if(($objectType == 'mr' or $objectType == 'kanbancard') and !empty($object->createdBy)) $target .= ",{$object->createdBy}";
                 $target = trim($target, ',');
@@ -130,6 +146,7 @@ class xuanxuanMessage extends messageModel
                     $contentData->actions     = array();
                     $contentData->url         = "xxc:openInApp/zentao-integrated/" . urlencode($url);
                 }
+                $contentData->extra = $extra;
 
                 $content = json_encode($contentData);
                 $avatarUrl = $server . $this->app->getWebRoot() . 'favicon.ico';
