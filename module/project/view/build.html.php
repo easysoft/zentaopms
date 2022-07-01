@@ -11,8 +11,10 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
+<?php js::set('allExecutions', $allExecutions)?>
 <?php js::set('executions', $executions)?>
 <?php js::set('projectID', $projectID)?>
+<?php js::set('noDevStage', $lang->project->noDevStage)?>
 <?php js::set('createExecution', $lang->project->createExecution)?>
 <?php js::set('confirmDelete', $lang->build->confirmDelete)?>
 <div id="mainMenu" class="clearfix table-row">
