@@ -162,11 +162,11 @@ $config->testcase->datatable->fieldList['lastRunResult']['required'] = 'no';
 
 if($app->rawMethod == 'cases')
 {
-    $config->testcase->datatable->fieldList['status']['title']    = 'executionStatus';
+    $config->testcase->datatable->fieldList['status']['title'] = 'executionStatus';
 }
 else
 {
-    $config->testcase->datatable->fieldList['status']['title']    = 'statusAB';
+    $config->testcase->datatable->fieldList['status']['title'] = 'statusAB';
 }
 $config->testcase->datatable->fieldList['status']['fixed']    = 'no';
 $config->testcase->datatable->fieldList['status']['width']    = '70';
