@@ -4344,6 +4344,7 @@ class storyModel extends model
                 echo "</span>";
                 break;
             case 'title':
+                $showBranch = 0;
                 if($tab == 'project')
                 {
                     $showBranch = isset($this->config->projectstory->story->showBranch) ? $this->config->projectstory->story->showBranch : 1;
