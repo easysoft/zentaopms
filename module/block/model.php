@@ -168,7 +168,7 @@ class blockModel extends model
     {
         $data = array();
 
-        $tasks = $this->dao->select('t1.id')->from(TABLE_TASK)->alias('t1')
+        $tasks = $this->dao->select("count(t1.id) as tasks, count(if(t1.status = 'done', 1, null)) as doneTasks")->from(TABLE_TASK)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on("t1.project = t2.id")
             ->leftJoin(TABLE_EXECUTION)->alias('t3')->on("t1.execution = t3.id")
             ->where('t1.assignedTo')->eq($this->app->user->account)
@@ -180,9 +180,11 @@ class blockModel extends model
             ->beginIF(!$this->app->user->admin)->andWhere('t1.execution')->in($this->app->user->view->sprints)->fi()
             ->beginIF($this->config->vision)->andWhere('t1.vision')->eq($this->config->vision)->fi()
             ->beginIF($this->config->vision)->andWhere('t3.vision')->eq($this->config->vision)->fi()
-            ->fetchAll('id');
-        $data['tasks']      = isset($tasks) ? count($tasks) : 0;
-        $data['doneTasks']  = (int)$this->dao->select('count(*) AS count')->from(TABLE_TASK)->where('assignedTo')->eq($this->app->user->account)->andWhere('deleted')->eq(0)->andWhere('status')->eq('done')->fetch('count');
+            ->fetch();
+
+        $data['tasks']     = isset($tasks->tasks)     ? $tasks->tasks : 0;
+        $data['doneTasks'] = isset($tasks->doneTasks) ? $tasks->doneTasks : 0;
+
         $data['bugs']       = (int)$this->dao->select('count(*) AS count')->from(TABLE_BUG)
             ->where('assignedTo')->eq($this->app->user->account)
             ->andWhere('deleted')->eq(0)
