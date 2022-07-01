@@ -1268,6 +1268,7 @@ $(function()
     {
         $.get(createLink('execution', 'ajaxUpdateKanban', "executionID=" + executionID + "&entertime=" + entertime + "&browseType=" + browseType + "&groupBy=" + groupBy + '&from=execution&searchValue=' + searchValue), function(data)
         {
+            if(lastUpdateData == '') lastUpdateData = data;
             if(data && lastUpdateData !== data)
             {
                 lastUpdateData = data;

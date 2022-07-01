@@ -835,7 +835,7 @@ function updateRegion(regionID, regionData = [])
     if(!regionData) regionData = regions[regionID];
 
     var data = groupBy == 'default' ? regionData.groups : regionData;
-    if(data == null || data.length == 0)
+    if((data == null || data.length == 0) && rdSearchValue != '')
     {
         if(groupBy == 'default') $("div[data-id^=" + regionID + "].region").hide();
         if(groupBy != 'default') $("div[data-id^=" + regionID + "].kanban").hide();
@@ -1608,6 +1608,7 @@ $(function()
             {
                 $.get(createLink('execution', 'ajaxUpdateKanban', "executionID=" + executionID + "&entertime=" + entertime + "&browseType=" + browseType + "&groupBy=" + groupBy + '&from=RD&searchValue=' + rdSearchValue), function(data)
                 {
+                    if(lastUpdateData == '') lastUpdateData = data;
                     if(data && lastUpdateData !== data)
                     {
                         lastUpdateData = data;
