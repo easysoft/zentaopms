@@ -470,7 +470,7 @@ class task extends control
      * @access public
      * @return void
      */
-    public function edit($taskID, $comment = false, $kanbanGroup = '')
+    public function edit($taskID, $comment = false, $kanbanGroup = 'default')
     {
         $this->commonAction($taskID);
         $task = $this->task->getById($taskID);
@@ -712,7 +712,7 @@ class task extends control
      * @access public
      * @return void
      */
-    public function assignTo($executionID, $taskID, $kanbanGroup = '')
+    public function assignTo($executionID, $taskID, $kanbanGroup = 'default')
     {
         $this->commonAction($taskID);
         $task = $this->task->getByID($taskID);
@@ -2110,7 +2110,7 @@ class task extends control
      * @access public
      * @return void
      */
-    public function editTeam($executionID, $task, $kanbanGroup = '')
+    public function editTeam($executionID, $task, $kanbanGroup = 'default')
     {
         $taskID = $task->id;
         $this->commonAction($taskID);
