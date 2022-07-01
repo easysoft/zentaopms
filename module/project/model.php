@@ -2610,6 +2610,9 @@ class projectModel extends model
         if(isset($project->model) and $project->model == 'waterfall')
         {
             global $lang;
+            $lang->project->createExecution = str_replace($this->lang->executionCommon, $lang->project->stage, $lang->project->createExecution);
+            $lang->project->lastIteration   = str_replace($this->lang->executionCommon, $lang->project->stage, $lang->project->lastIteration);
+
             $this->loadModel('execution');
             $lang->executionCommon = $lang->project->stage;
 
