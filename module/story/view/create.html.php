@@ -103,7 +103,7 @@
           <?php endif;?>
           <tr>
             <th><?php echo $lang->story->reviewedBy;?></th>
-            <td colspan='<?php echo $type == 'story' ? 2 : 1;?>' id='reviewerBox'>
+            <td colspan='<?php echo $type == 'story' ? 4 : 2;?>' id='reviewerBox'>
               <div class="table-row">
                 <?php if(!$this->story->checkForceReview()):?>
                 <div class="table-col">
@@ -124,7 +124,7 @@
                 <?php endif;?>
               </div>
             </td>
-            <td colspan='<?php echo $type == 'story' ? 2 : 1;?>' id='assignedToBox'>
+            <td colspan='<?php echo $type == 'story' ? 2 : 1;?>' id='assignedToBox' class='hidden'>
               <div class='input-group'>
                 <div class="input-group-addon"><?php echo $lang->story->assignedTo;?></div>
                 <?php echo html::select('assignedTo', $users, '', "class='form-control picker-select'");?>

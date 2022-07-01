@@ -17,6 +17,8 @@ $(function()
     });
     $('#needNotReview').change();
 
+    if($('#reviewer').val()) loadAssignedTo();
+
     // init pri selector
     $('#pri').on('change', function()
     {
@@ -34,13 +36,13 @@ $(function()
         if($.inArray(source, feedbackSource) != -1)
         {
             $('#feedbackBox').removeClass('hidden');
-            $('#reviewerBox').attr('colspan', 1);
+            $('#reviewerBox').attr('colspan', $('#assignedToBox').hasClass('hidden') ? 2 : 1);
             $('#assignedToBox').attr('colspan', 1);
         }
         else
         {
             $('#feedbackBox').addClass('hidden');
-            $('#reviewerBox').attr('colspan', 2);
+            $('#reviewerBox').attr('colspan', $('#assignedToBox').hasClass('hidden') ? 4 : 2);
             $('#assignedToBox').attr('colspan', 2);
         }
     });

@@ -24,7 +24,7 @@
       <table class='table table-form'>
         <tr>
           <th class='w-80px'><?php echo $lang->story->reviewedBy;?></th>
-          <td colspan='1' id='reviewerBox'>
+          <td colspan='2' id='reviewerBox'>
             <div class="input-group">
               <?php echo html::select('reviewer[]', $productReviewers, $reviewer, "class='form-control picker-select' multiple" . ($this->story->checkForceReview() ? ' required' : ''));?>
               <?php if(!$this->story->checkForceReview()):?>
@@ -34,7 +34,7 @@
               <?php endif;?>
             </div>
           </td>
-          <td colspan='1' id='assignedToBox'>
+          <td colspan='1' id='assignedToBox' class='hidden'>
             <div class='input-group'>
               <div class="input-group-addon"><?php echo $lang->story->assignedTo;?></div>
               <?php echo html::select('assignedTo', $users, '', "class='form-control picker-select'");?>
