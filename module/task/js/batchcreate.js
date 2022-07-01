@@ -137,6 +137,7 @@ function setPreview(num)
         }
         $('#preview' + num).removeAttr('disabled');
         $('#preview' + num).modalTrigger({type:'iframe'});
+        $('#preview' + num).css('pointer-events', 'auto');
         $('#preview' + num).attr('href', storyLink);
     }
     else
