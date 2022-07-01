@@ -1670,7 +1670,7 @@ class testcaseModel extends model
         $caseIdList = explode(',' , $caseIdList);
         $libID      = $this->post->lib;
 
-        if(empty($libID)) return dao::$errors[] = sprintf($this->lang->error->notempty, $this->lang->testcase->lib);
+        if(empty($libID)) return dao::$errors[] = sprintf($this->lang->error->notempty, $this->lang->testcase->caselib);
 
         $this->loadModel('action');
         $cases          = $this->dao->select('*')->from(TABLE_CASE)->where('deleted')->eq(0)->andWhere('id')->in($caseIdList)->fetchAll('id');

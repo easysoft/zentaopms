@@ -75,6 +75,7 @@ $config->testcase->search['params']['lastRunDate']    = array('operator' => '=',
 $config->testcase->search['params']['openedDate']     = array('operator' => '=', 'control' => 'input', 'values' => '', 'class' => 'date');
 $config->testcase->search['params']['lastEditedDate'] = array('operator' => '=', 'control' => 'input', 'values' => '', 'class' => 'date');
 
+global $app;
 $config->testcase->datatable = new stdclass();
 $config->testcase->datatable->defaultField = array('id', 'pri', 'title', 'type', 'openedBy', 'lastRunner', 'lastRunDate', 'lastRunResult', 'status', 'bugs', 'results', 'stepNumber', 'actions');
 
@@ -159,7 +160,14 @@ $config->testcase->datatable->fieldList['lastRunResult']['fixed']    = 'no';
 $config->testcase->datatable->fieldList['lastRunResult']['width']    = '70';
 $config->testcase->datatable->fieldList['lastRunResult']['required'] = 'no';
 
-$config->testcase->datatable->fieldList['status']['title']    = 'statusAB';
+if($app->rawMethod == 'cases')
+{
+    $config->testcase->datatable->fieldList['status']['title'] = 'executionStatus';
+}
+else
+{
+    $config->testcase->datatable->fieldList['status']['title'] = 'statusAB';
+}
 $config->testcase->datatable->fieldList['status']['fixed']    = 'no';
 $config->testcase->datatable->fieldList['status']['width']    = '70';
 $config->testcase->datatable->fieldList['status']['required'] = 'no';
