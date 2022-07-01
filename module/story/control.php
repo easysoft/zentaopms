@@ -662,7 +662,7 @@ class story extends control
      * @access public
      * @return void
      */
-    public function edit($storyID, $kanbanGroup = '')
+    public function edit($storyID, $kanbanGroup = 'default')
     {
         if(!empty($_POST))
         {
@@ -1701,7 +1701,7 @@ class story extends control
      * @access public
      * @return void
      */
-    public function assignTo($storyID, $kanbanGroup = '')
+    public function assignTo($storyID, $kanbanGroup = 'default')
     {
         if(!empty($_POST))
         {

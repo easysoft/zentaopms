@@ -827,7 +827,7 @@ class kanbanModel extends model
      */
     public function getRDKanban($executionID, $browseType = 'all', $orderBy = 'id_desc', $regionID = 0, $groupBy = 'default', $searchValue = '')
     {
-        if($groupBy != 'default') return $this->getKanban4Group($executionID, $browseType, $groupBy, $searchValue);
+        if($groupBy != 'default' and $groupBy != '') return $this->getKanban4Group($executionID, $browseType, $groupBy, $searchValue);
 
         $kanbanData   = array();
         $actions      = array('sortGroup');

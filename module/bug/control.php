@@ -916,7 +916,7 @@ class bug extends control
      * @access public
      * @return void
      */
-    public function edit($bugID, $comment = false, $kanbanGroup = '')
+    public function edit($bugID, $comment = false, $kanbanGroup = 'default')
     {
         if(!empty($_POST))
         {
@@ -1351,7 +1351,7 @@ class bug extends control
      * @access public
      * @return void
      */
-    public function assignTo($bugID, $kanbanGroup = '')
+    public function assignTo($bugID, $kanbanGroup = 'default')
     {
         $bug = $this->bug->getById($bugID);
         $this->bug->checkBugExecutionPriv($bug);
