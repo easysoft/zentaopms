@@ -13,6 +13,8 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
 <?php include '../../common/view/datepicker.html.php';?>
+<?php js::set('task', $task);?>
+<?php js::set('consumedEmpty', $lang->task->error->consumedEmptyAB);?>
 <div id='mainContent' class='main-content'>
   <div class='center-block'>
     <?php if(!empty($task->team) and (!isset($task->team[$app->user->account]) or ($task->assignedTo != $app->user->account and $task->mode == 'linear'))):?>
@@ -59,7 +61,7 @@
           <th><?php echo empty($task->team) ? $lang->task->consumed : $lang->task->myConsumed;?></th>
           <td>
           <?php $consumed = empty($task->team) ? $task->consumed : (float)$task->myConsumed;?>
-          <?php 
+          <?php
           echo "<span id='totalConsumed'>" . (float)$consumed . "</span> " . $lang->workingHour . html::hidden('consumed', $consumed);
           js::set('consumed', $consumed);
           ?>

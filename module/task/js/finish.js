@@ -8,5 +8,21 @@ $(function()
         totalConsumed = Math.round(totalConsumed * 1000) / 1000;
         $('#totalConsumed').html(totalConsumed);
         $('#consumed').val(totalConsumed);
-    })        
+    })
+
+    $('#submit').click(function()
+    {
+        if(task.consumed != 0 && $('#currentConsumed').val() == 0)
+        {
+            var msg = consumedEmpty;
+            if(confirm(msg) == true)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+    })
 })

@@ -1879,7 +1879,7 @@ class taskModel extends model
             return false;
         }
 
-        if(empty($currentConsumed))
+        if(empty($currentConsumed) and $oldTask->consumed == '0')
         {
             dao::$errors[] = $this->lang->task->error->consumedEmpty;
             return false;
