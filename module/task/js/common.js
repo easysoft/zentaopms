@@ -33,7 +33,7 @@ function checkedShowFields(fields)
     $('#formSettingForm > .checkboxes > .checkbox-primary > input').each(function()
     {
         var field     = ',' + $(this).val() + ',';
-        var $field    = $('#' + $(this).val());
+        var $field    = config.currentMethod == 'create' ? $('#' + $(this).val()) : $('[name^=' + $(this).val() + ']');
         var $fieldBox = $('.' + $(this).val() + 'Box' );
         if(fieldList.indexOf(field) >= 0)
         {
