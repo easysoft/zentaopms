@@ -969,7 +969,7 @@ class user extends control
         }
         else
         {
-            $loginExpired = !(preg_match("/(m=|\/)(index)(&f=|-)(index)(&|-|\.)?/", strtolower($this->referer), $output) or $this->referer == '/' or $this->referer == '/zentao/' or empty($this->referer));
+            $loginExpired = !(preg_match("/(m=|\/)(index)(&f=|-)(index)(&|-|\.)?/", strtolower($this->referer), $output) or $this->referer == '/' or $this->referer == '/zentao/' or $this->referer == '/biz/' or empty($this->referer));
 
             $this->loadModel('misc');
             $this->loadModel('extension');
