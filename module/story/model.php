@@ -3849,12 +3849,11 @@ class storyModel extends model
             if(common::canBeChanged('story', $story))
             {
                 $storyReviewer = isset($story->reviewer) ? $story->reviewer : array();
-
                 if($story->URChanged) return $this->buildMenu('story', 'processStoryChange', $params, $story, $type, 'search', '', 'iframe', true, '', $this->lang->confirm);
 
                 $isClick = $this->isClickable($story, 'change');
                 $title   = (!$isClick and $story->status != 'closed') ? $this->lang->story->changeTip : '';
-                $menu   .= $this->buildMenu('story', 'change', $params . "&from=$story->from", $story, $type, 'alter', '', '', false, '', $title);
+                $menu   .= $this->buildMenu('story', 'change', $params . "&from=$story->from", $story, $type, 'alter', '', 'showinonlybody', false, '', $title);
 
                 $isClick = $this->isClickable($story, 'review');
                 $title   = $this->lang->story->review;
@@ -3877,8 +3876,7 @@ class storyModel extends model
                         $title = $this->lang->story->reviewTip['recalled'];
                     }
                 }
-                $menu .= $this->buildMenu('story', 'review', $params . "&from=$story->from", $story, $type, 'search', '', '', false, '', $title);
-
+                $menu .= $this->buildMenu('story', 'review', $params . "&from=$story->from", $story, $type, 'search', '', 'showinonlybody', false, '', $title);
                 $title   = $this->lang->story->recall;
                 $isClick = $this->isClickable($story, 'recall');
                 if(!$isClick and $story->status != 'closed')
@@ -3888,12 +3886,12 @@ class storyModel extends model
                     if(empty($story->reviewedBy) and strpos('draft,changed', $story->status) !== false and !empty($story->reviewer) and $this->app->user->account != $story->openedBy) $title = $this->lang->story->recallTip['notOpenedBy'];
                     if($story->status == 'active' and empty($story->reviewer)) $title = $this->lang->story->recallTip['actived'];
                 }
-                $menu .= $this->buildMenu('story', 'recall', $params, $story, $type, 'undo', 'hiddenwin', '', '', '', $title);
+                $menu .= $this->buildMenu('story', 'recall', $params, $story, $type, 'undo', 'hiddenwin', 'showinonlybody', '', '', $title);
 
                 $menu .= $this->buildMenu('story', 'close', $params, $story, $type, '', '', 'iframe', true);
-                $menu .= $this->buildMenu('story', 'edit', $params . "&from=$story->from", $story, $type);
+                $menu .= $this->buildMenu('story', 'edit', $params . "&from=$story->from", $story, $type, '', '', 'showinonlybody');
                 $tab   = $this->app->tab == 'project' ? 'project' : 'qa';
-                if($story->type != 'requirement' and $this->config->vision != 'lite') $menu .= $this->buildMenu('story', 'createCase', "productID=$story->product&branch=$story->branch&module=0&from=&param=0&$params", $story, $type, 'sitemap', '', '', false, "data-app='$tab'");
+                if($story->type != 'requirement' and $this->config->vision != 'lite') $menu .= $this->buildMenu('story', 'createCase', "productID=$story->product&branch=$story->branch&module=0&from=&param=0&$params", $story, $type, 'sitemap', '', 'showinonlybody', false, "data-app='$tab'");
 
                 if($this->app->rawModule != 'projectstory' OR $this->config->vision == 'lite')
                 {
@@ -3912,9 +3910,10 @@ class storyModel extends model
                             if($story->stage == 'projected') $title = $this->lang->story->subDivideTip['projected'];
                         }
                     }
-                    $menu .= $this->buildMenu('story', 'batchCreate', "productID=$story->product&branch=$story->branch&module=$story->module&$params&executionID={$this->session->project}", $story, $type, 'split', '', '', '', '', $title);
+                    $menu .= $this->buildMenu('story', 'batchCreate', "productID=$story->product&branch=$story->branch&module=$story->module&$params&executionID={$this->session->project}", $story, $type, 'split', '', 'showinonlybody', '', '', $title);
                 }
-                if($this->app->rawModule == 'projectstory' and $this->config->vision != 'lite') $menu .= $this->buildMenu('projectstory', 'unlinkStory', "projectID={$this->session->project}&$params", $story, $type, 'unlink', 'hiddenwin');
+                if($this->app->rawModule == 'projectstory' and $this->config->vision != 'lite') $menu .= $this->buildMenu('projectstory', 'unlinkStory', "projectID={$this->session->project}&$params", $story, $type, 'unlink', 'hiddenwin', 'showinonlybody');
+
             }
             else
             {
