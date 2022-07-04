@@ -2,12 +2,11 @@ $(function()
 {
     $('#customField').click(function()
     {
-        disabledRequireFields();
+        hiddenRequireFields();
     });
 
     $('#formSettingForm .btn-primary').click(function()
     {
-        $('#formSettingForm > .checkboxes > .checkbox-primary > input').removeAttr('disabled');
         var fields = '';
         $('#formSettingForm > .checkboxes > .checkbox-primary > input:checked').each(function()
         {
@@ -18,7 +17,6 @@ $(function()
         $.post(link, {'fields' : fields}, function()
         {
             checkedShowFields(fields);
-            disabledRequireFields();
             $('#formSetting').parent().removeClass('open');
         });
 

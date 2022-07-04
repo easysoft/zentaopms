@@ -33,16 +33,17 @@ function checkedShowFields(fields)
     $('#formSettingForm > .checkboxes > .checkbox-primary > input').each(function()
     {
         var field     = ',' + $(this).val() + ',';
+        var $field    = $('#' + $(this).val());
         var $fieldBox = $('.' + $(this).val() + 'Box' );
         if(fieldList.indexOf(field) >= 0)
         {
-
-            $(this).attr('checked', true);
             $fieldBox.removeClass('hidden');
+            $field.removeAttr('disabled');
         }
-        else
+        else if(!$fieldBox.hasClass('hidden'))
         {
-            if(!$fieldBox.hasClass('hidden')) $fieldBox.addClass('hidden');
+            $fieldBox.addClass('hidden');
+            $field.attr('disabled', true);
         }
     });
 
@@ -66,17 +67,17 @@ function checkedShowFields(fields)
 }
 
 /**
- * Disabled require field.
+ * Hidden require field.
  *
  * @access public
  * @return void
  */
-function disabledRequireFields()
+function hiddenRequireFields()
 {
     $('#formSettingForm > .checkboxes > .checkbox-primary > input').each(function()
     {
         var field    = ',' + $(this).val() + ',';
         var required = ',' + requiredFields + ',';
-        if(required.indexOf(field) >= 0) $(this).attr('disabled', 'disabled');
+        if(required.indexOf(field) >= 0) $(this).closest('div').addClass('hidden');
     });
 }

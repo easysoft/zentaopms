@@ -12,7 +12,7 @@ select[id^="story"] + .picker-single {width: 130px; max-width: 130px;}
 
 #zeroTaskStory {margin: 0 0 0 20px; height: 32px; padding: 5px 5px 5px 5px; border-radius: 3px; border: 2px solid transparent;}
 #zeroTaskStory > label:before {top: 7px; left: 5px;}
-#zeroTaskStory > label:after {top: 5px; left: 5px;}
+#zeroTaskStory > label:after {top: 7px; left: 5px;}
 #zeroTaskStory.checked {border-color: #00a9fc; background: #E9F2FB;}
 
 .chosen-results > li.has-task,

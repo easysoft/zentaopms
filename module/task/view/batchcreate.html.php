@@ -115,7 +115,7 @@ $colspan = count($visibleFields) + 3;
           ?>
           <?php $pri = 3;?>
           <tr>
-            <td class='text-center'><?php echo $i;?></td>
+            <td class='text-left'><?php echo $i;?></td>
             <td class="<?php echo zget($visibleFields, 'module', 'hidden')?> moduleBox" style='overflow:visible'>
               <?php echo html::select("module[$i]", $modules, $moduleID, "class='form-control chosen'")?>
               <?php echo html::hidden("parent[$i]", $parent);?>

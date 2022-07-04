@@ -2,18 +2,18 @@
 $(function()
 {
     removeDitto();
-    if($('th.c-name').width() < 200) $('th.c-name').width(200);
+    if($('th.c-name').width() < 165) $('th.c-name').width(165);
     if(taskConsumed > 0) bootbox.alert(addChildTask);
     $('#customField').on('click', function(){$('#tableBody .chosen-with-drop').removeClass('chosen-with-drop chosen-container-active')});
 
     $('#customField').click(function()
     {
-        disabledRequireFields();
+        hiddenRequireFields();
     });
 
+    /* Implement a custom form without feeling refresh. */
     $('#formSettingForm .btn-primary').click(function()
     {
-        $('#formSettingForm > .checkboxes > .checkbox-primary > input').removeAttr('disabled');
         var fields = '';
         $('#formSettingForm > .checkboxes > .checkbox-primary > input:checked').each(function()
         {
@@ -24,8 +24,12 @@ $(function()
         $.post(link, {'fields' : fields}, function()
         {
             checkedShowFields(fields);
-            disabledRequireFields();
             $('#formSetting').parent().removeClass('open');
+
+            var fieldCount = $('#batchCreateForm .table thead>tr>th:visible').length;
+            $('.form-actions').attr('colspan', fieldCount);
+
+            if($('th.c-name').width() < 165) $('th.c-name').width(165);
         });
 
         return false;
