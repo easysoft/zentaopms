@@ -19,15 +19,9 @@
   [lang^='de'] #formSetting {min-width: 360px;}
   [lang^='fr'] #formSetting {min-width: 320px;}
   </style>
-  <?php
-  $module = $app->rawModule;
-  $method = $app->rawMethod;
-  $class  = '';
-  ?>
   <button type="button" title="<?php echo $lang->customField;?>" class="btn btn-link" id="customField" data-toggle="dropdown"><i class="icon icon-cog"></i></button>
   <div class="dropdown-menu pull-right" id="formSetting">
-    <?php if((in_array($module, array('task', 'testcase', 'story')) and in_array($method, array('create', 'batchcreate'))) or $module == 'bug' and $method == 'batchcreate') $class = 'not-watch';?>
-    <form class='with-padding load-indicator <?php echo $class;?>' id='formSettingForm' method='post' target='hiddenwin' action='<?php echo $customLink?>'>
+    <form class='with-padding load-indicator not-watch' id='formSettingForm' method='post' target='hiddenwin' action='<?php echo $customLink?>'>
       <div><?php echo $lang->customField;?></div>
       <div class="clearfix checkboxes">
         <?php echo html::checkbox('fields', $customFields, $showFields);?>
