@@ -314,7 +314,7 @@ class testsuiteModel extends model
     }
 
     /**
-     * Get not imported cases.
+     * Get lib cases.
      *
      * @param  int    $productID
      * @param  int    $libID
@@ -323,7 +323,7 @@ class testsuiteModel extends model
      * @access public
      * @return array
      */
-    public function getNotImportedCases($productID, $libID, $orderBy = 'id_desc', $pager = null, $browseType = '', $queryID = 0)
+    public function getLibCases($productID, $libID, $orderBy = 'id_desc', $pager = null, $browseType = '', $queryID = 0, $param = '')
     {
         $importedCases = $this->dao->select('fromCaseID')->from(TABLE_CASE)
             ->where('product')->eq($productID)
@@ -361,18 +361,17 @@ class testsuiteModel extends model
             ->beginIF($browseType != 'bysearch')->andWhere('lib')->eq($libID)->fi()
             ->beginIF($browseType == 'bysearch')->andWhere($query)->fi()
             ->andWhere('product')->eq(0)
-            ->andWhere('id')->notIN($importedCases)
+            ->beginIF(strpos($param, "canimport") !== false)->andWhere('id')->notIN($importedCases)->fi()
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id');
     }
 
-    
     /**
-     * Build testsuite menu. 
-     * 
-     * @param  object $suite 
-     * @param  string $type 
+     * Build testsuite menu.
+     *
+     * @param  object $suite
+     * @param  string $type
      * @access public
      * @return string
      */
