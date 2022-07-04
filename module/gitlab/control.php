@@ -583,10 +583,22 @@ class gitlab extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browseUser', "gitlabID=$gitlabID")));
         }
 
-        $userPairs = $this->loadModel('user')->getPairs('noclosed|noletter');
+        $users       = $this->loadModel('user')->getList();
+        $bindedUsers = $this->gitlab->getUserAccountIdPairs($gitlabID);
+        $userPairs   = array('' => '');
+        $userInfos   = array();
+        foreach($users as $key => $user)
+        {
+            if(!isset($bindedUsers[$user->account]))
+            {
+                $userPairs[$user->account] = $user->realname;
+                $userInfos[$user->account] = $user;
+            }
+        }
 
         $this->view->title     = $this->lang->gitlab->common . $this->lang->colon . $this->lang->gitlab->user->create;
         $this->view->userPairs = $userPairs;
+        $this->view->users     = $userInfos;
         $this->view->gitlabID  = $gitlabID;
         $this->display();
     }
