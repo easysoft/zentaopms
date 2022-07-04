@@ -7,12 +7,11 @@ $(function()
 
     $('#customField').click(function()
     {
-        disabledRequireFields();
+        hiddenRequireFields();
     });
 
     $('#formSettingForm .btn-primary').click(function()
     {
-        $('#formSettingForm > .checkboxes > .checkbox-primary > input').removeAttr('disabled');
         var fields = '';
         $('#formSettingForm > .checkboxes > .checkbox-primary > input:checked').each(function()
         {
@@ -23,10 +22,23 @@ $(function()
         $.post(link, {'fields' : fields}, function()
         {
             checkedShowFields(fields);
-            disabledRequireFields();
-            var $titleCol = $('#batchCreateForm table thead tr th.c-title');
-            if($titleCol.width() < 150) $titleCol.width(150);
             $('#formSetting').parent().removeClass('open');
+
+            if($('#batchCreateForm table thead tr th.c-title').width() < 150) $titleCol.width(150);
+
+            var fieldCount = $('#batchCreateForm .table thead>tr>th:visible').length;
+            $('.form-actions').attr('colspan', fieldCount);
+
+            if(fieldCount > 10)
+            {
+                $('#batchCreateForm > .table-responsive').removeClass('scroll-none');
+                $('#batchCreateForm > .table-responsive').css('overflow', 'auto');
+            }
+            else
+            {
+                $('#batchCreateForm > .table-responsive').addClass('scroll-none');
+                $('#batchCreateForm > .table-responsive').css('overflow', 'visible');
+            }
         });
 
         return false;
@@ -42,56 +54,40 @@ $(function()
  */
 function checkedShowFields(fields)
 {
-    var fieldList    = ',' + fields + ',';
-    var checkedCount = $('#formSettingForm > .checkboxes > .checkbox-primary > input:checked').length;
-    if(checkedCount > 5)
-    {
-        $('.table-responsive').removeClass('scroll-none');
-        $('.table-responsive').css('overflow', 'auto');
-    }
-    else
-    {
-        $('.table-responsive').addClass('scroll-none');
-        $('.table-responsive').css('overflow', 'visible');
-    }
-
+    var fieldList = ',' + fields + ',';
     $('#formSettingForm > .checkboxes > .checkbox-primary > input').each(function()
     {
         var field     = ',' + $(this).val() + ',';
+        var $field    = $('#' + $(this).val());
+        var $field    = $('[name^=' + $(this).val() + ']');
         var required  = ',' + requiredFields + ',';
         var $fieldBox = $('.' + $(this).val() + 'Box' );
         if(fieldList.indexOf(field) >= 0 || required.indexOf(field) >= 0)
         {
-
-            if(fieldList.indexOf(field) >= 0) $(this).attr('checked', true);
             $fieldBox.removeClass('hidden');
+            $field.removeAttr('disabled');
         }
-        else
+        else if(!$fieldBox.hasClass('hidden'))
         {
-            if(!$fieldBox.hasClass('hidden')) $fieldBox.addClass('hidden');
-        }
-
-        var fieldCount = $('#batchCreateForm .table thead>tr>th:visible').length;
-        if(fieldCount < 4)
-        {
-            $('#batchCreateForm table thead tr th.c-title').css('width', 'auto');
+            $fieldBox.addClass('hidden');
+            $field.attr('disabled', true);
         }
     });
 }
 
 /**
- * Disabled require field.
+ * Hidden require field.
  *
  * @access public
  * @return void
  */
-function disabledRequireFields()
+function hiddenRequireFields()
 {
     $('#formSettingForm > .checkboxes > .checkbox-primary > input').each(function()
     {
         var field    = ',' + $(this).val() + ',';
         var required = ',' + requiredFields + ',';
-        if(required.indexOf(field) >= 0) $(this).attr('disabled', 'disabled');
+        if(required.indexOf(field) >= 0) $(this).closest('div').addClass('hidden');
     });
 }
 
