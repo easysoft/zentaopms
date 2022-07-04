@@ -282,6 +282,7 @@ $lang->devops->mr       = '合并请求';
 $lang->devops->repo     = '版本库';
 $lang->devops->rules    = '指令';
 $lang->devops->settings = '合并请求设置';
+$lang->devops->set      = '设置';
 
 $lang->admin->system     = '系统';
 $lang->admin->entry      = '应用';
