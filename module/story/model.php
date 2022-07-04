@@ -4344,13 +4344,13 @@ class storyModel extends model
                 echo "</span>";
                 break;
             case 'title':
-                $showBranch = 0;
                 if($tab == 'project')
                 {
                     $showBranch = isset($this->config->projectstory->story->showBranch) ? $this->config->projectstory->story->showBranch : 1;
                 }
                 elseif($tab == 'execution')
                 {
+                    $showBranch = 0;
                     if($isShowBranch) $showBranch = isset($this->config->execution->story->showBranch) ? $this->config->execution->story->showBranch : 1;
                 }
                 else
