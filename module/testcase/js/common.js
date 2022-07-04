@@ -403,7 +403,7 @@ function loadStories(productID, moduleID, num)
  */
 function setModules(branchID, productID, num)
 {
-    moduleLink = createLink('tree', 'ajaxGetModules', 'productID=' + productID + '&viewType=story&branch=' + branchID + '&num=' + num);
+    moduleLink = createLink('tree', 'ajaxGetModules', 'productID=' + productID + '&viewType=case&branch=' + branchID + '&num=' + num);
     $.get(moduleLink, function(modules)
     {
         if(!modules) modules = '<select id="module' + num + '" name="module[' + num + ']" class="form-control"></select>';
@@ -425,47 +425,4 @@ function setModules(branchID, productID, num)
         $('#plan' + (num + 1)).find("option[value='ditto']").remove();
         $('#plan' + (num + 1)).trigger("chosen:updated");
     }
-}
-
-/**
- * Checked show fields.
- *
- * @param  string fields
- * @access public
- * @return void
- */
-function checkedShowFields(fields)
-{
-    var fieldList = ',' + fields + ',';
-    $('#formSettingForm > .checkboxes > .checkbox-primary > input').each(function()
-    {
-        var field     = ',' + $(this).val() + ',';
-        var $fieldBox = $('.' + $(this).val() + 'Box' );
-        if(fieldList.indexOf(field) >= 0)
-        {
-
-            $(this).attr('checked', true);
-            $fieldBox.removeClass('hidden');
-        }
-        else
-        {
-            if(!$fieldBox.hasClass('hidden')) $fieldBox.addClass('hidden');
-        }
-    });
-}
-
-/**
- * Disabled require field.
- *
- * @access public
- * @return void
- */
-function disabledRequireFields()
-{
-    $('#formSettingForm > .checkboxes > .checkbox-primary > input').each(function()
-    {
-        var field    = ',' + $(this).val() + ',';
-        var required = ',' + requiredFields + ',';
-        if(required.indexOf(field) >= 0) $(this).attr('disabled', 'disabled');
-    });
 }

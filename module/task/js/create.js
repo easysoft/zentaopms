@@ -5,6 +5,7 @@ $(function()
         hiddenRequireFields();
     });
 
+    /* Implement a custom form without feeling refresh. */
     $('#formSettingForm .btn-primary').click(function()
     {
         var fields = '';

@@ -16,6 +16,8 @@
   #formSettingForm .checkboxes {padding: 10px 3px;}
   #formSettingForm .checkbox-primary {width: 50%; float: left; margin: 3px 0;}
   #formSetting .btn {margin-right: 8px;}
+  [lang^='de'] #formSetting {min-width: 360px;}
+  [lang^='fr'] #formSetting {min-width: 320px;}
   </style>
   <?php
   $module = $app->rawModule;

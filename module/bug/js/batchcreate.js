@@ -10,6 +10,7 @@ $(function()
         hiddenRequireFields();
     });
 
+     /* Implement a custom form without feeling refresh. */
     $('#formSettingForm .btn-primary').click(function()
     {
         var fields = '';
@@ -58,7 +59,6 @@ function checkedShowFields(fields)
     $('#formSettingForm > .checkboxes > .checkbox-primary > input').each(function()
     {
         var field     = ',' + $(this).val() + ',';
-        var $field    = $('#' + $(this).val());
         var $field    = $('[name^=' + $(this).val() + ']');
         var required  = ',' + requiredFields + ',';
         var $fieldBox = $('.' + $(this).val() + 'Box' );
