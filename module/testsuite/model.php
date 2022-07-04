@@ -323,15 +323,8 @@ class testsuiteModel extends model
      * @access public
      * @return array
      */
-    public function getLibCases($productID, $libID, $orderBy = 'id_desc', $pager = null, $browseType = '', $queryID = 0, $param = '')
+    public function getLibCases($productID, $libID, $orderBy = 'id_desc', $pager = null, $browseType = '', $queryID = 0)
     {
-        $importedCases = $this->dao->select('fromCaseID')->from(TABLE_CASE)
-            ->where('product')->eq($productID)
-            ->andWhere('lib')->eq($libID)
-            ->andWhere('fromCaseID')->ne('')
-            ->andWhere('deleted')->eq(0)
-            ->fetchPairs('fromCaseID', 'fromCaseID');
-
         $query = '';
         if($browseType == 'bysearch')
         {
@@ -361,7 +354,6 @@ class testsuiteModel extends model
             ->beginIF($browseType != 'bysearch')->andWhere('lib')->eq($libID)->fi()
             ->beginIF($browseType == 'bysearch')->andWhere($query)->fi()
             ->andWhere('product')->eq(0)
-            ->beginIF(strpos($param, "canimport") !== false)->andWhere('id')->notIN($importedCases)->fi()
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id');
