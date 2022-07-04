@@ -14,15 +14,7 @@ $(function()
     {
         if(task.consumed != 0 && $('#currentConsumed').val() == 0)
         {
-            var msg = consumedEmpty;
-            if(confirm(msg) == true)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            return confirm(consumedEmpty);
         }
     })
 })
