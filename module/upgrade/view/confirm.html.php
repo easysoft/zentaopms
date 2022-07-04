@@ -19,7 +19,10 @@
       <div class='modal-body'>
         <textarea rows='20' class='form-control' readonly='readonly'><?php echo $confirm;?></textarea>
       </div>
-      <div class='modal-footer'><?php echo html::submitButton($lang->upgrade->sureExecute) . html::hidden('fromVersion', $fromVersion);?></div>
+      <div class='modal-footer'>
+        <?php echo html::submitButton($lang->upgrade->sureExecute) . html::hidden('fromVersion', $fromVersion);?>
+        <p style='margin-top:10px;' class='text-danger hidden'><?php echo $lang->upgrade->upgradingTips;?></p>
+      </div>
     </div>
   </form>
 </div>

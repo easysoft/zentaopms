@@ -35,13 +35,12 @@
 </div>
 <div id="mainContent">
   <?php $dataModule = $app->rawMethod == 'work' ? 'workBug' : 'contributeBug';?>
-  <?php if(empty($bugs)):?>
   <div class="cell<?php if($type == 'bySearch') echo ' show';?>" id="queryBox" data-module=<?php echo $dataModule;?>></div>
+  <?php if(empty($bugs)):?>
   <div class="table-empty-tip">
     <p><span class="text-muted"><?php echo $lang->bug->noBug;?></span></p>
   </div>
   <?php else:?>
-  <div class="cell<?php if($type == 'bySearch') echo ' show';?>" id="queryBox" data-module=<?php echo $dataModule;?>></div>
   <form id='myBugForm' class="main-table table-bug" data-ride="table" method="post" action='<?php echo $this->createLink('bug', 'batchEdit', "productID=0");?>'>
     <?php
     $canBatchEdit     = (common::hasPriv('bug', 'batchEdit') and $type == 'assignedTo');
