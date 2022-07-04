@@ -601,10 +601,11 @@ class gitlabModel extends model
      * @param  int     $gitlabID
      * @param  string  $orderBy
      * @param  string  $minRole
+     * @param  string  $keyword
      * @access public
      * @return object
      */
-    public function apiGetGroups($gitlabID, $orderBy = 'id_desc', $minRole = '')
+    public function apiGetGroups($gitlabID, $orderBy = 'id_desc', $minRole = '', $keyword = '')
     {
         $apiRoot = $this->getApiRoot($gitlabID);
         $url     = sprintf($apiRoot, "/groups");
@@ -616,6 +617,8 @@ class gitlabModel extends model
         {
             $url .= '&min_access_level=' . $this->config->gitlab->accessLevel[$minRole];
         }
+
+        if($keyword) $url .= '&search=' . urlencode($keyword);
 
         $order = 'id';
         $sort  = 'desc';
@@ -2853,5 +2856,44 @@ class gitlabModel extends model
 
         $apiRoot .= '&sudo=' . $users[0]->id;
         return $this->apiGet($apiRoot, '/user');
+    }
+
+    /**
+     * Get gitlab menu.
+     *
+     * @param  int    $gitlabID
+     * @param  string $type
+     * @access public
+     * @return void
+     */
+    public function getGitlabMenu($gitlabID = 0, $type = 'project')
+    {
+        $html    = '<div class="btn-toolbar pull-left">';
+
+        /* Gitlab server list. */
+        $gitlabs = $this->getPairs();
+        $html   .= "<div class='btn-group'>";
+        $tips    = $gitlabID >0 ? zget($gitlabs, $gitlabID, $this->lang->gitlab->server) : $this->lang->gitlab->server;
+        $html   .=  html::a('javascript:;', $tips . " <span class='caret'></span>", '', "data-toggle='dropdown' class='btn btn-link'");
+        $html   .= "<ul class='dropdown-menu'>";
+        foreach($gitlabs as $id => $gitlab)
+        {
+            $html .= '<li' . ($gitlabID == $id ? " class='active'" : '') . '>';
+            $html .= html::a(helper::createLink('gitlab', zget($this->config->gitlab->menus, $type, 'project'), "gitlabID=$id"), $gitlab);
+        }
+        $html .= '</ul></div>';
+
+        /* Other route. */
+        foreach($this->config->gitlab->menus as $key => $method)
+        {
+            $lang   = 'browse' . ucwords($key);
+            $title  = $this->lang->gitlab->$lang;
+            $label  = "<span class='text'>$title</span>";
+            $active = $key == $type ? 'btn-active-text' : '';
+            $html  .= html::a(inlink($method, "gitlabID=$gitlabID"), $label, '', "id='{$key}' class='btn btn-link $active' title='$title'");
+        }
+
+        $html .= '</div>';
+        return $html;
     }
 }

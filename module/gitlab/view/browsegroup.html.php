@@ -12,8 +12,12 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <div id="mainMenu" class="clearfix">
-  <div class='pull-left'>
-    <?php echo html::linkButton('<i class="icon icon-back icon-sm"></i> ' . $lang->goback, $this->createLink('gitlab', 'browse'), 'self', '','btn btn-secondary');?>
+  <?php echo $this->gitlab->getGitlabMenu($gitlabID, 'group');?>
+  <div class="btn-toolbar pull-left">
+    <form id='gitlabForm' method='post'>
+    <?php echo html::input('keyword', $keyword, "class='form-control' placeholder='{$lang->gitlab->placeholderSearch}' style='display: inline-block;width:auto;margin:0 10px'");?>
+    <a id="gitlabSearch" class="btn btn-primary"><?php echo $lang->gitlab->search?></a>
+    </form>
   </div>
   <div class="btn-toolbar pull-right">
     <?php if(common::hasPriv('gitlab', 'create')) common::printLink('gitlab', 'createGroup', "gitlabID=$gitlabID", "<i class='icon icon-plus'></i> " . $lang->gitlab->group->create, '', "class='btn btn-primary'");?>
