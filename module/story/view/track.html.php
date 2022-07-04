@@ -23,7 +23,7 @@
     <div class='main-table' data-ride="table">
       <table class='table table-bordered' id="trackList">
         <thead>
-          <tr class='text-center'>
+          <tr class='text-left'>
             <?php if($config->URAndSR):?>
             <th <?php echo $style;?>>
               <?php if($this->app->rawModule == 'projectstory'): ?>

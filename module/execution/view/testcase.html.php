@@ -52,7 +52,7 @@
           <td><?php echo zget($lang->testcase->typeList, $case->type);?></td>
           <td><?php echo zget($users, $case->openedBy);?></td>
           <td><?php echo zget($users, $case->lastRunner);?></td>
-          <td><?php if(!helper::isZeroDate($case->lastRunDate)) echo date(DT_MONTHTIME1, strtotime($case->lastRunDate));?></td>
+          <td><?php if(!helper::isZeroDate($case->lastRunDate)) echo substr($case->lastRunDate, 5, 11);?></td>
           <td class='<?php echo $case->lastRunResult;?>'><?php if($case->lastRunResult) echo $lang->testcase->resultList[$case->lastRunResult];?></td>
           <td>
           <?php
