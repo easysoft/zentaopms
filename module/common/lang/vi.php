@@ -65,6 +65,7 @@ $lang->noData       = 'Không có dữ liệu.';
 $lang->fullscreen   = 'Fullscreen';
 $lang->retrack      = 'Retrack';
 $lang->whitelist    = 'Lista bianca';
+$lang->app          = 'APP';
 
 $lang->actions         = 'Hành động';
 $lang->restore         = 'Thiết lập lại';
