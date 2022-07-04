@@ -805,6 +805,14 @@ class execution extends control
         }
         $actionURL    = $this->createLink('execution', 'story', "executionID=$executionID&orderBy=$orderBy&type=bySearch&queryID=myQueryID");
         $branchGroups = $this->loadModel('branch')->getByProducts(array_keys($products));
+        $branchOption = array();
+        foreach($branchGroups as $productID => $branches)
+        {
+            foreach($branches as $branchID => $name)
+            {
+                $branchOption[$branchID] = $name;
+            }
+        }
         $this->execution->buildStorySearchForm($products, $branchGroups, $modules, $queryID, $actionURL, 'executionStory', $executionID);
 
         /* Header and position. */
@@ -867,9 +875,10 @@ class execution extends control
         $this->view->pager             = $pager;
         $this->view->setModule         = true;
         $this->view->branchGroups      = $branchGroups;
+        $this->view->branchOption      = $branchOption;
         $this->view->canBeChanged      = common::canModify('execution', $execution); // Determines whether an object is editable.
         $this->view->showBranch        = $showBranch;
-        $this->view->storyStages     = $this->product->batchGetStoryStage($stories);
+        $this->view->storyStages       = $this->product->batchGetStoryStage($stories);
 
         $this->display();
     }
