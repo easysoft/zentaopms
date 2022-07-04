@@ -21,7 +21,7 @@
       </div>
       <div class='modal-footer'>
         <?php echo html::submitButton($lang->upgrade->sureExecute) . html::hidden('fromVersion', $fromVersion);?>
-        <p style='margin-top:10px;' class='text-danger hidden'><?php echo $lang->upgrade->upgradingTips;?></p>
+        <p style='margin-top:10px;' class='text-danger hidden' id='upgradingTips'><?php echo $lang->upgrade->upgradingTips;?></p>
       </div>
     </div>
   </form>
