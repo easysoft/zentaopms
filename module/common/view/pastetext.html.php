@@ -25,7 +25,15 @@ $(function()
     {
         if(!rowTpl) rowTpl = $('#trTemp tbody').html();
         if(!$formTbody) $formTbody = $form.find('table > tbody');
+
         var lastIndex = parseInt($formTbody.find('tr:last > td:first').text());
+        var moduleArr = ['task', 'story', 'bug', 'testcase'];
+        if($.inArray(config.currentModule, moduleArr) >= 0 && config.currentMethod == 'batchcreate')
+        {
+            lastIndex = itemIndex;
+            itemIndex ++;
+        }
+
         var $newRow = $(rowTpl.replace(/%s/g, lastIndex + 1));
         $newRow.find('.chosen').chosen();
         $newRow.find('.iframe').modalTrigger({iframe:true});

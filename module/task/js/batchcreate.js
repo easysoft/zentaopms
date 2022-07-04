@@ -344,3 +344,30 @@ $(function()
         }
     });
 });
+
+/**
+ * Add item.
+ *
+ * @param  object $obj
+ * @access public
+ * @return void
+ */
+function addItem(obj)
+{
+    var item = $('#addItem').html().replace(/%i%/g, itemIndex + 1);
+    $('<tr class="addedItem">' + item  + '</tr>').insertAfter($(obj).closest('tr'));
+
+    itemIndex ++;
+}
+
+/**
+ * Delete item.
+ *
+ * @param  object $obj
+ * @access public
+ * @return void
+ */
+function deleteItem(obj)
+{
+    $(obj).closest('tr').remove();
+}
