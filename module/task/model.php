@@ -3427,6 +3427,11 @@ class taskModel extends model
                 $title = " title='{$value} {$this->lang->execution->workHour}'";
             }
             if($id == 'lane') $title = " title='{$task->lane}'";
+            if($id == 'finishedBy')
+            {
+                $name   = zget($users, $task->finishedBy);
+                $title  = " title='$name'";
+            }
 
             echo "<td class='" . $class . "'" . $title . ">";
             if($this->config->edition != 'open') $this->loadModel('flow')->printFlowCell('task', $task, $id);
