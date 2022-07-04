@@ -397,7 +397,7 @@ $lang->devops->menu            = new stdclass();
 $lang->devops->menu->code      = array('link' => "{$lang->repo->common}|repo|browse|repoID=%s", 'alias' => 'diff,view,revision,log,blame,showsynccommit');
 $lang->devops->menu->mr        = array('link' => "{$lang->devops->mr}|mr|browse|repoID=%s");
 $lang->devops->menu->compile   = array('link' => "{$lang->devops->compile}|job|browse", 'subModule' => 'compile,job');
-$lang->devops->menu->set       = array('link' => "{$lang->devops->set}|repo|maintain");
+$lang->devops->menu->set       = array('link' => "{$lang->devops->set}|repo|maintain", 'subModule' => 'gitlab');
 
 $lang->devops->menuOrder[5]  = 'code';
 $lang->devops->menuOrder[10] = 'mr';
