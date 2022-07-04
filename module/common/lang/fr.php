@@ -282,6 +282,7 @@ $lang->devops->mr       = 'Merge Request';
 $lang->devops->repo     = 'Repo';
 $lang->devops->rules    = 'Rule';
 $lang->devops->settings = 'Setting Merge Request';
+$lang->devops->set      = 'Set';
 
 $lang->admin->system     = 'System';
 $lang->admin->entry      = 'Application';
