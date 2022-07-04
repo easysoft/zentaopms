@@ -29,6 +29,17 @@ $(function()
             var fieldCount = $('#batchCreateForm .table thead>tr>th:visible').length;
             $('.form-actions').attr('colspan', fieldCount);
 
+            if(fieldCount > 9)
+            {
+                $('#batchCreateForm > .table-responsive').removeClass('scroll-none');
+                $('#batchCreateForm > .table-responsive').css('overflow', 'auto');
+            }
+            else
+            {
+                $('#batchCreateForm > .table-responsive').addClass('scroll-none');
+                $('#batchCreateForm > .table-responsive').css('overflow', 'visible');
+            }
+
             if($('th.c-name').width() < 165) $('th.c-name').width(165);
         });
 
