@@ -92,6 +92,33 @@
               if(common::hasPriv($objectType, 'edit', $object))
               {
                   echo "<span class='right-icon'>&nbsp; ";
+
+                  /* Determines whether the file supports preview. */
+                  if($file->extension == 'txt')
+                  {
+                      $extension = 'txt';
+                      if(($postion = strrpos($file->title, '.')) !== false) $extension = substr($file->title, $postion + 1);
+                      if($extension != 'txt') $mode = 'down';
+                      $file->extension = $extension;
+                  }
+
+                  /* For the open source version of the file judgment. */
+                  if(stripos('txt|jpg|jpeg|gif|png|bmp', $file->extension) !== false)
+                  {
+                      echo html::a($downloadLink, $lang->file->preview, '_blank', "class='text-primary' onclick=\"return downloadFile($file->id, '$file->extension', $imageWidth, '$file->title')\"");
+                  }
+
+                  /* For the max version of the file judgment. */
+                  if(isset($this->config->file->libreOfficeTurnon) and $this->config->file->libreOfficeTurnon == 1)
+                  {
+                      $officeTypes = 'doc|docx|xls|xlsx|ppt|pptx|pdf';
+                      if(stripos($officeTypes, $file->extension) !== false)
+                      {
+                          echo html::a($downloadLink, $lang->file->preview, '_blank', "class='text-primary' onclick=\"return downloadFile($file->id, '$file->extension', $imageWidth, '$file->title')\"");
+                      }
+                  }
+
+                  common::printLink('file', 'download', "fileID=$file->id", $lang->file->downloadFile, '_blank', "class='text-primary' title='{$lang->file->downloadFile}'");
                   common::printLink('file', 'edit', "fileID=$file->id", $lang->file->edit, '', "data-width='400' class='edit iframe text-primary' title='{$lang->file->edit}'");
                   if(common::hasPriv('file', 'delete')) echo html::a('###', $lang->delete, '', "class='text-primary' onclick='deleteFile($file->id)' title='$lang->delete'");
                   echo '</span>';
