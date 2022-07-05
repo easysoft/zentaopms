@@ -21,14 +21,16 @@ function setStoryModule()
 }
 
 /**
- * Checked show fields.
+ * Show checked fields.
  *
  * @param  string fields
  * @access public
  * @return void
  */
-function checkedShowFields(fields)
+function showCheckedFields(fields)
 {
+    showFields = fields;
+
     var fieldList = ',' + fields + ',';
     $('#formSettingForm > .checkboxes > .checkbox-primary > input').each(function()
     {

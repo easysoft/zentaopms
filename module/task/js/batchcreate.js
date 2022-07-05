@@ -23,7 +23,7 @@ $(function()
         var link = createLink('custom', 'ajaxSaveCustomFields', 'module=task&section=custom&key=batchCreateFields');
         $.post(link, {'fields' : fields}, function()
         {
-            checkedShowFields(fields);
+            showCheckedFields(fields);
             $('#formSetting').parent().removeClass('open');
 
             var fieldCount = $('#batchCreateForm .table thead>tr>th:visible').length;
