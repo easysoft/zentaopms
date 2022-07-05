@@ -662,16 +662,21 @@ class kanban extends control
     /**
      * Split column.
      *
+     * @param  int    $regionID
+     * @param  int    $kanbanID
+     * @param  int    $columnID
      * @access public
      * @return void
      */
-    public function splitColumn($columnID)
+    public function splitColumn($regionID, $kanbanID, $columnID)
     {
         if(!empty($_POST))
         {
             $this->kanban->splitColumn($columnID);
             if(dao::isError()) $this->send(array('message' => dao::getError(), 'result' => 'fail'));
-            $this->send(array('message' => $this->lang->saveSuccess, 'result' => 'success', 'locate' => 'parent'));
+
+            $kanbanGroup = $this->kanban->getKanbanData($kanbanID, $regionID);
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => array('target' => 'parent', 'name' => 'updateRegion', 'params' => array($regionID, $kanbanGroup))));
         }
 
         $this->display();
