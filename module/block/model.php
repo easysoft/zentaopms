@@ -776,6 +776,10 @@ class blockModel extends model
             $params->meetingCount['name']    = $this->lang->block->meetingCount;
             $params->meetingCount['default'] = 20;
             $params->meetingCount['control'] = 'input';
+
+            $params->feedbackCount['name']    = $this->lang->block->feedbackCount;
+            $params->feedbackCount['default'] = 20;
+            $params->feedbackCount['control'] = 'input';
         }
 
         $params->storyCount['name']    = $this->lang->block->storyCount;
