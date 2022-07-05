@@ -367,7 +367,11 @@ function addItem(obj)
 {
     var item = $('#addItem').html().replace(/%i%/g, itemIndex + 1);
     $('<tr class="addedItem">' + item  + '</tr>').insertAfter($(obj).closest('tr'));
-    $(".form-date").datepicker();
+
+    $(obj).closest('tr').next().find(".form-date").datepicker();
+    $(obj).closest('tr').next().find('div[id$=_chosen]').remove();
+    $(obj).closest('tr').next().find('.chosen').next('.picker').remove();
+    $(obj).closest('tr').next().find('.chosen').chosen();
 
     itemIndex ++;
 }
