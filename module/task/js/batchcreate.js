@@ -365,8 +365,10 @@ $(function()
  */
 function addItem(obj)
 {
+
     var item = $('#addItem').html().replace(/%i%/g, itemIndex + 1);
     $('<tr class="addedItem">' + item  + '</tr>').insertAfter($(obj).closest('tr'));
+    $(".form-date").datepicker();
 
     itemIndex ++;
 }

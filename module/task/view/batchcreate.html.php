@@ -181,7 +181,6 @@ $colspan = count($visibleFields) + 3;
               <?php endif;?>
             </td>
           </tr>
-          <?php js::set('itemIndex', $i)?>
           <?php endfor;?>
         </tbody>
         <tfoot>
@@ -196,6 +195,7 @@ $colspan = count($visibleFields) + 3;
     </div>
   </form>
 </div>
+<?php js::set('itemIndex', -- $i);?>
 <table class='template' id='trTemp'>
   <tbody>
     <tr>
