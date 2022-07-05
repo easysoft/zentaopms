@@ -266,7 +266,7 @@
         /* Show page app and update iframe source */
         if (url)
         {
-            app.$app.toggleClass('open-from-hiddn', app.$app.is(':hidden'))
+            app.$app.toggleClass('open-from-hidden', app.$app.is(':hidden'))
             reloadApp(appCode, url, true);
         }
         app.zIndex = openedAppZIndex++;
