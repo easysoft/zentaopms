@@ -604,24 +604,30 @@ class kanban extends control
     /**
      * Delete a lane.
      *
+     * @param  int    $regionID
+     * @param  int    $kanbanID
      * @param  int    $laneID
      * @param  string $confirm no|yes
      * @access public
      * @return void
      */
-    public function deleteLane($laneID, $confirm = 'no')
+    public function deleteLane($regionID, $kanbanID, $laneID, $confirm = 'no')
     {
         if($confirm == 'no')
         {
             $laneType   = $this->kanban->getLaneById($laneID)->type;
             $confirmTip = in_array($laneType, array('story', 'task', 'bug')) ? sprintf($this->lang->kanbanlane->confirmDeleteTip, $this->lang->{$laneType}->common) : $this->lang->kanbanlane->confirmDelete;
 
-            return print(js::confirm($confirmTip, $this->createLink('kanban', 'deleteLane', "laneID=$laneID&confirm=yes"), ''));
+            return print(js::confirm($confirmTip, $this->createLink('kanban', 'deleteLane', "regionID=$regionID&kanbanID=$kanbanID&laneID=$laneID&confirm=yes"), ''));
+
         }
         else
         {
             $this->kanban->delete(TABLE_KANBANLANE, $laneID);
-            return print(js::reload('parent'));
+
+            $kanbanGroup = $this->kanban->getKanbanData($kanbanID, $regionID);
+            $kanbanGroup = json_encode($kanbanGroup);
+            return print("<script>parent.updateRegion($regionID, $kanbanGroup)</script>");
         }
     }
 
