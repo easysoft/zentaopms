@@ -2131,8 +2131,8 @@ class repoModel extends model
 
             $html .= "<li data-idx='$groupName' data-id='$groupName' class='has-list open in'>";
             $html .= "<i class='list-toggle icon'></i>";
-            $html .= "<div class='hide-in-search'>";
-            $html .= "<a class='text-muted'>{$groupName}</a>";
+            $html .= "<div class='label-type'>";
+            $html .= "<a class='text-muted not-list-item'>{$groupName}</a>";
             $html .= "<span class='label label-outline'> {$this->lang->repo->type}</span>";
             $html .= "</div>";
             $html .= "<ul data-idx='$groupName'>";
@@ -2152,6 +2152,7 @@ class repoModel extends model
         $html .= '</div>';
         $html .= '</div>';
         $html .= '</div>';
+        $html .= "<script>$('.tree').tree();</script>";
         return $html;
     }
 }
