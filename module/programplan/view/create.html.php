@@ -95,7 +95,7 @@
               <td <?php echo zget($visibleFields, 'realBegan', ' hidden') . zget($requiredFields, 'realBegan', '', ' required');?>><input type='text' name='realBegan[<?php echo $i;?>]' id='realBegan<?php echo $i;?>' value='' class='form-control form-date' /></td>
               <td <?php echo zget($visibleFields, 'realEnd', ' hidden') . zget($requiredFields, 'realEnd', '', ' required');?>><input type='text' name='realEnd[<?php echo $i;?>]' id='realEnd<?php echo $i;?>' value='' class='form-control form-date' /></td>
               <?php if($this->config->edition == 'max'):?>
-              <td><?php echo html::select("output[$i][]", $documentList, '', "class='form-control picker-select' multiple");?></td>
+              <td><?php echo html::select("output[$i][]", $documentList, '', "class='form-control picker-select' data-drop-width='auto' multiple");?></td>
               <?php endif;?>
               <td class='c-actions text-center'>
                 <a href='javascript:;' onclick='addItem(this)' class='btn btn-link'><i class='icon-plus'></i></a>
@@ -127,7 +127,7 @@
               <td <?php echo zget($visibleFields, 'realEnd', ' hidden') . zget($requiredFields, 'realEnd', '', ' required');?>><input type='text' name='realEnd[<?php echo $i;?>]' id='realEnd<?php echo $i;?>' value='<?php echo $plan->realEnd;?>' class='form-control form-date' /></td>
               <?php if($this->config->edition == 'max'):?>
               <?php $option = empty($plan->output) ? 0 : explode(',', $plan->output);?>
-              <td><?php echo html::select("output[$i][]", $documentList, $option, "class='form-control picker-select' multiple");?></td>
+              <td><?php echo html::select("output[$i][]", $documentList, $option, "class='form-control picker-select' data-drop-width='auto' multiple");?></td>
               <?php endif;?>
               <td class='c-actions text-center'>
                 <a href='javascript:;' onclick='addItem(this)' class='btn btn-link'><i class='icon-plus'></i></a>
@@ -155,7 +155,7 @@
             <td <?php echo zget($visibleFields, 'realBegan', ' hidden') . zget($requiredFields, 'realBegan', '', ' required');?>><input type='text' name='realBegan[<?php echo $i;?>] ' id='realBegan<?php echo $i;?>' value='' class='form-control form-date' /></td>
             <td <?php echo zget($visibleFields, 'realEnd', ' hidden') . zget($requiredFields, 'realEnd', '', ' required');?>><input type='text' name='realEnd[<?php echo $i;?>]' id='realEnd<?php echo $i;?>' value='' class='form-control form-date' /></td>
             <?php if($this->config->edition == 'max'):?>
-            <td><?php echo html::select("output[$i][]", $documentList, '', "class='form-control picker-select' multiple");?></td>
+            <td><?php echo html::select("output[$i][]", $documentList, '', "class='form-control picker-select' data-drop-width='auto' multiple");?></td>
             <?php endif;?>
             <td class='c-actions text-center'>
               <a href='javascript:;' onclick='addItem(this)' class='btn btn-link'><i class='icon-plus'></i></a>
@@ -197,7 +197,7 @@
       <td <?php echo zget($visibleFields, 'realBegan', ' hidden') . zget($requiredFields, 'realBegan', '', ' required');?>><input type='text' name='<?php echo "realBegan[$i]";?>' id='realBegan<?php echo $i;?>' class='form-control form-date' /></td>
       <td <?php echo zget($visibleFields, 'realEnd', ' hidden') . zget($requiredFields, 'realEnd', '', ' required');?>><input type='text' name='<?php echo "realEnd[$i]";?>' id='realEnd<?php echo $i;?>' class='form-control form-date' /></td>
       <?php if($this->config->edition == 'max'):?>
-      <td><?php echo html::select("output[$i][]", $documentList, '', "class='form-control' multiple");?></td>
+      <td><?php echo html::select("output[$i][]", $documentList, '', "class='form-control' data-drop-width='auto' multiple");?></td>
       <?php endif;?>
       <td class='c-actions text-center'>
         <a href='javascript:;' onclick='addItem(this)' class='btn btn-link'><i class='icon-plus'></i></a>
