@@ -293,6 +293,7 @@ class file extends control
      * @param  array  $files
      * @param  string $fieldset
      * @param  object $object
+     * @param  string $method
      * @access public
      * @return void
      */
