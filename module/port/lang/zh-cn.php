@@ -1,11 +1,12 @@
 <?php
-$lang->importexport = new stdclass();
+$lang->port = new stdclass();
 
-$lang->importexport->default->key['id']        = '编号';
-$lang->importexport->default->key['type']      = '类型';
-$lang->importexport->default->key['project']   = '所属项目';
-$lang->importexport->default->key['execution'] = '所属执行';
-$lang->importexport->default->key['product']   = '所属产品';
-$lang->importexport->default->key['code']      = '代号';
-$lang->importexport->default->key['name']      = '名称';
-$lang->importexport->default->key['title']     = '标题';
+$lang->port->reservedWord['id']        = '编号';
+$lang->port->reservedWord['type']      = '类型';
+$lang->port->reservedWord['project']   = '所属项目';
+$lang->port->reservedWord['execution'] = '所属执行';
+$lang->port->reservedWord['product']   = '所属产品';
+$lang->port->reservedWord['code']      = '代号';
+$lang->port->reservedWord['name']      = '名称';
+$lang->port->reservedWord['title']     = '标题';
+$lang->port->reservedWord['asdawdadw'] = '测试字段';
