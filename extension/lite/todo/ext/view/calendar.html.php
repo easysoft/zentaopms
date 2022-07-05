@@ -20,6 +20,7 @@
 .hide-sidebar #sidebar > .cell {display: none;}
 .hide-sidebar #sidebar > .sidebar-toggle > .icon:before {content: "\e314";}
 #date {float: left; margin-right: 10px; margin-left: 0px;}
+.cell .nav>li>a:focus {background-color: unset;}
 </style>
 <?php js::set('moreLang', $this->lang->side->more);?>
 <?php js::set('moduleList', $config->todo->moduleList);?>
