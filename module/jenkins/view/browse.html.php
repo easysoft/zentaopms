@@ -12,9 +12,13 @@
 ?>
 <?php include '../../common/view/header.html.php'; ?>
 <div id="mainMenu" class="clearfix">
+  <div class="btn-toolbar pull-left">
+    <?php echo html::a($this->createLink('jenkins', 'browse'), "<span class='text'>{$lang->jenkins->serverList}</span>", '', "class='btn btn-link btn-active-text'");?>
+  </div>
   <div class="btn-toolbar pull-right">
     <?php if(common::hasPriv('jenkins', 'create')) common::printLink('jenkins', 'create', "", "<i class='icon icon-plus'></i> " . $lang->jenkins->create, '', "class='btn btn-primary'");?>
   </div>
+</div>
 <?php if(empty($jenkinsList)):?>
 <div class="table-empty-tip">
   <p>
@@ -23,7 +27,6 @@
     <?php echo html::a($this->createLink('jenkins', 'create'), "<i class='icon icon-plus'></i> " . $lang->jenkins->create, '', "class='btn btn-info'");?>
     <?php endif;?>
   </p>
-</div>
 </div>
 <?php else:?>
 <div id='mainContent' class='main-row'>

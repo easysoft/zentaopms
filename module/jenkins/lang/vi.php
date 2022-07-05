@@ -17,3 +17,4 @@ $lang->jenkins->lblCreate  = 'Tạo Jenkins Server';
 $lang->jenkins->desc       = 'Mô tả';
 $lang->jenkins->tokenFirst = 'Sử dụng token nếu không trống.';
 $lang->jenkins->tips       = 'Hủy "Ngăn chặn khai thác yêu cầu trang web giả mạo" khi sử dụng mật khẩu.';
+$lang->jenkins->serverList = 'Server List';
