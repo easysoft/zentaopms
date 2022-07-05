@@ -239,6 +239,9 @@ class repoModel extends model
             ->batchCheck($this->config->repo->create->requiredFields, 'notempty')
             ->checkIF($data->SCM == 'Gitlab', 'gitlabProject', 'notempty')
             ->checkIF($data->SCM == 'Subversion', $this->config->repo->svn->requiredFields, 'notempty')
+            ->checkIF($data->SCM == 'Gitlab', 'path', 'unique', "`SCM` = 'Gitlab' and `client` = {$data->gitlabHost}")
+            ->checkIF($data->SCM == 'Git', 'path', 'unique', "`SCM` = 'Git'")
+            ->checkIF($data->SCM == 'Subversion', 'path', 'unique', "`SCM` = 'Subversion'")
             ->autoCheck()
             ->exec();
 
@@ -314,6 +317,9 @@ class repoModel extends model
             ->batchCheck($this->config->repo->edit->requiredFields, 'notempty')
             ->checkIF($data->SCM == 'Subversion', $this->config->repo->svn->requiredFields, 'notempty')
             ->checkIF($data->SCM == 'Gitlab', 'extra', 'notempty')
+            ->checkIF($data->SCM == 'Gitlab', 'path', 'unique', "`SCM` = 'Gitlab' and `client` = {$data->gitlabHost} and `id` <> $id")
+            ->checkIF($data->SCM == 'Git', 'path', 'unique', "`SCM` = 'Git' and `id` <> $id")
+            ->checkIF($data->SCM == 'Subversion', 'path', 'unique', "`SCM` = 'Subversion' and `id` <> $id")
             ->autoCheck()
             ->where('id')->eq($id)->exec();
 
