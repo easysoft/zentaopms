@@ -84,6 +84,7 @@ $lang->waterfallModel = 'Waterfall';
 $lang->scrumModel     = 'Scrum';
 $lang->all            = 'All';
 $lang->viewDetails    = 'View Details';
+$lang->app            = 'APP';
 
 $lang->actions         = 'Aktionen';
 $lang->restore         = 'Wiederherstellen';

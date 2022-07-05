@@ -84,6 +84,7 @@ $lang->waterfallModel = '瀑布模型';
 $lang->scrumModel     = '敏捷模型';
 $lang->all            = '所有';
 $lang->viewDetails    = '查看详情';
+$lang->app            = '应用';
 
 $lang->actions         = '操作';
 $lang->restore         = '恢复默认';
