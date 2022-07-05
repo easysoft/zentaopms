@@ -80,7 +80,7 @@
             <?php foreach($stages as $stage):?>
             <tr>
               <td><input type='text' name='names[<?php echo $i;?>]' id='names<?php echo $i;?>' value='<?php echo $stage->name;?>' class='form-control' /></td>
-              <td <?php echo zget($visibleFields, 'PM', ' hidden') . zget($requiredFields, 'PM', '', ' required');?>><?php echo html::select("PM[$i]", $PMUsers, '', "class='form-control chosen'");?></td>
+              <td <?php echo zget($visibleFields, 'PM', ' hidden') . zget($requiredFields, 'PM', '', ' required');?>><?php echo html::select("PM[$i]", $PMUsers, '', "class='form-control picker-select'");?></td>
               <td <?php echo zget($visibleFields, 'percent', ' hidden') . zget($requiredFields, 'percent', '', ' required');?>>
                 <div class='input-group'>
                   <input type='text' name='percents[<?php echo $i;?>]' id='percent<?php echo $i;?>' value='<?php echo $stage->percent;?>' class='form-control'/>
@@ -89,15 +89,15 @@
               </td>
               <td class='<?php echo $hideAttribute?> <?php echo zget($visibleFields, 'attribute', ' hidden') . zget($requiredFields, 'attribute', '', ' required');?>'><?php echo html::select("attributes[$i]", $lang->stage->typeList, $stage->type, "class='form-control'");?></td>
               <td class='<?php echo zget($visibleFields, 'acl', ' hidden') . zget($requiredFields, 'acl', '', ' required');?>'><?php echo html::select("acl[$i]", $lang->execution->aclList, 'open', "class='form-control' $class");?></td>
-              <td <?php echo zget($visibleFields, 'milestone', ' hidden') . zget($requiredFields, 'milestone', '', ' required');?>><?php echo html::radio("milestone[$i]", $lang->programplan->milestoneList, 0);?></td>
+              <td class='text-center' <?php echo zget($visibleFields, 'milestone', ' hidden') . zget($requiredFields, 'milestone', '', ' required');?>><?php echo html::radio("milestone[$i]", $lang->programplan->milestoneList, 0);?></td>
               <td><input type='text' name='begin[<?php echo $i;?>]' id='begin<?php echo $i;?>' value='' class='form-control form-date' /></td>
               <td><input type='text' name='end[<?php echo $i;?>]' id='end<?php echo $i;?>' value='' class='form-control form-date' /></td>
               <td <?php echo zget($visibleFields, 'realBegan', ' hidden') . zget($requiredFields, 'realBegan', '', ' required');?>><input type='text' name='realBegan[<?php echo $i;?>]' id='realBegan<?php echo $i;?>' value='' class='form-control form-date' /></td>
               <td <?php echo zget($visibleFields, 'realEnd', ' hidden') . zget($requiredFields, 'realEnd', '', ' required');?>><input type='text' name='realEnd[<?php echo $i;?>]' id='realEnd<?php echo $i;?>' value='' class='form-control form-date' /></td>
               <?php if($this->config->edition == 'max'):?>
-              <td><?php echo html::select("output[$i][]", $documentList, '', "class='form-control chosen' multiple");?></td>
+              <td><?php echo html::select("output[$i][]", $documentList, '', "class='form-control picker-select' multiple");?></td>
               <?php endif;?>
-              <td class='c-actions text-left'>
+              <td class='c-actions text-center'>
                 <a href='javascript:;' onclick='addItem(this)' class='btn btn-link'><i class='icon-plus'></i></a>
                 <a href='javascript:;' onclick='deleteItem(this)' class='btn btn-link'><i class='icon icon-close'></i></a>
               </td>
@@ -111,7 +111,7 @@
             <?php echo html::hidden("planIDList[$i]", $plan->id);?>
             <tr>
               <td><input type='text' name="names[<?php echo $i;?>]" id='names<?php echo $i;?>' value='<?php echo $plan->name;?>' class='form-control' /></td>
-              <td <?php echo zget($visibleFields, 'PM', ' hidden') . zget($requiredFields, 'PM', '', ' required');?>><?php echo html::select("PM[$i]", $PMUsers, $plan->PM, "class='form-control chosen'");?></td>
+              <td <?php echo zget($visibleFields, 'PM', ' hidden') . zget($requiredFields, 'PM', '', ' required');?>><?php echo html::select("PM[$i]", $PMUsers, $plan->PM, "class='form-control picker-select'");?></td>
               <td <?php echo zget($visibleFields, 'percent', ' hidden') . zget($requiredFields, 'percent', '', ' required');?>>
                 <div class='input-group'>
                   <input type='text' name='percents[<?php echo $i;?>]' id='percent<?php echo $i;?>' value='<?php echo $plan->percent;?>' class='form-control' />
@@ -120,17 +120,18 @@
               </td>
               <td class='<?php echo $hideAttribute?> <?php echo zget($visibleFields, 'attribute', ' hidden') . zget($requiredFields, 'attribute', '', ' required');?>'><?php echo html::select("attributes[$i]", $lang->stage->typeList, $plan->attribute, "class='form-control'");?></td>
               <td <?php echo zget($visibleFields, 'acl', ' hidden') . zget($requiredFields, 'acl', '', ' required');?>><?php echo html::select("acl[$i]", $lang->execution->aclList, $plan->acl, "class='form-control' $class");?></td>
-              <td <?php echo zget($visibleFields, 'milestone', ' hidden') . zget($requiredFields, 'milestone', '', ' required');?>><?php echo html::radio("milestone[$i]", $lang->programplan->milestoneList, $plan->milestone, $disabled);?></td>
+              <td class='text-center' <?php echo zget($visibleFields, 'milestone', ' hidden') . zget($requiredFields, 'milestone', '', ' required');?>><?php echo html::radio("milestone[$i]", $lang->programplan->milestoneList, $plan->milestone, $disabled);?></td>
               <td><input type='text' name='begin[<?php echo $i;?>] ' id='begin<?php echo $i;?>' value='<?php echo $plan->begin;?>' class='form-control form-date' /></td>
               <td><input type='text' name='end[<?php echo $i;?>]' id='end<?php echo $i;?>' value='<?php echo $plan->end;?>' class='form-control form-date' /></td>
               <td <?php echo zget($visibleFields, 'realBegan', ' hidden') . zget($requiredFields, 'realBegan', '', ' required');?>><input type='text' name='realBegan[<?php echo $i;?>] ' id='realBegan<?php echo $i;?>' value='<?php echo $plan->realBegan;?>' class='form-control form-date' /></td>
               <td <?php echo zget($visibleFields, 'realEnd', ' hidden') . zget($requiredFields, 'realEnd', '', ' required');?>><input type='text' name='realEnd[<?php echo $i;?>]' id='realEnd<?php echo $i;?>' value='<?php echo $plan->realEnd;?>' class='form-control form-date' /></td>
               <?php if($this->config->edition == 'max'):?>
               <?php $option = empty($plan->output) ? 0 : explode(',', $plan->output);?>
-              <td><?php echo html::select("output[$i][]", $documentList, $option, "class='form-control chosen' multiple");?></td>
+              <td><?php echo html::select("output[$i][]", $documentList, $option, "class='form-control picker-select' multiple");?></td>
               <?php endif;?>
-              <td class='c-actions text-left'>
+              <td class='c-actions text-center'>
                 <a href='javascript:;' onclick='addItem(this)' class='btn btn-link'><i class='icon-plus'></i></a>
+                <a href='javascript:;' onclick='deleteItem(this)' class='invisible btn btn-link'><i class='icon icon-close'></i></a>
               </td>
             </tr>
             <?php $i ++;?>
@@ -139,7 +140,7 @@
           <?php for($j = 0; $j < 5; $j ++):?>
           <tr class='addedItem'>
             <td><input type='text' name='names[<?php echo $i;?>]' id='names<?php echo $i;?>' value='' class='form-control' /></td>
-            <td <?php echo zget($visibleFields, 'PM', ' hidden') . zget($requiredFields, 'PM', '', ' required');?>><?php echo html::select("PM[$i]", $PMUsers, '', "class='form-control chosen'");?></td>
+            <td <?php echo zget($visibleFields, 'PM', ' hidden') . zget($requiredFields, 'PM', '', ' required');?>><?php echo html::select("PM[$i]", $PMUsers, '', "class='form-control picker-select'");?></td>
             <td <?php echo zget($visibleFields, 'percent', ' hidden') . zget($requiredFields, 'percent', '', ' required');?>>
               <div class='input-group'>
                 <input type='text' name='percents[<?php echo $i;?>]' id='percent<?php echo $i;?>' value='' class='form-control' />
@@ -148,15 +149,15 @@
             </td>
             <td class='<?php echo $hideAttribute?> <?php echo zget($visibleFields, 'attribute', ' hidden') . zget($requiredFields, 'attribute', '', ' required');?>'><?php echo html::select("attributes[$i]", $lang->stage->typeList, '', "class='form-control'");?></td>
             <td <?php echo zget($visibleFields, 'acl', ' hidden') . zget($requiredFields, 'acl', '', ' required');?>><?php echo html::select("acl[$i]", $lang->execution->aclList, 'open', "class='form-control' $class");?></td>
-            <td <?php echo zget($visibleFields, 'milestone', ' hidden') . zget($requiredFields, 'milestone', '', ' required');?>><?php echo html::radio("milestone[$i]", $lang->programplan->milestoneList, 0);?></td>
+            <td class='text-center' <?php echo zget($visibleFields, 'milestone', ' hidden') . zget($requiredFields, 'milestone', '', ' required');?>><?php echo html::radio("milestone[$i]", $lang->programplan->milestoneList, 0);?></td>
             <td><input type='text' name='begin[<?php echo $i;?>] ' id='begin<?php echo $i;?>' value='' class='form-control form-date' /></td>
             <td><input type='text' name='end[<?php echo $i;?>]' id='end<?php echo $i;?>' value='' class='form-control form-date' /></td>
             <td <?php echo zget($visibleFields, 'realBegan', ' hidden') . zget($requiredFields, 'realBegan', '', ' required');?>><input type='text' name='realBegan[<?php echo $i;?>] ' id='realBegan<?php echo $i;?>' value='' class='form-control form-date' /></td>
             <td <?php echo zget($visibleFields, 'realEnd', ' hidden') . zget($requiredFields, 'realEnd', '', ' required');?>><input type='text' name='realEnd[<?php echo $i;?>]' id='realEnd<?php echo $i;?>' value='' class='form-control form-date' /></td>
             <?php if($this->config->edition == 'max'):?>
-            <td><?php echo html::select("output[$i][]", $documentList, '', "class='form-control chosen' multiple");?></td>
+            <td><?php echo html::select("output[$i][]", $documentList, '', "class='form-control picker-select' multiple");?></td>
             <?php endif;?>
-            <td class='c-actions text-left'>
+            <td class='c-actions text-center'>
               <a href='javascript:;' onclick='addItem(this)' class='btn btn-link'><i class='icon-plus'></i></a>
               <a href='javascript:;' onclick='deleteItem(this)' class='btn btn-link'><i class='icon icon-close'></i></a>
             </td>
@@ -180,7 +181,7 @@
   <table class='hidden'>
     <tr id='addItem' class='hidden'>
       <td><input type='text' name='<?php echo "names[$i]";?>' id='names<?php echo $i;?>' class='form-control' /></td>
-      <td <?php echo zget($visibleFields, 'PM', ' hidden') . zget($requiredFields, 'PM', '', ' required');?>><?php echo html::select("PM[$i]", $PMUsers, '', "class='form-control chosen' id='PM$i'");?></td>
+      <td <?php echo zget($visibleFields, 'PM', ' hidden') . zget($requiredFields, 'PM', '', ' required');?>><?php echo html::select("PM[$i]", $PMUsers, '', "class='form-control' id='PM$i'");?></td>
       <?php echo html::hidden("planIDList[$i]", 0);?>
       <td <?php echo zget($visibleFields, 'percent', ' hidden') . zget($requiredFields, 'percent', '', ' required');?>>
         <div class='input-group'>
@@ -190,15 +191,15 @@
       </td>
       <td class='<?php echo $hideAttribute?> <?php echo zget($visibleFields, 'attribute', ' hidden') . zget($requiredFields, 'attribute', '', ' required');?>'><?php echo html::select("attributes[$i]", $lang->stage->typeList, '', "class='form-control'");?></td>
       <td <?php echo zget($visibleFields, 'acl', ' hidden') . zget($requiredFields, 'acl', '', ' required');?>><?php echo html::select("acl[$i]", $lang->execution->aclList, 'open', "class='form-control' $class");?></td>
-      <td <?php echo zget($visibleFields, 'milestone', ' hidden') . zget($requiredFields, 'milestone', '', ' required');?>><?php echo html::radio("milestone[$i]", $lang->programplan->milestoneList, 0);?></td>
+      <td class='text-center' <?php echo zget($visibleFields, 'milestone', ' hidden') . zget($requiredFields, 'milestone', '', ' required');?>><?php echo html::radio("milestone[$i]", $lang->programplan->milestoneList, 0);?></td>
       <td><input type='text' name='<?php echo "begin[$i]";?>' id='begin<?php echo $i;?>' class='form-control form-date' /></td>
       <td><input type='text' name='<?php echo "end[$i]";?>' id='end<?php echo $i;?>' class='form-control form-date' /></td>
       <td <?php echo zget($visibleFields, 'realBegan', ' hidden') . zget($requiredFields, 'realBegan', '', ' required');?>><input type='text' name='<?php echo "realBegan[$i]";?>' id='realBegan<?php echo $i;?>' class='form-control form-date' /></td>
       <td <?php echo zget($visibleFields, 'realEnd', ' hidden') . zget($requiredFields, 'realEnd', '', ' required');?>><input type='text' name='<?php echo "realEnd[$i]";?>' id='realEnd<?php echo $i;?>' class='form-control form-date' /></td>
       <?php if($this->config->edition == 'max'):?>
-      <td><?php echo html::select("output[$i][]", $documentList, '', "class='form-control chosen ' multiple");?></td>
+      <td><?php echo html::select("output[$i][]", $documentList, '', "class='form-control' multiple");?></td>
       <?php endif;?>
-      <td class='c-actions'>
+      <td class='c-actions text-center'>
         <a href='javascript:;' onclick='addItem(this)' class='btn btn-link'><i class='icon-plus'></i></a>
         <a href='javascript:;' onclick='deleteItem(this)' class='btn btn-link'><i class='icon icon-close'></i></a>
       </td>
