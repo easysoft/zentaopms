@@ -68,6 +68,7 @@ $lang->moduleOrder[210] = 'dev';
 $lang->moduleOrder[215] = 'message';
 $lang->moduleOrder[220] = 'gitlab';
 $lang->moduleOrder[225] = 'mr';
+$lang->moduleOrder[230] = 'app';
 
 $lang->resource = new stdclass();
 
@@ -1436,6 +1437,12 @@ $lang->mr->methodOrder[80] = 'approval';
 $lang->mr->methodOrder[85] = 'close';
 $lang->mr->methodOrder[90] = 'reopen';
 $lang->mr->methodOrder[95] = 'addReview';
+
+/* App. */
+$lang->resource->app = new stdclass();
+$lang->resource->app->serverlink = 'serverLink';
+
+$lang->app->methodOrder[10] = 'link';
 
 /* Git. */
 $lang->resource->git = new stdclass();

@@ -84,7 +84,6 @@ $lang->waterfallModel = '瀑布模型';
 $lang->scrumModel     = '敏捷模型';
 $lang->all            = '所有';
 $lang->viewDetails    = '查看详情';
-$lang->app            = '应用';
 
 $lang->actions         = '操作';
 $lang->restore         = '恢复默认';
@@ -197,6 +196,8 @@ $lang->execution->list    = "{$lang->executionCommon}列表";
 $lang->kanban->common     = '看板';
 $lang->backup->common     = '备份';
 $lang->action->trash      = '回收站';
+$lang->app->common        = '应用';
+$lang->app->serverLink    = '服务器链接';
 
 $lang->personnel->common     = '人员';
 $lang->personnel->invest     = '投入人员';
