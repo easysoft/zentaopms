@@ -264,8 +264,8 @@
         }
 
         /* Show page app and update iframe source */
-        // if(url) reloadApp(appCode, url, true);
-        if (url) {
+        if (url)
+        {
             app.$app.toggleClass('open-from-hiddn', app.$app.is(':hidden'))
             reloadApp(appCode, url, true);
         }
