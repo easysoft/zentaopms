@@ -42,15 +42,10 @@
           var fieldList = ',' + showFields + ',';
           $('#formSettingForm > .checkboxes > .checkbox-primary > input:visible').each(function()
           {
-              var field = ',' + $(this).val() + ',';
-              if(fieldList.indexOf(field) >= 0)
-              {
-                  $(this).prop('checked', true);
-              }
-              else
-              {
-                  $(this).prop('checked', false);
-              }
+              var field   = ',' + $(this).val() + ',';
+              var checked = fieldList.indexOf(field) >= 0 ? true : false;
+
+              $(this).prop('checked', checked);
           });
       }
 
