@@ -1280,9 +1280,7 @@ function createColumnMenu(options)
         items.push({type: 'divider'});
     }
 
-    var regionID = column.$kanbanData.region;
-    var kanbanID = column.$kanbanData.kanban;
-    if(privs.includes('splitColumn')) items.push({label: kanbanLang.splitColumn, icon: 'col-split', url: createLink('kanban', 'splitColumn', 'regionID=' + regionID + '&kanbanID=' + kanbanID + '&columnID=' + column.id, '', true), className: 'iframe', attrs: {'data-toggle': 'modal'}});
+    if(privs.includes('splitColumn')) items.push({label: kanbanLang.splitColumn, icon: 'col-split', url: createLink('kanban', 'splitColumn', 'columnID=' + column.id, '', true), className: 'iframe', attrs: {'data-toggle': 'modal'}});
     if(privs.includes('createColumn'))
     {
         items.push({label: kanbanLang.createColumnOnLeft, icon: 'col-add-left', url: createLink('kanban', 'createColumn', 'columnID=' + column.id + '&position=left'), className: 'iframe', attrs: {'data-toggle': 'modal'}});
