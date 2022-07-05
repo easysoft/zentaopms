@@ -323,17 +323,18 @@ if($config->systemMode == 'new') $lang->execution->menu->more = array('link' => 
 /* Execution menu order. */
 $lang->execution->menuOrder[5]  = 'task';
 $lang->execution->menuOrder[10] = 'kanban';
-$lang->execution->menuOrder[15] = 'burn';
-$lang->execution->menuOrder[20] = 'view';
-$lang->execution->menuOrder[25] = 'story';
-$lang->execution->menuOrder[30] = 'qa';
-$lang->execution->menuOrder[35] = 'repo';
-$lang->execution->menuOrder[40] = 'devops';
-$lang->execution->menuOrder[45] = 'doc';
-$lang->execution->menuOrder[50] = 'build';
-$lang->execution->menuOrder[55] = 'release';
-$lang->execution->menuOrder[60] = 'action';
-$lang->execution->menuOrder[65] = 'settings';
+$lang->execution->menuOrder[15] = 'CFD';
+$lang->execution->menuOrder[20] = 'burn';
+$lang->execution->menuOrder[25] = 'view';
+$lang->execution->menuOrder[30] = 'story';
+$lang->execution->menuOrder[35] = 'qa';
+$lang->execution->menuOrder[40] = 'repo';
+$lang->execution->menuOrder[45] = 'devops';
+$lang->execution->menuOrder[50] = 'doc';
+$lang->execution->menuOrder[55] = 'build';
+$lang->execution->menuOrder[60] = 'release';
+$lang->execution->menuOrder[65] = 'action';
+$lang->execution->menuOrder[70] = 'settings';
 
 $lang->execution->menu->doc['subMenu'] = new stdclass();
 
