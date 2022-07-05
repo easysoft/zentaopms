@@ -118,6 +118,7 @@ $lang->execution->relatedMember       = '相关成员';
 $lang->execution->watermark           = '由禅道导出';
 $lang->execution->burnXUnit           = '(日期)';
 $lang->execution->burnYUnit           = '(工时)';
+$lang->execution->count               = '(数量)';
 $lang->execution->waitTasks           = '待处理';
 $lang->execution->viewByUser          = '按用户查看';
 $lang->execution->oneProduct          = "阶段只能关联一个{$lang->productCommon}";
@@ -164,6 +165,10 @@ $lang->execution->endList[365] = '一年';
 $lang->execution->lifeTimeList['short'] = "短期";
 $lang->execution->lifeTimeList['long']  = "长期";
 $lang->execution->lifeTimeList['ops']   = "运维";
+
+$lang->execution->cfdTypeList['story'] = "{$lang->SRCommon}";
+$lang->execution->cfdTypeList['task']  = "任务";
+$lang->execution->cfdTypeList['bug']   = "Bug";
 
 $lang->team = new stdclass();
 $lang->team->account    = '用户';
@@ -221,6 +226,8 @@ $lang->execution->build               = '所有版本';
 $lang->execution->testtask            = '测试单';
 $lang->execution->burn                = '燃尽图';
 $lang->execution->computeBurn         = '更新燃尽图';
+$lang->execution->CFD                 = '累积流图';
+$lang->execution->computeCFD          = '更新累积流图';
 $lang->execution->burnData            = '燃尽图数据';
 $lang->execution->fixFirst            = '修改首天工时';
 $lang->execution->team                = '团队成员';

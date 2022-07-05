@@ -190,7 +190,7 @@
             <th></th>
             <td colspan="2" class='text-center form-actions'>
               <?php echo html::submitButton();?>
-              <?php if(!isonlybody()) echo html::a(inlink('browse', ""), $lang->goback, '', 'class="btn btn-wide"');?>
+              <?php if(!isonlybody()) echo html::a(inlink('browse', "repoID={$job->repo}"), $lang->goback, '', 'class="btn btn-wide"');?>
               <?php echo html::hidden('repoType', zget($repoTypes, $job->repo, 'Git'));?>
             </td>
           </tr>

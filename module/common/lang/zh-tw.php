@@ -78,7 +78,6 @@ $lang->globalSetting  = '全局設置';
 $lang->waterfallModel = '瀑布模型';
 $lang->all            = '所有';
 $lang->viewDetails    = '查看詳情';
-$lang->app            = '應用';
 
 $lang->actions         = '操作';
 $lang->restore         = '恢復預設';
@@ -182,6 +181,8 @@ $lang->stage->common      = '階段';
 $lang->stage->list        = '階段列表';
 $lang->execution->list    = "{$lang->executionCommon}列表";
 $lang->kanban->common     = '看板';
+$lang->app->common        = '應用';
+$lang->app->serverLink    = '服務器鏈接';
 
 $lang->personnel->common     = '人員';
 $lang->personnel->invest     = '投入人員';

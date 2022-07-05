@@ -78,8 +78,6 @@ class repo extends control
      */
     public function maintain($objectID = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
-        $this->lang->switcherMenu = '';
-
         $repoID = $this->repo->saveState(0, $objectID);
         if($this->viewType !== 'json') $this->commonAction($repoID, $objectID);
 
@@ -1138,18 +1136,32 @@ class repo extends control
      * @access public
      * @return void
      */
-    public function ajaxGetDropMenu($repoID, $type = 'repo', $objectID = 0)
+    public function ajaxGetDropMenu($repoID, $module = 'repo', $method = 'browse')
     {
-        $repos = $this->repo->getRepoPairs($type, $objectID);
-        $reposHtml = "<div class='table-row'><div class='table-col col-left'><div class='list-group' style='margin-bottom: 0;'>";
-        foreach($repos as $id => $repoName)
+        if($module == 'mr')  $method = 'browse';
+        if($module == 'job') $method = 'browse';
+        if($module == 'compile' and $method == 'logs') $method = 'browse';
+        if($module == 'bug' and $method == 'view')
         {
-            $selected = $id == $repoID ? 'selected' : '';
-            $reposHtml .= html::a($this->createLink('repo', 'browse', "repoID=$id&branchID=&objectID=$objectID"), $repoName, '', "class='$selected' data-app='{$this->app->tab}'");
+            $module = 'repo';
+            $method = 'review';
         }
-        $reposHtml .= '</div></div></div>';
 
-        return print($reposHtml);
+        /* Get repo group by type. */
+        $repoGroup = $this->repo->getRepoGroup($this->app->tab);
+        if($module == 'mr')
+        {
+            foreach($repoGroup as $type => $group)
+            {
+                if(strtolower($type) != 'gitlab') unset($repoGroup[$type]);
+            }
+        }
+
+        $this->view->repoID    = $repoID;
+        $this->view->repoGroup = $repoGroup;
+        $this->view->link      = $this->createLink($module, $method, "repoID=%s");
+
+        $this->display();
     }
 
     /**
@@ -1184,7 +1196,6 @@ class repo extends control
                 }
             }
         }
-
 
         if(!$projects) $this->send(array('message' => array()));
         $projectIdList = $projectIdList ? explode(',', $projectIdList) : null;

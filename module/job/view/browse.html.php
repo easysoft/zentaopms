@@ -13,8 +13,8 @@
 <?php include '../../common/view/header.html.php';?>
 <div id="mainMenu" class="clearfix">
   <div class="btn-toolbar pull-left">
-    <?php echo html::a($this->createLink('job', 'browse'), "<span class='text'>{$lang->ci->task}</span>", '', "class='btn btn-link btn-active-text'");?>
-    <?php echo html::a($this->createLink('compile', 'browse'), "<span class='text'>{$lang->ci->history}</span>", '', "class='btn btn-link'");?>
+    <?php echo html::a($this->createLink('job', 'browse', "repoID=$repoID"), "<span class='text'>{$lang->ci->task}</span>", '', "class='btn btn-link btn-active-text'");?>
+    <?php echo html::a($this->createLink('compile', 'browse', "repoID=$repoID"), "<span class='text'>{$lang->ci->history}</span>", '', "class='btn btn-link'");?>
   </div>
   <div class="btn-toolbar pull-right">
     <?php if(common::hasPriv('job', 'create')) common::printLink('job', 'create', "", "<i class='icon icon-plus'></i> " . $lang->job->create, '', "class='btn btn-primary'");?>

@@ -22,7 +22,7 @@ class job extends control
     public function __construct($moduleName = '', $methodName = '')
     {
         parent::__construct($moduleName, $methodName);
-        $this->loadModel('ci')->setMenu();
+        if($methodName != 'browse') $this->loadModel('ci')->setMenu();
         $this->projectID = isset($_GET['project']) ? $_GET['project'] : 0;
     }
 
@@ -36,17 +36,21 @@ class job extends control
      * @access public
      * @return void
      */
-    public function browse($orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function browse($repoID = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
+        /* Set session. */
+        $this->loadModel('ci')->setMenu($repoID);
+
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
         $this->app->loadLang('compile');
-        $this->view->jobList = $this->job->getList($orderBy, $pager);
+        $this->view->jobList = $this->job->getList($repoID, $orderBy, $pager);
 
         $this->view->title      = $this->lang->ci->job . $this->lang->colon . $this->lang->job->browse;
         $this->view->position[] = $this->lang->ci->job;
         $this->view->position[] = $this->lang->job->browse;
+        $this->view->repoID     = $repoID;
         $this->view->orderBy    = $orderBy;
         $this->view->pager      = $pager;
 
@@ -167,7 +171,7 @@ class job extends control
             }
 
             $this->loadModel('action')->create('job', $id, 'edited');
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browse')));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browse', "repoID={$job->repo}")));
         }
 
         $repo = $this->loadModel('repo')->getRepoByID($job->repo);

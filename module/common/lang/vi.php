@@ -65,7 +65,6 @@ $lang->noData       = 'Không có dữ liệu.';
 $lang->fullscreen   = 'Fullscreen';
 $lang->retrack      = 'Retrack';
 $lang->whitelist    = 'Lista bianca';
-$lang->app          = 'APP';
 
 $lang->actions         = 'Hành động';
 $lang->restore         = 'Thiết lập lại';
@@ -125,8 +124,10 @@ $lang->typeAB       = 'Loại';
 $lang->nameAB       = 'Name';
 
 $lang->common = new stdclass();
-$lang->common->common = 'Module chung';
-$lang->devops->common = 'DevOps';
+$lang->common->common  = 'Module chung';
+$lang->devops->common  = 'DevOps';
+$lang->app->common     = 'APP';
+$lang->app->serverLink = 'Server Link';
 
 global $config;
 list($programModule, $programMethod)     = explode('-', $config->programLink);

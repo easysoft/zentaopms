@@ -326,6 +326,33 @@ function updateLaneName(laneID, name)
 }
 
 /**
+ * Update lane color.
+ *
+ * @param  int    $laneID
+ * @param  string $color
+ * @access public
+ * @return void
+ */
+function updateLaneColor(laneID, color)
+{
+    $('.kanban-lane[data-id="' + laneID + '"] > .kanban-lane-name').css('background-color', color);
+}
+
+/**
+ * Update column name.
+ *
+ * @param  int    $columnID
+ * @param  string $name
+ * @param  string $color
+ * @access public
+ * @return void
+ */
+function updateColumnName(columnID, name, color)
+{
+    $('.kanban-col[data-id="' + columnID + '"] > div.title > span:first').text(name).css('color', color);
+}
+
+/**
  * Hide kanban action
  */
 function hideKanbanAction()
