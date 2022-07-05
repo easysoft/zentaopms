@@ -1879,7 +1879,7 @@ class taskModel extends model
             return false;
         }
 
-        if(empty($currentConsumed))
+        if(empty($currentConsumed) and $oldTask->consumed == '0')
         {
             dao::$errors[] = $this->lang->task->error->consumedEmpty;
             return false;
@@ -3408,7 +3408,7 @@ class taskModel extends model
             if($id == 'status') $class .= ' task-' . $task->status;
             if($id == 'id')     $class .= ' cell-id';
             if($id == 'name')   $class .= ' text-left';
-            if($id == 'deadline') $class .= ' text-center';
+            if($id == 'deadline') $class .= ' text-left';
             if($id == 'deadline' and isset($task->delay)) $class .= ' delayed';
             if($id == 'assignedTo') $class .= ' has-btn text-left';
             if($id == 'lane') $class .= ' text-left';
@@ -3427,6 +3427,9 @@ class taskModel extends model
                 $title = " title='{$value} {$this->lang->execution->workHour}'";
             }
             if($id == 'lane') $title = " title='{$task->lane}'";
+            if($id == 'finishedBy') $title  = " title='" . zget($users, $task->finishedBy) . "'";
+            if($id == 'openedBy') $title  = " title='" . zget($users, $task->openedBy) . "'";
+            if($id == 'lastEditedBy') $title  = " title='" . zget($users, $task->lastEditedBy) . "'";
 
             echo "<td class='" . $class . "'" . $title . ">";
             if($this->config->edition != 'open') $this->loadModel('flow')->printFlowCell('task', $task, $id);

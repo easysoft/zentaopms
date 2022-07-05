@@ -48,6 +48,7 @@ $lang->upgrade->fromVersion   = 'From';
 $lang->upgrade->toVersion     = 'To';
 $lang->upgrade->confirm       = 'Confirm SQL';
 $lang->upgrade->sureExecute   = 'Execute';
+$lang->upgrade->upgradingTips = 'The upgrade is in progress, please be patient. Do not refresh the page, blackout, or turn off your computer!';
 $lang->upgrade->forbiddenExt  = 'The extension is incompatible with the version. It has been deactivated:';
 $lang->upgrade->updateFile    = 'File information has to be updated.';
 $lang->upgrade->noticeSQL     = 'Your database is inconsistent with the standard and it failed to fix it. Please run the following SQL and refresh.';

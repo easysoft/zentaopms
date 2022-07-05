@@ -1762,7 +1762,6 @@ class kanbanModel extends model
             ->where('deleted')->eq(0)
             ->andWhere('id')->in($spaceIdList)
             ->beginIF(in_array($browseType, array('private', 'cooperation', 'public')))->andWhere('type')->eq($browseType)->fi()
-            ->beginIF($browseType == 'involved')->andWhere('owner')->ne($account)->fi()
             ->beginIF($this->cookie->showClosed == 0 and $browseType != 'showClosed')->andWhere('status')->ne('closed')->fi()
             ->orderBy('id_desc')
             ->fetchPairs('id');
@@ -1808,10 +1807,11 @@ class kanbanModel extends model
         $account = $this->app->user->account;
         foreach($objects as $objectID => $object)
         {
-            $remove = true;
             if($objectType == 'kanbanspace' and $object->type == 'public' and $param != 'involved') continue;
 
-            if($object->owner == $account and $param != 'involved') $remove = false;
+            $remove = true;
+
+            if($object->owner == $account) $remove = false;
             if(strpos(",{$object->team},", ",$account,") !== false) $remove = false;
             if(strpos(",{$object->whitelist},", ",$account,") !== false) $remove = false;
 
@@ -1823,7 +1823,6 @@ class kanbanModel extends model
                 if($spaceType == 'public' and $param != 'involved') $remove = false;
             }
 
-            if($objectType == 'kanbanspace' and $param == 'involved' and $object->owner == $account) $remove = true;
             if($remove) unset($objects[$objectID]);
         }
 

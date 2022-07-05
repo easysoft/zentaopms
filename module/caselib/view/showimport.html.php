@@ -20,6 +20,7 @@ $(function()
 });
 </script>
 <?php else:?>
+<?php js::set('requiredFields', $requiredFields);?>
 <div id="mainContent" class="main-content">
   <div class="main-header clearfix">
     <h2><?php echo $lang->caselib->import;?></h2>
@@ -29,13 +30,13 @@ $(function()
       <thead>
         <tr>
           <th class='c-number'><?php echo $lang->testcase->id?></th>
-          <th><?php echo $lang->testcase->title?></th>
-          <th class='c-module'><?php echo $lang->testcase->module?></th>
-          <th class='c-status'><?php echo $lang->testcase->pri?></th>
-          <th class='c-status'><?php echo $lang->testcase->type?></th>
-          <th><?php echo $lang->testcase->stage?></th>
-          <th class='c-text'><?php echo $lang->testcase->keywords?></th>
-          <th><?php echo $lang->testcase->precondition?></th>
+          <th class='c-title'        id='title'>       <?php echo $lang->testcase->title?></th>
+          <th class='c-module'       id='module'>      <?php echo $lang->testcase->module?></th>
+          <th class='c-pri'          id='pri'>         <?php echo $lang->testcase->pri?></th>
+          <th class='c-type'         id='type'>        <?php echo $lang->testcase->type?></th>
+          <th class='c-stage'        id='stage'>       <?php echo $lang->testcase->stage?></th>
+          <th class='c-text'         id='keywords'>    <?php echo $lang->testcase->keywords?></th>
+          <th class='c-precondition' id='precondition'><?php echo $lang->testcase->precondition?></th>
           <th class='c-case-step col-content'>
             <table class='w-p100 table-borderless'>
               <tr>
@@ -127,6 +128,13 @@ $(function()
 <style>#mainContent .col-content{display: none;}</style>
 <?php endif;?>
 <script>
-$(function(){$.fixedTableHead('#showData');});
+$(function()
+{
+    $.fixedTableHead('#showData');
+    $("#showData th").each(function()
+    {
+        if(requiredFields.indexOf(this.id) !== -1) $("#" + this.id).addClass('required');
+    });
+});
 </script>
 <?php include '../../common/view/footer.html.php';?>
