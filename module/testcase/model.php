@@ -2025,7 +2025,7 @@ class testcaseModel extends model
                 echo zget($users, $case->lastRunner);
                 break;
             case 'lastRunDate':
-                if(!helper::isZeroDate($case->lastRunDate)) echo date(DT_MONTHTIME1, strtotime($case->lastRunDate));
+                if(!helper::isZeroDate($case->lastRunDate)) echo substr($case->lastRunDate, 5, 11);
                 break;
             case 'lastRunResult':
                 $class = 'result-' . $case->lastRunResult;
