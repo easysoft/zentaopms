@@ -31,3 +31,4 @@ select[id^="story"] + .picker-single {width: 130px; max-width: 130px;}
 .c-assigned {width: 130px;}
 .c-date {width: 120px;}
 .c-pri {width: 80px;}
+.c-actions {width: 60px;}

@@ -37,6 +37,16 @@
   var $formSetting = $('#formSetting');
   $formSetting.on('click', '.close-dropdown', function()
   {
+      if(showFields != undefined)
+      {
+          var fieldList = ',' + showFields + ',';
+          $('#formSettingForm > .checkboxes > .checkbox-primary > input:visible').each(function()
+          {
+              var field = ',' + $(this).val() + ',';
+              $(this).prop('checked', fieldList.indexOf(field) >= 0);
+          });
+      }
+
       $formSetting.parent().removeClass('open');
   }).on('click', function(e){e.stopPropagation()});
   </script>

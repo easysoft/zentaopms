@@ -23,11 +23,22 @@ $(function()
         var link = createLink('custom', 'ajaxSaveCustomFields', 'module=task&section=custom&key=batchCreateFields');
         $.post(link, {'fields' : fields}, function()
         {
-            checkedShowFields(fields);
+            showCheckedFields(fields);
             $('#formSetting').parent().removeClass('open');
 
             var fieldCount = $('#batchCreateForm .table thead>tr>th:visible').length;
             $('.form-actions').attr('colspan', fieldCount);
+
+            if(fieldCount > 9)
+            {
+                $('#batchCreateForm > .table-responsive').removeClass('scroll-none');
+                $('#batchCreateForm > .table-responsive').css('overflow', 'auto');
+            }
+            else
+            {
+                $('#batchCreateForm > .table-responsive').addClass('scroll-none');
+                $('#batchCreateForm > .table-responsive').css('overflow', 'visible');
+            }
 
             if($('th.c-name').width() < 165) $('th.c-name').width(165);
         });
@@ -344,3 +355,30 @@ $(function()
         }
     });
 });
+
+/**
+ * Add item.
+ *
+ * @param  object $obj
+ * @access public
+ * @return void
+ */
+function addItem(obj)
+{
+    var item = $('#addItem').html().replace(/%i%/g, itemIndex + 1);
+    $('<tr class="addedItem">' + item  + '</tr>').insertAfter($(obj).closest('tr'));
+
+    itemIndex ++;
+}
+
+/**
+ * Delete item.
+ *
+ * @param  object $obj
+ * @access public
+ * @return void
+ */
+function deleteItem(obj)
+{
+    $(obj).closest('tr').remove();
+}

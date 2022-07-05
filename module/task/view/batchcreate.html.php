@@ -90,6 +90,7 @@ $colspan = count($visibleFields) + 3;
                 echo "<th class='w-100px $required'>{$extendField->name}</th>";
             }
             ?>
+            <th class='c-actions'><?php echo $lang->actions;?></th>
           </tr>
         </thead>
         <tbody>
@@ -115,7 +116,7 @@ $colspan = count($visibleFields) + 3;
           ?>
           <?php $pri = 3;?>
           <tr>
-            <td class='text-left'><?php echo $i;?></td>
+            <td class='text-left c-id'><?php echo $i;?></td>
             <td class="<?php echo zget($visibleFields, 'module', 'hidden')?> moduleBox" style='overflow:visible'>
               <?php echo html::select("module[$i]", $modules, $moduleID, "class='form-control chosen'")?>
               <?php echo html::hidden("parent[$i]", $parent);?>
@@ -173,7 +174,14 @@ $colspan = count($visibleFields) + 3;
             $this->loadModel('flow');
             foreach($extendFields as $extendField) echo "<td" . (($extendField->control == 'select' or $extendField->control == 'multi-select') ? " style='overflow:visible'" : '') . ">" . $this->flow->getFieldControl($extendField, '', $extendField->field . "[$i]") . "</td>";
             ?>
+            <td class='c-actions text-left'>
+              <a href='javascript:;' onclick='addItem(this)' class='btn btn-link'><i class='icon-plus'></i></a>
+              <?php if($i != 1):?>
+              <a href='javascript:;' onclick='deleteItem(this)' class='btn btn-link'><i class='icon icon-close'></i></a>
+              <?php endif;?>
+            </td>
           </tr>
+          <?php js::set('itemIndex', $i)?>
           <?php endfor;?>
         </tbody>
         <tfoot>
@@ -191,7 +199,7 @@ $colspan = count($visibleFields) + 3;
 <table class='template' id='trTemp'>
   <tbody>
     <tr>
-      <td class='text-center'>%s</td>
+      <td class='text-left c-id'>%s</td>
       <td class="<?php echo zget($visibleFields, 'module', 'hidden')?> moduleBox" style='overflow:visible'>
         <?php echo html::select("module[%s]", $modules, $moduleID, "class='form-control chosen' onchange='setStories(this.value, $execution->id, \"%s\")'")?>
         <?php echo html::hidden("parent[%s]", $parent);?>
@@ -242,9 +250,82 @@ $colspan = count($visibleFields) + 3;
       $this->loadModel('flow');
       foreach($extendFields as $extendField) echo "<td" . (($extendField->control == 'select' or $extendField->control == 'multi-select') ? " style='overflow:visible'" : '') . ">" . $this->flow->getFieldControl($extendField, '', $extendField->field . "[%s]") . "</td>";
       ?>
+      <td class='c-actions text-center'>
+        <a href='javascript:;' onclick='addItem(this)' class='btn btn-link'><i class='icon-plus'></i></a>
+        <a href='javascript:;' onclick='deleteItem(this)' class='btn btn-link'><i class='icon icon-close'></i></a>
+      </td>
     </tr>
   </tbody>
 </table>
+<div>
+  <?php $i = '%i%';?>
+  <table class='hidden'>
+    <tr id='addItem' class='hidden'>
+      <td class='text-left c-id'><?php echo $i;?></td>
+      <td class="<?php echo zget($visibleFields, 'module', 'hidden')?> moduleBox" style='overflow:visible'>
+        <?php echo html::select("module[$i]", $modules, $moduleID, "class='form-control chosen'")?>
+        <?php echo html::hidden("parent[$i]", $parent);?>
+      </td>
+      <?php if($execution->type != 'ops'):?>
+      <td class="<?php echo zget($visibleFields, 'story', 'hidden');?> storyBox" style='overflow: visible'>
+        <div class='input-group'>
+          <?php echo html::select("story[$i]", $stories, $currentStory, "class='form-control chosen' onchange='setStoryRelated($i)'");?>
+          <span class='input-group-btn'>
+            <a id='preview<?php echo $i;?>' href='#' class='btn iframe btn-link btn-icon btn-copy' style='pointer-events:none' data-width='80%' disabled='disabled' title='<?php echo $lang->preview; ?>'><i class='icon-eye'></i></a>
+            <a href='javascript:copyStoryTitle(<?php echo $i;?>)' class='btn btn-link btn-icon btn-copy' title='<?php echo $lang->task->copyStoryTitle; ?>'><i class='icon-arrow-right'></i></a>
+            <?php echo html::hidden("storyEstimate$i") . html::hidden("storyDesc$i") . html::hidden("storyPri$i");?>
+          </span>
+        </div>
+      </td>
+      <?php endif;?>
+      <td style='overflow:visible'>
+        <div class="input-control has-icon-right">
+          <?php echo html::input("name[$i]", '', "class='form-control title-import'");?>
+          <div class="colorpicker">
+            <button type="button" class="btn btn-link dropdown-toggle" data-toggle="dropdown"><span class="cp-title"></span><span class="color-bar"></span><i class="ic"></i></button>
+            <ul class="dropdown-menu clearfix pull-right">
+              <li class="heading"><?php echo $lang->task->colorTag;?><i class="icon icon-close"></i></li>
+            </ul>
+            <?php echo html::hidden("color[$i]", '', "data-provide='colorpicker' data-icon='color' data-wrapper='input-control-icon-right'  data-update-color='#name\\[$i\\]'");?>
+          </div>
+        </div>
+      </td>
+      <?php if($execution->type == 'kanban'):?>
+      <td><?php echo html::select("regions[$i]", $regionPairs, $regionID, "class='form-control chosen' onchange='setLane(this.value, $i)'");?></td>
+      <td><?php echo html::select("lanes[$i]", $lanePairs, $laneID, "class='form-control chosen'");?></td>
+      <?php endif;?>
+      <td><?php echo html::select("type[$i]", $lang->task->typeList, $type, 'class=form-control');?></td>
+      <td class="<?php echo zget($visibleFields, 'assignedTo', 'hidden')?> assignedToBox" style='overflow:visible'><?php echo html::select("assignedTo[$i]", $members, $member, "class='form-control chosen'");?></td>
+      <td class="<?php echo zget($visibleFields, 'estimate', 'hidden')?> estimateBox"><?php echo html::input("estimate[$i]", '', "class='form-control text-center'");?></td>
+      <td class="<?php echo zget($visibleFields, 'estStarted', 'hidden')?> estStartedBox">
+        <div class='input-group'>
+          <?php
+          echo html::input("estStarted[$i]", '', "class='form-control text-center form-date' onkeyup='toggleCheck(this)'");
+          echo "<span class='input-group-addon estStartedBox'><input type='checkbox' name='estStartedDitto[$i]' id='estStartedDitto$i' checked/> {$lang->task->ditto}</span>";
+          ?>
+        </div>
+      </td>
+      <td class="<?php echo zget($visibleFields, 'deadline', 'hidden')?> deadlineBox">
+        <div class='input-group'>
+          <?php
+          echo html::input("deadline[$i]", '', "class='form-control text-center form-date' onkeyup='toggleCheck(this)'");
+          echo "<span class='input-group-addon deadlineBox'><input type='checkbox' name='deadlineDitto[$i]' id='deadlineDitto$i' checked/> {$lang->task->ditto}</span>";
+          ?>
+        </div>
+      </td>
+      <td class="<?php echo zget($visibleFields, 'desc', 'hidden')?> descBox"><?php echo html::textarea("desc[$i]", '', "rows='1' class='form-control autosize'");?></td>
+      <td class="<?php echo zget($visibleFields, 'pri', 'hidden')?> priBox"><?php echo html::select("pri[$i]", (array)$lang->task->priList, $pri, 'class=form-control');?></td>
+      <?php
+      $this->loadModel('flow');
+      foreach($extendFields as $extendField) echo "<td" . (($extendField->control == 'select' or $extendField->control == 'multi-select') ? " style='overflow:visible'" : '') . ">" . $this->flow->getFieldControl($extendField, '', $extendField->field . "[$i]") . "</td>";
+      ?>
+      <td class='c-actions text-left'>
+        <a href='javascript:;' onclick='addItem(this)' class='btn btn-link'><i class='icon-plus'></i></a>
+        <a href='javascript:;' onclick='deleteItem(this)' class='btn btn-link'><i class='icon icon-close'></i></a>
+      </td>
+    </tr>
+  </table>
+</div>
 <?php js::set('executionType', $execution->type);?>
 <?php js::set('storyTasks', $storyTasks);?>
 <?php js::set('mainField', 'name');?>

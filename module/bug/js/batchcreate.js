@@ -22,7 +22,7 @@ $(function()
         var link = createLink('custom', 'ajaxSaveCustomFields', 'module=bug&section=custom&key=batchCreateFields');
         $.post(link, {'fields' : fields}, function()
         {
-            checkedShowFields(fields);
+            showCheckedFields(fields);
             $('#formSetting').parent().removeClass('open');
 
             if($('#batchCreateForm table thead tr th.c-title').width() < 150) $titleCol.width(150);
@@ -47,14 +47,16 @@ $(function()
 })
 
 /**
- * Checked show fields.
+ * Show checked fields.
  *
  * @param  string fields
  * @access public
  * @return void
  */
-function checkedShowFields(fields)
+function showCheckedFields(fields)
 {
+    showFields = fields;
+
     var fieldList = ',' + fields + ',';
     $('#formSettingForm > .checkboxes > .checkbox-primary > input').each(function()
     {
