@@ -36,17 +36,21 @@ class jobModel extends model
     /**
      * Get job list.
      *
+     * @param  int    $repoID
      * @param  string $orderBy
      * @param  object $pager
+     * @param  string $engine
+     * @param  string $pipeline
      * @access public
      * @return array
      */
-    public function getList($orderBy = 'id_desc', $pager = null, $engine = '', $pipeline = '')
+    public function getList($repoID = 0, $orderBy = 'id_desc', $pager = null, $engine = '', $pipeline = '')
     {
         return $this->dao->select('t1.*, t2.name as repoName, t3.name as jenkinsName')->from(TABLE_JOB)->alias('t1')
             ->leftJoin(TABLE_REPO)->alias('t2')->on('t1.repo=t2.id')
             ->leftJoin(TABLE_PIPELINE)->alias('t3')->on('t1.server=t3.id')
             ->where('t1.deleted')->eq('0')
+            ->beginIF($repoID)->andWhere('t1.repo')->eq($repoID)->fi()
             ->beginIF($engine)->andWhere('t1.engine')->eq($engine)->fi()
             ->beginIF($pipeline)->andWhere('t1.pipeline')->eq($pipeline)->fi()
             ->orderBy($orderBy)

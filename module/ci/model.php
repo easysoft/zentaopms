@@ -25,6 +25,8 @@ class ciModel extends model
             session_write_close();
         }
         common::setMenuVars('devops', $this->session->repoID);
+
+        $this->lang->switcherMenu = $this->loadModel('repo')->getSwitcher($this->session->repoID);
     }
 
     /**

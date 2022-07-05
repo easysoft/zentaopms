@@ -378,6 +378,8 @@ $config->objectTables['apistruct']    = TABLE_APISTRUCT;
 
 $config->newFeatures = array('introduction', 'tutorial', 'youngBlueTheme', 'visions');
 
+$config->pipelineTypeList = array('gitlab', 'sonarqube', 'jenkins');
+
 /* Program privs.*/
 $config->programPriv = new stdclass();
 $config->programPriv->scrum     = array('story', 'projectstory', 'projectrelease', 'project', 'execution', 'build', 'bug', 'testcase', 'testreport', 'doc', 'repo', 'meeting', 'stakeholder', 'testtask');
