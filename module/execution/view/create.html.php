@@ -46,7 +46,7 @@
 <?php js::set('systemMode', $config->systemMode);?>
 <?php js::set('projectID', $projectID);?>
 <?php js::set('copyExecutionID', $copyExecutionID);?>
-<?php js::set('copyNoExecution', $lang->execution->copyNoExecution);?>
+<?php js::set('cancelCopy', $lang->execution->cancelCopy);?>
 <div id='mainContent' class='main-content'>
   <div class='center-block'>
     <div class='main-header'>

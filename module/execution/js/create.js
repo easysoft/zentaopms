@@ -182,7 +182,7 @@ function subString(title, stringLength)
  */
 function loadProjectExecutions(projectID)
 {
-    $.get(createLink('execution', 'ajaxGetProjectExecutions', 'projectID=' + projectID + '&$copyExecutionID' + copyExecutionID), function(data)
+    $.get(createLink('execution', 'ajaxGetCopyProjectExecutions', 'projectID=' + projectID + '&$copyExecutionID' + copyExecutionID), function(data)
     {
         if(data != '[]')
         {
@@ -190,6 +190,10 @@ function loadProjectExecutions(projectID)
             $("#copyProjects > div[data-id != '']").remove();
             $(".model-body").remove();
             var data = JSON.parse(data);
+            if(copyExecutionID != 0 )
+            {
+                $('#copyProjects').append("<div class='col-md-4 col-sm-6'><a href='javascript:;' data-id='' class='cancel'><i class='icon-ban-circle'></i>" + cancelCopy + "</a></div>");
+            }
             $.each(data, function(id, execution)
             {
                 var type    = execution.type == 'stage' ? 'waterfall' : execution.type;

@@ -32,3 +32,4 @@
 #dateRangeOption {vertical-align: top; padding-top: 13px;}
 #copyProjectModal .projectSelect {display: inline-block; margin-left: 10px; width: 20%;}
 #copyProjectModal .titleBox{position: relative; bottom: 3px; display: inline-block;}
+a.chosen-single > div > b {top: -4px !important;}
