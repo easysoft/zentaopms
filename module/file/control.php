@@ -296,11 +296,13 @@ class file extends control
      * @access public
      * @return void
      */
-    public function printFiles($files, $fieldset, $object = null)
+    public function printFiles($files, $fieldset, $object = null, $method = 'view')
     {
         $this->view->files    = $files;
         $this->view->fieldset = $fieldset;
         $this->view->object   = $object;
+
+        if($method == 'view') return $this->display('file', 'viewfiles');
         $this->display();
     }
 
