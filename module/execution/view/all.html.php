@@ -73,12 +73,15 @@ js::set('isCNLang', !$this->loadModel('common')->checkNotCN())
   <div class="table-empty-tip">
     <p>
       <span class="text-muted"><?php echo $from == 'execution' ? $lang->execution->noExecutions : $lang->execution->noExecution;?></span>
-      <?php if(common::hasPriv('programplan', 'create') and $isStage):?>
-      <?php echo html::a($this->createLink('programplan', 'create', "projectID=$projectID&productID=$productID"), "<i class='icon icon-plus'></i> " . $lang->programplan->create, '', "class='btn btn-info'");?>
-      <?php else: ?>
-      <?php if(common::hasPriv('execution', 'create')):?>
-      <?php echo html::a($this->createLink('execution', 'create', "projectID=$projectID"), "<i class='icon icon-plus'></i> " . (($from == 'execution' and $config->systemMode == 'new') ? $lang->execution->createExec : $lang->execution->create), '', "class='btn btn-info' data-app='execution'");?>
-      <?php endif;?>
+      <?php $statusList = array("doing", "closed", "suspended");?>
+      <?php if(!in_array($status, $statusList)):?>
+        <?php if(common::hasPriv('programplan', 'create') and $isStage):?>
+        <?php echo html::a($this->createLink('programplan', 'create', "projectID=$projectID&productID=$productID"), "<i class='icon icon-plus'></i> " . $lang->programplan->create, '', "class='btn btn-info'");?>
+        <?php else: ?>
+          <?php if(common::hasPriv('execution', 'create')):?>
+          <?php echo html::a($this->createLink('execution', 'create', "projectID=$projectID"), "<i class='icon icon-plus'></i> " . (($from == 'execution' and $config->systemMode == 'new') ? $lang->execution->createExec : $lang->execution->create), '', "class='btn btn-info' data-app='execution'");?>
+          <?php endif;?>
+        <?php endif;?>
       <?php endif;?>
     </p>
   </div>

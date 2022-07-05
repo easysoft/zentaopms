@@ -198,7 +198,8 @@ body {margin-bottom: 25px;}
     <div class="table-empty-tip">
       <p>
         <span class="text-muted"><?php echo $lang->task->noTask;?></span>
-        <?php if($canBeChanged and common::hasPriv('task', 'create')):?>
+        <?php $statusList = array("doing", "closed");?>
+        <?php if($canBeChanged and common::hasPriv('task', 'create') and !in_array($status, $statusList)):?>
         <?php echo html::a($taskCreateLink, "<i class='icon icon-plus'></i> " . $lang->task->create, '', "class='btn btn-info'");?>
         <?php endif;?>
       </p>
