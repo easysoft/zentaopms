@@ -389,7 +389,8 @@ class testsuiteModel extends model
             ->fetchGroup('fromCaseID', 'module');
         foreach($importedModules as $fromCaseID => $modules) $importedModules[$fromCaseID] = array_combine(array_keys($modules), array_keys($modules));
 
-        $modules = $this->loadModel('tree')->getOptionMenu($productID, 'case', 0, $branch);
+        $modules          = $this->loadModel('tree')->getOptionMenu($productID, 'case', 0, $branch);
+        $modules['ditto'] = $this->lang->testcase->ditto;
 
         $canImportModules = array();
         foreach($importedModules as $caseID => $caseModules) $canImportModules[$caseID] = array_diff_key($modules, $importedModules[$caseID]);

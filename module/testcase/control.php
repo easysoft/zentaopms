@@ -1892,6 +1892,7 @@ class testcase extends control
 
         $this->loadModel('testsuite');
         foreach($branches as $branchID => $branchName) $canImportModules[$branchID] = $this->testsuite->getCanImportModules($productID, $libID, $branchID);
+        if(empty($branches)) $canImportModules[0] = $this->testsuite->getCanImportModules($productID, $libID, 0);
 
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);

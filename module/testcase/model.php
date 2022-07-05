@@ -1608,9 +1608,10 @@ class testcaseModel extends model
             $caseModules[$branch] = $this->loadModel('testsuite')->getCanImportModules($productID, $libID,  $branch);
         }
 
-        $libCases    = $this->dao->select('*')->from(TABLE_CASE)->where('deleted')->eq(0)->andWhere('id')->in($data->caseIdList)->fetchAll('id');
-        $libSteps    = $this->dao->select('*')->from(TABLE_CASESTEP)->where('`case`')->in($data->caseIdList)->orderBy('id')->fetchGroup('case');
-        $libFiles    = $this->dao->select('*')->from(TABLE_FILE)->where('objectID')->in($data->caseIdList)->andWhere('objectType')->eq('testcase')->fetchGroup('objectID', 'id');
+        $libCases = $this->dao->select('*')->from(TABLE_CASE)->where('deleted')->eq(0)->andWhere('id')->in($data->caseIdList)->fetchAll('id');
+        $libSteps = $this->dao->select('*')->from(TABLE_CASESTEP)->where('`case`')->in($data->caseIdList)->orderBy('id')->fetchGroup('case');
+        $libFiles = $this->dao->select('*')->from(TABLE_FILE)->where('objectID')->in($data->caseIdList)->andWhere('objectType')->eq('testcase')->fetchGroup('objectID', 'id');
+        $imported = '';
         foreach($libCases as $libCaseID => $case)
         {
             $case->fromCaseID      = $case->id;
@@ -1620,7 +1621,12 @@ class testcaseModel extends model
             if(isset($data->branch[$case->id])) $case->branch = $data->branch[$case->id];
             unset($case->id);
 
-            if(isset($caseModules[$data->branch[$i]][$case->fromCaseID]) and !isset($caseModules[$data->branch[$i]][$case->fromCaseID][$case->module])) continue;
+            $branch = isset($case->branch) ? $case->branch : 0;
+            if(isset($caseModules[$branch][$case->fromCaseID]) and !isset($caseModules[$branch][$case->fromCaseID][$case->module]))
+            {
+                $imported .= "$case->fromCaseID,";
+                continue;
+            }
 
             $this->dao->insert(TABLE_CASE)->data($case)->autoCheck()->exec();
 
@@ -1664,6 +1670,11 @@ class testcaseModel extends model
                 }
                 $this->loadModel('action')->create('case', $caseID, 'fromlib', '', $case->lib);
             }
+        }
+        if(!empty($imported))
+        {
+            $imported = trim($imported, ',');
+            return print(js::error(sprintf($this->lang->testcase->importedCases, $imported)));
         }
     }
 
