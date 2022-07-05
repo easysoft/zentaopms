@@ -410,11 +410,12 @@ class tree extends control
      * @access public
      * @return void
      */
-    public function updateOrder()
+    public function updateOrder($rootID = 0, $viewType = '', $moduleID = 0)
     {
         if(!empty($_POST))
         {
             $this->tree->updateOrder($_POST['orders']);
+            if($viewType == 'story' and !empty($rootID) and !empty($moduleID)) $this->loadModel('action')->create('module', $rootID, 'moved', '', $moduleID);
             die(js::reload('parent'));
         }
     }
@@ -614,5 +615,19 @@ class tree extends control
             ->andWhere('deleted')->eq(0)
             ->fetchAll('id');
         echo json_encode($modules);
+    }
+
+    /**
+     * View module histories.
+     *
+     * @param  int    $productID
+     * @access public
+     * @return void
+     */
+    public function viewHistory($productID)
+    {
+        $this->view->actions = $this->loadModel('action')->getList('module', $productID);
+        $this->view->users   = $this->loadModel('user')->getPairs('noletter');
+        $this->display();
     }
 }

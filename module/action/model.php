@@ -282,6 +282,11 @@ class actionModel extends model
                     if($extra == 'project') $record['project'] = $objectID;
                     if($extra == 'sprint' or $extra == 'stage') $record['execution'] = $objectID;
                     break;
+                case 'module':
+                    if($actionType != 'deleted') $module = $this->dao->select('*')->from(TABLE_MODULE)->where('id')->in($extra)->fetch();
+                    if($actionType == 'deleted') $module = $this->dao->select('*')->from(TABLE_MODULE)->where('id')->eq($objectID)->fetch();
+                    if(!empty($module) and $module->type == 'story') $record['product'] = $module->root;
+                    break;
                 default:
                     $result = $this->dao->select('*')->from($this->config->objectTables[$objectType])->where('id')->eq($objectID)->fetch();
                     $record['product']   = zget($result, 'product', '0');
@@ -318,13 +323,19 @@ class actionModel extends model
      */
     public function getList($objectType, $objectID)
     {
+        $modules   = $objectType == 'module' ? $this->dao->select('id')->from(TABLE_MODULE)->where('root')->eq($objectID)->fetchPairs('id') : array();
         $commiters = $this->loadModel('user')->getCommiters();
         $actions   = $this->dao->select('*')->from(TABLE_ACTION)
             ->beginIF($objectType == 'project')
             ->where("objectType IN('project', 'testtask', 'build')")
             ->andWhere('project')->eq((int)$objectID)
             ->fi()
-            ->beginIF($objectType != 'project')
+            ->beginIF($objectType == 'module')
+            ->where('objectType')->eq($objectType)
+            ->andWhere('((action')->ne('deleted')->andWhere('objectID')->eq((int)$objectID)->markRight(1)
+            ->orWhere('(action')->eq('deleted')->andWhere('objectID')->in($modules)->markRight(1)->markRight(1)
+            ->fi()
+            ->beginIF($objectType != 'project' and $objectType != 'module')
             ->where('objectType')->eq($objectType)
             ->andWhere('objectID')->eq((int)$objectID)
             ->fi()
@@ -836,6 +847,10 @@ class actionModel extends model
             {
                 $desc = $this->lang->$objectType->action->changebychild;
             }
+            elseif($action->objectType == 'module' and in_array($action->action, array('created', 'moved', 'deleted')))
+            {
+                $desc = $this->lang->$objectType->action->{$action->action};
+            }
             elseif($action->action == 'createmr' and strpos($action->extra, '::') !== false)
             {
                 list($mrCreatedDate, $mrActor, $mrLink) = explode('::', $action->extra);
@@ -919,6 +934,21 @@ class actionModel extends model
                     list($extra, $isSuperReviewer) = explode('|', $extra);
                     $actionDesc = str_replace('$extra', $desc['extra'][$extra], $desc['main']);
                 }
+            }
+
+            if($action->objectType == 'module' and strpos(',created,moved,', ",$action->action,") !== false)
+            {
+                $moduleNames = $this->loadModel('tree')->getOptionMenu($action->objectID, 'story', 0, 0, '');
+                $modules     = explode(',', $action->extra);
+                $moduleNames = array_intersect_key($moduleNames, array_combine($modules, $modules));
+                $moduleNames = implode(', ', $moduleNames);
+                $actionDesc  = str_replace('$extra', $moduleNames, $desc['main']);
+            }
+            elseif($action->objectType == 'module' and $action->action == 'deleted')
+            {
+                $module      = $this->dao->select('*')->from(TABLE_MODULE)->where('id')->eq($action->objectID)->fetch();
+                $moduleNames = $this->loadModel('tree')->getOptionMenu($module->root, 'story', 0, 0, '');
+                $actionDesc  = str_replace('$extra', zget($moduleNames, $action->objectID), $desc['main']);
             }
             echo $actionDesc;
         }
@@ -1203,6 +1233,11 @@ class actionModel extends model
                 $objectTable = zget($this->config->objectTables, $objectType);
                 $objectName  = $objectType == 'productplan' ? 'title' : 'name';
                 $action->objectName = $this->dao->select($objectName)->from($objectTable)->where('id')->eq($action->extra)->fetch($objectName);
+            }
+            elseif($action->objectType == 'module' and !empty($action->extra))
+            {
+                $modules = $this->dao->select('id,name')->from(TABLE_MODULE)->where('id')->in(explode(',', $action->extra))->fetchPairs('id');
+                $action->objectName = implode(',', $modules);
             }
 
             $projectID = isset($relatedProjects[$action->objectType][$action->objectID]) ? $relatedProjects[$action->objectType][$action->objectID] : 0;
@@ -1611,6 +1646,7 @@ class actionModel extends model
         {
             $fieldName = $history->field;
             $history->fieldLabel = (isset($this->lang->$objectType) && isset($this->lang->$objectType->$fieldName)) ? $this->lang->$objectType->$fieldName : $fieldName;
+            if($objectType == 'module') $history->fieldLabel = $this->lang->tree->$fieldName;
             if(($length = strlen($history->fieldLabel)) > $maxLength) $maxLength = $length;
             $history->diff ? $historiesWithDiff[] = $history : $historiesWithoutDiff[] = $history;
         }
