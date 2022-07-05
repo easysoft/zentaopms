@@ -26,7 +26,7 @@ class stakeholderModel extends model
         {
             if(!$account)
             {
-                dao::$errors[] = $this->lang->stakeholder->userEmpty;
+                dao::$errors['user'] = $this->lang->stakeholder->userEmpty;
                 return false;
             }
             $user = new stdclass();
@@ -43,7 +43,7 @@ class stakeholderModel extends model
             {
                 if(!$data->name)
                 {
-                    dao::$errors[] = $this->lang->stakeholder->nameEmpty;
+                    dao::$errors['name'] = $this->lang->stakeholder->nameEmpty;
                     return false;
                 }
 
