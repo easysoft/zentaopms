@@ -3195,7 +3195,7 @@ class bugModel extends model
                 echo zget($users, $bug->openedBy);
                 break;
             case 'openedDate':
-                echo substr($bug->openedDate, 5, 11);
+                echo helper::isZeroDate($bug->openedDate) ? '' : substr($bug->openedDate, 5, 11);
                 break;
             case 'openedBuild':
                 $builds = array_flip($builds);
@@ -3216,10 +3216,10 @@ class bugModel extends model
                 $this->printAssignedHtml($bug, $users);
                 break;
             case 'assignedDate':
-                echo substr($bug->assignedDate, 5, 11);
+                echo helper::isZeroDate($bug->assignedDate) ? '' : substr($bug->assignedDate, 5, 11);
                 break;
             case 'deadline':
-                echo $bug->deadline;
+                echo helper::isZeroDate($bug->deadline) ? '' : substr($bug->deadline, 5, 11);
                 break;
             case 'resolvedBy':
                 echo zget($users, $bug->resolvedBy, $bug->resolvedBy);
@@ -3228,7 +3228,7 @@ class bugModel extends model
                 echo zget($this->lang->bug->resolutionList, $bug->resolution);
                 break;
             case 'resolvedDate':
-                echo substr($bug->resolvedDate, 5, 11);
+                echo helper::isZeroDate($bug->resolvedDate) ? '' : substr($bug->resolvedDate, 5, 11);
                 break;
             case 'resolvedBuild':
                 echo $bug->resolvedBuild;
@@ -3237,13 +3237,13 @@ class bugModel extends model
                 echo zget($users, $bug->closedBy);
                 break;
             case 'closedDate':
-                echo substr($bug->closedDate, 5, 11);
+                echo helper::isZeroDate($bug->closedDate) ? '' : substr($bug->closedDate, 5, 11);
                 break;
             case 'lastEditedBy':
                 echo zget($users, $bug->lastEditedBy);
                 break;
             case 'lastEditedDate':
-                echo substr($bug->lastEditedDate, 5, 11);
+                echo helper::isZeroDate($bug->lastEditedDate) ? '' : substr($bug->lastEditedDate, 5, 11);
                 break;
             case 'actions':
                 echo $this->buildOperateMenu($bug, 'browse');

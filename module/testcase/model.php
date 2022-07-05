@@ -2013,13 +2013,13 @@ class testcaseModel extends model
                 echo zget($users, $case->reviewedBy);
                 break;
             case 'reviewedDate':
-                echo substr($case->reviewedDate, 5, 11);
+                 echo helper::isZeroDate($case->reviewedDate) ? '' : substr($case->reviewedDate, 5, 11);
                 break;
             case 'lastEditedBy':
                 echo zget($users, $case->lastEditedBy);
                 break;
             case 'lastEditedDate':
-                echo substr($case->lastEditedDate, 5, 11);
+                 echo helper::isZeroDate($case->lastEditedDate) ? '' : substr($case->lastEditedDate, 5, 11);
                 break;
             case 'lastRunner':
                 echo zget($users, $case->lastRunner);
