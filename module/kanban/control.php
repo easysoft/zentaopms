@@ -650,7 +650,10 @@ class kanban extends control
             if(dao::isError()) $this->send(array('message' => dao::getError(), 'result' => 'fail'));
 
             $this->loadModel('action')->create('kanbanColumn', $columnID, 'Created');
-            $this->send(array('message' => $this->lang->saveSuccess, 'result' => 'success', 'locate' => 'parent'));
+
+            $region      = $this->kanban->getRegionByID($column->region);
+            $kanbanGroup = $this->kanban->getKanbanData($region->kanban, $region->id);
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => array('target' => 'parent', 'name' => 'updateRegion', 'params' => array($column->region, $kanbanGroup))));
         }
 
         $this->view->title    = $this->lang->kanban->createColumn;
@@ -662,6 +665,7 @@ class kanban extends control
     /**
      * Split column.
      *
+     * @param  int    $columnID
      * @access public
      * @return void
      */
@@ -671,7 +675,11 @@ class kanban extends control
         {
             $this->kanban->splitColumn($columnID);
             if(dao::isError()) $this->send(array('message' => dao::getError(), 'result' => 'fail'));
-            $this->send(array('message' => $this->lang->saveSuccess, 'result' => 'success', 'locate' => 'parent'));
+
+            $column      = $this->kanban->getColumnById($columnID);
+            $region      = $this->kanban->getRegionByID($column->region);
+            $kanbanGroup = $this->kanban->getKanbanData($region->kanban, $region->id);
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => array('target' => 'parent', 'name' => 'updateRegion', 'params' => array($column->region, $kanbanGroup))));
         }
 
         $this->display();
@@ -711,8 +719,10 @@ class kanban extends control
 
             $this->loadModel('action')->create('kanbancolumn', $columnID, 'archived');
 
-            if(isonlybody()) return print(js::reload('parent.parent'));
-            return print(js::reload('parent'));
+            $region      = $this->kanban->getRegionByID($column->region);
+            $kanbanGroup = $this->kanban->getKanbanData($region->kanban, $region->id);
+            $kanbanGroup = json_encode($kanbanGroup);
+            return print("<script>parent.updateRegion({$column->region}, $kanbanGroup)</script>");
         }
     }
 
@@ -795,7 +805,10 @@ class kanban extends control
 
             $this->dao->delete()->from(TABLE_KANBANCOLUMN)->where('id')->eq($columnID)->exec();
 
-            return print(js::reload('parent'));
+            $region      = $this->kanban->getRegionByID($column->region);
+            $kanbanGroup = $this->kanban->getKanbanData($region->kanban, $region->id);
+            $kanbanGroup = json_encode($kanbanGroup);
+            return print("<script>parent.updateRegion({$column->region}, $kanbanGroup)</script>");
         }
     }
 
