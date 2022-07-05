@@ -2868,7 +2868,7 @@ class gitlabModel extends model
      */
     public function getGitlabMenu($gitlabID = 0, $type = 'project')
     {
-        $html    = '<div class="btn-toolbar pull-left">';
+        $html = '<div class="btn-toolbar pull-left">';
 
         /* Gitlab server list. */
         $gitlabs = $this->getPairs();
