@@ -72,8 +72,11 @@ class repoModel extends model
      */
     public function getSwitcher($repoID)
     {
-        $currentModule   = $this->app->moduleName;
-        $currentMethod   = $this->app->methodName;
+        $currentModule = $this->app->moduleName;
+        $currentMethod = $this->app->methodName;
+        if(!in_array($currentModule, $this->config->repo->switcherModuleList)) return '';
+        if($currentModule == 'repo' and !in_array($currentMethod, $this->config->repo->switcherMethodList)) return '';
+
         $currentRepo     = $this->getRepoByID($repoID);
         $currentRepoName = $currentRepo->name;
 
@@ -2102,57 +2105,5 @@ class repoModel extends model
         $executions = $this->loadModel('execution')->getList(0, 'all', 'undone', 0, $product, $branch);
         foreach($executions as $execution) $pairs[$execution->id] = $execution->name;
         return $pairs;
-    }
-
-    /**
-     * Get repos select menu.
-     *
-     * @param  object $repo
-     * @param  int    $objectID
-     * @param  string $link
-     * @param  string $scm
-     * @access public
-     * @return string
-     */
-    public function getReposMenu($repo, $objectID = 0, $link = '', $scm = '')
-    {
-        if(empty($link)) $link = helper::createLink('repo', 'browse', "repoID=%s&branchID=&objectID=$objectID");
-        $html  = '<div class="table-row">';
-        $html .= '<div class="table-col col-left">';
-        $html .= '<div class="list-group" id="repoList">';
-        $html .= "<ul class='tree tree-angles' data-ride='tree' data-idx='0'>";
-
-        $tabName    = $this->app->tab;
-        $reposGroup = $this->getRepoGroup($tabName, $objectID);
-        foreach($reposGroup as $groupName => $group)
-        {
-            if(empty($group)) continue;
-            if($scm and strtolower($groupName) != strtolower($scm)) continue;
-
-            $html .= "<li data-idx='$groupName' data-id='$groupName' class='has-list open in'>";
-            $html .= "<i class='list-toggle icon'></i>";
-            $html .= "<div class='label-type'>";
-            $html .= "<a class='text-muted not-list-item'>{$groupName}</a>";
-            $html .= "<span class='label label-outline'> {$this->lang->repo->type}</span>";
-            $html .= "</div>";
-            $html .= "<ul data-idx='$groupName'>";
-            foreach($group as $id => $repoName)
-            {
-                $isSelected = $id == $repo->id ? 'selected' : '';
-                $repoName   = trim($repoName);
-
-                $html .= "<li data-idx='$repoName' data-id='$groupName-$repoName'>";
-                $html .= "<a href='" . sprintf($link, $id) . "' id='$groupName-$repoName' class='$isSelected text-ellipsis' title='$repoName' data-key='$repoName' data-app='{$tabName}'>$repoName</a>";
-                $html .= "</li>";
-            }
-            $html .= '</ul>';
-            $html .= '</li>';
-        }
-        $html .= '</ul>';
-        $html .= '</div>';
-        $html .= '</div>';
-        $html .= '</div>';
-        $html .= "<script>$('.tree').tree();</script>";
-        return $html;
     }
 }

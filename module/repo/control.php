@@ -78,9 +78,6 @@ class repo extends control
      */
     public function maintain($objectID = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
-        $this->lang->switcherMenu = '';
-        if(common::hasPriv('repo', 'create')) $this->lang->TRActions = html::a(helper::createLink('repo', 'create'), "<i class='icon icon-plus'></i> " . $this->lang->repo->create, '', "class='btn btn-primary'");
-
         $repoID = $this->repo->saveState(0, $objectID);
         if($this->viewType !== 'json') $this->commonAction($repoID, $objectID);
 
@@ -1141,11 +1138,30 @@ class repo extends control
      */
     public function ajaxGetDropMenu($repoID, $module = 'repo', $method = 'browse')
     {
-        $repo = $this->repo->getRepoByID($repoID);
-        $link = $this->createLink($module, $method, "repoID=%s");
+        if($module == 'mr')  $method = 'browse';
+        if($module == 'job') $method = 'browse';
+        if($module == 'compile' and $method == 'logs') $method = 'browse';
+        if($module == 'bug' and $method == 'view')
+        {
+            $module = 'repo';
+            $method = 'review';
+        }
 
-        $reposHtml = $this->repo->getReposMenu($repo, 0, $link);
-        return print($reposHtml);
+        /* Get repo group by type. */
+        $repoGroup = $this->repo->getRepoGroup($this->app->tab);
+        if($module == 'mr')
+        {
+            foreach($repoGroup as $type => $group)
+            {
+                if(strtolower($type) != 'gitlab') unset($repoGroup[$type]);
+            }
+        }
+
+        $this->view->repoID    = $repoID;
+        $this->view->repoGroup = $repoGroup;
+        $this->view->link      = $this->createLink($module, $method, "repoID=%s");
+
+        $this->display();
     }
 
     /**
@@ -1180,7 +1196,6 @@ class repo extends control
                 }
             }
         }
-
 
         if(!$projects) $this->send(array('message' => array()));
         $projectIdList = $projectIdList ? explode(',', $projectIdList) : null;
