@@ -18,3 +18,6 @@ td.delayed {background: #e84e0f !important; color: white;}
 .c-status, .c-date, .c-user-short {width: 70px;}
 .c-project {width: 130px;}
 #taskTable .assigned-title{width: 110px; padding-left: 29px;}
+
+html[lang="en"] .c-date {width: 80px;}
+html[lang="en"] .c-user-short {width: 88px;}
