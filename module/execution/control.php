@@ -412,13 +412,26 @@ class execution extends control
             }
             elseif($groupBy == 'assignedTo' and $filter == 'undone')
             {
+                $multiTaskCount = array();
                 foreach($groupTasks as $assignedTo => $tasks)
                 {
                     foreach($tasks as $i => $task)
                     {
                         if($task->status != 'wait' and $task->status != 'doing')
                         {
-                            $allCount -= 1;
+                            if($task->mode == 'multi')
+                            {
+                                if(!isset($multiTaskCount[$task->id]))
+                                {
+                                    $multiTaskCount[$task->id] = true;
+                                    $allCount -= 1;
+                                }
+                            }
+                            else
+                            {
+                                $allCount -= 1;
+                            }
+
                             unset($groupTasks[$assignedTo][$i]);
                         }
                     }
@@ -805,6 +818,14 @@ class execution extends control
         }
         $actionURL    = $this->createLink('execution', 'story', "executionID=$executionID&orderBy=$orderBy&type=bySearch&queryID=myQueryID");
         $branchGroups = $this->loadModel('branch')->getByProducts(array_keys($products));
+        $branchOption = array();
+        foreach($branchGroups as $productID => $branches)
+        {
+            foreach($branches as $branchID => $name)
+            {
+                $branchOption[$branchID] = $name;
+            }
+        }
         $this->execution->buildStorySearchForm($products, $branchGroups, $modules, $queryID, $actionURL, 'executionStory', $executionID);
 
         /* Header and position. */
@@ -867,9 +888,10 @@ class execution extends control
         $this->view->pager             = $pager;
         $this->view->setModule         = true;
         $this->view->branchGroups      = $branchGroups;
+        $this->view->branchOption      = $branchOption;
         $this->view->canBeChanged      = common::canModify('execution', $execution); // Determines whether an object is editable.
         $this->view->showBranch        = $showBranch;
-        $this->view->storyStages     = $this->product->batchGetStoryStage($stories);
+        $this->view->storyStages       = $this->product->batchGetStoryStage($stories);
 
         $this->display();
     }
@@ -1281,6 +1303,64 @@ class execution extends control
         $this->view->burns = $this->execution->computeBurn();
         if($reload == 'yes') return print(js::reload('parent'));
         $this->display();
+    }
+
+    /**
+     * Kanban CFD.
+     *
+     * @param  int    $executionID
+     * @param  string $type
+     * @access public
+     * @return void
+     */
+    public function cfd($executionID = 0, $type = 'story')
+    {
+        $execution   = $this->commonAction($executionID);
+        $executionID = $execution->id;
+
+        $this->loadModel('kanban');
+        $this->app->loadClass('date');
+
+        $end = helper::today() > $execution->end ? $execution->end : helper::today();
+        if(helper::today() > $execution->end)
+        {
+            if(date($execution->end, strtotime('-14 days')) > $execution->begin)
+            {
+                $begin = date($execution->end, strtotime('-14 days'));
+            }
+            else
+            {
+                $begin = $execution->begin;
+            }
+        }
+        elseif(($execution->begin < helper::today()) and (helper::today() < $execution->end))
+        {
+            $begin = (date('Y-m-d', strtotime('-14 days')) < $execution->begin) ? $execution->begin : date('Y-m-d', strtotime('-14 days'));
+        }
+
+        $dateList = date::getDateList($begin, $end, 'Y-m-d', '');
+
+        $this->view->title         = $this->lang->execution->CFD;
+        $this->view->type          = $type;
+        $this->view->execution     = $execution;
+        $this->view->executionName = $execution->name;
+        $this->view->executionID   = $executionID;
+        $this->view->chartData     = $this->execution->buildCFDData($executionID, $dateList, $type);
+        $this->display();
+    }
+
+    /**
+     * Compute cfd datas.
+     *
+     * @param  string $reload
+     * @param  int    $executionID
+     * @access public
+     * @return void
+     */
+    public function computeCFD($reload = 'no', $executionID = 0)
+    {
+        $this->execution->computeCFD($executionID);
+        if($reload == 'yes') return print(js::reload('parent'));
     }
 
     /**

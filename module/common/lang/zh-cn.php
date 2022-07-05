@@ -84,6 +84,7 @@ $lang->waterfallModel = '瀑布模型';
 $lang->scrumModel     = '敏捷模型';
 $lang->all            = '所有';
 $lang->viewDetails    = '查看详情';
+$lang->app            = '应用';
 
 $lang->actions         = '操作';
 $lang->restore         = '恢复默认';
@@ -279,7 +280,7 @@ $lang->testcase->caselib   = '用例库';
 
 $lang->devops->compile  = '构建';
 $lang->devops->mr       = '合并请求';
-$lang->devops->repo     = '版本库';
+$lang->devops->repo     = '代码库';
 $lang->devops->rules    = '指令';
 $lang->devops->settings = '合并请求设置';
 $lang->devops->set      = '设置';

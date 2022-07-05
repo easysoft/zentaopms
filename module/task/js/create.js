@@ -1,3 +1,30 @@
+$(function()
+{
+    $('#customField').click(function()
+    {
+        hiddenRequireFields();
+    });
+
+    /* Implement a custom form without feeling refresh. */
+    $('#formSettingForm .btn-primary').click(function()
+    {
+        var fields = '';
+        $('#formSettingForm > .checkboxes > .checkbox-primary > input:checked').each(function()
+        {
+            fields += ',' + $(this).val();
+        });
+
+        var link = createLink('custom', 'ajaxSaveCustomFields', 'module=task&section=custom&key=createFields');
+        $.post(link, {'fields' : fields}, function()
+        {
+            showCheckedFields(fields);
+            $('#formSetting').parent().removeClass('open');
+        });
+
+        return false;
+    });
+})
+
 /**
  * Load module, stories and members.
  *

@@ -16,10 +16,12 @@
   #formSettingForm .checkboxes {padding: 10px 3px;}
   #formSettingForm .checkbox-primary {width: 50%; float: left; margin: 3px 0;}
   #formSetting .btn {margin-right: 8px;}
+  [lang^='de'] #formSetting {min-width: 360px;}
+  [lang^='fr'] #formSetting {min-width: 320px;}
   </style>
   <button type="button" title="<?php echo $lang->customField;?>" class="btn btn-link" id="customField" data-toggle="dropdown"><i class="icon icon-cog"></i></button>
   <div class="dropdown-menu pull-right" id="formSetting">
-    <form class='with-padding load-indicator' id='formSettingForm' method='post' target='hiddenwin' action='<?php echo $customLink?>'>
+    <form class='with-padding load-indicator not-watch' id='formSettingForm' method='post' target='hiddenwin' action='<?php echo $customLink?>'>
       <div><?php echo $lang->customField;?></div>
       <div class="clearfix checkboxes">
         <?php echo html::checkbox('fields', $customFields, $showFields);?>
@@ -35,6 +37,16 @@
   var $formSetting = $('#formSetting');
   $formSetting.on('click', '.close-dropdown', function()
   {
+      if(showFields != undefined)
+      {
+          var fieldList = ',' + showFields + ',';
+          $('#formSettingForm > .checkboxes > .checkbox-primary > input:visible').each(function()
+          {
+              var field = ',' + $(this).val() + ',';
+              $(this).prop('checked', fieldList.indexOf(field) >= 0);
+          });
+      }
+
       $formSetting.parent().removeClass('open');
   }).on('click', function(e){e.stopPropagation()});
   </script>

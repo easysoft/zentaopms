@@ -270,6 +270,7 @@ define('TABLE_PROJECTCASE',   '`' . $config->db->prefix . 'projectcase`');
 define('TABLE_TASKESTIMATE',  '`' . $config->db->prefix . 'taskestimate`');
 define('TABLE_EFFORT',        '`' . $config->db->prefix . 'effort`');
 define('TABLE_BURN',          '`' . $config->db->prefix . 'burn`');
+define('TABLE_CFD',           '`' . $config->db->prefix . 'cfd`');
 define('TABLE_BUILD',         '`' . $config->db->prefix . 'build`');
 define('TABLE_ACL',           '`' . $config->db->prefix . 'acl`');
 

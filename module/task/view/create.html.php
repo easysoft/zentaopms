@@ -17,9 +17,17 @@
 <?php js::set('blockID', $blockID);?>
 <?php js::set('teamMemberError', $lang->task->error->teamMember);?>
 <?php js::set('vision', $config->vision);?>
+<?php js::set('requiredFields', $config->task->create->requiredFields);?>
 <?php if(!empty($storyID)):?>
 <style> .title-group.required > .required:after {right: 110px;}</style>
 <?php endif;?>
+<?php
+foreach(explode(',', $config->task->create->requiredFields) as $field)
+{
+    if($field and strpos($showFields, $field) === false) $showFields .= ',' . $field;
+}
+?>
+<?php js::set('showFields', $showFields);?>
 <div id='mainContent' class='main-content'>
   <div class='center-block'>
     <div class='main-header'>
@@ -29,12 +37,6 @@
         <?php include '../../common/view/customfield.html.php';?>
       </div>
     </div>
-    <?php
-    foreach(explode(',', $config->task->create->requiredFields) as $field)
-    {
-        if($field and strpos($showFields, $field) === false) $showFields .= ',' . $field;
-    }
-    ?>
     <form class='main-form form-ajax' method='post' enctype='multipart/form-data' id='dataform'>
       <table class='table table-form'>
         <?php if($execution->type != 'kanban' or $this->config->vision == 'lite'):?>
@@ -97,8 +99,8 @@
           <td><?php echo html::hidden('status', 'wait');?></td>
         </tr>
         <?php $this->printExtendFields('', 'table', 'columns=3');?>
-        <?php if(strpos(",$showFields,", ',story,') !== false and $execution->lifetime != 'ops'):?>
-        <tr>
+        <?php $hiddenStory = (strpos(",$showFields,", ',story,') !== false and $execution->lifetime != 'ops') ? '' : 'hidden'?>
+        <tr class="<?php echo $hiddenStory?> storyBox">
           <th><?php echo $lang->task->story;?></th>
           <td colspan='3'>
             <span id='storyBox' class="<?php if(!empty($stories)) echo 'hidden';?> "><?php printf($lang->task->noticeLinkStory, html::a($this->createLink('execution', 'linkStory', "executionID=$execution->id"), $lang->execution->linkStory, '', 'class="text-primary"'), html::a("javascript:loadStories($execution->id)", $lang->refresh, '', 'class="text-primary"'));?></span>
@@ -110,7 +112,6 @@
             </div>
           </td>
         </tr>
-        <?php endif;?>
         <?php if($execution->type != 'ops'):?>
         <tr id='testStoryBox' class='hidden'>
           <th><?php echo $lang->task->selectTestStory;?></th>
@@ -174,8 +175,8 @@
                   <a href='javascript:copyStoryTitle();' id='copyButton' class='input-control-icon-right'><?php echo $lang->task->copyStoryTitle;?></a>
                   <?php echo html::hidden("storyEstimate") . html::hidden("storyDesc") . html::hidden("storyPri");?>
                 </div>
-                <?php if(strpos(",$showFields,", ',pri,') !== false): // begin print pri selector?>
-                <span class="input-group-addon fix-border br-0"><?php echo $lang->task->pri;?></span>
+                <?php $hiddenPri = strpos(",$showFields,", ',pri,') !== false ? '' : 'hidden'; // begin print pri selector?>
+                <span class="input-group-addon fix-border br-0 <?php echo $hiddenPri;?> priBox"><?php echo $lang->task->pri;?></span>
                 <?php
                 $hasCustomPri = false;
                 foreach($lang->task->priList as $priKey => $priValue)
@@ -195,9 +196,9 @@
                 }
                 ?>
                 <?php if($hasCustomPri):?>
-                <?php echo html::select('pri', (array)$priList, $task->pri, "class='form-control'");?>
+                <?php echo html::select('pri', (array)$priList, $task->pri, "class='form-control $hiddenPri'");?>
                 <?php else: ?>
-                <div class="input-group-btn pri-selector" data-type="pri">
+                <div class="input-group-btn pri-selector <?php echo $hiddenPri;?> priBox" data-type="pri">
                   <button type="button" class="btn dropdown-toggle br-0" data-toggle="dropdown">
                     <span class="pri-text"><span class="label-pri label-pri-<?php echo empty($task->pri) ? '0' : $task->pri?>" title="<?php echo $task->pri?>"><?php echo $task->pri?></span></span> &nbsp;<span class="caret"></span>
                   </button>
@@ -206,15 +207,13 @@
                   </div>
                 </div>
                 <?php endif; ?>
-                <?php endif; // end print pri selector ?>
-                <?php if(strpos(",$showFields,", ',estimate,') !== false):?>
-                <div class='table-col w-120px'>
+                <?php $hiddenEstimate = strpos(",$showFields,", ',estimate,') !== false ? '' : 'hidden';?>
+                <div class="table-col w-120px <?php echo $hiddenEstimate;?> estimateBox">
                   <div class="input-group">
                     <span class="input-group-addon fix-border br-0"><?php echo $lang->task->estimateAB;?></span>
                     <input type="text" name="estimate" id="estimate" value="<?php echo $task->estimate;?>" class="form-control" autocomplete="off">
                   </div>
                 </div>
-                <?php endif;?>
               </div>
             </div>
           </td>
@@ -231,29 +230,23 @@
           <td colspan='3'><?php echo $this->fetch('file', 'buildform');?></td>
         </tr>
         <?php
-        $hiddenEstStarted = strpos(",$showFields,", ',estStarted,') === false;
-        $hiddenDeadline   = strpos(",$showFields,", ',deadline,')   === false;
+        $hiddenEstStarted = strpos(",$showFields,", ',estStarted,') === false ? 'hidden' : '';
+        $hiddenDeadline   = strpos(",$showFields,", ',deadline,')   === false ? 'hidden' : '';
+        $hiddenDatePlan   = (!$hiddenEstStarted or !$hiddenDeadline) ? '' : 'hidden';
         ?>
-        <?php if(!$hiddenEstStarted or !$hiddenDeadline):?>
-        <tr>
+        <tr class="<?php echo $hiddenDatePlan?> datePlanBox">
           <th><?php echo $lang->task->datePlan;?></th>
           <td colspan='2'>
             <div class='input-group'>
-              <?php if(!$hiddenEstStarted):?>
-              <?php echo html::input('estStarted', $task->estStarted, "class='form-control form-date' placeholder='{$lang->task->estStarted}'");?>
-              <?php endif;?>
-              <?php if(!$hiddenEstStarted and !$hiddenDeadline):?>
-              <span class='input-group-addon fix-border'>~</span>
-              <?php endif;?>
-              <?php if(!$hiddenDeadline):?>
-              <?php echo html::input('deadline', $task->deadline, "class='form-control form-date' placeholder='{$lang->task->deadline}'");?>
-              <?php endif;?>
+              <?php echo html::input('estStarted', $task->estStarted, "class='form-control form-date $hiddenEstStarted estStartedBox' placeholder='{$lang->task->estStarted}'");?>
+              <?php $hiddenborder = (!$hiddenEstStarted and !$hiddenDeadline) ? '' : 'hidden';?>
+              <span class="input-group-addon fix-border <?php echo $hiddenborder?> borderBox">~</span>
+              <?php echo html::input('deadline', $task->deadline, "class='form-control form-date $hiddenDeadline deadlineBox' placeholder='{$lang->task->deadline}'");?>
             </div>
           </td>
         </tr>
-        <?php endif;?>
-        <?php if(strpos(",$showFields,", ',mailto,') !== false):?>
-        <tr>
+        <?php $hiddenMailto = strpos(",$showFields,", ',mailto,') !== false ? '' : 'hidden';?>
+        <tr class="<?php echo $hiddenMailto?> mailtoBox">
           <th><?php echo $lang->story->mailto;?></th>
           <td colspan='3'>
             <div class="input-group">
@@ -262,7 +255,6 @@
             </div>
           </td>
         </tr>
-        <?php endif;?>
         <?php if(!isonlybody()):?>
         <tr id='after-tr'>
           <th><?php echo $lang->task->afterSubmit;?></th>

@@ -325,8 +325,9 @@ class gitlab extends control
             if(!$openID) return print(js::alert($this->lang->gitlab->mustBindUser) . js::locate($this->createLink('gitlab', 'browse')));
         }
 
-        $groups      = $this->gitlab->apiGetGroups($gitlabID, $orderBy);
-        $adminGroups = $this->gitlab->apiGetGroups($gitlabID, $orderBy, 'owner');
+        $keyword     = fixer::input('post')->setDefault('keyword', '')->get('keyword');
+        $groups      = $this->gitlab->apiGetGroups($gitlabID, $orderBy, '', $keyword);
+        $adminGroups = $this->gitlab->apiGetGroups($gitlabID, $orderBy, 'owner', $keyword);
 
         $adminGroupIDList = array();
         foreach($adminGroups as $group) $adminGroupIDList[] = $group->id;
@@ -337,6 +338,7 @@ class gitlab extends control
         $this->view->gitlabGroupList  = $groups;
         $this->view->adminGroupIDList = $adminGroupIDList;
         $this->view->orderBy          = $orderBy;
+        $this->view->keyword          = $keyword;
         $this->display();
     }
 
@@ -558,11 +560,22 @@ class gitlab extends control
             if(!$user->is_admin) $isAdmin = false;
         }
 
+        $keyword = fixer::input('post')->setDefault('keyword', '')->get('keyword');
+        $users   = $this->gitlab->apiGetUsers($gitlabID, false, $orderBy);
+        if($keyword)
+        {
+            foreach($users as $key => $user)
+            {
+                if(strpos($user->realname, $keyword) === false) unset($users[$key]);
+            }
+        }
+
         $this->view->title          = $this->lang->gitlab->common . $this->lang->colon . $this->lang->gitlab->browseUser;
         $this->view->gitlabID       = $gitlabID;
-        $this->view->gitlabUserList = $this->gitlab->apiGetUsers($gitlabID, false, $orderBy);
+        $this->view->gitlabUserList = $users;
         $this->view->orderBy        = $orderBy;
         $this->view->isAdmin        = $isAdmin;
+        $this->view->keyword        = $keyword;
         $this->display();
     }
 
@@ -583,10 +596,22 @@ class gitlab extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browseUser', "gitlabID=$gitlabID")));
         }
 
-        $userPairs = $this->loadModel('user')->getPairs('noclosed|noletter');
+        $users       = $this->loadModel('user')->getList();
+        $bindedUsers = $this->gitlab->getUserAccountIdPairs($gitlabID);
+        $userPairs   = array('' => '');
+        $userInfos   = array();
+        foreach($users as $key => $user)
+        {
+            if(!isset($bindedUsers[$user->account]))
+            {
+                $userPairs[$user->account] = $user->realname;
+                $userInfos[$user->account] = $user;
+            }
+        }
 
         $this->view->title     = $this->lang->gitlab->common . $this->lang->colon . $this->lang->gitlab->user->create;
         $this->view->userPairs = $userPairs;
+        $this->view->users     = $userInfos;
         $this->view->gitlabID  = $gitlabID;
         $this->display();
     }

@@ -24,14 +24,14 @@ $lang->gitlab->lastUpdate        = 'Last Update';
 $lang->gitlab->confirmAddWebhook = 'Are you sure about creating Webhook？';
 $lang->gitlab->addWebhookSuccess = 'Webhook created successfully';
 $lang->gitlab->failCreateWebhook = 'Failed to create Webhook, please view the log';
-$lang->gitlab->placeholderSearch = 'Project name';
+$lang->gitlab->placeholderSearch = 'Enter name';
 
 $lang->gitlab->browseAction         = 'GitLab List';
 $lang->gitlab->deleteAction         = 'Delete GitLab';
 $lang->gitlab->gitlabProject        = "GitLab Project";
-$lang->gitlab->browseProject        = "GitLab Project List";
-$lang->gitlab->browseUser           = "User List";
-$lang->gitlab->browseGroup          = "Group List";
+$lang->gitlab->browseProject        = "Project";
+$lang->gitlab->browseUser           = "User";
+$lang->gitlab->browseGroup          = "Group";
 $lang->gitlab->browseBranch         = "GitLab Branch List";
 $lang->gitlab->browseTag            = "GitLab Tag List";
 $lang->gitlab->browseTagPriv        = "GitLab Tag protected List";
@@ -62,12 +62,13 @@ $lang->gitlab->editTagPriv          = 'Edit tag protected';
 $lang->gitlab->deleteTagPriv        = 'Delete tag protected';
 
 $lang->gitlab->id             = 'ID';
-$lang->gitlab->name           = "GitLab Server";
+$lang->gitlab->name           = "Server Name";
 $lang->gitlab->url            = 'Server URL';
 $lang->gitlab->token          = 'Token';
 $lang->gitlab->defaultProject = 'Default Project';
 $lang->gitlab->private        = 'MD5 Verify';
 
+$lang->gitlab->server        = "Server List";
 $lang->gitlab->lblCreate     = 'Create GitLab Server';
 $lang->gitlab->desc          = 'Description';
 $lang->gitlab->tokenFirst    = 'When the Token is not empty, the Token will be used first';

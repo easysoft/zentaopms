@@ -1879,7 +1879,7 @@ class taskModel extends model
             return false;
         }
 
-        if(empty($currentConsumed))
+        if(empty($currentConsumed) and $oldTask->consumed == '0')
         {
             dao::$errors[] = $this->lang->task->error->consumedEmpty;
             return false;
@@ -3427,6 +3427,9 @@ class taskModel extends model
                 $title = " title='{$value} {$this->lang->execution->workHour}'";
             }
             if($id == 'lane') $title = " title='{$task->lane}'";
+            if($id == 'finishedBy') $title  = " title='" . zget($users, $task->finishedBy) . "'";
+            if($id == 'openedBy') $title  = " title='" . zget($users, $task->openedBy) . "'";
+            if($id == 'lastEditedBy') $title  = " title='" . zget($users, $task->lastEditedBy) . "'";
 
             echo "<td class='" . $class . "'" . $title . ">";
             if($this->config->edition != 'open') $this->loadModel('flow')->printFlowCell('task', $task, $id);
@@ -3486,10 +3489,10 @@ class taskModel extends model
                 echo substr($task->openedDate, 5, 11);
                 break;
             case 'estStarted':
-                echo $task->estStarted;
+                echo helper::isZeroDate($task->estStarted) ? '' : substr($task->estStarted, 5, 11);
                 break;
             case 'realStarted':
-                echo substr($task->realStarted, 5, 11);
+                echo helper::isZeroDate($task->realStarted) ? '' : substr($task->realStarted, 5, 11);
                 break;
             case 'assignedTo':
                 $this->printAssignedHtml($task, $users);
@@ -3498,25 +3501,25 @@ class taskModel extends model
                 echo mb_substr($task->lane, 0, 8);
                 break;
             case 'assignedDate':
-                echo substr($task->assignedDate, 5, 11);
+                echo helper::isZeroDate($task->assignedDate) ? '' : substr($task->assignedDate, 5, 11);
                 break;
             case 'finishedBy':
                 echo zget($users, $task->finishedBy);
                 break;
             case 'finishedDate':
-                echo substr($task->finishedDate, 5, 11);
+                echo helper::isZeroDate($task->finishedDate) ? '' : substr($task->finishedDate, 5, 11);
                 break;
             case 'canceledBy':
                 echo zget($users, $task->canceledBy);
                 break;
             case 'canceledDate':
-                echo substr($task->canceledDate, 5, 11);
+                echo helper::isZeroDate($task->canceledDate) ? '' : substr($task->canceledDate, 5, 11);
                 break;
             case 'closedBy':
                 echo zget($users, $task->closedBy);
                 break;
             case 'closedDate':
-                echo substr($task->closedDate, 5, 11);
+                echo helper::isZeroDate($task->closedDate) ? '' : substr($task->closedDate, 5, 11);
                 break;
             case 'closedReason':
                 echo $this->lang->task->reasonList[$task->closedReason];

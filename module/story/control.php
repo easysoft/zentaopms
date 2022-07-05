@@ -1027,6 +1027,7 @@ class story extends control
         $this->view->needReview       = ($this->app->user->account == $this->view->product->PO || $this->config->story->needReview == 0) ? "checked='checked'" : "";
         $this->view->reviewer         = implode(',', array_keys($reviewer));
         $this->view->productReviewers = $this->user->getPairs('noclosed|nodeleted', $reviewer, 0, $productReviewers);
+        $this->view->files            = $this->loadModel('file')->getByObject($story->type, $storyID);
 
         $this->display();
     }

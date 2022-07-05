@@ -10,3 +10,4 @@ th.c-deadline {text-align: center;}
 .btn-toolbar > .btn {margin-right: 5px !important;}
 #taskList .c-progress{padding-right: 8px; text-align: right;}
 #datatable-taskList .c-progress{padding-right: 8px; text-align: right;}
+.c-finishedBy, .c-lastEditedBy {overflow: hidden; text-overflow: ellipsis; white-space: nowrap;}
