@@ -58,8 +58,8 @@
           <td class='text' title='<?php echo substr($gitlabUser->lastActivityOn, 0, 10);?>'><?php echo substr($gitlabUser->lastActivityOn, 0, 10);?></td>
           <td class='c-actions text-left'>
             <?php
-            common::printLink('gitlab', 'editUser', "gitlabID=$gitlabID&userID=$gitlabUser->id", "<i class='icon icon-edit'></i> ", '', "title='{$lang->gitlab->user->edit}' class='btn btn-primary'");
-            if(common::hasPriv('gitlab', 'delete')) echo html::a($this->createLink('gitlab', 'deleteUser', "gitlabID=$gitlabID&userID=$gitlabUser->id"), '<i class="icon-trash"></i>', 'hiddenwin', "title='{$lang->gitlab->deleteUser}' class='btn'" . ($isAdmin ? '' : ' disabled'));
+            echo common::buildIconButton('gitlab', 'editUser', "gitlabID=$gitlabID&userID=$gitlabUser->id", '', 'list', 'edit', '', '', false, '', '', 0, $isAdmin);
+            echo common::buildIconButton('gitlab', 'deleteUser', "gitlabID=$gitlabID&userID=$gitlabUser->id", '', 'list', 'trash', 'hiddenwin', '', false, '', '', 0, $isAdmin);
             ?>
           </td>
         </tr>
