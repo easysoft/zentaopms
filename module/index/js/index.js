@@ -264,7 +264,11 @@
         }
 
         /* Show page app and update iframe source */
-        if(url) reloadApp(appCode, url, true);
+        // if(url) reloadApp(appCode, url, true);
+        if (url) {
+            app.$app.toggleClass('open-from-hiddn', app.$app.is(':hidden'))
+            reloadApp(appCode, url, true);
+        }
         app.zIndex = openedAppZIndex++;
         app.$app.show().css('z-index', app.zIndex);
 
