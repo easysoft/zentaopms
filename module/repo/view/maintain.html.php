@@ -53,12 +53,6 @@
           <td class='text-left c-actions'>
             <?php
             common::printIcon('repo', 'edit', "repoID=$repo->id&objectID=$objectID", '', 'list', 'edit');
-            if(strtolower($repo->SCM) == "gitlab")
-            {
-                common::printIcon('gitlab', 'manageProjectMembers', "repo={$repo->id}", '', 'list', 'team');
-                common::printIcon('gitlab', 'createWebhook', "repoID=$repo->id", '', 'list', 'change', 'hiddenwin');
-                common::printIcon('gitlab', 'importIssue', "repo={$repo->id}", '', 'list', 'link');
-            }
             if(isset($sonarRepoList[$repo->id]))
             {
                 $jobID = $sonarRepoList[$repo->id]->id;
