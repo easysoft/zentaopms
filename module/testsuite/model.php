@@ -360,6 +360,29 @@ class testsuiteModel extends model
     }
 
     /**
+     * Get imported case modules.
+     *
+     * @param  int    $productID
+     * @param  int    $libID
+     * @param  string $orderBy
+     * @param  object $pager
+     * @access public
+     * @return array
+     */
+    public function getImportedModules($productID, $libID)
+    {
+        $importedModules = $this->dao->select('fromCaseID,module')->from(TABLE_CASE)
+            ->where('product')->eq($productID)
+            ->andWhere('lib')->eq($libID)
+            ->andWhere('fromCaseID')->ne('')
+            ->andWhere('deleted')->eq(0)
+            ->fetchGroup('fromCaseID', 'module');
+        foreach($importedModules as $fromCaseID => $modules) $importedModules[$fromCaseID] = array_combine(array_keys($modules), array_keys($modules));
+
+        return $importedModules;
+    }
+
+    /**
      * Build testsuite menu.
      *
      * @param  object $suite

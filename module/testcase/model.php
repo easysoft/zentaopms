@@ -1576,19 +1576,22 @@ class testcaseModel extends model
      * Import case from Lib.
      *
      * @param  int    $productID
+     * @param  int    $libID
      * @access public
      * @return void
      */
-    public function importFromLib($productID)
+    public function importFromLib($productID, $libID = 0)
     {
         $data = fixer::input('post')->get();
 
-        $prevModule = 0;
-        $prevBranch = 0;
+        $prevModule      = 0;
+        $prevBranch      = 0;
+        $importedModules = $this->loadModel('testsuite')->getImportedModules($productID, $libID);
         foreach($data->module as $i => $module)
         {
             if($module != 'ditto') $prevModule = $module;
             if($module == 'ditto') $data->module[$i] = $prevModule;
+            if(isset($importedModules[$i][$data->module[$i]])) unset($data->caseIdList[$i]);
         }
 
         if(isset($data->branch))

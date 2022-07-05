@@ -1860,14 +1860,6 @@ class testcase extends control
         $this->loadModel('branch');
         if($product->type != 'normal') $branches = array(BRANCH_MAIN => $this->lang->branch->main) + $this->branch->getPairs($productID, 'active', $projectID);
 
-        if($_POST)
-        {
-            $this->testcase->importFromLib($productID);
-            return print(js::reload('parent'));
-        }
-
-        $this->app->tab == 'project' ? $this->loadModel('project')->setMenu($this->session->project) : $this->testcase->setMenu($this->products, $productID, $branch);
-
         $libraries = $this->loadModel('caselib')->getLibraries();
         if(empty($libraries))
         {
@@ -1875,6 +1867,14 @@ class testcase extends control
             return print(js::locate($this->session->caseList));
         }
         if(empty($libID) or !isset($libraries[$libID])) $libID = key($libraries);
+
+        if($_POST)
+        {
+            $this->testcase->importFromLib($productID, $libID);
+            return print(js::reload('parent'));
+        }
+
+        $this->app->tab == 'project' ? $this->loadModel('project')->setMenu($this->session->project) : $this->testcase->setMenu($this->products, $productID, $branch);
 
         /* Build the search form. */
         $actionURL = $this->createLink('testcase', 'importFromLib', "productID=$productID&branch=$branch&libID=$libID&orderBy=$orderBy&browseType=bySearch&queryID=myQueryID");
@@ -1897,19 +1897,20 @@ class testcase extends control
         $this->view->title      = $this->lang->testcase->common . $this->lang->colon . $this->lang->testcase->importFromLib;
         $this->view->position[] = $this->lang->testcase->importFromLib;
 
-        $this->view->libraries  = $libraries;
-        $this->view->libID      = $libID;
-        $this->view->product    = $product;
-        $this->view->productID  = $productID;
-        $this->view->branch     = $branch;
-        $this->view->cases      = $this->loadModel('testsuite')->getLibCases($productID, $libID, $orderBy, $pager, $browseType, $queryID);
-        $this->view->modules    = $this->loadModel('tree')->getOptionMenu($productID, 'case', 0, $branch === 'all' ? 0 : (int)$branch);
-        $this->view->libModules = $this->tree->getOptionMenu($libID, 'caselib');
-        $this->view->pager      = $pager;
-        $this->view->orderBy    = $orderBy;
-        $this->view->branches   = $branches;
-        $this->view->browseType = $browseType;
-        $this->view->queryID    = $queryID;
+        $this->view->libraries       = $libraries;
+        $this->view->libID           = $libID;
+        $this->view->product         = $product;
+        $this->view->productID       = $productID;
+        $this->view->branch          = $branch;
+        $this->view->cases           = $this->loadModel('testsuite')->getLibCases($productID, $libID, $orderBy, $pager, $browseType, $queryID);
+        $this->view->modules         = $this->loadModel('tree')->getOptionMenu($productID, 'case', 0, $branch === 'all' ? 0 : (int)$branch);
+        $this->view->libModules      = $this->tree->getOptionMenu($libID, 'caselib');
+        $this->view->pager           = $pager;
+        $this->view->orderBy         = $orderBy;
+        $this->view->branches        = $branches;
+        $this->view->browseType      = $browseType;
+        $this->view->queryID         = $queryID;
+        $this->view->importedModules = $this->testsuite->getImportedModules($productID, $libID);
 
         $this->display();
     }
