@@ -280,7 +280,7 @@
       </div>
       <?php else:?>
       <div id='copyProjects' class='row'>
-      <?php if($projectID == 0) $executions = $copyExecutions;?>
+      <?php if($config->systemMode == 'new' and $projectID == 0) $executions = $copyExecutions;?>
       <?php foreach ($executions as $id => $execution):?>
       <?php if(empty($id)):?>
       <?php if($copyExecutionID != 0):?>
