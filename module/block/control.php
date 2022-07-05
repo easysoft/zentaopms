@@ -1714,9 +1714,10 @@ class block extends control
         if(common::hasPriv('bug',   'view') and $this->config->vision != 'lite') $hasViewPriv['bug']   = true;
         if($this->config->URAndSR and common::hasPriv('story', 'view') and $this->config->vision != 'lite') $hasViewPriv['requirement'] = true;
         if(common::hasPriv('story', 'view') and $this->config->vision != 'lite') $hasViewPriv['story'] = true;
-        if(common::hasPriv('risk',  'view') and $this->config->edition == 'max' and $this->config->vision != 'lite')   $hasViewPriv['risk']    = true;
-        if(common::hasPriv('issue', 'view') and $this->config->edition == 'max' and $this->config->vision != 'lite')   $hasViewPriv['issue']   = true;
-        if(common::hasPriv('meeting', 'view') and $this->config->edition == 'max' and $this->config->vision != 'lite') $hasViewPriv['meeting'] = true;
+        if(common::hasPriv('risk',  'view') and $this->config->edition == 'max' and $this->config->vision != 'lite')    $hasViewPriv['risk']     = true;
+        if(common::hasPriv('issue', 'view') and $this->config->edition == 'max' and $this->config->vision != 'lite')    $hasViewPriv['issue']    = true;
+        if(common::hasPriv('meeting', 'view') and $this->config->edition == 'max' and $this->config->vision != 'lite')  $hasViewPriv['meeting']  = true;
+        if(common::hasPriv('feedback', 'view') and $this->config->edition == 'max' and $this->config->vision != 'lite') $hasViewPriv['feedback'] = true;
 
         $params          = $this->get->param;
         $params          = json_decode(base64_decode($params));
@@ -1725,8 +1726,8 @@ class block extends control
         $objectCountList = array('todo' => 'todoCount', 'task' => 'taskCount', 'bug' => 'bugCount', 'story' => 'storyCount', 'requirement' => 'requirementCount');
         if($this->config->edition == 'max')
         {
-            $objectList      += array('risk' => 'risks', 'issue' => 'issues');
-            $objectCountList += array('risk' => 'riskCount', 'issue' => 'issueCount');
+            $objectList      += array('risk' => 'risks', 'issue' => 'issues', 'feedback' => 'feedbacks');
+            $objectCountList += array('risk' => 'riskCount', 'issue' => 'issueCount', 'feedback' => 'feedbackCount');
         }
 
         $tasks = $this->loadModel('task')->getUserSuspendedTasks($this->app->user->account);
@@ -1749,6 +1750,10 @@ class block extends control
                 ->beginIF($objectType == 'story' or $objectType == 'requirement')->andWhere('t2.deleted')->eq('0')->fi()
                 ->beginIF($objectType == 'todo')->andWhere('t1.cycle')->eq(0)->andWhere('t1.status')->eq('wait')->andWhere('t1.vision')->eq($this->config->vision)->fi()
                 ->beginIF($objectType != 'todo')->andWhere('t1.status')->ne('closed')->fi()
+                ->beginIF($objectType == 'feedback')
+                ->andWhere('t1.status')->in('wait, noreview')
+                ->andWhere('t1.assignedTo')->eq($this->app->user->account)
+                ->fi()
                 ->orderBy($orderBy)
                 ->beginIF($limitCount)->limit($limitCount)->fi()
                 ->fetchAll();
@@ -1786,6 +1791,13 @@ class block extends control
             if($objectType == 'bug')   $this->app->loadLang('bug');
             if($objectType == 'risk')  $this->app->loadLang('risk');
             if($objectType == 'issue') $this->app->loadLang('issue');
+
+            if($objectType == 'feedback')
+            {
+                $this->app->loadLang('feedback');
+                $this->view->users    = $this->loadModel('user')->getPairs('all,noletter');
+                $this->view->products = $this->loadModel('product')->getPairs();
+            }
 
             $count[$objectType] = count($objects);
             $this->view->{$objectList[$objectType]} = $objects;
