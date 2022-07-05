@@ -20,7 +20,7 @@ $status = $this->session->testTaskVersionStatus;
 ?>
 <?php js::set('status', strtolower($status));?>
 <style>
-#action-divider{display: inline-block; line-height: 0px; border-right: 2px solid #ddd}
+#action-divider{display: inline-block; line-height: 0px;}
 </style>
 <div id="mainMenu" class='clearfix'>
   <div class="btn-toolbar pull-left">

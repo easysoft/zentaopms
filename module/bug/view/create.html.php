@@ -312,7 +312,7 @@ if($this->app->tab == 'project')   js::set('objectID', $projectID);
             <td>
               <div class='input-group'>
                 <?php if($showStory):?>
-                <span class='input-group-addon'><?php echo $lang->bug->task?></span>
+                <span class='input-group-addon task'><?php echo $lang->bug->task?></span>
                 <?php endif;?>
                 <?php echo html::select('task', '', $taskID, "class='form-control chosen'") . html::hidden('oldTaskID', $taskID);?>
               </div>
