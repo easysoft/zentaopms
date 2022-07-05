@@ -30,5 +30,5 @@
 
 #dateRange {vertical-align: top; padding-top: 13px;}
 #dateRangeOption {vertical-align: top; padding-top: 13px;}
-#myModalLabel {width: 20%; display: inline-block;}
-.projectSelect {display: inline-block; margin: 0 auto; width:20%;}
+#copyProjectModal .projectSelect {display: inline-block; margin-left: 10px; width: 20%;}
+#copyProjectModal .titleBox{position: relative; bottom: 3px; display: inline-block;}
