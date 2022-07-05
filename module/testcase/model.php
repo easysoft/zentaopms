@@ -1622,7 +1622,7 @@ class testcaseModel extends model
             unset($case->id);
 
             $branch = isset($case->branch) ? $case->branch : 0;
-            if(isset($caseModules[$branch][$case->fromCaseID]) and !isset($caseModules[$branch][$case->fromCaseID][$case->module]))
+            if(empty($caseModules[$branch][$case->fromCaseID][$case->module]))
             {
                 $imported .= "$case->fromCaseID,";
                 continue;
