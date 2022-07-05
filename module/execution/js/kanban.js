@@ -300,6 +300,32 @@ function createColumnCreateMenu(options)
 }
 
 /**
+ * Update region name.
+ *
+ * @param  int    $regionID
+ * @param  string $name
+ * @access public
+ * @return void
+ */
+function updateRegionName(regionID, name)
+{
+    $('.region[data-id="' + regionID + '"] > .region-header > strong:first').text(name);
+}
+
+/**
+ * Update lane name.
+ *
+ * @param  int    $laneID
+ * @param  string $name
+ * @access public
+ * @return void
+ */
+function updateLaneName(laneID, name)
+{
+    $('.kanban-lane[data-id="' + laneID + '"] > .kanban-lane-name > span').text(name);
+}
+
+/**
  * Hide kanban action
  */
 function hideKanbanAction()
