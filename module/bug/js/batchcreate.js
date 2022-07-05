@@ -22,6 +22,7 @@ $(function()
         var link = createLink('custom', 'ajaxSaveCustomFields', 'module=bug&section=custom&key=batchCreateFields');
         $.post(link, {'fields' : fields}, function()
         {
+            showFields = fields;
             showCheckedFields(fields);
             $('#formSetting').parent().removeClass('open');
 
@@ -55,8 +56,6 @@ $(function()
  */
 function showCheckedFields(fields)
 {
-    showFields = fields;
-
     var fieldList = ',' + fields + ',';
     $('#formSettingForm > .checkboxes > .checkbox-primary > input').each(function()
     {

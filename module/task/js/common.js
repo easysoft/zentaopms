@@ -29,8 +29,6 @@ function setStoryModule()
  */
 function showCheckedFields(fields)
 {
-    showFields = fields;
-
     var fieldList = ',' + fields + ',';
     $('#formSettingForm > .checkboxes > .checkbox-primary > input').each(function()
     {
