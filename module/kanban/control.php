@@ -1559,7 +1559,7 @@ class kanban extends control
 
             $this->loadModel('action')->create('kanbanlane', $laneID, 'Edited', '', $executionID);
 
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent', 'lane' => $lane));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => 1, 'callback' => array('target' => 'parent', 'name' => 'updateLaneName', 'params' => array($laneID, $this->post->name))));
         }
 
         $lane = $this->kanban->getLaneById($laneID);
