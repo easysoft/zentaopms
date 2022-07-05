@@ -51,6 +51,7 @@ $lang->sonarqube->notAdminer           = "Please fill in the SonarQube user info
 $lang->sonarqube->projectKey          = 'Project Key';
 $lang->sonarqube->projectName         = 'Project Name';
 $lang->sonarqube->projectlastAnalysis = 'Last analysis time';
+$lang->sonarqube->serverList          = 'Server List';
 
 $lang->sonarqube->report = new stdclass();
 $lang->sonarqube->report->bugs                       = 'Bugs';

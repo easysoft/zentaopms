@@ -357,6 +357,7 @@ $lang->block->availableBlocks->testtask    = 'Testaufgaben';
 $lang->block->availableBlocks->risk        = 'My Risks';
 $lang->block->availableBlocks->issue       = 'My Issues';
 $lang->block->availableBlocks->meeting     = 'My Meetings';
+$lang->block->availableBlocks->feedback    = 'My Feedbacks';
 
 if($config->systemMode == 'new') $lang->block->moduleList['project'] = 'Project';
 $lang->block->moduleList['product']   = $lang->productCommon;
@@ -469,13 +470,14 @@ $lang->block->orderByList->story['status_desc'] = 'Status Absteigend';
 $lang->block->orderByList->story['stage_asc']   = 'Phase Aufsteigend';
 $lang->block->orderByList->story['stage_desc']  = 'Phase Absteigend';
 
-$lang->block->todoCount    = 'Todos';
-$lang->block->taskCount    = 'Aufgaben';
-$lang->block->bugCount     = 'Bugs';
-$lang->block->riskCount    = 'Risk';
-$lang->block->issueCount   = 'Issues';
-$lang->block->storyCount   = 'Stories';
-$lang->block->meetingCount = 'Meetings';
+$lang->block->todoCount     = 'Todos';
+$lang->block->taskCount     = 'Aufgaben';
+$lang->block->bugCount      = 'Bugs';
+$lang->block->riskCount     = 'Risk';
+$lang->block->issueCount    = 'Issues';
+$lang->block->storyCount    = 'Stories';
+$lang->block->meetingCount  = 'Meetings';
+$lang->block->feedbackCount = 'Feedbacks';
 
 $lang->block->typeList = new stdclass();
 

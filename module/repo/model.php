@@ -201,7 +201,16 @@ class repoModel extends model
             ->join('product', ',')
             ->get();
 
-        if($this->post->SCM == 'Gitlab') $data->path = $this->post->gitlabProject;
+        if($this->post->SCM == 'Gitlab')
+        {
+            $repo = $this->dao->select('id')->from(TABLE_REPO)
+                ->where('SCM')->eq('Gitlab')
+                ->andWhere('client')->eq($data->client)
+                ->andWhere('path')->eq($data->path)
+                ->fetch();
+            if(!empty($repo)) dao::$errors['gitlabProject'] = sprintf($this->lang->error->unique, $this->lang->repo->gitlabProject, $repo->id);
+            if(dao::isError()) return false;
+        }
 
         $data->acl = empty($data->acl) ? '' : json_encode($data->acl);
 
@@ -220,6 +229,8 @@ class repoModel extends model
             ->batchCheck($this->config->repo->create->requiredFields, 'notempty')
             ->checkIF($data->SCM == 'Gitlab', 'gitlabProject', 'notempty')
             ->checkIF($data->SCM == 'Subversion', $this->config->repo->svn->requiredFields, 'notempty')
+            ->checkIF($data->SCM == 'Git', 'path', 'unique', "`SCM` = 'Git'")
+            ->checkIF($data->SCM == 'Subversion', 'path', 'unique', "`SCM` = 'Subversion'")
             ->autoCheck()
             ->exec();
 
@@ -287,6 +298,18 @@ class repoModel extends model
             $data->prefix = '';
         }
 
+        if($this->post->SCM == 'Gitlab')
+        {
+            $repo = $this->dao->select('id')->from(TABLE_REPO)
+                ->where('SCM')->eq('Gitlab')
+                ->andWhere('client')->eq($data->client)
+                ->andWhere('path')->eq($data->path)
+                ->andWhere('id')->ne($id)
+                ->fetch();
+            if(!empty($repo)) dao::$errors['gitlabProject'] = sprintf($this->lang->error->unique, $this->lang->repo->gitlabProject, $repo->id);
+            if(dao::isError()) return false;
+        }
+
         if($data->client != $repo->client and !$this->checkClient()) return false;
         if(!$this->checkConnection()) return false;
 
@@ -295,6 +318,8 @@ class repoModel extends model
             ->batchCheck($this->config->repo->edit->requiredFields, 'notempty')
             ->checkIF($data->SCM == 'Subversion', $this->config->repo->svn->requiredFields, 'notempty')
             ->checkIF($data->SCM == 'Gitlab', 'extra', 'notempty')
+            ->checkIF($data->SCM == 'Git', 'path', 'unique', "`SCM` = 'Git' and `id` <> $id")
+            ->checkIF($data->SCM == 'Subversion', 'path', 'unique', "`SCM` = 'Subversion' and `id` <> $id")
             ->autoCheck()
             ->where('id')->eq($id)->exec();
 

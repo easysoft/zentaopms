@@ -20,6 +20,7 @@ $lang->jenkins->lblCreate  = 'Cr閑r Serveur Jenkins';
 $lang->jenkins->desc       = 'Description';
 $lang->jenkins->tokenFirst = 'Utiliser un Token si non vide.';
 $lang->jenkins->tips       = 'Cancel "Prevent Cross Site Request Forgery exploits" when using password.';
+$lang->jenkins->serverList = 'Server List';
 
 $lang->jenkins->error = new stdclass();
 $lang->jenkins->error->linkedJob = 'Failed. This jenkins has associated with the compile.';

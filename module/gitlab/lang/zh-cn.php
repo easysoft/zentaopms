@@ -24,14 +24,14 @@ $lang->gitlab->lastUpdate        = '最后更新';
 $lang->gitlab->confirmAddWebhook = '您确定创建Webhook吗？';
 $lang->gitlab->addWebhookSuccess = 'Webhook创建成功';
 $lang->gitlab->failCreateWebhook = 'Webhook创建失败，请查看日志';
-$lang->gitlab->placeholderSearch = '请输入项目名称';
+$lang->gitlab->placeholderSearch = '请输入名称';
 
 $lang->gitlab->browseAction         = 'GitLab列表';
 $lang->gitlab->deleteAction         = '删除GitLab';
 $lang->gitlab->gitlabProject        = "{$lang->gitlab->common}项目";
-$lang->gitlab->browseProject        = "{$lang->gitlab->common}项目列表";
-$lang->gitlab->browseUser           = "用户列表";
-$lang->gitlab->browseGroup          = "群组列表";
+$lang->gitlab->browseProject        = "项目";
+$lang->gitlab->browseUser           = "用户";
+$lang->gitlab->browseGroup          = "群组";
 $lang->gitlab->browseBranch         = "GitLab分支列表";
 $lang->gitlab->browseTag            = "GitLab标签列表";
 $lang->gitlab->browseTagPriv        = "GitLab标签保护列表";
@@ -62,12 +62,13 @@ $lang->gitlab->editTagPriv          = '编辑标签保护';
 $lang->gitlab->deleteTagPriv        = '删除标签保护';
 
 $lang->gitlab->id             = 'ID';
-$lang->gitlab->name           = "{$lang->gitlab->common}服务器";
+$lang->gitlab->name           = "服务器名称";
 $lang->gitlab->url            = '服务器地址';
 $lang->gitlab->token          = 'Token';
 $lang->gitlab->defaultProject = '默认项目';
 $lang->gitlab->private        = 'MD5验证';
 
+$lang->gitlab->server        = "服务器列表";
 $lang->gitlab->lblCreate     = '添加GitLab服务器';
 $lang->gitlab->desc          = '描述';
 $lang->gitlab->tokenFirst    = 'Token不为空时，优先使用Token。';

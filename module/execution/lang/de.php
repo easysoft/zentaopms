@@ -118,6 +118,7 @@ $lang->execution->relatedMember       = 'Teammitglieder';
 $lang->execution->watermark           = 'Exported by ZenTao';
 $lang->execution->burnXUnit           = '(Date)';
 $lang->execution->burnYUnit           = '(Hours)';
+$lang->execution->count               = '(Count)';
 $lang->execution->waitTasks           = 'Waiting Tasks';
 $lang->execution->viewByUser          = 'By User';
 $lang->execution->oneProduct          = "Only one stage can be linked {$lang->productCommon}";
@@ -164,6 +165,10 @@ $lang->execution->endList[365] = '1 Jahr';
 $lang->execution->lifeTimeList['short'] = "Short-Term";
 $lang->execution->lifeTimeList['long']  = "Long-Term";
 $lang->execution->lifeTimeList['ops']   = "DevOps";
+
+$lang->execution->cfdTypeList['story'] = "{$lang->SRCommon}";
+$lang->execution->cfdTypeList['task']  = "Task";
+$lang->execution->cfdTypeList['bug']   = "Bug";
 
 $lang->team = new stdclass();
 $lang->team->account    = 'Konto';
@@ -221,6 +226,8 @@ $lang->execution->build               = 'Builds';
 $lang->execution->testtask            = 'Testaufgaben';
 $lang->execution->burn                = 'Burndown';
 $lang->execution->computeBurn         = 'Aktualisieren';
+$lang->execution->CFD                 = 'Cumulative Flow diagrams';
+$lang->execution->computeCFD          = 'Compute Cumulative Flow diagrams';
 $lang->execution->burnData            = 'Burndown Daten';
 $lang->execution->fixFirst            = 'Bearbeite Mannstunden des ersten Tags';
 $lang->execution->team                = 'Teammitglieder';

@@ -195,7 +195,7 @@ class userEntry extends Entry
                     if(!common::hasPriv('my', 'work')) break;
 
                     $control = $this->loadController('my', 'task');
-                    $control->task($this->param('type', 'assignedTo'), $this->param('order', 'id_desc'), $this->param('total', 0), $this->param('limit', 5), $this->param('page', 1));
+                    $control->task($this->param('type', 'assignedTo'), 0, $this->param('order', 'id_desc'), $this->param('total', 0), $this->param('limit', 5), $this->param('page', 1));
                     $data = $this->getData();
 
                     if($data->status == 'success')

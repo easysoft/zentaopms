@@ -12,10 +12,11 @@
             <?php endif;?>
           </div>
           <div class="info">
-            <div class="version">
+            <?php $version = $version ? $version : $doc->version;?>
+            <div class="version" data-version='<?php echo $version;?>'>
               <div class='btn-group'>
                 <a href='javascript:;' class='btn btn-link btn-limit text-ellipsis' data-toggle='dropdown' style="max-width: 120px;">
-                  #<?php echo $version ? $version : $doc->version;?>
+                  #<?php echo $version;?>
                   <span class="caret"></span>
                 </a>
                 <ul class='dropdown-menu doc-version-menu' style='max-height:240px; max-width: 300px; overflow-y:auto'>

@@ -73,7 +73,10 @@
         </tr>
         <tr>
           <th><?php echo $lang->attatch;?></th>
-          <td colspan='2'><?php echo $this->fetch('file', 'buildform');?></td>
+          <td colspan='2'>
+          <?php echo $this->fetch('file', 'printFiles', array('files' => $files, 'fieldset' => 'true', 'object' => $story, 'method' => 'change'));?>
+          <?php echo $this->fetch('file', 'buildform');?>
+          </td>
         </tr>
         <tr>
           <th><?php echo $lang->story->checkAffection;?></th>
