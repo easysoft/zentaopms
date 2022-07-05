@@ -1717,7 +1717,7 @@ class block extends control
         if(common::hasPriv('risk',  'view') and $this->config->edition == 'max' and $this->config->vision != 'lite')   $hasViewPriv['risk']    = true;
         if(common::hasPriv('issue', 'view') and $this->config->edition == 'max' and $this->config->vision != 'lite')   $hasViewPriv['issue']   = true;
         if(common::hasPriv('meeting', 'view') and $this->config->edition == 'max' and $this->config->vision != 'lite') $hasViewPriv['meeting'] = true;
-        if(common::hasPriv('feedback', 'view') and in_array($this->config->edition, array('max', 'biz')) and $this->config->vision != 'lite') $hasViewPriv['feedback'] = true;
+        if(common::hasPriv('feedback', 'view') and in_array($this->config->edition, array('max', 'biz')))              $hasViewPriv['feedback'] = true;
 
         $params          = $this->get->param;
         $params          = json_decode(base64_decode($params));
@@ -1728,6 +1728,12 @@ class block extends control
         {
             $objectList      += array('risk' => 'risks', 'issue' => 'issues', 'feedback' => 'feedbacks');
             $objectCountList += array('risk' => 'riskCount', 'issue' => 'issueCount', 'feedback' => 'feedbackCount');
+        }
+
+        if($this->config->edition == 'biz')
+        {
+            $objectList      += array('feedback' => 'feedbacks');
+            $objectCountList += array('feedback' => 'feedbackCount');
         }
 
         $tasks = $this->loadModel('task')->getUserSuspendedTasks($this->app->user->account);
