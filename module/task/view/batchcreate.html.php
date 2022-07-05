@@ -250,7 +250,7 @@ $colspan = count($visibleFields) + 3;
       $this->loadModel('flow');
       foreach($extendFields as $extendField) echo "<td" . (($extendField->control == 'select' or $extendField->control == 'multi-select') ? " style='overflow:visible'" : '') . ">" . $this->flow->getFieldControl($extendField, '', $extendField->field . "[%s]") . "</td>";
       ?>
-      <td class='c-actions text-center'>
+      <td class='c-actions text-left'>
         <a href='javascript:;' onclick='addItem(this)' class='btn btn-link'><i class='icon-plus'></i></a>
         <a href='javascript:;' onclick='deleteItem(this)' class='btn btn-link'><i class='icon icon-close'></i></a>
       </td>
