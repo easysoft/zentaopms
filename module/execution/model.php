@@ -68,6 +68,7 @@ class executionModel extends model
         {
             $this->lang->execution->menu         = new stdclass();
             $this->lang->execution->menu->kanban = array('link' => "{$this->lang->kanban->common}|execution|kanban|executionID=%s");
+            $this->lang->execution->menu->CFD    = array('link' => "{$this->lang->execution->CFD}|execution|cfd|executionID=%s");
             $this->lang->execution->menu->build  = array('link' => "{$this->lang->build->common}|execution|build|executionID=%s");
             $this->lang->execution->dividerMenu  = '';
             $this->lang->execution->accessDenied = str_replace($this->lang->executionCommon, $this->lang->execution->kanban, $this->lang->execution->accessDenied);
@@ -2998,6 +2999,75 @@ class executionModel extends model
     }
 
     /**
+     * Compute cfd of a execution.
+     *
+     * @param  int    $executionID
+     * @access public
+     * @return array
+     */
+    public function computeCFD($executionID = 0)
+    {
+        $today = helper::today();
+        $executions = $this->dao->select('id, code')->from(TABLE_EXECUTION)
+            ->where('type')->eq('kanban')
+            ->andWhere('status')->notin('done,closed,suspended')
+            ->beginIF($executionID)->andWhere('id')->in($executionID)->fi()
+            ->fetchPairs();
+        if(!$executions) return array();
+
+        /* Update today's data of cfd. */
+        $cells = $this->dao->select("t1.id, t1.kanban as execution, t1.`column`, t1.type, t1.cards, t1.lane, t2.name, t2.parent")
+            ->from(TABLE_KANBANCELL)->alias('t1')
+            ->leftJoin(TABLE_KANBANCOLUMN)->alias('t2')->on('t1.column = t2.id')
+            ->where('t1.kanban')->in(array_keys($executions))
+            ->andWhere('t2.deleted')->eq('0')
+            ->andWhere('t1.type')->in('story,bug,task')
+            ->orderBy('t2.id asc')
+            ->fetchAll('id');
+
+        /* Group by type/name/execution/colID. */
+        $columnGroup = array();
+        $parentNames = array();
+        foreach($cells as $id => $column)
+        {
+            if($column->parent == '-1')
+            {
+                $parentNames[$column->column] = $column->name;
+                continue;
+            }
+
+            $column->name = isset($parentNames[$column->parent]) ? $parentNames[$column->parent] . "($column->name)" : $column->name;
+            $columnGroup[$column->execution][$column->type][$column->name][$column->lane][$column->column] = $column;
+        }
+
+        foreach($columnGroup as $executionID => $executionGroup)
+        {
+            foreach($executionGroup as $type => $columns)
+            {
+                foreach($columns as $colName => $laneGroup)
+                {
+                    $cfd = new stdclass();
+                    $cfd->count = 0;
+                    $cfd->date  = $today;
+                    $cfd->type  = $type;
+                    foreach($laneGroup as $laneID => $columnGroup)
+                    {
+                        foreach($columnGroup as $colID => $columnCard)
+                        {
+                            $cards = trim($columnCard->cards, ',');
+                            $cfd->count += $cards ? count(explode(',', $cards)) : 0;
+                        }
+                    }
+
+                    $cfd->name      = $colName;
+                    $cfd->execution = $executionID;
+                    $this->dao->replace(TABLE_CFD)->data($cfd)->exec();
+                }
+            }
+        }
+    }
+
+    /**
      * Fix burn for first day.
      *
      * @param  int    $executionID
@@ -3132,6 +3202,68 @@ class executionModel extends model
         if($endTime <= time()) return array_slice($sets, -$counts, $counts);
         if($todayTag <= $counts) return array_slice($sets, 0, $counts);
         if($todayTag > $counts) return array_slice($sets, $todayTag - $counts, $counts);
+    }
+
+    /**
+     * Build CFD data.
+     * 
+     * @param  int    $executionID
+     * @param  string $type
+     * @param  array  $dateList
+     * @access public
+     * @return void
+     */
+    public function buildCFDData($executionID, $dateList, $type)
+    {
+        $this->loadModel('report');
+        $setGroup = $this->getCFDData($executionID, $dateList, $type);
+
+        if(empty($setGroup)) return array();
+
+        $chartData['labels'] = $this->report->convertFormat($dateList, DT_DATE5);
+        //$chartData['line']   = $this->report->createSingleJSON($sets, $dateList);
+
+
+        $chartData['line'] = array();
+        foreach($setGroup as $name => $sets)
+        {
+            $chartData['line'][$name] = $this->report->createSingleJSON($sets, $dateList);
+        }
+
+        return $chartData;
+    }
+
+    /**
+     * Get CFD data to display.
+     *
+     * @param  int    $executionID
+     * @param  string $type
+     * @param  array  $dateList
+     * @access public
+     * @return void
+     */
+    public function getCFDData($executionID = 0, $dateList = array(), $type = 'story')
+    {
+        $execution = $this->getById($executionID);
+
+        $setGroup = $this->dao->select("date, `count` AS value, `name`")->from(TABLE_CFD)
+            ->where('execution')->eq((int)$executionID)
+            ->andWhere('type')->eq($type)
+            ->andWhere('date')->in($dateList)
+            ->orderBy('date DESC, id asc')->fetchGroup('name', 'date');
+
+        $data = array();
+        foreach($setGroup as $name => $sets)
+        {
+            foreach($sets as $date => $set)
+            {
+                if($date < $execution->begin) continue;
+
+                $data[$name][$date] = $set;
+            }
+        }
+
+        return $data;
     }
 
     /**

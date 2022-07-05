@@ -1284,6 +1284,64 @@ class execution extends control
     }
 
     /**
+     * Kanban CFD.
+     *
+     * @param  int    $executionID
+     * @param  string $type
+     * @access public
+     * @return void
+     */
+    public function cfd($executionID = 0, $type = 'story')
+    {
+        $execution   = $this->commonAction($executionID);
+        $executionID = $execution->id;
+
+        $this->loadModel('kanban');
+        $this->app->loadClass('date');
+
+        $end = helper::today() > $execution->end ? $execution->end : helper::today();
+        if(helper::today() > $execution->end)
+        {
+            if(date($execution->end, strtotime('-14 days')) > $execution->begin)
+            {
+                $begin = date($execution->end, strtotime('-14 days'));
+            }
+            else
+            {
+                $begin = $execution->begin;
+            }
+        }
+        elseif(($execution->begin < helper::today()) and (helper::today() < $execution->end))
+        {
+            $begin = (date('Y-m-d', strtotime('-14 days')) < $execution->begin) ? $execution->begin : date('Y-m-d', strtotime('-14 days'));
+        }
+
+        $dateList = date::getDateList($begin, $end, 'Y-m-d', '');
+
+        $this->view->title         = $this->lang->execution->CFD;
+        $this->view->type          = $type;
+        $this->view->execution     = $execution;
+        $this->view->executionName = $execution->name;
+        $this->view->executionID   = $executionID;
+        $this->view->chartData     = $this->execution->buildCFDData($executionID, $dateList, $type);
+        $this->display();
+    }
+
+    /**
+     * Compute cfd datas.
+     *
+     * @param  string $reload
+     * @param  int    $executionID
+     * @access public
+     * @return void
+     */
+    public function computeCFD($reload = 'no', $executionID = 0)
+    {
+        $this->execution->computeCFD($executionID);
+        if($reload == 'yes') return print(js::reload('parent'));
+    }
+
+    /**
      * Fix burn for first date.
      *
      * @param  int    $executionID
