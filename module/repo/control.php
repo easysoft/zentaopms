@@ -1139,17 +1139,12 @@ class repo extends control
      * @access public
      * @return void
      */
-    public function ajaxGetDropMenu($repoID, $type = 'repo', $objectID = 0)
+    public function ajaxGetDropMenu($repoID, $module = 'repo', $method = 'browse')
     {
-        $repos = $this->repo->getRepoPairs($type, $objectID);
-        $reposHtml = "<div class='table-row'><div class='table-col col-left'><div class='list-group' style='margin-bottom: 0;'>";
-        foreach($repos as $id => $repoName)
-        {
-            $selected = $id == $repoID ? 'selected' : '';
-            $reposHtml .= html::a($this->createLink('repo', 'browse', "repoID=$id&branchID=&objectID=$objectID"), $repoName, '', "class='$selected' data-app='{$this->app->tab}'");
-        }
-        $reposHtml .= '</div></div></div>';
+        $repo = $this->repo->getRepoByID($repoID);
+        $link = $this->createLink($module, $method, "repoID=%s");
 
+        $reposHtml = $this->repo->getReposMenu($repo, 0, $link);
         return print($reposHtml);
     }
 
