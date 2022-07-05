@@ -314,16 +314,17 @@ class testsuiteModel extends model
     }
 
     /**
-     * Get lib cases.
+     * Get can import cases.
      *
      * @param  int    $productID
      * @param  int    $libID
+     * @param  int    $branch
      * @param  string $orderBy
      * @param  object $pager
      * @access public
      * @return array
      */
-    public function getLibCases($productID, $libID, $orderBy = 'id_desc', $pager = null, $browseType = '', $queryID = 0)
+    public function getCanImportCases($productID, $libID, $branch, $orderBy = 'id_desc', $pager = null, $browseType = '', $queryID = 0)
     {
         $query = '';
         if($browseType == 'bysearch')
@@ -350,9 +351,18 @@ class testsuiteModel extends model
             if(!$withAllLib) $query .= " AND `lib` = '$libID'";
         }
 
+        $caseModules = $this->getCanImportModules($productID, $libID,  $branch === 'all' ? 0 : (int)$branch);
+
+        $importedCaseIdList = array();
+        foreach($caseModules as $caseID => $modules)
+        {
+            if(empty($modules)) $importedCaseIdList[$caseID] = $caseID;
+        }
+
         return $this->dao->select('*')->from(TABLE_CASE)->where('deleted')->eq(0)
             ->beginIF($browseType != 'bysearch')->andWhere('lib')->eq($libID)->fi()
             ->beginIF($browseType == 'bysearch')->andWhere($query)->fi()
+            ->andWhere('id')->notIn($importedCaseIdList)
             ->andWhere('product')->eq(0)
             ->orderBy($orderBy)
             ->page($pager)
@@ -364,22 +374,27 @@ class testsuiteModel extends model
      *
      * @param  int    $productID
      * @param  int    $libID
-     * @param  string $orderBy
-     * @param  object $pager
+     * @param  int    $branch
      * @access public
      * @return array
      */
-    public function getImportedModules($productID, $libID)
+    public function getCanImportModules($productID, $libID, $branch)
     {
         $importedModules = $this->dao->select('fromCaseID,module')->from(TABLE_CASE)
             ->where('product')->eq($productID)
             ->andWhere('lib')->eq($libID)
+            ->andWhere('branch')->eq($branch)
             ->andWhere('fromCaseID')->ne('')
             ->andWhere('deleted')->eq(0)
             ->fetchGroup('fromCaseID', 'module');
         foreach($importedModules as $fromCaseID => $modules) $importedModules[$fromCaseID] = array_combine(array_keys($modules), array_keys($modules));
 
-        return $importedModules;
+        $modules = $this->loadModel('tree')->getOptionMenu($productID, 'case', 0, $branch);
+
+        $canImportModules = array();
+        foreach($importedModules as $caseID => $caseModules) $canImportModules[$caseID] = array_diff_key($modules, $importedModules[$caseID]);
+
+        return $canImportModules;
     }
 
     /**

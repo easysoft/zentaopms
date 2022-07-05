@@ -13,6 +13,7 @@
 <?php include '../../common/view/header.html.php';?>
 <?php js::set('flow', $config->global->flow);?>
 <?php js::set('ditto', $lang->testcase->ditto);?>
+<?php js::set('canImportModules', $canImportModules);?>
 <div id='mainMenu' class='clearfix'>
   <div class='btn-toolbar pull-left'>
     <div class='input-group w-300px'>
@@ -46,7 +47,7 @@
       </thead>
       <tbody>
         <?php $i = 0;?>
-        <?php foreach($cases as $case):?>
+        <?php foreach($cases as $id => $case):?>
         <tr id='<?php echo $case->id;?>'>
           <td class='c-id'>
             <div class="checkbox-primary">
@@ -65,8 +66,7 @@
           <td class='text-left' title='<?php echo $libModule?>'><?php echo $libModule;?></td>
           <td class='text-left' data-module='<?php echo $case->module?>' style='overflow:visible'>
             <?php if($i > 0) $modules['ditto'] = $lang->testcase->ditto;?>
-            <?php $importedCaseModules = isset($importedModules[$case->id]) ? $importedModules[$case->id] : array();?>
-            <?php echo html::select("module[{$case->id}]", array_diff_key($modules, $importedCaseModules), $i == 0 ? 0 : 'ditto', "class='form-control chosen'");?>
+            <?php echo html::select("module[{$case->id}]", isset($canImportModules[$branch][$case->id]) ? $canImportModules[$branch][$case->id] : $modules, $i == 0 ? 0 : 'ditto', "class='form-control chosen'");?>
           </td>
           <td><?php echo zget($lang->testcase->typeList, $case->type);?></td>
         </tr>
