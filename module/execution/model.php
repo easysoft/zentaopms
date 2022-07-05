@@ -3211,7 +3211,7 @@ class executionModel extends model
      * @param  string $type
      * @param  array  $dateList
      * @access public
-     * @return void
+     * @return array
      */
     public function buildCFDData($executionID, $dateList, $type)
     {
@@ -3221,10 +3221,8 @@ class executionModel extends model
         if(empty($setGroup)) return array();
 
         $chartData['labels'] = $this->report->convertFormat($dateList, DT_DATE5);
-        //$chartData['line']   = $this->report->createSingleJSON($sets, $dateList);
+        $chartData['line']   = array();
 
-
-        $chartData['line'] = array();
         foreach($setGroup as $name => $sets)
         {
             $chartData['line'][$name] = $this->report->createSingleJSON($sets, $dateList);
@@ -3240,7 +3238,7 @@ class executionModel extends model
      * @param  string $type
      * @param  array  $dateList
      * @access public
-     * @return void
+     * @return array
      */
     public function getCFDData($executionID = 0, $dateList = array(), $type = 'story')
     {
