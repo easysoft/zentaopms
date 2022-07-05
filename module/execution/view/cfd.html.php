@@ -11,11 +11,6 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<?php js::set('executionID', $executionID);?>
-<?php js::set('executionName', $execution->name);?>
-<?php js::set('watermark', $lang->execution->watermark);?>
-<?php js::set('cfdXUnit', $lang->execution->burnXUnit);?>
-<?php js::set('cfdYUnit', $lang->execution->burnYUnit);?>
 <?php js::import($jsRoot . 'echarts/echarts.common.min.js'); ?>
 <?php js::import($jsRoot . 'html2canvas/min.js'); ?>
 <div id='mainMenu' class='clearfix'>
@@ -35,23 +30,28 @@
 <div id='mainContent' class='main-content'>
   <h2 class='text-center'><?php echo $executionName . ' - ' . zget($lang->execution->cfdTypeList, $type) . $lang->execution->CFD;?></h2>
   <div id="cfdWrapper">
-    <div id="cfdChart">
-      <canvas id="cfdCanvas" width='1400' height='600'></canvas>
-    </div>
+    <div id="cfdChart" style="width: 1200px; height: 600px"></div>
     <div id="cfdYUnit"><?php echo $lang->execution->count;?></div>
     <div id="cfdXUnit"><?php echo $lang->execution->burnXUnit;?></div>
   </div>
 </div>
+<?php if(!empty($chartData)):?>
 <script>
-var series = [];
-var colors = ['#33B4DB', '#7ECF69', '#FFC73A', '#FF5A61', '#50C8D0', '#AF5AFF', '#4EA3FF', '#6C73FF', '#FF8C5A'];
-var i      = 0;
+var i = 0;
+var series     = [];
+var colors     = ['#33B4DB', '#7ECF69', '#FFC73A', '#FF5A61', '#50C8D0', '#AF5AFF', '#4EA3FF', '#FF8C5A', '#6C73FF'];
+//var background = ['#E1F4FA', '#ECF8E9', '#FFF7E2', '#FFE7E8', '#E5F7F8', '#F3E7FF', '#E5F1FF', '#FFEEE7', '#E9EAFF'];
+
 <?php foreach($chartData['line'] as $label => $set):?>
 series.push({
     name: '<?php echo $label;?>',
     type: 'line',
     stack: 'Total',
-    areaStyle: {},
+    color: colors[i],
+    areaStyle: {
+        color: colors[i],
+        opacity: 0.2
+    },
     emphasis: {
         focus: 'series'
     },
@@ -60,8 +60,8 @@ series.push({
 i ++;
 <?php endforeach;?>
 
-var chartDom = document.getElementById('cfdCanvas');
-var myChart = echarts.init(chartDom);
+var chartDom = document.getElementById('cfdChart');
+var CFD      = echarts.init(chartDom);
 var option;
 
 option = {
@@ -75,12 +75,7 @@ option = {
         }
     },
     legend: {
-        data: ['Email', 'Union Ads', 'Video Ads', 'Direct', 'Search Engine']
-    },
-    toolbox: {
-        feature: {
-            saveAsImage: {}
-        }
+      data: <?php echo json_encode(array_keys($chartData['line']));?>
     },
     grid: {
         left: '3%',
@@ -103,8 +98,12 @@ option = {
     series: series,
 };
 
-option && myChart.setOption(option);
+option && CFD.setOption(option);
+window.addEventListener('resize', CFD.resize);
+</script>
+<?php endif;?>
 
+<script>
 $('#type').change(function()
 {
     location.href = createLink('execution', 'cfd', 'executionID=' + executionID + '&type=' + $(this).val());

@@ -1321,23 +1321,7 @@ class execution extends control
         $this->loadModel('kanban');
         $this->app->loadClass('date');
 
-        $end = helper::today() > $execution->end ? $execution->end : helper::today();
-        if(helper::today() > $execution->end)
-        {
-            if(date($execution->end, strtotime('-14 days')) > $execution->begin)
-            {
-                $begin = date($execution->end, strtotime('-14 days'));
-            }
-            else
-            {
-                $begin = $execution->begin;
-            }
-        }
-        elseif(($execution->begin < helper::today()) and (helper::today() < $execution->end))
-        {
-            $begin = (date('Y-m-d', strtotime('-14 days')) < $execution->begin) ? $execution->begin : date('Y-m-d', strtotime('-14 days'));
-        }
-
+        list($begin, $end) = $this->execution->getBeginEnd4CFD($execution);
         $dateList = date::getDateList($begin, $end, 'Y-m-d', '');
 
         $this->view->title         = $this->lang->execution->CFD;

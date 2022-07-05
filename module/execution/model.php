@@ -3093,6 +3093,36 @@ class executionModel extends model
     }
 
     /**
+     * Get begin and end for CFD.
+     * 
+     * @param  object $execution 
+     * @access public
+     * @return void
+     */
+    public function getBeginEnd4CFD($execution)
+    {
+        $begin = $execution->begin;
+        $end   = $execution->end;
+        if(helper::today() < $execution->begin)
+        {
+            $begin = helper::today();
+            $end   = helper::today();
+        }
+        elseif((helper::today() >= $execution->begin) and (helper::today() <= $execution->end))
+        {
+            $begin = (date('Y-m-d', strtotime('-14 days')) < $execution->begin) ? $execution->begin : date('Y-m-d', strtotime('-14 days'));
+            $end   = helper::today();
+        }
+        elseif((helper::today() > $execution->end))
+        {
+            $begin = date($execution->end, strtotime('-14 days')) > $execution->begin ? date($execution->end, strtotime('-14 days')) : $execution->begin;
+            $end   = $execution->end;
+        }
+
+        return array($begin, $end);
+    }
+
+    /**
      * Get burn data for flot
      *
      * @param  int    $executionID

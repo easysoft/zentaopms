@@ -1,11 +1,6 @@
 .main-content > h2 {font-size: 16px;}
 #cfdWrapper {max-width: 1400px; margin: 0 auto; padding: 25px 100px 10px; position: relative;}
-#cfdYUnit {position: absolute; color: #CBD0DB; top: 0; left: 90px;}
-#cfdXUnit {position: absolute; color: #CBD0DB; bottom: 20px; right: 60px;}
-#cfdLegend {position: absolute; right: 0; width: 80px; height: 60px; top: 50%; margin-top: -30px; line-height: 30px; color: #838A9D; font-size: 12px;}
-#cfdLegend > div {position: relative; padding-left: 30px;}
-#cfdLegend > div > .barline {position: absolute; width: 20px; left: 0; top: 13px; height: 3px; background: #EEEEEE;}
-#cfdLegend .line-real .bg-primary {background: #1183fb;}
-#cfdLegend .line-real .bg-delay   {background: red;}
+#cfdYUnit {position: absolute; color: #CBD0DB; top: 27px; left: 130px;}
+#cfdXUnit {position: absolute; color: #CBD0DB; bottom: 35px; right: 60px;}
 
 .pull-left .input-control {margin-right: 10px;}
