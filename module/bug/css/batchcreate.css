@@ -7,5 +7,5 @@
 .c-steps {width: 150px;}
 .c-pri, .c-severity {width: 80px;}
 .c-actions {width: 60px;}
-[lang^=de] .c-build {width: 110px}
-[lang^=fr] .c-build {width: 110px}
+[lang^=de] .c-build, [lang^=fr] .c-build {width: 115px}
+@media screen and (max-width: 1366px) {[lang^=de] .c-build, [lang^=fr] .c-build {width: 110px}}
