@@ -160,7 +160,7 @@ if($this->app->tab == 'project')   js::set('objectID', $bug->project);
                 </tr>
                 <tr>
                   <th><?php echo $lang->bug->deadline;?></th>
-                  <td><?php echo html::input('deadline', helper::isZeroDate($bug->deadline) ? '' : substr($bug->deadline, 5, 11), "class='form-control form-date'");?></td>
+                  <td><?php echo html::input('deadline', helper::isZeroDate($bug->deadline) ? '' : $bug->deadline, "class='form-control form-date'");?></td>
                 </tr>
                 <tr>
                   <th><?php echo $lang->bug->feedbackBy;?></th>
