@@ -412,13 +412,26 @@ class execution extends control
             }
             elseif($groupBy == 'assignedTo' and $filter == 'undone')
             {
+                $multiTaskCount = array();
                 foreach($groupTasks as $assignedTo => $tasks)
                 {
                     foreach($tasks as $i => $task)
                     {
                         if($task->status != 'wait' and $task->status != 'doing')
                         {
-                            $allCount -= 1;
+                            if($task->mode == 'multi')
+                            {
+                                if(!isset($multiTaskCount[$task->id]))
+                                {
+                                    $multiTaskCount[$task->id] = true;
+                                    $allCount -= 1;
+                                }
+                            }
+                            else
+                            {
+                                $allCount -= 1;
+                            }
+
                             unset($groupTasks[$assignedTo][$i]);
                         }
                     }
