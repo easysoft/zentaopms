@@ -3,9 +3,11 @@
 <?php else:?>
 <style>
 .block-risks .c-id {width: 40px;}
-.block-risks .c-pri {width: 70px; text-align: center;}
-.block-risks .c-strategy, .block-risks .c-status {width: 60px;}
-.block-risks .c-user, .block-risks .c-rate, .block-risks .c-category {width: 80px;}
+.block-risks .c-pri {width: 85px; text-align: center;}
+.block-risks .c-strategy, .block-risks .c-status {width: 80px;}
+.block-risks .c-user, .block-risks .c-rate, .block-risks .c-category {width: 110px;}
+.c-rate, .c-category {text-align:center;}
+.c-assignedTo {width: 100px; padding:0px !important;text-align:center;}
 .pri-low {color: #000000;}
 .pri-middle {color: #FF9900;}
 .pri-high {color: #E53333;}
@@ -23,7 +25,7 @@
         <?php if($longBlock):?>
         <th class='c-rate'><?php echo $lang->risk->rate;?></th>
         <th class='c-pri'><?php echo $lang->risk->pri;?></th>
-        <th class='c-user'><?php echo $lang->risk->assignedTo;?></th>
+        <th class='c-assignedTo text-center'><?php echo $lang->risk->assignedTo;?></th>
         <th class='c-category'><?php echo $lang->risk->category;?></th>
         <?php endif;?>
       </tr>
@@ -44,8 +46,8 @@
         </td>
         <?php if($longBlock):?>
         <td class='c-rate'><?php echo $risk->rate?></td>
-        <td><?php echo "<span class='pri-{$risk->pri}'>" . zget($lang->risk->priList, $risk->pri) . "</span>";?></td>
-        <td><?php echo zget($users, $risk->assignedTo, $risk->assignedTo)?></td>
+        <td class='c-pri'><?php echo "<span class='pri-{$risk->pri}'>" . zget($lang->risk->priList, $risk->pri) . "</span>";?></td>
+        <td class='c-assignedTo'><?php echo zget($users, $risk->assignedTo, $risk->assignedTo)?></td>
         <td class='c-category'><?php echo zget($lang->risk->categoryList, $risk->category, $risk->category)?></td>
         <?php endif;?>
       </tr>

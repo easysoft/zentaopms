@@ -2453,6 +2453,7 @@ EOD;
             if($module == 'company' and $method == 'dynamic') return true;
             if($module == 'action' and $method == 'editcomment') return true;
             if($module == 'action' and $method == 'comment') return true;
+            if($module == 'report' and $method == 'export') return true;
             if(!isset($acls['views'][$menu])) return false;
 
             return true;

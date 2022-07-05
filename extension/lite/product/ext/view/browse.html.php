@@ -17,6 +17,7 @@ body {margin-bottom: 25px;}
 #mainMenu .btn-toolbar .btn-group .dropdown-menu .btn-active-text:hover .text {color: #fff;}
 #mainMenu .btn-toolbar .btn-group .dropdown-menu .btn-active-text:hover .text:after {border-bottom: unset;}
 .body-modal #mainMenu>.btn-toolbar {width: auto;}
+.assignedTo{border-radius: 4px !important;}
 </style>
 <?php js::set('browseType', $browseType);?>
 <?php js::set('productID', $productID);?>
@@ -411,7 +412,7 @@ $projectIDParam = $isProjectStory ? "projectID=$projectID&" : '';
 
           <?php if($canBatchAssignTo):?>
           <div class="btn-group dropup">
-            <button data-toggle="dropdown" type="button" class="btn"><?php echo $lang->story->assignedTo;?> <span class="caret"></span></button>
+            <button data-toggle="dropdown" type="button" class="btn assignedTo"><?php echo $lang->story->assignedTo;?> <span class="caret"></span></button>
             <?php
             $withSearch = count($users) > 10;
             $actionLink = $this->createLink('story', 'batchAssignTo', "productID=$productID");

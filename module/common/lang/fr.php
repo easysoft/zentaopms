@@ -84,6 +84,7 @@ $lang->waterfallModel = 'Waterfall';
 $lang->scrumModel     = 'Scrum';
 $lang->all            = 'All';
 $lang->viewDetails    = 'View Details';
+$lang->app            = 'APP';
 
 $lang->actions         = 'Action';
 $lang->restore         = 'Réinitialiser';
@@ -282,6 +283,7 @@ $lang->devops->mr       = 'Merge Request';
 $lang->devops->repo     = 'Repo';
 $lang->devops->rules    = 'Rule';
 $lang->devops->settings = 'Setting Merge Request';
+$lang->devops->set      = 'Set';
 
 $lang->admin->system     = 'System';
 $lang->admin->entry      = 'Application';

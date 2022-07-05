@@ -78,6 +78,7 @@ $lang->globalSetting  = '全局設置';
 $lang->waterfallModel = '瀑布模型';
 $lang->all            = '所有';
 $lang->viewDetails    = '查看詳情';
+$lang->app            = '應用';
 
 $lang->actions         = '操作';
 $lang->restore         = '恢復預設';
