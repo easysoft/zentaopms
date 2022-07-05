@@ -1714,10 +1714,10 @@ class block extends control
         if(common::hasPriv('bug',   'view') and $this->config->vision != 'lite') $hasViewPriv['bug']   = true;
         if($this->config->URAndSR and common::hasPriv('story', 'view') and $this->config->vision != 'lite') $hasViewPriv['requirement'] = true;
         if(common::hasPriv('story', 'view') and $this->config->vision != 'lite') $hasViewPriv['story'] = true;
-        if(common::hasPriv('risk',  'view') and $this->config->edition == 'max' and $this->config->vision != 'lite')    $hasViewPriv['risk']     = true;
-        if(common::hasPriv('issue', 'view') and $this->config->edition == 'max' and $this->config->vision != 'lite')    $hasViewPriv['issue']    = true;
-        if(common::hasPriv('meeting', 'view') and $this->config->edition == 'max' and $this->config->vision != 'lite')  $hasViewPriv['meeting']  = true;
-        if(common::hasPriv('feedback', 'view') and $this->config->edition == 'max' and $this->config->vision != 'lite') $hasViewPriv['feedback'] = true;
+        if(common::hasPriv('risk',  'view') and $this->config->edition == 'max' and $this->config->vision != 'lite')   $hasViewPriv['risk']    = true;
+        if(common::hasPriv('issue', 'view') and $this->config->edition == 'max' and $this->config->vision != 'lite')   $hasViewPriv['issue']   = true;
+        if(common::hasPriv('meeting', 'view') and $this->config->edition == 'max' and $this->config->vision != 'lite') $hasViewPriv['meeting'] = true;
+        if(common::hasPriv('feedback', 'view') and in_array($this->config->edition, array('max', 'biz')) and $this->config->vision != 'lite') $hasViewPriv['feedback'] = true;
 
         $params          = $this->get->param;
         $params          = json_decode(base64_decode($params));
