@@ -280,7 +280,7 @@ $lang->testcase->caselib   = '用例库';
 
 $lang->devops->compile  = '构建';
 $lang->devops->mr       = '合并请求';
-$lang->devops->repo     = '版本库';
+$lang->devops->repo     = '代码库';
 $lang->devops->rules    = '指令';
 $lang->devops->settings = '合并请求设置';
 $lang->devops->set      = '设置';
