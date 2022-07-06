@@ -12,4 +12,9 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/action.html.php';?>
+<?php if(empty($actions)):?>
+<div class="table-empty-tip" id="emptyBox">
+  <p><span class="text-muted"><?php echo $lang->tree->emptyHistory;?></span></p>
+</div>
+<?php endif;?>
 <?php include '../../common/view/footer.html.php';?>
