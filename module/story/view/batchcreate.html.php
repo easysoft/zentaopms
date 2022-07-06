@@ -122,8 +122,8 @@
             foreach($extendFields as $extendField) echo "<td" . (($extendField->control == 'select' or $extendField->control == 'multi-select') ? " style='overflow:visible'" : '') . ">" . $this->flow->getFieldControl($extendField, '', $extendField->field . '[$id]') . "</td>";
             ?>
             <td class='c-actions text-left'>
-              <a href='javascript:;' onclick='addItem(this)' class='btn btn-link'><i class='icon-plus'></i></a>
-              <a href='javascript:;' onclick='deleteItem(this)' class='btn btn-link'><i class='icon icon-close'></i></a>
+              <a href='javascript:;' onclick='addItemBox(this)' class='btn btn-link'><i class='icon-plus'></i></a>
+              <a href='javascript:;' onclick='deleteItemBox(this)' class='btn btn-link'><i class='icon icon-close'></i></a>
             </td>
           </tr>
         </tbody>
@@ -142,7 +142,7 @@
 <div>
   <?php $i = '%i%';?>
   <table class='hidden'>
-    <tr id='addItem' class='hidden'>
+    <tr id='addItemBox' class='hidden'>
       <td class='text-left<?php echo zget($visibleFields, $product->type, ' hidden')?> branchBox'><?php echo html::select("branch[$i]", $branches, $branch, "class='form-control chosen' onchange='setModuleAndPlan(this.value, $productID, $i)'");?></td>
       <td class='text-left' style='overflow:visible'><?php echo html::select("module[$i]", $moduleOptionMenu, 'ditto', "class='form-control chosen'");?></td>
       <td class='text-left<?php echo zget($visibleFields, 'plan', ' hidden')?> planBox' style='overflow:visible'><?php echo html::select("plan[$i]", $plans, 'ditto', "class='form-control chosen'");?></td>
@@ -186,8 +186,8 @@
       foreach($extendFields as $extendField) echo "<td" . (($extendField->control == 'select' or $extendField->control == 'multi-select') ? " style='overflow:visible'" : '') . ">" . $this->flow->getFieldControl($extendField, '', $extendField->field . "[$i]") . "</td>";
       ?>
       <td class='c-actions text-left'>
-        <a href='javascript:;' onclick='addItem(this)' class='btn btn-link'><i class='icon-plus'></i></a>
-        <a href='javascript:;' onclick='deleteItem(this)' class='btn btn-link'><i class='icon icon-close'></i></a>
+        <a href='javascript:;' onclick='addItemBox(this)' class='btn btn-link'><i class='icon-plus'></i></a>
+        <a href='javascript:;' onclick='deleteItemBox(this)' class='btn btn-link'><i class='icon icon-close'></i></a>
       </td>
     </tr>
   </table>

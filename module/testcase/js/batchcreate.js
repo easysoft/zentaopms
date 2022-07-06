@@ -67,35 +67,3 @@ $(document).ready(function()
         return false;
     });
 });
-
-/**
- * Add item.
- *
- * @param  object $obj
- * @access public
- * @return void
- */
-function addItem(obj)
-{
-    var item = $('#addItem').html().replace(/%i%/g, itemIndex + 1);
-    $('<tr class="addedItem">' + item  + '</tr>').insertAfter($(obj).closest('tr'));
-
-    $(obj).closest('tr').next().find('div[id$=_chosen]').remove();
-    $(obj).closest('tr').next().find('.picker').remove();
-    $(obj).closest('tr').next().find('.chosen').chosen();
-    $(obj).closest('tr').next().find('.picker-select').picker();
-
-    itemIndex ++;
-}
-
-/**
- * Delete item.
- *
- * @param  object $obj
- * @access public
- * @return void
- */
-function deleteItem(obj)
-{
-    $(obj).closest('tr').remove();
-}

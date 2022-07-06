@@ -175,9 +175,9 @@ $colspan = count($visibleFields) + 3;
             foreach($extendFields as $extendField) echo "<td" . (($extendField->control == 'select' or $extendField->control == 'multi-select') ? " style='overflow:visible'" : '') . ">" . $this->flow->getFieldControl($extendField, '', $extendField->field . "[$i]") . "</td>";
             ?>
             <td class='c-actions text-left'>
-              <a href='javascript:;' onclick='addItem(this)' class='btn btn-link'><i class='icon-plus'></i></a>
+              <a href='javascript:;' onclick='addItemBox(this)' class='btn btn-link'><i class='icon-plus'></i></a>
               <?php if($i != 1):?>
-              <a href='javascript:;' onclick='deleteItem(this)' class='btn btn-link'><i class='icon icon-close'></i></a>
+              <a href='javascript:;' onclick='deleteItemBox(this)' class='btn btn-link'><i class='icon icon-close'></i></a>
               <?php endif;?>
             </td>
           </tr>
@@ -251,8 +251,8 @@ $colspan = count($visibleFields) + 3;
       foreach($extendFields as $extendField) echo "<td" . (($extendField->control == 'select' or $extendField->control == 'multi-select') ? " style='overflow:visible'" : '') . ">" . $this->flow->getFieldControl($extendField, '', $extendField->field . "[%s]") . "</td>";
       ?>
       <td class='c-actions text-left'>
-        <a href='javascript:;' onclick='addItem(this)' class='btn btn-link'><i class='icon-plus'></i></a>
-        <a href='javascript:;' onclick='deleteItem(this)' class='btn btn-link'><i class='icon icon-close'></i></a>
+        <a href='javascript:;' onclick='addItemBox(this)' class='btn btn-link'><i class='icon-plus'></i></a>
+        <a href='javascript:;' onclick='deleteItemBox(this)' class='btn btn-link'><i class='icon icon-close'></i></a>
       </td>
     </tr>
   </tbody>
@@ -260,7 +260,7 @@ $colspan = count($visibleFields) + 3;
 <div>
   <?php $i = '%i%';?>
   <table class='hidden'>
-    <tr id='addItem' class='hidden'>
+    <tr id='addItemBox' class='hidden'>
       <td class='text-left c-id'><?php echo $i;?></td>
       <td class="<?php echo zget($visibleFields, 'module', 'hidden')?> moduleBox" style='overflow:visible'>
         <?php echo html::select("module[$i]", $modules, $moduleID, "class='form-control chosen'")?>
@@ -320,8 +320,8 @@ $colspan = count($visibleFields) + 3;
       foreach($extendFields as $extendField) echo "<td" . (($extendField->control == 'select' or $extendField->control == 'multi-select') ? " style='overflow:visible'" : '') . ">" . $this->flow->getFieldControl($extendField, '', $extendField->field . "[$i]") . "</td>";
       ?>
       <td class='c-actions text-left'>
-        <a href='javascript:;' onclick='addItem(this)' class='btn btn-link'><i class='icon-plus'></i></a>
-        <a href='javascript:;' onclick='deleteItem(this)' class='btn btn-link'><i class='icon icon-close'></i></a>
+        <a href='javascript:;' onclick='addItemBox(this)' class='btn btn-link'><i class='icon-plus'></i></a>
+        <a href='javascript:;' onclick='deleteItemBox(this)' class='btn btn-link'><i class='icon icon-close'></i></a>
       </td>
     </tr>
   </table>

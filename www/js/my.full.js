@@ -1032,3 +1032,37 @@ $(document).ready(function()
         $(this).removeClass('dropdown-hover');
     });
 });
+
+/**
+ * Add item box.
+ *
+ * @param  object $obj
+ * @access public
+ * @return void
+ */
+function addItemBox(obj)
+{
+    var item = $('#addItemBox').html().replace(/%i%/g, itemIndex + 1);
+    $('<tr class="addedItem">' + item  + '</tr>').insertAfter($(obj).closest('tr'));
+
+    $(obj).closest('tr').next().find(".form-date").datepicker();
+    $(obj).closest('tr').next().find("input[name^=color]").colorPicker();
+    $(obj).closest('tr').next().find('div[id$=_chosen]').remove();
+    $(obj).closest('tr').next().find('.picker').remove();
+    $(obj).closest('tr').next().find('.chosen').chosen();
+    $(obj).closest('tr').next().find('.picker-select').picker();
+
+    itemIndex ++;
+}
+
+/**
+ * Delete item box.
+ *
+ * @param  object $obj
+ * @access public
+ * @return void
+ */
+function deleteItemBox(obj)
+{
+    $(obj).closest('tr').remove();
+}
