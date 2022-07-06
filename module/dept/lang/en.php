@@ -9,23 +9,24 @@
  * @version     $Id: en.php 4129 2013-01-18 01:58:14Z wwccss $
  * @link        http://www.zentao.net
  */
-$lang->dept->common      = 'Department';
-$lang->dept->id          = 'ID';
-$lang->dept->path        = 'Path';
-$lang->dept->position    = 'Position';
-$lang->dept->manageChild = "Department";
-$lang->dept->edit        = "Edit Department";
-$lang->dept->delete      = "Delete Department";
-$lang->dept->parent      = "Parent Dept";
-$lang->dept->manager     = "Manager";
-$lang->dept->name        = "Department Name";
-$lang->dept->browse      = "Manage Department";
-$lang->dept->manage      = "Manage Department";
-$lang->dept->updateOrder = "Rank Department";
-$lang->dept->add         = "Add Department";
-$lang->dept->grade       = "Department Grade";
-$lang->dept->order       = "Department Order";
-$lang->dept->dragAndSort = "Drag to order";
+$lang->dept->common       = 'Department';
+$lang->dept->id           = 'ID';
+$lang->dept->path         = 'Path';
+$lang->dept->position     = 'Position';
+$lang->dept->manageChild  = "Department";
+$lang->dept->edit         = "Edit Department";
+$lang->dept->delete       = "Delete Department";
+$lang->dept->parent       = "Parent Dept";
+$lang->dept->manager      = "Manager";
+$lang->dept->name         = "Department Name";
+$lang->dept->browse       = "Manage Department";
+$lang->dept->manage       = "Manage Department";
+$lang->dept->updateOrder  = "Rank Department";
+$lang->dept->add          = "Add Department";
+$lang->dept->grade        = "Department Grade";
+$lang->dept->order        = "Department Order";
+$lang->dept->dragAndSort  = "Drag to order";
+$lang->dept->noDepartment = "No Department";
 
 $lang->dept->confirmDelete = " Do you want to delete this department?";
 $lang->dept->successSave   = " Saved!";
