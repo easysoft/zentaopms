@@ -1759,7 +1759,6 @@ class treeModel extends model
         }
         $this->fixModulePath(isset($module->root) ? $module->root : $self->root, $self->type);
         if(isset($module->root) and $module->root != $self->root) $this->changeRoot($moduleID, $self->root, $module->root, $self->type);
-
     }
 
     /**
