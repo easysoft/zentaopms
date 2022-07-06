@@ -29,16 +29,41 @@ $(document).ready(function()
 
     $('#customField').click(function()
     {
-        $('#formSettingForm > .checkboxes > .checkbox-primary > input').each(function()
-        {
-            var field    = ',' + $(this).val() + ',';
-            var required = ',' + requiredFields + ',';
-            if(required.indexOf(field)  >= 0) $(this).attr('disabled', 'disabled');
-        });
+        hiddenRequireFields();
     });
 
+    /* Implement a custom form without feeling refresh. */
     $('#formSettingForm .btn-primary').click(function()
     {
-        $('#formSettingForm > .checkboxes > .checkbox-primary > input').removeAttr('disabled');
+        var fields = '';
+        $('#formSettingForm > .checkboxes > .checkbox-primary > input:checked').each(function()
+        {
+            fields += ',' + $(this).val();
+        });
+
+        var link = createLink('custom', 'ajaxSaveCustomFields', 'module=testcase&section=custom&key=batchCreateFields');
+        $.post(link, {'fields' : fields}, function()
+        {
+            showCheckedFields(fields);
+            $('#formSetting').parent().removeClass('open');
+
+            var fieldCount = $('#batchCreateForm .table thead>tr>th:visible').length;
+            $('.form-actions').attr('colspan', fieldCount);
+
+            if(fieldCount > 8)
+            {
+                $('#batchCreateForm > .table-responsive').removeClass('scroll-none');
+                $('#batchCreateForm > .table-responsive').css('overflow', 'auto');
+            }
+            else
+            {
+                $('#batchCreateForm > .table-responsive').addClass('scroll-none');
+                $('#batchCreateForm > .table-responsive').css('overflow', 'visible');
+            }
+
+            if($('#batchCreateForm table thead tr th.c-title').width() < 170) $('#batchCreateForm table thead tr th.c-title').width('170');
+        });
+
+        return false;
     });
 });

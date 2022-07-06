@@ -958,6 +958,7 @@ class storyModel extends model
 
             unset($oldStory->parent);
             unset($story->parent);
+            if(($this->config->edition == 'biz' || $this->config->edition == 'max') && $oldStory->feedback) $this->loadModel('feedback')->updateStatus('story', $oldStory->feedback, $story->status, $oldStory->status);
             return common::createChanges($oldStory, $story);
         }
     }
@@ -1065,6 +1066,8 @@ class storyModel extends model
                     $actionID = $this->loadModel('action')->create('story', $parentID, $action, '', '', '', false);
                     $this->action->logHistory($actionID, $changes);
                 }
+
+                if(($this->config->edition == 'biz' || $this->config->edition == 'max') && $oldParentStory->feedback) $this->loadModel('feedback')->updateStatus('story', $oldParentStory->feedback, $newParentStory->status, $oldParentStory->status);
             }
         }
         else
@@ -1290,6 +1293,12 @@ class storyModel extends model
                     if($story->type == 'story') $this->batchChangeStage(array($storyID), $story->stage);
                     if($story->closedReason == 'done') $this->loadModel('score')->create('story', 'close');
                     $allChanges[$storyID] = common::createChanges($oldStory, $story);
+
+                    if(($this->config->edition == 'biz' || $this->config->edition == 'max') && $oldStory->feedback && !isset($feedbacks[$oldStory->feedback]))
+                    {
+                        $feedbacks[$oldStory->feedback] = $oldStory->feedback;
+                        $this->loadModel('feedback')->updateStatus('story', $oldStory->feedback, $story->status, $oldStory->status);
+                    }
                 }
                 else
                 {
@@ -1605,6 +1614,8 @@ class storyModel extends model
         {
             $this->setStage($storyID);
             $this->loadModel('score')->create('story', 'close', $storyID);
+
+            if(($this->config->edition == 'biz' || $this->config->edition == 'max') && $oldStory->feedback) $this->loadModel('feedback')->updateStatus('story', $oldStory->feedback, $story->status, $oldStory->status);
         }
         return common::createChanges($oldStory, $story);
     }
@@ -1668,6 +1679,12 @@ class storyModel extends model
                 if($oldStory->parent > 0) $this->updateParentStatus($storyID, $oldStory->parent);
                 $this->setStage($storyID);
                 $allChanges[$storyID] = common::createChanges($oldStory, $story);
+
+                if(($this->config->edition == 'biz' || $this->config->edition == 'max') && $oldStory->feedback && !isset($feedbacks[$oldStory->feedback]))
+                {
+                    $feedbacks[$oldStory->feedback] = $oldStory->feedback;
+                    $this->loadModel('feedback')->updateStatus('story', $oldStory->feedback, $story->status, $oldStory->status);
+                }
             }
             else
             {

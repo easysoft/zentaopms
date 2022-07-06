@@ -22,6 +22,7 @@ $(function()
         var link = createLink('custom', 'ajaxSaveCustomFields', 'module=bug&section=custom&key=batchCreateFields');
         $.post(link, {'fields' : fields}, function()
         {
+            showFields = fields;
             showCheckedFields(fields);
             $('#formSetting').parent().removeClass('open');
 
@@ -55,8 +56,6 @@ $(function()
  */
 function showCheckedFields(fields)
 {
-    showFields = fields;
-
     var fieldList = ',' + fields + ',';
     $('#formSettingForm > .checkboxes > .checkbox-primary > input').each(function()
     {
@@ -74,22 +73,6 @@ function showCheckedFields(fields)
             $fieldBox.addClass('hidden');
             $field.attr('disabled', true);
         }
-    });
-}
-
-/**
- * Hidden require field.
- *
- * @access public
- * @return void
- */
-function hiddenRequireFields()
-{
-    $('#formSettingForm > .checkboxes > .checkbox-primary > input').each(function()
-    {
-        var field    = ',' + $(this).val() + ',';
-        var required = ',' + requiredFields + ',';
-        if(required.indexOf(field) >= 0) $(this).closest('div').addClass('hidden');
     });
 }
 

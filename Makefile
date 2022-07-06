@@ -7,8 +7,8 @@ XVERSION    = $(shell head -n 1 xuanxuan/XVERSION)
 #RELEASE_PATH := $(if $(ZENTAO_RELEASE_PATH),$(ZENTAO_RELEASE_PATH),$(shell pwd))
 XUANPATH      := /home/gitlab-runner/ci/gitlab/xuan/
 XUAN_WEB_PATH := /home/gitlab-runner/ci/packages/web
-BUILD_PATH    := /home/z/ci/build/
-RELEASE_PATH  := /home/z/ci/release/
+BUILD_PATH    := /home/z/ci/pip_build/
+RELEASE_PATH  := /home/z/ci/pip_release/
 
 all:
 	make clean

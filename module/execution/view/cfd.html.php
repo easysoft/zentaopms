@@ -89,11 +89,27 @@ option = {
         type: 'category',
         boundaryGap: false,
         data: <?php echo json_encode($chartData['labels'])?>,
+        axisLine: {
+          show: true,
+          lineStyle:
+          {
+             color: '#999',
+             width:1,
+          }
+        }
     }
     ],
     yAxis: [
     {
-        type: 'value'
+        type: 'value',
+        axisLine: {
+          show: true,
+          lineStyle:
+          {
+             color: '#999',
+             width:1,
+          }
+        }
     }
     ],
     series: series,

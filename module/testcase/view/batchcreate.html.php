@@ -15,6 +15,7 @@
 <?php js::set('productID', $productID);?>
 <?php js::set('branch', $branch);?>
 <?php js::set('requiredFields', $config->testcase->create->requiredFields)?>
+<?php js::set('showFields', $showFields);?>
 <div id="mainContent" class="main-content fade">
   <div class="main-header">
     <h2>
@@ -54,16 +55,16 @@
         <thead>
           <tr class='text-center'>
             <th class='c-id'><?php echo $lang->idAB;?></th>
-            <th class='c-branch<?php echo zget($visibleFields, $product->type, ' hidden')?>'><?php echo $lang->product->branch;?></th>
-            <th class='c-module<?php echo zget($visibleFields, 'module', ' hidden') . zget($requiredFields, 'module', '', ' required');?>'><?php echo $lang->testcase->module;?></th>
-            <th class='c-story<?php echo zget($visibleFields, 'story', ' hidden') . zget($requiredFields, 'story', '', ' required'); echo $hiddenStory;?>'> <?php echo $lang->testcase->story;?></th>
+            <th class='c-branch<?php echo zget($visibleFields, $product->type, ' hidden')?> branchBox'><?php echo $lang->product->branch;?></th>
+            <th class='c-module<?php echo zget($visibleFields, 'module', ' hidden') . zget($requiredFields, 'module', '', ' required');?> moduleBox'><?php echo $lang->testcase->module;?></th>
+            <th class='c-story<?php echo zget($visibleFields, 'story', ' hidden') . zget($requiredFields, 'story', '', ' required'); echo $hiddenStory;?> storyBox'> <?php echo $lang->testcase->story;?></th>
             <th class='text-left required has-btn c-title'><?php echo $lang->testcase->title;?></th>
             <th class='c-type text-left required'><?php echo $lang->testcase->type;?></th>
-            <th class='c-pri<?php  echo zget($visibleFields, 'pri', ' hidden') . zget($requiredFields, 'pri', '', ' required')?>'><?php echo $lang->testcase->pri;?></th>
-            <th class='c-precondition<?php echo zget($visibleFields, 'precondition', ' hidden') . zget($requiredFields, 'precondition', '', ' required')?>'><?php echo $lang->testcase->precondition;?></th>
-            <th class='c-keywords<?php echo zget($visibleFields, 'keywords', ' hidden') . zget($requiredFields, 'keywords', '', ' required')?>'><?php echo $lang->testcase->keywords;?></th>
-            <th class='c-stage<?php echo zget($visibleFields, 'stage', ' hidden') . zget($requiredFields, 'stage', '', ' required')?>'><?php echo $lang->testcase->stage;?></th>
-            <th class='c-review<?php  echo zget($visibleFields, 'review', ' hidden') . zget($requiredFields, 'review', '', ' required')?>'><?php echo $lang->testcase->review;?></th>
+            <th class='c-pri<?php  echo zget($visibleFields, 'pri', ' hidden') . zget($requiredFields, 'pri', '', ' required')?> priBox'><?php echo $lang->testcase->pri;?></th>
+            <th class='c-precondition<?php echo zget($visibleFields, 'precondition', ' hidden') . zget($requiredFields, 'precondition', '', ' required')?> preconditionBox'><?php echo $lang->testcase->precondition;?></th>
+            <th class='c-keywords<?php echo zget($visibleFields, 'keywords', ' hidden') . zget($requiredFields, 'keywords', '', ' required')?> keywordsBox'><?php echo $lang->testcase->keywords;?></th>
+            <th class='c-stage<?php echo zget($visibleFields, 'stage', ' hidden') . zget($requiredFields, 'stage', '', ' required')?> stageBox'><?php echo $lang->testcase->stage;?></th>
+            <th class='c-review<?php  echo zget($visibleFields, 'review', ' hidden') . zget($requiredFields, 'review', '', ' required')?> reviewBox'><?php echo $lang->testcase->review;?></th>
             <?php
             $extendFields = $this->testcase->getFlowExtendFields();
             foreach($extendFields as $extendField) 
@@ -86,9 +87,9 @@
           ?>
           <tr>
             <td class="text-center"><?php echo $i+1;?></td>
-            <td class='text-left<?php echo zget($visibleFields, $product->type, ' hidden')?>'><?php echo html::select("branch[$i]", $branches, $branch, "class='form-control' onchange='setModules(this.value, $productID, $i)'");?></td>
-            <td class='text-left<?php echo zget($visibleFields, 'module', ' hidden')?>' style='overflow:visible'><?php echo html::select("module[$i]", $moduleOptionMenu, $currentModuleID, "class='form-control chosen' onchange='loadStories($productID, this.value, $i)' data-drop_direction='down'");?></td>
-            <td class='text-left<?php echo zget($visibleFields, 'story', ' hidden'); echo $hiddenStory;?>' style='overflow:visible'> <?php echo html::select("story[$i]", $storyPairs, $story ? $story->id : '', 'class="form-control chosen"');?></td>
+            <td class='text-left<?php echo zget($visibleFields, $product->type, ' hidden')?> branchBox'><?php echo html::select("branch[$i]", $branches, $branch, "class='form-control' onchange='setModules(this.value, $productID, $i)'");?></td>
+            <td class='text-left<?php echo zget($visibleFields, 'module', ' hidden')?> moduleBox' style='overflow:visible'><?php echo html::select("module[$i]", $moduleOptionMenu, $currentModuleID, "class='form-control chosen' onchange='loadStories($productID, this.value, $i)' data-drop_direction='down'");?></td>
+            <td class='text-left<?php echo zget($visibleFields, 'story', ' hidden'); echo $hiddenStory;?> storyBox' style='overflow:visible'> <?php echo html::select("story[$i]", $storyPairs, $story ? $story->id : '', 'class="form-control chosen"');?></td>
             <td style='overflow:visible'>
               <div class="input-control has-icon-right">
                 <?php echo html::input("title[$i]", '', "class='form-control title-import'");?>
@@ -102,11 +103,11 @@
               </div>
             </td>
             <td><?php echo html::select("type[$i]", $lang->testcase->typeList, $type, "class='form-control chosen'");?></td>
-            <td class='<?php echo zget($visibleFields, 'pri', 'hidden')?>'>         <?php echo html::select("pri[$i]", $lang->testcase->priList, $pri, "class='form-control chosen'");?></td>
-            <td class='<?php echo zget($visibleFields, 'precondition', 'hidden')?>'><?php echo html::textarea("precondition[$i]", '', "rows='1' class='form-control autosize'")?></td>
-            <td class='<?php echo zget($visibleFields, 'keywords', 'hidden')?>'>    <?php echo html::input("keywords[$i]", '', "class='form-control'");?></td>
-            <td class='text-left<?php echo zget($visibleFields, 'stage', ' hidden')?>' style='overflow:visible'><?php echo html::select("stage[$i][]", $lang->testcase->stageList, '', "class='form-control chosen' multiple");?></td>
-            <td class='<?php echo zget($visibleFields, 'review', 'hidden')?>'><?php echo html::select("needReview[$i]", $lang->testcase->reviewList, $needReview, "class='form-control'");?></td>
+            <td class='<?php echo zget($visibleFields, 'pri', 'hidden')?> priBox'><?php echo html::select("pri[$i]", $lang->testcase->priList, $pri, "class='form-control chosen'");?></td>
+            <td class='<?php echo zget($visibleFields, 'precondition', 'hidden')?> preconditionBox'><?php echo html::textarea("precondition[$i]", '', "rows='1' class='form-control autosize'")?></td>
+            <td class='<?php echo zget($visibleFields, 'keywords', 'hidden')?> keywordsBox'><?php echo html::input("keywords[$i]", '', "class='form-control'");?></td>
+            <td class='text-left<?php echo zget($visibleFields, 'stage', ' hidden')?> stageBox' style='overflow:visible'><?php echo html::select("stage[$i][]", $lang->testcase->stageList, '', "class='form-control chosen' multiple");?></td>
+            <td class='<?php echo zget($visibleFields, 'review', 'hidden')?> reviewBox'><?php echo html::select("needReview[$i]", $lang->testcase->reviewList, $needReview, "class='form-control'");?></td>
             <?php
             $this->loadModel('flow');
             foreach($extendFields as $extendField) echo "<td" . (($extendField->control == 'select' or $extendField->control == 'multi-select') ? " style='overflow:visible'" : '') . ">" . $this->flow->getFieldControl($extendField, '', $extendField->field . "[$i]") . "</td>";
@@ -126,13 +127,14 @@
     </div>
   </form>
 </div>
+<?php js::set('itemIndex', -- $i);?>
 <table class='template' id='trTemp'>
   <tbody>
     <tr>
       <td class="text-center">%s</td>
-      <td class='text-left<?php echo zget($visibleFields, $product->type, ' hidden')?>'><?php echo html::select("branch[%s]", $branches, $branch, "class='form-control chosen' onchange='setModules(this.value, $productID, \"%s\")'");?></td>
-      <td class='text-left<?php echo zget($visibleFields, 'module', ' hidden')?>' style='overflow:visible'><?php echo html::select("module[%s]", $moduleOptionMenu, $currentModuleID, "class='form-control chosen' onchange='loadStories($productID, this.value, \"%s\")' data-drop_direction='down'");?></td>
-      <td class='text-left<?php echo zget($visibleFields, 'story', ' hidden'); echo $hiddenStory;?>' style='overflow:visible'> <?php echo html::select("story[%s]", '', '', 'class="form-control chosen"');?></td>
+      <td class='text-left<?php echo zget($visibleFields, $product->type, ' hidden')?> branchBox'><?php echo html::select("branch[%s]", $branches, $branch, "class='form-control chosen' onchange='setModules(this.value, $productID, \"%s\")'");?></td>
+      <td class='text-left<?php echo zget($visibleFields, 'module', ' hidden')?> moduleBox' style='overflow:visible'><?php echo html::select("module[%s]", $moduleOptionMenu, $currentModuleID, "class='form-control chosen' onchange='loadStories($productID, this.value, \"%s\")' data-drop_direction='down'");?></td>
+      <td class='text-left<?php echo zget($visibleFields, 'story', ' hidden'); echo $hiddenStory;?> storyBox' style='overflow:visible'> <?php echo html::select("story[%s]", $storyPairs, '', 'class="form-control chosen"');?></td>
       <td style='overflow:visible'>
         <div class="input-control has-icon-right">
           <?php echo html::input("title[%s]", '', "class='form-control title-import'");?>
@@ -146,11 +148,11 @@
         </div>
       </td>
       <td><?php echo html::select("type[%s]", $lang->testcase->typeList, $type, "class='form-control chosen'");?></td>
-      <td class='<?php echo zget($visibleFields, 'pri', 'hidden')?>'>         <?php echo html::select("pri[%s]", $lang->testcase->priList, $pri, "class='form-control chosen'");?></td>
-      <td class='<?php echo zget($visibleFields, 'precondition', 'hidden')?>'><?php echo html::textarea("precondition[%s]", '', "rows='1' class='form-control'")?></td>
-      <td class='<?php echo zget($visibleFields, 'keywords', 'hidden')?>'>    <?php echo html::input("keywords[%s]", '', "class='form-control'");?></td>
-      <td class='text-left<?php echo zget($visibleFields, 'stage', ' hidden')?>' style='overflow:visible'><?php echo html::select("stage[%s][]", $lang->testcase->stageList, '', "class='form-control chosen' multiple");?></td>
-      <td class='<?php echo zget($visibleFields, 'review', 'hidden')?>'><?php echo html::select("needReview[%s]", $lang->testcase->reviewList, $needReview, "class='form-control chosen'");?></td>
+      <td class='<?php echo zget($visibleFields, 'pri', 'hidden')?> priBox'><?php echo html::select("pri[%s]", $lang->testcase->priList, $pri, "class='form-control chosen'");?></td>
+      <td class='<?php echo zget($visibleFields, 'precondition', 'hidden')?> preconditionBox'><?php echo html::textarea("precondition[%s]", '', "rows='1' class='form-control'")?></td>
+      <td class='<?php echo zget($visibleFields, 'keywords', 'hidden')?> keywordsBox'><?php echo html::input("keywords[%s]", '', "class='form-control'");?></td>
+      <td class='text-left<?php echo zget($visibleFields, 'stage', ' hidden')?> stageBox' style='overflow:visible'><?php echo html::select("stage[%s][]", $lang->testcase->stageList, '', "class='form-control chosen' multiple");?></td>
+      <td class='<?php echo zget($visibleFields, 'review', 'hidden')?> reviewBox'><?php echo html::select("needReview[%s]", $lang->testcase->reviewList, $needReview, "class='form-control chosen'");?></td>
       <?php 
       $this->loadModel('flow');
       foreach($extendFields as $extendField) echo "<td" . (($extendField->control == 'select' or $extendField->control == 'multi-select') ? " style='overflow:visible'" : '') . ">" . $this->flow->getFieldControl($extendField, '', $extendField->field . "[%s]") . "</td>";
