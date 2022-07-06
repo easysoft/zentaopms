@@ -12,9 +12,6 @@ $(function()
 
     $('#submit').click(function()
     {
-        if(task.consumed != 0 && $('#currentConsumed').val() == 0)
-        {
-            return confirm(consumedEmpty);
-        }
+        if(task.consumed != 0 && $('#currentConsumed').val() == 0 && $('#currentConsumed').val() != '') return confirm(consumedEmpty);
     })
 })
