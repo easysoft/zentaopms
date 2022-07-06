@@ -523,7 +523,7 @@ class tree extends control
                     $output .= "<span class='input-group-addon'>";
                     $output .= html::a($this->createLink('tree', 'browse', "rootID=$rootID&view=$viewType&currentModuleID=0&branch=$branch", '', true), $this->lang->tree->manage, '', "class='text-primary' data-toggle='modal' data-type='iframe' data-width='95%'");
                     $output .= '&nbsp; ';
-                    $output .= html::a("javascript:void(0)", $this->lang->refresh, '', "class='refresh' onclick='loadProductModules($rootID)'");
+                    $output .= html::a("javascript:void(0)", "<i class='icon icon-refresh'></i>", '', "class='refresh' onclick='loadProductModules($rootID)'");
                     $output .= '</span>';
                 }
             }
