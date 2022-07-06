@@ -407,6 +407,10 @@ class tree extends control
     /**
      * Update modules' orders.
      *
+     * @param  int    $root
+     * @param  string $viewType
+     * @param  int    $moduleID
+     *
      * @access public
      * @return void
      */
