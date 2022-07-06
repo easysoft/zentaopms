@@ -1577,6 +1577,7 @@ class testcaseModel extends model
      *
      * @param  int    $productID
      * @param  int    $libID
+     * @param  int    $branch
      * @access public
      * @return void
      */
