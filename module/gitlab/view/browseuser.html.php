@@ -20,14 +20,14 @@
     </form>
   </div>
   <div class="btn-toolbar pull-right">
-    <?php common::printLink('gitlab', 'createUser', "gitlabID=$gitlabID", "<i class='icon icon-plus'></i> " . $lang->gitlab->user->create, '', "class='btn btn-primary'");?>
+    <?php if($isAdmin) common::printLink('gitlab', 'createUser', "gitlabID=$gitlabID", "<i class='icon icon-plus'></i> " . $lang->gitlab->user->create, '', "class='btn btn-primary'");?>
   </div>
 </div>
 <?php if(empty($gitlabUserList)):?>
 <div class="table-empty-tip">
   <p>
     <span class="text-muted"><?php echo $lang->noData;?></span>
-    <?php echo html::a($this->createLink('gitlab', 'createProject', "gitlabID=$gitlabID"), "<i class='icon icon-plus'></i> " . $lang->gitlab->user->create, '', "class='btn btn-info'");?>
+    <?php if($isAdmin) echo html::a($this->createLink('gitlab', 'createProject', "gitlabID=$gitlabID"), "<i class='icon icon-plus'></i> " . $lang->gitlab->user->create, '', "class='btn btn-info'");?>
   </p>
 </div>
 <?php else:?>
