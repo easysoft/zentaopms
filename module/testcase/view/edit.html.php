@@ -164,7 +164,7 @@
                       echo "<span class='input-group-addon'>";
                       echo html::a($this->createLink('tree', 'browse', "rootID=$libID&view=caselib&currentModuleID=0&branch=$case->branch", '', true), $lang->tree->manage, '', "class='text-primary' data-toggle='modal' data-type='iframe' data-width='95%'");
                       echo '&nbsp; ';
-                      echo html::a("javascript:void(0)", $lang->refreshIcon, '', "class='refresh' onclick='loadLibModules($libID)'");
+                      echo html::a("javascript:void(0)", $lang->refreshIcon, '', "class='refresh' title='$lang->refresh' onclick='loadLibModules($libID)'");
                       echo '</span>';
                   }
                   ?>
