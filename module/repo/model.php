@@ -2131,4 +2131,29 @@ class repoModel extends model
         foreach($executions as $execution) $pairs[$execution->id] = $execution->name;
         return $pairs;
     }
+
+    /**
+     * Get clone url.
+     *
+     * @param  object $repo
+     * @access public
+     * @return object
+     */
+    public function getCloneUrl($repo)
+    {
+        if(empty($repo)) return null;
+
+        $url = new stdClass();
+        if($repo->SCM == 'Gitlab')
+        {
+            $project = $this->loadModel('gitlab')->apiGetSingleProject($repo->gitlab, $repo->project);
+            if(isset($project->id))
+            {
+                $url->http = $project->http_url_to_repo;
+                $url->ssh  = $project->ssh_url_to_repo;
+            }
+        }
+
+        return $url;
+    }
 }
