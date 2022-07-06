@@ -154,6 +154,7 @@ class search extends control
         {
             if(empty($queryID)) continue;
             $query = $this->search->getByID($queryID);
+
             $html .= '<li>' . html::a("javascript:executeQuery({$queryID})", $queryName . ((common::hasPriv('search', 'deleteQuery') and $this->app->user->account == $query->account) ? '<i class="icon icon-close"></i>' : ''), '', "class='label user-query' data-query-id='$queryID' title='{$queryName}'") . '</li>';
         }
         echo $html;
