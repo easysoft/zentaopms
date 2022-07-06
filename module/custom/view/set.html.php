@@ -234,6 +234,7 @@ EOT;
         </tr>
       </table>
       <?php else:?>
+      <?php if(!empty($fieldList) && is_array($fieldList)):?>
       <table class='table table-form active-disabled table-condensed mw-600px'>
         <tr class='text-center'>
           <td class='w-120px'><strong><?php echo $lang->custom->key;?></strong></td>
@@ -268,6 +269,7 @@ EOT;
       </table>
       <?php if(!$canAdd):?>
       <div class='alert alert-warning alert-block'><?php echo $lang->custom->notice->canNotAdd;?></div>
+      <?php endif;?>
       <?php endif;?>
       <?php endif;?>
     </form>

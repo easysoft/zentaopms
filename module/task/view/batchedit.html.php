@@ -15,6 +15,8 @@
 <?php
 $dittoNotice = sprintf($this->lang->task->dittoNotice, $lang->executionCommon);
 js::set('dittoNotice', $dittoNotice);
+js::set('showFields', $showFields);
+js::set('requiredFields', $config->task->edit->requiredFields);
 ?>
 <div id='mainContent' class='main-content fade'>
   <div class='main-header'>

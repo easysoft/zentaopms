@@ -62,7 +62,7 @@ foreach(explode(',', $config->story->create->requiredFields) as $field)
                     echo "<div class='input-group-addon'>";
                     echo html::a($this->createLink('tree', 'browse', "rootID=$productID&view=story&currentModuleID=0&branch=$branch", '', true), $lang->tree->manage, '', "class='text-primary' data-toggle='modal' data-type='iframe' data-width='90%'");
                     echo '&nbsp; ';
-                    echo html::a("javascript:void(0)", $lang->refresh, '', "class='refresh' onclick='loadProductModules($productID)'");
+                    echo html::a("javascript:void(0)", $lang->refreshIcon, '', "class='refresh' title='refresh' onclick='loadProductModules($productID)'");
                     echo '</div>';
                 }
                 ?>

@@ -18,7 +18,7 @@ if(!$selfCall) die(include('./todolist.html.php'));
 .block-todoes .todoes-input .form-control::-moz-placeholder {font-size: 12px; line-height: 20px; color: #a4a8b6;}
 .block-todoes .todoes-input .form-control:-ms-input-placeholder {font-size: 12px; line-height: 20px;color: #a4a8b6;}
 .block-todoes .todoes-input .form-control::placeholder {font-size: 12px; line-height: 20px; color: #a4a8b6;}
-.block-todoes .todoes {padding: 0 10px 10px 10px; margin: 0 -20px; max-height: 350px; overflow: auto; overflow-x:hidden}
+.block-todoes .todoes {padding: 0 10px 10px 10px; margin: 0 -10px; max-height: 350px; overflow: auto; overflow-x:hidden}
 .block-todoes .todoes > li {position: relative; padding: 5px 10px 5px 35px; list-style: none; white-space:nowrap; overflow: auto; overflow-x:hidden;}
 .block-todoes .todoes > li:hover {background-color: #e9f2fb;}
 .block-todoes .todo-title {padding: 0px;}

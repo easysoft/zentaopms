@@ -175,6 +175,8 @@ $lang->createIcons['program']     = 'program';
 $lang->createIcons['kanbanspace'] = 'cube';
 $lang->createIcons['kanban']      = 'kanban';
 
+$lang->refreshIcon = "<i class='icon icon-refresh'></i>";
+
 $lang->noMenuModule = array('report', 'my', 'todo', 'effort', 'program', 'product', 'execution', 'task', 'build', 'productplan', 'project', 'projectrelease', 'projectstory', 'story', 'branch', 'release', 'attend', 'leave', 'makeup', 'overtime', 'lieu', 'custom', 'admin', 'mail', 'extension', 'dev', 'backup', 'action', 'cron', 'pssp', 'sms', 'message', 'webhook', 'search', 'score', 'stage', 'entry', 'jenkins', 'gitlab');
 
 if(isset($_SESSION['tutorialMode']) and $_SESSION['tutorialMode'] and !defined('TUTORIAL')) define('TUTORIAL', true);

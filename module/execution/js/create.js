@@ -8,7 +8,11 @@ $(function()
     var heightType = $("[name='heightType']:checked").val();
     setCardCount(heightType);
 
-    $('#copyProjects a').click(function(){setCopyProject($(this).data('id')); $('#copyProjectModal').modal('hide')});
+    $(document).on('click', '#copyProjects a', function()
+    {
+        setCopyProject($(this).data('id')); $('#copyProjectModal').modal('hide');
+    });
+
     $('#begin').on('change', function()
     {
        $("#end").val('');
@@ -167,4 +171,44 @@ function subString(title, stringLength)
     }
 
     return title;
+}
+
+/**
+ * Load project executions.
+ *
+ * @param  int    $projectID
+ * @access public
+ * @return void
+ */
+function loadProjectExecutions(projectID)
+{
+    $.get(createLink('execution', 'ajaxGetCopyProjectExecutions', 'projectID=' + projectID + '&$copyExecutionID' + copyExecutionID), function(data)
+    {
+        if(data != '[]')
+        {
+            $('.alert').replaceWith("<div id='copyProjects' class='row'>");
+            $("#copyProjects > div[data-id != '']").remove();
+            $(".model-body").remove();
+            var data = JSON.parse(data);
+            if(copyExecutionID != 0 )
+            {
+                $('#copyProjects').append("<div class='col-md-4 col-sm-6'><a href='javascript:;' data-id='' class='cancel'><i class='icon-ban-circle'></i>" + cancelCopy + "</a></div>");
+            }
+            $.each(data, function(id, execution)
+            {
+                var type    = execution.type == 'stage' ? 'waterfall' : execution.type;
+                var active  = copyExecutionID == id ? ' active' : '';
+                $('#copyProjects').append("<div class='col-md-4 col-sm-6'><a href='javascript:;' data-id='" + id + "' class='nobr " + active + "'><i class='icon-" + type + " text-muted'></i>" + execution.name + "</a></div>");
+            });
+        }
+        else if(data == '[]' && copyExecutionID == 0)
+        {
+            $('#copyProjects').replaceWith("<div class='alert with-icon'><i class='icon-exclamation-sign'></i><div class='content'>" + copyNoExecution + "</div>");
+        }
+        else if(data == '[]' && copyExecutionID != 0)
+        {
+            $("#copyProjects > div[data-id != '']").remove();
+            $('#copyProjects').append("<div class='col-md-4 col-sm-6'><a href='javascript:;' data-id='' class='cancel'><i class='icon-ban-circle'></i>" + cancelCopy + "</a></div>");
+        }
+    });
 }

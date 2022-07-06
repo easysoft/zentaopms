@@ -543,6 +543,17 @@ class kanban extends control
 
             $this->loadModel('action')->create('kanbanLane', $laneID, 'created');
 
+            if($from == 'execution')
+            {
+                if(dao::isError()) return $this->sendError(dao::getError());
+
+                $execLaneType = $this->session->execLaneType ? $this->session->execLaneType : 'all';
+                $execGroupBy  = $this->session->execGroupBy ? $this->session->execGroupBy : 'default';
+                $kanbanData   = $this->loadModel('kanban')->getRDKanban($kanbanID, $execLaneType, 'id_desc', $regionID, $execGroupBy);
+                $kanbanData   = json_encode($kanbanData);
+                return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => "parent.updateKanban($kanbanData, $regionID)"));
+            }
+
             $kanbanGroup = $this->kanban->getKanbanData($kanbanID, $regionID);
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => 1, 'callback' => array('target' => 'parent', 'name' => 'updateRegion', 'params' => array($regionID, $kanbanGroup))));
         }
@@ -624,6 +635,17 @@ class kanban extends control
         else
         {
             $this->kanban->delete(TABLE_KANBANLANE, $laneID);
+
+            if($this->app->tab == 'execution')
+            {
+                if(dao::isError()) return $this->sendError(dao::getError());
+
+                $execLaneType = $this->session->execLaneType ? $this->session->execLaneType : 'all';
+                $execGroupBy  = $this->session->execGroupBy ? $this->session->execGroupBy : 'default';
+                $kanbanData   = $this->loadModel('kanban')->getRDKanban($kanbanID, $execLaneType, 'id_desc', $regionID, $execGroupBy);
+                $kanbanData   = json_encode($kanbanData);
+                return print("<script>parent.updateKanban($kanbanData, $regionID)</script>");
+            }
 
             $kanbanGroup = $this->kanban->getKanbanData($kanbanID, $regionID);
             $kanbanGroup = json_encode($kanbanGroup);
@@ -1497,18 +1519,24 @@ class kanban extends control
             if($from == 'RDKanban')
             {
                 if(dao::isError()) return $this->sendError(dao::getError());
+
                 $regionID     = $column->region;
                 $execLaneType = $this->session->execLaneType ? $this->session->execLaneType : 'all';
                 $execGroupBy  = $this->session->execGroupBy ? $this->session->execGroupBy : 'default';
                 $kanbanData   = $this->loadModel('kanban')->getRDKanban($executionID, $execLaneType, 'id_desc', $regionID, $execGroupBy);
                 $kanbanData   = json_encode($kanbanData);
-
                 return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => "parent.updateKanban($kanbanData, $regionID)"));
             }
-
-            $region      = $this->kanban->getRegionByID($column->region);
-            $kanbanGroup = $this->kanban->getKanbanData($region->kanban, $region->id);
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => array('target' => 'parent', 'name' => 'updateRegion', 'params' => array($column->region, $kanbanGroup))));
+            elseif($from == 'kanban')
+            {
+                $region      = $this->kanban->getRegionByID($column->region);
+                $kanbanGroup = $this->kanban->getKanbanData($region->kanban, $region->id);
+                return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => array('target' => 'parent', 'name' => 'updateRegion', 'params' => array($column->region, $kanbanGroup))));
+            }
+            else
+            {
+                return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
+            }
         }
 
         $this->app->loadLang('story');

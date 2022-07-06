@@ -1842,7 +1842,8 @@ CREATE TABLE IF NOT EXISTS `zt_webhook` (
 
 INSERT INTO `zt_cron` (`m`, `h`, `dom`, `mon`, `dow`, `command`, `remark`, `type`, `buildin`, `status`, `lastTime`) VALUES
 ('*',    '*',    '*',    '*',    '*',    '', '监控定时任务', 'zentao', 1, 'normal',   '0000-00-00 00:00:00'),
-('30',   '23',   '*',    '*',    '*',    'moduleName=execution&methodName=computeburn', '更新燃尽图',      'zentao', 1, 'normal', '0000-00-00 00:00:00'),
+('30',   '23',   '*',    '*',    '*',    'moduleName=execution&methodName=computeburn', '更新燃尽图',    'zentao', 1, 'normal', '0000-00-00 00:00:00'),
+('30',   '23',   '*',    '*',    '*',    'moduleName=execution&methodName=computecfd', '更新累积流图',   'zentao', 1, 'normal', '0000-00-00 00:00:00'),
 ('0',    '8',    '*',    '*',    '*',    'moduleName=report&methodName=remind',       '每日任务提醒',    'zentao', 1, 'normal', '0000-00-00 00:00:00'),
 ('*/5',  '*',    '*',    '*',    '*',    'moduleName=svn&methodName=run',             '同步SVN',         'zentao', 1, 'stop',   '0000-00-00 00:00:00'),
 ('*/5',  '*',    '*',    '*',    '*',    'moduleName=git&methodName=run',             '同步GIT',         'zentao', 1, 'stop',   '0000-00-00 00:00:00'),
