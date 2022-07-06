@@ -2308,7 +2308,7 @@ class projectModel extends model
      * @access public
      * @return array
      */
-    public function getStats($projectID = 0, $status = 'undone', $productID = 0, $branch = 0, $itemCounts = 30, $orderBy = 'id_asc', $pager = null)
+    public function getStats($projectID = 0, $status = 'undone', $productID = 0, $branch = 0, $itemCounts = 30, $orderBy = 'id_asc', $pager = null, $withTasks = false)
     {
         if(empty($productID))
         {
@@ -2384,6 +2384,30 @@ class projectModel extends model
             $burns[$executionID] = $executionBurns;
         }
 
+        if($withTasks)
+        {
+            $executionTasks = $this->dao->select('*')->from(TABLE_TASK)
+                ->where('deleted')->eq(0)
+                ->andWhere('status')->ne('closed')
+                ->andWhere('execution')->in(array_keys($executions))
+                ->fetchGroup('execution', 'id');
+
+            foreach($executionTasks as $executionID => $tasks)
+            {
+                foreach($tasks as $task)
+                {
+                    if($task->parent > 0)
+                    {
+                        if(isset($executionTasks[$executionID][$task->parent]))
+                        {
+                            $executionTasks[$executionID][$task->parent]->children[$task->id] = $task;
+                            unset($executionTasks[$executionID][$task->id]);
+                        }
+                    }
+                }
+            }
+        }
+
         /* Process executions. */
         $parents  = array();
         $children = array();
@@ -2409,6 +2433,7 @@ class projectModel extends model
 
             $execution->children = array();
             $execution->grade == 1 ? $parents[$execution->id] = $execution : $children[$execution->parent][] = $execution;
+            if(isset($executionTasks) and isset($executionTasks[$execution->id])) $execution->tasks = $executionTasks[$execution->id];
         }
 
         /* In the case of the waterfall model, calculate the sub-stage. */
