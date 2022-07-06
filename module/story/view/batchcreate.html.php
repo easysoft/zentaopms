@@ -11,6 +11,8 @@
  */
 ?>
 <?php include './header.html.php';?>
+<?php js::set('showFields', $showFields);?>
+<?php js::set('requiredFields', $config->story->create->requiredFields);?>
 <div id="mainContent" class="main-content">
   <div class="main-header">
     <h2><?php echo $storyID ? $storyTitle . ' - ' . $this->lang->story->subdivide : $this->lang->story->batchCreate;?></h2>
@@ -47,23 +49,23 @@
       <table class="table table-form">
         <thead>
           <tr>
-            <th class='c-branch<?php echo zget($visibleFields, $product->type, ' hidden')?>'><?php echo $lang->product->branch;?></th>
+            <th class='c-branch<?php echo zget($visibleFields, $product->type, ' hidden')?> branchBox'><?php echo $lang->product->branch;?></th>
             <th class='c-module<?php echo zget($requiredFields, 'module', '', ' required');?>'><?php echo $lang->story->module;?></th>
-            <th class='c-plan<?php echo zget($visibleFields, 'plan', ' hidden') . zget($requiredFields, 'plan', '', ' required');?>'><?php echo $lang->story->plan;?></th>
+            <th class='c-plan<?php echo zget($visibleFields, 'plan', ' hidden') . zget($requiredFields, 'plan', '', ' required');?> planBox'><?php echo $lang->story->plan;?></th>
             <?php if(isset($execution) and $execution->type == 'kanban'):?>
             <th class='c-branch'><?php echo $lang->kanbancard->region;?></th>
             <th class='c-branch'><?php echo $lang->kanbancard->lane;?></th>
             <?php endif;?>
             <th class='c-name required has-btn'><?php echo $lang->story->title;?></th>
-            <th class='c-spec<?php echo zget($visibleFields, 'spec', ' hidden') . zget($requiredFields, 'spec', '', ' required');?>'><?php echo $lang->story->spec;?></th>
-            <th class='c-source<?php echo zget($visibleFields, 'source', ' hidden') . zget($requiredFields, 'source', '', ' required');?>'><?php echo $lang->story->source;?></th>
-            <th class='c-note<?php echo zget($visibleFields, 'source', ' hidden') . zget($requiredFields, 'sourceNote', '', ' required');?>'><?php echo $lang->story->sourceNote;?></th>
-            <th class='c-verify<?php echo zget($visibleFields, 'verify', ' hidden') . zget($requiredFields, 'verify', '', ' required');?>'><?php echo $lang->story->verify;?></th>
+            <th class='c-spec<?php echo zget($visibleFields, 'spec', ' hidden') . zget($requiredFields, 'spec', '', ' required');?> specBox'><?php echo $lang->story->spec;?></th>
+            <th class='c-source<?php echo zget($visibleFields, 'source', ' hidden') . zget($requiredFields, 'source', '', ' required');?> sourceBox'><?php echo $lang->story->source;?></th>
+            <th class='c-note<?php echo zget($visibleFields, 'source', ' hidden') . zget($requiredFields, 'sourceNote', '', ' required');?> sourceBox'><?php echo $lang->story->sourceNote;?></th>
+            <th class='c-verify<?php echo zget($visibleFields, 'verify', ' hidden') . zget($requiredFields, 'verify', '', ' required');?> verifyBox'><?php echo $lang->story->verify;?></th>
             <th class='c-category'><?php echo $lang->story->category;?></th>
-            <th class='c-pri<?php echo zget($visibleFields, 'pri', ' hidden') . zget($requiredFields, 'pri', '', ' required');?>'><?php echo $lang->story->pri;?></th>
-            <th class='c-estimate<?php echo zget($visibleFields, 'estimate', ' hidden') . zget($requiredFields, 'estimate', '', ' required');?>'><?php echo $lang->story->estimate;?></th>
-            <th class='<?php echo zget($visibleFields, 'review',   ' hidden');?><?php if($forceReview) echo ' required'?>' style="width: 200px !important"><?php echo $lang->story->reviewedBy;?></th>
-            <th class='c-keywords<?php echo zget($visibleFields, 'keywords', ' hidden') . zget($requiredFields, 'keywords', '', ' required');?>'><?php echo $lang->story->keywords;?></th>
+            <th class='c-pri<?php echo zget($visibleFields, 'pri', ' hidden') . zget($requiredFields, 'pri', '', ' required');?> priBox'><?php echo $lang->story->pri;?></th>
+            <th class='c-estimate<?php echo zget($visibleFields, 'estimate', ' hidden') . zget($requiredFields, 'estimate', '', ' required');?> estimateBox'><?php echo $lang->story->estimate;?></th>
+            <th class='<?php echo zget($visibleFields, 'review',   ' hidden');?><?php if($forceReview) echo ' required'?> reviewBox'><?php echo $lang->story->reviewedBy;?></th>
+            <th class='c-keywords<?php echo zget($visibleFields, 'keywords', ' hidden') . zget($requiredFields, 'keywords', '', ' required');?> keywordsBox'><?php echo $lang->story->keywords;?></th>
             <?php
             $extendFields = $this->story->getFlowExtendFields();
             foreach($extendFields as $extendField)
@@ -76,9 +78,9 @@
         </thead>
         <tbody>
           <tr class="template">
-            <td class='text-left<?php echo zget($visibleFields, $product->type, ' hidden')?>'><?php echo html::select('branch[$id]', $branches, $branch, "class='form-control chosen' onchange='setModuleAndPlan(this.value, $productID, \$id)'");?></td>
+            <td class='text-left<?php echo zget($visibleFields, $product->type, ' hidden')?> branchBox'><?php echo html::select('branch[$id]', $branches, $branch, "class='form-control chosen' onchange='setModuleAndPlan(this.value, $productID, \$id)'");?></td>
             <td class='text-left' style='overflow:visible'><?php echo html::select('module[$id]', $moduleOptionMenu, $moduleID, "class='form-control chosen'");?></td>
-            <td class='text-left<?php echo zget($visibleFields, 'plan', ' hidden')?>' style='overflow:visible'><?php echo html::select('plan[$id]', $plans, $planID, "class='form-control chosen'");?></td>
+            <td class='text-left<?php echo zget($visibleFields, 'plan', ' hidden')?> planBox' style='overflow:visible'><?php echo html::select('plan[$id]', $plans, $planID, "class='form-control chosen'");?></td>
             <?php if(isset($execution) and $execution->type == 'kanban'):?>
             <td class='text-left'><?php echo html::select('regions[$id]', $regionPairs, $regionID, "class='form-control chosen' onchange='setLane(this.value, \$id)'");?>
             <td class='text-left'><?php echo html::select('lanes[$id]', $lanePairs, $laneID, "class='form-control chosen'");?>
@@ -100,20 +102,20 @@
                 </span>
               </div>
             </td>
-            <td class='<?php echo zget($visibleFields, 'spec', 'hidden')?>'><textarea name="spec[$id]" id="spec$id" rows="1" class="form-control autosize"></textarea></td>
-            <td class='text-left<?php echo zget($visibleFields, 'source', ' hidden')?>'><?php echo html::select('source[$id]', $sourceList, '', "class='form-control chosen' id='source_\$id'");?></td>
-            <td class='<?php echo zget($visibleFields, 'source', 'hidden')?>'><?php echo html::input('sourceNote[$id]', '', "class='form-control' id='sourceNote_\$id'");?></td>
-            <td class='<?php echo zget($visibleFields, 'verify', 'hidden')?>'><textarea name="verify[$id]" id="verify$id" rows="1" class="form-control autosize"></textarea></td>
+            <td class='<?php echo zget($visibleFields, 'spec', 'hidden')?> specBox'><textarea name="spec[$id]" id="spec$id" rows="1" class="form-control autosize"></textarea></td>
+            <td class='text-left<?php echo zget($visibleFields, 'source', ' hidden')?> sourceBox'><?php echo html::select('source[$id]', $sourceList, '', "class='form-control chosen' id='source_\$id'");?></td>
+            <td class='<?php echo zget($visibleFields, 'source', 'hidden')?> sourceBox'><?php echo html::input('sourceNote[$id]', '', "class='form-control' id='sourceNote_\$id'");?></td>
+            <td class='<?php echo zget($visibleFields, 'verify', 'hidden')?> verifyBox'><textarea name="verify[$id]" id="verify$id" rows="1" class="form-control autosize"></textarea></td>
             <td class='text-left' style='overflow:visible'><?php echo html::select('category[$id]', $lang->story->categoryList, 'feature', "class='form-control chosen'");?></td>
-            <td class='text-left<?php echo zget($visibleFields, 'pri', ' hidden')?>' style='overflow:visible'><?php echo html::select('pri[$id]', $priList, $pri, "class='form-control chosen'");?></td>
-            <td class='<?php echo zget($visibleFields, 'estimate', 'hidden')?>'><?php echo html::input('estimate[$id]', $estimate, "class='form-control'");?></td>
-            <td class='<?php echo zget($visibleFields, 'review', 'hidden')?>'>
+            <td class='text-left<?php echo zget($visibleFields, 'pri', ' hidden')?> priBox' style='overflow:visible'><?php echo html::select('pri[$id]', $priList, $pri, "class='form-control chosen'");?></td>
+            <td class='<?php echo zget($visibleFields, 'estimate', 'hidden')?> estimateBox'><?php echo html::input('estimate[$id]', $estimate, "class='form-control'");?></td>
+            <td class='<?php echo zget($visibleFields, 'review', 'hidden')?> reviewBox'>
               <div class='input-group'>
                 <?php echo html::select('reviewer[$id][]', $reviewers, '', "class='form-control picker-select' multiple");?>
                 <span class='input-group-addon reviewerDitto'><input type='checkbox' name='reviewDitto[$id]' value='ditto' checked='checked' id='dittocheck$id'/> <?php echo $lang->story->ditto;?></span>
               </div>
             </td>
-            <td class='<?php echo zget($visibleFields, 'keywords', 'hidden')?>'><?php echo html::input('keywords[$id]', '', "class='form-control'");?></td>
+            <td class='<?php echo zget($visibleFields, 'keywords', 'hidden')?> keywordsBox'><?php echo html::input('keywords[$id]', '', "class='form-control'");?></td>
             <?php
             $this->loadModel('flow');
             foreach($extendFields as $extendField) echo "<td" . (($extendField->control == 'select' or $extendField->control == 'multi-select') ? " style='overflow:visible'" : '') . ">" . $this->flow->getFieldControl($extendField, '', $extendField->field . '[$id]') . "</td>";
@@ -144,6 +146,7 @@ $(function()
         idEnd: <?php echo max((empty($titles) ? 1 : count($titles)), 10)?>,
         rowCreator: function($row, index)
         {
+            itemIndex = index; // Set the index for the add element operation
             $row.find('select.chosen,select.picker-select').each(function()
             {
                 var $select = $(this);
@@ -162,6 +165,26 @@ $(function()
               {
                   $row.find('.input-story-title').val(storyTitle).after('<input type="hidden" name="uploadImage[' + index + ']" id="uploadImage[' + index + ']" value="' + imageTitles[storyTitle] + '">');
               }
+
+              /* Implement a custom form without feeling refresh. */
+              var fieldList = ',' + showFields + ',';
+              $('#formSettingForm > .checkboxes > .checkbox-primary > input').each(function()
+              {
+                  var field     = ',' + $(this).val() + ',';
+                  var $field    = $row.find('[name^=' + $(this).val() + ']');
+                  var required  = ',' + requiredFields + ',';
+                  var $fieldBox = $row.find('.' + $(this).val() + 'Box' );
+                  if(fieldList.indexOf(field) >= 0 || required.indexOf(field) >= 0)
+                  {
+                      $fieldBox.removeClass('hidden');
+                      $field.removeAttr('disabled');
+                  }
+                  else if(!$fieldBox.hasClass('hidden'))
+                  {
+                      $fieldBox.addClass('hidden');
+                      $field.attr('disabled', true);
+                  }
+              })
         }
     });
 
