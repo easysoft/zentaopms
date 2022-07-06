@@ -148,12 +148,21 @@ function loadBranches(product)
         if(data)
         {
             $inputgroup.addClass('has-branch').append(data);
+            $inputgroup.find('select:last').prepend("<option value='' title=''></option>");
+            $inputgroup.find('select:last').find('option:selected').removeAttr('selected');
+            $inputgroup.find('select:last').val('');
+            $inputgroup.find('select:last').each(nonClickableSelectedBranch);
+            $inputgroup.find('select:last').find('option:first').remove();
             $inputgroup.find('select:last').attr('name', 'branch[' + index + ']').attr('id', 'branch' + index).attr('onchange', "loadPlans('#products" + index + "', this.value)").chosen();
+
+            nonClickableSelectedProduct();
         }
 
         var branchID = $('#branch' + index).val();
         loadPlans(product, branchID);
     });
+
+    if(!multiBranchProducts[$(product).val()]) nonClickableSelectedProduct();
 }
 
 /**
@@ -234,6 +243,11 @@ function nonClickableSelectedProduct()
     {
         var selectedProduct = $(this).val();
         if(selectedProduct != 0 && $.inArray(selectedProduct, selectedVal) < 0 && !multiBranchProducts[selectedProduct]) selectedVal.push(selectedProduct);
+        if(multiBranchProducts[selectedProduct])
+        {
+            var isDisabled = checkMultiProducts(this);
+            if(isDisabled) selectedVal.push(selectedProduct);
+        }
     })
 
     $("select[id^='products']").each(function()
@@ -247,6 +261,59 @@ function nonClickableSelectedProduct()
     })
 
     $("select[id^=products]").trigger('chosen:updated');
+}
+
+function nonClickableSelectedBranch()
+{
+    var relatedProduct = $(this).siblings("select[id^='products']").val();
+
+    /* Get the products control of the same value and their branch control. */
+    var sameProductControl       = [];
+    var sameProductBranchControl = [];
+    $("select[id^='products']").each(function()
+    {
+        if($(this).val() == relatedProduct)
+        {
+            sameProductControl.push(this);
+            sameProductBranchControl.push($(this).siblings("select[id^='branch']"));
+        }
+    });
+
+    /* Get the selected branch of the related product. */
+    var selectedVal = [];
+    $.each(sameProductControl, function()
+    {
+        var selectedBranch = $(this).siblings("select[id^='branch']").val();
+        if($.inArray(selectedBranch, selectedVal) < 0) selectedVal.push(selectedBranch);
+    });
+
+    /* Make the selected value disabled. */
+    $.each(sameProductBranchControl, function()
+    {
+        var selectedBranch = $(this).val();
+        $(this).find('option').each(function()
+        {
+            var optionVal = $(this).attr('value');
+
+            if(optionVal != selectedBranch && $.inArray(optionVal, selectedVal) >= 0) $(this).attr('disabled', 'disabled');
+        })
+    })
+
+    $("select[id^=branch]").trigger('chosen:updated');
+}
+
+function checkMultiProducts(product)
+{
+    var disabledbranchList = [];
+    var optionLength       = $(product).siblings("select[id^='branch']").find('option').length;
+    $(product).siblings("select[id^='branch']").find("option[disabled='disabled']").each(function()
+    {
+        disabledbranchList.push($(this).attr('value'));
+    });
+
+    if(optionLength - disabledbranchList.length == 1) return true;
+
+    return false;
 }
 
 /* Auto compute the work days. */

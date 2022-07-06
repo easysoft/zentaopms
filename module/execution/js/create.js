@@ -118,7 +118,7 @@ $(function()
     });
 
     nonClickableSelectedProduct();
-    $(document).on('change', "select[id^='products']", nonClickableSelectedProduct);
+    $(document).on('change', "select[id^='branch']", nonClickableSelectedBranch);
 });
 
 function showLifeTimeTips()

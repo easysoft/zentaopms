@@ -72,7 +72,10 @@ $(function()
     });
 
     nonClickableSelectedProduct();
-    $(document).on('change', "select[id^='products']", nonClickableSelectedProduct);
+
+    $("select[id^=branch]").each(nonClickableSelectedBranch);
+
+    $(document).on('change', "select[id^='branch']", nonClickableSelectedBranch);
 })
 var lastProjectID = $("#project").val();
 
