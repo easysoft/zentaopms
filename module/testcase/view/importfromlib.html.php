@@ -69,8 +69,7 @@
             <?php printf('%03d', $case->id);?>
           </td>
           <?php if($product->type != 'normal'):?>
-          <?php if($i > 0) $caseBranches['ditto'] = $lang->testcase->ditto;?>
-          <td><?php echo html::select("branch[{$case->id}]", $caseBranches, $i == 0 ? $caseBranch : 'ditto', "class='form-control' onchange='updateModules($productID, this.value, $case->id)'")?></td>
+          <td><?php echo html::select("branch[{$case->id}]", $caseBranches, $caseBranch, "class='form-control' onchange='updateModules($productID, this.value, $case->id)'")?></td>
           <?php endif;?>
           <td><span class='label-pri <?php echo 'label-pri-' . $case->pri;?>' title='<?php echo zget($lang->testcase->priList, $case->pri, $case->pri);?>'><?php echo $case->pri == '0' ? '' : zget($lang->testcase->priList, $case->pri, $case->pri);?></span></td>
           <td class='text-left nobr'><?php if(!common::printLink('testcase', 'view', "caseID=$case->id", $case->title)) echo $case->title;?></td>
