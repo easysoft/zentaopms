@@ -3110,12 +3110,12 @@ class executionModel extends model
         }
         elseif((helper::today() >= $execution->begin) and (helper::today() <= $execution->end))
         {
-            $begin = (date('Y-m-d', strtotime('-14 days')) < $execution->begin) ? $execution->begin : date('Y-m-d', strtotime('-14 days'));
+            $begin = (date('Y-m-d', strtotime('-13 days')) < $execution->begin) ? $execution->begin : date('Y-m-d', strtotime('-13 days'));
             $end   = helper::today();
         }
         elseif((helper::today() > $execution->end))
         {
-            $begin = date($execution->end, strtotime('-14 days')) > $execution->begin ? date($execution->end, strtotime('-14 days')) : $execution->begin;
+            $begin = date($execution->end, strtotime('-13 days')) > $execution->begin ? date($execution->end, strtotime('-13 days')) : $execution->begin;
             $end   = $execution->end;
         }
 
