@@ -10,47 +10,44 @@ class port extends control
     public function export($model = '', $params = '')
     {
         $params = explode(',', $params);
-        $params['executionID'] = 1;
-        $params['orderBy'] = 'id_desc';
-
+        foreach($params as $key => $param)
+        {
+            $param = explode('=', $param);
+            $params[$param[0]] = $param[1];
+            unset($params[$key]);
+        }
         extract($params);
 
         /* save params to session. */
         $this->session->set(($model.'ExportParams'), $params);
-
-        /* Init config fieldList */
-        $fieldList = $this->port->initFieldList($model);
-
-        $queryCondition = $this->session->{$model . 'QueryCondition'};
-        $onlyCondition  = $this->session->{$model . 'OnlyCondition'};
-
-        $modelDatas = array();
-        if($onlyCondition and $queryCondition)
+        if($_POST)
         {
-            $table = zget($this->config->objectTables, $model);;
-            if(isset($this->config->$model->port->table)) $table = $this->config->$model->port->table;
-            $modelDatas = $this->dao->select('*')->from($table)->where($queryCondition)->fetchAll('id');
+            /* Init config fieldList */
+            $fieldList = $this->port->initFieldList($model);
+
+            $queryCondition = $this->session->{$model . 'QueryCondition'};
+            $onlyCondition  = $this->session->{$model . 'OnlyCondition'};
+
+            $modelDatas = array();
+            if($onlyCondition and $queryCondition)
+            {
+                $table = zget($this->config->objectTables, $model);;
+                if(isset($this->config->$model->port->table)) $table = $this->config->$model->port->table;
+                $modelDatas = $this->dao->select('*')->from($table)->where($queryCondition)->fetchAll('id');
+            }
+            elseif($queryCondition)
+            {
+                $stmt = $this->dbh->query($queryCondition . ($this->post->exportType == 'selected' ? " AND t1.id IN({$this->cookie->checkedItem})" : '') . " ORDER BY " . strtr($orderBy, '_', ' '));
+                while($row = $stmt->fetch()) $modelDatas[$row->id] = $row;
+            }
+
+            $exportDatas = $this->getExportDatas($fieldList, $modelDatas);
+
+            $this->post->set('rows', $exportDatas['rows']);
+            $this->post->set('fields', $exportDatas['fields']);
+            $this->post->set('kind', $model);
+            $this->fetch('file', 'export2' . $_POST['fileType'], $POST);
         }
-        elseif($queryCondition)
-        {
-            $stmt = $this->dbh->query($queryCondition . ($this->post->exportType == 'selected' ? " AND t1.id IN({$this->cookie->checkedItem})" : '') . " ORDER BY " . strtr($orderBy, '_', ' '));
-            while($row = $stmt->fetch()) $modelDatas[$row->id] = $row;
-        }
-
-        $exportDatas = $this->getExportDatas($fieldList, $modelDatas);
-        $exportDatas['kind'] = $model;
-
-        $exportFields= isset($this->config->$model->exportFields) ? $this->config->$model->exportFields : '';
-        $exportFields = explode(',', $exportFields);
-        $exportDatas['exportFields'] = array_keys($exportDatas['fields']);
-        $exportDatas['fileType']     = 'xlsx';
-        $exportDatas['fileName']     = '企业网站第一期-所有任务';
-
-        $exportDatas['typeList'] = join(',', $exportDatas['typeList']);
-        $exportDatas['priList']  = join(',', $exportDatas['priList']);
-        $_POST = $exportDatas;
-        //a($exportDatas);die;
-        $this->fetch('file', 'export2' . $_POST['fileType'], $POST);
     }
 
     /**
@@ -70,11 +67,12 @@ class port extends control
             $exportDatas['fields'][$key] = $field['title'];
             if($field['foreignKey'])
             {
-                $exportDatas['listStyle'][] = $key;
-                $exportDatas[$key.'List']   = $field['values'];
+                $exportDatas[$key]   = $field['values'];
                 $foreignKeyList[] = $key;
             }
         }
+
+        $exportDatas['user'] = $this->loadModel('user')->getPairs('devfirst|noclosed|nodeleted');
 
         foreach ($modelDatas as $id => $values)
         {
@@ -82,12 +80,22 @@ class port extends control
             {
                 if(in_array($field, $foreignKeyList))
                 {
-                    $modelDatas[$id]->$field = zget($exportDatas[$field.'List'], $value);
+                    $modelDatas[$id]->$field = zget($exportDatas[$field], $value);
+                }
+                elseif(strpos($this->config->port->userField, $field) !== false)
+                {
+                    $modelDatas[$id]->$field = zget($exportDatas['user'], $value);
                 }
             }
         }
+
         $exportDatas['rows'] = array_values($modelDatas);
         return $exportDatas;
+    }
+
+    public function setListValue($model)
+    {
+        $this->post->set('listStyle', $this->config->$model->export->listFields);
     }
 
     /**

@@ -46,6 +46,10 @@ $config->task->fieldList['story']['control'] = 'select';
 $config->task->fieldList['story']['foreignKey'] = true;
 $config->task->fieldList['story']['foreignKeySource']  = array('module' => 'story', 'method' => 'getExecutionStories', 'params' => '$executionID', 'pairs' => array('id', 'title'));
 
+$config->task->fieldList['execution']['control'] = 'select';
+$config->task->fieldList['execution']['foreignKey'] = true;
+$config->task->fieldList['execution']['foreignKeySource'] = array('module' => 'execution', 'method' => 'getPairs');
+
 $config->task->customCreateFields      = 'story,estStarted,deadline,mailto,pri,estimate';
 $config->task->customBatchCreateFields = 'module,story,assignedTo,estimate,estStarted,deadline,desc,pri';
 $config->task->customBatchEditFields   = 'module,assignedTo,status,pri,estimate,record,left,estStarted,deadline,finishedBy,canceledBy,closedBy,closedReason';

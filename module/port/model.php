@@ -86,7 +86,7 @@ class portModel extends model
     public function initControl($model, $field)
     {
         if(isset($this->lang->$model->{$field.'List'}))        return 'select';
-        if(strpos($this->config->port->selectParis, $field) !== false) return 'select';
+        if(strpos($this->config->port->sysDataField, $field) !== false) return 'select';
         return $this->config->port->fieldList['control'];
     }
 
@@ -106,7 +106,8 @@ class portModel extends model
         {
             $getParams = $this->session->{$model.'ExportParams'};
 
-            if($params)
+            $params = empty($params) ? '' : $params;
+            if(!empty($params))
             {
                 $sourceParams = explode(',', $params);
                 foreach($sourceParams as $key => $param)
@@ -146,7 +147,7 @@ class portModel extends model
      */
     public function initForeignKey($model, $field, $fieldContent)
     {
-        if(strpos($this->config->port->langList, $field) and !$fieldContent['foreignKey'] and isset($this->lang->$model->{$field.'List'}))
+        if(strpos($this->config->port->sysLangField, $field) and empty($fieldContent['foreignKey']) and isset($this->lang->$model->{$field.'List'}))
         {
             $fieldContent['foreignKey'] = true;
             $fieldContent['values']     = $this->lang->$model->{$field.'List'};
