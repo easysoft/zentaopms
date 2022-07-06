@@ -9,6 +9,7 @@ class port extends control
      */
     public function export($model = '', $params = '')
     {
+        /* Split parameters into variables (executionID=1,status=open).*/
         $params = explode(',', $params);
         foreach($params as $key => $param)
         {
@@ -33,7 +34,10 @@ class port extends control
             {
                 $table = zget($this->config->objectTables, $model);;
                 if(isset($this->config->$model->port->table)) $table = $this->config->$model->port->table;
-                $modelDatas = $this->dao->select('*')->from($table)->where($queryCondition)->fetchAll('id');
+                $modelDatas = $this->dao->select('*')->from($table)->alias('t1')
+                    ->where($queryCondition)
+                    ->beginIF($this->post->exportType == 'selected')->andWhere('t1.id')->in($this->cookie->checkedItem)->fi()
+                    ->fetchAll('id');
             }
             elseif($queryCondition)
             {
@@ -41,6 +45,10 @@ class port extends control
                 while($row = $stmt->fetch()) $modelDatas[$row->id] = $row;
             }
 
+            $list = $this->setListValue($model, $fieldList);
+            if($list) foreach($list as $listName => $listValue) $this->post->set($listName, $listValue);
+
+            /* Get export rows and fields datas */
             $exportDatas = $this->getExportDatas($fieldList, $modelDatas);
 
             $this->post->set('rows', $exportDatas['rows']);
@@ -82,7 +90,7 @@ class port extends control
                 {
                     $modelDatas[$id]->$field = zget($exportDatas[$field], $value);
                 }
-                elseif(strpos($this->config->port->userField, $field) !== false)
+                elseif(strpos($this->config->port->userFields, $field) !== false)
                 {
                     $modelDatas[$id]->$field = zget($exportDatas['user'], $value);
                 }
@@ -93,9 +101,31 @@ class port extends control
         return $exportDatas;
     }
 
-    public function setListValue($model)
+    /**
+     * setListValue
+     *
+     * @param  int    $model
+     * @param  int    $fieldList
+     * @access public
+     * @return void/array
+     */
+    public function setListValue($model, $fieldList)
     {
-        $this->post->set('listStyle', $this->config->$model->export->listFields);
+        $lists = array();
+        if(!empty($this->config->$model->listFields))
+        {
+            $listFields = $this->config->$model->listFields;
+            foreach($listFields as $field)
+            {
+                $listName = $field . 'List';
+                $lists[$listName] = $fieldList[$field]['values'];
+                if(strpos($this->config->$model->sysLangFields, $field)) $lists[$listName] = join(',', $fieldList[$field]['values']);
+            }
+
+            $lists['listStyle'] = $listFields;
+        }
+
+        return $lists;
     }
 
     /**

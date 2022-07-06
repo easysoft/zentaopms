@@ -12,9 +12,12 @@ $config->port->fieldList['sort']     = '';
 $config->port->fieldList['foreignKey'] = '';
 $config->port->fieldList['foreignKeySource'] = array('module' => '', 'method' => '', 'params' => '', 'pairs' => '', 'sql' => '', 'lang' => '');
 
-$config->port->dateFeilds     = ',estStarted,realStarted,deadline,openedDate,assignedDate,finishedDate,canceledDate,closedDate,lastEditedDate,';
-$config->port->datetimeFeilds = '';
-$config->port->sysLangField   = ',pri,status,type,mode,';
-$config->port->sysDataField   = '';
-$config->port->userField      = 'assignedTo,openedBy,finishedBy,canceledBy,closedBy,lastEditedBy,';
 $config->port->initFunction   = 'title,control,required,';
+$config->port->dateFeilds     = 'estStarted,realStarted,deadline,openedDate,assignedDate,finishedDate,canceledDate,closedDate,lastEditedDate,';
+$config->port->datetimeFeilds = '';
+$config->port->listFields     = '';
+$config->port->sysLangFields  = ',pri,status,type,mode,';
+$config->port->sysDataFields  = 'execution,project,product,user';
+$config->port->userFields     = 'assignedTo,openedBy,finishedBy,canceledBy,closedBy,lastEditedBy,';
+$config->port->import = new stdClass();
+$config->port->import->ignoreFields = explode(',', "mailto,openedBy,openedDate,assignedDate,finishedBy,finishedDate,canceledBy,,canceledDate,closedBy,closedDate,closedReason,lastEditedBy,lastEditedDate,files");
