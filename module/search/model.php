@@ -440,6 +440,30 @@ class searchModel extends model
     }
 
     /**
+     * Get query list.
+     *
+     * @param  string    $module
+     * @access public
+     * @return array
+     */
+    public function getQueryList($module)
+    {
+        $queries = $this->dao->select('id, account, title')
+            ->from(TABLE_USERQUERY)
+            ->where()
+            ->markLeft(1)
+            ->where('account')->eq($this->app->user->account)
+            ->orWhere('common')->eq(1)
+            ->markRight(1)
+            ->andWhere('module')->eq($module)
+            ->orderBy('id_desc')
+            ->fetchAll();
+        if(!$queries) return array('' => $this->lang->search->myQuery);
+        $queries = array('' => $this->lang->search->myQuery) + $queries;
+        return $queries;
+    }
+
+    /**
      * Get records by the condition.
      *
      * @param  string    $module
