@@ -320,7 +320,7 @@ class searchModel extends model
                 {
                     $params[$fieldName]['values'] = array('' => '', 'null' => $this->lang->search->null);
                 }
-                elseif(empty($params[$fieldName]['notnull']))
+                elseif(empty($params[$fieldName]['nonull']))
                 {
                     $params[$fieldName]['values'] = $params[$fieldName]['values'] + array('null' => $this->lang->search->null);
                 }
