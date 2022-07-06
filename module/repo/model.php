@@ -2133,21 +2133,20 @@ class repoModel extends model
     }
 
     /**
-     * Get download url.
+     * Get clone url.
      *
-     * @param  int    $repoID
+     * @param  object $repo
      * @access public
      * @return object
      */
-    public function getDownloadUrl($repoID)
+    public function getCloneUrl($repo)
     {
-        $repo = $this->dao->select('*')->from(TABLE_REPO)->where('id')->eq($repoID)->fetch();
         if(empty($repo)) return null;
 
         $url = new stdClass();
         if($repo->SCM == 'Gitlab')
         {
-            $project = $this->loadModel('gitlab')->apiGetSingleProject($repo->client, $repo->path);
+            $project = $this->loadModel('gitlab')->apiGetSingleProject($repo->gitlab, $repo->project);
             if($project)
             {
                 $url->http = $project->http_url_to_repo;

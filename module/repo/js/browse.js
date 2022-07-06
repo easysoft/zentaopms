@@ -3,30 +3,30 @@ function getDownload()
     var content = "<div class='main-col'>";
     content += "<div class='center-block'>";
     content += "<table class='table table-borderless'>";
-    if(downloadUrl.ssh)
+    if(cloneUrl.ssh)
     {
         content += "<tr>";
         content += "<th>" + lang.sshClone + "</th>";
         content += "</tr>";
         content += "<tr>";
-        content += "<td><input type='input' class='form-control' value='" + downloadUrl.ssh + "' readonly></td>";
+        content += "<td><input type='input' class='form-control' value='" + cloneUrl.ssh + "' readonly></td>";
         content += "<td><button type='button' class='btn copy-btn'><i class='icon-common-copy icon-copy' title='" + lang.copy +  "'></i></button></td>";
         content += "</tr>";
         content += "<tr>";
     }
 
-    if(downloadUrl.http)
+    if(cloneUrl.http)
     {
         content += "<th>" + lang.httpClone + "</th>";
         content += "</tr>";
         content += "<tr>";
-        content += "<td><input type='input' class='form-control' value='" + downloadUrl.http + "' readonly></td>";
+        content += "<td><input type='input' class='form-control' value='" + cloneUrl.http + "' readonly></td>";
         content += "<td><button type='button' class='btn copy-btn'><i class='icon-common-copy icon-copy' title='" + lang.copy +  "'></i></button></td>";
         content += "</tr>";
     }
 
     content += "<tr>";
-    content += "<td><button type='button' class='btn'><i class='icon-down-circle'></i> <span>" + lang.downloadZip + "</span></button></td>";
+    content += "<td><button type='button' class='btn download-btn'><i class='icon-down-circle'></i> <span>" + lang.downloadZip + "</span></button></td>";
     content += "<td>";
     content += "</td>";
     content += "</tr>";
@@ -72,5 +72,11 @@ $(function()
         copyText .select();
         document.execCommand("Copy");
         alert(lang.copied);
+    })
+
+    $('.download-btn').live('click', function()
+    {
+        var link = createLink('repo', 'downloadCode', 'repoID=' + repoID);
+        window.open(link);
     })
 })

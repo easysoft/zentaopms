@@ -36,7 +36,7 @@ $lang->repo->revisionAction  = '版本详情';
 $lang->repo->blameAction     = '版本追溯';
 $lang->repo->reviewAction    = '评审列表';
 $lang->repo->downloadCode    = '下载代码';
-$lang->repo->downloadZip     = '下载Zip包';
+$lang->repo->downloadZip     = '下载压缩包';
 $lang->repo->sshClone        = '使用SSH克隆';
 $lang->repo->httpClone       = '使用HTTP克隆';
 
