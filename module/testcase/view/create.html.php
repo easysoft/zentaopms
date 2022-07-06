@@ -56,7 +56,7 @@
                 {
                     echo "<span class='input-group-addon'>";
                     echo html::a($this->createLink('tree', 'browse', "rootID=$productID&view=case&currentModuleID=0&branch=$branch", '', true), $lang->tree->manage, '', "class='text-primary' data-toggle='modal' data-type='iframe' data-width='95%'");
-                    echo html::a("javascript:void(0)", "<i class='icon icon-refresh'></i>", '', "id='refresh' class='refresh' onclick='loadProductModules($productID)'");
+                    echo html::a("javascript:void(0)", $lang->refreshIcon, '', "id='refresh' class='refresh' onclick='loadProductModules($productID)'");
                     echo '</span>';
                 }
                 ?>
