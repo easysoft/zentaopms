@@ -2131,4 +2131,30 @@ class repoModel extends model
         foreach($executions as $execution) $pairs[$execution->id] = $execution->name;
         return $pairs;
     }
+
+    /**
+     * Get download url.
+     *
+     * @param  int    $repoID
+     * @access public
+     * @return object
+     */
+    public function getDownloadUrl($repoID)
+    {
+        $repo = $this->dao->select('*')->from(TABLE_REPO)->where('id')->eq($repoID)->fetch();
+        if(empty($repo)) return null;
+
+        $url = new stdClass();
+        if($repo->SCM == 'Gitlab')
+        {
+            $project = $this->loadModel('gitlab')->apiGetSingleProject($repo->client, $repo->path);
+            if($project)
+            {
+                $url->http = $project->http_url_to_repo;
+                $url->ssh  = $project->ssh_url_to_repo;
+            }
+        }
+
+        return $url;
+    }
 }

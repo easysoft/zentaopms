@@ -35,11 +35,17 @@ $lang->repo->downloadAction  = '下载代码库文件';
 $lang->repo->revisionAction  = '版本详情';
 $lang->repo->blameAction     = '版本追溯';
 $lang->repo->reviewAction    = '评审列表';
+$lang->repo->downloadCode    = '下载代码';
+$lang->repo->downloadZip     = '下载Zip包';
+$lang->repo->sshClone        = '使用SSH克隆';
+$lang->repo->httpClone       = '使用HTTP克隆';
 
 $lang->repo->submit     = '提交';
 $lang->repo->cancel     = '取消';
 $lang->repo->addComment = '添加评论';
 
+$lang->repo->copy     = '点击复制';
+$lang->repo->copied   = '复制成功';
 $lang->repo->module   = '模块';
 $lang->repo->type     = '类型';
 $lang->repo->assign   = '指派';

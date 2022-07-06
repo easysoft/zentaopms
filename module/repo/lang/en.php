@@ -35,11 +35,17 @@ $lang->repo->downloadAction  = 'Download File';
 $lang->repo->revisionAction  = 'Revision Detail';
 $lang->repo->blameAction     = 'Blame';
 $lang->repo->reviewAction    = 'Review List';
+$lang->repo->downloadCode    = 'Download Code';
+$lang->repo->downloadZip     = 'Download Zip file';
+$lang->repo->sshClone        = 'Clone by SSH';
+$lang->repo->httpClone       = 'Clone by HTTP';
 
 $lang->repo->submit     = 'Submit';
 $lang->repo->cancel     = 'Cancel';
 $lang->repo->addComment = 'Add Comment';
 
+$lang->repo->copy     = 'Click to copy';
+$lang->repo->copied   = 'Copy successful';
 $lang->repo->module   = 'Module';
 $lang->repo->type     = 'Type';
 $lang->repo->assign   = 'AssignTo';

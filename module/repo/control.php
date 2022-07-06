@@ -497,6 +497,7 @@ class repo extends control
         $this->view->pager           = $pager;
         $this->view->path            = urldecode($path);
         $this->view->logType         = $logType;
+        $this->view->downloadUrl     = $this->repo->getDownloadUrl($repoID);
         $this->view->cacheTime       = date('m-d H:i', filemtime($cacheFile));
         $this->view->branchOrTag     = $branchOrTag;
 
@@ -1292,5 +1293,39 @@ class repo extends control
     {
         $executions = $this->repo->getExecutionPairs($productID, $branch);
         echo html::select('execution', array('' => '') + $executions, '', 'class="form-control chosen"');
+    }
+
+    public function ajaxGetCodeUrl($repoID = 0, $branch = '')
+    {
+        return <<<EOF
+<div id='mainContent' class='main-row'>
+  <div class='main-col main-content'>
+    <div class='center-block'>
+      <div class='main-header'>
+        <h2>下载代码</h2>
+      </div>
+      <form id='gitlabForm' method='post' class='form-ajax'>
+        <table class='table table-form'>
+          <tr>
+            <th>使用SSH克隆</th>
+            <td class='required'><?php echo html::input('name', '', "class='form-control' readonly");?></td>
+          </tr>
+          <tr>
+            <th>使用HTTPS克隆</th>
+            <td class='required'><?php echo html::input('url', '', "class='form-control' readonly");?></td>
+          </tr>
+          <tr>
+            <th></th>
+            <td class='text-center form-actions'>
+              <?php echo html::submitButton();?>
+            </td>
+          </tr>
+        </table>
+      </form>
+    </div>
+  </div>
+</div>
+EOF;
+
     }
 }
