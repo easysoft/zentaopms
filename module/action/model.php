@@ -936,7 +936,7 @@ class actionModel extends model
                 }
             }
 
-            if($action->objectType == 'module' and $action->action == 'created')
+            if($action->objectType == 'module' and strpos(',created,moved,', $action->action) !== false)
             {
                 $moduleNames = $this->loadModel('tree')->getOptionMenu($action->objectID, 'story', 0, 'all', '');
                 $modules     = explode(',', $action->extra);
@@ -944,7 +944,7 @@ class actionModel extends model
                 $moduleNames = implode(', ', $moduleNames);
                 $actionDesc  = str_replace('$extra', $moduleNames, $desc['main']);
             }
-            elseif($action->objectType == 'module' and strpos(',deleted,moved,', $action->action) !== false)
+            elseif($action->objectType == 'module' and $action->action == 'deleted')
             {
                 $module      = $this->dao->select('*')->from(TABLE_MODULE)->where('id')->eq($action->objectID)->fetch();
                 $moduleNames = $this->loadModel('tree')->getOptionMenu($module->root, 'story', 0, 'all', '');
