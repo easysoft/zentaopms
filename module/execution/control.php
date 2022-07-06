@@ -1341,9 +1341,10 @@ class execution extends control
      * @access public
      * @return void
      */
-    public function computeCFD($reload = 'no', $executionID = 0)
+    public function computeCFD($reload = 'no', $executionID = 0, $date = '')
     {
-        $this->execution->computeCFD($executionID);
+        $date = date('Y-m-d', strtotime($date));
+        $this->execution->computeCFD($executionID, $date);
         if($reload == 'yes') return print(js::reload('parent'));
     }
 
