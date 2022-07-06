@@ -37,7 +37,7 @@
   var $formSetting = $('#formSetting');
   $formSetting.on('click', '.close-dropdown', function()
   {
-      if(showFields != undefined)
+      if(typeof showFields != 'undefined')
       {
           var fieldList = ',' + showFields + ',';
           $('#formSettingForm > .checkboxes > .checkbox-primary > input:visible').each(function()

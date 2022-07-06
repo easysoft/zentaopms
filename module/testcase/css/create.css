@@ -40,5 +40,6 @@
 .title-group.required > .required:after {display: block; right: 29px; top: 5px;}
 .pri-selector > .btn {padding: 5px 8px !important; width: 100%;}
 .pri-selector > .dropdown-menu {padding: 10px;}
+.stageBox {padding-left: 15px !important;}
 
 #refresh {margin-left: 7px;}
