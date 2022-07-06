@@ -4322,28 +4322,4 @@ class executionModel extends model
             echo '</td>';
         }
     }
-
-    /**
-     * Get copy project pairs by program and model.
-     *
-     * @param int    $programID
-     * @param string $status
-     * @param string $orderBy
-     * @param string $model
-     * @access public
-     * @return array
-     */
-    public function getCopyProjectPairsByProgramAndModel($programID = 0, $status = 'all', $orderBy = 'order_asc', $model = '')
-    {
-        return $this->dao->select('id, name')->from(TABLE_PROJECT)
-            ->where('type')->eq('project')
-            ->andWhere('deleted')->eq(0)
-            ->andWhere('vision')->eq($this->config->vision)
-            ->beginIF($programID !== '')->andWhere('parent')->eq($programID)->fi()
-            ->beginIF($model !== '')->andWhere('model')->eq($model)->fi()
-            ->beginIF($status == 'noclosed')->andWhere('status')->ne('closed')->fi()
-            ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->projects)->fi()
-            ->orderBy($orderBy)
-            ->fetchPairs();
-    }
 }

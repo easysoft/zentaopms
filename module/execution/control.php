@@ -1526,7 +1526,7 @@ class execution extends control
 
         $this->loadModel('product');
         $allProducts   = $this->config->systemMode == 'classic' ? $this->product->getPairs('noclosed') : $this->product->getProductPairsByProject($projectID, 'noclosed');
-        $copyProjects  = $this->execution->getCopyProjectPairsByProgramAndModel(isset($project->parent) ? $project->parent : '', 'noclosed', 'order_asc', isset($project->model) ? $project->model : '');
+        $copyProjects  = $this->loadModel('project')->getPairsByProgram(isset($project->parent) ? $project->parent : '', 'noclosed', '', 'order_asc', '', isset($project->model) ? $project->model : '');
         $copyProjectID = ($projectID == 0) ? key($copyProjects) : $projectID;
 
         $this->view->title               = (($this->app->tab == 'execution') and ($this->config->systemMode == 'new')) ? $this->lang->execution->createExec : $this->lang->execution->create;
@@ -3978,6 +3978,13 @@ class execution extends control
         }
     }
 
+    /**
+     * Ajax get copy project executions.
+     *
+     * @param  int    $projectID
+     * @access public
+     * @return void
+     */
     public function ajaxGetCopyProjectExecutions($projectID = 0)
     {
         $executions = $this->execution->getList($projectID);
