@@ -11,9 +11,6 @@
 <?php include '../../common/view/header.html.php';?>
 <div id='mainMenu' class='clearfix'>
   <div class='btn-toolbar pull-left'>
-    <div class='btn-group' id="swapper">
-      <?php echo $this->repo->getReposMenu($repo, $objectID);?>
-    </div>
     <?php if(!empty($branchesAndTags)):?>
     <div class='btn-group'>
       <a href='javascript:;' class='btn btn-link btn-limit text-ellipsis' data-toggle='dropdown' style="max-width: 120px;"><span class='text' title='<?php echo $branchesAndTags[$branchID];?>'><?php echo $branchesAndTags[$branchID];?></span> <span class='caret'></span></a>

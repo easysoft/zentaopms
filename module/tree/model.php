@@ -66,10 +66,11 @@ class treeModel extends model
      * @param  string     $type
      * @param  int        $startModule
      * @param  string|int $branch
+     * @param  string     $param
      * @access public
      * @return void
      */
-    public function buildMenuQuery($rootID, $type, $startModule = 0, $branch = 'all')
+    public function buildMenuQuery($rootID, $type, $startModule = 0, $branch = 'all', $param = 'nodeleted')
     {
         /* Set the start module. */
         $startModulePath = '';
@@ -91,7 +92,7 @@ class treeModel extends model
                 ->orWhere('branch')->eq($branch)
                 ->markRight(1)
                 ->fi()
-                ->andWhere('deleted')->eq(0)
+                ->beginIF(strpos($param, 'nodeleted') !== false)->andWhere('deleted')->eq(0)->fi()
                 ->orderBy('grade desc, `order`, type desc')
                 ->get();
         }
@@ -106,7 +107,7 @@ class treeModel extends model
             ->orWhere('branch')->eq($branch)
             ->markRight(1)
             ->fi()
-            ->andWhere('deleted')->eq(0)
+            ->beginIF(strpos($param, 'nodeleted') !== false)->andWhere('deleted')->eq(0)->fi()
             ->orderBy('grade desc, `order`')
             ->get();
     }
@@ -118,10 +119,11 @@ class treeModel extends model
      * @param  string    $type
      * @param  int       $startModule
      * @param  int|array $branch
+     * @param  string    $param
      * @access public
      * @return string
      */
-    public function getOptionMenu($rootID, $type = 'story', $startModule = 0, $branch = 0)
+    public function getOptionMenu($rootID, $type = 'story', $startModule = 0, $branch = 0, $param = 'nodeleted')
     {
         if(empty($branch)) $branch = 0;
         if(defined('TUTORIAL'))
@@ -138,7 +140,7 @@ class treeModel extends model
         if(gettype($branch) == 'array')
         {
             $modules = array();
-            foreach($branch as $b) $modules[$b] = $this->getOptionMenu($rootID, $type, $startModule, $b);
+            foreach($branch as $b) $modules[$b] = $this->getOptionMenu($rootID, $type, $startModule, $b, $param);
 
             return $modules;
         }
@@ -163,7 +165,7 @@ class treeModel extends model
         $treeMenu = array();
         foreach($branches as $branchID => $branch)
         {
-            $stmt    = $this->dbh->query($this->buildMenuQuery($rootID, $type, $startModule, $branchID));
+            $stmt    = $this->dbh->query($this->buildMenuQuery($rootID, $type, $startModule, $branchID, $param));
             $modules = array();
             while($module = $stmt->fetch()) $modules[$module->id] = $module;
 
@@ -1600,7 +1602,10 @@ class treeModel extends model
         }
         $i = 1;
 
-        $moduleIDList = array();
+        $oldModules = $this->getOptionMenu($rootID, 'story', 0, 'all');
+
+        $createIdList = array();
+        $editIdList   = array();
         foreach($childs as $moduleID => $moduleName)
         {
             if(empty($moduleName)) continue;
@@ -1629,7 +1634,7 @@ class treeModel extends model
                 $module->order  = $order;
                 $this->dao->insert(TABLE_MODULE)->data($module)->exec();
                 $moduleID       = $this->dao->lastInsertID();
-                $moduleIDList[] = $moduleID;
+                $createIdList[] = $moduleID;
                 $childPath      = $parentPath . "$moduleID,";
                 $this->dao->update(TABLE_MODULE)->set('path')->eq($childPath)->where('id')->eq($moduleID)->limit(1)->exec();
             }
@@ -1639,6 +1644,8 @@ class treeModel extends model
                 $order    = $orders[$moduleID];
                 $moduleID = str_replace('id', '', $moduleID);
 
+                $oldModule = $this->getByID($moduleID);
+
                 $data = new stdClass();
                 $data->name  = strip_tags(trim($moduleName));
                 $data->short = $short;
@@ -1646,10 +1653,43 @@ class treeModel extends model
 
                 $this->setModuleLang();
                 $this->dao->update(TABLE_MODULE)->data($data)->autoCheck()->where('id')->eq($moduleID)->limit(1)->exec();
+
+                $newModule = $this->getByID($moduleID);
+                if(!empty(common::createChanges($oldModule, $newModule)))
+                {
+                    $editIdList[]             = $moduleID;
+                    $moduleChanges[$moduleID] = common::createChanges($oldModule, $newModule);
+                }
             }
         }
 
-        return $moduleIDList;
+        if($type == 'story')
+        {
+            $this->loadModel('action');
+            if(!empty($createIdList)) $actionID = $this->action->create('module', $rootID, 'created', '', implode(',', $createIdList));
+
+            if(!empty($editIdList))
+            {
+                $changes    = array();
+                $newModules = $this->getOptionMenu($rootID, 'story', 0, 'all');
+                foreach($moduleChanges as $moduleID => $moduleChange)
+                {
+                    foreach($moduleChange as $change)
+                    {
+                        if($change['field'] == 'name')
+                        {
+                            $change['old']  = zget($oldModules, $moduleID);
+                            $change['new']  = zget($newModules, $moduleID);
+                            $change['diff'] = '';
+                        }
+                        $changes[] = $change;
+                    }
+                }
+                $actionID = $this->action->create('module', $rootID, 'edited', '', implode(',', $editIdList));
+                if(!empty($changes)) $this->action->logHistory($actionID, $changes);
+            }
+        }
+        return $createIdList;
     }
 
     /**
@@ -1663,10 +1703,13 @@ class treeModel extends model
     {
         $module = fixer::input('post')->get();
         $self   = $this->getById($moduleID);
+        $changes = common::createChanges($self, $module);
         if(!isset($_POST['branch'])) $module->branch = $self->branch;
 
         $repeatName = $this->checkUnique($self, array("id{$self->id}" => $module->name), array("id{$self->id}" => $module->branch));
         if($repeatName) helper::end(js::alert(sprintf($this->lang->tree->repeatName, $repeatName)));
+
+        $modules = $self->type == 'story' ? $this->getOptionMenu($self->root, 'story', 0, 'all') : '';
 
         $parent = $this->getById($this->post->parent);
         $childs = $this->getAllChildId($moduleID);
@@ -1677,6 +1720,31 @@ class treeModel extends model
         $this->dao->update(TABLE_MODULE)->set('grade = grade + 1')->where('id')->in($childs)->andWhere('id')->ne($moduleID)->exec();
         $this->dao->update(TABLE_MODULE)->set('owner')->eq($this->post->owner)->where('id')->in($childs)->andWhere('owner')->eq('')->exec();
         $this->dao->update(TABLE_MODULE)->set('owner')->eq($this->post->owner)->where('id')->in($childs)->andWhere('owner')->eq($self->owner)->exec();
+
+        if($self->type == 'story')
+        {
+            $rootID     = isset($module->root) ? $module->root : $self->root;
+            $newModules = $this->getOptionMenu($rootID, 'story', 0, 'all');
+
+            foreach($changes as $id => $change)
+            {
+                if($change['field'] == 'name')
+                {
+                    $changes[$id]['old']  = zget($modules, $moduleID);
+                    $changes[$id]['new']  = zget($newModules, $moduleID);
+                    $changes[$id]['diff'] = '';
+                    break;
+                }
+            }
+            $actionID = $this->loadModel('action')->create('module', $self->root, 'edited', '', $moduleID);
+            if(!empty($changes)) $this->action->logHistory($actionID, $changes);
+            if(isset($module->root) and $module->root != $self->root)
+            {
+                $actionID = $this->action->create('module', $rootID, 'edited', '', $moduleID);
+                if(!empty($changes)) $this->action->logHistory($actionID, $changes);
+            }
+        }
+
         if(isset($module->root) and $module->root != $self->root)
         {
             $this->dao->update(TABLE_MODULE)->set('root')->eq($module->root)->where('id')->in($childs)->exec();

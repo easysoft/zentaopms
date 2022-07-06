@@ -72,3 +72,9 @@ $lang->tree->short        = 'Abbr.';
 $lang->tree->all          = 'Tous les Modules';
 $lang->tree->executionDoc = "Document {$lang->executionCommon}";
 $lang->tree->product      = $lang->productCommon;
+
+$lang->module = new stdclass();
+$lang->module->action = new stdclass();
+$lang->module->action->created = array('main' => "\$date, créé  <strong>\$extra</strong> par <strong>\$actor</strong>.");
+$lang->module->action->moved   = array('main' => "\$date, déplacé  <strong>\$extra</strong> par <strong>\$actor</strong>.");
+$lang->module->action->deleted = array('main' => "\$date, supprimé <strong>\$extra</strong> par <strong>\$actor</strong>.");

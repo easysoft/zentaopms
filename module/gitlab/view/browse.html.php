@@ -55,11 +55,10 @@
           <td class='text' title='<?php echo $gitlab->url;?>'><?php echo html::a($gitlab->url, $gitlab->url, '_target');?></td>
           <td class='c-actions text-left'>
             <?php
-            $disabled = !empty($gitlab->isAdminToken) ? '' : 'disabled';
-            $notBind  = $gitlab->isBindUser ? '' : 'disabled';
-            common::printLink('gitlab', 'edit', "gitlabID=$id", "<i class='icon icon-edit'></i> ", '',"title='{$lang->gitlab->edit}' class='btn btn-primary'");
-            common::printLink('gitlab', 'bindUser', "id=$id", "<i class='icon icon-link'></i> ", '', "title='{$lang->gitlab->bindUser}'  class='btn {$disabled} {$notBind}' ,'disabled'");
-            if(common::hasPriv('gitlab', 'delete')) echo html::a($this->createLink('gitlab', 'delete', "gitlabID=$id"), '<i class="icon-trash"></i>', 'hiddenwin', "title='{$lang->gitlab->delete}' class='btn'");
+            $disabled = (empty($gitlab->isAdminToken) or !$gitlab->isBindUser) ? false : true;
+            common::printIcon('gitlab', 'edit', "gitlabID=$id", '', 'list', 'edit');
+            echo common::buildIconButton('gitlab', 'bindUser', "gitlabID=$id", '', 'list', 'link', '', '', false, '', '', 0, $disabled);
+            common::printIcon('gitlab', 'delete', "gitlabID=$id", '', 'list', 'trash', 'hiddenwin');
             ?>
           </td>
         </tr>

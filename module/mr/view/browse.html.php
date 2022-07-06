@@ -10,14 +10,6 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <div id="mainMenu" class="clearfix">
-  <div class='btn-toolbar pull-left'>
-    <div class='btn-group' id="swapper">
-      <?php
-      $link = inlink('browse', 'repoID=%s');
-      echo $this->repo->getReposMenu($repo, $objectID, $link, 'Gitlab');
-      ?>
-    </div>
-  </div>
   <div class="btn-toolBar pull-left">
     <?php foreach($lang->mr->statusList as $key => $label):?>
     <?php $active = $param == $key ? 'btn-active-text' : '';?>

@@ -14,8 +14,8 @@
 <div id="mainMenu" class="clearfix">
   <div class="btn-toolbar pull-left">
     <?php
-    echo html::a($this->createLink('job', 'browse'), "<span class='text'>{$lang->ci->task}</span>", '', "class='btn btn-link'");
-    echo html::a($this->createLink('compile', 'browse'), "<span class='text'>" . ($jobID ? $job->name : '') . " {$lang->ci->history}</span>", '', "class='btn btn-link btn-active-text'");
+    echo html::a($this->createLink('job', 'browse', "repoID=$repoID"), "<span class='text'>{$lang->ci->task}</span>", '', "class='btn btn-link'");
+    echo html::a($this->createLink('compile', 'browse', "repoID=$repoID&jobID=$jobID"), "<span class='text'>" . ($jobID ? $job->name : '') . " {$lang->ci->history}</span>", '', "class='btn btn-link btn-active-text'");
     ?>
   </div>
 </div>

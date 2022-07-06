@@ -118,6 +118,7 @@ $lang->execution->relatedMember       = 'Equipe';
 $lang->execution->watermark           = 'Exporté par ZenTao';
 $lang->execution->burnXUnit           = '(Date)';
 $lang->execution->burnYUnit           = '(Hours)';
+$lang->execution->count               = '(Count)';
 $lang->execution->waitTasks           = 'Waiting Tasks';
 $lang->execution->viewByUser          = 'Par Utilisateur';
 $lang->execution->oneProduct          = "Only one stage can be linked {$lang->productCommon}";
@@ -164,6 +165,10 @@ $lang->execution->endList[365] = '1 Année';
 $lang->execution->lifeTimeList['short'] = "Short-Term";
 $lang->execution->lifeTimeList['long']  = "Long-Term";
 $lang->execution->lifeTimeList['ops']   = "DevOps";
+
+$lang->execution->cfdTypeList['story'] = "{$lang->SRCommon}";
+$lang->execution->cfdTypeList['task']  = "Task";
+$lang->execution->cfdTypeList['bug']   = "Bug";
 
 $lang->team = new stdclass();
 $lang->team->account    = 'Utilisateur';
@@ -221,6 +226,8 @@ $lang->execution->build               = 'Liste Builds';
 $lang->execution->testtask            = 'Recette';
 $lang->execution->burn                = ' Atterrissage';
 $lang->execution->computeBurn         = 'Calculer';
+$lang->execution->CFD                 = 'Cumulative Flow diagrams';
+$lang->execution->computeCFD          = 'Compute Cumulative Flow diagrams';
 $lang->execution->burnData            = "Données d'atterrissage";
 $lang->execution->fixFirst            = 'Fixer 1er-Jour Estimation';
 $lang->execution->team                = 'Membres';

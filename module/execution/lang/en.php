@@ -118,6 +118,7 @@ $lang->execution->relatedMember       = 'Team';
 $lang->execution->watermark           = 'Exported by ZenTao';
 $lang->execution->burnXUnit           = '(Date)';
 $lang->execution->burnYUnit           = '(Hours)';
+$lang->execution->count               = '(Count)';
 $lang->execution->waitTasks           = 'Waiting Tasks';
 $lang->execution->viewByUser          = 'By User';
 $lang->execution->oneProduct          = "Only one stage can be linked {$lang->productCommon}";
@@ -164,6 +165,10 @@ $lang->execution->endList[365] = '1 Year';
 $lang->execution->lifeTimeList['short'] = "Short-Term";
 $lang->execution->lifeTimeList['long']  = "Long-Term";
 $lang->execution->lifeTimeList['ops']   = "DevOps";
+
+$lang->execution->cfdTypeList['story'] = "{$lang->SRCommon}";
+$lang->execution->cfdTypeList['task']  = "Task";
+$lang->execution->cfdTypeList['bug']   = "Bug";
 
 $lang->team = new stdclass();
 $lang->team->account    = 'User';
@@ -221,6 +226,8 @@ $lang->execution->build               = 'Build List';
 $lang->execution->testtask            = 'Request';
 $lang->execution->burn                = 'Burndown';
 $lang->execution->computeBurn         = 'Update';
+$lang->execution->CFD                 = 'Cumulative Flow diagrams';
+$lang->execution->computeCFD          = 'Compute Cumulative Flow diagrams';
 $lang->execution->burnData            = 'Burndown Data';
 $lang->execution->fixFirst            = 'Edit 1st-Day Estimates';
 $lang->execution->team                = 'Members';

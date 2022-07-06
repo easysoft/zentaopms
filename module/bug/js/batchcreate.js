@@ -219,3 +219,35 @@ $(document).keydown(function(event)
         inputFocusJump('down');
     }
 });
+
+/**
+ * Add item.
+ *
+ * @param  object $obj
+ * @access public
+ * @return void
+ */
+function addItem(obj)
+{
+    var item = $('#addItem').html().replace(/%i%/g, itemIndex + 1);
+    $('<tr class="addedItem">' + item  + '</tr>').insertAfter($(obj).closest('tr'));
+
+    $(obj).closest('tr').next().find(".form-date").datepicker();
+    $(obj).closest('tr').next().find('div[id$=_chosen]').remove();
+    $(obj).closest('tr').next().find('.chosen').next('.picker').remove();
+    $(obj).closest('tr').next().find('.chosen').chosen();
+
+    itemIndex ++;
+}
+
+/**
+ * Delete item.
+ *
+ * @param  object $obj
+ * @access public
+ * @return void
+ */
+function deleteItem(obj)
+{
+    $(obj).closest('tr').remove();
+}

@@ -2,7 +2,6 @@
 <?php $sessionString = session_name() . '=' . session_id();?>
 <?php if($fieldset == 'true'):?>
 <div class="detail">
-  <div class="detail-title"><?php echo $lang->file->common;?> <i class="icon icon-paper-clip icon-sm"></i></div>
   <div class="detail-content">
 <?php endif;?>
   <style>

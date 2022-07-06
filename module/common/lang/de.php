@@ -84,7 +84,6 @@ $lang->waterfallModel = 'Waterfall';
 $lang->scrumModel     = 'Scrum';
 $lang->all            = 'All';
 $lang->viewDetails    = 'View Details';
-$lang->app            = 'APP';
 
 $lang->actions         = 'Aktionen';
 $lang->restore         = 'Wiederherstellen';
@@ -197,6 +196,8 @@ $lang->execution->list    = "{$lang->executionCommon} List";
 $lang->kanban->common     = 'Kanban';
 $lang->backup->common     = 'Backup';
 $lang->action->trash      = 'Recycle';
+$lang->app->common        = 'APP';
+$lang->app->serverLink    = 'Server Link';
 
 $lang->personnel->common     = 'Member';
 $lang->personnel->invest     = 'Investment';

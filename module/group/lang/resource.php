@@ -68,6 +68,7 @@ $lang->moduleOrder[210] = 'dev';
 $lang->moduleOrder[215] = 'message';
 $lang->moduleOrder[220] = 'gitlab';
 $lang->moduleOrder[225] = 'mr';
+$lang->moduleOrder[230] = 'app';
 
 $lang->resource = new stdclass();
 
@@ -734,6 +735,8 @@ $lang->resource->execution->bug               = 'bug';
 $lang->resource->execution->testreport        = 'testreport';
 $lang->resource->execution->burn              = 'burn';
 $lang->resource->execution->computeBurn       = 'computeBurnAction';
+$lang->resource->execution->cfd               = 'CFD';
+$lang->resource->execution->computeCFD        = 'computeCFD';
 $lang->resource->execution->fixFirst          = 'fixFirst';
 $lang->resource->execution->burnData          = 'burnData';
 $lang->resource->execution->team              = 'teamAction';
@@ -792,6 +795,8 @@ $lang->execution->methodOrder[115] = 'testtask';
 $lang->execution->methodOrder[120] = 'testreport';
 $lang->execution->methodOrder[125] = 'burn';
 $lang->execution->methodOrder[130] = 'computeBurn';
+$lang->execution->methodOrder[132] = 'cfd';
+$lang->execution->methodOrder[133] = 'computeCFD';
 $lang->execution->methodOrder[135] = 'fixFirst';
 $lang->execution->methodOrder[140] = 'burnData';
 $lang->execution->methodOrder[145] = 'team';
@@ -1436,6 +1441,12 @@ $lang->mr->methodOrder[80] = 'approval';
 $lang->mr->methodOrder[85] = 'close';
 $lang->mr->methodOrder[90] = 'reopen';
 $lang->mr->methodOrder[95] = 'addReview';
+
+/* App. */
+$lang->resource->app = new stdclass();
+$lang->resource->app->serverlink = 'serverLink';
+
+$lang->app->methodOrder[10] = 'link';
 
 /* Git. */
 $lang->resource->git = new stdclass();

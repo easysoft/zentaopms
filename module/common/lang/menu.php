@@ -323,17 +323,18 @@ if($config->systemMode == 'new') $lang->execution->menu->more = array('link' => 
 /* Execution menu order. */
 $lang->execution->menuOrder[5]  = 'task';
 $lang->execution->menuOrder[10] = 'kanban';
-$lang->execution->menuOrder[15] = 'burn';
-$lang->execution->menuOrder[20] = 'view';
-$lang->execution->menuOrder[25] = 'story';
-$lang->execution->menuOrder[30] = 'qa';
-$lang->execution->menuOrder[35] = 'repo';
-$lang->execution->menuOrder[40] = 'devops';
-$lang->execution->menuOrder[45] = 'doc';
-$lang->execution->menuOrder[50] = 'build';
-$lang->execution->menuOrder[55] = 'release';
-$lang->execution->menuOrder[60] = 'action';
-$lang->execution->menuOrder[65] = 'settings';
+$lang->execution->menuOrder[15] = 'CFD';
+$lang->execution->menuOrder[20] = 'burn';
+$lang->execution->menuOrder[25] = 'view';
+$lang->execution->menuOrder[30] = 'story';
+$lang->execution->menuOrder[35] = 'qa';
+$lang->execution->menuOrder[40] = 'repo';
+$lang->execution->menuOrder[45] = 'devops';
+$lang->execution->menuOrder[50] = 'doc';
+$lang->execution->menuOrder[55] = 'build';
+$lang->execution->menuOrder[60] = 'release';
+$lang->execution->menuOrder[65] = 'action';
+$lang->execution->menuOrder[70] = 'settings';
 
 $lang->execution->menu->doc['subMenu'] = new stdclass();
 
@@ -393,12 +394,12 @@ $lang->qa->menuOrder[45] = 'automation';
 $lang->qa->dividerMenu = ',bug,testtask,caselib,';
 
 /* DevOps menu. */
-$lang->devops->menu            = new stdclass();
-$lang->devops->menu->code      = array('link' => "{$lang->repo->common}|repo|browse|repoID=%s", 'alias' => 'diff,view,revision,log,blame,showsynccommit');
-$lang->devops->menu->mr        = array('link' => "{$lang->devops->mr}|mr|browse|repoID=%s");
-$lang->devops->menu->compile   = array('link' => "{$lang->devops->compile}|job|browse", 'subModule' => 'compile,job');
-$lang->devops->menu->app       = array('link' => "{$lang->app}|devops|app|%s");
-$lang->devops->menu->set       = array('link' => "{$lang->devops->set}|repo|maintain", 'subModule' => 'gitlab,jenkins,sonarqube', 'alias' => 'setrules,create,edit');
+$lang->devops->menu          = new stdclass();
+$lang->devops->menu->code    = array('link' => "{$lang->repo->common}|repo|browse|repoID=%s", 'alias' => 'diff,view,revision,log,blame,showsynccommit');
+$lang->devops->menu->mr      = array('link' => "{$lang->devops->mr}|mr|browse|repoID=%s");
+$lang->devops->menu->compile = array('link' => "{$lang->devops->compile}|job|browse|repoID=%s", 'subModule' => 'compile,job');
+$lang->devops->menu->app     = array('link' => "{$lang->app->common}|app|serverlink|%s");
+$lang->devops->menu->set     = array('link' => "{$lang->devops->set}|repo|maintain", 'subModule' => 'gitlab,jenkins,sonarqube', 'alias' => 'setrules,create,edit');
 
 $lang->devops->menuOrder[5]  = 'code';
 $lang->devops->menuOrder[10] = 'mr';
@@ -650,6 +651,7 @@ $lang->navGroup->compile          = 'devops';
 $lang->navGroup->ci               = 'devops';
 $lang->navGroup->svn              = 'devops';
 $lang->navGroup->git              = 'devops';
+$lang->navGroup->app              = 'devops';
 
 $lang->navGroup->company = 'system';
 

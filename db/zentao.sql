@@ -411,6 +411,16 @@ CREATE TABLE IF NOT EXISTS `zt_casestep` (
   KEY `case` (`case`),
   KEY `version` (`version`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+-- DROP TABLE IF EXISTS `zt_cfd`;
+CREATE TABLE `zt_cfd` (
+  `id` int(8) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `execution` int(8) NOT NULL,
+  `type` char(30) NOT NULL,
+  `name` char(30) NOT NULL,
+  `count` smallint NOT NULL,
+  `date` date NOT NULL,
+  UNIQUE KEY `execution_type_name_date` (`execution`,`type`,`name`,`date`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_company`;
 CREATE TABLE IF NOT EXISTS `zt_company` (
   `id` mediumint(8) unsigned NOT NULL auto_increment,
@@ -1832,7 +1842,8 @@ CREATE TABLE IF NOT EXISTS `zt_webhook` (
 
 INSERT INTO `zt_cron` (`m`, `h`, `dom`, `mon`, `dow`, `command`, `remark`, `type`, `buildin`, `status`, `lastTime`) VALUES
 ('*',    '*',    '*',    '*',    '*',    '', '监控定时任务', 'zentao', 1, 'normal',   '0000-00-00 00:00:00'),
-('30',   '23',   '*',    '*',    '*',    'moduleName=execution&methodName=computeburn', '更新燃尽图',      'zentao', 1, 'normal', '0000-00-00 00:00:00'),
+('30',   '23',   '*',    '*',    '*',    'moduleName=execution&methodName=computeburn', '更新燃尽图',    'zentao', 1, 'normal', '0000-00-00 00:00:00'),
+('30',   '23',   '*',    '*',    '*',    'moduleName=execution&methodName=computecfd', '更新累积流图',   'zentao', 1, 'normal', '0000-00-00 00:00:00'),
 ('0',    '8',    '*',    '*',    '*',    'moduleName=report&methodName=remind',       '每日任务提醒',    'zentao', 1, 'normal', '0000-00-00 00:00:00'),
 ('*/5',  '*',    '*',    '*',    '*',    'moduleName=svn&methodName=run',             '同步SVN',         'zentao', 1, 'stop',   '0000-00-00 00:00:00'),
 ('*/5',  '*',    '*',    '*',    '*',    'moduleName=git&methodName=run',             '同步GIT',         'zentao', 1, 'stop',   '0000-00-00 00:00:00'),

@@ -674,8 +674,7 @@ class mr extends control
         {
             $this->product->setMenu($productID, 0);
             $this->config->bug->search['fields']['branch']           = $this->lang->product->branch;
-            $branches                                                = array('' => '') + $this->loadModel('branch')->getPairs($productID, 'noempty');
-            $this->config->bug->search['params']['branch']['values'] = $branches;
+            $this->config->bug->search['params']['branch']['values'] = array('' => '') + $this->loadModel('branch')->getPairs($productID, 'noempty');
         }
         $this->loadModel('search')->setSearchParams($this->config->bug->search);
 
