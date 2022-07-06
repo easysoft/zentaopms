@@ -149,12 +149,12 @@ class search extends control
         $query   = $queryID ? $queryID : '';
         $module  = empty($module) ? $this->session->searchParams['module'] : $module;
         $queries = $this->search->getQueryPairs($module);
-
         $html = '';
         foreach($queries as $queryID => $queryName)
         {
             if(empty($queryID)) continue;
-            $html .= '<li>' . html::a("javascript:executeQuery({$queryID})", $queryName . (common::hasPriv('search', 'deleteQuery') ? '<i class="icon icon-close"></i>' : ''), '', "class='label user-query' data-query-id='$queryID'") . '</li>';
+            $query = $this->search->getByID($queryID);
+            $html .= '<li>' . html::a("javascript:executeQuery({$queryID})", $queryName . ((common::hasPriv('search', 'deleteQuery') and $this->app->user->account == $query->account) ? '<i class="icon icon-close"></i>' : ''), '', "class='label user-query' data-query-id='$queryID' title='{$queryName}'") . '</li>';
         }
         echo $html;
     }
