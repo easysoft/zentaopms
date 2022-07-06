@@ -1,4 +1,5 @@
 .main-content > h2 {font-size: 16px;}
+
 .pull-left .input-control {margin-right: 10px;}
 
 @media screen and (max-width: 1920px)
@@ -12,3 +13,9 @@
 {
 #cfdChart {width:1150px !important; height:400px !important};
 }
+
+#mainContent {min-width: 1400px;}
+#burnStatistics {position: absolute; left: 1200px; width: 180px; height: 200px; top: 20%; margin-top: -30px; line-height: 30px; color: #838A9D; font-size: 12px; border: 1px solid #dcdcdc; background-color: #F8F8F8; padding: 15px 20px; color: #3c4353; border-radius: 8px;}
+#burnStatistics .bg-primary {margin-right: 5px;}
+#burnStatistics .icon-help {color: black;}
+#burnStatistics h3 {margin-top: 10px; text-indent: 10px; margin-bottom: 30px;}

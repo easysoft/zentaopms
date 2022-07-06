@@ -1,5 +1,7 @@
 $(function()
 {
+    $('[data-toggle=tooltip]').tooltip();
+
     if(chartData)
     {
         var i = 0;

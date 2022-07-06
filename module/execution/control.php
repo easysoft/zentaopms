@@ -1324,12 +1324,16 @@ class execution extends control
         list($begin, $end) = $this->execution->getBeginEnd4CFD($execution);
         $dateList = date::getDateList($begin, $end, 'Y-m-d', '');
 
+        list($cycleTimeAvg, $throughput) = $this->execution->getCFDStatistics($executionID, $dateList, $type);
+
         $this->view->title         = $this->lang->execution->CFD;
         $this->view->type          = $type;
         $this->view->execution     = $execution;
         $this->view->executionName = $execution->name;
         $this->view->executionID   = $executionID;
         $this->view->chartData     = $this->execution->buildCFDData($executionID, $dateList, $type);
+        $this->view->cycleTimeAvg  = $cycleTimeAvg;
+        $this->view->throughput    = $throughput;
         $this->display();
     }
 
