@@ -680,7 +680,7 @@ $lang->action->label->kanbancard   = 'Kanban Card|kanban|view|kanbanID=%s';
 $lang->action->label->mr           = 'Merge Request|mr|view|id=%s';
 $lang->action->label->gitlab       = 'GitLab Server|gitlab|view|id=%s';
 $lang->action->label->stage        = 'Stage|stage|browse|';
-$lang->action->label->module       = 'Module|tree|browse|productid=%s&type=story';
+$lang->action->label->module       = 'Module|tree|browse|productid=%s&type=story&currentModuleID=0&branch=all';
 
 /* Object type. */
 $lang->action->search = new stdclass();

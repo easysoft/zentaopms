@@ -283,8 +283,8 @@ class actionModel extends model
                     if($extra == 'sprint' or $extra == 'stage') $record['execution'] = $objectID;
                     break;
                 case 'module':
-                    if($actionType != 'deleted') $module = $this->dao->select('*')->from(TABLE_MODULE)->where('id')->in($extra)->fetch();
-                    if($actionType == 'deleted') $module = $this->dao->select('*')->from(TABLE_MODULE)->where('id')->eq($objectID)->fetch();
+                    if(strpos(',deleted,', ",$actionType,") === false) $module = $this->dao->select('*')->from(TABLE_MODULE)->where('id')->in($extra)->fetch();
+                    if(strpos(',deleted,', ",$actionType,") !== false) $module = $this->dao->select('*')->from(TABLE_MODULE)->where('id')->eq($objectID)->fetch();
                     if(!empty($module) and $module->type == 'story') $record['product'] = $module->root;
                     break;
                 default:
@@ -936,18 +936,18 @@ class actionModel extends model
                 }
             }
 
-            if($action->objectType == 'module' and strpos(',created,moved,', ",$action->action,") !== false)
+            if($action->objectType == 'module' and $action->action == 'created')
             {
-                $moduleNames = $this->loadModel('tree')->getOptionMenu($action->objectID, 'story', 0, 0, '');
+                $moduleNames = $this->loadModel('tree')->getOptionMenu($action->objectID, 'story', 0, 'all', '');
                 $modules     = explode(',', $action->extra);
                 $moduleNames = array_intersect_key($moduleNames, array_combine($modules, $modules));
                 $moduleNames = implode(', ', $moduleNames);
                 $actionDesc  = str_replace('$extra', $moduleNames, $desc['main']);
             }
-            elseif($action->objectType == 'module' and $action->action == 'deleted')
+            elseif($action->objectType == 'module' and strpos(',deleted,moved,', $action->action) !== false)
             {
                 $module      = $this->dao->select('*')->from(TABLE_MODULE)->where('id')->eq($action->objectID)->fetch();
-                $moduleNames = $this->loadModel('tree')->getOptionMenu($module->root, 'story', 0, 0, '');
+                $moduleNames = $this->loadModel('tree')->getOptionMenu($module->root, 'story', 0, 'all', '');
                 $actionDesc  = str_replace('$extra', zget($moduleNames, $action->objectID), $desc['main']);
             }
             echo $actionDesc;
@@ -1234,7 +1234,7 @@ class actionModel extends model
                 $objectName  = $objectType == 'productplan' ? 'title' : 'name';
                 $action->objectName = $this->dao->select($objectName)->from($objectTable)->where('id')->eq($action->extra)->fetch($objectName);
             }
-            elseif($action->objectType == 'module' and !empty($action->extra))
+            elseif($action->objectType == 'module' and !empty($action->extra) and $action->action != 'deleted')
             {
                 $modules = $this->dao->select('id,name')->from(TABLE_MODULE)->where('id')->in(explode(',', $action->extra))->fetchPairs('id');
                 $action->objectName = implode(',', $modules);
@@ -1500,6 +1500,10 @@ class actionModel extends model
                 elseif($action->objectType == 'kanbancolumn' or $action->objectType == 'kanbanlane')
                 {
                     $params = sprintf($vars, $action->extra);
+                }
+                elseif($action->objectType == 'module' and $action->action == 'deleted')
+                {
+                    $params = sprintf($vars, trim($action->product, ','));
                 }
                 else
                 {

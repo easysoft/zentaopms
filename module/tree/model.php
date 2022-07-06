@@ -1602,7 +1602,7 @@ class treeModel extends model
         }
         $i = 1;
 
-        $oldModules = $this->getOptionMenu($rootID, 'story');
+        $oldModules = $this->getOptionMenu($rootID, 'story', 0, 'all');
 
         $createIdList = array();
         $editIdList   = array();
@@ -1663,28 +1663,31 @@ class treeModel extends model
             }
         }
 
-        $this->loadModel('action');
-        if(!empty($createIdList)) $actionID = $this->action->create('module', $rootID, 'created', '', implode(',', $createIdList));
-
-        if(!empty($editIdList))
+        if($type == 'story')
         {
-            $changes    = array();
-            $newModules = $this->getOptionMenu($rootID, 'story');
-            foreach($moduleChanges as $moduleID => $moduleChange)
+            $this->loadModel('action');
+            if(!empty($createIdList)) $actionID = $this->action->create('module', $rootID, 'created', '', implode(',', $createIdList));
+
+            if(!empty($editIdList))
             {
-                foreach($moduleChange as $change)
+                $changes    = array();
+                $newModules = $this->getOptionMenu($rootID, 'story', 0, 'all');
+                foreach($moduleChanges as $moduleID => $moduleChange)
                 {
-                    if($change['field'] == 'name')
+                    foreach($moduleChange as $change)
                     {
-                        $change['old']  = zget($oldModules, $moduleID);
-                        $change['new']  = zget($newModules, $moduleID);
-                        $change['diff'] = '';
+                        if($change['field'] == 'name')
+                        {
+                            $change['old']  = zget($oldModules, $moduleID);
+                            $change['new']  = zget($newModules, $moduleID);
+                            $change['diff'] = '';
+                        }
+                        $changes[] = $change;
                     }
-                    $changes[] = $change;
                 }
+                $actionID = $this->action->create('module', $rootID, 'edited', '', implode(',', $editIdList));
+                if(!empty($changes)) $this->action->logHistory($actionID, $changes);
             }
-            $actionID = $this->action->create('module', $rootID, 'edited', '', implode(',', $editIdList));
-            if(!empty($changes)) $this->action->logHistory($actionID, $changes);
         }
         return $createIdList;
     }
@@ -1698,14 +1701,15 @@ class treeModel extends model
      */
     public function update($moduleID)
     {
-        $oldModule = $this->getById($moduleID);
-
         $module = fixer::input('post')->get();
         $self   = $this->getById($moduleID);
+        $changes = common::createChanges($self, $module);
         if(!isset($_POST['branch'])) $module->branch = $self->branch;
 
         $repeatName = $this->checkUnique($self, array("id{$self->id}" => $module->name), array("id{$self->id}" => $module->branch));
         if($repeatName) helper::end(js::alert(sprintf($this->lang->tree->repeatName, $repeatName)));
+
+        $modules = $self->type == 'story' ? $this->getOptionMenu($self->root, 'story', 0, 'all') : '';
 
         $parent = $this->getById($this->post->parent);
         $childs = $this->getAllChildId($moduleID);
@@ -1717,9 +1721,29 @@ class treeModel extends model
         $this->dao->update(TABLE_MODULE)->set('owner')->eq($this->post->owner)->where('id')->in($childs)->andWhere('owner')->eq('')->exec();
         $this->dao->update(TABLE_MODULE)->set('owner')->eq($this->post->owner)->where('id')->in($childs)->andWhere('owner')->eq($self->owner)->exec();
 
-        $changes  = common::createChanges($oldModule, $module);
-        $actionID = $this->loadModel('action')->create('module', $rootID, 'edited', '', $moduleID);
-        if(!empty($changes)) $this->action->logHistory($actionID, $changes);
+        if($self->type == 'story')
+        {
+            $rootID     = isset($module->root) ? $module->root : $self->root;
+            $newModules = $this->getOptionMenu($rootID, 'story', 0, 'all');
+
+            foreach($changes as $id => $change)
+            {
+                if($change['field'] == 'name')
+                {
+                    $changes[$id]['old']  = zget($modules, $moduleID);
+                    $changes[$id]['new']  = zget($newModules, $moduleID);
+                    $changes[$id]['diff'] = '';
+                    break;
+                }
+            }
+            $actionID = $this->loadModel('action')->create('module', $self->root, 'edited', '', $moduleID);
+            if(!empty($changes)) $this->action->logHistory($actionID, $changes);
+            if(isset($module->root) and $module->root != $self->root)
+            {
+                $actionID = $this->action->create('module', $rootID, 'edited', '', $moduleID);
+                if(!empty($changes)) $this->action->logHistory($actionID, $changes);
+            }
+        }
 
         if(isset($module->root) and $module->root != $self->root)
         {

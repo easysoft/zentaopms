@@ -680,7 +680,7 @@ $lang->action->label->kanbancard   = '看板卡片|kanban|view|kanbanID=%s';
 $lang->action->label->mr           = '合并请求|mr|view|id=%s';
 $lang->action->label->gitlab       = 'GitLab服务器|gitlab|view|id=%s';
 $lang->action->label->stage        = '瀑布模型的阶段|stage|browse|';
-$lang->action->label->module       = '模块|tree|browse|productid=%s&type=story';
+$lang->action->label->module       = '模块|tree|browse|productid=%s&type=story&currentModuleID=0&branch=all';
 
 /* Object type. */
 $lang->action->search = new stdclass();
