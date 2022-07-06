@@ -2147,7 +2147,7 @@ class repoModel extends model
         if($repo->SCM == 'Gitlab')
         {
             $project = $this->loadModel('gitlab')->apiGetSingleProject($repo->gitlab, $repo->project);
-            if($project)
+            if(isset($project->id))
             {
                 $url->http = $project->http_url_to_repo;
                 $url->ssh  = $project->ssh_url_to_repo;

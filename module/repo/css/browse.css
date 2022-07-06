@@ -30,3 +30,4 @@
 .download-popover {width: 400px; max-width: none;}
 .popover-content {padding: 0;}
 .download-popover .table {margin-bottom: 0;}
+.download-popover .table td {padding-right: 0;}
