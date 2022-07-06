@@ -201,9 +201,14 @@ function loadProjectExecutions(projectID)
                 $('#copyProjects').append("<div class='col-md-4 col-sm-6'><a href='javascript:;' data-id='" + id + "' class='nobr " + active + "'><i class='icon-" + type + " text-muted'></i>" + execution.name + "</a></div>");
             });
         }
-        else
+        else if(data == '[]' && copyExecutionID == 0)
         {
-            $('#copyProjects').replaceWith("<div class='alert with-icon'><i class='icon-exclamation-sign'></i><div class='content'>" + copyNoExecution + "</div>")
+            $('#copyProjects').replaceWith("<div class='alert with-icon'><i class='icon-exclamation-sign'></i><div class='content'>" + copyNoExecution + "</div>");
+        }
+        else if(data == '[]' && copyExecutionID != 0)
+        {
+            $("#copyProjects > div[data-id != '']").remove();
+            $('#copyProjects').append("<div class='col-md-4 col-sm-6'><a href='javascript:;' data-id='' class='cancel'><i class='icon-ban-circle'></i>" + cancelCopy + "</a></div>");
         }
     });
 }

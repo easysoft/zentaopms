@@ -47,6 +47,7 @@
 <?php js::set('projectID', $projectID);?>
 <?php js::set('copyExecutionID', $copyExecutionID);?>
 <?php js::set('cancelCopy', $lang->execution->cancelCopy);?>
+<?php js::set('copyNoExecution', $lang->execution->copyNoExecution);?>
 <div id='mainContent' class='main-content'>
   <div class='center-block'>
     <div class='main-header'>
