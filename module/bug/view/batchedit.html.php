@@ -13,6 +13,7 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/datepicker.html.php';?>
 <?php js::set('dittoNotice', $this->lang->bug->dittoNotice);?>
+<?php js::set('showFields', $showFields);?>
 <div id='mainContent' class='main-content fade'>
   <div class='main-header'>
     <h2><?php echo $lang->bug->common . $lang->colon . $lang->bug->batchEdit;?></h2>
