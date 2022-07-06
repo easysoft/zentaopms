@@ -59,10 +59,10 @@
           <td class='text' title='<?php echo substr($gitlabGroup->created_at, 0, 10);?>'><?php echo substr($gitlabGroup->created_at, 0, 10);?></td>
           <td class='c-actions text-left'>
             <?php
-            $adminClass = ($app->user->admin or in_array($gitlabGroup->id, $adminGroupIDList)) ? '' : 'disabled';
+            $isAdmin = ($app->user->admin or in_array($gitlabGroup->id, $adminGroupIDList)) ? true : false;
             common::printLink('gitlab', 'manageGroupMembers', "gitlabID=$gitlabID&groupID=$gitlabGroup->id", "<i class='icon icon-team'></i> ", '',"title='{$lang->gitlab->group->manageMembers}' class='btn'");
-            common::printLink('gitlab', 'editGroup', "gitlabID=$gitlabID&groupID=$gitlabGroup->id", "<i class='icon icon-edit'></i> ", '', "title='{$lang->gitlab->group->edit}' class='btn {$adminClass}'");
-            if(common::hasPriv('gitlab', 'delete')) echo html::a($this->createLink('gitlab', 'deleteGroup', "gitlabID=$gitlabID&groupID=$gitlabGroup->id"), '<i class="icon-trash"></i>', 'hiddenwin', "title='{$lang->gitlab->deleteGroup}' class='btn {$adminClass}'");
+            echo common::buildIconButton('gitlab', 'editGroup', "gitlabID=$gitlabID&groupID=$gitlabGroup->id", '', 'list', 'edit', '', '', false, '', '', 0, $isAdmin);
+            echo common::buildIconButton('gitlab', 'deleteGroup', "gitlabID=$gitlabID&groupID=$gitlabGroup->id", '', 'list', 'trash', 'hiddenwin', '', false, '', '', 0, $isAdmin);
             ?>
           </td>
         </tr>

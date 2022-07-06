@@ -714,7 +714,10 @@ class gitlab extends control
             $project->isMaintainer = $this->gitlab->checkUserAccess($gitlabID, $project->id, $project, $groupIDList, 'maintainer');
         }
 
-        $gitlab = $this->gitlab->getByID($gitlabID);
+        $gitlab    = $this->gitlab->getByID($gitlabID);
+        $repos     = $this->loadModel('repo')->getGitLabRepoList($gitlabID);
+        $repoPairs = array();
+        foreach($repos as $repo) $repoPairs[$repo->path] = $repo->id;
 
         $this->view->gitlab            = $gitlab;
         $this->view->keyword           = urldecode(urldecode($keyword));
@@ -723,6 +726,7 @@ class gitlab extends control
         $this->view->gitlabID          = $gitlabID;
         $this->view->gitlabProjectList = $result['projects'];
         $this->view->orderBy           = $orderBy;
+        $this->view->repoPairs         = $repoPairs;
         $this->display();
     }
 
