@@ -1856,6 +1856,7 @@ class testcase extends control
         $queryID    = (int)$queryID;
         $product    = $this->loadModel('product')->getById($productID);
         $branches   = array();
+        if($branch == '') $branch = 0;
 
         $this->loadModel('branch');
         if($product->type != 'normal') $branches = array(BRANCH_MAIN => $this->lang->branch->main) + $this->branch->getPairs($productID, 'active', $projectID);
