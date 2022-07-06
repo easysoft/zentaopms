@@ -315,6 +315,21 @@ class report extends control
         $users[''] = $this->lang->report->annualData->allUser;
 
         $depts = $this->loadModel('dept')->getOptionMenu();
+        $accounts = array();
+        if($userID)
+        {
+            $user     = $this->loadModel('user')->getById($userID, 'id');
+            $dept     = $user->dept;
+            $users    = $this->loadModel('dept')->getDeptUserPairs($dept, 'id');
+            $accounts = array($user->account => ($user->realname ? $user->realname : $user->account));
+        }
+        else
+        {
+            $users    = $this->loadModel('dept')->getDeptUserPairs($dept, 'id');
+            $users    = array('' => $this->lang->report->annualData->allUser) + $users;
+            $accounts = $this->loadModel('dept')->getDeptUserPairs($dept);
+        }
+a($this->app->user->account);
         if(!$this->app->user->admin)
         {
             foreach($depts as $id => $name) if($id != $this->app->user->dept) unset($depts[$id]);
@@ -323,24 +338,8 @@ class report extends control
         {
             $depts = array('' => $this->lang->report->annualData->allDept) + $depts;
         }
-        if(empty($userID)) unset($depts[0]);
 
-        $accounts = array();
-        if($dept) $accounts = $this->loadModel('dept')->getDeptUserPairs($dept);
-        if($userID)
-        {
-            $user = $this->loadModel('user')->getById($userID, 'id');
-            $dept = $user->dept;
-            $accounts = array($user->account => ($user->realname ? $user->realname : $user->account));
-        }
-        if(empty($accounts)) $accounts = $this->user->getPairs('noletter|noclosed');
         if($accounts) $accounts = array_keys($accounts);
-
-        if($dept)
-        {
-            $users = $this->loadModel('dept')->getDeptUserPairs($dept, 'id');
-            $users = array('' => $this->lang->report->annualData->allUser) + $users;
-        }
 
         /* Get annual data. */
         $data = array();
