@@ -461,6 +461,7 @@
 
         if(!notTriggerEvent) app.$app.trigger('reloadapp', app);
 
+        if(url) $(iframe.contentWindow.document.body).hide(); // Code for task #59703.
         app.$app.addClass('loading');
         if(app._loadTimer) clearTimeout(app._loadTimer);
         app._loadTimer = setTimeout(function()

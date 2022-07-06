@@ -1312,6 +1312,9 @@ class kanbanModel extends model
                     $cardData['acl']        = 'open';
                     $cardData['lane']       = $laneID;
                     $cardData['column']     = $cell->column;
+                    $cardData['openedDate'] = $object->openedDate;
+                    $cardData['closedDate'] = $object->closedDate;
+                    $cardData['lastEditedDate'] = $object->lastEditedDate;
 
                     if($cell->type == 'task')
                     {
