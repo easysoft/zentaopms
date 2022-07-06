@@ -1341,9 +1341,10 @@ class execution extends control
      * @access public
      * @return void
      */
-    public function computeCFD($reload = 'no', $executionID = 0)
+    public function computeCFD($reload = 'no', $executionID = 0, $date = '')
     {
-        $this->execution->computeCFD($executionID);
+        $date = date('Y-m-d', strtotime($date));
+        $this->execution->computeCFD($executionID, $date);
         if($reload == 'yes') return print(js::reload('parent'));
     }
 
@@ -1589,7 +1590,9 @@ class execution extends control
         if(!empty($this->config->user->moreLink)) $this->config->moreLinks["RD"] = $this->config->user->moreLink;
 
         $this->loadModel('product');
-        $allProducts = $this->config->systemMode == 'classic' ? $this->product->getPairs('noclosed') : $this->product->getProductPairsByProject($projectID, 'noclosed');
+        $allProducts   = $this->config->systemMode == 'classic' ? $this->product->getPairs('noclosed') : $this->product->getProductPairsByProject($projectID, 'noclosed');
+        $copyProjects  = $this->loadModel('project')->getPairsByProgram(isset($project->parent) ? $project->parent : '', 'noclosed', '', 'order_asc', '', isset($project->model) ? $project->model : '');
+        $copyProjectID = ($projectID == 0) ? key($copyProjects) : $projectID;
 
         $this->view->title               = (($this->app->tab == 'execution') and ($this->config->systemMode == 'new')) ? $this->lang->execution->createExec : $this->lang->execution->create;
         $this->view->position[]          = $this->view->title;
@@ -1604,6 +1607,8 @@ class execution extends control
         $this->view->team                = $team;
         $this->view->teams               = array(0 => '') + $this->execution->getCanCopyObjects((int)$projectID);
         $this->view->allProjects         = array(0 => '') + $this->project->getPairsByModel('all', 0, 'noclosed');
+        $this->view->copyProjects        = $copyProjects;
+        $this->view->copyExecutions      = array('' => '') + $this->execution->getList($copyProjectID);
         $this->view->executionID         = $executionID;
         $this->view->productID           = $productID;
         $this->view->projectID           = $projectID;
@@ -4037,4 +4042,18 @@ class execution extends control
             echo json_encode($date);
         }
     }
+
+    /**
+     * Ajax get copy project executions.
+     *
+     * @param  int    $projectID
+     * @access public
+     * @return void
+     */
+    public function ajaxGetCopyProjectExecutions($projectID = 0)
+    {
+        $executions = $this->execution->getList($projectID);
+        echo json_encode($executions);
+    }
+
 }

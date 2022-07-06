@@ -1571,7 +1571,7 @@ class testtaskModel extends model
                 echo zget($users, $run->lastRunner);
                 break;
             case 'lastRunDate':
-                if(!helper::isZeroDate($run->lastRunDate)) echo date(DT_MONTHTIME1, strtotime($run->lastRunDate));
+                echo helper::isZeroDate($run->lastRunDate) ? '' : substr($run->lastRunDate, 5, 11);
                 break;
             case 'lastRunResult':
                 $lastRunResultText = $run->lastRunResult ? zget($this->lang->testcase->resultList, $run->lastRunResult, $run->lastRunResult) : $this->lang->testcase->unexecuted;

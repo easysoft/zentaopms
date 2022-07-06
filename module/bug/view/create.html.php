@@ -18,7 +18,7 @@ js::set('holders', $lang->bug->placeholder);
 js::set('page', 'create');
 js::set('createRelease', $lang->release->create);
 js::set('createBuild', $lang->build->create);
-js::set('refresh', $lang->refresh);
+js::set('refresh', $lang->refreshIcon);
 js::set('flow', $config->global->flow);
 js::set('stepsRequired', $stepsRequired);
 js::set('stepsNotEmpty', $lang->bug->stepsNotEmpty);
@@ -69,7 +69,7 @@ if($this->app->tab == 'project')   js::set('objectID', $projectID);
                     echo "<span class='input-group-addon'>";
                     echo html::a($this->createLink('tree', 'browse', "rootID=$productID&view=bug&currentModuleID=0&branch=$branch", '', true), $lang->tree->manage, '', "class='text-primary' data-toggle='modal' data-type='iframe' data-width='95%'");
                     echo '&nbsp; ';
-                    echo html::a("javascript:void(0)", $lang->refresh, '', "class='refresh' onclick='loadProductModules($productID)'");
+                    echo html::a("javascript:void(0)", $lang->refreshIcon, '', "class='refresh' title='$lang->refresh' onclick='loadProductModules($productID)'");
                     echo '</span>';
                 }
                 ?>

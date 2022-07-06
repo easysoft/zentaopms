@@ -13,6 +13,7 @@
 <?php include '../../common/view/header.html.php';?>
 <?php js::import($jsRoot . 'echarts/echarts.common.min.js'); ?>
 <?php js::import($jsRoot . 'html2canvas/min.js'); ?>
+<?php js::set('executionID', $executionID); ?>
 <div id='mainMenu' class='clearfix'>
   <div class='btn-toolbar pull-left'>
     <?php
@@ -88,11 +89,27 @@ option = {
         type: 'category',
         boundaryGap: false,
         data: <?php echo json_encode($chartData['labels'])?>,
+        axisLine: {
+          show: true,
+          lineStyle:
+          {
+             color: '#999',
+             width:1,
+          }
+        }
     }
     ],
     yAxis: [
     {
-        type: 'value'
+        type: 'value',
+        axisLine: {
+          show: true,
+          lineStyle:
+          {
+             color: '#999',
+             width:1,
+          }
+        }
     }
     ],
     series: series,
