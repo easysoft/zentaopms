@@ -74,7 +74,7 @@
               <?php if($action->action != 'login' and $action->action != 'logout'):?>
               <span class="text"><?php echo $action->objectLabel;?></span>
               <?php if($action->objectID):?>
-              <span class="label label-id"><?php echo $action->objectID;?></span>
+              <span class="label label-id"><?php echo ($action->objectType == 'module' and strpos(',created,edited,moved,', "$action->action") !== false) ? trim($action->extra, ',') : $action->objectID;?></span>
               <?php endif;?>
               <?php $tab = '';?>
               <?php if($action->objectType == 'meeting') $tab = $action->project ? "data-app='project'" : "data-app='my'";?>
