@@ -6547,6 +6547,7 @@ class upgradeModel extends model
         $chatTablePairs = array();
 
         ini_set('memory_limit', '1024M');
+        set_time_limit(0);
 
         /* Fetch chat and message partition table associations. */
         $chatTableData = $this->dao->select('gid,tableName')->from(TABLE_IM_CHAT_MESSAGE_INDEX)->orderBy('id_asc')->fetchAll();
@@ -6621,10 +6622,17 @@ class upgradeModel extends model
         if(empty($lastReadMessages)) return true;
 
         ini_set('memory_limit', '1024M');
+        set_time_limit(0);
 
         $messages = $this->loadModel('im')->messageGetList('', $lastReadMessages, null, '', '', false);
+        if(empty($messages)) return;
 
-        foreach($messages as $message) $this->dao->update(TABLE_IM_CHATUSER)->set('lastReadMessageIndex')->eq($message->index)->where('lastReadMessage')->eq($message->id)->exec();
+        $queryData = array();
+        foreach($messages as $message) $queryData[] = "WHEN {$message->id} THEN {$message->index}";
+
+        $query = "UPDATE " . TABLE_IM_CHATUSER . " SET `lastReadMessageIndex` = (CASE `lastReadMessage` " . join(' ', $queryData) . " END) WHERE `id` IN(" . join(',', $lastReadMessages) . ");";
+        $this->dao->query($query);
+
         return !dao::isError();
     }
 
@@ -6641,6 +6649,7 @@ class upgradeModel extends model
         if(empty($zeroLastReadChats)) return true;
 
         ini_set('memory_limit', '1024M');
+        set_time_limit(0);
 
         $lastMessages = $this->dao->select('MAX(`index`), cgid')->from(TABLE_IM_MESSAGE)->where('cgid')->in($zeroLastReadChats)->groupBy('cgid')->fetchAll('cgid');
         if(empty($lastMessages)) return true;
