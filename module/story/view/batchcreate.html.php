@@ -74,6 +74,7 @@
                 echo "<th class='c-extend $required'>{$extendField->name}</th>";
             }
             ?>
+            <th class='c-actions'><?php echo $lang->actions;?></th>
           </tr>
         </thead>
         <tbody>
@@ -120,6 +121,10 @@
             $this->loadModel('flow');
             foreach($extendFields as $extendField) echo "<td" . (($extendField->control == 'select' or $extendField->control == 'multi-select') ? " style='overflow:visible'" : '') . ">" . $this->flow->getFieldControl($extendField, '', $extendField->field . '[$id]') . "</td>";
             ?>
+            <td class='c-actions text-left'>
+              <a href='javascript:;' onclick='addItem(this)' class='btn btn-link'><i class='icon-plus'></i></a>
+              <a href='javascript:;' onclick='deleteItem(this)' class='btn btn-link'><i class='icon icon-close'></i></a>
+            </td>
           </tr>
         </tbody>
         <tfoot>
@@ -133,6 +138,59 @@
       </table>
     </div>
   </form>
+</div>
+<div>
+  <?php $i = '%i%';?>
+  <table class='hidden'>
+    <tr id='addItem' class='hidden'>
+      <td class='text-left<?php echo zget($visibleFields, $product->type, ' hidden')?> branchBox'><?php echo html::select("branch[$i]", $branches, $branch, "class='form-control chosen' onchange='setModuleAndPlan(this.value, $productID, $i)'");?></td>
+      <td class='text-left' style='overflow:visible'><?php echo html::select("module[$i]", $moduleOptionMenu, 'ditto', "class='form-control chosen'");?></td>
+      <td class='text-left<?php echo zget($visibleFields, 'plan', ' hidden')?> planBox' style='overflow:visible'><?php echo html::select("plan[$i]", $plans, 'ditto', "class='form-control chosen'");?></td>
+      <?php if(isset($execution) and $execution->type == 'kanban'):?>
+      <td class='text-left'><?php echo html::select("regions[$i]", $regionPairs, $regionID, "class='form-control chosen' onchange='setLane(this.value, $i)'");?>
+      <td class='text-left'><?php echo html::select("lanes[$i]", $lanePairs, $laneID, "class='form-control chosen'");?>
+      <?php endif;?>
+      <td style='overflow:visible'>
+        <div class="input-group">
+          <div class="input-control has-icon-right">
+            <input type="text" name="title[<?php echo $i?>]" id="title<?php echo $i?>" value="" class="form-control title-import input-story-title" autocomplete="off">
+            <div class="colorpicker">
+              <button type="button" class="btn btn-link dropdown-toggle" data-toggle="dropdown"><span class="cp-title"></span><span class="color-bar"></span><i class="ic"></i></button>
+              <ul class="dropdown-menu clearfix">
+                <li class="heading"><?php echo $lang->story->colorTag;?><i class="icon icon-close"></i></li>
+              </ul>
+              <input type="hidden" class="colorpicker" id="color<?php echo $i?>" name="color[<?php echo $i?>]" value="" data-icon="color" data-wrapper="input-control-icon-right" data-update-color="#title<?php echo $i?>">
+            </div>
+          </div>
+          <span class="input-group-btn">
+            <button type="button" class="btn btn-link btn-icon btn-copy" data-copy-from="#title<?php echo $i?>" data-copy-to="#spec<?php echo $i?>" title="<?php echo $lang->story->copyTitle;?>"><i class="icon icon-arrow-right"></i></button>
+          </span>
+        </div>
+      </td>
+      <td class='<?php echo zget($visibleFields, 'spec', 'hidden')?> specBox'><textarea name="spec[<?php echo $i?>]" id="spec<?php echo $i;?>" rows="1" class="form-control autosize"></textarea></td>
+      <td class='text-left<?php echo zget($visibleFields, 'source', ' hidden')?> sourceBox'><?php echo html::select("source[$i]", $sourceList, 'ditto', "class='form-control chosen' id='source_$i'");?></td>
+      <td class='<?php echo zget($visibleFields, 'source', 'hidden')?> sourceBox'><?php echo html::input("sourceNote[$i]", '', "class='form-control' id='sourceNote_$i'");?></td>
+      <td class='<?php echo zget($visibleFields, 'verify', 'hidden')?> verifyBox'><textarea name="verify[<?php echo $i?>]" id="verify<?php echo $i?>" rows="1" class="form-control autosize"></textarea></td>
+      <td class='text-left' style='overflow:visible'><?php echo html::select("category[$i]", $lang->story->categoryList, 'feature', "class='form-control chosen'");?></td>
+      <td class='text-left<?php echo zget($visibleFields, 'pri', ' hidden')?> priBox' style='overflow:visible'><?php echo html::select("pri[$i]", $priList, 'ditto', "class='form-control chosen'");?></td>
+      <td class='<?php echo zget($visibleFields, 'estimate', 'hidden')?> estimateBox'><?php echo html::input("estimate[$i]", $estimate, "class='form-control'");?></td>
+      <td class='<?php echo zget($visibleFields, 'review', 'hidden')?> reviewBox'>
+        <div class='input-group'>
+          <?php echo html::select("reviewer[$i][]", $reviewers, '', "class='form-control picker-select' multiple");?>
+          <span class='input-group-addon reviewerDitto'><input type='checkbox' name="reviewDitto[<?php echo $i?>]" value='ditto' checked='checked' id="dittocheck<?php echo $i?>"/> <?php echo $lang->story->ditto;?></span>
+        </div>
+      </td>
+      <td class='<?php echo zget($visibleFields, 'keywords', 'hidden')?> keywordsBox'><?php echo html::input("keywords[$i]", '', "class='form-control'");?></td>
+      <?php
+      $this->loadModel('flow');
+      foreach($extendFields as $extendField) echo "<td" . (($extendField->control == 'select' or $extendField->control == 'multi-select') ? " style='overflow:visible'" : '') . ">" . $this->flow->getFieldControl($extendField, '', $extendField->field . "[$i]") . "</td>";
+      ?>
+      <td class='c-actions text-left'>
+        <a href='javascript:;' onclick='addItem(this)' class='btn btn-link'><i class='icon-plus'></i></a>
+        <a href='javascript:;' onclick='deleteItem(this)' class='btn btn-link'><i class='icon icon-close'></i></a>
+      </td>
+    </tr>
+  </table>
 </div>
 <script>
 $(function()
@@ -165,6 +223,8 @@ $(function()
               {
                   $row.find('.input-story-title').val(storyTitle).after('<input type="hidden" name="uploadImage[' + index + ']" id="uploadImage[' + index + ']" value="' + imageTitles[storyTitle] + '">');
               }
+
+              if(index == 1) $row.find('td.c-actions > a:last').remove();
 
               /* Implement a custom form without feeling refresh. */
               var fieldList = ',' + showFields + ',';
