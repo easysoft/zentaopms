@@ -432,7 +432,7 @@ $lang->execution->charts->burn->graph->delay        = '延期';
 
 $lang->execution->charts->cfd = new stdclass();
 $lang->execution->charts->cfd->cycleTime     = '平均周期时间';
-$lang->execution->charts->cfd->cycleTimeTip  = '平均每个卡片从开发启动到完成都周期时间';
+$lang->execution->charts->cfd->cycleTimeTip  = '平均每个卡片从开发启动到完成的周期时间';
 $lang->execution->charts->cfd->throughput    = '吞吐率';
 $lang->execution->charts->cfd->throughputTip = '吞吐率 = 在制品 / 平均周期时间';
 
