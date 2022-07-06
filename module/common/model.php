@@ -28,6 +28,7 @@ class commonModel extends model
             $this->sendHeader();
             $this->setCompany();
             $this->setUser();
+            $this->setApproval();
             $this->loadConfigFromDB();
             $this->app->setTimezone();
             $this->loadCustomFromDB();
@@ -282,6 +283,18 @@ class commonModel extends model
             $this->session->set('user', $user);
             $this->app->user = $this->session->user;
         }
+    }
+
+    /**
+     * Set approval config.
+     *
+     * @access public
+     * @return void
+     */
+    public function setApproval()
+    {
+        $this->config->openedApproval = false;
+        if($this->config->edition == 'max' && $this->config->vision == 'rnd') $this->config->openedApproval = true;
     }
 
     /**
@@ -1091,6 +1104,10 @@ class commonModel extends model
                 $executionID = $menuItem->link['vars'];
                 commonModel::buildMoreButton($executionID);
             }
+            elseif($menuItem->link['module'] == 'app' and $menuItem->link['method'] == 'serverlink')
+            {
+                commonModel::buildAppButton();
+            }
             else
             {
                 if($menuItem->link)
@@ -1667,19 +1684,19 @@ EOD;
                 }
                 else
                 {
-                    return html::a($link, "<i class='$class'></i>", $target, "class='btn btn-link $extraClass' title='$title' $misc", false);
+                    return html::a($link, "<i class='$class'></i>", $target, "class='btn btn-link $extraClass' title=\"$title\" $misc", false);
                 }
             }
             else
             {
-                return html::a($link, "<i class='$class'></i>", $target, "class='btn $extraClass' title='$title' $misc", false) . "\n";
+                return html::a($link, "<i class='$class'></i>", $target, "class='btn $extraClass' title=\"$title\" $misc", false) . "\n";
             }
         }
         else
         {
             if($type == 'list')
             {
-                return "<button type='button' class='disabled btn $extraClass'><i class='$class' title='$title' $misc></i></button>\n";
+                return "<button type='button' class='disabled btn $extraClass'><i class='$class' title=\"$title\" $misc></i></button>\n";
             }
         }
     }
@@ -1728,6 +1745,45 @@ EOD;
 
         if(count($executionPairs) > 10) $html .= '<li>' . html::a(helper::createLink('project', 'execution', "status=all&projectID={$object->project}"), $lang->preview . $lang->more, '', "data-app='project' style='padding: 2px 10px'") . '</li>';
 
+        $html .= "</ul></li>\n";
+
+        echo $html;
+    }
+
+    /**
+     * Build devops app button.
+     *
+     * @static
+     * @access public
+     * @return void
+     */
+    public static function buildAppButton()
+    {
+        if(defined('TUTORIAL')) return;
+        global $app, $config, $lang;
+
+        $pipelinePairs = array();
+        $condition     = '';
+        if(!$app->user->admin)
+        {
+            $types = '';
+            foreach($config->pipelineTypeList as $pipelineType)
+            {
+                if(commonModel::hasPriv($pipelineType, 'browse')) $types .= "'$pipelineType',";
+            }
+            if(empty($types)) return;
+            $condition .= ' AND `type` in (' . trim($types, ',') . ')';
+        }
+        $pipelineList = $app->dbh->query("SELECT type,name,url FROM " . TABLE_PIPELINE . " WHERE `deleted` = '0' $condition order by type")->fetchAll();
+        if(empty($pipelineList)) return;
+
+        $html  = "<li class='dropdown dropdown-hover'><a href='javascript:;' data-toggle='dropdown'>{$lang->app->common}<span class='caret'></span></a>";
+        $html .= "<ul class='dropdown-menu'>";
+
+        foreach($pipelineList as $pipeline)
+        {
+            $html .= "<li style='max-width: 300px;'>" . html::a($pipeline->url, "[{$pipeline->type}] {$pipeline->name}", '', "title='{$pipeline->name}' class='text-ellipsis' style='padding: 2px 10px' target='_blank'") . '</li>';
+        }
         $html .= "</ul></li>\n";
 
         echo $html;
@@ -1796,18 +1852,20 @@ EOD;
      * Print back link
      *
      * @param  string $backLink
+     * @param  string $class
+     * @param  string $misc
      * @static
      * @access public
      * @return void
      */
-    static public function printBack($backLink, $class = '')
+    static public function printBack($backLink, $class = '', $misc = '')
     {
         global $lang, $app;
         if(isonlybody()) return false;
 
         if(empty($class)) $class = 'btn';
         $title = $lang->goback . $lang->backShortcutKey;
-        echo html::a($backLink, '<i class="icon-goback icon-back"></i> ' . $lang->goback, '', "id='back' class='{$class}' title={$title} data-app='{$app->tab}'");
+        echo html::a($backLink, '<i class="icon-goback icon-back"></i> ' . $lang->goback, '', "id='back' class='{$class}' title={$title} $misc");
     }
 
     /**

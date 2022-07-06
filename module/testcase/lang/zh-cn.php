@@ -94,6 +94,7 @@ $lang->testcase->mailto           = '抄送给';
 $lang->testcase->deleted          = '是否删除';
 $lang->testcase->browseUnits      = '单元测试';
 $lang->testcase->suite            = '套件';
+$lang->testcase->executionStatus  = '执行状态';
 
 $lang->case = $lang->testcase;  // 用于DAO检查时使用。因为case是系统关键字，所以无法定义该模块为case，只能使用testcase，但表还是使用的case。
 
@@ -234,6 +235,7 @@ $lang->testcase->noLibrary        = "现在还没有用例库，请先创建！"
 $lang->testcase->mustChooseResult = '必须选择评审结果';
 $lang->testcase->noModule         = '<div>您现在还没有模块信息</div><div>请维护测试模块</div>';
 $lang->testcase->noCase           = '暂时没有用例。';
+$lang->testcase->importedCases    = 'ID为 %s 的用例在相同模块已经导入，已忽略。';
 
 $lang->testcase->searchStories = "键入来搜索{$lang->SRCommon}";
 $lang->testcase->selectLib     = '请选择库';

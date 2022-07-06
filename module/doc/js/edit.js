@@ -169,7 +169,7 @@ function loadWhitelist(libID)
             $('#aclcustom').parent('.radio-inline').removeClass('hidden');
 
             $('#users').replaceWith(users);
-            $('#user').next('.picker').remove();
+            $('#users').next('.picker').remove();
             $('#users').picker();
         }
     });

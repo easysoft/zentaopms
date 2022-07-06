@@ -4,7 +4,94 @@ $(function()
 
     var $titleCol = $('#batchCreateForm table thead tr th.c-title');
     if($titleCol.width() < 150) $titleCol.width(150);
+
+    $('#customField').click(function()
+    {
+        hiddenRequireFields();
+    });
+
+     /* Implement a custom form without feeling refresh. */
+    $('#formSettingForm .btn-primary').click(function()
+    {
+        var fields = '';
+        $('#formSettingForm > .checkboxes > .checkbox-primary > input:checked').each(function()
+        {
+            fields += ',' + $(this).val();
+        });
+
+        var link = createLink('custom', 'ajaxSaveCustomFields', 'module=bug&section=custom&key=batchCreateFields');
+        $.post(link, {'fields' : fields}, function()
+        {
+            showCheckedFields(fields);
+            $('#formSetting').parent().removeClass('open');
+
+            if($('#batchCreateForm table thead tr th.c-title').width() < 150) $titleCol.width(150);
+
+            var fieldCount = $('#batchCreateForm .table thead>tr>th:visible').length;
+            $('.form-actions').attr('colspan', fieldCount);
+
+            if(fieldCount > 10)
+            {
+                $('#batchCreateForm > .table-responsive').removeClass('scroll-none');
+                $('#batchCreateForm > .table-responsive').css('overflow', 'auto');
+            }
+            else
+            {
+                $('#batchCreateForm > .table-responsive').addClass('scroll-none');
+                $('#batchCreateForm > .table-responsive').css('overflow', 'visible');
+            }
+        });
+
+        return false;
+    });
 })
+
+/**
+ * Show checked fields.
+ *
+ * @param  string fields
+ * @access public
+ * @return void
+ */
+function showCheckedFields(fields)
+{
+    showFields = fields;
+
+    var fieldList = ',' + fields + ',';
+    $('#formSettingForm > .checkboxes > .checkbox-primary > input').each(function()
+    {
+        var field     = ',' + $(this).val() + ',';
+        var $field    = $('[name^=' + $(this).val() + ']');
+        var required  = ',' + requiredFields + ',';
+        var $fieldBox = $('.' + $(this).val() + 'Box' );
+        if(fieldList.indexOf(field) >= 0 || required.indexOf(field) >= 0)
+        {
+            $fieldBox.removeClass('hidden');
+            $field.removeAttr('disabled');
+        }
+        else if(!$fieldBox.hasClass('hidden'))
+        {
+            $fieldBox.addClass('hidden');
+            $field.attr('disabled', true);
+        }
+    });
+}
+
+/**
+ * Hidden require field.
+ *
+ * @access public
+ * @return void
+ */
+function hiddenRequireFields()
+{
+    $('#formSettingForm > .checkboxes > .checkbox-primary > input').each(function()
+    {
+        var field    = ',' + $(this).val() + ',';
+        var required = ',' + requiredFields + ',';
+        if(required.indexOf(field) >= 0) $(this).closest('div').addClass('hidden');
+    });
+}
 
 /**
  * Set opened builds.
@@ -149,3 +236,35 @@ $(document).keydown(function(event)
         inputFocusJump('down');
     }
 });
+
+/**
+ * Add item.
+ *
+ * @param  object $obj
+ * @access public
+ * @return void
+ */
+function addItem(obj)
+{
+    var item = $('#addItem').html().replace(/%i%/g, itemIndex + 1);
+    $('<tr class="addedItem">' + item  + '</tr>').insertAfter($(obj).closest('tr'));
+
+    $(obj).closest('tr').next().find(".form-date").datepicker();
+    $(obj).closest('tr').next().find('div[id$=_chosen]').remove();
+    $(obj).closest('tr').next().find('.chosen').next('.picker').remove();
+    $(obj).closest('tr').next().find('.chosen').chosen();
+
+    itemIndex ++;
+}
+
+/**
+ * Delete item.
+ *
+ * @param  object $obj
+ * @access public
+ * @return void
+ */
+function deleteItem(obj)
+{
+    $(obj).closest('tr').remove();
+}

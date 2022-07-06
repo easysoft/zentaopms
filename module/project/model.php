@@ -693,10 +693,11 @@ class projectModel extends model
      * @param  bool   $isQueryAll
      * @param  string $orderBy
      * @param  string $excludedModel
+     * @param  string $model
      * @access public
      * @return object
      */
-    public function getPairsByProgram($programID = '', $status = 'all', $isQueryAll = false, $orderBy = 'order_asc', $excludedModel = '')
+    public function getPairsByProgram($programID = '', $status = 'all', $isQueryAll = false, $orderBy = 'order_asc', $excludedModel = '', $model = '')
     {
         if(defined('TUTORIAL')) return $this->loadModel('tutorial')->getProjectPairs();
         return $this->dao->select('id, name')->from(TABLE_PROJECT)
@@ -706,6 +707,7 @@ class projectModel extends model
             ->beginIF($programID !== '')->andWhere('parent')->eq($programID)->fi()
             ->beginIF($status != 'all' and $status != 'noclosed')->andWhere('status')->eq($status)->fi()
             ->beginIF($excludedModel)->andWhere('model')->ne($excludedModel)->fi()
+            ->beginIF($model)->andWhere('model')->eq($model)->fi()
             ->beginIF($status == 'noclosed')->andWhere('status')->ne('closed')->fi()
             ->beginIF(!$this->app->user->admin and !$isQueryAll)->andWhere('id')->in($this->app->user->view->projects)->fi()
             ->orderBy($orderBy)
@@ -1094,10 +1096,10 @@ class projectModel extends model
             if($program)
             {
                 /* Child project begin cannot less than parent. */
-                if(!empty($project->name) and $project->begin < $program->begin) dao::$errors['begin'] = sprintf($this->lang->project->beginGreateChild, $project->name, $program->name, $program->begin);
+                if(!empty($project->name) and $project->begin < $program->begin) dao::$errors['begin'] = sprintf($this->lang->project->beginGreateChild, $program->begin);
 
                 /* When parent set end then child project end cannot greater than parent. */
-                if(!empty($project->name) and $$program->end != '0000-00-00' and $project->end > $program->end) dao::$errors['end'] = sprintf($this->lang->project->endLetterChild, $project->name, $program->name, $program->end);
+                if(!empty($project->name) and $program->end != '0000-00-00' and $project->end > $program->end) dao::$errors['end'] = sprintf($this->lang->project->endLetterChild, $program->end);
 
                 if(dao::isError()) return false;
             }
@@ -1358,10 +1360,10 @@ class projectModel extends model
             if($program)
             {
                 /* Child project begin cannot less than parent. */
-                if(!empty($project->name) and $project->begin < $program->begin) dao::$errors['begin'] = sprintf($this->lang->project->beginGreateChild, $project->name, $program->name, $program->begin);
+                if(!empty($project->name) and $project->begin < $program->begin) dao::$errors['begin'] = sprintf($this->lang->project->beginGreateChild, $program->begin);
 
                 /* When parent set end then child project end cannot greater than parent. */
-                if(!empty($project->name) and $program->end != '0000-00-00' and $project->end > $program->end) dao::$errors['end'] = sprintf($this->lang->project->endLetterChild, $project->name, $program->name, $program->end);
+                if(!empty($project->name) and $program->end != '0000-00-00' and $project->end > $program->end) dao::$errors['end'] = sprintf($this->lang->project->endLetterChild, $program->end);
 
                 if(dao::isError()) return false;
             }
@@ -1373,6 +1375,19 @@ class projectModel extends model
                 $availableBudget = $this->loadModel('program')->getBudgetLeft($program);
                 if($project->budget > $availableBudget + $oldProject->budget) dao::$errors['budget'] = $this->lang->program->beyondParentBudget;
             }
+        }
+
+        $executionsCount = $this->dao->select('COUNT(*) as count')->from(TABLE_PROJECT)
+            ->where('project')->eq($project->id)
+            ->andWhere('deleted')->eq('0')
+            ->fetchAll();
+        if(!empty($executionsCount))
+        {
+            $minExecutionBegin = $this->dao->select('begin as minBegin')->from(TABLE_PROJECT)->where('project')->eq($project->id)->andWhere('deleted')->eq('0')->orderBy('begin_asc')->fetch();
+            $maxExecutionEnd   = $this->dao->select('end as maxEnd')->from(TABLE_PROJECT)->where('project')->eq($project->id)->andWhere('deleted')->eq('0')->orderBy('end_desc')->fetch();
+            if($minExecutionBegin and $project->begin > $minExecutionBegin->minBegin) dao::$errors['begin'] = sprintf($this->lang->project->begigLetterExecution, $minExecutionBegin->minBegin);
+            if($maxExecutionEnd and $project->end < $maxExecutionEnd->maxEnd) dao::$errors['end'] = sprintf($this->lang->project->endGreateExecution, $maxExecutionEnd->maxEnd);
+            if(dao::isError()) return false;
         }
 
         /* Judge products not empty. */
@@ -1529,14 +1544,14 @@ class projectModel extends model
                     /* Child project begin cannot less than parent. */
                     if(!empty($projects[$projectID]->name) and $projects[$projectID]->begin < $parentProject->begin)
                     {
-                        dao::$errors['begin'] = sprintf($this->lang->project->beginGreateChild, $projects[$projectID]->name, $parentProject->name, $parentProject->begin);
+                        dao::$errors['begin'] = sprintf($this->lang->project->beginGreateChild, $parentProject->begin);
                         return false;
                     }
 
                     /* When parent set end then child project end cannot greater than parent. */
                     if(!empty($projects[$projectID]->name) and $parentProject->end != '0000-00-00' and $projects[$projectID]->end > $parentProject->end)
                     {
-                        dao::$errors['end'] =  sprintf($this->lang->project->endLetterChild, $projects[$projectID]->name, $parentProject->name, $parentProject->end);
+                        dao::$errors['end'] =  sprintf($this->lang->project->endLetterChild, $parentProject->end);
                         return false;
                     }
                 }
@@ -2597,6 +2612,9 @@ class projectModel extends model
         if(isset($project->model) and $project->model == 'waterfall')
         {
             global $lang;
+            $lang->project->createExecution = str_replace($this->lang->executionCommon, $lang->project->stage, $lang->project->createExecution);
+            $lang->project->lastIteration   = str_replace($this->lang->executionCommon, $lang->project->stage, $lang->project->lastIteration);
+
             $this->loadModel('execution');
             $lang->executionCommon = $lang->project->stage;
 

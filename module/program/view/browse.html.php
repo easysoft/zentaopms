@@ -17,6 +17,7 @@
 <?php js::set('selectAll', $lang->selectAll);?>
 <?php js::set('hasProject', $hasProject);?>
 <?php js::set('checkedProjects', $lang->program->checkedProjects);?>
+<?php js::set('cilentLang', $this->app->getClientLang());?>
 <?php if($programType == 'bygrid'):?>
 <style>#mainMenu{padding-left: 10px; padding-right: 10px;}</style>
 <?php endif;?>

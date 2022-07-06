@@ -1131,16 +1131,16 @@ class testcase extends control
             $changes = $this->testcase->review($caseID);
             if(dao::isError()) return print(js::error(dao::getError()));
 
-            if($changes or $this->post->comment != '')
+            if(is_array($changes))
             {
                 $result = $this->post->result;
                 $actionID = $this->loadModel('action')->create('case', $caseID, 'Reviewed', $this->post->comment, ucfirst($result));
                 $this->action->logHistory($actionID, $changes);
+
+                $this->executeHooks($caseID);
+
+                return print(js::reload('parent.parent'));
             }
-
-            $this->executeHooks($caseID);
-
-            return print(js::reload('parent.parent'));
         }
 
         $this->view->users   = $this->user->getPairs('noletter|noclosed|nodeleted');
@@ -1582,6 +1582,10 @@ class testcase extends control
                 $case->real       = '';
                 $result = isset($results[$case->id]) ? $results[$case->id] : array();
 
+                $case->openedDate     = !helper::isZeroDate($case->openedDate)     ? $case->openedDate     : '';
+                $case->lastEditedDate = !helper::isZeroDate($case->lastEditedDate) ? $case->lastEditedDate : '';
+                $case->lastRunDate    = !helper::isZeroDate($case->lastRunDate)    ? $case->lastRunDate    : '';
+
                 $case->real = '';
                 if(!empty($result) and !isset($relatedSteps[$case->id]))
                 {
@@ -1852,17 +1856,10 @@ class testcase extends control
         $queryID    = (int)$queryID;
         $product    = $this->loadModel('product')->getById($productID);
         $branches   = array();
+        if($branch == '') $branch = 0;
 
         $this->loadModel('branch');
         if($product->type != 'normal') $branches = array(BRANCH_MAIN => $this->lang->branch->main) + $this->branch->getPairs($productID, 'active', $projectID);
-
-        if($_POST)
-        {
-            $this->testcase->importFromLib($productID);
-            return print(js::reload('parent'));
-        }
-
-        $this->app->tab == 'project' ? $this->loadModel('project')->setMenu($this->session->project) : $this->testcase->setMenu($this->products, $productID, $branch);
 
         $libraries = $this->loadModel('caselib')->getLibraries();
         if(empty($libraries))
@@ -1871,6 +1868,14 @@ class testcase extends control
             return print(js::locate($this->session->caseList));
         }
         if(empty($libID) or !isset($libraries[$libID])) $libID = key($libraries);
+
+        if($_POST)
+        {
+            $this->testcase->importFromLib($productID, $libID, $branch);
+            return print(js::reload('parent'));
+        }
+
+        $this->app->tab == 'project' ? $this->loadModel('project')->setMenu($this->session->project) : $this->testcase->setMenu($this->products, $productID, $branch);
 
         /* Build the search form. */
         $actionURL = $this->createLink('testcase', 'importFromLib', "productID=$productID&branch=$branch&libID=$libID&orderBy=$orderBy&browseType=bySearch&queryID=myQueryID");
@@ -1886,6 +1891,10 @@ class testcase extends control
         unset($this->config->testcase->search['fields']['branch']);
         $this->loadModel('search')->setSearchParams($this->config->testcase->search);
 
+        $this->loadModel('testsuite');
+        foreach($branches as $branchID => $branchName) $canImportModules[$branchID] = $this->testsuite->getCanImportModules($productID, $libID, $branchID);
+        if(empty($branches)) $canImportModules[0] = $this->testsuite->getCanImportModules($productID, $libID, 0);
+
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
         $pager = pager::init(0, $recPerPage, $pageID);
@@ -1893,19 +1902,19 @@ class testcase extends control
         $this->view->title      = $this->lang->testcase->common . $this->lang->colon . $this->lang->testcase->importFromLib;
         $this->view->position[] = $this->lang->testcase->importFromLib;
 
-        $this->view->libraries  = $libraries;
-        $this->view->libID      = $libID;
-        $this->view->product    = $product;
-        $this->view->productID  = $productID;
-        $this->view->branch     = $branch;
-        $this->view->cases      = $this->loadModel('testsuite')->getNotImportedCases($productID, $libID, $orderBy, $pager, $browseType, $queryID);
-        $this->view->modules    = $this->loadModel('tree')->getOptionMenu($productID, 'case', 0, $branch === 'all' ? 0 : (int)$branch);
-        $this->view->libModules = $this->tree->getOptionMenu($libID, 'caselib');
-        $this->view->pager      = $pager;
-        $this->view->orderBy    = $orderBy;
-        $this->view->branches   = $branches;
-        $this->view->browseType = $browseType;
-        $this->view->queryID    = $queryID;
+        $this->view->libraries        = $libraries;
+        $this->view->libID            = $libID;
+        $this->view->product          = $product;
+        $this->view->productID        = $productID;
+        $this->view->branch           = $branch;
+        $this->view->cases            = $this->testsuite->getCanImportCases($productID, $libID, $branch, $orderBy, $pager, $browseType, $queryID);
+        $this->view->libModules       = $this->tree->getOptionMenu($libID, 'caselib');
+        $this->view->pager            = $pager;
+        $this->view->orderBy          = $orderBy;
+        $this->view->branches         = $branches;
+        $this->view->browseType       = $browseType;
+        $this->view->queryID          = $queryID;
+        $this->view->canImportModules = $canImportModules;
 
         $this->display();
     }
@@ -2168,11 +2177,11 @@ class testcase extends control
      */
     public function importToLib($caseID = 0)
     {
-        $caseIDList = $this->post->caseIDList;
-        if(!empty($_POST))
+        if($this->server->request_method == 'POST')
         {
             $this->testcase->importToLib($caseID);
-            if(!empty($caseID)) return $this->send(array('result' => 'success', 'message' => $this->lang->importSuccess, 'closeModal' => true,));
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            if(!empty($caseID)) return $this->send(array('result' => 'success', 'message' => $this->lang->importSuccess, 'closeModal' => true));
             return $this->send(array('result' => 'success', 'message' => $this->lang->importSuccess, 'locate' => 'reload'));
         }
         $this->view->libraries = $this->loadModel('caselib')->getLibraries();

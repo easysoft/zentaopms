@@ -34,11 +34,11 @@
           </tr>
           <tr class='gitlab hide'>
             <th><?php echo $lang->repo->gitlabHost;?></th>
-            <td class='required'><?php echo html::select('gitlabHost', $gitlabHosts, '', "class='form-control chosen' placeholder='{$lang->repo->placeholder->gitlabHost}'");?>
+            <td class='required'><?php echo html::select('gitlabHost', $gitlabHosts, '', "class='form-control chosen' placeholder='{$lang->repo->placeholder->gitlabHost}'");?></td>
           </tr>
           <tr class='gitlab hide'>
             <th><?php echo $lang->repo->gitlabProject;?></th>
-            <td class='required'><?php echo html::select('gitlabProject', array(''), '', "class='form-control chosen'");?>
+            <td class='required'><?php echo html::select('gitlabProject', array(''), '', "class='form-control chosen'");?></td>
           </tr>
           <tr>
             <th><?php echo $lang->repo->name; ?></th>

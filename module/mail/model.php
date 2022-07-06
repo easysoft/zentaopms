@@ -533,7 +533,7 @@ class mailModel extends model
         $data->ccList      = $ccList;
         $data->subject     = $subject;
         $data->data        = $body;
-        $data->createdBy   = $this->config->mail->fromName;
+        $data->createdBy   = $this->app->user->account;
         $data->createdDate = helper::now();
         $this->dao->insert(TABLE_NOTIFY)->data($data)->autocheck()->exec();
     }

@@ -916,7 +916,7 @@ class bug extends control
      * @access public
      * @return void
      */
-    public function edit($bugID, $comment = false, $kanbanGroup = '')
+    public function edit($bugID, $comment = false, $kanbanGroup = 'default')
     {
         if(!empty($_POST))
         {
@@ -1351,7 +1351,7 @@ class bug extends control
      * @access public
      * @return void
      */
-    public function assignTo($bugID, $kanbanGroup = '')
+    public function assignTo($bugID, $kanbanGroup = 'default')
     {
         $bug = $this->bug->getById($bugID);
         $this->bug->checkBugExecutionPriv($bug);
@@ -1397,19 +1397,26 @@ class bug extends control
         }
 
         /* Get assigned to member. */
-        if($bug->execution)
+        if($this->app->tab == 'project' or $this->app->tab == 'execution')
         {
-            $users = $this->user->getTeamMemberPairs($bug->execution, 'execution');
-        }
-        elseif($bug->project)
-        {
-            $users = $this->loadModel('project')->getTeamMemberPairs($bug->project);
+            if($bug->execution)
+            {
+                $users = $this->user->getTeamMemberPairs($bug->execution, 'execution');
+            }
+            elseif($bug->project)
+            {
+                $users = $this->loadModel('project')->getTeamMemberPairs($bug->project);
+            }
+            else
+            {
+                $users = $this->bug->getProductMemberPairs($bug->product, $bug->branch);
+                $users = array_filter($users);
+                if(empty($users)) $users = $this->user->getPairs('devfirst|noclosed');
+            }
         }
         else
         {
-            $users = $this->bug->getProductMemberPairs($bug->product, $bug->branch);
-            $users = array_filter($users);
-            if(empty($users)) $users = $this->user->getPairs('devfirst|noclosed');
+            $users = $this->user->getPairs('devfirst|noclosed');
         }
 
         $this->view->title      = $this->products[$bug->product] . $this->lang->colon . $this->lang->bug->assignedTo;
@@ -2251,6 +2258,13 @@ class bug extends control
                     $bug->steps = str_replace('"', '""', $bug->steps);
                     $bug->steps = str_replace('&nbsp;', ' ', $bug->steps);
                 }
+
+                $bug->openedDate     = !helper::isZeroDate($bug->openedDate)     ? $bug->openedDate     : '';
+                $bug->assignedDate   = !helper::isZeroDate($bug->assignedDate)   ? $bug->assignedDate   : '';
+                $bug->resolvedDate   = !helper::isZeroDate($bug->resolvedDate)   ? $bug->resolvedDate   : '';
+                $bug->closedDate     = !helper::isZeroDate($bug->closedDate)     ? $bug->closedDate     : '';
+                $bug->lastEditedDate = !helper::isZeroDate($bug->lastEditedDate) ? $bug->lastEditedDate : '';
+                $bug->deadline       = !helper::isZeroDate($bug->deadline)       ? $bug->deadline       : '';
 
                 /* fill some field with useful value. */
                 $bug->product   = !isset($products[$bug->product])     ? '' : $products[$bug->product] . "(#$bug->product)";

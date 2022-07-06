@@ -38,13 +38,14 @@ class compileModel extends model
     /**
      * Get build list.
      *
+     * @param  int    $repoID
      * @param  int    $jobID
      * @param  string $orderBy
      * @param  object $pager
      * @access public
      * @return array
      */
-    public function getList($jobID, $orderBy = 'id_desc', $pager = null)
+    public function getList($repoID, $jobID, $orderBy = 'id_desc', $pager = null)
     {
         return $this->dao->select('t1.id, t1.name, t1.job, t1.status, t1.createdDate, t1.testtask, t2.pipeline, t2.triggerType, t2.comment, t2.atDay, t2.atTime, t2.engine, t3.name as repoName, t4.name as jenkinsName')->from(TABLE_COMPILE)->alias('t1')
             ->leftJoin(TABLE_JOB)->alias('t2')->on('t1.job=t2.id')
@@ -52,6 +53,7 @@ class compileModel extends model
             ->leftJoin(TABLE_PIPELINE)->alias('t4')->on('t2.server=t4.id')
             ->where('t1.deleted')->eq('0')
             ->andWhere('t1.job')->ne('0')
+            ->beginIF(!empty($repoID))->andWhere('t3.id')->eq($repoID)->fi()
             ->beginIF(!empty($jobID))->andWhere('t1.job')->eq($jobID)->fi()
             ->orderBy($orderBy)
             ->page($pager)

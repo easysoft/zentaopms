@@ -47,6 +47,7 @@ $lang->program->realDuration   = 'RealDuration';
 $lang->program->openedVersion  = 'OpenedVersion';
 $lang->program->lastEditedBy   = 'LastEditedBy';
 $lang->program->lastEditedDate = 'LastEditedDate';
+$lang->program->childProgram   = 'sous-programme';
 
 /* Actions. */
 $lang->program->common                  = 'Program';
@@ -99,10 +100,10 @@ $lang->program->noProgram          = 'No program.';
 $lang->program->showClosed         = 'Closed programs.';
 $lang->program->tips               = 'If a parent program is selected, the products under the parent program can be associated. If no program is selected for the project, a product with the same name as the project is created and associated with the project by default.';
 $lang->program->confirmBatchUnlink = "Do you want to batch unlink these stakeholders?";
-$lang->program->beginLetterParent  = 'La date de début du programme "%s" doit être ≥ à la date de début du programme parent "%s" : %s.';
-$lang->program->endGreaterParent   = 'La date de fin du programme "%s" doit être ≤ à la date de fin du programme parent "%s" : %s.';
-$lang->program->beginGreateChild   = 'La date de début du programme parent "%s" doit être ≤ à la date de début minimum du sous-programme "%s" : %s.';
-$lang->program->endLetterChild     = 'Le temps de fin du programme parent "%s" doit être ≥ au temps de fin maximum du sous-programme "%s" : %s.';
+$lang->program->beginLetterParent  = 'La date de début du programme doit être ≥ à la date de début du programme parent: %s.';
+$lang->program->endGreaterParent   = 'La date de fin du programme doit être ≤ à la date de fin du programme parent: %s.';
+$lang->program->beginGreateChild   = 'La date de début du programme parent doit être ≤ à la date de début minimum du %s: %s.';
+$lang->program->endLetterChild     = 'Le temps de fin du programme parent doit être ≥ au temps de fin maximum du %s: %s.';
 $lang->program->closeErrorMessage  = 'There are subprograms or projects that are not closed';
 $lang->program->hasChildren        = 'It has child programs or projects. You cannot delete it.';
 $lang->program->hasProduct         = 'It has products. You cannot delete it.';

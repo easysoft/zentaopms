@@ -1576,10 +1576,12 @@ class testcaseModel extends model
      * Import case from Lib.
      *
      * @param  int    $productID
+     * @param  int    $libID
+     * @param  int    $branch
      * @access public
      * @return void
      */
-    public function importFromLib($productID)
+    public function importFromLib($productID, $libID, $branch)
     {
         $data = fixer::input('post')->get();
 
@@ -1591,18 +1593,26 @@ class testcaseModel extends model
             if($module == 'ditto') $data->module[$i] = $prevModule;
         }
 
+        $caseModules = array();
+        $this->loadModel('testsuite');
         if(isset($data->branch))
         {
             foreach($data->branch as $i => $branch)
             {
                 if($branch != 'ditto') $prevBranch = $branch;
                 if($branch == 'ditto') $data->branch[$i] = $prevBranch;
+                if(!isset($caseModules[$data->branch[$i]])) $caseModules[$data->branch[$i]] = $this->testsuite->getCanImportModules($productID, $libID,  $data->branch[$i]);
             }
+        }
+        else
+        {
+            $caseModules[$branch] = $this->loadModel('testsuite')->getCanImportModules($productID, $libID,  $branch);
         }
 
         $libCases = $this->dao->select('*')->from(TABLE_CASE)->where('deleted')->eq(0)->andWhere('id')->in($data->caseIdList)->fetchAll('id');
         $libSteps = $this->dao->select('*')->from(TABLE_CASESTEP)->where('`case`')->in($data->caseIdList)->orderBy('id')->fetchGroup('case');
         $libFiles = $this->dao->select('*')->from(TABLE_FILE)->where('objectID')->in($data->caseIdList)->andWhere('objectType')->eq('testcase')->fetchGroup('objectID', 'id');
+        $imported = '';
         foreach($libCases as $libCaseID => $case)
         {
             $case->fromCaseID      = $case->id;
@@ -1611,6 +1621,13 @@ class testcaseModel extends model
             if(isset($data->module[$case->id])) $case->module = $data->module[$case->id];
             if(isset($data->branch[$case->id])) $case->branch = $data->branch[$case->id];
             unset($case->id);
+
+            $branch = isset($case->branch) ? $case->branch : 0;
+            if(empty($caseModules[$branch][$case->fromCaseID][$case->module]))
+            {
+                $imported .= "$case->fromCaseID,";
+                continue;
+            }
 
             $this->dao->insert(TABLE_CASE)->data($case)->autoCheck()->exec();
 
@@ -1655,6 +1672,11 @@ class testcaseModel extends model
                 $this->loadModel('action')->create('case', $caseID, 'fromlib', '', $case->lib);
             }
         }
+        if(!empty($imported))
+        {
+            $imported = trim($imported, ',');
+            return print(js::error(sprintf($this->lang->testcase->importedCases, $imported)));
+        }
     }
 
     /**
@@ -1670,8 +1692,9 @@ class testcaseModel extends model
         $caseIdList = explode(',' , $caseIdList);
         $libID      = $this->post->lib;
 
-        $this->loadModel('action');
+        if(empty($libID)) return dao::$errors[] = sprintf($this->lang->error->notempty, $this->lang->testcase->caselib);
 
+        $this->loadModel('action');
         $cases          = $this->dao->select('*')->from(TABLE_CASE)->where('deleted')->eq(0)->andWhere('id')->in($caseIdList)->fetchAll('id');
         $caseSteps      = $this->dao->select('*')->from(TABLE_CASESTEP)->where('`case`')->in($caseIdList)->orderBy('id')->fetchGroup('case');
         $caseFiles      = $this->dao->select('*')->from(TABLE_FILE)->where('objectID')->in($caseIdList)->andWhere('objectType')->eq('testcase')->fetchGroup('objectID', 'id');
@@ -2012,19 +2035,19 @@ class testcaseModel extends model
                 echo zget($users, $case->reviewedBy);
                 break;
             case 'reviewedDate':
-                echo substr($case->reviewedDate, 5, 11);
+                 echo helper::isZeroDate($case->reviewedDate) ? '' : substr($case->reviewedDate, 5, 11);
                 break;
             case 'lastEditedBy':
                 echo zget($users, $case->lastEditedBy);
                 break;
             case 'lastEditedDate':
-                echo substr($case->lastEditedDate, 5, 11);
+                 echo helper::isZeroDate($case->lastEditedDate) ? '' : substr($case->lastEditedDate, 5, 11);
                 break;
             case 'lastRunner':
                 echo zget($users, $case->lastRunner);
                 break;
             case 'lastRunDate':
-                if(!helper::isZeroDate($case->lastRunDate)) echo date(DT_MONTHTIME1, strtotime($case->lastRunDate));
+                if(!helper::isZeroDate($case->lastRunDate)) echo substr($case->lastRunDate, 5, 11);
                 break;
             case 'lastRunResult':
                 $class = 'result-' . $case->lastRunResult;

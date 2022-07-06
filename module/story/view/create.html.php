@@ -60,7 +60,7 @@
                     echo "<div class='input-group-addon'>";
                     echo html::a($this->createLink('tree', 'browse', "rootID=$productID&view=story&currentModuleID=0&branch=$branch", '', true), $lang->tree->manage, '', "class='text-primary' data-toggle='modal' data-type='iframe' data-width='90%'");
                     echo '&nbsp; ';
-                    echo html::a("javascript:void(0)", $lang->refresh, '', "class='refresh' onclick='loadProductModules($productID)'");
+                    echo html::a("javascript:void(0)", $lang->refreshIcon, '', "class='refresh' onclick='loadProductModules($productID)'");
                     echo '</div>';
                 }
                 ?>
@@ -122,6 +122,12 @@
                   <?php echo html::select('reviewer[]', $reviewers, empty($needReview) ? $product->PO : '', "class='form-control picker-select' multiple required");?>
                 </div>
                 <?php endif;?>
+              </div>
+            </td>
+            <td colspan='<?php echo $type == 'story' ? 2 : 1;?>' id='assignedToBox' class='hidden'>
+              <div class='input-group'>
+                <div class="input-group-addon"><?php echo $lang->story->assignedTo;?></div>
+                <?php echo html::select('assignedTo', $users, '', "class='form-control picker-select'");?>
               </div>
             </td>
             <?php if($type == 'requirement'):?>

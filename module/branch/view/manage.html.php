@@ -102,15 +102,17 @@
           <td class='c-name' title='<?php echo $branch->desc;?>'><?php echo $branch->desc;?></td>
           <td class='c-actions'>
           <?php
-            $disabled = $isMain ? 'disabled' : '';
-            common::printIcon('branch', 'edit', "branchID=$branch->id&productID=$productID", $branch, 'list', '', '', "$disabled iframe", true, '', $lang->branch->edit);
-            if($branch->status == 'active')
+            if(!$isMain)
             {
-                common::printIcon('branch', 'close', "branchID=$branch->id", $branch, 'list', 'off', 'hiddenwin', $disabled);
-            }
-            else
-            {
-                common::printIcon('branch', 'activate', "branchID=$branch->id", $branch, 'list', 'active', 'hiddenwin', $disabled);
+                common::printIcon('branch', 'edit', "branchID=$branch->id&productID=$productID", $branch, 'list', '', '', 'iframe', true, '', $lang->branch->edit);
+                if($branch->status == 'active')
+                {
+                    common::printIcon('branch', 'close', "branchID=$branch->id", $branch, 'list', 'off', 'hiddenwin');
+                }
+                else
+                {
+                    common::printIcon('branch', 'activate', "branchID=$branch->id", $branch, 'list', 'active', 'hiddenwin');
+                }
             }
           ?>
           </td>

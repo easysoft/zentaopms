@@ -196,6 +196,8 @@ $lang->execution->list    = "{$lang->executionCommon} List";
 $lang->kanban->common     = 'Kanban';
 $lang->backup->common     = 'Backup';
 $lang->action->trash      = 'Recycle';
+$lang->app->common        = 'APP';
+$lang->app->serverLink    = 'Server Link';
 
 $lang->personnel->common     = 'Member';
 $lang->personnel->invest     = 'Investment';
@@ -282,6 +284,7 @@ $lang->devops->mr       = 'Merge Request';
 $lang->devops->repo     = 'Repo';
 $lang->devops->rules    = 'Rule';
 $lang->devops->settings = 'Setting Merge Request';
+$lang->devops->set      = 'Set';
 
 $lang->admin->system     = 'System';
 $lang->admin->entry      = 'Application';

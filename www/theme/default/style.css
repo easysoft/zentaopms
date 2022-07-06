@@ -92,3 +92,9 @@ a.showMoreImage:hover {opacity: 1;}
 
 .icon-size-width:before {content: "\e9c5"; transform: rotate(90deg); -ms-transform: rotate(90deg); -moz-transform: rotate(90deg); -webkit-transform: rotate(90deg); -o-transform: rotate(90deg);}
 .checkbox-primary > label{overflow: hidden;}
+
+body.xxc-embed {overflow-x: auto; overflow-y: hidden;}
+.xxc-embed #header {position: fixed;top: 0;width: 100%;z-index: 10;}
+.xxc-embed #toolbar {position: fixed;right: 120px!important;}
+.xxc-embed #main {position: absolute;top: 50px;bottom: 0;left: 0;right: 0;overflow: auto;}
+.xxc-embed .fix-table-copy-wrapper {top: 50px!important;}

@@ -357,6 +357,7 @@ $lang->block->availableBlocks->testtask    = '测试版本列表';
 $lang->block->availableBlocks->risk        = '风险';
 $lang->block->availableBlocks->issue       = '问题';
 $lang->block->availableBlocks->meeting     = '会议';
+$lang->block->availableBlocks->feedback    = '反馈';
 
 if($config->systemMode == 'new') $lang->block->moduleList['project'] = '项目';
 $lang->block->moduleList['product']   = $lang->productCommon;
@@ -469,13 +470,14 @@ $lang->block->orderByList->story['status_desc'] = '状态倒序';
 $lang->block->orderByList->story['stage_asc']   = '阶段正序';
 $lang->block->orderByList->story['stage_desc']  = '阶段倒序';
 
-$lang->block->todoCount    = '待办数';
-$lang->block->taskCount    = '任务数';
-$lang->block->bugCount     = 'Bug数';
-$lang->block->riskCount    = '风险数';
-$lang->block->issueCount   = '问题数';
-$lang->block->storyCount   = '需求数';
-$lang->block->meetingCount = '会议数';
+$lang->block->todoCount     = '待办数';
+$lang->block->taskCount     = '任务数';
+$lang->block->bugCount      = 'Bug数';
+$lang->block->riskCount     = '风险数';
+$lang->block->issueCount    = '问题数';
+$lang->block->storyCount    = '需求数';
+$lang->block->meetingCount  = '会议数';
+$lang->block->feedbackCount = '反馈数';
 
 $lang->block->typeList = new stdclass();
 

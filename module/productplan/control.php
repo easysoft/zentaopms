@@ -441,7 +441,7 @@ class productplan extends control
         $this->view->plan         = $plan;
         $this->view->actions      = $this->loadModel('action')->getList('productplan', $planID);
         $this->view->users        = $this->loadModel('user')->getPairs('noletter');
-        $this->view->plans        = $this->productplan->getPairs($plan->product, $plan->branch);
+        $this->view->plans        = $this->productplan->getPairs($plan->product, $plan->branch, '', true);
         $this->view->modules      = $this->loadModel('tree')->getOptionMenu($plan->product);
         $this->view->type         = $type;
         $this->view->orderBy      = $orderBy;

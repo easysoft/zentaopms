@@ -166,7 +166,7 @@
     <?php endif;?>
     <div class='main-actions'>
       <div class="btn-toolbar">
-        <?php common::printBack($browseLink);?>
+        <?php echo html::a($browseLink, '<i class="icon icon-back icon-sm"></i> ' . $lang->goback, '', "class='btn btn-secondary'");?>
         <?php if(!isonlybody()) echo "<div class='divider'></div>";?>
         <?php $task->executionList = $execution;?>
         <?php echo $this->task->buildOperateMenu($task, 'view');?>
@@ -265,7 +265,18 @@
                 <?php endif;?>
                 <tr>
                   <th><?php echo $lang->task->assignedTo;?></th>
-                  <td><?php echo $task->assignedTo ? $task->assignedToRealName . $lang->at . $task->assignedDate : $lang->noData;?></td>
+                  <td>
+                    <?php
+                    if(!empty($task->team) and $task->mode == 'multi')
+                    {
+                        foreach($task->team as $member) echo ' ' . zget($users, $member->account);
+                    }
+                    else
+                    {
+                        echo $task->assignedTo ? $task->assignedToRealName . $lang->at . $task->assignedDate : $lang->noData;
+                    }
+                    ?>
+                  </td>
                 </tr>
                 <?php if($task->mode):?>
                 <tr>

@@ -1079,10 +1079,10 @@ class block extends control
 
         /* Get tasks. Fix bug #2918.*/
         $yesterday  = date('Y-m-d', strtotime('-1 day'));
-        $taskGroups = $this->dao->select("id,parent,project,status,finishedDate,estimate,consumed,`left`")->from(TABLE_TASK)
-            ->where('project')->in($executionIdList)
+        $taskGroups = $this->dao->select("id,parent,execution,status,finishedDate,estimate,consumed,`left`")->from(TABLE_TASK)
+            ->where('execution')->in($executionIdList)
             ->andWhere('deleted')->eq(0)
-            ->fetchGroup('project', 'id');
+            ->fetchGroup('execution', 'id');
 
         $tasks = array();
         foreach($taskGroups as $executionID => $taskGroup)
@@ -1095,7 +1095,7 @@ class block extends control
 
             foreach($taskGroup as $taskID => $task)
             {
-                if(strpos('wait|doing|pause', $task->status) !== false) $undoneTasks ++;
+                if(strpos('wait|doing|pause|cancel', $task->status) !== false) $undoneTasks ++;
                 if(strpos($task->finishedDate, $yesterday) !== false) $yesterdayFinished ++;
 
                 if($task->parent == '-1') continue;
@@ -1131,11 +1131,11 @@ class block extends control
         }
 
         /* Get bugs. */
-        $bugs = $this->dao->select("project, count(status) as totalBugs, count(status = 'active' or null) as activeBugs, count(resolvedDate like '{$yesterday}%' or null) as yesterdayResolved")->from(TABLE_BUG)
-            ->where('project')->in($executionIdList)
+        $bugs = $this->dao->select("execution, count(status) as totalBugs, count(status = 'active' or null) as activeBugs, count(resolvedDate like '{$yesterday}%' or null) as yesterdayResolved")->from(TABLE_BUG)
+            ->where('execution')->in($executionIdList)
             ->andWhere('deleted')->eq(0)
-            ->groupBy('project')
-            ->fetchAll('project');
+            ->groupBy('execution')
+            ->fetchAll('execution');
 
         foreach($bugs as $executionID => $bug)
         {
@@ -1717,6 +1717,7 @@ class block extends control
         if(common::hasPriv('risk',  'view') and $this->config->edition == 'max' and $this->config->vision != 'lite')   $hasViewPriv['risk']    = true;
         if(common::hasPriv('issue', 'view') and $this->config->edition == 'max' and $this->config->vision != 'lite')   $hasViewPriv['issue']   = true;
         if(common::hasPriv('meeting', 'view') and $this->config->edition == 'max' and $this->config->vision != 'lite') $hasViewPriv['meeting'] = true;
+        if(common::hasPriv('feedback', 'view') and in_array($this->config->edition, array('max', 'biz')))              $hasViewPriv['feedback'] = true;
 
         $params          = $this->get->param;
         $params          = json_decode(base64_decode($params));
@@ -1725,8 +1726,14 @@ class block extends control
         $objectCountList = array('todo' => 'todoCount', 'task' => 'taskCount', 'bug' => 'bugCount', 'story' => 'storyCount', 'requirement' => 'requirementCount');
         if($this->config->edition == 'max')
         {
-            $objectList      += array('risk' => 'risks', 'issue' => 'issues');
-            $objectCountList += array('risk' => 'riskCount', 'issue' => 'issueCount');
+            $objectList      += array('risk' => 'risks', 'issue' => 'issues', 'feedback' => 'feedbacks');
+            $objectCountList += array('risk' => 'riskCount', 'issue' => 'issueCount', 'feedback' => 'feedbackCount');
+        }
+
+        if($this->config->edition == 'biz')
+        {
+            $objectList      += array('feedback' => 'feedbacks');
+            $objectCountList += array('feedback' => 'feedbackCount');
         }
 
         $tasks = $this->loadModel('task')->getUserSuspendedTasks($this->app->user->account);
@@ -1749,6 +1756,10 @@ class block extends control
                 ->beginIF($objectType == 'story' or $objectType == 'requirement')->andWhere('t2.deleted')->eq('0')->fi()
                 ->beginIF($objectType == 'todo')->andWhere('t1.cycle')->eq(0)->andWhere('t1.status')->eq('wait')->andWhere('t1.vision')->eq($this->config->vision)->fi()
                 ->beginIF($objectType != 'todo')->andWhere('t1.status')->ne('closed')->fi()
+                ->beginIF($objectType == 'feedback')
+                ->andWhere('t1.status')->in('wait, noreview')
+                ->andWhere('t1.assignedTo')->eq($this->app->user->account)
+                ->fi()
                 ->orderBy($orderBy)
                 ->beginIF($limitCount)->limit($limitCount)->fi()
                 ->fetchAll();
@@ -1786,6 +1797,13 @@ class block extends control
             if($objectType == 'bug')   $this->app->loadLang('bug');
             if($objectType == 'risk')  $this->app->loadLang('risk');
             if($objectType == 'issue') $this->app->loadLang('issue');
+
+            if($objectType == 'feedback')
+            {
+                $this->app->loadLang('feedback');
+                $this->view->users    = $this->loadModel('user')->getPairs('all,noletter');
+                $this->view->products = $this->loadModel('product')->getPairs();
+            }
 
             $count[$objectType] = count($objects);
             $this->view->{$objectList[$objectType]} = $objects;

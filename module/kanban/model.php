@@ -827,7 +827,7 @@ class kanbanModel extends model
      */
     public function getRDKanban($executionID, $browseType = 'all', $orderBy = 'id_desc', $regionID = 0, $groupBy = 'default', $searchValue = '')
     {
-        if($groupBy != 'default') return $this->getKanban4Group($executionID, $browseType, $groupBy, $searchValue);
+        if($groupBy != 'default' and $groupBy != '') return $this->getKanban4Group($executionID, $browseType, $groupBy, $searchValue);
 
         $kanbanData   = array();
         $actions      = array('sortGroup');
@@ -1479,6 +1479,19 @@ class kanbanModel extends model
         if($browseType == 'bug')   $cardList = $this->loadModel('bug')->getExecutionBugs($executionID);
         if($browseType == 'task')  $cardList = $this->loadModel('execution')->getKanbanTasks($executionID, "id");
 
+        if($browseType == 'task' and $groupBy == 'assignedTo')
+        {
+            foreach($cardList as $id => $task)
+            {
+                if($task->mode == 'multi')
+                {
+                    $task->team = $this->dao->select('t1.account,t2.realname')->from(TABLE_TEAM)->alias('t1')
+                        ->leftJoin(TABLE_USER)->alias('t2')->on('t1.account = t2.account')
+                        ->where('t1.root')->eq($id)->andWhere('t1.type')->eq('task')->orderBy('t1.order')->fetchPairs('account');
+                }
+            }
+        }
+
         /* Get objects cards menus. */
         if($browseType == 'story') $storyCardMenu = $this->getKanbanCardMenu($executionID, $cardList, 'story');
         if($browseType == 'bug')   $bugCardMenu   = $this->getKanbanCardMenu($executionID, $cardList, 'bug');
@@ -1564,13 +1577,20 @@ class kanbanModel extends model
 
                     $cardData = array();
                     if(in_array($groupBy, array('module', 'story', 'pri', 'severity')) and (int)$object->$groupBy !== $laneID) continue;
-                    if(in_array($groupBy, array('assignedTo', 'type', 'category', 'source')) and $object->$groupBy !== $laneID) continue;
+                    if(in_array($groupBy, array('type', 'category', 'source')) and $object->$groupBy !== $laneID) continue;
+                    if($groupBy == 'assignedTo')
+                    {
+                        if(empty($object->team) and $object->$groupBy !== $laneID) continue;
+                        if(!empty($object->team) and !in_array($laneID, array_keys($object->team), true)) continue;
+
+                        if($object->$groupBy !== $laneID) $cardData['assignedTo'] = $laneID;
+                    }
 
                     $cardData['id']         = $object->id;
                     $cardData['order']      = $cardOrder;
                     $cardData['pri']        = $object->pri ? $object->pri : '';
                     $cardData['estimate']   = $browseType == 'bug' ? '' : $object->estimate;
-                    $cardData['assignedTo'] = $object->assignedTo;
+                    $cardData['assignedTo'] = empty($cardData['assignedTo']) ? $object->assignedTo : $cardData['assignedTo'];
                     $cardData['deadline']   = $browseType == 'story' ? '' : $object->deadline;
                     $cardData['severity']   = $browseType == 'bug' ? $object->severity : '';
 
@@ -1625,6 +1645,14 @@ class kanbanModel extends model
         foreach($cardList as $item)
         {
             if(!isset($groupByList[$item->$groupBy])) $groupByList[$item->$groupBy] = $item->$groupBy;
+
+            if($groupBy == 'assignedTo' and !empty($item->team))
+            {
+                foreach($item->team as $account => $name)
+                {
+                    if(!isset($groupByList[$account])) $groupByList[$account] = $account;
+                }
+            }
         }
 
         if(in_array($groupBy, array('module', 'story', 'assignedTo')))
@@ -1734,7 +1762,6 @@ class kanbanModel extends model
             ->where('deleted')->eq(0)
             ->andWhere('id')->in($spaceIdList)
             ->beginIF(in_array($browseType, array('private', 'cooperation', 'public')))->andWhere('type')->eq($browseType)->fi()
-            ->beginIF($browseType == 'involved')->andWhere('owner')->ne($account)->fi()
             ->beginIF($this->cookie->showClosed == 0 and $browseType != 'showClosed')->andWhere('status')->ne('closed')->fi()
             ->orderBy('id_desc')
             ->fetchPairs('id');
@@ -1780,10 +1807,11 @@ class kanbanModel extends model
         $account = $this->app->user->account;
         foreach($objects as $objectID => $object)
         {
-            $remove = true;
             if($objectType == 'kanbanspace' and $object->type == 'public' and $param != 'involved') continue;
 
-            if($object->owner == $account and $param != 'involved') $remove = false;
+            $remove = true;
+
+            if($object->owner == $account) $remove = false;
             if(strpos(",{$object->team},", ",$account,") !== false) $remove = false;
             if(strpos(",{$object->whitelist},", ",$account,") !== false) $remove = false;
 
@@ -1795,7 +1823,6 @@ class kanbanModel extends model
                 if($spaceType == 'public' and $param != 'involved') $remove = false;
             }
 
-            if($objectType == 'kanbanspace' and $param == 'involved' and $object->owner == $account) $remove = true;
             if($remove) unset($objects[$objectID]);
         }
 

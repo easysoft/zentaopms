@@ -12,8 +12,12 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <div id="mainMenu" class="clearfix">
-  <div class='pull-left'>
-    <?php echo html::linkButton('<i class="icon icon-back icon-sm"></i> ' . $lang->goback, $this->createLink('gitlab', 'browse'), 'self', '','btn btn-secondary');?>
+  <?php echo $this->gitlab->getGitlabMenu($gitlabID, 'group');?>
+  <div class="btn-toolbar pull-left">
+    <form id='gitlabForm' method='post'>
+      <?php echo html::input('keyword', $keyword, "class='form-control' placeholder='{$lang->gitlab->placeholderSearch}' style='display: inline-block;width:auto;margin:0 10px'");?>
+      <a id="gitlabSearch" class="btn btn-primary"><?php echo $lang->gitlab->search?></a>
+    </form>
   </div>
   <div class="btn-toolbar pull-right">
     <?php if(common::hasPriv('gitlab', 'create')) common::printLink('gitlab', 'createGroup', "gitlabID=$gitlabID", "<i class='icon icon-plus'></i> " . $lang->gitlab->group->create, '', "class='btn btn-primary'");?>
@@ -55,10 +59,10 @@
           <td class='text' title='<?php echo substr($gitlabGroup->created_at, 0, 10);?>'><?php echo substr($gitlabGroup->created_at, 0, 10);?></td>
           <td class='c-actions text-left'>
             <?php
-            $adminClass = ($app->user->admin or in_array($gitlabGroup->id, $adminGroupIDList)) ? '' : 'disabled';
+            $isAdmin = ($app->user->admin or in_array($gitlabGroup->id, $adminGroupIDList)) ? true : false;
             common::printLink('gitlab', 'manageGroupMembers', "gitlabID=$gitlabID&groupID=$gitlabGroup->id", "<i class='icon icon-team'></i> ", '',"title='{$lang->gitlab->group->manageMembers}' class='btn'");
-            common::printLink('gitlab', 'editGroup', "gitlabID=$gitlabID&groupID=$gitlabGroup->id", "<i class='icon icon-edit'></i> ", '', "title='{$lang->gitlab->group->edit}' class='btn {$adminClass}'");
-            if(common::hasPriv('gitlab', 'delete')) echo html::a($this->createLink('gitlab', 'deleteGroup', "gitlabID=$gitlabID&groupID=$gitlabGroup->id"), '<i class="icon-trash"></i>', 'hiddenwin', "title='{$lang->gitlab->deleteGroup}' class='btn {$adminClass}'");
+            echo common::buildIconButton('gitlab', 'editGroup', "gitlabID=$gitlabID&groupID=$gitlabGroup->id", '', 'list', 'edit', '', '', false, '', '', 0, $isAdmin);
+            echo common::buildIconButton('gitlab', 'deleteGroup', "gitlabID=$gitlabID&groupID=$gitlabGroup->id", '', 'list', 'trash', 'hiddenwin', '', false, '', '', 0, $isAdmin);
             ?>
           </td>
         </tr>

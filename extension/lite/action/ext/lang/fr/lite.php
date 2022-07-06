@@ -59,9 +59,9 @@ $lang->action->dynamicAction->task['linkchildtask']       = 'Link child Task';
 
 $lang->action->label->createchildrenstory   = "Create child story";
 $lang->action->label->linkchildstory        = "Link child story";
-$lang->action->label->unlinkchildrenstory   = "CanceledLink child story";
+$lang->action->label->unlinkchildrenstory   = "unlinked a child story";
 $lang->action->label->linkparentstory       = "Link parent story";
-$lang->action->label->unlinkparentstory     = "From parent storyCanceledLink";
+$lang->action->label->unlinkparentstory     = "CanceledLink from parent story ";
 $lang->action->label->deletechildrenstory   = "Deleted child story";
 
 $lang->action->search->label = array();
@@ -100,13 +100,6 @@ $lang->action->search->label['paused']                = $lang->action->label->pa
 $lang->action->search->label['verified']              = $lang->action->label->verified;
 $lang->action->search->label['login']                 = $lang->action->label->login;
 $lang->action->search->label['logout']                = $lang->action->label->logout;
-
-$lang->action->label->createchildrenstory   = "Create child story";
-$lang->action->label->linkchildstory        = "Link child story";
-$lang->action->label->unlinkchildrenstory   = "unlinked a child story";
-$lang->action->label->linkparentstory       = "Link parent story";
-$lang->action->label->unlinkparentstory     = "CanceledLink from parent story ";
-$lang->action->label->deletechildrenstory   = "Deleted child story";
 
 $lang->action->desc->createchildrenstory = '$date, <strong>$actor</strong> Create child story <strong>$extra</strong>。' . "\n";
 $lang->action->desc->linkchildstory      = '$date, <strong>$actor</strong> Link child story <strong>$extra</strong>。' . "\n";

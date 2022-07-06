@@ -251,9 +251,10 @@ class api extends control
 
 
             $id = $this->api->createStruct($data);
+            if(dao::isError()) return $this->sendError(dao::getError());
+
             $this->action->create('apistruct', $id, 'Created');
 
-            if(dao::isError()) return $this->sendError(dao::getError());
             return $this->sendSuccess(array('locate' => helper::createLink('api', 'struct', "libID=$libID")));
         }
 
@@ -455,7 +456,7 @@ class api extends control
         $this->getTypeOptions($api->lib);
 
         $this->view->title            = $api->title . $this->lang->api->edit;
-        $this->view->gobackLink       = $this->createLink('api', 'index', "libID={$api->lib}&moduleID={$api->module}");
+        $this->view->gobackLink       = $this->createLink('api', 'index', "libID={$api->lib}&moduleID={$api->module}&apiID=$apiID");
         $this->view->user             = $this->app->user->account;
         $this->view->allUsers         = $this->loadModel('user')->getPairs('devfirst|noclosed');;
         $this->view->moduleOptionMenu = $this->loadModel('tree')->getOptionMenu($api->lib, 'api', $startModuleID = 0);

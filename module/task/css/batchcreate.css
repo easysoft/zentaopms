@@ -11,8 +11,11 @@ select[id^="story"] + .picker-single {width: 130px; max-width: 130px;}
 .main-header .pull-left {max-width: 200px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;}
 
 #zeroTaskStory {margin: 0 0 0 20px; height: 32px; padding: 5px 5px 5px 5px; border-radius: 3px; border: 2px solid transparent;}
+[lang^='en'] #zeroTaskStory {max-width: 210px !important;}
+[lang^='de'] #zeroTaskStory {max-width: 225px !important;}
+[lang^='fr'] #zeroTaskStory {max-width: 265px !important;}
 #zeroTaskStory > label:before {top: 7px; left: 5px;}
-#zeroTaskStory > label:after {top: 5px; left: 5px;}
+#zeroTaskStory > label:after {top: 7px; left: 5px;}
 #zeroTaskStory.checked {border-color: #00a9fc; background: #E9F2FB;}
 
 .chosen-results > li.has-task,
@@ -28,3 +31,4 @@ select[id^="story"] + .picker-single {width: 130px; max-width: 130px;}
 .c-assigned {width: 130px;}
 .c-date {width: 120px;}
 .c-pri {width: 80px;}
+.c-actions {width: 60px;}

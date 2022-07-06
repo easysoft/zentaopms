@@ -1,0 +1,6 @@
+.main-content > h2 {font-size: 16px;}
+#cfdWrapper {max-width: 1400px; margin: 0 auto; padding: 25px 100px 10px; position: relative;}
+#cfdYUnit {position: absolute; color: #CBD0DB; top: 27px; left: 130px;}
+#cfdXUnit {position: absolute; color: #CBD0DB; bottom: 35px; right: 60px;}
+
+.pull-left .input-control {margin-right: 10px;}

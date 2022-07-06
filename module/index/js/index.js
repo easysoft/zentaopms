@@ -264,7 +264,11 @@
         }
 
         /* Show page app and update iframe source */
-        if(url) reloadApp(appCode, url, true);
+        if (url)
+        {
+            app.$app.toggleClass('open-from-hidden', app.$app.is(':hidden'))
+            reloadApp(appCode, url, true);
+        }
         app.zIndex = openedAppZIndex++;
         app.$app.show().css('z-index', app.zIndex);
 
@@ -463,7 +467,7 @@
         {
             app.$app.removeClass('loading');
             app._loadTimer = null;
-        }, 10000);
+        }, 15000);
     }
 
     /**

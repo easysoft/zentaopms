@@ -910,7 +910,7 @@ class apiModel extends model
         $this->config->api->search['module']                  = 'api';
         $this->config->api->search['queryID']                 = $queryID;
         $this->config->api->search['actionURL']               = $actionURL;
-        $this->config->api->search['params']['lib']['values'] = array($lib->id => $lib->name) + array('all' => $this->lang->api->allLibs);
+        $this->config->api->search['params']['lib']['values'] = (!empty($lib)) ? array($lib->id => $lib->name) + array('all' => $this->lang->api->allLibs) : array('all' => $this->lang->api->allLibs);
 
         $this->loadModel('search')->setSearchParams($this->config->api->search);
     }

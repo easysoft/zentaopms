@@ -11,10 +11,13 @@ $(function()
         {
             $('#reviewerBox').addClass('required');
         }
+        loadAssignedTo();
 
         getStatus('create', "product=" + $('#product').val() + ",execution=" + executionID + ",needNotReview=" + ($(this).prop('checked') ? 1 : 0));
     });
     $('#needNotReview').change();
+
+    if($('#reviewer').val()) loadAssignedTo();
 
     // init pri selector
     $('#pri').on('change', function()
@@ -33,15 +36,47 @@ $(function()
         if($.inArray(source, feedbackSource) != -1)
         {
             $('#feedbackBox').removeClass('hidden');
-            $('#reviewerBox').attr('colspan', 2);
+            $('#reviewerBox').attr('colspan', $('#assignedToBox').hasClass('hidden') ? 2 : 1);
+            $('#assignedToBox').attr('colspan', 1);
         }
         else
         {
             $('#feedbackBox').addClass('hidden');
-            $('#reviewerBox').attr('colspan', 4);
+            $('#reviewerBox').attr('colspan', $('#assignedToBox').hasClass('hidden') ? 4 : 2);
+            $('#assignedToBox').attr('colspan', 2);
         }
     });
 });
+
+/**
+ * Load assignedTo.
+ *
+ * @access public
+ * @return void
+ */
+function loadAssignedTo()
+{
+    var assignees = $('#reviewer').val();
+    var link      = createLink('story', 'ajaxGetAssignedTo', 'type=create&storyID=0&assignees=' + assignees);
+    $.post(link, function(data)
+    {
+        $('#assignedTo').replaceWith(data);
+        $('#assignedToBox .picker').remove();
+        $('#assignedTo').picker();
+    });
+
+    var colspan = $('#assignedToBox').attr('colspan');
+    if($('#needNotReview').is(':checked'))
+    {
+        $('#assignedToBox').removeClass('hidden');
+        $('#reviewerBox').attr('colspan', colspan);
+    }
+    else
+    {
+        $('#assignedToBox').addClass('hidden');
+        $('#reviewerBox').attr('colspan', colspan * 2);
+    }
+}
 
 function refreshPlan()
 {

@@ -107,6 +107,12 @@ class GitRepo
         $cmd  = escapeCmd("$this->client tag --sort=taggerdate");
         $list = execCmd($cmd . ' 2>&1', 'array', $result);
         if($result) return array();
+
+        foreach($list as $key => $tag)
+        {
+            if(!$tag) unset($list[$key]);
+        }
+
         return $list;
     }
 
@@ -139,7 +145,7 @@ class GitRepo
         }
 
         asort($branches);
-        $branches = array($defaultBranch => $defaultBranch) + $branches;
+        if($defaultBranch) $branches = array($defaultBranch => $defaultBranch) + $branches;
 
         return $branches;
     }

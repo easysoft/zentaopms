@@ -196,6 +196,8 @@ $lang->execution->list    = "{$lang->executionCommon}列表";
 $lang->kanban->common     = '看板';
 $lang->backup->common     = '备份';
 $lang->action->trash      = '回收站';
+$lang->app->common        = '应用';
+$lang->app->serverLink    = '服务器链接';
 
 $lang->personnel->common     = '人员';
 $lang->personnel->invest     = '投入人员';
@@ -279,9 +281,10 @@ $lang->testcase->caselib   = '用例库';
 
 $lang->devops->compile  = '构建';
 $lang->devops->mr       = '合并请求';
-$lang->devops->repo     = '版本库';
+$lang->devops->repo     = '代码库';
 $lang->devops->rules    = '指令';
 $lang->devops->settings = '合并请求设置';
+$lang->devops->set      = '设置';
 
 $lang->admin->system     = '系统';
 $lang->admin->entry      = '应用';

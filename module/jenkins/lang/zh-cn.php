@@ -20,6 +20,7 @@ $lang->jenkins->lblCreate  = '添加Jenkins服务器';
 $lang->jenkins->desc       = '描述';
 $lang->jenkins->tokenFirst = 'Token不为空时，优先使用Token。';
 $lang->jenkins->tips       = '使用密码时，请在Jenkins全局安全设置中禁用"防止跨站点请求伪造"选项。';
+$lang->jenkins->serverList = '服务器列表';
 
 $lang->jenkins->error = new stdclass();
 $lang->jenkins->error->linkedJob = '删除失败，该Jenkins跟构建有关联，请取消关联或删除构建。';
