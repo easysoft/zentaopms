@@ -72,4 +72,9 @@ $(document).on('change', 'select', function()
 $(function()
 {
     $('#subNavbar li[data-id="bug"]').addClass('active');
+
+    $('#customField').click(function()
+    {
+        hiddenRequireFields();
+    });
 });

@@ -3094,8 +3094,8 @@ class executionModel extends model
 
     /**
      * Get begin and end for CFD.
-     * 
-     * @param  object $execution 
+     *
+     * @param  object $execution
      * @access public
      * @return void
      */
@@ -3110,12 +3110,12 @@ class executionModel extends model
         }
         elseif((helper::today() >= $execution->begin) and (helper::today() <= $execution->end))
         {
-            $begin = (date('Y-m-d', strtotime('-14 days')) < $execution->begin) ? $execution->begin : date('Y-m-d', strtotime('-14 days'));
+            $begin = (date('Y-m-d', strtotime('-13 days')) < $execution->begin) ? $execution->begin : date('Y-m-d', strtotime('-13 days'));
             $end   = helper::today();
         }
         elseif((helper::today() > $execution->end))
         {
-            $begin = date($execution->end, strtotime('-14 days')) > $execution->begin ? date($execution->end, strtotime('-14 days')) : $execution->begin;
+            $begin = date($execution->end, strtotime('-13 days')) > $execution->begin ? date($execution->end, strtotime('-13 days')) : $execution->begin;
             $end   = $execution->end;
         }
 
@@ -3236,7 +3236,7 @@ class executionModel extends model
 
     /**
      * Build CFD data.
-     * 
+     *
      * @param  int    $executionID
      * @param  string $type
      * @param  array  $dateList
@@ -3292,6 +3292,44 @@ class executionModel extends model
         }
 
         return $data;
+    }
+
+    /**
+     * Get CFD statistics.
+     *
+     * @param int $executionID
+     * @param array $dateList
+     * @param string $type
+     * @access public
+     * @return void
+     */
+    public function getCFDStatistics($executionID, $dateList, $type)
+    {
+        $kanbanData = $this->loadModel('kanban')->getRDKanban($executionID, $type);
+        $kanbanData = array_shift($kanbanData);
+
+        $cycleTime = array();
+        foreach($kanbanData->groups as $group)
+        {
+            foreach($group->lanes as $lane)
+            {
+                if(!isset($lane->items['closed'])) continue;
+
+                foreach($lane->items['closed'] as $item)
+                {
+                    $diffTime = $type == 'story' ? strtotime($item['lastEditedDate']) - strtotime($item['openedDate']) : strtotime($item['closedDate']) - strtotime($item['openedDate']);
+                    $day      = floor($diffTime / (3600 * 24));
+                    if($day > 0) $cycleTime[$item['id']] = $day;
+                }
+            }
+        }
+
+        $itemCount    = count($cycleTime);
+        if(!$itemCount) return array('', '');
+        $cycleTimeAvg = round(array_sum($cycleTime) / $itemCount);
+        $throughput   = round(($itemCount * 7) / $cycleTimeAvg, 1) . "{$this->lang->execution->kanbanCardsUnit}/" . $this->lang->execution->week;
+
+        return array($cycleTimeAvg, $throughput);
     }
 
     /**

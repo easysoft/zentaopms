@@ -28,6 +28,7 @@ js::set('blockID', $blockID);
 js::set('moduleID', $moduleID);
 js::set('tab', $this->app->tab);
 js::set('requiredFields', $config->bug->create->requiredFields);
+js::set('showFields', $showFields);
 if($this->app->tab == 'execution') js::set('objectID', $executionID);
 if($this->app->tab == 'project')   js::set('objectID', $projectID);
 ?>
