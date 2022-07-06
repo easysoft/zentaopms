@@ -38,6 +38,14 @@ $config->task->exportFields = '
     lastEditedBy, lastEditedDate, activatedDate, files
     ';
 
+$config->task->fieldList['module']['control'] = 'select';
+$config->task->fieldList['module']['foreignKey'] = true;
+$config->task->fieldList['module']['foreignKeySource'] = array('module' => 'tree', 'method' => 'getTaskOptionMenu', 'params' => 'task');
+
+$config->task->fieldList['story']['control'] = 'select';
+$config->task->fieldList['story']['foreignKey'] = true;
+$config->task->fieldList['story']['foreignKeySource']  = array('module' => 'story', 'method' => 'getExecutionStories', 'params' => '$executionID', 'pairs' => array('id', 'title'));
+
 $config->task->customCreateFields      = 'story,estStarted,deadline,mailto,pri,estimate';
 $config->task->customBatchCreateFields = 'module,story,assignedTo,estimate,estStarted,deadline,desc,pri';
 $config->task->customBatchEditFields   = 'module,assignedTo,status,pri,estimate,record,left,estStarted,deadline,finishedBy,canceledBy,closedBy,closedReason';
