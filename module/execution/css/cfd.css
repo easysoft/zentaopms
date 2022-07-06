@@ -1,6 +1,14 @@
 .main-content > h2 {font-size: 16px;}
-#cfdWrapper {max-width: 1400px; margin: 0 auto; padding: 25px 100px 10px; position: relative;}
-#cfdYUnit {position: absolute; color: #CBD0DB; top: 27px; left: 130px;}
-#cfdXUnit {position: absolute; color: #CBD0DB; bottom: 35px; right: 60px;}
-
 .pull-left .input-control {margin-right: 10px;}
+
+@media screen and (max-width: 1920px)
+{
+#cfdWrapper {max-width: 1400px; margin: 0 auto; padding: 25px 0px 10px; position: relative}
+#cfdChart {width:1400px !important; height:600px !important}
+#cfdYUnit {position: absolute; color: #CBD0DB; top: 40px; left: 30px}
+#cfdXUnit {position: absolute; color: #CBD0DB; bottom: 20px; right: 0px}
+}
+@media screen and (max-width: 1366px)
+{
+#cfdChart {width:1150px !important; height:400px !important};
+}
