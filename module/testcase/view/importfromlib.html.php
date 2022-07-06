@@ -50,7 +50,7 @@
         <?php foreach($cases as $id => $case):?>
         <?php
         $caseBranches = $branches;
-        $caseBranch   = $branch == 'all' ? 0 : $branch;
+        $caseBranch   = ($branch == 'all' or empty($branch)) ? 0 : $branch;
         foreach($caseBranches as $branchID => $branchName)
         {
             if(empty($canImportModules[$branchID][$case->id]))
