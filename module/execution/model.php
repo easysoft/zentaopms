@@ -3025,7 +3025,7 @@ class executionModel extends model
             ->orderBy('t2.id asc')
             ->fetchAll('id');
 
-        /* Group by type/name/execution/colID. */
+        /* Group by execution/type/name/lane/column. */
         $columnGroup = array();
         $parentNames = array();
         foreach($cells as $id => $column)
