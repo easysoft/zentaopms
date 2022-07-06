@@ -2896,18 +2896,4 @@ class gitlabModel extends model
         $html .= '</div>';
         return $html;
     }
-
-    /**
-     * Download zip code.
-     *
-     * @param  int    $gitlabID
-     * @param  string $projectID
-     * @access public
-     * @return void
-     */
-    public function downloadCode($gitlabID = 0, $projectID = '')
-    {
-        $url = sprintf($this->getApiRoot($gitlabID), "/projects/" . $projectID . '/export');
-        return $this->apiGet($url);
-    }
 }

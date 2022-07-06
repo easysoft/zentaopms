@@ -1308,7 +1308,7 @@ class repo extends control
         $repo = $this->repo->getRepoByID($repoID);
         if($repo->SCM == 'Gitlab')
         {
-            return $this->loadModel('gitlab')->downloadCode($repo->gitlab, $repo->project);
+            return '';
         }
     }
 }
