@@ -60,7 +60,7 @@ class search extends control
         $this->view->searchFields = $fields;
         $this->view->actionURL    = $actionURL;
         $this->view->fieldParams  = $this->search->setDefaultParams($fields, $params);
-        $this->view->queries      = $this->search->getQueryPairs($module);
+        $this->view->queries      = $this->search->getQueryList($module);
         $this->view->queryID      = $queryID;
         $this->view->style        = empty($style) ? 'full' : $style;
         $this->view->onMenuBar    = empty($onMenuBar) ? 'no' : $onMenuBar;
@@ -148,14 +148,13 @@ class search extends control
     {
         $query   = $queryID ? $queryID : '';
         $module  = empty($module) ? $this->session->searchParams['module'] : $module;
-        $queries = $this->search->getQueryPairs($module);
+        $queries = $this->search->getQueryList($module);
         $html = '';
-        foreach($queries as $queryID => $queryName)
+        foreach($queries as $query)
         {
-            if(empty($queryID)) continue;
-            $query = $this->search->getByID($queryID);
+            if(empty($query->id)) continue;
 
-            $html .= '<li>' . html::a("javascript:executeQuery({$queryID})", $queryName . ((common::hasPriv('search', 'deleteQuery') and $this->app->user->account == $query->account) ? '<i class="icon icon-close"></i>' : ''), '', "class='label user-query' data-query-id='$queryID' title='{$queryName}'") . '</li>';
+            $html .= '<li>' . html::a("javascript:executeQuery({$query->id})", $query->title . ((common::hasPriv('search', 'deleteQuery') and $this->app->user->account == $query->account) ? '<i class="icon icon-close"></i>' : ''), '', "class='label user-query' data-query-id='$query->id' title='{$query->title}'") . '</li>';
         }
         echo $html;
     }
