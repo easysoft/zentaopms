@@ -328,14 +328,17 @@ class testcaseModel extends model
      * @access public
      * @return array
      */
-    public function getExecutionCases($executionID, $orderBy = 'id_desc', $pager = null, $browseType = '')
+    public function getExecutionCases($executionID, $productID = 0, $moduleID = 0, $orderBy = 'id_desc', $pager = null, $browseType = '')
     {
         if($browseType == 'needconfirm')
         {
             return $this->dao->select('distinct t1.*, t2.*')->from(TABLE_PROJECTCASE)->alias('t1')
                 ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case=t2.id')
                 ->leftJoin(TABLE_STORY)->alias('t3')->on('t2.story = t3.id')
+                ->leftJoin(TABLE_MODULE)->alias('t4')->on('t2.module=t4.id')
                 ->where('t1.project')->eq((int)$executionID)
+                ->beginIF(!empty($productID))->andWhere('t1.product')->eq($productID)->fi()
+                ->beginIF(!empty($moduleID))->andWhere('t4.path')->like("%,$moduleID,%")->fi()
                 ->andWhere('t2.deleted')->eq('0')
                 ->andWhere('t3.version > t2.storyVersion')
                 ->andWhere("t3.status")->eq('active')
@@ -346,8 +349,11 @@ class testcaseModel extends model
 
         return $this->dao->select('distinct t1.*, t2.*')->from(TABLE_PROJECTCASE)->alias('t1')
             ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case=t2.id')
+            ->leftJoin(TABLE_MODULE)->alias('t3')->on('t2.module=t3.id')
             ->where('t1.project')->eq((int)$executionID)
-            ->beginIF($browseType != 'all')->andWhere('t2.status')->eq($browseType)->fi()
+            ->beginIF($browseType != 'all' and $browseType != 'byModule')->andWhere('t2.status')->eq($browseType)->fi()
+            ->beginIF(!empty($productID))->andWhere('t1.product')->eq($productID)->fi()
+            ->beginIF(!empty($moduleID))->andWhere('t3.path')->like("%,$moduleID,%")->fi()
             ->andWhere('t2.deleted')->eq('0')
             ->orderBy($orderBy)
             ->page($pager)
