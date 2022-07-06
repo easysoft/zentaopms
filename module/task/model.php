@@ -3584,7 +3584,7 @@ class taskModel extends model
                 echo zget($users, $task->lastEditedBy);
                 break;
             case 'lastEditedDate':
-                echo substr($task->lastEditedDate, 5, 11);
+                echo helper::isZeroDate($task->lastEditedDate) ? '' : substr($task->lastEditedDate, 5, 11);
                 break;
             case 'activatedDate':
                 echo helper::isZeroDate($task->activatedDate) ? '' : substr($task->activatedDate, 5, 11);
