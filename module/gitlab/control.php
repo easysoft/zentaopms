@@ -634,9 +634,16 @@ class gitlab extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browseUser', "gitlabID=$gitlabID")));
         }
 
-        $userPairs         = $this->loadModel('user')->getPairs('noclosed|noletter');
         $user              = $this->gitlab->apiGetSingleUser($gitlabID, $userID);
         $zentaoBindAccount = $this->dao->select('account')->from(TABLE_OAUTH)->where('providerType')->eq('gitlab')->andWhere('providerID')->eq($gitlabID)->andWhere('openID')->eq($user->id)->fetch('account');
+
+        $users       = $this->loadModel('user')->getList();
+        $bindedUsers = $this->gitlab->getUserAccountIdPairs($gitlabID);
+        $userPairs   = array('' => '');
+        foreach($users as $u)
+        {
+            if(!isset($bindedUsers[$u->account]) or $u->account == $zentaoBindAccount) $userPairs[$u->account] = $u->realname;
+        }
 
         $this->view->title             = $this->lang->gitlab->common . $this->lang->colon . $this->lang->gitlab->user->edit;
         $this->view->user              = $user;
