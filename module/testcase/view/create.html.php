@@ -79,8 +79,8 @@ foreach(explode(',', $config->testcase->create->requiredFields) as $field)
             </td>
             <?php endif;?>
           </tr>
-          <?php if(strpos(",$showFields,", ',story,') !== false):?>
-          <tr>
+          <?php $hiddenStory = strpos(",$showFields,", ',story,') !== false ? '' : 'hidden';?>
+          <tr class="<?php echo $hiddenStory?> storyBox">
             <th><?php echo $lang->testcase->lblStory;?></th>
             <td colspan='2'>
               <div class='input-group' id='storyIdBox'>
@@ -96,7 +96,6 @@ foreach(explode(',', $config->testcase->create->requiredFields) as $field)
               </div>
             </td>
           </tr>
-          <?php endif;?>
           <tr>
             <th><?php echo $lang->testcase->title;?></th>
             <td colspan='2'>
