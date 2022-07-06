@@ -546,11 +546,11 @@ class kanban extends control
             if($from == 'execution')
             {
                 if(dao::isError()) return $this->sendError(dao::getError());
+
                 $execLaneType = $this->session->execLaneType ? $this->session->execLaneType : 'all';
                 $execGroupBy  = $this->session->execGroupBy ? $this->session->execGroupBy : 'default';
                 $kanbanData   = $this->loadModel('kanban')->getRDKanban($kanbanID, $execLaneType, 'id_desc', $regionID, $execGroupBy);
                 $kanbanData   = json_encode($kanbanData);
-
                 return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => "parent.updateKanban($kanbanData, $regionID)"));
             }
 
