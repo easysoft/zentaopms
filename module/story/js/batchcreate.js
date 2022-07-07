@@ -1,6 +1,7 @@
 $(function()
 {
-    if($('#batchCreateForm table thead tr th.col-name').width() < 200) $('#batchCreateForm table thead tr th.col-name').width(200);
+    $name = $('#batchCreateForm table thead tr th.col-name');
+    if($name.width() < 200) $name.width(200);
 
     $('#customField').click(function()
     {
@@ -10,39 +11,11 @@ $(function()
     /* Implement a custom form without feeling refresh. */
     $('#formSettingForm .btn-primary').click(function()
     {
-        var fields = '';
-        $('#formSettingForm > .checkboxes > .checkbox-primary > input:checked').each(function()
-        {
-            fields += ',' + $(this).val();
-        });
-
-        var link = createLink('custom', 'ajaxSaveCustomFields', 'module=story&section=custom&key=batchCreateFields');
-        $.post(link, {'fields' : fields}, function()
-        {
-            showFields = fields;
-            showCheckedFields(fields);
-            $('#formSetting').parent().removeClass('open');
-
-            var fieldCount = $('#batchCreateForm .table thead>tr>th:visible').length;
-            $('.form-actions').attr('colspan', fieldCount);
-
-            if(fieldCount > 8)
-            {
-                $('#batchCreateForm > .table-responsive').removeClass('scroll-none');
-                $('#batchCreateForm > .table-responsive').css('overflow', 'auto');
-            }
-            else
-            {
-                $('#batchCreateForm > .table-responsive').addClass('scroll-none');
-                $('#batchCreateForm > .table-responsive').css('overflow', 'visible');
-            }
-
-            if($('#batchCreateForm table thead tr th.col-name').width() < 200) $('#batchCreateForm table thead tr th.col-name').width(200);
-        });
-
+        saveCustomFields('batchCreateFields', 8, $name, 200);
         return false;
     });
 });
+
 $(document).on('click', '.chosen-with-drop', function()
 {
     var select = $(this).prev('select');

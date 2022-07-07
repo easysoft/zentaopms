@@ -886,19 +886,3 @@ function setBranchRelated(branchID, productID, num)
         });
     }
 }
-
-/**
- * Hidden require field.
- *
- * @access public
- * @return void
- */
-function hiddenRequireFields()
-{
-    $('#formSettingForm > .checkboxes > .checkbox-primary > input').each(function()
-    {
-        var field    = ',' + $(this).val() + ',';
-        var required = ',' + requiredFields + ',';
-        if(required.indexOf(field) >= 0) $(this).closest('div').addClass('hidden');
-    });
-}

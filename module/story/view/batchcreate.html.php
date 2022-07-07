@@ -122,8 +122,8 @@
             foreach($extendFields as $extendField) echo "<td" . (($extendField->control == 'select' or $extendField->control == 'multi-select') ? " style='overflow:visible'" : '') . ">" . $this->flow->getFieldControl($extendField, '', $extendField->field . '[$id]') . "</td>";
             ?>
             <td class='c-actions text-left'>
-              <a href='javascript:;' onclick='addItemBox(this)' class='btn btn-link'><i class='icon-plus'></i></a>
-              <a href='javascript:;' onclick='deleteItemBox(this)' class='btn btn-link'><i class='icon icon-close'></i></a>
+              <a href='javascript:;' onclick='addRow(this)' class='btn btn-link'><i class='icon-plus'></i></a>
+              <a href='javascript:;' onclick='deleteRow(this)' class='btn btn-link'><i class='icon icon-close'></i></a>
             </td>
           </tr>
         </tbody>
@@ -142,7 +142,7 @@
 <div>
   <?php $i = '%i%';?>
   <table class='hidden'>
-    <tr id='addItemBox' class='hidden'>
+    <tr id='addRow' class='hidden'>
       <td class='text-left<?php echo zget($visibleFields, $product->type, ' hidden')?> branchBox'><?php echo html::select("branch[$i]", $branches, $branch, "class='form-control chosen' onchange='setModuleAndPlan(this.value, $productID, $i)'");?></td>
       <td class='text-left' style='overflow:visible'><?php echo html::select("module[$i]", $moduleOptionMenu, 'ditto', "class='form-control chosen'");?></td>
       <td class='text-left<?php echo zget($visibleFields, 'plan', ' hidden')?> planBox' style='overflow:visible'><?php echo html::select("plan[$i]", $plans, 'ditto', "class='form-control chosen'");?></td>
@@ -186,8 +186,8 @@
       foreach($extendFields as $extendField) echo "<td" . (($extendField->control == 'select' or $extendField->control == 'multi-select') ? " style='overflow:visible'" : '') . ">" . $this->flow->getFieldControl($extendField, '', $extendField->field . "[$i]") . "</td>";
       ?>
       <td class='c-actions text-left'>
-        <a href='javascript:;' onclick='addItemBox(this)' class='btn btn-link'><i class='icon-plus'></i></a>
-        <a href='javascript:;' onclick='deleteItemBox(this)' class='btn btn-link'><i class='icon icon-close'></i></a>
+        <a href='javascript:;' onclick='addRow(this)' class='btn btn-link'><i class='icon-plus'></i></a>
+        <a href='javascript:;' onclick='deleteRow(this)' class='btn btn-link'><i class='icon icon-close'></i></a>
       </td>
     </tr>
   </table>
@@ -204,7 +204,7 @@ $(function()
         idEnd: <?php echo max((empty($titles) ? 1 : count($titles)), 10)?>,
         rowCreator: function($row, index)
         {
-            itemIndex = index; // Set the index for the add element operation
+            rowIndex = index; // Set the index for the add element operation
             $row.find('select.chosen,select.picker-select').each(function()
             {
                 var $select = $(this);
@@ -217,34 +217,35 @@ $(function()
                 {
                     $select.next('.chosen-container').find('.chosen-drop').width($select.closest('td').width() + 50);
                 }, 200);
-              });
-              var storyTitle = storyTitles && storyTitles[index - 1];
-              if (storyTitle !== undefined && storyTitle !== null)
-              {
-                  $row.find('.input-story-title').val(storyTitle).after('<input type="hidden" name="uploadImage[' + index + ']" id="uploadImage[' + index + ']" value="' + imageTitles[storyTitle] + '">');
-              }
+            });
 
-              if(index == 1) $row.find('td.c-actions > a:last').remove();
+            var storyTitle = storyTitles && storyTitles[index - 1];
+            if (storyTitle !== undefined && storyTitle !== null)
+            {
+                $row.find('.input-story-title').val(storyTitle).after('<input type="hidden" name="uploadImage[' + index + ']" id="uploadImage[' + index + ']" value="' + imageTitles[storyTitle] + '">');
+            }
 
-              /* Implement a custom form without feeling refresh. */
-              var fieldList = ',' + showFields + ',';
-              $('#formSettingForm > .checkboxes > .checkbox-primary > input').each(function()
-              {
-                  var field     = ',' + $(this).val() + ',';
-                  var $field    = $row.find('[name^=' + $(this).val() + ']');
-                  var required  = ',' + requiredFields + ',';
-                  var $fieldBox = $row.find('.' + $(this).val() + 'Box' );
-                  if(fieldList.indexOf(field) >= 0 || required.indexOf(field) >= 0)
-                  {
-                      $fieldBox.removeClass('hidden');
-                      $field.removeAttr('disabled');
-                  }
-                  else if(!$fieldBox.hasClass('hidden'))
-                  {
-                      $fieldBox.addClass('hidden');
-                      $field.attr('disabled', true);
-                  }
-              })
+            if(index == 1) $row.find('td.c-actions > a:last').remove();
+
+            /* Implement a custom form without feeling refresh. */
+            var fieldList = ',' + showFields + ',';
+            $('#formSettingForm > .checkboxes > .checkbox-primary > input').each(function()
+            {
+                var field     = ',' + $(this).val() + ',';
+                var $field    = $row.find('[name^=' + $(this).val() + ']');
+                var required  = ',' + requiredFields + ',';
+                var $fieldBox = $row.find('.' + $(this).val() + 'Box' );
+                if(fieldList.indexOf(field) >= 0 || required.indexOf(field) >= 0)
+                {
+                    $fieldBox.removeClass('hidden');
+                    $field.removeAttr('disabled');
+                }
+                else if(!$fieldBox.hasClass('hidden'))
+                {
+                    $fieldBox.addClass('hidden');
+                    $field.attr('disabled', true);
+                }
+            })
         }
     });
 

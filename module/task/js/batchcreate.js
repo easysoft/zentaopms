@@ -2,7 +2,8 @@
 $(function()
 {
     removeDitto();
-    if($('th.c-name').width() < 165) $('th.c-name').width(165);
+    $name = $('th.c-name');
+    if($name.width() < 165) $name.width(165);
     if(taskConsumed > 0) bootbox.alert(addChildTask);
     $('#customField').on('click', function(){$('#tableBody .chosen-with-drop').removeClass('chosen-with-drop chosen-container-active')});
 
@@ -14,36 +15,7 @@ $(function()
     /* Implement a custom form without feeling refresh. */
     $('#formSettingForm .btn-primary').click(function()
     {
-        var fields = '';
-        $('#formSettingForm > .checkboxes > .checkbox-primary > input:checked').each(function()
-        {
-            fields += ',' + $(this).val();
-        });
-
-        var link = createLink('custom', 'ajaxSaveCustomFields', 'module=task&section=custom&key=batchCreateFields');
-        $.post(link, {'fields' : fields}, function()
-        {
-            showFields = fields;
-            showCheckedFields(fields);
-            $('#formSetting').parent().removeClass('open');
-
-            var fieldCount = $('#batchCreateForm .table thead>tr>th:visible').length;
-            $('.form-actions').attr('colspan', fieldCount);
-
-            if(fieldCount > 9)
-            {
-                $('#batchCreateForm > .table-responsive').removeClass('scroll-none');
-                $('#batchCreateForm > .table-responsive').css('overflow', 'auto');
-            }
-            else
-            {
-                $('#batchCreateForm > .table-responsive').addClass('scroll-none');
-                $('#batchCreateForm > .table-responsive').css('overflow', 'visible');
-            }
-
-            if($('th.c-name').width() < 165) $('th.c-name').width(165);
-        });
-
+        saveCustomFields('batchCreateFields', 9, $name, 165);
         return false;
     });
 });
