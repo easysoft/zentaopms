@@ -1,50 +1,77 @@
 <?php
 class portModel extends model
 {
+
+    /*  Port Module configs . */
+    public $portConfig;
+
+    public $portLang;
+
+    /* From model configs .*/
+    public $modelConfig;
+
+    public $modelLang;
+
     /**
-     * Init FieldList .
+     * Commom Actions
      *
      * @param  int    $model
      * @access public
      * @return void
      */
-    public function initFieldList($model)
+    public function commonActions($model = '')
     {
-        $this->mergeConfig($model);
-        $portFieldList = $this->config->port->fieldList;
+        $this->portConfig  = $this->config->port;
+        $this->portLang    = $this->lang->port;
 
-        $this->loadModel($model);
-        $fields = isset($this->config->$model->exportFields) ? $this->config->$model->exportFields : '';
+        if($model)
+        {
+            $this->loadModel($model);
+            $this->modelConfig = $this->config->$model;
+            $this->modelLang   = $this->lang->$model;
+        }
+    }
+
+    /**
+     * Init FieldList .
+     *
+     * @param  int    $model
+     * @param  string $fields
+     * @access public
+     * @return void
+     */
+    public function initFieldList($model, $fields = '')
+    {
+        $this->commonActions($model);
+        $this->mergeConfig($model);
+
+        $portFieldList = $this->portConfig->fieldList;
 
         if(empty($fields)) return false;
 
-        $fields = explode(',', $fields);
-
         /* build module fieldList. */
-        foreach ($fields as $field)
+        foreach ($fields as $key => $field)
         {
             $field = trim($field);
-
-            if(!isset($this->config->$model->fieldList[$field])) $this->config->$model->fieldList[$field] = array();
-            $modelFieldList = $this->config->$model->fieldList[$field];
+            $modelFieldList = isset($this->modelConfig->fieldList[$field]) ? $this->modelConfig->fieldList[$field] : array();
 
             foreach ($portFieldList as $portField => $value)
             {
                 $funcName = 'init' . ucfirst($portField);
-                if(!array_key_exists($portField, $modelFieldList))
+                if((!array_key_exists($portField, $modelFieldList)) or $portField == 'title')
                 {
-                    $modelFieldList[$portField] = $this->config->port->fieldList[$portField];
-                    if(strpos($this->config->port->initFunction, $portField) !== false) $modelFieldList[$portField] = $this->$funcName($model, $field);
+                  $modelFieldList[$portField] = $this->portConfig->fieldList[$portField];
+                  if(strpos($this->portConfig->initFunction, $portField) !== false) $modelFieldList[$portField] = $this->$funcName($model, $field);
                 }
             }
 
             $modelFieldList = $this->initForeignKey($model, $field, $modelFieldList);
             $modelFieldList['values'] = $this->initValues($model, $field, $modelFieldList);
 
-            $this->config->$model->fieldList[$field] = $modelFieldList;
+            $this->modelConfig->fieldList[$field] = $modelFieldList;
         }
 
-        return $this->config->$model->fieldList;
+        return $this->modelConfig->fieldList;
     }
 
     /**
@@ -58,8 +85,8 @@ class portModel extends model
     public function initTitle($model, $field)
     {
         $title = $field;
-        $this->app->loadLang($model);
 
+        if(!empty($this->modelConfig->fieldList[$field]['title'])) $title = $this->modelLang->{$this->modelConfig->fieldList[$field]['title']};
         if(array_key_exists($field, $this->lang->$model))
         {
             $title = $this->lang->$model->$field;
@@ -86,9 +113,9 @@ class portModel extends model
      */
     public function initControl($model, $field)
     {
-        if(isset($this->lang->$model->{$field.'List'}))        return 'select';
-        if(strpos($this->config->port->sysDataFields, $field) !== false) return 'select';
-        return $this->config->port->fieldList['control'];
+        if(isset($this->modelLang->{$field.'List'}))        return 'select';
+        if(strpos($this->portConfig->sysDataFields, $field) !== false) return 'select';
+        return $this->portConfig->fieldList['control'];
     }
 
     /**
@@ -101,8 +128,14 @@ class portModel extends model
      */
     public function initValues($model, $field, $fieldValue = '')
     {
-        $values = '';
+        $values = $fieldValue['values'];
+        if($values and (strpos($this->portConfig->sysDataFields, $values) !== false))
+        {
+            return $this->portConfig->sysDataList[$values];
+        }
+
         if(!$fieldValue['foreignKey']) return $values;
+
         extract($fieldValue['foreignKeySource']); // $module, $method, $params, $pairs, $sql, $lang
 
         if(!empty($module) and !empty($method))
@@ -117,16 +150,14 @@ class portModel extends model
         }
         elseif(!empty($lang))
         {
-            $values = $this->getSourceByLang();
+            $values = $this->getSourceByLang($lang);
         }
 
+        /* If empty values put system datas .*/
         if(empty($values))
         {
-            if(strpos($this->config->$model->sysLangFields, $field)) return $this->lang->$model->{$field.'List'};
-            if(strpos($this->config->$model->sysDataFields, $field))
-            {
-
-            }
+            if(strpos($this->modelConfig->sysLangFields, $field)) return $this->modelLang->{$field.'List'};
+            if(strpos($this->modelConfig->sysDataFields, $field)) return $this->portConfig->sysDataList[$values];
         }
 
         return $values;
@@ -143,7 +174,7 @@ class portModel extends model
      */
     public function initForeignKey($model, $field, $fieldContent)
     {
-        $modelConfig = $this->config->$model;
+        $modelConfig = $this->modelConfig;
         if((strpos($modelConfig->sysLangFields, $field) or strpos($modelConfig->sysDataFields, $field)) and empty($fieldContent['foreignKey']))
         {
             $fieldContent['foreignKey'] = true;
@@ -162,16 +193,37 @@ class portModel extends model
      */
     public function initRequired($model, $field)
     {
-        if(empty($this->config->$model->create->requiredFields)) return 'no';
+        $this->commonActions($model);
 
-        $requiredFields = "," . $this->config->$model->create->requiredFields . ",";
+        if(empty($this->modelConfig->create->requiredFields)) return 'no';
 
+        $requiredFields = "," . $this->modelConfig->create->requiredFields . ",";
         if(strpos($requiredFields, $field) !== false) return 'yes';
         return 'no';
     }
 
     /**
-     * Merge config .
+     * init system datafields list.
+     *
+     * @access public
+     * @return void
+     */
+    public function initSysDataFields()
+    {
+        $this->commonActions();
+        $dataList = array();
+
+        $sysDataFields = explode(',', $this->portConfig->sysDataFields);
+        foreach($sysDataFields as $field)
+        {
+            $dataList[$field] =  $this->loadModel($field)->getPairs();
+        }
+
+        return $dataList;
+    }
+
+    /**
+     * Merge configs .
      *
      * @param  int    $model
      * @access public
@@ -179,8 +231,9 @@ class portModel extends model
      */
     public function mergeConfig($model)
     {
-        $portConfig  = $this->config->port;
-        $modelConfig = $this->config->$model;
+        $this->commonActions($model);
+        $portConfig  = $this->portConfig;
+        $modelConfig = $this->modelConfig;
         if(!isset($modelConfig->export)) $modelConfig->export = new stdClass();
         if(!isset($modelConfig->import)) $modelConfig->export = new stdClass();
 
@@ -192,6 +245,17 @@ class portModel extends model
         $modelConfig->import->ignoreFields   = isset($modelConfig->import->ignoreFields)   ? $modelConfig->import->ignoreFields   : $portConfig->import->ignoreFields;
     }
 
+    /**
+     * Get field values by method .
+     *
+     * @param  int    $model
+     * @param  int    $module
+     * @param  int    $method
+     * @param  string $params
+     * @param  string $pairs
+     * @access public
+     * @return void
+     */
     public function getSourceByModuleMethod($model, $module, $method, $params = '', $pairs = '')
     {
         $getParams = $this->session->{$model.'ExportParams'};
@@ -221,17 +285,29 @@ class portModel extends model
             $values = $valuePairs;
         }
         return $values;
-
     }
 
+    /**
+     * Get field values by sql .
+     *
+     * @access public
+     * @return void
+     */
     public function getSourceBySql()
     {
         return '';
     }
 
-    public function getSourceByLang()
+    /**
+     * Get field values by lang .
+     *
+     * @access public
+     * @return void
+     */
+    public function getSourceByLang($lang)
     {
-        return '';
+        $lang = isset($this->modelLang->$lang) ? $this->modelLang->$lang : '';
+        return $lang;
     }
 
 }

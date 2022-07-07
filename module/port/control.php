@@ -23,8 +23,12 @@ class port extends control
         $this->session->set(($model.'ExportParams'), $params);
         if($_POST)
         {
+            $this->config->port->sysDataList = $this->port->initSysDataFields();
+
+            $fields = $this->post->exportFields;
+
             /* Init config fieldList */
-            $fieldList = $this->port->initFieldList($model);
+            $fieldList = $this->port->initFieldList($model, $fields);
 
             $queryCondition = $this->session->{$model . 'QueryCondition'};
             $onlyCondition  = $this->session->{$model . 'OnlyCondition'};
@@ -51,9 +55,10 @@ class port extends control
             /* Get export rows and fields datas */
             $exportDatas = $this->getExportDatas($fieldList, $modelDatas);
 
-            $this->post->set('rows', $exportDatas['rows']);
+            $this->post->set('rows',   $exportDatas['rows']);
             $this->post->set('fields', $exportDatas['fields']);
-            $this->post->set('kind', $model);
+            $this->post->set('kind',   $model);
+
             $this->fetch('file', 'export2' . $_POST['fileType'], $POST);
         }
     }
@@ -112,14 +117,18 @@ class port extends control
     public function setListValue($model, $fieldList)
     {
         $lists = array();
+
         if(!empty($this->config->$model->listFields))
         {
             $listFields = $this->config->$model->listFields;
             foreach($listFields as $field)
             {
                 $listName = $field . 'List';
-                $lists[$listName] = $fieldList[$field]['values'];
-                if(strpos($this->config->$model->sysLangFields, $field)) $lists[$listName] = join(',', $fieldList[$field]['values']);
+                if(!empty($fieldList[$field]))
+                {
+                    $lists[$listName] = $fieldList[$field]['values'];
+                    if(strpos($this->config->$model->sysLangFields, $field)) $lists[$listName] = join(',', $fieldList[$field]['values']);
+                }
             }
 
             $lists['listStyle'] = $listFields;

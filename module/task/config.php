@@ -50,6 +50,11 @@ $config->task->fieldList['execution']['control'] = 'select';
 $config->task->fieldList['execution']['foreignKey'] = true;
 $config->task->fieldList['execution']['foreignKeySource'] = array('module' => 'execution', 'method' => 'getPairs');
 
+$config->task->fieldList['assignedTo']['values'] = 'user';
+$config->task->fieldList['assignedTo']['title']  = 'assignTo';
+$config->task->fieldList['closedReason']['foreignKey']       = true;
+$config->task->fieldList['closedReason']['foreignKeySource'] = array('lang' => 'reasonList');
+
 $config->task->customCreateFields      = 'story,estStarted,deadline,mailto,pri,estimate';
 $config->task->customBatchCreateFields = 'module,story,assignedTo,estimate,estStarted,deadline,desc,pri';
 $config->task->customBatchEditFields   = 'module,assignedTo,status,pri,estimate,record,left,estStarted,deadline,finishedBy,canceledBy,closedBy,closedReason';
