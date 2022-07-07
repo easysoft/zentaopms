@@ -20,7 +20,7 @@ class port extends control
         extract($params);
 
         /* save params to session. */
-        $this->session->set(($model.'ExportParams'), $params);
+        $this->session->set(($model.'PortParams'), $params);
         if($_POST)
         {
             $this->config->port->sysDataList = $this->port->initSysDataFields();
@@ -46,14 +46,59 @@ class port extends control
     }
 
     /**
-     * Get ExportDatas.
+     * Export Template.
      *
-     * @param  int    $fieldList
-     * @param  int    $modelDatas
      * @access public
      * @return void
      */
-    public function getExportDatas($fieldList, $modelDatas)
+    public function exportTemplate($model, $params)
+    {
+        if($_POST)
+        {
+            /* Split parameters into variables (executionID=1,status=open).*/
+            $params = explode(',', $params);
+            foreach($params as $key => $param)
+            {
+                $param = explode('=', $param);
+                $params[$param[0]] = $param[1];
+                unset($params[$key]);
+            }
+            extract($params);
+
+            /* save params to session. */
+            $this->session->set(($model.'PortParams'), $params);
+            $this->loadModel($model);
+            $this->config->port->sysDataList = $this->port->initSysDataFields();
+
+            $fields = $this->config->$model->templateFields;
+
+            /* Init config fieldList */
+            $fieldList = $this->port->initFieldList($model, $fields);
+
+            $list = $this->setListValue($model, $fieldList);
+            if($list) foreach($list as $listName => $listValue) $this->post->set($listName, $listValue);
+
+            $fields = $this->getExportDatas($fieldList);
+            $this->post->set('fields', $fields['fields']);
+            $this->post->set('kind', $model);
+            $this->post->set('rows', array());
+            $this->post->set('extraNum',   $this->post->num);
+            $this->post->set('fileName',   $model . 'Template');
+            $this->fetch('file', 'export2' . $this->post->fileType, $_POST);
+        }
+
+        $this->display();
+    }
+
+    /**
+     * Get ExportDatas.
+     *
+     * @param  int    $fieldList
+     * @param  array  $modelDatas
+     * @access public
+     * @return void
+     */
+    public function getExportDatas($fieldList, $modelDatas = array())
     {
         $exportDatas = array();
         $foreignKeyList = array();
@@ -66,6 +111,8 @@ class port extends control
                 $foreignKeyList[] = $key;
             }
         }
+
+        if(empty($modelDatas)) return $exportDatas;
 
         $exportDatas['user'] = $this->loadModel('user')->getPairs('devfirst|noclosed|nodeleted');
 
@@ -155,16 +202,7 @@ class port extends control
         return $modelDatas;
     }
 
-    /**
-     * Export Template.
-     *
-     * @access public
-     * @return void
-     */
-    public function exportTemplate()
-    {
 
-    }
 
     /**
      * Import.

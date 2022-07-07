@@ -259,7 +259,7 @@ class portModel extends model
      */
     public function getSourceByModuleMethod($model, $module, $method, $params = '', $pairs = '')
     {
-        $getParams = $this->session->{$model.'ExportParams'};
+        $getParams = $this->session->{$model.'PortParams'};
 
         $params = empty($params) ? '' : $params;
         if(!empty($params))
