@@ -47,7 +47,7 @@
           <td class='text-center'><?php echo $id;?></td>
           <td class='text-c-name' title='<?php echo $gitea->name;?>'>
             <?php if(common::hasPriv('gitea', 'view')):?>
-            <a href="<?php echo $this->createLink('gitea', 'view', "giteaID=$id", '', true); ?>"><?php echo $gitea->name;?></a>
+            <a class="iframe" href="<?php echo $this->createLink('gitea', 'view', "giteaID=$id", '', true); ?>"><?php echo $gitea->name;?></a>
             <?php else:?>
             <?php echo $gitea->name;?>
             <?php endif;?>

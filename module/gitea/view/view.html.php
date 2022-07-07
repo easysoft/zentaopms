@@ -11,15 +11,14 @@
  * */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<?php js::set('sysurl', common::getSysUrl());?>
 <style>.action-cell {margin-bottom: 10px;}</style>
 <div id="mainMenu" class="clearfix">
   <div class="btn-toolbar pull-left">
     <div class="page-title">
-      <span class="label label-id"><?php echo $gitlab->id?></span>
-      <span class="text" title="<?php echo $gitlab->name;?>" style='color: #3c4354'><?php echo $gitlab->name;?></span>
-      <?php if($gitlab->deleted):?>
-      <span class='label label-danger'><?php echo $lang->gitlab->deleted;?></span>
+      <span class="label label-id"><?php echo $gitea->id?></span>
+      <span class="text" title="<?php echo $gitea->name;?>" style='color: #3c4354'><?php echo $gitea->name;?></span>
+      <?php if($gitea->deleted):?>
+      <span class='label label-danger'><?php echo $lang->gitea->deleted;?></span>
       <?php endif; ?>
     </div>
   </div>
@@ -28,8 +27,8 @@
   <div class="main-col col-8">
     <div class="cell">
       <div class="detail">
-        <div class="detail-title"><?php echo $lang->gitlab->url;?></div>
-        <div class="detail-content article-content"><?php echo html::a($gitlab->url, $gitlab->url, '_target');?></div>
+        <div class="detail-title"><?php echo $lang->gitea->url;?></div>
+        <div class="detail-content article-content"><?php echo html::a($gitea->url, $gitea->url, '_target');?></div>
       </div>
     </div>
     <div class='cell action-cell'><?php include '../../common/view/action.html.php';?></div>
