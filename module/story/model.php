@@ -4090,15 +4090,14 @@ class storyModel extends model
 
             $group = array();
             foreach($relations as $relation) $group[$relation->AID][] = $relation->BID;
-
             foreach($stories as $story)
             {
-                if(!isset($group[$story->id]))
-                {
-                    unset($stories[$story->id]);
-                    continue;
-                }
+                if(!isset($group[$story->id])) continue;
                 $story->children = $this->getByList($group[$story->id]);
+                array_map(function($storyID) use(&$stories)
+                {
+                    unset($stories[$storyID]);
+                }, $group[$story->id]);
             }
         }
 
