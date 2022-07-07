@@ -3318,7 +3318,7 @@ class executionModel extends model
                 foreach($lane->items['closed'] as $item)
                 {
                     $diffTime = $type == 'story' ? strtotime($item['lastEditedDate']) - strtotime($item['openedDate']) : strtotime($item['closedDate']) - strtotime($item['openedDate']);
-                    $day      = floor($diffTime / (3600 * 24));
+                    $day      = round($diffTime / (3600 * 24), 1);
                     if($day > 0) $cycleTime[$item['id']] = $day;
                 }
             }
@@ -3326,7 +3326,7 @@ class executionModel extends model
 
         $itemCount    = count($cycleTime);
         if(!$itemCount) return array('', '');
-        $cycleTimeAvg = round(array_sum($cycleTime) / $itemCount);
+        $cycleTimeAvg = round(array_sum($cycleTime) / $itemCount, 1);
         $throughput   = round(($itemCount * 7) / $cycleTimeAvg, 1) . "{$this->lang->execution->kanbanCardsUnit}/" . $this->lang->execution->week;
 
         return array($cycleTimeAvg, $throughput);
