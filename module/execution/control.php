@@ -3181,6 +3181,19 @@ class execution extends control
                 }
                 return $this->send($response);
             }
+
+            $execution = $this->execution->getByID($executionID);
+            if($this->app->tab == 'execution' and $execution->type == 'kanban')
+            {
+                $execLaneType  = $this->session->execLaneType ? $this->session->execLaneType : 'all';
+                $execGroupBy   = $this->session->execGroupBy ? $this->session->execGroupBy : 'default';
+                $rdSearchValue = $this->session->rdSearchValue ? $this->session->rdSearchValue : '';
+                $kanbanData    = $this->loadModel('kanban')->getRDKanban($executionID, $execLaneType, 'id_desc', 0, $execGroupBy, $rdSearchValue);
+                $kanbanData    = json_encode($kanbanData);
+
+                return print(js::closeModal('parent', '', "parent.updateKanban($kanbanData)"));
+            }
+
             return print(js::reload('parent'));
         }
     }
