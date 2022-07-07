@@ -25,7 +25,7 @@
           <tr>
             <th><?php echo $lang->release->name;?></th>
             <td><?php echo html::input('name', '', "class='form-control' required");?></td>
-            <td class='muted'>
+            <td>
               <div id='markerBox' class='checkbox-primary'>
                 <input id='marker' name='marker' value='1' type='checkbox' />
                 <label for='marker'><?php echo $lang->release->marker;?></label>
