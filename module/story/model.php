@@ -344,6 +344,8 @@ class storyModel extends model
 
             if($bugID > 0)
             {
+                if(($this->config->edition == 'biz' || $this->config->edition == 'max')) $oldBug = $this->dao->select('feedback, status')->from(TABLE_BUG)->where('id')->eq($bugID)->fetch();
+
                 $bug = new stdclass();
                 $bug->toStory      = $storyID;
                 $bug->status       = 'closed';
@@ -358,6 +360,8 @@ class storyModel extends model
 
                 $this->loadModel('action')->create('bug', $bugID, 'ToStory', '', $storyID);
                 $this->action->create('bug', $bugID, 'Closed');
+
+                if(($this->config->edition == 'biz' || $this->config->edition == 'max') && !dao::isError() && $oldBug->feedback) $this->loadModel('feedback')->updateStatus('bug', $oldBug->feedback, 'closed', $oldBug->status);
 
                 /* add files to story from bug. */
                 $files = $this->dao->select('*')->from(TABLE_FILE)
@@ -4086,15 +4090,14 @@ class storyModel extends model
 
             $group = array();
             foreach($relations as $relation) $group[$relation->AID][] = $relation->BID;
-
             foreach($stories as $story)
             {
-                if(!isset($group[$story->id]))
-                {
-                    unset($stories[$story->id]);
-                    continue;
-                }
+                if(!isset($group[$story->id])) continue;
                 $story->children = $this->getByList($group[$story->id]);
+                array_map(function($storyID) use(&$stories)
+                {
+                    unset($stories[$storyID]);
+                }, $group[$story->id]);
             }
         }
 

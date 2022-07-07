@@ -404,9 +404,10 @@ class treeModel extends model
 
         $this->loadModel('branch');
         $projectID        = zget($extra, 'projectID', 0);
+        $executionID      = zget($extra, 'executionID', 0);
         $branches         = array($branch => '');
         $executionModules = array();
-        if($branch and empty($projectID))
+        if($branch and empty($projectID) and empty($extra['executionID']))
         {
             $branchName = $this->branch->getById($branch);
             $branches   = array($branch => $branchName);
@@ -416,10 +417,15 @@ class treeModel extends model
         $manage  = $userFunc[1] == 'createManageLink' ? true : false;
         $product = $this->loadModel('product')->getById($rootID);
 
-        $onlyGetLinked = ($projectID and $this->config->vision != 'lite');
-        if(strpos('story|bug|case', $type) !== false and $branch === 'all' and empty($projectID))
+        $onlyGetLinked = (($projectID or $executionID) and $this->config->vision != 'lite');
+        if(strpos('story|bug|case', $type) !== false and $branch === 'all' and empty($projectID) and empty($executionID))
         {
             if($product->type != 'normal') $branches = array(BRANCH_MAIN => $this->lang->branch->main) + $this->loadModel('branch')->getPairs($rootID, 'noempty');
+        }
+        elseif($type == 'case' and $this->app->tab == 'execution')
+        {
+            if($product->type != 'normal' and $executionID) $branches += $this->branch->getPairs($product->id, 'noempty', $executionID);
+            if($onlyGetLinked) $executionModules = $this->getTaskTreeModules($executionID, true, $type);
         }
         elseif(($type == 'story' and $this->app->rawModule == 'projectstory') or ($type == 'case' and $this->app->tab == 'project'))
         {
@@ -721,10 +727,10 @@ class treeModel extends model
      */
     public function getCaseTreeMenu($rootID, $productID = 0, $startModule = 0, $userFunc = '', $extra = '')
     {
-        $extra = array('projectID' => $rootID, 'productID' => $productID, 'tip' => true, 'extra' => $extra);
+        $extra = array('projectID' => $rootID, 'executionID' => $rootID, 'productID' => $productID, 'tip' => true, 'extra' => $extra);
 
         /* If createdVersion <= 4.1, go to getTreeMenu(). */
-        $products     = $this->loadModel('product')->getProductPairsByProject($rootID);
+        $products     = $this->app->tab != 'execution' ? $this->loadModel('product')->getProductPairsByProject($rootID) : $this->loadModel('product')->getProducts($rootID);
         $branchGroups = $this->dao->select('t1.product as product,branch,t3.name')->from(TABLE_PROJECTPRODUCT)->alias('t1')
             ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product=t2.id')
             ->leftJoin(TABLE_BRANCH)->alias('t3')->on('t1.branch=t3.id')
@@ -734,6 +740,7 @@ class treeModel extends model
             ->andWhere('t2.deleted')->eq('0')
             ->fetchGroup('product', 'branch');
 
+        $this->app->loadLang('branch');
         foreach($branchGroups as $productID => $branches)
         {
             foreach($branches as $branchID => $branchInfo)
@@ -756,15 +763,16 @@ class treeModel extends model
         $executionModules = $this->getTaskTreeModules($rootID, true, 'case');
 
         /* Get module according to product. */
-        $productNum   = count($products);
-        $moduleName   = $this->app->tab == 'project' ? 'project'  : 'testcase';
-        $methodName   = $this->app->tab == 'project' ? 'testcase' : 'browse';
-        $projectParam = $this->app->tab == 'project' ? "projectID={$this->session->project}&" : '';
+        $productNum = count($products);
+        $moduleName = strpos(',project,execution,', ",{$this->app->tab},") !== false ? $this->app->tab  : 'testcase';
+        $methodName = strpos(',project,execution,', ",{$this->app->tab},") !== false ? 'testcase' : 'browse';
+        $param      = $this->app->tab == 'project' ? "projectID={$this->session->project}&" : '';
+        $param      = $this->app->tab == 'execution' ? "executionID={$rootID}&" : $param;
         foreach($products as $id => $product)
         {
             $extra['productID'] = $id;
-            $link  = helper::createLink($moduleName, $methodName, $projectParam . "productID=$id");
-            $menu .= "<li>" . html::a($link, $product, '_self', "id='product$id' data-app='project'");
+            $link  = helper::createLink($moduleName, $methodName, $param . "productID=$id");
+            $menu .= "<li>" . html::a($link, is_object($product) ? $product->name : $product, '_self', "id='product$id' data-app='{$this->app->tab}'");
 
             /* tree menu. */
             $tree = '';
@@ -1202,10 +1210,11 @@ class treeModel extends model
      */
     public function createCaseLink($type, $module, $extra = array())
     {
-        $moduleName   = $this->app->tab == 'project' ? 'project'  : 'testcase';
-        $methodName   = $this->app->tab == 'project' ? 'testcase' : 'browse';
-        $projectParam = $this->app->tab == 'project' ? "projectID={$this->session->project}&" : '';
-        return html::a(helper::createLink($moduleName, $methodName, $projectParam . "root={$module->root}&branch={$extra['branchID']}&type=byModule&param={$module->id}"), $module->name, '_self', "id='module{$module->id}' data-app='{$this->app->tab}' title='{$module->name}'");
+        $moduleName = strpos(',project,execution,', ",{$this->app->tab},") !== false ? $this->app->tab : 'testcase';
+        $methodName = strpos(',project,execution,', ",{$this->app->tab},") !== false ? 'testcase' : 'browse';
+        $param      = $this->app->tab == 'project' ? "projectID={$this->session->project}&root={$module->root}&branch={$extra['branchID']}&" : "root={$module->root}&branch={$extra['branchID']}&";
+        $param      = $this->app->tab == 'execution' ? "executionID={$extra['executionID']}&root={$module->root}&" : $param;
+        return html::a(helper::createLink($moduleName, $methodName, $param . "&type=byModule&param={$module->id}"), $module->name, '_self', "id='module{$module->id}' data-app='{$this->app->tab}' title='{$module->name}'");
     }
 
     /**

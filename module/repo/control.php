@@ -1314,9 +1314,10 @@ class repo extends control
             mkdir($savePath, 0777, true);
         }
 
+        $repo = $this->repo->getRepoByID($repoID);
         if($repo->SCM == 'Gitlab')
         {
-            return '';
+            $url = $this->loadModel('gitlab')->downloadCode($repo->gitlab, $repo->project, $branch);
         }
         elseif($repo->SCM == 'Git')
         {
@@ -1344,5 +1345,7 @@ class repo extends control
 
             $url = DS . 'data' . DS . 'repo' . DS . $repo->name . '.zip';
         }
+
+        $this->locate($url);
     }
 }

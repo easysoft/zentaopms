@@ -69,6 +69,7 @@ $lang->moduleOrder[215] = 'message';
 $lang->moduleOrder[220] = 'gitlab';
 $lang->moduleOrder[225] = 'mr';
 $lang->moduleOrder[230] = 'app';
+$lang->moduleOrder[235] = 'gitea';
 
 $lang->resource = new stdclass();
 
@@ -1383,6 +1384,20 @@ $lang->gitlab->methodOrder[130] = 'manageProjectMembers';
 $lang->gitlab->methodOrder[135] = 'browseTag';
 $lang->gitlab->methodOrder[140] = 'browseTagPriv';
 $lang->gitlab->methodOrder[145] = 'deleteTagPriv';
+
+/* Gitea. */
+$lang->resource->gitea = new stdclass();
+$lang->resource->gitea->browse = 'browse';
+$lang->resource->gitea->create = 'create';
+$lang->resource->gitea->edit   = 'edit';
+$lang->resource->gitea->view   = 'view';
+$lang->resource->gitea->delete = 'delete';
+
+$lang->gitea->methodOrder[5]  = 'browse';
+$lang->gitea->methodOrder[10] = 'create';
+$lang->gitea->methodOrder[15] = 'edit';
+$lang->gitea->methodOrder[20] = 'view';
+$lang->gitea->methodOrder[25] = 'delete';
 
 /* SonarQube. */
 $lang->resource->sonarqube = new stdclass();

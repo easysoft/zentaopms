@@ -69,6 +69,13 @@ $(function()
         {
             $('#downloadCode').popover('show');
 
+            $('.copy-btn').tooltip({
+                trigger: 'click',
+                placement: 'bottom',
+                title: lang.copied,
+                tipClass: 'tooltip-success'
+            });
+
             /* Set popover area. */
             var left = parseFloat($('.download-popover').css('left')) - 155;
             $('.download-popover').css('left', left + 'px')
@@ -80,12 +87,18 @@ $(function()
         var copyText = $(this).parent().parent().find('input');
         copyText .select();
         document.execCommand("Copy");
-        alert(lang.copied);
+
+        $(this).tooltip('show');
+        var that = this;
+        setTimeout(function()
+        {
+            $(that).tooltip('hide')
+        }, 2000)
     })
 
     $('.download-btn').live('click', function()
     {
-        var link = createLink('repo', 'downloadCode', 'repoID=' + repoID);
+        var link = createLink('repo', 'downloadCode', 'repoID=' + repoID + '&branch=' + branch);
         window.open(link);
     })
 })

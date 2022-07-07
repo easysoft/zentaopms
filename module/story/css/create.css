@@ -7,3 +7,6 @@
 #source_chosen {min-width: 50px !important;}
 #feedbackBox > .input-group + #notifyEmailLabel {position: relative; width: 50%; left: 48%}
 #product + .picker{min-width: 400px}
+#dataform .priBox, #dataform .estimateBox {width: 120px;}
+#dataform .categoryBox {width: 150px;}
+#dataform .needNotReviewBox {width: 130px;}
