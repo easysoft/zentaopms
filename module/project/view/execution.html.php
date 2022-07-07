@@ -54,6 +54,104 @@
   <?php $canBatchEdit = common::hasPriv('execution', 'batchEdit'); ?>
   <form class='main-table' id='executionsForm' method='post' action='<?php echo inLink('batchEdit');?>' data-ride='table'>
     <div class="table-header fixed-right">
+      <table class="table table-from has-sort-head table-fixed table-nested" id="executionList">
+        <thead>
+          <tr>
+            <th class='table-nest-title'>
+              <a class='table-nest-toggle table-nest-toggle-global' data-expand-text='<?php echo $lang->expand; ?>' data-   collapse-text='<?php echo $lang->collapse;?>'></a>
+              <?php echo $lang->idAB;?>
+            </th>
+            <th class='c-progress'><?php echo $lang->programplan->name;?></th>
+            <th class='c-progress'><?php echo $lang->execution->owner;?></th>
+            <th class='c-progress'><?php echo $lang->programplan->status;?></th>
+            <th class='c-progress'><?php echo $lang->project->progress;?></th>
+            <th class='c-progress'><?php echo $lang->programplan->begin;?></th>
+            <th class='c-progress'><?php echo $lang->programplan->end;?></th>
+            <th class='c-progress'><?php echo $lang->task->estimateAB;?></th>
+            <th class='c-progress'><?php echo $lang->task->consumedAB;?></th>
+            <th class='c-progress'><?php echo $lang->task->leftAB;?> </th>
+            <th class='c-progress'><?php echo $lang->execution->burn;?> </th>
+            <th class='text-center c-actions-6'><?php echo $lang->actions;?></th> 
+          </tr>
+        </thead>
+        <tbody id="executionTableList">
+          <?php foreach($executionStats as $stage):?>
+          <tr>
+            <td><?php echo $stage->id;?></td>
+            <td><?php echo $stage->name;?></td>
+            <td><?php echo $stage->id;?></td>
+            <td><?php echo $stage->name;?></td>
+            <td><?php echo $stage->id;?></td>
+            <td><?php echo $stage->name;?></td>
+            <td><?php echo $stage->id;?></td>
+            <td><?php echo $stage->name;?></td>
+            <td><?php echo $stage->id;?></td>
+            <td><?php echo $stage->name;?></td>
+            <td><?php echo $stage->name;?></td>
+            <td><?php echo $stage->name;?></td>
+          </tr>
+
+          <?php if(!empty($stage->children)):?>
+          <?php foreach($stage as $childStage):?>
+          <tr>
+            <td><?php echo $childStage->id;?></td>
+            <td><?php echo $childStage->name;?></td>
+            <td><?php echo $childStage->id;?></td>
+            <td><?php echo $childStage->name;?></td>
+            <td><?php echo $childStage->id;?></td>
+            <td><?php echo $childStage->name;?></td>
+            <td><?php echo $childStage->id;?></td>
+            <td><?php echo $childStage->name;?></td>
+            <td><?php echo $childStage->id;?></td>
+            <td><?php echo $childStage->name;?></td>
+            <td><?php echo $childStage->name;?></td>
+            <td><?php echo $childStage->name;?></td>
+          </tr>
+
+          <?php if(!empty($childStage->tasks)):?>
+          <?php foreach($childStage->tasks as $task):?>
+          <tr>
+            <td><?php echo $task->id;?></td>
+            <td><?php echo $task->name;?></td>
+            <td><?php echo $task->id;?></td>
+            <td><?php echo $task->name;?></td>
+            <td><?php echo $task->id;?></td>
+            <td><?php echo $task->name;?></td>
+            <td><?php echo $task->id;?></td>
+            <td><?php echo $task->name;?></td>
+            <td><?php echo $task->id;?></td>
+            <td><?php echo $task->name;?></td>
+            <td><?php echo $task->name;?></td>
+            <td><?php echo $task->name;?></td>
+          </tr>
+          <?php endforeach;?>
+          <?php endif;?>
+
+          <?php endforeach;?>
+          <?php endif;?>
+
+          <?php if(!empty($stage->tasks)):?>
+          <?php foreach($stage->tasks as $task):?>
+          <tr>
+            <td><?php echo $task->id;?></td>
+            <td><?php echo $task->name;?></td>
+            <td><?php echo $task->id;?></td>
+            <td><?php echo $task->name;?></td>
+            <td><?php echo $task->id;?></td>
+            <td><?php echo $task->name;?></td>
+            <td><?php echo $task->id;?></td>
+            <td><?php echo $task->name;?></td>
+            <td><?php echo $task->id;?></td>
+            <td><?php echo $task->name;?></td>
+            <td><?php echo $task->name;?></td>
+            <td><?php echo $task->name;?></td>
+          </tr>
+          <?php endforeach;?>
+          <?php endif;?>
+
+          <?php endforeach;?>
+        </tbody>
+      </table>
       <nav class="btn-toolbar pull-right setting"></nav>
     </div>
   </form>
