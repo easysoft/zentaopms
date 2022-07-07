@@ -66,8 +66,7 @@ class gitea extends control
             $giteaID = $this->gitea->create();
 
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-            $this->loadModel('action');
-            $actionID = $this->action->create('gitea', $giteaID, 'created');
+            $actionID = $this->loadModel('action')->create('gitea', $giteaID, 'created');
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browse')));
         }
 
@@ -78,48 +77,48 @@ class gitea extends control
 
     /**
      * View a gitea.
-     * @param  int    $id
+     * @param  int    $giteaID
      * @access public
      * @return void
      */
-    public function view($id)
+    public function view($giteaID)
     {
-        $gitea = $this->gitea->getByID($id);
+        $gitea = $this->gitea->getByID($giteaID);
 
         $this->view->title      = $this->lang->gitea->common . $this->lang->colon . $this->lang->gitea->view;
-        $this->view->gitea     = $gitea;
+        $this->view->gitea      = $gitea;
         $this->view->users      = $this->loadModel('user')->getPairs('noclosed');
-        $this->view->actions    = $this->loadModel('action')->getList('gitea', $id);
-        $this->view->preAndNext = $this->loadModel('common')->getPreAndNextObject('pipeline', $id);
+        $this->view->actions    = $this->loadModel('action')->getList('gitea', $giteaID);
+        $this->view->preAndNext = $this->loadModel('common')->getPreAndNextObject('pipeline', $giteaID);
         $this->display();
     }
 
     /**
      * Edit a gitea.
      *
-     * @param  int    $id
+     * @param  int    $giteaID
      * @access public
      * @return void
      */
-    public function edit($id)
+    public function edit($giteaID)
     {
-        $oldGitea = $this->gitea->getByID($id);
+        $oldGitea = $this->gitea->getByID($giteaID);
 
         if($_POST)
         {
             $this->checkToken();
-            $this->gitea->update($id);
-            $gitea = $this->gitea->getByID($id);
+            $this->gitea->update($giteaID);
+            $gitea = $this->gitea->getByID($giteaID);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $this->loadModel('action');
-            $actionID = $this->action->create('gitea', $id, 'edited');
+            $actionID = $this->action->create('gitea', $giteaID, 'edited');
             $changes  = common::createChanges($oldGitea, $gitea);
             $this->action->logHistory($actionID, $changes);
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browse')));
         }
 
-        $this->view->title  = $this->lang->gitea->common . $this->lang->colon . $this->lang->gitea->edit;
+        $this->view->title = $this->lang->gitea->common . $this->lang->colon . $this->lang->gitea->edit;
         $this->view->gitea = $oldGitea;
 
         $this->display();
@@ -128,23 +127,22 @@ class gitea extends control
     /**
      * Delete a gitea.
      *
-     * @param  int    $id
+     * @param  int    $giteaID
      * @access public
      * @return void
      */
-    public function delete($id, $confirm = 'no')
+    public function delete($giteaID, $confirm = 'no')
     {
-        if($confirm != 'yes') return print(js::confirm($this->lang->gitea->confirmDelete, inlink('delete', "id=$id&confirm=yes")));
+        if($confirm != 'yes') return print(js::confirm($this->lang->gitea->confirmDelete, inlink('delete', "id=$giteaID&confirm=yes")));
 
-        $oldGitea = $this->gitea->getByID($id);
-        $this->loadModel('action');
-        $this->gitea->delete(TABLE_PIPELINE, $id);
+        $oldGitea = $this->gitea->getByID($giteaID);
+        $this->gitea->delete(TABLE_PIPELINE, $giteaID);
 
         $actionID = $this->dao->lastInsertID();
-        $gitea    = $this->gitea->getByID($id);
+        $gitea    = $this->gitea->getByID($giteaID);
         $changes  = common::createChanges($oldGitea, $gitea);
-        $this->action->logHistory($actionID, $changes);
-        echo js::reload('parent');
+        $this->loadModel('action')->logHistory($actionID, $changes);
+        return print(js::reload('parent'));
     }
 
     /**
