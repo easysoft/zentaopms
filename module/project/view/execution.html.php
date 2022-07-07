@@ -77,8 +77,21 @@
         <tbody id="executionTableList">
           <?php foreach($executionStats as $stage):?>
           <tr>
-            <td><?php echo $stage->id;?></td>
-            <td><?php echo $stage->name;?></td>
+            <td>
+              <?php echo $stage->id;?>
+            </td>
+            <td>
+              <?php echo $stage->name;?>
+              <?php
+                $icon = '';
+                if( /* $stage->hasChild || $stage->hasTask*/ true )
+                {
+                    $icon = ' icon-program';
+                    $class = ' table-nest-toggle';
+                }
+              ?>
+                <span class="table-nest-icon icon <?php echo $class . $icon;?>"></span>
+            </td>
             <td><?php echo $stage->id;?></td>
             <td><?php echo $stage->name;?></td>
             <td><?php echo $stage->id;?></td>
