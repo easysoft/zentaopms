@@ -37,8 +37,9 @@ $lang->repo->blameAction     = 'Blame';
 $lang->repo->reviewAction    = 'Review List';
 $lang->repo->downloadCode    = 'Download Code';
 $lang->repo->downloadZip     = 'Download compressed package';
-$lang->repo->sshClone        = 'Clone by SSH';
-$lang->repo->httpClone       = 'Clone by HTTP';
+$lang->repo->sshClone        = 'Clone with SSH';
+$lang->repo->httpClone       = 'Clone with HTTP';
+$lang->repo->cloneUrl        = 'Clone URL';
 
 $lang->repo->submit     = 'Gửi';
 $lang->repo->cancel     = 'Hủy';
@@ -178,6 +179,7 @@ $lang->repo->error->clientVersion = "Client version is too low, please upgrade o
 $lang->repo->error->encoding      = "The encoding maybe wrong. Vui lòng change the encoding and try again.";
 $lang->repo->error->deleted       = "Deletion of the repository failed. The current repository has a commit record associated with the design.";
 $lang->repo->error->clientPath    = "The client installation directory cannot have spaces!";
+$lang->repo->error->noWritable    = '%s is not writable! Please check the privilege, or download will not be done.';
 
 $lang->repo->syncTips      = '<strong>Bạn có thể tìm tham khảo làm sao thiết lập đồng bộ Git từ <a target="_blank" href="https://www.zentao.pm/book/zentaomanual/free-open-source-project-management-software-git-105.html">here</a>.</strong>';
 $lang->repo->encodingsTips = "The encodings of commit comments, can be comma separated values，ví dụ:  utf-8";

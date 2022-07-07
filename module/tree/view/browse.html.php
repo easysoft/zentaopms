@@ -283,7 +283,7 @@ $(function()
             {
                 hiddenwin.location.href = action.linkTemplate.format(item.id);
             }
-            else if(action.type === 'sort')
+            else if(action.type === 'sort' && event.item == null)
             {
                 var orders = {};
                 $('#modulesTree').find('li:not(.tree-action-item)').each(function()

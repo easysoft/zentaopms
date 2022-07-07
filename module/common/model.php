@@ -2192,6 +2192,7 @@ EOD;
             $queryCondition = explode(' ORDER BY ', $sql);
             $queryCondition = $queryCondition[0];
         }
+        $queryCondition = preg_replace('/((AND)|(OR)) *t2.\w+ * [^ ]+ [^ ]+/', '', $queryCondition);
         $queryCondition = trim($queryCondition);
         if(empty($queryCondition)) $queryCondition = "1=1";
 

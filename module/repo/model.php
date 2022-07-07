@@ -2144,7 +2144,11 @@ class repoModel extends model
         if(empty($repo)) return null;
 
         $url = new stdClass();
-        if($repo->SCM == 'Gitlab')
+        if($repo->SCM == 'Subversion')
+        {
+            $url->svn = $repo->path;
+        }
+        elseif($repo->SCM == 'Gitlab')
         {
             $project = $this->loadModel('gitlab')->apiGetSingleProject($repo->gitlab, $repo->project);
             if(isset($project->id))
@@ -2152,6 +2156,12 @@ class repoModel extends model
                 $url->http = $project->http_url_to_repo;
                 $url->ssh  = $project->ssh_url_to_repo;
             }
+        }
+        else
+        {
+            $this->scm = $this->app->loadClass('scm');
+            $this->scm->setEngine($repo);
+            $url = $this->scm->getCloneUrl();
         }
 
         return $url;
