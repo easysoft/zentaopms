@@ -19,7 +19,7 @@
     <h2><?php echo $lang->gitlab->importIssue;?></h2>
     <?php if(!isonlybody() and empty($importable)):?>
     <div class='pull-right'>
-      <?php echo html::linkButton($lang->goback, $this->createLink('repo', 'maintain'), 'self', '', 'btn btn-primary');?>
+      <?php echo html::backButton($lang->goback, "data-app='{$app->tab}'", 'btn btn-primary');?>
     </div>
     <?php endif;?>
   </div>
