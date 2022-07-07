@@ -1210,7 +1210,7 @@ class treeModel extends model
      */
     public function createCaseLink($type, $module, $extra = array())
     {
-        $moduleName = strpos(',project,execution,', ",{$this->app->tab},") !== false ? $this->app->tab  : 'testcase';
+        $moduleName = strpos(',project,execution,', ",{$this->app->tab},") !== false ? $this->app->tab : 'testcase';
         $methodName = strpos(',project,execution,', ",{$this->app->tab},") !== false ? 'testcase' : 'browse';
         $param      = $this->app->tab == 'project' ? "projectID={$this->session->project}&root={$module->root}&branch={$extra['branchID']}&" : "root={$module->root}&branch={$extra['branchID']}&";
         $param      = $this->app->tab == 'execution' ? "executionID={$extra['executionID']}&root={$module->root}&" : $param;
