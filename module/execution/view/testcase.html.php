@@ -23,7 +23,7 @@
   <div class="side-col" id='sidebar' data-min-width='235'>
     <div class="sidebar-toggle"><i class="icon icon-angle-left"></i></div>
     <div class='cell'>
-      <?php if(!$moduleTree):?>
+      <?php if(empty($moduleTree) or empty($lang->modulePageNav)):?>
       <hr class="space">
       <div class="text-center text-muted"><?php echo $lang->testcase->noModule;?></div>
       <hr class="space">
