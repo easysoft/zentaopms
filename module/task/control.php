@@ -379,7 +379,7 @@ class task extends control
                     $kanbanData = $this->loadModel('kanban')->getExecutionKanban($executionID, $execLaneType, $execGroupBy, $rdSearchValue);
                     $kanbanType = $execLaneType == 'all' ? 'task' : key($kanbanData);
                     $kanbanData = $kanbanData[$kanbanType];
-                    $kanbanData = json_encode($kanbanData['task']);
+                    $kanbanData = json_encode($kanbanData);
 
                     return print(js::closeModal('parent.parent', '', "parent.parent.updateKanban(\"task\", $kanbanData)"));
                 }
@@ -549,7 +549,7 @@ class task extends control
                     $kanbanData = $this->loadModel('kanban')->getExecutionKanban($task->execution, $execLaneType, $execGroupBy, $rdSearchValue);
                     $kanbanType = $execLaneType == 'all' ? 'task' : key($kanbanData);
                     $kanbanData = $kanbanData[$kanbanType];
-                    $kanbanData = json_encode($kanbanData['task']);
+                    $kanbanData = json_encode($kanbanData);
 
                     return print(js::closeModal('parent.parent', '', "parent.parent.updateKanban(\"task\", $kanbanData)"));
                 }
@@ -785,7 +785,7 @@ class task extends control
                     $kanbanData = $this->loadModel('kanban')->getExecutionKanban($task->execution, $execLaneType, $execGroupBy, $rdSearchValue);
                     $kanbanType = $execLaneType == 'all' ? 'task' : key($kanbanData);
                     $kanbanData = $kanbanData[$kanbanType];
-                    $kanbanData = json_encode($kanbanData['task']);
+                    $kanbanData = json_encode($kanbanData);
 
                     return print(js::closeModal('parent.parent', '', "parent.parent.updateKanban(\"task\", $kanbanData)"));
                 }
@@ -1046,7 +1046,7 @@ class task extends control
                     $kanbanData = $this->loadModel('kanban')->getExecutionKanban($task->execution, $execLaneType, $execGroupBy, $rdSearchValue);
                     $kanbanType = $execLaneType == 'all' ? 'task' : key($kanbanData);
                     $kanbanData = $kanbanData[$kanbanType];
-                    $kanbanData = json_encode($kanbanData['task']);
+                    $kanbanData = json_encode($kanbanData);
 
                     return print(js::closeModal('parent.parent', '', "parent.parent.updateKanban(\"task\", $kanbanData)"));
                 }
@@ -1119,7 +1119,7 @@ class task extends control
                     $kanbanData = $this->loadModel('kanban')->getExecutionKanban($task->execution, $execLaneType, $execGroupBy, $rdSearchValue);
                     $kanbanType = $execLaneType == 'all' ? 'task' : key($kanbanData);
                     $kanbanData = $kanbanData[$kanbanType];
-                    $kanbanData = json_encode($kanbanData['task']);
+                    $kanbanData = json_encode($kanbanData);
 
                     return print(js::closeModal('parent.parent', '', "parent.parent.updateKanban(\"task\", $kanbanData)"));
                 }
@@ -1267,7 +1267,7 @@ class task extends control
                     $kanbanData = $this->loadModel('kanban')->getExecutionKanban($task->execution, $execLaneType, $execGroupBy, $rdSearchValue);
                     $kanbanType = $execLaneType == 'all' ? 'task' : key($kanbanData);
                     $kanbanData = $kanbanData[$kanbanType];
-                    $kanbanData = json_encode($kanbanData['task']);
+                    $kanbanData = json_encode($kanbanData);
 
                     return print(js::closeModal('parent.parent', '', "parent.parent.updateKanban(\"task\", $kanbanData)"));
                 }
@@ -1367,7 +1367,7 @@ class task extends control
                     $kanbanData = $this->loadModel('kanban')->getExecutionKanban($task->execution, $execLaneType, $execGroupBy, $rdSearchValue);
                     $kanbanType = $execLaneType == 'all' ? 'task' : key($kanbanData);
                     $kanbanData = $kanbanData[$kanbanType];
-                    $kanbanData = json_encode($kanbanData['task']);
+                    $kanbanData = json_encode($kanbanData);
 
                     return print(js::closeModal('parent.parent', '', "parent.parent.updateKanban(\"task\", $kanbanData)"));
                 }
@@ -1434,7 +1434,7 @@ class task extends control
                     $kanbanData = $this->loadModel('kanban')->getExecutionKanban($task->execution, $execLaneType, $execGroupBy, $rdSearchValue);
                     $kanbanType = $execLaneType == 'all' ? 'task' : key($kanbanData);
                     $kanbanData = $kanbanData[$kanbanType];
-                    $kanbanData = json_encode($kanbanData['task']);
+                    $kanbanData = json_encode($kanbanData);
 
                     return print(js::closeModal('parent.parent', '', "parent.parent.updateKanban(\"task\", $kanbanData)"));
                 }
@@ -1518,7 +1518,7 @@ class task extends control
                     $kanbanData = $this->loadModel('kanban')->getExecutionKanban($task->execution, $execLaneType, $execGroupBy, $rdSearchValue);
                     $kanbanType = $execLaneType == 'all' ? 'task' : key($kanbanData);
                     $kanbanData = $kanbanData[$kanbanType];
-                    $kanbanData = json_encode($kanbanData['task']);
+                    $kanbanData = json_encode($kanbanData);
 
                     return print(js::closeModal('parent.parent', '', "parent.parent.updateKanban(\"task\", $kanbanData)"));
                 }
@@ -1693,7 +1693,7 @@ class task extends control
                     $kanbanData = $this->loadModel('kanban')->getExecutionKanban($task->execution, $execLaneType, $execGroupBy, $rdSearchValue);
                     $kanbanType = $execLaneType == 'all' ? 'task' : key($kanbanData);
                     $kanbanData = $kanbanData[$kanbanType];
-                    $kanbanData = json_encode($kanbanData['task']);
+                    $kanbanData = json_encode($kanbanData);
 
                     return print(js::closeModal('parent.parent', '', "parent.parent.updateKanban(\"task\", $kanbanData)"));
                 }
@@ -1761,7 +1761,7 @@ class task extends control
                     $kanbanData = $this->loadModel('kanban')->getExecutionKanban($task->execution, $execLaneType, $execGroupBy, $rdSearchValue);
                     $kanbanType = $execLaneType == 'all' ? 'task' : key($kanbanData);
                     $kanbanData = $kanbanData[$kanbanType];
-                    $kanbanData = json_encode($kanbanData['task']);
+                    $kanbanData = json_encode($kanbanData);
 
                     return print(js::closeModal('parent.parent', '', "parent.parent.updateKanban(\"task\", $kanbanData)"));
                 }
