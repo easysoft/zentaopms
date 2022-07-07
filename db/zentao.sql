@@ -8963,7 +8963,7 @@ ALTER TABLE `zt_doc` ADD `assetLibType` varchar(30) NOT NULL default '' after `a
 ALTER TABLE `zt_doc` ADD `from` mediumint(8) unsigned NOT NULL default 0 after `assetLibType`;
 ALTER TABLE `zt_doc` ADD `fromVersion` smallint(6) NOT NULL default 1 after `from`;
 ALTER TABLE `zt_doc` ADD `assignedTo` varchar(30) NOT NULL after `addedDate`;
-ALTER TABLE `zt_doc` ADD `assignedDate` date NOT NULL after `assignedTo`;
+ALTER TABLE `zt_doc` ADD `assignedDate` datetime NOT NULL after `assignedTo`;
 ALTER TABLE `zt_doc` ADD `approvedDate` date NOT NULL after `assignedDate`;
 ALTER TABLE `zt_doc` ADD `status` varchar(30) NOT NULL after `type`;
 

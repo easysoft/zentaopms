@@ -9,3 +9,5 @@ CREATE TABLE `zt_cfd` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 INSERT INTO `zt_cron` (`m`, `h`, `dom`, `mon`, `dow`, `command`, `remark`, `type`, `buildin`, `status`, `lastTime`) VALUES ('30', '23', '*', '*', '*', 'moduleName=execution&methodName=computecfd', '更新累积流图', 'zentao', 1, 'normal', '0000-00-00 00:00:00');
+
+ALTER TABLE `zt_doc` CHANGE `assignedDate` `assignedDate` datetime NOT NULL AFTER `assignedTo`;
