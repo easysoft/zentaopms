@@ -48,7 +48,7 @@ class dao extends baseDAO
             /* Check current module is buildin workflow. */
             if(isset($config->workflow->buildin->modules))
             {
-                $currentModule = $app->rawModule;
+                $currentModule = $app->fetchModule ? $app->fetchModule : $app->rawModule;
                 foreach($config->workflow->buildin->modules as $appModules)
                 {
                     if(!empty($appModules->$currentModule))

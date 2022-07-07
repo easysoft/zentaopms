@@ -1092,28 +1092,29 @@ function changeCardColType(cardID, fromColID, toColID, fromLaneID, toLaneID, car
         }
         else
         {
-            if(toColType == 'ready' && typeof(reviewStoryParis[objectID]) != 'undefined')
+            if(toColType == 'ready')
             {
-                bootbox.alert(executionLang.storyDragError);
-                return false;
+                $.get(createLink('story', 'ajaxGetInfo', "storyID=" + cardID), function(data)
+                {
+                    if(data)
+                    {
+                        data = $.parseJSON(data);
+                        if(data.status == 'draft' || data.status == 'changed')
+                        {
+                            bootbox.alert(executionLang.storyDragError);
+                        }
+                        else
+                        {
+                            ajaxMoveCard(objectID, fromColID, toColID, fromLaneID, toLaneID, regionID);
+                        }
+                    }
+                });
+            }
+            else
+            {
+                ajaxMoveCard(objectID, fromColID, toColID, fromLaneID, toLaneID, regionID);
             }
 
-            var link  = createLink('kanban', 'ajaxMoveCard', 'cardID=' + objectID + '&fromColID=' + fromColID + '&toColID=' + toColID + '&fromLaneID=' + fromLaneID + '&toLaneID=' + toLaneID + '&execitionID=' + executionID + '&browseType=' + browseType + '&groupBy=' + groupBy + '&regionID=' + regionID+ '&orderBy=' + orderBy );
-            $.ajax(
-            {
-                method:   'post',
-                dataType: 'json',
-                url:       link,
-                success: function(data)
-                {
-                    data = groupBy == 'default' ? data[regionID] : data[groupBy];
-                    updateRegion(regionID, data);
-                },
-                error: function(xhr, status, error)
-                {
-                    showErrorMessager(error || lang.timeout);
-                }
-            });
         }
     }
 
@@ -1122,6 +1123,38 @@ function changeCardColType(cardID, fromColID, toColID, fromLaneID, toLaneID, car
         var modalTrigger = new $.zui.ModalTrigger({type: 'iframe', width: '80%', url: link});
         modalTrigger.show();
     }
+}
+
+/**
+ * AJAX: move card.
+ *
+ * @param  int $objectID
+ * @param  int $fromColID
+ * @param  int $toColID
+ * @param  int $fromLaneID
+ * @param  int $toLaneID
+ * @param  int $regionID
+ * @access public
+ * @return void
+ */
+function ajaxMoveCard(objectID, fromColID, toColID, fromLaneID, toLaneID, regionID)
+{
+    var link = createLink('kanban', 'ajaxMoveCard', 'cardID=' + objectID + '&fromColID=' + fromColID + '&toColID=' + toColID + '&fromLaneID=' + fromLaneID + '&toLaneID=' + toLaneID + '&execitionID=' + executionID + '&browseType=' + browseType + '&groupBy=' + groupBy + '&regionID=' + regionID+ '&orderBy=' + orderBy );
+    $.ajax(
+    {
+        method:   'post',
+        dataType: 'json',
+        url:       link,
+        success: function(data)
+        {
+            data = groupBy == 'default' ? data[regionID] : data[groupBy];
+            updateRegion(regionID, data);
+        },
+        error: function(xhr, status, error)
+        {
+            showErrorMessager(error || lang.timeout);
+        }
+    });
 }
 
 /**

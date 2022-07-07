@@ -395,6 +395,12 @@ class bug extends control
             {
                 $this->dao->update(TABLE_TODO)->set('status')->eq('done')->where('id')->eq($output['todoID'])->exec();
                 $this->action->create('todo', $output['todoID'], 'finished', '', "BUG:$bugID");
+
+                if($this->config->edition == 'biz' || $this->config->edition == 'max')
+                {
+                    $todo = $this->dao->select('type, idvalue')->from(TABLE_TODO)->where('id')->eq($output['todoID'])->fetch();
+                    if($todo->type == 'feedback' && $todo->idvalue) $this->loadModel('feedback')->updateStatus('todo', $todo->idvalue, 'done');
+                }
             }
 
             $message = $this->executeHooks($bugID);
@@ -404,11 +410,12 @@ class bug extends control
             if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $bugID));
 
             /* If link from no head then reload. */
-            if(isset($output['executionID']) and isonlybody())
+            if(isonlybody())
             {
-                $executionID = $this->post->execution ? $this->post->execution : $output['executionID'];
+                $executionID = isset($output['executionID']) ? $output['executionID'] : $this->session->execution;
+                $executionID = $this->post->execution ? $this->post->execution : $executionID;
                 $execution   = $this->loadModel('execution')->getByID($executionID);
-                if($executionID == $output['executionID'] and $this->app->tab == 'execution' and $execution->type == 'kanban')
+                if($this->app->tab == 'execution' and $execution->type == 'kanban')
                 {
                     $execLaneType  = $this->session->execLaneType ? $this->session->execLaneType : 'all';
                     $execGroupBy   = $this->session->execGroupBy ? $this->session->execGroupBy : 'default';

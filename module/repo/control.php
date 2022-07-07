@@ -497,6 +497,7 @@ class repo extends control
         $this->view->pager           = $pager;
         $this->view->path            = urldecode($path);
         $this->view->logType         = $logType;
+        $this->view->cloneUrl        = $this->repo->getCloneUrl($repo);
         $this->view->cacheTime       = date('m-d H:i', filemtime($cacheFile));
         $this->view->branchOrTag     = $branchOrTag;
 
@@ -1292,5 +1293,22 @@ class repo extends control
     {
         $executions = $this->repo->getExecutionPairs($productID, $branch);
         echo html::select('execution', array('' => '') + $executions, '', 'class="form-control chosen"');
+    }
+
+    /**
+     * Download zip code.
+     *
+     * @param  int    $repoID
+     * @param  string $branch
+     * @access public
+     * @return void
+     */
+    public function downloadCode($repoID = 0, $branch = '')
+    {
+        $repo = $this->repo->getRepoByID($repoID);
+        if($repo->SCM == 'Gitlab')
+        {
+            return '';
+        }
     }
 }

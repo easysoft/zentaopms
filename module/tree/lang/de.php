@@ -73,6 +73,8 @@ $lang->tree->all          = 'Alle Module';
 $lang->tree->executionDoc = "{$lang->executionCommon} Dok";
 $lang->tree->product      = $lang->productCommon;
 
+$lang->tree->emptyHistory = "No History";
+
 $lang->module = new stdclass();
 $lang->module->action = new stdclass();
 $lang->module->action->created = array('main' => "\$date, created <strong>\$extra</strong> by <strong>\$actor</strong>.");

@@ -2271,7 +2271,6 @@ class execution extends control
     public function kanban($executionID, $browseType = 'all', $orderBy = 'id_asc', $groupBy = 'default')
     {
         $this->app->loadLang('bug');
-        $this->loadModel('story');
 
         if(empty($groupBy)) $groupBy = 'default';
 
@@ -2345,7 +2344,6 @@ class execution extends control
         $this->view->kanbanData       = $kanbanData;
         $this->view->executionActions = $executionActions;
         $this->view->kanban           = $this->lang->execution->kanban;
-        $this->view->reviewStoryParis = $this->story->getExecutionStoryPairs($execution->id, 0, 'all', 0, 'full', 'review');
         $this->display();
     }
 
@@ -2374,7 +2372,6 @@ class execution extends control
         /* Load language. */
         $this->app->loadLang('task');
         $this->app->loadLang('bug');
-        $this->loadModel('story');
         $this->loadModel('kanban');
 
         /* Compatibility IE8. */
@@ -2435,7 +2432,6 @@ class execution extends control
         $this->view->groupBy          = $groupBy;
         $this->view->canBeChanged     = $canBeChanged;
         $this->view->userList         = $userList;
-        $this->view->reviewStoryParis = $this->story->getExecutionStoryPairs($execution->id, 0, 'all', 0, 'full', 'review');
 
         $this->display();
     }

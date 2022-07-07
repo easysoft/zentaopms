@@ -16,7 +16,7 @@
 <div id="mainMenu" class="clearfix">
   <?php echo $this->gitlab->getGitlabMenu($gitlabID, 'project');?>
   <div class="btn-toolbar pull-left">
-    <form id='gitlabForm' method='post'>
+    <form id='gitlabForm' method='post' class="not-watch">
       <?php echo html::input('keyword', $keyword, "class='form-control' placeholder='{$lang->gitlab->placeholderSearch}' style='display: inline-block;width:auto;margin:0 10px'");?>
       <a id="gitlabSearch" class="btn btn-primary"><?php echo $lang->gitlab->search?></a>
     </form>
@@ -45,7 +45,7 @@
           <th class='c-name text-left'><?php common::printOrderLink('name', $orderBy, $vars, $lang->gitlab->project->name);?></th>
           <th class='text-left'></th>
           <th class='text-left'><?php echo $lang->gitlab->lastUpdate;?></th>
-          <th class='c-actions-7'><?php echo $lang->actions;?></th>
+          <th class='c-actions-8'><?php echo $lang->actions;?></th>
         </tr>
       </thead>
       <tbody>

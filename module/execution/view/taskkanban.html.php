@@ -218,7 +218,6 @@ js::set('priv',
 <?php js::set('entertime', time());?>
 <?php js::set('fluidBoard', $execution->fluidBoard);?>
 <?php js::set('displayCards', $execution->displayCards);?>
-<?php js::set('reviewStoryParis', $reviewStoryParis);?>
 <?php js::set('needLinkProducts', $lang->execution->needLinkProducts);?>
 <?php js::set('hourUnit', $config->hourUnit);?>
 <?php include '../../common/view/footer.html.php';?>

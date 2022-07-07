@@ -51,7 +51,7 @@ class fixer extends baseFixer
         {
             global $app, $dbh;
             $flowFields = array();
-            $moduleName = $app->rawModule;
+            $moduleName = $app->fetchModule ? $app->fetchModule : $app->rawModule;
             $stmt       = $dbh->query("SELECT * FROM " . TABLE_WORKFLOWFIELD . " WHERE `module` = '{$moduleName}' and `buildin` = '0'");
             while($flowField = $stmt->fetch()) $flowFields[$flowField->field] = $flowField;
 
