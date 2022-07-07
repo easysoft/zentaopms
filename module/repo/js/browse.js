@@ -89,7 +89,7 @@ $(function()
 
     $('.download-btn').live('click', function()
     {
-        var link = createLink('repo', 'downloadCode', 'repoID=' + repoID);
+        var link = createLink('repo', 'downloadCode', 'repoID=' + repoID + '&branch=' + branch);
         window.open(link);
     })
 })

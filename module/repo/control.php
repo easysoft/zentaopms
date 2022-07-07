@@ -1305,10 +1305,13 @@ class repo extends control
      */
     public function downloadCode($repoID = 0, $branch = '')
     {
+        $url  = '';
         $repo = $this->repo->getRepoByID($repoID);
         if($repo->SCM == 'Gitlab')
         {
-            return '';
+            $url = $this->loadModel('gitlab')->downloadCode($repo->gitlab, $repo->project, $branch);
         }
+
+        $this->locate($url);
     }
 }
