@@ -1,29 +1,17 @@
+/**
+ * Get download.
+ *
+ * @access public
+ * @return void
+ */
 function getDownload()
 {
     var content = "<div class='main-col'>";
     content += "<div class='center-block'>";
     content += "<table class='table table-borderless'>";
-    if(cloneUrl.ssh)
-    {
-        content += "<tr>";
-        content += "<th>" + lang.sshClone + "</th>";
-        content += "</tr>";
-        content += "<tr>";
-        content += "<td><input type='input' class='form-control' value='" + cloneUrl.ssh + "' readonly></td>";
-        content += "<td><button type='button' class='btn copy-btn'><i class='icon-common-copy icon-copy' title='" + lang.copy +  "'></i></button></td>";
-        content += "</tr>";
-        content += "<tr>";
-    }
-
-    if(cloneUrl.http)
-    {
-        content += "<th>" + lang.httpClone + "</th>";
-        content += "</tr>";
-        content += "<tr>";
-        content += "<td><input type='input' class='form-control' value='" + cloneUrl.http + "' readonly></td>";
-        content += "<td><button type='button' class='btn copy-btn'><i class='icon-common-copy icon-copy' title='" + lang.copy +  "'></i></button></td>";
-        content += "</tr>";
-    }
+    if(cloneUrl.svn)  content += getCloneHtml(lang.cloneUrl,  cloneUrl.svn);
+    if(cloneUrl.ssh)  content += getCloneHtml(lang.sshClone,  cloneUrl.ssh);
+    if(cloneUrl.http) content += getCloneHtml(lang.httpClone, cloneUrl.http);
 
     content += "<tr>";
     content += "<td><button type='button' class='btn download-btn'><i class='icon-down-circle'></i> <span>" + lang.downloadZip + "</span></button></td>";
@@ -33,6 +21,27 @@ function getDownload()
     content += "</table>";
     content += "</div>";
     content += "</div>";
+    return content;
+}
+
+/**
+ * Get html of clone button.
+ *
+ * @param  cloneLang $cloneLang
+ * @param  url $url
+ * @access public
+ * @return void
+ */
+function getCloneHtml(cloneLang, url)
+{
+    var content = '';
+    content += "<tr>";
+    content += "<th>" + cloneLang + "</th>";
+    content += "</tr>";
+    content += "<tr>";
+    content += "<td><input type='input' class='form-control' value='" + url + "' readonly></td>";
+    content += "<td><button type='button' class='btn copy-btn'><i class='icon-common-copy icon-copy' title='" + lang.copy +  "'></i></button></td>";
+    content += "</tr>";
     return content;
 }
 
