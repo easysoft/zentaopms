@@ -322,6 +322,8 @@ class testcaseModel extends model
      * Get execution cases.
      *
      * @param  int    $executionID
+     * @param  int    $productID
+     * @param  int    $moduleID
      * @param  string $orderBy
      * @param  object $pager
      * @param  string $browseType   all|wait|needconfirm
