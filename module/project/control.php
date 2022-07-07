@@ -1078,7 +1078,7 @@ class project extends control
         }
         elseif(!empty($products))
         {
-            $productID  = reset($products)->id;
+            $productID  = empty($productID) ? reset($products)->id : $productID;
             $moduleTree = $this->tree->getTreeMenu($productID, 'bug', 0, array('treeModel', 'createBugLink'), $extra + array('productID' => $productID), 'all');
         }
         else
