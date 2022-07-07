@@ -642,7 +642,7 @@ class gitlab extends control
         $userPairs   = array('' => '');
         foreach($users as $user)
         {
-            if(!isset($bindedUsers[$user->account]) or $u->account == $zentaoBindAccount) $userPairs[$user->account] = $user->realname;
+            if(!isset($bindedUsers[$user->account]) or $user->account == $zentaoBindAccount) $userPairs[$user->account] = $user->realname;
         }
 
         $this->view->title             = $this->lang->gitlab->common . $this->lang->colon . $this->lang->gitlab->user->edit;
