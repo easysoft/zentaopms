@@ -2460,16 +2460,16 @@ EOD;
         /* If is the program/project/product/execution admin, have all program privs. */
         if($app->config->vision != 'lite')
         {
-            $inProject = isset($lang->navGroup->$module) and $lang->navGroup->$module == 'project';
+            $inProject = (isset($lang->navGroup->$module) and $lang->navGroup->$module == 'project');
             if($inProject and $app->session->project and (strpos(",{$app->user->rights['projects']},", ",{$app->session->project},") !== false or strpos(",{$app->user->rights['projects']},", ',all,') !== false)) return true;
 
-            $inProduct = isset($lang->navGroup->$module) and $lang->navGroup->$module == 'product';
+            $inProduct = (isset($lang->navGroup->$module) and $lang->navGroup->$module == 'product');
             if($inProduct and $app->session->product and (strpos(",{$app->user->rights['products']},", ",{$app->session->product},") !== false or strpos(",{$app->user->rights['products']},", ',all,') !== false)) return true;
 
-            $inProgram = isset($lang->navGroup->$module) and $lang->navGroup->$module == 'program';
+            $inProgram = (isset($lang->navGroup->$module) and $lang->navGroup->$module == 'program');
             if($inProgram and $app->session->program and (strpos(",{$app->user->rights['programs']},", ",{$app->session->program},") !== false or strpos(",{$app->user->rights['programs']},", ',all,') !== false)) return true;
 
-            $inExecution = isset($lang->navGroup->$module) and $lang->navGroup->$module == 'execution';
+            $inExecution = (isset($lang->navGroup->$module) and $lang->navGroup->$module == 'execution');
             if($inExecution and $app->session->execution and (strpos(",{$app->user->rights['executions']},", ",{$app->session->execution},") !== false or strpos(",{$app->user->rights['executions']},", ',all,') !== false)) return true;
         }
 

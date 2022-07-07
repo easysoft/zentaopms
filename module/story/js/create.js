@@ -46,6 +46,18 @@ $(function()
             $('#assignedToBox').attr('colspan', 2);
         }
     });
+
+    $('#customField').click(function()
+    {
+        hiddenRequireFields();
+    });
+
+    /* Implement a custom form without feeling refresh. */
+    $('#formSettingForm .btn-primary').click(function()
+    {
+        saveCustomFields('createFields');
+        return false;
+    });
 });
 
 /**

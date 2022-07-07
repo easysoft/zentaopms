@@ -15,6 +15,8 @@
 <?php js::import($jsRoot . 'html2canvas/min.js'); ?>
 <?php js::set('executionID', $executionID); ?>
 <?php js::set('chartData', $chartData); ?>
+<?php js::set('YUnit', $lang->execution->count); ?>
+<?php js::set('XUnit', $lang->execution->burnXUnit); ?>
 <div id='mainMenu' class='clearfix'>
   <div class='btn-toolbar pull-left'>
     <?php
@@ -33,8 +35,6 @@
   <h2 class='text-center'><?php echo $executionName . ' - ' . zget($lang->execution->cfdTypeList, $type) . $lang->execution->CFD;?></h2>
   <div id="cfdWrapper">
     <div id="cfdChart" style="width: 1200px; height: 600px"></div>
-    <div id="cfdYUnit"><?php echo $lang->execution->count;?></div>
-    <div id="cfdXUnit"><?php echo $lang->execution->burnXUnit;?></div>
     <div id="burnStatistics">
       <div class="stat-title"><span class="bg-primary">&nbsp;</span> <?php echo $lang->execution->charts->cfd->cycleTime;?> <i class="icon icon-help" data-toggle="tooltip" data-tip-class="tooltip-help" data-placement="bottom" title="<?php echo $lang->execution->charts->cfd->cycleTimeTip;?>"></i></div>
       <h3><?php echo $cycleTimeAvg ? ($cycleTimeAvg . $lang->day) : $lang->noData;?></h3>

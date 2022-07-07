@@ -3233,7 +3233,8 @@ class ztSessionHandler
     public function destroy($id)
     {
         $sessFile = $this->getSessionFile($id);
-        @unlink($sessFile);
+        unlink($sessFile);
+        unlink($this->rawFile);
         touch($sessFile);
         return true;
     }

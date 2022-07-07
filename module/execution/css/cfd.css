@@ -1,25 +1,30 @@
 .main-content > h2 {font-size: 16px;}
+.container {max-width: 1700px !important}
 
 .pull-left .input-control {margin-right: 10px;}
 
+#cfdWrapper {max-width: 1450px; padding: 25px 0px 10px; position: relative}
 @media screen and (max-width: 1920px)
 {
-#cfdWrapper {max-width: 1400px; padding: 25px 0px 10px; position: relative}
 #cfdChart {width:1400px !important; height:600px !important}
-#cfdYUnit {position: absolute; color: #CBD0DB; top: 40px; left: 30px}
-#cfdXUnit {position: absolute; color: #CBD0DB; bottom: 20px; right: 0px}
 #mainContent {min-width: 1550px !important;}
 #burnStatistics {left: 1400px !important;}
 }
 @media screen and (max-width: 1680px)
 {
-#cfdChart {width:1100px !important; height:400px !important}
-#mainContent {min-width: 1300px !important;}
-#burnStatistics {left: 1100px !important;}
+#cfdChart {width:1150px !important; height:500px !important}
+#mainContent {min-width: 1350px !important;}
+#burnStatistics {left: 1150px !important;}
+}
+@media screen and (max-width: 1366px)
+{
+#cfdChart {width:1000px !important; height:400px !important}
+#mainContent {min-width: 1200px !important;}
+#burnStatistics {left: 1000px !important;}
 }
 
 #mainContent {min-width: 1400px;}
-#burnStatistics {position: absolute; width: 180px; left: 1250px; height: 200px; top: 20%; margin-top: -30px; line-height: 30px; color: #838A9D; font-size: 12px; border: 1px solid #dcdcdc; background-color: #F8F8F8; padding: 15px 20px; color: #3c4353; border-radius: 8px;}
+#burnStatistics {position: absolute; width: 180px; left: 1200px; height: 200px; top: 20%; margin-top: -30px; line-height: 30px; color: #838A9D; font-size: 12px; border: 1px solid #dcdcdc; background-color: #F8F8F8; padding: 15px 20px; color: #3c4353; border-radius: 8px;}
 #burnStatistics .bg-primary {margin-right: 5px;}
 #burnStatistics .icon-help {color: black;}
 #burnStatistics h3 {margin-top: 10px; text-indent: 10px; margin-bottom: 30px;}

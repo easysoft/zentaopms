@@ -93,6 +93,7 @@ class productModel extends model
         }
         $isMobile = $this->app->viewType == 'mhtml';
 
+        $productID = $productID == 'all' ? 0 : $productID;
         setcookie("lastProduct", $productID, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, true);
         if($productID) $currentProduct = $this->getById($productID);
 

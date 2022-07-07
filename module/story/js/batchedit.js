@@ -46,6 +46,11 @@ $(function()
 
     // Init bactch action form
     $('#batchEditForm').batchActionForm();
+
+    $('#customField').click(function()
+    {
+        hiddenRequireFields();
+    });
 });
 
 $(document).on('click', '.chosen-with-drop', function(){oldValue = $(this).prev('select').val();})//Save old value.

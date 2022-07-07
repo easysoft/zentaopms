@@ -165,19 +165,7 @@ $(function()
     /* Implement a custom form without feeling refresh. */
     $('#formSettingForm .btn-primary').click(function()
     {
-        var fields = '';
-        $('#formSettingForm > .checkboxes > .checkbox-primary > input:checked').each(function()
-        {
-            fields += ',' + $(this).val();
-        });
-
-        var link = createLink('custom', 'ajaxSaveCustomFields', 'module=testcase&section=custom&key=createFields');
-        $.post(link, {'fields' : fields}, function()
-        {
-            showCheckedFields(fields);
-            $('#formSetting').parent().removeClass('open');
-        });
-
+        saveCustomFields('createFields');
         return false;
     });
 });
