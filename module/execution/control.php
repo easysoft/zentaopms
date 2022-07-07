@@ -933,6 +933,7 @@ class execution extends control
         $this->loadModel('user');
         $this->loadModel('product');
         $this->loadModel('datatable');
+        $this->loadModel('tree');
 
         /* Save session. */
         $this->session->set('bugList', $this->app->getURI(true), 'execution');
@@ -946,7 +947,7 @@ class execution extends control
 
         $productPairs = array('0' => $this->lang->product->all);
         foreach($products as $productData) $productPairs[$productData->id] = $productData->name;
-        $this->lang->modulePageNav = $this->product->select($productPairs, $productID, 'execution', 'bug', $executionID, $branchID, 0, '', false);
+        $this->lang->modulePageNav = $this->product->select($productPairs, $productID, 'execution', 'bug', $executionID, 0, 0, '', false);
 
         /* Header and position. */
         $title      = $execution->name . $this->lang->colon . $this->lang->execution->bug;
@@ -1009,6 +1010,28 @@ class execution extends control
         /* Process the openedBuild and resolvedBuild fields. */
         $bugs = $this->bug->processBuildForBugs($bugs);
 
+        $moduleID = $type != 'bysearch' ? $param : 0;
+        $modules  = $this->tree->getAllModulePairs('bug');
+
+        /* Get module tree.*/
+        $extra = array('executionID' => $executionID, 'orderBy' => $orderBy, 'type' => $type, 'build' => $build);
+        if($executionID and empty($productID) and count($products) > 1)
+        {
+            $moduleTree = $this->tree->getBugTreeMenu($executionID, $productID, 0, array('treeModel', 'createBugLink'), $extra);
+        }
+        elseif(!empty($products))
+        {
+            $productID  = empty($productID) ? reset($products)->id : $productID;
+            $moduleTree = $this->tree->getTreeMenu($productID, 'bug', 0, array('treeModel', 'createBugLink'), $extra + array('productID' => $productID), 'all');
+        }
+        else
+        {
+            $moduleTree = '';
+        }
+        $tree = $moduleID ? $this->tree->getByID($moduleID) : '';
+
+        $showModule  = !empty($this->config->datatable->projectBug->showModule) ? $this->config->datatable->executionBug->showModule : '';
+
         /* Assign. */
         $this->view->title           = $title;
         $this->view->position        = $position;
@@ -1029,11 +1052,17 @@ class execution extends control
         $this->view->builds          = $this->build->getBuildPairs($productID);
         $this->view->branchOption    = $branchOption;
         $this->view->branchTagOption = $branchTagOption;
-        $this->view->modulePairs     = $showModule ? $this->loadModel('tree')->getModulePairs($productID, 'bug', $showModule) : array();
         $this->view->plans           = $this->loadModel('productplan')->getPairs($productID);
         $this->view->stories         = $storyList;
         $this->view->tasks           = $taskList;
         $this->view->projectPairs    = $this->loadModel('project')->getPairsByProgram();
+        $this->view->moduleTree      = $moduleTree;
+        $this->view->modules         = $modules;
+        $this->view->moduleID        = $moduleID;
+        $this->view->moduleName      = $moduleID ? $tree->name : $this->lang->tree->all;
+        $this->view->modulePairs     = $showModule ? $this->tree->getModulePairs($productID, 'bug', $showModule) : array();
+        $this->view->setModule       = true;
+        $this->view->showBranch      = false;
 
         $this->display();
     }
