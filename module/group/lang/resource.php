@@ -1384,6 +1384,20 @@ $lang->gitlab->methodOrder[135] = 'browseTag';
 $lang->gitlab->methodOrder[140] = 'browseTagPriv';
 $lang->gitlab->methodOrder[145] = 'deleteTagPriv';
 
+/* Gitea. */
+$lang->resource->gitea = new stdclass();
+$lang->resource->gitea->browse = 'browse';
+$lang->resource->gitea->create = 'create';
+$lang->resource->gitea->edit   = 'edit';
+$lang->resource->gitea->view   = 'view';
+$lang->resource->gitea->delete = 'delete';
+
+$lang->gitlab->methodOrder[5]   = 'browse';
+$lang->gitlab->methodOrder[10]  = 'create';
+$lang->gitlab->methodOrder[15]  = 'edit';
+$lang->gitlab->methodOrder[20]  = 'view';
+$lang->gitlab->methodOrder[25]  = 'delete';
+
 /* SonarQube. */
 $lang->resource->sonarqube = new stdclass();
 $lang->resource->sonarqube->browse        = 'browse';
