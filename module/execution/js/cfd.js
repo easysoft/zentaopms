@@ -2,7 +2,7 @@ $(function()
 {
     $('[data-toggle=tooltip]').tooltip();
 
-    if(chartData)
+    if(Object.keys(chartData).length || 1)
     {
         var i = 0;
         var series     = [];
@@ -56,6 +56,7 @@ $(function()
               type: 'category',
               boundaryGap: false,
               data: chartData['labels'],
+              name: XUnit,
               axisLine:
               {
                   show: true,
@@ -70,6 +71,19 @@ $(function()
           {
               type: 'value',
               minInterval: 1,
+              name: YUnit,
+              nameTextStyle:
+              {
+                  fontWeight: 'normal'
+              },
+              axisPointer:
+              {
+                  label:
+                  {
+                      show: true,
+                      precision: 0
+                  },
+              },
               axisLine:
               {
                   show: true,
