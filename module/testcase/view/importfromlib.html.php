@@ -13,6 +13,7 @@
 <?php include '../../common/view/header.html.php';?>
 <?php js::set('flow', $config->global->flow);?>
 <?php js::set('ditto', $lang->testcase->ditto);?>
+<?php js::set('canImportModules', $canImportModules);?>
 <div id='mainMenu' class='clearfix'>
   <div class='btn-toolbar pull-left'>
     <div class='input-group w-300px'>
@@ -46,7 +47,19 @@
       </thead>
       <tbody>
         <?php $i = 0;?>
-        <?php foreach($cases as $case):?>
+        <?php foreach($cases as $id => $case):?>
+        <?php
+        $caseBranches = $branches;
+        $caseBranch   = ($branch == 'all' or empty($branch)) ? 0 : $branch;
+        foreach($caseBranches as $branchID => $branchName)
+        {
+            if(empty($canImportModules[$branchID][$case->id]))
+            {
+                unset($caseBranches[$branchID]);
+                if($caseBranch == $branchID) $caseBranch = key($caseBranches);
+            }
+        }
+        ?>
         <tr id='<?php echo $case->id;?>'>
           <td class='c-id'>
             <div class="checkbox-primary">
@@ -56,16 +69,15 @@
             <?php printf('%03d', $case->id);?>
           </td>
           <?php if($product->type != 'normal'):?>
-          <?php if($i > 0) $branches['ditto'] = $lang->testcase->ditto;?>
-          <td><?php echo html::select("branch[{$case->id}]", $branches, $i == 0 ? $branch : 'ditto', "class='form-control' onchange='updateModules($productID, this.value, $case->id)'")?></td>
+          <td><?php echo html::select("branch[{$case->id}]", $caseBranches, $caseBranch, "class='form-control' onchange='updateModules($productID, this.value, $case->id)'")?></td>
           <?php endif;?>
           <td><span class='label-pri <?php echo 'label-pri-' . $case->pri;?>' title='<?php echo zget($lang->testcase->priList, $case->pri, $case->pri);?>'><?php echo $case->pri == '0' ? '' : zget($lang->testcase->priList, $case->pri, $case->pri);?></span></td>
           <td class='text-left nobr'><?php if(!common::printLink('testcase', 'view', "caseID=$case->id", $case->title)) echo $case->title;?></td>
           <?php $libModule = zget($libModules, $case->module, '');?>
           <td class='text-left' title='<?php echo $libModule?>'><?php echo $libModule;?></td>
           <td class='text-left' data-module='<?php echo $case->module?>' style='overflow:visible'>
-            <?php if($i > 0) $modules['ditto'] = $lang->testcase->ditto;?>
-            <?php echo html::select("module[{$case->id}]", $modules, $i == 0 ? 0 : 'ditto', "class='form-control chosen'");?>
+            <?php if($i == 0) unset($canImportModules[$caseBranch][$case->id]['ditto']);?>
+            <?php echo html::select("module[{$case->id}]", $canImportModules[$caseBranch][$case->id], $i == 0 ? 0 : 'ditto', "class='form-control chosen'");?>
           </td>
           <td><?php echo zget($lang->testcase->typeList, $case->type);?></td>
         </tr>

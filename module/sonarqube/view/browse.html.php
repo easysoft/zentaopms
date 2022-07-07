@@ -12,6 +12,9 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <div id="mainMenu" class="clearfix">
+  <div class="btn-toolbar pull-left">
+    <?php echo html::a($this->createLink('sonarqube', 'browse'), "<span class='text'>{$lang->sonarqube->serverList}</span>", '', "class='btn btn-link btn-active-text'");?>
+  </div>
   <div class="btn-toolbar pull-right">
     <?php if(common::hasPriv('sonarqube', 'create')) common::printLink('sonarqube', 'create', "", "<i class='icon icon-plus'></i> " . $lang->sonarqube->create, '', "class='btn btn-primary'");?>
   </div>

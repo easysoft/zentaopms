@@ -33,6 +33,9 @@ $config->repo->editor->edit   = array('id' => 'desc', 'tools' => 'simpleTools');
 $config->repo->editor->view   = array('id' => 'commentText', 'tools' => 'simpleTools');
 $config->repo->editor->diff   = array('id' => 'commentText', 'tools' => 'simpleTools');
 
+$config->repo->switcherModuleList = array('repo', 'job', 'compile', 'mr');
+$config->repo->switcherMethodList = array('browse', 'review', 'view', 'diff', 'log', 'revision', 'blame');
+
 $config->repo->create = new stdclass();
 $config->repo->create->requiredFields = 'product,SCM,name,path,encoding,client';
 

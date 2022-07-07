@@ -68,6 +68,7 @@ $lang->moduleOrder[210] = 'dev';
 $lang->moduleOrder[215] = 'message';
 $lang->moduleOrder[220] = 'gitlab';
 $lang->moduleOrder[225] = 'mr';
+$lang->moduleOrder[230] = 'app';
 
 $lang->resource = new stdclass();
 
@@ -1145,6 +1146,7 @@ $lang->resource->repo->download        = 'downloadAction';
 $lang->resource->repo->maintain        = 'maintain';
 $lang->resource->repo->setRules        = 'setRules';
 $lang->resource->repo->apiGetRepoByUrl = 'apiGetRepoByUrl';
+$lang->resource->repo->downloadCode    = 'downloadCode';
 
 $lang->repo->methodOrder[5]  = 'create';
 $lang->repo->methodOrder[10] = 'edit';
@@ -1160,6 +1162,7 @@ $lang->repo->methodOrder[55] = 'blame';
 $lang->repo->methodOrder[60] = 'download';
 $lang->repo->methodOrder[65] = 'setRules';
 $lang->repo->methodOrder[70] = 'apiGetRepoByUrl';
+$lang->repo->methodOrder[75] = 'downloadCode';
 
 $lang->resource->ci = new stdclass();
 $lang->resource->ci->commitResult       = 'commitResult';
@@ -1440,6 +1443,12 @@ $lang->mr->methodOrder[80] = 'approval';
 $lang->mr->methodOrder[85] = 'close';
 $lang->mr->methodOrder[90] = 'reopen';
 $lang->mr->methodOrder[95] = 'addReview';
+
+/* App. */
+$lang->resource->app = new stdclass();
+$lang->resource->app->serverlink = 'serverLink';
+
+$lang->app->methodOrder[10] = 'link';
 
 /* Git. */
 $lang->resource->git = new stdclass();

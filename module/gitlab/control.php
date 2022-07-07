@@ -634,12 +634,19 @@ class gitlab extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browseUser', "gitlabID=$gitlabID")));
         }
 
-        $userPairs         = $this->loadModel('user')->getPairs('noclosed|noletter');
-        $user              = $this->gitlab->apiGetSingleUser($gitlabID, $userID);
-        $zentaoBindAccount = $this->dao->select('account')->from(TABLE_OAUTH)->where('providerType')->eq('gitlab')->andWhere('providerID')->eq($gitlabID)->andWhere('openID')->eq($user->id)->fetch('account');
+        $gitlabUser        = $this->gitlab->apiGetSingleUser($gitlabID, $userID);
+        $zentaoBindAccount = $this->dao->select('account')->from(TABLE_OAUTH)->where('providerType')->eq('gitlab')->andWhere('providerID')->eq($gitlabID)->andWhere('openID')->eq($gitlabUser->id)->fetch('account');
+
+        $users       = $this->loadModel('user')->getList();
+        $bindedUsers = $this->gitlab->getUserAccountIdPairs($gitlabID);
+        $userPairs   = array('' => '');
+        foreach($users as $user)
+        {
+            if(!isset($bindedUsers[$user->account]) or $u->account == $zentaoBindAccount) $userPairs[$user->account] = $user->realname;
+        }
 
         $this->view->title             = $this->lang->gitlab->common . $this->lang->colon . $this->lang->gitlab->user->edit;
-        $this->view->user              = $user;
+        $this->view->user              = $gitlabUser;
         $this->view->userPairs         = $userPairs;
         $this->view->zentaoBindAccount = $zentaoBindAccount;
         $this->view->gitlabID          = $gitlabID;
@@ -714,7 +721,10 @@ class gitlab extends control
             $project->isMaintainer = $this->gitlab->checkUserAccess($gitlabID, $project->id, $project, $groupIDList, 'maintainer');
         }
 
-        $gitlab = $this->gitlab->getByID($gitlabID);
+        $gitlab    = $this->gitlab->getByID($gitlabID);
+        $repos     = $this->loadModel('repo')->getGitLabRepoList($gitlabID);
+        $repoPairs = array();
+        foreach($repos as $repo) $repoPairs[$repo->path] = $repo->id;
 
         $this->view->gitlab            = $gitlab;
         $this->view->keyword           = urldecode(urldecode($keyword));
@@ -723,6 +733,7 @@ class gitlab extends control
         $this->view->gitlabID          = $gitlabID;
         $this->view->gitlabProjectList = $result['projects'];
         $this->view->orderBy           = $orderBy;
+        $this->view->repoPairs         = $repoPairs;
         $this->display();
     }
 

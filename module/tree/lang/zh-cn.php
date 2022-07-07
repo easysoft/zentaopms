@@ -55,7 +55,7 @@ $lang->tree->wordName     = '名称';
 $lang->tree->line         = "{$lang->productCommon}线名称";
 $lang->tree->cate         = '分类名称';
 $lang->tree->dir          = '目录名称';
-$lang->tree->root         = '所属根';
+$lang->tree->root         = '所属产品';
 $lang->tree->branch       = '平台/分支';
 $lang->tree->path         = '路径';
 $lang->tree->type         = '类型';
@@ -72,3 +72,11 @@ $lang->tree->short        = '简称';
 $lang->tree->all          = '所有模块';
 $lang->tree->executionDoc = "{$lang->executionCommon}文档";
 $lang->tree->product      = "所属{$lang->productCommon}";
+
+$lang->tree->emptyHistory = "暂时没有历史记录。";
+
+$lang->module = new stdclass();
+$lang->module->action = new stdclass();
+$lang->module->action->created = array('main' => "\$date, 由 <strong>\$actor</strong> 创建了 <strong>\$extra</strong>。");
+$lang->module->action->moved   = array('main' => "\$date, 由 <strong>\$actor</strong> 移动了 <strong>\$extra</strong>。");
+$lang->module->action->deleted = array('main' => "\$date, 由 <strong>\$actor</strong> 删除了 <strong>\$extra</strong>。");

@@ -208,12 +208,17 @@ class blockModel extends model
             ->fetch('count');
 
         $today = date('Y-m-d');
-        $data['delayTask'] = (int)$this->dao->select('count(*) AS count')->from(TABLE_TASK)
-            ->where('assignedTo')->eq($this->app->user->account)
-            ->andWhere('status')->in('wait,doing')
-            ->andWhere('deadline')->ne('0000-00-00')
-            ->andWhere('deadline')->lt($today)
-            ->andWhere('deleted')->eq(0)
+        $data['delayTask'] = (int)$this->dao->select('count(t1.id) AS count')->from(TABLE_TASK)->alias('t1')
+            ->leftJoin(TABLE_PROJECT)->alias('t2')->on("t1.project = t2.id")
+            ->leftJoin(TABLE_EXECUTION)->alias('t3')->on("t1.execution = t3.id")
+            ->where('t1.assignedTo')->eq($this->app->user->account)
+            ->andWhere('(t2.status')->ne('suspended')
+            ->orWhere('t3.status')->ne('suspended')
+            ->markRight(1)
+            ->andWhere('t1.status')->in('wait,doing')
+            ->andWhere('t1.deadline')->ne('0000-00-00')
+            ->andWhere('t1.deadline')->lt($today)
+            ->andWhere('t1.deleted')->eq(0)
             ->fetch('count');
         $data['delayBug'] = (int)$this->dao->select('count(*) AS count')->from(TABLE_BUG)
             ->where('assignedTo')->eq($this->app->user->account)

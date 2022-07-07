@@ -412,6 +412,7 @@ $lang->execution->ge                          = "『%s』should be >= actual beg
 $lang->execution->storyDragError              = "The {$lang->SRCommon} is still a draft or has been changed, please drag it after the review";
 $lang->execution->countTip                    = ' (%s member)';
 $lang->execution->pleaseInput                 = "Enter";
+$lang->execution->week                        = 'week';
 
 /* Statistics. */
 $lang->execution->charts = new stdclass();
@@ -428,6 +429,12 @@ $lang->execution->charts->burn->graph->showValues   = 0;
 $lang->execution->charts->burn->graph->reference    = 'Ideal';
 $lang->execution->charts->burn->graph->actuality    = 'Actual';
 $lang->execution->charts->burn->graph->delay        = 'Delay';
+
+$lang->execution->charts->cfd = new stdclass();
+$lang->execution->charts->cfd->cycleTime     = 'Average cycle time';
+$lang->execution->charts->cfd->cycleTimeTip  = 'Average cycle time of each card from development start to completion';
+$lang->execution->charts->cfd->throughput    = 'Throughput Rate';
+$lang->execution->charts->cfd->throughputTip = 'Throughput Rate = WIP / Average cycle time';
 
 $lang->execution->placeholder = new stdclass();
 $lang->execution->placeholder->code      = "Abbreviation of {$lang->executionCommon} name";

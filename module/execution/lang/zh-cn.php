@@ -412,6 +412,7 @@ $lang->execution->ge                          = "『%s』应当不小于实际�
 $lang->execution->storyDragError              = "该{$lang->SRCommon}还是草稿或已变更状态，请评审通过后再拖动";
 $lang->execution->countTip                    = '（%s人）';
 $lang->execution->pleaseInput                 = "请输入";
+$lang->execution->week                        = '周';
 
 /* 统计。*/
 $lang->execution->charts = new stdclass();
@@ -428,6 +429,12 @@ $lang->execution->charts->burn->graph->showValues   = 0;
 $lang->execution->charts->burn->graph->reference    = '参考';
 $lang->execution->charts->burn->graph->actuality    = '实际';
 $lang->execution->charts->burn->graph->delay        = '延期';
+
+$lang->execution->charts->cfd = new stdclass();
+$lang->execution->charts->cfd->cycleTime     = '平均周期时间';
+$lang->execution->charts->cfd->cycleTimeTip  = '平均每个卡片从开发启动到完成的周期时间';
+$lang->execution->charts->cfd->throughput    = '吞吐率';
+$lang->execution->charts->cfd->throughputTip = '吞吐率 = 在制品 / 平均周期时间';
 
 $lang->execution->placeholder = new stdclass();
 $lang->execution->placeholder->code      = '团队内部的简称';

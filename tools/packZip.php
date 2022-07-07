@@ -7,7 +7,7 @@ $liteVersion = isset($argv[2]) ? $argv[2] : '';
 /* File pathes. */
 $basePath    = dirname(dirname(__FILE__));
 //$releasePath = getenv('ZENTAO_RELEASE_PATH');
-$releasePath = '/home/z/ci/release/';
+$releasePath = '/home/z/ci/pip_release/';
 $releasePath = !empty($releasePath) ? $releasePath : $basePath;
 if(!file_exists($releasePath . '/zentaopms.zip')) die("Please give me encrypted packages.\n");
 

@@ -86,6 +86,7 @@ class pipelineModel extends model
         $this->dao->insert(TABLE_PIPELINE)->data($pipeline)
             ->batchCheck($this->config->pipeline->create->requiredFields, 'notempty')
             ->batchCheck("url", 'URL')
+            ->check('name', 'unique', "`type` = '$type'")
             ->autoCheck()
             ->exec();
         if(dao::isError()) return false;
@@ -116,6 +117,7 @@ class pipelineModel extends model
         $this->dao->update(TABLE_PIPELINE)->data($pipeline)
             ->batchCheck($this->config->pipeline->edit->requiredFields, 'notempty')
             ->batchCheck("url", 'URL')
+            ->check('name', 'unique', "`type` = '$type' and id <> $id")
             ->autoCheck()
             ->where('id')->eq($id)
             ->exec();

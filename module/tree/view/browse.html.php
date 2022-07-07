@@ -19,6 +19,7 @@ li.tree-item-story > .tree-actions .tree-action[data-type=delete] {display: none
 </style>
 <?php endif;?>
 <?php js::set('viewType', $viewType);?>
+<?php js::set('rootID', $rootID);?>
 <?php js::set('noSubmodule', $lang->tree->noSubmodule);?>
 <?php $this->app->loadLang('doc');?>
 <?php $hasBranch = (strpos('story|bug|case', $viewType) !== false and (!empty($root->type) && $root->type != 'normal')) ? true : false;?>
@@ -94,6 +95,9 @@ if($viewType == 'doc' or $viewType == 'api')
     <div class="panel">
       <div class="panel-heading">
         <div class="panel-title"><?php echo $childTitle;?></div>
+        <div class="panel-actions btn-toolbar">
+          <?php echo html::a($this->createLink('tree', 'viewHistory', "productID=$rootID", '', true), $lang->history,  '', "class='btn btn-sm btn-primary iframe'");?>
+        </div>
       </div>
       <div class="panel-body">
         <ul id='modulesTree' data-name='tree-<?php echo $viewType;?>'></ul>
@@ -207,6 +211,7 @@ if($viewType == 'doc' or $viewType == 'api')
 $(function()
 {
     var data = $.parseJSON('<?php echo helper::jsonEncode4Parse($tree);?>');
+    var orderModule = 0;
     var options =
     {
         initialState: 'preserve',
@@ -218,6 +223,10 @@ $(function()
             canMoveHere: function($ele, $target)
             {
                 if($ele && $target && $ele.parent().closest('li').attr('data-id') !== $target.parent().closest('li').attr('data-id')) return false;
+            },
+            start: function(e)
+            {
+                orderModule = e.element.data('id');
             }
         },
         itemCreator: function($li, item)
@@ -284,7 +293,7 @@ $(function()
                     orders['orders[' + item.id + ']'] = $li.attr('data-order') || item.order;
                 });
 
-                $.post('<?php echo $this->createLink('tree', 'updateOrder', "rootID=$rootID&viewType=$viewType");?>', orders, function(data)
+                $.post(createLink('tree', 'updateOrder', 'rootID=' + rootID + '&viewType=' + viewType +'&moduleID=' + orderModule), orders, function(data)
                 {
                     $('.main-col').load(location.href + ' .main-col .panel');
                 }).error(function()

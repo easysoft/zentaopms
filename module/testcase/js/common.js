@@ -370,7 +370,7 @@ function loadStories(productID, moduleID, num)
         if(!stories) stories = '<select id="story' + num + '" name="story[' + num + ']" class="form-control"></select>';
         if(config.currentMethod == 'batchcreate')
         {
-            for(var i = num; i < 10 ; i ++)
+            for(var i = num; i <= itemIndex ; i ++)
             {
                 if(i != num && $('#module' + i).val() != 'ditto') break;
                 var nowStories = stories.replaceAll('story' + num, 'story' + i);
@@ -425,4 +425,51 @@ function setModules(branchID, productID, num)
         $('#plan' + (num + 1)).find("option[value='ditto']").remove();
         $('#plan' + (num + 1)).trigger("chosen:updated");
     }
+}
+
+/**
+ * Show checked fields.
+ *
+ * @param  string fields
+ * @access public
+ * @return void
+ */
+function showCheckedFields(fields)
+{
+    showFields = fields;
+
+    var fieldList = ',' + fields + ',';
+    $('#formSettingForm > .checkboxes > .checkbox-primary > input').each(function()
+    {
+        var field     = ',' + $(this).val() + ',';
+        var $field    = config.currentMethod == 'create' ? $('#' + $(this).val()) : $('[name^=' + $(this).val() + ']');
+        var required  = ',' + requiredFields + ',';
+        var $fieldBox = $('.' + $(this).val() + 'Box' );
+        if(fieldList.indexOf(field) >= 0 || required.indexOf(field) >= 0)
+        {
+            $fieldBox.removeClass('hidden');
+            $field.removeAttr('disabled');
+        }
+        else if(!$fieldBox.hasClass('hidden'))
+        {
+            $fieldBox.addClass('hidden');
+            $field.attr('disabled', true);
+        }
+    });
+}
+
+/**
+ * Hidden require field.
+ *
+ * @access public
+ * @return void
+ */
+function hiddenRequireFields()
+{
+    $('#formSettingForm > .checkboxes > .checkbox-primary > input').each(function()
+    {
+        var field    = ',' + $(this).val() + ',';
+        var required = ',' + requiredFields + ',';
+        if(required.indexOf(field) >= 0) $(this).closest('div').addClass('hidden');
+    });
 }

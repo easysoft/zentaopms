@@ -1104,6 +1104,10 @@ class commonModel extends model
                 $executionID = $menuItem->link['vars'];
                 commonModel::buildMoreButton($executionID);
             }
+            elseif($menuItem->link['module'] == 'app' and $menuItem->link['method'] == 'serverlink')
+            {
+                commonModel::buildAppButton();
+            }
             else
             {
                 if($menuItem->link)
@@ -1741,6 +1745,45 @@ EOD;
 
         if(count($executionPairs) > 10) $html .= '<li>' . html::a(helper::createLink('project', 'execution', "status=all&projectID={$object->project}"), $lang->preview . $lang->more, '', "data-app='project' style='padding: 2px 10px'") . '</li>';
 
+        $html .= "</ul></li>\n";
+
+        echo $html;
+    }
+
+    /**
+     * Build devops app button.
+     *
+     * @static
+     * @access public
+     * @return void
+     */
+    public static function buildAppButton()
+    {
+        if(defined('TUTORIAL')) return;
+        global $app, $config, $lang;
+
+        $pipelinePairs = array();
+        $condition     = '';
+        if(!$app->user->admin)
+        {
+            $types = '';
+            foreach($config->pipelineTypeList as $pipelineType)
+            {
+                if(commonModel::hasPriv($pipelineType, 'browse')) $types .= "'$pipelineType',";
+            }
+            if(empty($types)) return;
+            $condition .= ' AND `type` in (' . trim($types, ',') . ')';
+        }
+        $pipelineList = $app->dbh->query("SELECT type,name,url FROM " . TABLE_PIPELINE . " WHERE `deleted` = '0' $condition order by type")->fetchAll();
+        if(empty($pipelineList)) return;
+
+        $html  = "<li class='dropdown dropdown-hover'><a href='javascript:;' data-toggle='dropdown'>{$lang->app->common}<span class='caret'></span></a>";
+        $html .= "<ul class='dropdown-menu'>";
+
+        foreach($pipelineList as $pipeline)
+        {
+            $html .= "<li style='max-width: 300px;'>" . html::a($pipeline->url, "[{$pipeline->type}] {$pipeline->name}", '', "title='{$pipeline->name}' class='text-ellipsis' style='padding: 2px 10px' target='_blank'") . '</li>';
+        }
         $html .= "</ul></li>\n";
 
         echo $html;

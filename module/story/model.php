@@ -958,6 +958,7 @@ class storyModel extends model
 
             unset($oldStory->parent);
             unset($story->parent);
+            if(($this->config->edition == 'biz' || $this->config->edition == 'max') && $oldStory->feedback) $this->loadModel('feedback')->updateStatus('story', $oldStory->feedback, $story->status, $oldStory->status);
             return common::createChanges($oldStory, $story);
         }
     }
@@ -1065,6 +1066,8 @@ class storyModel extends model
                     $actionID = $this->loadModel('action')->create('story', $parentID, $action, '', '', '', false);
                     $this->action->logHistory($actionID, $changes);
                 }
+
+                if(($this->config->edition == 'biz' || $this->config->edition == 'max') && $oldParentStory->feedback) $this->loadModel('feedback')->updateStatus('story', $oldParentStory->feedback, $newParentStory->status, $oldParentStory->status);
             }
         }
         else
@@ -1290,6 +1293,12 @@ class storyModel extends model
                     if($story->type == 'story') $this->batchChangeStage(array($storyID), $story->stage);
                     if($story->closedReason == 'done') $this->loadModel('score')->create('story', 'close');
                     $allChanges[$storyID] = common::createChanges($oldStory, $story);
+
+                    if(($this->config->edition == 'biz' || $this->config->edition == 'max') && $oldStory->feedback && !isset($feedbacks[$oldStory->feedback]))
+                    {
+                        $feedbacks[$oldStory->feedback] = $oldStory->feedback;
+                        $this->loadModel('feedback')->updateStatus('story', $oldStory->feedback, $story->status, $oldStory->status);
+                    }
                 }
                 else
                 {
@@ -1605,6 +1614,8 @@ class storyModel extends model
         {
             $this->setStage($storyID);
             $this->loadModel('score')->create('story', 'close', $storyID);
+
+            if(($this->config->edition == 'biz' || $this->config->edition == 'max') && $oldStory->feedback) $this->loadModel('feedback')->updateStatus('story', $oldStory->feedback, $story->status, $oldStory->status);
         }
         return common::createChanges($oldStory, $story);
     }
@@ -1668,6 +1679,12 @@ class storyModel extends model
                 if($oldStory->parent > 0) $this->updateParentStatus($storyID, $oldStory->parent);
                 $this->setStage($storyID);
                 $allChanges[$storyID] = common::createChanges($oldStory, $story);
+
+                if(($this->config->edition == 'biz' || $this->config->edition == 'max') && $oldStory->feedback && !isset($feedbacks[$oldStory->feedback]))
+                {
+                    $feedbacks[$oldStory->feedback] = $oldStory->feedback;
+                    $this->loadModel('feedback')->updateStatus('story', $oldStory->feedback, $story->status, $oldStory->status);
+                }
             }
             else
             {
@@ -3910,7 +3927,7 @@ class storyModel extends model
                             if($story->stage == 'projected') $title = $this->lang->story->subDivideTip['projected'];
                         }
                     }
-                    $menu .= $this->buildMenu('story', 'batchCreate', "productID=$story->product&branch=$story->branch&module=$story->module&$params&executionID={$this->session->project}", $story, $type, 'split', '', 'showinonlybody', '', '', $title);
+                    $menu .= $this->buildMenu('story', 'batchCreate', "productID=$story->product&branch=$story->branch&module=$story->module&$params&executionID={$this->session->project}&plan={$story->plan}&type={$story->type}", $story, $type, 'split', '', 'showinonlybody', '', '', $title);
                 }
                 if($this->app->rawModule == 'projectstory' and $this->config->vision != 'lite') $menu .= $this->buildMenu('projectstory', 'unlinkStory', "projectID={$this->session->project}&$params", $story, $type, 'unlink', 'hiddenwin', 'showinonlybody');
 
@@ -4072,7 +4089,11 @@ class storyModel extends model
 
             foreach($stories as $story)
             {
-                if(!isset($group[$story->id])) continue;
+                if(!isset($group[$story->id]))
+                {
+                    unset($stories[$story->id]);
+                    continue;
+                }
                 $story->children = $this->getByList($group[$story->id]);
             }
         }
@@ -4356,7 +4377,7 @@ class storyModel extends model
                 {
                     $showBranch = isset($this->config->product->browse->showBranch) ? $this->config->product->browse->showBranch : 1;
                 }
-                if($storyType == 'requirement') echo '<span class="label label-badge label-light">SR</span> ';
+                if($storyType == 'requirement') echo '<span class="label label-badge label-light">' .$this->lang->story->childrenAB. '</span> ';
                 if($story->parent > 0 and isset($story->parentName)) $story->title = "{$story->parentName} / {$story->title}";
                 if(isset($branches[$story->branch]) and $showBranch and $this->config->vision == 'rnd') echo "<span class='label label-outline label-badge' title={$branches[$story->branch]}>{$branches[$story->branch]}</span> ";
                 if($story->module and isset($modulePairs[$story->module])) echo "<span class='label label-gray label-badge'>{$modulePairs[$story->module]}</span> ";

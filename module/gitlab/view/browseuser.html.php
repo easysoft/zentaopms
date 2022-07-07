@@ -14,20 +14,20 @@
 <div id="mainMenu" class="clearfix">
   <?php echo $this->gitlab->getGitlabMenu($gitlabID, 'user');?>
   <div class="btn-toolbar pull-left">
-    <form id='gitlabForm' method='post'>
+    <form id='gitlabForm' method='post' class="not-watch">
       <?php echo html::input('keyword', $keyword, "class='form-control' placeholder='{$lang->gitlab->placeholderSearch}' style='display: inline-block;width:auto;margin:0 10px'");?>
       <a id="gitlabSearch" class="btn btn-primary"><?php echo $lang->gitlab->search?></a>
     </form>
   </div>
   <div class="btn-toolbar pull-right">
-    <?php common::printLink('gitlab', 'createUser', "gitlabID=$gitlabID", "<i class='icon icon-plus'></i> " . $lang->gitlab->user->create, '', "class='btn btn-primary'");?>
+    <?php if($isAdmin) common::printLink('gitlab', 'createUser', "gitlabID=$gitlabID", "<i class='icon icon-plus'></i> " . $lang->gitlab->user->create, '', "class='btn btn-primary'");?>
   </div>
 </div>
 <?php if(empty($gitlabUserList)):?>
 <div class="table-empty-tip">
   <p>
     <span class="text-muted"><?php echo $lang->noData;?></span>
-    <?php echo html::a($this->createLink('gitlab', 'createProject', "gitlabID=$gitlabID"), "<i class='icon icon-plus'></i> " . $lang->gitlab->user->create, '', "class='btn btn-info'");?>
+    <?php if($isAdmin) echo html::a($this->createLink('gitlab', 'createProject', "gitlabID=$gitlabID"), "<i class='icon icon-plus'></i> " . $lang->gitlab->user->create, '', "class='btn btn-info'");?>
   </p>
 </div>
 <?php else:?>
@@ -58,8 +58,8 @@
           <td class='text' title='<?php echo substr($gitlabUser->lastActivityOn, 0, 10);?>'><?php echo substr($gitlabUser->lastActivityOn, 0, 10);?></td>
           <td class='c-actions text-left'>
             <?php
-            common::printLink('gitlab', 'editUser', "gitlabID=$gitlabID&userID=$gitlabUser->id", "<i class='icon icon-edit'></i> ", '', "title='{$lang->gitlab->user->edit}' class='btn btn-primary'");
-            if(common::hasPriv('gitlab', 'delete')) echo html::a($this->createLink('gitlab', 'deleteUser', "gitlabID=$gitlabID&userID=$gitlabUser->id"), '<i class="icon-trash"></i>', 'hiddenwin', "title='{$lang->gitlab->deleteUser}' class='btn'" . ($isAdmin ? '' : ' disabled'));
+            echo common::buildIconButton('gitlab', 'editUser', "gitlabID=$gitlabID&userID=$gitlabUser->id", '', 'list', 'edit', '', '', false, '', '', 0, $isAdmin);
+            echo common::buildIconButton('gitlab', 'deleteUser', "gitlabID=$gitlabID&userID=$gitlabUser->id", '', 'list', 'trash', 'hiddenwin', '', false, '', '', 0, $isAdmin);
             ?>
           </td>
         </tr>

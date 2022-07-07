@@ -221,6 +221,7 @@ $config->openMethods[] = 'kanban.finishcard';
 $config->openMethods[] = 'kanban.deleteobjectcard';
 $config->openMethods[] = 'admin.ignore';
 $config->openMethods[] = 'personnel.unbindwhitelist';
+$config->openMethods[] = 'tree.viewhistory';
 
 /* Define the tables. */
 define('TABLE_COMPANY',       '`' . $config->db->prefix . 'company`');
@@ -377,6 +378,8 @@ $config->objectTables['stage']        = TABLE_STAGE;
 $config->objectTables['apistruct']    = TABLE_APISTRUCT;
 
 $config->newFeatures = array('introduction', 'tutorial', 'youngBlueTheme', 'visions');
+
+$config->pipelineTypeList = array('gitlab', 'sonarqube', 'jenkins');
 
 /* Program privs.*/
 $config->programPriv = new stdclass();

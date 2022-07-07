@@ -16,7 +16,7 @@
 <div id="mainMenu" class="clearfix">
   <?php echo $this->gitlab->getGitlabMenu($gitlabID, 'project');?>
   <div class="btn-toolbar pull-left">
-    <form id='gitlabForm' method='post'>
+    <form id='gitlabForm' method='post' class="not-watch">
       <?php echo html::input('keyword', $keyword, "class='form-control' placeholder='{$lang->gitlab->placeholderSearch}' style='display: inline-block;width:auto;margin:0 10px'");?>
       <a id="gitlabSearch" class="btn btn-primary"><?php echo $lang->gitlab->search?></a>
     </form>
@@ -45,7 +45,7 @@
           <th class='c-name text-left'><?php common::printOrderLink('name', $orderBy, $vars, $lang->gitlab->project->name);?></th>
           <th class='text-left'></th>
           <th class='text-left'><?php echo $lang->gitlab->lastUpdate;?></th>
-          <th class='c-actions-4'><?php echo $lang->actions;?></th>
+          <th class='c-actions-8'><?php echo $lang->actions;?></th>
         </tr>
       </thead>
       <tbody>
@@ -60,13 +60,13 @@
           <td class='text' title='<?php echo substr($gitlabProject->last_activity_at, 0, 10);?>'><?php echo substr($gitlabProject->last_activity_at, 0, 10);?></td>
           <td class='c-actions text-left'>
             <?php
-            $maintainerClass  = $gitlabProject->isMaintainer ? '' : 'disabled';
-            $ownerClass       = $gitlabProject->adminer ? '' : 'disabled';
-            $emptyBranchClass = $gitlabProject->default_branch ? '' : 'disabled';
-            common::printLink('gitlab', 'browseBranchPriv', "gitlabID=$gitlabID&projectID=$gitlabProject->id", "<i class='icon icon-branch-lock'></i> ", '', "title='{$lang->gitlab->branch->accessLevel}' class='btn {$maintainerClass} {$emptyBranchClass}'");
-            common::printLink('gitlab', 'browseTagPriv', "gitlabID=$gitlabID&projectID=$gitlabProject->id", "<i class='icon icon-tag-lock'></i> ", '', "title='{$lang->gitlab->browseTagPriv}' class='btn {$maintainerClass} {$emptyBranchClass}'");
-            common::printLink('gitlab', 'editProject', "gitlabID=$gitlabID&projectID=$gitlabProject->id", "<i class='icon icon-edit'></i> ", '', "title='{$lang->gitlab->project->edit}' class='btn {$ownerClass}'");
-            if(common::hasPriv('gitlab', 'delete')) echo html::a($this->createLink('gitlab', 'deleteProject', "gitlabID=$gitlabID&projectID=$gitlabProject->id"), '<i class="icon-trash"></i>', 'hiddenwin', "title='{$lang->gitlab->deleteProject}' class='btn {$ownerClass}'");
+            echo common::buildIconButton('gitlab', 'browseBranchPriv', "gitlabID=$gitlabID&projectID=$gitlabProject->id", '', 'list', 'branch-lock', '', '', false, '', '', 0, ($gitlabProject->isMaintainer and $gitlabProject->default_branch));
+            echo common::buildIconButton('gitlab', 'browseTagPriv', "gitlabID=$gitlabID&projectID=$gitlabProject->id", '', 'list', 'tag-lock', '', '', false, '', '', 0, ($gitlabProject->isMaintainer and $gitlabProject->default_branch));
+            echo common::buildIconButton('gitlab', 'manageProjectMembers', 'repoID=' . zget($repoPairs, $gitlabProject->id), '', 'list', 'team', '', '', false, '', '', 0, isset($repoPairs[$gitlabProject->id]));
+            echo common::buildIconButton('gitlab', 'createWebhook', 'repoID=' . zget($repoPairs, $gitlabProject->id), '', 'list', 'change', 'hiddenwin', '', false, '', '', 0, isset($repoPairs[$gitlabProject->id]));
+            echo common::buildIconButton('gitlab', 'importIssue', 'repoID=' . zget($repoPairs, $gitlabProject->id), '', 'list', 'link', '', '', false, '', '', 0, isset($repoPairs[$gitlabProject->id]));
+            echo common::buildIconButton('gitlab', 'editProject', "gitlabID=$gitlabID&projectID=$gitlabProject->id", '', 'list', 'edit', '', '', false, '', '', 0, $gitlabProject->adminer);
+            echo common::buildIconButton('gitlab', 'deleteProject', "gitlabID=$gitlabID&projectID=$gitlabProject->id", '', 'list', 'trash', 'hiddenwin', '', false, '', '', 0, $gitlabProject->adminer);
             ?>
           </td>
         </tr>

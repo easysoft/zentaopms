@@ -27,10 +27,25 @@ $lang->repo->tag             = 'Tag';
 $lang->repo->addWebHook      = 'Add Webhook';
 $lang->repo->apiGetRepoByUrl = 'API: Get repo by URL';
 
+$lang->repo->browseAction    = 'Browse Repo';
+$lang->repo->createAction    = 'Create Repo';
+$lang->repo->editAction      = 'Edit Repo';
+$lang->repo->diffAction      = 'Diff Revision';
+$lang->repo->downloadAction  = 'Download File';
+$lang->repo->revisionAction  = 'Revision Detail';
+$lang->repo->blameAction     = 'Blame';
+$lang->repo->reviewAction    = 'Review List';
+$lang->repo->downloadCode    = 'Download Code';
+$lang->repo->downloadZip     = 'Download compressed package';
+$lang->repo->sshClone        = 'Clone by SSH';
+$lang->repo->httpClone       = 'Clone by HTTP';
+
 $lang->repo->submit     = 'Gửi';
 $lang->repo->cancel     = 'Hủy';
 $lang->repo->addComment = 'Thêm nhận xét';
 
+$lang->repo->copy     = 'Click to copy';
+$lang->repo->copied   = 'Copy successful';
 $lang->repo->module   = 'Module';
 $lang->repo->type     = 'Loại';
 $lang->repo->assign   = 'Giao cho';

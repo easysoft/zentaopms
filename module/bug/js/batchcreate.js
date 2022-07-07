@@ -22,6 +22,7 @@ $(function()
         var link = createLink('custom', 'ajaxSaveCustomFields', 'module=bug&section=custom&key=batchCreateFields');
         $.post(link, {'fields' : fields}, function()
         {
+            showFields = fields;
             showCheckedFields(fields);
             $('#formSetting').parent().removeClass('open');
 
@@ -55,8 +56,6 @@ $(function()
  */
 function showCheckedFields(fields)
 {
-    showFields = fields;
-
     var fieldList = ',' + fields + ',';
     $('#formSettingForm > .checkboxes > .checkbox-primary > input').each(function()
     {
@@ -74,22 +73,6 @@ function showCheckedFields(fields)
             $fieldBox.addClass('hidden');
             $field.attr('disabled', true);
         }
-    });
-}
-
-/**
- * Hidden require field.
- *
- * @access public
- * @return void
- */
-function hiddenRequireFields()
-{
-    $('#formSettingForm > .checkboxes > .checkbox-primary > input').each(function()
-    {
-        var field    = ',' + $(this).val() + ',';
-        var required = ',' + requiredFields + ',';
-        if(required.indexOf(field) >= 0) $(this).closest('div').addClass('hidden');
     });
 }
 
@@ -236,3 +219,35 @@ $(document).keydown(function(event)
         inputFocusJump('down');
     }
 });
+
+/**
+ * Add item.
+ *
+ * @param  object $obj
+ * @access public
+ * @return void
+ */
+function addItem(obj)
+{
+    var item = $('#addItem').html().replace(/%i%/g, itemIndex + 1);
+    $('<tr class="addedItem">' + item  + '</tr>').insertAfter($(obj).closest('tr'));
+
+    $(obj).closest('tr').next().find(".form-date").datepicker();
+    $(obj).closest('tr').next().find('div[id$=_chosen]').remove();
+    $(obj).closest('tr').next().find('.chosen').next('.picker').remove();
+    $(obj).closest('tr').next().find('.chosen').chosen();
+
+    itemIndex ++;
+}
+
+/**
+ * Delete item.
+ *
+ * @param  object $obj
+ * @access public
+ * @return void
+ */
+function deleteItem(obj)
+{
+    $(obj).closest('tr').remove();
+}

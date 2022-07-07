@@ -9,11 +9,12 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
+<?php js::set('repoID',   $repoID);?>
+<?php js::set('branch',   $branchID);?>
+<?php js::set('lang',     $lang->repo);?>
+<?php js::set('cloneUrl', $cloneUrl);?>
 <div id='mainMenu' class='clearfix'>
   <div class='btn-toolbar pull-left'>
-    <div class='btn-group' id="swapper">
-      <?php echo $this->repo->getReposMenu($repo, $objectID);?>
-    </div>
     <?php if(!empty($branchesAndTags)):?>
     <div class='btn-group'>
       <a href='javascript:;' class='btn btn-link btn-limit text-ellipsis' data-toggle='dropdown' style="max-width: 120px;"><span class='text' title='<?php echo $branchesAndTags[$branchID];?>'><?php echo $branchesAndTags[$branchID];?></span> <span class='caret'></span></a>
@@ -85,7 +86,9 @@
   <div class="btn-toolbar pull-right">
     <span class='last-sync-time'><?php echo $lang->repo->notice->lastSyncTime . $cacheTime?></span>
     <?php echo html::a($this->repo->createLink('browse', "repoID=$repoID&branchID=" . $base64BranchID . "&objectID=$objectID&path=" . $this->repo->encodePath($path) . "&revision=$revision&refresh=1"), "<i class='icon icon-refresh'></i> " . $lang->refresh, '', "class='btn btn-primary' data-app={$app->tab}");?>
-    <?php if($repo->SCM == 'Gitlab' and common::hasPriv('gitlab', 'createBranch')) echo html::a($this->createLink('gitlab', 'createBranch', "gitlabID={$repo->gitlab}&projectID={$repo->project}"), "<i class='icon icon-sm icon-plus'></i> " . $lang->gitlab->createBranch, '', "class='btn btn-primary'");?>
+    <?php if(common::hasPriv('repo', 'downloadCode')): ?>
+    <button type="button" class="btn btn-primary" data-toggle="popover" id="downloadCode" title="<?php echo $lang->repo->downloadCode;?>"><i class='icon icon-sm icon-download'></i> <?php echo $lang->repo->download;?> <i class='icon icon-sm icon-caret-down'></i></button>
+    <?php endif;?>
   </div>
 </div>
 <div id="mainContent" class="main-row fade">

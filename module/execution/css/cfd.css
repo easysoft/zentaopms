@@ -1,11 +1,34 @@
 .main-content > h2 {font-size: 16px;}
-#cfdWrapper {max-width: 1400px; margin: 0 auto; padding: 25px 100px 10px; position: relative;}
-#cfdYUnit {position: absolute; color: #CBD0DB; top: 0; left: 90px;}
-#cfdXUnit {position: absolute; color: #CBD0DB; bottom: 20px; right: 60px;}
-#cfdLegend {position: absolute; right: 0; width: 80px; height: 60px; top: 50%; margin-top: -30px; line-height: 30px; color: #838A9D; font-size: 12px;}
-#cfdLegend > div {position: relative; padding-left: 30px;}
-#cfdLegend > div > .barline {position: absolute; width: 20px; left: 0; top: 13px; height: 3px; background: #EEEEEE;}
-#cfdLegend .line-real .bg-primary {background: #1183fb;}
-#cfdLegend .line-real .bg-delay   {background: red;}
 
 .pull-left .input-control {margin-right: 10px;}
+
+#cfdWrapper {max-width: 1450px; padding: 25px 0px 10px; position: relative}
+#cfdYUnit {position: absolute; color: #CBD0DB; top: 40px; left: 30px}
+#cfdXUnit {position: absolute; color: #CBD0DB; bottom: 20px; left: 1200px}
+@media screen and (max-width: 1920px)
+{
+#cfdChart {width:1400px !important; height:600px !important}
+#mainContent {min-width: 1550px !important;}
+#burnStatistics {left: 1400px !important;}
+#cfdXUnit {left: 1400px;}
+}
+@media screen and (max-width: 1680px)
+{
+#cfdChart {width:1150px !important; height:500px !important}
+#mainContent {min-width: 1350px !important;}
+#burnStatistics {left: 1150px !important;}
+#cfdXUnit {left: 1150px;}
+}
+@media screen and (max-width: 1366px)
+{
+#cfdChart {width:1000px !important; height:400px !important}
+#mainContent {min-width: 1200px !important;}
+#burnStatistics {left: 1000px !important;}
+#cfdXUnit {left: 1000px;}
+}
+
+#mainContent {min-width: 1400px;}
+#burnStatistics {position: absolute; width: 180px; left: 1200px; height: 200px; top: 20%; margin-top: -30px; line-height: 30px; color: #838A9D; font-size: 12px; border: 1px solid #dcdcdc; background-color: #F8F8F8; padding: 15px 20px; color: #3c4353; border-radius: 8px;}
+#burnStatistics .bg-primary {margin-right: 5px;}
+#burnStatistics .icon-help {color: black;}
+#burnStatistics h3 {margin-top: 10px; text-indent: 10px; margin-bottom: 30px;}

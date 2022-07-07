@@ -228,10 +228,9 @@ foreach($fieldParams as $fieldName => $param)
       <td class='w-160px hidden' rowspan='2' id='userQueries'>
         <h4><?php echo $lang->search->savedQuery;?></h4>
         <ul>
-          <?php foreach($queries as $queryID => $queryName):?>
-          <?php if(empty($queryID)) continue;?>
-          <?php $query = $this->search->getByID($queryID);?>
-          <li><?php echo html::a("javascript:executeQuery($queryID)", $queryName . ((common::hasPriv('search', 'deleteQuery') and $this->app->user->account == $query->account) ? '<i class="icon icon-close"></i>' : ''), '', "class='label user-query' data-query-id='$queryID' title='{$queryName}'");?></li>
+          <?php foreach($queries as $query):?>
+          <?php if(empty($query->id)) continue;?>
+          <li><?php echo html::a("javascript:executeQuery($query->id)", $query->title . ((common::hasPriv('search', 'deleteQuery') and $this->app->user->account == $query->account) ? '<i class="icon icon-close"></i>' : ''), '', "class='label user-query' data-query-id='$query->id' title='{$query->title}'");?></li>
           <?php endforeach;?>
         </ul>
       </td>

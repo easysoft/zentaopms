@@ -264,7 +264,11 @@
         }
 
         /* Show page app and update iframe source */
-        if(url) reloadApp(appCode, url, true);
+        if (url)
+        {
+            app.$app.toggleClass('open-from-hidden', app.$app.is(':hidden'))
+            reloadApp(appCode, url, true);
+        }
         app.zIndex = openedAppZIndex++;
         app.$app.show().css('z-index', app.zIndex);
 
@@ -457,6 +461,7 @@
 
         if(!notTriggerEvent) app.$app.trigger('reloadapp', app);
 
+        if(url) $(iframe.contentWindow.document.body).hide(); // Code for task #59703.
         app.$app.addClass('loading');
         if(app._loadTimer) clearTimeout(app._loadTimer);
         app._loadTimer = setTimeout(function()

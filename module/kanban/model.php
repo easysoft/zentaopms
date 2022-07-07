@@ -1302,16 +1302,19 @@ class kanbanModel extends model
 
                     if(empty($object)) continue;
 
-                    $cardData['id']         = $object->id;
-                    $cardData['order']      = $cardOrder++;
-                    $cardData['pri']        = $object->pri ? $object->pri : '';
-                    $cardData['estimate']   = $cell->type == 'bug' ? '' : $object->estimate;
-                    $cardData['assignedTo'] = $object->assignedTo;
-                    $cardData['deadline']   = $cell->type == 'story' ? '' : $object->deadline;
-                    $cardData['severity']   = $cell->type == 'bug' ? $object->severity : '';
-                    $cardData['acl']        = 'open';
-                    $cardData['lane']       = $laneID;
-                    $cardData['column']     = $cell->column;
+                    $cardData['id']             = $object->id;
+                    $cardData['order']          = $cardOrder++;
+                    $cardData['pri']            = $object->pri ? $object->pri : '';
+                    $cardData['estimate']       = $cell->type == 'bug' ? '' : $object->estimate;
+                    $cardData['assignedTo']     = $object->assignedTo;
+                    $cardData['deadline']       = $cell->type == 'story' ? '' : $object->deadline;
+                    $cardData['severity']       = $cell->type == 'bug' ? $object->severity : '';
+                    $cardData['acl']            = 'open';
+                    $cardData['lane']           = $laneID;
+                    $cardData['column']         = $cell->column;
+                    $cardData['openedDate']     = $object->openedDate;
+                    $cardData['closedDate']     = $object->closedDate;
+                    $cardData['lastEditedDate'] = $object->lastEditedDate;
 
                     if($cell->type == 'task')
                     {
