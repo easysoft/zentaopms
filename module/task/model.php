@@ -640,8 +640,8 @@ class taskModel extends model
         if($oldParentTask->parent != '-1') $this->dao->update(TABLE_TASK)->set('parent')->eq('-1')->where('id')->eq($parentID)->exec();
         $this->computeWorkingHours($parentID);
 
-        $childrenStatus       = $this->dao->select('id,status')->from(TABLE_TASK)->where('parent')->eq($parentID)->andWhere('deleted')->eq(0)->fetchPairs('status', 'status');
-        $childrenClosedReason = $this->dao->select('closedReason')->from(TABLE_TASK)->where('parent')->eq($parentID)->andWhere('deleted')->eq(0)->fetchPairs('closedReason');
+        $childrenStatus       = $this->dao->select('id,status')->from(TABLE_TASK)->where('parent')->eq($parentID)->andWhere('deleted')->eq('0')->fetchPairs('status', 'status');
+        $childrenClosedReason = $this->dao->select('closedReason')->from(TABLE_TASK)->where('parent')->eq($parentID)->andWhere('deleted')->eq('0')->fetchPairs('closedReason');
         if(empty($childrenStatus)) return $this->dao->update(TABLE_TASK)->set('parent')->eq('0')->where('id')->eq($parentID)->exec();
 
         $status = '';
@@ -755,7 +755,7 @@ class taskModel extends model
                     $this->action->logHistory($actionID, $changes);
                 }
 
-                if(($this->config->edition == 'biz' || $this->config->edition == 'max') && $parentTask->feedback) $this->loadModel('feedback')->udpateStatus('task', $parentTask->feedback, $status, $parentTask->status);
+                if(($this->config->edition == 'biz' || $this->config->edition == 'max') && $oldParentTask->feedback) $this->loadModel('feedback')->updateStatus('task', $oldParentTask->feedback, $newParentTask->status, $oldParentTask->status);
             }
         }
         else
