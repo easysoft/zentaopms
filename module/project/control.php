@@ -1076,10 +1076,14 @@ class project extends control
         {
             $moduleTree = $this->tree->getBugTreeMenu($projectID, $productID, 0, array('treeModel', 'createBugLink'), $extra);
         }
+        elseif(!empty($products))
+        {
+            $productID  = reset($products)->id;
+            $moduleTree = $this->tree->getTreeMenu($productID, 'bug', 0, array('treeModel', 'createBugLink'), $extra + array('productID' => $productID), 'all');
+        }
         else
         {
-            $productID  = empty($productID) ? 0 : $productID;
-            $moduleTree = $this->tree->getTreeMenu($productID, 'bug', 0, array('treeModel', 'createBugLink'), $extra + array('productID' => $productID), 'all');
+            $moduleTree = '';
         }
         $tree = $moduleID ? $this->tree->getByID($moduleID) : '';
 
