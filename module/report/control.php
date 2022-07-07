@@ -329,7 +329,6 @@ class report extends control
             $users    = array('' => $this->lang->report->annualData->allUser) + $users;
             $accounts = $this->loadModel('dept')->getDeptUserPairs($dept);
         }
-a($this->app->user->account);
         if(!$this->app->user->admin)
         {
             foreach($depts as $id => $name) if($id != $this->app->user->dept) unset($depts[$id]);
