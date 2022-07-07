@@ -53,7 +53,6 @@ js::set('projectID', $projectID);
 js::set('vision', $this->config->vision);
 js::set('productCount', count($productNames));
 js::set('executionID', $execution->id);
-js::set('reviewStoryParis', $reviewStoryParis);
 js::set('needLinkProducts', $lang->execution->needLinkProducts);
 js::set('lastUpdateData', '');
 js::set('rdSearchValue', '');

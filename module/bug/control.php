@@ -404,11 +404,12 @@ class bug extends control
             if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $bugID));
 
             /* If link from no head then reload. */
-            if(isset($output['executionID']) and isonlybody())
+            if(isonlybody())
             {
-                $executionID = $this->post->execution ? $this->post->execution : $output['executionID'];
+                $executionID = isset($output['executionID']) ? $output['executionID'] : $this->session->execution;
+                $executionID = $this->post->execution ? $this->post->execution : $executionID;
                 $execution   = $this->loadModel('execution')->getByID($executionID);
-                if($executionID == $output['executionID'] and $this->app->tab == 'execution' and $execution->type == 'kanban')
+                if($this->app->tab == 'execution' and $execution->type == 'kanban')
                 {
                     $execLaneType  = $this->session->execLaneType ? $this->session->execLaneType : 'all';
                     $execGroupBy   = $this->session->execGroupBy ? $this->session->execGroupBy : 'default';
