@@ -419,12 +419,7 @@ class tree extends control
         if(!empty($_POST))
         {
             $this->tree->updateOrder($_POST['orders']);
-            if($viewType == 'story' and !empty($rootID) and !empty($moduleID))
-            {
-                $sql     = "objectType = 'module' and objectID = $moduleID and date='" . helper::now() . "' and action = 'moved'" ;
-                $actions = $this->loadModel('action')->getBySQL($sql, 'id_desc');
-                if(count($actions) == 0) $this->action->create('module', $rootID, 'moved', '', $moduleID);
-            }
+            if($viewType == 'story' and !empty($rootID) and !empty($moduleID)) $this->action->create('module', $rootID, 'moved', '', $moduleID);
             die(js::reload('parent'));
         }
     }
