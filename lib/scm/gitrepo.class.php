@@ -580,6 +580,25 @@ class GitRepo
     }
 
     /**
+     * Get clone url.
+     *
+     * @access public
+     * @return string
+     */
+    public function getCloneUrl()
+    {
+        $url      = new stdclass();
+        $remote   = execCmd(escapeCmd("$this->client remote -v"), 'array');
+        $pregHttp = '/http(s)?:\/\/(www\.)?[a-zA-Z0-9][-a-zA-Z0-9]{0,62}(\.[a-zA-Z0-9][-a-zA-Z0-9]{0,62})+(:\d+)*(\/\w+)*\.git/';
+        $pregSSH  = '/ssh:\/\/git@[a-zA-Z0-9][-a-zA-Z0-9]{0,62}(\.[a-zA-Z0-9][-a-zA-Z0-9]{0,62})+(:\d+)*(\/\w+)*\.git/';
+
+        if(preg_match($pregHttp, $remote[0], $matches)) $url->http = $matches[0];
+        if(preg_match($pregSSH,  $remote[0], $matches)) $url->ssh  = $matches[0];
+
+        return $url;
+    }
+
+    /**
      * Parse log.
      *
      * @param  array  $logs

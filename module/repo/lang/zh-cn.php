@@ -39,6 +39,7 @@ $lang->repo->downloadCode    = '下载代码';
 $lang->repo->downloadZip     = '下载压缩包';
 $lang->repo->sshClone        = '使用SSH克隆';
 $lang->repo->httpClone       = '使用HTTP克隆';
+$lang->repo->cloneUrl        = '克隆地址';
 
 $lang->repo->submit     = '提交';
 $lang->repo->cancel     = '取消';
@@ -193,6 +194,7 @@ $lang->repo->error->deleted       = "删除代码库失败，当前代码库有�
 $lang->repo->error->linkedJob     = "删除代码库失败，当前代码库与构建有关联，请取消关联或删除构建。";
 $lang->repo->error->clientPath    = "客户端安装目录不能有空格！";
 $lang->repo->error->notFound      = "代码库『%s』路径 %s 不存在，请确认此代码库是否已在本地服务器被删除";
+$lang->repo->error->noWritable    = '%s 不可写！请检查该目录权限，否则无法下载。';
 
 $lang->repo->syncTips          = '请参照<a target="_blank" href="https://www.zentao.net/book/zentaopmshelp/207.html">这里</a>，设置代码库定时同步。';
 $lang->repo->encodingsTips     = "提交日志的编码，可以用逗号连接起来的多个，比如utf-8。";
