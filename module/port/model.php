@@ -49,6 +49,7 @@ class portModel extends model
 
         if(empty($fields)) return false;
 
+        $fieldList = array();
         /* build module fieldList. */
         foreach ($fields as $key => $field)
         {
@@ -67,11 +68,10 @@ class portModel extends model
 
             $modelFieldList = $this->initForeignKey($model, $field, $modelFieldList);
             $modelFieldList['values'] = $this->initValues($model, $field, $modelFieldList);
-
-            $this->modelConfig->fieldList[$field] = $modelFieldList;
+            $fieldList[$field] = $modelFieldList;
         }
 
-        return $this->modelConfig->fieldList;
+        return $fieldList;
     }
 
     /**
@@ -129,6 +129,7 @@ class portModel extends model
     public function initValues($model, $field, $fieldValue = '')
     {
         $values = $fieldValue['values'];
+
         if($values and (strpos($this->portConfig->sysDataFields, $values) !== false))
         {
             return $this->portConfig->sysDataList[$values];

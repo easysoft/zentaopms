@@ -30,36 +30,18 @@ class port extends control
             /* Init config fieldList */
             $fieldList = $this->port->initFieldList($model, $fields);
 
-            $queryCondition = $this->session->{$model . 'QueryCondition'};
-            $onlyCondition  = $this->session->{$model . 'OnlyCondition'};
-
-            $modelDatas = array();
-            if($onlyCondition and $queryCondition)
-            {
-                $table = zget($this->config->objectTables, $model);;
-                if(isset($this->config->$model->port->table)) $table = $this->config->$model->port->table;
-                $modelDatas = $this->dao->select('*')->from($table)->alias('t1')
-                    ->where($queryCondition)
-                    ->beginIF($this->post->exportType == 'selected')->andWhere('t1.id')->in($this->cookie->checkedItem)->fi()
-                    ->fetchAll('id');
-            }
-            elseif($queryCondition)
-            {
-                $stmt = $this->dbh->query($queryCondition . ($this->post->exportType == 'selected' ? " AND t1.id IN({$this->cookie->checkedItem})" : '') . " ORDER BY " . strtr($orderBy, '_', ' '));
-                while($row = $stmt->fetch()) $modelDatas[$row->id] = $row;
-            }
+            $rows = $this->getRows($model);
 
             $list = $this->setListValue($model, $fieldList);
             if($list) foreach($list as $listName => $listValue) $this->post->set($listName, $listValue);
 
             /* Get export rows and fields datas */
-            $exportDatas = $this->getExportDatas($fieldList, $modelDatas);
+            $exportDatas = $this->getExportDatas($fieldList, $rows);
 
             $this->post->set('rows',   $exportDatas['rows']);
             $this->post->set('fields', $exportDatas['fields']);
             $this->post->set('kind',   $model);
-
-            $this->fetch('file', 'export2' . $_POST['fileType'], $POST);
+            $this->fetch('file', 'export2' . $_POST['fileType'], $_POST);
         }
     }
 
@@ -135,6 +117,30 @@ class port extends control
         }
 
         return $lists;
+    }
+
+    public function getRows($model)
+    {
+        $queryCondition = $this->session->{$model . 'QueryCondition'};
+        $onlyCondition  = $this->session->{$model . 'OnlyCondition'};
+
+        $modelDatas = array();
+        if($onlyCondition and $queryCondition)
+        {
+            $table = zget($this->config->objectTables, $model);;
+            if(isset($this->config->$model->port->table)) $table = $this->config->$model->port->table;
+            $modelDatas = $this->dao->select('*')->from($table)->alias('t1')
+                ->where($queryCondition)
+                ->beginIF($this->post->exportType == 'selected')->andWhere('t1.id')->in($this->cookie->checkedItem)->fi()
+                ->fetchAll('id');
+        }
+        elseif($queryCondition)
+        {
+            $stmt = $this->dbh->query($queryCondition . ($this->post->exportType == 'selected' ? " AND t1.id IN({$this->cookie->checkedItem})" : '') . " ORDER BY " . strtr($orderBy, '_', ' '));
+            while($row = $stmt->fetch()) $modelDatas[$row->id] = $row;
+        }
+
+        return $modelDatas;
     }
 
     /**
