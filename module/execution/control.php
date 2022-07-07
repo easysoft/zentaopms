@@ -1061,10 +1061,11 @@ class execution extends control
         $this->session->set('caseList', $uri, 'execution');
         $this->session->set('bugList',  $uri, 'execution');
 
-        $products = array('0' => $this->lang->product->all) + $this->product->getProducts($executionID, 'all', '', false);
+        $products = $this->product->getProducts($executionID, 'all', '', false);
+        if(count($products) == 1) $productID = key($products);
 
         $extra = $executionID;
-        $this->lang->modulePageNav = $this->product->select($products, $productID, 'execution', 'testcase', $extra, 0, 0, '', false);
+        $this->lang->modulePageNav = $this->product->select(array('0' => $this->lang->product->all) + $products, $productID, 'execution', 'testcase', $extra, 0, 0, '', false);
 
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);

@@ -27,8 +27,9 @@
       <hr class="space">
       <div class="text-center text-muted"><?php echo $lang->testcase->noModule;?></div>
       <hr class="space">
-      <?php endif;?>
+      <?php else:?>
       <?php echo $moduleTree;?>
+      <?php endif;?>
     </div>
   </div>
   <div class='main-col' data-min-width='400'>
@@ -44,7 +45,7 @@
     <?php else:?>
     <form class='main-table' method='post' id='executionBugForm' data-ride="table">
       <table class='table has-sort-head' id='bugList'>
-      <?php $vars = "executionID=$executionID&type=$type&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}";?>
+      <?php $vars = "executionID=$executionID&productID=$productID&type=$type&moduleID=$moduleID&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}";?>
         <thead>
           <tr>
             <th class='w-id'>    <?php common::printOrderLink('id',            $orderBy, $vars, $lang->idAB);?></th>
