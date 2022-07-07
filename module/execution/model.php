@@ -488,6 +488,7 @@ class executionModel extends model
             ->setIF(!isset($_POST['whitelist']), 'whitelist', '')
             ->setIF($this->post->status == 'closed', 'closedDate', helper::now())
             ->setIF($this->post->status == 'suspended', 'suspendedDate', helper::today())
+            ->setIF($oldExecution->type == 'stage', 'project', $oldExecution->project)
             ->setDefault('team', $this->post->name)
             ->join('whitelist', ',')
             ->stripTags($this->config->execution->editor->edit['id'], $this->config->allowedTags)
