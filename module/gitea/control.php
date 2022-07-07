@@ -53,7 +53,7 @@ class gitea extends control
     }
 
     /**
-     * create a gitea.
+     * Create a gitea.
      *
      * @access public
      * @return void
@@ -77,7 +77,7 @@ class gitea extends control
     }
 
     /**
-     * view a gitea.
+     * View a gitea.
      * @param  int    $id
      * @access public
      * @return void
