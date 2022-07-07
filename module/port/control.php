@@ -30,7 +30,7 @@ class port extends control
             /* Init config fieldList */
             $fieldList = $this->port->initFieldList($model, $fields);
 
-            $rows = $this->getRows($model);
+            $rows = $this->getRows($model, $fieldList);
 
             $list = $this->setListValue($model, $fieldList);
             if($list) foreach($list as $listName => $listValue) $this->post->set($listName, $listValue);
@@ -119,7 +119,15 @@ class port extends control
         return $lists;
     }
 
-    public function getRows($model)
+    /**
+     * Get Rows .
+     *
+     * @param  int    $model
+     * @param  int    $fieldList
+     * @access public
+     * @return void
+     */
+    public function getRows($model, $fieldList)
     {
         $queryCondition = $this->session->{$model . 'QueryCondition'};
         $onlyCondition  = $this->session->{$model . 'OnlyCondition'};
@@ -140,6 +148,10 @@ class port extends control
             while($row = $stmt->fetch()) $modelDatas[$row->id] = $row;
         }
 
+        if(array_key_exists('files', $fieldList))
+        {
+            $modelDatas = $this->port->getFiles($model, $modelDatas);
+        }
         return $modelDatas;
     }
 

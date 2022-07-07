@@ -311,5 +311,41 @@ class portModel extends model
         return $lang;
     }
 
+    /**
+     * Get files by model;
+     *
+     * @param  int    $model
+     * @param  int    $datas
+     * @access public
+     * @return void
+     */
+    public function getFiles($model, $datas)
+    {
+        $this->loadModel('file');
+        $relatedFiles = $this->dao->select('id, objectID, pathname, title')->from(TABLE_FILE)
+            ->where('objectType')->eq($model)
+            ->andWhere('objectID')->in(@array_keys($datas))
+            ->andWhere('extra')
+            ->ne('editor')
+            ->fetchGroup('objectID');
+
+        if(empty($datas) and empty($relatedFiles)) return $datas;
+
+        /* Set related files. */
+        foreach($datas as $data)
+        {
+            $data->files = '';
+            if(isset($relatedFiles[$data->id]))
+            {
+                foreach($relatedFiles[$data->id] as $file)
+                {
+                    $fileURL = common::getSysURL() . helper::createLink('file', 'download', "fileID={$file->id}");
+                    $data->files .= html::a($fileURL, $file->title, '_blank') . '<br />';
+                }
+            }
+        }
+        return $datas;
+    }
+
 }
 
