@@ -52,13 +52,14 @@
   </div>
   <?php else:?>
   <?php $canBatchEdit = common::hasPriv('execution', 'batchEdit'); ?>
-  <form class='main-table' id='executionsForm' method='post' action='<?php echo inLink('batchEdit');?>' data-ride='table'>
+  <form class='main-table' id='executionsForm' method='post' action='<?php echo inLink('batchEdit');?>' data-ride='table' data-nested='true' data-expand-nest-child='false' data-checkable='false' data-enable-empty-nested-row='true' data-replace-id='executionTableList' data-preserve-nested='true'>
     <div class="table-header fixed-right">
       <table class="table table-from has-sort-head table-fixed table-nested" id="executionList">
-        <thead>
+<?php $vars = "status=$status&orderBy=%s";?>	
+<thead>
           <tr>
             <th class='table-nest-title'>
-              <a class='table-nest-toggle table-nest-toggle-global' data-expand-text='<?php echo $lang->expand; ?>' data-   collapse-text='<?php echo $lang->collapse;?>'></a>
+              <a class='table-nest-toggle table-nest-toggle-global' data-expand-text='<?php echo $lang->expand; ?>' data-collapse-text='<?php echo $lang->collapse;?>'></a>
               <?php echo $lang->idAB;?>
             </th>
             <th class='c-progress'><?php echo $lang->programplan->name;?></th>
@@ -76,8 +77,9 @@
         </thead>
         <tbody id="executionTableList">
           <?php foreach($executionStats as $stage):?>
-          <tr>
-            <td>
+          <tr class="row-program">
+	    <td class='text-left table-nest-title'>
+              <span class="table-nest-icon icon table-nest-toggle"></span>
               <?php echo $stage->id;?>
             </td>
             <td>
@@ -171,7 +173,55 @@
   <?php endif;?>
 </div>
 <?php js::set('status', $status)?>
+<?php js::set('orderBy', $orderBy)?>
+<?php js::set('executionStats', $executionStats);?>
 <script>
 $("#<?php echo $status;?>Tab").addClass('btn-active-text');
+
+$(function()
+{
+    var ordersList = [];
+    for(var i = 0; i < executionStats.length; ++i) ordersList.push(parseInt(executionStats[i]));
+    ordersList.sort(function(x, y){return x - y;});
+
+    var $list = $('#executionTableList');
+    $list.addClass('sortable').sortable(
+    {
+        reverse: orderBy === 'order_desc',
+        selector: 'tr',
+        dragCssClass: 'drag-row',
+        trigger: $list.find('.sort-handler').length ? '.sort-handler' : null,
+        before: function(e)
+        {
+            if($(e.event.target).closest('a,.btn').length) return false;
+        },
+        canMoveHere: function($ele, $target)
+        {
+            return $ele.data('parent') === $target.data('parent');
+        },
+        start: function(e)
+        {
+            e.targets.filter('[data-parent!="' + e.element.attr('data-parent') + '"]').addClass('drop-not-allowed');
+        },
+        finish: function(e)
+        {
+            var projects = '';
+            e.list.each(function()
+            {
+                projects += $(this.item).data('id') + ',' ;
+            });
+            $.post(createLink('project', 'updateOrder'), {'projects' : projects, 'orderBy' : orderBy});
+
+      
+            $('#executionsForm').table('initNestedList')
+        }
+    });
+    $('#executionTableList').on('click', '.row-program', function(e)
+    {
+	    console.log(e)
+        if($(e.target).closest('.table-nest-toggle,a').length) return;
+
+    });
+  });
 </script>
 <?php include '../../common/view/footer.html.php';?>
