@@ -1802,7 +1802,7 @@ class block extends control
             {
                 $this->app->loadLang('feedback');
                 $this->view->users    = $this->loadModel('user')->getPairs('all,noletter');
-                $this->view->products = $this->loadModel('product')->getPairs();
+                $this->view->products = $this->dao->select('id, name')->from(TABLE_PRODUCT)->where('deleted')->eq('0')->fetchPairs('id', 'name');
             }
 
             $count[$objectType] = count($objects);
