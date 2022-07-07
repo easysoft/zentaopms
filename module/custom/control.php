@@ -125,7 +125,7 @@ class custom extends control
                 foreach($postArray->data->keys as $key)
                 {
                     if($module == 'testtask' and $field == 'typeList' and empty($key)) continue;
-                    if(in_array($key, $keys)) return $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->custom->notice->repeatKey, $key)));;
+                    if($key && in_array($key, $keys)) return $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->custom->notice->repeatKey, $key)));;
                     $keys[] = $key;
                 }
             }
@@ -243,9 +243,12 @@ class custom extends control
                 }
 
                 $this->custom->deleteItems("lang=$lang&module=$module&section=$field&vision={$this->config->vision}");
-                $data = fixer::input('post')->get();
+                $data     = fixer::input('post')->get();
+                $emptyKey = false;
                 foreach($data->keys as $index => $key)
                 {
+                    if(!$key && $emptyKey) continue;
+
                     //if(!$system and (!$value or !$key)) continue; //Fix bug #951.
 
                     $value  = $data->values[$index];
@@ -253,6 +256,8 @@ class custom extends control
                     if($key and trim($value) === '') return $this->send(array('result' => 'fail', 'message' => $this->lang->custom->notice->valueEmpty)); // Fix bug #23538.
 
                     $this->custom->setItem("{$lang}.{$module}.{$field}.{$key}.{$system}", $value);
+
+                    if(!$key) $emptyKey = true;
                 }
             }
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
