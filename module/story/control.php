@@ -175,6 +175,12 @@ class story extends control
             {
                 $this->dao->update(TABLE_TODO)->set('status')->eq('done')->where('id')->eq($todoID)->exec();
                 $this->action->create('todo', $todoID, 'finished', '', "STORY:$storyID");
+
+                if($this->config->edition == 'biz' || $this->config->edition == 'max')
+                {
+                    $todo = $this->dao->select('type, idvalue')->from(TABLE_TODO)->where('id')->eq($todoID)->fetch();
+                    if($todo->type == 'feedback' && $todo->idvalue) $this->loadModel('feedback')->updateStatus('todo', $todo->idvalue, 'done');
+                }
             }
 
             $message = $this->executeHooks($storyID);
