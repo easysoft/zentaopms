@@ -739,6 +739,7 @@ class treeModel extends model
         $this->app->loadLang('branch');
         foreach($branchGroups as $productID => $branches)
         {
+            $branchGroups[$productID][0] = $this->lang->branch->main;
             foreach($branches as $branchID => $branchInfo)
             {
                 $branchGroups[$productID][$branchID] = $branchID == BRANCH_MAIN ? $this->lang->branch->main : $branchInfo->name;
