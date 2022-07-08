@@ -248,7 +248,7 @@ foreach($fieldParams as $fieldName => $param)
         echo html::submitButton($lang->search->common, '', 'btn btn-primary') . " &nbsp; ";
         if($style != 'simple') echo html::commonButton($lang->search->reset, '', 'btn-reset-form btn');
         echo html::commonButton('<i class="icon icon-chevron-double-down"></i>', '', 'btn-expand-form btn btn-info pull-right');
-        if($style != 'simple' and common::hasPriv('search', 'saveQuery')) echo html::a($this->createLink('search', 'saveQuery', "module=$module&onMenuBar=$onMenuBar"), '<span class="text"><i class="icon-bug-confirmBug icon-ok"></i> ' . $lang->search->saveCondition . '</span>', '', "class='btn-save-form btn btn-link btn-active-text text iframe pull-right' id='save-query'");
+        if($style != 'simple' and common::hasPriv('search', 'saveQuery')) echo html::a($this->createLink('search', 'saveQuery', "module=$module&onMenuBar=$onMenuBar"), '<span class="text"><i class="icon-bug-confirmBug icon-ok"></i> ' . $lang->search->saveCondition . '</span>', '', "class='btn-save-form btn btn-link btn-active-text text iframe' id='save-query'");
         echo html::hidden('formType', zget($formSession, 'formType', 'lite'));
         ?>
       </td>
