@@ -1756,10 +1756,7 @@ class block extends control
                 ->beginIF($objectType == 'story' or $objectType == 'requirement')->andWhere('t2.deleted')->eq('0')->fi()
                 ->beginIF($objectType == 'todo')->andWhere('t1.cycle')->eq(0)->andWhere('t1.status')->eq('wait')->andWhere('t1.vision')->eq($this->config->vision)->fi()
                 ->beginIF($objectType != 'todo')->andWhere('t1.status')->ne('closed')->fi()
-                ->beginIF($objectType == 'feedback')
-                ->andWhere('t1.status')->in('wait, noreview')
-                ->andWhere('t1.assignedTo')->eq($this->app->user->account)
-                ->fi()
+                ->beginIF($objectType == 'feedback')->andWhere('t1.status')->in('wait, noreview')->fi()
                 ->orderBy($orderBy)
                 ->beginIF($limitCount)->limit($limitCount)->fi()
                 ->fetchAll();
