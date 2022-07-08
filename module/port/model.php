@@ -158,7 +158,7 @@ class portModel extends model
         if(empty($values))
         {
             if(strpos($this->modelConfig->sysLangFields, $field)) return $this->modelLang->{$field.'List'};
-            if(strpos($this->modelConfig->sysDataFields, $field)) return $this->portConfig->sysDataList[$values];
+            if(strpos($this->modelConfig->sysDataFields, $field) and !empty($this->portConfig->sysDataList[$values])) return $this->portConfig->sysDataList[$values];
         }
 
         return $values;
@@ -261,18 +261,25 @@ class portModel extends model
     {
         $getParams = $this->session->{$model.'PortParams'};
 
-        $params = empty($params) ? '' : $params;
-        if(!empty($params))
+        if($params)
         {
-            $sourceParams = explode(',', $params);
-            foreach($sourceParams as $key => $param)
+            $params = explode('&', $params);
+            foreach($params as $param => $value)
             {
-                if(strpos($param, '$') !== false) $sourceParams[$key] = $getParams[ltrim($param, '$')];
+                if(strpos($value, '$') !== false) $params[$param] = $getParams[ltrim($value, '$')];
             }
-            $params = join(',', $sourceParams);
         }
 
-        $values = $this->loadModel($module)->$method($params);
+        /* If this method has multiple parameters use call_user_func_array */
+        if(is_array($params))
+        {
+            $values = call_user_func_array(array($this->loadModel($module), $method), $params);
+        }
+        else
+        {
+            $values = $this->loadModel($module)->$method($params);
+        }
+
         if(!empty($pairs))
         {
             $valuePairs = array();
@@ -285,6 +292,7 @@ class portModel extends model
             }
             $values = $valuePairs;
         }
+
         return $values;
     }
 

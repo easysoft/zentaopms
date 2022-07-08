@@ -41,6 +41,7 @@ class port extends control
             $this->post->set('rows',   $exportDatas['rows']);
             $this->post->set('fields', $exportDatas['fields']);
             $this->post->set('kind',   $model);
+
             $this->fetch('file', 'export2' . $_POST['fileType'], $_POST);
         }
     }
@@ -94,11 +95,11 @@ class port extends control
      * Get ExportDatas.
      *
      * @param  int    $fieldList
-     * @param  array  $modelDatas
+     * @param  array  $rows
      * @access public
      * @return void
      */
-    public function getExportDatas($fieldList, $modelDatas = array())
+    public function getExportDatas($fieldList, $rows = array())
     {
         $exportDatas = array();
         $foreignKeyList = array();
@@ -112,26 +113,32 @@ class port extends control
             }
         }
 
-        if(empty($modelDatas)) return $exportDatas;
+        if(empty($rows)) return $exportDatas;
 
         $exportDatas['user'] = $this->loadModel('user')->getPairs('devfirst|noclosed|nodeleted');
 
-        foreach ($modelDatas as $id => $values)
+        foreach ($rows as $id => $values)
         {
             foreach($values as $field => $value)
             {
                 if(in_array($field, $foreignKeyList))
                 {
-                    $modelDatas[$id]->$field = zget($exportDatas[$field], $value);
+                    $rows[$id]->$field = zget($exportDatas[$field], $value);
                 }
                 elseif(strpos($this->config->port->userFields, $field) !== false)
                 {
-                    $modelDatas[$id]->$field = zget($exportDatas['user'], $value);
+                    $rows[$id]->$field = zget($exportDatas['user'], $value);
+                }
+
+                /* if value = 0 or value = 0000:00:00 set value = ''*/
+                if(!$value or helper::isZeroDate($value))
+                {
+                    $rows[$id]->$field = '';
                 }
             }
         }
 
-        $exportDatas['rows'] = array_values($modelDatas);
+        $exportDatas['rows'] = array_values($rows);
         return $exportDatas;
     }
 

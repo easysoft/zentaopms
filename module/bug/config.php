@@ -26,7 +26,7 @@ $config->bug->list->allFields = 'id, module, execution, story, task,
 
 $config->bug->list->defaultFields = 'id,severity,pri,title,openedBy,assignedTo,resolvedBy,resolution';
 
-$config->bug->list->exportFields = 'id, product, branch, module, project, execution, story, task,
+$config->bug->exportFields = 'id, product, branch, module, project, execution, story, task,
     title, keywords, severity, pri, type, os, browser,
     steps, status, deadline, activatedCount, confirmed, mailto,
     openedBy, openedDate, openedBuild,
@@ -37,7 +37,82 @@ $config->bug->list->exportFields = 'id, product, branch, module, project, execut
     case,
     lastEditedBy,
     lastEditedDate, files ,feedbackBy, notifyEmail';
-if($config->systemMode == 'classic') $config->bug->list->exportFields = str_replace(' project,', '', $config->bug->list->exportFields);
+
+$config->bug->fieldList['id']['title'] = 'id';
+
+$config->bug->fieldList['product']['title']            = 'product';
+//$config->bug->fieldList['product']['foreignKey']       = true;
+//$config->bug->fieldList['product']['foreignKeySource'] = ;
+
+$config->bug->fieldList['branch']['title']            = 'branch';
+$config->bug->fieldList['branch']['foreignKey']       = true;
+$config->bug->fieldList['branch']['foreignKeySource'] = array('module' => 'branch', 'method' => 'getPairs', 'params' => '$executionID');
+
+$config->bug->fieldList['module']['title']            = 'module';
+$config->bug->fieldList['module']['foreignKey']       = true;
+$config->bug->fieldList['module']['foreignKeySource'] = array('module' => 'tree', 'method' => 'getAllModulePairs', 'params' => 'bug');;
+
+$config->bug->fieldList['project']['title'] = 'project';
+$config->bug->fieldList['project']['foreignKey'] = true;
+$config->bug->fieldList['project']['foreignKeySource'] = array('module' => 'product', 'method' => 'getProjectPairsByProduct', 'params' => '$productID');
+
+$config->bug->fieldList['execution']['title'] = 'execution';
+$config->bug->fieldList['execution']['foreignKey'] = true;
+$config->bug->fieldList['execution']['foreignKeySource'] = array('module' => 'execution', 'method' =>'getPairs');
+
+$config->bug->fieldList['story']['title'] = 'story';
+$config->bug->fieldList['story']['foreignKey']       = true;
+$config->bug->fieldList['story']['foreignKeySource'] = array('module' => 'bug', 'method' =>'getRelatedObjects', 'params' => 'story&id,title');
+
+$config->bug->fieldList['task']['title'] = 'task';
+
+$config->bug->fieldList['steps']['title'] = 'steps';
+
+$config->bug->fieldList['status']['title'] = 'status';
+
+$config->bug->fieldList['deadline']['title'] = 'deadline';
+
+$config->bug->fieldList['activatedCount']['title'] = 'activatedCount';
+
+$config->bug->fieldList['confirmed']['title'] = 'confirmed';
+
+$config->bug->fieldList['mailto']['title'] = 'mailto';
+
+$config->bug->fieldList['openedBy']['title'] = 'openedBy';
+
+$config->bug->fieldList['openedDate']['title'] = 'openedDate';
+
+$config->bug->fieldList['openedBuild']['title'] = 'openedBuild';
+
+$config->bug->fieldList['assignedTo']['title'] = 'assignedTo';
+
+$config->bug->fieldList['assignedDate']['title'] = 'assignedDate';
+
+$config->bug->fieldList['resolvedBy']['title'] = 'resolvedBy';
+
+$config->bug->fieldList['resolution']['title'] = 'resolution';
+
+$config->bug->fieldList['resolvedBuild']['title'] = 'resolvedBuild';
+
+$config->bug->fieldList['resolvedDate']['title'] = 'resolvedDate';
+
+$config->bug->fieldList['closedBy']['title'] = 'closedBy';
+
+$config->bug->fieldList['closedDate']['title'] = 'closedDate';
+
+$config->bug->fieldList['duplicateBug']['title'] = 'duplicateBug';
+
+$config->bug->fieldList['linkBug']['title'] = 'linkBug';
+
+$config->bug->fieldList['case']['title'] = 'case';
+
+$config->bug->fieldList['lastEditedBy']['title'] = 'lastEditedBy';
+$config->bug->fieldList['lastEditedDate']['title'] = 'lastEditedDate';
+$config->bug->fieldList['files']['title'] = 'files';
+$config->bug->fieldList['feedbackBy']['title'] = 'feedbackBy';
+$config->bug->fieldList['notifyEmail']['title'] = 'notifyEmail';
+
+if($config->systemMode == 'classic') $config->bug->exportFields = str_replace(' project,', '', $config->bug->exportFields);
 
 $config->bug->list->customCreateFields      = 'execution,noticefeedbackBy,story,task,pri,severity,os,browser,deadline,mailto,keywords';
 $config->bug->list->customBatchEditFields   = 'type,severity,pri,productplan,assignedTo,deadline,resolvedBy,resolution,os,browser,keywords';
