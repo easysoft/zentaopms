@@ -916,6 +916,7 @@ class execution extends control
      *
      * @param  int    $executionID
      * @param  int    $productID
+     * @param  int    $branchID
      * @param  string $orderBy
      * @param  int    $build
      * @param  string $type
@@ -926,7 +927,7 @@ class execution extends control
      * @access public
      * @return void
      */
-    public function bug($executionID = 0, $productID = 0, $orderBy = 'status,id_desc', $build = 0, $type = 'all', $param = 0, $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function bug($executionID = 0, $productID = 0, $branch = 0, $orderBy = 'status,id_desc', $build = 0, $type = 'all', $param = 0, $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         /* Load these two models. */
         $this->loadModel('bug');
@@ -943,11 +944,10 @@ class execution extends control
         $execution   = $this->commonAction($executionID);
         $executionID = $execution->id;
         $products    = $this->product->getProducts($execution->id);
-        $branchID    = isset($products[$productID]) ? current($products[$productID]->branches) : 0;
 
         $productPairs = array('0' => $this->lang->product->all);
         foreach($products as $productData) $productPairs[$productData->id] = $productData->name;
-        $this->lang->modulePageNav = $this->product->select($productPairs, $productID, 'execution', 'bug', $executionID, 0, 0, '', false);
+        $this->lang->modulePageNav = $this->product->select($productPairs, $productID, 'execution', 'bug', $executionID, $branch);
 
         /* Header and position. */
         $title      = $execution->name . $this->lang->colon . $this->lang->execution->bug;
@@ -959,7 +959,7 @@ class execution extends control
         if($this->app->getViewType() == 'xhtml') $recPerPage = 10;
         $pager = new pager($recTotal, $recPerPage, $pageID);
         $sort  = common::appendOrder($orderBy);
-        $bugs  = $this->bug->getExecutionBugs($executionID, $productID, $build, $type, $param, $sort, '', $pager);
+        $bugs  = $this->bug->getExecutionBugs($executionID, $productID, $branch, $build, $type, $param, $sort, '', $pager);
         $bugs  = $this->bug->checkDelayedBugs($bugs);
         $users = $this->user->getPairs('noletter');
 
@@ -986,7 +986,7 @@ class execution extends control
             $showBranch = $this->loadModel('branch')->showBranch($productID);
 
             /* Display status of branch. */
-            $branches = $this->branch->getList($productID, 0, 'all');
+            $branches = $this->branch->getList($productID, $executionID, 'all');
             foreach($branches as $branchInfo)
             {
                 $branchOption[$branchInfo->id]    = $branchInfo->name;
@@ -1014,15 +1014,15 @@ class execution extends control
         $modules  = $this->tree->getAllModulePairs('bug');
 
         /* Get module tree.*/
-        $extra = array('executionID' => $executionID, 'orderBy' => $orderBy, 'type' => $type, 'build' => $build);
+        $extra = array('executionID' => $executionID, 'orderBy' => $orderBy, 'type' => $type, 'build' => $build, 'branchID' => $branch);
         if($executionID and empty($productID) and count($products) > 1)
         {
             $moduleTree = $this->tree->getBugTreeMenu($executionID, $productID, 0, array('treeModel', 'createBugLink'), $extra);
         }
         elseif(!empty($products))
         {
-            $productID  = empty($productID) ? reset($products)->id : $productID;
-            $moduleTree = $this->tree->getTreeMenu($productID, 'bug', 0, array('treeModel', 'createBugLink'), $extra + array('productID' => $productID), 'all');
+            $productID = empty($productID) ? reset($products)->id : $productID;
+            $moduleTree = $this->tree->getTreeMenu($productID, 'bug', 0, array('treeModel', 'createBugLink'), $extra + array('branchID' => $branch, 'productID' => $productID), $branch);
         }
         else
         {
@@ -1030,7 +1030,7 @@ class execution extends control
         }
         $tree = $moduleID ? $this->tree->getByID($moduleID) : '';
 
-        $showModule  = !empty($this->config->datatable->projectBug->showModule) ? $this->config->datatable->executionBug->showModule : '';
+        $showModule  = !empty($this->config->datatable->executionBug->showModule) ? $this->config->datatable->executionBug->showModule : '';
 
         /* Assign. */
         $this->view->title           = $title;
@@ -1043,7 +1043,7 @@ class execution extends control
         $this->view->orderBy         = $orderBy;
         $this->view->users           = $users;
         $this->view->productID       = $productID;
-        $this->view->branchID        = empty($this->view->build->branch) ? $branchID : $this->view->build->branch;
+        $this->view->branchID        = empty($this->view->build->branch) ? $branch : $this->view->build->branch;
         $this->view->memberPairs     = $memberPairs;
         $this->view->type            = $type;
         $this->view->summary         = $this->bug->summary($bugs);
