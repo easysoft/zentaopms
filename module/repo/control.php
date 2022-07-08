@@ -1321,9 +1321,16 @@ class repo extends control
         }
         elseif($repo->SCM == 'Git')
         {
+            $gitDir = scandir($repo->path);
+            $files  = '';
+            foreach($gitDir as $path)
+            {
+                if(!in_array($path, array('.', '..', '.git'))) $files .= $repo->path . DS . "$path,";
+            }
+
             $this->app->loadClass('pclzip', true);
             $zip = new pclzip($fileName);
-            if($zip->create($repo->path, PCLZIP_OPT_REMOVE_PATH, $repo->path) === 0) return print(js::alert($zip->errorInfo()) . js::close());
+            if($zip->create($files, PCLZIP_OPT_REMOVE_PATH, $repo->path) === 0) return print(js::alert($zip->errorInfo()) . js::close());
 
             $url = DS . 'data' . DS . 'repo' . DS . $repo->name . '.zip';
         }
@@ -1333,7 +1340,7 @@ class repo extends control
             chdir($savePath);
             $this->scm = $this->app->loadClass('scm');
             $this->scm->setEngine($repo);
-            $this->scm->exec('checkout ' . $repo->path);
+            $this->scm->exec('export ' . $repo->path);
 
             /* Get repo name. */
             $pathList = explode('/', trim($repo->path, '/'));
