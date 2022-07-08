@@ -139,8 +139,8 @@
           <td><?php echo $action->date;?></td>
           <td>
             <?php
-            common::printLink('action', 'undelete', "actionid=$action->id", $lang->action->undelete, 'hiddenwin');
-            if($type == 'all') common::printLink('action', 'hideOne',  "actionid=$action->id", $lang->action->hideOne, 'hiddenwin');
+            common::printLink('action', 'undelete', "actionid=$action->id&browseType=$currentObjectType", $lang->action->undelete, 'hiddenwin');
+            if($type == 'all') common::printLink('action', 'hideOne',  "actionid=$action->id&browseType=$currentObjectType", $lang->action->hideOne, 'hiddenwin');
             ?>
           </td>
         </tr>
