@@ -1,0 +1,9 @@
+.input-control.required:after {display: block; right: 29px; top: 5px;}
+#pri + .chosen-container > .chosen-single {border-top-left-radius: 0 !important; border-bottom-left-radius: 0 !important;}
+
+.pri-selector > .btn {padding: 5px 8px !important; width: 100%;}
+.pri-selector > .dropdown-menu {padding: 10px;}
+
+#source_chosen {min-width: 50px !important;}
+#feedbackBox > .input-group + #notifyEmailLabel {position: relative; width: 50%; left: 48%}
+#product + .picker{min-width: 400px}

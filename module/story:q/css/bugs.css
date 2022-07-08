@@ -1,0 +1,4 @@
+body {background: white;}
+.bugsList {padding: 10px;}
+.bugsList .table {border: 1px solid #ddd;}
+.c-id {width: 40px}
