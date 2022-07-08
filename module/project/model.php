@@ -2433,7 +2433,7 @@ class projectModel extends model
 
             $execution->children = array();
             $execution->grade == 1 ? $parents[$execution->id] = $execution : $children[$execution->parent][] = $execution;
-            if(isset($executionTasks) and isset($executionTasks[$execution->id])) $execution->tasks = $executionTasks[$execution->id];
+            if(isset($executionTasks) and isset($executionTasks[$execution->id])) $execution->tasks = array();
         }
 
         /* In the case of the waterfall model, calculate the sub-stage. */

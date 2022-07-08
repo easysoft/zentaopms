@@ -1758,6 +1758,31 @@ class task extends control
         echo html::select('task', empty($tasks) ? array('' => '') : $tasks, $taskID, "class='form-control'");
     }
 
+    public function ajaxGetTasksByExecution($executionID, $pageID, $recPerPage, $maxTaskID = 0)
+    {
+        $tasks = $this->dao->select('*')->from(TABLE_TASK)
+            ->where('deleted')->eq(0)
+            ->andWhere('status')->ne('closed')
+            ->andWhere('execution')->eq($executionID)
+            //->andWhere('id')->gt('')
+            ->limit($recPerPage)
+            ->fetchAll('id');
+
+        foreach($tasks as $task)
+        {
+            if($task->parent > 0)
+            {
+                if(isset($tasks[$task->parent]))
+                {
+                    $tasks[$task->parent]->children[$task->id] = $task;
+                    unset($tasks[$task->id]);
+                }
+            }
+        }
+
+        die(json_encode($tasks));
+    }
+
     /**
      * AJAX: get the actions of a task. for web app.
      *

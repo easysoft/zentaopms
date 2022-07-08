@@ -129,8 +129,7 @@
           <tr type = "load-btn-row" parent-id = <?php echo $stage->id;?> >
             <td></td>
             <td>
-              <span parent-id = <?php echo $stage->id;?> class = "load-btn" current-page = 1 >加载更多...
-              </span>
+              <span parent-id = <?php echo $stage->id;?> class = "load-btn" current-page = 1 >加载更多...</span>
             </td>
             <td></td>
             <td></td>
@@ -167,32 +166,60 @@ $(function()
         var $trSelected = $(`tr[row-id = ${$(that).attr('id')}]`);
         if ($trSelected.hasClass("table-nest-child-hide"))
         {
-            var param = 
+            var that = this;
+            var executionID = $(this).attr('parent-id');
+            var currentPage = 1;
+            var pageSize    = 50;
+
+            var link = createLink('task', 'ajaxGetTasksByExecution', 'executionID=' + executionID + '&currentPage=' + currentPage + '&pageSize=' + pageSize);
+            $.get(link, function(data)
             {
-                'id': $(that).attr('id'),
-                'currentPage': 1,
-                'pageSize': 50,
-            };
-            $('#executionForm').table('initNestedList')
+                var newTasks = JSON.parse(data);
+                executionStats.forEach(item =>
+                {
+                    if(item.id === executionID)
+                    {
+                        Object.assign(item.tasks, newTasks);
+                    }
+
+                    $('#executionForm').table('initNestedList');
+                    return;
+                })
+            })
+
+            $('#executionForm').table('initNestedList');
             $trSelected.removeClass("table-nest-child-hide");
             $(`tr[parent-id = ${$(that).attr('id')} ]`).show();
-
-        } else 
+        }
+        else
         {
             $trSelected.addClass("table-nest-child-hide");
             $(`tr[parent-id = ${$(that).attr('id')} ]`).hide();
 
         }
     })
-    $('.load-btn').on('click', function () 
+    $('.load-btn').on('click', function ()
     {
         var that = this;
-        var param = 
+        var executionID = $(this).attr('parent-id');
+        var currentPage = $(this).attr('current-page') + 1;
+        var pageSize    = 50;
+
+        var link = createLink('task', 'ajaxGetTasksByExecution', 'executionID=' + executionID + '&currentPage=' + currentPage + '&pageSize=' + pageSize);
+        $.get(link, function(data)
         {
-            'id' : $(that).attr('parent-id'),
-            'currentPage' : $(that).attr('current-page'),
-            'pageSize':50,
-        }
+            var newTasks = JSON.parse(data);
+            executionStats.forEach(item =>
+            {
+                if(item.id === executionID)
+                {
+                    Object.assign(item.tasks, newTasks);
+                }
+
+                $('#executionForm').table('initNestedList');
+                return;
+            })
+        })
     })
 });
 </script>
