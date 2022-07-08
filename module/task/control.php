@@ -367,7 +367,7 @@ class task extends control
             /* If link from no head then reload. */
             if(isonlybody())
             {
-                if($this->app->tab == 'execution' or $this->config->vision = 'lite')
+                if($this->app->tab == 'execution' or $this->config->vision == 'lite')
                 {
                     $execLaneType  = $this->session->execLaneType ? $this->session->execLaneType : 'all';
                     $execGroupBy   = $this->session->execGroupBy ? $this->session->execGroupBy : 'default';
