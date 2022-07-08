@@ -8,6 +8,8 @@
   <style>
   .files-list>li>a {display: inline; word-wrap: break-word;}
   .files-list>li>.right-icon {opacity: 1;}
+  .files-list>li>.right-icon>a {padding-left: 7px;}
+  html[lang|="zh"] .files-list>li>.right-icon>a {padding-left: 3px;}
   </style>
   <script>
   /* Delete a file. */
