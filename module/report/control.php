@@ -315,6 +315,13 @@ class report extends control
         $users[''] = $this->lang->report->annualData->allUser;
 
         $depts = $this->loadModel('dept')->getOptionMenu();
+        if($this->app->tab == 'report')
+        {
+            $noDepartment = $depts[0];
+            unset($depts[0]);
+            $depts += array('0' => $noDepartment);
+        }
+
         $accounts = array();
         if($userID)
         {
