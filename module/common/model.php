@@ -1601,7 +1601,7 @@ EOD;
      * @param  string $extraClass
      * @param  bool   $onlyBody
      * @param  string $misc
-     * @Param  bool   $extraEnabled
+     * @param  bool   $extraEnabled
      * @static
      * @access public
      * @return void
@@ -1802,13 +1802,14 @@ EOD;
      * @param  string $extraClass
      * @param  bool   $onlyBody
      * @param  string $misc
+     * @param  string $extraEnabled
      * @static
      * @access public
      * @return void
      */
-    public static function printIcon($module, $method, $vars = '', $object = '', $type = 'button', $icon = '', $target = '', $extraClass = '', $onlyBody = false, $misc = '', $title = '', $programID = 0)
+    public static function printIcon($module, $method, $vars = '', $object = '', $type = 'button', $icon = '', $target = '', $extraClass = '', $onlyBody = false, $misc = '', $title = '', $programID = 0, $extraEnabled = '')
     {
-        echo common::buildIconButton($module, $method, $vars, $object, $type, $icon, $target, $extraClass, $onlyBody, $misc, $title, $programID);
+        echo common::buildIconButton($module, $method, $vars, $object, $type, $icon, $target, $extraClass, $onlyBody, $misc, $title, $programID, $extraEnabled);
     }
 
     /**
