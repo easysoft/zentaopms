@@ -3,6 +3,9 @@
 <?php $currentModule = $isProjectApp ? 'project'  : 'testcase';?>
 <?php $currentMethod = $isProjectApp ? 'testcase' : 'browse';?>
 <?php $projectParam  = $isProjectApp ? "projectID={$this->session->project}&" : '';?>
+<?php if(common::checkNotCN()):?>
+<style> .btn-toolbar>.btn {margin-right: 3px !important;}</style>
+<?php endif;?>
 <?php if(!isset($branch)) $branch = 0;?>
 <?php if($config->global->flow == 'full'):?>
 <style>
@@ -147,7 +150,6 @@
     </div>
     <?php endif;?>
     <?php $initModule = isset($moduleID) ? (int)$moduleID : 0;?>
-    <?php if(!common::checkNotCN()):?>
     <div class='btn-group dropdown'>
       <?php
       $createTestcaseLink = $this->createLink('testcase', 'create', "productID=$productID&branch=$branch&moduleID=$initModule");
@@ -177,24 +179,6 @@
       </ul>
       <?php endif;?>
     </div>
-    <?php else:?>
-    <div class='btn-group dropdown-hover'>
-      <?php
-      $link = common::hasPriv('testcase', 'create') ? $this->createLink('testcase', 'create', "productID=$productID&branch=$branch&moduleID=$initModule") : '###';
-      $disabled = common::hasPriv('testcase', 'create') ? '' : "disabled";
-      echo html::a($link, "<i class='icon icon-plus'></i> {$lang->testcase->create} </span><span class='caret'>", '', "class='btn btn-primary $disabled' data-app={$this->app->tab}");
-      ?>
-      <ul class='dropdown-menu'>
-        <?php $disabled = common::hasPriv('testcase', 'batchCreate') ? '' : "class='disabled'";?>
-        <li <?php echo $disabled?>>
-        <?php
-        $batchLink = $this->createLink('testcase', 'batchCreate', "productID=$productID&branch=$branch&moduleID=$initModule");
-        echo "<li>" . html::a($batchLink, "<i class='icon icon-plus'></i> " . $lang->testcase->batchCreate, '', "data-app='{$this->app->tab}'") . "</li>";
-        ?>
-        </li>
-      </ul>
-    </div>
-    <?php endif;?>
     <?php if($this->app->rawMethod == 'browseunits' and (empty($productID) or common::canModify('product', $product))):?>
       <?php common::printLink('testtask', 'importUnitResult', "product=$productID", "<i class='icon icon-import'></i> " . $lang->testtask->importUnitResult, '', "class='btn btn-primary' data-app='{$this->app->tab}'");?>
     <?php endif;?>
