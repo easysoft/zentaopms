@@ -11,6 +11,7 @@
  */
 ?>
 <?php include './header.html.php';?>
+<?php if($forceReview) $config->story->create->requiredFields .= ',review';?>
 <?php js::set('showFields', $showFields);?>
 <?php js::set('requiredFields', $config->story->create->requiredFields);?>
 <div id="mainContent" class="main-content">
