@@ -1482,7 +1482,7 @@ class kanban extends control
      * @access public
      * @return void
      */
-    public function deleteObjectCard($objectType, $objectID, $regionID, $from = '')
+    public function deleteObjectCard($objectType, $objectID, $regionID)
     {
         if(!($objectType == 'task' or $objectType == 'story' or $objectType == 'bug')) return false;
         $table = 'TABLE_' . strtoupper($objectType);
@@ -1493,7 +1493,6 @@ class kanban extends control
         $browseType  = $this->config->vision == 'lite' ? 'task' : $this->session->execLaneType;
         $groupBy     = $this->session->execGroupBy ? $this->session->execGroupBy : 'default';
         $kanbanGroup = $this->kanban->getRDKanban($kanbanID, $browseType, 'id_desc', 0, $groupBy);
-        if($from == 'taskkanban') $kanbanGroup = $this->loadModel('kanban')->getExecutionKanban($kanbanID, $browseType, $groupBy);
 
         return print(json_encode($kanbanGroup));
     }
