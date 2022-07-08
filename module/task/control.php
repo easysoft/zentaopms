@@ -44,9 +44,10 @@ class task extends control
         $extra = str_replace(array(',', ' '), array('&', ''), $extra);
         parse_str($extra, $output);
 
-        $execution   = $this->execution->getById($executionID);
-        $executions  = $this->execution->getPairs(0, 'all', !common::canModify('execution', $execution) ? 'noclosed' : '');
+        if(!empty($executionID)) $execution = $this->execution->getById($executionID);
+        $executions  = $this->execution->getPairs(0, 'all', isset($execution) ? (!common::canModify('execution', $execution) ? 'noclosed' : '') : 'noclosed');
         $executionID = $this->execution->saveState($executionID, $executions);
+        $execution   = $this->execution->getById($executionID);
         $this->execution->setMenu($executionID);
 
         $this->execution->getLimitedExecution();
