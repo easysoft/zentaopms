@@ -166,9 +166,9 @@ $lang->execution->lifeTimeList['short'] = "Short-Term";
 $lang->execution->lifeTimeList['long']  = "Long-Term";
 $lang->execution->lifeTimeList['ops']   = "DevOps";
 
-$lang->execution->cfdTypeList['story'] = "{$lang->SRCommon}";
-$lang->execution->cfdTypeList['task']  = "Task";
-$lang->execution->cfdTypeList['bug']   = "Bug";
+$lang->execution->cfdTypeList['story'] = "View by {$lang->SRCommon}";
+$lang->execution->cfdTypeList['task']  = "View by task";
+$lang->execution->cfdTypeList['bug']   = "View By bug";
 
 $lang->team = new stdclass();
 $lang->team->account    = 'Utilisateur';

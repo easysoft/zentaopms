@@ -110,7 +110,6 @@ $currentBrowseType = isset($lang->bug->mySelects[$browseType]) && in_array($brow
       </ul>
     </div>
     <?php if(common::canModify('product', $product)):?>
-    <?php if(!common::checkNotCN()):?>
     <?php
       $createBugLink   = '';
       $batchCreateLink = '';
@@ -150,38 +149,6 @@ $currentBrowseType = isset($lang->bug->mySelects[$browseType]) && in_array($brow
       </ul>
       <?php endif;?>
     </div>
-    <?php else:?>
-    <div class='btn-group dropdown-hover'>
-      <?php
-      if(commonModel::isTutorialMode())
-      {
-          $wizardParams = helper::safe64Encode("productID=$productID&branch=$branch&extra=moduleID=$moduleID");
-          $link = $this->createLink('tutorial', 'wizard', "module=bug&method=create&params=$wizardParams");
-          echo html::a($link, "<i class='icon icon-plus'></i> {$lang->bug->create} </span><span class='caret'>", '', "class='btn btn-primary btn-bug-create'");
-      }
-      else
-      {
-          $link     = $this->createLink('bug', 'create', "productID=$productID&branch=$branch&extra=moduleID=$moduleID");
-          $disabled = '';
-          if(!common::hasPriv('bug', 'create'))
-          {
-              $link     = '###';
-              $disabled = "disabled";
-          }
-          echo html::a($link, "<i class='icon icon-plus'></i> {$lang->bug->create} </span><span class='caret'>", '', "class='btn btn-primary $disabled'");
-      }
-      ?>
-      <ul class='dropdown-menu'>
-        <?php $disabled = common::hasPriv('bug', 'batchCreate') ? '' : "class='disabled'";?>
-        <li <?php echo $disabled?>>
-        <?php
-          $batchLink = $this->createLink('bug', 'batchCreate', "productID=$productID&branch=$branch&executionID=0&moduleID=$moduleID");
-          echo "<li>" . html::a($batchLink, "<i class='icon icon-plus'></i> " . $lang->bug->batchCreate) . "</li>";
-        ?>
-        </li>
-      </ul>
-    </div>
-    <?php endif;?>
     <?php endif;?>
   </div>
   <?php endif;?>
