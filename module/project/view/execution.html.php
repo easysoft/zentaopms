@@ -159,68 +159,47 @@ $("#<?php echo $status;?>Tab").addClass('btn-active-text');
 
 $(function()
 {
-    $('.table-nest-icon').on('click', function()
-    {
-        var that = this;
-        /* 调接口成功了 去改变行样式 */
+    $("#executionList").on('click','.table-nest-icon',function(e)
+    {   /* add event when click expand button */ 
+        var that = e.target;
         var $trSelected = $(`tr[row-id = ${$(that).attr('id')}]`);
         if ($trSelected.hasClass("table-nest-child-hide"))
-        {
-            var that = this;
-            var executionID = $(this).attr('parent-id');
-            var currentPage = 1;
-            var pageSize    = 50;
-
-            var link = createLink('task', 'ajaxGetTasksByExecution', 'executionID=' + executionID + '&currentPage=' + currentPage + '&pageSize=' + pageSize);
-            $.get(link, function(data)
-            {
-                var newTasks = JSON.parse(data);
-                executionStats.forEach(item =>
-                {
-                    if(item.id === executionID)
-                    {
-                        Object.assign(item.tasks, newTasks);
-                    }
-
-                    $('#executionForm').table('initNestedList');
-                    return;
-                })
-            })
-
-            $('#executionForm').table('initNestedList');
-            $trSelected.removeClass("table-nest-child-hide");
-            $(`tr[parent-id = ${$(that).attr('id')} ]`).show();
+        {    /* table expand */
+             var executionID = $(this).attr('id');
+             var currentPage = 1;
+             var pageSize    = 50;
+             var link = createLink('task', 'ajaxGetTasksByExecution', 'executionID=' + executionID + '&currentPage=' + currentPage + '&pageSize=' +      pageSize);
+             $.get(link, function(data)
+             {
+                 var newTasks = JSON.parse(data);
+                 $trSelected.after("<tr></tr>");
+                 /* if (total > 50)
+                     * 在第五十条后加一个tr 包裹一个td 中间含有一个 <span class = 'load-btn'></span>
+                     * 点击事件如下
+                     * {
+                     *     
+                     * }
+                     * */
+                 $trSelected.removeClass("table-nest-child-hide");
+                 $(`tr[parent-id = ${$(that).attr('id')} ]`).show();
+                 $('#executionForm').table('initNestedList');
+             })
         }
         else
-        {
-            $trSelected.addClass("table-nest-child-hide");
-            $(`tr[parent-id = ${$(that).attr('id')} ]`).hide();
+        {   /* table close */
+             $trSelected.addClass("table-nest-child-hide");
+             $(`tr[parent-id = ${$(that).attr('id')} ]`).hide();
 
         }
     })
-    $('.load-btn').on('click', function ()
-    {
-        var that = this;
-        var executionID = $(this).attr('parent-id');
-        var currentPage = $(this).attr('current-page') + 1;
-        var pageSize    = 50;
-
-        var link = createLink('task', 'ajaxGetTasksByExecution', 'executionID=' + executionID + '&currentPage=' + currentPage + '&pageSize=' + pageSize);
-        $.get(link, function(data)
+    $("#executionList").on('click','.load-btn', fucntion (e)
         {
-            var newTasks = JSON.parse(data);
-            executionStats.forEach(item =>
-            {
-                if(item.id === executionID)
-                {
-                    Object.assign(item.tasks, newTasks);
-                }
-
-                $('#executionForm').table('initNestedList');
-                return;
-            })
+            var that = e.target;
+            var executionID = $(this).attr('parent-id');
+            var currentPage = $(this).attr('current-page') + 1;
+            var pageSize    = 50;
+            var link = createLink('task', 'ajaxGetTasksByExecution', 'executionID=' + executionID + '&currentPage=' + currentPage + '&pageSize=' + pageSize);
         })
-    })
 });
 </script>
 <?php include '../../common/view/footer.html.php';?>
