@@ -288,7 +288,7 @@ $currentBrowseType = isset($lang->bug->mySelects[$browseType]) && in_array($brow
           <div class='btn-group dropup'>
             <?php
             $actionLink = $this->createLink('bug', 'batchEdit', "productID=$productID&branch=$branch");
-            $misc       = $canBatchEdit ? "onclick=\"setFormAction('$actionLink')\"" : "disabled='disabled'";
+            $misc       = $canBatchEdit ? "onclick=\"setFormAction('$actionLink', '', '#bugList')\"" : "disabled='disabled'";
             echo html::commonButton($lang->edit, $misc);
             ?>
             <button type='button' class='btn dropdown-toggle' data-toggle='dropdown'><span class='caret'></span></button>
@@ -296,17 +296,17 @@ $currentBrowseType = isset($lang->bug->mySelects[$browseType]) && in_array($brow
               <?php
               $class      = $canBatchConfirm ? '' : "class='disabled'";
               $actionLink = $this->createLink('bug', 'batchConfirm');
-              $misc       = $canBatchConfirm ? "onclick=\"setFormAction('$actionLink', 'hiddenwin')\"" : '';
+              $misc       = $canBatchConfirm ? "onclick=\"setFormAction('$actionLink', 'hiddenwin', '#bugList')\"" : '';
               echo "<li $class>" . html::a('javascript:;', $lang->bug->confirmBug, '', $misc) . "</li>";
 
               $class      = $canBatchClose ? '' : "class='disabled'";
               $actionLink = $this->createLink('bug', 'batchClose');
-              $misc       = $canBatchClose ? "onclick=\"setFormAction('$actionLink', 'hiddenwin')\"" : '';
+              $misc       = $canBatchClose ? "onclick=\"setFormAction('$actionLink', 'hiddenwin', '#bugList')\"" : '';
               echo "<li $class>" . html::a('javascript:;', $lang->bug->close, '', $misc) . "</li>";
 
               $class      = $canBatchActivate ? '' : "class='disabled'";
               $actionLink = $this->createLink('bug', 'batchActivate', "productID=$productID&branch=$branch");
-              $misc       = $canBatchActivate ? "onclick=\"setFormAction('$actionLink')\"" : '';
+              $misc       = $canBatchActivate ? "onclick=\"setFormAction('$actionLink', '', '#bugList')\"" : '';
               echo "<li $class>" . html::a('javascript:;', $lang->bug->activate, '', $misc) . "</li>";
 
               $misc = $canBatchResolve ? "id='resolveItem'" : '';
@@ -332,7 +332,7 @@ $currentBrowseType = isset($lang->bug->mySelects[$browseType]) && in_array($brow
                           {
                               $actionLink = $this->createLink('bug', 'batchResolve', "resolution=fixed&resolvedBuild=$key");
                               echo "<li class='option' data-key='$key'>";
-                              echo html::a('javascript:;', $build, '', "onclick=\"setFormAction('$actionLink', 'hiddenwin')\"");
+                              echo html::a('javascript:;', $build, '', "onclick=\"setFormAction('$actionLink', 'hiddenwin', '#bugList')\"");
                               echo "</li>";
                           }
                           echo "</ul>";
@@ -341,7 +341,7 @@ $currentBrowseType = isset($lang->bug->mySelects[$browseType]) && in_array($brow
                       }
                       else
                       {
-                          echo '<li>' . html::a('javascript:;', $resolution, '', "onclick=\"setFormAction('$actionLink', 'hiddenwin')\"") . '</li>';
+                          echo '<li>' . html::a('javascript:;', $resolution, '', "onclick=\"setFormAction('$actionLink', 'hiddenwin', '#bugList')\"") . '</li>';
                       }
                   }
                   echo '</ul></li>';
@@ -370,7 +370,7 @@ $currentBrowseType = isset($lang->bug->mySelects[$browseType]) && in_array($brow
                 {
                     $searchKey = $withSearch ? ('data-key="' . zget($branchsPinYin, $branchName, '') . '"') : '';
                     $actionLink = $this->createLink('bug', 'batchChangeBranch', "branchID=$branchID");
-                    echo html::a('#', $branchName, '', "$searchKey onclick=\"setFormAction('$actionLink', 'hiddenwin')\" data-key='$branchID'");
+                    echo html::a('#', $branchName, '', "$searchKey onclick=\"setFormAction('$actionLink', 'hiddenwin', '#bugList')\" data-key='$branchID'");
                 }
                 ?>
               </div>
@@ -398,7 +398,7 @@ $currentBrowseType = isset($lang->bug->mySelects[$browseType]) && in_array($brow
                 {
                     $searchKey = $withSearch ? ('data-key="' . zget($modulesPinYin, $module, '') . '"') : '';
                     $actionLink = $this->createLink('bug', 'batchChangeModule', "moduleID=$moduleId");
-                    echo html::a('#', $module, '', "$searchKey onclick=\"setFormAction('$actionLink', 'hiddenwin')\" data-key='$moduleID'");
+                    echo html::a('#', $module, '', "$searchKey onclick=\"setFormAction('$actionLink', 'hiddenwin', '#bugList')\" data-key='$moduleID'");
                 }
                 ?>
               </div>
@@ -428,7 +428,7 @@ $currentBrowseType = isset($lang->bug->mySelects[$browseType]) && in_array($brow
                 {
                     if(empty($key)) continue;
                     $searchKey = $withSearch ? ('data-key="' . zget($membersPinYin, $value, '') . " @$key\"") : "data-key='@$key'";
-                    echo html::a("javascript:$(\"#assignedTo\").val(\"$key\");setFormAction(\"$actionLink\", \"hiddenwin\")", $value, '', $searchKey);
+                    echo html::a("javascript:$(\"#assignedTo\").val(\"$key\");setFormAction(\"$actionLink\", \"hiddenwin\", \"#bugList\")", $value, '', $searchKey);
                 }
                 ?>
               </div>

@@ -1025,6 +1025,8 @@ EOT;
         }
         else
         {
+            /* Can not locate the url that has '#app', so remove it. */
+            if(strpos($url, '#app=') !== false) $url = substr($url, 0, strpos($url, '#app='));
             $js .= "$target.location='$url';\n";
         }
         return $js . self::end();
