@@ -2517,7 +2517,7 @@ class executionModel extends model
         $this->loadModel('action');
         $linkedCases   = $this->dao->select('*')->from(TABLE_PROJECTCASE)->where('project')->eq($executionID)->orderBy('order_desc')->fetchPairs('case', 'order');
         $lastCaseOrder = empty($linkedCases) ? 0 : reset($linkedCases);
-        $cases         = $this->dao->select('id, version')->from(TABLE_CASE)->where('story')->eq($storyID)->fetchParis('id');
+        $cases         = $this->dao->select('id, version')->from(TABLE_CASE)->where('story')->eq($storyID)->fetchPairs('id');
         foreach($cases as $caseID => $case)
         {
             if(isset($linkedCases[$caseID])) continue;
