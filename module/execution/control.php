@@ -1376,7 +1376,7 @@ class execution extends control
         list($begin, $end) = $this->execution->getBeginEnd4CFD($execution);
         $dateList = date::getDateList($begin, $end, 'Y-m-d', '');
 
-        list($cycleTimeAvg, $throughput) = $this->execution->getCFDStatistics($executionID, $dateList, $type);
+        //list($cycleTimeAvg, $throughput) = $this->execution->getCFDStatistics($executionID, $dateList, $type);
 
         $chartData = $this->execution->buildCFDData($executionID, $dateList, $type);
         if(isset($chartData['line'])) $chartData['line'] = array_reverse($chartData['line']);
@@ -1387,8 +1387,6 @@ class execution extends control
         $this->view->executionName = $execution->name;
         $this->view->executionID   = $executionID;
         $this->view->chartData     = $chartData;
-        $this->view->cycleTimeAvg  = $cycleTimeAvg;
-        $this->view->throughput    = $throughput;
         $this->display();
     }
 
