@@ -35,12 +35,15 @@
             <?php if(common::hasPriv('product', 'manageLine') and ($config->systemMode == 'classic' or $programID)):?>
             <td>
               <div class='input-group'>
-                <?php echo html::select("line", $lines, '', "class='form-control hidden line-exist chosen'");?>
-                <?php echo html::input("lineName", '', "class='form-control line-no-exist'");?>
+                <?php $hiddenLine     = count($lines) > 1 ? '' : 'hidden';?>
+                <?php $hiddenLineName = $hiddenLine ? '' : 'hidden';?>
+                <?php $checkedNewLine = $hiddenLine ? 'checked' : '';?>
+                <?php echo html::select("line", $lines, '', "class='form-control line-exist chosen $hiddenLine'");?>
+                <?php echo html::input("lineName", '', "class='form-control line-no-exist $hiddenLineName'");?>
                 <?php if(count($lines)):?>
                 <span class='input-group-addon'>
                   <div class="checkbox-primary">
-                    <input type="checkbox" name="newLine" value="0" checked onchange="toggleLine(this)" id="newLine0" />
+                  <input type="checkbox" name="newLine" value="0" <?php echo $checkedNewLine;?> onchange="toggleLine(this)" id="newLine0" />
                     <label for="newLine0"><?php echo $lang->product->newLine;?></label>
                   </div>
                 </span>
@@ -123,4 +126,5 @@
     </form>
   </div>
 </div>
+<?php js::set('hiddenLine', $hiddenLine);?>
 <?php include '../../common/view/footer.html.php';?>
