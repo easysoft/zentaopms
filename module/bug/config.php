@@ -41,12 +41,12 @@ $config->bug->exportFields = 'id, product, branch, module, project, execution, s
 $config->bug->fieldList['id']['title'] = 'id';
 
 $config->bug->fieldList['product']['title']            = 'product';
-//$config->bug->fieldList['product']['foreignKey']       = true;
-//$config->bug->fieldList['product']['foreignKeySource'] = ;
+$config->bug->fieldList['product']['foreignKey']       = true;
+$config->bug->fieldList['product']['foreignKeySource'] = array('module' => 'product', 'method' => 'getPairs');
 
 $config->bug->fieldList['branch']['title']            = 'branch';
 $config->bug->fieldList['branch']['foreignKey']       = true;
-$config->bug->fieldList['branch']['foreignKeySource'] = array('module' => 'branch', 'method' => 'getPairs', 'params' => '$executionID');
+$config->bug->fieldList['branch']['foreignKeySource'] = array('module' => 'bug', 'method' => 'getRelatedObjects', 'params' => 'branch&id,name');
 
 $config->bug->fieldList['module']['title']            = 'module';
 $config->bug->fieldList['module']['foreignKey']       = true;
@@ -65,6 +65,8 @@ $config->bug->fieldList['story']['foreignKey']       = true;
 $config->bug->fieldList['story']['foreignKeySource'] = array('module' => 'bug', 'method' =>'getRelatedObjects', 'params' => 'story&id,title');
 
 $config->bug->fieldList['task']['title'] = 'task';
+$config->bug->fieldList['task']['foreignKey']       = true;
+$config->bug->fieldList['task']['foreignKeySource'] = array('module' => 'bug', 'method' =>'getRelatedObjects', 'params' => 'task&id,name');
 
 $config->bug->fieldList['steps']['title'] = 'steps';
 
@@ -105,6 +107,8 @@ $config->bug->fieldList['duplicateBug']['title'] = 'duplicateBug';
 $config->bug->fieldList['linkBug']['title'] = 'linkBug';
 
 $config->bug->fieldList['case']['title'] = 'case';
+$config->bug->fieldList['case']['foreignKey']       = true;
+$config->bug->fieldList['case']['foreignKeySource'] = array('module' => 'bug', 'method' =>'getRelatedObjects', 'params' => 'case&id,title');
 
 $config->bug->fieldList['lastEditedBy']['title'] = 'lastEditedBy';
 $config->bug->fieldList['lastEditedDate']['title'] = 'lastEditedDate';
