@@ -52,14 +52,13 @@
   </div>
   <?php else:?>
   <?php $canBatchEdit = common::hasPriv('execution', 'batchEdit'); ?>
-  <form class='main-table' id='executionsForm' method='post' action='<?php echo inLink('batchEdit');?>' data-ride='table' data-nested='true' data-expand-nest-child='false' data-checkable='false' data-enable-empty-nested-row='true' data-replace-id='executionTableList' data-preserve-nested='true'>
+  <form class='main-table' id='executionForm' method='post' action='<?php echo inLink('batchEdit');?>' data-ride='table' data-nested='true' data-expand-nest-child='false' data-checkable='false' data-enable-empty-nested-row='true' data-replace-id='executionTableList' data-preserve-nested='true'>
     <div class="table-header fixed-right">
       <table class="table table-from has-sort-head table-fixed table-nested" id="executionList">
-<?php $vars = "status=$status&orderBy=%s";?>	
-<thead>
+        <?php $vars = "status=$status&orderBy=%s";?>	
+        <thead>
           <tr>
             <th class='table-nest-title'>
-              <a class='table-nest-toggle table-nest-toggle-global' data-expand-text='<?php echo $lang->expand; ?>' data-collapse-text='<?php echo $lang->collapse;?>'></a>
               <?php echo $lang->idAB;?>
             </th>
             <th class='c-progress'><?php echo $lang->programplan->name;?></th>
@@ -77,22 +76,27 @@
         </thead>
         <tbody id="executionTableList">
           <?php foreach($executionStats as $stage):?>
-          <tr class="row-program">
-	    <td class='text-left table-nest-title'>
-              <span class="table-nest-icon icon table-nest-toggle"></span>
+          <?php
+          $trClass  = '';
+          $trAttrs  = "data-id='$stage->id' data-order='$stage->order' data-parent='$stage->parent'";
+          $trAttrs .= " data-nested='true'";
+          $trClass .= $stage->parent == '0' ? ' is-top-level table-nest-child-hide' : ' table-nest-hide';
+          ?>          
+            <tr row-id = <?php echo $stage->id;?>  class="row-program table-nest-child-hide" >
+	        <td class='text-left table-nest-title'>
               <?php echo $stage->id;?>
             </td>
             <td>
-              <?php echo $stage->name;?>
               <?php
                 $icon = '';
                 if( /* $stage->hasChild || $stage->hasTask*/ true )
                 {
-                    $icon = ' icon-program';
+                    $icon = '';
                     $class = ' table-nest-toggle';
                 }
               ?>
-                <span class="table-nest-icon icon <?php echo $class . $icon;?>"></span>
+                <span id = <?php echo $stage->id;?> class="table-nest-icon icon <?php echo $class . $icon;?>"></span>
+                <?php echo $stage->name;?>
             </td>
             <td><?php echo $stage->id;?></td>
             <td><?php echo $stage->name;?></td>
@@ -105,49 +109,9 @@
             <td><?php echo $stage->name;?></td>
             <td><?php echo $stage->name;?></td>
           </tr>
-
-          <?php if(!empty($stage->children)):?>
-          <?php foreach($stage as $childStage):?>
-          <tr>
-            <td><?php echo $childStage->id;?></td>
-            <td><?php echo $childStage->name;?></td>
-            <td><?php echo $childStage->id;?></td>
-            <td><?php echo $childStage->name;?></td>
-            <td><?php echo $childStage->id;?></td>
-            <td><?php echo $childStage->name;?></td>
-            <td><?php echo $childStage->id;?></td>
-            <td><?php echo $childStage->name;?></td>
-            <td><?php echo $childStage->id;?></td>
-            <td><?php echo $childStage->name;?></td>
-            <td><?php echo $childStage->name;?></td>
-            <td><?php echo $childStage->name;?></td>
-          </tr>
-
-          <?php if(!empty($childStage->tasks)):?>
-          <?php foreach($childStage->tasks as $task):?>
-          <tr>
-            <td><?php echo $task->id;?></td>
-            <td><?php echo $task->name;?></td>
-            <td><?php echo $task->id;?></td>
-            <td><?php echo $task->name;?></td>
-            <td><?php echo $task->id;?></td>
-            <td><?php echo $task->name;?></td>
-            <td><?php echo $task->id;?></td>
-            <td><?php echo $task->name;?></td>
-            <td><?php echo $task->id;?></td>
-            <td><?php echo $task->name;?></td>
-            <td><?php echo $task->name;?></td>
-            <td><?php echo $task->name;?></td>
-          </tr>
-          <?php endforeach;?>
-          <?php endif;?>
-
-          <?php endforeach;?>
-          <?php endif;?>
-
           <?php if(!empty($stage->tasks)):?>
           <?php foreach($stage->tasks as $task):?>
-          <tr>
+          <tr parent-id = <?php echo $stage->id;?> >
             <td><?php echo $task->id;?></td>
             <td><?php echo $task->name;?></td>
             <td><?php echo $task->id;?></td>
@@ -162,8 +126,24 @@
             <td><?php echo $task->name;?></td>
           </tr>
           <?php endforeach;?>
+          <tr type = "load-btn-row" parent-id = <?php echo $stage->id;?> >
+            <td></td>
+            <td>
+              <span parent-id = <?php echo $stage->id;?> class = "load-btn" current-page = 1 >加载更多...
+              </span>
+            </td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
           <?php endif;?>
-
           <?php endforeach;?>
         </tbody>
       </table>
@@ -180,48 +160,40 @@ $("#<?php echo $status;?>Tab").addClass('btn-active-text');
 
 $(function()
 {
-    var ordersList = [];
-    for(var i = 0; i < executionStats.length; ++i) ordersList.push(parseInt(executionStats[i]));
-    ordersList.sort(function(x, y){return x - y;});
-
-    var $list = $('#executionTableList');
-    $list.addClass('sortable').sortable(
+    $('.table-nest-icon').on('click', function()
     {
-        reverse: orderBy === 'order_desc',
-        selector: 'tr',
-        dragCssClass: 'drag-row',
-        trigger: $list.find('.sort-handler').length ? '.sort-handler' : null,
-        before: function(e)
+        var that = this;
+        /* 调接口成功了 去改变行样式 */
+        var $trSelected = $(`tr[row-id = ${$(that).attr('id')}]`);
+        if ($trSelected.hasClass("table-nest-child-hide"))
         {
-            if($(e.event.target).closest('a,.btn').length) return false;
-        },
-        canMoveHere: function($ele, $target)
-        {
-            return $ele.data('parent') === $target.data('parent');
-        },
-        start: function(e)
-        {
-            e.targets.filter('[data-parent!="' + e.element.attr('data-parent') + '"]').addClass('drop-not-allowed');
-        },
-        finish: function(e)
-        {
-            var projects = '';
-            e.list.each(function()
+            var param = 
             {
-                projects += $(this.item).data('id') + ',' ;
-            });
-            $.post(createLink('project', 'updateOrder'), {'projects' : projects, 'orderBy' : orderBy});
+                'id': $(that).attr('id'),
+                'currentPage': 1,
+                'pageSize': 50,
+            };
+            $('#executionForm').table('initNestedList')
+            $trSelected.removeClass("table-nest-child-hide");
+            $(`tr[parent-id = ${$(that).attr('id')} ]`).show();
 
-      
-            $('#executionsForm').table('initNestedList')
+        } else 
+        {
+            $trSelected.addClass("table-nest-child-hide");
+            $(`tr[parent-id = ${$(that).attr('id')} ]`).hide();
+
         }
-    });
-    $('#executionTableList').on('click', '.row-program', function(e)
+    })
+    $('.load-btn').on('click', function () 
     {
-	    console.log(e)
-        if($(e.target).closest('.table-nest-toggle,a').length) return;
-
-    });
-  });
+        var that = this;
+        var param = 
+        {
+            'id' : $(that).attr('parent-id'),
+            'currentPage' : $(that).attr('current-page'),
+            'pageSize':50,
+        }
+    })
+});
 </script>
 <?php include '../../common/view/footer.html.php';?>
