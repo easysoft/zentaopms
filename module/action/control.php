@@ -138,10 +138,11 @@ class action extends control
      * Undelete an object.
      *
      * @param  int    $actionID
+     * @param  string $browseType
      * @access public
      * @return void
      */
-    public function undelete($actionID)
+    public function undelete($actionID, $browseType = 'all')
     {
         $oldAction = $this->action->getById($actionID);
         $extra     = $oldAction->extra == ACTIONMODEL::BE_HIDDEN ? 'hidden' : 'all';
@@ -149,7 +150,7 @@ class action extends control
         $this->action->undelete($actionID);
 
         $sameTypeObjects = $this->action->getTrashes($oldAction->objectType, $extra, 'id_desc', null);
-        $browseType      = $sameTypeObjects ? $oldAction->objectType : 'all';
+        $browseType      = ($sameTypeObjects and $browseType != 'all') ? $oldAction->objectType : 'all';
 
         return print(js::locate($this->createLink('action', 'trash', "browseType=$browseType&type=$extra"), 'parent'));
     }
@@ -158,17 +159,18 @@ class action extends control
      * Hide an deleted object.
      *
      * @param  int    $actionID
+     * @param  string $browseType
      * @access public
      * @return void
      */
-    public function hideOne($actionID)
+    public function hideOne($actionID, $browseType = 'all')
     {
         $oldAction = $this->action->getById($actionID);
 
         $this->action->hideOne($actionID);
 
         $sameTypeObjects = $this->action->getTrashes($oldAction->objectType, 'all', 'id_desc', null);
-        $browseType      = $sameTypeObjects ? $oldAction->objectType : 'all';
+        $browseType      = ($sameTypeObjects and $browseType != 'all') ? $oldAction->objectType : 'all';
 
         return print(js::locate($this->createLink('action', 'trash', "browseType=$browseType"), 'parent'));
     }
