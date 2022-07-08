@@ -113,12 +113,17 @@ class deptModel extends model
         krsort($deptMenu);
         $topMenu = array_pop($deptMenu);
         $topMenu = explode("\n", trim((string)$topMenu));
-        $lastMenu[] = '/' . $this->lang->dept->noDepartment;
+        $lastMenu[] = '/';
         foreach($topMenu as $menu)
         {
             if(!strpos($menu, '|')) continue;
             list($label, $deptID) = explode('|', $menu);
             $lastMenu[$deptID] = $label;
+        }
+        if($this->app->tab == 'report')
+        {
+            unset($lastMenu[0]);
+            $lastMenu[] = '/' . $this->lang->dept->noDepartment;
         }
         return $lastMenu;
     }
