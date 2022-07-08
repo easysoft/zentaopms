@@ -1376,16 +1376,17 @@ class execution extends control
         list($begin, $end) = $this->execution->getBeginEnd4CFD($execution);
         $dateList = date::getDateList($begin, $end, 'Y-m-d', '');
 
-        list($cycleTimeAvg, $throughput) = $this->execution->getCFDStatistics($executionID, $dateList, $type);
+        //list($cycleTimeAvg, $throughput) = $this->execution->getCFDStatistics($executionID, $dateList, $type);
+
+        $chartData = $this->execution->buildCFDData($executionID, $dateList, $type);
+        if(isset($chartData['line'])) $chartData['line'] = array_reverse($chartData['line']);
 
         $this->view->title         = $this->lang->execution->CFD;
         $this->view->type          = $type;
         $this->view->execution     = $execution;
         $this->view->executionName = $execution->name;
         $this->view->executionID   = $executionID;
-        $this->view->chartData     = $this->execution->buildCFDData($executionID, $dateList, $type);
-        $this->view->cycleTimeAvg  = $cycleTimeAvg;
-        $this->view->throughput    = $throughput;
+        $this->view->chartData     = $chartData;
         $this->display();
     }
 
@@ -1397,10 +1398,9 @@ class execution extends control
      * @access public
      * @return void
      */
-    public function computeCFD($reload = 'no', $executionID = 0, $date = '')
+    public function computeCFD($reload = 'no', $executionID = 0)
     {
-        $date = date('Y-m-d', strtotime($date));
-        $this->execution->computeCFD($executionID, $date);
+        $this->execution->computeCFD($executionID);
         if($reload == 'yes') return print(js::reload('parent'));
     }
 
@@ -3065,14 +3065,24 @@ class execution extends control
 
             if(isonlybody())
             {
-                if($this->app->tab == 'execution' and $object->type == 'kanban')
+                if($this->app->tab == 'execution')
                 {
                     $execLaneType = $this->session->execLaneType ? $this->session->execLaneType : 'all';
                     $execGroupBy  = $this->session->execGroupBy ? $this->session->execGroupBy : 'default';
-                    $kanbanData   = $this->loadModel('kanban')->getRDKanban($objectID, $execLaneType, 'id_desc', 0, $execGroupBy);
-                    $kanbanData   = json_encode($kanbanData);
-
-                    return print(js::closeModal('parent', '', "parent.updateKanban($kanbanData)"));
+                    if($object->type == 'kanban')
+                    {
+                        $kanbanData = $this->loadModel('kanban')->getRDKanban($objectID, $execLaneType, 'id_desc', 0, $execGroupBy);
+                        $kanbanData = json_encode($kanbanData);
+                        return print(js::closeModal('parent', '', "parent.updateKanban($kanbanData)"));
+                    }
+                    else
+                    {
+                        $kanbanData = $this->loadModel('kanban')->getExecutionKanban($objectID, $execLaneType, $execGroupBy);
+                        $kanbanType = $execLaneType == 'all' ? 'story' : key($kanbanData);
+                        $kanbanData = $kanbanData[$kanbanType];
+                        $kanbanData = json_encode($kanbanData);
+                        return print(js::closeModal('parent', '', "parent.updateKanban(\"story\", $kanbanData)"));
+                    }
                 }
                 else
                 {
@@ -3212,15 +3222,25 @@ class execution extends control
             }
 
             $execution = $this->execution->getByID($executionID);
-            if($this->app->tab == 'execution' and $execution->type == 'kanban')
+            if($this->app->tab == 'execution')
             {
                 $execLaneType  = $this->session->execLaneType ? $this->session->execLaneType : 'all';
                 $execGroupBy   = $this->session->execGroupBy ? $this->session->execGroupBy : 'default';
                 $rdSearchValue = $this->session->rdSearchValue ? $this->session->rdSearchValue : '';
-                $kanbanData    = $this->loadModel('kanban')->getRDKanban($executionID, $execLaneType, 'id_desc', 0, $execGroupBy, $rdSearchValue);
-                $kanbanData    = json_encode($kanbanData);
-
-                return print(js::closeModal('parent', '', "parent.updateKanban($kanbanData)"));
+                if($execution->type == 'kanban')
+                {
+                    $kanbanData = $this->loadModel('kanban')->getRDKanban($executionID, $execLaneType, 'id_desc', 0, $execGroupBy, $rdSearchValue);
+                    $kanbanData = json_encode($kanbanData);
+                    return print(js::closeModal('parent', '', "parent.updateKanban($kanbanData)"));
+                }
+                else
+                {
+                    $kanbanData = $this->loadModel('kanban')->getExecutionKanban($executionID, $execLaneType, $execGroupBy);
+                    $kanbanType = $execLaneType == 'all' ? 'story' : key($kanbanData);
+                    $kanbanData = $kanbanData[$kanbanType];
+                    $kanbanData = json_encode($kanbanData);
+                    return print(js::closeModal('parent', '', "parent.updateKanban(\"story\", $kanbanData)"));
+                }
             }
 
             return print(js::reload('parent'));

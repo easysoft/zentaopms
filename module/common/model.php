@@ -2416,6 +2416,7 @@ EOD;
           ($module == 'my' and strpos('|changepassword|preference|', "|{$method}|") !== false) or
           ($module == 'file' and strpos('|read|download|uploadimages|ajaxwopifiles|', "|{$method}|") !== false) or
           ($module == 'sso' and $method == 'login') or
+          ($module == 'report' && $method == 'annualdata') or
           ($module == 'traincourse' and $method == 'ajaxuploadlargefile'))
         {
             return;
