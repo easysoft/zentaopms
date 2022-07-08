@@ -550,7 +550,7 @@ class task extends control
                     $rdSearchValue = $this->session->rdSearchValue ? $this->session->rdSearchValue : '';
                     if($execution->type == 'kanban')
                     {
-                        $kanbanData = $this->loadModel('kanban')->getRDKanban($task->execution, $execLaneType, 'id_desc', 0, $execGroup, $rdSearchValue);
+                        $kanbanData = $this->loadModel('kanban')->getRDKanban($task->execution, $execLaneType, 'id_desc', 0, $execGroupBy, $rdSearchValue);
                         $kanbanData = json_encode($kanbanData);
 
                         return print(js::closeModal('parent.parent', '', "parent.parent.updateKanban($kanbanData)"));
