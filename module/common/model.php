@@ -2192,6 +2192,7 @@ EOD;
             $queryCondition = explode(' ORDER BY ', $sql);
             $queryCondition = $queryCondition[0];
         }
+        $queryCondition = preg_replace('/((AND)|(OR)) *t2.\w+ * [^ ]+ [^ ]+/', '', $queryCondition);
         $queryCondition = trim($queryCondition);
         if(empty($queryCondition)) $queryCondition = "1=1";
 
@@ -2415,7 +2416,9 @@ EOD;
           ($module == 'my' and strpos('|changepassword|preference|', "|{$method}|") !== false) or
           ($module == 'file' and strpos('|read|download|uploadimages|ajaxwopifiles|', "|{$method}|") !== false) or
           ($module == 'sso' and $method == 'login') or
-          ($module == 'traincourse' and $method == 'ajaxuploadlargefile'))
+          ($module == 'report' && $method == 'annualdata') or
+          ($module == 'traincourse' and $method == 'ajaxuploadlargefile') or
+          ($module == 'traincourse' and $method == 'playvideo'))
         {
             return;
         }

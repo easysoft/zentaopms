@@ -488,6 +488,7 @@ class executionModel extends model
             ->setIF(!isset($_POST['whitelist']), 'whitelist', '')
             ->setIF($this->post->status == 'closed', 'closedDate', helper::now())
             ->setIF($this->post->status == 'suspended', 'suspendedDate', helper::today())
+            ->setIF($oldExecution->type == 'stage', 'project', $oldExecution->project)
             ->setDefault('team', $this->post->name)
             ->join('whitelist', ',')
             ->stripTags($this->config->execution->editor->edit['id'], $this->config->allowedTags)
@@ -2516,8 +2517,8 @@ class executionModel extends model
         $this->loadModel('action');
         $linkedCases   = $this->dao->select('*')->from(TABLE_PROJECTCASE)->where('project')->eq($executionID)->orderBy('order_desc')->fetchPairs('case', 'order');
         $lastCaseOrder = empty($linkedCases) ? 0 : reset($linkedCases);
-        $cases         = $this->dao->select('id, version')->from(TABLE_CASE)->where('story')->eq($storyID)->fetchParis('id');
-        foreach($cases as $caseID => $case)
+        $cases         = $this->dao->select('id, version')->from(TABLE_CASE)->where('story')->eq($storyID)->fetchPairs();
+        foreach($cases as $caseID => $version)
         {
             if(isset($linkedCases[$caseID])) continue;
 
@@ -2525,7 +2526,7 @@ class executionModel extends model
             $object->project = $executionID;
             $object->product = $productID;
             $object->case    = $caseID;
-            $object->version = $case->version;
+            $object->version = $version;
             $object->order   = ++$lastCaseOrder;
 
             $this->dao->insert(TABLE_PROJECTCASE)->data($object)->exec();
@@ -3005,9 +3006,9 @@ class executionModel extends model
      * @access public
      * @return array
      */
-    public function computeCFD($executionID = 0, $date = '')
+    public function computeCFD($executionID = 0)
     {
-        $today = $date ? $date : helper::today();
+        $today = helper::today();
         $executions = $this->dao->select('id, code')->from(TABLE_EXECUTION)
             ->where('type')->eq('kanban')
             ->andWhere('status')->notin('done,closed,suspended')
@@ -3318,7 +3319,7 @@ class executionModel extends model
                 foreach($lane->items['closed'] as $item)
                 {
                     $diffTime = $type == 'story' ? strtotime($item['lastEditedDate']) - strtotime($item['openedDate']) : strtotime($item['closedDate']) - strtotime($item['openedDate']);
-                    $day      = floor($diffTime / (3600 * 24));
+                    $day      = round($diffTime / (3600 * 24), 1);
                     if($day > 0) $cycleTime[$item['id']] = $day;
                 }
             }
@@ -3326,7 +3327,7 @@ class executionModel extends model
 
         $itemCount    = count($cycleTime);
         if(!$itemCount) return array('', '');
-        $cycleTimeAvg = round(array_sum($cycleTime) / $itemCount);
+        $cycleTimeAvg = round(array_sum($cycleTime) / $itemCount, 1);
         $throughput   = round(($itemCount * 7) / $cycleTimeAvg, 1) . "{$this->lang->execution->kanbanCardsUnit}/" . $this->lang->execution->week;
 
         return array($cycleTimeAvg, $throughput);

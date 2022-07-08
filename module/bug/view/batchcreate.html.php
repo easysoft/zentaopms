@@ -119,7 +119,7 @@ foreach(explode(',', $config->bug->create->requiredFields) as $field)
             <td>
               <div class='input-group'>
                 <div class="input-control has-icon-right">
-                  <?php echo html::input("title[$i]", $bugTitle, "class='form-control'") . html::hidden("uploadImage[$i]", $fileName);?>
+                  <?php echo html::input("title[$i]", $bugTitle, "class='form-control title-import'") . html::hidden("uploadImage[$i]", $fileName);?>
                   <div class="colorpicker">
                     <button type="button" class="btn btn-link dropdown-toggle" data-toggle="dropdown"><span class="cp-title"></span><span class="color-bar"></span><i class="ic"></i></button>
                     <ul class="dropdown-menu clearfix">

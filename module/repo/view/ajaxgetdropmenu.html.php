@@ -12,17 +12,17 @@
 ?>
 <style>
 #dropMenu .tree li {padding: 3px 0 0 10px;}
+#dropMenu .tree li.has-list.open:before {border-left: 0px;}
+#dropMenu .tree li > a {max-width: 100%; line-height: 20px; border-radius: 2px; padding-top: 5px;}
 #dropMenu .col-left {padding: 0;}
 #dropMenu .label {margin-left: 3px;}
 #dropMenu .hide-in-search {padding-left: 8px;}
 #dropMenu .hide-in-search .hidden {display: block !important; visibility: inherit !important;}
 #dropMenuRepo > div.table-row > div > div > ul > li > div {padding-left: 10px;}
-#dropMenu .tree li.has-list.open:before {border-left: 0px;}
 #dropMenu ul.tree-angles {margin-bottom: 0;}
 #dropMenu {margin: 0;}
 #dropMenu ul > li > ul > li > a:hover {color: white; background-color: #0c64eb; text-decoration: none;}
-#dropMenu .tree li > a {max-width: 100%;}
-#dropMenu .tree li > a {line-height: 20px; border-radius: 2px;}
+#dropMenu .tree .has-list > ul > li {padding-top: 0;}
 li > a.selected {color: #3123ae !important; background: #f2eafc !important; line-height: 20px; border-radius: 5px;}
 .search-list .list-group {padding: 7px 10px;}
 #swapper li>div.hide-in-search>a:focus, #swapper li>div.hide-in-search>a:hover {color: #838a9d; cursor: default;}

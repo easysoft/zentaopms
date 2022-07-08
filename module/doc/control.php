@@ -589,7 +589,8 @@ class doc extends control
 
                     if($from == 'lib')
                     {
-                        $response['locate'] = $this->createLink('doc', 'objectLibs', "type=$objectType&objectID=0&libID={$doc->lib}");
+                        $objectID = $objectType == 'project' ? $doc->project : $doc->product;
+                        $response['locate'] = $this->createLink('doc', 'objectLibs', "type=$objectType&objectID={$objectID}&libID={$doc->lib}");
                     }
                 }
                 return $this->send($response);

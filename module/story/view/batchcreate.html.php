@@ -11,6 +11,7 @@
  */
 ?>
 <?php include './header.html.php';?>
+<?php if($forceReview) $config->story->create->requiredFields .= ',review';?>
 <?php js::set('showFields', $showFields);?>
 <?php js::set('requiredFields', $config->story->create->requiredFields);?>
 <div id="mainContent" class="main-content">
@@ -112,7 +113,7 @@
             <td class='<?php echo zget($visibleFields, 'estimate', 'hidden')?> estimateBox'><?php echo html::input('estimate[$id]', $estimate, "class='form-control'");?></td>
             <td class='<?php echo zget($visibleFields, 'review', 'hidden')?> reviewBox'>
               <div class='input-group'>
-                <?php echo html::select('reviewer[$id][]', $reviewers, '', "class='form-control picker-select' multiple");?>
+                <?php echo html::select('reviewer[$id][]', $reviewers, '', "class='form-control chosen' multiple");?>
                 <span class='input-group-addon reviewerDitto'><input type='checkbox' name='reviewDitto[$id]' value='ditto' checked='checked' id='dittocheck$id'/> <?php echo $lang->story->ditto;?></span>
               </div>
             </td>
@@ -176,7 +177,7 @@
       <td class='<?php echo zget($visibleFields, 'estimate', 'hidden')?> estimateBox'><?php echo html::input("estimate[$i]", $estimate, "class='form-control'");?></td>
       <td class='<?php echo zget($visibleFields, 'review', 'hidden')?> reviewBox'>
         <div class='input-group'>
-          <?php echo html::select("reviewer[$i][]", $reviewers, '', "class='form-control picker-select' multiple");?>
+          <?php echo html::select("reviewer[$i][]", $reviewers, '', "class='form-control chosen' multiple");?>
           <span class='input-group-addon reviewerDitto'><input type='checkbox' name="reviewDitto[<?php echo $i?>]" value='ditto' checked='checked' id="dittocheck<?php echo $i?>"/> <?php echo $lang->story->ditto;?></span>
         </div>
       </td>

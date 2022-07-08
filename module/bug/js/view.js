@@ -1,6 +1,7 @@
 $(document).ready(function()
 {
     limitIframeLevel();
+    if(config.onlybody == 'yes') $('.main-actions').css({width: '100%', minWidth: '100%'});
 });
 
 $('#tostory').click(function()
