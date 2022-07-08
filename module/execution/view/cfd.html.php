@@ -33,6 +33,7 @@
 </div>
 <div id='mainContent' class='main-content'>
   <h2 class='text-center'><?php echo $executionName . ' - ' . zget($lang->execution->cfdTypeList, $type) . $lang->execution->CFD;?></h2>
+  <?php if(isset($chartData['labels']) and count($chartData['labels']) != 1): ?>
   <div id="cfdWrapper">
     <div id="cfdChart" style="width: 1200px; height: 600px"></div>
     <div id="burnStatistics">
@@ -42,5 +43,10 @@
       <h3><?php echo $throughput ? $throughput : $lang->noData;?></h3>
     </div>
   </div>
+  <?php else:?>
+  <div class="table-empty-tip">
+  <p><span class="text-muted"><?php echo $lang->execution->noPrintData;?></span></p>
+  </div>
+  <?php endif; ?>
 </div>
 <?php include '../../common/view/footer.html.php';?>

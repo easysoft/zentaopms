@@ -1378,12 +1378,15 @@ class execution extends control
 
         list($cycleTimeAvg, $throughput) = $this->execution->getCFDStatistics($executionID, $dateList, $type);
 
+        $chartData = $this->execution->buildCFDData($executionID, $dateList, $type);
+        if(isset($chartData['line'])) $chartData['line'] = array_reverse($chartData['line']);
+
         $this->view->title         = $this->lang->execution->CFD;
         $this->view->type          = $type;
         $this->view->execution     = $execution;
         $this->view->executionName = $execution->name;
         $this->view->executionID   = $executionID;
-        $this->view->chartData     = $this->execution->buildCFDData($executionID, $dateList, $type);
+        $this->view->chartData     = $chartData;
         $this->view->cycleTimeAvg  = $cycleTimeAvg;
         $this->view->throughput    = $throughput;
         $this->display();
@@ -1397,10 +1400,9 @@ class execution extends control
      * @access public
      * @return void
      */
-    public function computeCFD($reload = 'no', $executionID = 0, $date = '')
+    public function computeCFD($reload = 'no', $executionID = 0)
     {
-        $date = date('Y-m-d', strtotime($date));
-        $this->execution->computeCFD($executionID, $date);
+        $this->execution->computeCFD($executionID);
         if($reload == 'yes') return print(js::reload('parent'));
     }
 

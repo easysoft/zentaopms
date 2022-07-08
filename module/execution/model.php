@@ -3006,9 +3006,9 @@ class executionModel extends model
      * @access public
      * @return array
      */
-    public function computeCFD($executionID = 0, $date = '')
+    public function computeCFD($executionID = 0)
     {
-        $today = $date ? $date : helper::today();
+        $today = helper::today();
         $executions = $this->dao->select('id, code')->from(TABLE_EXECUTION)
             ->where('type')->eq('kanban')
             ->andWhere('status')->notin('done,closed,suspended')
