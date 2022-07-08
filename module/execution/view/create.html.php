@@ -228,7 +228,7 @@
         </tr>
         <tr>
           <th id='c-name'><?php echo $lang->kanban->laneHeight;?></th>
-          <td class='laneHeightBox' colspan='2'><?php echo nl2br(html::radio('heightType', $lang->kanbanlane->heightTypeList, 'auto', "onclick='setCardCount(this.value);'"));?></td>
+          <td class='laneHeightBox' colspan='3'><?php echo nl2br(html::radio('heightType', $lang->kanbanlane->heightTypeList, 'auto', "onclick='setCardCount(this.value);'"));?></td>
         </tr>
         <tr class="hidden" id='cardBox'>
           <th class='c-count'><?php echo $lang->kanban->cardCount;?></th>
