@@ -1753,7 +1753,7 @@ function resetRegionHeight(fold)
         var regionPadding = $('.kanban').css('padding-bottom');
         var columnHeight  = $('.kanban-header').outerHeight();
 
-        $('.region').css('height', height);
+        $('.region').css('min-height', height);
         $('.kanban-lane').css('height', height - regionHeaderHeight - parseInt(regionPadding) - columnHeight);
     }
     else
