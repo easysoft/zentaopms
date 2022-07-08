@@ -165,41 +165,48 @@ $(function()
         var $trSelected = $(`tr[row-id = ${$(that).attr('id')}]`);
         if ($trSelected.hasClass("table-nest-child-hide"))
         {    /* table expand */
-             var executionID = $(this).attr('id');
-             var currentPage = 1;
-             var pageSize    = 50;
-             var link = createLink('task', 'ajaxGetTasksByExecution', 'executionID=' + executionID + '&currentPage=' + currentPage + '&pageSize=' +      pageSize);
-             $.get(link, function(data)
-             {
-                 var newTasks = JSON.parse(data);
-                 $trSelected.after("<tr></tr>");
-                 /* if (total > 50)
+            var executionID = $(this).attr('id');
+            var currentPage = 1;
+            var pageSize    = 50;
+            var link = createLink('task', 'ajaxGetTasksByExecution', 'executionID=' + executionID + '&currentPage=' + currentPage + '&pageSize=' +      pageSize);
+            $.get(link, function(data)
+            {
+                var newTasks = JSON.parse(data);
+                $trSelected.after("<tr></tr>");
+                /* if (total > 50)
                      * 在第五十条后加一个tr 包裹一个td 中间含有一个 <span class = 'load-btn'></span>
                      * 点击事件如下
                      * {
                      *     
                      * }
-                     * */
-                 $trSelected.removeClass("table-nest-child-hide");
-                 $(`tr[parent-id = ${$(that).attr('id')} ]`).show();
-                 $('#executionForm').table('initNestedList');
-             })
+                    * */
+                $trSelected.removeClass("table-nest-child-hide");
+                $(`tr[parent-id = ${$(that).attr('id')} ]`).show();
+                $('#executionForm').table('initNestedList');
+            })
         }
         else
         {   /* table close */
-             $trSelected.addClass("table-nest-child-hide");
-             $(`tr[parent-id = ${$(that).attr('id')} ]`).hide();
+            $trSelected.addClass("table-nest-child-hide");
+            $(`tr[parent-id = ${$(that).attr('id')} ]`).hide();
 
         }
     })
     $("#executionList").on('click','.load-btn', function(e)
-        {
-            var that = e.target;
-            var executionID = $(this).attr('parent-id');
-            var currentPage = $(this).attr('current-page') + 1;
-            var pageSize    = 50;
-            var link = createLink('task', 'ajaxGetTasksByExecution', 'executionID=' + executionID + '&currentPage=' + currentPage + '&pageSize=' + pageSize);
-        })
+    {
+        var that = e.target;
+        var executionID = $(this).attr('parent-id');
+        var currentPage = $(this).attr('current-page') + 1;
+        var pageSize    = 50;
+        var link = createLink('task', 'ajaxGetTasksByExecution', 'executionID=' + executionID + '&currentPage=' + currentPage + '&pageSize=' + pageSize);
+    })
+    /* var addTableRow = function(param)
+    {
+
+        console.log('addRow');
+    }*/
 });
+
+
 </script>
 <?php include '../../common/view/footer.html.php';?>
