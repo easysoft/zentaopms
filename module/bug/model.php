@@ -3457,6 +3457,12 @@ class bugModel extends model
             $relatedObjectIdList[$bug->$object]  = $bug->$object;
         }
 
+        if($object == 'openedBuild')
+        {
+            $relatedObjectIdList = array('trunk' => $this->lang->trunk) + $relatedObjectIdList;
+            $object = 'build';
+        }
+
         /* Get related objects title or names. */
         $table = $this->config->objectTables[$object];
         if($table) $relatedObjects = $this->dao->select($pairs)->from($table) ->where('id')->in($relatedObjectIdList)->fetchPairs();

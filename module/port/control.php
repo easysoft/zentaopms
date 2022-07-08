@@ -85,6 +85,7 @@ class port extends control
             $this->post->set('rows', array());
             $this->post->set('extraNum',   $this->post->num);
             $this->post->set('fileName',   $model . 'Template');
+
             $this->fetch('file', 'export2' . $this->post->fileType, $_POST);
         }
 

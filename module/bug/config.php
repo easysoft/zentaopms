@@ -85,6 +85,8 @@ $config->bug->fieldList['openedBy']['title'] = 'openedBy';
 $config->bug->fieldList['openedDate']['title'] = 'openedDate';
 
 $config->bug->fieldList['openedBuild']['title'] = 'openedBuild';
+$config->bug->fieldList['openedBuild']['foreignKey']       = true;
+$config->bug->fieldList['openedBuild']['foreignKeySource'] = array('module' => 'bug', 'method' =>'getRelatedObjects', 'params' => 'openedBuild&id,name');
 
 $config->bug->fieldList['assignedTo']['title'] = 'assignedTo';
 
