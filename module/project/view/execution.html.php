@@ -192,7 +192,7 @@ $(function()
 
         }
     })
-    $("#executionList").on('click','.load-btn', fucntion (e)
+    $("#executionList").on('click','.load-btn', function(e)
         {
             var that = e.target;
             var executionID = $(this).attr('parent-id');
