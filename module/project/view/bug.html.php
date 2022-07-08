@@ -15,6 +15,7 @@
 <style>
 #subHeader #dropMenu .col-left .list-group {margin-bottom: 0px; padding-top: 10px;}
 #subHeader #dropMenu .col-left {padding-bottom: 0px;}
+#currentBranch + #dropMenu .col-left {padding-bottom: 30px;}
 </style>
 <div id="mainMenu" class="clearfix main-row fade in">
   <div id="sidebarHeader">
@@ -23,7 +24,7 @@
      echo $moduleName;
      if(!empty($moduleID))
      {
-         $removeLink = $this->createLink('project', 'bug', "project={$project->id}&productID={$productID}&orderBy=$orderBy&build=$buildID&type=$type&param=0&recTotal=$pager->recTotal&recPerPage=$pager->recPerPage");
+         $removeLink = $this->createLink('project', 'bug', "project={$project->id}&productID={$productID}&branch=$branchID&orderBy=$orderBy&build=$buildID&type=$type&param=0&recTotal=$pager->recTotal&recPerPage=$pager->recPerPage");
          echo html::a($removeLink, "<i class='icon icon-sm icon-close'></i>", '', "class='text-muted' data-app='{$this->app->tab}'");
      }
      ?>
@@ -32,8 +33,8 @@
   <div class="btn-toolbar pull-left">
     <?php
     $buildName = $build ? " <span class='label label-danger'>Build:{$build->name}</span>" : '';
-    echo html::a($this->inlink('bug', "projectID={$project->id}&productID={$productID}&orderBy=status,id_desc&build=$buildID&type=all"), "<span class='text'>{$lang->bug->allBugs}</span>" . ($type == 'all' ? " <span class='label label-light label-badge'>{$pager->recTotal}</span>$buildName" : ''), '', "id='allTab' class='btn btn-link" . ('all' == $type ? ' btn-active-text' : '') . "'");
-    echo html::a($this->inlink('bug', "projectID={$project->id}&productID={$productID}&orderBy=status,id_desc&build=$buildID&type=unresolved"), "<span class='text'>{$lang->bug->unResolved}</span>" . ($type == 'unresolved' ? " <span class='label label-light label-badge'>{$pager->recTotal}</span>$buildName" : ''), '', "id='unresolvedTab' class='btn btn-link" . ('unresolved' == $type ? ' btn-active-text' : '') . "'");
+    echo html::a($this->inlink('bug', "projectID={$project->id}&productID={$productID}&branch=$branchID&orderBy=status,id_desc&build=$buildID&type=all"), "<span class='text'>{$lang->bug->allBugs}</span>" . ($type == 'all' ? " <span class='label label-light label-badge'>{$pager->recTotal}</span>$buildName" : ''), '', "id='allTab' class='btn btn-link" . ('all' == $type ? ' btn-active-text' : '') . "'");
+    echo html::a($this->inlink('bug', "projectID={$project->id}&productID={$productID}&branch=$branchID&orderBy=status,id_desc&build=$buildID&type=unresolved"), "<span class='text'>{$lang->bug->unResolved}</span>" . ($type == 'unresolved' ? " <span class='label label-light label-badge'>{$pager->recTotal}</span>$buildName" : ''), '', "id='unresolvedTab' class='btn btn-link" . ('unresolved' == $type ? ' btn-active-text' : '') . "'");
     ?>
     <a class="btn btn-link querybox-toggle" id="bysearchTab"><i class="icon icon-search muted"></i> <?php echo $lang->bug->search;?></a>
   </div>
@@ -77,7 +78,7 @@
         <nav class="btn-toolbar pull-right setting"></nav>
       </div>
       <?php
-      $vars = "projectID={$project->id}&productID=$productID&orderBy=%s&build=$buildID&type=$type&param=$param&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}";
+      $vars = "projectID={$project->id}&productID=$productID&branch=$branchID&orderBy=%s&build=$buildID&type=$type&param=$param&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}";
       if($useDatatable) include '../../common/view/datatable.html.php';
       else              include '../../common/view/tablesorter.html.php';
 
