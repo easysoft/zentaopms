@@ -30,7 +30,7 @@
               <ul class="tree tree-angles" data-ride="tree" data-idx="0">
                 <li data-idx='branch' data-id='branch' class='has-list open in' style='cursor: pointer;'>
                   <i class='list-toggle icon'></i>
-                  <div class='hide-in-search'><a class='text-muted' title='<?php echo $lang->repo->branch;?>'><?php echo $lang->repo->branch;?></a></div>
+                  <div class='hide-in-search'><a class='text-muted not-list-item' title='<?php echo $lang->repo->branch;?>'><?php echo $lang->repo->branch;?></a></div>
                   <ul data-idx='branch'>
                     <?php
                     foreach($branches as $branchName)
@@ -45,7 +45,7 @@
                 </li>
                 <li data-idx='tag' data-id='tag' class='has-list open in' style='cursor: pointer;'>
                   <i class='list-toggle icon'></i>
-                  <div class='hide-in-search'><a class='text-muted' title='<?php echo $lang->repo->tag;?>'><?php echo $lang->repo->tag;?></a></div>
+                  <div class='hide-in-search'><a class='text-muted not-list-item' title='<?php echo $lang->repo->tag;?>'><?php echo $lang->repo->tag;?></a></div>
                   <ul data-idx='tag'>
                     <?php
                     foreach($tags as $tagName)

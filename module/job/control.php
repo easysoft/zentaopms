@@ -22,7 +22,7 @@ class job extends control
     public function __construct($moduleName = '', $methodName = '')
     {
         parent::__construct($moduleName, $methodName);
-        if($methodName != 'browse') $this->loadModel('ci')->setMenu();
+        if($this->app->methodName != 'browse') $this->loadModel('ci')->setMenu();
         $this->projectID = isset($_GET['project']) ? $_GET['project'] : 0;
     }
 
