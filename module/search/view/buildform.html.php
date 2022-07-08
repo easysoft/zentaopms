@@ -64,7 +64,10 @@ $formId = 'searchForm-' . uniqid('');
 html[lang^='zh-'] .fieldWidth {width: 110px !important;}
 html[lang^='zh-'] .operatorWidth {width: 90px !important;}
 .table tbody tr td input {display: block !important;}
-#save-query {color: #0061f2;}
+
+#save-query {float: unset !important; position: absolute; right: 50px;}
+#save-query .text {top: 0px;}
+#save-query .text:after {border-bottom: 0px solid #0c64eb;}
 </style>
 <?php if($style != 'simple'):?>
   <div id='toggle-queries'>
@@ -245,7 +248,7 @@ foreach($fieldParams as $fieldName => $param)
         echo html::submitButton($lang->search->common, '', 'btn btn-primary') . " &nbsp; ";
         if($style != 'simple') echo html::commonButton($lang->search->reset, '', 'btn-reset-form btn');
         echo html::commonButton('<i class="icon icon-chevron-double-down"></i>', '', 'btn-expand-form btn btn-info pull-right');
-        if($style != 'simple' and common::hasPriv('search', 'saveQuery')) echo html::a($this->createLink('search', 'saveQuery', "module=$module&onMenuBar=$onMenuBar"), '<i class="icon-bug-confirmBug icon-ok"></i> ' . $lang->search->saveCondition, '', "class='btn-save-form btn btn-link iframe pull-right' id='save-query'");
+        if($style != 'simple' and common::hasPriv('search', 'saveQuery')) echo html::a($this->createLink('search', 'saveQuery', "module=$module&onMenuBar=$onMenuBar"), '<span class="text"><i class="icon-bug-confirmBug icon-ok"></i> ' . $lang->search->saveCondition . '</span>', '', "class='btn-save-form btn btn-link btn-active-text text iframe pull-right' id='save-query'");
         echo html::hidden('formType', zget($formSession, 'formType', 'lite'));
         ?>
       </td>
