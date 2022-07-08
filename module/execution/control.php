@@ -1021,7 +1021,7 @@ class execution extends control
         }
         elseif(!empty($products))
         {
-            $productID = empty($productID) ? reset($products)->id : $productID;
+            $productID  = empty($productID) ? reset($products)->id : $productID;
             $moduleTree = $this->tree->getTreeMenu($productID, 'bug', 0, array('treeModel', 'createBugLink'), $extra + array('branchID' => $branch, 'productID' => $productID), $branch);
         }
         else
@@ -1030,7 +1030,7 @@ class execution extends control
         }
         $tree = $moduleID ? $this->tree->getByID($moduleID) : '';
 
-        $showModule  = !empty($this->config->datatable->executionBug->showModule) ? $this->config->datatable->executionBug->showModule : '';
+        $showModule = !empty($this->config->datatable->executionBug->showModule) ? $this->config->datatable->executionBug->showModule : '';
 
         /* Assign. */
         $this->view->title           = $title;

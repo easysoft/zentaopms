@@ -112,7 +112,7 @@ class productModel extends model
         $this->session->set('currentProductType', $currentProduct->type);
 
         $executionID = ($isQaModule and $this->app->tab == 'execution') ? $extra : 0;
-        $output = '';
+        $output      = '';
         if(!empty($products))
         {
             $dropMenuLink = helper::createLink($isQaModule ? 'bug' : 'product', 'ajaxGetDropMenu', "objectID=$productID&module=$currentModule&method=$currentMethod&extra=$extra");
