@@ -1332,7 +1332,7 @@ class repo extends control
             $zip = new pclzip($fileName);
             if($zip->create($files, PCLZIP_OPT_REMOVE_PATH, $repo->path) === 0) return print(js::alert($zip->errorInfo()) . js::close());
 
-            $url = DS . 'data' . DS . 'repo' . DS . $repo->name . '.zip';
+            $url = $this->config->webRoot . $this->app->getAppName() . 'data' . DS . 'repo' . DS . $repo->name . '.zip';
         }
         else
         {
@@ -1350,7 +1350,7 @@ class repo extends control
             $zip = new pclzip($fileName);
             if($zip->create($repoDir, PCLZIP_OPT_REMOVE_PATH, $repoDir) === 0) return print(js::alert($zip->errorInfo()) . js::close());
 
-            $url = DS . 'data' . DS . 'repo' . DS . $repo->name . '.zip';
+            $url = $this->config->webRoot . $this->app->getAppName() . 'data' . DS . 'repo' . DS . $repo->name . '.zip';
         }
 
         $this->locate($url);
