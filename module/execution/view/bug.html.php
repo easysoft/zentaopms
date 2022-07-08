@@ -12,6 +12,11 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/datatable.fix.html.php';?>
+<style>
+#subHeader #dropMenu .col-left .list-group {margin-bottom: 0px; padding-top: 10px;}
+#subHeader #dropMenu .col-left {padding-bottom: 0px;}
+#currentBranch + #dropMenu .col-left {padding-bottom: 30px;}
+</style>
 <div id="mainMenu" class="clearfix main-row fade in">
   <div id="sidebarHeader">
     <div class="title" title="<?php echo $moduleName;?>">
