@@ -7,7 +7,7 @@ class port extends control
      * @access public
      * @return void
      */
-    public function export($model = '', $params = '')
+    public function export($model = '', $params = '', $rows = array())
     {
         /* Split parameters into variables (executionID=1,status=open).*/
         $params = explode(',', $params);
@@ -206,6 +206,15 @@ class port extends control
         if(array_key_exists('files', $fieldList))
         {
             $modelDatas = $this->port->getFiles($model, $modelDatas);
+        }
+
+        $rows = !empty($_POST['rows']) ? $_POST['rows'] : '';
+        if($rows)
+        {
+            foreach($rows as $id => $row)
+            {
+                $modelDatas[$id] = (object) array_merge((array)$modelDatas[$id], (array)$row);
+            }
         }
         return $modelDatas;
     }

@@ -50,7 +50,7 @@ $config->bug->fieldList['branch']['foreignKeySource'] = array('module' => 'bug',
 
 $config->bug->fieldList['module']['title']            = 'module';
 $config->bug->fieldList['module']['foreignKey']       = true;
-$config->bug->fieldList['module']['foreignKeySource'] = array('module' => 'tree', 'method' => 'getAllModulePairs', 'params' => 'bug');;
+$config->bug->fieldList['module']['foreignKeySource'] = array('module' => 'tree', 'method' => 'getAllModulePairs', 'params' => 'bug');
 
 $config->bug->fieldList['project']['title'] = 'project';
 $config->bug->fieldList['project']['foreignKey'] = true;

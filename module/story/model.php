@@ -5326,4 +5326,34 @@ class storyModel extends model
 
         return $story;
     }
+
+    /**
+     * Get related objects id lists.
+     *
+     * @param  int    $object
+     * @param  string $name
+     * @access public
+     * @return void
+     */
+    public function getRelatedObjects($object, $pairs = '')
+    {
+        /* Get bugs. */
+        $storys = $this->dao->select('*')->from(TABLE_STORY)->where($this->session->storyQueryCondition)
+            ->fetchAll('id');
+
+        /* Get related objects id lists. */
+        $relatedObjectIdList = array();
+        $relatedObjects      = array();
+
+        foreach($storys as $story)
+        {
+            $relatedObjectIdList[$story->$object]  = $story->$object;
+        }
+
+        if($object == 'plan') $object = 'productplan';
+        /* Get related objects title or names. */
+        $table = $this->config->objectTables[$object];
+        if($table) $relatedObjects = $this->dao->select($pairs)->from($table) ->where('id')->in($relatedObjectIdList)->fetchPairs();
+        return $relatedObjects;
+    }
 }

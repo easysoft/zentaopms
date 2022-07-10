@@ -302,8 +302,9 @@ class portModel extends model
      * @access public
      * @return void
      */
-    public function getSourceBySql()
+    public function getSourceBySql($sql = '')
     {
+
         return '';
     }
 

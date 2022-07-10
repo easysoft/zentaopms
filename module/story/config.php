@@ -30,7 +30,7 @@ $config->story->editor->activate = array('id' => 'comment', 'tools' => 'simpleTo
 $config->story->editor->assignto = array('id' => 'comment', 'tools' => 'simpleTools');
 
 $config->story->list = new stdclass();
-$config->story->list->exportFields      = '
+$config->story->exportFields = '
     id, product, branch, module, plan, source, sourceNote, title, spec, verify, keywords,
     pri, estimate, status, stage, taskCountAB, bugCountAB, caseCountAB,
     openedBy, openedDate, assignedTo, assignedDate, mailto,
@@ -38,6 +38,19 @@ $config->story->list->exportFields      = '
     closedBy, closedDate, closedReason,
     lastEditedBy, lastEditedDate,
     childStories, linkStories, duplicateStory, files';
+
+$config->product->fieldList['product']['title']            = 'product';
+$config->product->fieldList['product']['foreignKey']       = true;
+$config->product->fieldList['product']['foreignKeySource'] = array('module' => 'product', 'method' => 'getPairs');
+
+$config->story->fieldList['branch']['foreignKey'] = true;
+$config->story->fieldList['branch']['foreignKeySource'] = array('module' => 'story', 'method' => 'getRelatedObjects', 'params' => 'branch&id,name');
+
+$config->story->fieldList['module']['foreignKey'] = true;
+$config->story->fieldList['module']['foreignKeySource'] = array('module' => 'tree', 'method' => 'getAllModulePairs', 'params' => 'story');
+
+$config->story->fieldList['plan']['foreignKey'] = true;
+$config->story->fieldList['plan']['foreignKeySource'] = array('module' => 'story', 'method' => 'getRelatedObjects', 'params' => 'plan&id,title');
 
 $config->story->list->customCreateFields      = 'source,verify,pri,estimate,mailto,keywords';
 $config->story->list->customBatchCreateFields = 'plan,spec,source,verify,pri,estimate,review,keywords';
