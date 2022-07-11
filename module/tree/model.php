@@ -694,8 +694,8 @@ class treeModel extends model
                     ->andWhere('deleted')->eq(0)
                     ->orderBy('grade desc, `order`, type')
                     ->get();
-                $treeMenu          = array();
-                $stmt              = $this->dbh->query($query);
+                $treeMenu = array();
+                $stmt     = $this->dbh->query($query);
                 while($module = $stmt->fetch())
                 {
                     if(isset($executionModules[$module->id])) $this->buildTree($treeMenu, $module, 'bug', $userFunc, $extra, $branch);
