@@ -719,7 +719,6 @@ class taskModel extends model
                     $task->assignedTo   = $childTask->assignedTo;
                     $task->assignedDate = $now;
                 }
-
                 $task->finishedBy   = '';
                 $task->finishedDate = '';
                 $task->closedBy     = '';
@@ -749,6 +748,7 @@ class taskModel extends model
                 if($status == 'doing' and $parentTask->status == 'wait')    $action = 'Started';
                 if($status == 'doing' and $parentTask->status == 'pause')   $action = 'Restarted';
                 if($status == 'doing' and $parentTask->status != 'wait' and $parentTask->status != 'pause') $action = 'Activated';
+                if($status == 'wait' and $parentTask->status != 'wait')     $action = 'Adjusttasktowait';
                 if($action)
                 {
                     $actionID = $this->loadModel('action')->create('task', $parentID, $action, '', '', '', false);
@@ -2834,7 +2834,18 @@ class taskModel extends model
         $data->consumed = $consumed;
         $data->left     = $left;
         $data->status   = ($left == 0 && $consumed != 0) ? 'done' : $task->status;
-
+        if($left == 0 and $consumed != 0)
+        {
+            $data->status = 'done';
+        }
+        elseif($consumed == 0)
+        {
+            $data->status = 'wait';
+        }
+        else
+        {
+            $data->status = $task->status;
+        }
         if(!empty($task->team))
         {
             $oldConsumed = $task->team[$estimate->account]->consumed;

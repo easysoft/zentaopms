@@ -18,6 +18,7 @@
     $i = 0;
     foreach($actions as $action)
     {
+        if($action->action == 'adjusttasktowait') continue;
         $user = zget($users, $action->actor);
         if($action->action == 'login' or $action->action == 'logout') $action->objectName = $action->objectLabel = '';
         if($action->objectType == 'sonarqubeproject') $action->objectName = $action->extra;
