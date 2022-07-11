@@ -1,0 +1,3 @@
+.table-children {border-left: 2px solid #cbd0db; border-right: 2px solid #cbd0db;}
+.table tbody > tr.table-children.table-child-top {border-top: 2px solid #cbd0db;}
+.table tbody > tr.table-children.table-child-bottom {border-bottom: 2px solid #cbd0db;}

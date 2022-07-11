@@ -1760,6 +1760,7 @@ class task extends control
 
     public function ajaxGetTasksByExecution($executionID, $pageID, $recPerPage, $maxTaskID = 0)
     {
+        //总数、更多、最后一条ID，
         $tasks = $this->dao->select('*')->from(TABLE_TASK)
             ->where('deleted')->eq(0)
             ->andWhere('status')->ne('closed')
@@ -1768,6 +1769,8 @@ class task extends control
             ->limit($recPerPage)
             ->fetchAll('id');
 
+        $users = $this->loadModel('user')->getPairs('noclosed|nodeleted');
+        $html = '';
         foreach($tasks as $task)
         {
             if($task->parent > 0)
@@ -1778,9 +1781,48 @@ class task extends control
                     unset($tasks[$task->id]);
                 }
             }
+
+            $parentClass = $task->parent == '-1' ? 'table-nest-child-hide' : '';
+            $parentID    = $task->parent > 0 ? $task->parent : $executionID;
+
+            $html .= "<tr row-id=$task->id parent-id=$parentID class='row-program $parentClass'>";
+            $html .= '<td>';
+            $html .= $task->id;
+            $html .= '</td>';
+            $html .= '<td>';
+            $html .= $task->name;
+            $html .= '</td>';
+            $html .= '<td>';
+            $html .= zget($users, $task->assignedTo, '');
+            $html .= '</td>';
+            $html .= '<td>';
+            $html .= zget($this->lang->task->statusList, $task->task, '');
+            $html .= '</td>';
+            $html .= '<td>';
+            $html .= '</td>';
+            $html .= '<td>';
+            $html .= $task->begin;
+            $html .= '</td>';
+            $html .= '<td>';
+            $html .= $task->end;
+            $html .= '</td>';
+            $html .= '<td>';
+            $html .= $task->consumed;
+            $html .= '</td>';
+            $html .= '<td>';
+            $html .= $task->left;
+            $html .= '</td>';
+            $html .= '<td>';
+            $html .= '燃尽图';
+            $html .= '</td>';
+            $html .= '<td>';
+            $html .= '操作';
+            $html .= '</td>';
+            $html .= '</tr>';
+
         }
 
-        die(json_encode($tasks));
+        die(json_encode($html));
     }
 
     /**
