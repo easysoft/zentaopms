@@ -71,9 +71,20 @@ $(function()
         }
     });
 
+    /* Init. */
+    $("select[id^=branch]").each(nonClickableSelectedBranch);
     nonClickableSelectedProduct();
 
-    $("select[id^=branch]").each(nonClickableSelectedBranch);
+    /* Check the all products and branches control when uncheck the product. */
+    $(document).on('change', "select[id^='products']", function()
+    {
+        if($(this).val() == 0)
+        {
+            $("select[id^='branch']").each(nonClickableSelectedBranch);
+
+            nonClickableSelectedProduct();
+        }
+    });
 
     $(document).on('change', "select[id^='branch']", nonClickableSelectedBranch);
 })

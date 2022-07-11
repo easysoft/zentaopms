@@ -148,13 +148,9 @@ function loadBranches(product)
         if(data)
         {
             $inputgroup.addClass('has-branch').append(data);
-            $inputgroup.find('select:last').prepend("<option value='' title=''></option>");
-            $inputgroup.find('select:last').find('option:selected').removeAttr('selected');
-            $inputgroup.find('select:last').val('');
-            $inputgroup.find('select:last').each(nonClickableSelectedBranch);
-            $inputgroup.find('select:last').find('option:first').remove();
             $inputgroup.find('select:last').attr('name', 'branch[' + index + ']').attr('id', 'branch' + index).attr('onchange', "loadPlans('#products" + index + "', this.value)").chosen();
 
+            $inputgroup.find('select:last').each(nonClickableSelectedBranch);
             nonClickableSelectedProduct();
         }
 
@@ -263,6 +259,11 @@ function nonClickableSelectedProduct()
     $("select[id^=products]").trigger('chosen:updated');
 }
 
+/**
+ * Make the selected branch non clickable.
+ *
+ * @return void
+ */
 function nonClickableSelectedBranch()
 {
     var relatedProduct = $(this).siblings("select[id^='products']").val();
@@ -274,16 +275,33 @@ function nonClickableSelectedBranch()
     {
         if($(this).val() == relatedProduct)
         {
+            $(this).siblings("select[id^='branch']").find("option[disabled='disabled']").removeAttr('disabled');
+
             sameProductControl.push(this);
             sameProductBranchControl.push($(this).siblings("select[id^='branch']"));
         }
     });
 
     /* Get the selected branch of the related product. */
+    var preSelectedVal = [];
+    $.each(sameProductControl, function()
+    {
+        var selectedBranch = $(this).siblings("select[id^='branch']").val();
+        if($.inArray(selectedBranch, preSelectedVal) < 0) preSelectedVal.push(selectedBranch);
+    });
+
     var selectedVal = [];
     $.each(sameProductControl, function()
     {
         var selectedBranch = $(this).siblings("select[id^='branch']").val();
+        if($.inArray(selectedBranch, selectedVal) >= 0)
+        {
+            $(this).siblings("select[id^='branch']").find('option').removeAttr('selected');
+            for(i in preSelectedVal) $(this).siblings("select[id^='branch']").find('option[value=' + preSelectedVal[i] + ']').attr('disabled', 'disabled');
+
+            $(this).siblings("select[id^='branch']").find('option').not('[disabled=disabled]').eq(0).attr('selected', 'selected');
+            var selectedBranch = $(this).siblings("select[id^='branch']").val();
+        }
         if($.inArray(selectedBranch, selectedVal) < 0) selectedVal.push(selectedBranch);
     });
 
@@ -302,16 +320,22 @@ function nonClickableSelectedBranch()
     $("select[id^=branch]").trigger('chosen:updated');
 }
 
+/**
+ * Determine whether multi-branch products should be disabled.
+ *
+ * @param  object  product
+ * @return bool
+ */
 function checkMultiProducts(product)
 {
-    var disabledbranchList = [];
+    var disabledBranchList = [];
     var optionLength       = $(product).siblings("select[id^='branch']").find('option').length;
     $(product).siblings("select[id^='branch']").find("option[disabled='disabled']").each(function()
     {
-        disabledbranchList.push($(this).attr('value'));
+        disabledBranchList.push($(this).attr('value'));
     });
 
-    if(optionLength - disabledbranchList.length == 1) return true;
+    if(optionLength - disabledBranchList.length == 1) return true;
 
     return false;
 }
