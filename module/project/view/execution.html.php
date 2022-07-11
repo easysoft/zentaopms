@@ -51,88 +51,119 @@
   </div>
   <?php else:?>
   <?php $canBatchEdit = common::hasPriv('execution', 'batchEdit'); ?>
-  <form class='main-table' id='executionForm' method='post' action='<?php echo inLink('batchEdit');?>' data-ride='table' data-nested='true' data-expand-nest-child='false' data-checkable='false' data-enable-empty-nested-row='true' data-replace-id='executionTableList' data-preserve-nested='false'>
-    <div class="table-header fixed-right">
-      <table class="table table-from has-sort-head table-fixed table-nested" id="executionList">
-        <?php $vars = "status=$status&orderBy=%s";?>	
-        <thead>
-          <tr>
-            <th class='c-name'><?php echo $lang->programplan->name;?></th>
-            <th class='c-user'><?php echo $lang->execution->owner;?></th>
-            <th class='c-status'><?php echo $lang->project->status;?></th>
-            <th class='c-hours'><?php echo $lang->project->progress;?></th>
-            <th class='c-date'><?php echo $lang->programplan->begin;?></th>
-            <th class='c-date'><?php echo $lang->programplan->end;?></th>
-            <th class='c-hours'><?php echo $lang->task->estimateAB;?></th>
-            <th class='c-hours'><?php echo $lang->task->consumedAB;?></th>
-            <th class='c-hours'><?php echo $lang->task->leftAB;?> </th>
-            <th class='c-progress'><?php echo $lang->execution->burn;?> </th>
-            <th class='text-center c-actions-6'><?php echo $lang->actions;?></th> 
-          </tr>
-        </thead>
-        <tbody id="executionTableList">
-          <?php foreach($executionStats as $execution):?>
-          <?php
-          $trClass  = '';
-          $trAttrs  = "data-id='$execution->id' data-order='$execution->order' data-nested='true'";
-          $trClass .= !empty($execution->children) ? ' is-top-level table-nest-child-hide' : '';
-          ?>
-          <tr <?php echo $trAttrs;?> class="row-program <?php echo $trClass;?>">
-            <td>
-              <?php
-                $icon = '';
-                if( /* $execution->hasChild || $execution->hasTask*/ true )
-                {
-                    $icon = '';
-                    $class = ' table-nest-toggle';
-                }
-              ?>
-              <span id = <?php echo $execution->id;?> class="table-nest-icon icon <?php echo $class . $icon;?>"></span>
-              <?php echo $execution->name;?>
-            </td>
-            <td><?php echo zget($users, $execution->PM);?></td>
-            <td><?php echo zget($lang->project->statusList, $execution->status);?></td>
-            <td><?php echo html::ring($execution->hours->progress); ?></td>
-            <td><?php echo $execution->begin;?></td>
-            <td><?php echo $execution->end;?></td>
-            <td class='hours' title='<?php echo $execution->hours->totalEstimate . ' ' . $this->lang->execution->workHour;?>'><?php echo $execution->hours->totalEstimate . $this->lang->execution->workHourUnit;?></td>
-            <td class='hours' title='<?php echo $execution->hours->totalConsumed . ' ' . $this->lang->execution->workHour;?>'><?php echo $execution->hours->totalConsumed . $this->lang->execution->workHourUnit;?></td>
-            <td class='hours' title='<?php echo $execution->hours->totalLeft     . ' ' . $this->lang->execution->workHour;?>'><?php echo $execution->hours->totalLeft     . $this->lang->execution->workHourUnit;?></td>
-            <td id='spark-<?php echo $execution->id?>' class='sparkline text-left no-padding' values='<?php echo join(',', $execution->burns);?>'></td>
-            <td></td>
-          </tr>
+  <form class='main-table' id='executionForm' method='post' data-ride='table' data-nested='true' data-expand-nest-child='false' data-checkable='false' data-enable-empty-nested-row='true' data-replace-id='executionTableList' data-preserve-nested='true'>
+    <table class="table table-from table-fixed table-nested" id="executionList">
+      <?php $vars = "status=$status&orderBy=%s";?>	
+      <thead>
+        <tr>
+          <th class='table-nest-title'>
+          <a class='table-nest-toggle icon table-nest-toggle-global' data-expand-text='<?php echo $lang->expand; ?>' data-collapse-text='<?php echo $lang->collapse;?>'></a>
+          <?php echo $lang->nameAB;?>
+          </th>
+          <th class='c-user'><?php echo $lang->execution->owner;?></th>
+          <th class='c-status'><?php echo $lang->project->status;?></th>
+          <th class='c-hours'><?php echo $lang->project->progress;?></th>
+          <th class='c-date'><?php echo $lang->programplan->begin;?></th>
+          <th class='c-date'><?php echo $lang->programplan->end;?></th>
+          <th class='c-hours'><?php echo $lang->task->estimateAB;?></th>
+          <th class='c-hours'><?php echo $lang->task->consumedAB;?></th>
+          <th class='c-hours'><?php echo $lang->task->leftAB;?> </th>
+          <th class='c-progress'><?php echo $lang->execution->burn;?> </th>
+          <th class='text-center c-actions-6'><?php echo $lang->actions;?></th> 
+        </tr>
+      </thead>
+      <tbody id="executionTableList">
+        <?php foreach($executionStats as $execution):?>
+        <?php
+        $trClass  = '';
+        $trAttrs  = "data-id='$execution->id' data-order='$execution->order' data-nested='true'";
+        $trClass .= ' is-top-level table-nest-child-hide';
+        ?>
+        <tr <?php echo $trAttrs;?> class="<?php echo $trClass;?>">
+          <td>
+            <?php
+              $icon = '';
+              if( /* $execution->hasChild || $execution->hasTask*/ true )
+              {
+                  $icon = '';
+                  $class = ' table-nest-toggle';
+              }
+            ?>
+            <span id = <?php echo $execution->id;?> class="table-nest-icon icon <?php echo $class . $icon;?>"></span>
+            <?php echo $execution->name;?>
+          </td>
+          <td><?php echo zget($users, $execution->PM);?></td>
+          <td><?php echo zget($lang->project->statusList, $execution->status);?></td>
+          <td><?php echo html::ring($execution->hours->progress); ?></td>
+          <td><?php echo $execution->begin;?></td>
+          <td><?php echo $execution->end;?></td>
+          <td class='hours' title='<?php echo $execution->hours->totalEstimate . ' ' . $this->lang->execution->workHour;?>'><?php echo $execution->hours->totalEstimate . $this->lang->execution->workHourUnit;?></td>
+          <td class='hours' title='<?php echo $execution->hours->totalConsumed . ' ' . $this->lang->execution->workHour;?>'><?php echo $execution->hours->totalConsumed . $this->lang->execution->workHourUnit;?></td>
+          <td class='hours' title='<?php echo $execution->hours->totalLeft     . ' ' . $this->lang->execution->workHour;?>'><?php echo $execution->hours->totalLeft     . $this->lang->execution->workHourUnit;?></td>
+          <td id='spark-<?php echo $execution->id?>' class='sparkline text-left no-padding' values='<?php echo join(',', $execution->burns);?>'></td>
+          <td></td>
+        </tr>
 
-          <?php if(!empty($execution->children)):?>
-          <?php foreach($execution->children as $child):?>
-          <?php
-          $trClass  = '';
-          $trAttrs  = "data-id={$child->id} data-parent={$child->parent}";
-          $trClass .= " is-nest-child";
-          if(empty($child->path)) $child->path = $execution->path . "$child->id,";
-          $trAttrs .= " data-nest-parent='$child->parent' data-order='$child->order' data-nest-path='$child->path'";
-          ?>
-          <tr <?php echo $trAttrs;?> class='<?php echo $trClass;?>'>
-            <td>
-              <?php echo $child->name;?>
-            </td>
-            <td><?php echo zget($users, $child->PM);?></td>
-            <td><?php echo zget($lang->project->statusList, $child->status);?></td>
-            <td><?php echo html::ring($child->hours->progress); ?></td>
-            <td><?php echo $child->begin;?></td>
-            <td><?php echo $child->end;?></td>
-            <td class='hours' title='<?php echo $child->hours->totalEstimate . ' ' . $this->lang->execution->workHour;?>'><?php echo $child->hours->totalEstimate . $this->lang->execution->workHourUnit;?></td>
-            <td class='hours' title='<?php echo $child->hours->totalConsumed . ' ' . $this->lang->execution->workHour;?>'><?php echo $child->hours->totalConsumed . $this->lang->execution->workHourUnit;?></td>
-            <td class='hours' title='<?php echo $child->hours->totalLeft . ' ' . $this->lang->execution->workHour;?>'><?php echo $child->hours->totalLeft . $this->lang->execution->workHourUnit;?></td>
-            <td id='spark-<?php echo $child->id?>' class='sparkline text-left no-padding' values='<?php echo join(',', $child->burns);?>'></td>
-            <td></td>
-          </tr>
-          <?php endforeach;?>
+        <?php if(!empty($execution->tasks)):?>
+        <?php foreach($execution->tasks as $task):?>
+        <?php
+        $trClass  = '';
+        $trAttrs  = "data-id={$task->id} data-parent={$task->execution}";
+        $trClass .= " is-nest-child no-nest";
+        if(empty($task->path)) $task->path = $execution->id . ",$task->id,";
+        $trAttrs .= " data-nest-parent='$task->execution' data-nest-path='$task->path'";
+        ?>
+        <tr <?php echo $trAttrs;?> class='<?php echo $trClass;?>'>
+          <td><?php echo html::a($this->createLink('task', 'view', "id=$task->id"), $task->name);?></td>
+          <td><?php echo zget($users, $task->assignedTo);?></td>
+          <td><?php echo zget($lang->task->statusList, $task->status);?></td>
+          <td></td>
+          <td><?php echo $task->estStarted;?></td>
+          <td><?php echo $task->deadline;?></td>
+          <td class='hours' title='<?php echo $task->estimate . ' ' . $this->lang->execution->workHour;?>'><?php echo $task->estimate . $this->lang->execution->workHourUnit;?></td>
+          <td class='hours' title='<?php echo $task->consumed . ' ' . $this->lang->execution->workHour;?>'><?php echo $task->consumed . $this->lang->execution->workHourUnit;?></td>
+          <td class='hours' title='<?php echo $task->left . ' ' . $this->lang->execution->workHour;?>'><?php echo $task->left . $this->lang->execution->workHourUnit;?></td>
+          <td></td>
+          <td></td>
+        </tr>
+        <?php endforeach;?>
+        <?php if(count($execution->tasks) == 50):?>
+        <tr data-parent=<?php echo $execution->id;?> class='is-nest-child showmore' data-id='<?php echo $task->id;?>' data-nest-parent="<?php echo $execution->id;?>">
+          <td colspan='11' class='text-right'>加载更多...</td>
+        </tr>
+        <?php endif;?>
+        <?php endif;?>
 
-          <?php endif;?>
-          <?php endforeach;?>
-        </tbody>
-      </table>
-    </div>
+        <?php if(!empty($execution->children)):?>
+        <?php foreach($execution->children as $child):?>
+        <?php
+        $trClass  = '';
+        $trAttrs  = "data-id={$child->id} data-parent={$child->parent}";
+        $trClass .= " is-nest-child";
+        if(empty($child->path)) $child->path = $execution->path . "$child->id,";
+        $trAttrs .= " data-nest-parent='$child->parent' data-order='$child->order' data-nest-path='$child->path'";
+        ?>
+        <tr <?php echo $trAttrs;?> class='<?php echo $trClass;?>'>
+          <td>
+            <?php echo $child->name;?>
+          </td>
+          <td><?php echo zget($users, $child->PM);?></td>
+          <td><?php echo zget($lang->project->statusList, $child->status);?></td>
+          <td><?php echo html::ring($child->hours->progress); ?></td>
+          <td><?php echo $child->begin;?></td>
+          <td><?php echo $child->end;?></td>
+          <td class='hours' title='<?php echo $child->hours->totalEstimate . ' ' . $this->lang->execution->workHour;?>'><?php echo $child->hours->totalEstimate . $this->lang->execution->workHourUnit;?></td>
+          <td class='hours' title='<?php echo $child->hours->totalConsumed . ' ' . $this->lang->execution->workHour;?>'><?php echo $child->hours->totalConsumed . $this->lang->execution->workHourUnit;?></td>
+          <td class='hours' title='<?php echo $child->hours->totalLeft . ' ' . $this->lang->execution->workHour;?>'><?php echo $child->hours->totalLeft . $this->lang->execution->workHourUnit;?></td>
+          <td id='spark-<?php echo $child->id?>' class='sparkline text-left no-padding' values='<?php echo join(',', $child->burns);?>'></td>
+          <td></td>
+        </tr>
+        <?php endforeach;?>
+
+        <?php endif;?>
+        <?php endforeach;?>
+      </tbody>
+    </table>
   </form>
   <?php endif;?>
 </div>
@@ -144,52 +175,29 @@ $("#<?php echo $status;?>Tab").addClass('btn-active-text');
 
 $(function()
 {
-    $("#executionList").on('click','.showmore',function(e)
-    {   /* add event when click expand button */
-        var that = e.target;
-        var $trSelected = $(`tr[data-id = ${$(that).attr('id')}]`);
-        if ($trSelected.hasClass("table-nest-child-hide"))
-        {    /* table expand */
-            var executionID = $(this).attr('id');
-            var currentPage = 1;
-            var pageSize    = 50;
-            var link = createLink('task', 'ajaxGetTasksByExecution', 'executionID=' + executionID + '&currentPage=' + currentPage + '&pageSize=' +      pageSize);
-            $.get(link, function(data)
-            {
-                var newTasks = JSON.parse(data);
-                $trSelected.after("<tr><td>111</td></tr>");
-                /* if (total > 50)
-                     * 在第五十条后加一个tr 包裹一个td 中间含有一个 <span class = 'load-btn'></span>
-                     * 点击事件如下
-                     * {
-                     *     
-                     * }
-                    * */
-                $trSelected.removeClass("table-nest-child-hide");
-                $(`tr[parent-id = ${$(that).attr('id')} ]`).show();
-                $('#executionForm').table('initNestedList');
-            })
-        }
-        else
-        {   /* table close */
-            $trSelected.addClass("table-nest-child-hide");
-            $(`tr[parent-id = ${$(that).attr('id')} ]`).hide();
-
-        }
-    })
+    $('.showmore td span').remove();
     $("#executionList").on('click', '.showmore', function(e)
     {
-        var that = e.target;
-        var executionID = $(this).attr('parent-id');
-        var currentPage = $(this).attr('current-page') + 1;
-        var pageSize    = 50;
-        var link = createLink('task', 'ajaxGetTasksByExecution', 'executionID=' + executionID + '&currentPage=' + currentPage + '&pageSize=' + pageSize);
-    })
-    /* var addTableRow = function(param)
-    {
+        var showmoreTr  = this;
+        var executionID = $(this).attr('data-parent');
+        var maxTaskID   = $(this).attr('data-id');
+        var link = createLink('task', 'ajaxGetTasksByExecution', 'executionID=' + executionID + '&maxTaskID=' + maxTaskID);
+        $.get(link, function(data)
+        {
+            data = JSON.parse(data);
+            $(showmoreTr).before(data.body);
+            if(data.count < 50)
+            {
+                $(showmoreTr).remove();
+            }
+            else
+            {
+                $(showmoreTr).attr('data-id', data.maxTaskID);
+            }
 
-        console.log('addRow');
-    }*/
+            $('#executionForm').table('initNestedList');
+        })
+    })
 });
 </script>
 <?php include '../../common/view/footer.html.php';?>

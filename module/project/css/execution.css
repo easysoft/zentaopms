@@ -1,3 +1,2 @@
-.table-children {border-left: 2px solid #cbd0db; border-right: 2px solid #cbd0db;}
-.table tbody > tr.table-children.table-child-top {border-top: 2px solid #cbd0db;}
-.table tbody > tr.table-children.table-child-bottom {border-bottom: 2px solid #cbd0db;}
+#executionList > thead > tr > th .table-nest-toggle-global {top: 6px}
+#executionList > thead > tr > th .table-nest-toggle-global:before {color: #a6aab8;}

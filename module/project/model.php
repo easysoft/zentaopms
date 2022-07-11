@@ -2390,6 +2390,7 @@ class projectModel extends model
                 ->where('deleted')->eq(0)
                 ->andWhere('status')->ne('closed')
                 ->andWhere('execution')->in(array_keys($executions))
+                ->orderBy('id_asc')
                 ->fetchGroup('execution', 'id');
 
             foreach($executionTasks as $executionID => $tasks)
@@ -2433,7 +2434,11 @@ class projectModel extends model
 
             $execution->children = array();
             $execution->grade == 1 ? $parents[$execution->id] = $execution : $children[$execution->parent][] = $execution;
-            if(isset($executionTasks) and isset($executionTasks[$execution->id])) $execution->tasks = array();
+            if(isset($executionTasks) and isset($executionTasks[$execution->id])) 
+            {
+                $tasks = array_chunk($executionTasks[$execution->id], 50, true);
+                $execution->tasks = $tasks[0];
+            }
         }
 
         /* In the case of the waterfall model, calculate the sub-stage. */

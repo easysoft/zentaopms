@@ -957,6 +957,7 @@ class project extends control
     public function execution($status = 'all', $projectID = 0, $orderBy = 'order_asc', $productID = 0, $recTotal = 0, $recPerPage = 100, $pageID = 1)
     {
         $this->loadModel('execution');
+        $this->loadModel('task');
         $this->loadModel('programplan');
 
         $projects  = $this->project->getPairsByProgram();
@@ -973,7 +974,6 @@ class project extends control
 
         $this->view->title      = $this->lang->execution->allExecutions;
         $this->view->position[] = $this->lang->execution->allExecutions;
-
 
         $this->view->executionStats = $this->project->getStats($projectID, $status, $productID, 0, 30, $orderBy, $pager, true);
         $this->view->productList    = $this->loadModel('product')->getProductPairsByProject($projectID);

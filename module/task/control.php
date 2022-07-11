@@ -1758,18 +1758,21 @@ class task extends control
         echo html::select('task', empty($tasks) ? array('' => '') : $tasks, $taskID, "class='form-control'");
     }
 
-    public function ajaxGetTasksByExecution($executionID, $pageID, $recPerPage, $maxTaskID = 0)
+    public function ajaxGetTasksByExecution($executionID, $maxTaskID = 0)
     {
+        $this->loadModel('task');
+
         //总数、更多、最后一条ID，
         $tasks = $this->dao->select('*')->from(TABLE_TASK)
             ->where('deleted')->eq(0)
             ->andWhere('status')->ne('closed')
             ->andWhere('execution')->eq($executionID)
-            //->andWhere('id')->gt('')
-            ->limit($recPerPage)
+            ->andWhere('id')->gt($maxTaskID)
+            ->orderBy('id_asc')
+            ->limit(50)
             ->fetchAll('id');
 
-        $users = $this->loadModel('user')->getPairs('noclosed|nodeleted');
+        $users = $this->loadModel('user')->getPairs('noletter|nodeleted');
         $html = '';
         foreach($tasks as $task)
         {
@@ -1782,29 +1785,29 @@ class task extends control
                 }
             }
 
-            $parentClass = $task->parent == '-1' ? 'table-nest-child-hide' : '';
-            $parentID    = $task->parent > 0 ? $task->parent : $executionID;
+            //$parentClass = $task->parent == '-1' ? 'table-nest-child-hide' : '';
+            //$parentID    = $task->parent > 0 ? $task->parent : $executionID;
 
-            $html .= "<tr row-id=$task->id parent-id=$parentID class='row-program $parentClass'>";
+            $html .= "<tr data-parent=$executionID data-id=$task->id data-nest-path='$executionID,$task->id' data-nest-parent=$executionID class='is-nest-child'>";
             $html .= '<td>';
-            $html .= $task->id;
-            $html .= '</td>';
-            $html .= '<td>';
-            $html .= $task->name;
+            $html .= html::a($this->createLink('task', 'view', "id=$task->id"), $task->name);
             $html .= '</td>';
             $html .= '<td>';
             $html .= zget($users, $task->assignedTo, '');
             $html .= '</td>';
             $html .= '<td>';
-            $html .= zget($this->lang->task->statusList, $task->task, '');
+            $html .= zget($this->lang->task->statusList, $task->status, '');
             $html .= '</td>';
             $html .= '<td>';
             $html .= '</td>';
             $html .= '<td>';
-            $html .= $task->begin;
+            $html .= $task->estStarted;
             $html .= '</td>';
             $html .= '<td>';
-            $html .= $task->end;
+            $html .= $task->deadline;
+            $html .= '</td>';
+            $html .= '<td>';
+            $html .= $task->estimate;
             $html .= '</td>';
             $html .= '<td>';
             $html .= $task->consumed;
@@ -1819,10 +1822,9 @@ class task extends control
             $html .= '操作';
             $html .= '</td>';
             $html .= '</tr>';
-
         }
 
-        die(json_encode($html));
+        die(json_encode(array('body' => $html, 'count' => count($tasks), 'maxTaskID' => $task->id)));
     }
 
     /**
