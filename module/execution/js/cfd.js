@@ -48,6 +48,16 @@ $(function()
                 backgroundColor: '#6a7985'
               }
             },
+            formatter: function (params) {
+              var newParams = [];
+              var tooltipString = [];
+              newParams = params.reverse();
+              newParams.forEach((p) => {
+                const cont = p.marker + ' ' + p.seriesName + ': ' + p.value + '<br/>';
+                tooltipString.push(cont);
+              });
+              return tooltipString.join('');
+            },
             textStyle: {
               fontWeight: 100
             }
@@ -57,7 +67,7 @@ $(function()
           },
           grid: {
             left: '3%',
-            right: '4%',
+            right: '5%',
             bottom: '3%',
             containLabel: true
           },
@@ -99,7 +109,7 @@ $(function()
                 show: true,
                 lineStyle:
                 {
-                  color: ['#999'],
+                  color: '#999',
                   width: 1
                 }
               }

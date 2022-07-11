@@ -76,9 +76,8 @@ foreach($executions as $projectID => $projectExecutions)
     foreach($projectExecutions as $index => $execution)
     {
         $kanbanLink = $this->createLink('execution', 'kanban', "executionID=%s");
-        $cfdLink    = $this->createLink('execution', 'cfd', "executionID=%s");
         $taskLink   = $this->createLink('execution', 'task', "executionID=%s");
-        if($execution->type != 'kanban' and ($link == $kanbanLink or $link == $cfdLink)) $link = $taskLink;
+        if($execution->type != 'kanban' and $link == $kanbanLink) $link = $taskLink;
         if($execution->type == 'kanban' and $link != $kanbanLink) $link = $kanbanLink;
 
         $selected = $execution->id == $executionID ? 'selected' : '';
