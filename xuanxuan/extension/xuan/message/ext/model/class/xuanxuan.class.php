@@ -51,11 +51,11 @@ class xuanxuanMessage extends messageModel
                     {
                         $title = $objectType == 'mr' ? '' : sprintf($this->lang->message->notifyPassTitle, $this->app->user->realname, 1);
                     }
-                    if ($notifyType == 'clarify')
+                    else if($notifyType == 'clarify')
                     {
                         $title = $objectType == 'mr' ? '' : sprintf($this->lang->message->notifyClarifyTitle, $this->app->user->realname, 1);
                     }
-                    if ($notifyType == 'reject')
+                    else if($notifyType == 'reject')
                     {
                         $title = $objectType == 'mr' ? '' : sprintf($this->lang->message->notifyRejectTitle, $this->app->user->realname, 1);
                     }
