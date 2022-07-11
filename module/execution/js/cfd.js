@@ -127,4 +127,11 @@ $(function()
     {
         location.href = createLink('execution', 'cfd', 'executionID=' + executionID + '&type=' + $(this).val());
     });
+
+    $('#weekend').click(function()
+    {
+        var type    = $('#type').val();
+        withWeekend = withWeekend == 'true' ? 'false' : 'true';
+        location.href = createLink('execution', 'cfd', 'executionID=' + executionID + '&type=' + type + '&withWeekend=' + withWeekend);
+    });
 });

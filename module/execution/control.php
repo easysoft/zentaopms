@@ -1365,7 +1365,7 @@ class execution extends control
      * @access public
      * @return void
      */
-    public function cfd($executionID = 0, $type = 'story')
+    public function cfd($executionID = 0, $type = 'story', $withWeekend = 'false')
     {
         $execution   = $this->commonAction($executionID);
         $executionID = $execution->id;
@@ -1374,7 +1374,7 @@ class execution extends control
         $this->app->loadClass('date');
 
         list($begin, $end) = $this->execution->getBeginEnd4CFD($execution);
-        $dateList = date::getDateList($begin, $end, 'Y-m-d', '');
+        $dateList = date::getDateList($begin, $end, 'Y-m-d', $withWeekend == 'false'? 'noweekend' : '');
 
         //list($cycleTimeAvg, $throughput) = $this->execution->getCFDStatistics($executionID, $dateList, $type);
 
@@ -1384,6 +1384,7 @@ class execution extends control
         $this->view->title         = $this->lang->execution->CFD;
         $this->view->type          = $type;
         $this->view->execution     = $execution;
+        $this->view->withWeekend   = $withWeekend;
         $this->view->executionName = $execution->name;
         $this->view->executionID   = $executionID;
         $this->view->chartData     = $chartData;

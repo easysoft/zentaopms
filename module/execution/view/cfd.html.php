@@ -14,6 +14,7 @@
 <?php js::import($jsRoot . 'echarts/echarts.common.min.js'); ?>
 <?php js::import($jsRoot . 'html2canvas/min.js'); ?>
 <?php js::set('executionID', $executionID); ?>
+<?php js::set('withWeekend', $withWeekend); ?>
 <?php js::set('chartData', $chartData); ?>
 <?php js::set('YUnit', $lang->execution->count); ?>
 <?php js::set('XUnit', $lang->execution->burnXUnit); ?>
@@ -25,6 +26,8 @@
         common::printLink('execution', 'computeCFD', "reload=yes&executionID=$executionID", '<i class="icon icon-refresh"></i> ' . $lang->execution->computeCFD, 'hiddenwin', "title='{$lang->execution->computeCFD}' class='btn btn-primary' id='computeCFD'");
         echo '<div class="space"></div>';
     }
+    $weekend = $withWeekend == 'true' ? 'noweekend' : 'withweekend';
+    echo html::a('#', $lang->execution->$weekend, '', "class='btn btn-link' id='weekend'");
     ?>
     <div class='input-control w-100px'>
       <?php echo html::select('type', $lang->execution->cfdTypeList, $type, "class='form-control chosen'");?>
