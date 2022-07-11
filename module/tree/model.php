@@ -407,7 +407,7 @@ class treeModel extends model
         $executionID      = zget($extra, 'executionID', 0);
         $branches         = array($branch => '');
         $executionModules = array();
-        if($branch and empty($projectID) and empty($extra['executionID']))
+        if($branch and empty($projectID) and empty($executionID))
         {
             $branchName = $this->branch->getById($branch);
             $branches   = array($branch => $branchName);
@@ -425,12 +425,12 @@ class treeModel extends model
         elseif(strpos(',case,bug,', ",$type,") !== false and $this->app->tab == 'execution')
         {
             if($product->type != 'normal' and $executionID) $branches += $this->branch->getPairs($product->id, 'noempty', $executionID);
-            if($onlyGetLinked) $executionModules = $this->getTaskTreeModules($executionID, true, $type, $type == 'bug' ? array('branchID' => $branch) : array());
+            if($onlyGetLinked) $executionModules = $this->getTaskTreeModules($executionID, true, $type, array('branchID' => $branch));
         }
         elseif(($type == 'story' and $this->app->rawModule == 'projectstory') or (strpos(',case,bug,', ",$type,") !== false and $this->app->tab == 'project'))
         {
             if($product->type != 'normal' and $projectID) $branches += $this->branch->getPairs($product->id, 'noempty', $projectID);
-            if($onlyGetLinked) $executionModules = $this->getTaskTreeModules($projectID, true, $type, $type == 'bug' ? array('branchID' => $branch) : array());
+            if($onlyGetLinked) $executionModules = $this->getTaskTreeModules($projectID, true, $type, $type == 'story' ? array() : array('branchID' => $branch));
         }
 
         /* Add for task #1945. check the module has case or no. */
@@ -696,7 +696,6 @@ class treeModel extends model
                     ->get();
                 $treeMenu          = array();
                 $stmt              = $this->dbh->query($query);
-                $extra['branchID'] = $branch;
                 while($module = $stmt->fetch())
                 {
                     if(isset($executionModules[$module->id])) $this->buildTree($treeMenu, $module, 'bug', $userFunc, $extra, $branch);
@@ -786,7 +785,7 @@ class treeModel extends model
                 $stmt = $this->dbh->query($query);
                 while($module = $stmt->fetch())
                 {
-                    if(isset($executionModules[$module->id])) $this->buildTree($treeMenu, $module, 'case', $userFunc, $extra);
+                    if(isset($executionModules[$module->id])) $this->buildTree($treeMenu, $module, 'case', $userFunc, $extra, $branch);
                 }
                 $tree .= isset($treeMenu[0]) ? $treeMenu[0] : '';
             }
@@ -979,8 +978,12 @@ class treeModel extends model
                 $paths = $this->dao->select('DISTINCT t3.' . $field)->from($table1)->alias('t1')
                     ->leftJoin($table2)->alias('t2')->on('t1.' . $linkObject . ' = t2.id')
                     ->leftJoin(TABLE_MODULE)->alias('t3')->on('t2.module = t3.id')
-                    ->where('t1.project')->eq($executionID)
+                    ->leftJoin(TABLE_PROJECT)->alias('t4')->on('t1.project = t4.id')
+                    ->where('(t1.project')->eq($executionID)
+                    ->orWhere('t4.project')->eq($executionID)->markRight(1)
                     ->andWhere('t3.deleted')->eq(0)
+                    ->andWhere('t2.deleted')->eq(0)
+                    ->beginIF(isset($extra['branchID']))->andWhere('t2.branch')->eq(zget($extra, 'branchID', 0))->fi()
                     ->fetchPairs();
             }
             elseif($linkObject == 'bug' and strpos(',project,execution,', ",{$this->app->tab},") !== false)
@@ -1236,9 +1239,9 @@ class treeModel extends model
     {
         $moduleName = strpos(',project,execution,', ",{$this->app->tab},") !== false ? $this->app->tab : 'testcase';
         $methodName = strpos(',project,execution,', ",{$this->app->tab},") !== false ? 'testcase' : 'browse';
-        $param      = $this->app->tab == 'project' ? "projectID={$this->session->project}&root={$module->root}&branch={$extra['branchID']}&" : "root={$module->root}&branch={$extra['branchID']}&";
-        $param      = $this->app->tab == 'execution' ? "executionID={$extra['executionID']}&root={$module->root}&" : $param;
-        return html::a(helper::createLink($moduleName, $methodName, $param . "&type=byModule&param={$module->id}"), $module->name, '_self', "id='module{$module->id}' data-app='{$this->app->tab}' title='{$module->name}'");
+        $param      = $this->app->tab == 'project' ? "projectID={$this->session->project}&" : "";
+        $param      = $this->app->tab == 'execution' ? "executionID={$extra['executionID']}&" : $param;
+        return html::a(helper::createLink($moduleName, $methodName, $param . "root={$module->root}&branch={$extra['branchID']}&type=byModule&param={$module->id}"), $module->name, '_self', "id='module{$module->id}' data-app='{$this->app->tab}' title='{$module->name}'");
     }
 
     /**

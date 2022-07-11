@@ -119,7 +119,6 @@ class testcase extends control
             $this->products = count($linkedProducts) > 1 ? array('0' => $this->lang->product->all) + $linkedProducts : $linkedProducts;
             $productID      = count($linkedProducts) > 1 ? $productID : key($linkedProducts);
 
-            $branch = 'all';
             $this->loadModel('project')->setMenu($projectID);
         }
         else
@@ -175,7 +174,7 @@ class testcase extends control
         }
         else
         {
-            $moduleTree = $this->tree->getTreeMenu($productID, 'case', 0, array('treeModel', 'createCaseLink'), array('projectID' => $projectID, 'productID' => $productID), $projectID ? '' : $branch);
+            $moduleTree = $this->tree->getTreeMenu($productID, 'case', 0, array('treeModel', 'createCaseLink'), array('projectID' => $projectID, 'productID' => $productID), $branch);
         }
 
         $product = $this->product->getById($productID);
