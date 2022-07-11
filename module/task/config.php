@@ -39,21 +39,18 @@ $config->task->exportFields = '
     ';
 
 $config->task->fieldList['module']['control'] = 'select';
-$config->task->fieldList['module']['foreignKey'] = true;
-$config->task->fieldList['module']['foreignKeySource'] = array('module' => 'tree', 'method' => 'getTaskOptionMenu', 'params' => 'task');
+$config->task->fieldList['module']['dataSource'] = array('module' => 'tree', 'method' => 'getTaskOptionMenu', 'params' => '$executionID');
 
 $config->task->fieldList['story']['control'] = 'select';
-$config->task->fieldList['story']['foreignKey'] = true;
-$config->task->fieldList['story']['foreignKeySource']  = array('module' => 'story', 'method' => 'getExecutionStories', 'params' => '$executionID', 'pairs' => array('id', 'title'));
+$config->task->fieldList['story']['dataSource']  = array('module' => 'story', 'method' => 'getExecutionStories', 'params' => '$executionID', 'pairs' => array('id', 'title'));
 
 $config->task->fieldList['execution']['control'] = 'select';
-$config->task->fieldList['execution']['foreignKey'] = true;
-$config->task->fieldList['execution']['foreignKeySource'] = array('module' => 'execution', 'method' => 'getPairs');
+$config->task->fieldList['execution']['dataSource'] = array('module' => 'execution', 'method' => 'getPairs');
 
 $config->task->fieldList['assignedTo']['values'] = 'user';
 $config->task->fieldList['assignedTo']['title']  = 'assignTo';
-$config->task->fieldList['closedReason']['foreignKey']       = true;
-$config->task->fieldList['closedReason']['foreignKeySource'] = array('lang' => 'reasonList');
+
+$config->task->fieldList['closedReason']['dataSource'] = array('lang' => 'reasonList');
 
 $config->task->customCreateFields      = 'story,estStarted,deadline,mailto,pri,estimate';
 $config->task->customBatchCreateFields = 'module,story,assignedTo,estimate,estStarted,deadline,desc,pri';

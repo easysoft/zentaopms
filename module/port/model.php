@@ -33,6 +33,88 @@ class portModel extends model
     }
 
     /**
+     * export
+     *
+     * @param  string $model
+     * @param  string $params
+     * @access public
+     * @return void
+     */
+    public function export($model = '', $params = '')
+    {
+        /* Split parameters into variables (executionID=1,status=open).*/
+        $params = explode(',', $params);
+        foreach($params as $key => $param)
+        {
+            $param = explode('=', $param);
+            $params[$param[0]] = $param[1];
+            unset($params[$key]);
+        }
+        extract($params);
+
+        /* save params to session. */
+        $this->session->set(($model.'PortParams'), $params);
+
+        $this->config->port->sysDataList = $this->initSysDataFields();
+
+        $fields = $this->post->exportFields;
+
+        /* Init config fieldList */
+        $fieldList = $this->initFieldList($model, $fields);
+
+        $rows = $this->getRows($model, $fieldList);
+
+        $list = $this->setListValue($model, $fieldList);
+        if($list) foreach($list as $listName => $listValue) $this->post->set($listName, $listValue);
+
+        /* Get export rows and fields datas */
+        $exportDatas = $this->getExportDatas($fieldList, $rows);
+
+        $this->post->set('rows',   $exportDatas['rows']);
+        $this->post->set('fields', $exportDatas['fields']);
+        $this->post->set('kind',   $model);
+    }
+
+    /**
+     * createFromImport
+     *
+     * @param  int    $model
+     * @param  string $params
+     * @access public
+     * @return void
+     */
+    public function createFromImport($model, $params = '')
+    {
+        $this->loadModel('action');
+        $this->loadModel('file');
+        $now   = helper::now();
+        $datas = fixer::input('post')->get();
+        $table = zget($this->config->objectTables, $model);
+
+        if(!empty($_POST['id']))
+        {
+            $oldObjects = $this->dao->select('*')->from($table)->where('id')->in(($_POST['id']))->fetchAll('id');
+        }
+
+        $objects = array();
+        $objectData = array();
+        foreach ($datas as $field => $data)
+        {
+            if(is_array($data))
+            {
+                foreach($data as $key => $value) $objectData[$key][$field] = $value;
+            }
+        }
+
+        a($objectData);
+
+        die;
+
+
+
+    }
+
+    /**
      * Init FieldList .
      *
      * @param  int    $model
@@ -66,7 +148,6 @@ class portModel extends model
                 }
             }
 
-            $modelFieldList = $this->initForeignKey($model, $field, $modelFieldList);
             $modelFieldList['values'] = $this->initValues($model, $field, $modelFieldList);
             $fieldList[$field] = $modelFieldList;
         }
@@ -135,9 +216,9 @@ class portModel extends model
             return $this->portConfig->sysDataList[$values];
         }
 
-        if(!$fieldValue['foreignKey']) return $values;
+        if(!$fieldValue['dataSource']) return $values;
 
-        extract($fieldValue['foreignKeySource']); // $module, $method, $params, $pairs, $sql, $lang
+        extract($fieldValue['dataSource']); // $module, $method, $params, $pairs, $sql, $lang
 
         if(!empty($module) and !empty($method))
         {
@@ -162,26 +243,6 @@ class portModel extends model
         }
 
         return $values;
-    }
-
-    /**
-     * Init ForeignKey .
-     *
-     * @param  int    $model
-     * @param  int    $field
-     * @param  int    $fieldContent
-     * @access public
-     * @return void
-     */
-    public function initForeignKey($model, $field, $fieldContent)
-    {
-        $modelConfig = $this->modelConfig;
-        if((strpos($modelConfig->sysLangFields, $field) or strpos($modelConfig->sysDataFields, $field)) and empty($fieldContent['foreignKey']))
-        {
-            $fieldContent['foreignKey'] = true;
-        }
-
-        return $fieldContent;
     }
 
     /**
@@ -321,6 +382,58 @@ class portModel extends model
     }
 
     /**
+     * Get ExportDatas.
+     *
+     * @param  int    $fieldList
+     * @param  array  $rows
+     * @access public
+     * @return void
+     */
+    public function getExportDatas($fieldList, $rows = array())
+    {
+        $exportDatas = array();
+        $dataSourceList = array();
+
+        foreach ($fieldList as $key => $field)
+        {
+            $exportDatas['fields'][$key] = $field['title'];
+            if($field['values'])
+            {
+                $exportDatas[$key]   = $field['values'];
+                $dataSourceList[] = $key;
+            }
+        }
+
+        if(empty($rows)) return $exportDatas;
+
+        $exportDatas['user'] = $this->loadModel('user')->getPairs('devfirst|noclosed|nodeleted');
+
+        foreach ($rows as $id => $values)
+        {
+            foreach($values as $field => $value)
+            {
+                if(in_array($field, $dataSourceList))
+                {
+                    $rows[$id]->$field = zget($exportDatas[$field], $value);
+                }
+                elseif(strpos($this->config->port->userFields, $field) !== false)
+                {
+                    $rows[$id]->$field = zget($exportDatas['user'], $value);
+                }
+
+                /* if value = 0 or value = 0000:00:00 set value = ''*/
+                if(!$value or helper::isZeroDate($value))
+                {
+                    $rows[$id]->$field = '';
+                }
+            }
+        }
+
+        $exportDatas['rows'] = array_values($rows);
+        return $exportDatas;
+    }
+
+    /**
      * Get files by model;
      *
      * @param  int    $model
@@ -354,6 +467,82 @@ class portModel extends model
             }
         }
         return $datas;
+    }
+
+    /**
+     * setListValue
+     *
+     * @param  int    $model
+     * @param  int    $fieldList
+     * @access public
+     * @return void/array
+     */
+    public function setListValue($model, $fieldList)
+    {
+        $lists = array();
+
+        if(!empty($this->config->$model->listFields))
+        {
+            $listFields = $this->config->$model->listFields;
+            foreach($listFields as $field)
+            {
+                $listName = $field . 'List';
+                if(!empty($fieldList[$field]))
+                {
+                    $lists[$listName] = $fieldList[$field]['values'];
+                    if(strpos($this->config->$model->sysLangFields, $field)) $lists[$listName] = join(',', $fieldList[$field]['values']);
+                }
+            }
+
+            $lists['listStyle'] = $listFields;
+        }
+
+        return $lists;
+    }
+
+    /**
+     * Get Rows .
+     *
+     * @param  int    $model
+     * @param  int    $fieldList
+     * @access public
+     * @return void
+     */
+    public function getRows($model, $fieldList, $orderBy = 'id_desc')
+    {
+        $queryCondition = $this->session->{$model . 'QueryCondition'};
+        $onlyCondition  = $this->session->{$model . 'OnlyCondition'};
+
+        $modelDatas = array();
+        if($onlyCondition and $queryCondition)
+        {
+            $table = zget($this->config->objectTables, $model);
+            if(isset($this->config->$model->port->table)) $table = $this->config->$model->port->table;
+            $modelDatas = $this->dao->select('*')->from($table)->alias('t1')
+                ->where($queryCondition)
+                ->beginIF($this->post->exportType == 'selected')->andWhere('t1.id')->in($this->cookie->checkedItem)->fi()
+                ->fetchAll('id');
+        }
+        elseif($queryCondition)
+        {
+            $stmt = $this->dbh->query($queryCondition . ($this->post->exportType == 'selected' ? " AND t1.id IN({$this->cookie->checkedItem})" : '') . " ORDER BY " . strtr($orderBy, '_', ' '));
+            while($row = $stmt->fetch()) $modelDatas[$row->id] = $row;
+        }
+
+        if(array_key_exists('files', $fieldList))
+        {
+            $modelDatas = $this->getFiles($model, $modelDatas);
+        }
+
+        $rows = !empty($_POST['rows']) ? $_POST['rows'] : '';
+        if($rows)
+        {
+            foreach($rows as $id => $row)
+            {
+                $modelDatas[$id] = (object) array_merge((array)$modelDatas[$id], (array)$row);
+            }
+        }
+        return $modelDatas;
     }
 
 }
