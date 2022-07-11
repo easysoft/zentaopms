@@ -1032,3 +1032,118 @@ $(document).ready(function()
         $(this).removeClass('dropdown-hover');
     });
 });
+
+/**
+ * Make the selected product non clickable.
+ *
+ * @return void
+ */
+function disableSelectedProduct()
+{
+    $("select[id^='products'] option[disabled='disabled']").removeAttr('disabled');
+
+    var selectedVal = [];
+    $("select[id^='products']").each(function()
+    {
+        var selectedProduct = $(this).val();
+        if(selectedProduct != 0 && $.inArray(selectedProduct, selectedVal) < 0 && !multiBranchProducts[selectedProduct]) selectedVal.push(selectedProduct);
+        if(multiBranchProducts[selectedProduct])
+        {
+            var isDisabled = checkMultiProducts(this);
+            if(isDisabled) selectedVal.push(selectedProduct);
+        }
+    })
+
+    $("select[id^='products']").each(function()
+    {
+        var selectedProduct = $(this).val();
+        $(this).find('option').each(function()
+        {
+            var optionVal = $(this).attr('value');
+            if(optionVal != selectedProduct && $.inArray(optionVal, selectedVal) >= 0) $(this).attr('disabled', 'disabled');
+        })
+    })
+
+    $("select[id^=products]").trigger('chosen:updated');
+}
+
+/**
+ * Make the selected branch non clickable.
+ *
+ * @return void
+ */
+function disableSelectedBranch()
+{
+    var relatedProduct = $(this).siblings("select[id^='products']").val();
+
+    /* Get the products control of the same value and their branch control. */
+    var sameProductControl       = [];
+    var sameProductBranchControl = [];
+    $("select[id^='products']").each(function()
+    {
+        if($(this).val() == relatedProduct)
+        {
+            $(this).siblings("select[id^='branch']").find("option[disabled='disabled']").removeAttr('disabled');
+
+            sameProductControl.push(this);
+            sameProductBranchControl.push($(this).siblings("select[id^='branch']"));
+        }
+    });
+
+    /* Get the selected branch of the related product. */
+    var preSelectedVal = [];
+    $.each(sameProductControl, function()
+    {
+        var selectedBranch = $(this).siblings("select[id^='branch']").val();
+        if($.inArray(selectedBranch, preSelectedVal) < 0) preSelectedVal.push(selectedBranch);
+    });
+
+    var selectedVal = [];
+    $.each(sameProductControl, function()
+    {
+        var selectedBranch = $(this).siblings("select[id^='branch']").val();
+        if($.inArray(selectedBranch, selectedVal) >= 0)
+        {
+            $(this).siblings("select[id^='branch']").find('option').removeAttr('selected');
+            for(i in preSelectedVal) $(this).siblings("select[id^='branch']").find('option[value=' + preSelectedVal[i] + ']').attr('disabled', 'disabled');
+
+            $(this).siblings("select[id^='branch']").find('option').not('[disabled=disabled]').eq(0).attr('selected', 'selected');
+            var selectedBranch = $(this).siblings("select[id^='branch']").val();
+        }
+        if($.inArray(selectedBranch, selectedVal) < 0) selectedVal.push(selectedBranch);
+    });
+
+    /* Make the selected value disabled. */
+    $.each(sameProductBranchControl, function()
+    {
+        var selectedBranch = $(this).val();
+        $(this).find('option').each(function()
+        {
+            var optionVal = $(this).attr('value');
+
+            if(optionVal != selectedBranch && $.inArray(optionVal, selectedVal) >= 0) $(this).attr('disabled', 'disabled');
+        })
+    })
+
+    $("select[id^=branch]").trigger('chosen:updated');
+}
+
+/**
+ * Determine whether multi-branch products should be disabled.
+ *
+ * @param  object  product
+ * @return bool
+ */
+function checkMultiProducts(product)
+{
+    var disabledBranchList = [];
+    var optionLength       = $(product).siblings("select[id^='branch']").find('option').length;
+    $(product).siblings("select[id^='branch']").find("option[disabled='disabled']").each(function()
+    {
+        disabledBranchList.push($(this).attr('value'));
+    });
+
+    if(optionLength - disabledBranchList.length == 1) return true;
+
+    return false;
+}
