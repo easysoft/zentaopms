@@ -714,7 +714,7 @@ class baseRouter
         if(empty($account) and isset($_GET['account']))  $account = $_GET['account'];
 
         $vision = '';
-        if($this->config->installed)
+        if($this->config->installed and validater::checkAccount($account))
         {
             $sql     = new sql();
             $account = $sql->quote($account);
