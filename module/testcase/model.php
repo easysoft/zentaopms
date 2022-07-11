@@ -323,6 +323,7 @@ class testcaseModel extends model
      *
      * @param  int    $executionID
      * @param  int    $productID
+     * @param  int    $branchID
      * @param  int    $moduleID
      * @param  string $orderBy
      * @param  object $pager
@@ -330,7 +331,7 @@ class testcaseModel extends model
      * @access public
      * @return array
      */
-    public function getExecutionCases($executionID, $productID = 0, $moduleID = 0, $orderBy = 'id_desc', $pager = null, $browseType = '')
+    public function getExecutionCases($executionID, $productID = 0, $branchID = 0, $moduleID = 0, $orderBy = 'id_desc', $pager = null, $browseType = '')
     {
         if($browseType == 'needconfirm')
         {
@@ -341,6 +342,7 @@ class testcaseModel extends model
                 ->where('t1.project')->eq((int)$executionID)
                 ->beginIF(!empty($productID))->andWhere('t1.product')->eq($productID)->fi()
                 ->beginIF(!empty($moduleID))->andWhere('t4.path')->like("%,$moduleID,%")->fi()
+                ->andWhere('t2.branch')->eq($branchID)
                 ->andWhere('t2.deleted')->eq('0')
                 ->andWhere('t3.version > t2.storyVersion')
                 ->andWhere("t3.status")->eq('active')
@@ -356,6 +358,7 @@ class testcaseModel extends model
             ->beginIF($browseType != 'all' and $browseType != 'byModule')->andWhere('t2.status')->eq($browseType)->fi()
             ->beginIF(!empty($productID))->andWhere('t1.product')->eq($productID)->fi()
             ->beginIF(!empty($moduleID))->andWhere('t3.path')->like("%,$moduleID,%")->fi()
+            ->andWhere('t2.branch')->eq($branchID)
             ->andWhere('t2.deleted')->eq('0')
             ->orderBy($orderBy)
             ->page($pager)

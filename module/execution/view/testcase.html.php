@@ -6,14 +6,14 @@
      echo $moduleName;
      if(!empty($moduleID))
      {
-         $removeLink = $this->createLink('execution', 'testcase', "executionID=$executionID&productID=$productID&type=all&moduleID=0&orderBy=$orderBy&recTotal=0&recPerPage={$pager->recPerPage}");
+         $removeLink = $this->createLink('execution', 'testcase', "executionID=$executionID&productID=$productID&branchID=$branchID&type=all&moduleID=0&orderBy=$orderBy&recTotal=0&recPerPage={$pager->recPerPage}");
          echo html::a($removeLink, "<i class='icon icon-sm icon-close'></i>", '', "class='text-muted' data-app='{$this->app->tab}'");
      }
      ?>
     </div>
   </div>
   <div class="btn-toolbar pull-left">
-    <?php echo html::a(inlink('testcase', "executionID=$executionID&productID=$productID&type=$type&moduleID=$moduleID&orderBy=$orderBy"), "<span class='text'>{$lang->execution->all}</span>", '', "class='btn btn-link btn-active-text'");?>
+    <?php echo html::a(inlink('testcase', "executionID=$executionID&productID=$productID&branchID=$branchID&type=$type&moduleID=$moduleID&orderBy=$orderBy"), "<span class='text'>{$lang->execution->all}</span>", '', "class='btn btn-link btn-active-text'");?>
   </div>
   <div class="btn-toolbar pull-right">
     <?php if(common::canModify('execution', $execution)) echo html::a(helper::createLink('testcase', 'create', "productID=$productID&branch=0&moduleID=0&from=execution&param=$execution->id", '', '', '', true), "<i class='icon icon-plus'></i> " . $lang->testcase->create, '', "class='btn btn-primary' data-app='{$this->app->tab}'");?>
@@ -45,7 +45,7 @@
     <?php else:?>
     <form class='main-table' method='post' id='executionBugForm' data-ride="table">
       <table class='table has-sort-head' id='bugList'>
-      <?php $vars = "executionID=$executionID&productID=$productID&type=$type&moduleID=$moduleID&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}";?>
+      <?php $vars = "executionID=$executionID&productID=$productID&branchID=$branchID&type=$type&moduleID=$moduleID&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}";?>
         <thead>
           <tr>
             <th class='w-id'>    <?php common::printOrderLink('id',            $orderBy, $vars, $lang->idAB);?></th>

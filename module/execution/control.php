@@ -1072,6 +1072,7 @@ class execution extends control
      *
      * @param  int    $executionID
      * @param  int    $productID
+     * @param  int    $branchID
      * @param  string $type
      * @param  int    $moduleID
      * @param  string $orderBy
@@ -1081,7 +1082,7 @@ class execution extends control
      * @access public
      * @return void
      */
-    public function testcase($executionID = 0, $productID = 0, $type = 'all', $moduleID = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function testcase($executionID = 0, $productID = 0, $branchID = 0, $type = 'all', $moduleID = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         $this->loadModel('testcase');
         $this->loadModel('testtask');
@@ -1095,13 +1096,13 @@ class execution extends control
         if(count($products) == 1) $productID = key($products);
 
         $extra = $executionID;
-        $this->lang->modulePageNav = $this->product->select(array('0' => $this->lang->product->all) + $products, $productID, 'execution', 'testcase', $extra, 0, 0, '', false);
+        $this->lang->modulePageNav = $this->product->select(array('0' => $this->lang->product->all) + $products, $productID, 'execution', 'testcase', $extra, $branchID);
 
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
         $pager = pager::init($recTotal, $recPerPage, $pageID);
 
-        $cases = $this->loadModel('testcase')->getExecutionCases($executionID, $productID, $moduleID, $orderBy, $pager, $type);
+        $cases = $this->loadModel('testcase')->getExecutionCases($executionID, $productID, $branchID, $moduleID, $orderBy, $pager, $type);
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'testcase', false);
 
         $cases = $this->testcase->appendData($cases, 'case');
@@ -1116,7 +1117,7 @@ class execution extends control
         }
         else
         {
-            $moduleTree = $this->tree->getTreeMenu($productID, 'case', 0, array('treeModel', 'createCaseLink'), array('executionID' => $executionID, 'productID' => $productID), 'all');
+            $moduleTree = $this->tree->getTreeMenu($productID, 'case', 0, array('treeModel', 'createCaseLink'), array('executionID' => $executionID, 'productID' => $productID), $branchID);
         }
         $tree = $moduleID ? $this->tree->getByID($moduleID) : '';
 
@@ -1133,6 +1134,7 @@ class execution extends control
         $this->view->modules     = $modules;
         $this->view->moduleID    = $moduleID;
         $this->view->moduleName  = $moduleID ? $tree->name : $this->lang->tree->all;
+        $this->view->branchID    = $branchID;
 
         $this->display();
     }
