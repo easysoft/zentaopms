@@ -52,6 +52,7 @@ $lang->designedByAIUX = "<a href='https://api.zentao.net/goto.php?item=aiux' cla
 $lang->reset          = 'Zurücksetzen';
 $lang->cancel         = 'Abbrechen';
 $lang->refresh        = 'Aktualisieren';
+$lang->refreshIcon    = "<i title='$lang->refresh' class='icon icon-refresh'></i>";
 $lang->create         = 'Create';
 $lang->edit           = 'Bearbeiten';
 $lang->delete         = 'Löschen';

@@ -126,11 +126,11 @@ js::set('suiteID',        $suiteID);
           <div class='btn-group dropup'>
             <?php
             $actionLink = $this->createLink('testtask', 'batchRun', "productID=$productID&orderBy=$orderBy");
-            $misc = $canBatchRun ? "onclick=\"setFormAction('$actionLink')\"" : "disabled='disabled'";
+            $misc = $canBatchRun ? "onclick=\"setFormAction('$actionLink', '', '#caseList')\"" : "disabled='disabled'";
             echo html::commonButton($lang->testtask->runCase, $misc);
 
             $actionLink = $this->createLink('testcase', 'batchEdit', "productID=$productID&branch=$branch");
-            $misc       = $canBatchEdit ? "onclick=\"setFormAction('$actionLink')\"" : "disabled='disabled'";
+            $misc       = $canBatchEdit ? "onclick=\"setFormAction('$actionLink', '', '#caseList')\"" : "disabled='disabled'";
             echo html::commonButton($lang->edit, $misc);
             ?>
             <button type='button' class='btn dropdown-toggle' data-toggle='dropdown'><span class='caret'></span></button>
@@ -145,7 +145,7 @@ js::set('suiteID',        $suiteID);
                   foreach($lang->testcase->reviewResultList as $key => $result)
                   {
                       $actionLink = $this->createLink('testcase', 'batchReview', "result=$key");
-                      echo '<li>' . html::a('#', $result, '', "onclick=\"setFormAction('$actionLink', 'hiddenwin')\"") . '</li>';
+                      echo '<li>' . html::a('#', $result, '', "onclick=\"setFormAction('$actionLink', 'hiddenwin', '#caseList')\"") . '</li>';
                   }
                   echo '</ul></li>';
               }
@@ -166,7 +166,7 @@ js::set('suiteID',        $suiteID);
                   foreach($lang->testcase->typeList as $key => $result)
                   {
                       $actionLink = $this->createLink('testcase', 'batchCaseTypeChange', "result=$key");
-                      echo '<li>' . html::a('#', $result, '', "onclick=\"setFormAction('$actionLink', 'hiddenwin')\"") . '</li>';
+                      echo '<li>' . html::a('#', $result, '', "onclick=\"setFormAction('$actionLink', 'hiddenwin', '#caseList')\"") . '</li>';
                   }
                   echo '</ul></li>';
               }
@@ -174,7 +174,7 @@ js::set('suiteID',        $suiteID);
               if($canBatchConfirmStoryChange)
               {
                   $actionLink = $this->createLink('testcase', 'batchConfirmStoryChange', "productID=$productID");
-                  $misc       = "onclick=\"setFormAction('$actionLink')\"";
+                  $misc       = "onclick=\"setFormAction('$actionLink', '', '#caseList')\"";
                   echo "<li>" . html::a('#', $lang->testcase->confirmStoryChange, '', $misc) . "</li>";
               }
               ?>
@@ -201,7 +201,7 @@ js::set('suiteID',        $suiteID);
                 {
                     $searchKey = $withSearch ? ('data-key="' . zget($branchsPinYin, $branchName, '') . '"') : '';
                     $actionLink = $this->createLink('testcase', 'batchChangeBranch', "branchID=$branchID");
-                    echo html::a('#', $branchName, '', "$searchKey onclick=\"setFormAction('$actionLink', 'hiddenwin')\"");
+                    echo html::a('#', $branchName, '', "$searchKey onclick=\"setFormAction('$actionLink', 'hiddenwin', '#caseList')\"");
                 }
                 ?>
               </div>
@@ -230,7 +230,7 @@ js::set('suiteID',        $suiteID);
                 {
                     $searchKey = $withSearch ? ('data-key="' . zget($modulesPinYin, $module, '') . '"') : '';
                     $actionLink = $this->createLink('testcase', 'batchChangeModule', "moduleID=$moduleId");
-                    echo html::a('#', $module, '', "title='$module' $searchKey onclick=\"setFormAction('$actionLink', 'hiddenwin')\"");
+                    echo html::a('#', $module, '', "title='$module' $searchKey onclick=\"setFormAction('$actionLink', 'hiddenwin', '#caseList')\"");
                 }
                 ?>
               </div>

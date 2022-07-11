@@ -858,7 +858,7 @@ class task extends control
             }
             if(!dao::isError()) $this->loadModel('score')->create('ajax', 'batchOther');
         }
-        echo js::reload('parent');
+        return print(js::reload('parent'));
     }
 
     /**
@@ -1612,7 +1612,7 @@ class task extends control
             }
         }
 
-        echo js::reload('parent');
+        return print(js::reload('parent'));
     }
 
     /**
@@ -1676,7 +1676,7 @@ class task extends control
             if(!dao::isError()) $this->loadModel('score')->create('ajax', 'batchOther');
         }
 
-        echo js::reload('parent');
+        return print(js::reload('parent'));
     }
 
     /**

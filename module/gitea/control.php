@@ -135,12 +135,12 @@ class gitea extends control
     {
         if($confirm != 'yes') return print(js::confirm($this->lang->gitea->confirmDelete, inlink('delete', "id=$giteaID&confirm=yes")));
 
-        $oldGitea = $this->gitea->getByID($giteaID);
-        $this->gitea->delete(TABLE_PIPELINE, $giteaID);
 
-        $actionID = $this->dao->lastInsertID();
-        $gitea    = $this->gitea->getByID($giteaID);
-        $changes  = common::createChanges($oldGitea, $gitea);
+        $oldGitea = $this->loadModel('pipeline')->getByID($giteaID);
+        $actionID = $this->pipeline->delete($giteaID, 'gitea');
+
+        $gitea   = $this->pipeline->getByID($giteaID);
+        $changes = common::createChanges($oldGitea, $gitea);
         $this->loadModel('action')->logHistory($actionID, $changes);
         return print(js::reload('parent'));
     }

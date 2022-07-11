@@ -123,6 +123,7 @@ $lang->action->objectTypes['team']             = 'Team';
 $lang->action->objectTypes['whitelist']        = 'Whitelist';
 $lang->action->objectTypes['pipeline']         = 'GitLib';
 $lang->action->objectTypes['gitlab']           = 'GitLab Server';
+$lang->action->objectTypes['gitea']            = 'Gitea Server';
 $lang->action->objectTypes['jenkins']          = 'Jenkins';
 $lang->action->objectTypes['mr']               = 'Merge Request';
 $lang->action->objectTypes['gitlabproject']    = 'GitLab Project';
@@ -634,6 +635,10 @@ $lang->action->dynamicAction->sonarqubeproject['deleted'] = 'Delete SonarQube Pr
 $lang->action->dynamicAction->gitlab['created'] = 'Create GitLab Server';
 $lang->action->dynamicAction->gitlab['edited']  = 'Edit GitLab Server';
 $lang->action->dynamicAction->gitlab['deleted'] = 'Delete GitLab Server';
+
+$lang->action->dynamicAction->gitea['created'] = 'Create Gitea Server';
+$lang->action->dynamicAction->gitea['edited']  = 'Edit Gitea Server';
+$lang->action->dynamicAction->gitea['deleted'] = 'Delete Gitea Server';
 
 /* Generate the corresponding object link. */
 $lang->action->label->product     = $lang->productCommon . '|product|view|productID=%s';

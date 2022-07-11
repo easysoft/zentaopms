@@ -123,6 +123,7 @@ $lang->action->objectTypes['team']             = '团队';
 $lang->action->objectTypes['whitelist']        = '白名单';
 $lang->action->objectTypes['pipeline']         = 'GitLab服务器';
 $lang->action->objectTypes['gitlab']           = 'GitLab服务器';
+$lang->action->objectTypes['gitea']            = 'Gitea服务器';
 $lang->action->objectTypes['jenkins']          = 'Jenkins';
 $lang->action->objectTypes['mr']               = '合并请求';
 $lang->action->objectTypes['gitlabproject']    = 'GitLab项目';
@@ -632,8 +633,12 @@ $lang->action->dynamicAction->sonarqube['deleted'] = '删除SonarQube服务器';
 $lang->action->dynamicAction->sonarqubeproject['deleted'] = '删除SonarQube项目';
 
 $lang->action->dynamicAction->gitlab['created'] = '创建GitLab服务器';
-$lang->action->dynamicAction->gitlab['edited']  = '设置GitLab服务器';
+$lang->action->dynamicAction->gitlab['edited']  = '编辑GitLab服务器';
 $lang->action->dynamicAction->gitlab['deleted'] = '删除GitLab服务器';
+
+$lang->action->dynamicAction->gitea['created'] = '创建Gitea服务器';
+$lang->action->dynamicAction->gitea['edited']  = '编辑Gitea服务器';
+$lang->action->dynamicAction->gitea['deleted'] = '删除Gitea服务器';
 
 /* 用来生成相应对象的链接。*/
 $lang->action->label->product     = $lang->productCommon . '|product|view|productID=%s';
