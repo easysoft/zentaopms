@@ -1601,7 +1601,7 @@ EOD;
      * @param  string $extraClass
      * @param  bool   $onlyBody
      * @param  string $misc
-     * @Param  bool   $extraEnabled
+     * @param  bool   $extraEnabled
      * @static
      * @access public
      * @return void
@@ -1802,13 +1802,14 @@ EOD;
      * @param  string $extraClass
      * @param  bool   $onlyBody
      * @param  string $misc
+     * @param  string $extraEnabled
      * @static
      * @access public
      * @return void
      */
-    public static function printIcon($module, $method, $vars = '', $object = '', $type = 'button', $icon = '', $target = '', $extraClass = '', $onlyBody = false, $misc = '', $title = '', $programID = 0)
+    public static function printIcon($module, $method, $vars = '', $object = '', $type = 'button', $icon = '', $target = '', $extraClass = '', $onlyBody = false, $misc = '', $title = '', $programID = 0, $extraEnabled = '')
     {
-        echo common::buildIconButton($module, $method, $vars, $object, $type, $icon, $target, $extraClass, $onlyBody, $misc, $title, $programID);
+        echo common::buildIconButton($module, $method, $vars, $object, $type, $icon, $target, $extraClass, $onlyBody, $misc, $title, $programID, $extraEnabled);
     }
 
     /**
@@ -2192,6 +2193,7 @@ EOD;
             $queryCondition = explode(' ORDER BY ', $sql);
             $queryCondition = $queryCondition[0];
         }
+        $queryCondition = preg_replace('/((AND)|(OR)) *t2.\w+ * [^ ]+ [^ ]+/', '', $queryCondition);
         $queryCondition = trim($queryCondition);
         if(empty($queryCondition)) $queryCondition = "1=1";
 
@@ -2415,7 +2417,10 @@ EOD;
           ($module == 'my' and strpos('|changepassword|preference|', "|{$method}|") !== false) or
           ($module == 'file' and strpos('|read|download|uploadimages|ajaxwopifiles|', "|{$method}|") !== false) or
           ($module == 'sso' and $method == 'login') or
-          ($module == 'traincourse' and $method == 'ajaxuploadlargefile'))
+          ($module == 'report' && $method == 'annualdata') or
+          ($module == 'misc' && $method == 'captcha') or
+          ($module == 'traincourse' and $method == 'ajaxuploadlargefile') or
+          ($module == 'traincourse' and $method == 'playvideo'))
         {
             return;
         }
@@ -2460,16 +2465,16 @@ EOD;
         /* If is the program/project/product/execution admin, have all program privs. */
         if($app->config->vision != 'lite')
         {
-            $inProject = isset($lang->navGroup->$module) and $lang->navGroup->$module == 'project';
+            $inProject = (isset($lang->navGroup->$module) and $lang->navGroup->$module == 'project');
             if($inProject and $app->session->project and (strpos(",{$app->user->rights['projects']},", ",{$app->session->project},") !== false or strpos(",{$app->user->rights['projects']},", ',all,') !== false)) return true;
 
-            $inProduct = isset($lang->navGroup->$module) and $lang->navGroup->$module == 'product';
+            $inProduct = (isset($lang->navGroup->$module) and $lang->navGroup->$module == 'product');
             if($inProduct and $app->session->product and (strpos(",{$app->user->rights['products']},", ",{$app->session->product},") !== false or strpos(",{$app->user->rights['products']},", ',all,') !== false)) return true;
 
-            $inProgram = isset($lang->navGroup->$module) and $lang->navGroup->$module == 'program';
+            $inProgram = (isset($lang->navGroup->$module) and $lang->navGroup->$module == 'program');
             if($inProgram and $app->session->program and (strpos(",{$app->user->rights['programs']},", ",{$app->session->program},") !== false or strpos(",{$app->user->rights['programs']},", ',all,') !== false)) return true;
 
-            $inExecution = isset($lang->navGroup->$module) and $lang->navGroup->$module == 'execution';
+            $inExecution = (isset($lang->navGroup->$module) and $lang->navGroup->$module == 'execution');
             if($inExecution and $app->session->execution and (strpos(",{$app->user->rights['executions']},", ",{$app->session->execution},") !== false or strpos(",{$app->user->rights['executions']},", ',all,') !== false)) return true;
         }
 

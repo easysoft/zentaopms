@@ -15,6 +15,7 @@
 <?php js::set('storyType', $storyType);?>
 <?php js::set('app', $this->app->tab);?>
 <?php if(isset($resetActive)) js::set('resetActive', true);?>
+<?php js::set('showFields', $showFields);?>
 <div class='main-content' id='mainContent'>
 <div class='main-header'>
   <h2>

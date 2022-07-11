@@ -981,6 +981,7 @@ class project extends control
      *
      * @param  int    $projectID
      * @param  int    $productID
+     * @param  int    $branchID
      * @param  string $orderBy
      * @param  int    $build
      * @param  string $type
@@ -991,13 +992,14 @@ class project extends control
      * @access public
      * @return void
      */
-    public function bug($projectID = 0, $productID = 0, $orderBy = 'status,id_desc', $build = 0, $type = 'all', $param = 0, $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function bug($projectID = 0, $productID = 0, $branchID = 0, $orderBy = 'status,id_desc', $build = 0, $type = 'all', $param = 0, $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         /* Load these two models. */
         $this->loadModel('bug');
         $this->loadModel('user');
         $this->loadModel('product');
         $this->loadModel('datatable');
+        $this->loadModel('tree');
 
         /* Save session. */
         $this->session->set('bugList', $this->app->getURI(true), 'project');
@@ -1008,11 +1010,10 @@ class project extends control
         $type     = strtolower($type);
         $queryID  = ($type == 'bysearch') ? (int)$param : 0;
         $products = $this->product->getProducts($projectID);
-        $branchID = isset($products[$productID]) ? current($products[$productID]->branches) : 0;
 
         $productPairs = array('0' => $this->lang->product->all);
         foreach($products as $productData) $productPairs[$productData->id] = $productData->name;
-        $this->lang->modulePageNav = $this->product->select($productPairs, $productID, 'project', 'bug', '', $branchID, 0, '', false);
+        $this->lang->modulePageNav = $this->product->select($productPairs, $productID, 'project', 'bug', $projectID, $branchID);
 
         /* Header and position. */
         $title      = $project->name . $this->lang->colon . $this->lang->bug->common;
@@ -1025,7 +1026,7 @@ class project extends control
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
         $sort  = common::appendOrder($orderBy);
-        $bugs  = $this->bug->getProjectBugs($projectID, $productID, $build, $type, $param, $sort, '', $pager);
+        $bugs  = $this->bug->getProjectBugs($projectID, $productID, $branchID, $build, $type, $param, $sort, '', $pager);
 
         /* team member pairs. */
         $memberPairs   = array();
@@ -1046,15 +1047,13 @@ class project extends control
             $showBranch = $this->loadModel('branch')->showBranch($productID);
 
             /* Display status of branch. */
-            $branches = $this->loadModel('branch')->getList($productID, 0, 'all');
+            $branches = $this->loadModel('branch')->getList($productID, $projectID, 'all');
             foreach($branches as $branchInfo)
             {
                 $branchOption[$branchInfo->id]    = $branchInfo->name;
                 $branchTagOption[$branchInfo->id] = $branchInfo->name . ($branchInfo->status == 'closed' ? ' (' . $this->lang->branch->statusList['closed'] . ')' : '');
             }
         }
-
-        $showModule  = !empty($this->config->datatable->bugBrowse->showModule) ? $this->config->datatable->bugBrowse->showModule : '';
 
         $storyIdList = $taskIdList = array();
         foreach($bugs as $bug)
@@ -1065,6 +1064,28 @@ class project extends control
         }
         $storyList = $storyIdList ? $this->loadModel('story')->getByList($storyIdList) : array();
         $taskList  = $taskIdList  ? $this->loadModel('task')->getByList($taskIdList)   : array();
+
+        $moduleID = $type != 'bysearch' ? $param : 0;
+        $modules  = $this->tree->getAllModulePairs('bug');
+
+        /* Get module tree.*/
+        $extra = array('projectID' => $projectID, 'orderBy' => $orderBy, 'type' => $type, 'build' => $build, 'branchID' => $branchID);
+        if($projectID and empty($productID) and count($products) > 1)
+        {
+            $moduleTree = $this->tree->getBugTreeMenu($projectID, $productID, 0, array('treeModel', 'createBugLink'), $extra);
+        }
+        elseif(!empty($products))
+        {
+            $productID  = empty($productID) ? reset($products)->id : $productID;
+            $moduleTree = $this->tree->getTreeMenu($productID, 'bug', 0, array('treeModel', 'createBugLink'), $extra + array('productID' => $productID, 'branchID' => $branchID), $branchID);
+        }
+        else
+        {
+            $moduleTree = '';
+        }
+        $tree = $moduleID ? $this->tree->getByID($moduleID) : '';
+
+        $showModule  = !empty($this->config->datatable->projectBug->showModule) ? $this->config->datatable->projectBug->showModule : '';
 
         /* Assign. */
         $this->view->title           = $title;
@@ -1086,11 +1107,17 @@ class project extends control
         $this->view->branchOption    = $branchOption;
         $this->view->branchTagOption = $branchTagOption;
         $this->view->executions      = $executions;
-        $this->view->modulePairs     = $showModule ? $this->loadModel('tree')->getModulePairs($productID, 'bug', $showModule) : array();
         $this->view->plans           = $this->loadModel('productplan')->getPairs($productID);
         $this->view->stories         = $storyList;
         $this->view->tasks           = $taskList;
         $this->view->projectPairs    = $this->project->getPairsByProgram();
+        $this->view->moduleTree      = $moduleTree;
+        $this->view->modules         = $modules;
+        $this->view->moduleID        = $moduleID;
+        $this->view->moduleName      = $moduleID ? $tree->name : $this->lang->tree->all;
+        $this->view->modulePairs     = $showModule ? $this->tree->getModulePairs($productID, 'bug', $showModule) : array();
+        $this->view->setModule       = true;
+        $this->view->showBranch      = false;
 
 
         $this->display();

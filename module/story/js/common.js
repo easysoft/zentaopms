@@ -13,6 +13,14 @@ $(function()
     }
 })
 
+/**
+ * Get status.
+ *
+ * @param  method $method
+ * @param  params $params
+ * @access public
+ * @return void
+ */
 function getStatus(method, params)
 {
     $.get(createLink('story', 'ajaxGetStatus', "method=" + method + '&params=' + params), function(status)

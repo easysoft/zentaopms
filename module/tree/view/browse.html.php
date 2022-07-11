@@ -95,9 +95,11 @@ if($viewType == 'doc' or $viewType == 'api')
     <div class="panel">
       <div class="panel-heading">
         <div class="panel-title"><?php echo $childTitle;?></div>
+        <?php if($app->tab == 'product'):?>
         <div class="panel-actions btn-toolbar">
           <?php echo html::a($this->createLink('tree', 'viewHistory', "productID=$rootID", '', true), $lang->history,  '', "class='btn btn-sm btn-primary iframe'");?>
         </div>
+        <?php endif;?>
       </div>
       <div class="panel-body">
         <ul id='modulesTree' data-name='tree-<?php echo $viewType;?>'></ul>
@@ -281,7 +283,7 @@ $(function()
             {
                 hiddenwin.location.href = action.linkTemplate.format(item.id);
             }
-            else if(action.type === 'sort')
+            else if(action.type === 'sort' && event.item == null)
             {
                 var orders = {};
                 $('#modulesTree').find('li:not(.tree-action-item)').each(function()

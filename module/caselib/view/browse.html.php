@@ -47,6 +47,8 @@ js::set('flow',          $config->global->flow);
     }
     ?>
     <a class="btn btn-link querybox-toggle" id='bysearchTab'><i class="icon icon-search muted"></i> <?php echo $lang->testcase->bySearch;?></a>
+  </div>
+  <div class='btn-toolbar pull-right'>
     <?php
     if(common::hasPriv('caselib', 'view'))
     {
@@ -54,8 +56,6 @@ js::set('flow',          $config->global->flow);
         echo html::a($link, "<i class='icon icon-list-alt muted'> </i> " . $this->lang->caselib->view, '', "class='btn btn-link'");
     }
     ?>
-  </div>
-  <div class='btn-toolbar pull-right'>
     <div class='btn-group'>
      <?php common::printLink('caselib', 'exportTemplet', "libID=$libID", "<i class='icon icon-export muted'> </i> " . $lang->caselib->exportTemplet, '', "class='btn btn-link export' data-width='40%'");?>
      <?php common::printLink('caselib', 'import', "libID=$libID", "<i class='icon muted icon-import'> </i> " . $lang->testcase->fileImport, '', "class='btn btn-link export'");?>

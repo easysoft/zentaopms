@@ -46,6 +46,34 @@ $(function()
             $('#assignedToBox').attr('colspan', 2);
         }
     });
+
+    $('#customField').click(function()
+    {
+        hiddenRequireFields();
+    });
+
+    /* Implement a custom form without feeling refresh. */
+    $('#formSettingForm .btn-primary').click(function()
+    {
+        saveCustomFields('createFields');
+
+        setTimeout(function()
+        {
+            var showFieldList = showFields + ',';
+            if(showFieldList.indexOf(',source,') >= 0)
+            {
+                $('#source').trigger("change");
+            }
+            else
+            {
+                $('#feedbackBox').addClass('hidden');
+                $('#reviewerBox').attr('colspan', $('#assignedToBox').hasClass('hidden') ? 4 : 2);
+                $('#assignedToBox').attr('colspan', 2);
+            }
+        }, 100);
+
+        return false;
+    });
 });
 
 /**

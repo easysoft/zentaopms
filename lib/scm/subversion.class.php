@@ -11,13 +11,13 @@ class Subversion
     public $svnVersion;
 
     /**
-     * Construct 
-     * 
-     * @param  string $client 
-     * @param  string $root 
-     * @param  string $account 
-     * @param  string $password 
-     * @param  string $encoding 
+     * Construct
+     *
+     * @param  string $client
+     * @param  string $root
+     * @param  string $account
+     * @param  string $password
+     * @param  string $encoding
      * @access public
      * @return void
      */
@@ -37,10 +37,10 @@ class Subversion
     }
 
     /**
-     * List files. 
-     * 
-     * @param  string $path 
-     * @param  string $revision 
+     * List files.
+     *
+     * @param  string $path
+     * @param  string $revision
      * @access public
      * @return array
      */
@@ -91,10 +91,10 @@ class Subversion
 
     /**
      * Get tags.
-     * 
-     * @param  string $path 
-     * @param  string $revision 
-     * @param  bool   $onlyDir 
+     *
+     * @param  string $path
+     * @param  string $revision
+     * @param  bool   $onlyDir
      * @access public
      * @return array
      */
@@ -129,7 +129,7 @@ class Subversion
 
     /**
      * Get branch.
-     * 
+     *
      * @access public
      * @return array
      */
@@ -140,9 +140,9 @@ class Subversion
 
     /**
      * Get last log.
-     * 
-     * @param  string $path 
-     * @param  int    $count 
+     *
+     * @param  string $path
+     * @param  int    $count
      * @access public
      * @return array
      */
@@ -170,8 +170,8 @@ class Subversion
         foreach($parsedComments->logentry as $entry)
         {
             $log = new stdclass();
-            $log->committer = (string)$entry->author; 
-            $log->revision  = (int)$entry['revision']; 
+            $log->committer = (string)$entry->author;
+            $log->revision  = (int)$entry['revision'];
             $log->comment   = trim((string)$entry->msg);
             $log->time      = date('Y-m-d H:i:s', strtotime($entry->date));
             $log->change    = array();
@@ -188,12 +188,12 @@ class Subversion
 
     /**
      * Get log.
-     * 
-     * @param  string $path 
-     * @param  int    $fromRevision 
-     * @param  string $toRevision 
-     * @param  int    $count 
-     * @param  bool   $quiet 
+     *
+     * @param  string $path
+     * @param  int    $fromRevision
+     * @param  string $toRevision
+     * @param  int    $count
+     * @param  bool   $quiet
      * @access public
      * @return array
      */
@@ -229,17 +229,17 @@ class Subversion
         foreach($parsedComments->logentry as $entry)
         {
             $log = new stdclass();
-            $log->committer = (string)$entry->author; 
-            $log->revision  = (int)$entry['revision']; 
+            $log->committer = (string)$entry->author;
+            $log->revision  = (int)$entry['revision'];
             $log->comment   = trim((string)$entry->msg);
             $log->time      = date('Y-m-d H:i:s', strtotime($entry->date));
             $log->change    = array();
             if(!empty($entry->paths))
             {
-                foreach($entry->paths->path as $path) 
+                foreach($entry->paths->path as $path)
                 {
                     $pathInfo = array();
-                    foreach($path->attributes() as $attr => $value) $pathInfo[$attr] = (string)$value;    
+                    foreach($path->attributes() as $attr => $value) $pathInfo[$attr] = (string)$value;
                     $log->change[(string)$path] = $pathInfo;
                 }
             }
@@ -257,9 +257,9 @@ class Subversion
 
     /**
      * Blame file.
-     * 
-     * @param  string $path 
-     * @param  int    $revision 
+     *
+     * @param  string $path
+     * @param  int    $revision
      * @access public
      * @return array
      */
@@ -298,7 +298,7 @@ class Subversion
         {
             foreach($parsedResult->target->entry as $line)
             {
-                if($line->commit['revision'] != $revision) 
+                if($line->commit['revision'] != $revision)
                 {
                     $blame = array();
                     $blame['revision']  = (int)$line->commit['revision'];
@@ -327,10 +327,10 @@ class Subversion
 
     /**
      * Diff file.
-     * 
-     * @param  string $path 
-     * @param  int    $fromRevision 
-     * @param  int    $toRevision 
+     *
+     * @param  string $path
+     * @param  int    $fromRevision
+     * @param  int    $toRevision
      * @access public
      * @return array
      */
@@ -355,9 +355,9 @@ class Subversion
 
     /**
      * Cat file.
-     * 
-     * @param  string $entry 
-     * @param  string $revision 
+     *
+     * @param  string $entry
+     * @param  string $revision
      * @access public
      * @return string
      */
@@ -380,9 +380,9 @@ class Subversion
 
     /**
      * Get info.
-     * 
-     * @param  string $entry 
-     * @param  string $revision 
+     *
+     * @param  string $entry
+     * @param  string $revision
      * @access public
      * @return object
      */
@@ -421,8 +421,8 @@ class Subversion
 
     /**
      * Exec svn cmd.
-     * 
-     * @param  string $cmd 
+     *
+     * @param  string $cmd
      * @access public
      * @return array
      */
@@ -434,8 +434,8 @@ class Subversion
 
     /**
      * Parse diff.
-     * 
-     * @param  array  $lines 
+     *
+     * @param  array  $lines
      * @access public
      * @return array
      */
@@ -514,9 +514,9 @@ class Subversion
 
     /**
      * Get commit count.
-     * 
-     * @param  int    $commits 
-     * @param  int    $lastVersion 
+     *
+     * @param  int    $commits
+     * @param  int    $lastVersion
      * @access public
      * @return int
      */
@@ -547,7 +547,7 @@ class Subversion
 
     /**
      * Get first revision.
-     * 
+     *
      * @access public
      * @return int
      */
@@ -561,7 +561,7 @@ class Subversion
 
     /**
      * Get latest revision.
-     * 
+     *
      * @access public
      * @return int
      */
@@ -573,9 +573,9 @@ class Subversion
 
     /**
      * Get commits.
-     * 
-     * @param  string $version 
-     * @param  int    $count 
+     *
+     * @param  string $version
+     * @param  int    $count
      * @access public
      * @return array
      */
@@ -608,8 +608,8 @@ class Subversion
         foreach($parsedComments->logentry as $entry)
         {
             $parsedLog            = new stdClass();
-            $parsedLog->committer = (string)$entry->author; 
-            $parsedLog->revision  = (int)$entry['revision']; 
+            $parsedLog->committer = (string)$entry->author;
+            $parsedLog->revision  = (int)$entry['revision'];
             $parsedLog->comment   = trim((string)$entry->msg);
             $parsedLog->time      = date('Y-m-d H:i:s', strtotime($entry->date));
             $logs['commits'][$parsedLog->revision] = $parsedLog;
@@ -632,8 +632,8 @@ class Subversion
 
     /**
      * Replace svn auth.
-     * 
-     * @param  string $cmd 
+     *
+     * @param  string $cmd
      * @access public
      * @return string
      */
@@ -643,11 +643,11 @@ class Subversion
     }
 
     /**
-     * Build command. 
-     * 
-     * @param  string $path 
-     * @param  string $action 
-     * @param  string $param 
+     * Build command.
+     *
+     * @param  string $path
+     * @param  string $action
+     * @param  string $param
      * @access public
      * @return string
      */
@@ -668,8 +668,8 @@ class Subversion
 
     /**
      * Get SVN version.
-     * 
-     * @param  string $client 
+     *
+     * @param  string $client
      * @access public
      * @return string
      */

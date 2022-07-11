@@ -30,8 +30,8 @@ $(function()
         var moduleArr = ['task', 'story', 'bug', 'testcase'];
         if($.inArray(config.currentModule, moduleArr) >= 0 && config.currentMethod == 'batchcreate')
         {
-            lastIndex = itemIndex;
-            itemIndex ++;
+            lastIndex = rowIndex;
+            rowIndex ++;
         }
 
         var $newRow = $(rowTpl.replace(/%s/g, lastIndex + 1));

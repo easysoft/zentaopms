@@ -93,6 +93,7 @@ class productModel extends model
         }
         $isMobile = $this->app->viewType == 'mhtml';
 
+        $productID = $productID == 'all' ? 0 : $productID;
         setcookie("lastProduct", $productID, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, true);
         if($productID) $currentProduct = $this->getById($productID);
 
@@ -110,7 +111,8 @@ class productModel extends model
         }
         $this->session->set('currentProductType', $currentProduct->type);
 
-        $output = '';
+        $executionID = ($isQaModule and $this->app->tab == 'execution') ? $extra : 0;
+        $output      = '';
         if(!empty($products))
         {
             $dropMenuLink = helper::createLink($isQaModule ? 'bug' : 'product', 'ajaxGetDropMenu', "objectID=$productID&module=$currentModule&method=$currentMethod&extra=$extra");
@@ -125,7 +127,7 @@ class productModel extends model
                 $this->lang->product->branch = sprintf($this->lang->product->branch, $this->lang->product->branchName[$currentProduct->type]);
                 $this->lang->product->menu->settings['subMenu']->branch = str_replace('@branch@', $this->lang->product->branch, $this->lang->product->menu->settings['subMenu']->branch);
 
-                $branches   = $this->loadModel('branch')->getPairs($productID, 'all');
+                $branches   = $this->loadModel('branch')->getPairs($productID, 'all', $executionID);
                 $branchName = isset($branches[$branch]) ? $branches[$branch] : $branches[0];
                 if(!$isMobile)
                 {
@@ -2261,6 +2263,11 @@ class productModel extends model
         elseif($module == 'design')
         {
             return helper::createLink('design', 'browse', "productID=%s");
+        }
+        elseif(strpos(',project,execution,', ",$module,") !== false and $method == 'bug')
+        {
+            $params = explode(',', $extra);
+            return helper::createLink($module, $method, "projectID={$params[0]}&productID=%s" . ($branch ? "&branch=%s" : ''));
         }
         elseif($module == 'project' and $method == 'testcase')
         {

@@ -1147,3 +1147,171 @@ function checkMultiProducts(product)
 
     return false;
 }
+
+/**
+ * Add row.
+ *
+ * @param  object $obj
+ * @access public
+ * @return void
+ */
+function addRow(obj)
+{
+    var row = $('#addRow').html().replace(/%i%/g, rowIndex + 1);
+    $('<tr class="addedRow">' + row  + '</tr>').insertAfter($(obj).closest('tr'));
+
+    var $row = $(obj).closest('tr').next();
+
+    $row.find(".form-date").datepicker();
+    $row.find("input[name^=color]").colorPicker();
+    $row.find('div[id$=_chosen]').remove();
+    $row.find('.picker').remove();
+    $row.find('.chosen').chosen();
+    $row.find('.picker-select').picker();
+
+    rowIndex ++;
+}
+
+/**
+ * Delete row.
+ *
+ * @param  object $obj
+ * @access public
+ * @return void
+ */
+function deleteRow(obj)
+{
+    $(obj).closest('tr').remove();
+}
+
+/**
+ * Show checked fields.
+ *
+ * @param  string fields
+ * @access public
+ * @return void
+ */
+function showCheckedFields(fields)
+{
+    var fieldList = ',' + fields + ',';
+    $('#formSettingForm > .checkboxes > .checkbox-primary > input').each(function()
+    {
+        var field     = ',' + $(this).val() + ',';
+        var $field    = config.currentMethod == 'create' ? $('#' + $(this).val()) : $('[name^=' + $(this).val() + ']');
+        var $fieldBox = $('.' + $(this).val() + 'Box' );
+
+        var required  = '';
+        if(typeof requiredFields != 'undefined') var required = ',' + requiredFields + ',';
+        if(fieldList.indexOf(field) >= 0 || (required && required.indexOf(field) >= 0))
+        {
+            $fieldBox.removeClass('hidden');
+            $field.removeAttr('disabled');
+        }
+        else if(!$fieldBox.hasClass('hidden'))
+        {
+            $fieldBox.addClass('hidden');
+            $field.attr('disabled', true);
+        }
+
+        if(config.currentModule == 'story' && $(this).val() == 'source')
+        {
+            var $sourceNote = config.currentMethod == 'create' ? $('#sourceNote') : $('[name^=sourceNote]');
+            $sourceNote.attr('disabled', $fieldBox.hasClass('hidden'));
+        }
+    });
+
+
+    if(config.currentModule == 'task' && config.currentMethod == 'create');
+    {
+        if(fieldList.indexOf(',estStarted,') >= 0 && fieldList.indexOf(',deadline,') >= 0)
+        {
+            $('.borderBox').removeClass('hidden');
+        }
+        else if(fieldList.indexOf(',estStarted,') >= 0 || fieldList.indexOf(',deadline,') >= 0)
+        {
+            $('.datePlanBox').removeClass('hidden');
+            if(!$('.borderBox').hasClass('hidden')) $('.borderBox').addClass('hidden');
+        }
+        else
+        {
+            if(!$('.borderBox').hasClass('hidden')) $('.borderBox').addClass('hidden');
+            if(!$('.datePlanBox').hasClass('hidden')) $('.datePlanBox').addClass('hidden');
+        }
+    }
+}
+
+/**
+ * Hidden require field.
+ *
+ * @access public
+ * @return void
+ */
+function hiddenRequireFields()
+{
+    $('#formSettingForm > .checkboxes > .checkbox-primary > input').each(function()
+    {
+        var field    = ',' + $(this).val() + ',';
+        var required = ',' + requiredFields + ',';
+        if(required.indexOf(field) >= 0) $(this).closest('div').addClass('hidden');
+    });
+}
+
+/**
+ * Save custom fields.
+ *
+ * @param  stirng $key
+ * @param  int    $maxFieldCount
+ * @param  object $name
+ * @param  int    $nameMinWidth
+ * @access public
+ * @return void
+ */
+function saveCustomFields(key, maxFieldCount, $name, nameMinWidth)
+{
+    var fields = '';
+    $('#formSettingForm > .checkboxes > .checkbox-primary > input:checked').each(function()
+    {
+        fields += ',' + $(this).val();
+    });
+
+    var module = config.currentModule;
+    var link   = createLink('custom', 'ajaxSaveCustomFields', 'module=' + module + '&section=custom&key=' + key);
+    $.post(link, {'fields' : fields}, function()
+    {
+        showFields = fields;
+
+        showCheckedFields(fields);
+        $('#formSetting').parent().removeClass('open');
+
+        if(key == 'batchCreateFields') setCustomFieldsStyle(maxFieldCount, $name, nameMinWidth);
+    });
+}
+
+/**
+ * Set custom fields style.
+ *
+ * @param  int    $maxFieldCount
+ * @param  object $name
+ * @param  int    $nameMinWidth
+ * @access public
+ * @return void
+ */
+function setCustomFieldsStyle(maxFieldCount, $name, nameMinWidth)
+{
+    var fieldCount = $('#batchCreateForm .table thead>tr>th:visible').length;
+    $('.form-actions').attr('colspan', fieldCount);
+
+    var $table = $('#batchCreateForm > .table-responsive');
+    if(fieldCount > maxFieldCount)
+    {
+        $table.removeClass('scroll-none');
+        $table.css('overflow', 'auto');
+    }
+    else
+    {
+        $table.addClass('scroll-none');
+        $table.css('overflow', 'visible');
+    }
+
+    if($name.width() < nameMinWidth) $name.width(200);
+}

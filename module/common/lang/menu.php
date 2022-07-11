@@ -399,7 +399,7 @@ $lang->devops->menu->code    = array('link' => "{$lang->repo->common}|repo|brows
 $lang->devops->menu->mr      = array('link' => "{$lang->devops->mr}|mr|browse|repoID=%s");
 $lang->devops->menu->compile = array('link' => "{$lang->devops->compile}|job|browse|repoID=%s", 'subModule' => 'compile,job');
 $lang->devops->menu->app     = array('link' => "{$lang->app->common}|app|serverlink|%s");
-$lang->devops->menu->set     = array('link' => "{$lang->devops->set}|repo|maintain", 'subModule' => 'gitlab,jenkins,sonarqube', 'alias' => 'setrules,create,edit');
+$lang->devops->menu->set     = array('link' => "{$lang->devops->set}|repo|maintain", 'subModule' => 'gitlab,jenkins,sonarqube,gitea', 'alias' => 'setrules,create,edit');
 
 $lang->devops->menuOrder[5]  = 'code';
 $lang->devops->menuOrder[10] = 'mr';
@@ -412,6 +412,7 @@ $lang->devops->dividerMenu = ',set,';
 $lang->devops->menu->set['subMenu'] = new stdclass();
 $lang->devops->menu->set['subMenu']->repo      = array('link' => "{$lang->devops->repo}|repo|maintain", 'alias' => 'create,edit');
 $lang->devops->menu->set['subMenu']->gitlab    = array('link' => 'GitLab|gitlab|browse', 'subModule' => 'gitlab');
+$lang->devops->menu->set['subMenu']->gitea     = array('link' => 'Gitea|gitea|browse', 'subModule' => 'gitea');
 $lang->devops->menu->set['subMenu']->jenkins   = array('link' => 'Jenkins|jenkins|browse', 'subModule' => '');
 $lang->devops->menu->set['subMenu']->sonarqube = array('link' => 'SonarQube|sonarqube|browse', 'subModule' => 'sonarqube');
 $lang->devops->menu->set['subMenu']->setrules  = array('link' => "{$lang->devops->rules}|repo|setrules");
@@ -645,6 +646,7 @@ $lang->navGroup->job              = 'devops';
 $lang->navGroup->jenkins          = 'devops';
 $lang->navGroup->mr               = 'devops';
 $lang->navGroup->gitlab           = 'devops';
+$lang->navGroup->gitea            = 'devops';
 $lang->navGroup->sonarqube        = 'devops';
 $lang->navGroup->sonarqubeproject = 'devops';
 $lang->navGroup->compile          = 'devops';

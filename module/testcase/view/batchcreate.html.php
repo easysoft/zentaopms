@@ -73,20 +73,21 @@
                 echo "<th class='c-extend $required'>{$extendField->name}</th>";
             }   
             ?>
+            <th class='c-actions text-left'><?php echo $lang->actions;?></th>
           </tr>
         </thead>
         <tbody>
           <?php unset($lang->testcase->typeList['']);?>
-          <?php for($i = 0; $i < $config->testcase->batchCreate; $i++):?>
+          <?php for($i = 1; $i <= $config->testcase->batchCreate; $i++):?>
           <?php
-          if($i != 0) $currentModuleID = 'ditto';
-          if($i != 0) $lang->testcase->typeList['ditto'] = $lang->testcase->ditto;
-          if($i != 0) $lang->testcase->priList['ditto']  = $lang->testcase->ditto;
-          $type = $i == 0 ? 'feature' : 'ditto';
-          $pri  = $i == 0 ? 3 : 'ditto';
+          if($i != 1) $currentModuleID = 'ditto';
+          if($i != 1) $lang->testcase->typeList['ditto'] = $lang->testcase->ditto;
+          if($i != 1) $lang->testcase->priList['ditto']  = $lang->testcase->ditto;
+          $type = $i == 1 ? 'feature' : 'ditto';
+          $pri  = $i == 1 ? 3 : 'ditto';
           ?>
           <tr>
-            <td class="text-center"><?php echo $i+1;?></td>
+            <td class="text-center"><?php echo $i;?></td>
             <td class='text-left<?php echo zget($visibleFields, $product->type, ' hidden')?> branchBox'><?php echo html::select("branch[$i]", $branches, $branch, "class='form-control' onchange='setModules(this.value, $productID, $i)'");?></td>
             <td class='text-left<?php echo zget($visibleFields, 'module', ' hidden')?> moduleBox' style='overflow:visible'><?php echo html::select("module[$i]", $moduleOptionMenu, $currentModuleID, "class='form-control chosen' onchange='loadStories($productID, this.value, $i)' data-drop_direction='down'");?></td>
             <td class='text-left<?php echo zget($visibleFields, 'story', ' hidden'); echo $hiddenStory;?> storyBox' style='overflow:visible'> <?php echo html::select("story[$i]", $storyPairs, $story ? $story->id : '', 'class="form-control chosen"');?></td>
@@ -107,11 +108,17 @@
             <td class='<?php echo zget($visibleFields, 'precondition', 'hidden')?> preconditionBox'><?php echo html::textarea("precondition[$i]", '', "rows='1' class='form-control autosize'")?></td>
             <td class='<?php echo zget($visibleFields, 'keywords', 'hidden')?> keywordsBox'><?php echo html::input("keywords[$i]", '', "class='form-control'");?></td>
             <td class='text-left<?php echo zget($visibleFields, 'stage', ' hidden')?> stageBox' style='overflow:visible'><?php echo html::select("stage[$i][]", $lang->testcase->stageList, '', "class='form-control chosen' multiple");?></td>
-            <td class='<?php echo zget($visibleFields, 'review', 'hidden')?> reviewBox'><?php echo html::select("needReview[$i]", $lang->testcase->reviewList, $needReview, "class='form-control'");?></td>
+            <td class='<?php echo zget($visibleFields, 'review', 'hidden')?> reviewBox'><?php echo html::select("needReview[$i]", $lang->testcase->reviewList, $needReview, "class='form-control chosen'");?></td>
             <?php
             $this->loadModel('flow');
             foreach($extendFields as $extendField) echo "<td" . (($extendField->control == 'select' or $extendField->control == 'multi-select') ? " style='overflow:visible'" : '') . ">" . $this->flow->getFieldControl($extendField, '', $extendField->field . "[$i]") . "</td>";
             ?>
+            <td class='c-actions text-left'>
+              <a href='javascript:;' onclick='addRow(this)' class='btn btn-link'><i class='icon-plus'></i></a>
+              <?php if($i != 1):?>
+              <a href='javascript:;' onclick='deleteRow(this)' class='btn btn-link'><i class='icon icon-close'></i></a>
+              <?php endif;?>
+            </td>
           </tr>
           <?php endfor;?>
         </tbody>
@@ -127,7 +134,7 @@
     </div>
   </form>
 </div>
-<?php js::set('itemIndex', -- $i);?>
+<?php js::set('rowIndex', -- $i);?>
 <table class='template' id='trTemp'>
   <tbody>
     <tr>
@@ -157,8 +164,51 @@
       $this->loadModel('flow');
       foreach($extendFields as $extendField) echo "<td" . (($extendField->control == 'select' or $extendField->control == 'multi-select') ? " style='overflow:visible'" : '') . ">" . $this->flow->getFieldControl($extendField, '', $extendField->field . "[%s]") . "</td>";
       ?>
+      <td class='c-actions text-left'>
+        <a href='javascript:;' onclick='addRow(this)' class='btn btn-link'><i class='icon-plus'></i></a>
+        <?php if($i != 1):?>
+        <a href='javascript:;' onclick='deleteRow(this)' class='btn btn-link'><i class='icon icon-close'></i></a>
+        <?php endif;?>
+      </td>
     </tr>
   </tbody>
 </table>
+<div>
+  <?php $i = '%i%';?>
+  <table class='hidden'>
+    <tr id='addRow' class='hidden'>
+      <td class="text-center"><?php echo $i;?></td>
+      <td class='text-left<?php echo zget($visibleFields, $product->type, ' hidden')?> branchBox'><?php echo html::select("branch[$i]", $branches, $branch, "class='form-control' onchange='setModules(this.value, $productID, $i)'");?></td>
+      <td class='text-left<?php echo zget($visibleFields, 'module', ' hidden')?> moduleBox' style='overflow:visible'><?php echo html::select("module[$i]", $moduleOptionMenu, $currentModuleID, "class='form-control chosen' onchange='loadStories($productID, this.value, $i)' data-drop_direction='down'");?></td>
+      <td class='text-left<?php echo zget($visibleFields, 'story', ' hidden'); echo $hiddenStory;?> storyBox' style='overflow:visible'> <?php echo html::select("story[$i]", $storyPairs, $story ? $story->id : '', 'class="form-control chosen"');?></td>
+      <td style='overflow:visible'>
+        <div class="input-control has-icon-right">
+          <?php echo html::input("title[$i]", '', "class='form-control title-import'");?>
+          <div class="colorpicker">
+            <button type="button" class="btn btn-link dropdown-toggle" data-toggle="dropdown"><span class="cp-title"></span><span class="color-bar"></span><i class="ic"></i></button>
+            <ul class="dropdown-menu clearfix">
+              <li class="heading"><?php echo $lang->testcase->colorTag;?><i class="icon icon-close"></i></li>
+            </ul>
+            <?php echo html::hidden("color[$i]", '', "data-provide='colorpicker' data-icon='color' data-wrapper='input-control-icon-right'  data-update-color='#title\\[$i\\]'");?>
+          </div>
+        </div>
+      </td>
+      <td><?php echo html::select("type[$i]", $lang->testcase->typeList, $type, "class='form-control chosen'");?></td>
+      <td class='<?php echo zget($visibleFields, 'pri', 'hidden')?> priBox'><?php echo html::select("pri[$i]", $lang->testcase->priList, $pri, "class='form-control chosen'");?></td>
+      <td class='<?php echo zget($visibleFields, 'precondition', 'hidden')?> preconditionBox'><?php echo html::textarea("precondition[$i]", '', "rows='1' class='form-control autosize'")?></td>
+      <td class='<?php echo zget($visibleFields, 'keywords', 'hidden')?> keywordsBox'><?php echo html::input("keywords[$i]", '', "class='form-control'");?></td>
+      <td class='text-left<?php echo zget($visibleFields, 'stage', ' hidden')?> stageBox' style='overflow:visible'><?php echo html::select("stage[$i][]", $lang->testcase->stageList, '', "class='form-control chosen' multiple");?></td>
+      <td class='<?php echo zget($visibleFields, 'review', 'hidden')?> reviewBox'><?php echo html::select("needReview[$i]", $lang->testcase->reviewList, $needReview, "class='form-control chosen'");?></td>
+      <?php
+      $this->loadModel('flow');
+      foreach($extendFields as $extendField) echo "<td" . (($extendField->control == 'select' or $extendField->control == 'multi-select') ? " style='overflow:visible'" : '') . ">" . $this->flow->getFieldControl($extendField, '', $extendField->field . "[$i]") . "</td>";
+      ?>
+      <td class='c-actions text-left'>
+        <a href='javascript:;' onclick='addRow(this)' class='btn btn-link'><i class='icon-plus'></i></a>
+        <a href='javascript:;' onclick='deleteRow(this)' class='btn btn-link'><i class='icon icon-close'></i></a>
+      </td>
+    </tr>
+  </table>
+</div>
 <?php include '../../common/view/pastetext.html.php';?>
 <?php include '../../common/view/footer.html.php';?>

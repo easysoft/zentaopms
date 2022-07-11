@@ -186,6 +186,7 @@ $lang->repo->error->encoding      = "編碼可能錯誤，請更換編碼重試�
 $lang->repo->error->deleted       = "刪除版本庫失敗，當前版本庫有提交記錄與設計關聯";
 $lang->repo->error->linkedJob     = "刪除版本庫失敗，當前版本庫與構建有關聯，請取消關聯或刪除構建。";
 $lang->repo->error->clientPath    = "客戶端安裝目錄不能有空格！";
+$lang->repo->error->noWritable    = '%s 不可寫！請檢查該目錄權限，否則無法下載。';
 
 $lang->repo->syncTips          = '請參照<a target="_blank" href="https://www.zentao.net/book/zentaopmshelp/207.html">這裡</a>，設置版本庫定時同步。';
 $lang->repo->encodingsTips     = "提交日誌的編碼，可以用逗號連接起來的多個，比如utf-8。";

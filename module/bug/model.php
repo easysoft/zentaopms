@@ -1737,6 +1737,7 @@ class bugModel extends model
      *
      * @param  int    $projectID
      * @param  int    $productID
+     * @param  int    $branchID
      * @param  int    $build
      * @param  string $type
      * @param  int    $param
@@ -1746,7 +1747,7 @@ class bugModel extends model
      * @access public
      * @return array
      */
-    public function getProjectBugs($projectID, $productID = 0, $build = 0, $type = '', $param = 0, $orderBy = 'id_desc', $excludeBugs = '', $pager = null)
+    public function getProjectBugs($projectID, $productID = 0, $branchID = 0, $build = 0, $type = '', $param = 0, $orderBy = 'id_desc', $excludeBugs = '', $pager = null)
     {
         $type = strtolower($type);
         if($type == 'bysearch')
@@ -1776,16 +1777,19 @@ class bugModel extends model
         }
         else
         {
-            $bugs = $this->dao->select('*')->from(TABLE_BUG)
-                ->where('deleted')->eq(0)
-                ->beginIF(empty($build))->andWhere('project')->eq($projectID)->fi()
-                ->beginIF(!empty($productID))->andWhere('product')->eq($productID)->fi()
-                ->beginIF($type == 'unresolved')->andWhere('status')->eq('active')->fi()
-                ->beginIF($type == 'noclosed')->andWhere('status')->ne('closed')->fi()
-                ->beginIF($type == 'assignedtome')->andWhere('assignedTo')->eq($this->app->user->account)->fi()
-                ->beginIF($type == 'openedbyme')->andWhere('openedBy')->eq($this->app->user->account)->fi()
-                ->beginIF($build)->andWhere("CONCAT(',', openedBuild, ',') like '%,$build,%'")->fi()
-                ->beginIF($excludeBugs)->andWhere('id')->notIN($excludeBugs)->fi()
+            $bugs = $this->dao->select('t1.*')->from(TABLE_BUG)->alias('t1')
+                ->leftJoin(TABLE_MODULE)->alias('t2')->on('t1.module=t2.id')
+                ->where('t1.deleted')->eq(0)
+                ->beginIF(empty($build))->andWhere('t1.project')->eq($projectID)->fi()
+                ->beginIF(!empty($productID))->andWhere('t1.product')->eq($productID)->fi()
+                ->andWhere('t1.branch')->eq($branchID)
+                ->beginIF($type == 'unresolved')->andWhere('t1.status')->eq('active')->fi()
+                ->beginIF($type == 'noclosed')->andWhere('t1.status')->ne('closed')->fi()
+                ->beginIF($type == 'assignedtome')->andWhere('t1.assignedTo')->eq($this->app->user->account)->fi()
+                ->beginIF($type == 'openedbyme')->andWhere('t1.openedBy')->eq($this->app->user->account)->fi()
+                ->beginIF(!empty($param))->andWhere('t2.path')->like("%,$param,%")->andWhere('t2.deleted')->eq(0)->fi()
+                ->beginIF($build)->andWhere("CONCAT(',', t1.openedBuild, ',') like '%,$build,%'")->fi()
+                ->beginIF($excludeBugs)->andWhere('t1.id')->notIN($excludeBugs)->fi()
                 ->orderBy($orderBy)->page($pager)->fetchAll();
         }
 
@@ -1799,6 +1803,7 @@ class bugModel extends model
      *
      * @param  int    $executionID
      * @param  int    $productID
+     * @param  int    $branchID
      * @param  int    $build
      * @param  string $type
      * @param  int    $param
@@ -1808,7 +1813,7 @@ class bugModel extends model
      * @access public
      * @return array
      */
-    public function getExecutionBugs($executionID, $productID = 0, $build = 0, $type = '', $param = 0, $orderBy = 'id_desc', $excludeBugs = '', $pager = null)
+    public function getExecutionBugs($executionID, $productID = 0, $branchID = 'all', $build = 0, $type = '', $param = 0, $orderBy = 'id_desc', $excludeBugs = '', $pager = null)
     {
         $type = strtolower($type);
         if($type == 'bysearch')
@@ -1838,14 +1843,17 @@ class bugModel extends model
         }
         else
         {
-            $bugs = $this->dao->select('*')->from(TABLE_BUG)
-                ->where('deleted')->eq(0)
-                ->beginIF(empty($build))->andWhere('execution')->eq($executionID)->fi()
-                ->beginIF(!empty($productID))->andWhere('product')->eq($productID)->fi()
-                ->beginIF($type == 'unresolved')->andWhere('status')->eq('active')->fi()
-                ->beginIF($type == 'noclosed')->andWhere('status')->ne('closed')->fi()
-                ->beginIF($build)->andWhere("CONCAT(',', openedBuild, ',') like '%,$build,%'")->fi()
-                ->beginIF($excludeBugs)->andWhere('id')->notIN($excludeBugs)->fi()
+            $bugs = $this->dao->select('t1.*')->from(TABLE_BUG)->alias('t1')
+                ->leftJoin(TABLE_MODULE)->alias('t2')->on('t1.module=t2.id')
+                ->where('t1.deleted')->eq(0)
+                ->beginIF($branchID != 'all')->andWhere('t1.branch')->eq($branchID)->fi()
+                ->beginIF(empty($build))->andWhere('t1.execution')->eq($executionID)->fi()
+                ->beginIF(!empty($productID))->andWhere('t1.product')->eq($productID)->fi()
+                ->beginIF($type == 'unresolved')->andWhere('t1.status')->eq('active')->fi()
+                ->beginIF($type == 'noclosed')->andWhere('t1.status')->ne('closed')->fi()
+                ->beginIF($build)->andWhere("CONCAT(',', t1.openedBuild, ',') like '%,$build,%'")->fi()
+                ->beginIF(!empty($param))->andWhere('t2.path')->like("%,$param,%")->andWhere('t2.deleted')->eq(0)->fi()
+                ->beginIF($excludeBugs)->andWhere('t1.id')->notIN($excludeBugs)->fi()
                 ->orderBy($orderBy)
                 ->page($pager)
                 ->fetchAll('id');

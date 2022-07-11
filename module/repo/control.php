@@ -497,6 +497,7 @@ class repo extends control
         $this->view->pager           = $pager;
         $this->view->path            = urldecode($path);
         $this->view->logType         = $logType;
+        $this->view->cloneUrl        = $this->repo->getCloneUrl($repo);
         $this->view->cacheTime       = date('m-d H:i', filemtime($cacheFile));
         $this->view->branchOrTag     = $branchOrTag;
 
@@ -1292,5 +1293,66 @@ class repo extends control
     {
         $executions = $this->repo->getExecutionPairs($productID, $branch);
         echo html::select('execution', array('' => '') + $executions, '', 'class="form-control chosen"');
+    }
+
+    /**
+     * Download zip code.
+     *
+     * @param  int    $repoID
+     * @param  string $branch
+     * @access public
+     * @return void
+     */
+    public function downloadCode($repoID = 0, $branch = '')
+    {
+        $repo     = $this->repo->getRepoByID($repoID);
+        $savePath = $this->app->getDataRoot() . 'repo';
+        $fileName = $savePath . DS . $repo->name . '.zip';
+        if(!is_dir($savePath))
+        {
+            if(!is_writable($this->app->getDataRoot())) return print(js::alert(sprintf($this->lang->repo->error->noWritable, dirname($savePath))) . js::close());
+            mkdir($savePath, 0777, true);
+        }
+
+        $repo = $this->repo->getRepoByID($repoID);
+        if($repo->SCM == 'Gitlab')
+        {
+            $url = $this->loadModel('gitlab')->downloadCode($repo->gitlab, $repo->project, $branch);
+        }
+        elseif($repo->SCM == 'Git')
+        {
+            $gitDir = scandir($repo->path);
+            $files  = '';
+            foreach($gitDir as $path)
+            {
+                if(!in_array($path, array('.', '..', '.git'))) $files .= $repo->path . DS . "$path,";
+            }
+
+            $this->app->loadClass('pclzip', true);
+            $zip = new pclzip($fileName);
+            if($zip->create($files, PCLZIP_OPT_REMOVE_PATH, $repo->path) === 0) return print(js::alert($zip->errorInfo()) . js::close());
+
+            $url = $this->config->webRoot . $this->app->getAppName() . 'data' . DS . 'repo' . DS . $repo->name . '.zip';
+        }
+        else
+        {
+            /* Checkout repo. */
+            chdir($savePath);
+            $this->scm = $this->app->loadClass('scm');
+            $this->scm->setEngine($repo);
+            $this->scm->exec('export ' . $repo->path);
+
+            /* Get repo name. */
+            $pathList = explode('/', trim($repo->path, '/'));
+            $repoDir  = end($pathList);
+
+            $this->app->loadClass('pclzip', true);
+            $zip = new pclzip($fileName);
+            if($zip->create($repoDir, PCLZIP_OPT_REMOVE_PATH, $repoDir) === 0) return print(js::alert($zip->errorInfo()) . js::close());
+
+            $url = $this->config->webRoot . $this->app->getAppName() . 'data' . DS . 'repo' . DS . $repo->name . '.zip';
+        }
+
+        $this->locate($url);
     }
 }

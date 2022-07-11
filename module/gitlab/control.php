@@ -62,7 +62,7 @@ class gitlab extends control
     }
 
     /**
-     * create a gitlab.
+     * Create a gitlab.
      *
      * @access public
      * @return void
@@ -86,7 +86,7 @@ class gitlab extends control
     }
 
     /**
-     * view a gitlab.
+     * View a gitlab.
      * @param  int    $id
      * @access public
      * @return void
@@ -634,12 +634,19 @@ class gitlab extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browseUser', "gitlabID=$gitlabID")));
         }
 
-        $userPairs         = $this->loadModel('user')->getPairs('noclosed|noletter');
-        $user              = $this->gitlab->apiGetSingleUser($gitlabID, $userID);
-        $zentaoBindAccount = $this->dao->select('account')->from(TABLE_OAUTH)->where('providerType')->eq('gitlab')->andWhere('providerID')->eq($gitlabID)->andWhere('openID')->eq($user->id)->fetch('account');
+        $gitlabUser        = $this->gitlab->apiGetSingleUser($gitlabID, $userID);
+        $zentaoBindAccount = $this->dao->select('account')->from(TABLE_OAUTH)->where('providerType')->eq('gitlab')->andWhere('providerID')->eq($gitlabID)->andWhere('openID')->eq($gitlabUser->id)->fetch('account');
+
+        $users       = $this->loadModel('user')->getList();
+        $bindedUsers = $this->gitlab->getUserAccountIdPairs($gitlabID);
+        $userPairs   = array('' => '');
+        foreach($users as $user)
+        {
+            if(!isset($bindedUsers[$user->account]) or $user->account == $zentaoBindAccount) $userPairs[$user->account] = $user->realname;
+        }
 
         $this->view->title             = $this->lang->gitlab->common . $this->lang->colon . $this->lang->gitlab->user->edit;
-        $this->view->user              = $user;
+        $this->view->user              = $gitlabUser;
         $this->view->userPairs         = $userPairs;
         $this->view->zentaoBindAccount = $zentaoBindAccount;
         $this->view->gitlabID          = $gitlabID;

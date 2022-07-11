@@ -166,9 +166,9 @@ $lang->execution->lifeTimeList['short'] = "短期";
 $lang->execution->lifeTimeList['long']  = "长期";
 $lang->execution->lifeTimeList['ops']   = "运维";
 
-$lang->execution->cfdTypeList['story'] = "{$lang->SRCommon}";
-$lang->execution->cfdTypeList['task']  = "任务";
-$lang->execution->cfdTypeList['bug']   = "Bug";
+$lang->execution->cfdTypeList['story'] = "按{$lang->SRCommon}查看";
+$lang->execution->cfdTypeList['task']  = "按任务查看";
+$lang->execution->cfdTypeList['bug']   = "按Bug查看";
 
 $lang->team = new stdclass();
 $lang->team->account    = '用户';

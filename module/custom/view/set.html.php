@@ -21,7 +21,7 @@ $itemRow = <<<EOT
     <td>
       <input type='text' class="form-control" value="" autocomplete="off" name="values[]">
     </td>
-    <td class='c-actions'>
+    <td class='c-actions text-left'>
       <a href="javascript:void(0)" class='btn btn-link' onclick="addItem(this)"><i class='icon-plus'></i></a>
       <a href="javascript:void(0)" class='btn btn-link' onclick="delItem(this)"><i class='icon-close'></i></a>
     </td>
@@ -249,7 +249,7 @@ EOT;
             <?php echo html::input("values[]", isset($dbFields[$key]) ? $dbFields[$key]->value : $value, "class='form-control' " . (empty($key) ? 'readonly' : ''));?>
           </td>
           <?php if($canAdd):?>
-          <td class='c-actions'>
+          <td class='c-actions text-left'>
             <a href="javascript:void(0)" onclick="addItem(this)" class='btn btn-link'><i class='icon-plus'></i></a>
             <a href="javascript:void(0)" onclick="delItem(this)" class='btn btn-link'><i class='icon-close'></i></a>
           </td>

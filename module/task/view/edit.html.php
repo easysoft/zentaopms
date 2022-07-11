@@ -262,7 +262,7 @@
     <div class="modal fade modal-team" id="modalTeam"  data-scroll-inside='false'>
       <div class="modal-dialog">
         <div class="modal-header">
-          <button type="button" class="close hidden" data-dismiss="modal">
+          <button type="button" class="close" data-dismiss="modal">
             <i class="icon icon-close"></i>
           </button>
           <h4 class="modal-title"><?php echo $lang->task->team?></h4>

@@ -119,7 +119,7 @@ foreach(explode(',', $config->bug->create->requiredFields) as $field)
             <td>
               <div class='input-group'>
                 <div class="input-control has-icon-right">
-                  <?php echo html::input("title[$i]", $bugTitle, "class='form-control'") . html::hidden("uploadImage[$i]", $fileName);?>
+                  <?php echo html::input("title[$i]", $bugTitle, "class='form-control title-import'") . html::hidden("uploadImage[$i]", $fileName);?>
                   <div class="colorpicker">
                     <button type="button" class="btn btn-link dropdown-toggle" data-toggle="dropdown"><span class="cp-title"></span><span class="color-bar"></span><i class="ic"></i></button>
                     <ul class="dropdown-menu clearfix">
@@ -147,9 +147,9 @@ foreach(explode(',', $config->bug->create->requiredFields) as $field)
             foreach($extendFields as $extendField) echo "<td" . (($extendField->control == 'select' or $extendField->control == 'multi-select') ? " style='overflow:visible'" : '') . ">" . $this->flow->getFieldControl($extendField, '', $extendField->field . "[$i]") . "</td>";
             ?>
             <td class='c-actions text-left'>
-              <a href='javascript:;' onclick='addItem(this)' class='btn btn-link'><i class='icon-plus'></i></a>
+              <a href='javascript:;' onclick='addRow(this)' class='btn btn-link'><i class='icon-plus'></i></a>
               <?php if($i != 1):?>
-              <a href='javascript:;' onclick='deleteItem(this)' class='btn btn-link'><i class='icon icon-close'></i></a>
+              <a href='javascript:;' onclick='deleteRow(this)' class='btn btn-link'><i class='icon icon-close'></i></a>
               <?php endif;?>
             </td>
           </tr>
@@ -207,9 +207,9 @@ foreach(explode(',', $config->bug->create->requiredFields) as $field)
             foreach($extendFields as $extendField) echo "<td" . (($extendField->control == 'select' or $extendField->control == 'multi-select') ? " style='overflow:visible'" : '') . ">" . $this->flow->getFieldControl($extendField, '', $extendField->field . "[$i]") . "</td>";
             ?>
             <td class='c-actions text-left'>
-              <a href='javascript:;' onclick='addItem(this)' class='btn btn-link'><i class='icon-plus'></i></a>
+              <a href='javascript:;' onclick='addRow(this)' class='btn btn-link'><i class='icon-plus'></i></a>
               <?php if($i != 1):?>
-              <a href='javascript:;' onclick='deleteItem(this)' class='btn btn-link'><i class='icon icon-close'></i></a>
+              <a href='javascript:;' onclick='deleteRow(this)' class='btn btn-link'><i class='icon icon-close'></i></a>
               <?php endif;?>
             </td>
           </tr>
@@ -227,7 +227,7 @@ foreach(explode(',', $config->bug->create->requiredFields) as $field)
     </div>
   </form>
 </div>
-<?php js::set('itemIndex', -- $i);?>
+<?php js::set('rowIndex', -- $i);?>
 <table class='template' id='trTemp'>
   <tbody>
     <tr>
@@ -266,8 +266,8 @@ foreach(explode(',', $config->bug->create->requiredFields) as $field)
       foreach($extendFields as $extendField) echo "<td" . (($extendField->control == 'select' or $extendField->control == 'multi-select') ? " style='overflow:visible'" : '') . ">" . $this->flow->getFieldControl($extendField, '', $extendField->field . "[%s]") . "</td>";
       ?>
       <td class='c-actions text-left'>
-        <a href='javascript:;' onclick='addItem(this)' class='btn btn-link'><i class='icon-plus'></i></a>
-        <a href='javascript:;' onclick='deleteItem(this)' class='btn btn-link'><i class='icon icon-close'></i></a>
+        <a href='javascript:;' onclick='addRow(this)' class='btn btn-link'><i class='icon-plus'></i></a>
+        <a href='javascript:;' onclick='deleteRow(this)' class='btn btn-link'><i class='icon icon-close'></i></a>
       </td>
     </tr>
   </tbody>
@@ -275,7 +275,7 @@ foreach(explode(',', $config->bug->create->requiredFields) as $field)
 <div>
   <?php $i = '%i%';?>
   <table class='hidden'>
-    <tr id='addItem' class='hidden'>
+    <tr id='addRow' class='hidden'>
       <td><?php echo $i;?></td>
       <td class='<?php echo zget($visibleFields, $product->type, ' hidden')?> branchBox' style='overflow:visible'><?php echo html::select("branches[$i]", $branches, $branch, "class='form-control chosen' onchange='setBranchRelated(this.value, $productID, $i)'");?></td>
       <td><?php echo html::select("modules[$i]", $moduleOptionMenu, $moduleID, "class='form-control chosen'");?></td>
@@ -315,8 +315,8 @@ foreach(explode(',', $config->bug->create->requiredFields) as $field)
       foreach($extendFields as $extendField) echo "<td" . (($extendField->control == 'select' or $extendField->control == 'multi-select') ? " style='overflow:visible'" : '') . ">" . $this->flow->getFieldControl($extendField, '', $extendField->field . "[$i]") . "</td>";
       ?>
       <td class='c-actions text-left'>
-        <a href='javascript:;' onclick='addItem(this)' class='btn btn-link'><i class='icon-plus'></i></a>
-        <a href='javascript:;' onclick='deleteItem(this)' class='btn btn-link'><i class='icon icon-close'></i></a>
+        <a href='javascript:;' onclick='addRow(this)' class='btn btn-link'><i class='icon-plus'></i></a>
+        <a href='javascript:;' onclick='deleteRow(this)' class='btn btn-link'><i class='icon icon-close'></i></a>
       </td>
     </tr>
   </table>

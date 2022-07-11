@@ -221,6 +221,17 @@ class scm
     }
 
     /**
+     * Get clone url.
+     *
+     * @access public
+     * @return void
+     */
+    public function getCloneUrl()
+    {
+        return $this->engine->getCloneUrl();
+    }
+
+    /**
      * Check revision
      *
      * @param  int|string $revision

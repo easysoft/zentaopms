@@ -9,6 +9,10 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
+<?php js::set('repoID',   $repoID);?>
+<?php js::set('branch',   $branchID);?>
+<?php js::set('lang',     $lang->repo);?>
+<?php js::set('cloneUrl', $cloneUrl);?>
 <div id='mainMenu' class='clearfix'>
   <div class='btn-toolbar pull-left'>
     <?php if(!empty($branchesAndTags)):?>
@@ -26,7 +30,7 @@
               <ul class="tree tree-angles" data-ride="tree" data-idx="0">
                 <li data-idx='branch' data-id='branch' class='has-list open in' style='cursor: pointer;'>
                   <i class='list-toggle icon'></i>
-                  <div class='hide-in-search'><a class='text-muted' title='<?php echo $lang->repo->branch;?>'><?php echo $lang->repo->branch;?></a></div>
+                  <div class='hide-in-search'><a class='text-muted not-list-item' title='<?php echo $lang->repo->branch;?>'><?php echo $lang->repo->branch;?></a></div>
                   <ul data-idx='branch'>
                     <?php
                     foreach($branches as $branchName)
@@ -41,7 +45,7 @@
                 </li>
                 <li data-idx='tag' data-id='tag' class='has-list open in' style='cursor: pointer;'>
                   <i class='list-toggle icon'></i>
-                  <div class='hide-in-search'><a class='text-muted' title='<?php echo $lang->repo->tag;?>'><?php echo $lang->repo->tag;?></a></div>
+                  <div class='hide-in-search'><a class='text-muted not-list-item' title='<?php echo $lang->repo->tag;?>'><?php echo $lang->repo->tag;?></a></div>
                   <ul data-idx='tag'>
                     <?php
                     foreach($tags as $tagName)
@@ -82,7 +86,9 @@
   <div class="btn-toolbar pull-right">
     <span class='last-sync-time'><?php echo $lang->repo->notice->lastSyncTime . $cacheTime?></span>
     <?php echo html::a($this->repo->createLink('browse', "repoID=$repoID&branchID=" . $base64BranchID . "&objectID=$objectID&path=" . $this->repo->encodePath($path) . "&revision=$revision&refresh=1"), "<i class='icon icon-refresh'></i> " . $lang->refresh, '', "class='btn btn-primary' data-app={$app->tab}");?>
-    <?php if($repo->SCM == 'Gitlab' and common::hasPriv('gitlab', 'createBranch')) echo html::a($this->createLink('gitlab', 'createBranch', "gitlabID={$repo->gitlab}&projectID={$repo->project}"), "<i class='icon icon-sm icon-plus'></i> " . $lang->gitlab->createBranch, '', "class='btn btn-primary'");?>
+    <?php if(common::hasPriv('repo', 'downloadCode')): ?>
+    <button type="button" class="btn btn-primary" data-toggle="popover" id="downloadCode" title="<?php echo $lang->repo->downloadCode;?>"><i class='icon icon-sm icon-download'></i> <?php echo $lang->repo->download;?> <i class='icon icon-sm icon-caret-down'></i></button>
+    <?php endif;?>
   </div>
 </div>
 <div id="mainContent" class="main-row fade">

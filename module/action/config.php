@@ -43,6 +43,7 @@ $config->action->objectNameFields['kanban']       = 'name';
 $config->action->objectNameFields['kanbancard']   = 'name';
 $config->action->objectNameFields['sonarqube']    = 'name';
 $config->action->objectNameFields['gitlab']       = 'name';
+$config->action->objectNameFields['gitea']        = 'name';
 $config->action->objectNameFields['stage']        = 'name';
 $config->action->objectNameFields['apistruct']    = 'name';
 
@@ -60,7 +61,7 @@ $config->action->majorList['execution'] = array('opened', 'edited');
 
 $config->action->needGetProjectType = 'build,task,bug,case,testcase,caselib,testtask,testsuite,testreport,doc,issue,release,risk,design,opportunity,trainplan,gapanalysis,researchplan,researchreport,';
 $config->action->needGetRelateField = ',story,productplan,release,task,build,bug,testcase,case,testtask,testreport,doc,doclib,issue,risk,opportunity,trainplan,gapanalysis,team,whitelist,researchplan,researchreport,meeting,kanbanlane,kanbancolumn,module,';
-$config->action->noLinkModules      = ',doclib,module,webhook,gitlab,sonarqube,pipeline,jenkins,kanban,kanbanspace,kanbancolumn,kanbanlane,kanbanregion,kanbancard,execution,project,traincategory,apistruct,program,product,user,entry,';
+$config->action->noLinkModules      = ',doclib,module,webhook,gitlab,gitea,sonarqube,pipeline,jenkins,kanban,kanbanspace,kanbancolumn,kanbanlane,kanbanregion,kanbancard,execution,project,traincategory,apistruct,program,product,user,entry,';
 
 $config->action->preferredTypeNum = 10;
 

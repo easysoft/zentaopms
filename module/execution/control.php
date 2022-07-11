@@ -916,6 +916,7 @@ class execution extends control
      *
      * @param  int    $executionID
      * @param  int    $productID
+     * @param  int    $branchID
      * @param  string $orderBy
      * @param  int    $build
      * @param  string $type
@@ -926,13 +927,14 @@ class execution extends control
      * @access public
      * @return void
      */
-    public function bug($executionID = 0, $productID = 0, $orderBy = 'status,id_desc', $build = 0, $type = 'all', $param = 0, $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function bug($executionID = 0, $productID = 0, $branch = 0, $orderBy = 'status,id_desc', $build = 0, $type = 'all', $param = 0, $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         /* Load these two models. */
         $this->loadModel('bug');
         $this->loadModel('user');
         $this->loadModel('product');
         $this->loadModel('datatable');
+        $this->loadModel('tree');
 
         /* Save session. */
         $this->session->set('bugList', $this->app->getURI(true), 'execution');
@@ -942,11 +944,10 @@ class execution extends control
         $execution   = $this->commonAction($executionID);
         $executionID = $execution->id;
         $products    = $this->product->getProducts($execution->id);
-        $branchID    = isset($products[$productID]) ? current($products[$productID]->branches) : 0;
 
         $productPairs = array('0' => $this->lang->product->all);
         foreach($products as $productData) $productPairs[$productData->id] = $productData->name;
-        $this->lang->modulePageNav = $this->product->select($productPairs, $productID, 'execution', 'bug', $executionID, $branchID, 0, '', false);
+        $this->lang->modulePageNav = $this->product->select($productPairs, $productID, 'execution', 'bug', $executionID, $branch);
 
         /* Header and position. */
         $title      = $execution->name . $this->lang->colon . $this->lang->execution->bug;
@@ -958,7 +959,7 @@ class execution extends control
         if($this->app->getViewType() == 'xhtml') $recPerPage = 10;
         $pager = new pager($recTotal, $recPerPage, $pageID);
         $sort  = common::appendOrder($orderBy);
-        $bugs  = $this->bug->getExecutionBugs($executionID, $productID, $build, $type, $param, $sort, '', $pager);
+        $bugs  = $this->bug->getExecutionBugs($executionID, $productID, $branch, $build, $type, $param, $sort, '', $pager);
         $bugs  = $this->bug->checkDelayedBugs($bugs);
         $users = $this->user->getPairs('noletter');
 
@@ -985,7 +986,7 @@ class execution extends control
             $showBranch = $this->loadModel('branch')->showBranch($productID);
 
             /* Display status of branch. */
-            $branches = $this->branch->getList($productID, 0, 'all');
+            $branches = $this->branch->getList($productID, $executionID, 'all');
             foreach($branches as $branchInfo)
             {
                 $branchOption[$branchInfo->id]    = $branchInfo->name;
@@ -1009,6 +1010,28 @@ class execution extends control
         /* Process the openedBuild and resolvedBuild fields. */
         $bugs = $this->bug->processBuildForBugs($bugs);
 
+        $moduleID = $type != 'bysearch' ? $param : 0;
+        $modules  = $this->tree->getAllModulePairs('bug');
+
+        /* Get module tree.*/
+        $extra = array('executionID' => $executionID, 'orderBy' => $orderBy, 'type' => $type, 'build' => $build, 'branchID' => $branch);
+        if($executionID and empty($productID) and count($products) > 1)
+        {
+            $moduleTree = $this->tree->getBugTreeMenu($executionID, $productID, 0, array('treeModel', 'createBugLink'), $extra);
+        }
+        elseif(!empty($products))
+        {
+            $productID  = empty($productID) ? reset($products)->id : $productID;
+            $moduleTree = $this->tree->getTreeMenu($productID, 'bug', 0, array('treeModel', 'createBugLink'), $extra + array('branchID' => $branch, 'productID' => $productID), $branch);
+        }
+        else
+        {
+            $moduleTree = '';
+        }
+        $tree = $moduleID ? $this->tree->getByID($moduleID) : '';
+
+        $showModule = !empty($this->config->datatable->executionBug->showModule) ? $this->config->datatable->executionBug->showModule : '';
+
         /* Assign. */
         $this->view->title           = $title;
         $this->view->position        = $position;
@@ -1020,7 +1043,7 @@ class execution extends control
         $this->view->orderBy         = $orderBy;
         $this->view->users           = $users;
         $this->view->productID       = $productID;
-        $this->view->branchID        = empty($this->view->build->branch) ? $branchID : $this->view->build->branch;
+        $this->view->branchID        = empty($this->view->build->branch) ? $branch : $this->view->build->branch;
         $this->view->memberPairs     = $memberPairs;
         $this->view->type            = $type;
         $this->view->summary         = $this->bug->summary($bugs);
@@ -1029,11 +1052,17 @@ class execution extends control
         $this->view->builds          = $this->build->getBuildPairs($productID);
         $this->view->branchOption    = $branchOption;
         $this->view->branchTagOption = $branchTagOption;
-        $this->view->modulePairs     = $showModule ? $this->loadModel('tree')->getModulePairs($productID, 'bug', $showModule) : array();
         $this->view->plans           = $this->loadModel('productplan')->getPairs($productID);
         $this->view->stories         = $storyList;
         $this->view->tasks           = $taskList;
         $this->view->projectPairs    = $this->loadModel('project')->getPairsByProgram();
+        $this->view->moduleTree      = $moduleTree;
+        $this->view->modules         = $modules;
+        $this->view->moduleID        = $moduleID;
+        $this->view->moduleName      = $moduleID ? $tree->name : $this->lang->tree->all;
+        $this->view->modulePairs     = $showModule ? $this->tree->getModulePairs($productID, 'bug', $showModule) : array();
+        $this->view->setModule       = true;
+        $this->view->showBranch      = false;
 
         $this->display();
     }
@@ -1042,7 +1071,9 @@ class execution extends control
      * Execution case list.
      *
      * @param  int    $executionID
+     * @param  int    $productID
      * @param  string $type
+     * @param  int    $moduleID
      * @param  string $orderBy
      * @param  int    $recTotal
      * @param  int    $recPerPage
@@ -1050,27 +1081,44 @@ class execution extends control
      * @access public
      * @return void
      */
-    public function testcase($executionID = 0, $type = 'all', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function testcase($executionID = 0, $productID = 0, $type = 'all', $moduleID = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         $this->loadModel('testcase');
         $this->loadModel('testtask');
+        $this->loadModel('tree');
         $this->commonAction($executionID);
         $uri = $this->app->getURI(true);
         $this->session->set('caseList', $uri, 'execution');
         $this->session->set('bugList',  $uri, 'execution');
 
-        $products  = $this->product->getProducts($executionID);
-        $productID = key($products);    // Get the first product for creating testcase.
+        $products = $this->product->getProducts($executionID, 'all', '', false);
+        if(count($products) == 1) $productID = key($products);
+
+        $extra = $executionID;
+        $this->lang->modulePageNav = $this->product->select(array('0' => $this->lang->product->all) + $products, $productID, 'execution', 'testcase', $extra, 0, 0, '', false);
 
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
         $pager = pager::init($recTotal, $recPerPage, $pageID);
 
-        $cases = $this->loadModel('testcase')->getExecutionCases($executionID, $orderBy, $pager, $type);
+        $cases = $this->loadModel('testcase')->getExecutionCases($executionID, $productID, $moduleID, $orderBy, $pager, $type);
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'testcase', false);
 
         $cases = $this->testcase->appendData($cases, 'case');
         $cases = $this->loadModel('story')->checkNeedConfirm($cases);
+
+        $modules = $this->tree->getAllModulePairs('case');
+
+        /* Get module tree.*/
+        if($executionID and empty($productID))
+        {
+            $moduleTree = $this->tree->getCaseTreeMenu($executionID, $productID, 0, array('treeModel', 'createCaseLink'));
+        }
+        else
+        {
+            $moduleTree = $this->tree->getTreeMenu($productID, 'case', 0, array('treeModel', 'createCaseLink'), array('executionID' => $executionID, 'productID' => $productID), 'all');
+        }
+        $tree = $moduleID ? $this->tree->getByID($moduleID) : '';
 
         $this->view->title       = $this->lang->execution->testcase;
         $this->view->executionID = $executionID;
@@ -1081,6 +1129,10 @@ class execution extends control
         $this->view->type        = $type;
         $this->view->users       = $this->loadModel('user')->getPairs('noletter');
         $this->view->execution   = $this->execution->getByID($executionID);
+        $this->view->moduleTree  = $moduleTree;
+        $this->view->modules     = $modules;
+        $this->view->moduleID    = $moduleID;
+        $this->view->moduleName  = $moduleID ? $tree->name : $this->lang->tree->all;
 
         $this->display();
     }
@@ -1324,16 +1376,17 @@ class execution extends control
         list($begin, $end) = $this->execution->getBeginEnd4CFD($execution);
         $dateList = date::getDateList($begin, $end, 'Y-m-d', '');
 
-        list($cycleTimeAvg, $throughput) = $this->execution->getCFDStatistics($executionID, $dateList, $type);
+        //list($cycleTimeAvg, $throughput) = $this->execution->getCFDStatistics($executionID, $dateList, $type);
+
+        $chartData = $this->execution->buildCFDData($executionID, $dateList, $type);
+        if(isset($chartData['line'])) $chartData['line'] = array_reverse($chartData['line']);
 
         $this->view->title         = $this->lang->execution->CFD;
         $this->view->type          = $type;
         $this->view->execution     = $execution;
         $this->view->executionName = $execution->name;
         $this->view->executionID   = $executionID;
-        $this->view->chartData     = $this->execution->buildCFDData($executionID, $dateList, $type);
-        $this->view->cycleTimeAvg  = $cycleTimeAvg;
-        $this->view->throughput    = $throughput;
+        $this->view->chartData     = $chartData;
         $this->display();
     }
 
@@ -1345,10 +1398,9 @@ class execution extends control
      * @access public
      * @return void
      */
-    public function computeCFD($reload = 'no', $executionID = 0, $date = '')
+    public function computeCFD($reload = 'no', $executionID = 0)
     {
-        $date = date('Y-m-d', strtotime($date));
-        $this->execution->computeCFD($executionID, $date);
+        $this->execution->computeCFD($executionID);
         if($reload == 'yes') return print(js::reload('parent'));
     }
 
@@ -2271,7 +2323,6 @@ class execution extends control
     public function kanban($executionID, $browseType = 'all', $orderBy = 'id_asc', $groupBy = 'default')
     {
         $this->app->loadLang('bug');
-        $this->loadModel('story');
 
         if(empty($groupBy)) $groupBy = 'default';
 
@@ -2345,7 +2396,6 @@ class execution extends control
         $this->view->kanbanData       = $kanbanData;
         $this->view->executionActions = $executionActions;
         $this->view->kanban           = $this->lang->execution->kanban;
-        $this->view->reviewStoryParis = $this->story->getExecutionStoryPairs($execution->id, 0, 'all', 0, 'full', 'review');
         $this->display();
     }
 
@@ -2374,7 +2424,6 @@ class execution extends control
         /* Load language. */
         $this->app->loadLang('task');
         $this->app->loadLang('bug');
-        $this->loadModel('story');
         $this->loadModel('kanban');
 
         /* Compatibility IE8. */
@@ -2435,7 +2484,6 @@ class execution extends control
         $this->view->groupBy          = $groupBy;
         $this->view->canBeChanged     = $canBeChanged;
         $this->view->userList         = $userList;
-        $this->view->reviewStoryParis = $this->story->getExecutionStoryPairs($execution->id, 0, 'all', 0, 'full', 'review');
 
         $this->display();
     }
@@ -3017,14 +3065,24 @@ class execution extends control
 
             if(isonlybody())
             {
-                if($this->app->tab == 'execution' and $object->type == 'kanban')
+                if($this->app->tab == 'execution')
                 {
                     $execLaneType = $this->session->execLaneType ? $this->session->execLaneType : 'all';
                     $execGroupBy  = $this->session->execGroupBy ? $this->session->execGroupBy : 'default';
-                    $kanbanData   = $this->loadModel('kanban')->getRDKanban($objectID, $execLaneType, 'id_desc', 0, $execGroupBy);
-                    $kanbanData   = json_encode($kanbanData);
-
-                    return print(js::closeModal('parent', '', "parent.updateKanban($kanbanData)"));
+                    if($object->type == 'kanban')
+                    {
+                        $kanbanData = $this->loadModel('kanban')->getRDKanban($objectID, $execLaneType, 'id_desc', 0, $execGroupBy);
+                        $kanbanData = json_encode($kanbanData);
+                        return print(js::closeModal('parent', '', "parent.updateKanban($kanbanData)"));
+                    }
+                    else
+                    {
+                        $kanbanData = $this->loadModel('kanban')->getExecutionKanban($objectID, $execLaneType, $execGroupBy);
+                        $kanbanType = $execLaneType == 'all' ? 'story' : key($kanbanData);
+                        $kanbanData = $kanbanData[$kanbanType];
+                        $kanbanData = json_encode($kanbanData);
+                        return print(js::closeModal('parent', '', "parent.updateKanban(\"story\", $kanbanData)"));
+                    }
                 }
                 else
                 {
@@ -3162,6 +3220,29 @@ class execution extends control
                 }
                 return $this->send($response);
             }
+
+            $execution = $this->execution->getByID($executionID);
+            if($this->app->tab == 'execution')
+            {
+                $execLaneType  = $this->session->execLaneType ? $this->session->execLaneType : 'all';
+                $execGroupBy   = $this->session->execGroupBy ? $this->session->execGroupBy : 'default';
+                $rdSearchValue = $this->session->rdSearchValue ? $this->session->rdSearchValue : '';
+                if($execution->type == 'kanban')
+                {
+                    $kanbanData = $this->loadModel('kanban')->getRDKanban($executionID, $execLaneType, 'id_desc', 0, $execGroupBy, $rdSearchValue);
+                    $kanbanData = json_encode($kanbanData);
+                    return print(js::closeModal('parent', '', "parent.updateKanban($kanbanData)"));
+                }
+                else
+                {
+                    $kanbanData = $this->loadModel('kanban')->getExecutionKanban($executionID, $execLaneType, $execGroupBy);
+                    $kanbanType = $execLaneType == 'all' ? 'story' : key($kanbanData);
+                    $kanbanData = $kanbanData[$kanbanType];
+                    $kanbanData = json_encode($kanbanData);
+                    return print(js::closeModal('parent', '', "parent.updateKanban(\"story\", $kanbanData)"));
+                }
+            }
+
             return print(js::reload('parent'));
         }
     }
