@@ -12,7 +12,7 @@
 ?>
 <style>
 .table-form>tbody>tr>th {width:118px !important;}
-#mode1Rule .icon {color:#2667E3; margin-right: 8px;}
+.icon-exclamation-sign.icon {color:#2667E3; margin-right: 8px;}
 .notice {color:#2667E3; margin-left: 12px;}
 </style>
 <?php include '../../common/view/header.html.php';?>
@@ -48,7 +48,7 @@
           </tr>
           <tr id='mode2Rule' class='hidden'>
             <th></th>
-            <td colspan='2'><span style='color:#03b8cf;font-weight:bold;'><?php echo $lang->admin->safe->modeRuleList[2] . $lang->admin->safe->noticeStrong;?></span></td>
+            <td colspan='2'><span style='color:#5E626D;font-weight:bold;font-size:13px;'><i class="icon icon-exclamation-sign"></i><?php echo $lang->admin->safe->modeRuleList[2] . $lang->admin->safe->noticeStrong;?></span></td>
           </tr>
           <tr>
             <th><?php echo $lang->admin->safe->weak?></th>
