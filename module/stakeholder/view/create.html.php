@@ -23,7 +23,7 @@
       <table class="table table-form">
         <tbody>
           <tr>
-            <th class='w-120px'><?php echo $lang->stakeholder->from;?></th>
+            <th class='c-from'><?php echo $lang->stakeholder->from;?></th>
             <td><?php echo html::radio('from', $lang->stakeholder->fromList, "team");?></td>
             <td></td>
             <td></td>
