@@ -8,9 +8,9 @@ class gitea
      * Construct
      *
      * @param  string    $client    gitea api url.
-     * @param  string    $root      id of gitlab project.
+     * @param  string    $root      id of gitea project.
      * @param  string    $username  null
-     * @param  string    $password  token of gitlab api.
+     * @param  string    $password  token of gitea api.
      * @param  string    $encoding
      * @access public
      * @return void
@@ -97,7 +97,7 @@ class gitea
      * @param  string    $ref
      * @access public
      * @return object
-     * @doc    https://docs.gitlab.com/ee/api/repository_files.html
+     * @doc    https://docs.gitea.com/ee/api/repository_files.html
      */
     public function files($path, $ref = 'master')
     {
@@ -162,7 +162,7 @@ class gitea
      */
     public function branch()
     {
-        /* Max size of per_page in gitlab API is 100. */
+        /* Max size of per_page in gitea API is 100. */
         $params = array();
         $params['per_page'] = '100';
 
@@ -387,7 +387,7 @@ class gitea
      *
      * @param  string $cmd
      * @access public
-     * @todo Exec commands by gitlab api.
+     * @todo Exec commands by gitea api.
      * @return array
      */
     public function exec($cmd)
@@ -747,7 +747,7 @@ class gitea
     }
 
     /**
-     * Fetch data from gitlab api.
+     * Fetch data from gitea api.
      *
      * @param  string    $api
      * @access public
