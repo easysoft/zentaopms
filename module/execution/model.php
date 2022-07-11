@@ -1516,6 +1516,10 @@ class executionModel extends model
         {
             $link = helper::createLink($module, 'task', "executionID=%s");
         }
+        elseif($module == 'execution' and $method == 'cfd')
+        {
+            $link = helper::createLink('execution', 'kanban', "executionID=%s");
+        }
         elseif($module == 'bug' and $method == 'create' and $this->app->tab == 'execution')
         {
             $link = helper::createLink($module, $method, "productID=0&branch=0&extra=executionID=%s");

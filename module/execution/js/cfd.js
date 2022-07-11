@@ -11,28 +11,28 @@ $(function()
     {
         $.each(chartData['line'], function(label, set)
         {
-          series.push({
-            name: label,
-            type: 'line',
-            stack: 'Total',
-            color: colors[i],
-            areaStyle: {
-              color: colors[i],
-              opacity: 0.2
-            },
-            itemStyle: {
-              normal: {
-                lineStyle:{
-                  width:1//设置线条粗细
-                }
-              }
-            },
-            emphasis: {
-              focus: 'series'
-            },
-            data: eval(set)
-          })
-          i ++;
+            series.push({
+                name: label,
+                type: 'line',
+                stack: 'Total',
+                color: colors[i],
+                areaStyle: {
+                    color: colors[i],
+                    opacity: 0.2
+                },
+                itemStyle: {
+                    normal: {
+                        lineStyle:{
+                            width: 1
+                        }
+                    }
+                },
+                emphasis: {
+                  focus: 'series'
+                },
+                data: eval(set)
+            })
+            i ++;
         })
 
         var chartDom = document.getElementById('cfdChart');
@@ -40,72 +40,83 @@ $(function()
         var option;
 
         option = {
-          tooltip: {
-            trigger: 'axis',
-            axisPointer: {
-              type: 'cross',
-              label: {
-                backgroundColor: '#6a7985'
-              }
-            },
-            textStyle: {
-              fontWeight: 100
-            }
-          },
-          legend: {
-            data: Object.keys(chartData['line']).reverse()
-          },
-          grid: {
-            left: '3%',
-            right: '4%',
-            bottom: '3%',
-            containLabel: true
-          },
-          xAxis: [
-            {
-              type: 'category',
-              boundaryGap: false,
-              data: chartData['labels'],
-              name: XUnit,
-              axisLine:
-              {
-                show: true,
-                lineStyle:
-                {
-                  color: '#999',
-                  width:1
-                }
-              }
-            }],
-          yAxis: [
-            {
-              type: 'value',
-              minInterval: 1,
-              name: YUnit,
-              nameTextStyle:
-              {
-                fontWeight: 'normal'
-              },
-              axisPointer:
-              {
-                label:
-                {
-                  show: true,
-                  precision: 0
+            tooltip: {
+                trigger: 'axis',
+                axisPointer: {
+                    type: 'cross',
+                    label: {
+                      backgroundColor: '#6a7985'
+                    }
                 },
-              },
-              axisLine:
-              {
-                show: true,
-                lineStyle:
+                formatter: function(params)
                 {
-                  color: ['#999'],
-                  width: 1
+                    var newParams     = [];
+                    var tooltipString = [];
+                    newParams = params.reverse();
+                    newParams.forEach((p) => {
+                        const cont = p.marker + ' ' + p.seriesName + ': ' + p.value + '<br/>';
+                        tooltipString.push(cont);
+                    });
+                    return tooltipString.join('');
+                },
+                textStyle: {
+                    fontWeight: 100
                 }
+            },
+            legend: {
+                data: Object.keys(chartData['line']).reverse()
+            },
+            grid: {
+                left: '3%',
+                right: '5%',
+                bottom: '3%',
+                containLabel: true
+            },
+            xAxis: [
+                {
+                    type: 'category',
+                    boundaryGap: false,
+                    data: chartData['labels'],
+                    name: XUnit,
+                    axisLine:
+                    {
+                        show: true,
+                        lineStyle:
+                        {
+                            color: '#999',
+                            width:1
+                        }
+                    }
+                }],
+            yAxis: [
+              {
+                  type: 'value',
+                  minInterval: 1,
+                  name: YUnit,
+                  nameTextStyle:
+                  {
+                    fontWeight: 'normal'
+                  },
+                  axisPointer:
+                  {
+                      label:
+                      {
+                          show: true,
+                          precision: 0
+                      },
+                  },
+                  axisLine:
+                  {
+                      show: true,
+                      lineStyle:
+                      {
+                          color: '#999',
+                          width: 1
+                      }
+                  }
               }
-            }
-          ],
-          series: series,
+            ],
+            series: series,
         };
 
         option && CFD.setOption(option);
