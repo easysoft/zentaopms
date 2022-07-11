@@ -149,11 +149,16 @@ function loadBranches(product)
         {
             $inputgroup.addClass('has-branch').append(data);
             $inputgroup.find('select:last').attr('name', 'branch[' + index + ']').attr('id', 'branch' + index).attr('onchange', "loadPlans('#products" + index + "', this.value)").chosen();
+
+            $inputgroup.find('select:last').each(disableSelectedBranch);
+            disableSelectedProduct();
         }
 
         var branchID = $('#branch' + index).val();
         loadPlans(product, branchID);
     });
+
+    if(!multiBranchProducts[$(product).val()]) disableSelectedProduct();
 }
 
 /**
@@ -218,35 +223,6 @@ function adjustPlanBoxMargin()
             $('#plansBox .col-sm-4:lt(' + (j * 3) + ')').css('margin-bottom', '10px');
         }
     }
-}
-
-/**
- * Make the selected product non clickable.
- *
- * @return void
- */
-function nonClickableSelectedProduct()
-{
-    $("select[id^='products'] option[disabled='disabled']").removeAttr('disabled');
-
-    var selectedVal = [];
-    $("select[id^='products']").each(function()
-    {
-        var selectedProduct = $(this).val();
-        if(selectedProduct != 0 && $.inArray(selectedProduct, selectedVal) < 0 && !multiBranchProducts[selectedProduct]) selectedVal.push(selectedProduct);
-    })
-
-    $("select[id^='products']").each(function()
-    {
-        var selectedProduct = $(this).val();
-        $(this).find('option').each(function()
-        {
-            var optionVal = $(this).attr('value');
-            if(optionVal != selectedProduct && $.inArray(optionVal, selectedVal) >= 0) $(this).attr('disabled', 'disabled');
-        })
-    })
-
-    $("select[id^=products]").trigger('chosen:updated');
 }
 
 /* Auto compute the work days. */

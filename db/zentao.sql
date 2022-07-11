@@ -131,7 +131,7 @@ CREATE TABLE `zt_approval` (
   `status` varchar(20) NOT NULL DEFAULT 'doing',
   `result` varchar(20) NOT NULL,
   `createdBy` char(30) NOT NULL,
-  `createdDate` int(11) NOT NULL,
+  `createdDate` datetime NOT NULL,
   `deleted` tinyint(4) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
