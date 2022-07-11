@@ -9,3 +9,5 @@ td.branchName > span {vertical-align: middle;}
 
 #mergeBranch .form-actions {padding-top: 20px;}
 .modal-body {padding-top: 0;}
+.tips {background-color: #ffffff; max-width: 600px; float: left;}
+.icon-exclamation-sign.icon {float: left; margin-top: 40px; color: #2667E3; font-size: 24px;}
