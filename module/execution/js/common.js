@@ -150,15 +150,15 @@ function loadBranches(product)
             $inputgroup.addClass('has-branch').append(data);
             $inputgroup.find('select:last').attr('name', 'branch[' + index + ']').attr('id', 'branch' + index).attr('onchange', "loadPlans('#products" + index + "', this.value)").chosen();
 
-            $inputgroup.find('select:last').each(nonClickableSelectedBranch);
-            nonClickableSelectedProduct();
+            $inputgroup.find('select:last').each(disableSelectedBranch);
+            disableSelectedProduct();
         }
 
         var branchID = $('#branch' + index).val();
         loadPlans(product, branchID);
     });
 
-    if(!multiBranchProducts[$(product).val()]) nonClickableSelectedProduct();
+    if(!multiBranchProducts[$(product).val()]) disableSelectedProduct();
 }
 
 /**
@@ -230,7 +230,7 @@ function adjustPlanBoxMargin()
  *
  * @return void
  */
-function nonClickableSelectedProduct()
+function disableSelectedProduct()
 {
     $("select[id^='products'] option[disabled='disabled']").removeAttr('disabled');
 
@@ -264,7 +264,7 @@ function nonClickableSelectedProduct()
  *
  * @return void
  */
-function nonClickableSelectedBranch()
+function disableSelectedBranch()
 {
     var relatedProduct = $(this).siblings("select[id^='products']").val();
 
