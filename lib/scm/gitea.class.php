@@ -36,8 +36,9 @@ class gitea
         if(!scm::checkRevision($revision)) return array();
         $api = "contents";
 
+        $path = ltrim($path, '/');
+        if($path) $api .= "/$path";
         $param = new stdclass();
-        $param->path      = ltrim($path, '/');
         $param->ref       = $revision;
         $param->recursive = 0;
         if(!empty($this->branch)) $param->ref = $this->branch;
@@ -52,9 +53,9 @@ class gitea
 
             $info = new stdClass();
             $info->name = $file->name;
-            $info->kind = $file->type == 'blob' ? 'file' : 'dir';
+            $info->kind = $file->type;
 
-            if($file->type == 'blob')
+            if($file->type == 'file')
             {
                 $file = $this->files($file->path, $this->branch);
 
@@ -624,28 +625,10 @@ class gitea
         $api = "commits";
 
         $param = new stdclass();
-        $param->path     = urldecode($path);
-        $param->ref_name = ($toRevision != 'HEAD' and $toRevision) ? $toRevision : $this->branch;
-
-        $fromDate = $this->getCommittedDate($fromRevision);
-        $toDate   = $this->getCommittedDate($toRevision);
-
-        $since = '';
-        $until = '';
-        if($fromRevision and $toRevision)
-        {
-            $since = min($fromDate, $toDate);
-            $until = max($fromDate, $toDate);
-        }
-        elseif($fromRevision)
-        {
-            $since = $fromDate;
-        }
-        if($since) $param->since = $since;
-        if($until) $param->until = $until;
+        $param->path = urldecode($path);
+        $param->sha  = ($toRevision != 'HEAD' and $toRevision) ? $toRevision : $this->branch;
 
         if($perPage) $param->per_page = $perPage;
-
         return $this->fetch($api, $param);
     }
 
