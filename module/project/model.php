@@ -2434,7 +2434,7 @@ class projectModel extends model
 
             $execution->children = array();
             $execution->grade == 1 ? $parents[$execution->id] = $execution : $children[$execution->parent][] = $execution;
-            if(isset($executionTasks) and isset($executionTasks[$execution->id])) 
+            if(isset($executionTasks) and isset($executionTasks[$execution->id]))
             {
                 $tasks = array_chunk($executionTasks[$execution->id], 50, true);
                 $execution->tasks = $tasks[0];

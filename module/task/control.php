@@ -1758,22 +1758,29 @@ class task extends control
         echo html::select('task', empty($tasks) ? array('' => '') : $tasks, $taskID, "class='form-control'");
     }
 
-    public function ajaxGetTasksByExecution($executionID, $maxTaskID = 0)
+    /**
+     * Ajax get tasks for execution list.
+     *
+     * @param  int    $executionID
+     * @param  int    $maxTaskID
+     * @access public
+     * @return void
+     */
+    public function ajaxGetTasks($executionID, $maxTaskID = 0)
     {
         $this->loadModel('task');
+        $this->loadModel('execution');
+        $execution = $this->dao->findById($executionID)->from(TABLE_EXECUTION)->fetch();
 
-        //总数、更多、最后一条ID，
         $tasks = $this->dao->select('*')->from(TABLE_TASK)
             ->where('deleted')->eq(0)
             ->andWhere('status')->ne('closed')
             ->andWhere('execution')->eq($executionID)
             ->andWhere('id')->gt($maxTaskID)
             ->orderBy('id_asc')
-            ->limit(50)
             ->fetchAll('id');
 
         $users = $this->loadModel('user')->getPairs('noletter|nodeleted');
-        $html = '';
         foreach($tasks as $task)
         {
             if($task->parent > 0)
@@ -1784,47 +1791,57 @@ class task extends control
                     unset($tasks[$task->id]);
                 }
             }
-
-            //$parentClass = $task->parent == '-1' ? 'table-nest-child-hide' : '';
-            //$parentID    = $task->parent > 0 ? $task->parent : $executionID;
-
-            $html .= "<tr data-parent=$executionID data-id=$task->id data-nest-path='$executionID,$task->id' data-nest-parent=$executionID class='is-nest-child'>";
-            $html .= '<td>';
-            $html .= html::a($this->createLink('task', 'view', "id=$task->id"), $task->name);
-            $html .= '</td>';
-            $html .= '<td>';
-            $html .= zget($users, $task->assignedTo, '');
-            $html .= '</td>';
-            $html .= '<td>';
-            $html .= zget($this->lang->task->statusList, $task->status, '');
-            $html .= '</td>';
-            $html .= '<td>';
-            $html .= '</td>';
-            $html .= '<td>';
-            $html .= $task->estStarted;
-            $html .= '</td>';
-            $html .= '<td>';
-            $html .= $task->deadline;
-            $html .= '</td>';
-            $html .= '<td>';
-            $html .= $task->estimate;
-            $html .= '</td>';
-            $html .= '<td>';
-            $html .= $task->consumed;
-            $html .= '</td>';
-            $html .= '<td>';
-            $html .= $task->left;
-            $html .= '</td>';
-            $html .= '<td>';
-            $html .= '燃尽图';
-            $html .= '</td>';
-            $html .= '<td>';
-            $html .= '操作';
-            $html .= '</td>';
-            $html .= '</tr>';
         }
 
-        die(json_encode(array('body' => $html, 'count' => count($tasks), 'maxTaskID' => $task->id)));
+        $body  = '';
+        $tasks = array_chunk($tasks, 50, true);
+        $tasks = $tasks[0];
+        $count = count($tasks);
+        foreach($tasks as $task)
+        {
+            $path = $execution->grade == 2 ? "$execution->parent,$execution->id,$task->id," : ",$execution->id,$task->id,";
+            $showmore = ($count == 50 and $task == end($tasks)) ? 'showmore' : '';
+
+            $body .= "<tr data-parent=$executionID data-id=$task->id data-nest-path='$path' data-nest-parent=$executionID class='is-nest-child $showmore'>";
+            $body .= '<td>' . html::a($this->createLink('task', 'view', "id=$task->id"), $task->name) . '</td>';
+            $body .= '<td>' . zget($users, $task->assignedTo, '') . '</td>';
+            $body .= '<td>' . zget($this->lang->task->statusList, $task->status, '') . '</td>';
+            $body .= '<td></td>';
+            $body .= '<td>' . $task->estStarted . '</td>';
+            $body .= '<td>' . $task->deadline . '</td>';
+            $body .= '<td>' . $task->estimate . $this->lang->execution->workHourUnit . '</td>';
+            $body .= '<td>' . $task->consumed . $this->lang->execution->workHourUnit . '</td>';
+            $body .= '<td>' . $task->left . $this->lang->execution->workHourUnit . '</td>';
+            $body .= '<td></td>';
+            $body .= '<td class="c-actions">';
+            $body .= $this->task->buildOperateMenu($task, 'browse');
+            $body .= '</td></tr>';
+
+            if(!empty($task->children))
+            {
+                foreach($task->children as $childTask)
+                {
+                    $path = $execution->grade == 2 ? "$execution->parent,$execution->id,$childTask->parent,$childTask->id," : ",$execution->id,$childTask->parent,$childTask->id,";
+
+                    $body .= "<tr data-parent=$executionID data-id=$childTask->id data-nest-path='$path' data-nest-parent=$executionID class='is-nest-child $showmore'>";
+                    $body .= '<td>' . html::a($this->createLink('task', 'view', "id=$childTask->id"), $childTask->name) . '</td>';
+                    $body .= '<td>' . zget($users, $childTask->assignedTo, '') . '</td>';
+                    $body .= '<td>' . zget($this->lang->task->statusList, $childTask->status, '') . '</td>';
+                    $body .= '<td></td>';
+                    $body .= '<td>' . $childTask->estStarted . '</td>';
+                    $body .= '<td>' . $childTask->deadline . '</td>';
+                    $body .= '<td>' . $childTask->estimate . $this->lang->execution->workHourUnit . '</td>';
+                    $body .= '<td>' . $childTask->consumed . $this->lang->execution->workHourUnit . '</td>';
+                    $body .= '<td>' . $childTask->left . $this->lang->execution->workHourUnit . '</td>';
+                    $body .= '<td></td>';
+                    $body .= '<td class="c-actions">';
+                    $body .= $this->task->buildOperateMenu($childTask, 'browse');
+                    $body .= '</td></tr>';
+                }
+            }
+        }
+
+        die($body);
     }
 
     /**
