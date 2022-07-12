@@ -748,7 +748,7 @@ class task extends control
      * @access public
      * @return void
      */
-    public function assignTo($executionID, $taskID, $kanbanGroup = 'default', $from='')
+    public function assignTo($executionID, $taskID, $kanbanGroup = 'default', $from = '')
     {
         $this->commonAction($taskID);
         $task = $this->task->getByID($taskID);
