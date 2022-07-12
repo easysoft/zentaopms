@@ -43,6 +43,12 @@ class gitea extends control
 
         /* Admin user don't need bind. */
         $giteaList = $this->gitea->getList($orderBy, $pager);
+        $myGiteas  = $this->gitea->getGiteaListByAccount();
+        foreach($giteaList as $gitea)
+        {
+            $gitea->isBindUser = true;
+            if(!$this->app->user->admin and !isset($myGiteas[$gitea->id])) $gitea->isBindUser = false;
+        }
 
         $this->view->title     = $this->lang->gitea->common . $this->lang->colon . $this->lang->gitea->browse;
         $this->view->giteaList = $giteaList;
@@ -163,5 +169,32 @@ class gitea extends control
         if(!$result) return $this->send(array('result' => 'fail', 'message' => array('token' => array($this->lang->gitea->tokenLimit))));
 
         return true;
+    }
+
+    /**
+     * Bind gitea user to zentao users.
+     *
+     * @param  int     $giteaID
+     * @access public
+     * @return void
+     */
+    public function bindUser($giteaID)
+    {
+        $zentaoUsers = $this->dao->select('account,email,realname')->from(TABLE_USER)->fetchAll('account');
+        $userPairs   = $this->loadModel('user')->getPairs('noclosed|noletter');
+
+        if($_POST)
+        {
+            $this->gitea->bindUser($giteaID);
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->server->http_referer));
+        }
+
+        $this->view->title         = $this->lang->gitea->bindUser;
+        $this->view->userPairs     = $userPairs;
+        $this->view->giteaUsers    = $this->gitea->apiGetUsers($giteaID);
+        $this->view->bindedUsers   = $this->gitea->getUserAccountIdPairs($giteaID);
+        $this->view->matchedResult = $this->gitea->getMatchedUsers($giteaID, $this->view->giteaUsers, $zentaoUsers);
+        $this->display();
     }
 }

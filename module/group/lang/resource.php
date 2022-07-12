@@ -1383,17 +1383,19 @@ $lang->gitlab->methodOrder[155] = 'deleteTag';
 
 /* Gitea. */
 $lang->resource->gitea = new stdclass();
-$lang->resource->gitea->browse = 'browse';
-$lang->resource->gitea->create = 'create';
-$lang->resource->gitea->edit   = 'edit';
-$lang->resource->gitea->view   = 'view';
-$lang->resource->gitea->delete = 'delete';
+$lang->resource->gitea->browse   = 'browse';
+$lang->resource->gitea->create   = 'create';
+$lang->resource->gitea->edit     = 'edit';
+$lang->resource->gitea->view     = 'view';
+$lang->resource->gitea->delete   = 'delete';
+$lang->resource->gitea->bindUser = 'bindUser';
 
 $lang->gitea->methodOrder[5]  = 'browse';
 $lang->gitea->methodOrder[10] = 'create';
 $lang->gitea->methodOrder[15] = 'edit';
 $lang->gitea->methodOrder[20] = 'view';
 $lang->gitea->methodOrder[25] = 'delete';
+$lang->gitea->methodOrder[30] = 'bindUser';
 
 /* SonarQube. */
 $lang->resource->sonarqube = new stdclass();

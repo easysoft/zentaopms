@@ -105,6 +105,62 @@ class giteaModel extends model
     }
 
     /**
+     * Bind users.
+     *
+     * @param  int    $giteaID
+     * @access public
+     * @return array
+     */
+    public function bindUser($giteaID)
+    {
+        $users       = $this->post->zentaoUsers;
+        $giteaNames  = $this->post->giteaUserNames;
+        $accountList = array();
+        $repeatUsers = array();
+        foreach($users as $openID => $user)
+        {
+            if(empty($user)) continue;
+            if(isset($accountList[$user])) $repeatUsers[] = zget($userPairs, $user);
+            $accountList[$user] = $openID;
+        }
+
+        if(count($repeatUsers))
+        {
+            dao::$errors[] = sprintf($this->lang->gitea->bindUserError, join(',', $repeatUsers));
+            return false;
+        }
+
+        $user = new stdclass;
+        $user->providerID   = $giteaID;
+        $user->providerType = 'gitea';
+
+        $oldUsers = $this->dao->select('*')->from(TABLE_OAUTH)->where('providerType')->eq($user->providerType)->andWhere('providerID')->eq($user->providerID)->fetchAll('openID');
+        foreach($users as $openID => $account)
+        {
+            $existAccount = isset($oldUsers[$openID]) ? $oldUsers[$openID] : '';
+
+            if($existAccount and $existAccount->account != $account)
+            {
+                $this->dao->delete()
+                    ->from(TABLE_OAUTH)
+                    ->where('openID')->eq($openID)
+                    ->andWhere('providerType')->eq($user->providerType)
+                    ->andWhere('providerID')->eq($user->providerID)
+                    ->exec();
+                $this->loadModel('action')->create('giteauser', $giteaID, 'unbind', '', sprintf($this->lang->gitea->bindDynamic, $giteaNames[$openID], $zentaoUsers[$existAccount->account]->realname));
+            }
+            if(!$existAccount or $existAccount->account != $account)
+            {
+                if(!$account) continue;
+                $user->account = $account;
+                $user->openID  = $openID;
+                $this->dao->insert(TABLE_OAUTH)->data($user)->exec();
+                $this->loadModel('action')->create('giteauser', $giteaID, 'bind', '', sprintf($this->lang->gitea->bindDynamic, $giteaNames[$openID], $zentaoUsers[$account]->realname));
+            }
+        }
+    }
+
+    /**
      * Api error handling.
      *
      * @param  object $response
@@ -226,6 +282,87 @@ class giteaModel extends model
     }
 
     /**
+     * Get zentao account gitea user id pairs of one gitea.
+     *
+     * @param  int $giteaID
+     * @access public
+     * @return array
+     */
+    public function getUserAccountIdPairs($giteaID, $fields = 'account,openID')
+    {
+        return $this->dao->select($fields)->from(TABLE_OAUTH)
+            ->where('providerType')->eq('gitea')
+            ->andWhere('providerID')->eq($giteaID)
+            ->fetchPairs();
+    }
+
+    /**
+     * Get gitea user id by zentao account.
+     *
+     * @param  int    $giteaID
+     * @param  string $zentaoAccount
+     * @access public
+     * @return array
+     */
+    public function getUserIDByZentaoAccount($giteaID, $zentaoAccount)
+    {
+        return $this->dao->select('openID')->from(TABLE_OAUTH)
+            ->where('providerType')->eq('gitea')
+            ->andWhere('providerID')->eq($giteaID)
+            ->andWhere('account')->eq($zentaoAccount)
+            ->fetch('openID');
+    }
+
+    /**
+     * Get matched gitea users.
+     *
+     * @param  int   $giteaID
+     * @param  array $giteaUsers
+     * @param  array $zentaoUsers
+     * @access public
+     * @return array
+     */
+    public function getMatchedUsers($giteaID, $giteaUsers, $zentaoUsers)
+    {
+        $matches = new stdclass;
+        foreach($giteaUsers as $giteaUser)
+        {
+            foreach($zentaoUsers as $zentaoUser)
+            {
+                if($giteaUser->account == $zentaoUser->account)   $matches->accounts[$giteaUser->account][] = $zentaoUser->account;
+                if($giteaUser->realname == $zentaoUser->realname) $matches->names[$giteaUser->realname][]   = $zentaoUser->account;
+                if($giteaUser->email == $zentaoUser->email)       $matches->emails[$giteaUser->email][]     = $zentaoUser->account;
+            }
+        }
+
+        $bindedUsers  = $this->getUserAccountIdPairs($giteaID, 'openID,account');
+        $matchedUsers = array();
+        foreach($giteaUsers as $giteaUser)
+        {
+            if(isset($bindedUsers[$giteaUser->account]))
+            {
+                $giteaUser->zentaoAccount = $bindedUsers[$giteaUser->account];
+                $matchedUsers[]           = $giteaUser;
+                continue;
+            }
+
+            $matchedZentaoUsers = array();
+            if(isset($matches->accounts[$giteaUser->account])) $matchedZentaoUsers = array_merge($matchedZentaoUsers, $matches->accounts[$giteaUser->account]);
+            if(isset($matches->emails[$giteaUser->email]))     $matchedZentaoUsers = array_merge($matchedZentaoUsers, $matches->emails[$giteaUser->email]);
+            if(isset($matches->names[$giteaUser->realname]))   $matchedZentaoUsers = array_merge($matchedZentaoUsers, $matches->names[$giteaUser->realname]);
+
+            $matchedZentaoUsers = array_unique($matchedZentaoUsers);
+            if(count($matchedZentaoUsers) == 1)
+            {
+                $giteaUser->zentaoAccount = current($matchedZentaoUsers);
+                $matchedUsers[]           = $giteaUser;
+            }
+        }
+
+        return $matchedUsers;
+    }
+
+    /**
      * Get project by api.
      *
      * @param  int    $giteaID
@@ -250,14 +387,70 @@ class giteaModel extends model
      * @access public
      * @return array
      */
-    public function apiGetProjects($giteaID, $sudo = 'true')
+    public function apiGetProjects($giteaID, $sudo = true)
     {
         $apiRoot = $this->getApiRoot($giteaID, $sudo);
         if(!$apiRoot) return array();
 
-        $url     = sprintf($apiRoot, "/repos/search");
-        $results = json_decode(commonModel::http($url));
+        $url        = sprintf($apiRoot, "/repos/search");
+        $allResults = array();
+        for($page = 1; true; $page++)
+        {
+            $results = json_decode(commonModel::http($url . "&page={$page}&limit=50"));
+            if(!is_array($results->data)) break;
+            if(!empty($results->data)) $allResults = array_merge($allResults, $results->data);
+            if(count($results->data) < 50) break;
+        }
 
-        return $results->data;
+        return $allResults;
+    }
+
+    /**
+     * Get gitea user list.
+     *
+     * @param  int    $giteaID
+     * @param  bool   $onlyLinked
+     * @access public
+     * @return array
+     */
+    public function apiGetUsers($giteaID, $onlyLinked = false)
+    {
+        $response = array();
+        $apiRoot  = $this->getApiRoot($giteaID);
+
+        for($page = 1; true; $page++)
+        {
+            $url    = sprintf($apiRoot, "/users/search") . "&page={$page}&limit=50";
+            $result = json_decode(commonModel::http($url));
+            if(empty($result->data)) break;
+
+            $response = array_merge($response, $result->data);
+            $page += 1;
+        }
+
+        if(empty($response)) return array();
+
+        /* Get linked users. */
+        $linkedUsers = array();
+        if($onlyLinked) $linkedUsers = $this->getUserAccountIdPairs($giteaID, 'openID,account');
+
+        $users = array();
+        foreach($response as $giteaUser)
+        {
+            if($onlyLinked and !isset($linkedUsers[$giteaUser->id])) continue;
+
+            $user = new stdclass;
+            $user->id             = $giteaUser->id;
+            $user->realname       = $giteaUser->full_name ? $giteaUser->full_name : $giteaUser->username;
+            $user->account        = $giteaUser->username;
+            $user->email          = zget($giteaUser, 'email', '');
+            $user->avatar         = $giteaUser->avatar_url;
+            $user->createdAt      = zget($giteaUser, 'created', '');
+            $user->lastActivityOn = zget($giteaUser, 'last_login', '');
+
+            $users[] = $user;
+        }
+
+        return $users;
     }
 }

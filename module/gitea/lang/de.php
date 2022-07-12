@@ -8,6 +8,13 @@ $lang->gitea->edit          = 'Edit Gitea';
 $lang->gitea->view          = 'View Gitea';
 $lang->gitea->delete        = 'Delete Gitea';
 $lang->gitea->confirmDelete = 'Do you want to delete this Gitea server?';
+$lang->gitea->bindUser      = 'Bind User';
+$lang->gitea->giteaAccount  = 'Gitea Account';
+$lang->gitea->zentaoAccount = 'Zentao Account';
+$lang->gitea->bindingStatus = 'Binding Status';
+$lang->gitea->notBind       = 'Not bind';
+$lang->gitea->binded        = 'Binded';
+$lang->gitea->bindDynamic   = '%s and Zentao user %s';
 
 $lang->gitea->browseAction = 'Gitea List';
 $lang->gitea->deleteAction = 'Delete Gitea';
