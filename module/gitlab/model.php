@@ -2876,23 +2876,4 @@ class gitlabModel extends model
         $html .= '</div>';
         return $html;
     }
-
-    /**
-     * Download zip code.
-     *
-     * @param  int    $gitlabID
-     * @param  int    $projectID
-     * @param  string $branch
-     * @param  string $ext tar.gz|tar.bz2|tbz|tbz2|tb2|bz2|tar|zip
-     * @access public
-     * @return string
-     */
-    public function downloadCode($gitlabID = 0, $projectID = 0, $branch = '', $ext = 'zip')
-    {
-        if(empty($gitlabID) or empty($projectID)) return false;
-
-        $url = sprintf($this->getApiRoot($gitlabID), "/projects/$projectID/repository/archive." . $ext);
-        if($branch) $url .= '&sha=' . $branch;
-        return $url;
-    }
 }
