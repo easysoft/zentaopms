@@ -744,6 +744,7 @@ class task extends control
      * @param  int    $requestID
      * @param  int    $taskID
      * @param  string $kanbanGroup
+     * @param  string $from
      * @access public
      * @return void
      */
@@ -1073,6 +1074,7 @@ class task extends control
      * Record consumed and estimate.
      *
      * @param  int    $taskID
+     * @param  string $from
      * @access public
      * @return void
      */
@@ -1384,6 +1386,7 @@ class task extends control
      * Restart task
      *
      * @param  int    $taskID
+     * @param  string $from
      * @access public
      * @return void
      */
