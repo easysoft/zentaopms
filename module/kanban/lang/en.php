@@ -211,6 +211,9 @@ $lang->kanban->error->childLimitNote    = 'The sum of products in the child colu
 $lang->kanban->error->importObjNotEmpty = 'Please select at least one import object.';
 $lang->kanban->error->childLimitEmpty   = 'Please set the WIP quantity of the sub column before operation.';
 
+$lang->kanban->orderList['pri_asc']  = 'Story Priority Ascending';
+$lang->kanban->orderList['pri_desc'] = 'Story Priority Descending';
+
 $lang->kanban->importList = array();
 $lang->kanban->importList['off'] = 'Import is not enabled';
 $lang->kanban->importList['on']  = 'Enable import function (You can import content that you have permission to view as cards.)';

@@ -10,6 +10,11 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/kanban.html.php';?>
+<?php if($groupBy == 'story' and $browseType == 'task'):?>
+<style>
+.kanban-cols {left: 0px !important;}
+</style>
+<?php endif;?>
 <div id='mainMenu' class='clearfix'>
   <div class='btn-toolbar pull-left'>
     <div class="input-control space c-type">
@@ -220,4 +225,5 @@ js::set('priv',
 <?php js::set('displayCards', $execution->displayCards);?>
 <?php js::set('needLinkProducts', $lang->execution->needLinkProducts);?>
 <?php js::set('hourUnit', $config->hourUnit);?>
+<?php js::set('orderBy', $storyOrder);?>
 <?php include '../../common/view/footer.html.php';?>

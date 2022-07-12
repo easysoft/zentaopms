@@ -128,6 +128,15 @@ function renderEstStarted(estStarted, status)
  */
 function renderStoryItem(item, $item, col)
 {
+    if(groupBy == 'story' && item.id == '0')
+    {
+        $('.storyCell').css('width', '100%');
+        $parentItem = $item[0] == undefined ? $('.storyCell') : $item.parent();
+        $parentItem.addClass('text-center storyCell');
+        $parentItem.css('line-height', ($parentItem.parent().height() - 20) + 'px');
+        $item.replaceWith('<span class="text-muted">' + item.title + '</span>');
+        return;
+    }
     var scaleSize = window.kanbanScaleSize;
     if($item.attr('data-scale-size') !== scaleSize) $item.empty().attr('data-scale-size', scaleSize);
 
@@ -330,6 +339,14 @@ addColumnRenderer('task',  renderTaskItem);
  */
 function renderColumnCount($count, count, col)
 {
+    if(groupBy == 'story' && col.type == 'story')
+    {
+        $count.prev().addClass('storyColumn');
+        $count.prev().parent().append('<span class="caret changeOrderBy"></span>');
+        $count.remove();
+        return;
+    }
+
     var text = count + '/' + (col.limit < 0 ? '<i class="icon icon-infinite"></i>' : col.limit);
     $count.html(text + '<i class="icon icon-arrow-up"></i>');
 
@@ -370,7 +387,9 @@ function tips()
 function renderHeaderCol($col, col, $header, kanban)
 {
     if(col.asParent) $col = $col.children('.kanban-header-col');
-    if($col.children('.actions').context != undefined) return;
+    if($col.children('.actions').context != undefined || (groupBy == 'story' && col.type == 'story')) return;
+    console.log(groupBy);
+    console.log(col.type);
 
     var $actions = $('<div class="actions createButton" />');
     var printStoryButton =  printTaskButton = printBugButton = false;
@@ -410,6 +429,11 @@ function renderHeaderCol($col, col, $header, kanban)
  */
 function renderLaneName($name, lane, $kanban, columns, kanban)
 {
+    if(groupBy == 'story')
+    {
+        $name.hide();
+        return;
+    }
     if(lane.id != 'story' && lane.id != 'task' && lane.id != 'bug') return false;
     if(!$name.children('.actions').length && (priv.canSetLane || priv.canMoveLane))
     {
@@ -1167,7 +1191,7 @@ function handleSortCards(event)
         }
         else
         {
-            $.get(createLink('execution', 'ajaxUpdateKanban', "executionID=" + executionID + "&entertime=0&browseType=" + browseType + "&groupBy=" + groupBy + '&from=execution'), function(data)
+            $.get(createLink('execution', 'ajaxUpdateKanban', "executionID=" + executionID + "&entertime=0&browseType=" + browseType + "&groupBy=" + groupBy + '&from=execution' + '&searchValue=' + searchValue + '&orderBy=' + orderBy), function(data)
             {
                 if(data && lastUpdateData !== data)
                 {
@@ -1252,6 +1276,12 @@ $(function()
         event.preventDefault();
     });
 
+    $(document).on('click', '#kanbans span.caret.changeOrderBy', function(event)
+    {
+        orderBy = orderBy == 'pri_desc' ? 'pri_asc' : 'pri_desc';
+        searchCards(searchValue);
+    })
+
     /* Init contextmenu */
     $('#kanbans').on('click', '[data-contextmenu]', function(event)
     {
@@ -1311,7 +1341,7 @@ $(function()
     lastUpdateData = '';
     setInterval(function()
     {
-        $.get(createLink('execution', 'ajaxUpdateKanban', "executionID=" + executionID + "&entertime=" + entertime + "&browseType=" + browseType + "&groupBy=" + groupBy + '&from=execution&searchValue=' + searchValue), function(data)
+        $.get(createLink('execution', 'ajaxUpdateKanban', "executionID=" + executionID + "&entertime=" + entertime + "&browseType=" + browseType + "&groupBy=" + groupBy + '&from=execution&searchValue=' + searchValue + '&orderBy' + orderBy), function(data)
         {
             if(lastUpdateData == '') lastUpdateData = data;
             if(data && lastUpdateData !== data)
@@ -1447,7 +1477,7 @@ function toggleSearchBox()
 function searchCards(value)
 {
     searchValue = value;
-    $.get(createLink('execution', 'ajaxUpdateKanban', "executionID=" + executionID + "&entertime=0&browseType=" + browseType + "&groupBy=" + groupBy + '&from=execution&searchValue=' + value), function(data)
+    $.get(createLink('execution', 'ajaxUpdateKanban', "executionID=" + executionID + "&entertime=0&browseType=" + browseType + "&groupBy=" + groupBy + '&from=execution&searchValue=' + value + '&orderBy=' + orderBy), function(data)
     {
         lastUpdateData = data;
         var kanbanData = $.parseJSON(data);

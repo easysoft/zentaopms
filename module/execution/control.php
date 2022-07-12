@@ -2469,11 +2469,12 @@ class execution extends control
             unset($this->lang->kanban->type['all']);
         }
 
-        $kanbanGroup = $this->kanban->getExecutionKanban($executionID, $browseType, $groupBy);
+        if($groupBy == 'story' and $browseType == 'task' and !isset($this->lang->kanban->orderList[$orderBy])) $orderBy = 'pri_asc';
+        $kanbanGroup = $this->kanban->getExecutionKanban($executionID, $browseType, $groupBy, '', $orderBy);
         if(empty($kanbanGroup))
         {
             $this->kanban->createExecutionLane($executionID, $browseType, $groupBy);
-            $kanbanGroup = $this->kanban->getExecutionKanban($executionID, $browseType, $groupBy);
+            $kanbanGroup = $this->kanban->getExecutionKanban($executionID, $browseType, $groupBy, '', $orderBy);
         }
 
         /* Determines whether an object is editable. */
@@ -4099,11 +4100,15 @@ class execution extends control
      * @param  string $groupBy
      * @param  string $from execution|RD
      * @param  string $searchValue
+     * @param  string $orderBy
      * @access public
      * @return array
      */
-    public function ajaxUpdateKanban($executionID = 0, $enterTime = '', $browseType = '', $groupBy = '', $from = 'execution', $searchValue = '')
+    public function ajaxUpdateKanban($executionID = 0, $enterTime = '', $browseType = '', $groupBy = '', $from = 'execution', $searchValue = '', $orderBy = 'id_asc')
     {
+        $this->loadModel('kanban');
+        if($groupBy == 'story' and $browseType == 'task' and !isset($this->lang->kanban->orderList[$orderBy])) $orderBy = 'pri_asc';
+
         $enterTime = date('Y-m-d H:i:s', $enterTime);
         $lastEditedTime = $this->dao->select("max(lastEditedTime) as lastEditedTime")->from(TABLE_KANBANLANE)->where('execution')->eq($executionID)->fetch('lastEditedTime');
 
@@ -4111,7 +4116,7 @@ class execution extends control
         if($from == 'RD')        $this->session->set('rdSearchValue', $searchValue);
         if(strtotime($lastEditedTime) < 0 or $lastEditedTime > $enterTime or $groupBy != 'default' or !empty($searchValue))
         {
-            $kanbanGroup = $from == 'execution' ? $this->loadModel('kanban')->getExecutionKanban($executionID, $browseType, $groupBy, $searchValue) : $this->loadModel('kanban')->getRDKanban($executionID, $browseType, 'id_asc', 0, $groupBy, $searchValue);
+            $kanbanGroup = $from == 'execution' ? $this->kanban->getExecutionKanban($executionID, $browseType, $groupBy, $searchValue, $orderBy) : $this->kanban->getRDKanban($executionID, $browseType, $orderBy, 0, $groupBy, $searchValue);
             return print(json_encode($kanbanGroup));
         }
     }
