@@ -117,8 +117,22 @@ $(function()
         }
     });
 
-    nonClickableSelectedProduct();
-    $(document).on('change', "select[id^='products']", nonClickableSelectedProduct);
+    /* Init for copy execution. */
+    $("select[id^=branch]").each(disableSelectedBranch);
+    disableSelectedProduct();
+
+    /* Check the all products and branches control when uncheck the product. */
+    $(document).on('change', "select[id^='products']", function()
+    {
+        if($(this).val() == 0)
+        {
+            $("select[id^='branch']").each(disableSelectedBranch);
+
+            disableSelectedProduct();
+        }
+    });
+
+    $(document).on('change', "select[id^='branch']", disableSelectedBranch);
 });
 
 function showLifeTimeTips()

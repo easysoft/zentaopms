@@ -22,10 +22,9 @@
       <div class='panel'>
         <div class="panel-heading">
           <div class="panel-title">
-            <div class="table-row" id='conditions'>
-              <div class="col-xs"><?php echo $title;?></div>
-              <div class="col-xs text-right text-gray text-middle"><?php echo $lang->report->conditions?></div>
-              <div class='col'>
+            <div id='conditions'>
+              <div><?php echo $title;?></div>
+              <div class='condition-options'>
                 <div class="checkbox-primary inline-block">
                   <input type="checkbox" name="closedProduct" value="closedProduct" id="closedProduct" <?php if(strpos($conditions, 'closedProduct') !== false) echo "checked='checked'"?> />
                   <label for="closedProduct"><?php echo $lang->report->closedProduct?></label>

@@ -2272,7 +2272,12 @@ class productModel extends model
         elseif($module == 'project' and $method == 'testcase')
         {
             $params = explode(',', $extra);
-            return helper::createLink('project', 'testcase', "projectID={$params[0]}&productID=%s&branch=all&browseType={$params[1]}");
+            return helper::createLink('project', 'testcase', "projectID={$params[0]}&productID=%s&branch=" . ($branch ? "%s" : '0') . "&browseType={$params[1]}");
+        }
+        elseif($module == 'execution' and $method == 'testcase')
+        {
+            $params = explode(',', $extra);
+            return helper::createLink('execution', 'testcase', "executionID={$params[0]}&productID=%s" . ($branch ? "&branch=%s" : ''));
         }
         elseif($module == 'project' or $module == 'execution')
         {

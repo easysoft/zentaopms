@@ -176,8 +176,13 @@ function loadBranches(product)
         {
             $inputgroup.addClass('has-branch').append(data);
             $inputgroup.find('select:last').attr('name', 'branch[' + index + ']').attr('id', 'branch' + index).attr('onchange', "loadPlans('#products" + index + "', this.value)").chosen();
+
+            $inputgroup.find('select:last').each(disableSelectedBranch);
+            disableSelectedProduct();
         }
     });
+
+    if(!multiBranchProducts[$(product).val()]) disableSelectedProduct();
 
     $("input[name='products[" + index + "]']").remove();
     $("input[name='branch[" + index + "]']").remove();

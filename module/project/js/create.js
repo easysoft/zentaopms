@@ -65,6 +65,23 @@ $(function()
 
         loadBranches($('#products0'), selectedBranchID);
     }
+
+    /* Init for copy execution. */
+    $("select[id^=branch]").each(disableSelectedBranch);
+    disableSelectedProduct();
+
+    /* Check the all products and branches control when uncheck the product. */
+    $(document).on('change', "select[id^='products']", function()
+    {
+        if($(this).val() == 0)
+        {
+            $("select[id^='branch']").each(disableSelectedBranch);
+
+            disableSelectedProduct();
+        }
+    });
+
+    $(document).on('change', "select[id^='branch']", disableSelectedBranch);
 });
 
 /**
@@ -200,8 +217,13 @@ function loadBranches(product, branchID)
         {
             $inputgroup.addClass('has-branch').append(data);
             $inputgroup.find('select:last').attr('name', 'branch[' + index + ']').attr('id', 'branch' + index).attr('onchange', "loadPlans('#products" + index + "', this.value)").chosen();
+
+            $inputgroup.find('select:last').each(disableSelectedBranch);
+            disableSelectedProduct();
         }
     });
+
+    if(!multiBranchProducts[$(product).val()]) disableSelectedProduct();
 
     loadPlans(product, oldBranchID);
 }
