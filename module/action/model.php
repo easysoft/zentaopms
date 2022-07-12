@@ -1254,8 +1254,8 @@ class actionModel extends model
             /* If action type is login or logout, needn't link. */
             if($actionType == 'svncommited' or $actionType == 'gitcommited') $action->actor = zget($commiters, $action->actor);
 
-            /* Get gitlab objectname. */
-            if(empty($action->objectName) and substr($objectType, 0, 6) == 'gitlab') $action->objectName = $action->extra;
+            /* Get gitlab or gitea objectname. */
+            if(empty($action->objectName) and (substr($objectType, 0, 6) == 'gitlab' or substr($objectType, 0, 5) == 'gitea')) $action->objectName = $action->extra;
 
             /* Other actions, create a link. */
             if(!$this->setObjectLink($action, $deptUsers))

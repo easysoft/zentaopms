@@ -47,9 +47,7 @@ class gitlab extends control
 
         foreach($gitlabList as $gitlab)
         {
-            $token = $this->gitlab->apiGetCurrentUser($gitlab->url, $gitlab->token);
-            $gitlab->isAdminToken = (isset($token->is_admin) and $token->is_admin);
-            $gitlab->isBindUser   = true;
+            $gitlab->isBindUser = true;
             if(!$this->app->user->admin and !isset($myGitLabs[$gitlab->id])) $gitlab->isBindUser = false;
         }
 
@@ -1346,7 +1344,7 @@ class gitlab extends control
     {
         $repo          = $this->loadModel('repo')->getRepoByID($repoID);
         $productIDList = explode(',', $repo->product);
-        $gitlabID      = $repo->gitlab;
+        $gitlabID      = $repo->gitService;
         $projectID     = $repo->project;
 
         $gitlab = $this->gitlab->getByID($gitlabID);
@@ -1491,7 +1489,7 @@ class gitlab extends control
             $bindedUsers = $this->dao->select('account,openID')
                 ->from(TABLE_OAUTH)
                 ->where('providerType')->eq('gitlab')
-                ->andWhere('providerID')->eq($repo->gitlab)
+                ->andWhere('providerID')->eq($repo->gitService)
                 ->fetchPairs();
 
             if(empty($repo->acl))
@@ -1511,7 +1509,7 @@ class gitlab extends control
                 }
             }
 
-            $gitlabCurrentMembers = $this->gitlab->apiGetProjectMembers($repo->gitlab, $repo->project);
+            $gitlabCurrentMembers = $this->gitlab->apiGetProjectMembers($repo->gitService, $repo->project);
 
             $addedMembers = $updatedMembers = $deletedMembers = array();
             /* Get the updated data. */
@@ -1570,17 +1568,17 @@ class gitlab extends control
 
             foreach($addedMembers as $addedMember)
             {
-                $this->gitlab->apiCreateProjectMember($repo->gitlab, $repo->project, $addedMember);
+                $this->gitlab->apiCreateProjectMember($repo->gitService, $repo->project, $addedMember);
             }
 
             foreach($updatedMembers as $updatedMember)
             {
-                $this->gitlab->apiUpdateProjectMember($repo->gitlab, $repo->project, $updatedMember);
+                $this->gitlab->apiUpdateProjectMember($repo->gitService, $repo->project, $updatedMember);
             }
 
             foreach($deletedMembers as $deletedMemberID)
             {
-                $this->gitlab->apiDeleteProjectMember($repo->gitlab, $repo->project, $deletedMemberID);
+                $this->gitlab->apiDeleteProjectMember($repo->gitService, $repo->project, $deletedMemberID);
             }
 
             $repo->acl->users = array_values($accounts);
@@ -1590,7 +1588,7 @@ class gitlab extends control
 
         $repo           = $this->loadModel('repo')->getRepoByID($repoID);
         $users          = $this->loadModel('user')->getPairs('noletter|noempty|nodeleted|noclosed');
-        $projectMembers = $this->gitlab->apiGetProjectMembers($repo->gitlab, $repo->project);
+        $projectMembers = $this->gitlab->apiGetProjectMembers($repo->gitService, $repo->project);
         if(!is_array($projectMembers)) $projectMembers = array();
 
         /* Get users accesslevel. */
@@ -1598,7 +1596,7 @@ class gitlab extends control
         $bindedUsers    = $this->dao->select('openID,account')
             ->from(TABLE_OAUTH)
             ->where('providerType')->eq('gitlab')
-            ->andWhere('providerID')->eq($repo->gitlab)
+            ->andWhere('providerID')->eq($repo->gitService)
             ->fetchPairs();
 
         foreach($projectMembers as $projectMember)

@@ -43,7 +43,7 @@
       </thead>
       <tbody>
         <?php foreach ($gitlabList as $id => $gitlab): ?>
-        <tr class='text' title='<?php if(!$gitlab->isAdminToken) echo $lang->gitlab->tokenLimit;?>'>
+        <tr class='text'>
           <td class='text-center'><?php echo $id;?></td>
           <td class='text-c-name' title='<?php echo $gitlab->name;?>'>
             <?php if(common::hasPriv('gitlab', 'browseProject')):?>
@@ -55,7 +55,7 @@
           <td class='text' title='<?php echo $gitlab->url;?>'><?php echo html::a($gitlab->url, $gitlab->url, '_target');?></td>
           <td class='c-actions text-left'>
             <?php
-            $disabled = (empty($gitlab->isAdminToken) or !$gitlab->isBindUser) ? false : true;
+            $disabled = $gitlab->isBindUser ? true : false;
             common::printIcon('gitlab', 'edit', "gitlabID=$id", '', 'list', 'edit');
             echo common::buildIconButton('gitlab', 'bindUser', "gitlabID=$id", '', 'list', 'link', '', '', false, '', '', 0, $disabled);
             common::printIcon('gitlab', 'delete', "gitlabID=$id", '', 'list', 'trash', 'hiddenwin');

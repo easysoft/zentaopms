@@ -55,7 +55,9 @@
           <td class='text' title='<?php echo $gitea->url;?>'><?php echo html::a($gitea->url, $gitea->url, '_target');?></td>
           <td class='c-actions text-left'>
             <?php
+            $disabled = $gitea->isBindUser ? true : false;
             common::printIcon('gitea', 'edit', "giteaID=$id", '', 'list', 'edit');
+            echo common::buildIconButton('gitea', 'bindUser', "giteaID=$id", '', 'list', 'link', '', '', false, '', '', 0, $disabled);
             common::printIcon('gitea', 'delete', "giteaID=$id", '', 'list', 'trash', 'hiddenwin');
             ?>
           </td>

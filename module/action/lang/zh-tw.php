@@ -127,6 +127,7 @@ $lang->action->objectTypes['gitlabgroup']      = 'GitLab群組';
 $lang->action->objectTypes['gitlabbranch']     = 'GitLab分支';
 $lang->action->objectTypes['gitlabbranchpriv'] = 'GitLab保護分支';
 $lang->action->objectTypes['gitlabtag']        = 'GitLab標籤';
+$lang->action->objectTypes['giteauser']        = 'Gitea用戶';
 $lang->action->objectTypes['kanbanspace']      = '看板空間';
 $lang->action->objectTypes['kanban']           = '看板';
 $lang->action->objectTypes['kanbanregion']     = '看板區域';

@@ -111,6 +111,7 @@ $lang->action->objectTypes['gitlabbranch']     = 'GitLab Branch';
 $lang->action->objectTypes['gitlabbranchpriv'] = 'GitLab Protected Branches';
 $lang->action->objectTypes['gitlabtag']        = 'GitLab Tag';
 $lang->action->objectTypes['gitlabtagpriv']    = 'GitLab Tag Protected';
+$lang->action->objectTypes['giteauser']        = 'Gitea User';
 $lang->action->objectTypes['kanbanspace']      = 'Kanban Space';
 $lang->action->objectTypes['kanban']           = 'Kanban';
 $lang->action->objectTypes['kanbanregion']     = 'Kanban Region';
