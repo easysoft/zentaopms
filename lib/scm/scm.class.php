@@ -251,7 +251,7 @@ class scm
      * @param  string $branch
      * @param  string $ext
      * @access public
-     * @return void
+     * @return string
      */
     public function getDownloadUrl($branch = '', $ext = 'zip')
     {
