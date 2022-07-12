@@ -1544,13 +1544,13 @@ class projectModel extends model
                     /* Child project begin cannot less than parent. */
                     if(!empty($projects[$projectID]->name) and $projects[$projectID]->begin < $parentProject->begin)
                     {
-                        dao::$errors[] = "ID {$projects[$projectID]->id}" . sprintf($this->lang->project->beginGreateChild, $parentProject->begin);
+                        dao::$errors[] = "ID {$projects[$projectID]->id}" . sprintf($this->lang->project->beginGreateChild, $parentProject->begin) . "\n";
                     }
 
                     /* When parent set end then child project end cannot greater than parent. */
                     if(!empty($projects[$projectID]->name) and $parentProject->end != '0000-00-00' and $projects[$projectID]->end > $parentProject->end)
                     {
-                        dao::$errors[] = "ID {$projects[$projectID]->id}" . sprintf($this->lang->project->endLetterChild, $parentProject->end);
+                        dao::$errors[] = "ID {$projects[$projectID]->id}" . sprintf($this->lang->project->endLetterChild, $parentProject->end) . "\n";
                     }
                 }
             }
