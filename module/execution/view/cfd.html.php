@@ -48,7 +48,7 @@
   </div>
 </div>
 <div id='mainContent' class='main-content'>
-  <h2 class='text-center'><?php echo $executionName . ' - ' . zget($lang->execution->cfdTypeList, $type) . $lang->execution->CFD;?> <i class="icon icon-help" data-toggle="tooltip" data-tip-class="tooltip-help" data-trigger='click' data-html='true' data-placement="bottom" title="<?php echo $lang->execution->charts->cfd->cfdTip;?>"></i></h2>
+  <h2 class='text-center'><?php echo $executionName . ' - ' . zget($lang->execution->cfdTypeList, $type) . $lang->execution->CFD;?> <i class="icon icon-help" data-toggle="tooltip" data-tip-class="tooltip-help" data-html='true' data-placement="bottom" title="<?php echo $lang->execution->charts->cfd->cfdTip;?>"></i></h2>
   <?php if(isset($chartData['labels']) and count($chartData['labels']) != 1): ?>
   <div id="cfdWrapper">
     <div id="cfdChart" style="width: 1200px; height: 600px"></div>
