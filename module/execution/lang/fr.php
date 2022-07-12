@@ -434,7 +434,10 @@ $lang->execution->charts->burn->graph->actuality    = 'Actuel';
 $lang->execution->charts->burn->graph->delay        = 'Delay';
 
 $lang->execution->charts->cfd = new stdclass();
-$lang->execution->charts->cfd->cfdTip        = "Le Cumulative Flow Diagram（CFD）indique la tendance de la charge de travail cumulée de chaque étape au fil du temps. L'axe horizontal du CFD représente la date et l'axe vertical représente le nombre d'éléments de travail. Ce rapport vous permet de calculer les quantités de travail en cours (WIP), les taux de livraison et les délais moyens pour comprendre comment votre équipe travaille."
+$lang->execution->charts->cfd->cfdTip        = "<p>
+1. Le CFD（Cumulative Flow Diagram）indique la tendance de la charge de travail cumulée de chaque étape au fil du temps.<br>
+2. L'axe horizontal représente la date et l'axe vertical représente le nombre de travaux.<br>
+3. Ce CFD vous permet de calculer les quantités de travail en cours (WIP), les taux de livraison et les délais moyens pour comprendre comment votre équipe travaille.<p>";
 $lang->execution->charts->cfd->cycleTime     = 'Average cycle time';
 $lang->execution->charts->cfd->cycleTimeTip  = 'Average cycle time of each card from development start to completion';
 $lang->execution->charts->cfd->throughput    = 'Throughput Rate';

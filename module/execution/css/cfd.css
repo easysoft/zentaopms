@@ -1,6 +1,6 @@
 .main-content > h2 {font-size: 16px;}
 #mainContent h2 .icon-help {font-size: 16px; vertical-align: text-bottom;}
-.tooltip-inner {font-size: 13px; letter-spacing: 1px; line-height: 22px; max-width: 400px !important}
+.tooltip-inner {font-size: 13px; letter-spacing: 1px; line-height: 22px; max-width: 400px !important; text-align: left;}
 .container {max-width: 1700px !important}
 
 .pull-left .input-control {margin-right: 10px;}
