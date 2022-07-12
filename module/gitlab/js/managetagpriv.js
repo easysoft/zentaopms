@@ -19,7 +19,7 @@ $.zui.Picker.DEFAULTS.onChange = function(event)
 }
 
 /**
- * Save team members.
+ * Save tag priv.
  *
  * @access public
  * @return void
@@ -67,6 +67,6 @@ function addItem(obj)
  */
 function deleteItem(obj)
 {
-    if($('#teamForm .table-form tbody').children().length < 2) return false;
+    if($('#privForm .table-form tbody').children().length < 2) return false;
     $(obj).closest('tr').remove();
 }

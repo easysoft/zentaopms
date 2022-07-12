@@ -7,7 +7,7 @@
   </div>
 </div>
 <div id='mainContent' class='main-content'>
-  <form class='main-form form-ajax' method='post' id='teamForm'>
+  <form class='main-form form-ajax' method='post' id='privForm'>
     <table class='table table-form'>
       <thead>
         <tr class='text-center'>
