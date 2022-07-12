@@ -2027,6 +2027,7 @@ class bug extends control
      */
     public function batchClose()
     {
+        if($this->post->unlinkBugs) $this->post->bugIDList = $this->post->unlinkBugs;
         if($this->post->bugIDList)
         {
             $bugIDList = $this->post->bugIDList;
