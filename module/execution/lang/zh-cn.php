@@ -437,6 +437,12 @@ $lang->execution->charts->cfd->cycleTimeTip  = '平均每个卡片从开发启�
 $lang->execution->charts->cfd->throughput    = '吞吐率';
 $lang->execution->charts->cfd->throughputTip = '吞吐率 = 在制品 / 平均周期时间';
 
+$lang->execution->charts->cfd->begin          = '开始日期';
+$lang->execution->charts->cfd->end            = '结束日期';
+$lang->execution->charts->cfd->errorBegin     = '开始日期应小于结束日期';
+$lang->execution->charts->cfd->errorDateRange = '累积流图只提供3个月内的数据展示';
+$lang->execution->charts->cfd->dateRangeTip   = '累积流图只展示3个月内的数据';
+
 $lang->execution->placeholder = new stdclass();
 $lang->execution->placeholder->code      = '团队内部的简称';
 $lang->execution->placeholder->totalLeft = "{$lang->executionCommon}开始时的总预计工时";

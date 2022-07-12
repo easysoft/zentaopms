@@ -13,11 +13,14 @@
 <?php include '../../common/view/header.html.php';?>
 <?php js::import($jsRoot . 'echarts/echarts.common.min.js'); ?>
 <?php js::import($jsRoot . 'html2canvas/min.js'); ?>
+<?php js::import($jsRoot . 'misc/base64.js');?>
 <?php js::set('executionID', $executionID); ?>
 <?php js::set('withWeekend', $withWeekend); ?>
 <?php js::set('chartData', $chartData); ?>
 <?php js::set('YUnit', $lang->execution->count); ?>
 <?php js::set('XUnit', $lang->execution->burnXUnit); ?>
+<?php js::set('dateRangeTip', $lang->execution->charts->cfd->dateRangeTip); ?>
+<?php js::set('today', date(DT_DATE1)); ?>
 <div id='mainMenu' class='clearfix'>
   <div class='btn-toolbar pull-left'>
     <?php
@@ -31,6 +34,16 @@
     ?>
     <div class='input-control w-100px'>
       <?php echo html::select('type', $lang->execution->cfdTypeList, $type, "class='form-control chosen'");?>
+    </div>
+    <div id="cfdDateSelect">
+    <form method='post' target='hiddenwin' class='not-watch'>
+      <div class='input-group'>
+      <?php echo html::input('begin', $begin, "class='form-control form-date' onchange='$(\"#datePreview\").removeClass(\"hidden\")' placeholder='" . $lang->execution->charts->cfd->begin . "'");?>
+      <span class='input-group-addon'><?php echo $lang->project->to;?></span>
+      <?php echo html::input('end', $end, "class='form-control form-date' onchange='$(\"#datePreview\").removeClass(\"hidden\")' placeholder='" . $lang->execution->charts->cfd->end . "'");?>
+      </div>
+      <?php echo html::commonButton($lang->preview, "onclick='$(this).closest(\"form\").submit()' id='datePreview'", 'btn btn-primary hidden');?>
+    </form>
     </div>
   </div>
 </div>

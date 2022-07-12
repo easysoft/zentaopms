@@ -1367,7 +1367,7 @@ class execution extends control
      * @access public
      * @return void
      */
-    public function cfd($executionID = 0, $type = 'story', $withWeekend = 'false')
+    public function cfd($executionID = 0, $type = 'story', $withWeekend = 'false', $begin = '', $end = '')
     {
         $execution   = $this->commonAction($executionID);
         $executionID = $execution->id;
@@ -1375,7 +1375,29 @@ class execution extends control
         $this->loadModel('kanban');
         $this->app->loadClass('date');
 
-        list($begin, $end) = $this->execution->getBeginEnd4CFD($execution);
+        if(!empty($_POST))
+        {
+            $begin = htmlspecialchars($this->post->begin, ENT_QUOTES);
+            $end   = htmlspecialchars($this->post->end, ENT_QUOTES);
+
+            if(empty($begin)) return $this->sendError(sprintf($this->lang->error->notempty, $this->lang->execution->charts->cfd->begin));
+            if(empty($end)) return $this->sendError(sprintf($this->lang->error->notempty, $this->lang->execution->charts->cfd->end));
+            if($begin >= $end) return $this->sendError($this->lang->execution->charts->cfd->errorBegin);
+            if(date("Y-m-d", strtotime("-3 months", strtotime($end))) > $begin) return $this->sendError($this->lang->execution->charts->cfd->errorDateRange);
+
+            $this->execution->computeCFD($executionID);
+            return print(js::locate($this->createLink('execution', 'cfd', "executionID=$executionID&type=$type&withWeekend=$withWeekend&begin=" . helper::safe64Encode(urlencode($begin)) . "&end=" . helper::safe64Encode(urlencode($end))), 'parent'));
+        }
+
+        if($begin and $end)
+        {
+            $begin = urldecode(helper::safe64Decode($begin));
+            $end   = urldecode(helper::safe64Decode($end));
+        }
+        else
+        {
+            list($begin, $end) = $this->execution->getBeginEnd4CFD($execution);
+        }
         $dateList = date::getDateList($begin, $end, 'Y-m-d', $withWeekend == 'false'? 'noweekend' : '');
 
         //list($cycleTimeAvg, $throughput) = $this->execution->getCFDStatistics($executionID, $dateList, $type);
@@ -1390,6 +1412,8 @@ class execution extends control
         $this->view->executionName = $execution->name;
         $this->view->executionID   = $executionID;
         $this->view->chartData     = $chartData;
+        $this->view->begin         = $begin;
+        $this->view->end           = $end;
         $this->display();
     }
 
