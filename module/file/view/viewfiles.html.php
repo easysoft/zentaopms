@@ -106,7 +106,7 @@
                   /* For the open source version of the file judgment. */
                   if(stripos('txt|jpg|jpeg|gif|png|bmp', $file->extension) !== false)
                   {
-                      echo html::a($downloadLink, $lang->file->preview, '_blank', "class='btn btn-link text-primary fileAction' onclick=\"return downloadFile($file->id, '$file->extension', $imageWidth, '$file->title')\"");
+                      echo html::a($downloadLink, $lang->file->preview, '_blank', "class='fileAction btn btn-link text-primary' onclick=\"return downloadFile($file->id, '$file->extension', $imageWidth, '$file->title')\"");
                   }
 
                   /* For the max version of the file judgment. */
@@ -115,13 +115,13 @@
                       $officeTypes = 'doc|docx|xls|xlsx|ppt|pptx|pdf';
                       if(stripos($officeTypes, $file->extension) !== false)
                       {
-                          echo html::a($downloadLink, $lang->file->preview, '_blank', "class='btn btn-link text-primary fileAction' onclick=\"return downloadFile($file->id, '$file->extension', $imageWidth, '$file->title')\"");
+                          echo html::a($downloadLink, $lang->file->preview, '_blank', "class='fileAction btn btn-link text-primary' onclick=\"return downloadFile($file->id, '$file->extension', $imageWidth, '$file->title')\"");
                       }
                   }
 
-                  common::printLink('file', 'download', "fileID=$file->id", $lang->file->downloadFile, '_blank', "class='btn btn-link text-primary fileAction' title='{$lang->file->downloadFile}'");
-                  common::printLink('file', 'edit', "fileID=$file->id", $lang->file->edit, '', "data-width='400' class='btn btn-link edit iframe text-primary fileAction' title='{$lang->file->edit}'");
-                  if(common::hasPriv('file', 'delete')) echo html::a('###', $lang->delete, '', "class='btn btn-link text-primary fileAction' onclick='deleteFile($file->id)' title='$lang->delete'");
+                  common::printLink('file', 'download', "fileID=$file->id", $lang->file->downloadFile, '_blank', "class='fileAction btn btn-link text-primary' title='{$lang->file->downloadFile}'");
+                  common::printLink('file', 'edit', "fileID=$file->id", $lang->file->edit, '', "data-width='400' class='fileAction btn btn-link edit iframe text-primary' title='{$lang->file->edit}'");
+                  if(common::hasPriv('file', 'delete')) echo html::a('###', $lang->delete, '', "class='fileAction btn btn-link text-primary' onclick='deleteFile($file->id)' title='$lang->delete'");
                   echo '</span>';
               }
               echo '</li>';

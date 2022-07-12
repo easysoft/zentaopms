@@ -31,3 +31,7 @@
 #burnStatistics .bg-primary {margin-right: 5px;}
 #burnStatistics .icon-help {color: black;}
 #burnStatistics h3 {margin-top: 10px; text-indent: 10px; margin-bottom: 30px;}
+
+#cfdDateSelect {float: left;}
+#cfdDateSelect .input-group {width: 300px; float: left;}
+#datePreview {float: left; margin-left: 10px;}

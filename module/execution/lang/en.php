@@ -437,6 +437,12 @@ $lang->execution->charts->cfd->cycleTimeTip  = 'Average cycle time of each card 
 $lang->execution->charts->cfd->throughput    = 'Throughput Rate';
 $lang->execution->charts->cfd->throughputTip = 'Throughput Rate = WIP / Average cycle time';
 
+$lang->execution->charts->cfd->begin          = 'Begin';
+$lang->execution->charts->cfd->end            = 'End';
+$lang->execution->charts->cfd->errorBegin     = 'The start time cannot be greater than the end time.';
+$lang->execution->charts->cfd->errorDateRange = 'The Cumulative Flow Diagram（CFD） only provides data display within 3 months.';
+$lang->execution->charts->cfd->dateRangeTip   = 'CFD only shows the data within 3 months';
+
 $lang->execution->placeholder = new stdclass();
 $lang->execution->placeholder->code      = "Abbreviation of {$lang->executionCommon} name";
 $lang->execution->placeholder->totalLeft = "Hours estimated on the first day of the {$lang->executionCommon}.";

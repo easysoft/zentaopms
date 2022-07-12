@@ -132,6 +132,11 @@ $(function()
     {
         var type    = $('#type').val();
         withWeekend = withWeekend == 'true' ? 'false' : 'true';
-        location.href = createLink('execution', 'cfd', 'executionID=' + executionID + '&type=' + type + '&withWeekend=' + withWeekend);
+        var begin   = Base64.encode(encodeURIComponent($('#begin').val()));
+        var end     = Base64.encode(encodeURIComponent($('#end').val()));
+        location.href = createLink('execution', 'cfd', 'executionID=' + executionID + '&type=' + type + '&withWeekend=' + withWeekend + '&begin=' + begin + '&end=' + end);
     });
+
+    $("#end, #begin").datetimepicker('setEndDate', today)
+    $('.datetimepicker-days table tfoot tr th').html(dateRangeTip).removeClass('today');
 });
