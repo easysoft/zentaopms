@@ -450,7 +450,7 @@ class program extends control
      * @access public
      * @return void
      */
-    public function project($programID = 0, $browseType = 'doing', $orderBy = 'order_desc', $recTotal = 0, $recPerPage = 15, $pageID = 1)
+    public function project($programID = 0, $browseType = 'all', $orderBy = 'order_desc', $recTotal = 0, $recPerPage = 15, $pageID = 1)
     {
         $programID = $this->program->saveState($programID, $this->program->getPairs());
         setCookie("lastProgram", $programID, $this->config->cookieLife, $this->config->webRoot, '', false, true);
@@ -472,6 +472,13 @@ class program extends control
         $order        = explode('_', $orderBy);
         $sortField    = zget($this->config->program->sortFields, $order[0], 'id') . '_' . $order[1];
         $projectStats = $this->program->getProjectStats($programID, $browseType, 0, $sortField, $pager, $programTitle);
+
+        $allProjectsNum = $this->dao->select('COUNT(id) AS count')->from(TABLE_PROJECT)
+            ->where('parent')->eq($programID)
+            ->andWhere('type')->eq('project')
+            ->andWhere('deleted')->eq(0)
+            ->fetch();
+        $this->view->allProjectsNum = $allProjectsNum;
 
         $this->view->title      = $this->lang->program->project;
         $this->view->position[] = $this->lang->program->project;
