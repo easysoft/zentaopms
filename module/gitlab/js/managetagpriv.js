@@ -40,8 +40,8 @@ function savePriv()
  */
 function addItem(obj)
 {
-    var item = $('#addItem').html().replace(/%i%/g, itemIndex);
-    var $tr  = $('<tr class="addedItem">' + item  + '</tr>').insertAfter($(obj).closest('tr'));
+    var item      = $('#addItem').html().replace(/%i%/g, itemIndex);
+    var $tr       = $('<tr class="addedItem">' + item  + '</tr>').insertAfter($(obj).closest('tr'));
     var $accounts = $tr.find('select:first').addClass('user-picker').trigger('list:updated').picker({type: 'user'});
     itemIndex++;
 
@@ -50,7 +50,7 @@ function addItem(obj)
     {
         if(this === $accounts[0]) return;
         var $select = $(this);
-        var picker = $select.data('zui.picker');
+        var picker  = $select.data('zui.picker');
         if(!picker) return;
         var selectItem = picker.getListItem(picker.getValue());
         if(selectItem) disabledItems.push($.extend({}, selectItem, {disabled: true}));
