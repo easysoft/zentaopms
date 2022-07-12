@@ -1,3 +1,13 @@
+$(function()
+{
+    $('input[name^="showTask"]').click(function()
+    {
+        var show = $(this).is(':checked') ? 1 : 0;
+        $.cookie('showTask', show, {expires:config.cookieLife, path:config.webRoot});
+        window.location.reload();
+    });
+})
+
 window.addEventListener('scroll', this.handleScroll)
 function handleScroll(e)
 {

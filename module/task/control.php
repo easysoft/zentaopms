@@ -48,6 +48,7 @@ class task extends control
         $executions  = $this->execution->getPairs(0, 'all', !common::canModify('execution', $execution) ? 'noclosed' : '');
         $executionID = $this->execution->saveState($executionID, $executions);
         $this->execution->setMenu($executionID);
+        if($this->app->tab == 'project') $this->loadModel('project')->setMenu($this->session->project);
 
         $this->execution->getLimitedExecution();
         $limitedExecutions = !empty($_SESSION['limitedExecutions']) ? $_SESSION['limitedExecutions'] : '';
@@ -332,6 +333,7 @@ class task extends control
 
         /* Set menu. */
         $this->execution->setMenu($execution->id);
+        if($this->app->tab == 'project') $this->loadModel('project')->setMenu($this->session->project);
 
         /* When common task are child tasks, query whether common task are consumed. */
         $taskConsumed = 0;
@@ -539,6 +541,8 @@ class task extends control
                 return print(js::locate($this->createLink('task', 'view', "taskID=$taskID"), 'parent'));
             }
         }
+
+        if($this->app->tab == 'project') $this->loadModel('project')->setMenu($this->session->project);
 
         $tasks = $this->task->getParentTaskPairs($this->view->execution->id, $this->view->task->parent);
         if(isset($tasks[$taskID])) unset($tasks[$taskID]);
@@ -855,6 +859,7 @@ class task extends control
         $this->session->set('executionList', $this->app->getURI(true), 'execution');
 
         $this->commonAction($taskID);
+        if($this->app->tab == 'project') $this->loadModel('project')->setMenu($this->session->project);
 
         $taskID = (int)$taskID;
         $task   = $this->task->getById($taskID, true);
@@ -1803,7 +1808,7 @@ class task extends control
             $showmore = ($count == 50 and $task == end($tasks)) ? 'showmore' : '';
 
             $body .= "<tr data-parent=$executionID data-id=$task->id data-nest-path='$path' data-nest-parent=$executionID class='is-nest-child $showmore'>";
-            $body .= '<td>' . html::a($this->createLink('task', 'view', "id=$task->id"), $task->name) . '</td>';
+            $body .= '<td>' . html::a($this->createLink('task', 'view', "id=$task->id"), $task->name, '', "data-app='project'") . '</td>';
             $body .= '<td>' . zget($users, $task->assignedTo, '') . '</td>';
             $body .= '<td>' . zget($this->lang->task->statusList, $task->status, '') . '</td>';
             $body .= '<td></td>';
@@ -1824,7 +1829,7 @@ class task extends control
                     $path = $execution->grade == 2 ? "$execution->parent,$execution->id,$childTask->parent,$childTask->id," : ",$execution->id,$childTask->parent,$childTask->id,";
 
                     $body .= "<tr data-parent=$executionID data-id=$childTask->id data-nest-path='$path' data-nest-parent=$executionID class='is-nest-child no-nest'>";
-                    $body .= '<td>' . html::a($this->createLink('task', 'view', "id=$childTask->id"), $childTask->name) . '</td>';
+                    $body .= '<td>' . html::a($this->createLink('task', 'view', "id=$childTask->id"), $childTask->name, '', "data-app='project'") . '</td>';
                     $body .= '<td>' . zget($users, $childTask->assignedTo, '') . '</td>';
                     $body .= '<td>' . zget($this->lang->task->statusList, $childTask->status, '') . '</td>';
                     $body .= '<td></td>';

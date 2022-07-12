@@ -23,6 +23,7 @@
     <?php if($status == $key) $label .= " <span class='label label-light label-badge'>{$pager->recTotal}</span>";?>
     <?php echo html::a($this->createLink('project', 'execution', "status=$key&projectID=$projectID&orderBy=$orderBy&productID=$productID"), $label, '', "class='btn btn-link' id='{$key}Tab'");?>
     <?php endforeach;?>
+    <?php echo html::checkbox('showTask', array('1' => $lang->programplan->stageCustom->task), '', $this->cookie->showTask ? 'checked=checked' : '');?>
   </div>
   <div class='btn-toolbar pull-right'>
     <?php common::printLink('execution', 'export', "status=$status&productID=$productID&orderBy=$orderBy&from=project", "<i class='icon-export muted'> </i> " . $lang->export, '', "class='btn btn-link export'")?>
@@ -82,6 +83,9 @@
         <tr <?php echo $trAttrs;?> class="<?php echo $trClass;?>">
           <td>
             <span id = <?php echo $execution->id;?> class="table-nest-icon icon table-nest-toggle"></span>
+            <?php if($config->systemMode == 'new'):?>
+            <span class='project-type-label label label-outline <?php echo $execution->type == 'stage' ? 'label-warning' : 'label-info';?>'><?php echo $lang->execution->typeList[$execution->type]?></span>
+            <?php endif;?>
             <?php echo html::a($this->createLink('execution', 'view', "executionID=$execution->id"), $execution->name);?>
           </td>
           <td><?php echo zget($users, $execution->PM);?></td>
@@ -139,7 +143,7 @@
         if($task == end($child->tasks) and count($execution->tasks) == 50) $trClass .= ' showmore';
         ?>
         <tr <?php echo $trAttrs;?> class='<?php echo $trClass;?>'>
-          <td><?php echo html::a($this->createLink('task', 'view', "id=$task->id"), $task->name);?></td>
+          <td><?php echo html::a($this->createLink('task', 'view', "id=$task->id"), $task->name, '', "data-app={$this->app->tab}");?></td>
           <td><?php echo zget($users, $task->assignedTo);?></td>
           <td><?php echo zget($lang->task->statusList, $task->status);?></td>
           <td></td>
@@ -189,6 +193,9 @@
         ?>
         <tr <?php echo $trAttrs;?> class='<?php echo $trClass;?>'>
           <td>
+            <?php if($config->systemMode == 'new'):?>
+            <span class='project-type-label label label-outline <?php echo $child->type == 'stage' ? 'label-warning' : 'label-info';?>'><?php echo $lang->execution->typeList[$child->type]?></span>
+            <?php endif;?>
             <?php echo html::a($this->createLink('execution', 'view', "executionID=$child->id"), $child->name);?>
           </td>
           <td><?php echo zget($users, $child->PM);?></td>
@@ -246,7 +253,7 @@
         if($task == end($child->tasks) and count($child->tasks) == 50) $trClass .= ' showmore';
         ?>
         <tr <?php echo $trAttrs;?> class='<?php echo $trClass;?>'>
-          <td><?php echo html::a($this->createLink('task', 'view', "id=$task->id"), $task->name);?></td>
+          <td><?php echo html::a($this->createLink('task', 'view', "id=$task->id"), $task->name, '', "data-app={$this->app->tab}");?></td>
           <td><?php echo zget($users, $task->assignedTo);?></td>
           <td><?php echo zget($lang->task->statusList, $task->status);?></td>
           <td></td>
