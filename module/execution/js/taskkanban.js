@@ -388,8 +388,6 @@ function renderHeaderCol($col, col, $header, kanban)
 {
     if(col.asParent) $col = $col.children('.kanban-header-col');
     if($col.children('.actions').context != undefined || (groupBy == 'story' && col.type == 'story')) return;
-    console.log(groupBy);
-    console.log(col.type);
 
     var $actions = $('<div class="actions createButton" />');
     var printStoryButton =  printTaskButton = printBugButton = false;
