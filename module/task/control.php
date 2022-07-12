@@ -1806,8 +1806,9 @@ class task extends control
         {
             $path = $execution->grade == 2 ? "$execution->parent,$execution->id,$task->id," : ",$execution->id,$task->id,";
             $showmore = ($count == 50 and $task == end($tasks)) ? 'showmore' : '';
+            $trAttrs  = empty($task->children) ? " data-nested='false'" : '';
 
-            $body .= "<tr data-parent=$executionID data-id=$task->id data-nest-path='$path' data-nest-parent=$executionID class='is-nest-child $showmore'>";
+            $body .= "<tr data-parent=$executionID data-id=$task->id data-nest-path='$path' $trAttrs data-nest-parent=$executionID class=' $showmore'>";
             $body .= '<td>' . html::a($this->createLink('task', 'view', "id=$task->id"), $task->name, '', "data-app='project'") . '</td>';
             $body .= '<td>' . zget($users, $task->assignedTo, '') . '</td>';
             $body .= '<td>' . zget($this->lang->task->statusList, $task->status, '') . '</td>';
@@ -1828,7 +1829,7 @@ class task extends control
                 {
                     $path = $execution->grade == 2 ? "$execution->parent,$execution->id,$childTask->parent,$childTask->id," : ",$execution->id,$childTask->parent,$childTask->id,";
 
-                    $body .= "<tr data-parent=$executionID data-id=$childTask->id data-nest-path='$path' data-nest-parent=$executionID class='is-nest-child no-nest'>";
+                    $body .= "<tr data-parent=$executionID data-id=$childTask->id data-nest-path=$path data-nested='false' data-nest-parent=$executionID class='is-nest-child no-nest'>";
                     $body .= '<td>' . html::a($this->createLink('task', 'view', "id=$childTask->id"), $childTask->name, '', "data-app='project'") . '</td>';
                     $body .= '<td>' . zget($users, $childTask->assignedTo, '') . '</td>';
                     $body .= '<td>' . zget($this->lang->task->statusList, $childTask->status, '') . '</td>';

@@ -140,6 +140,7 @@
         $trAttrs  = "data-id={$task->id} data-parent={$task->execution}";
         $trClass .= " is-nest-child no-nest";
         $trAttrs .= " data-nest-parent='$task->execution' data-nest-path=',$execution->id,$task->id,'";
+        if(empty($task->children)) $trAttrs .= " data-nested='false'";
         if($task == end($child->tasks) and count($execution->tasks) == 50) $trClass .= ' showmore';
         ?>
         <tr <?php echo $trAttrs;?> class='<?php echo $trClass;?>'>
@@ -179,7 +180,6 @@
         </tr>
         <?php endforeach;?>
         <?php endif;?>
-
         <?php endforeach;?>
         <?php endif;?>
 
@@ -250,6 +250,7 @@
         $trAttrs  = "data-id={$task->id} data-parent={$task->execution}";
         $trClass .= " is-nest-child no-nest";
         $trAttrs .= " data-nest-parent='$task->execution' data-nest-path=',$execution->id,$child->id,$task->id,'";
+        if(empty($task->children)) $trAttrs .= " data-nested='false'";
         if($task == end($child->tasks) and count($child->tasks) == 50) $trClass .= ' showmore';
         ?>
         <tr <?php echo $trAttrs;?> class='<?php echo $trClass;?>'>
@@ -272,7 +273,7 @@
         $trClass  = '';
         $trAttrs  = "data-id={$childTask->id} data-parent={$child->parent}";
         $trClass .= " is-nest-child no-nest";
-        $trAttrs .= " data-nest-parent='$childTask->parent' data-nest-path=',$execution->id,$child->id,$childTask->parent,$childTask->id,'";
+        $trAttrs .= " data-nest-parent='$childTask->parent' data-nest-path=',$execution->id,$child->id,$childTask->parent,$childTask->id,' data-nested='false'";
         ?>
         <tr <?php echo $trAttrs;?> class='<?php echo $trClass;?>'>
           <td><?php echo html::a($this->createLink('task', 'view', "id=$childTask->id"), $childTask->name);?></td>
