@@ -1200,8 +1200,7 @@ class story extends control
     public function view($storyID, $version = 0, $param = 0)
     {
         $uri = $this->app->getURI(true);
-        $this->session->set('productList',     $uri . "#app={$this->app->tab}", 'product');
-        $this->session->set('productPlanList', $uri, 'product');
+        $this->session->set('productList', $uri . "#app={$this->app->tab}", 'product');
 
         $storyID = (int)$storyID;
         $story   = $this->story->getById($storyID, $version, true);
