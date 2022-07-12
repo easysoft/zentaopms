@@ -22,3 +22,4 @@
 #copyKanbanModal .copyContentBox {display: inline-block;}
 #copyKanbanModal .copyContentBox > .checkbox-primary {display: inline-block; margin-left: 10px; margin-top: -1px;}
 #copyKanbanModal .copyContentBox > .checkbox-primary:first-child {margin-left: 20px;}
+#copyContentbasicInfo {cursor: not-allowed;}
