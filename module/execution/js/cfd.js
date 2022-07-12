@@ -138,5 +138,5 @@ $(function()
     });
 
     $("#end, #begin").datetimepicker('setEndDate', today)
-    $('.datetimepicker-days table tfoot tr th').html(dateRangeTip).removeClass('today');
+    $('.datetimepicker-days table tfoot').append('<tr><th colspan="7">' + dateRangeTip + '</th></tr>');
 });

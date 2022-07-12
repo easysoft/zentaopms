@@ -1389,6 +1389,7 @@ class execution extends control
             if(date("Y-m-d", strtotime("-3 months", strtotime($end))) > $begin) return $this->sendError($this->lang->execution->charts->cfd->errorDateRange);
 
             $this->execution->computeCFD($executionID);
+            $this->execution->checkCFDData($executionID, $begin);
             return print(js::locate($this->createLink('execution', 'cfd', "executionID=$executionID&type=$type&withWeekend=$withWeekend&begin=" . helper::safe64Encode(urlencode($begin)) . "&end=" . helper::safe64Encode(urlencode($end))), 'parent'));
         }
 

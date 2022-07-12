@@ -3073,6 +3073,42 @@ class executionModel extends model
     }
 
     /**
+     * Check whether there is data on the specified date of execution, and there is no data with the latest date added.
+     *
+     * @param int    $executionID
+     * @param string $date
+     * @access public
+     * @return void
+     */
+    public function checkCFDData($executionID, $date)
+    {
+        $today = helper::today();
+        if($date >= $today) return;
+
+        $checkData = $this->dao->select("date, `count` AS value, `name`")->from(TABLE_CFD)
+            ->where('execution')->eq((int)$executionID)
+            ->andWhere('date')->eq($date)
+            ->orderBy('date DESC, id asc')->fetchGroup('name', 'date');
+        if(!$checkData)
+        {
+            $closetoDate = $this->dao->select("max(date) as date")->from(TABLE_CFD)->where('execution')->eq((int)$executionID)->andWhere('date')->lt($date)->fetch('date');
+            if($closetoDate)
+            {
+                $copyData = $this->dao->select("*")->from(TABLE_CFD)
+                    ->where('execution')->eq((int)$executionID)
+                    ->andWhere('date')->eq($closetoDate)
+                    ->fetchAll();
+                foreach($copyData as $data)
+                {
+                    unset($data->id);
+                    $data->date = $date;
+                    $this->dao->replace(TABLE_CFD)->data($data)->exec();
+                }
+            }
+        }
+    }
+
+    /**
      * Fix burn for first day.
      *
      * @param  int    $executionID
