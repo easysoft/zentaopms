@@ -43,7 +43,7 @@ function renderUserAvatar(user, objectType, objectID, size, objectStatus)
     if(objectType == 'task')
     {
         if(!priv.canAssignTask && !user) return $noPrivAndNoAssigned;
-        var link = createLink('task', 'assignto', 'executionID=' + executionID + '&id=' + objectID, '', true);
+        var link = createLink('task', 'assignto', 'executionID=' + executionID + '&id=' + objectID + '&kanbanGroup=default&from=taskkanban', '', true);
     }
     if(objectType == 'story')
     {
@@ -671,7 +671,7 @@ function changeCardColType(cardID, fromColID, toColID, fromLaneID, toLaneID, car
             }
             if(fromColType == 'pause' && priv.canActivateTask)
             {
-                var link = createLink('task', 'restart', 'taskID=' + objectID + '&extra=from=' + 'taskkanban', '', true);
+                var link = createLink('task', 'restart', 'taskID=' + objectID + '&from=' + 'taskkanban', '', true);
                 showIframe = true;
             }
             if(fromColType == 'wait' && priv.canStartTask)
