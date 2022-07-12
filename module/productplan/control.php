@@ -350,6 +350,7 @@ class productplan extends control
             $this->view->branchID   = $branchID;
             $this->view->kanbanData = $this->loadModel('kanban')->getPlanKanban($product, $branchID, $planGroup);
         }
+
         $productPlansNum = $this->dao->select('COUNT(id) AS count')->from(TABLE_PRODUCTPLAN)
              ->where('product')->eq($productID)
              ->andWhere('deleted')->eq(0)

@@ -3686,7 +3686,6 @@ class execution extends control
         $parents = array();
         if($parentIdList) $parents = $this->execution->getByIdList($parentIdList);
 
-
         $allExecutionsNum = $this->dao->select('COUNT(id) AS count')->from(TABLE_PROJECT)
             ->where('project')->eq($projectID)
             ->andWhere('deleted')->eq(0)
