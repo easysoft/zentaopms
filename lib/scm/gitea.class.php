@@ -34,7 +34,7 @@ class gitea
     public function ls($path, $revision = 'HEAD')
     {
         if(!scm::checkRevision($revision)) return array();
-        $api  = "contents";
+        $api = "contents";
 
         $param = new stdclass();
         $param->path      = ltrim($path, '/');
@@ -101,8 +101,8 @@ class gitea
      */
     public function files($path, $ref = 'master')
     {
-        $path = urlencode($path);
-        $api  = "contents/$path";
+        $path  = urlencode($path);
+        $api   = "contents/$path";
         $param = new stdclass();
         $param->ref = $ref;
         $file = $this->fetch($api, $param);
