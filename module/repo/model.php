@@ -2032,7 +2032,7 @@ class repoModel extends model
 
         $repo->gitService = $service ? $service->id : 0;
         $repo->project    = $service ? $repo->path : ''; // The projectID in gitlab.
-        $repo->path       = $service ? sprintf($this->config->repo->gitlab->apiPath, $service->url, $repo->path) : '';
+        $repo->path       = $service ? sprintf($this->config->repo->{$service->type}->apiPath, $service->url, $repo->path) : '';
         $repo->client     = $service ? $service->url : '';
         $repo->password   = $service ? $service->token : '';
         return $repo;
