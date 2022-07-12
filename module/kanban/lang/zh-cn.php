@@ -215,6 +215,9 @@ $lang->kanban->error->childLimitNote    = '子列在制品数量之和不能大�
 $lang->kanban->error->importObjNotEmpty = '请至少选择一个导入对象';
 $lang->kanban->error->childLimitEmpty   = '请先设置子列的在制品数量后再操作';
 
+$lang->kanban->orderList['pri_asc']  = '需求优先级正序排序';
+$lang->kanban->orderList['pri_desc'] = '需求优先级倒序排序';
+
 $lang->kanban->importList = array();
 $lang->kanban->importList['off'] = '不启用导入功能';
 $lang->kanban->importList['on']  = '启用导入功能（可以导入自己有权查看的内容作为卡片）';

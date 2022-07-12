@@ -872,7 +872,7 @@ class kanbanModel extends model
      */
     public function getRDKanban($executionID, $browseType = 'all', $orderBy = 'id_desc', $regionID = 0, $groupBy = 'default', $searchValue = '')
     {
-        if($groupBy != 'default' and $groupBy != '') return $this->getKanban4Group($executionID, $browseType, $groupBy, $searchValue);
+        if($groupBy != 'default' and $groupBy != '') return $this->getKanban4Group($executionID, $browseType, $groupBy, $searchValue, $orderBy);
 
         $kanbanData   = array();
         $actions      = array('sortGroup');
@@ -1393,9 +1393,9 @@ class kanbanModel extends model
      * @access public
      * @return array
      */
-    public function getExecutionKanban($executionID, $browseType = 'all', $groupBy = 'default', $searchValue = '')
+    public function getExecutionKanban($executionID, $browseType = 'all', $groupBy = 'default', $searchValue = '', $orderBy = 'pri_asc')
     {
-        if($groupBy != 'default') return $this->getKanban4Group($executionID, $browseType, $groupBy, $searchValue);
+        if($groupBy != 'default') return $this->getKanban4Group($executionID, $browseType, $groupBy, $searchValue, $orderBy);
 
         $lanes = $this->dao->select('*')->from(TABLE_KANBANLANE)
             ->where('execution')->eq($executionID)
@@ -1516,11 +1516,12 @@ class kanbanModel extends model
      * @param  string $browseType
      * @param  string $groupBy
      * @param  string $searchValue
+     * @param  string $orderBy
      *
      * @access public
      * @return array
      */
-    public function getKanban4Group($executionID, $browseType, $groupBy, $searchValue = '')
+    public function getKanban4Group($executionID, $browseType, $groupBy, $searchValue = '', $orderBy = 'pri_asc')
     {
         /* Get card  data. */
         $cardList = array();
@@ -1546,7 +1547,8 @@ class kanbanModel extends model
         if($browseType == 'bug')   $bugCardMenu   = $this->getKanbanCardMenu($executionID, $cardList, 'bug');
         if($browseType == 'task')  $taskCardMenu  = $this->getKanbanCardMenu($executionID, $cardList, 'task');
 
-        $lanes = $this->getLanes4Group($executionID, $browseType, $groupBy, $cardList);
+        if($groupBy == 'story' and $browseType == 'task' and !isset($this->lang->kanban->orderList[$orderBy])) $orderBy = 'pri_asc';
+        $lanes = $this->getLanes4Group($executionID, $browseType, $groupBy, $cardList, $orderBy);
         if(empty($lanes)) return array();
 
         $execution = $this->loadModel('execution')->getByID($executionID);
@@ -1592,6 +1594,33 @@ class kanbanModel extends model
             $laneData['order']           = $lane->order;
             $laneData['type']            = $browseType;
             $laneData['defaultCardType'] = $browseType;
+
+            if($browseType == 'task' and $groupBy == 'story')
+            {
+                $columnData[0]['id']         = 0;
+                $columnData[0]['type']       = 'story';
+                $columnData[0]['name']       = zget($this->lang->kanban->orderList, $orderBy, '');
+                $columnData[0]['color']      = '#333';
+                $columnData[0]['limit']      = '-1';
+                $columnData[0]['laneType']   = $browseType;
+                $columnData[0]['asParent']   = false;
+                $columnData[0]['parentType'] = '';
+                $columnData[0]['actions']    = array();
+
+                if(empty($searchValue) or strpos($lane->name, $searchValue) !== false)
+                {
+                    $cardData = array();
+                    $cardData['id']         = $laneID;
+                    $cardData['title']      = $lane->name;
+                    $cardData['order']      = 1;
+                    $cardData['pri']        = $lane->pri;
+                    $cardData['estimate']   = '';
+                    $cardData['assignedTo'] = $lane->assignedTo;
+                    $cardData['deadline']   = '';
+                    $cardData['severity']   = '';
+                    $laneData['cards']['story'][] = $cardData;
+                }
+            }
 
             /* Construct kanban column data. */
             foreach($columns as $column)
@@ -1684,9 +1713,11 @@ class kanbanModel extends model
      * @param  string $browseType
      * @param  string $groupBy
      * @param  array  $cardList
+     * @param  string $orderBy
+     *
      * @return array
      */
-    public function getLanes4Group($executionID, $browseType, $groupBy, $cardList)
+    public function getLanes4Group($executionID, $browseType, $groupBy, $cardList, $orderBy = 'pri_asc')
     {
         $lanes       = array();
         $groupByList = array();
@@ -1719,7 +1750,14 @@ class kanbanModel extends model
                 $objectPairs += $this->dao->select('id,title')->from(TABLE_STORY)
                     ->where('deleted')->eq(0)
                     ->andWhere('id')->in($groupByList)
+                    ->orderBy($orderBy)
                     ->fetchPairs();
+
+                $objects = $this->dao->select('*')->from(TABLE_STORY)
+                    ->where('deleted')->eq(0)
+                    ->andWhere('id')->in($groupByList)
+                    ->orderBy($orderBy)
+                    ->fetchAll('id');
             }
             else
             {
@@ -1747,12 +1785,14 @@ class kanbanModel extends model
             if(!isset($groupByList[$objectType]) and $objectType and !in_array($objectType, array('feature', 'design'))) continue;
 
             $lane = new stdclass();
-            $lane->id        = $groupBy . $objectType;
-            $lane->type      = $browseType;
-            $lane->execution = $executionID;
-            $lane->name      = $objectName;
-            $lane->order     = $order;
-            $lane->color     = $this->config->kanban->laneColorList[$laneColor];
+            $lane->id         = $groupBy . $objectType;
+            $lane->type       = $browseType;
+            $lane->execution  = $executionID;
+            $lane->name       = $objectName;
+            $lane->order      = $order;
+            $lane->color      = $this->config->kanban->laneColorList[$laneColor];
+            $lane->pri        = (isset($objects) and isset($objects[$objectType]->pri)) ? $objects[$objectType]->pri : '';
+            $lane->assignedTo = (isset($objects) and isset($objects[$objectType]->assignedTo)) ? $objects[$objectType]->assignedTo : '';
 
             $order     += 1;
             $laneColor += 1;
