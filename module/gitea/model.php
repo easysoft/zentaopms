@@ -147,7 +147,7 @@ class giteaModel extends model
                     ->andWhere('providerType')->eq($user->providerType)
                     ->andWhere('providerID')->eq($user->providerID)
                     ->exec();
-                $this->loadModel('action')->create('giteauser', $openID, 'unbind', '', sprintf($this->lang->gitea->bindDynamic, $giteaNames[$openID], $zentaoUsers[$existAccount->account]->realname));
+                $this->loadModel('action')->create('giteauser', $giteaID, 'unbind', '', sprintf($this->lang->gitea->bindDynamic, $giteaNames[$openID], $zentaoUsers[$existAccount->account]->realname));
             }
             if(!$existAccount or $existAccount->account != $account)
             {
@@ -155,7 +155,7 @@ class giteaModel extends model
                 $user->account = $account;
                 $user->openID  = $openID;
                 $this->dao->insert(TABLE_OAUTH)->data($user)->exec();
-                $this->loadModel('action')->create('giteauser', $openID, 'bind', '', sprintf($this->lang->gitea->bindDynamic, $giteaNames[$openID], $zentaoUsers[$account]->realname));
+                $this->loadModel('action')->create('giteauser', $giteaID, 'bind', '', sprintf($this->lang->gitea->bindDynamic, $giteaNames[$openID], $zentaoUsers[$account]->realname));
             }
         }
     }
@@ -294,6 +294,23 @@ class giteaModel extends model
             ->where('providerType')->eq('gitea')
             ->andWhere('providerID')->eq($giteaID)
             ->fetchPairs();
+    }
+
+    /**
+     * Get gitea user id by zentao account.
+     *
+     * @param  int    $giteaID
+     * @param  string $zentaoAccount
+     * @access public
+     * @return array
+     */
+    public function getUserIDByZentaoAccount($giteaID, $zentaoAccount)
+    {
+        return $this->dao->select('openID')->from(TABLE_OAUTH)
+            ->where('providerType')->eq('gitea')
+            ->andWhere('providerID')->eq($giteaID)
+            ->andWhere('account')->eq($zentaoAccount)
+            ->fetch('openID');
     }
 
     /**

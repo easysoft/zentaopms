@@ -43,6 +43,7 @@ class gitea extends control
 
         /* Admin user don't need bind. */
         $giteaList = $this->gitea->getList($orderBy, $pager);
+        $myGiteas  = $this->gitea->getGiteaListByAccount();
         foreach($giteaList as $gitea)
         {
             $gitea->isBindUser = true;
