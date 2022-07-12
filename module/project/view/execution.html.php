@@ -82,7 +82,7 @@
         <tr <?php echo $trAttrs;?> class="<?php echo $trClass;?>">
           <td>
             <span id = <?php echo $execution->id;?> class="table-nest-icon icon table-nest-toggle"></span>
-            <?php echo $execution->name;?>
+            <?php echo html::a($this->createLink('execution', 'view', "executionID=$execution->id"), $execution->name);?>
           </td>
           <td><?php echo zget($users, $execution->PM);?></td>
           <td><?php echo zget($lang->project->statusList, $execution->status);?></td>
@@ -189,7 +189,7 @@
         ?>
         <tr <?php echo $trAttrs;?> class='<?php echo $trClass;?>'>
           <td>
-            <?php echo $child->name;?>
+            <?php echo html::a($this->createLink('execution', 'view', "executionID=$child->id"), $child->name);?>
           </td>
           <td><?php echo zget($users, $child->PM);?></td>
           <td><?php echo zget($lang->project->statusList, $child->status);?></td>
