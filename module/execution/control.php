@@ -3686,11 +3686,8 @@ class execution extends control
         $parents = array();
         if($parentIdList) $parents = $this->execution->getByIdList($parentIdList);
 
-        $allExecutionsNum = $this->dao->select('COUNT(id) AS count')->from(TABLE_PROJECT)
-            ->where('project')->eq($projectID)
-            ->andWhere('deleted')->eq(0)
-            ->fetch();
-        $this->view->allExecutionsNum = $allExecutionsNum;
+        $allExecutionsNum = $this->project->getStats($projectID, 'all');
+        $this->view->allExecutionsNum = count($allExecutionsNum);
 
         $this->view->executionStats = $executionStats;
         $this->view->productList    = $this->loadModel('product')->getProductPairsByProject($projectID);
