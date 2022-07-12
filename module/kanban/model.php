@@ -50,13 +50,42 @@ class kanbanModel extends model
     public function createDefaultRegion($kanban)
     {
         $region = new stdclass();
-        $region->name           = $this->lang->kanbanregion->default;
-        $region->kanban         = $kanban->id;
-        $region->space          = $kanban->space;
-        $region->createdBy      = $this->app->user->account;
-        $region->createdDate    = helper::today();
+        $region->name        = $this->lang->kanbanregion->default;
+        $region->kanban      = $kanban->id;
+        $region->space       = $kanban->space;
+        $region->createdBy   = $this->app->user->account;
+        $region->createdDate = helper::now();
 
         return $this->createRegion($kanban, $region);
+    }
+
+    /**
+     * Copy kanban regions.
+     *
+     * @param  object $kanban
+     * @param  int    $copyKanbanID
+     * @access public
+     * @return void
+     */
+    public function copyRegions($kanban, $copyKanbanID)
+    {
+        if(empty($kanban) or empty($copyKanbanID)) return;
+
+        $regions = $this->getRegionPairs($copyKanbanID);
+        $order   = 1;
+        foreach($regions as $copyID => $copyName)
+        {
+            $region = new stdclass();
+            $region->name        = $copyName;
+            $region->kanban      = $kanban->id;
+            $region->space       = $kanban->space;
+            $region->createdBy   = $this->app->user->account;
+            $region->createdDate = helper::now();
+            $region->order       = $order;
+
+            $this->createRegion($kanban, $region, $copyID, 'kanban', 'withArchived');
+            $order ++;
+        }
     }
 
     /**
@@ -66,10 +95,11 @@ class kanbanModel extends model
      * @param  object $region
      * @param  int    $copyRegionID
      * @param  string $from kanban|execution
+     * @param  string $param
      * @access public
      * @return int
      */
-    public function createRegion($kanban, $region = null, $copyRegionID = 0, $from = 'kanban')
+    public function createRegion($kanban, $region = null, $copyRegionID = 0, $from = 'kanban', $param = '')
     {
         $account = $this->app->user->account;
         $order   = 1;
@@ -90,7 +120,7 @@ class kanbanModel extends model
             $region->space = $from == 'kanban' ? $kanban->space : 0;
         }
 
-        $region->order = $order;
+        $region->order = isset($region->order) ? $region->order : $order;
         $this->dao->insert(TABLE_KANBANREGION)->data($region)
             ->batchCheck($this->config->kanban->require->createregion, 'notempty')
             ->check('name', 'unique', "kanban = {$kanban->id} AND deleted = '0' AND space='$region->space'")
@@ -107,7 +137,7 @@ class kanbanModel extends model
             /* Gets the groups, lanes and columns of the replication region. */
             $copyGroups      = $this->getGroupGroupByRegions($copyRegionID);
             $copyLaneGroup   = $this->getLaneGroupByRegions($copyRegionID);
-            $copyColumnGroup = $this->getColumnGroupByRegions($copyRegionID, 'id_asc');
+            $copyColumnGroup = $this->getColumnGroupByRegions($copyRegionID, 'id_asc', $param);
 
             /* Create groups, lanes, and columns. */
             if(empty($copyGroups)) return $regionID;
@@ -652,6 +682,21 @@ class kanbanModel extends model
     }
 
     /**
+     * Get kanban pairs.
+     *
+     * @access public
+     * @return array
+     */
+    public function getPairs()
+    {
+        $idList = $this->getCanViewObjects();
+        return $this->dao->select('id,name')->from(TABLE_KANBAN)
+            ->where('id')->in($idList)
+            ->andWhere('deleted')->eq('0')
+            ->fetchPairs();
+    }
+
+    /**
      * Get kanban data.
      *
      * @param  int    $kanbanID
@@ -996,15 +1041,16 @@ class kanbanModel extends model
      *
      * @param  array  $regions
      * @param  string $order order|id_asc
+     * @param  string $param
      * @access public
      * @return array
      */
-    public function getColumnGroupByRegions($regions, $order = 'order')
+    public function getColumnGroupByRegions($regions, $order = 'order', $param = '')
     {
         $columnGroup = $this->dao->select("*")->from(TABLE_KANBANCOLUMN)
             ->where('deleted')->eq('0')
-            ->andWhere('archived')->eq('0')
             ->andWhere('region')->in($regions)
+            ->beginIF(strpos(",$param,", ',withArchived,') === false)->andWhere('archived')->eq('0')->fi()
             ->orderBy($order)
             ->fetchGroup('group');
 
@@ -2104,7 +2150,7 @@ class kanbanModel extends model
             ->join('whitelist', ',')
             ->join('team', ',')
             ->trim('name')
-            ->remove('uid,contactListMenu,type,import,importObjectList')
+            ->remove('contactListMenu,type,import,importObjectList,copyKanbanID,copyRegion')
             ->get();
 
         if($this->post->import == 'on') $kanban->object = implode(',', $this->post->importObjectList);
@@ -2134,7 +2180,15 @@ class kanbanModel extends model
             $kanbanID = $this->dao->lastInsertID();
             $kanban   = $this->getByID($kanbanID);
 
-            $this->createDefaultRegion($kanban);
+            if($this->post->copyRegion)
+            {
+                $this->copyRegions($kanban, $this->post->copyKanbanID);
+            }
+            else
+            {
+                $this->createDefaultRegion($kanban);
+            }
+
             $this->loadModel('file')->saveUpload('kanban', $kanbanID);
             $this->file->updateObjectID($this->post->uid, $kanbanID, 'kanban');
 

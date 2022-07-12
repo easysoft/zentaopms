@@ -14,7 +14,7 @@ class kanban extends control
     /**
      * Kanban space.
      *
-     * @param  string $browseType all|my|other|closed
+     * @param  string $browseType involved|cooperation|public|private
      * @param  int    $recTotal
      * @param  int    $recPerPage
      * @param  int    $pageID
@@ -201,11 +201,16 @@ class kanban extends control
      *
      * @param  int    $spaceID
      * @param  string $type
+     * @param  int    $copyKanbanID
+     * @param  string $extra
      * @access public
      * @return void
      */
-    public function create($spaceID = 0, $type = 'private')
+    public function create($spaceID = 0, $type = 'private', $copyKanbanID = 0, $extra = '')
     {
+        $extra = str_replace(array(',', ' '), array('&', ''), $extra);
+        parse_str($extra, $output);
+
         if(!empty($_POST))
         {
             $kanbanID = $this->kanban->create();
@@ -216,6 +221,15 @@ class kanban extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
         }
 
+        $enableImport  = 'off';
+        $importObjects = array();
+        if($copyKanbanID)
+        {
+            $copyKanban    = $this->kanban->getByID($copyKanbanID);
+            $enableImport  = empty($copyKanban->object) ? 'off' : 'on';
+            $importObjects = empty($copyKanban->object) ? array() : explode(',', $copyKanban->object);
+        }
+
         unset($this->lang->kanbanspace->featureBar['involved']);
 
         $space      = $this->kanban->getSpaceById($spaceID);
@@ -223,12 +237,18 @@ class kanban extends control
         $users      = $this->loadModel('user')->getPairs('noclosed|nodeleted', '', 0, $spaceUsers);
         $whitelist  = (isset($space->whitelist) and !empty($space->whitelist)) ? $space->whitelist : ',';
 
-        $this->view->users      = $users;
-        $this->view->whitelist  = $this->user->getPairs('noclosed|nodeleted', '', 0, $whitelist);
-        $this->view->spaceID    = $spaceID;
-        $this->view->spacePairs = array(0 => '') + $this->kanban->getSpacePairs($type);
-        $this->view->type       = $type;
-        $this->view->typeList   = $this->lang->kanbanspace->featureBar;
+        $this->view->users         = $users;
+        $this->view->whitelist     = $this->user->getPairs('noclosed|nodeleted', '', 0, $whitelist);
+        $this->view->spaceID       = $spaceID;
+        $this->view->spacePairs    = array(0 => '') + $this->kanban->getSpacePairs($type);
+        $this->view->type          = $type;
+        $this->view->typeList      = $this->lang->kanbanspace->featureBar;
+        $this->view->kanbans       = array('' => '') + $this->kanban->getPairs();
+        $this->view->copyKanbanID  = $copyKanbanID;
+        $this->view->copyKanban    = $copyKanbanID ? $copyKanban : '';
+        $this->view->enableImport  = $enableImport;
+        $this->view->importObjects = $importObjects;
+        $this->view->copyRegion    = isset($output['copyRegion']) ? true : false;
 
         $this->display();
     }
@@ -386,19 +406,20 @@ class kanban extends control
      *
      * @param  int    $kanbanID
      * @param  string $confirm
+     * @param  string $browseType involved|cooperation|public|private
      * @access public
      * @return void
      */
-    public function delete($kanbanID, $confirm = 'no')
+    public function delete($kanbanID, $confirm = 'no', $browseType = 'involved')
     {
         if($confirm == 'no')
         {
-            return print(js::confirm($this->lang->kanban->confirmDeleteKanban, $this->createLink('kanban', 'delete', "kanbanID=$kanbanID&confirm=yes")));
+            return print(js::confirm($this->lang->kanban->confirmDeleteKanban, $this->createLink('kanban', 'delete', "kanbanID=$kanbanID&confirm=yes&browseType=$browseType")));
         }
         else
         {
             $this->kanban->delete(TABLE_KANBAN, $kanbanID);
-            return print(js::locate($this->createLink('kanban', 'space'), 'parent'));
+            return print(js::locate($this->createLink('kanban', 'space', "browseType=$browseType"), 'parent'));
         }
     }
 
@@ -1882,5 +1903,31 @@ class kanban extends control
         if($i) return print(html::select($field . "[$i]", $lanes, '', "class='form-control'"));
 
         return print(html::select($field, $lanes, '', "class='form-control'"));
+    }
+
+    /**
+     * Ajax load space users.
+     *
+     * @param  int    $spaceID
+     * @param  string $field team|whitelist|owner
+     * @param  string $selectedUser
+     * @access public
+     * @return string
+     */
+    public function ajaxLoadSpaceUsers($spaceID, $field = '', $selectedUser = '')
+    {
+        $space    = $this->kanban->getSpaceById($spaceID);
+        $accounts = '';
+        if(!empty($space))
+        {
+            if($space->type == 'private' and !empty($space->whitelist)) $accounts = $space->whitelist;
+            if($space->type != 'private') $accounts = trim($space->owner) . ',' . trim($space->team);
+        }
+
+        $users     = $this->loadModel('user')->getPairs('noclosed|nodeleted', '', 0, $accounts);
+        $multiple  = in_array($field, array('team', 'whitelist')) ? 'multiple' : '';
+        $fieldName = $multiple ? $field . '[]' : $field;
+
+        return print(html::select($fieldName, $users, $selectedUser, "class='form-control' $multiple"));
     }
 }

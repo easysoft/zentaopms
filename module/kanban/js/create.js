@@ -1,6 +1,14 @@
 $(function()
 {
     if(enableImport == 'off') $("input[name^='importObjectList']").attr('disabled', 'disabled');
+    $("input[id='copyContentbasicInfo']").click(function(){return false;})
+
+    copyRegion = $("input[id='copyContentregion']").prop('checked');
+    $("input[id='copyContentregion']").click(function()
+    {
+        copyRegion = $(this).prop('checked');
+        $('#copyRegion').val(copyRegion);
+    });
 
     $("input[name='import']").change(function()
     {
@@ -30,10 +38,28 @@ $(function()
             return false;
         }
     })
+
+    $(document).on('click', '#copyKanbans a', function()
+    {
+        setCopyKanban($(this).data('id')); $('#copyKanbanModal').modal('hide');
+    });
 })
 
 /**
- * When space type or space value change.
+ * Set copy kanban.
+ *
+ * @param  int    $kanbanID
+ * @access public
+ * @return void
+ */
+function setCopyKanban(kanbanID)
+{
+    var extra = copyRegion ? '&extra=copyRegion=' + copyRegion : '';
+    location.href = createLink('kanban', 'create', 'spaceID=' + spaceID + '&type=' + spaceType + '&copyKanbanID=' + kanbanID + extra);
+}
+
+/**
+ * When space type change.
  *
  * @oaram  int    spaceID
  * @param  string type
@@ -44,4 +70,45 @@ function changeValue(spaceID, type)
 {
     if(typeof type === 'undefined') type = spaceType;
     location.href = createLink('kanban', 'create', 'spaceID=' + spaceID + '&type=' + type);
+}
+
+/**
+ * The team or whitelist member that loads kanban.
+ *
+ * @oaram  int    spaceID
+ * @access public
+ * @return void
+ */
+function loadUsers(spaceID)
+{
+    var field = spaceType == 'private' ? 'whitelist' : 'team';
+    var link  = createLink('kanban', 'ajaxLoadSpaceUsers', 'spaceID='+ spaceID + '&field=' + field + '&selectedUser=' + $('#' + field).val());
+    $.get(link, function(data)
+    {
+        $('#' + field).replaceWith(data);
+        $('#' + field).next('.picker').remove();
+        $('#' + field).picker();
+    });
+
+    if(spaceType != 'private') loadOwners(spaceID);
+}
+
+/**
+ * The owners that loads kanban.
+ *
+ * @oaram  int    spaceID
+ * @access public
+ * @return void
+ */
+function loadOwners(spaceID)
+{
+    var link = createLink('kanban', 'ajaxLoadSpaceUsers', 'spaceID='+ spaceID + '&field=owner&selectedUser=' + $('#owner').val());
+
+    $.get(link, function(data)
+    {
+        $('#owner').replaceWith(data);
+        $('#owner' + "_chosen").remove();
+        $('#owner').next('.picker').remove();
+        $('#owner').chosen();
+    });
 }

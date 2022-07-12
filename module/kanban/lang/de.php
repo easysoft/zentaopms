@@ -203,6 +203,10 @@ $lang->kanban->setting            = 'Setting';
 $lang->kanban->my                 = 'My';
 $lang->kanban->other              = 'Other';
 $lang->kanban->showWIP            = 'Show WIP';
+$lang->kanban->copyTitle          = 'Please select a Kanban to copy';
+$lang->kanban->copyNoKanban       = 'No Kanban available to copy';
+$lang->kanban->cancelCopy         = 'Cancel Copying';
+$lang->kanban->copyContent        = 'Copy Content';
 
 $lang->kanban->error = new stdclass();
 $lang->kanban->error->mustBeInt         = 'The WIPs must be positive integer.';
@@ -268,6 +272,10 @@ $lang->kanban->taskColumn['developed']  = 'Developed';
 $lang->kanban->taskColumn['pause']      = 'Pause';
 $lang->kanban->taskColumn['canceled']   = 'Canceled';
 $lang->kanban->taskColumn['closed']     = 'Closed';
+
+$lang->kanban->copyContentList = array();
+$lang->kanban->copyContentList['basicInfo'] = 'Basic Information';
+$lang->kanban->copyContentList['region']    = 'Columns and swimlanes';
 
 $lang->kanbanspace = new stdclass();
 $lang->kanbanspace->common         = 'Kanban Space';
