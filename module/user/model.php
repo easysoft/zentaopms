@@ -839,7 +839,7 @@ class userModel extends model
             if($this->post->password1 != $this->post->password2) dao::$errors['password'][] = $this->lang->error->passwordsame;
             if(!validater::checkReg($this->post->password1, '|(.){6,}|')) dao::$errors['password'][] = $this->lang->error->passwordrule;
 
-            if(isset($this->config->safe->mode) and ($this->post->passwordStrength < $this->config->safe->mode)) dao::$errors['password1'][] = $this->lang->user->weakPassword;
+            if(isset($this->config->safe->mode) and ($this->post->passwordStrength < $this->config->safe->mode)) dao::$errors['password'] = zget($this->lang->user->placeholder->passwordStrength, $this->config->safe->mode, $this->lang->user->weakPassword);
             if(!empty($this->config->safe->changeWeak))
             {
                 if(!isset($this->config->safe->weak)) $this->app->loadConfig('admin');
