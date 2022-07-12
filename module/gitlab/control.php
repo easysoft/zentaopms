@@ -1391,6 +1391,8 @@ class gitlab extends control
         {
             $openID = $this->gitlab->getUserIDByZentaoAccount($gitlabID, $this->app->user->account);
             if(!$openID) return print(js::alert($this->lang->gitlab->mustBindUser) . js::locate($this->createLink('gitlab', 'browse')));
+
+            $project = $this->gitlab->apiGetSingleProject($gitlabID, $projectID);
             if(!$this->gitlab->checkUserAccess($gitlabID, $projectID, $project)) return print(js::alert($this->lang->gitlab->noAccess) . js::locate($this->createLink('gitlab', 'browse')));
         }
 
@@ -1437,6 +1439,8 @@ class gitlab extends control
         {
             $openID = $this->gitlab->getUserIDByZentaoAccount($gitlabID, $this->app->user->account);
             if(!$openID) return print(js::alert($this->lang->gitlab->mustBindUser) . js::locate($this->createLink('gitlab', 'browse')));
+
+            $project = $this->gitlab->apiGetSingleProject($gitlabID, $projectID);
             if(!$this->gitlab->checkUserAccess($gitlabID, $projectID, $project)) return print(js::alert($this->lang->gitlab->noAccess) . js::locate($this->createLink('gitlab', 'browse')));
         }
 

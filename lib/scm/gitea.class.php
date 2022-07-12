@@ -34,7 +34,7 @@ class gitea
     public function ls($path, $revision = 'HEAD')
     {
         if(!scm::checkRevision($revision)) return array();
-        $api  = "tree";
+        $api = "contents";
 
         $param = new stdclass();
         $param->path      = ltrim($path, '/');
@@ -70,10 +70,10 @@ class gitea
                 if(empty($commits)) continue;
                 $commit = $commits[0];
 
-                $info->revision = $commit->id;
-                $info->comment  = $commit->message;
-                $info->account  = $commit->committer_name;
-                $info->date     = date('Y-m-d H:i:s', strtotime($commit->committed_date));
+                $info->revision = $commit->sha;
+                $info->comment  = $commit->commit->message;
+                $info->account  = $commit->commit->committer->name;
+                $info->date     = date('Y-m-d H:i:s', strtotime($commit->commit->committer->date));
                 $info->size     = 0;
             }
 
@@ -101,24 +101,24 @@ class gitea
      */
     public function files($path, $ref = 'master')
     {
-        $path = urlencode($path);
-        $api  = "files/$path";
+        $path  = urlencode($path);
+        $api   = "contents/$path";
         $param = new stdclass();
         $param->ref = $ref;
         $file = $this->fetch($api, $param);
-        if(!isset($file->file_name)) return false;
+        if(!isset($file->name)) return false;
 
         $commits = $this->getCommitsByPath($path, '', '', 1);
-        $file->revision = $file->commit_id;
+        $file->revision = $file->sha;
         $file->size     = $this->formatBytes($file->size);
 
         if(!empty($commits))
         {
             $commit = $commits[0];
-            $file->revision  = $commit->id;
-            $file->committer = $commit->committer_name;
-            $file->comment   = $commit->message;
-            $file->date      = date('Y-m-d H:i:s', strtotime($commit->committed_date));
+            $file->revision  = $commit->sha;
+            $file->committer = $commit->commit->committer->name;
+            $file->comment   = $commit->commit->message;
+            $file->date      = date('Y-m-d H:i:s', strtotime($commit->commit->committer->date));
         }
 
         return $file;
@@ -145,7 +145,7 @@ class gitea
         {
             $params['page'] = $page;
             $list = $this->fetch($api, $params);
-            if(empty($list)) break;
+            if(empty($list) or $list == '[]') break;
 
             foreach($list as $tag) $tags[] = $tag->name;
             if(count($list) < $params['per_page']) break;
@@ -177,7 +177,7 @@ class gitea
             foreach($branchList as $branch)
             {
                 if(!isset($branch->name)) continue;
-                if($branch->default)
+                if($branch->name == 'main')
                 {
                     $default[$branch->name] = $branch->name;
                 }
@@ -232,7 +232,7 @@ class gitea
         $list = $this->getCommitsByPath($path, $fromRevision, $toRevision);
         foreach($list as $commit)
         {
-            if(isset($commit->id)) $commit->diffs = $this->getFilesByCommit($commit->id);
+            if(isset($commit->sha)) $commit->diffs = $this->getFilesByCommit($commit->sha);
         }
 
         return $this->parseLog($list);
@@ -248,42 +248,7 @@ class gitea
      */
     public function blame($path, $revision)
     {
-        if(!scm::checkRevision($revision)) return array();
-
-        $path  = ltrim($path, DIRECTORY_SEPARATOR);
-        $path  = urlencode($path);
-        $api   = "files/$path/blame";
-        $param = new stdclass;
-        $param->ref = ($revision and $revision != 'HEAD') ? $revision : $this->branch;
-        $results = $this->fetch($api, $param);
-
-        $blames   = array();
-        $revLine  = 0;
-        $revision = '';
-
-        $lineNumber = 1;
-        foreach($results as $blame)
-        {
-            $line = array();
-            $line['revision']  = $blame->commit->id;
-            $line['committer'] = $blame->commit->committer_name;
-            $line['time']      = $blame->commit->committer_name;
-            $line['line']      = $lineNumber;
-            $line['lines']     = count($blame->lines);
-            $line['content']   = array_shift($blame->lines);
-
-            $blames[$lineNumber] = $line;
-
-            $lineNumber ++;
-
-            foreach($blame->lines as $line)
-            {
-                $blames[$lineNumber] = array('line' => $lineNumber, 'content' => $line);
-                $lineNumber ++;
-            }
-        }
-
-        return $blames;
+        return array();
     }
 
     /**
@@ -562,16 +527,16 @@ class gitea
         {
             $api .= '/' . $version;
             $commit = $this->fetch($api);
-            if(isset($commit->id))
+            if(isset($commit->sha))
             {
                 $log = new stdclass;
-                $log->committer = $commit->committer_name;
-                $log->revision  = $commit->id;
-                $log->comment   = $commit->message;
-                $log->time      = date('Y-m-d H:i:s', strtotime($commit->created_at));
+                $log->committer = $commit->commit->committer->name;
+                $log->revision  = $commit->sha;
+                $log->comment   = $commit->commit->message;
+                $log->time      = date('Y-m-d H:i:s', strtotime($commit->commit->committer->date));
 
-                $commits[$commit->id] = $log;
-                $files[$commit->id]   = $this->getFilesByCommit($log->revision);
+                $commits[$commit->sha] = $log;
+                $files[$commit->sha]   = $this->getFilesByCommit($log->revision);
 
                 return array('commits' => $commits, 'files' => $files);
             }
@@ -608,16 +573,16 @@ class gitea
 
         foreach($list as $commit)
         {
-            if(!is_object($commit)) continue;
+            if(!is_object($commit->commit)) continue;
 
             $log = new stdclass;
-            $log->committer = $commit->committer_name;
-            $log->revision  = $commit->id;
-            $log->comment   = $commit->message;
-            $log->time      = date('Y-m-d H:i:s', strtotime($commit->created_at));
+            $log->committer = $commit->commit->committer->name;
+            $log->revision  = $commit->sha;
+            $log->comment   = $commit->commit->message;
+            $log->time      = date('Y-m-d H:i:s', strtotime($commit->commit->committer->date));
 
-            $commits[$commit->id] = $log;
-            $files[$commit->id]   = $this->getFilesByCommit($log->revision);
+            $commits[$commit->sha] = $log;
+            $files[$commit->sha]   = $this->getFilesByCommit($log->revision);
         }
 
         return array('commits' => $commits, 'files' => $files);
@@ -694,33 +659,18 @@ class gitea
     public function getFilesByCommit($revision)
     {
         if(!scm::checkRevision($revision)) return array();
-        $api  = "commits/{$revision}/diff";
-        $params = new stdclass;
-        $params->page     = 1;
-        $params->per_page = 100;
-
-        $allResults = array();
-        while(true)
-        {
-            $results = $this->fetch($api, $params);
-            $params->page ++;
-            if(!is_array($results)) $results = array();
-            $allResults = $allResults + $results;
-            if(count($results) < 100) break;
-        }
+        $api     = "contents";
+        $results = $this->fetch($api, array('ref' => $revision));
+        if(empty($results)) return array();
 
         $files = array();
-        foreach($allResults as $row)
+        foreach($results as $row)
         {
-            $file = new stdclass();
+            $file  = new stdclass();
             $file->revision = $revision;
-            $file->path     = '/' . $row->new_path;
-            $file->type     = 'file';
-
-            $file->action   = 'M';
-            if($row->new_file) $file->action = 'A';
-            if($row->renamed_file) $file->action = 'R';
-            if($row->deleted_file) $file->action = 'D';
+            $file->action   = 'A';
+            $file->type = $row->type;
+            $file->path = '/' . trim($row->path);
             $files[] = $file;
         }
 
@@ -737,7 +687,7 @@ class gitea
      */
     public function tree($path, $recursive = 1)
     {
-        $api = "tree";
+        $api = "contents";
 
         $params = array();
         $params['path']      = ltrim($path, '/');
@@ -756,8 +706,8 @@ class gitea
     public function fetch($api, $params = array(), $needToLoop = false)
     {
         $params = (array) $params;
-        $params['private_token'] = $this->token;
-        $params['per_page']      = isset($params['per_page']) ? $params['per_page'] : 100;
+        $params['token']    = $this->token;
+        $params['per_page'] = isset($params['per_page']) ? $params['per_page'] : 100;
 
         $api = ltrim($api, '/');
         $api = $this->root . $api . '?' . http_build_query($params);
@@ -783,7 +733,8 @@ class gitea
                 return array();
             }
 
-            return json_decode($response);
+            $res = json_decode($response);
+            return empty($res) ? trim($response) : $res;
         }
     }
 
@@ -816,12 +767,12 @@ class gitea
         $i          = 0;
         foreach($logs as $commit)
         {
-            if(!isset($commit->id)) continue;
+            if(!isset($commit->sha)) continue;
             $parsedLog = new stdclass();
-            $parsedLog->revision  = $commit->id;
-            $parsedLog->committer = $commit->committer_name;
-            $parsedLog->time      = date('Y-m-d H:i:s', strtotime($commit->committed_date));
-            $parsedLog->comment   = $commit->message;
+            $parsedLog->revision  = $commit->sha;
+            $parsedLog->committer = $commit->commit->committer->name;
+            $parsedLog->time      = date('Y-m-d H:i:s', strtotime($commit->commit->committer->date));
+            $parsedLog->comment   = $commit->commit->message;
             $parsedLog->change    = array();
             foreach($commit->diffs as $diff)
             {
@@ -833,5 +784,21 @@ class gitea
         }
 
         return $parsedLogs;
+    }
+
+    /**
+     * Get download url.
+     *
+     * @param  string $branch
+     * @param  string $ext
+     * @access public
+     * @return string
+     */
+    public function getDownloadUrl($branch = 'master', $ext = 'zip')
+    {
+        $params = (array) $params;
+        $params['token'] = $this->token;
+
+        return "{$this->root}archive/{$branch}.{$ext}" . '?' . http_build_query($params);
     }
 }

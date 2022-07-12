@@ -834,4 +834,21 @@ class gitlab
 
         return $parsedLogs;
     }
+
+    /**
+     * Get download url.
+     *
+     * @param  string $branch
+     * @param  string $ext
+     * @access public
+     * @return string
+     */
+    public function getDownloadUrl($branch = 'master', $ext = 'zip')
+    {
+        $params = (array) $params;
+        $params['private_token'] = $this->token;
+        $params['sha']           = $branch;
+
+        return "{$this->root}archive.{$ext}" . '?' . http_build_query($params);
+    }
 }

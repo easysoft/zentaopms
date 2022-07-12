@@ -1367,9 +1367,11 @@ class repo extends control
         }
 
         $repo = $this->repo->getRepoByID($repoID);
-        if($repo->SCM == 'Gitlab')
+        if(in_array($repo->SCM, $this->config->repo->gitServiceList))
         {
-            $url = $this->loadModel('gitlab')->downloadCode($repo->gitlab, $repo->project, $branch);
+            $this->scm = $this->app->loadClass('scm');
+            $this->scm->setEngine($repo);
+            $url = $this->scm->getDownloadUrl($branch);
         }
         elseif($repo->SCM == 'Git')
         {

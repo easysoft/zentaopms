@@ -244,6 +244,19 @@ class scm
         if(preg_match('/[^a-z0-9\-_\.\^\w][\x{4e00}-\x{9fa5}]/ui', $revision)) return false;
         return true;
     }
+
+    /**
+     * Get download url.
+     *
+     * @param  string $branch
+     * @param  string $ext
+     * @access public
+     * @return string
+     */
+    public function getDownloadUrl($branch = '', $ext = 'zip')
+    {
+        return $this->engine->getDownloadUrl($branch, $ext);
+    }
 }
 
 /**
