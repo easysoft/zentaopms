@@ -9,7 +9,7 @@
  */
 function updateColumnName(columnID, name, color)
 {
-    $('.kanban-col[data-id="' + columnID + '"] > div.title > span:first').text(name).css('color', color);
+    $('.kanban-col[data-id="' + columnID + '"] > div.title > span:first').text(name).attr('title', name).css('color', color);
 }
 
 /**

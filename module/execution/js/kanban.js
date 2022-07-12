@@ -322,7 +322,7 @@ function updateRegionName(regionID, name)
  */
 function updateLaneName(laneID, name)
 {
-    $('.kanban-lane[data-id="' + laneID + '"] > .kanban-lane-name > span').text(name);
+    $('.kanban-lane[data-id="' + laneID + '"] > .kanban-lane-name > span').text(name).attr('title', name);
 }
 
 /**
@@ -349,7 +349,7 @@ function updateLaneColor(laneID, color)
  */
 function updateColumnName(columnID, name, color)
 {
-    $('.kanban-col[data-id="' + columnID + '"] > div.title > span:first').text(name).css('color', color);
+    $('.kanban-col[data-id="' + columnID + '"] > div.title > span:first').text(name).attr('title', name).css('color', color);
 }
 
 /**
