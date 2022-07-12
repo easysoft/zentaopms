@@ -799,15 +799,12 @@ class testcaseModel extends model
         $this->dao->update(TABLE_CASE)->data($case)->autoCheck()->batchCheck($requiredFields, 'notempty')->checkFlow()->where('id')->eq((int)$caseID)->exec();
         if(!$this->dao->isError())
         {
-            $isLibCase    = ($oldCase->lib and empty($oldCase->product));
-            $titleChanged = ($case->title != $oldCase->title);
-            if($isLibCase and $titleChanged) $this->dao->update(TABLE_CASE)->set('`title`')->eq($case->title)->where('`fromCaseID`')->eq($caseID)->exec();
-
             $this->updateCase2Project($oldCase, $case, $caseID);
 
             if($stepChanged)
             {
                 $parentStepID = 0;
+                $isLibCase    = ($oldCase->lib and empty($oldCase->product));
                 if($isLibCase)
                 {
                     $fromcaseVersion  = $this->dao->select('fromCaseVersion')->from(TABLE_CASE)->where('fromCaseID')->eq($caseID)->fetch('fromCaseVersion');
@@ -1103,6 +1100,11 @@ class testcaseModel extends model
         foreach($cases as $caseID => $case)
         {
             $oldCase = $this->getByID($caseID);
+
+            $caseChanged = false;
+            if($oldCase->title != $case->title)               $caseChanged = true;
+            if($oldCase->precondition != $case->precondition) $caseChanged = true;
+
             $this->dao->update(TABLE_CASE)->data($case)
                 ->autoCheck()
                 ->batchCheck($this->config->testcase->edit->requiredFields, 'notempty')
@@ -1112,11 +1114,7 @@ class testcaseModel extends model
 
             if(!dao::isError())
             {
-                $isLibCase     = ($oldCase->lib and empty($oldCase->product));
-                $titleChanged  = ($case->title != $oldCase->title);
                 $case->product = $oldCase->product;
-                if($isLibCase and $titleChanged) $this->dao->update(TABLE_CASE)->set('`title`')->eq($case->title)->where('`fromCaseID`')->eq($caseID)->exec();
-
                 $this->updateCase2Project($oldCase, $case, $caseID);
 
                 $this->executeHooks($caseID);
@@ -1137,6 +1135,14 @@ class testcaseModel extends model
                             $this->action->create('case' ,$caseID, 'unlinkedfromtesttask', '', $taskID);
                         }
                     }
+                }
+
+                $isLibCase = ($oldCase->lib and empty($oldCase->product));
+                if($isLibCase and $caseChanged)
+                {
+                    $fromcaseVersion  = $this->dao->select('fromCaseVersion')->from(TABLE_CASE)->where('fromCaseID')->eq($caseID)->fetch('fromCaseVersion');
+                    $fromcaseVersion += 1;
+                    $this->dao->update(TABLE_CASE)->set('`fromCaseVersion`')->eq($fromcaseVersion)->where('`fromCaseID`')->eq($caseID)->exec();
                 }
             }
             else
@@ -2356,6 +2362,10 @@ class testcaseModel extends model
             }
 
             if(!$this->forceNotReview() and $stepChanged) $status = 'wait';
+
+            if(!empty($_POST['title']) and $case->title != $this->post->title)                      $stepChanged = true;
+            if(!empty($_post['precondition']) and $case->precondition != $this->post->precondition) $stepchanged = true;
+            if(!empty($_POST['labels'][0]))                                                         $stepChanged = true;
 
             return array($stepChanged, $status);
         }
