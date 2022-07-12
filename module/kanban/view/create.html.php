@@ -97,6 +97,7 @@
       <tr>
         <td colspan='3' class='text-center form-actions'>
           <?php echo html::hidden('copyKanbanID', $copyKanbanID)?>
+          <?php echo html::hidden('copyRegion', $copyRegion)?>
           <?php echo html::submitButton();?>
         </td>
       </tr>

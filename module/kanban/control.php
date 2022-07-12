@@ -213,7 +213,7 @@ class kanban extends control
 
         if(!empty($_POST))
         {
-            $kanbanID = $this->kanban->create($output);
+            $kanbanID = $this->kanban->create();
 
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 

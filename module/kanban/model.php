@@ -2133,11 +2133,10 @@ class kanbanModel extends model
     /*
      * Create a kanban.
      *
-     * @param  array  $extra
      * @access public
      * @return int
      */
-    public function create($extra = array())
+    public function create()
     {
         $account = $this->app->user->account;
         $kanban  = fixer::input('post')
@@ -2151,7 +2150,7 @@ class kanbanModel extends model
             ->join('whitelist', ',')
             ->join('team', ',')
             ->trim('name')
-            ->remove('contactListMenu,type,import,importObjectList,copyKanbanID')
+            ->remove('contactListMenu,type,import,importObjectList,copyKanbanID,copyRegion')
             ->get();
 
         if($this->post->import == 'on') $kanban->object = implode(',', $this->post->importObjectList);
@@ -2181,7 +2180,7 @@ class kanbanModel extends model
             $kanbanID = $this->dao->lastInsertID();
             $kanban   = $this->getByID($kanbanID);
 
-            if(isset($extra['copyRegion']))
+            if($this->post->copyRegion)
             {
                 $this->copyRegions($kanban, $this->post->copyKanbanID);
             }

@@ -7,6 +7,7 @@ $(function()
     $("input[id='copyContentregion']").click(function()
     {
         copyRegion = $(this).prop('checked');
+        $('#copyRegion').val(copyRegion);
     });
 
     $("input[name='import']").change(function()
