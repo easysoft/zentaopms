@@ -224,4 +224,40 @@ class giteaModel extends model
             ->andWhere('account')->eq($account)
             ->fetchPairs('providerID');
     }
+
+    /**
+     * Get project by api.
+     *
+     * @param  int    $giteaID
+     * @param  int    $projectID
+     * @access public
+     * @return void
+     */
+    public function apiGetSingleProject($giteaID, $projectID)
+    {
+        $apiRoot = $this->getApiRoot($giteaID);
+        if(!$apiRoot) return array();
+
+        $url = sprintf($apiRoot, "/repos/$projectID");
+        return json_decode(commonModel::http($url));
+    }
+
+    /**
+     * Get projects by api.
+     *
+     * @param  int    $giteaID
+     * @param  bool   $sudo
+     * @access public
+     * @return array
+     */
+    public function apiGetProjects($giteaID, $sudo = 'true')
+    {
+        $apiRoot = $this->getApiRoot($giteaID, $sudo);
+        if(!$apiRoot) return array();
+
+        $url     = sprintf($apiRoot, "/repos/search");
+        $results = json_decode(commonModel::http($url));
+
+        return $results->data;
+    }
 }

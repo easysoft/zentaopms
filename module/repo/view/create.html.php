@@ -32,20 +32,20 @@
             <td style="width:550px"><?php echo html::select('SCM', $lang->repo->scmList, 'Gitlab', "onchange='scmChanged(this.value)' class='form-control chosen'"); ?></td>
             <td class="tips-git"><?php echo $lang->repo->syncTips; ?></td>
           </tr>
-          <tr class='gitlab hide'>
-            <th><?php echo $lang->repo->gitlabHost;?></th>
-            <td class='required'><?php echo html::select('gitlabHost', $gitlabHosts, '', "class='form-control chosen' placeholder='{$lang->repo->placeholder->gitlabHost}'");?></td>
+          <tr class='service hide'>
+            <th><?php echo $lang->repo->serviceHost;?></th>
+            <td class='required'><?php echo html::select('serviceHost', $serviceHosts, '', "class='form-control chosen'");?></td>
           </tr>
-          <tr class='gitlab hide'>
-            <th><?php echo $lang->repo->gitlabProject;?></th>
-            <td class='required'><?php echo html::select('gitlabProject', array(''), '', "class='form-control chosen'");?></td>
+          <tr class='service hide'>
+            <th><?php echo $lang->repo->serviceProject;?></th>
+            <td class='required'><?php echo html::select('serviceProject', array(''), '', "class='form-control chosen'");?></td>
           </tr>
           <tr>
             <th><?php echo $lang->repo->name; ?></th>
             <td class='required'><?php echo html::input('name', '', "class='form-control'"); ?></td>
             <td></td>
           </tr>
-          <tr class='hide-gitlab'>
+          <tr class='hide-service'>
             <th><?php echo $lang->repo->path; ?></th>
             <td class='required'><?php echo html::input('path', '', "class='form-control'"); ?></td>
             <td class='muted'>
@@ -58,7 +58,7 @@
             <td class='required'><?php echo html::input('encoding', 'utf-8', "class='form-control'"); ?></td>
             <td class='muted'><?php echo $lang->repo->encodingsTips; ?></td>
           </tr>
-          <tr class='hide-gitlab'>
+          <tr class='hide-service'>
             <th><?php echo $lang->repo->client;?></th>
             <td class='required'><?php echo html::input('client', '', "class='form-control'")?></td>
             <td class='muted'>
@@ -66,11 +66,11 @@
                 <span class="tips-svn"><?php echo $lang->repo->example->client->svn;?></span>
             </td>
           </tr>
-          <tr class="account-fields hide-gitlab">
+          <tr class="account-fields hide-service">
             <th><?php echo $lang->repo->account;?></th>
             <td><?php echo html::input('account', '', "class='form-control'");?></td>
           </tr>
-          <tr class="account-fields hide-gitlab">
+          <tr class="account-fields hide-service">
             <th><?php echo $lang->repo->password;?></th>
             <td>
               <div class='input-group'>
