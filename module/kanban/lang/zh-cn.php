@@ -203,6 +203,10 @@ $lang->kanban->setting            = '设置';
 $lang->kanban->my                 = '我的看板';
 $lang->kanban->other              = '其他';
 $lang->kanban->showWIP            = '显示在制品限制';
+$lang->kanban->copyTitle          = '请选择一个看板来复制';
+$lang->kanban->copyNoKanban       = '没有可用的看板来复制';
+$lang->kanban->cancelCopy         = '取消复制';
+$lang->kanban->copyContent        = '复制内容';
 
 $lang->kanban->error = new stdclass();
 $lang->kanban->error->mustBeInt         = '在制品数量必须是正整数。';
@@ -268,6 +272,10 @@ $lang->kanban->taskColumn['developed']  = '研发完毕';
 $lang->kanban->taskColumn['pause']      = '已暂停';
 $lang->kanban->taskColumn['canceled']   = '已取消';
 $lang->kanban->taskColumn['closed']     = '已关闭';
+
+$lang->kanban->copyContentList = array();
+$lang->kanban->copyContentList['basicInfo'] = '基本信息';
+$lang->kanban->copyContentList['region']    = '列和泳道';
 
 $lang->kanbanspace = new stdclass();
 $lang->kanbanspace->common         = '看板空间';
