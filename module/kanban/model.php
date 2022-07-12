@@ -1837,11 +1837,11 @@ class kanbanModel extends model
      * Get can view objects.
      *
      * @param  string $objectType kanbanspace|kanban
-     * @param  string $param      noclosed|private|cooperation|public|involved
+     * @param  string $param      all|noclosed|private|cooperation|public|involved
      * @access public
      * @return array
      */
-    public function getCanViewObjects($objectType = 'kanban', $param = '')
+    public function getCanViewObjects($objectType = 'kanban', $param = 'all')
     {
         $table   = $this->config->objectTables[$objectType];
         $objects = $this->dao->select('*')->from($table)
