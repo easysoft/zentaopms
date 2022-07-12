@@ -60,7 +60,7 @@
       <?php endif;?>
       <tr>
         <th class='columnWidth'><?php echo $lang->kanban->columnWidth;?></th>
-        <td><?php echo nl2br(html::radio('fluidBoard', $lang->kanbancolumn->fluidBoardList, isset($copyKanban->fluidBoard) ? isset($copyKanban->fluidBoard) : 0));?></td>
+        <td><?php echo nl2br(html::radio('fluidBoard', $lang->kanbancolumn->fluidBoardList, isset($copyKanban->fluidBoard) ? $copyKanban->fluidBoard : 0));?></td>
       </tr>
       <tr>
         <th rowspan='2'><?php echo $lang->kanban->import?></th>
