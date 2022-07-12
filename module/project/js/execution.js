@@ -11,32 +11,33 @@ $(function()
 window.addEventListener('scroll', this.handleScroll)
 function handleScroll(e)
 {
-    var relative = 500; // 相对距离
-    if(getScrollTop() + getWindowHeight() >= getScrollHeight() - relative)
-    {
-        throttle(loadData(), 250)
-    }
-}
-
-function loadData()
-{
+    var relative = 200; // 相对距离
     $('tr.showmore').each(function()
     {
-        var offsetTop = $(this)[0].offsetTop;
+        var $showmore = $(this);
+        var offsetTop = $showmore[0].offsetTop;
         if(offsetTop == 0) return true;
-        $(this).removeClass('showmore');
 
-        var showmoreTr  = this;
-        var executionID = $(this).attr('data-parent');
-        var maxTaskID   = $(this).attr('data-id');
-        var link = createLink('task', 'ajaxGetTasks', 'executionID=' + executionID + '&maxTaskID=' + maxTaskID);
-        $.get(link, function(data)
+        if(getScrollTop() + getWindowHeight() >= offsetTop - relative)
         {
-            $(showmoreTr).before(data);
-            $(".iframe").modalTrigger({type:'iframe'});
+            throttle(loadData($showmore), 150)
+        }
+    })
+}
 
-            $('#executionForm').table('initNestedList');
-        })
+function loadData($showmore)
+{
+    $showmore.removeClass('showmore');
+
+    var executionID = $showmore.attr('data-parent');
+    var maxTaskID   = $showmore.attr('data-id');
+    var link = createLink('task', 'ajaxGetTasks', 'executionID=' + executionID + '&maxTaskID=' + maxTaskID);
+    $.get(link, function(data)
+    {
+        $showmore.before(data);
+        $(".iframe").modalTrigger({type:'iframe'});
+
+        $('#executionForm').table('initNestedList');
     })
 }
 
@@ -73,11 +74,6 @@ function throttle(fn, threshhold)
 function getScrollTop()
 {
     return scrollTop = document.body.scrollTop + document.documentElement.scrollTop
-}
-
-function getScrollHeight()
-{
-    return scrollHeight = document.documentElement.scrollHeight
 }
 
 function getWindowHeight()

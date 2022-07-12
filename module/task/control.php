@@ -1798,56 +1798,17 @@ class task extends control
             }
         }
 
-        $body  = '';
+        $list  = '';
         $tasks = array_chunk($tasks, 50, true);
         $tasks = $tasks[0];
         $count = count($tasks);
         foreach($tasks as $task)
         {
-            $path = $execution->grade == 2 ? "$execution->parent,$execution->id,$task->id," : ",$execution->id,$task->id,";
-            $showmore = ($count == 50 and $task == end($tasks)) ? 'showmore' : '';
-            $trAttrs  = empty($task->children) ? " data-nested='false'" : '';
-
-            $body .= "<tr data-parent=$executionID data-id=$task->id data-nest-path='$path' $trAttrs data-nest-parent=$executionID class=' $showmore'>";
-            $body .= '<td>' . html::a($this->createLink('task', 'view', "id=$task->id"), $task->name, '', "data-app='project'") . '</td>';
-            $body .= '<td>' . zget($users, $task->assignedTo, '') . '</td>';
-            $body .= '<td>' . zget($this->lang->task->statusList, $task->status, '') . '</td>';
-            $body .= '<td></td>';
-            $body .= '<td>' . $task->estStarted . '</td>';
-            $body .= '<td>' . $task->deadline . '</td>';
-            $body .= '<td>' . $task->estimate . $this->lang->execution->workHourUnit . '</td>';
-            $body .= '<td>' . $task->consumed . $this->lang->execution->workHourUnit . '</td>';
-            $body .= '<td>' . $task->left . $this->lang->execution->workHourUnit . '</td>';
-            $body .= '<td></td>';
-            $body .= '<td class="c-actions">';
-            $body .= $this->task->buildOperateMenu($task, 'browse');
-            $body .= '</td></tr>';
-
-            if(!empty($task->children))
-            {
-                foreach($task->children as $childTask)
-                {
-                    $path = $execution->grade == 2 ? "$execution->parent,$execution->id,$childTask->parent,$childTask->id," : ",$execution->id,$childTask->parent,$childTask->id,";
-
-                    $body .= "<tr data-parent=$executionID data-id=$childTask->id data-nest-path=$path data-nested='false' data-nest-parent=$executionID class='is-nest-child no-nest'>";
-                    $body .= '<td>' . html::a($this->createLink('task', 'view', "id=$childTask->id"), $childTask->name, '', "data-app='project'") . '</td>';
-                    $body .= '<td>' . zget($users, $childTask->assignedTo, '') . '</td>';
-                    $body .= '<td>' . zget($this->lang->task->statusList, $childTask->status, '') . '</td>';
-                    $body .= '<td></td>';
-                    $body .= '<td>' . $childTask->estStarted . '</td>';
-                    $body .= '<td>' . $childTask->deadline . '</td>';
-                    $body .= '<td>' . $childTask->estimate . $this->lang->execution->workHourUnit . '</td>';
-                    $body .= '<td>' . $childTask->consumed . $this->lang->execution->workHourUnit . '</td>';
-                    $body .= '<td>' . $childTask->left . $this->lang->execution->workHourUnit . '</td>';
-                    $body .= '<td></td>';
-                    $body .= '<td class="c-actions">';
-                    $body .= $this->task->buildOperateMenu($childTask, 'browse');
-                    $body .= '</td></tr>';
-                }
-            }
+            $showmore = ($count == 50) && ($task == end($tasks));
+            $list    .= $this->task->buildNestedList($execution, $task, false, $showmore, $users);
         }
 
-        die($body);
+        die($list);
     }
 
     /**
