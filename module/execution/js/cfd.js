@@ -137,6 +137,6 @@ $(function()
         location.href = createLink('execution', 'cfd', 'executionID=' + executionID + '&type=' + type + '&withWeekend=' + withWeekend + '&begin=' + begin + '&end=' + end);
     });
 
-    $("#end").datetimepicker('setEndDate', today)
+    $("#end, #begin").datetimepicker('setEndDate', today)
     $('.datetimepicker-days table tfoot tr th').html(dateRangeTip).removeClass('today');
 });

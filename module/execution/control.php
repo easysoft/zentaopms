@@ -1364,6 +1364,9 @@ class execution extends control
      *
      * @param  int    $executionID
      * @param  string $type
+     * @param  string $withWeekend
+     * @param  string $begin
+     * @param  string $end
      * @access public
      * @return void
      */
