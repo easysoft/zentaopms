@@ -497,7 +497,7 @@ class task extends control
      * @access public
      * @return void
      */
-    public function edit($taskID, $comment = false, $kanbanGroup = 'default', $from = '')
+    public function edit($taskID, $comment = false, $kanbanGroup = 'default')
     {
         $this->commonAction($taskID);
         $task = $this->task->getById($taskID);
