@@ -2579,15 +2579,10 @@ class gitlabModel extends model
             /* Process exists data. */
             if(isset($protected[$name]))
             {
-                if($protected[$name]->pushAccess == $pushLevels[$key] and $protected[$name]->mergeAccess == $mergeLevels[$key])
-                {
-                    continue;
-                }
-                else
-                {
-                    $result = $this->apiDeleteBranchPriv($gitlabID, $projectID, $name);
-                    if(isset($result->message) and substr($result->message, 0, 2) != '20') $failure[] = $name;
-                }
+                if($protected[$name]->pushAccess == $pushLevels[$key] and $protected[$name]->mergeAccess == $mergeLevels[$key]) continue;
+
+                $result = $this->apiDeleteBranchPriv($gitlabID, $projectID, $name);
+                if(isset($result->message) and substr($result->message, 0, 2) != '20') $failure[] = $name;
             }
 
             $priv->name               = $name;
@@ -2667,15 +2662,10 @@ class gitlabModel extends model
             /* Process exists data. */
             if(isset($protected[$name]))
             {
-                if($protected[$name]->createAccess == $createLevels[$key])
-                {
-                    continue;
-                }
-                else
-                {
-                    $result = $this->apiDeleteTagPriv($gitlabID, $projectID, $name);
-                    if(isset($result->message) and substr($result->message, 0, 2) != '20') $failure[] = $name;
-                }
+                if($protected[$name]->createAccess == $createLevels[$key]) continue;
+
+                $result = $this->apiDeleteTagPriv($gitlabID, $projectID, $name);
+                if(isset($result->message) and substr($result->message, 0, 2) != '20') $failure[] = $name;
             }
 
             $priv->name                = $name;
