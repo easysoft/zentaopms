@@ -292,7 +292,7 @@ class productplan extends control
      * @access public
      * @return void
      */
-    public function browse($productID = 0, $branch = '', $browseType = 'undone', $queryID = 0, $orderBy = 'begin_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1 )
+    public function browse($productID = 0, $branch = '', $browseType = 'all', $queryID = 0, $orderBy = 'begin_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1 )
     {
         $branchID = $branch === '' ? 'all' : $branch;
         if(!$branch) $branch = 0;
@@ -350,6 +350,11 @@ class productplan extends control
             $this->view->branchID   = $branchID;
             $this->view->kanbanData = $this->loadModel('kanban')->getPlanKanban($product, $branchID, $planGroup);
         }
+        $productPlansNum = $this->dao->select('COUNT(id) AS count')->from(TABLE_PRODUCTPLAN)
+             ->where('product')->eq($productID)
+             ->andWhere('deleted')->eq(0)
+             ->fetch();
+        $this->view->productPlansNum = $productPlansNum;
 
         $this->view->title            = $productName . $this->lang->colon . $this->lang->productplan->browse;
         $this->view->position[]       = $this->lang->productplan->browse;

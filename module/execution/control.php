@@ -107,7 +107,7 @@ class execution extends control
      * @access public
      * @return void
      */
-    public function task($executionID = 0, $status = 'unclosed', $param = 0, $orderBy = '', $recTotal = 0, $recPerPage = 100, $pageID = 1)
+    public function task($executionID = 0, $status = 'all', $param = 0, $orderBy = '', $recTotal = 0, $recPerPage = 100, $pageID = 1)
     {
         $this->loadModel('tree');
         $this->loadModel('search');
@@ -219,8 +219,14 @@ class execution extends control
         $showModule    = !empty($this->config->datatable->executionTask->showModule) ? $this->config->datatable->executionTask->showModule : '';
         $this->view->modulePairs = $showModule ? $this->tree->getModulePairs($executionID, 'task', $showModule) : array();
 
+        $allTasksNum = $this->dao->select('COUNT(id) AS count')->from(TABLE_TASK)
+            ->where('execution')->eq($executionID)
+            ->andWhere('deleted')->eq(0)
+            ->fetch();
+
         /* Assign. */
         $this->view->tasks        = $tasks;
+        $this->view->allTasksNum  = $allTasksNum;
         $this->view->summary      = $this->execution->summary($tasks);
         $this->view->tabID        = 'task';
         $this->view->pager        = $pager;
@@ -3679,6 +3685,13 @@ class execution extends control
         }
         $parents = array();
         if($parentIdList) $parents = $this->execution->getByIdList($parentIdList);
+
+
+        $allExecutionsNum = $this->dao->select('COUNT(id) AS count')->from(TABLE_PROJECT)
+            ->where('project')->eq($projectID)
+            ->andWhere('deleted')->eq(0)
+            ->fetch();
+        $this->view->allExecutionsNum = $allExecutionsNum;
 
         $this->view->executionStats = $executionStats;
         $this->view->productList    = $this->loadModel('product')->getProductPairsByProject($projectID);
