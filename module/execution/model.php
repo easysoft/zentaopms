@@ -79,7 +79,7 @@ class executionModel extends model
         $executions = $this->getPairs(0, 'all', 'nocode');
         if(!$executionID and $this->session->execution) $executionID = $this->session->execution;
         if(!$executionID or !in_array($executionID, array_keys($executions))) $executionID = key($executions);
-        $this->session->set('execution', $executionID);
+        $this->session->set('execution', $executionID, $this->app->tab);
 
         /* Unset story, bug, build and testtask if type is ops. */
         if($execution and $execution->type == 'stage' and $this->config->systemMode == 'new')

@@ -48,12 +48,12 @@ function renderUserAvatar(user, objectType, objectID, size, objectStatus)
     if(objectType == 'story')
     {
         if(!priv.canAssignStory && !user) return $noPrivAndNoAssigned;
-        var link = createLink('story', 'assignto', 'id=' + objectID, '', true);
+        var link = createLink('story', 'assignto', 'id=' + objectID + '&kanbanGroup=default&from=taskkanban', '', true);
     }
     if(objectType == 'bug')
     {
         if(!priv.canAssignBug && !user) return $noPrivAndNoAssigned;
-        var link = createLink('bug', 'assignto', 'id=' + objectID, '', true);
+        var link = createLink('bug', 'assignto', 'id=' + objectID + '&kanbanGroup=default&from=taskkanban', '', true);
     }
 
     if(!user) return objectStatus == 'closed' ? '' : $('<a class="avatar has-text ' + avatarSizeClass + ' avatar-circle iframe" title="' + noAssigned + '" style="background: #ccc" href="' + link + '"><i class="icon icon-person"></i></a>');
@@ -705,7 +705,7 @@ function changeCardColType(cardID, fromColID, toColID, fromLaneID, toLaneID, car
         {
             if(fromColType == 'unconfirmed' && priv.canConfirmBug)
             {
-                var link = createLink('bug', 'confirmBug', 'bugID=' + objectID, '', true);
+                var link = createLink('bug', 'confirmBug', 'bugID=' + objectID + '&extra=&from=taskkanban', '', true);
                 showIframe = true;
             }
         }
@@ -714,7 +714,7 @@ function changeCardColType(cardID, fromColID, toColID, fromLaneID, toLaneID, car
             if(fromColType == 'confirmed' || fromColType == 'unconfirmed') moveCard = true;
             if((fromColType == 'closed' || fromColType == 'fixed' || fromColType == 'testing' || fromColType == 'tested') && priv.canActivateBug)
             {
-                var link = createLink('bug', 'activate', 'bugID=' + objectID, '', true);
+                var link = createLink('bug', 'activate', 'bugID=' + objectID + '&extra=&from=taskkanban', '', true);
                 showIframe = true;
             }
         }
@@ -722,7 +722,7 @@ function changeCardColType(cardID, fromColID, toColID, fromLaneID, toLaneID, car
         {
             if(fromColType == 'fixing' || fromColType == 'confirmed' || fromColType == 'unconfirmed')
             {
-                var link = createLink('bug', 'resolve', 'bugID=' + objectID, '', true);
+                var link = createLink('bug', 'resolve', 'bugID=' + objectID + '&extra=&from=taskkanban', '', true);
                 showIframe = true;
             }
         }
@@ -738,7 +738,7 @@ function changeCardColType(cardID, fromColID, toColID, fromLaneID, toLaneID, car
         {
             if(fromColType == 'testing' || fromColType == 'tested')
             {
-                var link = createLink('bug', 'close', 'bugID=' + objectID, '', true);
+                var link = createLink('bug', 'close', 'bugID=' + objectID + '&extra=&from=taskkanban', '', true);
                 showIframe = true;
             }
         }
@@ -769,7 +769,7 @@ function changeCardColType(cardID, fromColID, toColID, fromLaneID, toLaneID, car
     {
         if(toColType == 'closed' && priv.canCloseStory)
         {
-            var link = createLink('story', 'close', 'storyID=' + objectID, '', true);
+            var link = createLink('story', 'close', 'storyID=' + objectID + '&from=taskkanban', '', true);
             showIframe = true;
         }
         else

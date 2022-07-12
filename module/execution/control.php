@@ -3221,15 +3221,16 @@ class execution extends control
      * @param  int    $executionID
      * @param  int    $storyID
      * @param  string $confirm    yes|no
+     * @param  string $from taskkanban
      * @access public
      * @return void
      */
-    public function unlinkStory($executionID, $storyID, $confirm = 'no')
+    public function unlinkStory($executionID, $storyID, $confirm = 'no', $from = '')
     {
         if($confirm == 'no')
         {
             $tip = $this->app->rawModule == 'projectstory' ? $this->lang->execution->confirmUnlinkExecutionStory : $this->lang->execution->confirmUnlinkStory;
-            return print(js::confirm($tip, $this->createLink('execution', 'unlinkstory', "executionID=$executionID&storyID=$storyID&confirm=yes")));
+            return print(js::confirm($tip, $this->createLink('execution', 'unlinkstory', "executionID=$executionID&storyID=$storyID&confirm=yes&from=$from")));
         }
         else
         {
@@ -3251,26 +3252,23 @@ class execution extends control
                 return $this->send($response);
             }
 
-            $execution = $this->execution->getByID($executionID);
-            if($this->app->tab == 'execution')
+            $execution     = $this->execution->getByID($executionID);
+            $execLaneType  = $this->session->execLaneType ? $this->session->execLaneType : 'all';
+            $execGroupBy   = $this->session->execGroupBy ? $this->session->execGroupBy : 'default';
+            $rdSearchValue = $this->session->rdSearchValue ? $this->session->rdSearchValue : '';
+            if($this->app->tab == 'execution' and $execution->type == 'kanban')
             {
-                $execLaneType  = $this->session->execLaneType ? $this->session->execLaneType : 'all';
-                $execGroupBy   = $this->session->execGroupBy ? $this->session->execGroupBy : 'default';
-                $rdSearchValue = $this->session->rdSearchValue ? $this->session->rdSearchValue : '';
-                if($execution->type == 'kanban')
-                {
-                    $kanbanData = $this->loadModel('kanban')->getRDKanban($executionID, $execLaneType, 'id_desc', 0, $execGroupBy, $rdSearchValue);
-                    $kanbanData = json_encode($kanbanData);
-                    return print(js::closeModal('parent', '', "parent.updateKanban($kanbanData)"));
-                }
-                else
-                {
-                    $kanbanData = $this->loadModel('kanban')->getExecutionKanban($executionID, $execLaneType, $execGroupBy);
-                    $kanbanType = $execLaneType == 'all' ? 'story' : key($kanbanData);
-                    $kanbanData = $kanbanData[$kanbanType];
-                    $kanbanData = json_encode($kanbanData);
-                    return print(js::closeModal('parent', '', "parent.updateKanban(\"story\", $kanbanData)"));
-                }
+                $kanbanData = $this->loadModel('kanban')->getRDKanban($executionID, $execLaneType, 'id_desc', 0, $execGroupBy, $rdSearchValue);
+                $kanbanData = json_encode($kanbanData);
+                return print(js::closeModal('parent', '', "parent.updateKanban($kanbanData)"));
+            }
+            elseif($from == 'taskkanban')
+            {
+                $kanbanData = $this->loadModel('kanban')->getExecutionKanban($executionID, $execLaneType, $execGroupBy);
+                $kanbanType = $execLaneType == 'all' ? 'story' : key($kanbanData);
+                $kanbanData = $kanbanData[$kanbanType];
+                $kanbanData = json_encode($kanbanData);
+                return print(js::closeModal('parent', '', "parent.updateKanban(\"story\", $kanbanData)"));
             }
 
             return print(js::reload('parent'));
