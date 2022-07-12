@@ -1367,7 +1367,7 @@ class repo extends control
         }
 
         $repo = $this->repo->getRepoByID($repoID);
-        if(in_array($repo->SCM, array('Gitlab', 'Gitea')))
+        if(in_array($repo->SCM, $this->config->repo->gitServiceList))
         {
             $this->scm = $this->app->loadClass('scm');
             $this->scm->setEngine($repo);
