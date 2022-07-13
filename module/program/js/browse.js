@@ -68,6 +68,16 @@ $(function()
             $('#projectsSummary').addClass('hidden');
         }
     });
+
+    /* Solve the problem that clicking the browser back button causes the checkbox to be selected by default. */
+    setTimeout(function()
+    {
+        $(":checkbox[name^='projectIdList']").each(function()
+        {
+            $(this).prop('checked', false);
+        });
+        $('.table-footer #checkAll').prop('checked', false);
+    }, 10);
 });
 
 function showEditCheckbox(show)
