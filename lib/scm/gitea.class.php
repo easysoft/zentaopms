@@ -659,11 +659,11 @@ class gitea
             {
                 if($matches[2] == 'create')
                 {
-                    $newFiles[] = $matches[3];
+                    if(!in_array($matches[3], $newFiles)) $newFiles[] = $matches[3];
                 }
                 elseif($matches[2] == 'delete')
                 {
-                    $delFiles[] = $matches[3];
+                    if(!in_array($matches[3], $delFiles)) $delFiles[] = $matches[3];
                 }
             }
         }
