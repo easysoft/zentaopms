@@ -1527,6 +1527,7 @@ class projectModel extends model
             $projects[$projectID]->id             = $projectID;
             $projects[$projectID]->name           = $projectName;
             $projects[$projectID]->code           = $projectCode;
+            $projects[$projectID]->model          = $oldProjects[$projectID]->model;
             $projects[$projectID]->PM             = $data->PMs[$projectID];
             $projects[$projectID]->begin          = $data->begins[$projectID];
             $projects[$projectID]->end            = isset($data->ends[$projectID]) ? $data->ends[$projectID] : LONG_TIME;
@@ -1582,7 +1583,17 @@ class projectModel extends model
                 ->where('id')->eq($projectID)
                 ->exec();
 
-            if(dao::isError()) helper::end(js::error('project#' . $projectID . dao::getError(true)));
+            if(dao::isError())
+            {
+                $errors = dao::getError();
+                foreach($errors as $key => $error)
+                {
+                    dao::$errors[$key][0] = 'project#' . $projectID . $error[0];
+                }
+
+                return false;
+            }
+
             if(!dao::isError())
             {
                 $linkedProducts = $this->dao->select('product')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($projectID)->fetchPairs();
