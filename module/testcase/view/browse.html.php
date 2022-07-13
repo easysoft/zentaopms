@@ -261,7 +261,7 @@ js::set('suiteID',        $suiteID);
         <h4 class="modal-title"><?php echo $lang->testcase->importToLib;?></h4>
       </div>
       <div class="modal-body">
-        <form method='post' class='form-ajax' action='<?php echo $this->createLink('testcase', 'importToLib');?>'>
+        <form method='post' class='form-ajax not-watch' action='<?php echo $this->createLink('testcase', 'importToLib');?>'>
           <table class='table table-form'>
             <tr>
               <td class='select-lib'><?php echo $lang->testcase->selectLibAB;?></td>
