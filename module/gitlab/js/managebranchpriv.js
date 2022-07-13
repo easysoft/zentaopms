@@ -50,7 +50,7 @@ function addItem(obj)
     {
         if(this === $branches[0]) return;
         var $select = $(this);
-        var picker = $select.data('zui.picker');
+        var picker  = $select.data('zui.picker');
         if(!picker) return;
         var selectItem = picker.getListItem(picker.getValue());
         if(selectItem) disabledItems.push($.extend({}, selectItem, {disabled: true}));

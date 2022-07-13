@@ -527,7 +527,7 @@ class gitea
         if(!empty($version) and $count == 1)
         {
             $api .= '/' . $version;
-            $commit = $this->fetch($api);
+            $commit = $this->fetch($api, array('limit' => 1));
             if(isset($commit->sha))
             {
                 $log = new stdclass;
@@ -543,10 +543,8 @@ class gitea
             }
         }
 
-        $params = array();
-        $params['ref_name'] = $branch;
-        $params['per_page'] = $count;
-        $params['all']      = 0;
+        $params['sha']  = $branch;
+        $params['page'] = $count;
 
         if($version and $version != 'HEAD')
         {
@@ -605,8 +603,11 @@ class gitea
         $time = $dao->select('time')->from(TABLE_REPOHISTORY)->where('revision')->eq($sha)->fetch('time');
         if($time) return date('c', strtotime($time));
 
-        $result = $this->fetch("commits/$sha");
-        return (isset($result->committed_date)) ? $result->committed_date : false;
+        $params = array();
+        $params['sha']   = $sha;
+        $params['limit'] = 1;
+        $result = $this->fetch("commits", $params);
+        return (isset($resulti[0]->created)) ? date('Y-m-d H:i:s', strtotime($result->created)) : false;
     }
 
     /**
@@ -622,14 +623,14 @@ class gitea
     public function getCommitsByPath($path, $fromRevision = '', $toRevision = '', $perPage = 0)
     {
         $path = ltrim($path, DIRECTORY_SEPARATOR);
-        $api = "commits";
+        $api  = "commits";
 
         $param = new stdclass();
         $param->path  = urldecode($path);
         $param->limit = 1;
         $param->sha   = ($toRevision != 'HEAD' and $toRevision) ? $toRevision : $this->branch;
 
-        if($perPage) $param->per_page = $perPage;
+        if($perPage) $param->page = $perPage;
         return $this->fetch($api, $param);
     }
 
@@ -647,18 +648,23 @@ class gitea
         $results = $this->fetch($api, array('ref' => $revision));
         if(empty($results)) return array();
 
+        $diffApi = "git/commits/$revision.patch";
+        $diffs = commonModel::http($diffApi);
+        if(!empty(commonModel::$requestErrors) or empty($diffs)) return array();
+
         $files = array();
         foreach($results as $row)
         {
             $file  = new stdclass();
             $file->revision = $revision;
             $file->action   = 'A';
-            $file->type = $row->type;
-            $file->path = '/' . trim($row->path);
-            $files[] = $file;
+            $file->type     = $row->type;
+            $file->path     = '/' . $row->path;
+
+            $files[$file->path] = $file;
         }
 
-        return $files;
+        return array_values($files);
     }
 
     /**
@@ -690,8 +696,8 @@ class gitea
     public function fetch($api, $params = array(), $needToLoop = false)
     {
         $params = (array) $params;
-        $params['token']    = $this->token;
-        $params['per_page'] = isset($params['per_page']) ? $params['per_page'] : 100;
+        $params['token'] = $this->token;
+        $params['limit'] = isset($params['limit']) ? $params['limit'] : 100;
 
         $api = ltrim($api, '/');
         $api = $this->root . $api . '?' . http_build_query($params);
