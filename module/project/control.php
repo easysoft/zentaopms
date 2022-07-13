@@ -981,6 +981,9 @@ class project extends control
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
+        $allExecution = $this->project->getStats($projectID, 'all');
+        $this->view->allExecutionNum = count($allExecution);
+
         $this->view->title      = $this->lang->execution->allExecutions;
         $this->view->position[] = $this->lang->execution->allExecutions;
 
