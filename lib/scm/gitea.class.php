@@ -655,15 +655,15 @@ class gitea
         foreach($diffs as $row)
         {
             preg_match('/^(\s)(create|delete)\smode\s\d+\s(.+)$/', $row, $matches);
-            if(count($matches) == 4)
+            if(count($matches) == 4 and !in_array($matches[3], $newFiles) and !in_array($matches[3], $delFiles))
             {
                 if($matches[2] == 'create')
                 {
-                    if(!in_array($matches[3], $newFiles)) $newFiles[] = $matches[3];
+                    $newFiles[] = $matches[3];
                 }
                 elseif($matches[2] == 'delete')
                 {
-                    if(!in_array($matches[3], $delFiles)) $delFiles[] = $matches[3];
+                    $delFiles[] = $matches[3];
                 }
             }
         }
