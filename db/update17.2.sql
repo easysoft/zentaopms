@@ -16,3 +16,6 @@ UPDATE `zt_approval` SET  `createdDate` = '';
 ALTER TABLE `zt_approval` CHANGE `createdDate` `createdDate` datetime NOT NULL AFTER `createdBy`;
 
 ALTER TABLE `zt_reviewissue` ADD `approval` MEDIUMINT  NOT NULL  AFTER `review`;
+
+ALTER TABLE `zt_approvalnode` ADD INDEX `idx_reviewed_date` (`reviewedDate`);
+
