@@ -1226,7 +1226,14 @@ class task extends control
                 $actionID = $this->loadModel('action')->create('task', $estimate->task, 'Adjusttasktowait');
                 $this->action->logHistory($actionID, $changes);
             }
-            return print(js::reload('parent'));
+            if($task->consumed - $estimate->consumed == 0)
+            {
+                return print(js::reload('parent.parent'));
+            }
+            else
+            {
+                return print(js::reload('parent'));
+            }
         }
     }
 
