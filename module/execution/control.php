@@ -219,14 +219,9 @@ class execution extends control
         $showModule    = !empty($this->config->datatable->executionTask->showModule) ? $this->config->datatable->executionTask->showModule : '';
         $this->view->modulePairs = $showModule ? $this->tree->getModulePairs($executionID, 'task', $showModule) : array();
 
-        $allTasksNum = $this->dao->select('COUNT(id) AS count')->from(TABLE_TASK)
-            ->where('execution')->eq($executionID)
-            ->andWhere('deleted')->eq(0)
-            ->fetch();
-
         /* Assign. */
         $this->view->tasks        = $tasks;
-        $this->view->allTasksNum  = $allTasksNum;
+        $this->view->allTasksNum  = $this->task->getExecutionTasks($executionID);
         $this->view->summary      = $this->execution->summary($tasks);
         $this->view->tabID        = 'task';
         $this->view->pager        = $pager;

@@ -473,11 +473,7 @@ class program extends control
         $sortField    = zget($this->config->program->sortFields, $order[0], 'id') . '_' . $order[1];
         $projectStats = $this->program->getProjectStats($programID, $browseType, 0, $sortField, $pager, $programTitle);
 
-        $allProjectsNum = $this->dao->select('COUNT(id) AS count')->from(TABLE_PROJECT)
-            ->where('parent')->eq($programID)
-            ->andWhere('type')->eq('project')
-            ->andWhere('deleted')->eq(0)
-            ->fetch();
+        $allProjectsNum = $this->program->getProjectStats($programID, 'all');
         $this->view->allProjectsNum = $allProjectsNum;
 
         $this->view->title      = $this->lang->program->project;

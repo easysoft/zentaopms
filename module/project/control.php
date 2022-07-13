@@ -309,10 +309,7 @@ class project extends control
         $programTitle = $this->loadModel('setting')->getItem('owner=' . $this->app->user->account . '&module=project&key=programTitle');
         $projectStats = $this->loadModel('program')->getProjectStats($programID, $browseType, $queryID, $orderBy, $pager, $programTitle);
 
-        $allProjectsNum = $this->dao->select('COUNT(id) AS count')->from(TABLE_PROJECT)
-            ->where('type')->eq('project')
-            ->andWhere('deleted')->eq(0)
-            ->fetch();
+        $allProjectsNum = $this->loadModel('program')->getProjectStats($programID, 'all');
         $this->view->allProjectsNum = $allProjectsNum;
 
         $this->view->title      = $this->lang->project->browse;
@@ -982,7 +979,7 @@ class project extends control
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
         $allExecution = $this->project->getStats($projectID, 'all');
-        $this->view->allExecutionNum = count($allExecution);
+        $this->view->allExecutionNum = empty($allExecution);
 
         $this->view->title      = $this->lang->execution->allExecutions;
         $this->view->position[] = $this->lang->execution->allExecutions;
