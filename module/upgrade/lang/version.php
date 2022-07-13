@@ -161,6 +161,7 @@ $lang->upgrade->fromVersions['17_0_beta2'] = '17.0.beta2';
 $lang->upgrade->fromVersions['17_0']       = '17.0';
 $lang->upgrade->fromVersions['17_1']       = '17.1';
 $lang->upgrade->fromVersions['17_2']       = '17.2';
+$lang->upgrade->fromVersions['17_3']       = '17.3';
 
 global $config;
 /* Lite. */
@@ -326,6 +327,7 @@ $lang->upgrade->fromVersions['biz7_0_beta2'] = 'Biz7.0.beta2';
 $lang->upgrade->fromVersions['biz7_0']       = 'Biz7.0';
 $lang->upgrade->fromVersions['biz7_1']       = 'Biz7.1';
 $lang->upgrade->fromVersions['biz7_2']       = 'Biz7.2';
+$lang->upgrade->fromVersions['biz7_3']       = 'Biz7.3';
 
 /* Max. */
 $lang->upgrade->fromVersions['max2_0_beta4'] = 'Max2.0.beta4';
@@ -347,3 +349,4 @@ $lang->upgrade->fromVersions['max3_1_beta1'] = 'Max3.1.beta1';
 $lang->upgrade->fromVersions['max3_1_beta2'] = 'Max3.1.beta2';
 $lang->upgrade->fromVersions['max3_1']       = 'Max3.1';
 $lang->upgrade->fromVersions['max3_2']       = 'Max3.2';
+$lang->upgrade->fromVersions['max3_3']       = 'Max3.3';

@@ -531,7 +531,6 @@ class upgradeModel extends model
             case '17_2':
                 $this->addReviewIssusApprovalData();
                 break;
-                
         }
 
         $this->deletePatch();
@@ -973,6 +972,8 @@ class upgradeModel extends model
                 $confirmContent .= file_get_contents($this->getUpgradeFile('17.1'));
                 $xuanxuanSql     = $this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan5.6.sql';
                 $confirmContent .= file_get_contents($xuanxuanSql);
+            case '17_2':
+                $confirmContent .= file_get_contents($this->getUpgradeFile('17.2'));
         }
 
         return $confirmContent;
