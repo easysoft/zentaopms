@@ -528,9 +528,6 @@ class upgradeModel extends model
                 $this->moveProjectAdmins();
                 $this->addStoryViewPriv();
                 break;
-            case '17_2':
-                $this->addReviewIssusApprovalData();
-                break;
         }
 
         $this->deletePatch();
@@ -694,6 +691,9 @@ class upgradeModel extends model
                 break;
             case 'max3_0':
                 $this->moveResult2Node();
+                break;
+            case 'max3_3':
+                $this->addReviewIssusApprovalData();
                 break;
         }
     }
@@ -6542,7 +6542,7 @@ class upgradeModel extends model
 
         /* Add approval data. */
         foreach($reviewIssues as $reviewIssue)
-        {   
+        {
             if(!isset($approvalsPairs[$reviewIssue->review]->approval)) continue;
             $this->dao->update(TABLE_REVIEWISSUE)
                 ->set('approval')->eq($approvalsPairs[$reviewIssue->review]->approval)
