@@ -24,3 +24,5 @@ $config->port->sysDataFields  = 'execution,product,user';
 $config->port->userFields     = 'assignedTo,openedBy,finishedBy,canceledBy,closedBy,lastEditedBy,';
 $config->port->import = new stdClass();
 $config->port->import->ignoreFields = explode(',', "mailto,openedBy,openedDate,assignedDate,finishedBy,finishedDate,canceledBy,,canceledDate,closedBy,closedDate,closedReason,lastEditedBy,lastEditedDate,files");
+
+$config->port->dateMatch = '/[1-9]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])/';

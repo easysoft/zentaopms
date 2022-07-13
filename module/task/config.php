@@ -44,11 +44,19 @@ $config->task->fieldList['module']['dataSource'] = array('module' => 'tree', 'me
 $config->task->fieldList['story']['control'] = 'select';
 $config->task->fieldList['story']['dataSource']  = array('module' => 'story', 'method' => 'getExecutionStories', 'params' => '$executionID', 'pairs' => array('id', 'title'));
 
-$config->task->fieldList['execution']['control'] = 'select';
+$config->task->fieldList['execution']['control'] = 'hidden';
 $config->task->fieldList['execution']['dataSource'] = array('module' => 'execution', 'method' => 'getPairs');
 
-$config->task->fieldList['assignedTo']['values'] = 'user';
-$config->task->fieldList['assignedTo']['title']  = 'assignTo';
+$config->task->fieldList['mode']['control'] = 'hidden';
+
+$config->task->fieldList['desc']['control'] = 'textarea';
+
+$config->task->fieldList['assignedTo']['control'] = 'select';
+$config->task->fieldList['assignedTo']['dataSource']  = array('module' => 'user', 'method' => 'getTeamMemberPairs', 'params' => '$executionID&execution');
+$config->task->fieldList['assignedTo']['title']   = 'assignTo';
+
+$config->task->fieldList['estStarted']['control'] = 'date';
+$config->task->fieldList['deadline']['control']   = 'date';
 
 $config->task->fieldList['closedReason']['dataSource'] = array('lang' => 'reasonList');
 

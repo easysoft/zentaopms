@@ -55,7 +55,7 @@ class portModel extends model
         /* save params to session. */
         $this->session->set(($model.'PortParams'), $params);
 
-        $this->config->port->sysDataList = $this->initSysDataFields();
+
 
         $fields = $this->post->exportFields;
 
@@ -122,11 +122,12 @@ class portModel extends model
      * @access public
      * @return void
      */
-    public function initFieldList($model, $fields = '')
+    public function initFieldList($model, $fields = '', $withKey = true)
     {
         $this->commonActions($model);
         $this->mergeConfig($model);
 
+        $this->config->port->sysDataList = $this->initSysDataFields();
         $portFieldList = $this->portConfig->fieldList;
 
         if(empty($fields)) return false;
@@ -148,7 +149,7 @@ class portModel extends model
                 }
             }
 
-            $modelFieldList['values'] = $this->initValues($model, $field, $modelFieldList);
+            $modelFieldList['values'] = $this->initValues($model, $field, $modelFieldList, $withKey);
             $fieldList[$field] = $modelFieldList;
         }
 
@@ -207,7 +208,7 @@ class portModel extends model
      * @access public
      * @return void
      */
-    public function initValues($model, $field, $fieldValue = '')
+    public function initValues($model, $field, $fieldValue = '', $withKey = true)
     {
         $values = $fieldValue['values'];
 
@@ -240,6 +241,15 @@ class portModel extends model
         {
             if(strpos($this->modelConfig->sysLangFields, $field)) return $this->modelLang->{$field.'List'};
             if(strpos($this->modelConfig->sysDataFields, $field) and !empty($this->portConfig->sysDataList[$values])) return $this->portConfig->sysDataList[$values];
+        }
+
+        if(is_array($values) and $withKey)
+        {
+            unset($values['']);
+            foreach ($values as $key => $value)
+            {
+                $values[$key] = $value . "(#$key)";
+            }
         }
 
         return $values;
@@ -542,8 +552,57 @@ class portModel extends model
                 $modelDatas[$id] = (object) array_merge((array)$modelDatas[$id], (array)$row);
             }
         }
+
+        /* Deal children datas and multiple tasks .*/
+        if($modelDatas)
+        {
+           $modelDatas = $this->updateChildDatas($modelDatas);
+        }
+
         return $modelDatas;
     }
 
-}
+    /**
+     * updateChildrenDatas
+     *
+     * @param  int    $datas
+     * @access public
+     * @return void
+     */
+    public function updateChildDatas($datas)
+    {
+        $children = array();
+        foreach($datas as $data)
+        {
+            if(!empty($data->parent) and isset($datas[$data->parent]))
+            {
+                if(!empty($data->name)) $data->name = '>' . $data->name;
+                elseif(!empty($data->title)) $data->title = '>' . $data->title;
+                $children[$data->parent][$data->id] = $data;
+                unset($datas[$data->id]);
+            }
+            if(!empty($data->mode))
+            {
+                $datas[$data->id]->name = '[' . $this->lang->task->multipleAB . ']' . $data->name;
+            }
+        }
 
+        /* Move child data after parent data .*/
+        if(!empty($children))
+        {
+            $position = 0;
+            foreach($datas as $data)
+            {
+                $position ++;
+                if(isset($children[$data->id]))
+                {
+                    array_splice($datas, $position, 0, $children[$data->id]);
+                    $position += count($children[$data->id]);
+                }
+            }
+        }
+
+        return $datas;
+    }
+
+}
