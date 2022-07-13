@@ -59,10 +59,12 @@ class messageModel extends model
      * @param  int    $objectID
      * @param  string $actionType
      * @param  int    $actionID
+     * @param  string $actor
+     * @param  string $extra
      * @access public
      * @return void
      */
-    public function send($objectType, $objectID, $actionType, $actionID, $actor = '')
+    public function send($objectType, $objectID, $actionType, $actionID, $actor = '', $extra = '')
     {
         $objectType     = strtolower($objectType);
         $messageSetting = $this->config->message->setting;

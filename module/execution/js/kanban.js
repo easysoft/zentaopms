@@ -811,8 +811,6 @@ function tips()
 function renderHeaderCol($column, column, $header, kanbanData)
 {
     if(groupBy == 'story' && column.type == 'story') return;
-    console.log(groupBy);
-    console.log(column.type);
     /* Render group header. */
     var privs       = kanbanData.actions;
     var columnPrivs = kanbanData.columns[0].actions;

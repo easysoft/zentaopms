@@ -27,6 +27,7 @@
 <?php js::set('productName', $lang->product->name);?>
 <?php js::set('manageProducts', $lang->project->manageProducts);?>
 <?php $requiredFields = $config->project->create->requiredFields;?>
+<?php js::set('requiredFields', $requiredFields);?>
 <div id='mainContent' class='main-content'>
   <div class='center-block'>
     <div class='main-header'>
@@ -77,7 +78,7 @@
             </div>
           </td>
           <td>
-            <div class='checkbox-primary c-future'>
+            <div class="checkbox-primary c-future <?php echo strpos($requiredFields, 'budget') !== false ? 'hidden' : '';?>">
               <input type='checkbox' id='future' name='future' value='1' />
               <label for='future'><?php echo $lang->project->future;?></label>
             </div>
