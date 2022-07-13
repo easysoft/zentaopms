@@ -23,9 +23,9 @@
         <?php foreach($hasAccessBranches as $branch):?>
         <tr>
           <td><?php echo html::input("names[$i]", $branch->name, "class='form-control' readonly");?></td>
-          <td><?php echo html::select("mergeLevels[$i]", $lang->gitlab->branch->branchCreationLevelList, $branch->mergeAccess, "class='form-control chosen'");?></td>
+          <td><?php echo html::select("mergeLevels[$i]", $lang->gitlab->branch->branchCreationLevelList, $branch->mergeAccess, "class='form-control user-picker'");?></td>
           <td>
-            <?php echo html::select("pushLevels[$i]", $lang->gitlab->branch->branchCreationLevelList, $branch->pushAccess, "class='form-control chosen'");?>
+            <?php echo html::select("pushLevels[$i]", $lang->gitlab->branch->branchCreationLevelList, $branch->pushAccess, "class='form-control user-picker'");?>
             <?php echo html::hidden("branches[$i]", $branch->name);?>
           </td>
           <td class='c-actions text-center'>
@@ -40,8 +40,8 @@
         <?php for($j = 0; $j < 5; $j ++):?>
         <tr class='addedItem'>
           <td><?php echo html::select("branches[$i]", array(''=>'') + $noAccessBranches, '', "class='form-control user-picker'");?></td>
-          <td><?php echo html::select("mergeLevels[$i]", $lang->gitlab->branch->branchCreationLevelList, 40, "class='form-control chosen'");?></td>
-          <td><?php echo html::select("pushLevels[$i]", $lang->gitlab->branch->branchCreationLevelList, 40, "class='form-control chosen'");?></td>
+          <td><?php echo html::select("mergeLevels[$i]", $lang->gitlab->branch->branchCreationLevelList, 40, "class='form-control user-picker'");?></td>
+          <td><?php echo html::select("pushLevels[$i]", $lang->gitlab->branch->branchCreationLevelList, 40, "class='form-control user-picker'");?></td>
           <td class='c-actions text-center'>
             <?php echo html::a('javascript:;', "<i class='icon-plus'></i>", '', "onclick='addItem(this)' class='btn btn-link'");?>
             <?php echo html::a('javascript:;', "<i class='icon icon-close'></i>", '', "onclick='deleteItem(this)' class='btn btn-link'");?>
@@ -70,8 +70,8 @@
   <table class='hidden'>
     <tr id='addItem' class='hidden'>
       <td><?php echo html::select("branches[]", array(''=>'') + $noAccessBranches, '', "class='form-control'");?></td>
-      <td><?php echo html::select("mergeLevels[]", $lang->gitlab->branch->branchCreationLevelList, 40, "class='form-control chosen'");?></td>
-      <td><?php echo html::select("pushLevels[]", $lang->gitlab->branch->branchCreationLevelList, 40, "class='form-control chosen'");?></td>
+      <td><?php echo html::select("mergeLevels[]", $lang->gitlab->branch->branchCreationLevelList, 40, "class='form-control'");?></td>
+      <td><?php echo html::select("pushLevels[]", $lang->gitlab->branch->branchCreationLevelList, 40, "class='form-control'");?></td>
       <td class='c-actions text-center'>
         <?php echo html::a('javascript:;', "<i class='icon-plus'></i>", '', "onclick='addItem(this)' class='btn btn-link'");?>
         <?php echo html::a('javascript:;', "<i class='icon icon-close'></i>", '', "onclick='deleteItem(this)' class='btn btn-link'");?>

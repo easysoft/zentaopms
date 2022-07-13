@@ -22,7 +22,7 @@
         <?php foreach($hasAccessTags as $tag):?>
         <tr>
           <td><?php echo html::input("names[$i]", $tag->name, "class='form-control' readonly");?></td>
-          <td><?php echo html::select("createLevels[$i]", $lang->gitlab->branch->branchCreationLevelList, $tag->createAccess, "class='form-control chosen'");?></td>
+          <td><?php echo html::select("createLevels[$i]", $lang->gitlab->branch->branchCreationLevelList, $tag->createAccess, "class='form-control user-picker'");?></td>
           <td class='c-actions text-center'>
             <?php echo html::hidden("tags[$i]", $tag->name);?>
             <?php echo html::a('javascript:;', "<i class='icon-plus'></i>", '', "onclick='addItem(this)' class='btn btn-link'");?>
@@ -36,7 +36,7 @@
         <?php for($j = 0; $j < 5; $j ++):?>
         <tr class='addedItem'>
           <td><?php echo html::select("tags[$i]", array(''=>'') + $noAccessTags, '', "class='form-control user-picker'");?></td>
-          <td><?php echo html::select("createLevels[$i]", $lang->gitlab->branch->branchCreationLevelList, 40, "class='form-control chosen'");?></td>
+          <td><?php echo html::select("createLevels[$i]", $lang->gitlab->branch->branchCreationLevelList, 40, "class='form-control user-picker'");?></td>
           <td class='c-actions text-center'>
             <?php echo html::a('javascript:;', "<i class='icon-plus'></i>", '', "onclick='addItem(this)' class='btn btn-link'");?>
             <?php echo html::a('javascript:;', "<i class='icon icon-close'></i>", '', "onclick='deleteItem(this)' class='btn btn-link'");?>
@@ -65,7 +65,7 @@
   <table class='hidden'>
     <tr id='addItem' class='hidden'>
       <td><?php echo html::select("tags[]", array(''=>'') + $noAccessTags, '', "class='form-control'");?></td>
-      <td><?php echo html::select("createLevels[]", $lang->gitlab->branch->branchCreationLevelList, 40, "class='form-control chosen'");?></td>
+      <td><?php echo html::select("createLevels[]", $lang->gitlab->branch->branchCreationLevelList, 40, "class='form-control'");?></td>
       <td class='c-actions text-center'>
         <?php echo html::a('javascript:;', "<i class='icon-plus'></i>", '', "onclick='addItem(this)' class='btn btn-link'");?>
         <?php echo html::a('javascript:;', "<i class='icon icon-close'></i>", '', "onclick='deleteItem(this)' class='btn btn-link'");?>

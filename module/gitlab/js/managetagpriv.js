@@ -40,22 +40,22 @@ function savePriv()
  */
 function addItem(obj)
 {
-    var item      = $('#addItem').html().replace(/%i%/g, itemIndex);
-    var $tr       = $('<tr class="addedItem">' + item  + '</tr>').insertAfter($(obj).closest('tr'));
-    var $accounts = $tr.find('select:first').addClass('user-picker').trigger('list:updated').picker({type: 'user'});
+    var item  = $('#addItem').html().replace(/%i%/g, itemIndex);
+    var $tr   = $('<tr class="addedItem">' + item  + '</tr>').insertAfter($(obj).closest('tr'));
+    var $tags = $tr.find('select').addClass('user-picker').trigger('list:updated').picker({type: 'user'});
     itemIndex++;
 
     var disabledItems = [];
     $('.user-picker[name^=tags]').each(function()
     {
-        if(this === $accounts[0]) return;
+        if(this === $tags[0]) return;
         var $select = $(this);
         var picker  = $select.data('zui.picker');
         if(!picker) return;
         var selectItem = picker.getListItem(picker.getValue());
         if(selectItem) disabledItems.push($.extend({}, selectItem, {disabled: true}));
     });
-    if(disabledItems.length) $accounts.data('zui.picker').updateOptionList(disabledItems);
+    if(disabledItems.length) $tags.data('zui.picker').updateOptionList(disabledItems);
 }
 
 /**
@@ -67,6 +67,8 @@ function addItem(obj)
  */
 function deleteItem(obj)
 {
-    if($('#privForm .table-form tbody').children().length < 2) return false;
+    if($('#privForm .table tbody').children().length < 2) return false;
+
+    $(obj).closest('tr').find('.picker .picker-selection-remove').click();
     $(obj).closest('tr').remove();
 }
