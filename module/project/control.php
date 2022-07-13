@@ -493,7 +493,10 @@ class project extends control
             $products = $this->product->getProducts($copyProjectID);
             foreach($products as $product)
             {
-                $productPlans[$product->id] = $this->loadModel('productplan')->getPairs($product->id, '', 'noclosed');
+                foreach($product->branches as $branch)
+                {
+                    $productPlans[$product->id][$branch] = $this->loadModel('productplan')->getPairs($product->id, $branch, 'noclosed', true);
+                }
             }
         }
 
