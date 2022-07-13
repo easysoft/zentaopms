@@ -434,8 +434,7 @@ $lang->execution->charts->cfd = new stdclass();
 $lang->execution->charts->cfd->cfdTip        = "<p>
 1. The CFD（Cumulative Flow Diagram）reflects the trend of accumulated workload at each stage over time.<br>
 2. The horizontal axis represents the date, and the vertical axis represents the number of work items.<br>
-3. To learn about the team's delivery, you can calculate the WIP quantity, delivery rate and average lead time through the CFD.
-<p>";
+3. To learn about the team's delivery, you can calculate the WIP quantity, delivery rate and average lead time through the CFD. <p>";
 $lang->execution->charts->cfd->cycleTime     = 'Average cycle time';
 $lang->execution->charts->cfd->cycleTimeTip  = 'Average cycle time of each card from development start to completion';
 $lang->execution->charts->cfd->throughput    = 'Throughput Rate';
