@@ -145,7 +145,7 @@ class repo extends control
         $this->view->title        = $this->lang->repo->common . $this->lang->colon . $this->lang->repo->create;
         $this->view->position[]   = $this->lang->repo->create;
         $this->view->groups       = $this->loadModel('group')->getPairs();
-        $this->view->users        = $this->loadModel('user')->getPairs('noletter|noempty|nodeleted');
+        $this->view->users        = $this->loadModel('user')->getPairs('noletter|noempty|nodeleted|noclosed');
         $this->view->products     = $products;
         $this->view->productID    = $productID;
         $this->view->serviceHosts = $this->loadModel('gitlab')->getPairs();
@@ -202,7 +202,7 @@ class repo extends control
         $this->view->repoID        = $repoID;
         $this->view->objectID      = $objectID;
         $this->view->groups        = $this->loadModel('group')->getPairs();
-        $this->view->users         = $this->loadModel('user')->getPairs('noletter|noempty|nodeleted');
+        $this->view->users         = $this->loadModel('user')->getPairs('noletter|noempty|nodeleted|noclosed');
         $this->view->products      = $objectID ? $this->loadModel('product')->getProductPairsByProject($objectID) : $this->loadModel('product')->getPairs();
         $this->view->serviceHosts  = array('' => '') + $this->loadModel('pipeline')->getPairs($repo->SCM);
 
