@@ -2364,7 +2364,7 @@ class testcaseModel extends model
             if(!$this->forceNotReview() and $stepChanged) $status = 'wait';
 
             if(!empty($_POST['title']) and $case->title != $this->post->title)                      $stepChanged = true;
-            if(!empty($_post['precondition']) and $case->precondition != $this->post->precondition) $stepchanged = true;
+            if(!empty($_POST['precondition']) and $case->precondition != $this->post->precondition) $stepChanged = true;
             if(!empty($_POST['labels'][0]))                                                         $stepChanged = true;
 
             return array($stepChanged, $status);
