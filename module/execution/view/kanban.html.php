@@ -118,6 +118,11 @@ js::set('priv',
     )
 );
 ?>
+<?php if($groupBy == 'story' and $browseType == 'task'):?>
+<style>
+.kanban-cols {left: 0px !important;}
+</style>
+<?php endif;?>
 <div id='mainMenu' class='clearfix'>
   <div class='btn-toolbar pull-left'>
     <div class="input-control space c-type">

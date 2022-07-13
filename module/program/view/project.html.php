@@ -35,7 +35,7 @@ js::set('browseType', $browseType);
     <div class="table-empty-tip">
       <p>
         <span class="text-muted"><?php echo $lang->project->empty;?></span>
-        <?php if($browseType == 'all') common::printLink('project', 'createGuide', "programID=$programID", '<i class="icon icon-plus"></i> ' . $lang->project->create, '', 'class="btn btn-info btn-wide " data-toggle="modal"');?>
+        <?php if(empty($allProjectsNum->count)) common::printLink('project', 'createGuide', "programID=$programID", '<i class="icon icon-plus"></i> ' . $lang->project->create, '', 'class="btn btn-info btn-wide " data-toggle="modal"');?>
       </p>
     </div>
     <?php else:?>

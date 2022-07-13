@@ -431,10 +431,21 @@ $lang->execution->charts->burn->graph->actuality    = 'Actual';
 $lang->execution->charts->burn->graph->delay        = 'Delay';
 
 $lang->execution->charts->cfd = new stdclass();
+$lang->execution->charts->cfd->cfdTip        = "<p>
+1. The CFD（Cumulative Flow Diagram）reflects the trend of accumulated workload at each stage over time.<br>
+2. The horizontal axis represents the date, and the vertical axis represents the number of work items.<br>
+3. To learn about the team's delivery, you can calculate the WIP quantity, delivery rate and average lead time through the CFD.
+<p>";
 $lang->execution->charts->cfd->cycleTime     = 'Average cycle time';
 $lang->execution->charts->cfd->cycleTimeTip  = 'Average cycle time of each card from development start to completion';
 $lang->execution->charts->cfd->throughput    = 'Throughput Rate';
 $lang->execution->charts->cfd->throughputTip = 'Throughput Rate = WIP / Average cycle time';
+
+$lang->execution->charts->cfd->begin          = 'Begin';
+$lang->execution->charts->cfd->end            = 'End';
+$lang->execution->charts->cfd->errorBegin     = 'The start time cannot be greater than the end time.';
+$lang->execution->charts->cfd->errorDateRange = 'The Cumulative Flow Diagram（CFD） only provides data display within 3 months.';
+$lang->execution->charts->cfd->dateRangeTip   = 'CFD only shows the data within 3 months';
 
 $lang->execution->placeholder = new stdclass();
 $lang->execution->placeholder->code      = "Abbreviation of {$lang->executionCommon} name";

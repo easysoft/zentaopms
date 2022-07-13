@@ -211,7 +211,7 @@ class branch extends control
     public function ajaxGetDropMenu($productID, $branch, $module, $method, $extra = '')
     {
         parse_str($extra, $output);
-        $isQaModule = (strpos(',project,execution,', ",{$this->app->tab},") !== false and strpos(',bug,', ",$method,") !== false and !empty($productID)) ? true : false;
+        $isQaModule = (strpos(',project,execution,', ",{$this->app->tab},") !== false and strpos(',bug,testcase,', ",$method,") !== false and !empty($productID)) ? true : false;
         $param      = $isQaModule ? $extra : 0;
         $param      = isset($output['projectID']) ? $output['projectID'] : $param;
         $branches   = $this->branch->getPairs($productID, 'all', $param);
@@ -274,7 +274,7 @@ class branch extends control
         {
             $branchTagOption[$branchInfo->id] = $branchInfo->name . ($branchInfo->status == 'closed' ? ' (' . $this->lang->branch->statusList['closed'] . ')' : '');
         }
-        if(!isset($branchTagOption[$oldBranch]))
+        if(is_numeric($oldBranch) and !isset($branchTagOption[$oldBranch]))
         {
             $branch = $this->branch->getById($oldBranch, $productID, '');
             $branchTagOption[$oldBranch] = $oldBranch == BRANCH_MAIN ? $branch : ($branch->name . ($branch->status == 'closed' ? ' (' . $this->lang->branch->statusList['closed'] . ')' : ''));

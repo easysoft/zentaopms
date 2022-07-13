@@ -127,4 +127,16 @@ $(function()
     {
         location.href = createLink('execution', 'cfd', 'executionID=' + executionID + '&type=' + $(this).val());
     });
+
+    $('#weekend').click(function()
+    {
+        var type    = $('#type').val();
+        withWeekend = withWeekend == 'true' ? 'false' : 'true';
+        var begin   = Base64.encode(encodeURIComponent($('#begin').val()));
+        var end     = Base64.encode(encodeURIComponent($('#end').val()));
+        location.href = createLink('execution', 'cfd', 'executionID=' + executionID + '&type=' + type + '&withWeekend=' + withWeekend + '&begin=' + begin + '&end=' + end);
+    });
+
+    $("#end, #begin").datetimepicker('setEndDate', today)
+    $('.datetimepicker-days table tfoot').append('<tr><th colspan="7">' + dateRangeTip + '</th></tr>');
 });

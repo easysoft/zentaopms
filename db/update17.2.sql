@@ -11,3 +11,6 @@ CREATE TABLE `zt_cfd` (
 INSERT INTO `zt_cron` (`m`, `h`, `dom`, `mon`, `dow`, `command`, `remark`, `type`, `buildin`, `status`, `lastTime`) VALUES ('30', '23', '*', '*', '*', 'moduleName=execution&methodName=computecfd', '更新累积流图', 'zentao', 1, 'normal', '0000-00-00 00:00:00');
 
 ALTER TABLE `zt_doc` CHANGE `assignedDate` `assignedDate` datetime NOT NULL AFTER `assignedTo`;
+
+UPDATE `zt_approval` SET  `createdDate` = '';
+ALTER TABLE `zt_approval` CHANGE `createdDate` `createdDate` datetime NOT NULL AFTER `createdBy`;

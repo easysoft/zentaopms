@@ -88,7 +88,7 @@
               $createMisc = common::hasPriv('story', 'create') ? 'btn btn-secondary' : " btn btn-secondary disabled";
               echo html::a($createLink, "<i class='icon icon-plus'></i><span class='text'>" . $lang->story->create . "</span><span class='caret'>", '', "class='$createMisc'");
               ?>
-              <ul class='dropdown-menu'>
+              <ul class='dropdown-menu pull-right'>
                 <?php $disabled = common::hasPriv('story', 'batchCreate') ? '' : "class='disabled'";?>
                 <li <?php echo $disabled?>>
                   <?php
