@@ -9526,6 +9526,7 @@ CREATE TABLE IF NOT EXISTS `zt_reviewissue` (
   `id` mediumint(8) NOT NULL AUTO_INCREMENT,
   `project` mediumint(8) unsigned NOT NULL,
   `review` mediumint(8) NOT NULL,
+  `approval` mediumint(8) NOT NULL,
   `injection` mediumint(8) NOT NULL,
   `identify` mediumint(8) NOT NULL,
   `type` char(30) NOT NULL DEFAULT 'review',
