@@ -583,7 +583,7 @@ class portModel extends model
             }
             if(!empty($data->mode))
             {
-                $datas[$data->id]->name = '[' . $this->lang->task->multipleAB . ']' . $data->name;
+                $datas[$data->id]->name = '[' . $this->lang->task->multipleAB . '] ' . $data->name;
             }
         }
 
@@ -605,4 +605,91 @@ class portModel extends model
         return $datas;
     }
 
+    /**
+     * initTmpFile
+     *
+     * @access public
+     * @return void
+     */
+    public function initTmpFile()
+    {
+        $taskLang = $this->lang->task;
+        $file    = $this->session->fileImportFileName;
+        $tmpPath = $this->loadModel('file')->getPathOfImportedFile();
+        $tmpFile = $tmpPath . DS . md5(basename($file));
+
+        if(file_exists($tmpFile)) return $tmpFile;
+
+        $rows = $this->file->getRowsFromExcel($file);
+
+        /* Check empty.*/
+        if(is_string($rows))
+        {
+            unlink($this->session->fileImportFileName);
+            unset($_SESSION['fileImportFileName']);
+            unset($_SESSION['fileImportExtension']);
+            $response['result']  = 'fail';
+            $response['message'] = $rows;
+            return $response;
+        }
+
+        $fields = array('id') + $this->config->task->templateFields;
+        foreach($fields as $key => $fieldName)
+        {
+            $fieldName = trim($fieldName);
+            $fields[$fieldName] = isset($taskLang->$fieldName) ? $taskLang->$fieldName : $fieldName;
+            unset($fields[$key]);
+        }
+
+        $objectDatas = array();
+
+        foreach($rows as $currentRow => $row)
+        {
+            $tmpArray = new stdClass();
+            foreach($row as $currentColumn => $cellValue)
+            {
+                if($currentRow == 1)
+                {
+                    $field = array_search($cellValue, $fields);
+                    $columnKey[$currentColumn] = $field ? $field : '';
+                    continue;
+                }
+
+                if(empty($columnKey[$currentColumn]))
+                {
+                    $currentColumn++;
+                    continue;
+                }
+
+                $field = $columnKey[$currentColumn];
+                $currentColumn++;
+
+                /* Check empty data. */
+                if(empty($cellValue))
+                {
+                    $tmpArray->$field = '';
+                    continue;
+                }
+
+                $tmpArray->$field = $cellValue;
+            }
+            if(empty($tmpArray->name)) continue;
+            $objectDatas[$currentRow] = $tmpArray;
+            unset($tmpArray);
+        }
+
+        file_put_contents($tmpFile, serialize($objectDatas));
+
+        if(empty($objectDatas))
+        {
+            unlink($this->session->fileImportFileName);
+            unset($_SESSION['fileImportFileName']);
+            unset($_SESSION['fileImportExtension']);
+            $response['result']  = 'fail';
+            $response['message'] = $this->lang->excel->noData;
+            return $response;
+        }
+
+        return $tmpFile;
+    }
 }

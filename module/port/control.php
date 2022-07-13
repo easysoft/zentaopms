@@ -71,7 +71,7 @@ class port extends control
      * @access public
      * @return void
      */
-    public function import($params = '')
+    public function import($model, $locate = '')
     {
         if($_FILES)
         {
@@ -91,10 +91,12 @@ class port extends control
             }
             $this->session->set('fileImportFileName', $fileName);
             $this->session->set('fileImportExtension', $extension);
-            die(js::locate(inlink('showImport', "executionID=$executionID"), 'parent.parent'));
-        }
-        $this->display();
 
+            die(js::locate($locate, 'parent.parent'));
+        }
+
+        $this->view->title = $this->lang->port->importCase;
+        $this->display();
     }
 
     /**
@@ -105,6 +107,8 @@ class port extends control
      */
     public function showImport()
     {
+
+        $this->display();
 
     }
 }

@@ -10,3 +10,12 @@ $lang->port->reservedWord['code']      = '代号';
 $lang->port->reservedWord['name']      = '名称';
 $lang->port->reservedWord['title']     = '标题';
 $lang->port->reservedWord['asdawdadw'] = '测试字段';
+
+
+$lang->port->importCase   = '导入数据';
+$lang->port->importNotice = '请先导出模板，按照模板格式填写数据后再导入。';
+
+$lang->port->new = '新增';
+
+$lang->port->num = '记录数：';
+
