@@ -1,8 +1,9 @@
 <?php
 class gitea
 {
-    public $client;
-    public $projectID;
+    public  $client;
+    public  $projectID;
+    private $pageLimit = 50;
 
     /**
      * Construct
@@ -34,10 +35,10 @@ class gitea
     public function ls($path, $revision = 'HEAD')
     {
         if(!scm::checkRevision($revision)) return array();
-        $api = "contents";
-
+        $api  = "contents";
         $path = ltrim($path, '/');
         if($path) $api .= "/$path";
+
         $param = new stdclass();
         $param->ref       = $revision;
         $param->recursive = 0;
@@ -102,11 +103,9 @@ class gitea
      */
     public function files($path, $ref = 'master')
     {
-        $path  = urlencode($path);
-        $api   = "contents/$path";
-        $param = new stdclass();
-        $param->ref = $ref;
-        $file = $this->fetch($api, $param);
+        $path = urlencode($path);
+        $api  = "contents/$path";
+        $file = $this->fetch($api, array('ref' => $ref));
         if(!isset($file->name)) return false;
 
         $commits = $this->getCommitsByPath($path, '', '', 1);
@@ -116,6 +115,7 @@ class gitea
         if(!empty($commits))
         {
             $commit = $commits[0];
+
             $file->revision  = $commit->sha;
             $file->committer = $commit->commit->committer->name;
             $file->comment   = $commit->commit->message;
@@ -139,9 +139,7 @@ class gitea
         $tags = array();
 
         $params = array();
-        $params['per_page'] = '100';
-        $params['order_by'] = 'updated';
-        $params['sort']     = 'asc';
+        $params['limit'] = $this->pageLimit;
         for($page = 1; true; $page ++)
         {
             $params['page'] = $page;
@@ -149,7 +147,7 @@ class gitea
             if(empty($list) or $list == '[]') break;
 
             foreach($list as $tag) $tags[] = $tag->name;
-            if(count($list) < $params['per_page']) break;
+            if(count($list) < $params['limit']) break;
         }
 
         return $tags;
@@ -163,9 +161,9 @@ class gitea
      */
     public function branch()
     {
-        /* Max size of per_page in gitea API is 100. */
+        /* Max size of limit in gitea API is 50. */
         $params = array();
-        $params['per_page'] = '100';
+        $params['limit'] = $this->pageLimit;
 
         $branches = array();
         $default  = array();
@@ -189,7 +187,7 @@ class gitea
             }
 
             /* Last page. */
-            if(count($branchList) < $params['per_page']) break;
+            if(count($branchList) < $params['limit']) break;
         }
 
         if(empty($branches) and empty($default)) $branches['master'] = 'master';
@@ -229,8 +227,7 @@ class gitea
 
         $path  = ltrim($path, DIRECTORY_SEPARATOR);
         $count = $count == 0 ? '' : "-n $count";
-
-        $list = $this->getCommitsByPath($path, $fromRevision, $toRevision);
+        $list  = $this->getCommitsByPath($path, $fromRevision, $toRevision);
         foreach($list as $commit)
         {
             if(isset($commit->sha)) $commit->diffs = $this->getFilesByCommit($commit->sha);
@@ -648,18 +645,45 @@ class gitea
         $results = $this->fetch($api, array('ref' => $revision));
         if(empty($results)) return array();
 
-        $diffApi = "git/commits/$revision.patch";
+        $diffApi = "{$this->root}git/commits/$revision.patch?token={$this->token}";
         $diffs = commonModel::http($diffApi);
-        if(!empty(commonModel::$requestErrors) or empty($diffs)) return array();
+        if(empty($diffs)) return array();
+
+        $diffs    = explode("\n", $diffs);
+        $newFiles = array();
+        $delFiles = array();
+        foreach($diffs as $row)
+        {
+            preg_match('/^(\s)(create|delete)\smode\s\d+\s(.+)$/', $row, $matches);
+            if(count($matches) == 4)
+            {
+                if($matches[2] == 'create')
+                {
+                    $newFiles[] = $matches[3];
+                }
+                elseif($matches[2] == 'delete')
+                {
+                    $delFiles[] = $matches[3];
+                }
+            }
+        }
 
         $files = array();
         foreach($results as $row)
         {
             $file  = new stdclass();
             $file->revision = $revision;
-            $file->action   = 'A';
             $file->type     = $row->type;
             $file->path     = '/' . $row->path;
+            $file->action   = 'M';
+            if(in_array($row->path, $newFiles))
+            {
+                $file->action = 'A';
+            }
+            elseif(in_array($row->path, $delFiles))
+            {
+                $file->action = 'D';
+            }
 
             $files[$file->path] = $file;
         }
@@ -697,7 +721,7 @@ class gitea
     {
         $params = (array) $params;
         $params['token'] = $this->token;
-        $params['limit'] = isset($params['limit']) ? $params['limit'] : 100;
+        $params['limit'] = isset($params['limit']) ? $params['limit'] : $this->pageLimit;
 
         $api = ltrim($api, '/');
         $api = $this->root . $api . '?' . http_build_query($params);
@@ -709,7 +733,7 @@ class gitea
                 $results = json_decode(commonModel::http($api . "&page={$page}"));
                 if(!is_array($results)) break;
                 if(!empty($results)) $allResults = array_merge($allResults, $results);
-                if(count($results) < 100) break;
+                if(count($results) < $this->pageLimit) break;
             }
 
             return $allResults;
