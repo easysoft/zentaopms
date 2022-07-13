@@ -265,29 +265,9 @@ class gitea
         if(!scm::checkRevision($fromRevision) and $extra != 'isBranchOrTag') return array();
         if(!scm::checkRevision($toRevision) and $extra != 'isBranchOrTag')   return array();
 
-        $api    = "compare";
-        $params = array('from' => $fromRevision, 'to' => $toRevision);
-        if($fromProject) $params['from_project_id'] = $fromProject;
-
-        if($toRevision == 'HEAD' and $this->branch) $params['to'] = $this->branch;
-        $results = $this->fetch($api, $params);
-        if(!isset($results->diffs)) return array();
-
-        foreach($results->diffs as $key => $diff)
-        {
-            if($path != '' and strpos($diff->new_path, $path) === false) unset($results->diffs[$key]);
-        }
-        $diffs = $results->diffs;
-        $lines = array();
-        foreach($diffs as $diff)
-        {
-            $lines[] = sprintf("diff --git a/%s b/%s", $diff->old_path, $diff->new_path);
-            $lines[] = sprintf("index %s ... %s %s ", $fromRevision, $toRevision, $diff->b_mode);
-            $lines[] = sprintf("--a/%s", $diff->old_path);
-            $lines[] = sprintf("--b/%s", $diff->new_path);
-            $diffLines = explode("\n", $diff->diff);
-            foreach($diffLines as $diffLine) $lines[] = $diffLine;
-        }
+        $diffApi = "{$this->root}git/commits/$fromRevision.diff?token={$this->token}";
+        $diffs   = commonModel::http($diffApi);
+        $lines   = explode("\n", $diffs);
         return $lines;
     }
 
