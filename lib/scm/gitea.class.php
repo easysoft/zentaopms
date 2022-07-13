@@ -519,7 +519,7 @@ class gitea
         $commits = array();
         $files   = array();
 
-        if(empty($count)) $count = 10;
+        if(empty($count)) $count = $this->pageLimit;
 
         if(!empty($version) and $count == 1)
         {
@@ -541,8 +541,6 @@ class gitea
         }
 
         $params['sha']  = $branch;
-        $params['page'] = $count;
-
         if($version and $version != 'HEAD')
         {
             /* Get since param. */
