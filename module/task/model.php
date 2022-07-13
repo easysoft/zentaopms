@@ -1237,10 +1237,10 @@ class taskModel extends model
                 return false;
             }
 
-            if(empty($task->closedReason))
+            if(empty($task->closedReason) and $task->status == 'closed')
             {
-                if($oldTask->status == 'done' and $task->status == 'closed')   $task->closedReason = 'done';
-                if($oldTask->status == 'cancel' and $task->status == 'closed') $task->closedReason = 'cancel';
+                if($oldTask->status == 'done')   $task->closedReason = 'done';
+                if($oldTask->status == 'cancel') $task->closedReason = 'cancel';
             }
 
             if($oldTask->name != $task->name || $oldTask->estStarted != $task->estStarted || $oldTask->deadline != $task->deadline)
