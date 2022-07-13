@@ -462,7 +462,7 @@ $('#bugForm .table-footer .table-actions #assignedTo').closest('.btn-group.dropu
 <?php endif;?>
 function handleLinkButtonClick()
 {
-  var xxcUrl = "xxc:openInApp/zentao-integrated/" + encodeURIComponent(window.location.href.replace(/.display=card/, '').replace(/\.xhtml/, '.html'));
+  var xxcUrl = "xxc:openInApp/zentao-integrated/" + encodeURIComponent(window.location.href.replace(/.display=card/, '').replace('xhtml', 'html'));
   window.open(xxcUrl);
 }
 </script>
