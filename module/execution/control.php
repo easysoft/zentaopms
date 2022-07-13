@@ -3963,8 +3963,8 @@ class execution extends control
             $projectID   = $this->dao->findByID($executionID)->from(TABLE_EXECUTION)->fetch('project');
             $planStories = array_keys($planStory);
 
-            $this->execution->linkStory($executionID, $planStories, $planProducts, $extra);
             if($this->config->systemMode == 'new' and $executionID != $projectID) $this->execution->linkStory($projectID, $planStories, $planProducts);
+            $this->execution->linkStory($executionID, $planStories, $planProducts, $extra);
         }
 
         $moduleName = 'execution';

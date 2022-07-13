@@ -1403,10 +1403,33 @@ class testcase extends control
         $case    = $this->testcase->getById($caseID);
         $libCase = $this->testcase->getById($libcaseID);
         $version = $case->version + 1;
+
+        $this->dao->delete()->from(TABLE_FILE)->where('objectType')->eq('testcase')->andWhere('objectID')->eq($caseID)->exec();
+        foreach($libCase->files as $fileID => $file)
+        {
+            $fileName = pathinfo($file->pathname, PATHINFO_FILENAME);
+            $datePath = substr($file->pathname, 0, 6);
+            $realPath = $this->app->getAppRoot() . "www/data/upload/{$this->app->company->id}/" . "{$datePath}/" . $fileName;
+
+            $rand        = rand();
+            $newFileName = $fileName . 'copy' . $rand;
+            $newFilePath = $this->app->getAppRoot() . "www/data/upload/{$this->app->company->id}/" . "{$datePath}/" .  $newFileName;
+            copy($realPath, $newFilePath);
+
+            $newFileName = $file->pathname;
+            $newFileName = str_replace('.', "copy$rand.", $newFileName);
+
+            unset($file->id, $file->realPath, $file->webPath);
+            $file->objectID = $caseID;
+            $file->pathname = $newFileName;
+            $this->dao->insert(TABLE_FILE)->data($file)->exec();
+        }
+
         $this->dao->update(TABLE_CASE)
             ->set('version')->eq($version)
             ->set('fromCaseVersion')->eq($version)
             ->set('precondition')->eq($libCase->precondition)
+            ->set('title')->eq($libCase->title)
             ->where('id')->eq($caseID)
             ->exec();
 
@@ -1417,6 +1440,7 @@ class testcase extends control
             $step->version = $version;
             $this->dao->insert(TABLE_CASESTEP)->data($step)->exec();
         }
+
         echo js::locate($this->createLink('testcase', 'view', "caseID=$caseID&version=$version"), 'parent');
     }
 

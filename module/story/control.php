@@ -162,12 +162,14 @@ class story extends control
                 $object = $this->dao->findById((int)$objectID)->from(TABLE_PROJECT)->fetch();
                 if($object->type != 'project')
                 {
+                    if($this->config->systemMode == 'new') $this->action->create('story', $storyID, 'linked2project', '', $object->project);
+
                     $actionType = $object->type == 'kanban' ? 'linked2kanban' : 'linked2execution';
-                    $this->loadModel('action')->create('story', $storyID, $actionType, '', $objectID);
+                    $this->action->create('story', $storyID, $actionType, '', $objectID);
                 }
                 else
                 {
-                    $this->loadModel('action')->create('story', $storyID, 'linked2project', '', $objectID);
+                    $this->action->create('story', $storyID, 'linked2project', '', $objectID);
                 }
             }
 
@@ -499,8 +501,8 @@ class story extends control
             {
                 $products = array();
                 foreach($mails as $story) $products[$story->storyID] = $productID;
-                $this->execution->linkStory($executionID, $stories, $products, $extra, $lanes);
                 if($executionID != $this->session->project) $this->execution->linkStory($this->session->project, $stories, $products);
+                $this->execution->linkStory($executionID, $stories, $products, $extra, $lanes);
             }
 
             /* If storyID not equal zero, subdivide this story to child stories and close it. */
