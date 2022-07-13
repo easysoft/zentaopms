@@ -3763,9 +3763,12 @@ class taskModel extends model
         }
 
         $list  = "<tr $trAttrs class='$trClass $showmore'>";
-        $list .= '<td>' . html::a(helper::createLink('task', 'view', "id=$task->id"), $task->name, '', "data-app='project'") . '</td>';
+        $list .= '<td>';
+        if($task->parent > 0) $list .= '<span class="label label-badge label-light" title="' . $this->lang->task->children . '">' . $this->lang->task->childrenAB . '</span> ';
+        $list .= html::a(helper::createLink('task', 'view', "id=$task->id"), $task->name, '', "data-app='project'");
+        $list .= '</td>';
         $list .= '<td>' . zget($users, $task->assignedTo, '') . '</td>';
-        $list .= '<td>' . zget($this->lang->task->statusList, $task->status, '') . '</td>';
+        $list .= "<td class='status-{$task->status}'>" . $this->processStatus('task', $task) . '</td>';
         $list .= '<td></td>';
         $list .= '<td>' . $task->estStarted . '</td>';
         $list .= '<td>' . $task->deadline . '</td>';

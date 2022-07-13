@@ -1,3 +1,4 @@
 #executionList > thead > tr > th .table-nest-toggle-global {top: 6px}
 #executionList > thead > tr > th .table-nest-toggle-global:before {color: #a6aab8;}
 #mainMenu .pull-left .checkbox-primary {margin-top: 5px;}
+.main-table tbody>tr>td:first-child, .main-table thead>tr>th:first-child { padding-left: 8px; }

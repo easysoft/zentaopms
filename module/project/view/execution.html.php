@@ -75,10 +75,13 @@
       </thead>
       <tbody id="executionTableList">
         <?php foreach($executionStats as $execution):?>
-        <?php $this->project->printExecutionList($execution, false, $users, $productID);?>
+        <?php $this->execution->printNestedList($execution, false, $users, $productID);?>
         <?php endforeach;?>
       </tbody>
     </table>
+    <div class='table-footer'>
+    <?php $pager->show('right', 'pagerjs');?>
+    </div>
   </form>
   <?php endif;?>
 </div>
