@@ -162,12 +162,14 @@ class story extends control
                 $object = $this->dao->findById((int)$objectID)->from(TABLE_PROJECT)->fetch();
                 if($object->type != 'project')
                 {
+                    if($this->config->systemMode == 'new') $this->action->create('story', $storyID, 'linked2project', '', $object->project);
+
                     $actionType = $object->type == 'kanban' ? 'linked2kanban' : 'linked2execution';
-                    $this->loadModel('action')->create('story', $storyID, $actionType, '', $objectID);
+                    $this->action->create('story', $storyID, $actionType, '', $objectID);
                 }
                 else
                 {
-                    $this->loadModel('action')->create('story', $storyID, 'linked2project', '', $objectID);
+                    $this->action->create('story', $storyID, 'linked2project', '', $objectID);
                 }
             }
 
@@ -499,8 +501,8 @@ class story extends control
             {
                 $products = array();
                 foreach($mails as $story) $products[$story->storyID] = $productID;
-                $this->execution->linkStory($executionID, $stories, $products, $extra, $lanes);
                 if($executionID != $this->session->project) $this->execution->linkStory($this->session->project, $stories, $products);
+                $this->execution->linkStory($executionID, $stories, $products, $extra, $lanes);
             }
 
             /* If storyID not equal zero, subdivide this story to child stories and close it. */
@@ -1200,8 +1202,7 @@ class story extends control
     public function view($storyID, $version = 0, $param = 0)
     {
         $uri = $this->app->getURI(true);
-        $this->session->set('productList',     $uri . "#app={$this->app->tab}", 'product');
-        $this->session->set('productPlanList', $uri, 'product');
+        $this->session->set('productList', $uri . "#app={$this->app->tab}", 'product');
 
         $storyID = (int)$storyID;
         $story   = $this->story->getById($storyID, $version, true);
@@ -1485,10 +1486,11 @@ class story extends control
      * Close a story.
      *
      * @param  int    $storyID
+     * @param  string $from taskkanban
      * @access public
      * @return void
      */
-    public function close($storyID)
+    public function close($storyID, $from = '')
     {
         if(!empty($_POST))
         {
@@ -1506,28 +1508,25 @@ class story extends control
 
             if(isonlybody())
             {
-                $execution = $this->execution->getByID($this->session->execution);
-                if($this->app->tab == 'execution')
+                $execution     = $this->execution->getByID($this->session->execution);
+                $execLaneType  = $this->session->execLaneType ? $this->session->execLaneType : 'all';
+                $execGroupBy   = $this->session->execGroupBy ? $this->session->execGroupBy : 'default';
+                $rdSearchValue = $this->session->rdSearchValue ? $this->session->rdSearchValue : '';
+                if($this->app->tab == 'execution' and $execution->type == 'kanban')
                 {
                     $this->loadModel('kanban')->updateLane($this->session->execution, 'story', $storyID);
 
-                    $execLaneType  = $this->session->execLaneType ? $this->session->execLaneType : 'all';
-                    $execGroupBy   = $this->session->execGroupBy ? $this->session->execGroupBy : 'default';
-                    $rdSearchValue = $this->session->rdSearchValue ? $this->session->rdSearchValue : '';
-                    if($execution->type == 'kanban')
-                    {
-                        $kanbanData = $this->loadModel('kanban')->getRDKanban($this->session->execution, $execLaneType, 'id_desc', 0, $execGroupBy, $rdSearchValue);
-                        $kanbanData = json_encode($kanbanData);
-                        return print(js::closeModal('parent.parent', '', "parent.parent.updateKanban($kanbanData)"));
-                    }
-                    else
-                    {
-                        $kanbanData = $this->loadModel('kanban')->getExecutionKanban($this->session->execution, $execLaneType, $execGroupBy, $rdSearchValue);
-                        $kanbanType = $execLaneType == 'all' ? 'story' : key($kanbanData);
-                        $kanbanData = $kanbanData[$kanbanType];
-                        $kanbanData = json_encode($kanbanData);
-                        return print(js::closeModal('parent.parent', '', "parent.parent.updateKanban(\"story\", $kanbanData)"));
-                    }
+                    $kanbanData = $this->loadModel('kanban')->getRDKanban($this->session->execution, $execLaneType, 'id_desc', 0, $execGroupBy, $rdSearchValue);
+                    $kanbanData = json_encode($kanbanData);
+                    return print(js::closeModal('parent.parent', '', "parent.parent.updateKanban($kanbanData)"));
+                }
+                elseif($from == 'taskkanban')
+                {
+                    $kanbanData = $this->loadModel('kanban')->getExecutionKanban($this->session->execution, $execLaneType, $execGroupBy, $rdSearchValue);
+                    $kanbanType = $execLaneType == 'all' ? 'story' : key($kanbanData);
+                    $kanbanData = $kanbanData[$kanbanType];
+                    $kanbanData = json_encode($kanbanData);
+                    return print(js::closeModal('parent.parent', '', "parent.parent.updateKanban(\"story\", $kanbanData)"));
                 }
                 else
                 {
@@ -1853,10 +1852,11 @@ class story extends control
      *
      * @param  int    $storyID
      * @param  string $kanbanGroup
+     * @param  string $from taskkanban
      * @access public
      * @return void
      */
-    public function assignTo($storyID, $kanbanGroup = 'default')
+    public function assignTo($storyID, $kanbanGroup = 'default', $from = '')
     {
         if(!empty($_POST))
         {
@@ -1872,26 +1872,23 @@ class story extends control
 
             if(isonlybody())
             {
-                $execution = $this->execution->getByID($this->session->execution);
-                if($this->app->tab == 'execution')
+                $execution     = $this->execution->getByID($this->session->execution);
+                $execLaneType  = $this->session->execLaneType ? $this->session->execLaneType : 'all';
+                $rdSearchValue = $this->session->rdSearchValue ? $this->session->rdSearchValue : '';
+                $execGroupBy   = $this->session->execGroupBy ? $this->session->execGroupBy : 'default';
+                if($this->app->tab == 'execution' and $execution->type == 'kanban')
                 {
-                    $execLaneType  = $this->session->execLaneType ? $this->session->execLaneType : 'all';
-                    $rdSearchValue = $this->session->rdSearchValue ? $this->session->rdSearchValue : '';
-                    $execGroupBy   = $this->session->execGroupBy ? $this->session->execGroupBy : 'default';
-                    if($execution->type == 'kanban')
-                    {
-                        $kanbanData = $this->loadModel('kanban')->getRDKanban($this->session->execution, $execLaneType, 'id_desc', 0, $kanbanGroup, $rdSearchValue);
-                        $kanbanData = json_encode($kanbanData);
-                        return print(js::closeModal('parent.parent', '', "parent.parent.updateKanban($kanbanData)"));
-                    }
-                    else
-                    {
-                        $kanbanData = $this->loadModel('kanban')->getExecutionKanban($execution->id, $execLaneType, $execGroupBy, $rdSearchValue);
-                        $kanbanType = $execLaneType == 'all' ? 'story' : key($kanbanData);
-                        $kanbanData = $kanbanData[$kanbanType];
-                        $kanbanData = json_encode($kanbanData);
-                        return print(js::closeModal('parent.parent', '', "parent.parent.updateKanban(\"story\", $kanbanData)"));
-                    }
+                    $kanbanData = $this->loadModel('kanban')->getRDKanban($this->session->execution, $execLaneType, 'id_desc', 0, $kanbanGroup, $rdSearchValue);
+                    $kanbanData = json_encode($kanbanData);
+                    return print(js::closeModal('parent.parent', '', "parent.parent.updateKanban($kanbanData)"));
+                }
+                elseif($from == 'taskkanban')
+                {
+                    $kanbanData = $this->loadModel('kanban')->getExecutionKanban($execution->id, $execLaneType, $execGroupBy, $rdSearchValue);
+                    $kanbanType = $execLaneType == 'all' ? 'story' : key($kanbanData);
+                    $kanbanData = $kanbanData[$kanbanType];
+                    $kanbanData = json_encode($kanbanData);
+                    return print(js::closeModal('parent.parent', '', "parent.parent.updateKanban('$execLaneType', $kanbanData)"));
                 }
                 else
                 {

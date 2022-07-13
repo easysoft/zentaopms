@@ -29,6 +29,7 @@
 .kanban-affixed .kanban-header-col > .title > .text,
 .kanban-affixed .kanban-header-col > .title > .count {color: #fff!important;}
 .kanban-header-col > .title > .text {max-width: 110px !important;}
+.kanban-header-col > .title > .storyColumn.text {max-width: 100% !important;}
 
 #kanbanContainer {margin: 0;}
 #kanbanContainer > .panel-body {overflow: auto;}

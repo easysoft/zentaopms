@@ -50,13 +50,42 @@ class kanbanModel extends model
     public function createDefaultRegion($kanban)
     {
         $region = new stdclass();
-        $region->name           = $this->lang->kanbanregion->default;
-        $region->kanban         = $kanban->id;
-        $region->space          = $kanban->space;
-        $region->createdBy      = $this->app->user->account;
-        $region->createdDate    = helper::today();
+        $region->name        = $this->lang->kanbanregion->default;
+        $region->kanban      = $kanban->id;
+        $region->space       = $kanban->space;
+        $region->createdBy   = $this->app->user->account;
+        $region->createdDate = helper::now();
 
         return $this->createRegion($kanban, $region);
+    }
+
+    /**
+     * Copy kanban regions.
+     *
+     * @param  object $kanban
+     * @param  int    $copyKanbanID
+     * @access public
+     * @return void
+     */
+    public function copyRegions($kanban, $copyKanbanID)
+    {
+        if(empty($kanban) or empty($copyKanbanID)) return;
+
+        $regions = $this->getRegionPairs($copyKanbanID);
+        $order   = 1;
+        foreach($regions as $copyID => $copyName)
+        {
+            $region = new stdclass();
+            $region->name        = $copyName;
+            $region->kanban      = $kanban->id;
+            $region->space       = $kanban->space;
+            $region->createdBy   = $this->app->user->account;
+            $region->createdDate = helper::now();
+            $region->order       = $order;
+
+            $this->createRegion($kanban, $region, $copyID, 'kanban', 'withArchived');
+            $order ++;
+        }
     }
 
     /**
@@ -66,10 +95,11 @@ class kanbanModel extends model
      * @param  object $region
      * @param  int    $copyRegionID
      * @param  string $from kanban|execution
+     * @param  string $param
      * @access public
      * @return int
      */
-    public function createRegion($kanban, $region = null, $copyRegionID = 0, $from = 'kanban')
+    public function createRegion($kanban, $region = null, $copyRegionID = 0, $from = 'kanban', $param = '')
     {
         $account = $this->app->user->account;
         $order   = 1;
@@ -90,7 +120,7 @@ class kanbanModel extends model
             $region->space = $from == 'kanban' ? $kanban->space : 0;
         }
 
-        $region->order = $order;
+        $region->order = isset($region->order) ? $region->order : $order;
         $this->dao->insert(TABLE_KANBANREGION)->data($region)
             ->batchCheck($this->config->kanban->require->createregion, 'notempty')
             ->check('name', 'unique', "kanban = {$kanban->id} AND deleted = '0' AND space='$region->space'")
@@ -107,7 +137,7 @@ class kanbanModel extends model
             /* Gets the groups, lanes and columns of the replication region. */
             $copyGroups      = $this->getGroupGroupByRegions($copyRegionID);
             $copyLaneGroup   = $this->getLaneGroupByRegions($copyRegionID);
-            $copyColumnGroup = $this->getColumnGroupByRegions($copyRegionID, 'id_asc');
+            $copyColumnGroup = $this->getColumnGroupByRegions($copyRegionID, 'id_asc', $param);
 
             /* Create groups, lanes, and columns. */
             if(empty($copyGroups)) return $regionID;
@@ -652,6 +682,21 @@ class kanbanModel extends model
     }
 
     /**
+     * Get kanban pairs.
+     *
+     * @access public
+     * @return array
+     */
+    public function getPairs()
+    {
+        $idList = $this->getCanViewObjects();
+        return $this->dao->select('id,name')->from(TABLE_KANBAN)
+            ->where('id')->in($idList)
+            ->andWhere('deleted')->eq('0')
+            ->fetchPairs();
+    }
+
+    /**
      * Get kanban data.
      *
      * @param  int    $kanbanID
@@ -827,7 +872,7 @@ class kanbanModel extends model
      */
     public function getRDKanban($executionID, $browseType = 'all', $orderBy = 'id_desc', $regionID = 0, $groupBy = 'default', $searchValue = '')
     {
-        if($groupBy != 'default' and $groupBy != '') return $this->getKanban4Group($executionID, $browseType, $groupBy, $searchValue);
+        if($groupBy != 'default' and $groupBy != '') return $this->getKanban4Group($executionID, $browseType, $groupBy, $searchValue, $orderBy);
 
         $kanbanData   = array();
         $actions      = array('sortGroup');
@@ -996,15 +1041,16 @@ class kanbanModel extends model
      *
      * @param  array  $regions
      * @param  string $order order|id_asc
+     * @param  string $param
      * @access public
      * @return array
      */
-    public function getColumnGroupByRegions($regions, $order = 'order')
+    public function getColumnGroupByRegions($regions, $order = 'order', $param = '')
     {
         $columnGroup = $this->dao->select("*")->from(TABLE_KANBANCOLUMN)
             ->where('deleted')->eq('0')
-            ->andWhere('archived')->eq('0')
             ->andWhere('region')->in($regions)
+            ->beginIF(strpos(",$param,", ',withArchived,') === false)->andWhere('archived')->eq('0')->fi()
             ->orderBy($order)
             ->fetchGroup('group');
 
@@ -1347,9 +1393,9 @@ class kanbanModel extends model
      * @access public
      * @return array
      */
-    public function getExecutionKanban($executionID, $browseType = 'all', $groupBy = 'default', $searchValue = '')
+    public function getExecutionKanban($executionID, $browseType = 'all', $groupBy = 'default', $searchValue = '', $orderBy = 'pri_asc')
     {
-        if($groupBy != 'default') return $this->getKanban4Group($executionID, $browseType, $groupBy, $searchValue);
+        if($groupBy != 'default') return $this->getKanban4Group($executionID, $browseType, $groupBy, $searchValue, $orderBy);
 
         $lanes = $this->dao->select('*')->from(TABLE_KANBANLANE)
             ->where('execution')->eq($executionID)
@@ -1470,11 +1516,12 @@ class kanbanModel extends model
      * @param  string $browseType
      * @param  string $groupBy
      * @param  string $searchValue
+     * @param  string $orderBy
      *
      * @access public
      * @return array
      */
-    public function getKanban4Group($executionID, $browseType, $groupBy, $searchValue = '')
+    public function getKanban4Group($executionID, $browseType, $groupBy, $searchValue = '', $orderBy = 'pri_asc')
     {
         /* Get card  data. */
         $cardList = array();
@@ -1500,7 +1547,8 @@ class kanbanModel extends model
         if($browseType == 'bug')   $bugCardMenu   = $this->getKanbanCardMenu($executionID, $cardList, 'bug');
         if($browseType == 'task')  $taskCardMenu  = $this->getKanbanCardMenu($executionID, $cardList, 'task');
 
-        $lanes = $this->getLanes4Group($executionID, $browseType, $groupBy, $cardList);
+        if($groupBy == 'story' and $browseType == 'task' and !isset($this->lang->kanban->orderList[$orderBy])) $orderBy = 'pri_asc';
+        $lanes = $this->getLanes4Group($executionID, $browseType, $groupBy, $cardList, $orderBy);
         if(empty($lanes)) return array();
 
         $execution = $this->loadModel('execution')->getByID($executionID);
@@ -1546,6 +1594,33 @@ class kanbanModel extends model
             $laneData['order']           = $lane->order;
             $laneData['type']            = $browseType;
             $laneData['defaultCardType'] = $browseType;
+
+            if($browseType == 'task' and $groupBy == 'story')
+            {
+                $columnData[0]['id']         = 0;
+                $columnData[0]['type']       = 'story';
+                $columnData[0]['name']       = zget($this->lang->kanban->orderList, $orderBy, '');
+                $columnData[0]['color']      = '#333';
+                $columnData[0]['limit']      = '-1';
+                $columnData[0]['laneType']   = $browseType;
+                $columnData[0]['asParent']   = false;
+                $columnData[0]['parentType'] = '';
+                $columnData[0]['actions']    = array();
+
+                if(empty($searchValue) or strpos($lane->name, $searchValue) !== false)
+                {
+                    $cardData = array();
+                    $cardData['id']         = $laneID;
+                    $cardData['title']      = $lane->name;
+                    $cardData['order']      = 1;
+                    $cardData['pri']        = $lane->pri;
+                    $cardData['estimate']   = '';
+                    $cardData['assignedTo'] = $lane->assignedTo;
+                    $cardData['deadline']   = '';
+                    $cardData['severity']   = '';
+                    $laneData['cards']['story'][] = $cardData;
+                }
+            }
 
             /* Construct kanban column data. */
             foreach($columns as $column)
@@ -1638,9 +1713,11 @@ class kanbanModel extends model
      * @param  string $browseType
      * @param  string $groupBy
      * @param  array  $cardList
+     * @param  string $orderBy
+     *
      * @return array
      */
-    public function getLanes4Group($executionID, $browseType, $groupBy, $cardList)
+    public function getLanes4Group($executionID, $browseType, $groupBy, $cardList, $orderBy = 'pri_asc')
     {
         $lanes       = array();
         $groupByList = array();
@@ -1673,7 +1750,14 @@ class kanbanModel extends model
                 $objectPairs += $this->dao->select('id,title')->from(TABLE_STORY)
                     ->where('deleted')->eq(0)
                     ->andWhere('id')->in($groupByList)
+                    ->orderBy($orderBy)
                     ->fetchPairs();
+
+                $objects = $this->dao->select('*')->from(TABLE_STORY)
+                    ->where('deleted')->eq(0)
+                    ->andWhere('id')->in($groupByList)
+                    ->orderBy($orderBy)
+                    ->fetchAll('id');
             }
             else
             {
@@ -1701,12 +1785,14 @@ class kanbanModel extends model
             if(!isset($groupByList[$objectType]) and $objectType and !in_array($objectType, array('feature', 'design'))) continue;
 
             $lane = new stdclass();
-            $lane->id        = $groupBy . $objectType;
-            $lane->type      = $browseType;
-            $lane->execution = $executionID;
-            $lane->name      = $objectName;
-            $lane->order     = $order;
-            $lane->color     = $this->config->kanban->laneColorList[$laneColor];
+            $lane->id         = $groupBy . $objectType;
+            $lane->type       = $browseType;
+            $lane->execution  = $executionID;
+            $lane->name       = $objectName;
+            $lane->order      = $order;
+            $lane->color      = $this->config->kanban->laneColorList[$laneColor];
+            $lane->pri        = (isset($objects) and isset($objects[$objectType]->pri)) ? $objects[$objectType]->pri : '';
+            $lane->assignedTo = (isset($objects) and isset($objects[$objectType]->assignedTo)) ? $objects[$objectType]->assignedTo : '';
 
             $order     += 1;
             $laneColor += 1;
@@ -1791,11 +1877,11 @@ class kanbanModel extends model
      * Get can view objects.
      *
      * @param  string $objectType kanbanspace|kanban
-     * @param  string $param      noclosed|private|cooperation|public|involved
+     * @param  string $param      all|noclosed|private|cooperation|public|involved
      * @access public
      * @return array
      */
-    public function getCanViewObjects($objectType = 'kanban', $param = '')
+    public function getCanViewObjects($objectType = 'kanban', $param = 'all')
     {
         $table   = $this->config->objectTables[$objectType];
         $objects = $this->dao->select('*')->from($table)
@@ -2104,7 +2190,7 @@ class kanbanModel extends model
             ->join('whitelist', ',')
             ->join('team', ',')
             ->trim('name')
-            ->remove('uid,contactListMenu,type,import,importObjectList')
+            ->remove('contactListMenu,type,import,importObjectList,copyKanbanID,copyRegion')
             ->get();
 
         if($this->post->import == 'on') $kanban->object = implode(',', $this->post->importObjectList);
@@ -2134,7 +2220,15 @@ class kanbanModel extends model
             $kanbanID = $this->dao->lastInsertID();
             $kanban   = $this->getByID($kanbanID);
 
-            $this->createDefaultRegion($kanban);
+            if($this->post->copyRegion)
+            {
+                $this->copyRegions($kanban, $this->post->copyKanbanID);
+            }
+            else
+            {
+                $this->createDefaultRegion($kanban);
+            }
+
             $this->loadModel('file')->saveUpload('kanban', $kanbanID);
             $this->file->updateObjectID($this->post->uid, $kanbanID, 'kanban');
 
@@ -3660,6 +3754,7 @@ class kanbanModel extends model
     public function getKanbanCardMenu($executionID, $objects, $objecType)
     {
         $this->app->loadLang('execution');
+        $methodName = $this->app->rawMethod;
 
         $menus = array();
         switch ($objecType)
@@ -3679,7 +3774,7 @@ class kanbanModel extends model
                     if(common::hasPriv('task', 'create') and $toTaskPriv)                                      $menu[] = array('label' => $this->lang->execution->wbs, 'icon' => 'plus', 'url' => helper::createLink('task', 'create', "executionID=$executionID&storyID=$story->id&moduleID=$story->module", '', true), 'size' => '95%');
                     if(common::hasPriv('task', 'batchCreate') and $toTaskPriv)                                 $menu[] = array('label' => $this->lang->execution->batchWBS, 'icon' => 'pluses', 'url' => helper::createLink('task', 'batchCreate', "executionID=$executionID&storyID=$story->id&moduleID=0&taskID=0&iframe=true", '', true), 'size' => '95%');
                     if(common::hasPriv('story', 'activate') and $this->story->isClickable($story, 'activate')) $menu[] = array('label' => $this->lang->story->activate, 'icon' => 'magic', 'url' => helper::createLink('story', 'activate', "storyID=$story->id", '', true));
-                    if(common::hasPriv('execution', 'unlinkStory'))                                            $menu[] = array('label' => $this->lang->execution->unlinkStory, 'icon' => 'unlink', 'url' => helper::createLink('execution', 'unlinkStory', "executionID=$executionID&storyID=$story->story&confirm=no", '', true));
+                    if(common::hasPriv('execution', 'unlinkStory'))                                            $menu[] = array('label' => $this->lang->execution->unlinkStory, 'icon' => 'unlink', 'url' => helper::createLink('execution', 'unlinkStory', "executionID=$executionID&storyID=$story->story&confirm=no&from=taskkanban", '', true));
                     if(common::hasPriv('story', 'delete'))                                                     $menu[] = array('label' => $this->lang->story->delete, 'icon' => 'trash', 'url' => helper::createLink('story', 'delete', "storyID=$story->id&confirm=no&from=taskkanban"));
 
                     $menus[$story->id] = $menu;
@@ -3693,11 +3788,11 @@ class kanbanModel extends model
                     $menu = array();
 
                     if(common::hasPriv('bug', 'edit') and $this->bug->isClickable($bug, 'edit'))             $menu[] = array('label' => $this->lang->bug->edit, 'icon' => 'edit', 'url' => helper::createLink('bug', 'edit', "bugID=$bug->id", '', true), 'size' => '95%');
-                    if(common::hasPriv('bug', 'confirmBug') and $this->bug->isClickable($bug, 'confirmBug')) $menu[] = array('label' => $this->lang->bug->confirmBug, 'icon' => 'ok', 'url' => helper::createLink('bug', 'confirmBug', "bugID=$bug->id", '', true));
-                    if(common::hasPriv('bug', 'resolve') and $this->bug->isClickable($bug, 'resolve'))       $menu[] = array('label' => $this->lang->bug->resolve, 'icon' => 'checked', 'url' => helper::createLink('bug', 'resolve', "bugID=$bug->id", '', true));
-                    if(common::hasPriv('bug', 'close') and $this->bug->isClickable($bug, 'close'))           $menu[] = array('label' => $this->lang->bug->close, 'icon' => 'off', 'url' => helper::createLink('bug', 'close', "bugID=$bug->id", '', true));
+                    if(common::hasPriv('bug', 'confirmBug') and $this->bug->isClickable($bug, 'confirmBug')) $menu[] = array('label' => $this->lang->bug->confirmBug, 'icon' => 'ok', 'url' => helper::createLink('bug', 'confirmBug', "bugID=$bug->id&extra=&from=taskkanban", '', true));
+                    if(common::hasPriv('bug', 'resolve') and $this->bug->isClickable($bug, 'resolve'))       $menu[] = array('label' => $this->lang->bug->resolve, 'icon' => 'checked', 'url' => helper::createLink('bug', 'resolve', "bugID=$bug->id&extra=&from=taskkanban", '', true));
+                    if(common::hasPriv('bug', 'close') and $this->bug->isClickable($bug, 'close'))           $menu[] = array('label' => $this->lang->bug->close, 'icon' => 'off', 'url' => helper::createLink('bug', 'close', "bugID=$bug->id&extra=&from=taskkanban", '', true));
                     if(common::hasPriv('bug', 'create') and $this->bug->isClickable($bug, 'create'))         $menu[] = array('label' => $this->lang->bug->copy, 'icon' => 'copy', 'url' => helper::createLink('bug', 'create', "productID=$bug->product&branch=$bug->branch&extras=bugID=$bug->id", '', true), 'size' => '95%');
-                    if(common::hasPriv('bug', 'activate') and $this->bug->isClickable($bug, 'activate'))     $menu[] = array('label' => $this->lang->bug->activate, 'icon' => 'magic', 'url' => helper::createLink('bug', 'activate', "bugID=$bug->id", '', true));
+                    if(common::hasPriv('bug', 'activate') and $this->bug->isClickable($bug, 'activate'))     $menu[] = array('label' => $this->lang->bug->activate, 'icon' => 'magic', 'url' => helper::createLink('bug', 'activate', "bugID=$bug->id&extra=&from=taskkanban", '', true));
                     if(common::hasPriv('story', 'create') and $bug->status != 'closed')                      $menu[] = array('label' => $this->lang->bug->toStory, 'icon' => 'lightbulb', 'url' => helper::createLink('story', 'create', "product=$bug->product&branch=$bug->branch&module=0&story=0&execution=0&bugID=$bug->id", '', true), 'size' => '95%');
                     if(common::hasPriv('bug', 'delete'))                                                     $menu[] = array('label' => $this->lang->bug->delete, 'icon' => 'trash', 'url' => helper::createLink('bug', 'delete', "bugID=$bug->id&confirm=no&from=taskkanban"));
 
@@ -3712,14 +3807,14 @@ class kanbanModel extends model
                     $menu = array();
 
                     if(common::hasPriv('task', 'edit') and $this->task->isClickable($task, 'edit'))                     $menu[] = array('label' => $this->lang->task->edit, 'icon' => 'edit', 'url' => helper::createLink('task', 'edit', "taskID=$task->id", '', true), 'size' => '95%');
-                    if(common::hasPriv('task', 'pause') and $this->task->isClickable($task, 'pause'))                   $menu[] = array('label' => $this->lang->task->pause, 'icon' => 'pause', 'url' => helper::createLink('task', 'pause', "taskID=$task->id", '', true));
-                    if(common::hasPriv('task', 'restart') and $this->task->isClickable($task, 'restart'))               $menu[] = array('label' => $this->lang->task->restart, 'icon' => 'play', 'url' => helper::createLink('task', 'restart', "taskID=$task->id", '', true));
-                    if(common::hasPriv('task', 'recordEstimate') and $this->task->isClickable($task, 'recordEstimate')) $menu[] = array('label' => $this->lang->task->recordEstimate, 'icon' => 'time', 'url' => helper::createLink('task', 'recordEstimate', "taskID=$task->id", '', true));
-                    if(common::hasPriv('task', 'activate') and $this->task->isClickable($task, 'activate'))             $menu[] = array('label' => $this->lang->task->activate, 'icon' => 'magic', 'url' => helper::createLink('task', 'activate', "taskID=$task->id", '', true));
+                    if(common::hasPriv('task', 'pause') and $this->task->isClickable($task, 'pause'))                   $menu[] = array('label' => $this->lang->task->pause, 'icon' => 'pause', 'url' => helper::createLink('task', 'pause', "taskID=$task->id&extra=from=taskkanban", '', true));
+                    if(common::hasPriv('task', 'restart') and $this->task->isClickable($task, 'restart'))               $menu[] = array('label' => $this->lang->task->restart, 'icon' => 'play', 'url' => helper::createLink('task', 'restart', "taskID=$task->id&from=taskkanban", '', true));
+                    if(common::hasPriv('task', 'recordEstimate') and $this->task->isClickable($task, 'recordEstimate')) $menu[] = array('label' => $this->lang->task->recordEstimate, 'icon' => 'time', 'url' => helper::createLink('task', 'recordEstimate', "taskID=$task->id&from=taskkanban", '', true));
+                    if(common::hasPriv('task', 'activate') and $this->task->isClickable($task, 'activate'))             $menu[] = array('label' => $this->lang->task->activate, 'icon' => 'magic', 'url' => helper::createLink('task', 'activate', "taskID=$task->id&extra=from=taskkanban", '', true));
                     if(common::hasPriv('task', 'batchCreate') and $this->task->isClickable($task, 'batchCreate'))       $menu[] = array('label' => $this->lang->task->children, 'icon' => 'split', 'url' => helper::createLink('task', 'batchCreate', "execution=$task->execution&storyID=$task->story&moduleID=$task->module&taskID=$task->id", '', true), 'size' => '95%');
                     if(common::hasPriv('task', 'create') and $this->task->isClickable($task, 'create'))                 $menu[] = array('label' => $this->lang->task->copy, 'icon' => 'copy', 'url' => helper::createLink('task', 'create', "projctID=$task->execution&storyID=$task->story&moduleID=$task->module&taskID=$task->id", '', true), 'size' => '95%');
-                    if(common::hasPriv('task', 'cancel') and $this->task->isClickable($task, 'cancel'))                 $menu[] = array('label' => $this->lang->task->cancel, 'icon' => 'ban-circle', 'url' => helper::createLink('task', 'cancel', "taskID=$task->id", '', true));
-                    if(common::hasPriv('task', 'delete'))                                                     $menu[] = array('label' => $this->lang->task->delete, 'icon' => 'trash', 'url' => helper::createLink('task', 'delete', "executionID=$task->execution&taskID=$task->id&confirm=no&from=taskkanban"));
+                    if(common::hasPriv('task', 'cancel') and $this->task->isClickable($task, 'cancel'))                 $menu[] = array('label' => $this->lang->task->cancel, 'icon' => 'ban-circle', 'url' => helper::createLink('task', 'cancel', "taskID=$task->id&extra=from=taskkanban", '', true));
+                    if(common::hasPriv('task', 'delete'))                                                               $menu[] = array('label' => $this->lang->task->delete, 'icon' => 'trash', 'url' => helper::createLink('task', 'delete', "executionID=$task->execution&taskID=$task->id&confirm=no&from=taskkanban"));
 
                     $menus[$task->id] = $menu;
                 }

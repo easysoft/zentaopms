@@ -9,7 +9,7 @@
  */
 function updateColumnName(columnID, name, color)
 {
-    $('.kanban-col[data-id="' + columnID + '"] > div.title > span:first').text(name).css('color', color);
+    $('.kanban-col[data-id="' + columnID + '"] > div.title > span:first').text(name).attr('title', name).css('color', color);
 }
 
 /**
@@ -43,17 +43,17 @@ function renderUserAvatar(user, objectType, objectID, size, objectStatus)
     if(objectType == 'task')
     {
         if(!priv.canAssignTask && !user) return $noPrivAndNoAssigned;
-        var link = createLink('task', 'assignto', 'executionID=' + executionID + '&id=' + objectID, '', true);
+        var link = createLink('task', 'assignto', 'executionID=' + executionID + '&id=' + objectID + '&kanbanGroup=default&from=taskkanban', '', true);
     }
     if(objectType == 'story')
     {
         if(!priv.canAssignStory && !user) return $noPrivAndNoAssigned;
-        var link = createLink('story', 'assignto', 'id=' + objectID, '', true);
+        var link = createLink('story', 'assignto', 'id=' + objectID + '&kanbanGroup=default&from=taskkanban', '', true);
     }
     if(objectType == 'bug')
     {
         if(!priv.canAssignBug && !user) return $noPrivAndNoAssigned;
-        var link = createLink('bug', 'assignto', 'id=' + objectID, '', true);
+        var link = createLink('bug', 'assignto', 'id=' + objectID + '&kanbanGroup=default&from=taskkanban', '', true);
     }
 
     if(!user) return objectStatus == 'closed' ? '' : $('<a class="avatar has-text ' + avatarSizeClass + ' avatar-circle iframe" title="' + noAssigned + '" style="background: #ccc" href="' + link + '"><i class="icon icon-person"></i></a>');
@@ -128,6 +128,15 @@ function renderEstStarted(estStarted, status)
  */
 function renderStoryItem(item, $item, col)
 {
+    if(groupBy == 'story' && item.id == '0')
+    {
+        $('.storyCell').css('width', '100%');
+        $parentItem = $item[0] == undefined ? $('.storyCell') : $item.parent();
+        $parentItem.addClass('text-center storyCell');
+        $parentItem.css('line-height', ($parentItem.parent().height() - 20) + 'px');
+        $item.replaceWith('<span class="text-muted">' + item.title + '</span>');
+        return;
+    }
     var scaleSize = window.kanbanScaleSize;
     if($item.attr('data-scale-size') !== scaleSize) $item.empty().attr('data-scale-size', scaleSize);
 
@@ -330,6 +339,14 @@ addColumnRenderer('task',  renderTaskItem);
  */
 function renderColumnCount($count, count, col)
 {
+    if(groupBy == 'story' && col.type == 'story')
+    {
+        $count.prev().addClass('storyColumn');
+        $count.prev().parent().append('<span class="caret changeOrderBy"></span>');
+        $count.remove();
+        return;
+    }
+
     var text = count + '/' + (col.limit < 0 ? '<i class="icon icon-infinite"></i>' : col.limit);
     $count.html(text + '<i class="icon icon-arrow-up"></i>');
 
@@ -370,7 +387,7 @@ function tips()
 function renderHeaderCol($col, col, $header, kanban)
 {
     if(col.asParent) $col = $col.children('.kanban-header-col');
-    if($col.children('.actions').context != undefined) return;
+    if($col.children('.actions').context != undefined || (groupBy == 'story' && col.type == 'story')) return;
 
     var $actions = $('<div class="actions createButton" />');
     var printStoryButton =  printTaskButton = printBugButton = false;
@@ -410,6 +427,11 @@ function renderHeaderCol($col, col, $header, kanban)
  */
 function renderLaneName($name, lane, $kanban, columns, kanban)
 {
+    if(groupBy == 'story')
+    {
+        $name.hide();
+        return;
+    }
     if(lane.id != 'story' && lane.id != 'task' && lane.id != 'bug') return false;
     if(!$name.children('.actions').length && (priv.canSetLane || priv.canMoveLane))
     {
@@ -650,7 +672,7 @@ function changeCardColType(cardID, fromColID, toColID, fromLaneID, toLaneID, car
         {
             if((fromColType == 'developing' || fromColType == 'wait') && priv.canFinishTask)
             {
-                var link   = createLink('task', 'finish', 'taskID=' + objectID, '', true);
+                var link   = createLink('task', 'finish', 'taskID=' + objectID + '&extra=from=' + 'taskkanban', '', true);
                 showIframe = true;
             }
         }
@@ -658,7 +680,7 @@ function changeCardColType(cardID, fromColID, toColID, fromLaneID, toLaneID, car
         {
             if(fromColType == 'developing' && priv.canPauseTask)
             {
-                var link = createLink('task', 'pause', 'taskID=' + objectID, '', true);
+                var link = createLink('task', 'pause', 'taskID=' + objectID + '&extra=from=' + 'taskkanban', '', true);
                 showIframe = true;
             }
         }
@@ -666,17 +688,17 @@ function changeCardColType(cardID, fromColID, toColID, fromLaneID, toLaneID, car
         {
             if((fromColType == 'canceled' || fromColType == 'closed' || fromColType == 'developed') && priv.canActivateTask)
             {
-                var link = createLink('task', 'activate', 'taskID=' + objectID, '', true);
+                var link = createLink('task', 'activate', 'taskID=' + objectID + '&extra=from=' + 'taskkanban', '', true);
                 showIframe = true;
             }
             if(fromColType == 'pause' && priv.canActivateTask)
             {
-                var link = createLink('task', 'restart', 'taskID=' + objectID, '', true);
+                var link = createLink('task', 'restart', 'taskID=' + objectID + '&from=' + 'taskkanban', '', true);
                 showIframe = true;
             }
             if(fromColType == 'wait' && priv.canStartTask)
             {
-                var link = createLink('task', 'start', 'taskID=' + objectID, '', true);
+                var link = createLink('task', 'start', 'taskID=' + objectID + '&extra=from=' + 'taskkanban', '', true);
                 showIframe = true;
             }
         }
@@ -684,7 +706,7 @@ function changeCardColType(cardID, fromColID, toColID, fromLaneID, toLaneID, car
         {
             if((fromColType == 'developing' || fromColType == 'wait' || fromColType == 'pause') && priv.canCancelTask)
             {
-                var link = createLink('task', 'cancel', 'taskID=' + objectID, '', true);
+                var link = createLink('task', 'cancel', 'taskID=' + objectID + '&extra=from=' + 'taskkanban', '', true);
                 showIframe = true;
             }
         }
@@ -692,7 +714,7 @@ function changeCardColType(cardID, fromColID, toColID, fromLaneID, toLaneID, car
         {
             if((fromColType == 'developed' || fromColType == 'canceled') && priv.canCloseTask)
             {
-                var link = createLink('task', 'close', 'taskID=' + objectID, '', true);
+                var link = createLink('task', 'close', 'taskID=' + objectID + '&extra=from=' + 'taskkanban', '', true);
                 showIframe = true;
             }
         }
@@ -705,7 +727,7 @@ function changeCardColType(cardID, fromColID, toColID, fromLaneID, toLaneID, car
         {
             if(fromColType == 'unconfirmed' && priv.canConfirmBug)
             {
-                var link = createLink('bug', 'confirmBug', 'bugID=' + objectID, '', true);
+                var link = createLink('bug', 'confirmBug', 'bugID=' + objectID + '&extra=&from=taskkanban', '', true);
                 showIframe = true;
             }
         }
@@ -714,7 +736,7 @@ function changeCardColType(cardID, fromColID, toColID, fromLaneID, toLaneID, car
             if(fromColType == 'confirmed' || fromColType == 'unconfirmed') moveCard = true;
             if((fromColType == 'closed' || fromColType == 'fixed' || fromColType == 'testing' || fromColType == 'tested') && priv.canActivateBug)
             {
-                var link = createLink('bug', 'activate', 'bugID=' + objectID, '', true);
+                var link = createLink('bug', 'activate', 'bugID=' + objectID + '&extra=&from=taskkanban', '', true);
                 showIframe = true;
             }
         }
@@ -722,7 +744,7 @@ function changeCardColType(cardID, fromColID, toColID, fromLaneID, toLaneID, car
         {
             if(fromColType == 'fixing' || fromColType == 'confirmed' || fromColType == 'unconfirmed')
             {
-                var link = createLink('bug', 'resolve', 'bugID=' + objectID, '', true);
+                var link = createLink('bug', 'resolve', 'bugID=' + objectID + '&extra=&from=taskkanban', '', true);
                 showIframe = true;
             }
         }
@@ -738,7 +760,7 @@ function changeCardColType(cardID, fromColID, toColID, fromLaneID, toLaneID, car
         {
             if(fromColType == 'testing' || fromColType == 'tested')
             {
-                var link = createLink('bug', 'close', 'bugID=' + objectID, '', true);
+                var link = createLink('bug', 'close', 'bugID=' + objectID + '&extra=&from=taskkanban', '', true);
                 showIframe = true;
             }
         }
@@ -769,7 +791,7 @@ function changeCardColType(cardID, fromColID, toColID, fromLaneID, toLaneID, car
     {
         if(toColType == 'closed' && priv.canCloseStory)
         {
-            var link = createLink('story', 'close', 'storyID=' + objectID, '', true);
+            var link = createLink('story', 'close', 'storyID=' + objectID + '&from=taskkanban', '', true);
             showIframe = true;
         }
         else
@@ -930,7 +952,7 @@ function createColumnCreateMenu(options)
 
     if(col.laneType == 'story')
     {
-        if(priv.canCreateStory) items.push({label: storyLang.create, url: $.createLink('story', 'create', 'productID=' + productID, '', true), className: 'iframe'});
+        if(priv.canCreateStory) items.push({label: storyLang.create, url: $.createLink('story', 'create', 'productID=' + productID + '&branch=0&moduleID=0&storyID=0&objectID=' + executionID, '', true), className: 'iframe'});
         if(priv.canBatchCreateStory) items.push({label: executionLang.batchCreateStory, url: $.createLink('story', 'batchcreate', 'productID=' + productID + '&branch=0&moduleID=0&storyID=0&executionID=' + executionID, '', true), className: 'iframe', attrs: {'data-width': '90%'}});
         if(priv.canLinkStory) items.push({label: executionLang.linkStory, url: $.createLink('execution', 'linkStory', 'executionID=' + executionID, '', true), className: 'iframe', attrs: {'data-width': '90%'}});
         if(priv.canLinkStoryByPlan) items.push({label: executionLang.linkStoryByPlan, url: '#linkStoryByPlan', 'attrs' : {'data-toggle': 'modal'}});
@@ -1167,7 +1189,7 @@ function handleSortCards(event)
         }
         else
         {
-            $.get(createLink('execution', 'ajaxUpdateKanban', "executionID=" + executionID + "&entertime=0&browseType=" + browseType + "&groupBy=" + groupBy + '&from=execution'), function(data)
+            $.get(createLink('execution', 'ajaxUpdateKanban', "executionID=" + executionID + "&entertime=0&browseType=" + browseType + "&groupBy=" + groupBy + '&from=execution' + '&searchValue=' + searchValue + '&orderBy=' + orderBy), function(data)
             {
                 if(data && lastUpdateData !== data)
                 {
@@ -1252,6 +1274,12 @@ $(function()
         event.preventDefault();
     });
 
+    $(document).on('click', '#kanbans span.caret.changeOrderBy', function(event)
+    {
+        orderBy = orderBy == 'pri_desc' ? 'pri_asc' : 'pri_desc';
+        searchCards(searchValue);
+    })
+
     /* Init contextmenu */
     $('#kanbans').on('click', '[data-contextmenu]', function(event)
     {
@@ -1311,7 +1339,7 @@ $(function()
     lastUpdateData = '';
     setInterval(function()
     {
-        $.get(createLink('execution', 'ajaxUpdateKanban', "executionID=" + executionID + "&entertime=" + entertime + "&browseType=" + browseType + "&groupBy=" + groupBy + '&from=execution&searchValue=' + searchValue), function(data)
+        $.get(createLink('execution', 'ajaxUpdateKanban', "executionID=" + executionID + "&entertime=" + entertime + "&browseType=" + browseType + "&groupBy=" + groupBy + '&from=execution&searchValue=' + searchValue + '&orderBy' + orderBy), function(data)
         {
             if(lastUpdateData == '') lastUpdateData = data;
             if(data && lastUpdateData !== data)
@@ -1447,7 +1475,7 @@ function toggleSearchBox()
 function searchCards(value)
 {
     searchValue = value;
-    $.get(createLink('execution', 'ajaxUpdateKanban', "executionID=" + executionID + "&entertime=0&browseType=" + browseType + "&groupBy=" + groupBy + '&from=execution&searchValue=' + value), function(data)
+    $.get(createLink('execution', 'ajaxUpdateKanban', "executionID=" + executionID + "&entertime=0&browseType=" + browseType + "&groupBy=" + groupBy + '&from=execution&searchValue=' + value + '&orderBy=' + orderBy), function(data)
     {
         lastUpdateData = data;
         var kanbanData = $.parseJSON(data);

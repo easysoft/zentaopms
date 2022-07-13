@@ -274,7 +274,7 @@ class branch extends control
         {
             $branchTagOption[$branchInfo->id] = $branchInfo->name . ($branchInfo->status == 'closed' ? ' (' . $this->lang->branch->statusList['closed'] . ')' : '');
         }
-        if(!isset($branchTagOption[$oldBranch]))
+        if(is_numeric($oldBranch) and !isset($branchTagOption[$oldBranch]))
         {
             $branch = $this->branch->getById($oldBranch, $productID, '');
             $branchTagOption[$oldBranch] = $oldBranch == BRANCH_MAIN ? $branch : ($branch->name . ($branch->status == 'closed' ? ' (' . $this->lang->branch->statusList['closed'] . ')' : ''));

@@ -431,10 +431,20 @@ $lang->execution->charts->burn->graph->actuality    = '实际';
 $lang->execution->charts->burn->graph->delay        = '延期';
 
 $lang->execution->charts->cfd = new stdclass();
+$lang->execution->charts->cfd->cfdTip        = "<p>
+1.累积流图反应各个阶段累积处理的工作项数量随时间的变化趋势。</br>
+2.横轴代表日期，纵轴代表工作项数量。</br>
+3.通过此图可计算出在制品数量，交付速率以及平均前置时间，从而了解团队的交付情况。</p>";
 $lang->execution->charts->cfd->cycleTime     = '平均周期时间';
 $lang->execution->charts->cfd->cycleTimeTip  = '平均每个卡片从开发启动到完成的周期时间';
 $lang->execution->charts->cfd->throughput    = '吞吐率';
 $lang->execution->charts->cfd->throughputTip = '吞吐率 = 在制品 / 平均周期时间';
+
+$lang->execution->charts->cfd->begin          = '开始日期';
+$lang->execution->charts->cfd->end            = '结束日期';
+$lang->execution->charts->cfd->errorBegin     = '开始日期应小于结束日期';
+$lang->execution->charts->cfd->errorDateRange = '累积流图只提供3个月内的数据展示';
+$lang->execution->charts->cfd->dateRangeTip   = '累积流图只展示3个月内的数据';
 
 $lang->execution->placeholder = new stdclass();
 $lang->execution->placeholder->code      = '团队内部的简称';

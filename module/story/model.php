@@ -3931,7 +3931,7 @@ class storyModel extends model
                             if($story->stage == 'projected') $title = $this->lang->story->subDivideTip['projected'];
                         }
                     }
-                    $menu .= $this->buildMenu('story', 'batchCreate', "productID=$story->product&branch=$story->branch&module=$story->module&$params&executionID={$this->session->project}", $story, $type, 'split', '', 'showinonlybody', '', '', $title);
+                    $menu .= $this->buildMenu('story', 'batchCreate', "productID=$story->product&branch=$story->branch&module=$story->module&$params", $story, $type, 'split', '', 'showinonlybody', '', '', $title);
                 }
                 if($this->app->rawModule == 'projectstory' and $this->config->vision != 'lite') $menu .= $this->buildMenu('projectstory', 'unlinkStory', "projectID={$this->session->project}&$params", $story, $type, 'unlink', 'hiddenwin', 'showinonlybody');
 

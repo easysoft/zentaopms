@@ -79,7 +79,7 @@ class executionModel extends model
         $executions = $this->getPairs(0, 'all', 'nocode');
         if(!$executionID and $this->session->execution) $executionID = $this->session->execution;
         if(!$executionID or !in_array($executionID, array_keys($executions))) $executionID = key($executions);
-        $this->session->set('execution', $executionID);
+        $this->session->set('execution', $executionID, $this->app->tab);
 
         /* Unset story, bug, build and testtask if type is ops. */
         if($execution and $execution->type == 'stage' and $this->config->systemMode == 'new')
@@ -3073,6 +3073,42 @@ class executionModel extends model
     }
 
     /**
+     * Check whether there is data on the specified date of execution, and there is no data with the latest date added.
+     *
+     * @param int    $executionID
+     * @param string $date
+     * @access public
+     * @return void
+     */
+    public function checkCFDData($executionID, $date)
+    {
+        $today = helper::today();
+        if($date >= $today) return;
+
+        $checkData = $this->dao->select("date, `count` AS value, `name`")->from(TABLE_CFD)
+            ->where('execution')->eq((int)$executionID)
+            ->andWhere('date')->eq($date)
+            ->orderBy('date DESC, id asc')->fetchGroup('name', 'date');
+        if(!$checkData)
+        {
+            $closetoDate = $this->dao->select("max(date) as date")->from(TABLE_CFD)->where('execution')->eq((int)$executionID)->andWhere('date')->lt($date)->fetch('date');
+            if($closetoDate)
+            {
+                $copyData = $this->dao->select("*")->from(TABLE_CFD)
+                    ->where('execution')->eq((int)$executionID)
+                    ->andWhere('date')->eq($closetoDate)
+                    ->fetchAll();
+                foreach($copyData as $data)
+                {
+                    unset($data->id);
+                    $data->date = $date;
+                    $this->dao->replace(TABLE_CFD)->data($data)->exec();
+                }
+            }
+        }
+    }
+
+    /**
      * Fix burn for first day.
      *
      * @param  int    $executionID
@@ -4267,6 +4303,103 @@ class executionModel extends model
             $html .= '</li>';
         }
         return $html;
+    }
+
+    /**
+     * Print execution nested list.
+     *
+     * @param  object $execution
+     * @param  int    $isChild
+     * @param  array  $users
+     * @access public
+     * @return void
+     */
+    public function printNestedList($execution, $isChild = false, $users, $productID)
+    {
+        $this->loadModel('task');
+        $this->loadModel('execution');
+        $this->loadModel('programplan');
+
+        if(!$isChild)
+        {
+            $trClass = 'is-top-level table-nest-child-hide';
+            $trAttrs = "data-id='$execution->id' data-order='$execution->order' data-nested='true'";
+        }
+        else
+        {
+            $trClass  = 'is-nest-child';
+            $trAttrs  = "data-id={$execution->id} data-parent={$execution->parent}";
+            $trAttrs .= " data-nest-parent='$execution->parent' data-order='$execution->order' data-nest-path=',$execution->parent,$execution->id,'";
+        }
+
+        $burns = join(',', $execution->burns);
+        echo "<tr $trAttrs class=$trClass>";
+        echo "<td><span id=$execution->id class='table-nest-icon icon table-nest-toggle'></span>";
+        if($this->config->systemMode == 'new')
+        {
+            $spanClass = $execution->type == 'stage' ? 'label-warning' : 'label-info';
+            echo "<span class='project-type-label label label-outline $spanClass'>{$this->lang->execution->typeList[$execution->type]}</span> ";
+        }
+        echo html::a(helper::createLink('execution', 'view', "executionID=$execution->id"), $execution->name);
+        echo '<td>' . zget($users, $execution->PM) . '</td>';
+        echo "<td class='status-{$execution->status}'>" . zget($this->lang->project->statusList, $execution->status) . '</td>';
+        echo '<td>' . html::ring($execution->hours->progress) . '</td>';
+        echo '<td>' . $execution->begin . '</td>';
+        echo '<td>' . $execution->end . '</td>';
+        echo "<td class='hours' title='{$execution->hours->totalEstimate}{$this->lang->execution->workHour}'>" . $execution->hours->totalEstimate . $this->lang->execution->workHourUnit . '</td>';
+        echo "<td class='hours' title='{$execution->hours->totalConsumed}{$this->lang->execution->workHour}'>" . $execution->hours->totalConsumed . $this->lang->execution->workHourUnit . '</td>';
+        echo "<td class='hours' title='{$execution->hours->totalLeft}{$this->lang->execution->workHour}'>" . $execution->hours->totalLeft . $this->lang->execution->workHourUnit . '</td>';
+        echo "<td id='spark-{$execution->id}' class='sparkline text-left no-padding' values='$burns'></td>";
+        echo '<td class="c-actions">';
+        common::printIcon('execution', 'start', "executionID={$execution->id}", $execution, 'list', '', '', 'iframe', true);
+        $class = !empty($execution->children) ? 'disabled' : '';
+        common::printIcon('task', 'create', "executionID={$execution->id}", $execution, 'list', '', '', $class, false, "data-app='execution'");
+
+        if($execution->type == 'stage')
+        {
+            if($execution->grade == 1 && $this->loadModel('programplan')->isCreateTask($execution->id))
+            {
+                common::printIcon('programplan', 'create', "program={$execution->parent}&productID=$productID&planID=$execution->id", $execution, 'list', 'split', '', '', '', '', $this->lang->programplan->createSubPlan);
+            }
+            else
+            {
+                $disabled = ($execution->grade == 2) ? ' disabled' : '';
+                echo common::hasPriv('programplan', 'create') ? html::a('javascript:alert("' . $this->lang->programplan->error->createdTask . '");', '<i class="icon-programplan-create icon-split"></i>', '', 'class="btn ' . $disabled . '"') : '';
+            }
+        }
+
+        common::printIcon('programplan', 'edit', "stageID=$execution->id&projectID=$execution->project", $execution, 'list', '', '', 'iframe', true);
+
+        $disabled = !empty($execution->children) ? ' disabled' : '';
+        if($execution->status != 'closed' and common::hasPriv('execution', 'close', $execution))
+        {
+            common::printIcon('execution', 'close', "stageID=$execution->id", $execution, 'list', 'off', 'hiddenwin' , $disabled . ' iframe', true, '', $this->lang->execution->close);
+        }
+        elseif($execution->status == 'closed' and common::hasPriv('execution', 'activate', $execution))
+        {
+            common::printIcon('execution', 'activate', "stageID=$execution->id", $execution, 'list', 'magic', 'hiddenwin' , $disabled . ' iframe', true, '', $this->lang->execution->activate);
+        }
+
+        if(common::hasPriv('execution', 'delete', $execution))
+        {
+            common::printIcon('execution', 'delete', "stageID=$execution->id&confirm=no", $execution, 'list', 'trash', 'hiddenwin' , $disabled, '', '', $this->lang->delete);
+        }
+        echo '</td>';
+        echo '</tr>';
+
+        if(!empty($execution->children))
+        {
+            foreach($execution->children as $child) $this->printNestedList($child, true, $users, $productID);
+        }
+
+        if(!empty($execution->tasks))
+        {
+            foreach($execution->tasks as $task)
+            {
+                $showmore = (count($execution->tasks) == 50) && ($task == end($execution->tasks));
+                echo $this->task->buildNestedList($execution, $task, false, $showmore, $users);
+            }
+        }
     }
 
     /**

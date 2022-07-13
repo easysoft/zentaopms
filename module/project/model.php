@@ -1527,6 +1527,7 @@ class projectModel extends model
             $projects[$projectID]->id             = $projectID;
             $projects[$projectID]->name           = $projectName;
             $projects[$projectID]->code           = $projectCode;
+            $projects[$projectID]->model          = $oldProjects[$projectID]->model;
             $projects[$projectID]->PM             = $data->PMs[$projectID];
             $projects[$projectID]->begin          = $data->begins[$projectID];
             $projects[$projectID]->end            = isset($data->ends[$projectID]) ? $data->ends[$projectID] : LONG_TIME;
@@ -1544,15 +1545,13 @@ class projectModel extends model
                     /* Child project begin cannot less than parent. */
                     if(!empty($projects[$projectID]->name) and $projects[$projectID]->begin < $parentProject->begin)
                     {
-                        dao::$errors['begin'] = sprintf($this->lang->project->beginGreateChild, $parentProject->begin);
-                        return false;
+                        dao::$errors[] = "ID {$projects[$projectID]->id}" . sprintf($this->lang->project->beginGreateChild, $parentProject->begin) . "\n";
                     }
 
                     /* When parent set end then child project end cannot greater than parent. */
                     if(!empty($projects[$projectID]->name) and $parentProject->end != '0000-00-00' and $projects[$projectID]->end > $parentProject->end)
                     {
-                        dao::$errors['end'] =  sprintf($this->lang->project->endLetterChild, $parentProject->end);
-                        return false;
+                        dao::$errors[] = "ID {$projects[$projectID]->id}" . sprintf($this->lang->project->endLetterChild, $parentProject->end) . "\n";
                     }
                 }
             }
@@ -1584,7 +1583,17 @@ class projectModel extends model
                 ->where('id')->eq($projectID)
                 ->exec();
 
-            if(dao::isError()) helper::end(js::error('project#' . $projectID . dao::getError(true)));
+            if(dao::isError())
+            {
+                $errors = dao::getError();
+                foreach($errors as $key => $error)
+                {
+                    dao::$errors[$key][0] = 'project#' . $projectID . $error[0];
+                }
+
+                return false;
+            }
+
             if(!dao::isError())
             {
                 $linkedProducts = $this->dao->select('product')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($projectID)->fetchPairs();
@@ -2308,7 +2317,7 @@ class projectModel extends model
      * @access public
      * @return array
      */
-    public function getStats($projectID = 0, $status = 'undone', $productID = 0, $branch = 0, $itemCounts = 30, $orderBy = 'id_asc', $pager = null)
+    public function getStats($projectID = 0, $status = 'undone', $productID = 0, $branch = 0, $itemCounts = 30, $orderBy = 'id_asc', $pager = null, $withTasks = false)
     {
         if(empty($productID))
         {
@@ -2384,6 +2393,31 @@ class projectModel extends model
             $burns[$executionID] = $executionBurns;
         }
 
+        if($withTasks)
+        {
+            $executionTasks = $this->dao->select('*')->from(TABLE_TASK)
+                ->where('deleted')->eq(0)
+                ->andWhere('status')->notin('closed,cancel')
+                ->andWhere('execution')->in(array_keys($executions))
+                ->orderBy('id_asc')
+                ->fetchGroup('execution', 'id');
+
+            foreach($executionTasks as $executionID => $tasks)
+            {
+                foreach($tasks as $task)
+                {
+                    if($task->parent > 0)
+                    {
+                        if(isset($executionTasks[$executionID][$task->parent]))
+                        {
+                            $executionTasks[$executionID][$task->parent]->children[$task->id] = $task;
+                            unset($executionTasks[$executionID][$task->id]);
+                        }
+                    }
+                }
+            }
+        }
+
         /* Process executions. */
         $parents  = array();
         $children = array();
@@ -2409,6 +2443,11 @@ class projectModel extends model
 
             $execution->children = array();
             $execution->grade == 1 ? $parents[$execution->id] = $execution : $children[$execution->parent][] = $execution;
+            if(isset($executionTasks) and isset($executionTasks[$execution->id]))
+            {
+                $tasks = array_chunk($executionTasks[$execution->id], 50, true);
+                $execution->tasks = $tasks[0];
+            }
         }
 
         /* In the case of the waterfall model, calculate the sub-stage. */

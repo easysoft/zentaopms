@@ -274,7 +274,7 @@ function setLane(regionID)
 }
 
 /* Get select of stories.*/
-function setStories(moduleID, executionID)
+function setStories(moduleID)
 {
     link = createLink('story', 'ajaxGetExecutionStories', 'executionID=' + executionID + '&productID=0&branch=all&moduleID=' + moduleID + '&storyID=0&number=&type=full&status=unclosed');
     $.get(link, function(stories)
@@ -530,8 +530,9 @@ $(document).on('click', '#testStory_chosen', function()
 
 $('#modalTeam .btn').click(function()
 {
-    var team = '';
-    var time = 0;
+    var team  = '';
+    var time  = 0;
+    var error = false;
 
     /* Unique team. */
     $('select[name^=team]').each(function(i)
@@ -548,9 +549,10 @@ $('#modalTeam .btn').click(function()
 
     $('select[name^=team]').each(function()
     {
-        if($(this).find('option:selected').text() != '')
+        var account = $(this).find('option:selected').text();
+        if(account != '')
         {
-            team += ' ' + $(this).find('option:selected').text();
+            team += ' ' + account;
         }
 
         estimate = parseFloat($(this).parents('td').next('td').find('[name^=teamEstimate]').val());
@@ -559,9 +561,16 @@ $('#modalTeam .btn').click(function()
             time += estimate;
         }
 
-        $('#teamMember').val(team);
-        $('#estimate').val(time);
-    })
+        var requiredFieldList = ',' + requiredFields + ',';
+        if(account && requiredFieldList.indexOf(',estimate,') >= 0 && (estimate == 0 || isNaN(estimate)))
+        {
+            alert(estimateNotEmpty);
+            error = true;
+            return false;
+        }
+    });
+
+    if(error) return false;
     var teamList = team.split(" ");
     if(teamList.length <= 2)
     {
@@ -570,6 +579,9 @@ $('#modalTeam .btn').click(function()
     }
     else
     {
+        $('#teamMember').val(team);
+        $('#estimate').val(time);
+
         if(config.onlybody == 'yes' && vision == 'lite')
         {
             $('.close').parent().click();

@@ -209,6 +209,7 @@ $lang->action->desc->importedbuild        = '$date, imported to <strong>$extra</
 $lang->action->desc->fromsonarqube        = '$date, created by <strong>$actor</strong> from <strong>SonarQube Issue</strong>.' . "\n";
 $lang->action->desc->tolib                = '$date, imported by <strong>$actor</strong> .' . "\n";
 $lang->action->desc->updatetolib          = '$date, updated to ' . $lang->testcase->common . ' by  <strong>$actor</strong>.' . "\n";
+$lang->action->desc->adjusttasktowait     = '$date, System Reminder: The task status will be set to Not Started as the consumed work hour is adjusted to 0. ' . "\n";
 
 /* Used to describe the history of operations related to parent-child tasks. */
 $lang->action->desc->createchildren     = '$date, <strong>$actor</strong> created a child task <strong>$extra</strong>。' . "\n";
@@ -305,7 +306,7 @@ $lang->action->label->suspended             = 'suspended ';
 $lang->action->label->login                 = 'login';
 $lang->action->label->logout                = "logout";
 $lang->action->label->notified              = "Notified";
-$lang->action->label->deleteestimate        = "deleted ";
+$lang->action->label->deleteestimate        = "deleted hours";
 $lang->action->label->linked2build          = "linked ";
 $lang->action->label->linked2bug            = "linked ";
 $lang->action->label->linked2testtask       = "linked";

@@ -10,6 +10,11 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/kanban.html.php';?>
+<?php if($groupBy == 'story' and $browseType == 'task'):?>
+<style>
+.kanban-cols {left: 0px !important;}
+</style>
+<?php endif;?>
 <div id='mainMenu' class='clearfix'>
   <div class='btn-toolbar pull-left'>
     <div class="input-control space c-type">
@@ -35,7 +40,7 @@
   <div class='btn-toolbar pull-right'>
     <div class="input-group" id="taskKanbanSearch">
       <div class="input-control search-box" id="searchBox">
-      <input type="text" name="taskKanbanSearchInput" id="taskKanbanSearchInput" value="" class="form-control" oninput="searchCards(this.value)" placeholder="<?php echo $lang->execution->pleaseInput;?>">
+      <input type="text" name="taskKanbanSearchInput" id="taskKanbanSearchInput" value="" class="form-control" oninput="searchCards(this.value)" placeholder="<?php echo $lang->execution->pleaseInput;?>" autocomplete="off">
       </div>
     </div>
     <?php
@@ -220,4 +225,5 @@ js::set('priv',
 <?php js::set('displayCards', $execution->displayCards);?>
 <?php js::set('needLinkProducts', $lang->execution->needLinkProducts);?>
 <?php js::set('hourUnit', $config->hourUnit);?>
+<?php js::set('orderBy', $storyOrder);?>
 <?php include '../../common/view/footer.html.php';?>

@@ -1390,11 +1390,12 @@ class bug extends control
      * Update assign of bug.
      *
      * @param  int    $bugID
-     * @parm   string $kanbanGroup
+     * @param  string $kanbanGroup
+     * @param  string $from taskkanban
      * @access public
      * @return void
      */
-    public function assignTo($bugID, $kanbanGroup = 'default')
+    public function assignTo($bugID, $kanbanGroup = 'default', $from = '')
     {
         $bug = $this->bug->getById($bugID);
         $this->bug->checkBugExecutionPriv($bug);
@@ -1414,28 +1415,24 @@ class bug extends control
 
             if(isonlybody())
             {
-                $bug       = $this->bug->getById($bugID);
-                $execution = $this->loadModel('execution')->getByID($bug->execution);
-                if($this->app->tab == 'execution')
+                $bug           = $this->bug->getById($bugID);
+                $execution     = $this->loadModel('execution')->getByID($bug->execution);
+                $execLaneType  = $this->session->execLaneType ? $this->session->execLaneType : 'all';
+                $execGroupBy   = $this->session->execGroupBy ? $this->session->execGroupBy : 'default';
+                $rdSearchValue = $this->session->rdSearchValue ? $this->session->rdSearchValue : '';
+                if($this->app->tab == 'execution' and isset($execution->type) and $execution->type == 'kanban')
                 {
-                    $execLaneType  = $this->session->execLaneType ? $this->session->execLaneType : 'all';
-                    $execGroupBy   = $this->session->execGroupBy ? $this->session->execGroupBy : 'default';
-                    $rdSearchValue = $this->session->rdSearchValue ? $this->session->rdSearchValue : '';
-
-                    if(isset($execution->type) and $execution->type == 'kanban')
-                    {
-                        $kanbanData = $this->loadModel('kanban')->getRDKanban($bug->execution, $execLaneType, 'id_desc', 0, $kanbanGroup, $rdSearchValue);
-                        $kanbanData = json_encode($kanbanData);
-                        return print(js::closeModal('parent.parent', '', "parent.parent.updateKanban($kanbanData)"));
-                    }
-                    else
-                    {
-                        $kanbanData = $this->loadModel('kanban')->getExecutionKanban($bug->execution, $execLaneType, $execGroupBy, $rdSearchValue);
-                        $kanbanType = $execLaneType == 'all' ? 'bug' : key($kanbanData);
-                        $kanbanData = $kanbanData[$kanbanType];
-                        $kanbanData = json_encode($kanbanData);
-                        return print(js::closeModal('parent.parent', '', "parent.parent.updateKanban(\"bug\", $kanbanData)"));
-                    }
+                    $kanbanData = $this->loadModel('kanban')->getRDKanban($bug->execution, $execLaneType, 'id_desc', 0, $kanbanGroup, $rdSearchValue);
+                    $kanbanData = json_encode($kanbanData);
+                    return print(js::closeModal('parent.parent', '', "parent.parent.updateKanban($kanbanData)"));
+                }
+                elseif($from == 'taskkanban')
+                {
+                    $kanbanData = $this->loadModel('kanban')->getExecutionKanban($bug->execution, $execLaneType, $execGroupBy, $rdSearchValue);
+                    $kanbanType = $execLaneType == 'all' ? 'bug' : key($kanbanData);
+                    $kanbanData = $kanbanData[$kanbanType];
+                    $kanbanData = json_encode($kanbanData);
+                    return print(js::closeModal('parent.parent', '', "parent.parent.updateKanban(\"bug\", $kanbanData)"));
                 }
                 else
                 {
@@ -1627,10 +1624,11 @@ class bug extends control
      *
      * @param  int    $bugID
      * @param  string $extra
+     * @param  string $from taskkanban
      * @access public
      * @return void
      */
-    public function confirmBug($bugID, $extra = '')
+    public function confirmBug($bugID, $extra = '', $from = '')
     {
         $bug = $this->bug->getById($bugID);
         if(!empty($_POST))
@@ -1646,28 +1644,24 @@ class bug extends control
             parse_str($extra, $output);
             if(isonlybody())
             {
-                $execution = $this->loadModel('execution')->getByID($bug->execution);
-                if($this->app->tab == 'execution')
+                $execution     = $this->loadModel('execution')->getByID($bug->execution);
+                $execLaneType  = $this->session->execLaneType ? $this->session->execLaneType : 'all';
+                $execGroupBy   = $this->session->execGroupBy ? $this->session->execGroupBy : 'default';
+                $rdSearchValue = $this->session->rdSearchValue ? $this->session->rdSearchValue : '';
+                if($this->app->tab == 'execution' and isset($execution->type) and $execution->type == 'kanban')
                 {
-                    $execLaneType  = $this->session->execLaneType ? $this->session->execLaneType : 'all';
-                    $execGroupBy   = $this->session->execGroupBy ? $this->session->execGroupBy : 'default';
-                    $rdSearchValue = $this->session->rdSearchValue ? $this->session->rdSearchValue : '';
-
-                    if(isset($execution->type) and $execution->type == 'kanban')
-                    {
-                        $regionID   = !empty($output['regionID']) ? $output['regionID'] : 0;
-                        $kanbanData = $this->loadModel('kanban')->getRDKanban($bug->execution, $execLaneType, 'id_desc', $regionID, $execGroupBy, $rdSearchValue);
-                        $kanbanData = json_encode($kanbanData);
-                        return print(js::closeModal('parent.parent', '', "parent.parent.updateKanban($kanbanData, $regionID)"));
-                    }
-                    else
-                    {
-                        $kanbanData = $this->loadModel('kanban')->getExecutionKanban($bug->execution, $execLaneType, $execGroupBy, $rdSearchValue);
-                        $kanbanType = $execLaneType == 'all' ? 'bug' : key($kanbanData);
-                        $kanbanData = $kanbanData[$kanbanType];
-                        $kanbanData = json_encode($kanbanData);
-                        return print(js::closeModal('parent.parent', '', "parent.parent.updateKanban(\"bug\", $kanbanData)"));
-                    }
+                    $regionID   = !empty($output['regionID']) ? $output['regionID'] : 0;
+                    $kanbanData = $this->loadModel('kanban')->getRDKanban($bug->execution, $execLaneType, 'id_desc', $regionID, $execGroupBy, $rdSearchValue);
+                    $kanbanData = json_encode($kanbanData);
+                    return print(js::closeModal('parent.parent', '', "parent.parent.updateKanban($kanbanData, $regionID)"));
+                }
+                elseif($from == 'taskkanban')
+                {
+                    $kanbanData = $this->loadModel('kanban')->getExecutionKanban($bug->execution, $execLaneType, $execGroupBy, $rdSearchValue);
+                    $kanbanType = $execLaneType == 'all' ? 'bug' : key($kanbanData);
+                    $kanbanData = $kanbanData[$kanbanType];
+                    $kanbanData = json_encode($kanbanData);
+                    return print(js::closeModal('parent.parent', '', "parent.parent.updateKanban(\"bug\", $kanbanData)"));
                 }
                 else
                 {
@@ -1714,10 +1708,11 @@ class bug extends control
      *
      * @param  int    $bugID
      * @param  string $extra
+     * @param  string $from taskkanban
      * @access public
      * @return void
      */
-    public function resolve($bugID, $extra = '')
+    public function resolve($bugID, $extra = '', $from = '')
     {
         $bug = $this->bug->getById($bugID);
         if($bug->execution) $execution = $this->loadModel('execution')->getByID($bug->execution);
@@ -1753,27 +1748,23 @@ class bug extends control
             parse_str($extra, $output);
             if(isonlybody())
             {
-                if($this->app->tab == 'execution')
+                $execLaneType  = $this->session->execLaneType ? $this->session->execLaneType : 'all';
+                $execGroupBy   = $this->session->execGroupBy ? $this->session->execGroupBy : 'default';
+                $rdSearchValue = $this->session->rdSearchValue ? $this->session->rdSearchValue : '';
+                if($this->app->tab == 'execution' and isset($execution->type) and $execution->type == 'kanban')
                 {
-                    $execLaneType  = $this->session->execLaneType ? $this->session->execLaneType : 'all';
-                    $execGroupBy   = $this->session->execGroupBy ? $this->session->execGroupBy : 'default';
-                    $rdSearchValue = $this->session->rdSearchValue ? $this->session->rdSearchValue : '';
-                    if(isset($execution->type) and $execution->type == 'kanban')
-                    {
-                        $regionID   = !empty($output['regionID']) ? $output['regionID'] : 0;
-                        $kanbanData = $this->loadModel('kanban')->getRDKanban($bug->execution, $execLaneType, 'id_desc', $regionID, $execGroupBy, $rdSearchValue);
-                        $kanbanData = json_encode($kanbanData);
-
-                        return print(js::closeModal('parent.parent', '', "parent.parent.updateKanban($kanbanData, $regionID)"));
-                    }
-                    else
-                    {
-                        $kanbanData = $this->loadModel('kanban')->getExecutionKanban($bug->execution, $execLaneType, $execGroupBy, $rdSearchValue);
-                        $kanbanType = $execLaneType == 'all' ? 'bug' : key($kanbanData);
-                        $kanbanData = $kanbanData[$kanbanType];
-                        $kanbanData = json_encode($kanbanData);
-                        return print(js::closeModal('parent.parent', '', "parent.parent.updateKanban(\"bug\", $kanbanData)"));
-                    }
+                    $regionID   = !empty($output['regionID']) ? $output['regionID'] : 0;
+                    $kanbanData = $this->loadModel('kanban')->getRDKanban($bug->execution, $execLaneType, 'id_desc', $regionID, $execGroupBy, $rdSearchValue);
+                    $kanbanData = json_encode($kanbanData);
+                    return print(js::closeModal('parent.parent', '', "parent.parent.updateKanban($kanbanData, $regionID)"));
+                }
+                elseif($from == 'taskkanban')
+                {
+                    $kanbanData = $this->loadModel('kanban')->getExecutionKanban($bug->execution, $execLaneType, $execGroupBy, $rdSearchValue);
+                    $kanbanType = $execLaneType == 'all' ? 'bug' : key($kanbanData);
+                    $kanbanData = $kanbanData[$kanbanType];
+                    $kanbanData = json_encode($kanbanData);
+                    return print(js::closeModal('parent.parent', '', "parent.parent.updateKanban(\"bug\", $kanbanData)"));
                 }
                 else
                 {
@@ -1842,10 +1833,11 @@ class bug extends control
      *
      * @param  int    $bugID
      * @param  string $extra
+     * @param  string $from taskkanban
      * @access public
      * @return void
      */
-    public function activate($bugID, $extra = '')
+    public function activate($bugID, $extra = '', $from = '')
     {
         $bug = $this->bug->getById($bugID);
         if(!empty($_POST))
@@ -1866,27 +1858,23 @@ class bug extends control
             if(isonlybody())
             {
                 $execution = $this->loadModel('execution')->getByID($bug->execution);
-                if($this->app->tab == 'execution')
+                $execLaneType  = $this->session->execLaneType ? $this->session->execLaneType : 'all';
+                $execGroupBy   = $this->session->execGroupBy ? $this->session->execGroupBy : 'default';
+                $rdSearchValue = $this->session->rdSearchValue ? $this->session->rdSearchValue : '';
+                if($this->app->tab == 'execution' and isset($execution->type) and $execution->type == 'kanban')
                 {
-                    $execLaneType  = $this->session->execLaneType ? $this->session->execLaneType : 'all';
-                    $execGroupBy   = $this->session->execGroupBy ? $this->session->execGroupBy : 'default';
-                    $rdSearchValue = $this->session->rdSearchValue ? $this->session->rdSearchValue : '';
-
-                    if(isset($execution->type) and $execution->type == 'kanban')
-                    {
-                        $regionID      = !empty($output['regionID']) ? $output['regionID'] : 0;
-                        $kanbanData    = $this->loadModel('kanban')->getRDKanban($bug->execution, $execLaneType, 'id_desc', $regionID, $execGroupBy, $rdSearchValue);
-                        $kanbanData    = json_encode($kanbanData);
-                        return print(js::closeModal('parent.parent', '', "parent.parent.updateKanban($kanbanData, $regionID)"));
-                    }
-                    else
-                    {
-                        $kanbanData = $this->loadModel('kanban')->getExecutionKanban($bug->execution, $execLaneType, $execGroupBy, $rdSearchValue);
-                        $kanbanType = $execLaneType == 'all' ? 'bug' : key($kanbanData);
-                        $kanbanData = $kanbanData[$kanbanType];
-                        $kanbanData = json_encode($kanbanData);
-                        return print(js::closeModal('parent.parent', '', "parent.parent.updateKanban(\"bug\", $kanbanData)"));
-                    }
+                    $regionID   = !empty($output['regionID']) ? $output['regionID'] : 0;
+                    $kanbanData = $this->loadModel('kanban')->getRDKanban($bug->execution, $execLaneType, 'id_desc', $regionID, $execGroupBy, $rdSearchValue);
+                    $kanbanData = json_encode($kanbanData);
+                    return print(js::closeModal('parent.parent', '', "parent.parent.updateKanban($kanbanData, $regionID)"));
+                }
+                elseif($from == 'taskkanban')
+                {
+                    $kanbanData = $this->loadModel('kanban')->getExecutionKanban($bug->execution, $execLaneType, $execGroupBy, $rdSearchValue);
+                    $kanbanType = $execLaneType == 'all' ? 'bug' : key($kanbanData);
+                    $kanbanData = $kanbanData[$kanbanType];
+                    $kanbanData = json_encode($kanbanData);
+                    return print(js::closeModal('parent.parent', '', "parent.parent.updateKanban(\"bug\", $kanbanData)"));
                 }
                 else
                 {
@@ -1917,10 +1905,11 @@ class bug extends control
      *
      * @param  int    $bugID
      * @param  string $extra
+     * @param  string $from taskkanban
      * @access public
      * @return void
      */
-    public function close($bugID, $extra = '')
+    public function close($bugID, $extra = '', $from = '')
     {
         $bug = $this->bug->getById($bugID);
         if(!empty($_POST))
@@ -1937,28 +1926,24 @@ class bug extends control
             parse_str($extra, $output);
             if(isonlybody())
             {
-                $execution = $this->loadModel('execution')->getByID($bug->execution);
-                if($this->app->tab == 'execution')
+                $execution     = $this->loadModel('execution')->getByID($bug->execution);
+                $execLaneType  = $this->session->execLaneType ? $this->session->execLaneType : 'all';
+                $execGroupBy   = $this->session->execGroupBy ? $this->session->execGroupBy : 'default';
+                $rdSearchValue = $this->session->rdSearchValue ? $this->session->rdSearchValue : '';
+                if($this->app->tab == 'execution' and isset($execution->type) and $execution->type == 'kanban')
                 {
-                    $execLaneType  = $this->session->execLaneType ? $this->session->execLaneType : 'all';
-                    $execGroupBy   = $this->session->execGroupBy ? $this->session->execGroupBy : 'default';
-                    $rdSearchValue = $this->session->rdSearchValue ? $this->session->rdSearchValue : '';
-                    if(isset($execution->type) and $execution->type == 'kanban')
-                    {
-                        $regionID   = !empty($output['regionID']) ? $output['regionID'] : 0;
-                        $kanbanData = $this->loadModel('kanban')->getRDKanban($bug->execution, $execLaneType, 'id_desc', $regionID, $execGroupBy, $rdSearchValue);
-                        $kanbanData = json_encode($kanbanData);
-
-                        return print(js::closeModal('parent.parent', '', "parent.parent.updateKanban($kanbanData, $regionID)"));
-                    }
-                    else
-                    {
-                        $kanbanData = $this->loadModel('kanban')->getExecutionKanban($bug->execution, $execLaneType, $execGroupBy, $rdSearchValue);
-                        $kanbanType = $execLaneType == 'all' ? 'bug' : key($kanbanData);
-                        $kanbanData = $kanbanData[$kanbanType];
-                        $kanbanData = json_encode($kanbanData);
-                        return print(js::closeModal('parent.parent', '', "parent.parent.updateKanban(\"bug\", $kanbanData)"));
-                    }
+                    $regionID   = !empty($output['regionID']) ? $output['regionID'] : 0;
+                    $kanbanData = $this->loadModel('kanban')->getRDKanban($bug->execution, $execLaneType, 'id_desc', $regionID, $execGroupBy, $rdSearchValue);
+                    $kanbanData = json_encode($kanbanData);
+                    return print(js::closeModal('parent.parent', '', "parent.parent.updateKanban($kanbanData, $regionID)"));
+                }
+                elseif($from == 'taskkanban')
+                {
+                    $kanbanData = $this->loadModel('kanban')->getExecutionKanban($bug->execution, $execLaneType, $execGroupBy, $rdSearchValue);
+                    $kanbanType = $execLaneType == 'all' ? 'bug' : key($kanbanData);
+                    $kanbanData = $kanbanData[$kanbanType];
+                    $kanbanData = json_encode($kanbanData);
+                    return print(js::closeModal('parent.parent', '', "parent.parent.updateKanban(\"bug\", $kanbanData)"));
                 }
                 else
                 {
@@ -2037,11 +2022,14 @@ class bug extends control
     /**
      * Batch close bugs.
      *
+     * @param  int    $releaseID
+     * @param  string $viewType
      * @access public
      * @return void
      */
-    public function batchClose()
+    public function batchClose($releaseID = '', $viewType = '')
     {
+        if($releaseID) $this->post->bugIDList = $this->post->unlinkBugs;
         if($this->post->bugIDList)
         {
             $bugIDList = $this->post->bugIDList;
@@ -2066,6 +2054,10 @@ class bug extends control
             }
             $this->loadModel('score')->create('ajax', 'batchOther');
             if(isset($skipBugs)) echo js::alert(sprintf($this->lang->bug->skipClose, join(',', $skipBugs)));
+            if($viewType)
+            {
+                return print(js::locate($this->createLink($viewType, 'view', "releaseID=$releaseID&type=bug"), 'parent'));
+            }
         }
         return print(js::reload('parent'));
     }

@@ -59,6 +59,7 @@ $(function()
             $('#programSummary').addClass('hidden');
             $('#projectsSummary').remove();
             $('.editCheckbox').after(statistic);
+            $(this).next('label').addClass('hover');
         }
         else
         {
@@ -66,8 +67,19 @@ $(function()
             $('#programForm').removeClass('has-row-checked');
             $('#programSummary').removeClass('hidden');
             $('#projectsSummary').addClass('hidden');
+            $(this).next('label').removeClass('hover');
         }
     });
+
+    /* Solve the problem that clicking the browser back button causes the checkbox to be selected by default. */
+    setTimeout(function()
+    {
+        $(":checkbox[name^='projectIdList']").each(function()
+        {
+            $(this).prop('checked', false);
+        });
+        $('.table-footer #checkAll').prop('checked', false);
+    }, 10);
 });
 
 function showEditCheckbox(show)
