@@ -28,6 +28,8 @@ class caselibModel extends model
         if(!empty($products) and $this->session->product) $this->loadModel('qa')->setMenu($products, $this->session->product);
         if(empty($products)) $this->loadModel('qa')->setMenu(array(0 => ''), 0);
 
+        $this->lang->qa->menu->caselib['subModule'] .= ',testcase';
+
         if($libraries)
         {
             $libName = '';
