@@ -1187,19 +1187,36 @@ class task extends control
      */
     public function deleteEstimate($estimateID, $confirm = 'no')
     {
-        if($confirm == 'no')
+        $estimate = $this->task->getEstimateById($estimateID);
+        $task     = $this->task->getById($estimate->task);
+        if($confirm == 'no' and $task->consumed - $estimate->consumed != 0)
         {
             return print(js::confirm($this->lang->task->confirmDeleteEstimate, $this->createLink('task', 'deleteEstimate', "estimateID=$estimateID&confirm=yes")));
         }
+        elseif($confirm == 'no' and $task->consumed - $estimate->consumed == 0)
+        {
+            return print(js::confirm($this->lang->task->confirmDeleteLastEstimate, $this->createLink('task', 'deleteEstimate', "estimateID=$estimateID&confirm=yes")));
+        }
         else
         {
-            $estimate = $this->task->getEstimateById($estimateID);
             $changes  = $this->task->deleteEstimate($estimateID);
             if(dao::isError()) return print(js::error(dao::getError()));
 
             $actionID = $this->loadModel('action')->create('task', $estimate->task, 'DeleteEstimate');
             $this->action->logHistory($actionID, $changes);
-            return print(js::reload('parent'));
+            if($task->consumed - $estimate->consumed == 0)
+            {
+                $actionID = $this->loadModel('action')->create('task', $estimate->task, 'Adjusttasktowait');
+                $this->action->logHistory($actionID, $changes);
+            }
+            if($task->consumed - $estimate->consumed == 0)
+            {
+                return print(js::reload('parent.parent'));
+            }
+            else
+            {
+                return print(js::reload('parent'));
+            }
         }
     }
 
