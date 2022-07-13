@@ -4355,14 +4355,17 @@ class executionModel extends model
         $class = !empty($execution->children) ? 'disabled' : '';
         common::printIcon('task', 'create', "executionID={$execution->id}", $execution, 'list', '', '', $class, false, "data-app='execution'");
 
-        if($execution->grade == 1 && $this->loadModel('programplan')->isCreateTask($execution->id))
+        if($execution->type == 'stage')
         {
-            common::printIcon('programplan', 'create', "program={$execution->parent}&productID=$productID&planID=$execution->id", $execution, 'list', 'split', '', '', '', '', $this->lang->programplan->createSubPlan);
-        }
-        else
-        {
-            $disabled = ($execution->grade == 2) ? ' disabled' : '';
-            echo common::hasPriv('programplan', 'create') ? html::a('javascript:alert("' . $this->lang->programplan->error->createdTask . '");', '<i class="icon-programplan-create icon-split"></i>', '', 'class="btn ' . $disabled . '"') : '';
+            if($execution->grade == 1 && $this->loadModel('programplan')->isCreateTask($execution->id))
+            {
+                common::printIcon('programplan', 'create', "program={$execution->parent}&productID=$productID&planID=$execution->id", $execution, 'list', 'split', '', '', '', '', $this->lang->programplan->createSubPlan);
+            }
+            else
+            {
+                $disabled = ($execution->grade == 2) ? ' disabled' : '';
+                echo common::hasPriv('programplan', 'create') ? html::a('javascript:alert("' . $this->lang->programplan->error->createdTask . '");', '<i class="icon-programplan-create icon-split"></i>', '', 'class="btn ' . $disabled . '"') : '';
+            }
         }
 
         common::printIcon('programplan', 'edit', "stageID=$execution->id&projectID=$execution->project", $execution, 'list', '', '', 'iframe', true);
@@ -4370,31 +4373,31 @@ class executionModel extends model
         $disabled = !empty($execution->children) ? ' disabled' : '';
         if($execution->status != 'closed' and common::hasPriv('execution', 'close', $execution))
         {
-            common::printIcon('execution', 'close', "stageID=$execution->id", $execution, 'list', 'off', 'hiddenwin' , $disabled . ' iframe', true, '', $this->lang->programplan->close);
+            common::printIcon('execution', 'close', "stageID=$execution->id", $execution, 'list', 'off', 'hiddenwin' , $disabled . ' iframe', true, '', $this->lang->execution->close);
         }
         elseif($execution->status == 'closed' and common::hasPriv('execution', 'activate', $execution))
         {
-            common::printIcon('execution', 'activate', "stageID=$execution->id", $execution, 'list', 'magic', 'hiddenwin' , $disabled . ' iframe', true, '', $this->lang->programplan->activate);
+            common::printIcon('execution', 'activate', "stageID=$execution->id", $execution, 'list', 'magic', 'hiddenwin' , $disabled . ' iframe', true, '', $this->lang->execution->activate);
         }
 
         if(common::hasPriv('execution', 'delete', $execution))
         {
-            common::printIcon('execution', 'delete', "stageID=$execution->id&confirm=no", $execution, 'list', 'trash', 'hiddenwin' , $disabled, '', '', $this->lang->programplan->delete);
-            echo '</td>';
-            echo '</tr>';
+            common::printIcon('execution', 'delete', "stageID=$execution->id&confirm=no", $execution, 'list', 'trash', 'hiddenwin' , $disabled, '', '', $this->lang->delete);
+        }
+        echo '</td>';
+        echo '</tr>';
 
-            if(!empty($execution->children))
-            {
-                foreach($execution->children as $child) $this->printNestedList($child, true, $users, $productID);
-            }
+        if(!empty($execution->children))
+        {
+            foreach($execution->children as $child) $this->printNestedList($child, true, $users, $productID);
+        }
 
-            if(!empty($execution->tasks))
+        if(!empty($execution->tasks))
+        {
+            foreach($execution->tasks as $task)
             {
-                foreach($execution->tasks as $task)
-                {
-                    $showmore = (count($execution->tasks) == 50) && ($task == end($execution->tasks));
-                    echo $this->task->buildNestedList($execution, $task, false, $showmore, $users);
-                }
+                $showmore = (count($execution->tasks) == 50) && ($task == end($execution->tasks));
+                echo $this->task->buildNestedList($execution, $task, false, $showmore, $users);
             }
         }
     }
