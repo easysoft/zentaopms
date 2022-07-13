@@ -41,7 +41,7 @@
   <div class="table-empty-tip">
     <p>
       <span class="text-muted"><?php echo $lang->productplan->noPlan;?></span>
-      <?php if(common::canModify('product', $product) and common::hasPriv('productplan', 'create') and $browseType == "all"):?>
+      <?php if(common::canModify('product', $product) and common::hasPriv('productplan', 'create') and empty($productPlansNum->count)):?>
       <?php echo html::a($this->createLink('productplan', 'create', "productID=$product->id&branch=$branch"), "<i class='icon icon-plus'></i> " . $lang->productplan->create, '', "class='btn btn-info'");?>
       <?php endif;?>
     </p>

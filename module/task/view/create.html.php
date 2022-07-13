@@ -18,12 +18,15 @@
 <?php js::set('teamMemberError', $lang->task->error->teamMember);?>
 <?php js::set('vision', $config->vision);?>
 <?php js::set('requiredFields', $config->task->create->requiredFields);?>
+<?php js::set('estimateNotEmpty', sprintf($lang->error->notempty, $lang->task->estimate))?>
 <?php if(!empty($storyID)):?>
 <style> .title-group.required > .required:after {right: 110px;}</style>
 <?php endif;?>
 <?php
+$requiredFields = array();
 foreach(explode(',', $config->task->create->requiredFields) as $field)
 {
+    if($field) $requiredFields[$field] = '';
     if($field and strpos($showFields, $field) === false) $showFields .= ',' . $field;
 }
 ?>
@@ -56,7 +59,7 @@ foreach(explode(',', $config->task->create->requiredFields) as $field)
         </tr>
         <tr>
           <th><?php echo $lang->task->module;?></th>
-          <td id='moduleIdBox'><?php echo html::select('module', $moduleOptionMenu, $task->module, "class='form-control chosen'");?></td>
+          <td id='moduleIdBox'><?php echo html::select('module', $moduleOptionMenu, $task->module, "class='form-control chosen' onchange='setStories(this.value, $execution->id)'");?></td>
           <td>
             <div class="checkbox-primary c-modulel">
               <input type="checkbox" id="showAllModule" <?php if($showAllModule) echo 'checked';?>><label for="showAllModule" class="no-margin"><?php echo $lang->task->allModule;?></label>
@@ -283,7 +286,7 @@ foreach(explode(',', $config->task->create->requiredFields) as $field)
                 <tbody class='sortable'>
                   <tr class='template'>
                     <td><?php echo html::select("team[]", $members, '', "class='form-control chosen'");?></td>
-                    <td>
+                    <td class="<?php echo zget($requiredFields, 'estimate', '', ' required')?>">
                       <div class='input-group'>
                         <?php echo html::input("teamEstimate[]", '', "class='form-control text-center' placeholder='{$lang->task->estimateAB}'") ?>
                         <span class='input-group-addon'><?php echo $lang->task->hour;?></span>

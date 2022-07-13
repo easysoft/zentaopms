@@ -309,6 +309,12 @@ class project extends control
         $programTitle = $this->loadModel('setting')->getItem('owner=' . $this->app->user->account . '&module=project&key=programTitle');
         $projectStats = $this->loadModel('program')->getProjectStats($programID, $browseType, $queryID, $orderBy, $pager, $programTitle);
 
+        $allProjectsNum = $this->dao->select('COUNT(id) AS count')->from(TABLE_PROJECT)
+            ->where('type')->eq('project')
+            ->andWhere('deleted')->eq(0)
+            ->fetch();
+        $this->view->allProjectsNum = $allProjectsNum;
+
         $this->view->title      = $this->lang->project->browse;
         $this->view->position[] = $this->lang->project->browse;
 
@@ -1138,7 +1144,7 @@ class project extends control
      * @access public
      * @return void
      */
-    public function testcase($projectID = 0, $productID = 0, $branch = 'all', $browseType = 'all', $param = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function testcase($projectID = 0, $productID = 0, $branch = 0, $browseType = 'all', $param = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         $this->loadModel('product');
         $this->session->set('bugList', $this->app->getURI(true), 'project');
@@ -1147,7 +1153,7 @@ class project extends control
         $products = array('0' => $this->lang->product->all) + $this->product->getProducts($projectID, 'all', '', false);
 
         $extra = "$projectID,$browseType";
-        $this->lang->modulePageNav = $this->product->select($products, $productID, 'project', 'testcase', $extra, $branch, 0, '', false);
+        $this->lang->modulePageNav = $this->product->select($products, $productID, 'project', 'testcase', $extra, $branch);
 
         echo $this->fetch('testcase', 'browse', "productID=$productID&branch=$branch&browseType=$browseType&param=$param&orderBy=$orderBy&recTotal=$orderBy&recPerPage=$recPerPage&pageID=$pageID&projectID=$projectID");
     }

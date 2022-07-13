@@ -79,7 +79,7 @@ class executionModel extends model
         $executions = $this->getPairs(0, 'all', 'nocode');
         if(!$executionID and $this->session->execution) $executionID = $this->session->execution;
         if(!$executionID or !in_array($executionID, array_keys($executions))) $executionID = key($executions);
-        $this->session->set('execution', $executionID);
+        $this->session->set('execution', $executionID, $this->app->tab);
 
         /* Unset story, bug, build and testtask if type is ops. */
         if($execution and $execution->type == 'stage' and $this->config->systemMode == 'new')
@@ -3067,6 +3067,42 @@ class executionModel extends model
                     $cfd->name      = $colName;
                     $cfd->execution = $executionID;
                     $this->dao->replace(TABLE_CFD)->data($cfd)->exec();
+                }
+            }
+        }
+    }
+
+    /**
+     * Check whether there is data on the specified date of execution, and there is no data with the latest date added.
+     *
+     * @param int    $executionID
+     * @param string $date
+     * @access public
+     * @return void
+     */
+    public function checkCFDData($executionID, $date)
+    {
+        $today = helper::today();
+        if($date >= $today) return;
+
+        $checkData = $this->dao->select("date, `count` AS value, `name`")->from(TABLE_CFD)
+            ->where('execution')->eq((int)$executionID)
+            ->andWhere('date')->eq($date)
+            ->orderBy('date DESC, id asc')->fetchGroup('name', 'date');
+        if(!$checkData)
+        {
+            $closetoDate = $this->dao->select("max(date) as date")->from(TABLE_CFD)->where('execution')->eq((int)$executionID)->andWhere('date')->lt($date)->fetch('date');
+            if($closetoDate)
+            {
+                $copyData = $this->dao->select("*")->from(TABLE_CFD)
+                    ->where('execution')->eq((int)$executionID)
+                    ->andWhere('date')->eq($closetoDate)
+                    ->fetchAll();
+                foreach($copyData as $data)
+                {
+                    unset($data->id);
+                    $data->date = $date;
+                    $this->dao->replace(TABLE_CFD)->data($data)->exec();
                 }
             }
         }

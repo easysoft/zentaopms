@@ -1,4 +1,6 @@
 .main-content > h2 {font-size: 16px;}
+#mainContent h2 .icon-help {font-size: 16px; vertical-align: text-bottom;}
+.tooltip-inner {font-size: 13px; letter-spacing: 1px; line-height: 22px; max-width: 400px !important; text-align: left;}
 .container {max-width: 1700px !important}
 
 .pull-left .input-control {margin-right: 10px;}
@@ -29,3 +31,7 @@
 #burnStatistics .bg-primary {margin-right: 5px;}
 #burnStatistics .icon-help {color: black;}
 #burnStatistics h3 {margin-top: 10px; text-indent: 10px; margin-bottom: 30px;}
+
+#cfdDateSelect {float: left;}
+#cfdDateSelect .input-group {width: 300px; float: left;}
+#datePreview {float: left; margin-left: 10px;}

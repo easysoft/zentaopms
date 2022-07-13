@@ -322,7 +322,7 @@ function updateRegionName(regionID, name)
  */
 function updateLaneName(laneID, name)
 {
-    $('.kanban-lane[data-id="' + laneID + '"] > .kanban-lane-name > span').text(name);
+    $('.kanban-lane[data-id="' + laneID + '"] > .kanban-lane-name > span').text(name).attr('title', name);
 }
 
 /**
@@ -349,7 +349,7 @@ function updateLaneColor(laneID, color)
  */
 function updateColumnName(columnID, name, color)
 {
-    $('.kanban-col[data-id="' + columnID + '"] > div.title > span:first').text(name).css('color', color);
+    $('.kanban-col[data-id="' + columnID + '"] > div.title > span:first').text(name).attr('title', name).css('color', color);
 }
 
 /**
@@ -547,6 +547,15 @@ function renderEstStarted(estStarted, status)
  */
 function renderStoryItem(item, $item, col)
 {
+    if(groupBy == 'story' && item.id == '0')
+    {
+        $('.storyCell').css('width', '100%');
+        $parentItem = $item[0] == undefined ? $('.storyCell') : $item.parent();
+        $parentItem.addClass('text-center storyCell');
+        $parentItem.css('line-height', ($parentItem.parent().height() - 20) + 'px');
+        $item.replaceWith('<span class="text-muted">' + item.title + '</span>');
+        return;
+    }
     var scaleSize = window.kanbanScaleSize;
     if(+$item.attr('data-scale-size') !== scaleSize) $item.empty().attr('data-scale-size', scaleSize);
 
@@ -749,6 +758,14 @@ addColumnRenderer('task',  renderTaskItem);
  */
 function renderCount($count, count, column)
 {
+    if(groupBy == 'story' && column.type == 'story')
+    {
+        $count.prev().addClass('storyColumn');
+        $count.prev().parent().append('<span class="caret changeOrderBy"></span>');
+        $count.remove();
+        return;
+    }
+
     /* Render WIP. */
     var limit = !column.limit || column.limit == '-1' ? '<i class="icon icon-md icon-infinite"></i>' : column.limit;
     if($count.parent().find('.limit').length)
@@ -793,6 +810,9 @@ function tips()
  */
 function renderHeaderCol($column, column, $header, kanbanData)
 {
+    if(groupBy == 'story' && column.type == 'story') return;
+    console.log(groupBy);
+    console.log(column.type);
     /* Render group header. */
     var privs       = kanbanData.actions;
     var columnPrivs = kanbanData.columns[0].actions;
@@ -850,6 +870,11 @@ function renderHeaderCol($column, column, $header, kanbanData)
  */
 function renderLaneName($lane, lane, $kanban, columns, kanban)
 {
+    if(groupBy == 'story')
+    {
+        $lane.hide();
+        return;
+    }
     if(groupBy != 'default') return;
     var canEditLaneColor = lane.actions.includes('editLaneColor');
     var canEditLaneName  = lane.actions.includes('editLaneName');
@@ -1375,7 +1400,7 @@ function handleSortCards(event)
         }
         else
         {
-            $.get(createLink('execution', 'ajaxUpdateKanban', "executionID=" + executionID + "&entertime=0&browseType=" + browseType + "&groupBy=" + groupBy + '&from=RD'), function(data)
+            $.get(createLink('execution', 'ajaxUpdateKanban', "executionID=" + executionID + "&entertime=0&browseType=" + browseType + "&groupBy=" + groupBy + '&from=RD' + '&serachValue=' + rdSearchValue + '&orderBy=' + orderBy), function(data)
             {
                 if(data && lastUpdateData !== data)
                 {
@@ -1567,6 +1592,12 @@ $(function()
         $('.color0 .cardcolor').css('border', '1px solid #fff');
     });
 
+    $(document).on('click', '#kanban span.caret.changeOrderBy', function(event)
+    {
+        orderBy = orderBy == 'pri_desc' ? 'pri_asc' : 'pri_desc';
+        searchCards(rdSearchValue);
+    })
+
     /* Init sortable */
     var sortType = '';
     var $cards   = null;
@@ -1694,7 +1725,7 @@ $(function()
         {
             if(rdSearchValue == '')
             {
-                $.get(createLink('execution', 'ajaxUpdateKanban', "executionID=" + executionID + "&entertime=" + entertime + "&browseType=" + browseType + "&groupBy=" + groupBy + '&from=RD&searchValue=' + rdSearchValue), function(data)
+                $.get(createLink('execution', 'ajaxUpdateKanban', "executionID=" + executionID + "&entertime=" + entertime + "&browseType=" + browseType + "&groupBy=" + groupBy + '&from=RD&searchValue=' + rdSearchValue + '&orderBy=' + orderBy), function(data)
                 {
                     if(lastUpdateData == '') lastUpdateData = data;
                     if(data && lastUpdateData !== data)
@@ -1800,7 +1831,7 @@ function toggleRDSearchBox()
 function searchCards(value)
 {
     rdSearchValue = value;
-    $.get(createLink('execution', 'ajaxUpdateKanban', "executionID=" + executionID + "&entertime=0&browseType=" + browseType + "&groupBy=" + groupBy + '&from=RD&searchValue=' + rdSearchValue), function(data)
+    $.get(createLink('execution', 'ajaxUpdateKanban', "executionID=" + executionID + "&entertime=0&browseType=" + browseType + "&groupBy=" + groupBy + '&from=RD&searchValue=' + rdSearchValue + '&orderBy=' + orderBy), function(data)
     {
         lastUpdateData = data;
         kanbanData     = $.parseJSON(data);

@@ -7,8 +7,7 @@
   <style>
   .files-list>li>a {display: inline; word-wrap: break-word;}
   .files-list>li>.right-icon {opacity: 1;}
-  .files-list>li>.right-icon>a {padding-left: 7px;}
-  html[lang|="zh"] .files-list>li>.right-icon>a {padding-left: 3px;}
+  .fileAction {color: #0c64eb !important;}
   </style>
   <script>
   /* Delete a file. */
@@ -93,8 +92,8 @@
               if(common::hasPriv($objectType, 'edit', $object))
               {
                   echo "<span class='right-icon'>&nbsp; ";
-                  common::printLink('file', 'edit', "fileID=$file->id", $lang->file->edit, '', "data-width='400' class='edit iframe text-primary' title='{$lang->file->edit}'");
-                  if(common::hasPriv('file', 'delete')) echo html::a('###', $lang->delete, '', "class='text-primary' onclick='deleteFile($file->id)' title='$lang->delete'");
+                  common::printLink('file', 'edit', "fileID=$file->id", $lang->file->edit, '', "data-width='400' class='fileAction btn btn-link edit iframe text-primary' title='{$lang->file->edit}'");
+                  if(common::hasPriv('file', 'delete')) echo html::a('###', $lang->delete, '', "class='fileAction btn btn-link text-primary' onclick='deleteFile($file->id)' title='$lang->delete'");
                   echo '</span>';
               }
               echo '</li>';

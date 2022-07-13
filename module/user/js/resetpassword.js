@@ -11,4 +11,12 @@ $(function()
     }
 
     $('#password1').attr('id', 'password');
+
+    $('#submit').click(function()
+    {
+        var password1        = $('#password').val();
+        var passwordStrength = computePasswordStrength(password1);
+
+        $("form input[id=passwordStrength]").val(passwordStrength);
+    })
 })

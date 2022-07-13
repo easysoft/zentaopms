@@ -21,7 +21,13 @@
           <label class="radio-inline"><input type="radio" name="execution" value="<?php echo $key?>"<?php echo $key == $checkedKey ? " checked='checked'" : ''?> id="execution<?php echo $key;?>"><?php echo $value;?></label>
           <?php endforeach;?>
         </td>
-        <td><span class='alert alert-info no-margin'><?php echo $lang->custom->notice->readOnlyOfExecution;?></span></td>
+        <td></td>
+      </tr>
+      <tr>
+        <th></th>
+        <td colspan="2" id="readOnlyOfExecution">
+          <i class="icon-exclamation-sign"></i>&nbsp;<?php echo $lang->custom->notice->readOnlyOfExecution;?>
+        </td>
       </tr>
       <tr>
         <th></th>
