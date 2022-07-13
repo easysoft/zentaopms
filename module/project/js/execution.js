@@ -34,7 +34,7 @@ function loadData($showmore)
     var link = createLink('task', 'ajaxGetTasks', 'executionID=' + executionID + '&maxTaskID=' + maxTaskID);
     $.get(link, function(data)
     {
-        $showmore.before(data);
+        $showmore.after(data);
         $(".iframe").modalTrigger({type:'iframe'});
 
         $('#executionForm').table('initNestedList');

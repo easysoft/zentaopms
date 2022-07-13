@@ -1237,7 +1237,7 @@ class taskModel extends model
                 return false;
             }
 
-            if(empty($task->closedReason))
+            if(empty($task->closedReason) and $task->status == 'closed')
             {
                 if($oldTask->status == 'done')   $task->closedReason = 'done';
                 if($oldTask->status == 'cancel') $task->closedReason = 'cancel';
@@ -3749,13 +3749,13 @@ class taskModel extends model
 
     /**
      * Build nested list.
-     * 
-     * @param  objecct $execution 
-     * @param  object  $task 
-     * @param  bool    $isChild 
-     * @param  bool    $showmore 
+     *
+     * @param  objecct $execution
+     * @param  object  $task
+     * @param  bool    $isChild
+     * @param  bool    $showmore
      * @access public
-     * @return string 
+     * @return string
      */
     public function buildNestedList($execution, $task, $isChild = false, $showmore = false, $users)
     {

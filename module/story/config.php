@@ -142,7 +142,7 @@ $config->story->datatable->fieldList['estimate']['required'] = 'no';
 
 $config->story->datatable->fieldList['stage']['title']    = 'stageAB';
 $config->story->datatable->fieldList['stage']['fixed']    = 'no';
-$config->story->datatable->fieldList['stage']['width']    = '70';
+$config->story->datatable->fieldList['stage']['width']    = '75';
 $config->story->datatable->fieldList['stage']['required'] = 'no';
 
 $config->story->datatable->fieldList['openedBy']['title']    = 'openedByAB';
