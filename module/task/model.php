@@ -3735,6 +3735,64 @@ class taskModel extends model
     }
 
     /**
+     * Build nested list.
+     * 
+     * @param  objecct $execution 
+     * @param  object  $task 
+     * @param  bool    $isChild 
+     * @param  bool    $showmore 
+     * @access public
+     * @return string 
+     */
+    public function buildNestedList($execution, $task, $isChild = false, $showmore = false, $users)
+    {
+        $showmore = $showmore ? 'showmore' : '';
+        $trAttrs  = "data-id=$task->id";
+        if(!$isChild)
+        {
+            $path     = $execution->grade == 2 ? "$execution->parent,$execution->id,$task->id," : ",$execution->id,$task->id,";
+            $trAttrs .= " data-parent=$execution->id data-nest-parent=$execution->id data-nest-path=$path";
+            if(empty($task->children)) $trAttrs .= " data-nested='false'";
+            $trClass  = empty($task->children) ? '' : " has-nest-child";
+        }
+        else
+        {
+            $path     = $execution->grade == 2 ? "$execution->parent,$execution->id,$task->parent,$task->id," : ",$execution->id,$task->parent,$task->id,";
+            $trClass  = 'is-nest-child no-nest';
+            $trAttrs .= " data-nested='false' data-parent=$task->parent data-nest-parent=$task->parent data-nest-path=$path";
+        }
+
+        $list  = "<tr $trAttrs class='$trClass $showmore'>";
+        $list .= '<td>';
+        if($task->parent > 0) $list .= '<span class="label label-badge label-light" title="' . $this->lang->task->children . '">' . $this->lang->task->childrenAB . '</span> ';
+        $list .= html::a(helper::createLink('task', 'view', "id=$task->id"), $task->name, '', "data-app='project'");
+        $list .= '</td>';
+        $list .= '<td>' . zget($users, $task->assignedTo, '') . '</td>';
+        $list .= "<td class='status-{$task->status}'>" . $this->processStatus('task', $task) . '</td>';
+        $list .= '<td></td>';
+        $list .= '<td>' . $task->estStarted . '</td>';
+        $list .= '<td>' . $task->deadline . '</td>';
+        $list .= '<td>' . $task->estimate . $this->lang->execution->workHourUnit . '</td>';
+        $list .= '<td>' . $task->consumed . $this->lang->execution->workHourUnit . '</td>';
+        $list .= '<td>' . $task->left . $this->lang->execution->workHourUnit . '</td>';
+        $list .= '<td></td>';
+        $list .= '<td class="c-actions">';
+        $list .= $this->buildOperateMenu($task, 'browse');
+        $list .= '</td></tr>';
+
+        if(!empty($task->children))
+        {
+            foreach($task->children as $child)
+            {
+                $showmore = (count($task->children) == 50) && ($child == end($task->children));
+                $list .= $this->buildNestedList($execution, $child, true, $showmore, $users);
+            }
+        }
+
+        return $list;
+    }
+
+    /**
      * Build task menu.
      *
      * @param  object $task

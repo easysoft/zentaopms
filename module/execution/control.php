@@ -3668,18 +3668,6 @@ class execution extends control
         $from = $this->app->tab;
         if($from == 'execution') $this->session->set('executionList', $this->app->getURI(true), 'execution');
 
-        if($from == 'project')
-        {
-            $projects  = $this->project->getPairsByProgram();
-            $projectID = $this->project->saveState($projectID, $projects);
-            $project   = $this->loadModel('project')->getByID($projectID);
-            $this->view->project = $project;
-            $this->project->setMenu($projectID);
-
-            if(!$projectID) return print(js::locate($this->createLink('project', 'browse')));
-            if(!empty($project->model) and $project->model == 'kanban' and !(defined('RUN_MODE') and RUN_MODE == 'api')) return print(js::locate($this->createLink('project', 'index', "projectID=$projectID")));
-        }
-
         if($this->app->viewType == 'mhtml')
         {
             if($this->app->rawModule == 'project' and $this->app->rawMethod == 'execution')

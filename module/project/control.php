@@ -962,10 +962,37 @@ class project extends control
      */
     public function execution($status = 'all', $projectID = 0, $orderBy = 'order_asc', $productID = 0, $recTotal = 0, $recPerPage = 100, $pageID = 1)
     {
-        $uri = $this->app->getURI(true);
-        $this->app->session->set('executionList', $uri, 'project');
+        $this->loadModel('execution');
+        $this->loadModel('task');
+        $this->loadModel('programplan');
 
-        echo $this->fetch('execution', 'all', "status=$status&projectID=$projectID&orderBy=$orderBy&productID=$productID&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID");
+        $projects  = $this->project->getPairsByProgram();
+        $projectID = $this->project->saveState($projectID, $projects);
+        $project   = $this->project->getByID($projectID);
+        $this->project->setMenu($projectID);
+
+        if(!$projectID) return print(js::locate($this->createLink('project', 'browse')));
+        if(!empty($project->model) and $project->model == 'kanban' and !(defined('RUN_MODE') and RUN_MODE == 'api')) return print(js::locate($this->createLink('project', 'index', "projectID=$projectID")));
+
+        /* Load pager and get tasks. */
+        $this->app->loadClass('pager', $static = true);
+        $pager = new pager($recTotal, $recPerPage, $pageID);
+
+        $this->view->title      = $this->lang->execution->allExecutions;
+        $this->view->position[] = $this->lang->execution->allExecutions;
+
+        $this->view->executionStats = $this->project->getStats($projectID, $status, $productID, 0, 30, $orderBy, $pager, $this->cookie->showTask);
+        $this->view->productList    = $this->loadModel('product')->getProductPairsByProject($projectID);
+        $this->view->productID      = $productID;
+        $this->view->projectID      = $projectID;
+        $this->view->project        = $project;
+        $this->view->pager          = $pager;
+        $this->view->orderBy        = $orderBy;
+        $this->view->users          = $this->loadModel('user')->getPairs('noletter');
+        $this->view->status         = $status;
+        $this->view->isStage        = (isset($project->model) and $project->model == 'waterfall') ? true : false;
+
+        $this->display();
     }
 
     /**
