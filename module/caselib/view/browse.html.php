@@ -153,7 +153,7 @@ js::set('flow',          $config->global->flow);
                 <?php echo html::a($viewLink, $case->title, null, "style='color: $case->color'");?>
               </td>
               <td><?php echo $lang->testcase->typeList[$case->type];?></td>
-              <td><?php echo zget($users, $case->openedBy);?></td>
+              <td title="<?php echo zget($users, $case->openedBy);?>"><?php echo zget($users, $case->openedBy);?></td>
               <td class='<?php if(isset($run)) echo $run->status;?> testcase-<?php echo $case->status?>'> <?php echo $this->processStatus('testcase', $case);?></td>
               <?php foreach($extendFields as $extendField) echo "<td>" . $this->loadModel('flow')->getFieldValue($extendField, $case) . "</td>";?>
               <td class='c-actions'>
