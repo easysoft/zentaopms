@@ -4349,7 +4349,7 @@ class executionModel extends model
         echo "<td class='hours' title='{$execution->hours->totalEstimate}{$this->lang->execution->workHour}'>" . $execution->hours->totalEstimate . $this->lang->execution->workHourUnit . '</td>';
         echo "<td class='hours' title='{$execution->hours->totalConsumed}{$this->lang->execution->workHour}'>" . $execution->hours->totalConsumed . $this->lang->execution->workHourUnit . '</td>';
         echo "<td class='hours' title='{$execution->hours->totalLeft}{$this->lang->execution->workHour}'>" . $execution->hours->totalLeft . $this->lang->execution->workHourUnit . '</td>';
-        echo "<td id='spark-{$execution->id} class='sparkline text-left no-padding' values='$burns'></td>";
+        echo "<td id='spark-{$execution->id}' class='sparkline text-left no-padding' values='$burns'></td>";
         echo '<td class="c-actions">';
         common::printIcon('execution', 'start', "executionID={$execution->id}", $execution, 'list', '', '', 'iframe', true);
         $class = !empty($execution->children) ? 'disabled' : '';
