@@ -4335,10 +4335,10 @@ class executionModel extends model
         $burns = join(',', $execution->burns);
         echo "<tr $trAttrs class=$trClass>";
         echo "<td><span id=$execution->id class='table-nest-icon icon table-nest-toggle'></span>";
-        if($this->config->systemMode == 'new') 
+        if($this->config->systemMode == 'new')
         {
             $spanClass = $execution->type == 'stage' ? 'label-warning' : 'label-info';
-            echo "<span class='project-type-label label label-outline $spanClass'>{$this->lang->execution->typeList[$execution->type]}</span>";
+            echo "<span class='project-type-label label label-outline $spanClass'>{$this->lang->execution->typeList[$execution->type]}</span> ";
         }
         echo html::a(helper::createLink('execution', 'view', "executionID=$execution->id"), $execution->name);
         echo '<td>' . zget($users, $execution->PM) . '</td>';
