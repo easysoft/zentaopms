@@ -2022,12 +2022,14 @@ class bug extends control
     /**
      * Batch close bugs.
      *
+     * @param  int    $releaseID
+     * @param  string $viewType
      * @access public
      * @return void
      */
-    public function batchClose()
+    public function batchClose($releaseID = '', $viewType = '')
     {
-        if($this->post->unlinkBugs) $this->post->bugIDList = $this->post->unlinkBugs;
+        if($releaseID) $this->post->bugIDList = $this->post->unlinkBugs;
         if($this->post->bugIDList)
         {
             $bugIDList = $this->post->bugIDList;
@@ -2052,6 +2054,10 @@ class bug extends control
             }
             $this->loadModel('score')->create('ajax', 'batchOther');
             if(isset($skipBugs)) echo js::alert(sprintf($this->lang->bug->skipClose, join(',', $skipBugs)));
+            if($viewType)
+            {
+                return print(js::locate($this->createLink($viewType, 'view', "releaseID=$releaseID&type=bug"), 'parent'));
+            }
         }
         return print(js::reload('parent'));
     }

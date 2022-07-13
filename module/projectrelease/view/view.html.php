@@ -220,7 +220,7 @@
                 }
                 if($canBatchClose and $canBeChanged)
                 {
-                    $closeURL = $this->createLink('bug', 'batchClose');
+                    $closeURL = $this->createLink('bug', 'batchClose', "releaseID=$release->id&viewType=projectrelease");
                     echo html::a("###", $lang->story->batchClose, '', "onclick='setFormAction(\"$closeURL\", \"hiddenwin\", this)' class='btn'");
                 }
                 ?>
