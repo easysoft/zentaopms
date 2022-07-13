@@ -1886,7 +1886,7 @@ class story extends control
                     $kanbanType = $execLaneType == 'all' ? 'story' : key($kanbanData);
                     $kanbanData = $kanbanData[$kanbanType];
                     $kanbanData = json_encode($kanbanData);
-                    return print(js::closeModal('parent.parent', '', "parent.parent.updateKanban(\"story\", $kanbanData)"));
+                    return print(js::closeModal('parent.parent', '', "parent.parent.updateKanban('$execLaneType', $kanbanData)"));
                 }
                 else
                 {
