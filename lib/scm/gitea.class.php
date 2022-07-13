@@ -68,7 +68,7 @@ class gitea
             else
             {
                 $commits = $this->getCommitsByPath($file->path, '', '', 1);
-                if(empty($commits)) continue;
+                if(empty($commits) or !is_array($commits)) continue;
                 $commit = $commits[0];
 
                 $info->revision = $commit->sha;
@@ -625,8 +625,9 @@ class gitea
         $api = "commits";
 
         $param = new stdclass();
-        $param->path = urldecode($path);
-        $param->sha  = ($toRevision != 'HEAD' and $toRevision) ? $toRevision : $this->branch;
+        $param->path  = urldecode($path);
+        $param->limit = 1;
+        $param->sha   = ($toRevision != 'HEAD' and $toRevision) ? $toRevision : $this->branch;
 
         if($perPage) $param->per_page = $perPage;
         return $this->fetch($api, $param);
@@ -716,8 +717,7 @@ class gitea
                 return array();
             }
 
-            $res = json_decode($response);
-            return empty($res) ? trim($response) : $res;
+            return json_decode($response);
         }
     }
 
