@@ -14,3 +14,5 @@ ALTER TABLE `zt_doc` CHANGE `assignedDate` `assignedDate` datetime NOT NULL AFTE
 
 UPDATE `zt_approval` SET  `createdDate` = '';
 ALTER TABLE `zt_approval` CHANGE `createdDate` `createdDate` datetime NOT NULL AFTER `createdBy`;
+
+ALTER TABLE `zt_reviewissue` ADD `approval` MEDIUMINT  NOT NULL  AFTER `review`;
