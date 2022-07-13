@@ -59,6 +59,7 @@ $(function()
             $('#programSummary').addClass('hidden');
             $('#projectsSummary').remove();
             $('.editCheckbox').after(statistic);
+            $(this).next('label').addClass('hover');
         }
         else
         {
@@ -66,6 +67,7 @@ $(function()
             $('#programForm').removeClass('has-row-checked');
             $('#programSummary').removeClass('hidden');
             $('#projectsSummary').addClass('hidden');
+            $(this).next('label').removeClass('hover');
         }
     });
 
