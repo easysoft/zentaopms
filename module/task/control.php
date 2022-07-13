@@ -1919,6 +1919,8 @@ class task extends control
             }
         }
 
+        if(empty($tasks)) die('');
+
         $list  = '';
         $tasks = array_chunk($tasks, 50, true);
         $tasks = $tasks[0];
