@@ -2386,7 +2386,7 @@ class projectModel extends model
         {
             $executionTasks = $this->dao->select('*')->from(TABLE_TASK)
                 ->where('deleted')->eq(0)
-                ->andWhere('status')->ne('closed')
+                ->andWhere('status')->notin('closed,cancel')
                 ->andWhere('execution')->in(array_keys($executions))
                 ->orderBy('id_asc')
                 ->fetchGroup('execution', 'id');

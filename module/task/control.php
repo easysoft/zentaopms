@@ -1883,7 +1883,7 @@ class task extends control
 
         $tasks = $this->dao->select('*')->from(TABLE_TASK)
             ->where('deleted')->eq(0)
-            ->andWhere('status')->ne('closed')
+            ->andWhere('status')->notin('closed,cancel')
             ->andWhere('execution')->eq($executionID)
             ->andWhere('id')->gt($maxTaskID)
             ->orderBy('id_asc')
