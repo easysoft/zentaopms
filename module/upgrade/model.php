@@ -6527,6 +6527,8 @@ class upgradeModel extends model
             ->andWhere('deleted')->eq('0')
             ->fetchAll('review');
 
+        if(empty($reviewIssues)) return false;
+
         $reviewIds = array_unique(array_column($reviewIssues, 'review'));
 
         $approvalsPairs = $this->dao->select('objectID, max(id) as approval')->from(TABLE_APPROVAL)
