@@ -349,7 +349,7 @@ $lang->kanbancolumn->fluidBoardList['0'] = 'Fixed';
 $lang->kanbancolumn->fluidBoardList['1'] = 'Auto Width';
 
 $lang->kanbanlane->error = new stdclass();
-$lang->kanbanlane->error->mustBeInt = 'No. of cards must be a positive integer from 2 to 32767.';
+$lang->kanbanlane->error->mustBeInt = 'No. of cards must be a positive integer from 3 to 32767.';
 
 $lang->kanbanregion = new stdclass();
 $lang->kanbanregion->name    = 'Region Name';
