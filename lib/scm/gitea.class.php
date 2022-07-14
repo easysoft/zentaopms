@@ -227,7 +227,7 @@ class gitea
 
         $path  = ltrim($path, DIRECTORY_SEPARATOR);
         $count = $count == 0 ? '' : "-n $count";
-        $list  = $this->getCommitsByPath($path, $fromRevision, $toRevision, 1);
+        $list  = $this->getCommitsByPath($path, $fromRevision, $toRevision, 1, 1);
         foreach($list as $commit)
         {
             if(isset($commit->sha)) $commit->diffs = $this->getFilesByCommit($commit->sha);
@@ -265,7 +265,7 @@ class gitea
         if(!scm::checkRevision($fromRevision) and $extra != 'isBranchOrTag') return array();
         if(!scm::checkRevision($toRevision) and $extra != 'isBranchOrTag')   return array();
 
-        $diffApi = "{$this->root}git/commits/$fromRevision.diff?token={$this->token}";
+        $diffApi = "{$this->root}git/commits/$toRevision.diff?token={$this->token}";
         $diffs   = commonModel::http($diffApi);
         $lines   = explode("\n", $diffs);
         return $lines;
@@ -619,8 +619,8 @@ class gitea
     public function getFilesByCommit($revision)
     {
         if(!scm::checkRevision($revision)) return array();
-        $api     = "contents";
-        $results = $this->fetch($api, array('ref' => $revision));
+        $api     = "git/commits/$revision";
+        $results = $this->fetch($api);
         if(empty($results)) return array();
 
         $diffApi = "{$this->root}git/commits/$revision.patch?token={$this->token}";
@@ -647,26 +647,26 @@ class gitea
         }
 
         $files = array();
-        foreach($results as $row)
+        foreach($results->files as $row)
         {
             $file  = new stdclass();
             $file->revision = $revision;
-            $file->type     = $row->type;
-            $file->path     = '/' . $row->path;
+            $file->type     = 'file';
+            $file->path     = '/' . $row->filename;
             $file->action   = 'M';
-            if(in_array($row->path, $newFiles))
+            if(in_array($row->filename, $newFiles))
             {
                 $file->action = 'A';
             }
-            elseif(in_array($row->path, $delFiles))
+            elseif(in_array($row->filename, $delFiles))
             {
                 $file->action = 'D';
             }
 
-            $files[$file->path] = $file;
+            $files[] = $file;
         }
 
-        return array_values($files);
+        return $files;
     }
 
     /**
