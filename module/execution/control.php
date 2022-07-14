@@ -4168,4 +4168,23 @@ class execution extends control
         echo json_encode($executions);
     }
 
+    /**
+     * AJAX: Get execution kanban data.
+     *
+     * @param  int    $executionID
+     * @access public
+     * @return void
+     */
+    public function ajaxGetExecutionKanban($executionID)
+    {
+        $execution = $this->execution->getByID($executionID);
+        if($this->app->tab == 'execution' and $execution->type == 'kanban')
+        {
+            $execLaneType  = $this->session->execLaneType ? $this->session->execLaneType : 'all';
+            $execGroupBy   = $this->session->execGroupBy ? $this->session->execGroupBy : 'default';
+            $rdSearchValue = $this->session->rdSearchValue ? $this->session->rdSearchValue : '';
+            $kanbanData    = $this->loadModel('kanban')->getRDKanban($executionID, $execLaneType, 'id_desc', 0, $execGroupBy, $rdSearchValue);
+            echo json_encode($kanbanData);
+        }
+    }
 }
