@@ -38,6 +38,7 @@ class html extends baseHTML
         if(empty($target)) $target = '_self';
         if($target != '_self')  $misc .= " target='$target'";
         if($target == '_blank') $misc .= " rel='noopener noreferrer'";
+        if(strpos($misc, 'disabled')) $href = '#';
         return parent::a($href, $title, $misc, $newline);
     }
 
