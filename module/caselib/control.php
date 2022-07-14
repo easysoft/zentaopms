@@ -352,18 +352,12 @@ class caselib extends control
         /* Set lib menu. */
         $this->caselib->setLibMenu($libraries, $libID);
 
-        $currentModuleID = (int)$moduleID;
-
-        /* Set module option menu. */
-        $moduleOptionMenu          = $this->loadModel('tree')->getOptionMenu($libID, $viewType = 'caselib', $startModuleID = 0);
-        $moduleOptionMenu['ditto'] = $this->lang->testcase->ditto;
-
         $this->view->title            = $libraries[$libID] . $this->lang->colon . $this->lang->testcase->batchCreate;
         $this->view->position[]       = html::a($this->createLink('caselib', 'browse', "libID=$libID"), $libraries[$libID]);
         $this->view->position[]       = $this->lang->testcase->batchCreate;
         $this->view->libID            = $libID;
-        $this->view->moduleOptionMenu = $moduleOptionMenu;
-        $this->view->currentModuleID  = $currentModuleID;
+        $this->view->moduleOptionMenu = $this->loadModel('tree')->getOptionMenu($libID, $viewType = 'caselib', $startModuleID = 0);
+        $this->view->currentModuleID  = (int)$moduleID;
 
         $this->display();
     }

@@ -498,7 +498,7 @@ class project extends control
         }
 
         if($this->app->tab == 'doc') unset($this->lang->doc->menu->project['subMenu']);
-        if($this->app->tab == 'product' and isset($output['productID'])) $this->loadModel('product')->setMenu($output['productID']);
+        if($this->app->tab == 'product' and !empty($output['productID'])) $this->loadModel('product')->setMenu($output['productID']);
 
         $topProgramID = $this->program->getTopByID($programID);
 

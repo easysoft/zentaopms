@@ -180,14 +180,15 @@ function loadBranches(product)
             $inputgroup.find('select:last').each(disableSelectedBranch);
             disableSelectedProduct();
         }
+
+        var branchID = $('#branch' + index).val();
+        loadPlans(product, branchID);
     });
 
     if(!multiBranchProducts[$(product).val()]) disableSelectedProduct();
 
     $("input[name='products[" + index + "]']").remove();
     $("input[name='branch[" + index + "]']").remove();
-
-    loadPlans(product);
 }
 
 function loadPlans(product, branchID)
