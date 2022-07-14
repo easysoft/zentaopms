@@ -57,7 +57,7 @@ $version = " <span class=\"label label-info\">$revisionName</span>";
         <div class='panel-actions'>
           <?php if($suffix != 'binary' and strpos($config->repo->images, "|$suffix|") === false):?>
           <?php
-          if(common::hasPriv('repo', 'blame')) echo html::a($this->repo->createLink('blame', "repoID=$repoID&objectID=$objectID&entry=$encodePath&revision=$revision&encoding=$encoding"), html::icon('random') . $lang->repo->blame, '', "class='btn btn-sm btn-primary' data-app='{$app->tab}'");
+          if($repo->SCM != 'Gitea' and common::hasPriv('repo', 'blame')) echo html::a($this->repo->createLink('blame', "repoID=$repoID&objectID=$objectID&entry=$encodePath&revision=$revision&encoding=$encoding"), html::icon('random') . $lang->repo->blame, '', "class='btn btn-sm btn-primary' data-app='{$app->tab}'");
           if(common::hasPriv('repo', 'download')) echo html::a($this->repo->createLink('download', "repoID=$repoID&path=$encodePath&fromRevision=$revision"), html::icon('download-alt') . $lang->repo->download, 'hiddenwin', "class='btn btn-sm btn-primary'");
           ?>
           <?php endif;?>

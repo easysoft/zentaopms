@@ -51,7 +51,9 @@
     <table class='table table-fixed' id='logList'>
       <thead>
         <tr>
+          <?php if($repo->SCM != 'Gitea'):?>
           <th class='w-40px'></th>
+          <?php endif;?>
           <th class='w-110px'><?php echo $lang->repo->revision?></th>
           <?php if($repo->SCM != 'Subversion'):?>
           <th class='w-90px'><?php echo $lang->repo->commit?></th>
@@ -64,12 +66,14 @@
       <tbody>
         <?php foreach($logs as $log):?>
         <tr>
+          <?php if($repo->SCM != 'Gitea'):?>
           <td>
             <div class='checkbox-primary'>
               <input type='checkbox' name='revision[]' value="<?php echo $log->revision?>" />
               <label></label>
             </div>
           </td>
+          <?php endif;?>
           <td class='versions'><?php echo html::a($this->repo->createLink('revision', "repoID=$repoID&objectID=$objectID&revision=" . $log->revision), substr($log->revision, 0, 10), '', "data-app='{$app->tab}'");?></td>
           <?php if($repo->SCM != 'Subversion'):?>
           <td><?php echo $log->commit?></td>
@@ -82,7 +86,7 @@
       </tbody>
     </table>
     <div class='table-footer'>
-      <?php if(common::hasPriv('repo', 'diff')) echo html::submitButton($lang->repo->diff, '', count($logs) < 2 ? 'disabled btn btn-primary' : 'btn btn-primary')?>
+      <?php if($repo->SCM != 'Gitea' and common::hasPriv('repo', 'diff')) echo html::submitButton($lang->repo->diff, '', count($logs) < 2 ? 'disabled btn btn-primary' : 'btn btn-primary')?>
       <?php $pager->show('right', 'pagerjs');?>
     </div>
   </form>
