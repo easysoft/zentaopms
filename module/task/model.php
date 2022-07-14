@@ -2876,7 +2876,7 @@ class taskModel extends model
         $newTask = new stdClass();
         $newTask->consumed = $data->consumed;
         $newTask->left     = $data->left;
-        $newTask->status   = $task->status;
+        $newTask->status   = $data->status;
 
         if(!dao::isError()) return common::createChanges($oldTask, $newTask);
     }
