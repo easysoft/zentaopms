@@ -502,10 +502,11 @@ class task extends control
      * @param  int    $taskID
      * @param  bool   $comment
      * @param  string $kanbanGroup
+     * @param  string $from
      * @access public
      * @return void
      */
-    public function edit($taskID, $comment = false, $kanbanGroup = 'default')
+    public function edit($taskID, $comment = false, $kanbanGroup = 'default', $from = '')
     {
         $this->commonAction($taskID);
         $task = $this->task->getById($taskID);
@@ -553,7 +554,7 @@ class task extends control
                 $execution    = $this->execution->getByID($task->execution);
                 $execLaneType = $this->session->execLaneType ? $this->session->execLaneType : 'all';
                 $execGroupBy  = $this->session->execGroupBy ? $this->session->execGroupBy : 'default';
-                if($execution->type == 'kanban')
+                if(($this->app->tab == 'execution' or ($this->config->vision == 'lite' and $this->app->tab == 'project')) and $execution->type == 'kanban')
                 {
                     $rdSearchValue = $this->session->rdSearchValue ? $this->session->rdSearchValue : '';
                     $kanbanData    = $this->loadModel('kanban')->getRDKanban($task->execution, $execLaneType, 'id_desc', 0, $execGroupBy, $rdSearchValue);
@@ -561,7 +562,7 @@ class task extends control
 
                     return print(js::closeModal('parent.parent', '', "parent.parent.updateKanban($kanbanData)"));
                 }
-                else
+                if($from == 'taskkanban')
                 {
                     $taskSearchValue = $this->session->taskSearchValue ? $this->session->taskSearchValue : '';
                     $kanbanData      = $this->loadModel('kanban')->getExecutionKanban($task->execution, $execLaneType, $execGroupBy, $taskSearchValue);
@@ -792,7 +793,7 @@ class task extends control
                 $execution    = $this->execution->getByID($task->execution);
                 $execLaneType = $this->session->execLaneType ? $this->session->execLaneType : 'all';
                 $execGroupBy  = $this->session->execGroupBy ? $this->session->execGroupBy : 'default';
-                if($execution->type == 'kanban')
+                if(($this->app->tab == 'execution' or ($this->config->vision == 'lite' and $this->app->tab == 'project')) and $execution->type == 'kanban')
                 {
                     $rdSearchValue = $this->session->rdSearchValue ? $this->session->rdSearchValue : '';
                     $kanbanData    = $this->loadModel('kanban')->getRDKanban($task->execution, $execLaneType, 'id_desc', 0, $execGroup, $rdSearchValue);
@@ -1051,7 +1052,7 @@ class task extends control
                 $execution    = $this->execution->getByID($task->execution);
                 $execLaneType = $this->session->execLaneType ? $this->session->execLaneType : 'all';
                 $execGroupBy  = $this->session->execGroupBy ? $this->session->execGroupBy : 'default';
-                if($execution->type == 'kanban')
+                if(($this->app->tab == 'execution' or ($this->config->vision == 'lite' and $this->app->tab == 'project')) and $execution->type == 'kanban')
                 {
                     $rdSearchValue = $this->session->rdSearchValue ? $this->session->rdSearchValue : '';
                     $regionID      = !empty($output['regionID']) ? $output['regionID'] : 0;
@@ -1124,7 +1125,7 @@ class task extends control
                 $execution     = $this->execution->getByID($task->execution);
                 $execLaneType  = $this->session->execLaneType ? $this->session->execLaneType : 'all';
                 $execGroupBy   = $this->session->execGroupBy ? $this->session->execGroupBy : 'default';
-                if($execution->type == 'kanban')
+                if(($this->app->tab == 'execution' or ($this->config->vision == 'lite' and $this->app->tab == 'project')) and $execution->type == 'kanban')
                 {
                     $rdSearchValue = $this->session->rdSearchValue ? $this->session->rdSearchValue : '';
                     $kanbanData    = $this->loadModel('kanban')->getRDKanban($task->execution, $execLaneType, 'id_desc', 0, $execGroupBy, $rdSearchValue);
@@ -1285,7 +1286,7 @@ class task extends control
                 $execution    = $this->execution->getByID($task->execution);
                 $execLaneType = $this->session->execLaneType ? $this->session->execLaneType : 'all';
                 $execGroupBy  = $this->session->execGroupBy ? $this->session->execGroupBy : 'default';
-                if($execution->type == "kanban")
+                if(($this->app->tab == 'execution' or ($this->config->vision == 'lite' and $this->app->tab == 'project')) and $execution->type == "kanban")
                 {
                     $rdSearchValue = $this->session->rdSearchValue ? $this->session->rdSearchValue : '';
                     $regionID      = !empty($output['regionID']) ? $output['regionID'] : 0;
@@ -1383,7 +1384,7 @@ class task extends control
                 $execution    = $this->execution->getByID($task->execution);
                 $execLaneType = $this->session->execLaneType ? $this->session->execLaneType : 'all';
                 $execGroupBy  = $this->session->execGroupBy ? $this->session->execGroupBy : 'default';
-                if($execution->type == 'kanban')
+                if(($this->app->tab == 'execution' or ($this->config->vision == 'lite' and $this->app->tab == 'project')) and $execution->type == 'kanban')
                 {
                     $rdSearchValue = $this->session->rdSearchValue ? $this->session->rdSearchValue : '';
                     $regionID      = !empty($output['regionID']) ? $output['regionID'] : 0;
@@ -1450,7 +1451,7 @@ class task extends control
                 $execution    = $this->execution->getByID($task->execution);
                 $execLaneType = $this->session->execLaneType ? $this->session->execLaneType : 'all';
                 $execGroupBy  = $this->session->execGroupBy ? $this->session->execGroupBy : 'default';
-                if($execution->type == 'kanban')
+                if(($this->app->tab == 'execution' or ($this->config->vision == 'lite' and $this->app->tab == 'project')) and $execution->type == 'kanban')
                 {
                     $rdSearchValue = $this->session->rdSearchValue ? $this->session->rdSearchValue : '';
                     $kanbanData    = $this->loadModel('kanban')->getRDKanban($task->execution, $execLaneType, 'id_desc', 0, $execGroupBy, $rdSearchValue);
@@ -1531,7 +1532,7 @@ class task extends control
 
                 $execLaneType = $this->session->execLaneType ? $this->session->execLaneType : 'all';
                 $execGroupBy  = $this->session->execGroupBy ? $this->session->execGroupBy : 'default';
-                if($execution->type == 'kanban')
+                if(($this->app->tab == 'execution' or ($this->config->vision == 'lite' and $this->app->tab == 'project')) and $execution->type == 'kanban')
                 {
                     $rdSearchValue = $this->session->rdSearchValue ? $this->session->rdSearchValue : '';
                     $regionID      = !empty($output['regionID']) ? $output['regionID'] : 0;
@@ -1704,7 +1705,7 @@ class task extends control
                 $execution    = $this->execution->getByID($task->execution);
                 $execLaneType = $this->session->execLaneType ? $this->session->execLaneType : 'all';
                 $execGroupBy  = $this->session->execGroupBy ? $this->session->execGroupBy : 'default';
-                if($execution->type == 'kanban')
+                if(($this->app->tab == 'execution' or ($this->config->vision == 'lite' and $this->app->tab == 'project')) and $execution->type == 'kanban')
                 {
                     $rdSearchValue = $this->session->rdSearchValue ? $this->session->rdSearchValue : '';
                     $regionID      = !empty($output['regionID']) ? $output['regionID'] : 0;
@@ -1770,7 +1771,7 @@ class task extends control
                 $execution    = $this->execution->getByID($task->execution);
                 $execLaneType = $this->session->execLaneType ? $this->session->execLaneType : 'all';
                 $execGroupBy  = $this->session->execGroupBy ? $this->session->execGroupBy : 'default';
-                if($execution->type == "kanban")
+                if(($this->app->tab == 'execution' or ($this->config->vision == 'lite' and $this->app->tab == 'project')) and $execution->type == "kanban")
                 {
                     $rdSearchValue = $this->session->rdSearchValue ? $this->session->rdSearchValue : '';
                     $regionID      = !empty($output['regionID']) ? $output['regionID'] : 0;
@@ -2333,7 +2334,7 @@ class task extends control
             {
                 $task      = $this->task->getById($taskID);
                 $execution = $this->execution->getByID($task->execution);
-                if($execution->type == 'kanban' and $this->app->tab == 'execution')
+                if(($this->app->tab == 'execution' or $this->config->vision == 'lite') and $this->app->tab == 'execution')
                 {
                     $rdSearchValue = $this->session->rdSearchValue ? $this->session->rdSearchValue : '';
                     $kanbanData    = $this->loadModel('kanban')->getRDKanban($task->execution, $this->session->execLaneType ? $this->session->execLaneType : 'all', 'id_desc', 0, $kanbanGroup, $rdSearchValue);
