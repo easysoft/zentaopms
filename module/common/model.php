@@ -633,7 +633,7 @@ class commonModel extends model
                         }
                         else if(!defined('TUTORIAL'))
                         {
-                            $params       = "programID=0&copyProjectID=0&extra=from=global";
+                            $params       = "programID=0&extra=from=global";
                             $createMethod = 'createGuide';
                             $attr         = 'data-toggle="modal"';
                         }
