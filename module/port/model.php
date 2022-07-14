@@ -633,7 +633,9 @@ class portModel extends model
             return $response;
         }
 
-        $fields = array('id') + $this->config->task->templateFields;
+        $fields = $this->config->task->templateFields;
+        array_unshift($fields, 'id');
+
         foreach($fields as $key => $fieldName)
         {
             $fieldName = trim($fieldName);
@@ -678,6 +680,7 @@ class portModel extends model
             unset($tmpArray);
         }
 
+        $objectDatas = $this->getNatureDatas($objectDatas);
         file_put_contents($tmpFile, serialize($objectDatas));
 
         if(empty($objectDatas))
@@ -691,5 +694,42 @@ class portModel extends model
         }
 
         return $tmpFile;
+    }
+
+    /**
+     * getNatureDatas
+     *
+     * @param  int    $datas
+     * @access public
+     * @return void
+     */
+    public function getNatureDatas($datas)
+    {
+        $taskLang = $this->lang->task;
+        foreach($datas as $key => $data)
+        {
+            foreach($data as $field => $cellValue)
+            {
+                if(strrpos($cellValue, '(#') === false)
+                {
+                    if(!isset($taskLang->{$field . 'List'}) or !is_array($taskLang->{$field . 'List'})) continue;
+
+                    /* When the cell value is key of list then eq the key. */
+                    $listKey = array_keys($taskLang->{$field . 'List'});
+                    unset($listKey[0]);
+                    unset($listKey['']);
+
+                    $fieldKey = array_search($cellValue, $taskLang->{$field . 'List'});
+                    if($fieldKey) $datas[$key]->$field = array_search($cellValue, $taskLang->{$field . 'List'});
+                }
+                else
+                {
+                    $id = trim(substr($cellValue, strrpos($cellValue,'(#') + 2), ')');
+                    $datas[$key]->$field = $id;
+                }
+            }
+
+        }
+        return $datas;
     }
 }

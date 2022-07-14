@@ -1,6 +1,11 @@
 <?php include $app->getModuleRoot() . 'common/view/header.html.php';?>
 <style>
 form{overflow-x: scroll}
+.c-pri, .c-estStarted, .c-deadline{width:100px;}
+.c-estimate {width:150px;}
+.c-story{width:150px;}
+.c-team {width:100px; padding:0px 0px 8px 0px !important;}
+.c-estimate-1 {width:50px;padding:0px 0px 8px 8px !important;}
 </style>
 <?php if(isset($suhosinInfo)):?>
 <div class='alert alert-info'><?php echo $suhosinInfo?></div>
@@ -19,7 +24,12 @@ $(function()
     {
         if(parseInt($('#maxImport').val())) $('#times').html(Math.ceil(parseInt($('#allCount').html()) / parseInt($('#maxImport').val())));
     });
-    $('#import').click(function(){location.href = createLink('task', 'showImport', "executionID=<?php echo $executionID;?>&pageID=1&maxImport=" + $('#maxImport').val())})
+
+
+    $('#import').click(function(){
+        $.cookie('maxImport', $('#maxImport').val());
+        location.href = "<?php echo $url;?>";
+    })
 });
 </script>
 <?php else:?>
@@ -32,17 +42,12 @@ $(function()
     <table class='table table-form' id='showData'>
       <thead>
         <tr>
-          <th class='w-70px'>                          <?php echo $lang->task->id?></th>
-          <th class='w-150px'         id='name'>       <?php echo $lang->task->name?></th>
-          <th class='w-150px'         id='module' >    <?php echo $lang->task->module?></th>
-          <th class='w-150px'         id='story'>      <?php echo $lang->task->story?></th>
-          <th class='w-120px'         id='assignedTo'> <?php echo $lang->task->assignedTo?></th>
-          <th class='w-70px'          id='pri'>        <?php echo $lang->task->pri?></th>
-          <th class='w-90px'          id='type'>       <?php echo $lang->task->type?></th>
-          <th class='estimate w-80px' id='estimate'>   <?php echo $lang->task->estimate?></th>
-          <th class='w-100px'         id='estStarted'> <?php echo $lang->task->estStarted?></th>
-          <th class='w-100px'         id='deadline'>   <?php echo $lang->task->deadline?></th>
-          <th class='w-300px'         id='desc'>       <?php echo $lang->task->desc?></th>
+          <th class='w-70px'> <?php echo $lang->task->id?></th>
+          <?php foreach($fields as $key => $value):?>
+          <?php if($value['control'] != 'hidden'):?>
+          <th class='c-<?php echo $key?>'  id='<?php echo $key;?>'>  <?php echo $value['title'];?></th>
+          <?php endif;?>
+          <?php endforeach;?>
           <?php
           if(!empty($appendFields))
           {
@@ -64,55 +69,65 @@ $(function()
         $addID       = 1;
         $hasMultiple = false;
         ?>
-        <?php foreach($taskData as $key => $task):?>
+        <?php foreach($datas as $key => $object):?>
         <tr class='text-top'>
           <td>
             <?php
-            if(!empty($task->id))
+            if(!empty($object->id))
             {
-                echo $task->id . html::hidden("id[$key]", $task->id);
+                echo $object->id . html::hidden("id[$key]", $object->id);
                 $insert = false;
             }
             else
             {
-                $sub = (strpos($task->name, '>') === 0) ? " <sub style='vertical-align:sub;color:red'>{$lang->task->children}</sub>" : " <sub style='vertical-align:sub;color:gray'>{$lang->task->new}</sub>";
+                $sub = (strpos($object->name, '>') === 0) ? " <sub style='vertical-align:sub;color:red'>{$lang->port->children}</sub>" : " <sub style='vertical-align:sub;color:gray'>{$lang->task->new}</sub>";
                 echo $addID++ . $sub;
             }
-            echo html::hidden("execution[$key]", $executionID);
             ?>
           </td>
-          <td><?php echo html::input("name[$key]", htmlspecialchars($task->name, ENT_QUOTES), "class='form-control'")?></td>
-          <td style='overflow:visible'><?php echo html::select("module[$key]", $modules, !empty($task->module) ? $task->module : ((!empty($task->id) and isset($tasks[$task->id])) ? $tasks[$task->id]->module : ''), "class='form-control chosen'")?></td>
-          <td style='overflow:visible'><?php echo html::select("story[$key]", $stories, !empty($task->story) ? $task->story : ((!empty($task->id) and isset($tasks[$task->id])) ? $tasks[$task->id]->story : ''), "class='form-control chosen'")?></td>
-          <td style='overflow:visible'><?php echo html::select("assignedTo[$key]", $members, !empty($task->assignedTo) ? $task->assignedTo: ((!empty($task->id) and isset($tasks[$task->id])) ? $tasks[$task->id]->assignedTo : ''), "class='form-control chosen'")?></td>
-          <td><?php echo html::select("pri[$key]", $lang->task->priList, !empty($task->pri) ? $task->pri : ((!empty($task->id) and isset($tasks[$task->id])) ? $tasks[$task->id]->pri : ''), "class='form-control'")?></td>
-          <td><?php echo html::select("type[$key]", $lang->task->typeList, !empty($task->type) ? $task->type : ((!empty($task->id) and isset($tasks[$task->id])) ? $tasks[$task->id]->type : ''), "class='form-control'")?></td>
+          <?php foreach($fields as $field => $value):?>
+
+          <?php if($value['control'] == 'select'):?>
+          <td><?php echo html::select("{$field}[$key]", $value['values'], !empty($object->$field) ? $object->$field : '', "class='form-control chosen'")?></td>
+
+          <?php elseif($value['control'] == 'date'):?>
+          <?php $dateMatch = $this->config->port->dateMatch;?>
+          <?php if(!preg_match($dateMatch, $object->$field)) $object->$field = ''; ?>
+          <td><?php echo html::input("{$field}[$key]", !empty($object->$field) ? $object->$field : '', "class='form-control form-date autocomplete='off'")?></td>
+
+          <?php elseif($value['control'] == 'hidden'):?>
+          <?php echo html::hidden("{$field}[$key]", $object->$field)?>
+
+          <?php elseif($value['control'] == 'textarea'):?>
+          <td><?php echo html::textarea("{$field}[$key]", $object->$field, "class='form-control' cols='50' rows='1'")?></td>
+
+          <?php elseif($field == 'estimate'):?>
           <td>
           <?php
-          if(is_array($task->estimate))
+          if(is_array($object->estimate))
           {
               echo "<table class='table-borderless'>";
-              foreach($task->estimate as $account => $estimate)
+              foreach($object->estimate as $account => $estimate)
               {
                   echo '<tr>';
-                  echo '<td class="w-150px">' . html::select("team[$key][]", $members, $account, "class='form-control chosen'") . '</td>';
-                  echo '<td>' . html::input("estimate[$key][]", $estimate, "class='form-control' autocomplete='off'")  . '</td>';
+                  echo '<td class="c-team">' . html::select("team[$key][]", $members, $account, "class='form-control chosen'") . '</td>';
+                  echo '<td class="c-estimate-1">' . html::input("estimate[$key][]", $estimate, "class='form-control' autocomplete='off'")  . '</td>';
                   echo '</tr>';
               }
               echo "</table>";
           }
           else
           {
-              echo html::input("estimate[$key]", !empty($task->estimate) ? $task->estimate : ((!empty($task->id) and isset($tasks[$task->id])) ? $tasks[$task->id]->estimate : ''), "class='form-control' autocomplete='off'");
+              echo html::input("estimate[$key]", !empty($task->estimate) ? $task->estimate : '', "class='form-control'");
           }
           ?>
           </td>
-          <?php $dateMatch = '/[1-9]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])/';?>
-          <?php if(!preg_match($dateMatch, $task->estStarted)) $task->estStarted = ''; ?>
-          <td><?php echo html::input("estStarted[$key]", !empty($task->estStarted) ? $task->estStarted : ((!empty($task->id) and isset($tasks[$task->id])) ? $tasks[$task->id]->estStarted : ''), "class='form-control form-date autocomplete='off'")?></td>
-          <?php if(!preg_match($dateMatch, $task->deadline)) $task->deadline = '';?>
-          <td><?php echo html::input("deadline[$key]", !empty($task->deadline) ? $task->deadline : ((!empty($task->id) and isset($tasks[$task->id])) ? $tasks[$task->id]->deadline : ''), "class='form-control form-date'")?></td>
-          <td><?php echo html::textarea("desc[$key]", $task->desc, "class='form-control' cols='50' rows='1'")?></td>
+
+          <?php else:?>
+          <td><?php echo html::input("{$field}[$key]", !empty($object->$field) ? $object->$field : '', "class='form-control autocomplete='off'")?></td>
+          <?php endif;?>
+
+          <?php endforeach;?>
           <?php
           if(!empty($appendFields))
           {
@@ -125,9 +140,6 @@ $(function()
               }
           }
           ?>
-          <?php if(!empty($task->multiple)) $hasMultiple = true;?>
-          <?php echo html::hidden("multiple[$key]", !empty($task->multiple) ? 1 : 0);?>
-          <?php echo html::hidden("mode[$key]", !empty($task->multiple) ? $task->mode : '');?>
         </tr>
         <?php endforeach;?>
       </tbody>
@@ -148,7 +160,7 @@ $(function()
             }
             echo html::hidden('isEndPage', $isEndPage ? 1 : 0);
             echo html::hidden('pagerID', $pagerID);
-            echo ' &nbsp; ' . html::a($this->createLink('execution', 'task', "executionID=$executionID"), $lang->goback, '', "class='btn btn-back btn-wide'");
+            echo ' &nbsp; ' . html::a("javascript:history.back(-1)", $lang->goback, '', "class='btn btn-back btn-wide'");
             echo ' &nbsp; ' . sprintf($lang->file->importPager, $allCount, $pagerID, $allPager);
             ?>
           </td>

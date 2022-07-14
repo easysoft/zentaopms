@@ -105,10 +105,121 @@ class port extends control
      * @access public
      * @return void
      */
-    public function showImport()
+    public function showImport($model, $pagerID = 1, $insert = '', $url = 'back')
     {
+        $maxImport = $this->cookie->maxImport;
+
+        if($_POST)
+        {
+            $this->loadModel('port')->createFromImport($model);
+            if($this->post->isEndPage) unlink($tmpFile);
+            return print(js::locate($url, 'parent'));
+        }
+
+        /* Get import fields */
+        $fields = $this->config->task->templateFields;
+
+        /* Get file datas */
+        $datas = $this->getDatasByFile();
+
+        /* Get page datas */
+        $datas = $this->getPageDatas($datas, $pagerID, $maxImport);
+
+        /* Check suhosin setting */
+        $this->checkSuhosinInfo($datas);
+
+        $this->view->title          = $this->lang->$model->common . $this->lang->colon . $this->lang->task->showImport;
+        $this->view->position[]     = $this->lang->port->importCase;
+        $this->view->fields         = $this->loadModel('port')->initFieldList($model, $fields, false);
+        $this->view->requiredFields = ',' . $this->config->$model->create->requiredFields;
+        $this->view->datas          = $datas;
+        $this->view->dataInsert     = $insert;
+        $this->view->model          = $model;
+        $this->view->url            = $url;
 
         $this->display();
+    }
 
+    /**
+     * checkSuhosinInfo
+     *
+     * @access public
+     * @return void
+     */
+    public function checkSuhosinInfo($datas = array())
+    {
+        /* Judge whether the editedTasks is too large and set session. */
+        $countInputVars  = count($datas) * 11;
+        $showSuhosinInfo = common::judgeSuhosinSetting($countInputVars);
+        if($showSuhosinInfo) $this->view->suhosinInfo = extension_loaded('suhosin') ? sprintf($this->lang->suhosinInfo, $countInputVars) : sprintf($this->lang->maxVarsInfo, $countInputVars);
+    }
+
+    /**
+     * getPageDatas
+     *
+     * @access public
+     * @return void
+     */
+    public function getPageDatas($datas, $pagerID = 1, $maxImport = 0)
+    {
+        $allCount = count($datas);
+        $allPager = 1;
+        if($allCount > $this->config->file->maxImport)
+        {
+            if(empty($maxImport))
+            {
+                $this->view->allCount  = $allCount;
+                $this->view->maxImport = $maxImport;
+                return $datas;
+            }
+
+            $allPager = ceil($allCount / $maxImport);
+            $datas    = array_slice($datas, ($pagerID - 1) * $maxImport, $maxImport, true);
+        }
+
+        $this->view->allCount  = $allCount;
+        $this->view->maxImport = $maxImport;
+        $this->view->pagerID   = $pagerID;
+        $this->view->allPager  = $allPager;
+        $this->view->isEndPage = $pagerID >= $allPager;
+
+        return $datas;
+    }
+
+    /**
+     * getWorkFlowFields
+     *
+     * @access public
+     * @return void
+     */
+    public function getWorkFlowFields()
+    {
+        if($this->config->edition != 'open')
+        {
+            $appendFields = $this->loadModel('workflowaction')->getFields('task', 'showimport', false);
+
+            foreach($appendFields as $appendField) $this->config->task->exportFields .= ',' . $appendField->field;
+
+            $this->view->appendFields = $appendFields;
+            $this->view->notEmptyRule = $this->loadModel('workflowrule')->getByTypeAndRule('system', 'notempty');
+        }
+    }
+
+    /**
+     * getDatasByFile
+     *
+     * @access public
+     * @return void
+     */
+    public function getDatasByFile()
+    {
+        $tmpFile = $this->loadModel('port')->initTmpFile();
+        if(!empty($tmpFile['message']))
+        {
+            echo js::alert($tmpFile['message']);
+            die(js::locate('back', 'parent'));
+        }
+
+        if(file_exists($tmpFile)) return  unserialize(file_get_contents($tmpFile));
     }
 }
