@@ -73,7 +73,7 @@ js::set('isCNLang', !$this->loadModel('common')->checkNotCN())
   <div class="table-empty-tip">
     <p>
       <span class="text-muted"><?php echo $from == 'execution' ? $lang->execution->noExecutions : $lang->execution->noExecution;?></span>
-      <?php if(empty($allExecutionsNum->count)):?>
+      <?php if(empty($allExecutionsNum)):?>
         <?php if(common::hasPriv('programplan', 'create') and $isStage):?>
         <?php echo html::a($this->createLink('programplan', 'create', "projectID=$projectID&productID=$productID"), "<i class='icon icon-plus'></i> " . $lang->programplan->create, '', "class='btn btn-info'");?>
         <?php else: ?>

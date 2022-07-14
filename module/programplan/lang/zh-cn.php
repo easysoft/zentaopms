@@ -23,6 +23,7 @@ $lang->programplan->createSubPlan = '创建二级阶段';
 $lang->programplan->parent           = '父阶段';
 $lang->programplan->emptyParent      = '无';
 $lang->programplan->name             = '阶段名称';
+$lang->programplan->status           = '阶段进度';
 $lang->programplan->PM               = '阶段负责人';
 $lang->programplan->acl              = '访问控制';
 $lang->programplan->subStageName     = '子阶段名称';

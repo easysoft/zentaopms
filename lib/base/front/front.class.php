@@ -966,8 +966,9 @@ class baseJS
         {
             $cancleAction = "$cancleTarget.location = '$cancleURL';";
         }
-
-        $js .= <<<EOT
+        if(strpos($_SERVER['HTTP_USER_AGENT'], 'xuanxuan') === false)
+        {
+            $js .= <<<EOT
 if(confirm("$message"))
 {
     $confirmAction
@@ -977,6 +978,12 @@ else
     $cancleAction
 }
 EOT;
+        }
+        else
+        {
+            $js .= $confirmAction;
+        }
+
         $js .= self::end();
         return $js;
     }

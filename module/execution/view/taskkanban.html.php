@@ -40,7 +40,7 @@
   <div class='btn-toolbar pull-right'>
     <div class="input-group" id="taskKanbanSearch">
       <div class="input-control search-box" id="searchBox">
-      <input type="text" name="taskKanbanSearchInput" id="taskKanbanSearchInput" value="" class="form-control" oninput="searchCards(this.value)" placeholder="<?php echo $lang->execution->pleaseInput;?>">
+      <input type="text" name="taskKanbanSearchInput" id="taskKanbanSearchInput" value="" class="form-control" oninput="searchCards(this.value)" placeholder="<?php echo $lang->execution->pleaseInput;?>" autocomplete="off">
       </div>
     </div>
     <?php

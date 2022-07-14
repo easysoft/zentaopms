@@ -127,7 +127,8 @@ function loadExecutionStories(executionID)
  */
 function loadModuleMenu(executionID)
 {
-    var link = createLink('tree', 'ajaxGetOptionMenu', 'rootID=' + executionID + '&viewtype=task');
+    var extra = $('#showAllModule').prop('checked') ? 'allModule' : '';
+    var link  = createLink('tree', 'ajaxGetOptionMenu', 'rootID=' + executionID + '&viewtype=task&branch=0&rootModuleID=0&returnType=html&fieldID=&needManage=0&extra=' + extra);
     $('#moduleIdBox').load(link, function(){$('#module').chosen();});
 }
 
@@ -501,11 +502,12 @@ $(document).ready(function()
 
     $('#showAllModule').change(function()
     {
-        var moduleID = $('#moduleIdBox #module').val();
-        var extra    = $(this).prop('checked') ? 'allModule' : '';
+        var executionID = $('#execution').val();
+        var moduleID    = $('#moduleIdBox #module').val();
+        var extra       = $(this).prop('checked') ? 'allModule' : '';
         $('#moduleIdBox').load(createLink('tree', 'ajaxGetOptionMenu', "rootID=" + executionID + '&viewType=task&branch=0&rootModuleID=0&returnType=html&fieldID=&needManage=0&extra=' + extra), function()
         {
-            $('#moduleIdBox #module').val(moduleID).chosen();
+            $('#module').val(moduleID).chosen();
         });
     });
 });

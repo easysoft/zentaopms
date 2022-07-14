@@ -23,6 +23,7 @@ $lang->programplan->createSubPlan = 'Create Sub Plan';
 $lang->programplan->parent           = 'Parent Stage';
 $lang->programplan->emptyParent      = 'N/A';
 $lang->programplan->name             = 'Stage Name';
+$lang->programplan->status           = 'Stage Progress';
 $lang->programplan->PM               = 'Stage Manager';
 $lang->programplan->acl              = 'Access Control';
 $lang->programplan->subStageName     = 'Sub Stage Name';

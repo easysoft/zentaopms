@@ -146,6 +146,17 @@ $(function()
     });
 
     $(document).on('change', "select[id^='branch']", disableSelectedBranch);
+
+    if(requiredFields.indexOf('budget') >= 0 && budget == 0)
+    {
+        $('#budget').removeAttr('disabled');
+        $('td .checkbox-primary').addClass('hidden');
+    }
+    if(requiredFields.indexOf('budget') >= 0 && budget != 0)
+    {
+        $('td .checkbox-primary').addClass('hidden');
+    }
+
 });
 
 /**
