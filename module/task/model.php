@@ -2842,7 +2842,7 @@ class taskModel extends model
         elseif($consumed == 0)
         {
             $data->status = 'wait';
-            $data->left   = $task->left + $estimate->consumed;
+            $data->left   = $task->estimate;
         }
         else
         {
@@ -2871,12 +2871,10 @@ class taskModel extends model
         $oldTask = new stdClass();
         $oldTask->consumed = $task->consumed;
         $oldTask->left     = $task->left;
-        $oldTask->status   = $task->status;
 
         $newTask = new stdClass();
         $newTask->consumed = $data->consumed;
         $newTask->left     = $data->left;
-        $newTask->status   = $data->status;
 
         if(!dao::isError()) return common::createChanges($oldTask, $newTask);
     }

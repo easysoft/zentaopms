@@ -1213,7 +1213,6 @@ class task extends control
             if($task->consumed - $estimate->consumed == 0)
             {
                 $actionID = $this->loadModel('action')->create('task', $estimate->task, 'Adjusttasktowait');
-                $this->action->logHistory($actionID, $changes);
             }
             if($task->consumed - $estimate->consumed == 0)
             {
