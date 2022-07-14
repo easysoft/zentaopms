@@ -126,7 +126,7 @@ $colspan = count($visibleFields) + 3;
               <div class='input-group'>
                 <?php echo html::select("story[$i]", $stories, $currentStory, "class='form-control chosen' onchange='setStoryRelated($i)'");?>
                 <span class='input-group-btn'>
-                  <a id='preview<?php echo $i;?>' href='#' class='btn iframe btn-link btn-icon btn-copy' style='pointer-events:none' data-width='80%' disabled='disabled' title='<?php echo $lang->preview; ?>'><i class='icon-eye'></i></a>
+                  <a id='preview<?php echo $i;?>' href='#' class='btn iframe btn-link btn-icon btn-copy' style='pointer-events:none' data-width='95%' disabled='disabled' title='<?php echo $lang->preview; ?>'><i class='icon-eye'></i></a>
                   <a href='javascript:copyStoryTitle(<?php echo $i;?>)' class='btn btn-link btn-icon btn-copy' title='<?php echo $lang->task->copyStoryTitle; ?>'><i class='icon-arrow-right'></i></a>
                   <?php echo html::hidden("storyEstimate$i") . html::hidden("storyDesc$i") . html::hidden("storyPri$i");?>
                 </span>
