@@ -21,6 +21,7 @@
 <?php js::set('XUnit', $lang->execution->burnXUnit); ?>
 <?php js::set('dateRangeTip', $lang->execution->charts->cfd->dateRangeTip); ?>
 <?php js::set('today', date(DT_DATE1)); ?>
+<?php js::set('executionBegin', $execution->begin); ?>
 <div id='mainMenu' class='clearfix'>
   <div class='btn-toolbar pull-left'>
     <?php
