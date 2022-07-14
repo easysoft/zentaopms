@@ -228,6 +228,7 @@ class kanban extends control
             $copyKanban    = $this->kanban->getByID($copyKanbanID);
             $enableImport  = empty($copyKanban->object) ? 'off' : 'on';
             $importObjects = empty($copyKanban->object) ? array() : explode(',', $copyKanban->object);
+            $spaceID       = $copyKanban->space;
         }
 
         unset($this->lang->kanbanspace->featureBar['involved']);
