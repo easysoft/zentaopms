@@ -888,14 +888,17 @@ class repoModel extends model
             {
                 $commitID = $this->dao->lastInsertID();
                 if($branch) $this->dao->replace(TABLE_REPOBRANCH)->set('repo')->eq($repoID)->set('revision')->eq($commitID)->set('branch')->eq($branch)->exec();
-                foreach($logs['files'][$i] as $file)
+                if(!empty($logs['files']))
                 {
-                    $parentPath = dirname($file->path);
+                    foreach($logs['files'][$i] as $file)
+                    {
+                        $parentPath = dirname($file->path);
 
-                    $file->parent   = $parentPath == '\\' ? '/' : $parentPath;
-                    $file->revision = $commitID;
-                    $file->repo     = $repoID;
-                    $this->dao->insert(TABLE_REPOFILES)->data($file)->exec();
+                        $file->parent   = $parentPath == '\\' ? '/' : $parentPath;
+                        $file->revision = $commitID;
+                        $file->repo     = $repoID;
+                        $this->dao->insert(TABLE_REPOFILES)->data($file)->exec();
+                    }
                 }
                 $revisionPairs[$commit->revision] = $commit->revision;
                 $version++;
