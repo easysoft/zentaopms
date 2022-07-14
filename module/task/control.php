@@ -342,6 +342,10 @@ class task extends control
         {
             $taskLink = $this->createLink('my', 'work', 'mode=task');
         }
+        elseif($this->app->tab == 'project')
+        {
+            $taskLink = $this->createLink('project', 'execution', "browseType=all&projectID={$execution->project}");
+        }
         else
         {
             $taskLink  = $this->createLink('execution', 'browse', "executionID=$executionID");
