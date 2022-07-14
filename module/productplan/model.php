@@ -638,6 +638,9 @@ class productplanModel extends model
         $parent      = $this->getByID($parentID);
         $childStatus = $this->dao->select('status')->from(TABLE_PRODUCTPLAN)->where('parent')->eq($parentID)->andWhere('deleted')->eq(0)->fetchPairs();
 
+        /* If the subplan is empty, update the plan. */
+        if(empty($childStatus)) $this->dao->update(TABLE_PRODUCTPLAN)->set('parent')->eq(0)->exec();
+
         if(count($childStatus) == 1 and isset($childStatus['wait']))
         {
             return;
