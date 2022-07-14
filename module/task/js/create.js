@@ -3,6 +3,17 @@ $(function()
     $('#customField').click(function()
     {
         hiddenRequireFields();
+
+        var fieldList    = showFields + ',';
+        var requiredList = ',' + requiredFields + ',';
+        if(lifetime == 'ops')
+        {
+            $('#fieldsstory').parent('div').addClass('hidden');
+        }
+        else if(fieldList.indexOf('story') >= 0 && requiredList.indexOf('story') < 0)
+        {
+            $('#fieldsstory').parent('div').removeClass('hidden');
+        }
     });
 
     /* Implement a custom form without feeling refresh. */
@@ -22,6 +33,17 @@ $(function()
  */
 function loadAll(executionID)
 {
+    lifetime      = lifetimeList[executionID];
+    var fieldList = showFields + ',';
+    if(lifetime == 'ops')
+    {
+        $('.storyBox').addClass('hidden');
+    }
+    else if(fieldList.indexOf('story') >= 0)
+    {
+        $('.storyBox').removeClass('hidden');
+    }
+
     loadModuleMenu(executionID);
     loadExecutionStories(executionID);
     loadExecutionMembers(executionID);
@@ -408,8 +430,11 @@ $(document).ready(function()
     });
     $('#type').change(function()
     {
-        $('#selectTestStoryBox').toggleClass('hidden', $(this).val() != 'test');
-        toggleSelectTestStory();
+        if(lifetime != 'ops')
+        {
+            $('#selectTestStoryBox').toggleClass('hidden', $(this).val() != 'test');
+            toggleSelectTestStory();
+        }
     });
 
     setStoryRelated();

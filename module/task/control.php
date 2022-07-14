@@ -290,7 +290,8 @@ class task extends control
 
         /* Set Custom*/
         foreach(explode(',', $this->config->task->customCreateFields) as $field) $customFields[$field] = $this->lang->task->$field;
-        if($execution->type == 'ops') unset($customFields['story']);
+
+        $executions = $this->config->systemMode == 'classic' ? $executions : $this->execution->getByProject($projectID, !common::canModify('execution', $execution) ? 'noclosed' : 'all', 0, true);
 
         $this->view->customFields  = $customFields;
         $this->view->showFields    = $this->config->task->custom->createFields;
@@ -300,7 +301,8 @@ class task extends control
         $this->view->position         = $position;
         $this->view->gobackLink       = (isset($output['from']) and $output['from'] == 'global') ? $this->createLink('execution', 'task', "executionID=$executionID") : '';
         $this->view->execution        = $execution;
-        $this->view->executions       = $this->config->systemMode == 'classic' ? $executions : $this->execution->getByProject($projectID, !common::canModify('execution', $execution) ? 'noclosed' : 'all', 0, true);
+        $this->view->executions       = $executions;
+        $this->view->lifetimeList     = $this->execution->getLifetimeByIdList(array_keys($executions));
         $this->view->task             = $task;
         $this->view->users            = $users;
         $this->view->storyID          = $storyID;
@@ -435,6 +437,9 @@ class task extends control
             if($execution->type == 'stage' and strpos('estStarted,deadline', $field) !== false) continue;
             $customFields[$field] = $this->lang->task->$field;
         }
+
+        if($execution->lifetime == 'ops') unset($customFields['story']);
+
         $this->view->customFields = $customFields;
         $this->view->showFields   = $this->config->task->custom->batchCreateFields;
 
