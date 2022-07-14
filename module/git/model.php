@@ -135,6 +135,12 @@ class gitModel extends model
             $acountIDPairs  = $this->gitlab->getUserIdAccountPairs($repo->gitService);
             foreach($gitlabUserList as $gitlabUser) $gitlabAccountPairs[$gitlabUser->realname] = zget($acountIDPairs, $gitlabUser->id, '');
         }
+        elseif($repo->SCM == 'Gitea')
+        {
+            $gitlabUserList = $this->loadModel('gitea')->apiGetUsers($repo->gitService);
+            $acountIDPairs  = $this->gitea->getUserAccountIdPairs($repo->gitService, 'openID,account');
+            foreach($gitlabUserList as $gitlabUser) $gitlabAccountPairs[$gitlabUser->realname] = zget($acountIDPairs, $gitlabUser->id, '');
+        }
 
         /* Update code commit history. */
         foreach($branches as $branch)
