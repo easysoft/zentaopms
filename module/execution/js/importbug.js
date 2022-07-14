@@ -7,7 +7,7 @@ $(function()
 });
 
 /**
- * goback
+ * Go back.
  *
  * @param  int $executionID
  * @access public
