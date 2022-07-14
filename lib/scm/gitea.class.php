@@ -576,7 +576,6 @@ class gitea
             $log->time      = date('Y-m-d H:i:s', strtotime($commit->commit->committer->date));
 
             $commits[$commit->sha] = $log;
-            $files[$commit->sha]   = $this->getFilesByCommit($log->revision);
         }
 
         return array('commits' => $commits, 'files' => $files);

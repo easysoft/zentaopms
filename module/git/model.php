@@ -131,8 +131,8 @@ class gitModel extends model
         $gitlabAccountPairs = array();
         if($repo->SCM == 'Gitlab')
         {
-            $gitlabUserList = $this->loadModel('gitlab')->apiGetUsers($repo->gitlab);
-            $acountIDPairs  = $this->gitlab->getUserIdAccountPairs($repo->gitlab);
+            $gitlabUserList = $this->loadModel('gitlab')->apiGetUsers($repo->gitService);
+            $acountIDPairs  = $this->gitlab->getUserIdAccountPairs($repo->gitService);
             foreach($gitlabUserList as $gitlabUser) $gitlabAccountPairs[$gitlabUser->realname] = zget($acountIDPairs, $gitlabUser->id, '');
         }
 

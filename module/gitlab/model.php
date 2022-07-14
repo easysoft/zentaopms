@@ -1203,7 +1203,7 @@ class gitlabModel extends model
         /* Return an empty array if where is one existing webhook. */
         if($this->isWebhookExists($repo, $hook->url)) return array();
 
-        $result = $this->apiCreateHook($repo->gitlab, $repo->project, $hook);
+        $result = $this->apiCreateHook($repo->gitService, $repo->project, $hook);
 
         if(!empty($result->id)) return true;
         return false;
@@ -1218,7 +1218,7 @@ class gitlabModel extends model
      */
     public function isWebhookExists($repo, $url = '')
     {
-        $hookList = $this->apiGetHooks($repo->gitlab, $repo->project);
+        $hookList = $this->apiGetHooks($repo->gitService, $repo->project);
         foreach($hookList as $hook)
         {
             if($hook->url == $url) return true;
