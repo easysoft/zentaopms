@@ -4363,8 +4363,14 @@ class executionModel extends model
             }
             else
             {
-                $disabled = ($execution->grade == 2) ? ' disabled' : '';
-                echo common::hasPriv('programplan', 'create') ? html::a('javascript:alert("' . $this->lang->programplan->error->createdTask . '");', '<i class="icon-programplan-create icon-split"></i>', '', 'class="btn ' . $disabled . '"') : '';
+                if($execution->grade == 2)
+                {
+                    echo "<button class='btn' disabled='disabled' style='margin-right: 4px;'><i class='icon-split disabled icon-search'></i></button>";
+                }
+                else
+                {
+                    echo common::hasPriv('programplan', 'create') ? html::a('javascript:alert("' . $this->lang->programplan->error->createdTask . '");', '<i class="icon-programplan-create icon-split"></i>', '', 'class="btn"') : '';
+                }
             }
         }
 
