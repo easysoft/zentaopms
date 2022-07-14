@@ -1914,31 +1914,37 @@ class task extends control
         $execution = $this->dao->findById($executionID)->from(TABLE_EXECUTION)->fetch();
 
         $tasks = $this->dao->select('*')->from(TABLE_TASK)
-            ->where('deleted')->eq(0)
+            ->where('deleted')->eq('0')
             ->andWhere('status')->notin('closed,cancel')
+            ->andWhere('parent')->le('0')
             ->andWhere('execution')->eq($executionID)
             ->andWhere('id')->gt($maxTaskID)
             ->orderBy('id_asc')
+            ->limit(50)
             ->fetchAll('id');
-
-        $users = $this->loadModel('user')->getPairs('noletter|nodeleted');
-        foreach($tasks as $task)
-        {
-            if($task->parent > 0)
-            {
-                if(isset($tasks[$task->parent]))
-                {
-                    $tasks[$task->parent]->children[$task->id] = $task;
-                    unset($tasks[$task->id]);
-                }
-            }
-        }
 
         if(empty($tasks)) die('');
 
+        $parentGroup = $this->dao->select('*')->from(TABLE_TASK)
+            ->where('parent')->in(array_keys($tasks))
+            ->andWhere('parent')->gt('0')
+            ->andWhere('deleted')->eq('0')
+            ->fetchGroup('parent', 'id');
+
+        $users = $this->loadModel('user')->getPairs('noletter|nodeleted');
+        foreach($tasks as $taskID => $task)
+        {
+            if(isset($parentGroup[$taskID]))
+            {
+                $tasks[$taskID]->children = $parentGroup[$taskID];
+            }
+            else
+            {
+                $tasks[$taskID]->children = array();
+            }
+        }
+
         $list  = '';
-        $tasks = array_chunk($tasks, 50, true);
-        $tasks = $tasks[0];
         $count = count($tasks);
         foreach($tasks as $task)
         {
