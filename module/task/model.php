@@ -3760,19 +3760,19 @@ class taskModel extends model
     public function buildNestedList($execution, $task, $isChild = false, $showmore = false, $users)
     {
         $showmore = $showmore ? 'showmore' : '';
-        $trAttrs  = "data-id=$task->id";
+        $trAttrs  = "data-id='t$task->id'";
         if(!$isChild)
         {
-            $path     = $execution->grade == 2 ? "$execution->parent,$execution->id,$task->id," : ",$execution->id,$task->id,";
-            $trAttrs .= " data-parent=$execution->id data-nest-parent=$execution->id data-nest-path=$path";
+            $path     = $execution->grade == 2 ? "$execution->parent,$execution->id,t$task->id," : ",$execution->id,t$task->id,";
+            $trAttrs .= " data-parent='$execution->id' data-nest-parent='$execution->id' data-nest-path='$path'";
             if(empty($task->children)) $trAttrs .= " data-nested='false'";
             $trClass  = empty($task->children) ? '' : " has-nest-child";
         }
         else
         {
-            $path     = $execution->grade == 2 ? "$execution->parent,$execution->id,$task->parent,$task->id," : ",$execution->id,$task->parent,$task->id,";
+            $path     = $execution->grade == 2 ? "$execution->parent,$execution->id,$task->parent,t$task->id," : ",$execution->id,$task->parent,t$task->id,";
             $trClass  = 'is-nest-child no-nest';
-            $trAttrs .= " data-nested='false' data-parent=$task->parent data-nest-parent=$task->parent data-nest-path=$path";
+            $trAttrs .= " data-nested='false' data-parent='t$task->parent' data-nest-parent='t$task->parent' data-nest-path='$path'";
         }
 
         $list  = "<tr $trAttrs class='$trClass $showmore'>";
