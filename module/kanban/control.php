@@ -242,7 +242,7 @@ class kanban extends control
         $this->view->users         = $users;
         $this->view->whitelist     = isset($spacePairs[$spaceID]) ? $this->user->getPairs('noclosed|nodeleted', '', 0, $whitelist) : array();
         $this->view->spaceID       = $spaceID;
-        $this->view->spacePairs    = array(0 => '') + $this->kanban->getSpacePairs($type);
+        $this->view->spacePairs    = $spacePairs;
         $this->view->type          = $type;
         $this->view->typeList      = $this->lang->kanbanspace->featureBar;
         $this->view->kanbans       = array('' => '') + $this->kanban->getPairs();
