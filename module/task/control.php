@@ -408,11 +408,11 @@ class task extends control
         if($story)
         {
             $moduleID = $story->module;
-            $stories  = $this->story->getExecutionStoryPairs($executionID, 0, 'all', $moduleID, 'short', 'unclosed');
+            $stories  = $this->story->getExecutionStoryPairs($executionID, 0, 'all', $moduleID, 'short', 'active');
         }
         else
         {
-            $stories = $this->story->getExecutionStoryPairs($executionID, 0, 'all', 0, 'short', 'unclosed');
+            $stories = $this->story->getExecutionStoryPairs($executionID, 0, 'all', 0, 'short', 'active');
         }
 
         $members       = $this->loadModel('user')->getTeamMemberPairs($executionID, 'execution', 'nodeleted');
