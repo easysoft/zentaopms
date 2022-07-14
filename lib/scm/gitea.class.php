@@ -503,8 +503,8 @@ class gitea
 
         if(!empty($version) and $count == 1)
         {
-            $api .= '/' . $version;
-            $commit = $this->fetch($api, array('limit' => 1));
+            $commits = $this->fetch($api, array('limit' => 1, 'sha' => $version));
+            $commit  = $commits[0];
             if(isset($commit->sha))
             {
                 $log = new stdclass;
@@ -789,6 +789,6 @@ class gitea
     {
         $params['token'] = $this->token;
 
-        return "{$this->root}archive/{$branch}.{$ext}" . '?' . http_build_query($params);
+        return "{$this->root}archive/" . urlencode($branch) . ".{$ext}" . '?' . http_build_query($params);
     }
 }

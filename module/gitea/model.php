@@ -113,6 +113,7 @@ class giteaModel extends model
      */
     public function bindUser($giteaID)
     {
+        $userPairs   = $this->loadModel('user')->getPairs('noclosed|noletter');
         $users       = $this->post->zentaoUsers;
         $giteaNames  = $this->post->giteaUserNames;
         $accountList = array();

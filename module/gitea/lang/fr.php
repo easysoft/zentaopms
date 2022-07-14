@@ -24,8 +24,9 @@ $lang->gitea->name  = "Server Name";
 $lang->gitea->url   = 'Server URL';
 $lang->gitea->token = 'Token';
 
-$lang->gitea->tokenLimit = "The current token has no admin privilege. Please regenerate one with root user in Gitea.";
-$lang->gitea->hostError  = "So the current Gitea server address is invalid, please confirm that the current server can be accessed and try again.";
+$lang->gitea->tokenLimit    = "The current token has no admin privilege. Please regenerate one with root user in Gitea.";
+$lang->gitea->hostError     = "So the current Gitea server address is invalid, please confirm that the current server can be accessed and try again.";
+$lang->gitea->bindUserError = "Can not bind users repeatedly %s";
 
 $lang->gitea->server        = "Server List";
 $lang->gitea->lblCreate     = 'Create Gitea Server';
