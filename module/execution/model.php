@@ -4442,6 +4442,18 @@ class executionModel extends model
     }
 
     /**
+     * Get lifetime by id list.
+     *
+     * @param  string $idList
+     * @access public
+     * @return array
+     */
+    public function getLifetimeByIdList($idList = '')
+    {
+        return $this->dao->select('id,lifetime')->from(TABLE_EXECUTION)->where('id')->in($idList)->fetchPairs();
+    }
+
+    /**
      ** Set stage tree path.
      **
      ** @param  int    $executionID
