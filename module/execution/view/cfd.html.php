@@ -32,7 +32,7 @@
     $weekend = $withWeekend == 'true' ? 'noweekend' : 'withweekend';
     echo html::a('#', $lang->execution->$weekend, '', "class='btn btn-link' id='weekend'");
     ?>
-    <div class='input-control w-100px'>
+    <div class='input-control w-140px'>
       <?php echo html::select('type', $lang->execution->cfdTypeList, $type, "class='form-control chosen'");?>
     </div>
     <div id="cfdDateSelect">
