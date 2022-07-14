@@ -165,6 +165,10 @@ class gitea
         $params = array();
         $params['limit'] = $this->pageLimit;
 
+        /* Get default branch. */
+        $project       = $this->fetch('');
+        $defaultBranch = $project->default_branch;
+
         $branches = array();
         $default  = array();
         for($page = 1; true; $page ++)
@@ -176,7 +180,7 @@ class gitea
             foreach($branchList as $branch)
             {
                 if(!isset($branch->name)) continue;
-                if($branch->name == 'main')
+                if($branch->name == $defaultBranch)
                 {
                     $default[$branch->name] = $branch->name;
                 }
@@ -556,6 +560,7 @@ class gitea
             $log->time      = date('Y-m-d H:i:s', strtotime($commit->commit->author->date));
 
             $commits[$commit->sha] = $log;
+            $files[$commit->sha]   = $this->getFilesByCommit($log->revision);
         }
 
         return array('commits' => $commits, 'files' => $files);
