@@ -4327,13 +4327,13 @@ class executionModel extends model
         }
         else
         {
-            $trClass  = 'is-nest-child';
+            $trClass  = 'table-nest-hide';
             $trAttrs  = "data-id={$execution->id} data-parent={$execution->parent}";
             $trAttrs .= " data-nest-parent='$execution->parent' data-order='$execution->order' data-nest-path=',$execution->parent,$execution->id,'";
         }
 
         $burns = join(',', $execution->burns);
-        echo "<tr $trAttrs class=$trClass>";
+        echo "<tr $trAttrs class='$trClass'>";
         echo "<td><span id=$execution->id class='table-nest-icon icon table-nest-toggle'></span>";
         if($this->config->systemMode == 'new')
         {
@@ -4439,6 +4439,18 @@ class executionModel extends model
             ->where('t1.project')->in($stageIdList)
             ->fetchPairs('project', 'name');
         return $productpairs;
+    }
+
+    /**
+     * Get lifetime by id list.
+     *
+     * @param  string $idList
+     * @access public
+     * @return array
+     */
+    public function getLifetimeByIdList($idList = '')
+    {
+        return $this->dao->select('id,lifetime')->from(TABLE_EXECUTION)->where('id')->in($idList)->fetchPairs();
     }
 
     /**

@@ -1680,9 +1680,10 @@ class kanbanModel extends model
                     if($browseType == 'task')
                     {
                         if($searchValue != '' and strpos($object->name, $searchValue) === false) continue;
-                        $cardData['name']   = $object->name;
-                        $cardData['status'] = $object->status;
-                        $cardData['left']   = $object->left;
+                        $cardData['name']       = $object->name;
+                        $cardData['status']     = $object->status;
+                        $cardData['left']       = $object->left;
+                        $cardData['estStarted'] = $object->estStarted;
                     }
                     else
                     {
@@ -3808,7 +3809,7 @@ class kanbanModel extends model
                 {
                     $menu = array();
 
-                    if(common::hasPriv('task', 'edit') and $this->task->isClickable($task, 'edit'))                     $menu[] = array('label' => $this->lang->task->edit, 'icon' => 'edit', 'url' => helper::createLink('task', 'edit', "taskID=$task->id", '', true), 'size' => '95%');
+                    if(common::hasPriv('task', 'edit') and $this->task->isClickable($task, 'edit'))                     $menu[] = array('label' => $this->lang->task->edit, 'icon' => 'edit', 'url' => helper::createLink('task', 'edit', "taskID=$task->id&comment=false&kanbanGroup=default&from=taskkanban", '', true), 'size' => '95%');
                     if(common::hasPriv('task', 'pause') and $this->task->isClickable($task, 'pause'))                   $menu[] = array('label' => $this->lang->task->pause, 'icon' => 'pause', 'url' => helper::createLink('task', 'pause', "taskID=$task->id&extra=from=taskkanban", '', true));
                     if(common::hasPriv('task', 'restart') and $this->task->isClickable($task, 'restart'))               $menu[] = array('label' => $this->lang->task->restart, 'icon' => 'play', 'url' => helper::createLink('task', 'restart', "taskID=$task->id&from=taskkanban", '', true));
                     if(common::hasPriv('task', 'recordEstimate') and $this->task->isClickable($task, 'recordEstimate')) $menu[] = array('label' => $this->lang->task->recordEstimate, 'icon' => 'time', 'url' => helper::createLink('task', 'recordEstimate', "taskID=$task->id&from=taskkanban", '', true));

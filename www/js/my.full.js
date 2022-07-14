@@ -1237,6 +1237,8 @@ function showCheckedFields(fields)
             if(!$('.borderBox').hasClass('hidden')) $('.borderBox').addClass('hidden');
             if(!$('.datePlanBox').hasClass('hidden')) $('.datePlanBox').addClass('hidden');
         }
+
+        if(typeof lifetime != 'undefined' && lifetime == 'ops') $('.storyBox').addClass('hidden');
     }
 }
 

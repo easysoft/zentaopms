@@ -153,11 +153,13 @@
           <table class='table table-form'>
             <tr>
               <td colspan="8">
-                <i class="icon-exclamation-sign icon"></i>
                 <div class="alert no-margin tips">
-                  <p><?php echo $lang->branch->mergedMain;?></p>
-                  <p><?php echo $lang->branch->mergeTips;?></p>
-                  <p><?php echo $lang->branch->targetBranchTips;?></p>
+                  <i class="icon-exclamation-sign icon"></i>
+                  <div id="marginTips">
+                    <p><?php echo $lang->branch->mergedMain;?></p>
+                    <p><?php echo $lang->branch->mergeTips;?></p>
+                    <p><?php echo $lang->branch->targetBranchTips;?></p>
+                  </div>
                 </div>
               </td>
             </tr>
