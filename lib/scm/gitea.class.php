@@ -68,14 +68,14 @@ class gitea
             }
             else
             {
-                $commits = $this->getCommitsByPath($file->path, '', '', 1);
+                $commits = $this->getCommitsByPath($file->path, '', '', 1, 1);
                 if(empty($commits) or !is_array($commits)) continue;
                 $commit = $commits[0];
 
                 $info->revision = $commit->sha;
                 $info->comment  = $commit->commit->message;
-                $info->account  = $commit->commit->committer->name;
-                $info->date     = date('Y-m-d H:i:s', strtotime($commit->commit->committer->date));
+                $info->account  = $commit->commit->author->name;
+                $info->date     = date('Y-m-d H:i:s', strtotime($commit->commit->author->date));
                 $info->size     = 0;
             }
 
@@ -108,7 +108,7 @@ class gitea
         $file = $this->fetch($api, array('ref' => $ref));
         if(!isset($file->name)) return false;
 
-        $commits = $this->getCommitsByPath($path, '', '', 1);
+        $commits = $this->getCommitsByPath($path, '', '', 1, 1);
         $file->revision = $file->sha;
         $file->size     = $this->formatBytes($file->size);
 
@@ -117,9 +117,9 @@ class gitea
             $commit = $commits[0];
 
             $file->revision  = $commit->sha;
-            $file->committer = $commit->commit->committer->name;
+            $file->committer = $commit->commit->author->name;
             $file->comment   = $commit->commit->message;
-            $file->date      = date('Y-m-d H:i:s', strtotime($commit->commit->committer->date));
+            $file->date      = date('Y-m-d H:i:s', strtotime($commit->commit->author->date));
         }
 
         return $file;
@@ -227,7 +227,7 @@ class gitea
 
         $path  = ltrim($path, DIRECTORY_SEPARATOR);
         $count = $count == 0 ? '' : "-n $count";
-        $list  = $this->getCommitsByPath($path, $fromRevision, $toRevision);
+        $list  = $this->getCommitsByPath($path, $fromRevision, $toRevision, 1);
         foreach($list as $commit)
         {
             if(isset($commit->sha)) $commit->diffs = $this->getFilesByCommit($commit->sha);
@@ -508,10 +508,10 @@ class gitea
             if(isset($commit->sha))
             {
                 $log = new stdclass;
-                $log->committer = $commit->commit->committer->name;
+                $log->committer = $commit->commit->author->name;
                 $log->revision  = $commit->sha;
                 $log->comment   = $commit->commit->message;
-                $log->time      = date('Y-m-d H:i:s', strtotime($commit->commit->committer->date));
+                $log->time      = date('Y-m-d H:i:s', strtotime($commit->commit->author->date));
 
                 $commits[$commit->sha] = $log;
                 $files[$commit->sha]   = $this->getFilesByCommit($log->revision);
@@ -550,10 +550,10 @@ class gitea
             if(!is_object($commit->commit)) continue;
 
             $log = new stdclass;
-            $log->committer = $commit->commit->committer->name;
+            $log->committer = $commit->commit->author->name;
             $log->revision  = $commit->sha;
             $log->comment   = $commit->commit->message;
-            $log->time      = date('Y-m-d H:i:s', strtotime($commit->commit->committer->date));
+            $log->time      = date('Y-m-d H:i:s', strtotime($commit->commit->author->date));
 
             $commits[$commit->sha] = $log;
         }
@@ -594,14 +594,15 @@ class gitea
      * @access public
      * @return array
      */
-    public function getCommitsByPath($path, $fromRevision = '', $toRevision = '', $perPage = 0)
+    public function getCommitsByPath($path, $fromRevision = '', $toRevision = '', $perPage = 0, $limit = 0)
     {
         $path = ltrim($path, DIRECTORY_SEPARATOR);
         $api  = "commits";
 
+        if(!$limit) $limit = $this->pageLimit;
         $param = new stdclass();
         $param->path  = urldecode($path);
-        $param->limit = 1;
+        $param->limit = $limit;
         $param->sha   = ($toRevision != 'HEAD' and $toRevision) ? $toRevision : $this->branch;
 
         if($perPage) $param->page = $perPage;
@@ -760,8 +761,8 @@ class gitea
             if(!isset($commit->sha)) continue;
             $parsedLog = new stdclass();
             $parsedLog->revision  = $commit->sha;
-            $parsedLog->committer = $commit->commit->committer->name;
-            $parsedLog->time      = date('Y-m-d H:i:s', strtotime($commit->commit->committer->date));
+            $parsedLog->committer = $commit->commit->author->name;
+            $parsedLog->time      = date('Y-m-d H:i:s', strtotime($commit->commit->author->date));
             $parsedLog->comment   = $commit->commit->message;
             $parsedLog->change    = array();
             foreach($commit->diffs as $diff)
@@ -786,7 +787,6 @@ class gitea
      */
     public function getDownloadUrl($branch = 'master', $ext = 'zip')
     {
-        $params = (array) $params;
         $params['token'] = $this->token;
 
         return "{$this->root}archive/{$branch}.{$ext}" . '?' . http_build_query($params);
