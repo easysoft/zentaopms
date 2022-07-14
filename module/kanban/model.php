@@ -1586,6 +1586,7 @@ class kanbanModel extends model
         {
             $laneData   = array();
             $columnData = array();
+            $cardCount  = 0;
 
             $laneData['id']              = $groupBy . $laneID;
             $laneData['laneID']          = $groupBy . $laneID;
@@ -1692,10 +1693,11 @@ class kanbanModel extends model
                     $laneData['cards'][$column->columnType][] = $cardData;
                     $cardOrder ++;
                 }
+                $cardCount += -- $cardOrder;
                 if($searchValue == '' and !isset($laneData['cards'][$column->columnType])) $laneData['cards'][$column->columnType] = array();
             }
 
-            if($searchValue != '' and empty($laneData['cards'])) continue;
+            if(($searchValue != '' and empty($laneData['cards'])) or ($laneData['id'] == 'story0' and $cardCount == 0)) continue;
             $kanbanGroup[$groupBy]['id']              = $groupBy . $laneID;
             $kanbanGroup[$groupBy]['columns']         = array_values($columnData);
             $kanbanGroup[$groupBy]['lanes'][]         = $laneData;
