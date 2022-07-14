@@ -73,7 +73,7 @@
     <div class="table-empty-tip">
       <p>
         <span class="text-muted"><?php echo $lang->project->empty;?></span>
-        <?php if(empty($allProjectsNum->count)):?>
+        <?php if(empty($allProjectsNum)):?>
           <?php if(!defined('TUTORIAL')):?>
             <?php if(common::hasPriv('project', 'create') and $browseType != 'bysearch') common::printLink('project', 'createGuide', "programID=$programID", '<i class="icon icon-plus"></i> ' . $lang->project->create, '', 'class="btn btn-info" data-toggle="modal"');?>
           <?php else:?>
