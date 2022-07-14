@@ -1367,7 +1367,7 @@ class repo extends control
         }
 
         $repo = $this->repo->getRepoByID($repoID);
-        if(in_array($repo->SCM, $this->config->repo->gitServiceList))
+        if(in_array(strtolower($repo->SCM), $this->config->repo->gitServiceList))
         {
             $this->scm = $this->app->loadClass('scm');
             $this->scm->setEngine($repo);
