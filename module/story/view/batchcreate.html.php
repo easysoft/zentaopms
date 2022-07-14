@@ -273,7 +273,7 @@ $(function()
 $(function()
 {
     parent.$('#triggerModal .modal-content .modal-header .close').hide();
-    $('#closeModal').on('click', function(){window.parent.$.closeModal();})
+    // $('#closeModal').on('click', function(){window.parent.$.closeModal();})
 })
 </script>
 <?php endif;?>
