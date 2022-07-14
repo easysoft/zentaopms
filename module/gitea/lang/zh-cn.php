@@ -24,8 +24,9 @@ $lang->gitea->name  = "服务器名称";
 $lang->gitea->url   = '服务器地址';
 $lang->gitea->token = 'Token';
 
-$lang->gitea->tokenLimit = "Gitea Token权限不足。";
-$lang->gitea->hostError  = "当前Gitea服务器地址无效，请确认当前服务器可被访问";
+$lang->gitea->tokenLimit    = "Gitea Token权限不足。";
+$lang->gitea->hostError     = "当前Gitea服务器地址无效，请确认当前服务器可被访问";
+$lang->gitea->bindUserError = "不能重复绑定用户 %s";
 
 $lang->gitea->server        = "服务器列表";
 $lang->gitea->lblCreate     = '添加Gitea服务器';
