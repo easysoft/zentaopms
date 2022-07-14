@@ -1697,7 +1697,7 @@ class kanbanModel extends model
                 if($searchValue == '' and !isset($laneData['cards'][$column->columnType])) $laneData['cards'][$column->columnType] = array();
             }
 
-            if(($searchValue != '' and empty($laneData['cards'])) or ($laneData['id'] == 'story0' and $cardCount == 0)) continue;
+            if(($searchValue != '' and empty($laneData['cards'])) or ($laneData['id'] == 'story0' and $cardCount == 0 and count($lanes) > 1)) continue;
             $kanbanGroup[$groupBy]['id']              = $groupBy . $laneID;
             $kanbanGroup[$groupBy]['columns']         = array_values($columnData);
             $kanbanGroup[$groupBy]['lanes'][]         = $laneData;
