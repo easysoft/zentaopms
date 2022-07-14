@@ -7,7 +7,8 @@ $(function()
     var colors     = ['#33B4DB', '#7ECF69', '#FFC73A', '#FF5A61', '#50C8D0', '#AF5AFF', '#4EA3FF', '#FF8C5A', '#6C73FF'];
     //var background = ['#E1F4FA', '#ECF8E9', '#FFF7E2', '#FFE7E8', '#E5F7F8', '#F3E7FF', '#E5F1FF', '#FFEEE7', '#E9EAFF'];
 
-    if(Object.keys(chartData).length)
+    var chartDom = document.getElementById('cfdChart');
+    if(Object.keys(chartData).length && chartDom)
     {
         $.each(chartData['line'], function(label, set)
         {
@@ -35,8 +36,7 @@ $(function()
             i ++;
         })
 
-        var chartDom = document.getElementById('cfdChart');
-        var CFD      = echarts.init(chartDom);
+        var CFD = echarts.init(chartDom);
         var option;
 
         option = {
