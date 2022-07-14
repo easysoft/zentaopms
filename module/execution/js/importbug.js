@@ -7,12 +7,21 @@ $(function()
 });
 
 /**
- * Go back.
+ * goback
  *
+ * @param  int $executionID
  * @access public
  * @return void
  */
-function goback()
+function goback(executionID)
 {
-    parent.location.reload();
+    var link = createLink('execution', 'ajaxGetExecutionKanban', "executionID=" + executionID);
+    $.get(link, function(data)
+    {
+        if(data)
+        {
+            kanbanData = $.parseJSON(data);
+            parent.updateKanban(kanbanData);
+        }
+    });
 }
