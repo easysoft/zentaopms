@@ -719,7 +719,6 @@ class taskModel extends model
                     $task->assignedTo   = $childTask->assignedTo;
                     $task->assignedDate = $now;
                 }
-
                 $task->finishedBy   = '';
                 $task->finishedDate = '';
                 $task->closedBy     = '';
@@ -749,6 +748,7 @@ class taskModel extends model
                 if($status == 'doing' and $parentTask->status == 'wait')    $action = 'Started';
                 if($status == 'doing' and $parentTask->status == 'pause')   $action = 'Restarted';
                 if($status == 'doing' and $parentTask->status != 'wait' and $parentTask->status != 'pause') $action = 'Activated';
+                if($status == 'wait' and $parentTask->status != 'wait')     $action = 'Adjusttasktowait';
                 if($action)
                 {
                     $actionID = $this->loadModel('action')->create('task', $parentID, $action, '', '', '', false);
@@ -833,7 +833,8 @@ class taskModel extends model
                 $currentTask->consumed += (float)$member->consumed;
                 $currentTask->left     += (float)$member->left;
             }
-            if(empty($oldTask->team) and isset($oldTask->consumed)) $currentTask->consumed += (float)$oldTask->consumed;
+
+            if($this->app->rawMethod == 'edit' and empty($oldTask->team) and isset($oldTask->consumed)) $currentTask->consumed += (float)$oldTask->consumed;
 
             if(!empty($task))
             {
@@ -1236,7 +1237,7 @@ class taskModel extends model
                 return false;
             }
 
-            if(empty($task->closedReason))
+            if(empty($task->closedReason) and $task->status == 'closed')
             {
                 if($oldTask->status == 'done')   $task->closedReason = 'done';
                 if($oldTask->status == 'cancel') $task->closedReason = 'cancel';
@@ -2834,7 +2835,19 @@ class taskModel extends model
         $data->consumed = $consumed;
         $data->left     = $left;
         $data->status   = ($left == 0 && $consumed != 0) ? 'done' : $task->status;
-
+        if($left == 0 and $consumed != 0)
+        {
+            $data->status = 'done';
+        }
+        elseif($consumed == 0)
+        {
+            $data->status = 'wait';
+            $data->left   = $task->left + $estimate->consumed;
+        }
+        else
+        {
+            $data->status = $task->status;
+        }
         if(!empty($task->team))
         {
             $oldConsumed = $task->team[$estimate->account]->consumed;
@@ -3732,6 +3745,64 @@ class taskModel extends model
             ->andWhere('action')->eq('finished')
             ->andWhere('date')->ge($task->activatedDate)
             ->fetchPairs('actor');
+    }
+
+    /**
+     * Build nested list.
+     *
+     * @param  objecct $execution
+     * @param  object  $task
+     * @param  bool    $isChild
+     * @param  bool    $showmore
+     * @access public
+     * @return string
+     */
+    public function buildNestedList($execution, $task, $isChild = false, $showmore = false, $users)
+    {
+        $showmore = $showmore ? 'showmore' : '';
+        $trAttrs  = "data-id=$task->id";
+        if(!$isChild)
+        {
+            $path     = $execution->grade == 2 ? "$execution->parent,$execution->id,$task->id," : ",$execution->id,$task->id,";
+            $trAttrs .= " data-parent=$execution->id data-nest-parent=$execution->id data-nest-path=$path";
+            if(empty($task->children)) $trAttrs .= " data-nested='false'";
+            $trClass  = empty($task->children) ? '' : " has-nest-child";
+        }
+        else
+        {
+            $path     = $execution->grade == 2 ? "$execution->parent,$execution->id,$task->parent,$task->id," : ",$execution->id,$task->parent,$task->id,";
+            $trClass  = 'is-nest-child no-nest';
+            $trAttrs .= " data-nested='false' data-parent=$task->parent data-nest-parent=$task->parent data-nest-path=$path";
+        }
+
+        $list  = "<tr $trAttrs class='$trClass $showmore'>";
+        $list .= '<td>';
+        if($task->parent > 0) $list .= '<span class="label label-badge label-light" title="' . $this->lang->task->children . '">' . $this->lang->task->childrenAB . '</span> ';
+        $list .= html::a(helper::createLink('task', 'view', "id=$task->id"), $task->name, '', "data-app='project'");
+        $list .= '</td>';
+        $list .= '<td>' . zget($users, $task->assignedTo, '') . '</td>';
+        $list .= "<td class='status-{$task->status}'>" . $this->processStatus('task', $task) . '</td>';
+        $list .= '<td></td>';
+        $list .= '<td>' . $task->estStarted . '</td>';
+        $list .= '<td>' . $task->deadline . '</td>';
+        $list .= '<td>' . $task->estimate . $this->lang->execution->workHourUnit . '</td>';
+        $list .= '<td>' . $task->consumed . $this->lang->execution->workHourUnit . '</td>';
+        $list .= '<td>' . $task->left . $this->lang->execution->workHourUnit . '</td>';
+        $list .= '<td></td>';
+        $list .= '<td class="c-actions">';
+        $list .= $this->buildOperateMenu($task, 'browse');
+        $list .= '</td></tr>';
+
+        if(!empty($task->children))
+        {
+            foreach($task->children as $child)
+            {
+                $showmore = (count($task->children) == 50) && ($child == end($task->children));
+                $list .= $this->buildNestedList($execution, $child, true, $showmore, $users);
+            }
+        }
+
+        return $list;
     }
 
     /**

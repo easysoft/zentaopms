@@ -27,6 +27,7 @@
 <?php js::set('productName', $lang->product->name);?>
 <?php js::set('manageProducts', $lang->project->manageProducts);?>
 <?php $requiredFields = $config->project->create->requiredFields;?>
+<?php js::set('requiredFields', $requiredFields);?>
 <div id='mainContent' class='main-content'>
   <div class='center-block'>
     <div class='main-header'>
@@ -77,7 +78,7 @@
             </div>
           </td>
           <td>
-            <div class='checkbox-primary c-future'>
+            <div class="checkbox-primary c-future <?php echo strpos($requiredFields, 'budget') !== false ? 'hidden' : '';?>">
               <input type='checkbox' id='future' name='future' value='1' />
               <label for='future'><?php echo $lang->project->future;?></label>
             </div>
@@ -109,15 +110,17 @@
             <div class='row'>
               <?php $i = 0;?>
               <?php foreach($products as $product):?>
+              <?php foreach($product->branches as $branch):?>
               <div class="col-sm-4" style="margin-bottom: 10px; padding-right: 6px;">
                 <?php $hasBranch = $product->type != 'normal' and isset($branchGroups[$product->id]);?>
                 <div class="input-group<?php if($hasBranch) echo ' has-branch';?>">
                   <?php echo html::select("products[$i]", $allProducts, $product->id, "class='form-control chosen' onchange='loadBranches(this)' data-last='" . $product->id . "'");?>
                   <span class='input-group-addon fix-border'></span>
-                  <?php if($hasBranch) echo html::select("branch[$i]", $branchGroups[$product->id], key($product->branches), "class='form-control chosen' onchange=\"loadPlans('#products{$i}', this.value)\"");?>
+                  <?php if($hasBranch) echo html::select("branch[$i]", $branchGroups[$product->id], $branch, "class='form-control chosen' onchange=\"loadPlans('#products{$i}', this.value)\"");?>
                 </div>
               </div>
               <?php $i++;?>
+              <?php endforeach;?>
               <?php endforeach;?>
               <div class='col-sm-4 <?php if($programID) echo 'required';?>' style="padding-right: 6px;">
                 <div class='input-group'>
@@ -146,12 +149,15 @@
               <?php if($copyProjectID):?>
               <?php $i = 0;?>
               <?php foreach($products as $product):?>
-              <?php $plans = zget($productPlans, $product->id, array(0 => ''));?>
-              <div class="col-sm-4" id="plan<?php echo $i;?>"><?php echo html::select("plans[" . $product->id . "]", $plans, '', "class='form-control chosen' multiple");?></div>
+              <?php $productPlan = zget($productPlans, $product->id, array(0 => ''));?>
+              <?php foreach($product->branches as $branch):?>
+              <?php $plans = zget($productPlan, $branch, array(0 => ''));?>
+              <div class="col-sm-4" id="plan<?php echo $i;?>"><?php echo html::select('plans[' . $product->id . '][' . $branch . '][]', $plans, '', "class='form-control chosen' multiple");?></div>
               <?php $i++;?>
               <?php endforeach;?>
+              <?php endforeach;?>
               <?php else:?>
-              <div class="col-sm-4" id="plan0" style="padding-right: 6px;"><?php echo html::select("plans[][]", '', '', "class='form-control chosen' multiple");?></div>
+              <div class="col-sm-4" id="plan0" style="padding-right: 6px;"><?php echo html::select("plans[][][]", '', '', "class='form-control chosen' multiple");?></div>
               <?php endif;?>
             </div>
           </td>

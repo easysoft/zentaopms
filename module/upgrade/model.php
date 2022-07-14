@@ -692,6 +692,9 @@ class upgradeModel extends model
             case 'max3_0':
                 $this->moveResult2Node();
                 break;
+            case 'max3_3':
+                $this->addReviewIssusApprovalData();
+                break;
         }
     }
 
@@ -969,6 +972,8 @@ class upgradeModel extends model
                 $confirmContent .= file_get_contents($this->getUpgradeFile('17.1'));
                 $xuanxuanSql     = $this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan5.6.sql';
                 $confirmContent .= file_get_contents($xuanxuanSql);
+            case '17_2':
+                $confirmContent .= file_get_contents($this->getUpgradeFile('17.2'));
         }
 
         return $confirmContent;
@@ -6507,6 +6512,46 @@ class upgradeModel extends model
         }
 
         return true;
+    }
+
+    /*
+     * Add review issue approval data.
+     *
+     * @access public
+     * @return bool
+     */
+    public function addReviewIssusApprovalData()
+    {
+        $reviewIssues = $this->dao->select('id,review,type')->from(TABLE_REVIEWISSUE)
+            ->where('type')->eq('review')
+            ->andWhere('approval')->eq(0)
+            ->andWhere('deleted')->eq('0')
+            ->fetchAll('review');
+
+        if(empty($reviewIssues)) return false;
+
+        $reviewIds = array_unique(array_column($reviewIssues, 'review'));
+
+        $approvalsPairs = $this->dao->select('objectID, max(id) as approval')->from(TABLE_APPROVAL)
+            ->where('objectID')->in($reviewIds)
+            ->andWhere('objectType')->eq('review')
+            ->andWhere('result')->eq('fail')
+            ->andWhere('deleted')->eq(0)
+            ->groupBy('objectID')
+            ->fetchAll('objectID');
+
+        /* Add approval data. */
+        foreach($reviewIssues as $reviewIssue)
+        {
+            if(!isset($approvalsPairs[$reviewIssue->review]->approval)) continue;
+            $this->dao->update(TABLE_REVIEWISSUE)
+                ->set('approval')->eq($approvalsPairs[$reviewIssue->review]->approval)
+                ->where('review')->eq($reviewIssue->review)
+                ->andWhere('type')->eq('review')
+                ->andWhere('approval')->eq(0)
+                ->andWhere('deleted')->eq('0')
+                ->exec();
+        }
     }
 
     /**

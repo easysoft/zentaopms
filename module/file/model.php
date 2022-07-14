@@ -1046,4 +1046,23 @@ class fileModel extends model
             ->andWhere('deleted')->eq('0')
             ->fetchPairs();
     }
+
+    /**
+     * Update test case version.
+     *
+     * @param  object $file
+     * @access public
+     * @return void
+     */
+    public function updateTestcaseVersion($file)
+    {
+        $oldCase   = $this->loadModel('testcase')->getByID($file->objectID);
+        $isLibCase = ($oldCase->lib and empty($oldCase->product));
+        if($isLibCase)
+        {
+            $fromcaseVersion  = $this->dao->select('fromCaseVersion')->from(TABLE_CASE)->where('fromCaseID')->eq($file->objectID)->fetch('fromCaseVersion');
+            $fromcaseVersion += 1;
+            $this->dao->update(TABLE_CASE)->set('`fromCaseVersion`')->eq($fromcaseVersion)->where('`fromCaseID`')->eq($file->objectID)->exec();
+        }
+    }
 }

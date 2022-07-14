@@ -3260,22 +3260,23 @@ class execution extends control
                 return $this->send($response);
             }
 
-            $execution     = $this->execution->getByID($executionID);
-            $execLaneType  = $this->session->execLaneType ? $this->session->execLaneType : 'all';
-            $execGroupBy   = $this->session->execGroupBy ? $this->session->execGroupBy : 'default';
-            $rdSearchValue = $this->session->rdSearchValue ? $this->session->rdSearchValue : '';
+            $execution    = $this->execution->getByID($executionID);
+            $execLaneType = $this->session->execLaneType ? $this->session->execLaneType : 'all';
+            $execGroupBy  = $this->session->execGroupBy ? $this->session->execGroupBy : 'default';
             if($this->app->tab == 'execution' and $execution->type == 'kanban')
             {
-                $kanbanData = $this->loadModel('kanban')->getRDKanban($executionID, $execLaneType, 'id_desc', 0, $execGroupBy, $rdSearchValue);
-                $kanbanData = json_encode($kanbanData);
+                $rdSearchValue = $this->session->rdSearchValue ? $this->session->rdSearchValue : '';
+                $kanbanData    = $this->loadModel('kanban')->getRDKanban($executionID, $execLaneType, 'id_desc', 0, $execGroupBy, $rdSearchValue);
+                $kanbanData    = json_encode($kanbanData);
                 return print(js::closeModal('parent', '', "parent.updateKanban($kanbanData)"));
             }
             elseif($from == 'taskkanban')
             {
-                $kanbanData = $this->loadModel('kanban')->getExecutionKanban($executionID, $execLaneType, $execGroupBy);
-                $kanbanType = $execLaneType == 'all' ? 'story' : key($kanbanData);
-                $kanbanData = $kanbanData[$kanbanType];
-                $kanbanData = json_encode($kanbanData);
+                $taskSearchValue = $this->session->taskSearchValue ? $this->session->taskSearchValue : '';
+                $kanbanData      = $this->loadModel('kanban')->getExecutionKanban($executionID, $execLaneType, $execGroupBy, $taskSearchValue);
+                $kanbanType      = $execLaneType == 'all' ? 'story' : key($kanbanData);
+                $kanbanData      = $kanbanData[$kanbanType];
+                $kanbanData      = json_encode($kanbanData);
                 return print(js::closeModal('parent', '', "parent.updateKanban(\"story\", $kanbanData)"));
             }
 
@@ -3668,18 +3669,6 @@ class execution extends control
         $from = $this->app->tab;
         if($from == 'execution') $this->session->set('executionList', $this->app->getURI(true), 'execution');
 
-        if($from == 'project')
-        {
-            $projects  = $this->project->getPairsByProgram();
-            $projectID = $this->project->saveState($projectID, $projects);
-            $project   = $this->loadModel('project')->getByID($projectID);
-            $this->view->project = $project;
-            $this->project->setMenu($projectID);
-
-            if(!$projectID) return print(js::locate($this->createLink('project', 'browse')));
-            if(!empty($project->model) and $project->model == 'kanban' and !(defined('RUN_MODE') and RUN_MODE == 'api')) return print(js::locate($this->createLink('project', 'index', "projectID=$projectID")));
-        }
-
         if($this->app->viewType == 'mhtml')
         {
             if($this->app->rawModule == 'project' and $this->app->rawMethod == 'execution')
@@ -3713,11 +3702,8 @@ class execution extends control
         $parents = array();
         if($parentIdList) $parents = $this->execution->getByIdList($parentIdList);
 
-        $allExecutionsNum = $this->dao->select('COUNT(id) AS count')->from(TABLE_PROJECT)
-            ->where('project')->eq($projectID)
-            ->andWhere('deleted')->eq(0)
-            ->fetch();
-        $this->view->allExecutionsNum = $allExecutionsNum;
+        $allExecutionsNum = $this->project->getStats($projectID, 'all');
+        $this->view->allExecutionsNum = count($allExecutionsNum);
 
         $this->view->executionStats = $executionStats;
         $this->view->productList    = $this->loadModel('product')->getProductPairsByProject($projectID);
@@ -3978,8 +3964,8 @@ class execution extends control
             $projectID   = $this->dao->findByID($executionID)->from(TABLE_EXECUTION)->fetch('project');
             $planStories = array_keys($planStory);
 
-            $this->execution->linkStory($executionID, $planStories, $planProducts, $extra);
             if($this->config->systemMode == 'new' and $executionID != $projectID) $this->execution->linkStory($projectID, $planStories, $planProducts);
+            $this->execution->linkStory($executionID, $planStories, $planProducts, $extra);
         }
 
         $moduleName = 'execution';

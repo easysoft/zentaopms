@@ -280,9 +280,14 @@ class file extends control
             $file = $this->file->getById($fileID);
             $this->dao->delete()->from(TABLE_FILE)->where('id')->eq($fileID)->exec();
             $this->loadModel('action')->create($file->objectType, $file->objectID, 'deletedFile', '', $extra=$file->title);
+
             /* Fix Bug #1518. */
             $fileRecord = $this->dao->select('id')->from(TABLE_FILE)->where('pathname')->eq($file->pathname)->fetch();
             if(empty($fileRecord)) @unlink($file->realPath);
+
+            /* Update test case version for test case synchronization. */
+            if($file->objectType == 'testcase') $this->file->updateTestcaseVersion($file);
+
             return print(js::reload('parent'));
         }
     }
@@ -331,8 +336,11 @@ class file extends control
 
             $extension = "." . $file->extension;
             $actionID  = $this->loadModel('action')->create($file->objectType, $file->objectID, 'editfile', '', $fileName);
-            $changes[] = array('field' => 'fileName', 'old' => $file->title . $extension, 'new' => $fileName);
+            $changes[] = array('field' => 'fileName', 'old' => $file->title, 'new' => $fileName);
             $this->action->logHistory($actionID, $changes);
+
+            /* Update test case version for test case synchronization. */
+            if($file->objectType == 'testcase' and $file->title != $fileName) $this->file->updateTestcaseVersion($file);
 
             return print(js::reload('parent.parent'));
         }

@@ -148,7 +148,7 @@ js::set('priv',
   <div class='btn-toolbar pull-right'>
     <div class="input-group" id="rdKanbanSearch">
       <div class="input-control search-box" id="rdSearchBox">
-        <input type="text" name="rdKanbanSearchInput" id="rdKanbanSearchInput" value="" class="form-control" oninput="searchCards(this.value)" placeholder="<?php echo $lang->execution->pleaseInput?>">
+        <input type="text" name="rdKanbanSearchInput" id="rdKanbanSearchInput" value="" class="form-control" oninput="searchCards(this.value)" placeholder="<?php echo $lang->execution->pleaseInput?>" autocomplete="off">
       </div>
     </div>
     <?php
