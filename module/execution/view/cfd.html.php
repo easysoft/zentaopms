@@ -21,6 +21,7 @@
 <?php js::set('XUnit', $lang->execution->burnXUnit); ?>
 <?php js::set('dateRangeTip', $lang->execution->charts->cfd->dateRangeTip); ?>
 <?php js::set('today', date(DT_DATE1)); ?>
+<?php js::set('executionBegin', $execution->begin); ?>
 <div id='mainMenu' class='clearfix'>
   <div class='btn-toolbar pull-left'>
     <?php
@@ -32,7 +33,7 @@
     $weekend = $withWeekend == 'true' ? 'noweekend' : 'withweekend';
     echo html::a('#', $lang->execution->$weekend, '', "class='btn btn-link' id='weekend'");
     ?>
-    <div class='input-control w-100px'>
+    <div class='input-control w-140px'>
       <?php echo html::select('type', $lang->execution->cfdTypeList, $type, "class='form-control chosen'");?>
     </div>
     <div id="cfdDateSelect">

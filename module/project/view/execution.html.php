@@ -39,7 +39,7 @@
   <div class="table-empty-tip">
     <p>
       <span class="text-muted"><?php echo $lang->execution->noExecution;?></span>
-      <?php if(empty($allExecutionNum)):?>
+      <?php if($allExecutionNum):?>
         <?php if(common::hasPriv('programplan', 'create') and $isStage):?>
         <?php echo html::a($this->createLink('programplan', 'create', "projectID=$projectID&productID=$productID"), "<i class='icon icon-plus'></i> " . $lang->programplan->create, '', "class='btn btn-info'");?>
         <?php else: ?>

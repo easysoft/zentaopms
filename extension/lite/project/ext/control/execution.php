@@ -22,7 +22,7 @@ class project extends control
         }
 
         $allExecution = $this->execution->getList($projectID, 'all', 'all');
-        $this->view->allExecutionsNum = count($allExecution);
+        $this->view->allExecutionsNum = empty($allExecution);
 
         $this->view->title            = $this->lang->project->kanban;
 

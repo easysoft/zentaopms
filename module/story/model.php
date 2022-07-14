@@ -1692,7 +1692,7 @@ class storyModel extends model
             }
             else
             {
-                return print(js::error('story#' . $storyID . dao::getError(true)));
+                helper::end(js::error('story#' . $storyID . dao::getError(true)));
             }
             if(!dao::isError()) $this->loadModel('score')->create('story', 'close', $storyID);
         }

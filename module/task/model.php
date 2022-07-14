@@ -2842,7 +2842,7 @@ class taskModel extends model
         elseif($consumed == 0)
         {
             $data->status = 'wait';
-            $data->left   = $task->left + $estimate->consumed;
+            $data->left   = $task->estimate;
         }
         else
         {

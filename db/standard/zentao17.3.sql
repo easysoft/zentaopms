@@ -217,7 +217,8 @@ CREATE TABLE `zt_approvalnode` (
   `extra` mediumtext NOT NULL,
   `reviewedBy` char(30) NOT NULL,
   `reviewedDate` datetime NOT NULL,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `idx_reviewed_date` (`reviewedDate`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 CREATE TABLE `zt_approvalobject` (
   `id` int(8) NOT NULL AUTO_INCREMENT,
