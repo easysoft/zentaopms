@@ -4340,7 +4340,7 @@ class executionModel extends model
             $spanClass = $execution->type == 'stage' ? 'label-warning' : 'label-info';
             echo "<span class='project-type-label label label-outline $spanClass'>{$this->lang->execution->typeList[$execution->type]}</span> ";
         }
-        echo html::a(helper::createLink('execution', 'view', "executionID=$execution->id"), $execution->name);
+        echo empty($execution->children) ? html::a(helper::createLink('execution', 'view', "executionID=$execution->id"), $execution->name) : $execution->name;
         echo '<td>' . zget($users, $execution->PM) . '</td>';
         echo "<td class='status-{$execution->status}'>" . zget($this->lang->project->statusList, $execution->status) . '</td>';
         echo '<td>' . html::ring($execution->hours->progress) . '</td>';
