@@ -117,13 +117,13 @@ class port extends control
         }
 
         /* Get import fields */
-        $fields = $this->config->task->templateFields;
+        $fields = $this->config->$model->templateFields;
 
         /* Get file datas */
-        $datas = $this->getDatasByFile();
+        $datas = $this->port->getDatasByFile();
 
         /* Get page datas */
-        $datas = $this->getPageDatas($datas, $pagerID, $maxImport);
+        $datas = $this->port->getPageDatas($datas, $pagerID, $maxImport);
 
         /* Check suhosin setting */
         $this->checkSuhosinInfo($datas);
@@ -155,38 +155,6 @@ class port extends control
     }
 
     /**
-     * getPageDatas
-     *
-     * @access public
-     * @return void
-     */
-    public function getPageDatas($datas, $pagerID = 1, $maxImport = 0)
-    {
-        $allCount = count($datas);
-        $allPager = 1;
-        if($allCount > $this->config->file->maxImport)
-        {
-            if(empty($maxImport))
-            {
-                $this->view->allCount  = $allCount;
-                $this->view->maxImport = $maxImport;
-                return $datas;
-            }
-
-            $allPager = ceil($allCount / $maxImport);
-            $datas    = array_slice($datas, ($pagerID - 1) * $maxImport, $maxImport, true);
-        }
-
-        $this->view->allCount  = $allCount;
-        $this->view->maxImport = $maxImport;
-        $this->view->pagerID   = $pagerID;
-        $this->view->allPager  = $allPager;
-        $this->view->isEndPage = $pagerID >= $allPager;
-
-        return $datas;
-    }
-
-    /**
      * getWorkFlowFields
      *
      * @access public
@@ -205,21 +173,5 @@ class port extends control
         }
     }
 
-    /**
-     * getDatasByFile
-     *
-     * @access public
-     * @return void
-     */
-    public function getDatasByFile()
-    {
-        $tmpFile = $this->loadModel('port')->initTmpFile();
-        if(!empty($tmpFile['message']))
-        {
-            echo js::alert($tmpFile['message']);
-            die(js::locate('back', 'parent'));
-        }
 
-        if(file_exists($tmpFile)) return  unserialize(file_get_contents($tmpFile));
-    }
 }

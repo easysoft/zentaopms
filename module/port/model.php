@@ -107,10 +107,34 @@ class portModel extends model
         }
 
         a($objectData);
-
         die;
+    }
+
+    /**
+     * initPostFields
+     *
+     * @access public
+     * @return void
+     */
+    public function initPostFields()
+    {
+        $datas = fixer::input('post')->get();
+        $objectData = array();
+        foreach ($datas as $field => $data)
+        {
+            if(is_array($data))
+            {
+                foreach($data as $key => $value) $objectData[$key][$field] = $value;
+            }
+        }
+        return $objectData;
+    }
 
 
+    public function getCompleteByConfig($model, $datas)
+    {
+        $configInsFields = $this->config->$model->import->table['mainTable']['insertFields'];
+        a($configInsFields);
 
     }
 
@@ -605,13 +629,14 @@ class portModel extends model
         return $datas;
     }
 
+
     /**
      * initTmpFile
      *
      * @access public
      * @return void
      */
-    public function initTmpFile()
+    public function initTmpFile($created = true)
     {
         $taskLang = $this->lang->task;
         $file    = $this->session->fileImportFileName;
@@ -643,6 +668,196 @@ class portModel extends model
             unset($fields[$key]);
         }
 
+
+
+        //$objectDatas = $this->getNatureDatas($objectDatas);
+
+
+
+        if($created) $this->createTmpFile($tmpFile, $objectDatas);
+
+        return $objectDatas;
+    }
+
+    /**
+     * checkTmpFile
+     *
+     * @access public
+     * @return void
+     */
+    public function checkTmpFile()
+    {
+        $maxImport = isset($_COOKIE['maxImport']) ? $_COOKIE['maxImport'] : 0;
+        $file      = $this->session->fileImportFileName;
+        $tmpPath   = $this->loadModel('file')->getPathOfImportedFile();
+        $tmpFile   = $tmpPath . DS . md5(basename($file));
+        if(!empty($maxImport) and file_exists($tmpFile)) return $tmpFile;
+        return false;
+    }
+
+    /**
+     * checkRowsFromExcel
+     *
+     * @access public
+     * @return void
+     */
+    public function checkRowsFromExcel()
+    {
+        $rows = $this->file->getRowsFromExcel($this->session->fileImportFileName);
+        if(is_string($rows))
+        {
+            unlink($this->session->fileImportFileName);
+            unset($_SESSION['fileImportFileName']);
+            unset($_SESSION['fileImportExtension']);
+            echo js::alert($rows);
+            die(js::locate('back'));
+        }
+        return $rows;
+
+    }
+
+    /**
+     * createTmpFile
+     *
+     * @param  int    $path
+     * @param  int    $tmpFile
+     * @access public
+     * @return void
+     */
+    public function createTmpFile($objectDatas)
+    {
+        $file      = $this->session->fileImportFileName;
+        $tmpPath   = $this->loadModel('file')->getPathOfImportedFile();
+        $tmpFile   = $tmpPath . DS . md5(basename($file));
+
+        if(file_exists($tmpFile)) unlink($tmpFile);
+        file_put_contents($tmpFile, serialize($objectDatas));
+        $this->session->set('tmpFile', $tmpFile);
+    }
+
+    /**
+     * getNatureDatas
+     *
+     * @param  int    $datas
+     * @access public
+     * @return void
+     */
+    public function getNatureDatas($model, $datas)
+    {
+        $lang = $this->lang->$model;
+        foreach($datas as $key => $data)
+        {
+            foreach($data as $field => $cellValue)
+            {
+                if(is_array($cellValue)) continue;
+                if(strrpos($cellValue, '(#') === false)
+                {
+                    if(!isset($lang->{$field . 'List'}) or !is_array($lang->{$field . 'List'})) continue;
+
+                    /* When the cell value is key of list then eq the key. */
+                    $listKey = array_keys($lang->{$field . 'List'});
+                    unset($listKey[0]);
+                    unset($listKey['']);
+
+                    $fieldKey = array_search($cellValue, $lang->{$field . 'List'});
+                    if($fieldKey) $datas[$key]->$field = array_search($cellValue, $lang->{$field . 'List'});
+                }
+                else
+                {
+                    $id = trim(substr($cellValue, strrpos($cellValue,'(#') + 2), ')');
+                    $datas[$key]->$field = $id;
+                }
+            }
+
+        }
+        return $datas;
+    }
+
+    /**
+     * checkSuhosinInfo
+     *
+     * @access public
+     * @return void
+     */
+    public function checkSuhosinInfo($datas = array())
+    {
+        /* Judge whether the editedTasks is too large and set session. */
+        $countInputVars  = count($datas) * 11;
+        $showSuhosinInfo = common::judgeSuhosinSetting($countInputVars);
+        if($showSuhosinInfo) return extension_loaded('suhosin') ? sprintf($this->lang->suhosinInfo, $countInputVars) : sprintf($this->lang->maxVarsInfo, $countInputVars);
+        return '';
+    }
+
+    /**
+     * getDatasByFile
+     *
+     * @access public
+     * @return void
+     */
+    public function getDatasByFile($file)
+    {
+        if(file_exists($file)) return  unserialize(file_get_contents($file));
+    }
+
+    /**
+     * getPageDatas
+     *
+     * @access public
+     * @return void
+     */
+    public function getPageDatas($datas, $pagerID = 1, $maxImport = 0)
+    {
+        $result   = new stdClass();
+        $result->allCount = count($datas);
+        $result->allPager = 1;
+        $result->pagerID  = $pagerID;
+
+        if($result->allCount > $this->config->file->maxImport)
+        {
+            if(empty($maxImport))
+            {
+                $result->maxImport = $maxImport;
+                $result->datas     = $datas;
+                return $result;
+            }
+
+            $result->allPager = ceil($result->allCount / $maxImport);
+            $datas    = array_slice($datas, ($pagerID - 1) * $maxImport, $maxImport, true);
+        }
+
+        $result->maxImport = $maxImport;
+        $result->isEndPage = $pagerID >= $result->allPager;
+        $result->datas     = $datas;
+
+        if(empty($datas)) die(js::locate('back'));
+        return $result;
+    }
+
+    /**
+     * getImportFields
+     *
+     * @param  string $model
+     * @access public
+     * @return void
+     */
+    public function getImportFields($model = '')
+    {
+        $this->app->loadLang($model);
+        $modelLang = $this->lang->$model;
+        $fields = $this->config->$model->templateFields;
+        array_unshift($fields, 'id');
+        foreach($fields as $key => $fieldName)
+        {
+            $fieldName = trim($fieldName);
+            $fields[$fieldName] = isset($modelLang->$fieldName) ? $modelLang->$fieldName : $fieldName;
+            unset($fields[$key]);
+        }
+
+        return $fields;
+    }
+
+    public function processRows4Fields($rows = array(), $fields = array())
+    {
         $objectDatas = array();
 
         foreach($rows as $currentRow => $row)
@@ -680,56 +895,15 @@ class portModel extends model
             unset($tmpArray);
         }
 
-        $objectDatas = $this->getNatureDatas($objectDatas);
-        file_put_contents($tmpFile, serialize($objectDatas));
-
         if(empty($objectDatas))
         {
             unlink($this->session->fileImportFileName);
             unset($_SESSION['fileImportFileName']);
             unset($_SESSION['fileImportExtension']);
-            $response['result']  = 'fail';
-            $response['message'] = $this->lang->excel->noData;
-            return $response;
+            echo js::alert($this->lang->excel->noData);
+            die(js::locate('back'));
         }
 
-        return $tmpFile;
-    }
-
-    /**
-     * getNatureDatas
-     *
-     * @param  int    $datas
-     * @access public
-     * @return void
-     */
-    public function getNatureDatas($datas)
-    {
-        $taskLang = $this->lang->task;
-        foreach($datas as $key => $data)
-        {
-            foreach($data as $field => $cellValue)
-            {
-                if(strrpos($cellValue, '(#') === false)
-                {
-                    if(!isset($taskLang->{$field . 'List'}) or !is_array($taskLang->{$field . 'List'})) continue;
-
-                    /* When the cell value is key of list then eq the key. */
-                    $listKey = array_keys($taskLang->{$field . 'List'});
-                    unset($listKey[0]);
-                    unset($listKey['']);
-
-                    $fieldKey = array_search($cellValue, $taskLang->{$field . 'List'});
-                    if($fieldKey) $datas[$key]->$field = array_search($cellValue, $taskLang->{$field . 'List'});
-                }
-                else
-                {
-                    $id = trim(substr($cellValue, strrpos($cellValue,'(#') + 2), ')');
-                    $datas[$key]->$field = $id;
-                }
-            }
-
-        }
-        return $datas;
+        return $objectDatas;
     }
 }
