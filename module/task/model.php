@@ -116,8 +116,8 @@ class taskModel extends model
             $task = $this->loadModel('file')->processImgURL($task, $this->config->task->editor->create['id'], $this->post->uid);
 
             /* Fix Bug #1525 */
-            $executionType = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($executionID)->fetch('type');
-            if($executionType == 'ops')
+            $executionLifetime = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($executionID)->fetch('lifetime');
+            if($executionLifetime == 'ops')
             {
                 $requiredFields = str_replace(",story,", ',', "$requiredFields");
                 $task->story = 0;
@@ -381,9 +381,9 @@ class taskModel extends model
         }
 
         /* Fix bug #1525*/
-        $executionType  = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($executionID)->fetch('type');
+        $executionLifetime  = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($executionID)->fetch('lifetime');
         $requiredFields = ',' . $this->config->task->create->requiredFields . ',';
-        if($executionType == 'ops') $requiredFields = str_replace(',story,', ',', $requiredFields);
+        if($executionLifetime == 'ops') $requiredFields = str_replace(',story,', ',', $requiredFields);
         $requiredFields = trim($requiredFields, ',');
 
         /* check data. */
@@ -809,7 +809,7 @@ class taskModel extends model
                 }
                 else
                 {
-                    if($team[$oldTask->assignedTo]->left == 0 && $team[$oldTask->assignedTo]->consumed != 0)
+                    if($team[$oldTask->assignedTo]->left == 0 and $team[$oldTask->assignedTo]->consumed != 0 and $this->app->rawMethod != 'deleteestimate')
                     {
                         if($oldTask->assignedTo != $teams[count($teams) - 1])
                         {
@@ -1036,9 +1036,9 @@ class taskModel extends model
             $task->mode = '';
         }
 
-        $executionType  = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($task->execution)->fetch('type');
+        $executionLifetime  = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($task->execution)->fetch('lifetime');
         $requiredFields = "," . $this->config->task->edit->requiredFields . ",";
-        if($executionType == 'ops')
+        if($executionLifetime == 'ops')
         {
             $requiredFields = str_replace(",story,", ',', "$requiredFields");
             $task->story = 0;
@@ -3738,6 +3738,7 @@ class taskModel extends model
     public function getFinishedUsers($taskID = 0, $team = array())
     {
         $task = $this->getById($taskID);
+        if($task->activatedDate == '') $task->activatedDate = "0000-00-00";
         return $this->dao->select('actor')->from(TABLE_ACTION)
             ->where('objectType')->eq('task')
             ->andWhere('objectID')->eq($taskID)

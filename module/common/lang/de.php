@@ -463,6 +463,7 @@ if(!defined('DT_TIME2'))          define('DT_TIME2',     'H:i');
 if(!defined('LONG_TIME'))         define('LONG_TIME',    '2059-12-31');
 if(!defined('BRANCH_MAIN'))       define('BRANCH_MAIN', '0');
 if(!defined('DEFAULT_CARDCOUNT')) define('DEFAULT_CARDCOUNT', '2');
+if(!defined('MAX_CARDCOUNT'))     define('MAX_CARDCOUNT', '32767');
 
 /* Datepicker. */
 $lang->datepicker = new stdclass();

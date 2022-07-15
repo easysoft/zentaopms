@@ -2420,6 +2420,7 @@ EOD;
           ($module == 'sso' and $method == 'login') or
           ($module == 'report' && $method == 'annualdata') or
           ($module == 'misc' && $method == 'captcha') or
+          ($module == 'execution' and $method == 'printkanban') or
           ($module == 'traincourse' and $method == 'ajaxuploadlargefile') or
           ($module == 'traincourse' and $method == 'playvideo'))
         {

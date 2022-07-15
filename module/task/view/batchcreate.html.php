@@ -45,7 +45,7 @@ $colspan = count($visibleFields) + 3;
       <?php echo $lang->task->batchCreate;?>
       <?php endif;?>
     </h2>
-    <?php if($execution->type != 'ops'):?>
+    <?php if($execution->lifetime != 'ops'):?>
     <a class="checkbox-primary pull-left" id='zeroTaskStory' href='javascript:toggleZeroTaskStory();'>
       <label><?php echo $lang->story->zeroTask;?></label>
     </a>
@@ -67,7 +67,7 @@ $colspan = count($visibleFields) + 3;
           <tr>
             <th class='c-id'><?php echo $lang->idAB;?></th>
             <th class='c-module<?php echo zget($visibleFields, 'module', ' hidden') . zget($requiredFields, 'module', '', ' required');?> moduleBox'><?php echo $lang->task->module?></th>
-            <?php if($execution->type != 'ops'):?>
+            <?php if($execution->lifetime != 'ops'):?>
             <th class='c-story<?php echo zget($visibleFields, 'story', ' hidden') . zget($requiredFields, 'story', '', ' required');?> storyBox'><?php echo $lang->task->story;?></th>
             <?php endif;?>
             <th class='c-name required has-btn'><?php echo $lang->task->name;?></span></th>
@@ -99,7 +99,7 @@ $colspan = count($visibleFields) + 3;
           $lang->task->typeList['ditto'] = $lang->task->ditto;
           $members['ditto'] = $lang->task->ditto;
           $modules['ditto'] = $lang->task->ditto;
-          if($execution->type == 'ops') $colspan = $colspan - 1;
+          if($execution->lifetime == 'ops') $colspan = $colspan - 1;
           ?>
           <?php for($i = 1; $i <= $config->task->batchCreate; $i++):?>
           <?php
@@ -121,12 +121,12 @@ $colspan = count($visibleFields) + 3;
               <?php echo html::select("module[$i]", $modules, $moduleID, "class='form-control chosen' onchange='setStories(this.value, $execution->id)'")?>
               <?php echo html::hidden("parent[$i]", $parent);?>
             </td>
-            <?php if($execution->type != 'ops'):?>
+            <?php if($execution->lifetime != 'ops'):?>
             <td class="<?php echo zget($visibleFields, 'story', 'hidden');?> storyBox" style='overflow: visible'>
               <div class='input-group'>
                 <?php echo html::select("story[$i]", $stories, $currentStory, "class='form-control chosen' onchange='setStoryRelated($i)'");?>
                 <span class='input-group-btn'>
-                  <a id='preview<?php echo $i;?>' href='#' class='btn iframe btn-link btn-icon btn-copy' style='pointer-events:none' data-width='80%' disabled='disabled' title='<?php echo $lang->preview; ?>'><i class='icon-eye'></i></a>
+                  <a id='preview<?php echo $i;?>' href='#' class='btn iframe btn-link btn-icon btn-copy' style='pointer-events:none' data-width='95%' disabled='disabled' title='<?php echo $lang->preview; ?>'><i class='icon-eye'></i></a>
                   <a href='javascript:copyStoryTitle(<?php echo $i;?>)' class='btn btn-link btn-icon btn-copy' title='<?php echo $lang->task->copyStoryTitle; ?>'><i class='icon-arrow-right'></i></a>
                   <?php echo html::hidden("storyEstimate$i") . html::hidden("storyDesc$i") . html::hidden("storyPri$i");?>
                 </span>
@@ -266,7 +266,7 @@ $colspan = count($visibleFields) + 3;
         <?php echo html::select("module[$i]", $modules, $moduleID, "class='form-control chosen'")?>
         <?php echo html::hidden("parent[$i]", $parent);?>
       </td>
-      <?php if($execution->type != 'ops'):?>
+      <?php if($execution->lifetime != 'ops'):?>
       <td class="<?php echo zget($visibleFields, 'story', 'hidden');?> storyBox" style='overflow: visible'>
         <div class='input-group'>
           <?php echo html::select("story[$i]", $stories, $currentStory, "class='form-control chosen' onchange='setStoryRelated($i)'");?>
