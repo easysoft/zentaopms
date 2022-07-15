@@ -116,8 +116,8 @@ class taskModel extends model
             $task = $this->loadModel('file')->processImgURL($task, $this->config->task->editor->create['id'], $this->post->uid);
 
             /* Fix Bug #1525 */
-            $executionLifetime = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($executionID)->fetch('lifetime');
-            if($executionLifetime == 'ops')
+            $execution = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($executionID)->fetch();
+            if($execution->lifetime == 'ops' or $execution->attribute == 'request' or $execution->attribute == 'review')
             {
                 $requiredFields = str_replace(",story,", ',', "$requiredFields");
                 $task->story = 0;
@@ -381,9 +381,9 @@ class taskModel extends model
         }
 
         /* Fix bug #1525*/
-        $executionLifetime  = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($executionID)->fetch('lifetime');
+        $execution = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($executionID)->fetch();
         $requiredFields = ',' . $this->config->task->create->requiredFields . ',';
-        if($executionLifetime == 'ops') $requiredFields = str_replace(',story,', ',', $requiredFields);
+        if($execution->lifetime == 'ops' or $execution->attribute == 'request' or $execution->attribute == 'review') $requiredFields = str_replace(',story,', ',', $requiredFields);
         $requiredFields = trim($requiredFields, ',');
 
         /* check data. */
@@ -1036,9 +1036,9 @@ class taskModel extends model
             $task->mode = '';
         }
 
-        $executionLifetime  = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($task->execution)->fetch('lifetime');
+        $execution      = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($executionID)->fetch();
         $requiredFields = "," . $this->config->task->edit->requiredFields . ",";
-        if($executionLifetime == 'ops')
+        if($execution->lifetime == 'ops' or $execution->attribute == 'request' or $execution->attribute == 'review')
         {
             $requiredFields = str_replace(",story,", ',', "$requiredFields");
             $task->story = 0;

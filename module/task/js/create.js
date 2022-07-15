@@ -6,7 +6,7 @@ $(function()
 
         var fieldList    = showFields + ',';
         var requiredList = ',' + requiredFields + ',';
-        if(lifetime == 'ops')
+        if(lifetime == 'ops' || (typeof execAttribute != 'undefined' && (execAttribute == 'request' || execAttribute == 'review')))
         {
             $('#fieldsstory').parent('div').addClass('hidden');
         }
