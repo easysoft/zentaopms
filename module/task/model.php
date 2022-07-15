@@ -2514,7 +2514,7 @@ class taskModel extends model
             ->orWhere('t1.finishedList')->like("%,{$account},%")
             ->markRight(1)
             ->fi()
-            ->beginIF($this->app->rawModule == 'my' or $this->app->rawModule == 'block')->andWhere('(t2.status')->ne('suspended')->orWhere('t4.status')->ne('suspended')->markRight(1)->fi()
+            ->beginIF($type == 'assignedTo' and ($this->app->rawModule == 'my' or $this->app->rawModule == 'block'))->andWhere('t2.status', true)->ne('suspended')->orWhere('t4.status')->ne('suspended')->markRight(1)->fi()
             ->beginIF($type != 'all' and $type != 'finishedBy' and $type != 'assignedTo')->andWhere("t1.`$type`")->eq($account)->fi()
             ->beginIF($type == 'assignedTo')->andWhere("(t1.assignedTo = '{$account}' or (t1.mode = 'multi' and t5.`account` = '{$account}') )")->fi()
             ->orderBy($orderBy)
