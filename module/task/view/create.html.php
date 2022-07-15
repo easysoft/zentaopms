@@ -21,7 +21,7 @@
 <?php js::set('estimateNotEmpty', sprintf($lang->error->notempty, $lang->task->estimate))?>
 <?php js::set('lifetime', $execution->lifetime);?>
 <?php js::set('lifetimeList', $lifetimeList);?>
-<?php if(!empty($storyID)):?>
+<?php if(!empty($storyID) and !empty($stories[$storyID])):?>
 <style> .title-group.required > .required:after {right: 110px;}</style>
 <?php endif;?>
 <?php
