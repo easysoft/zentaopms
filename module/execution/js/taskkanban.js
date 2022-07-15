@@ -969,7 +969,7 @@ function createColumnCreateMenu(options)
     else
     {
         if(priv.canCreateTask) items.push({label: taskLang.create, url: $.createLink('task', 'create', 'executionID=' + executionID, '', true), className: 'iframe', attrs: {'data-width': '80%'}});
-        if(priv.canBatchCreateTask) items.push({label: taskLang.batchCreate, url: $.createLink('task', 'batchcreate', 'executionID=' + executionID, '', true), className: 'iframe', attrs: {'data-width': '80%'}});
+        if(priv.canBatchCreateTask) items.push({label: taskLang.batchCreate, url: $.createLink('task', 'batchcreate', 'executionID=' + executionID, '', true), className: 'iframe', attrs: {'data-width': '90%'}});
         if(priv.canImportBug) items.push({label: executionLang.importBug, url: $.createLink('execution', 'importBug', 'executionID=' + executionID, '', true), className: 'iframe', attrs: {'data-width': '90%'}});
     }
     return items;
