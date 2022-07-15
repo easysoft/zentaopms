@@ -727,6 +727,9 @@ class execution extends control
         }
         if($type == 'bymodule')
         {
+            $module    = $this->loadModel('tree')->getByID($param);
+            $productID = $module->root;
+
             $_COOKIE['storyModuleParam']  = $param;
             $_COOKIE['storyProductParam'] = 0;
             $_COOKIE['storyBranchParam']  = 0;
