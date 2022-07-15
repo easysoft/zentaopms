@@ -820,7 +820,7 @@ class execution extends control
         $actionURL    = $this->createLink('execution', 'story', "executionID=$executionID&orderBy=$orderBy&type=bySearch&queryID=myQueryID");
         $branchGroups = $this->loadModel('branch')->getByProducts(array_keys($products));
         $branchOption = array();
-        foreach($branchGroups as $productID => $branches)
+        foreach($branchGroups as $branches)
         {
             foreach($branches as $branchID => $name)
             {
