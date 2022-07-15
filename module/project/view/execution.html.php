@@ -54,7 +54,7 @@
   <?php $canBatchEdit = common::hasPriv('execution', 'batchEdit'); ?>
   <form class='main-table' id='executionForm' method='post' data-ride='table' data-nested='true' data-expand-nest-child='false' data-checkable='false' data-enable-empty-nested-row='true' data-replace-id='executionTableList' data-preserve-nested='true'>
     <table class="table table-from table-fixed table-nested" id="executionList">
-      <?php $vars = "status=$status&orderBy=%s";?>	
+      <?php $vars = "status=$status&orderBy=%s";?>
       <thead>
         <tr>
           <th class='table-nest-title'>
@@ -70,7 +70,7 @@
           <th class='c-hours'><?php echo $lang->task->consumedAB;?></th>
           <th class='c-hours'><?php echo $lang->task->leftAB;?> </th>
           <th class='c-progress'><?php echo $lang->execution->burn;?> </th>
-          <th class='text-center c-actions-6'><?php echo $lang->actions;?></th> 
+          <th class='text-center c-actions-6'><?php echo $lang->actions;?></th>
         </tr>
       </thead>
       <tbody id="executionTableList">
