@@ -51,6 +51,12 @@ adjustMenuWidth();
 if(window.navigator.userAgent.indexOf('xuanxuan') > 0)
 {
     $('li.user-tutorial').addClass('hide');
+
+    /* Fix double header covering #main. */
+    $('document').ready(function()
+    {
+        $('#subHeader').parent().parent().children('#main').css('top', '100px');
+    });
 }
 </script>
 <main id='main' <?php if(!empty($config->sso->redirect)) echo "class='ranzhiFixedTfootAction'";?> >
