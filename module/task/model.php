@@ -116,7 +116,7 @@ class taskModel extends model
             $task = $this->loadModel('file')->processImgURL($task, $this->config->task->editor->create['id'], $this->post->uid);
 
             /* Fix Bug #1525 */
-            $execution = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($executionID)->fetch();
+            $execution = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($task->execution)->fetch();
             if($execution->lifetime == 'ops' or $execution->attribute == 'request' or $execution->attribute == 'review')
             {
                 $requiredFields = str_replace(",story,", ',', "$requiredFields");
@@ -1036,7 +1036,7 @@ class taskModel extends model
             $task->mode = '';
         }
 
-        $execution      = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($executionID)->fetch();
+        $execution      = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($task->execution)->fetch();
         $requiredFields = "," . $this->config->task->edit->requiredFields . ",";
         if($execution->lifetime == 'ops' or $execution->attribute == 'request' or $execution->attribute == 'review')
         {
