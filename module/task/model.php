@@ -809,7 +809,7 @@ class taskModel extends model
                 }
                 else
                 {
-                    if($team[$oldTask->assignedTo]->left == 0 && $team[$oldTask->assignedTo]->consumed != 0)
+                    if($team[$oldTask->assignedTo]->left == 0 and $team[$oldTask->assignedTo]->consumed != 0 and $this->app->rawMethod != 'deleteestimate')
                     {
                         if($oldTask->assignedTo != $teams[count($teams) - 1])
                         {
@@ -3738,6 +3738,7 @@ class taskModel extends model
     public function getFinishedUsers($taskID = 0, $team = array())
     {
         $task = $this->getById($taskID);
+        if($task->activatedDate == '') $task->activatedDate = "0000-00-00";
         return $this->dao->select('actor')->from(TABLE_ACTION)
             ->where('objectType')->eq('task')
             ->andWhere('objectID')->eq($taskID)
