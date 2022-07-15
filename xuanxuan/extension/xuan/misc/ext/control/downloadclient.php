@@ -102,6 +102,7 @@ class myMisc extends misc
 
         if($action == 'downloadPackage')
         {
+            ini_set('memory_limit', '512M');
             $account   = $this->app->user->account;
             $clientDir = $this->app->wwwRoot . 'data/client/' . "$account/";
 
