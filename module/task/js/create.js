@@ -22,6 +22,10 @@ $(function()
         saveCustomFields('createFields');
         return false;
     });
+
+    var executionID = $('#execution').val();
+    loadStories(executionID);
+
 })
 
 /**
