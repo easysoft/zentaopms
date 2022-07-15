@@ -639,6 +639,10 @@ class projectModel extends model
             {
                 $link = helper::createLink($module, $method, "projectID=%s");
             }
+            elseif($module == 'programplan')
+            {
+                $link = helper::createLink('project', 'execution', "type=all&projectID=%s");
+            }
         }
 
         return $link;

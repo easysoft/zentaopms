@@ -1804,6 +1804,8 @@ class taskModel extends model
             $data->assignedDate = $now;
             $data->finishedBy   = $this->app->user->account;
             $data->finishedDate = $now;
+
+            $this->action->create('task', $taskID, 'Finished');
         }
         elseif($task->status == 'wait')
         {
