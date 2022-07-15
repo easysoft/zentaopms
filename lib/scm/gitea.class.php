@@ -551,7 +551,7 @@ class gitea
 
         foreach($list as $commit)
         {
-            if(!is_object($commit->commit)) continue;
+            if(!isset($commit->commit) or !is_object($commit->commit)) continue;
 
             $log = new stdclass;
             $log->committer = $commit->commit->author->name;
@@ -615,6 +615,44 @@ class gitea
     }
 
     /**
+     * Get diff files by reviesion.
+     *
+     * @param  int    $reviesion
+     * @access public
+     * @return array
+     */
+    public function getDiffFiles($revision)
+    {
+        $diffApi = "{$this->root}git/commits/$revision.patch?token={$this->token}";
+        $diffs   = commonModel::http($diffApi);
+
+        $newFiles = array();
+        $delFiles = array();
+
+        if(!empty($diffs))
+        {
+            $diffs = explode("\n", $diffs);
+            foreach($diffs as $row)
+            {
+                preg_match('/^(\s)(create|delete)\smode\s\d+\s(.+)$/', $row, $matches);
+                if(count($matches) == 4 and !in_array($matches[3], $newFiles) and !in_array($matches[3], $delFiles))
+                {
+                    if($matches[2] == 'create')
+                    {
+                        $newFiles[] = $matches[3];
+                    }
+                    elseif($matches[2] == 'delete')
+                    {
+                        $delFiles[] = $matches[3];
+                    }
+                }
+            }
+        }
+
+        return array('newFiles' => $newFiles, 'delFiles' => $delFiles);
+    }
+
+    /**
      * Get files by commit.
      *
      * @param  string    $commit
@@ -628,30 +666,8 @@ class gitea
         $results = $this->fetch($api);
         if(empty($results)) return array();
 
-        $diffApi = "{$this->root}git/commits/$revision.patch?token={$this->token}";
-        $diffs = commonModel::http($diffApi);
-        if(empty($diffs)) return array();
-
-        $diffs    = explode("\n", $diffs);
-        $newFiles = array();
-        $delFiles = array();
-        foreach($diffs as $row)
-        {
-            preg_match('/^(\s)(create|delete)\smode\s\d+\s(.+)$/', $row, $matches);
-            if(count($matches) == 4 and !in_array($matches[3], $newFiles) and !in_array($matches[3], $delFiles))
-            {
-                if($matches[2] == 'create')
-                {
-                    $newFiles[] = $matches[3];
-                }
-                elseif($matches[2] == 'delete')
-                {
-                    $delFiles[] = $matches[3];
-                }
-            }
-        }
-
-        $files = array();
+        $diffFiles = $this->getDiffFiles($revision);
+        $files     = array();
         foreach($results->files as $row)
         {
             $file  = new stdclass();
@@ -659,11 +675,11 @@ class gitea
             $file->type     = 'file';
             $file->path     = '/' . $row->filename;
             $file->action   = 'M';
-            if(in_array($row->filename, $newFiles))
+            if(in_array($row->filename, $diffFiles['newFiles']))
             {
                 $file->action = 'A';
             }
-            elseif(in_array($row->filename, $delFiles))
+            elseif(in_array($row->filename, $diffFiles['delFiles']))
             {
                 $file->action = 'D';
             }
