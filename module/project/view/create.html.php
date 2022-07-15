@@ -43,7 +43,7 @@
       <table class='table table-form'>
         <tr>
           <th class='w-130px'><?php echo $lang->project->parent;?></th>
-          <?php $disabled = $this->app->tab == 'product' ? 'disabled' : '';?>
+          <?php $disabled = ($this->app->tab == 'product' and $productID) ? 'disabled' : '';?>
           <td><?php echo html::select('parent', $programList, $programID, "class='form-control chosen' onchange='setParentProgram(this.value)' $disabled");?></td>
           <?php if($disabled) echo html::hidden('parent', $programID);?>
           <td>

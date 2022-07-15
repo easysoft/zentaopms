@@ -219,14 +219,9 @@ class execution extends control
         $showModule    = !empty($this->config->datatable->executionTask->showModule) ? $this->config->datatable->executionTask->showModule : '';
         $this->view->modulePairs = $showModule ? $this->tree->getModulePairs($executionID, 'task', $showModule) : array();
 
-        $allTasksNum = $this->dao->select('COUNT(id) AS count')->from(TABLE_TASK)
-            ->where('execution')->eq($executionID)
-            ->andWhere('deleted')->eq(0)
-            ->fetch();
-
         /* Assign. */
         $this->view->tasks        = $tasks;
-        $this->view->allTasksNum  = $allTasksNum;
+        $this->view->allTasksNum  = $this->task->getExecutionTasks($executionID);
         $this->view->summary      = $this->execution->summary($tasks);
         $this->view->tabID        = 'task';
         $this->view->pager        = $pager;
@@ -4173,4 +4168,23 @@ class execution extends control
         echo json_encode($executions);
     }
 
+    /**
+     * AJAX: Get execution kanban data.
+     *
+     * @param  int    $executionID
+     * @access public
+     * @return void
+     */
+    public function ajaxGetExecutionKanban($executionID)
+    {
+        $execution = $this->execution->getByID($executionID);
+        if($this->app->tab == 'execution' and $execution->type == 'kanban')
+        {
+            $execLaneType  = $this->session->execLaneType ? $this->session->execLaneType : 'all';
+            $execGroupBy   = $this->session->execGroupBy ? $this->session->execGroupBy : 'default';
+            $rdSearchValue = $this->session->rdSearchValue ? $this->session->rdSearchValue : '';
+            $kanbanData    = $this->loadModel('kanban')->getRDKanban($executionID, $execLaneType, 'id_desc', 0, $execGroupBy, $rdSearchValue);
+            echo json_encode($kanbanData);
+        }
+    }
 }

@@ -228,19 +228,21 @@ class kanban extends control
             $copyKanban    = $this->kanban->getByID($copyKanbanID);
             $enableImport  = empty($copyKanban->object) ? 'off' : 'on';
             $importObjects = empty($copyKanban->object) ? array() : explode(',', $copyKanban->object);
+            $spaceID       = $copyKanban->space;
         }
 
         unset($this->lang->kanbanspace->featureBar['involved']);
 
         $space      = $this->kanban->getSpaceById($spaceID);
         $spaceUsers = $spaceID == 0 ? ',' : trim($space->owner) . ',' . trim($space->team);
-        $users      = $this->loadModel('user')->getPairs('noclosed|nodeleted', '', 0, $spaceUsers);
+        $spacePairs = array(0 => '') + $this->kanban->getSpacePairs($type);
+        $users      = isset($spacePairs[$spaceID]) ? $this->loadModel('user')->getPairs('noclosed|nodeleted', '', 0, $spaceUsers) : array();
         $whitelist  = (isset($space->whitelist) and !empty($space->whitelist)) ? $space->whitelist : ',';
 
         $this->view->users         = $users;
-        $this->view->whitelist     = $this->user->getPairs('noclosed|nodeleted', '', 0, $whitelist);
+        $this->view->whitelist     = isset($spacePairs[$spaceID]) ? $this->user->getPairs('noclosed|nodeleted', '', 0, $whitelist) : array();
         $this->view->spaceID       = $spaceID;
-        $this->view->spacePairs    = array(0 => '') + $this->kanban->getSpacePairs($type);
+        $this->view->spacePairs    = $spacePairs;
         $this->view->type          = $type;
         $this->view->typeList      = $this->lang->kanbanspace->featureBar;
         $this->view->kanbans       = array('' => '') + $this->kanban->getPairs();

@@ -116,8 +116,8 @@ class taskModel extends model
             $task = $this->loadModel('file')->processImgURL($task, $this->config->task->editor->create['id'], $this->post->uid);
 
             /* Fix Bug #1525 */
-            $executionType = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($executionID)->fetch('type');
-            if($executionType == 'ops')
+            $executionLifetime = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($executionID)->fetch('lifetime');
+            if($executionLifetime == 'ops')
             {
                 $requiredFields = str_replace(",story,", ',', "$requiredFields");
                 $task->story = 0;
@@ -381,9 +381,9 @@ class taskModel extends model
         }
 
         /* Fix bug #1525*/
-        $executionType  = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($executionID)->fetch('type');
+        $executionLifetime  = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($executionID)->fetch('lifetime');
         $requiredFields = ',' . $this->config->task->create->requiredFields . ',';
-        if($executionType == 'ops') $requiredFields = str_replace(',story,', ',', $requiredFields);
+        if($executionLifetime == 'ops') $requiredFields = str_replace(',story,', ',', $requiredFields);
         $requiredFields = trim($requiredFields, ',');
 
         /* check data. */
@@ -1036,9 +1036,9 @@ class taskModel extends model
             $task->mode = '';
         }
 
-        $executionType  = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($task->execution)->fetch('type');
+        $executionLifetime  = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($task->execution)->fetch('lifetime');
         $requiredFields = "," . $this->config->task->edit->requiredFields . ",";
-        if($executionType == 'ops')
+        if($executionLifetime == 'ops')
         {
             $requiredFields = str_replace(",story,", ',', "$requiredFields");
             $task->story = 0;
@@ -2842,7 +2842,7 @@ class taskModel extends model
         elseif($consumed == 0)
         {
             $data->status = 'wait';
-            $data->left   = $task->left + $estimate->consumed;
+            $data->left   = $task->estimate;
         }
         else
         {
@@ -3760,19 +3760,19 @@ class taskModel extends model
     public function buildNestedList($execution, $task, $isChild = false, $showmore = false, $users)
     {
         $showmore = $showmore ? 'showmore' : '';
-        $trAttrs  = "data-id=$task->id";
+        $trAttrs  = "data-id='t$task->id'";
         if(!$isChild)
         {
-            $path     = $execution->grade == 2 ? "$execution->parent,$execution->id,$task->id," : ",$execution->id,$task->id,";
-            $trAttrs .= " data-parent=$execution->id data-nest-parent=$execution->id data-nest-path=$path";
+            $path     = $execution->grade == 2 ? "$execution->parent,$execution->id,t$task->id," : ",$execution->id,t$task->id,";
+            $trAttrs .= " data-parent='$execution->id' data-nest-parent='$execution->id' data-nest-path='$path'";
             if(empty($task->children)) $trAttrs .= " data-nested='false'";
             $trClass  = empty($task->children) ? '' : " has-nest-child";
         }
         else
         {
-            $path     = $execution->grade == 2 ? "$execution->parent,$execution->id,$task->parent,$task->id," : ",$execution->id,$task->parent,$task->id,";
+            $path     = $execution->grade == 2 ? "$execution->parent,$execution->id,$task->parent,t$task->id," : ",$execution->id,$task->parent,t$task->id,";
             $trClass  = 'is-nest-child no-nest';
-            $trAttrs .= " data-nested='false' data-parent=$task->parent data-nest-parent=$task->parent data-nest-path=$path";
+            $trAttrs .= " data-nested='false' data-parent='t$task->parent' data-nest-parent='t$task->parent' data-nest-path='$path'";
         }
 
         $list  = "<tr $trAttrs class='$trClass $showmore'>";

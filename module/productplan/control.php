@@ -351,17 +351,12 @@ class productplan extends control
             $this->view->kanbanData = $this->loadModel('kanban')->getPlanKanban($product, $branchID, $planGroup);
         }
 
-        $productPlansNum = $this->dao->select('COUNT(id) AS count')->from(TABLE_PRODUCTPLAN)
-             ->where('product')->eq($productID)
-             ->andWhere('deleted')->eq(0)
-             ->fetch();
-        $this->view->productPlansNum = $productPlansNum;
-
         $this->view->title            = $productName . $this->lang->colon . $this->lang->productplan->browse;
         $this->view->position[]       = $this->lang->productplan->browse;
         $this->view->productID        = $productID;
         $this->view->branch           = $branch;
         $this->view->branchStatusList = $branchStatusList;
+        $this->view->productPlansNum  = $this->productplan->getList($productID, $branch, 'all');
         $this->view->browseType       = $browseType;
         $this->view->viewType         = $viewType;
         $this->view->orderBy          = $orderBy;

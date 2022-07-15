@@ -1,2 +1,3 @@
 .c-id {width: 50px;}
 .c-reason {width: 150px;}
+td[id^="duplicateStoryBox"].required:after {top: 6px; right: 2px;}

@@ -4327,20 +4327,20 @@ class executionModel extends model
         }
         else
         {
-            $trClass  = 'is-nest-child';
+            $trClass  = 'table-nest-hide';
             $trAttrs  = "data-id={$execution->id} data-parent={$execution->parent}";
             $trAttrs .= " data-nest-parent='$execution->parent' data-order='$execution->order' data-nest-path=',$execution->parent,$execution->id,'";
         }
 
         $burns = join(',', $execution->burns);
-        echo "<tr $trAttrs class=$trClass>";
+        echo "<tr $trAttrs class='$trClass'>";
         echo "<td><span id=$execution->id class='table-nest-icon icon table-nest-toggle'></span>";
         if($this->config->systemMode == 'new')
         {
             $spanClass = $execution->type == 'stage' ? 'label-warning' : 'label-info';
             echo "<span class='project-type-label label label-outline $spanClass'>{$this->lang->execution->typeList[$execution->type]}</span> ";
         }
-        echo html::a(helper::createLink('execution', 'view', "executionID=$execution->id"), $execution->name);
+        echo empty($execution->children) ? html::a(helper::createLink('execution', 'view', "executionID=$execution->id"), $execution->name) : $execution->name;
         echo '<td>' . zget($users, $execution->PM) . '</td>';
         echo "<td class='status-{$execution->status}'>" . zget($this->lang->project->statusList, $execution->status) . '</td>';
         echo '<td>' . html::ring($execution->hours->progress) . '</td>';
@@ -4363,8 +4363,14 @@ class executionModel extends model
             }
             else
             {
-                $disabled = ($execution->grade == 2) ? ' disabled' : '';
-                echo common::hasPriv('programplan', 'create') ? html::a('javascript:alert("' . $this->lang->programplan->error->createdTask . '");', '<i class="icon-programplan-create icon-split"></i>', '', 'class="btn ' . $disabled . '"') : '';
+                if($execution->grade == 2)
+                {
+                    echo "<button class='btn' disabled='disabled' style='margin-right: 4px;'><i class='icon-split disabled icon-search'></i></button>";
+                }
+                else
+                {
+                    echo common::hasPriv('programplan', 'create') ? html::a('javascript:alert("' . $this->lang->programplan->error->createdTask . '");', '<i class="icon-programplan-create icon-split"></i>', '', 'class="btn"') : '';
+                }
             }
         }
 
@@ -4433,6 +4439,18 @@ class executionModel extends model
             ->where('t1.project')->in($stageIdList)
             ->fetchPairs('project', 'name');
         return $productpairs;
+    }
+
+    /**
+     * Get lifetime by id list.
+     *
+     * @param  string $idList
+     * @access public
+     * @return array
+     */
+    public function getLifetimeByIdList($idList = '')
+    {
+        return $this->dao->select('id,lifetime')->from(TABLE_EXECUTION)->where('id')->in($idList)->fetchPairs();
     }
 
     /**

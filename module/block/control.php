@@ -597,7 +597,7 @@ class block extends control
      */
     public function printTodoBlock()
     {
-        $limit = $this->viewType == 'json' ? 0 : (int)$this->params->count;
+        $limit = ($this->viewType == 'json' or !isset($this->params->count)) ? 0 : (int)$this->params->count;
         $todos = $this->loadModel('todo')->getList('all', $this->app->user->account, 'wait, doing', $limit, $pager = null, $orderBy = 'date, begin');
         $uri   = $this->app->getURI(true);
 

@@ -1445,6 +1445,7 @@ class product extends control
                 unset($fields[$key]);
             }
 
+            $lastProgram = $lastLine = '';
             $lines = $this->product->getLinePairs();
             $productStats = $this->product->getStats('program_desc,line_desc,' . $orderBy, null, $status);
             foreach($productStats as $i => $product)

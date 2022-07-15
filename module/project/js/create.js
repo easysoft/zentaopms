@@ -171,11 +171,10 @@ function setAclList(programID)
  * Load branches.
  *
  * @param  int $product
- * @param  int $branchID
  * @access public
  * @return void
  */
-function loadBranches(product, branchID)
+function loadBranches(product)
 {
     $("#productsBox select[name^='products']").each(function()
     {
@@ -209,9 +208,8 @@ function loadBranches(product, branchID)
     if($inputgroup.find('select').size() >= 2) $inputgroup.removeClass('has-branch').find('select:last').remove();
     if($inputgroup.find('.chosen-container').size() >= 2) $inputgroup.find('.chosen-container:last').remove();
 
-    var oldBranchID = typeof(branchID) == 'undefined' ? 0 : branchID;
     var index       = $inputgroup.find('select:first').attr('id').replace('products' , '');
-    $.get(createLink('branch', 'ajaxGetBranches', "productID=" + $(product).val() + "&oldBranch=" + oldBranchID + "&param=active"), function(data)
+    $.get(createLink('branch', 'ajaxGetBranches', "productID=" + $(product).val() + "&oldBranch=0&param=active"), function(data)
     {
         if(data)
         {
@@ -221,11 +219,12 @@ function loadBranches(product, branchID)
             $inputgroup.find('select:last').each(disableSelectedBranch);
             disableSelectedProduct();
         }
+
+        var branchID = $('#branch' + index).val();
+        loadPlans(product, branchID);
     });
 
     if(!multiBranchProducts[$(product).val()]) disableSelectedProduct();
-
-    loadPlans(product, oldBranchID);
 }
 
 /**

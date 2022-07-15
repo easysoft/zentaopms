@@ -1586,6 +1586,7 @@ class kanbanModel extends model
         {
             $laneData   = array();
             $columnData = array();
+            $cardCount  = 0;
 
             $laneData['id']              = $groupBy . $laneID;
             $laneData['laneID']          = $groupBy . $laneID;
@@ -1679,9 +1680,10 @@ class kanbanModel extends model
                     if($browseType == 'task')
                     {
                         if($searchValue != '' and strpos($object->name, $searchValue) === false) continue;
-                        $cardData['name']   = $object->name;
-                        $cardData['status'] = $object->status;
-                        $cardData['left']   = $object->left;
+                        $cardData['name']       = $object->name;
+                        $cardData['status']     = $object->status;
+                        $cardData['left']       = $object->left;
+                        $cardData['estStarted'] = $object->estStarted;
                     }
                     else
                     {
@@ -1692,10 +1694,11 @@ class kanbanModel extends model
                     $laneData['cards'][$column->columnType][] = $cardData;
                     $cardOrder ++;
                 }
+                $cardCount += $cardOrder - 1;
                 if($searchValue == '' and !isset($laneData['cards'][$column->columnType])) $laneData['cards'][$column->columnType] = array();
             }
 
-            if($searchValue != '' and empty($laneData['cards'])) continue;
+            if(($searchValue != '' and empty($laneData['cards'])) or ($laneData['id'] == 'story0' and $cardCount == 0 and count($lanes) > 1)) continue;
             $kanbanGroup[$groupBy]['id']              = $groupBy . $laneID;
             $kanbanGroup[$groupBy]['columns']         = array_values($columnData);
             $kanbanGroup[$groupBy]['lanes'][]         = $laneData;
@@ -2825,7 +2828,7 @@ class kanbanModel extends model
                     }
                 }
 
-                if($story->stage == 'projected' and strpos($cardPairs['ready'], ",$storyID,") === false and strpos($cardPairs['backlog'], ",$storyID,") === false)
+                if(strpos('wait,projected', $story->stage) !== false and strpos($cardPairs['ready'], ",$storyID,") === false and strpos($cardPairs['backlog'], ",$storyID,") === false)
                 {
                     $cardPairs['backlog'] = empty($cardPairs['backlog']) ? ",$storyID," : ",$storyID" . $cardPairs['backlog'];
                 }
@@ -3806,7 +3809,7 @@ class kanbanModel extends model
                 {
                     $menu = array();
 
-                    if(common::hasPriv('task', 'edit') and $this->task->isClickable($task, 'edit'))                     $menu[] = array('label' => $this->lang->task->edit, 'icon' => 'edit', 'url' => helper::createLink('task', 'edit', "taskID=$task->id", '', true), 'size' => '95%');
+                    if(common::hasPriv('task', 'edit') and $this->task->isClickable($task, 'edit'))                     $menu[] = array('label' => $this->lang->task->edit, 'icon' => 'edit', 'url' => helper::createLink('task', 'edit', "taskID=$task->id&comment=false&kanbanGroup=default&from=taskkanban", '', true), 'size' => '95%');
                     if(common::hasPriv('task', 'pause') and $this->task->isClickable($task, 'pause'))                   $menu[] = array('label' => $this->lang->task->pause, 'icon' => 'pause', 'url' => helper::createLink('task', 'pause', "taskID=$task->id&extra=from=taskkanban", '', true));
                     if(common::hasPriv('task', 'restart') and $this->task->isClickable($task, 'restart'))               $menu[] = array('label' => $this->lang->task->restart, 'icon' => 'play', 'url' => helper::createLink('task', 'restart', "taskID=$task->id&from=taskkanban", '', true));
                     if(common::hasPriv('task', 'recordEstimate') and $this->task->isClickable($task, 'recordEstimate')) $menu[] = array('label' => $this->lang->task->recordEstimate, 'icon' => 'time', 'url' => helper::createLink('task', 'recordEstimate', "taskID=$task->id&from=taskkanban", '', true));
@@ -3957,7 +3960,7 @@ class kanbanModel extends model
      */
     public function checkDisplayCards($count)
     {
-        if(!preg_match("/^-?\d+$/", $count) or $count <= DEFAULT_CARDCOUNT) dao::$errors['displayCards'] = $this->lang->kanbanlane->error->mustBeInt;
+        if(!preg_match("/^-?\d+$/", $count) or $count <= DEFAULT_CARDCOUNT or $count > MAX_CARDCOUNT) dao::$errors['displayCards'] = $this->lang->kanbanlane->error->mustBeInt;
         return !dao::isError();
     }
 }

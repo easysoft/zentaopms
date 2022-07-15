@@ -44,11 +44,17 @@
           </tr>
           <tr id='mode1Rule' class='hidden'>
             <th></th>
-            <td colspan='2'><span style='color:#5E626D;font-weight:bold;font-size:13px;'><i class="icon icon-exclamation-sign"></i><?php echo $lang->admin->safe->modeRuleList[1] . $lang->admin->safe->noticeStrong;?></span></td>
+            <td colspan='2'>
+              <i class="icon icon-exclamation-sign"></i>
+              <span style='color:#5E626D;font-weight:bold;font-size:13px;'><?php echo $lang->admin->safe->modeRuleList[1] . $lang->admin->safe->noticeStrong;?></span>
+            </td>
           </tr>
           <tr id='mode2Rule' class='hidden'>
             <th></th>
-            <td colspan='2'><span style='color:#5E626D;font-weight:bold;font-size:13px;'><i class="icon icon-exclamation-sign"></i><?php echo $lang->admin->safe->modeRuleList[2] . $lang->admin->safe->noticeStrong;?></span></td>
+            <td colspan='2'>
+              <i class="icon icon-exclamation-sign"></i>
+              <span style='color:#5E626D;font-weight:bold;font-size:13px;'><i class="icon icon-exclamation-sign"></i><?php echo $lang->admin->safe->modeRuleList[2] . $lang->admin->safe->noticeStrong;?></span>
+            </td>
           </tr>
           <tr>
             <th><?php echo $lang->admin->safe->weak?></th>

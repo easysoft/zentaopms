@@ -633,7 +633,7 @@ class commonModel extends model
                         }
                         else if(!defined('TUTORIAL'))
                         {
-                            $params       = "programID=0&copyProjectID=0&extra=from=global";
+                            $params       = "programID=0&from=global";
                             $createMethod = 'createGuide';
                             $attr         = 'data-toggle="modal"';
                         }
@@ -2419,6 +2419,7 @@ EOD;
           ($module == 'sso' and $method == 'login') or
           ($module == 'report' && $method == 'annualdata') or
           ($module == 'misc' && $method == 'captcha') or
+          ($module == 'execution' and $method == 'printkanban') or
           ($module == 'traincourse' and $method == 'ajaxuploadlargefile') or
           ($module == 'traincourse' and $method == 'playvideo'))
         {

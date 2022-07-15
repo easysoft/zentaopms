@@ -31,6 +31,7 @@ function loadData($showmore)
 
     var executionID = $showmore.attr('data-parent');
     var maxTaskID   = $showmore.attr('data-id');
+    var maxTaskID   = maxTaskID.replace('t', '');
     var link = createLink('task', 'ajaxGetTasks', 'executionID=' + executionID + '&maxTaskID=' + maxTaskID);
     $.get(link, function(data)
     {

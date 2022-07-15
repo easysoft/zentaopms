@@ -48,6 +48,7 @@
       <ul class="timeline timeline-tag-left <?php if($type == 'all') echo 'margin-l-50px';?>">
         <?php if($direction == 'next') $actions = array_reverse($actions);?>
         <?php foreach($actions as $i => $action):?>
+        <?php if($action->action == 'adjusttasktowait') continue;?>
         <?php if(empty($firstAction)) $firstAction = $action;?>
         <li <?php if($action->major) echo "class='active'";?>>
           <div>

@@ -349,7 +349,7 @@ $lang->kanbancolumn->fluidBoardList['0'] = '固定列宽';
 $lang->kanbancolumn->fluidBoardList['1'] = '自适应列宽';
 
 $lang->kanbanlane->error = new stdclass();
-$lang->kanbanlane->error->mustBeInt = '卡片数量必须是大于2的正整数。';
+$lang->kanbanlane->error->mustBeInt = '卡片数量必须是 3~32767 的正整数。';
 
 $lang->kanbanregion = new stdclass();
 $lang->kanbanregion->name    = '区域名称';

@@ -1588,7 +1588,7 @@ class projectModel extends model
                 $errors = dao::getError();
                 foreach($errors as $key => $error)
                 {
-                    dao::$errors[$key][0] = 'project#' . $projectID . $error[0];
+                    dao::$errors[$key][0] = 'ID' . $projectID . $error[0];
                 }
 
                 return false;
