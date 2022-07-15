@@ -1,5 +1,5 @@
 body * {font-size: 13px !important; line-height: 1.42857143; color: rgb(51, 51, 51);}
-#main {margin-bottom: 40px; min-width: unset;}
+#main {margin-bottom: 40px; min-width: unset; position: unset !important;}
 #mainMenu .pull-left > a, #mainMenu .pull-left .divider, #mainMenu .pull-right, #mainContent .col-4, .main-actions {display: none;}
 #mainMenu {position: fixed; width: 100%; z-index: 999;}
 #scrollContent {margin-top: 35px; height: calc(100% - 70px); display: block; overflow: hidden;}
