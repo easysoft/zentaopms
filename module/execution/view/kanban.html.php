@@ -214,7 +214,7 @@ js::set('priv',
         <?php if($canCreateTask) echo '<li>' . html::a(helper::createLink('task', 'create', "execution=$execution->id", '', true), $lang->task->create, '', "class='iframe'") . '</li>';?>
         <?php if($canImportBug) echo '<li>' . html::a(helper::createLink('execution', 'importBug', "executionID=$execution->id", '', true), $lang->execution->importBug, '', "class='iframe' data-width=90%") . '</li>';?>
         <?php if($canImportTask) echo '<li>' . html::a(helper::createLink('execution', 'importTask', "toExecution=$execution->id", '', true), $lang->execution->importTask, '', "class='iframe' data-width=90%") . '</li>';?>
-        <?php if($canBatchCreateTask) echo '<li>' . html::a(helper::createLink('task', 'batchCreate', "execution=$execution->id", '', true), $lang->execution->batchCreateTask, '', "class='iframe'") . '</li>';?>
+        <?php if($canBatchCreateTask) echo '<li>' . html::a(helper::createLink('task', 'batchCreate', "execution=$execution->id", '', true), $lang->execution->batchCreateTask, '', "class='iframe' data-width=90%") . '</li>';?>
       </ul>
     </div>
     <?php endif;?>

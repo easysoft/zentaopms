@@ -4309,12 +4309,12 @@ class executionModel extends model
      * Print execution nested list.
      *
      * @param  object $execution
-     * @param  int    $isChild
+     * @param  bool   $isChild
      * @param  array  $users
      * @access public
      * @return void
      */
-    public function printNestedList($execution, $isChild = false, $users, $productID)
+    public function printNestedList($execution, $isChild, $users, $productID)
     {
         $this->loadModel('task');
         $this->loadModel('execution');
@@ -4374,7 +4374,14 @@ class executionModel extends model
             }
         }
 
-        common::printIcon('programplan', 'edit', "stageID=$execution->id&projectID=$execution->project", $execution, 'list', '', '', 'iframe', true);
+        if($execution->type == 'stage')
+        {
+            common::printIcon('programplan', 'edit', "stageID=$execution->id&projectID=$execution->project", $execution, 'list', '', '', 'iframe', true);
+        }
+        else
+        {
+            common::printIcon('execution', 'edit', "executionID=$execution->id", $execution, 'list', '', '', 'iframe', true);
+        }
 
         $disabled = !empty($execution->children) ? ' disabled' : '';
         if($execution->status != 'closed' and common::hasPriv('execution', 'close', $execution))

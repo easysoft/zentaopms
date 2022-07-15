@@ -6,7 +6,7 @@ $(function()
 
         var fieldList    = showFields + ',';
         var requiredList = ',' + requiredFields + ',';
-        if(lifetime == 'ops')
+        if(lifetime == 'ops' || (typeof execAttribute != 'undefined' && (execAttribute == 'request' || execAttribute == 'review')))
         {
             $('#fieldsstory').parent('div').addClass('hidden');
         }
@@ -22,6 +22,10 @@ $(function()
         saveCustomFields('createFields');
         return false;
     });
+
+    var executionID = $('#execution').val();
+    loadStories(executionID);
+
 })
 
 /**
@@ -299,7 +303,7 @@ function setLane(regionID)
 /* Get select of stories.*/
 function setStories(moduleID, executionID)
 {
-    link = createLink('story', 'ajaxGetExecutionStories', 'executionID=' + executionID + '&productID=0&branch=all&moduleID=' + moduleID + '&storyID=0&number=&type=full&status=unclosed');
+    link = createLink('story', 'ajaxGetExecutionStories', 'executionID=' + executionID + '&productID=0&branch=all&moduleID=' + moduleID + '&storyID=0&number=&type=full&status=active');
     $.get(link, function(stories)
     {
         var storyID = $('#story').val();

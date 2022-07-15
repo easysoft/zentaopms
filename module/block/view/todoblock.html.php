@@ -28,7 +28,7 @@ if(!$selfCall) die(include('./todolist.html.php'));
 .block-todoes .todo-check {position: absolute; top: 5px; left: 10px; display: block; width: 20px; height: 20px; font-size: 20px; color: transparent; cursor: pointer; background: #fff; border: 2px solid #eee; border-radius: 50%;}
 .block-todoes .todo-check:hover {border-color: #8e939a;}
 .block-todoes .active > .todo-check {color: #00da88; background: transparent;border: none;}
-.block-todoes .todoes-form {position: absolute; top: -45px; right: 0; left: 0; z-index: 1011; max-width: 500px; padding: 12px 20px 20px; visibility: hidden; background: #fff; -webkit-box-shadow: 0 0 20px 0 #bdc9d8; box-shadow: 0 0 20px 0 #bdc9d8; opacity: 0;-webkit-transition: .4s cubic-bezier(.175, .885, .32, 1); -o-transition: .4s cubic-bezier(.175, .885, .32, 1); transition: .4s cubic-bezier(.175, .885, .32, 1); -webkit-transition-property: opacity, visibility; -o-transition-property: opacity, visibility; transition-property: opacity, visibility;}
+.block-todoes .todoes-form {position: absolute; top: -45px; right: 0; left: 0; z-index: 1011; max-width: 100%; padding: 12px 20px 20px; visibility: hidden; background: #fff; -webkit-box-shadow: 0 0 20px 0 #bdc9d8; box-shadow: 0 0 20px 0 #bdc9d8; opacity: 0;-webkit-transition: .4s cubic-bezier(.175, .885, .32, 1); -o-transition: .4s cubic-bezier(.175, .885, .32, 1); transition: .4s cubic-bezier(.175, .885, .32, 1); -webkit-transition-property: opacity, visibility; -o-transition-property: opacity, visibility; transition-property: opacity, visibility;}
 .block-todoes .todoes-form .form-group > label {padding-left: 0;}
 .block-todoes .todoes-form .form-group > label.text-center {text-align: center!important;}
 .block-todoes .todoes-form > .form-group:last-child {margin-bottom: 0;}

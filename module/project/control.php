@@ -966,6 +966,8 @@ class project extends control
         $this->loadModel('task');
         $this->loadModel('programplan');
 
+        if($this->cookie->showTask) $this->session->set('taskList', $this->app->getURI(true), 'project');
+
         $projects  = $this->project->getPairsByProgram();
         $projectID = $this->project->saveState($projectID, $projects);
         $project   = $this->project->getByID($projectID);

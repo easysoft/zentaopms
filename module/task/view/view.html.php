@@ -166,8 +166,10 @@
     <?php endif;?>
     <div class='main-actions'>
       <div class="btn-toolbar">
+        <?php if(!isonlybody()):?>
         <?php echo html::a($browseLink, '<i class="icon icon-back icon-sm"></i> ' . $lang->goback, '', "class='btn btn-secondary'");?>
-        <?php if(!isonlybody()) echo "<div class='divider'></div>";?>
+        <?php echo "<div class='divider'></div>";?>
+        <?php endif;?>
         <?php $task->executionList = $execution;?>
         <?php echo $this->task->buildOperateMenu($task, 'view');?>
       </div>
@@ -442,7 +444,7 @@
 <script>
 function handleLinkButtonClick()
 {
-  var xxcUrl = "xxc:openInApp/zentao-integrated/" + encodeURIComponent(window.location.href.replace(/.display=card/, '').replace(/\.xhtml/, '.html'));
+  var xxcUrl = "xxc:openInApp/zentao-integrated/" + encodeURIComponent(window.location.href.replace(/.display=card/, '').replace('xhtml', 'html'));
   window.open(xxcUrl);
 }
 </script>

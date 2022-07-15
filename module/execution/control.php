@@ -727,6 +727,9 @@ class execution extends control
         }
         if($type == 'bymodule')
         {
+            $module    = $this->loadModel('tree')->getByID($param);
+            $productID = $module->root;
+
             $_COOKIE['storyModuleParam']  = $param;
             $_COOKIE['storyProductParam'] = 0;
             $_COOKIE['storyBranchParam']  = 0;
@@ -820,7 +823,7 @@ class execution extends control
         $actionURL    = $this->createLink('execution', 'story', "executionID=$executionID&orderBy=$orderBy&type=bySearch&queryID=myQueryID");
         $branchGroups = $this->loadModel('branch')->getByProducts(array_keys($products));
         $branchOption = array();
-        foreach($branchGroups as $productID => $branches)
+        foreach($branchGroups as $branches)
         {
             foreach($branches as $branchID => $name)
             {
