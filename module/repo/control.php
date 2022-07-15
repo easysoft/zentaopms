@@ -237,11 +237,7 @@ class repo extends control
 
         if($error) return print(js::alert($error));
 
-        $this->dao->delete()->from(TABLE_REPO)->where('id')->eq($repoID)->exec();
-        $this->dao->delete()->from(TABLE_REPOHISTORY)->where('repo')->eq($repoID)->exec();
-        $this->dao->delete()->from(TABLE_REPOFILES)->where('repo')->eq($repoID)->exec();
-        $this->dao->delete()->from(TABLE_REPOBRANCH)->where('repo')->eq($repoID)->exec();
-
+        $this->repo->delete(TABLE_REPO, $repoID);
         if(dao::isError()) return print(js::error(dao::getError()));
         echo js::reload('parent');
     }

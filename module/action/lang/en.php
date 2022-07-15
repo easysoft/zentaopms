@@ -144,6 +144,7 @@ $lang->action->objectTypes['sonarqube']        = 'SonarQube Server';
 $lang->action->objectTypes['sonarqubeproject'] = 'SonarQube Project';
 $lang->action->objectTypes['stage']            = 'Stage';
 $lang->action->objectTypes['patch']            = 'Patch';
+$lang->action->objectTypes['repo']             = 'Repo';
 
 /* Used to describe operation history. */
 $lang->action->desc = new stdclass();

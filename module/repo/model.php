@@ -38,6 +38,9 @@ class repoModel extends model
         if(empty($repoID)) $repoID = $this->session->repoID ? $this->session->repoID : key($repos);
         if(!isset($repos[$repoID])) $repoID = key($repos);
 
+        /* Init switcher menu. */
+        $this->lang->switcherMenu = '';
+
         /* Check the privilege. */
         if($repoID)
         {
