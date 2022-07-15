@@ -9,6 +9,10 @@
   .files-list>li>a {display: inline; word-wrap: break-word;}
   .files-list>li>.right-icon {opacity: 1;}
   .fileAction {color: #0c64eb !important;}
+  .renameFile {display: flex;}
+  .renameFile .input-group {margin-left: 10px;}
+  .renameFile .icon {margin-top: 8px;}
+  .renameFile .input-group-addon {width: 60px;}
   </style>
   <script>
   /* Delete a file. */
@@ -44,6 +48,40 @@
           window.open(url, '_blank');
       }
       return false;
+  }
+
+  function showRenameBox(fileID)
+  {
+      $('#renameFile' + fileID).closest('li').addClass('hidden');
+      $('#renameBox' + fileID).removeClass('hidden');
+  }
+
+  function showFile(fileID)
+  {
+      $('#renameBox' + fileID).addClass('hidden');
+      $('#renameFile' + fileID).closest('li').removeClass('hidden');
+  }
+
+  function setFileName(fileID)
+  {
+      var fileName  = $('#fileName' + fileID).val();
+      var extension = $('#extension' + fileID).val();
+      var postData  = {'fileName' : fileName, 'extension' : extension};
+      $('#renameBox' + fileID ).addClass('hidden');
+      $.ajax(
+      {
+          url:createLink('file', 'edit', 'fileID=' + fileID),
+          dataType: 'json',
+          method: 'post',
+          data: postData,
+          success: function(data)
+          {
+              console.log(data['title']);
+              $('#fileTitle' + fileID).html("<i class='icon icon-file-text'></i> &nbsp;" + data['title']);
+              $('#renameFile' + fileID).closest('li').removeClass('hidden');
+              $('#renameBox' + fileID).addClass('hidden');
+          }
+      })
   }
   </script>
     <ul class="files-list">
@@ -87,7 +125,7 @@
               $downloadLink  = $this->createLink('file', 'download', "fileID=$file->id");
               $downloadLink .= strpos($downloadLink, '?') === false ? '?' : '&';
               $downloadLink .= $sessionString;
-              echo "<li title='{$uploadDate}'>" . html::a($downloadLink, $fileTitle . " <span class='text-muted'>({$fileSize})</span>", '_blank', "onclick=\"return downloadFile($file->id, '$file->extension', $imageWidth, '$file->title')\"");
+              echo "<li title='{$uploadDate}'>" . html::a($downloadLink, $fileTitle . " <span class='text-muted'>({$fileSize})</span>", '_blank', "id='fileTitle$file->id'  onclick=\"return downloadFile($file->id, '$file->extension', $imageWidth, '$file->title')\"");
 
               $objectType = zget($this->config->file->objectType, $file->objectType);
               if(common::hasPriv($objectType, 'edit', $object))
@@ -120,14 +158,50 @@
                   }
 
                   common::printLink('file', 'download', "fileID=$file->id", $lang->file->downloadFile, '_blank', "class='fileAction btn btn-link text-primary' title='{$lang->file->downloadFile}'");
-                  common::printLink('file', 'edit', "fileID=$file->id", $lang->file->edit, '', "data-width='400' class='fileAction btn btn-link edit iframe text-primary' title='{$lang->file->edit}'");
+                  if(common::hasPriv('file', 'edit')) echo html::a('###', $lang->file->edit, '', "id='renameFile$file->id' class='fileAction btn btn-link edit text-primary' onclick='showRenameBox($file->id)' title='{$lang->file->edit}'");
                   if(common::hasPriv('file', 'delete')) echo html::a('###', $lang->delete, '', "class='fileAction btn btn-link text-primary' onclick='deleteFile($file->id)' title='$lang->delete'");
                   echo '</span>';
               }
-              echo '</li>';
-          }
-      }
-      ?>
+              echo '</li>';?>
+
+      <li>
+        <div>
+        <?php
+        if(strrpos($file->title, '.') !== false)
+        {
+            /* Fix the file name exe.exe */
+            $title     = explode('.', $file->title);
+            $extension = end($title);
+            if($file->extension == 'txt' && $extension != $file->extension) $file->extension = $extension;
+            array_pop($title);
+            $file->title = join('.', $title);
+        }
+        ?>
+          <form class='main-form hidden form-ajax' id='renameBox<?php echo $file->id;?>' method='post'>
+            <table class='w-300px'>
+              <tr>
+                <td>
+                  <div class="renameFile">
+                    <i class='icon icon-file-text'></i>
+                    <div class='input-group'>
+                      <?php echo html::input('fileName' . $file->id, $file->title, "class='form-control' size='40'");?>
+                      <input type="hidden" name="extension" id="extension<?php echo $file->id?>" value="<?php echo $file->extension;?>"/>
+                      <strong class='input-group-addon'>.<?php echo $file->extension;?></strong>
+                    </div>
+                    <div class="input-group-btn">
+                      <button type="button" class="btn btn-success file-name-confirm" onclick="setFileName(<?php echo $file->id;?>)" style="border-radius: 0px 2px 2px 0px; border-left-color: transparent;"><i class="icon icon-check"></i></button>
+                      <button type="button" class="btn btn-gray file-name-cancel" onclick="showFile(<?php echo $file->id;?>)" style="border-radius: 0px 2px 2px 0px; border-left-color: transparent;"><i class="icon icon-close"></i></button>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+            </table>
+          </form>
+        </div>
+      </li>
+
+    <?php }
+      }?>
     </ul>
 <?php if($fieldset == 'true'):?>
   </div>
