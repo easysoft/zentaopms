@@ -53,9 +53,10 @@ class repoModel extends model
                 echo(js::alert($this->lang->repo->error->accessDenied));
                 return print(js::locate('back'));
             }
-        }
 
-        $this->lang->switcherMenu = $this->getSwitcher($repoID);
+            if($repo->SCM != 'Gitlab') unset($this->lang->devops->menu->mr);
+            $this->lang->switcherMenu = $this->getSwitcher($repoID);
+        }
 
         common::setMenuVars('devops', $repoID);
         if(!session_id()) session_start();
