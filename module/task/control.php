@@ -438,7 +438,7 @@ class task extends control
             $customFields[$field] = $this->lang->task->$field;
         }
 
-        if($execution->lifetime == 'ops') unset($customFields['story']);
+        if($execution->lifetime == 'ops' or $execution->attribute == 'request' or $execution->attribute == 'review') unset($customFields['story']);
 
         $this->view->customFields = $customFields;
         $this->view->showFields   = $this->config->task->custom->batchCreateFields;
