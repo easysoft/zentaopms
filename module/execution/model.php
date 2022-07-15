@@ -4309,12 +4309,12 @@ class executionModel extends model
      * Print execution nested list.
      *
      * @param  object $execution
-     * @param  int    $isChild
+     * @param  bool   $isChild
      * @param  array  $users
      * @access public
      * @return void
      */
-    public function printNestedList($execution, $isChild = false, $users, $productID)
+    public function printNestedList($execution, $isChild, $users, $productID)
     {
         $this->loadModel('task');
         $this->loadModel('execution');

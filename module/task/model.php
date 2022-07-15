@@ -3758,7 +3758,7 @@ class taskModel extends model
      * @access public
      * @return string
      */
-    public function buildNestedList($execution, $task, $isChild = false, $showmore = false, $users)
+    public function buildNestedList($execution, $task, $isChild = false, $showmore = false, $users = array())
     {
         $showmore = $showmore ? 'showmore' : '';
         $trAttrs  = "data-id='t$task->id'";
