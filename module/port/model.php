@@ -971,6 +971,7 @@ class portModel extends model
                 $this->session->set('parentID', $parentID);
             }
             $data['parent'] = $parentID;
+            $data['name'] = ltrim($data['name'], '&gt;');
             $this->dao->update(TABLE_TASK)->set('parent')->eq('-1')->where('id')->eq($parentID)->exec();
         }
         else
