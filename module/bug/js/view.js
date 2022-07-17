@@ -45,7 +45,7 @@ $('#toTaskButton').on('click', function()
         var link = createLink('task', 'create', 'executionID=' + executionID + '&storyID=0&moduleID=0&taskID=0&todoID=0&extra=projectID=0&bugID=' + bugID);
         window.parent.$.apps.open(link, 'execution');
     }
-    else if(projectID == 0)
+    else if(systemMode == 'new' && projectID == 0)
     {
         alert(errorNoProject);
     }
