@@ -130,14 +130,6 @@ class portModel extends model
         return $objectData;
     }
 
-
-    public function getCompleteByConfig($model, $datas)
-    {
-        $configInsFields = $this->config->$model->import->table['mainTable']['insertFields'];
-        a($configInsFields);
-
-    }
-
     /**
      * Init FieldList .
      *
@@ -856,6 +848,14 @@ class portModel extends model
         return $fields;
     }
 
+    /**
+     * processRows4Fields
+     *
+     * @param  array  $rows
+     * @param  array  $fields
+     * @access public
+     * @return void
+     */
     public function processRows4Fields($rows = array(), $fields = array())
     {
         $objectDatas = array();
@@ -905,5 +905,119 @@ class portModel extends model
         }
 
         return $objectDatas;
+    }
+
+    /**
+     * saveImportDatas
+     *
+     * @param  int    $datas
+     * @access public
+     * @return void
+     */
+    public function saveImportDatas($model, $datas)
+    {
+        foreach($datas as $key => $data)
+        {
+            $subDatas = array();
+            if(isset($data['subDatas']))
+            {
+                $subDatas = $data['subDatas'];
+                unset($data['subDatas']);
+            }
+
+            if($this->post->insert) unset($data['id']);
+
+            /* Check required field*/
+            $this->checkRequired($model, $key, $data);
+
+            if(!empty($objectID)) $data = $this->processChildData($objectID, $data);
+
+            $table = zget($this->config->objectTables, $model);
+            $this->dao->insert($table)->data($data)->autoCheck()->checkFlow()->exec();
+            $objectID = $this->dao->lastInsertID();
+
+            if(dao::isError()) die(js::error(dao::getError()));
+
+            if(!empty($subDatas)) $this->saveSubTable($objectID, $subDatas);
+            /* Create action*/
+            $this->loadModel('action')->create($model, $objectID, 'Opened', '');
+        }
+
+        if($this->post->isEndPage)
+        {
+            unlink($this->session->fileImportFileName);
+            unlink($this->session->tmpFile);
+            unset($_SESSION['fileImportFileName']);
+            unset($_SESSION['fileImportExtension']);
+        }
+    }
+
+    /**
+     * processChildData
+     *
+     * @param  int    $objectID
+     * @param  int    $data
+     * @access public
+     * @return void
+     */
+    public function processChildData($lastID, $data)
+    {
+        $parentID = $this->session->parentID ? $this->session->parentID : 0;
+        if(strpos($data['name'], '&gt;') === 0)
+        {
+            if(!$parentID)
+            {
+                $parentID = $lastID;
+                $this->session->set('parentID', $parentID);
+            }
+            $data['parent'] = $parentID;
+            $this->dao->update(TABLE_TASK)->set('parent')->eq('-1')->where('id')->eq($parentID)->exec();
+        }
+        else
+        {
+            $this->session->set('parentID', 0);
+        }
+        return $data;
+    }
+
+    /**
+     * saveSubTable
+     *
+     * @param  int    $lastInsertID
+     * @param  int    $datas
+     * @access public
+     * @return void
+     */
+    public function saveSubTable($lastInsertID, $datas)
+    {
+        $table = zget($this->config->objectTables, $datas['name']);
+
+        foreach($datas['datas'] as $key => $value)
+        {
+            $value[$datas['foreignkey']] = $lastInsertID;
+            $this->dao->replace($table)->data($value)->autoCheck()->exec();
+        }
+    }
+
+    /**
+     * checkRequired
+     *
+     * @param  int    $model
+     * @param  int    $line
+     * @param  int    $data
+     * @access public
+     * @return void
+     */
+    public function checkRequired($model, $line, $data)
+    {
+        if(isset($this->config->$model->create->requiredFields))
+        {
+            $requiredFields = explode(',', $this->config->$model->create->requiredFields);
+            foreach($requiredFields as $requiredField)
+            {
+                $requiredField = trim($requiredField);
+                if(empty($data[$requiredField])) dao::$errors[] = sprintf($this->lang->port->noRequire, $line, $this->lang->$model->$requiredField);
+            }
+        }
     }
 }
