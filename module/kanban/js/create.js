@@ -82,7 +82,7 @@ function changeValue(spaceID, type)
 function loadUsers(spaceID)
 {
     var field = spaceType == 'private' ? 'whitelist' : 'team';
-    var link  = createLink('kanban', 'ajaxLoadSpaceUsers', 'spaceID='+ spaceID + '&field=' + field + '&selectedUser=' + $('#' + field).val());
+    var link  = createLink('kanban', 'ajaxLoadUsers', 'spaceID='+ spaceID + '&field=' + field + '&selectedUser=' + $('#' + field).val());
     $.get(link, function(data)
     {
         $('#' + field).replaceWith(data);
@@ -102,7 +102,7 @@ function loadUsers(spaceID)
  */
 function loadOwners(spaceID)
 {
-    var link = createLink('kanban', 'ajaxLoadSpaceUsers', 'spaceID='+ spaceID + '&field=owner&selectedUser=' + $('#owner').val());
+    var link = createLink('kanban', 'ajaxLoadUsers', 'spaceID='+ spaceID + '&field=owner&selectedUser=' + $('#owner').val());
 
     $.get(link, function(data)
     {

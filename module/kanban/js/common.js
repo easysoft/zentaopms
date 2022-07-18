@@ -8,13 +8,14 @@
  */
 function setMailto(field, value)
 {
-    var link = createLink('kanban', 'ajaxGetContactUsers', "listID=" + value);
+    console.log(field);
+    var link = createLink('kanban', 'ajaxGetContactUsers', 'field=' + field + '&listID=' + value);
     $.post(link, function(data)
     {
-        $('#team').replaceWith(data);
-        $('#team_chosen').remove();
-        $('#team').chosen();
-        $('.picker.picker-multi').remove();
+        $('#' + field).replaceWith(data);
+        $('#' + field + '_chosen').remove();
+        $('#' + field).siblings('.picker').remove();
+        $('#' + field).picker();
     })
 }
 
@@ -108,4 +109,23 @@ function changeType(type)
         $('#teamBox').removeClass('hidden');
         $('#whitelistBox').addClass('hidden');
     }
+}
+
+/**
+ * Load all users.
+ *
+ * @access public
+ * @return void
+ */
+function loadAllUsers()
+{
+    var link = createLink('kanban', 'ajaxLoadUsers', 'spaceID=0&field=owner&selectedUser=' + $('#owner').val() + "&type=all");
+
+    $.get(link, function(data)
+    {
+        $('#owner').replaceWith(data);
+        $('#owner' + "_chosen").remove();
+        $('#owner').next('.picker').remove();
+        $('#owner').chosen();
+    });
 }
