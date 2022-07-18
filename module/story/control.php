@@ -1484,7 +1484,7 @@ class story extends control
         $this->story->recall($storyID);
         $this->loadModel('action')->create('story', $storyID, 'Recalled');
 
-        if($from == 'view') return print(js::reload('parent'));
+        if($from == 'view') return print(js::locate($this->createLink('story', 'view', "storyID={$storyID}&from=view")));
 
         $locateLink = $this->session->storyList ? $this->session->storyList : $this->createLink('product', 'browse', "productID={$story->product}");
         echo js::locate($locateLink, 'parent');
