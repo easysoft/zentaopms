@@ -40,39 +40,39 @@ $config->bug->exportFields = 'id, product, branch, module, project, execution, s
 
 $config->bug->fieldList['id']['title'] = 'id';
 
-$config->bug->fieldList['product']['title']            = 'product';
-$config->bug->fieldList['product']['foreignKey']       = true;
-$config->bug->fieldList['product']['foreignKeySource'] = array('module' => 'product', 'method' => 'getPairs');
+$config->bug->fieldList['product']['title']      = 'product';
+$config->bug->fieldList['product']['control']    = 'hidden';
+$config->bug->fieldList['product']['dataSource'] = array('module' => 'product', 'method' => 'getPairs');
 
-$config->bug->fieldList['branch']['title']            = 'branch';
-$config->bug->fieldList['branch']['foreignKey']       = true;
-$config->bug->fieldList['branch']['foreignKeySource'] = array('module' => 'bug', 'method' => 'getRelatedObjects', 'params' => 'branch&id,name');
+$config->bug->fieldList['branch']['title']      = 'branch';
+$config->bug->fieldList['branch']['control']    = 'select';
+$config->bug->fieldList['branch']['dataSource'] = array('module' => 'bug', 'method' => 'getRelatedObjects', 'params' => 'branch&id,name');
 
-$config->bug->fieldList['module']['title']            = 'module';
-$config->bug->fieldList['module']['foreignKey']       = true;
-$config->bug->fieldList['module']['foreignKeySource'] = array('module' => 'tree', 'method' => 'getAllModulePairs', 'params' => 'bug');
+$config->bug->fieldList['module']['control']    = 'select';
+$config->bug->fieldList['module']['title']      = 'module';
+$config->bug->fieldList['module']['dataSource'] = array('module' => 'tree', 'method' => 'getAllModulePairs', 'params' => 'bug');
 
-$config->bug->fieldList['project']['title'] = 'project';
-$config->bug->fieldList['project']['foreignKey'] = true;
-$config->bug->fieldList['project']['foreignKeySource'] = array('module' => 'product', 'method' => 'getProjectPairsByProduct', 'params' => '$productID');
+$config->bug->fieldList['project']['title']      = 'project';
+$config->bug->fieldList['project']['control']    = 'hidden';
+$config->bug->fieldList['project']['dataSource'] = array('module' => 'product', 'method' => 'getProjectPairsByProduct', 'params' => '$productID');
 
-$config->bug->fieldList['execution']['title'] = 'execution';
-$config->bug->fieldList['execution']['foreignKey'] = true;
-$config->bug->fieldList['execution']['foreignKeySource'] = array('module' => 'execution', 'method' =>'getPairs');
+$config->bug->fieldList['execution']['title']      = 'execution';
+$config->bug->fieldList['execution']['dataSource'] = array('module' => 'execution', 'method' =>'getPairs');
 
-$config->bug->fieldList['story']['title'] = 'story';
-$config->bug->fieldList['story']['foreignKey']       = true;
-$config->bug->fieldList['story']['foreignKeySource'] = array('module' => 'bug', 'method' =>'getRelatedObjects', 'params' => 'story&id,title');
+$config->bug->fieldList['story']['title']      = 'story';
+$config->bug->fieldList['story']['control']    = 'select';
+$config->bug->fieldList['story']['dataSource'] = array('module' => 'bug', 'method' =>'getRelatedObjects', 'params' => 'story&id,title');
 
-$config->bug->fieldList['task']['title'] = 'task';
-$config->bug->fieldList['task']['foreignKey']       = true;
-$config->bug->fieldList['task']['foreignKeySource'] = array('module' => 'bug', 'method' =>'getRelatedObjects', 'params' => 'task&id,name');
+$config->bug->fieldList['task']['title']      = 'task';
+$config->bug->fieldList['task']['dataSource'] = array('module' => 'bug', 'method' =>'getRelatedObjects', 'params' => 'task&id,name');
 
-$config->bug->fieldList['steps']['title'] = 'steps';
+$config->bug->fieldList['steps']['title']   = 'steps';
+$config->bug->fieldList['steps']['control'] = 'textarea';
 
 $config->bug->fieldList['status']['title'] = 'status';
 
-$config->bug->fieldList['deadline']['title'] = 'deadline';
+$config->bug->fieldList['deadline']['title']   = 'deadline';
+$config->bug->fieldList['deadline']['control'] = 'date';
 
 $config->bug->fieldList['activatedCount']['title'] = 'activatedCount';
 
@@ -84,11 +84,11 @@ $config->bug->fieldList['openedBy']['title'] = 'openedBy';
 
 $config->bug->fieldList['openedDate']['title'] = 'openedDate';
 
-$config->bug->fieldList['openedBuild']['title'] = 'openedBuild';
-$config->bug->fieldList['openedBuild']['foreignKey']       = true;
-$config->bug->fieldList['openedBuild']['foreignKeySource'] = array('module' => 'bug', 'method' =>'getRelatedObjects', 'params' => 'openedBuild&id,name');
+$config->bug->fieldList['openedBuild']['title']      = 'openedBuild';
+$config->bug->fieldList['openedBuild']['control']    = 'multiple';
+$config->bug->fieldList['openedBuild']['dataSource'] = array('module' => 'bug', 'method' =>'getRelatedObjects', 'params' => 'openedBuild&id,name');
 
-$config->bug->fieldList['assignedTo']['title'] = 'assignedTo';
+$config->bug->fieldList['assignedTo']['title']   = 'assignedTo';
 
 $config->bug->fieldList['assignedDate']['title'] = 'assignedDate';
 
@@ -109,13 +109,18 @@ $config->bug->fieldList['duplicateBug']['title'] = 'duplicateBug';
 $config->bug->fieldList['linkBug']['title'] = 'linkBug';
 
 $config->bug->fieldList['case']['title'] = 'case';
-$config->bug->fieldList['case']['foreignKey']       = true;
-$config->bug->fieldList['case']['foreignKeySource'] = array('module' => 'bug', 'method' =>'getRelatedObjects', 'params' => 'case&id,title');
+$config->bug->fieldList['case']['dataSource'] = array('module' => 'bug', 'method' =>'getRelatedObjects', 'params' => 'case&id,title');
 
 $config->bug->fieldList['lastEditedBy']['title'] = 'lastEditedBy';
+
 $config->bug->fieldList['lastEditedDate']['title'] = 'lastEditedDate';
+
 $config->bug->fieldList['files']['title'] = 'files';
-$config->bug->fieldList['feedbackBy']['title'] = 'feedbackBy';
+
+$config->bug->fieldList['feedbackBy']['title']   = 'feedbackBy';
+$config->bug->fieldList['feedbackBy']['control'] = 'select';
+$config->bug->fieldList['feedbackBy']['values']  = 'user';
+
 $config->bug->fieldList['notifyEmail']['title'] = 'notifyEmail';
 
 if($config->systemMode == 'classic') $config->bug->exportFields = str_replace(' project,', '', $config->bug->exportFields);

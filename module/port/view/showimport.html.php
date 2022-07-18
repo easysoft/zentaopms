@@ -90,38 +90,23 @@ $(function()
           <?php if($value['control'] == 'select'):?>
           <td><?php echo html::select("{$field}[$key]", $value['values'], !empty($object->$field) ? $object->$field : '', "class='form-control chosen'")?></td>
 
+          <?php elseif($value['control'] == 'multiple'):?>
+          <?php if(!isset($value['values'][''])) $value['values'][''] = '';?>
+          <td><?php echo html::select("{$field}[$key][]", $value['values'], !empty($object->$field) ? $object->$field : '', "multiple class='form-control chosen'")?></td>
+
           <?php elseif($value['control'] == 'date'):?>
           <?php $dateMatch = $this->config->port->dateMatch;?>
           <?php if(!preg_match($dateMatch, $object->$field)) $object->$field = ''; ?>
           <td><?php echo html::input("{$field}[$key]", !empty($object->$field) ? $object->$field : '', "class='form-control form-date autocomplete='off'")?></td>
+
+          <?php elseif($value['control'] == 'datetime'):?>
+          <td><?php echo html::input("{$field}[$key]", !empty($object->$field) ? $object->$field : '', "class='form-control form-datetime autocomplete='off'")?></td>
 
           <?php elseif($value['control'] == 'hidden'):?>
           <?php echo html::hidden("{$field}[$key]", $object->$field)?>
 
           <?php elseif($value['control'] == 'textarea'):?>
           <td><?php echo html::textarea("{$field}[$key]", $object->$field, "class='form-control' cols='50' rows='1'")?></td>
-
-          <?php elseif($field == 'estimate'):?>
-          <td>
-          <?php
-          if(is_array($object->estimate))
-          {
-              echo "<table class='table-borderless'>";
-              foreach($object->estimate as $account => $estimate)
-              {
-                  echo '<tr>';
-                  echo '<td class="c-team">' . html::select("team[$key][]", $members, $account, "class='form-control chosen'") . '</td>';
-                  echo '<td class="c-estimate-1">' . html::input("estimate[$key][]", $estimate, "class='form-control' autocomplete='off'")  . '</td>';
-                  echo '</tr>';
-              }
-              echo "</table>";
-          }
-          else
-          {
-              echo html::input("estimate[$key]", !empty($task->estimate) ? $task->estimate : '', "class='form-control'");
-          }
-          ?>
-          </td>
 
           <?php else:?>
           <td><?php echo html::input("{$field}[$key]", !empty($object->$field) ? $object->$field : '', "class='form-control autocomplete='off'")?></td>

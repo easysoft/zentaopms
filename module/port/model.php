@@ -76,7 +76,7 @@ class portModel extends model
     }
 
     /**
-     * createFromImport
+     * Create from import.
      *
      * @param  int    $model
      * @param  string $params
@@ -111,7 +111,7 @@ class portModel extends model
     }
 
     /**
-     * initPostFields
+     * Init postFields.
      *
      * @access public
      * @return void
@@ -291,7 +291,7 @@ class portModel extends model
     }
 
     /**
-     * init system datafields list.
+     * Init system datafields list.
      *
      * @access public
      * @return void
@@ -496,7 +496,7 @@ class portModel extends model
     }
 
     /**
-     * setListValue
+     * Set list value.
      *
      * @param  int    $model
      * @param  int    $fieldList
@@ -579,7 +579,7 @@ class portModel extends model
     }
 
     /**
-     * updateChildrenDatas
+     * Update children datas.
      *
      * @param  int    $datas
      * @access public
@@ -623,7 +623,7 @@ class portModel extends model
 
 
     /**
-     * initTmpFile
+     * Init tmpFile.
      *
      * @access public
      * @return void
@@ -660,19 +660,13 @@ class portModel extends model
             unset($fields[$key]);
         }
 
-
-
-        //$objectDatas = $this->getNatureDatas($objectDatas);
-
-
-
         if($created) $this->createTmpFile($tmpFile, $objectDatas);
 
         return $objectDatas;
     }
 
     /**
-     * checkTmpFile
+     * Check tmpFile.
      *
      * @access public
      * @return void
@@ -688,7 +682,7 @@ class portModel extends model
     }
 
     /**
-     * checkRowsFromExcel
+     * Check rows from excel.
      *
      * @access public
      * @return void
@@ -709,7 +703,7 @@ class portModel extends model
     }
 
     /**
-     * createTmpFile
+     * Create tmpFile.
      *
      * @param  int    $path
      * @param  int    $tmpFile
@@ -728,7 +722,7 @@ class portModel extends model
     }
 
     /**
-     * getNatureDatas
+     * Get nature datas.
      *
      * @param  int    $datas
      * @access public
@@ -766,7 +760,7 @@ class portModel extends model
     }
 
     /**
-     * checkSuhosinInfo
+     * Check suhosin info.
      *
      * @access public
      * @return void
@@ -774,14 +768,14 @@ class portModel extends model
     public function checkSuhosinInfo($datas = array())
     {
         /* Judge whether the editedTasks is too large and set session. */
-        $countInputVars  = count($datas) * 11;
+        $countInputVars  = count($datas) * 11; // Count all post datas
         $showSuhosinInfo = common::judgeSuhosinSetting($countInputVars);
         if($showSuhosinInfo) return extension_loaded('suhosin') ? sprintf($this->lang->suhosinInfo, $countInputVars) : sprintf($this->lang->maxVarsInfo, $countInputVars);
         return '';
     }
 
     /**
-     * getDatasByFile
+     * Get datas by file.
      *
      * @access public
      * @return void
@@ -792,7 +786,7 @@ class portModel extends model
     }
 
     /**
-     * getPageDatas
+     * Get pagelist for datas.
      *
      * @access public
      * @return void
@@ -826,7 +820,7 @@ class portModel extends model
     }
 
     /**
-     * getImportFields
+     * Get import fields.
      *
      * @param  string $model
      * @access public
@@ -849,7 +843,7 @@ class portModel extends model
     }
 
     /**
-     * processRows4Fields
+     * Process rows for fields.
      *
      * @param  array  $rows
      * @param  array  $fields
@@ -890,8 +884,15 @@ class portModel extends model
 
                 $tmpArray->$field = $cellValue;
             }
-            if(empty($tmpArray->name)) continue;
-            $objectDatas[$currentRow] = $tmpArray;
+
+            if(!empty($tmpArray->title))
+            {
+                $objectDatas[$currentRow] = $tmpArray;
+            }
+            elseif(!empty($tmpArray->name))
+            {
+                $objectDatas[$currentRow] = $tmpArray;
+            }
             unset($tmpArray);
         }
 
@@ -908,8 +909,9 @@ class portModel extends model
     }
 
     /**
-     * saveImportDatas
+     * Save import datas.
      *
+     * @param  int    $model
      * @param  int    $datas
      * @access public
      * @return void
@@ -953,7 +955,7 @@ class portModel extends model
     }
 
     /**
-     * processChildData
+     * Process child datas (task, story).
      *
      * @param  int    $objectID
      * @param  int    $data
@@ -982,7 +984,7 @@ class portModel extends model
     }
 
     /**
-     * saveSubTable
+     * Save SubTable datas.
      *
      * @param  int    $lastInsertID
      * @param  int    $datas
@@ -1001,7 +1003,7 @@ class portModel extends model
     }
 
     /**
-     * checkRequired
+     * Check Required fields .
      *
      * @param  int    $model
      * @param  int    $line
