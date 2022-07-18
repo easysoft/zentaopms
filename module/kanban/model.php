@@ -2235,6 +2235,18 @@ class kanbanModel extends model
             $this->loadModel('file')->saveUpload('kanban', $kanbanID);
             $this->file->updateObjectID($this->post->uid, $kanbanID, 'kanban');
 
+            if(isset($_POST['team']))
+            {
+                $kanbanMembers = empty($kanban->team) ? array() : explode(',', $kanban->team); 
+                $type          = 'team';
+            }
+            elseif(isset($_POST['whitelist']))
+            {
+                $kanbanMembers = empty($kanban->whitelist) ? array() : explode(',', $kanban->whitelist); 
+                $type          = 'whitelist';
+            }
+            $this->addSpaceMembers($kanban->space, $type, $kanbanMembers);
+
             return $kanbanID;
         }
     }
@@ -2282,6 +2294,19 @@ class kanbanModel extends model
         {
             $this->loadModel('file')->saveUpload('kanban', $kanbanID);
             $this->file->updateObjectID($this->post->uid, $kanbanID, 'kanban');
+
+            if(isset($_POST['team']))
+            {
+                $kanbanMembers = empty($kanban->team) ? array() : explode(',', $kanban->team); 
+                $type          = 'team';
+            }
+            elseif(isset($_POST['whitelist']))
+            {
+                $kanbanMembers = empty($kanban->whitelist) ? array() : explode(',', $kanban->whitelist); 
+                $type          = 'whitelist';
+            }
+
+            $this->addSpaceMembers($kanban->space, $type, $kanbanMembers);
 
             return common::createChanges($oldKanban, $kanban);
         }
@@ -2556,6 +2581,41 @@ class kanbanModel extends model
         {
             $cell->cards = $cell->cards ? ",$cardID" . $cell->cards : ",$cardID,";
             $this->dao->update(TABLE_KANBANCELL)->set('cards')->eq($cell->cards)->where('id')->eq($cell->id)->exec();
+        }
+    }
+
+    /**
+     * Add space members.
+     *
+     * @param  int    $spaceID
+     * @param  array  $type team|whitelist
+     * @param  array  $kanbanMembers
+     * @access public
+     * @return void
+     */
+    public function addSpaceMembers($spaceID, $type, $kanbanMembers = array())
+    {
+        $space   = $this->getSpaceById($spaceID);
+        $members = '';
+
+        if($type == 'team')
+        {
+            $spaceMembers = empty($space->team) ? array() : explode(',', $space->team);
+            $members      = $space->team;
+        }
+        elseif($type == 'whitelist')
+        {
+            $spaceMembers = empty($space->whitelist) ? array() : explode(',', $space->whitelist);
+            $members      = $space->whitelist;
+        }
+
+        $addMembers = array_diff($kanbanMembers, $spaceMembers);
+
+        if(!empty($addMembers))
+        {
+            $addMembers = implode(',', $addMembers);
+            $members   .= ',' . trim($addMembers, ',');
+            $this->dao->update(TABLE_KANBANSPACE)->set($type)->eq($members)->where('id')->eq($spaceID)->exec(); 
         }
     }
 
