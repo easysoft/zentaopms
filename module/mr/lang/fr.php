@@ -1,6 +1,7 @@
 <?php
 $lang->mr = new stdclass;
 $lang->mr->common       = "Merge Request";
+$lang->mr->server       = "Server";
 $lang->mr->view         = "Survey";
 $lang->mr->create       = "Create";
 $lang->mr->apiCreate    = "Interface: Create";

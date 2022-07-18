@@ -197,4 +197,25 @@ class gitea extends control
         $this->view->matchedResult = $this->gitea->getMatchedUsers($giteaID, $this->view->giteaUsers, $zentaoUsers);
         $this->display();
     }
+
+    /**
+     * Ajax getProjectBranches
+     *
+     * @param  int    $giteaID
+     * @param  string $project
+     * @access public
+     * @return void
+     */
+    public function ajaxGetProjectBranches($giteaID, $project)
+    {
+        if(!$giteaID or !$project) return $this->send(array('message' => array()));
+
+        $branches = $this->gitea->apiGetBranches($giteaID, $project);
+        $options  = "<option value=''></option>";
+        foreach($branches as $branch)
+        {
+            $options .= "<option value='{$branch->name}'>{$branch->name}</option>";
+        }
+        $this->send($options);
+    }
 }

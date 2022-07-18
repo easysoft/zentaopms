@@ -454,4 +454,56 @@ class giteaModel extends model
 
         return $users;
     }
+
+    /**
+     * Get project repository branches by api.
+     *
+     * @param  int    $giteaID
+     * @param  string $project
+     * @access public
+     * @return object
+     */
+    public function apiGetBranches($giteaID, $project, $pager = null)
+    {
+        $url = sprintf($this->getApiRoot($giteaID), "/repos/{$project}/branches");
+        $allResults = array();
+        for($page = 1; true; $page++)
+        {
+            $results = json_decode(commonModel::http($url . "&page={$page}&limit=50"));
+            if(!is_array($results)) break;
+            if(!empty($results)) $allResults = array_merge($allResults, $results);
+            if(count($results) < 100) break;
+        }
+
+        return $allResults;
+    }
+
+    /**
+     * Get Forks of a project by API.
+     *
+     * @param  int    $giteaID
+     * @param  string $projectID
+     * @access public
+     * @return object
+     */
+    public function apiGetForks($giteaID, $projectID)
+    {
+        $url = sprintf($this->getApiRoot($giteaID), "/repos/$projectID/forks");
+        return json_decode(commonModel::http($url));
+    }
+
+    /**
+     * Get upstream project by API.
+     *
+     * @param  int    $giteaID
+     * @param  string $projectID
+     * @access public
+     * @return void
+     */
+    public function apiGetUpstream($giteaID, $projectID)
+    {
+        $currentProject = $this->apiGetSingleProject($giteaID, $projectID);
+        if(isset($currentProject->parent->full_name)) return $currentProject->parent->full_name;
+        return array();
+    }
 }

@@ -1,6 +1,7 @@
 <?php
 $lang->mr = new stdclass;
 $lang->mr->common       = "合并请求";
+$lang->mr->server       = "服务器";
 $lang->mr->view         = "概况";
 $lang->mr->create       = "创建{$lang->mr->common}";
 $lang->mr->apiCreate    = "接口：创建{$lang->mr->common}";
@@ -116,11 +117,15 @@ $lang->mr->apiErrorMap[1] = "You can't use same project/branch for source and ta
 $lang->mr->apiErrorMap[2] = "/Another open merge request already exists for this source branch: !([0-9]+)/";
 $lang->mr->apiErrorMap[3] = "401 Unauthorized";
 $lang->mr->apiErrorMap[4] = "403 Forbidden";
+$lang->mr->apiErrorMap[5] = "/(pull request already exists for these targets).*/";
+$lang->mr->apiErrorMap[6] = "Invalid PullRequest: There are no changes between the head and the base";
 
 $lang->mr->errorLang[1] = '源项目分支与目标项目分支不能相同';
 $lang->mr->errorLang[2] = '存在另外一个同样的合并请求在源项目分支中: ID%u';
 $lang->mr->errorLang[3] = '权限不足';
 $lang->mr->errorLang[4] = '权限不足';
+$lang->mr->errorLang[5] = '存在另外一个同样的合并请求在源项目分支中';
+$lang->mr->errorLang[6] = '源项目分支与目标项目分支不能相同';
 
 $lang->mr->from = "从";
 $lang->mr->to   = "合并到";

@@ -10,6 +10,7 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
+<?php js::set('hosts', $hosts);?>
 <div id='mainContent' class='main-row'>
   <div class='main-col main-content'>
     <div class='center-block'>
@@ -19,8 +20,8 @@
       <form id='mrForm' method='post' class='form-ajax'>
         <table class='table table-form'>
           <tr>
-            <th><?php echo $lang->gitlab->common;?></th>
-            <td class='required'><?php echo html::select('hostID', array('') + $gitlabHosts, '', "class='form-control chosen'");?></td>
+            <th><?php echo $lang->mr->server;?></th>
+            <td class='required'><?php echo html::select('hostID', array('') + $hostPairs, '', "class='form-control chosen'");?></td>
           </tr>
           <tr>
             <th style="white-space: nowrap;"><?php echo $lang->mr->sourceProject;?></th>

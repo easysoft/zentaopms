@@ -2052,10 +2052,9 @@ class repoModel extends model
      * @param  int $projectID
      * @return array
      */
-    public function getGitLabRepoList($gitlabID, $projectID = 0)
+    public function getRepoListByClient($gitlabID, $projectID = 0)
     {
         return $this->dao->select('*')->from(TABLE_REPO)->where('deleted')->eq('0')
-            ->andWhere('SCM')->eq('Gitlab')
             ->andWhere('synced')->eq(1)
             ->andWhere('client')->eq($gitlabID)
             ->beginIF($projectID)->andWhere('path')->eq($projectID)->fi()

@@ -42,7 +42,7 @@ class pipelineModel extends model
     {
         return $this->dao->select('*')->from(TABLE_PIPELINE)
             ->where('deleted')->eq('0')
-            ->AndWhere('type')->eq($type)
+            ->AndWhere('type')->in($type)
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id');

@@ -720,7 +720,7 @@ class gitlab extends control
         }
 
         $gitlab    = $this->gitlab->getByID($gitlabID);
-        $repos     = $this->loadModel('repo')->getGitLabRepoList($gitlabID);
+        $repos     = $this->loadModel('repo')->getRepoListByClient($gitlabID);
         $repoPairs = array();
         foreach($repos as $repo) $repoPairs[$repo->path] = $repo->id;
 

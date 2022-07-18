@@ -99,44 +99,68 @@ class mrModel extends model
      * Get all gitlab server projects. If not an administrator, the role of project member should be higher than guest.
      *
      * @param  int    $repoID
+     * @param  string $scm
      * @access public
      * @return array
      */
-    public function getAllGitlabProjects($repoID = 0)
+    public function getAllProjects($repoID = 0, $scm = 'Gitlab')
     {
-        $hostIDList = $this->dao->select('distinct hostID')->from(TABLE_MR)
+        $hostID = $this->dao->select('hostID')->from(TABLE_MR)
             ->where('deleted')->eq('0')
-            ->beginIF($repoID)->andWhere('repoID')->eq($repoID)->fi()
-            ->fetchPairs('hostID');
+            ->andWhere('repoID')->eq($repoID)
+            ->fetch('hostID');
 
+        return $this->{'get' . $scm . 'Projects'}($hostID);
+    }
+
+    /**
+     * Get gitea projects.
+     *
+     * @param  int    $hostID
+     * @access public
+     * @return array
+     */
+    public function getGiteaProjects($hostID = 0)
+    {
+        $projects = $this->loadModel('gitea')->apiGetProjects($hostID);
+        return array($hostID => array_column($projects, 'full_name', 'full_name'));
+    }
+
+    /**
+     * Get gitlab projects.
+     *
+     * @param  int    $hostID
+     * @access public
+     * @return array
+     */
+    public function getGitlabProjects($hostID = 0)
+    {
         $allProjects = array();
         $allGroups   = array();
         $gitlabUsers = $this->loadModel('gitlab')->getGitLabListByAccount();
-        foreach($hostIDList as $hostID)
+        if(!$this->app->user->admin and !isset($gitlabUsers[$hostID])) continue;
+
+        $minProject = $maxProject = 0;
+        /* Mysql string to int. */
+        $projectCount = $this->dao->select('min(sourceProject + 0) as minSource, MAX(sourceProject + 0) as maxSource,MIN(targetProject) as minTarget,MAX(targetProject) as maxTarget')->from(TABLE_MR)
+            ->where('deleted')->eq('0')
+            ->andWhere('hostID')->eq($hostID)
+            ->fetch();
+        if($projectCount)
         {
-            if(!$this->app->user->admin and !isset($gitlabUsers[$hostID])) continue;
-
-            $minProject = $maxProject = 0;
-            $projectCount = $this->dao->select('min(sourceProject) as minSource,MAX(sourceProject) as maxSource,MIN(targetProject) as minTarget,MAX(targetProject) as maxTarget')->from(TABLE_MR)
-                ->where('deleted')->eq('0')
-                ->andWhere('hostID')->eq($hostID)
-                ->fetch();
-            if($projectCount)
-            {
-                $minProject = min($projectCount->minSource, $projectCount->minTarget);
-                $maxProject = max($projectCount->maxSource, $projectCount->maxTarget);
-            }
-            $allProjects[$hostID] = $this->gitlab->apiGetProjects($hostID, 'false', $minProject, $maxProject);
-
-            /* If not an administrator, need to obtain group member information. */
-            $groupIDList = array(0 => 0);
-            if(!$this->app->user->admin)
-            {
-                $groups = $this->gitlab->apiGetGroups($hostID, 'name_asc', 'reporter');
-                foreach($groups as $group) $groupIDList[] = $group->id;
-            }
-            $allGroups[$hostID] = $groupIDList;
+            $minProject = min($projectCount->minSource, $projectCount->minTarget);
+            $maxProject = max($projectCount->maxSource, $projectCount->maxTarget);
         }
+        $allProjects[$hostID] = $this->gitlab->apiGetProjects($hostID, 'false', $minProject, $maxProject);
+
+        /* If not an administrator, need to obtain group member information. */
+        $groupIDList = array(0 => 0);
+        if(!$this->app->user->admin)
+        {
+            $groups = $this->gitlab->apiGetGroups($hostID, 'name_asc', 'reporter');
+            foreach($groups as $group) $groupIDList[] = $group->id;
+        }
+        $allGroups[$hostID] = $groupIDList;
 
         $allProjectPairs = array();
         foreach($allProjects as $hostID => $projects)
@@ -195,21 +219,7 @@ class mrModel extends model
         $MRID = $this->dao->lastInsertId();
         $this->loadModel('action')->create('mr', $MRID, 'opened');
 
-        $MRObject = new stdclass;
-        $MRObject->target_project_id    = $MR->targetProject;
-        $MRObject->source_branch        = $MR->sourceBranch;
-        $MRObject->target_branch        = $MR->targetBranch;
-        $MRObject->title                = $MR->title;
-        $MRObject->description          = $MR->description;
-        $MRObject->remove_source_branch = $MR->removeSourceBranch == '1' ? true : false;
-        $MRObject->squash               = $MR->squash == '1' ? 1 : 0;
-        if($MR->assignee)
-        {
-            $gitlabAssignee = $this->gitlab->getUserIDByZentaoAccount($this->post->hostID, $MR->assignee);
-            if($gitlabAssignee) $MRObject->assignee_ids = $gitlabAssignee;
-        }
-
-        $rawMR = $this->apiCreateMR($this->post->hostID, $this->post->sourceProject, $MRObject);
+        $rawMR   = $this->apiCreateMR($this->post->hostID, $this->post->sourceProject, $MR);
 
         /**
          * Another open merge request already exists for this source branch.
@@ -619,8 +629,50 @@ class mrModel extends model
      */
     public function apiCreateMR($hostID, $projectID, $MR)
     {
-        $url = sprintf($this->gitlab->getApiRoot($hostID), "/projects/$projectID/merge_requests");
-        return json_decode(commonModel::http($url, $MR));
+        $host = $this->loadModel('pipeline')->getByID($hostID);
+
+        $MRObject = new stdclass;
+        $MRObject->title = $MR->title;
+        if($host->type == 'gitlab')
+        {
+            $url = sprintf($this->loadModel('gitlab')->getApiRoot($hostID), "/projects/$projectID/merge_requests");
+
+            $MRObject->target_project_id    = $MR->targetProject;
+            $MRObject->source_branch        = $MR->sourceBranch;
+            $MRObject->target_branch        = $MR->targetBranch;
+            $MRObject->description          = $MR->description;
+            $MRObject->remove_source_branch = $MR->removeSourceBranch == '1' ? true : false;
+            $MRObject->squash               = $MR->squash == '1' ? 1 : 0;
+            if($MR->assignee)
+            {
+                $gitlabAssignee = $this->gitlab->getUserIDByZentaoAccount($this->post->hostID, $MR->assignee);
+                if($gitlabAssignee) $MRObject->assignee_ids = $gitlabAssignee;
+            }
+            return json_decode(commonModel::http($url, $MRObject));
+        }
+        else
+        {
+            $url = sprintf($this->loadModel('gitea')->getApiRoot($hostID), "/repos/$projectID/pulls");
+
+            $MRObject->base = $MR->sourceBranch;
+            $MRObject->head = $MR->targetBranch;
+            $MRObject->body = $MR->description;
+            if($MR->assignee)
+            {
+                $assignee = $this->gitea->getUserIDByZentaoAccount($this->post->hostID, $MR->assignee);
+                if($assignee) $MRObject->assignee = $assignee;
+            }
+
+            $mergeResult = json_decode(commonModel::http($url, $MRObject));
+            if(isset($mergeResult->number)) $mergeResult->iid = $mergeResult->number;
+            if(isset($mergeResult->mergeable))
+            {
+                if($mergeResult->mergeable) $mergeResult->merge_status = 'can_be_merged';
+                if(!$mergeResult->mergeable) $mergeResult->merge_status = 'cannot_be_merged';
+            }
+            if(isset($mergeResult->state) and $mergeResult->state == 'open') $mergeResult->state = 'opened';
+            return $mergeResult;
+        }
     }
 
     /**
@@ -732,8 +784,17 @@ class mrModel extends model
      */
     public function apiDeleteMR($hostID, $projectID, $MRID)
     {
-        $url = sprintf($this->gitlab->getApiRoot($hostID), "/projects/$projectID/merge_requests/$MRID");
-        return json_decode(commonModel::http($url, null, array(CURLOPT_CUSTOMREQUEST => 'DELETE')));
+        $host = $this->loadModel('pipeline')->getByID($hostID);
+        if($host->type == 'gitlab')
+        {
+            $url = sprintf($this->loadModel('gitlab')->getApiRoot($hostID), "/projects/$projectID/merge_requests/$MRID");
+            return json_decode(commonModel::http($url, null, array(CURLOPT_CUSTOMREQUEST => 'DELETE')));
+        }
+        else
+        {
+            $url  = sprintf($this->loadModel('gitea')->getApiRoot($hostID), "/repos/$projectID/pulls/$MRID");
+            return json_decode(commonModel::http($url, array('state' => 'closed'), array(CURLOPT_CUSTOMREQUEST => 'PATCH')));
+        }
     }
 
      /**

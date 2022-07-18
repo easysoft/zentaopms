@@ -5,7 +5,14 @@ $(function()
         var hostID = $('#hostID').val();
         if(hostID == '') return false;
 
-        var url = createLink('repo', 'ajaxgetgitlabprojects', "hostID=" + hostID + "&projectIdList=&filter=IS_DEVELOPER");
+        if(hosts[hostID].type == 'gitlab')
+        {
+            var url = createLink('repo', 'ajaxGetGitlabProjects', "gitlabID=" + hostID + "&projectIdList=&filter=IS_DEVELOPER");
+        }
+        else
+        {
+            var url = createLink('repo', 'ajaxGetGiteaProjects', "giteaID=" + hostID);
+        }
         $.get(url, function(response)
         {
             $('#sourceProject').html('').append(response);
@@ -18,7 +25,7 @@ $(function()
         var hostID      = $('#hostID').val();
         var sourceProject = $(this).val();
         var branchSelect  = $(this).parents('td').find('select[name*=Branch]');
-        var branchUrl     = createLink('gitlab', 'ajaxgetprojectbranches', "hostID=" + hostID + "&projectID=" + sourceProject);
+        var branchUrl     = createLink(hosts[hostID].type, 'ajaxGetProjectBranches', "hostID=" + hostID + "&projectID=" + sourceProject);
         $.get(branchUrl, function(response)
         {
             branchSelect.html('').append(response);
@@ -31,7 +38,7 @@ $(function()
     {
         var hostID      = $('#hostID').val();
         var sourceProject = $(this).val();
-        var projectUrl    = createLink('mr', 'ajaxGetMRTargetProjects', "hostID=" + hostID + "&projectID=" + sourceProject);
+        var projectUrl    = createLink('mr', 'ajaxGetMRTargetProjects', "hostID=" + hostID + "&projectID=" + sourceProject + "&scm=" + hosts[hostID].type);
         $.get(projectUrl, function(response)
         {
             $('#targetProject').html('').append(response);
