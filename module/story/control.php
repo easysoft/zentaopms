@@ -1474,14 +1474,17 @@ class story extends control
      * Recall the story review.
      *
      * @param  int    $storyID
+     * @param  string $from
      * @access public
      * @return void
      */
-    public function recall($storyID)
+    public function recall($storyID, $from = 'list')
     {
         $story = $this->story->getById($storyID);
         $this->story->recall($storyID);
         $this->loadModel('action')->create('story', $storyID, 'Recalled');
+
+        if($from == 'view') return print(js::reload('parent'));
 
         $locateLink = $this->session->storyList ? $this->session->storyList : $this->createLink('product', 'browse', "productID={$story->product}");
         echo js::locate($locateLink, 'parent');
