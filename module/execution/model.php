@@ -1409,7 +1409,7 @@ class executionModel extends model
                 ->andWhere('t2.deleted')->eq(0)
                 ->fetchPairs();
 
-            $products = $this->loadModel('product')->getProductPairsByProject($projectID);
+            $products = $this->loadModel('product')->getProductPairsByProject($projectID, 'all', $executionProducts);
 
             foreach($executions as $id => $execution)
             {
