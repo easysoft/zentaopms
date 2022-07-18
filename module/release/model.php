@@ -104,6 +104,23 @@ class releaseModel extends model
     }
 
     /**
+     * Get story releases.
+     *
+     * @param  int    $storyID
+     * @access public
+     * @return array
+     */
+    public function getStoryReleases($storyID)
+    {
+        return $this->dao->select('*')->from(TABLE_RELEASE)
+            ->where('deleted')->eq(0)
+            ->andWhere('stories', true)->like("%,$storyID,%")
+            ->orWhere('stories')->like("%,$storyID")->markRight(1)
+            ->orderBy('id_desc')
+            ->fetchAll('id');
+    }
+
+    /**
      * Create a release.
      *
      * @param  int    $productID

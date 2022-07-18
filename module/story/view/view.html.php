@@ -456,7 +456,7 @@
               <tbody>
                 <?php if(!empty($fromBug)):?>
                 <tr>
-                  <th class='w-90px'><?php echo $lang->story->legendFromBug;?></th>
+                  <th><?php echo $lang->story->legendFromBug;?></th>
                   <td class='pd-0'>
                     <ul class='list-unstyled'>
                     <?php echo "<li title='#$fromBug->id $fromBug->title'>" . html::a($this->createLink('bug', 'view', "bugID=$fromBug->id", '', true), "#$fromBug->id $fromBug->title", '', "class='iframe' data-width='80%'") . '</li>';?>
@@ -465,7 +465,7 @@
                 </tr>
                 <?php endif;?>
                 <tr>
-                  <th class='w-90px'><?php echo $lang->story->legendBugs;?></th>
+                  <th><?php echo $lang->story->legendBugs;?></th>
                   <td class='pd-0'>
                     <ul class='list-unstyled'>
                     <?php
@@ -487,6 +487,36 @@
                     foreach($cases as $case)
                     {
                         echo "<li title='[C]$case->id $case->title'>" . html::a($this->createLink('testcase', 'view', "caseID=$case->id", '', true), "[C] #$case->id $case->title", '', $misc) . '</li>';
+                    }
+                    ?>
+                    </ul>
+                  </td>
+                </tr>
+                <tr>
+                  <th><?php echo $lang->story->legendBuilds;?></th>
+                  <td class='pd-0'>
+                    <ul class='list-unstyled'>
+                    <?php
+                    $misc = isonlybody() ? "showinonlybody" : "class='iframe' data-width='80%'";
+
+                    foreach($builds as $build)
+                    {
+                        echo "<li title='$build->id $build->name'>" . html::a($this->createLink('build', 'view', "buildID=$build->id", '', true), "#$build->id $build->name", '', $misc) . '</li>';
+                    }
+                    ?>
+                    </ul>
+                  </td>
+                </tr>
+                <tr>
+                  <th><?php echo $lang->story->legendReleases;?></th>
+                  <td class='pd-0'>
+                    <ul class='list-unstyled'>
+                    <?php
+                    $misc = isonlybody() ? "showinonlybody" : "class='iframe' data-width='80%'";
+
+                    foreach($releases as $release)
+                    {
+                        echo "<li title='$release->id $release->name'>" . html::a($this->createLink('release', 'view', "release=$release->id", '', true), "#$release->id $release->name", '', $misc) . '</li>';
                     }
                     ?>
                     </ul>

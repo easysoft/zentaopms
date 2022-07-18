@@ -179,6 +179,23 @@ class buildModel extends model
     }
 
     /**
+     * Get story builds.
+     *
+     * @param  int    $storyID
+     * @access public
+     * @return array
+     */
+    public function getStoryBuilds($storyID)
+    {
+        return $this->dao->select('*')->from(TABLE_BUILD)
+            ->where('deleted')->eq(0)
+            ->andWhere('stories', true)->like("%,$storyID,%")
+            ->orWhere('stories')->like("%,$storyID")->markRight(1)
+            ->orderBy('id_desc')
+            ->fetchAll('id');
+    }
+
+    /**
      * Get builds in pairs.
      *
      * @param int|array  $products
