@@ -525,6 +525,7 @@ class commonModel extends model
 
         if(isset($app->user))
         {
+            if(!isset($app->user->visions)) $app->user->visions = trim($config->visions, ',');
             $currentVision = $app->config->vision;
             $userVisions   = array_filter(explode(',', $app->user->visions));
             $configVisions = array_filter(explode(',', trim($config->visions, ',')));

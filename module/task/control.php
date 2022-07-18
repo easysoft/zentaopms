@@ -438,7 +438,7 @@ class task extends control
             $customFields[$field] = $this->lang->task->$field;
         }
 
-        if($execution->lifetime == 'ops') unset($customFields['story']);
+        if($execution->lifetime == 'ops' or $execution->attribute == 'request' or $execution->attribute == 'review') unset($customFields['story']);
 
         $this->view->customFields = $customFields;
         $this->view->showFields   = $this->config->task->custom->batchCreateFields;
@@ -801,7 +801,7 @@ class task extends control
                 if(($this->app->tab == 'execution' or ($this->config->vision == 'lite' and $this->app->tab == 'project')) and $execution->type == 'kanban')
                 {
                     $rdSearchValue = $this->session->rdSearchValue ? $this->session->rdSearchValue : '';
-                    $kanbanData    = $this->loadModel('kanban')->getRDKanban($task->execution, $execLaneType, 'id_desc', 0, $execGroup, $rdSearchValue);
+                    $kanbanData    = $this->loadModel('kanban')->getRDKanban($task->execution, $execLaneType, 'id_desc', 0, $execGroupBy, $rdSearchValue);
                     $kanbanData    = json_encode($kanbanData);
 
                     return print(js::closeModal('parent.parent', '', "parent.parent.updateKanban($kanbanData)"));

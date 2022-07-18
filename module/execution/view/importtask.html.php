@@ -60,7 +60,7 @@
           </td>
           <td title="<?php echo $executions[$task->execution];?>"><?php echo $executions[$task->execution];?></td>
           <td><span class='label-pri label-pri-<?php echo $task->pri;?>' title='<?php echo zget($lang->task->priList, $task->pri, $task->pri);?>'><?php echo $task->pri == '0' ? '' : zget($lang->task->priList, $task->pri, $task->pri);?></span></td>
-          <td class='text-left nobr'><?php if(!common::printLink('task', 'view', "task=$task->id", $task->name, '', "class='preview'", true, isonlybody())) echo $task->name;?></td>
+          <td class='text-left nobr'><?php if(!common::printLink('task', 'view', "task=$task->id", $task->name, '', "class='preview'", true, true)) echo $task->name;?></td>
           <td <?php echo $class;?>><?php echo $task->assignedToRealName;?></td>
           <td title="<?php echo $task->left . ' ' . $lang->execution->workHour;?>"><?php echo $task->left . ' ' . $lang->execution->workHourUnit;?></td>
           <td class=<?php if(isset($task->delay)) echo 'delayed';?>><?php if(substr($task->deadline, 0, 4) > 0) echo $task->deadline;?></td>

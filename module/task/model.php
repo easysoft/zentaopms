@@ -116,8 +116,8 @@ class taskModel extends model
             $task = $this->loadModel('file')->processImgURL($task, $this->config->task->editor->create['id'], $this->post->uid);
 
             /* Fix Bug #1525 */
-            $executionLifetime = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($executionID)->fetch('lifetime');
-            if($executionLifetime == 'ops')
+            $execution = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($task->execution)->fetch();
+            if($execution->lifetime == 'ops' or $execution->attribute == 'request' or $execution->attribute == 'review')
             {
                 $requiredFields = str_replace(",story,", ',', "$requiredFields");
                 $task->story = 0;
@@ -381,9 +381,9 @@ class taskModel extends model
         }
 
         /* Fix bug #1525*/
-        $executionLifetime  = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($executionID)->fetch('lifetime');
+        $execution = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($executionID)->fetch();
         $requiredFields = ',' . $this->config->task->create->requiredFields . ',';
-        if($executionLifetime == 'ops') $requiredFields = str_replace(',story,', ',', $requiredFields);
+        if($execution->lifetime == 'ops' or $execution->attribute == 'request' or $execution->attribute == 'review') $requiredFields = str_replace(',story,', ',', $requiredFields);
         $requiredFields = trim($requiredFields, ',');
 
         /* check data. */
@@ -809,7 +809,7 @@ class taskModel extends model
                 }
                 else
                 {
-                    if($team[$oldTask->assignedTo]->left == 0 && $team[$oldTask->assignedTo]->consumed != 0)
+                    if($team[$oldTask->assignedTo]->left == 0 and $team[$oldTask->assignedTo]->consumed != 0 and $this->app->rawMethod != 'deleteestimate')
                     {
                         if($oldTask->assignedTo != $teams[count($teams) - 1])
                         {
@@ -1036,9 +1036,9 @@ class taskModel extends model
             $task->mode = '';
         }
 
-        $executionLifetime  = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($task->execution)->fetch('lifetime');
+        $execution      = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($task->execution)->fetch();
         $requiredFields = "," . $this->config->task->edit->requiredFields . ",";
-        if($executionLifetime == 'ops')
+        if($execution->lifetime == 'ops' or $execution->attribute == 'request' or $execution->attribute == 'review')
         {
             $requiredFields = str_replace(",story,", ',', "$requiredFields");
             $task->story = 0;
@@ -1804,6 +1804,8 @@ class taskModel extends model
             $data->assignedDate = $now;
             $data->finishedBy   = $this->app->user->account;
             $data->finishedDate = $now;
+
+            $this->action->create('task', $taskID, 'Finished');
         }
         elseif($task->status == 'wait')
         {
@@ -2512,7 +2514,7 @@ class taskModel extends model
             ->orWhere('t1.finishedList')->like("%,{$account},%")
             ->markRight(1)
             ->fi()
-            ->beginIF($this->app->rawModule == 'my' or $this->app->rawModule == 'block')->andWhere('(t2.status')->ne('suspended')->orWhere('t4.status')->ne('suspended')->markRight(1)->fi()
+            ->beginIF($type == 'assignedTo' and ($this->app->rawModule == 'my' or $this->app->rawModule == 'block'))->andWhere('t2.status', true)->ne('suspended')->orWhere('t4.status')->ne('suspended')->markRight(1)->fi()
             ->beginIF($type != 'all' and $type != 'finishedBy' and $type != 'assignedTo')->andWhere("t1.`$type`")->eq($account)->fi()
             ->beginIF($type == 'assignedTo')->andWhere("(t1.assignedTo = '{$account}' or (t1.mode = 'multi' and t5.`account` = '{$account}') )")->fi()
             ->orderBy($orderBy)
@@ -3738,6 +3740,7 @@ class taskModel extends model
     public function getFinishedUsers($taskID = 0, $team = array())
     {
         $task = $this->getById($taskID);
+        if($task->activatedDate == '') $task->activatedDate = "0000-00-00";
         return $this->dao->select('actor')->from(TABLE_ACTION)
             ->where('objectType')->eq('task')
             ->andWhere('objectID')->eq($taskID)
@@ -3757,7 +3760,7 @@ class taskModel extends model
      * @access public
      * @return string
      */
-    public function buildNestedList($execution, $task, $isChild = false, $showmore = false, $users)
+    public function buildNestedList($execution, $task, $isChild = false, $showmore = false, $users = array())
     {
         $showmore = $showmore ? 'showmore' : '';
         $trAttrs  = "data-id='t$task->id'";

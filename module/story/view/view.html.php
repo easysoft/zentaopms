@@ -579,7 +579,7 @@ js::set('rawModule', $this->app->rawModule);
 <script>
 function handleLinkButtonClick()
 {
-  var xxcUrl = "xxc:openInApp/zentao-integrated/" + encodeURIComponent(window.location.href.replace(/.display=card/, '').replace(/\.xhtml/, '.html'));
+  var xxcUrl = "xxc:openInApp/zentao-integrated/" + encodeURIComponent(window.location.href.replace(/.display=card/, '').replace('xhtml', 'html'));
   window.open(xxcUrl);
 }
 </script>

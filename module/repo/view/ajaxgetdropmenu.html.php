@@ -38,7 +38,6 @@ li > a.selected {color: #3123ae !important; background: #f2eafc !important; line
           <i class='list-toggle icon'></i>
           <div class='label-type'>
             <a class='text-muted not-list-item'><?php echo $groupName;?></a>
-            <span class='label label-outline'><?php echo $this->lang->repo->type;?></span>
           </div>
           <ul data-idx='<?php echo $groupName;?>'>
           <?php foreach($group as $id => $repoName):?>
