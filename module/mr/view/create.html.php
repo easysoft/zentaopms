@@ -20,7 +20,7 @@
         <table class='table table-form'>
           <tr>
             <th><?php echo $lang->gitlab->common;?></th>
-            <td class='required'><?php echo html::select('gitlabID', array('') + $gitlabHosts, '', "class='form-control chosen'");?></td>
+            <td class='required'><?php echo html::select('hostID', array('') + $gitlabHosts, '', "class='form-control chosen'");?></td>
           </tr>
           <tr>
             <th style="white-space: nowrap;"><?php echo $lang->mr->sourceProject;?></th>

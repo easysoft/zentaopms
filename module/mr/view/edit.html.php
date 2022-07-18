@@ -9,7 +9,7 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<?php js::set('gitlabID', $MR->gitlabID);?>
+<?php js::set('hostID', $MR->hostID);?>
 <?php js::set('projectID', $MR->sourceProject);?>
 <!-- If this mr is deleted in GitLab, then show this part to user. -->
 <?php if(empty($rawMR) or !isset($rawMR->id)): ?>
@@ -33,14 +33,14 @@
         <table class='table table-form'>
           <tr>
             <th><?php echo $lang->gitlab->common;?></th>
-            <td><?php echo $this->loadModel('gitlab')->getByID($MR->gitlabID)->name;?></td>
+            <td><?php echo $this->loadModel('gitlab')->getByID($MR->hostID)->name;?></td>
           </tr>
           <tr>
              <th style="white-space: nowrap;"><?php echo $lang->mr->sourceProject;?></th>
              <td>
                <div>
                  <span class='fix-border text-left'>
-                 <?php echo $this->loadModel('gitlab')->apiGetSingleProject($MR->gitlabID, $MR->sourceProject)->name_with_namespace;?>:
+                 <?php echo $this->loadModel('gitlab')->apiGetSingleProject($MR->hostID, $MR->sourceProject)->name_with_namespace;?>:
                  <?php echo $MR->sourceBranch;?>
                  </span>
                </div>
@@ -52,12 +52,12 @@
                <div class='input-group'>
                  <?php if($MR->status == 'merged' or $MR->status == 'closed'):?>
                  <span class='fix-border text-left'>
-                 <?php echo $this->loadModel('gitlab')->apiGetSingleProject($MR->gitlabID, $MR->targetProject)->name_with_namespace;?>:
+                 <?php echo $this->loadModel('gitlab')->apiGetSingleProject($MR->hostID, $MR->targetProject)->name_with_namespace;?>:
                  <?php echo $MR->targetBranch;?>
                  </span>
                  <?php else:?>
                  <span class='input-group-addon fix-border'>
-                 <?php echo $this->loadModel('gitlab')->apiGetSingleProject($MR->gitlabID, $MR->targetProject)->name_with_namespace;?>
+                 <?php echo $this->loadModel('gitlab')->apiGetSingleProject($MR->hostID, $MR->targetProject)->name_with_namespace;?>
                  </span>
                  <?php echo html::select('targetBranch', $targetBranchList, $MR->targetBranch, "class='form-control chosen'");?>
                  <?php endif;?>

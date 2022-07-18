@@ -57,7 +57,7 @@ class repoModel extends model
                 return print(js::locate('back'));
             }
 
-            if($repo->SCM != 'Gitlab') unset($this->lang->devops->menu->mr);
+            if(!in_array(strtolower($repo->SCM), $this->config->repo->gitServiceList)) unset($this->lang->devops->menu->mr);
             $this->lang->switcherMenu = $this->getSwitcher($repoID);
         }
 

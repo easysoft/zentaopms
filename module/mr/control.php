@@ -39,7 +39,7 @@ class mr extends control
 
         $repoID = $this->repo->saveState($repoID, $objectID);
         $repo   = $this->repo->getRepoByID($repoID);
-        if($repo->SCM != 'Gitlab') $repo = $repos[0];
+        if(!in_array(strtolower($repo->SCM), $this->config->mr->gitServiceList)) $repo = $repos[0];
         $this->loadModel('ci')->setMenu($repo->id);
 
         $projects = $this->mr->getAllGitlabProjects($repoID);
@@ -126,19 +126,19 @@ class mr extends control
         }
 
         $MR = $this->mr->getByID($MRID);
-        if(isset($MR->gitlabID)) $rawMR = $this->mr->apiGetSingleMR($MR->gitlabID, $MR->targetProject, $MR->mriid);
+        if(isset($MR->hostID)) $rawMR = $this->mr->apiGetSingleMR($MR->hostID, $MR->targetProject, $MR->mriid);
         $this->view->title = $this->lang->mr->edit;
         $this->view->MR    = $MR;
         $this->view->rawMR = isset($rawMR) ? $rawMR : false;
         if(!isset($rawMR->id) or (isset($rawMR->message) and $rawMR->message == '404 Not found') or empty($rawMR)) return $this->display();
 
-        $branchList       = $this->loadModel('gitlab')->getBranches($MR->gitlabID, $MR->targetProject);
+        $branchList       = $this->loadModel('gitlab')->getBranches($MR->hostID, $MR->targetProject);
         $targetBranchList = array();
         foreach($branchList as $branch) $targetBranchList[$branch] = $branch;
 
         /* Fetch user list both in Zentao and current GitLab project. */
-        $bindedUsers     = $this->gitlab->getUserIdRealnamePairs($MR->gitlabID);
-        $rawProjectUsers = $this->gitlab->apiGetProjectUsers($MR->gitlabID, $MR->targetProject);
+        $bindedUsers     = $this->gitlab->getUserIdRealnamePairs($MR->hostID);
+        $rawProjectUsers = $this->gitlab->apiGetProjectUsers($MR->hostID, $MR->targetProject);
 
         $users = array();
         foreach($rawProjectUsers as $rawProjectUser)
@@ -146,16 +146,16 @@ class mr extends control
             if(!empty($bindedUsers[$rawProjectUser->id])) $users[$rawProjectUser->id] = $bindedUsers[$rawProjectUser->id];
         }
 
-        $gitlabUsers = $this->gitlab->getUserAccountIdPairs($MR->gitlabID);
+        $gitlabUsers = $this->gitlab->getUserAccountIdPairs($MR->hostID);
 
         /* Check permissions. */
         if(!$this->app->user->admin)
         {
             $groupIDList = array(0 => 0);
-            $groups      = $this->gitlab->apiGetGroups($MR->gitlabID, 'name_asc', 'developer');
+            $groups      = $this->gitlab->apiGetGroups($MR->hostID, 'name_asc', 'developer');
             foreach($groups as $group) $groupIDList[] = $group->id;
-            $sourceProject = $this->gitlab->apiGetSingleProject($MR->gitlabID, $MR->sourceProject);
-            $isDeveloper   = $this->gitlab->checkUserAccess($MR->gitlabID, 0, $sourceProject, $groupIDList, 'developer');
+            $sourceProject = $this->gitlab->apiGetSingleProject($MR->hostID, $MR->sourceProject);
+            $isDeveloper   = $this->gitlab->checkUserAccess($MR->hostID, 0, $sourceProject, $groupIDList, 'developer');
 
             if(!isset($gitlabUsers[$this->app->user->account]) or !$isDeveloper) return print(js::alert($this->lang->mr->errorLang[3]) . js::locate($this->createLink('mr', 'browse')));
         }
@@ -166,7 +166,7 @@ class mr extends control
         $this->loadModel('compile');
 
         $repoList    = array();
-        $rawRepoList = $this->repo->getGitLabRepoList($MR->gitlabID, $MR->sourceProject);
+        $rawRepoList = $this->repo->getGitLabRepoList($MR->hostID, $MR->sourceProject);
         foreach($rawRepoList as $rawRepo) $repoList[$rawRepo->id] = "[$rawRepo->id] $rawRepo->name";
 
         $jobList = array();
@@ -204,7 +204,7 @@ class mr extends control
 
         if($MR->synced)
         {
-           $res = $this->mr->apiDeleteMR($MR->gitlabID, $MR->targetProject, $MR->mriid);
+           $res = $this->mr->apiDeleteMR($MR->hostID, $MR->targetProject, $MR->mriid);
            if(isset($res->message)) return print(js::alert($this->mr->convertApiError($res->message)));
         }
         $this->dao->delete()->from(TABLE_MR)->where('id')->eq($id)->exec();
@@ -223,7 +223,7 @@ class mr extends control
     {
         $MR = $this->mr->getByID($id);
         if(!$MR) return print(js::error($this->lang->notFound) . js::locate($this->createLink('mr', 'browse')));
-        if(isset($MR->gitlabID)) $rawMR = $this->mr->apiGetSingleMR($MR->gitlabID, $MR->targetProject, $MR->mriid);
+        if(isset($MR->hostID)) $rawMR = $this->mr->apiGetSingleMR($MR->hostID, $MR->targetProject, $MR->mriid);
         if($MR->synced and (!isset($rawMR->id) or (isset($rawMR->message) and $rawMR->message == '404 Not found') or empty($rawMR))) return $this->display();
 
         $this->loadModel('gitlab');
@@ -231,15 +231,15 @@ class mr extends control
 
         /* Sync MR from GitLab to ZentaoPMS. */
         $MR = $this->mr->apiSyncMR($MR);
-        $sourceProject = $this->gitlab->apiGetSingleProject($MR->gitlabID, $MR->sourceProject);
-        $targetProject = $this->gitlab->apiGetSingleProject($MR->gitlabID, $MR->targetProject);
-        $sourceBranch  = $this->gitlab->apiGetSingleBranch($MR->gitlabID, $MR->sourceProject, $MR->sourceBranch);
-        $targetBranch  = $this->gitlab->apiGetSingleBranch($MR->gitlabID, $MR->targetProject, $MR->targetBranch);
+        $sourceProject = $this->gitlab->apiGetSingleProject($MR->hostID, $MR->sourceProject);
+        $targetProject = $this->gitlab->apiGetSingleProject($MR->hostID, $MR->targetProject);
+        $sourceBranch  = $this->gitlab->apiGetSingleBranch($MR->hostID, $MR->sourceProject, $MR->sourceBranch);
+        $targetBranch  = $this->gitlab->apiGetSingleBranch($MR->hostID, $MR->targetProject, $MR->targetBranch);
 
         $projectOwner = true;
-        if(isset($MR->gitlabID) and !$this->app->user->admin)
+        if(isset($MR->hostID) and !$this->app->user->admin)
         {
-            $openID = $this->gitlab->getUserIDByZentaoAccount($MR->gitlabID, $this->app->user->account);
+            $openID = $this->gitlab->getUserIDByZentaoAccount($MR->hostID, $this->app->user->account);
             if(!$projectOwner and isset($sourceProject->owner->id) and $sourceProject->owner->id == $openID) $projectOwner = true;
         }
 
@@ -321,12 +321,12 @@ class mr extends control
         }
 
         /* Accept MR by using the mapped user in GitLab. */
-        $sudoUser = $this->mr->getSudoUsername($MR->gitlabID, $MR->targetProject);
+        $sudoUser = $this->mr->getSudoUsername($MR->hostID, $MR->targetProject);
 
-        if(isset($MR->gitlabID))
+        if(isset($MR->hostID))
         {
-            if(!empty($sudoUser)) $rawMR = $this->mr->apiAcceptMR($MR->gitlabID, $MR->targetProject, $MR->mriid, $sudoUser);
-            if(empty($sudoUser))  $rawMR = $this->mr->apiAcceptMR($MR->gitlabID, $MR->targetProject, $MR->mriid);
+            if(!empty($sudoUser)) $rawMR = $this->mr->apiAcceptMR($MR->hostID, $MR->targetProject, $MR->mriid, $sudoUser);
+            if(empty($sudoUser))  $rawMR = $this->mr->apiAcceptMR($MR->hostID, $MR->targetProject, $MR->mriid);
         }
         if(isset($rawMR->state) and $rawMR->state == 'merged')
         {
@@ -372,7 +372,7 @@ class mr extends control
         $rawMR = null;
         if($MR->synced)
         {
-            $rawMR = $this->mr->apiGetSingleMR($MR->gitlabID, $MR->targetProject, $MR->mriid);
+            $rawMR = $this->mr->apiGetSingleMR($MR->hostID, $MR->targetProject, $MR->mriid);
             if(!isset($rawMR->id) or (isset($rawMR->message) and $rawMR->message == '404 Not found') or empty($rawMR)) return $this->display();
         }
         $this->view->rawMR = $rawMR;
@@ -594,7 +594,7 @@ class mr extends control
         $this->loadModel('search')->setSearchParams($this->config->product->search);
 
         $MR             = $this->mr->getByID($MRID);
-        $relatedStories = $this->mr->getCommitedLink($MR->gitlabID, $MR->targetProject, $MR->mriid, 'story');
+        $relatedStories = $this->mr->getCommitedLink($MR->hostID, $MR->targetProject, $MR->mriid, 'story');
 
         $linkedStories = $this->mr->getLinkList($MRID, $product->id, 'story');
         if($browseType == 'bySearch')
@@ -679,7 +679,7 @@ class mr extends control
         $this->loadModel('search')->setSearchParams($this->config->bug->search);
 
         $MR          = $this->mr->getByID($MRID);
-        $relatedBugs = $this->mr->getCommitedLink($MR->gitlabID, $MR->targetProject, $MR->mriid, 'bug');
+        $relatedBugs = $this->mr->getCommitedLink($MR->hostID, $MR->targetProject, $MR->mriid, 'bug');
 
         $linkedBugs = $this->mr->getLinkList($MRID, $product->id, 'bug');
         if($browseType == 'bySearch')
@@ -751,7 +751,7 @@ class mr extends control
         $this->loadModel('search')->setSearchParams($this->config->execution->search);
 
         $MR           = $this->mr->getByID($MRID);
-        $relatedTasks = $this->mr->getCommitedLink($MR->gitlabID, $MR->targetProject, $MR->mriid, 'task');
+        $relatedTasks = $this->mr->getCommitedLink($MR->hostID, $MR->targetProject, $MR->mriid, 'task');
         $linkedTasks  = $this->mr->getLinkList($MRID, $product->id, 'task');
 
         /* Get executions by product. */
@@ -884,38 +884,38 @@ class mr extends control
     /**
      * AJAX: Get MR target projects.
      *
-     * @param  int    $gitlabID
+     * @param  int    $hostID
      * @param  int    $projectID
      * @access public
      * @return void
      */
-    public function ajaxGetMRTargetProjects($gitlabID, $projectID)
+    public function ajaxGetMRTargetProjects($hostID, $projectID)
     {
         $this->loadModel('gitlab');
 
         /* First step: get forks. Only get first level forks(not recursively). */
-        $projects = $this->gitlab->apiGetForks($gitlabID, $projectID);
+        $projects = $this->gitlab->apiGetForks($hostID, $projectID);
 
         /* Second step: get project itself. */
-        $projects[] = $this->gitlab->apiGetSingleProject($gitlabID, $projectID);
+        $projects[] = $this->gitlab->apiGetSingleProject($hostID, $projectID);
 
         /* Last step: find its upstream recursively. */
-        $project = $this->gitlab->apiGetUpstream($gitlabID, $projectID);
+        $project = $this->gitlab->apiGetUpstream($hostID, $projectID);
         if(!empty($project)) $projects[] = $project;
 
         while(!empty($project) and isset($project->id))
         {
-            $project = $this->gitlab->apiGetUpstream($gitlabID, $project->id);
+            $project = $this->gitlab->apiGetUpstream($hostID, $project->id);
             if(empty($project)) break;
             $projects[] = $project;
         }
 
         $groupIDList = array(0 => 0);
-        $groups      = $this->gitlab->apiGetGroups($gitlabID, 'name_asc', 'developer');
+        $groups      = $this->gitlab->apiGetGroups($hostID, 'name_asc', 'developer');
         foreach($groups as $group) $groupIDList[] = $group->id;
         foreach($projects as $key => $project)
         {
-            if($this->gitlab->checkUserAccess($gitlabID, 0, $project, $groupIDList, 'developer') == false) unset($projects[$key]);
+            if($this->gitlab->checkUserAccess($hostID, 0, $project, $groupIDList, 'developer') == false) unset($projects[$key]);
         }
 
         if(!$projects) return $this->send(array('message' => array()));
@@ -932,14 +932,14 @@ class mr extends control
     /**
      * AJAX: Get repo list.
      *
-     * @param  int $gitlabID
+     * @param  int $hostID
      * @param  int $projectID
      * @return void
      */
-    public function ajaxGetRepoList($gitlabID, $projectID)
+    public function ajaxGetRepoList($hostID, $projectID)
     {
         $this->loadModel('repo');
-        $repoList = $this->repo->getGitLabRepoList($gitlabID, $projectID);
+        $repoList = $this->repo->getGitLabRepoList($hostID, $projectID);
 
         if(!$repoList) return $this->send(array('message' => array()));
         $options = "<option value=''></option>";
@@ -984,18 +984,18 @@ class mr extends control
    /**
     * Ajax check same opened mr for source branch.
     *
-    * @param  int    $gitlabID
+    * @param  int    $hostID
     * @access public
     * @return void
     */
-   public function ajaxCheckSameOpened($gitlabID)
+   public function ajaxCheckSameOpened($hostID)
    {
        $sourceProject = $this->post->sourceProject;
        $sourceBranch  = $this->post->sourceBranch;
        $targetProject = $this->post->targetProject;
        $targetBranch  = $this->post->targetBranch;
 
-       $result = $this->mr->checkSameOpened($gitlabID, $sourceProject, $sourceBranch, $targetProject, $targetBranch);
+       $result = $this->mr->checkSameOpened($hostID, $sourceProject, $sourceBranch, $targetProject, $targetBranch);
        echo json_encode($result);
    }
 }

@@ -58,8 +58,8 @@
       </thead>
       <tbody>
         <?php foreach($MRList as $MR):?>
-        <?php $sourceProject = isset($projects[$MR->gitlabID][$MR->sourceProject]) ? $projects[$MR->gitlabID][$MR->sourceProject]->name_with_namespace . ':' . $MR->sourceBranch : $MR->sourceProject . ':' . $MR->sourceBranch; ?>
-        <?php $targetProject = isset($projects[$MR->gitlabID][$MR->targetProject]) ? $projects[$MR->gitlabID][$MR->targetProject]->name_with_namespace . ':' . $MR->targetBranch : $MR->targetProject . ':' . $MR->targetBranch; ?>
+        <?php $sourceProject = isset($projects[$MR->hostID][$MR->sourceProject]) ? $projects[$MR->hostID][$MR->sourceProject]->name_with_namespace . ':' . $MR->sourceBranch : $MR->sourceProject . ':' . $MR->sourceBranch; ?>
+        <?php $targetProject = isset($projects[$MR->hostID][$MR->targetProject]) ? $projects[$MR->hostID][$MR->targetProject]->name_with_namespace . ':' . $MR->targetBranch : $MR->targetProject . ':' . $MR->targetBranch; ?>
         <tr>
           <td class='text'><?php echo $MR->id;?></td>
           <td class='text'><?php echo html::a(inlink('view', "mr={$MR->id}"), $MR->title);?></td>
@@ -79,8 +79,8 @@
           <td class='text' title='<?php echo zget($users, $MR->createdBy);?>'><?php echo zget($users, $MR->createdBy);?></td>
           <td class='c-actions'>
             <?php
-            $canDelete = ($app->user->admin or (isset($projects[$MR->gitlabID][$MR->sourceProject]->owner->id) and $projects[$MR->gitlabID][$MR->sourceProject]->owner->id == $openIDList[$MR->gitlabID])) ? '' : 'disabled';
-            $canEdit   = (isset($projects[$MR->gitlabID][$MR->sourceProject]->isDeveloper) and $projects[$MR->gitlabID][$MR->sourceProject]->isDeveloper == true) ? '' : 'disabled';
+            $canDelete = ($app->user->admin or (isset($projects[$MR->hostID][$MR->sourceProject]->owner->id) and $projects[$MR->hostID][$MR->sourceProject]->owner->id == $openIDList[$MR->hostID])) ? '' : 'disabled';
+            $canEdit   = (isset($projects[$MR->hostID][$MR->sourceProject]->isDeveloper) and $projects[$MR->hostID][$MR->sourceProject]->isDeveloper == true) ? '' : 'disabled';
             common::printLink('mr', 'view',   "mr={$MR->id}", '<i class="icon icon-eye"></i>', '', "title='{$lang->mr->view}' class='btn btn-info'");
             common::printIcon('mr', 'edit',   "mr={$MR->id}", $MR, 'list',  '', '', '', false, "{$canEdit}");
             common::printLink('mr', 'diff',   "mr={$MR->id}", '<i class="icon icon-diff"></i>', '', "title='{$lang->mr->viewDiff}' class='btn btn-info'");
