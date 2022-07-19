@@ -39,7 +39,7 @@
         <td>
           <div class='input-group'>
             <?php echo html::select('owner', $ownerPairs, $kanban->owner, "class='form-control chosen' data-drop_direction='down'");?>
-            <span class='input-group-btn'><?php echo html::commonButton($lang->bug->allUsers, "class='btn btn-default' onclick='loadAllUsers()' data-toggle='tooltip'");?></span>
+            <span class='input-group-btn'><?php echo html::commonButton($lang->kanban->allUsers, "class='btn btn-default' onclick='loadAllUsers()' data-toggle='tooltip'");?></span>
           </div>
         </td>
       </tr>

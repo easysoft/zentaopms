@@ -87,6 +87,7 @@ $lang->kanban->allProjects         = 'All ' . ($this->config->systemMode == 'cla
 $lang->kanban->allProducts         = 'All Products';
 $lang->kanban->mine                = 'Mine';
 $lang->kanban->alignment           = 'Alignment';
+$lang->kanban->allUsers            = 'Alle Benutzer laden';
 
 /* Fields. */
 $lang->kanban->space          = 'Space';
