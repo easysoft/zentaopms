@@ -87,6 +87,7 @@ $lang->kanban->allProjects         = '所有' . ($this->config->systemMode == 'c
 $lang->kanban->allProducts         = '所有产品';
 $lang->kanban->mine                = '我负责';
 $lang->kanban->alignment           = '对齐方式';
+$lang->kanban->allUsers            = '加载所有用户';
 
 /* Fields. */
 $lang->kanban->space          = '所属空间';

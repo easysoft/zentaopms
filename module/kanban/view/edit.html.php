@@ -36,13 +36,19 @@
       <?php if($type != 'private'):?>
       <tr>
         <th><?php echo $lang->kanban->owner;?></th>
-        <td><?php echo html::select('owner', $users, $kanban->owner, "class='form-control chosen' data-drop_direction='down'");?></td>
+        <td>
+          <div class='input-group'>
+            <?php echo html::select('owner', $ownerPairs, $kanban->owner, "class='form-control chosen' data-drop_direction='down'");?>
+            <span class='input-group-btn'><?php echo html::commonButton($lang->kanban->allUsers, "class='btn btn-default' onclick='loadAllUsers()' data-toggle='tooltip'");?></span>
+          </div>
+        </td>
       </tr>
       <tr>
         <th><?php echo $lang->kanban->team;?></th>
         <td colspan='2'>
           <div class="input-group">
             <?php echo html::select('team[]', $users, $kanban->team, "class='form-control picker-select' multiple data-dropDirection='bottom'");?>
+            <?php echo $this->fetch('my', 'buildContactLists', 'dropdownName=team');?>
           </div>
         </td>
       </tr>
@@ -90,7 +96,12 @@
       <?php if($type == 'private'):?>
       <tr id="whitelistBox">
         <th><?php echo $lang->whitelist;?></th>
-        <td><?php echo html::select('whitelist[]', $whitelist, $kanban->whitelist, 'class="form-control picker-select" multiple');?></td>
+        <td colspan='2'>
+          <div class="input-group">
+            <?php echo html::select('whitelist[]', $users, $kanban->whitelist, 'class="form-control picker-select" multiple');?>
+            <?php echo $this->fetch('my', 'buildContactLists', 'dropdownName=whitelist');?>
+          </div>
+        </td>
       </tr>
       <?php endif;?>
       <tr>
