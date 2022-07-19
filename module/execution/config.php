@@ -151,10 +151,13 @@ $config->execution->datatable->fieldList['name']['fixed']    = 'left';
 $config->execution->datatable->fieldList['name']['width']    = 'auto';
 $config->execution->datatable->fieldList['name']['required'] = 'yes';
 
-$config->execution->datatable->fieldList['code']['title']    = 'code';
-$config->execution->datatable->fieldList['code']['fixed']    = 'no';
-$config->execution->datatable->fieldList['code']['width']    = '95';
-$config->execution->datatable->fieldList['code']['required'] = 'no';
+if(!isset($config->setCode) or $config->setCode == 1)
+{
+    $config->execution->datatable->fieldList['code']['title']    = 'code';
+    $config->execution->datatable->fieldList['code']['fixed']    = 'no';
+    $config->execution->datatable->fieldList['code']['width']    = '95';
+    $config->execution->datatable->fieldList['code']['required'] = 'no';
+}
 
 $config->execution->datatable->fieldList['project']['title']    = 'project';
 $config->execution->datatable->fieldList['project']['fixed']    = 'no';
