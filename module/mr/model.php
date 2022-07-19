@@ -123,7 +123,7 @@ class mrModel extends model
     public function getGiteaProjects($hostID = 0)
     {
         $projects = $this->loadModel('gitea')->apiGetProjects($hostID);
-        return array($hostID => array_column($projects, 'full_name', 'full_name'));
+        return array($hostID => array_column($projects, null, 'full_name'));
     }
 
     /**
@@ -365,6 +365,7 @@ class mrModel extends model
             ->get();
         $oldMR = $this->getByID($MRID);
 
+        if($oldMR->sourceProject == $oldMR->targetProject and $oldMR->sourceBranch == $MR->targetBranch) dao::$errors['targetBranch'] = $this->lang->mr->errorLang[1];
         $this->dao->update(TABLE_MR)->data($MR)->checkIF($MR->needCI, 'jobID',  'notempty');
         if(dao::isError()) return array('result' => 'fail', 'message' => dao::getError());
 
@@ -381,21 +382,8 @@ class mrModel extends model
             }
         }
 
-        /* Update MR in GitLab. */
-        $newMR = new stdclass;
-        $newMR->title                = $MR->title;
-        $newMR->description          = $MR->description;
-        $newMR->target_branch        = $MR->targetBranch;
-        $newMR->remove_source_branch = $MR->removeSourceBranch == '1' ? true : false;
-        $newMR->squash               = $MR->squash == '1' ? 1 : 0;
-        if($MR->assignee)
-        {
-            $gitlabAssignee = $this->gitlab->getUserIDByZentaoAccount($oldMR->hostID, $MR->assignee);
-            if($gitlabAssignee) $newMR->assignee_ids = $gitlabAssignee;
-        }
-
         /* Known issue: `reviewer_ids` takes no effect. */
-        $rawMR = $this->apiUpdateMR($oldMR->hostID, $oldMR->targetProject, $oldMR->mriid, $newMR);
+        $rawMR = $this->apiUpdateMR($oldMR->hostID, $oldMR->targetProject, $oldMR->mriid, $MR);
         if(!isset($rawMR->id) and isset($rawMR->message))
         {
             $errorMessage = $this->convertApiError($rawMR->message);
@@ -766,8 +754,19 @@ class mrModel extends model
      */
     public function apiGetSingleMR($hostID, $projectID, $MRID)
     {
-        $url = sprintf($this->gitlab->getApiRoot($hostID), "/projects/$projectID/merge_requests/$MRID");
-        return json_decode(commonModel::http($url));
+        $host = $this->loadModel('pipeline')->getByID($hostID);
+        if($host->type == 'gitlab')
+        {
+            $url = sprintf($this->gitlab->getApiRoot($hostID), "/projects/$projectID/merge_requests/$MRID");
+            return json_decode(commonModel::http($url));
+        }
+        else
+        {
+            $url = sprintf($this->loadModel('gitea')->getApiRoot($hostID), "/repos/$projectID/pulls/$MRID");
+            $MR  = json_decode(commonModel::http($url));
+
+            return $MR;
+        }
     }
 
     /**
@@ -799,8 +798,45 @@ class mrModel extends model
      */
     public function apiUpdateMR($hostID, $projectID, $MRID, $MR)
     {
-        $url = sprintf($this->gitlab->getApiRoot($hostID), "/projects/$projectID/merge_requests/$MRID");
-        return json_decode(commonModel::http($url, $MR, $options = array(CURLOPT_CUSTOMREQUEST => 'PUT')));
+        $host  = $this->loadModel('pipeline')->getByID($hostID);
+        $newMR = new stdclass;
+        $newMR->title = $MR->title;
+        if($host->type == 'gitlab')
+        {
+            $newMR->description          = $MR->description;
+            $newMR->target_branch        = $MR->targetBranch;
+            $newMR->remove_source_branch = $MR->removeSourceBranch == '1' ? true : false;
+            $newMR->squash               = $MR->squash == '1' ? 1 : 0;
+            if($MR->assignee)
+            {
+                $gitlabAssignee = $this->gitlab->getUserIDByZentaoAccount($oldMR->hostID, $MR->assignee);
+                if($gitlabAssignee) $newMR->assignee_ids = $gitlabAssignee;
+            }
+            $url = sprintf($this->gitlab->getApiRoot($hostID), "/projects/$projectID/merge_requests/$MRID");
+            return json_decode(commonModel::http($url, $MR, $options = array(CURLOPT_CUSTOMREQUEST => 'PUT')));
+        }
+        else
+        {
+            $url = sprintf($this->loadModel('gitea')->getApiRoot($hostID), "/repos/$projectID/pulls/$MRID");
+
+            $newMR->base = $MR->targetBranch;
+            $newMR->body = $MR->description;
+            if($MR->assignee)
+            {
+                $assignee = $this->gitea->getUserIDByZentaoAccount($this->post->hostID, $MR->assignee);
+                if($assignee) $newMR->assignee = $assignee;
+            }
+
+            $mergeResult = json_decode(commonModel::http($url, $newMR, array(), array(), 'json', 'PATCH'));
+            if(isset($mergeResult->number)) $mergeResult->iid = $mergeResult->number;
+            if(isset($mergeResult->mergeable))
+            {
+                if($mergeResult->mergeable) $mergeResult->merge_status = 'can_be_merged';
+                if(!$mergeResult->mergeable) $mergeResult->merge_status = 'cannot_be_merged';
+            }
+            if(isset($mergeResult->state) and $mergeResult->state == 'open') $mergeResult->state = 'opened';
+            return $mergeResult;
+        }
     }
 
     /**
@@ -1750,6 +1786,7 @@ class mrModel extends model
     {
         if(empty($sourceProject) or empty($sourceBranch) or empty($targetProject) or empty($targetBranch)) return array('result' => 'success');
 
+        if($sourceProject == $targetProject and $sourceBranch == $targetBranch) return array('result' => 'fail', 'message' => $this->lang->mr->errorLang[1]);
         $dbOpenedID = $this->dao->select('id')->from(TABLE_MR)
             ->where('hostID')->eq($hostID)
             ->andWhere('sourceProject')->eq($sourceProject)

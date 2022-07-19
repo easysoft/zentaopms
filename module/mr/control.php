@@ -63,7 +63,17 @@ class mr extends control
         $this->app->loadLang('compile');
 
         $openIDList = array();
-        if(!$this->app->user->admin) $openIDList = $this->loadModel('gitlab')->getGitLabListByAccount($this->app->user->account);
+        if(!$this->app->user->admin)
+        {
+            if($repo->SCM == 'Gitlab')
+            {
+                $openIDList = $this->loadModel('gitlab')->getGitLabListByAccount($this->app->user->account);
+            }
+            else
+            {
+                $openIDList = $this->loadModel('gitea')->getGiteaListByAccount($this->app->user->account);
+            }
+        }
 
         $this->view->title      = $this->lang->mr->common . $this->lang->colon . $this->lang->mr->browse;
         $this->view->MRList     = $MRList;
@@ -143,32 +153,26 @@ class mr extends control
         $this->view->rawMR = isset($rawMR) ? $rawMR : false;
         if(!isset($rawMR->id) or (isset($rawMR->message) and $rawMR->message == '404 Not found') or empty($rawMR)) return $this->display();
 
-        $branchList       = $this->loadModel('gitlab')->getBranches($MR->hostID, $MR->targetProject);
+        $host = $this->loadModel('pipeline')->getByID($MR->hostID);
+        $scm  = $host->type;
+        $branchList = $this->loadModel($scm)->getBranches($MR->hostID, $MR->targetProject);
         $targetBranchList = array();
         foreach($branchList as $branch) $targetBranchList[$branch] = $branch;
 
         /* Fetch user list both in Zentao and current GitLab project. */
-        $bindedUsers     = $this->gitlab->getUserIdRealnamePairs($MR->hostID);
-        $rawProjectUsers = $this->gitlab->apiGetProjectUsers($MR->hostID, $MR->targetProject);
-
-        $users = array();
-        foreach($rawProjectUsers as $rawProjectUser)
-        {
-            if(!empty($bindedUsers[$rawProjectUser->id])) $users[$rawProjectUser->id] = $bindedUsers[$rawProjectUser->id];
-        }
-
-        $gitlabUsers = $this->gitlab->getUserAccountIdPairs($MR->hostID);
+        $bindedUsers = $this->$scm->getUserIdRealnamePairs($MR->hostID);
+        $gitUsers    = $this->$scm->getUserAccountIdPairs($MR->hostID);
 
         /* Check permissions. */
-        if(!$this->app->user->admin)
+        if(!$this->app->user->admin and $scm == 'gitlab')
         {
             $groupIDList = array(0 => 0);
-            $groups      = $this->gitlab->apiGetGroups($MR->hostID, 'name_asc', 'developer');
+            $groups      = $this->scm->apiGetGroups($MR->hostID, 'name_asc', 'developer');
             foreach($groups as $group) $groupIDList[] = $group->id;
-            $sourceProject = $this->gitlab->apiGetSingleProject($MR->hostID, $MR->sourceProject);
-            $isDeveloper   = $this->gitlab->checkUserAccess($MR->hostID, 0, $sourceProject, $groupIDList, 'developer');
+            $sourceProject = $this->scm->apiGetSingleProject($MR->hostID, $MR->sourceProject);
+            $isDeveloper   = $this->scm->checkUserAccess($MR->hostID, 0, $sourceProject, $groupIDList, 'developer');
 
-            if(!isset($gitlabUsers[$this->app->user->account]) or !$isDeveloper) return print(js::alert($this->lang->mr->errorLang[3]) . js::locate($this->createLink('mr', 'browse')));
+            if(!isset($gitUsers[$this->app->user->account]) or !$isDeveloper) return print(js::alert($this->lang->mr->errorLang[3]) . js::locate($this->createLink('mr', 'browse')));
         }
 
         /* Import lang for required modules. */
@@ -192,10 +196,11 @@ class mr extends control
 
         $this->view->title            = $this->lang->mr->edit;
         $this->view->MR               = $MR;
+        $this->view->host             = $host;
         $this->view->targetBranchList = $targetBranchList;
         $this->view->users            = $this->loadModel('user')->getPairs('noletter|noclosed');
         $this->view->assignee         = $MR->assignee;
-        $this->view->reviewer         = zget($gitlabUsers, $MR->reviewer, '');
+        $this->view->reviewer         = zget($gitUsers, $MR->reviewer, '');
 
         $this->display();
     }

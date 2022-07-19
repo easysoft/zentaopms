@@ -32,15 +32,15 @@
       <form id='mrForm' method='post' class='form-ajax'>
         <table class='table table-form'>
           <tr>
-            <th><?php echo $lang->gitlab->common;?></th>
-            <td><?php echo $this->loadModel('gitlab')->getByID($MR->hostID)->name;?></td>
+            <th><?php echo $lang->mr->server;?></th>
+            <td><?php echo $this->loadModel('pipeline')->getByID($MR->hostID)->name;?></td>
           </tr>
           <tr>
              <th style="white-space: nowrap;"><?php echo $lang->mr->sourceProject;?></th>
              <td>
                <div>
                  <span class='fix-border text-left'>
-                 <?php echo $this->loadModel('gitlab')->apiGetSingleProject($MR->hostID, $MR->sourceProject)->name_with_namespace;?>:
+                 <?php echo $host->type == 'gitlab' ? $this->loadModel('gitlab')->apiGetSingleProject($MR->hostID, $MR->sourceProject)->name_with_namespace : $MR->sourceProject;?>:
                  <?php echo $MR->sourceBranch;?>
                  </span>
                </div>
@@ -52,12 +52,12 @@
                <div class='input-group'>
                  <?php if($MR->status == 'merged' or $MR->status == 'closed'):?>
                  <span class='fix-border text-left'>
-                 <?php echo $this->loadModel('gitlab')->apiGetSingleProject($MR->hostID, $MR->targetProject)->name_with_namespace;?>:
+                 <?php echo $host->type == 'gitlab' ? $this->loadModel('gitlab')->apiGetSingleProject($MR->hostID, $MR->targetProject)->name_with_namespace : $MR->targetProject;?>:
                  <?php echo $MR->targetBranch;?>
                  </span>
                  <?php else:?>
                  <span class='input-group-addon fix-border'>
-                 <?php echo $this->loadModel('gitlab')->apiGetSingleProject($MR->hostID, $MR->targetProject)->name_with_namespace;?>
+                 <?php echo $host->type == 'gitlab' ? $this->loadModel('gitlab')->apiGetSingleProject($MR->hostID, $MR->targetProject)->name_with_namespace : $MR->targetProject;?>:
                  </span>
                  <?php echo html::select('targetBranch', $targetBranchList, $MR->targetBranch, "class='form-control chosen'");?>
                  <?php endif;?>

@@ -506,4 +506,40 @@ class giteaModel extends model
         if(isset($currentProject->parent->full_name)) return $currentProject->parent->full_name;
         return array();
     }
+
+    /**
+     * Get branches.
+     *
+     * @param  int    $giteaID
+     * @param  string $project
+     * @access public
+     * @return array
+     */
+    public function getBranches($giteaID, $project)
+    {
+        $rawBranches = $this->apiGetBranches($giteaID, $project);
+
+        $branches = array();
+        foreach($rawBranches as $branch) $branches[] = $branch->name;
+
+        return $branches;
+    }
+
+    /**
+     * Get gitea user id and realname pairs of one gitea.
+     *
+     * @param  int $giteaID
+     * @access public
+     * @return array
+     */
+    public function getUserIdRealnamePairs($giteaID)
+    {
+        return $this->dao->select('oauth.openID as openID,user.realname as realname')
+            ->from(TABLE_OAUTH)->alias('oauth')
+            ->leftJoin(TABLE_USER)->alias('user')
+            ->on("oauth.account = user.account")
+            ->where('providerType')->eq('gitea')
+            ->andWhere('providerID')->eq($giteaID)
+            ->fetchPairs();
+    }
 }
