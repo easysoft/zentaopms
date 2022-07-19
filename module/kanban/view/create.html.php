@@ -59,7 +59,7 @@
         <td colspan='2'>
           <div class="input-group">
             <?php echo html::select('team[]', $users, isset($copyKanban->team) ? $copyKanban->team : '', "class='form-control picker-select' multiple data-dropDirection='bottom'");?>
-            <?php echo $this->fetch('my', 'buildContactLists', 'dropdownName=team');?>
+            <?php echo $this->fetch('my', 'buildContactLists', "dropdownName=team");?>
           </div>
         </td>
       </tr>
@@ -100,7 +100,7 @@
         <td colspan='2'>
           <div class="input-group">
             <?php echo html::select('whitelist[]', $users, isset($copyKanban->whitelist) ? $copyKanban->whitelist : '', 'class="form-control picker-select" multiple');?>
-            <?php echo $this->fetch('my', 'buildContactLists', 'dropdownName=whitelist');?>
+            <?php echo $this->fetch('my', 'buildContactLists', "dropdownName=whitelist&attr=data-drop_direction='up'");?>
           </div>
         </td>
       </tr>
