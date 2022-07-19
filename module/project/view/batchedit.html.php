@@ -19,6 +19,7 @@
   <div class="main-header">
     <h2><?php echo $lang->project->batchEdit;?></h2>
   </div>
+  <?php $hiddenCode = (isset($config->setCode) and $config->setCode == 0) ? 'hidden' : '';?>
   <form method='post' class='load-indicator main-form form-ajax' enctype='multipart/form-data' id="batchEditForm">
     <table class="table table-form">
       <thead>
@@ -26,7 +27,7 @@
           <th class='c-id'><?php echo $lang->idAB;?></th>
           <th class='c-parent'><?php echo $lang->project->parent;?></th>
           <th class='c-name required'><?php echo $lang->project->name;?></th>
-          <th class='c-name required'><?php echo $lang->project->code;?></th>
+          <th class="c-name required <?php echo $hiddenCode;?>"><?php echo $lang->project->code;?></th>
           <th class="c-user-box <?php echo strpos($requiredFields, 'PM') !== false ?  'required' : '';?>"> <?php echo $lang->project->PM;?></th>
           <th class='c-date required'><?php echo $lang->project->begin;?></th>
           <th class='c-date required'><?php echo $lang->project->end;?></th>
@@ -51,7 +52,7 @@
           <td><?php echo html::select("parents[$projectID]", $programs, $project->parent, "class='form-control chosen' data-id='$projectID' data-name='{$project->name}' data-parent='{$project->parent}'");?></td>
           <?php endif;?>
           <td title='<?php echo $project->name;?>'><?php echo html::input("names[$projectID]", $project->name, "class='form-control'");?></td>
-          <td title='<?php echo $project->code;?>'><?php echo html::input("codes[$projectID]", $project->code, "class='form-control'");?></td>
+          <td title='<?php echo $project->code;?>' class="<?php echo $hiddenCode;?>"><?php echo html::input("codes[$projectID]", $project->code, "class='form-control'");?></td>
           <td><?php echo html::select("PMs[$projectID]", $PMUsers, $project->PM, "class='form-control chosen'");?></td>
           <td>
             <?php echo html::input("begins[$projectID]", $project->begin, "class='form-control form-date' onchange='computeWorkDays(this.id);' placeholder='" . $lang->project->begin . "'");?>
