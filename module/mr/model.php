@@ -138,7 +138,7 @@ class mrModel extends model
         $allProjects = array();
         $allGroups   = array();
         $gitlabUsers = $this->loadModel('gitlab')->getGitLabListByAccount();
-        if(!$this->app->user->admin and !isset($gitlabUsers[$hostID])) continue;
+        if(!$this->app->user->admin and !isset($gitlabUsers[$hostID])) return array();
 
         $minProject = $maxProject = 0;
         /* Mysql string to int. */
@@ -219,7 +219,7 @@ class mrModel extends model
         $MRID = $this->dao->lastInsertId();
         $this->loadModel('action')->create('mr', $MRID, 'opened');
 
-        $rawMR   = $this->apiCreateMR($this->post->hostID, $this->post->sourceProject, $MR);
+        $rawMR = $this->apiCreateMR($this->post->hostID, $this->post->sourceProject, $MR);
 
         /**
          * Another open merge request already exists for this source branch.
@@ -465,18 +465,21 @@ class mrModel extends model
      * Batch Sync GitLab MR Database.
      *
      * @param  object $MRList
+     * @param  string $scm
      * @access public
      * @return array
      */
-    public function batchSyncMR($MRList)
+    public function batchSyncMR($MRList, $scm = 'Gitlab')
     {
         if(empty($MRList)) return array();
 
+        $this->loadModel('gitlab');
+        $this->loadModel('gitea');
         foreach($MRList as $key => $MR)
         {
             if($MR->status != 'opened') continue;
 
-            if(!isset($rawMRList[$MR->hostID][$MR->targetProject])) $rawMRList[$MR->hostID][$MR->targetProject] = $this->apiGetMRList($MR->hostID, $MR->targetProject);
+            if(!isset($rawMRList[$MR->hostID][$MR->targetProject])) $rawMRList[$MR->hostID][$MR->targetProject] = $this->apiGetMRList($MR->hostID, $MR->targetProject, $scm);
             $rawMR = new stdClass();
             foreach($rawMRList[$MR->hostID][$MR->targetProject] as $projcetRawMR)
             {
@@ -490,10 +493,17 @@ class mrModel extends model
             if(isset($rawMR->iid))
             {
                 /* create gitlab mr todo to zentao todo */
-                $this->batchSyncTodo($MR->hostID, $MR->targetProject);
+                if($scm == 'Gitlab') $this->batchSyncTodo($MR->hostID, $MR->targetProject);
 
-                $map         = $this->config->mr->maps->sync;
-                $gitlabUsers = $this->gitlab->getUserIdAccountPairs($MR->hostID);
+                $map   = $this->config->mr->maps->sync;
+                if($scm == 'Gitlab')
+                {
+                    $users = $this->gitlab->getUserIdAccountPairs($MR->hostID);
+                }
+                else
+                {
+                    $users = $this->gitea->getUserAccountIdPairs($MR->hostID, 'openID,account');
+                }
 
                 $newMR = new stdclass;
 
@@ -511,7 +521,7 @@ class mrModel extends model
                             $values = $rawMR->$field;
                             if(isset($values[0])) $gitlabUserID = $values[0]->$options;
                         }
-                        $value = zget($gitlabUsers, $gitlabUserID, '');
+                        $value = zget($users, $gitlabUserID, '');
                     }
 
                     if($value) $newMR->$syncField = $value;
@@ -654,8 +664,8 @@ class mrModel extends model
         {
             $url = sprintf($this->loadModel('gitea')->getApiRoot($hostID), "/repos/$projectID/pulls");
 
-            $MRObject->base = $MR->sourceBranch;
-            $MRObject->head = $MR->targetBranch;
+            $MRObject->head = $MR->sourceBranch;
+            $MRObject->base = $MR->targetBranch;
             $MRObject->body = $MR->description;
             if($MR->assignee)
             {
@@ -684,12 +694,33 @@ class mrModel extends model
      * @access public
      * @return object
      */
-    public function apiGetMRList($hostID, $projectID)
+    public function apiGetMRList($hostID, $projectID, $scm = 'Gitlab')
     {
-        $url = sprintf($this->gitlab->getApiRoot($hostID), "/projects/$projectID/merge_requests");
+        if($scm == 'Gitlab')
+        {
+            $url = sprintf($this->loadModel('gitlab')->getApiRoot($hostID), "/projects/$projectID/merge_requests");
+        }
+        else
+        {
+            $url = sprintf($this->loadModel('gitea')->getApiRoot($hostID), "/repos/$projectID/pulls");
+        }
 
         $response = json_decode(commonModel::http($url));
         if(empty($response)) $response = array();
+        if($scm == 'Gitea')
+        {
+            foreach($response as $mr)
+            {
+                $mr->iid               = $mr->number;
+                $mr->state             = $mr->state == 'open' ? 'opened' : $mr->state;
+                $mr->merge_status      = $mr->mergeable ? 'can_be_merged' : 'cannot_be_merged';
+                $mr->description       = $mr->body;
+                $mr->target_branch     = $mr->base->ref;
+                $mr->source_branch     = $mr->head->ref;
+                $mr->source_project_id = $projectID;
+                $mr->target_project_id = $projectID;
+            }
+        }
 
         return $response;
     }
@@ -792,8 +823,8 @@ class mrModel extends model
         }
         else
         {
-            $url  = sprintf($this->loadModel('gitea')->getApiRoot($hostID), "/repos/$projectID/pulls/$MRID");
-            return json_decode(commonModel::http($url, array('state' => 'closed'), array(CURLOPT_CUSTOMREQUEST => 'PATCH')));
+            $url = sprintf($this->loadModel('gitea')->getApiRoot($hostID), "/repos/$projectID/pulls/$MRID");
+            return json_decode(commonModel::http($url, array('state' => 'closed'), array(), array(), 'json', 'PATCH'));
         }
     }
 

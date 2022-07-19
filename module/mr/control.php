@@ -40,6 +40,7 @@ class mr extends control
         $repoID = $this->repo->saveState($repoID, $objectID);
         $repo   = $this->repo->getRepoByID($repoID);
         if(!in_array(strtolower($repo->SCM), $this->config->mr->gitServiceList)) $repo = $repos[0];
+        if($repo->SCM != 'Gitlab') unset($this->lang->mr->statusList['merged']);
         $this->loadModel('ci')->setMenu($repo->id);
 
         $projects = $this->mr->getAllProjects($repoID, $repo->SCM);
@@ -49,7 +50,7 @@ class mr extends control
         $this->session->set('mrList', $this->app->getURI(true), 'repo');
 
         /* Sync GitLab MR to ZenTao Database. */
-        $MRList = $this->mr->batchSyncMR($MRList);
+        $MRList = $this->mr->batchSyncMR($MRList, $repo->SCM);
 
         /* Check whether Mr is linked with the product. */
         foreach($MRList as $MR)
@@ -217,7 +218,7 @@ class mr extends control
            $res = $this->mr->apiDeleteMR($MR->hostID, $MR->targetProject, $MR->mriid);
            if(isset($res->message)) return print(js::alert($this->mr->convertApiError($res->message)));
         }
-        //$this->dao->delete()->from(TABLE_MR)->where('id')->eq($id)->exec();
+        $this->dao->delete()->from(TABLE_MR)->where('id')->eq($id)->exec();
 
         echo js::reload('parent');
     }
@@ -903,8 +904,9 @@ class mr extends control
     {
         $this->loadModel($scm);
 
+        if($scm != 'gitlab') $projectID = urldecode(base64_decode($projectID));
         /* First step: get forks. Only get first level forks(not recursively). */
-        $projects = $this->$scm->apiGetForks($hostID, $projectID);
+        $projects = $scm == 'gitlab' ? $this->$scm->apiGetForks($hostID, $projectID) : array();
 
         /* Second step: get project itself. */
         $projects[] = $this->$scm->apiGetSingleProject($hostID, $projectID);
@@ -957,8 +959,10 @@ class mr extends control
      */
     public function ajaxGetRepoList($hostID, $projectID)
     {
-        $this->loadModel('repo');
-        $repoList = $this->repo->getRepoListByClient($hostID, $projectID);
+        $host = $this->loadModel('pipeline')->getByID($hostID);
+        if($host->type != 'gitlab') $projectID =urldecode(base64_decode($projectID));
+
+        $repoList = $this->loadModel('repo')->getRepoListByClient($hostID, $projectID);
 
         if(!$repoList) return $this->send(array('message' => array()));
         $options = "<option value=''></option>";

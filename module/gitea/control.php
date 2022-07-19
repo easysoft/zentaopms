@@ -210,6 +210,7 @@ class gitea extends control
     {
         if(!$giteaID or !$project) return $this->send(array('message' => array()));
 
+        $project  = urldecode(base64_decode($project));
         $branches = $this->gitea->apiGetBranches($giteaID, $project);
         $options  = "<option value=''></option>";
         foreach($branches as $branch)

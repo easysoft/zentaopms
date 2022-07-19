@@ -1,3 +1,18 @@
+/**
+ * Urlencode param.
+ *
+ * @param  param $param
+ * @access public
+ * @return string
+ */
+function urlencode(param)
+{
+    var hostID = $('#hostID').val();
+    if(hosts[hostID].type != 'gitlab') return Base64.encode(encodeURIComponent(param));
+
+    return param;
+}
+
 $(function()
 {
     $('#hostID').change(function()
@@ -22,8 +37,8 @@ $(function()
 
     $('#sourceProject,#targetProject').change(function()
     {
-        var hostID      = $('#hostID').val();
-        var sourceProject = $(this).val();
+        var hostID        = $('#hostID').val();
+        var sourceProject = urlencode($(this).val());
         var branchSelect  = $(this).parents('td').find('select[name*=Branch]');
         var branchUrl     = createLink(hosts[hostID].type, 'ajaxGetProjectBranches', "hostID=" + hostID + "&projectID=" + sourceProject);
         $.get(branchUrl, function(response)
@@ -36,8 +51,8 @@ $(function()
 
     $('#sourceProject').change(function()
     {
-        var hostID      = $('#hostID').val();
-        var sourceProject = $(this).val();
+        var hostID        = $('#hostID').val();
+        var sourceProject = urlencode($(this).val());
         var projectUrl    = createLink('mr', 'ajaxGetMRTargetProjects', "hostID=" + hostID + "&projectID=" + sourceProject + "&scm=" + hosts[hostID].type);
         $.get(projectUrl, function(response)
         {
@@ -55,10 +70,10 @@ $(function()
 
     $('#sourceBranch,#targetBranch').change(function()
     {
-        var sourceProject = $('#sourceProject').val();
-        var sourceBranch  = $('#sourceBranch').val();
-        var targetProject = $('#targetProject').val();
-        var targetBranch  = $('#targetBranch').val();
+        var sourceProject = urlencode($('#sourceProject').val());
+        var sourceBranch  = urlencode($('#sourceBranch').val());
+        var targetProject = urlencode($('#targetProject').val());
+        var targetBranch  = urlencode($('#targetBranch').val());
         if(!sourceProject || !sourceBranch || !targetProject || !targetBranch) return false;
 
         var $this    = $(this);
