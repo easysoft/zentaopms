@@ -442,11 +442,13 @@ $(function()
     {
         if($(e.srcElement).hasClass('gantt_close') || $(e.srcElement).hasClass('gantt_open')) return false;
 
-        if(typeof id === 'string') id = parseInt(id);
-        if(!isNaN(id) && id > 0)
-        {
-            //taskModalTrigger.show({url: createLink('task', 'view', 'taskID=' + id, 'html', true)});
-        }
+        /* The id of task item is like executionID-taskID. e.g. 1507-37829, 37829 is task id. */
+        var position = id.indexOf('-');
+        if(position < 0) return;
+
+        var taskID = parseInt(id.substring(position + 1));
+
+        if(!isNaN(taskID) && taskID > 0) taskModalTrigger.show({url: createLink('task', 'view', 'taskID=' + taskID, 'html', true)});
     });
 
     // Make folder can open or close by click
