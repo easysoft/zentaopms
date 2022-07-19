@@ -100,61 +100,6 @@ class port extends control
     }
 
     /**
-     * Show Import datas .
-     *
-     * @access public
-     * @return void
-     */
-    public function showImport($model, $pagerID = 1, $insert = '', $url = 'back')
-    {
-        $maxImport = $this->cookie->maxImport;
-
-        if($_POST)
-        {
-            $this->loadModel('port')->createFromImport($model);
-            if($this->post->isEndPage) unlink($tmpFile);
-            return print(js::locate($url, 'parent'));
-        }
-
-        /* Get import fields */
-        $fields = $this->config->$model->templateFields;
-
-        /* Get file datas */
-        $datas = $this->port->getDatasByFile();
-
-        /* Get page datas */
-        $datas = $this->port->getPageDatas($datas, $pagerID, $maxImport);
-
-        /* Check suhosin setting */
-        $this->checkSuhosinInfo($datas);
-
-        $this->view->title          = $this->lang->$model->common . $this->lang->colon . $this->lang->task->showImport;
-        $this->view->position[]     = $this->lang->port->importCase;
-        $this->view->fields         = $this->loadModel('port')->initFieldList($model, $fields, false);
-        $this->view->requiredFields = ',' . $this->config->$model->create->requiredFields;
-        $this->view->datas          = $datas;
-        $this->view->dataInsert     = $insert;
-        $this->view->model          = $model;
-        $this->view->url            = $url;
-
-        $this->display();
-    }
-
-    /**
-     * checkSuhosinInfo
-     *
-     * @access public
-     * @return void
-     */
-    public function checkSuhosinInfo($datas = array())
-    {
-        /* Judge whether the editedTasks is too large and set session. */
-        $countInputVars  = count($datas) * 11;
-        $showSuhosinInfo = common::judgeSuhosinSetting($countInputVars);
-        if($showSuhosinInfo) $this->view->suhosinInfo = extension_loaded('suhosin') ? sprintf($this->lang->suhosinInfo, $countInputVars) : sprintf($this->lang->maxVarsInfo, $countInputVars);
-    }
-
-    /**
      * getWorkFlowFields
      *
      * @access public

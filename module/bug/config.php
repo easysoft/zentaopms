@@ -50,14 +50,14 @@ $config->bug->fieldList['branch']['dataSource'] = array('module' => 'bug', 'meth
 
 $config->bug->fieldList['module']['control']    = 'select';
 $config->bug->fieldList['module']['title']      = 'module';
-$config->bug->fieldList['module']['dataSource'] = array('module' => 'tree', 'method' => 'getAllModulePairs', 'params' => 'bug');
+$config->bug->fieldList['module']['dataSource'] = array('module' => 'bug', 'method' => 'getRelatedObjects', 'params' => 'module&id,name');
 
 $config->bug->fieldList['project']['title']      = 'project';
 $config->bug->fieldList['project']['control']    = 'hidden';
 $config->bug->fieldList['project']['dataSource'] = array('module' => 'product', 'method' => 'getProjectPairsByProduct', 'params' => '$productID');
 
 $config->bug->fieldList['execution']['title']      = 'execution';
-$config->bug->fieldList['execution']['dataSource'] = array('module' => 'execution', 'method' =>'getPairs');
+$config->bug->fieldList['execution']['dataSource'] = array('module' => 'product', 'method' =>'getAllExecutionPairsByProduct', 'params' => '$productID&$branch');
 
 $config->bug->fieldList['story']['title']      = 'story';
 $config->bug->fieldList['story']['control']    = 'select';
@@ -118,8 +118,6 @@ $config->bug->fieldList['lastEditedDate']['title'] = 'lastEditedDate';
 $config->bug->fieldList['files']['title'] = 'files';
 
 $config->bug->fieldList['feedbackBy']['title']   = 'feedbackBy';
-$config->bug->fieldList['feedbackBy']['control'] = 'select';
-$config->bug->fieldList['feedbackBy']['values']  = 'user';
 
 $config->bug->fieldList['notifyEmail']['title'] = 'notifyEmail';
 

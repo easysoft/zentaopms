@@ -23,6 +23,63 @@ $config->testcase->exportFields = '
     pri, type, stage, status, bugsAB, resultsAB, stepNumberAB, lastRunner, lastRunDate, lastRunResult, openedBy, openedDate,
     lastEditedBy, lastEditedDate, version, linkCase, files';
 
+$config->testcase->fieldList['product']['title']      = 'product';
+$config->testcase->fieldList['product']['control']    = 'hidden';
+
+$config->testcase->fieldList['branch']['title']      = 'branch';
+$config->testcase->fieldList['branch']['dataSource'] = array('module' => 'port', 'method' => 'getRelatedObjects', 'params' => 'testcase&branch&id,name');
+
+$config->testcase->fieldList['module']['title']      = 'module';
+$config->testcase->fieldList['module']['dataSource'] = array('module' => 'port', 'method' => 'getRelatedObjects', 'params' => 'testcase&module&id,name');
+
+$config->testcase->fieldList['story']['title']      = 'product';
+$config->testcase->fieldList['story']['dataSource'] = array('module' => 'port', 'method' => 'getRelatedObjects', 'params' => 'testcase&story&id,title');
+
+$config->testcase->fieldList['title']['title']      = 'product';
+
+$config->testcase->fieldList['precondition']['title']      = 'product';
+
+$config->testcase->fieldList['stepDesc']['title']      = 'product';
+
+$config->testcase->fieldList['stepExpect']['title']      = 'product';
+
+$config->testcase->fieldList['real']['title']      = 'product';
+
+$config->testcase->fieldList['keywords']['title']      = 'product';
+
+$config->testcase->fieldList['pri']['title']      = 'product';
+
+$config->testcase->fieldList['type']['title']      = 'product';
+
+$config->testcase->fieldList['stage']['title']      = 'product';
+
+$config->testcase->fieldList['status']['title']      = 'product';
+
+$config->testcase->fieldList['bugsAB']['title']      = 'product';
+
+$config->testcase->fieldList['resultsAB']['title']      = 'product';
+
+$config->testcase->fieldList['stepNumberAB']['title']      = 'product';
+
+$config->testcase->fieldList['lastRunner']['title']      = 'product';
+
+$config->testcase->fieldList['lastRunDate']['title']      = 'product';
+
+$config->testcase->fieldList['lastRunResult']['title']      = 'product';
+
+$config->testcase->fieldList['openedBy']['title']      = 'product';
+
+$config->testcase->fieldList['openedDate']['title']      = 'product';
+
+$config->testcase->fieldList['lastEditedBy']['title']      = 'product';
+
+$config->testcase->fieldList['lastEditedDate']['title']      = 'product';
+
+$config->testcase->fieldList['version']['title']      = 'product';
+
+$config->testcase->fieldList['files']['title']      = 'product';
+
+
 $config->testcase->customCreateFields      = 'story,stage,pri,keywords';
 $config->testcase->customBatchCreateFields = 'module,stage,story,pri,precondition,keywords,review';
 $config->testcase->customBatchEditFields   = 'module,story,stage,precondition,status,pri,keywords';

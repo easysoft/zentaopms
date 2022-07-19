@@ -40,23 +40,8 @@ class portModel extends model
      * @access public
      * @return void
      */
-    public function export($model = '', $params = '')
+    public function export($model = '')
     {
-        /* Split parameters into variables (executionID=1,status=open).*/
-        $params = explode(',', $params);
-        foreach($params as $key => $param)
-        {
-            $param = explode('=', $param);
-            $params[$param[0]] = $param[1];
-            unset($params[$key]);
-        }
-        extract($params);
-
-        /* save params to session. */
-        $this->session->set(($model.'PortParams'), $params);
-
-
-
         $fields = $this->post->exportFields;
 
         /* Init config fieldList */
@@ -116,7 +101,7 @@ class portModel extends model
      * @access public
      * @return void
      */
-    public function initPostFields()
+    public function initPostFields($model = '')
     {
         $datas = fixer::input('post')->get();
         $objectData = array();
@@ -124,7 +109,11 @@ class portModel extends model
         {
             if(is_array($data))
             {
-                foreach($data as $key => $value) $objectData[$key][$field] = $value;
+                foreach($data as $key => $value)
+                {
+                    if(is_array($value) and $this->config->$model->fieldList[$field]['control'] == 'multiple') $value = implode(',', $value);
+                    $objectData[$key][$field] = $value;
+                }
             }
         }
         return $objectData;
@@ -330,7 +319,6 @@ class portModel extends model
         $modelConfig->sysLangFields  = isset($modelConfig->sysLangFields)  ? $modelConfig->sysLangFields  : $portConfig->sysLangFields;
         $modelConfig->sysDataFields  = isset($modelConfig->sysDataFields)  ? $modelConfig->sysDataFields  : $portConfig->sysDataFields;
         $modelConfig->listFields     = isset($modelConfig->listFields)     ? $modelConfig->listFields     : $portConfig->listFields;
-        $modelConfig->import->ignoreFields   = isset($modelConfig->import->ignoreFields)   ? $modelConfig->import->ignoreFields   : $portConfig->import->ignoreFields;
     }
 
     /**
@@ -536,24 +524,7 @@ class portModel extends model
      */
     public function getRows($model, $fieldList, $orderBy = 'id_desc')
     {
-        $queryCondition = $this->session->{$model . 'QueryCondition'};
-        $onlyCondition  = $this->session->{$model . 'OnlyCondition'};
-
-        $modelDatas = array();
-        if($onlyCondition and $queryCondition)
-        {
-            $table = zget($this->config->objectTables, $model);
-            if(isset($this->config->$model->port->table)) $table = $this->config->$model->port->table;
-            $modelDatas = $this->dao->select('*')->from($table)->alias('t1')
-                ->where($queryCondition)
-                ->beginIF($this->post->exportType == 'selected')->andWhere('t1.id')->in($this->cookie->checkedItem)->fi()
-                ->fetchAll('id');
-        }
-        elseif($queryCondition)
-        {
-            $stmt = $this->dbh->query($queryCondition . ($this->post->exportType == 'selected' ? " AND t1.id IN({$this->cookie->checkedItem})" : '') . " ORDER BY " . strtr($orderBy, '_', ' '));
-            while($row = $stmt->fetch()) $modelDatas[$row->id] = $row;
-        }
+        $modelDatas = $this->getQueryDatas($model);
 
         if(array_key_exists('files', $fieldList))
         {
@@ -576,6 +547,70 @@ class portModel extends model
         }
 
         return $modelDatas;
+    }
+
+    /**
+     * getQueryDatas
+     *
+     * @param  string $model
+     * @access public
+     * @return void
+     */
+    public function getQueryDatas($model = '')
+    {
+        $queryCondition = $this->session->{$model . 'QueryCondition'};
+        $onlyCondition  = $this->session->{$model . 'OnlyCondition'};
+
+        $modelDatas = array();
+        if($onlyCondition and $queryCondition)
+        {
+            $table = zget($this->config->objectTables, $model);
+            if(isset($this->config->$model->port->table)) $table = $this->config->$model->port->table;
+            $modelDatas = $this->dao->select('*')->from($table)->alias('t1')
+                ->where($queryCondition)
+                ->beginIF($this->post->exportType == 'selected')->andWhere('t1.id')->in($this->cookie->checkedItem)->fi()
+                ->fetchAll('id');
+        }
+        elseif($queryCondition)
+        {
+            $stmt = $this->dbh->query($queryCondition . ($this->post->exportType == 'selected' ? " AND t1.id IN({$this->cookie->checkedItem})" : ''));
+            while($row = $stmt->fetch()) $modelDatas[$row->id] = $row;
+        }
+
+        return $modelDatas;
+    }
+
+    /**
+     * getRelatedObjects
+     *
+     * @param  int    $object
+     * @param  string $pairs
+     * @access public
+     * @return void
+     */
+    public function getRelatedObjects($model = '', $object = '', $pairs = '')
+    {
+        /* Get objects. */
+        $datas = $this->getQueryDatas($model);
+
+        /* Get related objects id lists. */
+        $relatedObjectIdList = array();
+        $relatedObjects      = array();
+
+        foreach($datas as $data)
+        {
+            $relatedObjectIdList[$data->$object]  = $data->$object;
+        }
+
+        if($object == 'openedBuild') $object = 'build';
+
+        /* Get related objects title or names. */
+        $table = $this->config->objectTables[$object];
+        if($table) $relatedObjects = $this->dao->select($pairs)->from($table) ->where('id')->in($relatedObjectIdList)->fetchPairs();
+
+        if($object == 'build') $relatedObjects= array('trunk' => $this->lang->trunk) + $relatedObjects;
+
+        return $relatedObjects;
     }
 
     /**
@@ -932,7 +967,10 @@ class portModel extends model
             /* Check required field*/
             $this->checkRequired($model, $key, $data);
 
-            if(!empty($objectID)) $data = $this->processChildData($objectID, $data);
+            if(!empty($objectID) and in_array($model, $this->config->port->hasChildDataFields))
+            {
+                $data = $this->processChildData($objectID, $data);
+            }
 
             $table = zget($this->config->objectTables, $model);
             $this->dao->insert($table)->data($data)->autoCheck()->checkFlow()->exec();
