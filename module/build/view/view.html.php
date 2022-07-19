@@ -63,7 +63,7 @@ tbody tr td:first-child input {display: none;}
     </ul>
     <div class='tab-content'>
       <div class='tab-pane <?php if($type == 'story') echo 'active'?>' id='stories'>
-        <?php if($canBeChanged and common::hasPriv('build', 'linkStory')):?>
+        <?php if($canBeChanged and common::hasPriv('build', 'linkStory') and !isonlybody()):?>
         <div class='actions'><?php echo html::a("javascript:showLink($build->id, \"story\")", '<i class="icon-link"></i> ' . $lang->build->linkStory, '', "class='btn btn-primary'");?></div>
         <div class='linkBox cell hidden'></div>
         <?php endif;?>
@@ -158,7 +158,7 @@ tbody tr td:first-child input {display: none;}
         </form>
       </div>
       <div class='tab-pane <?php if($type == 'bug') echo 'active'?>' id='bugs'>
-        <?php if($canBeChanged and common::hasPriv('build', 'linkBug')):?>
+        <?php if($canBeChanged and common::hasPriv('build', 'linkBug') and !isonlybody()):?>
         <div class='actions'><?php echo html::a("javascript:showLink($build->id, \"bug\")", '<i class="icon-bug"></i> ' . $lang->build->linkBug, '', "class='btn btn-primary'");?></div>
         <div class='linkBox cell hidden'></div>
         <?php endif;?>
