@@ -8,7 +8,6 @@
  */
 function setMailto(field, value)
 {
-    console.log(field);
     var link = createLink('kanban', 'ajaxGetContactUsers', 'field=' + field + '&listID=' + value);
     $.post(link, function(data)
     {

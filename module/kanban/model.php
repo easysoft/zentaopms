@@ -2235,17 +2235,12 @@ class kanbanModel extends model
             $this->loadModel('file')->saveUpload('kanban', $kanbanID);
             $this->file->updateObjectID($this->post->uid, $kanbanID, 'kanban');
 
-            if(isset($_POST['team']))
+            if(isset($_POST['team']) or isset($_POST['whitelist']))
             {
-                $kanbanMembers = empty($kanban->team) ? array() : explode(',', $kanban->team); 
-                $type          = 'team';
+                $type = isset($_POST['team']) ? 'team' : 'whitelist';
+                $kanbanMembers = empty($kanban->{$type}) ? array() : explode(',', $kanban->{$type}); 
+                $this->addSpaceMembers($kanban->space, $type, $kanbanMembers);
             }
-            elseif(isset($_POST['whitelist']))
-            {
-                $kanbanMembers = empty($kanban->whitelist) ? array() : explode(',', $kanban->whitelist); 
-                $type          = 'whitelist';
-            }
-            $this->addSpaceMembers($kanban->space, $type, $kanbanMembers);
 
             return $kanbanID;
         }
@@ -2295,18 +2290,12 @@ class kanbanModel extends model
             $this->loadModel('file')->saveUpload('kanban', $kanbanID);
             $this->file->updateObjectID($this->post->uid, $kanbanID, 'kanban');
 
-            if(isset($_POST['team']))
+            if(isset($_POST['team']) or isset($_POST['whitelist']))
             {
-                $kanbanMembers = empty($kanban->team) ? array() : explode(',', $kanban->team); 
-                $type          = 'team';
+                $type = isset($_POST['team']) ? 'team' : 'whitelist';
+                $kanbanMembers = empty($kanban->{$type}) ? array() : explode(',', $kanban->{$type}); 
+                $this->addSpaceMembers($kanban->space, $type, $kanbanMembers);
             }
-            elseif(isset($_POST['whitelist']))
-            {
-                $kanbanMembers = empty($kanban->whitelist) ? array() : explode(',', $kanban->whitelist); 
-                $type          = 'whitelist';
-            }
-
-            $this->addSpaceMembers($kanban->space, $type, $kanbanMembers);
 
             return common::createChanges($oldKanban, $kanban);
         }
