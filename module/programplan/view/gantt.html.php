@@ -62,6 +62,10 @@ form {display: block; margin-top: 0em; margin-block-end: 1em;}
       <?php echo html::commonButton($lang->programplan->full, 'id="fullScreenBtn"', 'btn btn-primary btn-sm')?>
       <?php if($app->rawModule == 'review' and $app->rawMethod == 'assess') unset($lang->programplan->stageCustom->date); ?>
       <?php echo html::checkbox('stageCustom', $lang->programplan->stageCustom, $selectCustom);?>
+      <div class='btn btn-link'>
+        <strong><?php echo $lang->execution->gantt->format . '：';?></strong>
+        <?php echo html::radio('zooming', $lang->execution->gantt->zooming, 'day', "onchange='zoomTasks(this)'");?>
+      </div>
       <div class='btn btn-link' id='ganttPris'>
         <strong><?php echo $lang->task->pri . " : "?></strong>
         <?php foreach($lang->execution->gantt->color as $pri => $color):?>
