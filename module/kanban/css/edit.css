@@ -10,3 +10,5 @@
 #mainContent .objectBox .checkbox-primary>label:after {width: 14px; height: 14px;}
 [lang^='en'] .columnWidth {width: 120px;}
 [lang^='zh-cn'] .columnWidth {width: 80px;}
+#team ~ #contactListMenu_chosen, #whitelist ~ #contactListMenu_chosen {vertical-align: top;}
+#team ~ #contactListMenu_chosen > .chosen-drop, #whitelist ~ #contactListMenu_chosen > .chosen-drop {top: 32px;}
