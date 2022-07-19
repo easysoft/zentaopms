@@ -31,7 +31,7 @@
       <span class="label label-id"><?php echo $MR->id ?></span>
       <span class="text" title='<?php echo $MR->title; ?>'><?php echo  $MR->title; ?></span>
       <?php if($MR->synced):?>
-      <span class="text" title='<?php echo $MR->title; ?>' style='color: blue'><?php echo html::a($rawMR->web_url, $lang->mr->viewInGitlab, "_blank", "class='btn btn-link btn-active-text' style='color: blue'"); ?></span>
+      <span class="text" title='<?php echo $MR->title; ?>' style='color: blue'><?php echo html::a($rawMR->web_url, $lang->mr->viewInGit, "_blank", "class='btn btn-link btn-active-text' style='color: blue'"); ?></span>
       <?php endif;?>
     </div>
   </div>
@@ -85,7 +85,7 @@
                    </tr>
                    <tr>
                      <th><?php echo $lang->mr->MRHasConflicts; ?></th>
-                     <?php $hasNoConflict = $MR->synced === '1' ? $rawMR->has_conflicts : (bool)$MR->hasNoConflict; ?>
+                     <?php $hasNoConflict = $MR->synced === '1' ? $rawMR->has_conflicts : (bool)$MR->hasNoConflict;?>
                      <td><?php echo ($hasNoConflict ? $lang->mr->hasConflicts : $lang->mr->hasNoConflict);?></td>
                   </tr>
                    <tr>

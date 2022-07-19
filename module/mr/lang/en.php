@@ -14,7 +14,7 @@ $lang->mr->source       = 'source';
 $lang->mr->target       = 'target';
 $lang->mr->viewDiff     = 'View diff';
 $lang->mr->diff         = 'View diff';
-$lang->mr->viewInGitlab = 'View in GitLab';
+$lang->mr->viewInGit    = 'View in APP';
 $lang->mr->link         = 'Link of stories,Bugs,tasks';
 $lang->mr->createAction = '%s, <strong>%s</strong> submitted a <a href="%s">Merge Request</a>.';
 
@@ -39,8 +39,8 @@ $lang->mr->gitlabID    = 'GitLab';
 $lang->mr->repoID      = 'Repo';
 $lang->mr->jobID       = 'Compile job';
 
-$lang->mr->canMerge  = "Can merge";
-$lang->mr->cantMerge = "不可合并";
+$lang->mr->canMerge  = "Can be merged";
+$lang->mr->cantMerge = "Can not be merged";
 
 $lang->mr->approval = 'Approval';
 $lang->mr->approve  = 'Approve';
@@ -182,7 +182,7 @@ $lang->mr->commandDocument = <<< EOD
     git merge --no-ff "%s"</pre>
   </p>
   <p>
-    step 4. Push the result of the merge to GitLab
+    step 4. Push the result of the merge to Git
     <pre> git push origin "%s" </pre>
   </p>
 </div>

@@ -3127,7 +3127,7 @@ EOD;
         if(!empty($data))
         {
             if(is_object($data)) $data = (array) $data;
-            if($method == 'POST')  curl_setopt($curl, CURLOPT_POST, true);
+            if($method == 'POST') curl_setopt($curl, CURLOPT_POST, true);
             if(in_array($method, array('PATCH', 'PUT'))) curl_setopt($curl, CURLOPT_CUSTOMREQUEST, $method);
             curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
         }

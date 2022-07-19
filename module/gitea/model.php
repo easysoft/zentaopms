@@ -376,8 +376,17 @@ class giteaModel extends model
         $apiRoot = $this->getApiRoot($giteaID);
         if(!$apiRoot) return array();
 
-        $url = sprintf($apiRoot, "/repos/$projectID");
-        return json_decode(commonModel::http($url));
+        $url     = sprintf($apiRoot, "/repos/$projectID");
+        $project = json_decode(commonModel::http($url));
+        if(isset($project->name))
+        {
+            $project->name_with_namespace = $project->full_name;
+            $project->path_with_namespace = $project->full_name;
+            $project->http_url_to_repo    = $project->html_url;
+            $project->name_with_namespace = $project->full_name;
+        }
+
+        return $project;
     }
 
     /**
@@ -541,5 +550,20 @@ class giteaModel extends model
             ->where('providerType')->eq('gitea')
             ->andWhere('providerID')->eq($giteaID)
             ->fetchPairs();
+    }
+
+    /**
+     * Get single branch by API.
+     *
+     * @param  int    $giteaID
+     * @param  int    $projectID
+     * @param  string $branch
+     * @access public
+     * @return object
+     */
+    public function apiGetSingleBranch($giteaID, $projectID, $branch)
+    {
+        $url = sprintf($this->getApiRoot($giteaID), "/repos/$projectID/branches/$branch");
+        return json_decode(commonModel::http($url));
     }
 }

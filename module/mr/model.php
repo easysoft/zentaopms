@@ -669,6 +669,7 @@ class mrModel extends model
                 if(!$mergeResult->mergeable) $mergeResult->merge_status = 'cannot_be_merged';
             }
             if(isset($mergeResult->state) and $mergeResult->state == 'open') $mergeResult->state = 'opened';
+            if(isset($mergeResult->merged) and $mergeResult->merged) $mergeResult->state = 'merged';
             return $mergeResult;
         }
     }
@@ -697,16 +698,18 @@ class mrModel extends model
         if(empty($response)) $response = array();
         if($scm == 'Gitea')
         {
-            foreach($response as $mr)
+            foreach($response as $MR)
             {
-                $mr->iid               = $mr->number;
-                $mr->state             = $mr->state == 'open' ? 'opened' : $mr->state;
-                $mr->merge_status      = $mr->mergeable ? 'can_be_merged' : 'cannot_be_merged';
-                $mr->description       = $mr->body;
-                $mr->target_branch     = $mr->base->ref;
-                $mr->source_branch     = $mr->head->ref;
-                $mr->source_project_id = $projectID;
-                $mr->target_project_id = $projectID;
+                $MR->iid   = $MR->number;
+                $MR->state = $MR->state == 'open' ? 'opened' : $MR->state;
+                if($MR->merged) $MR->state = 'merged';
+
+                $MR->merge_status      = $MR->mergeable ? 'can_be_merged' : 'cannot_be_merged';
+                $MR->description       = $MR->body;
+                $MR->target_branch     = $MR->base->ref;
+                $MR->source_branch     = $MR->head->ref;
+                $MR->source_project_id = $projectID;
+                $MR->target_project_id = $projectID;
             }
         }
 
@@ -733,10 +736,10 @@ class mrModel extends model
 
         if($response)
         {
-            foreach($response as $mr)
+            foreach($response as $MR)
             {
-                if(empty($mr->source_project_id) or empty($mr->target_project_id)) return null;
-                if($mr->source_project_id == $sourceProject and $mr->target_project_id == $targetProject) return $mr;
+                if(empty($MR->source_project_id) or empty($MR->target_project_id)) return null;
+                if($MR->source_project_id == $sourceProject and $MR->target_project_id == $targetProject) return $MMRR;
             }
         }
         return null;
@@ -764,6 +767,24 @@ class mrModel extends model
         {
             $url = sprintf($this->loadModel('gitea')->getApiRoot($hostID), "/repos/$projectID/pulls/$MRID");
             $MR  = json_decode(commonModel::http($url));
+            if(isset($MR->url))
+            {
+                $diff = $this->apiGetDiffs($hostID, $projectID, $MRID);
+
+                $MR->web_url = $MR->url;
+                $MR->iid     = $MR->number;
+                $MR->state   = $MR->state == 'open' ? 'opened' : $MR->state;
+                if($MR->merged) $MR->state = 'merged';
+
+                $MR->merge_status      = $MR->mergeable ? 'can_be_merged' : 'cannot_be_merged';
+                $MR->changes_count     = (int)$diff;
+                $MR->description       = $MR->body;
+                $MR->target_branch     = $MR->base->ref;
+                $MR->source_branch     = $MR->head->ref;
+                $MR->source_project_id = $projectID;
+                $MR->target_project_id = $projectID;
+                $MR->has_conflicts     = !(bool)$diff;
+            }
 
             return $MR;
         }
@@ -835,6 +856,7 @@ class mrModel extends model
                 if(!$mergeResult->mergeable) $mergeResult->merge_status = 'cannot_be_merged';
             }
             if(isset($mergeResult->state) and $mergeResult->state == 'open') $mergeResult->state = 'opened';
+            if(isset($mergeResult->merged) and $mergeResult->merged) $mergeResult->state = 'merged';
             return $mergeResult;
         }
     }
@@ -876,8 +898,17 @@ class mrModel extends model
      */
     public function apiCloseMR($hostID, $projectID, $MRID)
     {
-        $url = sprintf($this->gitlab->getApiRoot($hostID), "/projects/$projectID/merge_requests/$MRID") . '&state_event=close';
-        return json_decode(commonModel::http($url, null, array(CURLOPT_CUSTOMREQUEST => 'PUT')));
+        $host = $this->loadModel('pipeline')->getByID($hostID);
+        if($host->type == 'gitlab')
+        {
+            $url = sprintf($this->gitlab->getApiRoot($hostID), "/projects/$projectID/merge_requests/$MRID") . '&state_event=close';
+            return json_decode(commonModel::http($url, null, array(CURLOPT_CUSTOMREQUEST => 'PUT')));
+        }
+        else
+        {
+            $url = sprintf($this->loadModel('gitea')->getApiRoot($hostID), "/repos/$projectID/pulls/$MRID");
+            return json_decode(commonModel::http($url, array('state' => 'closed'), array(), array(), 'json', 'PATCH'));
+        }
     }
 
     /**
@@ -892,8 +923,29 @@ class mrModel extends model
      */
     public function apiReopenMR($hostID, $projectID, $MRID)
     {
-        $url = sprintf($this->gitlab->getApiRoot($hostID), "/projects/$projectID/merge_requests/$MRID") . '&state_event=reopen';
-        return json_decode(commonModel::http($url, null, array(CURLOPT_CUSTOMREQUEST => 'PUT')));
+        $host = $this->loadModel('pipeline')->getByID($hostID);
+        if($host->type == 'gitlab')
+        {
+            $url = sprintf($this->gitlab->getApiRoot($hostID), "/projects/$projectID/merge_requests/$MRID") . '&state_event=reopen';
+            return json_decode(commonModel::http($url, null, array(CURLOPT_CUSTOMREQUEST => 'PUT')));
+        }
+        else
+        {
+            $url = sprintf($this->loadModel('gitea')->getApiRoot($hostID), "/repos/$projectID/pulls/$MRID");
+            $MR  = json_decode(commonModel::http($url, array('state' => 'open'), array(), array(), 'json', 'PATCH'));
+            $MR->iid   = $MR->number;
+            $MR->state = $MR->state == 'open' ? 'opened' : $MR->state;
+            if($MR->merged) $MR->state = 'merged';
+
+            $MR->merge_status      = $MR->mergeable ? 'can_be_merged' : 'cannot_be_merged';
+            $MR->description       = $MR->body;
+            $MR->target_branch     = $MR->base->ref;
+            $MR->source_branch     = $MR->head->ref;
+            $MR->source_project_id = $projectID;
+            $MR->target_project_id = $projectID;
+
+            return $MR;
+        }
     }
 
     /**
@@ -903,19 +955,44 @@ class mrModel extends model
      * @param  int    $hostID
      * @param  int    $projectID
      * @param  int    $MRID
-     * @param  string $sudo
+     * @param  object $MR
      * @access public
      * @return object
      */
-    public function apiAcceptMR($hostID, $projectID, $MRID, $sudo = "")
+    public function apiAcceptMR($hostID, $projectID, $MRID, $MR = null)
     {
-        $apiRoot    = $this->gitlab->getApiRoot($hostID);
-        $approveUrl = sprintf($apiRoot, "/projects/$projectID/merge_requests/$MRID/approved");
-        commonModel::http($approveUrl, null, array(CURLOPT_CUSTOMREQUEST => 'POST'));
+        $host = $this->loadModel('pipeline')->getByID($hostID);
+        if($host->type == 'gitlab')
+        {
+            $apiRoot    = $this->gitlab->getApiRoot($hostID);
+            $approveUrl = sprintf($apiRoot, "/projects/$projectID/merge_requests/$MRID/approved");
+            commonModel::http($approveUrl, null, array(CURLOPT_CUSTOMREQUEST => 'POST'));
 
-        $url = sprintf($apiRoot, "/projects/$projectID/merge_requests/$MRID/merge");
-        if($sudo != "") return json_decode(commonModel::http($url, null, array(CURLOPT_CUSTOMREQUEST => 'PUT'), $headers = array("sudo: {$sudo}")));
-        return json_decode(commonModel::http($url, null, array(CURLOPT_CUSTOMREQUEST => 'PUT')));
+            $url = sprintf($apiRoot, "/projects/$projectID/merge_requests/$MRID/merge");
+            return json_decode(commonModel::http($url, null, array(CURLOPT_CUSTOMREQUEST => 'PUT')));
+        }
+        elseif($host->type == 'gitea')
+        {
+            $apiRoot = $this->loadModel('gitea')->getApiRoot($hostID);
+            $url   = sprintf($apiRoot, "/repos/$projectID/pulls/$MRID/merge");
+            $rowMR = json_decode(commonModel::http($url, array('Do' => 'merge'), array(), array(), 'json', 'POST'));
+            if(!isset($rowMR->massage))
+            {
+                $rowMR = $this->apiGetSingleMR($hostID, $projectID, $MRID);
+
+                $this->dao->update(TABLE_MR)->data(array('status' => 'merged'))
+                    ->where('id')->eq($MRID)
+                    ->autoCheck()
+                    ->exec();
+
+                if($MR and $MR->removeSourceBranch == '1')
+                {
+                    $url = sprintf($apiRoot, "/repos/$projectID/branches/{$MR->sourceBranch}");
+                    json_decode(commonModel::http($url, null, array(CURLOPT_CUSTOMREQUEST => 'DELETE')));
+                }
+            }
+            return $rowMR;
+        }
     }
 
     /**
@@ -930,39 +1007,48 @@ class mrModel extends model
     public function getDiffs($MR, $encoding = '')
     {
         $diffVersions = array();
-        if($MR->synced) $diffVersions = $this->apiGetDiffVersions($MR->hostID, $MR->targetProject, $MR->mriid);
 
-        $gitlab = $this->gitlab->getByID($MR->hostID);
+        $host = $this->loadModel('pipeline')->getByID($MR->hostID);
+        $scm  = $host->type;
 
         $this->loadModel('repo');
         $repo = new stdclass;
-        $repo->SCM      = 'GitLab';
-        $repo->gitlab   = $gitlab->id;
-        $repo->project  = $MR->targetProject;
-        $repo->path     = sprintf($this->config->repo->gitlab->apiPath, $gitlab->url, $MR->targetProject);
-        $repo->client   = $gitlab->url;
-        $repo->password = $gitlab->token;
-        $repo->account  = '';
-        $repo->encoding = $encoding;
+        $repo->SCM        = $this->lang->repo->scmList[ucfirst($scm)];
+        $repo->gitService = $host->id;
+        $repo->project    = $MR->targetProject;
+        $repo->path       = sprintf($this->config->repo->$scm->apiPath, $host->url, $MR->targetProject);
+        $repo->client     = $host->url;
+        $repo->password   = $host->token;
+        $repo->account    = '';
+        $repo->encoding   = $encoding;
 
         $lines      = array();
         $commitList = array();
-        foreach($diffVersions as $diffVersion)
+        if($scm == 'gitlab')
         {
-            $singleDiff = $this->apiGetSingleDiffVersion($MR->hostID, $MR->targetProject, $MR->mriid, $diffVersion->id);
-            if($singleDiff->state == 'empty') continue;
-
-            $commits = $singleDiff->commits;
-            $diffs   = $singleDiff->diffs;
-            foreach($diffs as $index => $diff)
+            if($MR->synced) $diffVersions = $this->apiGetDiffVersions($MR->hostID, $MR->targetProject, $MR->mriid);
+            foreach($diffVersions as $diffVersion)
             {
-                $lines[] = sprintf("diff --git a/%s b/%s", $diff->old_path, $diff->new_path);
-                $lines[] = sprintf("index %s ... %s %s ", $singleDiff->head_commit_sha, $singleDiff->base_commit_sha, $diff->b_mode);
-                $lines[] = sprintf("--a/%s", $diff->old_path);
-                $lines[] = sprintf("--b/%s", $diff->new_path);
-                $diffLines = explode("\n", $diff->diff);
-                foreach($diffLines as $diffLine) $lines[] = $diffLine;
+                $singleDiff = $this->apiGetSingleDiffVersion($MR->hostID, $MR->targetProject, $MR->mriid, $diffVersion->id);
+                if($singleDiff->state == 'empty') continue;
+
+                $commits = $singleDiff->commits;
+                $diffs   = $singleDiff->diffs;
+                foreach($diffs as $index => $diff)
+                {
+                    $lines[] = sprintf("diff --git a/%s b/%s", $diff->old_path, $diff->new_path);
+                    $lines[] = sprintf("index %s ... %s %s ", $singleDiff->head_commit_sha, $singleDiff->base_commit_sha, $diff->b_mode);
+                    $lines[] = sprintf("--a/%s", $diff->old_path);
+                    $lines[] = sprintf("--b/%s", $diff->new_path);
+                    $diffLines = explode("\n", $diff->diff);
+                    foreach($diffLines as $diffLine) $lines[] = $diffLine;
+                }
             }
+        }
+        else
+        {
+            $diffs = $this->apiGetDiffs($MR->hostID, $MR->targetProject, $MR->mriid);
+            $lines = explode("\n", $diffs);
         }
 
         if(empty($MR->synced))
@@ -1075,8 +1161,31 @@ class mrModel extends model
      */
     public function apiGetDiffCommits($hostID, $projectID, $MRID)
     {
-        $url = sprintf($this->gitlab->getApiRoot($hostID), "/projects/$projectID/merge_requests/$MRID/commits");
+        $host = $this->loadModel('pipeline')->getByID($hostID);
+        if($host->type == 'gitlab')
+        {
+            $url = sprintf($this->gitlab->getApiRoot($hostID), "/projects/$projectID/merge_requests/$MRID/commits");
+        }
+        else
+        {
+            $url = sprintf($this->loadModel('gitea')->getApiRoot($hostID), "/repos/$projectID/pulls/$MRID/commits");
+        }
         return json_decode(commonModel::http($url));
+    }
+
+    /**
+     * Get diff of MR from Gitea API.
+     *
+     * @param  int    $hostID
+     * @param  int    $projectID
+     * @param  int    $MRID
+     * @access public
+     * @return object
+     */
+    public function apiGetDiffs($hostID, $projectID, $MRID)
+    {
+        $url = sprintf($this->loadModel('gitea')->getApiRoot($hostID), "/repos/$projectID/pulls/$MRID.diff");
+        return commonModel::http($url);
     }
 
     /**
@@ -1098,9 +1207,9 @@ class mrModel extends model
             $rawApprovalStatus = '';
             if(isset($MR->approvalStatus)) $rawApprovalStatus = $MR->approvalStatus;
             $MR->approver = $this->app->user->account;
-            if ($action == 'reject' and $rawApprovalStatus != 'rejected') $MR->approvalStatus = 'rejected';
-            if ($action == 'approve' and $rawApprovalStatus != 'approved') $MR->approvalStatus = 'approved';
-            if (isset($MR->approvalStatus) and $rawApprovalStatus != $MR->approvalStatus)
+            if($action == 'reject' and $rawApprovalStatus != 'rejected')  $MR->approvalStatus = 'rejected';
+            if($action == 'approve' and $rawApprovalStatus != 'approved') $MR->approvalStatus = 'approved';
+            if(isset($MR->approvalStatus) and $rawApprovalStatus != $MR->approvalStatus)
             {
                 $changes = common::createChanges($oldMR, $MR);
                 $this->action->logHistory($actionID, $changes);
@@ -1731,13 +1840,13 @@ class mrModel extends model
     /**
      * Get toList and ccList.
      *
-     * @param  object $mr
+     * @param  object $MR
      * @access public
      * @return bool|array
      */
-    public function getToAndCcList($mr)
+    public function getToAndCcList($MR)
     {
-        return array($mr->createdBy, $mr->assignee);
+        return array($MR->createdBy, $MR->assignee);
     }
 
     /**
@@ -1798,8 +1907,8 @@ class mrModel extends model
             ->fetch('id');
         if(!empty($dbOpenedID)) return array('result' => 'fail', 'message' => sprintf($this->lang->mr->hasSameOpenedMR, $dbOpenedID));
 
-        $mr = $this->apiGetSameOpened($hostID, $sourceProject, $sourceBranch, $targetProject, $targetBranch);
-        if($mr) return array('result' => 'fail', 'message' => sprintf($this->lang->mr->errorLang[2], $mr->iid));
+        $MR = $this->apiGetSameOpened($hostID, $sourceProject, $sourceBranch, $targetProject, $targetBranch);
+        if($MR) return array('result' => 'fail', 'message' => sprintf($this->lang->mr->errorLang[2], $MR->iid));
         return array('result' => 'success');
     }
 

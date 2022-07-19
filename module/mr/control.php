@@ -40,7 +40,6 @@ class mr extends control
         $repoID = $this->repo->saveState($repoID, $objectID);
         $repo   = $this->repo->getRepoByID($repoID);
         if(!in_array(strtolower($repo->SCM), $this->config->mr->gitServiceList)) $repo = $repos[0];
-        if($repo->SCM != 'Gitlab') unset($this->lang->mr->statusList['merged']);
         $this->loadModel('ci')->setMenu($repo->id);
 
         $projects = $this->mr->getAllProjects($repoID, $repo->SCM);
@@ -242,20 +241,22 @@ class mr extends control
         if(isset($MR->hostID)) $rawMR = $this->mr->apiGetSingleMR($MR->hostID, $MR->targetProject, $MR->mriid);
         if($MR->synced and (!isset($rawMR->id) or (isset($rawMR->message) and $rawMR->message == '404 Not found') or empty($rawMR))) return $this->display();
 
-        $this->loadModel('gitlab');
+        $host = $this->loadModel('pipeline')->getByID($MR->hostID);
+        $scm  = $host->type;
+        $this->loadModel($scm);
         $this->loadModel('job');
 
         /* Sync MR from GitLab to ZentaoPMS. */
         $MR = $this->mr->apiSyncMR($MR);
-        $sourceProject = $this->gitlab->apiGetSingleProject($MR->hostID, $MR->sourceProject);
-        $targetProject = $this->gitlab->apiGetSingleProject($MR->hostID, $MR->targetProject);
-        $sourceBranch  = $this->gitlab->apiGetSingleBranch($MR->hostID, $MR->sourceProject, $MR->sourceBranch);
-        $targetBranch  = $this->gitlab->apiGetSingleBranch($MR->hostID, $MR->targetProject, $MR->targetBranch);
+        $sourceProject = $this->$scm->apiGetSingleProject($MR->hostID, $MR->sourceProject);
+        $targetProject = $this->$scm->apiGetSingleProject($MR->hostID, $MR->targetProject);
+        $sourceBranch  = $this->$scm->apiGetSingleBranch($MR->hostID, $MR->sourceProject, $MR->sourceBranch);
+        $targetBranch  = $this->$scm->apiGetSingleBranch($MR->hostID, $MR->targetProject, $MR->targetBranch);
 
         $projectOwner = true;
         if(isset($MR->hostID) and !$this->app->user->admin)
         {
-            $openID = $this->gitlab->getUserIDByZentaoAccount($MR->hostID, $this->app->user->account);
+            $openID = $this->$scm->getUserIDByZentaoAccount($MR->hostID, $this->app->user->account);
             if(!$projectOwner and isset($sourceProject->owner->id) and $sourceProject->owner->id == $openID) $projectOwner = true;
         }
 
@@ -336,22 +337,10 @@ class mr extends control
             }
         }
 
-        /* Accept MR by using the mapped user in GitLab. */
-        $sudoUser = $this->mr->getSudoUsername($MR->hostID, $MR->targetProject);
-
-        if(isset($MR->hostID))
-        {
-            if(!empty($sudoUser)) $rawMR = $this->mr->apiAcceptMR($MR->hostID, $MR->targetProject, $MR->mriid, $sudoUser);
-            if(empty($sudoUser))  $rawMR = $this->mr->apiAcceptMR($MR->hostID, $MR->targetProject, $MR->mriid);
-        }
+        if(isset($MR->hostID)) $rawMR = $this->mr->apiAcceptMR($MR->hostID, $MR->targetProject, $MR->mriid, $MR);
         if(isset($rawMR->state) and $rawMR->state == 'merged')
         {
-            ///* Force reload when locate to the url. */
-            //$random = uniqid();
-            //return $this->send(array('result' => 'success', 'message' => $this->lang->mr->mergeSuccess, 'locate' => helper::createLink('mr', 'browse', "random={$random}")));
-
             $this->mr->logMergedAction($MR);
-
             return $this->send(array('result' => 'success', 'message' => $this->lang->mr->mergeSuccess, 'locate' => helper::createLink('mr', 'browse')));
         }
 
