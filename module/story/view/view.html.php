@@ -497,11 +497,10 @@
                   <td class='pd-0'>
                     <ul class='list-unstyled'>
                     <?php
-                    $misc = isonlybody() ? "showinonlybody" : "class='iframe' data-width='80%'";
-
+                    $tab = $app->tab == 'product' ? 'project' : $app->tab;
                     foreach($builds as $build)
                     {
-                        echo "<li title='$build->id $build->name'>" . html::a($this->createLink('build', 'view', "buildID=$build->id", '', true), "#$build->id $build->name", '', $misc) . '</li>';
+                        echo "<li title='$build->id $build->name'>" . html::a($this->createLink('build', 'view', "buildID=$build->id"), "#$build->id $build->name", '', "data-app='{$tab}'") . '</li>';
                     }
                     ?>
                     </ul>
@@ -512,11 +511,11 @@
                   <td class='pd-0'>
                     <ul class='list-unstyled'>
                     <?php
-                    $misc = isonlybody() ? "showinonlybody" : "class='iframe' data-width='80%'";
-
+                    $releaseModule = $app->tab == 'project' ? 'projectrelease' : 'release';
+                    $tab = $app->tab == 'execution' ? 'product' : $app->tab;
                     foreach($releases as $release)
                     {
-                        echo "<li title='$release->id $release->name'>" . html::a($this->createLink('release', 'view', "release=$release->id", '', true), "#$release->id $release->name", '', $misc) . '</li>';
+                        echo "<li title='$release->id $release->name'>" . html::a($this->createLink($releaseModule, 'view', "release=$release->id"), "#$release->id $release->name", '', "data-app='{$tab}'") . '</li>';
                     }
                     ?>
                     </ul>
