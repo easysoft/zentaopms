@@ -386,6 +386,8 @@ class project extends control
      */
     public function create($model = 'scrum', $programID = 0, $copyProjectID = 0, $extra = '')
     {
+
+        echo 2222;exit;
         $this->loadModel('execution');
         $this->loadModel('product');
 
@@ -538,6 +540,48 @@ class project extends control
         $this->view->budgetUnitList      = $this->project->getBudgetUnitList();
 
         $this->display();
+    }
+
+    public function copyProject($model = 'scrum', $programID = 0, $copyProjectID = 0)
+    {
+        $this->loadModel('project');
+        // $this->project->getCopyProjectInfo($copyProjectID);
+        // 基础信息：所属项目集、项目名称、项目代号、项目描述、所属产品、所属计划。
+        $copyProject = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($copyProjectID)->fetch();
+       
+        $programID   = $copyProject->parent;//项目集
+        $name        = $copyProject->name;  //名称
+        $code        = $copyProject->code;  //代号
+        $desc        = $copyProject->desc;  //描述
+        $products    = $this->product->getProducts($copyProjectID);//产品
+        $model       = $copyProject->model;
+
+        //计划
+        foreach($products as $product)
+        {
+            foreach($product->branches as $branch)
+            {
+                $productPlans[$product->id][$branch] = $this->loadModel('productplan')->getPairs($product->id, $branch, 'noclosed', true);
+            }
+        }
+
+        // 迭代：所属项目、执行名称、执行代号、执行类型（scrum）
+        
+        // 阶段：所属项目、阶段名称、工作量占比、阶段类型、访问控制、里程牌、输出
+
+        // 任务：模块、所属执行、任务类型、所属模块、任务名称、优先级、预计故事点、任务描述。
+
+        // 文档（文档目录）。
+
+        //过程（过程裁剪）。
+
+        //QA（质量保证计划）：所属过程、所属执行、检查对象。
+
+        //团队、权限、人员安排清空。
+
+
+
+        $this->fetch('project', 'create', "model=$model&programID=$programID&copyProjectID=$copyProjectID");
     }
 
     /**

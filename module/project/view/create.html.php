@@ -28,6 +28,19 @@
 <?php js::set('manageProducts', $lang->project->manageProducts);?>
 <?php $requiredFields = $config->project->create->requiredFields;?>
 <?php js::set('requiredFields', $requiredFields);?>
+<?php js::set('test1', ['aaa'=>['bbbb'=>2],'vvvv','vcccc']);?>
+<?php js::set('test2', ['aaa', 'vvvv','vcccc']);?>
+<script> 
+
+sessionStorage.setItem("testkey",JSON.stringify(test1))
+// for(i in testkey){
+//   console.log(i);           //获得属性
+//   console.log(testkey[i]);  //获得属性值
+
+// }
+console.log(sessionStorage.getItem("testkey"));
+
+</script>
 <div id='mainContent' class='main-content'>
   <div class='center-block'>
     <div class='main-header'>
@@ -224,6 +237,41 @@
       <div id='copyProjects' class='row'>
       <?php foreach ($copyProjects as $id => $name):?>
         <?php $active = ($copyProjectID == $id) ? ' active' : '';?>
+        <div class='col-md-4 col-sm-6'>
+        <?php if($config->edition != 'max'):?>
+        <a href='javascript:;' data-id='<?php echo $id;?>' class='nobr <?php echo $active;?>'><?php echo html::icon($lang->icons['project'], 'text-muted') . ' ' . $name;?></a>
+        <?php else: ?>
+        <a data-id='<?php echo $id;?>' class='nobr <?php echo $active;?>' data-toggle='modal' data-target='#copyProjectConfirmModal'><?php echo html::icon($lang->icons['project'], 'text-muted') . ' ' . $name;?></a>
+        <?php endif; ?>
+        </div>
+      <?php endforeach;?>
+      </div>
+      <?php endif;?>
+    </div>
+  </div>
+</div>
+
+<div class='modal fade modal-scroll-inside' id='copyProjectConfirmModal'>
+  <div class='modal-dialog mw-900px'>
+    <div class='modal-header'>
+      <button type='button' class='close' data-dismiss='modal'><i class="icon icon-close"></i></button>
+      <h2 class='text-center'>
+        <?php echo $lang->project->copyProjectConfirm;?>
+      </h2>
+      <h4 class='modal-title text-center'>
+        <span></span>
+      </h4>
+    </div>
+    <div class='modal-body'>
+      <?php if(empty($copyProjects)):?>
+      <div class='alert with-icon'>
+        <i class='icon-exclamation-sign'></i>
+        <div class='content'><?php echo $lang->project->copyNoProject;?></div>
+      </div>
+      <?php else:?>
+      <div id='copyProjects' class='row'>
+      <?php foreach ($copyProjects as $id => $name):?>
+        <?php $active = ($copyProjectID == $id) ? ' active' : '';?>
         <div class='col-md-4 col-sm-6'><a href='javascript:;' data-id='<?php echo $id;?>' class='nobr <?php echo $active;?>'><?php echo html::icon($lang->icons['project'], 'text-muted') . ' ' . $name;?></a></div>
       <?php endforeach;?>
       </div>
@@ -231,6 +279,7 @@
     </div>
   </div>
 </div>
+
 <div id='projectAcl' class='hidden'>
   <?php echo nl2br(html::radio('acl', $lang->project->aclList, $acl, "onclick='setWhite(this.value);'", 'block'));?>
 </div>
