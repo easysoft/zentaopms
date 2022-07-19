@@ -236,11 +236,11 @@ class kanban extends control
         $space      = $this->kanban->getSpaceById($spaceID);
         $spaceUsers = $spaceID == 0 ? ',' : trim($space->owner) . ',' . trim($space->team);
         $spacePairs = array(0 => '') + $this->kanban->getSpacePairs($type);
-        $users      = isset($spacePairs[$spaceID]) ? $this->loadModel('user')->getPairs('noclosed|nodeleted', '', 0, $spaceUsers) : array();
-        $whitelist  = (isset($space->whitelist) and !empty($space->whitelist)) ? $space->whitelist : ',';
+        $users      = $this->loadModel('user')->getPairs('noclosed|nodeleted');
+        $ownerPairs = (isset($spacePairs[$spaceID])) ? $this->user->getPairs('noclosed|nodeleted', '', 0, $spaceUsers) : $users;
 
         $this->view->users         = $users;
-        $this->view->whitelist     = isset($spacePairs[$spaceID]) ? $this->user->getPairs('noclosed|nodeleted', '', 0, $whitelist) : array();
+        $this->view->ownerPairs    = $ownerPairs;
         $this->view->spaceID       = $spaceID;
         $this->view->spacePairs    = $spacePairs;
         $this->view->type          = $type;
@@ -282,11 +282,11 @@ class kanban extends control
 
         $space      = $this->kanban->getSpaceById($kanban->space);
         $spaceUsers = trim($space->owner) . ',' . trim($space->team);
-        $users      = $this->loadModel('user')->getPairs('noclosed|nodeleted', '', 0, $spaceUsers);
-        $whitelist  = (isset($space->whitelist) and !empty($space->whitelist)) ? $space->whitelist : ',';
+        $users      = $this->loadModel('user')->getPairs('noclosed|nodeleted');
+        $ownerPairs = $this->user->getPairs('noclosed|nodeleted', '', 0, $spaceUsers);
 
         $this->view->users      = $users;
-        $this->view->whitelist  = $this->user->getPairs('noclosed|nodeleted', '', 0, $whitelist);
+        $this->view->ownerPairs = $ownerPairs;
         $this->view->spacePairs = array(0 => '') + array($kanban->space => $space->name) + $this->kanban->getSpacePairs($space->type);
         $this->view->kanban     = $kanban;
         $this->view->type       = $space->type;
@@ -1844,20 +1844,21 @@ class kanban extends control
     /**
      * Ajax get contact users.
      *
+     * @param  string $field
      * @param  int    $contactListID
      * @access public
      * @return string
      */
-    public function ajaxGetContactUsers($contactListID)
+    public function ajaxGetContactUsers($field, $contactListID)
     {
         $this->loadModel('user');
         $list = $contactListID ? $this->user->getContactListByID($contactListID) : '';
 
         $users = $this->user->getPairs('devfirst|nodeleted|noclosed', $list ? $list->userList : '', $this->config->maxCount);
 
-        if(!$contactListID) return print(html::select('team[]', $users, '', "class='form-control chosen' multiple"));
+        if(!$contactListID) return print(html::select($field . '[]', $users, '', "class='form-control picker-select' multiple"));
 
-        return print(html::select('team[]', $users, $list->userList, "class='form-control chosen' multiple"));
+        return print(html::select($field . '[]', $users, $list->userList, "class='form-control picker-select' multiple"));
     }
 
     /**
@@ -1913,18 +1914,16 @@ class kanban extends control
      * @param  int    $spaceID
      * @param  string $field team|whitelist|owner
      * @param  string $selectedUser
+     * @param  string $space all|space
      * @access public
      * @return string
      */
-    public function ajaxLoadSpaceUsers($spaceID, $field = '', $selectedUser = '')
+    public function ajaxLoadUsers($spaceID, $field = '', $selectedUser = '', $type = 'space')
     {
         $space    = $this->kanban->getSpaceById($spaceID);
         $accounts = '';
-        if(!empty($space))
-        {
-            if($space->type == 'private' and !empty($space->whitelist)) $accounts = $space->whitelist;
-            if($space->type != 'private') $accounts = trim($space->owner) . ',' . trim($space->team);
-        }
+
+        if(!empty($space) and $field == 'owner' and $type != 'all') $accounts = trim($space->owner) . ',' . trim($space->team);
 
         $users     = $this->loadModel('user')->getPairs('noclosed|nodeleted', '', 0, $accounts);
         $multiple  = in_array($field, array('team', 'whitelist')) ? 'multiple' : '';
