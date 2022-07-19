@@ -1205,8 +1205,13 @@ class story extends control
      */
     public function view($storyID, $version = 0, $param = 0)
     {
-        $uri = $this->app->getURI(true);
-        $this->session->set('productList', $uri . "#app={$this->app->tab}", 'product');
+        $uri        = $this->app->getURI(true);
+        $tab        = $this->app->tab;
+        $buildApp   = $tab == 'product' ?   'project' : $tab;
+        $releaseApp = $tab == 'execution' ? 'product' : $tab;
+        $this->session->set('productList', $uri . "#app={$tab}", 'product');
+        $this->session->set('releaseList', $uri, $releaseApp);
+        $this->session->set('buildList',   $uri, $buildApp);
 
         $storyID = (int)$storyID;
         $story   = $this->story->getById($storyID, $version, true);
@@ -1282,6 +1287,8 @@ class story extends control
         $this->view->preAndNext         = $this->loadModel('common')->getPreAndNextObject('story', $storyID);
         $this->view->from               = $from;
         $this->view->param              = $param;
+        $this->view->builds             = $this->loadModel('build')->getStoryBuilds($storyID);
+        $this->view->releases           = $this->loadModel('release')->getStoryReleases($storyID);
 
         $this->display();
     }
