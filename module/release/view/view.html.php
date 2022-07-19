@@ -50,7 +50,7 @@
         </ul>
         <div class='tab-content'>
           <div class='tab-pane <?php if($type == 'story') echo 'active'?>' id='stories'>
-            <?php if(common::hasPriv('release', 'linkStory') and $canBeChanged):?>
+            <?php if(common::hasPriv('release', 'linkStory') and $canBeChanged and !isonlybody()):?>
             <div class='actions'><?php echo html::a("javascript:showLink({$release->id}, \"story\")", '<i class="icon-link"></i> ' . $lang->release->linkStory, '', "class='btn btn-primary'");?></div>
             <div class='linkBox cell hidden'></div>
             <?php endif;?>
@@ -148,7 +148,7 @@
             </form>
           </div>
           <div class='tab-pane <?php if($type == 'bug') echo 'active'?>' id='bugs'>
-            <?php if(common::hasPriv('release', 'linkBug') and $canBeChanged):?>
+            <?php if(common::hasPriv('release', 'linkBug') and $canBeChanged and !isonlybody()):?>
             <div class='actions'><?php echo html::a("javascript:showLink({$release->id}, \"bug\")", '<i class="icon-bug"></i> ' . $lang->release->linkBug, '', "class='btn btn-primary'");?></div>
             <div class='linkBox cell hidden'></div>
             <?php endif;?>
@@ -238,7 +238,7 @@
             </form>
           </div>
           <div class='tab-pane <?php if($type == 'leftBug') echo 'active'?>' id='leftBugs'>
-            <?php if(common::hasPriv('release', 'linkBug') and $canBeChanged):?>
+            <?php if(common::hasPriv('release', 'linkBug') and $canBeChanged and !isonlybody()):?>
             <div class='actions'><?php echo html::a("javascript:showLink({$release->id}, \"leftBug\")", '<i class="icon-bug"></i> ' . $lang->release->linkBug, '', "class='btn btn-primary'");?></div>
             <div class='linkBox cell hidden'></div>
             <?php endif;?>
