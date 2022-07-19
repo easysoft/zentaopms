@@ -2595,21 +2595,12 @@ class kanbanModel extends model
      */
     public function addSpaceMembers($spaceID, $type, $kanbanMembers = array())
     {
-        $space   = $this->getSpaceById($spaceID);
-        $members = '';
+        $space = $this->getSpaceById($spaceID);
+        if(empty($space)) return;
 
-        if($type == 'team')
-        {
-            $spaceMembers = empty($space->team) ? array() : explode(',', $space->team);
-            $members      = $space->team;
-        }
-        elseif($type == 'whitelist')
-        {
-            $spaceMembers = empty($space->whitelist) ? array() : explode(',', $space->whitelist);
-            $members      = $space->whitelist;
-        }
-
-        $addMembers = array_diff($kanbanMembers, $spaceMembers);
+        $spaceMembers = empty($space->{$type}) ? array() : explode(',', $space->{$type});
+        $members      = $space->{$type};
+        $addMembers   = array_diff($kanbanMembers, $spaceMembers);
 
         if(!empty($addMembers))
         {
