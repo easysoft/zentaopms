@@ -2830,4 +2830,255 @@ class projectModel extends model
 
         return $menu;
     }
+
+    public function getCopyProjectInfo($projectID)
+    {
+        $returnData = array();
+        if(empty($projectID)) return $returnData;
+
+        // 基础信息：所属项目集、项目名称、项目代号、项目描述、所属产品、所属计划。
+        $copyProject = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($projectID)->fetch();
+       
+        $programID   = $copyProject->parent;//项目集
+        $name        = $copyProject->name;  //名称
+        $code        = $copyProject->code;  //代号
+        $desc        = $copyProject->desc;  //描述
+        $products    = $this->loadModel('product')->getProducts($projectID);//产品
+        $model       = $copyProject->model;
+        /* 计划. */
+        foreach($products as $product)
+        {
+            foreach($product->branches as $branch)
+            {
+                $productPlans[$product->id][$branch] = $this->loadModel('productplan')->getPairs($product->id, $branch, 'noclosed', true);
+            }
+        }
+    }
+
+    /**
+     * Save copy project.
+     *
+     * @param  int    $copyProjectID
+     * @param  string $model
+     * @param  object $executions
+     * @access public
+     * @return string
+     */
+    public function saveCopyProject($copyProjectID, $model = 'scrum', $executions)
+    {
+        if(empty($executions)) return false;
+
+        $projectID = $this->create();
+        $isProcess = false;
+
+        /* Add execution. */
+        $executions = $this->loadModel('execution')->getList($copyProjectID);
+
+        foreach($executions as $execution)
+        {
+            $executionID = $execution->id;
+            $insertExecution = new StdClass();
+            $insertExecution->project   = $projectID;
+            $insertExecution->type      = $execution->type;
+            $insertExecution->name      = $execution->name;
+            $insertExecution->code      = $execution->code;
+            $insertExecution->status    = 'wait';
+            $insertExecution->parent    = $projectID;
+            $insertExecution->openedVersion = $this->config->version;
+            if($model == 'waterfull')
+            {
+                $insertExecution->attribute = $execution->attribute;
+                $insertExecution->percent   = $execution->percent;
+                $insertExecution->acl       = $execution->acl;
+                $insertExecution->milestone = $execution->milestone;
+                $insertExecution->output    = $execution->output;
+            }
+
+            $this->dao->insert(TABLE_EXECUTION)->data($insertExecution)->exec();
+            $lastExecutionID = $this->dao->lastInsertId();
+            $this->dao->update(TABLE_EXECUTION)->set('path')->eq(",{$projectID},{$lastExecutionID},")->where('id')->eq($lastExecutionID)->exec();
+
+            /* Add process. */
+            if($model == 'scrum' or ($model == 'waterfull' and !$isProcess))
+            {
+                $projectActivities = $this->dao->select('*')
+                    ->from(TABLE_PROGRAMACTIVITY)
+                    ->where('project')->eq($copyProjectID)
+                    ->andWhere('deleted')->eq('0')
+                    ->beginIF($model == 'scrum')->andWhere('execution')->eq($executionID)->fi()
+                    ->fetchAll();
+            
+                if(!empty($projectActivities))
+                {
+                    foreach($projectActivities as $projectActivity)
+                    {
+                        $insertProjectActivity = new stdClass();
+                        $insertProjectActivity->project     = $projectID;
+                        $insertProjectActivity->execution   = $lastExecutionID;
+                        $insertProjectActivity->process     = $projectActivity->process;
+                        $insertProjectActivity->activity    = $projectActivity->activity;
+                        $insertProjectActivity->name        = $projectActivity->name;
+                        $insertProjectActivity->content     = $projectActivity->content;
+                        $insertProjectActivity->reason      = $projectActivity->reason;
+                        $insertProjectActivity->result      = $projectActivity->result;
+                        $insertProjectActivity->linkedBy    = $this->app->user->account;
+                        $insertProjectActivity->createdBy   = $this->app->user->account;
+                        $insertProjectActivity->createdDate = helper::now();
+
+                        $this->dao->insert(TABLE_PROGRAMACTIVITY)->data($insertProjectActivity)->exec();
+                    }
+                }
+
+                $projectOutputs = $this->dao->select('*')
+                    ->from(TABLE_PROGRAMOUTPUT)
+                    ->where('project')->eq($copyProjectID)
+                    ->andWhere('deleted')->eq('0')
+                    ->beginIF($model == 'scrum')->andWhere('execution')->eq($executionID)->fi()
+                    ->fetchAll();
+
+                if(!empty($projectOutputs))
+                {
+                    foreach($projectOutputs as $projectOutput)
+                    {
+                        $insertProjectOutput = new stdClass();
+                        $insertProjectOutput->project     = $projectID;
+                        $insertProjectOutput->execution   = $lastExecutionID;
+                        $insertProjectOutput->process     = $projectOutput->process;
+                        $insertProjectOutput->activity    = $projectOutput->activity;
+                        $insertProjectOutput->output      = $projectOutput->output;
+                        $insertProjectOutput->name        = $projectOutput->name;
+                        $insertProjectOutput->content     = $projectOutput->content;
+                        $insertProjectOutput->reason      = $projectOutput->reason;
+                        $insertProjectOutput->result      = $projectOutput->result;
+                        $insertProjectOutput->linkedBy    = $this->app->user->account;
+                        $insertProjectOutput->createdBy   = $this->app->user->account;
+                        $insertProjectOutput->createdDate = helper::now();
+
+                        $this->dao->insert(TABLE_PROGRAMOUTPUT)->data($insertProjectOutput)->exec();
+                    }
+                }
+
+                $isProcess = true;
+            }
+
+            /* Add QA. */
+            $auditplans = $this->dao->select('*')->from(TABLE_AUDITPLAN)
+                ->where('deleted')->eq(0)
+                ->andWhere('project')->eq($copyProjectID)
+                ->andWhere('execution')->eq($executionID)
+                ->fetchAll();
+            if(!empty($auditplans))
+            {
+                foreach($auditplans as $auditplan)
+                {
+                    $insertAuditplan = new stdClass();
+                    $insertAuditplan->objectID = $auditplan->objectID;
+                    $insertAuditplan->objectType = $auditplan->objectType;
+                    $insertAuditplan->process = $auditplan->process;
+                    $insertAuditplan->processType = $auditplan->processType;
+                    $insertAuditplan->status = 'wait';
+                    $insertAuditplan->project = $projectID;
+                    $insertAuditplan->execution = $lastExecutionID;
+                    $insertAuditplan->createdBy = $this->app->user->account;
+                    $insertAuditplan->createdDate = helper::now();
+    
+                    $this->dao->insert(TABLE_AUDITPLAN)->data($insertAuditplan)->exec();
+                }
+            }
+
+            /* Add task. */
+            $tasks = $this->dao->select('*')->from(TABLE_TASK)
+                ->where('project')->eq($copyProjectID)
+                ->andWhere('execution')->eq($executionID)
+                ->andWhere('deleted')->eq('0')
+                ->fetchAll();
+            if(!empty($tasks))
+            {   
+                foreach($tasks as $task)
+                {
+                    $insertTask = new stdClass();
+
+                    $insertTask->project   = $projectID;
+                    $insertTask->type      = $task->type;
+                    $insertTask->name      = $task->name;
+                    $insertTask->pri       = $task->pri;
+                    $insertTask->status    = 'wait';
+                    $insertTask->desc      = $task->desc;
+                    $insertTask->project   = $projectID;
+                    $insertTask->execution = $lastExecutionID;
+
+                    $this->dao->insert(TABLE_TASK)->data($insertTask)->exec();
+                }
+            }
+
+            // 文档 （阶段目录）
+            // $executionDocLibs = $this->dao->select('*')->from(TABLE_DOCLIB)
+            //     ->where('type')->eq('execution')
+            //     ->andWhere('execution')->eq($executionID)
+            //     ->andWhere('vision')->eq($this->config->vision)
+            //     ->andWhere('deleted')->eq('0')
+            //     ->fetchAll();
+            
+            // if(!empty($executionDocLibs))
+            // {
+            //     foreach($executionDocLibs as $executionDocLib)
+            //     {
+            //         $executionDocLib->execution = $lastExecutionID;
+            //         $originDocLibID = $executionDocLib->id;
+            //         unset($executionDocLib->id);
+            //         $this->dao->insert(TABLE_DOCLIB)->data($executionDocLib)->exec();
+            //         $executionDoclibId = $this->dao->lastInsertId();
+
+            //         // module
+            //         $modules = $this->dao->select('*')->from(TABLE_MODULE)
+            //             ->where('root')->eq($originDocLibID)
+            //             ->andWhere('type')->eq('doc')
+            //             ->fetchAll();
+
+            //         foreach($modules as $module)
+            //         {
+            //             unset($module->id);
+            //             unset($module->root);
+            //             unset($module->path);
+            //             $this->dao->insert(TABLE_MODULE)->data($module)->exec();
+            //             $moduleID = $this->dao->lastInsertId();
+            //             $this->dao->update(TABLE_MODULE)->set('path')->eq(",{$moduleID},")->set('root')->eq($executionDoclibId)->where('id')->eq($moduleID)->limit(1)->exec();
+            //         }
+            //     }
+            // }
+        }
+        
+        /* Add doclib and module (project) */
+        $projectDoclib = $this->dao->select('*')->from(TABLE_DOCLIB)
+            ->where('type')->eq('project')
+            ->andWhere('project')->eq($copyProjectID)
+            ->andWhere('vision')->eq($this->config->vision)
+            ->andWhere('deleted')->eq('0')
+            ->fetch();
+        if(!empty($projectDoclib))
+        {
+            $projectDoclib->project = $projectID;
+            $originDocLibID = $projectDoclib->id;
+            unset($projectDoclib->id);
+            $this->dao->insert(TABLE_DOCLIB)->data($projectDoclib)->exec();
+            $doclibId = $this->dao->lastInsertId();
+
+            $modules = $this->dao->select('*')->from(TABLE_MODULE)
+                ->where('root')->eq($originDocLibID)
+                ->andWhere('type')->eq('doc')
+                ->fetchAll();
+
+            foreach($modules as $module)
+            {
+                unset($module->id);
+                unset($module->root);
+                unset($module->path);
+                $this->dao->insert(TABLE_MODULE)->data($module)->exec();
+                $moduleID = $this->dao->lastInsertId();
+                $this->dao->update(TABLE_MODULE)->set('path')->eq(",{$moduleID},")->set('root')->eq($doclibId)->where('id')->eq($moduleID)->limit(1)->exec();
+            }   
+        }
+
+        return true;
+    }
 }
