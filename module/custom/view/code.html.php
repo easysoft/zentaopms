@@ -14,8 +14,8 @@
   <form class="load-indicator main-form form-ajax" method='post'>
     <table class='table table-form'>
       <tr>
-        <th class='w-150px'><?php echo $lang->custom->setCode;?></th>
-        <td class='w-300px text-left'>
+        <th class='c-setCode'><?php echo $lang->custom->setCode;?></th>
+        <td class='c-code text-left'>
           <?php $checkedKey = isset($config->setCode) ? $config->setCode : 1;?>
           <?php foreach($lang->custom->conceptOptions->URAndSR as $key => $value):?>
           <label class="radio-inline"><input type="radio" name="code" value="<?php echo $key?>"<?php echo $key == $checkedKey ? " checked='checked'" : ''?> id="code<?php echo $key;?>"><?php echo $value;?></label>
@@ -26,7 +26,8 @@
       <tr>
         <th></th>
         <td colspan="2" id="readOnlyOfCode">
-          <i class="icon-exclamation-sign"></i>&nbsp;<?php echo $lang->custom->notice->readOnlyOfCode;?>
+          <div class="inline-block"><i class="icon-exclamation-sign"></i>&nbsp;</div>
+          <div class="inline-block"><?php echo $lang->custom->notice->readOnlyOfCode;?></div>
         </td>
       </tr>
       <tr>
