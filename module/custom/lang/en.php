@@ -54,6 +54,7 @@ $lang->custom->allUsers             = 'All Users';
 $lang->custom->account              = 'Users';
 $lang->custom->role                 = 'Role';
 $lang->custom->dept                 = 'Dept';
+$lang->custom->code                 = $lang->code;
 
 if($config->systemMode == 'new') $lang->custom->execution = 'Execution';
 if($config->systemMode == 'classic' || !$config->systemMode) $lang->custom->execution = $lang->executionCommon;

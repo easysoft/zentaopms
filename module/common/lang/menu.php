@@ -488,7 +488,7 @@ $lang->admin->menu            = new stdclass();
 $lang->admin->menu->index     = array('link' => "$lang->indexPage|admin|index", 'alias' => 'register,certifytemail,certifyztmobile,ztcompany');
 $lang->admin->menu->company   = array('link' => "{$lang->personnel->common}|company|browse|", 'subModule' => ',user,dept,group,');
 $lang->admin->menu->model     = array('link' => "$lang->model|custom|browsestoryconcept|", 'class' => 'dropdown dropdown-hover', 'exclude' => 'custom-index,custom-set,custom-product,custom-execution,custom-kanban,custom-required,custom-flow,custom-score,custom-feedback,custom-timezone,custom-mode');
-$lang->admin->menu->custom    = array('link' => "{$lang->custom->common}|custom|index", 'exclude' => 'custom-browsestoryconcept,custom-timezone,custom-estimate');
+$lang->admin->menu->custom    = array('link' => "{$lang->custom->common}|custom|index", 'exclude' => 'custom-browsestoryconcept,custom-timezone,custom-estimate,custom-code');
 $lang->admin->menu->extension = array('link' => "{$lang->extension->common}|extension|browse", 'subModule' => 'extension');
 $lang->admin->menu->dev       = array('link' => "$lang->redev|dev|api", 'alias' => 'db', 'subModule' => 'dev,editor,entry');
 $lang->admin->menu->message   = array('link' => "{$lang->message->common}|message|index", 'subModule' => 'message,mail,webhook');
@@ -506,7 +506,9 @@ if($config->systemMode == 'new')
 
 $lang->admin->menu->allModel['subMenu'] = new stdclass();
 $lang->admin->menu->allModel['subMenu']->storyConcept = array('link' => "{$lang->storyConcept}|custom|browsestoryconcept|");
-$lang->admin->menu->allModel['menuOrder'][5] = 'storyConcept';
+$lang->admin->menu->allModel['subMenu']->code         = array('link' => "{$lang->code}|custom|code|");
+$lang->admin->menu->allModel['menuOrder'][5]  = 'storyConcept';
+$lang->admin->menu->allModel['menuOrder'][30] = 'code';
 
 $lang->admin->menu->waterfall['subMenu'] = new stdclass();
 $lang->admin->menu->waterfall['subMenu']->stage = array('link' => "{$lang->stage->common}|stage|setType|", 'subModule' => 'stage');

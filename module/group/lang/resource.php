@@ -1284,6 +1284,7 @@ $lang->resource->custom->browseStoryConcept = 'browseStoryConcept';
 $lang->resource->custom->setDefaultConcept  = 'setDefaultConcept';
 $lang->resource->custom->deleteStoryConcept = 'deleteStoryConcept';
 $lang->resource->custom->kanban             = 'kanban';
+$lang->resource->custom->code               = 'code';
 
 $lang->custom->methodOrder[5]  = 'index';
 $lang->custom->methodOrder[10] = 'set';
@@ -1300,6 +1301,8 @@ $lang->custom->methodOrder[60] = 'editStoryConcept';
 $lang->custom->methodOrder[65] = 'browseStoryConcept';
 $lang->custom->methodOrder[70] = 'setDefaultConcept';
 $lang->custom->methodOrder[75] = 'deleteStoryConcept';
+$lang->custom->methodOrder[80] = 'kanban';
+$lang->custom->methodOrder[85] = 'code';
 
 $lang->resource->datatable = new stdclass();
 $lang->resource->datatable->setGlobal = 'setGlobal';
