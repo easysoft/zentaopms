@@ -189,8 +189,7 @@ class buildModel extends model
     {
         return $this->dao->select('*')->from(TABLE_BUILD)
             ->where('deleted')->eq(0)
-            ->andWhere('stories', true)->like("%,$storyID,%")
-            ->orWhere('stories')->like("%,$storyID")->markRight(1)
+            ->andWhere("CONCAT(stories, ',')")->like("%,$storyID,%")
             ->orderBy('id_desc')
             ->fetchAll('id');
     }
