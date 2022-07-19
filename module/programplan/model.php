@@ -200,8 +200,8 @@ class programplanModel extends model
             if($data->start_date) $data->start_date = date('d-m-Y', strtotime($data->start_date));
             if($data->start_date == '' or $data->endDate == '') $data->duration = 0;
 
-            $datas['data'][]       = $data;
-            $stageIndex[$plan->id] = array('planID' => $plan->id, 'parent' => $plan->parent, 'progress' => array('totalConsumed' => 0, 'totalReal' => 0));
+            $datas['data'][$plan->id] = $data;
+            $stageIndex[$plan->id]    = array('planID' => $plan->id, 'parent' => $plan->parent, 'progress' => array('totalConsumed' => 0, 'totalReal' => 0));
         }
 
         $taskSign = "<span>[ T ] </span>";
@@ -231,14 +231,23 @@ class programplanModel extends model
             }
         }
 
+        $minStartDate  = '';
+        $maxDeadline   = '';
         foreach($tasks as $task)
         {
-            $start = helper::isZeroDate($task->estStarted) ? '' : $task->estStarted;
-            $end   = helper::isZeroDate($task->deadline)   ? '' : $task->deadline;
-
-            $realBegan = helper::isZeroDate($task->realStarted)  ? '' : substr($task->realStarted, 0, 10);
-            $realEnd   = helper::isZeroDate($task->finishedDate) ? '' : substr($task->finishedDate, 0, 10);
+            $execution = zget($plans, $task->execution, array());
             $priIcon   = sprintf($taskPri, $task->pri, $task->pri, $task->pri);
+
+            $estStart  = helper::isZeroDate($task->estStarted)  ? '' : $task->estStarted;
+            $estEnd    = helper::isZeroDate($task->deadline)    ? '' : $task->deadline;
+            $realBegan = helper::isZeroDate($task->realStarted) ? '' : substr($task->realStarted, 0, 10);
+            $realEnd   = (in_array($task->status, array('done', 'closed')) and !helper::isZeroDate($task->finishedDate)) ? substr($task->finishedDate, 0, 10) : '';
+
+            $start = $realBegan ? $realBegan : $estStart;
+            $end   = $realEnd   ? $realEnd   : $estEnd;
+            if(empty($start) and $execution) $start = $execution->begin;
+            if(empty($end)   and $execution) $end   = $execution->end;
+            if($start > $end) $end = $start;
 
             $data = new stdclass();
             $data->id           = $task->execution . '-' . $task->id;
@@ -257,15 +266,33 @@ class programplanModel extends model
             $progress           = $task->consumed ? round($task->consumed / ($task->left + $task->consumed), 3) : 0;
             $data->progress     = $progress;
             $data->taskProgress = ($progress * 100) . '%';
-            $data->start_date   = $data->realBegan ? $data->realBegan : $data->begin;
-            $data->endDate      = $data->realEnd ? $data->realEnd : $data->deadline;
+            $data->start_date   = $start;
+            $data->endDate      = $end;
             $data->duration     = 0;
 
             if($data->endDate > $data->start_date) $data->duration = helper::diffDate($data->endDate, $data->start_date) + 1;
             if($data->start_date) $data->start_date = date('d-m-Y', strtotime($data->start_date));
             if($data->start_date == '' or $data->endDate == '') $data->duration = 0;
 
-            if(strpos($selectCustom, 'task') !== false) $datas['data'][] = $data;
+            if(strpos($selectCustom, 'task') !== false)
+            {
+                $datas['data'][$data->id] = $data;
+                if(isset($datas['data'][$task->execution]))
+                {
+                    $changed = false;
+                    if($start and strtotime($start) < strtotime($datas['data'][$task->execution]->start_date))
+                    {
+                        $changed = true;
+                        $datas['data'][$task->execution]->start_date = date('d-m-Y', strtotime($start));
+                    }
+                    if($end and $end > $datas['data'][$task->execution]->endDate)
+                    {
+                        $changed = true;
+                        $datas['data'][$task->execution]->endDate = $end;
+                    }
+                    if($changed) $datas['data'][$task->execution]->duration = helper::diffDate($datas['data'][$task->execution]->endDate, $datas['data'][$task->execution]->start_date) + 1;
+                }
+            }
             foreach($stageIndex as $index => $stage)
             {
                 if($stage['planID'] == $task->execution)
@@ -282,9 +309,6 @@ class programplanModel extends model
                 }
             }
         }
-
-        /* Ceturns all the values from the stageIndex and indexes the array numerically. */
-        $stageIndex = array_values($stageIndex);
 
         /* Calculate the progress of the phase. */
         foreach($stageIndex as $index => $stage)
@@ -308,6 +332,8 @@ class programplanModel extends model
                 $datas['links'][] = $link;
             }
         }
+
+        $datas['data'] = array_values($datas['data']);
 
         return $returnJson ? json_encode($datas) : $datas;
     }
