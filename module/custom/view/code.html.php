@@ -9,7 +9,7 @@
  * @link        https://www.zentao.net
  */
 ?>
-<?php include 'header.html.php';?>
+<?php include $app->getModuleRoot() . 'common/view/header.html.php';?>
 <div id='mainContent' class='main-content'>
   <form class="load-indicator main-form form-ajax" method='post'>
     <table class='table table-form'>
