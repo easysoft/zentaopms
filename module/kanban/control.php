@@ -1854,7 +1854,7 @@ class kanban extends control
         $this->loadModel('user');
         $list = $contactListID ? $this->user->getContactListByID($contactListID) : '';
 
-        $users = $this->user->getPairs('devfirst|nodeleted|noclosed', $list ? $list->userList : '', $this->config->maxCount);
+        $users = $this->user->getPairs('nodeleted|noclosed', '', $this->config->maxCount);
 
         if(!$contactListID) return print(html::select($field . '[]', $users, '', "class='form-control picker-select' multiple"));
 
