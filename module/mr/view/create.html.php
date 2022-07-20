@@ -12,6 +12,7 @@
 <?php include '../../common/view/header.html.php';?>
 <?php js::import($jsRoot . 'misc/base64.js');?>
 <?php js::set('hosts', $hosts);?>
+<?php js::set('branchPrivs', array());?>
 <div id='mainContent' class='main-row'>
   <div class='main-col main-content'>
     <div class='center-block'>
@@ -59,7 +60,7 @@
           <tr>
             <th><?php echo $lang->mr->removeSourceBranch;?></th>
             <td colspan='1'>
-              <div class="checkbox-primary">
+              <div class="checkbox-primary" title="<?php echo $lang->mr->notDelbranch;?>">
                 <input type="checkbox" name="removeSourceBranch" value="1" id="removeSourceBranch">
                 <label for="removeSourceBranch"></label>
               </div>

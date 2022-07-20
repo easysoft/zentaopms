@@ -13,6 +13,23 @@ function urlencode(param)
     return param;
 }
 
+/**
+ * Get branch priv.
+ *
+ * @param  int|string $project
+ * @access public
+ * @return void
+ */
+function getBranchPriv(project)
+{
+    var hostID    = $('#hostID').val();
+    var branchUrl = createLink('mr', 'ajaxGetBranchPivs', "hostID=" + hostID + "&project=" + project);
+    $.get(branchUrl, function(response)
+    {
+        branchPrivs = eval('(' + response + ')');
+    });
+}
+
 $(function()
 {
     $('#hostID').change(function()
@@ -66,14 +83,19 @@ $(function()
             $('#repoID').html('').append(response);
             $('#repoID').chosen().trigger("chosen:updated");;
         });
+
+        if(sourceProject) getBranchPriv(sourceProject);
     });
 
     $('#sourceBranch,#targetBranch').change(function()
     {
-        var sourceProject = urlencode($('#sourceProject').val());
-        var sourceBranch  = urlencode($('#sourceBranch').val());
-        var targetProject = urlencode($('#targetProject').val());
-        var targetBranch  = urlencode($('#targetBranch').val());
+        $('#removeSourceBranch').removeAttr('disabled');
+
+        var sourceProject = $('#sourceProject').val();
+        var sourceBranch  = $('#sourceBranch').val();
+        var targetProject = $('#targetProject').val();
+        var targetBranch  = $('#targetBranch').val();
+        if(branchPrivs[sourceBranch]) $('#removeSourceBranch').attr('disabled', 'true');
         if(!sourceProject || !sourceBranch || !targetProject || !targetBranch) return false;
 
         var $this    = $(this);
@@ -86,6 +108,7 @@ $(function()
             {
                 alert(response.message);
                 $this.val('').trigger('chosen:updated');
+                if($this.attr('id') == 'sourceBranch') $('#removeSourceBranch').removeAttr('disabled');
                 return false;
             }
         });

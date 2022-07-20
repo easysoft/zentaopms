@@ -1691,7 +1691,7 @@ class treeModel extends model
                 $this->dao->update(TABLE_MODULE)->data($data)->autoCheck()->where('id')->eq($moduleID)->limit(1)->exec();
 
                 $newModule = $this->getByID($moduleID);
-                if(!empty(common::createChanges($oldModule, $newModule)))
+                if(common::createChanges($oldModule, $newModule))
                 {
                     $editIdList[]             = $moduleID;
                     $moduleChanges[$moduleID] = common::createChanges($oldModule, $newModule);

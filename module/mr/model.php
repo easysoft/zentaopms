@@ -976,8 +976,12 @@ class mrModel extends model
         {
             $apiRoot = $this->loadModel('gitea')->getApiRoot($hostID);
             $url     = sprintf($apiRoot, "/repos/$projectID/pulls/$MRID/merge");
-            $merege  = ($MR and $MR->squash == '1') ? 'squash' : 'merge';
-            $rowMR   = json_decode(commonModel::http($url, array('Do' => $merge), array(), array(), 'json', 'POST'));
+
+            $merege = ($MR and $MR->squash == '1') ? 'squash' : 'merge';
+            $data   = array('Do' => $merge);
+            if($MR and $MR->removeSourceBranch == '1') $data['delete_branch_after_merge'] = true;
+
+            $rowMR = json_decode(commonModel::http($url, $data, array(), array(), 'json', 'POST'));
             if(!isset($rowMR->massage))
             {
                 $rowMR = $this->apiGetSingleMR($hostID, $projectID, $MRID);
@@ -986,12 +990,6 @@ class mrModel extends model
                     ->where('id')->eq($MRID)
                     ->autoCheck()
                     ->exec();
-
-                if($MR and $MR->removeSourceBranch == '1')
-                {
-                    $url = sprintf($apiRoot, "/repos/$projectID/branches/{$MR->sourceBranch}");
-                    json_decode(commonModel::http($url, null, array(CURLOPT_CUSTOMREQUEST => 'DELETE')));
-                }
             }
             return $rowMR;
         }

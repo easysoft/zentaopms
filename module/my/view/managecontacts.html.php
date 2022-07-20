@@ -20,8 +20,7 @@
     foreach($lists as $id => $listName)
     {
         $listClass = ($id == $listID and $mode == 'edit') ? 'btn btn-block active' : 'btn btn-block';
-        $shareIcon = in_array($id, $globalContacts) ? '<i class="icon icon-share-sign"></i> ' : '';
-        echo html::a(inlink('managecontacts', "listID=$id&mode=edit"), $shareIcon . $listName, '', "class='{$listClass}' title='$listName'");
+        echo html::a(inlink('managecontacts', "listID=$id&mode=edit"), $listName, '', "class='{$listClass}' title='$listName'");
     }
     ?>
     </div>
