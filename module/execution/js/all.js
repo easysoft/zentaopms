@@ -59,6 +59,26 @@ $(function()
             $('.table td.has-child > .plan-toggle').removeClass('collapsed');
         }
     });
+
+    $('#executionsForm').table(
+    {
+        statisticCreator: function(table)
+        {
+            var $table = table.getTable();
+            var $checkedRows = $table.find(table.isDataTable ? '.datatable-row-left.checked' : 'tbody>tr.checked');
+            var $originTable = table.isDataTable ? table.$.find('.datatable-origin') : null;
+            var $rows = $table.find(table.isDataTable ? '.datatable-rows .datatable-row-left' : 'tbody>tr');
+
+            var taskIdList      = [];
+            $rows.each(function()
+            {
+                var $row = $(this);
+                if($originTable) $row = $originTable.find('tbody>tr[data-id="' + $row.data('id') + '"]');
+                var data = $row.data();
+                taskIdList.push(data.id);
+            });
+        }
+    })
 });
 
 function byProduct(productID, projectID, status)
