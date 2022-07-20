@@ -2190,6 +2190,8 @@ class task extends control
                 }
             }
 
+            foreach($tasks as $task) $relatedBugIdList[$task->fromBug] = $task->fromBug;
+            $bugs = $this->loadModel('bug')->getByList($relatedBugIdList);
             foreach($tasks as $task)
             {
                 if($this->post->fileType == 'csv')
@@ -2203,8 +2205,7 @@ class task extends control
                 /* fill some field with useful value. */
                 $task->story = isset($relatedStories[$task->story]) ? $relatedStories[$task->story] . "(#$task->story)" : '';
 
-                $bug           = $this->loadModel('bug')->getByID($task->fromBug);
-                $task->fromBug = empty($task->fromBug) ? '' : "#$task->fromBug " . $bug->title;
+                $task->fromBug = empty($task->fromBug) ? '' : "#$task->fromBug " . $bugs[$task->fromBug]->title;
 
                 if(isset($executions[$task->execution]))              $task->execution    = $executions[$task->execution] . "(#$task->execution)";
                 if(isset($taskLang->typeList[$task->type]))           $task->type         = $taskLang->typeList[$task->type];
