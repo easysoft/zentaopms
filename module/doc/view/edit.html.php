@@ -10,7 +10,7 @@
  * @link        http://www.zentao.net
  */
 ?>
-<?php if($doc->type == 'text'):?>
+<?php if($doc->type == 'text' and !isonlybody()):?>
 <?php include 'edittexttype.html.php';?>
 <?php else:?>
 <?php include 'editothertype.html.php';?>
