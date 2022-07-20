@@ -507,6 +507,7 @@ if($config->systemMode == 'new')
 $lang->admin->menu->allModel['subMenu'] = new stdclass();
 $lang->admin->menu->allModel['subMenu']->storyConcept = array('link' => "{$lang->storyConcept}|custom|browsestoryconcept|");
 $lang->admin->menu->allModel['subMenu']->code         = array('link' => "{$lang->code}|custom|code|");
+
 $lang->admin->menu->allModel['menuOrder'][5]  = 'storyConcept';
 $lang->admin->menu->allModel['menuOrder'][30] = 'code';
 
