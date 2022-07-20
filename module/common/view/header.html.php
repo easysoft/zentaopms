@@ -7,6 +7,10 @@ include 'chosen.html.php';
 <?php if(empty($_GET['onlybody']) or $_GET['onlybody'] != 'yes'):?>
 <?php $this->app->loadConfig('sso');?>
 <?php if(!empty($config->sso->redirect)) js::set('ssoRedirect', $config->sso->redirect);?>
+<?php $isDocModule        = $app->getModuleName() == 'doc';?>
+<?php $isManagedDocMethod = strpos(',create,edit,', ",{$app->getMethodName()},") !== false;?>
+<?php $isNotTextTypeDoc   = (isset($docType) and strpos(',html,markdown,text,', ",$docType,") === false);?>
+<?php if(!$isDocModule or ($isDocModule and (!$isManagedDocMethod or ($isManagedDocMethod and $isNotTextTypeDoc)))):?>
 <header id='header'>
   <div id='mainHeader'>
     <div class='container'>
@@ -44,6 +48,11 @@ include 'chosen.html.php';
   }
   ?>
 </header>
+<?php else:?>
+<header id='header'>
+  <div id='mainHeader' style="height: 0;"></div>
+</header>
+<?php endif;?>
 
 <?php endif;?>
 <script>

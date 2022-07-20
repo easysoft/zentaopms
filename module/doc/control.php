@@ -486,6 +486,7 @@ class doc extends control
         $this->view->lib              = $lib;
         $this->view->groups           = $this->loadModel('group')->getPairs();
         $this->view->users            = $this->user->getPairs('noletter|noclosed|nodeleted', $doc->users);
+        $this->view->docType          = $doc->type;
         $this->display();
     }
 
@@ -780,6 +781,21 @@ class doc extends control
     public function ajaxGetAllLibs()
     {
         return print(json_encode($this->doc->getAllLibGroups()));
+    }
+
+    /**
+     * AJAX: Get libs by type.
+     *
+     * @param  string $type
+     * @access public
+     * @return void
+     */
+    public function ajaxGetLibsByType($type)
+    {
+        $unclosed = strpos($this->config->doc->custom->showLibs, 'unclosed') !== false ? 'unclosedProject' : '';
+        $libs = $this->doc->getLibs($type, "withObject,$unclosed");
+
+        return print(html::select('lib', $libs, '', 'class="form-control"'));
     }
 
     /**
@@ -1239,11 +1255,23 @@ class doc extends control
             $response['message']    = $this->lang->saveSuccess;
             $response['result']     = 'success';
             $response['closeModal'] = true;
-            $response['callback']   = "redirectParentWindow(\"{$this->post->objectType}\")";
+            $response['callback']   = "redirectParentWindow(\"{$this->post->objectType}\", \"{$this->post->lib}\", \"{$this->post->type}\")";
             return $this->send($response);
         }
 
         unset($this->lang->doc->libTypeList['book']);
+
+        $globalTypeList = $this->lang->doc->libTypeList;
+        $globalTypeList = $this->config->vision == 'lite' ? $globalTypeList : $globalTypeList + $this->lang->doc->libGlobalList;
+
+        $defaultType = key($globalTypeList);
+        $unclosed    = strpos($this->config->doc->custom->showLibs, 'unclosed') !== false ? 'unclosedProject' : '';
+        $libs        = $this->doc->getLibs($defaultType, "withObject,$unclosed");
+
+        $this->view->globalTypeList = $globalTypeList;
+        $this->view->defaultType    = $defaultType;
+        $this->view->libs           = $libs;
+
         $this->display();
     }
 

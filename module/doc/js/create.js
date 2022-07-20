@@ -26,12 +26,12 @@ $(function()
         if($(this).hasClass('ke-selected'))
         {
             $('#submit').removeClass('fullscreen-save')
-            $('#submit').addClass('btn-wide')
+            $('.form-actions #submit').addClass('btn-wide')
         }
         else
         {
             $('#submit').addClass('fullscreen-save')
-            $('#submit').removeClass('btn-wide')
+            $('.form-actions #submit').removeClass('btn-wide')
         }
     });
 

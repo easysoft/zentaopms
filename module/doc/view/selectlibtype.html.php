@@ -21,12 +21,19 @@
     <table class='table table-form'>
       <tr>
         <th class='w-80px'><?php echo $lang->doc->libType;?></th>
-        <?php if($config->vision == 'lite'):?>
-          <?php $globalList = $lang->doc->libTypeList;?>
-        <?php else:?>
-          <?php $globalList = $lang->doc->libTypeList + $lang->doc->libGlobalList;?>
-        <?php endif;?>
-        <td class='w-p90'><?php echo html::radio('objectType', $globalList, key($globalList));?></td>
+        <td class='w-p90'><?php echo html::radio('objectType', $globalTypeList, $defaultType, "onchange=loadDocLibs(this.value)");?></td>
+      </tr>
+      <tr>
+        <th class='w-100px'><?php echo $lang->doc->lib;?></th>
+        <td class='w-p90'><?php echo html::select('lib', $libs, '', "class='form-control chosen'");?></td>
+      </tr>
+      <tr id='docType'>
+        <th><?php echo $lang->doc->type;?></th>
+        <?php
+        $typeKeyList = array();
+        foreach($lang->doc->types as $typeKey => $typeName) $typeKeyList[$typeKey] = $typeKey;
+        ?>
+        <td><?php echo html::radio('type', $lang->doc->types, 'text');?></td>
       </tr>
       <tr>
         <td colspan='3' class='text-center form-actions'><?php echo html::submitButton($lang->confirm);?></td>

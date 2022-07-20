@@ -6267,7 +6267,7 @@ class upgradeModel extends model
 
         foreach($stories as $storyID => $story)
         {
-            if(!empty($story->assingnedTo))
+            if(!empty($story->assignedTo))
             {
                 $story->reviewer = $story->assingnedTo;
             }
