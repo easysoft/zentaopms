@@ -196,3 +196,4 @@ $lang->mr->linkedTasks       = '任务';
 $lang->mr->unlinkedTasks     = '未关联任务';
 $lang->mr->confirmUnlinkTask = "您确认移除该任务吗？";
 $lang->mr->taskSummary       = "本页共 <strong>%s</strong> 个任务";
+$lang->mr->notDelbranch      = "源分支为受保护分支时不可删除";

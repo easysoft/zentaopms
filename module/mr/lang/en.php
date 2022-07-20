@@ -196,3 +196,4 @@ $lang->mr->linkedTasks       = 'Task';
 $lang->mr->unlinkedTasks     = 'Task not linked';
 $lang->mr->confirmUnlinkTask = "Are you sure to remove this task?";
 $lang->mr->taskSummary       = "There are <strong>%s</strong> tasks on this page";
+$lang->mr->notDelbranch      = "The source branch cannot be deleted when it is a protected branch";

@@ -156,6 +156,14 @@ class mr extends control
         $scm        = $host->type;
         $branchList = $this->loadModel($scm)->getBranches($MR->hostID, $MR->targetProject);
 
+        $MR->canDeleteBranch = true;
+        $branchPrivs = $this->loadModel($scm)->apiGetBranchPrivs($MR->hostID, $MR->sourceProject);
+        foreach($branchPrivs as $priv)
+        {
+            if($MR->canDeleteBranch and $priv->name == $MR->sourceBranch) $MR->canDeleteBranch = false;
+        }
+
+
         $targetBranchList = array();
         foreach($branchList as $branch) $targetBranchList[$branch] = $branch;
 
@@ -1016,5 +1024,25 @@ class mr extends control
 
        $result = $this->mr->checkSameOpened($hostID, $sourceProject, $sourceBranch, $targetProject, $targetBranch);
        echo json_encode($result);
+   }
+
+   /**
+    * Ajax get branch pivs.
+    *
+    * @param  int        $hostID
+    * @param  int|string $project
+    * @access public
+    * @return array
+    */
+   public function ajaxGetBranchPivs($hostID, $project)
+   {
+        $host = $this->loadModel('pipeline')->getByID($hostID);
+        $scm  = $host->type;
+        if($scm == 'gitea') $project = urldecode(base64_decode($project));
+
+        $branches    = $this->loadModel($scm)->apiGetBranchPrivs($hostID, $project);
+        $branchPrivs = array();
+        foreach($branches as $branch) $branchPrivs[$branch->name] = $branch->name;
+        echo json_encode($branchPrivs);
    }
 }
