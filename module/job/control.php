@@ -38,8 +38,9 @@ class job extends control
      */
     public function browse($repoID = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
-        $repos = $this->loadModel('repo')->getRepoPairs('devops');
+        $repos  = $this->loadModel('repo')->getRepoPairs('devops');
         if(empty($repos)) $this->locate($this->repo->createLink('create'));
+        $repoID = $this->repo->saveState($repoID);
 
         /* Set session. */
         $this->loadModel('ci')->setMenu($repoID);
