@@ -191,7 +191,6 @@ class company extends control
         $this->session->set('riskList',        $uri, 'project');
         $this->session->set('opportunityList', $uri, 'project');
         $this->session->set('trainplanList',   $uri, 'project');
-        $this->session->set('executionList',   $uri, 'execution');
         $this->session->set('taskList',        $uri, 'execution');
         $this->session->set('buildList',       $uri, 'execution');
         $this->session->set('bugList',         $uri, 'qa');
