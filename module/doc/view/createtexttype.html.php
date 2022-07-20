@@ -149,7 +149,7 @@ $(function()
 {
     $('.doc-title input').focus();
 
-    $('#sidebar').height($(document).height() - $('#headerBox').height() - $('.ke-toolbar').height());
+    $('#sidebar').height($(document).height() - 120);
     setTimeout(function(){$('.ke-edit-iframe, .ke-edit').height($(document).height() - 120);}, 100);
     setTimeout(function(){$('.CodeMirror').height($(document).height() - 120);}, 100);
 
