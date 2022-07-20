@@ -1183,8 +1183,8 @@ class projectModel extends model
         $this->dao->insert(TABLE_PROJECT)->data($project)
             ->autoCheck()
             ->batchcheck($requiredFields, 'notempty')
-            ->checkIF(!empty($project->name), 'name', 'unique', "`type`='project' and `parent` = $project->parent and `model` = '{$project->model}'")
-            ->checkIF(!empty($project->code), 'code', 'unique', "`type`='project' and `model` = '{$project->model}'")
+            ->checkIF(!empty($project->name), 'name', 'unique', "`type`='project' and `parent` = $project->parent and `model` = '{$project->model}' and `deleted` = '0'")
+            ->checkIF(!empty($project->code), 'code', 'unique', "`type`='project' and `model` = '{$project->model}' and `deleted` = '0'")
             ->checkIF($project->end != '', 'end', 'gt', $project->begin)
             ->checkFlow()
             ->exec();
@@ -1431,8 +1431,8 @@ class projectModel extends model
             ->checkIF($project->begin != '', 'begin', 'date')
             ->checkIF($project->end != '', 'end', 'date')
             ->checkIF($project->end != '', 'end', 'gt', $project->begin)
-            ->checkIF(!empty($project->name), 'name', 'unique', "id != $projectID and `type` = 'project' and `parent` = $project->parent and `model` = '{$project->model}'")
-            ->checkIF(!empty($project->code), 'code', 'unique', "id != $projectID and `type` = 'project' and `model` = '{$project->model}'")
+            ->checkIF(!empty($project->name), 'name', 'unique', "id != $projectID and `type` = 'project' and `parent` = $project->parent and `model` = '{$project->model}' and `deleted` = '0'")
+            ->checkIF(!empty($project->code), 'code', 'unique', "id != $projectID and `type` = 'project' and `model` = '{$project->model}' and `deleted` = '0'")
             ->checkFlow()
             ->where('id')->eq($projectID)
             ->exec();

@@ -675,8 +675,8 @@ class productModel extends model
         $programID = isset($product->program) ? $product->program : 0;
         $this->dao->insert(TABLE_PRODUCT)->data($product)->autoCheck()
             ->batchCheck($this->config->product->create->requiredFields, 'notempty')
-            ->checkIF((!empty($product->name) and $this->config->systemMode == 'new'), 'name', 'unique', "`program` = $programID")
-            ->checkIF(!empty($product->code), 'code', 'unique')
+            ->checkIF((!empty($product->name) and $this->config->systemMode == 'new'), 'name', 'unique', "`program` = $programID and `deleted` = '0'")
+            ->checkIF(!empty($product->code), 'code', 'unique', "`deleted` = '0'")
             ->checkFlow()
             ->exec();
 
@@ -767,8 +767,8 @@ class productModel extends model
         $programID = isset($product->program) ? $product->program : '';
         $this->dao->update(TABLE_PRODUCT)->data($product)->autoCheck()
             ->batchCheck($this->config->product->edit->requiredFields, 'notempty')
-            ->checkIF((!empty($product->name) and $this->config->systemMode == 'new'), 'name', 'unique', "id != $productID and `program` = $programID")
-            ->checkIF(!empty($product->code), 'code', 'unique', "id != $productID")
+            ->checkIF((!empty($product->name) and $this->config->systemMode == 'new'), 'name', 'unique', "id != $productID and `program` = $programID and `deleted` = '0'")
+            ->checkIF(!empty($product->code), 'code', 'unique', "id != $productID and `deleted` = '0'")
             ->checkFlow()
             ->where('id')->eq($productID)
             ->exec();

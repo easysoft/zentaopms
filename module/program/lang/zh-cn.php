@@ -114,6 +114,7 @@ $lang->program->accessDenied       = '你无权访问该项目集';
 $lang->program->beyondParentBudget = '已超出所属项目集的剩余预算';
 $lang->program->checkedProjects    = '已选择%s项';
 
+
 $lang->program->endList[31]  = '一个月';
 $lang->program->endList[93]  = '三个月';
 $lang->program->endList[186] = '半年';
@@ -140,7 +141,7 @@ $lang->program->statusList['suspended'] = '已挂起';
 $lang->program->statusList['closed']    = '已关闭';
 
 $lang->program->featureBar['all']       = '所有';
-$lang->program->featureBar['undone']    = '未完成';
+$lang->program->featureBar['unclosed']  = '未关闭';
 $lang->program->featureBar['wait']      = '未开始';
 $lang->program->featureBar['doing']     = '进行中';
 $lang->program->featureBar['suspended'] = '已挂起';
