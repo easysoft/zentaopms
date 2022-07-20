@@ -2379,8 +2379,7 @@ EOD;
                 }
 
                 $referer = helper::safe64Encode($uri);
-                print(js::locate(helper::createLink('user', 'login', "referer=$referer")));
-                helper::end();
+                die(js::locate(helper::createLink('user', 'login', "referer=$referer")));
             }
         }
         catch(EndResponseException $endResponseException)
