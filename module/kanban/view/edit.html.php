@@ -22,7 +22,7 @@
     <table class='table table-form'>
       <tr>
         <th><?php echo $lang->kanban->space;?></th>
-        <td><?php echo html::select('space', $spacePairs, $kanban->space, "class='form-control chosen'");?></td>
+        <td><?php echo html::select('space', $spacePairs, $kanban->space, "class='form-control chosen' onchange='loadOwners(this.value)'");?></td>
       </tr>
       <tr>
         <th><?php echo $lang->kanban->WIPCount;?></th>
@@ -99,7 +99,7 @@
         <td colspan='2'>
           <div class="input-group">
             <?php echo html::select('whitelist[]', $users, $kanban->whitelist, 'class="form-control picker-select" multiple');?>
-            <?php echo $this->fetch('my', 'buildContactLists', 'dropdownName=whitelist');?>
+            <?php echo $this->fetch('my', 'buildContactLists', "dropdownName=whitelist&attr=data-drop_direction='up'");?>
           </div>
         </td>
       </tr>

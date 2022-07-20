@@ -49,13 +49,16 @@ $config->project->datatable->fieldList['name']['required'] = 'yes';
 $config->project->datatable->fieldList['name']['sort']     = 'no';
 $config->project->datatable->fieldList['name']['pri']      = '1';
 
-$config->project->datatable->fieldList['code']['title']    = 'code';
-$config->project->datatable->fieldList['code']['fixed']    = 'left';
-$config->project->datatable->fieldList['code']['width']    = '100';
-$config->project->datatable->fieldList['code']['minWidth'] = '180';
-$config->project->datatable->fieldList['code']['required'] = 'no';
-$config->project->datatable->fieldList['code']['sort']     = 'no';
-$config->project->datatable->fieldList['code']['pri']      = '1';
+if(!isset($config->setCode) or $config->setCode == 1)
+{
+    $config->project->datatable->fieldList['code']['title']    = 'code';
+    $config->project->datatable->fieldList['code']['fixed']    = 'left';
+    $config->project->datatable->fieldList['code']['width']    = '100';
+    $config->project->datatable->fieldList['code']['minWidth'] = '180';
+    $config->project->datatable->fieldList['code']['required'] = 'no';
+    $config->project->datatable->fieldList['code']['sort']     = 'no';
+    $config->project->datatable->fieldList['code']['pri']      = '1';
+}
 
 $config->project->datatable->fieldList['PM']['title']    = 'PM';
 $config->project->datatable->fieldList['PM']['fixed']    = 'no';
@@ -134,7 +137,7 @@ $config->project->maxCheckList->waterfall = array('execution', 'design', 'doc', 
 
 $config->project->search['module']                   = 'project';
 $config->project->search['fields']['name']           = $lang->project->name;
-$config->project->search['fields']['code']           = $lang->project->code;
+if(!isset($config->setCode) or $config->setCode == 1 )$config->project->search['fields']['code'] = $lang->project->code;
 $config->project->search['fields']['id']             = $lang->project->id;
 $config->project->search['fields']['model']          = $lang->project->model;
 $config->project->search['fields']['parent']         = $lang->project->parent;

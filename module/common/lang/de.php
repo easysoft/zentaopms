@@ -150,6 +150,7 @@ $lang->openedByAB   = 'Ersteller';
 $lang->assignedToAB = 'Bearbeiter';
 $lang->typeAB       = 'Typ';
 $lang->nameAB       = 'Name';
+$lang->code         = 'Code';
 
 $lang->pri     = 'Priority';
 $lang->delayed = 'Delayed';
