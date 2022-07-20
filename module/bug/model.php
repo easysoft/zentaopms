@@ -748,9 +748,9 @@ class bugModel extends model
             $changeBugs  = $this->dao->select('id,linkbug')->from(TABLE_BUG)->where('id')->in(array_filter($changeBugs))->fetchPairs();
             foreach($changeBugs as $changeBugID => $changeBug)
             {
-                if(array_search($changeBugID, $addBugs) !== false and empty($changeBug))  $this->dao->update(TABLE_BUG)->set('linkBug')->eq($bugID)->where('id')->eq((int)$changeBugID)->exec();
-                if(array_search($changeBugID, $addBugs) !== false and !empty($changeBug)) $this->dao->update(TABLE_BUG)->set('linkBug')->eq("$changeBug,$bugID")->where('id')->eq((int)$changeBugID)->exec();
-                if(array_search($changeBugID, $removeBugs) !== false)
+                if(in_array($changeBugID, $addBugs) and empty($changeBug))  $this->dao->update(TABLE_BUG)->set('linkBug')->eq($bugID)->where('id')->eq((int)$changeBugID)->exec();
+                if(in_array($changeBugID, $addBugs) and !empty($changeBug)) $this->dao->update(TABLE_BUG)->set('linkBug')->eq("$changeBug,$bugID")->where('id')->eq((int)$changeBugID)->exec();
+                if(in_array($changeBugID, $removeBugs))
                 {
                     $linkBugs = explode(',', $changeBug);
                     unset($linkBugs[array_search($bugID, $linkBugs)]);
