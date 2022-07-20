@@ -680,6 +680,7 @@ class mrModel extends model
      * @link   https://docs.gitlab.com/ee/api/merge_requests.html#list-project-merge-requests
      * @param  int    $hostID
      * @param  int    $projectID
+     * @param  string $scm
      * @access public
      * @return object
      */
@@ -974,8 +975,9 @@ class mrModel extends model
         elseif($host->type == 'gitea')
         {
             $apiRoot = $this->loadModel('gitea')->getApiRoot($hostID);
-            $url   = sprintf($apiRoot, "/repos/$projectID/pulls/$MRID/merge");
-            $rowMR = json_decode(commonModel::http($url, array('Do' => 'merge'), array(), array(), 'json', 'POST'));
+            $url     = sprintf($apiRoot, "/repos/$projectID/pulls/$MRID/merge");
+            $merege  = ($MR and $MR->squash == '1') ? 'squash' : 'merge';
+            $rowMR   = json_decode(commonModel::http($url, array('Do' => $merge), array(), array(), 'json', 'POST'));
             if(!isset($rowMR->massage))
             {
                 $rowMR = $this->apiGetSingleMR($hostID, $projectID, $MRID);

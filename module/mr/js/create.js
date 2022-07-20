@@ -40,7 +40,7 @@ $(function()
         var hostID        = $('#hostID').val();
         var sourceProject = urlencode($(this).val());
         var branchSelect  = $(this).parents('td').find('select[name*=Branch]');
-        var branchUrl     = createLink(hosts[hostID].type, 'ajaxGetProjectBranches', "hostID=" + hostID + "&projectID=" + sourceProject);
+        var branchUrl     = createLink(hosts[hostID].type, 'ajaxGetProjectBranches', hosts[hostID].type + "ID=" + hostID + "&projectID=" + sourceProject);
         $.get(branchUrl, function(response)
         {
             branchSelect.html('').append(response);
@@ -90,24 +90,6 @@ $(function()
             }
         });
     });
-
-    /*
-    $('#targetProject').change(function()
-    {
-        targetProject = $(this).val();
-        var hostID = $('#hostID').val();
-        var assignee = $("#assignee").parents('td').find('select[name*=assignee]');
-        var reviewer = $("#reviewer").parents('td').find('select[name*=reviewer]');
-        usersUrl = createLink('gitlab', 'ajaxgetmruserpairs', "hostID=" + hostID + "&projectID=" + targetProject);
-        $.get(usersUrl, function(response)
-        {
-            assignee.html('').append(response);
-            assignee.chosen().trigger("chosen:updated");;
-            reviewer.html('').append(response);
-            reviewer.chosen().trigger("chosen:updated");;
-        });
-    });
-    */
 
     $('#repoID').change(function()
     {

@@ -152,9 +152,10 @@ class mr extends control
         $this->view->rawMR = isset($rawMR) ? $rawMR : false;
         if(!isset($rawMR->id) or (isset($rawMR->message) and $rawMR->message == '404 Not found') or empty($rawMR)) return $this->display();
 
-        $host = $this->loadModel('pipeline')->getByID($MR->hostID);
-        $scm  = $host->type;
+        $host       = $this->loadModel('pipeline')->getByID($MR->hostID);
+        $scm        = $host->type;
         $branchList = $this->loadModel($scm)->getBranches($MR->hostID, $MR->targetProject);
+
         $targetBranchList = array();
         foreach($branchList as $branch) $targetBranchList[$branch] = $branch;
 
@@ -891,6 +892,7 @@ class mr extends control
      *
      * @param  int    $hostID
      * @param  int    $projectID
+     * @param  string $scm
      * @access public
      * @return void
      */
