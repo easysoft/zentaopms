@@ -985,9 +985,9 @@ class actionModel extends model
         if(!$this->app->user->admin)
         {
             $aclViews = isset($this->app->user->rights['acls']['views']) ? $this->app->user->rights['acls']['views'] : array();
-            if($productID == 'all')   $authedProducts   = (!empty($aclViews) and isset($aclViews['product']))   ? $this->app->user->view->products : '0';
-            if($projectID == 'all')   $authedProjects   = (!empty($aclViews) and isset($aclViews['project']))   ? $this->app->user->view->projects : '0';
-            if($executionID == 'all') $authedExecutions = (!empty($aclViews) and isset($aclViews['execution'])) ? $this->app->user->view->sprints : '0';
+            if($productID == 'all')   $authedProducts   = (empty($aclViews) or (!empty($aclViews) and !empty($aclViews['product'])))   ? $this->app->user->view->products : '0';
+            if($projectID == 'all')   $authedProjects   = (empty($aclViews) or (!empty($aclViews) and !empty($aclViews['project'])))   ? $this->app->user->view->projects : '0';
+            if($executionID == 'all') $authedExecutions = (empty($aclViews) or (!empty($aclViews) and !empty($aclViews['execution']))) ? $this->app->user->view->sprints : '0';
 
             if($productID == 'all' and $projectID == 'all')
             {
@@ -1016,9 +1016,9 @@ class actionModel extends model
             }
 
             $condition = "((product =',0,' or product = '0') AND project = '0' AND execution = '0')";
-            if(!empty($productCondition) and isset($aclViews['product']))     $condition .= ' OR ' . $productCondition;
-            if(!empty($projectCondition) and isset($aclViews['project']))     $condition .= ' OR ' . $projectCondition;
-            if(!empty($executionCondition) and isset($aclViews['execution'])) $condition .= ' OR ' . $executionCondition;
+            if(!empty($productCondition))   $condition .= ' OR ' . $productCondition;
+            if(!empty($projectCondition))   $condition .= ' OR ' . $projectCondition;
+            if(!empty($executionCondition)) $condition .= ' OR ' . $executionCondition;
         }
 
         $actionCondition = $this->getActionCondition();
@@ -1087,7 +1087,7 @@ class actionModel extends model
 
             foreach($this->app->user->rights['acls']['actions'] as $moduleName => $actions)
             {
-                if(isset($this->lang->mainNav->$moduleName) and !isset($this->app->user->rights['acls']['views'][$moduleName])) continue;
+                if(isset($this->lang->mainNav->$moduleName) and !empty($this->app->user->rights['acls']['views']) and !isset($this->app->user->rights['acls']['views'][$moduleName])) continue;
                 $actionCondition .= "(`objectType` = '$moduleName' and `action` " . helper::dbIN($actions) . ") or ";
             }
             $actionCondition = trim($actionCondition, 'or ');
