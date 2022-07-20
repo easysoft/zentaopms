@@ -2203,6 +2203,9 @@ class task extends control
                 /* fill some field with useful value. */
                 $task->story = isset($relatedStories[$task->story]) ? $relatedStories[$task->story] . "(#$task->story)" : '';
 
+                $bug           = $this->loadModel('bug')->getByID($task->fromBug);
+                $task->fromBug = empty($task->fromBug) ? '0' : "#$task->fromBug " . $bug->title;
+
                 if(isset($executions[$task->execution]))              $task->execution    = $executions[$task->execution] . "(#$task->execution)";
                 if(isset($taskLang->typeList[$task->type]))           $task->type         = $taskLang->typeList[$task->type];
                 if(isset($taskLang->priList[$task->pri]))             $task->pri          = $taskLang->priList[$task->pri];
