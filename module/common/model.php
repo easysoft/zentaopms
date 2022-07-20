@@ -2379,8 +2379,7 @@ EOD;
                 }
 
                 $referer = helper::safe64Encode($uri);
-                print(js::locate(helper::createLink('user', 'login', "referer=$referer")));
-                helper::end();
+                die(js::locate(helper::createLink('user', 'login', "referer=$referer")));
             }
         }
         catch(EndResponseException $endResponseException)
@@ -3084,11 +3083,13 @@ EOD;
      * @param  string|array $data
      * @param  array        $options   This is option and value pair, like CURLOPT_HEADER => true. Use curl_setopt function to set options.
      * @param  array        $headers   Set request headers.
+     * @param  string       $dataType
+     * @param  string       $method    POST|PATCH|PUT
      * @static
      * @access public
      * @return string
      */
-    public static function http($url, $data = null, $options = array(), $headers = array(), $dataType = 'data')
+    public static function http($url, $data = null, $options = array(), $headers = array(), $dataType = 'data', $method = 'POST')
     {
         global $lang, $app;
         if(!extension_loaded('curl'))
@@ -3125,7 +3126,8 @@ EOD;
         if(!empty($data))
         {
             if(is_object($data)) $data = (array) $data;
-            curl_setopt($curl, CURLOPT_POST, true);
+            if($method == 'POST') curl_setopt($curl, CURLOPT_POST, true);
+            if(in_array($method, array('PATCH', 'PUT'))) curl_setopt($curl, CURLOPT_CUSTOMREQUEST, $method);
             curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
         }
 

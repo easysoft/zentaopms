@@ -848,4 +848,23 @@ class custom extends control
         $this->loadModel('setting')->deleteItems("owner=system&module={$module}&key=requiredFields");
         return print(js::reload('parent.parent'));
     }
+
+    /**
+     * Set code.
+     *
+     * @access public
+     * @return void
+     */
+    public function code()
+    {
+        if($_POST)
+        {
+            $this->loadModel('setting')->setItem('system.common.setCode', $this->post->code);
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'reload'));
+        }
+
+        $this->view->title = $this->lang->custom->code;
+
+        $this->display();
+    }
 }

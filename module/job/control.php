@@ -114,7 +114,7 @@ class job extends control
             $repoTypes[$repo->id] = $repo->SCM;
             if(strtolower($repo->SCM) == 'gitlab')
             {
-                if(isset($repo->gitlab)) $gitlab = $this->loadModel('gitlab')->getByID($repo->gitlab);
+                if(isset($repo->gitService)) $gitlab = $this->loadModel('gitlab')->getByID($repo->gitService);
                 if(!empty($gitlab)) $tokenUser = $this->gitlab->apiGetCurrentUser($gitlab->url, $gitlab->token);
                 if(!isset($tokenUser->is_admin) or !$tokenUser->is_admin) continue;
                 $gitlabRepos[$repo->id] = $repo->name;
@@ -180,7 +180,7 @@ class job extends control
         $repo = $this->loadModel('repo')->getRepoByID($job->repo);
         $this->view->repo = $this->loadModel('repo')->getRepoByID($job->repo);
 
-        if($repo->SCM == 'Gitlab') $this->view->refList = $this->loadModel('gitlab')->getReferenceOptions($repo->gitlab, $repo->project);
+        if($repo->SCM == 'Gitlab') $this->view->refList = $this->loadModel('gitlab')->getReferenceOptions($repo->gitService, $repo->project);
 
         $repoList             = $this->repo->getList($this->projectID);
         $repoPairs            = array(0 => '', $repo->id => $repo->name);
@@ -383,7 +383,7 @@ class job extends control
     public function ajaxGetRefList($repoID)
     {
         $repo = $this->loadModel('repo')->getRepoByID($repoID);
-        if($repo->SCM == 'Gitlab') $refList = $this->loadModel('gitlab')->getReferenceOptions($repo->gitlab, $repo->project);
+        if($repo->SCM == 'Gitlab') $refList = $this->loadModel('gitlab')->getReferenceOptions($repo->gitService, $repo->project);
         if($repo->SCM != 'Gitlab') $refList = $this->repo->getBranches($repo, true);
         $this->send(array('result' => 'success', 'refList' => $refList));
     }

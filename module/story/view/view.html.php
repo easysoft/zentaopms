@@ -500,7 +500,8 @@
                     $tab = $app->tab == 'product' ? 'project' : $app->tab;
                     foreach($builds as $build)
                     {
-                        echo "<li title='$build->id $build->name'>" . html::a($this->createLink('build', 'view', "buildID=$build->id"), "#$build->id $build->name", '', "data-app='{$tab}'") . '</li>';
+                        $link = common::hasPriv('build', 'view') ? html::a($this->createLink('build', 'view', "buildID=$build->id"), "#$build->id $build->name", '', "data-app='{$tab}'") : "#$build->id $build->name";
+                        echo "<li title='$build->id $build->name'>$link</li>";
                     }
                     ?>
                     </ul>
@@ -511,11 +512,12 @@
                   <td class='pd-0'>
                     <ul class='list-unstyled'>
                     <?php
-                    $releaseModule = $app->tab == 'project' ? 'projectrelease' : 'release';
-                    $tab = $app->tab == 'execution' ? 'product' : $app->tab;
+                    $tab           = $app->tab == 'execution' ? 'product'        : $app->tab;
+                    $releaseModule = $app->tab == 'project'   ? 'projectrelease' : 'release';
                     foreach($releases as $release)
                     {
-                        echo "<li title='$release->id $release->name'>" . html::a($this->createLink($releaseModule, 'view', "release=$release->id"), "#$release->id $release->name", '', "data-app='{$tab}'") . '</li>';
+                        $link = common::hasPriv($releaseModule, 'view') ? html::a($this->createLink($releaseModule, 'view', "release=$release->id"), "#$release->id $release->name", '', "data-app='{$tab}'") : "#$release->id $release->name";
+                        echo "<li title='$release->id $release->name'>$link</li>";
                     }
                     ?>
                     </ul>

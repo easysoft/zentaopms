@@ -158,7 +158,8 @@
         <div class="col-sm-12">
           <div class="cell">
             <div class="detail">
-              <h2 class="detail-title"><span class="label-id"><?php echo $execution->id;?></span> <span class="label label-light label-outline"><?php echo $execution->code;?></span> <?php echo $execution->name;?></h2>
+              <?php $hiddenCode = (isset($config->setCode) and $config->setCode == 0) ? 'hidden' : '';?>
+              <h2 class="detail-title"><span class="label-id"><?php echo $execution->id;?></span> <span class="label label-light label-outline <?php echo $hiddenCode;?>"><?php echo $execution->code;?></span> <?php echo $execution->name;?></h2>
               <div class="detail-content article-content">
                 <div><span class="text-limit hidden" data-limit-size="40"><?php echo $execution->desc;?></span><a class="text-primary text-limit-toggle small" data-text-expand="<?php echo $lang->expand;?>"  data-text-collapse="<?php echo $lang->collapse;?>"></a></div>
                 <p>

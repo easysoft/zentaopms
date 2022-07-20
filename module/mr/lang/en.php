@@ -1,6 +1,7 @@
 <?php
 $lang->mr = new stdclass;
 $lang->mr->common       = "Merge Request";
+$lang->mr->server       = "Server";
 $lang->mr->view         = "Survey";
 $lang->mr->create       = "Create";
 $lang->mr->apiCreate    = "Interface: Create";
@@ -13,7 +14,7 @@ $lang->mr->source       = 'source';
 $lang->mr->target       = 'target';
 $lang->mr->viewDiff     = 'View diff';
 $lang->mr->diff         = 'View diff';
-$lang->mr->viewInGitlab = 'View in GitLab';
+$lang->mr->viewInGit    = 'View in APP';
 $lang->mr->link         = 'Link of stories,Bugs,tasks';
 $lang->mr->createAction = '%s, <strong>%s</strong> submitted a <a href="%s">Merge Request</a>.';
 
@@ -38,8 +39,8 @@ $lang->mr->gitlabID    = 'GitLab';
 $lang->mr->repoID      = 'Repo';
 $lang->mr->jobID       = 'Compile job';
 
-$lang->mr->canMerge  = "Can merge";
-$lang->mr->cantMerge = "不可合并";
+$lang->mr->canMerge  = "Can be merged";
+$lang->mr->cantMerge = "Can not be merged";
 
 $lang->mr->approval = 'Approval';
 $lang->mr->approve  = 'Approve';
@@ -116,11 +117,15 @@ $lang->mr->apiErrorMap[1] = "You can't use same project/branch for source and ta
 $lang->mr->apiErrorMap[2] = "/Another open merge request already exists for this source branch: !([0-9]+)/";
 $lang->mr->apiErrorMap[3] = "401 Unauthorized";
 $lang->mr->apiErrorMap[4] = "403 Forbidden";
+$lang->mr->apiErrorMap[5] = "/(pull request already exists for these targets).*/";
+$lang->mr->apiErrorMap[6] = "Invalid PullRequest: There are no changes between the head and the base";
 
 $lang->mr->errorLang[1] = 'The source project branch cannot be the same as the target project branch';
 $lang->mr->errorLang[2] = 'Another open merge request already exists for this source branch: ID%u';
 $lang->mr->errorLang[3] = "Unauthorized";
 $lang->mr->errorLang[4] = 'Permission denied';
+$lang->mr->errorLang[5] = 'Another open merge request already exists for this source branch';
+$lang->mr->errorLang[6] = 'The source project branch cannot be the same as the target project branch';
 
 $lang->mr->from = "from";
 $lang->mr->to   = "to";
@@ -177,7 +182,7 @@ $lang->mr->commandDocument = <<< EOD
     git merge --no-ff "%s"</pre>
   </p>
   <p>
-    step 4. Push the result of the merge to GitLab
+    step 4. Push the result of the merge to Git
     <pre> git push origin "%s" </pre>
   </p>
 </div>
@@ -191,3 +196,4 @@ $lang->mr->linkedTasks       = 'Task';
 $lang->mr->unlinkedTasks     = 'Task not linked';
 $lang->mr->confirmUnlinkTask = "Are you sure to remove this task?";
 $lang->mr->taskSummary       = "There are <strong>%s</strong> tasks on this page";
+$lang->mr->notDelbranch      = "The source branch cannot be deleted when it is a protected branch";

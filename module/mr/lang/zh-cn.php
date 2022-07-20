@@ -1,6 +1,7 @@
 <?php
 $lang->mr = new stdclass;
 $lang->mr->common       = "合并请求";
+$lang->mr->server       = "服务器";
 $lang->mr->view         = "概况";
 $lang->mr->create       = "创建{$lang->mr->common}";
 $lang->mr->apiCreate    = "接口：创建{$lang->mr->common}";
@@ -13,7 +14,7 @@ $lang->mr->source       = '源项目分支';
 $lang->mr->target       = '目标项目分支';
 $lang->mr->viewDiff     = '比对代码';
 $lang->mr->diff         = '比对代码';
-$lang->mr->viewInGitlab = '在GitLab查看';
+$lang->mr->viewInGit    = '在应用中查看';
 $lang->mr->link         = '关联需求、Bug、任务';
 $lang->mr->createAction = '%s, 由 <strong>%s</strong> 提交了 <a href="%s">合并请求</a>。';
 
@@ -116,11 +117,15 @@ $lang->mr->apiErrorMap[1] = "You can't use same project/branch for source and ta
 $lang->mr->apiErrorMap[2] = "/Another open merge request already exists for this source branch: !([0-9]+)/";
 $lang->mr->apiErrorMap[3] = "401 Unauthorized";
 $lang->mr->apiErrorMap[4] = "403 Forbidden";
+$lang->mr->apiErrorMap[5] = "/(pull request already exists for these targets).*/";
+$lang->mr->apiErrorMap[6] = "Invalid PullRequest: There are no changes between the head and the base";
 
 $lang->mr->errorLang[1] = '源项目分支与目标项目分支不能相同';
 $lang->mr->errorLang[2] = '存在另外一个同样的合并请求在源项目分支中: ID%u';
 $lang->mr->errorLang[3] = '权限不足';
 $lang->mr->errorLang[4] = '权限不足';
+$lang->mr->errorLang[5] = '存在另外一个同样的合并请求在源项目分支中';
+$lang->mr->errorLang[6] = '源项目分支与目标项目分支不能相同';
 
 $lang->mr->from = "从";
 $lang->mr->to   = "合并到";
@@ -177,7 +182,7 @@ $lang->mr->commandDocument = <<< EOD
     git merge --no-ff "%s"</pre>
   </p>
   <p>
-    第 4 步. 将合并结果推送到GitLab
+    第 4 步. 将合并结果推送到Git
     <pre> git push origin "%s" </pre>
   </p>
 </div>
@@ -191,3 +196,4 @@ $lang->mr->linkedTasks       = '任务';
 $lang->mr->unlinkedTasks     = '未关联任务';
 $lang->mr->confirmUnlinkTask = "您确认移除该任务吗？";
 $lang->mr->taskSummary       = "本页共 <strong>%s</strong> 个任务";
+$lang->mr->notDelbranch      = "源分支为受保护分支时不可删除";

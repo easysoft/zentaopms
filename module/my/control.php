@@ -1373,13 +1373,15 @@ EOF;
      * Build contact lists.
      *
      * @param  string $dropdownName
+     * @param  string $attr
      * @access public
      * @return void
      */
-    public function buildContactLists($dropdownName = 'mailto')
+    public function buildContactLists($dropdownName = 'mailto', $attr = '')
     {
         $this->view->contactLists = $this->user->getContactLists($this->app->user->account, 'withnote');
         $this->view->dropdownName = $dropdownName;
+        $this->view->attr         = $attr;
         $this->display();
     }
 

@@ -658,6 +658,20 @@ class baseRouter
         $_POST   = validater::filterSuper($_POST);
         $_GET    = validater::filterSuper($_GET);
         $_COOKIE = validater::filterSuper($_COOKIE);
+
+        /* Filter common get and cookie vars. */
+        if($this->config->framework->filterParam == 2)
+        {
+            global $filter;
+            foreach($filter->default->get as $key => $rules)
+            {
+                if(isset($_GET[$key]) and !validater::checkByRule($_GET[$key], $rules)) unset($_GET[$key]);
+            }
+            foreach($filter->default->cookie as $key => $rules)
+            {
+                if(isset($_COOKIE[$key]) and !validater::checkByRule($_COOKIE[$key], $rules)) unset($_COOKIE[$key]);
+            }
+        }
     }
 
     /**

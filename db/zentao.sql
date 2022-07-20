@@ -955,10 +955,10 @@ CREATE TABLE IF NOT EXISTS `zt_module` (
 -- DROP TABLE IF EXISTS `zt_mr`;
 CREATE TABLE IF NOT EXISTS `zt_mr` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
-  `gitlabID` mediumint(8) unsigned NOT NULL,
-  `sourceProject` int unsigned NOT NULL,
+  `hostID` mediumint(8) unsigned NOT NULL,
+  `sourceProject` varchar(50) NOT NULL,
   `sourceBranch` varchar(100) NOT NULL,
-  `targetProject` int unsigned NOT NULL,
+  `targetProject` varchar(50) NOT NULL,
   `targetBranch` varchar(100) NOT NULL,
   `mriid` int unsigned NOT NULL,
   `title` varchar(255) NOT NULL,

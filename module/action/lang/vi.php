@@ -111,6 +111,7 @@ $lang->action->objectTypes['gitlabbranch']     = 'GitLab Branch';
 $lang->action->objectTypes['gitlabbranchpriv'] = 'GitLab Protected Branches';
 $lang->action->objectTypes['gitlabtag']        = 'GitLab Tag';
 $lang->action->objectTypes['gitlabtagpriv']    = 'GitLab Tag Protected';
+$lang->action->objectTypes['giteauser']        = 'Gitea User';
 $lang->action->objectTypes['kanbanspace']      = 'Kanban Space';
 $lang->action->objectTypes['kanban']           = 'Kanban';
 $lang->action->objectTypes['kanbanregion']     = 'Kanban Region';
@@ -121,6 +122,7 @@ $lang->action->objectTypes['sonarqube']        = 'SonarQube Server';
 $lang->action->objectTypes['sonarqubeproject'] = 'SonarQube Project';
 $lang->action->objectTypes['stage']            = 'Stage';
 $lang->action->objectTypes['patch']            = 'Patch';
+$lang->action->objectTypes['repo']             = 'Repo';
 
 /* Used to describe operation history. */
 $lang->action->desc = new stdclass();

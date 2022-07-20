@@ -150,6 +150,7 @@ $lang->openedByAB   = 'Créé par';
 $lang->assignedToAB = 'Affecté à';
 $lang->typeAB       = 'Type';
 $lang->nameAB       = 'Name';
+$lang->code         = 'Code';
 
 $lang->pri     = 'Priority';
 $lang->delayed = 'Delayed';

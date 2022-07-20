@@ -133,6 +133,7 @@ $lang->action->objectTypes['gitlabbranch']     = 'GitLab分支';
 $lang->action->objectTypes['gitlabbranchpriv'] = 'GitLab保护分支';
 $lang->action->objectTypes['gitlabtag']        = 'GitLab标签';
 $lang->action->objectTypes['gitlabtagpriv']    = 'GitLab标签保护';
+$lang->action->objectTypes['giteauser']        = 'Gitea用户';
 $lang->action->objectTypes['kanbanspace']      = '看板空间';
 $lang->action->objectTypes['kanban']           = '看板';
 $lang->action->objectTypes['kanbanregion']     = '看板区域';
@@ -143,6 +144,7 @@ $lang->action->objectTypes['sonarqube']        = 'SonarQube服务器';
 $lang->action->objectTypes['sonarqubeproject'] = 'SonarQube项目';
 $lang->action->objectTypes['stage']            = '阶段';
 $lang->action->objectTypes['patch']            = '补丁';
+$lang->action->objectTypes['repo']             = '代码库';
 
 /* 用来描述操作历史记录。*/
 $lang->action->desc = new stdclass();
