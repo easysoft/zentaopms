@@ -742,8 +742,21 @@ class bugModel extends model
 
             $linkBugs    = explode(',', $bug->linkBug);
             $oldLinkBugs = explode(',', $oldBug->linkBug);
-            foreach(array_diff($linkBugs, $oldLinkBugs) as $addBug) $this->dao->update(TABLE_BUG)->set("linkBug = CONCAT(linkbug, ',$bugID')")->where('id')->eq((int)$addBug)->exec();
-            foreach(array_diff($oldLinkBugs, $linkBugs) as $removeBug) $this->dao->update(TABLE_BUG)->set("linkBug = TRIM(BOTH ',' from REPLACE(CONCAT(',', linkbug, ','), ',$bugID,', ''))")->where('id')->eq((int)$removeBug)->exec();
+            $addBugs     = array_diff($linkBugs, $oldLinkBugs);
+            $removeBugs  = array_diff($oldLinkBugs, $linkBugs);
+            $changeBugs  = array_merge($addBugs, $removeBugs);
+            $changeBugs  = $this->dao->select('id,linkbug')->from(TABLE_BUG)->where('id')->in(array_filter($changeBugs))->fetchPairs();
+            foreach($changeBugs as $changeBugID => $changeBug)
+            {
+                if(array_search($changeBugID, $addBugs) !== false and empty($changeBug))  $this->dao->update(TABLE_BUG)->set('linkBug')->eq($bugID)->where('id')->eq((int)$changeBugID)->exec();
+                if(array_search($changeBugID, $addBugs) !== false and !empty($changeBug)) $this->dao->update(TABLE_BUG)->set('linkBug')->eq("$changeBug,$bugID")->where('id')->eq((int)$changeBugID)->exec();
+                if(array_search($changeBugID, $removeBugs) !== false)
+                {
+                    $linkBugs = explode(',', $changeBug);
+                    unset($linkBugs[array_search($bugID, $linkBugs)]);
+                    $this->dao->update(TABLE_BUG)->set('linkBug')->eq(implode(',', $linkBugs))->where('id')->eq((int)$changeBugID)->exec();
+                }
+            }
 
             if(!empty($bug->resolvedBy)) $this->loadModel('score')->create('bug', 'resolve', $bugID);
             $this->file->updateObjectID($this->post->uid, $bugID, 'bug');
