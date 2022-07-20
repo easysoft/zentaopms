@@ -740,6 +740,24 @@ class bugModel extends model
                 $this->linkBugToBuild($bugID, $bug->resolvedBuild);
             }
 
+            $linkBugs    = explode(',', $bug->linkBug);
+            $oldLinkBugs = explode(',', $oldBug->linkBug);
+            $addBugs     = array_diff($linkBugs, $oldLinkBugs);
+            $removeBugs  = array_diff($oldLinkBugs, $linkBugs);
+            $changeBugs  = array_merge($addBugs, $removeBugs);
+            $changeBugs  = $this->dao->select('id,linkbug')->from(TABLE_BUG)->where('id')->in(array_filter($changeBugs))->fetchPairs();
+            foreach($changeBugs as $changeBugID => $changeBug)
+            {
+                if(in_array($changeBugID, $addBugs) and empty($changeBug))  $this->dao->update(TABLE_BUG)->set('linkBug')->eq($bugID)->where('id')->eq((int)$changeBugID)->exec();
+                if(in_array($changeBugID, $addBugs) and !empty($changeBug)) $this->dao->update(TABLE_BUG)->set('linkBug')->eq("$changeBug,$bugID")->where('id')->eq((int)$changeBugID)->exec();
+                if(in_array($changeBugID, $removeBugs))
+                {
+                    $linkBugs = explode(',', $changeBug);
+                    unset($linkBugs[array_search($bugID, $linkBugs)]);
+                    $this->dao->update(TABLE_BUG)->set('linkBug')->eq(implode(',', $linkBugs))->where('id')->eq((int)$changeBugID)->exec();
+                }
+            }
+
             if(!empty($bug->resolvedBy)) $this->loadModel('score')->create('bug', 'resolve', $bugID);
             $this->file->updateObjectID($this->post->uid, $bugID, 'bug');
 
