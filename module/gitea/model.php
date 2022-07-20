@@ -566,4 +566,31 @@ class giteaModel extends model
         $url = sprintf($this->getApiRoot($giteaID), "/repos/$projectID/branches/$branch");
         return json_decode(commonModel::http($url));
     }
+
+    /**
+     * Get protect branches of one project.
+     *
+     * @param  int    $giteaID
+     * @param  string $project
+     * @param  string $keyword
+     * @access public
+     * @return array
+     */
+    public function apiGetBranchPrivs($giteaID, $project, $keyword = '')
+    {
+        $keyword  = urlencode($keyword);
+        $url      = sprintf($this->getApiRoot($giteaID), "/repos/$project/branch_protections");
+        $branches = json_decode(commonModel::http($url));
+
+        if(!is_array($branches)) return $branches;
+
+        $newBranches = array();
+        foreach($branches as $branch)
+        {
+            $branch->name = $branch->branch_name;
+            if(empty($keyword) || stristr($branch->name, $keyword)) $newBranches[] = $branch;
+        }
+
+        return $newBranches;
+    }
 }
