@@ -1155,7 +1155,7 @@ class repo extends control
         {
             foreach($repoGroup as $type => $group)
             {
-                if(strtolower($type) != 'gitlab') unset($repoGroup[$type]);
+                if(!in_array(strtolower($type), $this->config->repo->gitServiceList)) unset($repoGroup[$type]);
             }
         }
 

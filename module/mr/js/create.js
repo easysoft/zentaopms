@@ -1,11 +1,33 @@
+/**
+ * Urlencode param.
+ *
+ * @param  param $param
+ * @access public
+ * @return string
+ */
+function urlencode(param)
+{
+    var hostID = $('#hostID').val();
+    if(hosts[hostID].type != 'gitlab') return Base64.encode(encodeURIComponent(param));
+
+    return param;
+}
+
 $(function()
 {
-    $('#gitlabID').change(function()
+    $('#hostID').change(function()
     {
-        var gitlabID = $('#gitlabID').val();
-        if(gitlabID == '') return false;
+        var hostID = $('#hostID').val();
+        if(hostID == '') return false;
 
-        var url = createLink('repo', 'ajaxgetgitlabprojects', "gitlabID=" + gitlabID + "&projectIdList=&filter=IS_DEVELOPER");
+        if(hosts[hostID].type == 'gitlab')
+        {
+            var url = createLink('repo', 'ajaxGetGitlabProjects', "gitlabID=" + hostID + "&projectIdList=&filter=IS_DEVELOPER");
+        }
+        else
+        {
+            var url = createLink('repo', 'ajaxGetGiteaProjects', "giteaID=" + hostID);
+        }
         $.get(url, function(response)
         {
             $('#sourceProject').html('').append(response);
@@ -15,10 +37,10 @@ $(function()
 
     $('#sourceProject,#targetProject').change(function()
     {
-        var gitlabID      = $('#gitlabID').val();
-        var sourceProject = $(this).val();
+        var hostID        = $('#hostID').val();
+        var sourceProject = urlencode($(this).val());
         var branchSelect  = $(this).parents('td').find('select[name*=Branch]');
-        var branchUrl     = createLink('gitlab', 'ajaxgetprojectbranches', "gitlabID=" + gitlabID + "&projectID=" + sourceProject);
+        var branchUrl     = createLink(hosts[hostID].type, 'ajaxGetProjectBranches', hosts[hostID].type + "ID=" + hostID + "&projectID=" + sourceProject);
         $.get(branchUrl, function(response)
         {
             branchSelect.html('').append(response);
@@ -29,16 +51,16 @@ $(function()
 
     $('#sourceProject').change(function()
     {
-        var gitlabID      = $('#gitlabID').val();
-        var sourceProject = $(this).val();
-        var projectUrl    = createLink('mr', 'ajaxGetMRTargetProjects', "gitlabID=" + gitlabID + "&projectID=" + sourceProject);
+        var hostID        = $('#hostID').val();
+        var sourceProject = urlencode($(this).val());
+        var projectUrl    = createLink('mr', 'ajaxGetMRTargetProjects', "hostID=" + hostID + "&projectID=" + sourceProject + "&scm=" + hosts[hostID].type);
         $.get(projectUrl, function(response)
         {
             $('#targetProject').html('').append(response);
             $('#targetProject').chosen().trigger("chosen:updated");;
         });
 
-        var repoUrl = createLink('mr', 'ajaxGetRepoList', "gitlabID=" + gitlabID + "&projectID=" + sourceProject);
+        var repoUrl = createLink('mr', 'ajaxGetRepoList', "hostID=" + hostID + "&projectID=" + sourceProject);
         $.get(repoUrl, function(response)
         {
             $('#repoID').html('').append(response);
@@ -48,15 +70,15 @@ $(function()
 
     $('#sourceBranch,#targetBranch').change(function()
     {
-        var sourceProject = $('#sourceProject').val();
-        var sourceBranch  = $('#sourceBranch').val();
-        var targetProject = $('#targetProject').val();
-        var targetBranch  = $('#targetBranch').val();
+        var sourceProject = urlencode($('#sourceProject').val());
+        var sourceBranch  = urlencode($('#sourceBranch').val());
+        var targetProject = urlencode($('#targetProject').val());
+        var targetBranch  = urlencode($('#targetBranch').val());
         if(!sourceProject || !sourceBranch || !targetProject || !targetBranch) return false;
 
         var $this    = $(this);
-        var gitlabID = $('#gitlabID').val();
-        var repoUrl  = createLink('mr', 'ajaxCheckSameOpened', "gitlabID=" + gitlabID);
+        var hostID = $('#hostID').val();
+        var repoUrl  = createLink('mr', 'ajaxCheckSameOpened', "hostID=" + hostID);
         $.post(repoUrl, {"sourceProject": sourceProject, "sourceBranch": sourceBranch, "targetProject": targetProject, "targetBranch": targetBranch}, function(response)
         {
             response = $.parseJSON(response);
@@ -68,24 +90,6 @@ $(function()
             }
         });
     });
-
-    /*
-    $('#targetProject').change(function()
-    {
-        targetProject = $(this).val();
-        var gitlabID = $('#gitlabID').val();
-        var assignee = $("#assignee").parents('td').find('select[name*=assignee]');
-        var reviewer = $("#reviewer").parents('td').find('select[name*=reviewer]');
-        usersUrl = createLink('gitlab', 'ajaxgetmruserpairs', "gitlabID=" + gitlabID + "&projectID=" + targetProject);
-        $.get(usersUrl, function(response)
-        {
-            assignee.html('').append(response);
-            assignee.chosen().trigger("chosen:updated");;
-            reviewer.html('').append(response);
-            reviewer.chosen().trigger("chosen:updated");;
-        });
-    });
-    */
 
     $('#repoID').change(function()
     {
