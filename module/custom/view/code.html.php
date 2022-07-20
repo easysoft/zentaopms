@@ -39,10 +39,4 @@
     </table>
   </form>
 </div>
-<script>
-$(function()
-{
-    $('#mainMenu #productTab').addClass('btn-active-text');
-})
-</script>
 <?php include '../../common/view/footer.html.php';?>
