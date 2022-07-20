@@ -25,6 +25,7 @@ $config->testcase->exportFields = '
 
 $config->testcase->fieldList['product']['title']      = 'product';
 $config->testcase->fieldList['product']['control']    = 'hidden';
+$config->testcase->fieldList['product']['dataSource']    = array('module' => 'port', 'method' => 'getRelatedObjects', 'params' => 'testcase&product&id,name');
 
 $config->testcase->fieldList['branch']['title']      = 'branch';
 $config->testcase->fieldList['branch']['dataSource'] = array('module' => 'port', 'method' => 'getRelatedObjects', 'params' => 'testcase&branch&id,name');

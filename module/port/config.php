@@ -21,7 +21,7 @@ $config->port->datetimeFeilds = '';
 $config->port->listFields     = '';
 $config->port->sysLangFields  = ',pri,status,type,mode,severity,os,browser,resolution,confirmed,source,reviewResult,stage,change';
 $config->port->sysDataFields  = 'execution,product,user';
-$config->port->userFields     = 'assignedTo,openedBy,finishedBy,canceledBy,closedBy,lastEditedBy,';
+$config->port->userFields     = 'assignedTo,openedBy,finishedBy,canceledBy,closedBy,lastEditedBy,lastRunner,';
 $config->port->import = new stdClass();
 
 $config->port->dateMatch = '/[1-9]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])/';
