@@ -140,7 +140,7 @@ $lang->program->statusList['suspended'] = 'Suspended';
 $lang->program->statusList['closed']    = 'Closed';
 
 $lang->program->featureBar['all']       = 'All';
-$lang->program->featureBar['undone']    = 'Unfinished';
+$lang->program->featureBar['unclosed']  = 'Unclosed';
 $lang->program->featureBar['wait']      = 'Waiting';
 $lang->program->featureBar['doing']     = 'Doing';
 $lang->program->featureBar['suspended'] = 'Suspended';
