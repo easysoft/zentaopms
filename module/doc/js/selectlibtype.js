@@ -36,12 +36,5 @@ function loadDocLibs(type)
         $('#lib').chosen();
     })
 
-    if(type == 'api')
-    {
-        $('#docType').addClass('hidden');
-    }
-    else
-    {
-        $('#docType').removeClass('hidden');
-    }
+    $('#docType').toggleClass('hidden', type == 'api');
 }
