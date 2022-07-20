@@ -104,7 +104,9 @@ class mr extends control
             return $this->send($result);
         }
 
-        $hosts = $this->loadModel('pipeline')->getList(array('gitea', 'gitlab'));
+        $repoID = $this->loadModel('repo')->saveState(0);
+        $repo   = $this->repo->getRepoByID($repoID);
+        $hosts  = $this->loadModel('pipeline')->getList(array('gitea', 'gitlab'));
         if(!$this->app->user->admin)
         {
             $gitlabUsers = $this->loadModel('gitlab')->getGitLabListByAccount();
@@ -128,6 +130,7 @@ class mr extends control
         $this->view->jobList   = $this->loadModel('job')->getList();
         $this->view->hostPairs = $hostPairs;
         $this->view->hosts     = $hosts;
+        $this->view->repo      = $repo;
         $this->display();
     }
 

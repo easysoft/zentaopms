@@ -32,30 +32,12 @@ function getBranchPriv(project)
 
 $(function()
 {
-    $('#hostID').change(function()
-    {
-        var hostID = $('#hostID').val();
-        if(hostID == '') return false;
-
-        if(hosts[hostID].type == 'gitlab')
-        {
-            var url = createLink('repo', 'ajaxGetGitlabProjects', "gitlabID=" + hostID + "&projectIdList=&filter=IS_DEVELOPER");
-        }
-        else
-        {
-            var url = createLink('repo', 'ajaxGetGiteaProjects', "giteaID=" + hostID);
-        }
-        $.get(url, function(response)
-        {
-            $('#sourceProject').html('').append(response);
-            $('#sourceProject').chosen().trigger("chosen:updated");;
-        });
-   });
-
     $('#sourceProject,#targetProject').change(function()
     {
         var hostID        = $('#hostID').val();
         var sourceProject = urlencode($(this).val());
+        if(!sourceProject) return false;
+
         var branchSelect  = $(this).parents('td').find('select[name*=Branch]');
         var branchUrl     = createLink(hosts[hostID].type, 'ajaxGetProjectBranches', hosts[hostID].type + "ID=" + hostID + "&projectID=" + sourceProject);
         $.get(branchUrl, function(response)
@@ -70,6 +52,8 @@ $(function()
     {
         var hostID        = $('#hostID').val();
         var sourceProject = urlencode($(this).val());
+        if(!sourceProject) return false;
+
         var projectUrl    = createLink('mr', 'ajaxGetMRTargetProjects', "hostID=" + hostID + "&projectID=" + sourceProject + "&scm=" + hosts[hostID].type);
         $.get(projectUrl, function(response)
         {
@@ -151,4 +135,40 @@ $(function()
             $("#jobID").parent().parent().removeClass('hidden');
         }
     });
+
+    $('#hostID').change(function()
+    {
+        $('#sourceProject').val('');
+        $('#sourceProject').chosen().trigger("chosen:updated");;
+        $('#sourceBranch').val('');
+        $('#sourceBranch').chosen().trigger("chosen:updated");;
+        $('#targetProject').val('');
+        $('#targetProject').chosen().trigger("chosen:updated");;
+        $('#targetBranch').val('');
+        $('#targetBranch').chosen().trigger("chosen:updated");;
+
+        var hostID = $('#hostID').val();
+        if(hostID == '') return false;
+
+        if(hosts[hostID].type == 'gitlab')
+        {
+            var url = createLink('repo', 'ajaxGetGitlabProjects', "gitlabID=" + hostID + "&projectIdList=&filter=IS_DEVELOPER");
+        }
+        else
+        {
+            var url = createLink('repo', 'ajaxGetGiteaProjects', "giteaID=" + hostID);
+        }
+        $.get(url, function(response)
+        {
+            $('#sourceProject').html('').append(response);
+            if(repo.project)
+            {
+                $('#sourceProject').val(repo.project);
+                $('#sourceProject').change();
+            }
+            $('#sourceProject').chosen().trigger("chosen:updated");;
+        });
+   });
+
+    if(repo.gitService) $('#hostID').change();
 });
