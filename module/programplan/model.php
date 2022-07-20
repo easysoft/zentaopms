@@ -186,6 +186,8 @@ class programplanModel extends model
             $data->percent    = $plan->percent;
             $data->attribute  = zget($this->lang->stage->typeList, $plan->attribute);
             $data->milestone  = zget($this->lang->programplan->milestoneList, $plan->milestone);
+            $data->owner_id   = $plan->PM;
+            $data->status     = $this->processStatus('execution', $plan);
             $data->begin      = $start;
             $data->deadline   = $end;
             $data->realBegan  = helper::isZeroDate($plan->realBegan) ? '' : substr($plan->realBegan, 0, 10);
@@ -254,6 +256,8 @@ class programplanModel extends model
             $data->type         = 'task';
             $data->text         = $taskSign . $priIcon . $task->name;
             $data->percent      = '';
+            $data->status       = $this->processStatus('task', $task);
+            $data->owner_id     = $task->assignedTo;
             $data->attribute    = '';
             $data->milestone    = '';
             $data->begin        = $start;
