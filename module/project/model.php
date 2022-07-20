@@ -1533,7 +1533,7 @@ class projectModel extends model
             $projects[$projectID]->model          = $oldProjects[$projectID]->model;
             $projects[$projectID]->PM             = $data->PMs[$projectID];
             $projects[$projectID]->begin          = $data->begins[$projectID];
-            $projects[$projectID]->end            = isset($data->ends[$projectID]) ? $data->ends[$projectID] : LONG_TIME;
+            $projects[$projectID]->end            = $data->ends[$projectID] != $this->lang->project->longTime ? $data->ends[$projectID] : LONG_TIME;
             $projects[$projectID]->days           = $data->dayses[$projectID];
             $projects[$projectID]->acl            = $data->acls[$projectID];
             $projects[$projectID]->lastEditedBy   = $this->app->user->account;
