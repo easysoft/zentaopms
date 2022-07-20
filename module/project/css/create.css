@@ -21,3 +21,11 @@
 #productsBox .input-group-addon > div {display: inline-block !important;}
 #plansBox .row {display: inline-table; width: 102%;}
 #plansBox .col-sm-4 {float: none; display: inline-block; padding-right: 5px;}
+.change-blue {color: #0061F4; font-weight: bold;}
+.change-gray {color: #C4C4C4; font-weight: bold;}
+#copypart .icon-check{padding-right: 5px;}
+#copyall .icon-check{padding-right: 5px;}
+.modal-flex{display:flex; justify-content:space-around;}
+.modal-flex .col-md-4{padding-right: 5px; padding-left: 5px;}
+.change-background-gray{background-color: #F8F8F8;}
+.change-background-blue{background-color: #F5F9FF;}

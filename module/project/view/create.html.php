@@ -196,7 +196,14 @@
           <td colspan='4' class='text-center form-actions'>
             <?php
               echo html::hidden('model', $model);
-              echo html::submitButton();
+              if($copyProjectID and $copyType == 2)
+              {
+                  echo html::submitButton($lang->project->nextStep);
+              }
+              else
+              {
+                  echo html::submitButton();
+              }
               echo $gobackLink ? html::a($gobackLink, $lang->goback, '', 'class="btn btn-wide"') : html::backButton();
             ?>
           </td>
@@ -240,7 +247,7 @@
 </div>
 
 <div class='modal fade modal-scroll-inside' id='copyProjectConfirmModal'>
-  <div class='modal-dialog mw-900px' style="height: 400px">
+  <div class='modal-dialog mw-900px' style="height: 360px">
     <div class='modal-header'>
       <button type='button' class='close' data-dismiss='modal'><i class="icon icon-close"></i></button>
       <h2 class='text-center'>
@@ -250,43 +257,46 @@
         <span></span>
       </h4>
     </div>
-    <div class='modal-body'>
-        <div class='col-md-4' style="border-style: solid; height: 150px;" id="copypart">
+    <div class='modal-body modal-flex'>
+        <div class='col-md-4 change-background-gray' style="border-style: solid; height: 150px; border-color: #D7DBDE;" id="copypart">
           <div class='col-sm-6'>
-          <h2>部分信息</h2> 
-            <i class="icon icon-check">基本信息</i>
+          <h3><?php echo $lang->project->copyproject->part;?></h3> 
+          <i class="icon icon-check"></i><?php echo $lang->project->copyproject->partMessageList['base']; ?>
           </div>
         </div>
-        <div class='col-md-8' style="border-style: solid; height: 150px;" id="copyall">
+        <div class='col-md-7 change-background-blue' style="border-style: solid; height: 150px; border-color: #D7DBDE;" id="copyall">
           <div class='col-md-12' style="height: 80px;">
-            <h2>全部信息</h2>
+            <h3>
+              <span class='change-blue'><?php echo $lang->project->copyproject->all;?></span>
+              <span style='color: #C4C4C4; font-size: 12px;'><?php echo $lang->project->copyproject->allextra;?></span>
+            </h3>
             <div class='col-md-4'>
-              <i class="icon icon-check"></i>基本信息
+              <i class="icon icon-check change-blue"></i><?php echo $lang->project->copyproject->allMessageList['base'];?>
             </div>
             <div class='col-md-4'>
-              <i class="icon icon-check"></i>阶段/迭代
+              <i class="icon icon-check change-blue"></i><?php echo $lang->project->copyproject->allMessageList['execution'];?>
             </div>
             <div class='col-md-4'>
-              <i class="icon icon-check"></i>文档（文档目录）
+              <i class="icon icon-check change-blue"></i><?php echo $lang->project->copyproject->allMessageList['doc'];?>
             </div>
           </div>
           <div class='col-md-12' style="height: 70px;">
             <div class='col-md-4'>
-              <i class="icon icon-check"></i>任务
+              <i class="icon icon-check change-blue"></i><?php echo $lang->project->copyproject->allMessageList['task'];?>
             </div>
             <div class='col-md-4'>
-              <i class="icon icon-check"></i>QA（质量保证计划）
+              <i class="icon icon-check change-blue"></i><?php echo $lang->project->copyproject->allMessageList['qa'];?>
             </div>
             <div class='col-md-4'>
-              <i class="icon icon-check"></i>过程（过程裁剪）
+              <i class="icon icon-check change-blue"></i><?php echo $lang->project->copyproject->allMessageList['process'];?>
             </div>
           </div>
         </div>
-        <div class='col-md-12 text-center'> 
-        <?php echo html::hidden('copytype', 1); ?>
-        <?php echo html::commonButton($lang->save, 'id="copyTypeConfirm"', 'btn btn-wide btn-primary'); ?>
         
-        </div>
+    </div>
+    <div class='col-md-12 text-center' style="margin-top: 10px;"> 
+    <?php echo html::hidden('copytype', 2); ?>
+    <?php echo html::commonButton($lang->save, 'id="copyTypeConfirm"', 'btn btn-wide btn-primary'); ?>
     </div>
   </div>
 </div>
