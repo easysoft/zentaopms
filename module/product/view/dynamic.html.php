@@ -86,7 +86,7 @@
               <span class='label-action'><?php echo $action->actionLabel;?></span>
               <span class="text"><?php echo $action->objectLabel;?></span>
               <span class="label label-id"><?php echo ($action->objectType == 'module' and strpos(',created,edited,moved,', "$action->action") !== false) ? trim($action->extra, ',') : $action->objectID;?></span>
-              <?php if($action->objectName) echo html::a($action->objectLink, $action->objectName);?>
+              <?php if($action->objectName) echo !empty($action->objectLink) ? html::a($action->objectLink, $action->objectName) : $action->objectName;?>
             </span>
           </div>
         </li>
