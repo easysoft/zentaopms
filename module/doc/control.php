@@ -347,6 +347,8 @@ class doc extends control
             if($this->config->systemMode == 'new') unset($this->lang->doc->menu->project['subMenu']);
         }
 
+        $this->config->showMainMenu = strpos(',html,markdown,text,', ",$docType,") === false;
+
         /* Get libs and the default lib id. */
         $gobackLink = ($objectID == 0 and $libID == 0) ? $this->createLink('doc', 'tableContents', "type=$objectType") : '';
         $unclosed   = strpos($this->config->doc->custom->showLibs, 'unclosed') !== false ? 'unclosedProject' : '';
@@ -469,6 +471,8 @@ class doc extends control
             }
         }
 
+        $this->config->showMainMenu = strpos(',html,markdown,text,', ",{$doc->type},") === false;
+
         $objects                   = $this->doc->getOrderedObjects($objectType);
         $appendLib                 = (!empty($lib) and $lib->deleted == '1') ? $libID : 0;
         $libs                      = $this->doc->getLibsByObject($objectType, $objectID, '', $appendLib);
@@ -486,7 +490,6 @@ class doc extends control
         $this->view->lib              = $lib;
         $this->view->groups           = $this->loadModel('group')->getPairs();
         $this->view->users            = $this->user->getPairs('noletter|noclosed|nodeleted', $doc->users);
-        $this->view->docType          = $doc->type;
         $this->display();
     }
 

@@ -34,18 +34,18 @@
 
 #contentBox {padding: 0; width: 100%;}
 .ke-container {overflow: visible;}
-.ke-container, .contentmarkdown {border: unset; background: #efefef;}
+.ke-container, .contenthtml {border: unset; background: #efefef;}
 .ke-container.focus {box-shadow: unset; border-color: unset;}
-.ke-toolbar {padding-left: 20px; width: 150%; height: 29px; border-bottom: unset;}
+.ke-toolbar {padding-left: 20px; width: 150%; height: 30px; border-bottom: unset;}
 .ke-edit {border-top: 1px solid rgb(220, 220, 220)}
 .ke-edit, .CodeMirror {margin-left: 20px; background: #fff;}
 .kindeditor-ph {padding-left: 20px !important;}
-.editor-toolbar {background: #fff; padding-left: 20px; border-right: unset; border-top: unset; height: 29px;}
+.editor-toolbar {background: #fff; padding-left: 20px; border-right: unset; border-top: unset; height: 30px;}
 .hide-sidebar .ke-edit {padding-right: 20px;}
 .hide-sidebar .CodeMirror {padding-right: 50px;}
 .CodeMirror.CodeMirror-wrap {border-left: 0; border-right: 0; border-bottom: 0;}
 
-#sidebar {top: 29px;}
+#sidebar {top: 30px;}
 #sidebar .sidebar-toggle {right: 0; left: 0px; background: #efefef; border-radius: 0px; width: 20px; border-top: 1px solid rgb(220, 220, 220);}
 #sidebar > .sidebar-toggle:hover {background: #efefef;}
 #sidebar {width: 500px;}
@@ -54,8 +54,7 @@
 .hide-sidebar #sidebar > .sidebar-toggle > .icon:before {content: "\e314";}
 .hide-sidebar #sidebar > .sidebar-toggle {left: -20px; z-index: 9;}
 #sidebar .cell {border-top: 1px solid rgb(220, 220, 220); border-radius: 0px;}
-#sidebar>.sidebar-toggle>.icon.icon-angle-right {left: 4px;}
-
+#sidebar > .sidebar-toggle > .icon.icon-angle-right {left: 4px;}
 .file-title {max-width: 130px !important;}
 
 .th-control {vertical-align: top !important;}
@@ -156,9 +155,10 @@ $(function()
         setTimeout(function(){$('#dataform').scrollTop(0)}, 100);
     });
 
-    $('#sidebar').height($(document).height() - 120);
-    setTimeout(function(){$('.ke-edit-iframe, .ke-edit').height($(document).height() - 120);}, 100);
-    setTimeout(function(){$('.CodeMirror').height($(document).height() - 120);}, 100);
+    var contentHeight = $(document).height() - 120;
+    $('#sidebar').height(contentHeight);
+    setTimeout(function(){$('.ke-edit-iframe, .ke-edit').height(contentHeight);}, 100);
+    setTimeout(function(){$('.CodeMirror').height(contentHeight);}, 100);
 
     $('#editorContent .icon.icon-angle-right').css('top', '50%');
 })

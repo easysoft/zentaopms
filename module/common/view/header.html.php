@@ -7,10 +7,7 @@ include 'chosen.html.php';
 <?php if(empty($_GET['onlybody']) or $_GET['onlybody'] != 'yes'):?>
 <?php $this->app->loadConfig('sso');?>
 <?php if(!empty($config->sso->redirect)) js::set('ssoRedirect', $config->sso->redirect);?>
-<?php $isDocModule        = $app->getModuleName() == 'doc';?>
-<?php $isManagedDocMethod = strpos(',create,edit,', ",{$app->getMethodName()},") !== false;?>
-<?php $isNotTextTypeDoc   = (isset($docType) and strpos(',html,markdown,text,', ",$docType,") === false);?>
-<?php if(!$isDocModule or ($isDocModule and (!$isManagedDocMethod or ($isManagedDocMethod and $isNotTextTypeDoc)))):?>
+<?php if($config->showMainMenu):?>
 <header id='header'>
   <div id='mainHeader'>
     <div class='container'>

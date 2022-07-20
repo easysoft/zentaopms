@@ -155,9 +155,10 @@ $(function()
         setTimeout(function(){$('#dataform').scrollTop(0)}, 100);
     });
 
-    $('#sidebar').height($(document).height() - 120);
-    setTimeout(function(){$('.ke-edit-iframe, .ke-edit').height($(document).height() - 120);}, 100);
-    setTimeout(function(){$('.CodeMirror').height($(document).height() - 120);}, 100);
+    var contentHeight = $(document).height() - 120;
+    $('#sidebar').height(contentHeight);
+    setTimeout(function(){$('.ke-edit-iframe, .ke-edit').height(contentHeight);}, 100);
+    setTimeout(function(){$('.CodeMirror').height(contentHeight);}, 100);
 
     $('#editorContent .icon.icon-angle-right').css('top', '50%');
 })
