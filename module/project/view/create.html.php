@@ -55,10 +55,12 @@
           <th><?php echo $lang->project->name;?></th>
           <td class="col-main"><?php echo html::input('name', $name, "class='form-control' required");?></td>
         </tr>
+        <?php if(!isset($config->setCode) or $config->setCode == 1):?>
         <tr>
           <th><?php echo $lang->project->code;?></th>
           <td><?php echo html::input('code', $code, "class='form-control' required");?></td>
         </tr>
+        <?php endif;?>
         <tr>
           <th><?php echo $lang->project->PM;?></th>
           <td><?php echo html::select('PM', $pmUsers, '', "class='form-control chosen'" . (strpos($requiredFields, 'PM') !== false ? ' required' : ''));?></td>

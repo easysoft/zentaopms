@@ -376,8 +376,17 @@ class giteaModel extends model
         $apiRoot = $this->getApiRoot($giteaID);
         if(!$apiRoot) return array();
 
-        $url = sprintf($apiRoot, "/repos/$projectID");
-        return json_decode(commonModel::http($url));
+        $url     = sprintf($apiRoot, "/repos/$projectID");
+        $project = json_decode(commonModel::http($url));
+        if(isset($project->name))
+        {
+            $project->name_with_namespace = $project->full_name;
+            $project->path_with_namespace = $project->full_name;
+            $project->http_url_to_repo    = $project->html_url;
+            $project->name_with_namespace = $project->full_name;
+        }
+
+        return $project;
     }
 
     /**
@@ -453,5 +462,108 @@ class giteaModel extends model
         }
 
         return $users;
+    }
+
+    /**
+     * Get project repository branches by api.
+     *
+     * @param  int    $giteaID
+     * @param  string $project
+     * @access public
+     * @return object
+     */
+    public function apiGetBranches($giteaID, $project, $pager = null)
+    {
+        $url = sprintf($this->getApiRoot($giteaID), "/repos/{$project}/branches");
+        $allResults = array();
+        for($page = 1; true; $page++)
+        {
+            $results = json_decode(commonModel::http($url . "&page={$page}&limit=50"));
+            if(!is_array($results)) break;
+            if(!empty($results)) $allResults = array_merge($allResults, $results);
+            if(count($results) < 100) break;
+        }
+
+        return $allResults;
+    }
+
+    /**
+     * Get Forks of a project by API.
+     *
+     * @param  int    $giteaID
+     * @param  string $projectID
+     * @access public
+     * @return object
+     */
+    public function apiGetForks($giteaID, $projectID)
+    {
+        $url = sprintf($this->getApiRoot($giteaID), "/repos/$projectID/forks");
+        return json_decode(commonModel::http($url));
+    }
+
+    /**
+     * Get upstream project by API.
+     *
+     * @param  int    $giteaID
+     * @param  string $projectID
+     * @access public
+     * @return void
+     */
+    public function apiGetUpstream($giteaID, $projectID)
+    {
+        $currentProject = $this->apiGetSingleProject($giteaID, $projectID);
+        if(isset($currentProject->parent->full_name)) return $currentProject->parent->full_name;
+        return array();
+    }
+
+    /**
+     * Get branches.
+     *
+     * @param  int    $giteaID
+     * @param  string $project
+     * @access public
+     * @return array
+     */
+    public function getBranches($giteaID, $project)
+    {
+        $rawBranches = $this->apiGetBranches($giteaID, $project);
+
+        $branches = array();
+        foreach($rawBranches as $branch) $branches[] = $branch->name;
+
+        return $branches;
+    }
+
+    /**
+     * Get gitea user id and realname pairs of one gitea.
+     *
+     * @param  int $giteaID
+     * @access public
+     * @return array
+     */
+    public function getUserIdRealnamePairs($giteaID)
+    {
+        return $this->dao->select('oauth.openID as openID,user.realname as realname')
+            ->from(TABLE_OAUTH)->alias('oauth')
+            ->leftJoin(TABLE_USER)->alias('user')
+            ->on("oauth.account = user.account")
+            ->where('providerType')->eq('gitea')
+            ->andWhere('providerID')->eq($giteaID)
+            ->fetchPairs();
+    }
+
+    /**
+     * Get single branch by API.
+     *
+     * @param  int    $giteaID
+     * @param  int    $projectID
+     * @param  string $branch
+     * @access public
+     * @return object
+     */
+    public function apiGetSingleBranch($giteaID, $projectID, $branch)
+    {
+        $url = sprintf($this->getApiRoot($giteaID), "/repos/$projectID/branches/$branch");
+        return json_decode(commonModel::http($url));
     }
 }

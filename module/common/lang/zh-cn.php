@@ -150,6 +150,7 @@ $lang->openedByAB   = '创建';
 $lang->assignedToAB = '指派';
 $lang->typeAB       = '类型';
 $lang->nameAB       = '名称';
+$lang->code         = '代号';
 
 $lang->pri     = '优先级';
 $lang->delayed = '已延期';

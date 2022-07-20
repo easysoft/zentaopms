@@ -54,6 +54,8 @@ $lang->custom->allUsers             = 'All Users';
 $lang->custom->account              = 'Users';
 $lang->custom->role                 = 'Role';
 $lang->custom->dept                 = 'Dept';
+$lang->custom->code                 = $lang->code;
+$lang->custom->setCode              = 'Activer ou Désactiver le Code';
 
 if($config->systemMode == 'new') $lang->custom->execution = 'Execution';
 if($config->systemMode == 'classic' || !$config->systemMode) $lang->custom->execution = 'Execution';
@@ -208,6 +210,7 @@ $lang->custom->notice->confirmReviewCase   = 'Set the case in Wait to Normal?';
 $lang->custom->notice->storyReviewTip      = 'After selecting by individual, position, and department, take the union of these three filters. ';
 $lang->custom->notice->selectAllTip        = 'After selecting all people, the reviewers will be emptied and grayed out while hiding their positions and departments.';
 $lang->custom->notice->repeatKey           = 'Repeat Key %s';
+$lang->custom->notice->readOnlyOfCode      = "Le code est un terme de gestion utilisé pour la confidentialité ou comme alias. Lorsque la gestion du code est activée, le produit, le projet et l'exécution dans le système afficheront les informations de code sur les pages de création, de modification, de détails et de liste.";
 
 $lang->custom->notice->indexPage['product'] = "ZenTao 8.2+ possède une page d'accueil. Voulez-vous consulter la page d'accueil du produit ?";
 $lang->custom->notice->indexPage['project'] = "ZenTao 8.2+ possède une page d'accueil. Voulez-vous consulter la page d'accueil du produit ?";

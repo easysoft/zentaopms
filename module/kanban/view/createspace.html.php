@@ -36,7 +36,7 @@
         <td colspan='2'>
           <div class="input-group">
             <?php echo html::select('team[]', $users, '', "class='form-control picker-select' multiple data-drop-direction='bottom'");?>
-            <?php echo $this->fetch('my', 'buildContactLists');?>
+            <?php echo $this->fetch('my', 'buildContactLists', "dropdownName=team");?>
           </div>
         </td>
       </tr>

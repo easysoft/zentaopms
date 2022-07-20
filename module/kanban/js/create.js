@@ -92,23 +92,3 @@ function loadUsers(spaceID)
 
     if(spaceType != 'private') loadOwners(spaceID);
 }
-
-/**
- * The owners that loads kanban.
- *
- * @oaram  int    spaceID
- * @access public
- * @return void
- */
-function loadOwners(spaceID)
-{
-    var link = createLink('kanban', 'ajaxLoadUsers', 'spaceID='+ spaceID + '&field=owner&selectedUser=' + $('#owner').val());
-
-    $.get(link, function(data)
-    {
-        $('#owner').replaceWith(data);
-        $('#owner' + "_chosen").remove();
-        $('#owner').next('.picker').remove();
-        $('#owner').chosen();
-    });
-}
