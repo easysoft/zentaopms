@@ -79,7 +79,11 @@ $(function()
         var sourceBranch  = $('#sourceBranch').val();
         var targetProject = $('#targetProject').val();
         var targetBranch  = $('#targetBranch').val();
-        if(branchPrivs[sourceBranch]) $('#removeSourceBranch').attr('disabled', 'true');
+        if(branchPrivs[sourceBranch])
+        {
+            $('#removeSourceBranch').attr('disabled', 'true');
+            $('#removeSourceBranch').attr("checked",false);
+        }
         if(!sourceProject || !sourceBranch || !targetProject || !targetBranch) return false;
 
         var $this    = $(this);
