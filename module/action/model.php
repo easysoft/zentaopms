@@ -991,7 +991,9 @@ class actionModel extends model
 
             if($productID == 'all' and $projectID == 'all')
             {
-                $productCondition   = "product " . helper::dbIN($authedProducts);
+                $productCondition = '';
+                foreach(explode(',', $authedProducts) as $product) $productCondition = empty($productCondition) ? "product LIKE '%,$product,%'" : "$productCondition OR product LIKE '%,$product,%'";
+
                 $projectCondition   = "project " . helper::dbIN($authedProjects);
                 $executionCondition = isset($authedExecutions) ? "execution " . helper::dbIN($authedExecutions) : '';
             }
@@ -1000,7 +1002,9 @@ class actionModel extends model
                 $products   = $this->loadModel('product')->getProductPairsByProject($projectID);
                 $executions = $this->loadModel('execution')->getPairs($projectID) + array(0 => 0);
 
-                $productCondition   = "product " . helper::dbIN(array_keys($products));
+                $productCondition = '';
+                foreach(array_keys($products) as $product) $productCondition = empty($productCondition) ? "product LIKE '%,$product,%'" : "$productCondition OR product LIKE '%,$product,%'";
+
                 $projectCondition   = "project = $projectID";
                 $executionCondition = "execution " . helper::dbIN(array_keys($executions));
             }
