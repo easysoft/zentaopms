@@ -323,7 +323,11 @@ EOF;
     {
         $this->loadModel('story');
         /* Save session. */
-        if($this->app->viewType != 'json') $this->session->set('storyList', $this->app->getURI(true), 'my');
+        if($this->app->viewType != 'json')
+        {
+            $this->session->set('storyList', $this->app->getURI(true), 'my');
+            $this->session->set('storyList', $this->app->getURI(true), 'product');
+        }
 
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
