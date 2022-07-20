@@ -56,6 +56,8 @@
 #sidebar .cell {border-top: 1px solid rgb(220, 220, 220); border-radius: 0px;}
 #sidebar>.sidebar-toggle>.icon.icon-angle-right {left: 4px;}
 
+.file-title {max-width: 130px !important;}
+
 .th-control {vertical-align: top !important;}
 
 #noticeAcl {margin: 0;}
@@ -149,9 +151,16 @@ $(function()
 {
     $('.doc-title input').focus();
 
+    $('#dataform').submit(function()
+    {
+        setTimeout(function(){$('#dataform').scrollTop(0)}, 100);
+    });
+
     $('#sidebar').height($(document).height() - 120);
     setTimeout(function(){$('.ke-edit-iframe, .ke-edit').height($(document).height() - 120);}, 100);
     setTimeout(function(){$('.CodeMirror').height($(document).height() - 120);}, 100);
+
+    $('#editorContent .icon.icon-angle-right').css('top', '50%');
 })
 </script>
 <?php js::set('noticeAcl', $lang->doc->noticeAcl['doc']);?>
