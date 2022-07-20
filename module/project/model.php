@@ -1570,6 +1570,9 @@ class projectModel extends model
         }
         if(dao::isError()) return false;
 
+        $requiredFields = $this->config->project->edit->requiredFields;
+        if(isset($this->config->setCode) and $this->config->setCode == 0) $requiredFields = trim(str_replace(',code,', ',', ",{$requiredFields},"), ',');
+
         foreach($projects as $projectID => $project)
         {
             $oldProject = $oldProjects[$projectID];
@@ -1577,7 +1580,7 @@ class projectModel extends model
 
             $this->dao->update(TABLE_PROJECT)->data($project)
                 ->autoCheck($skipFields = 'begin,end')
-                ->batchCheck($this->config->project->edit->requiredFields , 'notempty')
+                ->batchCheck($requiredFields, 'notempty')
                 ->checkIF($project->begin != '', 'begin', 'date')
                 ->checkIF($project->end != '', 'end', 'date')
                 ->checkIF($project->end != '', 'end', 'gt', $project->begin)

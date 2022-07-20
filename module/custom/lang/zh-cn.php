@@ -210,7 +210,7 @@ $lang->custom->notice->confirmReviewCase   = '是否将待评审的用例修改�
 $lang->custom->notice->storyReviewTip      = '按人员、职位、部门勾选后，取所有人员的并集。';
 $lang->custom->notice->selectAllTip        = '勾选所有人员后，会清空并置灰评审人员，同时隐藏职位、部门。';
 $lang->custom->notice->repeatKey           = '%s键重复';
-$lang->custom->notice->readOnlyOfCode      = '代号是一种管理话术，主要便于保密或作为别名存在。启用代号管理后，系统中的项目集、产品、项目、执行在创建、编辑、详情、列表等页面均会展示代号信息。';
+$lang->custom->notice->readOnlyOfCode      = '代号是一种管理话术，主要便于保密或作为别名存在。启用代号管理后，系统中的产品、项目、执行在创建、编辑、详情、列表等页面均会展示代号信息。';
 
 $lang->custom->notice->indexPage['product'] = "从8.2版本起增加了产品主页视图，是否默认进入产品主页？";
 $lang->custom->notice->indexPage['project'] = "从8.2版本起增加了项目主页视图，是否默认进入项目主页？";
