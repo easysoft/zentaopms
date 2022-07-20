@@ -163,7 +163,6 @@ class mr extends control
             if($MR->canDeleteBranch and $priv->name == $MR->sourceBranch) $MR->canDeleteBranch = false;
         }
 
-
         $targetBranchList = array();
         foreach($branchList as $branch) $targetBranchList[$branch] = $branch;
 
@@ -1032,7 +1031,7 @@ class mr extends control
     * @param  int        $hostID
     * @param  int|string $project
     * @access public
-    * @return array
+    * @return void
     */
    public function ajaxGetBranchPivs($hostID, $project)
    {

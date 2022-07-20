@@ -28,7 +28,6 @@ function getBranchPriv(project)
     {
         branchPrivs = eval('(' + response + ')');
     });
-
 }
 
 $(function()
@@ -113,7 +112,6 @@ $(function()
                 return false;
             }
         });
-
     });
 
     $('#repoID').change(function()
