@@ -64,12 +64,12 @@ $(function()
     {
         statisticCreator: function(table)
         {
-            var $table = table.getTable();
+            var $table       = table.getTable();
             var $checkedRows = $table.find(table.isDataTable ? '.datatable-row-left.checked' : 'tbody>tr.checked');
             var $originTable = table.isDataTable ? table.$.find('.datatable-origin') : null;
-            var $rows = $table.find(table.isDataTable ? '.datatable-rows .datatable-row-left' : 'tbody>tr');
+            var $rows        = $table.find(table.isDataTable ? '.datatable-rows .datatable-row-left' : 'tbody>tr');
 
-            var taskIdList      = [];
+            var taskIdList = [];
             $rows.each(function()
             {
                 var $row = $(this);
