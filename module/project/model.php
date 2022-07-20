@@ -1524,13 +1524,12 @@ class projectModel extends model
         {
             $projectID   = (int)$projectID;
             $projectName = $data->names[$projectID];
-            $projectCode = $data->codes[$projectID];
+            if(isset($data->codes)) $projectCode = $data->codes[$projectID];
 
             $projects[$projectID] = new stdClass();
             if(isset($data->parents[$projectID])) $projects[$projectID]->parent = $data->parents[$projectID];
             $projects[$projectID]->id             = $projectID;
             $projects[$projectID]->name           = $projectName;
-            $projects[$projectID]->code           = $projectCode;
             $projects[$projectID]->model          = $oldProjects[$projectID]->model;
             $projects[$projectID]->PM             = $data->PMs[$projectID];
             $projects[$projectID]->begin          = $data->begins[$projectID];
@@ -1540,6 +1539,7 @@ class projectModel extends model
             $projects[$projectID]->lastEditedBy   = $this->app->user->account;
             $projects[$projectID]->lastEditedDate = helper::now();
 
+            if(isset($data->codes)) $projects[$projectID]->code = $projectCode;
             if($projects[$projectID]->parent)
             {
                 $parentProject = $this->dao->select('*')->from(TABLE_PROGRAM)->where('id')->eq($projects[$projectID]->parent)->fetch();
@@ -1570,9 +1570,6 @@ class projectModel extends model
         }
         if(dao::isError()) return false;
 
-        $requiredFields = $this->config->project->edit->requiredFields;
-        if(isset($this->config->setCode) and $this->config->setCode == 0) $requiredFields = trim(str_replace(',code,', ',', ",{$requiredFields},"), ',');
-
         foreach($projects as $projectID => $project)
         {
             $oldProject = $oldProjects[$projectID];
@@ -1580,7 +1577,7 @@ class projectModel extends model
 
             $this->dao->update(TABLE_PROJECT)->data($project)
                 ->autoCheck($skipFields = 'begin,end')
-                ->batchCheck($requiredFields, 'notempty')
+                ->batchCheck($this->config->project->edit->requiredFields, 'notempty')
                 ->checkIF($project->begin != '', 'begin', 'date')
                 ->checkIF($project->end != '', 'end', 'date')
                 ->checkIF($project->end != '', 'end', 'gt', $project->begin)

@@ -660,13 +660,12 @@ class executionModel extends model
         foreach($data->executionIDList as $executionID)
         {
             $executionName = $data->names[$executionID];
-            $executionCode = $data->codes[$executionID];
+            if(isset($data->codes)) $executionCode = $data->codes[$executionID];
 
             $executionID = (int)$executionID;
             $executions[$executionID] = new stdClass();
             $executions[$executionID]->id             = $executionID;
             $executions[$executionID]->name           = $executionName;
-            $executions[$executionID]->code           = $executionCode;
             $executions[$executionID]->PM             = $data->PMs[$executionID];
             $executions[$executionID]->PO             = $data->POs[$executionID];
             $executions[$executionID]->QD             = $data->QDs[$executionID];
@@ -680,13 +679,15 @@ class executionModel extends model
             $executions[$executionID]->days           = $data->dayses[$executionID];
             $executions[$executionID]->lastEditedBy   = $this->app->user->account;
             $executions[$executionID]->lastEditedDate = helper::now();
+
+            if(isset($data->codes)) $executions[$executionID]->code = $executionCode;
             if(isset($data->projects))   $executions[$executionID]->project   = zget($data->projects, $executionID, 0);
             if(isset($data->attributes)) $executions[$executionID]->attribute = zget($data->attributes, $executionID, '');
             if($executions[$executionID]->status == 'closed') $executions[$executionID]->closedDate = helper::now();
             if($executions[$executionID]->status == 'suspended') $executions[$executionID]->suspendedDate = helper::today();
 
             /* Check unique code for edited executions. */
-            if($projectModel == 'scrum' and empty($executionCode) and (!isset($this->config->setCode) or $this->config->setCode == 1))
+            if($projectModel == 'scrum' and isset($executionCode) and empty($executionCode))
             {
                 dao::$errors['code'][] = 'execution#' . $executionID .  sprintf($this->lang->error->notempty, $this->lang->project->code);
                 return false;
