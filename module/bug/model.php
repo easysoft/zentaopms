@@ -740,6 +740,11 @@ class bugModel extends model
                 $this->linkBugToBuild($bugID, $bug->resolvedBuild);
             }
 
+            $linkBugs    = explode(',', $bug->linkBug);
+            $oldLinkBugs = explode(',', $oldBug->linkBug);
+            foreach(array_diff($linkBugs, $oldLinkBugs) as $addBug) $this->dao->update(TABLE_BUG)->set("linkBug = CONCAT(linkbug, ',$bugID')")->where('id')->eq((int)$addBug)->exec();
+            foreach(array_diff($oldLinkBugs, $linkBugs) as $removeBug) $this->dao->update(TABLE_BUG)->set("linkBug = TRIM(BOTH ',' from REPLACE(CONCAT(',', linkbug, ','), ',$bugID,', ''))")->where('id')->eq((int)$removeBug)->exec();
+
             if(!empty($bug->resolvedBy)) $this->loadModel('score')->create('bug', 'resolve', $bugID);
             $this->file->updateObjectID($this->post->uid, $bugID, 'bug');
 

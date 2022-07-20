@@ -974,6 +974,8 @@ class upgradeModel extends model
                 $confirmContent .= file_get_contents($xuanxuanSql);
             case '17_2':
                 $confirmContent .= file_get_contents($this->getUpgradeFile('17.2'));
+            case '17_3':
+                $this->processBugLinkBug();
         }
 
         return $confirmContent;
@@ -6706,6 +6708,24 @@ class upgradeModel extends model
 
         $query = "UPDATE " . TABLE_IM_CHATUSER . " SET `lastReadMessageIndex` = (CASE `cgid` " . join(' ', $queryData) . " END) WHERE `cgid` IN('" . join("','", array_keys($lastMessages)) . "');";
         $this->dao->query($query);
+
+        return !dao::isError();
+    }
+
+    /**
+     * Process bug link bug.
+     *
+     * @access public
+     * @return void
+     */
+    public function processBugLinkBug()
+    {
+        $bugs = $this->dao->select('id,linkBug')->from(TABLE_BUG)->where('linkBug')->ne('')->fetchPairs();
+        foreach($bugs as $bugID => $linkBugs)
+        {
+            $linkBugs = explode(',', $linkBugs);
+            $this->dao->update(TABLE_BUG)->set("linkBug = TRIM(BOTH ',' from CONCAT(linkbug, ',$bugID'))")->where('id')->in($linkBugs)->andWhere('id')->ne($bugID)->andWhere("CONCAT(',', linkBug, ',')")->notlike("%,$bugID,%")->exec();
+        }
 
         return !dao::isError();
     }
