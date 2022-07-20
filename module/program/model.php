@@ -565,11 +565,6 @@ class programModel extends model
             if($this->session->projectQuery == false) $this->session->set('projectQuery', ' 1 = 1');
         }
 
-        if(isset($this->config->setCode) and $this->config->setCode == 0)
-        {
-            $this->session->projectQuery = preg_replace("/`code`.*'  [)] (AND|OR) \( 1  AND `/", '1 ) $1 ( 1  AND `', $this->session->projectQuery);
-        }
-
         $query       = str_replace('`id`','t1.id', $this->session->projectQuery);
         $projectList = $this->dao->select('distinct t1.*')->from(TABLE_PROJECT)->alias('t1')
             ->leftJoin(TABLE_TEAM)->alias('t2')->on('t1.id=t2.root')

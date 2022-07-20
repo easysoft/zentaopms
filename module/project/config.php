@@ -155,7 +155,7 @@ $config->project->search['fields']['lastEditedDate'] = $lang->project->lastEdite
 $config->project->search['fields']['closedDate']     = $lang->project->closedDate;
 
 $config->project->search['params']['name']           = array('operator' => 'include', 'control' => 'input' , 'values' => '');
-if(!isset($config->setCode) or $config->setCode == 1) $config->project->search['params']['code'] = array('operator' => '='      , 'control' => 'input' , 'values' => '');
+if(!isset($config->setCode) or $config->setCode == 1) $config->project->search['params']['code'] = array('operator' => '=', 'control' => 'input' , 'values' => '');
 $config->project->search['params']['id']             = array('operator' => '='      , 'control' => 'input' , 'values' => '');
 $config->project->search['params']['model']          = array('operator' => '='      , 'control' => 'select', 'values' => $lang->project->modelList);
 $config->project->search['params']['parent']         = array('operator' => '='      , 'control' => 'select', 'values' => '');
