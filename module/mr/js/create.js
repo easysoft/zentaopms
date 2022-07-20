@@ -50,6 +50,9 @@ $(function()
 
     $('#sourceProject').change(function()
     {
+        $('#sourceBranch,#targetProject,#targetBranch').empty();
+        $('#sourceBranch,#targetProject,#targetBranch').chosen().trigger("chosen:updated");;
+
         var hostID        = $('#hostID').val();
         var sourceProject = urlencode($(this).val());
         if(!sourceProject) return false;
@@ -142,14 +145,8 @@ $(function()
 
     $('#hostID').change(function()
     {
-        $('#sourceProject').val('');
-        $('#sourceProject').chosen().trigger("chosen:updated");;
-        $('#sourceBranch').val('');
-        $('#sourceBranch').chosen().trigger("chosen:updated");;
-        $('#targetProject').val('');
-        $('#targetProject').chosen().trigger("chosen:updated");;
-        $('#targetBranch').val('');
-        $('#targetBranch').chosen().trigger("chosen:updated");;
+        $('#sourceProject,#sourceBranch,#targetProject,#targetBranch').empty();
+        $('#sourceProject,#sourceBranch,#targetProject,#targetBranch').chosen().trigger("chosen:updated");;
 
         var hostID = $('#hostID').val();
         if(hostID == '') return false;
