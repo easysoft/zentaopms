@@ -82,6 +82,33 @@ $(function()
     });
 
     $(document).on('change', "select[id^='branch']", disableSelectedBranch);
+
+    $("#copypart").click(function() 
+    {
+        $("#copytype").val(1);
+    });
+
+    $("#copyall").click(function() 
+    {
+        $("#copytype").val(2);
+    });
+
+    $("#copyTypeConfirm").click(function() 
+    {
+        console.log(model)
+        console.log(programID)
+        console.log($("#copyProjectID").val())
+        if($("#copytype").val() == 1)
+        {
+            location.href = createLink('project', 'create', 'model=' + model + '&programID=' + programID + '&copyProjectID=' + $("#copyProjectID").val());
+        }
+        else
+        {
+            location.href = createLink('project', 'copyproject', 'model=' + model + '&programID=' + programID + '&copyProjectID=' + $("#copyProjectID").val());
+        }
+    });
+
+    
 });
 
 /**

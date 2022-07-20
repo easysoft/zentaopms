@@ -28,19 +28,6 @@
 <?php js::set('manageProducts', $lang->project->manageProducts);?>
 <?php $requiredFields = $config->project->create->requiredFields;?>
 <?php js::set('requiredFields', $requiredFields);?>
-<?php js::set('test1', ['aaa'=>['bbbb'=>2],'vvvv','vcccc']);?>
-<?php js::set('test2', ['aaa', 'vvvv','vcccc']);?>
-<script> 
-
-sessionStorage.setItem("testkey",JSON.stringify(test1))
-// for(i in testkey){
-//   console.log(i);           //获得属性
-//   console.log(testkey[i]);  //获得属性值
-
-// }
-console.log(sessionStorage.getItem("testkey"));
-
-</script>
 <div id='mainContent' class='main-content'>
   <div class='center-block'>
     <div class='main-header'>
@@ -242,6 +229,7 @@ console.log(sessionStorage.getItem("testkey"));
         <a href='javascript:;' data-id='<?php echo $id;?>' class='nobr <?php echo $active;?>'><?php echo html::icon($lang->icons['project'], 'text-muted') . ' ' . $name;?></a>
         <?php else: ?>
         <a data-id='<?php echo $id;?>' class='nobr <?php echo $active;?>' data-toggle='modal' data-target='#copyProjectConfirmModal'><?php echo html::icon($lang->icons['project'], 'text-muted') . ' ' . $name;?></a>
+        <?php echo html::hidden('copyProjectID', 0); ?>
         <?php endif; ?>
         </div>
       <?php endforeach;?>
@@ -252,7 +240,7 @@ console.log(sessionStorage.getItem("testkey"));
 </div>
 
 <div class='modal fade modal-scroll-inside' id='copyProjectConfirmModal'>
-  <div class='modal-dialog mw-900px'>
+  <div class='modal-dialog mw-900px' style="height: 400px">
     <div class='modal-header'>
       <button type='button' class='close' data-dismiss='modal'><i class="icon icon-close"></i></button>
       <h2 class='text-center'>
@@ -263,19 +251,42 @@ console.log(sessionStorage.getItem("testkey"));
       </h4>
     </div>
     <div class='modal-body'>
-      <?php if(empty($copyProjects)):?>
-      <div class='alert with-icon'>
-        <i class='icon-exclamation-sign'></i>
-        <div class='content'><?php echo $lang->project->copyNoProject;?></div>
-      </div>
-      <?php else:?>
-      <div id='copyProjects' class='row'>
-      <?php foreach ($copyProjects as $id => $name):?>
-        <?php $active = ($copyProjectID == $id) ? ' active' : '';?>
-        <div class='col-md-4 col-sm-6'><a href='javascript:;' data-id='<?php echo $id;?>' class='nobr <?php echo $active;?>'><?php echo html::icon($lang->icons['project'], 'text-muted') . ' ' . $name;?></a></div>
-      <?php endforeach;?>
-      </div>
-      <?php endif;?>
+        <div class='col-md-4' style="border-style: solid; height: 150px;" id="copypart">
+          <div class='col-sm-6'>
+          <h2>部分信息</h2> 
+            <i class="icon icon-check">基本信息</i>
+          </div>
+        </div>
+        <div class='col-md-8' style="border-style: solid; height: 150px;" id="copyall">
+          <div class='col-md-12' style="height: 80px;">
+            <h2>全部信息</h2>
+            <div class='col-md-4'>
+              <i class="icon icon-check"></i>基本信息
+            </div>
+            <div class='col-md-4'>
+              <i class="icon icon-check"></i>阶段/迭代
+            </div>
+            <div class='col-md-4'>
+              <i class="icon icon-check"></i>文档（文档目录）
+            </div>
+          </div>
+          <div class='col-md-12' style="height: 70px;">
+            <div class='col-md-4'>
+              <i class="icon icon-check"></i>任务
+            </div>
+            <div class='col-md-4'>
+              <i class="icon icon-check"></i>QA（质量保证计划）
+            </div>
+            <div class='col-md-4'>
+              <i class="icon icon-check"></i>过程（过程裁剪）
+            </div>
+          </div>
+        </div>
+        <div class='col-md-12 text-center'> 
+        <?php echo html::hidden('copytype', 1); ?>
+        <?php echo html::commonButton($lang->save, 'id="copyTypeConfirm"', 'btn btn-wide btn-primary'); ?>
+        
+        </div>
     </div>
   </div>
 </div>
