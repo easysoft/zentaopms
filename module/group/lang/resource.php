@@ -1344,17 +1344,11 @@ $lang->resource->gitlab->browseBranch         = 'browseBranch';
 $lang->resource->gitlab->webhook              = 'webhook';
 $lang->resource->gitlab->createWebhook        = 'createWebhook';
 $lang->resource->gitlab->manageProjectMembers = 'manageProjectMembers';
-$lang->resource->gitlab->browseBranchPriv     = 'browseBranchPriv';
-$lang->resource->gitlab->createBranchPriv     = 'createBranchPriv';
-$lang->resource->gitlab->editBranchPriv       = 'editBranchPriv';
-$lang->resource->gitlab->deleteBranchPriv     = 'deleteBranchPriv';
+$lang->resource->gitlab->manageBranchPriv     = 'browseBranchPriv';
+$lang->resource->gitlab->manageTagPriv        = 'browseTagPriv';
 $lang->resource->gitlab->browseTag            = 'browseTag';
 $lang->resource->gitlab->createTag            = 'createTag';
 $lang->resource->gitlab->deleteTag            = 'deleteTag';
-$lang->resource->gitlab->browseTagPriv        = 'browseTagPriv';
-$lang->resource->gitlab->createTagPriv        = 'createTagPriv';
-$lang->resource->gitlab->editTagPriv          = 'editTagPriv';
-$lang->resource->gitlab->deleteTagPriv        = 'deleteTagPriv';
 
 $lang->gitlab->methodOrder[5]   = 'browse';
 $lang->gitlab->methodOrder[10]  = 'create';
@@ -1381,23 +1375,27 @@ $lang->gitlab->methodOrder[115] = 'browseBranch';
 $lang->gitlab->methodOrder[120] = 'webhook';
 $lang->gitlab->methodOrder[125] = 'createWebhook';
 $lang->gitlab->methodOrder[130] = 'manageProjectMembers';
-$lang->gitlab->methodOrder[135] = 'browseTag';
-$lang->gitlab->methodOrder[140] = 'browseTagPriv';
-$lang->gitlab->methodOrder[145] = 'deleteTagPriv';
+$lang->gitlab->methodOrder[135] = 'manageBranchPriv';
+$lang->gitlab->methodOrder[140] = 'manageTagPriv';
+$lang->gitlab->methodOrder[145] = 'browseTag';
+$lang->gitlab->methodOrder[150] = 'createTag';
+$lang->gitlab->methodOrder[155] = 'deleteTag';
 
 /* Gitea. */
 $lang->resource->gitea = new stdclass();
-$lang->resource->gitea->browse = 'browse';
-$lang->resource->gitea->create = 'create';
-$lang->resource->gitea->edit   = 'edit';
-$lang->resource->gitea->view   = 'view';
-$lang->resource->gitea->delete = 'delete';
+$lang->resource->gitea->browse   = 'browse';
+$lang->resource->gitea->create   = 'create';
+$lang->resource->gitea->edit     = 'edit';
+$lang->resource->gitea->view     = 'view';
+$lang->resource->gitea->delete   = 'delete';
+$lang->resource->gitea->bindUser = 'bindUser';
 
 $lang->gitea->methodOrder[5]  = 'browse';
 $lang->gitea->methodOrder[10] = 'create';
 $lang->gitea->methodOrder[15] = 'edit';
 $lang->gitea->methodOrder[20] = 'view';
 $lang->gitea->methodOrder[25] = 'delete';
+$lang->gitea->methodOrder[30] = 'bindUser';
 
 /* SonarQube. */
 $lang->resource->sonarqube = new stdclass();

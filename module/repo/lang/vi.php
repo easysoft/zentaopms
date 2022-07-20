@@ -137,8 +137,17 @@ $lang->repo->logStyles['D'] = 'Xóa';
 $lang->repo->encodingList['utf_8'] = 'UTF-8';
 $lang->repo->encodingList['gbk']   = 'GBK';
 
+$lang->repo->scmList['Gitlab']     = 'GitLab';
+$lang->repo->scmList['Gitea']      = 'Gitea';
 $lang->repo->scmList['Git']        = 'Git';
 $lang->repo->scmList['Subversion'] = 'SVN';
+
+$lang->repo->gitlabHost    = 'GitLab Host';
+$lang->repo->gitlabToken   = 'GitLab Token';
+$lang->repo->gitlabProject = 'Project';
+
+$lang->repo->serviceHost    = 'Host';
+$lang->repo->serviceProject = 'Project';
 
 $lang->repo->notice = new stdclass();
 $lang->repo->notice->syncing        = 'Đang đồng bộ. Vui lòng đợi ...';

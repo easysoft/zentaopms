@@ -142,12 +142,16 @@ $lang->repo->encodingList['utf_8'] = 'UTF-8';
 $lang->repo->encodingList['gbk']   = 'GBK';
 
 $lang->repo->scmList['Gitlab']     = 'GitLab';
+$lang->repo->scmList['Gitea']      = 'Gitea';
 $lang->repo->scmList['Git']        = '本地 Git';
 $lang->repo->scmList['Subversion'] = 'Subversion';
 
 $lang->repo->gitlabHost    = 'GitLab Server';
 $lang->repo->gitlabToken   = 'GitLab Token';
 $lang->repo->gitlabProject = 'GitLab 项目';
+
+$lang->repo->serviceHost    = '服务器';
+$lang->repo->serviceProject = '仓库';
 
 $lang->repo->placeholder = new stdclass;
 $lang->repo->placeholder->gitlabHost = '请填写GitLab访问地址';

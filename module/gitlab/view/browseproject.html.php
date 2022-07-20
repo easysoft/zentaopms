@@ -60,8 +60,8 @@
           <td class='text' title='<?php echo substr($gitlabProject->last_activity_at, 0, 10);?>'><?php echo substr($gitlabProject->last_activity_at, 0, 10);?></td>
           <td class='c-actions text-left'>
             <?php
-            echo common::buildIconButton('gitlab', 'browseBranchPriv', "gitlabID=$gitlabID&projectID=$gitlabProject->id", '', 'list', 'branch-lock', '', '', false, '', '', 0, ($gitlabProject->isMaintainer and $gitlabProject->default_branch));
-            echo common::buildIconButton('gitlab', 'browseTagPriv', "gitlabID=$gitlabID&projectID=$gitlabProject->id", '', 'list', 'tag-lock', '', '', false, '', '', 0, ($gitlabProject->isMaintainer and $gitlabProject->default_branch));
+            echo common::buildIconButton('gitlab', 'manageBranchPriv', "gitlabID=$gitlabID&projectID=$gitlabProject->id", '', 'list', 'branch-lock', '', '', false, '', $this->lang->gitlab->browseBranchPriv, 0, ($gitlabProject->isMaintainer and $gitlabProject->default_branch));
+            echo common::buildIconButton('gitlab', 'manageTagPriv', "gitlabID=$gitlabID&projectID=$gitlabProject->id", '', 'list', 'tag-lock', '', '', false, '', $this->lang->gitlab->browseTagPriv, 0, ($gitlabProject->isMaintainer and $gitlabProject->default_branch));
             echo common::buildIconButton('gitlab', 'manageProjectMembers', 'repoID=' . zget($repoPairs, $gitlabProject->id), '', 'list', 'team', '', '', false, '', '', 0, isset($repoPairs[$gitlabProject->id]));
             echo common::buildIconButton('gitlab', 'createWebhook', 'repoID=' . zget($repoPairs, $gitlabProject->id), '', 'list', 'change', 'hiddenwin', '', false, '', '', 0, isset($repoPairs[$gitlabProject->id]));
             echo common::buildIconButton('gitlab', 'importIssue', 'repoID=' . zget($repoPairs, $gitlabProject->id), '', 'list', 'link', '', '', false, '', '', 0, isset($repoPairs[$gitlabProject->id]));

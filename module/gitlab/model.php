@@ -1203,7 +1203,7 @@ class gitlabModel extends model
         /* Return an empty array if where is one existing webhook. */
         if($this->isWebhookExists($repo, $hook->url)) return array();
 
-        $result = $this->apiCreateHook($repo->gitlab, $repo->project, $hook);
+        $result = $this->apiCreateHook($repo->gitService, $repo->project, $hook);
 
         if(!empty($result->id)) return true;
         return false;
@@ -1218,7 +1218,7 @@ class gitlabModel extends model
      */
     public function isWebhookExists($repo, $url = '')
     {
-        $hookList = $this->apiGetHooks($repo->gitlab, $repo->project);
+        $hookList = $this->apiGetHooks($repo->gitService, $repo->project);
         foreach($hookList as $hook)
         {
             if($hook->url == $url) return true;
@@ -2549,59 +2549,49 @@ class gitlabModel extends model
     }
 
     /**
-     * Get single protct branch by API.
+     * Manage branch privs.
      *
      * @param  int    $gitlabID
      * @param  int    $projectID
-     * @param  string $branch
+     * @param  array  $protected
      * @access public
-     * @return object
+     * @return array
      */
-    public function apiGetSingleBranchPriv($gitlabID, $projectID, $branch)
+    public function manageBranchPrivs($gitlabID, $projectID, $protected = array())
     {
-        if(empty($gitlabID)) return false;
-        $branch = urlencode($branch);
-        $url    = sprintf($this->getApiRoot($gitlabID), "/projects/$projectID/protected_branches/$branch");
-        return json_decode(commonModel::http($url));
-    }
+        $data = (array)fixer::input('post')->get();
+        extract($data);
+        $failure = array();
 
-    /**
-     * Create gitlab potect branch.
-     *
-     * @param  int    $gitlabID
-     * @param  int    $projectID
-     * @param  string $branch
-     * @access public
-     * @return bool
-     */
-    public function createBranchPriv($gitlabID, $projectID, $branch = '')
-    {
-        $priv = fixer::input('post')->get();
-        if(empty($priv->name))
+        /* Remove privs. */
+        foreach($protected as $name => $branch)
         {
-            dao::$errors['name'][] = $this->lang->gitlab->branch->emptyPrivNameError;
-            return false;
+            if(!in_array($name, $branches))
+            {
+                $result = $this->apiDeleteBranchPriv($gitlabID, $projectID, $name);
+                if($result and substr($result->message, 0, 2) != '20') $failure[] = $name;
+            }
         }
 
-        $priv->name = urldecode(helper::safe64Decode($priv->name));
-        $singleBranch = $this->apiGetSingleBranchPriv($gitlabID, $projectID, $priv->name);
-        if(empty($branch) && !empty($singleBranch->id))
+        $priv = new stdClass();
+        foreach($branches as $key => $name)
         {
-            dao::$errors['name'][] = $this->lang->gitlab->branch->issetPrivNameError;
-            return false;
+            /* Process exists data. */
+            if(isset($protected[$name]))
+            {
+                if($protected[$name]->pushAccess == $pushLevels[$key] and $protected[$name]->mergeAccess == $mergeLevels[$key]) continue;
+
+                $result = $this->apiDeleteBranchPriv($gitlabID, $projectID, $name);
+                if(isset($result->message) and substr($result->message, 0, 2) != '20') $failure[] = $name;
+            }
+
+            $priv->name               = $name;
+            $priv->push_access_level  = $pushLevels[$key];
+            $priv->merge_access_level = $mergeLevels[$key];
+            $response = $this->apiCreateBranchPriv($gitlabID, $projectID, $priv);
+            if(isset($response->message) and substr($response->message, 0, 2) != '20') $failure[] = $name;
         }
-
-        if(!empty($branch) && !empty($singleBranch->id)) $this->apiDeleteBranchPriv($gitlabID, $projectID, $branch);
-        $response = $this->apiCreateBranchPriv($gitlabID, $projectID, $priv);
-
-        if(!empty($response->id))
-        {
-            $action = empty($branch) ? 'created' : 'edited';
-            $this->loadModel('action')->create('gitlabbranchpriv', $response->id, $action, '', $response->name);
-            return true;
-        }
-
-        return $this->apiErrorHandling($response);
+        return array_unique($failure);
     }
 
     /**
@@ -2630,7 +2620,7 @@ class gitlabModel extends model
      * @param  int    $projectID
      * @param  string $branch
      * @access public
-     * @return object
+     * @return array
      */
     public function apiDeleteBranchPriv($gitlabID, $projectID, $branch)
     {
@@ -2642,58 +2632,48 @@ class gitlabModel extends model
     }
 
     /**
-     * Create gitlab protect tag.
+     * Manage tag privs.
      *
      * @param  int    $gitlabID
      * @param  int    $projectID
-     * @param  string $tag
+     * @param  array  $protected
      * @access public
-     * @return bool
+     * @return array
      */
-    public function createTagPriv($gitlabID, $projectID, $tag = '')
+    public function manageTagPrivs($gitlabID, $projectID, $protected = array())
     {
-        $priv = fixer::input('post')->get();
-        if(empty($priv->name))
+        $data = (array)fixer::input('post')->get();
+        extract($data);
+        $failure = array();
+
+        /* Remove privs. */
+        foreach($protected as $name => $tag)
         {
-            dao::$errors['name'][] = $this->lang->gitlab->tag->emptyPrivNameError;
-            return false;
+            if(!in_array($name, $tags))
+            {
+                $result = $this->apiDeleteTagPriv($gitlabID, $projectID, $name);
+                if($result and substr($result->message, 0, 2) != '20') $failure[] = $name;
+            }
         }
 
-        $singleTag = $this->apiGetSingleTagPriv($gitlabID, $projectID, $priv->name);
-        if(empty($tag) && !empty($singleTag->id))
+        $priv = new stdClass();
+        foreach($tags as $key => $name)
         {
-            dao::$errors['name'][] = $this->lang->gitlab->tag->issetPrivNameError;
-            return false;
+            /* Process exists data. */
+            if(isset($protected[$name]))
+            {
+                if($protected[$name]->createAccess == $createLevels[$key]) continue;
+
+                $result = $this->apiDeleteTagPriv($gitlabID, $projectID, $name);
+                if(isset($result->message) and substr($result->message, 0, 2) != '20') $failure[] = $name;
+            }
+
+            $priv->name                = $name;
+            $priv->create_access_level = $createLevels[$key];
+            $response = $this->apiCreateTagPriv($gitlabID, $projectID, $priv);
+            if(isset($response->message) and substr($response->message, 0, 2) != '20') $failure[] = $name;
         }
-
-        if(!empty($tag) && !empty($singleTag->name)) $this->apiDeleteTagPriv($gitlabID, $projectID, $tag);
-        $response = $this->apiCreateTagPriv($gitlabID, $projectID, $priv);
-
-        if(!empty($response->id))
-        {
-            $action = empty($tag) ? 'created' : 'edited';
-            $this->loadModel('action')->create('gitlabtagpriv', $response->id, $action, '', $response->name);
-            return true;
-        }
-
-        return $this->apiErrorHandling($response);
-    }
-
-    /**
-     * Get single protct tag by API.
-     *
-     * @param  int    $gitlabID
-     * @param  int    $projectID
-     * @param  string $tag
-     * @access public
-     * @return object
-     */
-    public function apiGetSingleTagPriv($gitlabID, $projectID, $tag)
-    {
-        if(empty($gitlabID)) return false;
-        $tag = urlencode($tag);
-        $url = sprintf($this->getApiRoot($gitlabID), "/projects/$projectID/protected_tags/$tag");
-        return json_decode(commonModel::http($url));
+        return array_unique($failure);
     }
 
     /**
@@ -2895,24 +2875,5 @@ class gitlabModel extends model
 
         $html .= '</div>';
         return $html;
-    }
-
-    /**
-     * Download zip code.
-     *
-     * @param  int    $gitlabID
-     * @param  int    $projectID
-     * @param  string $branch
-     * @param  string $ext tar.gz|tar.bz2|tbz|tbz2|tb2|bz2|tar|zip
-     * @access public
-     * @return string
-     */
-    public function downloadCode($gitlabID = 0, $projectID = 0, $branch = '', $ext = 'zip')
-    {
-        if(empty($gitlabID) or empty($projectID)) return false;
-
-        $url = sprintf($this->getApiRoot($gitlabID), "/projects/$projectID/repository/archive." . $ext);
-        if($branch) $url .= '&sha=' . $branch;
-        return $url;
     }
 }

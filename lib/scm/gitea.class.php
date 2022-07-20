@@ -1,16 +1,17 @@
 <?php
-class gitlab
+class gitea
 {
-    public $client;
-    public $projectID;
+    public  $client;
+    public  $projectID;
+    private $pageLimit = 50;
 
     /**
      * Construct
      *
-     * @param  string    $client    gitlab api url.
-     * @param  string    $root      id of gitlab project.
+     * @param  string    $client    gitea api url.
+     * @param  string    $root      id of gitea project.
      * @param  string    $username  null
-     * @param  string    $password  token of gitlab api.
+     * @param  string    $password  token of gitea api.
      * @param  string    $encoding
      * @access public
      * @return void
@@ -34,10 +35,11 @@ class gitlab
     public function ls($path, $revision = 'HEAD')
     {
         if(!scm::checkRevision($revision)) return array();
-        $api  = "tree";
+        $api  = "contents";
+        $path = ltrim($path, '/');
+        if($path) $api .= "/$path";
 
         $param = new stdclass();
-        $param->path      = ltrim($path, '/');
         $param->ref       = $revision;
         $param->recursive = 0;
         if(!empty($this->branch)) $param->ref = $this->branch;
@@ -52,9 +54,9 @@ class gitlab
 
             $info = new stdClass();
             $info->name = $file->name;
-            $info->kind = $file->type == 'blob' ? 'file' : 'dir';
+            $info->kind = $file->type;
 
-            if($file->type == 'blob')
+            if($file->type == 'file')
             {
                 $file = $this->files($file->path, $this->branch);
 
@@ -66,14 +68,14 @@ class gitlab
             }
             else
             {
-                $commits = $this->getCommitsByPath($file->path, '', '', 1);
-                if(empty($commits)) continue;
+                $commits = $this->getCommitsByPath($file->path, '', '', 1, 1);
+                if(empty($commits) or !is_array($commits)) continue;
                 $commit = $commits[0];
 
-                $info->revision = $commit->id;
-                $info->comment  = $commit->message;
-                $info->account  = $commit->committer_name;
-                $info->date     = date('Y-m-d H:i:s', strtotime($commit->committed_date));
+                $info->revision = $commit->sha;
+                $info->comment  = $commit->commit->message;
+                $info->account  = $commit->commit->author->name;
+                $info->date     = date('Y-m-d H:i:s', strtotime($commit->commit->author->date));
                 $info->size     = 0;
             }
 
@@ -97,28 +99,27 @@ class gitlab
      * @param  string    $ref
      * @access public
      * @return object
-     * @doc    https://docs.gitlab.com/ee/api/repository_files.html
+     * @doc    https://docs.gitea.com/ee/api/repository_files.html
      */
     public function files($path, $ref = 'master')
     {
         $path = urlencode($path);
-        $api  = "files/$path";
-        $param = new stdclass();
-        $param->ref = $ref;
-        $file = $this->fetch($api, $param);
-        if(!isset($file->file_name)) return false;
+        $api  = "contents/$path";
+        $file = $this->fetch($api, array('ref' => $ref));
+        if(!isset($file->name)) return false;
 
-        $commits = $this->getCommitsByPath($path, '', '', 1);
-        $file->revision = $file->commit_id;
+        $commits = $this->getCommitsByPath($path, '', '', 1, 1);
+        $file->revision = $file->sha;
         $file->size     = $this->formatBytes($file->size);
 
         if(!empty($commits))
         {
             $commit = $commits[0];
-            $file->revision  = $commit->id;
-            $file->committer = $commit->committer_name;
-            $file->comment   = $commit->message;
-            $file->date      = date('Y-m-d H:i:s', strtotime($commit->committed_date));
+
+            $file->revision  = $commit->sha;
+            $file->committer = $commit->commit->author->name;
+            $file->comment   = $commit->commit->message;
+            $file->date      = date('Y-m-d H:i:s', strtotime($commit->commit->author->date));
         }
 
         return $file;
@@ -138,17 +139,15 @@ class gitlab
         $tags = array();
 
         $params = array();
-        $params['per_page'] = '100';
-        $params['order_by'] = 'updated';
-        $params['sort']     = 'asc';
+        $params['limit'] = $this->pageLimit;
         for($page = 1; true; $page ++)
         {
             $params['page'] = $page;
             $list = $this->fetch($api, $params);
-            if(empty($list)) break;
+            if(empty($list) or $list == '[]') break;
 
             foreach($list as $tag) $tags[] = $tag->name;
-            if(count($list) < $params['per_page']) break;
+            if(count($list) < $params['limit']) break;
         }
 
         return $tags;
@@ -162,9 +161,13 @@ class gitlab
      */
     public function branch()
     {
-        /* Max size of per_page in gitlab API is 100. */
+        /* Max size of limit in gitea API is 50. */
         $params = array();
-        $params['per_page'] = '100';
+        $params['limit'] = $this->pageLimit;
+
+        /* Get default branch. */
+        $project       = $this->fetch('');
+        $defaultBranch = $project->default_branch;
 
         $branches = array();
         $default  = array();
@@ -177,7 +180,7 @@ class gitlab
             foreach($branchList as $branch)
             {
                 if(!isset($branch->name)) continue;
-                if($branch->default)
+                if($branch->name == $defaultBranch)
                 {
                     $default[$branch->name] = $branch->name;
                 }
@@ -188,7 +191,7 @@ class gitlab
             }
 
             /* Last page. */
-            if(count($branchList) < $params['per_page']) break;
+            if(count($branchList) < $params['limit']) break;
         }
 
         if(empty($branches) and empty($default)) $branches['master'] = 'master';
@@ -228,11 +231,10 @@ class gitlab
 
         $path  = ltrim($path, DIRECTORY_SEPARATOR);
         $count = $count == 0 ? '' : "-n $count";
-
-        $list = $this->getCommitsByPath($path, $fromRevision, $toRevision);
+        $list  = $this->getCommitsByPath($path, $fromRevision, $toRevision, 1, 1);
         foreach($list as $commit)
         {
-            if(isset($commit->id)) $commit->diffs = $this->getFilesByCommit($commit->id);
+            if(isset($commit->sha)) $commit->diffs = $this->getFilesByCommit($commit->sha);
         }
 
         return $this->parseLog($list);
@@ -248,42 +250,7 @@ class gitlab
      */
     public function blame($path, $revision)
     {
-        if(!scm::checkRevision($revision)) return array();
-
-        $path  = ltrim($path, DIRECTORY_SEPARATOR);
-        $path  = urlencode($path);
-        $api   = "files/$path/blame";
-        $param = new stdclass;
-        $param->ref = ($revision and $revision != 'HEAD') ? $revision : $this->branch;
-        $results = $this->fetch($api, $param);
-
-        $blames   = array();
-        $revLine  = 0;
-        $revision = '';
-
-        $lineNumber = 1;
-        foreach($results as $blame)
-        {
-            $line = array();
-            $line['revision']  = $blame->commit->id;
-            $line['committer'] = $blame->commit->committer_name;
-            $line['time']      = $blame->commit->committer_name;
-            $line['line']      = $lineNumber;
-            $line['lines']     = count($blame->lines);
-            $line['content']   = array_shift($blame->lines);
-
-            $blames[$lineNumber] = $line;
-
-            $lineNumber ++;
-
-            foreach($blame->lines as $line)
-            {
-                $blames[$lineNumber] = array('line' => $lineNumber, 'content' => $line);
-                $lineNumber ++;
-            }
-        }
-
-        return $blames;
+        return array();
     }
 
     /**
@@ -302,29 +269,9 @@ class gitlab
         if(!scm::checkRevision($fromRevision) and $extra != 'isBranchOrTag') return array();
         if(!scm::checkRevision($toRevision) and $extra != 'isBranchOrTag')   return array();
 
-        $api    = "compare";
-        $params = array('from' => $fromRevision, 'to' => $toRevision);
-        if($fromProject) $params['from_project_id'] = $fromProject;
-
-        if($toRevision == 'HEAD' and $this->branch) $params['to'] = $this->branch;
-        $results = $this->fetch($api, $params);
-        if(!isset($results->diffs)) return array();
-
-        foreach($results->diffs as $key => $diff)
-        {
-            if($path != '' and strpos($diff->new_path, $path) === false) unset($results->diffs[$key]);
-        }
-        $diffs = $results->diffs;
-        $lines = array();
-        foreach($diffs as $diff)
-        {
-            $lines[] = sprintf("diff --git a/%s b/%s", $diff->old_path, $diff->new_path);
-            $lines[] = sprintf("index %s ... %s %s ", $fromRevision, $toRevision, $diff->b_mode);
-            $lines[] = sprintf("--a/%s", $diff->old_path);
-            $lines[] = sprintf("--b/%s", $diff->new_path);
-            $diffLines = explode("\n", $diff->diff);
-            foreach($diffLines as $diffLine) $lines[] = $diffLine;
-        }
+        $diffApi = "{$this->root}git/commits/$toRevision.diff?token={$this->token}";
+        $diffs   = commonModel::http($diffApi);
+        $lines   = explode("\n", $diffs);
         return $lines;
     }
 
@@ -387,7 +334,7 @@ class gitlab
      *
      * @param  string $cmd
      * @access public
-     * @todo Exec commands by gitlab api.
+     * @todo Exec commands by gitea api.
      * @return array
      */
     public function exec($cmd)
@@ -556,32 +503,28 @@ class gitlab
         $commits = array();
         $files   = array();
 
-        if(empty($count)) $count = 10;
+        if(empty($count)) $count = $this->pageLimit;
 
         if(!empty($version) and $count == 1)
         {
-            $api .= '/' . $version;
-            $commit = $this->fetch($api);
-            if(isset($commit->id))
+            $commits = $this->fetch($api, array('limit' => 1, 'sha' => $version));
+            $commit  = $commits[0];
+            if(isset($commit->sha))
             {
                 $log = new stdclass;
-                $log->committer = $commit->committer_name;
-                $log->revision  = $commit->id;
-                $log->comment   = $commit->message;
-                $log->time      = date('Y-m-d H:i:s', strtotime($commit->created_at));
+                $log->committer = $commit->commit->author->name;
+                $log->revision  = $commit->sha;
+                $log->comment   = $commit->commit->message;
+                $log->time      = date('Y-m-d H:i:s', strtotime($commit->commit->author->date));
 
-                $commits[$commit->id] = $log;
-                $files[$commit->id]   = $this->getFilesByCommit($log->revision);
+                $commits[$commit->sha] = $log;
+                $files[$commit->sha]   = $this->getFilesByCommit($log->revision);
 
                 return array('commits' => $commits, 'files' => $files);
             }
         }
 
-        $params = array();
-        $params['ref_name'] = $branch;
-        $params['per_page'] = $count;
-        $params['all']      = 0;
-
+        $params['sha']  = $branch;
         if($version and $version != 'HEAD')
         {
             /* Get since param. */
@@ -608,16 +551,16 @@ class gitlab
 
         foreach($list as $commit)
         {
-            if(!is_object($commit)) continue;
+            if(!isset($commit->commit) or !is_object($commit->commit)) continue;
 
             $log = new stdclass;
-            $log->committer = $commit->committer_name;
-            $log->revision  = $commit->id;
-            $log->comment   = $commit->message;
-            $log->time      = date('Y-m-d H:i:s', strtotime($commit->created_at));
+            $log->committer = $commit->commit->author->name;
+            $log->revision  = $commit->sha;
+            $log->comment   = $commit->commit->message;
+            $log->time      = date('Y-m-d H:i:s', strtotime($commit->commit->author->date));
 
-            $commits[$commit->id] = $log;
-            $files[$commit->id]   = $this->getFilesByCommit($log->revision);
+            $commits[$commit->sha] = $log;
+            $files[$commit->sha]   = $this->getFilesByCommit($log->revision);
         }
 
         return array('commits' => $commits, 'files' => $files);
@@ -639,8 +582,11 @@ class gitlab
         $time = $dao->select('time')->from(TABLE_REPOHISTORY)->where('revision')->eq($sha)->fetch('time');
         if($time) return date('c', strtotime($time));
 
-        $result = $this->fetch("commits/$sha");
-        return (isset($result->committed_date)) ? $result->committed_date : false;
+        $params = array();
+        $params['sha']   = $sha;
+        $params['limit'] = 1;
+        $result = $this->fetch("commits", $params);
+        return (isset($resulti[0]->created)) ? date('Y-m-d H:i:s', strtotime($result->created)) : false;
     }
 
     /**
@@ -653,35 +599,57 @@ class gitlab
      * @access public
      * @return array
      */
-    public function getCommitsByPath($path, $fromRevision = '', $toRevision = '', $perPage = 0)
+    public function getCommitsByPath($path, $fromRevision = '', $toRevision = '', $perPage = 0, $limit = 0)
     {
         $path = ltrim($path, DIRECTORY_SEPARATOR);
-        $api = "commits";
+        $api  = "commits";
 
+        if(!$limit) $limit = $this->pageLimit;
         $param = new stdclass();
-        $param->path     = urldecode($path);
-        $param->ref_name = ($toRevision != 'HEAD' and $toRevision) ? $toRevision : $this->branch;
+        $param->path  = urldecode($path);
+        $param->limit = $limit;
+        $param->sha   = ($toRevision != 'HEAD' and $toRevision) ? $toRevision : $this->branch;
 
-        $fromDate = $this->getCommittedDate($fromRevision);
-        $toDate   = $this->getCommittedDate($toRevision);
-
-        $since = '';
-        $until = '';
-        if($fromRevision and $toRevision)
-        {
-            $since = min($fromDate, $toDate);
-            $until = max($fromDate, $toDate);
-        }
-        elseif($fromRevision)
-        {
-            $since = $fromDate;
-        }
-        if($since) $param->since = $since;
-        if($until) $param->until = $until;
-
-        if($perPage) $param->per_page = $perPage;
-
+        if($perPage) $param->page = $perPage;
         return $this->fetch($api, $param);
+    }
+
+    /**
+     * Get diff files by reviesion.
+     *
+     * @param  int    $reviesion
+     * @access public
+     * @return array
+     */
+    public function getDiffFiles($revision)
+    {
+        $diffApi = "{$this->root}git/commits/$revision.patch?token={$this->token}";
+        $diffs   = commonModel::http($diffApi);
+
+        $newFiles = array();
+        $delFiles = array();
+
+        if(!empty($diffs))
+        {
+            $diffs = explode("\n", $diffs);
+            foreach($diffs as $row)
+            {
+                preg_match('/^(\s)(create|delete)\smode\s\d+\s(.+)$/', $row, $matches);
+                if(count($matches) == 4 and !in_array($matches[3], $newFiles) and !in_array($matches[3], $delFiles))
+                {
+                    if($matches[2] == 'create')
+                    {
+                        $newFiles[] = $matches[3];
+                    }
+                    elseif($matches[2] == 'delete')
+                    {
+                        $delFiles[] = $matches[3];
+                    }
+                }
+            }
+        }
+
+        return array('newFiles' => $newFiles, 'delFiles' => $delFiles);
     }
 
     /**
@@ -694,33 +662,28 @@ class gitlab
     public function getFilesByCommit($revision)
     {
         if(!scm::checkRevision($revision)) return array();
-        $api  = "commits/{$revision}/diff";
-        $params = new stdclass;
-        $params->page     = 1;
-        $params->per_page = 100;
+        $api     = "git/commits/$revision";
+        $results = $this->fetch($api);
+        if(empty($results)) return array();
 
-        $allResults = array();
-        while(true)
+        $diffFiles = $this->getDiffFiles($revision);
+        $files     = array();
+        foreach($results->files as $row)
         {
-            $results = $this->fetch($api, $params);
-            $params->page ++;
-            if(!is_array($results)) $results = array();
-            $allResults = $allResults + $results;
-            if(count($results) < 100) break;
-        }
-
-        $files = array();
-        foreach($allResults as $row)
-        {
-            $file = new stdclass();
+            $file  = new stdclass();
             $file->revision = $revision;
-            $file->path     = '/' . $row->new_path;
             $file->type     = 'file';
-
+            $file->path     = '/' . $row->filename;
             $file->action   = 'M';
-            if($row->new_file) $file->action = 'A';
-            if($row->renamed_file) $file->action = 'R';
-            if($row->deleted_file) $file->action = 'D';
+            if(in_array($row->filename, $diffFiles['newFiles']))
+            {
+                $file->action = 'A';
+            }
+            elseif(in_array($row->filename, $diffFiles['delFiles']))
+            {
+                $file->action = 'D';
+            }
+
             $files[] = $file;
         }
 
@@ -737,7 +700,7 @@ class gitlab
      */
     public function tree($path, $recursive = 1)
     {
-        $api = "tree";
+        $api = "contents";
 
         $params = array();
         $params['path']      = ltrim($path, '/');
@@ -747,7 +710,7 @@ class gitlab
     }
 
     /**
-     * Fetch data from gitlab api.
+     * Fetch data from gitea api.
      *
      * @param  string    $api
      * @access public
@@ -756,8 +719,8 @@ class gitlab
     public function fetch($api, $params = array(), $needToLoop = false)
     {
         $params = (array) $params;
-        $params['private_token'] = $this->token;
-        $params['per_page']      = isset($params['per_page']) ? $params['per_page'] : 100;
+        $params['token'] = $this->token;
+        $params['limit'] = isset($params['limit']) ? $params['limit'] : $this->pageLimit;
 
         $api = ltrim($api, '/');
         $api = $this->root . $api . '?' . http_build_query($params);
@@ -769,7 +732,7 @@ class gitlab
                 $results = json_decode(commonModel::http($api . "&page={$page}"));
                 if(!is_array($results)) break;
                 if(!empty($results)) $allResults = array_merge($allResults, $results);
-                if(count($results) < 100) break;
+                if(count($results) < $this->pageLimit) break;
             }
 
             return $allResults;
@@ -816,12 +779,12 @@ class gitlab
         $i          = 0;
         foreach($logs as $commit)
         {
-            if(!isset($commit->id)) continue;
+            if(!isset($commit->sha)) continue;
             $parsedLog = new stdclass();
-            $parsedLog->revision  = $commit->id;
-            $parsedLog->committer = $commit->committer_name;
-            $parsedLog->time      = date('Y-m-d H:i:s', strtotime($commit->committed_date));
-            $parsedLog->comment   = $commit->message;
+            $parsedLog->revision  = $commit->sha;
+            $parsedLog->committer = $commit->commit->author->name;
+            $parsedLog->time      = date('Y-m-d H:i:s', strtotime($commit->commit->author->date));
+            $parsedLog->comment   = $commit->commit->message;
             $parsedLog->change    = array();
             foreach($commit->diffs as $diff)
             {
@@ -845,10 +808,8 @@ class gitlab
      */
     public function getDownloadUrl($branch = 'master', $ext = 'zip')
     {
-        $params = (array) $params;
-        $params['private_token'] = $this->token;
-        $params['sha']           = $branch;
+        $params['token'] = $this->token;
 
-        return "{$this->root}archive.{$ext}" . '?' . http_build_query($params);
+        return "{$this->root}archive/" . urlencode($branch) . ".{$ext}" . '?' . http_build_query($params);
     }
 }

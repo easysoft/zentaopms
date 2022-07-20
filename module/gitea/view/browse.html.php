@@ -56,6 +56,7 @@
           <td class='c-actions text-left'>
             <?php
             common::printIcon('gitea', 'edit', "giteaID=$id", '', 'list', 'edit');
+            echo common::buildIconButton('gitea', 'bindUser', "giteaID=$id", '', 'list', 'link', '', '', false, '', '', 0, $gitea->isBindUser);
             common::printIcon('gitea', 'delete', "giteaID=$id", '', 'list', 'trash', 'hiddenwin');
             ?>
           </td>
