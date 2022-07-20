@@ -196,7 +196,7 @@
           <td colspan='4' class='text-center form-actions'>
             <?php
               echo html::hidden('model', $model);
-              if($copyProjectID and $copyType == 2)
+              if(!empty($copyProjectID) and $copyType == 2)
               {
                   echo html::submitButton($lang->project->nextStep);
               }
@@ -307,4 +307,12 @@
 <div id='programAcl' class='hidden'>
   <?php echo nl2br(html::radio('acl', $lang->project->subAclList, $acl, "onclick='setWhite(this.value);'", 'block'));?>
 </div>
+<?php if(!empty($copyProjectID) and $copyType == 2): ?>
+<script>
+$("#submit").click(function()
+{
+    sessionStorage.setItem("projectID:" + copyProjectID, JSON.stringify($("form").serializeArray()))
+})
+</script>
+<?php endif; ?>
 <?php include '../../common/view/footer.html.php';?>
