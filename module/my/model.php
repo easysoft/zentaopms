@@ -332,6 +332,7 @@ class myModel extends model
             ->andWhere('objectType')->eq($module)
             ->andWhere('action')->eq('assigned')
             ->fetchAll('objectID');
+        if(empty($objectIDList)) return array();
 
         $objectList = $this->dao->select('*')->from($this->config->objectTables[$module])
             ->where('deleted')->eq(0)
