@@ -24,11 +24,11 @@
 <div id='mainContent' class='main-content'>
   <div class='tabs' id='tabsNav'>
     <ul class='nav nav-tabs'>
-      <li><?php echo html::a(inlink('view', "mr={$MR->id}"), $lang->mr->view);?></li>
+      <li><?php echo html::a(inlink('view', "MRID={$MR->id}"), $lang->mr->view);?></li>
       <li class='active'><?php echo html::a('#', $lang->mr->viewDiff);?></li>
-      <li><?php echo html::a(inlink('link', "mr={$MR->id}&type=story"), html::icon($lang->icons['story'], 'text-primary') . ' ' . $lang->productplan->linkedStories);?></a></li>
-      <li><?php echo html::a(inlink('link', "mr={$MR->id}&type=bug"),   html::icon($lang->icons['bug'], 'text-red')   . ' ' . $lang->productplan->linkedBugs);?></a></li>
-      <li><?php echo html::a(inlink('link', "mr={$MR->id}&type=task"),  html::icon('todo', 'text-info')  . ' ' . $lang->mr->linkedTasks);?></a></li>
+      <li><?php echo html::a(inlink('link', "MRID={$MR->id}&type=story"), html::icon($lang->icons['story'], 'text-primary') . ' ' . $lang->productplan->linkedStories);?></a></li>
+      <li><?php echo html::a(inlink('link', "MRID={$MR->id}&type=bug"),   html::icon($lang->icons['bug'], 'text-red')   . ' ' . $lang->productplan->linkedBugs);?></a></li>
+      <li><?php echo html::a(inlink('link', "MRID={$MR->id}&type=task"),  html::icon('todo', 'text-info')  . ' ' . $lang->mr->linkedTasks);?></a></li>
     </ul>
     <div class='tab-content'>
       <?php include '../../common/view/form.html.php';?>
