@@ -41,10 +41,10 @@
   <div class='tabs' id='tabsNav'>
     <ul class='nav nav-tabs'>
       <li class='active'><?php echo html::a('###', $lang->mr->view);?></li>
-      <li><?php echo html::a(inlink('diff', "mr={$MR->id}"), $lang->mr->viewDiff);?></li>
-      <li><?php echo html::a(inlink('link', "mr={$MR->id}&type=story"), html::icon($lang->icons['story'], 'text-primary') . ' ' . $lang->productplan->linkedStories);?></a></li>
-      <li><?php echo html::a(inlink('link', "mr={$MR->id}&type=bug"),   html::icon($lang->icons['bug'], 'text-red')   . ' ' . $lang->productplan->linkedBugs);?></a></li>
-      <li><?php echo html::a(inlink('link', "mr={$MR->id}&type=task"),  html::icon('todo', 'text-info')  . ' ' . $lang->mr->linkedTasks);?></a></li>
+      <li><?php echo html::a(inlink('diff', "MRID={$MR->id}"), $lang->mr->viewDiff);?></li>
+      <li><?php echo html::a(inlink('link', "MRID={$MR->id}&type=story"), html::icon($lang->icons['story'], 'text-primary') . ' ' . $lang->productplan->linkedStories);?></a></li>
+      <li><?php echo html::a(inlink('link', "MRID={$MR->id}&type=bug"),   html::icon($lang->icons['bug'], 'text-red')   . ' ' . $lang->productplan->linkedBugs);?></a></li>
+      <li><?php echo html::a(inlink('link', "MRID={$MR->id}&type=task"),  html::icon('todo', 'text-info')  . ' ' . $lang->mr->linkedTasks);?></a></li>
     </ul>
     <div class='tab-content main-row'>
       <div class="main-col col-8">
@@ -112,16 +112,16 @@
             <?php if($MR->synced and $rawMR->state == 'opened' and !$rawMR->has_conflicts) common::printIcon('mr', 'accept', "mr=$MR->id", $MR, 'button', 'flow', 'hiddenwin', 'mergeButton btn', false, $acceptDisabled, $lang->mr->acceptMR);?>
             <?php if($MR->synced and $rawMR->state == 'opened'): ?>
               <?php if($rawMR->has_conflicts or (!empty($compile->id) and $compile->status != 'success') or $MR->approvalStatus == 'approved'):?>
-              <?php common::printIcon('mr', 'approval', "mr=$MR->id&action=approve", $MR, 'button', 'ok', 'hiddenwin', 'mergeButton', true, 'disabled', $lang->mr->approve);?>
+              <?php common::printIcon('mr', 'approval', "MRID=$MR->id&action=approve", $MR, 'button', 'ok', 'hiddenwin', 'mergeButton', true, 'disabled', $lang->mr->approve);?>
               <?php else:?>
-              <?php common::printIcon('mr', 'approval', "mr=$MR->id&action=approve", $MR, 'button', 'ok', 'hiddenwin', 'mergeButton btn iframe showinonlybody', true, '', $lang->mr->approve);?>
+              <?php common::printIcon('mr', 'approval', "MRID=$MR->id&action=approve", $MR, 'button', 'ok', 'hiddenwin', 'mergeButton btn iframe showinonlybody', true, '', $lang->mr->approve);?>
               <?php endif;?>
-              <?php common::printIcon('mr', 'approval', "mr=$MR->id&action=reject", $MR, 'button', 'bug', 'hiddenwin', 'mergeButton btn iframe showinonlybody', true, ($MR->approvalStatus == 'rejected' ? 'disabled' : ''), $lang->mr->reject);?>
-              <?php common::printIcon('mr', 'close', "mr=$MR->id", $MR, 'button', 'off', 'hiddenwin', 'mergeButton');?>
-              <?php common::printIcon('mr', 'edit', "mr=$MR->id", $MR, 'button', 'edit');?>
+              <?php common::printIcon('mr', 'approval', "MRID=$MR->id&action=reject", $MR, 'button', 'bug', 'hiddenwin', 'mergeButton btn iframe showinonlybody', true, ($MR->approvalStatus == 'rejected' ? 'disabled' : ''), $lang->mr->reject);?>
+              <?php common::printIcon('mr', 'close', "MRID=$MR->id", $MR, 'button', 'off', 'hiddenwin', 'mergeButton');?>
+              <?php common::printIcon('mr', 'edit', "MRID=$MR->id", $MR, 'button', 'edit');?>
             <?php endif;?>
             <?php if($MR->synced and $rawMR->state == 'closed') common::printIcon('mr', 'reopen', "mr=$MR->id", $MR, 'button', 'restart', 'hiddenwin', 'mergeButton'); ?>
-            <?php if($projectOwner) common::printIcon('mr', 'delete', "mr=$MR->id", $MR, 'button', 'trash', 'hiddenwin');?>
+            <?php if($projectOwner) common::printIcon('mr', 'delete', "MRID=$MR->id", $MR, 'button', 'trash', 'hiddenwin');?>
           </div>
         </div>
       </div>

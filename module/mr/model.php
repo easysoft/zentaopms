@@ -890,8 +890,14 @@ class mrModel extends model
         }
         else
         {
-            $url = sprintf($this->loadModel('gitea')->getApiRoot($hostID), "/repos/$projectID/pulls/$MRID");
-            return json_decode(commonModel::http($url, array('state' => 'closed'), array(), array(), 'json', 'PATCH'));
+            $rowMR = $this->apiGetSingleMR($hostID, $projectID, $MRID);
+            if($rowMR->state == 'opened')
+            {
+                $url = sprintf($this->loadModel('gitea')->getApiRoot($hostID), "/repos/$projectID/pulls/$MRID");
+                return json_decode(commonModel::http($url, array('state' => 'closed'), array(), array(), 'json', 'PATCH'));
+            }
+
+            return null;
         }
     }
 
