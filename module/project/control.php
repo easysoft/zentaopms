@@ -1858,16 +1858,13 @@ class project extends control
             /* Delete the execution under the project. */
             $executionIdList = $this->loadModel('execution')->getByProject($projectID);
 
-            $url = $this->createLink('project', 'browse');
-            if($this->app->tab == 'program') $url = $this->createLink('program', 'browse');
-
             $message = $this->executeHooks($projectID);
             if($message) $this->lang->saveSuccess = $message;
 
             if(empty($executionIdList))
             {
                 if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess));
-                return print(js::locate($url, 'parent'));
+                return print(js::reload('parent'));
             }
 
             $this->dao->update(TABLE_EXECUTION)->set('deleted')->eq(1)->where('id')->in(array_keys($executionIdList))->exec();
@@ -1877,7 +1874,7 @@ class project extends control
             if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess));
 
             $this->session->set('project', '');
-            return print(js::locate($url, 'parent'));
+            return print(js::reload('parent'));
         }
     }
 
