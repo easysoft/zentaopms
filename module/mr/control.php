@@ -235,7 +235,7 @@ class mr extends control
         }
         $this->dao->delete()->from(TABLE_MR)->where('id')->eq($MRID)->exec();
 
-         echo js::locate(inlink('browse'), 'parent');
+        echo js::locate(inlink('browse'), 'parent');
     }
 
     /**
