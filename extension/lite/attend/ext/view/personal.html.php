@@ -151,6 +151,10 @@
                   <span class='attend-<?php echo $status;?>'>
                     <?php extCommonModel::printLink('leave', 'create', "date=" . $date, $leave, "data-toggle='modal' data-width='700px'");?>
                   </span>
+                  <?php elseif($status == 'overtime'):?>
+                  <span class='attend-<?php echo $status;?>'>
+                    <?php extCommonModel::printLink('overtime', 'create', "date=" . $date, $overtime, "data-toggle='modal' data-width='700px'");?>
+                  </span>
                   <?php elseif($status == 'lieu'):?>
                   <span class='attend-<?php echo $status;?>'>
                   <?php extCommonModel::printLink('lieu', 'create', "date=" . $date, $lieu, "data-toggle='modal' data-width='700px'");?>
@@ -158,16 +162,6 @@
                   <?php elseif(strpos(',rest,normal,', ",$status,") === false):?>
                   <?php if($reviewStatus == 'wait' or strpos(',late,early,both,', ",$status,") !== false):?>
                   <?php echo baseHTML::a($this->createLink('attend', 'edit', "date=" . $date), $edit, "data-toggle='modal' data-width='500px'");?>
-                  <?php elseif(!empty($reason)):?>
-                  <span class='attend-<?php echo $status;?>'>
-                      <?php if($reason == 'normal')   extCommonModel::printLink('attend',   'edit',   "date=" . $date, $edit,     "data-toggle='modal' data-width='500px'");?>
-                      <?php if($reason == 'leave')    extCommonModel::printLink('leave',    'create', "date=" . $date, $leave,    "data-toggle='modal' data-width='700px'");?>
-                      <?php if($reason == 'makeup')   extCommonModel::printLink('makeup',   'create', "date=" . $date, $makeup,   "data-toggle='modal' data-width='700px'");?>
-                      <?php if($reason == 'overtime') extCommonModel::printLink('overtime', 'create', "date=" . $date, $overtime, "data-toggle='modal' data-width='700px'");?>
-                      <?php if($reason == 'lieu')     extCommonModel::printLink('lieu',     'create', "date=" . $date, $lieu,     "data-toggle='modal' data-width='700px'");?>
-                      <?php if($reason == 'trip')     extCommonModel::printLink('trip',     'create', "date=" . $date, $trip,     "data-toggle='modal' data-width='700px'");?>
-                      <?php if($reason == 'egress')   extCommonModel::printLink('egress',   'create', "date=" . $date, $egress,   "data-toggle='modal' data-width='700px'");?>
-                  </span>
                   <?php else:?>
                   <div class='dropdown'>
                     <a href='javascript:;' data-toggle='dropdown'><?php echo $lang->actions;?><span class='caret'></span></a>
