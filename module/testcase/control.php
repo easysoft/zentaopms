@@ -911,11 +911,7 @@ class testcase extends control
             }
 
             $moduleIdList = $case->module;
-            if($case->module)
-            {
-                $moduleIdList = $this->loadModel->tree->getStoryModule($case->module);
-                $moduleIdList = $this->tree->getAllChildID($case->module);
-            }
+            if($case->module) $moduleIdList = $this->tree->getAllChildID($case->module);
 
             $this->view->productID        = $productID;
             $this->view->product          = $product;
