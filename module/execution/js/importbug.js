@@ -23,5 +23,9 @@ function goback(executionID)
             kanbanData = $.parseJSON(data);
             parent.updateKanban(kanbanData);
         }
+        else
+        {
+            parent.location.reload();
+        }
     });
 }

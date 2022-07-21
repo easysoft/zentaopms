@@ -104,39 +104,11 @@ js::set('isCNLang', !$this->loadModel('common')->checkNotCN())
       <thead>
         <tr>
           <?php
-          if($isStage)
-          {
-              $hasActions = false;
-              foreach($setting as $key => $value)
-              {
-                  if($value->id == 'actions')
-                  {
-                      $hasActions  = true;
-                      $value->show = true;
-                  }
-              }
-
-              if(!$hasActions)
-              {
-                  $data = new stdclass();
-                  $data->id    = 'actions';
-                  $data->order = $value->order + 1;
-                  $data->show  = true;
-                  $data->width = '180px';
-                  $data->fixed = 'right';
-                  $data->title = $lang->actions;
-                  $data->sort  = 'no';
-
-                  $setting[] = $data;
-              }
-          }
-
           foreach($setting as $key => $value)
           {
               if($value->show)
               {
-                  if(!$isStage and in_array($value->id, array('percent', 'attribute', 'actions'))) continue;
-                  if(($config->systemMode == 'classic' or ($config->systemMode == 'new' and $this->app->tab != 'execution')) and $value->id == 'project') continue;
+                  if($config->systemMode == 'classic' and $value->id == 'project') continue;
 
                   $this->datatable->printHead($value, $orderBy, $vars, $canBatchEdit);
                   $columns ++;

@@ -1737,30 +1737,28 @@ class userModel extends model
             $groups  = ',' . join(',', $groups) . ',';
 
             /* Init objects. */
-            static $allProducts, $allPrograms, $allProjects, $allSprints, $teams, $stakeholders, $productWhiteList, $whiteList, $manageObjects;
+            static $allProducts, $allPrograms, $allProjects, $allSprints, $teams, $stakeholders, $productWhiteList, $whiteList;
             if($allProducts === null) $allProducts = $this->dao->select('id,PO,QD,RD,createdBy,acl,whitelist,program,createdBy')->from(TABLE_PRODUCT)->where('acl')->ne('open')->fetchAll('id');
             if($allProjects === null) $allProjects = $this->dao->select('id,PO,PM,QD,RD,acl,type,path,parent,openedBy')->from(TABLE_PROJECT)->where('acl')->ne('open')->andWhere('type')->eq('project')->fetchAll('id');
             if($allPrograms === null) $allPrograms = $this->dao->select('id,PO,PM,QD,RD,acl,type,path,parent,openedBy')->from(TABLE_PROGRAM)->where('acl')->ne('open')->andWhere('type')->eq('program')->fetchAll('id');
             if($allSprints  === null) $allSprints  = $this->dao->select('id,PO,PM,QD,RD,acl,project,path,parent,type,openedBy')->from(TABLE_PROJECT)->where('acl')->eq('private')->beginIF($this->config->systemMode == 'new')->andWhere('type')->in('sprint,stage,kanban')->fi()->fetchAll('id');
 
             /* Get admins. */
-            if($manageObjects === null)
+            $manageObjects = array();
+            $projectAdmins = $this->dao->select('`group`,programs,products,projects,executions')->from(TABLE_PROJECTADMIN)->where('account')->eq($account)->fetchAll('group');
+            foreach($projectAdmins as $projectAdmin)
             {
-                $projectAdmins = $this->dao->select('programs,products,projects,executions')->from(TABLE_PROJECTADMIN)->where('account')->eq($account)->fetchAll('`group`');
-                foreach($projectAdmins as $projectAdmin)
+                foreach($projectAdmin as $key => $value)
                 {
-                    foreach($projectAdmin as $key => $value)
-                    {
-                        $manageObjects[$key]['list'] = isset($manageObjects[$key]['list']) ? $manageObjects[$key]['list'] : '';
+                    $manageObjects[$key]['list'] = isset($manageObjects[$key]['list']) ? $manageObjects[$key]['list'] : '';
 
-                        if($value == 'all')
-                        {
-                            $manageObjects[$key]['isAdmin'] = 1;
-                        }
-                        else
-                        {
-                            $manageObjects[$key]['list'] .= $value . ',';
-                        }
+                    if($value == 'all')
+                    {
+                        $manageObjects[$key]['isAdmin'] = 1;
+                    }
+                    else
+                    {
+                        $manageObjects[$key]['list'] .= $value . ',';
                     }
                 }
             }

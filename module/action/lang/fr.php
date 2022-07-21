@@ -58,9 +58,9 @@ $lang->action->noDynamic          = "Pas d'historique.";
 $lang->action->undeletedTips      = 'This data did not participate in the merging process during the version upgrade process, so restore is not supported.';
 $lang->action->executionNoProject = 'The execution does not belong to a project,please restore the project first';
 
-$lang->action->repeatChange     = '%s with the same name and code already exists in the system. After recovery, the name and code are %s_,%s_';
-$lang->action->nameRepeatChange = '%s with the same name already exists in the system. After recovery, the name are %s_';
-$lang->action->codeRepeatChange = '%s with the same code already exists in the system. After recovery, the code are %s_';
+$lang->action->repeatChange     = '%s with the same name and code already exists in the system, After recovery, the name are \"%s\",the code are \"%s\".';
+$lang->action->nameRepeatChange = '%s with the same name already exists in the system, After recovery, the name are \"%s\".';
+$lang->action->codeRepeatChange = '%s with the same code already exists in the system, After recovery, the code are \"%s\".';
 
 $lang->action->history = new stdclass();
 $lang->action->history->action = 'Lien';

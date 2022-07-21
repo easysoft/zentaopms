@@ -104,7 +104,9 @@ class mr extends control
             return $this->send($result);
         }
 
-        $hosts = $this->loadModel('pipeline')->getList(array('gitea', 'gitlab'));
+        $repoID = $this->loadModel('repo')->saveState(0);
+        $repo   = $this->repo->getRepoByID($repoID);
+        $hosts  = $this->loadModel('pipeline')->getList(array('gitea', 'gitlab'));
         if(!$this->app->user->admin)
         {
             $gitlabUsers = $this->loadModel('gitlab')->getGitLabListByAccount();
@@ -128,6 +130,7 @@ class mr extends control
         $this->view->jobList   = $this->loadModel('job')->getList();
         $this->view->hostPairs = $hostPairs;
         $this->view->hosts     = $hosts;
+        $this->view->repo      = $repo;
         $this->display();
     }
 
@@ -215,36 +218,36 @@ class mr extends control
     /**
      * Delete a MR.
      *
-     * @param  int    $id
+     * @param  int    $MRID
      * @access public
      * @return void
      */
-    public function delete($id, $confirm = 'no')
+    public function delete($MRID, $confirm = 'no')
     {
-        if($confirm != 'yes') return print(js::confirm($this->lang->mr->confirmDelete, inlink('delete', "id=$id&confirm=yes")));
+        if($confirm != 'yes') return print(js::confirm($this->lang->mr->confirmDelete, inlink('delete', "MRID=$MRID&confirm=yes")));
 
-        $MR = $this->mr->getByID($id);
+        $MR = $this->mr->getByID($MRID);
 
         if($MR->synced)
         {
            $res = $this->mr->apiDeleteMR($MR->hostID, $MR->targetProject, $MR->mriid);
            if(isset($res->message)) return print(js::alert($this->mr->convertApiError($res->message)));
         }
-        $this->dao->delete()->from(TABLE_MR)->where('id')->eq($id)->exec();
+        $this->dao->delete()->from(TABLE_MR)->where('id')->eq($MRID)->exec();
 
-        echo js::reload('parent');
+        echo js::locate(inlink('browse'), 'parent');
     }
 
     /**
      * View a MR.
      *
-     * @param  int $id
+     * @param  int $MRID
      * @access public
      * @return void
      */
-    public function view($id)
+    public function view($MRID)
     {
-        $MR = $this->mr->getByID($id);
+        $MR = $this->mr->getByID($MRID);
         if(!$MR) return print(js::error($this->lang->notFound) . js::locate($this->createLink('mr', 'browse')));
         if(isset($MR->hostID)) $rawMR = $this->mr->apiGetSingleMR($MR->hostID, $MR->targetProject, $MR->mriid);
         if($MR->synced and (!isset($rawMR->id) or (isset($rawMR->message) and $rawMR->message == '404 Not found') or empty($rawMR))) return $this->display();

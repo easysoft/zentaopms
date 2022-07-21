@@ -1835,16 +1835,17 @@ class project extends control
      * Delete a project.
      *
      * @param  int     $projectID
-     * @param  string  $from
+     * @param  string  $confirm
+     * @param  string  $from browse|view
      * @access public
      * @return void
      */
-    public function delete($projectID, $confirm = 'no')
+    public function delete($projectID, $confirm = 'no', $from = 'browse')
     {
         if($confirm == 'no')
         {
             $project = $this->project->getByID($projectID);
-            return print(js::confirm(sprintf($this->lang->project->confirmDelete, $project->name), $this->createLink('project', 'delete', "projectID=$projectID&confirm=yes")));
+            return print(js::confirm(sprintf($this->lang->project->confirmDelete, $project->name), $this->createLink('project', 'delete', "projectID=$projectID&confirm=yes&from=$from")));
         }
         else
         {
@@ -1858,16 +1859,14 @@ class project extends control
             /* Delete the execution under the project. */
             $executionIdList = $this->loadModel('execution')->getByProject($projectID);
 
-            $url = $this->createLink('project', 'browse');
-            if($this->app->tab == 'program') $url = $this->createLink('program', 'browse');
-
             $message = $this->executeHooks($projectID);
             if($message) $this->lang->saveSuccess = $message;
 
             if(empty($executionIdList))
             {
                 if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess));
-                return print(js::locate($url, 'parent'));
+                if($from == 'view') return print(js::locate($this->createLink('project', 'browse'), 'parent'));
+                return print(js::reload('parent'));
             }
 
             $this->dao->update(TABLE_EXECUTION)->set('deleted')->eq(1)->where('id')->in(array_keys($executionIdList))->exec();
@@ -1877,7 +1876,8 @@ class project extends control
             if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess));
 
             $this->session->set('project', '');
-            return print(js::locate($url, 'parent'));
+            if($from == 'view') return print(js::locate($this->createLink('project', 'browse'), 'parent'));
+            return print(js::reload('parent'));
         }
     }
 

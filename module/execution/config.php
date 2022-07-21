@@ -141,11 +141,11 @@ $config->execution->gantt->linkType['begin']['end']   = 3;
 $config->execution->datatable = new stdclass();
 if(!isset($config->setCode) or $config->setCode == 1)
 {
-    $config->execution->datatable->defaultField = array('id', 'name', 'code', 'project', 'PM', 'status', 'progress', 'percent', 'attribute', 'begin', 'end', 'estimate', 'consumed', 'left', 'burn', 'actions');
+    $config->execution->datatable->defaultField = array('id', 'name', 'code', 'project', 'PM', 'status', 'progress', 'begin', 'end', 'estimate', 'consumed', 'left', 'burn');
 }
 else
 {
-    $config->execution->datatable->defaultField = array('id', 'name', 'project', 'PM', 'status', 'progress', 'percent', 'attribute', 'begin', 'end', 'estimate', 'consumed', 'left', 'burn', 'actions');
+    $config->execution->datatable->defaultField = array('id', 'name', 'project', 'PM', 'status', 'progress', 'begin', 'end', 'estimate', 'consumed', 'left', 'burn');
 }
 
 $config->execution->datatable->fieldList['id']['title']    = 'idAB';
@@ -186,18 +186,6 @@ $config->execution->datatable->fieldList['progress']['fixed']    = 'no';
 $config->execution->datatable->fieldList['progress']['width']    = '70';
 $config->execution->datatable->fieldList['progress']['required'] = 'no';
 $config->execution->datatable->fieldList['progress']['sort']     = 'no';
-
-$config->execution->datatable->fieldList['percent']['title']    = 'percent';
-$config->execution->datatable->fieldList['percent']['fixed']    = 'no';
-$config->execution->datatable->fieldList['percent']['width']    = '85';
-$config->execution->datatable->fieldList['percent']['required'] = 'no';
-$config->execution->datatable->fieldList['percent']['sort']     = 'no';
-
-$config->execution->datatable->fieldList['attribute']['title']    = 'attribute';
-$config->execution->datatable->fieldList['attribute']['fixed']    = 'no';
-$config->execution->datatable->fieldList['attribute']['width']    = '80';
-$config->execution->datatable->fieldList['attribute']['required'] = 'no';
-$config->execution->datatable->fieldList['attribute']['sort']     = 'no';
 
 $config->execution->datatable->fieldList['openedDate']['title']    = 'openedDate';
 $config->execution->datatable->fieldList['openedDate']['fixed']    = 'no';
@@ -249,9 +237,3 @@ $config->execution->datatable->fieldList['burn']['fixed']    = 'no';
 $config->execution->datatable->fieldList['burn']['width']    = '80';
 $config->execution->datatable->fieldList['burn']['required'] = 'no';
 $config->execution->datatable->fieldList['burn']['sort']     = 'no';
-
-$config->execution->datatable->fieldList['actions']['title']    = 'actions';
-$config->execution->datatable->fieldList['actions']['fixed']    = 'right';
-$config->execution->datatable->fieldList['actions']['width']    = '180';
-$config->execution->datatable->fieldList['actions']['required'] = 'yes';
-$config->execution->datatable->fieldList['actions']['sort']     = 'no';

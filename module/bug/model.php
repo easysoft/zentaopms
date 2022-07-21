@@ -1688,7 +1688,7 @@ class bugModel extends model
         $query = preg_replace('/`(\w+)`/', 't1.`$1`', $query);
 
         if($type != 'bySearch' and !$this->loadModel('common')->checkField(TABLE_BUG, $type)) return array();
-        $bugs = $this->dao->select('t1.*,t2.name as productName')->from(TABLE_BUG)->alias('t1')
+        return $this->dao->select('t1.*,t2.name as productName')->from(TABLE_BUG)->alias('t1')
             ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product = t2.id')
             ->where('t1.deleted')->eq(0)
             ->beginIF($type == 'bySearch')->andWhere($query)->fi()
@@ -1697,6 +1697,7 @@ class bugModel extends model
             ->beginIF($type != 'all' and $type != 'bySearch')->andWhere("t1.`$type`")->eq($account)->fi()
             ->beginIF($type == 'bySearch' and $moduleName == 'workBug')->andWhere("t1.assignedTo")->eq($account)->fi()
             ->beginIF($type == 'bySearch' and $moduleName == 'contributeBug')
+            ->beginIF($type == 'assignedTo' and $moduleName == 'workBug')->andWhere('t1.status')->ne('closed')->fi()
             ->andWhere('t1.openedBy', 1)->eq($account)
             ->orWhere('t1.closedBy')->eq($account)
             ->orWhere('t1.resolvedBy')->eq($account)
@@ -1707,7 +1708,6 @@ class bugModel extends model
             ->beginIF($limit > 0)->limit($limit)->fi()
             ->page($pager)
             ->fetchAll();
-        return $bugs ? $bugs : array();
     }
 
     /**
