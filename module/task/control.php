@@ -2194,7 +2194,6 @@ class task extends control
                 }
             }
 
-            foreach($tasks as $task) $relatedBugIdList[$task->fromBug] = $task->fromBug;
             $bugs = $this->loadModel('bug')->getByList($relatedBugIdList);
             foreach($tasks as $task)
             {
