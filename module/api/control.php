@@ -353,7 +353,7 @@ class api extends control
 
         $this->view->type   = $type;
         $this->view->groups = $this->loadModel('group')->getPairs();
-        $this->view->users  = $this->user->getPairs('nocode');
+        $this->view->users  = $this->user->getPairs('nocode|noclosed');
 
         $this->display();
     }
@@ -388,7 +388,7 @@ class api extends control
 
         $this->view->doc    = $doc;
         $this->view->groups = $this->loadModel('group')->getPairs();
-        $this->view->users  = $this->user->getPairs('nocode');
+        $this->view->users  = $this->user->getPairs('nocode|noclosed');
 
         $this->display();
     }
