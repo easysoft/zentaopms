@@ -17,12 +17,14 @@
   </div>
   <form method='post' class='load-indicator main-form form-ajax' enctype='multipart/form-data'>
     <div class="table-responsive">
-      <table class="table table-borderless w-600px">
+      <table class="table table-borderless w-800px">
         <thead>
           <tr>
-            <th colspan='2'><?php echo $lang->gitlab->gitlabAccount;?></th>
+            <th class='w-60px'><?php echo $lang->gitlab->gitlabAvatar;?></th>
+            <th><?php echo $lang->gitlab->gitlabAccount;?></th>
+            <th><?php echo $lang->gitlab->gitlabEmail;?></th>
             <th class='w-150px'><?php echo $lang->gitlab->zentaoAccount;?></th>
-            <th class='w-150px'><?php echo $lang->gitlab->bindingStatus;?></th>
+            <th><?php echo $lang->gitlab->bindingStatus;?></th>
           </tr>
         </thead>
         <tbody>
@@ -30,13 +32,13 @@
           <?php if(isset($gitlabUser->zentaoAccount)) continue;?>
           <?php echo html::hidden("gitlabUserNames[$gitlabUser->id]", $gitlabUser->realname);?>
           <tr>
-            <td class='w-60px'><?php echo html::image($gitlabUser->avatar, "height=40");?></td>
+            <td><?php echo html::image($gitlabUser->avatar, "height=40");?></td>
             <td class='text-left'>
               <strong><?php echo $gitlabUser->realname;?></strong>
               <br>
               <?php echo $gitlabUser->account;?>
-              <?php if($gitlabUser->email) echo " &lt;" . $gitlabUser->email . "&gt;";?>
             </td>
+            <td><?php echo $gitlabUser->email;?></td>
             <td><?php echo html::select("zentaoUsers[$gitlabUser->id]", $userPairs, '', "class='form-control select chosen'" );?></td>
             <td><?php echo $lang->gitlab->notBind;?></td>
           </tr>
@@ -45,13 +47,13 @@
           <?php if(!isset($gitlabUser->zentaoAccount)) continue;?>
           <?php echo html::hidden("gitlabUserNames[$gitlabUser->id]", $gitlabUser->realname);?>
           <tr>
-            <td class='w-60px'><?php echo html::image($gitlabUser->avatar, "height=40");?></td>
+            <td><?php echo html::image($gitlabUser->avatar, "height=40");?></td>
             <td>
               <strong><?php echo $gitlabUser->realname;?></strong>
               <br>
               <?php echo $gitlabUser->account;?>
-              <?php if($gitlabUser->email) echo " &lt;" . $gitlabUser->email . "&gt;";?>
             </td>
+            <td><?php echo $gitlabUser->email;?></td>
             <td><?php echo html::select("zentaoUsers[$gitlabUser->id]", $userPairs, $gitlabUser->zentaoAccount, "class='form-control select chosen'" );?></td>
             <td>
               <?php if(isset($bindedUsers[$gitlabUser->zentaoAccount])):?>
