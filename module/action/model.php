@@ -1000,13 +1000,15 @@ class actionModel extends model
             elseif($productID == 'all' and is_numeric($projectID))
             {
                 $products   = $this->loadModel('product')->getProductPairsByProject($projectID);
-                $executions = $this->loadModel('execution')->getPairs($projectID) + array(0 => 0);
+                $executions = $this->loadModel('execution')->getPairs($projectID);
+
+                $authedExecutions = isset($authedExecutions) ? array_intersect(array_keys($executions), explode(',', $authedExecutions)) : array_keys($executions);
 
                 $productCondition = '';
                 foreach(array_keys($products) as $product) $productCondition = empty($productCondition) ? "product LIKE '%,$product,%'" : "$productCondition OR product LIKE '%,$product,%'";
 
                 $projectCondition   = "project = $projectID";
-                $executionCondition = "execution " . helper::dbIN(array_keys($executions));
+                $executionCondition = "execution " . helper::dbIN($authedExecutions);
             }
             elseif(is_numeric($productID) and $projectID == 'all')
             {
@@ -1014,15 +1016,18 @@ class actionModel extends model
                 $projects   = $this->product->getProjectPairsByProduct($productID);
                 $executions = $this->product->getExecutionPairsByProduct($productID);
 
-                $productCondition   = "product = $productID";
-                $projectCondition   = "project " . helper::dbIN(array_keys($projects));
-                $executionCondition = "execution " . helper::dbIN(array_keys($executions));
+                $authedProjects   = array_intersect(array_keys($projects), explode(',', $authedProjects));
+                $authedExecutions = isset($authedExecutions) ? array_intersect(array_keys($executions), explode(',', $authedExecutions)) : array_keys($executions);
+
+                $productCondition   = "product like '%,$productID,%'";
+                $projectCondition   = 'project ' . helper::dbIN($authedProjects);
+                $executionCondition = 'execution ' . helper::dbIN($authedExecutions);
             }
 
-            $condition = "((product =',0,' or product = '0') AND project = '0' AND execution = '0')";
-            if(!empty($productCondition))   $condition .= ' OR ' . $productCondition;
-            if(!empty($projectCondition))   $condition .= ' OR ' . $projectCondition;
-            if(!empty($executionCondition)) $condition .= ' OR ' . $executionCondition;
+            $condition = "((product =',0,' or product = '0' or product=',,') AND project = '0' AND execution = '0')";
+            if(!empty($productCondition))   $condition .= " OR $productCondition";
+            if(!empty($projectCondition))   $condition .= " OR $projectCondition";
+            if(!empty($executionCondition)) $condition .= " OR $executionCondition";
         }
 
         $actionCondition = $this->getActionCondition();
@@ -1092,7 +1097,8 @@ class actionModel extends model
             foreach($this->app->user->rights['acls']['actions'] as $moduleName => $actions)
             {
                 if(isset($this->lang->mainNav->$moduleName) and !empty($this->app->user->rights['acls']['views']) and !isset($this->app->user->rights['acls']['views'][$moduleName])) continue;
-                $actionCondition .= "(`objectType` = '$moduleName' and `action` " . helper::dbIN($actions) . ") or ";
+                $canViewPrograms  = $moduleName == 'program' ? "`objectID` in ({$this->app->user->view->programs}) and " : '';
+                $actionCondition .= "($canViewPrograms `objectType` = '$moduleName' and `action` " . helper::dbIN($actions) . ") or ";
             }
             $actionCondition = trim($actionCondition, 'or ');
         }
@@ -1214,8 +1220,17 @@ class actionModel extends model
         $relatedProjects = $relatedData['relatedProjects'];
         $requirements    = $relatedData['requirements'];
 
+        $aclViews         = isset($this->app->user->rights['acls']['views']) ? $this->app->user->rights['acls']['views'] : array();
+        $authedProjects   = (empty($aclViews) or (!empty($aclViews) and !empty($aclViews['project'])))   ? ",{$this->app->user->view->projects}," : array();
+        $authedExecutions = (empty($aclViews) or (!empty($aclViews) and !empty($aclViews['execution']))) ? ",{$this->app->user->view->sprints},": array();
+
         foreach($actions as $i => $action)
         {
+            if(($action->execution != '0' and strpos($authedExecutions, ",$action->execution,") === false) or ($action->execution == '0' and $action->project != '0' and strpos($authedProjects, ",$action->project,") === false))
+            {
+                unset($actions[$i]);
+                continue;
+            }
             /* Add name field to the actions. */
             $action->objectName = isset($objectNames[$action->objectType][$action->objectID]) ? $objectNames[$action->objectType][$action->objectID] : '';
 
