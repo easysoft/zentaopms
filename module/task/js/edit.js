@@ -12,12 +12,7 @@ $(function()
  */
 function loadAll(executionID)
 {
-    if(!changeExecutionConfirmed)
-    {
-        firstChoice = confirm(confirmChangeExecution);
-        changeExecutionConfirmed = true;    // Only notice the user one time.
-    }
-    if(changeExecutionConfirmed && firstChoice)
+    if(confirm(confirmChangeExecution))
     {
         loadModuleMenu(executionID);
         loadExecutionStories(executionID);
