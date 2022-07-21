@@ -21,6 +21,7 @@
 .gantt-fullscreen #mainContent {position: fixed; top: 0; right: 0; bottom: 0; left: 0}
 .checkbox-primary {margin-top: 0px; margin-left: 10px;}
 form {display: block; margin-top: 0em; margin-block-end: 1em;}
+.gantt_task_content span.task-label, .gantt_task_content span.label-pri{display: none;}
 #ganttPris > span {display: inline-block; line-height: 20px; min-width: 20px; border-radius: 2px;}
 .gantt_task_line {background: #<?php echo $lang->execution->gantt->color[0]?>; border-color: #<?php echo $lang->execution->gantt->color[0]?>;}
 .gantt_task_progress {background: rgba(0,0,0,.1)}
@@ -50,15 +51,15 @@ form {display: block; margin-top: 0em; margin-block-end: 1em;}
 .gantt_task_link.start_to_finish:hover .gantt_line_wrapper div { box-shadow: 0 0 5px 0px #975000; }
 .gantt_task_link.start_to_finish .gantt_link_arrow_left { border-right-color: #975000; }
 .gantt_critical_task{background:#e63030 !important; border-color:#9d3a3a !important;}
-.weekend { background: #f4f7f4 !important; }
 .gantt_marker .gantt_marker_content {left: -15px; background-color: #f51e1e;}
+.gantt_row.task-item{cursor: pointer;}
 </style>
 <?php js::set('customUrl', $this->createLink('programplan', 'ajaxCustom'));?>
 <?php js::set('dateDetails', $dateDetails);?>
 <?php js::set('module', $app->rawModule);?>
 <?php js::set('method', $app->rawMethod);?>
 <div id='mainContent' class='main-content load-indicator' data-loading='<?php echo $lang->programplan->exporting;?>'>
-  <form class="main-form form-ajax">
+  <form class="main-form form-ajax not-watch">
     <div class="example">
       <?php echo html::commonButton($lang->programplan->full, 'id="fullScreenBtn"', 'btn btn-primary btn-sm')?>
       <?php if($app->rawModule == 'review' and $app->rawMethod == 'assess') unset($lang->programplan->stageCustom->date); ?>
@@ -402,18 +403,18 @@ $(function()
         }
     },
     {name: 'taskProgress', align: 'center', resize: true, width: 60},
-    {name: 'start_date',  align: 'center', resize: true, width: 80},
-    {name: 'endDate', align: 'center', width: 80}
+    {name: 'realBegan',  align: 'center', resize: true, width: 80},
+    {name: 'realEnd', align: 'center', width: 80}
     ];
 
     gantt.locale.labels.column_text         = "<?php echo $lang->programplan->name;?>";
-    gantt.locale.labels.column_status       = "<?php echo $lang->execution->status;?>";
+    gantt.locale.labels.column_status       = "<?php echo $lang->statusAB;?>";
     gantt.locale.labels.column_percent      = "<?php echo $lang->programplan->percentAB;?>";
     gantt.locale.labels.column_taskProgress = "<?php echo $lang->programplan->taskProgress;?>";
     gantt.locale.labels.column_begin        = "<?php echo $lang->programplan->begin;?>";
     gantt.locale.labels.column_deadline     = "<?php echo $lang->programplan->end;?>";
-    gantt.locale.labels.column_start_date   = "<?php echo $lang->programplan->realBegan;?>";
-    gantt.locale.labels.column_endDate      = "<?php echo $lang->programplan->realEnd;?>";
+    gantt.locale.labels.column_realBegan    = "<?php echo $lang->programplan->realBegan;?>";
+    gantt.locale.labels.column_realEnd      = "<?php echo $lang->programplan->realEnd;?>";
     gantt.locale.labels.column_duration     = "<?php echo $lang->programplan->duration;?>";
 
     if((module == 'review' && method == 'assess') || dateDetails) gantt.config.show_chart = false;
@@ -434,13 +435,9 @@ $(function()
         if(typeof task.owner_id == 'undefined') return;
         return getByIdForGantt(gantt.serverList('userList'), task.owner_id);
     };
-    gantt.templates.scale_cell_class = function(date)
+    gantt.templates.grid_row_class = function (start, end, task)
     {
-        if(date.getDay() == 0 || date.getDay() == 6) return 'weekend';
-    };
-    gantt.templates.timeline_cell_class = function(item, date)
-    {
-        if(date.getDay() == 0 || date.getDay() == 6) return 'weekend';
+        if(task.type == 'task') return 'task-item';
     };
     gantt.templates.link_class = function(link)
     {
@@ -563,6 +560,11 @@ $(function()
                 window.location.reload();
             }
         });
+    });
+
+    $('#ganttContainer').mouseleave(function()
+    {
+        setTimeout(function(){$('.gantt_tooltip').remove()}, 100);
     });
 });
 </script>
