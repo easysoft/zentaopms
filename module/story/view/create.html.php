@@ -90,12 +90,16 @@ foreach(explode(',', $config->story->create->requiredFields) as $field)
             </td>
             <td colspan="2" class="sourceTd <?php echo $hiddenSource?> sourceBox">
               <div class="input-group">
-                <div class="input-group">
-                  <div class="input-group-addon" style="min-width: 77px;"><?php echo $lang->story->source;?></div>
-                  <?php echo html::select('source', $lang->story->sourceList, $source, "class='form-control chosen'");?>
-                  <span class='input-group-addon' id='sourceNoteBox'><?php echo $lang->story->sourceNote;?></span>
-                  <?php $sourceNoteWidth = isonlybody() ? "style='width: 89px;'" : "style='width: 180px;'"?>
-                  <?php echo html::input('sourceNote', $sourceNote, "class='form-control' $sourceNoteWidth");?>
+                <div class="input-group" style='display: flex;'>
+                  <div class='source'>
+                    <div class="input-group-addon" style="min-width: 77px;"><?php echo $lang->story->source;?></div>
+                    <?php echo html::select('source', $lang->story->sourceList, $source, "class='form-control chosen'");?>
+                  </div>
+                  <div class='sourceNote'>
+                    <div class='input-group-addon' id='sourceNoteBox'><?php echo $lang->story->sourceNote;?></div>
+                    <?php $sourceNoteWidth = isonlybody() ? "style='width: 89px;'" : ""?>
+                    <?php echo html::input('sourceNote', $sourceNote, "class='form-control' $sourceNoteWidth");?>
+                  </div>
                 </div>
               </div>
             </td>
@@ -126,7 +130,7 @@ foreach(explode(',', $config->story->create->requiredFields) as $field)
             </td>
             <td colspan='<?php echo $type == 'story' ? 2 : 1;?>' id='assignedToBox' class='hidden'>
               <div class='input-group'>
-                <div class="input-group-addon"><?php echo $lang->story->assignedTo;?></div>
+                <div class="input-group-addon assignedTo"><?php echo $lang->story->assignedTo;?></div>
                 <?php echo html::select('assignedTo', $users, '', "class='form-control picker-select'");?>
               </div>
             </td>
