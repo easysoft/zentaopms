@@ -99,7 +99,7 @@ $(function()
             var id        = $(this).attr('id');
             var num       = id.substring(5);
             var moduleID  = $('#modules' + num).val();
-            var branchID  = $('#branches' + num).val();
+            var branchID  = typeof($('#branches' + num).val()) == 'undefined' ? 0 : $('#branches' + num).val();
             var storyID   = $("#story" + num).val();
             var storyLink = createLink('story', 'ajaxGetProductStories', 'productID=' + productID + '&branch=' + branchID + '&moduleID=' + moduleID + '&storyID=0&onlyOption=false&status=noclosed&limit=50&type=full&hasParent=1&executionID=0&number=' + num);
             $.get(storyLink, function(stories)

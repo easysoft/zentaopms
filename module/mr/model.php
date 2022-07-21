@@ -417,8 +417,15 @@ class mrModel extends model
         /* Sync MR in ZenTao database whatever status of MR in GitLab. */
         if(isset($rawMR->iid))
         {
-            $map         = $this->config->mr->maps->sync;
-            $gitlabUsers = $this->gitlab->getUserIdAccountPairs($MR->hostID);
+            $map = $this->config->mr->maps->sync;
+            if($rawMR->gitService == 'gitlab')
+            {
+                $gitUsers = $this->loadModel('gitlab')->getUserIdAccountPairs($MR->hostID);
+            }
+            elseif($rawMR->gitService == 'gitea')
+            {
+                $gitUsers = $this->loadModel('gitea')->getUserAccountIdPairs($MR->hostID, 'openID,account');
+            }
 
             $newMR = new stdclass;
             foreach($map as $syncField => $config)
@@ -426,16 +433,16 @@ class mrModel extends model
                 $value = '';
                 list($field, $optionType, $options) = explode('|', $config);
 
-                if($optionType == 'field')       $value = $rawMR->$field;
+                if($optionType == 'field') $value = $rawMR->$field;
                 if($optionType == 'userPairs')
                 {
-                    $gitlabUserID = '';
+                    $gitUserID = '';
                     if(isset($rawMR->$field))
                     {
                         $values = $rawMR->$field;
-                        if(isset($values[0])) $gitlabUserID = $values[0]->$options;
+                        if(isset($values[0])) $gitUserID = $values[0]->$options;
                     }
-                    $value = zget($gitlabUsers, $gitlabUserID, '');
+                    $value = zget($gitUsers, $gitUserID, '');
                 }
 
                 if($value) $newMR->$syncField = $value;
@@ -762,7 +769,7 @@ class mrModel extends model
         if($host->type == 'gitlab')
         {
             $url = sprintf($this->gitlab->getApiRoot($hostID), "/projects/$projectID/merge_requests/$MRID");
-            return json_decode(commonModel::http($url));
+            $MR  = json_decode(commonModel::http($url));
         }
         else
         {
@@ -778,17 +785,18 @@ class mrModel extends model
                 if($MR->merged) $MR->state = 'merged';
 
                 $MR->merge_status      = $MR->mergeable ? 'can_be_merged' : 'cannot_be_merged';
-                $MR->changes_count     = (int)$diff;
+                $MR->changes_count     = empty($diff) ? 0 : 1;
                 $MR->description       = $MR->body;
                 $MR->target_branch     = $MR->base->ref;
                 $MR->source_branch     = $MR->head->ref;
                 $MR->source_project_id = $projectID;
                 $MR->target_project_id = $projectID;
-                $MR->has_conflicts     = !(bool)$diff;
+                $MR->has_conflicts     = empty($diff) ? true : false;
             }
-
-            return $MR;
         }
+
+        $MR->gitService = $host->type;
+        return $MR;
     }
 
     /**
@@ -882,8 +890,14 @@ class mrModel extends model
         }
         else
         {
-            $url = sprintf($this->loadModel('gitea')->getApiRoot($hostID), "/repos/$projectID/pulls/$MRID");
-            return json_decode(commonModel::http($url, array('state' => 'closed'), array(), array(), 'json', 'PATCH'));
+            $rowMR = $this->apiGetSingleMR($hostID, $projectID, $MRID);
+            if($rowMR->state == 'opened')
+            {
+                $url = sprintf($this->loadModel('gitea')->getApiRoot($hostID), "/repos/$projectID/pulls/$MRID");
+                return json_decode(commonModel::http($url, array('state' => 'closed'), array(), array(), 'json', 'PATCH'));
+            }
+
+            return null;
         }
     }
 

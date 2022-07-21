@@ -186,6 +186,8 @@ class programplanModel extends model
             $data->percent    = $plan->percent;
             $data->attribute  = zget($this->lang->stage->typeList, $plan->attribute);
             $data->milestone  = zget($this->lang->programplan->milestoneList, $plan->milestone);
+            $data->owner_id   = $plan->PM;
+            $data->status     = $this->processStatus('execution', $plan);
             $data->begin      = $start;
             $data->deadline   = $end;
             $data->realBegan  = helper::isZeroDate($plan->realBegan) ? '' : substr($plan->realBegan, 0, 10);
@@ -204,7 +206,7 @@ class programplanModel extends model
             $stageIndex[$plan->id]    = array('planID' => $plan->id, 'parent' => $plan->parent, 'progress' => array('totalConsumed' => 0, 'totalReal' => 0));
         }
 
-        $taskSign = "<span>[ T ] </span>";
+        $taskSign = "<span class='task-label'>[ T ] </span>";
         $taskPri  = "<span class='label-pri label-pri-%s' title='%s'>%s</span> ";
 
         /* Judge whether to display tasks under the stage. */
@@ -231,8 +233,6 @@ class programplanModel extends model
             }
         }
 
-        $minStartDate  = '';
-        $maxDeadline   = '';
         foreach($tasks as $task)
         {
             $execution = zget($plans, $task->execution, array());
@@ -254,6 +254,8 @@ class programplanModel extends model
             $data->type         = 'task';
             $data->text         = $taskSign . $priIcon . $task->name;
             $data->percent      = '';
+            $data->status       = $this->processStatus('task', $task);
+            $data->owner_id     = $task->assignedTo;
             $data->attribute    = '';
             $data->milestone    = '';
             $data->begin        = $start;
@@ -274,25 +276,7 @@ class programplanModel extends model
             if($data->start_date) $data->start_date = date('d-m-Y', strtotime($data->start_date));
             if($data->start_date == '' or $data->endDate == '') $data->duration = 0;
 
-            if(strpos($selectCustom, 'task') !== false)
-            {
-                $datas['data'][$data->id] = $data;
-                if(isset($datas['data'][$task->execution]))
-                {
-                    $changed = false;
-                    if($start and strtotime($start) < strtotime($datas['data'][$task->execution]->start_date))
-                    {
-                        $changed = true;
-                        $datas['data'][$task->execution]->start_date = date('d-m-Y', strtotime($start));
-                    }
-                    if($end and $end > $datas['data'][$task->execution]->endDate)
-                    {
-                        $changed = true;
-                        $datas['data'][$task->execution]->endDate = $end;
-                    }
-                    if($changed) $datas['data'][$task->execution]->duration = helper::diffDate($datas['data'][$task->execution]->endDate, $datas['data'][$task->execution]->start_date) + 1;
-                }
-            }
+            if(strpos($selectCustom, 'task') !== false) $datas['data'][$data->id] = $data;
             foreach($stageIndex as $index => $stage)
             {
                 if($stage['planID'] == $task->execution)

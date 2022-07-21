@@ -40,6 +40,7 @@ class job extends control
     {
         $repos = $this->loadModel('repo')->getRepoPairs('devops');
         if(empty($repos)) $this->locate($this->repo->createLink('create'));
+        $repoID = $this->repo->saveState($repoID);
 
         /* Set session. */
         $this->loadModel('ci')->setMenu($repoID);

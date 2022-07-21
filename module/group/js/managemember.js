@@ -6,7 +6,7 @@ $(function()
         $(this).parents('tr').find('input[type=checkbox]').prop('checked', checked);
     });
 
-    $('#other,#group,#outside').selectable(
+    $('.table-members table tr').selectable(
     {
         selector: 'input',
         listenClick: false,

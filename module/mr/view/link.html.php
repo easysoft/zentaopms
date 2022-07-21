@@ -37,8 +37,8 @@
 <div id='mainContent' class='main-content'>
   <div class='tabs' id='tabsNav'>
     <ul class='nav nav-tabs'>
-      <li><?php echo html::a(inlink('view', "mr={$MR->id}"), $lang->mr->view);?></li>
-      <li><?php echo html::a(inlink('diff', "mr={$MR->id}"), $lang->mr->viewDiff);?></li>
+      <li><?php echo html::a(inlink('view', "MRID={$MR->id}"), $lang->mr->view);?></li>
+      <li><?php echo html::a(inlink('diff', "MRID={$MR->id}"), $lang->mr->viewDiff);?></li>
       <li class='<?php if($type == 'story') echo 'active'?>'><a href='#stories' data-toggle='tab'><?php echo  html::icon($lang->icons['story'], 'text-primary') . ' ' . $lang->productplan->linkedStories;?></a></li>
       <li class='<?php if($type == 'bug') echo 'active'?>'><a href='#bugs' data-toggle='tab'><?php echo  html::icon($lang->icons['bug'], 'text-red') . ' ' . $lang->productplan->linkedBugs;?></a></li>
       <li class='<?php if($type == 'task') echo 'active'?>'><a href='#tasks' data-toggle='tab'><?php echo  html::icon('todo', 'text-info') . ' ' . $lang->mr->linkedTasks;?></a></li>

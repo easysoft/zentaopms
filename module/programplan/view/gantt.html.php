@@ -19,12 +19,12 @@
 .gantt-fullscreen #mainMenu,
 .gantt-fullscreen #footer {display: none!important;}
 .gantt-fullscreen #mainContent {position: fixed; top: 0; right: 0; bottom: 0; left: 0}
-.gantt_task_content{display: none;}
 .checkbox-primary {margin-top: 0px; margin-left: 10px;}
 form {display: block; margin-top: 0em; margin-block-end: 1em;}
-.gantt_task_progress {background: rgba(0,0,0,.1)}
+.gantt_task_content span.task-label, .gantt_task_content span.label-pri{display: none;}
 #ganttPris > span {display: inline-block; line-height: 20px; min-width: 20px; border-radius: 2px;}
 .gantt_task_line {background: #<?php echo $lang->execution->gantt->color[0]?>; border-color: #<?php echo $lang->execution->gantt->color[0]?>;}
+.gantt_task_progress {background: rgba(0,0,0,.1)}
 .gantt_task_line.pri-1 {background: #<?php echo $lang->execution->gantt->color[1]?>; border-color: #<?php echo $lang->execution->gantt->color[1]?>}
 .gantt_task_line.pri-2 {background: #<?php echo $lang->execution->gantt->color[2]?>; border-color: #<?php echo $lang->execution->gantt->color[2]?>}
 .gantt_task_line.pri-3 {background: #<?php echo $lang->execution->gantt->color[3]?>; border-color: #<?php echo $lang->execution->gantt->color[3]?>}
@@ -50,14 +50,16 @@ form {display: block; margin-top: 0em; margin-block-end: 1em;}
 .gantt_task_link.start_to_finish .gantt_line_wrapper div { background-color: #975000; }
 .gantt_task_link.start_to_finish:hover .gantt_line_wrapper div { box-shadow: 0 0 5px 0px #975000; }
 .gantt_task_link.start_to_finish .gantt_link_arrow_left { border-right-color: #975000; }
+.gantt_critical_task{background:#e63030 !important; border-color:#9d3a3a !important;}
 .gantt_marker .gantt_marker_content {left: -15px; background-color: #f51e1e;}
+.gantt_row.task-item{cursor: pointer;}
 </style>
 <?php js::set('customUrl', $this->createLink('programplan', 'ajaxCustom'));?>
 <?php js::set('dateDetails', $dateDetails);?>
 <?php js::set('module', $app->rawModule);?>
 <?php js::set('method', $app->rawMethod);?>
 <div id='mainContent' class='main-content load-indicator' data-loading='<?php echo $lang->programplan->exporting;?>'>
-  <form class="main-form form-ajax">
+  <form class="main-form form-ajax not-watch">
     <div class="example">
       <?php echo html::commonButton($lang->programplan->full, 'id="fullScreenBtn"', 'btn btn-primary btn-sm')?>
       <?php if($app->rawModule == 'review' and $app->rawMethod == 'assess') unset($lang->programplan->stageCustom->date); ?>
@@ -82,6 +84,16 @@ form {display: block; margin-top: 0em; margin-block-end: 1em;}
 <script>
 var scriptLoadedMap   = {};
 var loadingPrefixText = '<?php echo $lang->programplan->exporting;?>';
+
+/**
+ * Get remote script for export.
+ *
+ * @param  string $url
+ * @param  function $sucessCallback
+ * @param  function $errorCallback
+ * @access public
+ * @return void
+ */
 function getRemoteScript(url, successCallback, errorCallback)
 {
     if(scriptLoadedMap[url]) return successCallback && successCallback();
@@ -94,16 +106,35 @@ function getRemoteScript(url, successCallback, errorCallback)
         if(errorCallback) errorCallback('Cannot load "' + url + '".');
     });
 }
+
+/**
+ * Update export progress.
+ *
+ * @param  int $progress
+ * @access public
+ * @return void
+ */
 function updateProgress(progress)
 {
     var progressText = loadingPrefixText;
     if(progress < 1) progressText += Math.floor(progress * 100) + '%';
     $('#mainContent').attr('data-loading', progressText);
 }
+
+/**
+ * Draw gantt to canvas.
+ *
+ * @param  string   $exportType
+ * @param  function $sucessCallback
+ * @param  function $errorCallback
+ * @access public
+ * @return void
+ */
 function drawGanttToCanvas(exportType, successCallback, errorCallback)
 {
     updateProgress(0);
-    exportType          = exportType || 'image';
+
+    exportType = exportType || 'image';
     var $ganttView      = $('#ganttView');
     var oldHeight       = $ganttView.css('height');
     var $ganttContainer = $('#ganttContainer');
@@ -208,6 +239,13 @@ function drawGanttToCanvas(exportType, successCallback, errorCallback)
     }, errorCallback);
 }
 
+/**
+ * Export gantt.
+ *
+ * @param  string $exportType
+ * @access public
+ * @return void
+ */
 function exportGantt(exportType)
 {
     var $mainContent = $('#mainContent');
@@ -228,38 +266,61 @@ function exportGantt(exportType)
     });
 }
 
+/**
+ * Get by id for gantt.
+ *
+ * @param  array  $list
+ * @param  string $id
+ * @access public
+ * @return string
+ */
 function getByIdForGantt(list, id)
 {
     for (var i = 0; i < list.length; i++)
     {
         if (list[i].key == id) return list[i].label || "";
     }
-    return "";
+    return id;
 }
 
+/**
+ * Zoom tasks.
+ *
+ * @param  node $node
+ * @access public
+ * @return void
+ */
 function zoomTasks(node)
 {
     switch(node.value)
     {
         case "day":
             gantt.config.min_column_width = 70;
-            gantt.config.scales = [{unit: 'day', step: 1, format: '%m-%d'}];
-            gantt.config.scale_height = 35;
+            gantt.config.scales = [{unit: "year", step: 1, format: "%Y"}, {unit: 'day', step: 1, format: '%m-%d'}];
+            gantt.config.scale_height = 22 * gantt.config.scales.length;
         break;
         case "week":
             gantt.config.min_column_width = 70;
-            gantt.config.scales = [{unit: 'week', step: 1, format: "<?php echo $lang->execution->gantt->zooming['week'];?> #%W"}, {unit:"day", step:1, date:"%D"}]
-            gantt.config.scale_height = 60;
+            gantt.config.scales = [{unit: "year", step: 1, format: "%Y"}, {unit: 'week', step: 1, format: "<?php echo $lang->execution->gantt->zooming['week'];?> #%W"}, {unit:"day", step:1, date:"%D"}]
+            gantt.config.scale_height = 22 * gantt.config.scales.length;
         break;
         case "month":
             gantt.config.min_column_width = 70;
-            gantt.config.scale_height = 60;
-            gantt.config.scales = [{unit: 'month', step: 1, format: '%M'}, {unit:"week", step:1, date:"<?php echo $lang->execution->gantt->zooming['week'];?> #%W"}];
+            gantt.config.scales = [{unit: "year", step: 1, format: "%Y"}, {unit: 'month', step: 1, format: '%M'}, {unit:"week", step:1, date:"<?php echo $lang->execution->gantt->zooming['week'];?> #%W"}];
+            gantt.config.scale_height = 22 * gantt.config.scales.length;
         break;
     }
+
     gantt.render();
+    $('.gantt_grid_head_cell .sort').addClass(node.value);
 }
 
+/**
+ * Update criticalPath
+ *
+ * @access public
+ * @return void
+ */
 function updateCriticalPath()
 {
     gantt.config.highlight_critical_path = !gantt.config.highlight_critical_path;
@@ -305,15 +366,34 @@ $(function()
     var ganttData = $.parseJSON(<?php echo json_encode(json_encode($plans));?>);
     if(!ganttData.data) ganttData.data = [];
 
+
+    <?php
+    $userList = array();
+    foreach($users as $account => $realname)
+    {
+        $user = array();
+        $user['key']   = $account;
+        $user['label'] = $realname;
+        $userList[]    = $user;
+    }
+    ?>
+    gantt.serverList("userList", <?php echo json_encode($userList);?>);
+
     gantt.config.readonly          = true;
+    gantt.config.smart_rendering   = true;
+    gantt.config.smart_scales      = true;
+    gantt.config.static_background = true;
+    gantt.config.show_task_cells   = false;
     gantt.config.row_height        = 25;
     gantt.config.min_column_width  = 40;
     gantt.config.details_on_create = false;
-    gantt.config.scales            = [{unit: 'day', step: 1, format: '%m-%d'}];
+    gantt.config.scales            = [{unit: "year", step: 1, format: "%Y"}, {unit: 'day', step: 1, format: '%m-%d'}];
+    gantt.config.scale_height      = 22 * gantt.config.scales.length;
     gantt.config.duration_unit     = "day";
 
     gantt.config.columns = [
     {name: 'text',     width: '*', tree: true, resize: true, width:200},
+    {name: 'status',   align: 'center', resize: true, width: 80},
     {name: 'begin',    align: 'center', resize: true, width: 80},
     {name: 'deadline', align: 'center', resize: true, width: 80},
     {name: 'duration', align: 'center', resize: true, width: 60},
@@ -323,23 +403,21 @@ $(function()
         }
     },
     {name: 'taskProgress', align: 'center', resize: true, width: 60},
-    {name: 'start_date',  align: 'center', resize: true, width: 80},
-    {name: 'endDate', align: 'center', width: 80}
+    {name: 'realBegan',  align: 'center', resize: true, width: 80},
+    {name: 'realEnd', align: 'center', width: 80}
     ];
 
     gantt.locale.labels.column_text         = "<?php echo $lang->programplan->name;?>";
+    gantt.locale.labels.column_status       = "<?php echo $lang->statusAB;?>";
     gantt.locale.labels.column_percent      = "<?php echo $lang->programplan->percentAB;?>";
     gantt.locale.labels.column_taskProgress = "<?php echo $lang->programplan->taskProgress;?>";
     gantt.locale.labels.column_begin        = "<?php echo $lang->programplan->begin;?>";
     gantt.locale.labels.column_deadline     = "<?php echo $lang->programplan->end;?>";
-    gantt.locale.labels.column_start_date   = "<?php echo $lang->programplan->realBegan;?>";
-    gantt.locale.labels.column_endDate      = "<?php echo $lang->programplan->realEnd;?>";
+    gantt.locale.labels.column_realBegan    = "<?php echo $lang->programplan->realBegan;?>";
+    gantt.locale.labels.column_realEnd      = "<?php echo $lang->programplan->realEnd;?>";
     gantt.locale.labels.column_duration     = "<?php echo $lang->programplan->duration;?>";
 
-    if((module == 'review' && method == 'assess') || dateDetails)
-    {
-        gantt.config.show_chart = false;
-    }
+    if((module == 'review' && method == 'assess') || dateDetails) gantt.config.show_chart = false;
 
     var date2Str  = gantt.date.date_to_str(gantt.config.task_date);
     var today     = new Date();
@@ -351,12 +429,16 @@ $(function()
         title: todayTips + ": " + date2Str(today)
     });
 
-    gantt.templates.task_class       = function(start, end, task){return 'pri-' + (task.pri || 0);};
-    gantt.templates.scale_cell_class = function(date)
+    gantt.templates.task_class     = function(start, end, task){return 'pri-' + (task.pri || 0);};
+    gantt.templates.rightside_text = function(start, end, task)
     {
-        if(date.getDay() == 0 || date.getDay() == 6) return 'weekend';
+        if(typeof task.owner_id == 'undefined') return;
+        return getByIdForGantt(gantt.serverList('userList'), task.owner_id);
     };
-
+    gantt.templates.grid_row_class = function (start, end, task)
+    {
+        if(task.type == 'task') return 'task-item';
+    };
     gantt.templates.link_class = function(link)
     {
         var types = gantt.config.links;
@@ -365,10 +447,9 @@ $(function()
         if(link.type == types.finish_to_finish) return 'finish_to_finish';
         if(link.type == types.start_to_finish)  return 'start_to_finish';
     };
-
-    gantt.templates.timeline_cell_class = function(item, date)
+    gantt.templates.tooltip_text = function (start, end, task)
     {
-        if(date.getDay() == 0 || date.getDay() == 6) return 'weekend';
+        return task.text;
     };
 
     gantt.attachEvent('onTemplatesReady', function()
@@ -382,7 +463,6 @@ $(function()
             }
             gantt.expand();
         });
-
     });
 
     var isGanttExpand    = false;
@@ -413,6 +493,7 @@ $(function()
         isGanttExpand = true;
         return true;
     });
+
     if(document.addEventListener)
     {
         document.addEventListener('webkitfullscreenchange', delayHandleFullscreen, false);
@@ -479,6 +560,11 @@ $(function()
                 window.location.reload();
             }
         });
+    });
+
+    $('#ganttContainer').mouseleave(function()
+    {
+        setTimeout(function(){$('.gantt_tooltip').remove()}, 100);
     });
 });
 </script>

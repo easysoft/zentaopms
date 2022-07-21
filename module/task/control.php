@@ -2083,7 +2083,11 @@ class task extends control
 
             /* Get related objects id lists. */
             $relatedStoryIdList  = array();
-            foreach($tasks as $task) $relatedStoryIdList[$task->story] = $task->story;
+            foreach($tasks as $task)
+            {
+                $relatedStoryIdList[$task->story] = $task->story;
+                $relatedBugIdList[$task->fromBug] = $task->fromBug;
+            }
 
             /* Get team for multiple task. */
             $taskTeam = $this->dao->select('*')->from(TABLE_TEAM)
@@ -2190,6 +2194,7 @@ class task extends control
                 }
             }
 
+            $bugs = $this->loadModel('bug')->getByList($relatedBugIdList);
             foreach($tasks as $task)
             {
                 if($this->post->fileType == 'csv')
@@ -2202,6 +2207,8 @@ class task extends control
 
                 /* fill some field with useful value. */
                 $task->story = isset($relatedStories[$task->story]) ? $relatedStories[$task->story] . "(#$task->story)" : '';
+
+                $task->fromBug = empty($task->fromBug) ? '' : "#$task->fromBug " . $bugs[$task->fromBug]->title;
 
                 if(isset($executions[$task->execution]))              $task->execution    = $executions[$task->execution] . "(#$task->execution)";
                 if(isset($taskLang->typeList[$task->type]))           $task->type         = $taskLang->typeList[$task->type];

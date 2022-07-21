@@ -40,6 +40,7 @@
 .hide-sidebar .ke-edit {padding-right: 20px;}
 .hide-sidebar .CodeMirror {padding-right: 50px;}
 .CodeMirror.CodeMirror-wrap {border-left: 0; border-right: 0; border-bottom: 0;}
+.ke-statusbar {display: none;}
 
 #sidebar {top: 30px;}
 #sidebar .sidebar-toggle {right: 0; left: 0px; background: #efefef; border-radius: 0px; width: 20px; border-top: 1px solid rgb(220, 220, 220);}
@@ -49,7 +50,7 @@
 #sidebar table th {font-weight: 400 !important;}
 .hide-sidebar #sidebar > .sidebar-toggle > .icon:before {content: "\e314";}
 .hide-sidebar #sidebar > .sidebar-toggle {left: -20px; z-index: 9;}
-#sidebar .cell {border-top: 1px solid rgb(220, 220, 220); border-radius: 0px;}
+#sidebar .cell {border-top: 1px solid rgb(220, 220, 220); border-radius: 0px; height: 100%;}
 #sidebar > .sidebar-toggle > .icon.icon-angle-right {left: 4px;}
 .file-title {max-width: 130px !important;}
 
@@ -152,7 +153,7 @@ $(function()
 
     $('#dataform').submit(function()
     {
-        setTimeout(function(){$('#dataform').scrollTop(0)}, 100);
+        setTimeout(function(){$('#dataform').scrollTop(0)}, 300);
     });
 
     var contentHeight = $(document).height() - 120;

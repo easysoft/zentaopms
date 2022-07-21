@@ -319,15 +319,9 @@ class projectModel extends model
             ->groupBy('t2.project')
             ->fetchPairs();
 
-        $this->loadModel('product');
-        foreach($projectIdList as $projectID)
-        {
-            $productIdList = $this->product->getProductIDByProject($projectID, false);
-
-            $allStories[$projectID]  = $this->getTotalStoriesByProject($projectID, $productIdList, 'story');
-            $doneStories[$projectID] = $this->getTotalStoriesByProject($projectID, $productIdList, 'story', 'closed');
-            $leftStories[$projectID] = $this->getTotalStoriesByProject($projectID, $productIdList, 'story', 'active');
-        }
+        $allStories  = $this->getTotalStoriesByProject($projectIdList, 'story');
+        $doneStories = $this->getTotalStoriesByProject($projectIdList, 'story', 'closed');
+        $leftStories = $this->getTotalStoriesByProject($projectIdList, 'story', 'active');
 
         $leftBugs = $this->getTotalBugByProject($projectIdList, 'active');
         $allBugs  = $this->getTotalBugByProject($projectIdList, 'all');
@@ -349,9 +343,9 @@ class projectModel extends model
             $project->leftBugs      = isset($leftBugs[$projectID])  ? $leftBugs[$projectID]  : 0;
             $project->allBugs       = isset($allBugs[$projectID])   ? $allBugs[$projectID]   : 0;
             $project->doneBugs      = isset($doneBugs[$projectID])  ? $doneBugs[$projectID]  : 0;
-            $project->allStories    = $allStories[$projectID];
-            $project->doneStories   = $doneStories[$projectID];
-            $project->leftStories   = $leftStories[$projectID];
+            $project->allStories    = isset($allStories[$projectID]) ? $allStories[$projectID] : 0;
+            $project->doneStories   = isset($doneStories[$projectID]) ? $doneStories[$projectID] : 0;
+            $project->leftStories   = isset($leftStories[$projectID]) ? $leftStories[$projectID] : 0;
             $project->leftTasks     = isset($leftTasks[$projectID])     ? $leftTasks[$projectID] : 0;
             $project->allTasks      = isset($allTasks[$projectID])      ? $allTasks[$projectID]  : 0;
             $project->waitTasks     = isset($waitTasks[$projectID])     ? $waitTasks[$projectID] : 0;
@@ -369,25 +363,24 @@ class projectModel extends model
     /**
      * Get the number of stories associated with the project.
      *
-     * @param  int     $projectID
-     * @param  array   $productIdList
-     * @param  string  $type          story|requirement
-     * @param  string  $status        all|closed|active
+     * @param  array   $projectIdList
+     * @param  string  $type   story|requirement
+     * @param  string  $status all|closed|active
      * @access public
      * @return int
      */
-    public function getTotalStoriesByProject($projectID = 0, $productIdList = array(), $type = 'story', $status = 'all')
+    public function getTotalStoriesByProject($projectIdList = 0, $type = 'story', $status = 'all')
     {
-        return $this->dao->select('count(t2.id) as stories')->from(TABLE_PROJECTSTORY)->alias('t1')
+        return $this->dao->select('t1.project, count(t2.id) as stories')->from(TABLE_PROJECTSTORY)->alias('t1')
             ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story=t2.id')
-            ->where('t1.project')->eq($projectID)
+            ->where('t1.project')->in($projectIdList)
             ->andWhere('t2.type')->eq($type)
-            ->andWhere('t2.product')->in($productIdList)
             ->beginIF($status == 'active')->andWhere('t2.status')->in('active,changed')->fi()
             ->beginIF($status == 'closed')->andWhere('t2.status')->eq('closed')->fi()
             ->beginIF($status == 'closed')->andWhere('t2.closedReason')->eq('done')->fi()
             ->andWhere('deleted')->eq('0')
-            ->fetch('stories');
+            ->groupBy('project')
+            ->fetchPairs();
     }
 
     /**
@@ -1183,8 +1176,8 @@ class projectModel extends model
         $this->dao->insert(TABLE_PROJECT)->data($project)
             ->autoCheck()
             ->batchcheck($requiredFields, 'notempty')
-            ->checkIF(!empty($project->name), 'name', 'unique', "`type`='project' and `parent` = $project->parent and `model` = '{$project->model}'")
-            ->checkIF(!empty($project->code), 'code', 'unique', "`type`='project' and `model` = '{$project->model}'")
+            ->checkIF(!empty($project->name), 'name', 'unique', "`type`='project' and `parent` = $project->parent and `model` = '{$project->model}' and `deleted` = '0'")
+            ->checkIF(!empty($project->code), 'code', 'unique', "`type`='project' and `model` = '{$project->model}' and `deleted` = '0'")
             ->checkIF($project->end != '', 'end', 'gt', $project->begin)
             ->checkFlow()
             ->exec();
@@ -1431,8 +1424,8 @@ class projectModel extends model
             ->checkIF($project->begin != '', 'begin', 'date')
             ->checkIF($project->end != '', 'end', 'date')
             ->checkIF($project->end != '', 'end', 'gt', $project->begin)
-            ->checkIF(!empty($project->name), 'name', 'unique', "id != $projectID and `type` = 'project' and `parent` = $project->parent and `model` = '{$project->model}'")
-            ->checkIF(!empty($project->code), 'code', 'unique', "id != $projectID and `type` = 'project' and `model` = '{$project->model}'")
+            ->checkIF(!empty($project->name), 'name', 'unique', "id != $projectID and `type` = 'project' and `parent` = $project->parent and `model` = '{$project->model}' and `deleted` = '0'")
+            ->checkIF(!empty($project->code), 'code', 'unique', "id != $projectID and `type` = 'project' and `model` = '{$project->model}' and `deleted` = '0'")
             ->checkFlow()
             ->where('id')->eq($projectID)
             ->exec();
@@ -1533,7 +1526,7 @@ class projectModel extends model
             $projects[$projectID]->model          = $oldProjects[$projectID]->model;
             $projects[$projectID]->PM             = $data->PMs[$projectID];
             $projects[$projectID]->begin          = $data->begins[$projectID];
-            $projects[$projectID]->end            = isset($data->ends[$projectID]) ? $data->ends[$projectID] : LONG_TIME;
+            $projects[$projectID]->end            = $data->ends[$projectID] != $this->lang->project->longTime ? $data->ends[$projectID] : LONG_TIME;
             $projects[$projectID]->days           = $data->dayses[$projectID];
             $projects[$projectID]->acl            = $data->acls[$projectID];
             $projects[$projectID]->lastEditedBy   = $this->app->user->account;
@@ -2758,8 +2751,8 @@ class projectModel extends model
         $menu .= $this->buildFlowMenu('project', $project, 'view', 'direct');
         $menu .= "<div class='divider'></div>";
 
-        $menu .= $this->buildMenu('project', 'edit',   "project=$project->id&from=view", $project, 'button', 'edit', '',           '', '', '', $this->lang->edit);
-        $menu .= $this->buildMenu('project', 'delete', "project=$project->id",           $project, 'button', 'trash', 'hiddenwin', '', '', '', $this->lang->delete);
+        $menu .= $this->buildMenu('project', 'edit',   "project=$project->id&from=view",            $project, 'button', 'edit', '',           '', '', '', $this->lang->edit);
+        $menu .= $this->buildMenu('project', 'delete', "project=$project->id&confirm=no&from=view", $project, 'button', 'trash', 'hiddenwin', '', '', '', $this->lang->delete);
 
         return $menu;
     }

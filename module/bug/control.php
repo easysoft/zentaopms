@@ -1147,6 +1147,7 @@ class bug extends control
             $assignedToList = array_filter($assignedToList);
             if(empty($assignedToList)) $assignedToList = $this->user->getPairs('devfirst|noclosed');
         }
+        if($bug->status == 'closed') $assignedToList['closed'] = 'Closed';
 
         $this->view->bug              = $bug;
         $this->view->productID        = $productID;
