@@ -35,7 +35,7 @@
     <table id='jobList' class='table has-sort-head table-fixed'>
       <thead>
         <tr class='text-left'>
-          <?php $vars = "orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}";?>
+          <?php $vars = "repoID=$repoID&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}";?>
           <th class='c-id text-center'><?php common::printOrderLink('id', $orderBy, $vars, $lang->job->id);?></th>
           <th><?php common::printOrderLink('name', $orderBy, $vars, $lang->job->name);?></th>
           <th class='c-repo'><?php common::printOrderLink('repo', $orderBy, $vars, $lang->job->repo);?></th>

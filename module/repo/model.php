@@ -206,10 +206,10 @@ class repoModel extends model
             ->join('product', ',')
             ->get();
 
-        if($this->post->SCM == 'Gitlab')
+        if(in_array(strtolower($this->post->SCM), $this->config->repo->gitServiceList))
         {
             $repo = $this->dao->select('id')->from(TABLE_REPO)
-                ->where('SCM')->eq('Gitlab')
+                ->where('SCM')->eq($this->post->SCM)
                 ->andWhere('client')->eq($data->client)
                 ->andWhere('path')->eq($data->path)
                 ->fetch();
@@ -304,10 +304,10 @@ class repoModel extends model
             $data->prefix = '';
         }
 
-        if($this->post->SCM == 'Gitlab')
+        if(in_array(strtolower($this->post->SCM), $this->config->repo->gitServiceList))
         {
             $repo = $this->dao->select('id')->from(TABLE_REPO)
-                ->where('SCM')->eq('Gitlab')
+                ->where('SCM')->eq($this->post->SCM)
                 ->andWhere('client')->eq($data->client)
                 ->andWhere('path')->eq($data->path)
                 ->andWhere('id')->ne($id)
