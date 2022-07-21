@@ -23,9 +23,8 @@ $(function()
         return false;
     });
 
-    var executionID = $('#execution').val();
+    if(executionType != 'kanban') executionID = $('#execution').val();
     loadStories(executionID);
-
 })
 
 /**
