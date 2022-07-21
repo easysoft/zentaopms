@@ -21,7 +21,7 @@ $typeInfo = $type == 'file' ? '&type=file' : '';
   <div class='btn-toolbar pull-left'>
     <?php if(!isonlybody()):?>
     <?php $browseLink = $app->session->revisionList != false ? $app->session->revisionList : $this->repo->createLink('browse', "repoID={$repoID}&branchID=" . helper::safe64Encode(base64_encode($branchID)) . "&objectID=$objectID{$preDir}");?>
-    <?php echo html::a($browseLink, "<i class='icon icon-back'></i> " . $lang->goback, '', "class='btn btn-link'");?>
+    <?php echo html::a($browseLink, "<i class='icon icon-back'></i> " . $lang->goback, '', "class='btn btn-link back-btn'");?>
     <div class="divider"></div>
     <?php endif;?>
     <div class="page-title">
@@ -42,8 +42,8 @@ $typeInfo = $type == 'file' ? '&type=file' : '';
           <table class='table no-margin'>
             <?php foreach($changes as $path => $change):?>
             <tr>
-              <td><?php echo "<span class='label label-info label-badge'>" . $change['action'] . '</span> ' . $path?></td>
-              <td class='w-80px text-center'><?php echo zget($change, 'view', '') . zget($change, 'diff', '')?></td>
+              <td><?php echo "<span class='label label-info label-badge'>" . $change['action'] . '</span> ' . $path;?></td>
+              <td class='w-80px text-center'><?php echo zget($change, 'view', '') . zget($change, 'diff', '');?></td>
             </tr>
             <?php endforeach;?>
           </table>
@@ -54,30 +54,30 @@ $typeInfo = $type == 'file' ? '&type=file' : '';
   <div class='side-col col-4'>
     <div class='cell'>
       <div class='detail'>
-        <div class='detail-title'><?php echo $lang->repo->info?></div>
+        <div class='detail-title'><?php echo $lang->repo->info;?></div>
         <div class='detail-content'>
           <table class='table table-data'>
             <tr>
-              <th class='w-80px'><?php echo $lang->repo->committer?></th>
-              <td><?php echo $log->committer?></td>
+              <th class='w-80px'><?php echo $lang->repo->committer;?></th>
+              <td><?php echo $log->committer;?></td>
             </tr>
             <tr>
-              <th><?php echo $lang->repo->revisionA?></th>
-              <td><?php echo $log->revision?></td>
+              <th><?php echo $lang->repo->revisionA;?></th>
+              <td><?php echo substr($log->revision, 0, 10);?></td>
             </tr>
             <?php if($repo->SCM != 'Subversion'):?>
             <tr>
-              <th><?php echo $lang->repo->commit?></th>
-              <td><?php echo $log->commit?></td>
+              <th><?php echo $lang->repo->commit;?></th>
+              <td><?php echo $log->commit;?></td>
             </tr>
             <?php endif;?>
             <tr>
-              <th><?php echo $lang->repo->comment?></th>
-              <td><?php echo $log->comment?></td>
+              <th><?php echo $lang->repo->comment;?></th>
+              <td><?php echo $log->comment;?></td>
             </tr>
             <tr>
-              <th><?php echo $lang->repo->time?></th>
-              <td><?php echo $log->time?></td>
+              <th><?php echo $lang->repo->time;?></th>
+              <td><?php echo $log->time;?></td>
             </tr>
           </table>
         </div>
@@ -87,8 +87,8 @@ $typeInfo = $type == 'file' ? '&type=file' : '';
 </div>
 <div id="mainActions" class='main-actions'>
   <nav class="container">
-    <?php if(!empty($preAndNext->pre))  echo html::a($this->repo->createLink('revision', "repoID=$repoID&objectID=$objectID&revision={$preAndNext->pre}" . $pathInfo . $typeInfo, 'html'), "<i class='icon-pre icon-chevron-left'></i>", '', "data-app='{$app->tab}' id='prevPage' class='btn btn-info' title='{$preAndNext->pre}'")?>
-    <?php if(!empty($preAndNext->next)) echo html::a($this->repo->createLink('revision', "repoID=$repoID&objectID=$objectID&revision={$preAndNext->next}" . $pathInfo . $typeInfo, 'html'), "<i class='icon-pre icon-chevron-right'></i>", '', "data-app='{$app->tab}' id='nextPage' class='btn btn-info' title='{$preAndNext->next}'")?>
+    <?php if(!empty($preAndNext->pre))  echo html::a($this->repo->createLink('revision', "repoID=$repoID&objectID=$objectID&revision={$preAndNext->pre}" . $pathInfo . $typeInfo, 'html'), "<i class='icon-pre icon-chevron-left'></i>", '', "data-app='{$app->tab}' id='prevPage' class='btn btn-info' title='{$preAndNext->pre}'");?>
+    <?php if(!empty($preAndNext->next)) echo html::a($this->repo->createLink('revision', "repoID=$repoID&objectID=$objectID&revision={$preAndNext->next}" . $pathInfo . $typeInfo, 'html'), "<i class='icon-pre icon-chevron-right'></i>", '', "data-app='{$app->tab}' id='nextPage' class='btn btn-info' title='{$preAndNext->next}'");?>
   </nav>
 </div>
 <?php include '../../common/view/footer.html.php';?>
