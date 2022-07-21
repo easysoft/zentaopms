@@ -1835,16 +1835,17 @@ class project extends control
      * Delete a project.
      *
      * @param  int     $projectID
-     * @param  string  $from
+     * @param  string  $confirm
+     * @param  string  $from browse|view
      * @access public
      * @return void
      */
-    public function delete($projectID, $confirm = 'no')
+    public function delete($projectID, $confirm = 'no', $from = 'browse')
     {
         if($confirm == 'no')
         {
             $project = $this->project->getByID($projectID);
-            return print(js::confirm(sprintf($this->lang->project->confirmDelete, $project->name), $this->createLink('project', 'delete', "projectID=$projectID&confirm=yes")));
+            return print(js::confirm(sprintf($this->lang->project->confirmDelete, $project->name), $this->createLink('project', 'delete', "projectID=$projectID&confirm=yes&from=$from")));
         }
         else
         {
@@ -1864,6 +1865,7 @@ class project extends control
             if(empty($executionIdList))
             {
                 if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess));
+                if($from == 'view') return print(js::locate($this->createLink('project', 'browse'), 'parent'));
                 return print(js::reload('parent'));
             }
 
@@ -1874,6 +1876,7 @@ class project extends control
             if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess));
 
             $this->session->set('project', '');
+            if($from == 'view') return print(js::locate($this->createLink('project', 'browse'), 'parent'));
             return print(js::reload('parent'));
         }
     }
