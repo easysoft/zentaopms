@@ -1219,9 +1219,9 @@ class actionModel extends model
         $relatedProjects = $relatedData['relatedProjects'];
         $requirements    = $relatedData['requirements'];
 
-        $aclViews = isset($this->app->user->rights['acls']['views']) ? $this->app->user->rights['acls']['views'] : array();
-        $authedProjects   = (empty($aclViews) or (!empty($aclViews) and !empty($aclViews['project'])))   ? ',' . $this->app->user->view->projects . ',' :array();
-        $authedExecutions = (empty($aclViews) or (!empty($aclViews) and !empty($aclViews['execution']))) ? ',' . $this->app->user->view->sprints . ',' : array();
+        $aclViews         = isset($this->app->user->rights['acls']['views']) ? $this->app->user->rights['acls']['views'] : array();
+        $authedProjects   = (empty($aclViews) or (!empty($aclViews) and !empty($aclViews['project'])))   ? ",{$this->app->user->view->projects}," : array();
+        $authedExecutions = (empty($aclViews) or (!empty($aclViews) and !empty($aclViews['execution']))) ? ",{$this->app->user->view->sprints},": array();
 
         foreach($actions as $i => $action)
         {
