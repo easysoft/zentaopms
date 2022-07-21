@@ -26,7 +26,7 @@
           <th class='c-id'><?php echo $lang->idAB;?></th>
           <th class='c-parent'><?php echo $lang->project->parent;?></th>
           <th class='c-name required'><?php echo $lang->project->name;?></th>
-          <?php if(!isset($config->setCode) and $config->setCode == 1):?>
+          <?php if(!isset($config->setCode) or $config->setCode == 1):?>
           <th class='c-name required'><?php echo $lang->project->code;?></th>
           <?php endif?>
           <th class="c-user-box <?php echo strpos($requiredFields, 'PM') !== false ?  'required' : '';?>"> <?php echo $lang->project->PM;?></th>
@@ -53,7 +53,7 @@
           <td><?php echo html::select("parents[$projectID]", $programs, $project->parent, "class='form-control chosen' data-id='$projectID' data-name='{$project->name}' data-parent='{$project->parent}'");?></td>
           <?php endif;?>
           <td title='<?php echo $project->name;?>'><?php echo html::input("names[$projectID]", $project->name, "class='form-control'");?></td>
-          <?php if(!isset($config->setCode) and $config->setCode == 1):?>
+          <?php if(!isset($config->setCode) or $config->setCode == 1):?>
           <td title='<?php echo $project->code;?>'><?php echo html::input("codes[$projectID]", $project->code, "class='form-control'");?></td>
           <?php endif;?>
           <td><?php echo html::select("PMs[$projectID]", $PMUsers, $project->PM, "class='form-control chosen'");?></td>
