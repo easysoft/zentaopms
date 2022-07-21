@@ -271,13 +271,14 @@ class mailModel extends model
      * @param  array   $ccList
      * @param  bool    $includeMe
      * @param  array   $emails
+     * @param  bool    $forceSync
      * @access public
      * @return void
      */
-    public function send($toList, $subject, $body = '', $ccList = '', $includeMe = false, $emails = array())
+    public function send($toList, $subject, $body = '', $ccList = '', $includeMe = false, $emails = array(), $forceSync = false)
     {
         if(!$this->config->mail->turnon) return;
-        if(!empty($this->config->mail->async)) return $this->addQueue($toList, $subject, $body, $ccList, $includeMe);
+        if(!empty($this->config->mail->async) and !$forceSync) return $this->addQueue($toList, $subject, $body, $ccList, $includeMe);
 
         ob_start();
 
