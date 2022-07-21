@@ -83,6 +83,7 @@ $(function()
 
     $(document).on('change', "select[id^='branch']", disableSelectedBranch);
 
+    /* Select copy type eq part. */
     $("#copypart").click(function() 
     {
         $("#copypart .icon-check").removeClass('change-gray');
@@ -99,6 +100,7 @@ $(function()
         $("#copytype").val(1);
     });
 
+    /* Select copy type eq all. */
     $("#copyall").click(function() 
     {
         $("#copyall .icon-check").removeClass('change-gray');
@@ -115,6 +117,7 @@ $(function()
         $("#copytype").val(2);
     });
 
+    /* Copy project next step. */
     $("#copyTypeConfirm").click(function() 
     {
         var copytype = $("#copytype").val();
@@ -126,9 +129,7 @@ $(function()
         {
             location.href = createLink('project', 'copyproject', 'model=' + model + '&programID=' + programID + '&copyProjectID=' + $("#copyProjectID").val() + '&extra=copytype=' + copytype);
         }
-    });
-
-    
+    });  
 });
 
 /**

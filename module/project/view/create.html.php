@@ -245,7 +245,6 @@
     </div>
   </div>
 </div>
-
 <div class='modal fade modal-scroll-inside' id='copyProjectConfirmModal'>
   <div class='modal-dialog mw-900px' style="height: 360px">
     <div class='modal-header'>
