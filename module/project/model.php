@@ -2751,8 +2751,8 @@ class projectModel extends model
         $menu .= $this->buildFlowMenu('project', $project, 'view', 'direct');
         $menu .= "<div class='divider'></div>";
 
-        $menu .= $this->buildMenu('project', 'edit',   "project=$project->id&from=view", $project, 'button', 'edit', '',           '', '', '', $this->lang->edit);
-        $menu .= $this->buildMenu('project', 'delete', "project=$project->id",           $project, 'button', 'trash', 'hiddenwin', '', '', '', $this->lang->delete);
+        $menu .= $this->buildMenu('project', 'edit',   "project=$project->id&from=view",            $project, 'button', 'edit', '',           '', '', '', $this->lang->edit);
+        $menu .= $this->buildMenu('project', 'delete', "project=$project->id&confirm=no&from=view", $project, 'button', 'trash', 'hiddenwin', '', '', '', $this->lang->delete);
 
         return $menu;
     }
