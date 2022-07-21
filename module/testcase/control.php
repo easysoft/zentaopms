@@ -910,13 +910,20 @@ class testcase extends control
                 $branchTagOption[$case->branch] = $case->branch == BRANCH_MAIN ? $caseBranch : ($caseBranch->name . ($caseBranch->status == 'closed' ? ' (' . $this->lang->branch->statusList['closed'] . ')' : ''));
             }
 
+            $moduleIdList = $case->module;
+            if($case->module)
+            {
+                $moduleIdList = $this->loadModel->tree->getStoryModule($case->module);
+                $moduleIdList = $this->tree->getAllChildID($case->module);
+            }
+
             $this->view->productID        = $productID;
             $this->view->product          = $product;
             $this->view->products         = $this->products;
             $this->view->branchTagOption  = $branchTagOption;
             $this->view->productName      = $this->products[$productID];
             $this->view->moduleOptionMenu = $moduleOptionMenu;
-            $this->view->stories          = $this->story->getProductStoryPairs($productID, $case->branch, 0, 'all','id_desc', 0, 'full', 'story', false);
+            $this->view->stories          = $this->story->getProductStoryPairs($productID, $case->branch, $moduleIdList, 'all','id_desc', 0, 'full', 'story', false);
         }
         $forceNotReview = $this->testcase->forceNotReview();
         if($forceNotReview) unset($this->lang->testcase->statusList['wait']);
