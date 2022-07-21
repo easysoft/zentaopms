@@ -182,13 +182,22 @@ class action extends control
 
             if($repeatObject)
             {
-                $result      = preg_match('/_(\d+)$/', $repeatObject->name, $nameMatches);
-                $replaceName = $result ? preg_replace('/_(\d+)$/', '_' . ($nameMatches[1] + 1), $repeatObject->name) : $repeatObject->name . '_1';
-                $result      = preg_match('/_(\d+)$/', $repeatObject->code, $codeMatches);
-                $replaceCode = $result ? preg_replace('/_(\d+)$/', '_' . ($codeMatches[1] + 1), $repeatObject->code) : $repeatObject->code . '_1';
-
                 $table  = $oldAction->objectType == 'product' ? TABLE_PRODUCT : TABLE_PROJECT;
                 $object = $oldAction->objectType == 'product' ? $product : $project;
+
+                for($i = 1; $i < 1000; $i ++)
+                {
+                    $replaceName = $repeatObject->name . '_' . $i;
+                    $existName   = $this->dao->select('*')->from($table)->where('name')->eq($replaceName)->fetch();
+                    if(!$existName) break;
+                }
+                for($i = 1; $i < 1000; $i ++)
+                {
+                    $replaceCode = $repeatObject->code . '_' . $i;
+                    $existCode   = $this->dao->select('*')->from($table)->where('code')->eq($replaceCode)->fetch();
+                    if(!$existCode) break;
+                }
+
                 if($repeatObject->name == $object->name and $repeatObject->code and $repeatObject->code == $object->code)
                 {
                     if($confirmChange == 'no') return print(js::confirm(sprintf($this->lang->action->repeatChange, $this->lang->{$oldAction->objectType}->common, $replaceName, $replaceCode), $this->createLink('action', 'undelete', "action={$actionID}&browseType={$browseType}&confirmChange=yes")));
