@@ -1097,7 +1097,8 @@ class actionModel extends model
             foreach($this->app->user->rights['acls']['actions'] as $moduleName => $actions)
             {
                 if(isset($this->lang->mainNav->$moduleName) and !empty($this->app->user->rights['acls']['views']) and !isset($this->app->user->rights['acls']['views'][$moduleName])) continue;
-                $actionCondition .= "(" . ( $moduleName == 'program' ? "`objectID` in ({$this->app->user->view->programs}) and " : '') . "`objectType` = '$moduleName' and `action` " . helper::dbIN($actions) . ") or ";
+                $canViewPrograms  = $moduleName == 'program' ? "`objectID` in ({$this->app->user->view->programs}) and " : '';
+                $actionCondition .= "($canViewPrograms `objectType` = '$moduleName' and `action` " . helper::dbIN($actions) . ") or ";
             }
             $actionCondition = trim($actionCondition, 'or ');
         }
