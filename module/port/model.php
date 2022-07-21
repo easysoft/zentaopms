@@ -13,6 +13,20 @@ class portModel extends model
     public $modelLang;
 
     /**
+     * The construc method, to do some auto things.
+     *
+     * @access public
+     * @return void
+     */
+    public function __construct()
+    {
+        parent::__construct();
+
+        $this->portConfig  = $this->config->port;
+        $this->portLang    = $this->lang->port;
+    }
+
+    /**
      * Commom Actions
      *
      * @param  int    $model
@@ -21,9 +35,6 @@ class portModel extends model
      */
     public function commonActions($model = '')
     {
-        $this->portConfig  = $this->config->port;
-        $this->portLang    = $this->lang->port;
-
         if($model)
         {
             $this->loadModel($model);
@@ -509,6 +520,55 @@ class portModel extends model
             }
 
             $lists['listStyle'] = $listFields;
+        }
+
+        if(!empty($this->modelConfig->cascade))
+        {
+            $lists = $this->getCascadeList($model, $lists);
+            $lists['cascade'] = $this->modelConfig->cascade;
+        }
+
+        return $lists;
+    }
+
+    /**
+     * getCascadeList
+     *
+     * @param  int    $model
+     * @param  int    $lists
+     * @access public
+     * @return void
+     */
+    public function getCascadeList($model, $lists)
+    {
+        $this->commonActions($model);
+        if(!isset($this->modelConfig->cascade)) return $lists;
+
+        $cascadeArray = $this->modelConfig->cascade;
+
+        foreach($cascadeArray as $field => $linkFiled)
+        {
+            $fieldList     = $field . 'List';
+            $linkFieldList = $linkFiled . 'List';
+            $tmpFieldList = array();
+            if(!empty($lists[$fieldList]) and !empty($lists[$linkFieldList]))
+            {
+                $table = zget($this->config->objectTables, $field);
+                if(empty($table)) continue;
+
+                $fieldIDList     = array_keys($lists[$fieldList]);
+                $linkFieldIDList = array_keys($lists[$linkFieldList]);
+
+                $fieldDatas = $this->dao->select("id, $linkFiled")->from($table)->where('id')->in($fieldIDList)->fetchPairs();
+
+                if(empty($fieldDatas)) continue;
+                foreach($fieldDatas as $id => $linkFieldID)
+                {
+                    $tmpFieldList[$linkFieldID][$id] = $lists[$fieldList][$id];
+                }
+
+                $lists[$fieldList] = $tmpFieldList;
+            }
         }
 
         return $lists;
