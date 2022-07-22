@@ -99,3 +99,5 @@ body.xxc-embed {overflow-x: auto; overflow-y: hidden; height: 600px;}
 .xxc-embed #main {position: absolute;top: 50px;bottom: 0;left: 0;right: 0;overflow: auto;}
 .xxc-embed .fix-table-copy-wrapper {top: 50px!important;}
 .xxc-embed #headerActions {right: 310px!important;}
+.xxc-embed,.body-modal #mainContent {padding-top: 13px !important;}
+.xxc-embed .modal-iframe .modal-header .close {font-size: 28px !important}
