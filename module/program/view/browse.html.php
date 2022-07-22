@@ -43,7 +43,7 @@
   <div class="table-empty-tip">
     <p>
       <span class="text-muted"><?php echo $lang->program->noProgram;?></span>
-      <?php common::printLink('program', 'create', '', "<i class='icon icon-plus'></i> " . $lang->program->create, '', "class='btn btn-info'");?>
+      <?php if($status == 'all') common::printLink('program', 'create', '', "<i class='icon icon-plus'></i> " . $lang->program->create, '', "class='btn btn-info'");?>
     </p>
   </div>
   <?php else:?>

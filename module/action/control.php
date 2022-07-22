@@ -157,7 +157,7 @@ class action extends control
                 $repeatObject = $this->dao->select('*')->from(TABLE_PRODUCT)
                     ->where('id')->ne($oldAction->objectID)
                     ->andWhere("(name = '{$product->name}' and program = {$programID})", true)
-                    ->orWhere("code = '{$product->code}'")
+                    ->beginIF($product->code)->orWhere("code = '{$product->code}'")->fi()
                     ->markRight(1)
                     ->andWhere('deleted')->eq('0')
                     ->fetch();
@@ -185,17 +185,21 @@ class action extends control
                 $table  = $oldAction->objectType == 'product' ? TABLE_PRODUCT : TABLE_PROJECT;
                 $object = $oldAction->objectType == 'product' ? $product : $project;
 
-                for($i = 1; $i < 1000; $i ++)
+                $existNames = $this->dao->select('name')->from($table)->where('name')->like($repeatObject->name . '_%')->fetchPairs();
+                for($i = 1; $i < 10000; $i ++)
                 {
                     $replaceName = $repeatObject->name . '_' . $i;
-                    $existName   = $this->dao->select('*')->from($table)->where('name')->eq($replaceName)->fetch();
-                    if(!$existName) break;
+                    if(!in_array($replaceName, $existNames)) break;
                 }
-                for($i = 1; $i < 1000; $i ++)
+                $replaceCode = '';
+                if($object->code)
                 {
-                    $replaceCode = $repeatObject->code . '_' . $i;
-                    $existCode   = $this->dao->select('*')->from($table)->where('code')->eq($replaceCode)->fetch();
-                    if(!$existCode) break;
+                    $existCodes = $this->dao->select('code')->from($table)->where('code')->like($repeatObject->code . '_%')->fetchPairs();
+                    for($i = 1; $i < 10000; $i ++)
+                    {
+                        $replaceCode = $repeatObject->code . '_' . $i;
+                        if(!in_array($replaceCode, $existCodes)) break;
+                    }
                 }
 
                 if($repeatObject->name == $object->name and $repeatObject->code and $repeatObject->code == $object->code)
