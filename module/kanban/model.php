@@ -1527,7 +1527,7 @@ class kanbanModel extends model
         $cardList = array();
         if($browseType == 'story') $cardList = $this->loadModel('story')->getExecutionStories($executionID, 0, 0, 't1.`order`_desc', 'allStory');
         if($browseType == 'bug')   $cardList = $this->loadModel('bug')->getExecutionBugs($executionID);
-        if($browseType == 'task')  $cardList = $this->loadModel('execution')->getKanbanTasks($executionID, "id");
+        if($browseType == 'task')  $cardList = $this->loadModel('execution')->getKanbanTasks($executionID);
 
         if($browseType == 'task' and $groupBy == 'assignedTo')
         {

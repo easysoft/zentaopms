@@ -24,7 +24,7 @@
         <table class='table table-form'>
           <tr>
             <th><?php echo $lang->mr->server;?></th>
-            <td class='required'><?php echo html::select('hostID', array('') + $hostPairs, $repo->gitService, "class='form-control chosen'");?></td>
+            <td class='required'><?php echo html::select('hostID', array('') + $hostPairs, zget($repo, 'gitService', ''), "class='form-control chosen'");?></td>
           </tr>
           <tr>
             <th style="white-space: nowrap;"><?php echo $lang->mr->sourceProject;?></th>

@@ -53,6 +53,17 @@ form {display: block; margin-top: 0em; margin-block-end: 1em;}
 .gantt_critical_task{background:#e63030 !important; border-color:#9d3a3a !important;}
 .gantt_marker .gantt_marker_content {left: -15px; background-color: #f51e1e;}
 .gantt_row.task-item{cursor: pointer;}
+
+#ganttDownload, #ganttHeader {display: none;}
+#ganttContainer {margin-top: 10px;}
+#mainContent:before {background: #fff;}
+#mainContent.loading {overflow: hidden}
+#mainContent.loading #ganttView {overflow: hidden}
+#mainContent.loading #ganttHeader {display: block; padding-bottom: 20px; margin: 0; height: 46px;}
+#mainContent.loading #ganttDownload {display: inline}
+#mainContent.loading #ganttContainer {padding: 40px;}
+#mainContent.loading .scrollVer_cell,
+#mainContent.loading .scrollVer_cell {display: none;}
 </style>
 <?php js::set('customUrl', $this->createLink('programplan', 'ajaxCustom'));?>
 <?php js::set('dateDetails', $dateDetails);?>
@@ -89,7 +100,7 @@ var loadingPrefixText = '<?php echo $lang->programplan->exporting;?>';
  * Get remote script for export.
  *
  * @param  string $url
- * @param  function $sucessCallback
+ * @param  function $successCallback
  * @param  function $errorCallback
  * @access public
  * @return void
@@ -125,7 +136,7 @@ function updateProgress(progress)
  * Draw gantt to canvas.
  *
  * @param  string   $exportType
- * @param  function $sucessCallback
+ * @param  function $successCallback
  * @param  function $errorCallback
  * @access public
  * @return void
@@ -169,7 +180,17 @@ function drawGanttToCanvas(exportType, successCallback, errorCallback)
                 height: ''
             });
             $ganttView.css('height', oldHeight);
-            if(canvas) canvas.remove();
+            if(canvas)
+            {
+                try
+                {
+                    canvas.removeNode(true)
+                }
+                catch(err)
+                {
+                    canvas.remove()
+                };
+            }
         };
         var delayTime = Math.max(1000, Math.floor(10 * (ganttHeight * ganttWidth) / 100000));
         var progressTimer;
@@ -225,7 +246,14 @@ function drawGanttToCanvas(exportType, successCallback, errorCallback)
                     {
                         updateProgress(0.95);
                         var imageUrl = URL.createObjectURL(blob);
-                        $('#ganttDownload').attr({href: imageUrl})[0].click();
+                        if(navigator.msSaveBlob)
+                        {
+                            navigator.msSaveOrOpenBlob(blob, 'gantt-export-<?php echo $projectID;?>.png');
+                        }
+                        else
+                        {
+                            $('#ganttDownload').attr({href: imageUrl})[0].click();
+                        }
                         if(successCallback) successCallback(imageUrl);
                         afterFinish(canvas);
                     });
@@ -249,7 +277,7 @@ function drawGanttToCanvas(exportType, successCallback, errorCallback)
 function exportGantt(exportType)
 {
     var $mainContent = $('#mainContent');
-    $mainContent.addClass('loading').css('height', Math.max(200, Math.floor($(window).height() - $('#footer').outerHeight() - $('#header').outerHeight() - 38)));
+    $mainContent.addClass('loading').css('height', Math.max(200, Math.floor($(window).height() - $('#footer').outerHeight() - $('#header').outerHeight() - $('#mainMenu').outerHeight() - 38)));
     $('#ganttExportDate').text(new Date().format('yyyy-MM-dd hh:mm:ss'));
     var afterFinish = function(url)
     {

@@ -556,15 +556,22 @@ class giteaModel extends model
      * Get single branch by API.
      *
      * @param  int    $giteaID
-     * @param  int    $projectID
-     * @param  string $branch
+     * @param  string $project
+     * @param  string $branchName
      * @access public
      * @return object
      */
-    public function apiGetSingleBranch($giteaID, $projectID, $branch)
+    public function apiGetSingleBranch($giteaID, $project, $branchName)
     {
-        $url = sprintf($this->getApiRoot($giteaID), "/repos/$projectID/branches/$branch");
-        return json_decode(commonModel::http($url));
+        $url    = sprintf($this->getApiRoot($giteaID), "/repos/$project/branches/$branchName");
+        $branch = json_decode(commonModel::http($url));
+        if($branch)
+        {
+            $gitea = $this->getByID($giteaID);
+            $branch->web_url = "{$gitea->url}/$project/src/branch/$branchName";
+        }
+
+        return $branch;
     }
 
     /**

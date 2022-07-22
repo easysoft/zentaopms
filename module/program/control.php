@@ -234,7 +234,7 @@ class program extends control
                 $this->action->logHistory($actionID, $changes);
             }
 
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inLink('browse')));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->session->programList ? $this->session->programList : inLink('browse')));
         }
 
         $program       = $this->program->getByID($programID);

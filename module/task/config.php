@@ -116,7 +116,7 @@ $config->task->datatable->fieldList['left']['required'] = 'no';
 
 $config->task->datatable->fieldList['progress']['title']    = 'progressAB';
 $config->task->datatable->fieldList['progress']['fixed']    = 'no';
-$config->task->datatable->fieldList['progress']['width']    = '50';
+$config->task->datatable->fieldList['progress']['width']    = '80';
 $config->task->datatable->fieldList['progress']['required'] = 'no';
 $config->task->datatable->fieldList['progress']['sort']     = 'no';
 $config->task->datatable->fieldList['progress']['name']     = $lang->task->progress;

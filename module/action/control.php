@@ -157,7 +157,7 @@ class action extends control
                 $repeatObject = $this->dao->select('*')->from(TABLE_PRODUCT)
                     ->where('id')->ne($oldAction->objectID)
                     ->andWhere("(name = '{$product->name}' and program = {$programID})", true)
-                    ->orWhere("code = '{$product->code}'")
+                    ->beginIF($product->code)->orWhere("code = '{$product->code}'")->fi()
                     ->markRight(1)
                     ->andWhere('deleted')->eq('0')
                     ->fetch();
@@ -182,13 +182,26 @@ class action extends control
 
             if($repeatObject)
             {
-                $result      = preg_match('/_(\d+)$/', $repeatObject->name, $nameMatches);
-                $replaceName = $result ? preg_replace('/_(\d+)$/', '_' . ($nameMatches[1] + 1), $repeatObject->name) : $repeatObject->name . '_1';
-                $result      = preg_match('/_(\d+)$/', $repeatObject->code, $codeMatches);
-                $replaceCode = $result ? preg_replace('/_(\d+)$/', '_' . ($codeMatches[1] + 1), $repeatObject->code) : $repeatObject->code . '_1';
-
                 $table  = $oldAction->objectType == 'product' ? TABLE_PRODUCT : TABLE_PROJECT;
                 $object = $oldAction->objectType == 'product' ? $product : $project;
+
+                $existNames = $this->dao->select('name')->from($table)->where('name')->like($repeatObject->name . '_%')->fetchPairs();
+                for($i = 1; $i < 10000; $i ++)
+                {
+                    $replaceName = $repeatObject->name . '_' . $i;
+                    if(!in_array($replaceName, $existNames)) break;
+                }
+                $replaceCode = '';
+                if($object->code)
+                {
+                    $existCodes = $this->dao->select('code')->from($table)->where('code')->like($repeatObject->code . '_%')->fetchPairs();
+                    for($i = 1; $i < 10000; $i ++)
+                    {
+                        $replaceCode = $repeatObject->code . '_' . $i;
+                        if(!in_array($replaceCode, $existCodes)) break;
+                    }
+                }
+
                 if($repeatObject->name == $object->name and $repeatObject->code and $repeatObject->code == $object->code)
                 {
                     if($confirmChange == 'no') return print(js::confirm(sprintf($this->lang->action->repeatChange, $this->lang->{$oldAction->objectType}->common, $replaceName, $replaceCode), $this->createLink('action', 'undelete', "action={$actionID}&browseType={$browseType}&confirmChange=yes")));

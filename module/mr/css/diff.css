@@ -11,7 +11,6 @@ table.diff {margin-bottom: 0px;}
 .diff .line-all, .diff .line-all {background: #FFF;}
 .diff .w-num {width: 25px; border-right: 1px solid #E4E4E4; color: #999; border-left: 1px solid #E4E4E4; color: #999; font-weight: normal;}
 
-.repoCode .diff tr .comment-btn .icon-wrapper {left: -23px;}
 .repoCode .diff tr.over td.line-all, .repoCode .diff tr.over td.line-all {background: #f8eec7;}
 .repoCode .diff tr.over td.line-new, .repoCode .diff tr.over td.line-new {background: #8eff8e;}
 .repoCode .diff tr.over td.line-old, .repoCode .diff tr.over td.line-old {background: #f6b2b2;}

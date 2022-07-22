@@ -98,7 +98,7 @@
         <tr>
           <th class='c-icon'></th>
           <th class='c-name'><?php echo $lang->repo->name?></th>
-          <th class='text-center c-version'><?php echo $lang->repo->revisions?></th>
+          <th class='c-version'><?php echo $lang->repo->revisions?></th>
           <th class='c-date'><?php echo $lang->repo->time?></th>
           <th class='c-user'><?php echo $lang->repo->committer?></th>
           <th><?php echo $lang->repo->comment?></th>
@@ -112,13 +112,13 @@
             <span class="<?php echo $info->kind == 'dir' ? 'directory' : 'file';?> mini-icon"></span>
           </td>
           <td>
-          <?php
-          $infoPath = trim($path . '/' . $info->name, '/');
-          $link = $info->kind == 'dir' ? $this->repo->createLink('browse', "repoID=$repoID&branchID=$base64BranchID&objectID=$objectID&path=" . $this->repo->encodePath($infoPath)) : $this->repo->createLink('view', "repoID=$repoID&objectID=$objectID&entry=" . $this->repo->encodePath($infoPath));
-          echo html::a($link, $info->name, '', "title='{$info->name}' data-app={$app->tab}");
-          ?>
+            <?php
+            $infoPath = trim($path . '/' . $info->name, '/');
+            $link = $info->kind == 'dir' ? $this->repo->createLink('browse', "repoID=$repoID&branchID=$base64BranchID&objectID=$objectID&path=" . $this->repo->encodePath($infoPath)) : $this->repo->createLink('view', "repoID=$repoID&objectID=$objectID&entry=" . $this->repo->encodePath($infoPath));
+            echo html::a($link, $info->name, '', "title='{$info->name}' data-app={$app->tab}");
+            ?>
           </td>
-          <td align='center'><?php echo $repo->SCM == 'Subversion' ? $info->revision : substr($info->revision, 0, 10);?></td>
+          <td><?php echo $repo->SCM == 'Subversion' ? $info->revision : substr($info->revision, 0, 10);?></td>
           <td><?php echo substr($info->date, 0, 10)?></td>
           <td><?php echo $info->account?></td>
           <?php $comment = htmlSpecialString($info->comment, ENT_QUOTES);?>

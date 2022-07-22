@@ -213,7 +213,7 @@ class repoModel extends model
                 ->andWhere('client')->eq($data->client)
                 ->andWhere('path')->eq($data->path)
                 ->fetch();
-            if(!empty($repo)) dao::$errors['serviceProject'] = sprintf($this->lang->error->unique, $this->lang->repo->serviceProject, $repo->id);
+            if(!empty($repo)) dao::$errors['serviceProject'] = sprintf($this->lang->error->unique, $this->lang->repo->serviceProject, $repo->name);
             if(dao::isError()) return false;
         }
 
@@ -312,7 +312,7 @@ class repoModel extends model
                 ->andWhere('path')->eq($data->path)
                 ->andWhere('id')->ne($id)
                 ->fetch();
-            if(!empty($repo)) dao::$errors['serviceProject'] = sprintf($this->lang->error->unique, $this->lang->repo->serviceProject, $repo->id);
+            if(!empty($repo)) dao::$errors['serviceProject'] = sprintf($this->lang->error->unique, $this->lang->repo->serviceProject, $repo->name);
             if(dao::isError()) return false;
         }
 

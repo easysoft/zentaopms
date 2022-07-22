@@ -217,8 +217,9 @@ class programplanModel extends model
 
         if(empty($selectCustom)) $selectCustom = $this->loadModel('setting')->getItem("owner={$owner}&module={$module}&section={$section}&key={$object}");
 
-        $tasks = array();
-        $tasks = $this->dao->select('*')->from(TABLE_TASK)->where('deleted')->eq(0)->andWhere('execution')->in($planIdList)->fetchAll('id');
+        $tasks     = $this->dao->select('*')->from(TABLE_TASK)->where('deleted')->eq(0)->andWhere('execution')->in($planIdList)->fetchAll('id');
+        $taskTeams = $this->dao->select('root,account')->from(TABLE_TEAM)->where('type')->eq('task')->andWhere('root')->in(array_keys($tasks))->fetchGroup('root', 'account');
+        $users     = $this->loadModel('user')->getPairs('noletter');
 
         if($baselineID)
         {
@@ -271,6 +272,15 @@ class programplanModel extends model
             $data->start_date   = $start;
             $data->endDate      = $end;
             $data->duration     = 0;
+
+            /* If multi task then show the teams. */
+            if($task->mode == 'multi' and !empty($taskTeams[$task->id]))
+            {
+                $teams     = array_keys($taskTeams[$task->id]);
+                $assigneds = array();
+                foreach($teams as $assignedTo) $assigneds[] = zget($users, $assignedTo);
+                $data->owner_id = join(',', $assigneds);
+            }
 
             if($data->endDate > $data->start_date) $data->duration = helper::diffDate($data->endDate, $data->start_date) + 1;
             if($data->start_date) $data->start_date = date('d-m-Y', strtotime($data->start_date));
