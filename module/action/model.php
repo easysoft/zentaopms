@@ -1094,11 +1094,12 @@ class actionModel extends model
         {
             if(empty($this->app->user->rights['acls']['actions'])) return '';
 
+            $canViewPrograms = empty($this->app->user->view->programs) ? '0' : $this->app->user->view->programs;
             foreach($this->app->user->rights['acls']['actions'] as $moduleName => $actions)
             {
                 if(isset($this->lang->mainNav->$moduleName) and !empty($this->app->user->rights['acls']['views']) and !isset($this->app->user->rights['acls']['views'][$moduleName])) continue;
-                $canViewPrograms  = $moduleName == 'program' ? "`objectID` in ({$this->app->user->view->programs}) and " : '';
-                $actionCondition .= "($canViewPrograms `objectType` = '$moduleName' and `action` " . helper::dbIN($actions) . ") or ";
+                $programQuery     = $moduleName == 'program' ? "`objectID` in ($canViewPrograms) and " : '';
+                $actionCondition .= "($programQuery `objectType` = '$moduleName' and `action` " . helper::dbIN($actions) . ") or ";
             }
             $actionCondition = trim($actionCondition, 'or ');
         }
