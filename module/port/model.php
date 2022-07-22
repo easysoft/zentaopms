@@ -83,6 +83,7 @@ class portModel extends model
     /**
      * Check suhosin info.
      *
+     * @param  array  $datas
      * @access public
      * @return void
      */
@@ -98,8 +99,7 @@ class portModel extends model
     /**
      * Create tmpFile.
      *
-     * @param  int    $path
-     * @param  int    $tmpFile
+     * @param  int    $objectDatas
      * @access public
      * @return void
      */
@@ -140,7 +140,6 @@ class portModel extends model
      * export
      *
      * @param  string $model
-     * @param  string $params
      * @access public
      * @return void
      */
@@ -193,6 +192,7 @@ class portModel extends model
      *
      * @param  int    $model
      * @param  string $fields
+     * @param  int    $withKey
      * @access public
      * @return void
      */
@@ -281,6 +281,8 @@ class portModel extends model
      *
      * @param  int    $model
      * @param  int    $field
+     * @param  string $fieldValue
+     * @param  int    $withKey
      * @access public
      * @return void
      */
@@ -373,6 +375,7 @@ class portModel extends model
     /**
      * Init tmpFile.
      *
+     * @param  int    $created
      * @access public
      * @return void
      */
@@ -660,6 +663,7 @@ class portModel extends model
      *
      * @param  int    $model
      * @param  int    $fieldList
+     * @param  string $orderBy
      * @access public
      * @return void
      */
@@ -758,6 +762,7 @@ class portModel extends model
     /**
      * Get nature datas.
      *
+     * @param  int    $model
      * @param  int    $datas
      * @access public
      * @return void
@@ -794,7 +799,7 @@ class portModel extends model
     }
 
     /**
-     * getShowImportDatas
+     * Get showImport datas.
      *
      * @param  string $model
      * @param  int    $pagerID
@@ -845,6 +850,9 @@ class portModel extends model
     /**
      * Get pagelist for datas.
      *
+     * @param  int    $datas
+     * @param  int    $pagerID
+     * @param  int    $maxImport
      * @access public
      * @return void
      */
