@@ -49,7 +49,7 @@
       <tbody>
         <?php foreach ($gitlabGroupList as $id => $gitlabGroup): ?>
         <tr class='text'>
-          <td class='text-center'><?php echo $gitlabGroup->id;?></td>
+          <td class='text'><?php echo $gitlabGroup->id;?></td>
           <td class='text-c-name' title='<?php echo $gitlabGroup->full_name;?>'>
             <?php $groupName = current(common::convert2Pinyin(array($gitlabGroup->name))); ?>
             <?php echo html::avatar(array('avatar' => $gitlabGroup->avatar_url, 'account' => $groupName), 20); ?>

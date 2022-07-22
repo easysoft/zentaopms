@@ -33,8 +33,7 @@
             <td><?php echo html::input('token', '', "class='form-control'");?></td>
           </tr>
           <tr>
-            <th></th>
-            <td class='text-center form-actions'>
+            <td colspan='2' class='text-center form-actions'>
               <?php echo html::submitButton();?>
             </td>
           </tr>

@@ -22,3 +22,5 @@ table.diff {margin-bottom: 0px;}
 .btn-download {border-right: none;}
 .body-modal .repo-diff {display: none;}
 .body-modal #mainMenu {padding-bottom: 40px;}
+
+.repoCode td.code {white-space: inherit;}
