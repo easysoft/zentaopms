@@ -5038,7 +5038,7 @@ class upgradeModel extends model
     public function computeObjectMembers()
     {
         $this->app->loadLang('user');
-        $projects      = $this->dao->select('id,days')->from(TABLE_PROJECT)->where('type')->eq('project')->fetchAll('id');
+        $projects      = $this->dao->select('id,days,PM')->from(TABLE_PROJECT)->where('type')->eq('project')->fetchAll('id');
         $projectIdList = array_keys($projects);
 
         /* Get product and sprint team. */
@@ -5091,7 +5091,9 @@ class upgradeModel extends model
 
             $projectMember = array_filter($projectMember);
             $project       = zget($projects, $projectID, '');
-            $members       = implode(',', $projectMember);
+
+            if(!empty($project) and !isset($projectMember[$project->PM])) $projectMember[$project->PM] = $project->PM;
+            $members = implode(',', $projectMember);
 
             $this->dao->update(TABLE_DOCLIB)
                 ->set('users')->eq($members)
