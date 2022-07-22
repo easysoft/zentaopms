@@ -353,7 +353,7 @@ class api extends control
 
         $this->view->type   = $type;
         $this->view->groups = $this->loadModel('group')->getPairs();
-        $this->view->users  = $this->user->getPairs('nocode');
+        $this->view->users  = $this->user->getPairs('nocode|noclosed');
 
         $this->display();
     }
@@ -388,7 +388,7 @@ class api extends control
 
         $this->view->doc    = $doc;
         $this->view->groups = $this->loadModel('group')->getPairs();
-        $this->view->users  = $this->user->getPairs('nocode');
+        $this->view->users  = $this->user->getPairs('nocode|noclosed');
 
         $this->display();
     }
@@ -636,7 +636,7 @@ class api extends control
             if(intval($libID) > 0 and common::hasPriv('api', 'create'))
             {
                 $menu .= "<li>";
-                $menu .= html::a(helper::createLink('api', 'create', "libID=$libID&moduleID=$moduleID"), "<i class='icon-rich-text icon'></i> " . $this->lang->api->apiDoc, '', "data-app='{$this->app->tab}'");
+                $menu .= html::a(helper::createLink('api', 'create', "libID=$libID&moduleID=$moduleID"), "<i class='icon-rich-text icon'></i> " . $this->lang->api->createApi, '', "data-app='{$this->app->tab}'");
                 $menu .= "</li>";
             }
 

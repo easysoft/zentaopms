@@ -164,7 +164,7 @@
                 <td><?php echo $child->id;?></td>
                 <td>
                   <?php
-                  echo "<span class='pri-" . $child->pri . "'>";
+                  echo "<span class='label-pri label-pri-" . $child->pri . "'>";
                   echo $child->pri == '0' ? '' : zget($this->lang->story->priList, $child->pri, $child->pri);
                   echo "</span>";
                   ?>

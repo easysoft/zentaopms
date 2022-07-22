@@ -11,11 +11,6 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<div id="mainMenu" class="clearfix">
-  <div class='pull-right'>
-    <?php if(common::hasPriv('repo', 'create')) echo html::a(helper::createLink('repo', 'create'), "<i class='icon icon-plus'></i> " . $this->lang->repo->create, '', "class='btn btn-primary'");?>
-  </div>
-</div>
 <div id='mainContent'>
   <form class='main-table' id='ajaxForm' method='post'>
     <table id='repoList' class='table has-sort-head table-fixed'>
@@ -27,13 +22,13 @@
           <th class='c-name text-left'><?php common::printOrderLink('name', $orderBy, $vars, $lang->repo->name); ?></th>
           <th class='c-product text-left'><?php common::printOrderLink('product', $orderBy, $vars, $lang->repo->product); ?></th>
           <th class='text-left'><?php echo $lang->repo->path; ?></th>
-          <th class='c-actions-7'><?php echo $lang->actions; ?></th>
+          <th class='c-actions-3'><?php echo $lang->actions; ?></th>
         </tr>
       </thead>
       <tbody>
         <?php foreach($repoList as $repo):?>
         <tr>
-          <td class='text-center'><?php echo $repo->id; ?></td>
+          <td class='text'><?php echo $repo->id; ?></td>
           <td class='text'><?php echo zget($lang->repo->scmList, $repo->SCM); ?></td>
           <td class='text' title='<?php echo $repo->name; ?>'><?php echo html::a($this->createLink('repo', 'browse', "repoID={$repo->id}&branchID=&objectID=$objectID"), $repo->name);?></td>
           <?php

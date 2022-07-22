@@ -17,12 +17,14 @@
   </div>
   <form method='post' class='load-indicator main-form form-ajax' enctype='multipart/form-data'>
     <div class="table-responsive">
-      <table class="table table-borderless w-600px">
+      <table class="table table-borderless w-800px">
         <thead>
           <tr>
-            <th colspan='2'><?php echo $lang->gitea->giteaAccount;?></th>
+            <th class='w-60px'><?php echo $lang->gitea->giteaAvatar;?></th>
+            <th><?php echo $lang->gitea->giteaAccount;?></th>
+            <th><?php echo $lang->gitea->giteaEmail;?></th>
             <th class='w-150px'><?php echo $lang->gitea->zentaoAccount;?></th>
-            <th class='w-150px'><?php echo $lang->gitea->bindingStatus;?></th>
+            <th><?php echo $lang->gitea->bindingStatus;?></th>
           </tr>
         </thead>
         <tbody>
@@ -30,13 +32,13 @@
           <?php if(isset($giteaUser->zentaoAccount)) continue;?>
           <?php echo html::hidden("giteaUserNames[$giteaUser->account]", $giteaUser->realname);?>
           <tr>
-            <td class='w-60px'><?php echo html::image($giteaUser->avatar, "height=40");?></td>
+            <td><?php echo html::image($giteaUser->avatar, "height=40");?></td>
             <td class='text-left'>
               <strong><?php echo $giteaUser->realname;?></strong>
               <br>
               <?php echo $giteaUser->account;?>
-              <?php if($giteaUser->email) echo " &lt;" . $giteaUser->email . "&gt;";?>
             </td>
+            <td><?php echo $giteaUser->email;?></td>
             <td><?php echo html::select("zentaoUsers[$giteaUser->account]", $userPairs, '', "class='form-control select chosen'" );?></td>
             <td><?php echo $lang->gitea->notBind;?></td>
           </tr>
@@ -45,13 +47,13 @@
           <?php if(!isset($giteaUser->zentaoAccount)) continue;?>
           <?php echo html::hidden("giteaUserNames[$giteaUser->account]", $giteaUser->realname);?>
           <tr>
-            <td class='w-60px'><?php echo html::image($giteaUser->avatar, "height=40");?></td>
+            <td><?php echo html::image($giteaUser->avatar, "height=40");?></td>
             <td>
               <strong><?php echo $giteaUser->realname;?></strong>
               <br>
               <?php echo $giteaUser->account;?>
-              <?php if($giteaUser->email) echo " &lt;" . $giteaUser->email . "&gt;";?>
             </td>
+            <td><?php echo $giteaUser->email;?></td>
             <td><?php echo html::select("zentaoUsers[$giteaUser->account]", $userPairs, $giteaUser->zentaoAccount, "class='form-control select chosen'" );?></td>
             <td>
               <?php if(isset($bindedUsers[$giteaUser->zentaoAccount])):?>

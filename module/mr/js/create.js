@@ -68,6 +68,7 @@ $(function()
         $.get(repoUrl, function(response)
         {
             $('#repoID').html('').append(response);
+            $('#repoID').val(repo.id);
             $('#repoID').chosen().trigger("chosen:updated");;
         });
 
