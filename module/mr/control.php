@@ -106,11 +106,19 @@ class mr extends control
 
         $repoID = $this->loadModel('repo')->saveState(0);
         $repo   = $this->repo->getRepoByID($repoID);
+
+        $this->loadModel('gitea');
+        if($repo->SCM == 'Gitea')
+        {
+            $project = $this->gitea->apiGetSingleProject($repo->gitService, $repo->project);
+            if(empty($project) or !$project->allow_merge_commits) $repo = array();
+        }
+
         $hosts  = $this->loadModel('pipeline')->getList(array('gitea', 'gitlab'));
         if(!$this->app->user->admin)
         {
             $gitlabUsers = $this->loadModel('gitlab')->getGitLabListByAccount();
-            $giteaUsers  = $this->loadModel('gitea')->getGiteaListByAccount();
+            $giteaUsers  = $this->gitea->getGiteaListByAccount();
             foreach($hosts as $hostID => $host)
             {
                 if($host->type == 'gitLab' and isset($gitlabUsers[$hostID])) continue;
@@ -465,7 +473,7 @@ class mr extends control
 
         $this->view->MR      = $MR;
         $this->view->action  = $action;
-        $this->view->actions = $this->loadModel('action')->getList('mrapproval', $MRID);
+        $this->view->actions = $this->loadModel('action')->getList('mr', $MRID);
         $this->view->users   = $this->loadModel('user')->getPairs('noletter|noclosed');
         $this->display();
     }
@@ -524,9 +532,9 @@ class mr extends control
         $bugPager   = new pager(0, $recPerPage, $type == 'bug' ? $pageID : 1);
         $taskPager  = new pager(0, $recPerPage, $type == 'task' ? $pageID : 1);
 
-        $stories = $this->mr->getLinkList($MRID, $product->id, 'story', $orderBy, $storyPager);
-        $bugs    = $this->mr->getLinkList($MRID, $product->id, 'bug', $orderBy, $bugPager);
-        $tasks   = $this->mr->getLinkList($MRID, $product->id, 'task', $orderBy, $taskPager);
+        $stories = $this->mr->getLinkList($MRID, $product->id, 'story', $type == 'story' ? $orderBy : '', $storyPager);
+        $bugs    = $this->mr->getLinkList($MRID, $product->id, 'bug',   $type == 'bug'   ? $orderBy : '', $bugPager);
+        $tasks   = $this->mr->getLinkList($MRID, $product->id, 'task',  $type == 'task'  ? $orderBy : '', $taskPager);
 
         $this->view->title        = $this->lang->mr->common . $this->lang->colon . $this->lang->mr->link;
         $this->view->MR           = $MR;
@@ -575,7 +583,7 @@ class mr extends control
         $this->app->loadLang('productplan');
 
         $product = $this->loadModel('product')->getById($productID);
-        $modules = $this->loadModel('tree')->getOptionMenu($productID, $viewType = 'story');
+        $modules = $this->loadModel('tree')->getOptionMenu($productID, 'story');
 
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
@@ -619,7 +627,7 @@ class mr extends control
         }
         else
         {
-            $allStories = $this->story->getProductStories($productID, 0, $moduleID   = '0', $status     = 'draft,active,changed', 'story', 'id_desc', $hasParent  = false, array_keys($linkedStories), $pager);
+            $allStories = $this->story->getProductStories($productID, 0, '0', 'draft,active,changed', 'story', 'id_desc', false, array_keys($linkedStories), $pager);
         }
 
         $this->view->modules        = $modules;
