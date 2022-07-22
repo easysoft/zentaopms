@@ -320,8 +320,7 @@ class gitea
 
             foreach($list as $node) if($node->path == $entry) $file = $node;
 
-            $commits = $this->getCommitsByPath($entry);
-
+            $commits = $this->getCommitsByPath($entry, $revision, $revision);
             if(!empty($commits)) $file->revision = zget($commits[0], 'id', '');
             $info->kind = (isset($file->type) and $file->type == 'tree') ? 'dir' : 'file';
         }
