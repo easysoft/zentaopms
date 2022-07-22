@@ -1044,6 +1044,8 @@ class actionModel extends model
             if($this->app->getMethodName() == 'dynamic') $beginDate = $year - 1 . '-01-01';
         }
 
+        $programCondition = empty($this->app->user->view->programs) ? '0' : $this->app->user->view->programs;
+
         /* Get actions. */
         $actions = $this->dao->select('*')->from(TABLE_ACTION)
             ->where('objectType')->notIN('kanbanregion,kanbanlane,kanbancolumn')
@@ -1070,6 +1072,7 @@ class actionModel extends model
             ->beginIF($actionCondition)->andWhere("($actionCondition)")->fi()
             /* Filter out client login/logout actions. */
             ->andWhere('action')->notin('disconnectxuanxuan,reconnectxuanxuan,loginxuanxuan,logoutxuanxuan')
+            ->andWhere("IF((objectType = 'program'), (objectID in ($programCondition)), '1=1')")
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll();
@@ -1094,12 +1097,10 @@ class actionModel extends model
         {
             if(empty($this->app->user->rights['acls']['actions'])) return '';
 
-            $canViewPrograms = empty($this->app->user->view->programs) ? '0' : $this->app->user->view->programs;
             foreach($this->app->user->rights['acls']['actions'] as $moduleName => $actions)
             {
                 if(isset($this->lang->mainNav->$moduleName) and !empty($this->app->user->rights['acls']['views']) and !isset($this->app->user->rights['acls']['views'][$moduleName])) continue;
-                $programQuery     = $moduleName == 'program' ? "`objectID` in ($canViewPrograms) and " : '';
-                $actionCondition .= "($programQuery `objectType` = '$moduleName' and `action` " . helper::dbIN($actions) . ") or ";
+                $actionCondition .= "(`objectType` = '$moduleName' and `action` " . helper::dbIN($actions) . ") or ";
             }
             $actionCondition = trim($actionCondition, 'or ');
         }
