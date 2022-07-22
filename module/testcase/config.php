@@ -31,9 +31,11 @@ $config->testcase->fieldList['branch']['title']      = 'branch';
 $config->testcase->fieldList['branch']['dataSource'] = array('module' => 'port', 'method' => 'getRelatedObjects', 'params' => 'testcase&branch&id,name');
 
 $config->testcase->fieldList['module']['title']      = 'module';
+$config->testcase->fieldList['module']['control']    = 'select';
 $config->testcase->fieldList['module']['dataSource'] = array('module' => 'tree', 'method' => 'getOptionMenu', 'params' => '$productID&case');
 
 $config->testcase->fieldList['story']['title']      = 'product';
+$config->testcase->fieldList['story']['control']    = 'select';
 $config->testcase->fieldList['story']['dataSource'] = array('module' => 'port', 'method' => 'getRelatedObjects', 'params' => 'testcase&story&id,title');
 
 $config->testcase->fieldList['stage']['title']      = 'product';
