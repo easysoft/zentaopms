@@ -246,28 +246,25 @@
   </div>
 </div>
 <div class='modal fade modal-scroll-inside' id='copyProjectConfirmModal'>
-  <div class='modal-dialog mw-900px' style="height: 360px">
+  <div class='modal-dialog mw-900px'>
     <div class='modal-header'>
       <button type='button' class='close' data-dismiss='modal'><i class="icon icon-close"></i></button>
       <h2 class='text-center'>
         <?php echo $lang->project->copyProjectConfirm;?>
       </h2>
-      <h4 class='modal-title text-center'>
-        <span></span>
-      </h4>
     </div>
     <div class='modal-body modal-flex'>
-        <div class='col-md-4 change-background-gray' style="border-style: solid; height: 150px; border-color: #D7DBDE;" id="copypart">
+        <div class='col-md-4 modal-border change-background-gray' id="copypart">
           <div class='col-sm-6'>
-          <h3><?php echo $lang->project->copyproject->part;?></h3> 
-          <i class="icon icon-check"></i><?php echo $lang->project->copyproject->partMessageList['base']; ?>
+          <h3><?php echo $lang->project->copyproject->part;?></h3>
+            <i class="icon icon-check"></i><?php echo $lang->project->copyproject->partMessageList['base']; ?>
           </div>
         </div>
-        <div class='col-md-7 change-background-blue' style="border-style: solid; height: 150px; border-color: #D7DBDE;" id="copyall">
+        <div class='col-md-7 modal-border change-background-blue' id="copyall">
           <div class='col-md-12' style="height: 80px;">
             <h3>
               <span class='change-blue'><?php echo $lang->project->copyproject->all;?></span>
-              <span style='color: #C4C4C4; font-size: 12px;'><?php echo $lang->project->copyproject->allextra;?></span>
+              <span><?php echo $lang->project->copyproject->allextra;?></span>
             </h3>
             <div class='col-md-4'>
               <i class="icon icon-check change-blue"></i><?php echo $lang->project->copyproject->allMessageList['base'];?>
@@ -291,9 +288,8 @@
             </div>
           </div>
         </div>
-        
     </div>
-    <div class='col-md-12 text-center' style="margin-top: 10px;"> 
+    <div class='col-md-12 text-center'>
     <?php echo html::hidden('copytype', 2); ?>
     <?php echo html::commonButton($lang->save, 'id="copyTypeConfirm"', 'btn btn-wide btn-primary'); ?>
     </div>

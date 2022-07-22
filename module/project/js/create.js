@@ -82,54 +82,6 @@ $(function()
     });
 
     $(document).on('change', "select[id^='branch']", disableSelectedBranch);
-
-    /* Select copy type eq part. */
-    $("#copypart").click(function() 
-    {
-        $("#copypart .icon-check").removeClass('change-gray');
-        $("#copypart .icon-check").addClass('change-blue');
-        $("#copypart h3").addClass('change-blue');
-        $("#copyall .icon-check").removeClass('change-blue');
-        $("#copyall .icon-check").addClass('change-gray');
-        $("#copyall h3 span").removeClass('change-blue');
-        $("#copyall").removeClass('change-background-blue');
-        $("#copyall").addClass('change-background-gray');
-        $("#copypart").removeClass('change-background-gray');
-        $("#copypart").addClass('change-background-blue');
-        
-        $("#copytype").val(1);
-    });
-
-    /* Select copy type eq all. */
-    $("#copyall").click(function() 
-    {
-        $("#copyall .icon-check").removeClass('change-gray');
-        $("#copyall .icon-check").addClass('change-blue');
-        $("#copyall h3 span").addClass('change-blue');
-        $("#copypart .icon-check").removeClass('change-blue');
-        $("#copypart .icon-check").addClass('change-gray');
-        $("#copypart h3").removeClass('change-blue');
-        $("#copyall").removeClass('change-background-gray');
-        $("#copyall").addClass('change-background-blue');
-        $("#copypart").removeClass('change-background-blue');
-        $("#copypart").addClass('change-background-gray');
-
-        $("#copytype").val(2);
-    });
-
-    /* Copy project next step. */
-    $("#copyTypeConfirm").click(function() 
-    {
-        var copytype = $("#copytype").val();
-        if(copytype == 1)
-        {
-            location.href = createLink('project', 'create', 'model=' + model + '&programID=' + programID + '&copyProjectID=' + $("#copyProjectID").val() + '&extra=copytype=' + copytype);
-        }
-        else
-        {
-            location.href = createLink('project', 'copyproject', 'model=' + model + '&programID=' + programID + '&copyProjectID=' + $("#copyProjectID").val() + '&extra=copytype=' + copytype);
-        }
-    });  
 });
 
 /**

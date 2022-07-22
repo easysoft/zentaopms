@@ -21,6 +21,11 @@
 #productsBox .input-group-addon > div {display: inline-block !important;}
 #plansBox .row {display: inline-table; width: 102%;}
 #plansBox .col-sm-4 {float: none; display: inline-block; padding-right: 5px;}
+
+#copyProjectConfirmModal .modal-dialog {height: 380px;}
+#copyProjectConfirmModal .modal-body>div {border-style: solid; height: 150px; border-color: #D7DBDE;}
+#copyProjectConfirmModal .col-md-12 {margin-top: 10px;}
+#copyProjectConfirmModal #copyall h3 :nth-child(2) {color: #C4C4C4; font-size: 12px;}
 .change-blue {color: #0061F4; font-weight: bold;}
 .change-gray {color: #C4C4C4; font-weight: bold;}
 #copypart .icon-check{padding-right: 5px;}
