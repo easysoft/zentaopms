@@ -1823,7 +1823,7 @@ class taskModel extends model
 
         if(!empty($task->team))
         {
-            $myConsumed = $task->team[$task->assignedTo]->consumed;
+            $myConsumed = $task->team[$this->app->user->account]->consumed;
 
             $newTeamInfo = new stdClass();
             $newTeamInfo->consumed = $myConsumed + $consumed;
@@ -1831,7 +1831,7 @@ class taskModel extends model
             $this->dao->update(TABLE_TEAM)->data($newTeamInfo)
                 ->where('root')->eq($taskID)
                 ->andWhere('type')->eq('task')
-                ->andWhere('account')->eq($task->assignedTo)
+                ->andWhere('account')->eq($this->app->user->account)
                 ->exec();
 
             $data = $this->computeHours4Multiple($task, $data);

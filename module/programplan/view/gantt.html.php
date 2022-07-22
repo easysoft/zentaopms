@@ -15,10 +15,6 @@
 <style>
 #ganttView {height: 600px;}
 #mainContent:before {background: #fff;}
-.gantt-fullscreen #header,
-.gantt-fullscreen #mainMenu,
-.gantt-fullscreen #footer {display: none!important;}
-.gantt-fullscreen #mainContent {position: fixed; top: 0; right: 0; bottom: 0; left: 0}
 .checkbox-primary {margin-top: 0px; margin-left: 10px;}
 form {display: block; margin-top: 0em; margin-block-end: 1em;}
 .gantt_task_content span.task-label, .gantt_task_content span.label-pri{display: none;}
@@ -64,6 +60,11 @@ form {display: block; margin-top: 0em; margin-block-end: 1em;}
 #mainContent.loading #ganttContainer {padding: 40px;}
 #mainContent.loading .scrollVer_cell,
 #mainContent.loading .scrollVer_cell {display: none;}
+#
+.gantt-fullscreen #header,
+.gantt-fullscreen #mainMenu,
+.gantt-fullscreen #footer {display: none!important;}
+.gantt-fullscreen #mainContent {position: fixed; top: 0; right: 0; bottom: 0; left: 0}
 </style>
 <?php js::set('customUrl', $this->createLink('programplan', 'ajaxCustom'));?>
 <?php js::set('dateDetails', $dateDetails);?>
@@ -90,7 +91,8 @@ form {display: block; margin-top: 0em; margin-block-end: 1em;}
   <div id='ganttContainer'>
     <div class='gantt' id='ganttView'></div>
   </div>
-  <a id='ganttDownload' download='gantt-export-<?php echo $projectID;?>.png'></a>
+  <?php $fileName = "gantt-export-{$projectID}";?>
+  <a id='ganttDownload' target='hiddenwin' download='<?php echo "{$fileName}.png";?>'></a>
 </div>
 <script>
 var scriptLoadedMap   = {};
@@ -231,7 +233,7 @@ function drawGanttToCanvas(exportType, successCallback, errorCallback)
                             orientation: width > height ? 'l' : 'p'
                         });
                         pdf.addImage(canvas, 0, 0, pdf.internal.pageSize.getWidth(), pdf.internal.pageSize.getHeight());
-                        pdf.save('gantt-export-<?php echo $projectID;?>.pdf');
+                        pdf.save('<?php echo "$fileName.pdf"?>');
                         if(successCallback) successCallback(pdf);
                         afterFinish();
                     }, function(error)
@@ -248,7 +250,7 @@ function drawGanttToCanvas(exportType, successCallback, errorCallback)
                         var imageUrl = URL.createObjectURL(blob);
                         if(navigator.msSaveBlob)
                         {
-                            navigator.msSaveOrOpenBlob(blob, 'gantt-export-<?php echo $projectID;?>.png');
+                            navigator.msSaveOrOpenBlob(blob, '<?php echo $fileName; ?>.png');
                         }
                         else
                         {
