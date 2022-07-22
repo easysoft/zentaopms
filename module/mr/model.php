@@ -991,8 +991,8 @@ class mrModel extends model
             $apiRoot = $this->loadModel('gitea')->getApiRoot($hostID);
             $url     = sprintf($apiRoot, "/repos/$projectID/pulls/$MRID/merge");
 
-            $merege = ($MR and $MR->squash == '1') ? 'squash' : 'merge';
-            $data   = array('Do' => $merge);
+            $merge = ($MR and $MR->squash == '1') ? 'squash' : 'merge';
+            $data  = array('Do' => $merge);
             if($MR and $MR->removeSourceBranch == '1') $data['delete_branch_after_merge'] = true;
 
             $rowMR = json_decode(commonModel::http($url, $data, array(), array(), 'json', 'POST'));
