@@ -23,7 +23,6 @@
 <?php js::set('team', $task->team);?>
 <?php js::set('members', $members);?>
 <?php js::set('confirmChangeExecution', $lang->task->confirmChangeExecution);?>
-<?php js::set('changeExecutionConfirmed', false);?>
 <?php js::set('newRowCount', count($task->team) < 6 ? 6 - count($task->team) : 1);?>
 <?php js::set('teamMemberError', $lang->task->error->teamMember);?>
 <?php js::set('totalLeftError', sprintf($this->lang->task->error->leftEmptyAB, $this->lang->task->statusList[$task->status]));?>
