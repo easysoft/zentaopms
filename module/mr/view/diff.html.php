@@ -93,8 +93,8 @@
             <?php if($arrange == 'inline'):?>
             <?php foreach($content->lines as $line):?>
             <tr data-line='<?php echo $line->newlc ?>'>
-              <th class='w-num text-right'><?php if($line->type != 'new') echo $line->oldlc?></th>
-              <th class='w-num text-left'><?php if($line->type != 'old') echo $line->newlc?></th>
+              <th class='w-num text-center'><?php if($line->type != 'new') echo $line->oldlc?></th>
+              <th class='w-num text-center'><?php if($line->type != 'old') echo $line->newlc?></th>
               <td class='line-<?php echo $line->type?> code'><?php
               echo $line->type == 'old' ? preg_replace('/^\-/', '&ndash;', $line->line) : ($line->type == 'new' ? $line->line : ' ' . $line->line);
               ?></td>
@@ -121,12 +121,12 @@
                   if(!isset($content->new[$newlc])) continue;
               }
               ?>
-              <th class='w-num text-right'><?php echo $oldlc?></th>
+              <th class='w-num text-center'><?php echo $oldlc?></th>
               <td class='w-code line-<?php if($line->type != 'new')echo $line->type?> <?php if($line->type == 'custom') echo "line-old"?> code'><?php
               if(!isset($content->old[$oldlc])) $content->old[$oldlc] = '';
               if(!empty($oldlc)) echo $line->type != 'all' ? preg_replace('/^\-/', '&ndash;', $content->old[$oldlc]) : ' ' . $content->old[$oldlc];
               ?></td>
-              <th class='w-num text-right'><?php echo $newlc?></th>
+              <th class='w-num text-center'><?php echo $newlc?></th>
               <td class='w-code line-<?php if($line->type != 'old') echo $line->type?> <?php if($line->type == 'custom') echo "line-new"?> code'><?php
               if(!isset($content->new[$newlc])) $content->new[$newlc] = '';
               if(!empty($newlc)) echo $line->type != 'all' ? $content->new[$newlc] : ' ' . $content->new[$newlc];

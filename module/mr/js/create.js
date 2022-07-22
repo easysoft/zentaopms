@@ -162,6 +162,8 @@ $(function()
         }
         $.get(url, function(response)
         {
+            if(response == "<option value=''></option>" && confirm(mrLang.addForApp) == true) window.open(hosts[hostID].url);
+
             $('#sourceProject').html('').append(response);
             if(repo.project)
             {

@@ -35,19 +35,19 @@
       <thead>
         <tr>
           <?php $vars = "orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}";?>
-          <th class='c-id text-center'><?php common::printOrderLink('id', $orderBy, $vars, $lang->sonarqube->id);?></th>
-          <th class='c-name text-left'><?php common::printOrderLink('name', $orderBy, $vars, $lang->sonarqube->name);?></th>
-          <th class='text-left'><?php common::printOrderLink('url', $orderBy, $vars, $lang->sonarqube->url);?></th>
+          <th class='c-id'><?php common::printOrderLink('id', $orderBy, $vars, $lang->sonarqube->id);?></th>
+          <th class='c-name w-300px'><?php common::printOrderLink('name', $orderBy, $vars, $lang->sonarqube->name);?></th>
+          <th class='text'><?php common::printOrderLink('url', $orderBy, $vars, $lang->sonarqube->url);?></th>
           <th class='c-actions-3'><?php echo $lang->actions;?></th>
         </tr>
       </thead>
       <tbody>
         <?php foreach ($sonarqubeList as $id => $sonarqube): ?>
         <tr class='text'>
-          <td class='text-center'><?php echo $id;?></td>
+          <td class='text'><?php echo $id;?></td>
           <td class='text-c-name' title='<?php echo $sonarqube->name;?>'><?php echo $sonarqube->name;?></td>
           <td class='text' title='<?php echo $sonarqube->url;?>'><?php echo html::a($sonarqube->url, $sonarqube->url, '_blank');?></td>
-          <td class='c-actions text-left'>
+          <td class='c-actions'>
             <?php
             common::printLink('sonarqube', 'browseProject', "sonarqubeID=$id", "<i class='icon icon-list-box'></i> ", '',"title='{$lang->sonarqube->browseProject}' class='btn btn-primary'");
             common::printLink('sonarqube', 'edit', "sonarqubeID=$id", "<i class='icon icon-edit'></i> ", '',"title='{$lang->sonarqube->edit}' class='btn btn-primary'");

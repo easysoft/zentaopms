@@ -13,6 +13,7 @@
 <?php js::import($jsRoot . 'misc/base64.js');?>
 <?php js::set('hosts', $hosts);?>
 <?php js::set('repo', $repo);?>
+<?php js::set('mrLang', $lang->mr);?>
 <?php js::set('branchPrivs', array());?>
 <div id='mainContent' class='main-row'>
   <div class='main-col main-content'>

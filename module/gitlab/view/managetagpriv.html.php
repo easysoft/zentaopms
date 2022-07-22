@@ -47,7 +47,7 @@
       </tbody>
       <tfoot>
         <tr>
-          <td colspan='4' class='text-center form-actions'>
+          <td colspan='3' class='text-center form-actions'>
             <?php
               echo html::submitButton('', '', 'hidden btn btn-wide btn-primary');
               echo html::commonButton($lang->save, 'onclick="savePriv()" id="saveBtn"', 'btn btn-wide btn-primary');

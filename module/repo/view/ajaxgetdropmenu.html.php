@@ -23,7 +23,6 @@
 #dropMenu {margin: 0;}
 #dropMenu ul > li > ul > li > a:hover {color: white; background-color: #0c64eb; text-decoration: none;}
 #dropMenu .tree .has-list > ul > li {padding-top: 0;}
-li > a.selected {color: #3123ae !important; background: #f2eafc !important; line-height: 20px; border-radius: 5px;}
 .search-list .list-group {padding: 7px 10px;}
 #swapper li>div.hide-in-search>a:focus, #swapper li>div.hide-in-search>a:hover {color: #838a9d; cursor: default;}
 #dropMenu .label-type {margin: 1px 10px;}

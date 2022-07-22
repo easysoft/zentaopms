@@ -199,3 +199,4 @@ $lang->mr->unlinkedTasks     = 'Task not linked';
 $lang->mr->confirmUnlinkTask = "Are you sure to remove this task?";
 $lang->mr->taskSummary       = "There are <strong>%s</strong> tasks on this page";
 $lang->mr->notDelbranch      = "The source branch cannot be deleted when it is a protected branch";
+$lang->mr->addForApp         = "There are no projects under this server, do you want to go to add?";

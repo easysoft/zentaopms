@@ -20,7 +20,7 @@ if(isset($entry)) $pathInfo .= '&type=file';
     <thead>
       <tr>
         <?php if($repo->SCM != 'Gitea'):?>
-        <th class='c-checkbox'></th>
+        <th class='c-checkbox w-40px'></th>
         <?php endif;?>
         <th class='c-version'><?php echo $lang->repo->revisionA?></th>
         <?php if($repo->SCM != 'Subversion'):?>
