@@ -473,7 +473,7 @@ class mr extends control
 
         $this->view->MR      = $MR;
         $this->view->action  = $action;
-        $this->view->actions = $this->loadModel('action')->getList('mrapproval', $MRID);
+        $this->view->actions = $this->loadModel('action')->getList('mr', $MRID);
         $this->view->users   = $this->loadModel('user')->getPairs('noletter|noclosed');
         $this->display();
     }
