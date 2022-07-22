@@ -119,6 +119,7 @@ $lang->mr->apiErrorMap[3] = "401 Unauthorized";
 $lang->mr->apiErrorMap[4] = "403 Forbidden";
 $lang->mr->apiErrorMap[5] = "/(pull request already exists for these targets).*/";
 $lang->mr->apiErrorMap[6] = "Invalid PullRequest: There are no changes between the head and the base";
+$lang->mr->apiErrorMap[7] = "/(user doesn't have access to repo).*/";
 
 $lang->mr->errorLang[1] = 'The source project branch cannot be the same as the target project branch';
 $lang->mr->errorLang[2] = 'Another open merge request already exists for this source branch: ID%u';
@@ -126,6 +127,7 @@ $lang->mr->errorLang[3] = "Unauthorized";
 $lang->mr->errorLang[4] = 'Permission denied';
 $lang->mr->errorLang[5] = 'Another open merge request already exists for this source branch';
 $lang->mr->errorLang[6] = 'The source project branch cannot be the same as the target project branch';
+$lang->mr->errorLang[7] = "user doesn't have access to repo";
 
 $lang->mr->from = "from";
 $lang->mr->to   = "to";

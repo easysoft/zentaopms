@@ -106,11 +106,19 @@ class mr extends control
 
         $repoID = $this->loadModel('repo')->saveState(0);
         $repo   = $this->repo->getRepoByID($repoID);
+
+        $this->loadModel('gitea');
+        if($repo->SCM == 'Gitea')
+        {
+            $project = $this->gitea->apiGetSingleProject($repo->gitService, $repo->project);
+            if(empty($project) or !$project->allow_merge_commits) $repo = array();
+        }
+
         $hosts  = $this->loadModel('pipeline')->getList(array('gitea', 'gitlab'));
         if(!$this->app->user->admin)
         {
             $gitlabUsers = $this->loadModel('gitlab')->getGitLabListByAccount();
-            $giteaUsers  = $this->loadModel('gitea')->getGiteaListByAccount();
+            $giteaUsers  = $this->gitea->getGiteaListByAccount();
             foreach($hosts as $hostID => $host)
             {
                 if($host->type == 'gitLab' and isset($gitlabUsers[$hostID])) continue;
@@ -575,7 +583,7 @@ class mr extends control
         $this->app->loadLang('productplan');
 
         $product = $this->loadModel('product')->getById($productID);
-        $modules = $this->loadModel('tree')->getOptionMenu($productID, $viewType = 'story');
+        $modules = $this->loadModel('tree')->getOptionMenu($productID, 'story');
 
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
@@ -619,7 +627,7 @@ class mr extends control
         }
         else
         {
-            $allStories = $this->story->getProductStories($productID, 0, $moduleID   = '0', $status     = 'draft,active,changed', 'story', 'id_desc', $hasParent  = false, array_keys($linkedStories), $pager);
+            $allStories = $this->story->getProductStories($productID, 0, '0', 'draft,active,changed', 'story', 'id_desc', false, array_keys($linkedStories), $pager);
         }
 
         $this->view->modules        = $modules;
