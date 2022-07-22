@@ -189,5 +189,5 @@ h3 {font-size: 16px;}
 
 .header-btn .btn > .text {text-overflow: unset !important;}
 
-#repoPageSize {right: 90px;}
+#repoPageSize {right: 90px; padding: 8px 5px 6px 10px;}
 .dropdown-menu li > a.selected {color: #3123ae !important; background: #f2eafc !important; line-height: 20px; border-radius: 5px;}
