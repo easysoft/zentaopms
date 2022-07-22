@@ -108,7 +108,7 @@ class bug extends control
 
         /* Set browse type. */
         $browseType = strtolower($browseType);
-        if($this->cookie->preProductID != $productID or $this->cookie->preBranch != $branch or $browseType == 'bybranch')
+        if($this->cookie->preProductID != $productID or ($this->cookie->preBranch != $branch and $product->type != 'normal' and $branch != 'all') or $browseType == 'bybranch')
         {
             $_COOKIE['bugModule'] = 0;
             setcookie('bugModule', 0, 0, $this->config->webRoot, '', $this->config->cookieSecure, false);
