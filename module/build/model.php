@@ -217,6 +217,7 @@ class buildModel extends model
         {
             $selectedBuilds = $this->dao->select('id, name')->from(TABLE_BUILD)
                 ->where('id')->in($buildIdList)
+                ->beginIF($products)->andWhere('product')->in($products)->fi()
                 ->beginIF($objectType === 'execution')->andWhere('execution')->eq($objectID)->fi()
                 ->beginIF($objectType === 'project')->andWhere('project')->eq($objectID)->fi()
                 ->fetchPairs();
