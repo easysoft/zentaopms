@@ -216,7 +216,8 @@
               </tr>
               <tr>
                 <th><?php echo $lang->story->assignedTo;?></th>
-                <td><?php echo html::select('assignedTo', $users, $story->assignedTo, 'class="form-control chosen"');?></td>
+                <?php $assignedToList = $story->status == 'closed' ? $users + array('closed' => 'Closed') : $users;?>
+                <td><?php echo html::select('assignedTo', $assignedToList, $story->assignedTo, 'class="form-control chosen"');?></td>
               </tr>
               <?php if($isShowReviewer):?>
               <tr>
