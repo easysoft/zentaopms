@@ -44,6 +44,99 @@ class portModel extends model
     }
 
     /**
+     * Check tmpFile.
+     *
+     * @access public
+     * @return void
+     */
+    public function checkTmpFile()
+    {
+        $maxImport = isset($_COOKIE['maxImport']) ? $_COOKIE['maxImport'] : 0;
+        $file      = $this->session->fileImportFileName;
+        $tmpPath   = $this->loadModel('file')->getPathOfImportedFile();
+        $tmpFile   = $tmpPath . DS . md5(basename($file));
+        if(!empty($maxImport) and file_exists($tmpFile)) return $tmpFile;
+        return false;
+    }
+
+    /**
+     * Check rows from excel.
+     *
+     * @access public
+     * @return void
+     */
+    public function checkRowsFromExcel()
+    {
+        $rows = $this->file->getRowsFromExcel($this->session->fileImportFileName);
+        if(is_string($rows))
+        {
+            unlink($this->session->fileImportFileName);
+            unset($_SESSION['fileImportFileName']);
+            unset($_SESSION['fileImportExtension']);
+            echo js::alert($rows);
+            die(js::locate('back'));
+        }
+        return $rows;
+
+    }
+
+    /**
+     * Check suhosin info.
+     *
+     * @access public
+     * @return void
+     */
+    public function checkSuhosinInfo($datas = array())
+    {
+        /* Judge whether the editedTasks is too large and set session. */
+        $countInputVars  = count($datas) * 11; // Count all post datas
+        $showSuhosinInfo = common::judgeSuhosinSetting($countInputVars);
+        if($showSuhosinInfo) return extension_loaded('suhosin') ? sprintf($this->lang->suhosinInfo, $countInputVars) : sprintf($this->lang->maxVarsInfo, $countInputVars);
+        return '';
+    }
+
+    /**
+     * Create tmpFile.
+     *
+     * @param  int    $path
+     * @param  int    $tmpFile
+     * @access public
+     * @return void
+     */
+    public function createTmpFile($objectDatas)
+    {
+        $file      = $this->session->fileImportFileName;
+        $tmpPath   = $this->loadModel('file')->getPathOfImportedFile();
+        $tmpFile   = $tmpPath . DS . md5(basename($file));
+
+        if(file_exists($tmpFile)) unlink($tmpFile);
+        file_put_contents($tmpFile, serialize($objectDatas));
+        $this->session->set('tmpFile', $tmpFile);
+    }
+
+    /**
+     * Check Required fields .
+     *
+     * @param  int    $model
+     * @param  int    $line
+     * @param  int    $data
+     * @access public
+     * @return void
+     */
+    public function checkRequired($model, $line, $data)
+    {
+        if(isset($this->config->$model->create->requiredFields))
+        {
+            $requiredFields = explode(',', $this->config->$model->create->requiredFields);
+            foreach($requiredFields as $requiredField)
+            {
+                $requiredField = trim($requiredField);
+                if(empty($data[$requiredField])) dao::$errors[] = sprintf($this->lang->port->noRequire, $line, $this->lang->$model->$requiredField);
+            }
+        }
+    }
+
+    /**
      * export
      *
      * @param  string $model
@@ -69,41 +162,6 @@ class portModel extends model
         $this->post->set('rows',   $exportDatas['rows']);
         $this->post->set('fields', $exportDatas['fields']);
         $this->post->set('kind',   $model);
-    }
-
-    /**
-     * Create from import.
-     *
-     * @param  int    $model
-     * @param  string $params
-     * @access public
-     * @return void
-     */
-    public function createFromImport($model, $params = '')
-    {
-        $this->loadModel('action');
-        $this->loadModel('file');
-        $now   = helper::now();
-        $datas = fixer::input('post')->get();
-        $table = zget($this->config->objectTables, $model);
-
-        if(!empty($_POST['id']))
-        {
-            $oldObjects = $this->dao->select('*')->from($table)->where('id')->in(($_POST['id']))->fetchAll('id');
-        }
-
-        $objects = array();
-        $objectData = array();
-        foreach ($datas as $field => $data)
-        {
-            if(is_array($data))
-            {
-                foreach($data as $key => $value) $objectData[$key][$field] = $value;
-            }
-        }
-
-        a($objectData);
-        die;
     }
 
     /**
@@ -183,6 +241,8 @@ class portModel extends model
     public function initTitle($model, $field)
     {
         $title = $field;
+
+        $this->commonActions($model);
 
         if(!empty($this->modelConfig->fieldList[$field]['title'])) $title = $this->modelLang->{$this->modelConfig->fieldList[$field]['title']};
         if(array_key_exists($field, $this->lang->$model))
@@ -311,25 +371,46 @@ class portModel extends model
     }
 
     /**
-     * Merge configs .
+     * Init tmpFile.
      *
-     * @param  int    $model
      * @access public
      * @return void
      */
-    public function mergeConfig($model)
+    public function initTmpFile($created = true)
     {
-        $this->commonActions($model);
-        $portConfig  = $this->portConfig;
-        $modelConfig = $this->modelConfig;
-        if(!isset($modelConfig->export)) $modelConfig->export = new stdClass();
-        if(!isset($modelConfig->import)) $modelConfig->export = new stdClass();
+        $taskLang = $this->lang->task;
+        $file    = $this->session->fileImportFileName;
+        $tmpPath = $this->loadModel('file')->getPathOfImportedFile();
+        $tmpFile = $tmpPath . DS . md5(basename($file));
 
-        $modelConfig->dateFeilds     = isset($modelConfig->dateFeilds)     ? $modelConfig->dateFeilds     : $portConfig->dateFeilds;
-        $modelConfig->datetimeFeilds = isset($modelConfig->datetimeFeilds) ? $modelConfig->datetimeFeilds : $portConfig->datetimeFeilds;
-        $modelConfig->sysLangFields  = isset($modelConfig->sysLangFields)  ? $modelConfig->sysLangFields  : $portConfig->sysLangFields;
-        $modelConfig->sysDataFields  = isset($modelConfig->sysDataFields)  ? $modelConfig->sysDataFields  : $portConfig->sysDataFields;
-        $modelConfig->listFields     = isset($modelConfig->listFields)     ? $modelConfig->listFields     : $portConfig->listFields;
+        if(file_exists($tmpFile)) return $tmpFile;
+
+        $rows = $this->file->getRowsFromExcel($file);
+
+        /* Check empty.*/
+        if(is_string($rows))
+        {
+            unlink($this->session->fileImportFileName);
+            unset($_SESSION['fileImportFileName']);
+            unset($_SESSION['fileImportExtension']);
+            $response['result']  = 'fail';
+            $response['message'] = $rows;
+            return $response;
+        }
+
+        $fields = $this->config->task->templateFields;
+        array_unshift($fields, 'id');
+
+        foreach($fields as $key => $fieldName)
+        {
+            $fieldName = trim($fieldName);
+            $fields[$fieldName] = isset($taskLang->$fieldName) ? $taskLang->$fieldName : $fieldName;
+            unset($fields[$key]);
+        }
+
+        if($created) $this->createTmpFile($tmpFile, $objectDatas);
+
+        return $objectDatas;
     }
 
     /**
@@ -532,7 +613,7 @@ class portModel extends model
     }
 
     /**
-     * getCascadeList
+     * Get cascade list for export excel.
      *
      * @param  int    $model
      * @param  int    $lists
@@ -610,7 +691,7 @@ class portModel extends model
     }
 
     /**
-     * getQueryDatas
+     * Get query datas.
      *
      * @param  string $model
      * @access public
@@ -641,9 +722,10 @@ class portModel extends model
     }
 
     /**
-     * getRelatedObjects
+     * Get related objects pairs.
      *
-     * @param  int    $object
+     * @param  string $model
+     * @param  string $object
      * @param  string $pairs
      * @access public
      * @return void
@@ -671,149 +753,6 @@ class portModel extends model
         if($object == 'build') $relatedObjects= array('trunk' => $this->lang->trunk) + $relatedObjects;
 
         return $relatedObjects;
-    }
-
-    /**
-     * Update children datas.
-     *
-     * @param  int    $datas
-     * @access public
-     * @return void
-     */
-    public function updateChildDatas($datas)
-    {
-        $children = array();
-        foreach($datas as $data)
-        {
-            if(!empty($data->parent) and isset($datas[$data->parent]))
-            {
-                if(!empty($data->name)) $data->name = '>' . $data->name;
-                elseif(!empty($data->title)) $data->title = '>' . $data->title;
-                $children[$data->parent][$data->id] = $data;
-                unset($datas[$data->id]);
-            }
-            if(!empty($data->mode))
-            {
-                $datas[$data->id]->name = '[' . $this->lang->task->multipleAB . '] ' . $data->name;
-            }
-        }
-
-        /* Move child data after parent data .*/
-        if(!empty($children))
-        {
-            $position = 0;
-            foreach($datas as $data)
-            {
-                $position ++;
-                if(isset($children[$data->id]))
-                {
-                    array_splice($datas, $position, 0, $children[$data->id]);
-                    $position += count($children[$data->id]);
-                }
-            }
-        }
-
-        return $datas;
-    }
-
-
-    /**
-     * Init tmpFile.
-     *
-     * @access public
-     * @return void
-     */
-    public function initTmpFile($created = true)
-    {
-        $taskLang = $this->lang->task;
-        $file    = $this->session->fileImportFileName;
-        $tmpPath = $this->loadModel('file')->getPathOfImportedFile();
-        $tmpFile = $tmpPath . DS . md5(basename($file));
-
-        if(file_exists($tmpFile)) return $tmpFile;
-
-        $rows = $this->file->getRowsFromExcel($file);
-
-        /* Check empty.*/
-        if(is_string($rows))
-        {
-            unlink($this->session->fileImportFileName);
-            unset($_SESSION['fileImportFileName']);
-            unset($_SESSION['fileImportExtension']);
-            $response['result']  = 'fail';
-            $response['message'] = $rows;
-            return $response;
-        }
-
-        $fields = $this->config->task->templateFields;
-        array_unshift($fields, 'id');
-
-        foreach($fields as $key => $fieldName)
-        {
-            $fieldName = trim($fieldName);
-            $fields[$fieldName] = isset($taskLang->$fieldName) ? $taskLang->$fieldName : $fieldName;
-            unset($fields[$key]);
-        }
-
-        if($created) $this->createTmpFile($tmpFile, $objectDatas);
-
-        return $objectDatas;
-    }
-
-    /**
-     * Check tmpFile.
-     *
-     * @access public
-     * @return void
-     */
-    public function checkTmpFile()
-    {
-        $maxImport = isset($_COOKIE['maxImport']) ? $_COOKIE['maxImport'] : 0;
-        $file      = $this->session->fileImportFileName;
-        $tmpPath   = $this->loadModel('file')->getPathOfImportedFile();
-        $tmpFile   = $tmpPath . DS . md5(basename($file));
-        if(!empty($maxImport) and file_exists($tmpFile)) return $tmpFile;
-        return false;
-    }
-
-    /**
-     * Check rows from excel.
-     *
-     * @access public
-     * @return void
-     */
-    public function checkRowsFromExcel()
-    {
-        $rows = $this->file->getRowsFromExcel($this->session->fileImportFileName);
-        if(is_string($rows))
-        {
-            unlink($this->session->fileImportFileName);
-            unset($_SESSION['fileImportFileName']);
-            unset($_SESSION['fileImportExtension']);
-            echo js::alert($rows);
-            die(js::locate('back'));
-        }
-        return $rows;
-
-    }
-
-    /**
-     * Create tmpFile.
-     *
-     * @param  int    $path
-     * @param  int    $tmpFile
-     * @access public
-     * @return void
-     */
-    public function createTmpFile($objectDatas)
-    {
-        $file      = $this->session->fileImportFileName;
-        $tmpPath   = $this->loadModel('file')->getPathOfImportedFile();
-        $tmpFile   = $tmpPath . DS . md5(basename($file));
-
-        if(file_exists($tmpFile)) unlink($tmpFile);
-        file_put_contents($tmpFile, serialize($objectDatas));
-        $this->session->set('tmpFile', $tmpFile);
     }
 
     /**
@@ -891,20 +830,6 @@ class portModel extends model
         return $this->getPageDatas($modelData, $pagerID, $maxImport);
     }
 
-    /**
-     * Check suhosin info.
-     *
-     * @access public
-     * @return void
-     */
-    public function checkSuhosinInfo($datas = array())
-    {
-        /* Judge whether the editedTasks is too large and set session. */
-        $countInputVars  = count($datas) * 11; // Count all post datas
-        $showSuhosinInfo = common::judgeSuhosinSetting($countInputVars);
-        if($showSuhosinInfo) return extension_loaded('suhosin') ? sprintf($this->lang->suhosinInfo, $countInputVars) : sprintf($this->lang->maxVarsInfo, $countInputVars);
-        return '';
-    }
 
     /**
      * Get datas by file.
@@ -975,6 +900,49 @@ class portModel extends model
     }
 
     /**
+     * Update children datas.
+     *
+     * @param  int    $datas
+     * @access public
+     * @return void
+     */
+    public function updateChildDatas($datas)
+    {
+        $children = array();
+        foreach($datas as $data)
+        {
+            if(!empty($data->parent) and isset($datas[$data->parent]))
+            {
+                if(!empty($data->name)) $data->name = '>' . $data->name;
+                elseif(!empty($data->title)) $data->title = '>' . $data->title;
+                $children[$data->parent][$data->id] = $data;
+                unset($datas[$data->id]);
+            }
+            if(!empty($data->mode))
+            {
+                $datas[$data->id]->name = '[' . $this->lang->task->multipleAB . '] ' . $data->name;
+            }
+        }
+
+        /* Move child data after parent data .*/
+        if(!empty($children))
+        {
+            $position = 0;
+            foreach($datas as $data)
+            {
+                $position ++;
+                if(isset($children[$data->id]))
+                {
+                    array_splice($datas, $position, 0, $children[$data->id]);
+                    $position += count($children[$data->id]);
+                }
+            }
+        }
+
+        return $datas;
+    }
+
+    /**
      * Process rows for fields.
      *
      * @param  array  $rows
@@ -1041,6 +1009,35 @@ class portModel extends model
     }
 
     /**
+     * Process child datas (task, story).
+     *
+     * @param  int    $objectID
+     * @param  int    $data
+     * @access public
+     * @return void
+     */
+    public function processChildData($lastID, $data)
+    {
+        $parentID = $this->session->parentID ? $this->session->parentID : 0;
+        if(strpos($data['name'], '&gt;') === 0)
+        {
+            if(!$parentID)
+            {
+                $parentID = $lastID;
+                $this->session->set('parentID', $parentID);
+            }
+            $data['parent'] = $parentID;
+            $data['name'] = ltrim($data['name'], '&gt;');
+            $this->dao->update(TABLE_TASK)->set('parent')->eq('-1')->where('id')->eq($parentID)->exec();
+        }
+        else
+        {
+            $this->session->set('parentID', 0);
+        }
+        return $data;
+    }
+
+    /**
      * Save import datas.
      *
      * @param  int    $model
@@ -1090,35 +1087,6 @@ class portModel extends model
     }
 
     /**
-     * Process child datas (task, story).
-     *
-     * @param  int    $objectID
-     * @param  int    $data
-     * @access public
-     * @return void
-     */
-    public function processChildData($lastID, $data)
-    {
-        $parentID = $this->session->parentID ? $this->session->parentID : 0;
-        if(strpos($data['name'], '&gt;') === 0)
-        {
-            if(!$parentID)
-            {
-                $parentID = $lastID;
-                $this->session->set('parentID', $parentID);
-            }
-            $data['parent'] = $parentID;
-            $data['name'] = ltrim($data['name'], '&gt;');
-            $this->dao->update(TABLE_TASK)->set('parent')->eq('-1')->where('id')->eq($parentID)->exec();
-        }
-        else
-        {
-            $this->session->set('parentID', 0);
-        }
-        return $data;
-    }
-
-    /**
      * Save SubTable datas.
      *
      * @param  int    $lastInsertID
@@ -1138,24 +1106,25 @@ class portModel extends model
     }
 
     /**
-     * Check Required fields .
+     * Merge configs .
      *
      * @param  int    $model
-     * @param  int    $line
-     * @param  int    $data
      * @access public
      * @return void
      */
-    public function checkRequired($model, $line, $data)
+    public function mergeConfig($model)
     {
-        if(isset($this->config->$model->create->requiredFields))
-        {
-            $requiredFields = explode(',', $this->config->$model->create->requiredFields);
-            foreach($requiredFields as $requiredField)
-            {
-                $requiredField = trim($requiredField);
-                if(empty($data[$requiredField])) dao::$errors[] = sprintf($this->lang->port->noRequire, $line, $this->lang->$model->$requiredField);
-            }
-        }
+        $this->commonActions($model);
+        $portConfig  = $this->portConfig;
+        $modelConfig = $this->modelConfig;
+        if(!isset($modelConfig->export)) $modelConfig->export = new stdClass();
+        if(!isset($modelConfig->import)) $modelConfig->export = new stdClass();
+
+        $modelConfig->dateFeilds     = isset($modelConfig->dateFeilds)     ? $modelConfig->dateFeilds     : $portConfig->dateFeilds;
+        $modelConfig->datetimeFeilds = isset($modelConfig->datetimeFeilds) ? $modelConfig->datetimeFeilds : $portConfig->datetimeFeilds;
+        $modelConfig->sysLangFields  = isset($modelConfig->sysLangFields)  ? $modelConfig->sysLangFields  : $portConfig->sysLangFields;
+        $modelConfig->sysDataFields  = isset($modelConfig->sysDataFields)  ? $modelConfig->sysDataFields  : $portConfig->sysDataFields;
+        $modelConfig->listFields     = isset($modelConfig->listFields)     ? $modelConfig->listFields     : $portConfig->listFields;
     }
+
 }
