@@ -1886,10 +1886,7 @@ class mrModel extends model
             $this->action->create('task', $task->id, 'mergedmr', '', helper::createLink('mr', 'view', "mr={$MR->id}"));
         }
 
-        return $this->dao->update(TABLE_MR)->data(array('status' => 'merged'))
-                    ->where('id')->eq($MR->id)
-                    ->autoCheck()
-                    ->exec();
+        return $this->dao->update(TABLE_MR)->data(array('status' => 'merged'))->where('id')->eq($MR->id)->exec();
     }
 
     /**
