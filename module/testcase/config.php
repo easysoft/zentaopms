@@ -36,50 +36,8 @@ $config->testcase->fieldList['module']['dataSource'] = array('module' => 'tree',
 $config->testcase->fieldList['story']['title']      = 'product';
 $config->testcase->fieldList['story']['dataSource'] = array('module' => 'port', 'method' => 'getRelatedObjects', 'params' => 'testcase&story&id,title');
 
-$config->testcase->fieldList['title']['title']      = 'product';
-
-$config->testcase->fieldList['precondition']['title']      = 'product';
-
-$config->testcase->fieldList['stepDesc']['title']      = 'product';
-
-$config->testcase->fieldList['stepExpect']['title']      = 'product';
-
-$config->testcase->fieldList['real']['title']      = 'product';
-
-$config->testcase->fieldList['keywords']['title']      = 'product';
-
-$config->testcase->fieldList['pri']['title']      = 'product';
-
-$config->testcase->fieldList['type']['title']      = 'product';
-
 $config->testcase->fieldList['stage']['title']      = 'product';
-
-$config->testcase->fieldList['status']['title']      = 'product';
-
-$config->testcase->fieldList['bugsAB']['title']      = 'product';
-
-$config->testcase->fieldList['resultsAB']['title']      = 'product';
-
-$config->testcase->fieldList['stepNumberAB']['title']      = 'product';
-
-$config->testcase->fieldList['lastRunner']['title']      = 'product';
-
-$config->testcase->fieldList['lastRunDate']['title']      = 'product';
-
-$config->testcase->fieldList['lastRunResult']['title']      = 'product';
-
-$config->testcase->fieldList['openedBy']['title']      = 'product';
-
-$config->testcase->fieldList['openedDate']['title']      = 'product';
-
-$config->testcase->fieldList['lastEditedBy']['title']      = 'product';
-
-$config->testcase->fieldList['lastEditedDate']['title']      = 'product';
-
-$config->testcase->fieldList['version']['title']      = 'product';
-
-$config->testcase->fieldList['files']['title']      = 'product';
-
+$config->testcase->fieldList['stage']['control']    = 'multiple';
 
 $config->testcase->customCreateFields      = 'story,stage,pri,keywords';
 $config->testcase->customBatchCreateFields = 'module,stage,story,pri,precondition,keywords,review';

@@ -122,7 +122,7 @@ class portModel extends model
             {
                 foreach($data as $key => $value)
                 {
-                    if(is_array($value) and $this->config->$model->fieldList[$field]['control'] == 'multiple') $value = implode(',', $value);
+                    if(is_array($value) and array_key_exists($field, $this->config->$model->fieldList) and $this->config->$model->fieldList[$field]['control'] == 'multiple') $value = implode(',', $value);
                     $objectData[$key][$field] = $value;
                 }
             }
@@ -852,6 +852,43 @@ class portModel extends model
 
         }
         return $datas;
+    }
+
+    /**
+     * getShowImportDatas
+     *
+     * @param  string $model
+     * @param  int    $pagerID
+     * @param  int    $maxImport
+     * @access public
+     * @return void
+     */
+    public function getShowImportDatas($model = '', $pagerID = 1, $maxImport = 0)
+    {
+        /* Bulid import paris (field => name) .*/
+        $fields  = $this->getImportFields($model);
+
+        /* Check tmpfile. */
+        $tmpFile = $this->checkTmpFile();
+
+        /* If tmpfile not isset create tmpfile .*/
+        if(!$tmpFile)
+        {
+            $rows      = $this->checkRowsFromExcel();
+
+            $modelData = $this->processRows4Fields($rows, $fields);
+
+            $modelData = $this->getNatureDatas($model, $modelData);
+
+            $this->createTmpFile($modelData);
+        }
+        else
+        {
+            $modelData = $this->getDatasByFile($tmpFile);
+        }
+
+        /* Get page by datas.*/
+        return $this->getPageDatas($modelData, $pagerID, $maxImport);
     }
 
     /**
