@@ -9,7 +9,7 @@ table.diff {margin-bottom: 0px;}
 .diff .line-new, .diff .line-new {background: #CFC;}
 .diff .line-old, .diff .line-old {background: #FCC;}
 .diff .line-all, .diff .line-all {background: #FFF;}
-.diff .w-num {width: 25px; border-right: 1px solid #E4E4E4; color: #999; border-left: 1px solid #E4E4E4; color: #999; font-weight: normal;}
+.diff .w-num {width: 25px; border-right: 1px solid #E4E4E4; color: #999; border-left: 1px solid #E4E4E4; color: #999; font-weight: normal; line-height: 2.5;}
 
 .repoCode .diff tr .comment-btn .icon-wrapper {left: -23px;}
 .repoCode .diff tr.over td.line-all, .repoCode .diff tr.over td.line-all {background: #f8eec7;}
@@ -22,3 +22,5 @@ table.diff {margin-bottom: 0px;}
 .btn-download {border-right: none;}
 .body-modal .repo-diff {display: none;}
 .body-modal #mainMenu {padding-bottom: 40px;}
+
+.repoCode td.code {white-space: inherit;}

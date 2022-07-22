@@ -72,7 +72,7 @@
         </tbody>
         <tfoot>
           <tr>
-            <td colspan="3" class="text-center form-actions">
+            <td colspan="5" class="text-center form-actions">
               <?php echo html::submitButton();?>
               <?php if(!isonlybody()) echo html::a(inlink('browse', ""), $lang->goback, '', 'class="btn btn-wide"');?>
             </td>

@@ -139,8 +139,7 @@
             </td>
           </tr>
           <tr>
-            <th></th>
-            <td class='text-center form-actions'>
+            <td colspan="3" class='text-center form-actions'>
               <?php echo html::submitButton(); ?>
               <?php if(!isonlybody()) echo html::a(inlink('browse', ""), $lang->goback, '', 'class="btn btn-wide"');?>
               <?php echo html::hidden('repoType');?>

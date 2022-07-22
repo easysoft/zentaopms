@@ -36,7 +36,7 @@ function getCloneHtml(cloneLang, url)
 {
     var content = '';
     content += "<tr>";
-    content += "<th>" + cloneLang + "</th>";
+    content += "<td>" + cloneLang + "</td>";
     content += "</tr>";
     content += "<tr>";
     content += "<td><input type='input' class='form-control' value='" + url + "' readonly></td>";
@@ -53,7 +53,7 @@ $(function()
         content: getDownload(),
         html: true,
         placement: 'bottom',
-        template: '<div class="popover"><h3 class="popover-title"></h3><div class="popover-content"></div></div',
+        template: '<div class="popover"><h3 class="popover-title strong repo-popover"></h3><div class="popover-content"></div></div',
         tipClass: 'download-popover',
         trigger: 'manual'
     };
