@@ -996,15 +996,8 @@ class mrModel extends model
             if($MR and $MR->removeSourceBranch == '1') $data['delete_branch_after_merge'] = true;
 
             $rowMR = json_decode(commonModel::http($url, $data, array(), array(), 'json', 'POST'));
-            if(!isset($rowMR->massage))
-            {
-                $rowMR = $this->apiGetSingleMR($hostID, $projectID, $MRID);
+            if(!isset($rowMR->massage)) $rowMR = $this->apiGetSingleMR($hostID, $projectID, $MRID);
 
-                $this->dao->update(TABLE_MR)->data(array('status' => 'merged'))
-                    ->where('id')->eq($MRID)
-                    ->autoCheck()
-                    ->exec();
-            }
             return $rowMR;
         }
     }
@@ -1892,6 +1885,11 @@ class mrModel extends model
         {
             $this->action->create('task', $task->id, 'mergedmr', '', helper::createLink('mr', 'view', "mr={$MR->id}"));
         }
+
+        return $this->dao->update(TABLE_MR)->data(array('status' => 'merged'))
+                    ->where('id')->eq($MR->id)
+                    ->autoCheck()
+                    ->exec();
     }
 
     /**
