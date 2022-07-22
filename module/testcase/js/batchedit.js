@@ -108,7 +108,7 @@ $(function()
                 $('#story' + num).replaceWith(stories);
                 $('#story' + num + "_chosen").remove();
                 $('#story' + num).next('.picker').remove();
-                $('#story' + num).attr('name', 'story[' + num + ']').pricker();
+                $('#story' + num).attr('name', 'story[' + num + ']').picker();
             });
         });
     }
