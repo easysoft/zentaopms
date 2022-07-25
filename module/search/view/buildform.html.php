@@ -322,14 +322,24 @@ $(function()
             $('#toggle-queries .icon').removeClass('icon-angle-left');
             $('#toggle-queries .icon').addClass('icon-angle-right');
             $('#toggle-queries').css('right', $('#userQueries').outerWidth());
+            $('#save-query').css('right', $('#userQueries').outerWidth() + 50);
         }
         else
         {
             $('#toggle-queries .icon').removeClass('icon-angle-right');
             $('#toggle-queries .icon').addClass('icon-angle-left');
             $('#toggle-queries').css('right', '0px');
+            $('#save-query').css('right', 50);
         }
     });
+
+    $('.sidebar-toggle').click(function()
+    {
+        if(!$('#userQueries').hasClass('hidden'))
+        {
+            $('#toggle-queries').click();
+        }
+    })
 
     $(window).resize(function()
     {
