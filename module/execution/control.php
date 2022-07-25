@@ -1744,13 +1744,6 @@ class execution extends control
         $branches            = $this->project->getBranchesByProject($executionID);
         $linkedProductIdList = empty($branches) ? '' : array_keys($branches);
 
-        if($execution->type == 'kanban')
-        {
-            global $lang;
-            $lang->executionCommon = $lang->execution->kanban;
-            include $this->app->getModulePath('', 'execution') . 'lang/' . $this->app->getClientLang() . '.php';
-        }
-
         if(!empty($newPlans) and $confirm == 'yes')
         {
             $newPlans = explode(',', $newPlans);

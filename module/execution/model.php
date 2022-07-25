@@ -66,13 +66,17 @@ class executionModel extends model
         $execution = $this->getByID($executionID);
         if($execution and $execution->type == 'kanban')
         {
+            global $lang;
+            $lang->execution->common = $lang->execution->kanban;
+            $lang->executionCommon   = $lang->execution->kanban;
+            include $this->app->getModulePath('', 'execution') . 'lang/' . $this->app->getClientLang() . '.php';
+
             $this->lang->execution->menu           = new stdclass();
             $this->lang->execution->menu->kanban   = array('link' => "{$this->lang->kanban->common}|execution|kanban|executionID=%s");
             $this->lang->execution->menu->CFD      = array('link' => "{$this->lang->execution->CFD}|execution|cfd|executionID=%s");
             $this->lang->execution->menu->build    = array('link' => "{$this->lang->build->common}|execution|build|executionID=%s");
             $this->lang->execution->menu->settings = array('link' => "{$this->lang->settings}|execution|view|executionID=%s", 'subModule' => 'personnel', 'alias' => 'edit,manageproducts,team,whitelist,addwhitelist,managemembers', 'class' => 'dropdown dropdown-hover');
             $this->lang->execution->dividerMenu    = '';
-            $this->lang->execution->accessDenied   = str_replace($this->lang->executionCommon, $this->lang->execution->kanban, $this->lang->execution->accessDenied);
 
             $this->lang->execution->menu->settings['subMenu']            = new stdclass();
             $this->lang->execution->menu->settings['subMenu']->view      = array('link' => "{$this->lang->overview}|execution|view|executionID=%s", 'subModule' => 'view', 'alias' => 'edit,start,suspend,putoff,close');
