@@ -19,9 +19,11 @@
         <div class="panel block-dynamic" style="height: 280px">
           <div class="panel-heading">
             <div class="panel-title"><?php echo $lang->execution->latestDynamic;?></div>
+            <?php if($project->model != 'kanban'):?>
             <nav class="panel-actions nav nav-default">
               <li><?php common::printLink('project', 'dynamic', "projectID=$project->id&type=all", '<i class="icon icon-more icon-sm"></i>', '', "title=$lang->more");?></li>
             </nav>
+            <?php endif;?>
           </div>
           <div class="panel-body scrollbar-hover">
             <ul class="timeline timeline-tag-left no-margin">

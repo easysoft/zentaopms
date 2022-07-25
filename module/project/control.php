@@ -756,7 +756,8 @@ class project extends control
 
         $this->session->set('teamList', $this->app->getURI(true), 'project');
 
-        $project = $this->project->getById($projectID);
+        $projectID = $this->project->setMenu($projectID);
+        $project   = $this->project->getById($projectID);
 
         if($this->config->systemMode == 'new')
         {
@@ -770,8 +771,6 @@ class project extends control
             if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'fail', 'code' => 404, 'message' => '404 Not found'));
             return print(js::error($this->lang->notFound) . js::locate($this->createLink('project', 'browse')));
         }
-
-        $this->project->setMenu($projectID);
 
         $products = $this->loadModel('product')->getProducts($projectID);
         $linkedBranches = array();
@@ -1923,6 +1922,10 @@ class project extends control
      */
     public function whitelist($projectID = 0, $module = 'project', $from = 'project', $objectType = 'project', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
+        $projectID = $this->project->setMenu($projectID);
+        $project   = $this->project->getById($projectID);
+        if(isset($project->acl) and $project->acl == 'open') $this->locate($this->createLink('project', 'view', "projectID=$projectID"));
+
         echo $this->fetch('personnel', 'whitelist', "objectID=$projectID&module=$module&browseType=$objectType&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID&projectID=$projectID&from=$from");
     }
 
@@ -1987,8 +1990,7 @@ class project extends control
             if($diffProducts) $this->loadModel('action')->create('project', $projectID, 'Managed', '', !empty($_POST['products']) ? join(',', $_POST['products']) : '');
 
             $locateLink = inLink('manageProducts', "projectID=$projectID");
-            if($from == 'program')  $locateLink = $this->createLink('program', 'browse');
-            if($from == 'programproject') $locateLink = $this->session->programProject ? $this->session->programProject : inLink('programProject', "projectID=$projectID");
+            if($from == 'program')  $locateLink = $this->session->projectList;
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $locateLink));
         }
 
