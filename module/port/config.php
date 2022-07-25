@@ -11,10 +11,6 @@ $config->port->fieldList['class']    = '';
 $config->port->fieldList['sort']     = '';
 $config->port->fieldList['dataSource'] = array('module' => '', 'method' => '', 'params' => '', 'pairs' => '', 'sql' => '', 'lang' => '');
 
-$config->port->table['mainTable']['name']       = '';
-$config->port->table['mainTable']['fields']     = explode(',', "");
-$config->port->table['mainTable']['foreignKey'] = '';
-
 $config->port->initFunction   = 'title,control,required,';
 $config->port->dateFeilds     = 'estStarted,realStarted,deadline,openedDate,assignedDate,finishedDate,canceledDate,closedDate,lastEditedDate,';
 $config->port->datetimeFeilds = '';

@@ -39,18 +39,13 @@ $config->story->exportFields = '
     lastEditedBy, lastEditedDate,
     childStories, linkStories, duplicateStory, files';
 
-$config->product->fieldList['product']['title']            = 'product';
-$config->product->fieldList['product']['foreignKey']       = true;
-$config->product->fieldList['product']['foreignKeySource'] = array('module' => 'product', 'method' => 'getPairs');
+$config->story->fieldList['product']['dataSource'] = array('module' => 'port', 'method' => 'getRelatedObjects', 'params' => 'story&product&id,name');
 
-$config->story->fieldList['branch']['foreignKey'] = true;
-$config->story->fieldList['branch']['foreignKeySource'] = array('module' => 'story', 'method' => 'getRelatedObjects', 'params' => 'branch&id,name');
+$config->story->fieldList['branch']['dataSource'] = array('module' => 'story', 'method' => 'getRelatedObjects', 'params' => 'branch&id,name');
 
-$config->story->fieldList['module']['foreignKey'] = true;
-$config->story->fieldList['module']['foreignKeySource'] = array('module' => 'tree', 'method' => 'getAllModulePairs', 'params' => 'story');
+$config->story->fieldList['module']['dataSource'] = array('module' => 'tree', 'method' => 'getAllModulePairs', 'params' => 'story');
 
-$config->story->fieldList['plan']['foreignKey'] = true;
-$config->story->fieldList['plan']['foreignKeySource'] = array('module' => 'story', 'method' => 'getRelatedObjects', 'params' => 'plan&id,title');
+$config->story->fieldList['plan']['dataSource'] = array('module' => 'story', 'method' => 'getRelatedObjects', 'params' => 'plan&id,title');
 
 $config->story->list->customCreateFields      = 'source,verify,pri,estimate,mailto,keywords';
 $config->story->list->customBatchCreateFields = 'plan,spec,source,verify,pri,estimate,review,keywords';

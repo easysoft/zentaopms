@@ -2291,10 +2291,10 @@ class bug extends control
     {
         if($_POST)
         {
-            $this->loadModel('file');
-            $this->loadModel('branch');
-
-            $this->fetch('port', 'export', 'model=bug&params=productID=' . $productID . ',executionID=' . $executionID);
+            $this->loadModel('port');
+            $this->session->set('bugPortParams', array('productID' => $productID, 'executionID' => $executionID));
+            $this->port->export('bug');
+            $this->fetch('file', 'export2' . $_POST['fileType'], $_POST);
         }
 
         $fileName = $this->lang->bug->common;
