@@ -291,15 +291,26 @@ $lang->waterfall->menu->design['subMenu']->ads      = array('link' => "{$lang->d
 $lang->waterfall->menu->design['subMenu']->bysearch = array('link' => '<a href="javascript:;" class="querybox-toggle"><i class="icon-search icon"></i> ' . $lang->searchAB . '</a>');
 
 /* Kanban project menu. */
-$lang->kanbanProject              = new stdclass();
-$lang->kanbanProject->menu        = new stdclass();
-$lang->kanbanProject->menu->index = array('link' => "{$lang->kanban->common}|project|index|project=%s");
-$lang->kanbanProject->menu->build = array('link' => "{$lang->build->common}|project|build|project=%s");
+$lang->kanbanProject                 = new stdclass();
+$lang->kanbanProject->menu           = new stdclass();
+$lang->kanbanProject->menu->index    = array('link' => "{$lang->kanban->common}|project|index|project=%s");
+$lang->kanbanProject->menu->build    = array('link' => "{$lang->build->common}|project|build|project=%s");
+$lang->kanbanProject->menu->settings = array('link' => "$lang->settings|project|view|project=%s", 'subModule' => 'stakeholder', 'alias' => 'edit,manageproducts,group,managemembers,manageview,managepriv,whitelist,addwhitelist,team');
 
-$lang->kanbanProject->menuOrder   = array();
-$lang->kanbanProject->menuOrder[5] = 'index';
-$lang->kanbanProject->menuOrder[10] = 'build';
 $lang->kanbanProject->dividerMenu = '';
+
+$lang->kanbanProject->menuOrder     = array();
+$lang->kanbanProject->menuOrder[5]  = 'index';
+$lang->kanbanProject->menuOrder[10] = 'build';
+$lang->kanbanProject->menuOrder[15] = 'settings';
+
+$lang->kanbanProject->menu->settings['subMenu']              = new stdclass();
+$lang->kanbanProject->menu->settings['subMenu']->view        = array('link' => "$lang->overview|project|view|project=%s", 'alias' => 'edit');
+$lang->kanbanProject->menu->settings['subMenu']->products    = array('link' => "{$lang->product->common}|project|manageProducts|project=%s", 'alias' => 'manageproducts');
+$lang->kanbanProject->menu->settings['subMenu']->members     = array('link' => "{$lang->team->common}|project|team|project=%s", 'alias' => 'managemembers,team');
+$lang->kanbanProject->menu->settings['subMenu']->whitelist   = array('link' => "{$lang->whitelist}|project|whitelist|project=%s", 'subModule' => 'personnel');
+$lang->kanbanProject->menu->settings['subMenu']->stakeholder = array('link' => "{$lang->stakeholder->common}|stakeholder|browse|project=%s", 'subModule' => 'stakeholder');
+$lang->kanbanProject->menu->settings['subMenu']->group       = array('link' => "{$lang->priv}|project|group|project=%s", 'alias' => 'group,manageview,managepriv');
 
 /* Execution menu. */
 $lang->execution->homeMenu      = new stdclass();
