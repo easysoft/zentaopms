@@ -28,6 +28,7 @@
 <?php js::set('manageProducts', $lang->project->manageProducts);?>
 <?php $requiredFields = $config->project->create->requiredFields;?>
 <?php js::set('requiredFields', $requiredFields);?>
+<?php js::set('copyType', $copyType);?>
 <div id='mainContent' class='main-content'>
   <div class='center-block'>
     <div class='main-header'>

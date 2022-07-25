@@ -328,15 +328,3 @@ $lang->project->confirmUnlinkMember  = "您确定从该项目中移除该用户�
 
 $lang->project->action = new stdclass();
 $lang->project->action->managed = '$date, 由 <strong>$actor</strong> 维护。$extra' . "\n";
-
-$lang->project->copyproject = new stdClass();
-$lang->project->copyproject->all = '全部信息';
-$lang->project->copyproject->allextra = '(团队成员与时间不复制)';
-$lang->project->copyproject->allMessageList['base'] = '基本信息';
-$lang->project->copyproject->allMessageList['execution'] = '阶段/迭代';
-$lang->project->copyproject->allMessageList['doc'] = '文档(文档目录)';
-$lang->project->copyproject->allMessageList['task'] = '任务';
-$lang->project->copyproject->allMessageList['qa'] = 'QA(质量保证计划)';
-$lang->project->copyproject->allMessageList['process'] = '过程(过程裁剪)';
-$lang->project->copyproject->part = '部分信息';
-$lang->project->copyproject->partMessageList['base'] = '基本信息';

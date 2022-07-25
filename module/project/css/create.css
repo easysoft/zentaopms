@@ -34,3 +34,6 @@
 .modal-flex .col-md-4{padding-right: 5px; padding-left: 5px;}
 .change-background-gray{background-color: #F8F8F8;}
 .change-background-blue{background-color: #F5F9FF;}
+
+.has-info{border-color: #0075ff!important; box-shadow: 0 0 6px #0075ff!important;}
+.text-info{color: #0075ff;margin-top: 5px;}

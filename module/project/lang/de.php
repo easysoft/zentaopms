@@ -328,15 +328,3 @@ $lang->project->confirmUnlinkMember  = "Do you want to remove this user from pro
 
 $lang->project->action = new stdclass();
 $lang->project->action->managed = '$date, managed by <strong>$actor</strong>. $extra' . "\n";
-
-$lang->project->copyproject = new stdClass();
-$lang->project->copyproject->all = 'All info';
-$lang->project->copyproject->allextra = '(Teams and time are not duplicated)';
-$lang->project->copyproject->allMessageList['base'] = 'Base info';
-$lang->project->copyproject->allMessageList['execution'] = 'sprint/stage';
-$lang->project->copyproject->allMessageList['doc'] = 'Doc(Doc lib)';
-$lang->project->copyproject->allMessageList['task'] = 'Task';
-$lang->project->copyproject->allMessageList['qa'] = 'QA(QA plan)';
-$lang->project->copyproject->allMessageList['process'] = 'Process(Process tailoring)';
-$lang->project->copyproject->part = 'Part info';
-$lang->project->copyproject->partMessageList['base'] = 'Base info';
