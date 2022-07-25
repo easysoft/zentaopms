@@ -105,6 +105,10 @@
         <div class="cell"><?php echo sprintf($lang->mr->commandDocument, $httpRepoURL, $MR->sourceBranch, $branchPath, $MR->targetBranch, $branchPath, $MR->targetBranch); ?></div>
         <?php endif; ?>
 
+        <?php if($this->app->getViewType() != 'xhtml'):?>
+        <div class="cell"><?php include '../../common/view/action.html.php';?></div>
+        <?php endif;?>
+
         <div class='main-actions'>
           <div class="btn-toolbar">
             <?php common::printBack(inlink('browse', '')); ?>

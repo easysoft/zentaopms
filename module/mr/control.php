@@ -303,6 +303,8 @@ class mr extends control
         $this->view->stories = $this->mr->getLinkList($MR->id, $product->id, 'story');
         $this->view->bugs    = $this->mr->getLinkList($MR->id, $product->id, 'bug');
         $this->view->tasks   = $this->mr->getLinkList($MR->id, $product->id, 'task');
+        $this->view->actions = $this->loadModel('action')->getList('mr', $MRID);
+        $this->view->users   = $this->loadModel('user')->getPairs('noletter|noclosed');
 
         $this->display();
     }

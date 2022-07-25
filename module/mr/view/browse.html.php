@@ -50,9 +50,10 @@
           <th class='c-name'><?php common::printOrderLink('title', $orderBy, $vars, $lang->mr->title);?></th>
           <th class='w-200px'><?php common::printOrderLink('sourceBranch', $orderBy, $vars, $lang->mr->sourceBranch);?></th>
           <th class='w-200px'><?php common::printOrderLink('targetBranch', $orderBy, $vars, $lang->mr->targetBranch);?></th>
-          <th class='w-120px'><?php common::printOrderLink('mergeStatus', $orderBy, $vars, $lang->mr->mergeStatus);?></th>
-          <th class='w-120px'><?php common::printOrderLink('approvalStatus', $orderBy, $vars, $lang->mr->approvalStatus);?></th>
-          <th class='w-120px'><?php common::printOrderLink('createdBy', $orderBy, $vars, $lang->mr->author);?></th>
+          <th class='w-100px'><?php common::printOrderLink('mergeStatus', $orderBy, $vars, $lang->mr->mergeStatus);?></th>
+          <th class='w-80px'><?php common::printOrderLink('approvalStatus', $orderBy, $vars, $lang->mr->approvalStatus);?></th>
+          <th class='w-80px'><?php common::printOrderLink('createdBy', $orderBy, $vars, $lang->mr->author);?></th>
+          <th class='w-160px'><?php common::printOrderLink('createdDate', $orderBy, $vars, $lang->mr->createdDate);?></th>
           <th class='c-actions-5'><?php echo $lang->actions;?></th>
         </tr>
       </thead>
@@ -87,6 +88,7 @@
             <td><?php echo empty($MR->approvalStatus) ? $lang->mr->approvalStatusList['notReviewed'] : $lang->mr->approvalStatusList[$MR->approvalStatus];?></td>
           <?php endif;?>
           <td class='text' title='<?php echo zget($users, $MR->createdBy);?>'><?php echo zget($users, $MR->createdBy);?></td>
+          <td class='text' title='<?php echo zget($users, $MR->createdDate);?>'><?php echo zget($users, $MR->createdDate);?></td>
           <td class='c-actions'>
             <?php
             $canDelete = ($app->user->admin or (isset($projects[$MR->hostID][$MR->sourceProject]->owner->id) and $projects[$MR->hostID][$MR->sourceProject]->owner->id == $openIDList[$MR->hostID])) ? '' : 'disabled';
