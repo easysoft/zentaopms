@@ -50,7 +50,7 @@ $config->bug->fieldList['branch']['dataSource'] = array('module' => 'bug', 'meth
 
 $config->bug->fieldList['module']['control']    = 'select';
 $config->bug->fieldList['module']['title']      = 'module';
-$config->bug->fieldList['module']['dataSource'] = array('module' => 'bug', 'method' => 'getRelatedObjects', 'params' => 'module&id,name');
+$config->bug->fieldList['module']['dataSource'] = array('module' => 'tree', 'method' => 'getOptionMenu', 'params' => '$productID&bug');
 
 $config->bug->fieldList['project']['title']      = 'project';
 $config->bug->fieldList['project']['control']    = 'hidden';

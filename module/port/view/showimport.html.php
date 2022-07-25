@@ -25,7 +25,6 @@ $(function()
         if(parseInt($('#maxImport').val())) $('#times').html(Math.ceil(parseInt($('#allCount').html()) / parseInt($('#maxImport').val())));
     });
 
-
     $('#import').click(function(){
         $.cookie('maxImport', $('#maxImport').val());
         location.href = "<?php echo $url;?>";

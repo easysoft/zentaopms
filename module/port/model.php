@@ -244,7 +244,7 @@ class portModel extends model
 
         $this->commonActions($model);
 
-        if(!empty($this->modelConfig->fieldList[$field]['title'])) $title = $this->modelLang->{$this->modelConfig->fieldList[$field]['title']};
+        if(!empty($this->modelConfig->fieldList[$field]['title'])) return $this->modelLang->{$this->modelConfig->fieldList[$field]['title']};
         if(array_key_exists($field, $this->lang->$model))
         {
             $title = $this->lang->$model->$field;
