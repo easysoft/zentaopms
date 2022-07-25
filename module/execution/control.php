@@ -1820,10 +1820,7 @@ class execution extends control
             if($_POST['status'] == 'doing') $this->loadModel('common')->syncPPEStatus($executionID);
 
             /* If link from no head then reload. */
-            if(isonlybody())
-            {
-                return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
-            }
+            if(isonlybody()) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
 
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('view', "executionID=$executionID")));
         }
@@ -2271,6 +2268,8 @@ class execution extends control
 
         $type = $this->config->vision == 'lite' ? 'kanban' : 'stage,sprint,kanban';
         if(empty($execution) || strpos($type, $execution->type) === false) return print(js::error($this->lang->notFound) . js::locate('back'));
+
+        if($execution->type == 'kanban' and defined('RUN_MODE') and RUN_MODE == 'api') return print($this->fetch('execution', 'kanban', "executionID=$executionID"));
 
         $this->app->loadLang('program');
 
