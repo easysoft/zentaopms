@@ -895,7 +895,7 @@ EOF;
      * @param  int    $pageID
      * @return void
      */
-    public function risk($type = 'assignedTo', $param = 0,$orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function risk($type = 'assignedTo', $param = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         /* Set the pager. */
         $this->loadModel('risk');
