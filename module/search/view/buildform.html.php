@@ -343,7 +343,11 @@ $(function()
 
     $(window).resize(function()
     {
-        if(!$('#userQueries').hasClass('hidden')) $('#toggle-queries').css('right', $('#userQueries').outerWidth());
+        if(!$('#userQueries').hasClass('hidden'))
+        {
+            $('#toggle-queries').css('right', $('#userQueries').outerWidth());
+            $('#save-query').css('right', $('#userQueries').outerWidth() + 50);
+        }
     })
 
     /*
