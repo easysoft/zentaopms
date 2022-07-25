@@ -1825,7 +1825,6 @@ class execution extends control
             if($message) $this->lang->saveSuccess = $message;
 
             if($_POST['status'] == 'doing') $this->loadModel('common')->syncPPEStatus($executionID);
-            if($execution->type == 'kanban') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
 
             /* If link from no head then reload. */
             if(isonlybody())
@@ -2279,12 +2278,6 @@ class execution extends control
 
         $type = $this->config->vision == 'lite' ? 'kanban' : 'stage,sprint,kanban';
         if(empty($execution) || strpos($type, $execution->type) === false) return print(js::error($this->lang->notFound) . js::locate('back'));
-
-        if($execution->type == 'kanban')
-        {
-            if(defined('RUN_MODE') && RUN_MODE == 'api') return print($this->fetch('execution', 'kanban', "executionID=$executionID"));
-            return print(js::locate(inlink('kanban', "executionID=$executionID")));
-        }
 
         $this->app->loadLang('program');
 
@@ -3739,6 +3732,9 @@ class execution extends control
 
         /* Set the menu. If the executionID = 0, use the indexMenu instead. */
         $this->execution->setMenu($executionID);
+
+        $execution = $this->execution->getByID($executionID);
+        if(!empty($execution->acl) and $execution->acl != 'private') $this->locate($this->createLink('execution', 'view', "executionID=$executionID"));
 
         echo $this->fetch('personnel', 'whitelist', "objectID=$executionID&module=$module&browseType=$objectType&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID");
     }
