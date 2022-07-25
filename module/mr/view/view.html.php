@@ -37,7 +37,7 @@
   </div>
 </div>
 
-<div id="mainContent" class="main-content">
+<div class="main-content">
   <div class='tabs' id='tabsNav'>
     <ul class='nav nav-tabs'>
       <li class='active'><?php echo html::a('###', $lang->mr->view);?></li>
@@ -46,7 +46,7 @@
       <li><?php echo html::a(inlink('link', "MRID={$MR->id}&type=bug"),   html::icon($lang->icons['bug'], 'text-red')   . ' ' . $lang->productplan->linkedBugs);?></a></li>
       <li><?php echo html::a(inlink('link', "MRID={$MR->id}&type=task"),  html::icon('todo', 'text-info')  . ' ' . $lang->mr->linkedTasks);?></a></li>
     </ul>
-    <div class='tab-content main-row'>
+    <div class='tab-content main-row' id="mainContent">
       <div class="main-col col-8">
         <div class="cell">
           <div class="detail">
