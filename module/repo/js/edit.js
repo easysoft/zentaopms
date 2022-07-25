@@ -38,7 +38,7 @@ $(function()
  */
 function scmChanged(scm, isFirstRequest = false)
 {
-    if(scm == 'Git')
+    if(scm == 'Git' || scm == 'Gitea')
     {
         $('.account-fields').addClass('hidden');
 
@@ -61,7 +61,14 @@ function scmChanged(scm, isFirstRequest = false)
     else
     {
         $('tr.service').toggle(true);
-        $('tr.hide-service').toggle(false);
+        if(scm == 'Gitea')
+        {
+            $('tr.hide-service').toggle(true);
+        }
+        else
+        {
+            $('tr.hide-service').toggle(false);
+        }
 
         if(!isFirstRequest)
         {
