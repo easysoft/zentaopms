@@ -10,11 +10,11 @@ class port extends control
      * @access public
      * @return void
      */
-    public function export($model = '', $params = '', $rows = array())
+    public function export($model = '')
     {
         if($_POST)
         {
-            $this->port->export($model, $params, $rows);
+            $this->port->export($model);
             $this->fetch('file', 'export2' . $_POST['fileType'], $_POST);
         }
     }
@@ -75,11 +75,16 @@ class port extends control
     {
         if($_FILES)
         {
-            $file = $this->loadModel('file')->getUpload('file');
-            $file = $file[0];
+            $file      = $this->loadModel('file')->getUpload('file');
+            $file      = $file[0];
+            $shortName = $this->file->getSaveName($file['pathname']);
+            if(empty($shortName))
+            {
+                die(js::alert($this->lang->excel->emptyFileName));
+            }
             $extension = $file['extension'];
 
-            $fileName = $this->file->savePath . $this->file->getSaveName($file['pathname']);
+            $fileName = $this->file->savePath . $shortName;
             move_uploaded_file($file['tmpname'], $fileName);
 
             $phpExcel  = $this->app->loadClass('phpexcel');

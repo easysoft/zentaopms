@@ -1075,14 +1075,14 @@ class portModel extends model
             }
 
             $table = zget($this->config->objectTables, $model);
-            $this->dao->insert($table)->data($data)->autoCheck()->checkFlow()->exec();
+            $this->dao->replace($table)->data($data)->autoCheck()->checkFlow()->exec();
             $objectID = $this->dao->lastInsertID();
 
             if(dao::isError()) die(js::error(dao::getError()));
 
             if(!empty($subDatas)) $this->saveSubTable($objectID, $subDatas);
             /* Create action*/
-            $this->loadModel('action')->create($model, $objectID, 'Opened', '');
+            if($this->post->insert) $this->loadModel('action')->create($model, $objectID, 'Opened', '');
         }
 
         if($this->post->isEndPage)
