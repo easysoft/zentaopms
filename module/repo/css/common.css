@@ -4,10 +4,9 @@ a:hover, a:active {text-decoration:underline; color: #C61A1A;}
 #swapper .col-footer a:hover {color: #0c64eb;}
 h2,h3 {font-size: 20px; margin: 0; clear: both;}
 h3 {font-size: 16px;}
-.revision {font-size: 12px; line-height: 20px; text-align: right; padding-right: 8px;}
+.revision {line-height: 20px; text-align: right; padding-right: 8px;}
 .directory {background-image:url('theme/default/images/repo/dir.png');}
 .file {background-image:url('theme/default/images/repo/txt.png');}
-//.icon {width: 17px; padding-left: 10px; padding-right: 2px;}
 .mini-icon {display: inline-block; height: 16px; width: 16px; background-color: transparent; background-position: 0 0; background-repeat: no-repeat; vertical-align: text-bottom;}
 .action {float: left;}
 .input-group select#encrypt {border-left: 0px;}

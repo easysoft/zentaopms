@@ -35,8 +35,8 @@ $typeInfo = $type == 'file' ? '&type=file' : '';
     <div class='cell'>
       <div class='detail'>
         <div class='detail-title'>
-          <?php echo $lang->repo->changes;?>
-          <div class='pull-right'><?php if(common::hasPriv('repo', 'diff')) echo html::a($this->repo->createLink('diff', "repoID=$repoID&objectID=$objectID&entry=&fromRevision=$oldRevision&toRevision=$revision"), $lang->repo->diffAll, '', "data-app='{$app->tab}'");?></div>
+          <span><?php echo $lang->repo->changes;?></span>
+          <span class='pull-right compare-all'><?php if(common::hasPriv('repo', 'diff')) echo html::a($this->repo->createLink('diff', "repoID=$repoID&objectID=$objectID&entry=&fromRevision=$oldRevision&toRevision=$revision"), $lang->repo->diffAll, '', "data-app='{$app->tab}'");?></span>
         </div>
         <div class='detail-content'>
           <table class='table no-margin'>
