@@ -60,6 +60,8 @@ class projectModel extends model
         if($action == 'close')    return $project->status != 'closed';
         if($action == 'suspend')  return $project->status == 'wait' or $project->status == 'doing';
         if($action == 'activate') return $project->status == 'done' or $project->status == 'closed';
+        if($action == 'whitelist') return $project->acl != 'open';
+        if($action == 'group') return $project->model != 'kanban';
 
         return true;
     }
@@ -2632,6 +2634,12 @@ class projectModel extends model
         if(isset($project->acl) and $project->acl == 'open' and isset($this->config->project->unsetWhitelist[$methodName]) and $this->config->project->unsetWhitelist[$methodName] == $moduleName)
         {
             unset($this->lang->project->menu->settings['subMenu']->whitelist);
+        }
+
+        if($project->model == 'kanban')
+        {
+            unset($this->lang->project->menu->settings['subMenu']->stakeholder);
+            unset($this->lang->project->menu->settings['subMenu']->group);
         }
 
         common::setMenuVars('project', $objectID);

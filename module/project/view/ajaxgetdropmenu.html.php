@@ -77,7 +77,7 @@ foreach($projects as $programID => $programProjects)
         {
             $link = helper::createLink('project', 'index', "projectID=%s");
         }
-        elseif($project->model == 'kanban' and (($module == 'stakeholder' and $method != 'browse') or ($module == 'project' and !in_array($method, array('build', 'view', 'manageproducts', 'team', 'whitlist', 'group')))))
+        elseif($project->model == 'kanban' and ($module == 'project' and !in_array($method, array('build', 'view', 'manageproducts', 'team', 'whitlist', 'managemembers'))))
         {
             $link = helper::createLink('project', 'index', "projectID=%s");
         }

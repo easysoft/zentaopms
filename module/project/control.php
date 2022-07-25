@@ -1924,7 +1924,7 @@ class project extends control
     {
         $projectID = $this->project->setMenu($projectID);
         $project   = $this->project->getById($projectID);
-        if(isset($project->acl) and $project->acl == 'open') $this->locate($this->createLink('project', 'view', "projectID=$projectID"));
+        if(isset($project->acl) and $project->acl == 'open') $this->locate($this->createLink('project', 'index', "projectID=$projectID"));
 
         echo $this->fetch('personnel', 'whitelist', "objectID=$projectID&module=$module&browseType=$objectType&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID&projectID=$projectID&from=$from");
     }
@@ -1942,6 +1942,10 @@ class project extends control
      */
     public function addWhitelist($projectID = 0, $deptID = 0, $copyID = 0, $programID = 0, $from = 'project')
     {
+        $projectID = $this->project->setMenu($projectID);
+        $project   = $this->project->getById($projectID);
+        if(isset($project->acl) and $project->acl == 'open') $this->locate($this->createLink('project', 'index', "projectID=$projectID"));
+
         echo $this->fetch('personnel', 'addWhitelist', "objectID=$projectID&dept=$deptID&copyID=$copyID&objectType=project&module=project&programID=$programID&from=$from");
     }
 

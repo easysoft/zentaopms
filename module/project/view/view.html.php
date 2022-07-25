@@ -19,7 +19,7 @@
         <div class="panel block-dynamic" style="height: 280px">
           <div class="panel-heading">
             <div class="panel-title"><?php echo $lang->execution->latestDynamic;?></div>
-            <?php if($project->model != 'kanban'):?>
+            <?php if($project->model != 'kanban' and common::hasPriv('project', 'dynamic')):?>
             <nav class="panel-actions nav nav-default">
               <li><?php common::printLink('project', 'dynamic', "projectID=$project->id&type=all", '<i class="icon icon-more icon-sm"></i>', '', "title=$lang->more");?></li>
             </nav>
@@ -43,9 +43,11 @@
         <div class="panel block-team" style="height: 280px">
           <div class="panel-heading">
             <div class="panel-title"><?php echo $lang->execution->relatedMember;?></div>
+            <?php if(common::hasPriv('project', 'team')):?>
             <nav class="panel-actions nav nav-default">
-              <li><?php common::printLink('project', 'manageMembers', "projectID=$project->id", '<i class="icon icon-more icon-sm"></i>', '', "title=$lang->more");?></li>
+              <li><?php common::printLink('project', 'team', "projectID=$project->id", '<i class="icon icon-more icon-sm"></i>', '', "title=$lang->more");?></li>
             </nav>
+            <?php endif;?>
           </div>
           <div class="panel-body">
             <div class="row row-grid">

@@ -148,14 +148,7 @@ class personnel extends control
      */
     public function addWhitelist($objectID = 0, $deptID = 0, $copyID = 0, $objectType = 'program', $module = 'personnel', $programID = 0, $from = '')
     {
-        if($this->app->tab == 'program')
-        {
-            $this->loadModel('program')->setMenu($objectID);
-        }
-        else if($this->app->tab == 'project')
-        {
-            $this->loadModel('project')->setMenu($objectID);
-        }
+        if($this->app->tab == 'program') $this->loadModel('program')->setMenu($objectID);
 
         $this->app->loadLang('execution');
 
