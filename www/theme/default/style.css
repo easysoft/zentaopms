@@ -94,10 +94,11 @@ a.showMoreImage:hover {opacity: 1;}
 .checkbox-primary > label{overflow: hidden;}
 
 body.xxc-embed {overflow-x: auto; overflow-y: hidden; height: 600px;}
+body.xxc-embed.m-productplan-view,body.xxc-embed.m-bug-browse,body.xxc-embed.m-product-browse,body.xxc-embed.m-execution-story,body.xxc-embed.m-execution-bug,body.xxc-embed.m-execution-task{height: unset}
 .xxc-embed #header {position: fixed;top: 0;width: 100%;z-index: 10;}
 .xxc-embed #toolbar {position: fixed;right: 120px!important;}
 .xxc-embed #main {position: absolute;top: 50px;bottom: 0;left: 0;right: 0;overflow: auto;}
 .xxc-embed .fix-table-copy-wrapper {top: 50px!important;}
 .xxc-embed #headerActions {right: 310px!important;}
-.xxc-embed,.body-modal #mainContent {padding-top: 13px !important;}
+.xxc-embed.body-modal #mainContent {padding-top: 13px !important;}
 .xxc-embed .modal-iframe .modal-header .close {font-size: 28px !important}
