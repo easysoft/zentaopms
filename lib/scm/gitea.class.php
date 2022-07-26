@@ -21,7 +21,7 @@ class Gitea
 
         $this->client = $client;
         $this->root   = rtrim($root, DIRECTORY_SEPARATOR);
-        $this->branch = isset($_COOKIE['repoBranch']) ? 'origin/' . $_COOKIE['repoBranch'] : '';
+        $this->branch = isset($_COOKIE['repoBranch']) ? $_COOKIE['repoBranch'] : '';
 
         chdir($this->root);
         exec("{$this->client} config core.quotepath false");
