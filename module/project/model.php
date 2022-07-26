@@ -60,6 +60,8 @@ class projectModel extends model
         if($action == 'close')    return $project->status != 'closed';
         if($action == 'suspend')  return $project->status == 'wait' or $project->status == 'doing';
         if($action == 'activate') return $project->status == 'done' or $project->status == 'closed';
+        if($action == 'whitelist') return $project->acl != 'open';
+        if($action == 'group') return $project->model != 'kanban';
 
         return true;
     }
@@ -2584,7 +2586,7 @@ class projectModel extends model
      *
      * @param  int    $objectID  projectID
      * @access public
-     * @return void
+     * @return int
      */
     public function setMenu($objectID)
     {
@@ -2625,11 +2627,23 @@ class projectModel extends model
             include $this->app->getModulePath('', 'execution') . 'lang/' . $this->app->getClientLang() . '.php';
         }
 
-        $this->lang->switcherMenu = $this->getSwitcher($objectID, $this->app->rawModule, $this->app->rawMethod);
+        $this->lang->switcherMenu = $this->getSwitcher($objectID, $moduleName, $methodName);
 
         $this->saveState($objectID, $this->getPairsByProgram());
+        $project = $this->getById($objectID);
+        if(isset($project->acl) and $project->acl == 'open' and isset($this->config->project->unsetWhitelist[$methodName]) and $this->config->project->unsetWhitelist[$methodName] == $moduleName)
+        {
+            unset($this->lang->project->menu->settings['subMenu']->whitelist);
+        }
+
+        if($project->model == 'kanban')
+        {
+            unset($this->lang->project->menu->settings['subMenu']->stakeholder);
+            unset($this->lang->project->menu->settings['subMenu']->group);
+        }
 
         common::setMenuVars('project', $objectID);
+        return $objectID;
     }
 
     /**
@@ -2758,25 +2772,24 @@ class projectModel extends model
         }
 
         $from     = $project->from == 'project' ? 'project' : 'pgmproject';
-        $iframe   = ($this->app->tab == 'program' || $project->model == 'kanban') ? 'iframe' : '';
-        $onlyBody = ($this->app->tab == 'program' || $project->model == 'kanban') ? true : '';
+        $iframe   = $this->app->tab == 'program' ? 'iframe' : '';
+        $onlyBody = $this->app->tab == 'program' ? true : '';
         $dataApp  = $this->config->systemMode == 'classic' ? "data-app=execution" : "data-app=project";
-        $attr     = $project->model == 'kanban' ? " disabled='disabled' style='pointer-events: none;'" : '';
 
         $menu .= $this->buildMenu($moduleName, 'edit', $params, $project, 'browse', 'edit', '', $iframe, $onlyBody, $dataApp);
 
         if($this->config->vision != 'lite')
         {
-            $menu .= $this->buildMenu($moduleName, 'team', $params, $project, 'browse', 'group', '', '', '', $dataApp . $attr, $this->lang->execution->team);
-            if($this->config->systemMode == 'new') $menu .= $this->buildMenu('project', 'group', "$params&programID={$project->programID}", $project, 'browse', 'lock', '', '', '', $dataApp . $attr);
+            $menu .= $this->buildMenu($moduleName, 'team', $params, $project, 'browse', 'group', '', '', '', $dataApp, $this->lang->execution->team);
+            if($this->config->systemMode == 'new') $menu .= $this->buildMenu('project', 'group', "$params&programID={$project->programID}", $project, 'browse', 'lock', '', '', '', $dataApp);
 
             if(common::hasPriv($moduleName, 'manageProducts') || common::hasPriv($moduleName, 'whitelist') || common::hasPriv($moduleName, 'delete'))
             {
                 $menu .= "<div class='btn-group'>";
                 $menu .= "<button type='button' class='btn dropdown-toggle' data-toggle='context-dropdown' title='{$this->lang->more}'><i class='icon-more-alt'></i></button>";
                 $menu .= "<ul class='dropdown-menu pull-right text-center' role='menu'>";
-                $menu .= $this->buildMenu($moduleName, 'manageProducts', $params, $project, 'browse', 'link', '', 'btn-action', '', $attr, $this->lang->project->manageProducts);
-                if($this->config->systemMode == 'new') $menu .= $this->buildMenu('project', 'whitelist', "$params&module=project&from=$from", $project, 'browse', 'shield-check', '', 'btn-action', '', $dataApp . $attr);
+                $menu .= $this->buildMenu($moduleName, 'manageProducts', $params . "&from={$this->app->tab}", $project, 'browse', 'link', '', 'btn-action', '', '', $this->lang->project->manageProducts);
+                if($this->config->systemMode == 'new') $menu .= $this->buildMenu('project', 'whitelist', "$params&module=project&from=$from", $project, 'browse', 'shield-check', '', 'btn-action', '', $dataApp);
                 $menu .= $this->buildMenu($moduleName, "delete", $params, $project, 'browse', 'trash', 'hiddenwin', 'btn-action');
                 $menu .= "</ul>";
                 $menu .= "</div>";

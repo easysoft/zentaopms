@@ -103,14 +103,7 @@ class personnel extends control
      */
     public function whitelist($objectID = 0, $module = 'personnel', $objectType = 'program', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1, $programID = 0, $from = '')
     {
-        if($this->app->tab == 'program')
-        {
-            $this->loadModel('program')->setMenu($objectID);
-        }
-        else if($this->app->tab == 'project')
-        {
-            $this->loadModel('project')->setMenu($objectID);
-        }
+        if($this->app->tab == 'program') $this->loadModel('program')->setMenu($objectID);
 
         /* Load lang and set session. */
         $this->app->loadLang('user');
@@ -155,14 +148,7 @@ class personnel extends control
      */
     public function addWhitelist($objectID = 0, $deptID = 0, $copyID = 0, $objectType = 'program', $module = 'personnel', $programID = 0, $from = '')
     {
-        if($this->app->tab == 'program')
-        {
-            $this->loadModel('program')->setMenu($objectID);
-        }
-        else if($this->app->tab == 'project')
-        {
-            $this->loadModel('project')->setMenu($objectID);
-        }
+        if($this->app->tab == 'program') $this->loadModel('program')->setMenu($objectID);
 
         $this->app->loadLang('execution');
 
