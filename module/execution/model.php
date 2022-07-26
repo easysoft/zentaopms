@@ -3250,6 +3250,7 @@ class executionModel extends model
         $current  = $begin;
         $today    = helper::today();
         $endTime  = strtotime($end);
+        $preValue = 0;
         $todayTag = 0;
 
         foreach($sets as $date => $set)
@@ -3266,11 +3267,12 @@ class executionModel extends model
                 $todayTag = $i + 1;
             }
 
+            if(isset($sets[$current])) $preValue = $sets[$current]->value;
             if(!isset($sets[$current]) and $mode == 'noempty')
             {
                 $sets[$current]  = new stdclass();
                 $sets[$current]->name  = $current;
-                $sets[$current]->value = helper::diffDate($current, $today) <= 0 ? 0 : 'null';
+                $sets[$current]->value = helper::diffDate($current, $today) < 0 ? $preValue : 'null';
             }
 
             $nextDay = date(DT_DATE1, $currentTime + 24 * 3600);
