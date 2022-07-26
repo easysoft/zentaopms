@@ -52,7 +52,7 @@
           }
           ?>
           <td class='text' title='<?php echo $productNames;?>'><?php echo $productNames;?></td>
-          <td class='text' title='<?php echo $repo->path; ?>'><?php echo $repo->path; ?></td>
+          <td class='text' title='<?php echo $repo->codePath;?>'><?php echo $repo->codePath;?></td>
           <td class='text-left c-actions'>
             <?php
             common::printIcon('repo', 'edit', "repoID=$repo->id&objectID=$objectID", '', 'list', 'edit');
