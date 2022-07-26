@@ -30,6 +30,7 @@ $lang->mr->mriid       = "raw MR ID";
 $lang->mr->title       = 'Name';
 $lang->mr->status      = 'Status';
 $lang->mr->author      = 'Author';
+$lang->mr->createdDate = 'Created date';
 $lang->mr->assignee    = 'Assignee';
 $lang->mr->reviewer    = 'Reviewer';
 $lang->mr->mergeStatus = 'Merge status';

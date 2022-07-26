@@ -170,7 +170,6 @@ $lang->execution->cfdTypeList['story'] = "View by {$lang->SRCommon}";
 $lang->execution->cfdTypeList['task']  = "View by task";
 $lang->execution->cfdTypeList['bug']   = "View By bug";
 
-$lang->team = new stdclass();
 $lang->team->account    = 'User';
 $lang->team->role       = 'Role';
 $lang->team->join       = 'Joined';

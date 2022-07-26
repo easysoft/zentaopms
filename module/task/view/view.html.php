@@ -166,8 +166,8 @@
     <?php endif;?>
     <div class='main-actions'>
       <div class="btn-toolbar">
-        <?php if(!isonlybody()):?>
-        <?php echo html::a($browseLink, '<i class="icon icon-back icon-sm"></i> ' . $lang->goback, '', "class='btn btn-secondary'");?>
+        <?php if(!isonlybody() and $this->app->getViewType() != 'xhtml'):?>
+        <?php echo html::a($browseLink, '<i class="icon icon-back icon-sm"></i> ' . $lang->goback, '', "class='btn'");?>
         <?php echo "<div class='divider'></div>";?>
         <?php endif;?>
         <?php $task->executionList = $execution;?>
