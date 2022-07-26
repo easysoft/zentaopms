@@ -1744,13 +1744,6 @@ class execution extends control
         $branches            = $this->project->getBranchesByProject($executionID);
         $linkedProductIdList = empty($branches) ? '' : array_keys($branches);
 
-        if($execution->type == 'kanban')
-        {
-            global $lang;
-            $lang->executionCommon = $lang->execution->kanban;
-            include $this->app->getModulePath('', 'execution') . 'lang/' . $this->app->getClientLang() . '.php';
-        }
-
         if(!empty($newPlans) and $confirm == 'yes')
         {
             $newPlans = explode(',', $newPlans);
@@ -1825,13 +1818,9 @@ class execution extends control
             if($message) $this->lang->saveSuccess = $message;
 
             if($_POST['status'] == 'doing') $this->loadModel('common')->syncPPEStatus($executionID);
-            if($execution->type == 'kanban') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
 
             /* If link from no head then reload. */
-            if(isonlybody())
-            {
-                return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
-            }
+            if(isonlybody()) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
 
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('view', "executionID=$executionID")));
         }
@@ -2280,11 +2269,7 @@ class execution extends control
         $type = $this->config->vision == 'lite' ? 'kanban' : 'stage,sprint,kanban';
         if(empty($execution) || strpos($type, $execution->type) === false) return print(js::error($this->lang->notFound) . js::locate('back'));
 
-        if($execution->type == 'kanban')
-        {
-            if(defined('RUN_MODE') && RUN_MODE == 'api') return print($this->fetch('execution', 'kanban', "executionID=$executionID"));
-            return print(js::locate(inlink('kanban', "executionID=$executionID")));
-        }
+        if($execution->type == 'kanban' and defined('RUN_MODE') and RUN_MODE == 'api') return print($this->fetch('execution', 'kanban', "executionID=$executionID"));
 
         $this->app->loadLang('program');
 
@@ -2305,18 +2290,36 @@ class execution extends control
         $this->execution->setMenu($execution->id);
         $this->app->loadLang('bug');
 
-        $type = 'noweekend';
-        if(((strpos('closed,suspended', $execution->status) === false and helper::today() > $execution->end)
-            or ($execution->status == 'closed'    and substr($execution->closedDate, 0, 10) > $execution->end)
-            or ($execution->status == 'suspended' and $execution->suspendedDate > $execution->end))
-            and strpos($type, 'delay') === false)
-        $type .= ',withdelay';
+        if($execution->type == 'kanban')
+        {
+            $this->app->loadClass('date');
 
-        $deadline = $execution->status == 'closed' ? substr($execution->closedDate, 0, 10) : $execution->suspendedDate;
-        $deadline = strpos('closed,suspended', $execution->status) === false ? helper::today() : $deadline;
-        $endDate  = strpos($type, 'withdelay') !== false ? $deadline : $execution->end;
-        list($dateList, $interval) = $this->execution->getDateList($execution->begin, $endDate, $type, 0, 'Y-m-d', $execution->end);
-        $chartData = $this->execution->buildBurnData($executionID, $dateList, $type);
+            $begin     = date('Y-m-d', strtotime('-13 days'));
+            $begin     = (helper::isZeroDate($execution->begin) or helper::diffDate($begin, $execution->begin) > 0) ? $begin : $execution->begin;
+            $end       = helper::today();
+            $dateList  = date::getDateList($begin, $end, 'Y-m-d', 'noweekend');
+            $chartData = $this->execution->buildCFDData($executionID, $dateList, 'task');
+
+            $this->view->begin = helper::safe64Encode(urlencode($begin));
+            $this->view->end   = helper::safe64Encode(urlencode($end));
+        }
+        else
+        {
+            $type = 'noweekend';
+            if(((strpos('closed,suspended', $execution->status) === false and helper::today() > $execution->end)
+                or ($execution->status == 'closed'    and substr($execution->closedDate, 0, 10) > $execution->end)
+                or ($execution->status == 'suspended' and $execution->suspendedDate > $execution->end))
+                and strpos($type, 'delay') === false)
+            {
+                $type .= ',withdelay';
+            }
+
+            $deadline = $execution->status == 'closed' ? substr($execution->closedDate, 0, 10) : $execution->suspendedDate;
+            $deadline = strpos('closed,suspended', $execution->status) === false ? helper::today() : $deadline;
+            $endDate  = strpos($type, 'withdelay') !== false ? $deadline : $execution->end;
+            list($dateList, $interval) = $this->execution->getDateList($execution->begin, $endDate, $type, 0, 'Y-m-d', $execution->end);
+            $chartData = $this->execution->buildBurnData($executionID, $dateList, $type);
+        }
 
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
@@ -2991,6 +2994,8 @@ class execution extends control
         /* Set menu. */
         $this->execution->setMenu($execution->id);
         if(!empty($this->config->user->moreLink)) $this->config->moreLinks["accounts[]"] = $this->config->user->moreLink;
+
+        if($execution->type == 'kanban') $this->lang->execution->copyTeamTitle = str_replace($this->lang->execution->common, $this->lang->execution->kanban, $this->lang->execution->copyTeamTitle);
 
         $title      = $this->lang->execution->manageMembers . $this->lang->colon . $execution->name;
         $position[] = html::a($this->createLink('execution', 'browse', "executionID=$executionID"), $execution->name);
@@ -3740,6 +3745,9 @@ class execution extends control
         /* Set the menu. If the executionID = 0, use the indexMenu instead. */
         $this->execution->setMenu($executionID);
 
+        $execution = $this->execution->getByID($executionID);
+        if(!empty($execution->acl) and $execution->acl != 'private') $this->locate($this->createLink('execution', 'task', "executionID=$executionID"));
+
         echo $this->fetch('personnel', 'whitelist', "objectID=$executionID&module=$module&browseType=$objectType&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID");
     }
 
@@ -3759,6 +3767,9 @@ class execution extends control
 
         /* Set the menu. If the executionID = 0, use the indexMenu instead. */
         $this->execution->setMenu($executionID);
+
+        $execution = $this->execution->getByID($executionID);
+        if(!empty($execution->acl) and $execution->acl != 'private') $this->locate($this->createLink('execution', 'task', "executionID=$executionID"));
 
         echo $this->fetch('personnel', 'addWhitelist', "objectID=$executionID&dept=$deptID&copyID=$copyID&objectType=sprint&module=execution");
     }

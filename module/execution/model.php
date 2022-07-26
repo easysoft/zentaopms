@@ -66,12 +66,22 @@ class executionModel extends model
         $execution = $this->getByID($executionID);
         if($execution and $execution->type == 'kanban')
         {
-            $this->lang->execution->menu         = new stdclass();
-            $this->lang->execution->menu->kanban = array('link' => "{$this->lang->kanban->common}|execution|kanban|executionID=%s");
-            $this->lang->execution->menu->CFD    = array('link' => "{$this->lang->execution->CFD}|execution|cfd|executionID=%s");
-            $this->lang->execution->menu->build  = array('link' => "{$this->lang->build->common}|execution|build|executionID=%s");
-            $this->lang->execution->dividerMenu  = '';
-            $this->lang->execution->accessDenied = str_replace($this->lang->executionCommon, $this->lang->execution->kanban, $this->lang->execution->accessDenied);
+            global $lang;
+            $lang->executionCommon   = $lang->execution->kanban;
+            include $this->app->getModulePath('', 'execution') . 'lang/' . $this->app->getClientLang() . '.php';
+
+            $this->lang->execution->menu           = new stdclass();
+            $this->lang->execution->menu->kanban   = array('link' => "{$this->lang->kanban->common}|execution|kanban|executionID=%s");
+            $this->lang->execution->menu->CFD      = array('link' => "{$this->lang->execution->CFD}|execution|cfd|executionID=%s");
+            $this->lang->execution->menu->build    = array('link' => "{$this->lang->build->common}|execution|build|executionID=%s");
+            $this->lang->execution->menu->settings = array('link' => "{$this->lang->settings}|execution|view|executionID=%s", 'subModule' => 'personnel', 'alias' => 'edit,manageproducts,team,whitelist,addwhitelist,managemembers', 'class' => 'dropdown dropdown-hover');
+            $this->lang->execution->dividerMenu    = '';
+
+            $this->lang->execution->menu->settings['subMenu']            = new stdclass();
+            $this->lang->execution->menu->settings['subMenu']->view      = array('link' => "{$this->lang->overview}|execution|view|executionID=%s", 'subModule' => 'view', 'alias' => 'edit,start,suspend,putoff,close');
+            $this->lang->execution->menu->settings['subMenu']->products  = array('link' => "{$this->lang->productCommon}|execution|manageproducts|executionID=%s");
+            $this->lang->execution->menu->settings['subMenu']->team      = array('link' => "{$this->lang->team->common}|execution|team|executionID=%s", 'alias' => 'managemembers');
+            $this->lang->execution->menu->settings['subMenu']->whitelist = array('link' => "{$this->lang->whitelist}|execution|whitelist|executionID=%s", 'subModule' => 'personnel', 'alias' => 'addwhitelist');
         }
 
         if(!$this->app->user->admin and strpos(",{$this->app->user->view->sprints},", ",$executionID,") === false and !defined('TUTORIAL') and $executionID != 0) return print(js::error($this->lang->execution->accessDenied) . js::locate('back'));
@@ -89,6 +99,8 @@ class executionModel extends model
             $lang->executionCommon = $lang->project->stage;
             include $this->app->getModulePath('', 'execution') . 'lang/' . $this->app->getClientLang() . '.php';
         }
+
+        if($execution->acl != 'private') unset($this->lang->execution->menu->settings['subMenu']->whitelist);
 
         if($execution and $execution->lifetime == 'ops')
         {
@@ -1517,10 +1529,6 @@ class executionModel extends model
         {
             $link = helper::createLink($module, 'task', "executionID=%s");
         }
-        elseif($module == 'execution' and $method == 'cfd')
-        {
-            $link = helper::createLink('execution', 'kanban', "executionID=%s");
-        }
         elseif($module == 'bug' and $method == 'create' and $this->app->tab == 'execution')
         {
             $link = helper::createLink($module, $method, "productID=0&branch=0&extra=executionID=%s");
@@ -2904,13 +2912,13 @@ class executionModel extends model
     public function unlinkMember($sprintID, $account)
     {
         $sprint = $this->getByID($sprintID);
-        $type   = ($sprint->type == 'stage' || $sprint->type == 'sprint') ? 'execution' : $sprint->type;
+        $type   = strpos(',stage,sprint,kanban,', ",$sprint->type,") !== false ? 'execution' : $sprint->type;
 
         $this->dao->delete()->from(TABLE_TEAM)->where('root')->eq((int)$sprintID)->andWhere('type')->eq($type)->andWhere('account')->eq($account)->exec();
         $this->updateUserView($sprintID, 'sprint', array($account));
 
         /* Remove team members from the sprint or stage, and determine whether to remove team members from the execution. */
-        if($sprint->type == 'stage' || $sprint->type == 'sprint')
+        if(strpos(',stage,sprint,kanban,', ",$sprint->type,") !== false)
         {
             $teamMember = $this->dao->select('t1.id, t2.account')->from(TABLE_EXECUTION)->alias('t1')
                 ->leftJoin(TABLE_TEAM)->alias('t2')->on('t1.id = t2.root')

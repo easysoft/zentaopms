@@ -479,17 +479,20 @@ class personnelModel extends model
         if($objectType == 'sprint')
         {
             $parentID = 0;
-            if($this->config->systemMode == 'new') $parentID = $this->dao->select('project')->from(TABLE_EXECUTION)->where('id')->eq($objectID)->fetch('project');
+            if($this->config->systemMode == 'new')
+            {
+                $this->loadModel('execution');
+                $execution = $this->execution->getByID($objectID);
+                $parentID  = $execution->project;
+                $project   = $this->execution->getByID($parentID);
+                $objects   = array($project->id => $project->name);
+            }
 
-            $objects  = $this->dao->select('id,name')->from(TABLE_EXECUTION)
-                ->where('(project')->eq($parentID)
-                ->orWhere('id')->eq($parentID)
-                ->markRight(1)
-                ->andWhere('(id')->in($this->app->user->view->projects)
-                ->orWhere('id')->in($this->app->user->view->sprints)
-                ->markRight(1)
+            $objects += $this->dao->select('id,name')->from(TABLE_EXECUTION)
+                ->where('project')->eq($parentID)
+                ->andWhere('id')->in($this->app->user->view->sprints)
                 ->andWhere('deleted')->eq(0)
-                ->orderBy('type_asc,openedDate_desc')
+                ->orderBy('openedDate_desc')
                 ->limit('10')
                 ->fetchPairs();
             foreach($objects as $id => &$object)

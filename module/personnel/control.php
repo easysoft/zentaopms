@@ -183,6 +183,12 @@ class personnel extends control
         if($objectType == 'project')           $objectName = $this->lang->projectCommon;
         $this->lang->personnel->selectObjectTips = sprintf($this->lang->personnel->selectObjectTips, $objectName);
 
+        if($objectType == 'sprint' and $module == 'execution')
+        {
+            $execution = $this->loadModel('execution')->getByID($objectID);
+            $this->lang->personnel->selectObjectTips = (!empty($execution) and $execution->type == 'kanban') ? str_replace($this->lang->execution->common, $this->lang->execution->kanban, $this->lang->personnel->selectObjectTips) : $this->lang->personnel->selectObjectTips;
+        }
+
         $this->view->title      = $this->lang->personnel->addWhitelist;
         $this->view->position[] = $this->lang->personnel->addWhitelist;
 
