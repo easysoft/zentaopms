@@ -28,7 +28,6 @@
 <?php js::set('manageProducts', $lang->project->manageProducts);?>
 <?php $requiredFields = $config->project->create->requiredFields;?>
 <?php js::set('requiredFields', $requiredFields);?>
-<?php js::set('copyType', $copyType);?>
 <div id='mainContent' class='main-content'>
   <div class='center-block'>
     <div class='main-header'>
@@ -197,14 +196,7 @@
           <td colspan='4' class='text-center form-actions'>
             <?php
               echo html::hidden('model', $model);
-              if(!empty($copyProjectID) and $copyType == 2)
-              {
-                  echo html::submitButton($lang->project->nextStep);
-              }
-              else
-              {
-                  echo html::submitButton();
-              }
+              echo html::submitButton();
               echo $gobackLink ? html::a($gobackLink, $lang->goback, '', 'class="btn btn-wide"') : html::backButton();
             ?>
           </td>
@@ -246,69 +238,10 @@
     </div>
   </div>
 </div>
-<div class='modal fade modal-scroll-inside' id='copyProjectConfirmModal'>
-  <div class='modal-dialog mw-900px'>
-    <div class='modal-header'>
-      <button type='button' class='close' data-dismiss='modal'><i class="icon icon-close"></i></button>
-      <h2 class='text-center'>
-        <?php echo $lang->project->copyProjectConfirm;?>
-      </h2>
-    </div>
-    <div class='modal-body modal-flex'>
-        <div class='col-md-4 modal-border change-background-gray' id="copypart">
-          <div class='col-sm-6'>
-          <h3><?php echo $lang->project->copyproject->part;?></h3>
-            <i class="icon icon-check"></i><?php echo $lang->project->copyproject->partMessageList['base']; ?>
-          </div>
-        </div>
-        <div class='col-md-7 modal-border change-background-blue' id="copyall">
-          <div class='col-md-12' style="height: 80px;">
-            <h3>
-              <span class='change-blue'><?php echo $lang->project->copyproject->all;?></span>
-              <span><?php echo $lang->project->copyproject->allextra;?></span>
-            </h3>
-            <div class='col-md-4'>
-              <i class="icon icon-check change-blue"></i><?php echo $lang->project->copyproject->allMessageList['base'];?>
-            </div>
-            <div class='col-md-4'>
-              <i class="icon icon-check change-blue"></i><?php echo $lang->project->copyproject->allMessageList['execution'];?>
-            </div>
-            <div class='col-md-4'>
-              <i class="icon icon-check change-blue"></i><?php echo $lang->project->copyproject->allMessageList['doc'];?>
-            </div>
-          </div>
-          <div class='col-md-12' style="height: 70px;">
-            <div class='col-md-4'>
-              <i class="icon icon-check change-blue"></i><?php echo $lang->project->copyproject->allMessageList['task'];?>
-            </div>
-            <div class='col-md-4'>
-              <i class="icon icon-check change-blue"></i><?php echo $lang->project->copyproject->allMessageList['qa'];?>
-            </div>
-            <div class='col-md-4'>
-              <i class="icon icon-check change-blue"></i><?php echo $lang->project->copyproject->allMessageList['process'];?>
-            </div>
-          </div>
-        </div>
-    </div>
-    <div class='col-md-12 text-center'>
-    <?php echo html::hidden('copytype', 2); ?>
-    <?php echo html::commonButton($lang->save, 'id="copyTypeConfirm"', 'btn btn-wide btn-primary'); ?>
-    </div>
-  </div>
-</div>
-
 <div id='projectAcl' class='hidden'>
   <?php echo nl2br(html::radio('acl', $lang->project->aclList, $acl, "onclick='setWhite(this.value);'", 'block'));?>
 </div>
 <div id='programAcl' class='hidden'>
   <?php echo nl2br(html::radio('acl', $lang->project->subAclList, $acl, "onclick='setWhite(this.value);'", 'block'));?>
 </div>
-<?php if(!empty($copyProjectID) and $copyType == 2): ?>
-<script>
-$("#submit").click(function()
-{
-    sessionStorage.setItem("projectID:" + copyProjectID, JSON.stringify($("form").serializeArray()))
-})
-</script>
-<?php endif; ?>
 <?php include '../../common/view/footer.html.php';?>

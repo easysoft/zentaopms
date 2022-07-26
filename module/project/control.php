@@ -536,7 +536,6 @@ class project extends control
         $this->view->URSRPairs           = $this->loadModel('custom')->getURSRPairs();
         $this->view->availableBudget     = $this->program->getBudgetLeft($parentProgram);
         $this->view->budgetUnitList      = $this->project->getBudgetUnitList();
-        $this->view->copyType            = isset($output['copytype']) ? $output['copytype'] : 0;
 
         $this->display('project', 'create');
     }
