@@ -977,7 +977,7 @@ class execution extends control
         $memberPairs = $this->user->processAccountSort($memberPairs);
 
         /* Build the search form. */
-        $actionURL = $this->createLink('execution', 'bug', "executionID=$executionID&productID=$productID&orderBy=$orderBy&build=$build&type=bysearch&queryID=myQueryID");
+        $actionURL = $this->createLink('execution', 'bug', "executionID=$executionID&productID=$productID&branch=$branch&orderBy=$orderBy&build=$build&type=bysearch&queryID=myQueryID");
         $this->execution->buildBugSearchForm($products, $queryID, $actionURL);
 
         $product = $this->product->getById($productID);

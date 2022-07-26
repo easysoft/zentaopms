@@ -1304,7 +1304,7 @@ class bug extends control
 
             $branchIdList[$bug->product][$bug->branch] = $bug->branch;
 
-            if(!isset($modules[$bug->product][$bug->branch])) $modules[$bug->product][$bug->branch] = $modules[$bug->product][0] + $this->tree->getModulesName($bug->module);
+            if(!isset($modules[$bug->product][$bug->branch]) and isset($modules[$bug->product])) $modules[$bug->product][$bug->branch] = $modules[$bug->product][0] + $this->tree->getModulesName($bug->module);
         }
 
         /* Get assigned to member. */
