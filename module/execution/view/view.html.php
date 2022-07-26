@@ -157,7 +157,7 @@
               <div class="panel-title"><?php echo $execution->name . $lang->execution->CFD;?></div>
               <?php if(common::hasPriv('execution', 'cfd')):?>
               <nav class="panel-actions nav nav-default">
-                <li><?php common::printLink('execution', 'cfd', "executionID=$execution->id", '<i class="icon icon-more icon-sm"></i>', '', "title=$lang->more");?></li>
+                <li><?php common::printLink('execution', 'cfd', "executionID=$execution->id&type=task&withWeekend=false&begin=$begin&end=$end", '<i class="icon icon-more icon-sm"></i>', '', "title=$lang->more");?></li>
               </nav>
               <?php endif;?>
             </div>
@@ -226,11 +226,6 @@
           <div class="panel block-dynamic" style="height: 280px">
             <div class="panel-heading">
               <div class="panel-title"><?php echo $lang->execution->latestDynamic;?></div>
-              <?php if(common::hasPriv('execution', 'dynamic')):?>
-              <nav class="panel-actions nav nav-default">
-                <li><?php common::printLink('execution', 'dynamic', "executionID=$execution->id&type=all", '<i class="icon icon-more icon-sm"></i>', '', "title=$lang->more");?></li>
-              </nav>
-              <?php endif;?>
             </div>
             <div class="panel-body scrollbar-hover">
               <ul class="timeline timeline-tag-left no-margin">

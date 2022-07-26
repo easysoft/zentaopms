@@ -2295,10 +2295,13 @@ class execution extends control
             $this->app->loadClass('date');
 
             $begin     = date('Y-m-d', strtotime('-13 days'));
-            $begin     = (helper::isZeroDate($execution->begin) or helper::diffDate($execution->begin, $begin) >= 14) ? $begin : $execution->begin;
+            $begin     = (helper::isZeroDate($execution->begin) or helper::diffDate($begin, $execution->begin) > 0) ? $begin : $execution->begin;
             $end       = helper::today();
             $dateList  = date::getDateList($begin, $end, 'Y-m-d', 'noweekend');
             $chartData = $this->execution->buildCFDData($executionID, $dateList, 'task');
+
+            $this->view->begin = helper::safe64Encode(urlencode($begin));
+            $this->view->end   = helper::safe64Encode(urlencode($end));
         }
         else
         {
