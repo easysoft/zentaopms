@@ -15,6 +15,8 @@ $config->execution->modelList['kanban']    = 'kanban';
 
 $config->execution->statusActions = array('start', 'putoff', 'suspend', 'close', 'activate');
 
+$config->execution->kanbanMethod = array('kanban', 'cfd', 'build', 'view', 'manageproducts', 'team', 'managemembers', 'whitelist', 'addwhitelist', 'edit');
+
 global $lang, $app;
 $app->loadLang('task');
 $config->execution->task   = new stdclass();

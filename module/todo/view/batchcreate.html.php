@@ -41,7 +41,7 @@
   {
       if($field)$visibleFields[$field] = '';
   }
-  $columns = count($visibleFields) + 2;
+  $columns = count($visibleFields) + 3;
   ?>
   <form id='todoBatchAddForm' method='post' target='hiddenwin' action='<?php echo $this->createLink('todo', 'batchCreate');?>' data-ride='table'>
     <table class='table table-form table-fixed with-border'>
@@ -52,8 +52,9 @@
           <th class='col-pri<?php echo zget($visibleFields, 'pri', ' hidden')?>'><?php echo $lang->todo->pri;?></th>
           <th class='col-name required'><?php echo $lang->todo->name;?></th>
           <th class='col-desc<?php echo zget($visibleFields, 'desc', ' hidden');?>'><?php echo $lang->todo->desc;?></th>
+          <th class='col-assignedTo'><?php echo $lang->todo->assignTo;?></th>
           <th class='col-date<?php echo zget($visibleFields, 'beginAndEnd', ' hidden')?>'><?php echo $lang->todo->beginAndEnd;?></th>
-          <th><div class='checkbox-primary check-all<?php echo zget($visibleFields, 'beginAndEnd', ' hidden')?>' style='overflow:visible' id="select-all"><label><?php echo $lang->todo->periods['future']?></label></div></th>
+          <th class='col-future'><div class='checkbox-primary check-all visible<?php echo zget($visibleFields, 'beginAndEnd', ' hidden')?>' id="select-all"><label><?php echo $lang->todo->periods['future']?></label></div></th>
         </tr>
       </thead>
       <tbody>
@@ -62,14 +63,17 @@
         <?php for($i = 0; $i < $config->todo->batchCreate; $i++):?>
         <tr class='text-left'>
           <td class='col-id'><?php echo $i+1;?></td>
-          <td <?php echo zget($visibleFields, 'type', "class='hidden'")?> style='overflow:visible'><?php echo html::select("types[$i]", $lang->todo->typeList, '', "onchange='loadList(this.value, " . ($i + 1) . ")' class='form-control chosen'");?></td>
-          <td <?php echo zget($visibleFields, 'pri', "class='hidden'")?> style='overflow:visible'><?php echo html::select("pris[$i]", $lang->todo->priList, $pri, "class='form-control'");?></td>
-          <td style='overflow:visible'>
+          <td class="visible <?php echo zget($visibleFields, 'type', 'hidden')?>"><?php echo html::select("types[$i]", $lang->todo->typeList, '', "onchange='loadList(this.value, " . ($i + 1) . ")' class='form-control'");?></td>
+          <td class="visible <?php echo zget($visibleFields, 'pri', 'hidden')?>"><?php echo html::select("pris[$i]", $lang->todo->priList, $pri, "class='form-control'");?></td>
+          <td class='visible'>
             <div id='<?php echo "nameBox" . ($i+1);?>' class='hidden'><?php echo html::input("names[$i]", '', 'class="text-left form-control"');?></div>
             <div class='<?php echo "nameBox" . ($i+1);?>'><?php echo html::input("names[$i]", '', 'class="text-left form-control"');?></div>
           </td>
           <td <?php echo zget($visibleFields, 'desc', "class='hidden'")?>><?php echo html::textarea("descs[$i]", '', "rows='1' class='form-control'");?></td>
-          <td <?php echo zget($visibleFields, 'beginAndEnd', "class='hidden'")?> style='overflow:visible'>
+          <?php $assignedTo = $i > 0 ? 'ditto' : $app->user->account;?>
+          <?php if($i > 0) $users['ditto'] = $lang->todo->ditto;?>
+          <td class='visible'><?php echo html::select("assignedTos[$i]", $users, $assignedTo, "class='form-control chosen'");?></td>
+          <td class="visible <?php echo zget($visibleFields, 'beginAndEnd', 'hidden')?>">
             <div class='w-p50 pull-left'>
               <?php echo html::select("begins[$i]", $times, $time, "onchange=\"setBeginsAndEnds($i, 'begin');\" class='form-control chosen control-time-begin'" . (isset($visibleFields['beginAndEnd']) ? '' : " disabled"));?>
             </div>
@@ -77,7 +81,7 @@
               <?php echo html::select("ends[$i]", $times, '', "onchange=\"setBeginsAndEnds($i, 'end');\" class='form-control chosen control-time-end'" . (isset($visibleFields['beginAndEnd']) ? '' : " disabled"));?>
             </div>
           </td>
-          <td <?php echo zget($visibleFields, 'beginAndEnd', "class='hidden'")?> style='overflow:visible'>
+          <td class="visible <?php echo zget($visibleFields, 'beginAndEnd', 'hidden')?>">
             <div class='checkbox-primary'>
               <input type='checkbox' name="switchTime[<?php echo $i?>]" id="switchTime<?php echo $i?>" class='control-time-switch' onclick='switchTimeList(<?php echo $i?>);' />
               <label for="switchTime<?php echo $i?>"> <?php echo $lang->todo->periods['future'];?></label>

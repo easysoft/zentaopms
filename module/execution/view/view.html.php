@@ -10,20 +10,26 @@
  * @link        http://www.zentao.net
  */
 ?>
+<?php js::import($this->config->webRoot . 'js/echarts/echarts.common.min.js'); ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
 <?php js::set('type', $type);?>
+<?php js::set('chartData', $chartData);?>
+<?php js::set('YUnit', $lang->execution->count); ?>
 <?php $style = isonlybody() ? 'style="padding-top: 0px;"' : '';?>
   <div id='mainContent' class="main-row" <?php echo $style;?>>
     <div class="col-8 main-col">
       <div class="row">
+        <?php if(isset($execution->type) and $execution->type != 'kanban'):?>
         <div class="col-sm-6">
           <div class="panel block-burn" style="height: 280px">
             <div class="panel-heading">
               <div class="panel-title"><?php echo $execution->name . $lang->execution->burn;?></div>
+              <?php if(common::hasPriv('execution', 'burn')):?>
               <nav class="panel-actions nav nav-default">
                 <li><?php common::printLink('execution', 'burn', "executionID=$execution->id", '<i class="icon icon-more icon-sm"></i>', '', "title=$lang->more");?></li>
               </nav>
+              <?php endif;?>
             </div>
             <div class="panel-body">
               <?php if(common::hasPriv('execution', 'burn')):?>
@@ -45,9 +51,11 @@
           <div class="panel block-dynamic" style="height: 280px">
             <div class="panel-heading">
               <div class="panel-title"><?php echo $lang->execution->latestDynamic;?></div>
+              <?php if(common::hasPriv('execution', 'dynamic')):?>
               <nav class="panel-actions nav nav-default">
                 <li><?php common::printLink('execution', 'dynamic', "executionID=$execution->id&type=all", '<i class="icon icon-more icon-sm"></i>', '', "title=$lang->more");?></li>
               </nav>
+              <?php endif;?>
             </div>
             <div class="panel-body scrollbar-hover">
               <ul class="timeline timeline-tag-left no-margin">
@@ -67,9 +75,11 @@
           <div class="panel block-team" style="height: 240px">
             <div class="panel-heading">
               <div class="panel-title"><?php echo $lang->execution->relatedMember;?></div>
+              <?php if(common::hasPriv('execution', 'team')):?>
               <nav class="panel-actions nav nav-default">
                 <li><?php common::printLink('execution', 'team', "executionID=$execution->id", '<i class="icon icon-more icon-sm"></i>', '', "title=$lang->more");?></li>
               </nav>
+              <?php endif;?>
             </div>
             <div class="panel-body">
               <div class="row row-grid">
@@ -111,9 +121,11 @@
           <div class="panel block-docs" style="height: 240px">
             <div class="panel-heading">
             <div class="panel-title"><?php echo $lang->execution->doclib;?></div>
+              <?php if(common::hasPriv('doc', 'objectLibs')):?>
               <nav class="panel-actions nav nav-default">
                 <li><?php common::printLink('doc', 'objectLibs', "type=execution&executionID=$execution->id&from=execution", '<i class="icon icon-more icon-sm"></i>', '', "title=$lang->more");?></li>
               </nav>
+              <?php endif;?>
             </div>
             <div class="panel-body">
               <div class="row row-grid">
@@ -138,6 +150,98 @@
             </div>
           </div>
         </div>
+        <?php else:?>
+        <div class="col-sm-6">
+          <div class="panel block-cfd" style="height: 280px">
+            <div class="panel-heading">
+              <div class="panel-title"><?php echo $execution->name . $lang->execution->CFD;?></div>
+              <?php if(common::hasPriv('execution', 'cfd')):?>
+              <nav class="panel-actions nav nav-default">
+                <li><?php common::printLink('execution', 'cfd', "executionID=$execution->id&type=task&withWeekend=false&begin=$begin&end=$end", '<i class="icon icon-more icon-sm"></i>', '', "title=$lang->more");?></li>
+              </nav>
+              <?php endif;?>
+            </div>
+            <div class="panel-body">
+              <?php if(common::hasPriv('execution', 'cfd')):?>
+              <?php if(isset($chartData['labels']) and count($chartData['labels']) != 1): ?>
+              <div id="cfdWrapper">
+                <div id="cfdChart" style='height:240px;'></div>
+              </div>
+              <?php else:?>
+              <div class="table-empty-tip">
+                <p><span class="text-muted"><?php echo $lang->execution->noPrintData;?></span></p>
+              </div>
+              <?php endif;?>
+              <?php endif;?>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-6">
+          <div class="panel block-team" style="height: 280px">
+            <div class="panel-heading">
+              <div class="panel-title"><?php echo $lang->execution->relatedMember;?></div>
+              <?php if(common::hasPriv('execution', 'team')):?>
+              <nav class="panel-actions nav nav-default">
+                <li><?php common::printLink('execution', 'team', "executionID=$execution->id", '<i class="icon icon-more icon-sm"></i>', '', "title=$lang->more");?></li>
+              </nav>
+              <?php endif;?>
+            </div>
+            <div class="panel-body">
+              <div class="row row-grid">
+                <?php $i = 9; $j = 0;?>
+                <?php if($execution->PM):?>
+                <?php $i--;?>
+                <?php unset($teamMembers[$execution->PM]);?>
+                <div class="col-xs-6"><i class="icon icon-person icon-sm text-muted"></i> <?php echo zget($users, $execution->PM);?> <span class="text-muted">（<?php echo $lang->execution->PM;?>）</span></div>
+                <?php endif;?>
+                <?php if($execution->PO):?>
+                <?php $i--;?>
+                <?php unset($teamMembers[$execution->PO]);?>
+                <div class="col-xs-6"><i class="icon icon-person icon-sm text-muted"></i> <?php echo zget($users, $execution->PO);?> <span class="text-muted">（<?php echo $lang->execution->PO;?>）</span></div>
+                <?php endif;?>
+                <?php if($execution->QD):?>
+                <?php $i--;?>
+                <?php unset($teamMembers[$execution->QD]);?>
+                <div class="col-xs-6"><i class="icon icon-person icon-sm text-muted"></i> <?php echo zget($users, $execution->QD);?> <span class="text-muted">（<?php echo $lang->execution->QD;?>）</span></div>
+                <?php endif;?>
+                <?php if($execution->RD):?>
+                <?php $i--;?>
+                <?php unset($teamMembers[$execution->RD]);?>
+                <div class="col-xs-6"><i class="icon icon-person icon-sm text-muted"></i> <?php echo zget($users, $execution->RD);?> <span class="text-muted">（<?php echo $lang->execution->RD;?>）</span></div>
+                <?php endif;?>
+
+                <?php foreach($teamMembers as $teamMember):?>
+                <?php if($j > $i) break;?>
+                <div class="col-xs-6"><i class="icon icon-person icon-sm text-muted"></i> <?php echo zget($users, $teamMember->account);?></div>
+                <?php $j++;?>
+                <?php endforeach;?>
+                <div class="col-xs-6">
+                  <?php if($canBeChanged) common::printLink('execution', 'manageMembers', "executionID=$execution->id", "<i class='icon icon-plus hl-primary text-primary'></i> &nbsp;" . $lang->execution->manageMembers, '', "class='text-muted'");?>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-12">
+          <div class="panel block-dynamic" style="height: 280px">
+            <div class="panel-heading">
+              <div class="panel-title"><?php echo $lang->execution->latestDynamic;?></div>
+            </div>
+            <div class="panel-body scrollbar-hover">
+              <ul class="timeline timeline-tag-left no-margin">
+                <?php foreach($dynamics as $action):?>
+                <li <?php if($action->major) echo "class='active'";?>>
+                  <div>
+                    <span class="timeline-tag"><?php echo $action->date;?></span>
+                    <span class="timeline-text"><?php echo zget($users, $action->actor) . ' ' . "<span class='label-action'>{$action->actionLabel}</span>" . $action->objectLabel . ' ' . html::a($action->objectLink, $action->objectName, '', "title='$action->objectName'");?></span>
+                  </div>
+                </li>
+                <?php endforeach;?>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <?php endif;?>
         <?php $this->printExtendFields($execution, 'div', "position=left&inForm=0");?>
         <div class="col-sm-12">
           <?php $blockHistory = true;?>
@@ -218,7 +322,7 @@
             <div class="detail">
               <div class="detail-title">
                 <strong><?php echo $lang->execution->manageProducts;?></strong>
-                <?php common::printLink('execution', 'manageproducts', "executionID=$execution->id", '<i class="icon icon-more icon-sm"></i>', '', "class='btn btn-link pull-right muted'");?>
+                <?php if(common::hasPriv('execution', 'manageproducts')) common::printLink('execution', 'manageproducts', "executionID=$execution->id", '<i class="icon icon-more icon-sm"></i>', '', "class='btn btn-link pull-right muted'");?>
               </div>
               <div class="detail-content">
                 <div class="row row-grid">
@@ -342,6 +446,7 @@
 <script>
 $(function()
 {
+    <?php if(isset($execution->type) and $execution->type != 'kanban'):?>
     var data =
     {
         labels: <?php echo json_encode($chartData['labels'])?>,
@@ -397,6 +502,127 @@ $(function()
         multiTooltipTitleTemplate: '<%= label %> <?php echo $lang->execution->workHour;?> /h',
         multiTooltipTemplate: "<%if (datasetLabel){%><%=datasetLabel%>: <%}%><%= value %>",
     });
+    <?php else:?>
+    var i      = 0;
+    var series = [];
+    var colors = ['#33B4DB', '#7ECF69', '#FFC73A', '#FF5A61', '#50C8D0', '#AF5AFF', '#4EA3FF', '#FF8C5A', '#6C73FF'];
+
+    var chartDom = document.getElementById('cfdChart');
+    if(Object.keys(chartData).length && chartDom)
+    {
+        $.each(chartData['line'], function(label, set)
+        {
+            series.push({
+                name: label,
+                type: 'line',
+                stack: 'Total',
+                color: colors[i],
+                symbolSize: 1,
+                areaStyle: {
+                    color: colors[i],
+                    opacity: 0.2
+                },
+                itemStyle: {
+                    normal: {
+                        lineStyle:{
+                            width: 1
+                        }
+                    }
+                },
+                data: eval(set)
+            })
+            i ++;
+        })
+
+        var CFD = echarts.init(chartDom);
+        var option;
+
+        option = {
+            tooltip: {
+                trigger: 'axis',
+                axisPointer: {
+                    type: 'cross',
+                    crossStyle: {
+                        width: 0,
+                    },
+                    label: {
+                      backgroundColor: '#6a7985'
+                    }
+                },
+                formatter: function(params)
+                {
+                    var newParams     = [];
+                    var tooltipString = [];
+                    newParams = params.reverse();
+                    newParams.forEach((p) => {
+                        const cont = p.marker + ' ' + p.seriesName + ': ' + p.value + '<br/>';
+                        tooltipString.push(cont);
+                    });
+                    return tooltipString.join('');
+                },
+                textStyle: {
+                    fontWeight: 100
+                }
+            },
+            grid: {
+                left: '3%',
+                right: '5%',
+                bottom: '3%',
+                containLabel: true
+            },
+            xAxis: [
+                {
+                    type: 'category',
+                    boundaryGap: false,
+                    data: chartData['labels'],
+                    axisLabel: {
+                        interval: 0
+                    },
+                    axisLine:
+                    {
+                        show: true,
+                        lineStyle:
+                        {
+                            color: '#999',
+                            width: 1
+                        }
+                    }
+                }],
+            yAxis: [
+              {
+                  type: 'value',
+                  minInterval: 1,
+                  name: YUnit,
+                  nameTextStyle:
+                  {
+                    fontWeight: 'normal'
+                  },
+                  axisPointer:
+                  {
+                      label:
+                      {
+                          show: true,
+                          precision: 0
+                      },
+                  },
+                  axisLine:
+                  {
+                      show: true,
+                      lineStyle:
+                      {
+                          color: '#999',
+                          width: 1
+                      }
+                  }
+              }
+            ],
+            series: series,
+        };
+
+        option && CFD.setOption(option);
+        window.addEventListener('resize', CFD.resize);
+    }
+    <?php endif;?>
 });
 </script>
 <?php include '../../common/view/footer.html.php';?>
