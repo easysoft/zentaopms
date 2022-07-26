@@ -558,12 +558,16 @@ class todoModel extends model
             ->where('t1.type')->eq('story')
             ->andWhere('t3.deleted')->eq('1')
             ->fetchPairs();
-        $deletedMeeting = $this->dao->select('t1.id')->from(TABLE_TODO)->alias('t1')
-            ->leftJoin(TABLE_MEETING)->alias('t2')->on('t1.idvalue=t2.id')
-            ->leftJoin(TABLE_PROJECT)->alias('t3')->on('t2.project=t3.id')
-            ->where('t1.type')->eq('meeting')
-            ->andWhere('t3.deleted')->eq('1')
-            ->fetchPairs();
+        $deletedMeeting = array();
+        if($this->config->edition == 'max')
+        {
+            $deletedMeeting = $this->dao->select('t1.id')->from(TABLE_TODO)->alias('t1')
+                ->leftJoin(TABLE_MEETING)->alias('t2')->on('t1.idvalue=t2.id')
+                ->leftJoin(TABLE_PROJECT)->alias('t3')->on('t2.project=t3.id')
+                ->where('t1.type')->eq('meeting')
+                ->andWhere('t3.deleted')->eq('1')
+                ->fetchPairs();
+        }
         $deletedIds     = $deletedTaskIds + $deletedBugs + $deletedStories + $deletedMeeting;
         $stmt = $this->dao->select('*')->from(TABLE_TODO)
             ->where('deleted')->eq('0')
