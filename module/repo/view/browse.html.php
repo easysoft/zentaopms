@@ -96,7 +96,6 @@
     <table class='table table-fixed'>
       <thead>
         <tr>
-          <th class='c-icon'></th>
           <th class='c-name'><?php echo $lang->repo->name?></th>
           <th class='c-version'><?php echo $lang->repo->revisions?></th>
           <th class='c-date'><?php echo $lang->repo->time?></th>
@@ -108,10 +107,8 @@
         <?php foreach($infos as $info):?>
         <?php if(empty($info->name)) continue;?>
         <tr>
-          <td class="icon">
-            <span class="<?php echo $info->kind == 'dir' ? 'directory' : 'file';?> mini-icon"></span>
-          </td>
           <td>
+            <span class="<?php echo $info->kind == 'dir' ? 'directory' : 'file';?> mini-icon"></span>
             <?php
             $infoPath = trim($path . '/' . $info->name, '/');
             $link = $info->kind == 'dir' ? $this->repo->createLink('browse', "repoID=$repoID&branchID=$base64BranchID&objectID=$objectID&path=" . $this->repo->encodePath($infoPath)) : $this->repo->createLink('view', "repoID=$repoID&objectID=$objectID&entry=" . $this->repo->encodePath($infoPath));
