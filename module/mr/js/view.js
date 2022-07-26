@@ -1,5 +1,5 @@
 $(document).ready(function()
-  {
+{
     $('#mergeButton,.mergeButton').click(function()
     {
         link = $(this).attr('href');

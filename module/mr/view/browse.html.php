@@ -46,15 +46,15 @@
       <thead>
         <tr class='text-left'>
           <?php $vars = "repoID=$repoID&mode=$mode&param=$param&objectID=$objectID&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}";?>
-          <th class='w-60px'><?php common::printOrderLink('id', $orderBy, $vars, $lang->mr->id);?></th>
-          <th class='c-name'><?php common::printOrderLink('title', $orderBy, $vars, $lang->mr->title);?></th>
-          <th class='w-200px'><?php common::printOrderLink('sourceBranch', $orderBy, $vars, $lang->mr->sourceBranch);?></th>
-          <th class='w-200px'><?php common::printOrderLink('targetBranch', $orderBy, $vars, $lang->mr->targetBranch);?></th>
-          <th class='w-100px'><?php common::printOrderLink('mergeStatus', $orderBy, $vars, $lang->mr->mergeStatus);?></th>
-          <th class='w-80px'><?php common::printOrderLink('approvalStatus', $orderBy, $vars, $lang->mr->approvalStatus);?></th>
-          <th class='w-80px'><?php common::printOrderLink('createdBy', $orderBy, $vars, $lang->mr->author);?></th>
-          <th class='w-160px'><?php common::printOrderLink('createdDate', $orderBy, $vars, $lang->mr->createdDate);?></th>
-          <th class='c-actions-5'><?php echo $lang->actions;?></th>
+          <th class='c-id'><?php common::printOrderLink('id', $orderBy, $vars, $lang->mr->id);?></th>
+          <th class='c-title'><?php common::printOrderLink('title', $orderBy, $vars, $lang->mr->title);?></th>
+          <th class='c-branch'><?php common::printOrderLink('sourceBranch', $orderBy, $vars, $lang->mr->sourceBranch);?></th>
+          <th class='c-branch'><?php common::printOrderLink('targetBranch', $orderBy, $vars, $lang->mr->targetBranch);?></th>
+          <th class='c-status'><?php common::printOrderLink('mergeStatus', $orderBy, $vars, $lang->mr->mergeStatus);?></th>
+          <th class='c-status'><?php common::printOrderLink('approvalStatus', $orderBy, $vars, $lang->mr->approvalStatus);?></th>
+          <th class='c-author'><?php common::printOrderLink('createdBy', $orderBy, $vars, $lang->mr->author);?></th>
+          <th class='c-date'><?php common::printOrderLink('createdDate', $orderBy, $vars, $lang->mr->createdDate);?></th>
+          <th class='c-actions-5 text-center'><?php echo $lang->actions;?></th>
         </tr>
       </thead>
       <tbody>
