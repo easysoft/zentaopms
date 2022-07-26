@@ -2048,15 +2048,19 @@ class repoModel extends model
      */
     public function processGitService($repo)
     {
+        $service = $this->loadModel('pipeline')->getByID($repo->serviceHost);
         if($repo->SCM == 'Gitlab')
         {
-            $service = $this->loadModel('pipeline')->getByID($repo->serviceHost);
             $project = $this->loadModel('gitlab')->apiGetSingleProject($repo->serviceHost, $repo->serviceProject);
 
             $repo->path     = $service ? sprintf($this->config->repo->{$service->type}->apiPath, $service->url, $repo->serviceProject) : '';
             $repo->client   = $service ? $service->url : '';
             $repo->password = $service ? $service->token : '';
             $repo->codePath = $project ? $project->web_url : $repo->path;
+        }
+        elseif($repo->SCM == 'Gitea')
+        {
+            $repo->codePath = $service ? "{$service->url}/{$repo->serviceProject}" : $repo->path;
         }
         $repo->gitService = $repo->serviceHost;
         $repo->project    = $repo->serviceProject;
