@@ -2636,12 +2636,6 @@ class projectModel extends model
             unset($this->lang->project->menu->settings['subMenu']->whitelist);
         }
 
-        if($project->model == 'kanban')
-        {
-            unset($this->lang->project->menu->settings['subMenu']->stakeholder);
-            unset($this->lang->project->menu->settings['subMenu']->group);
-        }
-
         common::setMenuVars('project', $objectID);
         return $objectID;
     }
