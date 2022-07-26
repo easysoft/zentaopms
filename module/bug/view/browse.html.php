@@ -159,11 +159,6 @@ $currentBrowseType = isset($lang->bug->mySelects[$browseType]) && in_array($brow
   <strong>
   <?php echo $this->product->getByID($productID)->name ?>
   </strong>
-  <div class="linkButton" onclick="handleLinkButtonClick()">
-    <span title="<?php echo $lang->viewDetails;?>">
-      <i class="icon icon-import icon-rotate-270"></i>
-    </span>
-  </div>
 </div>
 <?php endif;?>
 <div id="mainContent" class="main-row fade">
@@ -460,10 +455,5 @@ $(function(){$('#modulemenu .nav li:last').after("<li class='right'><a style='fo
 <?php if(count($bugs) <= 2):?>
 $('#bugForm .table-footer .table-actions #assignedTo').closest('.btn-group.dropup').removeClass('dropup').addClass('dropdown');
 <?php endif;?>
-function handleLinkButtonClick()
-{
-  var xxcUrl = "xxc:openInApp/zentao-integrated/" + encodeURIComponent(window.location.href.replace(/.display=card/, '').replace('xhtml', 'html'));
-  window.open(xxcUrl);
-}
 </script>
 <?php include '../../common/view/footer.html.php';?>

@@ -45,11 +45,6 @@
   <div class='tabs' id='tabsNav'>
     <?php if($this->app->getViewType() == 'xhtml'):?>
     <div class="plan-title"><?php echo $product->name . ' ' . $plan->title ?></div>
-    <div class="linkButton" onclick="handleLinkButtonClick()">
-      <span title="<?php echo $lang->viewDetails;?>">
-        <i class="icon icon-import icon-rotate-270"></i>
-      </span>
-    </div>
     <div class='tab-btn-container'>
     <?php endif;?>
     <ul class='nav nav-tabs'>
@@ -607,12 +602,6 @@
 <?php js::set('type', $type)?>
 <?php if($this->app->getViewType() == 'xhtml'):?>
 <script>
-function handleLinkButtonClick()
-{
-    var xxcUrl = "xxc:openInApp/zentao-integrated/" + encodeURIComponent(window.location.href.replace(/.display=card/, '').replace('xhtml', 'html'));
-    window.open(xxcUrl, '_blank');
-}
-
 $(function()
 {
     function handleClientReady()
