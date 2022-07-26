@@ -171,7 +171,7 @@ class personnel extends control
         if($copyObjectType == 'sprint')
         {
             $object = $this->loadModel('project')->getByID($copyID);
-            if(!empty($object)) $copyObjectType = 'project';
+            if(!empty($object->type) and $object->type == 'project') $copyObjectType = 'project';
         }
         $copyUsers   = empty($copyID) ? array() : $this->personnel->getWhitelistAccount($copyID, $copyObjectType);
         $appendUsers = array_unique($deptUsers + $copyUsers);
