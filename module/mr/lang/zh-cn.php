@@ -30,6 +30,7 @@ $lang->mr->mriid       = "MR原始ID";
 $lang->mr->title       = '名称';
 $lang->mr->status      = '状态';
 $lang->mr->author      = '创建人';
+$lang->mr->createdDate = '创建时间';
 $lang->mr->assignee    = '指派给';
 $lang->mr->reviewer    = '评审人';
 $lang->mr->mergeStatus = '是否可合并';

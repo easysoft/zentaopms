@@ -32,7 +32,7 @@
             <td>
               <div class='input-group required'>
                 <?php echo html::select('sourceProject', array(''), '', "class='form-control chosen'");?>
-                <span class='input-group-addon fix-border'><?php echo $lang->mr->sourceBranch ?></span>
+                <span class='input-group-addon fix-border branch-btn'><?php echo $lang->mr->sourceBranch ?></span>
                 <?php echo html::select('sourceBranch', array(''), '', "class='form-control chosen'");?>
               </div>
             </td>
@@ -42,7 +42,7 @@
             <td>
               <div class='input-group required'>
                 <?php echo html::select('targetProject', array(''), '', "class='form-control chosen'");?>
-                <span class='input-group-addon fix-border'><?php echo $lang->mr->targetBranch ?></span>
+                <span class='input-group-addon fix-border branch-btn'><?php echo $lang->mr->targetBranch ?></span>
                 <?php echo html::select('targetBranch', array(''), '', "class='form-control chosen'");?>
               </div>
             </td>
