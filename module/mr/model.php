@@ -1021,12 +1021,9 @@ class mrModel extends model
         $scm  = $host->type;
 
         $this->loadModel('repo');
-        $repo = new stdclass;
-        $repo->SCM        = $this->lang->repo->scmList[ucfirst($scm)];
+        $repo = $this->loadModel('repo')->getRepoByID($MR->repoID);
         $repo->gitService = $host->id;
         $repo->project    = $MR->targetProject;
-        $repo->path       = sprintf($this->config->repo->$scm->apiPath, $host->url, $MR->targetProject);
-        $repo->client     = $host->url;
         $repo->password   = $host->token;
         $repo->account    = '';
         $repo->encoding   = $encoding;
