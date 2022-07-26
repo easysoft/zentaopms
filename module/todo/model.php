@@ -141,9 +141,11 @@ class todoModel extends model
 
         $validTodos = array();
         $now        = helper::now();
+        $assignedTo = $this->app->user->account;
         for($i = 0; $i < $this->config->todo->batchCreate; $i++)
         {
-            $isExist = false;
+            $isExist    = false;
+            $assignedTo = $todos->assignedTos[$i] == 'ditto' ? $assignedTo : $todos->assignedTos[$i];
             foreach($this->config->todo->objectList as $objects)
             {
                 if(isset($todos->{$objects}[$i + 1]))
@@ -175,7 +177,7 @@ class todoModel extends model
                 $todo->status       = "wait";
                 $todo->private      = 0;
                 $todo->idvalue      = 0;
-                $todo->assignedTo   = $this->app->user->account;
+                $todo->assignedTo   = $assignedTo;
                 $todo->assignedBy   = $this->app->user->account;
                 $todo->assignedDate = $now;
                 $todo->vision       = $this->config->vision;
@@ -327,13 +329,14 @@ class todoModel extends model
             foreach($todoIDList as $todoID)
             {
                 $todo = new stdclass();
-                $todo->date   = $data->dates[$todoID];
-                $todo->type   = $data->types[$todoID];
-                $todo->pri    = $data->pris[$todoID];
-                $todo->status = $data->status[$todoID];
-                $todo->name   = !in_array($todo->type, $this->config->todo->moduleList) ? $data->names[$todoID] : '';
-                $todo->begin  = isset($data->begins[$todoID]) ? $data->begins[$todoID] : 2400;
-                $todo->end    = isset($data->ends[$todoID]) ? $data->ends[$todoID] : 2400;
+                $todo->date       = $data->dates[$todoID];
+                $todo->type       = $data->types[$todoID];
+                $todo->pri        = $data->pris[$todoID];
+                $todo->status     = $data->status[$todoID];
+                $todo->name       = !in_array($todo->type, $this->config->todo->moduleList) ? $data->names[$todoID] : '';
+                $todo->begin      = isset($data->begins[$todoID]) ? $data->begins[$todoID] : 2400;
+                $todo->end        = isset($data->ends[$todoID]) ? $data->ends[$todoID] : 2400;
+                $todo->assignedTo = isset($data->assignedTos[$todoID]) ? $data->assignedTos[$todoID] : $this->app->user->account;
 
                 if(in_array($todo->type, $this->config->todo->moduleList))
                 {
