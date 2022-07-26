@@ -107,7 +107,7 @@ class execution extends control
      * @access public
      * @return void
      */
-    public function task($executionID = 0, $status = 'all', $param = 0, $orderBy = '', $recTotal = 0, $recPerPage = 100, $pageID = 1)
+    public function task($executionID = 0, $status = 'unclosed', $param = 0, $orderBy = '', $recTotal = 0, $recPerPage = 100, $pageID = 1)
     {
         $this->loadModel('tree');
         $this->loadModel('search');
