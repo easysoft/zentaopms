@@ -540,6 +540,31 @@ class todoModel extends model
 
         if(empty($account)) $account = $this->app->user->account;
 
+        $deletedTaskIds = $this->dao->select('t1.id')->from(TABLE_TODO)->alias('t1')
+            ->leftJoin(TABLE_TASK)->alias('t2')->on('t1.idvalue=t2.id')
+            ->leftJoin(TABLE_EXECUTION)->alias('t3')->on('t2.execution=t3.id')
+            ->where('t1.type')->eq('task')
+            ->andWhere('t3.deleted')->eq('1')
+            ->fetchPairs();
+        $deletedBugs    = $this->dao->select('t1.id')->from(TABLE_TODO)->alias('t1')
+            ->leftJoin(TABLE_BUG)->alias('t2')->on('t1.idvalue=t2.id')
+            ->leftJoin(TABLE_PRODUCT)->alias('t3')->on('t2.product=t3.id')
+            ->where('t1.type')->eq('bug')
+            ->andWhere('t3.deleted')->eq('1')
+            ->fetchPairs();
+        $deletedStories = $this->dao->select('t1.id')->from(TABLE_TODO)->alias('t1')
+            ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.idvalue=t2.id')
+            ->leftJoin(TABLE_PRODUCT)->alias('t3')->on('t2.product=t3.id')
+            ->where('t1.type')->eq('story')
+            ->andWhere('t3.deleted')->eq('1')
+            ->fetchPairs();
+        $deletedMeeting = $this->dao->select('t1.id')->from(TABLE_TODO)->alias('t1')
+            ->leftJoin(TABLE_MEETING)->alias('t2')->on('t1.idvalue=t2.id')
+            ->leftJoin(TABLE_PROJECT)->alias('t3')->on('t2.project=t3.id')
+            ->where('t1.type')->eq('meeting')
+            ->andWhere('t3.deleted')->eq('1')
+            ->fetchPairs();
+        $deletedIds     = $deletedTaskIds + $deletedBugs + $deletedStories + $deletedMeeting;
         $stmt = $this->dao->select('*')->from(TABLE_TODO)
             ->where('deleted')->eq('0')
             ->andWhere('vision')->eq($this->config->vision)
@@ -555,6 +580,7 @@ class todoModel extends model
             ->beginIF($type == 'cycle')->andWhere('cycle')->eq('1')->fi()
             ->beginIF($type != 'cycle')->andWhere('cycle')->eq('0')->fi()
             ->beginIF($type == 'assignedtoother')->andWhere('assignedTo')->notin(array($account, ''))->fi()
+            ->beginIF($deletedIds)->andWhere('id')->notin($deletedIds)->fi()
             ->orderBy($orderBy)
             ->beginIF($limit > 0)->limit($limit)->fi()
             ->page($pager)
