@@ -433,7 +433,11 @@ class programplanModel extends model
             $parentACL       = $parentStage->acl;
         }
 
-        if(!$this->checkNameUnique($names)) return false;
+        if(!$this->checkNameUnique($names))
+        {
+            dao::$errors['message'][] = $this->lang->programplan->error->sameName;
+            return false;
+        }
 
         $datas = array();
         foreach($names as $key => $name)
@@ -961,11 +965,7 @@ class programplanModel extends model
     public function checkNameUnique($names)
     {
         $names = array_filter($names);
-        if(count(array_unique($names)) != count($names))
-        {
-            dao::$errors['message'][] = $this->lang->programplan->error->sameName;
-            return false;
-        }
+        if(count(array_unique($names)) != count($names)) return false;
         return true;
     }
 
