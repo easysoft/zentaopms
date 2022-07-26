@@ -13,6 +13,7 @@
 .btn-group a.btn-primary {border-right: 1px solid rgba(255,255,255,0.2);}
 .btn-group button.dropdown-toggle.btn-primary {padding:6px;}
 .body-modal #mainMenu>.btn-toolbar {width: auto;}
+#mainMenu .pull-left .checkbox-primary {margin-top: 5px;}
 </style>
 <div id='mainMenu' class='clearfix'>
   <?php if(!($this->app->rawMethod == 'groupcase')):?>
@@ -54,6 +55,29 @@
         $isBySearch       = $browseType == 'bysearch';
         include '../../common/view/querymenu.html.php';
     }
+    elseif($hasBrowsePriv and $menuType == 'casetype')
+    {
+        $lang->testcase->typeList[''] = $lang->testcase->allType;
+
+        $currentType     = isset($caseType) ? $caseType : '';
+        $currentTypeName = zget($lang->testcase->typeList, $currentType, '');
+        $currentLable    = empty($currentTypeName) ? $lang->testcase->allType : $currentTypeName;
+
+        echo "<div id='byTypeTab' class='btn-group'>";
+        echo html::a('javascript:;', "<span class='text'>{$currentLable}</span>" . " <span class='caret'></span>", '', "class='btn btn-link' data-toggle='dropdown'");
+        echo "<ul class='dropdown-menu' style='max-height:240px; overflow-y:auto'>";
+
+        foreach($lang->testcase->typeList as $type => $typeName)
+        {
+            echo '<li' . ($type == $currentType ? " class='active'" : '') . '>';
+            echo html::a($this->createLink('testcase', 'browse', "productID=$productID&branch=$branch&browseType=byType&param=$type"), $typeName);
+            echo "</li>";
+        }
+
+        echo '</ul>';
+        if($browseType != 'bysearch') echo html::checkbox('showAutoCase', array('1' => $lang->testcase->showAutoCase), '', $this->cookie->showAutoCase ? 'checked=checked' : '');
+        echo '</div>';
+    }
     elseif($hasBrowsePriv and ($menuType == 'all' or $menuType == 'needconfirm' or $menuType == 'wait'))
     {
         echo html::a($this->createLink($currentModule, $currentMethod, $projectParam . "productID=$productID&branch=$branch&browseType=$menuType"), "<span class='text'>{$menuItem->text}</span>", '', "class='btn btn-link' id='{$menuType}Tab' data-app='{$this->app->tab}'");
@@ -66,10 +90,10 @@
 
         echo "<div id='bysuiteTab' class='btn-group'>";
         echo html::a('javascript:;', "<span class='text'>{$currentLable}</span>" . " <span class='caret'></span>", '', "class='btn btn-link' data-toggle='dropdown'");
+        echo "<ul class='dropdown-menu' style='max-height:240px; overflow-y:auto'>";
+
         if(empty($productID) or common::canModify('product', $product))
         {
-            echo "<ul class='dropdown-menu' style='max-height:240px; overflow-y:auto'>";
-
             if(empty($suiteList))
             {
                 echo '<li>';

@@ -110,6 +110,7 @@ class testcase extends control
 
         $moduleID = ($browseType == 'bymodule') ? (int)$param : ($browseType == 'bysearch' ? 0 : ($this->cookie->caseModule ? $this->cookie->caseModule : 0));
         $suiteID  = ($browseType == 'bysuite') ? (int)$param : ($browseType == 'bymodule' ? ($this->cookie->caseSuite ? $this->cookie->caseSuite : 0) : 0);
+        $caseType = ($browseType == 'bytype') ? $param : '';
         $queryID  = ($browseType == 'bysearch') ? (int)$param : 0;
 
         /* Set menu, save session. */
@@ -142,11 +143,12 @@ class testcase extends control
         $sort  = common::appendOrder($orderBy);
 
         /* Get test cases. */
-        $cases = $this->testcase->getTestCases($productID, $branch, $browseType, $browseType == 'bysearch' ? $queryID : $suiteID, $moduleID, $sort, $pager);
+        $browseParam = $browseType == 'bysearch' ? $queryID : ($browseType == 'bysuite' ? $suiteID : $caseType);
+        $cases       = $this->testcase->getTestCases($productID, $branch, $browseType, $browseParam, $moduleID, $sort, $pager);
         if(empty($cases) and $pageID > 1)
         {
             $pager = pager::init(0, $recPerPage, 1);
-            $cases = $this->testcase->getTestCases($productID, $branch, $browseType, $browseType == 'bysearch' ? $queryID : $suiteID, $moduleID, $sort, $pager);
+            $cases = $this->testcase->getTestCases($productID, $branch, $browseType, $browseParam, $moduleID, $sort, $pager);
         }
 
         /* save session .*/
@@ -216,6 +218,7 @@ class testcase extends control
         $this->view->orderBy         = $orderBy;
         $this->view->browseType      = $browseType;
         $this->view->param           = $param;
+        $this->view->caseType        = $caseType;
         $this->view->cases           = $cases;
         $this->view->branch          = (!empty($product) and $product->type != 'normal') ? $branch : 0;
         $this->view->branchOption    = $branchOption;

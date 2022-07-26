@@ -395,6 +395,35 @@ class testcaseModel extends model
     }
 
     /**
+     * Get cases by type.
+     *
+     * @param  int         $productID
+     * @param  int|string  $branch
+     * @param  int         $suiteID
+     * @param  array       $moduleIdList
+     * @param  string      $orderBy
+     * @param  object      $pager
+     * @param  string      $auto    no|unit
+     * @access public
+     * @return array
+     */
+    public function getByType($productID, $branch = 0, $type = '', $moduleIdList = 0, $orderBy = 'id_desc', $pager = null, $auto = 'no')
+    {
+        return $this->dao->select('t1.*, t2.title as storyTitle')->from(TABLE_CASE)->alias('t1')
+            ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story=t2.id')
+            ->where('t1.product')->eq((int)$productID)
+            ->beginIF($this->app->tab == 'project')->andWhere('t1.project')->eq($this->session->project)->fi()
+            ->beginIF($type)->andWhere('t1.type')->eq($type)->fi()
+            ->beginIF($branch !== 'all')->andWhere('t1.branch')->eq($branch)->fi()
+            ->beginIF($moduleIdList)->andWhere('t1.module')->in($moduleIdList)->fi()
+            ->beginIF($auto == 'unit')->andWhere('t1.auto')->eq('unit')->fi()
+            ->beginIF($auto != 'unit')->andWhere('t1.auto')->ne('unit')->fi()
+            ->andWhere('t1.deleted')->eq('0')
+            ->orderBy($orderBy)->page($pager)
+            ->fetchAll('id');
+    }
+
+    /**
      * Get case info by ID.
      *
      * @param  int    $caseID
@@ -495,6 +524,7 @@ class testcaseModel extends model
         $modules    = $moduleID ? $this->loadModel('tree')->getAllChildId($moduleID) : '0';
         $browseType = ($browseType == 'bymodule' and $this->session->caseBrowseType and $this->session->caseBrowseType != 'bysearch') ? $this->session->caseBrowseType : $browseType;
         $group      = $this->lang->navGroup->testcase;
+        $auto       = $this->cookie->showAutoCase ? 'auto' : $auto;
 
         /* By module or all cases. */
         $cases = array();
@@ -531,6 +561,10 @@ class testcaseModel extends model
         elseif($browseType == 'bysuite')
         {
             $cases = $this->getBySuite($productID, $branch, $queryID, $modules, $sort, $pager, $auto);
+        }
+        elseif($browseType == 'bytype')
+        {
+            $cases = $this->getByType($productID, $branch, $queryID, $modules, $sort, $pager, $auto);
         }
         /* By search. */
         elseif($browseType == 'bysearch')
