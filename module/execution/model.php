@@ -67,7 +67,6 @@ class executionModel extends model
         if($execution and $execution->type == 'kanban')
         {
             global $lang;
-            $lang->execution->common = $lang->execution->kanban;
             $lang->executionCommon   = $lang->execution->kanban;
             include $this->app->getModulePath('', 'execution') . 'lang/' . $this->app->getClientLang() . '.php';
 

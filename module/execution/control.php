@@ -2993,6 +2993,8 @@ class execution extends control
         $this->execution->setMenu($execution->id);
         if(!empty($this->config->user->moreLink)) $this->config->moreLinks["accounts[]"] = $this->config->user->moreLink;
 
+        if($execution->type == 'kanban') $this->lang->execution->copyTeamTitle = str_replace($this->lang->execution->common, $this->lang->execution->kanban, $this->lang->execution->copyTeamTitle);
+
         $title      = $this->lang->execution->manageMembers . $this->lang->colon . $execution->name;
         $position[] = html::a($this->createLink('execution', 'browse', "executionID=$executionID"), $execution->name);
         $position[] = $this->lang->execution->manageMembers;
