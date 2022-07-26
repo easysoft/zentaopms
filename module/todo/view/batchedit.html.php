@@ -66,7 +66,7 @@
           }
           ?>
         </td>
-        <td class="visible <?php echo zget($visibleFields, 'pri', ' hidden')?>"><?php echo html::select("pris[$todo->id]", $lang->todo->priList, $todo->pri, "class='form-control chosen'");?></td>
+        <td class="visible <?php echo zget($visibleFields, 'pri', 'hidden')?>"><?php echo html::select("pris[$todo->id]", $lang->todo->priList, $todo->pri, "class='form-control chosen'");?></td>
         <td class='visible'>
           <div id='<?php echo "nameBox" . $todo->id;?>' class='hidden'><?php echo html::input("names[$todo->id]", $todo->name, "class='text-left form-control hiddenwin'"); ?></div>
           <div class='<?php echo "nameBox" . $todo->id;?> text-left'>
@@ -115,7 +115,7 @@
           </div>
         </td>
         <td class='visible'><?php echo html::select("assignedTos[$todo->id]", $users, $todo->assignedTo, "class='form-control chosen'");?></td>
-        <td class="visible <?php echo zget($visibleFields, 'beginAndEnd', ' hidden')?>">
+        <td class="visible <?php echo zget($visibleFields, 'beginAndEnd', 'hidden')?>">
           <div class='input-group'>
             <?php
             echo html::select("begins[$todo->id]", $times, substr($todo->begin, 0, 2) . substr($todo->begin, 3, 2), "onchange=\"setBeginsAndEnds($todo->id, 'begin');\" class='form-control chosen control-time-begin'" . ((isset($visibleFields['beginAndEnd']) && $todo->begin != '') ? '' : " disabled"));
@@ -130,7 +130,7 @@
             </span>
           </div>
         </td>
-        <td class="visible <?php echo zget($visibleFields, 'status', ' hidden')?>"><?php echo html::select("status[$todo->id]", $lang->todo->statusList, $todo->status, "class='form-control chosen'");?></td>
+        <td class="visible <?php echo zget($visibleFields, 'status', 'hidden')?>"><?php echo html::select("status[$todo->id]", $lang->todo->statusList, $todo->status, "class='form-control chosen'");?></td>
       </tr>
       <?php endforeach;?>
       </tbody>

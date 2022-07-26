@@ -54,7 +54,7 @@
           <th class='col-desc<?php echo zget($visibleFields, 'desc', ' hidden');?>'><?php echo $lang->todo->desc;?></th>
           <th class='col-assignedTo'><?php echo $lang->todo->assignTo;?></th>
           <th class='col-date<?php echo zget($visibleFields, 'beginAndEnd', ' hidden')?>'><?php echo $lang->todo->beginAndEnd;?></th>
-          <th class='col-future'><div class='checkbox-primary check-all<?php echo zget($visibleFields, 'beginAndEnd', ' hidden')?>' id="select-all"><label><?php echo $lang->todo->periods['future']?></label></div></th>
+          <th class='col-future'><div class='checkbox-primary check-all visible<?php echo zget($visibleFields, 'beginAndEnd', ' hidden')?>' id="select-all"><label><?php echo $lang->todo->periods['future']?></label></div></th>
         </tr>
       </thead>
       <tbody>

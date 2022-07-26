@@ -326,8 +326,11 @@ class todoModel extends model
         if(!empty($todoIDList))
         {
             /* Initialize todos from the post data. */
+            $oldTodos = $this->dao->select('*')->from(TABLE_TODO)->where('id')->in(array_keys($todos))->fetchAll('id');
             foreach($todoIDList as $todoID)
             {
+                $oldTodo = $oldTodos[$todoID];
+
                 $todo = new stdclass();
                 $todo->date       = $data->dates[$todoID];
                 $todo->type       = $data->types[$todoID];
@@ -336,7 +339,7 @@ class todoModel extends model
                 $todo->name       = !in_array($todo->type, $this->config->todo->moduleList) ? $data->names[$todoID] : '';
                 $todo->begin      = isset($data->begins[$todoID]) ? $data->begins[$todoID] : 2400;
                 $todo->end        = isset($data->ends[$todoID]) ? $data->ends[$todoID] : 2400;
-                $todo->assignedTo = isset($data->assignedTos[$todoID]) ? $data->assignedTos[$todoID] : $this->app->user->account;
+                $todo->assignedTo = isset($data->assignedTos[$todoID]) ? $data->assignedTos[$todoID] : $oldTodo->assignedTo;
 
                 if(in_array($todo->type, $this->config->todo->moduleList))
                 {
@@ -347,7 +350,6 @@ class todoModel extends model
                 $todos[$todoID] = $todo;
             }
 
-            $oldTodos = $this->dao->select('*')->from(TABLE_TODO)->where('id')->in(array_keys($todos))->fetchAll('id');
             foreach($todos as $todoID => $todo)
             {
                 $oldTodo = $oldTodos[$todoID];
