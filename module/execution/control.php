@@ -2290,18 +2290,31 @@ class execution extends control
         $this->execution->setMenu($execution->id);
         $this->app->loadLang('bug');
 
-        $type = 'noweekend';
-        if(((strpos('closed,suspended', $execution->status) === false and helper::today() > $execution->end)
-            or ($execution->status == 'closed'    and substr($execution->closedDate, 0, 10) > $execution->end)
-            or ($execution->status == 'suspended' and $execution->suspendedDate > $execution->end))
-            and strpos($type, 'delay') === false)
-        $type .= ',withdelay';
+        if($execution->type == 'kanban')
+        {
+            $this->app->loadClass('date');
 
-        $deadline = $execution->status == 'closed' ? substr($execution->closedDate, 0, 10) : $execution->suspendedDate;
-        $deadline = strpos('closed,suspended', $execution->status) === false ? helper::today() : $deadline;
-        $endDate  = strpos($type, 'withdelay') !== false ? $deadline : $execution->end;
-        list($dateList, $interval) = $this->execution->getDateList($execution->begin, $endDate, $type, 0, 'Y-m-d', $execution->end);
-        $chartData = $this->execution->buildBurnData($executionID, $dateList, $type);
+            $begin     = date('Y-m-d', strtotime('-13 days'));
+            $begin     = (helper::isZeroDate($execution->begin) or helper::diffDate($execution->begin, $begin) >= 14) ? $begin : $execution->begin;
+            $end       = helper::today();
+            $dateList  = date::getDateList($begin, $end, 'Y-m-d', 'noweekend');
+            $chartData = $this->execution->buildCFDData($executionID, $dateList, 'task');
+        }
+        else
+        {
+            $type = 'noweekend';
+            if(((strpos('closed,suspended', $execution->status) === false and helper::today() > $execution->end)
+                or ($execution->status == 'closed'    and substr($execution->closedDate, 0, 10) > $execution->end)
+                or ($execution->status == 'suspended' and $execution->suspendedDate > $execution->end))
+                and strpos($type, 'delay') === false)
+                $type .= ',withdelay';
+
+            $deadline = $execution->status == 'closed' ? substr($execution->closedDate, 0, 10) : $execution->suspendedDate;
+            $deadline = strpos('closed,suspended', $execution->status) === false ? helper::today() : $deadline;
+            $endDate  = strpos($type, 'withdelay') !== false ? $deadline : $execution->end;
+            list($dateList, $interval) = $this->execution->getDateList($execution->begin, $endDate, $type, 0, 'Y-m-d', $execution->end);
+            $chartData = $this->execution->buildBurnData($executionID, $dateList, $type);
+        }
 
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
@@ -3726,7 +3739,7 @@ class execution extends control
         $this->execution->setMenu($executionID);
 
         $execution = $this->execution->getByID($executionID);
-        if(!empty($execution->acl) and $execution->acl != 'private') $this->locate($this->createLink('execution', 'view', "executionID=$executionID"));
+        if(!empty($execution->acl) and $execution->acl != 'private') $this->locate($this->createLink('execution', 'task', "executionID=$executionID"));
 
         echo $this->fetch('personnel', 'whitelist', "objectID=$executionID&module=$module&browseType=$objectType&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID");
     }
@@ -3747,6 +3760,9 @@ class execution extends control
 
         /* Set the menu. If the executionID = 0, use the indexMenu instead. */
         $this->execution->setMenu($executionID);
+
+        $execution = $this->execution->getByID($executionID);
+        if(!empty($execution->acl) and $execution->acl != 'private') $this->locate($this->createLink('execution', 'task', "executionID=$executionID"));
 
         echo $this->fetch('personnel', 'addWhitelist', "objectID=$executionID&dept=$deptID&copyID=$copyID&objectType=sprint&module=execution");
     }
