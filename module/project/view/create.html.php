@@ -233,7 +233,7 @@
       <?php foreach ($copyProjects as $id => $name):?>
         <?php $active = ($copyProjectID == $id) ? ' active' : '';?>
         <div class='col-md-4 col-sm-6'>
-        <?php if($config->edition != 'max'):?>
+        <?php if($config->edition != 'max' || $model == 'kanban'):?>
         <a href='javascript:;' data-id='<?php echo $id;?>' class='nobr <?php echo $active;?>'><?php echo html::icon($lang->icons['project'], 'text-muted') . ' ' . $name;?></a>
         <?php else: ?>
         <a data-id='<?php echo $id;?>' class='nobr <?php echo $active;?>' data-toggle='modal' data-target='#copyProjectConfirmModal'><?php echo html::icon($lang->icons['project'], 'text-muted') . ' ' . $name;?></a>
