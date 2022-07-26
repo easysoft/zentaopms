@@ -503,9 +503,9 @@ $(function()
         multiTooltipTemplate: "<%if (datasetLabel){%><%=datasetLabel%>: <%}%><%= value %>",
     });
     <?php else:?>
-    var i = 0;
-    var series     = [];
-    var colors     = ['#33B4DB', '#7ECF69', '#FFC73A', '#FF5A61', '#50C8D0', '#AF5AFF', '#4EA3FF', '#FF8C5A', '#6C73FF'];
+    var i      = 0;
+    var series = [];
+    var colors = ['#33B4DB', '#7ECF69', '#FFC73A', '#FF5A61', '#50C8D0', '#AF5AFF', '#4EA3FF', '#FF8C5A', '#6C73FF'];
 
     var chartDom = document.getElementById('cfdChart');
     if(Object.keys(chartData).length && chartDom)

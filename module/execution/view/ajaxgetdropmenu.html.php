@@ -78,7 +78,7 @@ foreach($executions as $projectID => $projectExecutions)
     foreach($projectExecutions as $index => $execution)
     {
         $executionLink  = $link;
-        $isKanbanMethod = ((strpos(',kanban,cfd,build,view,manageproducts,team,managemembers,whitelist,addwhitelist,edit,', ",$method,") !== false and $module == 'execution') or (strpos(',create,edit,', ",$method,") !== false and $module == 'build'));
+        $isKanbanMethod = ((in_array($method, $config->execution->kanbanMethod) and $module == 'execution') or (strpos(',create,edit,', ",$method,") !== false and $module == 'build'));
         if(isset($execution->type) and $execution->type == 'kanban' and !$isKanbanMethod) $executionLink = $kanbanLink;
         if(isset($execution->type) and $execution->type != 'kanban' and strpos(',kanban,cfd,', ",$method,") !== false) $executionLink = $taskLink;
 

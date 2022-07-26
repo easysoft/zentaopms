@@ -2310,7 +2310,9 @@ class execution extends control
                 or ($execution->status == 'closed'    and substr($execution->closedDate, 0, 10) > $execution->end)
                 or ($execution->status == 'suspended' and $execution->suspendedDate > $execution->end))
                 and strpos($type, 'delay') === false)
+            {
                 $type .= ',withdelay';
+            }
 
             $deadline = $execution->status == 'closed' ? substr($execution->closedDate, 0, 10) : $execution->suspendedDate;
             $deadline = strpos('closed,suspended', $execution->status) === false ? helper::today() : $deadline;
