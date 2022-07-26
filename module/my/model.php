@@ -357,7 +357,7 @@ class myModel extends model
                 ->page($pager)
                 ->fetchAll('id');
         }
-        elseif($objectType == 'risk' or $objectType == 'issue')
+        elseif($objectType == 'risk' or $objectType == 'issue' or $objectType == 'nc')
         {
             $objectList = $this->dao->select('t1.*')->from($this->config->objectTables[$module])->alias('t1')
                 ->leftJoin(TABLE_PROJECT)->alias('t2')->on("t1.project = t2.id")
