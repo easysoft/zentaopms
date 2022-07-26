@@ -335,10 +335,7 @@ $(function()
 
     $('.sidebar-toggle').click(function()
     {
-        if(!$('#userQueries').hasClass('hidden'))
-        {
-            $('#toggle-queries').click();
-        }
+        if(!$('#userQueries').hasClass('hidden')) $('#toggle-queries').click();
     })
 
     $(window).resize(function()
