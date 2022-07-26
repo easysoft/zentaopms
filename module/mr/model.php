@@ -400,6 +400,8 @@ class mrModel extends model
         $MR = $this->getByID($MRID);
         $this->linkObjects($MR);
 
+        $this->loadModel('action')->create('mr', $MRID, 'edited');
+
         if(dao::isError()) return array('result' => 'fail', 'message' => dao::getError());
         return array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => helper::createLink('mr', 'browse'));
    }
@@ -1865,7 +1867,7 @@ class mrModel extends model
      */
     public function logMergedAction($MR)
     {
-        $this->loadModel('action');
+        $this->loadModel('action')->create('mr', $MR->id, 'merged');
         $product = $this->getMRProduct($MR);
 
         $stories = $this->getLinkList($MR->id, $product->id, 'story');
