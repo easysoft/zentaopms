@@ -537,7 +537,11 @@ class Gitea
         $count    = $count == 0 ? '' : "-n $count";
 
         chdir($this->root);
-        if($branch) execCmd(escapeCmd("$this->client checkout $branch"), 'array');
+        if($branch)
+        {
+            execCmd(escapeCmd("$this->client checkout $branch"));
+            execCmd(escapeCmd("$this->client pull"));
+        }
 
         $list    = execCmd(escapeCmd("$this->client log $count $revision -- ./"), 'array');
         $commits = $this->parseLog($list);
