@@ -14,7 +14,7 @@
 <div id='mainContent' class='main-content'>
   <div class='center-block'>
     <div class='main-header'>
-      <h2><?php echo '<span>' . $lang->doc->selectLibType . '</span>';?></h2>
+      <h2><?php echo '<span>' . $lang->doc->create . '</span>';?></h2>
     </div>
   </div>
   <form method='post' class='form-ajax'>

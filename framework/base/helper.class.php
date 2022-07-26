@@ -164,7 +164,7 @@ class baseHelper
         $sign = strpos($link, '?') === false ? "?" : "&";
         $appendString = '';
         if($onlyBody or self::inOnlyBodyMode()) $appendString = $sign . "onlybody=yes";
-        if(self::isWithTID()) $appendString .= empty($appendString) ? "{$sign}tid={$_GET['tid']}" : "&tid={$_GET['tid']}";
+        if(self::isWithTID() and strpos($link, 'tid=') === false) $appendString .= empty($appendString) ? "{$sign}tid={$_GET['tid']}" : "&tid={$_GET['tid']}";
         return $link . $appendString;
     }
 
