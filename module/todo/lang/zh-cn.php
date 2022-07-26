@@ -71,6 +71,7 @@ $lang->todo->closedBy     = '由谁关闭';
 $lang->todo->closedDate   = '关闭时间';
 $lang->todo->deadline     = '过期时间';
 $lang->todo->deleted      = '已删除';
+$lang->todo->ditto        = '同上';
 
 $lang->todo->cycleDaysLabel  = '间隔天数';
 $lang->todo->beforeDaysLabel = '提前天数';

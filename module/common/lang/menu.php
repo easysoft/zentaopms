@@ -309,8 +309,6 @@ $lang->kanbanProject->menu->settings['subMenu']->view        = array('link' => "
 $lang->kanbanProject->menu->settings['subMenu']->products    = array('link' => "{$lang->product->common}|project|manageProducts|project=%s", 'alias' => 'manageproducts');
 $lang->kanbanProject->menu->settings['subMenu']->members     = array('link' => "{$lang->team->common}|project|team|project=%s", 'alias' => 'managemembers,team');
 $lang->kanbanProject->menu->settings['subMenu']->whitelist   = array('link' => "{$lang->whitelist}|project|whitelist|project=%s", 'subModule' => 'personnel');
-$lang->kanbanProject->menu->settings['subMenu']->stakeholder = array('link' => "{$lang->stakeholder->common}|stakeholder|browse|project=%s", 'subModule' => 'stakeholder');
-$lang->kanbanProject->menu->settings['subMenu']->group       = array('link' => "{$lang->priv}|project|group|project=%s", 'alias' => 'group,manageview,managepriv');
 
 /* Execution menu. */
 $lang->execution->homeMenu      = new stdclass();
