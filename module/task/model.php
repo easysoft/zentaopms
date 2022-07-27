@@ -3625,7 +3625,7 @@ class taskModel extends model
     public function printAssignedHtml($task, $users)
     {
         $btnTextClass   = '';
-        $assignedToText = (!empty($task->team) and $task->mode == 'multi') ? $this->lang->task->team : zget($users, $task->assignedTo);
+        $assignedToText = (!empty($task->team) and $task->mode == 'multi' and $task->status != 'closed') ? $this->lang->task->team : zget($users, $task->assignedTo);
 
         if(empty($task->assignedTo))
         {

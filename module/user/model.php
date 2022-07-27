@@ -2829,7 +2829,8 @@ class userModel extends model
             $personalData['createdIssues']  = $this->dao->select($t1Count)->from(TABLE_ISSUE)->alias('t1')->leftjoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')->where('t1.createdBy')->eq($account)->andWhere('t1.deleted')->eq('0')->andWhere('t2.deleted')->eq('0')->fetch('count');
             $personalData['resolvedIssues'] = $this->dao->select($t1Count)->from(TABLE_ISSUE)->alias('t1')->leftjoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')->where('t1.resolvedBy')->eq($account)->andWhere('t1.deleted')->eq('0')->andWhere('t2.deleted')->eq('0')->fetch('count');
         }
-        $personalData['createdDocs']   = $this->dao->select($count)->from(TABLE_DOC)->where('addedBy')->eq($account)->andWhere('deleted')->eq('0')->fetch('count');
+        $allLibs = $this->loadModel('doc')->getLibs('all');
+        $personalData['createdDocs']   = $this->dao->select($count)->from(TABLE_DOC)->where('addedBy')->eq($account)->andWhere('lib')->in(array_keys($allLibs))->andWhere('deleted')->eq('0')->fetch('count');
         $personalData['finishedTasks'] = $this->dao->select($t1Count)->from(TABLE_TASK)->alias('t1')
             ->leftjoin(TABLE_EXECUTION)->alias('t2')->on('t1.execution = t2.id')
             ->where('t1.deleted')->eq('0')

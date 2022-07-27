@@ -269,7 +269,7 @@
                   <th><?php echo $lang->task->assignedTo;?></th>
                   <td>
                     <?php
-                    if(!empty($task->team) and $task->mode == 'multi')
+                    if(!empty($task->team) and $task->mode == 'multi' and $task->status != 'closed')
                     {
                         foreach($task->team as $member) echo ' ' . zget($users, $member->account);
                     }
