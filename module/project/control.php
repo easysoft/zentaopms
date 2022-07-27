@@ -1856,7 +1856,7 @@ class project extends control
             $this->user->updateUserView($projectID, 'project');
 
             /* Delete the execution under the project. */
-            $executionIdList = $this->loadModel('execution')->getByProject($projectID);
+            $executionIdList = $this->loadModel('execution')->getPairs($projectID);
 
             $message = $this->executeHooks($projectID);
             if($message) $this->lang->saveSuccess = $message;
