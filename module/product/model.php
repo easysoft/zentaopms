@@ -1271,13 +1271,14 @@ class productModel extends model
         }
 
         /* Compute totalReal and progress. */
-        foreach($hours as $hour)
+        $this->loadModel('project');
+        foreach($hours as $projectID => $hour)
         {
             $hour->totalEstimate = round($hour->totalEstimate, 1) ;
             $hour->totalConsumed = round($hour->totalConsumed, 1);
             $hour->totalLeft     = round($hour->totalLeft, 1);
             $hour->totalReal     = $hour->totalConsumed + $hour->totalLeft;
-            $hour->progress      = $hour->totalReal ? round($hour->totalConsumed / $hour->totalReal, 2) * 100 : 0;
+            $hour->progress      = $projects[$projectID]->model == 'waterfall' ? $this->project->getWaterfallProgress($projectID) : ($hour->totalReal ? round($hour->totalConsumed / $hour->totalReal, 2) * 100 : 0);
         }
 
         /* Get the number of project teams. */

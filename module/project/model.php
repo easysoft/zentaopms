@@ -394,6 +394,47 @@ class projectModel extends model
     }
 
     /**
+     * Get waterfall project progress.
+     *
+     * @param  int    $projectID
+     * @access public
+     * @return int
+     */
+    public function getWaterfallProgress($projectID)
+    {
+        $executions = $this->loadModel('execution')->getByProject($projectID);
+
+        $totalHour = $this->dao->select('execution, ROUND(SUM(`left`), 2) AS totalLeft, ROUND(SUM(consumed), 1) AS totalConsumed')->from(TABLE_TASK)
+            ->where('execution')->in(array_keys($executions))
+            ->andWhere('deleted')->eq(0)
+            ->andWhere('parent')->lt(1)
+            ->groupBy('execution')
+            ->fetchAll('execution');
+
+        $closedTotalLeft = $this->dao->select('execution, ROUND(SUM(`left`), 2) AS totalLeft')->from(TABLE_TASK)
+            ->where('execution')->in(array_keys($executions))
+            ->andWhere('deleted')->eq(0)
+            ->andWhere('parent')->lt(1)
+            ->andWhere('status')->in('closed,cancel')
+            ->groupBy('execution')
+            ->fetchPairs('execution');
+
+        $progress = 0;
+        foreach($executions as $executionID => $execution)
+        {
+            $executionClosedLeft    = isset($closedTotalLeft[$executionID]) ? $closedTotalLeft[$executionID] : 0;
+            $executionTotalConsumed = isset($totalHour[$executionID]) ? $totalHour[$executionID]->totalConsumed : 0;
+            $executionTotalLeft     = isset($totalHour[$executionID]) ? round($totalHour[$executionID]->totalLeft - $executionClosedLeft, 1) : 0;
+
+            $executionProgress = ($executionTotalConsumed + $executionTotalLeft) ? floor($executionTotalConsumed / ($executionTotalConsumed + $executionTotalLeft) * 1000) / 1000 * 100 : 0;
+
+            $progress += $executionProgress * ($execution->percent / 100);
+        }
+
+        return $progress;
+    }
+
+    /**
      * Get project workhour info.
      *
      * @param  int    $projectID
