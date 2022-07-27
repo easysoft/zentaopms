@@ -292,10 +292,11 @@ class doc extends control
      * @param  int        $moduleID
      * @param  string     $docType
      * @param  bool       $fromGlobal
+     * @param  string     $from
      * @access public
      * @return void
      */
-    public function create($objectType, $objectID, $libID, $moduleID = 0, $docType = '', $fromGlobal = false)
+    public function create($objectType, $objectID, $libID, $moduleID = 0, $docType = '', $fromGlobal = false, $from = 'doc')
     {
         if(!empty($_POST))
         {
@@ -361,9 +362,7 @@ class doc extends control
             if($this->config->systemMode == 'new') unset($this->lang->doc->menu->project['subMenu']);
         }
 
-        /* {$this->view->from} is the zentaomax code, compatible with zentaomax. */
-        $from = isset($this->view->from) ? $this->view->from : '';
-        $this->config->showMainMenu = (strpos($this->config->doc->textTypes, $docType) === false or (!empty($from) and $from == 'template'));
+        $this->config->showMainMenu = (strpos($this->config->doc->textTypes, $docType) === false or $from == 'template');
 
         /* Get libs and the default lib id. */
         $gobackLink = ($objectID == 0 and $libID == 0) ? $this->createLink('doc', 'tableContents', "type=$objectType") : '';
@@ -390,6 +389,7 @@ class doc extends control
         $this->view->groups           = $this->loadModel('group')->getPairs();
         $this->view->users            = $this->user->getPairs('nocode|noclosed|nodeleted');
         $this->view->fromGlobal       = $fromGlobal;
+        $this->view->from             = $from;
 
         $this->display();
     }
