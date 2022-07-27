@@ -316,7 +316,7 @@ class doc extends control
             $this->action->create('doc', $docID, 'Created', $fileAction);
 
             if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $docID));
-            $objectID = zget($lib, $lib->type, '');
+            $objectID = zget($lib, $lib->type, 0);
             $params   = "type={$lib->type}&objectID=$objectID&libID={$lib->id}&docID=" . $docResult['id'];
             $link     = isonlybody() ? 'parent' : $this->createLink('doc', 'objectLibs', $params, 'html') . '#app=' . $this->app->tab;
             $response = array('result' => 'success', 'message' => $this->lang->saveSuccess);
@@ -376,7 +376,7 @@ class doc extends control
         $this->view->title = $libName . $this->lang->doc->create;
 
         $this->view->objectType       = $objectType;
-        $this->view->objectID         = zget($lib, $lib->type, '');
+        $this->view->objectID         = zget($lib, $lib->type, 0);
         $this->view->libID            = $libID;
         $this->view->lib              = $lib;
         $this->view->libs             = $libs;
@@ -508,7 +508,7 @@ class doc extends control
         $this->view->users            = $this->user->getPairs('noletter|noclosed|nodeleted', $doc->users);
         $this->view->from             = $from;
         $this->view->files            = $this->loadModel('file')->getByObject('doc', $docID);
-        $this->view->objectID         = zget($lib, $type, '');
+        $this->view->objectID         = zget($lib, $type, 0);
         $this->display();
     }
 
