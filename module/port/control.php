@@ -123,5 +123,25 @@ class port extends control
         }
     }
 
+    /**
+     * ajaxGetOptions
+     *
+     * @param  string $model
+     * @param  string $field
+     * @param  string $value
+     * @param  string $index
+     * @access public
+     * @return void
+     */
+    public function ajaxGetOptions($model = '', $field = '', $value = '', $index = '')
+    {
+        $this->app->loadConfig($model);
+        $fields    = $this->config->$model->templateFields;
+        $fieldList = $this->port->initFieldList($model, $fields, false);
 
+        if(!isset($fieldList[$field]['values'][''])) $fieldList[$field]['values'][''] = '';
+        $multiple = $fieldList[$field]['control'] == 'multiple' ? 'multiple' : '';
+
+        return print(html::select($field. "[$index]", $fieldList[$field]['values'], $value, "class='form-control picker-select' $multiple"));
+    }
 }

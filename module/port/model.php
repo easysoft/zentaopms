@@ -908,6 +908,37 @@ class portModel extends model
     }
 
     /**
+     * Get view datas.
+     *
+     * @param  string $model
+     * @param  string $datas
+     * @param  string $title
+     * @param  int    $pagerID
+     * @param  int    $maxImport
+     * @access public
+     * @return void
+     */
+    public function getViewDatas($model = '', $datas = '', $title = '', $pagerID = 1, $maxImport = 0, $insert)
+    {
+        $suhosinInfo = $this->checkSuhosinInfo($datas->datas);
+
+        $fields      = $this->config->$model->templateFields;
+
+        $datas->title          = $title ? $title : $this->lang->port->showImport;
+        $datas->requiredFields = $this->config->$model->create->requiredFields;
+        $datas->allPager       = isset($datas->allPager) ? $datas->allPager : 1;
+        $datas->pagerID        = $pagerID;
+        $datas->isEndPage      = $pagerID >= $datas->allPager;
+        $datas->maxImport      = $maxImport;
+        $datas->dataInsert     = $insert;
+        $datas->fields         = $this->initFieldList($model, $fields, false);
+        $datas->suhosinInfo    = $suhosinInfo;
+        $datas->model          = $model;
+
+        return $datas;
+    }
+
+    /**
      * Update children datas.
      *
      * @param  int    $datas
@@ -1053,8 +1084,10 @@ class portModel extends model
      * @access public
      * @return void
      */
-    public function saveImportDatas($model, $datas)
+    public function saveImportDatas($model, $datas = '')
     {
+        if(empty($datas)) $datas = $this->initPostFields($model);
+
         foreach($datas as $key => $data)
         {
             $subDatas = array();
@@ -1133,6 +1166,43 @@ class portModel extends model
         $modelConfig->sysLangFields  = isset($modelConfig->sysLangFields)  ? $modelConfig->sysLangFields  : $portConfig->sysLangFields;
         $modelConfig->sysDataFields  = isset($modelConfig->sysDataFields)  ? $modelConfig->sysDataFields  : $portConfig->sysDataFields;
         $modelConfig->listFields     = isset($modelConfig->listFields)     ? $modelConfig->listFields     : $portConfig->listFields;
+    }
+
+    /**
+     * Read excel and format data .
+     *
+     * @param  string $model
+     * @param  int    $pagerID
+     * @param  int    $maxImport
+     * @access public
+     * @return void
+     */
+    public function readExcel($model = '', $pagerID = 1, $maxImport = 0)
+    {
+        /* Bulid import paris (field => name) .*/
+        $fields  = $this->getImportFields('bug');
+
+        /* Check tmpfile. */
+        $tmpFile = $this->checkTmpFile();
+
+        /* If tmpfile not isset create tmpfile .*/
+        if(!$tmpFile)
+        {
+            $rows    = $this->checkRowsFromExcel();
+
+            $bugData = $this->processRows4Fields($rows, $fields);
+
+            $bugData = $this->getNatureDatas('bug', $bugData);
+
+            $this->createTmpFile($bugData);
+        }
+        else
+        {
+            $bugData = $this->getDatasByFile($tmpFile);
+        }
+
+        /* Get page by datas.*/
+        return $this->getPageDatas($bugData, $pagerID, $maxImport);
     }
 
 }
