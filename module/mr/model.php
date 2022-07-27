@@ -1020,7 +1020,6 @@ class mrModel extends model
         $host = $this->loadModel('pipeline')->getByID($MR->hostID);
         $scm  = $host->type;
 
-        $this->loadModel('repo');
         $repo = $this->loadModel('repo')->getRepoByID($MR->repoID);
         $repo->gitService = $host->id;
         $repo->project    = $MR->targetProject;
