@@ -1124,7 +1124,8 @@ class projectModel extends model
             }
             else
             {
-                $existProductName = $this->dao->select('name')->from(TABLE_PRODUCT)->where('name')->eq($_POST['productName'])->fetch('name');
+                $programID        = isset($project->parent) ? $project->parent : 0;
+                $existProductName = $this->dao->select('name')->from(TABLE_PRODUCT)->where('name')->eq($_POST['productName'])->andWhere('program')->eq($programID)->fetch('name');
                 if(!empty($existProductName))
                 {
                     dao::$errors['productName'] = $this->lang->project->existProductName;
