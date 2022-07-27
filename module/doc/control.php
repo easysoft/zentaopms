@@ -362,7 +362,7 @@ class doc extends control
         }
 
         /* {$this->view->from} is the zentaomax code, compatible with zentaomax. */
-        $from = $this->view->from;
+        $from = isset($this->view->from) ? $this->view->from : '';
         $this->config->showMainMenu = (strpos($this->config->doc->textTypes, $docType) === false or (!empty($from) and $from == 'template'));
 
         /* Get libs and the default lib id. */
@@ -426,12 +426,14 @@ class doc extends control
                 if(!empty($changes)) $this->action->logHistory($actionID, $changes);
             }
 
-            $link = $this->session->docList ? $this->session->docList : $this->createLink('doc', 'index');
-            $doc  = $this->doc->getById($docID);
+            $link     = $this->session->docList ? $this->session->docList : $this->createLink('doc', 'index');
+            $doc      = $this->doc->getById($docID);
+            $lib      = $this->doc->getLibById($doc->lib);
+            $objectID = zget($lib, $lib->type, 0);
 
             if(!empty($objectType) and $objectType != 'doc' and $doc->type != 'chapter' and $doc->type != 'article')
             {
-                $link = $this->createLink('doc', 'objectLibs', "type=$objectType&objectID=$objectID&libID=$libID&docID=$docID");
+                $link = $this->createLink('doc', 'objectLibs', "type={$lib->type}&objectID=$objectID&libID={$doc->lib}&docID=$docID");
             }
 
             if(isonlybody()) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
