@@ -396,42 +396,48 @@ class projectModel extends model
     /**
      * Get waterfall project progress.
      *
-     * @param  int    $projectID
+     * @param  array  $projectIDList
      * @access public
      * @return int
      */
-    public function getWaterfallProgress($projectID)
+    public function getWaterfallProgress($projectIDList)
     {
-        $executions = $this->loadModel('execution')->getByProject($projectID);
+        $projectList = $this->dao->select('t1.*')->from(TABLE_EXECUTION)->alias('t1')
+            ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')
+            ->where('t1.type')->in('stage')
+            ->andWhere('t1.deleted')->eq('0')
+            ->andWhere('t1.vision')->eq($this->config->vision)
+            ->andWhere('t1.project')->in($projectIDList)
+            ->andWhere('t2.model')->eq('waterfall')
+            ->fetchGroup('project', 'id');
 
-        $totalHour = $this->dao->select('execution, ROUND(SUM(`left`), 2) AS totalLeft, ROUND(SUM(consumed), 1) AS totalConsumed')->from(TABLE_TASK)
-            ->where('execution')->in(array_keys($executions))
-            ->andWhere('deleted')->eq(0)
-            ->andWhere('parent')->lt(1)
-            ->groupBy('execution')
-            ->fetchAll('execution');
+        $totalHour = $this->dao->select('t1.project, t1.execution, ROUND(SUM(if(t1.status !="closed" && t1.status !="cancel", `left`, 0)), 2) AS totalLeft, ROUND(SUM(consumed), 1) AS totalConsumed')->from(TABLE_TASK)->alias('t1')
+            ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.execution = t2.id')
+            ->where('t2.project')->in(array_keys($projectList))
+            ->andWhere('t1.deleted')->eq(0)
+            ->andWhere('t1.parent')->lt(1)
+            ->groupBy('t1.execution')
+            ->fetchGroup('project', 'execution');
 
-        $closedTotalLeft = $this->dao->select('execution, ROUND(SUM(`left`), 2) AS totalLeft')->from(TABLE_TASK)
-            ->where('execution')->in(array_keys($executions))
-            ->andWhere('deleted')->eq(0)
-            ->andWhere('parent')->lt(1)
-            ->andWhere('status')->in('closed,cancel')
-            ->groupBy('execution')
-            ->fetchPairs('execution');
-
-        $progress = 0;
-        foreach($executions as $executionID => $execution)
+        $progressList = array();
+        foreach($projectList as $projectID => $stageList)
         {
-            $executionClosedLeft    = isset($closedTotalLeft[$executionID]) ? $closedTotalLeft[$executionID] : 0;
-            $executionTotalConsumed = isset($totalHour[$executionID]) ? $totalHour[$executionID]->totalConsumed : 0;
-            $executionTotalLeft     = isset($totalHour[$executionID]) ? round($totalHour[$executionID]->totalLeft - $executionClosedLeft, 1) : 0;
+            $progress = 0;
+            foreach($stageList as $stageID => $stage)
+            {
+                if($stage->project != $projectID) continue;
 
-            $executionProgress = ($executionTotalConsumed + $executionTotalLeft) ? floor($executionTotalConsumed / ($executionTotalConsumed + $executionTotalLeft) * 1000) / 1000 * 100 : 0;
+                $stageTotalConsumed = isset($totalHour[$projectID][$stageID]) ? $totalHour[$projectID][$stageID]->totalConsumed : 0;
+                $stageTotalLeft     = isset($totalHour[$projectID][$stageID]) ? round($totalHour[$projectID][$stageID]->totalLeft, 1) : 0;
 
-            $progress += $executionProgress * ($execution->percent / 100);
+                $stageProgress = ($stageTotalConsumed + $stageTotalLeft) ? floor($stageTotalConsumed / ($stageTotalConsumed + $stageTotalLeft) * 1000) / 1000 * 100 : 0;
+
+                $progress += $stageProgress * ($stage->percent / 100);
+            }
+            $progressList[$projectID] = $progress;
         }
 
-        return $progress;
+        return is_numeric($projectIDList) ? $progressList[$projectIDList] : $progressList;
     }
 
     /**
