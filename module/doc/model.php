@@ -782,7 +782,7 @@ class docModel extends model
             $docContent->files = join(',', array_keys($files));
             $this->dao->insert(TABLE_DOCCONTENT)->data($docContent)->exec();
             $this->loadModel('score')->create('doc', 'create', $docID);
-            return array('status' => 'new', 'id' => $docID, 'files' => $files);
+            return array('status' => 'new', 'id' => $docID, 'files' => $files, 'docType' => $doc->type, 'libID' => $doc->lib);
         }
         return false;
     }
@@ -2126,11 +2126,11 @@ class docModel extends model
             {
                 foreach($this->lang->doc->typeList as $typeKey => $typeName)
                 {
-                    $class = strpos($this->config->doc->officeTypes, $typeKey) !== false ? 'iframe' : '';
+                    $class = (strpos($this->config->doc->officeTypes, $typeKey) !== false or strpos($this->config->doc->textTypes, $typeKey) !== false) ? 'iframe' : '';
                     $icon  = zget($this->config->doc->iconList, $typeKey);
-                    $html  .= "<li>";
-                    $html  .= html::a(helper::createLink('doc', 'create', "objectType=$objectType&objectID=$objectID&libID=$libID&moduleID=0&type=$typeKey", '', $class ? true : false), "<i class='icon-$icon icon'></i> " . $typeName, '', "class='$class' data-app='{$this->app->tab}'");
-                    $html  .= "</li>";
+                    $html .= "<li>";
+                    $html .= html::a(helper::createLink('doc', 'create', "objectType=$objectType&objectID=$objectID&libID=$libID&moduleID=0&type=$typeKey", '', $class ? true : false), "<i class='icon-$icon icon'></i> " . $typeName, '', "class='$class' data-app='{$this->app->tab}'");
+                    $html .= "</li>";
                     if($typeKey == 'url') $html .= '<li class="divider"></li>';
                 }
             }

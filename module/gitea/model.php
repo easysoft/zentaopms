@@ -600,4 +600,36 @@ class giteaModel extends model
 
         return $newBranches;
     }
+
+    /**
+     * Check remote url.
+     *
+     * @param  int    $giteaID
+     * @param  string $project
+     * @param  string $client
+     * @param  string $path
+     * @access public
+     * @return bool
+     */
+    public function checkRemoteUrl($giteaID, $project, $client, $path)
+    {
+        if(chdir($path))
+        {
+            $url      = new stdclass();
+            $remote   = execCmd(escapeCmd("$client remote -v"), 'array');
+            $pregHttp = '/http(s)?:\/\/(www\.)?[a-zA-Z0-9][-a-zA-Z0-9]{0,62}(\.[a-zA-Z0-9][-a-zA-Z0-9]{0,62})+(:\d+)*(\/\w+)*\.git/';
+            $pregSSH  = '/ssh:\/\/git@[a-zA-Z0-9][-a-zA-Z0-9]{0,62}(\.[a-zA-Z0-9][-a-zA-Z0-9]{0,62})+(:\d+)*(\/\w+)*\.git/';
+
+            if(preg_match($pregHttp, $remote[0], $matches)) $url->http = $matches[0];
+            if(preg_match($pregSSH,  $remote[0], $matches)) $url->ssh  = $matches[0];
+
+            $project = $this->apiGetSingleProject($giteaID, $project);
+            if(isset($project->clone_url))
+            {
+                if($project->clone_url == $url->http or $project->ssh_url == $url->ssh) return true;
+            }
+        }
+
+        return false;
+    }
 }

@@ -176,6 +176,8 @@ $lang->action->desc->run             = '$date, by <strong>$actor</strong> execut
 $lang->action->desc->syncprogram     = '$date, started by <strong>$actor</strong>(starting the project sets the program status as Ongoing).' . "\n";
 $lang->action->desc->syncproject     = '$date, starting the execution sets the project status as Ongoing.' . "\n";
 $lang->action->desc->syncexecution   = '$date, starting the task sets the execution status as Ongoing.' . "\n";
+$lang->action->desc->reopen          = '$date, reopened by <strong>$actor</strong> .' . "\n";
+$lang->action->desc->merged          = '$date, merged by <strong>$actor</strong> .' . "\n";
 
 /* Used to describe the history of operations related to parent-child tasks. */
 $lang->action->desc->createchildren     = '$date, <strong>$actor</strong> created a child task <strong>$extra</strong>。' . "\n";
