@@ -1667,7 +1667,6 @@ class execution extends control
             }
         }
 
-        $this->app->loadLang('kanban');
         $this->loadModel('user');
         $poUsers = $this->user->getPairs('noclosed|nodeleted|pofirst', '', $this->config->maxCount);
         if(!empty($this->config->user->moreLink)) $this->config->moreLinks["PM"] = $this->config->user->moreLink;
@@ -1870,7 +1869,6 @@ class execution extends control
         }
 
         $this->loadModel('user');
-        $this->loadModel('kanban');
         $poUsers = $this->user->getPairs('noclosed|nodeleted|pofirst', $execution->PO, $this->config->maxCount);
         if(!empty($this->config->user->moreLink)) $this->config->moreLinks["PM"] = $this->config->user->moreLink;
 
@@ -1908,10 +1906,6 @@ class execution extends control
         $this->view->branchGroups         = $this->execution->getBranchByProduct(array_keys($linkedProducts), $this->config->systemMode == 'new' ? $execution->project : 0, 'noclosed', $linkedBranchList);
         $this->view->teamMembers          = $this->execution->getTeamMembers($executionID);
         if($this->config->systemMode == 'new') $this->view->allProjects = $this->project->getPairsByModel($project->model, 0, 'noclosed', $project->id);
-
-        $this->view->laneCount     = $this->kanban->getLaneCount($executionID, $execution->type);
-        $this->view->heightType    = $execution->displayCards > 2 ? 'custom' : 'auto';
-        $this->view->displayCards  = $execution->displayCards ? $execution->displayCards : '';
 
         $this->display();
     }
@@ -2605,6 +2599,33 @@ class execution extends control
         $this->view->projects     = $projects;
         $this->view->projectCount = $projectCount;
         $this->view->statusCount  = $statusCount;
+
+        $this->display();
+    }
+
+    /**
+     * Set Kanban.
+     *
+     * @param  int    $executionID
+     * @access public
+     * @return void
+     */
+    public function setKanban($executionID)
+    {
+        $execution = $this->execution->getByID($executionID);
+
+        if($_POST)
+        {
+            $this->execution->setKanban($executionID);
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
+        }
+
+        $this->view->title         = $this->lang->execution->setKanban;
+        $this->view->execution     = $execution;
+        $this->view->laneCount     = $this->loadModel('kanban')->getLaneCount($executionID, $execution->type);
+        $this->view->heightType    = $execution->displayCards > 2 ? 'custom' : 'auto';
+        $this->view->displayCards  = $execution->displayCards ? $execution->displayCards : '';
 
         $this->display();
     }

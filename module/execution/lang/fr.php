@@ -461,6 +461,7 @@ $lang->execution->orderList['stage_desc'] = "Story Phase Descendante";
 
 $lang->execution->kanban        = "Kanban";
 $lang->execution->kanbanSetting = "Paramétrage";
+$lang->execution->setKanban     = "Paramétrage";
 $lang->execution->resetKanban   = "Réinitialiser";
 $lang->execution->printKanban   = "Impression";
 $lang->execution->fullScreen    = "Full Screen";
