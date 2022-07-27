@@ -292,10 +292,11 @@ class doc extends control
      * @param  int        $moduleID
      * @param  string     $docType
      * @param  bool       $fromGlobal
+     * @param  string     $from
      * @access public
      * @return void
      */
-    public function create($objectType, $objectID, $libID, $moduleID = 0, $docType = '', $fromGlobal = false)
+    public function create($objectType, $objectID, $libID, $moduleID = 0, $docType = '', $fromGlobal = false, $from = 'doc')
     {
         if(!empty($_POST))
         {
@@ -361,9 +362,7 @@ class doc extends control
             if($this->config->systemMode == 'new') unset($this->lang->doc->menu->project['subMenu']);
         }
 
-        /* {$this->view->from} is the zentaomax code, compatible with zentaomax. */
-        $from = $this->view->from;
-        $this->config->showMainMenu = (strpos($this->config->doc->textTypes, $docType) === false or (!empty($from) and $from == 'template'));
+        $this->config->showMainMenu = (strpos($this->config->doc->textTypes, $docType) === false or $from == 'template');
 
         /* Get libs and the default lib id. */
         $gobackLink = ($objectID == 0 and $libID == 0) ? $this->createLink('doc', 'tableContents', "type=$objectType") : '';
@@ -390,6 +389,7 @@ class doc extends control
         $this->view->groups           = $this->loadModel('group')->getPairs();
         $this->view->users            = $this->user->getPairs('nocode|noclosed|nodeleted');
         $this->view->fromGlobal       = $fromGlobal;
+        $this->view->from             = $from;
 
         $this->display();
     }
@@ -426,12 +426,14 @@ class doc extends control
                 if(!empty($changes)) $this->action->logHistory($actionID, $changes);
             }
 
-            $link = $this->session->docList ? $this->session->docList : $this->createLink('doc', 'index');
-            $doc  = $this->doc->getById($docID);
+            $link     = $this->session->docList ? $this->session->docList : $this->createLink('doc', 'index');
+            $doc      = $this->doc->getById($docID);
+            $lib      = $this->doc->getLibById($doc->lib);
+            $objectID = zget($lib, $lib->type, 0);
 
             if(!empty($objectType) and $objectType != 'doc' and $doc->type != 'chapter' and $doc->type != 'article')
             {
-                $link = $this->createLink('doc', 'objectLibs', "type=$objectType&objectID=$objectID&libID=$libID&docID=$docID");
+                $link = $this->createLink('doc', 'objectLibs', "type={$lib->type}&objectID=$objectID&libID={$doc->lib}&docID=$docID");
             }
 
             if(isonlybody()) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
