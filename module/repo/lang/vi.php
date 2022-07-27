@@ -99,6 +99,10 @@ $lang->repo->acl       = 'Phân quyền';
 $lang->repo->group     = 'Nhóm';
 $lang->repo->user      = 'Người dùng';
 $lang->repo->info      = 'Thông tin phiên bản';
+$lang->repo->job                = 'Job';
+$lang->repo->fileServerUrl      = 'File Server Url';
+$lang->repo->fileServerAccount  = 'File Server Account';
+$lang->repo->fileServerPassword = 'File Server Password';
 
 $lang->repo->title      = 'Tiêu đề';
 $lang->repo->status     = 'Tình trạng';
@@ -151,11 +155,15 @@ $lang->repo->serviceProject = 'Project';
 
 $lang->repo->notice = new stdclass();
 $lang->repo->notice->syncing        = 'Đang đồng bộ. Vui lòng đợi ...';
+
+$lang->repo->notice                 = new stdclass();
+$lang->repo->notice->syncing        = 'Synchronizing. Please wait ...';
 $lang->repo->notice->syncComplete   = 'Synchronized. Now redirecting ...';
 $lang->repo->notice->syncedCount    = 'The number of records synchronized is ';
 $lang->repo->notice->delete         = 'Bạn có muốn xóa this repo?';
 $lang->repo->notice->successDelete  = 'Repository is removed.';
 $lang->repo->notice->commentContent = 'Nhận xét';
+$lang->repo->notice->deleteReview   = 'Do you want to delete this review?';
 $lang->repo->notice->deleteBug      = 'Bạn có muốn xóa bug này?';
 $lang->repo->notice->deleteComment  = 'Bạn có muốn xóa this comment?';
 $lang->repo->notice->lastSyncTime   = 'Last Sync:';
@@ -187,12 +195,15 @@ $lang->repo->error->output        = "The command is: %s\nThe error is(%s): %s\n"
 $lang->repo->error->clientVersion = "Client version is too low, please upgrade or change SVN client";
 $lang->repo->error->encoding      = "The encoding maybe wrong. Vui lòng change the encoding and try again.";
 $lang->repo->error->deleted       = "Deletion of the repository failed. The current repository has a commit record associated with the design.";
+$lang->repo->error->linkedJob     = "Deletion of the repository failed. The current repository has associated with the Compile.";
 $lang->repo->error->clientPath    = "The client installation directory cannot have spaces!";
+$lang->repo->error->notFound      = "The repository %s’s URL %s does not exist. Please confirm if this repository has been deleted from the local server.";
 $lang->repo->error->noWritable    = '%s is not writable! Please check the privilege, or download will not be done.';
 $lang->repo->error->unconnected   = 'The directory does not match the repository';
 
 $lang->repo->syncTips      = '<strong>Bạn có thể tìm tham khảo làm sao thiết lập đồng bộ Git từ <a target="_blank" href="https://www.zentao.pm/book/zentaomanual/free-open-source-project-management-software-git-105.html">here</a>.</strong>';
 $lang->repo->encodingsTips = "The encodings of commit comments, can be comma separated values，ví dụ:  utf-8";
+$lang->repo->pathTipsForGitlab = "GitLab Project URL";
 
 $lang->repo->example              = new stdclass();
 $lang->repo->example->client      = new stdclass();
