@@ -48,7 +48,8 @@ function getCloneHtml(cloneLang, url)
 $(function()
 {
     /* Hide popover tip. */
-    $(document).on('mousedown', function(e) {
+    $(document).on('mousedown', function(e)
+    {
         var $target = $(e.target);
         var $toggle = $target.closest('.popover, #downloadCode');
         if(!$toggle.length) $('#downloadCode').popover('hide');
