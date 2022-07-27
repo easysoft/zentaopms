@@ -361,7 +361,9 @@ class doc extends control
             if($this->config->systemMode == 'new') unset($this->lang->doc->menu->project['subMenu']);
         }
 
-        $this->config->showMainMenu = strpos($this->config->doc->textTypes, $docType) === false;
+        /* {$this->view->from} is the zentaomax code, compatible with zentaomax. */
+        $from = $this->view->from;
+        $this->config->showMainMenu = (strpos($this->config->doc->textTypes, $docType) === false or (!empty($from) and $from == 'template'));
 
         /* Get libs and the default lib id. */
         $gobackLink = ($objectID == 0 and $libID == 0) ? $this->createLink('doc', 'tableContents', "type=$objectType") : '';
