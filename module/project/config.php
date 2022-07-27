@@ -184,9 +184,3 @@ $config->project->includedPriv['repo']       = array('create', 'showSyncCommit',
 $config->project->includedPriv['testreport'] = array('create', 'view', 'delete', 'edit', 'export');
 $config->project->includedPriv['auditplan']  = array('browse', 'create', 'edit', 'batchCreate', 'batchCheck', 'check', 'nc', 'result', 'assignTo');
 if($config->edition != 'max') $config->project->includedPriv['stakeholder'] = array('browse', 'create', 'batchCreate', 'edit', 'delete', 'view', 'communicate', 'expect', 'expectation', 'deleteExpect', 'createExpect', 'editExpect', 'viewExpect');
-$config->project->unsetWhitelist['view']           = 'project';
-$config->project->unsetWhitelist['manageproducts'] = 'project';
-$config->project->unsetWhitelist['team']           = 'project';
-$config->project->unsetWhitelist['browse']         = 'stakeholder';
-$config->project->unsetWhitelist['group']          = 'project';
-$config->project->unsetWhitelist['approval']       = 'project';
