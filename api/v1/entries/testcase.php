@@ -46,25 +46,27 @@ class testcaseEntry extends entry
         $oldCase = $this->loadModel('testcase')->getByID($caseID);
 
         /* Set $_POST variables. */
-        $fields = 'title,pri,story,type,stage,product,module,branch,precondition';
+        $fields = 'title,pri,story,type,stage,product,module,branch,precondition,script';
         $this->batchSetPost($fields, $oldCase);
+        if(isset($this->requestBody->script)) $this->setPost('auto', 'auto');
 
         /* Set steps and expects. */
+        $steps    = array();
+        $expects  = array();
+        $stepType = array();
         if(isset($this->requestBody->steps))
         {
-            $steps    = array();
-            $expects  = array();
-            $stepType = array();
             foreach($this->requestBody->steps as $step)
             {
                 $steps[]    = $step->desc;
                 $expects[]  = $step->expect;
                 $stepType[] = 'item';
             }
-            $this->setPost('steps',    $steps);
-            $this->setPost('expects',  $expects);
-            $this->setPost('stepType', $stepType);
         }
+
+        $this->setPost('steps',    $steps);
+        $this->setPost('expects',  $expects);
+        $this->setPost('stepType', $stepType);
 
         $control = $this->loadController('testcase', 'edit');
         $control->edit($caseID);
