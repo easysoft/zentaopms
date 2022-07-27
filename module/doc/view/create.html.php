@@ -133,7 +133,7 @@ $("a[href^='###']").click(function()
             <td colspan='3' class='text-center form-actions'>
               <?php echo html::hidden('contentType', 'html');?>
               <?php echo html::submitButton();?>
-              <?php if(strpos($config->doc->textTypes, $docType) === false):?>
+              <?php if($config->showMainMenu):?>
               <?php if(empty($gobackLink)) echo html::backButton($lang->goback, "data-app='{$app->tab}'");?>
               <?php if(!empty($gobackLink)) echo html::a($gobackLink, $lang->goback, '', "class='btn btn-back btn-wide'");?>
               <?php endif;?>
