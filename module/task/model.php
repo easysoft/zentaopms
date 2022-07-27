@@ -1673,7 +1673,7 @@ class taskModel extends model
         $estimate->left     = zget($_POST, 'left', 0);
         $estimate->work     = zget($task, 'work', '');
         $estimate->account  = $this->app->user->account;
-        $estimate->consumed = $estimate->consumed - $oldTask->consumed;
+        $estimate->consumed = !empty($oldTask->team) ? $estimate->consumed - $oldTask->team[$this->app->user->account]->consumed : $estimate->consumed - $oldTask->consumed;
         if($this->post->comment) $estimate->work = $this->post->comment;
         $this->addTaskEstimate($estimate);
 

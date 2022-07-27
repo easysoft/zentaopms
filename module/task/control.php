@@ -230,7 +230,7 @@ class task extends control
             elseif($this->post->after == 'toTaskList')
             {
                 setcookie('moduleBrowseParam',  0, 0, $this->config->webRoot, '', $this->config->cookieSecure, false);
-                $taskLink  = $this->createLink('execution', 'task', "executionID=$executionID&status=unclosed&param=0&orderBy=id_desc");
+                $taskLink  = $this->createLink('execution', 'task', "executionID=$executionID&status=all&param=0&orderBy=id_desc");
                 $response['locate'] = $taskLink;
                 return $this->send($response);
             }

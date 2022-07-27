@@ -107,7 +107,7 @@ class execution extends control
      * @access public
      * @return void
      */
-    public function task($executionID = 0, $status = 'all', $param = 0, $orderBy = '', $recTotal = 0, $recPerPage = 100, $pageID = 1)
+    public function task($executionID = 0, $status = 'unclosed', $param = 0, $orderBy = '', $recTotal = 0, $recPerPage = 100, $pageID = 1)
     {
         $this->loadModel('tree');
         $this->loadModel('search');
@@ -191,7 +191,8 @@ class execution extends control
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
         /* Get tasks. */
-        $tasks = $this->execution->getTasks($productID, $executionID, $this->executions, $browseType, $queryID, $moduleID, $sort, $pager);
+        $allTasks = $this->task->getExecutionTasks($executionID);
+        $tasks    = $this->execution->getTasks($productID, $executionID, $this->executions, $browseType, $queryID, $moduleID, $sort, $pager);
         if(empty($tasks) and $pageID > 1)
         {
             $pager = pager::init(0, $recPerPage, 1);
@@ -221,7 +222,7 @@ class execution extends control
 
         /* Assign. */
         $this->view->tasks        = $tasks;
-        $this->view->allTasksNum  = $this->task->getExecutionTasks($executionID);
+        $this->view->allTasks     = $allTasks;
         $this->view->summary      = $this->execution->summary($tasks);
         $this->view->tabID        = 'task';
         $this->view->pager        = $pager;
