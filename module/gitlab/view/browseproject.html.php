@@ -45,7 +45,7 @@
           <th class='c-name'><?php common::printOrderLink('name', $orderBy, $vars, $lang->gitlab->project->name);?></th>
           <th class='text'></th>
           <th class='text'><?php echo $lang->gitlab->lastUpdate;?></th>
-          <th class='c-actions-8'><?php echo $lang->actions;?></th>
+          <th class='c-actions-8 text-center'><?php echo $lang->actions;?></th>
         </tr>
       </thead>
       <tbody>

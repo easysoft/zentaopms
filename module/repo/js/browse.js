@@ -47,6 +47,10 @@ function getCloneHtml(cloneLang, url)
 
 $(function()
 {
+    $(document).on('click', 'main', function()
+    {
+        $('#downloadCode').popover('hide');
+    })
     /* Init popover. */
     var options = {
         container: 'body',
@@ -59,7 +63,7 @@ $(function()
     };
     $('#downloadCode').popover(options);
 
-    $('#downloadCode').click(function()
+    $('#downloadCode').click(function(e)
     {
         if($('.download-popover').css('display') == 'block')
         {
@@ -80,6 +84,8 @@ $(function()
             var left = parseFloat($('.download-popover').css('left')) - 155;
             $('.download-popover').css('left', left + 'px')
         }
+
+        e.stopPropagation();
     })
 
     $('.copy-btn').live('click', function()
