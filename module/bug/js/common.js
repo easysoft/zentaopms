@@ -60,14 +60,21 @@ function loadAll(productID)
   */
 function loadAllUsers()
 {
-    var link = createLink('bug', 'ajaxLoadAllUsers', 'selectedUser=' + $('#assignedTo').val());
+    isClosedBug = typeof isClosedBug == 'undefined' ? false : isClosedBug;
+
+    var params      = isClosedBug ? '&params=devfirst' : '';
+    var link        = createLink('bug', 'ajaxLoadAllUsers', 'selectedUser=' + $('#assignedTo').val() + params);
     $.get(link, function(data)
     {
         if(data)
         {
-            var moduleID  = $('#module').val();
-            var productID = $('#product').val();
-            setAssignedTo(moduleID, productID);
+            if(!isClosedBug)
+            {
+                var moduleID  = $('#module').val();
+                var productID = $('#product').val();
+                setAssignedTo(moduleID, productID);
+            }
+
             $('#assignedTo').replaceWith(data);
             $('#assignedTo_chosen').remove();
             $('#assignedTo').chosen();
