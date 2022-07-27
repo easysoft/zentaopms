@@ -117,7 +117,7 @@ class GitRepo
     }
 
     /**
-     * Get branch
+     * Get branch.
      *
      * @access public
      * @return array
