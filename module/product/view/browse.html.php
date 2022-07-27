@@ -238,11 +238,6 @@ $projectIDParam = $isProjectStory ? "projectID=$projectID&" : '';
   <strong>
   <?php echo $this->product->getByID($productID)->name ?>
   </strong>
-  <div class="linkButton" onclick="handleLinkButtonClick()">
-    <span title="<?php echo $lang->viewDetails;?>">
-      <i class="icon icon-import icon-rotate-270"></i>
-    </span>
-  </div>
 </div>
 <?php endif;?>
 <div id="mainContent" class="main-row fade">
@@ -745,12 +740,6 @@ function setBadgeStyle(obj, isShow)
     {
         $label.find('.label-badge').css({"color":"#838a9d", "border-color":"#838a9d"});
     }
-}
-
-function handleLinkButtonClick()
-{
-  var xxcUrl = "xxc:openInApp/zentao-integrated/" + encodeURIComponent(window.location.href.replace(/.display=card/, '').replace('xhtml', 'html'));
-  window.open(xxcUrl);
 }
 </script>
 <?php include '../../common/view/footer.html.php';?>
