@@ -1257,6 +1257,8 @@ CREATE TABLE IF NOT EXISTS `zt_repo` (
   `encoding` varchar(20) NOT NULL,
   `SCM` varchar(10) NOT NULL,
   `client` varchar(100) NOT NULL,
+  `serviceHost` varchar(50) NOT NULL,
+  `serviceProject` varchar(100) NOT NULL,
   `commits` mediumint(8) unsigned NOT NULL,
   `account` varchar(30) NOT NULL,
   `password` varchar(30) NOT NULL,

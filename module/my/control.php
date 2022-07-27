@@ -895,7 +895,7 @@ EOF;
      * @param  int    $pageID
      * @return void
      */
-    public function risk($type = 'assignedTo', $param = 0,$orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function risk($type = 'assignedTo', $param = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         /* Set the pager. */
         $this->loadModel('risk');
@@ -993,7 +993,7 @@ EOF;
      * @access public
      * @return void
      */
-    public function nc($browseType = 'assignedToMe', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function nc($browseType = 'assignedToMe', $param = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         $this->loadModel('nc');
         $this->session->set('ncList', $this->app->getURI(true));
@@ -1015,6 +1015,7 @@ EOF;
         $this->view->projects   = $this->loadModel('project')->getPairsByProgram();
         $this->view->pager      = $pager;
         $this->view->orderBy    = $orderBy;
+        $this->view->param      = $param;
         $this->view->mode       = 'nc';
         $this->display();
     }

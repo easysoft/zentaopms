@@ -562,7 +562,7 @@ class programModel extends model
         }
         else
         {
-            if($this->session->projectQuery == false) $this->session->set('projectQuery', ' 1 = 1');
+            if($browseType == 'bySearch' and $this->session->projectQuery == false) $this->session->set('projectQuery', ' 1 = 1');
         }
 
         $query       = str_replace('`id`','t1.id', $this->session->projectQuery);

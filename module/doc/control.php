@@ -286,15 +286,16 @@ class doc extends control
     /**
      * Create a doc.
      *
-     * @param string $objectType
-     * @param int $objectID
-     * @param int|string $libID
-     * @param int $moduleID
-     * @param string $docType
+     * @param  string     $objectType
+     * @param  int        $objectID
+     * @param  int|string $libID
+     * @param  int        $moduleID
+     * @param  string     $docType
+     * @param  bool       $fromGlobal
      * @access public
      * @return void
      */
-    public function create($objectType, $objectID, $libID, $moduleID = 0, $docType = '')
+    public function create($objectType, $objectID, $libID, $moduleID = 0, $docType = '', $fromGlobal = false)
     {
         if(!empty($_POST))
         {
@@ -315,10 +316,23 @@ class doc extends control
             $this->action->create('doc', $docID, 'Created', $fileAction);
 
             if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $docID));
-            $objectID = zget($lib, $lib->type, '');
+            $objectID = zget($lib, $lib->type, 0);
             $params   = "type={$lib->type}&objectID=$objectID&libID={$lib->id}&docID=" . $docResult['id'];
             $link     = isonlybody() ? 'parent' : $this->createLink('doc', 'objectLibs', $params, 'html') . '#app=' . $this->app->tab;
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $link));
+            $response = array('result' => 'success', 'message' => $this->lang->saveSuccess);
+
+            if(isonlybody() and $docResult['docType'] == 'text')
+            {
+                $link = helper::createLink('doc', 'edit', "docID=$docID&comment=false&objectType=$objectType&objectID=$objectID&libID={$docResult['libID']}");
+
+                $response['callback'] = "redirect2Edit($docID, \"$objectType\", $objectID, {$docResult['libID']})";
+            }
+            else
+            {
+                $response['locate'] = "$link";
+            }
+
+            return $this->send($response);
         }
 
         unset($_GET['onlybody']);
@@ -347,7 +361,9 @@ class doc extends control
             if($this->config->systemMode == 'new') unset($this->lang->doc->menu->project['subMenu']);
         }
 
-        $this->config->showMainMenu = strpos(',html,markdown,text,', ",$docType,") === false;
+        /* {$this->view->from} is the zentaomax code, compatible with zentaomax. */
+        $from = $this->view->from;
+        $this->config->showMainMenu = (strpos($this->config->doc->textTypes, $docType) === false or (!empty($from) and $from == 'template'));
 
         /* Get libs and the default lib id. */
         $gobackLink = ($objectID == 0 and $libID == 0) ? $this->createLink('doc', 'tableContents', "type=$objectType") : '';
@@ -362,7 +378,7 @@ class doc extends control
         $this->view->title = $libName . $this->lang->doc->create;
 
         $this->view->objectType       = $objectType;
-        $this->view->objectID         = $objectID;
+        $this->view->objectID         = zget($lib, $lib->type, 0);
         $this->view->libID            = $libID;
         $this->view->lib              = $lib;
         $this->view->libs             = $libs;
@@ -373,6 +389,7 @@ class doc extends control
         $this->view->docType          = $docType;
         $this->view->groups           = $this->loadModel('group')->getPairs();
         $this->view->users            = $this->user->getPairs('nocode|noclosed|nodeleted');
+        $this->view->fromGlobal       = $fromGlobal;
 
         $this->display();
     }
@@ -380,15 +397,16 @@ class doc extends control
     /**
      * Edit a doc.
      *
-     * @param int     $docID
-     * @param bool    $comment
-     * @param string  $objectType
-     * @param int     $objectID
-     * @param int     $libID
+     * @param  int     $docID
+     * @param  bool    $comment
+     * @param  string  $objectType
+     * @param  int     $objectID
+     * @param  int     $libID
+     * @param  string  $from
      * @access public
      * @return void
      */
-    public function edit($docID, $comment = false, $objectType = '', $objectID = 0, $libID = 0)
+    public function edit($docID, $comment = false, $objectType = '', $objectID = 0, $libID = 0, $from = 'edit')
     {
         if(!empty($_POST))
         {
@@ -490,6 +508,9 @@ class doc extends control
         $this->view->lib              = $lib;
         $this->view->groups           = $this->loadModel('group')->getPairs();
         $this->view->users            = $this->user->getPairs('noletter|noclosed|nodeleted', $doc->users);
+        $this->view->from             = $from;
+        $this->view->files            = $this->loadModel('file')->getByObject('doc', $docID);
+        $this->view->objectID         = zget($lib, $type, 0);
         $this->display();
     }
 

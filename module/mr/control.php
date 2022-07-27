@@ -976,7 +976,7 @@ class mr extends control
     public function ajaxGetRepoList($hostID, $projectID)
     {
         $host = $this->loadModel('pipeline')->getByID($hostID);
-        if($host->type != 'gitlab') $projectID =urldecode(base64_decode($projectID));
+        if($host->type != 'gitlab') $projectID = urldecode(base64_decode($projectID));
 
         $repoList = $this->loadModel('repo')->getRepoListByClient($hostID, $projectID);
 

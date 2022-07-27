@@ -2300,6 +2300,7 @@ class execution extends control
             $end       = helper::today();
             $dateList  = date::getDateList($begin, $end, 'Y-m-d', 'noweekend');
             $chartData = $this->execution->buildCFDData($executionID, $dateList, 'task');
+            if(isset($chartData['line'])) $chartData['line'] = array_reverse($chartData['line']);
 
             $this->view->begin = helper::safe64Encode(urlencode($begin));
             $this->view->end   = helper::safe64Encode(urlencode($end));

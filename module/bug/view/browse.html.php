@@ -377,7 +377,7 @@ $currentBrowseType = isset($lang->bug->mySelects[$browseType]) && in_array($brow
             </div>
           </div>
           <?php endif;?>
-          <?php if($canBatchChangeModule and $branch !== 'all'):?>
+          <?php if($canBatchChangeModule and ($product->type == 'normal' or $branch !== 'all')):?>
           <div class="btn-group dropup">
             <button data-toggle="dropdown" type="button" class="btn"><?php echo $lang->bug->moduleAB;?> <span class="caret"></span></button>
             <?php $withSearch = count($modules) > 6;?>

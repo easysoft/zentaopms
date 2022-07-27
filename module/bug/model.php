@@ -1691,6 +1691,7 @@ class bugModel extends model
         return $this->dao->select('t1.*,t2.name as productName')->from(TABLE_BUG)->alias('t1')
             ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product = t2.id')
             ->where('t1.deleted')->eq(0)
+            ->andWhere('t2.deleted')->eq('0')
             ->beginIF($type == 'bySearch')->andWhere($query)->fi()
             ->beginIF($executionID)->andWhere('t1.execution')->eq($executionID)->fi()
             ->beginIF($type != 'closedBy' and $this->app->moduleName == 'block')->andWhere('t1.status')->ne('closed')->fi()

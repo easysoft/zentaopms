@@ -2631,10 +2631,8 @@ class projectModel extends model
 
         $this->saveState($objectID, $this->getPairsByProgram());
         $project = $this->getById($objectID);
-        if(isset($project->acl) and $project->acl == 'open' and isset($this->config->project->unsetWhitelist[$methodName]) and $this->config->project->unsetWhitelist[$methodName] == $moduleName)
-        {
-            unset($this->lang->project->menu->settings['subMenu']->whitelist);
-        }
+
+        if(isset($project->acl) and $project->acl == 'open') unset($this->lang->project->menu->settings['subMenu']->whitelist);
 
         common::setMenuVars('project', $objectID);
         return $objectID;

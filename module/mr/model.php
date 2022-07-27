@@ -400,6 +400,8 @@ class mrModel extends model
         $MR = $this->getByID($MRID);
         $this->linkObjects($MR);
 
+        $this->loadModel('action')->create('mr', $MRID, 'edited');
+
         if(dao::isError()) return array('result' => 'fail', 'message' => dao::getError());
         return array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => helper::createLink('mr', 'browse'));
    }
@@ -1018,13 +1020,9 @@ class mrModel extends model
         $host = $this->loadModel('pipeline')->getByID($MR->hostID);
         $scm  = $host->type;
 
-        $this->loadModel('repo');
-        $repo = new stdclass;
-        $repo->SCM        = $this->lang->repo->scmList[ucfirst($scm)];
+        $repo = $this->loadModel('repo')->getRepoByID($MR->repoID);
         $repo->gitService = $host->id;
         $repo->project    = $MR->targetProject;
-        $repo->path       = sprintf($this->config->repo->$scm->apiPath, $host->url, $MR->targetProject);
-        $repo->client     = $host->url;
         $repo->password   = $host->token;
         $repo->account    = '';
         $repo->encoding   = $encoding;
@@ -1865,7 +1863,7 @@ class mrModel extends model
      */
     public function logMergedAction($MR)
     {
-        $this->loadModel('action');
+        $this->loadModel('action')->create('mr', $MR->id, 'merged');
         $product = $this->getMRProduct($MR);
 
         $stories = $this->getLinkList($MR->id, $product->id, 'story');

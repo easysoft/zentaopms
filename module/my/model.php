@@ -334,21 +334,52 @@ class myModel extends model
             ->fetchAll('objectID');
         if(empty($objectIDList)) return array();
 
-        $objectList = $this->dao->select('*')->from($this->config->objectTables[$module])
-            ->where('deleted')->eq(0)
-            ->andWhere('id')->in(array_keys($objectIDList))
-            ->beginIF($objectType == 'requirement' or $objectType == 'story')->andWhere('type')->eq($objectType)->fi()
-            ->orderBy($orderBy)
-            ->page($pager)
-            ->fetchAll('id');
+        if($objectType == 'task')
+        {
+            $objectList = $this->dao->select('t1.*, t2.name as executionName')->from($this->config->objectTables[$module])->alias('t1')
+                ->leftJoin(TABLE_EXECUTION)->alias('t2')->on("t1.execution = t2.id")
+                ->where('t1.deleted')->eq(0)
+                ->andWhere('t2.deleted')->eq(0)
+                ->andWhere('t1.id')->in(array_keys($objectIDList))
+                ->orderBy('t1.' . $orderBy)
+                ->page($pager)
+                ->fetchAll('id');
+        }
+        elseif($objectType == 'requirement' or $objectType == 'story' or $objectType == 'bug')
+        {
+            $objectList = $this->dao->select('t1.*')->from($this->config->objectTables[$module])->alias('t1')
+                ->leftJoin(TABLE_PRODUCT)->alias('t2')->on("t1.product = t2.id")
+                ->where('t1.deleted')->eq(0)
+                ->andWhere('t2.deleted')->eq(0)
+                ->andWhere('t1.id')->in(array_keys($objectIDList))
+                ->beginIF($objectType == 'requirement' or $objectType == 'story')->andWhere('t1.type')->eq($objectType)->fi()
+                ->orderBy('t1.' . $orderBy)
+                ->page($pager)
+                ->fetchAll('id');
+        }
+        elseif($objectType == 'risk' or $objectType == 'issue' or $objectType == 'nc')
+        {
+            $objectList = $this->dao->select('t1.*')->from($this->config->objectTables[$module])->alias('t1')
+                ->leftJoin(TABLE_PROJECT)->alias('t2')->on("t1.project = t2.id")
+                ->where('t1.deleted')->eq(0)
+                ->andWhere('t2.deleted')->eq(0)
+                ->andWhere('t1.id')->in(array_keys($objectIDList))
+                ->orderBy('t1.' . $orderBy)
+                ->page($pager)
+                ->fetchAll('id');
+        }
+        else
+        {
+            $objectList = $this->dao->select('*')->from($this->config->objectTables[$module])
+                ->where('deleted')->eq(0)
+                ->andWhere('id')->in(array_keys($objectIDList))
+                ->orderBy($orderBy)
+                ->page($pager)
+                ->fetchAll('id');
+        }
 
         if($objectType == 'task')
         {
-            $executionList = array();
-            foreach($objectList as $task) $executionList[$task->execution] = $task->execution;
-            $objectPairs = $this->dao->select('id,name')->from(TABLE_PROJECT)->where('id')->in($executionList)->fetchPairs('id');
-            foreach($objectList as $task) $task->executionName = zget($objectPairs, $task->execution, '');
-
             if($objectList) return $this->loadModel('task')->processTasks($objectList);
             return $objectList;
         }

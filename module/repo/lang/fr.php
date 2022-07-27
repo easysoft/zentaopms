@@ -199,6 +199,7 @@ $lang->repo->error->linkedJob     = "Deletion of the repository failed. The curr
 $lang->repo->error->clientPath    = "The client installation directory cannot have spaces!";
 $lang->repo->error->notFound      = "The repository %s’s URL %s does not exist. Please confirm if this repository has been deleted from the local server.";
 $lang->repo->error->noWritable    = '%s is not writable! Please check the privilege, or download will not be done.';
+$lang->repo->error->unconnected   = 'The directory does not match the repository';
 
 $lang->repo->syncTips          = '<strong>Vous pouvez trouver la référence sur la façon de définir la synchronisation Git à partir de la page se trouvant <a target="_blank" href="https://www.zentao.pm/book/zentaomanual/free-open-source-project-management-software-git-105.html">ici</a>.</strong>';
 $lang->repo->encodingsTips     = "Les encodages des commentaires de validation peuvent être des valeurs séparées par des virgules，ex: utf-8";
