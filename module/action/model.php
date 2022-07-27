@@ -1558,8 +1558,8 @@ class actionModel extends model
         }
         elseif($action->objectType == 'team')
         {
-            if($action->project)   $action->objectLink = helper::createLink('project',   'team', 'projectID=' . $action->project);
-            if($action->execution) $action->objectLink = helper::createLink('execution', 'team', 'executionID=' . $action->execution);
+            if($action->project)   $action->objectLink = common::hasPriv('project', 'team')   ? helper::createLink('project',   'team', 'projectID=' . $action->project) : '';
+            if($action->execution) $action->objectLink = common::hasPriv('execution', 'team') ? helper::createLink('execution', 'team', 'executionID=' . $action->execution) : '';
         }
 
         if($action->objectType == 'stakeholder' and $action->project == 0) $action->objectLink = '';
