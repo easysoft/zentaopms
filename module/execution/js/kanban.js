@@ -1813,7 +1813,7 @@ function toggleRDSearchBox()
     }
     else
     {
-        $(".querybox-toggle").css("color", "3c495c");
+        $(".querybox-toggle").css("color", "#3c495c");
         $('#rdKanbanSearchInput').attr('value', '');
         searchCards('');
     }

@@ -243,6 +243,7 @@ class repoModel extends model
         if($data->encrypt == 'base64') $data->password = base64_encode($data->password);
         $this->dao->insert(TABLE_REPO)->data($data, $skip = 'serviceToken')
             ->batchCheck($this->config->repo->create->requiredFields, 'notempty')
+            ->checkIF($data->SCM != 'Gitlab', 'path,client', 'notempty')
             ->checkIF($isPipelineServer, 'serviceHost,serviceProject', 'notempty')
             ->checkIF($data->SCM == 'Subversion', $this->config->repo->svn->requiredFields, 'notempty')
             ->checkIF($data->SCM == 'Gitea', $this->config->repo->gitea->requiredFields, 'notempty')
@@ -334,6 +335,7 @@ class repoModel extends model
         if($data->encrypt == 'base64') $data->password = base64_encode($data->password);
         $this->dao->update(TABLE_REPO)->data($data, $skip = 'serviceToken')
             ->batchCheck($this->config->repo->edit->requiredFields, 'notempty')
+            ->checkIF($data->SCM != 'Gitlab', 'path,client', 'notempty')
             ->checkIF($data->SCM == 'Subversion', $this->config->repo->svn->requiredFields, 'notempty')
             ->checkIF($data->SCM == 'Gitlab', 'extra', 'notempty')
             ->checkIF($data->SCM == 'Git', 'path', 'unique', "`SCM` = 'Git' and `id` <> $id")

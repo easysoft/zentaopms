@@ -5,9 +5,6 @@ function setCopyProject(executionID)
 
 $(function()
 {
-    var heightType = $("[name='heightType']:checked").val();
-    setCardCount(heightType);
-
     $(document).on('click', '#copyProjects a', function()
     {
         setCopyProject($(this).data('id')); $('#copyProjectModal').modal('hide');

@@ -1551,7 +1551,7 @@ class product extends control
      */
     public function ajaxSetState($productID)
     {
-        $this->session->set('product', (int)$productID);
+        $this->session->set('product', (int)$productID, $this->app->tab);
         $this->send(array('result' => 'success', 'productID' => $this->session->product));
     }
 }

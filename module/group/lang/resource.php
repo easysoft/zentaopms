@@ -767,6 +767,7 @@ $lang->resource->execution->storyEstimate     = 'storyEstimate';
 $lang->resource->execution->storyView         = 'storyView';
 if($config->systemMode == 'new') $lang->resource->execution->executionkanban = 'kanbanAction';
 $lang->resource->execution->kanban            = 'RDKanban';
+$lang->resource->execution->setKanban         = 'setKanban';
 //if($config->systemMode == 'classic') $lang->resource->project->list = 'list';
 
 //$lang->execution->methodOrder[0]   = 'index';
@@ -825,6 +826,7 @@ $lang->execution->methodOrder[255] = 'unbindWhitelist';
 $lang->execution->methodOrder[260] = 'storyEstimate';
 $lang->execution->methodOrder[265] = 'executionkanban';
 $lang->execution->methodOrder[270] = 'kanban';
+$lang->execution->methodOrder[275] = 'setKanban';
 
 /* Task. */
 $lang->resource->task = new stdclass();

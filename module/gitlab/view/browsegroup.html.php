@@ -43,7 +43,7 @@
           <th class='c-name text-left'><?php common::printOrderLink('name', $orderBy, $vars, $lang->gitlab->group->name);?></th>
           <th class='text-left'><?php common::printOrderLink('path', $orderBy, $vars, $lang->gitlab->group->path);?></th>
           <th class='text-left'><?php echo $lang->gitlab->group->createOn;?></th>
-          <th class='c-actions-3'><?php echo $lang->actions;?></th>
+          <th class='c-actions-3 text-center'><?php echo $lang->actions;?></th>
         </tr>
       </thead>
       <tbody>
