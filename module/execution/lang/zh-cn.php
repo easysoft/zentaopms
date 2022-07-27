@@ -461,6 +461,7 @@ $lang->execution->orderList['stage_desc'] = "{$lang->SRCommon}阶段倒序";
 
 $lang->execution->kanban        = "看板";
 $lang->execution->kanbanSetting = "看板设置";
+$lang->execution->setKanban     = "设置看板";
 $lang->execution->resetKanban   = "恢复默认";
 $lang->execution->printKanban   = "打印看板";
 $lang->execution->fullScreen    = "看板全屏展示";

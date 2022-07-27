@@ -461,6 +461,7 @@ $lang->execution->orderList['stage_desc'] = "Phase Ab.";
 
 $lang->execution->kanban        = "Kanban";
 $lang->execution->kanbanSetting = "Kanban Einstellung";
+$lang->execution->setKanban     = "Kanban Einstellung";
 $lang->execution->resetKanban   = "Einstellungen zurücksetzen";
 $lang->execution->printKanban   = "Kanban drucken";
 $lang->execution->fullScreen    = "Full Screen";
