@@ -37,10 +37,10 @@ $config->repo->switcherModuleList = array('repo', 'job', 'compile', 'mr');
 $config->repo->switcherMethodList = array('browse', 'review', 'view', 'diff', 'log', 'revision', 'blame');
 
 $config->repo->create = new stdclass();
-$config->repo->create->requiredFields = 'product,SCM,name,path,encoding,client';
+$config->repo->create->requiredFields = 'product,SCM,name,encoding';
 
 $config->repo->edit = new stdclass();
-$config->repo->edit->requiredFields = 'product,SCM,name,path,encoding,client';
+$config->repo->edit->requiredFields = 'product,SCM,name,encoding';
 
 $config->repo->svn = new stdclass();
 $config->repo->svn->requiredFields = 'account,password';

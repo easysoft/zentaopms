@@ -14,3 +14,4 @@ tr,th,td {border-bottom: none;}
 .body-modal .panel-actions {right: 30px;}
 .icon-angle-left {transform: rotateY(180deg);}
 #main {padding: 20px 0;}
+.m-repo-view .btn-toolbar .btn-link {margin-right: 0; padding-top: 8px;}

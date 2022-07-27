@@ -45,7 +45,7 @@
           <th class='text-left'><?php echo $lang->job->triggerType;?></th>
           <th class='c-status text-center'><?php common::printOrderLink('lastStatus', $orderBy, $vars, $lang->job->lastStatus);?></th>
           <th class='c-exec'><?php common::printOrderLink('lastExec', $orderBy, $vars, $lang->job->lastExec);?></th>
-          <th class='c-actions-4'><?php echo $lang->actions;?></th>
+          <th class='c-actions-4 text-center'><?php echo $lang->actions;?></th>
         </tr>
       </thead>
       <tbody>
