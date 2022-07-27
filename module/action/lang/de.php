@@ -216,6 +216,8 @@ $lang->action->desc->fromsonarqube        = '$date, created by <strong>$actor</s
 $lang->action->desc->tolib                = '$date, imported by <strong>$actor</strong> .' . "\n";
 $lang->action->desc->updatetolib          = '$date, updated to ' . $lang->testcase->common . ' by  <strong>$actor</strong>.' . "\n";
 $lang->action->desc->adjusttasktowait     = '$date, System Reminder: The task status will be set to Not Started as the consumed work hour is adjusted to 0. ' . "\n";
+$lang->action->desc->reopen               = '$date, reopened by <strong>$actor</strong> .' . "\n";
+$lang->action->desc->merged               = '$date, merged by <strong>$actor</strong> .' . "\n";
 
 /* Used to describe the history of operations related to parent-child tasks. */
 $lang->action->desc->createchildren     = '$date, <strong>$actor</strong> created a child task <strong>$extra</strong>。' . "\n";

@@ -19,9 +19,7 @@ if(isset($entry)) $pathInfo .= '&type=file';
   <table class='table table-fixed'>
     <thead>
       <tr>
-        <?php if($repo->SCM != 'Gitea'):?>
         <th class='c-checkbox w-40px'></th>
-        <?php endif;?>
         <th class='c-version'><?php echo $lang->repo->revisionA?></th>
         <?php if($repo->SCM != 'Subversion'):?>
         <th class='c-commit'><?php echo $lang->repo->commit?></th>
@@ -34,14 +32,12 @@ if(isset($entry)) $pathInfo .= '&type=file';
     <tbody>
       <?php foreach($revisions as $log):?>
       <tr>
-        <?php if($repo->SCM != 'Gitea'):?>
         <td>
           <div class='checkbox-primary'>
             <input type='checkbox' name='revision[]' value="<?php echo $log->revision?>" />
             <label></label>
           </div>
         </td>
-        <?php endif;?>
         <td class='versions'><span class="revision"><?php echo html::a($this->repo->createLink('revision', "repoID=$repoID&objectID=$objectID&revision={$log->revision}" . $pathInfo), $repo->SCM != 'Subversion' ? substr($log->revision, 0, 10) : $log->revision, '', "data-app='{$this->app->tab}'");?></span></td>
         <?php if($repo->SCM != 'Subversion'):?>
         <td><?php echo $log->commit?></td>
@@ -54,7 +50,7 @@ if(isset($entry)) $pathInfo .= '&type=file';
     </tbody>
   </table>
   <div class='table-footer'>
-    <?php if($repo->SCM != 'Gitea' and common::hasPriv('repo', 'diff')) echo html::submitButton($lang->repo->diff, '', count($revisions) < 2 ? 'disabled btn btn-primary' : 'btn btn-primary')?>
+    <?php if(common::hasPriv('repo', 'diff')) echo html::submitButton($lang->repo->diff, '', count($revisions) < 2 ? 'disabled btn btn-primary' : 'btn btn-primary')?>
     <?php echo html::a($this->repo->createLink('log', "repoID=$repoID&objectID=$objectID&entry=" . $this->repo->encodePath($path) . "&revision=HEAD&type=$logType"), $lang->repo->allLog, '', "class='allLogs' data-app='{$this->app->tab}'");?>
     <div class='pull-right'>
         <ul id="repoPageSize" class="pager" data-ride="pager" data-elements="size_menu" data-rec-total="<?php echo $pager->recTotal;?>" data-rec-per-page="<?php echo $pager->recPerPage;?>" data-page="<?php echo $pager->pageID;?>"></ul>
