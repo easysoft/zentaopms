@@ -528,6 +528,8 @@ class upgradeModel extends model
                 $this->moveProjectAdmins();
                 $this->addStoryViewPriv();
                 break;
+            case '17_3':
+                $this->processBugLinkBug();
         }
 
         $this->deletePatch();
@@ -975,7 +977,9 @@ class upgradeModel extends model
             case '17_2':
                 $confirmContent .= file_get_contents($this->getUpgradeFile('17.2'));
             case '17_3':
-                $this->processBugLinkBug();
+                $confirmContent .= file_get_contents($this->getUpgradeFile('17.3'));
+                $xuanxuanSql     = $this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan6.0.1.sql';
+                $confirmContent .= file_get_contents($xuanxuanSql);
         }
 
         return $confirmContent;
