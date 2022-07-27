@@ -150,6 +150,7 @@ class programplanModel extends model
     public function getDataForGantt($executionID, $productID, $baselineID = 0, $selectCustom = '', $returnJson = true)
     {
         $this->loadModel('stage');
+        $this->loadModel('execution');
 
         $plans = $this->getStage($executionID, $productID);
         if($baselineID)
@@ -327,7 +328,7 @@ class programplanModel extends model
             }
         }
 
-        $datas['data'] = array_values($datas['data']);
+        $datas['data'] = isset($datas['data']) ? array_values($datas['data']) : array();
 
         return $returnJson ? json_encode($datas) : $datas;
     }
