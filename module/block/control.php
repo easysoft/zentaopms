@@ -1748,6 +1748,7 @@ class block extends control
                 ->beginIF($objectType == 'story' or $objectType == 'requirement')->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product=t2.id')->fi()
                 ->beginIF($objectType == 'bug')->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product=t2.id')->fi()
                 ->beginIF($objectType == 'task')->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.execution=t2.id')->fi()
+                ->beginIF($objectType == 'issue' or $objectType == 'risk')->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')->fi()
                 ->where('t1.deleted')->eq(0)
                 ->andWhere('t1.assignedTo')->eq($this->app->user->account)->fi()
                 ->beginIF($objectType == 'story')->andWhere('t1.type')->eq('story')->andWhere('t2.deleted')->eq('0')->fi()
@@ -1757,6 +1758,7 @@ class block extends control
                 ->beginIF($objectType == 'todo')->andWhere('t1.cycle')->eq(0)->andWhere('t1.status')->eq('wait')->andWhere('t1.vision')->eq($this->config->vision)->fi()
                 ->beginIF($objectType != 'todo')->andWhere('t1.status')->ne('closed')->fi()
                 ->beginIF($objectType == 'feedback')->andWhere('t1.status')->in('wait, noreview')->fi()
+                ->beginIF($objectType == 'issue' or $objectType == 'risk')->andWhere('t2.deleted')->eq(0)->fi()
                 ->orderBy($orderBy)
                 ->beginIF($limitCount)->limit($limitCount)->fi()
                 ->fetchAll();
@@ -1813,16 +1815,18 @@ class block extends control
             $now          = date('H:i:s', strtotime(helper::now()));
             $meetingCount = isset($params->meetingCount) ? isset($params->meetingCount) : 0;
 
-            $meetings = $this->dao->select('*')->from(TABLE_MEETING)
-                ->where('deleted')->eq('0')
-                ->andWhere('(date')->gt($today)
-                ->orWhere('(begin')->gt($now)
-                ->andWhere('date')->eq($today)
+            $meetings = $this->dao->select('*')->from(TABLE_MEETING)->alias('t1')
+                ->leftjoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
+                ->where('t1.deleted')->eq('0')
+                ->andWhere('t2.deleted')->eq('0')
+                ->andWhere('(t1.date')->gt($today)
+                ->orWhere('(t1.begin')->gt($now)
+                ->andWhere('t1.date')->eq($today)
                 ->markRight(2)
-                ->andwhere('(host')->eq($this->app->user->account)
-                ->orWhere('participant')->in($this->app->user->account)
+                ->andwhere('(t1.host')->eq($this->app->user->account)
+                ->orWhere('t1.participant')->in($this->app->user->account)
                 ->markRight(1)
-                ->orderBy('id_desc')
+                ->orderBy('t1.id_desc')
                 ->beginIF($meetingCount)->limit($meetingCount)->fi()
                 ->fetchAll();
 
