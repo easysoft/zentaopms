@@ -60,7 +60,6 @@ function scmChanged(scm, isFirstRequest = false)
     }
     else
     {
-        console.log(scm)
         $('tr.service').toggle(true);
         if(scm == 'Gitea')
         {
