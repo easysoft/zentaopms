@@ -41,7 +41,7 @@
           </tr>
           <tr class='commonRepo'>
             <th><?php echo $lang->job->repo; ?></th>
-            <td><?php echo html::select('repo', $repoPairs, $job->repo, "class='form-control'"); ?></td>
+            <td><?php echo html::select('repo', $repoPairs, $job->repo, "class='form-control chosen'"); ?></td>
           </tr>
           <tr class='gitlabRepo hide'>
             <th><?php echo $lang->job->repo; ?></th>

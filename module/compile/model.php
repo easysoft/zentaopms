@@ -47,7 +47,7 @@ class compileModel extends model
      */
     public function getList($repoID, $jobID, $orderBy = 'id_desc', $pager = null)
     {
-        return $this->dao->select('t1.id, t1.name, t1.job, t1.status, t1.createdDate, t1.testtask, t2.pipeline, t2.triggerType, t2.comment, t2.atDay, t2.atTime, t2.engine, t3.name as repoName, t4.name as jenkinsName')->from(TABLE_COMPILE)->alias('t1')
+        return $this->dao->select('t1.id, t1.name, t1.job, t1.status, DATE_FORMAT(t1.createdDate, "%m-%d %H:%i") AS createdDate, t1.testtask, t2.pipeline, t2.triggerType, t2.comment, t2.atDay, t2.atTime, t2.engine, t3.name as repoName, t4.name as jenkinsName')->from(TABLE_COMPILE)->alias('t1')
             ->leftJoin(TABLE_JOB)->alias('t2')->on('t1.job=t2.id')
             ->leftJoin(TABLE_REPO)->alias('t3')->on('t2.repo=t3.id')
             ->leftJoin(TABLE_PIPELINE)->alias('t4')->on('t2.server=t4.id')

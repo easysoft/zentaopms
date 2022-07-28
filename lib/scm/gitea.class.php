@@ -62,6 +62,7 @@ class Gitea
         chdir($this->root);
         if(!empty($path)) $sub = ":$path";
         if(!empty($this->branch))$revision = $this->branch;
+        execCmd(escapeCmd("$this->client pull"));
         $cmd  = escapeCmd("$this->client ls-tree -l $revision$sub");
         $list = execCmd($cmd . ' 2>&1', 'array', $result);
         if($result) return array();

@@ -88,7 +88,7 @@
             <td><?php echo empty($MR->approvalStatus) ? $lang->mr->approvalStatusList['notReviewed'] : $lang->mr->approvalStatusList[$MR->approvalStatus];?></td>
           <?php endif;?>
           <td class='text' title='<?php echo zget($users, $MR->createdBy);?>'><?php echo zget($users, $MR->createdBy);?></td>
-          <td class='text' title='<?php echo zget($users, $MR->createdDate);?>'><?php echo zget($users, $MR->createdDate);?></td>
+          <td class='text' title='<?php echo $MR->createdDate;?>'><?php echo $MR->createdDate;?></td>
           <td class='c-actions'>
             <?php
             $canDelete = ($app->user->admin or (isset($projects[$MR->hostID][$MR->sourceProject]->owner->id) and $projects[$MR->hostID][$MR->sourceProject]->owner->id == $openIDList[$MR->hostID])) ? '' : 'disabled';
