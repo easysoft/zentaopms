@@ -166,36 +166,36 @@
           }
           echo '</li>';?>
 
-       <li class='file'>
-         <div>
-           <?php
-           if(strrpos($file->title, '.') !== false)
-           {
-               /* Fix the file name exe.exe */
-               $title     = explode('.', $file->title);
-               $extension = end($title);
-               if($file->extension == 'txt' && $extension != $file->extension) $file->extension = $extension;
-               array_pop($title);
-               $file->title = join('.', $title);
-           }
-           ?>
-           <div class='hidden renameFile w-300px' id='renameBox<?php echo $file->id;?>'>
-             <i class='icon icon-file-text'></i>
-             <div class='input-group'>
-               <?php echo html::input('fileName' . $file->id, $file->title, "class='form-control' size='40'");?>
-               <input type="hidden" name="extension" id="extension<?php echo $file->id?>" value="<?php echo $file->extension;?>"/>
-               <strong class='input-group-addon'>.<?php echo $file->extension;?></strong>
-             </div>
-             <div class="input-group-btn">
-               <button type="button" class="btn btn-success file-name-confirm" onclick="setFileName(<?php echo $file->id;?>)" style="border-radius: 0px 2px 2px 0px; border-left-color: transparent;"><i class="icon icon-check"></i></button>
-               <button type="button" class="btn btn-gray file-name-cancel" onclick="showFile(<?php echo $file->id;?>)" style="border-radius: 0px 2px 2px 0px; border-left-color: transparent;"><i class="icon icon-close"></i></button>
-             </div>
-           </div>
-         </div>
-       </li>
+          <li class='file'>
+            <div>
+              <?php
+              if(strrpos($file->title, '.') !== false)
+              {
+                  /* Fix the file name exe.exe */
+                  $title     = explode('.', $file->title);
+                  $extension = end($title);
+                  if($file->extension == 'txt' && $extension != $file->extension) $file->extension = $extension;
+                  array_pop($title);
+                  $file->title = join('.', $title);
+              }
+              ?>
+              <div class='hidden renameFile w-300px' id='renameBox<?php echo $file->id;?>'>
+                <i class='icon icon-file-text'></i>
+                <div class='input-group'>
+                  <?php echo html::input('fileName' . $file->id, $file->title, "class='form-control' size='40'");?>
+                  <input type="hidden" name="extension" id="extension<?php echo $file->id?>" value="<?php echo $file->extension;?>"/>
+                  <strong class='input-group-addon'>.<?php echo $file->extension;?></strong>
+                </div>
+                <div class="input-group-btn">
+                  <button type="button" class="btn btn-success file-name-confirm" onclick="setFileName(<?php echo $file->id;?>)" style="border-radius: 0px 2px 2px 0px; border-left-color: transparent;"><i class="icon icon-check"></i></button>
+                  <button type="button" class="btn btn-gray file-name-cancel" onclick="showFile(<?php echo $file->id;?>)" style="border-radius: 0px 2px 2px 0px; border-left-color: transparent;"><i class="icon icon-close"></i></button>
+                </div>
+              </div>
+            </div>
+          </li>
 
-     <?php endif;
-        endforeach;?>
+        <?php endif;?>
+      <?php endforeach;?>
     </ul>
 <?php if($fieldset == 'true'):?>
   </div>
