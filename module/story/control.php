@@ -1052,7 +1052,7 @@ class story extends control
      * @access public
      * @return void
      */
-    public function change($storyID)
+    public function change($storyID, $from = '')
     {
         if(!empty($_POST))
         {
@@ -1095,7 +1095,7 @@ class story extends control
                         $kanbanData    = json_encode($kanbanData);
                         return print(js::closeModal('parent.parent', '', "parent.parent.updateKanban($kanbanData)"));
                     }
-                    else
+                    if($from == 'taskkanban')
                     {
                         $taskSearchValue = $this->session->taskSearchValue ? $this->session->taskSearchValue : '';
                         $kanbanData      = $this->loadModel('kanban')->getExecutionKanban($execution->id, $execLaneType, $execGroupBy, $taskSearchValue);
@@ -1385,7 +1385,7 @@ class story extends control
                         $kanbanData    = json_encode($kanbanData);
                         return print(js::closeModal('parent.parent', '', "parent.parent.updateKanban($kanbanData)"));
                     }
-                    else
+                    if($from == 'taskkanban')
                     {
                         $taskSearchValue = $this->session->taskSearchValue ? $this->session->taskSearchValue : '';
                         $kanbanData      = $this->loadModel('kanban')->getExecutionKanban($this->session->execution, $execLaneType, $execGroupBy, $taskSearchValue);
