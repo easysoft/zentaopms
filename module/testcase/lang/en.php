@@ -144,6 +144,7 @@ $lang->testcase->step                    = 'Steps';
 $lang->testcase->stepChild               = 'Child Steps';
 $lang->testcase->viewAll                 = 'All Cases';
 $lang->testcase->importToLib             = "Import To Library";
+$lang->testcase->showScript              = 'Show Script';
 
 $lang->testcase->new = 'New';
 

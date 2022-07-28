@@ -216,6 +216,6 @@ $config->testcase->datatable->fieldList['stepNumber']['name']     = $lang->testc
 
 $config->testcase->datatable->fieldList['actions']['title']    = 'actions';
 $config->testcase->datatable->fieldList['actions']['fixed']    = 'right';
-$config->testcase->datatable->fieldList['actions']['width']    = '150';
+$config->testcase->datatable->fieldList['actions']['width']    = '180';
 $config->testcase->datatable->fieldList['actions']['required'] = 'yes';
 $config->testcase->datatable->fieldList['actions']['sort']     = 'no';

@@ -123,6 +123,7 @@ $lang->testcase->groupName               = 'Tên nhóm';
 $lang->testcase->step                    = 'Các bước';
 $lang->testcase->stepChild               = 'Các bước con';
 $lang->testcase->viewAll                 = 'Tất cả tình huống';
+$lang->testcase->showScript              = 'Show Script';
 
 $lang->testcase->new = 'Mới';
 

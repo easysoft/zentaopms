@@ -2232,6 +2232,19 @@ class testcase extends control
     }
 
     /**
+     * Show script.
+     *
+     * @param  int    $caseID
+     * @access public
+     * @return void
+     */
+    public function showScript($caseID)
+    {
+        $this->view->case = $this->testcase->getByID($caseID);
+        $this->display();
+    }
+
+    /**
      * Export case getModuleByStory
      *
      * @params int $storyID
