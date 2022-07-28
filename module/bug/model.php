@@ -1859,7 +1859,7 @@ class bugModel extends model
                 ->andWhere('deleted')->eq(0)
                 ->beginIF($excludeBugs)->andWhere('id')->notIN($excludeBugs)->fi()
                 ->beginIF(!empty($productID) and strpos($bugQuery, 'product') === false and strpos($bugQuery, '`product` IN') === false)->andWhere('product')->eq($productID)->fi()
-                ->beginIF(!empty($productID) and $branchID != 'all' and strpos($bugQuery, 'product') === false and strpos($bugQuery, '`product` IN') === false)->andWhere('branch')->eq($branchID)->fi()
+                ->beginIF(!empty($productID) and $branchID !== 'all' and strpos($bugQuery, 'product') === false and strpos($bugQuery, '`product` IN') === false)->andWhere('branch')->eq($branchID)->fi()
                 ->orderBy($orderBy)
                 ->page($pager)
                 ->fetchAll('id');
@@ -1869,7 +1869,7 @@ class bugModel extends model
             $bugs = $this->dao->select('t1.*')->from(TABLE_BUG)->alias('t1')
                 ->leftJoin(TABLE_MODULE)->alias('t2')->on('t1.module=t2.id')
                 ->where('t1.deleted')->eq(0)
-                ->beginIF(!empty($productID) and $branchID != 'all')->andWhere('t1.branch')->eq($branchID)->fi()
+                ->beginIF(!empty($productID) and $branchID !== 'all')->andWhere('t1.branch')->eq($branchID)->fi()
                 ->beginIF(empty($build))->andWhere('t1.execution')->eq($executionID)->fi()
                 ->beginIF(!empty($productID))->andWhere('t1.product')->eq($productID)->fi()
                 ->beginIF($type == 'unresolved')->andWhere('t1.status')->eq('active')->fi()
