@@ -6,6 +6,7 @@
   <div class="detail-content">
 <?php endif;?>
   <style>
+  .file {padding-top: 2px;}
   .files-list>li>a {display: inline; word-wrap: break-word;}
   .files-list>li>.right-icon {opacity: 1;}
   .fileAction {color: #0c64eb !important;}
@@ -125,7 +126,7 @@
               $downloadLink  = $this->createLink('file', 'download', "fileID=$file->id");
               $downloadLink .= strpos($downloadLink, '?') === false ? '?' : '&';
               $downloadLink .= $sessionString;
-              echo "<li title='{$uploadDate}'>" . html::a($downloadLink, $fileTitle . " <span class='text-muted'>({$fileSize})</span>", '_blank', "id='fileTitle$file->id'  onclick=\"return downloadFile($file->id, '$file->extension', $imageWidth, '$file->title')\"");
+              echo "<li class='file' title='{$uploadDate}'>" . html::a($downloadLink, $fileTitle . " <span class='text-muted'>({$fileSize})</span>", '_blank', "id='fileTitle$file->id'  onclick=\"return downloadFile($file->id, '$file->extension', $imageWidth, '$file->title')\"");
 
               $objectType = zget($this->config->file->objectType, $file->objectType);
               if(common::hasPriv($objectType, 'edit', $object))
@@ -164,7 +165,7 @@
               }
               echo '</li>';?>
 
-      <li>
+      <li class='file'>
         <div>
           <?php
           if(strrpos($file->title, '.') !== false)
