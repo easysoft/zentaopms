@@ -57,7 +57,8 @@
 </style>
 <div id="mainMenu" class="clearfix table-row">
   <div class="btn-toolBar pull-left">
-    <div class="input-control w-150px" id='programBox'><?php echo html::select('programID', $programs, $programID, "onchange=changeProgram(this.value) class='form-control chosen' data-placeholder='{$lang->project->selectProgram}' data-drop_width='450' data-max_drop_width='0'");?></div>
+    <?php $excludedEmptyPrograms = array_filter($programs);?>
+    <div class="input-control w-150px" id='programBox'><?php echo html::select('programID', $programs, $programID, "onchange=changeProgram(this.value) class='form-control chosen' data-placeholder='{$lang->project->selectProgram}' data-drop_width='" . (empty($excludedEmptyPrograms) ? 170 : 450) . "' data-max_drop_width='0'");?></div>
     <?php foreach($lang->project->featureBar as $key => $label):?>
     <?php $active = $browseType == $key ? 'btn-active-text' : '';?>
     <?php $label = "<span class='text'>$label</span>";?>
