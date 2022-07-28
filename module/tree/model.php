@@ -1221,6 +1221,8 @@ class treeModel extends model
         $moduleName = strpos(',project,execution,', ",{$this->app->tab},") !== false ? $this->app->tab : 'bug';
         $methodName = strpos(',project,execution,', ",{$this->app->tab},") !== false ? 'bug' : 'browse';
         $param      = "root={$module->root}&branch=&type=byModule&param={$module->id}";
+
+        $extra['type'] = (isset($extra['type']) and $extra['type'] != 'bysearch') ? $extra['type'] : 'all';
         if($this->app->tab == 'execution') $param = "execuitonID={$extra['executionID']}&productID={$module->root}&branch={$extra['branchID']}&orderBy={$extra['orderBy']}&build={$extra['build']}&type={$extra['type']}&param={$module->id}";
         if($this->app->tab == 'project') $param = "projectID={$extra['projectID']}&productID={$module->root}&branch={$extra['branchID']}&orderBy={$extra['orderBy']}&build={$extra['build']}&type={$extra['type']}&param={$module->id}";
         return html::a(helper::createLink($moduleName, $methodName, $param), $module->name, '_self', "id='module{$module->id}' title='{$module->name}'");
