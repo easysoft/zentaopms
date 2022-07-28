@@ -51,7 +51,7 @@
           </td>
           <td><?php echo $user->realname;?></td>
           <td class='c-dept' title="<?php echo zget($depts, $user->dept);?>"><?php echo zget($depts, $user->dept);?></td>
-          <td><?php echo zget($lang->user->roleList, $user->role);?></td>
+          <td title="<?php echo zget($lang->user->roleList, $user->role)?>"><?php echo zget($lang->user->roleList, $user->role);?></td>
           <td title="<?php echo $user->phone;?>"><?php echo $user->phone;?></td>
           <td title="<?php echo $user->qq;?>"><?php echo $user->qq;?></td>
           <td title="<?php echo $user->weixin;?>"><?php echo $user->weixin;?></td>

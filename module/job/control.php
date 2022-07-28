@@ -139,16 +139,16 @@ class job extends control
     /**
      * Edit a job.
      *
-     * @param  int    $id
+     * @param  int    $jobID
      * @access public
      * @return void
      */
-    public function edit($id)
+    public function edit($jobID)
     {
-        $job = $this->job->getByID($id);
+        $job = $this->job->getByID($jobID);
         if($_POST)
         {
-            $this->job->update($id);
+            $this->job->update($jobID);
             if(dao::isError())
             {
                 $errors = dao::getError();
@@ -174,7 +174,7 @@ class job extends control
                 return $this->send(array('result' => 'fail', 'message' => $errors));
             }
 
-            $this->loadModel('action')->create('job', $id, 'edited');
+            $this->loadModel('action')->create('job', $jobID, 'edited');
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browse', "repoID={$job->repo}")));
         }
 
@@ -190,7 +190,7 @@ class job extends control
         foreach($repoList as $repo)
         {
             if(empty($repo->synced)) continue;
-            $repoPairs[$repo->id] = $repo->name;
+            $repoPairs[$repo->id] = "[{$repo->SCM}] {$repo->name}";
             $repoTypes[$repo->id] = $repo->SCM;
             if(strtolower($repo->SCM) == 'gitlab') $gitlabRepos[$repo->id] = $repo->name;
         }
@@ -221,15 +221,15 @@ class job extends control
     /**
      * Delete a job.
      *
-     * @param  int    $id
+     * @param  int    $jobID
      * @access public
      * @return void
      */
-    public function delete($id, $confirm = 'no')
+    public function delete($jobID, $confirm = 'no')
     {
-        if($confirm != 'yes') return print(js::confirm($this->lang->job->confirmDelete, inlink('delete', "jobID=$id&confirm=yes")));
+        if($confirm != 'yes') return print(js::confirm($this->lang->job->confirmDelete, inlink('delete', "jobID=$jobID&confirm=yes")));
 
-        $this->job->delete(TABLE_JOB, $id);
+        $this->job->delete(TABLE_JOB, $jobID);
         echo js::reload('parent');
     }
 
@@ -317,27 +317,27 @@ class job extends control
     /**
      * Exec a job.
      *
-     * @param  int     $id
+     * @param  int     $jobID
      * @param  string  $showForm
      * @access public
      * @return void
      */
-    public function exec($id)
+    public function exec($jobID)
     {
-        $job = $this->job->getByID($id);
+        $job = $this->job->getByID($jobID);
         if(strtolower($job->engine) == 'gitlab')
         {
             if(!isset($job->reference) or !$job->reference)
             {
-                return $this->send(array('result' => 'fail', 'message' => $this->lang->job->setReferenceTips, 'locate' => inlink('edit', "id=$id")));
+                return $this->send(array('result' => 'fail', 'message' => $this->lang->job->setReferenceTips, 'locate' => inlink('edit', "id=$jobID")));
             }
         }
 
-        $compile = $this->job->exec($id);
+        $compile = $this->job->exec($jobID);
         if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
         $this->app->loadLang('compile');
-        $this->loadModel('action')->create('job', $id, 'executed');
+        $this->loadModel('action')->create('job', $jobID, 'executed');
         return $this->send(array('result' => 'success', 'message' => sprintf($this->lang->job->sendExec, zget($this->lang->compile->statusList, $compile->status))));
     }
 
@@ -409,7 +409,7 @@ class job extends control
             }
             else
             {
-                $repoPairs[$repo->id] = $repo->name;
+                $repoPairs[$repo->id] = "[{$repo->SCM}] {$repo->name}";
             }
         }
         echo html::select('repo', $repoPairs, '', "class='form-control chosen'");

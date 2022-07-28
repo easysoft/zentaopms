@@ -49,7 +49,7 @@
             <td class='required'><?php echo html::input('name', $repo->name, "class='form-control'"); ?></td>
             <td></td>
           </tr>
-          <tr class='hide-service'>
+          <tr class='hide-service hide-gitea'>
             <th><?php echo $lang->repo->path; ?></th>
             <td class='required'><?php echo html::input('path', $repo->path, "class='form-control'"); ?></td>
             <td class='muted'>

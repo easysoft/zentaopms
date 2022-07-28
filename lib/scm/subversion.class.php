@@ -18,10 +18,11 @@ class Subversion
      * @param  string $account
      * @param  string $password
      * @param  string $encoding
+     * @param  object $repo
      * @access public
      * @return void
      */
-    public function __construct($client, $root, $account, $password, $encoding = 'UTF-8')
+    public function __construct($client, $root, $account, $password, $encoding = 'UTF-8', $repo = null)
     {
         putenv('LC_CTYPE=en_US.UTF-8');
         $this->root     = str_replace(array('%3A', '%2F', '+'), array(':', '/', ' '), urlencode(rtrim($root, '/')));
