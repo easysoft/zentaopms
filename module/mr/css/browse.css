@@ -13,8 +13,9 @@
 #repoList .tree li > a {line-height: 20px; border-radius: 2px;}
 
 .c-id {width: 60px;}
-.c-title {min-width: 120px;}
-.c-branch {width: 240px;}
+.c-title {width: 150px;}
+.c-branch {width: 200px;}
 .c-status {width: 120px;}
-.c-author {width: 100px;}
-.c-date {width: 140px;}
+.c-author {width: 80px;}
+.c-date {width: 100px;}
+[lang^='zh-'] .c-status {width: 100px;}

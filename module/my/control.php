@@ -1270,7 +1270,7 @@ EOF;
             {
                 if(empty($data->newList))
                 {
-                    dao::$errors['newList'] = sprintf($this->lang->error->notempty, $this->lang->user->contacts->listName);
+                    dao::$errors[] = sprintf($this->lang->error->notempty, $this->lang->user->contacts->listName);
 
                     $response['result']  = 'fail';
                     $response['message'] = dao::getError();

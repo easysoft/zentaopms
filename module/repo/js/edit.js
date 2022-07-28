@@ -63,7 +63,8 @@ function scmChanged(scm, isFirstRequest = false)
         $('tr.service').toggle(true);
         if(scm == 'Gitea')
         {
-            $('tr.hide-service').toggle(true);
+            $('tr.hide-service:not(".hide-gitea")').toggle(true);
+            $('tr.hide-gitea').toggle(false);
         }
         else
         {

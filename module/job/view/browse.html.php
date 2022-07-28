@@ -72,7 +72,7 @@
           <td><?php if($job->lastStatus) echo $job->lastExec;?></td>
           <td class='c-actions text-center'>
             <?php
-            common::printIcon('compile', 'browse', "jobID=$id", '', 'list', 'history');
+            common::printIcon('compile', 'browse', "repoID={$job->repo}&jobID=$id", '', 'list', 'history');
             common::printIcon('job', 'edit', "jobID=$id", '', 'list',  'edit');
             common::printIcon('job', 'exec', "jobID=$id", '', 'list',  'play');
             if(common::hasPriv('job', 'delete')) echo html::a($this->createLink('job', 'delete', "jobID=$id"), '<i class="icon-trash"></i>', 'hiddenwin', "title='{$lang->job->delete}' class='btn'");

@@ -344,7 +344,7 @@ tbody tr td:first-child input {display: none;}
                 <?php $this->printExtendFields($build, 'table', 'inForm=0');?>
                 <tr>
                   <th style="vertical-align:top"><?php echo $lang->build->desc;?></th>
-                  <td>
+                  <td class='article-content'>
                     <?php if($build->desc):?>
                     <?php echo $build->desc;?>
                     <?php else:?>

@@ -120,3 +120,5 @@ body.menu-hide {padding-left: 0;}
 {
   #upgradeContent{width: 85%;}
 }
+#searchbox .dropdown-menu > li.search-type-all{max-width: 250px}
+#searchbox .dropdown-menu > li.search-type-all a{width: 100%; overflow: hidden; text-overflow: ellipsis;}

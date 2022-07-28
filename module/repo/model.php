@@ -221,15 +221,6 @@ class repoModel extends model
 
         $data->acl = empty($data->acl) ? '' : json_encode($data->acl);
 
-        if($data->SCM == 'Gitea')
-        {
-            $relation = $this->loadModel('gitea')->checkRemoteUrl($data->serviceHost, $data->serviceProject, $data->client, $data->path);
-            if(!$relation)
-            {
-                dao::$errors['path'] = $this->lang->repo->error->unconnected;
-                return false;
-            }
-        }
         if($data->SCM == 'Subversion')
         {
             $scm = $this->app->loadClass('scm');
@@ -1424,7 +1415,29 @@ class repoModel extends model
                 return false;
             }
         }
-        elseif(in_array($scm, array('Git', 'Gitea')))
+        elseif($scm == 'Gitea')
+        {
+            if($this->post->name != '' and $this->post->serviceProject != '')
+            {
+                $project = $this->loadModel('gitea')->apiGetSingleProject($this->post->serviceHost, $this->post->serviceProject);
+                if(isset($project->tokenCloneUrl))
+                {
+                    $path = dirname(dirname(dirname(__FILE__))) . '/tmp/repo/' . $this->post->name . '_gitea';
+                    if(!realpath($path))
+                    {
+                        $cmd = 'git clone --progress -v "' . $project->tokenCloneUrl . '" "' . $path . '"';
+                        exec($cmd);
+                    }
+                    $_POST['path'] = $path;
+                }
+                else
+                {
+                    dao::$errors['serviceProject'] = $this->lang->repo->error->noCloneAddr;
+                    return false;
+                }
+            }
+        }
+        elseif($scm == 'Git')
         {
             if(!is_dir($path))
             {

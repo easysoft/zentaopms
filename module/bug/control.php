@@ -2254,12 +2254,13 @@ class bug extends control
      * AJAX: get all users as assignedTo list.
      *
      * @param  string $selectedUser
+     * @param  string $params   noletter|noempty|nodeleted|noclosed|withguest|pofirst|devfirst|qafirst|pmfirst|realname|outside|inside|all, can be sets of theme
      * @access public
      * @return string
      */
-    public function ajaxLoadAllUsers($selectedUser = '')
+    public function ajaxLoadAllUsers($selectedUser = '', $params = 'devfirst|noclosed')
     {
-        $allUsers = $this->loadModel('user')->getPairs('devfirst|noclosed');
+        $allUsers = $this->loadModel('user')->getPairs($params);
 
         return print(html::select('assignedTo', $allUsers, $selectedUser, 'class="form-control"'));
     }

@@ -5,3 +5,4 @@
 .page-title .text>a {font-weight: 700;}
 
 .body-modal #mainContent {min-height: 200px;}
+td.article-content{overflow:auto !important;}

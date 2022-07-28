@@ -753,6 +753,7 @@ class programModel extends model
             if(isset($this->lang->program->$field)) $this->lang->project->$field = $this->lang->program->$field;
         }
 
+        $this->lang->error->unique = $this->lang->error->repeat;
         $program = $this->loadModel('file')->processImgURL($program, $this->config->program->editor->create['id'], $this->post->uid);
         $this->dao->insert(TABLE_PROGRAM)->data($program)
             ->autoCheck()
@@ -860,6 +861,7 @@ class programModel extends model
             if(isset($this->lang->program->$field)) $this->lang->project->$field = $this->lang->program->$field;
         }
 
+        $this->lang->error->unique = $this->lang->error->repeat;
         $this->dao->update(TABLE_PROGRAM)->data($program)
             ->autoCheck($skipFields = 'begin,end')
             ->batchcheck($this->config->program->edit->requiredFields, 'notempty')
