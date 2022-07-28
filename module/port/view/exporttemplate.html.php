@@ -21,12 +21,12 @@ function closeWindow()
 </script>
 <div id='mainContent' class='main-content'>
   <div class='main-header'>
-    <h2><?php echo $lang->task->exportTemplet;?></h2>
+    <h2><?php echo $lang->port->exportTemplate;?></h2>
   </div>
   <form method='post' target='hiddenwin' onsubmit='setDownloading();' style='padding: 20px 5%'>
     <table class='table table-form'>
       <tr>
-        <th class='w-120px'><?php echo $lang->task->num;?></th>
+        <th class='w-120px'><?php echo $lang->port->num;?></th>
         <td class='w-80px'><?php echo html::input('num', '10', "class='form-control'");?></td>
         <td class='w-100px'><?php echo html::select('fileType', array('xlsx' => 'xlsx', 'xls' => 'xls'), 'xlsx', "class='form-control'");?>
         <td><?php echo html::submitButton('', '', 'btn btn-primary');?></td>

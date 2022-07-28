@@ -856,13 +856,14 @@ class portModel extends model
      * @access public
      * @return void
      */
-    public function getPageDatas($datas, $pagerID = 1, $maxImport = 0)
+    public function getPageDatas($datas, $pagerID = 1)
     {
         $result   = new stdClass();
         $result->allCount = count($datas);
         $result->allPager = 1;
         $result->pagerID  = $pagerID;
 
+        $maxImport = $_COOKIE['maxImport'];
         if($result->allCount > $this->config->file->maxImport)
         {
             if(empty($maxImport))
@@ -918,7 +919,7 @@ class portModel extends model
      * @access public
      * @return void
      */
-    public function getViewDatas($model = '', $datas = '', $title = '', $pagerID = 1, $maxImport = 0, $insert)
+    public function getViewDatas($model = '', $datas = '', $title = '', $pagerID = 1, $insert)
     {
         $suhosinInfo = $this->checkSuhosinInfo($datas->datas);
 
@@ -929,7 +930,7 @@ class portModel extends model
         $datas->allPager       = isset($datas->allPager) ? $datas->allPager : 1;
         $datas->pagerID        = $pagerID;
         $datas->isEndPage      = $pagerID >= $datas->allPager;
-        $datas->maxImport      = $maxImport;
+        $datas->maxImport      = $_COOKIE['maxImport'];
         $datas->dataInsert     = $insert;
         $datas->fields         = $this->initFieldList($model, $fields, false);
         $datas->suhosinInfo    = $suhosinInfo;
@@ -1177,7 +1178,7 @@ class portModel extends model
      * @access public
      * @return void
      */
-    public function readExcel($model = '', $pagerID = 1, $maxImport = 0)
+    public function readExcel($model = '', $pagerID = 1)
     {
         /* Bulid import paris (field => name) .*/
         $fields  = $this->getImportFields('bug');
@@ -1202,7 +1203,7 @@ class portModel extends model
         }
 
         /* Get page by datas.*/
-        return $this->getPageDatas($bugData, $pagerID, $maxImport);
+        return $this->getPageDatas($bugData, $pagerID);
     }
 
 }

@@ -36,10 +36,11 @@ $(function()
     {
         if(parseInt($('#maxImport').val())) $('#times').html(Math.ceil(parseInt($('#allCount').html()) / parseInt($('#maxImport').val())));
     });
+
     $('#import').click(function()
     {
         $.cookie('maxImport', $('#maxImport').val())
-        window.location.reload();
+        location.href = "<?php echo $this->app->getURI()?>";
     })
 });
 </script>
@@ -86,13 +87,12 @@ $(function()
 
           <?php foreach($fields as $field => $value):?>
 
-          <?php if(!isset($value['values'][''])) $value['values'][''] = '';?>
           <?php if($value['control'] != 'hidden') $colspan ++?>
 
           <?php if($value['control'] == 'select'):?>
           <?php $selected = !empty($object->$field) ? $object->$field : '';$list = array();?>
-          <?php if($value['values'][$selected])  $list  = array($selected => $value['values'][$selected]);?>
-          <?php if(!$value['values'][$selected] and $value['values'][0]) $list = array_slice($value['values'], 0, 1);?>
+          <?php if(!empty($value['values'][$selected])) $list = array($selected => $value['values'][$selected]);?>
+          <?php if(!empty($value['values'][$selected]) and isset($value['values'][0])) $list = array_slice($value['values'], 0, 1);?>
           <td><?php echo html::select("{$field}[$key]", $list, $selected, "class='form-control picker-select' data-field='{$field}' data-key='$key'")?></td>
 
           <?php elseif($value['control'] == 'multiple'):?>
@@ -126,6 +126,7 @@ $(function()
           <td colspan='<?php echo $colspan;?>' class='text-center form-actions'>
             <?php
             $submitText = $isEndPage ? $this->lang->save : $this->lang->file->saveAndNext;
+            $backLink   = isset($backLink) ? $backLink : "javascript:history.back(-1)";
             if(!$insert and $dataInsert === '')
             {
                 echo "<button type='button' data-toggle='modal' data-target='#importNoticeModal' class='btn btn-primary btn-wide'>{$submitText}</button>";
@@ -137,7 +138,7 @@ $(function()
             }
             echo html::hidden('isEndPage', $isEndPage ? 1 : 0);
             echo html::hidden('pagerID', $pagerID);
-            echo html::a("javascript:history.back(-1)", $lang->goback, '', "class='btn btn-back btn-wide'");
+            echo html::a("$backLink", $lang->goback, '', "class='btn btn-back btn-wide'");
             echo ' &nbsp; ' . sprintf($lang->file->importPager, $allCount, $pagerID, $allPager);
             ?>
           </td>

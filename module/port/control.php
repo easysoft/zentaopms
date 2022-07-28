@@ -73,6 +73,7 @@ class port extends control
      */
     public function import($model, $locate = '')
     {
+        $locate = $locate ? $locate : $this->session->showImportURL;
         if($_FILES)
         {
             $file      = $this->loadModel('file')->getUpload('file');
@@ -135,7 +136,7 @@ class port extends control
      */
     public function ajaxGetOptions($model = '', $field = '', $value = '', $index = '')
     {
-        $this->app->loadConfig($model);
+        $this->loadModel($model);
         $fields    = $this->config->$model->templateFields;
         $fieldList = $this->port->initFieldList($model, $fields, false);
 

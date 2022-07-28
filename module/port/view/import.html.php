@@ -19,4 +19,7 @@
     </div>
   </div>
 </main>
+<script>
+$.cookie('maxImport', 0);
+</script>
 <?php include $app->getModuleRoot() . 'common/view/footer.lite.html.php';?>
