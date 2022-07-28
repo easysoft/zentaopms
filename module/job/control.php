@@ -409,7 +409,7 @@ class job extends control
             }
             else
             {
-                $repoPairs[$repo->id] = $repo->name;
+                $repoPairs[$repo->id] = "[{$repo->SCM}] {$repo->name}";
             }
         }
         echo html::select('repo', $repoPairs, '', "class='form-control chosen'");
