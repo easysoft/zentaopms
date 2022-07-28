@@ -16,14 +16,29 @@
   .renameFile .input-group-addon {width: 60px;}
   </style>
   <script>
-  /* Delete a file. */
+  /**
+   * Delete a file.
+   *
+   * @param  int    $fileID
+   * @access public
+   * @return void
+   */
   function deleteFile(fileID)
   {
       if(!fileID) return;
       hiddenwin.location.href = createLink('file', 'delete', 'fileID=' + fileID);
   }
 
-  /* Download a file, append the mouse to the link. Thus we call decide to open the file in browser no download it. */
+  /**
+   * Download a file, append the mouse to the link. Thus we call decide to open the file in browser no download it.
+   *
+   * @param  int    $fileID
+   * @param  int    $extension
+   * @param  int    $imageWidth
+   * @param  string $fileTitle
+   * @access public
+   * @return void
+   */
   function downloadFile(fileID, extension, imageWidth, fileTitle)
   {
       if(!fileID) return;
@@ -52,20 +67,39 @@
   }
 
   /* Show edit box for editing file name. */
+  /**
+   * Show edit box for editing file name.
+   *
+   * @param  int    $fileID
+   * @access public
+   * @return void
+   */
   function showRenameBox(fileID)
   {
       $('#renameFile' + fileID).closest('li').addClass('hidden');
       $('#renameBox' + fileID).removeClass('hidden');
   }
 
-  /* Show File. */
+  /**
+   * Show File.
+   *
+   * @param  int    $fileID
+   * @access public
+   * @return void
+   */
   function showFile(fileID)
   {
       $('#renameBox' + fileID).addClass('hidden');
       $('#renameFile' + fileID).closest('li').removeClass('hidden');
   }
 
-  /* Smooth refresh file name. */
+  /**
+   * Smooth refresh file name.
+   *
+   * @param  int    $fileID
+   * @access public
+   * @return void
+   */
   function setFileName(fileID)
   {
       var fileName  = $('#fileName' + fileID).val();
