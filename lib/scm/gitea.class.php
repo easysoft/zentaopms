@@ -12,15 +12,26 @@ class Gitea
      * @param  string $username
      * @param  string $password
      * @param  string $encoding
+     * @param  object $repo
      * @access public
      * @return void
      */
-    public function __construct($client, $root, $username, $password, $encoding = 'UTF-8')
+    public function __construct($client, $root, $username, $password, $encoding = 'UTF-8', $repo = null)
     {
         putenv('LC_CTYPE=en_US.UTF-8');
 
         $this->client = $client;
         $this->root   = rtrim($root, DIRECTORY_SEPARATOR);
+        if(!realpath($this->root) and !empty($repo))
+        {
+            global $app;
+            $project = $app->control->loadModel('gitea')->apiGetSingleProject($repo->serviceHost, $repo->serviceProject);
+            if(isset($project->tokenCloneUrl))
+            {
+                $cmd = 'git clone --progress -v "' . $project->tokenCloneUrl . '" "' . $this->root . '"';
+                exec($cmd);
+            }
+        }
 
         $branch = isset($_COOKIE['repoBranch']) ? $_COOKIE['repoBranch'] : '';
         if($branch)

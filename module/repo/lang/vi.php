@@ -199,7 +199,7 @@ $lang->repo->error->linkedJob     = "Deletion of the repository failed. The curr
 $lang->repo->error->clientPath    = "The client installation directory cannot have spaces!";
 $lang->repo->error->notFound      = "The repository %s’s URL %s does not exist. Please confirm if this repository has been deleted from the local server.";
 $lang->repo->error->noWritable    = '%s is not writable! Please check the privilege, or download will not be done.';
-$lang->repo->error->unconnected   = 'The directory does not match the repository';
+$lang->repo->error->noCloneAddr   = 'The repository clone address was not found';
 
 $lang->repo->syncTips          = '<strong>Bạn có thể tìm tham khảo làm sao thiết lập đồng bộ Git từ <a target="_blank" href="https://www.zentao.pm/book/zentaomanual/free-open-source-project-management-software-git-105.html">here</a>.</strong>';
 $lang->repo->encodingsTips     = "The encodings of commit comments, can be comma separated values，ví dụ:  utf-8";
