@@ -2611,9 +2611,13 @@ class executionModel extends model
             }
         }
 
-        $projectID = $this->dao->select('project')->from(TABLE_EXECUTION)->where('id')->eq($executionID)->fetch('project');
+        if($this->config->systemMode == 'new')
+        {
+            $projectID = $this->dao->select('project')->from(TABLE_EXECUTION)->where('id')->eq($executionID)->fetch('project');
+            $this->session->set('project', $projectID);
+            $this->linkStory($projectID, $planStories, $planProducts);
+        }
         $this->linkStory($executionID, $planStories, $planProducts);
-        if($this->config->systemMode == 'new') $this->linkStory($projectID, $planStories, $planProducts);
     }
 
     /**
