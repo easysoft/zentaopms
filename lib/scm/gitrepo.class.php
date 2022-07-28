@@ -12,10 +12,11 @@ class GitRepo
      * @param  string $username
      * @param  string $password
      * @param  string $encoding
+     * @param  object $repo
      * @access public
      * @return void
      */
-    public function __construct($client, $root, $username, $password, $encoding = 'UTF-8')
+    public function __construct($client, $root, $username, $password, $encoding = 'UTF-8', $repo = null)
     {
         putenv('LC_CTYPE=en_US.UTF-8');
 

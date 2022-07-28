@@ -46,7 +46,7 @@ class jobModel extends model
      */
     public function getList($repoID = 0, $orderBy = 'id_desc', $pager = null, $engine = '', $pipeline = '')
     {
-        return $this->dao->select('t1.*, t2.name as repoName, t3.name as jenkinsName')->from(TABLE_JOB)->alias('t1')
+        return $this->dao->select('t1.*, DATE_FORMAT(t1.lastExec, "%m-%d %H:%i") AS lastExec, t2.name as repoName, t3.name as jenkinsName')->from(TABLE_JOB)->alias('t1')
             ->leftJoin(TABLE_REPO)->alias('t2')->on('t1.repo=t2.id')
             ->leftJoin(TABLE_PIPELINE)->alias('t3')->on('t1.server=t3.id')
             ->where('t1.deleted')->eq('0')

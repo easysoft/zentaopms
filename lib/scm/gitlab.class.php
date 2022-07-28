@@ -7,15 +7,16 @@ class gitlab
     /**
      * Construct
      *
-     * @param  string    $client    gitlab api url.
-     * @param  string    $root      id of gitlab project.
-     * @param  string    $username  null
-     * @param  string    $password  token of gitlab api.
-     * @param  string    $encoding
+     * @param  string $client    gitlab api url.
+     * @param  string $root      id of gitlab project.
+     * @param  string $username  null
+     * @param  string $password  token of gitlab api.
+     * @param  string $encoding
+     * @param  object $repo
      * @access public
      * @return void
      */
-    public function __construct($client, $root, $username, $password, $encoding = 'UTF-8')
+    public function __construct($client, $root, $username, $password, $encoding = 'UTF-8', $repo = null)
     {
         $this->client = $client;
         $this->root   = rtrim($root, '/') . '/';

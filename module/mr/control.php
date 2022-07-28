@@ -54,8 +54,9 @@ class mr extends control
         /* Check whether Mr is linked with the product. */
         foreach($MRList as $MR)
         {
-            $product        = $this->mr->getMRProduct($MR);
-            $MR->linkButton = empty($product) ? false : true;
+            $product         = $this->mr->getMRProduct($MR);
+            $MR->linkButton  = empty($product) ? false : true;
+            $MR->createdDate = date('m-d H:i', strtotime($MR->createdDate));
         }
 
         /* Load lang from compile module */
