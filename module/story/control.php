@@ -1049,6 +1049,7 @@ class story extends control
      * Change a story.
      *
      * @param  int    $storyID
+     * @param  string $from
      * @access public
      * @return void
      */
