@@ -1190,6 +1190,7 @@ class projectModel extends model
             if(isset($this->lang->project->$field)) $this->lang->project->$field = $this->lang->project->$field;
         }
 
+        $this->lang->error->unique = $this->lang->error->repeat;
         $project = $this->loadModel('file')->processImgURL($project, $this->config->project->editor->create['id'], $this->post->uid);
         $this->dao->insert(TABLE_PROJECT)->data($project)
             ->autoCheck()
@@ -1436,6 +1437,7 @@ class projectModel extends model
             if(isset($this->lang->project->$field)) $this->lang->project->$field = $this->lang->project->$field;
         }
 
+        $this->lang->error->unique = $this->lang->error->repeat;
         $this->dao->update(TABLE_PROJECT)->data($project)
             ->autoCheck($skipFields = 'begin,end')
             ->batchcheck($requiredFields, 'notempty')

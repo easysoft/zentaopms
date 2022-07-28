@@ -671,6 +671,7 @@ class productModel extends model
             ->remove('uid,newLine,lineName,contactListMenu')
             ->get();
 
+        $this->lang->error->unique = $this->lang->error->repeat;
         $product   = $this->loadModel('file')->processImgURL($product, $this->config->product->editor->create['id'], $this->post->uid);
         $programID = isset($product->program) ? $product->program : 0;
         $this->dao->insert(TABLE_PRODUCT)->data($product)->autoCheck()
@@ -763,6 +764,7 @@ class productModel extends model
             ->remove('uid,changeProjects,contactListMenu')
             ->get();
 
+        $this->lang->error->unique = $this->lang->error->repeat;
         $product   = $this->loadModel('file')->processImgURL($product, $this->config->product->editor->edit['id'], $this->post->uid);
         $programID = isset($product->program) ? $product->program : '';
         $this->dao->update(TABLE_PRODUCT)->data($product)->autoCheck()
