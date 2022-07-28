@@ -62,8 +62,8 @@ function loadAllUsers()
 {
     isClosedBug = typeof isClosedBug == 'undefined' ? false : isClosedBug;
 
-    var params      = isClosedBug ? '&params=devfirst' : '';
-    var link        = createLink('bug', 'ajaxLoadAllUsers', 'selectedUser=' + $('#assignedTo').val() + params);
+    var params = isClosedBug ? '&params=devfirst' : '';
+    var link   = createLink('bug', 'ajaxLoadAllUsers', 'selectedUser=' + $('#assignedTo').val() + params);
     $.get(link, function(data)
     {
         if(data)
