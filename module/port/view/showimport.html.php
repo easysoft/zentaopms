@@ -1,5 +1,5 @@
+<?php include $app->getModuleRoot() . 'common/view/header.html.php';?>
 <?php
-    $title          = $datas->title;
     $requiredFields = $datas->requiredFields;
     $allCount       = $datas->allCount;
     $allPager       = $datas->allPager;
@@ -12,7 +12,6 @@
     $model          = $datas->model;
     $datas          = $datas->datas;
 ?>
-<?php include $app->getModuleRoot() . 'common/view/header.html.php';?>
 <style>
 th {width:150px;}
 .c-pri, .c-severity, .c-deadline, .c-openedBuild{width:100px;}

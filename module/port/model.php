@@ -12,6 +12,8 @@ class portModel extends model
 
     public $modelLang;
 
+    public $maxImport;
+
     /**
      * The construc method, to do some auto things.
      *
@@ -22,8 +24,9 @@ class portModel extends model
     {
         parent::__construct();
 
-        $this->portConfig  = $this->config->port;
-        $this->portLang    = $this->lang->port;
+        $this->maxImport  = isset($_COOKIE['maxImport']) ? $_COOKIE['maxImport'] : 0;
+        $this->portConfig = $this->config->port;
+        $this->portLang   = $this->lang->port;
     }
 
     /**
@@ -51,33 +54,12 @@ class portModel extends model
      */
     public function checkTmpFile()
     {
-        $maxImport = isset($_COOKIE['maxImport']) ? $_COOKIE['maxImport'] : 0;
         $file      = $this->session->fileImportFileName;
         $tmpPath   = $this->loadModel('file')->getPathOfImportedFile();
         $tmpFile   = $tmpPath . DS . md5(basename($file));
-        if(!empty($maxImport) and file_exists($tmpFile)) return $tmpFile;
+
+        if($this->maxImport and file_exists($tmpFile)) return $tmpFile;
         return false;
-    }
-
-    /**
-     * Check rows from excel.
-     *
-     * @access public
-     * @return void
-     */
-    public function checkRowsFromExcel()
-    {
-        $rows = $this->file->getRowsFromExcel($this->session->fileImportFileName);
-        if(is_string($rows))
-        {
-            unlink($this->session->fileImportFileName);
-            unset($_SESSION['fileImportFileName']);
-            unset($_SESSION['fileImportExtension']);
-            echo js::alert($rows);
-            die(js::locate('back'));
-        }
-        return $rows;
-
     }
 
     /**
@@ -393,7 +375,7 @@ class portModel extends model
         /* Check empty.*/
         if(is_string($rows))
         {
-            unlink($this->session->fileImportFileName);
+            if(file_exists($this->session->fileImportFileName)) unlink($this->session->fileImportFileName);
             unset($_SESSION['fileImportFileName']);
             unset($_SESSION['fileImportExtension']);
             $response['result']  = 'fail';
@@ -414,6 +396,62 @@ class portModel extends model
         if($created) $this->createTmpFile($tmpFile, $objectDatas);
 
         return $objectDatas;
+    }
+
+    /**
+     * Get showImport datas.
+     *
+     * @param  string $model
+     * @param  string $filter
+     * @access public
+     * @return void
+     */
+    public function format($model = '', $filter = '')
+    {
+        /* Bulid import paris (field => name) .*/
+        $fields  = $this->getImportFields($model);
+
+        /* Check tmpfile. */
+        $tmpFile = $this->checkTmpFile();
+
+        /* If tmpfile not isset create tmpfile .*/
+        if(!$tmpFile)
+        {
+            $rows      = $this->getRowsFromExcel();
+
+            $modelData = $this->processRows4Fields($rows, $fields);
+
+            $modelData = $this->getNatureDatas($model, $modelData, $filter);
+
+            $this->createTmpFile($modelData);
+        }
+        else
+        {
+            $modelData = $this->getDatasByFile($tmpFile);
+        }
+
+        return $modelData;
+    }
+
+    /**
+     * Get rows from excel.
+     *
+     * @access public
+     * @return void
+     */
+    public function getRowsFromExcel()
+    {
+        $rows = $this->file->getRowsFromExcel($this->session->fileImportFileName);
+        if(is_string($rows))
+        {
+            if($this->session->fileImportFileName) unlink($this->session->fileImportFileName);
+            unset($_SESSION['fileImportFileName']);
+            unset($_SESSION['fileImportExtension']);
+            echo js::alert($rows);
+            die(js::locate('back'));
+        }
+        return $rows;
+
     }
 
     /**
@@ -764,16 +802,18 @@ class portModel extends model
      *
      * @param  int    $model
      * @param  int    $datas
+     * @param  string $filter
      * @access public
      * @return void
      */
-    public function getNatureDatas($model, $datas)
+    public function getNatureDatas($model, $datas, $filter = '')
     {
         $lang = $this->lang->$model;
         foreach($datas as $key => $data)
         {
             foreach($data as $field => $cellValue)
             {
+                if(strpos($filter, $field) !== false) continue;
                 if(is_array($cellValue)) continue;
                 if(strrpos($cellValue, '(#') === false)
                 {
@@ -799,44 +839,6 @@ class portModel extends model
     }
 
     /**
-     * Get showImport datas.
-     *
-     * @param  string $model
-     * @param  int    $pagerID
-     * @param  int    $maxImport
-     * @access public
-     * @return void
-     */
-    public function getShowImportDatas($model = '', $pagerID = 1, $maxImport = 0)
-    {
-        /* Bulid import paris (field => name) .*/
-        $fields  = $this->getImportFields($model);
-
-        /* Check tmpfile. */
-        $tmpFile = $this->checkTmpFile();
-
-        /* If tmpfile not isset create tmpfile .*/
-        if(!$tmpFile)
-        {
-            $rows      = $this->checkRowsFromExcel();
-
-            $modelData = $this->processRows4Fields($rows, $fields);
-
-            $modelData = $this->getNatureDatas($model, $modelData);
-
-            $this->createTmpFile($modelData);
-        }
-        else
-        {
-            $modelData = $this->getDatasByFile($tmpFile);
-        }
-
-        /* Get page by datas.*/
-        return $this->getPageDatas($modelData, $pagerID, $maxImport);
-    }
-
-
-    /**
      * Get datas by file.
      *
      * @access public
@@ -852,18 +854,17 @@ class portModel extends model
      *
      * @param  int    $datas
      * @param  int    $pagerID
-     * @param  int    $maxImport
      * @access public
      * @return void
      */
     public function getPageDatas($datas, $pagerID = 1)
     {
-        $result   = new stdClass();
+        $result = new stdClass();
         $result->allCount = count($datas);
         $result->allPager = 1;
         $result->pagerID  = $pagerID;
 
-        $maxImport = $_COOKIE['maxImport'];
+        $maxImport = $this->maxImport;
         if($result->allCount > $this->config->file->maxImport)
         {
             if(empty($maxImport))
@@ -874,7 +875,7 @@ class portModel extends model
             }
 
             $result->allPager = ceil($result->allCount / $maxImport);
-            $datas    = array_slice($datas, ($pagerID - 1) * $maxImport, $maxImport, true);
+            $datas = array_slice($datas, ($pagerID - 1) * $maxImport, $maxImport, true);
         }
 
         $result->maxImport = $maxImport;
@@ -915,22 +916,20 @@ class portModel extends model
      * @param  string $datas
      * @param  string $title
      * @param  int    $pagerID
-     * @param  int    $maxImport
      * @access public
      * @return void
      */
-    public function getViewDatas($model = '', $datas = '', $title = '', $pagerID = 1, $insert)
+    public function getViewDatas($model = '', $datas = '', $pagerID = 1, $insert)
     {
         $suhosinInfo = $this->checkSuhosinInfo($datas->datas);
 
         $fields      = $this->config->$model->templateFields;
 
-        $datas->title          = $title ? $title : $this->lang->port->showImport;
         $datas->requiredFields = $this->config->$model->create->requiredFields;
         $datas->allPager       = isset($datas->allPager) ? $datas->allPager : 1;
         $datas->pagerID        = $pagerID;
         $datas->isEndPage      = $pagerID >= $datas->allPager;
-        $datas->maxImport      = $_COOKIE['maxImport'];
+        $datas->maxImport      = $this->maxImport;
         $datas->dataInsert     = $insert;
         $datas->fields         = $this->initFieldList($model, $fields, false);
         $datas->suhosinInfo    = $suhosinInfo;
@@ -1038,7 +1037,7 @@ class portModel extends model
 
         if(empty($objectDatas))
         {
-            unlink($this->session->fileImportFileName);
+            if(file_exists($this->session->fileImportFileName)) unlink($this->session->fileImportFileName);
             unset($_SESSION['fileImportFileName']);
             unset($_SESSION['fileImportExtension']);
             echo js::alert($this->lang->excel->noData);
@@ -1174,36 +1173,32 @@ class portModel extends model
      *
      * @param  string $model
      * @param  int    $pagerID
-     * @param  int    $maxImport
+     * @param  string $insert
+     * @param  string $filter
      * @access public
      * @return void
      */
-    public function readExcel($model = '', $pagerID = 1)
+    public function readExcel($model = '', $pagerID = 1, $insert = '', $filter = '')
     {
-        /* Bulid import paris (field => name) .*/
-        $fields  = $this->getImportFields('bug');
-
-        /* Check tmpfile. */
-        $tmpFile = $this->checkTmpFile();
-
-        /* If tmpfile not isset create tmpfile .*/
-        if(!$tmpFile)
-        {
-            $rows    = $this->checkRowsFromExcel();
-
-            $bugData = $this->processRows4Fields($rows, $fields);
-
-            $bugData = $this->getNatureDatas('bug', $bugData);
-
-            $this->createTmpFile($bugData);
-        }
-        else
-        {
-            $bugData = $this->getDatasByFile($tmpFile);
-        }
-
+        /* Formatting excel data .*/
+        $formatDatas  = $this->format($model, $filter);
         /* Get page by datas.*/
-        return $this->getPageDatas($bugData, $pagerID);
-    }
+        $datas        = $this->getPageDatas($formatDatas, $pagerID);
 
+        $suhosinInfo  = $this->checkSuhosinInfo($datas->datas);
+
+        $importFields = $this->config->$model->templateFields;
+
+        $datas->requiredFields = $this->config->$model->create->requiredFields;
+        $datas->allPager       = isset($datas->allPager) ? $datas->allPager : 1;
+        $datas->pagerID        = $pagerID;
+        $datas->isEndPage      = $pagerID >= $datas->allPager;
+        $datas->maxImport      = $this->maxImport;
+        $datas->dataInsert     = $insert;
+        $datas->fields         = $this->initFieldList($model, $importFields, false);
+        $datas->suhosinInfo    = $suhosinInfo;
+        $datas->model          = $model;
+
+        return $datas;
+    }
 }
