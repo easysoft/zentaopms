@@ -15,9 +15,7 @@
   <div class='center-block'>
     <div class='main-header'>
       <h2>
-        <span class='prefix label-id'><strong><?php echo $execution->id;?></strong></span>
-        <?php echo html::a($this->createLink('execution', 'view', 'execution=' . $execution->id), $execution->name, '_blank');?>
-        <small><?php echo $lang->arrow . ' ' . $lang->execution->setKanban;?></small>
+        <?php echo $lang->execution->setKanban;?>
       </h2>
     </div>
     <form class='load-indicator main-form form-ajax' method='post' id='dataform'>
