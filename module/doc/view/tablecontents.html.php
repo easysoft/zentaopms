@@ -94,7 +94,7 @@ if(empty($type)) $type = 'product';
             foreach($this->lang->doc->typeList as $typeKey => $typeName)
             {
                 $icon  = zget($this->config->doc->iconList, $typeKey);
-                $class = strpos($this->config->doc->officeTypes, $typeKey) !== false ? 'iframe' : '';
+                $class = (strpos($this->config->doc->officeTypes, $typeKey) !== false or strpos($this->config->doc->textTypes, $typeKey) !== false) ? 'iframe' : '';
                 $html .= "<li>";
                 $html .= html::a(helper::createLink('doc', 'create', "objectType=$type&objectID=$objectID&libID=$libID&moduleID=0&type=$typeKey", '', $class ? true : false), "<i class='icon-$icon text-muted'></i> " . $typeName, '', "class='$class' data-app='{$this->app->tab}'");
                 $html .= "</li>";
