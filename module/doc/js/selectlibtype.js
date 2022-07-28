@@ -18,7 +18,6 @@ function redirectParentWindow(objectType, libID, docType)
     {
         var link = createLink('doc', 'create', 'objectType=' + objectType + '&objectID=0&libID=' + libID + '&moduleID=0&docType=' + docType + '&fromGlobal=true') + '#app=doc';
     }
-    window.parent.$.apps.close('doc');
     window.parent.$.apps.open(link);
 }
 

@@ -160,11 +160,12 @@ js::set('priv',
 
     if($printSettingBtn)
     {
-        $actions .= html::a('javascript:;', "<i class='icon icon-cog-outline'></i> " . $lang->kanban->setting, '', "data-toggle='dropdown' class='btn btn-link'");
-        $actions .= "<ul id='kanbanActionMenu' class='dropdown-menu pull-right'>";
-        $width    = $this->app->getClientLang() == 'en' ? '750' : '650';
+        $actions .= "<div class='btn-group menu-actions'>";
+        $actions .= html::a('javascript:;', "<i class='icon icon-ellipsis-v'></i>", '', "data-toggle='dropdown' class='btn btn-link'");
+        $actions .= "<ul class='dropdown-menu pull-right'>";
+        $width    = common::checkNotCN() ? '600px' : '470px';
         if($printCreateRegion) $actions .= '<li>' . html::a(helper::createLink('kanban', 'createRegion', "kanbanID=$execution->id&from=execution", '', true), '<i class="icon icon-plus"></i>' . $lang->kanban->createRegion, '', "class='iframe btn btn-link text-left'") . '</li>';
-        if(common::hasPriv('execution', 'setKanban')) $actions .= '<li>' . html::a(helper::createLink('execution', 'setKanban', "executionID=$execution->id", '', true), '<i class="icon icon-cog-outline"></i>' . $lang->execution->setKanban, '', "class='iframe btn btn-link text-left' data-width='1000px'") . '</li>';
+        if(common::hasPriv('execution', 'setKanban')) $actions .= '<li>' . html::a(helper::createLink('execution', 'setKanban', "executionID=$execution->id", '', true), '<i class="icon icon-cog-outline"></i>' . $lang->execution->setKanban, '', "class='iframe btn btn-link text-left' data-width='$width'") . '</li>';
         $kanbanActions = '';
         if(common::hasPriv('execution', 'edit')) $kanbanActions .= '<li>' . html::a(helper::createLink('execution', 'edit', "executionID=$execution->id", '', true), '<i class="icon icon-edit"></i>' . $lang->kanban->edit, '', "class='iframe btn btn-link text-left' data-width='80%'") . '</li>';
         if(common::hasPriv('execution', 'start')) $kanbanActions .= '<li class="startButton hidden">' . html::a(helper::createLink('execution', 'start', "executionID=$execution->id&from=kanban", '', true), '<i class="icon icon-play"></i>' . $lang->execution->start, '', "class='iframe btn btn-link text-left' data-width='75%'") . '</li>';
@@ -177,7 +178,7 @@ js::set('priv',
         {
             $actions .= ((common::hasPriv('kanban', 'createRegion') or common::hasPriv('execution', 'setKanban')) and (common::hasPriv('execution', 'edit') or common::hasPriv('execution', 'delete') or !empty($executionActions))) ? "<div class='divider'></div>" . $kanbanActions : $kanbanActions;
         }
-        $actions .= "</ul>";
+        $actions .= '</ul></div>';
     }
 
     echo $actions;

@@ -85,8 +85,8 @@
         <td><?php echo $program->end == LONG_TIME ? $lang->program->longTime : $program->end;?></td>
         <td>
           <?php if(isset($progressList[$program->id])):?>
-          <div class='progress-pie' data-doughnut-size='85' data-color='#00DA88' data-value='<?php echo $progressList[$program->id]?>' data-width='26' data-height='26' data-back-color='#e8edf3'>
-            <div class='progress-info'><?php echo $progressList[$program->id];?></div>
+          <div class='progress-pie' data-doughnut-size='85' data-color='#00DA88' data-value='<?php echo round($progressList[$program->id])?>' data-width='26' data-height='26' data-back-color='#e8edf3'>
+            <div class='progress-info'><?php echo round($progressList[$program->id]);?></div>
           </div>
           <?php endif;?>
         </td>
