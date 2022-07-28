@@ -71,7 +71,7 @@
     </div>
 
     <?php
-    $width = common::checkNotCN ? '600px' : '470px';
+    $width = common::checkNotCN() ? '600px' : '470px';
     echo "<div class='btn-group menu-actions'>";
     echo html::a('javascript:;', "<i class='icon icon-ellipsis-v'></i>", '', "data-toggle='dropdown' class='btn btn-link'");
     echo "<ul class='dropdown-menu pull-right'>";

@@ -163,7 +163,7 @@ js::set('priv',
         $actions .= "<div class='btn-group menu-actions'>";
         $actions .= html::a('javascript:;', "<i class='icon icon-ellipsis-v'></i>", '', "data-toggle='dropdown' class='btn btn-link'");
         $actions .= "<ul class='dropdown-menu pull-right'>";
-        $width    = common::checkNotCN ? '600px' : '470px';
+        $width    = common::checkNotCN() ? '600px' : '470px';
         if($printCreateRegion) $actions .= '<li>' . html::a(helper::createLink('kanban', 'createRegion', "kanbanID=$execution->id&from=execution", '', true), '<i class="icon icon-plus"></i>' . $lang->kanban->createRegion, '', "class='iframe btn btn-link text-left'") . '</li>';
         if(common::hasPriv('execution', 'setKanban')) $actions .= '<li>' . html::a(helper::createLink('execution', 'setKanban', "executionID=$execution->id", '', true), '<i class="icon icon-cog-outline"></i>' . $lang->execution->setKanban, '', "class='iframe btn btn-link text-left' data-width='$width'") . '</li>';
         $kanbanActions = '';
