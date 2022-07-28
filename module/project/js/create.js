@@ -31,6 +31,16 @@ $(function()
         var products      = new Array();
         var existedBranch = false;
 
+        /* Remove init tips. */
+        $('#name').removeClass('has-info');
+        $('#nameLabelInfo').remove();
+        $('#code').removeClass('has-info');
+        $('#codeLabelInfo').remove();
+        $('#end').removeClass('has-info');
+        $('#endLabelInfo').remove();
+        $('#days').removeClass('has-info');
+        $('#daysLabelInfo').remove();
+
         /* Determine whether the products of the same branch are linked. */
         $("#productsBox select[name^='products']").each(function()
         {
@@ -82,6 +92,18 @@ $(function()
     });
 
     $(document).on('change', "select[id^='branch']", disableSelectedBranch);
+
+    if(copyProjectID > 0)
+    {
+        $('#name').addClass('has-info')
+        $('#name').after('<div id="nameLabelInfo" class="text-info">' + nameTips + '</div>')
+        $('#code').addClass('has-info')
+        $('#code').after('<div id="codeLabelInfo" class="text-info">' + codeTips + '</div>')
+        $('#end').addClass('has-info')
+        $('#end').parent().after('<div id="endLabelInfo" class="text-info">' + endTips + '</div>')
+        $('#days').addClass('has-info')
+        $('#days').parent().after('<div id="daysLabelInfo" class="text-info">' + daysTips + '</div>')
+    }
 });
 
 /**
@@ -317,3 +339,32 @@ $('#projectName').on('keyup', function()
         });
     })
 })
+
+/* Click remove tips.  */
+$("#name").click(function()
+{
+    $('#name').removeClass('has-info');
+    $('#nameLabelInfo').remove();
+});
+$("#code").click(function()
+{
+    $('#code').removeClass('has-info');
+    $('#codeLabelInfo').remove();
+});
+$("#end").click(function()
+{
+    $('#end').removeClass('has-info');
+    $('#endLabelInfo').remove();
+});
+$("#days").click(function()
+{
+    $('#days').removeClass('has-info');
+    $('#daysLabelInfo').remove();
+});
+$("#endList input[type=radio]").click(function()
+{
+    $('#end').removeClass('has-info');
+    $('#endLabelInfo').remove();
+    $('#days').removeClass('has-info');
+    $('#daysLabelInfo').remove();
+});
