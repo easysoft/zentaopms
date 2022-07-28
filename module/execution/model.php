@@ -3184,7 +3184,7 @@ class executionModel extends model
         }
         elseif((helper::today() > $execution->end))
         {
-            $begin = date($execution->end, strtotime('-13 days')) > $execution->begin ? date($execution->end, strtotime('-13 days')) : $execution->begin;
+            $begin = date('Y-m-d', strtotime('-13 days', strtotime($execution->end))) > $execution->begin ? date('Y-m-d', strtotime('-13 days', strtotime($execution->end))) : $execution->begin;
             $end   = $execution->end;
         }
 
