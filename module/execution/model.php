@@ -391,6 +391,7 @@ class executionModel extends model
             $this->lang->project->code = $this->lang->execution->execCode;
         }
 
+        $this->lang->error->unique = $this->lang->error->repeat;
         $sprintProject = isset($sprint->project) ? $sprint->project : '0';
         $this->dao->insert(TABLE_EXECUTION)->data($sprint)
             ->autoCheck($skipFields = 'begin,end')
@@ -540,6 +541,7 @@ class executionModel extends model
         }
 
         /* Update data. */
+        $this->lang->error->unique = $this->lang->error->repeat;
         $executionProject = isset($execution->project) ? $execution->project : '0';
         $this->dao->update(TABLE_EXECUTION)->data($execution)
             ->autoCheck($skipFields = 'begin,end')
