@@ -1,4 +1,17 @@
 <?php include $app->getModuleRoot() . 'common/view/header.html.php';?>
+<?php
+    $requiredFields = $datas->requiredFields;
+    $allCount       = $datas->allCount;
+    $allPager       = $datas->allPager;
+    $pagerID        = $datas->pagerID;
+    $isEndPage      = $datas->isEndPage;
+    $maxImport      = $datas->maxImport;
+    $dataInsert     = $datas->dataInsert;
+    $fields         = $datas->fields;
+    $suhosinInfo    = $datas->suhosinInfo;
+    $model          = $datas->model;
+    $datas          = $datas->datas;
+?>
 <style>
 form{overflow-x: scroll}
 .c-pri, .c-estStarted, .c-deadline{width:100px;}
@@ -90,7 +103,7 @@ $(function()
             }
             else
             {
-                $sub = (strpos($object->name, '>') === 0) ? " <sub style='vertical-align:sub;color:red'>{$lang->port->children}</sub>" : " <sub style='vertical-align:sub;color:gray'>{$lang->task->new}</sub>";
+                $sub = (strpos($object->title, '>') === 0) ? " <sub style='vertical-align:sub;color:red'>{$lang->port->children}</sub>" : " <sub style='vertical-align:sub;color:gray'>{$lang->task->new}</sub>";
                 echo $addID++ . $sub;
             }
             ?>

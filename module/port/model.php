@@ -1,7 +1,6 @@
 <?php
 class portModel extends model
 {
-
     /*  Port Module configs . */
     public $portConfig;
 
@@ -13,6 +12,14 @@ class portModel extends model
     public $modelLang;
 
     public $maxImport;
+
+    public $modelFieldList;
+
+    public $templateFields;
+
+    public $exportFields;
+
+    public $modelListFields;
 
     /**
      * The construc method, to do some auto things.
@@ -41,8 +48,10 @@ class portModel extends model
         if($model)
         {
             $this->loadModel($model);
-            $this->modelConfig = $this->config->$model;
-            $this->modelLang   = $this->lang->$model;
+            $this->modelConfig     = $this->config->$model;
+            $this->modelLang       = $this->lang->$model;
+            $this->modelFieldList  = $this->config->$model->datatable->fieldList;
+            $this->modelListFields = explode(',', $this->config->$model->listFields);
         }
     }
 
@@ -183,17 +192,18 @@ class portModel extends model
         $this->commonActions($model);
         $this->mergeConfig($model);
 
-        $this->config->port->sysDataList = $this->initSysDataFields();
+        $this->portConfig->sysDataList = $this->initSysDataFields();
         $portFieldList = $this->portConfig->fieldList;
 
         if(empty($fields)) return false;
 
+        $fields    = explode(',', $fields);
         $fieldList = array();
         /* build module fieldList. */
         foreach ($fields as $key => $field)
         {
             $field = trim($field);
-            $modelFieldList = isset($this->modelConfig->fieldList[$field]) ? $this->modelConfig->fieldList[$field] : array();
+            $modelFieldList = isset($this->modelFieldList[$field]) ? $this->modelFieldList[$field] : array();
 
             foreach ($portFieldList as $portField => $value)
             {
@@ -627,10 +637,11 @@ class portModel extends model
     public function setListValue($model, $fieldList)
     {
         $lists = array();
+        $this->commonActions($model);
 
-        if(!empty($this->config->$model->listFields))
+        if(!empty($this->modelListFields))
         {
-            $listFields = $this->config->$model->listFields;
+            $listFields = $this->modelListFields;
             foreach($listFields as $field)
             {
                 $listName = $field . 'List';
@@ -895,9 +906,9 @@ class portModel extends model
      */
     public function getImportFields($model = '')
     {
-        $this->app->loadLang($model);
+        $this->commonActions($model);
         $modelLang = $this->lang->$model;
-        $fields = $this->config->$model->templateFields;
+        $fields    = explode(',', $this->modelConfig->templateFields);
         array_unshift($fields, 'id');
         foreach($fields as $key => $fieldName)
         {
@@ -907,6 +918,26 @@ class portModel extends model
         }
 
         return $fields;
+    }
+
+    /**
+     * Get WorkFlow fields .
+     *
+     * @param  int    $model
+     * @access public
+     * @return void
+     */
+    public function getWorkFlowFields($model)
+    {
+        if($this->config->edition != 'open')
+        {
+            $appendFields = $this->loadModel('workflowaction')->getFields($model, 'showimport', false);
+
+            foreach($appendFields as $appendField) $this->config->$model->exportFields .= ',' . $appendField->field;
+
+            $this->session->set('appendFields', $appendFields);
+            $this->session->set('notEmptyRule', $this->loadModel('workflowrule')->getByTypeAndRule('system', 'notempty'));
+        }
     }
 
     /**
@@ -1188,6 +1219,8 @@ class portModel extends model
         $suhosinInfo  = $this->checkSuhosinInfo($datas->datas);
 
         $importFields = $this->config->$model->templateFields;
+
+        $this->getWorkFlowFields($model);
 
         $datas->requiredFields = $this->config->$model->create->requiredFields;
         $datas->allPager       = isset($datas->allPager) ? $datas->allPager : 1;

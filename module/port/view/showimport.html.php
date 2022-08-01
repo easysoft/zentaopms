@@ -13,9 +13,8 @@
     $datas          = $datas->datas;
 ?>
 <style>
-th {width:150px;}
+th {width:150px !important}
 .c-pri, .c-severity, .c-deadline, .c-openedBuild{width:100px;}
-.c-steps {width:150px;}
 
 </style>
 <?php if(!empty($suhosinInfo)):?>
@@ -46,6 +45,10 @@ $(function()
 <?php else:?>
 <?php js::set('requiredFields', $requiredFields);?>
 <?php js::set('page', 'showImport');?>
+<?php
+    $appendFields = $this->session->appendFields;
+    $notEmptyRule = $this->session->notEmptyRule;
+?>
 <div id="mainContent" class="main-content">
   <div class="main-header clearfix">
     <h2><?php echo $lang->port->import;?></h2>
@@ -60,6 +63,19 @@ $(function()
           <th class='c-<?php echo $key?>'  id='<?php echo $key;?>'>  <?php echo $value['title'];?></th>
           <?php endif;?>
           <?php endforeach;?>
+          <?php
+          if(!empty($appendFields))
+          {
+              foreach($appendFields as $field)
+              {
+                  if(!$field->show) continue;
+
+                  $width    = ($field->width && $field->width != 'auto' ? $field->width . 'px' : 'auto');
+                  $required = strpos(",$field->rules,", ",$notEmptyRule->id,") !== false ? 'required' : '';
+                  echo "<th class='$required' style='width: $width'>$field->name</th>";
+              }
+          }
+          ?>
         </tr>
       </thead>
       <tbody>
@@ -67,6 +83,7 @@ $(function()
         $insert  = true;
         $addID   = 1;
         $colspan = 1;
+
         ?>
         <?php foreach($datas as $key => $object):?>
         <tr class='text-top'>
@@ -116,6 +133,18 @@ $(function()
           <?php endif;?>
 
           <?php endforeach;?>
+          <?php
+          if(!empty($appendFields))
+          {
+              $this->loadModel('flow');
+              foreach($appendFields as $field)
+              {
+                  if(!$field->show) continue;
+                  $value = $field->defaultValue ? $field->defaultValue : zget($object, $field->field, '');
+                  echo '<td>' . $this->flow->buildControl($field, $value, "$field->field[$key]", true) . '</td>';
+              }
+          }
+          ?>
         </tr>
         <?php endforeach;?>
 
@@ -159,7 +188,7 @@ $('#showData').on('mouseenter', '.picker', function(e){
     var value    = myPicker.prev().val();
 
     if($('#' + id).attr('isInit')) return;
-    $.get(createLink('port', 'ajaxGetOptions', 'model=<?php echo $model;?>&field=' + field + '&value=' + value + '&index=' + index), function(data)
+    $.get(createLink('port', 'ajaxGetOptions', 'model=<?php echo $model;?>&field=' + field + '&value=' + value + '&id=' + id), function(data)
     {
         $('#' + id).parent().html(data);
         $('#' + id).picker({chosenMode: true});

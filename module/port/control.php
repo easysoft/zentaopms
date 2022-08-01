@@ -25,22 +25,44 @@ class port extends control
      * @access public
      * @return void
      */
-    public function exportTemplate($model, $params)
+    public function exportTemplate($model, $params = '')
     {
         if($_POST)
         {
-            /* Split parameters into variables (executionID=1,status=open).*/
-            $params = explode(',', $params);
-            foreach($params as $key => $param)
+            $this->loadModel($model);
+            if($this->config->edition != 'open')
             {
-                $param = explode('=', $param);
-                $params[$param[0]] = $param[1];
-                unset($params[$key]);
-            }
-            extract($params);
+                $appendFields = $this->dao->select('t2.*')->from(TABLE_WORKFLOWLAYOUT)->alias('t1')
+                    ->leftJoin(TABLE_WORKFLOWFIELD)->alias('t2')->on('t1.field=t2.field && t1.module=t2.module')
+                    ->where('t1.module')->eq($model)
+                    ->andWhere('t1.action')->eq('exporttemplate')
+                    ->andWhere('t2.buildin')->eq(0)
+                    ->orderBy('t1.order')
+                    ->fetchAll();
 
-            /* save params to session. */
-            $this->session->set(($model.'PortParams'), $params);
+                foreach($appendFields as $appendField)
+                {
+                    $this->lang->$model->{$appendField->field} = $appendField->name;
+                    $this->config->$model->templateFields .= ',' . $appendField->field;
+                }
+            }
+
+            if($params)
+            {
+                /* Split parameters into variables (executionID=1,status=open).*/
+                $params = explode(',', $params);
+                foreach($params as $key => $param)
+                {
+                    $param = explode('=', $param);
+                    $params[$param[0]] = $param[1];
+                    unset($params[$key]);
+                }
+                extract($params);
+
+                /* save params to session. */
+                $this->session->set(($model.'PortParams'), $params);
+            }
+
             $this->loadModel($model);
             $this->config->port->sysDataList = $this->port->initSysDataFields();
 
@@ -53,11 +75,12 @@ class port extends control
             if($list) foreach($list as $listName => $listValue) $this->post->set($listName, $listValue);
 
             $fields = $this->port->getExportDatas($fieldList);
+
             $this->post->set('fields', $fields['fields']);
-            $this->post->set('kind', $model);
+            $this->post->set('kind', isset($_POST['kind']) ? $_POST['kind'] : $model);
             $this->post->set('rows', array());
-            $this->post->set('extraNum',   $this->post->num);
-            $this->post->set('fileName',   $model . 'Template');
+            $this->post->set('extraNum', $this->post->num);
+            $this->post->set('fileName', isset($_POST['fileName']) ? $_POST['fileName'] : $model . 'Template');
 
             $this->fetch('file', 'export2' . $this->post->fileType, $_POST);
         }
@@ -106,43 +129,33 @@ class port extends control
     }
 
     /**
-     * getWorkFlowFields
-     *
-     * @access public
-     * @return void
-     */
-    public function getWorkFlowFields()
-    {
-        if($this->config->edition != 'open')
-        {
-            $appendFields = $this->loadModel('workflowaction')->getFields('task', 'showimport', false);
-
-            foreach($appendFields as $appendField) $this->config->task->exportFields .= ',' . $appendField->field;
-
-            $this->view->appendFields = $appendFields;
-            $this->view->notEmptyRule = $this->loadModel('workflowrule')->getByTypeAndRule('system', 'notempty');
-        }
-    }
-
-    /**
-     * ajaxGetOptions
+     * Ajax Get Options.
      *
      * @param  string $model
      * @param  string $field
      * @param  string $value
-     * @param  string $index
+     * @param  string $id
      * @access public
      * @return void
      */
-    public function ajaxGetOptions($model = '', $field = '', $value = '', $index = '')
+    public function ajaxGetOptions($model = '', $field = '', $value = '', $id = '')
     {
         $this->loadModel($model);
-        $fields    = $this->config->$model->templateFields;
+        $fields = $this->config->$model->templateFields;
+
+        if($this->config->edition != 'open')
+        {
+            $appendFields = $this->loadModel('workflowaction')->getFields($model, 'showimport', false);
+
+            foreach($appendFields as $appendField) $fields .= ',' . $appendField->field;
+        }
+
         $fieldList = $this->port->initFieldList($model, $fields, false);
 
+        if(empty($fieldList[$field]['values'])) $fieldList[$field]['values'] = array();
         if(!isset($fieldList[$field]['values'][''])) $fieldList[$field]['values'][''] = '';
         $multiple = $fieldList[$field]['control'] == 'multiple' ? 'multiple' : '';
 
-        return print(html::select($field. "[$index]", $fieldList[$field]['values'], $value, "class='form-control picker-select' $multiple"));
+        return print(html::select($id, $fieldList[$field]['values'], $value, "class='form-control picker-select' $multiple"));
     }
 }

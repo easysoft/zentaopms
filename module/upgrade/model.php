@@ -2993,7 +2993,7 @@ class upgradeModel extends model
             $data = new stdclass();
             $data->group  = $groupID;
             $data->module = 'testsuite';
-            $newMethods   = array('batchCreateCase', 'exportTemplet', 'import', 'showImport');
+            $newMethods   = array('batchCreateCase', 'exportTemplate', 'import', 'showImport');
             foreach($newMethods as $method)
             {
                 $data->method = $method;
@@ -4004,7 +4004,7 @@ class upgradeModel extends model
         $this->dao->update(TABLE_GROUPPRIV)->set('module')->eq('caselib')->set('method')->eq('browse')->where('module')->eq('testsuite')->andWhere('method')->eq('library')->exec();
         $this->dao->update(TABLE_GROUPPRIV)->set('module')->eq('caselib')->set('method')->eq('create')->where('module')->eq('testsuite')->andWhere('method')->eq('createLib')->exec();
         $this->dao->update(TABLE_GROUPPRIV)->set('module')->eq('caselib')->set('method')->eq('view')->where('module')->eq('testsuite')->andWhere('method')->eq('libView')->exec();
-        $this->dao->update(TABLE_GROUPPRIV)->set('module')->eq('caselib')->where('module')->eq('testsuite')->andWhere('method')->in('exportTemplet,import,showImport,batchCreateCase,createCase')->exec();
+        $this->dao->update(TABLE_GROUPPRIV)->set('module')->eq('caselib')->where('module')->eq('testsuite')->andWhere('method')->in('exportTemplate,import,showImport,batchCreateCase,createCase')->exec();
 
         $groups = $this->dao->select('*')->from(TABLE_GROUPPRIV)->where('module')->eq('testsuite')->andWhere('method')->eq('edit')->fetchPairs('group', 'group');
         foreach($groups as $groupID)

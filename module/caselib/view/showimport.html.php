@@ -1,10 +1,31 @@
-<?php include '../../common/view/header.html.php';?>
-<?php if(isset($suhosinInfo)):?>
+<?php include $app->getModuleRoot() . 'common/view/header.html.php';?>
+<?php
+    $requiredFields = $datas->requiredFields;
+    $allCount       = $datas->allCount;
+    $allPager       = $datas->allPager;
+    $pagerID        = $datas->pagerID;
+    $isEndPage      = $datas->isEndPage;
+    $maxImport      = $datas->maxImport;
+    $dataInsert     = $datas->dataInsert;
+    $fields         = $datas->fields;
+    $suhosinInfo    = $datas->suhosinInfo;
+    $model          = $datas->model;
+    $datas          = $datas->datas;
+?>
+<style>
+form{overflow-x: scroll}
+.c-pri, .c-estStarted, .c-deadline{width:100px;}
+.c-estimate {width:150px;}
+.c-story{width:150px;}
+.c-team {width:100px; padding:0px 0px 8px 0px !important;}
+.c-estimate-1 {width:50px;padding:0px 0px 8px 8px !important;}
+</style>
+<?php if(!empty($suhosinInfo)):?>
 <div class='alert alert-info'><?php echo $suhosinInfo?></div>
 <?php elseif(empty($maxImport) and $allCount > $this->config->file->maxImport):?>
 <div id="mainContent" class="main-content">
   <div class="main-header">
-    <h2><?php echo $lang->caselib->import;?></h2>
+    <h2><?php echo $lang->task->import;?></h2>
   </div>
   <p><?php echo sprintf($lang->file->importSummary, $allCount, html::input('maxImport', $config->file->maxImport, "style='width:50px'"), ceil($allCount / $config->file->maxImport));?></p>
   <p><?php echo html::commonButton($lang->import, "id='import'", 'btn btn-primary');?></p>
@@ -16,125 +37,194 @@ $(function()
     {
         if(parseInt($('#maxImport').val())) $('#times').html(Math.ceil(parseInt($('#allCount').html()) / parseInt($('#maxImport').val())));
     });
-    $('#import').click(function(){location.href = createLink('caselib', 'showImport', "libID=<?php echo $libID;?>&pageID=1&maxImport=" + $('#maxImport').val())})
+
+    $('#import').click(function(){location.href = createLink('testcase', 'showImport', "productID=<?php echo $productID;?>&branch=<?php echo $branch?>&pageID=1&maxImport=" + $('#maxImport').val())})
 });
 </script>
 <?php else:?>
 <?php js::set('requiredFields', $requiredFields);?>
 <div id="mainContent" class="main-content">
   <div class="main-header clearfix">
-    <h2><?php echo $lang->caselib->import;?></h2>
+    <h2><?php echo $lang->task->import;?></h2>
   </div>
-  <form target='hiddenwin' method='post'>
+  <form class='main-form' target='hiddenwin' method='post'>
     <table class='table table-form' id='showData'>
       <thead>
         <tr>
-          <th class='c-number'><?php echo $lang->testcase->id?></th>
-          <th class='c-title'        id='title'>       <?php echo $lang->testcase->title?></th>
-          <th class='c-module'       id='module'>      <?php echo $lang->testcase->module?></th>
-          <th class='c-pri'          id='pri'>         <?php echo $lang->testcase->pri?></th>
-          <th class='c-type'         id='type'>        <?php echo $lang->testcase->type?></th>
-          <th class='c-stage'        id='stage'>       <?php echo $lang->testcase->stage?></th>
-          <th class='c-text'         id='keywords'>    <?php echo $lang->testcase->keywords?></th>
-          <th class='c-precondition' id='precondition'><?php echo $lang->testcase->precondition?></th>
-          <th class='c-case-step col-content'>
+          <th class='w-70px'> <?php echo $lang->task->id?></th>
+
+          <?php foreach($fields as $key => $value):?>
+
+          <?php if($key == 'stepDesc' or $key == 'stepExpect'):?>
+          <?php if($key == 'stepExpect') continue;?>
+          <th class='c-step'>
             <table class='w-p100 table-borderless'>
               <tr>
-                <th><?php echo $lang->testcase->stepDesc?></th>
-                <th><?php echo $lang->testcase->stepExpect?></th>
+                <th class="no-padding"><?php echo $fields['stepDesc']['title']?></th>
+                <th class="no-padding"><?php echo $fields['stepExpect']['title']?></th>
               </tr>
             </table>
           </th>
+
+          <?php elseif($value['control'] != 'hidden'):?>
+          <th class='c-<?php echo $key?>'  id='<?php echo $key;?>'>  <?php echo $value['title'];?></th>
+
+          <?php endif;?>
+          <?php endforeach;?>
+          <?php
+          if(!empty($appendFields))
+          {
+              foreach($appendFields as $field)
+              {
+                  if(!$field->show) continue;
+
+                  $width    = ($field->width && $field->width != 'auto' ? $field->width . 'px' : 'auto');
+                  $required = strpos(",$field->rules,", ",$notEmptyRule->id,") !== false ? 'required' : '';
+                  echo "<th class='$required' style='width: $width'>$field->name</th>";
+              }
+          }
+          ?>
         </tr>
       </thead>
       <tbody>
-      <?php
-        $insert         = true;
-        $hideContentCol = true;
-      ?>
-      <?php foreach($caseData as $key => $case):?>
-      <?php if(empty($case->title)) continue;?>
-      <?php if(!empty($case->id) and !isset($cases[$case->id])) $case->id = 0;?>
-      <tr class='text-left' valign='top'>
-        <td>
-          <?php
-          if(!empty($case->id))
-          {
-              echo $case->id . html::hidden("id[$key]", $case->id);
-              $insert = false;
-          }
-          else
-          {
-              echo $key . " <sup class='text-green small'>{$lang->testcase->new}</sup>";
-          }
-          echo html::hidden("lib[$key]", $libID);
-          ?>
-        </td>
-        <td><?php echo html::input("title[$key]", $case->title, "class='form-control' style='margin-top:2px'")?></td>
-        <td style='overflow:visible'><?php echo html::select("module[$key]", $modules, isset($case->module) ? $case->module : (!empty($case->id) ? $cases[$case->id]->module : ''), "class='form-control chosen'")?></td>
-        <td><?php echo html::select("pri[$key]", $lang->testcase->priList, isset($case->pri) ? $case->pri : (!empty($case->id) ? $cases[$case->id]->pri : ''), "class='form-control chosen'")?></td>
-        <td><?php echo html::select("type[$key]", $lang->testcase->typeList, isset($case->type) ? $case->type : (!empty($case->id) ? $cases[$case->id]->type : ''), "class='form-control chosen'")?></td>
-        <td style='overflow:visible'><?php echo html::select("stage[$key][]", $lang->testcase->stageList, !empty($case->stage) ? $case->stage : (!empty($case->id) ? $cases[$case->id]->stage : ''), "multiple='multiple' class='form-control chosen'")?></td>
-        <td><?php echo html::input("keywords[$key]", isset($case->keywords) ? $case->keywords : "", "class='form-control'")?></td>
-        <td><?php echo html::textarea("precondition[$key]", isset($case->precondition) ? htmlSpecialString($case->precondition) : "", "class='form-control'")?></td>
-        <td class='col-content'>
-          <?php if(isset($stepData[$key]['desc'])):?>
-          <table class='w-p100 bd-0'>
-          <?php foreach($stepData[$key]['desc'] as $id => $desc):?>
-          <?php
-            if(empty($desc['content'])) continue;
-            $hideContentCol = false;
-          ?>
-            <tr class='step'>
-              <td><?php echo $id . html::hidden("stepType[$key][$id]", $desc['type'])?></td>
-              <td><?php echo html::textarea("desc[$key][$id]", htmlSpecialString($desc['content']), "class='form-control'")?></td>
-              <td><?php if($desc['type'] != 'group') echo html::textarea("expect[$key][$id]", isset($stepData[$key]['expect'][$id]['content']) ? htmlSpecialString($stepData[$key]['expect'][$id]['content']) : '', "class='form-control'")?></td>
-            </tr>
-          <?php endforeach;?>
-          </table>
-          <?php endif;?>
-        </td>
-      </tr>
-      <?php endforeach;?>
-      </tbody>
-      <tfoot>
-        <tr>
-          <td colspan='9' class='text-center form-actions'>
+        <?php
+        $insert      = true;
+        $addID       = 1;
+        $hasMultiple = false;
+        ?>
+        <?php foreach($datas as $key => $object):?>
+        <tr class='text-top'>
+          <td>
             <?php
-            $submitText = $isEndPage ? $this->lang->save : $this->lang->file->saveAndNext;
-            if(!$insert and $dataInsert === '')
+            if(!empty($object->id))
             {
-              echo "<button type='button' data-toggle='modal' data-target='#importNoticeModal' class='btn btn-primary btn-wide'>{$submitText}</button>";
+                echo $object->id . html::hidden("id[$key]", $object->id);
+                $insert = false;
             }
             else
             {
-              echo html::submitButton($submitText);
-              if($dataInsert !== '') echo html::hidden('insert', $dataInsert);
+                $sub = (strpos($object->title, '>') === 0) ? " <sub style='vertical-align:sub;color:red'>{$lang->port->children}</sub>" : " <sub style='vertical-align:sub;color:gray'>{$lang->task->new}</sub>";
+                echo $addID++ . $sub;
+            }
+            echo html::hidden("lib[$key]", $libID);
+            ?>
+          </td>
+          <?php foreach($fields as $field => $value):?>
+
+          <?php if($value['control'] == 'select'):?>
+          <td><?php echo html::select("{$field}[$key]", $value['values'], !empty($object->$field) ? $object->$field : '', "class='form-control chosen'")?></td>
+
+          <?php elseif($value['control'] == 'multiple'):?>
+          <?php if(!isset($value['values'][''])) $value['values'][''] = '';?>
+          <td><?php echo html::select("{$field}[$key][]", $value['values'], !empty($object->$field) ? $object->$field : '', "multiple class='form-control chosen'")?></td>
+
+          <?php elseif($value['control'] == 'date'):?>
+          <?php $dateMatch = $this->config->port->dateMatch;?>
+          <?php if(!preg_match($dateMatch, $object->$field)) $object->$field = ''; ?>
+          <td><?php echo html::input("{$field}[$key]", !empty($object->$field) ? $object->$field : '', "class='form-control form-date autocomplete='off'")?></td>
+
+          <?php elseif($value['control'] == 'datetime'):?>
+          <td><?php echo html::input("{$field}[$key]", !empty($object->$field) ? $object->$field : '', "class='form-control form-datetime autocomplete='off'")?></td>
+
+          <?php elseif($value['control'] == 'hidden'):?>
+          <?php echo html::hidden("{$field}[$key]", $object->$field)?>
+
+          <?php elseif($value['control'] == 'textarea'):?>
+          <td><?php echo html::textarea("{$field}[$key]", $object->$field, "class='form-control' cols='50' rows='1'")?></td>
+
+          <?php elseif($field == 'stepDesc' or $field == 'stepExpect'):?>
+          <?php if($field == 'stepExpect') continue;?>
+          <td>
+              <?php if(isset($stepData[$key]['desc'])):?>
+              <table class='w-p100 bd-0'>
+              <?php $hasStep = false;?>
+              <?php foreach($stepData[$key]['desc'] as $id => $desc):?>
+              <?php if(empty($desc['content'])) continue;?>
+                <tr class='step'>
+                  <?php $hasStep = true;?>
+                  <td><?php echo $id . html::hidden("stepType[$key][$id]", $desc['type'])?></td>
+                  <td><?php echo html::textarea("desc[$key][$id]", htmlSpecialString($desc['content']), "class='form-control'")?></td>
+                  <td><?php if($desc['type'] != 'group') echo html::textarea("expect[$key][$id]", isset($stepData[$key]['expect'][$id]['content']) ? htmlSpecialString($stepData[$key]['expect'][$id]['content']) : '', "class='form-control'")?></td>
+                </tr>
+              <?php endforeach;?>
+              <?php if(!$hasStep):?>
+                <tr class='step'>
+                  <td><?php echo '1' . html::hidden("stepType[$key][1]", 'step')?></td>
+                  <td><?php echo html::textarea("desc[$key][1]", '', "class='form-control'")?></td>
+                  <td><?php echo html::textarea("expect[$key][1]", '', "class='form-control'")?></td>
+                </tr>
+              <?php endif;?>
+              </table>
+              <?php else:?>
+              <table class='w-p100 bd-0'>
+                <tr class='step'>
+                  <td><?php echo '1' . html::hidden("stepType[$key][1]", 'step')?></td>
+                  <td><?php echo html::textarea("desc[$key][1]", '', "class='form-control'")?></td>
+                  <td><?php echo html::textarea("expect[$key][1]", '', "class='form-control'")?></td>
+                </tr>
+              </table>
+              <?php endif;?>
+          </td>
+
+          <?php else:?>
+          <td><?php echo html::input("{$field}[$key]", !empty($object->$field) ? $object->$field : '', "class='form-control autocomplete='off'")?></td>
+          <?php endif;?>
+
+          <?php endforeach;?>
+          <?php
+          if(!empty($appendFields))
+          {
+              $this->loadModel('flow');
+              foreach($appendFields as $field)
+              {
+                  if(!$field->show) continue;
+                  $value = $field->defaultValue ? $field->defaultValue : zget($task, $field->field, '');
+                  echo '<td>' . $this->flow->buildControl($field, $value, "$field->field[$key]", true) . '</td>';
+              }
+          }
+          ?>
+        </tr>
+        <?php endforeach;?>
+      </tbody>
+      <tfoot>
+        <tr>
+          <td colspan='10' class='text-center form-actions'>
+            <?php
+            $submitText  = $isEndPage ? $this->lang->save : $this->lang->file->saveAndNext;
+            $isStartPage = $pagerID == 1 ? true : false;
+            if(!$insert and $dataInsert === '')
+            {
+                echo "<button type='button' data-toggle='modal' data-target='#importNoticeModal' class='btn btn-primary btn-wide'>{$submitText}</button>";
+            }
+            else
+            {
+                echo html::submitButton($submitText);
+                if($dataInsert !== '') echo html::hidden('insert', $dataInsert);
             }
             echo html::hidden('isEndPage', $isEndPage ? 1 : 0);
             echo html::hidden('pagerID', $pagerID);
-            echo ' &nbsp; ' . html::a($this->createLink('caselib', 'browse', "libID=$libID"), $lang->goback, '', 'class="btn btn-wide"');
+            echo ' &nbsp; ' . html::a("javascript:history.back(-1)", $lang->goback, '', "class='btn btn-back btn-wide'");
             echo ' &nbsp; ' . sprintf($lang->file->importPager, $allCount, $pagerID, $allPager);
             ?>
           </td>
         </tr>
       </tfoot>
     </table>
-    <?php if(!$insert and $dataInsert === '') include '../../common/view/noticeimport.html.php';?>
+    <?php if(!$insert and $dataInsert === '') include $app->getModuleRoot() . 'common/view/noticeimport.html.php';?>
   </form>
 </div>
-<?php endif;?>
-<?php if(isset($hideContentCol) and $hideContentCol):?>
-<style>#mainContent .col-content{display: none;}</style>
 <?php endif;?>
 <script>
 $(function()
 {
     $.fixedTableHead('#showData');
+    <?php if($hasMultiple):?>
+    $('th.estimate').addClass('text-center w-250px');
+    <?php endif;?>
     $("#showData th").each(function()
     {
         if(requiredFields.indexOf(this.id) !== -1) $("#" + this.id).addClass('required');
     });
 });
 </script>
-<?php include '../../common/view/footer.html.php';?>
+<?php include $app->getModuleRoot() . 'common/view/footer.html.php';?>
