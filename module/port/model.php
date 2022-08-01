@@ -197,7 +197,7 @@ class portModel extends model
 
         if(empty($fields)) return false;
 
-        $fields    = explode(',', $fields);
+        if(!is_array($fields)) $fields = explode(',', $fields);
         $fieldList = array();
         /* build module fieldList. */
         foreach ($fields as $key => $field)
@@ -309,7 +309,7 @@ class portModel extends model
         /* If empty values put system datas .*/
         if(empty($values))
         {
-            if(strpos($this->modelConfig->sysLangFields, $field)) return $this->modelLang->{$field.'List'};
+            if(strpos($this->modelConfig->sysLangFields, $field) and !empty($this->modelLang->{$field.'List'})) return $this->modelLang->{$field.'List'};
             if(strpos($this->modelConfig->sysDataFields, $field) and !empty($this->portConfig->sysDataList[$values])) return $this->portConfig->sysDataList[$values];
         }
 

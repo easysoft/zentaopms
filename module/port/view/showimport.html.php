@@ -184,11 +184,12 @@ $('#showData').on('mouseenter', '.picker', function(e){
     var myPicker = $(this);
     var field    = myPicker.prev().attr('data-field');
     var id       = myPicker.prev().attr('id');
-    var index    = myPicker.prev().attr('data-key');
+    var name     = myPicker.prev().attr('name');
+    var index    = Number(name.replace(/[^\d]/g, " "));
     var value    = myPicker.prev().val();
 
     if($('#' + id).attr('isInit')) return;
-    $.get(createLink('port', 'ajaxGetOptions', 'model=<?php echo $model;?>&field=' + field + '&value=' + value + '&id=' + id), function(data)
+    $.get(createLink('port', 'ajaxGetOptions', 'model=<?php echo $model;?>&field=' + field + '&value=' + value + '&index=' + index), function(data)
     {
         $('#' + id).parent().html(data);
         $('#' + id).picker({chosenMode: true});

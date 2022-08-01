@@ -138,7 +138,7 @@ class port extends control
      * @access public
      * @return void
      */
-    public function ajaxGetOptions($model = '', $field = '', $value = '', $id = '')
+    public function ajaxGetOptions($model = '', $field = '', $value = '', $index = '')
     {
         $this->loadModel($model);
         $fields = $this->config->$model->templateFields;
@@ -156,6 +156,6 @@ class port extends control
         if(!isset($fieldList[$field]['values'][''])) $fieldList[$field]['values'][''] = '';
         $multiple = $fieldList[$field]['control'] == 'multiple' ? 'multiple' : '';
 
-        return print(html::select($id, $fieldList[$field]['values'], $value, "class='form-control picker-select' $multiple"));
+        return print(html::select($field . "[$index]", $fieldList[$field]['values'], $value, "class='form-control picker-select' $multiple"));
     }
 }
