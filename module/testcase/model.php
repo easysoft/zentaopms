@@ -1999,7 +1999,7 @@ class testcaseModel extends model
                     $showBranch = isset($this->config->testcase->browse->showBranch) ? $this->config->testcase->browse->showBranch : 1;
                 }
 
-                $autoIcon = $case->auto == 'auto' ? " <i class='icon icon-ZTF'></i>" : '';
+                $autoIcon = $case->auto == 'auto' ? " <i class='icon icon-ztf'></i>" : '';
                 if(isset($branches[$case->branch]) and $showBranch) echo "<span class='label label-outline label-badge'>{$branches[$case->branch]}</span> ";
                 if($modulePairs and $case->module and isset($modulePairs[$case->module])) echo "<span class='label label-gray label-badge'>{$modulePairs[$case->module]}</span> ";
                 echo $canView ? ($fromCaseID ? html::a($caseLink, $case->title, null, "style='color: $case->color' data-app='{$this->app->tab}'") . html::a(helper::createLink('testcase', 'view', "caseID=$fromCaseID"), "[<i class='icon icon-share' title='{$this->lang->testcase->fromCaselib}'></i>#$fromCaseID]" . $autoIcon, '', "data-app='{$this->app->tab}'") : html::a($caseLink, $case->title . $autoIcon, null, "style='color: $case->color' data-app='{$this->app->tab}'")) : "<span style='color: $case->color'>$case->title</span>";
