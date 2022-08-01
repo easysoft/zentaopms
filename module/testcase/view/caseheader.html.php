@@ -48,6 +48,7 @@
     <?php
     if(isset($menuItem->hidden)) continue;
     $menuType = $menuItem->name;
+    $caseType = isset($caseType) ? $caseType : '';
     if(!$config->testcase->needReview and empty($config->testcase->forceReview) and $menuType == 'wait') continue;
     if($hasBrowsePriv and $menuType == 'QUERY' and in_array($browseType, array('all', 'needconfirm', 'bysuite')))
     {
@@ -57,11 +58,15 @@
     }
     elseif($hasBrowsePriv and $menuType == 'casetype')
     {
+        if($this->moduleName == 'testtask' and $this->methodName == 'browseunits') continue;
+        if($this->moduleName == 'story' and $this->methodName == 'zerocase') continue;
+        if($browseType == 'bysuite') continue;
+
         $lang->testcase->typeList[''] = $lang->testcase->allType;
 
-        $currentType     = isset($caseType) ? $caseType : '';
-        $currentTypeName = zget($lang->testcase->typeList, $currentType, '');
+        $currentTypeName = zget($lang->testcase->typeList, $caseType, '');
         $currentLable    = empty($currentTypeName) ? $lang->testcase->allType : $currentTypeName;
+        if(!isset($param)) $param = 0;
 
         echo "<div id='byTypeTab' class='btn-group'>";
         echo html::a('javascript:;', "<span class='text'>{$currentLable}</span>" . " <span class='caret'></span>", '', "class='btn btn-link' data-toggle='dropdown'");
@@ -69,18 +74,32 @@
 
         foreach($lang->testcase->typeList as $type => $typeName)
         {
-            echo '<li' . ($type == $currentType ? " class='active'" : '') . '>';
-            echo html::a($this->createLink('testcase', 'browse', "productID=$productID&branch=$branch&browseType=byType&param=$type"), $typeName);
+            echo '<li' . ($type == $caseType ? " class='active'" : '') . '>';
+            if(isset($groupBy))
+            {
+                echo html::a($this->createLink('testcase', 'groupCase', "productID=$productID&branch=$branch&groupBy=story&projectID=$projectID&caseType=$type"), $typeName);
+
+            }
+            else
+            {
+                echo html::a($this->createLink('testcase', 'browse', "productID=$productID&branch=$branch&browseType=$browseType&param=$param&caseType=$type"), $typeName);
+            }
             echo "</li>";
         }
 
-        echo '</ul>';
-        if($browseType != 'bysearch') echo html::checkbox('showAutoCase', array('1' => $lang->testcase->showAutoCase), '', $this->cookie->showAutoCase ? 'checked=checked' : '');
-        echo '</div>';
+        echo '</ul></div>';
+    }
+    elseif($hasBrowsePriv and $menuType == 'autocase')
+    {
+        if($this->moduleName == 'testtask' and $this->methodName == 'browseunits') continue;
+        if($this->moduleName == 'story' and $this->methodName == 'zerocase') continue;
+        if($browseType == 'bysuite' or $browseType == 'bysearch') continue;
+
+        echo html::checkbox('showAutoCase', array('1' => $lang->testcase->showAutoCase), '', $this->cookie->showAutoCase ? 'checked=checked' : '');
     }
     elseif($hasBrowsePriv and ($menuType == 'all' or $menuType == 'needconfirm' or $menuType == 'wait'))
     {
-        echo html::a($this->createLink($currentModule, $currentMethod, $projectParam . "productID=$productID&branch=$branch&browseType=$menuType"), "<span class='text'>{$menuItem->text}</span>", '', "class='btn btn-link' id='{$menuType}Tab' data-app='{$this->app->tab}'");
+        echo html::a($this->createLink($currentModule, $currentMethod, $projectParam . "productID=$productID&branch=$branch&browseType=$menuType&param=0&caseType=$caseType"), "<span class='text'>{$menuItem->text}</span>", '', "class='btn btn-link' id='{$menuType}Tab' data-app='{$this->app->tab}'");
     }
     elseif($hasBrowsePriv and $menuType == 'suite' and $this->app->tab == 'qa')
     {
@@ -126,7 +145,7 @@
         $projectID = $isProjectApp ? $this->session->project : 0;
         echo html::a($this->createLink('story', 'zeroCase', "productID=$productID&branch=$branch&orderBy=id_desc&projectID=$projectID"), "<span class='text'>{$lang->story->zeroCase}</span>", '', "class='btn btn-link' id='zerocaseTab' data-app='{$this->app->tab}'");
     }
-    elseif($hasUnitPriv and $menuType == 'browseunits')
+    elseif($hasUnitPriv and $menuType == 'browseunits' and !$caseType)
     {
         echo html::a($this->createLink('testtask', 'browseUnits', "productID=$productID&browseType=newest&orderBy=id_desc&recTotal=0&recPerPage=20&pageID=1&projectID=$projectID"), "<span class='text'>{$lang->testcase->browseUnits}</span>", '', "class='btn btn-link' id='browseunitsTab' data-app='{$this->app->tab}'");
     }
