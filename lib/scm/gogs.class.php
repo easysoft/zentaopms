@@ -1,5 +1,5 @@
 <?php
-class GitRepo
+class Gogs
 {
     public $client;
     public $root;
@@ -22,6 +22,16 @@ class GitRepo
 
         $this->client = $client;
         $this->root   = rtrim($root, DIRECTORY_SEPARATOR);
+        if(!realpath($this->root) and !empty($repo))
+        {
+            global $app;
+            $project = $app->control->loadModel('gogs')->apiGetSingleProject($repo->serviceHost, $repo->serviceProject);
+            if(isset($project->tokenCloneUrl))
+            {
+                $cmd = 'git clone --progress -v "' . $project->tokenCloneUrl . '" "' . $this->root . '"';
+                exec($cmd);
+            }
+        }
 
         $branch = isset($_COOKIE['repoBranch']) ? $_COOKIE['repoBranch'] : '';
         if($branch)
@@ -52,7 +62,8 @@ class GitRepo
         chdir($this->root);
         if(!empty($path)) $sub = ":$path";
         if(!empty($this->branch))$revision = $this->branch;
-        $cmd = escapeCmd("$this->client ls-tree -l $revision$sub");
+        execCmd(escapeCmd("$this->client pull"));
+        $cmd  = escapeCmd("$this->client ls-tree -l $revision$sub");
         $list = execCmd($cmd . ' 2>&1', 'array', $result);
         if($result) return array();
 
@@ -540,12 +551,15 @@ class GitRepo
     {
         if(!scm::checkRevision($revision)) return array();
 
-        if($revision == 'HEAD' and $branch) $revision = 'origin/' . $branch;
-        $revision = is_numeric($revision) ? "--skip=$revision $branch" : $revision;
-        $count    = $count == 0 ? '' : "-n $count";
+        if($revision == 'HEAD' and $branch) $revision = $branch;
+        $count = $count == 0 ? '' : "-n $count";
 
         chdir($this->root);
-        if($branch) execCmd(escapeCmd("$this->client checkout $branch"), 'array');
+        if($branch)
+        {
+            execCmd(escapeCmd("$this->client checkout $branch"));
+            execCmd(escapeCmd("$this->client pull"));
+        }
 
         $list    = execCmd(escapeCmd("$this->client log $count $revision -- ./"), 'array');
         $commits = $this->parseLog($list);

@@ -128,18 +128,24 @@ class gitModel extends model
         $branches = $this->repo->getBranches($repo);
         $commits  = $repo->commits;
 
-        $gitlabAccountPairs = array();
+        $accountPairs = array();
         if($repo->SCM == 'Gitlab')
         {
-            $gitlabUserList = $this->loadModel('gitlab')->apiGetUsers($repo->gitService);
-            $acountIDPairs  = $this->gitlab->getUserIdAccountPairs($repo->gitService);
-            foreach($gitlabUserList as $gitlabUser) $gitlabAccountPairs[$gitlabUser->realname] = zget($acountIDPairs, $gitlabUser->id, '');
+            $userList      = $this->loadModel('gitlab')->apiGetUsers($repo->gitService);
+            $acountIDPairs = $this->gitlab->getUserIdAccountPairs($repo->gitService);
+            foreach($userList as $gitlabUser) $accountPairs[$gitlabUser->realname] = zget($acountIDPairs, $gitlabUser->id, '');
         }
         elseif($repo->SCM == 'Gitea')
         {
-            $gitlabUserList = $this->loadModel('gitea')->apiGetUsers($repo->gitService);
-            $acountIDPairs  = $this->gitea->getUserAccountIdPairs($repo->gitService, 'openID,account');
-            foreach($gitlabUserList as $gitlabUser) $gitlabAccountPairs[$gitlabUser->realname] = zget($acountIDPairs, $gitlabUser->id, '');
+            $userList      = $this->loadModel('gitea')->apiGetUsers($repo->gitService);
+            $acountIDPairs = $this->gitea->getUserAccountIdPairs($repo->gitService, 'openID,account');
+            foreach($userList as $gitlabUser) $accountPairs[$gitlabUser->realname] = zget($acountIDPairs, $gitlabUser->id, '');
+        }
+        elseif($repo->SCM == 'Gogs')
+        {
+            $userList      = $this->loadModel('gogs')->apiGetUsers($repo->gitService);
+            $acountIDPairs = $this->gogs->getUserAccountIdPairs($repo->gitService, 'openID,account');
+            foreach($userList as $gitlabUser) $accountPairs[$gitlabUser->realname] = zget($acountIDPairs, $gitlabUser->id, '');
         }
 
         /* Update code commit history. */
@@ -180,7 +186,7 @@ class gitModel extends model
                             ' task:' . join(' ', $objects['tasks']) .
                             ' bug:'  . join(',', $objects['bugs']));
 
-                        $this->repo->saveAction2PMS($objects, $log, $this->repoRoot, $repo->encoding, 'git', $gitlabAccountPairs);
+                        $this->repo->saveAction2PMS($objects, $log, $this->repoRoot, $repo->encoding, 'git', $accountPairs);
                     }
                     else
                     {
