@@ -753,6 +753,7 @@ class programModel extends model
             if(isset($this->lang->program->$field)) $this->lang->project->$field = $this->lang->program->$field;
         }
 
+        $this->lang->error->unique = $this->lang->error->repeat;
         $program = $this->loadModel('file')->processImgURL($program, $this->config->program->editor->create['id'], $this->post->uid);
         $this->dao->insert(TABLE_PROGRAM)->data($program)
             ->autoCheck()
@@ -860,6 +861,7 @@ class programModel extends model
             if(isset($this->lang->program->$field)) $this->lang->project->$field = $this->lang->program->$field;
         }
 
+        $this->lang->error->unique = $this->lang->error->repeat;
         $this->dao->update(TABLE_PROGRAM)->data($program)
             ->autoCheck($skipFields = 'begin,end')
             ->batchcheck($this->config->program->edit->requiredFields, 'notempty')
@@ -1434,13 +1436,14 @@ class programModel extends model
         }
 
         /* Compute totalReal and progress. */
-        foreach($hours as $hour)
+        $progressList = $this->loadModel('project')->getWaterfallProgress(array_keys($hours));
+        foreach($hours as $projectID => $hour)
         {
             $hour->totalEstimate = round($hour->totalEstimate, 1) ;
             $hour->totalConsumed = round($hour->totalConsumed, 1);
             $hour->totalLeft     = round($hour->totalLeft, 1);
             $hour->totalReal     = $hour->totalConsumed + $hour->totalLeft;
-            $hour->progress      = $hour->totalReal ? round($hour->totalConsumed / $hour->totalReal, 2) * 100 : 0;
+            $hour->progress      = $projects[$projectID]->model == 'waterfall' ? $progressList[$projectID] : ($hour->totalReal ? round($hour->totalConsumed / $hour->totalReal, 2) * 100 : 0);
         }
 
         /* Get the number of left tasks. */

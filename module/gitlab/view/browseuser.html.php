@@ -42,7 +42,7 @@
           <th class='c-name text w-400px'></th>
           <th class='text'><?php echo $lang->gitlab->user->createOn;?></th>
           <th class='text'><?php echo $lang->gitlab->user->lastActivity;?></th>
-          <th class='c-actions-4'><?php echo $lang->actions;?></th>
+          <th class='c-actions-2'><?php echo $lang->actions;?></th>
         </tr>
       </thead>
       <tbody>

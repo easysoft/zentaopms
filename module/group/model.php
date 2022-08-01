@@ -27,7 +27,8 @@ class groupModel extends model
             unset($group->limited);
             $group->role = 'limited';
         }
-        $this->dao->insert(TABLE_GROUP)->data($group)->batchCheck($this->config->group->create->requiredFields, 'notempty')->exec();
+        $this->lang->error->unique = $this->lang->group->repeat;
+        $this->dao->insert(TABLE_GROUP)->data($group)->batchCheck($this->config->group->create->requiredFields, 'notempty')->check('name', 'unique')->exec();
         return $this->dao->lastInsertId();
     }
 
@@ -41,7 +42,8 @@ class groupModel extends model
     public function update($groupID)
     {
         $group = fixer::input('post')->get();
-        return $this->dao->update(TABLE_GROUP)->data($group)->batchCheck($this->config->group->edit->requiredFields, 'notempty')->where('id')->eq($groupID)->exec();
+        $this->lang->error->unique = $this->lang->group->repeat;
+        return $this->dao->update(TABLE_GROUP)->data($group)->batchCheck($this->config->group->edit->requiredFields, 'notempty')->check('name', 'unique', "id != {$groupID}")->where('id')->eq($groupID)->exec();
     }
 
     /**
@@ -54,6 +56,7 @@ class groupModel extends model
     public function copy($groupID)
     {
         $group = fixer::input('post')->remove('options')->get();
+        $this->lang->error->unique = $this->lang->group->repeat;
         $this->dao->insert(TABLE_GROUP)->data($group)->check('name', 'unique')->check('name', 'notempty')->exec();
         if($this->post->options == false) return;
         if(!dao::isError())
@@ -315,9 +318,9 @@ class groupModel extends model
 
     /**
      * Get admins by object id list.
-     * 
-     * @param  int    $idList 
-     * @param  string $field 
+     *
+     * @param  int    $idList
+     * @param  string $field
      * @access public
      * @return void
      */

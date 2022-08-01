@@ -38,7 +38,7 @@
           <th class='c-id'><?php common::printOrderLink('id', $orderBy, $vars, $lang->gitlab->id);?></th>
           <th class='c-name w-300px'><?php common::printOrderLink('name', $orderBy, $vars, $lang->gitlab->name);?></th>
           <th class='text-left'><?php common::printOrderLink('url', $orderBy, $vars, $lang->gitlab->url);?></th>
-          <th class='c-actions-3'><?php echo $lang->actions;?></th>
+          <th class='c-actions-3 text-center'><?php echo $lang->actions;?></th>
         </tr>
       </thead>
       <tbody>

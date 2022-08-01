@@ -68,7 +68,7 @@ h3 {font-size: 16px;}
 /* Comment-btn */
 .comment-btn {position: relative; margin: 0; padding: 0; display: none;}
 .repoCode tr.over .comment-btn {display: block;}
-.comment-btn .icon-wrapper {display: block; position: absolute; background: #4183C4; border-radius: 2px; width: 24px; height: 20px; left: -6px; top: 0; line-height: 20px; text-align: center; color: #fff; cursor: pointer; transition: transform 0.2s;}
+.comment-btn .icon-wrapper {display: block; position: absolute; background: #4183C4; border-radius: 2px; width: 24px; height: 20px; left: -6px; top: -2px; line-height: 20px; text-align: center; color: #fff; cursor: pointer; transition: transform 0.2s;}
 .comment-btn .icon-wrapper:before {display: block; content: ' '; right: -4px; top: 6px; position: absolute; border-left: 4px solid #4183C4; border-right: 0 solid transparent; border-bottom: 4px solid transparent; border-top: 4px solid transparent; width: 0; height: 0;}
 .comment-btn .icon-wrapper:hover {background: #169; transform: scale(1.1);}
 .comment-btn .icon-wrapper:hover:before {border-left-color: #169;}
@@ -81,7 +81,7 @@ h3 {font-size: 16px;}
 .repoCode tr.commented .comment-btn .icon-wrapper > i:before {font-size: 18px; transform: scale(-1, 1); display: inline-block;}
 .repoCode tr.commented .comment-btn .icon-wrapper:before {display: none;}
 
-.repoCode tr.over.commented .comment-btn .icon-wrapper, .repoCode tr.selected.commented .comment-btn .icon-wrapper {line-height: 20px; height: 20px; background: #4183C4; color: #fff; left: -6px;}
+.repoCode tr.over.commented .comment-btn .icon-wrapper, .repoCode tr.selected.commented .comment-btn .icon-wrapper {line-height: 20px; height: 20px; background: #4183C4; color: #fff; left: -30px;}
 .repoCode tr.over.commented .comment-btn .icon-wrapper > i:before {font-size: 14px;}
 .repoCode tr.selected.commented .comment-btn .icon-wrapper > i:before {font-size: 14px;}
 .repoCode tr.over.commented .comment-btn .icon-wrapper:before, .repoCode tr.selected.commented .comment-btn .icon-wrapper:before {display: block;}

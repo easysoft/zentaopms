@@ -45,7 +45,7 @@
           <th class='c-name'><?php common::printOrderLink('name', $orderBy, $vars, $lang->gitlab->project->name);?></th>
           <th class='text'></th>
           <th class='text'><?php echo $lang->gitlab->lastUpdate;?></th>
-          <th class='c-actions-8'><?php echo $lang->actions;?></th>
+          <th class='c-actions-9 text-center'><?php echo $lang->actions;?></th>
         </tr>
       </thead>
       <tbody>
@@ -60,6 +60,8 @@
           <td class='text' title='<?php echo substr($gitlabProject->last_activity_at, 0, 10);?>'><?php echo substr($gitlabProject->last_activity_at, 0, 10);?></td>
           <td class='c-actions'>
             <?php
+            echo common::buildIconButton('gitlab', 'browseBranch', "gitlabID=$gitlabID&projectID=$gitlabProject->id", '', 'list', 'treemap', '', '', false, '', $this->lang->gitlab->browseBranch, 0, $gitlabProject->default_branch);
+            echo common::buildIconButton('gitlab', 'browseTag', "gitlabID=$gitlabID&projectID=$gitlabProject->id", '', 'list', 'tag', '', '', false, '', $this->lang->gitlab->browseTag, 0, $gitlabProject->default_branch);
             echo common::buildIconButton('gitlab', 'manageBranchPriv', "gitlabID=$gitlabID&projectID=$gitlabProject->id", '', 'list', 'branch-lock', '', '', false, '', $this->lang->gitlab->browseBranchPriv, 0, ($gitlabProject->isMaintainer and $gitlabProject->default_branch));
             echo common::buildIconButton('gitlab', 'manageTagPriv', "gitlabID=$gitlabID&projectID=$gitlabProject->id", '', 'list', 'tag-lock', '', '', false, '', $this->lang->gitlab->browseTagPriv, 0, ($gitlabProject->isMaintainer and $gitlabProject->default_branch));
             echo common::buildIconButton('gitlab', 'manageProjectMembers', 'repoID=' . zget($repoPairs, $gitlabProject->id), '', 'list', 'team', '', '', false, '', '', 0, isset($repoPairs[$gitlabProject->id]));

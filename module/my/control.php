@@ -895,7 +895,7 @@ EOF;
      * @param  int    $pageID
      * @return void
      */
-    public function risk($type = 'assignedTo', $param = 0,$orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function risk($type = 'assignedTo', $param = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         /* Set the pager. */
         $this->loadModel('risk');
@@ -1270,7 +1270,7 @@ EOF;
             {
                 if(empty($data->newList))
                 {
-                    dao::$errors['newList'] = sprintf($this->lang->error->notempty, $this->lang->user->contacts->listName);
+                    dao::$errors[] = sprintf($this->lang->error->notempty, $this->lang->user->contacts->listName);
 
                     $response['result']  = 'fail';
                     $response['message'] = dao::getError();

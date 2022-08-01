@@ -21,6 +21,7 @@ $config->upgrade->maxVersion['max3_1']       = '17_0';
 $config->upgrade->maxVersion['max3_2']       = '17_1';
 $config->upgrade->maxVersion['max3_3']       = '17_2';
 $config->upgrade->maxVersion['max3_4']       = '17_3';
+$config->upgrade->maxVersion['max3_5']       = '17_4';
 
 $config->upgrade->bizVersion = array();
 $config->upgrade->bizVersion['biz1_0']       = '9_5_1';
@@ -80,6 +81,7 @@ $config->upgrade->bizVersion['biz7_0']       = '17_0';
 $config->upgrade->bizVersion['biz7_1']       = '17_1';
 $config->upgrade->bizVersion['biz7_2']       = '17_2';
 $config->upgrade->bizVersion['biz7_3']       = '17_3';
+$config->upgrade->bizVersion['biz7_4']       = '17_4';
 
 $config->upgrade->proVersion = array();
 $config->upgrade->proVersion['pro1_0']        = '3_1';

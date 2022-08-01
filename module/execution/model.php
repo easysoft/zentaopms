@@ -391,6 +391,7 @@ class executionModel extends model
             $this->lang->project->code = $this->lang->execution->execCode;
         }
 
+        $this->lang->error->unique = $this->lang->error->repeat;
         $sprintProject = isset($sprint->project) ? $sprint->project : '0';
         $this->dao->insert(TABLE_EXECUTION)->data($sprint)
             ->autoCheck($skipFields = 'begin,end')
@@ -540,6 +541,7 @@ class executionModel extends model
         }
 
         /* Update data. */
+        $this->lang->error->unique = $this->lang->error->repeat;
         $executionProject = isset($execution->project) ? $execution->project : '0';
         $this->dao->update(TABLE_EXECUTION)->data($execution)
             ->autoCheck($skipFields = 'begin,end')
@@ -1071,6 +1073,25 @@ class executionModel extends model
             $this->loadModel('score')->create('execution', 'close', $oldExecution);
             return common::createChanges($oldExecution, $execution);
         }
+    }
+
+    /**
+     * Set Kanban.
+     *
+     * @param  int    $executionID
+     * @access public
+     * @return void
+     */
+    public function setKanban($executionID)
+    {
+        $execution = fixer::input('post')
+            ->setIF($this->post->heightType == 'auto', 'displayCards', 0)
+            ->remove('heightType')
+            ->get();
+
+        if(isset($_POST['heightType']) and $this->post->heightType == 'custom' and !$this->loadModel('kanban')->checkDisplayCards($execution->displayCards)) return;
+
+        $this->dao->update(TABLE_EXECUTION)->data($execution)->where('id')->eq((int)$executionID)->exec();
     }
 
     /**
@@ -2592,9 +2613,13 @@ class executionModel extends model
             }
         }
 
-        $projectID = $this->dao->select('project')->from(TABLE_EXECUTION)->where('id')->eq($executionID)->fetch('project');
+        if($this->config->systemMode == 'new')
+        {
+            $projectID = $this->dao->select('project')->from(TABLE_EXECUTION)->where('id')->eq($executionID)->fetch('project');
+            $this->session->set('project', $projectID);
+            $this->linkStory($projectID, $planStories, $planProducts);
+        }
         $this->linkStory($executionID, $planStories, $planProducts);
-        if($this->config->systemMode == 'new') $this->linkStory($projectID, $planStories, $planProducts);
     }
 
     /**
@@ -3165,7 +3190,7 @@ class executionModel extends model
         }
         elseif((helper::today() > $execution->end))
         {
-            $begin = date($execution->end, strtotime('-13 days')) > $execution->begin ? date($execution->end, strtotime('-13 days')) : $execution->begin;
+            $begin = date('Y-m-d', strtotime('-13 days', strtotime($execution->end))) > $execution->begin ? date('Y-m-d', strtotime('-13 days', strtotime($execution->end))) : $execution->begin;
             $end   = $execution->end;
         }
 

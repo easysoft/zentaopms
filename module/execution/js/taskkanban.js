@@ -1459,7 +1459,7 @@ function toggleSearchBox()
     }
     else
     {
-        $(".querybox-toggle").css("color", "3c495c");
+        $(".querybox-toggle").css("color", "#3c495c");
         $('#taskKanbanSearchInput').attr('value', '');
         searchCards('');
     }

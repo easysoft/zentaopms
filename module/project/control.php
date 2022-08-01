@@ -1072,7 +1072,7 @@ class project extends control
         foreach($teamMembers as $key => $member) $memberPairs[$key] = $member->realname;
 
         /* Build the search form. */
-        $actionURL = $this->createLink('project', 'bug', "projectID=$projectID&productID=$productID&orderBy=$orderBy&build=$build&type=bysearch&queryID=myQueryID");
+        $actionURL = $this->createLink('project', 'bug', "projectID=$projectID&productID=$productID&branchID=$branchID&orderBy=$orderBy&build=$build&type=bysearch&queryID=myQueryID");
         $this->loadModel('execution')->buildBugSearchForm($products, $queryID, $actionURL, 'project');
 
         $showBranch      = false;
@@ -1856,7 +1856,7 @@ class project extends control
             $this->user->updateUserView($projectID, 'project');
 
             /* Delete the execution under the project. */
-            $executionIdList = $this->loadModel('execution')->getByProject($projectID);
+            $executionIdList = $this->loadModel('execution')->getPairs($projectID);
 
             $message = $this->executeHooks($projectID);
             if($message) $this->lang->saveSuccess = $message;

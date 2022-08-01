@@ -174,11 +174,6 @@ body {margin-bottom: 25px;}
   <strong>
   <?php echo $projectName;?>
   </strong>
-  <div class="linkButton" onclick="handleLinkButtonClick()">
-    <span title="<?php echo $lang->viewDetails;?>">
-      <i class="icon icon-import icon-rotate-270"></i>
-    </span>
-  </div>
 </div>
 <?php endif;?>
 <div id="mainContent" class="main-row fade">
@@ -475,12 +470,6 @@ $(function()
 });
 
 <?php if($this->app->getViewType() == 'xhtml'):?>
-function handleLinkButtonClick()
-{
-  var xxcUrl = "xxc:openInApp/zentao-integrated/" + encodeURIComponent(window.location.href.replace(/.display=card/, '').replace('xhtml', 'html'));
-  window.open(xxcUrl);
-}
-
 $(function()
 {
     function handleClientReady()

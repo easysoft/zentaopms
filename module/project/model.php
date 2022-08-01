@@ -394,6 +394,53 @@ class projectModel extends model
     }
 
     /**
+     * Get waterfall project progress.
+     *
+     * @param  array  $projectIDList
+     * @access public
+     * @return int
+     */
+    public function getWaterfallProgress($projectIDList)
+    {
+        $projectList = $this->dao->select('t1.*')->from(TABLE_EXECUTION)->alias('t1')
+            ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')
+            ->where('t1.type')->in('stage')
+            ->andWhere('t1.deleted')->eq('0')
+            ->andWhere('t1.vision')->eq($this->config->vision)
+            ->andWhere('t1.project')->in($projectIDList)
+            ->andWhere('t2.model')->eq('waterfall')
+            ->fetchGroup('project', 'id');
+
+        $totalHour = $this->dao->select('t1.project, t1.execution, ROUND(SUM(if(t1.status !="closed" && t1.status !="cancel", `left`, 0)), 2) AS totalLeft, ROUND(SUM(consumed), 1) AS totalConsumed')->from(TABLE_TASK)->alias('t1')
+            ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.execution = t2.id')
+            ->where('t2.project')->in(array_keys($projectList))
+            ->andWhere('t1.deleted')->eq(0)
+            ->andWhere('t1.parent')->lt(1)
+            ->groupBy('t1.execution')
+            ->fetchGroup('project', 'execution');
+
+        $progressList = array();
+        foreach($projectList as $projectID => $stageList)
+        {
+            $progress = 0;
+            foreach($stageList as $stageID => $stage)
+            {
+                if($stage->project != $projectID) continue;
+
+                $stageTotalConsumed = isset($totalHour[$projectID][$stageID]) ? $totalHour[$projectID][$stageID]->totalConsumed : 0;
+                $stageTotalLeft     = isset($totalHour[$projectID][$stageID]) ? round($totalHour[$projectID][$stageID]->totalLeft, 1) : 0;
+
+                $stageProgress = ($stageTotalConsumed + $stageTotalLeft) ? floor($stageTotalConsumed / ($stageTotalConsumed + $stageTotalLeft) * 1000) / 1000 * 100 : 0;
+
+                $progress += $stageProgress * ($stage->percent / 100);
+            }
+            $progressList[$projectID] = $progress;
+        }
+
+        return is_numeric($projectIDList) ? $progressList[$projectIDList] : $progressList;
+    }
+
+    /**
      * Get project workhour info.
      *
      * @param  int    $projectID
@@ -1124,7 +1171,8 @@ class projectModel extends model
             }
             else
             {
-                $existProductName = $this->dao->select('name')->from(TABLE_PRODUCT)->where('name')->eq($_POST['productName'])->fetch('name');
+                $programID        = isset($project->parent) ? $project->parent : 0;
+                $existProductName = $this->dao->select('name')->from(TABLE_PRODUCT)->where('name')->eq($_POST['productName'])->andWhere('program')->eq($programID)->fetch('name');
                 if(!empty($existProductName))
                 {
                     dao::$errors['productName'] = $this->lang->project->existProductName;
@@ -1142,6 +1190,7 @@ class projectModel extends model
             if(isset($this->lang->project->$field)) $this->lang->project->$field = $this->lang->project->$field;
         }
 
+        $this->lang->error->unique = $this->lang->error->repeat;
         $project = $this->loadModel('file')->processImgURL($project, $this->config->project->editor->create['id'], $this->post->uid);
         $this->dao->insert(TABLE_PROJECT)->data($project)
             ->autoCheck()
@@ -1388,6 +1437,7 @@ class projectModel extends model
             if(isset($this->lang->project->$field)) $this->lang->project->$field = $this->lang->project->$field;
         }
 
+        $this->lang->error->unique = $this->lang->error->repeat;
         $this->dao->update(TABLE_PROJECT)->data($project)
             ->autoCheck($skipFields = 'begin,end')
             ->batchcheck($requiredFields, 'notempty')
@@ -2631,10 +2681,8 @@ class projectModel extends model
 
         $this->saveState($objectID, $this->getPairsByProgram());
         $project = $this->getById($objectID);
-        if(isset($project->acl) and $project->acl == 'open' and isset($this->config->project->unsetWhitelist[$methodName]) and $this->config->project->unsetWhitelist[$methodName] == $moduleName)
-        {
-            unset($this->lang->project->menu->settings['subMenu']->whitelist);
-        }
+
+        if(isset($project->acl) and $project->acl == 'open') unset($this->lang->project->menu->settings['subMenu']->whitelist);
 
         common::setMenuVars('project', $objectID);
         return $objectID;

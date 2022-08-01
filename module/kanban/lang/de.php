@@ -346,8 +346,8 @@ $lang->kanbanlane->modeList['independent'] = 'Independent Kanban column';
 $lang->kanbanlane->heightTypeList['auto']   = "Adaptive <span class='tip'>(Adaptive to card height and lane name height)</span>";
 $lang->kanbanlane->heightTypeList['custom'] = "Custom <span class='tip'>(Customize lane height based on number of cards)</span>";
 
-$lang->kanbancolumn->fluidBoardList['0'] = 'Fixed';
-$lang->kanbancolumn->fluidBoardList['1'] = 'Auto Width';
+$lang->kanbancolumn->fluidBoardList['0'] = "Fixed<span class='tip'>(Keep all columns the same width)</span>";
+$lang->kanbancolumn->fluidBoardList['1'] = "Auto Width<span class='tip'>(Adapts to lane width)</span>";
 
 $lang->kanbanlane->error = new stdclass();
 $lang->kanbanlane->error->mustBeInt = 'No. of cards must be a positive integer from 3 to 32767.';

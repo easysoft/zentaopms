@@ -17,7 +17,7 @@
   </div>
 </div>
 <div id='mainContent' class='main-content'>
-  <form class="load-indicator main-form form-ajax" id="managePrivForm" method="post" target='hiddenwin'>
+  <form class="load-indicator main-form form-ajax" id="managePrivForm" method="post">
     <table class='table table-hover table-striped table-bordered'>
       <thead>
         <tr class='text-center'>

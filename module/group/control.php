@@ -91,6 +91,7 @@ class group extends control
        if(!empty($_POST))
         {
             $this->group->update($groupID);
+            if(dao::isError()) return print(js::error(dao::getError()));
             if(isonlybody()) return print(js::closeModal('parent.parent', 'this'));
             return print(js::locate($this->createLink('group', 'browse'), 'parent'));
         }
@@ -191,8 +192,8 @@ class group extends control
             if($type == 'byModule') $result = $this->group->updatePrivByModule();
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-            if($type == 'byGroup') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('managePriv', "type=byGroup&param=$param&menu=$menu&version=$version")));
-            if($type == 'byModule') return print(js::alert($this->lang->saveSuccess) . js::execute('window.parent.location.reload()'));
+            if($type == 'byGroup') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'reload'));
+            if($type == 'byModule') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'window.parent.location.reload()'));
         }
 
         if($type == 'byGroup')
