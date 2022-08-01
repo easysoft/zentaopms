@@ -180,7 +180,7 @@ class taskModel extends model
                     {
                         if($storyID) $testStoryIdList[$storyID] = $storyID;
                     }
-                    $testStories = $this->dao->select('id,title,version')->from(TABLE_STORY)->where('id')->in($testStoryIdList)->fetchAll('id');
+                    $testStories = $this->dao->select('id,title,version,module')->from(TABLE_STORY)->where('id')->in($testStoryIdList)->fetchAll('id');
                     foreach($this->post->testStory as $i => $storyID)
                     {
                         if(!isset($testStories[$storyID])) continue;
@@ -195,6 +195,7 @@ class taskModel extends model
                         $task->assignedTo   = $this->post->testAssignedTo[$i];
                         $task->estimate     = $this->post->testEstimate[$i];
                         $task->left         = $this->post->testEstimate[$i];
+                        $task->module       = $testStories[$storyID]->module;
                         $this->dao->insert(TABLE_TASK)->data($task)->exec();
 
                         $childTaskID = $this->dao->lastInsertID();
