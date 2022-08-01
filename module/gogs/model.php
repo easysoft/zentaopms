@@ -459,7 +459,7 @@ class gogsModel extends model
     /**
      * Get upstream project by API.
      *
-     * @param  int    $gogID
+     * @param  int    $gogsID
      * @param  string $project
      * @access public
      * @return void
