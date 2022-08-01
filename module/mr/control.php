@@ -177,10 +177,13 @@ class mr extends control
         $branchList = $this->loadModel($scm)->getBranches($MR->hostID, $MR->targetProject);
 
         $MR->canDeleteBranch = true;
-        $branchPrivs = $this->loadModel($scm)->apiGetBranchPrivs($MR->hostID, $MR->sourceProject);
-        foreach($branchPrivs as $priv)
+        if($scm != 'gogs')
         {
-            if($MR->canDeleteBranch and $priv->name == $MR->sourceBranch) $MR->canDeleteBranch = false;
+            $branchPrivs = $this->loadModel($scm)->apiGetBranchPrivs($MR->hostID, $MR->sourceProject);
+            foreach($branchPrivs as $priv)
+            {
+                if($MR->canDeleteBranch and $priv->name == $MR->sourceBranch) $MR->canDeleteBranch = false;
+            }
         }
 
         $targetBranchList = array();
@@ -1061,9 +1064,13 @@ class mr extends control
         $scm  = $host->type;
         if($scm == 'gitea') $project = urldecode(base64_decode($project));
 
-        $branches    = $this->loadModel($scm)->apiGetBranchPrivs($hostID, $project);
         $branchPrivs = array();
-        foreach($branches as $branch) $branchPrivs[$branch->name] = $branch->name;
+
+        if($scm != 'gogs')
+        {
+            $branches = $this->loadModel($scm)->apiGetBranchPrivs($hostID, $project);
+            foreach($branches as $branch) $branchPrivs[$branch->name] = $branch->name;
+        }
         echo json_encode($branchPrivs);
    }
 }

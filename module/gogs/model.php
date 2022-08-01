@@ -506,18 +506,4 @@ class gogsModel extends model
             ->andWhere('providerID')->eq($gogsID)
             ->fetchPairs();
     }
-
-    /**
-     * Get protect branches of one project.
-     *
-     * @param  int    $gogsID
-     * @param  string $project
-     * @param  string $keyword
-     * @access public
-     * @return array
-     */
-    public function apiGetBranchPrivs($gogsID, $project, $keyword = '')
-    {
-        return array();
-    }
 }
