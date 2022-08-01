@@ -266,7 +266,7 @@
         /* Show page app and update iframe source */
         var iframe = app.$iframe[0];
         var isSameUrl = iframe && url && iframe.contentWindow.location.href.endsWith(url);
-        if (url && (!isSameUrl || forceReload))
+        if (url && (!isSameUrl || forceReload !== false))
         {
             app.$app.toggleClass('open-from-hidden', app.$app.is(':hidden'))
             reloadApp(appCode, url, true);
