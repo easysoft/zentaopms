@@ -1372,7 +1372,8 @@ class repo extends control
         }
         elseif($repo->SCM == 'Gitea')
         {
-            $url = "$repo->codePath/archive/{$branch}.zip";
+            $api = $this->loadModel('gitea')->getApiRoot($repo->serviceHost);
+            $url = sprintf($api, "/repos/{$repo->serviceProject}/archive/{$branch}.zip");
         }
         elseif($repo->SCM == 'Git')
         {
