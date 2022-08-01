@@ -109,21 +109,29 @@ class mr extends control
         $repo   = $this->repo->getRepoByID($repoID);
 
         $this->loadModel('gitea');
+        $this->loadModel('gogs');
         if($repo->SCM == 'Gitea')
         {
             $project = $this->gitea->apiGetSingleProject($repo->gitService, $repo->project);
             if(empty($project) or !$project->allow_merge_commits) $repo = array();
         }
+        elseif($repo->SCM == 'Gogs')
+        {
+            $project = $this->gitea->apiGetSingleProject($repo->gitService, $repo->project);
+            if(empty($project)) $repo = array();
+        }
 
-        $hosts  = $this->loadModel('pipeline')->getList(array('gitea', 'gitlab'));
+        $hosts  = $this->loadModel('pipeline')->getList(array('gitea', 'gitlab', 'gogs'));
         if(!$this->app->user->admin)
         {
             $gitlabUsers = $this->loadModel('gitlab')->getGitLabListByAccount();
             $giteaUsers  = $this->gitea->getGiteaListByAccount();
+            $gogsUsers   = $this->gogs->getGiteaListByAccount();
             foreach($hosts as $hostID => $host)
             {
                 if($host->type == 'gitLab' and isset($gitlabUsers[$hostID])) continue;
                 if($host->type == 'gitea' and isset($giteaUsers[$hostID])) continue;
+                if($host->type == 'gogs' and isset($gogsUsers[$hostID])) continue;
 
                 unset($hosts[$hostID]);
             }

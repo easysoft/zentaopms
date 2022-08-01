@@ -52,7 +52,8 @@ $config->repo->gitlab->apiPath = "%s/api/v4/projects/%s/repository/";
 $config->repo->gitea = new stdclass;
 $config->repo->gitea->apiPath = "%s/api/v1/repos/%s/";
 
-$config->repo->gitServiceList = array('gitlab', 'gitea');
+$config->repo->gitServiceList = array('gitlab', 'gitea', 'gogs');
+$config->repo->gitTypeList    = array('Gitlab', 'Gitea', 'Gogs', 'Git');
 
 $config->repo->rules['module']['task']     = 'Task';
 $config->repo->rules['module']['bug']      = 'Bug';

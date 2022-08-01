@@ -12,14 +12,6 @@
 
 class gogsModel extends model
 {
-
-    const HOOK_PUSH_EVENT = 'Push Hook';
-
-    /* Gitlab access level. */
-    public $noAccess         = 0;
-    public $developerAccess  = 30;
-    public $maintainerAccess = 40;
-
     /**
      * Get a gogs by id.
      *
@@ -62,23 +54,15 @@ class gogsModel extends model
      * Get gogs api base url by gogs id.
      *
      * @param  int    $gogsID
-     * @param  bool   $sudo
      * @access public
      * @return string
      */
-    public function getApiRoot($gogsID, $sudo = true)
+    public function getApiRoot($gogsID)
     {
         $gogs = $this->getByID($gogsID);
         if(!$gogs) return '';
 
-        $sudoParam = '';
-        if($sudo == true and !$this->app->user->admin)
-        {
-            $openID = $this->getUserIDByZentaoAccount($gogsID, $this->app->user->account);
-            if($openID) $sudoParam = "&sudo={$openID}";
-        }
-
-        return rtrim($gogs->url, '/') . '/api/v1%s' . "?token={$gogs->token}" . $sudoParam;
+        return rtrim($gogs->url, '/') . '/api/v1%s' . "?token={$gogs->token}";
     }
 
     /**
@@ -204,45 +188,6 @@ class gogsModel extends model
         }
 
         if(!$response) dao::$errors[] = false;
-        return false;
-    }
-
-    /**
-     * Check user access.
-     *
-     * @param  int    $gogsID
-     * @param  int    $projectID
-     * @param  object $project
-     * @param  string $maxRole
-     * @access public
-     * @return bool
-     */
-    public function checkUserAccess($gogsID, $projectID = 0, $project = null, $groupIDList = array(), $maxRole = 'maintainer')
-    {
-        if($this->app->user->admin) return true;
-
-        if($project == null) $project = $this->apiGetSingleProject($gogsID, $projectID);
-        if(!isset($project->id)) return false;
-
-        $accessLevel = $this->config->gogs->accessLevel[$maxRole];
-
-        if(isset($project->permissions->project_access->access_level) and $project->permissions->project_access->access_level >= $accessLevel) return true;
-        if(isset($project->permissions->group_access->access_level) and $project->permissions->group_access->access_level >= $accessLevel) return true;
-        if(!empty($project->shared_with_groups))
-        {
-            if(empty($groupIDList))
-            {
-                $groups = $this->apiGetGroups($gogsID, 'name_asc', $maxRole);
-                foreach($groups as $group) $groupIDList[] = $group->id;
-            }
-
-            foreach($project->shared_with_groups as $group)
-            {
-                if($group->group_access_level < $accessLevel) continue;
-                if(in_array($group->group_id, $groupIDList)) return true;
-            }
-        }
-
         return false;
     }
 
@@ -397,26 +342,46 @@ class gogsModel extends model
      * Get projects by api.
      *
      * @param  int    $gogsID
-     * @param  bool   $sudo
      * @access public
      * @return array
      */
-    public function apiGetProjects($gogsID, $sudo = true)
+    public function apiGetProjects($gogsID)
     {
-        $apiRoot = $this->getApiRoot($gogsID, $sudo);
+        $apiRoot = $this->getApiRoot($gogsID);
         if(!$apiRoot) return array();
 
-        $url        = sprintf($apiRoot, "/repos/search");
+        $user = $this->apiGetAdminer($gogsID);
+        if(!$user) return array();
+
+        $url        = sprintf($apiRoot, "/users/{$user->username}/repos");
         $allResults = array();
         for($page = 1; true; $page++)
         {
             $results = json_decode(commonModel::http($url . "&page={$page}&limit=50"));
-            if(!is_array($results->data)) break;
-            if(!empty($results->data)) $allResults = array_merge($allResults, $results->data);
-            if(count($results->data) < 50) break;
+            if(!is_array($results)) break;
+            if(!empty($results)) $allResults = array_merge($allResults, $results);
+            if(count($results) < 50) break;
         }
 
         return $allResults;
+    }
+
+    /**
+     * Api get adminer.
+     *
+     * @param  int    $gogsID
+     * @access public
+     * @return void
+     */
+    public function apiGetAdminer($gogsID)
+    {
+        $apiRoot = $this->getApiRoot($gogsID);
+        if(!$apiRoot) return array();
+
+        $url  = sprintf($apiRoot, "/user");
+        $user = json_decode(commonModel::http($url));
+
+        return isset($user->username) ? $user : null;
     }
 
     /**
@@ -492,30 +457,16 @@ class gogsModel extends model
     }
 
     /**
-     * Get Forks of a project by API.
-     *
-     * @param  int    $gogsID
-     * @param  string $projectID
-     * @access public
-     * @return object
-     */
-    public function apiGetForks($gogsID, $projectID)
-    {
-        $url = sprintf($this->getApiRoot($gogsID), "/repos/$projectID/forks");
-        return json_decode(commonModel::http($url));
-    }
-
-    /**
      * Get upstream project by API.
      *
-     * @param  int    $gogsID
-     * @param  string $projectID
+     * @param  int    $gogID
+     * @param  string $project
      * @access public
      * @return void
      */
-    public function apiGetUpstream($gogsID, $projectID)
+    public function apiGetUpstream($gogsID, $project)
     {
-        $currentProject = $this->apiGetSingleProject($gogsID, $projectID);
+        $currentProject = $this->apiGetSingleProject($gogsID, $project);
         if(isset($currentProject->parent->full_name)) return $currentProject->parent->full_name;
         return array();
     }
@@ -557,28 +508,6 @@ class gogsModel extends model
     }
 
     /**
-     * Get single branch by API.
-     *
-     * @param  int    $gogsID
-     * @param  string $project
-     * @param  string $branchName
-     * @access public
-     * @return object
-     */
-    public function apiGetSingleBranch($gogsID, $project, $branchName)
-    {
-        $url    = sprintf($this->getApiRoot($gogsID), "/repos/$project/branches/$branchName");
-        $branch = json_decode(commonModel::http($url));
-        if($branch)
-        {
-            $gogs = $this->getByID($gogsID);
-            $branch->web_url = "{$gogs->url}/$project/src/branch/$branchName";
-        }
-
-        return $branch;
-    }
-
-    /**
      * Get protect branches of one project.
      *
      * @param  int    $gogsID
@@ -589,19 +518,6 @@ class gogsModel extends model
      */
     public function apiGetBranchPrivs($gogsID, $project, $keyword = '')
     {
-        $keyword  = urlencode($keyword);
-        $url      = sprintf($this->getApiRoot($gogsID), "/repos/$project/branch_protections");
-        $branches = json_decode(commonModel::http($url));
-
-        if(!is_array($branches)) return $branches;
-
-        $newBranches = array();
-        foreach($branches as $branch)
-        {
-            $branch->name = $branch->branch_name;
-            if(empty($keyword) || stristr($branch->name, $keyword)) $newBranches[] = $branch;
-        }
-
-        return $newBranches;
+        return array();
     }
 }

@@ -551,7 +551,7 @@ class Gitea
     {
         if(!scm::checkRevision($revision)) return array();
 
-        if($revision == 'HEAD' and $branch) $revision = $branch;
+        if($revision == 'HEAD' and $branch) $revision = 'origin/' . $branch;
         $revision = is_numeric($revision) ? "--skip=$revision $branch" : $revision;
         $count    = $count == 0 ? '' : "-n $count";
 

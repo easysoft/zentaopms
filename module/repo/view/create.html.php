@@ -30,7 +30,7 @@
           <tr>
             <th class='thWidth'><?php echo $lang->repo->type; ?></th>
             <td style="width:550px"><?php echo html::select('SCM', $lang->repo->scmList, 'Gitlab', "onchange='scmChanged(this.value)' class='form-control chosen'"); ?></td>
-            <td class="tips-git"><?php echo $lang->repo->syncTips; ?></td>
+            <td class="tips-git tips"><?php echo $lang->repo->syncTips; ?></td>
           </tr>
           <tr class='service hide'>
             <th><?php echo $lang->repo->serviceHost;?></th>
@@ -45,7 +45,7 @@
             <td class='required'><?php echo html::input('name', '', "class='form-control'"); ?></td>
             <td></td>
           </tr>
-          <tr class='hide-service hide-gitea'>
+          <tr class='hide-service hide-git'>
             <th><?php echo $lang->repo->path; ?></th>
             <td class='required'><?php echo html::input('path', '', "class='form-control'"); ?></td>
             <td class='muted'>
