@@ -341,9 +341,16 @@ function renderColumnCount($count, count, col)
 {
     if(groupBy == 'story' && col.type == 'story')
     {
-        $count.prev().addClass('storyColumn');
-        $count.prev().parent().append('<span class="caret changeOrderBy"></span>');
-        $count.remove();
+        var orderButton = '<button class="btn btn-link action storyColumn" type="button" data-toggle="dropdown">'
+            + '  <span class="text">' + (kanbanLang.orderList[orderBy] == undefined ? kanbanLang.orderList['pri_asc'] : kanbanLang.orderList[orderBy]) + '</span><span class="caret"></span>'
+            + '</button>'
+            + '<ul class="dropdown-menu">';
+        for(var order in kanbanLang.orderList) orderButton += '<li><a href="###" onclick="searchCards(searchValue, \'' + order + '\')">' + kanbanLang.orderList[order] + '</a></li>';
+        orderButton += '</ul>';
+
+        $count.siblings('.storyColumn').remove();
+        $count.prev().replaceWith(orderButton);
+        $count.hide();
         return;
     }
 
@@ -1274,12 +1281,6 @@ $(function()
         event.preventDefault();
     });
 
-    $(document).on('click', '#kanbans span.caret.changeOrderBy', function(event)
-    {
-        orderBy = orderBy == 'pri_desc' ? 'pri_asc' : 'pri_desc';
-        searchCards(searchValue);
-    })
-
     /* Init contextmenu */
     $('#kanbans').on('click', '[data-contextmenu]', function(event)
     {
@@ -1339,7 +1340,7 @@ $(function()
     lastUpdateData = '';
     setInterval(function()
     {
-        $.get(createLink('execution', 'ajaxUpdateKanban', "executionID=" + executionID + "&entertime=" + entertime + "&browseType=" + browseType + "&groupBy=" + groupBy + '&from=execution&searchValue=' + searchValue + '&orderBy' + orderBy), function(data)
+        $.get(createLink('execution', 'ajaxUpdateKanban', "executionID=" + executionID + "&entertime=" + entertime + "&browseType=" + browseType + "&groupBy=" + groupBy + '&from=execution&searchValue=' + searchValue + '&orderBy=' + orderBy), function(data)
         {
             if(lastUpdateData == '') lastUpdateData = data;
             if(data && lastUpdateData !== data)
@@ -1469,12 +1470,15 @@ function toggleSearchBox()
  * Search kanban cards.
  *
  * @param  string value
+ * @param  string order
+ *
  * @access public
  * @return void
  */
-function searchCards(value)
+function searchCards(value, order = '')
 {
     searchValue = value;
+    orderBy     = order == '' ? orderBy : order;
     $.get(createLink('execution', 'ajaxUpdateKanban', "executionID=" + executionID + "&entertime=0&browseType=" + browseType + "&groupBy=" + groupBy + '&from=execution&searchValue=' + value + '&orderBy=' + orderBy), function(data)
     {
         lastUpdateData = data;

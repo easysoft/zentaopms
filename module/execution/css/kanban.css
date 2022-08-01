@@ -36,7 +36,8 @@
 .region .kanban-header-col > .title {max-width: 80% !important;}
 .region .kanban-header-col > .title {margin: 0}
 .region .kanban-header-col > .title > span {display: inline-block; overflow: hidden; padding-right:2px; position: initial; max-width: 85px !important;}
-.region .kanban-header-col > .title > span.storyColumn {max-width: 100% !important;}
+.region .kanban-header-col > .title > .storyColumn {margin-right: 30px;}
+.region .kanban-header-col > .title > .storyColumn + .dropdown-menu {top: 45px; left: auto;}
 .region .kanban-header-col > .title > .text-grey {opacity: .5; font-weight: bold; color: #8b91a2;}
 .region .kanban-header-col > .title > .count {opacity: .5; font-weight: bold; color: #8b91a2;}
 .region .kanban-header-col > .title > .error {color: #333333; padding-left: 2px; font-size: 10px; padding-top: 1px; padding-right: 2px;}
