@@ -234,14 +234,15 @@ class testcaseModel extends model
      * @param  int         $productID
      * @param  int|string  $branch
      * @param  int         $moduleIdList
-     * @param  string      $orderBy
-     * @param  object      $pager
      * @param  string      $browseType
      * @param  string      $auto   no|unit
+     * @param  string      $caseType
+     * @param  string      $orderBy
+     * @param  object      $pager
      * @access public
      * @return array
      */
-    public function getModuleCases($productID, $branch = 0, $moduleIdList = 0, $orderBy = 'id_desc', $pager = null, $browseType = '', $auto = 'no')
+    public function getModuleCases($productID, $branch = 0, $moduleIdList = 0, $browseType = '', $auto = 'no', $caseType = '', $orderBy = 'id_desc', $pager = null)
     {
         $stmt = $this->dao->select('t1.*, t2.title as storyTitle, t2.deleted as storyDeleted')->from(TABLE_CASE)->alias('t1')
             ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story=t2.id');
@@ -255,6 +256,8 @@ class testcaseModel extends model
             ->beginIF($browseType == 'wait')->andWhere('t1.status')->eq($browseType)->fi()
             ->beginIF($auto == 'unit')->andWhere('t1.auto')->eq('unit')->fi()
             ->beginIF($auto != 'unit')->andWhere('t1.auto')->ne('unit')->fi()
+            ->beginIF(!$this->cookie->showAutoCase)->andWhere('t1.auto')->ne('auto')->fi()
+            ->beginIF($caseType)->andWhere('t1.type')->eq($caseType)->fi()
             ->andWhere('t1.deleted')->eq('0')
             ->orderBy($orderBy)
             ->page($pager)
@@ -267,14 +270,15 @@ class testcaseModel extends model
      * @param  int        $productID
      * @param  int|string $branch
      * @param  int        $moduleIdList
-     * @param  string     $orderBy
-     * @param  object     $pager
      * @param  string     $browseType
      * @param  string     $auto   no|unit
+     * @param  string     $caseType
+     * @param  string     $orderBy
+     * @param  object     $pager
      * @access public
      * @return array
      */
-    public function getModuleProjectCases($productID, $branch = 0, $moduleIdList = 0, $orderBy = 'id_desc', $pager = null, $browseType = '', $auto = 'no')
+    public function getModuleProjectCases($productID, $branch = 0, $moduleIdList = 0, $browseType = '', $auto = 'no', $caseType = '', $orderBy = 'id_desc', $pager = null)
     {
         $executions = $this->loadModel('execution')->getIdList($this->session->project);
         array_push($executions, $this->session->project);
@@ -290,6 +294,8 @@ class testcaseModel extends model
             ->beginIF($browseType == 'wait')->andWhere('t2.status')->eq($browseType)->fi()
             ->beginIF($auto == 'unit')->andWhere('t2.auto')->eq('unit')->fi()
             ->beginIF($auto != 'unit')->andWhere('t2.auto')->ne('unit')->fi()
+            ->beginIF(!$this->cookie->showAutoCase)->andWhere('t2.auto')->ne('auto')->fi()
+            ->beginIF($caseType)->andWhere('t2.type')->eq($caseType)->fi()
             ->andWhere('t2.deleted')->eq('0')
             ->orderBy($orderBy)
             ->page($pager, 't1.case')
@@ -395,6 +401,35 @@ class testcaseModel extends model
     }
 
     /**
+     * Get cases by type.
+     *
+     * @param  int         $productID
+     * @param  int|string  $branch
+     * @param  int         $suiteID
+     * @param  array       $moduleIdList
+     * @param  string      $orderBy
+     * @param  object      $pager
+     * @param  string      $auto    no|unit
+     * @access public
+     * @return array
+     */
+    public function getByType($productID, $branch = 0, $type = '', $moduleIdList = 0, $orderBy = 'id_desc', $pager = null, $auto = 'no')
+    {
+        return $this->dao->select('t1.*, t2.title as storyTitle')->from(TABLE_CASE)->alias('t1')
+            ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story=t2.id')
+            ->where('t1.product')->eq((int)$productID)
+            ->beginIF($this->app->tab == 'project')->andWhere('t1.project')->eq($this->session->project)->fi()
+            ->beginIF($type)->andWhere('t1.type')->eq($type)->fi()
+            ->beginIF($branch !== 'all')->andWhere('t1.branch')->eq($branch)->fi()
+            ->beginIF($moduleIdList)->andWhere('t1.module')->in($moduleIdList)->fi()
+            ->beginIF($auto == 'unit')->andWhere('t1.auto')->eq('unit')->fi()
+            ->beginIF($auto != 'unit')->andWhere('t1.auto')->ne('unit')->fi()
+            ->andWhere('t1.deleted')->eq('0')
+            ->orderBy($orderBy)->page($pager)
+            ->fetchAll('id');
+    }
+
+    /**
      * Get case info by ID.
      *
      * @param  int    $caseID
@@ -483,18 +518,20 @@ class testcaseModel extends model
      * @param  string     $browseType
      * @param  int        $queryID
      * @param  int        $moduleID
+     * @param  string     $caseType
      * @param  string     $sort
      * @param  object     $pager
      * @param  string     $auto   no|unit
      * @access public
      * @return array
      */
-    public function getTestCases($productID, $branch, $browseType, $queryID, $moduleID, $sort, $pager, $auto = 'no')
+    public function getTestCases($productID, $branch, $browseType, $queryID, $moduleID, $caseType = '', $sort = 'id_desc', $pager = null, $auto = 'no')
     {
         /* Set modules and browse type. */
         $modules    = $moduleID ? $this->loadModel('tree')->getAllChildId($moduleID) : '0';
         $browseType = ($browseType == 'bymodule' and $this->session->caseBrowseType and $this->session->caseBrowseType != 'bysearch') ? $this->session->caseBrowseType : $browseType;
         $group      = $this->lang->navGroup->testcase;
+        $auto       = $this->cookie->showAutoCase ? 'auto' : $auto;
 
         /* By module or all cases. */
         $cases = array();
@@ -502,11 +539,11 @@ class testcaseModel extends model
         {
             if($this->app->tab == 'project')
             {
-                $cases = $this->getModuleProjectCases($productID, $branch, $modules, $sort, $pager, $browseType, $auto);
+                $cases = $this->getModuleProjectCases($productID, $branch, $modules, $browseType, $auto, $caseType, $sort, $pager);
             }
             else
             {
-                $cases = $this->getModuleCases($productID, $branch, $modules, $sort, $pager, $browseType, $auto);
+                $cases = $this->getModuleCases($productID, $branch, $modules, $browseType, $auto, $caseType, $sort, $pager);
             }
         }
         /* Cases need confirmed. */
@@ -524,6 +561,8 @@ class testcaseModel extends model
                 ->beginIF($modules)->andWhere('t1.module')->in($modules)->fi()
                 ->beginIF($auto != 'unit')->andWhere('t1.auto')->ne('unit')->fi()
                 ->beginIF($auto == 'unit')->andWhere('t1.auto')->eq('unit')->fi()
+                ->beginIF(!$this->cookie->showAutoCase)->andWhere('t1.auto')->ne('auto')->fi()
+                ->beginIF($caseType)->andWhere('t1.type')->eq($caseType)->fi()
                 ->orderBy($sort)
                 ->page($pager, 't1.id')
                 ->fetchAll();

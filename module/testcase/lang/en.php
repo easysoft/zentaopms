@@ -95,6 +95,9 @@ $lang->testcase->deleted          = 'Deleted';
 $lang->testcase->browseUnits      = 'Unit Test';
 $lang->testcase->suite            = 'Test Suite';
 $lang->testcase->executionStatus  = 'executionStatus';
+$lang->testcase->caseType         = 'Case Type';
+$lang->testcase->allType          = 'All Types';
+$lang->testcase->showAutoCase     = 'Show Automated Test Cases';
 
 $lang->case = $lang->testcase;  // For dao checking using. Because 'case' is a php keywords, so the module name is testcase, table name is still case.
 
@@ -250,6 +253,7 @@ $lang->testcase->action->unlinkedfromproject   = array('main' => '$date, 由 <st
 $lang->testcase->action->linked2execution      = array('main' => '$date, 由 <strong>$actor</strong> 关联到' . $lang->executionCommon . ' <strong>$extra</strong>。');
 $lang->testcase->action->unlinkedfromexecution = array('main' => '$date, 由 <strong>$actor</strong> 从' . $lang->executionCommon . ' <strong>$extra</strong> 移除。');
 
+$lang->testcase->featureBar['browse']['casetype']    = $lang->testcase->caseType;
 $lang->testcase->featureBar['browse']['all']         = $lang->testcase->allCases;
 $lang->testcase->featureBar['browse']['wait']        = 'Waiting';
 $lang->testcase->featureBar['browse']['needconfirm'] = $lang->testcase->needConfirm;
@@ -257,4 +261,5 @@ $lang->testcase->featureBar['browse']['group']       = 'Group View';
 $lang->testcase->featureBar['browse']['suite']       = 'Suite';
 $lang->testcase->featureBar['browse']['zerocase']    = 'Zero Case Story';
 $lang->testcase->featureBar['browse']['browseunits'] = 'Unit Test';
+$lang->testcase->featureBar['browse']['autocase']    = $lang->testcase->showAutoCase;
 $lang->testcase->featureBar['groupcase']             = $lang->testcase->featureBar['browse'];

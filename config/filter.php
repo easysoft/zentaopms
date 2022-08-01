@@ -299,14 +299,16 @@ $filter->execution->story->cookie['storyBranchParam']    = 'int';
 $filter->execution->story->cookie['executionStoryOrder'] = 'code';
 $filter->execution->export->cookie['checkedItem']        = 'reg::checked';
 
-$filter->testcase->browse->cookie['caseModule']     = 'int';
-$filter->testcase->browse->cookie['caseSuite']      = 'int';
-$filter->testcase->browse->cookie['preBranch']      = 'reg::word';
-$filter->testcase->create->cookie['lastCaseModule'] = 'int';
-$filter->testcase->default->cookie['lastProduct']   = 'int';
-$filter->testcase->default->cookie['preProductID']  = 'int';
-$filter->testcase->export->cookie['checkedItem']    = 'reg::checked';
-$filter->testcase->groupcase->cookie['preBranch']   = 'reg::word';
+$filter->testcase->browse->cookie['caseModule']      = 'int';
+$filter->testcase->browse->cookie['caseSuite']       = 'int';
+$filter->testcase->browse->cookie['preBranch']       = 'reg::word';
+$filter->testcase->browse->cookie['showAutoCase']    = 'int';
+$filter->testcase->create->cookie['lastCaseModule']  = 'int';
+$filter->testcase->default->cookie['lastProduct']    = 'int';
+$filter->testcase->default->cookie['preProductID']   = 'int';
+$filter->testcase->export->cookie['checkedItem']     = 'reg::checked';
+$filter->testcase->groupcase->cookie['preBranch']    = 'reg::word';
+$filter->testcase->groupcase->cookie['showAutoCase'] = 'int';
 
 $filter->testreport->default->cookie['lastProduct']  = 'int';
 $filter->testreport->default->cookie['lastProject']  = 'int';

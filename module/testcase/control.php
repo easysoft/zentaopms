@@ -78,6 +78,7 @@ class testcase extends control
      * @param  int|string $branch
      * @param  string     $browseType
      * @param  int        $param
+     * @param  string     $caseType
      * @param  string     $orderBy
      * @param  int        $recTotal
      * @param  int        $recPerPage
@@ -86,7 +87,7 @@ class testcase extends control
      * @access public
      * @return void
      */
-    public function browse($productID = 0, $branch = '', $browseType = 'all', $param = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1, $projectID = 0)
+    public function browse($productID = 0, $branch = '', $browseType = 'all', $param = 0, $caseType = '', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1, $projectID = 0)
     {
         $this->loadModel('datatable');
 
@@ -142,11 +143,11 @@ class testcase extends control
         $sort  = common::appendOrder($orderBy);
 
         /* Get test cases. */
-        $cases = $this->testcase->getTestCases($productID, $branch, $browseType, $browseType == 'bysearch' ? $queryID : $suiteID, $moduleID, $sort, $pager);
+        $cases = $this->testcase->getTestCases($productID, $branch, $browseType, $browseType == 'bysearch' ? $queryID : $suiteID, $moduleID, $caseType, $sort, $pager);
         if(empty($cases) and $pageID > 1)
         {
             $pager = pager::init(0, $recPerPage, 1);
-            $cases = $this->testcase->getTestCases($productID, $branch, $browseType, $browseType == 'bysearch' ? $queryID : $suiteID, $moduleID, $sort, $pager);
+            $cases = $this->testcase->getTestCases($productID, $branch, $browseType, $browseType == 'bysearch' ? $queryID : $suiteID, $moduleID, $caseType, $sort, $pager);
         }
 
         /* save session .*/
@@ -216,6 +217,7 @@ class testcase extends control
         $this->view->orderBy         = $orderBy;
         $this->view->browseType      = $browseType;
         $this->view->param           = $param;
+        $this->view->caseType        = $caseType;
         $this->view->cases           = $cases;
         $this->view->branch          = (!empty($product) and $product->type != 'normal') ? $branch : 0;
         $this->view->branchOption    = $branchOption;
@@ -234,11 +236,14 @@ class testcase extends control
      * Group case.
      *
      * @param  int    $productID
+     * @param  string $branch
      * @param  string $groupBy
+     * @param  int    $projectID
+     * @param  string $caseType
      * @access public
      * @return void
      */
-    public function groupCase($productID = 0, $branch = '', $groupBy = 'story', $projectID = 0)
+    public function groupCase($productID = 0, $branch = '', $groupBy = 'story', $projectID = 0, $caseType = '')
     {
         $groupBy   = empty($groupBy) ? 'story' : $groupBy;
         $productID = $this->product->saveState($productID, $this->products);
@@ -255,7 +260,7 @@ class testcase extends control
 
         $this->session->set('caseList', $this->app->getURI(true), $this->app->tab);
 
-        $cases = $this->testcase->getModuleCases($productID, $branch, 0, $groupBy);
+        $cases = $this->testcase->getModuleCases($productID, $branch, 0, '', 'no', $caseType, $groupBy);
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'testcase', false);
         $cases = $this->loadModel('story')->checkNeedConfirm($cases);
         $cases = $this->testcase->appendData($cases);
@@ -292,6 +297,7 @@ class testcase extends control
         $this->view->moduleID    = 0;
         $this->view->branch      = $branch;
         $this->view->product     = $this->product->getByID($productID);
+        $this->view->caseType    = $caseType;
         $this->display();
     }
 
@@ -548,7 +554,7 @@ class testcase extends control
             $currentModule = $this->app->tab == 'project' ? 'project'  : 'testcase';
             $currentMethod = $this->app->tab == 'project' ? 'testcase' : 'browse';
             $projectParam  = $this->app->tab == 'project' ? "projectID={$this->session->project}&" : '';
-            return print(js::locate($this->createLink($currentModule, $currentMethod, $projectParam . "productID=$productID&branch=$branch&browseType=all&param=0&orderBy=id_desc"), 'parent'));
+            return print(js::locate($this->createLink($currentModule, $currentMethod, $projectParam . "productID=$productID&branch=$branch&browseType=all&param=0&caseType=&orderBy=id_desc"), 'parent'));
         }
         if(empty($this->products)) $this->locate($this->createLink('product', 'create'));
 
