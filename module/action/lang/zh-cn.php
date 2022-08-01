@@ -128,6 +128,7 @@ $lang->action->objectTypes['whitelist']        = '白名单';
 $lang->action->objectTypes['pipeline']         = 'GitLab服务器';
 $lang->action->objectTypes['gitlab']           = 'GitLab服务器';
 $lang->action->objectTypes['gitea']            = 'Gitea服务器';
+$lang->action->objectTypes['gogs']             = 'Gogs服务器';
 $lang->action->objectTypes['jenkins']          = 'Jenkins';
 $lang->action->objectTypes['mr']               = '合并请求';
 $lang->action->objectTypes['gitlabproject']    = 'GitLab项目';
@@ -138,6 +139,7 @@ $lang->action->objectTypes['gitlabbranchpriv'] = 'GitLab保护分支';
 $lang->action->objectTypes['gitlabtag']        = 'GitLab标签';
 $lang->action->objectTypes['gitlabtagpriv']    = 'GitLab标签保护';
 $lang->action->objectTypes['giteauser']        = 'Gitea用户';
+$lang->action->objectTypes['gogsuser']         = 'Gogs用户';
 $lang->action->objectTypes['kanbanspace']      = '看板空间';
 $lang->action->objectTypes['kanban']           = '看板';
 $lang->action->objectTypes['kanbanregion']     = '看板区域';
@@ -648,6 +650,10 @@ $lang->action->dynamicAction->gitlab['deleted'] = '删除GitLab服务器';
 $lang->action->dynamicAction->gitea['created'] = '创建Gitea服务器';
 $lang->action->dynamicAction->gitea['edited']  = '编辑Gitea服务器';
 $lang->action->dynamicAction->gitea['deleted'] = '删除Gitea服务器';
+
+$lang->action->dynamicAction->gogs['created'] = '创建Gogs服务器';
+$lang->action->dynamicAction->gogs['edited']  = '编辑Gogs服务器';
+$lang->action->dynamicAction->gogs['deleted'] = '删除Gogs服务器';
 
 /* 用来生成相应对象的链接。*/
 $lang->action->label->product     = $lang->productCommon . '|product|view|productID=%s';

@@ -69,7 +69,8 @@ $lang->moduleOrder[215] = 'message';
 $lang->moduleOrder[220] = 'gitlab';
 $lang->moduleOrder[225] = 'mr';
 $lang->moduleOrder[230] = 'app';
-$lang->moduleOrder[235] = 'gitea';
+$lang->moduleOrder[235] = 'gogs';
+$lang->moduleOrder[240] = 'gitea';
 
 $lang->resource = new stdclass();
 
@@ -1385,6 +1386,22 @@ $lang->gitlab->methodOrder[140] = 'manageTagPriv';
 $lang->gitlab->methodOrder[145] = 'browseTag';
 $lang->gitlab->methodOrder[150] = 'createTag';
 $lang->gitlab->methodOrder[155] = 'deleteTag';
+
+/* Gogs. */
+$lang->resource->gogs = new stdclass();
+$lang->resource->gogs->browse   = 'browse';
+$lang->resource->gogs->create   = 'create';
+$lang->resource->gogs->edit     = 'edit';
+$lang->resource->gogs->view     = 'view';
+$lang->resource->gogs->delete   = 'delete';
+$lang->resource->gogs->bindUser = 'bindUser';
+
+$lang->gogs->methodOrder[5]  = 'browse';
+$lang->gogs->methodOrder[10] = 'create';
+$lang->gogs->methodOrder[15] = 'edit';
+$lang->gogs->methodOrder[20] = 'view';
+$lang->gogs->methodOrder[25] = 'delete';
+$lang->gogs->methodOrder[30] = 'bindUser';
 
 /* Gitea. */
 $lang->resource->gitea = new stdclass();
