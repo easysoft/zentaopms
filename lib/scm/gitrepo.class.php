@@ -603,7 +603,8 @@ class GitRepo
     {
         $url      = new stdclass();
         $remote   = execCmd(escapeCmd("$this->client remote -v"), 'array');
-        $pregHttp = '/http(s)?:\/\/(www\.)?[a-zA-Z0-9][-a-zA-Z0-9]{0,62}(\.[a-zA-Z0-9][-a-zA-Z0-9]{0,62})+(:\d+)*(\/\w+)*\.git/';
+        if(strpos($remote[0], 'oauth2:')) $remote[0] = preg_replace('/oauth2.*@/', '', $remote[0]);
+        $pregHttp = '/http(s)?:\/\/(www\.)?[a-zA-Z0-9][-a-zA-Z0-9]{0,62}(\.[a-zA-Z0-9][-a-zA-Z0-9]{0,62})+(:\d+)*(\/\w+)*(\.git)?/';
         $pregSSH  = '/ssh:\/\/git@[a-zA-Z0-9][-a-zA-Z0-9]{0,62}(\.[a-zA-Z0-9][-a-zA-Z0-9]{0,62})+(:\d+)*(\/\w+)*\.git/';
 
         if(preg_match($pregHttp, $remote[0], $matches)) $url->http = $matches[0];
