@@ -1390,26 +1390,12 @@ class repo extends control
             $this->scm->setEngine($repo);
             $url = $this->scm->getDownloadUrl($branch);
         }
-        elseif(in_array($repo->SCM, array('Gitea', 'Gogs')))
+        elseif($repo->SCM == 'Gitea')
         {
-            $url = "$repo->codePath/archive/{$branch}.zip";
+            $api = $this->loadModel('gitea')->getApiRoot($repo->serviceHost);
+            $url = sprintf($api, "/repos/{$repo->serviceProject}/archive/{$branch}.zip");
         }
-        elseif($repo->SCM == 'Git')
-        {
-            $gitDir = scandir($repo->path);
-            $files  = '';
-            foreach($gitDir as $path)
-            {
-                if(!in_array($path, array('.', '..', '.git'))) $files .= $repo->path . DS . "$path,";
-            }
-
-            $this->app->loadClass('pclzip', true);
-            $zip = new pclzip($fileName);
-            if($zip->create($files, PCLZIP_OPT_REMOVE_PATH, $repo->path) === 0) return print(js::alert($zip->errorInfo()) . js::close());
-
-            $url = $this->config->webRoot . $this->app->getAppName() . 'data' . DS . 'repo' . DS . $repo->name . '.zip';
-        }
-        else
+        elseif($repo->SCM == 'Subversion')
         {
             /* Checkout repo. */
             chdir($savePath);
@@ -1424,6 +1410,21 @@ class repo extends control
             $this->app->loadClass('pclzip', true);
             $zip = new pclzip($fileName);
             if($zip->create($repoDir, PCLZIP_OPT_REMOVE_PATH, $repoDir) === 0) return print(js::alert($zip->errorInfo()) . js::close());
+
+            $url = $this->config->webRoot . $this->app->getAppName() . 'data' . DS . 'repo' . DS . $repo->name . '.zip';
+        }
+        else
+        {
+            $gitDir = scandir($repo->path);
+            $files  = '';
+            foreach($gitDir as $path)
+            {
+                if(!in_array($path, array('.', '..', '.git'))) $files .= $repo->path . DS . "$path,";
+            }
+
+            $this->app->loadClass('pclzip', true);
+            $zip = new pclzip($fileName);
+            if($zip->create($files, PCLZIP_OPT_REMOVE_PATH, $repo->path) === 0) return print(js::alert($zip->errorInfo()) . js::close());
 
             $url = $this->config->webRoot . $this->app->getAppName() . 'data' . DS . 'repo' . DS . $repo->name . '.zip';
         }
