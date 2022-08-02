@@ -69,8 +69,8 @@
           <th><?php echo $lang->project->budget;?></th>
           <td>
             <div class='input-group'>
-              <?php $placeholder = ($parentProgram and $parentProgram->budget != 0) ? 'placeholder=' . $lang->program->parentBudget . zget($lang->project->currencySymbol, $parentProgram->budgetUnit) . $availableBudget : '';?>
-              <?php echo html::input('budget', '', "class='form-control' maxlength='10' " . (strpos($requiredFields, 'budget') !== false ? 'required ' : '') . $placeholder);?>
+              <?php $placeholder = ($parentProgram and $parentProgram->budget != 0) ? 'placeholder="' . $lang->program->parentBudget . zget($lang->project->currencySymbol, $parentProgram->budgetUnit) . $availableBudget . '"' : '';?>
+              <?php echo html::input('budget', '', "class='form-control' onchange='budgetOverrunTips($availableBudget)' maxlength='10' " . (strpos($requiredFields, 'budget') !== false ? 'required ' : '') . $placeholder);?>
               <?php if($parentProgram):?>
               <span class='input-group-addon'><?php echo zget($budgetUnitList, $parentProgram->budgetUnit);?></span>
               <?php else:?>
@@ -78,8 +78,9 @@
               <?php echo html::select('budgetUnit', $budgetUnitList, $config->project->defaultCurrency, "class='form-control'");?>
               <?php endif;?>
             </div>
+            <span id='programBudget' class='text-remind hidden'><?php echo $lang->project->budgetOverrun;?></span>
           </td>
-          <td>
+          <td class='undetermined'>
             <div class="checkbox-primary c-future <?php echo strpos($requiredFields, 'budget') !== false ? 'hidden' : '';?>">
               <input type='checkbox' id='future' name='future' value='1' />
               <label for='future'><?php echo $lang->project->future;?></label>
@@ -145,7 +146,7 @@
           </td>
         </tr>
         <tr>
-          <th><?php echo $lang->execution->linkPlan;?></th>
+          <th id='linkPlan'><?php echo $lang->execution->linkPlan;?></th>
           <td colspan="3" id="plansBox">
             <div class='row'>
               <?php if($copyProjectID):?>

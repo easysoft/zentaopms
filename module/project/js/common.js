@@ -324,6 +324,12 @@ function setBudgetTipsAndAclList(programID)
     }
 }
 
+function budgetOverrunTips(budgetLeft)
+{
+    var budget = $('#budget').val();
+    budget > budgetLeft ? $('#programBudget').removeClass('hidden') : $('#programBudget').addClass('hidden');
+}
+
 $(document).on('change', "#plansBox select[name^='plans']", function()
 {
     var $plan = $(this);

@@ -75,8 +75,8 @@
           <th><?php echo $lang->project->budget;?></th>
           <td>
             <div class='input-group'>
-              <?php $placeholder = ($parentProgram and $parentProgram->budget != 0) ? 'placeholder=' . $lang->project->parentBudget . zget($lang->project->currencySymbol, $parentProgram->budgetUnit) . $availableBudget : '';?>
-              <?php echo html::input('budget', $project->budget != 0 ? $project->budget : '', "class='form-control' maxlength='10' " . (strpos($requiredFields, 'budget') !== false ? 'required ' : '') . ($project->budget == 0 ? 'disabled ' : '') . $placeholder);?>
+              <?php $placeholder = ($parentProgram and $parentProgram->budget != 0) ? 'placeholder="' . $lang->project->parentBudget . zget($lang->project->currencySymbol, $parentProgram->budgetUnit) . $availableBudget . '"' : '';?>
+              <?php echo html::input('budget', $project->budget != 0 ? $project->budget : '', "class='form-control' onchange='budgetOverrunTips($availableBudget)' maxlength='10' " . (strpos($requiredFields, 'budget') !== false ? 'required ' : '') . ($project->budget == 0 ? 'disabled ' : '') . $placeholder);?>
               <?php if($parentProgram):?>
               <span class='input-group-addon'><?php echo zget($budgetUnitList, $project->budgetUnit);?></span>
               <?php else:?>
@@ -84,8 +84,9 @@
               <?php echo html::select('budgetUnit', $budgetUnitList, $project->budgetUnit, "class='form-control'");?>
               <?php endif;?>
             </div>
+            <span id='programBudget' class='text-remind hidden'><?php echo $lang->project->budgetOverrun;?></span>
           </td>
-          <td>
+          <td class='undetermined'>
             <div class='checkbox-primary'>
               <input type='checkbox' id='future' name='future' value='1' <?php if($project->budget == 0) echo 'checked';?> />
               <label for='future'><?php echo $lang->project->future;?></label>
@@ -153,7 +154,7 @@
           </td>
         </tr>
         <tr>
-          <th><?php echo $lang->execution->linkPlan;?></th>
+          <th id='linkPlan'><?php echo $lang->execution->linkPlan;?></th>
           <td id="plansBox" colspan="3">
             <div class='row'>
               <?php $i = 0;?>
