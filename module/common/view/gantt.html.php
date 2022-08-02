@@ -26,6 +26,7 @@ gantt.plugins({
     marker: true,
     critical_path: true,
     fullscreen: true,
-    tooltip: true
+    tooltip: true,
+    click_drag: true
 });
 </script>
