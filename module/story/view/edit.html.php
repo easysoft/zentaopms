@@ -267,9 +267,9 @@
                     {
                         foreach($story->linkStoryTitles as $linkStoryID => $linkStoryTitle)
                         {
-                            echo "<li><div class='checkbox-primary'>";
+                            echo "<li><div class='checkbox-primary' title='$linkStoryTitle'>";
                             echo "<input type='checkbox' checked='checked' name='" . $linkStoryField . "[]' value=$linkStoryID />";
-                            echo "<label>#{$linkStoryID} {$linkStoryTitle}</label>";
+                            echo "<label class='linkStoryTitle'>#{$linkStoryID} {$linkStoryTitle}</label>";
                             echo '</div></li>';
                         }
                     }
