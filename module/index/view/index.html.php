@@ -3,7 +3,7 @@
  * The html template file of index method of index module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2021 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Hao Sun <sunhao@cnezsoft.com>
  * @package     ZenTaoPMS
  * @version     $Id: index.html.php 1947 2011-06-29 11:58:03Z wwccss $
@@ -45,6 +45,7 @@ js::set('showFeatures', $showFeatures);
 #searchbox .dropdown-menu.show-quick-go.with-active {min-height: 180px;}
 <?php endif;?>
 </style>
+<?php if(strpos($_SERVER['HTTP_USER_AGENT'], 'xuanxuan') === false):?>
 <div id='menu'>
   <nav id='menuNav'>
     <ul class='nav nav-default' id='menuMainNav'>
@@ -77,6 +78,7 @@ js::set('showFeatures', $showFeatures);
     </ul>
   </div>
 </div>
+<?php endif;?>
 <div id='apps'>
 </div>
 <div id='appsBar'>

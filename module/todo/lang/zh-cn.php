@@ -3,7 +3,7 @@
  * The todo module zh-cn file of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     todo
  * @version     $Id: zh-cn.php 5022 2013-07-05 06:50:39Z chencongzhi520@gmail.com $
@@ -36,6 +36,7 @@ $lang->todo->cycleConfig  = "周期设置";
 $lang->todo->project      = "所属项目";
 $lang->todo->product      = "所属产品";
 $lang->todo->execution    = "所属{$lang->execution->common}";
+$lang->todo->changeDate   = "修改日期";
 
 $lang->todo->reasonList['story'] = "转{$lang->SRCommon}";
 $lang->todo->reasonList['task']  = "转任务";
@@ -70,6 +71,7 @@ $lang->todo->closedBy     = '由谁关闭';
 $lang->todo->closedDate   = '关闭时间';
 $lang->todo->deadline     = '过期时间';
 $lang->todo->deleted      = '已删除';
+$lang->todo->ditto        = '同上';
 
 $lang->todo->cycleDaysLabel  = '间隔天数';
 $lang->todo->beforeDaysLabel = '提前天数';
@@ -84,6 +86,7 @@ $lang->todo->specifiedDay = array(1 => 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13
 $lang->todo->confirmBug   = '该待办关联的是Bug #%s，需要修改它吗？';
 $lang->todo->confirmTask  = '该待办关联的是Task #%s，需要修改它吗？';
 $lang->todo->confirmStory = '该待办关联的是Story #%s，需要修改它吗？';
+$lang->todo->noOptions    = '您暂时没有待处理的%s，请重新选择待办类型。';
 
 $lang->todo->statusList['wait']   = '未开始';
 $lang->todo->statusList['doing']  = '进行中';

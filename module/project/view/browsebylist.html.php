@@ -3,7 +3,7 @@
  * The browsebylist view file of project module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2021 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Shujie Tian <tianshujie@easycorp.ltd>
  * @package     project
  * @version     $Id: browsebylist.html.php 4769 2021-07-23 11:16:21Z $
@@ -11,9 +11,9 @@
  */
 ?>
 <style>
+.export {margin-left: 0px !important;}
 .project-type-label.label-outline {width: 50px; min-width: 50px;}
 .project-type-label.label {overflow: unset !important; text-overflow: unset !important; white-space: unset !important;}
-
 .project-name {position: relative; display: flex; align-items: center;}
 .project-name > span,
 .project-name > span {flex: none;}
@@ -73,10 +73,12 @@
     <div class="table-empty-tip">
       <p>
         <span class="text-muted"><?php echo $lang->project->empty;?></span>
-        <?php if(!defined('TUTORIAL')):?>
-        <?php if(common::hasPriv('project', 'create') and $browseType != 'bysearch') common::printLink('project', 'createGuide', "programID=$programID", '<i class="icon icon-plus"></i> ' . $lang->project->create, '', 'class="btn btn-info" data-toggle="modal"');?>
-        <?php else:?>
-        <?php common::printLink('execution', 'create', '', '<i class="icon icon-plus"></i> ' . $lang->execution->create, '', 'class="btn btn-info"');?>
+        <?php if(empty($allProjectsNum)):?>
+          <?php if(!defined('TUTORIAL')):?>
+            <?php if(common::hasPriv('project', 'create') and $browseType != 'bysearch') common::printLink('project', 'createGuide', "programID=$programID", '<i class="icon icon-plus"></i> ' . $lang->project->create, '', 'class="btn btn-info" data-toggle="modal"');?>
+          <?php else:?>
+            <?php common::printLink('execution', 'create', '', '<i class="icon icon-plus"></i> ' . $lang->execution->create, '', 'class="btn btn-info"');?>
+          <?php endif;?>
         <?php endif;?>
       </p>
     </div>

@@ -3,7 +3,7 @@
  * The testtask view file of my module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     dashboard
  * @version     $Id$
@@ -40,7 +40,7 @@
         <th class='c-date'>     <?php common::printOrderLink('begin',     $orderBy, $vars, $lang->testtask->begin);?></th>
         <th class='c-date'>     <?php common::printOrderLink('end',       $orderBy, $vars, $lang->testtask->end);?></th>
         <th class='c-status'>   <?php common::printOrderLink('status',    $orderBy, $vars, $lang->statusAB);?></th>
-        <th class='c-actions-6'><?php echo $lang->actions;?></th>
+        <th class='c-actions-6 text-center'><?php echo $lang->actions;?></th>
       </tr>
     </thead>
     <tbody>
@@ -58,7 +58,7 @@
           common::printIcon('testtask',   'cases',    "taskID=$task->id", $task, 'list', 'sitemap', '', '', '', "data-app='qa'");
           common::printIcon('testtask',   'view',     "taskID=$task->id", '', 'list', 'list-alt', '', 'iframe', true, "data-width='90%'");
           common::printIcon('testtask',   'linkCase', "taskID=$task->id", $task, 'list', 'link', '', '', false, "data-app='qa'");
-          common::printIcon('testreport', 'browse',   "objectID=$task->product&objectType=product&extra=$task->id", $task, 'list', 'flag', '', '', false, "data-app='qa'");
+          common::printIcon('testreport', 'browse',   "objectID=$task->product&objectType=product&extra=$task->id", $task, 'list', 'summary', '', '', false, "data-app='qa'");
           common::printIcon('testtask',   'edit',     "taskID=$task->id", $task, 'list', '', '', 'iframe', true, "data-width='90%'");
           if(common::hasPriv('testtask', 'delete', $task))
           {

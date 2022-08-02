@@ -1,1 +1,4 @@
 #mainContent {padding-left: 0px; height: 500px;}
+#contactListMenu_chosen {vertical-align: unset;}
+#teamBox .input-group .input-group-btn {vertical-align: top;}
+.chosen-container .chosen-results {max-height: 200px;}

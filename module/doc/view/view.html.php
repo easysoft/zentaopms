@@ -3,7 +3,7 @@
  * The view of doc module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Jia Fu <fujia@cnezsoft.com>
  * @package     doc
  * @version     $Id: view.html.php 975 2010-07-29 03:30:25Z jajacn@126.com $
@@ -113,6 +113,10 @@ js::set('docID', $doc->id);
                   echo "<div class='url-href'>" . html::a($url, $url, '_target') . "</div>";
                   echo "</div></div>";
               }
+          }
+          elseif($doc->contentType == 'markdown')
+          {
+              echo "<textarea id='markdownContent'></textarea>";
           }
           else
           {
@@ -237,4 +241,19 @@ js::set('docID', $doc->id);
 </div>
 <?php js::set('canDeleteFile', common::hasPriv('doc', 'deleteFile'));?>
 <?php include '../../common/view/syntaxhighlighter.html.php';?>
+<?php if($doc->contentType == 'markdown'):?>
+<?php css::import($jsRoot . "markdown/simplemde.min.css");?>
+<?php js::import($jsRoot . 'markdown/simplemde.min.js'); ?>
+<?php js::set('markdownText', $doc->content);?>
+<script>
+$(function()
+{
+    var simplemde = new SimpleMDE({element: $("#markdownContent")[0],toolbar:false, status: false});
+    simplemde.value(String(markdownText));
+    simplemde.togglePreview();
+
+    $('#content .CodeMirror .editor-preview a').attr('target', '_blank');
+})
+</script>
+<?php endif;?>
 <?php include '../../common/view/footer.html.php';?>

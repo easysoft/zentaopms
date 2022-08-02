@@ -3,7 +3,7 @@
  * The control file of company module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     company
  * @version     $Id: control.php 5100 2013-07-12 00:25:23Z zhujinyonging@gmail.com $
@@ -72,6 +72,9 @@ class company extends control
 
         /* Get users. */
         $users = $this->company->getUsers($browseType, $type, $queryID, $deptID, $sort, $pager);
+
+        /* Process the sql, get the conditon partion, save it to session. */
+        $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'user', true);
 
         /* Remove passwd. */
         foreach($users as $user) unset($user->password);
@@ -188,7 +191,6 @@ class company extends control
         $this->session->set('riskList',        $uri, 'project');
         $this->session->set('opportunityList', $uri, 'project');
         $this->session->set('trainplanList',   $uri, 'project');
-        $this->session->set('executionList',   $uri, 'execution');
         $this->session->set('taskList',        $uri, 'execution');
         $this->session->set('buildList',       $uri, 'execution');
         $this->session->set('bugList',         $uri, 'qa');
@@ -221,6 +223,15 @@ class company extends control
 
         /* Get executions' list.*/
         $executions = $this->loadModel('execution')->getPairs(0, 'all', 'nocode');
+        $executionsIDList = array_keys($executions);
+        $executionsList = $this->execution->getByIdList($executionsIDList);
+        foreach($executionsList as $executionsID => $executionObj)
+        {
+            foreach($projects as $projectsID => $projectsName)
+            {
+                if($executionObj->project == $projectsID) $executions[$executionObj->id] = $projectsName . '/' . $executionObj->name;
+            }
+        }
         $executions = array($this->lang->execution->common) + $executions;
         $this->view->executions = $executions;
 

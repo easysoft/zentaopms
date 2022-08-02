@@ -6,13 +6,13 @@ if(empty($pmsVersion)) die("Please give me pms version.\n");
 /* Zip file pathes. */
 $basePath   = dirname(dirname(__FILE__));
 $fileList   = array();
-$fileList[] = "{$basePath}/ZenTaoPMS.$pmsVersion.php5.3_5.6.zip";
+$fileList[] = "{$basePath}/ZenTaoPMS.$pmsVersion.php5.4_5.6.zip";
 $fileList[] = "{$basePath}/ZenTaoPMS.$pmsVersion.php7.0.zip";
 $fileList[] = "{$basePath}/ZenTaoPMS.$pmsVersion.php7.1.zip";
 $fileList[] = "{$basePath}/ZenTaoPMS.$pmsVersion.php7.2_7.4.zip";
 $fileList[] = "{$basePath}/ZenTaoPMS.$pmsVersion.php8.0.zip";
 
-$fileList[] = "{$basePath}/ZenTaoALM.$pmsVersion.int.php5.3_5.6.zip";
+$fileList[] = "{$basePath}/ZenTaoALM.$pmsVersion.int.php5.4_5.6.zip";
 $fileList[] = "{$basePath}/ZenTaoALM.$pmsVersion.int.php7.0.zip";
 $fileList[] = "{$basePath}/ZenTaoALM.$pmsVersion.int.php7.1.zip";
 $fileList[] = "{$basePath}/ZenTaoALM.$pmsVersion.int.php7.2_7.4.zip";
@@ -30,7 +30,7 @@ foreach(array('zh-cn', 'en') as $langType)
     $dirName    = $langType == 'zh-cn' ? 'zentaopms' : 'zentaoalm';
 
     /* Cycle the php versions. */
-    foreach(array('5.3_5.6', '7.0', '7.1', '7.2_7.4', '8.0') as $phpVersion)
+    foreach(array('5.4_5.6', '7.0', '7.1', '7.2_7.4', '8.0') as $phpVersion)
     {
         /* File name. */
         $workDir   = "tmp/$packPrefix.{$version}.{$phpVersion}/";
@@ -60,9 +60,7 @@ foreach(array('zh-cn', 'en') as $langType)
 
         $command .= "cd ../../\n";
         $command .= "rpmbuild --define \"_topdir \${PWD}/rpmbuild\" -ba rpmbuild/SPECS/zentaopms.spec\n";
-        $command .= "cp rpmbuild/RPMS/noarch/$dirName-$version-1.noarch.rpm ./{$dirName}-{$version}-php{$phpVersion}-1.noarch.rpm\n";
-
-        $command .= "mv {$dirName}-{$version}-php{$phpVersion}-1.noarch.rpm ../../\n";
+        $command .= "cp rpmbuild/RPMS/noarch/$dirName-$version-1.noarch.rpm ../../{$packPrefix}.{$version}.php{$phpVersion}.1.noarch.rpm\n";
 
         $command .= "rm -rf rpmbuild\n";
 

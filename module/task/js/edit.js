@@ -12,12 +12,7 @@ $(function()
  */
 function loadAll(executionID)
 {
-    if(!changeExecutionConfirmed)
-    {
-        firstChoice = confirm(confirmChangeExecution);
-        changeExecutionConfirmed = true;    // Only notice the user one time.
-    }
-    if(changeExecutionConfirmed && firstChoice)
+    if(confirm(confirmChangeExecution))
     {
         loadModuleMenu(executionID);
         loadExecutionStories(executionID);
@@ -82,17 +77,29 @@ $(document).ready(function()
         if(checked)
         {
             $('#teamTr').removeClass('hidden');
+            $('.modeBox').removeClass('hidden');
+            $('#mode').removeAttr('disabled').trigger('chosen:updated');
             $('#parent').val('');
             $('#parent').trigger('chosen:updated');
             $('#parent').closest('tr').addClass('hidden');
             $('#estimate').attr('disabled', 'disabled');
+            $('#left').attr('disabled', 'disabled');
+
+            var mode = $('#mode').val();
+            if((mode == 'linear' && currentUser != oldAssignedTo) || !team[currentUser]) $('[name=assignedTo]').attr('disabled', 'disabled').trigger('chosen:updated');
         }
         else
         {
             $('#teamTr').addClass('hidden');
+            $('.modeBox').addClass('hidden');
+            $('#mode').attr('disabled', 'disabled').trigger('chosen:updated');
             $('#parent').closest('tr').removeClass('hidden');
             $('#estimate').removeAttr('disabled');
+            $('#left').removeAttr('disabled');
+            $('[name=assignedTo]').removeAttr('disabled').trigger('chosen:updated');
         }
+
+        updateAssignedTo();
     });
 
     /* Init task team manage dialog */
@@ -156,21 +163,19 @@ $('#confirmButton').click(function()
             if(i <= j) return;
             if(value == $(this).val()) $(this).closest('tr').addClass('hidden');
         })
-    })
+    });
+
     $('select[name^=team]').closest('tr.hidden').remove();
 
     var memberCount   = '';
-    var assignedTo    = '';
     var totalEstimate = 0;
     var totalConsumed = oldConsumed;
     var totalLeft     = 0;
+    var error         = false;
     $('select[name^=team]').each(function()
     {
         if($(this).find('option:selected').text() == '') return;
 
-        var account  = $(this).find('option:selected').val();
-        var realName = $(this).find('option:selected').text();
-        assignedTo += "<option value='" + account + "' title='" + realName + "'>" + realName + "</option>";
         memberCount++;
 
         estimate = parseFloat($(this).parents('td').next('td').find('[name^=teamEstimate]').val());
@@ -181,22 +186,84 @@ $('#confirmButton').click(function()
 
         left = parseFloat($(this).parents('td').next('td').find('[name^=teamLeft]').val());
         if(!isNaN(left)) totalLeft += left;
+
+        var requiredFieldList = ',' + requiredFields + ',';
+        if(requiredFieldList.indexOf(',estimate,') >= 0 && (estimate == 0 || isNaN(estimate)))
+        {
+            $(this).val('').trigger("chosen:updated");
+            alert(estimateNotEmpty);
+            error = true;
+            return false;
+        }
     })
-    $('#estimate').val(totalEstimate);
-    $('#consumedSpan').html(totalConsumed);
-    $('#left').val(totalLeft);
-    $('#assignedTo').html(assignedTo);
-    $('#assignedTo').trigger('chosen:updated');
+
+    if(error) return false;
 
     if(memberCount < 2)
     {
         alert(teamMemberError);
         return false;
     }
+
     if(totalLeft == 0 && (taskStatus == 'doing' || taskStatus == 'pause'))
     {
         alert(totalLeftError);
         return false;
     }
+
+    $('#estimate').val(totalEstimate);
+    $('#consumedSpan').html(totalConsumed);
+    $('#left').val(totalLeft);
+    updateAssignedTo();
+
     $('.close').click();
 });
+
+/**
+ * Update assignedTo.
+ *
+ * @access public
+ * @return void
+ */
+function updateAssignedTo()
+{
+    var html       = '';
+    var multiple   = $('#multiple').prop('checked');
+    var assignedTo = $('#assignedTo').val();
+    if(multiple)
+    {
+        var isTeamMember = false;
+        var mode         = $('#mode').val();
+        $('select[name^=team]').each(function()
+        {
+            if($(this).find('option:selected').text() == '') return;
+            if($(this).val() == currentUser) isTeamMember = true;
+
+            var account  = $(this).find('option:selected').val();
+            var realName = $(this).find('option:selected').text();
+            var selected = account == assignedTo ? 'selected' : '';
+
+            html += "<option value='" + account + "' title='" + realName + "'" + selected + ">" + realName + "</option>";
+        });
+
+        if(mode == 'multi' && isTeamMember)
+        {
+            $('[name=assignedTo]').removeAttr('disabled').trigger('chosen:updated');
+        }
+        else
+        {
+            if(currentUser != oldAssignedTo || !isTeamMember) $('[name=assignedTo]').attr('disabled', 'disabled').trigger('chosen:updated');
+        }
+    }
+    else
+    {
+        for(key in members)
+        {
+            var selected = key == assignedTo ? 'selected' : '';
+            html += "<option value='" + key + "' title='" + members[key] + "'" + selected + ">" + members[key] + "</option>";
+        }
+    }
+
+    $('#assignedTo').html(html);
+    $('#assignedTo').trigger('chosen:updated');
+}

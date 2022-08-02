@@ -49,13 +49,16 @@ $config->project->datatable->fieldList['name']['required'] = 'yes';
 $config->project->datatable->fieldList['name']['sort']     = 'no';
 $config->project->datatable->fieldList['name']['pri']      = '1';
 
-$config->project->datatable->fieldList['code']['title']    = 'code';
-$config->project->datatable->fieldList['code']['fixed']    = 'left';
-$config->project->datatable->fieldList['code']['width']    = '100';
-$config->project->datatable->fieldList['code']['minWidth'] = '180';
-$config->project->datatable->fieldList['code']['required'] = 'no';
-$config->project->datatable->fieldList['code']['sort']     = 'no';
-$config->project->datatable->fieldList['code']['pri']      = '1';
+if(!isset($config->setCode) or $config->setCode == 1)
+{
+    $config->project->datatable->fieldList['code']['title']    = 'code';
+    $config->project->datatable->fieldList['code']['fixed']    = 'left';
+    $config->project->datatable->fieldList['code']['width']    = '100';
+    $config->project->datatable->fieldList['code']['minWidth'] = '180';
+    $config->project->datatable->fieldList['code']['required'] = 'no';
+    $config->project->datatable->fieldList['code']['sort']     = 'no';
+    $config->project->datatable->fieldList['code']['pri']      = '1';
+}
 
 $config->project->datatable->fieldList['PM']['title']    = 'PM';
 $config->project->datatable->fieldList['PM']['fixed']    = 'no';
@@ -73,13 +76,13 @@ $config->project->datatable->fieldList['status']['pri']      = '2';
 
 $config->project->datatable->fieldList['begin']['title']    = 'begin';
 $config->project->datatable->fieldList['begin']['fixed']    = 'no';
-$config->project->datatable->fieldList['begin']['width']    = '90';
+$config->project->datatable->fieldList['begin']['width']    = '115';
 $config->project->datatable->fieldList['begin']['required'] = 'no';
 $config->project->datatable->fieldList['begin']['pri']      = '9';
 
 $config->project->datatable->fieldList['end']['title']    = 'end';
 $config->project->datatable->fieldList['end']['fixed']    = 'no';
-$config->project->datatable->fieldList['end']['width']    = '90';
+$config->project->datatable->fieldList['end']['width']    = '100';
 $config->project->datatable->fieldList['end']['required'] = 'no';
 $config->project->datatable->fieldList['end']['pri']      = '3';
 
@@ -134,7 +137,7 @@ $config->project->maxCheckList->waterfall = array('execution', 'design', 'doc', 
 
 $config->project->search['module']                   = 'project';
 $config->project->search['fields']['name']           = $lang->project->name;
-$config->project->search['fields']['code']           = $lang->project->code;
+if(!isset($config->setCode) or $config->setCode == 1) $config->project->search['fields']['code'] = $lang->project->code;
 $config->project->search['fields']['id']             = $lang->project->id;
 $config->project->search['fields']['model']          = $lang->project->model;
 $config->project->search['fields']['parent']         = $lang->project->parent;
@@ -152,7 +155,7 @@ $config->project->search['fields']['lastEditedDate'] = $lang->project->lastEdite
 $config->project->search['fields']['closedDate']     = $lang->project->closedDate;
 
 $config->project->search['params']['name']           = array('operator' => 'include', 'control' => 'input' , 'values' => '');
-$config->project->search['params']['code']           = array('operator' => '='      , 'control' => 'input' , 'values' => '');
+if(!isset($config->setCode) or $config->setCode == 1) $config->project->search['params']['code'] = array('operator' => '=', 'control' => 'input' , 'values' => '');
 $config->project->search['params']['id']             = array('operator' => '='      , 'control' => 'input' , 'values' => '');
 $config->project->search['params']['model']          = array('operator' => '='      , 'control' => 'select', 'values' => $lang->project->modelList);
 $config->project->search['params']['parent']         = array('operator' => '='      , 'control' => 'select', 'values' => '');

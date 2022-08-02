@@ -3,7 +3,7 @@
  * The view method view file of project module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     project
  * @version     $Id: view.html.php 4594 2013-03-13 06:16:02Z wyd621@gmail.com $
@@ -19,15 +19,17 @@
         <div class="panel block-dynamic" style="height: 280px">
           <div class="panel-heading">
             <div class="panel-title"><?php echo $lang->execution->latestDynamic;?></div>
+            <?php if($project->model != 'kanban' and common::hasPriv('project', 'dynamic')):?>
             <nav class="panel-actions nav nav-default">
               <li><?php common::printLink('project', 'dynamic', "projectID=$project->id&type=all", '<i class="icon icon-more icon-sm"></i>', '', "title=$lang->more");?></li>
             </nav>
+            <?php endif;?>
           </div>
           <div class="panel-body scrollbar-hover">
             <ul class="timeline timeline-tag-left no-margin">
               <?php foreach($dynamics as $action):?>
               <li <?php if($action->major) echo "class='active'";?>>
-                <div class='text-ellipsis'>
+                <div>
                   <span class="timeline-tag"><?php echo $action->date;?></span>
                   <span class="timeline-text"><?php echo zget($users, $action->actor) . ' ' . "<span class='label-action'>{$action->actionLabel}</span>" . $action->objectLabel . ' ' . html::a($action->objectLink, $action->objectName, '', "title='$action->objectName'");?></span>
                 </div>
@@ -41,9 +43,11 @@
         <div class="panel block-team" style="height: 280px">
           <div class="panel-heading">
             <div class="panel-title"><?php echo $lang->execution->relatedMember;?></div>
+            <?php if(common::hasPriv('project', 'team')):?>
             <nav class="panel-actions nav nav-default">
-              <li><?php common::printLink('project', 'manageMembers', "projectID=$project->id", '<i class="icon icon-more icon-sm"></i>', '', "title=$lang->more");?></li>
+              <li><?php common::printLink('project', 'team', "projectID=$project->id", '<i class="icon icon-more icon-sm"></i>', '', "title=$lang->more");?></li>
             </nav>
+            <?php endif;?>
           </div>
           <div class="panel-body">
             <div class="row row-grid">
@@ -107,7 +111,8 @@
       <div class="col-sm-12">
         <div class="cell">
           <div class="detail">
-            <h2 class="detail-title"><span class="label-id"><?php echo $project->id;?></span> <span class="label label-light label-outline"><?php echo $project->code;?></span> <?php echo $project->name;?></h2>
+            <?php $hiddenCode = (isset($config->setCode) and $config->setCode == 0) ? 'hidden' : '';?>
+            <h2 class="detail-title"><span class="label-id"><?php echo $project->id;?></span> <span class="label label-light label-outline <?php echo $hiddenCode;?>"><?php echo $project->code;?></span> <?php echo $project->name;?></h2>
             <div class="detail-content article-content">
               <div><span class="text-limit hidden" data-limit-size="40"><?php echo $project->desc;?></span><a class="text-primary text-limit-toggle small" data-text-expand="<?php echo $lang->expand;?>"  data-text-collapse="<?php echo $lang->collapse;?>"></a></div>
               <p>
@@ -123,6 +128,30 @@
               </p>
             </div>
           </div>
+          <?php if($this->config->systemMode == 'new'):?>
+          <div class="detail">
+            <div class="detail-title">
+              <strong><?php echo $lang->project->parent;?></strong>
+            </div>
+            <div class="detail-content">
+              <div class="row row-grid">
+                <div class="col-xs-12">
+                <?php if($project->grade > 1):?>
+                  <i class='icon icon-program text-muted'></i>
+                  <?php
+                  $names = '';
+                  foreach($programList as $id => $name)
+                  {
+                      $names .= common::hasPriv('program', 'product') ? html::a($this->createLink('program', 'product', "programID=$id"), $name) . '/ ' : $name . '/ ';
+                  }
+                  echo rtrim($names, '/ ');
+                  ?>
+                <?php endif;?>
+                </div>
+              </div>
+            </div>
+          </div>
+          <?php endif;?>
           <div class="detail">
             <div class="detail-title">
               <strong><?php echo $lang->project->manageProducts;?></strong>
@@ -146,10 +175,13 @@
             <div class="detail-content">
               <div class="row row-grid">
                 <?php foreach($products as $productID => $product):?>
-                <?php foreach($product->plans as $planID):?>
+                <?php foreach($product->plans as $planIDList):?>
+                <?php $planIDList = explode(',', $planIDList);?>
+                <?php foreach($planIDList as $planID):?>
                 <?php if(isset($planGroup[$productID][$planID])):?>
-                <div class="col-xs-12"><?php echo html::a($this->createLink('productplan', 'view', "planID={$planID}"), $product->name . '/' . $planGroup[$productID][$planID]);?></div>
+                <div class="col-xs-12"><?php echo html::a($this->createLink('productplan', 'view', "planID={$planID}"), "<i class='icon icon-calendar text-muted'></i> " . $product->name . '/' . $planGroup[$productID][$planID]);?></div>
                 <?php endif;?>
+                <?php endforeach;?>
                 <?php endforeach;?>
                 <?php endforeach;?>
               </div>
@@ -163,7 +195,7 @@
                   <tr class='statsTr'><td class='w-100px'></td><td></td><td></td><td></td></tr>
                   <tr>
                     <td colspan="4">
-                      <?php $progress = ($workhour->totalConsumed + $workhour->totalLeft) ? floor($workhour->totalConsumed / ($workhour->totalConsumed + $workhour->totalLeft) * 1000) / 1000 * 100 : 0;?>
+                      <?php $progress = $project->model == 'waterfall' ? $this->project->getWaterfallProgress($project->id) : (($workhour->totalConsumed + $workhour->totalLeft) ? floor($workhour->totalConsumed / ($workhour->totalConsumed + $workhour->totalLeft) * 1000) / 1000 * 100 : 0);?>
                       <?php echo $lang->project->progress;?> <?php echo $progress . $lang->percent;?> &nbsp;
                       <div class="progress inline-block">
                         <div class="progress-bar progress-bar-success" role="progressbar" aria-valuenow="<?php echo $progress;?>" aria-valuemin="0" aria-valuemax="100" style="width: <?php echo $progress . $lang->percent;?>"></div>

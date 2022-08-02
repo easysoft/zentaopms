@@ -3,7 +3,7 @@
  * The build view file of execution module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     execution
  * @version     $Id: build.html.php 4262 2013-01-24 08:48:56Z chencongzhi520@gmail.com $
@@ -72,19 +72,7 @@
           <td class="c-url" title="<?php echo $build->filePath?>"><?php echo strpos($build->filePath, 'http') === 0 ? html::a($build->filePath) : $build->filePath;?></td>
           <td class="c-date"><?php echo $build->date?></td>
           <td class="c-user em"><?php echo zget($users, $build->builder);?></td>
-          <td class="c-actions">
-            <?php
-            if(common::hasPriv('build', 'linkstory') and common::hasPriv('build', 'view') and common::canBeChanged('build', $build))
-            {
-                echo html::a($this->createLink('build', 'view', "buildID=$build->id&type=story&link=true"), "<i class='icon icon-link'></i>", '', "class='btn' title='{$lang->build->linkStory}'");
-            }
-            common::printIcon('testtask', 'create', "product=$build->product&execution=$execution->id&build=$build->id", $build, 'list', 'bullhorn');
-            $lang->execution->bug = $lang->execution->viewBug;
-            common::printIcon('execution', 'bug',  "execution=$execution->id&productID=$productID&orderBy=status&build=$build->id", $build, 'list');
-            common::printIcon('build', 'edit', "buildID=$build->id", $build, 'list');
-            common::printIcon('build', 'delete', "buildID=$build->id", $build, 'list', 'trash', 'hiddenwin');
-            ?>
-          </td>
+          <td class="c-actions"><?php echo $this->build->buildOperateMenu($build, 'browse', "executionID={$execution->id}&productID={$productID}");?></td>
         </tr>
         <?php endforeach;?>
         <?php endforeach;?>

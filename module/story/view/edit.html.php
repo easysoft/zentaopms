@@ -3,7 +3,7 @@
  * The edit view file of story module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     story
  * @version     $Id: edit.html.php 4645 2013-04-11 08:32:09Z chencongzhi520@gmail.com $
@@ -106,7 +106,7 @@
                       echo "<span class='input-group-addon'>";
                       echo html::a($this->createLink('tree', 'browse', "rootID=$story->product&view=story&currentModuleID=0&branch=$story->branch", '', true), $lang->tree->manage, '', "class='text-primary' data-toggle='modal' data-type='iframe' data-width='95%'");
                       echo '&nbsp; ';
-                      echo html::a("javascript:void(0)", $lang->refresh, '', "class='refresh' onclick='loadProductModules($story->product)'");
+                      echo html::a("javascript:void(0)", $lang->refreshIcon, '', "class='refresh' title='$lang->refresh' onclick='loadProductModules($story->product)'");
                       echo '</span>';
                   }
                   ?>
@@ -200,7 +200,7 @@
                 <th><?php echo $lang->story->mailto;?></th>
                 <td>
                   <div class='input-group'>
-                    <?php echo html::select('mailto[]', $users, str_replace(' ' , '', $story->mailto), "class='form-control chosen' multiple");?>
+                    <?php echo html::select('mailto[]', $users, str_replace(' ' , '', $story->mailto), "class='form-control picker-select' multiple");?>
                     <?php echo $this->fetch('my', 'buildContactLists');?>
                   </div>
                 </td>
@@ -216,12 +216,13 @@
               </tr>
               <tr>
                 <th><?php echo $lang->story->assignedTo;?></th>
-                <td><?php echo html::select('assignedTo', $users, $story->assignedTo, 'class="form-control chosen"');?></td>
+                <?php $assignedToList = $story->status == 'closed' ? $users + array('closed' => 'Closed') : $users;?>
+                <td><?php echo html::select('assignedTo', $assignedToList, $story->assignedTo, 'class="form-control chosen"');?></td>
               </tr>
               <?php if($isShowReviewer):?>
               <tr>
                 <th><?php echo $lang->story->reviewers;?></th>
-                <td><?php echo html::select('reviewer[]', $productReviewers, $reviewers, 'class="form-control chosen" multiple')?></td>
+                <td><?php echo html::select('reviewer[]', $productReviewers, $reviewers, 'class="form-control picker-select" multiple')?></td>
               </tr>
               <?php endif;?>
               <?php if($story->status == 'closed'):?>

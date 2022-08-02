@@ -7,31 +7,54 @@ $(function()
         $form.css('min-height', $form.height());
     })
 
-    $('#gitlabHost').change(function()
+    $('#repoForm').bind('DOMNodeInserted', function(e)
     {
-        host  = $('#gitlabHost').val();
-        url   = createLink('repo', 'ajaxgetgitlabprojects', "host=" + host + "&projectIdList=&filter=ALL");
+        if($("#clientLabel").length > 0)
+        {
+            if($("#client").val() !== '' && $("#client").val().indexOf(" ") == -1)
+            {
+                $("#clientLabel").css('color', '#0c64eb');
+                $("#client").attr('style', 'border-color: #0c64eb !important;box-shadow: 0 0 6px #0c64eb !important;');
+            }
+            else
+            {
+                $("#client").removeAttr("style");
+            }
+        }
+    });
+
+    $('#serviceHost').change(function()
+    {
+        var host = $('#serviceHost').val();
+        var url  = createLink('repo', 'ajaxGetProjects', "host=" + host);
         if(host == '') return false;
 
         $.get(url, function(response)
         {
-            $('#gitlabProject').html('').append(response);
-            $('#gitlabProject').chosen().trigger("chosen:updated");;
+            $('#serviceProject').html('').append(response);
+            $('#serviceProject').chosen().trigger("chosen:updated");;
         });
     });
 
-    $('#gitlabProject').change(function()
+    $('#serviceProject').change(function()
     {
         $option = $(this).find('option:selected');
         $('#name').val($option.data('name'));
     });
 
-    $('#gitlabHost').change();
+    $('#serviceHost').change();
 });
 
+/**
+ * Changed SCM.
+ *
+ * @param  string $scm
+ * @access public
+ * @return void
+ */
 function scmChanged(scm)
 {
-    if(scm == 'Git')
+    if(scm == 'Git' || scm == 'Gitea')
     {
         $('.account-fields').addClass('hidden');
 
@@ -46,6 +69,30 @@ function scmChanged(scm)
         $('.tips-svn').removeClass('hidden');
     }
 
-    $('tr.gitlab').toggle(scm == 'Gitlab');
-    $('tr.hide-gitlab').toggle(scm != 'Gitlab');
+    if(scm == 'Git' || scm == 'Subversion')
+    {
+        $('tr.service').toggle(false);
+        $('tr.hide-service').toggle(true);
+    }
+    else
+    {
+        $('tr.service').toggle(true);
+        if(scm == 'Gitea')
+        {
+            $('tr.hide-service:not(".hide-gitea")').toggle(true);
+            $('tr.hide-gitea').toggle(false);
+        }
+        else
+        {
+            $('tr.hide-service').toggle(false);
+        }
+
+        var url = createLink('repo', 'ajaxGetHosts', "scm=" + scm);
+        $.get(url, function(response)
+        {
+            $('#serviceHost').html(response);
+            $('#serviceHost').chosen().trigger("chosen:updated");;
+            $('#serviceHost').change();
+        });
+    }
 }

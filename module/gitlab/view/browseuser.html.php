@@ -3,7 +3,7 @@
  * The browse view file of gitlab module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2017 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Gang Liu <liugang@cnezsoft.com>
  * @package     gitlab
  * @version     $Id$
@@ -12,18 +12,22 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <div id="mainMenu" class="clearfix">
-  <div class='pull-left'>
-    <?php echo html::linkButton('<i class="icon icon-back icon-sm"></i> ' . $lang->goback, $this->createLink('gitlab', 'browse'), 'self', '','btn btn-secondary');?>
+  <?php echo $this->gitlab->getGitlabMenu($gitlabID, 'user');?>
+  <div class="btn-toolbar pull-left">
+    <form id='gitlabForm' method='post' class="not-watch">
+      <?php echo html::input('keyword', $keyword, "class='form-control' placeholder='{$lang->gitlab->placeholderSearch}' style='display: inline-block;width:auto;margin:0 10px'");?>
+      <a id="gitlabSearch" class="btn btn-primary"><?php echo $lang->gitlab->search?></a>
+    </form>
   </div>
   <div class="btn-toolbar pull-right">
-    <?php common::printLink('gitlab', 'createUser', "gitlabID=$gitlabID", "<i class='icon icon-plus'></i> " . $lang->gitlab->user->create, '', "class='btn btn-primary'");?>
+    <?php if($isAdmin) common::printLink('gitlab', 'createUser', "gitlabID=$gitlabID", "<i class='icon icon-plus'></i> " . $lang->gitlab->user->create, '', "class='btn btn-primary'");?>
   </div>
 </div>
 <?php if(empty($gitlabUserList)):?>
 <div class="table-empty-tip">
   <p>
     <span class="text-muted"><?php echo $lang->noData;?></span>
-    <?php echo html::a($this->createLink('gitlab', 'createProject', "gitlabID=$gitlabID"), "<i class='icon icon-plus'></i> " . $lang->gitlab->user->create, '', "class='btn btn-info'");?>
+    <?php if($isAdmin) echo html::a($this->createLink('gitlab', 'createProject', "gitlabID=$gitlabID"), "<i class='icon icon-plus'></i> " . $lang->gitlab->user->create, '', "class='btn btn-info'");?>
   </p>
 </div>
 <?php else:?>
@@ -34,17 +38,17 @@
         <tr>
           <?php $vars = "gitlabID=$gitlabID&orderBy=%s";?>
           <th class='c-id'><?php common::printOrderLink('id', $orderBy, $vars, $lang->gitlab->user->id);?></th>
-          <th class='c-name text-left w-60px'><?php common::printOrderLink('name', $orderBy, $vars, $lang->gitlab->user->name);?></th>
-          <th class='c-name text-left'></th>
-          <th class='text-left'><?php echo $lang->gitlab->user->createOn;?></th>
-          <th class='text-left'><?php echo $lang->gitlab->user->lastActivity;?></th>
-          <th class='c-actions-4'><?php echo $lang->actions;?></th>
+          <th class='c-name text w-60px'><?php common::printOrderLink('name', $orderBy, $vars, $lang->gitlab->user->name);?></th>
+          <th class='c-name text w-400px'></th>
+          <th class='text'><?php echo $lang->gitlab->user->createOn;?></th>
+          <th class='text'><?php echo $lang->gitlab->user->lastActivity;?></th>
+          <th class='c-actions-2'><?php echo $lang->actions;?></th>
         </tr>
       </thead>
       <tbody>
         <?php foreach ($gitlabUserList as $id => $gitlabUser): ?>
         <tr>
-          <td class='text-center'><?php echo $gitlabUser->id;?></td>
+          <td class='text'><?php echo $gitlabUser->id;?></td>
           <td class='w-60px'><?php echo html::image($gitlabUser->avatar, "height=40");?></td>
           <td class='text-left'>
               <strong><?php echo $gitlabUser->realname;?></strong>
@@ -54,8 +58,8 @@
           <td class='text' title='<?php echo substr($gitlabUser->lastActivityOn, 0, 10);?>'><?php echo substr($gitlabUser->lastActivityOn, 0, 10);?></td>
           <td class='c-actions text-left'>
             <?php
-            common::printLink('gitlab', 'editUser', "gitlabID=$gitlabID&userID=$gitlabUser->id", "<i class='icon icon-edit'></i> ", '', "title='{$lang->gitlab->user->edit}' class='btn btn-primary'");
-            if(common::hasPriv('gitlab', 'delete')) echo html::a($this->createLink('gitlab', 'deleteUser', "gitlabID=$gitlabID&userID=$gitlabUser->id"), '<i class="icon-trash"></i>', 'hiddenwin', "title='{$lang->gitlab->deleteUser}' class='btn'" . ($isAdmin ? '' : ' disabled'));
+            echo common::buildIconButton('gitlab', 'editUser', "gitlabID=$gitlabID&userID=$gitlabUser->id", '', 'list', 'edit', '', '', false, '', '', 0, $isAdmin);
+            echo common::buildIconButton('gitlab', 'deleteUser', "gitlabID=$gitlabID&userID=$gitlabUser->id", '', 'list', 'trash', 'hiddenwin', '', false, '', '', 0, $isAdmin);
             ?>
           </td>
         </tr>

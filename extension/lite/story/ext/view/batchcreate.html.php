@@ -3,7 +3,7 @@
  * The batch create view of story module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Yangyang Shi <shiyangyang@cnezsoft.com>
  * @package     story
  * @version     $Id$
@@ -46,7 +46,7 @@
             <th class='c-spec<?php echo zget($visibleFields, 'spec', ' hidden') . zget($requiredFields, 'spec', '', ' required');?>'><?php echo $lang->story->spec;?></th>
             <th class='c-pri<?php echo zget($requiredFields, 'pri', '', ' required');?>'><?php echo $lang->story->pri;?></th>
             <th class='c-estimate<?php echo zget($requiredFields, 'estimate', '', ' required');?>'><?php echo $lang->story->estimate;?></th>
-            <th style="width: 200px !important"><?php echo $lang->story->reviewedBy;?></th>
+            <th class="<?php if($forceReview) echo ' required'?>" style="width: 200px !important"><?php echo $lang->story->reviewedBy;?></th>
             <th class='c-keywords<?php echo zget($requiredFields, 'keywords', '', ' required');?>'><?php echo $lang->story->keywords;?></th>
             <?php
             $extendFields = $this->story->getFlowExtendFields();

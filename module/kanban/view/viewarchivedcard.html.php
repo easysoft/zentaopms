@@ -3,7 +3,7 @@
  * The viewarchivedcard file of kanban module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2021 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Shujie Tian <tianshujie@easycorp.ltd>
  * @package     kanban
  * @version     $Id: viewarchivedcard.html.php 935 2021-12-22 15:44:24Z $
@@ -16,6 +16,7 @@
 #archivedCards .kanban-item {border: 1px solid #ddd; border-radius: 4px; padding: 5px;}
 #archivedCards .kanban-item > .title {display: block; max-height: 38px; overflow: hidden; color: inherit; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;}
 #archivedCards .kanban-item > .title:hover {color: #2272eb}
+#archivedCards .kanban-item > .desc {color: #838a9d; overflow: hidden; white-space:nowrap; text-overflow:ellipsis; padding-top: 5px;}
 #archivedCards .kanban-item > .info {margin-top: 5px; position: relative;}
 #archivedCards .kanban-item > .info > .pri {height: 14px; border-width: 1px; font-size: 12px; line-height: 12px; min-width: 14px; padding: 0 1px;}
 #archivedCards .kanban-item > .info > .time {margin-left: 10px; font-size: 12px}
@@ -53,6 +54,7 @@ $app->loadLang('execution');
 $app->loadLang('release');
 $app->loadLang('build');
 $app->loadLang('productplan');
+js::set('systemMode', $this->config->systemMode);
 ?>
 <div class='panel'>
   <div class='panel-heading text-center'>
@@ -96,6 +98,7 @@ $app->loadLang('productplan');
         $name = isset($card->title) ? $card->title : $card->name;
         if(common::hasPriv($card->fromType, 'view')) echo html::a($this->createLink($card->fromType, 'view', "id=$card->fromID"), $name, '', "class='cardName' title='$name'");
         if(!common::hasPriv($card->fromType, 'view')) echo "<div class='cardName' title='$name'>$name</div>";
+        if($card->fromType == 'productplan' or $card->fromType == 'build') echo "<div class='desc' title='$card->desc'>$card->desc</div>";
         echo "<div class='info $card->fromType'>";
         if(isset($lang->{$card->fromType}->statusList[$card->objectStatus])) echo "<span class='label label-$card->objectStatus'>" . $lang->{$card->fromType}->statusList[$card->objectStatus] . '</span>';
         if(isset($card->date) and !helper::isZeroDate($card->date)) echo "<span class='time label label-light'>" . date("Y-m-d", strtotime($card->date)) . "</span>"
@@ -199,9 +202,11 @@ $(function()
         var icon  = '';
 
         if($item.children('.build').length)       icon = '<i class="icon icon-ver">';
-        if($item.children('.execution').length)   icon = '<i class="icon icon-run">';
         if($item.children('.productplan').length) icon = '<i class="icon icon-delay">';
         if($item.children('.release').length)     icon = '<i class="icon icon-publish">';
+
+        if($item.children('.execution').length && systemMode == 'new')     icon = '<i class="icon icon-run">';
+        if($item.children('.execution').length && systemMode == 'classic') icon = '<i class="icon icon-project">';
 
         $item.children('.cardName').prepend(icon);
     });

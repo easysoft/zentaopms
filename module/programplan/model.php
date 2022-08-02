@@ -3,7 +3,7 @@
  * The model file of programplan module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     programplan
  * @version     $Id: model.php 5079 2013-07-10 00:44:34Z chencongzhi520@gmail.com $
@@ -150,6 +150,7 @@ class programplanModel extends model
     public function getDataForGantt($executionID, $productID, $baselineID = 0, $selectCustom = '', $returnJson = true)
     {
         $this->loadModel('stage');
+        $this->loadModel('execution');
 
         $plans = $this->getStage($executionID, $productID);
         if($baselineID)
@@ -186,6 +187,8 @@ class programplanModel extends model
             $data->percent    = $plan->percent;
             $data->attribute  = zget($this->lang->stage->typeList, $plan->attribute);
             $data->milestone  = zget($this->lang->programplan->milestoneList, $plan->milestone);
+            $data->owner_id   = $plan->PM;
+            $data->status     = $this->processStatus('execution', $plan);
             $data->begin      = $start;
             $data->deadline   = $end;
             $data->realBegan  = helper::isZeroDate($plan->realBegan) ? '' : substr($plan->realBegan, 0, 10);
@@ -200,11 +203,11 @@ class programplanModel extends model
             if($data->start_date) $data->start_date = date('d-m-Y', strtotime($data->start_date));
             if($data->start_date == '' or $data->endDate == '') $data->duration = 0;
 
-            $datas['data'][]       = $data;
-            $stageIndex[$plan->id] = array('planID' => $plan->id, 'parent' => $plan->parent, 'progress' => array('totalConsumed' => 0, 'totalReal' => 0));
+            $datas['data'][$plan->id] = $data;
+            $stageIndex[$plan->id]    = array('planID' => $plan->id, 'parent' => $plan->parent, 'progress' => array('totalConsumed' => 0, 'totalReal' => 0));
         }
 
-        $taskSign = "<span>[ T ] </span>";
+        $taskSign = "<span class='task-label'>[ T ] </span>";
         $taskPri  = "<span class='label-pri label-pri-%s' title='%s'>%s</span> ";
 
         /* Judge whether to display tasks under the stage. */
@@ -215,8 +218,9 @@ class programplanModel extends model
 
         if(empty($selectCustom)) $selectCustom = $this->loadModel('setting')->getItem("owner={$owner}&module={$module}&section={$section}&key={$object}");
 
-        $tasks = array();
-        $tasks = $this->dao->select('*')->from(TABLE_TASK)->where('deleted')->eq(0)->andWhere('execution')->in($planIdList)->fetchAll('id');
+        $tasks     = $this->dao->select('*')->from(TABLE_TASK)->where('deleted')->eq(0)->andWhere('execution')->in($planIdList)->fetchAll('id');
+        $taskTeams = $this->dao->select('root,account')->from(TABLE_TEAM)->where('type')->eq('task')->andWhere('root')->in(array_keys($tasks))->fetchGroup('root', 'account');
+        $users     = $this->loadModel('user')->getPairs('noletter');
 
         if($baselineID)
         {
@@ -233,18 +237,27 @@ class programplanModel extends model
 
         foreach($tasks as $task)
         {
-            $start = helper::isZeroDate($task->estStarted) ? '' : $task->estStarted;
-            $end   = helper::isZeroDate($task->deadline)   ? '' : $task->deadline;
-
-            $realBegan = helper::isZeroDate($task->realStarted)  ? '' : substr($task->realStarted, 0, 10);
-            $realEnd   = helper::isZeroDate($task->finishedDate) ? '' : substr($task->finishedDate, 0, 10);
+            $execution = zget($plans, $task->execution, array());
             $priIcon   = sprintf($taskPri, $task->pri, $task->pri, $task->pri);
+
+            $estStart  = helper::isZeroDate($task->estStarted)  ? '' : $task->estStarted;
+            $estEnd    = helper::isZeroDate($task->deadline)    ? '' : $task->deadline;
+            $realBegan = helper::isZeroDate($task->realStarted) ? '' : substr($task->realStarted, 0, 10);
+            $realEnd   = (in_array($task->status, array('done', 'closed')) and !helper::isZeroDate($task->finishedDate)) ? substr($task->finishedDate, 0, 10) : '';
+
+            $start = $realBegan ? $realBegan : $estStart;
+            $end   = $realEnd   ? $realEnd   : $estEnd;
+            if(empty($start) and $execution) $start = $execution->begin;
+            if(empty($end)   and $execution) $end   = $execution->end;
+            if($start > $end) $end = $start;
 
             $data = new stdclass();
             $data->id           = $task->execution . '-' . $task->id;
             $data->type         = 'task';
             $data->text         = $taskSign . $priIcon . $task->name;
             $data->percent      = '';
+            $data->status       = $this->processStatus('task', $task);
+            $data->owner_id     = $task->assignedTo;
             $data->attribute    = '';
             $data->milestone    = '';
             $data->begin        = $start;
@@ -257,15 +270,24 @@ class programplanModel extends model
             $progress           = $task->consumed ? round($task->consumed / ($task->left + $task->consumed), 3) : 0;
             $data->progress     = $progress;
             $data->taskProgress = ($progress * 100) . '%';
-            $data->start_date   = $data->realBegan ? $data->realBegan : $data->begin;
-            $data->endDate      = $data->realEnd ? $data->realEnd : $data->deadline;
+            $data->start_date   = $start;
+            $data->endDate      = $end;
             $data->duration     = 0;
+
+            /* If multi task then show the teams. */
+            if($task->mode == 'multi' and !empty($taskTeams[$task->id]))
+            {
+                $teams     = array_keys($taskTeams[$task->id]);
+                $assigneds = array();
+                foreach($teams as $assignedTo) $assigneds[] = zget($users, $assignedTo);
+                $data->owner_id = join(',', $assigneds);
+            }
 
             if($data->endDate > $data->start_date) $data->duration = helper::diffDate($data->endDate, $data->start_date) + 1;
             if($data->start_date) $data->start_date = date('d-m-Y', strtotime($data->start_date));
             if($data->start_date == '' or $data->endDate == '') $data->duration = 0;
 
-            if(strpos($selectCustom, 'task') !== false) $datas['data'][] = $data;
+            if(strpos($selectCustom, 'task') !== false) $datas['data'][$data->id] = $data;
             foreach($stageIndex as $index => $stage)
             {
                 if($stage['planID'] == $task->execution)
@@ -282,9 +304,6 @@ class programplanModel extends model
                 }
             }
         }
-
-        /* Ceturns all the values from the stageIndex and indexes the array numerically. */
-        $stageIndex = array_values($stageIndex);
 
         /* Calculate the progress of the phase. */
         foreach($stageIndex as $index => $stage)
@@ -308,6 +327,8 @@ class programplanModel extends model
                 $datas['links'][] = $link;
             }
         }
+
+        $datas['data'] = isset($datas['data']) ? array_values($datas['data']) : array();
 
         return $returnJson ? json_encode($datas) : $datas;
     }
@@ -735,6 +756,10 @@ class programplanModel extends model
         /* Judgment of required items. */
         if($plan->begin == '0000-00-00') dao::$errors['begin'][] = sprintf($this->lang->error->notempty, $this->lang->programplan->begin);
         if($plan->end   == '0000-00-00') dao::$errors['end'][]   = sprintf($this->lang->error->notempty, $this->lang->programplan->end);
+        if(dao::isError()) return false;
+
+        if($projectID) $this->loadModel('execution')->checkBeginAndEndDate($projectID, $plan->begin, $plan->end);
+        if(dao::isError()) return false;
 
         $planChanged = ($oldPlan->name != $plan->name || $oldPlan->milestone != $plan->milestone || $oldPlan->begin != $plan->begin || $oldPlan->end != $plan->end);
 

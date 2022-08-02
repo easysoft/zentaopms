@@ -3,7 +3,7 @@
  * The testcase module English file of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     testcase
  * @version     $Id: en.php 4966 2013-07-02 02:59:25Z wyd621@gmail.com $
@@ -43,6 +43,9 @@ $lang->testcase->files            = 'Files';
 $lang->testcase->linkCase         = 'Linked Cases';
 $lang->testcase->linkCases        = 'Link Case';
 $lang->testcase->unlinkCase       = 'Unlink Cases';
+$lang->testcase->linkBug          = 'Linked Bugs';
+$lang->testcase->linkBugs         = 'Link Bug';
+$lang->testcase->unlinkBug        = 'Unlink Bugs';
 $lang->testcase->stage            = 'Phase';
 $lang->testcase->scriptedBy       = 'ScriptedBy';
 $lang->testcase->scriptedDate     = 'ScriptedDate';
@@ -91,6 +94,7 @@ $lang->testcase->mailto           = 'Mailto';
 $lang->testcase->deleted          = 'Deleted';
 $lang->testcase->browseUnits      = 'Unit Test';
 $lang->testcase->suite            = 'Test Suite';
+$lang->testcase->executionStatus  = 'executionStatus';
 
 $lang->case = $lang->testcase;  // For dao checking using. Because 'case' is a php keywords, so the module name is testcase, table name is still case.
 
@@ -139,6 +143,7 @@ $lang->testcase->groupName               = 'Group Name';
 $lang->testcase->step                    = 'Steps';
 $lang->testcase->stepChild               = 'Child Steps';
 $lang->testcase->viewAll                 = 'All Cases';
+$lang->testcase->importToLib             = "Import To Library";
 
 $lang->testcase->new = 'New';
 
@@ -220,6 +225,8 @@ $lang->testcase->resultList['blocked'] = 'Blocked';
 
 $lang->testcase->buttonToList = 'Back';
 
+$lang->testcase->whichLine        = 'Line No.%s : ';
+$lang->testcase->stepsEmpty       = 'Step %s cannot be empty.';
 $lang->testcase->errorEncode      = 'No data. Please select right encoding and upload again!';
 $lang->testcase->noFunction       = 'Iconv and mb_convert_encoding are not found. You cannot convert the data to the encoding you want!';
 $lang->testcase->noRequire        = "Row %s has“%s ”which is a required field and it should not be blank.";
@@ -228,9 +235,11 @@ $lang->testcase->noLibrary        = "No library exists. Please create one first.
 $lang->testcase->mustChooseResult = 'Review result is required.';
 $lang->testcase->noModule         = '<div>You have no modules.</div><div>Manage it now.</div>';
 $lang->testcase->noCase           = 'No cases yet. ';
+$lang->testcase->importedCases    = 'The case with ID%s has been imported in the same module and has been ignored.';
 
 $lang->testcase->searchStories = 'Enter to search for stories';
 $lang->testcase->selectLib     = 'Select Library';
+$lang->testcase->selectLibAB   = 'Select Library';
 
 $lang->testcase->action = new stdclass();
 $lang->testcase->action->fromlib               = array('main' => '$date, imported by <strong>$actor</strong> from <strong>$extra</strong>.');

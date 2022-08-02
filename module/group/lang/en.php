@@ -3,7 +3,7 @@
  * The group module English file of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     group
  * @version     $Id: en.php 4719 2013-05-03 02:20:28Z chencongzhi520@gmail.com $
@@ -20,13 +20,18 @@ $lang->group->managePriv         = 'Manage Privileges';
 $lang->group->managePrivByGroup  = 'Manage Privileges by Group';
 $lang->group->managePrivByModule = 'Manage Privileges by Module';
 $lang->group->byModuleTips       = '<span class="tips">(Press Shift/Ctrl to Multi-select)</span>';
+$lang->group->allTips            = 'After checking this option, the administrator can manage all objects in the system, including objects created later.';
 $lang->group->manageMember       = 'Manage Members';
 $lang->group->manageProjectAdmin = 'Manage Program Admins';
-$lang->group->confirmDelete      = 'Do you want to delete this user group?';
+$lang->group->confirmDelete      = "Do you want to delete '%s'?";
 $lang->group->successSaved       = 'Saved.';
 $lang->group->errorNotSaved      = 'Failed. Please select actions and groups.';
 $lang->group->viewList           = 'Access Sight';
+$lang->group->object             = 'Manage Object';
+$lang->group->manageProgram      = 'Manage Program';
 $lang->group->manageProject      = 'Manage Project';
+$lang->group->manageExecution    = 'Manage ' . $lang->execution->common;
+$lang->group->manageProduct      = 'Manage ' . $lang->productCommon;
 $lang->group->programList        = 'Access Program';
 $lang->group->productList        = 'Access Product';
 $lang->group->projectList        = 'Access Project';
@@ -39,6 +44,9 @@ $lang->group->noneExecution      = "No {$lang->execution->common}";
 $lang->group->project            = 'Project';
 $lang->group->group              = 'Group';
 $lang->group->more               = 'More';
+$lang->group->allCheck           = 'All';
+$lang->group->noGroup            = 'No group';
+$lang->group->repeat             = "『%s』『%s』exists.Please adjust it and try again.";
 
 global $config;
 if($config->systemMode == 'new') $lang->group->noneProject = 'No Project';

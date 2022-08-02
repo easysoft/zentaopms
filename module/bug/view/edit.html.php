@@ -3,7 +3,7 @@
  * The edit file of bug module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     bug
  * @version     $Id: edit.html.php 4259 2013-01-24 05:49:40Z wyd621@gmail.com $
@@ -27,6 +27,8 @@ js::set('oldResolvedBuild'       , $bug->resolvedBuild);
 js::set('systemMode'             , $config->systemMode);
 js::set('confirmUnlinkBuild'     , sprintf($lang->bug->confirmUnlinkBuild, zget($resolvedBuilds, $bug->resolvedBuild)));
 js::set('tab'                    , $this->app->tab);
+js::set('bugBranch'              , $bug->branch);
+js::set('isClosedBug'            , $bug->status == 'closed');
 if($this->app->tab == 'execution') js::set('objectID', $bug->execution);
 if($this->app->tab == 'project')   js::set('objectID', $bug->project);
 ?>
@@ -110,7 +112,7 @@ if($this->app->tab == 'project')   js::set('objectID', $bug->project);
                         echo "<span class='input-group-addon'>";
                         echo html::a($this->createLink('tree', 'browse', "rootID=$productID&view=bug&currentModuleID=0&branch=$bug->branch", '', true), $lang->tree->manage, '', "class='text-primary' data-toggle='modal' data-type='iframe' data-width='95%'");
                         echo '&nbsp; ';
-                        echo html::a("javascript:void(0)", $lang->refresh, '', "class='refresh' onclick='loadProductModules($productID)'");
+                        echo html::a("javascript:void(0)", $lang->refreshIcon, '', "class='refresh' title='$lang->refresh' onclick='loadProductModules($productID)'");
                         echo '</span>';
                     }
                     ?>
@@ -137,7 +139,12 @@ if($this->app->tab == 'project')   js::set('objectID', $bug->project);
                 </tr>
                 <tr>
                   <th><?php echo $lang->bug->status;?></th>
-                  <td><?php echo zget($lang->bug->statusList, $bug->status);?></td>
+                  <td>
+                    <?php
+                    echo zget($lang->bug->statusList, $bug->status);
+                    echo html::hidden('status', $bug->status);
+                    ?>
+                 </td>
                 </tr>
                 <tr>
                   <th><?php echo $lang->bug->confirmed;?></th>
@@ -147,14 +154,14 @@ if($this->app->tab == 'project')   js::set('objectID', $bug->project);
                   <th><?php echo $lang->bug->assignedTo;?></th>
                   <td>
                     <div class='input-group'>
-                      <?php echo html::select('assignedTo', $users, $bug->assignedTo, "class='form-control chosen'");?>
+                      <?php echo html::select('assignedTo', $assignedToList, $bug->assignedTo, "class='form-control chosen'");?>
                       <span class='input-group-btn'><?php echo html::commonButton($lang->bug->allUsers, "class='btn btn-default' onclick='loadAllUsers()' data-toggle='tooltip'");?></span>
                     </div>
                   </td>
                 </tr>
                 <tr>
                   <th><?php echo $lang->bug->deadline;?></th>
-                  <td><?php echo html::input('deadline', $bug->deadline, "class='form-control form-date'");?></td>
+                  <td><?php echo html::input('deadline', helper::isZeroDate($bug->deadline) ? '' : $bug->deadline, "class='form-control form-date'");?></td>
                 </tr>
                 <tr>
                   <th><?php echo $lang->bug->feedbackBy;?></th>
@@ -180,7 +187,7 @@ if($this->app->tab == 'project')   js::set('objectID', $bug->project);
                   <th><?php echo $lang->bug->mailto;?></th>
                   <td>
                     <div class='input-group'>
-                      <?php echo html::select('mailto[]', $users, str_replace(' ', '', $bug->mailto), 'class="form-control chosen" multiple');?>
+                      <?php echo html::select('mailto[]', $users, str_replace(' ', '', $bug->mailto), 'class="form-control picker-select" multiple');?>
                       <?php echo $this->fetch('my', 'buildContactLists');?>
                     </div>
                   </td>

@@ -3,7 +3,7 @@
  * The view of mr link module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2021 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      gang zeng
  * @package     repo
  * @version     $Id: link.html.php $
@@ -37,8 +37,8 @@
 <div id='mainContent' class='main-content'>
   <div class='tabs' id='tabsNav'>
     <ul class='nav nav-tabs'>
-      <li><?php echo html::a(inlink('view', "mr={$MR->id}"), $lang->mr->view);?></li>
-      <li><?php echo html::a(inlink('diff', "mr={$MR->id}"), $lang->mr->viewDiff);?></li>
+      <li><?php echo html::a(inlink('view', "MRID={$MR->id}"), $lang->mr->view);?></li>
+      <li><?php echo html::a(inlink('diff', "MRID={$MR->id}"), $lang->mr->viewDiff);?></li>
       <li class='<?php if($type == 'story') echo 'active'?>'><a href='#stories' data-toggle='tab'><?php echo  html::icon($lang->icons['story'], 'text-primary') . ' ' . $lang->productplan->linkedStories;?></a></li>
       <li class='<?php if($type == 'bug') echo 'active'?>'><a href='#bugs' data-toggle='tab'><?php echo  html::icon($lang->icons['bug'], 'text-red') . ' ' . $lang->productplan->linkedBugs;?></a></li>
       <li class='<?php if($type == 'task') echo 'active'?>'><a href='#tasks' data-toggle='tab'><?php echo  html::icon('todo', 'text-info') . ' ' . $lang->mr->linkedTasks;?></a></li>

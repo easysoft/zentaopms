@@ -3,7 +3,7 @@
  * The project view file of my module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     my
  * @version     $Id
@@ -30,18 +30,19 @@
   </div>
   <?php else:?>
   <form class='main-table' id='projectForm' method='post' data-ride='table' data-checkable='false'>
-    <table class='table table-fixed' id='projectList'>
+    <table class='table has-sort-head table-fixed' id='projectList'>
+      <?php $vars = "status=$status&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID&orderBy=%s"; ?>
       <thead>
         <tr>
-          <th class='c-id'><?php echo $lang->idAB;?></th>
-          <th><?php echo $lang->project->name;?></th>
+          <th class='c-id'><?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?></th>
+          <th><?php common::printOrderLink('name', $orderBy, $vars, $lang->project->name);?></th>
           <?php if($status == 'openedbyme'):?>
-          <th class='c-status'> <?php echo $lang->project->status;?></th>
+          <th class='c-status'><?php common::printOrderLink('status', $orderBy, $vars, $lang->project->status);?></th>
           <?php endif;?>
-          <th class='c-date'><?php echo $lang->project->begin;?></th>
-          <th class='c-date'><?php echo $lang->project->end;?></th>
-          <th class='text-right c-budget'><?php echo $lang->project->budget;?></th>
-          <th class='c-user'><?php echo $lang->project->PM;?></th>
+          <th class='c-date c-begin'><?php common::printOrderLink('begin', $orderBy, $vars, $lang->project->begin);?></th>
+          <th class='c-date c-end'><?php common::printOrderLink('end', $orderBy, $vars, $lang->project->end);?></th>
+          <th class='text-right c-budget'><?php common::printOrderLink('budget', $orderBy, $vars, $lang->project->budget);?></th>
+          <th class='c-user'><?php common::printOrderLink('PM', $orderBy, $vars, $lang->project->PM);?></th>
           <th class='text-center c-actions-6'><?php echo $lang->actions;?></th>
         </tr>
       </thead>
@@ -63,7 +64,7 @@
           <td class='text-left'><?php echo $project->begin;?></td>
           <td class='text-left'><?php echo $project->end == LONG_TIME ? $this->lang->project->longTime : $project->end;?></td>
           <?php $projectBudget = in_array($this->app->getClientLang(), array('zh-cn','zh-tw')) ? round((float)$project->budget / 10000, 2) . $this->lang->project->tenThousand : round((float)$project->budget, 2);?>
-          <td class='text-right'><?php echo $project->budget != 0 ? zget($lang->project->currencySymbol, $project->budgetUnit) . ' ' . $projectBudget : $lang->project->future;?></td>
+          <td class='text-right c-budget'><?php echo $project->budget != 0 ? zget($lang->project->currencySymbol, $project->budgetUnit) . ' ' . $projectBudget : $lang->project->future;?></td>
           <td>
             <?php $userID = isset($PMList[$project->PM]) ? $PMList[$project->PM]->id : ''?>
             <?php if(!empty($project->PM)) echo html::a($this->createLink('user', 'profile', "userID=$userID", '', true), zget($users, $project->PM), '', "data-toggle='modal' data-type='iframe' data-width='600'");?>

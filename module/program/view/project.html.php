@@ -3,7 +3,7 @@
  * The pgmproject view file of program module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     program
  * @version     $Id: pgmproject.html.php 4769 2013-05-05 07:24:21Z wwccss $
@@ -26,7 +26,7 @@ js::set('browseType', $browseType);
     <?php echo html::checkbox('involved ', array('1' => $lang->project->mine), '', $this->cookie->involved ? 'checked=checked' : '');?>
   </div>
   <div class="btn-toolbar pull-right">
-    <?php if(common::hasPriv('project', 'create')) common::printLink('project', 'createGuide', "programID=$programID", '<i class="icon icon-plus"></i> ' . $lang->project->create, '', 'class="btn btn-primary" data-toggle="modal" data-target="#guideDialog"');?>
+    <?php if(common::hasPriv('project', 'create')) common::printLink('project', 'createGuide', "programID=$programID", '<i class="icon icon-plus"></i> ' . $lang->project->create, '', 'class="btn btn-primary" data-toggle="modal"');?>
   </div>
 </div>
 <div id='mainContent' class="main-row fade">
@@ -35,7 +35,7 @@ js::set('browseType', $browseType);
     <div class="table-empty-tip">
       <p>
         <span class="text-muted"><?php echo $lang->project->empty;?></span>
-        <?php common::printLink('project', 'createGuide', "programID=$programID", '<i class="icon icon-plus"></i> ' . $lang->project->create, '', 'class="btn btn-info btn-wide " data-toggle="modal" data-target="#guideDialog"');?>
+        <?php if(empty($allProjectsNum)) common::printLink('project', 'createGuide', "programID=$programID", '<i class="icon icon-plus"></i> ' . $lang->project->create, '', 'class="btn btn-info btn-wide " data-toggle="modal"');?>
       </p>
     </div>
     <?php else:?>

@@ -3,7 +3,7 @@
  * The control file of user module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     user
  * @version     $Id: control.php 5005 2013-07-03 08:39:11Z chencongzhi520@gmail.com $
@@ -401,7 +401,7 @@ class user extends control
 
         $this->view->title      = $this->lang->user->common . $this->lang->colon . $this->lang->user->issue;
         $this->view->position[] = $this->lang->user->issue;
-        $this->view->issues     = $this->loadModel('issue')->getUserIssues($type, $account, $orderBy, $pager);
+        $this->view->issues     = $this->loadModel('issue')->getUserIssues($type, 0, $account, $orderBy, $pager);
         $this->view->user       = $user;
         $this->view->users      = $this->loadModel('user')->getPairs('noletter');
         $this->view->type       = $type;
@@ -658,7 +658,7 @@ class user extends control
     {
         if(isset($_POST['users']))
         {
-            $this->view->users = $this->dao->select('*')->from(TABLE_USER)->where('account')->in($this->post->users)->orderBy('id')->fetchAll('id');
+            $this->view->users = $this->dao->select('*')->from(TABLE_USER)->where('id')->in($this->post->users)->orderBy('id')->fetchAll('id');
         }
         elseif($_POST)
         {
@@ -892,23 +892,32 @@ class user extends control
                     }
 
                     /* Get the module and method of the referer. */
+                    $module = $this->config->default->module;
+                    $method = $this->config->default->method;
                     if($this->config->requestType == 'PATH_INFO')
                     {
+                        $requestFix = $this->config->requestFix;
+
                         $path = substr($this->post->referer, strrpos($this->post->referer, '/') + 1);
                         $path = rtrim($path, '.html');
-                        if(empty($path)) $path = $this->config->requestFix;
-                        list($module, $method) = explode($this->config->requestFix, $path);
+                        if($path and strpos($path, $requestFix) !== false) list($module, $method) = explode($requestFix, $path);
                     }
                     else
                     {
                         $url   = html_entity_decode($this->post->referer);
                         $param = substr($url, strrpos($url, '?') + 1);
 
-                        $module = $this->config->default->module;
-                        $method = $this->config->default->method;
                         if(strpos($param, '&') !== false) list($module, $method) = explode('&', $param);
                         $module = str_replace('m=', '', $module);
                         $method = str_replace('f=', '', $method);
+                    }
+
+                    /* Check parsed name of module and method from referer. */
+                    if(empty($module) or !$this->app->checkModuleName($module, $exit = false) or
+                       empty($method) or !$this->app->checkMethodName($module, $exit = false))
+                    {
+                        $module = $this->config->default->module;
+                        $method = $this->config->default->method;
                     }
 
                     $response['result']  = 'success';
@@ -960,14 +969,19 @@ class user extends control
         }
         else
         {
+            $loginExpired = !(preg_match("/(m=|\/)(index)(&f=|-)(index)(&|-|\.)?/", strtolower($this->referer), $output) or $this->referer == $this->config->webRoot or empty($this->referer) or preg_match("/\/www\/$/", strtolower($this->referer), $output));
+
             $this->loadModel('misc');
-            $this->view->noGDLib     = sprintf($this->lang->misc->noGDLib, common::getSysURL() . $this->config->webRoot, '', false, true);
-            $this->view->title       = $this->lang->user->login;
-            $this->view->referer     = $this->referer;
-            $this->view->s           = zget($this->config->global, 'sn', '');
-            $this->view->keepLogin   = $this->cookie->keepLogin ? $this->cookie->keepLogin : 'off';
-            $this->view->rand        = $this->user->updateSessionRandom();
-            $this->view->unsafeSites = $this->misc->checkOneClickPackage();
+            $this->loadModel('extension');
+            $this->view->noGDLib       = sprintf($this->lang->misc->noGDLib, common::getSysURL() . $this->config->webRoot, '', false, true);
+            $this->view->title         = $this->lang->user->login;
+            $this->view->referer       = $this->referer;
+            $this->view->s             = zget($this->config->global, 'sn', '');
+            $this->view->keepLogin     = $this->cookie->keepLogin ? $this->cookie->keepLogin : 'off';
+            $this->view->rand          = $this->user->updateSessionRandom();
+            $this->view->unsafeSites   = $this->misc->checkOneClickPackage();
+            $this->view->plugins       = $this->extension->getExpiringPlugins(true);
+            $this->view->loginExpired  = $loginExpired;
             $this->display();
         }
     }
@@ -1072,6 +1086,93 @@ class user extends control
         $this->view->status         = 'reset';
         $this->view->needCreateFile = $needCreateFile;
         $this->view->resetFileName  = $resetFileName;
+
+        $this->display();
+    }
+
+    /**
+     * Forget password.
+     *
+     * @access public
+     * @return void
+     */
+    public function forgetPassword()
+    {
+        $this->app->loadLang('admin');
+        $this->loadModel('mail');
+
+        if(!empty($_POST))
+        {
+            /* Check account and email. */
+            $account = $_POST['account'];
+            $email   = $_POST['email'];
+            if(empty($account)) return $this->send(array('result' => 'fail', 'message' => $this->lang->user->error->accountEmpty));
+            if(empty($email)) return $this->send(array('result' => 'fail', 'message' => $this->lang->user->error->emailEmpty));
+
+            $user = $this->dao->select('*')->from(TABLE_USER)->where('account')->eq($account)->fetch();
+            if(empty($user)) return $this->send(array('result' => 'fail', 'message' => $this->lang->user->error->noUser));
+            if(empty($user->email)) return $this->send(array('result' => 'fail', 'message' => $this->lang->user->error->noEmail));
+
+            if($user->email != $email) return $this->send(array('result' => 'fail', 'message' => $this->lang->user->error->errorEmail));
+            if(!$this->config->mail->turnon) return $this->send(array('result' => 'fail', 'message' => $this->lang->user->error->emailSetting));
+
+            $code = uniqid();
+            $this->dao->update(TABLE_USER)->set('resetToken')->eq(json_encode(array('code' => $code, 'endTime' => strtotime("+{$this->config->user->resetPasswordTimeout} minutes"))))->where('account')->eq($account)->exec();
+
+            $result = $this->mail->send($account, $this->lang->user->resetPWD, sprintf($this->lang->mail->forgetPassword, commonModel::getSysURL() . inlink('resetPassword', 'code=' . $code)), '', true, array(), true);
+            if(strstr($result, 'ERROR')) return $this->send(array('result' => 'fail', 'message' => $this->lang->user->error->sendMailFail), true);
+
+            return $this->send(array('result' => 'success', 'message' => $this->lang->user->sendEmailSuccess));
+        }
+
+        $this->view->title = $this->lang->user->resetPassword;
+        $this->display();
+    }
+
+    /**
+     * Reset password.
+     *
+     * @param  string  $code
+     * @access public
+     * @return void
+     */
+    public function resetPassword($code)
+    {
+        $expired = true;
+        $user    = $this->dao->select('account, resetToken')->from(TABLE_USER)->where('resetToken')->like('%"' . $code . '"%')->fetch();
+        if($user)
+        {
+            $resetToken = json_decode($user->resetToken);
+            if($resetToken->endTime >= time()) $expired = false;
+        }
+
+        if(!empty($_POST))
+        {
+            if($expired) return $this->send(array('result' => 'fail', 'message' => $this->lang->user->linkExpired));
+
+            $this->user->resetPassword();
+            if(dao::isError())
+            {
+                if(empty($_POST['password2'])) dao::$errors['password2'][] = sprintf($this->lang->error->notempty, $this->lang->user->password);
+
+                $response['result']  = 'fail';
+                $response['message'] = dao::getError();
+
+                return $this->send($response);
+            }
+
+            $this->dao->update(TABLE_USER)->set('resetToken')->eq('')->where('account')->eq($this->post->account)->exec();
+
+            $response['result']  = 'success';
+            $response['message'] = $this->lang->saveSuccess;
+            $response['locate']  = inlink('login');
+
+            return $this->send($response);
+        }
+
+        $this->view->title   = $this->lang->user->resetPWD;
+        $this->view->expired = $expired;
+        $this->view->user    = empty($user) ? '' : $user;
 
         $this->display();
     }
@@ -1191,14 +1292,13 @@ class user extends control
     public function ajaxGetContactUsers($contactListID, $dropdownName = 'mailto', $oldUsers = '')
     {
         $list = $contactListID ? $this->user->getContactListByID($contactListID) : '';
-
-        $attr = $dropdownName == 'mailto' ? "data-placeholder='{$this->lang->chooseUsersToMail}'" : '';
+        $attr = $dropdownName == 'mailto' ? "data-placeholder='{$this->lang->chooseUsersToMail}' data-drop-direction='bottom'" : '';
 
         $users = $this->user->getPairs('devfirst|nodeleted|noclosed', $list ? $list->userList : '', $this->config->maxCount);
         if(isset($this->config->user->moreLink)) $this->config->moreLinks[$dropdownName . "[]"] = $this->config->user->moreLink;
 
         $defaultUsers = empty($contactListID) ? '' : $list->userList . ',' . trim($oldUsers);
-        return print(html::select($dropdownName . "[]", $users, $defaultUsers, "class='form-control chosen' multiple $attr"));
+        return print(html::select($dropdownName . "[]", $users, $defaultUsers, "class='form-control picker-select' multiple $attr"));
     }
 
     /**
@@ -1212,7 +1312,7 @@ class user extends control
     {
         $contactList = $this->user->getContactLists($this->app->user->account, 'withnote');
         if(empty($contactList)) return false;
-        return print(html::select('', $contactList, '', "class='form-control' onchange=\"setMailto('$dropdownName', this.value)\""));
+        return print(html::select('contactListMenu', $contactList, '', "class='form-control' onchange=\"setMailto('$dropdownName', this.value)\""));
     }
 
     /**

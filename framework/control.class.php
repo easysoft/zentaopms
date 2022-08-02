@@ -231,14 +231,13 @@ class control extends baseControl
             if(!is_file($viewFile)) die(js::error($this->lang->notPage) . js::locate('back'));
 
             /* Get ext hook files. */
-            if(empty($viewExtPath['vision']))
+            $commonExtHookFiles = glob($viewExtPath['common'] . $this->devicePrefix . $methodName . ".*.{$viewType}.hook.php");
+            if(!empty($viewExtPath['vision']))
             {
-                $commonExtHookFiles = glob($viewExtPath['common'] . $this->devicePrefix . $methodName . ".*.{$viewType}.hook.php");
+                $visionExtHookFiles = glob($viewExtPath['vision'] . $this->devicePrefix . $methodName . ".*.{$viewType}.hook.php");
+                $commonExtHookFiles = array_merge((array)$commonExtHookFiles, (array)$visionExtHookFiles);
             }
-            else
-            {
-                $commonExtHookFiles = glob($viewExtPath['vision'] . $this->devicePrefix . $methodName . ".*.{$viewType}.hook.php");
-            }
+
             $xuanExtHookFiles   = glob($viewExtPath['xuan']   . $this->devicePrefix . $methodName . ".*.{$viewType}.hook.php");
             $saasExtHookFiles   = glob($viewExtPath['saas']   . $this->devicePrefix . $methodName . ".*.{$viewType}.hook.php");
             $customExtHookFiles = glob($viewExtPath['custom'] . $this->devicePrefix . $methodName . ".*.{$viewType}.hook.php");
@@ -311,6 +310,26 @@ class control extends baseControl
          * At the end, chang the dir to the previous.
          */
         chdir($currentPWD);
+    }
+
+    /**
+     * 获取一个方法的输出内容，这样我们可以在一个方法里获取其他模块方法的内容。
+     * 如果模块名为空，则调用该模块、该方法；如果设置了模块名，调用指定模块指定方法。
+     *
+     * Get the output of one module's one method as a string, thus in one module's method, can fetch other module's content.
+     * If the module name is empty, then use the current module and method. If set, use the user defined module and method.
+     *
+     * @param  string $moduleName module name.
+     * @param  string $methodName method name.
+     * @param  array  $params     params.
+     * @access  public
+     * @return  string  the parsed html.
+     */
+    public function fetch($moduleName = '', $methodName = '', $params = array(), $appName = '')
+    {
+        if($moduleName != $this->moduleName) $this->app->fetchModule = $moduleName;
+
+        return parent::fetch($moduleName, $methodName, $params, $appName);
     }
 
     /**

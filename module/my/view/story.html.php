@@ -20,20 +20,22 @@
     $recTotalLabel = " <span class='label label-light label-badge'>{$pager->recTotal}</span>";
     if($app->rawMethod == 'contribute')
     {
-        echo html::a(inlink($app->rawMethod, "mode=story&type=openedBy&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pagerID=$pageID"),   "<span class='text'>{$lang->my->storyMenu->openedByMe}</span>"   . ($type == 'openedBy'   ? $recTotalLabel : ''), '', "class='btn btn-link" . ($type == 'openedBy'   ? ' btn-active-text' : '') . "'");
-        echo html::a(inlink($app->rawMethod, "mode=story&type=reviewedBy&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pagerID=$pageID"), "<span class='text'>{$lang->my->storyMenu->reviewedByMe}</span>" . ($type == 'reviewedBy' ? $recTotalLabel : ''), '', "class='btn btn-link" . ($type == 'reviewedBy' ? ' btn-active-text' : '') . "'");
-        echo html::a(inlink($app->rawMethod, "mode=story&type=closedBy&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pagerID=$pageID"),   "<span class='text'>{$lang->my->storyMenu->closedByMe}</span>"   . ($type == 'closedBy'   ? $recTotalLabel : ''), '', "class='btn btn-link" . ($type == 'closedBy'   ? ' btn-active-text' : '') . "'");
-        echo html::a(inlink($app->rawMethod, "mode=story&type=assignedBy&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pagerID=$pageID"), "<span class='text'>{$lang->my->storyMenu->assignedByMe}</span>" . ($type == 'assignedBy' ? $recTotalLabel : ''), '', "class='btn btn-link" . ($type == 'assignedBy' ? ' btn-active-text' : '') . "'");
+        echo html::a(inlink($app->rawMethod, "mode=story&type=openedBy&param=$param&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pagerID=$pageID"),   "<span class='text'>{$lang->my->storyMenu->openedByMe}</span>"   . ($type == 'openedBy'   ? $recTotalLabel : ''), '', "class='btn btn-link" . ($type == 'openedBy'   ? ' btn-active-text' : '') . "'");
+        echo html::a(inlink($app->rawMethod, "mode=story&type=reviewedBy&param=$param&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pagerID=$pageID"), "<span class='text'>{$lang->my->storyMenu->reviewedByMe}</span>" . ($type == 'reviewedBy' ? $recTotalLabel : ''), '', "class='btn btn-link" . ($type == 'reviewedBy' ? ' btn-active-text' : '') . "'");
+        echo html::a(inlink($app->rawMethod, "mode=story&type=closedBy&param=$param&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pagerID=$pageID"),   "<span class='text'>{$lang->my->storyMenu->closedByMe}</span>"   . ($type == 'closedBy'   ? $recTotalLabel : ''), '', "class='btn btn-link" . ($type == 'closedBy'   ? ' btn-active-text' : '') . "'");
+        echo html::a(inlink($app->rawMethod, "mode=story&type=assignedBy&param=$param&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pagerID=$pageID"), "<span class='text'>{$lang->my->storyMenu->assignedByMe}</span>" . ($type == 'assignedBy' ? $recTotalLabel : ''), '', "class='btn btn-link" . ($type == 'assignedBy' ? ' btn-active-text' : '') . "'");
     }
     else
     {
-        echo html::a(inlink($app->rawMethod, "mode=story&type=assignedTo&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pagerID=$pageID"), "<span class='text'>{$lang->my->storyMenu->assignedToMe}</span>" . ($type == 'assignedTo' ? $recTotalLabel : ''), '', "class='btn btn-link" . ($type == 'assignedTo' ? ' btn-active-text' : '') . "'");
-        echo html::a(inlink($app->rawMethod, "mode=story&type=reviewBy&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pagerID=$pageID"),   "<span class='text'>{$lang->my->storyMenu->reviewByMe}</span>"   . ($type == 'reviewBy' ? $recTotalLabel : ''),   '', "class='btn btn-link" . ($type == 'reviewBy'   ? ' btn-active-text' : '') . "'");
+        echo html::a(inlink($app->rawMethod, "mode=story&type=assignedTo&param=$param&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pagerID=$pageID"), "<span class='text'>{$lang->my->storyMenu->assignedToMe}</span>" . ($type == 'assignedTo' ? $recTotalLabel : ''), '', "class='btn btn-link" . ($type == 'assignedTo' ? ' btn-active-text' : '') . "'");
+        echo html::a(inlink($app->rawMethod, "mode=story&type=reviewBy&param=$param&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pagerID=$pageID"),   "<span class='text'>{$lang->my->storyMenu->reviewByMe}</span>"   . ($type == 'reviewBy' ? $recTotalLabel : ''),   '', "class='btn btn-link" . ($type == 'reviewBy'   ? ' btn-active-text' : '') . "'");
     }
     ?>
+    <a class="btn btn-link querybox-toggle" id='bysearchTab'><i class="icon icon-search muted"></i> <?php $this->loadModel('search');echo $lang->search->common;?></a>
   </div>
 </div>
 <div id="mainContent">
+<div class="cell<?php if($type == 'bysearch') echo ' show';?>" id="queryBox" data-module=<?php echo ($app->rawMethod == 'contribute' ? 'contributeStory' : 'workStory');?>></div>
   <?php if(!$stories):?>
   <div class="table-empty-tip">
     <p><span class="text-muted"><?php echo sprintf($lang->my->noData, $lang->SRCommon);?></span></p>
@@ -41,7 +43,7 @@
   <?php else:?>
   <form id='myStoryForm' class="main-table table-story" data-ride="table" method="post">
     <table id='storyList' class="table has-sort-head table-fixed">
-      <?php $vars = "mode=$mode&type=$type&orderBy=%s&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID"; ?>
+      <?php $vars = "mode=$mode&type=$type&param=$param&orderBy=%s&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID"; ?>
       <?php
       $canBatchEdit     = common::hasPriv('story', 'batchEdit');
       $canBatchClose    = (common::hasPriv('story', 'batchClose') and strtolower($type) != 'closedby');
@@ -60,14 +62,14 @@
             <?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?>
           </th>
           <th class='c-pri' title=<?php echo $lang->my->pri;?>><?php common::printOrderLink('pri',          $orderBy, $vars, $lang->priAB);?></th>
-          <th class='c-name'>     <?php common::printOrderLink('title',        $orderBy, $vars, $lang->my->name);?></th>
-          <th class='c-product'>  <?php common::printOrderLink('productTitle', $orderBy, $vars, $lang->story->product);?></th>
-          <th class='c-plan'>     <?php common::printOrderLink('plan',         $orderBy, $vars, $lang->story->plan);?></th>
-          <th class='c-user'>     <?php common::printOrderLink('openedBy',     $orderBy, $vars, $lang->openedByAB);?></th>
-          <th class='c-hours'>    <?php common::printOrderLink('estimate',     $orderBy, $vars, $lang->story->estimateAB);?></th>
-          <th class='c-status'>   <?php common::printOrderLink('status',       $orderBy, $vars, $lang->statusAB);?></th>
-          <th class='c-stage'>    <?php common::printOrderLink('stage',        $orderBy, $vars, $lang->story->stageAB);?></th>
-          <th class='c-actions-6'><?php echo $lang->actions;?></th>
+          <th class='c-name'>     <?php common::printOrderLink('title',    $orderBy, $vars, $lang->my->name);?></th>
+          <th class='c-product'>  <?php common::printOrderLink('product',  $orderBy, $vars, $lang->story->product);?></th>
+          <th class='c-plan'>     <?php common::printOrderLink('plan',     $orderBy, $vars, $lang->story->plan);?></th>
+          <th class='c-user'>     <?php common::printOrderLink('openedBy', $orderBy, $vars, $lang->openedByAB);?></th>
+          <th class='c-hours'>    <?php common::printOrderLink('estimate', $orderBy, $vars, $lang->story->estimateAB);?></th>
+          <th class='c-status'>   <?php common::printOrderLink('status',   $orderBy, $vars, $lang->statusAB);?></th>
+          <th class='c-stage'>    <?php common::printOrderLink('stage',    $orderBy, $vars, $lang->story->stageAB);?></th>
+          <th class="c-actions-6 text-center"><?php echo $lang->actions;?></th>
         </tr>
       </thead>
       <tbody>

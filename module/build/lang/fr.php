@@ -3,11 +3,11 @@
  * The build module English file of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     build
  * @version     $Id: en.php 4129 2013-01-18 01:58:14Z wwccss $
- * @link        https://www.zentao.pm
+ * @link        http://www.zentao.net
  */
 $lang->build->common           = "Build";
 $lang->build->create           = "Créer Build";
@@ -27,26 +27,30 @@ $lang->build->confirmUnlinkBug   = "Voulez-vous retirer ce Bug du Build ?";
 
 $lang->build->basicInfo = 'Infos de Base';
 
-$lang->build->id            = 'ID';
-$lang->build->product       = $lang->productCommon;
-$lang->build->branch        = 'Plateforme/Branche';
-$lang->build->execution     = $lang->executionCommon;
-$lang->build->name          = 'Nom';
-$lang->build->date          = 'Date';
-$lang->build->builder       = 'Builder';
-$lang->build->scmPath       = 'Chemin SCM';
-$lang->build->filePath      = 'Chemin Fichier';
-$lang->build->desc          = 'Description';
-$lang->build->files         = 'Fichiers';
-$lang->build->last          = 'Dernier Build';
-$lang->build->packageType   = 'Type de Package';
-$lang->build->unlinkStory   = "Retirer {$lang->SRCommon}";
-$lang->build->unlinkBug     = 'Retirer Bug';
-$lang->build->stories       = 'Stories terminées';
-$lang->build->bugs          = 'Bugs Résolus';
-$lang->build->generatedBugs = 'Bugs signalés';
-$lang->build->noProduct     = " <span id='noProduct' style='color:red'>Ce {$lang->executionCommon} n'est pas associé à un {$lang->productCommon}, le Build ne peut pas être créé. Commencez par <a href='%s' data-app='%s' data-toggle='modal' data-type='iframe'>rattacher le projet à un {$lang->productCommon}</a></span>";
-$lang->build->noBuild       = 'Aucun builds.';
+$lang->build->id             = 'ID';
+$lang->build->product        = $lang->productCommon;
+$lang->build->project        = 'Project';
+$lang->build->branch         = 'Plateforme/Branche';
+$lang->build->branchName     = '%s';
+$lang->build->execution      = $lang->executionCommon;
+$lang->build->name           = 'Nom';
+$lang->build->date           = 'Date';
+$lang->build->builder        = 'Builder';
+$lang->build->scmPath        = 'Chemin SCM';
+$lang->build->filePath       = 'Chemin Fichier';
+$lang->build->desc           = 'Description';
+$lang->build->mailto         = 'Mailto';
+$lang->build->files          = 'Fichiers';
+$lang->build->last           = 'Dernier Build';
+$lang->build->packageType    = 'Type de Package';
+$lang->build->unlinkStory    = "Retirer {$lang->SRCommon}";
+$lang->build->unlinkBug      = 'Retirer Bug';
+$lang->build->stories        = 'Stories terminées';
+$lang->build->bugs           = 'Bugs Résolus';
+$lang->build->generatedBugs  = 'Bugs signalés';
+$lang->build->noProduct      = " <span id='noProduct' style='color:red'>Ce {$lang->executionCommon} n'est pas associé à un {$lang->productCommon}, le Build ne peut pas être créé. Commencez par <a href='%s' data-app='%s' data-toggle='modal' data-type='iframe'>rattacher le projet à un {$lang->productCommon}</a></span>";
+$lang->build->noBuild        = 'Aucun builds.';
+$lang->build->emptyExecution =  $lang->executionCommon . 'should be not empty.';
 
 $lang->build->notice = new stdclass();
 $lang->build->notice->changeProduct   = "The {$lang->SRCommon}, bug, or the version of the submitted test order has been linked, and its {$lang->productCommon} cannot be modified";

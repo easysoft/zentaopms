@@ -3,14 +3,18 @@
  * The file module English file of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     file
  * @version     $Id: en.php 4129 2013-01-18 01:58:14Z wwccss $
- * @link        https://www.zentao.pm
+ * @link        http://www.zentao.net
  */
 $lang->file = new stdclass();
 $lang->file->common        = 'Fichier';
+$lang->file->id            = 'ID';
+$lang->file->objectType    = 'Object Type';
+$lang->file->objectID      = 'Object ID';
+$lang->file->deleted       = 'Deleted';
 $lang->file->uploadImages  = 'Charger Images en Lot';
 $lang->file->download      = 'Télécharger Fichiers';
 $lang->file->uploadDate    = 'Chargé le';
@@ -32,6 +36,7 @@ $lang->file->addFile       = 'Ajouter';
 $lang->file->beginUpload   = 'Clic pour Charger';
 $lang->file->uploadSuccess = 'Chargé !';
 $lang->file->batchExport   = 'Export in batches';
+$lang->file->downloadFile  = 'Download';
 
 $lang->file->pathname  = 'Nom Chemin';
 $lang->file->title     = 'Titre';

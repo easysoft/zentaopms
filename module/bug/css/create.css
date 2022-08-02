@@ -1,5 +1,9 @@
 html[lang='en'] #moduleIdBox .input-group-addon {padding: 5px 23px;}
 html[lang='en'] #deadlineTd .input-group-addon {padding: 5px 18px;}
+html[lang='zh-cn'] #keywordsAddonLabel, .task {width: 77px;}
+html[lang='zh-tw'] #keywordsAddonLabel, .task {width: 77px;}
+html[lang='fr'] #keywordsAddonLabel, .task {width: 61px;}
+html[lang='de'] #keywordsAddonLabel, .task {width: 73px;}
 
 .ke-toolbar .ke-outline[data-name='savetemplate'] {display: block;}
 .ke-outline  .ke-icon-savetemplate {background-image: url(theme/default/images/kindeditor/save.gif); background-position: center; width: 56px; height: 20px;}
@@ -47,4 +51,7 @@ html[lang='en'] #deadlineTd .input-group-addon {padding: 5px 18px;}
 #branch_chosen {min-width: 90px;}
 #notifyEmailTd .input-group-addon, #deadlineTd .input-group-addon {border-radius: 2px 0px 2px 0px !important;}
 
-#feedback.input-group + #notifyEmailLabel {position: relative; width: 50%; left: 48%}
+#feedback.input-group + #notifyEmailLabel {position: relative; width: 50%; left: 48%;}
+#executionLabel {display: inline; position: relative; width: 50%; left: 37%;}
+#projectLabel {display: inline;}
+#openedBuildLabel {display: inline; position: relative; width: 50%; left: 14%;}

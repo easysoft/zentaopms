@@ -3,7 +3,7 @@
  * The control file of misc of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     misc
  * @version     $Id: control.php 5128 2013-07-13 08:59:49Z chencongzhi520@gmail.com $
@@ -20,7 +20,7 @@ class misc extends control
     public function ping()
     {
         if(mt_rand(0, 1) == 1) $this->loadModel('setting')->setSN();
-        echo "<html><head><meta http-equiv=refresh' content='600' /></head><body></body></html>";
+        echo "<html><head><meta http-equiv='refresh' content='600' /></head><body></body></html>";
     }
 
     /**

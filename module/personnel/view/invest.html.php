@@ -3,7 +3,7 @@
  * The html template file of invest method of personnel module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     ZenTaoPMS
  * @version     $Id
@@ -21,8 +21,8 @@
       <table class="table has-sort-head table-fixed table-bordered text-center">
         <thead>
           <tr>
-            <th rowspan='2' class="c-user"> <?php echo $lang->personnel->name;?></th>
             <th rowspan='2' class="c-role"><?php echo $lang->personnel->role;?></th>
+            <th rowspan='2' class="c-user"> <?php echo $lang->personnel->name;?></th>
             <th rowspan='2'><?php echo $lang->personnel->projects;?></th>
             <th rowspan='2'><?php echo $lang->personnel->executions;?></th>
             <th colspan="2"><?php echo $lang->personnel->workingHours;?></th>
@@ -58,10 +58,11 @@
           </tr>
         </thead>
         <tbody class="sortable">
-          <?php foreach($investList as $personnel):?>
+          <?php foreach($investList as $role => $personnelList):?>
+          <?php foreach($personnelList as $personnel):?>
           <tr>
-            <td title='<?php echo $personnel['realname'];?>'><?php echo $personnel['realname'];?></td>
             <td title='<?php echo $personnel['role'];?>' style="overflow: hidden; white-space:nowrap; text-overflow: ellipsis;"><?php echo $personnel['role'];?></td>
+            <td title='<?php echo $personnel['realname'];?>'><?php echo $personnel['realname'];?></td>
             <td><?php echo $personnel['projects'];?></td>
             <td><?php echo $personnel['executions'];?></td>
             <td><?php echo round($personnel['consumedTask'], 1);?></td>
@@ -85,6 +86,7 @@
             <td><?php echo $personnel['pendingRisk'];?></td>
             <?php endif;?>
           </tr>
+        <?php endforeach;?>
         <?php endforeach;?>
         </tbody>
       </table>

@@ -157,10 +157,18 @@ $lang->upgrade->fromVersions['16_4']       = '16.4';
 $lang->upgrade->fromVersions['16_5_beta1'] = '16.5.beta1';
 $lang->upgrade->fromVersions['16_5']       = '16.5';
 $lang->upgrade->fromVersions['17_0_beta1'] = '17.0.beta1';
+$lang->upgrade->fromVersions['17_0_beta2'] = '17.0.beta2';
+$lang->upgrade->fromVersions['17_0']       = '17.0';
+$lang->upgrade->fromVersions['17_1']       = '17.1';
+$lang->upgrade->fromVersions['17_2']       = '17.2';
+$lang->upgrade->fromVersions['17_3']       = '17.3';
+$lang->upgrade->fromVersions['17_4']       = '17.4';
 
+global $config;
 /* Lite. */
 $lang->upgrade->fromVersions['lite1_0'] = 'Lite1.0';
 $lang->upgrade->fromVersions['lite1_1'] = 'Lite1.1';
+if($config->edition != 'open') $lang->upgrade->fromVersions['liteVIP1_1'] = 'LiteVIP1.1';
 
 /* Pro. */
 $lang->upgrade->fromVersions['pro1_0']        = 'Pro1.0';
@@ -316,6 +324,12 @@ $lang->upgrade->fromVersions['biz6_4']       = 'Biz6.4';
 $lang->upgrade->fromVersions['biz6_5_beta1'] = 'Biz6.5.beta1';
 $lang->upgrade->fromVersions['biz6_5']       = 'Biz6.5';
 $lang->upgrade->fromVersions['biz7_0_beta1'] = 'Biz7.0.beta1';
+$lang->upgrade->fromVersions['biz7_0_beta2'] = 'Biz7.0.beta2';
+$lang->upgrade->fromVersions['biz7_0']       = 'Biz7.0';
+$lang->upgrade->fromVersions['biz7_1']       = 'Biz7.1';
+$lang->upgrade->fromVersions['biz7_2']       = 'Biz7.2';
+$lang->upgrade->fromVersions['biz7_3']       = 'Biz7.3';
+$lang->upgrade->fromVersions['biz7_4']       = 'Biz7.4';
 
 /* Max. */
 $lang->upgrade->fromVersions['max2_0_beta4'] = 'Max2.0.beta4';
@@ -333,3 +347,9 @@ $lang->upgrade->fromVersions['max2_7']       = 'Max2.7';
 $lang->upgrade->fromVersions['max2_8']       = 'Max2.8';
 $lang->upgrade->fromVersions['max3_0_beta1'] = 'Max3.0.beta1';
 $lang->upgrade->fromVersions['max3_0']       = 'Max3.0';
+$lang->upgrade->fromVersions['max3_1_beta1'] = 'Max3.1.beta1';
+$lang->upgrade->fromVersions['max3_1_beta2'] = 'Max3.1.beta2';
+$lang->upgrade->fromVersions['max3_1']       = 'Max3.1';
+$lang->upgrade->fromVersions['max3_2']       = 'Max3.2';
+$lang->upgrade->fromVersions['max3_3']       = 'Max3.3';
+$lang->upgrade->fromVersions['max3_4']       = 'Max3.4';

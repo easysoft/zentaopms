@@ -28,10 +28,10 @@ $config->task->editor->pause    = array('id' => 'comment', 'tools' => 'simpleToo
 
 $config->task->removeFields = 'objectTypeList,productList,executionList,gitlabID,gitlabProjectID,product';
 $config->task->exportFields = '
-    id, execution, module, story,
+    id, execution, module, story, fromBug,
     name, desc,
     type, pri,estStarted, realStarted, deadline, status,estimate, consumed, left,
-    mailto, progress,
+    mailto, progress, mode,
     openedBy, openedDate, assignedTo, assignedDate,
     finishedBy, finishedDate, canceledBy, canceledDate,
     closedBy, closedDate, closedReason,
@@ -94,14 +94,14 @@ $config->task->datatable->fieldList['left']['required'] = 'no';
 
 $config->task->datatable->fieldList['progress']['title']    = 'progressAB';
 $config->task->datatable->fieldList['progress']['fixed']    = 'no';
-$config->task->datatable->fieldList['progress']['width']    = '50';
+$config->task->datatable->fieldList['progress']['width']    = '80';
 $config->task->datatable->fieldList['progress']['required'] = 'no';
 $config->task->datatable->fieldList['progress']['sort']     = 'no';
 $config->task->datatable->fieldList['progress']['name']     = $lang->task->progress;
 
 $config->task->datatable->fieldList['deadline']['title']    = 'deadlineAB';
 $config->task->datatable->fieldList['deadline']['fixed']    = 'no';
-$config->task->datatable->fieldList['deadline']['width']    = '60';
+$config->task->datatable->fieldList['deadline']['width']    = '70';
 $config->task->datatable->fieldList['deadline']['required'] = 'no';
 
 $config->task->datatable->fieldList['openedBy']['title']    = 'openedByAB';

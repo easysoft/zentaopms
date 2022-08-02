@@ -101,8 +101,8 @@
       <?php if($arrange == 'inline'):?>
       <?php foreach($content->lines as $line):?>
       <tr data-line='<?php echo $line->newlc ?>'>
-        <th class='w-num text-right'><?php if($line->type != 'new') echo $line->oldlc?></th>
-        <th class='w-num text-left'><?php if($line->type != 'old') echo $line->newlc?></th>
+        <th class='w-num text'><?php if($line->type != 'new' and $line->oldlc) echo $line->oldlc?></th>
+        <th class='w-num text'><?php if($line->type != 'old' and $line->newlc) echo $line->newlc?></th>
         <td class='line-<?php echo $line->type?> code'><?php
         $line->line = $repo->SCM == 'Subversion' ? htmlSpecialString($line->line) : $line->line;
         echo $line->type == 'old' ? preg_replace('/^\-/', '&ndash;', $line->line) : ($line->type == 'new' ? $line->line : ' ' . $line->line);
@@ -125,18 +125,18 @@
         }
         else
         {
-            $oldlc = $line->oldlc;
+            $oldlc = $line->oldlc > 0 ? $line->oldlc : ' ';
             $newlc = $line->newlc;
             if(!isset($content->new[$newlc])) continue;
         }
         ?>
-        <th class='w-num text-right'><?php echo $oldlc?></th>
+        <th class='w-num text-center'><?php echo $oldlc?></th>
         <td class='w-code line-<?php if($line->type != 'new')echo $line->type?> <?php if($line->type == 'custom') echo "line-old"?> code'><?php
         if(!isset($content->old[$oldlc])) $content->old[$oldlc] = '';
         $content->old[$oldlc] = $repo->SCM == 'Subversion' ? htmlSpecialString($content->old[$oldlc]) : $content->old[$oldlc];
         if(!empty($oldlc)) echo $line->type != 'all' ? preg_replace('/^\-/', '&ndash;', $content->old[$oldlc]) : ' ' . $content->old[$oldlc];
         ?></td>
-        <th class='w-num text-right'><?php echo $newlc?></th>
+        <th class='w-num text-center'><?php echo $newlc?></th>
         <td class='w-code line-<?php if($line->type != 'old') echo $line->type?> <?php if($line->type == 'custom') echo "line-new"?> code'><?php
         if(!isset($content->new[$newlc])) $content->new[$newlc] = '';
         $content->new[$newlc] = $repo->SCM == 'Subversion' ? htmlSpecialString($content->new[$newlc]) : $content->new[$newlc];

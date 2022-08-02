@@ -60,14 +60,21 @@ function loadAll(productID)
   */
 function loadAllUsers()
 {
-    var link = createLink('bug', 'ajaxLoadAllUsers', 'selectedUser=' + $('#assignedTo').val());
+    isClosedBug = typeof isClosedBug == 'undefined' ? false : isClosedBug;
+
+    var params = isClosedBug ? '&params=devfirst' : '';
+    var link   = createLink('bug', 'ajaxLoadAllUsers', 'selectedUser=' + $('#assignedTo').val() + params);
     $.get(link, function(data)
     {
         if(data)
         {
-            var moduleID  = $('#module').val();
-            var productID = $('#product').val();
-            setAssignedTo(moduleID, productID);
+            if(!isClosedBug)
+            {
+                var moduleID  = $('#module').val();
+                var productID = $('#product').val();
+                setAssignedTo(moduleID, productID);
+            }
+
             $('#assignedTo').replaceWith(data);
             $('#assignedTo_chosen').remove();
             $('#assignedTo').chosen();
@@ -130,6 +137,7 @@ function loadBranch()
     loadProductBuilds(productID);
     loadProductplans(productID);
     loadProductStories(productID);
+    loadProductMembers(productID);
 }
 
 /**
@@ -333,10 +341,75 @@ function loadProductExecutions(productID, projectID = 0)
         $(this).find('select').chosen();
         if(typeof(bugExecution) == 'string' && systemMode != 'classic') $('#executionIdBox').prepend("<span class='input-group-addon' id='executionBox' style='border-left-width: 0px;'>" + bugExecution + "</span>");
         if(required) $(this).find('#execution_chosen').addClass('required');
-        if(page != 'edit') changeAssignedTo(projectID);
+        changeAssignedTo(projectID);
     });
 
     projectID != 0 ? loadProjectBuilds(projectID) : loadProductBuilds(productID);
+}
+
+/**
+ * Ajax change execution name.
+ *
+ * @param  int $projectID
+ * @access public
+ * @return void
+ */
+function changeAssignedTo(projectID)
+{
+    if(parseInt(projectID))
+    {
+        loadProjectTeamMembers(projectID);
+        if(page == 'create')
+        {
+            var link = createLink('bug', 'ajaxGetExecutionLang', 'projectID=' + projectID);
+            $.post(link, function(executionLang)
+            {
+                $('#executionBox').html(executionLang);
+            })
+        }
+    }
+    else if($('#execution').val() != 0)
+    {
+        loadAssignedTo($('#execution').val());
+    }
+    else
+    {
+        var productID = $('#product').val();
+        loadProductMembers(productID);
+    }
+}
+
+/**
+ * Load executions of product and project.
+ *
+ * @param  int    $productID
+ * @param  int    $projectID
+ * @param  int    $num
+ * @access public
+ * @return void
+ */
+function loadProductExecutionsByProject(productID, projectID = 0, num = 0)
+{
+    var branch = $('#branches' + num).val();
+    if(typeof(branch) == 'undefined') branch = 0;
+
+    if(projectID == 'ditto')
+    {
+        for(var i = num - 1; i > 0, projectID == 'ditto'; i--)
+        {
+            projectID = $('#projects' + i).val();
+        }
+    }
+
+    var link = createLink('product', 'ajaxGetExecutionsByProject', 'productID=' + productID + '&projectID=' + projectID + '&branch=' + branch + '&number=' + num);
+    $.get(link, function(executions)
+    {
+        if(!executions) executions = '<select id="executions' + num + '" name="executions[' + num + ']" class="form-control"></select>';
+        $('#executions' + num).replaceWith(executions);
+        $("#executions" + num + "_chosen").remove();
+        $("#executions" + num).next('.picker').remove();
+        $("#executions" + num).chosen();
+    });
 }
 
 /**
@@ -408,13 +481,13 @@ function loadExecutionRelated(executionID)
     }
     else
     {
-        var currentProjectID = $('#project').val();
+        var currentProjectID = $('#project').val() == 'undefined' ? 0 : $('#project').val();
         var currentProductID = $('#product').val();
 
         $('#taskIdBox').innerHTML = '<select id="task"></select>';  // Reset the task.
         loadProductStories(currentProductID);
         loadTestTasks(currentProductID);
-        if(typeof(currentProjectID) == 'undefined')
+        if(currentProjectID == 0)
         {
             loadProductMembers(currentProductID);
         }
@@ -485,7 +558,7 @@ function loadProjectBuilds(projectID)
 
     if(page == 'create')
     {
-        var link = createLink('build', 'ajaxGetProjectBuilds', 'projectID=' + projectID + '&productID=' + productID + '&varName=openedBuild&build=' + oldOpenedBuild + "&branch=" + branch);
+        var link = createLink('build', 'ajaxGetProjectBuilds', 'projectID=' + projectID + '&productID=' + productID + '&varName=openedBuild&build=&branch=' + branch);
         $.get(link, function(data)
         {
             if(!data) data = '<select id="openedBuild" name="openedBuild" class="form-control" multiple=multiple></select>';
@@ -560,7 +633,8 @@ function loadExecutionBuilds(executionID, num)
  */
 function loadProductMembers(productID)
 {
-    link = createLink('bug', 'ajaxGetProductMembers', 'productID=' + productID + '&selectedUser=' + $('#assignedTo').val());
+    var branchID = $('#branch').val() == undefined ? '' : $('#branch').val();
+    var link     = createLink('bug', 'ajaxGetProductMembers', 'productID=' + productID + '&selectedUser=' + $('#assignedTo').val() + '&branchID=' + branchID);
     $.get(link, function(data)
     {
         if(!data) data = '<select id="assignedTo" name="assignedTo" class="form-control"></select>';
@@ -629,7 +703,8 @@ function loadProductBranches(productID, param)
     $('#branch').next('.picker').remove();
 
     var branchStatus = page == 'create' ? 'active' : 'all';
-    var param        = "productID=" + productID + "&oldBranch=0&param=" + branchStatus;
+    var oldBranch    = page == 'edit' ? bugBranch : 0;
+    var param        = "productID=" + productID + "&oldBranch=" + oldBranch + "&param=" + branchStatus;
     if(typeof(tab) != 'undefined' && (tab == 'execution' || tab == 'project')) param += "&projectID=" + objectID;
     $.get(createLink('branch', 'ajaxGetBranches', param), function(data)
     {
@@ -644,6 +719,7 @@ function loadProductBranches(productID, param)
         loadProductProjects(productID);
         loadProductplans(productID);
         loadProductStories(productID);
+        loadProductMembers(productID);
     })
 }
 
@@ -713,7 +789,7 @@ function notice()
             if(typeof(branch) == 'undefined') branch = 0;
             var link = createLink('release', 'create', 'productID=' + $('#product').val() + '&branch=' + branch);
             if(config.onlybody != 'yes') link += link.indexOf('?') >= 0 ? '&onlybody=yes' : '?onlybody=yes';
-            html += '<a href="' + link + '" data-toggle="modal" data-type="iframe" style="padding-right:5px">' + createBuild + '</a> ';
+            html += '<a href="' + link + '" data-toggle="modal" data-type="iframe" style="padding-right:5px">' + createRelease + '</a> ';
             html += '<a href="javascript:loadProductBuilds(' + $('#product').val() + ')">' + refresh + '</a>';
         }
         else
@@ -760,7 +836,7 @@ function notice()
 function setBranchRelated(branchID, productID, num)
 {
     var currentModuleID = config.currentMethod == 'batchedit' ? $('#modules' + num).val() : 0;
-    moduleLink = createLink('tree', 'ajaxGetModules', 'productID=' + productID + '&viewType=bug&branch=' + branchID + '&num=' + num + '&currentModuleID=' + currentModuleID);
+    var moduleLink      = createLink('tree', 'ajaxGetModules', 'productID=' + productID + '&viewType=bug&branch=' + branchID + '&num=' + num + '&currentModuleID=' + currentModuleID);
     $.get(moduleLink, function(modules)
     {
         if(!modules) modules = '<select id="modules' + num + '" name="modules[' + num + ']" class="form-control"></select>';
@@ -770,7 +846,17 @@ function setBranchRelated(branchID, productID, num)
         $("#modules" + num).chosen();
     });
 
-    executionLink = createLink('product', 'ajaxGetExecutions', 'productID=' + productID + '&projectID=0&branch=' + branchID + '&num=' + num);
+    var projectLink = createLink('product', 'ajaxGetProjectsByBranch', 'productID=' + productID + '&branch=' + branchID + '&num=' + num);
+    $.get(projectLink, function(projects)
+    {
+        if(!projects) projects = '<select id="projects' + num + '" name="projects[' + num + ']" class="form-control"></select>';
+        $('#projects' + num).replaceWith(projects);
+        $("#projects" + num + "_chosen").remove();
+        $("#projects" + num).next('.picker').remove();
+        $("#projects" + num).chosen();
+    });
+
+    var executionLink = createLink('product', 'ajaxGetExecutions', 'productID=' + productID + '&projectID=0&branch=' + branchID + '&num=' + num);
     $.get(executionLink, function(executions)
     {
         if(!executions) executions = '<select id="executions' + num + '" name="executions[' + num + ']" class="form-control"></select>';
@@ -780,7 +866,7 @@ function setBranchRelated(branchID, productID, num)
         $("#executions" + num).chosen();
     });
 
-    buildLink = createLink('build', 'ajaxGetProductBuilds', 'productID=' + productID + "&varName=openedBuilds&build=&branch=" + branchID + "&index=" + num);
+    var buildLink = createLink('build', 'ajaxGetProductBuilds', 'productID=' + productID + "&varName=openedBuilds&build=&branch=" + branchID + "&index=" + num);
 
     /* If the branch of the current row is inconsistent with the one below, clear the module and execution of the nex row. */
     if(config.currentMethod == 'batchcreate')

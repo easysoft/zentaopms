@@ -3,7 +3,7 @@
  * The create view file of job module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2017 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chenqi <chenqi@cnezsoft.com>
  * @package     job
  * @version     $Id$
@@ -139,8 +139,7 @@
             </td>
           </tr>
           <tr>
-            <th></th>
-            <td class='text-center form-actions'>
+            <td colspan="3" class='text-center form-actions'>
               <?php echo html::submitButton(); ?>
               <?php if(!isonlybody()) echo html::a(inlink('browse', ""), $lang->goback, '', 'class="btn btn-wide"');?>
               <?php echo html::hidden('repoType');?>

@@ -3,7 +3,7 @@
  * The story module English file of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     story
  * @version     $Id: en.php 5141 2013-07-15 05:57:15Z chencongzhi520@gmail.com $
@@ -67,6 +67,7 @@ $lang->story->toTask             = 'Convert to Task';
 $lang->story->batchToTask        = 'Batch Convert to Task';
 $lang->story->convertRelations   = 'Convert Relations';
 $lang->story->undetermined       = 'undetermined';
+$lang->story->order              = 'Order';
 
 $lang->story->editAction      = "Edit {$lang->SRCommon}";
 $lang->story->changeAction    = "Change {$lang->SRCommon}";
@@ -147,7 +148,6 @@ $lang->story->colorTag       = 'Color';
 $lang->story->files          = 'Files';
 $lang->story->copy           = "Copy Story";
 $lang->story->total          = "Total Stories";
-$lang->story->allStories     = 'All Stories';
 $lang->story->draft          = 'Draft';
 $lang->story->unclosed       = 'Unclosed';
 $lang->story->deleted        = 'Deleted';
@@ -246,6 +246,8 @@ $lang->story->legendProjectAndTask = $lang->executionCommon . ' And Task';
 $lang->story->legendBugs           = 'Linked Bugs';
 $lang->story->legendFromBug        = 'From Bug';
 $lang->story->legendCases          = 'Linked Cases';
+$lang->story->legendBuilds         = 'Linked Builds';
+$lang->story->legendReleases       = 'Linked Releases';
 $lang->story->legendLinkStories    = 'Linked Stories';
 $lang->story->legendChildStories   = 'Child Stories';
 $lang->story->legendSpec           = 'Description';
@@ -419,3 +421,23 @@ $lang->story->categoryList['safe']        = 'Safe';
 $lang->story->categoryList['experience']  = 'Experience';
 $lang->story->categoryList['improve']     = 'Improve';
 $lang->story->categoryList['other']       = 'Other';
+
+$lang->story->changeTip = 'This Story is under review and cannot be changed.';
+
+$lang->story->reviewTip = array();
+$lang->story->reviewTip['active']      = 'The Story is already active,no review requirements.';
+$lang->story->reviewTip['notReviewer'] = 'You are not the reviewer of this Story and cannot perform review operations.';
+$lang->story->reviewTip['reviewed']    = 'Reviewed';
+$lang->story->reviewTip['recalled']    = 'This Story has been withdrawn from review and cannot be reviewed.';
+
+$lang->story->recallTip = array();
+$lang->story->recallTip['actived']     = 'The Story has not initiated a review process and no undo action is required.';
+$lang->story->recallTip['recalled']    = 'This Story has been withdrawn from review and cannot be cancelled.';
+$lang->story->recallTip['reviewed']    = 'The review process has been started and cannot be cancelled.';
+$lang->story->recallTip['notOpenedBy'] = 'You are not the Story creator and cannot cancel the operation.';
+
+$lang->story->subDivideTip = array();
+$lang->story->subDivideTip['subStory']  = 'The Sub-stories cannot be subdivided.';
+$lang->story->subDivideTip['planned']   = 'The Story has been planned and cannot be subdivided.';
+$lang->story->subDivideTip['projected'] = 'The Story has been initiated and cannot be subdivided.';
+$lang->story->subDivideTip['notActive'] = 'The Story is not active and cannot be subdivided.';

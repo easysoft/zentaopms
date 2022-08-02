@@ -3,7 +3,7 @@
  * The browse view file of sonarqube module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2022 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Yanyi Cao <caoyanyi@easycorp.ltd>
  * @package     sonarqube
  * @version     $Id$
@@ -12,6 +12,9 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <div id="mainMenu" class="clearfix">
+  <div class="btn-toolbar pull-left">
+    <?php echo html::a($this->createLink('sonarqube', 'browse'), "<span class='text'>{$lang->sonarqube->serverList}</span>", '', "class='btn btn-link btn-active-text'");?>
+  </div>
   <div class="btn-toolbar pull-right">
     <?php if(common::hasPriv('sonarqube', 'create')) common::printLink('sonarqube', 'create', "", "<i class='icon icon-plus'></i> " . $lang->sonarqube->create, '', "class='btn btn-primary'");?>
   </div>
@@ -32,19 +35,19 @@
       <thead>
         <tr>
           <?php $vars = "orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}";?>
-          <th class='c-id text-center'><?php common::printOrderLink('id', $orderBy, $vars, $lang->sonarqube->id);?></th>
-          <th class='c-name text-left'><?php common::printOrderLink('name', $orderBy, $vars, $lang->sonarqube->name);?></th>
-          <th class='text-left'><?php common::printOrderLink('url', $orderBy, $vars, $lang->sonarqube->url);?></th>
-          <th class='c-actions-3'><?php echo $lang->actions;?></th>
+          <th class='c-id'><?php common::printOrderLink('id', $orderBy, $vars, $lang->sonarqube->id);?></th>
+          <th class='c-name w-300px'><?php common::printOrderLink('name', $orderBy, $vars, $lang->sonarqube->name);?></th>
+          <th class='text'><?php common::printOrderLink('url', $orderBy, $vars, $lang->sonarqube->url);?></th>
+          <th class='c-actions-3 text-center'><?php echo $lang->actions;?></th>
         </tr>
       </thead>
       <tbody>
         <?php foreach ($sonarqubeList as $id => $sonarqube): ?>
         <tr class='text'>
-          <td class='text-center'><?php echo $id;?></td>
+          <td class='text'><?php echo $id;?></td>
           <td class='text-c-name' title='<?php echo $sonarqube->name;?>'><?php echo $sonarqube->name;?></td>
           <td class='text' title='<?php echo $sonarqube->url;?>'><?php echo html::a($sonarqube->url, $sonarqube->url, '_blank');?></td>
-          <td class='c-actions text-left'>
+          <td class='c-actions'>
             <?php
             common::printLink('sonarqube', 'browseProject', "sonarqubeID=$id", "<i class='icon icon-list-box'></i> ", '',"title='{$lang->sonarqube->browseProject}' class='btn btn-primary'");
             common::printLink('sonarqube', 'edit', "sonarqubeID=$id", "<i class='icon icon-edit'></i> ", '',"title='{$lang->sonarqube->edit}' class='btn btn-primary'");

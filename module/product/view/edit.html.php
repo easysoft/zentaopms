@@ -3,7 +3,7 @@
  * The edit view of product module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     product
  * @version     $Id: edit.html.php 4129 2013-01-18 01:58:14Z wwccss $
@@ -17,8 +17,11 @@
 <?php js::set('canChangeProgram', $canChangeProgram);?>
 <?php js::set('singleLinkProjects', $singleLinkProjects);?>
 <?php js::set('multipleLinkProjects', $multipleLinkProjects);?>
+<?php js::set('linkStoriesProjectIDList', array_keys($linkStoriesProjects));?>
+<?php js::set('projectPathList', $projectPathList);?>
 <style>
 #changeProgram .icon-project {padding-right: 5px;}
+#changeProgram .modal-body {padding-top: 10px;}
 </style>
 <div id="mainContent" class="main-content">
   <div class="center-block">
@@ -48,10 +51,12 @@
             <th class='w-140px'><?php echo $lang->product->name;?></th>
             <td class='w-p40-f'><?php echo html::input('name', $product->name, "class='form-control' required");?></td><td></td>
           </tr>
+          <?php if(!isset($config->setCode) or $config->setCode == 1):?>
           <tr>
             <th><?php echo $lang->product->code;?></th>
             <td><?php echo html::input('code', $product->code, "class='form-control' required");?></td><td></td>
           </tr>
+          <?php endif;?>
           <tr>
             <th><?php echo $lang->product->PO;?></th>
             <td><?php echo html::select('PO', $poUsers, $product->PO, "class='form-control chosen'");?></td><td></td>
@@ -66,7 +71,7 @@
           </tr>
           <tr>
             <th><?php echo $lang->product->reviewer;?></th>
-            <td><?php echo html::select('reviewer[]', $users, $product->reviewer, "class='form-control chosen' multiple");?></td><td></td>
+            <td><?php echo html::select('reviewer[]', $users, $product->reviewer, "class='form-control picker-select' multiple");?></td><td></td>
           </tr>
           <tr>
             <th><?php echo $lang->product->type;?></th>
@@ -89,7 +94,7 @@
             <th><?php echo $lang->whitelist;?></th>
             <td>
               <div class='input-group'>
-                <?php echo html::select('whitelist[]', $users, $product->whitelist, 'class="form-control chosen" multiple');?>
+                <?php echo html::select('whitelist[]', $users, $product->whitelist, 'class="form-control picker-select" multiple');?>
                 <?php echo $this->fetch('my', 'buildContactLists', "dropdownName=whitelist");?>
               </div>
             </td>
@@ -113,6 +118,8 @@
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="icon icon-close"></i></button>
         <?php if($canChangeProgram):?>
         <h4 class="modal-title"><?php echo $lang->product->changeProgram;?></h4>
+        <?php else:?>
+        <h4 class="modal-title"><?php echo sprintf($lang->product->changeProgramTip, $product->name);?></h4>
         <?php endif;?>
       </div>
       <div class="modal-body">
@@ -121,9 +128,11 @@
           <tr>
             <th class='text-left'><?php echo $lang->product->notChangeProgramTip;?></th>
           </tr>
-          <?php foreach($linkStoriesProjects as $project):?>
+          <?php foreach($linkStoriesProjects as $projectID => $projectName):?>
           <tr>
-            <td><i class="icon icon-project"></i><?php echo $project;?></td>
+            <td>
+              <?php echo html::a($this->createLink('projectstory', 'story', 'projectID=' . $projectID), "<i class='icon icon-project'></i>" . $projectName, '', "title='$projectName'");?>
+            </td>
           </tr>
           <?php endforeach;?>
           <?php endif;?>

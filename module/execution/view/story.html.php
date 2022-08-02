@@ -3,7 +3,7 @@
  * The story view file of execution module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     execution
  * @version     $Id: story.html.php 5117 2013-07-12 07:03:14Z chencongzhi520@gmail.com $
@@ -27,33 +27,44 @@
 .btn-group a i.icon-plus, .btn-group a i.icon-link {font-size: 16px;}
 .btn-group a.btn-secondary, .btn-group a.btn-primary {border-right: 1px solid rgba(255,255,255,0.2);}
 .btn-group button.dropdown-toggle.btn-secondary, .btn-group button.dropdown-toggle.btn-primary {padding:6px;}
+.export {margin-left: 0px !important;}
 </style>
+<?php $isAllModules = (!empty($module->name) or !empty($product->name) or !empty($branch)) ? false : true;?>
+<?php $sidebarName  = $lang->tree->all;?>
+<?php $removeBtn    = '';?>
 <div id="mainMenu" class="clearfix">
-  <?php if(!empty($module->name) or !empty($product->name) or !empty($branch)):?>
   <div id="sidebarHeader">
     <?php
-    $sidebarName = isset($product) ? $product->name : (isset($branch) ? $branch : $module->name);
-    $removeType  = isset($product) ? 'byproduct' : (isset($branch) ? 'bybranch' : 'bymodule');
-    $removeLink  = inlink('story', "executionID=$execution->id&orderBy=$orderBy&type=$removeType&param=0&recTotal=0&recPerPage={$pager->recPerPage}");
+    if(!$isAllModules)
+    {
+        $sidebarName = isset($product) ? $product->name : (isset($branch) ? $branch : $module->name);
+        $removeType  = isset($product) ? 'byproduct' : (isset($branch) ? 'bybranch' : 'bymodule');
+        $removeLink  = inlink('story', "executionID=$execution->id&orderBy=$orderBy&type=$removeType&param=0&recTotal=0&recPerPage={$pager->recPerPage}");
+        $removeBtn   = html::a($removeLink, "<i class='icon icon-sm icon-close'></i>", '', "class='text-muted'");
+    }
     ?>
     <div class="title" title='<?php echo $sidebarName;?>'>
       <?php echo $sidebarName;?>
-      <?php echo html::a($removeLink, "<i class='icon icon-sm icon-close'></i>", '', "class='text-muted'");?>
+      <?php echo $removeBtn;?>
     </div>
   </div>
-  <?php endif;?>
   <div class="btn-toolbar pull-left">
     <?php
     if(common::hasPriv('execution', 'story'))
     {
-        echo html::a($this->createLink('execution', 'story', "executionID=$execution->id&orderBy=order_desc&type=all"), "<span class='text'>{$lang->story->allStories}</span>" . ($type == 'all' ? " <span class='label label-light label-badge'>{$pager->recTotal}</span>" : ''), '', "class='btn btn-link" . ($type == 'all' ? " btn-active-text" : '') . "'");
+        echo html::a($this->createLink('execution', 'story', "executionID=$execution->id&orderBy=order_desc&type=all"), "<span class='text'>{$lang->all}</span>" . ($type == 'all' ? " <span class='label label-light label-badge'>{$pager->recTotal}</span>" : ''), '', "class='btn btn-link" . ($type == 'all' ? " btn-active-text" : '') . "'");
         echo html::a($this->createLink('execution', 'story', "executionID=$execution->id&orderBy=order_desc&type=unclosed"), "<span class='text'>{$lang->story->unclosed}</span>" . ($type == 'unclosed' ? " <span class='label label-light label-badge'>{$pager->recTotal}</span>" : ''), '', "class='btn btn-link" . ($type == 'unclosed' ? " btn-active-text" : '') . "'");
     }
-    if(common::hasPriv('execution', 'storykanban')) echo html::a($this->createLink('execution', 'storykanban', "executionID=$execution->id"), "<span class='text'>{$lang->execution->kanban}</span>", '', "class='btn btn-link'");
     ?>
     <a class="btn btn-link querybox-toggle" id='bysearchTab'><i class="icon icon-search muted"></i> <?php echo $lang->product->searchStory;?></a>
   </div>
   <div class="btn-toolbar pull-right">
+    <?php if(common::hasPriv('execution', 'storykanban')):?>
+    <div class="btn-group panel-actions">
+      <?php echo html::a($this->createLink('execution', 'story', "executionID=$execution->id&orderBy=order_desc&type=all"), "<i class='icon-list'></i> &nbsp;", '', "class='btn btn-icon text-primary switchBtn' title='{$lang->execution->list}' data-type='bylist'");?>
+      <?php echo html::a($this->createLink('execution', 'storykanban', "executionID=$execution->id"), "<i class='icon-kanban'></i> &nbsp;", '', "class='btn btn-icon switchBtn' title='{$lang->execution->kanban}' data-type='bykanban'");?>
+    </div>
+    <?php endif;?>
     <?php
     common::printLink('story', 'export', "productID=$productID&orderBy=id_desc&executionID=$execution->id", "<i class='icon icon-export muted'></i> " . $lang->story->export, '', "class='btn btn-link export iframe' data-app='execution'");
 
@@ -61,7 +72,7 @@
     {
         $this->lang->story->create = $this->lang->execution->createStory;
 
-        if($productID and !$this->loadModel('story')->checkForceReview())
+        if($productID)
         {
             $storyModuleID   = (int)$this->cookie->storyModuleParam;
             $createStoryLink = $this->createLink('story', 'create', "productID=$productID&branch=0&moduleID={$storyModuleID}&story=0&execution=$execution->id");
@@ -144,11 +155,6 @@
   <strong>
   <?php echo ($this->project->getById($execution->project)->name . ' / ' . $this->execution->getByID($execution->id)->name) ?>
   </strong>
-  <div class="linkButton" onclick="handleLinkButtonClick()">
-    <span title="<?php echo $lang->viewDetails;?>">
-      <i class="icon icon-import icon-rotate-270"></i>
-    </span>
-  </div>
 </div>
 <?php endif;?>
 <div id="mainContent" class="main-row fade">
@@ -161,6 +167,9 @@
   </div>
   <div class="main-col">
     <div id='queryBox' data-module='executionStory' class='cell <?php if($type =='bysearch') echo 'show';?>'></div>
+      <div class="table-header fixed-right">
+        <nav class="btn-toolbar pull-right setting"></nav>
+      </div>
     <?php if(empty($stories)):?>
     <div class="table-empty-tip">
       <p>
@@ -172,161 +181,59 @@
     </div>
     <?php else:?>
     <form class='main-table table-story skip-iframe-modal' method='post' id='executionStoryForm'>
-      <div class="table-header fixed-right">
-        <nav class="btn-toolbar pull-right"></nav>
-      </div>
-      <table class='table tablesorter has-sort-head' id='storyList'>
+      <?php
+      $datatableId  = $this->moduleName . ucfirst($this->methodName);
+      $useDatatable = (isset($config->datatable->$datatableId->mode) and $config->datatable->$datatableId->mode == 'datatable');
+      $vars = "executionID={$execution->id}&orderBy=%s&type=$type&param=$param&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}";
+
+      if($useDatatable) include '../../common/view/datatable.html.php';
+      $setting = $this->datatable->getSetting('execution');
+      $widths  = $this->datatable->setFixedFieldWidth($setting);
+      $columns = 0;
+
+      $checkObject = new stdclass();
+      $checkObject->execution = $execution->id;
+
+      $totalEstimate       = 0;
+      $canBatchEdit        = common::hasPriv('story', 'batchEdit');
+      $canBatchClose       = common::hasPriv('story', 'batchClose');
+      $canBatchChangeStage = common::hasPriv('story', 'batchChangeStage');
+      $canBatchUnlink      = common::hasPriv('execution', 'batchUnlinkStory');
+      $canBatchToTask      = common::hasPriv('story', 'batchToTask', $checkObject);
+      $canBatchAction      = ($canBeChanged and ($canBatchEdit or $canBatchClose or $canBatchChangeStage or $canBatchUnlink or $canBatchToTask));
+      ?>
+      <?php if(!$useDatatable) echo '<div class="table-responsive">';?>
+      <table class='table tablesorter has-sort-head<?php if($useDatatable) echo ' datatable';?>' id='storyList' data-fixed-left-width='<?php echo $widths['leftWidth']?>' data-fixed-right-width='<?php echo $widths['rightWidth']?>'>
         <thead>
           <tr>
           <?php
-          $checkObject = new stdclass();
-          $checkObject->execution = $execution->id;
-
-          $totalEstimate       = 0;
-          $canBatchEdit        = common::hasPriv('story', 'batchEdit');
-          $canBatchClose       = common::hasPriv('story', 'batchClose');
-          $canBatchChangeStage = common::hasPriv('story', 'batchChangeStage');
-          $canBatchUnlink      = common::hasPriv('execution', 'batchUnlinkStory');
-          $canBatchToTask      = common::hasPriv('story', 'batchToTask', $checkObject);
-          $canBatchAction      = ($canBeChanged and ($canBatchEdit or $canBatchClose or $canBatchChangeStage or $canBatchUnlink or $canBatchToTask));
+          foreach($setting as $key => $value)
+          {
+              if($value->show)
+              {
+                  $this->datatable->printHead($value, $orderBy, $vars, $canBatchAction);
+                  $columns ++;
+              }
+          }
           ?>
-          <?php $vars = "executionID={$execution->id}&orderBy=%s&type=$type&param=$param&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"; ?>
-            <th class='c-id {sorter:false}'>
-              <?php if($canBatchAction):?>
-              <div class="checkbox-primary check-all" title="<?php echo $lang->selectAll?>">
-                <label></label>
-              </div>
-              <?php endif;?>
-              <?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?>
-            </th>
-            <?php if($canOrder):?>
-            <th class='c-sort {sorter:false}'><?php common::printOrderLink('order', $orderBy, $vars, $lang->execution->orderAB);?></th>
-            <?php endif;?>
-            <th class='c-pri {sorter:false}' title=<?php echo $lang->execution->pri;?>><?php common::printOrderLink('pri', $orderBy, $vars, $lang->priAB);?></th>
-            <th class='c-name {sorter:false}'><?php common::printOrderLink('title', $orderBy, $vars, $lang->execution->storyTitle);?></th>
-            <th class='c-category {sorter:false}'><?php common::printOrderLink('category', $orderBy, $vars, $lang->story->category);?></th>
-            <th class='c-user {sorter:false}'> <?php common::printOrderLink('openedBy', $orderBy, $vars, $lang->openedByAB);?></th>
-            <th class='c-user {sorter:false}'> <?php common::printOrderLink('assignedTo', $orderBy, $vars, $lang->assignedToAB);?></th>
-            <th class='c-estimate {sorter:false} text-right'> <?php common::printOrderLink('estimate', $orderBy, $vars, $lang->story->estimateAB);?></th>
-            <th class='c-status {sorter:false}'> <?php common::printOrderLink('status', $orderBy, $vars, $lang->statusAB);?></th>
-            <th class='c-stage {sorter:false}'> <?php common::printOrderLink('stage', $orderBy, $vars, $lang->story->stageAB);?></th>
-            <th title='<?php echo $lang->story->taskCount?>' class='c-count'><?php echo $lang->story->taskCountAB;?></th>
-            <th title='<?php echo $lang->story->bugCount?>'  class='c-count'><?php echo $lang->story->bugCountAB;?></th>
-            <th title='<?php echo $lang->story->caseCount?>' class='c-count'><?php echo $lang->story->caseCountAB;?></th>
-            <th class='c-actions-7 text-center {sorter:false}'><?php echo $lang->actions;?></th>
           </tr>
         </thead>
         <tbody id='storyTableList' class='sortable'>
           <?php foreach($stories as $key => $story):?>
           <?php
-          $storyLink      = $this->createLink('story', 'view', "storyID=$story->id&version=$story->version&param=$execution->id");
           $totalEstimate += $story->estimate;
           ?>
           <tr id="story<?php echo $story->id;?>" data-id='<?php echo $story->id;?>' data-order='<?php echo $story->order ?>' data-estimate='<?php echo $story->estimate?>' data-cases='<?php echo zget($storyCases, $story->id, 0)?>'>
-            <td class='cell-id'>
-              <?php if($canBatchAction):?>
-              <?php echo html::checkbox('storyIdList', array($story->id => '')) . html::a(helper::createLink('story', 'view', "storyID=$story->id&version=$story->version&from=execution&param=$execution->id"), sprintf('%03d', $story->id), null, "data-app='execution'");?>
-              <?php else:?>
-              <?php printf('%03d', $story->id);?>
-              <?php endif;?>
-            </td>
-            <?php if($canOrder):?>
-            <td class='sort-handler c-sort'><i class='icon-move'></i></td>
-            <?php endif;?>
-            <td class='c-pri'><span class='label-pri <?php echo 'label-pri-' . $story->pri?>' title='<?php echo zget($lang->story->priList, $story->pri, $story->pri);?>'><?php echo zget($lang->story->priList, $story->pri, $story->pri);?></span></td>
-            <td class='c-name' title="<?php echo $story->title?>">
-              <?php if($showBranch) $showBranch = isset($this->config->execution->story->showBranch) ? $this->config->execution->story->showBranch : 1;?>
-              <?php if(isset($branchGroups[$story->product][$story->branch]) and $showBranch) echo "<span class='label label-outline label-badge' title={$branchGroups[$story->product][$story->branch]}>" . $branchGroups[$story->product][$story->branch] . '</span>';?>
-              <?php if(!empty($story->module) and isset($modulePairs[$story->module])) echo "<span class='label label-gray label-badge'>{$modulePairs[$story->module]}</span> ";?>
-              <?php if($story->parent > 0) echo "<span class='label'>{$lang->story->childrenAB}</span>";?>
-              <?php echo html::a($storyLink,$story->title, null, "style='color: $story->color' data-app='execution'");?>
-            </td>
-            <td class='c-category' title='<?php echo zget($lang->story->categoryList, $story->category);?>'><?php echo zget($lang->story->categoryList, $story->category);?></td>
-            <td class='c-user' title='<?php echo zget($users, $story->openedBy);?>'><?php echo zget($users, $story->openedBy);?></td>
-            <td class='c-assignedTo <?php if(zget($users, $story->assignedTo) == 'Closed') echo 'closed-story'?>' title='<?php echo zget($users, $story->assignedTo);?>'><?php echo zget($users, $story->assignedTo);?></td>
-            <td class='c-estimate text-right' title="<?php echo $story->estimate . ' ' . $lang->hourCommon;?>"><?php echo $story->estimate . $config->hourUnit;?></td>
-            <?php $status = $this->processStatus('story', $story);?>
-            <td class='c-status' title='<?php echo $status;?>'>
-              <span class='status-story status-<?php echo $story->status;?>'><?php echo $status;?></span>
-            </td>
-            <td class='c-stage'><?php echo $lang->story->stageList[$story->stage];?></td>
-            <td class='linkbox c-count'>
-              <?php
-              $tasksLink = $this->createLink('story', 'tasks', "storyID=$story->id&executionID=$execution->id");
-              $storyTasks[$story->id] > 0 ? print(html::a($tasksLink, $storyTasks[$story->id], '', 'class="iframe"')) : print(0);
-              ?>
-            <td class='c-count'>
-              <?php
-              $bugsLink = $this->createLink('story', 'bugs', "storyID=$story->id&executionID=$execution->id");
-              $storyBugs[$story->id] > 0 ? print(html::a($bugsLink, $storyBugs[$story->id], '', 'class="iframe"')) : print(0);
-              ?>
-            </td>
-            <td class='c-count'>
-              <?php
-              $casesLink = $this->createLink('story', 'cases', "storyID=$story->id&executionID=$execution->id");
-              $storyCases[$story->id] > 0 ? print(html::a($casesLink, $storyCases[$story->id], '', 'class="iframe"')) : print(0);
-              ?>
-            </td>
-            <td class='c-actions'>
-              <?php
-              $hasDBPriv = common::hasDBPriv($execution, 'execution');
-              if($canBeChanged)
-              {
-                  $param = "executionID={$execution->id}&story={$story->id}&moduleID={$story->module}";
-
-                  $story->reviewer  = isset($story->reviewer)  ? $story->reviewer  : array();
-                  $story->notReview = isset($story->notReview) ? $story->notReview : array();
-
-                  if(common::hasPriv('story', 'review'))
-                  {
-                      $reviewDisabled = in_array($app->user->account, $story->notReview) and ($story->status == 'draft' or $story->status == 'changed') ? '' : 'disabled';
-                      $story->from = 'execution';
-                      common::printIcon('story', 'review', "story={$story->id}&from=story", $story, 'list', 'search', '', $reviewDisabled, false, "data-group=execution");
-                  }
-
-                  if(common::hasPriv('story', 'recall'))
-                  {
-                      $recallDisabled = empty($story->reviewedBy) and strpos('draft,changed', $story->status) !== false and !empty($story->reviewer) ? '' : 'disabled';
-                      common::printIcon('story', 'recall', "story={$story->id}", $story, 'list', 'undo', 'hiddenwin', $recallDisabled, '', '', $lang->story->recall);
-                  }
-
-                  $lang->task->create = $lang->execution->wbs;
-                  $toTaskDisabled = strpos('draft,closed', $story->status) !== false ? 'disabled' : '';
-                  if(commonModel::isTutorialMode())
-                  {
-                      $wizardParams = helper::safe64Encode($param);
-                      echo html::a($this->createLink('tutorial', 'wizard', "module=task&method=create&params=$wizardParams"), "<i class='icon-plus'></i>",'', "class='btn btn-task-create' title='{$lang->execution->wbs}' data-app='execution'");
-                  }
-                  else
-                  {
-                      if($hasDBPriv) common::printIcon('task', 'create', $param, '', 'list', 'plus', '', 'btn-task-create ' . $toTaskDisabled);
-                  }
-
-                  $lang->task->batchCreate = $lang->execution->batchWBS;
-                  if($hasDBPriv) common::printIcon('task', 'batchCreate', "executionID={$execution->id}&story={$story->id}", '', 'list', 'pluses', '', $toTaskDisabled);
-
-                  $lang->testcase->batchCreate = $lang->testcase->create;
-                  if($productID and $hasDBPriv and common::hasPriv('testcase', 'create'))
-                  {
-                      echo html::a($this->createLink('testcase', 'create', "productID=$story->product&branch=$story->branch&moduleID=$story->module&form=&param=0&storyID=$story->id"), '<i class="icon-testcase-create icon-sitemap"></i>', '', "class='btn' title='{$lang->testcase->create}' data-app='qa'");
-                  }
-
-                  if($canBeChanged and common::hasPriv('execution', 'storyEstimate', $execution))
-                  {
-                      common::printIcon('execution', 'storyEstimate', "executionID=$execution->id&storyID=$story->id", '', 'list', 'estimate', '', 'iframe', true, "data-width='600px'");
-                  }
-
-                  if($canBeChanged and common::hasPriv('execution', 'unlinkStory', $execution))
-                  {
-                      common::printIcon('execution', 'unlinkStory', "executionID=$execution->id&storyID=$story->id&confirm=no", '', 'list', 'unlink', 'hiddenwin');
-                  }
-              }
-              ?>
-            </td>
+          <?php foreach($setting as $key => $value)
+          {
+              $this->story->printCell($value, $story, $users, $branchOption, $storyStages, $modulePairs, $storyTasks, $storyBugs, $storyCases, $useDatatable ? 'datatable' : 'table', '', $execution, $showBranch);
+          }
+          ?>
           </tr>
           <?php endforeach;?>
         </tbody>
       </table>
+      <?php if(!$useDatatable) echo '</div>';?>
       <div class='table-footer'>
         <?php if($canBatchAction):?>
         <div class="checkbox-primary check-all"><label><?php echo $lang->selectAll?></label></div>
@@ -486,11 +393,9 @@ $(function()
         }
     });
 });
-function handleLinkButtonClick()
-{
-  var xxcUrl = "xxc:openInApp/zentao-integrated/" + encodeURIComponent(window.location.href.replace(/.display=card/, '').replace(/\.xhtml/, '.html'));
-  window.open(xxcUrl);
-}
+<?php if(!empty($useDatatable)):?>
+$(function(){$('#executionStoryForm').table();})
+<?php endif;?>
 </script>
 <?php if(commonModel::isTutorialMode()): ?>
 <style>

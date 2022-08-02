@@ -3,7 +3,7 @@
  * The control file of api of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     api
  * @version     $Id: control.php 5143 2013-07-15 06:11:59Z thanatos thanatos915@163.com $
@@ -28,21 +28,13 @@ class api extends control
      * @param  int    $version
      * @param  int    $release
      * @param  int    $appendLib
+     * @param  string $browseType
+     * @param  int    $param
      * @access public
      * @return void
      */
-    public function index($libID = 0, $moduleID = 0, $apiID = 0, $version = 0, $release = 0, $appendLib = 0)
+    public function index($libID = 0, $moduleID = 0, $apiID = 0, $version = 0, $release = 0, $appendLib = 0, $browseType = '', $param = 0)
     {
-        /* Get all api doc libraries. */
-        $libs = $this->doc->getApiLibs($appendLib);
-        if($libID == 0 and !empty($libs)) $libID = key($libs);
-
-        $lib       = $this->doc->getLibById($libID);
-        $appendLib = (!empty($lib) and $lib->deleted == '1') ? $libID : 0;
-
-        /* Generate bread crumbs dropMenu. */
-        if($libs) $this->lang->modulePageNav = $this->generateLibsDropMenu($libs, $libID, $release);
-
         /* Get an api doc. */
         if($apiID > 0)
         {
@@ -69,7 +61,30 @@ class api extends control
             $this->view->typeList = $this->api->getTypeList($libID);
         }
 
+        /* Get all api doc libraries. */
+        $libs = $this->doc->getApiLibs($appendLib);
+        if($libID == 0 and $apiID > 0) $libID = $api->lib;
+        if($libID == 0 and !empty($libs)) $libID = key($libs);
+
+        $lib       = $this->doc->getLibById($libID);
+        $appendLib = (!empty($lib) and $lib->deleted == '1') ? $libID : 0;
+
+        /* Generate bread crumbs dropMenu. */
+        if($libs) $this->lang->modulePageNav = $this->generateLibsDropMenu($libs, $libID, $release);
+
         $this->setMenu($libID, $moduleID);
+        $this->lang->TRActions = '<a class="btn btn-link querybox-toggle" id="bysearchTab"><i class="icon icon-search muted"></i> ' . $this->lang->api->search . '</a>' . $this->lang->TRActions;
+
+        /* Build the search form. */
+        $queryID   = $browseType == 'bySearch' ? (int)$param : 0;
+        $actionURL = $this->createLink('api', 'index', "libID=$libID&moduleID=0&apiID=0&version=0&release=0&appendLib=0&browseType=bySearch&param=myQueryID");
+        $this->api->buildSearchForm($lib,$queryID, $actionURL);
+
+        if($browseType == 'bySearch')
+        {
+            $this->view->apiList  = $this->api->getApiListBySearch($libID, $queryID);
+            $this->view->typeList = $this->api->getTypeList($libID);
+        }
 
         $this->view->lib        = $lib;
         $this->view->isRelease  = $release > 0;
@@ -78,6 +93,7 @@ class api extends control
         $this->view->libID      = $libID;
         $this->view->apiID      = $apiID;
         $this->view->libs       = $libs;
+        $this->view->browseType = $browseType;
         $this->view->moduleTree = $libID ? $this->doc->getApiModuleTree($libID, $apiID, $release, $moduleID) : '';
         $this->view->users      = $this->user->getPairs('noclosed,noletter');
 
@@ -235,9 +251,10 @@ class api extends control
 
 
             $id = $this->api->createStruct($data);
+            if(dao::isError()) return $this->sendError(dao::getError());
+
             $this->action->create('apistruct', $id, 'Created');
 
-            if(dao::isError()) return $this->sendError(dao::getError());
             return $this->sendSuccess(array('locate' => helper::createLink('api', 'struct', "libID=$libID")));
         }
 
@@ -336,7 +353,7 @@ class api extends control
 
         $this->view->type   = $type;
         $this->view->groups = $this->loadModel('group')->getPairs();
-        $this->view->users  = $this->user->getPairs('nocode');
+        $this->view->users  = $this->user->getPairs('nocode|noclosed');
 
         $this->display();
     }
@@ -371,7 +388,7 @@ class api extends control
 
         $this->view->doc    = $doc;
         $this->view->groups = $this->loadModel('group')->getPairs();
-        $this->view->users  = $this->user->getPairs('nocode');
+        $this->view->users  = $this->user->getPairs('nocode|noclosed');
 
         $this->display();
     }
@@ -439,7 +456,7 @@ class api extends control
         $this->getTypeOptions($api->lib);
 
         $this->view->title            = $api->title . $this->lang->api->edit;
-        $this->view->gobackLink       = $this->createLink('api', 'index', "libID={$api->lib}&moduleID={$api->module}");
+        $this->view->gobackLink       = $this->createLink('api', 'index', "libID={$api->lib}&moduleID={$api->module}&apiID=$apiID");
         $this->view->user             = $this->app->user->account;
         $this->view->allUsers         = $this->loadModel('user')->getPairs('devfirst|noclosed');;
         $this->view->moduleOptionMenu = $this->loadModel('tree')->getOptionMenu($api->lib, 'api', $startModuleID = 0);
@@ -619,7 +636,7 @@ class api extends control
             if(intval($libID) > 0 and common::hasPriv('api', 'create'))
             {
                 $menu .= "<li>";
-                $menu .= html::a(helper::createLink('api', 'create', "libID=$libID&moduleID=$moduleID"), "<i class='icon-rich-text icon'></i> " . $this->lang->api->apiDoc, '', "data-app='{$this->app->tab}'");
+                $menu .= html::a(helper::createLink('api', 'create', "libID=$libID&moduleID=$moduleID"), "<i class='icon-rich-text icon'></i> " . $this->lang->api->createApi, '', "data-app='{$this->app->tab}'");
                 $menu .= "</li>";
             }
 
@@ -673,6 +690,11 @@ EOT;
         {
             $selected = $key == $libID ? 'selected' : '';
             $output  .= html::a(inlink($methodName, "libID=$key"), $lib->name, '', "class='$selected' data-app='{$this->app->tab}'");
+        }
+        if(count($libs) >= 2 and common::hasPriv('doc', 'sortLibs'))
+        {
+            $output   .= '<li class="divider"></li>';
+            $output   .= html::a($this->createLink('doc', 'sortLibs', "type=api&objectID=0", '', true), "<i class='icon-move'></i>  {$this->lang->doc->sortLibs}", '', "data-title='{$this->lang->doc->sortLibs}' data-toggle='modal' data-type='iframe' data-width='400px' data-app='{$this->app->tab}'");
         }
         $output .= "</div></div></div></div></div>";
 

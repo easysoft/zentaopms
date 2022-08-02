@@ -3,7 +3,7 @@
  * The view file of task module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     task
  * @version     $Id: view.html.php 4808 2013-06-17 05:48:13Z zhujinyonging@gmail.com $
@@ -16,13 +16,6 @@
 <?php js::set('sysurl', common::getSysUrl());?>
 <?php if(strpos($_SERVER["QUERY_STRING"], 'isNotice=1') === false):?>
 <div id="mainMenu" class="clearfix">
-<?php if($this->app->getViewType() == 'xhtml'):?>
-<div class="linkButton" onclick="handleLinkButtonClick()">
-  <span title="<?php echo $lang->viewDetails;?>">
-    <i class="icon icon-import icon-rotate-270"></i>
-  </span>
-</div>
-<?php endif;?>
   <div class="btn-toolbar pull-left">
     <?php if(!isonlybody()):?>
     <?php echo html::a($browseLink, '<i class="icon icon-back icon-sm"></i> ' . $lang->goback, '', "class='btn btn-secondary'");?>
@@ -105,18 +98,18 @@
       <div class='detail'>
         <div class='detail-title'><?php echo $this->lang->task->children;?></div>
         <div class='detail-content article-content'>
-          <table class='table table-hover table-fixed'>
+          <table class='table table-hover table-fixed' id='childrenTable'>
             <thead>
               <tr class='text-center'>
-                <th class='w-50px'> <?php echo $lang->task->id;?></th>
-                <th class='w-40px'> <?php echo $lang->task->lblPri;?></th>
+                <th class='c-id'> <?php echo $lang->task->id;?></th>
+                <th class='c-lblPri'> <?php echo $lang->task->lblPri;?></th>
                 <th>                <?php echo $lang->task->name;?></th>
-                <th class='w-100px'><?php echo $lang->task->deadline;?></th>
-                <th class='w-80px'> <?php echo $lang->task->assignedTo;?></th>
-                <th class='w-80px'> <?php echo $lang->task->status;?></th>
-                <th class='w-60px visible-lg'><?php echo $lang->task->consumedAB . $lang->task->lblHour;?></th>
-                <th class='w-60px visible-lg'><?php echo $lang->task->leftAB . $lang->task->lblHour;?></th>
-                <th class='w-170px'><?php echo $lang->actions;?></th>
+                <th class='c-deadline'><?php echo $lang->task->deadline;?></th>
+                <th class='c-assignedTo'> <?php echo $lang->task->assignedTo;?></th>
+                <th class='c-status'> <?php echo $lang->task->status;?></th>
+                <th class='visible-lg c-consumedAB'><?php echo $lang->task->consumedAB . $lang->task->lblHour;?></th>
+                <th class='visible-lg c-leftAB'><?php echo $lang->task->leftAB . $lang->task->lblHour;?></th>
+                <th class='c-actions'><?php echo $lang->actions;?></th>
               </tr>
             </thead>
             <tbody>
@@ -125,26 +118,25 @@
                 <td><?php echo $child->id;?></td>
                 <td>
                   <?php
-                  echo "<span class='pri-" . $child->pri . "'>";
+                  echo "<span class='label-pri label-pri-" . $child->pri . "'>";
                   echo $child->pri == '0' ? '' : zget($this->lang->task->priList, $child->pri, $child->pri);
                   echo "</span>";
                   ?>
                 </td>
                 <td class='text-left' title='<?php echo $child->name;?>'><a class="iframe" data-width="90%" href="<?php echo $this->createLink('task', 'view', "taskID=$child->id", '', true); ?>"><?php echo $child->name;?></a></td>
                 <td><?php echo $child->deadline;?></td>
-                <td><?php echo zget($users, $child->assignedTo);?></td>
+                <td id='assignedTo'><?php $this->task->printAssignedHtml($child, $users);?></td>
                 <td><?php echo $this->processStatus('task', $child);?></td>
                 <td class='visible-lg'><?php echo $child->consumed;?></td>
                 <td class='visible-lg'><?php echo $child->left;?></td>
                 <td class='c-actions'>
                   <?php
-                  common::printIcon('task', 'assignTo', "executionID=$child->execution&taskID=$child->id", $child, 'list', '', '', 'iframe showinonlybody', true);
                   common::printIcon('task', 'start',    "taskID=$child->id", $child, 'list', '', '', 'iframe showinonlybody', true);
-                  common::printIcon('task', 'activate', "taskID=$child->id", $child, 'list', '', '', 'iframe showinonlybody', true);
                   common::printIcon('task', 'close',    "taskID=$child->id", $child, 'list', '', '', 'iframe showinonlybody', true);
                   common::printIcon('task', 'finish',   "taskID=$child->id", $child, 'list', '', '', 'iframe showinonlybody', true);
                   common::printIcon('task', 'recordEstimate', "taskID=$child->id", $child, 'list', 'time', '', 'iframe showinonlybody', true);
                   common::printIcon('task', 'edit', "taskID=$child->id", $child, 'list');
+                  common::printIcon('task', 'activate', "taskID=$child->id", $child, 'list', '', '', 'iframe showinonlybody', true);
                   ?>
                 </td>
               </tr>
@@ -167,8 +159,10 @@
     <?php endif;?>
     <div class='main-actions'>
       <div class="btn-toolbar">
-        <?php common::printBack($browseLink);?>
-        <?php if(!isonlybody()) echo "<div class='divider'></div>";?>
+        <?php if(!isonlybody() and $this->app->getViewType() != 'xhtml'):?>
+        <?php echo html::a($browseLink, '<i class="icon icon-back icon-sm"></i> ' . $lang->goback, '', "class='btn'");?>
+        <?php echo "<div class='divider'></div>";?>
+        <?php endif;?>
         <?php $task->executionList = $execution;?>
         <?php echo $this->task->buildOperateMenu($task, 'view');?>
       </div>
@@ -247,7 +241,7 @@
                     <?php
                     if(!$task->storyTitle) echo $lang->noData;
                     $class = isonlybody() ? 'showinonlybody' : 'iframe';
-                    if($task->storyTitle and !common::printLink('story', 'view', "storyID=$task->story", $task->storyTitle, '', "class=$class data-width='80%'", true, true)) echo $task->storyTitle;
+                    if($task->storyTitle and !common::printLink('execution', 'storyView', "storyID=$task->story", $task->storyTitle, '', "class=$class data-width='80%'", true, true)) echo $task->storyTitle;
                     if($task->needConfirm)
                     {
                         echo "(<span class='warning'>{$lang->story->changed}</span> ";
@@ -266,8 +260,25 @@
                 <?php endif;?>
                 <tr>
                   <th><?php echo $lang->task->assignedTo;?></th>
-                  <td><?php echo $task->assignedTo ? $task->assignedToRealName . $lang->at . $task->assignedDate : $lang->noData;?></td>
+                  <td>
+                    <?php
+                    if(!empty($task->team) and $task->mode == 'multi' and $task->status != 'closed')
+                    {
+                        foreach($task->team as $member) echo ' ' . zget($users, $member->account);
+                    }
+                    else
+                    {
+                        echo $task->assignedTo ? $task->assignedToRealName . $lang->at . $task->assignedDate : $lang->noData;
+                    }
+                    ?>
+                  </td>
                 </tr>
+                <?php if($task->mode):?>
+                <tr>
+                  <th><?php echo $lang->task->mode;?></th>
+                  <td><?php echo zget($lang->task->modeList, $task->mode);?></td>
+                </tr>
+                <?php endif;?>
                 <tr>
                   <th><?php echo $lang->task->type;?></th>
                   <td><?php echo $lang->task->typeList[$task->type];?></td>
@@ -424,11 +435,6 @@
   <?php common::printPreAndNext($preAndNext);?>
 </div>
 <script>
-function handleLinkButtonClick()
-{
-  var xxcUrl = "xxc:openInApp/zentao-integrated/" + encodeURIComponent(window.location.href.replace(/.display=card/, '').replace(/\.xhtml/, '.html'));
-  window.open(xxcUrl);
-}
 </script>
 <?php include '../../common/view/syntaxhighlighter.html.php';?>
 <?php include '../../common/view/footer.html.php';?>

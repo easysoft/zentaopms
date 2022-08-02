@@ -3,7 +3,7 @@
  * The prjedit view file of project module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     project
  * @version     $Id
@@ -28,6 +28,8 @@
 <?php js::set('multiBranchProducts', $multiBranchProducts);?>
 <?php $aclList = $project->parent ? $lang->project->subAclList : $lang->project->aclList;?>
 <?php $requiredFields = $config->project->edit->requiredFields;?>
+<?php js::set('requiredFields', $requiredFields);?>
+<?php js::set('budget', $project->budget);?>
 <div id='mainContent' class='main-content'>
   <div class='center-block'>
     <div class='main-header'>
@@ -37,7 +39,7 @@
       <table class='table table-form'>
         <?php if($project->model != 'kanban'):?>
         <tr>
-          <th><?php echo $lang->project->model;?></th>
+          <th class='w-130px'><?php echo $lang->project->model;?></th>
           <td><?php echo html::select('model', $lang->project->modelList, $model, "class='form-control chosen' required $disableModel");?></td>
         </tr>
         <?php endif;?>
@@ -59,10 +61,12 @@
           <th><?php echo $lang->project->name;?></th>
           <td class="col-main"><?php echo html::input('name', $project->name, "class='form-control' required");?></td>
         </tr>
+        <?php if(!isset($config->setCode) or $config->setCode == 1):?>
         <tr>
           <th><?php echo $lang->project->code;?></th>
           <td><?php echo html::input('code', $project->code, "class='form-control' required");?></td>
         </tr>
+        <?php endif;?>
         <tr>
           <th><?php echo $lang->project->PM;?></th>
           <td><?php echo html::select('PM', $PMUsers, $project->PM, "class='form-control chosen'" . (strpos($requiredFields, 'PM') !== false ? ' required' : ''));?></td>
@@ -89,7 +93,7 @@
           </td>
         </tr>
         <tr>
-          <th><?php echo $lang->project->dateRange;?></th>
+          <th id="dateRange"><?php echo $lang->project->dateRange;?></th>
           <td>
             <div class='input-group'>
               <?php echo html::input('begin', $project->begin, "class='form-control form-date' onchange='computeWorkDays();' placeholder='" . $lang->project->begin . "' required");?>
@@ -101,7 +105,7 @@
             </div>
           </td>
           <?php $deltaValue = $project->end == LONG_TIME ? 999 : (strtotime($project->end) - strtotime($project->begin)) / 3600 / 24 + 1;?>
-          <td colspan='2'><?php echo html::radio('delta', $lang->project->endList , $deltaValue, "onclick='computeEndDate(this.value)'");?></td>
+          <td id="endList" colspan='2'><?php echo html::radio('delta', $lang->project->endList , $deltaValue, "onclick='computeEndDate(this.value)'");?></td>
         </tr>
         <tr id='daysBox' <?php if($project->end == LONG_TIME) echo "class='hidden'";?>>
           <th><?php echo $lang->project->days;?></th>
@@ -156,18 +160,18 @@
               <?php foreach($linkedProducts as $product):?>
                 <?php foreach($linkedBranches[$product->id] as $branchID => $branch):?>
                 <?php $plans = isset($productPlans[$product->id][$branchID]) ? $productPlans[$product->id][$branchID] : array();?>
-                <div class="col-sm-4" id="plan<?php echo $i;?>" style="padding-right: 6px;"><?php echo html::select("plans[{$product->id}][{$branchID}]", $plans, $branches[$product->id][$branchID]->plan, "class='form-control chosen'");?></div>
+                <div class="col-sm-4" id="plan<?php echo $i;?>" style="padding-right: 6px;"><?php echo html::select("plans[{$product->id}][{$branchID}][]", $plans, $branches[$product->id][$branchID]->plan, "class='form-control chosen' multiple");?></div>
                 <?php $i++;?>
                 <?php endforeach;?>
               <?php endforeach;?>
-              <div class="col-sm-4" id="planDefault" style="padding-right: 6px;"><?php echo html::select("plans[0][0]", array(), 0, "class='form-control chosen'");?></div>
+              <div class="col-sm-4" id="planDefault" style="padding-right: 6px;"><?php echo html::select("plans[0][0][]", array(), 0, "class='form-control chosen' multiple");?></div>
             </div>
           </td>
         </tr>
         <?php if($project->model == 'kanban'):?>
         <tr>
           <th><?php echo $lang->execution->team;?></th>
-          <td colspan='2'><?php echo html::select('teamMembers[]', $users, array_keys($teamMembers), "class='form-control chosen' multiple"); ?></td>
+          <td colspan='2'><?php echo html::select('teamMembers[]', $users, array_keys($teamMembers), "class='form-control picker-select' multiple"); ?></td>
         </tr>
         <?php endif;?>
         <tr>
@@ -185,7 +189,7 @@
           <th><?php echo $lang->whitelist;?></th>
           <td colspan='2'>
             <div class='input-group'>
-              <?php echo html::select('whitelist[]', $users, $project->whitelist, 'class="form-control chosen" multiple');?>
+              <?php echo html::select('whitelist[]', $users, $project->whitelist, 'class="form-control picker-select" multiple');?>
               <?php echo $this->fetch('my', 'buildContactLists', "dropdownName=whitelist");?>
             </div>
           </td>

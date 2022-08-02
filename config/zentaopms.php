@@ -3,7 +3,7 @@
 * The config file of zentaophp.  Don't modify this file directly, copy the item to my.php and change it.
 *
 * @copyright   Copyright 2009-2017 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
-* @license     ZPL (http://zpl.pub/page/zplv12.html)
+* @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
 * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
 * @package     config
 * @version     $Id: zentaopms.php 5068 2017-06-20 15:35:22Z pengjx $
@@ -186,7 +186,9 @@ $config->openMethods[] = 'user.login';
 $config->openMethods[] = 'user.logout';
 $config->openMethods[] = 'user.deny';
 $config->openMethods[] = 'user.reset';
+$config->openMethods[] = 'user.forgetpassword';
 $config->openMethods[] = 'user.refreshrandom';
+$config->openMethods[] = 'user.resetpassword';
 $config->openMethods[] = 'api.getsessionid';
 $config->openMethods[] = 'misc.checktable';
 $config->openMethods[] = 'misc.qrcode';
@@ -219,6 +221,7 @@ $config->openMethods[] = 'kanban.finishcard';
 $config->openMethods[] = 'kanban.deleteobjectcard';
 $config->openMethods[] = 'admin.ignore';
 $config->openMethods[] = 'personnel.unbindwhitelist';
+$config->openMethods[] = 'tree.viewhistory';
 
 /* Define the tables. */
 define('TABLE_COMPANY',       '`' . $config->db->prefix . 'company`');
@@ -261,12 +264,14 @@ define('TABLE_EXECUTION',     '`' . $config->db->prefix . 'project`');
 define('TABLE_TASK',          '`' . $config->db->prefix . 'task`');
 define('TABLE_TASKSPEC',      '`' . $config->db->prefix . 'taskspec`');
 define('TABLE_TEAM',          '`' . $config->db->prefix . 'team`');
+define('TABLE_PROJECTADMIN',  '`' . $config->db->prefix . 'projectadmin`');
 define('TABLE_PROJECTPRODUCT','`' . $config->db->prefix . 'projectproduct`');
 define('TABLE_PROJECTSTORY',  '`' . $config->db->prefix . 'projectstory`');
 define('TABLE_PROJECTCASE',   '`' . $config->db->prefix . 'projectcase`');
 define('TABLE_TASKESTIMATE',  '`' . $config->db->prefix . 'taskestimate`');
 define('TABLE_EFFORT',        '`' . $config->db->prefix . 'effort`');
 define('TABLE_BURN',          '`' . $config->db->prefix . 'burn`');
+define('TABLE_CFD',           '`' . $config->db->prefix . 'cfd`');
 define('TABLE_BUILD',         '`' . $config->db->prefix . 'build`');
 define('TABLE_ACL',           '`' . $config->db->prefix . 'acl`');
 
@@ -367,12 +372,16 @@ $config->objectTables['kanbanorder']  = TABLE_KANBANORDER;
 $config->objectTables['kanbangroup']  = TABLE_KANBANGROUP;
 $config->objectTables['kanbancard']   = TABLE_KANBANCARD;
 $config->objectTables['sonarqube']    = TABLE_PIPELINE;
+$config->objectTables['gitea']        = TABLE_PIPELINE;
 $config->objectTables['gitlab']       = TABLE_PIPELINE;
 $config->objectTables['jebkins']      = TABLE_PIPELINE;
 $config->objectTables['stage']        = TABLE_STAGE;
 $config->objectTables['apistruct']    = TABLE_APISTRUCT;
+$config->objectTables['repo']         = TABLE_REPO;
 
 $config->newFeatures = array('introduction', 'tutorial', 'youngBlueTheme', 'visions');
+
+$config->pipelineTypeList = array('gitlab', 'sonarqube', 'jenkins', 'gitea');
 
 /* Program privs.*/
 $config->programPriv = new stdclass();
@@ -380,3 +389,5 @@ $config->programPriv->scrum     = array('story', 'projectstory', 'projectrelease
 $config->programPriv->waterfall = array_merge($config->programPriv->scrum, array('task', 'workestimation', 'durationestimation', 'budget', 'programplan', 'review', 'reviewissue', 'weekly', 'cm', 'milestone', 'design', 'issue', 'risk', 'opportunity', 'measrecord', 'auditplan', 'trainplan', 'gapanalysis', 'pssp', 'researchplan', 'researchreport'));
 
 $config->waterfallModules = array('workestimation', 'durationestimation', 'budget', 'programplan', 'review', 'reviewissue', 'weekly', 'cm', 'milestone', 'design', 'opportunity', 'auditplan', 'trainplan', 'gapanalysis', 'pssp', 'researchplan', 'researchreport');
+
+$config->showMainMenu = true;

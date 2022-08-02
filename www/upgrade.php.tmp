@@ -3,7 +3,7 @@
  * The upgrade router file of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     ZenTaoPMS
  * @version     $Id: upgrade.php 4677 2013-04-26 06:23:58Z chencongzhi520@gmail.com $
@@ -64,6 +64,19 @@ $app->setDebug();
 /* Check the installed version is the latest or not. */
 $config->installedVersion = $common->loadModel('setting')->getVersion();
 if(($config->version[0] == $config->installedVersion[0] or (is_numeric($config->version[0]) and is_numeric($config->installedVersion[0]))) and version_compare($config->version, $config->installedVersion) <= 0) die(header('location: index.php'));
+
+/* If run in container, upgrade automatically. */
+if($app->isContainer())
+{
+    $upgradeModel = $common->loadModel('upgrade');
+    $alterSQL     = $upgradeModel->checkConsistency();
+    if(!empty($alterSQL)) $upgradeModel->dao->query("SET @@sql_mode= '';" . $alterSQL);
+
+    $config->set('default.method', 'execute');
+    $app->session->set('upgrading', true);
+    $app->session->set('step', '');
+    $app->post->set('fromVersion', str_replace( '.', '_', strtolower($config->installedVersion)));
+}
 
 /* Run it. */
 $app->parseRequest();

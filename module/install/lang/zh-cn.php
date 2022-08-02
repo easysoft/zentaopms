@@ -3,7 +3,7 @@
  * The install module zh-cn file of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     install
  * @version     $Id: zh-cn.php 4972 2013-07-02 06:50:10Z zhujinyonging@gmail.com $
@@ -23,9 +23,9 @@ $lang->install->start            = '开始安装';
 $lang->install->keepInstalling   = '继续安装当前版本';
 $lang->install->seeLatestRelease = '看看最新的版本';
 $lang->install->welcome          = '欢迎使用禅道项目管理软件！';
-$lang->install->license          = '禅道项目管理软件使用 Z PUBLIC LICENSE(ZPL) 1.2 授权协议';
+$lang->install->license          = '禅道项目管理软件授权协议';
 $lang->install->desc             = <<<EOT
-禅道项目管理软件(ZenTaoPMS)是一款国产的，基于<a href='http://zpl.pub' target='_blank'>ZPL</a>协议，开源免费的项目管理软件，它集产品管理、项目管理、测试管理于一体，同时还包含了事务管理、组织管理等诸多功能，是中小型企业项目管理的首选。
+禅道项目管理软件(ZenTaoPMS)是一款国产的，基于<a href='http://zpl.pub/page/zplv12.html' target='_blank'>ZPL</a>或<a href='https://www.gnu.org/licenses/agpl-3.0.en.html' target='_blank'>AGPL</a>双授权协议，开源免费的项目管理软件，它集产品管理、项目管理、测试管理于一体，同时还包含了事务管理、组织管理等诸多功能，是中小型企业项目管理的首选。
 
 禅道项目管理软件使用PHP + MySQL开发，基于自主的PHP开发框架──ZenTaoPHP而成。第三方开发者或者企业可以非常方便的开发插件或者进行定制。
 EOT;
@@ -48,17 +48,17 @@ $lang->install->introductionContent = <<<EOT
   <h4>尊敬的用户您好，欢迎您使用禅道项目管理系统。</h4>
   <p> 禅道自15系列开始提供了两种使用模式，一种是经典管理模式，功能较为精简，主要提供了产品和项目两个核心功能；另一种是全新项目集管理模式，增加了项目集和执行的概念。下面是全新项目集管理模式的介绍：</p>
   <div class='block-content'>
-    <div class='block-details'><p class='block-title'><i class='icon icon-program'></i><strong>项目集</strong></p><p>项目集用来管理一组相关的产品和项目，公司高层或者PMO可以用来做战略规划。</p></div>
+    <div class='block-details'><p class='block-title'><i class='icon icon-program'></i> <strong>项目集</strong></p><p>项目集用来管理一组相关的产品和项目，公司高层或者PMO可以用来做战略规划。</p></div>
     <div class='block-details block-right'>
-      <p class='block-title'><i class='icon icon-product'></i><strong>产品</strong></p>
+      <p class='block-title'><i class='icon icon-product'></i> <strong>产品</strong></p>
       <p>产品用来将公司的战略细分为可以进行研发的需求，产品经理可以用来做产品的发布计划。<p>
     </div>
     <div class='block-details'>
-      <p class='block-title'><i class='icon icon-project'></i><strong>项目</strong></p>
+      <p class='block-title'><i class='icon icon-project'></i> <strong>项目</strong></p>
       <p>项目用来组织相应的人力进行研发，做好项目过程的跟踪管理，多快好省地完成项目。</p>
     </div>
     <div class='block-details block-right'>
-      <p class='block-title'><i class='icon icon-run'></i><strong>执行</strong></p>
+      <p class='block-title'><i class='icon icon-run'></i> <strong>执行</strong></p>
       <p>执行用来做任务的分解、指派和跟踪，保证项目目标可以落实到人来执行。<p>
     </div>
   </div>
@@ -116,7 +116,7 @@ $lang->install->sessionFail  = '修改PHP配置文件，设置session.save_path�
 $lang->install->mkdirWin     = '<p>需要创建目录%s。命令为：<br /> mkdir %s</p>';
 $lang->install->chmodWin     = '需要修改目录 "%s" 的权限。';
 $lang->install->mkdirLinux   = '<p>需要创建目录%s。<br /> 命令为：<br /> mkdir -p %s</p>';
-$lang->install->chmodLinux   = '需要修改目录 "%s" 的权限。<br />命令为：<br />chmod o=rwx -R %s';
+$lang->install->chmodLinux   = '需要修改目录 "%s" 的权限。<br />命令为：<br />chmod 777 -R %s';
 
 $lang->install->timezone       = '时区设置';
 $lang->install->defaultLang    = '默认语言';
@@ -160,6 +160,9 @@ $lang->install->getPriv            = '设置帐号';
 $lang->install->company            = '公司名称';
 $lang->install->account            = '管理员帐号';
 $lang->install->password           = '管理员密码';
+
+$lang->install->placeholder = new stdclass();
+$lang->install->placeholder->password = '六位及以上，包含数字、字母和特殊字符';
 
 $lang->install->errorEmpty['company']  = "{$lang->install->company}不能为空";
 $lang->install->errorEmpty['account']  = "{$lang->install->account}不能为空";

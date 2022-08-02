@@ -3,7 +3,7 @@
  * The edit view of testtask module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     testtask
  * @version     $Id: edit.html.php 4728 2013-05-03 06:14:34Z chencongzhi520@gmail.com $
@@ -41,7 +41,7 @@
         </tr>
         <tr>
           <th><?php echo $lang->testtask->type;?></th>
-          <td><?php echo html::select('type[]', $lang->testtask->typeList, $task->type, "class='form-control chosen' multiple");?></td>
+          <td><?php echo html::select('type[]', $lang->testtask->typeList, $task->type, "class='form-control picker-select' multiple");?></td>
         </tr>
         <tr>
           <th><?php echo $lang->testtask->owner;?></th>
@@ -91,7 +91,7 @@
           <th><?php echo $lang->testtask->mailto;?></th>
           <td colspan='2'>
             <div class='input-group'>
-              <?php echo html::select('mailto[]', $users, str_replace(' ' , '', $task->mailto), "multiple class='form-control chosen'");?>
+              <?php echo html::select('mailto[]', $users, str_replace(' ' , '', $task->mailto), "multiple class='form-control picker-select'");?>
               <?php echo $this->fetch('my', 'buildContactLists');?>
             </div>
           </td>

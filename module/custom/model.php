@@ -3,7 +3,7 @@
  * The model file of custom module of ZenTaoCMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Congzhi Chen <congzhi@cnezsoft.com>
  * @package     custom
  * @version     $Id$
@@ -245,7 +245,9 @@ class customModel extends model
                 $link = explode('|', $link);
                 list($label, $module, $method) = $link;
                 $hasPriv = commonModel::hasPriv($module, $method);
+
                 /* Fix bug #20464 */
+                if(isset($vars)) unset($vars);
                 if(!$hasPriv and is_array($item) and isset($item['subMenu']))
                 {
                     foreach($item['subMenu'] as $subMenu)
@@ -261,6 +263,7 @@ class customModel extends model
 
                 if($module == 'execution' and $method == 'more') $hasPriv = true;
                 if($module == 'project' and $method == 'other')  $hasPriv = true;
+                if(!$hasPriv and isset($vars)) unset($vars);
             }
 
             if($isTutorialMode || $hasPriv)
@@ -698,8 +701,10 @@ class customModel extends model
             }
         }
 
+        $vision = $this->config->vision;
+
         $this->loadModel('setting');
-        $this->setting->setItems("system.{$moduleName}", $requiredFields);
+        $this->setting->setItems("system.{$moduleName}@$vision", $requiredFields);
     }
 
     /**

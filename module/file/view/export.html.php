@@ -3,7 +3,7 @@
  * The export view file of file module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Congzhi Chen <congzhi@cnezsoft.com>
  * @package     file
  * @version     $Id$
@@ -257,6 +257,7 @@ if($isCustomExport)
     {
         $field                    = trim($field);
         $exportFieldPairs[$field] = isset($moduleLang->$field) ? $moduleLang->$field : (isset($lang->$field) ? $lang->$field : $field);
+        if(!is_string($exportFieldPairs[$field])) $exportFieldPairs[$field] = $field;
         if(!$hasDefaultField)$selectedFields[] = $field;
     }
     js::set('defaultExportFields', join(',', $selectedFields));

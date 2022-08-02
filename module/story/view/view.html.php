@@ -3,7 +3,7 @@
  * The view file of story module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     story
  * @version     $Id: view.html.php 4952 2013-07-02 01:14:58Z chencongzhi520@gmail.com $
@@ -16,13 +16,6 @@
 <?php js::set('sysurl', common::getSysUrl());?>
 <?php if(strpos($_SERVER["QUERY_STRING"], 'isNotice=1') === false):?>
 <div id="mainMenu" class="clearfix">
-<?php if($this->app->getViewType() == 'xhtml'):?>
-<div class="linkButton" onclick="handleLinkButtonClick()">
-  <span title="<?php echo $lang->viewDetails;?>">
-    <i class="icon icon-import icon-rotate-270"></i>
-  </span>
-</div>
-<?php endif;?>
   <div class="btn-toolbar pull-left">
     <?php if(!isonlybody()):?>
     <?php echo html::a($browseLink, '<i class="icon icon-back icon-sm"></i> ' . $lang->goback, '', "class='btn btn-secondary'");?>
@@ -164,7 +157,7 @@
                 <td><?php echo $child->id;?></td>
                 <td>
                   <?php
-                  echo "<span class='pri-" . $child->pri . "'>";
+                  echo "<span class='label-pri label-pri-" . $child->pri . "'>";
                   echo $child->pri == '0' ? '' : zget($this->lang->story->priList, $child->pri, $child->pri);
                   echo "</span>";
                   ?>
@@ -268,7 +261,7 @@
                   {
                       foreach($story->planTitle as $planID => $planTitle)
                       {
-                          if(!common::printLink('productplan', 'view', "planID=$planID", $planTitle, '', "data-app='product'")) echo $lanTitle;
+                          if(!common::printLink('productplan', 'view', "planID=$planID", $planTitle, '', "data-app='product'")) echo $planTitle;
                           echo '<br />';
                       }
                   }
@@ -307,7 +300,7 @@
                 <?php endif;?>
                 <tr>
                   <th><?php echo $lang->story->category;?></th>
-                  <td><?php echo $lang->story->categoryList[$story->category];?></td>
+                  <td><?php echo zget($lang->story->categoryList, $story->category, $story->category)?></td>
                 </tr>
                 <tr>
                   <th><?php echo $lang->story->pri;?></th>
@@ -436,19 +429,16 @@
                       $executionName = $executions[$task->execution];
                       $taskInfo      = $task->id . '&nbsp<span class="label label-success label-outline">' . $this->lang->task->statusList[$task->status]  . '</span>&nbsp' . $task->name;
                       $class         = isonlybody() ? 'showinonlybody' : 'iframe';
-                      echo "<li title='$task->name'>" . html::a($this->createLink('task', 'view', "taskID=$task->id", '', true), $taskInfo, '', "class=$class data-width='80%'");
                       $execution = isset($story->executions[$task->execution]) ? $story->executions[$task->execution] : '';
                       $execName  = (isset($execution->type) and $execution->type == 'kanban' and isonlybody()) ? $executionName : html::a($this->createLink('execution', 'view', "executionID=$task->execution"), $executionName, '', "class='text-muted'");
-                      echo $execName . '</li>';
+                      echo "<li title='$task->name'>" . $execName . html::a($this->createLink('task', 'view', "taskID=$task->id", '', true), $taskInfo, '', "class=$class data-width='80%'") . '</li>';
                   }
               }
-              if(count($story->tasks) == 0)
+              foreach($story->executions as $executionID => $execution)
               {
-                  foreach($story->executions as $executionID => $execution)
-                  {
-                      $execName = ($execution->type == 'kanban' and isonlybody()) ? $execution->name : html::a($this->createLink('execution', 'view', "executionID=$executionID"), $execution->name, '', "class='text-muted'");
-                      echo "<li title='$execution->name'>" . $execName . '</li>';
-                  }
+                  if(isset($story->tasks[$executionID])) continue;
+                  $execName = ($execution->type == 'kanban' and isonlybody()) ? $execution->name : html::a($this->createLink('execution', 'view', "executionID=$executionID"), $execution->name, '', "class='text-muted'");
+                  echo "<li title='$execution->name'>" . $execName . '</li>';
               }
               ?>
             </ul>
@@ -459,7 +449,7 @@
               <tbody>
                 <?php if(!empty($fromBug)):?>
                 <tr>
-                  <th class='w-90px'><?php echo $lang->story->legendFromBug;?></th>
+                  <th><?php echo $lang->story->legendFromBug;?></th>
                   <td class='pd-0'>
                     <ul class='list-unstyled'>
                     <?php echo "<li title='#$fromBug->id $fromBug->title'>" . html::a($this->createLink('bug', 'view', "bugID=$fromBug->id", '', true), "#$fromBug->id $fromBug->title", '', "class='iframe' data-width='80%'") . '</li>';?>
@@ -468,7 +458,7 @@
                 </tr>
                 <?php endif;?>
                 <tr>
-                  <th class='w-90px'><?php echo $lang->story->legendBugs;?></th>
+                  <th><?php echo $lang->story->legendBugs;?></th>
                   <td class='pd-0'>
                     <ul class='list-unstyled'>
                     <?php
@@ -490,6 +480,37 @@
                     foreach($cases as $case)
                     {
                         echo "<li title='[C]$case->id $case->title'>" . html::a($this->createLink('testcase', 'view', "caseID=$case->id", '', true), "[C] #$case->id $case->title", '', $misc) . '</li>';
+                    }
+                    ?>
+                    </ul>
+                  </td>
+                </tr>
+                <tr>
+                  <th><?php echo $lang->story->legendBuilds;?></th>
+                  <td class='pd-0'>
+                    <ul class='list-unstyled'>
+                    <?php
+                    $tab = $app->tab == 'product' ? 'project' : $app->tab;
+                    foreach($builds as $build)
+                    {
+                        $link = common::hasPriv('build', 'view') ? html::a($this->createLink('build', 'view', "buildID=$build->id"), "#$build->id $build->name", '', "data-app='{$tab}'") : "#$build->id $build->name";
+                        echo "<li title='$build->id $build->name'>$link</li>";
+                    }
+                    ?>
+                    </ul>
+                  </td>
+                </tr>
+                <tr>
+                  <th><?php echo $lang->story->legendReleases;?></th>
+                  <td class='pd-0'>
+                    <ul class='list-unstyled'>
+                    <?php
+                    $tab           = $app->tab == 'execution' ? 'product'        : $app->tab;
+                    $releaseModule = $app->tab == 'project'   ? 'projectrelease' : 'release';
+                    foreach($releases as $release)
+                    {
+                        $link = common::hasPriv($releaseModule, 'view') ? html::a($this->createLink($releaseModule, 'view', "release=$release->id"), "#$release->id $release->name", '', "data-app='{$tab}'") : "#$release->id $release->name";
+                        echo "<li title='$release->id $release->name'>$link</li>";
                     }
                     ?>
                     </ul>
@@ -580,11 +601,6 @@ js::set('cancel', $lang->cancel);
 js::set('rawModule', $this->app->rawModule);
 ?>
 <script>
-function handleLinkButtonClick()
-{
-  var xxcUrl = "xxc:openInApp/zentao-integrated/" + encodeURIComponent(window.location.href.replace(/.display=card/, '').replace(/\.xhtml/, '.html'));
-  window.open(xxcUrl);
-}
 </script>
 <?php include '../../common/view/syntaxhighlighter.html.php';?>
 <?php include '../../common/view/footer.html.php';?>

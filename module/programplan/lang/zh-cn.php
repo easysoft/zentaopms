@@ -3,7 +3,7 @@
  * The programplan module zh-cn file of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     programplan
  * @version     $Id: zh-cn.php 4729 2013-05-03 07:53:55Z chencongzhi520@gmail.com $
@@ -16,11 +16,14 @@ $lang->programplan->list          = '阶段列表';
 $lang->programplan->create        = '设置阶段';
 $lang->programplan->edit          = '编辑';
 $lang->programplan->delete        = '删除阶段';
+$lang->programplan->close         = '关闭阶段';
+$lang->programplan->activate      = '激活阶段';
 $lang->programplan->createSubPlan = '创建二级阶段';
 
 $lang->programplan->parent           = '父阶段';
 $lang->programplan->emptyParent      = '无';
 $lang->programplan->name             = '阶段名称';
+$lang->programplan->status           = '阶段进度';
 $lang->programplan->PM               = '阶段负责人';
 $lang->programplan->acl              = '访问控制';
 $lang->programplan->subStageName     = '子阶段名称';
@@ -77,7 +80,7 @@ $lang->programplan->error                  = new stdclass();
 $lang->programplan->error->percentNumber   = '"工作量比例"必须为数字';
 $lang->programplan->error->planFinishSmall = '"计划完成时间"必须大于"计划开始时间"';
 $lang->programplan->error->percentOver     = '工作量占比累计不应当超过100%';
-$lang->programplan->error->createdTask     = '已分解任务,不可添加子阶段';
+$lang->programplan->error->createdTask     = '已分解任务，不可添加子阶段';
 $lang->programplan->error->parentWorkload  = '子阶段的工作量之和不能大于父阶段的工作量:%s';
 $lang->programplan->error->parentDuration  = '子阶段计划开始、计划完成不能超过父阶段';
 $lang->programplan->error->sameName        = '阶段名称不能相同！';

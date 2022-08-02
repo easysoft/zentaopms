@@ -1,0 +1,4 @@
+#libs {height: 180px; padding-top: 20px;}
+#libs .select-lib {width: 100px; text-align: right;}
+#libs .chosen-results {max-height: 110px;}
+#libs tr > td.text-center {padding-top: 15px;}

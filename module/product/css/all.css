@@ -43,7 +43,7 @@ th.c-story {width: 290px;}
 th.c-bug {width: 200px;}
 th.c-plan {width: 45px;}
 th.c-release {width: 50px;}
-th.c-actions {width: 60px;}
+th.c-actions {width: 50px;}
 [lang='en'] .en-wrap-text {white-space: normal; height: 24px; line-height: 1; font-size: 12px;}
 
 
@@ -85,3 +85,8 @@ th.c-actions {width: 60px;}
     [lang^='zh-'] th.c-requirement {width: 220px;}
     [lang^='zh-'] th.c-story {width: 220px;}
 }
+
+#productTableList > tr.row-line.is-nest-child > td.text-left.table-nest-title > span.table-nest-icon.icon:before{content: '\e6f2'; background-color: white; display: inline;}
+#productTableList > tr.row-line.no-nest > td.text-left.table-nest-title > span.table-nest-icon.icon:before{content: '\e6f2'; background-color: white; display: inline;}
+.statistic {margin-left: 10px; color: #838a9d; float: left; position: relative; line-height: 28px;}
+.table-footer.fixed-footer .statistic {color: #fff;}

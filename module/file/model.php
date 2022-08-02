@@ -3,7 +3,7 @@
  * The model file of file module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     file
  * @version     $Id: model.php 4976 2013-07-02 08:15:31Z wyd621@gmail.com $
@@ -413,6 +413,12 @@ class fileModel extends model
             ->join('content', ',')
             ->get();
 
+        if($template->title == $this->lang->file->defaultTPL)
+        {
+            dao::$errors[] = sprintf($this->lang->error->unique, $this->lang->file->tplTitle, $this->lang->file->defaultTPL);
+            return false;
+        }
+
         $condition = "`type`='export$module' and account='{$this->app->user->account}'";
         $this->dao->insert(TABLE_USERTPL)->data($template)->batchCheck('title, content', 'notempty')->check('title', 'unique', $condition)->exec();
         return $this->dao->lastInsertId();
@@ -736,7 +742,6 @@ class fileModel extends model
             $content = $this->pasteImage($data->$editorID, $uid);
             if($content) $data->$editorID = $content;
 
-            $data->$editorID = htmlspecialchars_decode($data->$editorID);
             $data->$editorID = preg_replace("/ src=\"$readLinkReg\" /", ' src="' . $imgURL . '" ', $data->$editorID);
             $data->$editorID = preg_replace("/ src=\"" . htmlSpecialString($readLinkReg) . "\" /", ' src="' . $imgURL . '" ', $data->$editorID);
 
@@ -1012,7 +1017,7 @@ class fileModel extends model
     {
         if($this->config->file->storageType == 'fs')
         {
-            return getimagesize($file->realPath);
+            return file_exists($file->realPath) ? getimagesize($file->realPath) : 0;
         }
         else if($this->config->file->storageType == 's3')
         {
@@ -1040,5 +1045,24 @@ class fileModel extends model
             ->where('id')->in($IDs)
             ->andWhere('deleted')->eq('0')
             ->fetchPairs();
+    }
+
+    /**
+     * Update test case version.
+     *
+     * @param  object $file
+     * @access public
+     * @return void
+     */
+    public function updateTestcaseVersion($file)
+    {
+        $oldCase   = $this->loadModel('testcase')->getByID($file->objectID);
+        $isLibCase = ($oldCase->lib and empty($oldCase->product));
+        if($isLibCase)
+        {
+            $fromcaseVersion  = $this->dao->select('fromCaseVersion')->from(TABLE_CASE)->where('fromCaseID')->eq($file->objectID)->fetch('fromCaseVersion');
+            $fromcaseVersion += 1;
+            $this->dao->update(TABLE_CASE)->set('`fromCaseVersion`')->eq($fromcaseVersion)->where('`fromCaseID`')->eq($file->objectID)->exec();
+        }
     }
 }

@@ -3,7 +3,7 @@
  * The create view file of project module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     project
  * @version     $Id: create.html.php 4769 2013-05-05 07:24:21Z wwccss $
@@ -27,6 +27,7 @@
 <?php js::set('productName', $lang->product->name);?>
 <?php js::set('manageProducts', $lang->project->manageProducts);?>
 <?php $requiredFields = $config->project->create->requiredFields;?>
+<?php js::set('requiredFields', $requiredFields);?>
 <div id='mainContent' class='main-content'>
   <div class='center-block'>
     <div class='main-header'>
@@ -41,8 +42,10 @@
     <form class='form-indicator main-form form-ajax' method='post' target='hiddenwin' id='dataform'>
       <table class='table table-form'>
         <tr>
-          <th class='w-120px'><?php echo $lang->project->parent;?></th>
-          <td><?php echo html::select('parent', $programList, $programID, "class='form-control chosen' onchange='setParentProgram(this.value)'");?></td>
+          <th class='w-130px'><?php echo $lang->project->parent;?></th>
+          <?php $disabled = ($this->app->tab == 'product' and $productID) ? 'disabled' : '';?>
+          <td><?php echo html::select('parent', $programList, $programID, "class='form-control chosen' onchange='setParentProgram(this.value)' $disabled");?></td>
+          <?php if($disabled) echo html::hidden('parent', $programID);?>
           <td>
             <icon class='icon icon-help' data-toggle='popover' data-trigger='focus hover' data-placement='right' data-tip-class='text-muted popover-sm' data-content="<?php echo $lang->program->tips;?>"></icon>
           </td>
@@ -52,10 +55,12 @@
           <th><?php echo $lang->project->name;?></th>
           <td class="col-main"><?php echo html::input('name', $name, "class='form-control' required");?></td>
         </tr>
+        <?php if(!isset($config->setCode) or $config->setCode == 1):?>
         <tr>
           <th><?php echo $lang->project->code;?></th>
-          <td><?php echo html::input('code', '', "class='form-control' required");?></td>
+          <td><?php echo html::input('code', $code, "class='form-control' required");?></td>
         </tr>
+        <?php endif;?>
         <tr>
           <th><?php echo $lang->project->PM;?></th>
           <td><?php echo html::select('PM', $pmUsers, '', "class='form-control chosen'" . (strpos($requiredFields, 'PM') !== false ? ' required' : ''));?></td>
@@ -75,14 +80,14 @@
             </div>
           </td>
           <td>
-            <div class='checkbox-primary'>
+            <div class="checkbox-primary c-future <?php echo strpos($requiredFields, 'budget') !== false ? 'hidden' : '';?>">
               <input type='checkbox' id='future' name='future' value='1' />
               <label for='future'><?php echo $lang->project->future;?></label>
             </div>
           </td>
         </tr>
         <tr>
-          <th><?php echo $lang->project->dateRange;?></th>
+          <th id="dateRange"><?php echo $lang->project->dateRange;?></th>
           <td>
             <div class='input-group'>
               <?php echo html::input('begin', date('Y-m-d'), "class='form-control form-date' onchange='computeWorkDays();' placeholder='" . $lang->project->begin . "' required");?>
@@ -90,7 +95,7 @@
               <?php echo html::input('end', '', "class='form-control form-date' onchange='computeWorkDays();' placeholder='" . $lang->project->end . "' required");?>
             </div>
           </td>
-          <td colspan='2'><?php echo html::radio('delta', $lang->project->endList , '', "onclick='computeEndDate(this.value)'");?></td>
+          <td id="endList" colspan='2'><?php echo html::radio('delta', $lang->project->endList , '', "onclick='computeEndDate(this.value)'");?></td>
         </tr>
         <tr id='daysBox'>
           <th><?php echo $lang->execution->days;?></th>
@@ -107,15 +112,17 @@
             <div class='row'>
               <?php $i = 0;?>
               <?php foreach($products as $product):?>
+              <?php foreach($product->branches as $branch):?>
               <div class="col-sm-4" style="margin-bottom: 10px; padding-right: 6px;">
                 <?php $hasBranch = $product->type != 'normal' and isset($branchGroups[$product->id]);?>
                 <div class="input-group<?php if($hasBranch) echo ' has-branch';?>">
                   <?php echo html::select("products[$i]", $allProducts, $product->id, "class='form-control chosen' onchange='loadBranches(this)' data-last='" . $product->id . "'");?>
                   <span class='input-group-addon fix-border'></span>
-                  <?php if($hasBranch) echo html::select("branch[$i]", $branchGroups[$product->id], key($product->branches), "class='form-control chosen' onchange=\"loadPlans('#products{$i}', this.value)\"");?>
+                  <?php if($hasBranch) echo html::select("branch[$i]", $branchGroups[$product->id], $branch, "class='form-control chosen' onchange=\"loadPlans('#products{$i}', this.value)\"");?>
                 </div>
               </div>
               <?php $i++;?>
+              <?php endforeach;?>
               <?php endforeach;?>
               <div class='col-sm-4 <?php if($programID) echo 'required';?>' style="padding-right: 6px;">
                 <div class='input-group'>
@@ -144,12 +151,15 @@
               <?php if($copyProjectID):?>
               <?php $i = 0;?>
               <?php foreach($products as $product):?>
-              <?php $plans = zget($productPlans, $product->id, array(0 => ''));?>
-              <div class="col-sm-4" id="plan<?php echo $i;?>"><?php echo html::select("plans[" . $product->id . "]", $plans, '', "class='form-control chosen'");?></div>
+              <?php $productPlan = zget($productPlans, $product->id, array(0 => ''));?>
+              <?php foreach($product->branches as $branch):?>
+              <?php $plans = zget($productPlan, $branch, array(0 => ''));?>
+              <div class="col-sm-4" id="plan<?php echo $i;?>"><?php echo html::select('plans[' . $product->id . '][' . $branch . '][]', $plans, '', "class='form-control chosen' multiple");?></div>
               <?php $i++;?>
               <?php endforeach;?>
+              <?php endforeach;?>
               <?php else:?>
-              <div class="col-sm-4" id="plan0" style="padding-right: 6px;"><?php echo html::select("plans[][]", '', '', "class='form-control chosen'");?></div>
+              <div class="col-sm-4" id="plan0" style="padding-right: 6px;"><?php echo html::select("plans[][][]", '', '', "class='form-control chosen' multiple");?></div>
               <?php endif;?>
             </div>
           </td>
@@ -157,7 +167,7 @@
         <?php if($model == 'kanban'):?>
         <tr>
           <th><?php echo $lang->execution->team;?></th>
-          <td colspan='3'><?php echo html::select('teamMembers[]', $users, '', "class='form-control chosen' multiple"); ?></td>
+          <td colspan='3'><?php echo html::select('teamMembers[]', $users, '', "class='form-control picker-select' multiple"); ?></td>
         </tr>
         <?php endif;?>
         <tr>
@@ -175,7 +185,7 @@
           <th><?php echo $lang->whitelist;?></th>
           <td colspan='2'>
             <div class='input-group'>
-              <?php echo html::select('whitelist[]', $users, '', 'class="form-control chosen" multiple');?>
+              <?php echo html::select('whitelist[]', $users, '', 'class="form-control picker-select" multiple');?>
               <?php echo $this->fetch('my', 'buildContactLists', "dropdownName=whitelist");?>
             </div>
           </td>

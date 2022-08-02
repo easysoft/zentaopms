@@ -3,7 +3,7 @@
  * The trash view file of action module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     action
  * @version     $Id$
@@ -50,22 +50,33 @@
         foreach($moreType as $objectType)
         {
             $activeClass = $objectType == $currentObjectType ? 'btn-active-text' : '';
-            echo '<li>' . html::a($this->createLink('action', 'trash', "objectType=$objectType&type=$type"), "<span class='text'>" . zget($lang->action->objectTypes, $objectType) . "</span>", '', "class='btn btn-link $activeClass'") . '</li>';
+            $objectName  = zget($lang->action->objectTypes, $objectType, '');
+            if(empty($objectName)) continue;
+
+            echo '<li>' . html::a($this->createLink('action', 'trash', "objectType=$objectType&type=$type"), "<span class='text'>" . $objectName . "</span>", '', "class='btn btn-link $activeClass'") . '</li>';
         }
         echo '</ul></div>';
     }
     ?>
+    <?php if($currentObjectType != 'all'):?>
+    <a class="btn btn-link querybox-toggle" id='bysearchTab'><i class="icon icon-search muted"></i> <?php echo $lang->action->byQuery;?></a>
+    <?php endif;?>
   </div>
   <div class='btn-toolbar pull-right'>
     <?php if($type == 'hidden') echo html::a(inLink('trash', "browseType=all&type=all"),    $lang->goback, '', "class='btn'");?>
     <?php if($type == 'all')    echo html::a(inLink('trash', "browseType=all&type=hidden"), "<i class='icon-eye-close'></i> " . $lang->action->dynamic->hidden, '', "class='btn btn-danger'");?>
   </div>
 </div>
-
+<div class="cell<?php if($byQuery) echo ' show';?>" id="queryBox" data-module='trash'></div>
 <div id='mainContent' class="main-row">
+  <?php if(empty($trashes)):?>
+  <div class="table-empty-tip">
+    <p><span class="text-muted"><?php echo $lang->noData;?></span></p>
+  </div>
+  <?php else:?>
   <div class='main-table' data-ride='table'>
     <table class='table has-sort-head'>
-      <?php $vars = "browseType=$currentObjectType&type=$type&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"; ?>
+      <?php $vars = "browseType=$currentObjectType&type=$type&byQuery=$byQuery&queryID=$queryID&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"; ?>
       <thead>
         <tr class='colhead'>
           <th class='c-object-type'><?php common::printOrderLink('objectType', $orderBy, $vars, $lang->action->objectType);?></th>
@@ -128,8 +139,8 @@
           <td><?php echo $action->date;?></td>
           <td>
             <?php
-            common::printLink('action', 'undelete', "actionid=$action->id", $lang->action->undelete, 'hiddenwin');
-            if($type == 'all') common::printLink('action', 'hideOne',  "actionid=$action->id", $lang->action->hideOne, 'hiddenwin');
+            common::printLink('action', 'undelete', "actionid=$action->id&browseType=$currentObjectType", $lang->action->undelete, 'hiddenwin');
+            if($type == 'all') common::printLink('action', 'hideOne',  "actionid=$action->id&browseType=$currentObjectType", $lang->action->hideOne, 'hiddenwin');
             ?>
           </td>
         </tr>
@@ -144,5 +155,6 @@
       <?php $pager->show('right', 'pagerjs');?>
     </div>
   </div>
+  <?php endif;?>
 </div>
 <?php include '../../common/view/footer.html.php';?>

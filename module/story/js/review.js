@@ -6,6 +6,12 @@ function switchShow(result)
     {
         $('#rejectedReasonBox').show();
         $('#preVersionBox').hide();
+        $('#assignedToBox').hide();
+        if(isMultiple)
+        {
+            $('#assignedToBox').show();
+            loadAssignedTo();
+        }
     }
     else if(result == 'revert')
     {
@@ -13,19 +19,34 @@ function switchShow(result)
         $('#rejectedReasonBox').hide();
         $('#duplicateStoryBox').hide();
         $('#childStoriesBox').hide();
+        $('#assignedToBox').show();
+        loadAssignedTo();
     }
-    else
+    else if(result == 'clarify')
     {
-        if(result == 'pass')
-        {
-            $('#priBox').show();
-            $('#estimateBox').show();
-        }
         $('#preVersionBox').hide();
         $('#rejectedReasonBox').hide();
         $('#duplicateStoryBox').hide();
         $('#childStoriesBox').hide();
         $('#rejectedReasonBox').hide();
+        $('#assignedToBox').show();
+        loadAssignedTo();
+    }
+    else
+    {
+        $('#preVersionBox').hide();
+        $('#rejectedReasonBox').hide();
+        $('#duplicateStoryBox').hide();
+        $('#childStoriesBox').hide();
+        $('#rejectedReasonBox').hide();
+        $('#assignedToBox').hide();
+        if(result == 'pass')
+        {
+            $('#priBox').show();
+            $('#estimateBox').show();
+            $('#assignedToBox').show();
+            loadAssignedTo();
+        }
     }
 
     getStatus('review', "storyID=" + storyID + ",result=" + result);
@@ -48,6 +69,23 @@ function setStory(reason)
         $('#duplicateStoryBox').hide();
         $('#childStoriesBox').hide();
     }
+}
+
+/**
+ * Load assignedTo.
+ *
+ * @access public
+ * @return void
+ */
+function loadAssignedTo()
+{
+    var link = createLink('story', 'ajaxGetAssignedTo', 'type=review&storyID=' + storyID);
+    $.post(link, function(data)
+    {
+        $('#assignedTo').replaceWith(data);
+        $('#assignedToBox .picker').remove();
+        $('#assignedTo').picker();
+    });
 }
 
 $(function()

@@ -3,7 +3,7 @@
  * The view file of bug module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     bug
  * @version     $Id: view.html.php 4728 2013-05-03 06:14:34Z chencongzhi520@gmail.com $
@@ -13,16 +13,16 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
 <?php js::set('sysurl', common::getSysUrl());?>
+<?php js::set('confrimToStory', $lang->bug->confirmToStory);?>
+<?php js::set('systemMode', $config->systemMode);?>
+<?php js::set('tab', $app->tab);?>
+<?php js::set('bugID', $bug->id);?>
+<?php js::set('branchID', $bug->branch);?>
+<?php js::set('errorNoExecution', $lang->bug->noExecution);?>
+<?php js::set('errorNoProject', $lang->bug->noProject);?>
 <?php $browseLink = $app->session->bugList ? $app->session->bugList : inlink('browse', "productID=$bug->product");?>
 <?php if(strpos($_SERVER["QUERY_STRING"], 'isNotice=1') === false):?>
 <div id="mainMenu" class="clearfix">
-<?php if($this->app->getViewType() == 'xhtml'):?>
-<div class="linkButton" onclick="handleLinkButtonClick()">
-  <span title="<?php echo $lang->viewDetails;?>">
-    <i class="icon icon-import icon-rotate-270"></i>
-  </span>
-</div>
-<?php endif;?>
   <div class="btn-toolbar pull-left">
     <?php if(!isonlybody()):?>
     <?php echo html::a($browseLink, '<i class="icon icon-back icon-sm"></i> ' . $lang->goback, '', "class='btn btn-secondary'");?>
@@ -217,7 +217,7 @@
                   <th><?php echo $lang->bug->deadline;?></th>
                   <td>
                     <?php
-                    if($bug->deadline) echo $bug->deadline;
+                    if($bug->deadline) echo helper::isZeroDate($bug->deadline) ? '' : $bug->deadline;
                     if(isset($bug->delay)) printf($lang->bug->delayWarning, $bug->delay);
                     ?>
                   </td>
@@ -424,12 +424,41 @@
 <div id="mainActions" class='main-actions'>
   <?php common::printPreAndNext($preAndNext);?>
 </div>
+<div class="modal fade" id="toTask">
+  <div class="modal-dialog mw-500px select-project-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title"><?php echo $lang->bug->selectProjects;?></h4>
+      </div>
+      <div class="modal-body">
+        <table class='table table-form'>
+          <?php if($this->config->systemMode == 'new'):?>
+          <tr>
+            <th><?php echo $lang->bug->project;?></th>
+            <td class='required'><?php echo html::select('taskProjects', $projects, '', "class='form-control chosen' onchange='loadProductExecutions({$productID}, this.value)'");?></td>
+          </tr>
+          <tr>
+            <th id='executionHead'><?php echo $lang->bug->execution;?></th>
+            <td id='executionBox' class='required'><?php echo html::select('execution', '', '', "class='form-control chosen'");?></td>
+          </tr>
+          <?php else:?>
+          <tr>
+            <th><?php echo $lang->execution->common;?></th>
+            <td><?php echo html::select('execution', $projects, '', "class='form-control chosen'");?></td>
+          </tr>
+          <?php endif;?>
+          <tr>
+            <td colspan='2' class='text-center'>
+              <?php echo html::commonButton($lang->bug->nextStep, "id='toTaskButton'", 'btn btn-primary btn-wide');?>
+              <?php echo html::commonButton($lang->cancel, "id='cancelButton' data-dismiss='modal'", 'btn btn-default btn-wide');?>
+            </td>
+          </tr>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
 <script>
-function handleLinkButtonClick()
-{
-  var xxcUrl = "xxc:openInApp/zentao-integrated/" + encodeURIComponent(window.location.href.replace(/.display=card/, '').replace(/\.xhtml/, '.html'));
-  window.open(xxcUrl);
-}
 </script>
 <?php include '../../common/view/syntaxhighlighter.html.php';?>
 <?php include '../../common/view/footer.html.php';?>

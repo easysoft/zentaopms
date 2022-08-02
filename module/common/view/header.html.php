@@ -7,6 +7,7 @@ include 'chosen.html.php';
 <?php if(empty($_GET['onlybody']) or $_GET['onlybody'] != 'yes'):?>
 <?php $this->app->loadConfig('sso');?>
 <?php if(!empty($config->sso->redirect)) js::set('ssoRedirect', $config->sso->redirect);?>
+<?php if($config->showMainMenu):?>
 <header id='header'>
   <div id='mainHeader'>
     <div class='container'>
@@ -44,6 +45,11 @@ include 'chosen.html.php';
   }
   ?>
 </header>
+<?php else:?>
+<header id='header'>
+  <div id='mainHeader' style="height: 0;"></div>
+</header>
+<?php endif;?>
 
 <?php endif;?>
 <script>
@@ -51,6 +57,12 @@ adjustMenuWidth();
 if(window.navigator.userAgent.indexOf('xuanxuan') > 0)
 {
     $('li.user-tutorial').addClass('hide');
+
+    /* Fix double header covering #main. */
+    $('document').ready(function()
+    {
+        $('#subHeader').parent().parent().children('#main').css('top', '100px');
+    });
 }
 </script>
 <main id='main' <?php if(!empty($config->sso->redirect)) echo "class='ranzhiFixedTfootAction'";?> >

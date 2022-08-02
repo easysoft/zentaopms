@@ -3,7 +3,7 @@
  * The control file of programplan currentModule of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     programplan
  * @version     $Id: control.php 5107 2013-07-12 01:46:12Z chencongzhi520@gmail.com $
@@ -186,6 +186,11 @@ class programplan extends control
         $this->app->loadLang('project');
         $this->app->loadLang('execution');
         $plan = $this->programplan->getByID($planID);
+
+        global $lang;
+        $lang->executionCommon = $lang->execution->stage;
+        include $this->app->getModulePath('', 'execution') . 'lang/' . $this->app->getClientLang() . '.php';
+
         if($_POST)
         {
             $changes = $this->programplan->update($planID, $projectID);

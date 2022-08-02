@@ -3,7 +3,7 @@
  * The api module English file of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     api
  * @version     $Id: English.php 824 2010-05-02 15:32:06Z wwccss $
@@ -60,6 +60,8 @@ $lang->api->confirmDeleteLib = "Do you want to delete this interface library?";
 $lang->api->filterStruct     = "use struct";
 $lang->api->defaultVersion   = "Current Version";
 $lang->api->zentaoAPI        = "Zentao API v1";
+$lang->api->search           = "Search";
+$lang->api->allLibs          = "AllLibs";
 
 /* Common access control lang. */
 $lang->api->whiteList          = 'Whitelist';
@@ -124,6 +126,12 @@ $lang->api->query              = 'Parameter';
 $lang->api->params             = 'Request Body';
 $lang->api->response           = 'Response';
 $lang->api->responseExample    = 'Response Example';
+$lang->api->id                 = 'ID';
+$lang->api->addedBy            = 'AddedBy';
+$lang->api->addedDate          = 'AddedDate';
+$lang->api->editedBy           = 'EditedBy';
+$lang->api->editedDate         = 'EditedDate';
+$lang->api->version            = 'Version';
 $lang->api->res                = new stdClass();
 $lang->api->res->name          = 'Name';
 $lang->api->res->desc          = 'Description';

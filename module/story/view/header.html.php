@@ -64,7 +64,7 @@ function loadBranch()
  */
 function loadProductBranches(productID)
 {
-    var param = '';
+    var param = 'all';
     if(page == 'create') param = 'active';
     $('#branch').remove();
     $('#branch_chosen').remove();
@@ -152,9 +152,21 @@ function loadProductReviewers(productID)
     {
         if(data)
         {
-            $('#reviewer').replaceWith(data);
-            $('#reviewer_chosen').remove();
-            $('#reviewer').chosen();
+            var $reviewer = $('#reviewer');
+            var chosen = $reviewer.data('chosen');
+            if(chosen)
+            {
+                chosen.destroy();
+            }
+            else
+            {
+                var picker = $reviewer.data('zui.picker');
+                if(picker) picker.destroy();
+            }
+            $reviewer.replaceWith(data);
+            $reviewer = $('#reviewer');
+            if($reviewer.data('pickertype')) $reviewer.picker({chosenMode: true});
+            else $reviewer.chosen();
             if(needNotReview == 'checked') $('#reviewer').attr('disabled', 'disabled').trigger('chosen:updated');
         }
     });

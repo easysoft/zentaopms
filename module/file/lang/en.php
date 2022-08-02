@@ -3,7 +3,7 @@
  * The file module English file of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     file
  * @version     $Id: en.php 4129 2013-01-18 01:58:14Z wwccss $
@@ -18,7 +18,7 @@ $lang->file->deleted       = 'Deleted';
 $lang->file->uploadImages  = 'Batch Upload Images';
 $lang->file->download      = 'Download Files';
 $lang->file->uploadDate    = 'Uploaded';
-$lang->file->edit          = 'Rename File';
+$lang->file->edit          = 'Rename';
 $lang->file->inputFileName = 'Enter File Name';
 $lang->file->delete        = 'Delete File';
 $lang->file->label         = 'Label:';
@@ -36,6 +36,7 @@ $lang->file->addFile       = 'Add';
 $lang->file->beginUpload   = 'Click to Upload';
 $lang->file->uploadSuccess = 'Uploaded!';
 $lang->file->batchExport   = 'Export in batches';
+$lang->file->downloadFile  = 'Download';
 
 $lang->file->pathname  = 'Path Name';
 $lang->file->title     = 'Title';

@@ -3,7 +3,7 @@
  * The executions entry point of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2021 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     entries
  * @version     1
@@ -22,7 +22,7 @@ class feedbacksEntry extends entry
         if(strpos(strtolower($this->param('fields')), 'moduleandproduct') !== false) return $this->getModuleAndProduct();
 
         $control = $this->loadController('feedback', 'admin');
-        $control->admin($this->param('status', 'unclosed'), 0, $this->param('orderBy', 'id_desc'), 0, $this->param('limit', 20), $this->param('page', 1));
+        $control->admin($this->param('solution', 'unclosed'), 0, $this->param('orderBy', 'id_desc'), 0, $this->param('limit', 20), $this->param('page', 1));
         $data = $this->getData();
 
         if(!$data or !isset($data->status)) return $this->sendError(400, 'error');
@@ -34,7 +34,7 @@ class feedbacksEntry extends entry
         $result = array();
         foreach($feedbacks as $feedback)
         {
-            $result[] = $this->format($feedback, 'openedBy:user,openedDate:time,reviewedBy:user,reviewedDate:time,processedBy:user,processedDate:time,closedBy:user,closedDate:time,editedBy:user,editedDate:time,mailto:userList,deleted:bool');
+            $result[] = $this->format($feedback, 'openedBy:user,openedDate:time,reviewedBy:user,reviewedDate:time,processedBy:user,processedDate:time,closedBy:user,closedDate:time,editedBy:user,editedDate:time,assignedTo:user,mailto:userList,deleted:bool');
         }
 
         $data = array();
@@ -54,8 +54,10 @@ class feedbacksEntry extends entry
      */
     public function post()
     {
-        $fields = 'module,product,type,title,public,desc,status,feedbackBy,notifyEmail,notify,uid';
+        $fields = 'module,product,type,title,public,desc,status,feedbackBy,notify,uid';
         $this->batchSetPost($fields);
+
+        $this->setPost('notifyEmail', $this->request('notifyEmail', ''));
 
         $control = $this->loadController('feedback', 'create');
         $this->requireFields('title,product');

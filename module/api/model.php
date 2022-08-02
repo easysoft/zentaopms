@@ -3,7 +3,7 @@
  * The model file of api module of ZenTaoCMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     api
  * @version     $Id$
@@ -106,7 +106,7 @@ class apiModel extends model
             ->autoCheck()
             ->batchCheck($this->config->api->create->requiredFields, 'notempty')
             ->check('title', 'unique', "lib = $data->lib AND module = $data->module")
-            ->check('path', 'unique', "lib = $data->lib AND module = $data->module")
+            ->check('path', 'unique', "lib = $data->lib AND module = $data->module AND method = '$data->method'")
             ->exec();
 
         if(dao::isError()) return false;
@@ -894,5 +894,64 @@ class apiModel extends model
     {
         $file = $this->app->getAppRoot() . 'db' . DS . 'api' . DS . $version . DS . $table;
         return unserialize(preg_replace_callback('#s:(\d+):"(.*?)";#s', function($match){return 's:'.strlen($match[2]).':"'.$match[2].'";';}, file_get_contents($file)));
+    }
+
+     /**
+     * Build search form.
+     *
+     * @param  object $lib
+     * @param  string $queryID
+     * @param  string $actionURL
+     * @access public
+     * @return void
+     */
+    public function buildSearchForm($lib, $queryID, $actionURL)
+    {
+        $this->config->api->search['module']                  = 'api';
+        $this->config->api->search['queryID']                 = $queryID;
+        $this->config->api->search['actionURL']               = $actionURL;
+        $this->config->api->search['params']['lib']['values'] = (!empty($lib)) ? array($lib->id => $lib->name) + array('all' => $this->lang->api->allLibs) : array('all' => $this->lang->api->allLibs);
+
+        $this->loadModel('search')->setSearchParams($this->config->api->search);
+    }
+
+    /**
+     * Get api by search.
+     *
+     * @param  string $libID
+     * @param  int    $queryID
+     * @access public
+     * @return array
+     */
+    public function getApiListBySearch($libID, $queryID)
+    {
+       if($queryID)
+       {
+           $query = $this->loadModel('search')->getQuery($queryID);
+           if($query)
+           {
+               $this->session->set('apiQuery', $query->sql);
+               $this->session->set('apiForm', $query->form);
+           }
+           else
+           {
+               $this->session->set('apiQuery', ' 1 = 1');
+           }
+       }
+       else
+       {
+           if($this->session->apiQuery == false) $this->session->set('apiQuery', ' 1 = 1');
+       }
+
+       $apiQuery = $this->session->apiQuery;
+       $apiQuery = strpos($apiQuery, "`lib` = 'all'") === false ? "$apiQuery and lib = $libID" : str_replace("`lib` = 'all'", '1', $apiQuery);
+
+       $list = $this->dao->select('*')
+           ->from(TABLE_API)
+           ->where('deleted')->eq(0)
+           ->andWhere($apiQuery)
+           ->fetchAll();
+
+       return $list;
     }
 }

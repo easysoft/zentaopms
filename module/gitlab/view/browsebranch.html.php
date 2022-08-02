@@ -3,7 +3,7 @@
  * The browse view file of gitlab module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2021 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Gang Zeng <zenggang@easycorp.ltd>
  * @package     gitlab
  * @version     $Id$
@@ -37,7 +37,7 @@
       <?php $vars = "gitlabID={$gitlabID}&projectID={$projectID}&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}";?>
       <thead>
         <tr>
-          <th class='c-name text-left'><?php common::printOrderLink('name', $orderBy, $vars, $lang->gitlab->branch->name);?></th>
+          <th class='c-name text'><?php common::printOrderLink('name', $orderBy, $vars, $lang->gitlab->branch->name);?></th>
           <th class='text-left'><?php echo $lang->gitlab->branch->lastCommitter;?></th>
           <th class='text-left'><?php common::printOrderLink('lastCommittedDate', $orderBy, $vars, $lang->gitlab->branch->lastCommittedDate);?></th>
         </tr>

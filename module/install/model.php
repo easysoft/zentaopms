@@ -3,7 +3,7 @@
  * The model file of install module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     install
  * @version     $Id: model.php 5006 2013-07-03 08:52:21Z wyd621@gmail.com $
@@ -516,6 +516,16 @@ class installModel extends model
             }
         }
 
+        /* Check password. */
+        if(!validater::checkReg($this->post->password, '|(.){6,}|')) dao::$errors['password'][] = $this->lang->error->passwordrule;
+        if(isset($this->config->safe->mode) and (strlen($this->post->password) < $this->config->safe->mode)) dao::$errors['password'][] = $this->lang->user->weakPassword;
+        if(!empty($this->config->safe->changeWeak))
+        {
+            if(!isset($this->config->safe->weak)) $this->app->loadConfig('admin');
+            if(strpos(",{$this->config->safe->weak},", ",{$this->post->password},") !== false) dao::$errors['password'][] = sprintf($this->lang->user->errorWeak, $this->config->safe->weak);
+        }
+        if(dao::isError()) return false;
+
         /* Insert a company. */
         $company = new stdclass();
         $company->name   = $data->company;
@@ -634,6 +644,7 @@ class installModel extends model
             if($this->config->edition == 'open') $this->dao->update(TABLE_USER)->set('deleted')->eq('0')->where('deleted')->eq('1')->exec();
         }
 
+        $config = new stdclass();
         $config->module  = 'common';
         $config->owner   = 'system';
         $config->section = 'global';

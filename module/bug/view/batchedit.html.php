@@ -3,7 +3,7 @@
  * The batch edit view of bug module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Congzhi Chen <congzhi@cnezsoft.com>
  * @package     bug
  * @version     $Id$
@@ -13,6 +13,8 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/datepicker.html.php';?>
 <?php js::set('dittoNotice', $this->lang->bug->dittoNotice);?>
+<?php js::set('showFields', $showFields);?>
+<?php js::set('requiredFields', $config->bug->edit->requiredFields);?>
 <div id='mainContent' class='main-content fade'>
   <div class='main-header'>
     <h2><?php echo $lang->bug->common . $lang->colon . $lang->bug->batchEdit;?></h2>
@@ -97,17 +99,45 @@
             <?php if($branchProduct):?>
             <td style='overflow:visible'>
               <?php $disabled = (isset($productList) and $productList[$bug->product]->type == 'normal') ? "disabled='disabled'" : '';?>
-              <?php echo html::select("branches[$bugID]", !empty($disabled) ? array() : $branchTagOption[$bug->product], $bug->branch, "class='form-control chosen' $disabled onchange='setBranchRelated(this.value, $bug->product, $bug->id)'");?>
+              <?php echo html::select("branches[$bugID]", !empty($disabled) ? array() : $branchTagOption[$bug->product], $bug->branch, "class='form-control picker-select' data-drop-width='auto' $disabled onchange='setBranchRelated(this.value, $bug->product, $bug->id)'");?>
             </td>
             <?php endif;?>
-            <td><?php echo html::select("modules[$bugID]", isset($modules[$bug->product][$bug->branch]) ? $modules[$bug->product][$bug->branch] : array(0 => '/'), $bug->module, "class='form-control chosen'");?></td>
-            <td class='<?php echo zget($visibleFields, 'productplan', ' hidden')?>' style='overflow:visible'><?php echo html::select("plans[$bugID]", $plans, $bug->plan, "class='form-control chosen'");?></td>
-            <td class='<?php echo zget($visibleFields, 'assignedTo', ' hidden')?>' style='overflow:visible'><?php echo html::select("assignedTos[$bugID]", $users, $bug->assignedTo, "class='form-control chosen'");?></td>
-            <td class='<?php echo zget($visibleFields, 'deadline', ' hidden')?>' style='overflow:visible'><?php echo html::input("deadlines[$bugID]", $bug->deadline, "class='form-control form-date'");?></td>
+            <td><?php echo html::select("modules[$bugID]", isset($modules[$bug->product][$bug->branch]) ? $modules[$bug->product][$bug->branch] : array(0 => '/'), $bug->module, "class='form-control picker-select' data-drop-width='auto'");?></td>
+            <td class='<?php echo zget($visibleFields, 'productplan', ' hidden')?>' style='overflow:visible'><?php echo html::select("plans[$bugID]", $plans, $bug->plan, "class='form-control picker-select' data-drop-width='auto'");?></td>
+            <?php
+            $assignedToList = array();
+            if($app->tab == 'project' or $app->tab == 'execution')
+            {
+                if($bug->execution)
+                {
+                    $assignedToList = array('' => '', 'ditto' => $this->lang->bug->ditto) + $executionMembers[$bug->execution];
+                }
+                elseif($bug->project)
+                {
+                    $assignedToList = array('' => '', 'ditto' => $this->lang->bug->ditto) + $projectMembers[$bug->project];
+                }
+                else
+                {
+                    $assignedToList = $productMembers[$bug->product][$bug->branch];
+                    if(empty($assignedToList))
+                    {
+                        $assignedToList = $users;
+                        unset($assignedToList['closed']);
+                    }
+                }
+            }
+            else
+            {
+                $assignedToList = $users;
+                unset($assignedToList['closed']);
+            }
+            ?>
+            <td class='<?php echo zget($visibleFields, 'assignedTo', ' hidden')?>' style='overflow:visible'><?php echo html::select("assignedTos[$bugID]", $assignedToList, $bug->assignedTo, "class='form-control picker-select' data-drop-width='135px'");?></td>
+            <td class='<?php echo zget($visibleFields, 'deadline', ' hidden')?>' style='overflow:visible'><?php echo html::input("deadlines[$bugID]", helper::isZeroDate($bug->deadline) ? '' : $bug->deadline, "class='form-control form-date'");?></td>
             <td <?php echo zget($visibleFields, 'os', "class='hidden'")?>><?php echo html::select("os[$bugID]", $osList, $bug->os, 'class=form-control');?></td>
             <td <?php echo zget($visibleFields, 'browser', "class='hidden'")?>><?php echo html::select("browsers[$bugID]", $browserList, $bug->browser, 'class=form-control');?></td>
             <td <?php echo zget($visibleFields, 'keywords', "class='hidden'")?>><?php echo html::input("keywords[$bugID]", $bug->keywords, 'class=form-control');?></td>
-            <td class='<?php echo zget($visibleFields, 'resolvedBy', ' hidden')?>' style='overflow:visible'><?php echo html::select("resolvedBys[$bugID]", $users, $bug->resolvedBy, "class='form-control chosen'");?></td>
+            <td class='<?php echo zget($visibleFields, 'resolvedBy', ' hidden')?>' style='overflow:visible'><?php echo html::select("resolvedBys[$bugID]", $users, $bug->resolvedBy, "class='form-control picker-select' data-drop-width='auto'");?></td>
             <td <?php echo zget($visibleFields, 'resolution', "class='hidden'")?>>
               <table class='table-borderless table no-margin'>
                 <tr>

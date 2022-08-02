@@ -3,7 +3,7 @@
  * The index view file of doc module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Yidong Wang <yidong@cnezsoft.com>
  * @package     doc
  * @version     $Id$
@@ -33,8 +33,8 @@
               <thead>
                 <tr>
                   <th class="c-name"><?php echo $lang->doc->title;?></th>
-                  <th class="c-num text-right"><?php echo $lang->doc->size;?></th>
-                  <th class="c-user"><?php echo $lang->doc->addedBy;?></th>
+                  <th class="c-num text-right" title="<?php echo $lang->doc->size?>"><?php echo $lang->doc->size;?></th>
+                  <th class="c-user" title="<?php echo $lang->doc->addedBy;?>"><?php echo $lang->doc->addedBy;?></th>
                   <th class="c-datetime"><?php echo $lang->doc->editedDate;?></th>
                 </tr>
               </thead>

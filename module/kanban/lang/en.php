@@ -1,13 +1,16 @@
 <?php
 /* Actions. */
+$lang->kanban->noCard              = 'No card';
 $lang->kanban->create              = 'Create Kanban';
 $lang->kanban->createSpace         = 'Create Space';
 $lang->kanban->editSpace           = 'Edit Space';
 $lang->kanban->closeSpace          = 'Close Space';
 $lang->kanban->deleteSpace         = 'Delete Space';
+$lang->kanban->activateSpace       = 'Activate Space';
 $lang->kanban->sortSpace           = 'Sort Space';
 $lang->kanban->edit                = 'Edit Kanban';
 $lang->kanban->view                = 'View Kanban';
+$lang->kanban->activate            = 'Activate Kanban';
 $lang->kanban->close               = 'Close Kanban';
 $lang->kanban->delete              = 'Delete Kanban';
 $lang->kanban->createRegion        = 'Create Region';
@@ -24,6 +27,7 @@ $lang->kanban->columnWidth         = 'Column Width';
 $lang->kanban->setColumnWidth      = 'Set Column Width';
 $lang->kanban->deleteLane          = 'Delete Lane';
 $lang->kanban->createColumn        = 'Create Column';
+$lang->kanban->emptyDesc           = 'No description';
 $lang->kanban->editColumn          = 'Edit Column';
 $lang->kanban->sortColumn          = 'Sort Column';
 $lang->kanban->deleteColumn        = 'Delete Column';
@@ -43,10 +47,14 @@ $lang->kanban->deleteCard          = 'Delete Card';
 $lang->kanban->removeCard          = 'Remove Card';
 $lang->kanban->assigntoCard        = 'Assign';
 $lang->kanban->setting             = 'Setting';
+$lang->kanban->settingSpace        = 'Setting Space';
+$lang->kanban->activateSpace       = 'Activate Space';
+$lang->kanban->closeSpace          = 'Close Space';
+$lang->kanban->deleteSpace         = 'Delete Space';
 $lang->kanban->enableArchived      = 'Enable Archived';
 $lang->kanban->archive             = 'Archive';
 $lang->kanban->performable         = 'Set progress management';
-$lang->kanban->manageProgress      = 'Manage Progress';
+$lang->kanban->manageProgress      = 'Progress';
 $lang->kanban->splitColumn         = 'Split Column';
 $lang->kanban->createColumnOnLeft  = 'Create Column On Left';
 $lang->kanban->createColumnOnRight = 'Create Column On Right';
@@ -77,6 +85,9 @@ $lang->kanban->importBuild         = 'Build';
 $lang->kanban->allKanban           = 'All Kanban';
 $lang->kanban->allProjects         = 'All ' . ($this->config->systemMode == 'classic' ? $lang->executionCommon : 'Projects');
 $lang->kanban->allProducts         = 'All Products';
+$lang->kanban->mine                = 'Mine';
+$lang->kanban->alignment           = 'Alignment';
+$lang->kanban->allUsers            = 'Load All Users';
 
 /* Fields. */
 $lang->kanban->space          = 'Space';
@@ -96,8 +107,11 @@ $lang->kanban->closed         = 'Closed';
 $lang->kanban->closedBy       = 'Closed By';
 $lang->kanban->closedDate     = 'Closed Date';
 $lang->kanban->empty          = 'No Kanban';
-$lang->kanban->teamSumCount   = '%s people in total';
+$lang->kanban->teamSumCount   = '%s Pers';
+$lang->kanban->cardsCount     = '%s Card';
 $lang->kanban->cardCount      = 'Card Count';
+$lang->kanban->activatedBy    = 'Activated By';
+$lang->kanban->activatedDate  = 'Activated Date';
 
 $lang->kanban->createColumnOnLeft  = 'Create Column On Left';
 $lang->kanban->createColumnOnRight = 'Create Column On Right';
@@ -124,6 +138,9 @@ $lang->kanban->archiveList['1'] = 'Enable';
 
 $lang->kanban->enableList['0'] = 'Disable';
 $lang->kanban->enableList['1'] = 'Enable';
+
+$lang->kanban->alignmentList['center'] = 'Center';
+$lang->kanban->alignmentList['left']   = 'Left';
 
 $lang->kanban->type = array();
 $lang->kanban->type['all']   = "All KanBan";
@@ -166,7 +183,9 @@ $lang->kanban->WIPType            = 'WIP Type';
 $lang->kanban->WIPCount           = 'WIP Count';
 $lang->kanban->noLimit            = 'No Limit ∞';
 $lang->kanban->setLane            = 'Lane Settings';
+$lang->kanban->editLaneName       = 'Edit Lane Name';
 $lang->kanban->laneName           = 'Lane Name';
+$lang->kanban->editLaneColor      = 'Edit Lane Color';
 $lang->kanban->laneColor          = 'Lane Color';
 $lang->kanban->setColumn          = 'Column Settings';
 $lang->kanban->columnName         = 'Column Name';
@@ -184,6 +203,11 @@ $lang->kanban->fullScreen         = 'Full Screen';
 $lang->kanban->setting            = 'Setting';
 $lang->kanban->my                 = 'My';
 $lang->kanban->other              = 'Other';
+$lang->kanban->showWIP            = 'Show WIP';
+$lang->kanban->copyTitle          = 'Please select a Kanban to copy';
+$lang->kanban->copyNoKanban       = 'No Kanban available to copy';
+$lang->kanban->cancelCopy         = 'Cancel Copying';
+$lang->kanban->copyContent        = 'Copy Content';
 
 $lang->kanban->error = new stdclass();
 $lang->kanban->error->mustBeInt         = 'The WIPs must be positive integer.';
@@ -192,9 +216,12 @@ $lang->kanban->error->childLimitNote    = 'The sum of products in the child colu
 $lang->kanban->error->importObjNotEmpty = 'Please select at least one import object.';
 $lang->kanban->error->childLimitEmpty   = 'Please set the WIP quantity of the sub column before operation.';
 
+$lang->kanban->orderList['pri_asc']  = 'Story Priority Ascending';
+$lang->kanban->orderList['pri_desc'] = 'Story Priority Descending';
+
 $lang->kanban->importList = array();
 $lang->kanban->importList['off'] = 'Import is not enabled';
-$lang->kanban->importList['on']  = 'Enable the import function, you can only import content that you have permission to view.';
+$lang->kanban->importList['on']  = 'Enable import function (You can import content that you have permission to view as cards.)';
 
 $lang->kanban->importObjectList = array();
 $lang->kanban->importObjectList['plans']      = 'Product Plan';
@@ -202,6 +229,9 @@ $lang->kanban->importObjectList['releases']   = 'Release';
 $lang->kanban->importObjectList['builds']     = 'Build';
 $lang->kanban->importObjectList['executions'] = 'Execution';
 $lang->kanban->importObjectList['cards']      = 'Other Kanban Cards';
+
+$lang->kanban->showWIPList[1] = 'Show';
+$lang->kanban->showWIPList[0] = 'Hide';
 
 $lang->kanban->defaultColumn = array();
 $lang->kanban->defaultColumn['wait']   = 'wait';
@@ -247,6 +277,10 @@ $lang->kanban->taskColumn['pause']      = 'Pause';
 $lang->kanban->taskColumn['canceled']   = 'Canceled';
 $lang->kanban->taskColumn['closed']     = 'Closed';
 
+$lang->kanban->copyContentList = array();
+$lang->kanban->copyContentList['basicInfo'] = 'Basic Information';
+$lang->kanban->copyContentList['region']    = 'Columns and swimlanes';
+
 $lang->kanbanspace = new stdclass();
 $lang->kanbanspace->common         = 'Kanban Space';
 $lang->kanbanspace->name           = 'Name';
@@ -263,20 +297,22 @@ $lang->kanbanspace->lastEditedDate = 'Edited Date';
 $lang->kanbanspace->closedBy       = 'Closed By';
 $lang->kanbanspace->closedDate     = 'Closed Date';
 $lang->kanbanspace->type           = 'Type';
+$lang->kanbanspace->activatedBy    = 'Activated By';
+$lang->kanbanspace->activatedDate  = 'Activated Date';
 
 $lang->kanbanspace->empty = 'No Space';
 
 $lang->kanbanspace->aclList['open']    = 'Open (Accessible with kanban view permissions)';
 $lang->kanbanspace->aclList['private'] = 'Private (For the space owner, team and whitelist members only)';
 
-$lang->kanbanspace->featureBar['private']     = 'Private Space';
+$lang->kanbanspace->featureBar['involved']    = 'Involved';
 $lang->kanbanspace->featureBar['cooperation'] = 'Cooperation Space';
 $lang->kanbanspace->featureBar['public']      = 'Public Space';
-$lang->kanbanspace->featureBar['involved']    = 'Involved';
+$lang->kanbanspace->featureBar['private']     = 'Private Space';
 
-$lang->kanbanspace->typeList['private']     = 'Private Space';
 $lang->kanbanspace->typeList['cooperation'] = 'Cooperation Space';
 $lang->kanbanspace->typeList['public']      = 'Public Space';
+$lang->kanbanspace->typeList['private']     = 'Private Space';
 
 $lang->kanbancolumn = new stdclass();
 $lang->kanbancolumn->name       = $lang->kanban->columnName;
@@ -292,13 +328,14 @@ $lang->kanbancolumn->confirmDeleteChild = 'Are you sure to delete this column? A
 $lang->kanbancolumn->confirmRestore     = 'Are you sure you want to restore this Kanban column? After restoring the Kanban column, the Kanban column and all tasks in the Kanban column will be restored to the previous position at the same time.';
 
 $lang->kanbanlane = new stdclass();
-$lang->kanbanlane->name      = $lang->kanban->laneName;
-$lang->kanbanlane->common    = 'Lane';
-$lang->kanbanlane->default   = 'Default Lane';
-$lang->kanbanlane->column    = 'Lane Kanban Column';
-$lang->kanbanlane->otherlane = 'Select Existed Lane';
-$lang->kanbanlane->color     = 'Lane Color';
-$lang->kanbanlane->WIPType   = 'Lane WIP Type';
+$lang->kanbanlane->name         = $lang->kanban->laneName;
+$lang->kanbanlane->common       = 'Lane';
+$lang->kanbanlane->default      = 'Default Lane';
+$lang->kanbanlane->column       = 'Lane Kanban Column';
+$lang->kanbanlane->otherlane    = 'Select Existed Lane';
+$lang->kanbanlane->color        = 'Lane Color';
+$lang->kanbanlane->WIPType      = 'Lane WIP Type';
+$lang->kanbanlane->heightByCard = 'Adaptive (Adaptive to card height)';
 
 $lang->kanbanlane->confirmDelete    = 'Are you sure to delete this lane? After deleting the lane, all data (columns and cards) in the lane will also be deleted.';
 $lang->kanbanlane->confirmDeleteTip = 'Are you sure to delete this lane? After deleting the lane, all %s in the lane will be hidden.';
@@ -306,14 +343,14 @@ $lang->kanbanlane->confirmDeleteTip = 'Are you sure to delete this lane? After d
 $lang->kanbanlane->modeList['sameAsOther'] = 'Use the same Kanban column';
 $lang->kanbanlane->modeList['independent'] = 'Independent Kanban column';
 
-$lang->kanbanlane->heightTypeList['auto']   = 'Adaptive (Adaptive according to the card height)';
-$lang->kanbanlane->heightTypeList['custom'] = 'Custom (Customize lane height based on number of cards)';
+$lang->kanbanlane->heightTypeList['auto']   = "Adaptive <span class='tip'>(Adaptive to card height and lane name height)</span>";
+$lang->kanbanlane->heightTypeList['custom'] = "Custom <span class='tip'>(Customize lane height based on number of cards)</span>";
 
-$lang->kanbancolumn->fluidBoardList['0'] = 'Fixed';
-$lang->kanbancolumn->fluidBoardList['1'] = 'Auto Width';
+$lang->kanbancolumn->fluidBoardList['0'] = "Fixed<span class='tip'>(Keep all columns the same width)</span>";
+$lang->kanbancolumn->fluidBoardList['1'] = "Auto Width<span class='tip'>(Adapts to lane width)</span>";
 
 $lang->kanbanlane->error = new stdclass();
-$lang->kanbanlane->error->mustBeInt = 'The number of cards must be a positive integer greater than 2.';
+$lang->kanbanlane->error->mustBeInt = 'No. of cards must be a positive integer from 3 to 32767.';
 
 $lang->kanbanregion = new stdclass();
 $lang->kanbanregion->name    = 'Region Name';

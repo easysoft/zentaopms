@@ -3,7 +3,7 @@
  * The testcase module English file of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     testcase
  * @version     $Id: en.php 4966 2013-07-02 02:59:25Z wyd621@gmail.com $
@@ -11,7 +11,14 @@
  */
 $lang->testcase->id               = 'ID';
 $lang->testcase->product          = $lang->productCommon;
+$lang->testcase->project          = 'Project';
+$lang->testcase->execution        = 'Execution';
 $lang->testcase->module           = 'Module';
+$lang->testcase->auto             = 'Test Automation Cases';
+$lang->testcase->frame            = 'Test Automation Cramework';
+$lang->testcase->howRun           = 'Testing Method';
+$lang->testcase->frequency        = 'Frequency';
+$lang->testcase->path             = 'Path';
 $lang->testcase->lib              = "Bibliothek";
 $lang->testcase->branch           = "Branch/Platform";
 $lang->testcase->moduleAB         = 'Module';
@@ -22,7 +29,7 @@ $lang->testcase->order            = 'Rank';
 $lang->testcase->title            = 'Titel';
 $lang->testcase->precondition     = 'Voraussetzungen';
 $lang->testcase->pri              = 'Priorität';
-$lang->testcase->type             = 'Typ';
+$lang->testcase->type             = 'Type';
 $lang->testcase->status           = 'Status';
 $lang->testcase->subStatus        = 'Sub Status';
 $lang->testcase->steps            = 'Schritte';
@@ -36,7 +43,14 @@ $lang->testcase->files            = 'Dateien';
 $lang->testcase->linkCase         = 'Verbundene Fälle';
 $lang->testcase->linkCases        = 'Fall verbinden';
 $lang->testcase->unlinkCase       = 'Fall verbindung aufheben';
+$lang->testcase->linkBug          = 'Linked Bugs';
+$lang->testcase->linkBugs         = 'Link Bug';
+$lang->testcase->unlinkBug        = 'Unlink Bugs';
 $lang->testcase->stage            = 'Phase';
+$lang->testcase->scriptedBy       = 'ScriptedBy';
+$lang->testcase->scriptedDate     = 'ScriptedDate';
+$lang->testcase->scriptStatus     = 'Script Status';
+$lang->testcase->scriptLocation   = 'Script Location';
 $lang->testcase->reviewedBy       = 'Überprüft von';
 $lang->testcase->reviewedDate     = 'Überprüft von';
 $lang->testcase->reviewResult     = 'Prüfungsbericht';
@@ -54,6 +68,7 @@ $lang->testcase->assignedTo       = 'An';
 $lang->testcase->colorTag         = 'Farb-Tag';
 $lang->testcase->lastRunResult    = 'Ergebnis';
 $lang->testcase->desc             = 'Schritt';
+$lang->testcase->parent           = 'Parent';
 $lang->testcase->xml              = 'XML';
 $lang->testcase->expect           = 'Erwartet';
 $lang->testcase->allProduct       = "Alle {$lang->productCommon}";
@@ -73,8 +88,13 @@ $lang->testcase->sync             = 'Sync. Case';
 $lang->testcase->ignore           = 'Ignore';
 $lang->testcase->fromTesttask     = 'From Test Request';
 $lang->testcase->fromCaselib      = 'From CaseLib';
+$lang->testcase->fromCaseID       = 'From Case ID';
+$lang->testcase->fromCaseVersion  = 'From Case Version';
+$lang->testcase->mailto           = 'Mailto';
 $lang->testcase->deleted          = 'Deleted';
 $lang->testcase->browseUnits      = 'Unit Test';
+$lang->testcase->suite            = 'Test Suite';
+$lang->testcase->executionStatus  = 'executionStatus';
 
 $lang->case = $lang->testcase;  // For dao checking using. Because 'case' is a php keywords, so the module name is testcase, table name is still case.
 
@@ -123,6 +143,7 @@ $lang->testcase->groupName               = 'Gruppenname';
 $lang->testcase->step                    = 'Schritt';
 $lang->testcase->stepChild               = 'Teilschritt';
 $lang->testcase->viewAll                 = 'Alle anziegen';
+$lang->testcase->importToLib             = "Import To Library";
 
 $lang->testcase->new = 'Neu';
 
@@ -146,17 +167,18 @@ $lang->testcase->lblTypeValue   = 'Typenliste';
 $lang->testcase->lblStageValue  = 'Stageliste';
 $lang->testcase->lblStatusValue = 'Statusliste';
 
-$lang->testcase->legendBasicInfo    = 'Basis Info';
-$lang->testcase->legendAttatch      = 'Datei';
-$lang->testcase->legendLinkBugs     = 'Bug';
-$lang->testcase->legendOpenAndEdit  = 'Erstellt/Bearbeitet';
-$lang->testcase->legendComment      = 'Bemerkung';
+$lang->testcase->legendBasicInfo       = 'Basis Info';
+$lang->testcase->legendAttatch         = 'Datei';
+$lang->testcase->legendLinkBugs        = 'Bug';
+$lang->testcase->legendOpenAndEdit     = 'Erstellt/Bearbeitet';
+$lang->testcase->legendComment         = 'Bemerkung';
 
-$lang->testcase->summary            = "Fälle auf dieser Seite: <strong>%s</strong> insgesamt, <strong>%s</strong> ausgeführt.";
-$lang->testcase->confirmDelete      = 'Möchten Sie diesen Testfall schließen?';
-$lang->testcase->confirmBatchDelete = 'Möchten Sie diese Testfälle schließen?';
-$lang->testcase->ditto              = 'Dito';
-$lang->testcase->dittoNotice        = 'Dieser Fall gehört nicht zu den Produkt!';
+$lang->testcase->summary               = "Fälle auf dieser Seite: <strong>%s</strong> insgesamt, <strong>%s</strong> ausgeführt.";
+$lang->testcase->confirmDelete         = 'Möchten Sie diesen Testfall schließen?';
+$lang->testcase->confirmBatchDelete    = 'Möchten Sie diese Testfälle schließen?';
+$lang->testcase->ditto                 = 'Dito';
+$lang->testcase->dittoNotice           = 'Dieser Fall gehört nicht zu den Produkt!';
+$lang->testcase->confirmUnlinkTesttask = 'The case [%s] is already associated in the testtask order of the previous branch/platform, after adjusting the branch/platform, it will be removed from the test list of the previous branch/platform, please confirm whether to continue to modify.';
 
 $lang->testcase->reviewList[0] = 'Nein';
 $lang->testcase->reviewList[1] = 'Ja';
@@ -203,16 +225,21 @@ $lang->testcase->resultList['blocked'] = 'Blockiert';
 
 $lang->testcase->buttonToList = 'Zurück';
 
+$lang->testcase->whichLine        = 'Line No.%s : ';
+$lang->testcase->stepsEmpty       = 'Step %s cannot be empty.';
 $lang->testcase->errorEncode      = 'Keine Daten. Bitte wählen Sie das richtige Encoding und versuchen Sie es erneut!';
 $lang->testcase->noFunction       = 'Iconv und mb_convert_encoding wurde nicht gefunden. Sie können die Daten nicht in das gewünschte Format konvertieren!';
 $lang->testcase->noRequire        = "Zeile %s hat “%s” was ein benötigtes Feld ist und nicht leer sein darf.";
+$lang->testcase->noRequireTip     = "“%s”is a required field and it should not be blank.";
 $lang->testcase->noLibrary        = "Es existiert keine Bibliothek. Bitte erstellen Sie eine.";
 $lang->testcase->mustChooseResult = 'Prüfungsergebnis wird benötigt.';
 $lang->testcase->noModule         = '<div>Es existieren keine Module</div><div>Jetzt verwalten</div>';
 $lang->testcase->noCase           = 'Keine Fälle. ';
+$lang->testcase->importedCases    = 'The case with ID%s has been imported in the same module and has been ignored.';
 
 $lang->testcase->searchStories = 'Story suchen';
 $lang->testcase->selectLib     = 'Bibliothek wählen';
+$lang->testcase->selectLibAB   = 'Bibliothek wählen';
 
 $lang->testcase->action = new stdclass();
 $lang->testcase->action->fromlib               = array('main' => '$date, importiert von <strong>$actor</strong> aus Bibliothek <strong>$extra</strong>.');

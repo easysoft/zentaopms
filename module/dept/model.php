@@ -3,7 +3,7 @@
  * The model file of dept module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     dept
  * @version     $Id: model.php 4210 2013-01-22 01:06:12Z zhujinyonging@gmail.com $
@@ -113,13 +113,21 @@ class deptModel extends model
         krsort($deptMenu);
         $topMenu = array_pop($deptMenu);
         $topMenu = explode("\n", trim((string)$topMenu));
-        $lastMenu[] = '/';
+        if($this->app->tab == 'report')
+        {
+            $lastMenu[] = '/' . $this->lang->dept->noDepartment;
+        }
+        else
+        {
+            $lastMenu[] = '/';
+        }
         foreach($topMenu as $menu)
         {
             if(!strpos($menu, '|')) continue;
             list($label, $deptID) = explode('|', $menu);
             $lastMenu[$deptID] = $label;
         }
+
         return $lastMenu;
     }
 
@@ -409,6 +417,7 @@ class deptModel extends model
             ->where('deleted')->eq(0)
             ->beginIF(strpos($params, 'all') === false)->andWhere('type')->eq($type)->fi()
             ->beginIF($childDepts)->andWhere('dept')->in($childDepts)->fi()
+            ->beginIF($deptID === '0')->andWhere('dept')->eq($deptID)->fi()
             ->beginIF($this->config->vision)->andWhere("CONCAT(',', visions, ',')")->like("%,{$this->config->vision},%")->fi()
             ->orderBy('account')
             ->fetchPairs();

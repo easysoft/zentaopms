@@ -1,5 +1,7 @@
 $(function()
 {
+    if($('#storyList thead th.c-title').width() < 150) $('#storyList thead th.c-title').width(150);
+
     $('#storyList').on('sort.sortable', function(e, data)
     {
         var list = '';
@@ -9,8 +11,8 @@ $(function()
             var $target = $(data.element[0]);
             $target.hide();
             $target.fadeIn(1000);
-            order = 'order_asc'
-            history.pushState({}, 0, createLink('project', 'story', "executionID=" + executionID + '&orderBy=' + order));
+            order = 'order_desc'
+            history.pushState({}, 0, createLink('execution', 'story', "executionID=" + executionID + '&orderBy=' + order));
         });
     });
 
@@ -60,6 +62,8 @@ $(function()
             }
             else
             {
+                if(!unlinkTaskIdList) return false;
+
                 $('#storyIdList').val(unlinkTaskIdList);
             }
         }
@@ -70,6 +74,13 @@ $(function()
     });
 
     $('.sorter-false a').unwrap();
+
+    /* The display of the adjusting sidebarHeader is synchronized with the sidebar. */
+    $(".sidebar-toggle").click(function()
+    {
+        $("#sidebarHeader").toggle("fast");
+    });
+    if($("main").is(".hide-sidebar")) $("#sidebarHeader").hide();
 });
 
 /**

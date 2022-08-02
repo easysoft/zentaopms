@@ -3,7 +3,7 @@
  * The control file of install currentModule of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     install
  * @version     $Id: control.php 4297 2013-01-27 07:51:45Z wwccss $
@@ -233,13 +233,13 @@ class install extends control
         if(!empty($_POST))
         {
             $this->install->grantPriv();
-            if(dao::isError()) return print(js::error(dao::getError()) . js::locate('back'));
+            if(dao::isError()) return print(js::error(dao::getError()));
 
             $this->install->updateLang();
-            if(dao::isError()) return print(js::error(dao::getError()) . js::locate('back'));
+            if(dao::isError()) return print(js::error(dao::getError()));
 
             if($this->post->importDemoData) $this->install->importDemoData();
-            if(dao::isError()) return print(js::alert($this->lang->install->errorImportDemoData) . js::locate('back'));
+            if(dao::isError()) return print(js::alert($this->lang->install->errorImportDemoData));
 
             $this->loadModel('setting');
             $this->setting->updateVersion($this->config->version);

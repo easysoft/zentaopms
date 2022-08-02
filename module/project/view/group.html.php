@@ -3,7 +3,7 @@
  * The prigroup view file of project module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     project
  * @version     $Id: prigroup.html.php 4769 2013-05-05 07:24:21Z wwccss $
@@ -23,6 +23,13 @@
   </div>
 </div>
 <div id='mainContent' class='main-table'>
+  <?php if(empty($groups)):?>
+  <div class="table-empty-tip">
+    <p>
+      <span class="text-muted"><?php echo $lang->group->noGroup;?></span>
+    </p>
+  </div>
+  <?php else:?>
   <table class='table tablesorter' id='groupList'>
     <thead>
       <tr>
@@ -52,8 +59,9 @@
           <?php
           if(common::hasPriv('group', 'delete') and $group->role != 'limited')
           {
-              $deleteURL = $this->createLink('group', 'delete', "groupID=$group->id&confirm=yes");
-              echo html::a("###", '<i class="icon icon-trash"></i>', '', "onclick='ajaxDelete(\"$deleteURL\", \"groupList\", confirmDelete)' title='{$lang->group->delete}' class='btn btn-icon'");
+              $deleteURL     = $this->createLink('group', 'delete', "groupID=$group->id&confirm=yes");
+              $confirmDelete = htmlspecialchars(sprintf($lang->group->confirmDelete, $group->name));
+              echo html::a("###", '<i class="icon icon-trash"></i>', '', "onclick='ajaxDelete(\"$deleteURL\", \"groupList\", \"$confirmDelete\")' title='{$lang->group->delete}' class='btn btn-icon'");
           }
           else
           {
@@ -65,5 +73,6 @@
       <?php endforeach;?>
     </tbody>
   </table>
+  <?php endif;?>
 </div>
 <?php include '../../common/view/footer.html.php';?>

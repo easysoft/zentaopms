@@ -3,7 +3,18 @@
 #sidebar>.sidebar-toggle>.icon {right: -2px; left: auto;}
 .main-row {width: 99%;}
 .btn-toolbar > .last-sync-time {display: inline-block; float: left; margin-right: 10px;}
+.btn-toolbar .page-title {line-height: 32px;}
 .dropdown-menu > li.selected > a:after {content: '';}
+.tree li.has-list.open:before {border-left: 0px;}
+#mainMenu > div.btn-toolbar.pull-left > div.btn-group.open {line-height: 20px;}
+#dropMenuRepo > div.table-row > div > div > ul > li > div {padding-left: 20px;}
+#dropMenuRepo > div.table-row > div > div > ul > li > ul {padding-left: 10px;}
+
+#branchList {line-height: 25px;}
+#branchList .hide-in-search, #branchList .tree ul {padding-left: 20px;}
+.tree li.has-list.open:before {border-left: none;}
+.tree li {padding: 0;}
+.branch-or-tag {border-radius: 4px;}
 
 .c-name {min-width: 150px;}
 .c-checkbox {width: 40px;}
@@ -15,3 +26,9 @@
 /* Fix bug #21893. */
 .in #sidebar>.sidebar-toggle>.icon-angle-left:before {content: "\e315";}
 .hide-sidebar #sidebar>.sidebar-toggle>.icon-angle-left:before {content: "\e314";}
+
+.download-popover {width: 400px; max-width: none;}
+.popover-content {padding: 0;}
+.download-popover .table {margin-bottom: 0;}
+.download-popover .table td {padding-right: 0;}
+.download-popover .popover-title {padding: 8px;}

@@ -3,7 +3,7 @@
  * The view file of build module's view method of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     build
  * @version     $Id: view.html.php 4386 2013-02-19 07:37:45Z chencongzhi520@gmail.com $
@@ -63,7 +63,7 @@ tbody tr td:first-child input {display: none;}
     </ul>
     <div class='tab-content'>
       <div class='tab-pane <?php if($type == 'story') echo 'active'?>' id='stories'>
-        <?php if($canBeChanged and common::hasPriv('build', 'linkStory')):?>
+        <?php if($canBeChanged and common::hasPriv('build', 'linkStory') and !isonlybody()):?>
         <div class='actions'><?php echo html::a("javascript:showLink($build->id, \"story\")", '<i class="icon-link"></i> ' . $lang->build->linkStory, '', "class='btn btn-primary'");?></div>
         <div class='linkBox cell hidden'></div>
         <?php endif;?>
@@ -91,9 +91,7 @@ tbody tr td:first-child input {display: none;}
               </tr>
             </thead>
             <tbody class='text-center'>
-              <?php $objectID = $this->app->tab == 'execution' ? $build->execution : $build->project;?>
               <?php foreach($stories as $storyID => $story):?>
-              <?php $storyLink = $this->createLink('story', 'view', "storyID=$story->id&version=0&param=$objectID", '', true);?>
               <tr>
                 <td class='c-id text-left'>
                   <?php if($canBatchUnlink):?>
@@ -106,7 +104,18 @@ tbody tr td:first-child input {display: none;}
                 <td class='text-left nobr' title='<?php echo $story->title?>'>
                   <?php
                   if($story->parent > 0) echo "<span class='label'>{$lang->story->childrenAB}</span>";
-                  echo html::a($storyLink,$story->title, '', isonlybody() ? "data-width='1000'" : "class='iframe' data-width='1000'");
+                  if($this->app->tab == 'execution' and common::hasPriv('execution', 'storyView'))
+                  {
+                      echo html::a($this->createLink('execution', 'storyView', "storyID=$story->id", '', true), $story->title, '', isonlybody() ? "data-width='1000'" : "class='iframe' data-width='1000'");
+                  }
+                  elseif($this->app->tab == 'project' and common::hasPriv('projectstory', 'view'))
+                  {
+                      echo html::a($this->createLink('projectstory', 'view', "storyID=$story->id&version=0&param=$build->project", '', true), $story->title, '', isonlybody() ? "data-width='1000'" : "class='iframe' data-width='1000'");
+                  }
+                  else
+                  {
+                      echo $story->title;
+                  }
                   ?>
                 </td>
                 <td><?php echo zget($users, $story->openedBy);?></td>
@@ -149,7 +158,7 @@ tbody tr td:first-child input {display: none;}
         </form>
       </div>
       <div class='tab-pane <?php if($type == 'bug') echo 'active'?>' id='bugs'>
-        <?php if($canBeChanged and common::hasPriv('build', 'linkBug')):?>
+        <?php if($canBeChanged and common::hasPriv('build', 'linkBug') and !isonlybody()):?>
         <div class='actions'><?php echo html::a("javascript:showLink($build->id, \"bug\")", '<i class="icon-bug"></i> ' . $lang->build->linkBug, '', "class='btn btn-primary'");?></div>
         <div class='linkBox cell hidden'></div>
         <?php endif;?>
@@ -335,7 +344,7 @@ tbody tr td:first-child input {display: none;}
                 <?php $this->printExtendFields($build, 'table', 'inForm=0');?>
                 <tr>
                   <th style="vertical-align:top"><?php echo $lang->build->desc;?></th>
-                  <td>
+                  <td class='article-content'>
                     <?php if($build->desc):?>
                     <?php echo $build->desc;?>
                     <?php else:?>

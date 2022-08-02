@@ -82,4 +82,36 @@ class myTest
 
         return $objects;
     }
+
+    /**
+     * Function getAssignedByMe test by my
+     *
+     * @param string $account
+     * @param int    $limit
+     * @param int    $pager
+     * @param string $orderBy
+     * @param int    $projectID
+     * @param string $objectType
+     * @access public
+     * @return int
+     */
+    public function getAssignedByMeTest($account, $limit, $pager, $orderBy, $projectID, $objectType)
+    {
+        global $tester;
+        $recTotal = 0;
+        $recPerPage = 20;
+        $pageID = 0;
+        $tester->app->loadClass('pager', $static = true);
+        $pager = new pager($recTotal, $recPerPage, $pageID);
+
+        $actionID = $tester->loadModel('action')->create('task', 6, 'assigned', '', '', 'admin', '');
+        $actionID = $tester->loadModel('action')->create('bug', 6, 'assigned', '', '', 'admin', '');
+        $actionID = $tester->loadModel('action')->create('story', 5, 'assigned', '', '', 'admin', '');
+        $objects = $this->objectModel->getAssignedByMe($account, $limit, $pager, $orderBy, $projectID, $objectType);
+
+        if(dao::isError()) return dao::getError();
+
+        return count($objects);
+    }
+
 }

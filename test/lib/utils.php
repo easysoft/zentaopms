@@ -3,7 +3,7 @@
  * Utils for ZenTaoPMS testing.
  *
  * @copyright   Copyright 2009-2017 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Guanxing <guanxiying@easycorp.ltd>
  * @package     ZenTaoPMS
  * @version     $Id: $
@@ -12,6 +12,7 @@
 
 define('RUNTIME_ROOT', dirname(dirname(__FILE__)) . '/runtime/');
 define('LIB_ROOT', dirname(dirname(__FILE__)) . '/lib/');
+define('TEST_BASEHPATH', dirname(__FILE__, 2));
 
 include LIB_ROOT . 'init.php';
 
@@ -205,6 +206,40 @@ function zdRun()
     catch (PDOException $e)
     {
         die('Error!: ' . $e->getMessage() . PHP_EOL);
+    }
+}
+
+/**
+ * copy init DB.
+ *
+ * @access public
+ * @return void
+ */
+function copyDB()
+{
+    global $config, $dao;
+
+    $dumpCommand = "mysqldump -u%s -p%s %s > %s";
+    $sqlFile     = TEST_BASEHPATH . DS . 'tmp/raw.sql';
+
+    $currentDBNum = $dao->query("select count(*) as num from information_schema.SCHEMATA where SCHEMA_NAME like '" . $config->test->dbPrefix . "%'")->fetch();
+    $dumpCommand  = sprintf($dumpCommand, $config->db->user, $config->db->password, $config->test->rawDB, $sqlFile);
+    shell_exec($dumpCommand);
+
+    $dbNum = $config->test->dbNum;
+
+    $dbUsed = array();
+    for($i = 1; $i <= $dbNum; $i++)
+    {
+        $dbUsed[] =  $config->test->dbPrefix . $i;
+    }
+
+    foreach($dbUsed as $db)
+    {
+        if ($currentDBNum->num > 0) $dao->query('drop database ' . $db);
+        $dao->query('CREATE DATABASE ' . $db);
+        shell_exec("mysql -u" . $config->db->user . ' -p' . $config->db->password . ' ' .  $db . '  <  ' . $sqlFile);
+        echo '数据库<' . $db . '>复制成功！';
     }
 }
 

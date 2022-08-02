@@ -3,7 +3,7 @@
  * The control file of testsuite module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     testsuite
  * @version     $Id: control.php 5114 2013-07-12 06:02:59Z chencongzhi520@gmail.com $
@@ -74,7 +74,7 @@ class testsuite extends control
         $sort = common::appendOrder($orderBy);
 
         $productName = isset($this->products[$productID]) ? $this->products[$productID] : '';
-        $suites      = $this->testsuite->getSuites($productID, $sort, $pager, 'all');
+        $suites      = $this->testsuite->getSuites($productID, $sort, $pager);
         if(empty($suites) and $pageID > 1)
         {
             $pager  = pager::init(0, $recPerPage, 1);
@@ -118,7 +118,8 @@ class testsuite extends control
             }
             $actionID = $this->loadModel('action')->create('testsuite', $suiteID, 'opened');
 
-            $this->executeHooks($suiteID);
+            $message = $this->executeHooks($suiteID);
+            if($message) $response['message'] = $message;
 
             if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $suiteID));
 
@@ -221,7 +222,8 @@ class testsuite extends control
                 $this->action->logHistory($actionID, $changes);
             }
 
-            $this->executeHooks($suiteID);
+            $messgae = $this->executeHooks($suiteID);
+            if($message) $response['message'] = $message;
 
             $response['locate']  = inlink('view', "suiteID=$suiteID");
             return $this->send($response);
@@ -263,7 +265,8 @@ class testsuite extends control
 
             $this->testsuite->delete($suiteID);
 
-            $this->executeHooks($suiteID);
+            $message = $this->executeHooks($suiteID);
+            if($message) $response['message'] = $message;
 
             /* if ajax request, send result. */
             if($this->server->ajax)

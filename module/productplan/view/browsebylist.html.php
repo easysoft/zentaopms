@@ -2,14 +2,18 @@
 /** * The browsebylist view file of plan module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     plan
  * @version     $Id: browsebylist.html.php 4707 2013-05-02 06:57:41Z chencongzhi520@gmail.com $
  * @link        https://www.zentao.net
  */
 ?>
-<style> .c-actions {width: 240px;} </style>
+<style>
+.c-actions {width: 250px;}
+#productplanList .c-actions .btn+.btn {margin-left: -1px;}
+#productplanList .c-actions .btn {display: block; float: left;}
+</style>
 <div id="mainMenu" class="clearfix">
   <div class="btn-toolbar pull-left">
     <?php foreach(customModel::getFeatureMenu($this->moduleName, $this->methodName) as $menuItem):?>
@@ -19,6 +23,7 @@
     <?php $active  = $menuItem->name == $browseType ? 'btn-active-text' : '';?>
     <?php echo html::a($this->inlink('browse', "productID=$productID&branch=&browseType={$menuItem->name}"), $label, '', "class='btn btn-link $active' id='{$menuItem->name}'");?>
     <?php endforeach;?>
+    <a class="btn btn-link querybox-toggle" id='bysearchTab'><i class="icon icon-search muted"></i><?php echo $lang->searchAB;?></a>
   </div>
   <div class="btn-toolbar pull-right">
     <div class="btn-group panel-actions">
@@ -30,12 +35,13 @@
     <?php endif;?>
   </div>
 </div>
+<div class="cell<?php if($browseType == 'bySearch') echo ' show';?>" id="queryBox" data-module='productplan'></div>
 <div id="mainContent">
   <?php if(empty($plans)):?>
   <div class="table-empty-tip">
     <p>
       <span class="text-muted"><?php echo $lang->productplan->noPlan;?></span>
-      <?php if(common::canModify('product', $product) and common::hasPriv('productplan', 'create')):?>
+      <?php if(common::canModify('product', $product) and common::hasPriv('productplan', 'create') and empty($productPlansNum)):?>
       <?php echo html::a($this->createLink('productplan', 'create', "productID=$product->id&branch=$branch"), "<i class='icon icon-plus'></i> " . $lang->productplan->create, '', "class='btn btn-info'");?>
       <?php endif;?>
     </p>
@@ -44,7 +50,7 @@
   <form class='main-table table-productplan' data-ride='table' method='post' id='productplanForm' action='<?php echo inlink('batchEdit', "productID=$product->id&branch=$branch")?>'>
     <table class='table has-sort-head' id="productplanList">
       <thead>
-      <?php $vars = "productID=$productID&branch=$branch&browseType=$browseType&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"; ?>
+      <?php $vars = "productID=$productID&branch=$branch&browseType=$browseType&queryID=$queryID&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"; ?>
       <tr>
         <th class='c-id'>
           <?php if(common::hasPriv('productplan', 'batchEdit') or common::hasPriv('productplan', 'batchChangeStatus')):?>
@@ -150,25 +156,29 @@
       </tbody>
     </table>
     <div class="table-footer">
+      <?php if(common::hasPriv('productplan', 'batchEdit') or common::hasPriv('productplan', 'batchChangeStatus')):?>
       <div class="checkbox-primary check-all"><label><?php echo $lang->selectAll?></label></div>
+      <?php endif;?>
       <div class="table-actions btn-toolbar">
       <?php if(common::hasPriv('productplan', 'batchEdit')):?>
       <?php $actionLink = $this->inlink('batchEdit', "productID=$product->id&branch=$branch");?>
       <?php echo html::commonButton($lang->edit, "data-form-action='$actionLink'");?>
       <?php endif;?>
       <?php if(common::hasPriv('productplan', 'batchChangeStatus')):?>
-        <button data-toggle="dropdown" type="button" class="btn"><?php echo $lang->productplan->planStatus;?> <span class="caret"></span></button>
-        <div class="dropdown-menu search-list">
-          <div class="list-group">
-            <?php
-            foreach($lang->productplan->statusList as $key => $status)
-            {
-                $isHiddenwin = $key == 'closed' ? '' : 'hiddenwin';
+        <div class="btn-group dropup">
+          <button data-toggle="dropdown" type="button" class="btn"><?php echo $lang->productplan->planStatus;?> <span class="caret"></span></button>
+          <div class="dropdown-menu search-list">
+            <div class="list-group">
+              <?php
+              foreach($lang->productplan->statusList as $key => $status)
+              {
+                  $isHiddenwin = $key == 'closed' ? '' : 'hiddenwin';
 
-                $actionLink = $this->createLink('productplan', 'batchChangeStatus', "status=$key&productID=$product->id");
-                echo html::a('javascript:;', $status, '', "onclick=\"setFormAction('$actionLink', '$isHiddenwin')\"");
-            }
-            ?>
+                  $actionLink = $this->createLink('productplan', 'batchChangeStatus', "status=$key&productID=$product->id");
+                  echo html::a('javascript:;', $status, '', "onclick=\"setFormAction('$actionLink', '$isHiddenwin')\"");
+              }
+              ?>
+            </div>
           </div>
         </div>
       <?php endif;?>

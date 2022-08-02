@@ -932,4 +932,15 @@ class userTest
     {
         return $this->objectModel->getVisionList();
     }
+
+    /**
+     * Get users who have authority to create stories.
+     *
+     * @access public
+     * @return array
+     */
+    public function getCanCreateStoryUsersTest()
+    {
+        return $this->objectModel->getCanCreateStoryUsers();
+    }
 }

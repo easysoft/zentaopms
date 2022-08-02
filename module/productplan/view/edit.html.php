@@ -3,7 +3,7 @@
  * The edit view of productplan module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     productplan
  * @version     $Id: edit.html.php 4728 2013-05-03 06:14:34Z chencongzhi520@gmail.com $
@@ -39,12 +39,10 @@
             <th><?php echo $lang->productplan->title;?></th>
             <td><?php echo html::input('title', $plan->title, "class='form-control' required");?></td><td></td><td></td>
           </tr>
-          <?php if($plan->parent != '-1'):?>
-          <tr>
+          <tr <?php echo $plan->parent == '-1' ? "class='hidden'": '';?>>
             <th><?php echo $lang->productplan->parent;?></th>
             <td><?php echo html::select('parent', array('0' => '') + $parentPlanPairs, $plan->parent, "class='form-control chosen'");?>
           </tr>
-          <?php endif;?>
           <tr>
             <th><?php echo $lang->productplan->status;?></th>
             <?php $disabled = $plan->parent == -1 ? "disabled='disabled'" : '' ;?>

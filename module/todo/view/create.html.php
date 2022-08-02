@@ -3,7 +3,7 @@
  * The create view of todo module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     todo
  * @version     $Id: create.html.php 4728 2013-05-03 06:14:34Z chencongzhi520@gmail.com $
@@ -18,6 +18,8 @@
 <?php js::set('objectsMethod', $config->todo->getUserObjectsMethod)?>
 <?php js::set('nameBoxLabel', array('custom' => $lang->todo->name, 'idvalue' => $lang->todo->idvalue));?>
 <?php js::set('vision', $config->vision);?>
+<?php js::set('noOptions', $lang->todo->noOptions);?>
+<?php js::set('chosenType', $lang->todo->typeList);?>
 <div id='mainContent' class='main-content'>
   <div class='center-block'>
     <div class='main-header'>
@@ -103,7 +105,7 @@
               </div>
             </div>
             <?php echo html::hidden('config[type]', 'day')?>
-            <div class='input-group inputGroupWidth' style='padding-top:5px;'>
+            <div class='input-group inputGroupWidth'>
             <?php printf($lang->todo->beforeDays, html::input('config[beforeDays]', 0, "class='form-control'"));?>
             </div>
           </td>
@@ -117,12 +119,16 @@
           <td><?php echo html::select('type', $lang->todo->typeList, '', 'onchange="loadList(this.value);" class="form-control"');?></td>
         </tr>
         <tr>
+          <th><?php echo $lang->todo->assignTo;?></th>
+          <td><?php echo html::select('assignedTo', $users, $app->user->account, 'class="form-control chosen"');?></td>
+        </tr>
+        <tr>
           <th id='nameBoxLabel'><?php echo $lang->todo->name;?></th>
           <td colspan='2'>
             <div id='nameBox' class='hidden'><?php echo html::input('name', '', "class='form-control'");?></div>
             <div class='input-group title-group required'>
               <div class='nameBox'><?php echo html::input('name', isset($name) ? $name : '', "class='form-control'");?></div>
-              <span class="input-group-addon fix-border br-0" style="border-radius: 0px;"><?php echo $lang->todo->pri;?></span>
+              <span class="input-group-addon fix-border br-0"><?php echo $lang->todo->pri;?></span>
               <div class="input-group-btn pri-selector" data-type="pri">
                 <button type="button" class="btn dropdown-toggle br-0" data-toggle="dropdown">
                   <span class="pri-text"><span class="label-pri label-pri-3">3</span></span> &nbsp;<span class="caret"></span>
@@ -147,8 +153,8 @@
           <td>
             <div class='input-group'>
             <?php
-              echo html::select('begin', $times, date('Y-m-d') != $date ? key($times) : $time, 'onchange=selectNext(); class="form-control chosen" style="width: 50%;"');
-              echo html::select('end', $times, '', 'class="form-control chosen" style="width: 50%; margin-left:-1px"');
+              echo html::select('begin', $times, date('Y-m-d') != $date ? key($times) : $time, 'onchange=selectNext(); class="form-control chosen"');
+              echo html::select('end', $times, '', 'class="form-control chosen"');
             ?>
             </div>
           </td>

@@ -180,6 +180,28 @@ class productPlan
     }
 
     /**
+     * Get top plan pairs
+     *
+     * @param  int  $productID
+     * @param  int  $branch
+     * @param  int  $exclude
+     * @access public
+     * @return array
+     */
+    public function getTopPlanPairsTest($param)
+    {
+        $productID = $param['productID'];
+        $branch    = $param['branch'];
+        $exclude   = $param['exclude'];
+
+        $planPairs = $this->productplan->getTopPlanPairs($productID, $branch, $exclude);
+
+        if(dao::isError()) return dao::getError();
+
+        return $planPairs;
+    }
+
+    /**
      * Create
      *
      * @param  array mixed $param

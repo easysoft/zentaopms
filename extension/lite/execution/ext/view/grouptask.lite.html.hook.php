@@ -1,3 +1,3 @@
 <script>
-$('#mainMenu .dropdown-menu li:last-child').remove();
+$('#mainMenu .dropdown-menu #importBug').remove();
 </script>

@@ -3,7 +3,7 @@
  * The batch create view of user module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Yangyang Shi <shiyangyang@cnezsoft.com>
  * @package     story
  * @version     $Id$
@@ -97,7 +97,7 @@
           <td align='left'>
             <div class='input-group'>
             <?php
-            echo html::input("password[$i]", '', "class='form-control' onkeyup='toggleCheck(this, $i)'");
+            echo html::input("password[$i]", '', "class='form-control' onkeyup='toggleCheck(this, $i)' oninput=\"this.value = this.value.replace(/[^\\x00-\\xff]/g, '');\"");
             echo "<span class='input-group-addon passwordStrength'></span>";
             if($i != 1) echo "<span class='input-group-addon passwordBox'><input type='checkbox' name='ditto[$i]' id='ditto$i' " . ($i > 1 ? "checked" : '') . " /> {$lang->user->ditto}</span>";
             ?>

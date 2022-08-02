@@ -15,5 +15,9 @@ td.delayed {background: #e84e0f !important; color: white;}
 @-moz-document url-prefix() {.main-table tbody > tr.table-children > td:first-child::before {width: 4px;};}
 
 .c-hours {width: 50px;}
-.c-status, .c-date {width: 70px;}
-.c-project {width: 150px;}
+.c-status, .c-date, .c-user-short {width: 70px;}
+.c-project {width: 130px;}
+#taskTable .assigned-title{width: 110px; padding-left: 29px;}
+
+html[lang="en"] .c-date {width: 80px;}
+html[lang="en"] .c-user-short {width: 88px;}

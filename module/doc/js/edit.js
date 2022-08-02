@@ -125,3 +125,52 @@ function saveDraft()
     var link    = createLink('doc', 'ajaxSaveDraft', 'docID=' + docID);
     $.post(link, {content: content});
 }
+
+/**
+ * Load whitelist by libID.
+ *
+ * @param  int    $libID
+ * @access public
+ * @return void
+ */
+function loadWhitelist(libID)
+{
+    var groupLink = createLink('doc', 'ajaxGetWhitelist', 'libID=' + libID + '&acl=&control=group' + '&docID=' + docID);
+    var userLink  = createLink('doc', 'ajaxGetWhitelist', 'libID=' + libID + '&acl=&control=user' + '&docID=' + docID);
+    $.post(groupLink, function(groups)
+    {
+        if(groups != 'private')
+        {
+            $('#groups').replaceWith(groups);
+            $('#groups').next('.picker').remove();
+            $('#groups').picker();
+        }
+    });
+
+    $.post(userLink, function(users)
+    {
+        if(users == 'private')
+        {
+            $('#aclopen').parent('.radio-inline').addClass('hidden');
+            $('#aclcustom').parent('.radio-inline').addClass('hidden');
+            $('#whiteListBox').addClass('hidden');
+            $('#aclprivate').prop('checked', true);
+        }
+        else if(users == 'project')
+        {
+            $('#aclprivate').parent('.radio-inline').addClass('hidden');
+            $('#aclcustom').parent('.radio-inline').addClass('hidden');
+            $('#whiteListBox').addClass('hidden');
+            $('#aclopen').prop('checked', true);
+        }
+        else
+        {
+            $('#aclopen').parent('.radio-inline').removeClass('hidden');
+            $('#aclcustom').parent('.radio-inline').removeClass('hidden');
+
+            $('#users').replaceWith(users);
+            $('#users').next('.picker').remove();
+            $('#users').picker();
+        }
+    });
+}

@@ -3,7 +3,7 @@
  * The model file of personnel of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     personnel
  * @version     $Id$
@@ -137,26 +137,28 @@ class personnelModel extends model
         }
 
         $users = $this->loadModel('user')->getListByAccounts(array_keys($accountPairs), 'account');
-        foreach($users as $user) $user->role = zget($this->lang->user->roleList, $user->role, $user->role);
 
         foreach($accountPairs as $account => $projects)
         {
             $user = zget($users, $account, '');
 
-            $personnelList[$account]['realname']   = $user ? $user->realname : $account;
-            $personnelList[$account]['account']    = $account;
-            $personnelList[$account]['role']       = $user ? $user->role : '';
-            $personnelList[$account]['projects']   = $projects;
-            $personnelList[$account]['executions'] = zget($executionPairs, $account, 0);
+            if(!empty($user) and !isset($personnelList[$user->role])) $personnelList[$user->role] = array();
 
-            $personnelList[$account] += $taskInvest[$account];
-            $personnelList[$account] += $bugAndStoryInvest[$account];
+            $personnelList[$user->role][$account]['realname']   = $user ? $user->realname : $account;
+            $personnelList[$user->role][$account]['account']    = $account;
+            $personnelList[$user->role][$account]['role']       = $user ? zget($this->lang->user->roleList, $user->role, $user->role) : '';
+            $personnelList[$user->role][$account]['projects']   = $projects;
+            $personnelList[$user->role][$account]['executions'] = zget($executionPairs, $account, 0);
+
+            $personnelList[$user->role][$account] += $taskInvest[$account];
+            $personnelList[$user->role][$account] += $bugAndStoryInvest[$account];
             if($this->config->edition == 'max')
             {
-                $personnelList[$account] += $issueInvest[$account];
-                $personnelList[$account] += $riskInvest[$account];
+                $personnelList[$user->role][$account] += $issueInvest[$account];
+                $personnelList[$user->role][$account] += $riskInvest[$account];
             }
         }
+        krsort($personnelList);
 
         return $personnelList;
     }
@@ -466,27 +468,31 @@ class personnelModel extends model
      *
      * @param  int    $objectID
      * @param  int    $objectType
+     * @param  bool   $addCount
      * @access public
      * @return array
      */
-    public function getCopiedObjects($objectID, $objectType)
+    public function getCopiedObjects($objectID, $objectType, $addCount = false)
     {
         $objects = array();
 
         if($objectType == 'sprint')
         {
             $parentID = 0;
-            if($this->config->systemMode == 'new') $parentID = $this->dao->select('project')->from(TABLE_EXECUTION)->where('id')->eq($objectID)->fetch('project');
+            if($this->config->systemMode == 'new')
+            {
+                $this->loadModel('execution');
+                $execution = $this->execution->getByID($objectID);
+                $parentID  = $execution->project;
+                $project   = $this->execution->getByID($parentID);
+                $objects   = array($project->id => $project->name);
+            }
 
-            $objects  = $this->dao->select('id,name')->from(TABLE_EXECUTION)
-                ->where('(project')->eq($parentID)
-                ->orWhere('id')->eq($parentID)
-                ->markRight(1)
-                ->andWhere('(id')->in($this->app->user->view->projects)
-                ->orWhere('id')->in($this->app->user->view->sprints)
-                ->markRight(1)
+            $objects += $this->dao->select('id,name')->from(TABLE_EXECUTION)
+                ->where('project')->eq($parentID)
+                ->andWhere('id')->in($this->app->user->view->sprints)
                 ->andWhere('deleted')->eq(0)
-                ->orderBy('type_asc,openedDate_desc')
+                ->orderBy('openedDate_desc')
                 ->limit('10')
                 ->fetchPairs();
             foreach($objects as $id => &$object)
@@ -512,6 +518,28 @@ class personnelModel extends model
         }
 
         unset($objects[$objectID]);
+
+        if($addCount)
+        {
+            $objectType = $objectType == 'sprint' ? 'execution' : $objectType;
+            $countPairs = $this->dao->select('root, COUNT(*) as count')->from(TABLE_TEAM)
+                ->where('type')->eq($objectType)
+                ->andWhere('root')->in(array_keys($objects))
+                ->beginIF($objectType == 'execution')
+                ->orWhere('( type')->eq('project')
+                ->andWhere('root')->eq($parentID)->markRight(1)
+                ->fi()
+                ->groupBy('root')
+                ->fetchPairs('root');
+
+            foreach($objects as $objectID => $objectName)
+            {
+                $memberCount = zget($countPairs, $objectID, 0);
+                $countTip    = $memberCount > 1 ? str_replace('member', 'members', $this->lang->personnel->countTip) : $this->lang->personnel->countTip;
+                $objects[$objectID] = $objectName . sprintf($countTip, $memberCount);
+            }
+        }
+
         return $objects;
     }
 

@@ -3,7 +3,7 @@
  * The bug view file of dashboard module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     dashboard
  * @version     $Id: bug.html.php 5107 2013-07-12 01:46:12Z chencongzhi520@gmail.com $
@@ -25,10 +25,17 @@
         echo html::a(inlink($app->rawMethod, "mode=$mode&type=closedBy"),   "<span class='text'>{$lang->bug->closedByMe}</span>" . ($type == 'closedBy'   ? $recTotalLabel : ''),   '', "class='btn btn-link" . ($type == 'closedBy'   ? ' btn-active-text' : '') . "'");
         echo html::a(inlink($app->rawMethod, "mode=$mode&type=assignedBy"), "<span class='text'>{$lang->bug->assignedByMe}</span>" . ($type == 'assignedBy' ? $recTotalLabel : ''), '', "class='btn btn-link" . ($type == 'assignedBy' ? ' btn-active-text' : '') . "'");
     }
+    else
+    {
+        echo html::a(inlink($app->rawMethod, "mode=$mode&type=assignedTo"), "<span class='text'>{$lang->bug->assignedToMe}</span>" . ($type == 'assignedTo' ? $recTotalLabel : ''), '', "class='btn btn-link" . ($type == 'assignedTo' ? ' btn-active-text' : '') . "'");
+    }
     ?>
   </div>
+  <a class="btn btn-link querybox-toggle" id='bysearchTab'><i class="icon icon-search muted"></i> <?php echo $lang->my->byQuery;?></a>
 </div>
 <div id="mainContent">
+  <?php $dataModule = $app->rawMethod == 'work' ? 'workBug' : 'contributeBug';?>
+  <div class="cell<?php if($type == 'bySearch') echo ' show';?>" id="queryBox" data-module=<?php echo $dataModule;?>></div>
   <?php if(empty($bugs)):?>
   <div class="table-empty-tip">
     <p><span class="text-muted"><?php echo $lang->bug->noBug;?></span></p>
@@ -43,7 +50,8 @@
     $canBatchAction   = ($canBatchEdit or $canBatchConfirm or $canBatchClose or $canBatchAssignTo);
     ?>
     <table class="table has-sort-head table-fixed" id='bugList'>
-      <?php $vars = "mode=$mode&type=$type&orderBy=%s&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID"; ?>
+      <?php $vars = "mode=$mode&type=$type&param=myQueryID&orderBy=%s&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID"; ?>
+      <?php $type = $type == 'bySearch' ? $this->session->myBugType : $type;?>
       <thead>
         <tr>
           <th class="c-id">
@@ -59,7 +67,7 @@
           <th class='c-confirm' title='<?php echo $lang->bug->confirmedAB;?>'><?php common::printOrderLink('confirmed', $orderBy, $vars, $lang->bug->confirmedAB);?></th>
 
           <th><?php common::printOrderLink('title', $orderBy, $vars, $lang->bug->title);?></th>
-          <th class='c-product'><?php common::printOrderLink('productName', $orderBy, $vars, $lang->bug->product);?></th>
+          <th class='c-product'><?php common::printOrderLink('product', $orderBy, $vars, $lang->bug->product);?></th>
           <th class='c-type'><?php common::printOrderLink('type', $orderBy, $vars, $lang->typeAB);?></th>
           <?php if($type != 'openedBy'): ?>
           <th class='c-user'><?php common::printOrderLink('openedBy', $orderBy, $vars, $lang->openedByAB);?></th>
@@ -74,7 +82,7 @@
           <th class='c-user'><?php common::printOrderLink('resolvedBy', $orderBy, $vars, $lang->bug->resolvedByAB);?></th>
           <?php endif;?>
           <th class='c-resolution'><?php common::printOrderLink('resolution', $orderBy, $vars, $lang->bug->resolutionAB);?></th>
-          <th class='c-actions-5'><?php echo $lang->actions;?></th>
+          <th class='c-actions-5 text-center'><?php echo $lang->actions;?></th>
         </tr>
       </thead>
       <?php

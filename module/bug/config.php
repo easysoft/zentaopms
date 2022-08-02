@@ -36,16 +36,23 @@ $config->bug->list->exportFields = 'id, product, branch, module, project, execut
     duplicateBug, linkBug,
     case,
     lastEditedBy,
-    lastEditedDate, files';
+    lastEditedDate, files ,feedbackBy, notifyEmail';
 if($config->systemMode == 'classic') $config->bug->list->exportFields = str_replace(' project,', '', $config->bug->list->exportFields);
 
 $config->bug->list->customCreateFields      = 'execution,noticefeedbackBy,story,task,pri,severity,os,browser,deadline,mailto,keywords';
-$config->bug->list->customBatchCreateFields = 'execution,steps,type,pri,deadline,severity,os,browser,keywords';
 $config->bug->list->customBatchEditFields   = 'type,severity,pri,productplan,assignedTo,deadline,resolvedBy,resolution,os,browser,keywords';
+if($config->systemMode == 'new')
+{
+    $config->bug->list->customBatchCreateFields = 'project,execution,steps,type,pri,deadline,severity,os,browser,keywords';
+}
+else
+{
+    $config->bug->list->customBatchCreateFields = 'execution,steps,type,pri,deadline,severity,os,browser,keywords';
+}
 
 $config->bug->custom = new stdclass();
 $config->bug->custom->createFields      = $config->bug->list->customCreateFields;
-$config->bug->custom->batchCreateFields = 'execution,deadline,steps,type,severity,os,browser,%s';
+$config->bug->custom->batchCreateFields = 'project,execution,deadline,steps,type,severity,os,browser,%s';
 $config->bug->custom->batchEditFields   = 'type,severity,pri,assignedTo,deadline,status,resolvedBy,resolution';
 
 $config->bug->editor = new stdclass();
@@ -301,7 +308,7 @@ $config->bug->datatable->fieldList['resolvedBy']['required'] = 'no';
 
 $config->bug->datatable->fieldList['resolution']['title']    = 'resolutionAB';
 $config->bug->datatable->fieldList['resolution']['fixed']    = 'no';
-$config->bug->datatable->fieldList['resolution']['width']    = '100';
+$config->bug->datatable->fieldList['resolution']['width']    = '110';
 $config->bug->datatable->fieldList['resolution']['required'] = 'no';
 
 $config->bug->datatable->fieldList['resolvedDate']['title']    = 'resolvedDateAB';
@@ -326,7 +333,7 @@ $config->bug->datatable->fieldList['closedDate']['required'] = 'no';
 
 $config->bug->datatable->fieldList['lastEditedBy']['title']    = 'lastEditedBy';
 $config->bug->datatable->fieldList['lastEditedBy']['fixed']    = 'no';
-$config->bug->datatable->fieldList['lastEditedBy']['width']    = '80';
+$config->bug->datatable->fieldList['lastEditedBy']['width']    = '90';
 $config->bug->datatable->fieldList['lastEditedBy']['required'] = 'no';
 
 $config->bug->datatable->fieldList['lastEditedDate']['title']    = 'lastEditedDateAB';
@@ -340,6 +347,7 @@ $config->bug->datatable->fieldList['actions']['width']    = '150';
 $config->bug->datatable->fieldList['actions']['required'] = 'yes';
 
 $config->bug->colorList = new stdclass();
+$config->bug->colorList->pri[0]      = '#c0c0c0';
 $config->bug->colorList->pri[1]      = '#d50000';
 $config->bug->colorList->pri[2]      = '#ff9800';
 $config->bug->colorList->pri[3]      = '#2098ee';

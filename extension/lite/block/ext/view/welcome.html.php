@@ -3,7 +3,7 @@
  * The welcome view file of block module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Yidong Wang <yidong@cnezsoft.com>
  * @package     block
  * @version     $Id$
@@ -11,8 +11,8 @@
  */
 ?>
 <style>
-.block-welcome .col-right > h4 {font-weight: normal;}
-.block-welcome .col-right > h4 small {display: inline-block;margin-right: 8px;font-size: 14px;}
+.block-welcome .col-right > h4 {font-weight: bold; font-size: 15px;}
+.block-welcome .col-right > h4 small {display: inline-block; margin-left: 10px; font-size: 14px;}
 .block-welcome .col-right .tile {width: 33%;}
 .block-welcome .panel-body {padding-top: 15px;}
 .block-welcome .user-notification-icon {position: relative;display: inline-block;margin-left: 5px;}
@@ -26,7 +26,7 @@
 <div class="panel-body conatiner-fluid">
   <div class="table-row">
     <div class="col col-right">
-    <h4><small class="text-muted"><?php echo date(DT_DATE3)?></small> <?php echo $lang->block->leftToday?></h4>
+    <h4><?php echo $lang->block->leftToday?><small class="text-muted"><?php echo date(DT_DATE3)?></small></h4>
       <div class="row tiles">
         <div class="col tile">
           <div class="tile-title"><?php echo $lang->block->undone?></div>

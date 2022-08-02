@@ -3,7 +3,7 @@
  * The task view file of execution module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     execution
  * @version     $Id: task.html.php 4894 2013-06-25 01:28:39Z wyd621@gmail.com $
@@ -103,6 +103,7 @@ body {margin-bottom: 25px;}
     ?>
     <a class="btn btn-link querybox-toggle" id='bysearchTab'><i class="icon icon-search muted"></i> <?php echo $lang->product->searchStory;?></a>
   </div>
+  <?php $taskCreateLink = $this->createLink('task', 'create', "executionID=$executionID" . (isset($moduleID) ? "&storyID=0&moduleID=$moduleID" : ""));?>
   <?php if(!isonlybody()): ?>
   <div class="btn-toolbar pull-right">
     <?php
@@ -147,7 +148,6 @@ body {margin-bottom: 25px;}
     <?php
     $checkObject = new stdclass();
     $checkObject->execution = $executionID;
-    $taskCreateLink = $this->createLink('task', 'create', "executionID=$executionID" . (isset($moduleID) ? "&storyID=0&moduleID=$moduleID" : ""));
     ?>
     <?php if($canBeChanged and (common::hasPriv('task', 'batchCreate', $checkObject) or common::hasPriv('task', 'create', $checkObject))):?>
     <div class='btn-group dropdown'>
@@ -174,11 +174,6 @@ body {margin-bottom: 25px;}
   <strong>
   <?php echo $projectName;?>
   </strong>
-  <div class="linkButton" onclick="handleLinkButtonClick()">
-    <span title="<?php echo $lang->viewDetails;?>">
-      <i class="icon icon-import icon-rotate-270"></i>
-    </span>
-  </div>
 </div>
 <?php endif;?>
 <div id="mainContent" class="main-row fade">
@@ -198,7 +193,7 @@ body {margin-bottom: 25px;}
     <div class="table-empty-tip">
       <p>
         <span class="text-muted"><?php echo $lang->task->noTask;?></span>
-        <?php if($canBeChanged and common::hasPriv('task', 'create')):?>
+        <?php if($canBeChanged and common::hasPriv('task', 'create') and empty($allTasks)):?>
         <?php echo html::a($taskCreateLink, "<i class='icon icon-plus'></i> " . $lang->task->create, '', "class='btn btn-info'");?>
         <?php endif;?>
       </p>
@@ -475,12 +470,6 @@ $(function()
 });
 
 <?php if($this->app->getViewType() == 'xhtml'):?>
-function handleLinkButtonClick()
-{
-  var xxcUrl = "xxc:openInApp/zentao-integrated/" + encodeURIComponent(window.location.href.replace(/.display=card/, '').replace(/\.xhtml/, '.html'));
-  window.open(xxcUrl);
-}
-
 $(function()
 {
     function handleClientReady()

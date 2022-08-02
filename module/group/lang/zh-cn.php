@@ -3,7 +3,7 @@
  * The group module zh-cn file of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     group
  * @version     $Id: zh-cn.php 4719 2013-05-03 02:20:28Z chencongzhi520@gmail.com $
@@ -20,13 +20,18 @@ $lang->group->managePriv         = '权限维护';
 $lang->group->managePrivByGroup  = '权限维护';
 $lang->group->managePrivByModule = '按模块分配权限';
 $lang->group->byModuleTips       = '<span class="tips">（可以按住Shift或者Ctrl键进行多选）</span>';
+$lang->group->allTips            = '勾选此项后，管理员可管理系统中所有对象，包括后续创建的对象。';
 $lang->group->manageMember       = '成员维护';
 $lang->group->manageProjectAdmin = '维护项目管理员';
-$lang->group->confirmDelete      = '您确定删除该用户分组吗？';
+$lang->group->confirmDelete      = '您确定删除“%s”用户分组吗？';
 $lang->group->successSaved       = '成功保存';
 $lang->group->errorNotSaved      = '没有保存，请确认选择了权限数据。';
 $lang->group->viewList           = '可访问视图';
+$lang->group->object             = '可管理对象';
+$lang->group->manageProgram      = '可管理项目集';
 $lang->group->manageProject      = '可管理项目';
+$lang->group->manageExecution    = '可管理' . $lang->execution->common;
+$lang->group->manageProduct      = '可管理' . $lang->productCommon;
 $lang->group->programList        = '可访问项目集';
 $lang->group->productList        = '可访问' . $lang->productCommon;
 $lang->group->projectList        = '可访问项目';
@@ -39,6 +44,9 @@ $lang->group->noneExecution      = "暂时没有{$lang->execution->common}";
 $lang->group->project            = '项目';
 $lang->group->group              = '分组';
 $lang->group->more               = '更多';
+$lang->group->allCheck           = '全部';
+$lang->group->noGroup            = '暂时没有分组。';
+$lang->group->repeat             = "『%s』已经有『%s』这条记录了，请调整后再试。";
 
 global $config;
 if($config->systemMode == 'new') $lang->group->noneProject = '暂时没有项目';

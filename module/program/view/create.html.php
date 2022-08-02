@@ -3,7 +3,7 @@
  * The pgmcreate view of project module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     project
  * @version     $Id: pgmcreate.html.php 4728 2013-05-03 06:14:34Z chencongzhi520@gmail.com $
@@ -88,7 +88,7 @@
           </td>
         </tr>
         <tr>
-          <th><?php echo $lang->project->dateRange;?></th>
+          <th id="dateRange"><?php echo $lang->project->dateRange;?></th>
           <td>
             <div class='input-group'>
               <?php echo html::input('begin', date('Y-m-d'), "class='form-control form-date' onchange='computeWorkDays();' placeholder='" . $lang->project->begin . "' required");?>
@@ -96,7 +96,7 @@
               <?php echo html::input('end', '', "class='form-control form-date' placeholder='" . $lang->project->end . "' required");?>
             </div>
           </td>
-          <td colspan='2'><?php echo html::radio('delta', $lang->program->endList , '', "onclick='computeEndDate(this.value)'");?></td>
+          <td id="endList" colspan='2'><?php echo html::radio('delta', $lang->program->endList, '', "onclick='computeEndDate(this.value)'");?></td>
         </tr>
         <tr class='hide'>
           <th><?php echo $lang->project->status;?></th>
@@ -120,7 +120,7 @@
           <th><?php echo $lang->whitelist;?></th>
           <td colspan='2'>
             <div class='input-group'>
-              <?php echo html::select('whitelist[]', $users, '', 'class="form-control chosen" multiple');?>
+              <?php echo html::select('whitelist[]', $users, '', 'class="form-control picker-select" multiple');?>
               <?php echo $this->fetch('my', 'buildContactLists', "dropdownName=whitelist");?>
             </div>
           </td>

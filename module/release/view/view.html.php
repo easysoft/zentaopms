@@ -3,7 +3,7 @@
  * The view file of release module's view method of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     release
  * @version     $Id: view.html.php 4386 2013-02-19 07:37:45Z chencongzhi520@gmail.com $
@@ -50,7 +50,7 @@
         </ul>
         <div class='tab-content'>
           <div class='tab-pane <?php if($type == 'story') echo 'active'?>' id='stories'>
-            <?php if(common::hasPriv('release', 'linkStory') and $canBeChanged):?>
+            <?php if(common::hasPriv('release', 'linkStory') and $canBeChanged and !isonlybody()):?>
             <div class='actions'><?php echo html::a("javascript:showLink({$release->id}, \"story\")", '<i class="icon-link"></i> ' . $lang->release->linkStory, '', "class='btn btn-primary'");?></div>
             <div class='linkBox cell hidden'></div>
             <?php endif;?>
@@ -148,13 +148,14 @@
             </form>
           </div>
           <div class='tab-pane <?php if($type == 'bug') echo 'active'?>' id='bugs'>
-            <?php if(common::hasPriv('release', 'linkBug') and $canBeChanged):?>
+            <?php if(common::hasPriv('release', 'linkBug') and $canBeChanged and !isonlybody()):?>
             <div class='actions'><?php echo html::a("javascript:showLink({$release->id}, \"bug\")", '<i class="icon-bug"></i> ' . $lang->release->linkBug, '', "class='btn btn-primary'");?></div>
             <div class='linkBox cell hidden'></div>
             <?php endif;?>
-            <form class='main-table table-bug' method='post' target='hiddenwin' action="<?php echo inLink('batchUnlinkBug', "releaseID=$release->id");?>" id='linkedBugsForm' data-ride="table">
+            <form class='main-table table-bug' method='post' target='hiddenwin' id='linkedBugsForm' data-ride="table">
               <table class='table has-sort-head' id='bugList'>
                 <?php $canBatchUnlink = common::hasPriv('release', 'batchUnlinkBug');?>
+                <?php $canBatchClose  = common::hasPriv('bug', 'batchClose');?>
                 <?php $vars = "releaseID={$release->id}&type=bug&link=$link&param=$param&orderBy=%s";?>
                 <thead>
                   <tr class='text-center'>
@@ -180,7 +181,7 @@
                   <?php $bugLink = $this->createLink('bug', 'view', "bugID=$bug->id", '', true);?>
                   <tr>
                     <td class='c-id text-left'>
-                      <?php if($canBatchUnlink and $canBeChanged):?>
+                      <?php if($canBatchUnlink or $canBatchClose and $canBeChanged):?>
                       <div class="checkbox-primary">
                         <input type='checkbox' name='unlinkBugs[]'  value='<?php echo $bug->id;?>'/>
                         <label></label>
@@ -210,10 +211,21 @@
                 </tbody>
               </table>
               <div class='table-footer'>
-                <?php if($countBugs and $canBatchUnlink and $canBeChanged):?>
+                <?php if($countBugs and ($canBatchUnlink or $canBatchClose) and $canBeChanged):?>
                 <div class="checkbox-primary check-all"><label><?php echo $lang->selectAll?></label></div>
                 <div class="table-actions btn-toolbar">
-                  <?php echo html::submitButton($lang->release->batchUnlink, '', 'btn');?>
+                <?php
+                if($canBatchUnlink)
+                {
+                    $unlinkURL = inlink('batchUnlinkBug', "release=$release->id");
+                    echo html::a('###', $lang->release->batchUnlink, '', "onclick='setFormAction(\"$unlinkURL\", \"hiddenwin\", this)' class='btn'");
+                }
+                if($canBatchClose)
+                {
+                    $closeURL = $this->createLink('bug', 'batchClose', "release=$release->id&viewType=release");
+                    echo html::a("###", $lang->story->batchClose, '', "onclick='setFormAction(\"$closeURL\", \"hiddenwin\", this)' class='btn'");
+                }
+                ?>
                 </div>
                 <div class='table-statistic'><?php echo sprintf($lang->release->resolvedBugs, $countBugs);?></div>
                 <?php endif;?>
@@ -226,7 +238,7 @@
             </form>
           </div>
           <div class='tab-pane <?php if($type == 'leftBug') echo 'active'?>' id='leftBugs'>
-            <?php if(common::hasPriv('release', 'linkBug') and $canBeChanged):?>
+            <?php if(common::hasPriv('release', 'linkBug') and $canBeChanged and !isonlybody()):?>
             <div class='actions'><?php echo html::a("javascript:showLink({$release->id}, \"leftBug\")", '<i class="icon-bug"></i> ' . $lang->release->linkBug, '', "class='btn btn-primary'");?></div>
             <div class='linkBox cell hidden'></div>
             <?php endif;?>

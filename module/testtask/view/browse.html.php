@@ -3,7 +3,7 @@
  * The browse view file of testtask module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     testtask
  * @version     $Id: browse.html.php 4129 2013-01-18 01:58:14Z wwccss $
@@ -20,7 +20,7 @@ $status = $this->session->testTaskVersionStatus;
 ?>
 <?php js::set('status', strtolower($status));?>
 <style>
-#action-divider{display: inline-block; line-height: 0px; border-right: 2px solid #ddd}
+#action-divider{display: inline-block; line-height: 0px;}
 </style>
 <div id="mainMenu" class='clearfix'>
   <div class="btn-toolbar pull-left">

@@ -3,7 +3,7 @@
  * The pause file of task module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Yidong Wang <yidong@cnezsoft.com>
  * @package     task
  * @version     $Id$
@@ -14,11 +14,15 @@
 <?php include '../../common/view/kindeditor.html.php';?>
 <div id='mainContent' class='main-content'>
   <div class='center-block'>
-    <?php if(!empty($task->team) && $task->assignedTo != $this->app->user->account):?>
+    <?php if(!empty($task->team) and (!isset($task->team[$app->user->account]) or ($task->assignedTo != $app->user->account and $task->mode == 'linear'))):?>
     <div class="alert with-icon">
       <i class="icon-exclamation-sign"></i>
       <div class="content">
+        <?php if($task->assignedTo != $app->user->account and $task->mode == 'linear'):?>
         <p><?php echo sprintf($lang->task->deniedNotice, '<strong>' . $task->assignedToRealName . '</strong>', $lang->task->pause);?></p>
+        <?php else:?>
+        <p><?php echo sprintf($lang->task->deniedNotice, '<strong>' . $lang->task->teamMember . '</strong>', $lang->task->pause);?></p>
+        <?php endif;?>
       </div>
     </div>
     <?php else:?>

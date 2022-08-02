@@ -515,10 +515,15 @@ class baseEntry
             if(!isset($object->$key)) continue;
 
             $pos = strpos($type, ']');
-            if($pos !== FALSE)
+            if($pos !== false)
             {
-                $is_array = true;
-                $type = substr($type, $pos + 1);
+                $isArray = true;
+                $type    = substr($type, $pos + 1);
+            }
+            else if(strpos($type, 'array') !== false)
+            {
+                $isArray = true;
+                $type    = 'object';
             }
 
             /* Format value. */
@@ -530,7 +535,7 @@ class baseEntry
 
             /* Format array. */
             $value = array();
-            if(is_array($object->$key))
+            if(is_array($object->$key) or is_object($object->$key))
             {
                 foreach($object->$key as $v) $value[] = $this->cast($v, $type);
             }

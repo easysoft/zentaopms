@@ -3,7 +3,7 @@
  * The table contents view file of doc module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2021 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Fangzhou Hu <hufangzhou@easycorp.ltd>
  * @package     doc
  * @version     $Id$
@@ -12,6 +12,7 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php js::set('moduleTree', $moduleTree);?>
+<?php js::set('docLang', $lang->doc);?>
 <?php
 $sideLibs = array();
 foreach($lang->doclib->tabList as $libType => $typeName) $sideLibs[$libType] = $this->doc->getLimitLibs($libType);
@@ -27,6 +28,7 @@ if($this->methodName != 'browse')
 }
 if(empty($type)) $type = 'product';
 ?>
+<div class="cell<?php if($browseType == 'bySearch') echo ' show';?>" id="queryBox" data-module=<?php echo $type . 'Doc';?>></div>
 <div class="main-content">
   <div class="cell" id="<?php echo $type;?>">
     <div class="detail">
@@ -48,7 +50,7 @@ if(empty($type)) $type = 'product';
               echo "<li class='divider'></li>";
           }
           if($canEditLib) echo '<li>' . html::a($this->createLink('doc', 'editLib', "rootID=$libID"), '<i class="icon-edit"></i> ' . $lang->doc->editLib, '', "class='iframe'") . '</li>';
-          if($canDeleteLib) echo '<li>' . html::a($this->createLink('doc', 'deleteLib', "rootID=$libID"), '<i class="icon-trash"></i> ' . $lang->doc->deleteLib, 'hiddenwin') . '</li>';
+          if($canDeleteLib) echo '<li>' . html::a($this->createLink('doc', 'deleteLib', "rootID=$libID&confirm=no&type=lib&from=tableContents"), '<i class="icon-trash"></i> ' . $lang->doc->deleteLib, 'hiddenwin') . '</li>';
           echo '</ul></div>';
       }
 
@@ -92,7 +94,7 @@ if(empty($type)) $type = 'product';
             foreach($this->lang->doc->typeList as $typeKey => $typeName)
             {
                 $icon  = zget($this->config->doc->iconList, $typeKey);
-                $class = strpos($this->config->doc->officeTypes, $typeKey) !== false ? 'iframe' : '';
+                $class = (strpos($this->config->doc->officeTypes, $typeKey) !== false or strpos($this->config->doc->textTypes, $typeKey) !== false) ? 'iframe' : '';
                 $html .= "<li>";
                 $html .= html::a(helper::createLink('doc', 'create', "objectType=$type&objectID=$objectID&libID=$libID&moduleID=0&type=$typeKey", '', $class ? true : false), "<i class='icon-$icon text-muted'></i> " . $typeName, '', "class='$class' data-app='{$this->app->tab}'");
                 $html .= "</li>";

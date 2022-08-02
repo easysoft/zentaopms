@@ -3,7 +3,7 @@
  * The common simplified chinese file of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青島易軟天創網絡科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     ZenTaoPMS
  * @version     $Id: zh-tw.php 5116 2013-07-12 06:37:48Z chencongzhi520@gmail.com $
@@ -181,6 +181,8 @@ $lang->stage->common      = '階段';
 $lang->stage->list        = '階段列表';
 $lang->execution->list    = "{$lang->executionCommon}列表";
 $lang->kanban->common     = '看板';
+$lang->app->common        = '應用';
+$lang->app->serverLink    = '服務器鏈接';
 
 $lang->personnel->common     = '人員';
 $lang->personnel->invest     = '投入人員';

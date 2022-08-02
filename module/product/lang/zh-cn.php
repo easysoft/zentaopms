@@ -3,36 +3,38 @@
  * The product module zh-cn file of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     product
  * @version     $Id: zh-cn.php 5091 2013-07-10 06:06:46Z chencongzhi520@gmail.com $
  * @link        http://www.zentao.net
  */
-$lang->product->index           = $lang->productCommon . '主页';
-$lang->product->browse          = "{$lang->SRCommon}列表";
-$lang->product->dynamic         = $lang->productCommon . '动态';
-$lang->product->view            = "{$lang->productCommon}概况";
-$lang->product->edit            = "编辑{$lang->productCommon}";
-$lang->product->batchEdit       = '批量编辑';
-$lang->product->create          = "添加{$lang->productCommon}";
-$lang->product->delete          = "删除{$lang->productCommon}";
-$lang->product->deleted         = '已删除';
-$lang->product->close           = '关闭';
-$lang->product->select          = "请选择{$lang->productCommon}";
-$lang->product->mine            = '我负责';
-$lang->product->other           = '其他';
-$lang->product->closed          = '已关闭';
-$lang->product->closedProduct   = '已关闭的产品';
-$lang->product->updateOrder     = '排序';
-$lang->product->all             = "所有{$lang->productCommon}";
-$lang->product->manageLine      = "维护{$lang->productCommon}线";
-$lang->product->newLine         = "新建{$lang->productCommon}线";
-$lang->product->export          = '导出数据';
-$lang->product->dashboard       = "{$lang->productCommon}仪表盘";
-$lang->product->changeProgram   = "{$lang->productCommon}调整所属项目集影响范围确认";
-$lang->product->addWhitelist    = '添加白名单';
-$lang->product->unbindWhitelist = '移除白名单';
+$lang->product->index            = $lang->productCommon . '主页';
+$lang->product->browse           = "{$lang->SRCommon}列表";
+$lang->product->dynamic          = $lang->productCommon . '动态';
+$lang->product->view             = "{$lang->productCommon}概况";
+$lang->product->edit             = "编辑{$lang->productCommon}";
+$lang->product->batchEdit        = '批量编辑';
+$lang->product->create           = "添加{$lang->productCommon}";
+$lang->product->delete           = "删除{$lang->productCommon}";
+$lang->product->deleted          = '已删除';
+$lang->product->close            = '关闭';
+$lang->product->select           = "请选择{$lang->productCommon}";
+$lang->product->mine             = '我负责';
+$lang->product->other            = '其他';
+$lang->product->closed           = '已关闭';
+$lang->product->closedProduct    = '已关闭的产品';
+$lang->product->updateOrder      = '排序';
+$lang->product->all              = "所有{$lang->productCommon}";
+$lang->product->manageLine       = "维护{$lang->productCommon}线";
+$lang->product->newLine          = "新建{$lang->productCommon}线";
+$lang->product->export           = '导出数据';
+$lang->product->dashboard        = "{$lang->productCommon}仪表盘";
+$lang->product->changeProgram    = "{$lang->productCommon}调整所属项目集影响范围确认";
+$lang->product->changeProgramTip = "%s > 修改项目集";
+$lang->product->addWhitelist     = '添加白名单';
+$lang->product->unbindWhitelist  = '移除白名单';
+$lang->product->checkedProducts  = '已选择%s项产品';
 
 $lang->product->indexAction  = "所有{$lang->productCommon}仪表盘";
 $lang->product->closeAction  = "关闭{$lang->productCommon}";
@@ -86,9 +88,10 @@ $lang->product->confirmDelete        = " 您确定删除该{$lang->productCommon
 $lang->product->errorNoProduct       = "还没有创建{$lang->productCommon}！";
 $lang->product->accessDenied         = "您无权访问该{$lang->productCommon}";
 $lang->product->programChangeTip     = "如下项目只关联了该{$lang->productCommon}， 将直接转移至新项目集下。";
-$lang->product->notChangeProgramTip  = "该{$lang->productCommon}的{$lang->SRCommon}已经关联到如下项目，请取消关联后再操作";
+$lang->product->notChangeProgramTip  = "该{$lang->productCommon}的{$lang->SRCommon}已经关联到如下项目，请点击项目名称进入{$lang->SRCommon}列表取消关联后再操作";
 $lang->product->confirmChangeProgram = "如下项目既关联了该{$lang->productCommon}又关联了其他{$lang->productCommon}，请确认是否继续关联该{$lang->productCommon}，勾选后将取消与其他{$lang->productCommon}的关联关系，同时转移至新项目集下。";
 $lang->product->changeProgramError   = "该{$lang->productCommon}的{$lang->SRCommon}已经关联到项目，请取消关联后再操作";
+$lang->product->changeLineError      = "产品线下已有产品，不可修改所属项目集。";
 $lang->product->programEmpty         = '项目集不能为空';
 $lang->product->nameIsDuplicate      = "『%s』产品线已经存在，请重新设置！";
 $lang->product->nameIsDuplicated     = "产品线已经有『%s』这条记录了。如果您确定该记录已删除，请到后台-系统-数据-回收站还原。";

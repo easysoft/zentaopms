@@ -55,3 +55,14 @@ details .btn-comment.pull-right {right: 30px;}
 #itemContent .label-product, #taskTree .item-product > a > .label-type {border-color: #7d8599; color: #7d8599;}
 #itemContent .label-story, #taskTree .item-story > a > .label-type {border-color: #7d8599; color: #7d8599;}
 #itemContent .label-task, #taskTree .item-task > a > .label-type {border-color: #7d8599; color: #7d8599;}
+
+.taskID {border-color: rgba(131, 138, 157, 0.25);}
+.storyID {border-color: rgba(131, 138, 157, 0.25);}
+.title {color: #838A9D;}
+.btn-toolbar .btn-icon {min-width: 56px;}
+.status-doing {border-color: rgba(255, 93, 93, 0.25)!important;}
+.status-pause {border-color: rgba(255, 152, 0, 0.25)!important;}
+.status-done {border-color: rgba(67, 160, 71, 0.25)!important;}
+.status-changed {border-color: rgba(255, 93, 93, 0.25)!important;}
+.status-draft {border-color: rgba(165, 102, 184, 0.25)!important;}
+.label-id {line-height: 18px !important;}

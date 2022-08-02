@@ -3,7 +3,7 @@
  * The browse view file of design module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Shujie Tian <tianshujie@easycorp.ltd>
  * @package     design
  * @version     $Id: browse.html.php 5102 2020-09-03 10:59:54Z tianshujie@easycorp.ltd $
@@ -13,6 +13,8 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/sortable.html.php';?>
 <?php js::set('type', strtolower($type));?>
+<?php js::set('projectID', $projectID);?>
+<?php js::set('productID', $productID);?>
 <style>
 .btn-group a i.icon-plus {font-size: 16px;}
 .btn-group a.btn-primary {border-right: 1px solid rgba(255,255,255,0.3);}

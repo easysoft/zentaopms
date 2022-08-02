@@ -3,7 +3,7 @@
  * The model file of dashboard module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     dashboard
  * @version     $Id: model.php 4129 2013-01-18 01:58:14Z wwccss $
@@ -326,31 +326,62 @@ class myModel extends model
     {
         $module = $objectType == 'requirement' ? 'story' : $objectType;
         $this->loadModel($module);
-        $objectList = $this->dao->select('DISTINCT t1.*')
-            ->from($this->config->objectTables[$module])->alias('t1')
-            ->leftJoin(TABLE_ACTION)->alias('t2')->on("t1.id = t2.objectID and t2.objectType='{$module}'")
-            ->where('t2.actor')->eq($account)
-            ->andWhere('t2.action')->eq('assigned')
-            ->beginIF($objectType == 'requirement' or $objectType == 'story')->andWhere('t1.type')->eq($objectType)->fi()
-            ->andWhere('t1.deleted')->eq(0)
-            ->orderBy($orderBy)
-            ->page($pager, 't1.id')
-            ->fetchAll('id');
+
+        $objectIDList = $this->dao->select('objectID')->from(TABLE_ACTION)
+            ->where('actor')->eq($account)
+            ->andWhere('objectType')->eq($module)
+            ->andWhere('action')->eq('assigned')
+            ->fetchAll('objectID');
+        if(empty($objectIDList)) return array();
 
         if($objectType == 'task')
         {
-            $projectList = array();
-            foreach($objectList as $task) $projectList[$task->project] = $task->project;
-            $projectPairs = $this->dao->select('id,name')->from(TABLE_PROJECT)->where('id')->in($projectList)->fetchPairs('id');
-            foreach($objectList as $task) $task->projectName = zget($projectPairs, $task->project);
+            $objectList = $this->dao->select('t1.*, t2.name as executionName')->from($this->config->objectTables[$module])->alias('t1')
+                ->leftJoin(TABLE_EXECUTION)->alias('t2')->on("t1.execution = t2.id")
+                ->where('t1.deleted')->eq(0)
+                ->andWhere('t2.deleted')->eq(0)
+                ->andWhere('t1.id')->in(array_keys($objectIDList))
+                ->orderBy('t1.' . $orderBy)
+                ->page($pager)
+                ->fetchAll('id');
+        }
+        elseif($objectType == 'requirement' or $objectType == 'story' or $objectType == 'bug')
+        {
+            $objectList = $this->dao->select('t1.*')->from($this->config->objectTables[$module])->alias('t1')
+                ->leftJoin(TABLE_PRODUCT)->alias('t2')->on("t1.product = t2.id")
+                ->where('t1.deleted')->eq(0)
+                ->andWhere('t2.deleted')->eq(0)
+                ->andWhere('t1.id')->in(array_keys($objectIDList))
+                ->beginIF($objectType == 'requirement' or $objectType == 'story')->andWhere('t1.type')->eq($objectType)->fi()
+                ->orderBy('t1.' . $orderBy)
+                ->page($pager)
+                ->fetchAll('id');
+        }
+        elseif($objectType == 'risk' or $objectType == 'issue' or $objectType == 'nc')
+        {
+            $objectList = $this->dao->select('t1.*')->from($this->config->objectTables[$module])->alias('t1')
+                ->leftJoin(TABLE_PROJECT)->alias('t2')->on("t1.project = t2.id")
+                ->where('t1.deleted')->eq(0)
+                ->andWhere('t2.deleted')->eq(0)
+                ->andWhere('t1.id')->in(array_keys($objectIDList))
+                ->orderBy('t1.' . $orderBy)
+                ->page($pager)
+                ->fetchAll('id');
+        }
+        else
+        {
+            $objectList = $this->dao->select('*')->from($this->config->objectTables[$module])
+                ->where('deleted')->eq(0)
+                ->andWhere('id')->in(array_keys($objectIDList))
+                ->orderBy($orderBy)
+                ->page($pager)
+                ->fetchAll('id');
+        }
 
-            $executionList = array();
-            foreach($objectList as $task) $executionList[$task->execution] = $task->execution;
-            $executionPairs = $this->dao->select('id,name')->from(TABLE_PROJECT)->where('id')->in($executionList)->fetchPairs('id');
-            foreach($objectList as $task) $task->executionName = zget($executionPairs, $task->execution);
-
+        if($objectType == 'task')
+        {
             if($objectList) return $this->loadModel('task')->processTasks($objectList);
-            return array();
+            return $objectList;
         }
 
         if($objectType == 'bug')
@@ -358,20 +389,595 @@ class myModel extends model
             $productList = array();
             foreach($objectList as $bug) $productList[$bug->product] = $bug->product;
             $productPairs = $this->dao->select('id,name')->from(TABLE_PRODUCT)->where('id')->in($productList)->fetchPairs('id');
-            foreach($objectList as $bug) $bug->productName = zget($productPairs, $bug->product);
+            foreach($objectList as $bug) $bug->productName = zget($productPairs, $bug->product, '');
         }
+
         if($objectType == 'requirement' or $objectType == 'story')
         {
             $productList = array();
             foreach($objectList as $story) $productList[$story->product] = $story->product;
             $productPairs = $this->dao->select('id,name')->from(TABLE_PRODUCT)->where('id')->in($productList)->fetchPairs('id');
-            foreach($objectList as $story) $story->productTitle = zget($productPairs, $story->product);
+            foreach($objectList as $story) $story->productTitle = zget($productPairs, $story->product, '');
 
             $planList = array();
             foreach($objectList as $story) $planList[$story->plan] = $story->plan;
             $planPairs = $this->dao->select('id,title')->from(TABLE_PRODUCTPLAN)->where('id')->in($planList)->fetchPairs('id');
-            foreach($objectList as $story) $story->planTitle = zget($planPairs, $story->plan);
+            foreach($objectList as $story) $story->planTitle = zget($planPairs, $story->plan, '');
         }
         return $objectList;
     }
+
+    /**
+     * Build case search form.
+     *
+     * @param  int    $queryID
+     * @param  string $actionURL
+     * @param  string $type
+     * @access public
+     * @return void
+     */
+    public function buildTestCaseSearchForm($queryID, $actionURL, $type)
+    {
+        $products = $this->dao->select('id,name')->from(TABLE_PRODUCT)
+            ->where('deleted')->eq(0)
+            ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->products)->fi()
+            ->orderBy('order_asc')
+            ->fetchPairs();
+
+        $queryName = $type == 'contribute' ? 'contributeTestcase' : 'workTestcase';
+        $this->app->loadConfig('testcase');
+        $this->config->testcase->search['module']                      = $queryName;
+        $this->config->testcase->search['queryID']                     = $queryID;
+        $this->config->testcase->search['actionURL']                   = $actionURL;
+        $this->config->testcase->search['params']['product']['values'] = array('' => '') + $products;
+        $this->config->testcase->search['params']['lib']['values']     = array('' => '') + $this->loadModel('caselib')->getLibraries();
+
+        unset($this->config->testcase->search['fields']['module']);
+
+        $this->loadModel('search')->setSearchParams($this->config->testcase->search);
+    }
+
+    /**
+     * Get testcases by search.
+     *
+     * @param  int    $queryID
+     * @param  string $type
+     * @param  string $orderBy
+     * @param  int    $pager
+     * @access public
+     * @return array
+     */
+    public function getTestcasesBySearch($queryID, $type, $orderBy, $pager)
+    {
+        $queryName = $type == 'contribute' ? 'contributeTestcaseQuery' : 'workTestcaseQuery';
+        $queryForm = $type == 'openedbyme' ? 'contributeTestcaseForm' : 'workTestcaseForm';
+        if($queryID)
+        {
+            $query = $this->loadModel('search')->getQuery($queryID);
+            if($query)
+            {
+                $this->session->set($queryName, $query->sql);
+                $this->session->set($queryForm, $query->form);
+            }
+            else
+            {
+                $this->session->set($queryName, ' 1 = 1');
+            }
+        }
+        else
+        {
+            if($this->session->$queryName  == false) $this->session->set($queryName, ' 1 = 1');
+        }
+
+        $myTestcaseQuery = $this->session->$queryName;
+        $myTestcaseQuery = preg_replace('/`(\w+)`/', 't1.`$1`', $myTestcaseQuery);
+
+        if($type == 'contribute')
+        {
+            $cases = $this->dao->select('*')->from(TABLE_CASE)->alias('t1')
+                ->where($myTestcaseQuery)
+                ->andWhere('t1.openedBy')->eq($this->app->user->account)
+                ->andWhere('t1.deleted')->eq(0)
+                ->orderBy($orderBy)->page($pager)->fetchAll('id');
+        }
+        else
+        {
+            $cases = $this->dao->select('t1.*')->from(TABLE_CASE)->alias('t1')
+                ->leftJoin(TABLE_TESTRUN)->alias('t2')->on('t1.id = t2.case')
+                ->where($myTestcaseQuery)
+                ->andWhere('t2.assignedTo')->eq($this->app->user->account)
+                ->andWhere('t1.deleted')->eq(0)
+                ->orderBy($orderBy)->page($pager)->fetchAll('id');
+        }
+        return $cases;
+    }
+
+    /**
+     * Build search form for task page of work.
+     *
+     * @param  int    $queryID
+     * @param  string $actionURL
+     * @access public
+     * @return void
+     */
+    public function buildTaskSearchForm($queryID, $actionURL)
+    {
+        $rawMethod = $this->app->rawMethod;
+        $this->loadModel('execution');
+        $this->app->loadConfig('execution');
+
+        $this->config->execution->search['module']    = $rawMethod . 'Task';
+        $this->config->execution->search['actionURL'] = $actionURL;
+        $this->config->execution->search['queryID']   = $queryID;
+
+        if($rawMethod == 'work')
+        {
+            unset($this->config->execution->search['fields']['closedReason']);
+            unset($this->config->execution->search['fields']['closedBy']);
+            unset($this->config->execution->search['fields']['canceledBy']);
+            unset($this->config->execution->search['fields']['closedDate']);
+            unset($this->config->execution->search['fields']['canceledDate']);
+        }
+
+        $projects = $this->loadModel('project')->getPairsByProgram();
+        $this->config->execution->search['params']['project']['values'] = $projects + array('all' => $this->lang->project->allProjects);
+
+        $executions = $this->execution->getPairs();
+        $this->config->execution->search['params']['execution']['values'] = $executions + array('all' => $this->lang->execution->allExecutions);
+
+        $this->config->execution->search['params']['module']['values'] = $this->loadModel('tree')->getAllModulePairs();
+
+        $this->loadModel('search')->setSearchParams($this->config->execution->search);
+    }
+
+    /**
+     * Get tasks by search.
+     *
+     * @param  string $account
+     * @param  int    $limit
+     * @param  object $pager
+     * @param  string $orderBy
+     * @param  int    $queryID
+     * @access public
+     * @return array
+     */
+    public function getTasksBySearch($account, $limit = 0, $pager = null, $orderBy = 'id_desc', $queryID = 0)
+    {
+        $moduleName = $this->app->rawMethod == 'work' ? 'workTask' : 'contributeTask';
+        $queryName  = $moduleName . 'Query';
+        $formName   = $moduleName . 'Form';
+
+        $taskIDList = array();
+        if($moduleName == 'contributeTask')
+        {
+            $tasksAssignedByMe = $this->getAssignedByMe($account, 0, $pager, $orderBy, 0, 'task');
+            foreach($tasksAssignedByMe as $taskID => $task)
+            {
+                $taskIDList[$taskID] = $taskID;
+            }
+        }
+
+        if($queryID)
+        {
+            $query = $this->loadModel('search')->getQuery($queryID);
+            if($query)
+            {
+                $this->session->set($queryName, $query->sql);
+                $this->session->set($formName, $query->form);
+            }
+            else
+            {
+                $this->session->set($queryName, ' 1 = 1');
+            }
+        }
+        else
+        {
+            if($this->session->$queryName == false) $this->session->set($queryName, ' 1 = 1');
+        }
+
+        $query = $this->session->$queryName;
+
+        $query = preg_replace('/`(\w+)`/', 't1.`$1`', $query);
+        $query = str_replace('t1.`project`', 't2.`project`', $query);
+
+        $tasks = $this->dao->select('t1.*, t2.id as executionID, t2.name as executionName, t2.type as executionType, t3.id as storyID, t3.title as storyTitle, t3.status AS storyStatus, t3.version AS latestStoryVersion')
+            ->from(TABLE_TASK)->alias('t1')
+            ->leftJoin(TABLE_EXECUTION)->alias('t2')->on("t1.execution = t2.id")
+            ->leftJoin(TABLE_STORY)->alias('t3')->on('t1.story = t3.id')
+            ->leftJoin(TABLE_PROJECT)->alias('t4')->on("t1.project = t4.id")
+            ->where($query)
+            ->andWhere('t1.deleted')->eq(0)
+            ->andWhere('t2.deleted')->eq(0)
+            ->andWhere('(t2.status')->ne('suspended')->orWhere('t4.status')->ne('suspended')->markRight(1)
+            ->beginIF($moduleName == 'workTask')->andWhere("t1.assignedTo")->eq($account)
+            ->beginIF($moduleName == 'contributeTask')
+            ->andWhere('t1.openedBy', 1)->eq($account)
+            ->orWhere('t1.closedBy')->eq($account)
+            ->orWhere('t1.canceledBy')->eq($account)
+            ->orWhere('t1.finishedby', 1)->eq($account)
+            ->orWhere('t1.finishedList')->like("%,{$account},%")
+            ->orWhere('t1.id')->in($taskIDList)
+            ->markRight(1)
+            ->fi()
+            ->beginIF($this->config->vision)->andWhere('t1.vision')->eq($this->config->vision)->fi()
+            ->beginIF($this->config->vision)->andWhere('t2.vision')->eq($this->config->vision)->fi()
+            ->beginIF(!$this->app->user->admin)->andWhere('t1.execution')->in($this->app->user->view->sprints)->fi()
+            ->orderBy($orderBy)
+            ->beginIF($limit > 0)->limit($limit)->fi()
+            ->page($pager)
+            ->fetchAll('id');
+
+        $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'task', false);
+
+        $taskTeam = $this->dao->select('*')->from(TABLE_TEAM)->where('root')->in(array_keys($tasks))->andWhere('type')->eq('task')->fetchGroup('root');
+        if(!empty($taskTeam))
+        {
+            foreach($taskTeam as $taskID => $team) $tasks[$taskID]->team = $team;
+        }
+
+        if($tasks) return $this->loadModel('task')->processTasks($tasks);
+        return array();
+    }
+
+    /**
+     * Build search form for bug page of work.
+     *
+     * @param  int    $queryID
+     * @param  string $actionURL
+     * @access public
+     * @return void
+     */
+    public function buildBugSearchForm($queryID, $actionURL)
+    {
+        $rawMethod = $this->app->rawMethod;
+        $this->loadModel('bug');
+        $this->app->loadConfig('bug');
+
+        $products = $this->loadModel('product')->getPairs();
+
+        $this->config->bug->search['module']    = $rawMethod . 'Bug';
+        $this->config->bug->search['actionURL'] = $actionURL;
+        $this->config->bug->search['queryID']   = $queryID;
+        if($rawMethod == 'work')
+        {
+            unset($this->config->bug->search['fields']['closedDate']);
+            unset($this->config->bug->search['fields']['closedBy']);
+        }
+
+        if($this->config->systemMode == 'new') $this->config->bug->search['params']['project']['values'] = $this->loadModel('project')->getPairsByProgram() + array('all' => $this->lang->bug->allProject) + array('' => '');
+        $this->config->bug->search['params']['execution']['values']     = $this->loadModel('execution')->getPairs();
+        $this->config->bug->search['params']['product']['values']       = $products + array('' => '');
+        $this->config->bug->search['params']['plan']['values']          = $this->loadModel('productplan')->getPairs();
+        $this->config->bug->search['params']['module']['values']        = $this->loadModel('tree')->getAllModulePairs();
+        $this->config->bug->search['params']['severity']['values']      = array(0 => '') + $this->lang->bug->severityList;
+        $this->config->bug->search['params']['openedBuild']['values']   = $this->loadModel('build')->getBuildPairs($products);
+        $this->config->bug->search['params']['resolvedBuild']['values'] = $this->config->bug->search['params']['openedBuild']['values'];
+
+        $this->loadModel('search')->setSearchParams($this->config->bug->search);
+    }
+
+    /*
+     * Build risk search form.
+     *
+     * @param  int    $queryID
+     * @param  string $actionURL
+     * @param  string $type risk|contribute
+     * @access public
+     * @return void
+     */
+    public function buildRiskSearchForm($queryID, $actionURL, $type)
+    {
+        $projects  = $this->dao->select('id, name')->from(TABLE_PROJECT)
+            ->where('type')->eq('project')
+            ->andWhere('deleted')->eq('0')
+            ->andWhere('vision')->eq($this->config->vision)
+            ->andWhere('model')->ne('kanban')
+            ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->projects)->fi()
+            ->orderBy('order_asc')
+            ->fetchPairs();
+        $queryName = $type == 'contribute' ? 'contributeRisk' : 'workRisk';
+
+        $this->app->loadConfig('risk');
+        $this->config->risk->search['module']            = $queryName;
+        $this->config->risk->search['actionURL']         = $actionURL;
+        $this->config->risk->search['queryID']           = $queryID;
+
+        $this->config->risk->search['params']['project']['values'] = array('') + $projects;
+
+        if($this->config->systemMode == 'classic') unset($this->config->risk->search['fields']['project']);
+        unset($this->config->risk->search['fields']['module']);
+
+        $this->loadModel('search')->setSearchParams($this->config->risk->search);
+    }
+
+    /**
+     * Get risks by search.
+     *
+     * @param  int    $queryID
+     * @param  string $type
+     * @param  string $orderBy
+     * @param  int    $pager
+     * @access public
+     * @return array
+     */
+    public function getRisksBySearch($queryID, $type, $orderBy, $pager)
+    {
+        $queryName = $type == 'contribute' ? 'contributeRiskQuery' : 'workRiskQuery';
+        if($queryID && $queryID != 'myQueryID')
+        {
+            $query = $this->loadModel('search')->getQuery($queryID);
+            if($query)
+            {
+                $this->session->set($queryName, $query->sql);
+                $this->session->set($queryName . 'Form', $query->form);
+            }
+            else
+            {
+                $this->session->set($queryName, ' 1 = 1');
+            }
+        }
+        else
+        {
+            if($this->session->$queryName == false) $this->session->set($queryName, ' 1 = 1');
+        }
+
+        $riskQuery = $this->session->$queryName;
+
+        if($type == 'contribute')
+        {
+            $assignedByMe = $this->getAssignedByMe($this->app->user->account, '', $pager, $orderBy, '', 'risk');
+
+            $risks = $this->dao->select('*')->from(TABLE_RISK)
+                ->where($riskQuery)
+                ->andWhere('deleted')->eq('0')
+                ->andWhere('createdBy',1)->eq($this->app->user->account)
+                ->orWhere('id')->in(array_keys($assignedByMe))
+                ->orWhere('closedBy')->eq($this->app->user->account)
+                ->markRight(1)
+                ->orderBy($orderBy)
+                ->page($pager)
+                ->fetchAll('id');
+        }
+        elseif($type == 'work')
+        {
+            $risks = $this->dao->select('*')->from(TABLE_RISK)
+                ->where($riskQuery)
+                ->andWhere('deleted')->eq('0')
+                ->andWhere('assignedTo')->eq($this->app->user->account)
+                ->orderBy($orderBy)
+                ->page($pager)
+                ->fetchAll('id');
+        }
+
+        return $risks;
+    }
+
+    /**
+     * Build Story search form.
+     *
+     * @param  int    $queryID
+     * @param  string $actionURL
+     * @param  string $type
+     * @access public
+     * @return void
+     */
+    public function buildStorySearchForm($queryID, $actionURL, $type)
+    {
+        $products = $this->dao->select('id,name')->from(TABLE_PRODUCT)
+            ->where('deleted')->eq(0)
+            ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->products)->fi()
+            ->orderBy('order_asc')
+            ->fetchPairs();
+
+        $productIdList = array_keys($products);
+        $branchParam   = '';
+        $queryName = $type == 'contribute' ? 'contributeStory' : 'workStory';
+        $this->app->loadConfig('product');
+        $this->config->product->search['module']                      = $queryName;
+        $this->config->product->search['queryID']                     = $queryID;
+        $this->config->product->search['actionURL']                   = $actionURL;
+        $this->config->product->search['params']['product']['values'] = array('' => '') + $products;
+        $this->config->product->search['params']['plan']['values']    = array('' => '') + $this->loadModel('productplan')->getPairs($productIdList, $branchParam);
+
+        unset($this->config->product->search['fields']['module']);
+
+        $this->loadModel('search')->setSearchParams($this->config->product->search);
+    }
+
+    /**
+     * Get stories by search.
+     *
+     * @param  int    $queryID
+     * @param  string $type
+     * @param  string $orderBy
+     * @param  int    $pager
+     * @access public
+     * @return array
+     */
+    public function getStoriesBySearch($queryID, $type, $orderBy, $pager)
+    {
+        $queryName = $type == 'contribute' ? 'contributeStoryQuery' : 'workStoryQuery';
+        $queryForm = $type == 'contribute' ? 'contributeStoryForm' : 'workStoryForm';
+        if($queryID)
+        {
+            $query = $this->loadModel('search')->getQuery($queryID);
+            if($query)
+            {
+                $this->session->set($queryName, $query->sql);
+                $this->session->set($queryForm, $query->form);
+            }
+            else
+            {
+                $this->session->set($queryName, ' 1 = 1');
+            }
+        }
+        else
+        {
+            if($this->session->$queryName  == false) $this->session->set($queryName, ' 1 = 1');
+        }
+
+        $myStoryQuery = $this->session->$queryName;
+        $myStoryQuery = preg_replace('/`(\w+)`/', 't1.`$1`', $myStoryQuery);
+
+        $storyIDList = array();
+        if($type == 'contribute')
+        {
+            $storiesAssignedByMe = $this->getAssignedByMe($this->app->user->account, '', $pager, $orderBy, '', 'story');
+            foreach($storiesAssignedByMe as $storyID => $story)
+            {
+                $storyIDList[$storyID] = $storyID;
+            }
+
+            $stories = $this->dao->select('distinct t1.*, t2.name as productTitle, t4.title as planTitle')->from(TABLE_STORY)->alias('t1')
+                ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product = t2.id')
+                ->leftJoin(TABLE_PLANSTORY)->alias('t3')->on('t1.id = t3.plan')
+                ->leftJoin(TABLE_PRODUCTPLAN)->alias('t4')->on('t3.plan = t4.id')
+                ->leftJoin(TABLE_STORYREVIEW)->alias('t5')->on('t1.id = t5.story')
+                ->where($myStoryQuery)
+                ->andWhere('t1.type')->eq('story')
+                ->andWhere('t1.openedBy',1)->eq($this->app->user->account)
+                ->orWhere('t5.reviewer')->eq($this->app->user->account)
+                ->orWhere('t1.closedBy')->eq($this->app->user->account)
+                ->orWhere('t1.id')->in($storyIDList)
+                ->markRight(1)
+                ->andWhere('t1.deleted')->eq(0)
+                ->orderBy($orderBy)
+                ->page($pager, 't1.id')
+                ->fetchAll('id');
+        }
+        else
+        {
+            $stories = $this->dao->select('distinct t1.*, t2.name as productTitle, t4.title as planTitle')->from(TABLE_STORY)->alias('t1')
+                ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product = t2.id')
+                ->leftJoin(TABLE_PLANSTORY)->alias('t3')->on('t1.id = t3.plan')
+                ->leftJoin(TABLE_PRODUCTPLAN)->alias('t4')->on('t3.plan = t4.id')
+                ->leftJoin(TABLE_STORYREVIEW)->alias('t5')->on('t1.id = t5.story')
+                ->where($myStoryQuery)
+                ->andWhere('t1.type')->eq('story')
+                ->andWhere('t1.assignedTo',1)->eq($this->app->user->account)
+                ->orWhere('t5.reviewer')->eq($this->app->user->account)
+                ->markRight(1)
+                ->andWhere('t1.deleted')->eq(0)
+                ->orderBy($orderBy)
+                ->page($pager, 't1.id')
+                ->fetchAll('id');
+        }
+        return $stories;
+    }
+
+    /**
+     * Build Requirement search form.
+     *
+     * @param  int    $queryID
+     * @param  string $actionURL
+     * @param  string $type
+     * @access public
+     * @return void
+     */
+    public function buildRequirementSearchForm($queryID, $actionURL, $type)
+    {
+        $products = $this->dao->select('id,name')->from(TABLE_PRODUCT)
+            ->where('deleted')->eq(0)
+            ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->products)->fi()
+            ->orderBy('order_asc')
+            ->fetchPairs();
+
+        $productIdList = array_keys($products);
+        $branchParam   = '';
+        $queryName = $type == 'contribute' ? 'contributeRequirement' : 'workRequirement';
+        $this->app->loadConfig('product');
+        $this->config->product->search['module']                      = $queryName;
+        $this->config->product->search['queryID']                     = $queryID;
+        $this->config->product->search['actionURL']                   = $actionURL;
+        $this->config->product->search['params']['product']['values'] = array('' => '') + $products;
+        $this->config->product->search['params']['plan']['values']    = array('' => '') + $this->loadModel('productplan')->getPairs($productIdList, $branchParam);
+
+        $this->lang->story->title  = str_replace($this->lang->SRCommon, $this->lang->URCommon, $this->lang->story->title);
+        $this->lang->story->create = str_replace($this->lang->SRCommon, $this->lang->URCommon, $this->lang->story->create);
+        $this->config->product->search['fields']['title'] = $this->lang->story->title;
+        unset($this->config->product->search['fields']['plan']);
+        unset($this->config->product->search['fields']['stage']);
+
+        unset($this->config->product->search['fields']['module']);
+
+        $this->loadModel('search')->setSearchParams($this->config->product->search);
+    }
+
+    /**
+     * Get requirements by search.
+     *
+     * @param  int    $queryID
+     * @param  string $type
+     * @param  string $orderBy
+     * @param  int    $pager
+     * @access public
+     * @return array
+     */
+    public function getRequirementsBySearch($queryID, $type, $orderBy, $pager)
+    {
+        $queryName = $type == 'contribute' ? 'contributeRequirementQuery' : 'workRequirementQuery';
+        $queryForm = $type == 'contribute' ? 'contributeRequirementForm' : 'workRequirementForm';
+        if($queryID)
+        {
+            $query = $this->loadModel('search')->getQuery($queryID);
+            if($query)
+            {
+                $this->session->set($queryName, $query->sql);
+                $this->session->set($queryForm, $query->form);
+            }
+            else
+            {
+                $this->session->set($queryName, ' 1 = 1');
+            }
+        }
+        else
+        {
+            if($this->session->$queryName  == false) $this->session->set($queryName, ' 1 = 1');
+        }
+
+        $myRequirementQuery = $this->session->$queryName;
+        $myRequirementQuery = preg_replace('/`(\w+)`/', 't1.`$1`', $myRequirementQuery);
+
+        $requirementIDList = array();
+        if($type == 'contribute')
+        {
+            $requirementsAssignedByMe = $this->getAssignedByMe($this->app->user->account, '', $pager, $orderBy, '', 'requirement');
+            foreach($requirementsAssignedByMe as $requirementID => $requirement)
+            {
+                $requirementIDList[$requirementID] = $requirementID;
+            }
+
+            $requirements = $this->dao->select('distinct t1.*, t2.name as productTitle')->from(TABLE_STORY)->alias('t1')
+                ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product = t2.id')
+                ->leftJoin(TABLE_STORYREVIEW)->alias('t3')->on('t1.id = t3.story')
+                ->where($myRequirementQuery)
+                ->andWhere('t1.type')->eq('requirement')
+                ->andWhere('t1.openedBy',1)->eq($this->app->user->account)
+                ->orWhere('t1.closedBy')->eq($this->app->user->account)
+                ->orWhere('t3.reviewer')->eq($this->app->user->account)
+                ->orWhere('t1.id')->in($requirementIDList)
+                ->markRight(1)
+                ->andWhere('t1.deleted')->eq(0)
+                ->orderBy($orderBy)
+                ->page($pager, 't1.id')
+                ->fetchAll('id');
+        }
+        else
+        {
+            $requirements = $this->dao->select('distinct t1.*, t2.name as productTitle')->from(TABLE_STORY)->alias('t1')
+                ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product = t2.id')
+                ->leftJoin(TABLE_STORYREVIEW)->alias('t3')->on('t1.id = t3.story')
+                ->where($myRequirementQuery)
+                ->andWhere('t1.type')->eq('requirement')
+                ->andWhere('t1.assignedTo',1)->eq($this->app->user->account)
+                ->orWhere('t3.reviewer')->eq($this->app->user->account)
+                ->markRight(1)
+                ->andWhere('t1.deleted')->eq(0)
+                ->orderBy($orderBy)
+                ->page($pager, 't1.id')
+                ->fetchAll('id');
+        }
+        return $requirements;
+    }
+
 }

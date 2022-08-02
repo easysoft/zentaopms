@@ -1,4 +1,7 @@
-#tipsModal {margin-top: 10%;}
+[lang^='en'] #newTipsModal {margin-top: 10%; max-width: 620px;}
+[lang^='zh-cn'] #newTipsModal {margin-top: 10%; max-width: 530px;}
+[lang^='zh-cn'] #classicTipsModal {margin-top: 10%; max-width: 420px;}
+[lang^='en'] #classicTipsModal {margin-top: 10%; max-width: 450px;}
 .chosen-container-single .chosen-single > span {max-width: 100%;}
 
 #copyProjectModal {padding: 0;}
@@ -14,4 +17,18 @@
 .checkbox input[type=checkbox], .checkbox-inline input[type=checkbox], .radio input[type=radio], .radio-inline input[type=radio] {margin-top: 1px;}
 
 #lifeTimeTips {display: none;}
-#teams_chosen ul .label {margin-top: 3px;}
+#teams_chosen .chosen-drop ul li .label {margin-top: 3px; background: #fff; color: #838a9d; border: 1px solid #d8d8d8;}
+
+.chosen-container.chosen-highlight-selected .disabled-result.result-selected {background: none;}
+
+#productsBox .row .col-sm-4 {padding-right: 13px;}
+#plansBox .row {display: inline-table; width: 102%;}
+#plansBox .row .col-sm-4 {display: inline-block; float: none; padding-right: 13px;}
+
+#dateRange {vertical-align: top; padding-top: 13px;}
+#dateRangeOption {vertical-align: top; padding-top: 13px;}
+#beginLabel {white-space: nowrap;}
+#endLabel {white-space: nowrap;}
+#copyProjectModal .projectSelect {display: inline-block; margin-left: 10px; width: 20%;}
+#copyProjectModal .titleBox{position: relative; bottom: 3px; display: inline-block;}
+a.chosen-single > div > b {top: -4px !important;}

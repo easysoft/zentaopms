@@ -124,7 +124,10 @@ $lang->typeAB       = 'Loại';
 $lang->nameAB       = 'Name';
 
 $lang->common = new stdclass();
-$lang->common->common = 'Module chung';
+$lang->common->common  = 'Module chung';
+$lang->devops->common  = 'DevOps';
+$lang->app->common     = 'APP';
+$lang->app->serverLink = 'Server Link';
 
 global $config;
 list($programModule, $programMethod)     = explode('-', $config->programLink);
@@ -228,6 +231,13 @@ $lang->system->menu->calendar = array('link' => 'Calendar|my|calendar|', 'subMod
 
 $lang->measurement = new stdclass();
 $lang->measurement->menu = new stdclass();
+
+$lang->devops->compile  = 'Compile';
+$lang->devops->mr       = 'Merge Request';
+$lang->devops->repo     = 'Repo';
+$lang->devops->rules    = 'Rule';
+$lang->devops->settings = 'Setting Merge Request';
+$lang->devops->set      = 'Set';
 
 $lang->searchTips = '';
 $lang->searchAB   = 'Tìm ki?m';

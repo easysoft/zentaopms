@@ -7,13 +7,15 @@ $config->execution->weekend          = '2';
 $config->execution->ownerFields      = array('PO', 'PM', 'QD', 'RD');
 
 $config->execution->list = new stdclass();
-$config->execution->list->exportFields = 'id,name,projectName,code,PM,end,status,totalEstimate,totalConsumed,totalLeft,progress';
+$config->execution->list->exportFields = 'id,name,projectName,code,PM,begin,end,status,totalEstimate,totalConsumed,totalLeft,progress';
 
 $config->execution->modelList['scrum']     = 'sprint';
 $config->execution->modelList['waterfall'] = 'stage';
 $config->execution->modelList['kanban']    = 'kanban';
 
 $config->execution->statusActions = array('start', 'putoff', 'suspend', 'close', 'activate');
+
+$config->execution->kanbanMethod = array('kanban', 'cfd', 'build', 'view', 'manageproducts', 'team', 'managemembers', 'whitelist', 'addwhitelist', 'edit');
 
 global $lang, $app;
 $app->loadLang('task');
@@ -51,6 +53,7 @@ $config->execution->search['fields']['desc']           = $lang->task->desc;
 $config->execution->search['fields']['assignedTo']     = $lang->task->assignedTo;
 $config->execution->search['fields']['pri']            = $lang->task->pri;
 
+if($app->tab == 'my') $config->execution->search['fields']['project'] = $lang->task->project;
 $config->execution->search['fields']['execution']      = $lang->task->execution;
 $config->execution->search['fields']['module']         = $lang->task->module;
 $config->execution->search['fields']['estimate']       = $lang->task->estimate;
@@ -86,6 +89,7 @@ $config->execution->search['params']['desc']           = array('operator' => 'in
 $config->execution->search['params']['assignedTo']     = array('operator' => '=',       'control' => 'select', 'values' => 'users');
 $config->execution->search['params']['pri']            = array('operator' => '=',       'control' => 'select', 'values' => $lang->task->priList);
 
+if($app->tab == 'my') $config->execution->search['params']['project'] = array('operator' => '=', 'control' => 'select', 'values' => '');
 $config->execution->search['params']['execution']      = array('operator' => '=',       'control' => 'select', 'values' => '');
 $config->execution->search['params']['module']         = array('operator' => 'belong',  'control' => 'select', 'values' => '');
 $config->execution->search['params']['estimate']       = array('operator' => '=',       'control' => 'input',  'values' => '');
@@ -135,3 +139,103 @@ $config->execution->gantt->linkType['end']['begin']   = 0;
 $config->execution->gantt->linkType['begin']['begin'] = 1;
 $config->execution->gantt->linkType['end']['end']     = 2;
 $config->execution->gantt->linkType['begin']['end']   = 3;
+
+$config->execution->datatable = new stdclass();
+if(!isset($config->setCode) or $config->setCode == 1)
+{
+    $config->execution->datatable->defaultField = array('id', 'name', 'code', 'project', 'PM', 'status', 'progress', 'begin', 'end', 'estimate', 'consumed', 'left', 'burn');
+}
+else
+{
+    $config->execution->datatable->defaultField = array('id', 'name', 'project', 'PM', 'status', 'progress', 'begin', 'end', 'estimate', 'consumed', 'left', 'burn');
+}
+
+$config->execution->datatable->fieldList['id']['title']    = 'idAB';
+$config->execution->datatable->fieldList['id']['fixed']    = 'left';
+$config->execution->datatable->fieldList['id']['width']    = '70';
+$config->execution->datatable->fieldList['id']['required'] = 'yes';
+
+$config->execution->datatable->fieldList['name']['title']    = 'name';
+$config->execution->datatable->fieldList['name']['fixed']    = 'left';
+$config->execution->datatable->fieldList['name']['width']    = 'auto';
+$config->execution->datatable->fieldList['name']['required'] = 'yes';
+
+if(!isset($config->setCode) or $config->setCode == 1)
+{
+    $config->execution->datatable->fieldList['code']['title']    = 'code';
+    $config->execution->datatable->fieldList['code']['fixed']    = 'no';
+    $config->execution->datatable->fieldList['code']['width']    = '95';
+    $config->execution->datatable->fieldList['code']['required'] = 'no';
+}
+
+$config->execution->datatable->fieldList['project']['title']    = 'project';
+$config->execution->datatable->fieldList['project']['fixed']    = 'no';
+$config->execution->datatable->fieldList['project']['width']    = '100';
+$config->execution->datatable->fieldList['project']['required'] = 'no';
+
+$config->execution->datatable->fieldList['PM']['title']    = 'owner';
+$config->execution->datatable->fieldList['PM']['fixed']    = 'no';
+$config->execution->datatable->fieldList['PM']['width']    = '70';
+$config->execution->datatable->fieldList['PM']['required'] = 'no';
+
+$config->execution->datatable->fieldList['status']['title']    = 'status';
+$config->execution->datatable->fieldList['status']['fixed']    = 'no';
+$config->execution->datatable->fieldList['status']['width']    = '100';
+$config->execution->datatable->fieldList['status']['required'] = 'no';
+
+$config->execution->datatable->fieldList['progress']['title']    = 'progress';
+$config->execution->datatable->fieldList['progress']['fixed']    = 'no';
+$config->execution->datatable->fieldList['progress']['width']    = '70';
+$config->execution->datatable->fieldList['progress']['required'] = 'no';
+$config->execution->datatable->fieldList['progress']['sort']     = 'no';
+
+$config->execution->datatable->fieldList['openedDate']['title']    = 'openedDate';
+$config->execution->datatable->fieldList['openedDate']['fixed']    = 'no';
+$config->execution->datatable->fieldList['openedDate']['width']    = '85';
+$config->execution->datatable->fieldList['openedDate']['required'] = 'no';
+
+$config->execution->datatable->fieldList['begin']['title']    = 'begin';
+$config->execution->datatable->fieldList['begin']['fixed']    = 'no';
+$config->execution->datatable->fieldList['begin']['width']    = '100';
+$config->execution->datatable->fieldList['begin']['required'] = 'no';
+
+$config->execution->datatable->fieldList['end']['title']    = 'end';
+$config->execution->datatable->fieldList['end']['fixed']    = 'no';
+$config->execution->datatable->fieldList['end']['width']    = '90';
+$config->execution->datatable->fieldList['end']['required'] = 'no';
+
+$config->execution->datatable->fieldList['realBegan']['title']    = 'realBegan';
+$config->execution->datatable->fieldList['realBegan']['fixed']    = 'no';
+$config->execution->datatable->fieldList['realBegan']['width']    = '90';
+$config->execution->datatable->fieldList['realBegan']['required'] = 'no';
+$config->execution->datatable->fieldList['realBegan']['sort']     = 'no';
+
+$config->execution->datatable->fieldList['realEnd']['title']    = 'realEnd';
+$config->execution->datatable->fieldList['realEnd']['fixed']    = 'no';
+$config->execution->datatable->fieldList['realEnd']['width']    = '90';
+$config->execution->datatable->fieldList['realEnd']['required'] = 'no';
+$config->execution->datatable->fieldList['realEnd']['sort']     = 'no';
+
+$config->execution->datatable->fieldList['estimate']['title']    = 'estimate';
+$config->execution->datatable->fieldList['estimate']['fixed']    = 'no';
+$config->execution->datatable->fieldList['estimate']['width']    = '70';
+$config->execution->datatable->fieldList['estimate']['required'] = 'no';
+$config->execution->datatable->fieldList['estimate']['sort']     = 'no';
+
+$config->execution->datatable->fieldList['consumed']['title']    = 'consumed';
+$config->execution->datatable->fieldList['consumed']['fixed']    = 'no';
+$config->execution->datatable->fieldList['consumed']['width']    = '75';
+$config->execution->datatable->fieldList['consumed']['required'] = 'no';
+$config->execution->datatable->fieldList['consumed']['sort']     = 'no';
+
+$config->execution->datatable->fieldList['left']['title']    = 'left';
+$config->execution->datatable->fieldList['left']['fixed']    = 'no';
+$config->execution->datatable->fieldList['left']['width']    = '70';
+$config->execution->datatable->fieldList['left']['required'] = 'no';
+$config->execution->datatable->fieldList['left']['sort']     = 'no';
+
+$config->execution->datatable->fieldList['burn']['title']    = 'burn';
+$config->execution->datatable->fieldList['burn']['fixed']    = 'no';
+$config->execution->datatable->fieldList['burn']['width']    = '80';
+$config->execution->datatable->fieldList['burn']['required'] = 'no';
+$config->execution->datatable->fieldList['burn']['sort']     = 'no';

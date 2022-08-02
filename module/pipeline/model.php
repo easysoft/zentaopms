@@ -3,7 +3,7 @@
  * The model file of pipeline module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chenqi <chenqi@cnezsoft.com>
  * @package     product
  * @version     $Id: $
@@ -42,7 +42,7 @@ class pipelineModel extends model
     {
         return $this->dao->select('*')->from(TABLE_PIPELINE)
             ->where('deleted')->eq('0')
-            ->AndWhere('type')->eq($type)
+            ->AndWhere('type')->in($type)
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id');
@@ -86,6 +86,7 @@ class pipelineModel extends model
         $this->dao->insert(TABLE_PIPELINE)->data($pipeline)
             ->batchCheck($this->config->pipeline->create->requiredFields, 'notempty')
             ->batchCheck("url", 'URL')
+            ->check('name', 'unique', "`type` = '$type'")
             ->autoCheck()
             ->exec();
         if(dao::isError()) return false;
@@ -116,6 +117,7 @@ class pipelineModel extends model
         $this->dao->update(TABLE_PIPELINE)->data($pipeline)
             ->batchCheck($this->config->pipeline->edit->requiredFields, 'notempty')
             ->batchCheck("url", 'URL')
+            ->check('name', 'unique', "`type` = '$type' and id <> $id")
             ->autoCheck()
             ->where('id')->eq($id)
             ->exec();

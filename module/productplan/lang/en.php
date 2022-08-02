@@ -3,7 +3,7 @@
  * The productplan module English file of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     productplan
  * @version     $Id: en.php 4659 2013-04-17 06:45:08Z chencongzhi520@gmail.com $
@@ -141,11 +141,6 @@ $lang->productplan->featureBar['browse']['wait']   = 'Waiting';
 $lang->productplan->featureBar['browse']['doing']  = 'Doing';
 $lang->productplan->featureBar['browse']['done']   = 'Done';
 $lang->productplan->featureBar['browse']['closed'] = 'Closed';
-
-$lang->productplan->statusList['wait']   = 'Wait';
-$lang->productplan->statusList['doing']  = 'Doing';
-$lang->productplan->statusList['done']   = 'Done';
-$lang->productplan->statusList['closed'] = 'Closed';
 
 $lang->productplan->orderList['begin_desc'] = 'Begin Descend';
 $lang->productplan->orderList['begin_asc']  = 'Begin Ascend';

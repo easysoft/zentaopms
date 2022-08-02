@@ -3,7 +3,7 @@
  * The file module zh-cn file of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     file
  * @version     $Id: zh-cn.php 4630 2013-04-10 05:54:08Z chencongzhi520@gmail.com $
@@ -36,6 +36,7 @@ $lang->file->addFile       = '添加文件';
 $lang->file->beginUpload   = '开始上传';
 $lang->file->uploadSuccess = '上传成功';
 $lang->file->batchExport   = '分批导出';
+$lang->file->downloadFile  = '下载';
 
 $lang->file->pathname  = '路径';
 $lang->file->title     = '标题';

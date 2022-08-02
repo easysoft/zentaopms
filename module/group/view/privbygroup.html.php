@@ -3,7 +3,7 @@
  * The manage privilege by group view of group module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     group
  * @version     $Id: managepriv.html.php 1517 2011-03-07 10:02:57Z wwccss $
@@ -17,7 +17,7 @@
   </div>
 </div>
 <div id='mainContent' class='main-content'>
-  <form class="load-indicator main-form form-ajax" id="managePrivForm" method="post" target='hiddenwin'>
+  <form class="load-indicator main-form form-ajax" id="managePrivForm" method="post">
     <table class='table table-hover table-striped table-bordered'>
       <thead>
         <tr class='text-center'>

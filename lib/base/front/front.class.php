@@ -509,7 +509,7 @@ class baseHTML
             setcookie('goback', json_encode($gobackList), $config->cookieLife, $config->webRoot, '', $config->cookieSecure, false);
         }
 
-        return "<a href='{$gobackLink}' class='btn btn-back $class' data-app='$tab' $misc>{$label}</a>";
+        return "<a href='{$gobackLink}' class='btn btn-back $class' $misc>{$label}</a>";
     }
 
     /**
@@ -966,8 +966,9 @@ class baseJS
         {
             $cancleAction = "$cancleTarget.location = '$cancleURL';";
         }
-
-        $js .= <<<EOT
+        if(strpos($_SERVER['HTTP_USER_AGENT'], 'xuanxuan') === false)
+        {
+            $js .= <<<EOT
 if(confirm("$message"))
 {
     $confirmAction
@@ -977,6 +978,12 @@ else
     $cancleAction
 }
 EOT;
+        }
+        else
+        {
+            $js .= $confirmAction;
+        }
+
         $js .= self::end();
         return $js;
     }
@@ -1025,6 +1032,8 @@ EOT;
         }
         else
         {
+            /* Can not locate the url that has '#app', so remove it. */
+            if(strpos($url, '#app=') !== false) $url = substr($url, 0, strpos($url, '#app='));
             $js .= "$target.location='$url';\n";
         }
         return $js . self::end();
@@ -1222,7 +1231,8 @@ EOT;
             $viewOBJOut = true;
         }
 
-        if(is_numeric($value))
+        /* Fix value is '0123' error. */
+        if(is_numeric($value) and !preg_match('/^0[1-9]/', $value))
         {
             $js .= "{$prefix}{$key} = {$value};";
         }
@@ -1249,7 +1259,7 @@ EOT;
         else
         {
             $value = addslashes($value);
-            $js .= "{$prefix}{$key} = '{$value};'";
+            $js .= "{$prefix}{$key} = '{$value}';";
         }
         $js .= self::end($newline = false);
         echo $js;

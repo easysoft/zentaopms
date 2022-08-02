@@ -3,7 +3,7 @@
  * The model file of git module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     git
  * @version     $Id$
@@ -131,8 +131,14 @@ class gitModel extends model
         $gitlabAccountPairs = array();
         if($repo->SCM == 'Gitlab')
         {
-            $gitlabUserList = $this->loadModel('gitlab')->apiGetUsers($repo->gitlab);
-            $acountIDPairs  = $this->gitlab->getUserIdAccountPairs($repo->gitlab);
+            $gitlabUserList = $this->loadModel('gitlab')->apiGetUsers($repo->gitService);
+            $acountIDPairs  = $this->gitlab->getUserIdAccountPairs($repo->gitService);
+            foreach($gitlabUserList as $gitlabUser) $gitlabAccountPairs[$gitlabUser->realname] = zget($acountIDPairs, $gitlabUser->id, '');
+        }
+        elseif($repo->SCM == 'Gitea')
+        {
+            $gitlabUserList = $this->loadModel('gitea')->apiGetUsers($repo->gitService);
+            $acountIDPairs  = $this->gitea->getUserAccountIdPairs($repo->gitService, 'openID,account');
             foreach($gitlabUserList as $gitlabUser) $gitlabAccountPairs[$gitlabUser->realname] = zget($acountIDPairs, $gitlabUser->id, '');
         }
 

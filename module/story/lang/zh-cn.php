@@ -3,7 +3,7 @@
  * The story module zh-cn file of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     story
  * @version     $Id: zh-cn.php 5141 2013-07-15 05:57:15Z chencongzhi520@gmail.com $
@@ -67,6 +67,7 @@ $lang->story->toTask             = '转任务';
 $lang->story->batchToTask        = '批量转任务';
 $lang->story->convertRelations   = '换算关系';
 $lang->story->undetermined       = '待定';
+$lang->story->order              = '排序';
 
 $lang->story->editAction      = "编辑{$lang->SRCommon}";
 $lang->story->changeAction    = "变更{$lang->SRCommon}";
@@ -97,7 +98,7 @@ $lang->story->sourceNote     = '来源备注';
 $lang->story->fromBug        = '来源Bug';
 $lang->story->title          = "{$lang->SRCommon}名称";
 $lang->story->type           = "需求类型";
-$lang->story->category       = "类型";
+$lang->story->category       = "类别";
 $lang->story->color          = '标题颜色';
 $lang->story->toBug          = '转Bug';
 $lang->story->spec           = "描述";
@@ -147,7 +148,6 @@ $lang->story->colorTag       = '颜色标签';
 $lang->story->files          = '附件';
 $lang->story->copy           = "复制{$lang->SRCommon}";
 $lang->story->total          = "总{$lang->SRCommon}";
-$lang->story->allStories     = "所有{$lang->SRCommon}";
 $lang->story->draft          = '草稿';
 $lang->story->unclosed       = '未关闭';
 $lang->story->deleted        = '已删除';
@@ -246,6 +246,8 @@ $lang->story->legendProjectAndTask = $lang->executionCommon . '任务';
 $lang->story->legendBugs           = '相关Bug';
 $lang->story->legendFromBug        = '来源Bug';
 $lang->story->legendCases          = '相关用例';
+$lang->story->legendBuilds         = '相关版本';
+$lang->story->legendReleases       = '相关发布';
 $lang->story->legendLinkStories    = "相关{$lang->SRCommon}";
 $lang->story->legendChildStories   = "细分{$lang->SRCommon}";
 $lang->story->legendSpec           = "需求描述";
@@ -419,3 +421,23 @@ $lang->story->categoryList['safe']        = '安全';
 $lang->story->categoryList['experience']  = '体验';
 $lang->story->categoryList['improve']     = '改进';
 $lang->story->categoryList['other']       = '其他';
+
+$lang->story->changeTip = '该需求正在评审中，无法进行变更';
+
+$lang->story->reviewTip = array();
+$lang->story->reviewTip['active']      = '该需求已是激活状态，无需评审';
+$lang->story->reviewTip['notReviewer'] = '您不是该需求的评审人员，无法进行评审操作';
+$lang->story->reviewTip['reviewed']    = '您已评审';
+$lang->story->reviewTip['recalled']    = '该需求已撤销评审，无法进行评审操作';
+
+$lang->story->recallTip = array();
+$lang->story->recallTip['actived']     = '该需求未发起评审流程，无需撤销操作';
+$lang->story->recallTip['recalled']    = '该需求已经撤销评审，无法进行撤销操作';
+$lang->story->recallTip['reviewed']    = '已进入评审流程，无法进行撤销操作';
+$lang->story->recallTip['notOpenedBy'] = '您不是需求创建者，无法进行撤销操作';
+
+$lang->story->subDivideTip = array();
+$lang->story->subDivideTip['subStory']  = '子需求无法细分';
+$lang->story->subDivideTip['planned']   = '该需求已计划，无法进行细分操作';
+$lang->story->subDivideTip['projected'] = '该需求已立项，无法进行细分操作';
+$lang->story->subDivideTip['notActive'] = '需求不是激活状态，无法进行细分操作';

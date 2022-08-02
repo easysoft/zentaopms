@@ -3,7 +3,7 @@
  * The create view file of gitlab module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2017 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Gang Liu <liugang@cnezsoft.com>
  * @package     gitlab
  * @version     $Id$
@@ -40,8 +40,7 @@
             <td colspan='2'><?php echo nl2br(html::radio('visibility', $lang->gitlab->project->visibilityList, $project->visibility, "", 'block'));?></td>
           </tr>
           <tr>
-            <th></th>
-            <td class='text-center form-actions'>
+            <td colspan="2" class='text-center form-actions'>
               <?php echo html::submitButton();?>
               <?php if(!isonlybody()) echo html::a(inlink('browseProject', "gitlabID=$gitlabID"), $lang->goback, '', 'class="btn btn-wide"');?>
             </td>

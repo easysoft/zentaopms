@@ -3,7 +3,7 @@
  * The users entry point of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2021 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     entries
  * @version     1
@@ -62,9 +62,13 @@ class usersEntry extends entry
 
         $password = $this->request('password', '') ? md5($this->request('password')) : '';
 
+        $visions = $this->request('visions', array('rnd'));
+        if(!is_array($visions)) $visions = explode(',', $visions);
+
         $this->setPost('password1', $password);
         $this->setPost('password2', $password);
         $this->setPost('passwordStrength', 3);
+        $this->setPost('visions', $visions);
         $this->setPost('verifyPassword', md5($this->app->user->password . $this->app->session->rand));
 
         $control = $this->loadController('user', 'create');

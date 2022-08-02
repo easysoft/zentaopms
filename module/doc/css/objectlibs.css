@@ -18,6 +18,8 @@
 #content .title {max-width: 54%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;}
 #content .detail-content {padding-left: 10px;}
 #mainContent .scrollbar-hover {max-height: 2000px; overflow: scroll;}
+#content .editor-preview {background: #fff}
+#content .CodeMirror{border: none}
 #sidebar {width: 275px;}
 #sidebar>.cell {width: 100%;}
 #sidebar>.sidebar-toggle {left: 3px; right: auto;}
@@ -30,7 +32,7 @@
 
 .article-content {width: 100%; display: inline-block;}
 .outline {position: relative;}
-.outline .outline-toggle i.icon-angle-right, i.icon-angle-left {width: 18px; height: 18px; background: #efefef; border-radius: 50%; position: absolute; padding-left: 2px; padding-top: 1px;}
+.outline .outline-toggle i.icon-angle-right, i.icon-angle-left {width: 18px; height: 18px; border-radius: 50%; position: absolute; padding-left: 2px; padding-top: 1px;}
 .outline .outline-toggle i.icon-angle-right:before {content: "\e314"; cursor: pointer;}
 .outline .outline-toggle i.icon-angle-left:before {content: "\e315"; cursor: pointer;}
 .outline ul li {list-style: none;}

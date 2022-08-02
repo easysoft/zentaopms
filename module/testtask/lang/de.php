@@ -3,7 +3,7 @@
  * The testtask module English file of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     testtask
  * @version     $Id: en.php 4490 2013-02-27 03:27:05Z wyd621@gmail.com $
@@ -12,7 +12,6 @@
 $lang->testtask->index            = "Home";
 $lang->testtask->create           = "Test erstellen";
 $lang->testtask->reportChart      = 'Bericht';
-$lang->testtask->reportAction     = 'Case Report';
 $lang->testtask->delete           = "Löschen";
 $lang->testtask->importUnitResult = "Import Unit Result";
 $lang->testtask->importUnit       = "Import Unit Result"; //Fix bug custom required testtask.
@@ -29,7 +28,6 @@ $lang->testtask->batchAssign      = "Mehrere zuordnen";
 $lang->testtask->runCase          = "Ausführen";
 $lang->testtask->batchRun         = "Mehrere ausführen";
 $lang->testtask->results          = "Ergebnisse";
-$lang->testtask->resultsAction    = "Case Result";
 $lang->testtask->createBug        = "Bug erstellen";
 $lang->testtask->assign           = 'Zuordnen';
 $lang->testtask->cases            = 'Fälle';
@@ -37,15 +35,13 @@ $lang->testtask->groupCase        = "Nach Gruppe";
 $lang->testtask->pre              = 'Vorherige';
 $lang->testtask->next             = 'Nächste';
 $lang->testtask->start            = "Start";
-$lang->testtask->startAction      = "Start Request";
 $lang->testtask->close            = "Schließen";
-$lang->testtask->closeAction      = "Close Request";
 $lang->testtask->wait             = "Wartend";
+$lang->testtask->waitAB           = "Waiting";
 $lang->testtask->block            = "Block";
-$lang->testtask->blockAction      = "Block Request";
 $lang->testtask->activate         = "Aktiviert";
-$lang->testtask->activateAction   = "Activate Request";
 $lang->testtask->testing          = "Testen";
+$lang->testtask->testingAB        = "Testing";
 $lang->testtask->blocked          = "Blockiert";
 $lang->testtask->done             = "Getestet";
 $lang->testtask->totalStatus      = "Alle";
@@ -53,6 +49,21 @@ $lang->testtask->all              = "Alle " . $lang->productCommon;
 $lang->testtask->allTasks         = 'Alle';
 $lang->testtask->collapseAll      = 'Zuklappen';
 $lang->testtask->expandAll        = 'Aufklappen';
+$lang->testtask->auto             = 'Test Automation Tasks';
+$lang->testtask->task             = 'Test Task';
+$lang->testtask->run              = 'Test Run ID';
+$lang->testtask->job              = 'Job';
+$lang->testtask->compile          = 'Compile';
+$lang->testtask->duration         = 'Duration';
+
+$lang->testtask->viewAction     = "View Request";
+$lang->testtask->casesAction    = 'View Case';
+$lang->testtask->activateAction = "Activate Request";
+$lang->testtask->blockAction    = "Block Request";
+$lang->testtask->closeAction    = "Close Request";
+$lang->testtask->startAction    = "Start Request";
+$lang->testtask->resultsAction  = "Case Result";
+$lang->testtask->reportAction   = 'Case Report';
 
 $lang->testtask->id               = 'ID';
 $lang->testtask->common           = 'Testaufgabe';
@@ -107,10 +118,9 @@ $lang->testtask->statusList['doing']   = 'In Arbeit';
 $lang->testtask->statusList['done']    = 'Erledigt';
 $lang->testtask->statusList['blocked'] = 'Blockiert';
 
-$lang->testtask->priList[0] = '';
-$lang->testtask->priList[3] = '3';
 $lang->testtask->priList[1] = '1';
 $lang->testtask->priList[2] = '2';
+$lang->testtask->priList[3] = '3';
 $lang->testtask->priList[4] = '4';
 
 $lang->testtask->unlinkedCases = 'Unverknüpfte Fälle';
@@ -118,6 +128,7 @@ $lang->testtask->linkByBuild   = 'Mit Build verknüpfen';
 $lang->testtask->linkByStory   = 'Mit Story verknüpfen';
 $lang->testtask->linkByBug     = 'Mit Bug verknüpfen';
 $lang->testtask->linkBySuite   = 'Mit Suite verknüpfen';
+$lang->testtask->browseBySuite = 'Browse by Suite';
 $lang->testtask->passAll       = 'Alle erfolgreich';
 $lang->testtask->pass          = 'Erfolgreich';
 $lang->testtask->fail          = 'Fehlgeschlagen';
@@ -163,11 +174,13 @@ $lang->testtask->action->testtaskclosed  = '$date,  <strong>$actor</strong> hat 
 
 $lang->testtask->unexecuted = 'Nicht ausgeführt';
 
-/* 统计报表。*/
+/* Statistical statement. */
 $lang->testtask->report = new stdclass();
 $lang->testtask->report->common = 'Bericht';
 $lang->testtask->report->select = 'Berichttyp wählen';
 $lang->testtask->report->create = 'Erzeugen';
+
+$lang->testtask->report->testTaskPerRunResultTip = 'There are %s usecase, including %s passed,%s not executed, and %s failed';
 
 $lang->testtask->report->charts['testTaskPerRunResult'] = 'Ergebnisbericht';
 $lang->testtask->report->charts['testTaskPerType']      = 'Berichttyp';

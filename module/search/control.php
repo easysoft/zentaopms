@@ -3,7 +3,7 @@
  * The control file of search module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     search
  * @version     $Id: control.php 4129 2013-01-18 01:58:14Z wwccss $
@@ -49,12 +49,18 @@ class search extends control
         $_SESSION['searchParams']['module'] = $module;
         $this->search->initSession($module, $fields, $params);
 
+        if($module == 'trash' and $this->session->objectName)
+        {
+            $space = common::checkNotCN() ? ' ' : '';
+            $this->lang->search->common = $this->lang->search->common . $space . $this->session->objectName;
+        }
+
         $this->view->module       = $module;
         $this->view->groupItems   = $this->config->search->groupItems;
         $this->view->searchFields = $fields;
         $this->view->actionURL    = $actionURL;
         $this->view->fieldParams  = $this->search->setDefaultParams($fields, $params);
-        $this->view->queries      = $this->search->getQueryPairs($module);
+        $this->view->queries      = $this->search->getQueryList($module);
         $this->view->queryID      = $queryID;
         $this->view->style        = empty($style) ? 'full' : $style;
         $this->view->onMenuBar    = empty($onMenuBar) ? 'no' : $onMenuBar;
@@ -142,13 +148,13 @@ class search extends control
     {
         $query   = $queryID ? $queryID : '';
         $module  = empty($module) ? $this->session->searchParams['module'] : $module;
-        $queries = $this->search->getQueryPairs($module);
-
+        $queries = $this->search->getQueryList($module);
         $html = '';
-        foreach($queries as $queryID => $queryName)
+        foreach($queries as $query)
         {
-            if(empty($queryID)) continue;
-            $html .= '<li>' . html::a("javascript:executeQuery({$queryID})", $queryName . (common::hasPriv('search', 'deleteQuery') ? '<i class="icon icon-close"></i>' : ''), '', "class='label user-query' data-query-id='$queryID'") . '</li>';
+            if(empty($query->id)) continue;
+
+            $html .= '<li>' . html::a("javascript:executeQuery({$query->id})", $query->title . ((common::hasPriv('search', 'deleteQuery') and $this->app->user->account == $query->account) ? '<i class="icon icon-close"></i>' : ''), '', "class='label user-query' data-query-id='$query->id' title='{$query->title}'") . '</li>';
         }
         echo $html;
     }

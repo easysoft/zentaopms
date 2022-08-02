@@ -3,7 +3,7 @@
  * The upgrade module English file of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     upgrade
  * @version     $Id: en.php 5119 2013-07-12 08:06:42Z wyd621@gmail.com $
@@ -48,6 +48,7 @@ $lang->upgrade->fromVersion   = 'From';
 $lang->upgrade->toVersion     = 'To';
 $lang->upgrade->confirm       = 'Confirm SQL';
 $lang->upgrade->sureExecute   = 'Execute';
+$lang->upgrade->upgradingTips = 'The upgrade is in progress, please be patient. Do not refresh the page, blackout, or turn off your computer!';
 $lang->upgrade->forbiddenExt  = 'The extension is incompatible with the version. It has been deactivated:';
 $lang->upgrade->updateFile    = 'File information has to be updated.';
 $lang->upgrade->noticeSQL     = 'Your database is inconsistent with the standard and it failed to fix it. Please run the following SQL and refresh.';
@@ -134,6 +135,8 @@ $lang->upgrade->duplicateProject   = "Project name in the same program cannot be
 $lang->upgrade->upgradeTips        = "Historically deleted data cannot be upgraded, and restoration is not supported after the upgrade. Please be aware.";
 $lang->upgrade->moveEXTFileFail    = 'The migration file failed, please execute the above command and refresh!';
 $lang->upgrade->deleteDirTip       = 'After the upgrade, the following folders will affect the use of system functions, please delete them.';
+$lang->upgrade->errorNoProduct     = "Select the {$lang->productCommon} that you want to merge.";
+$lang->upgrade->errorNoExecution   = "Select the {$lang->projectCommon} that you want to merge.";
 $lang->upgrade->moveExtFileTip     = <<<EOT
 <p>The new version will be compatible with the extension mechanism of the historical customization/plug-in. You need to migrate the customization/plug-in related files to extension/custom, otherwise the customization/plug-in function will not be available.</p>
 <p>Please confirm whether the system has been customized/plug-in. If no customization/plug-in has been done, you can uncheck the following files; Whether you have done customization/plug-in, you can also keep the file checked.</p>

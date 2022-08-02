@@ -60,6 +60,59 @@ $(function()
         });
     }
 
+    /**
+     * Add a statistics prompt statement after the Edit button.
+     *
+     * @access public
+     * @return void
+     */
+    function addStatistic()
+    {
+        var checkedLength = $(":checkbox[name^='productIDList']:checked").length;
+        var summary       = checkedProducts.replace('%s', checkedLength);
+        if(cilentLang == "en" && checkedLength < 2) summary = summary.replace('products', 'product');
+        var statistic     = "<div id='productsSummary' class='statistic'>" + summary + "</div>";
+
+        if(checkedLength > 0)
+        {
+            $('#productsSummary').remove();
+            $('#editBtn').after(statistic);
+        }
+        else
+        {
+            $('#productsSummary').addClass('hidden');
+        }
+    }
+
+    /**
+     * Anti shake operation for jquery.
+     *
+     * @param  fn $fn
+     * @param  delay $delay
+     * @access public
+     * @return void
+     */
+    function debounce(fn, delay)
+    {
+        var timer = null;
+        return function()
+        {
+            if(timer) clearTimeout(timer);
+            timer = setTimeout(fn, delay)
+        }
+    }
+
+    /**
+     * Update statistics.
+     *
+     * @access public
+     * @return void
+     */
+    function updateStatistic()
+    {
+        debounce(addStatistic(), 200)
+    }
+
     $('#productTableList').on('click', '.row-program,.row-line', function(e)
     {
         if($(e.target).closest('.table-nest-toggle,a').length) return;
@@ -79,7 +132,27 @@ $(function()
         {
             updatePrarentCheckbox($('#productTableList>tr[data-id="' + parentID + '"]'));
         }
+        updateStatistic()
     });
+
     $('#productListForm').on('checkChange', updateCheckboxes);
     updateCheckboxes();
+
+    $(":checkbox[name^='productIDList']").on('click', function()
+    {
+        updateStatistic()
+    });
+
+    $(".check-all").on('click', function()
+    {
+        if($(":checkbox[name^='productIDList']:not(:checked)").length == 0)
+        {
+            $(":checkbox[name^='productIDList']").prop('checked', false);
+        }
+        else
+        {
+            $(":checkbox[name^='productIDList']").prop('checked', true);
+        }
+        updateStatistic()
+    });
 });

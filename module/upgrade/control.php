@@ -3,7 +3,7 @@
  * The control file of upgrade module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     upgrade
  * @version     $Id: control.php 5119 2013-07-12 08:06:42Z wyd621@gmail.com $
@@ -153,6 +153,10 @@ class upgrade extends control
         if(!$this->upgrade->isError())
         {
             $systemMode = $this->loadModel('setting')->getItem('owner=system&module=common&section=global&key=mode');
+
+            /* Delete all patch actions if upgrade success. */
+            $this->loadModel('action')->deleteByType('patch');
+
             if((empty($systemMode) && !isset($this->config->qcVersion) && strpos($fromVersion, 'max') === false) or
                ($systemMode != 'new' && strpos($fromVersion, 'max') === false && strpos($this->config->version, 'max') !== false))
             {
@@ -298,7 +302,7 @@ class upgrade extends control
                 }
 
                 /* When upgrading historical data as a project, handle products that are not linked with the project. */
-                if(!empty($singleProducts)) $this->upgrade->computeProductAcl($singleProducts, $programID);
+                if(!empty($singleProducts)) $this->upgrade->computeProductAcl($singleProducts, $programID, $lineID);
 
                 /* Process unlinked sprint and product. */
                 foreach($linkedProducts as $productID => $product)
@@ -353,7 +357,7 @@ class upgrade extends control
                 }
 
                 /* When upgrading historical data as a project, handle products that are not linked with the project. */
-                if(!empty($singleProducts)) $this->upgrade->computeProductAcl($singleProducts, $programID);
+                if(!empty($singleProducts)) $this->upgrade->computeProductAcl($singleProducts, $programID, $lineID);
             }
             elseif($type == 'sprint')
             {
@@ -420,7 +424,7 @@ class upgrade extends control
 
         /* Get no merged product and project count. */
         $noMergedProductCount = $this->dao->select('count(*) as count')->from(TABLE_PRODUCT)->where('program')->eq(0)->andWhere('vision')->eq('rnd')->fetch('count');
-        $noMergedSprintCount  = $this->dao->select('count(*) as count')->from(TABLE_PROJECT)->where('grade')->eq(0)->andWhere('vision')->eq('rnd')->andWhere('path')->eq('')->andWhere('type')->ne('program')->andWhere('deleted')->eq(0)->fetch('count');
+        $noMergedSprintCount  = $this->dao->select('count(*) as count')->from(TABLE_PROJECT)->where('vision')->eq('rnd')->andWhere('project')->eq(0)->andWhere('type')->eq('sprint')->andWhere('deleted')->eq(0)->fetch('count');
 
         /* When all products and projects merged then finish and locate afterExec page. */
         if(empty($noMergedProductCount) and empty($noMergedSprintCount))
@@ -555,9 +559,9 @@ class upgrade extends control
         if($type == 'sprint')
         {
             $noMergedSprints = $this->dao->select('*')->from(TABLE_PROJECT)
-                ->where('parent')->eq(0)
-                ->andWhere('path')->eq('')
+                ->where('project')->eq(0)
                 ->andWhere('vision')->eq('rnd')
+                ->andWhere('type')->eq('sprint')
                 ->andWhere('deleted')->eq(0)
                 ->orderBy('id_desc')
                 ->fetchAll('id');
@@ -574,9 +578,9 @@ class upgrade extends control
         if($type == 'moreLink')
         {
             $noMergedSprints = $this->dao->select('*')->from(TABLE_PROJECT)
-                ->where('parent')->eq(0)
+                ->where('project')->eq(0)
                 ->andWhere('vision')->eq('rnd')
-                ->andWhere('path')->eq('')
+                ->andWhere('type')->eq('sprint')
                 ->andWhere('deleted')->eq(0)
                 ->orderBy('id_desc')
                 ->fetchAll('id');

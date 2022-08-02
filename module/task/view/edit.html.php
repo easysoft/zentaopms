@@ -3,7 +3,7 @@
  * The edit view of task module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     task
  * @version     $Id: edit.html.php 4897 2013-06-26 01:13:16Z wyd621@gmail.com $
@@ -19,11 +19,22 @@
 <?php js::set('oldExecutionID', $task->execution);?>
 <?php js::set('oldConsumed', $task->consumed);?>
 <?php js::set('taskStatus', $task->status);?>
+<?php js::set('currentUser', $app->user->account);?>
+<?php js::set('team', $task->team);?>
+<?php js::set('members', $members);?>
 <?php js::set('confirmChangeExecution', $lang->task->confirmChangeExecution);?>
-<?php js::set('changeExecutionConfirmed', false);?>
 <?php js::set('newRowCount', count($task->team) < 6 ? 6 - count($task->team) : 1);?>
 <?php js::set('teamMemberError', $lang->task->error->teamMember);?>
 <?php js::set('totalLeftError', sprintf($this->lang->task->error->leftEmptyAB, $this->lang->task->statusList[$task->status]));?>
+<?php js::set('estimateNotEmpty', sprintf($lang->error->notempty, $lang->task->estimate))?>
+<?php js::set('requiredFields', $config->task->edit->requiredFields);?>
+<?php
+$requiredFields = array();
+foreach(explode(',', $config->task->edit->requiredFields) as $field)
+{
+    if($field) $requiredFields[$field] = '';
+}
+?>
 <div class='main-content' id='mainContent'>
   <form method='post' enctype='multipart/form-data' target='hiddenwin' id='dataform'>
     <div class='main-header'>
@@ -127,7 +138,7 @@
               <?php endif;?>
               <tr>
                 <th><?php echo $lang->task->assignedTo;?></th>
-                <?php $disableAssignedTo = (!empty($task->team) and $task->assignedTo != $this->app->user->account) ? "disabled='disabled'" :'';?>
+                <?php $disableAssignedTo = (!empty($task->team) and (($task->assignedTo != $this->app->user->account and $task->mode == 'linear') or !isset($task->team[$app->user->account]))) ? "disabled='disabled'" :'';?>
                 <?php
                 $taskMembers = array();
                 if(!empty($task->team))
@@ -145,6 +156,11 @@
                 }
                 ?>
                 <td><span id="assignedToIdBox"><?php echo html::select('assignedTo', $taskMembers, $task->assignedTo, "class='form-control chosen' {$disableAssignedTo}");?></span></td>
+              </tr>
+              <tr class="modeBox <?php echo $task->mode ? '' : 'hidden';?>">
+                <th><?php echo $lang->task->mode;?></th>
+                <?php $disabledMode = isset($task->team[$app->user->account]) ? '' : "disabled='disabled'"?>
+                <td><?php echo html::select('mode', $lang->task->modeList, $task->mode, "class='form-control chosen' $disabledMode onchange='updateAssignedTo()'");?></td>
               </tr>
               <tr class='<?php echo empty($task->team) ? 'hidden' : ''?>' id='teamTr'>
                 <th><?php echo $lang->task->team;?></th>
@@ -168,7 +184,7 @@
                 <th><?php echo $lang->task->mailto;?></th>
                 <td>
                   <div class='input-group'>
-                    <?php echo html::select('mailto[]', $users, str_replace(' ' , '', $task->mailto), 'class="form-control chosen" multiple');?>
+                    <?php echo html::select('mailto[]', $users, str_replace(' ' , '', $task->mailto), 'class="form-control picker-select" multiple data-drop-direction="bottom"');?>
                     <?php echo $this->fetch('my', 'buildContactLists');?>
                   </div>
                 </td>
@@ -254,7 +270,7 @@
     <div class="modal fade modal-team" id="modalTeam"  data-scroll-inside='false'>
       <div class="modal-dialog">
         <div class="modal-header">
-          <button type="button" class="close hidden" data-dismiss="modal">
+          <button type="button" class="close" data-dismiss="modal">
             <i class="icon icon-close"></i>
           </button>
           <h4 class="modal-title"><?php echo $lang->task->team?></h4>
@@ -267,7 +283,7 @@
                 <td class='w-250px'><?php echo html::select("team[]", $members, $member->account, "class='form-control chosen'")?></td>
                 <td>
                   <div class='input-group'>
-                    <span class='input-group-addon'><?php echo $lang->task->estimate?></span>
+                    <span class="input-group-addon <?php echo zget($requiredFields, 'estimate', '', ' required');?>"><?php echo $lang->task->estimate?></span>
                     <?php echo html::input("teamEstimate[]", (float)$member->estimate, "class='form-control text-center' placeholder='{$lang->task->hour}'")?>
                     <span class='input-group-addon fix-border'><?php echo $lang->task->consumed?></span>
                     <?php echo html::input("teamConsumed[]", (float)$member->consumed, "class='form-control text-center' readonly placeholder='{$lang->task->hour}'")?>
@@ -286,7 +302,7 @@
                 <td class='w-250px'><?php echo html::select("team[]", $members, '', "class='form-control chosen'")?></td>
                 <td>
                   <div class='input-group'>
-                    <span class='input-group-addon'><?php echo $lang->task->estimate?></span>
+                    <span class="input-group-addon <?php echo zget($requiredFields, 'estimate', '', ' required');?>"><?php echo $lang->task->estimate?></span>
                     <?php echo html::input("teamEstimate[]", '', "class='form-control text-center' placeholder='{$lang->task->hour}'")?>
                     <span class='input-group-addon fix-border'><?php echo $lang->task->consumed?></span>
                     <?php echo html::input("teamConsumed[]", '', "class='form-control text-center' placeholder='{$lang->task->hour}'")?>

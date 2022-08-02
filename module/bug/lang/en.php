@@ -3,7 +3,7 @@
  * The bug module English file of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2021 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     bug
  * @version     $Id: en.php 4536 2013-03-02 13:39:37Z wwccss $
@@ -34,9 +34,12 @@ $lang->bug->browser          = 'Browser';
 $lang->bug->hardware         = 'Hardware';
 $lang->bug->result           = 'Result';
 $lang->bug->repo             = 'Repo';
+$lang->bug->mr               = 'Merge Request';
+$lang->bug->entry            = 'Code Path';
 $lang->bug->lines            = 'Lines';
 $lang->bug->v1               = 'Version A';
 $lang->bug->v2               = 'Version B';
+$lang->bug->issueKey         = 'Sonarqube Issue Key';
 $lang->bug->repoType         = 'Repo Type';
 $lang->bug->steps            = 'Repro Steps';
 $lang->bug->status           = 'Status';
@@ -58,6 +61,7 @@ $lang->bug->openedDate       = 'ReportedDate';
 $lang->bug->openedDateAB     = 'Reported';
 $lang->bug->openedBuild      = 'Open Build';
 $lang->bug->assignedTo       = 'AssignTo';
+$lang->bug->assignedToMe     = 'AssignToMe';
 $lang->bug->assignBug        = 'AssignedTo';
 $lang->bug->assignedToAB     = 'AssignedTo';
 $lang->bug->assignedDate     = 'AssignedDate';
@@ -91,6 +95,10 @@ $lang->bug->toCase           = 'To Case';
 $lang->bug->colorTag         = 'Color';
 $lang->bug->fixedRate        = 'Fixed Rate';
 $lang->bug->noticefeedbackBy = 'NoticeFeedbackBy';
+$lang->bug->selectProjects   = 'Select Projects';
+$lang->bug->nextStep         = 'Next Step';
+$lang->bug->noProject        = 'Haven’t chosen a project yet';
+$lang->bug->noExecution      = 'Haven’t chosen a execution yet';
 
 /* Method list. */
 $lang->bug->index              = 'Bug Home';
@@ -200,11 +208,12 @@ $lang->bug->summary               = "Total <strong>%s</strong> bugs on this page
 $lang->bug->confirmChangeProduct  = "Any change to {$lang->productCommon} will cause linked {$lang->executionCommon}s, stories and tasks change. Do you want to do this?";
 $lang->bug->confirmDelete         = 'Do you want to delete this bug?';
 $lang->bug->remindTask            = 'This bug has been converted to a task. Do you want to update the status of Task(ID %s)?';
-$lang->bug->skipClose             = 'Bug %s is active. You cannot close it.';
+$lang->bug->skipClose             = 'Bug %s is/are Not Resolved states and cannot be closed. They will be ignored automatically.';
 $lang->bug->executionAccessDenied = "You access to the {$lang->executionCommon} to which this bug belongs is denied!";
 $lang->bug->stepsNotEmpty         = "The reproduction step cannot be empty.";
 $lang->bug->confirmUnlinkBuild    = "Replacing the solution version will disassociate the bug from the old version. Are you sure you want to disassociate the bug from %s?";
 $lang->bug->noSwitchBranch        = 'The linked module of Bug%s is not in the current branch. It will be omitted.';
+$lang->bug->confirmToStory        = 'The bug will be closed automatically after transferring to requirements, and the reason for closing is that the bug has been converted to requirements status.';
 
 /* Template. */
 $lang->bug->tplStep   = "<p>[Steps]</p><br/>";
@@ -400,6 +409,7 @@ $lang->bug->action = new stdclass();
 $lang->bug->action->resolved            = array('main' => '$date, resolved by <strong>$actor</strong> and the resolution is <strong>$extra</strong> $appendLink.', 'extra' => 'resolutionList');
 $lang->bug->action->tostory             = array('main' => '$date, converted by <strong>$actor</strong> to <strong>Story</strong> with ID <strong>$extra</strong>.');
 $lang->bug->action->totask              = array('main' => '$date, imported by <strong>$actor</strong> as <strong>Task</strong> with ID <strong>$extra</strong>.');
+$lang->bug->action->converttotask       = array('main' => '$date, imported by <strong>$actor</strong> as <strong>Task</strong>，with ID <strong>$extra</strong>。');
 $lang->bug->action->linked2plan         = array('main' => '$date, linked by <strong>$actor</strong> to Plan <strong>$extra</strong>.');
 $lang->bug->action->unlinkedfromplan    = array('main' => '$date, deleted by <strong>$actor</strong> from Plan <strong>$extra</strong>.');
 $lang->bug->action->linked2build        = array('main' => '$date, linked by <strong>$actor</strong> to Build <strong>$extra</strong>.');
@@ -418,14 +428,15 @@ $lang->bug->featureBar['browse']['unclosed']     = $lang->bug->unclosed;
 $lang->bug->featureBar['browse']['openedbyme']   = $lang->bug->openedByMe;
 $lang->bug->featureBar['browse']['assigntome']   = $lang->bug->assignToMe;
 $lang->bug->featureBar['browse']['resolvedbyme'] = $lang->bug->resolvedByMe;
-$lang->bug->featureBar['browse']['assignedbyme'] = $lang->bug->assignedByMe;
 
 $lang->bug->featureBar['browse']['unresolved']   = $lang->bug->unResolved;
 $lang->bug->featureBar['browse']['more']         = $lang->more;
 
+$lang->bug->moreSelects['assignedbyme']  = $lang->bug->assignedByMe;
 $lang->bug->moreSelects['unconfirmed']   = $lang->bug->unconfirmed;
 $lang->bug->moreSelects['assigntonull']  = $lang->bug->assignToNull;
 $lang->bug->moreSelects['longlifebugs']  = $lang->bug->longLifeBugs;
+$lang->bug->moreSelects['toclosed']      = $lang->bug->toClosed;
 $lang->bug->moreSelects['postponedbugs'] = $lang->bug->postponedBugs;
 $lang->bug->moreSelects['overduebugs']   = $lang->bug->overdueBugs;
 $lang->bug->moreSelects['needconfirm']   = $lang->bug->needConfirm;

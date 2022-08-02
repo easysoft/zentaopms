@@ -3,7 +3,7 @@
  * The profile view file of my module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     my
  * @version     $Id: profile.html.php 4694 2013-05-02 01:40:54Z chencongzhi520@gmail.com $
@@ -13,18 +13,21 @@
 <?php include '../../common/view/header.html.php';?>
 <?php js::set('avatar', $this->app->user->avatar);?>
 <?php js::set('userID', $this->app->user->id);?>
+<?php if(!zget($lang->user->roleList, $user->role, '')):?>
+<style>.user-name {line-height: 40px;}</style>
+<?php endif;?>
 <div id='mainContent'>
   <div class='cell'>
     <div class='main-header text-center'>
       <div id="avatarUpload">
-        <?php echo html::avatar($user, 50); ?>
+        <?php echo html::avatar($user, 40); ?>
         <form method='post' class='form-ajax' action=<?php echo inlink('uploadAvatar');?> id='avatarForm' enctype='multipart/form-data'>
           <input type="file" name="files" id="files" class="form-control hidden">
           <?php if(common::hasPriv('my', 'uploadAvatar')) echo html::a('javascript:void(0);', '<i class="icon icon-pencil icon-2x"></i>', '', "class='btn-avatar' id='avatarUploadBtn' data-toggle='tooltip' data-container='body' data-placement='bottom' title='{$lang->my->uploadAvatar}'");?>
         </form>
       </div>
-      <span class='user-name'><?php echo $user->realname;?></span>
-      <span class='user-role'><?php echo zget($lang->user->roleList, $user->role, '');?></span>
+      <div class='user-name'><?php echo $user->realname;?></div>
+      <div class='user-role'><?php echo zget($lang->user->roleList, $user->role, '');?></div>
     </div>
     <div class='row'>
       <table>
@@ -62,9 +65,9 @@
           <td><?php echo zget($lang->user->roleList, $user->role, '');?></td>
         </tr>
         <tr>
-          <th><?php echo $lang->user->join;?></th>
+          <th><?php echo $lang->user->joinAB;?></th>
           <td><?php echo formatTime($user->join);?></td>
-          <th><?php echo $lang->group->priv;?></th>
+          <th><?php echo $lang->user->priv;?></th>
           <td><?php foreach($groups as $group) echo $group->name . ' ';?></td>
         </tr>
       </table>
@@ -84,7 +87,7 @@
         <tr>
           <th><?php echo $lang->user->zipcode;?></th>
           <td><?php echo $user->zipcode;?></td>
-          <th><?php echo $lang->user->address;?></th>
+          <th><?php echo $lang->user->addressAB;?></th>
           <td title='<?php echo $user->address;?>'><?php echo $user->address;?></td>
         </tr>
       </table>

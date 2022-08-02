@@ -3,7 +3,7 @@
  * The showFiles view file of doc module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Yidong Wang <yidong@cnezsoft.com>
  * @package     doc
  * @version     $Id$
@@ -21,13 +21,13 @@
           <tr>
             <?php $this->app->rawMethod = 'showfiles';?>
             <?php $vars = "type=$type&objectID=$objectID&viewType=$viewType&orderBy=%s&recTotal=$pager->recTotal&recPerPage=$pager->recPerPage&pageID=$pager->pageID";?>
-            <th class="w-60px"><?php common::printOrderLink('id', $orderBy, $vars, $lang->doc->id);?></th>
+            <th class="c-id"><?php common::printOrderLink('id', $orderBy, $vars, $lang->doc->id);?></th>
             <th class="c-name"><?php common::printOrderLink('title', $orderBy, $vars, $lang->doc->fileTitle);?></th>
-            <th class="w-300px"><?php common::printOrderLink('objectID', $orderBy, $vars, $lang->doc->source);?></th>
-            <th class="w-100px"><?php common::printOrderLink('extension', $orderBy, $vars, $lang->doc->extension);?></th>
-            <th class="w-100px"><?php common::printOrderLink('size', $orderBy, $vars, $lang->doc->size);?></th>
-            <th class="w-100px"><?php common::printOrderLink('addedBy', $orderBy, $vars, $lang->doc->addedBy);?></th>
-            <th class="w-100px"><?php common::printOrderLink('addedDate', $orderBy, $vars, $lang->doc->addedDate);?></th>
+            <th class="c-source"><?php common::printOrderLink('objectID', $orderBy, $vars, $lang->doc->source);?></th>
+            <th class="c-size"><?php common::printOrderLink('extension', $orderBy, $vars, $lang->doc->extension);?></th>
+            <th class="c-size"><?php common::printOrderLink('size', $orderBy, $vars, $lang->doc->size);?></th>
+            <th class="c-size"><?php common::printOrderLink('addedBy', $orderBy, $vars, $lang->doc->addedBy);?></th>
+            <th class="c-size"><?php common::printOrderLink('addedDate', $orderBy, $vars, $lang->doc->addedDate);?></th>
             <th class="c-actions-1"><?php echo $lang->actions;?></th>
           </tr>
         </thead>

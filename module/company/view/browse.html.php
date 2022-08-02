@@ -3,7 +3,7 @@
  * The browse view file of product dept of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     product
  * @version     $Id: browse.html.php 5096 2013-07-11 07:02:43Z chencongzhi520@gmail.com $
@@ -29,19 +29,31 @@ js::set('confirmDelete', $lang->user->confirmDelete);
     <a class="btn btn-link querybox-toggle" id='bysearchTab'><i class="icon icon-search muted"></i> <?php echo $lang->user->search;?></a>
   </div>
   <div class='btn-toolbar pull-right'>
-    <?php common::printLink('user', 'batchCreate', "dept={$deptID}", "<i class='icon icon-plus'></i> " . $lang->user->batchCreate, '', "class='btn btn-secondary'");?>
+    <?php if(commonModel::isTutorialMode()):?>
     <?php
-      if(commonModel::isTutorialMode())
-      {
-          $wizardParams = helper::safe64Encode("dept=$deptID");
-          $link = $this->createLink('tutorial', 'wizard', "module=user&method=create&params=$wizardParams");
-          echo html::a($link, "<i class='icon icon-plus'></i> {$lang->user->create}", '', "class='btn btn-primary create-user-btn'");
-      }
-      else
-      {
-          common::printLink('user', 'create', "dept={$deptID}", "<i class='icon icon-plus'></i> " . $lang->user->create, '', "class='btn btn-primary create-user-btn'");
-      }
+    $wizardParams = helper::safe64Encode("dept=$deptID");
+    $link = $this->createLink('tutorial', 'wizard', "module=user&method=create&params=$wizardParams");
+    echo html::a($link, "<i class='icon icon-plus'></i> {$lang->user->create}", '', "class='btn btn-primary create-user-btn'");
     ?>
+    <?php else:?>
+      <?php if(common::hasPriv('user', 'create') and common::hasPriv('user', 'batchCreate')):?>
+      <?php
+      $createUserLink      = $this->createLink('user', 'create', "dept={$deptID}");
+      $batchCreateUserLink = $this->createLink('user', 'batchCreate', "dept={$deptID}");
+      ?>
+      <div class='btn-group dropdown'>
+      <?php common::printLink('user', 'create', "dept={$deptID}", "<i class='icon icon-plus'></i> " . $lang->user->create, '', "class='btn btn-primary create-user-btn'");?>
+        <button type='button' class='btn btn-primary dropdown-toggle' data-toggle='dropdown'><span class='caret'></span></button>
+        <ul class='dropdown-menu'>
+          <li><?php echo html::a($createUserLink, $lang->user->create);?></li>
+          <li><?php echo html::a($batchCreateUserLink, $lang->user->batchCreate);?></li>
+        </ul>
+      </div>
+      <?php else:?>
+      <?php common::printLink('user', 'batchCreate', "dept={$deptID}", "<i class='icon icon-plus'></i> " . $lang->user->batchCreate, '', "class='btn btn-secondary'");?>
+      <?php common::printLink('user', 'create', "dept={$deptID}", "<i class='icon icon-plus'></i> " . $lang->user->create, '', "class='btn btn-primary'");?>
+      <?php endif;?>
+    <?php endif;?>
   </div>
 </div>
 <div id='mainContent' class='main-row fade'>
@@ -93,7 +105,7 @@ js::set('confirmDelete', $lang->user->confirmDelete);
         <tr>
           <td class='c-id'>
             <?php if($canBatchEdit):?>
-            <?php echo html::checkbox('users', array($user->account => '')) . sprintf('%03d', $user->id);?>
+            <?php echo html::checkbox('users', array($user->id => '')) . sprintf('%03d', $user->id);?>
             <?php else:?>
             <?php printf('%03d', $user->id);?>
             <?php endif;?>

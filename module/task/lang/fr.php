@@ -3,11 +3,11 @@
  * The task module English file of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     task
  * @version     $Id: en.php 5040 2013-07-06 06:22:18Z zhujinyonging@gmail.com $
- * @link        https://www.zentao.pm
+ * @link        http://www.zentao.net
  */
 $lang->task->index               = "Accueil";
 $lang->task->create              = "Créer Tâche";
@@ -25,6 +25,7 @@ $lang->task->delayed             = 'Ajournées';
 $lang->task->view                = "Détail Tâche";
 $lang->task->logEfforts          = "Effort";
 $lang->task->record              = "Estimés";
+$lang->task->teamConsumed        = "Tean Consumed";
 $lang->task->start               = "Démarrer";
 $lang->task->startAction         = "Démarrer Tâche";
 $lang->task->restart             = "Continuer";
@@ -39,6 +40,7 @@ $lang->task->cancel              = "Annuler";
 $lang->task->cancelAction        = "Annuler Tâche";
 $lang->task->activateAction      = "Activer Tâche";
 $lang->task->activate            = "Activer";
+$lang->task->activatedDate       = "Activate Date";
 $lang->task->export              = "Exporter Données";
 $lang->task->exportAction        = "Exporter Tâche";
 $lang->task->reportChart         = "Rapport Graphique";
@@ -47,7 +49,7 @@ $lang->task->case                = 'Associée CasTest';
 $lang->task->confirmStoryChange  = "Confirmer Changement";
 $lang->task->storyChange         = "Story Changée";
 $lang->task->progress            = 'Progression';
-$lang->task->progressAB          = '%';
+$lang->task->progressAB          = 'Progression';
 $lang->task->progressTips        = 'Coût/(Coût+Reste)';
 $lang->task->copy                = 'Copier Tâche';
 $lang->task->waitTask            = 'Tâche en attente';
@@ -59,15 +61,19 @@ $lang->task->project           = 'Project';
 $lang->task->execution         = $lang->executionCommon;
 $lang->task->module            = 'Module';
 $lang->task->moduleAB          = 'Module';
+$lang->task->design            = 'Design';
 $lang->task->story             = 'Story';
 $lang->task->storyAB           = 'Story';
 $lang->task->storySpec         = 'Description Story';
 $lang->task->storyVerify       = "Critères d'Acceptance";
 $lang->task->storyVersion      = 'Story Version';
+$lang->task->designVersion     = "Design Version";
 $lang->task->color             = 'Couleur';
 $lang->task->name              = 'Nom';
 $lang->task->type              = 'Type';
 $lang->task->typeAB            = 'Type';
+$lang->task->mode              = 'Mode';
+$lang->task->sync2Gitlab       = 'Sync to GitLab';
 $lang->task->pri               = 'Priorité';
 $lang->task->mailto            = 'Mailto';
 $lang->task->estimate          = 'Estimés';
@@ -90,6 +96,12 @@ $lang->task->deadlineAB        = 'Date Butoir';
 $lang->task->status            = 'Statut';
 $lang->task->subStatus         = 'Sous-statut';
 $lang->task->desc              = 'Description';
+$lang->task->version           = 'Version';
+$lang->task->estimateStartDate = 'Estimate Start Date';
+$lang->task->actualStartDate   = 'Actual Start Date';
+$lang->task->planDuration      = 'Plan Duration';
+$lang->task->realDuration      = 'Real Duration';
+$lang->task->version           = 'Version';
 $lang->task->assign            = 'Assigner';
 $lang->task->assignAction      = 'Assigner Tâche';
 $lang->task->assignTo          = $lang->task->assign;
@@ -116,6 +128,13 @@ $lang->task->lastEdited        = 'Edité par';
 $lang->task->recordEstimate    = 'Effort';
 $lang->task->editEstimate      = 'Editer Estimé';
 $lang->task->deleteEstimate    = 'Supprimer Estimés';
+$lang->task->repo              = 'Repo';
+$lang->task->mr                = 'Merge Request';
+$lang->task->entry             = 'Code Path';
+$lang->task->lines             = 'Lines';
+$lang->task->v1                = 'Version A';
+$lang->task->v2                = 'Version B';
+$lang->task->vision            = 'Vision';
 $lang->task->colorTag          = 'Couleur';
 $lang->task->files             = 'Fichiers';
 $lang->task->hasConsumed       = 'Consommé';
@@ -131,6 +150,14 @@ $lang->task->parentAB          = 'Parent';
 $lang->task->lblPri            = 'P';
 $lang->task->lblHour           = '(h)';
 $lang->task->lblTestStory      = 'Story Testée';
+$lang->task->teamMember        = 'Team Member';
+
+/* Fields of zt_taskestimate. */
+$lang->task->task    = 'Task';
+$lang->task->account = 'Account';
+$lang->task->work    = 'Work';
+
+$lang->task->recordEstimateAction = 'Record Estimate';
 
 $lang->task->ditto             = 'Idem';
 $lang->task->dittoNotice       = "Cette Tâche n'est pas associée au %s comme la précédente peut l'être !";
@@ -142,6 +169,7 @@ $lang->task->noFinished        = 'Non Finies';
 $lang->task->noClosed          = 'Non Fermées';
 $lang->task->yesterdayFinished = 'Tâche Terminée Hier';
 $lang->task->allTasks          = 'Tâche';
+$lang->task->linkMR            = 'Related MRs';
 
 $lang->task->statusList['']        = '';
 $lang->task->statusList['wait']    = 'A Faire';
@@ -172,6 +200,9 @@ $lang->task->reasonList['']       = '';
 $lang->task->reasonList['done']   = 'Fait';
 $lang->task->reasonList['cancel'] = 'Annulé';
 
+$lang->task->modeList['linear'] = 'Serial';
+$lang->task->modeList['multi']  = 'Parallel';
+
 $lang->task->afterChoices['continueAdding'] = ' Continuer Ajouter Tâches';
 $lang->task->afterChoices['toTaskList']     = 'Aller à la liste des Tâches';
 $lang->task->afterChoices['toStoryList']    = 'Aller à la liste des Stories';
@@ -180,27 +211,31 @@ $lang->task->legendBasic  = 'Infos de Base';
 $lang->task->legendEffort = 'Effort';
 $lang->task->legendLife   = 'Vie de la Tâche';
 $lang->task->legendDesc   = 'Description Tâche';
+$lang->task->legendDetail = 'Task Detail';
+$lang->task->legendMisc   = 'Misc.';
 
-$lang->task->confirmDelete          = "Voulez-vous réellement supprimer cette tâche ?";
-$lang->task->confirmDeleteEstimate  = "Voulez-vous la supprimer ?";
-$lang->task->copyStoryTitle         = '<span style="color:blue;">StoryModel</span>';
-$lang->task->afterSubmit            = "Suiv. ";
-$lang->task->successSaved           = "Créée !";
-$lang->task->delayWarning           = " <strong class='text-danger'> Retard %s jours </strong>";
-$lang->task->remindBug              = "Cette tâche a été convertie depuis un bug. Voulez-vous mettre à jour le Bug : %s ?";
-$lang->task->confirmChangeExecution = "Si vous changez {$lang->executionCommon}, Module, Story et AssignedTo seront également changés. Voulez-vous le faire ?";
-$lang->task->confirmFinish          = '"Heures Restantes" à 0. Voulez-vous passer le statut à "Terminée" ?';
-$lang->task->confirmRecord          = '"Heures Restantes" à 0. Voulez-vous passer le statut de la tâche à "Finie" ?';
-$lang->task->confirmTransfer        = '"Heures Restantes" à 0. Voulez-vous transférer la tâche ?';
-$lang->task->noticeTaskStart        = '"Cost Hour" and "Left Hour" cannot be 0 at the same time.';
-$lang->task->noticeLinkStory        = "Aucune Story n'est associée. Vous pouvez %s pour ce projet, alors %s.";
-$lang->task->noticeSaveRecord       = "Votre temps n'a pas été sauvé. Enregistrez-le d'abord.";
-$lang->task->commentActions         = '%s. %s, commenté par <strong>%s</strong>.';
-$lang->task->deniedNotice           = 'Seulement le %s peut %s la tâche.';
-$lang->task->noTask                 = "Pas de tâche pour l'instant. ";
-$lang->task->createDenied           = 'La création de tâches est interdite dans ce projet';
-$lang->task->cannotDeleteParent     = 'Impossible de supprimer la tâche parente';
-$lang->task->addChildTask           = 'Because the task has already consumed consumption, to ensure data consistency, we will help you create a subtask with the same name to record the consumption.';
+$lang->task->confirmDelete             = "Voulez-vous réellement supprimer cette tâche ?";
+$lang->task->confirmDeleteEstimate     = "Voulez-vous la supprimer ?";
+$lang->task->confirmDeleteLastEstimate = "Do you want to delete the log? After deleting the last work log, the task status will be adjusted to Not Started.";
+$lang->task->copyStoryTitle            = '<span style="color:blue;">StoryModel</span>';
+$lang->task->afterSubmit               = "Suiv. ";
+$lang->task->successSaved              = "Créée !";
+$lang->task->delayWarning              = " <strong class='text-danger'> Retard %s jours </strong>";
+$lang->task->remindBug                 = "Cette tâche a été convertie depuis un bug. Voulez-vous mettre à jour le Bug : %s ?";
+$lang->task->remindIssue               = "This task is converted from a issue. Do you want to update the Issue:%s?";
+$lang->task->confirmChangeExecution    = "Si vous changez {$lang->executionCommon}, Module, Story et AssignedTo seront également changés. Voulez-vous le faire ?";
+$lang->task->confirmFinish             = '"Heures Restantes" à 0. Voulez-vous passer le statut à "Terminée" ?';
+$lang->task->confirmRecord             = '"Heures Restantes" à 0. Voulez-vous passer le statut de la tâche à "Finie" ?';
+$lang->task->confirmTransfer           = '"Heures Restantes" à 0. Voulez-vous transférer la tâche ?';
+$lang->task->noticeTaskStart           = '"Cost Hour" and "Left Hour" cannot be 0 at the same time.';
+$lang->task->noticeLinkStory           = "Aucune Story n'est associée. Vous pouvez %s pour ce projet, alors %s.";
+$lang->task->noticeSaveRecord          = "Votre temps n'a pas été sauvé. Enregistrez-le d'abord.";
+$lang->task->commentActions            = '%s. %s, commenté par <strong>%s</strong>.';
+$lang->task->deniedNotice              = 'Seulement le %s peut %s la tâche.';
+$lang->task->noTask                    = "Pas de tâche pour l'instant. ";
+$lang->task->createDenied              = 'La création de tâches est interdite dans ce projet';
+$lang->task->cannotDeleteParent        = 'Impossible de supprimer la tâche parente';
+$lang->task->addChildTask              = 'Because the task has already consumed consumption, to ensure data consistency, we will help you create a subtask with the same name to record the consumption.';
 
 $lang->task->error = new stdclass();
 $lang->task->error->totalNumber       = '"Coût Total" doit être numérique.';
@@ -208,15 +243,18 @@ $lang->task->error->consumedNumber    = '"Coût" doit être numérique.';
 $lang->task->error->estimateNumber    = '"Estimé" doit être numérique.';
 $lang->task->error->recordMinus       = 'Work hours should not be negative number.';
 $lang->task->error->leftNumber        = '"Entrez" doit être numérique.';
-$lang->task->error->recordMinus       = 'Les heures de travail ne doivent pas être un nombre négatif.';
+$lang->task->error->recordMinus       = 'Work hours should not be negative number.';
 $lang->task->error->consumedSmall     = '"Coût Total" doit être > au dernier chiffre.';
 $lang->task->error->consumedThisTime  = 'Entrez le "Coût en Heures"';
 $lang->task->error->left              = 'Entrez les "Heures Restantes"';
 $lang->task->error->work              = '"Commentaire" doit être <  %d caractères.';
+$lang->task->error->teamMember        = 'Team members must be at least 2 people';
 $lang->task->error->skipClose         = 'Tâche: %s non “Finie” ou “Annulée”. Voulez-vous la fermer malgré tout ?';
+$lang->task->error->closeParent       = 'Task: %s is the Parent Task, which is automatically closed after all subtasks under the Parent Task are closed and cannot be closed manually.';
 $lang->task->error->consumed          = 'Tâche: %s heures doivent être < 0. Ignorer changements de cette tâche.';
 $lang->task->error->assignedTo        = "Tâche Multi-user dans le statut courant ne peut pas être assignée à un membre qui ne fait pas partie de l'équipe.";
-$lang->task->error->consumedEmpty     = '"Coût Actuel" ne devrait pas être 0.';
+$lang->task->error->consumedEmpty     = 'Lorsque la "Coût Total" est de 0, la tâche ne peut pas être terminée. Veuillez d\'abord remplir "Coût Actuel".';
+$lang->task->error->consumedEmptyAB   = '"Coût Actuel" est de 0, veuillez confirmer si vous souhaitez continuer à soumettre.';
 $lang->task->error->deadlineSmall     = '"Date Limite" doit être supérieur à la "Date de Départ".';
 $lang->task->error->alreadyStarted    = 'You cannot start this task, because it is started.';
 $lang->task->error->realStartedEmpty  = '"Real Started" should not be empty.';
@@ -224,6 +262,8 @@ $lang->task->error->finishedDateEmpty = '"Finished Date" should not be empty.';
 $lang->task->error->finishedDateSmall = '"Finished Date" should be > "Real Started"';
 $lang->task->error->alreadyConsumed   = 'The currently selected parent task has been consumed.';
 $lang->task->error->date              = 'The date should be >= today.';
+$lang->task->error->leftEmptyAB       = 'When the task status is %s, "Hours Left" cannot be 0';
+$lang->task->error->leftEmpty         = 'Task#%sWhen the task status is %s, "Left" cannot be 0';
 
 /* Report. */
 $lang->task->report = new stdclass();

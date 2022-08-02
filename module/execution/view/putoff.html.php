@@ -3,7 +3,7 @@
  * The delay file of execution module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang<wwccss@gmail.com>
  * @package     execution 
  * @version     $Id: delay.html.php 935 2013-01-16 07:49:24Z wwccss@gmail.com $
@@ -27,7 +27,7 @@
     <table class='table table-form'>
       <tbody>
         <tr>
-          <th class='w-80px'><?php echo $lang->execution->dateRange;?></th>
+          <th class='c-date'><?php echo $lang->execution->dateRange;?></th>
           <td colspan='2'>
             <div class='input-group'>
               <?php echo html::input('begin', $execution->begin, "class='form-control form-date' onchange='computeWorkDays()' placeholder='" . $lang->execution->begin . "'");?>
@@ -43,7 +43,7 @@
               </div>
             </div>
           </td>
-          <td class='w-100px'></td>
+          <td class='c-date'></td>
         </tr>
         <tr>
           <th><?php echo $lang->execution->days;?></th>

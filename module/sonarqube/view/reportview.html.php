@@ -3,7 +3,7 @@
  * The reprot file of sonarqubemodule of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2021 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Yuchun Li <liyuchun@easycorp.ltd>
  * @package     sonarqube
  * @version     $Id: reprotview.html.php 935 2022-01-25 10:52:24Z liyuchun@easycorp.ltd $
@@ -44,13 +44,13 @@
     </thead>
     <tbody>
       <tr class="text-center">
-        <td><?php echo $measures['bugs'];?></td>
-        <td><?php echo $measures['vulnerabilities'];?></td>
-        <td><?php echo $measures['security_hotspots_reviewed'];?></td>
-        <td><?php echo $measures['code_smells'];?></td>
-        <td><?php echo $measures['coverage'];?></td>
-        <td><?php echo $measures['duplicated_lines_density'];?></td>
-        <td><?php echo $measures['ncloc'];?></td>
+        <td><?php echo zget($measures, 'bugs', 0);?></td>
+        <td><?php echo zget($measures, 'vulnerabilities', 0);?></td>
+        <td><?php echo zget($measures, 'security_hotspots_reviewed', '0.0%');?></td>
+        <td><?php echo zget($measures, 'code_smells', 0);?></td>
+        <td><?php echo zget($measures, 'coverage', '0.0%');?></td>
+        <td><?php echo zget($measures, 'duplicated_lines_density', '0.0%');?></td>
+        <td><?php echo zget($measures, 'ncloc', 0);?></td>
       </tr>
     </tbody>
   </table>

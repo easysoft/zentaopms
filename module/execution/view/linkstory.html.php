@@ -3,7 +3,7 @@
  * The link story view of execution module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     execution
  * @version     $Id: linkstory.html.php 4129 2013-01-18 01:58:14Z wwccss $
@@ -19,9 +19,11 @@
   <div class="btn-toolbar pull-left">
     <span class='btn btn-link btn-active-text'><span class='text'><?php echo $lang->execution->linkStory;?></span></span>
   </div>
+  <?php if(!isonlybody()):?>
   <div class='btn-toolbar pull-right'>
-    <?php common::printBack($this->createLink($this->app->rawModule, 'story', "objectID=$objectID"), 'btn btn-link');?>
+    <?php echo html::a($browseLink, '<i class="icon icon-back icon-sm"></i> ' . $lang->goback, '', "class='btn btn-primary'");?>
   </div>
+  <?php endif;?>
 </div>
 <div id="mainContent">
   <div class="cell space-sm">
@@ -55,7 +57,7 @@
       <tbody>
       <?php $storyCount = 0;?>
       <?php foreach($allStories as $story):?>
-      <?php $storyLink = $this->createLink('story', 'view', "storyID=$story->id");?>
+      <?php $storyLink = $this->createLink('execution', 'storyView', "storyID=$story->id", '', true);?>
       <tr>
         <td class='cell-id'>
           <?php echo html::checkbox('stories', array($story->id => sprintf('%03d', $story->id)));?>
@@ -65,10 +67,17 @@
         <td class='text-left nobr' title="<?php echo $story->title?>">
           <?php
           if($story->parent > 0) echo "<span class='label'>{$lang->story->childrenAB}</span>";
-          echo html::a($storyLink, $story->title);
+          if(common::hasPriv('execution', 'storyView'))
+          {
+              echo html::a($storyLink, $story->title, '', "class='iframe' data-width='80%'");
+          }
+          else
+          {
+              echo '<a>' . $story->title . '</a>';
+          }
           ?>
         </td>
-        <td class='text-left' title='<?php echo $products[$story->product]->name?>'><?php echo html::a($this->createLink('product', 'browse', "productID=$story->product&branch=$story->branch"), $products[$story->product]->name, '_blank');?></td>
+        <td class='text-left' title='<?php echo $products[$story->product]->name?>'><?php echo html::a($this->createLink('product', 'browse', "productID=$story->product&branch=$story->branch"), $products[$story->product]->name);?></td>
         <td class='c-module text-left' title='<?php echo zget($modules, $story->module, '')?>'><?php echo zget($modules, $story->module, '')?></td>
         <td class='text-ellipsis' title='<?php echo $story->planTitle;?>'><?php echo $story->planTitle;?></td>
         <td><?php echo zget($lang->story->stageList, $story->stage);?></td>

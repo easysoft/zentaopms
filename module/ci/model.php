@@ -12,12 +12,27 @@ class ciModel extends model
     /**
      * Set menu.
      *
+     * @param  int    $repoID
      * @access public
      * @return void
      */
-    public function setMenu()
+    public function setMenu($repoID = 0)
     {
+        if($repoID)
+        {
+            if(!session_id()) session_start();
+            $this->session->set('repoID', $repoID);
+            session_write_close();
+        }
         common::setMenuVars('devops', $this->session->repoID);
+
+        if($this->session->repoID)
+        {
+            $repo = $this->loadModel('repo')->getRepoByID($this->session->repoID);
+            if(!in_array(strtolower($repo->SCM), $this->config->repo->gitServiceList)) unset($this->lang->devops->menu->mr);
+
+            $this->lang->switcherMenu = $this->loadModel('repo')->getSwitcher($this->session->repoID);
+        }
     }
 
     /**
@@ -274,6 +289,7 @@ class ciModel extends model
             }
 
             $this->dao->update(TABLE_MR)->data($newMR)->where('id')->eq($relateMR->id)->exec();
+            $this->mr->linkObjects($relateMR);
         }
         elseif($status != 'success')
         {

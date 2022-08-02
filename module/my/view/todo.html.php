@@ -3,7 +3,7 @@
  * The todo view file of dashboard module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     dashboard
  * @version     $Id: todo.html.php 4735 2013-05-03 08:30:02Z chencongzhi520@gmail.com $
@@ -35,9 +35,25 @@
     </div>
   </div>
   <div class="btn-toolbar pull-right">
+    <?php if($config->edition != 'open' and !empty($app->user) and common::hasPriv('todo', 'calendar')):?>
+    <div class="btn-group panel-actions">
+      <?php echo html::a(helper::createLink('todo', 'calendar'), "<i class='icon-cards-view'></i> &nbsp;", '', "class='btn btn-icon' title='{$lang->todo->calendar}' id='switchButton'");?>
+      <?php echo html::a(helper::createLink('my', 'todo', "type=all"), "<i class='icon-list'></i> &nbsp;", '', "class='btn btn-icon text-primary' title='{$lang->todo->list}' id='switchButton'");?>
+    </div>
+    <?php endif;?>
     <?php if(common::hasPriv('todo', 'export')) echo html::a(helper::createLink('todo', 'export', "userID={$user->id}&orderBy=$orderBy", 'html', true), "<i class='icon-export muted'> </i> " . $lang->todo->export, '', "class='btn btn-link export' data-width='600px'");?>
-    <?php common::printLink('todo', 'batchCreate', '', "<i class='icon icon-plus'></i> " . $lang->todo->batchCreate, '', "id='batchCreate' class='btn btn-secondary iframe' data-width='80%'", '', 'true');?>
-    <?php common::printLink('todo', 'create', '', "<i class='icon icon-plus'></i> " . $lang->todo->create, '', "id='create' class='btn btn-primary iframe' data-width='80%' data-app='my'", '', 'true');?>
+    <?php if(common::hasPriv('todo', 'create') or common::hasPriv('todo', 'batchCreate')):?>
+    <div class='btn-group dropdown'>
+    <?php common::printLink('todo', common::hasPriv('todo', 'create') ? 'create' : 'batchCreate', '', "<i class='icon icon-plus'></i> " . (common::hasPriv('todo', 'create') ? $lang->todo->create : $lang->todo->batchCreate), '', "id='create' class='btn btn-primary iframe' data-width='80%' data-app='my'", '', 'true');?>
+    <?php if(common::hasPriv('todo', 'create') and common::hasPriv('todo', 'batchCreate')):?>
+    <button type='button' class='btn btn-primary dropdown-toggle' data-toggle='dropdown'><span class='caret'></span></button>
+    <ul class='dropdown-menu pull-right'>
+      <li><?php echo html::a($this->createLink('todo', 'create', '', '', true), $lang->todo->create, '', "class='iframe' data-width='80%'");?></li>
+      <li><?php echo html::a($this->createLink('todo', 'batchCreate', '', '', true), $lang->todo->batchCreate, '', "class='iframe' data-width='80%'");?></li>
+    </ul>
+    <?php endif;?>
+    </div>
+    <?php endif;?>
   </div>
 </div>
 <div id="mainContent">
@@ -162,9 +178,9 @@
           $actionLink = $this->createLink('todo', 'import2Today');
           echo "<div class='input-control has-icon-right space'>";
           echo '<input type="text" name="date" id="importDate" value="' . date('Y-m-d') . '" class="form-control form-date">';
-          echo '<label for="importDate" class="input-control-icon-right"><i class="icon icon-delay"></i></label>';
+          echo '<label for="importDate" class="input-control-icon-right iconCenter"><i class="icon icon-delay"></i></label>';
           echo '</div>';
-          echo html::commonButton($lang->todo->import, "onclick=\"setFormAction('$actionLink')\"");
+          echo html::commonButton($lang->todo->changeDate, "onclick=\"setFormAction('$actionLink')\"");
       }
       ?>
       </div>

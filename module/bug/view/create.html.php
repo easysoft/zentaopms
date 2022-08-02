@@ -3,7 +3,7 @@
  * The create view of bug module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     bug
  * @version     $Id: create.html.php 4903 2013-06-26 05:32:59Z wyd621@gmail.com $
@@ -18,7 +18,7 @@ js::set('holders', $lang->bug->placeholder);
 js::set('page', 'create');
 js::set('createRelease', $lang->release->create);
 js::set('createBuild', $lang->build->create);
-js::set('refresh', $lang->refresh);
+js::set('refresh', $lang->refreshIcon);
 js::set('flow', $config->global->flow);
 js::set('stepsRequired', $stepsRequired);
 js::set('stepsNotEmpty', $lang->bug->stepsNotEmpty);
@@ -27,6 +27,8 @@ js::set('oldProjectID', $projectID);
 js::set('blockID', $blockID);
 js::set('moduleID', $moduleID);
 js::set('tab', $this->app->tab);
+js::set('requiredFields', $config->bug->create->requiredFields);
+js::set('showFields', $showFields);
 if($this->app->tab == 'execution') js::set('objectID', $executionID);
 if($this->app->tab == 'project')   js::set('objectID', $projectID);
 ?>
@@ -68,7 +70,7 @@ if($this->app->tab == 'project')   js::set('objectID', $projectID);
                     echo "<span class='input-group-addon'>";
                     echo html::a($this->createLink('tree', 'browse', "rootID=$productID&view=bug&currentModuleID=0&branch=$branch", '', true), $lang->tree->manage, '', "class='text-primary' data-toggle='modal' data-type='iframe' data-width='95%'");
                     echo '&nbsp; ';
-                    echo html::a("javascript:void(0)", $lang->refresh, '', "class='refresh' onclick='loadProductModules($productID)'");
+                    echo html::a("javascript:void(0)", $lang->refreshIcon, '', "class='refresh' title='$lang->refresh' onclick='loadProductModules($productID)'");
                     echo '</span>';
                 }
                 ?>
@@ -311,7 +313,7 @@ if($this->app->tab == 'project')   js::set('objectID', $projectID);
             <td>
               <div class='input-group'>
                 <?php if($showStory):?>
-                <span class='input-group-addon'><?php echo $lang->bug->task?></span>
+                <span class='input-group-addon task'><?php echo $lang->bug->task?></span>
                 <?php endif;?>
                 <?php echo html::select('task', '', $taskID, "class='form-control chosen'") . html::hidden('oldTaskID', $taskID);?>
               </div>
@@ -332,7 +334,7 @@ if($this->app->tab == 'project')   js::set('objectID', $projectID);
             <td>
               <div class='input-group' id='contactListGroup'>
                 <?php
-                echo html::select('mailto[]', $users, str_replace(' ', '', $mailto), "class='form-control chosen' multiple");
+                echo html::select('mailto[]', $users, str_replace(' ', '', $mailto), "class='form-control picker-select' multiple");
                 echo $this->fetch('my', 'buildContactLists');
                 ?>
               </div>

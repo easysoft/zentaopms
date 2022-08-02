@@ -1,13 +1,16 @@
 <?php
 /* Actions. */
+$lang->kanban->noCard              = '暂无卡片';
 $lang->kanban->create              = '创建看板';
 $lang->kanban->createSpace         = '创建空间';
 $lang->kanban->editSpace           = '设置空间';
 $lang->kanban->closeSpace          = '关闭空间';
 $lang->kanban->deleteSpace         = '删除空间';
+$lang->kanban->activateSpace       = '激活空间';
 $lang->kanban->sortSpace           = '空间排序';
-$lang->kanban->edit                = '设置看板';
+$lang->kanban->edit                = '编辑看板';
 $lang->kanban->view                = '查看看板';
+$lang->kanban->activate            = '激活看板';
 $lang->kanban->close               = '关闭看板';
 $lang->kanban->delete              = '删除看板';
 $lang->kanban->createRegion        = '新增区域';
@@ -24,6 +27,7 @@ $lang->kanban->columnWidth         = '列宽度';
 $lang->kanban->setColumnWidth      = '设置列宽度';
 $lang->kanban->deleteLane          = '删除泳道';
 $lang->kanban->createColumn        = '创建看板列';
+$lang->kanban->emptyDesc           = '暂无描述';
 $lang->kanban->editColumn          = '编辑看板列';
 $lang->kanban->sortColumn          = '看板列排序';
 $lang->kanban->deleteColumn        = '删除看板列';
@@ -43,6 +47,10 @@ $lang->kanban->deleteCard          = '删除卡片';
 $lang->kanban->removeCard          = '移除卡片';
 $lang->kanban->assigntoCard        = '指派';
 $lang->kanban->setting             = '设置';
+$lang->kanban->settingSpace        = '设置空间';
+$lang->kanban->activateSpace       = '激活空间';
+$lang->kanban->closeSpace          = '关闭空间';
+$lang->kanban->deleteSpace         = '删除空间';
 $lang->kanban->enableArchived      = '设置归档功能';
 $lang->kanban->archive             = '归档功能';
 $lang->kanban->performable         = '设置进度管理';
@@ -77,6 +85,9 @@ $lang->kanban->importBuild         = '版本';
 $lang->kanban->allKanban           = '所有看板';
 $lang->kanban->allProjects         = '所有' . ($this->config->systemMode == 'classic' ? $lang->executionCommon : '项目');
 $lang->kanban->allProducts         = '所有产品';
+$lang->kanban->mine                = '我负责';
+$lang->kanban->alignment           = '对齐方式';
+$lang->kanban->allUsers            = '加载所有用户';
 
 /* Fields. */
 $lang->kanban->space          = '所属空间';
@@ -97,7 +108,10 @@ $lang->kanban->closedBy       = '由谁关闭';
 $lang->kanban->closedDate     = '关闭日期';
 $lang->kanban->empty          = '暂时没有看板';
 $lang->kanban->teamSumCount   = '共%s人';
+$lang->kanban->cardsCount     = '共%s张卡片';
 $lang->kanban->cardCount      = '卡片数量';
+$lang->kanban->activatedBy    = '由谁激活';
+$lang->kanban->activatedDate  = '激活日期';
 
 $lang->kanban->createColumnOnLeft  = '在左侧添加看板列';
 $lang->kanban->createColumnOnRight = '在右侧添加看板列';
@@ -124,6 +138,9 @@ $lang->kanban->archiveList['1'] = '启用';
 
 $lang->kanban->enableList['0'] = '不启用';
 $lang->kanban->enableList['1'] = '启用';
+
+$lang->kanban->alignmentList['center'] = '居中';
+$lang->kanban->alignmentList['left']   = '居左';
 
 $lang->kanban->type = array();
 $lang->kanban->type['all']   = "综合看板";
@@ -166,7 +183,9 @@ $lang->kanban->WIPType            = '在制品类型';
 $lang->kanban->WIPCount           = '在制品数量';
 $lang->kanban->noLimit            = '不限制∞';
 $lang->kanban->setLane            = '泳道设置';
+$lang->kanban->editLaneName       = '修改泳道名';
 $lang->kanban->laneName           = '泳道名称';
+$lang->kanban->editLaneColor      = '设置背景色';
 $lang->kanban->laneColor          = '泳道颜色';
 $lang->kanban->setColumn          = '看板列设置';
 $lang->kanban->columnName         = '看板列名称';
@@ -184,6 +203,11 @@ $lang->kanban->fullScreen         = '全屏';
 $lang->kanban->setting            = '设置';
 $lang->kanban->my                 = '我的看板';
 $lang->kanban->other              = '其他';
+$lang->kanban->showWIP            = '显示在制品限制';
+$lang->kanban->copyTitle          = '请选择一个看板来复制';
+$lang->kanban->copyNoKanban       = '没有可用的看板来复制';
+$lang->kanban->cancelCopy         = '取消复制';
+$lang->kanban->copyContent        = '复制内容';
 
 $lang->kanban->error = new stdclass();
 $lang->kanban->error->mustBeInt         = '在制品数量必须是正整数。';
@@ -192,9 +216,12 @@ $lang->kanban->error->childLimitNote    = '子列在制品数量之和不能大�
 $lang->kanban->error->importObjNotEmpty = '请至少选择一个导入对象';
 $lang->kanban->error->childLimitEmpty   = '请先设置子列的在制品数量后再操作';
 
+$lang->kanban->orderList['pri_asc']  = '需求优先级正序排序';
+$lang->kanban->orderList['pri_desc'] = '需求优先级倒序排序';
+
 $lang->kanban->importList = array();
 $lang->kanban->importList['off'] = '不启用导入功能';
-$lang->kanban->importList['on']  = '启用导入功能，只能导入自己有权限查看的内容';
+$lang->kanban->importList['on']  = '启用导入功能（可以导入自己有权查看的内容作为卡片）';
 
 $lang->kanban->importObjectList = array();
 $lang->kanban->importObjectList['plans']      = '计划';
@@ -202,6 +229,9 @@ $lang->kanban->importObjectList['releases']   = '发布';
 $lang->kanban->importObjectList['builds']     = '版本';
 $lang->kanban->importObjectList['executions'] = $lang->execution->common;
 $lang->kanban->importObjectList['cards']      = '其他看板卡片';
+
+$lang->kanban->showWIPList[1] = '显示';
+$lang->kanban->showWIPList[0] = '不显示';
 
 $lang->kanban->defaultColumn = array();
 $lang->kanban->defaultColumn['wait']   = '未开始';
@@ -247,6 +277,10 @@ $lang->kanban->taskColumn['pause']      = '已暂停';
 $lang->kanban->taskColumn['canceled']   = '已取消';
 $lang->kanban->taskColumn['closed']     = '已关闭';
 
+$lang->kanban->copyContentList = array();
+$lang->kanban->copyContentList['basicInfo'] = '基本信息';
+$lang->kanban->copyContentList['region']    = '列和泳道';
+
 $lang->kanbanspace = new stdclass();
 $lang->kanbanspace->common         = '看板空间';
 $lang->kanbanspace->name           = '空间名称';
@@ -263,20 +297,22 @@ $lang->kanbanspace->lastEditedDate = '最后修改日期';
 $lang->kanbanspace->closedBy       = '由谁关闭';
 $lang->kanbanspace->closedDate     = '关闭日期';
 $lang->kanbanspace->type           = '空间类型';
+$lang->kanbanspace->activatedBy    = '由谁激活';
+$lang->kanbanspace->activatedDate  = '激活日期';
 
 $lang->kanbanspace->empty = '暂时没有空间';
 
 $lang->kanbanspace->aclList['open']    = '公开（有看板空间视图权限即可访问）';
 $lang->kanbanspace->aclList['private'] = '私有（只有看板空间负责人、团队成员、白名单可访问）';
 
-$lang->kanbanspace->featureBar['private']     = '私人空间';
+$lang->kanbanspace->featureBar['involved']    = '我参与的';
 $lang->kanbanspace->featureBar['cooperation'] = '协作空间';
 $lang->kanbanspace->featureBar['public']      = '公共空间';
-$lang->kanbanspace->featureBar['involved']    = '我参与的';
+$lang->kanbanspace->featureBar['private']     = '私人空间';
 
-$lang->kanbanspace->typeList['private']     = '私人空间';
 $lang->kanbanspace->typeList['cooperation'] = '协作空间';
 $lang->kanbanspace->typeList['public']      = '公共空间';
+$lang->kanbanspace->typeList['private']     = '私人空间';
 
 $lang->kanbancolumn = new stdclass();
 $lang->kanbancolumn->name       = $lang->kanban->columnName;
@@ -292,13 +328,14 @@ $lang->kanbancolumn->confirmDeleteChild = '您确认删除该列吗？删除列�
 $lang->kanbancolumn->confirmRestore     = '您确定要还原该看板列吗？还原后，该看板列将回到之前的位置。';
 
 $lang->kanbanlane = new stdclass();
-$lang->kanbanlane->name      = $lang->kanban->laneName;
-$lang->kanbanlane->common    = '泳道';
-$lang->kanbanlane->default   = '默认泳道';
-$lang->kanbanlane->column    = '泳道看板列';
-$lang->kanbanlane->otherlane = '选择共享看板列的泳道';
-$lang->kanbanlane->color     = '泳道颜色';
-$lang->kanbanlane->WIPType   = '泳道在制品类型';
+$lang->kanbanlane->name         = $lang->kanban->laneName;
+$lang->kanbanlane->common       = '泳道';
+$lang->kanbanlane->default      = '默认泳道';
+$lang->kanbanlane->column       = '泳道看板列';
+$lang->kanbanlane->otherlane    = '选择共享看板列的泳道';
+$lang->kanbanlane->color        = '泳道颜色';
+$lang->kanbanlane->WIPType      = '泳道在制品类型';
+$lang->kanbanlane->heightByCard = '自适应（根据卡片高度自适应）';
 
 $lang->kanbanlane->confirmDelete    = '您确认删除该泳道吗？删除泳道后，该泳道中所有数据（列、卡片）也会被删除。';
 $lang->kanbanlane->confirmDeleteTip = '您确认删除该泳道吗？删除泳道后，该泳道中所有的%s将被隐藏。';
@@ -306,14 +343,14 @@ $lang->kanbanlane->confirmDeleteTip = '您确认删除该泳道吗？删除泳�
 $lang->kanbanlane->modeList['sameAsOther'] = '与其他泳道使用相同看板列';
 $lang->kanbanlane->modeList['independent'] = '采用独立的看板列';
 
-$lang->kanbanlane->heightTypeList['auto']   = '自适应（根据卡片高度自适应）';
-$lang->kanbanlane->heightTypeList['custom'] = '自定义（根据卡片数量自定义泳道高度）';
+$lang->kanbanlane->heightTypeList['auto']   = "自适应<span class='tip'>（根据卡片高度和泳道名称高度自适应）</span>";
+$lang->kanbanlane->heightTypeList['custom'] = "自定义<span class='tip'>（根据卡片数量自定义泳道高度）</span>";
 
-$lang->kanbancolumn->fluidBoardList['0'] = '固定列宽';
-$lang->kanbancolumn->fluidBoardList['1'] = '自适应列宽';
+$lang->kanbancolumn->fluidBoardList['0'] = "固定列宽<span class='tip'>（所有列保持一致的宽度）</span>";
+$lang->kanbancolumn->fluidBoardList['1'] = "自适应列宽<span class='tip'>（根据泳道宽度自适应）</span>";
 
 $lang->kanbanlane->error = new stdclass();
-$lang->kanbanlane->error->mustBeInt = '卡片数量必须是大于2的正整数。';
+$lang->kanbanlane->error->mustBeInt = '卡片数量必须是 3~32767 的正整数。';
 
 $lang->kanbanregion = new stdclass();
 $lang->kanbanregion->name    = '区域名称';

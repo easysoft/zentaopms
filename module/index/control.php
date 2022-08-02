@@ -5,7 +5,7 @@
  * When requests the root of a website, this index module will be called.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     ZenTaoPMS
  * @version     $Id: control.php 5036 2013-07-06 05:26:44Z wyd621@gmail.com $
@@ -34,6 +34,7 @@ class index extends control
     public function index($open = '')
     {
         if($this->app->getViewType() == 'mhtml') $this->locate($this->createLink('my', 'index'));
+        if($this->get->open) $open = $this->get->open;
 
         $latestVersionList = array();
         if(isset($this->config->global->latestVersionList)) $latestVersionList = json_decode($this->config->global->latestVersionList);

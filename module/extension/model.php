@@ -3,7 +3,7 @@
  * The model file of extension module of ZenTaoCMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     extension
  * @version     $Id$
@@ -909,5 +909,38 @@ class extensionModel extends model
         }
 
         return $expiredDate;
+    }
+
+    /**
+     * Get plugins that are about to expire or have expired.
+     *
+     * @param  bool    $category
+     * @access public
+     * @return array
+     */
+    public function getExpiringPlugins($category = false)
+    {
+        $extensions = $this->getLocalExtensions('installed');
+
+        $plugins = $category ? array('expiring' => array(), 'expired' => array()) : array();
+        $today   = helper::today();
+        foreach($extensions as $extension)
+        {
+            $expiredDate = $this->getExpireDate($extension);
+            if(!empty($expiredDate) and $expiredDate != 'life')
+            {
+                $dateDiff = helper::diffDate($expiredDate, $today);
+                if($category)
+                {
+                    if($dateDiff == 30 or $dateDiff == 14 or ($dateDiff <= 7 and $dateDiff >= 0)) $plugins['expiring'][] = $extension->name;
+                    if($dateDiff <= -1) $plugins['expired'][] = $extension->name;
+                }
+                else
+                {
+                    if($dateDiff == 30 or $dateDiff == 14 or $dateDiff <= 7) $plugins[] = $extension->name;
+                }
+            }
+        }
+        return $plugins;
     }
 }

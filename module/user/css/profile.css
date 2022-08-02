@@ -1,12 +1,13 @@
-.main-header {margin-bottom: 10px;}
+.main-header {border-bottom: unset; padding-top: 20px !important; padding-bottom: 24px !important;}
 .row table {width: 94%; margin-left: 3%;}
-.row th {width: 17%; line-height: 30px; padding-right: 20px; text-align: right; font-weight: 500;}
+.row th {width: 17%; line-height: 32px; padding-right: 20px; text-align: right; font-weight: unset;}
 .row td {width: 33%; text-align: left; font-weight: 700;}
 .main-actions {margin: 20px 0 20px 0; text-align: center;}
 .user-title {margin: 10px 10px -10px 10px; font-size: 14px; font-weight: bold; padding-left: 10px;}
-.cell .avatar {display: inline-block; width: 50px; height: 50px; line-height: 50px;}
-.user-name {margin-left: 15px; font-weight: bold;}
-.user-name, .user-role {font-size: 16px; vertical-align: top; line-height: 50px;}
+.cell .avatar {display: inline-block; width: 40px; height: 40px; line-height: 40px; position: absolute; left: 200px;}
+.user-name {font-weight: bold;}
+.user-role {color: #5B606E;}
+.user-name, .user-role {font-size: 14px; vertical-align: top; display: table; padding-left: 250px;}
 .line {border-top: 1px solid #eee; margin: 10px;}
 #avatarUploadBtn {padding: 4px 12px; position: relative; left: 32px; bottom: 30px;}
 #avatarForm {height: 10px;}

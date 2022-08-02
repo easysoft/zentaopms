@@ -3,7 +3,7 @@
  * The create view of case module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     case
  * @version     $Id: create.html.php 4904 2013-06-26 05:37:45Z wyd621@gmail.com $
@@ -17,10 +17,18 @@
 <?php js::set('lblBefore', $lang->testcase->insertBefore);?>
 <?php js::set('lblAfter', $lang->testcase->insertAfter);?>
 <?php js::set('isonlybody', isonlybody());?>
-<?php js::set('executionID', $projectID);?>
+<?php js::set('executionID', $executionID);?>
 <?php js::set('tab', $this->app->tab);?>
 <?php if($this->app->tab == 'execution') js::set('objectID', $executionID);?>
 <?php if($this->app->tab == 'project') js::set('objectID', $projectID);?>
+<?php
+foreach(explode(',', $config->testcase->create->requiredFields) as $field)
+{
+    if($field and strpos($showFields, $field) === false) $showFields .= ',' . $field;
+}
+?>
+<?php js::set('requiredFields', $config->testcase->create->requiredFields);?>
+<?php js::set('showFields', $showFields);?>
 <div id='mainContent' class='main-content'>
   <div class='center-block'>
     <div class='main-header'>
@@ -30,12 +38,6 @@
         <?php include '../../common/view/customfield.html.php';?>
       </div>
     </div>
-    <?php
-    foreach(explode(',', $config->testcase->create->requiredFields) as $field)
-    {
-        if($field and strpos($showFields, $field) === false) $showFields .= ',' . $field;
-    }
-    ?>
     <form class='load-indicator main-form form-ajax' method='post' enctype='multipart/form-data' id='dataform' data-type='ajax'>
       <table class='table table-form'>
         <tbody>
@@ -56,7 +58,7 @@
                 {
                     echo "<span class='input-group-addon'>";
                     echo html::a($this->createLink('tree', 'browse', "rootID=$productID&view=case&currentModuleID=0&branch=$branch", '', true), $lang->tree->manage, '', "class='text-primary' data-toggle='modal' data-type='iframe' data-width='95%'");
-                    echo html::a("javascript:void(0)", $lang->refresh, '', "class='refresh' onclick='loadProductModules($productID)'");
+                    echo html::a("javascript:void(0)", $lang->refreshIcon, '', "id='refresh' class='refresh' title='$lang->refresh' onclick='loadProductModules($productID)'");
                     echo '</span>';
                 }
                 ?>
@@ -68,7 +70,8 @@
             <?php unset($lang->testcase->typeList['unit']);?>
             <td><?php echo html::select('type', $lang->testcase->typeList, $type, "class='form-control chosen'");?></td>
             <?php if(strpos(",$showFields,", 'stage') !== false):?>
-            <td style='padding-left:15px'>
+            <?php $hiddenStage = strpos(",$showFields,", 'stage') !== false ? '' : 'hidden';?>
+            <td class="<?php echo $hiddenStage?> stageBox">
               <div class='input-group'>
                 <span class='input-group-addon w-80px'><?php echo $lang->testcase->stage?></span>
                 <?php echo html::select('stage[]', $lang->testcase->stageList, $stage, "class='form-control chosen' multiple='multiple'");?>
@@ -76,12 +79,12 @@
             </td>
             <?php endif;?>
           </tr>
-          <?php if(strpos(",$showFields,", ',story,') !== false):?>
-          <tr>
+          <?php $hiddenStory = strpos(",$showFields,", ',story,') !== false ? '' : 'hidden';?>
+          <tr class="<?php echo $hiddenStory?> storyBox">
             <th><?php echo $lang->testcase->lblStory;?></th>
             <td colspan='2'>
               <div class='input-group' id='storyIdBox'>
-                <?php echo html::select('story', $stories, $storyID, 'class="form-control chosen" onchange="setPreview();" data-no_results_text="' . $lang->searchMore . '"');?>
+                <?php echo html::select('story', $stories, $storyID, 'class="form-control picker-select" onchange="setPreview();" data-no_results_text="' . $lang->searchMore . '"');?>
                 <span class='input-group-btn' style='width: 0.01%'>
                 <?php if($storyID == 0): ?>
                   <a href='' id='preview' class='btn hidden'><?php echo $lang->preview;?></a>
@@ -93,7 +96,6 @@
               </div>
             </td>
           </tr>
-          <?php endif;?>
           <tr>
             <th><?php echo $lang->testcase->title;?></th>
             <td colspan='2'>
@@ -108,8 +110,8 @@
                     <input type="hidden" class="colorpicker" id="color" name="color" value="" data-icon="color" data-wrapper="input-control-icon-right" data-update-color="#title"  data-provide="colorpicker">
                   </div>
                 </div>
-                <?php if(strpos(",$showFields,", ',pri,') !== false): // begin print pri selector?>
-                <span class="input-group-addon fix-border br-0"><?php echo $lang->testcase->pri;?></span>
+                <?php $hiddenPri = strpos(",$showFields,", ',pri,') !== false ? '' : 'hidden';?>
+                <span class="input-group-addon fix-border br-0 <?php echo $hiddenPri;?> priBox"><?php echo $lang->testcase->pri;?></span>
                 <?php
                 $hasCustomPri = false;
                 foreach($lang->testcase->priList as $priKey => $priValue)
@@ -129,10 +131,10 @@
                 }
                 ?>
                 <?php if($hasCustomPri):?>
-                <?php echo html::select('pri', (array)$priList, $pri, "class='form-control'");?>
+                <?php echo html::select('pri', (array)$priList, $pri, "class='form-control priBox $hiddenPri'");?>
                 <?php else: ?>
                 <?php ksort($priList);?>
-                <div class="input-group-btn pri-selector" data-type="pri">
+                <div class="input-group-btn pri-selector priBox <?php echo $hiddenPri;?>" data-type="pri">
                   <button type="button" class="btn dropdown-toggle br-0" data-toggle="dropdown">
                     <span class="pri-text"><span class="label-pri label-pri-<?php echo empty($pri) ? '0' : $pri?>" title="<?php echo $pri?>"><?php echo $pri?></span></span> &nbsp;<span class="caret"></span>
                   </button>
@@ -141,7 +143,6 @@
                   </div>
                 </div>
                 <?php endif; ?>
-                <?php endif; // end print pri selector ?>
                 <?php if(!$this->testcase->forceNotReview()):?>
                 <span class="input-group-addon"><?php echo html::checkbox('forceNotReview', $lang->testcase->forceNotReview, '', "id='forceNotReview0'");?></span>
                 <?php endif;?>
@@ -220,12 +221,11 @@
               </table>
             </td>
           </tr>
-          <?php if(strpos(",$showFields,", ',keywords,') !== false):?>
-          <tr>
+          <?php $hiddenKeywords = strpos(",$showFields,", ',keywords,') !== false ? '' : 'hidden';?>
+          <tr class="<?php echo $hiddenKeywords?> keywordsBox">
             <th><?php echo $lang->testcase->keywords;?></th>
             <td colspan='2'><?php echo html::input('keywords', $keywords, "class='form-control'");?></td>
           </tr>
-          <?php endif;?>
           <tr class='hide'>
             <th><?php echo $lang->testcase->status;?></th>
             <td><?php echo html::hidden('status', 'normal');?></td>

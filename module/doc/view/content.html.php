@@ -12,10 +12,11 @@
             <?php endif;?>
           </div>
           <div class="info">
-            <div class="version">
+            <?php $version = $version ? $version : $doc->version;?>
+            <div class="version" data-version='<?php echo $version;?>'>
               <div class='btn-group'>
                 <a href='javascript:;' class='btn btn-link btn-limit text-ellipsis' data-toggle='dropdown' style="max-width: 120px;">
-                  #<?php echo $version ? $version : $doc->version;?>
+                  #<?php echo $version;?>
                   <span class="caret"></span>
                 </a>
                 <ul class='dropdown-menu doc-version-menu' style='max-height:240px; max-width: 300px; overflow-y:auto'>
@@ -99,6 +100,10 @@
                     echo "<div class='url-href'>" . html::a($url, $url, '_target') . "</div>";
                     echo "</div></div>";
                 }
+            }
+            elseif($doc->contentType == 'markdown')
+            {
+                echo "<textarea id='markdownContent'></textarea>";
             }
             else
             {
@@ -283,3 +288,18 @@
 </div>
 <?php endif;?>
 <?php include '../../common/view/syntaxhighlighter.html.php';?>
+<?php if($doc->contentType == 'markdown'):?>
+<?php css::import($jsRoot . "markdown/simplemde.min.css");?>
+<?php js::import($jsRoot . 'markdown/simplemde.min.js'); ?>
+<?php js::set('markdownText', $doc->content);?>
+<script>
+$(function()
+{
+    var simplemde = new SimpleMDE({element: $("#markdownContent")[0],toolbar:false, status: false});
+    simplemde.value(String(markdownText));
+    simplemde.togglePreview();
+
+    $('#content .CodeMirror .editor-preview a').attr('target', '_blank');
+})
+</script>
+<?php endif;?>

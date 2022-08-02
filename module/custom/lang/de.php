@@ -2,6 +2,7 @@
 global $config;
 
 $lang->custom->common               = 'Custom';
+$lang->custom->id                   = 'ID';
 $lang->custom->index                = 'Home';
 $lang->custom->set                  = 'Customize';
 $lang->custom->restore              = 'Reset to Default';
@@ -47,9 +48,17 @@ $lang->custom->reviewRule           = 'Review Rules';
 $lang->custom->switch               = "Switch";
 $lang->custom->oneUnit              = "One {$lang->hourCommon}";
 $lang->custom->convertRelationTitle = "Please firstly set the conversion factor from {$lang->hourCommon} to %s";
+$lang->custom->superReviewers       = "Super Reviewer";
+$lang->custom->kanban               = "Kanban";
+$lang->custom->allUsers             = 'All Users';
+$lang->custom->account              = 'Users';
+$lang->custom->role                 = 'Role';
+$lang->custom->dept                 = 'Dept';
+$lang->custom->code                 = $lang->code;
+$lang->custom->setCode              = 'Enable or Disable Code';
 
 if($config->systemMode == 'new') $lang->custom->execution = 'Execution';
-if($config->systemMode == 'classic' || !$config->systemMode) $lang->custom->execution = $lang->executionCommon;
+if($config->systemMode == 'classic' || !$config->systemMode) $lang->custom->execution = 'Execution';
 
 $lang->custom->unitList['efficiency'] = 'Working Hours/';
 $lang->custom->unitList['manhour']    = 'Man-hour/';
@@ -77,11 +86,13 @@ $lang->custom->saveTips            = 'After clicking save, the current %s will b
 $lang->custom->numberError = 'The interval must be greater than zero!';
 
 $lang->custom->closedExecution = 'Closed ' . $lang->executionCommon;
+$lang->custom->closedKanban    = 'Closed ' . $lang->custom->kanban;
 $lang->custom->closedProduct   = 'Closed ' . $lang->productCommon;
 
 if($config->systemMode == 'new') $lang->custom->object['project']   = 'Project';
 $lang->custom->object['product']   = $lang->productCommon;
 $lang->custom->object['execution'] = $lang->custom->execution;
+$lang->custom->object['kanban']    = $lang->custom->kanban;
 $lang->custom->object['story']     = 'Story';
 $lang->custom->object['task']      = 'Task';
 $lang->custom->object['bug']       = 'Bug';
@@ -90,6 +101,29 @@ $lang->custom->object['testtask']  = 'Build';
 $lang->custom->object['todo']      = 'Todo';
 $lang->custom->object['user']      = 'User';
 $lang->custom->object['block']     = 'ClosedBlock';
+$lang->custom->object['flow']      = '流程';
+$lang->custom->object['score']     = '积分';
+
+if($config->systemMode == 'new') $lang->custom->menuOrder[5]  = 'project';
+$lang->custom->menuOrder[10] = 'product';
+$lang->custom->menuOrder[15] = 'execution';
+$lang->custom->menuOrder[20] = 'kanban';
+$lang->custom->menuOrder[25] = 'story';
+$lang->custom->menuOrder[30] = 'task';
+$lang->custom->menuOrder[35] = 'bug';
+$lang->custom->menuOrder[40] = 'testcase';
+$lang->custom->menuOrder[45] = 'testtask';
+$lang->custom->menuOrder[50] = 'todo';
+$lang->custom->menuOrder[55] = 'user';
+$lang->custom->menuOrder[60] = 'block';
+$lang->custom->menuOrder[65] = 'flow';
+$lang->custom->menuOrder[70] = 'score';
+
+$lang->custom->dividerMenu  = ',story,todo,block,';
+$lang->custom->separatePage = ',execution,product,kanban,flow,score,';
+
+$lang->custom->block = new stdclass();
+$lang->custom->block->fields['closed'] = 'Closed Block';
 
 $lang->custom->project = new stdClass();
 $lang->custom->project->currencySetting    = 'Currency Setting';
@@ -133,8 +167,9 @@ $lang->custom->testcase->fields['statusList'] = 'Status';
 $lang->custom->testcase->fields['review']     = 'Review Required';
 
 $lang->custom->testtask = new stdClass();
-$lang->custom->testtask->fields['priList']    = 'Priority';
 $lang->custom->testtask->fields['statusList'] = 'Status';
+$lang->custom->testtask->fields['typeList']   = 'Type';
+$lang->custom->testtask->fields['priList']    = 'Priority';
 
 $lang->custom->todo = new stdClass();
 $lang->custom->todo->fields['priList']    = 'Priority';
@@ -146,11 +181,6 @@ $lang->custom->user->fields['roleList']     = 'Role';
 $lang->custom->user->fields['statusList']   = 'Status';
 $lang->custom->user->fields['contactField'] = 'Available Contact';
 $lang->custom->user->fields['deleted']      = 'Show deleted user';
-
-$lang->custom->system = array('required', 'flow', 'score');
-
-$lang->custom->block = new stdclass();
-$lang->custom->block->fields['closed'] = 'Closed Block';
 
 $lang->custom->currentLang = 'Current Language';
 $lang->custom->allLang     = 'All Language';
@@ -172,14 +202,22 @@ $lang->custom->notice->conceptResult       = 'According to your preference, <b> 
 $lang->custom->notice->conceptPath         = 'Go to Admin -> Custom -> Concept to set it.';
 $lang->custom->notice->readOnlyOfProduct   = 'If Change Forbidden, any change on stories, bugs, cases, efforts, releases and plans of the closed product is also forbidden.';
 $lang->custom->notice->readOnlyOfExecution = "If Change Forbidden, any change on tasks, builds, efforts and stories of the closed {$lang->executionCommon} is also forbidden.";
+$lang->custom->notice->readOnlyOfKanban    = "If Change Forbidden, any change on kanban card and related operations of {$lang->custom->kanban} is also forbidden.";
 $lang->custom->notice->URSREmpty           = 'Custom requirement name can not be empty!';
+$lang->custom->notice->valueEmpty          = 'Value can not be empty!';
 $lang->custom->notice->confirmDelete       = 'Are you sure you want to delete it?';
+$lang->custom->notice->confirmReviewCase   = 'Set the case in Wait to Normal?';
+$lang->custom->notice->storyReviewTip      = 'After selecting by individual, position, and department, take the union of these three filters. ';
+$lang->custom->notice->selectAllTip        = 'After selecting all people, the reviewers will be emptied and grayed out while hiding their positions and departments.';
+$lang->custom->notice->repeatKey           = 'Repeat Key %s';
+$lang->custom->notice->readOnlyOfCode      = 'A code is a management term that exists for secrecy or as an antonym. When code management is enabled, the code information of product, project, and execution in the system will be displayed in the creation, editing, detail, and list pages.';
 
 $lang->custom->notice->indexPage['product'] = "ZenTao 8.2+ has Product Homepage. Do you want to go to Product Homepage?";
 $lang->custom->notice->indexPage['project'] = "ZenTao 8.2+ has Project Homepage. Do you want to go to Project Homepage?";
 $lang->custom->notice->indexPage['qa']      = "ZenTao 8.2+ has QA Homepage. Do you want to go to QA Homepage?";
 
 $lang->custom->notice->invalidStrlen['ten']        = 'The length of the key must be less than 10 characters.';
+$lang->custom->notice->invalidStrlen['fifteen']    = 'The key should be <= 15 characters.';
 $lang->custom->notice->invalidStrlen['twenty']     = 'The length of the key must be less than 20 characters.';
 $lang->custom->notice->invalidStrlen['thirty']     = 'The length of the key must be less than 30 characters.';
 $lang->custom->notice->invalidStrlen['twoHundred'] = 'The length of the key must be less than 225 characters.';
@@ -207,8 +245,8 @@ if($config->systemMode == 'classic')
 }
 else
 {
-    $lang->custom->sprintConceptList[0] = 'Program - Product - Iteration';
-    $lang->custom->sprintConceptList[1] = 'Program - Product - Sprint';
+    $lang->custom->sprintConceptList[0] = 'Product - Project';
+    $lang->custom->sprintConceptList[1] = 'Product - Iteration';
 }
 
 $lang->custom->workingList['full'] = 'Full Management of Dev';
@@ -217,6 +255,7 @@ $lang->custom->menuTip          = 'Click to show/hide navigation bar. Drag to sw
 $lang->custom->saveFail         = 'Failed to save!';
 $lang->custom->page             = ' Page';
 $lang->custom->changeClassicTip = 'The Program module will be hidden, if you switch to the classic mode.';
+$lang->custom->changeModeTips   = 'Historical deleted data does not participate in the data merging process. After switching the mode, it will not support restoration. Please know.';
 
 $lang->custom->scoreStatus[1] = 'On';
 $lang->custom->scoreStatus[0] = 'Off';
@@ -226,6 +265,9 @@ $lang->custom->CRProduct[0] = 'Change Forbidden';
 
 $lang->custom->CRExecution[1] = 'Change Allowed';
 $lang->custom->CRExecution[0] = 'Change Forbidden';
+
+$lang->custom->CRKanban[1] = 'Change Allowed';
+$lang->custom->CRKanban[0] = 'Change Forbidden';
 
 $lang->custom->moduleName['product']     = $lang->productCommon;
 $lang->custom->moduleName['productplan'] = 'Plan';

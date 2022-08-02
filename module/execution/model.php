@@ -3,7 +3,7 @@
  * The model file of execution module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     execution
  * @version     $Id: model.php 5118 2013-07-12 07:41:41Z chencongzhi520@gmail.com $
@@ -66,8 +66,22 @@ class executionModel extends model
         $execution = $this->getByID($executionID);
         if($execution and $execution->type == 'kanban')
         {
-            $this->lang->execution->menu         = new stdclass();
-            $this->lang->execution->accessDenied = str_replace($this->lang->executionCommon, $this->lang->execution->kanban, $this->lang->execution->accessDenied);
+            global $lang;
+            $lang->executionCommon   = $lang->execution->kanban;
+            include $this->app->getModulePath('', 'execution') . 'lang/' . $this->app->getClientLang() . '.php';
+
+            $this->lang->execution->menu           = new stdclass();
+            $this->lang->execution->menu->kanban   = array('link' => "{$this->lang->kanban->common}|execution|kanban|executionID=%s");
+            $this->lang->execution->menu->CFD      = array('link' => "{$this->lang->execution->CFD}|execution|cfd|executionID=%s");
+            $this->lang->execution->menu->build    = array('link' => "{$this->lang->build->common}|execution|build|executionID=%s");
+            $this->lang->execution->menu->settings = array('link' => "{$this->lang->settings}|execution|view|executionID=%s", 'subModule' => 'personnel', 'alias' => 'edit,manageproducts,team,whitelist,addwhitelist,managemembers', 'class' => 'dropdown dropdown-hover');
+            $this->lang->execution->dividerMenu    = '';
+
+            $this->lang->execution->menu->settings['subMenu']            = new stdclass();
+            $this->lang->execution->menu->settings['subMenu']->view      = array('link' => "{$this->lang->overview}|execution|view|executionID=%s", 'subModule' => 'view', 'alias' => 'edit,start,suspend,putoff,close');
+            $this->lang->execution->menu->settings['subMenu']->products  = array('link' => "{$this->lang->productCommon}|execution|manageproducts|executionID=%s");
+            $this->lang->execution->menu->settings['subMenu']->team      = array('link' => "{$this->lang->team->common}|execution|team|executionID=%s", 'alias' => 'managemembers');
+            $this->lang->execution->menu->settings['subMenu']->whitelist = array('link' => "{$this->lang->whitelist}|execution|whitelist|executionID=%s", 'subModule' => 'personnel', 'alias' => 'addwhitelist');
         }
 
         if(!$this->app->user->admin and strpos(",{$this->app->user->view->sprints},", ",$executionID,") === false and !defined('TUTORIAL') and $executionID != 0) return print(js::error($this->lang->execution->accessDenied) . js::locate('back'));
@@ -75,7 +89,7 @@ class executionModel extends model
         $executions = $this->getPairs(0, 'all', 'nocode');
         if(!$executionID and $this->session->execution) $executionID = $this->session->execution;
         if(!$executionID or !in_array($executionID, array_keys($executions))) $executionID = key($executions);
-        $this->session->set('execution', $executionID);
+        $this->session->set('execution', $executionID, $this->app->tab);
 
         /* Unset story, bug, build and testtask if type is ops. */
         if($execution and $execution->type == 'stage' and $this->config->systemMode == 'new')
@@ -85,6 +99,8 @@ class executionModel extends model
             $lang->executionCommon = $lang->project->stage;
             include $this->app->getModulePath('', 'execution') . 'lang/' . $this->app->getClientLang() . '.php';
         }
+
+        if($execution->acl != 'private') unset($this->lang->execution->menu->settings['subMenu']->whitelist);
 
         if($execution and $execution->lifetime == 'ops')
         {
@@ -330,14 +346,20 @@ class executionModel extends model
             ->setDefault('lastEditedBy', $this->app->user->account)
             ->setDefault('lastEditedDate', helper::now())
             ->setDefault('team', substr($this->post->name, 0, 30))
+            ->setIF($this->post->heightType == 'auto', 'displayCards', 0)
             ->setIF(!isset($_POST['whitelist']), 'whitelist', '')
             ->setIF($this->config->systemMode == 'new', 'parent', $this->post->project)
             ->setIF($this->post->acl == 'open', 'whitelist', '')
             ->join('whitelist', ',')
             ->setDefault('type', $type)
             ->stripTags($this->config->execution->editor->create['id'], $this->config->allowedTags)
-            ->remove('products, workDays, delta, branch, uid, plans, teams, teamMembers, contactListMenu')
+            ->remove('products, workDays, delta, branch, uid, plans, teams, teamMembers, contactListMenu, heightType')
             ->get();
+
+        if(isset($_POST['heightType']) and $this->post->heightType == 'custom')
+        {
+            if(!$this->loadModel('kanban')->checkDisplayCards($sprint->displayCards)) return;
+        }
 
         /* Check the workload format and total. */
         if(!empty($sprint->percent)) $this->checkWorkload('create', $sprint->percent);
@@ -369,12 +391,13 @@ class executionModel extends model
             $this->lang->project->code = $this->lang->execution->execCode;
         }
 
-        $sprintProject = isset($sprint->project) ? $sprint->project : '';
+        $this->lang->error->unique = $this->lang->error->repeat;
+        $sprintProject = isset($sprint->project) ? $sprint->project : '0';
         $this->dao->insert(TABLE_EXECUTION)->data($sprint)
             ->autoCheck($skipFields = 'begin,end')
             ->batchcheck($this->config->execution->create->requiredFields, 'notempty')
-            ->checkIF((!empty($sprint->name) and $this->config->systemMode == 'new'), 'name', 'unique', "`type` in ('sprint','stage', 'kanban') and `project` = $sprintProject")
-            ->checkIF(!empty($sprint->code), 'code', 'unique', "`type` in ('sprint','stage')")
+            ->checkIF((!empty($sprint->name) and $this->config->systemMode == 'new'), 'name', 'unique', "`type` in ('sprint','stage', 'kanban') and `project` = $sprintProject and `deleted` = '0'")
+            ->checkIF(!empty($sprint->code), 'code', 'unique', "`type` in ('sprint','stage', 'kanban') and `deleted` = '0'")
             ->checkIF($sprint->begin != '', 'begin', 'date')
             ->checkIF($sprint->end != '', 'end', 'date')
             ->checkIF($sprint->end != '', 'end', 'ge', $sprint->begin)
@@ -452,7 +475,7 @@ class executionModel extends model
         $oldExecution = $this->dao->findById($executionID)->from(TABLE_EXECUTION)->fetch();
 
         /* Judgment of required items. */
-        if($oldExecution->type != 'stage' and $this->post->code == '')
+        if($oldExecution->type != 'stage' and $this->post->code == '' and (!isset($this->config->setCode) or $this->config->setCode == 1))
         {
             dao::$errors['code'] = sprintf($this->lang->error->notempty, $this->lang->execution->code);
             return false;
@@ -472,16 +495,23 @@ class executionModel extends model
             ->add('id', $executionID)
             ->setDefault('lastEditedBy', $this->app->user->account)
             ->setDefault('lastEditedDate', helper::now())
+            ->setIF($this->post->heightType == 'auto', 'displayCards', 0)
             ->setIF(helper::isZeroDate($this->post->begin), 'begin', '')
             ->setIF(helper::isZeroDate($this->post->end), 'end', '')
             ->setIF(!isset($_POST['whitelist']), 'whitelist', '')
             ->setIF($this->post->status == 'closed', 'closedDate', helper::now())
             ->setIF($this->post->status == 'suspended', 'suspendedDate', helper::today())
+            ->setIF($oldExecution->type == 'stage', 'project', $oldExecution->project)
             ->setDefault('team', $this->post->name)
             ->join('whitelist', ',')
             ->stripTags($this->config->execution->editor->edit['id'], $this->config->allowedTags)
-            ->remove('products, branch, uid, plans, syncStories, contactListMenu, teamMembers')
+            ->remove('products, branch, uid, plans, syncStories, contactListMenu, teamMembers, heightType')
             ->get();
+
+        if(isset($_POST['heightType']) and $this->post->heightType == 'custom')
+        {
+            if(!$this->loadModel('kanban')->checkDisplayCards($execution->displayCards)) return;
+        }
 
         if(in_array($execution->status, array('closed', 'suspended'))) $this->computeBurn($executionID);
 
@@ -511,18 +541,18 @@ class executionModel extends model
         }
 
         /* Update data. */
-        $executionProject = isset($execution->project) ? $execution->project : '';
+        $this->lang->error->unique = $this->lang->error->repeat;
+        $executionProject = isset($execution->project) ? $execution->project : '0';
         $this->dao->update(TABLE_EXECUTION)->data($execution)
             ->autoCheck($skipFields = 'begin,end')
             ->batchcheck($this->config->execution->edit->requiredFields, 'notempty')
             ->checkIF($execution->begin != '', 'begin', 'date')
             ->checkIF($execution->end != '', 'end', 'date')
             ->checkIF($execution->end != '', 'end', 'ge', $execution->begin)
-            ->checkIF((!empty($execution->name) and $this->config->systemMode == 'new'), 'name', 'unique', "id != $executionID and type in ('sprint','stage') and `project` = $executionProject")
-            ->checkIF(!empty($execution->code), 'code', 'unique', "id != $executionID and type in ('sprint','stage')")
+            ->checkIF((!empty($execution->name) and $this->config->systemMode == 'new'), 'name', 'unique', "id != $executionID and type in ('sprint','stage', 'kanban') and `project` = $executionProject and `deleted` = '0'")
+            ->checkIF(!empty($execution->code), 'code', 'unique', "id != $executionID and type in ('sprint','stage', 'kanban') and `deleted` = '0'")
             ->checkFlow()
             ->where('id')->eq($executionID)
-            ->checkFlow()
             ->limit(1)
             ->exec();
 
@@ -644,13 +674,12 @@ class executionModel extends model
         foreach($data->executionIDList as $executionID)
         {
             $executionName = $data->names[$executionID];
-            $executionCode = $data->codes[$executionID];
+            if(isset($data->codes)) $executionCode = $data->codes[$executionID];
 
             $executionID = (int)$executionID;
             $executions[$executionID] = new stdClass();
             $executions[$executionID]->id             = $executionID;
             $executions[$executionID]->name           = $executionName;
-            $executions[$executionID]->code           = $executionCode;
             $executions[$executionID]->PM             = $data->PMs[$executionID];
             $executions[$executionID]->PO             = $data->POs[$executionID];
             $executions[$executionID]->QD             = $data->QDs[$executionID];
@@ -664,13 +693,15 @@ class executionModel extends model
             $executions[$executionID]->days           = $data->dayses[$executionID];
             $executions[$executionID]->lastEditedBy   = $this->app->user->account;
             $executions[$executionID]->lastEditedDate = helper::now();
+
+            if(isset($data->codes)) $executions[$executionID]->code = $executionCode;
             if(isset($data->projects))   $executions[$executionID]->project   = zget($data->projects, $executionID, 0);
             if(isset($data->attributes)) $executions[$executionID]->attribute = zget($data->attributes, $executionID, '');
             if($executions[$executionID]->status == 'closed') $executions[$executionID]->closedDate = helper::now();
             if($executions[$executionID]->status == 'suspended') $executions[$executionID]->suspendedDate = helper::today();
 
             /* Check unique code for edited executions. */
-            if($projectModel == 'scrum' and empty($executionCode))
+            if($projectModel == 'scrum' and isset($executionCode) and empty($executionCode))
             {
                 dao::$errors['code'][] = 'execution#' . $executionID .  sprintf($this->lang->error->notempty, $this->lang->project->code);
                 return false;
@@ -705,12 +736,12 @@ class executionModel extends model
         }
 
         /* Update burn before close execution. */
-        $closedIDList = array();
+        $closedIdList = array();
         foreach($executions as $executionID => $execution)
         {
-            if(isset($execution->status) and in_array($execution->status, array('done', 'closed', 'suspended'))) $closedIDList[$executionID] = $executionID;
+            if(isset($execution->status) and in_array($execution->status, array('done', 'closed', 'suspended'))) $closedIdList[$executionID] = $executionID;
         }
-        $this->computeBurn($closedIDList);
+        $this->computeBurn($closedIdList);
 
         foreach($executions as $executionID => $execution)
         {
@@ -816,9 +847,11 @@ class executionModel extends model
             ->setDefault('status', 'doing')
             ->setDefault('lastEditedBy', $this->app->user->account)
             ->setDefault('lastEditedDate', $now)
+            ->stripTags($this->config->execution->editor->start['id'], $this->config->allowedTags)
             ->remove('comment')
             ->get();
 
+        $execution = $this->loadModel('file')->processImgURL($execution, $this->config->execution->editor->start['id'], $this->post->uid);
         $this->dao->update(TABLE_EXECUTION)->data($execution)
             ->autoCheck()
             ->check($this->config->execution->start->requiredFields, 'notempty')
@@ -847,6 +880,7 @@ class executionModel extends model
 
         $execution = fixer::input('post')
             ->add('id', $executionID)
+            ->stripTags($this->config->execution->editor->putoff['id'], $this->config->allowedTags)
             ->setDefault('lastEditedBy', $this->app->user->account)
             ->setDefault('lastEditedDate', $now)
             ->remove('comment')
@@ -855,6 +889,7 @@ class executionModel extends model
         if($this->config->systemMode == 'new') $this->checkBeginAndEndDate($oldExecution->project, $execution->begin, $execution->end);
         if(dao::isError()) return false;
 
+        $execution = $this->loadModel('file')->processImgURL($execution, $this->config->execution->editor->putoff['id'], $this->post->uid);
         $this->dao->update(TABLE_EXECUTION)->data($execution)
             ->autoCheck()
             ->checkFlow()
@@ -882,8 +917,10 @@ class executionModel extends model
             ->setDefault('lastEditedBy', $this->app->user->account)
             ->setDefault('lastEditedDate', $now)
             ->setDefault('suspendedDate', helper::today())
+            ->stripTags($this->config->execution->editor->suspend['id'], $this->config->allowedTags)
             ->remove('comment')->get();
 
+        $execution = $this->loadModel('file')->processImgURL($execution, $this->config->execution->editor->suspend['id'], $this->post->uid);
         $this->dao->update(TABLE_EXECUTION)->data($execution)
             ->autoCheck()
             ->checkFlow()
@@ -911,6 +948,7 @@ class executionModel extends model
             ->setDefault('status', 'doing')
             ->setDefault('lastEditedBy', $this->app->user->account)
             ->setDefault('lastEditedDate', $now)
+            ->stripTags($this->config->execution->editor->activate['id'], $this->config->allowedTags)
             ->remove('comment,readjustTime,readjustTask')
             ->get();
 
@@ -920,6 +958,7 @@ class executionModel extends model
             unset($execution->end);
         }
 
+        $execution = $this->loadModel('file')->processImgURL($execution, $this->config->execution->editor->activate['id'], $this->post->uid);
         $this->dao->update(TABLE_EXECUTION)->data($execution)
             ->autoCheck()
             ->checkFlow()
@@ -961,6 +1000,16 @@ class executionModel extends model
             }
         }
 
+        /* Update the status of the parent stage. */
+        if($oldExecution->type == 'stage')
+        {
+            $parent = $this->getByID($oldExecution->parent);
+            if($parent->type == 'stage' and $parent->status == 'closed')
+            {
+                $this->dao->update(TABLE_EXECUTION)->set('status')->eq('doing')->where('id')->eq($parent->id)->exec();
+            }
+        }
+
         if(!dao::isError()) return common::createChanges($oldExecution, $execution);
     }
 
@@ -983,11 +1032,13 @@ class executionModel extends model
             ->setDefault('closedDate', $now)
             ->setDefault('lastEditedBy', $this->app->user->account)
             ->setDefault('lastEditedDate', $now)
+            ->stripTags($this->config->execution->editor->close['id'], $this->config->allowedTags)
             ->remove('comment')
             ->get();
 
         $this->lang->error->ge = $this->lang->execution->ge;
 
+        $execution = $this->loadModel('file')->processImgURL($execution, $this->config->execution->editor->close['id'], $this->post->uid);
         $this->dao->update(TABLE_EXECUTION)->data($execution)
             ->autoCheck()
             ->check($this->config->execution->close->requiredFields,'notempty')
@@ -1002,9 +1053,45 @@ class executionModel extends model
 
         if(!dao::isError())
         {
+            /* Update the status of the parent stage. */
+            if($oldExecution->type == 'stage')
+            {
+                $parent = $this->getByID($oldExecution->parent);
+                if($parent->type == 'stage')
+                {
+                    $isClosed = true;
+                    $children = $this->getChildExecutions($oldExecution->parent);
+                    foreach($children as $childID => $childExecution)
+                    {
+                        if($childExecution->status != 'closed') $isClosed = false;
+                    }
+
+                    if($isClosed) $this->dao->update(TABLE_EXECUTION)->set('status')->eq('closed')->where('id')->eq($parent->id)->exec();
+                }
+            }
+
             $this->loadModel('score')->create('execution', 'close', $oldExecution);
             return common::createChanges($oldExecution, $execution);
         }
+    }
+
+    /**
+     * Set Kanban.
+     *
+     * @param  int    $executionID
+     * @access public
+     * @return void
+     */
+    public function setKanban($executionID)
+    {
+        $execution = fixer::input('post')
+            ->setIF($this->post->heightType == 'auto', 'displayCards', 0)
+            ->remove('heightType')
+            ->get();
+
+        if(isset($_POST['heightType']) and $this->post->heightType == 'custom' and !$this->loadModel('kanban')->checkDisplayCards($execution->displayCards)) return;
+
+        $this->dao->update(TABLE_EXECUTION)->data($execution)->where('id')->eq((int)$executionID)->exec();
     }
 
     /**
@@ -1063,6 +1150,7 @@ class executionModel extends model
     /**
      * Check begin and end date.
      *
+     * @param  int    $projectID
      * @param  string $begin
      * @param  string $end
      * @access public
@@ -1071,9 +1159,9 @@ class executionModel extends model
     public function checkBeginAndEndDate($projectID, $begin, $end)
     {
         $project = $this->loadModel('project')->getByID($projectID);
-        if($begin < $project->begin) dao::$errors['begin'] = sprintf($this->lang->execution->errorBegin, $project->begin);
 
-        if($end > $project->end) dao::$errors['end'] = sprintf($this->lang->execution->errorEnd, $project->end);
+        if($begin < $project->begin) dao::$errors['begin'] = sprintf($this->lang->execution->errorCommonBegin, $project->begin);
+        if($end > $project->end)     dao::$errors['end']   = sprintf($this->lang->execution->errorCommonEnd, $project->end);
     }
 
     /*
@@ -1355,7 +1443,7 @@ class executionModel extends model
                 ->andWhere('t2.deleted')->eq(0)
                 ->fetchPairs();
 
-            $products = $this->loadModel('product')->getProductPairsByProject($projectID);
+            $products = $this->loadModel('product')->getProductPairsByProject($projectID, 'all', $executionProducts);
 
             foreach($executions as $id => $execution)
             {
@@ -1575,7 +1663,7 @@ class executionModel extends model
      */
     public function getChildExecutions($executionID)
     {
-        return $this->dao->select('id, name')->from(TABLE_EXECUTION)->where('parent')->eq((int)$executionID)->fetchPairs();
+        return $this->dao->select('id, name, status')->from(TABLE_EXECUTION)->where('deleted')->eq(0)->andWhere('parent')->eq((int)$executionID)->fetchAll('id');
     }
 
     /**
@@ -1929,18 +2017,14 @@ class executionModel extends model
      */
     public function getToImport($executionIds, $type)
     {
-        $executions = $this->dao->select('*')->from(TABLE_EXECUTION)
-            ->where('id')->in($executionIds)
-            ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->sprints)->fi()
-            ->andWhere('type')->eq($type)
-            ->andWhere('deleted')->eq(0)
-            ->orderBy('id desc')
-            ->fetchAll('id');
-
-        $pairs = array();
-        $now   = date('Y-m-d');
-        foreach($executions as $id => $execution) $pairs[$id] = $execution->name;
-        return $pairs;
+        return $this->dao->select('t1.id,concat_ws(" / ", t2.name, t1.name) as name')->from(TABLE_EXECUTION)->alias('t1')
+            ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t2.id=t1.project')
+            ->where('t1.id')->in($executionIds)
+            ->beginIF(!$this->app->user->admin)->andWhere('t1.id')->in($this->app->user->view->sprints)->fi()
+            ->andWhere('t1.type')->eq($type)
+            ->andWhere('t1.deleted')->eq(0)
+            ->orderBy('t1.id desc')
+            ->fetchPairs('id', 'name');
     }
 
     /**
@@ -1981,14 +2065,16 @@ class executionModel extends model
             if(isset($oldProducts[$productID][$branch]))
             {
                 $oldProduct = $oldProducts[$productID][$branch];
-                $oldPlan    = $oldProduct->plan;
+                if($this->app->rawMethod != 'edit') $oldPlan = $oldProduct->plan;
             }
 
             $data = new stdclass();
             $data->project = $executionID;
             $data->product = $productID;
             $data->branch  = $branch;
-            $data->plan    = isset($plans[$productID][$branch]) ? $plans[$productID][$branch] : $oldPlan;
+            $data->plan    = isset($plans[$productID][$branch]) ? implode(',', $plans[$productID][$branch]) : $oldPlan;
+            $data->plan    = trim($data->plan, ',');
+            $data->plan    = empty($data->plan) ? 0 : ",$data->plan,";
             $this->dao->insert(TABLE_PROJECTPRODUCT)->data($data)->exec();
             $existedProducts[$productID][$branch] = true;
         }
@@ -2008,13 +2094,28 @@ class executionModel extends model
      */
     public function getTasks2Imported($toExecution, $branches)
     {
-        $execution       = $this->getById($toExecution);
-        $project         = $this->loadModel('project')->getById($execution->project);
-        $brotherProjects = $this->project->getBrotherProjects($project);
-        $executions      = $this->dao->select('id')->from(TABLE_EXECUTION)
-            ->where('project')->in($brotherProjects)
-            ->andWhere('status')->ne('closed')
-            ->fetchPairs('id');
+        if($this->config->systemMode == 'classic')
+        {
+            $products = $this->loadModel('product')->getProducts($toExecution);
+            if(empty($products)) return array();
+
+            $execution  = $this->getById($toExecution);
+            $executions = $this->dao->select('t1.product, t1.project')->from(TABLE_PROJECTPRODUCT)->alias('t1')
+                ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.project=t2.id')
+                ->where('t1.product')->in(array_keys($products))
+                ->andWhere('t2.project')->eq($execution->project)
+                ->fetchGroup('project');
+        }
+        else
+        {
+            $execution       = $this->getById($toExecution);
+            $project         = $this->loadModel('project')->getById($execution->project);
+            $brotherProjects = $this->project->getBrotherProjects($project);
+            $executions      = $this->dao->select('id')->from(TABLE_EXECUTION)
+                ->where('project')->in($brotherProjects)
+                ->andWhere('status')->ne('closed')
+                ->fetchPairs('id');
+        }
 
         $branches = str_replace(',', "','", $branches);
         $tasks = $this->dao->select('t1.*, t2.id AS storyID, t2.title AS storyTitle, t2.version AS latestStoryVersion, t2.status AS storyStatus, t3.realname AS assignedToRealName')->from(TABLE_TASK)->alias('t1')
@@ -2450,8 +2551,8 @@ class executionModel extends model
         $this->loadModel('action');
         $linkedCases   = $this->dao->select('*')->from(TABLE_PROJECTCASE)->where('project')->eq($executionID)->orderBy('order_desc')->fetchPairs('case', 'order');
         $lastCaseOrder = empty($linkedCases) ? 0 : reset($linkedCases);
-        $cases         = $this->dao->select('id, version')->from(TABLE_CASE)->where('story')->eq($storyID)->fetchParis('id');
-        foreach($cases as $caseID => $case)
+        $cases         = $this->dao->select('id, version')->from(TABLE_CASE)->where('story')->eq($storyID)->fetchPairs();
+        foreach($cases as $caseID => $version)
         {
             if(isset($linkedCases[$caseID])) continue;
 
@@ -2459,7 +2560,7 @@ class executionModel extends model
             $object->project = $executionID;
             $object->product = $productID;
             $object->case    = $caseID;
-            $object->version = $case->version;
+            $object->version = $version;
             $object->order   = ++$lastCaseOrder;
 
             $this->dao->insert(TABLE_PROJECTCASE)->data($object)->exec();
@@ -2479,41 +2580,46 @@ class executionModel extends model
      */
     public function linkStories($executionID)
     {
-        $plans = $this->dao->select('plan,product')->from(TABLE_PROJECTPRODUCT)
+        $plans = $this->dao->select('plan')->from(TABLE_PROJECTPRODUCT)
             ->where('project')->eq($executionID)
-            ->fetchPairs('plan', 'product');
+            ->fetchPairs('plan');
 
         $planStories  = array();
         $planProducts = array();
-        $count        = 0;
         $this->loadModel('story');
         if(!empty($plans))
         {
-            foreach($plans as $planID => $productID)
+            foreach($plans as $planIdList)
             {
-                if(empty($planID)) continue;
-                $planStory = $this->story->getPlanStories($planID);
-                if(!empty($planStory))
+                if(empty($planIdList)) continue;
+                $planIdList = explode(',', $planIdList);
+                foreach($planIdList as $planID)
                 {
-                    foreach($planStory as $id => $story)
+                    $planStory = $this->story->getPlanStories($planID);
+                    if(!empty($planStory))
                     {
-                        if($story->status == 'draft')
+                        foreach($planStory as $id => $story)
                         {
-                            $count++;
-                            unset($planStory[$id]);
-                            continue;
+                            if($story->status == 'draft')
+                            {
+                                unset($planStory[$id]);
+                                continue;
+                            }
+                            $planProducts[$story->id] = $story->product;
                         }
-                        $planProducts[$story->id] = $story->product;
+                        $planStories = array_merge($planStories, array_keys($planStory));
                     }
-                    $planStories = array_merge($planStories, array_keys($planStory));
                 }
             }
         }
 
-        $projectID = $this->dao->select('project')->from(TABLE_EXECUTION)->where('id')->eq($executionID)->fetch('project');
+        if($this->config->systemMode == 'new')
+        {
+            $projectID = $this->dao->select('project')->from(TABLE_EXECUTION)->where('id')->eq($executionID)->fetch('project');
+            $this->session->set('project', $projectID);
+            $this->linkStory($projectID, $planStories, $planProducts);
+        }
         $this->linkStory($executionID, $planStories, $planProducts);
-        if($this->config->systemMode == 'new') $this->linkStory($projectID, $planStories, $planProducts);
-        if($count != 0) echo js::alert(sprintf($this->lang->execution->haveDraft, $count)) . js::locate(helper::createLink('execution', 'create', "projectID=$projectID&executionID=$executionID"));
     }
 
     /**
@@ -2703,13 +2809,30 @@ class executionModel extends model
 
         $objectPairs = $this->dao->select('id,name')->from(TABLE_PROJECT)
             ->where('deleted')->eq(0)
+            ->andWhere('project', true)->eq($projectID)
             ->andWhere('type')->ne('project')
-            ->andWhere('(project')->eq($projectID)
-            ->orWhere('id')->eq($projectID)
             ->markRight(1)
+            ->orWhere('id')->eq($projectID)
             ->orderBy('type_asc,openedDate_desc')
             ->limit('9')
             ->fetchPairs();
+
+        $countPairs = $this->dao->select('root, COUNT(*) as count')->from(TABLE_TEAM)
+            ->where('( type')->eq('project')
+            ->andWhere('root')->eq($projectID)
+            ->markRight(1)
+            ->orWhere('( type')->eq('execution')
+            ->andWhere('root')->in(array_keys($objectPairs))
+            ->markRight(1)
+            ->groupBy('root')
+            ->fetchPairs('root');
+
+        foreach($objectPairs as $objectID => $objectName)
+        {
+            $memberCount = zget($countPairs, $objectID, 0);
+            $countTip    = $memberCount > 1 ? str_replace('member', 'members', $this->lang->execution->countTip) : $this->lang->execution->countTip;
+            $objectPairs[$objectID] = $objectName . sprintf($countTip, $memberCount);
+        }
 
         return $objectPairs;
     }
@@ -2814,13 +2937,13 @@ class executionModel extends model
     public function unlinkMember($sprintID, $account)
     {
         $sprint = $this->getByID($sprintID);
-        $type   = ($sprint->type == 'stage' || $sprint->type == 'sprint') ? 'execution' : $sprint->type;
+        $type   = strpos(',stage,sprint,kanban,', ",$sprint->type,") !== false ? 'execution' : $sprint->type;
 
         $this->dao->delete()->from(TABLE_TEAM)->where('root')->eq((int)$sprintID)->andWhere('type')->eq($type)->andWhere('account')->eq($account)->exec();
         $this->updateUserView($sprintID, 'sprint', array($account));
 
         /* Remove team members from the sprint or stage, and determine whether to remove team members from the execution. */
-        if($sprint->type == 'stage' || $sprint->type == 'sprint')
+        if(strpos(',stage,sprint,kanban,', ",$sprint->type,") !== false)
         {
             $teamMember = $this->dao->select('t1.id, t2.account')->from(TABLE_EXECUTION)->alias('t1')
                 ->leftJoin(TABLE_TEAM)->alias('t2')->on('t1.id = t2.root')
@@ -2915,6 +3038,111 @@ class executionModel extends model
     }
 
     /**
+     * Compute cfd of a execution.
+     *
+     * @param  int    $executionID
+     * @access public
+     * @return array
+     */
+    public function computeCFD($executionID = 0)
+    {
+        $today = helper::today();
+        $executions = $this->dao->select('id, code')->from(TABLE_EXECUTION)
+            ->where('type')->eq('kanban')
+            ->andWhere('status')->notin('done,closed,suspended')
+            ->beginIF($executionID)->andWhere('id')->in($executionID)->fi()
+            ->fetchPairs();
+        if(!$executions) return array();
+
+        /* Update today's data of cfd. */
+        $cells = $this->dao->select("t1.id, t1.kanban as execution, t1.`column`, t1.type, t1.cards, t1.lane, t2.name, t2.parent")
+            ->from(TABLE_KANBANCELL)->alias('t1')
+            ->leftJoin(TABLE_KANBANCOLUMN)->alias('t2')->on('t1.column = t2.id')
+            ->where('t1.kanban')->in(array_keys($executions))
+            ->andWhere('t2.deleted')->eq('0')
+            ->andWhere('t1.type')->in('story,bug,task')
+            ->orderBy('t2.id asc')
+            ->fetchAll('id');
+
+        /* Group by execution/type/name/lane/column. */
+        $columnGroup = array();
+        $parentNames = array();
+        foreach($cells as $id => $column)
+        {
+            if($column->parent == '-1')
+            {
+                $parentNames[$column->column] = $column->name;
+                continue;
+            }
+
+            $column->name = isset($parentNames[$column->parent]) ? $parentNames[$column->parent] . "($column->name)" : $column->name;
+            $columnGroup[$column->execution][$column->type][$column->name][$column->lane][$column->column] = $column;
+        }
+
+        foreach($columnGroup as $executionID => $executionGroup)
+        {
+            foreach($executionGroup as $type => $columns)
+            {
+                foreach($columns as $colName => $laneGroup)
+                {
+                    $cfd = new stdclass();
+                    $cfd->count = 0;
+                    $cfd->date  = $today;
+                    $cfd->type  = $type;
+                    foreach($laneGroup as $laneID => $columnGroup)
+                    {
+                        foreach($columnGroup as $colID => $columnCard)
+                        {
+                            $cards = trim($columnCard->cards, ',');
+                            $cfd->count += $cards ? count(explode(',', $cards)) : 0;
+                        }
+                    }
+
+                    $cfd->name      = $colName;
+                    $cfd->execution = $executionID;
+                    $this->dao->replace(TABLE_CFD)->data($cfd)->exec();
+                }
+            }
+        }
+    }
+
+    /**
+     * Check whether there is data on the specified date of execution, and there is no data with the latest date added.
+     *
+     * @param int    $executionID
+     * @param string $date
+     * @access public
+     * @return void
+     */
+    public function checkCFDData($executionID, $date)
+    {
+        $today = helper::today();
+        if($date >= $today) return;
+
+        $checkData = $this->dao->select("date, `count` AS value, `name`")->from(TABLE_CFD)
+            ->where('execution')->eq((int)$executionID)
+            ->andWhere('date')->eq($date)
+            ->orderBy('date DESC, id asc')->fetchGroup('name', 'date');
+        if(!$checkData)
+        {
+            $closetoDate = $this->dao->select("max(date) as date")->from(TABLE_CFD)->where('execution')->eq((int)$executionID)->andWhere('date')->lt($date)->fetch('date');
+            if($closetoDate)
+            {
+                $copyData = $this->dao->select("*")->from(TABLE_CFD)
+                    ->where('execution')->eq((int)$executionID)
+                    ->andWhere('date')->eq($closetoDate)
+                    ->fetchAll();
+                foreach($copyData as $data)
+                {
+                    unset($data->id);
+                    $data->date = $date;
+                    $this->dao->replace(TABLE_CFD)->data($data)->exec();
+                }
+            }
+        }
+    }
+
+    /**
      * Fix burn for first day.
      *
      * @param  int    $executionID
@@ -2937,6 +3165,36 @@ class executionModel extends model
         if(!is_numeric($data->estimate)) return false;
 
         $this->dao->replace(TABLE_BURN)->data($data)->exec();
+    }
+
+    /**
+     * Get begin and end for CFD.
+     *
+     * @param  object $execution
+     * @access public
+     * @return void
+     */
+    public function getBeginEnd4CFD($execution)
+    {
+        $begin = $execution->begin;
+        $end   = $execution->end;
+        if(helper::today() < $execution->begin)
+        {
+            $begin = helper::today();
+            $end   = helper::today();
+        }
+        elseif((helper::today() >= $execution->begin) and (helper::today() <= $execution->end))
+        {
+            $begin = (date('Y-m-d', strtotime('-13 days')) < $execution->begin) ? $execution->begin : date('Y-m-d', strtotime('-13 days'));
+            $end   = helper::today();
+        }
+        elseif((helper::today() > $execution->end))
+        {
+            $begin = date('Y-m-d', strtotime('-13 days', strtotime($execution->end))) > $execution->begin ? date('Y-m-d', strtotime('-13 days', strtotime($execution->end))) : $execution->begin;
+            $end   = $execution->end;
+        }
+
+        return array($begin, $end);
     }
 
     /**
@@ -3015,6 +3273,7 @@ class executionModel extends model
         }
 
         $current  = $begin;
+        $today    = helper::today();
         $endTime  = strtotime($end);
         $preValue = 0;
         $todayTag = 0;
@@ -3028,19 +3287,19 @@ class executionModel extends model
         {
             $currentTime = strtotime($current);
             if($currentTime > $endTime) break;
-            if(isset($sets[$current])) $preValue = $sets[$current]->value;
             if($currentTime > time() and !$todayTag)
             {
                 $todayTag = $i + 1;
-                break;
             }
 
+            if(isset($sets[$current])) $preValue = $sets[$current]->value;
             if(!isset($sets[$current]) and $mode == 'noempty')
             {
                 $sets[$current]  = new stdclass();
                 $sets[$current]->name  = $current;
-                $sets[$current]->value = $preValue;
+                $sets[$current]->value = helper::diffDate($current, $today) < 0 ? $preValue : 'null';
             }
+
             $nextDay = date(DT_DATE1, $currentTime + 24 * 3600);
             $current = $nextDay;
         }
@@ -3050,6 +3309,104 @@ class executionModel extends model
         if($endTime <= time()) return array_slice($sets, -$counts, $counts);
         if($todayTag <= $counts) return array_slice($sets, 0, $counts);
         if($todayTag > $counts) return array_slice($sets, $todayTag - $counts, $counts);
+    }
+
+    /**
+     * Build CFD data.
+     *
+     * @param  int    $executionID
+     * @param  string $type
+     * @param  array  $dateList
+     * @access public
+     * @return array
+     */
+    public function buildCFDData($executionID, $dateList, $type)
+    {
+        $this->loadModel('report');
+        $setGroup = $this->getCFDData($executionID, $dateList, $type);
+
+        if(empty($setGroup)) return array();
+
+        $chartData['labels'] = $this->report->convertFormat($dateList, DT_DATE5);
+        $chartData['line']   = array();
+
+        foreach($setGroup as $name => $sets)
+        {
+            $chartData['line'][$name] = $this->report->createSingleJSON($sets, $dateList);
+        }
+
+        return $chartData;
+    }
+
+    /**
+     * Get CFD data to display.
+     *
+     * @param  int    $executionID
+     * @param  string $type
+     * @param  array  $dateList
+     * @access public
+     * @return array
+     */
+    public function getCFDData($executionID = 0, $dateList = array(), $type = 'story')
+    {
+        $execution = $this->getById($executionID);
+
+        $setGroup = $this->dao->select("date, `count` AS value, `name`")->from(TABLE_CFD)
+            ->where('execution')->eq((int)$executionID)
+            ->andWhere('type')->eq($type)
+            ->andWhere('date')->in($dateList)
+            ->orderBy('date DESC, id asc')->fetchGroup('name', 'date');
+
+        $data = array();
+        foreach($setGroup as $name => $sets)
+        {
+            foreach($sets as $date => $set)
+            {
+                if($date < $execution->begin) continue;
+
+                $data[$name][$date] = $set;
+            }
+        }
+
+        return $data;
+    }
+
+    /**
+     * Get CFD statistics.
+     *
+     * @param int $executionID
+     * @param array $dateList
+     * @param string $type
+     * @access public
+     * @return void
+     */
+    public function getCFDStatistics($executionID, $dateList, $type)
+    {
+        $kanbanData = $this->loadModel('kanban')->getRDKanban($executionID, $type);
+        $kanbanData = array_shift($kanbanData);
+
+        $cycleTime = array();
+        foreach($kanbanData->groups as $group)
+        {
+            foreach($group->lanes as $lane)
+            {
+                if(!isset($lane->items['closed'])) continue;
+
+                foreach($lane->items['closed'] as $item)
+                {
+                    $diffTime = $type == 'story' ? strtotime($item['lastEditedDate']) - strtotime($item['openedDate']) : strtotime($item['closedDate']) - strtotime($item['openedDate']);
+                    $day      = round($diffTime / (3600 * 24), 1);
+                    if($day > 0) $cycleTime[$item['id']] = $day;
+                }
+            }
+        }
+
+        $itemCount    = count($cycleTime);
+        if(!$itemCount) return array('', '');
+        $cycleTimeAvg = round(array_sum($cycleTime) / $itemCount, 1);
+        $throughput   = round(($itemCount * 7) / $cycleTimeAvg, 1) . "{$this->lang->execution->kanbanCardsUnit}/" . $this->lang->execution->week;
+
+        return array($cycleTimeAvg, $throughput);
     }
 
     /**
@@ -3079,6 +3436,8 @@ class executionModel extends model
              ->andWhere('t1.id')->in(array_keys($taskIdList))
              ->orderBy($orderBy)
              ->fetchAll('id');
+
+        $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'task', true);
 
         if(empty($tasks)) return array();
 
@@ -3777,9 +4136,9 @@ class executionModel extends model
                 $storyItem->color         = $story->color;
                 $storyItem->pri           = $story->pri;
                 $storyItem->storyId       = $story->id;
-                $storyItem->openedBy      = $users[$story->openedBy];
+                $storyItem->openedBy      = zget($users, $story->openedBy);
                 $storyItem->assignedTo    = zget($users, $story->assignedTo);
-                $storyItem->url           = helper::createLink('story', 'view', "storyID=$story->id&version=$story->version&from=execution&param=$executionID");
+                $storyItem->url           = helper::createLink('execution', 'storyView', "storyID=$story->id&version=$story->version&from=execution&param=$executionID");
                 $storyItem->taskCreateUrl = helper::createLink('task', 'batchCreate', "executionID={$executionID}&story={$story->id}");
 
                 $storyTasks = isset($taskGroups[$node->id][$story->id]) ? $taskGroups[$node->id][$story->id] : array();
@@ -3904,29 +4263,26 @@ class executionModel extends model
         $this->loadModel('productplan');
 
         $param        = strtolower($param);
-        $branchIDList = strpos($param, 'withmainplan') !== false ? array(BRANCH_MAIN => BRANCH_MAIN) : array();
+        $branchIdList = strpos($param, 'withmainplan') !== false ? array(BRANCH_MAIN => BRANCH_MAIN) : array();
         $branchGroups = $this->getBranchByProduct(array_keys($products), $executionID, 'noclosed');
         foreach($branchGroups as $branches)
         {
-            foreach($branches as $branchID => $branchName) $branchIDList[$branchID] = $branchID;
+            foreach($branches as $branchID => $branchName) $branchIdList[$branchID] = $branchID;
         }
 
         $plans = $this->dao->select('id,title,product,parent,begin,end')->from(TABLE_PRODUCTPLAN)
             ->where('product')->in(array_keys($products))
             ->andWhere('deleted')->eq(0)
-            ->andWhere('branch')->in($branchIDList)->fi()
-            ->beginIF(strpos($param, 'skipparent') !== false)->andWhere('parent')->ne(-1)->fi()
+            ->andWhere('branch')->in($branchIdList)->fi()
             ->orderBy('begin desc')
             ->fetchAll('id');
 
         $plans        = $this->productplan->reorder4Children($plans);
         $productPlans = array();
-        $parentTitle  = array();
         foreach($plans as $plan)
         {
-            if($plan->parent == '-1') $parentTitle[$plan->id] = $plan->title;
-            if($plan->parent > 0 and isset($parentTitle[$plan->parent])) $plan->title = $parentTitle[$plan->parent] . ' /' . $plan->title;
-
+            if($plan->parent == '-1' and strpos($param, 'skipparent') !== false) continue;
+            if($plan->parent > 0 and isset($plans[$plan->parent])) $plan->title = $plans[$plan->parent]->title . ' /' . $plan->title;
             $productPlans[$plan->product][$plan->id] = $plan->title . " [{$plan->begin} ~ {$plan->end}]";
             if($plan->begin == '2030-01-01' and $plan->end == '2030-01-01') $productPlans[$plan->product][$plan->id] = $plan->title . ' ' . $this->lang->productplan->future;
         }
@@ -3988,6 +4344,116 @@ class executionModel extends model
     }
 
     /**
+     * Print execution nested list.
+     *
+     * @param  object $execution
+     * @param  bool   $isChild
+     * @param  array  $users
+     * @access public
+     * @return void
+     */
+    public function printNestedList($execution, $isChild, $users, $productID)
+    {
+        $this->loadModel('task');
+        $this->loadModel('execution');
+        $this->loadModel('programplan');
+
+        if(!$isChild)
+        {
+            $trClass = 'is-top-level table-nest-child-hide';
+            $trAttrs = "data-id='$execution->id' data-order='$execution->order' data-nested='true'";
+        }
+        else
+        {
+            $trClass  = 'table-nest-hide';
+            $trAttrs  = "data-id={$execution->id} data-parent={$execution->parent}";
+            $trAttrs .= " data-nest-parent='$execution->parent' data-order='$execution->order' data-nest-path=',$execution->parent,$execution->id,'";
+        }
+
+        $burns = join(',', $execution->burns);
+        echo "<tr $trAttrs class='$trClass'>";
+        echo "<td><span id=$execution->id class='table-nest-icon icon table-nest-toggle'></span>";
+        if($this->config->systemMode == 'new')
+        {
+            $spanClass = $execution->type == 'stage' ? 'label-warning' : 'label-info';
+            echo "<span class='project-type-label label label-outline $spanClass'>{$this->lang->execution->typeList[$execution->type]}</span> ";
+        }
+        echo empty($execution->children) ? html::a(helper::createLink('execution', 'view', "executionID=$execution->id"), $execution->name) : $execution->name;
+        echo '<td>' . zget($users, $execution->PM) . '</td>';
+        echo "<td class='status-{$execution->status}'>" . zget($this->lang->project->statusList, $execution->status) . '</td>';
+        echo '<td>' . html::ring($execution->hours->progress) . '</td>';
+        echo '<td>' . $execution->begin . '</td>';
+        echo '<td>' . $execution->end . '</td>';
+        echo "<td class='hours' title='{$execution->hours->totalEstimate}{$this->lang->execution->workHour}'>" . $execution->hours->totalEstimate . $this->lang->execution->workHourUnit . '</td>';
+        echo "<td class='hours' title='{$execution->hours->totalConsumed}{$this->lang->execution->workHour}'>" . $execution->hours->totalConsumed . $this->lang->execution->workHourUnit . '</td>';
+        echo "<td class='hours' title='{$execution->hours->totalLeft}{$this->lang->execution->workHour}'>" . $execution->hours->totalLeft . $this->lang->execution->workHourUnit . '</td>';
+        echo "<td id='spark-{$execution->id}' class='sparkline text-left no-padding' values='$burns'></td>";
+        echo '<td class="c-actions">';
+        common::printIcon('execution', 'start', "executionID={$execution->id}", $execution, 'list', '', '', 'iframe', true);
+        $class = !empty($execution->children) ? 'disabled' : '';
+        common::printIcon('task', 'create', "executionID={$execution->id}", $execution, 'list', '', '', $class, false, "data-app='execution'");
+
+        if($execution->type == 'stage')
+        {
+            if($execution->grade == 1 && $this->loadModel('programplan')->isCreateTask($execution->id))
+            {
+                common::printIcon('programplan', 'create', "program={$execution->parent}&productID=$productID&planID=$execution->id", $execution, 'list', 'split', '', '', '', '', $this->lang->programplan->createSubPlan);
+            }
+            else
+            {
+                if($execution->grade == 2)
+                {
+                    echo "<button class='btn' disabled='disabled' style='margin-right: 4px;'><i class='icon-split disabled icon-search'></i></button>";
+                }
+                else
+                {
+                    echo common::hasPriv('programplan', 'create') ? html::a('javascript:alert("' . $this->lang->programplan->error->createdTask . '");', '<i class="icon-programplan-create icon-split"></i>', '', 'class="btn"') : '';
+                }
+            }
+        }
+
+        if($execution->type == 'stage')
+        {
+            common::printIcon('programplan', 'edit', "stageID=$execution->id&projectID=$execution->project", $execution, 'list', '', '', 'iframe', true);
+        }
+        else
+        {
+            common::printIcon('execution', 'edit', "executionID=$execution->id", $execution, 'list', '', '', 'iframe', true);
+        }
+
+        $disabled = !empty($execution->children) ? ' disabled' : '';
+        if($execution->status != 'closed' and common::hasPriv('execution', 'close', $execution))
+        {
+            common::printIcon('execution', 'close', "stageID=$execution->id", $execution, 'list', 'off', 'hiddenwin' , $disabled . ' iframe', true, '', $this->lang->execution->close);
+        }
+        elseif($execution->status == 'closed' and common::hasPriv('execution', 'activate', $execution))
+        {
+            common::printIcon('execution', 'activate', "stageID=$execution->id", $execution, 'list', 'magic', 'hiddenwin' , $disabled . ' iframe', true, '', $this->lang->execution->activate);
+        }
+
+        if(common::hasPriv('execution', 'delete', $execution))
+        {
+            common::printIcon('execution', 'delete', "stageID=$execution->id&confirm=no", $execution, 'list', 'trash', 'hiddenwin' , $disabled, '', '', $this->lang->delete);
+        }
+        echo '</td>';
+        echo '</tr>';
+
+        if(!empty($execution->children))
+        {
+            foreach($execution->children as $child) $this->printNestedList($child, true, $users, $productID);
+        }
+
+        if(!empty($execution->tasks))
+        {
+            foreach($execution->tasks as $task)
+            {
+                $showmore = (count($execution->tasks) == 50) && ($task == end($execution->tasks));
+                echo $this->task->buildNestedList($execution, $task, false, $showmore, $users);
+            }
+        }
+    }
+
+    /**
      * Update user view of execution and it's product.
      *
      * @param  int|array $executionID
@@ -4018,6 +4484,18 @@ class executionModel extends model
             ->where('t1.project')->in($stageIdList)
             ->fetchPairs('project', 'name');
         return $productpairs;
+    }
+
+    /**
+     * Get lifetime by id list.
+     *
+     * @param  string $idList
+     * @access public
+     * @return array
+     */
+    public function getLifetimeByIdList($idList = '')
+    {
+        return $this->dao->select('id,lifetime')->from(TABLE_EXECUTION)->where('id')->in($idList)->fetchPairs();
     }
 
     /**
@@ -4075,5 +4553,172 @@ class executionModel extends model
         $menu .= $this->buildMenu('execution', 'delete', "execution=$execution->id", $execution, 'button', 'trash', 'hiddenwin');
 
         return $menu;
+    }
+
+    /**
+     * Print cell data.
+     *
+     * @param  object $col
+     * @param  object $execution
+     * @param  array  $users
+     * @param  string $mode
+     * @param  bool   $isStage
+     * @param  int    $productID
+     * @param  bool   $child
+     * @access public
+     * @return void
+     */
+    public function printCell($col, $execution, $users, $mode = 'datatable', $isStage = false, $productID = 0, $child = false)
+    {
+        $canBatchEdit   = common::hasPriv('execution', 'batchEdit');
+        $id             = $col->id;
+        $onlyChildStage = ($execution->grade == 2 and $execution->project != $execution->parent);
+
+        if(!$isStage and in_array($col->id, array('percent', 'attribute', 'actions'))) return;
+        if(($this->config->systemMode == 'classic' or ($this->config->systemMode == 'new' and $this->app->tab != 'execution')) and $col->id == 'project') return;
+
+        if($col->show)
+        {
+            $class = "c-{$id}";
+
+            if($id == 'id')      $class .= ' cell-id';
+            if($id == 'name')    $class .= ' text-left flex';
+            if($id == 'code')    $class .= ' text-left';
+            if($id == 'project') $class .= ' text-left c-name';
+            if($id == 'status')  $class .= ' text-center';
+            if($id == 'actions') $class .= ' text-center';
+
+            if($id == 'name' and !$child) $class .= ' sort-handler';
+            if($id == 'name' and !empty($execution->children)) $class .= ' parent';
+            if(in_array($id, array('estimate', 'consumed', 'left'))) $class .= ' hours';
+
+            $title = '';
+            if($id == 'name')
+            {
+                $title = " title='{$execution->name}'";
+                if(!empty($execution->children)) $class .= ' has-child';
+            }
+
+            if($id == 'project') $title = " title='{$execution->projectName}'";
+            if($id == 'code')    $title = " title='{$execution->code}'";
+
+            if($id == 'status')
+            {
+                $executionStatus = $this->processStatus('execution', $execution);
+                $title           = " title='{$executionStatus}'";
+            }
+
+            if(in_array($id, array('estimate', 'consumed', 'left')))
+            {
+                $totalTitle = 'total' . ucfirst($id);
+                $title     .= $execution->hours->{$totalTitle} . $this->lang->execution->workHour;
+            }
+
+            echo "<td class='{$class}' $title>";
+            if($this->config->edition != 'open') $this->loadModel('flow')->printFlowCell('execution', $execution, $id);
+            if($id == 'burn')
+            {
+                $burnValue = join(',', $execution->burns);
+                echo "<span id='spark-{$execution->id}' class='sparkline text-left no-padding' values='$burnValue'></span>";
+            }
+
+            switch($id)
+            {
+            case 'id':
+                if($canBatchEdit)
+                {
+                    echo "<div class='checkbox-primary'><input type='checkbox' name='executionIDList[$execution->id]' value='$execution->id' autocomplete='off'/><label></label></div>";
+                }
+                echo sprintf('%03d', $execution->id);
+                break;
+            case 'name':
+                $label         = $execution->type == 'stage' ? 'label-warning' : 'label-info';
+                $executionLink = $execution->projectModel == 'kanban' ? html::a(helper::createLink('execution', 'kanban', 'executionID=' . $execution->id), $execution->name, '', "class='text-ellipsis'") : html::a(helper::createLink('execution', 'task', 'execution=' . $execution->id), $execution->name, '', "class='text-ellipsis'");
+                if(!$onlyChildStage) echo "<span class='project-type-label label label-outline $label'>{$this->lang->execution->typeList[$execution->type]}</span>";
+                if($onlyChildStage) echo "<span class='label label-badge label-light label-children'>{$this->lang->programplan->childrenAB}</span> ";
+                echo !empty($execution->children) ? "<span class='text-ellipsis'>$execution->name</span>" :  $executionLink;
+                if(isset($execution->delay)) echo "<span class='label label-danger label-badge'>{$this->lang->execution->delayed}</span> ";
+                if(!empty($execution->children))
+                {
+                    echo "<a class='plan-toggle' data-id='$execution->id'><i class='icon icon-angle-double-right'></i></a>";
+                }
+                break;
+            case 'code':
+                echo $execution->code;
+                break;
+            case 'project':
+                echo "<span class='status-execution status-{$execution->projectName}'>{$execution->projectName}</span>";
+                break;
+            case 'PM':
+                echo zget($users, $execution->PM);
+                break;
+            case 'status':
+                echo "<span class='status-execution status-{$execution->status}'>$executionStatus</span>";
+                break;
+            case 'progress':
+                echo html::ring($execution->hours->progress);
+                break;
+            case 'percent':
+                echo $execution->percent . '%';
+                break;
+            case 'attribute':
+                echo zget($this->lang->stage->typeList, $execution->attribute, '');
+                break;
+            case 'begin':
+                echo helper::isZeroDate($execution->begin) ? '' : $execution->begin;
+                break;
+            case 'end':
+                echo helper::isZeroDate($execution->end) ? '' : $execution->end;
+                break;
+            case 'realBegan':
+                echo helper::isZeroDate($execution->realBegan) ? '' : $execution->realBegan;
+                break;
+            case 'realEnd':
+                echo helper::isZeroDate($execution->realEnd) ? '' : $execution->realEnd;
+                break;
+            case 'estimate':
+                echo $execution->hours->totalEstimate . $this->lang->execution->workHourUnit;
+                break;
+            case 'consumed':
+                echo $execution->hours->totalConsumed . $this->lang->execution->workHourUnit;
+                break;
+            case 'left':
+                echo $execution->hours->totalLeft . $this->lang->execution->workHourUnit;
+                break;
+            case 'actions':
+                common::printIcon('execution', 'start', "executionID={$execution->id}", $execution, 'list', '', '', 'iframe', true);
+                $class = !empty($execution->children) ? 'disabled' : '';
+                common::printIcon('task', 'create', "executionID={$execution->id}", $execution, 'list', '', '', $class, false, "data-app='execution'");
+
+                if($execution->grade == 1 && $this->loadModel('programplan')->isCreateTask($execution->id))
+                {
+                    common::printIcon('programplan', 'create', "program={$execution->parent}&productID=$productID&planID=$execution->id", $execution, 'list', 'split', '', '', '', '', $this->lang->programplan->createSubPlan);
+                }
+                else
+                {
+                    $disabled = ($execution->grade == 2) ? ' disabled' : '';
+                    echo common::hasPriv('programplan', 'create') ? html::a('javascript:alert("' . $this->lang->programplan->error->createdTask . '");', '<i class="icon-programplan-create icon-split"></i>', '', 'class="btn ' . $disabled . '"') : '';
+                }
+
+                common::printIcon('programplan', 'edit', "stageID=$execution->id&projectID=$execution->project", $execution, 'list', '', '', 'iframe', true);
+
+                $disabled = !empty($execution->children) ? ' disabled' : '';
+                if($execution->status != 'closed' and common::hasPriv('execution', 'close', $execution))
+                {
+                    common::printIcon('execution', 'close', "stageID=$execution->id", $execution, 'list', 'off', 'hiddenwin' , $disabled . ' iframe', true, '', $this->lang->programplan->close);
+                }
+                elseif($execution->status == 'closed' and common::hasPriv('execution', 'activate', $execution))
+                {
+                    common::printIcon('execution', 'activate', "stageID=$execution->id", $execution, 'list', 'magic', 'hiddenwin' , $disabled . ' iframe', true, '', $this->lang->programplan->activate);
+                }
+
+                if(common::hasPriv('execution', 'delete', $execution))
+                {
+                    common::printIcon('execution', 'delete', "stageID=$execution->id&confirm=no", $execution, 'list', 'trash', 'hiddenwin' , $disabled, '', '', $this->lang->programplan->delete);
+                }
+                break;
+            }
+            echo '</td>';
+        }
     }
 }

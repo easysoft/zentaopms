@@ -3,7 +3,7 @@
  * The execution view file of my module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     my
  * @version     $Id
@@ -43,7 +43,7 @@
         <th class='c-user'><?php echo $lang->team->role;?></th>
         <th class='c-date'><?php echo $lang->team->join;?></th>
         <th class='c-hours'><?php echo $lang->my->hours;?></th>
-        <th class='c-user'><?php echo $lang->execution->assignedToMe;?></th>
+        <th class='c-user'><?php echo $lang->execution->myTask;?></th>
         <th class='c-progress'><?php echo $lang->execution->progress;?></th>
       </tr>
     </thead>

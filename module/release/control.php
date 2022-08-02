@@ -3,7 +3,7 @@
  * The control file of release module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     release
  * @version     $Id: control.php 4178 2013-01-20 09:32:11Z wwccss $
@@ -72,7 +72,8 @@ class release extends control
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             $this->loadModel('action')->create('release', $releaseID, 'opened');
 
-            $this->executeHooks($releaseID);
+            $message = $this->executeHooks($releaseID);
+            if($message) $this->lang->saveSuccess = $message;
 
             if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $releaseID));
             if(isonlybody()) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => "parent.loadProductBuilds($productID)"));
@@ -98,7 +99,7 @@ class release extends control
         $this->view->position[]     = $this->lang->release->create;
         $this->view->productID      = $productID;
         $this->view->builds         = $builds;
-        $this->view->users          = $this->loadModel('user')->getPairs('noletter|noclosed');
+        $this->view->users          = $this->loadModel('user')->getPairs('noclosed');
         $this->view->lastRelease    = $this->release->getLast($productID, $branch);
         $this->view->notEmptyBuilds = $notEmptyBuilds;
 
@@ -126,7 +127,10 @@ class release extends control
                 $actionID = $this->loadModel('action')->create('release', $releaseID, 'Edited', $fileAction);
                 if(!empty($changes)) $this->action->logHistory($actionID, $changes);
             }
-            $this->executeHooks($releaseID);
+
+            $message = $this->executeHooks($releaseID);
+            if($message) $this->lang->saveSuccess = $message;
+
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('view', "releaseID=$releaseID")));
         }
         $this->loadModel('story');
@@ -151,7 +155,7 @@ class release extends control
         $this->view->release    = $release;
         $this->view->build      = $build;
         $this->view->builds     = $builds;
-        $this->view->users      = $this->loadModel('user')->getPairs('noletter|noclosed');
+        $this->view->users      = $this->loadModel('user')->getPairs('noclosed');
 
         $this->display();
     }
@@ -193,7 +197,7 @@ class release extends control
                 ->fetchAll('id');
 
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'story');
-        $stages = $this->dao->select('*')->from(TABLE_STORYSTAGE)->where('story')->in($release->stories)->andWhere('branch')->eq($release->branch)->fetchPairs('story', 'stage');
+        $stages = $this->dao->select('*')->from(TABLE_STORYSTAGE)->where('story')->in(array_keys($stories))->andWhere('branch')->eq($release->branch)->fetchPairs('story', 'stage');
         foreach($stages as $storyID => $stage)$stories[$storyID]->stage = $stage;
 
         $bugPager = new pager($type == 'bug' ? $recTotal : 0, $recPerPage, $type == 'bug' ? $pageID : 1);
@@ -285,7 +289,8 @@ class release extends control
             $build   = $this->dao->select('*')->from(TABLE_BUILD)->where('id')->eq((int)$release->build)->fetch();
             if(empty($build->execution)) $this->loadModel('build')->delete(TABLE_BUILD, $build->id);
 
-            $this->executeHooks($releaseID);
+            $message = $this->executeHooks($releaseID);
+            if($message) $response['message'] = $message;
 
             /* if ajax request, send result. */
             if($this->server->ajax)

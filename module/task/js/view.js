@@ -1,3 +1,8 @@
+$(function()
+{
+    if(config.onlybody == 'yes') $('.main-actions').css('width', '100%');
+});
+
 function assign(taskID, assignedTo)
 {
   $('.assign').width(150);

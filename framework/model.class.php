@@ -63,13 +63,16 @@ class model extends baseModel
      * @param  string $type
      * @param  string $icon
      * @param  string $target
-     * @param  string $misc
+     * @param  string $class
      * @param  bool   $onlyBody
+     * @param  string $misc
+     * @param  string $title
+     * @param  bool   $returnHtml
      * @access public
      * @return string
      */
 
-    public function buildMenu($moduleName, $methodName, $params, $data, $type = 'view', $icon = '', $target = '', $class = '', $onlyBody = false, $misc = '' , $title = '')
+    public function buildMenu($moduleName, $methodName, $params, $data, $type = 'view', $icon = '', $target = '', $class = '', $onlyBody = false, $misc = '' , $title = '', $returnHtml = true)
     {
         if(strpos($moduleName, '.') !== false) list($appName, $moduleName) = explode('.', $moduleName);
 
@@ -100,10 +103,10 @@ class model extends baseModel
             if($action->extensionType == 'override') return $this->loadModel('flow')->buildActionMenu($moduleName, $action, $data, $type);
 
             $conditions = json_decode($action->conditions);
-            if($action->extensionType == 'extend' && $conditions)
+            if($conditions and $action->extensionType == 'extend')
             {
-                $enabled = $this->loadModel('flow')->checkConditions($conditions, $data);
-                $label   = $action->name;
+                if($icon != 'copy' and $methodName != 'create') $title = $action->name;
+                if($conditions) $enabled = $this->loadModel('flow')->checkConditions($conditions, $data);
             }
             else
             {
@@ -114,6 +117,8 @@ class model extends baseModel
         {
             if(method_exists($this, 'isClickable')) $enabled = $this->isClickable($data, $method, $module);
         }
+
+        if(!$returnHtml) return $enabled;
 
         $html = '';
         $type = $type == 'browse' ? 'list' : 'button';
@@ -139,6 +144,7 @@ class model extends baseModel
         if(strpos($module, '.') !== false) list($appName, $moduleName) = explode('.', $module);
 
         static $actions;
+        static $relations;
         if(empty($actions))
         {
             $actions = $this->dao->select('*')->from(TABLE_WORKFLOWACTION)
@@ -149,6 +155,7 @@ class model extends baseModel
                 ->orderBy('order_asc')
                 ->fetchAll();
         }
+        if(empty($relations)) $relations = $this->dao->select('next, actions')->from(TABLE_WORKFLOWRELATION)->where('prev')->eq($moduleName)->fetchPairs();
 
         $menu = '';
         if($show)
@@ -157,7 +164,7 @@ class model extends baseModel
             {
                 if(strpos($action->position, $type) === false || $action->show != $show) continue;
 
-                $menu .= $this->loadModel('flow')->buildActionMenu($moduleName, $action, $data, $type);
+                $menu .= $this->loadModel('flow')->buildActionMenu($moduleName, $action, $data, $type, $relations);
             }
         }
         else
@@ -167,8 +174,8 @@ class model extends baseModel
             {
                 if(strpos($action->position, $type) === false) continue;
 
-                if($type == 'view' || $action->show == 'direct')         $menu         .= $this->loadModel('flow')->buildActionMenu($moduleName, $action, $data, $type);
-                if($type == 'browse' && $action->show == 'dropdownlist') $dropdownMenu .= $this->loadModel('flow')->buildActionMenu($moduleName, $action, $data, $type);
+                if($type == 'view' || $action->show == 'direct')         $menu         .= $this->loadModel('flow')->buildActionMenu($moduleName, $action, $data, $type, $relations);
+                if($type == 'browse' && $action->show == 'dropdownlist') $dropdownMenu .= $this->loadModel('flow')->buildActionMenu($moduleName, $action, $data, $type, $relations);
             }
 
             if($type == 'browse' && $dropdownMenu)
@@ -293,6 +300,6 @@ class model extends baseModel
         }
 
         $flow = $this->loadModel('workflow')->getByModule($moduleName);
-        if($flow && $action) $this->loadModel('workflowhook')->execute($flow, $action, $objectID);
+        if($flow && $action) return $this->loadModel('workflowhook')->execute($flow, $action, $objectID);
     }
 }

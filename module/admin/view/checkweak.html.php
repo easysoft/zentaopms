@@ -3,7 +3,7 @@
  * The safe view file of admin module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Yidong Wang <yidong@cnezsoft.com>
  * @package     admin
  * @version     $Id$
@@ -18,6 +18,7 @@
         <?php
         echo html::a($this->createLink('admin', 'safe'), $lang->admin->safe->set);
         echo html::a($this->createLink('admin', 'checkWeak'), $lang->admin->safe->checkWeak, '', "class='active'");
+        if(common::hasPriv('admin', 'resetPWDSetting')) echo html::a($this->createLink('admin', 'resetPWDSetting'), $lang->admin->resetPWDSetting);
         ?>
       </div>
     </div>

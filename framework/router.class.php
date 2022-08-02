@@ -47,6 +47,15 @@ class router extends baseRouter
     public $isFlow = false;
 
     /**
+     * Fetch的模块名。
+     * The fetched module name.
+     *
+     * @var string
+     * @access public
+     */
+    public $fetchModule;
+
+    /**
      * Get the $moduleRoot var.
      *
      * @param  string $appName
@@ -119,6 +128,8 @@ class router extends baseRouter
                 if(isset($nullKey))$lang->{$moduleName}->{$section}[$nullKey] = $nullValue;
                 foreach($fields as $key => $value)
                 {
+                    if($section == 'priList' and $key > 0 and trim($value) === '') continue; // Fix bug #23538.
+
                     if(!isset($lang->{$moduleName})) $lang->{$moduleName} = new stdclass();
                     if(!isset($lang->{$moduleName}->{$section})) $lang->{$moduleName}->{$section} = array();
                     $lang->{$moduleName}->{$section}[$key] = $value;
@@ -518,6 +529,13 @@ class router extends baseRouter
             /* Remove module and method. */
             $params = array_slice($params, 2);                              // $params = array(1);
 
+            if($moduleName == 'flow' and $methodName == 'browse')
+            {
+                $mode = 'browse';
+                if(count($params) > 0 and !is_numeric($params[0])) $mode = array_shift($params);
+                array_unshift($params, $mode);
+            }
+
             array_unshift($params, $methodName);                            // $params = array('operate', 1);
             array_unshift($params, $moduleName);                            // $params = array('flow', 'operate', 1);
 
@@ -537,6 +555,16 @@ class router extends baseRouter
 
             $params = array_reverse($params);                       // $params = array('id' => 1);
 
+            if($moduleName == 'flow' and $methodName == 'browse')
+            {
+                $mode = zget($params, 'mode', 'browse');
+                if(is_numeric($mode)) $mode = 'browse';
+                $params['mode'] = $mode;
+
+                $get = array_reverse($_GET);
+                $get['mode'] = $mode;
+                $_GET = array_reverse($get);
+            }
             $params[$this->config->methodVar] = $methodName;        // $param = array('id' => 1, 'f' => 'operate');
             $params[$this->config->moduleVar] = $moduleName;        // $param = array('id' => 1, 'f' => 'operate', 'm' => 'flow');
 

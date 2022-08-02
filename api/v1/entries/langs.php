@@ -3,7 +3,7 @@
  * The langs entry point of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2021 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     entries
  * @version     1
@@ -28,6 +28,8 @@ class langsEntry extends entry
         if(empty($language)) $language = 'zh-cn';
         $this->app->setClientLang($language);
 
+        global $filter;
+        $rule    = $filter->default->moduleName;
         $modules = explode(',', $modules);
         foreach($modules as $module)
         {
@@ -39,6 +41,7 @@ class langsEntry extends entry
                     if(!is_dir($modulePath)) continue;
 
                     $moduleName = basename($modulePath);
+                    if(!validater::checkByRule($moduleName, $rule)) continue;
                     $this->app->loadLang($moduleName);
 
                     $loadedModule[$moduleName] = $moduleName;
@@ -61,6 +64,7 @@ class langsEntry extends entry
                         if(!is_dir($modulePath)) continue;
 
                         $moduleName = basename($modulePath);
+                        if(!validater::checkByRule($moduleName, $rule)) continue;
                         if(isset($loadedModule[$moduleName])) continue;
 
                         $this->app->loadLang($moduleName);
@@ -71,7 +75,7 @@ class langsEntry extends entry
                 break;
             }
 
-            $this->app->loadLang($module);
+            if(validater::checkByRule($module, $rule)) $this->app->loadLang($module);
         }
 
         return $this->send(200, $this->lang);

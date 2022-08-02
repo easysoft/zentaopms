@@ -2,7 +2,7 @@
 /**
  * The model file of misc module of ZenTaoPMS.
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     misc
  * @version     $Id: model.php 4129 2013-01-18 01:58:14Z wwccss $
@@ -57,6 +57,31 @@ class miscModel extends model
             $remind  = '<h4>' . $this->lang->misc->showAnnual . '</h4>';
             $remind .= '<p>' . sprintf($this->lang->misc->annualDesc, helper::createLink('report', 'annualData')) . '</p>';
             $this->loadModel('setting')->setItem("{$this->app->user->account}.common.global.annualShowed", 1);
+        }
+        return $remind;
+    }
+
+    /**
+     * Get the notification information about plugin expiration.
+     *
+     * @access public
+     * @return void
+     */
+    public function getPluginRemind()
+    {
+        $plugins = $this->loadModel('extension')->getExpiringPlugins();
+        $remind  = '';
+
+        $today = helper::today();
+        $showPluginRemind = (empty($this->config->global->showPluginRemind) or $this->config->global->showPluginRemind != $today) ? true : false;
+        if(!empty($plugins) and $this->app->user->admin and $showPluginRemind)
+        {
+            $pluginButton = html::a(helper::createLink('extension', 'browse'), $this->lang->misc->view, '', "id='pluginButton' class='btn btn-primary btn-wide' data-app='admin'");
+            $cancelButton = html::a('javascript: void(0);', $this->lang->misc->cancel, '', "id='cancelButton' class='btn btn-back btn-wide'");
+            $remind  = '<p>' . sprintf($this->lang->misc->expiredTipsForAdmin, count($plugins)) . '</p>';
+            $remind .= '<p class="text-right">' . $pluginButton . $cancelButton . '</p>';
+
+            $this->loadModel('setting')->setItem("{$this->app->user->account}.common.global.showPluginRemind", $today);
         }
         return $remind;
     }

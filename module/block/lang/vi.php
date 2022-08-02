@@ -3,7 +3,7 @@
  * The vi file of block module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Yidong Wang <yidong@cnezsoft.com>
  * @package     block
  * @version     $Id$
@@ -319,6 +319,7 @@ $lang->block->availableBlocks->testtask  = 'Yêu cầu';
 $lang->block->availableBlocks->risk      = 'My Risks';
 $lang->block->availableBlocks->issue     = 'My Issues';
 $lang->block->availableBlocks->meeting   = 'My Meetings';
+$lang->block->availableBlocks->feedback  = 'My Feedbacks';
 
 if($config->systemMode == 'new') $lang->block->moduleList['project'] = 'Project';
 $lang->block->moduleList['product']   = $lang->productCommon;
@@ -431,13 +432,14 @@ $lang->block->orderByList->story['status_desc'] = 'Tình trạng câu chuyện g
 $lang->block->orderByList->story['stage_asc']   = 'Giai đoạn câu chuyện tăng dần';
 $lang->block->orderByList->story['stage_desc']  = 'Giai đoạn câu chuyện giảm dần';
 
-$lang->block->todoCount    = 'Việc làm';
-$lang->block->taskCount    = 'Nhiệm vụ';
-$lang->block->bugCount     = 'Bug';
-$lang->block->riskCount    = 'Risk';
-$lang->block->issueCount   = 'Issues';
-$lang->block->storyCount   = 'Stories';
-$lang->block->meetingCount = 'Meetings';
+$lang->block->todoCount     = 'Việc làm';
+$lang->block->taskCount     = 'Nhiệm vụ';
+$lang->block->bugCount      = 'Bug';
+$lang->block->riskCount     = 'Risk';
+$lang->block->issueCount    = 'Issues';
+$lang->block->storyCount    = 'Stories';
+$lang->block->meetingCount  = 'Meetings';
+$lang->block->feedbackCount = 'Feedbacks';
 
 $lang->block->typeList = new stdclass();
 

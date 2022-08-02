@@ -3,7 +3,7 @@
  * The createlib view of doc module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Jia Fu <fujia@cnezsoft.com>
  * @package     doc
  * @version     $Id: createlib.html.php 975 2010-07-29 03:30:25Z jajacn@126.com $
@@ -33,7 +33,8 @@
             <tr>
               <th><?php echo $lang->api->control;?></th>
               <td>
-                <span><?php echo html::radio('acl', $lang->api->aclList, 'open', "onchange='toggleAcl(this.value, \"lib\")'")?></span>
+                <?php $isDisabled = $type == 'demo' ? 'disabled' : '';?>
+                <span><?php echo html::radio('acl', $lang->api->aclList, 'open', "onchange='toggleAcl(this.value, \"lib\")' $isDisabled")?></span>
                 <span class='text-info' id='noticeAcl'><?php echo $lang->api->noticeAcl['open'];?></span>
               </td>
             </tr>

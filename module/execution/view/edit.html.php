@@ -3,7 +3,7 @@
  * The edit view of execution module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     execution
  * @version     $Id: edit.html.php 4728 2013-05-03 06:14:34Z chencongzhi520@gmail.com $
@@ -25,22 +25,28 @@
     </div>
     <form class='load-indicator main-form form-ajax' method='post' target='hiddenwin' id='dataform'>
       <table class='table table-form'>
-        <?php if($config->systemMode == 'new' and isset($project) and $project->model == 'scrum'):?>
+        <?php if($config->systemMode == 'new' and isset($project)):?>
+        <?php if($project->model == 'scrum'):?>
         <tr>
           <th class='w-120px'><?php echo $lang->execution->projectName;?></th>
           <td><?php echo html::select('project', $allProjects, $execution->project, "class='form-control chosen' onchange='changeProject(this.value)' required");?></td><td></td>
         </tr>
+        <?php elseif($project->model == 'kanban'):?>
+        <?php echo html::hidden('project', $project->id);?>
+        <?php endif;?>
         <?php endif;?>
         <tr>
           <th class='w-120px'><?php echo $lang->execution->name;?></th>
           <td><?php echo html::input('name', $execution->name, "class='form-control' required");?></td><td></td>
         </tr>
+        <?php if(!isset($config->setCode) or $config->setCode == 1):?>
         <tr>
           <th><?php echo $lang->execution->code;?></th>
           <td><?php echo html::input('code', $execution->code, "class='form-control' required");?></td>
         </tr>
+        <?php endif;?>
         <tr>
-          <th><?php echo $lang->execution->dateRange;?></th>
+          <th id="dateRange"><?php echo $lang->execution->dateRange;?></th>
           <td>
             <div class='input-group'>
               <?php echo html::input('begin', $execution->begin, "class='form-control form-date' onchange='computeWorkDays()' required placeholder='" . $lang->execution->begin . "'");?>
@@ -175,7 +181,7 @@
               <?php foreach($linkedProducts as $product):?>
               <?php foreach($linkedBranches[$product->id] as $branchID => $branch):?>
               <?php $plans = isset($productPlans[$product->id][$branchID]) ? $productPlans[$product->id][$branchID] : array();?>
-              <div class="col-sm-4" id="plan<?php echo $i;?>"><?php echo html::select("plans[{$product->id}][{$branchID}]", $plans, $branches[$product->id][$branchID]->plan, "class='form-control chosen'");?></div>
+              <div class="col-sm-4" id="plan<?php echo $i;?>"><?php echo html::select("plans[{$product->id}][{$branchID}][]", $plans, $branches[$product->id][$branchID]->plan, "class='form-control chosen' multiple");?></div>
               <?php $i++;?>
               <?php endforeach;?>
               <?php endforeach;?>
@@ -187,7 +193,7 @@
         <?php endif; ?>
         <tr>
           <th><?php echo $lang->execution->team;?></th>
-          <td colspan='2'><?php echo html::select('teamMembers[]', $users, array_keys($teamMembers), "class='form-control chosen' multiple"); ?></td>
+          <td colspan='2'><?php echo html::select('teamMembers[]', $users, array_keys($teamMembers), "class='form-control picker-select' multiple"); ?></td>
         </tr>
         <tr>
           <th><?php echo $lang->execution->desc;?></th>
@@ -203,7 +209,7 @@
           <th><?php echo $lang->whitelist;?></th>
           <td>
             <div class='input-group'>
-              <?php echo html::select('whitelist[]', $users, $execution->whitelist, 'class="form-control chosen" multiple');?>
+              <?php echo html::select('whitelist[]', $users, $execution->whitelist, 'class="form-control picker-select" multiple');?>
               <?php echo $this->fetch('my', 'buildContactLists', "dropdownName=whitelist");?>
             </div>
           </td>
@@ -218,6 +224,7 @@
 <?php js::set('errorSameBranches', $lang->execution->errorSameBranches);?>
 <?php js::set('unmodifiableProducts',$unmodifiableProducts);?>
 <?php js::set('unmodifiableBranches', $unmodifiableBranches)?>
+<?php js::set('linkedStoryIDList', $linkedStoryIDList)?>
 <?php js::set('multiBranchProducts', $multiBranchProducts);?>
 <?php js::set('tip', $lang->execution->notAllowRemoveProducts);?>
 <?php js::set('confirmSync', $lang->execution->confirmSync);?>

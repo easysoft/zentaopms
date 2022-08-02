@@ -1,7 +1,21 @@
 $(function()
 {
-    if($('#batchCreateForm table thead tr th.col-name').width() < 200) $('#batchCreateForm table thead tr th.col-name').width(200);
+    $name = $('#batchCreateForm table thead tr th.col-name');
+    if($name.width() < 200) $name.width(200);
+
+    $('#customField').click(function()
+    {
+        hiddenRequireFields();
+    });
+
+    /* Implement a custom form without feeling refresh. */
+    $('#formSettingForm .btn-primary').click(function()
+    {
+        saveCustomFields('batchCreateFields', 8, $name, 200);
+        return false;
+    });
 });
+
 $(document).on('click', '.chosen-with-drop', function()
 {
     var select = $(this).prev('select');

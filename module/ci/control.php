@@ -3,7 +3,7 @@
  * The control file of ci module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chenqi <chenqi@cnezsoft.com>
  * @package     product
  * @version     $Id: ${FILE_NAME} 5144 2020/1/8 8:10 下午 chenqi@cnezsoft.com $
@@ -150,7 +150,7 @@ class ci extends control
 
             $testtask = new stdclass();
             $testtask->product   = $productID;
-            $testtask->name      = sprintf($this->lang->testtask->titleOfAuto, date('Y-m-d H:i:s'));
+            $testtask->name      = !empty($post->name) ? $post->name : sprintf($this->lang->testtask->titleOfAuto, date('Y-m-d H:i:s'));
             $testtask->owner     = $this->app->user->account;
             $testtask->project   = $lastProject->project;
             $testtask->execution = $lastProject->id;

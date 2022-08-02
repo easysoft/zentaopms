@@ -3,7 +3,7 @@
  * The browse view file of product module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     product
  * @version     $Id: browse.html.php 4909 2013-06-26 07:23:50Z chencongzhi520@gmail.com $
@@ -17,6 +17,7 @@ body {margin-bottom: 25px;}
 #mainMenu .btn-toolbar .btn-group .dropdown-menu .btn-active-text:hover .text {color: #fff;}
 #mainMenu .btn-toolbar .btn-group .dropdown-menu .btn-active-text:hover .text:after {border-bottom: unset;}
 .body-modal #mainMenu>.btn-toolbar {width: auto;}
+.assignedTo{border-radius: 4px !important;}
 </style>
 <?php js::set('browseType', $browseType);?>
 <?php js::set('productID', $productID);?>
@@ -237,11 +238,6 @@ $projectIDParam = $isProjectStory ? "projectID=$projectID&" : '';
   <strong>
   <?php echo $this->product->getByID($productID)->name ?>
   </strong>
-  <div class="linkButton" onclick="handleLinkButtonClick()">
-    <span title="<?php echo $lang->viewDetails;?>">
-      <i class="icon icon-import icon-rotate-270"></i>
-    </span>
-  </div>
 </div>
 <?php endif;?>
 <div id="mainContent" class="main-row fade">
@@ -268,7 +264,7 @@ $projectIDParam = $isProjectStory ? "projectID=$projectID&" : '';
     <div class="table-empty-tip">
       <p>
         <span class="text-muted"><?php echo $storyType == 'story' ? $lang->story->noStory : $lang->story->noRequirement;?></span>
-        <?php if(common::canModify('product', $product) and common::hasPriv('story', 'create')):?>
+        <?php if(common::canModify('product', $product) and common::hasPriv('story', 'create') and $browseType == 'allstory'):?>
         <?php echo html::a($this->createLink('story', 'create', "productID={$productID}&branch={$branch}&moduleID={$moduleID}&storyID=0&projectID=$projectID&bugID=0&planID=0&todoID=0&extra=&type=$storyType"), "<i class='icon icon-plus'></i> " . $lang->story->create, '', "class='btn btn-info' data-app='$from'");?>
         <?php endif;?>
       </p>
@@ -282,7 +278,7 @@ $projectIDParam = $isProjectStory ? "projectID=$projectID&" : '';
       $datatableId  = $this->moduleName . ucfirst($this->methodName);
       $useDatatable = (isset($config->datatable->$datatableId->mode) and $config->datatable->$datatableId->mode == 'datatable');
       $vars = "productID=$productID&branch=$branch&browseType=$browseType&param=$param&storyType=$storyType&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}";
-      if($from == 'project') $vars = "projectID=$projectID&productID=$productID&branch=$branch&browseType=$browseType&param=$param&storyType=$storyType&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}";
+      if($from == 'project' and !empty($projectID)) $vars = "projectID=$projectID&productID=$productID&branch=$branch&browseType=$browseType&param=$param&storyType=$storyType&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}";
 
       if($useDatatable) include '../../common/view/datatable.html.php';
       $setting = $this->datatable->getSetting('product');
@@ -550,7 +546,7 @@ $projectIDParam = $isProjectStory ? "projectID=$projectID&" : '';
 
           <?php if($canBatchAssignTo):?>
           <div class="btn-group dropup">
-            <button data-toggle="dropdown" type="button" class="btn"><?php echo $lang->story->assignedTo;?> <span class="caret"></span></button>
+            <button data-toggle="dropdown" type="button" class="btn assignedTo"><?php echo $lang->story->assignedTo;?> <span class="caret"></span></button>
             <?php
             $withSearch = count($users) > 10;
             $actionLink = $this->createLink('story', 'batchAssignTo', "productID=$productID");
@@ -744,12 +740,6 @@ function setBadgeStyle(obj, isShow)
     {
         $label.find('.label-badge').css({"color":"#838a9d", "border-color":"#838a9d"});
     }
-}
-
-function handleLinkButtonClick()
-{
-  var xxcUrl = "xxc:openInApp/zentao-integrated/" + encodeURIComponent(window.location.href.replace(/.display=card/, '').replace(/\.xhtml/, '.html'));
-  window.open(xxcUrl);
 }
 </script>
 <?php include '../../common/view/footer.html.php';?>

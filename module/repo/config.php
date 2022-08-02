@@ -33,11 +33,14 @@ $config->repo->editor->edit   = array('id' => 'desc', 'tools' => 'simpleTools');
 $config->repo->editor->view   = array('id' => 'commentText', 'tools' => 'simpleTools');
 $config->repo->editor->diff   = array('id' => 'commentText', 'tools' => 'simpleTools');
 
+$config->repo->switcherModuleList = array('repo', 'job', 'compile', 'mr');
+$config->repo->switcherMethodList = array('browse', 'review', 'view', 'diff', 'log', 'revision', 'blame');
+
 $config->repo->create = new stdclass();
-$config->repo->create->requiredFields = 'product,SCM,name,path,encoding,client';
+$config->repo->create->requiredFields = 'product,SCM,name,encoding';
 
 $config->repo->edit = new stdclass();
-$config->repo->edit->requiredFields = 'product,SCM,name,path,encoding,client';
+$config->repo->edit->requiredFields = 'product,SCM,name,encoding';
 
 $config->repo->svn = new stdclass();
 $config->repo->svn->requiredFields = 'account,password';
@@ -45,6 +48,11 @@ $config->repo->svn->requiredFields = 'account,password';
 $config->repo->gitlab = new stdclass;
 $config->repo->gitlab->perPage = 300;
 $config->repo->gitlab->apiPath = "%s/api/v4/projects/%s/repository/";
+
+$config->repo->gitea = new stdclass;
+$config->repo->gitea->apiPath = "%s/api/v1/repos/%s/";
+
+$config->repo->gitServiceList = array('gitlab', 'gitea');
 
 $config->repo->rules['module']['task']     = 'Task';
 $config->repo->rules['module']['bug']      = 'Bug';

@@ -4,7 +4,10 @@
 <?php else:?>
 <div class="detail histories" id='actionbox' data-textDiff="<?php echo $lang->action->textDiff;?>" data-original="<?php echo $lang->action->original;?>">
 <?php endif;?>
-<style>.histories-list > li{word-break: break-word; word-wrap: break-word;}</style>
+<style>
+.histories-list > li {word-break: break-word; word-wrap: break-word;}
+.history-changes del {padding-left: 3px;}
+</style>
   <script>
   $(function()
   {
@@ -47,7 +50,7 @@
     <ol class='histories-list'>
       <?php $i = 1; ?>
       <?php foreach($actions as $action):?>
-      <?php $canEditComment = ((!isset($canBeChanged) or !empty($canBeChanged)) and end($actions) == $action and trim($action->comment) != '' and $this->methodName == 'view' and $action->actor == $this->app->user->account and common::hasPriv('action', 'editComment'));?>
+      <?php $canEditComment = ((!isset($canBeChanged) or !empty($canBeChanged)) and end($actions) == $action and trim($action->comment) != '' and strpos(',view,objectlibs,viewcard,', ",$this->methodName,") !== false and $action->actor == $this->app->user->account and common::hasPriv('action', 'editComment'));?>
       <li value='<?php echo $i ++;?>'>
         <?php
         $action->actor = zget($users, $action->actor);
@@ -67,7 +70,22 @@
         <style>.comment .comment-content{width: 98%}</style>
         <?php endif;?>
         <div class='article-content comment'>
-          <div class='comment-content'><?php echo strip_tags($action->comment) == $action->comment ? nl2br($action->comment) : $action->comment;?></div>
+          <div class='comment-content'>
+            <?php
+            if(strpos($action->comment, '<pre class="prettyprint lang-html">') !== false)
+            {
+                $before   = explode('<pre class="prettyprint lang-html">', $action->comment);
+                $after    = explode('</pre>', $before[1]);
+                $htmlCode = $after[0];
+                $text     = $before[0] . htmlspecialchars($htmlCode) . $after[1];
+                echo $text;
+            }
+            else
+            {
+                echo strip_tags($action->comment) == $action->comment ? nl2br($action->comment) : $action->comment;
+            }
+            ?>
+          </div>
         </div>
         <?php if($canEditComment):?>
         <form method='post' class='comment-edit-form' action='<?php echo $this->createLink('action', 'editComment', "actionID=$action->id")?>'>

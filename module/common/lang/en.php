@@ -3,7 +3,7 @@
  * The common simplified chinese file of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     ZenTaoPMS
  * @version     $Id: en.php 5116 2013-07-12 06:37:48Z chencongzhi520@gmail.com $
@@ -46,15 +46,17 @@ $lang->collapseMenu   = 'Collapse';
 $lang->preference     = 'Preference';
 $lang->tutorialAB     = 'Tutorial';
 $lang->runInfo        = "<div class='row'><div class='u-1 a-center' id='debugbar'>Time %s MS, Memory %s KB, Query %s.  </div></div>";
-$lang->agreement      = "I have read and agreed to the terms and conditions of <a href='http://zpl.pub/page/zplv12.html' target='_blank'> Z PUBLIC LICENSE 1.2 </a>. <span class='text-danger'>Without authorization, I should not remove, hide or cover any logos/links of ZenTao.</span>";
+$lang->agreement      = "I have read and agreed to the terms and conditions. <span class='text-danger'>Without authorization, I should not remove, hide or cover any logos/links of ZenTao.</span>";
 $lang->designedByAIUX = "<a href='https://api.zentao.net/goto.php?item=aiux' class='link-aiux' target='_blank'><i class='icon icon-aiux'></i> AIUX</a>";
 
 $lang->reset          = 'Reset';
 $lang->cancel         = 'Cancel';
 $lang->refresh        = 'Refresh';
+$lang->refreshIcon    = "<i title='$lang->refresh' class='icon icon-refresh'></i>";
 $lang->create         = 'Create';
 $lang->edit           = 'Edit';
 $lang->delete         = 'Delete';
+$lang->activate       = 'Activate';
 $lang->close          = 'Close';
 $lang->unlink         = 'Unlink';
 $lang->import         = 'Import';
@@ -80,6 +82,7 @@ $lang->retrack        = 'Retrack';
 $lang->whitelist      = 'Access whitelist';
 $lang->globalSetting  = 'Global Setting';
 $lang->waterfallModel = 'Waterfall';
+$lang->scrumModel     = 'Scrum';
 $lang->all            = 'All';
 $lang->viewDetails    = 'View Details';
 
@@ -147,6 +150,7 @@ $lang->openedByAB   = 'CreatedBy';
 $lang->assignedToAB = 'AssignedTo';
 $lang->typeAB       = 'Type';
 $lang->nameAB       = 'Name';
+$lang->code         = 'Code';
 
 $lang->pri     = 'Priority';
 $lang->delayed = 'Delayed';
@@ -184,16 +188,18 @@ $lang->upgrade->common    = 'Update';
 $lang->program->list      = 'Program List';
 $lang->program->kanban    = 'Program Kanban';
 $lang->design->common     = 'Design';
-$lang->design->HLDS       = 'HLDS';
-$lang->design->DDS        = 'DDS';
-$lang->design->DBDS       = 'DBDS';
-$lang->design->ADS        = 'ADS';
+$lang->design->HLDS       = 'Preliminary Design';
+$lang->design->DDS        = 'Detailed Design';
+$lang->design->DBDS       = 'Database Design';
+$lang->design->ADS        = 'Interface Design';
 $lang->stage->common      = 'Stage';
 $lang->stage->list        = 'Stage List';
 $lang->execution->list    = "{$lang->executionCommon} List";
 $lang->kanban->common     = 'Kanban';
 $lang->backup->common     = 'Backup';
 $lang->action->trash      = 'Recycle';
+$lang->app->common        = 'APP';
+$lang->app->serverLink    = 'Server Link';
 
 $lang->personnel->common     = 'Member';
 $lang->personnel->invest     = 'Investment';
@@ -280,6 +286,7 @@ $lang->devops->mr       = 'Merge Request';
 $lang->devops->repo     = 'Repo';
 $lang->devops->rules    = 'Rule';
 $lang->devops->settings = 'Setting Merge Request';
+$lang->devops->set      = 'Set';
 
 $lang->admin->system     = 'System';
 $lang->admin->entry      = 'Application';
@@ -366,6 +373,7 @@ $lang->error->companyNotFound = "The domain %s cannot be found!";
 $lang->error->length          = array("『%s』length error. It should be『%s』", "『%s』length should be <=『%s』and >『%s』.");
 $lang->error->reg             = "『%s』format error. It should be『%s』.";
 $lang->error->unique          = "『%s』『%s』exists. Go to Admin->System->Data->Recycle Bin to restore it, if you are sure it is deleted.";
+$lang->error->repeat          = "『%s』『%s』exists.";
 $lang->error->gt              = "『%s』should be >『%s』.";
 $lang->error->ge              = "『%s』should be >=『%s』.";
 $lang->error->lt              = "『%s』should be <『%s』。";
@@ -443,19 +451,21 @@ $lang->pasteImgFail       = "Failed to paste images. Try again later.";
 $lang->pasteImgUploading  = "Uploading...";
 
 /* Time formats settings. */
-if(!defined('DT_DATETIME1'))  define('DT_DATETIME1',  'Y-m-d H:i:s');
-if(!defined('DT_DATETIME2'))  define('DT_DATETIME2',  'y-m-d H:i');
-if(!defined('DT_MONTHTIME1')) define('DT_MONTHTIME1', 'n/d H:i');
-if(!defined('DT_MONTHTIME2')) define('DT_MONTHTIME2', 'n/d H:i');
-if(!defined('DT_DATE1'))      define('DT_DATE1',     'Y-m-d');
-if(!defined('DT_DATE2'))      define('DT_DATE2',     'Ymd');
-if(!defined('DT_DATE3'))      define('DT_DATE3',     'Y/m/d');
-if(!defined('DT_DATE4'))      define('DT_DATE4',     'M d');
-if(!defined('DT_DATE5'))      define('DT_DATE5',     'j/n');
-if(!defined('DT_TIME1'))      define('DT_TIME1',     'H:i:s');
-if(!defined('DT_TIME2'))      define('DT_TIME2',     'H:i');
-if(!defined('LONG_TIME'))     define('LONG_TIME',    '2059-12-31');
-if(!defined('BRANCH_MAIN'))   define('BRANCH_MAIN', '0');
+if(!defined('DT_DATETIME1'))      define('DT_DATETIME1',  'Y-m-d H:i:s');
+if(!defined('DT_DATETIME2'))      define('DT_DATETIME2',  'y-m-d H:i');
+if(!defined('DT_MONTHTIME1'))     define('DT_MONTHTIME1', 'n/d H:i');
+if(!defined('DT_MONTHTIME2'))     define('DT_MONTHTIME2', 'n/d H:i');
+if(!defined('DT_DATE1'))          define('DT_DATE1',     'Y-m-d');
+if(!defined('DT_DATE2'))          define('DT_DATE2',     'Ymd');
+if(!defined('DT_DATE3'))          define('DT_DATE3',     'Y/m/d');
+if(!defined('DT_DATE4'))          define('DT_DATE4',     'M d');
+if(!defined('DT_DATE5'))          define('DT_DATE5',     'j/n');
+if(!defined('DT_TIME1'))          define('DT_TIME1',     'H:i:s');
+if(!defined('DT_TIME2'))          define('DT_TIME2',     'H:i');
+if(!defined('LONG_TIME'))         define('LONG_TIME',    '2059-12-31');
+if(!defined('BRANCH_MAIN'))       define('BRANCH_MAIN', '0');
+if(!defined('DEFAULT_CARDCOUNT')) define('DEFAULT_CARDCOUNT', '2');
+if(!defined('MAX_CARDCOUNT'))     define('MAX_CARDCOUNT', '32767');
 
 /* Datepicker. */
 $lang->datepicker = new stdclass();

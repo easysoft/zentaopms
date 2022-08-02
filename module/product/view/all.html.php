@@ -3,7 +3,7 @@
  * The html productlist file of productlist method of product module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Yangyang Shi <shiyangyang@cnezsoft.com>
  * @package     ZenTaoPMS
  * @version     $Id
@@ -34,7 +34,7 @@
   <?php else:?>
   <div class="main-col">
     <div class="cell<?php if($browseType == 'bySearch') echo ' show';?>" id="queryBox" data-module='product'></div>
-    <form class="main-table table-product" data-ride="table" data-nested='true' id="productListForm" method="post" action='<?php echo inLink('batchEdit', '');?>' data-preserve-nested='false' data-expand-nest-child='true'>
+    <form class="main-table table-product" data-ride="table" data-nested='true' id="productListForm" method="post" action='<?php echo inLink('batchEdit', '');?>' data-preserve-nested='true' data-expand-nest-child='true'>
       <?php $canBatchEdit = common::hasPriv('product', 'batchEdit'); ?>
       <table id="productList" class="table has-sort-head table-nested table-fixed">
         <?php $vars = "browseType=$browseType&orderBy=%s";?>
@@ -86,6 +86,20 @@
         $trClass  = 'is-top-level table-nest-child text-center';
         $trAttrs .= " class='$trClass'";
         ?>
+          <?php
+          if(isset($programLines[$programID]))
+          {
+              foreach($programLines[$programID] as $lineID => $lineName)
+              {
+                  if(!isset($program[$lineID]))
+                  {
+                      $program[$lineID] = array();
+                      $program[$lineID]['product']  = '';
+                      $program[$lineID]['lineName'] = $lineName;
+                  }
+              }
+          }
+          ;?>
           <?php if(isset($program['programName']) and $config->systemMode == 'new'):?>
           <tr class="row-program" <?php echo $trAttrs;?>>
             <?php if($canBatchEdit):?>
@@ -141,20 +155,20 @@
               <?php echo $line['lineName']?>
             </td>
             <?php if($this->config->URAndSR):?>
-            <td><?php echo $line['draftRequirements'];?></td>
-            <td><?php echo $line['activeRequirements'];?></td>
-            <td><?php echo $line['changedRequirements'];?></td>
-            <td><?php echo $line['totalRequirements'] == 0 ? 0 : round($line['closedRequirements'] / $line['totalRequirements'], 3) * 100;?>%</td>
+            <td><?php echo isset($line['draftRequirements']) ? $line['draftRequirements'] : 0;?></td>
+            <td><?php echo isset($line['activeRequirements']) ? $line['activeRequirements'] : 0;?></td>
+            <td><?php echo isset($line['changedRequirements']) ? $line['changedRequirements'] : 0;?></td>
+            <td><?php echo (isset($line['totalRequirements']) and $line['totalRequirements'] != 0) ? round($line['closedRequirements'] / $line['totalRequirements'], 3) * 100 : 0;?>%</td>
             <?php endif;?>
-            <td><?php echo $line['draftStories'];?></td>
-            <td><?php echo $line['activeStories'];?></td>
-            <td><?php echo $line['changedStories'];?></td>
-            <td><?php echo $line['totalStories'] == 0 ? 0 : round($line['closedStories'] / $line['totalStories'], 3) * 100;?>%</td>
-            <td><?php echo $line['unResolvedBugs'];?></td>
-            <td><?php echo $line['closedBugs'];?></td>
-            <td><?php echo ($line['unResolvedBugs'] + $line['fixedBugs']) == 0 ? 0 : round($line['fixedBugs'] / ($line['unResolvedBugs'] + $line['fixedBugs']), 3) * 100;?>%</td>
-            <td><?php echo $line['plans'];?></td>
-            <td><?php echo $line['releases'];?></td>
+            <td><?php echo isset($line['draftStories']) ? $line['draftStories'] : 0;?></td>
+            <td><?php echo isset($line['activeStories']) ? $line['activeStories'] : 0;?></td>
+            <td><?php echo isset($line['changedStories']) ? $line['changedStories'] : 0;?></td>
+            <td><?php echo (isset($line['totalStories']) and $line['totalStories'] != 0) ? round($line['closedStories'] / $line['totalStories'], 3) * 100 : 0;?>%</td>
+            <td><?php echo isset($line['unResolvedBugs']) ? $line['unResolvedBugs'] : 0;?></td>
+            <td><?php echo isset($line['closedBugs']) ? $line['closedBugs'] : 0;?></td>
+            <td><?php echo (isset($line['fixedBugs']) and ($line['unResolvedBugs'] + $line['fixedBugs'] != 0)) ? round($line['fixedBugs'] / ($line['unResolvedBugs'] + $line['fixedBugs']), 3) * 100 : 0;?>%</td>
+            <td><?php echo isset($line['plans']) ? $line['plans'] : 0;?></td>
+            <td><?php echo isset($line['releases']) ? $line['releases'] : 0;?></td>
             <?php foreach($extendFields as $extendField) echo "<td></td>";?>
             <td></td>
           </tr>
@@ -193,7 +207,7 @@
             <?php if($canBatchEdit):?>
             <td class='c-checkbox'><?php echo html::checkbox('productIDList', array($product->id => ''));?></td>
             <?php endif;?>
-            <td class="c-name text-left table-nest-title" title='<?php echo $product->name?>'>
+            <td class="c-name text-left sort-handler table-nest-title" title='<?php echo $product->name?>'>
               <?php
               $productLink = html::a($this->createLink('product', 'browse', 'productID=' . $product->id), $product->name);
               echo "<span class='table-nest-icon icon icon-product'></span>" . $productLink;
@@ -215,7 +229,7 @@
             <td><?php echo $product->plans;?></td>
             <td><?php echo $product->releases;?></td>
             <?php foreach($extendFields as $extendField) echo "<td>" . $this->loadModel('flow')->getFieldValue($extendField, $product) . "</td>";?>
-            <td class='c-actions sort-handler'><?php echo $this->product->buildOperateMenu($product, 'browse');?></td>
+            <td class='c-actions'><?php echo $this->product->buildOperateMenu($product, 'browse');?></td>
           </tr>
           <?php endforeach;?>
           <?php endif;?>
@@ -228,10 +242,10 @@
         <?php if(!empty($product) and $canBatchEdit):?>
         <div class="checkbox-primary check-all"><label><?php echo $lang->selectAll?></label></div>
         <div class="table-actions btn-toolbar">
-        <?php
-        $actionLink = $this->createLink('product', 'batchEdit');
-        echo html::commonButton($lang->edit, "data-form-action='$actionLink'");
-        ?>
+          <?php
+          $actionLink = $this->createLink('product', 'batchEdit');
+          echo html::commonButton($lang->edit, "id='editBtn' data-form-action='$actionLink'");
+          ?>
         <?php endif;?>
         </div>
       </div>
@@ -241,6 +255,8 @@
 </div>
 <?php js::set('orderBy', $orderBy)?>
 <?php js::set('browseType', $browseType)?>
+<?php js::set('checkedProducts', $lang->product->checkedProducts);?>
+<?php js::set('cilentLang', $this->app->getClientLang());?>
 <?php if(commonModel::isTutorialMode()): ?>
 <style>
 #productListForm {overflow: hidden;}

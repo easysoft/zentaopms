@@ -3,7 +3,7 @@
  * The control file of admin module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     admin
  * @version     $Id: control.php 4460 2013-02-26 02:28:02Z chencongzhi520@gmail.com $
@@ -354,5 +354,23 @@ class admin extends control
         $date = date(DT_DATE1, strtotime("-{$this->config->admin->log->saveDays} days"));
         $this->dao->delete()->from(TABLE_LOG)->where('date')->lt($date)->exec();
         return !dao::isError();
+    }
+
+    /**
+     * Reset password setting.
+     *
+     * @access public
+     * @return void
+     */
+    public function resetPWDSetting()
+    {
+        if($_POST)
+        {
+            $this->loadModel('setting')->setItem('system.common.resetPWDByMail', $this->post->resetPWDByMail);
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'reload'));
+        }
+
+        $this->view->title = $this->lang->admin->resetPWDSetting;
+        $this->display();
     }
 }

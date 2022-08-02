@@ -3,7 +3,7 @@
  * The view file of kanban module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2021 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Guangming Sun<sungangming@easycorp.ltd>
  * @package     kanban
  * @version     $Id: view.html.php 935 2021-12-09 10:49:24Z $
@@ -24,6 +24,7 @@ js::set('vision', $this->config->vision);
 js::set('CRKanban', isset($this->config->CRKanban) ? $this->config->CRKanban : 1);
 js::set('regions', $regions);
 js::set('kanban', $kanban);
+js::set('kanbanInfo', $kanban);
 js::set('kanbanLang', $lang->kanban);
 js::set('kanbanlaneLang', $lang->kanbanlane);
 js::set('kanbancolumnLang', $lang->kanbancolumn);
@@ -41,6 +42,7 @@ js::set('colorList', $this->config->kanban->cardColorList);
 js::set('displayCards', $kanban->displayCards);
 js::set('fluidBoard', $kanban->fluidBoard);
 js::set('mode', $config->systemMode);
+js::set('alignment', $kanban->alignment);
 js::set('priv', array('canAssignCard' => common::hasPriv('kanban', 'assigncard')));
 
 $canSortRegion   = commonModel::hasPriv('kanban', 'sortRegion') && count($regions) > 1;
@@ -56,9 +58,9 @@ $canCreateLane   = commonModel::hasPriv('kanban', 'createLane');
       <div class="region<?php if($canSortRegion) echo ' sort';?>" data-id="<?php echo $region->id;?>">
         <div class="region-header dropdown">
           <strong><?php echo $region->name;?></strong>
-          <a class="text-muted"><i class="icon icon-chevron-double-up" data-id="<?php echo $region->id;?>"></i></a>
+          <i class="icon icon-angle-top btn-link" data-id="<?php echo $region->id;?>"></i>
           <div class='region-actions'>
-            <?php if($canEditRegion || $canCreateLane || $canDeleteRegion):?>
+            <?php if(($canEditRegion || $canCreateLane || $canDeleteRegion) and !(isset($this->config->CRKanban) and $this->config->CRKanban == '0' and $kanban->status == 'closed')):?>
             <button class="btn btn-link action" type="button" data-toggle="dropdown"><i class="icon icon-ellipsis-v"></i></button>
             <ul class="dropdown-menu pull-right">
               <?php if($canEditRegion) echo '<li>' . html::a(inlink('editRegion', "regionID={$region->id}", '', 1), '<i class="icon icon-edit"></i>' . $this->lang->kanban->editRegion, '', 'class="iframe" data-toggle="modal" data-width="600px"') . '</li>';?>

@@ -3,7 +3,7 @@
  * The link story view of mr module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      gang zeng
  * @package     mr
  * @version     $Id: linkstory.html.php 5096 2013-07-11 07:02:43Z chencongzhi520@gmail.com $
@@ -47,7 +47,7 @@
           </td>
           <td><span class='label-pri <?php echo 'label-pri-' . $story->pri;?>' title='<?php echo zget($lang->story->priList, $story->pri, $story->pri)?>'><?php echo zget($lang->story->priList, $story->pri, $story->pri)?></span></td>
           <td><?php echo $story->planTitle;?></td>
-          <td title='<?php echo $modules[$story->module]?>' class='text-left'><?php echo $modules[$story->module];?></td>
+          <td title='<?php echo zget($modules, $story->module, '/')?>' class='text-left'><?php echo zget($modules, $story->module, '/');?></td>
           <td class='text-left nobr' title='<?php echo $story->title?>'>
             <?php
             if($story->parent > 0) echo "<span class='label label-badge label-light' title={$lang->story->children}>{$lang->story->childrenAB}</span>";

@@ -43,8 +43,10 @@ $config->action->objectNameFields['kanban']       = 'name';
 $config->action->objectNameFields['kanbancard']   = 'name';
 $config->action->objectNameFields['sonarqube']    = 'name';
 $config->action->objectNameFields['gitlab']       = 'name';
+$config->action->objectNameFields['gitea']        = 'name';
 $config->action->objectNameFields['stage']        = 'name';
 $config->action->objectNameFields['apistruct']    = 'name';
+$config->action->objectNameFields['repo']         = 'name';
 
 $config->action->commonImgSize = 870;
 
@@ -59,11 +61,26 @@ $config->action->majorList['project']   = array('opened', 'edited');
 $config->action->majorList['execution'] = array('opened', 'edited');
 
 $config->action->needGetProjectType = 'build,task,bug,case,testcase,caselib,testtask,testsuite,testreport,doc,issue,release,risk,design,opportunity,trainplan,gapanalysis,researchplan,researchreport,';
-$config->action->needGetRelateField = ',story,productplan,release,task,build,bug,testcase,case,testtask,testreport,doc,doclib,issue,risk,opportunity,trainplan,gapanalysis,team,whitelist,researchplan,researchreport,meeting,kanbanlane,kanbancolumn,';
-$config->action->noLinkModules      = ',doclib,module,webhook,gitlab,sonarqube,pipeline,jenkins,kanban,kanbanspace,kanbancolumn,kanbanlane,kanbanregion,kanbancard,execution,project,traincategory,apistruct,program,product,user,entry,';
+$config->action->needGetRelateField = ',story,productplan,release,task,build,bug,testcase,case,testtask,testreport,doc,doclib,issue,risk,opportunity,trainplan,gapanalysis,team,whitelist,researchplan,researchreport,meeting,kanbanlane,kanbancolumn,module,';
+$config->action->noLinkModules      = ',doclib,module,webhook,gitlab,gitea,sonarqube,pipeline,jenkins,kanban,kanbanspace,kanbancolumn,kanbanlane,kanbanregion,kanbancard,execution,project,traincategory,apistruct,program,product,user,entry,repo,';
 
 $config->action->preferredTypeNum = 10;
 
 $config->action->preferredType = new stdclass();
 $config->action->preferredType->new     = array('user', 'story', 'task', 'bug', 'case', 'doc', 'program', 'product', 'project', 'execution');
 $config->action->preferredType->classic = array('user', 'story', 'task', 'bug', 'case', 'doc', 'product', 'execution', 'productplan', 'build');
+
+global $app, $lang;
+$app->loadLang('action');
+
+$config->trash = new stdclass();
+$config->trash->search['module']               = 'trash';
+$config->trash->search['fields']['objectName'] = $lang->action->objectName;
+$config->trash->search['fields']['objectID']   = $lang->action->objectID;
+$config->trash->search['fields']['actor']      = $lang->action->actor;
+$config->trash->search['fields']['date']       = $lang->action->dateAB;
+
+$config->trash->search['params']['objectName'] = array('operator' => 'include', 'control' => 'input',  'values' => '');
+$config->trash->search['params']['objectID']   = array('operator' => 'include', 'control' => 'input',  'values' => '');
+$config->trash->search['params']['actor']      = array('operator' => '=', 'control' => 'select',  'values' => 'users');
+$config->trash->search['params']['date']       = array('operator' => '=', 'control' => 'input',  'values' => '', 'class' => 'date');

@@ -3,7 +3,7 @@
  * The edit view file of repo module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2017 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Gang Liu <liugang@cnezsoft.com>
  * @package     repo
  * @version     $Id$
@@ -36,20 +36,20 @@
             <td style="width:550px"><?php echo html::select('SCM', $lang->repo->scmList, $repo->SCM, "onchange='scmChanged(this.value)' class='form-control chosen'"); ?></td>
             <td><span class="tips-git"><?php echo $lang->repo->syncTips; ?></span></td>
           </tr>
-          <tr class='gitlab hide'>
-            <th><?php echo $lang->repo->gitlabHost;?></th>
-            <td class='required'><?php echo html::select('gitlabHost', $gitlabHosts, isset($repo->gitlab) ? $repo->gitlab : '', "class='form-control chosen' placeholder='{$lang->repo->placeholder->gitlabHost}'");?>
+          <tr class='service hide'>
+            <th><?php echo $lang->repo->serviceHost;?></th>
+            <td class='required'><?php echo html::select('serviceHost', $serviceHosts, isset($repo->gitService) ? $repo->gitService : '', "class='form-control chosen'");?></td>
           </tr>
-          <tr class='gitlab hide'>
-            <th><?php echo $lang->repo->gitlabProject;?></th>
-            <td class='required'><?php echo html::select('gitlabProject', $projects, isset($repo->project) ? $repo->project : '', "class='form-control chosen'");?>
+          <tr class='service hide'>
+            <th><?php echo $lang->repo->serviceProject;?></th>
+            <td class='required'><?php echo html::select('serviceProject', $projects, isset($repo->project) ? $repo->project : '', "class='form-control chosen'");?></td>
           </tr>
           <tr>
             <th><?php echo $lang->repo->name; ?></th>
             <td class='required'><?php echo html::input('name', $repo->name, "class='form-control'"); ?></td>
             <td></td>
           </tr>
-          <tr class='hide-gitlab'>
+          <tr class='hide-service hide-gitea'>
             <th><?php echo $lang->repo->path; ?></th>
             <td class='required'><?php echo html::input('path', $repo->path, "class='form-control'"); ?></td>
             <td class='muted'>
@@ -62,7 +62,7 @@
             <td class='required'><?php echo html::input('encoding', $repo->encoding, "class='form-control'"); ?></td>
             <td class='muted'><?php echo $lang->repo->encodingsTips; ?></td>
           </tr>
-          <tr class='hide-gitlab'>
+          <tr class='hide-service'>
             <th><?php echo $lang->repo->client;?></th>
             <td class='required'><?php echo html::input('client',  $repo->client, "class='form-control'")?></td>
             <td class='muted'>
@@ -70,11 +70,11 @@
               <span class="tips-svn"><?php echo $lang->repo->example->client->svn;?></span>
             </td>
           </tr>
-          <tr class="account-fields hide-gitlab">
+          <tr class="account-fields hide-service">
             <th><?php echo $lang->repo->account;?></th>
             <td><?php echo html::input('account', $repo->account, "class='form-control'");?></td>
           </tr>
-          <tr class="account-fields  hide-gitlab">
+          <tr class="account-fields  hide-service">
             <th><?php echo $lang->repo->password;?></th>
             <td>
               <div class='input-group'>
@@ -89,11 +89,11 @@
             <td>
               <div class='input-group mgb-10'>
                 <span class='input-group-addon'><?php echo $lang->repo->group?></span>
-                <?php echo html::select('acl[groups][]', $groups, empty($repo->acl->groups) ? '' : join(',', $repo->acl->groups), "class='form-control chosen' multiple")?>
+                <?php echo html::select('acl[groups][]', $groups, empty($repo->acl->groups) ? '' : join(',', $repo->acl->groups), "class='form-control picker-select' multiple")?>
               </div>
               <div class='input-group'>
                 <span class='input-group-addon user-addon'><?php echo $lang->repo->user?></span>
-                <?php echo html::select('acl[users][]', $users, empty($repo->acl->users) ? '' : join(',', $repo->acl->users), "class='form-control chosen' multiple")?>
+                <?php echo html::select('acl[users][]', $users, empty($repo->acl->users) ? '' : join(',', $repo->acl->users), "class='form-control picker-select' multiple")?>
               </div>
             </td>
           </tr>
@@ -102,8 +102,7 @@
             <td colspan='2'><?php echo html::textarea('desc', $repo->desc, "rows='3' class='form-control'"); ?></td>
           </tr>
           <tr>
-            <th></th>
-            <td colspan='2' class='text-center form-actions'>
+            <td colspan='3' class='text-center form-actions'>
               <?php echo html::submitButton(); ?>
               <?php if(!isonlybody()) echo html::a(inlink('maintain', ""), $lang->goback, '', 'class="btn btn-wide"'); ?>
             </td>

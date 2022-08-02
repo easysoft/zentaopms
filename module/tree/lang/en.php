@@ -3,7 +3,7 @@
  * The tree module English file of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     tree
  * @version     $Id: en.php 5045 2013-07-06 07:04:40Z zhujinyonging@gmail.com $
@@ -72,3 +72,11 @@ $lang->tree->short        = 'Abbr.';
 $lang->tree->all          = 'All Modules';
 $lang->tree->executionDoc = "{$lang->executionCommon} Document";
 $lang->tree->product      = $lang->productCommon;
+
+$lang->tree->emptyHistory = "No History";
+
+$lang->module = new stdclass();
+$lang->module->action = new stdclass();
+$lang->module->action->created = array('main' => "\$date, created <strong>\$extra</strong> by <strong>\$actor</strong>.");
+$lang->module->action->moved   = array('main' => "\$date, moved <strong>\$extra</strong> by <strong>\$actor</strong>.");
+$lang->module->action->deleted = array('main' => "\$date, deleted <strong>\$extra</strong> by <strong>\$actor</strong>.");

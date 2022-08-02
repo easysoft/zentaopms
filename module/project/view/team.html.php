@@ -3,7 +3,7 @@
  * The team view file of project module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2021 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Qiyu Xie
  * @package     project
  * @version     $Id: team.html.php 4143 2021-08-11 11:01:06Z $
@@ -15,7 +15,10 @@
 <?php js::set('noAccess', $lang->user->error->noAccess)?>
 <div id='mainMenu' class='clearfix'>
   <div class='btn-toolbar pull-left'>
-    <span class='btn btn-link btn-active-text'><span class='text'><?php echo $lang->project->teamMember;?></span></span>
+    <span class='btn btn-link btn-active-text'>
+      <span class='text'><?php echo $lang->project->teamMember;?></span>
+      <span class="label label-light label-badge"><?php echo count($teamMembers);?></span>
+    </span>
   </div>
   <div class='btn-toolbar pull-right'>
     <?php
@@ -55,9 +58,9 @@
           <th><?php echo $lang->team->days;?></th>
           <th><?php echo $lang->team->hours;?></th>
           <th><?php echo $lang->team->totalHours;?></th>
-          <th class='w-100px text-center'><?php echo $lang->team->limited;?></th>
+          <th class='c-limited text-center'><?php echo $lang->team->limited;?></th>
           <?php if($canBeChanged):?>
-          <th class='c-actions-1 w-80px text-center'><?php echo $lang->actions;?></th>
+          <th class='c-actions-1 text-center'><?php echo $lang->actions;?></th>
           <?php endif;?>
         </tr>
       </thead>
@@ -101,7 +104,7 @@
       </tbody>
     </table>
     <div class='table-footer'>
-      <div class='table-statistic'><?php echo $lang->team->totalHours . '：' .  "<strong>$totalHours{$lang->execution->workHour}</strong>";?></div>
+      <div class='table-statistic'><?php echo $lang->team->totalHours . '：' .  "<strong>$totalHours{$lang->execution->workHour}" . sprintf($lang->project->teamMembersCount, count($teamMembers)) . "</strong>";?></div>
     </div>
   </form>
   <?php endif;?>

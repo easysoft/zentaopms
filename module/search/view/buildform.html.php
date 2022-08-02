@@ -3,7 +3,7 @@
  * The buildform view of search module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     search
  * @version     $Id: buildform.html.php 4129 2013-01-18 01:58:14Z wwccss $
@@ -17,6 +17,7 @@ include '../../common/view/chosen.html.php';
 $formId = 'searchForm-' . uniqid('');
 ?>
 <style>
+.btn-active-text .text {font-weight: 400; font-size: 14px;}
 #selectPeriod {padding: 4px 0; height: 197px; min-width: 120px}
 #selectPeriod > .dropdown-header {background: #f1f1f1; display: block; text-align: center; padding: 4px 0; line-height: 20px; margin: 5px 10px; font-size: 14px; border-radius: 2px; color: #333; font-size: 12px}
 #groupAndOr {display: inline-block;}
@@ -63,6 +64,11 @@ $formId = 'searchForm-' . uniqid('');
 .operatorWidth {width: 110px !important;}
 html[lang^='zh-'] .fieldWidth {width: 110px !important;}
 html[lang^='zh-'] .operatorWidth {width: 90px !important;}
+.table tbody tr td input {display: block !important;}
+
+#save-query {float: unset !important; position: absolute; right: 50px;}
+#save-query .text {top: 0px;}
+#save-query .text:after {border-bottom: 0px solid #0c64eb;}
 </style>
 <?php if($style != 'simple'):?>
   <div id='toggle-queries'>
@@ -125,7 +131,7 @@ foreach($fieldParams as $fieldName => $param)
                 /* Print value. */
                 echo "<td id='valueBox$fieldNO' style='overflow:visible'>";
                 if(isset($config->moreLinks["field{$currentField}"])) $config->moreLinks["value$fieldNO"] = $config->moreLinks["field{$currentField}"];
-                if($param['control'] == 'select') echo html::select("value$fieldNO", $param['values'], $formSession["value$fieldNO"], "class='form-control searchSelect chosen'");
+                if($param['control'] == 'select') echo html::select("value$fieldNO", $param['values'], $formSession["value$fieldNO"], "class='form-control searchSelect chosen' max_drop_width='400'");
                 if($param['control'] == 'input')
                 {
                     $fieldName  = $formSession["field$fieldNO"];
@@ -226,10 +232,9 @@ foreach($fieldParams as $fieldName => $param)
       <td class='w-160px hidden' rowspan='2' id='userQueries'>
         <h4><?php echo $lang->search->savedQuery;?></h4>
         <ul>
-          <?php foreach($queries as $queryID => $queryName):?>
-          <?php if(empty($queryID)) continue;?>
-          <?php $query = $this->search->getByID($queryID);?>
-          <li><?php echo html::a("javascript:executeQuery($queryID)", $queryName . ((common::hasPriv('search', 'deleteQuery') and $this->app->user->account == $query->account) ? '<i class="icon icon-close"></i>' : ''), '', "class='label user-query' data-query-id='$queryID' title='{$queryName}'");?></li>
+          <?php foreach($queries as $query):?>
+          <?php if(empty($query->id)) continue;?>
+          <li><?php echo html::a("javascript:executeQuery($query->id)", $query->title . ((common::hasPriv('search', 'deleteQuery') and $this->app->user->account == $query->account) ? '<i class="icon icon-close"></i>' : ''), '', "class='label user-query' data-query-id='$query->id' title='{$query->title}'");?></li>
           <?php endforeach;?>
         </ul>
       </td>
@@ -242,12 +247,9 @@ foreach($fieldParams as $fieldName => $param)
         echo html::hidden('actionURL',  $actionURL);
         echo html::hidden('groupItems', $groupItems);
         echo html::submitButton($lang->search->common, '', 'btn btn-primary') . " &nbsp; ";
-        if($style != 'simple')
-        {
-            if(common::hasPriv('search', 'saveQuery')) echo html::a($this->createLink('search', 'saveQuery', "module=$module&onMenuBar=$onMenuBar"), $lang->save, '', "class='btn-save-form btn btn-secondary iframe' id='save-query'") . "&nbsp;";
-            echo html::commonButton($lang->search->reset, '', 'btn-reset-form btn');
-        }
+        if($style != 'simple') echo html::commonButton($lang->search->reset, '', 'btn-reset-form btn');
         echo html::commonButton('<i class="icon icon-chevron-double-down"></i>', '', 'btn-expand-form btn btn-info pull-right');
+        if($style != 'simple' and common::hasPriv('search', 'saveQuery')) echo html::a($this->createLink('search', 'saveQuery', "module=$module&onMenuBar=$onMenuBar"), '<span class="text"><i class="icon-bug-confirmBug icon-save"></i> ' . $lang->search->saveCondition . '</span>', '', "class='btn-save-form btn btn-link btn-active-text text iframe' id='save-query'");
         echo html::hidden('formType', zget($formSession, 'formType', 'lite'));
         ?>
       </td>
@@ -284,15 +286,18 @@ function executeQuery(queryID)
 
 $(function()
 {
-    if(!canSaveQuery) $('.btn-save-form').attr('disabled', 'disabled');
-
+    if(!canSaveQuery)
+    {
+        $('.btn-save-form').attr('disabled', 'disabled');
+        $('.btn-save-form').css('pointer-events', 'none');
+    }
     var $searchForm = $('#<?php echo $formId;?>');
     $searchForm.find('select.chosen').chosen().on('chosen:showing_dropdown', function()
     {
         var $this = $(this);
         var $chosen = $this.next('.chosen-container').removeClass('chosen-up');
         var $drop = $chosen.find('.chosen-drop');
-        $chosen.toggleClass('chosen-up', $drop.height() + $drop.offset().top - $(document).scrollTop() > $(window).height());
+        if($this.data('drop_direction') === 'auto') $chosen.toggleClass('chosen-up', $drop.height() + $drop.offset().top - $(document).scrollTop() > $(window).height());
     });
 
     $searchForm.find('.picker-select').each(function()
@@ -303,9 +308,11 @@ $(function()
         $select.picker(pickerOptions);
     });
 
-    $('#queryBox select, #queryBox input').change(function(){
-        $('#save-query').attr("disabled","disabled");
+    $('#queryBox select, #queryBox input').change(function()
+    {
+        $('#save-query').attr("disabled", "disabled");
     })
+
     /* Toggle user queries action. */
     $('#toggle-queries').click(function()
     {
@@ -315,18 +322,29 @@ $(function()
             $('#toggle-queries .icon').removeClass('icon-angle-left');
             $('#toggle-queries .icon').addClass('icon-angle-right');
             $('#toggle-queries').css('right', $('#userQueries').outerWidth());
+            $('#save-query').css('right', $('#userQueries').outerWidth() + 50);
         }
         else
         {
             $('#toggle-queries .icon').removeClass('icon-angle-right');
             $('#toggle-queries .icon').addClass('icon-angle-left');
             $('#toggle-queries').css('right', '0px');
+            $('#save-query').css('right', 50);
         }
     });
 
+    $('.sidebar-toggle').click(function()
+    {
+        if(!$('#userQueries').hasClass('hidden')) $('#toggle-queries').click();
+    })
+
     $(window).resize(function()
     {
-        if(!$('#userQueries').hasClass('hidden')) $('#toggle-queries').css('right', $('#userQueries').outerWidth());
+        if(!$('#userQueries').hasClass('hidden'))
+        {
+            $('#toggle-queries').css('right', $('#userQueries').outerWidth());
+            $('#save-query').css('right', $('#userQueries').outerWidth() + 50);
+        }
     })
 
     /*
@@ -486,12 +504,21 @@ $(function()
                 $searchForm.find("#value" + fieldNO).picker(
                 {
                     chosenMode: true,
+                    dropWidth: 'auto',
+                    minAutoDropWidth: '100%',
+                    maxAutoDropWidth: 350,
                     remote: $searchForm.find("#value" + fieldNO).attr('data-pickerremote')
                 });
             }
             else
             {
-                $searchForm.find("#value" + fieldNO).picker({chosenMode: true});
+                $searchForm.find("#value" + fieldNO).picker(
+                {
+                    chosenMode: true,
+                    dropWidth: 'auto',
+                    minAutoDropWidth: '100%',
+                    maxAutoDropWidth: 350
+                });
             }
         }
     };
@@ -524,8 +551,9 @@ $(function()
     {
         for(i = 1; i <= groupItems * 2; i ++)
         {
-            $searchForm.find('#value' + i).val('').trigger('chosen:updated');
-            $searchForm.find('#dateValue' + i).val('').attr('placeholder','');
+            if(!$searchForm.find('#value' + i).hasClass('picker-select')) $searchForm.find('#value' + i).val('').trigger('chosen:updated');
+            if($searchForm.find('#value' + i).hasClass('picker-select'))  $searchForm.find('#value' + i).data('zui.picker').setValue('');
+            $searchForm.find('#value' + i + '.date').val('').attr('placeholder', '');
         }
     };
 

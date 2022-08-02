@@ -3,7 +3,7 @@
  * The model file of build module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     build
  * @version     $Id: model.php 4970 2013-07-02 05:58:11Z wyd621@gmail.com $
@@ -179,6 +179,22 @@ class buildModel extends model
     }
 
     /**
+     * Get story builds.
+     *
+     * @param  int    $storyID
+     * @access public
+     * @return array
+     */
+    public function getStoryBuilds($storyID)
+    {
+        return $this->dao->select('*')->from(TABLE_BUILD)
+            ->where('deleted')->eq(0)
+            ->andWhere("CONCAT(stories, ',')")->like("%,$storyID,%")
+            ->orderBy('id_desc')
+            ->fetchAll('id');
+    }
+
+    /**
      * Get builds in pairs.
      *
      * @param int|array  $products
@@ -201,6 +217,7 @@ class buildModel extends model
         {
             $selectedBuilds = $this->dao->select('id, name')->from(TABLE_BUILD)
                 ->where('id')->in($buildIdList)
+                ->beginIF($products)->andWhere('product')->in($products)->fi()
                 ->beginIF($objectType === 'execution')->andWhere('execution')->eq($objectID)->fi()
                 ->beginIF($objectType === 'project')->andWhere('project')->eq($objectID)->fi()
                 ->fetchPairs();
@@ -526,20 +543,49 @@ class buildModel extends model
      *
      * @param  object $build
      * @param  string $type
+     * @param  string $extra
      * @access public
      * @return string
      */
-    public function buildOperateMenu($build, $type = 'view')
+    public function buildOperateMenu($build, $type = 'view', $extra = '')
     {
-        $canBeChanged = common::canBeChanged('build', $build);
-        if($build->deleted || !$canBeChanged) return '';
+        $extraParams = array();
+        if($extra) parse_str($extra, $extraParams);
 
         $menu   = '';
         $params = "buildID=$build->id";
 
-        $menu .= $this->buildFlowMenu('build', $build, 'view', 'direct');
-        $menu .= $this->buildMenu('build', 'edit',   $params, $build, $type);
-        $menu .= $this->buildMenu('build', 'delete', $params, $build, $type, 'trash', 'hiddenwin');
+        global $app;
+        $tab = $app->tab;
+
+        if($type == 'browse')
+        {
+            $executionID = $tab == 'execution' ? $extraParams['executionID'] : $build->execution;
+            $execution   = $this->loadModel('execution')->getByID($executionID);
+            $testtaskApp = (!empty($execution->type) and $execution->type == 'kanban') ? 'data-app="qa"' : "data-app='{$tab}'";
+
+            if(common::hasPriv('build', 'linkstory') and common::canBeChanged('build', $build)) $menu .= $this->buildMenu('build', 'view', "{$params}&type=story&link=true", $build, $type, 'link', '', '', '', "data-app={$tab}", $this->lang->build->linkStory);
+
+            $menu .= $this->buildMenu('testtask', 'create', "product=$build->product&execution={$executionID}&build=$build->id&projectID=$build->project", $build, $type, 'bullhorn', '', '', '', $testtaskApp);
+
+            if($tab == 'execution' and !empty($execution->type) and $execution->type != 'kanban') $menu .= $this->buildMenu('execution', 'bug', "execution={$extraParams['executionID']}&productID={$extraParams['productID']}&branchID=all&orderBy=status&build=$build->id", $build, $type, '', '', '', '', $this->lang->execution->viewBug);
+            if($tab == 'project' or empty($execution->type) or $execution->type == 'kanban')      $menu .= $this->buildMenu('build', 'view', "{$params}&type=generatedBug", $build, $type, 'bug', '', '', '', "data-app='$tab'", $this->lang->project->bug);
+
+            $menu .= $this->buildMenu('build', 'edit',   $params, $build, $type);
+            $menu .= $this->buildMenu('build', 'delete', $params, $build, $type, 'trash', 'hiddenwin');
+        }
+        else
+        {
+            $canBeChanged = common::canBeChanged('build', $build);
+            if($build->deleted || !$canBeChanged) return '';
+
+            $menu .= $this->buildFlowMenu('build', $build, 'view', 'direct');
+
+            $editClickable   = $this->buildMenu('build', 'edit',   $params, $build, $type, '', '', '', '', '', '', false);
+            $deleteClickable = $this->buildMenu('build', 'delete',   $params, $build, $type, '', '', '', '', '', '', false);
+            if(common::hasPriv('build', 'edit')   and $editClickable)   $menu .= html::a(helper::createLink('build', 'edit',   $params), "<i class='icon-common-edit icon-edit'></i> "    . $this->lang->edit,   '', "class='btn btn-link' title='{$this->lang->build->edit}' data-app='{$app->tab}'");
+            if(common::hasPriv('build', 'delete') and $deleteClickable) $menu .= html::a(helper::createLink('build', 'delete', $params), "<i class='icon-common-delete icon-trash'></i> " . $this->lang->delete, '', "class='btn btn-link' title='{$this->lang->build->delete}' target='hiddenwin' data-app='{$app->tab}'");
+        }
 
         return $menu;
     }

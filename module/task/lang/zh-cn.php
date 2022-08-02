@@ -3,7 +3,7 @@
  * The task module zh-cn file of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     task
  * @version     $Id: zh-cn.php 5040 2013-07-06 06:22:18Z zhujinyonging@gmail.com $
@@ -72,6 +72,7 @@ $lang->task->color             = '标题颜色';
 $lang->task->name              = '任务名称';
 $lang->task->type              = '任务类型';
 $lang->task->typeAB            = '类型';
+$lang->task->mode              = '任务模式';
 $lang->task->sync2Gitlab       = '同步到GitLab';
 $lang->task->pri               = '优先级';
 $lang->task->mailto            = '抄送给';
@@ -127,6 +128,13 @@ $lang->task->lastEdited        = '最后编辑';
 $lang->task->recordEstimate    = '工时';
 $lang->task->editEstimate      = '编辑工时';
 $lang->task->deleteEstimate    = '删除工时';
+$lang->task->repo              = '所属版本库';
+$lang->task->mr                = '合并请求';
+$lang->task->entry             = '代码路径';
+$lang->task->lines             = '代码行';
+$lang->task->v1                = '版本1';
+$lang->task->v2                = '版本2';
+$lang->task->vision            = '所属界面';
 $lang->task->colorTag          = '颜色标签';
 $lang->task->files             = '附件';
 $lang->task->hasConsumed       = '之前消耗';
@@ -142,6 +150,7 @@ $lang->task->parentAB          = '父';
 $lang->task->lblPri            = 'P';
 $lang->task->lblHour           = '(h)';
 $lang->task->lblTestStory      = "测试{$lang->SRCommon}";
+$lang->task->teamMember        = '团队成员';
 
 /* Fields of zt_taskestimate. */
 $lang->task->task    = '任务';
@@ -152,7 +161,7 @@ $lang->task->recordEstimateAction = '添加工时';
 
 $lang->task->ditto             = '同上';
 $lang->task->dittoNotice       = "该任务与上一任务不属于同一%s！";
-$lang->task->selectTestStory   = "选择测试需求";
+$lang->task->selectTestStory   = "选择测试{$lang->SRCommon}";
 $lang->task->selectAllUser     = '全部';
 $lang->task->noStory           = "无{$lang->SRCommon}";
 $lang->task->noAssigned        = '未指派';
@@ -191,6 +200,9 @@ $lang->task->reasonList['']       = '';
 $lang->task->reasonList['done']   = '已完成';
 $lang->task->reasonList['cancel'] = '已取消';
 
+$lang->task->modeList['linear'] = '串行';
+$lang->task->modeList['multi']  = '并行';
+
 $lang->task->afterChoices['continueAdding'] = "继续为该{$lang->SRCommon}添加任务";
 $lang->task->afterChoices['toTaskList']     = '返回任务列表';
 $lang->task->afterChoices['toStoryList']    = "返回{$lang->SRCommon}列表";
@@ -202,26 +214,28 @@ $lang->task->legendDesc   = '任务描述';
 $lang->task->legendDetail = '任务详情';
 $lang->task->legendMisc   = '其他相关';
 
-$lang->task->confirmDelete          = "您确定要删除这个任务吗？";
-$lang->task->confirmDeleteEstimate  = "您确定要删除这个记录吗？";
-$lang->task->copyStoryTitle         = "同{$lang->SRCommon}";
-$lang->task->afterSubmit            = "添加之后";
-$lang->task->successSaved           = "成功添加，";
-$lang->task->delayWarning           = " <strong class='text-danger'> 延期%s天 </strong>";
-$lang->task->remindBug              = "该任务为Bug转化得到，是否更新Bug:%s ?";
-$lang->task->confirmChangeExecution = "修改{$lang->executionCommon}会导致相应的所属模块、相关{$lang->SRCommon}和指派人发生变化，确定吗？";
-$lang->task->confirmFinish          = '"预计剩余"为0，确认将任务状态改为"已完成"吗？';
-$lang->task->confirmRecord          = '"剩余"为0，任务将标记为"已完成"，您确定吗？';
-$lang->task->confirmTransfer        = '"当前剩余"为0，任务将被转交，您确定吗？';
-$lang->task->noticeTaskStart        = '"总计消耗"和"预计剩余"不能同时为0';
-$lang->task->noticeLinkStory        = "没有可关联的相关{$lang->SRCommon}，您可以为当前项目%s，然后%s";
-$lang->task->noticeSaveRecord       = '您有尚未保存的工时记录，请先将其保存。';
-$lang->task->commentActions         = '%s. %s, 由 <strong>%s</strong> 添加备注。';
-$lang->task->deniedNotice           = '当前任务只有%s才可以%s。';
-$lang->task->noTask                 = '暂时没有任务。';
-$lang->task->createDenied           = '你不能在该项目添加任务';
-$lang->task->cannotDeleteParent     = '不能删除父任务。';
-$lang->task->addChildTask           = '因该任务已经产生消耗，为保证数据一致性，我们会帮您创建一条同名子任务记录该消耗。';
+$lang->task->confirmDelete             = "您确定要删除这个任务吗？";
+$lang->task->confirmDeleteEstimate     = "您确定要删除这个记录吗？";
+$lang->task->confirmDeleteLastEstimate = "您确定要删除该条日志吗？删除最后一条工时日志后，该任务状态将调整为未开始。";
+$lang->task->copyStoryTitle            = "同{$lang->SRCommon}";
+$lang->task->afterSubmit               = "添加之后";
+$lang->task->successSaved              = "成功添加，";
+$lang->task->delayWarning              = " <strong class='text-danger'> 延期%s天 </strong>";
+$lang->task->remindBug                 = "该任务为Bug转化得到，是否更新Bug:%s ?";
+$lang->task->remindIssue               = "该任务为问题转化得到，是否更新问题:%s ?";
+$lang->task->confirmChangeExecution    = "修改{$lang->executionCommon}会导致相应的所属模块、相关{$lang->SRCommon}和指派人发生变化，确定吗？";
+$lang->task->confirmFinish             = '"预计剩余"为0，确认将任务状态改为"已完成"吗？';
+$lang->task->confirmRecord             = '"剩余"为0，任务将标记为"已完成"，您确定吗？';
+$lang->task->confirmTransfer           = '"当前剩余"为0，任务将被转交，您确定吗？';
+$lang->task->noticeTaskStart           = '"总计消耗"和"预计剩余"不能同时为0';
+$lang->task->noticeLinkStory           = "没有可关联的相关{$lang->SRCommon}，您可以为当前项目%s，然后%s";
+$lang->task->noticeSaveRecord          = '您有尚未保存的工时记录，请先将其保存。';
+$lang->task->commentActions            = '%s. %s, 由 <strong>%s</strong> 添加备注。';
+$lang->task->deniedNotice              = '当前任务只有%s才可以%s。';
+$lang->task->noTask                    = '暂时没有任务。';
+$lang->task->createDenied              = '你不能在该项目添加任务';
+$lang->task->cannotDeleteParent        = '不能删除父任务。';
+$lang->task->addChildTask              = '因该任务已经产生消耗，为保证数据一致性，我们会帮您创建一条同名子任务记录该消耗。';
 
 $lang->task->error                    = new stdclass();
 $lang->task->error->totalNumber       = '"总计消耗"必须为数字';
@@ -239,7 +253,8 @@ $lang->task->error->skipClose         = '任务：%s 不是“已完成”或“
 $lang->task->error->closeParent       = '任务：%s 是父任务，父任务在所有子任务关闭后会自动关闭，无法手动关闭。';
 $lang->task->error->consumed          = '任务：%s工时不能小于0，忽略该任务工时的改动';
 $lang->task->error->assignedTo        = '当前状态的多人任务不能指派给任务团队外的成员。';
-$lang->task->error->consumedEmpty     = '"本次消耗"不能为0';
+$lang->task->error->consumedEmpty     = '总计消耗为0时不能完成任务，请填写本次消耗工时';
+$lang->task->error->consumedEmptyAB   = '"本次消耗"为0，请确认是否提交。';
 $lang->task->error->deadlineSmall     = '"截止日期"必须大于"预计开始"';
 $lang->task->error->alreadyStarted    = '此任务已被启动，不能重复启动！';
 $lang->task->error->realStartedEmpty  = '实际开始不能为空';

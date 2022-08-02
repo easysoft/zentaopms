@@ -3,7 +3,7 @@
  * The html template file of index method of index module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     ZenTaoPMS
  * @version     $Id: index.html.php 4129 2013-01-18 01:58:14Z wwccss $
@@ -35,16 +35,14 @@
       }
   }
   $minWidth = (count($visibleFields) > 5) ? 'w-150px' : '';
-
-  $name = $from == 'execution' ? 'execName' : 'name';
-  $code = $from == 'execution' ? 'execCode' : 'code';
-  $PM   = $from == 'execution' ? 'execPM'   : 'PM';
-  $type = $from == 'execution' ? 'execType' : 'type';
-  $desc = $from == 'execution' ? 'execDesc' : 'desc';
-  $status = $from == 'execution' ? 'execStatus' : 'status';
-
+  $name     = $from == 'execution' ? 'execName' : 'name';
+  $code     = $from == 'execution' ? 'execCode' : 'code';
+  $PM       = $from == 'execution' ? 'execPM'   : 'PM';
+  $type     = $from == 'execution' ? 'execType' : 'type';
+  $desc     = $from == 'execution' ? 'execDesc' : 'desc';
+  $status   = $from == 'execution' ? 'execStatus' : 'status';
   ?>
-  <form class='main-form' method='post' target='hiddenwin' action='<?php echo inLink('batchEdit');?>'>
+  <form class='main-form' method='post' target='hiddenwin' id='executionForm' action='<?php echo inLink('batchEdit');?>'>
     <div class="table-responsive">
       <table class='table table-form'>
         <thead>
@@ -54,7 +52,9 @@
             <th class='c-project required' style="width:100%"><?php echo $lang->execution->projectName;?></th>
             <?php endif;?>
             <th class='required <?php echo $minWidth?>' style="width:100%"><?php echo $lang->execution->$name;?></th>
+            <?php if(!isset($config->setCode) or $config->setCode == 1):?>
             <th class='c-code required'><?php echo $lang->execution->$code;?></th>
+            <?php endif;?>
             <th class='c-user<?php echo zget($visibleFields, 'PM',       ' hidden') . zget($requiredFields, 'PM',     '', ' required');?>'><?php echo $lang->execution->$PM;?></th>
             <th class='c-user<?php echo zget($visibleFields, 'PO',       ' hidden') . zget($requiredFields, 'PO',     '', ' required');?>'><?php echo $lang->execution->PO;?></th>
             <th class='c-user<?php echo zget($visibleFields, 'QD',       ' hidden') . zget($requiredFields, 'QD',     '', ' required');?>'><?php echo $lang->execution->QD;?></th>
@@ -85,8 +85,10 @@
             <?php if($config->systemMode == 'new' and isset($project) and $project->model == 'scrum'):?>
             <td class='text-left' style='overflow:visible'><?php echo html::select("projects[$executionID]", $allProjects, $executions[$executionID]->project, "class='form-control picker-select' data-lastselected='{$executions[$executionID]->project}' onchange='changeProject(this, $executionID, {$executions[$executionID]->project})'");?></td>
             <?php endif;?>
-            <td title='<?php echo $executions[$executionID]->name?>'><?php echo html::input("names[$executionID]", $executions[$executionID]->name, "class='form-control'");?></td>
-            <td><?php echo html::input("codes[$executionID]",     $executions[$executionID]->code, "class='form-control'");?></td>
+            <td title='<?php echo $executions[$executionID]->name?>'><?php echo html::input("names[$executionID]", $executions[$executionID]->name, "id='names{$executionID}' class='form-control'");?></td>
+            <?php if(!isset($config->setCode) or $config->setCode == 1):?>
+            <td><?php echo html::input("codes[$executionID]", $executions[$executionID]->code, "class='form-control'");?></td>
+            <?php endif;?>
             <td class='text-left<?php echo zget($visibleFields, 'PM',  ' hidden')?>' style='overflow:visible'><?php echo html::select("PMs[$executionID]", $pmUsers, $executions[$executionID]->PM, "class='form-control picker-select'");?></td>
             <td class='text-left<?php echo zget($visibleFields, 'PO', ' hidden')?>' style='overflow:visible'><?php echo html::select("POs[$executionID]", $poUsers, $executions[$executionID]->PO, "class='form-control picker-select'");?></td>
             <td class='text-left<?php echo zget($visibleFields, 'QD', ' hidden')?>' style='overflow:visible'><?php echo html::select("QDs[$executionID]", $qdUsers, $executions[$executionID]->QD, "class='form-control picker-select'");?></td>
@@ -104,8 +106,8 @@
               ?>
             </td>
             <td class='<?php echo zget($visibleFields, 'status', 'hidden')?>'><?php echo html::select("statuses[$executionID]", $lang->execution->statusList, $executions[$executionID]->status, 'class=form-control');?></td>
-            <td><?php echo html::input("begins[$executionID]", $executions[$executionID]->begin, "class='form-control form-date' onchange='computeWorkDays(this.id)'");?></td>
-            <td><?php echo html::input("ends[$executionID]",   $executions[$executionID]->end,   "class='form-control form-date' onchange='computeWorkDays(this.id)'");?></td>
+            <td><?php echo html::input("begins[$executionID]", $executions[$executionID]->begin, "id='begins{$executionID}' class='form-control form-date' onchange='computeWorkDays(this.id)'");?></td>
+            <td><?php echo html::input("ends[$executionID]",   $executions[$executionID]->end,   "id='ends{$executionID}' class='form-control form-date' onchange='computeWorkDays(this.id)'");?></td>
             <td class='<?php echo zget($visibleFields, 'desc', 'hidden')?>'>    <?php echo html::textarea("descs[$executionID]",  $executions[$executionID]->desc,  "rows='1' class='form-control autosize'");?></td>
             <td class='<?php echo zget($visibleFields, 'teamname', 'hidden')?>'><?php echo html::input("teams[$executionID]",  $executions[$executionID]->team,  "class='form-control'");?></td>
             <td class='<?php echo zget($visibleFields, 'days',     'hidden')?>'>
@@ -136,6 +138,118 @@
     </div>
   </form>
 </div>
-<?php js::set('weekend', $config->execution->weekend);?>
-<?php js::set('confirmSync', $lang->execution->confirmSync);?>
+<?php
+js::set('weekend', $config->execution->weekend);
+js::set('confirmSync', $lang->execution->confirmSync);
+js::set('emptyBegin', $lang->programplan->emptyBegin);
+js::set('emptyEnd', $lang->programplan->emptyEnd);
+js::set('planFinishSmall', $lang->programplan->error->planFinishSmall);
+js::set('errorBegin', $lang->execution->errorLetterProject);
+js::set('errorEnd', $lang->execution->errorGreaterProject);
+?>
+
+<script>
+$('#executionForm').submit(function()
+{
+    /* Clear all error messages. */
+    $('input[name^=begins]').each(function()
+    {
+        var beginDateID = $(this).attr('id');
+        var endDateID   = beginDateID.replace('begins', 'ends');
+        $('#help' + beginDateID).remove();
+        $('#help' + endDateID).remove();
+    });
+
+    var submitForm = true;
+    $('input[name^=begins]').each(function()
+    {
+        var beginDate   = $(this).val();
+        var beginDateID = $(this).attr('id');
+
+        var nameID      = beginDateID.replace('begins', 'names');
+        var endDateID   = beginDateID.replace('begins', 'ends');
+        var executionID = beginDateID.replace('begins', '');
+        $('#help' + beginDateID).remove();
+        $('#help' + endDateID).remove();
+
+        /* Invalid data is skipped. */
+        var nameVal = $('#' + nameID).val()
+        if(!nameVal) return;
+
+        var projectBeginDate = '0000-00-00';
+        var projectEndDate   = '2059-12-31';
+
+        $.ajax(
+        {
+            url: createLink('execution', 'ajaxGetProjectStartDate', "executionID=" + executionID),
+            dataType: 'json',
+            method: 'post',
+            async: false,
+            success: function(data)
+            {
+                if(data)
+                {
+                    projectBeginDate = data.begin;
+                    projectEndDate   = data.end;
+                }
+            }
+        });
+
+        /* Check if the begin date is empty. */
+        if(!beginDate)
+        {
+            submitForm = false;
+            var emptyBeginHtml = '<div id="help' + beginDateID + '" class="text-danger help-text">' + emptyBegin + '</div>';
+            $(this).after(emptyBeginHtml);
+            alert(emptyBegin);
+            return false;
+        }
+
+        var endDate = $('#' + endDateID).val();
+        if(!endDate)
+        {
+            submitForm = false;
+            var emptyEndHtml = '<div id="help' + endDateID + '" class="text-danger help-text">' + emptyEnd + '</div>';
+            $('#' + endDateID).after(emptyEndHtml);
+            alert(emptyEnd);
+            return false;
+        }
+
+        if(endDate < beginDate)
+        {
+            submitForm = false;
+            var emptyEndHtml = '<div id="help' + endDateID + '" class="text-danger help-text">' + planFinishSmall + '</div>';
+            $('#' + endDateID).after(emptyEndHtml);
+            alert(planFinishSmall);
+            return false;
+        }
+
+        if(beginDate < projectBeginDate)
+        {
+            submitForm = false;
+            var errorBeginTip  = errorBegin.replace('%s', projectBeginDate);
+            var errorBeginHtml = '<div id="help' + beginDateID + '" class="text-danger help-text">' + errorBeginTip + '</div>';
+            $('#' + beginDateID).after(errorBeginHtml);
+            alert(errorBeginTip);
+            return false;
+        }
+
+        if(endDate > projectEndDate)
+        {
+            submitForm = false;
+            var errorEndTip  = errorEnd.replace('%s', projectEndDate);
+            var errorEndHtml = '<div id="help' + endDateID + '" class="text-danger help-text">' + errorEndTip + '</div>';
+            $('#' + endDateID).after(errorEndHtml);
+            alert(errorEndTip);
+            return false;
+        }
+    });
+
+    if(!submitForm)
+    {
+        setTimeout(function(){$('#submit').removeAttr('disabled')}, 500);
+        return false;
+    }
+});
+</script>
 <?php include '../../common/view/footer.html.php';?>

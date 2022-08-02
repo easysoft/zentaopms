@@ -3,7 +3,7 @@
  * The html template file of execute method of upgrade module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     upgrade
  * @version     $Id: execute.html.php 5119 2013-07-12 08:06:42Z wyd621@gmail.com $
@@ -48,6 +48,7 @@
 <script>
 $(function()
 {
+    sessionStorage.removeItem('TID');
     $.get('<?php echo inlink('afterExec', "fromVersion=$fromVersion&processed=yes&skipMoveFile=yes")?>');
 })
 

@@ -3,7 +3,7 @@
  * The record file of task module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang<wwccss@gmail.com>
  * @package     task
  * @version     $Id: record.html.php 935 2013-01-08 07:49:24Z wwccss@gmail.com $
@@ -45,7 +45,7 @@
             <th class="thWidth"><?php echo $lang->task->consumed;?></th>
             <th class="thWidth"><?php echo $lang->task->left;?></th>
             <th><?php echo $lang->comment;?></th>
-            <th class='c-actions-2'><?php if(empty($task->team) or $task->assignedTo == $this->app->user->account) echo $lang->actions;?></th>
+            <th class='c-actions-2'><?php if(empty($task->team) or $task->assignedTo == $this->app->user->account or ($task->mode == 'multi' and isset($task->team[$app->user->account]))) echo $lang->actions;?></th>
           </tr>
         </thead>
         <tbody>
@@ -57,10 +57,10 @@
             <td title="<?php echo $estimate->consumed . ' ' . $lang->execution->workHour;?>"><?php echo $estimate->consumed . ' ' . $lang->execution->workHourUnit;?></td>
             <td title="<?php echo $estimate->left     . ' ' . $lang->execution->workHour;?>"><?php echo $estimate->left     . ' ' . $lang->execution->workHourUnit;?></td>
             <td class="text-left" title="<?php echo $estimate->work;?>"><?php echo $estimate->work;?></td>
-            <?php if(empty($task->team) or $task->assignedTo == $this->app->user->account):?>
+            <?php if(empty($task->team) or $task->assignedTo == $this->app->user->account or ($task->mode == 'multi' and isset($task->team[$app->user->account]))):?>
             <td align='center' class='c-actions'>
               <?php
-              if($this->app->user->admin or $this->app->user->account == $estimate->account)
+              if($this->app->user->account == $estimate->account)
               {
                   common::printIcon('task', 'editEstimate', "estimateID=$estimate->id", '', 'list', 'pencil', '', 'showinonlybody', true);
                   common::printIcon('task', 'deleteEstimate', "estimateID=$estimate->id", '', 'list', 'close', 'hiddenwin', 'showinonlybody');
@@ -71,14 +71,18 @@
           <?php endif;?>
           <?php endforeach;?>
           <?php endif;?>
-      <?php if(!empty($task->team) && $task->assignedTo != $this->app->user->account):?>
+      <?php if(!empty($task->team) and (!isset($task->team[$app->user->account]) or ($task->assignedTo != $app->user->account and $task->mode == 'linear'))):?>
         </tbody>
       </table>
     </form>
     <div class="alert with-icon">
       <i class="icon-exclamation-sign"></i>
       <div class="content">
+        <?php if($task->assignedTo != $app->user->account and $task->mode == 'linear'):?>
         <p><?php echo sprintf($lang->task->deniedNotice, '<strong>' . $task->assignedToRealName . '</strong>', $lang->task->logEfforts);?></p>
+        <?php else:?>
+        <p><?php echo sprintf($lang->task->deniedNotice, '<strong>' . $lang->task->teamMember . '</strong>', $lang->task->logEfforts);?></p>
+        <?php endif;?>
       </div>
     </div>
     <?php else:?>

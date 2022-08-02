@@ -3,7 +3,7 @@
  * The start file of task module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Jia Fu <fujia@cnezsoft.com>
  * @package     task
  * @version     $Id: start.html.php 935 2010-07-06 07:49:24Z jajacn@126.com $
@@ -18,12 +18,16 @@
 <div id='mainContent' class='main-content'>
   <?php
   /* IF it is multi-task, the suspened can only be restarted by the current user who it is assigned to. */
-  if(!empty($task->team) && $task->assignedTo != $this->app->user->account):
+  if(!empty($task->team) and (!isset($task->team[$app->user->account]) or ($task->assignedTo != $app->user->account and $task->mode == 'linear'))):
   ?>
   <div class="alert with-icon">
     <i class="icon-exclamation-sign"></i>
     <div class="content">
+      <?php if($task->assignedTo != $app->user->account and $task->mode == 'linear'):?>
       <p><?php echo sprintf($lang->task->deniedNotice, '<strong>' . $task->assignedToRealName . '</strong>', $lang->task->start);?></p>
+      <?php else:?>
+      <p><?php echo sprintf($lang->task->deniedNotice, '<strong>' . $lang->task->teamMember . '</strong>', $lang->task->start);?></p>
+      <?php endif;?>
     </div>
   </div>
   <?php else:?>

@@ -3,7 +3,7 @@
  * The productplan module zh-cn file of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     productplan
  * @version     $Id: zh-cn.php 4659 2013-04-17 06:45:08Z chencongzhi520@gmail.com $
@@ -141,11 +141,6 @@ $lang->productplan->featureBar['browse']['wait']   = '未开始';
 $lang->productplan->featureBar['browse']['doing']  = '进行中';
 $lang->productplan->featureBar['browse']['done']   = '已完成';
 $lang->productplan->featureBar['browse']['closed'] = '已关闭';
-
-$lang->productplan->statusList['wait']   = '未开始';
-$lang->productplan->statusList['doing']  = '进行中';
-$lang->productplan->statusList['done']   = '已完成';
-$lang->productplan->statusList['closed'] = '已关闭';
 
 $lang->productplan->orderList['begin_desc'] = '计划开始时间倒序';
 $lang->productplan->orderList['begin_asc']  = '计划开始时间正序';

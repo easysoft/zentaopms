@@ -3,7 +3,7 @@
  * The model file of search module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     search
  * @version     $Id: model.php 5082 2013-07-10 01:14:45Z wyd621@gmail.com $
@@ -115,7 +115,7 @@ class searchModel extends model
             /* Skip empty values. */
             if($this->post->$valueName == false) continue;
             if($this->post->$valueName == 'ZERO') $this->post->$valueName = 0;   // ZERO is special, stands to 0.
-            if(isset($fieldParams->$field) and $fieldParams->$field->control == 'select' and $this->post->$valueName == 'null') $this->post->$valueName = '';   // Null is special, stands to empty if control is select. Fix bug #3279.
+            if(isset($fieldParams->$field) and $fieldParams->$field->control == 'select' and $this->post->$valueName === 'null') $this->post->$valueName = '';   // Null is special, stands to empty if control is select. Fix bug #3279.
 
             $scoreNum += 1;
 
@@ -320,7 +320,7 @@ class searchModel extends model
                 {
                     $params[$fieldName]['values'] = array('' => '', 'null' => $this->lang->search->null);
                 }
-                else
+                elseif(empty($params[$fieldName]['nonull']))
                 {
                     $params[$fieldName]['values'] = $params[$fieldName]['values'] + array('null' => $this->lang->search->null);
                 }
@@ -434,6 +434,30 @@ class searchModel extends model
             ->andWhere('module')->eq($module)
             ->orderBy('id_desc')
             ->fetchPairs();
+        if(!$queries) return array('' => $this->lang->search->myQuery);
+        $queries = array('' => $this->lang->search->myQuery) + $queries;
+        return $queries;
+    }
+
+    /**
+     * Get query list.
+     *
+     * @param  string    $module
+     * @access public
+     * @return array
+     */
+    public function getQueryList($module)
+    {
+        $queries = $this->dao->select('id, account, title')
+            ->from(TABLE_USERQUERY)
+            ->where()
+            ->markLeft(1)
+            ->where('account')->eq($this->app->user->account)
+            ->orWhere('common')->eq(1)
+            ->markRight(1)
+            ->andWhere('module')->eq($module)
+            ->orderBy('id_desc')
+            ->fetchAll();
         if(!$queries) return array('' => $this->lang->search->myQuery);
         $queries = array('' => $this->lang->search->myQuery) + $queries;
         return $queries;

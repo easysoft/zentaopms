@@ -3,29 +3,31 @@
  * The admin module English file of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     admin
  * @version     $Id: en.php 4460 2013-02-26 02:28:02Z chencongzhi520@gmail.com $
- * @link        https://www.zentao.pm
+ * @link        http://www.zentao.net
  */
-$lang->admin->index         = 'Admin Home';
-$lang->admin->checkDB       = 'Check Database';
-$lang->admin->sso           = 'Zdoo';
-$lang->admin->ssoAction     = 'Link Zdoo';
-$lang->admin->safeIndex     = 'Sécurité';
-$lang->admin->checkWeak     = 'Contrôle niveau de sécurité des mots de passe';
-$lang->admin->certifyMobile = 'Vérifier votre smartphone';
-$lang->admin->certifyEmail  = 'Vérifier votre Email';
-$lang->admin->ztCompany     = 'Vérifier votre entreprise';
-$lang->admin->captcha       = 'Code de vérification';
-$lang->admin->getCaptcha    = 'Obtenir le Code de vérification';
-$lang->admin->register      = 'Register';
+$lang->admin->index           = 'Admin Home';
+$lang->admin->checkDB         = 'Check Database';
+$lang->admin->sso             = 'Zdoo';
+$lang->admin->ssoAction       = 'Link Zdoo';
+$lang->admin->safeIndex       = 'Sécurité';
+$lang->admin->checkWeak       = 'Contrôle niveau de sécurité des mots de passe';
+$lang->admin->certifyMobile   = 'Vérifier votre smartphone';
+$lang->admin->certifyEmail    = 'Vérifier votre Email';
+$lang->admin->ztCompany       = 'Vérifier votre entreprise';
+$lang->admin->captcha         = 'Code de vérification';
+$lang->admin->getCaptcha      = 'Obtenir le Code de vérification';
+$lang->admin->register        = 'Register';
+$lang->admin->resetPWDSetting = 'Reset password Setting';
 
-$lang->admin->api     = 'API';
-$lang->admin->log     = 'Log';
-$lang->admin->setting = 'Paramétrage';
-$lang->admin->days    = 'Durée de conservation';
+$lang->admin->api            = 'API';
+$lang->admin->log            = 'Log';
+$lang->admin->setting        = 'Paramétrage';
+$lang->admin->days           = 'Durée de conservation';
+$lang->admin->resetPWDByMail = 'Reset the password via the email';
 
 $lang->admin->info = new stdclass();
 $lang->admin->info->version = 'La version actuelle est %s customisée. ';
@@ -53,14 +55,14 @@ $lang->admin->bind->caption = 'Lier au compte';
 $lang->admin->bind->success = "Le compte est associé !";
 
 $lang->admin->safe = new stdclass();
-$lang->admin->safe->common     = 'Politique de sécurité';
-$lang->admin->safe->set        = 'Paramétrages du Mot de passe';
-$lang->admin->safe->password   = 'Force du Mot de passe';
-$lang->admin->safe->weak       = 'Mots de passes non sécurisés courrants';
-$lang->admin->safe->reason     = 'Type';
-$lang->admin->safe->checkWeak  = 'Balayage des mots de passe faibles';
-$lang->admin->safe->changeWeak = 'Forcer le changement des mots de passe faibles';
-$lang->admin->safe->loginCaptcha = 'Login using CAPTCHA';
+$lang->admin->safe->common                   = 'Politique de sécurité';
+$lang->admin->safe->set                      = 'Paramétrages du Mot de passe';
+$lang->admin->safe->password                 = 'Force du Mot de passe';
+$lang->admin->safe->weak                     = 'Mots de passes non sécurisés courrants';
+$lang->admin->safe->reason                   = 'Type';
+$lang->admin->safe->checkWeak                = 'Balayage des mots de passe faibles';
+$lang->admin->safe->changeWeak               = 'Forcer le changement des mots de passe faibles';
+$lang->admin->safe->loginCaptcha             = 'Login using CAPTCHA';
 $lang->admin->safe->modifyPasswordFirstLogin = 'Forcer le changement du mot de passe après la première connexion';
 
 $lang->admin->safe->modeList[0] = "Contrôle Modéré";
@@ -79,8 +81,11 @@ $lang->admin->safe->reasonList['birthday'] = 'Identique à la date de naissance'
 $lang->admin->safe->modifyPasswordList[1] = 'Oui';
 $lang->admin->safe->modifyPasswordList[0] = 'Non';
 
-$lang->admin->safe->loginCaptchaList[1] = 'Oui'
+$lang->admin->safe->loginCaptchaList[1] = 'Yes';
 $lang->admin->safe->loginCaptchaList[0] = 'Non';
+
+$lang->admin->safe->resetPWDList[1] = 'ON';
+$lang->admin->safe->resetPWDList[0] = 'Off';
 
 $lang->admin->safe->noticeMode   = "Le mot de passe sera vérifié quand un utilisateur se connectera ou qu'un utilisateur sera créé ou modifier.";
 $lang->admin->safe->noticeStrong = '';

@@ -32,7 +32,7 @@ $config->story->editor->assignto = array('id' => 'comment', 'tools' => 'simpleTo
 $config->story->list = new stdclass();
 $config->story->list->exportFields      = '
     id, product, branch, module, plan, source, sourceNote, title, spec, verify, keywords,
-    pri, estimate, status, stage, taskCountAB, bugCountAB, caseCountAB,
+    pri, estimate, status, stage, category, taskCountAB, bugCountAB, caseCountAB,
     openedBy, openedDate, assignedTo, assignedDate, mailto,
     reviewedBy, reviewedDate,
     closedBy, closedDate, closedReason,
@@ -43,18 +43,38 @@ $config->story->list->customCreateFields      = 'source,verify,pri,estimate,mail
 $config->story->list->customBatchCreateFields = 'plan,spec,source,verify,pri,estimate,review,keywords';
 $config->story->list->customBatchEditFields   = 'branch,plan,estimate,pri,assignedTo,source,stage,closedBy,closedReason,keywords';
 
+$config->story->list->actionsOpratedParentStory = ',edit,batchcreate,change,review,recall,';
+
 $config->story->custom = new stdclass();
 $config->story->custom->createFields      = $config->story->list->customCreateFields;
 $config->story->custom->batchCreateFields = 'module,plan,spec,pri,estimate,review,%s';
 $config->story->custom->batchEditFields   = 'branch,module,plan,estimate,pri,source,stage,closedBy,closedReason';
 
+global $lang, $app;
 $config->story->datatable = new stdclass();
-$config->story->datatable->defaultField = array('id', 'pri', 'title', 'plan', 'openedBy', 'assignedTo', 'estimate', 'status', 'stage', 'taskCount', 'actions');
+if($app->tab == 'execution')
+{
+    $config->story->datatable->defaultField = array('id','order', 'pri', 'title', 'plan', 'openedBy', 'assignedTo', 'estimate', 'status', 'stage', 'taskCount', 'actions');
+}
+else
+{
+    $config->story->datatable->defaultField = array('id', 'pri', 'title', 'plan', 'openedBy', 'assignedTo', 'estimate', 'status', 'stage', 'taskCount', 'actions');
+}
 
 $config->story->datatable->fieldList['id']['title']    = 'idAB';
 $config->story->datatable->fieldList['id']['fixed']    = 'left';
 $config->story->datatable->fieldList['id']['width']    = '60';
 $config->story->datatable->fieldList['id']['required'] = 'yes';
+
+if($app->tab == 'execution')
+{
+    $config->story->datatable->fieldList['order']['title']    = 'order';
+    $config->story->datatable->fieldList['order']['fixed']    = 'left';
+    $config->story->datatable->fieldList['order']['width']    = '60';
+    $config->story->datatable->fieldList['order']['sort']     = 'no';
+    $config->story->datatable->fieldList['order']['required'] = 'no';
+    $config->story->datatable->fieldList['order']['name']     = $this->lang->story->order;
+}
 
 $config->story->datatable->fieldList['pri']['title']    = 'priAB';
 $config->story->datatable->fieldList['pri']['fixed']    = 'left';
@@ -109,7 +129,7 @@ $config->story->datatable->fieldList['estimate']['required'] = 'no';
 
 $config->story->datatable->fieldList['stage']['title']    = 'stageAB';
 $config->story->datatable->fieldList['stage']['fixed']    = 'no';
-$config->story->datatable->fieldList['stage']['width']    = '70';
+$config->story->datatable->fieldList['stage']['width']    = '80';
 $config->story->datatable->fieldList['stage']['required'] = 'no';
 
 $config->story->datatable->fieldList['openedBy']['title']    = 'openedByAB';
@@ -192,7 +212,6 @@ $config->story->datatable->fieldList['version']['fixed']    = 'no';
 $config->story->datatable->fieldList['version']['width']    = '60';
 $config->story->datatable->fieldList['version']['required'] = 'no';
 
-global $lang, $app;
 $config->story->datatable->fieldList['taskCount']['title']    = 'T';
 $config->story->datatable->fieldList['taskCount']['fixed']    = 'no';
 $config->story->datatable->fieldList['taskCount']['width']    = '30';

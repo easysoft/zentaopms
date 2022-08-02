@@ -3,7 +3,7 @@
  * The preference view of user module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Congzhi Chen <congzhi@cnezsoft.com>
  * @package     user
  * @version     $Id: editprofile.html.php 2605 2012-02-21 07:22:58Z wwccss $
@@ -68,7 +68,14 @@ html,body {height: 100%;}
       </tr>
       <?php endif;?>
       <tr>
-        <td colspan='2' class='text-center form-actions'><?php echo html::submitButton();?></td>
+        <td colspan='2' class='text-center form-actions'>
+          <?php echo html::submitButton();?>
+          <?php if($showTip == 'true'):?>
+          <div>
+            <p class='text-muted tip'><?php echo $lang->my->alert;?></p>
+          </div>
+          <?php endif;?>
+        </td>
       </tr>
     </table>
   </form>

@@ -3,7 +3,7 @@
  * The bug module zh-cn file of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     bug
  * @version     $Id: zh-cn.php 4536 2013-03-02 13:39:37Z wwccss $
@@ -34,9 +34,12 @@ $lang->bug->browser          = '浏览器';
 $lang->bug->hardware         = '硬件';
 $lang->bug->result           = '结果';
 $lang->bug->repo             = '所属版本库';
+$lang->bug->mr               = '合并请求';
+$lang->bug->entry            = '代码路径';
 $lang->bug->lines            = '代码行';
 $lang->bug->v1               = '版本1';
 $lang->bug->v2               = '版本2';
+$lang->bug->issueKey         = 'Sonarqube问题键值';
 $lang->bug->repoType         = '版本库类型';
 $lang->bug->steps            = '重现步骤';
 $lang->bug->status           = 'Bug状态';
@@ -58,6 +61,7 @@ $lang->bug->openedDate       = '创建日期';
 $lang->bug->openedDateAB     = '创建日期';
 $lang->bug->openedBuild      = '影响版本';
 $lang->bug->assignedTo       = '指派给';
+$lang->bug->assignedToMe     = '指派给我';
 $lang->bug->assignBug        = '指派给';
 $lang->bug->assignedToAB     = '指派给';
 $lang->bug->assignedDate     = '指派日期';
@@ -91,6 +95,10 @@ $lang->bug->toCase           = '生成用例';
 $lang->bug->colorTag         = '颜色标签';
 $lang->bug->fixedRate        = '修复率';
 $lang->bug->noticefeedbackBy = '通知反馈者';
+$lang->bug->selectProjects   = '选择项目';
+$lang->bug->nextStep         = '下一步';
+$lang->bug->noProject        = '还没有选择项目！';
+$lang->bug->noExecution      = '还没有选择执行！';
 
 /* 方法列表。*/
 $lang->bug->index              = '首页';
@@ -200,11 +208,12 @@ $lang->bug->summary               = "本页共 <strong>%s</strong> 个Bug，未�
 $lang->bug->confirmChangeProduct  = "修改{$lang->productCommon}会导致相应的{$lang->executionCommon}、{$lang->SRCommon}和任务发生变化，确定吗？";
 $lang->bug->confirmDelete         = '您确认要删除该Bug吗？';
 $lang->bug->remindTask            = '该Bug已经转化为任务，是否更新任务(编号:%s)状态 ?';
-$lang->bug->skipClose             = 'Bug %s 不是已解决状态，不能关闭。';
+$lang->bug->skipClose             = 'Bug %s 不是已解决状态，不能关闭，将自动忽略。';
 $lang->bug->executionAccessDenied = "您无权访问该Bug所属的{$lang->executionCommon}！";
 $lang->bug->stepsNotEmpty         = "重现步骤不能为空。";
 $lang->bug->confirmUnlinkBuild    = "更换解决版本将取消与旧版本的关联，您确定取消该bug与%s的关联吗？";
 $lang->bug->noSwitchBranch        = 'Bug%s所属模块不在当前分支下，将自动忽略。';
+$lang->bug->confirmToStory        = '转需求后Bug将自动关闭，关闭原因为转为需求。';
 
 /* 模板。*/
 $lang->bug->tplStep   = "<p>[步骤]</p><br/>";
@@ -400,6 +409,7 @@ $lang->bug->action = new stdclass();
 $lang->bug->action->resolved            = array('main' => '$date, 由 <strong>$actor</strong> 解决，方案为 <strong>$extra</strong> $appendLink。', 'extra' => 'resolutionList');
 $lang->bug->action->tostory             = array('main' => '$date, 由 <strong>$actor</strong> 转为<strong> ' . $lang->SRCommon . '</strong>，编号为 <strong>$extra</strong>。');
 $lang->bug->action->totask              = array('main' => '$date, 由 <strong>$actor</strong> 导入为<strong>任务</strong>，编号为 <strong>$extra</strong>。');
+$lang->bug->action->converttotask       = array('main' => '$date, 由 <strong>$actor</strong> 转为<strong>任务</strong>，编号为 <strong>$extra</strong>。');
 $lang->bug->action->linked2plan         = array('main' => '$date, 由 <strong>$actor</strong> 关联到计划 <strong>$extra</strong>。');
 $lang->bug->action->unlinkedfromplan    = array('main' => '$date, 由 <strong>$actor</strong> 从计划 <strong>$extra</strong> 移除。');
 $lang->bug->action->linked2build        = array('main' => '$date, 由 <strong>$actor</strong> 关联到版本 <strong>$extra</strong>。');
@@ -419,13 +429,14 @@ $lang->bug->featureBar['browse']['openedbyme']   = $lang->bug->openedByMe;
 $lang->bug->featureBar['browse']['assigntome']   = $lang->bug->assignToMe;
 $lang->bug->featureBar['browse']['resolvedbyme'] = $lang->bug->resolvedByMe;
 $lang->bug->featureBar['browse']['assignedbyme'] = $lang->bug->assignedByMe;
-$lang->bug->featureBar['browse']['toclosed']     = $lang->bug->toClosed;
 $lang->bug->featureBar['browse']['unresolved']   = $lang->bug->unResolved;
 $lang->bug->featureBar['browse']['more']         = $lang->more;
+
 
 $lang->bug->moreSelects['unconfirmed']   = $lang->bug->unconfirmed;
 $lang->bug->moreSelects['assigntonull']  = $lang->bug->assignToNull;
 $lang->bug->moreSelects['longlifebugs']  = $lang->bug->longLifeBugs;
+$lang->bug->moreSelects['toclosed']      = $lang->bug->toClosed;
 $lang->bug->moreSelects['postponedbugs'] = $lang->bug->postponedBugs;
 $lang->bug->moreSelects['overduebugs']   = $lang->bug->overdueBugs;
 $lang->bug->moreSelects['needconfirm']   = $lang->bug->needConfirm;

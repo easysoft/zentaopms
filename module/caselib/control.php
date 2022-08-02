@@ -3,7 +3,7 @@
  * The control file of caselib module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     caselib
  * @version     $Id: control.php 5114 2013-07-12 06:02:59Z chencongzhi520@gmail.com $
@@ -92,7 +92,8 @@ class caselib extends control
                 $this->action->logHistory($actionID, $changes);
             }
 
-            $this->executeHooks($libID);
+            $message = $this->executeHooks($libID);
+            if($message) $response['message'] = $message;
 
             $response['locate']  = inlink('view', "libID=$libID");
             return $this->send($response);
@@ -130,7 +131,8 @@ class caselib extends control
         {
             $this->caselib->delete($libID);
 
-            $this->executeHooks($libID);
+            $message = $this->executeHooks($libID);
+            if($message) $response['message'] = $message;
 
             /* if ajax request, send result. */
             if($this->server->ajax)
@@ -350,18 +352,12 @@ class caselib extends control
         /* Set lib menu. */
         $this->caselib->setLibMenu($libraries, $libID);
 
-        $currentModuleID = (int)$moduleID;
-
-        /* Set module option menu. */
-        $moduleOptionMenu          = $this->loadModel('tree')->getOptionMenu($libID, $viewType = 'caselib', $startModuleID = 0);
-        $moduleOptionMenu['ditto'] = $this->lang->testcase->ditto;
-
         $this->view->title            = $libraries[$libID] . $this->lang->colon . $this->lang->testcase->batchCreate;
         $this->view->position[]       = html::a($this->createLink('caselib', 'browse', "libID=$libID"), $libraries[$libID]);
         $this->view->position[]       = $this->lang->testcase->batchCreate;
         $this->view->libID            = $libID;
-        $this->view->moduleOptionMenu = $moduleOptionMenu;
-        $this->view->currentModuleID  = $currentModuleID;
+        $this->view->moduleOptionMenu = $this->loadModel('tree')->getOptionMenu($libID, $viewType = 'caselib', $startModuleID = 0);
+        $this->view->currentModuleID  = (int)$moduleID;
 
         $this->display();
     }

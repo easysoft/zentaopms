@@ -3,7 +3,7 @@
  * The bugs entry point of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2021 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     entries
  * @version     1
@@ -85,6 +85,17 @@ class bugsEntry extends entry
 
         $fields = 'title,project,execution,openedBuild,assignedTo,pri,module,severity,type,story,task,mailto,keywords,steps,uid';
         $this->batchSetPost($fields);
+
+        $caseID = $this->request('case', 0);
+        if($caseID)
+        {
+            $case = $this->loadModel('testcase')->getById($caseID);
+            if($case)
+            {
+                $this->setPost('case', $case->id);
+                $this->setPost('caseVersion', $case->version);
+            }
+        }
 
         $this->setPost('product', $productID);
         $this->setPost('notifyEmail', implode(',', $this->request('notifyEmail', array())));

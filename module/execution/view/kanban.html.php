@@ -3,7 +3,7 @@
  * The kanban file of execution module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2022 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Mengyi Liu<liumengyi@easycorp.ltd>
  * @package     execution
  * @version     $Id: kanban.html.php 935 2022-01-11 16:49:24Z $
@@ -27,6 +27,7 @@ js::set('orderBy', $orderBy);
 js::set('groupBy', $groupBy);
 js::set('execution', $execution);
 js::set('productID', $productID);
+js::set('hourUnit', $config->hourUnit);
 js::set('kanbanLang', $lang->kanban);
 js::set('kanbanlaneLang', $lang->kanbanlane);
 js::set('storyLang', $lang->story);
@@ -34,6 +35,7 @@ js::set('executionLang', $lang->execution);
 js::set('bugLang', $lang->bug);
 js::set('taskLang', $lang->task);
 js::set('deadlineLang', $lang->task->deadlineAB);
+js::set('estStartedLang', $lang->task->estStarted);
 js::set('kanbancolumnLang', $lang->kanbancolumn);
 js::set('kanbancardLang', $lang->kanbancard);
 js::set('executionID', $execution->id);
@@ -51,7 +53,9 @@ js::set('projectID', $projectID);
 js::set('vision', $this->config->vision);
 js::set('productCount', count($productNames));
 js::set('executionID', $execution->id);
-js::set('reviewStoryParis', $reviewStoryParis);
+js::set('needLinkProducts', $lang->execution->needLinkProducts);
+js::set('lastUpdateData', '');
+js::set('rdSearchValue', '');
 
 $canSortRegion       = commonModel::hasPriv('kanban', 'sortRegion') && count($regions) > 1;
 $canEditRegion       = commonModel::hasPriv('kanban', 'editRegion');
@@ -59,6 +63,7 @@ $canDeleteRegion     = commonModel::hasPriv('kanban', 'deleteRegion');
 $canCreateLane       = commonModel::hasPriv('kanban', 'createLane');
 $canCreateTask       = common::hasPriv('task', 'create');
 $canBatchCreateTask  = common::hasPriv('task', 'batchCreate');
+$canImportTask       = common::hasPriv('execution', 'importTask');
 $canCreateBug        = ($productID and common::hasPriv('bug', 'create'));
 $canBatchCreateBug   = ($productID and common::hasPriv('bug', 'batchCreate'));
 $canImportBug        = ($productID and common::hasPriv('execution', 'importBug'));
@@ -81,6 +86,7 @@ js::set('priv',
         'canBatchCreateStory'   => $canBatchCreateStory,
         'canLinkStory'          => $canLinkStory,
         'canLinkStoryByPlan'    => $canLinkStoryByPlan,
+        'canViewBug'            => common::hasPriv('bug', 'view'),
         'canAssignBug'          => common::hasPriv('bug', 'assignto'),
         'canConfirmBug'         => common::hasPriv('bug', 'confirmBug'),
         'canResolveBug'         => common::hasPriv('bug', 'resolve'),
@@ -88,6 +94,7 @@ js::set('priv',
         'canEditBug'            => common::hasPriv('bug', 'edit'),
         'canDeleteBug'          => common::hasPriv('bug', 'delete'),
         'canActivateBug'        => common::hasPriv('bug', 'activate'),
+        'canViewTask'           => common::hasPriv('task', 'view'),
         'canAssignTask'         => common::hasPriv('task', 'assignto'),
         'canFinishTask'         => common::hasPriv('task', 'finish'),
         'canPauseTask'          => common::hasPriv('task', 'pause'),
@@ -107,12 +114,15 @@ js::set('priv',
         'canChangeStory'        => common::hasPriv('story', 'change'),
         'canCloseStory'         => common::hasPriv('story', 'close'),
         'canUnlinkStory'        => common::hasPriv('execution', 'unlinkStory'),
+        'canViewStory'          => common::hasPriv('execution', 'storyView'),
     )
 );
-js::set('hasStoryButton', $hasStoryButton);
-js::set('hasBugButton', $hasBugButton);
-js::set('hasTaskButton', $hasTaskButton);
 ?>
+<?php if($groupBy == 'story' and $browseType == 'task'):?>
+<style>
+.kanban-cols {left: 0px !important;}
+</style>
+<?php endif;?>
 <div id='mainMenu' class='clearfix'>
   <div class='btn-toolbar pull-left'>
     <div class="input-control space c-type">
@@ -136,21 +146,28 @@ js::set('hasTaskButton', $hasTaskButton);
     </span>
   </div>
   <div class='btn-toolbar pull-right'>
+    <div class="input-group" id="rdKanbanSearch">
+      <div class="input-control search-box" id="rdSearchBox">
+        <input type="text" name="rdKanbanSearchInput" id="rdKanbanSearchInput" value="" class="form-control" oninput="searchCards(this.value)" placeholder="<?php echo $lang->execution->pleaseInput?>" autocomplete="off">
+      </div>
+    </div>
     <?php
+    echo html::a('javascript:toggleRDSearchBox()', "<i class='icon-search muted'></i> " . $lang->searchAB, '', "class='btn btn-link querybox-toggle'");
     echo html::a('javascript:fullScreen()', "<i class='icon-fullscreen muted'></i> " . $lang->kanban->fullScreen, '', "class='btn btn-link'");
-    $actions = '';
-    $printSettingBtn = (common::hasPriv('kanban', 'createRegion') or (common::hasPriv('kanban', 'setLaneHeight')) or (common::hasPriv('kanban', 'setColumnWidth')) or common::hasPriv('execution', 'edit') or common::hasPriv('execution', 'close') or common::hasPriv('execution', 'delete') or !empty($executionActions));
+    $actions           = '';
+    $printCreateRegion = (common::hasPriv('kanban', 'createRegion') and $groupBy == 'default');
+    $printSettingBtn   = ($printCreateRegion or common::hasPriv('execution', 'edit') or common::hasPriv('execution', 'setKanban') or common::hasPriv('execution', 'close') or common::hasPriv('execution', 'delete') or !empty($executionActions));
 
     if($printSettingBtn)
     {
-        $actions .= html::a('javascript:;', "<i class='icon icon-cog-outline'></i>" . $lang->kanban->setting, '', "data-toggle='dropdown' class='btn btn-link'");
-        $actions .= "<ul id='kanbanActionMenu' class='dropdown-menu pull-right'>";
-        $width    = $this->app->getClientLang() == 'en' ? '750' : '650';
-        if(common::hasPriv('kanban', 'createRegion')) $actions .= '<li>' . html::a(helper::createLink('kanban', 'createRegion', "kanbanID=$execution->id&from=execution", '', true), '<i class="icon icon-plus"></i>' . $lang->kanban->createRegion, '', "class='iframe btn btn-link text-left'") . '</li>';
-        if(common::hasPriv('kanban', 'setLaneHeight')) $actions .= '<li>' . html::a(helper::createLink('kanban', 'setLaneHeight', "kanbanID=$execution->id&from=execution", '', true), '<i class="icon icon-size-height"></i>' . $lang->kanban->laneHeight, '', "class='iframe btn btn-link text-left' data-width=$width") . '</li>';
-        if(common::hasPriv('kanban', 'setColumnWidth')) $actions .= '<li>' . html::a(helper::createLink('kanban', 'setColumnWidth', "kanbanID=$execution->id&from=execution", '', true), '<i class="icon icon-size-width"></i>' . $lang->kanban->columnWidth, '', "class='iframe btn btn-link text-left' data-width='400'") . '</li>';
+        $actions .= "<div class='btn-group menu-actions'>";
+        $actions .= html::a('javascript:;', "<i class='icon icon-ellipsis-v'></i>", '', "data-toggle='dropdown' class='btn btn-link'");
+        $actions .= "<ul class='dropdown-menu pull-right'>";
+        $width    = common::checkNotCN() ? '600px' : '470px';
+        if($printCreateRegion) $actions .= '<li>' . html::a(helper::createLink('kanban', 'createRegion', "kanbanID=$execution->id&from=execution", '', true), '<i class="icon icon-plus"></i>' . $lang->kanban->createRegion, '', "class='iframe btn btn-link text-left'") . '</li>';
+        if(common::hasPriv('execution', 'setKanban')) $actions .= '<li>' . html::a(helper::createLink('execution', 'setKanban', "executionID=$execution->id", '', true), '<i class="icon icon-cog-outline"></i>' . $lang->execution->setKanban, '', "class='iframe btn btn-link text-left' data-width='$width'") . '</li>';
         $kanbanActions = '';
-        if(common::hasPriv('execution', 'edit')) $kanbanActions .= '<li>' . html::a(helper::createLink('execution', 'edit', "executionID=$execution->id", '', true), '<i class="icon icon-edit"></i>' . $lang->kanban->edit, '', "class='iframe btn btn-link text-left' data-width='75%'") . '</li>';
+        if(common::hasPriv('execution', 'edit')) $kanbanActions .= '<li>' . html::a(helper::createLink('execution', 'edit', "executionID=$execution->id", '', true), '<i class="icon icon-edit"></i>' . $lang->kanban->edit, '', "class='iframe btn btn-link text-left' data-width='80%'") . '</li>';
         if(common::hasPriv('execution', 'start')) $kanbanActions .= '<li class="startButton hidden">' . html::a(helper::createLink('execution', 'start', "executionID=$execution->id&from=kanban", '', true), '<i class="icon icon-play"></i>' . $lang->execution->start, '', "class='iframe btn btn-link text-left' data-width='75%'") . '</li>';
         if(common::hasPriv('execution', 'putoff')) $kanbanActions .= '<li class="putoffButton hidden">' . html::a(helper::createLink('execution', 'putoff', "executionID=$execution->id&from=kanban", '', true), '<i class="icon icon-calendar"></i>' . $lang->execution->putoff, '', "class='iframe btn btn-link text-left' data-width='75%'") . '</li>';
         if(common::hasPriv('execution', 'suspend')) $kanbanActions .= '<li class="suspendButton hidden">' . html::a(helper::createLink('execution', 'suspend', "executionID=$execution->id&from=kanban", '', true), '<i class="icon icon-pause"></i>' . $lang->execution->suspend, '', "class='iframe btn btn-link text-left' data-width='75%'") . '</li>';
@@ -159,9 +176,9 @@ js::set('hasTaskButton', $hasTaskButton);
         if(common::hasPriv('execution', 'delete')) $kanbanActions .= '<li>' . html::a(helper::createLink('execution', 'delete', "executionID=$execution->id"), '<i class="icon icon-trash"></i>' . $lang->delete, 'hiddenwin', "class='btn btn-link text-left'") . '</li>';
         if($kanbanActions)
         {
-            $actions .= ((common::hasPriv('kanban', 'createRegion') or common::hasPriv('kanban', 'setLaneHeight') or common::hasPriv('kanban', 'setColumnWidth')) and (common::hasPriv('execution', 'edit') or common::hasPriv('execution', 'delete') or !empty($executionActions))) ? "<div class='divider'></div>" . $kanbanActions : $kanbanActions;
+            $actions .= ((common::hasPriv('kanban', 'createRegion') or common::hasPriv('execution', 'setKanban')) and (common::hasPriv('execution', 'edit') or common::hasPriv('execution', 'delete') or !empty($executionActions))) ? "<div class='divider'></div>" . $kanbanActions : $kanbanActions;
         }
-        $actions .= "</ul>";
+        $actions .= '</ul></div>';
     }
 
     echo $actions;
@@ -197,8 +214,9 @@ js::set('hasTaskButton', $hasTaskButton);
         }?>
         <?php if(($hasStoryButton or $hasBugButton) and $hasTaskButton) echo '<li class="divider"></li>';?>
         <?php if($canCreateTask) echo '<li>' . html::a(helper::createLink('task', 'create', "execution=$execution->id", '', true), $lang->task->create, '', "class='iframe'") . '</li>';?>
-        <?php if($canImportBug) echo '<li>' . html::a(helper::createLink('execution', 'importBug', "executionID=$execution->id", '', true), $lang->execution->importBug, '', "class='iframe' data-width=80%") . '</li>';?>
-        <?php if($canBatchCreateTask) echo '<li>' . html::a(helper::createLink('task', 'batchCreate', "execution=$execution->id", '', true), $lang->execution->batchCreateTask, '', "class='iframe'") . '</li>';?>
+        <?php if($canImportBug) echo '<li>' . html::a(helper::createLink('execution', 'importBug', "executionID=$execution->id", '', true), $lang->execution->importBug, '', "class='iframe' data-width=90%") . '</li>';?>
+        <?php if($canImportTask) echo '<li>' . html::a(helper::createLink('execution', 'importTask', "toExecution=$execution->id", '', true), $lang->execution->importTask, '', "class='iframe' data-width=90%") . '</li>';?>
+        <?php if($canBatchCreateTask) echo '<li>' . html::a(helper::createLink('task', 'batchCreate', "execution=$execution->id", '', true), $lang->execution->batchCreateTask, '', "class='iframe' data-width=90%") . '</li>';?>
       </ul>
     </div>
     <?php endif;?>
@@ -232,8 +250,12 @@ js::set('hasTaskButton', $hasTaskButton);
 </div>
 <?php else:?>
 <div class='panel' id='kanbanContainer'>
-  <div class='panel-body region'>
-    <div id='kanban' class='kanban'></div>
+  <div class='panel-body'>
+    <div id='kanban'>
+      <div class='region'>
+        <div id='kanban<?php echo $execution->id;?>' data-id='<?php echo $execution->id;?>' class='kanban'></div>
+      </div>
+    </div>
   </div>
 </div>
 <?php endif;?>

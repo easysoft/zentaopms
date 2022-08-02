@@ -3,7 +3,7 @@
  * The search module zh-cn file of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     search
  * @version     $Id: zh-cn.php 4129 2013-01-18 01:58:14Z wwccss $
@@ -30,6 +30,7 @@ $lang->search->noQuery       = '还没有保存查询！';
 $lang->search->onMenuBar     = '显示在菜单栏';
 $lang->search->custom        = '自定义';
 $lang->search->setCommon     = '设为公共查询条件';
+$lang->search->saveCondition = '保存搜索条件';
 
 $lang->search->account  = '用户名';
 $lang->search->module   = '模块';

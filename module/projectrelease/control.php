@@ -3,7 +3,7 @@
  * The control file of release module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     release
  * @version     $Id: control.php 4178 2013-01-20 09:32:11Z wwccss $
@@ -109,7 +109,9 @@ class projectrelease extends control
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             $this->loadModel('action')->create('release', $releaseID, 'opened');
 
-            $this->executeHooks($releaseID);
+            $message = $this->executeHooks($releaseID);
+            if($message) $this->lang->saveSuccess = $message;
+
             if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $releaseID));
 
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('view', "releaseID=$releaseID")));
@@ -128,7 +130,7 @@ class projectrelease extends control
         $this->view->projectID   = $projectID;
         $this->view->builds      = $builds;
         $this->view->lastRelease = $this->projectrelease->getLast($projectID);
-        $this->view->users       = $this->loadModel('user')->getPairs('noletter|noclosed');
+        $this->view->users       = $this->loadModel('user')->getPairs('noclosed');
         $this->view->confirmLink = $this->lang->release->confirmLink;
         $this->display();
     }
@@ -161,7 +163,10 @@ class projectrelease extends control
                 $actionID = $this->loadModel('action')->create('release', $releaseID, 'Edited', $fileAction);
                 if(!empty($changes)) $this->action->logHistory($actionID, $changes);
             }
-            $this->executeHooks($releaseID);
+
+            $message = $this->executeHooks($releaseID);
+            if($message) $this->lang->saveSuccess = $message;
+
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('view', "releaseID=$releaseID")));
         }
 
@@ -187,7 +192,7 @@ class projectrelease extends control
         $this->view->release    = $release;
         $this->view->build      = $build;
         $this->view->builds     = $builds;
-        $this->view->users      = $this->loadModel('user')->getPairs('noletter|noclosed');
+        $this->view->users      = $this->loadModel('user')->getPairs('noclosed');
 
         $this->display();
     }
@@ -328,7 +333,8 @@ class projectrelease extends control
             $build   = $this->dao->select('*')->from(TABLE_BUILD)->where('id')->eq((int)$release->build)->fetch();
             if(empty($build->execution)) $this->loadModel('build')->delete(TABLE_BUILD, $build->id);
 
-            $this->executeHooks($releaseID);
+            $message = $this->executeHooks($releaseID);
+            if($message) $response['message'] = $message;
 
             /* if ajax request, send result. */
             if($this->server->ajax)

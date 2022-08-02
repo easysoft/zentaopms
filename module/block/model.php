@@ -3,7 +3,7 @@
  * The model file of block module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Yidong Wang <yidong@cnezsoft.com>
  * @package     block
  * @version     $Id$
@@ -34,6 +34,7 @@ class blockModel extends model
             ->setDefault('grid', '4')
             ->setDefault('source', $source)
             ->setDefault('block', $type)
+            ->setDefault('vision', $this->config->vision)
             ->setDefault('params', array())
             ->remove('uid,actionLink,modules,moduleBlock')
             ->get();
@@ -167,7 +168,7 @@ class blockModel extends model
     {
         $data = array();
 
-        $tasks = $this->dao->select('t1.id')->from(TABLE_TASK)->alias('t1')
+        $tasks = $this->dao->select("count(t1.id) as tasks, count(if(t1.status = 'done', 1, null)) as doneTasks")->from(TABLE_TASK)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on("t1.project = t2.id")
             ->leftJoin(TABLE_EXECUTION)->alias('t3')->on("t1.execution = t3.id")
             ->where('t1.assignedTo')->eq($this->app->user->account)
@@ -179,12 +180,16 @@ class blockModel extends model
             ->beginIF(!$this->app->user->admin)->andWhere('t1.execution')->in($this->app->user->view->sprints)->fi()
             ->beginIF($this->config->vision)->andWhere('t1.vision')->eq($this->config->vision)->fi()
             ->beginIF($this->config->vision)->andWhere('t3.vision')->eq($this->config->vision)->fi()
-            ->fetchAll('id');
-        $data['tasks']      = isset($tasks) ? count($tasks) : 0;
-        $data['doneTasks']  = (int)$this->dao->select('count(*) AS count')->from(TABLE_TASK)->where('assignedTo')->eq($this->app->user->account)->andWhere('deleted')->eq(0)->andWhere('status')->eq('done')->fetch('count');
-        $data['bugs']       = (int)$this->dao->select('count(*) AS count')->from(TABLE_BUG)
-            ->where('assignedTo')->eq($this->app->user->account)
-            ->andWhere('deleted')->eq(0)
+            ->fetch();
+
+        $data['tasks']     = isset($tasks->tasks)     ? $tasks->tasks : 0;
+        $data['doneTasks'] = isset($tasks->doneTasks) ? $tasks->doneTasks : 0;
+
+        $data['bugs']       = (int)$this->dao->select('count(*) AS count')->from(TABLE_BUG)->alias('t1')
+            ->leftJoin(TABLE_PRODUCT)->alias('t2')->on("t1.product = t2.id")
+            ->where('t1.assignedTo')->eq($this->app->user->account)
+            ->andWhere('t1.deleted')->eq(0)
+            ->andWhere('t2.deleted')->eq(0)
             ->fetch('count');
         $data['stories']    = (int)$this->dao->select('count(*) AS count')->from(TABLE_STORY)->alias('t1')
             ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product=t2.id')
@@ -205,19 +210,27 @@ class blockModel extends model
             ->fetch('count');
 
         $today = date('Y-m-d');
-        $data['delayTask'] = (int)$this->dao->select('count(*) AS count')->from(TABLE_TASK)
-            ->where('assignedTo')->eq($this->app->user->account)
-            ->andWhere('status')->in('wait,doing')
-            ->andWhere('deadline')->ne('0000-00-00')
-            ->andWhere('deadline')->lt($today)
-            ->andWhere('deleted')->eq(0)
+        $data['delayTask'] = (int)$this->dao->select('count(t1.id) AS count')->from(TABLE_TASK)->alias('t1')
+            ->leftJoin(TABLE_PROJECT)->alias('t2')->on("t1.project = t2.id")
+            ->leftJoin(TABLE_EXECUTION)->alias('t3')->on("t1.execution = t3.id")
+            ->where('t1.assignedTo')->eq($this->app->user->account)
+            ->andWhere('(t2.status')->ne('suspended')
+            ->orWhere('t3.status')->ne('suspended')
+            ->markRight(1)
+            ->andWhere('t1.status')->in('wait,doing')
+            ->andWhere('t1.deadline')->ne('0000-00-00')
+            ->andWhere('t1.deadline')->lt($today)
+            ->andWhere('t1.deleted')->eq(0)
+            ->andWhere('t3.deleted')->eq(0)
             ->fetch('count');
-        $data['delayBug'] = (int)$this->dao->select('count(*) AS count')->from(TABLE_BUG)
-            ->where('assignedTo')->eq($this->app->user->account)
-            ->andWhere('status')->eq('active')
-            ->andWhere('deadline')->ne('0000-00-00')
-            ->andWhere('deadline')->lt($today)
-            ->andWhere('deleted')->eq(0)
+        $data['delayBug'] = (int)$this->dao->select('count(*) AS count')->from(TABLE_BUG)->alias('t1')
+            ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product=t2.id')
+            ->where('t1.assignedTo')->eq($this->app->user->account)
+            ->andWhere('t1.status')->eq('active')
+            ->andWhere('t1.deadline')->ne('0000-00-00')
+            ->andWhere('t1.deadline')->lt($today)
+            ->andWhere('t1.deleted')->eq(0)
+            ->andWhere('t2.deleted')->eq(0)
             ->fetch('count');
         $data['delayProject'] = (int)$this->dao->select('count(*) AS count')->from(TABLE_PROJECT)
             ->where('status')->in('wait,doing')
@@ -773,6 +786,10 @@ class blockModel extends model
             $params->meetingCount['name']    = $this->lang->block->meetingCount;
             $params->meetingCount['default'] = 20;
             $params->meetingCount['control'] = 'input';
+
+            $params->feedbackCount['name']    = $this->lang->block->feedbackCount;
+            $params->feedbackCount['default'] = 20;
+            $params->feedbackCount['control'] = 'input';
         }
 
         $params->storyCount['name']    = $this->lang->block->storyCount;

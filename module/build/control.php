@@ -3,7 +3,7 @@
  * The control file of build module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     build
  * @version     $Id: control.php 4992 2013-07-03 07:21:59Z chencongzhi520@gmail.com $
@@ -38,11 +38,12 @@ class build extends control
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             $this->loadModel('action')->create('build', $buildID, 'opened');
 
-            $this->executeHooks($buildID);
+            $message = $this->executeHooks($buildID);
+            if($message) $this->lang->saveSuccess = $message;
 
             if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $buildID));
             if(isonlybody()) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => "parent.loadExecutionBuilds($executionID, $buildID)")); // Code for task #5126.
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('build', 'view', "buildID=$buildID")));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('build', 'view', "buildID=$buildID") . "#app={$this->app->tab}"));
         }
 
         /* Set menu. */
@@ -130,7 +131,8 @@ class build extends control
                 if(!empty($changes)) $this->action->logHistory($actionID, $changes);
             }
 
-            $this->executeHooks($buildID);
+            $message = $this->executeHooks($buildID);
+            if($message) $this->lang->saveSuccess = $message;
 
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('view', "buildID=$buildID")));
         }
@@ -268,7 +270,7 @@ class build extends control
         $this->view->storyPager = $storyPager;
 
         $generatedBugPager = new pager($type == 'generatedBug' ? $recTotal : 0, $recPerPage, $type == 'generatedBug' ? $pageID : 1);
-        $this->view->generatedBugs     = $this->bug->getExecutionBugs($build->execution, $build->product, $build->id, $type, $param, $type == 'generatedBug' ? $orderBy : 'status_desc,id_desc', '', $generatedBugPager);
+        $this->view->generatedBugs     = $this->bug->getExecutionBugs($build->execution, $build->product, 'all', $build->id, $type, $param, $type == 'generatedBug' ? $orderBy : 'status_desc,id_desc', '', $generatedBugPager);
         $this->view->generatedBugPager = $generatedBugPager;
 
         $this->executeHooks($buildID);
@@ -316,7 +318,8 @@ class build extends control
             $build = $this->build->getById($buildID);
             $this->build->delete(TABLE_BUILD, $buildID);
 
-            $this->executeHooks($buildID);
+            $message = $this->executeHooks($buildID);
+            if($message) $response['message'] = $message;
 
             /* if ajax request, send result. */
             if($this->server->ajax)
@@ -679,7 +682,7 @@ class build extends control
         }
         else
         {
-            $allBugs = $this->bug->getExecutionBugs($build->execution, 0, $buildID, 'noclosed', 0, 'status_desc,id_desc', $build->bugs, $pager);
+            $allBugs = $this->bug->getExecutionBugs($build->execution, 0, 'all', $buildID, 'noclosed', 0, 'status_desc,id_desc', $build->bugs, $pager);
         }
 
         $this->view->allBugs    = $allBugs;

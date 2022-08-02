@@ -3,7 +3,7 @@
  * The test view file of dashboard module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     dashboard
  * @version     $Id: test.html.php 1191 2010-11-13 07:30:35Z jajacn@126.com $
@@ -55,7 +55,7 @@
           <td><?php echo $lang->testcase->typeList[$case->type];?></td>
           <td><?php echo zget($users, $case->openedBy);?></td>
           <td><?php echo zget($users, $case->lastRunner);?></td>
-          <td><?php if(!helper::isZeroDate($case->lastRunDate)) echo date(DT_MONTHTIME1, strtotime($case->lastRunDate));?></td>
+          <td><?php echo helper::isZeroDate($case->lastRunDate) ? '' : substr($case->lastRunDate, 5, 11);?></td>
           <td class='<?php echo $case->lastRunResult;?>'><?php if($case->lastRunResult) echo $lang->testcase->resultList[$case->lastRunResult];?></td>
           <td class='<?php echo $case->status;?>'><?php echo $this->processStatus('testcase', $case);?></td>
         </tr>

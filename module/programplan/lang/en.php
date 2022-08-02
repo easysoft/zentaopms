@@ -3,7 +3,7 @@
  * The programplan module English file of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     programplan
  * @version     $Id: en.php 4729 2013-05-03 07:53:55Z chencongzhi520@gmail.com $
@@ -16,11 +16,14 @@ $lang->programplan->list          = 'Stage List';
 $lang->programplan->create        = 'Create';
 $lang->programplan->edit          = 'Edit';
 $lang->programplan->delete        = 'Delete Stage';
+$lang->programplan->close         = 'Close Stage';
+$lang->programplan->activate      = 'Activate Stage';
 $lang->programplan->createSubPlan = 'Create Sub Stage';
 
 $lang->programplan->parent           = 'Parent Stage';
 $lang->programplan->emptyParent      = 'N/A';
 $lang->programplan->name             = 'Stage Name';
+$lang->programplan->status           = 'Stage Progress';
 $lang->programplan->PM               = 'Stage Manager';
 $lang->programplan->acl              = 'Access Control';
 $lang->programplan->subStageName     = 'Sub Stage Name';

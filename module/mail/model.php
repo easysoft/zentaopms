@@ -3,7 +3,7 @@
  * The model file of mail module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     mail
  * @version     $Id: model.php 4750 2013-05-05 00:22:53Z chencongzhi520@gmail.com $
@@ -271,13 +271,14 @@ class mailModel extends model
      * @param  array   $ccList
      * @param  bool    $includeMe
      * @param  array   $emails
+     * @param  bool    $forceSync
      * @access public
      * @return void
      */
-    public function send($toList, $subject, $body = '', $ccList = '', $includeMe = false, $emails = array())
+    public function send($toList, $subject, $body = '', $ccList = '', $includeMe = false, $emails = array(), $forceSync = false)
     {
         if(!$this->config->mail->turnon) return;
-        if(!empty($this->config->mail->async)) return $this->addQueue($toList, $subject, $body, $ccList, $includeMe);
+        if(!empty($this->config->mail->async) and !$forceSync) return $this->addQueue($toList, $subject, $body, $ccList, $includeMe);
 
         ob_start();
 
@@ -533,7 +534,7 @@ class mailModel extends model
         $data->ccList      = $ccList;
         $data->subject     = $subject;
         $data->data        = $body;
-        $data->createdBy   = $this->config->mail->fromName;
+        $data->createdBy   = $this->app->user->account;
         $data->createdDate = helper::now();
         $this->dao->insert(TABLE_NOTIFY)->data($data)->autocheck()->exec();
     }
@@ -722,7 +723,7 @@ class mailModel extends model
             }
         }
 
-        if($objectType == 'meeting') $rooms = $this->loadmodel('meetingroom')->getpairs();
+        if($objectType == 'meeting') $rooms = $this->loadModel('meetingroom')->getpairs();
         if($objectType == 'review') $this->app->loadLang('baseline');
 
         /* Get mail content. */

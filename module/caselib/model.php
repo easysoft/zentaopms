@@ -3,7 +3,7 @@
  * The model file of caselib module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     caselib
  * @version     $Id: model.php 5114 2013-07-12 06:02:59Z chencongzhi520@gmail.com $
@@ -27,6 +27,8 @@ class caselibModel extends model
         $products = $this->loadModel('product')->getPairs();
         if(!empty($products) and $this->session->product) $this->loadModel('qa')->setMenu($products, $this->session->product);
         if(empty($products)) $this->loadModel('qa')->setMenu(array(0 => ''), 0);
+
+        $this->lang->qa->menu->caselib['subModule'] .= ',testcase';
 
         if($libraries)
         {
@@ -647,10 +649,13 @@ class caselibModel extends model
             $menu .= $this->buildMenu('testcase', 'review', $params, $case, 'browse', 'glasses', '', 'iframe');
         }
         $menu .= $this->buildMenu('testcase', 'edit', $params, $case, 'browse');
+        $clickable = $this->buildMenu('testcase', 'delete', $params, $case, 'browse', '', '', '', '', '', '', false);
         if(common::hasPriv('testcase', 'delete'))
         {
             $deleteURL = helper::createLink('testcase', 'delete', "$params&confirm=yes");
-            $menu .= html::a("javascript:ajaxDelete(\"$deleteURL\", \"caseList\", confirmDelete)", '<i class="icon icon-trash"></i>', '', "title='{$this->lang->testcase->delete}' class='btn'");
+            $class = 'btn';
+            if(!$clickable) $class .= ' disabled';
+            $menu .= html::a("javascript:ajaxDelete(\"$deleteURL\", \"caseList\", confirmDelete)", '<i class="icon icon-trash"></i>', '', "title='{$this->lang->testcase->delete}' class='{$class}'");
         }
 
         return $menu;

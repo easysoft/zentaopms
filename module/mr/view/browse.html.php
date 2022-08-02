@@ -10,28 +10,21 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <div id="mainMenu" class="clearfix">
-  <?php if($this->config->systemMode == 'new'):?>
-  <div id="sidebarHeader">
-    <div class="title">
-      <?php echo $lang->mr->common;?>
-    </div>
-  </div>
-  <?php endif;?>
   <div class="btn-toolBar pull-left">
     <?php foreach($lang->mr->statusList as $key => $label):?>
     <?php $active = $param == $key ? 'btn-active-text' : '';?>
     <?php $label = "<span class='text'>$label</span>";?>
     <?php if($param == $key) $label .= " <span class='label label-light label-badge'>{$pager->recTotal}</span>";?>
-    <?php echo html::a(inlink('browse', "mode=status&param=$key"), $label, '', "class='btn btn-link $active'");?>
+    <?php echo html::a(inlink('browse', "repoID=$repoID&mode=status&param=$key"), $label, '', "class='btn btn-link $active'");?>
     <?php endforeach;?>
     <?php $active = $mode == 'assignee' ? 'btn-active-text' : '';?>
     <?php $label = "<span class='text'>{$lang->mr->assignedToMe}</span>";?>
     <?php if($mode == 'assignee') $label .= " <span class='label label-light label-badge'>{$pager->recTotal}</span>";?>
-    <?php echo html::a(inlink('browse', "mode=assignee&param={$this->app->user->account}"), $label, '', "class='btn btn-link $active'");?>
+    <?php echo html::a(inlink('browse', "repoID=$repoID&mode=assignee&param={$this->app->user->account}"), $label, '', "class='btn btn-link $active'");?>
     <?php $active = $mode == 'creator' ? 'btn-active-text' : '';?>
     <?php $label = "<span class='text'>{$lang->mr->createdByMe}</span>";?>
     <?php if($mode == 'creator') $label .= " <span class='label label-light label-badge'>{$pager->recTotal}</span>";?>
-    <?php echo html::a(inlink('browse', "mode=creator&param={$this->app->user->account}"), $label, '', "class='btn btn-link $active'");?>
+    <?php echo html::a(inlink('browse', "repoID=$repoID&mode=creator&param={$this->app->user->account}"), $label, '', "class='btn btn-link $active'");?>
   </div>
   <div class="btn-toolbar pull-right">
     <?php common::printLink('mr', 'create', '', "<i class='icon icon-plus'></i> " . $lang->mr->create, '', "class='btn btn-primary'");?>
@@ -52,21 +45,32 @@
     <table id='gitlabProjectList' class='table has-sort-head table-fixed'>
       <thead>
         <tr class='text-left'>
-          <?php $vars = "mode=$mode&param=$param&objectID=$objectID&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}";?>
-          <th class='w-60px'><?php common::printOrderLink('id', $orderBy, $vars, $lang->mr->id);?></th>
-          <th class='c-name'><?php common::printOrderLink('title', $orderBy, $vars, $lang->mr->title);?></th>
-          <th class='w-200px'><?php common::printOrderLink('sourceBranch', $orderBy, $vars, $lang->mr->sourceBranch);?></th>
-          <th class='w-200px'><?php common::printOrderLink('targetBranch', $orderBy, $vars, $lang->mr->targetBranch);?></th>
-          <th class='w-120px'><?php common::printOrderLink('mergeStatus', $orderBy, $vars, $lang->mr->mergeStatus);?></th>
-          <th class='w-120px'><?php common::printOrderLink('approvalStatus', $orderBy, $vars, $lang->mr->approvalStatus);?></th>
-          <th class='w-120px'><?php common::printOrderLink('createdBy', $orderBy, $vars, $lang->mr->author);?></th>
-          <th class='c-actions-5'><?php echo $lang->actions;?></th>
+          <?php $vars = "repoID=$repoID&mode=$mode&param=$param&objectID=$objectID&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}";?>
+          <th class='c-id'><?php common::printOrderLink('id', $orderBy, $vars, $lang->mr->id);?></th>
+          <th class='c-title'><?php common::printOrderLink('title', $orderBy, $vars, $lang->mr->title);?></th>
+          <th class='c-branch'><?php common::printOrderLink('sourceBranch', $orderBy, $vars, $lang->mr->sourceBranch);?></th>
+          <th class='c-branch'><?php common::printOrderLink('targetBranch', $orderBy, $vars, $lang->mr->targetBranch);?></th>
+          <th class='c-status'><?php common::printOrderLink('mergeStatus', $orderBy, $vars, $lang->mr->mergeStatus);?></th>
+          <th class='c-status'><?php common::printOrderLink('approvalStatus', $orderBy, $vars, $lang->mr->approvalStatus);?></th>
+          <th class='c-author'><?php common::printOrderLink('createdBy', $orderBy, $vars, $lang->mr->author);?></th>
+          <th class='c-date'><?php common::printOrderLink('createdDate', $orderBy, $vars, $lang->mr->createdDate);?></th>
+          <th class='c-actions-5 text-center'><?php echo $lang->actions;?></th>
         </tr>
       </thead>
       <tbody>
         <?php foreach($MRList as $MR):?>
-        <?php $sourceProject = isset($projects[$MR->gitlabID][$MR->sourceProject]) ? $projects[$MR->gitlabID][$MR->sourceProject]->name_with_namespace . ':' . $MR->sourceBranch : $MR->sourceProject . ':' . $MR->sourceBranch; ?>
-        <?php $targetProject = isset($projects[$MR->gitlabID][$MR->targetProject]) ? $projects[$MR->gitlabID][$MR->targetProject]->name_with_namespace . ':' . $MR->targetBranch : $MR->targetProject . ':' . $MR->targetBranch; ?>
+        <?php
+        if($repo->SCM == 'Gitlab')
+        {
+            $sourceProject = isset($projects[$MR->hostID][$MR->sourceProject]) ? $projects[$MR->hostID][$MR->sourceProject]->name_with_namespace . ':' . $MR->sourceBranch : $MR->sourceProject . ':' . $MR->sourceBranch;
+            $targetProject = isset($projects[$MR->hostID][$MR->targetProject]) ? $projects[$MR->hostID][$MR->targetProject]->name_with_namespace . ':' . $MR->targetBranch : $MR->targetProject . ':' . $MR->targetBranch;
+        }
+        else
+        {
+            $sourceProject = isset($projects[$MR->hostID][$MR->sourceProject]) ? $projects[$MR->hostID][$MR->sourceProject]->full_name . ':' . $MR->sourceBranch : $MR->sourceProject . ':' . $MR->sourceBranch;
+            $targetProject = isset($projects[$MR->hostID][$MR->targetProject]) ? $projects[$MR->hostID][$MR->targetProject]->full_name . ':' . $MR->targetBranch : $MR->targetProject . ':' . $MR->targetBranch;
+        }
+        ?>
         <tr>
           <td class='text'><?php echo $MR->id;?></td>
           <td class='text'><?php echo html::a(inlink('view', "mr={$MR->id}"), $MR->title);?></td>
@@ -84,15 +88,23 @@
             <td><?php echo empty($MR->approvalStatus) ? $lang->mr->approvalStatusList['notReviewed'] : $lang->mr->approvalStatusList[$MR->approvalStatus];?></td>
           <?php endif;?>
           <td class='text' title='<?php echo zget($users, $MR->createdBy);?>'><?php echo zget($users, $MR->createdBy);?></td>
+          <td class='text' title='<?php echo $MR->createdDate;?>'><?php echo $MR->createdDate;?></td>
           <td class='c-actions'>
             <?php
-            $canDelete = ($app->user->admin or (isset($projects[$MR->gitlabID][$MR->sourceProject]->owner->id) and $projects[$MR->gitlabID][$MR->sourceProject]->owner->id == $openIDList[$MR->gitlabID])) ? '' : 'disabled';
-            $canEdit   = (isset($projects[$MR->gitlabID][$MR->sourceProject]->isDeveloper) and $projects[$MR->gitlabID][$MR->sourceProject]->isDeveloper == true) ? '' : 'disabled';
-            common::printLink('mr', 'view',   "mr={$MR->id}", '<i class="icon icon-eye"></i>', '', "title='{$lang->mr->view}' class='btn btn-info'");
-            common::printIcon('mr', 'edit',   "mr={$MR->id}", $MR, 'list',  '', '', '', false, "{$canEdit}");
-            common::printLink('mr', 'diff',   "mr={$MR->id}", '<i class="icon icon-diff"></i>', '', "title='{$lang->mr->viewDiff}' class='btn btn-info'");
-            common::printLink('mr', 'link',   "mr={$MR->id}", '<i class="icon icon-link"></i>', '', "title='{$lang->mr->link}' class='btn btn-info'" . ($MR->linkButton == false ? 'disabled' : ''));
-            common::printLink('mr', 'delete', "mr={$MR->id}", '<i class="icon icon-trash"></i>', 'hiddenwin', "title='{$lang->mr->delete}' class='btn btn-info {$canDelete}'");
+            $canDelete = ($app->user->admin or (isset($projects[$MR->hostID][$MR->sourceProject]->owner->id) and $projects[$MR->hostID][$MR->sourceProject]->owner->id == $openIDList[$MR->hostID])) ? '' : 'disabled';
+            if($repo->SCM == 'Gitlab')
+            {
+                $canEdit = (isset($projects[$MR->hostID][$MR->sourceProject]->isDeveloper) and $projects[$MR->hostID][$MR->sourceProject]->isDeveloper == true) ? '' : 'disabled';
+            }
+            else
+            {
+                $canEdit = (isset($projects[$MR->hostID][$MR->sourceProject]->allow_merge_commits) and $projects[$MR->hostID][$MR->sourceProject]->allow_merge_commits == true) ? '' : 'disabled';
+            }
+            common::printLink('mr', 'view',   "MRID={$MR->id}", '<i class="icon icon-eye"></i>', '', "title='{$lang->mr->view}' class='btn btn-info'");
+            common::printIcon('mr', 'edit',   "MRID={$MR->id}", $MR, 'list',  '', '', '', false, "{$canEdit}");
+            common::printLink('mr', 'diff',   "MRID={$MR->id}", '<i class="icon icon-diff"></i>', '', "title='{$lang->mr->viewDiff}' class='btn btn-info'");
+            common::printLink('mr', 'link',   "MRID={$MR->id}", '<i class="icon icon-link"></i>', '', "title='{$lang->mr->link}' class='btn btn-info'" . ($MR->linkButton == false ? 'disabled' : ''));
+            common::printLink('mr', 'delete', "MRID={$MR->id}", '<i class="icon icon-trash"></i>', 'hiddenwin', "title='{$lang->mr->delete}' class='btn btn-info {$canDelete}'");
             ?>
           </td>
         </tr>

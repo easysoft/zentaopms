@@ -3,7 +3,7 @@
  * The products entry point of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2021 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     entries
  * @version     1
@@ -55,7 +55,7 @@ class productsEntry extends entry
         else
         {
             $control = $this->loadController('product', 'all');
-            $control->all($this->param('status', 'all'), $this->param('order', 'order_asc'));
+            $control->all($this->param('status', 'all'), $this->param('order', 'order_asc'), 0, 0, $this->param('limit', '20'), $this->param('page', '1') );
 
             /* Response */
             $data = $this->getData();
@@ -65,8 +65,9 @@ class productsEntry extends entry
             $products = $data->data->productStats;
             if($mergeChildren) $products = $data->data->productStructure;
         }
+        $pager = $data->data->pager;
 
-        $result   = array();
+        $result = array();
         if($mergeChildren)
         {
             $programs = $this->mergeChildren($products);
@@ -95,10 +96,7 @@ class productsEntry extends entry
                 $result[] = $this->format($product, 'createdDate:time,whitelist:userList,createdBy:user,PO:user,RD:user,QD:user');
             }
 
-            $data = array();
-            $data['total']    = count($result);
-            $data['products'] = $result;
-
+            $data = array('page' => $pager->pageID, 'total' => $pager->recTotal, 'limit' => $pager->recPerPage, 'products' => $result);
             $withUser = $this->param('withUser', '');
             if(!empty($withUser)) $data['users'] = $this->loadModel('user')->getListByAccounts($accounts, 'account');
 

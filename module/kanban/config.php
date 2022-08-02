@@ -34,16 +34,14 @@ $config->kanban->editregion->requiredFields    = 'name';
 $config->kanban->splitcolumn->requiredFields   = 'name,limit';
 
 $config->kanban->editor = new stdclass();
-$config->kanban->editor->create       = array('id' => 'desc', 'tools' => 'simpleTools');
-$config->kanban->editor->edit         = array('id' => 'desc', 'tools' => 'simpleTools');
-$config->kanban->editor->createspace  = array('id' => 'desc', 'tools' => 'simpleTools');
-$config->kanban->editor->editspace    = array('id' => 'desc', 'tools' => 'simpleTools');
-$config->kanban->editor->closespace   = array('id' => 'comment', 'tools' => 'simpleTools');
-$config->kanban->editor->createcard   = array('id' => 'desc', 'tools' => 'simpleTools');
-$config->kanban->editor->close        = array('id' => 'comment', 'tools' => 'simpleTools');
-$config->kanban->editor->editcard     = array('id' => 'desc', 'tools' => 'simpleTools');
-$config->kanban->editor->viewcard     = array('id' => 'comment', 'tools' => 'simpleTools');
-$config->kanban->editor->activatecard = array('id' => 'comment', 'tools' => 'simpleTools');
+$config->kanban->editor->closespace    = array('id' => 'comment', 'tools' => 'simpleTools');
+$config->kanban->editor->activatespace = array('id' => 'comment', 'tools' => 'simpleTools');
+$config->kanban->editor->createcard    = array('id' => 'desc', 'tools' => 'simpleTools');
+$config->kanban->editor->activate      = array('id' => 'comment', 'tools' => 'simpleTools');
+$config->kanban->editor->close         = array('id' => 'comment', 'tools' => 'simpleTools');
+$config->kanban->editor->editcard      = array('id' => 'desc', 'tools' => 'simpleTools');
+$config->kanban->editor->viewcard      = array('id' => 'comment,lastComment', 'tools' => 'simpleTools');
+$config->kanban->editor->activatecard  = array('id' => 'comment', 'tools' => 'simpleTools');
 
 $config->kanban->fromType         = array('execution', 'productplan', 'release', 'build');
 $config->kanban->executionField   = array('name', 'status', 'end', 'PM', 'type', 'deleted');
@@ -106,7 +104,7 @@ $config->kanban->taskColumnStatusList['pause']      = 'pause';
 $config->kanban->taskColumnStatusList['canceled']   = 'cancel';
 $config->kanban->taskColumnStatusList['closed']     = 'closed';
 
-$config->kanban->laneColorList   = array('#7ec5ff', '#333', '#2b529c', '#e48600', '#d2323d', '#229f24', '#777', '#d2691e', '#008b8b', '#2e8b57', '#4169e1', '#4b0082', '#fa8072', '#ba55d3', '#6b8e23');
+$config->kanban->laneColorList   = array('#3C4353', '#838A9D', '#476BDA', '#A65BD4', '#449C9D', '#D75557', '#CE814C', '#E7D057', '#73BE60', '#F6998A', '#8DA8ED', '#93DAF6', '#B9E78C', '#E58CE7', '#EDE590', '#CFB5FA');
 $config->kanban->columnColorList = array('#333', '#2b519c', '#e48610', '#d2313d', '#2a9f23', '#777', '#d2691e', '#2e8b8b', '#2f8b58', '#4168e0', '#4b0082', '#f58072', '#ba55d3', '#6a8e22');
 $config->kanban->cardColorList   = array('#fff', '#b10b0b', '#cfa227', '#2a5f29');
 

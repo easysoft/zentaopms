@@ -3,7 +3,7 @@
  * The upgrade module zh-cn file of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     upgrade
  * @version     $Id: zh-cn.php 5119 2013-07-12 08:06:42Z wyd621@gmail.com $
@@ -48,6 +48,7 @@ $lang->upgrade->fromVersion    = '原来的版本';
 $lang->upgrade->toVersion      = '升级到';
 $lang->upgrade->confirm        = '确认要执行的SQL语句';
 $lang->upgrade->sureExecute    = '确认执行';
+$lang->upgrade->upgradingTips  = '正在升级中，请耐心等待，切勿刷新页面、断电、关机！';
 $lang->upgrade->forbiddenExt   = '以下插件与新版本不兼容，已经自动禁用：';
 $lang->upgrade->updateFile     = '需要更新附件信息。';
 $lang->upgrade->noticeSQL      = '检查到你的数据库跟标准不一致，尝试修复失败。请执行以下SQL语句，再刷新页面检查。';
@@ -134,6 +135,8 @@ $lang->upgrade->duplicateProject   = "同一个项目集内项目名称不能重
 $lang->upgrade->upgradeTips        = "历史删除数据不参与升级，升级后将不支持还原，请知悉";
 $lang->upgrade->moveEXTFileFail    = '迁移文件失败， 请执行上面命令后刷新！';
 $lang->upgrade->deleteDirTip       = '升级后，如下文件夹会影响系统功能的使用，请删除。';
+$lang->upgrade->errorNoProduct     = "请选择需要归并的{$lang->productCommon}。";
+$lang->upgrade->errorNoExecution   = "请选择需要归并的{$lang->projectCommon}。";
 $lang->upgrade->moveExtFileTip     = <<<EOT
 <p>新版本将对历史的定制/插件进行扩展机制兼容处理，需要将定制/插件相关的文件迁移到extension/custom下，否则定制/插件功能将无法使用。</p>
 <p>请您确认系统是否有做过定制/插件，如没有做过定制/插件，可取消勾选如下文件；如果不清楚是否做过定制/插件，也可保持文件勾选。</p>

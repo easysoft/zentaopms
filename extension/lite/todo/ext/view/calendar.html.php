@@ -14,20 +14,40 @@
 <?php include $app->getExtensionRoot() . 'biz/common/ext/view/calendar.html.php';?>
 <style>
 #todoLists .todo-item[data-type="todo"] {padding-left: 5px;}
+#sidebar {width: 275px;}
+#sidebar > .cell {width: 100%; left: 8px;}
+#sidebar > .sidebar-toggle {left: 3px; right: auto;}
+.hide-sidebar #sidebar > .cell {display: none;}
+.hide-sidebar #sidebar > .sidebar-toggle > .icon:before {content: "\e314";}
+#date {float: left; margin-right: 10px; margin-left: 0px;}
+.cell .nav>li>a:focus {background-color: unset;}
 </style>
 <?php js::set('moreLang', $this->lang->side->more);?>
 <?php js::set('moduleList', $config->todo->moduleList);?>
 <div id="mainMenu" class="clearfix">
   <div class="btn-toolbar pull-left">
-    <?php if(common::hasPriv('my', 'todo')) echo html::a(helper::createLink('my', 'todo', "type=all"), $lang->todo->all . " <span class='label label-light label-badge'>{$todoCount}</span>", '', "class='btn btn-link'");?>
-    <?php if(isset($effortCount)):?>
-    <?php if(common::hasPriv('my', 'effort')) echo html::a(helper::createLink('my', 'effort', "type=all"), $lang->effort->all . " <span class='label label-light label-badge'>{$effortCount}</span>", '', "class='btn btn-link'");?>
-    <?php endif;?>
+    <?php echo html::a('#', $lang->todo->todoCalendar, '', "class='btn btn-link'");?>
   </div>
   <div class="btn-toolbar pull-right">
+    <?php if(common::hasPriv('my', 'todo')):?>
+    <div class="btn-group panel-actions">
+      <?php echo html::a(helper::createLink('todo', 'calendar'), "<i class='icon-cards-view'></i> &nbsp;", '', "class='btn btn-icon text-primary' title='{$lang->todo->calendar}' id='switchButton'");?>
+      <?php echo html::a(helper::createLink('my', 'todo', "type=all"), "<i class='icon-list'></i> &nbsp;", '', "class='btn btn-icon' title='{$lang->todo->list}' id='switchButton'");?>
+    </div>
+    <?php endif;?>
     <?php if(common::hasPriv('todo', 'export')) echo html::a('javascript:exportCalendar("' . helper::createLink('todo', 'export', "userID={$this->app->user->id}&orderBy=id_desc&date=_date_") . '")', "<i class='icon-export muted'> </i> " . $lang->todo->export, '', "class='btn btn-link'");?>
-    <?php common::printLink('todo', 'batchCreate', '', "<i class='icon icon-plus'></i> " . $lang->todo->batchCreate, '', "class='btn btn-secondary' id='batchCreate'", '', true);?>
-    <?php common::printLink('todo', 'create', '', "<i class='icon icon-plus'></i> " . $lang->todo->create, '', "id='create' class='btn btn-primary iframe' data-width='80%'", '', 'true');?>
+    <?php if(common::hasPriv('todo', 'create') or common::hasPriv('todo', 'batchCreate')):?>
+    <div class='btn-group dropdown'>
+    <?php common::printLink('todo', common::hasPriv('todo', 'create') ? 'create' : 'batchCreate', '', "<i class='icon icon-plus'></i> " . (common::hasPriv('todo', 'create') ? $lang->todo->create : $lang->todo->batchCreate), '', "id='create' class='btn btn-primary iframe' data-width='80%' data-app='my'", '', 'true');?>
+    <?php if(common::hasPriv('todo', 'create') and common::hasPriv('todo', 'batchCreate')):?>
+    <button type='button' class='btn btn-primary dropdown-toggle' data-toggle='dropdown'><span class='caret'></span></button>
+    <ul class='dropdown-menu pull-right'>
+      <li><?php echo html::a($this->createLink('todo', 'create', '', '', true), $lang->todo->create, '', "class='iframe' data-width='80%'");?></li>
+      <li><?php echo html::a($this->createLink('todo', 'batchCreate', '', '', true), $lang->todo->batchCreate, '', "class='iframe' data-width='80%'");?></li>
+    </ul>
+    <?php endif;?>
+    </div>
+    <?php endif;?>
   </div>
 </div>
 <div class="main-row">
@@ -36,27 +56,16 @@
       <div id="todoCalendar" class="calendar">
         <header class="calender-header table-row">
           <div class="btn-toolbar col-4 table-col text-middle">
-            <button type="button" class="btn btn-info btn-icon btn-mini btn-prev"><i class="icon-chevron-left"></i></button>
             <button type="button" class="btn btn-info btn-mini btn-today"><?php echo $lang->today;?></button>
+            <button type="button" class="btn btn-info btn-icon btn-mini btn-prev"><i class="icon-chevron-left"></i></button>
+            <span id="date" class="calendar-caption"></span>
             <button type="button" class="btn btn-info btn-icon btn-mini btn-next"><i class="icon-chevron-right"></i></button>
-            <span class="calendar-caption"></span>
           </div>
-          <div class="col-4 text-center table-col">
-            <ul class="nav nav-primary">
-              <li class="active"><?php echo html::a($this->createLink('todo', 'calendar'), $lang->todo->common);?></li>
-              <?php if($this->config->edition != 'open' and common::hasPriv('effort', 'calendar')):?>
-              <li><?php echo html::a($this->createLink('effort', 'calendar'), $lang->effort->common);?></li>
-              <?php elseif(common::hasPriv('my', 'effort')):?>
-              <li><?php echo html::a($this->createLink('my', 'effort'), $lang->effort->common);?></li>
-              <?php endif;?>
-            </ul>
-          </div>
-          <div class="col-4 table-col"></div>
         </header>
       </div>
     </div>
   </div>
-  <div class="side-col">
+  <div class="side-col" id="sidebar">
     <?php
     $todos = $this->dao->select('id,account,date,name,status,assignedTo')->from(TABLE_TODO)
         ->where('status')->in('wait,doing')
@@ -78,6 +87,7 @@
         }
     }
     ?>
+    <div class="sidebar-toggle" style='left: 5px;'><i class="icon icon-angle-right"></i></div>
     <div class="cell">
       <ul class="nav nav-secondary nav-justified">
         <li class="active"><a href="#tab_undone" data-toggle='tab' class="object-calendar"><?php echo $lang->todo->periods['before'];?><span class="label label-light label-badge label-todo" id="'undoneTotal';?>" data-object="undone"><?php echo count($undoneTodos);?></span></a></li>
@@ -405,6 +415,11 @@ $(function()
     {
         batchAddModalTrigger.show({url: $(this).attr('href'), showHeader:false});
         return false;
+    })
+
+    $('.pull-left .btn-link').click(function()
+    {
+        $(this).css('background', 'unset');
     })
 
     addPager('#tab_undone');

@@ -15,11 +15,11 @@ $pathInfo = '&root=' . $this->repo->encodePath(empty($path) ? '/' : $path);
 if(isset($entry)) $pathInfo .= '&type=file';
 ?>
 <?php js::set('paramsBase', "repoID=$repoID&path=" . $this->repo->encodePath($path) . "&objectID=$objectID&type=$logType");?>
-<form id='logForm' class='main-table' data-ride='table' method='post' onsubmit='logsubmit()'>
+<form id='logForm' class='main-table not-watch' method='post' onsubmit='logsubmit()'>
   <table class='table table-fixed'>
     <thead>
       <tr>
-        <th class='c-checkbox'></th>
+        <th class='c-checkbox w-40px'></th>
         <th class='c-version'><?php echo $lang->repo->revisionA?></th>
         <?php if($repo->SCM != 'Subversion'):?>
         <th class='c-commit'><?php echo $lang->repo->commit?></th>

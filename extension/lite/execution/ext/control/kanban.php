@@ -10,7 +10,7 @@ class myExecution extends execution
         $currentMethod = $this->app->methodName;
         $execution     = $this->execution->getById($executionID);
         $this->loadModel('project')->setMenu($execution->project);
-        $this->lang->kanban->menu->execution['subMenu'] = new stdClass();
+        $this->lang->kanbanProject->menu->execution['subMenu'] = new stdClass();
 
         $this->session->set('kanbanview', $currentMethod);
         setcookie('kanbanview', $currentMethod, $this->config->cookieLife, $this->config->webRoot, '', false, true);

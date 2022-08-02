@@ -3,7 +3,7 @@
  * The zh-cn file of block module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Yidong Wang <yidong@cnezsoft.com>
  * @package     block
  * @version     $Id$
@@ -39,11 +39,14 @@ $lang->block->lblNum       = '条数';
 $lang->block->lblHtml      = 'HTML内容';
 $lang->block->dynamic      = '最新动态';
 $lang->block->assignToMe   = '待处理';
+$lang->block->wait         = '未开始';
+$lang->block->doing        = '进行中';
 $lang->block->done         = '已完成';
 $lang->block->lblFlowchart = '流程图';
 $lang->block->welcome      = '欢迎总览';
 $lang->block->lblTesttask  = '查看测试详情';
 $lang->block->contribute   = '我的贡献';
+$lang->block->finish       = '已完成';
 
 $lang->block->leftToday           = '今天剩余工作总计';
 $lang->block->myTask              = '我的任务';
@@ -77,6 +80,7 @@ $lang->block->month               = '月';
 $lang->block->selectProduct       = '选择产品';
 $lang->block->of                  = '的';
 $lang->block->remain              = '剩余工时';
+$lang->block->allStories          = '总需求';
 
 $lang->block->createBlock        = '添加区块';
 $lang->block->editBlock          = '编辑区块';
@@ -90,8 +94,8 @@ $lang->block->remove             = '移除';
 $lang->block->refresh            = '刷新';
 $lang->block->nbsp               = '';
 $lang->block->hidden             = '隐藏';
-$lang->block->dynamicInfo        = "<span class='timeline-tag'>%s</span> <span class='timeline-text'>%s <em>%s</em> %s <a href='%s' title='%s'>%s</a></span>";
-$lang->block->noLinkDynamic      = "<span class='timeline-tag'>%s</span> <span class='timeline-text' title='%s'>%s <em>%s</em> %s %s</span>";
+$lang->block->dynamicInfo        = "<span class='timeline-tag'>%s</span> <span class='timeline-text'>%s<em class='label-action'>%s</em>%s<a href='%s' title='%s'>%s</a></span>";
+$lang->block->noLinkDynamic      = "<span class='timeline-tag'>%s</span> <span class='timeline-text' title='%s'>%s<em class='label-action'>%s</em>%s<span class='label-name'>%s</span></span>";
 $lang->block->cannotPlaceInLeft  = '此区块无法放置在左侧。';
 $lang->block->cannotPlaceInRight = '此区块无法放置在右侧。';
 
@@ -353,6 +357,7 @@ $lang->block->availableBlocks->testtask    = '测试版本列表';
 $lang->block->availableBlocks->risk        = '风险';
 $lang->block->availableBlocks->issue       = '问题';
 $lang->block->availableBlocks->meeting     = '会议';
+$lang->block->availableBlocks->feedback    = '反馈';
 
 if($config->systemMode == 'new') $lang->block->moduleList['project'] = '项目';
 $lang->block->moduleList['product']   = $lang->productCommon;
@@ -465,13 +470,14 @@ $lang->block->orderByList->story['status_desc'] = '状态倒序';
 $lang->block->orderByList->story['stage_asc']   = '阶段正序';
 $lang->block->orderByList->story['stage_desc']  = '阶段倒序';
 
-$lang->block->todoCount    = '待办数';
-$lang->block->taskCount    = '任务数';
-$lang->block->bugCount     = 'Bug数';
-$lang->block->riskCount    = '风险数';
-$lang->block->issueCount   = '问题数';
-$lang->block->storyCount   = '需求数';
-$lang->block->meetingCount = '会议数';
+$lang->block->todoCount     = '待办数';
+$lang->block->taskCount     = '任务数';
+$lang->block->bugCount      = 'Bug数';
+$lang->block->riskCount     = '风险数';
+$lang->block->issueCount    = '问题数';
+$lang->block->storyCount    = '需求数';
+$lang->block->meetingCount  = '会议数';
+$lang->block->feedbackCount = '反馈数';
 
 $lang->block->typeList = new stdclass();
 

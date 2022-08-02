@@ -45,7 +45,9 @@ $(function()
         if(isExistedProduct != -1 && productType == 'normal')
         {
             $(this).prop('disabled', true).trigger("chosen:updated");
-            $(this).siblings('div').find('span').attr('title', tip);
+
+            var productTip = tip.replace('%s', linkedStoryIDList[$(this).attr('data-last')][0]);
+            $(this).siblings('div').find('span').attr('title', productTip);
         }
     });
 
@@ -55,14 +57,33 @@ $(function()
         if(isExistedBranch != -1)
         {
             var $product = $(this).closest('.has-branch').find("[name^='products']");
-            if($.inArray($product.val(), unmodifiableProducts) != -1)
+            if($.inArray($product.val(), unmodifiableProducts) != -1 && linkedStoryIDList[$product.val()][$(this).attr('data-last')])
             {
                 $(this).prop('disabled', true).trigger("chosen:updated");
                 $product.prop('disabled', true).trigger("chosen:updated");
-                $product.siblings('div').find('span').attr('title', tip);
+
+                var productTip = tip.replace('%s', linkedStoryIDList[$product.val()][$(this).attr('data-last')]);
+                $product.siblings('div').find('span').attr('title', productTip);
             }
         }
     });
+
+    /* Init. */
+    $("select[id^=branch]").each(disableSelectedBranch);
+    disableSelectedProduct();
+
+    /* Check the all products and branches control when uncheck the product. */
+    $(document).on('change', "select[id^='products']", function()
+    {
+        if($(this).val() == 0)
+        {
+            $("select[id^='branch']").each(disableSelectedBranch);
+
+            disableSelectedProduct();
+        }
+    });
+
+    $(document).on('change', "select[id^='branch']", disableSelectedBranch);
 })
 var lastProjectID = $("#project").val();
 

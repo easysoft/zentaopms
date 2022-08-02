@@ -3,7 +3,7 @@
  * The personal view file of attend module of Ranzhi.
  *
  * @copyright   Copyright 2009-2018 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      liyuchun <liyuchun@cnezsoft.com>
  * @package     attend
  * @version     $Id$
@@ -150,6 +150,10 @@
                   <?php elseif($status == 'leave'):?>
                   <span class='attend-<?php echo $status;?>'>
                     <?php extCommonModel::printLink('leave', 'create', "date=" . $date, $leave, "data-toggle='modal' data-width='700px'");?>
+                  </span>
+                  <?php elseif($status == 'overtime'):?>
+                  <span class='attend-<?php echo $status;?>'>
+                    <?php extCommonModel::printLink('overtime', 'create', "date=" . $date, $overtime, "data-toggle='modal' data-width='700px'");?>
                   </span>
                   <?php elseif($status == 'lieu'):?>
                   <span class='attend-<?php echo $status;?>'>

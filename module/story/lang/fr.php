@@ -3,11 +3,11 @@
  * The story module English file of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     story
  * @version     $Id: en.php 5141 2013-07-15 05:57:15Z chencongzhi520@gmail.com $
- * @link        https://www.zentao.pm
+ * @link        http://www.zentao.net
  */
 global $config;
 $lang->story->create            = "Créer Story";
@@ -18,64 +18,67 @@ $lang->story->createStory       = 'Create ' . $lang->story->story;
 $lang->story->createRequirement = 'Create ' . $lang->story->requirement;
 $lang->story->affectedStories   = "Affected {$lang->story->story}";
 
-$lang->story->batchCreate       = "Créer par Lot";
-$lang->story->change            = "Changer";
-$lang->story->changeAction      = "Changer Story";
-$lang->story->changed           = 'Changée';
-$lang->story->assignTo          = 'Affecter';
-$lang->story->assignAction      = 'Affecter Story';
-$lang->story->review            = 'Valider';
-$lang->story->recall            = 'Revoke';
-$lang->story->reviewAction      = 'Valider Story';
-$lang->story->needReview        = 'Validation requise';
-$lang->story->batchReview       = 'Validation par lot';
-$lang->story->edit              = "Editer Story";
-$lang->story->editAB            = "Editer Story";
-$lang->story->batchEdit         = "Editer par Lot";
-$lang->story->subdivide         = 'Décomposer';
-$lang->story->link              = 'Link';
-$lang->story->unlink            = 'Unlink';
-$lang->story->track             = 'Track';
-$lang->story->trackAB           = 'Track';
-$lang->story->processStoryChange= 'Process Story Change';
-$lang->story->subdivideAction   = 'Décomposer Story';
-$lang->story->splitRequirent    = 'Décompose';
-$lang->story->close             = 'Fermer';
-$lang->story->closeAction       = 'Fermer Story';
-$lang->story->batchClose        = 'Fermer par Lot';
-$lang->story->activate          = 'Activer';
-$lang->story->activateAction    = 'Activer Story';
-$lang->story->delete            = "Supprimer";
-$lang->story->deleteAction      = "Supprimer Story";
-$lang->story->view              = "Détail Story";
-$lang->story->setting           = "Paramétrage";
-$lang->story->tasks             = "Tâches Associées";
-$lang->story->bugs              = "Bugs Associés";
-$lang->story->cases             = "CasTest Associés";
-$lang->story->taskCount         = 'Tâches';
-$lang->story->bugCount          = 'Bugs';
-$lang->story->caseCount         = 'CasTests';
-$lang->story->taskCountAB       = 'T';
-$lang->story->bugCountAB        = 'B';
-$lang->story->caseCountAB       = 'C';
-$lang->story->linkStory         = 'Lier Story';
-$lang->story->unlinkStory       = 'Dissocier';
-$lang->story->export            = "Exporter Données";
-$lang->story->exportAction      = "Exporter Story";
-$lang->story->zeroCase          = "Stories sans CasTests";
-$lang->story->zeroTask          = "Seulement liste des stories sans tâches";
-$lang->story->reportChart       = "Rapport";
-$lang->story->reportAction      = "Rapport de Story";
-$lang->story->copyTitle         = "Copier Titre";
-$lang->story->batchChangePlan   = "Changer Plans par lot";
-$lang->story->batchChangeBranch = "Changer Branches par lot";
-$lang->story->batchChangeStage  = "Changer Phases par lot";
-$lang->story->batchAssignTo     = "Affecter par lot";
-$lang->story->batchChangeModule = "Changer Modules par lot";
-$lang->story->viewAll           = "Voir Tout";
-$lang->story->toTask            = 'Convert to Task';
-$lang->story->batchToTask       = 'Batch Convert to Task';
-$lang->story->convertRelations  = 'Convert Relations';
+$lang->story->batchCreate        = "Créer par Lot";
+$lang->story->change             = "Changer";
+$lang->story->changed            = 'Changée';
+$lang->story->assignTo           = 'Affecter';
+$lang->story->review             = 'Valider';
+$lang->story->recall             = 'Revoke';
+$lang->story->needReview         = 'Validation requise';
+$lang->story->batchReview        = 'Validation par lot';
+$lang->story->edit               = "Editer Story";
+$lang->story->batchEdit          = "Editer par Lot";
+$lang->story->subdivide          = 'Décomposer';
+$lang->story->link               = 'Link';
+$lang->story->unlink             = 'Unlink';
+$lang->story->track              = 'Track';
+$lang->story->trackAB            = 'Track';
+$lang->story->processStoryChange = 'Confirm Story Change';
+$lang->story->splitRequirent     = 'Décompose';
+$lang->story->close              = 'Fermer';
+$lang->story->batchClose         = 'Fermer par Lot';
+$lang->story->activate           = 'Activer';
+$lang->story->delete             = "Supprimer";
+$lang->story->view               = "Détail Story";
+$lang->story->setting            = "Paramétrage";
+$lang->story->tasks              = "Tâches Associées";
+$lang->story->bugs               = "Bugs Associés";
+$lang->story->cases              = "CasTest Associés";
+$lang->story->taskCount          = 'Tâches';
+$lang->story->bugCount           = 'Bugs';
+$lang->story->caseCount          = 'CasTests';
+$lang->story->taskCountAB        = 'T';
+$lang->story->bugCountAB         = 'B';
+$lang->story->caseCountAB        = 'C';
+$lang->story->linkStory          = 'Lier Story';
+$lang->story->unlinkStory        = 'Dissocier';
+$lang->story->export             = "Exporter Données";
+$lang->story->zeroCase           = "Stories sans CasTests";
+$lang->story->zeroTask           = "Seulement liste des stories sans tâches";
+$lang->story->reportChart        = "Rapport";
+$lang->story->copyTitle          = "Copier Titre";
+$lang->story->batchChangePlan    = "Changer Plans par lot";
+$lang->story->batchChangeBranch  = "Changer Branches par lot";
+$lang->story->batchChangeStage   = "Changer Phases par lot";
+$lang->story->batchAssignTo      = "Affecter par lot";
+$lang->story->batchChangeModule  = "Changer Modules par lot";
+$lang->story->viewAll            = "Voir Tout";
+$lang->story->toTask             = 'Convert to Task';
+$lang->story->batchToTask        = 'Batch Convert to Task';
+$lang->story->convertRelations   = 'Convert Relations';
+$lang->story->undetermined       = 'undetermined';
+$lang->story->order              = 'Order';
+
+$lang->story->editAction      = "Edit {$lang->SRCommon}";
+$lang->story->changeAction    = "Changer Story";
+$lang->story->assignAction    = 'Affecter Story';
+$lang->story->reviewAction    = 'Valider Story';
+$lang->story->subdivideAction = 'Décomposer Story';
+$lang->story->closeAction     = 'Fermer Story';
+$lang->story->activateAction  = 'Activer Story';
+$lang->story->deleteAction    = "Supprimer Story";
+$lang->story->exportAction    = "Exporter Story";
+$lang->story->reportAction    = "Rapport de Story";
 
 $lang->story->skipStory       = '%s is a parent story. It cannot be closed.';
 $lang->story->closedStory     = 'Story %s is closed and will not be closed.';
@@ -83,7 +86,6 @@ $lang->story->batchToTaskTips = "This action will create a task with the same na
 $lang->story->successToTask   = "Converted to task.";
 $lang->story->storyRound      = '%s time estimation';
 
-$lang->story->common         = 'Story';
 $lang->story->id             = 'ID';
 $lang->story->parent         = 'Parent';
 $lang->story->product        = $lang->productCommon;
@@ -95,6 +97,7 @@ $lang->story->source         = 'De';
 $lang->story->sourceNote     = 'Note';
 $lang->story->fromBug        = 'Depuis Bug';
 $lang->story->title          = 'Titre';
+$lang->story->type           = "Story/Requirement";
 $lang->story->category       = 'Category';
 $lang->story->color          = 'Couleur';
 $lang->story->toBug          = 'Vers Bug';
@@ -122,9 +125,13 @@ $lang->story->closedDate     = 'Date Fermeture';
 $lang->story->closedReason   = 'Raison';
 $lang->story->rejectedReason = 'Raison du Rejet';
 $lang->story->reviewedBy     = 'Validée par';
+$lang->story->reviewer       = $lang->story->reviewedBy;
 $lang->story->reviewers      = 'Reviewers';
 $lang->story->reviewedDate   = 'Date Validation';
+$lang->story->activatedDate  = 'Activated Date';
 $lang->story->version        = 'Version';
+$lang->story->feedbackBy     = 'From Name';
+$lang->story->notifyEmail    = 'From Email';
 $lang->story->plan           = 'Intégrée Plans';
 $lang->story->planAB         = 'Plan';
 $lang->story->comment        = 'Commentaire';
@@ -141,7 +148,6 @@ $lang->story->colorTag       = 'Couleur';
 $lang->story->files          = 'Fichiers';
 $lang->story->copy           = "Copier Story";
 $lang->story->total          = "Stories Total";
-$lang->story->allStories     = 'Toutes les Stories';
 $lang->story->draft          = 'Brouillon';
 $lang->story->unclosed       = 'Non Fermées';
 $lang->story->deleted        = 'Supprimée';
@@ -157,6 +163,7 @@ $lang->story->field          = 'Synchronized fields';
 $lang->story->completeRate   = 'Completion Rate';
 $lang->story->reviewed       = 'Reviewed';
 $lang->story->toBeReviewed   = 'To Be Reviewed';
+$lang->story->linkMR         = 'Related MRs';
 
 $lang->story->ditto       = 'Idem';
 $lang->story->dittoNotice = "La story n'est pas associée au même product que la précédente !";
@@ -239,11 +246,14 @@ $lang->story->legendProjectAndTask = $lang->executionCommon . ' et Tâches';
 $lang->story->legendBugs           = 'Bugs Liés';
 $lang->story->legendFromBug        = 'du Bug';
 $lang->story->legendCases          = 'CasTests Liés';
+$lang->story->legendBuilds         = 'Builds Lié s';
+$lang->story->legendReleases       = 'Releases Lié s';
 $lang->story->legendLinkStories    = 'Stories Liées';
 $lang->story->legendChildStories   = 'Sous-Stories';
 $lang->story->legendSpec           = 'Description';
 $lang->story->legendVerify         = 'Acceptance';
 $lang->story->legendMisc           = 'Divers';
+$lang->story->legendInformation    = 'Story Information';
 
 $lang->story->lblChange   = 'Changer';
 $lang->story->lblReview   = 'Valider';
@@ -260,19 +270,23 @@ $lang->story->specTemplate         = "En tant que < type utilisateur >, je veux 
 $lang->story->needNotReview        = 'Aucune Validation Requise';
 $lang->story->successSaved         = "Story est sauvegardée !";
 $lang->story->confirmDelete        = "Voulez-vous vraiment supprimer cette story ?";
+$lang->story->confirmRecall        = "Do you want to recall this story?";
 $lang->story->errorEmptyChildStory = '『Decomposed Stories』ne peuvent être vides.';
 $lang->story->errorNotSubdivide    = "Si le statut n'est pas actif, ou l'étape n'est pas en attente, ou si c'est une sous-story, elle ne peut pas être subdivisée.";
-$lang->story->errorEmptyReviewedBy = "『ReviewedBy』ne peuvent être vides."
+$lang->story->errorEmptyReviewedBy = "『ReviewedBy』canot be blank.";
 $lang->story->mustChooseResult     = 'Sélect Résultat';
 $lang->story->mustChoosePreVersion = 'Sélect une version pour revenir en arrière.';
 $lang->story->noStory              = "Aucune story pour l'instant. ";
-$lang->story->noRequirement        = "Aucune requirement pour l'instant. ";
+$lang->story->noRequirement        = 'No Requirements';
 $lang->story->ignoreChangeStage    = 'Story %s is in Draft or Closed status. Please review it..';
 $lang->story->cannotDeleteParent   = "Impossible de supprimer {$lang->SRCommon} parent";
 $lang->story->moveChildrenTips     = "Its Child {$lang->SRCommon} will be moved to the selected product when editing the linked product of Parent {$lang->SRCommon}.";
 $lang->story->changeTips           = 'The story associated with the requirements to change, click "Cancel" ignore this change, click "Confirm" to change the story.';
 $lang->story->estimateMustBeNumber = 'Estimate value must be number.';
 $lang->story->estimateMustBePlus   = 'Estimated value cannot be negative';
+$lang->story->confirmChangeBranch  = $lang->SRCommon . ' %s is linked to the plan of its linked branch. If the branch is edited, ' . $lang->SRCommon . ' will be removed from the plan of its linked branch. Do you want to continue edit ' . $lang->SRCommon . '?';
+$lang->story->confirmChangePlan    = $lang->SRCommon . ' %s is linked to the branch of its plan. If the branch is edited, ' . $lang->SRCommon . ' will be removed from the plan. Do you want to continue edit branch ?';
+$lang->story->errorDuplicateStory  = $lang->SRCommon . '%s not exist';
 
 $lang->story->form = new stdclass();
 $lang->story->form->area     = 'Périmètre';
@@ -292,6 +306,7 @@ $lang->story->action->linked2plan           = array('main' => '$date, planifiée
 $lang->story->action->unlinkedfromplan      = array('main' => '$date, déplanifiée par <strong>$actor</strong> du Plan <strong>$extra</strong>.');
 $lang->story->action->linked2execution      = array('main' => '$date, associée au ' . $lang->executionCommon . ' <strong>$extra</strong> par <strong>$actor</strong>.');
 $lang->story->action->unlinkedfromexecution = array('main' => '$date, dissociée du ' . $lang->executionCommon . ' <strong>$extra</strong> par <strong>$actor</strong>.');
+$lang->story->action->linked2kanban         = array('main' => '$date, linked by <strong>$actor</strong> to Kanban <strong>$extra</strong>.');
 $lang->story->action->linked2project        = array('main' => '$date, associée au project <strong>$extra</strong> par <strong>$actor</strong>.');
 $lang->story->action->unlinkedfromproject   = array('main' => '$date, dissociée d uproject <strong>$extra</strong> par <strong>$actor</strong>.');
 $lang->story->action->linked2build          = array('main' => '$date, intégrée par <strong>$actor</strong> au Build <strong>$extra</strong>');
@@ -303,7 +318,7 @@ $lang->story->action->subdividestory        = array('main' => '$date, décompos�
 $lang->story->action->unlinkrelatedstory    = array('main' => '$date, dissociée par <strong>$actor</strong> de la Story <strong>$extra</strong>.');
 $lang->story->action->unlinkchildstory      = array('main' => '$date, dissociée par <strong>$actor</strong> de la sous-Story <strong>$extra</strong>.');
 
-/* 统计报表。*/
+/* Statistical statement. */
 $lang->story->report = new stdclass();
 $lang->story->report->common = 'Rapport';
 $lang->story->report->select = 'Choix Type de Rapport';
@@ -406,3 +421,23 @@ $lang->story->categoryList['safe']        = 'Safe';
 $lang->story->categoryList['experience']  = 'Experience';
 $lang->story->categoryList['improve']     = 'Improve';
 $lang->story->categoryList['other']       = 'Other';
+
+$lang->story->changeTip = 'Cette Story est en cours de vérification et ne peut pas être modifiée.';
+
+$lang->story->reviewTip = array();
+$lang->story->reviewTip['active']      = "Cette Story est déjà active, il n'y a pas de demande de révision.";
+$lang->story->reviewTip['notReviewer'] = "Vous n'êtes pas l'évaluateur de cette Story et ne pouvez pas effectuer d'opérations d'évaluation.";
+$lang->story->reviewTip['reviewed']    = "Révisé";
+$lang->story->reviewTip['recalled']    = "Cette Story a été retirée pour vérification, et l'opération de révision ne peut pas être effectuée.";
+
+$lang->story->recallTip = array();
+$lang->story->recallTip['actived']     = "Aucun processus de révision n'a été lancé pour cette Story, et il n'est pas nécessaire de révoquer l'opération.";
+$lang->story->recallTip['recalled']    = "Cette Story a été retirée pour vérification, et l'opération ne peut pas être annulée.";
+$lang->story->recallTip['reviewed']    = "Il est entré dans le processus de révision, et l'opération ne peut pas être annulée.";
+$lang->story->recallTip['notOpenedBy'] = "Vous n'êtes pas l'initiateur de la révision et vous ne pouvez pas annuler l'opération.";
+
+$lang->story->subDivideTip = array();
+$lang->story->subDivideTip['subStory']  = 'Les sous-stories ne peuvent pas être décomposées.';
+$lang->story->subDivideTip['planned']   = 'Cette Story est planifiée et ne peut être subdivisée.';
+$lang->story->subDivideTip['projected'] = 'Cette Story a été créée et ne peut être subdivisée.';
+$lang->story->subDivideTip['notActive'] = "Cette Story n'est pas active et ne peut être subdivisée.";

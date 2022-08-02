@@ -4,7 +4,7 @@
  * The control file of tree module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     tree
  * @version     $Id: control.php 5002 2013-07-03 08:25:39Z chencongzhi520@gmail.com $
@@ -229,6 +229,49 @@ class tree extends control
             $title      = $this->lang->tree->manageTrainpost;
             $position[] = $this->lang->tree->manageTrainpost;
         }
+        elseif(strpos($viewType, 'datasource') !== false)
+        {
+            $params = explode('_', $viewType);
+            if(count($params) == 2)
+            {
+                $datasourceID = $params[1];
+                $manageChild  = 'manage' . ucfirst($viewType) . 'Child';
+                $datasource   = $this->loadModel('workflowdatasource', 'flow')->getByID($datasourceID);
+                if($datasource)
+                {
+                    $this->app->rawModule = 'workflowdatasource';
+
+                    $title      = $datasource->name;
+                    $position[] = $datasource->name;
+
+                    $this->lang->tree->$manageChild = $title;
+
+                    $root = new stdclass();
+                    $root->name = $title;
+                    $this->view->root = $root;
+                }
+            }
+        }
+        /* viewType is workflow building category. */
+        else if(strpos($viewType, '_') !== false)
+        {
+            $params = explode('_', $viewType);
+            if(count($params) == 2)
+            {
+                $this->app->rawModule = $params[0];
+
+                $manageChild  = 'manage' . ucfirst($viewType) . 'Child';
+
+                $title      = $this->lang->tree->common;
+                $position[] = $this->lang->tree->common;
+
+                $this->lang->tree->$manageChild = $title;
+
+                $root = new stdclass();
+                $root->name = $title;
+                $this->view->root = $root;
+            }
+        }
 
         $parentModules               = $this->tree->getParents($currentModuleID);
         $this->view->title           = $title;
@@ -316,8 +359,7 @@ class tree extends control
 
         if($type == 'task')
         {
-            $optionMenu             = $this->tree->getTaskOptionMenu($module->root);
-            $this->view->optionMenu = $optionMenu;
+            $this->view->optionMenu = $this->tree->getTaskOptionMenu($module->root);
         }
         else
         {
@@ -364,14 +406,19 @@ class tree extends control
     /**
      * Update modules' orders.
      *
+     * @param  int    $root
+     * @param  string $viewType
+     * @param  int    $moduleID
+     *
      * @access public
      * @return void
      */
-    public function updateOrder()
+    public function updateOrder($rootID = 0, $viewType = '', $moduleID = 0)
     {
         if(!empty($_POST))
         {
             $this->tree->updateOrder($_POST['orders']);
+            if($viewType == 'story' and !empty($rootID) and !empty($moduleID)) $this->loadModel('action')->create('module', $rootID, 'moved', '', $moduleID);
             die(js::reload('parent'));
         }
     }
@@ -469,6 +516,7 @@ class tree extends control
             {
                 $changeFunc = '';
                 if($viewType == 'bug' or $viewType == 'case') $changeFunc = "onchange='loadModuleRelated()'";
+                if($viewType == 'task') $changeFunc = "onchange='setStories(this.value, $rootID)'";
                 $field = $fieldID ? "modules[$fieldID]" : 'module';
 
                 $currentModule   = $this->tree->getById($currentModuleID);
@@ -480,7 +528,7 @@ class tree extends control
                     $output .= "<span class='input-group-addon'>";
                     $output .= html::a($this->createLink('tree', 'browse', "rootID=$rootID&view=$viewType&currentModuleID=0&branch=$branch", '', true), $this->lang->tree->manage, '', "class='text-primary' data-toggle='modal' data-type='iframe' data-width='95%'");
                     $output .= '&nbsp; ';
-                    $output .= html::a("javascript:void(0)", $this->lang->refresh, '', "class='refresh' onclick='loadProductModules($rootID)'");
+                    $output .= html::a("javascript:void(0)", $this->lang->refreshIcon, '', "class='refresh' onclick='loadProductModules($rootID)'");
                     $output .= '</span>';
                 }
             }
@@ -490,7 +538,8 @@ class tree extends control
         if($returnType == 'mhtml')
         {
             $changeFunc = '';
-            if($viewType == 'task' or $viewType == 'bug' or $viewType == 'case') $changeFunc = "onchange='loadModuleRelated()'";
+            if($viewType == 'bug' or $viewType == 'case') $changeFunc = "onchange='loadModuleRelated()'";
+            if($viewType == 'task') $changeFunc = "onchange='setStories(this.value, $rootID)'";
             $field  = $fieldID ? "modules[$fieldID]" : 'module';
             $output = html::select("$field", $optionMenu, '', "class='input' $changeFunc");
             die($output);
@@ -571,5 +620,19 @@ class tree extends control
             ->andWhere('deleted')->eq(0)
             ->fetchAll('id');
         echo json_encode($modules);
+    }
+
+    /**
+     * View module histories.
+     *
+     * @param  int    $productID
+     * @access public
+     * @return void
+     */
+    public function viewHistory($productID)
+    {
+        $this->view->actions = $this->loadModel('action')->getList('module', $productID);
+        $this->view->users   = $this->loadModel('user')->getPairs('noletter');
+        $this->display();
     }
 }

@@ -3,7 +3,7 @@
  * The model file of setting module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     setting
  * @version     $Id: model.php 4976 2013-07-02 08:15:31Z wyd621@gmail.com $
@@ -77,7 +77,7 @@ class settingModel extends model
         $item->section = $section;
         $item->key     = $key;
         $item->value   = $value;
-        $item->vision  = empty($vision) ? '' : $vision;
+        if(!empty($vision)) $item->vision = $vision;
 
         $this->dao->replace(TABLE_CONFIG)->data($item)->exec();
     }
@@ -194,6 +194,8 @@ class settingModel extends model
             ->fetchAll('id');
         if(!$records) return array();
 
+        $vision = $this->config->vision;
+
         /* Group records by owner and module. */
         $config = array();
         foreach($records as $record)
@@ -201,6 +203,9 @@ class settingModel extends model
             if(!isset($config[$record->owner])) $config[$record->owner] = new stdclass();
             if(!isset($record->module)) return array();    // If no module field, return directly. Since 3.2 version, there's the module field.
             if(empty($record->module)) continue;
+
+            /* If it`s lite vision unset config requiredFields */
+            if($vision == 'lite' and $record->key == 'requiredFields' and $record->vision == '') continue;
 
             $config[$record->owner]->{$record->module}[] = $record;
         }

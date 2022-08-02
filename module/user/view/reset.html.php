@@ -3,7 +3,7 @@
  * The reset view file of user module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Yidong Wang <yidong@cnezsoft.com>
  * @package     user
  * @version     $Id$
@@ -21,7 +21,10 @@
       <div class='alert alert-info'>
       <?php printf($lang->user->noticeResetFile, $resetFileName);?>
       </div>
-      <div class='text-center'><?php echo html::a(inlink('reset'), $this->lang->refresh, '', "class='btn btn-primary btn-wide'")?></div>
+      <div class='text-center'>
+        <?php echo html::a(inlink('reset'), $this->lang->refresh, '', "class='btn btn-primary btn-wide'")?>
+        <?php echo html::backButton();?>
+      </div>
     </div>
   </div>
 </div>

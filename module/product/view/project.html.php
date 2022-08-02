@@ -3,7 +3,7 @@
  * The html template file of index method of index module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     ZenTaoPMS
  * @version     $Id: index.html.php 2343 2011-11-21 05:24:56Z wwccss $
@@ -30,7 +30,11 @@
   <?php if(empty($projectStats)):?>
   <div class="table-empty-tip">
     <p>
+    <?php if($config->systemMode == 'new'):?>
       <span class="text-muted"><?php echo $lang->project->empty;?></span>
+    <?php else:?>
+      <span class="text-muted"><?php echo $lang->execution->noExecution;?></span>
+    <?php endif;?>
     </p>
   </div>
   <?php else:?>
@@ -92,8 +96,8 @@
           <td class="text-right" title="<?php echo $project->hours->totalEstimate . ' ' . $lang->execution->workHour;?>"><?php echo $project->hours->totalEstimate . $lang->execution->workHourUnit;?></td>
           <td class="text-right" title="<?php echo $project->hours->totalConsumed . ' ' . $lang->execution->workHour;?>"><?php echo $project->hours->totalConsumed . $lang->execution->workHourUnit;?></td>
           <td>
-            <div class='progress-pie' data-doughnut-size='90' data-color='#3CB371' data-value='<?php echo $project->hours->progress;?>' data-width='24' data-height='24' data-back-color='#e8edf3'>
-              <div class='progress-info'><?php echo $project->hours->progress;?></div>
+            <div class='progress-pie' data-doughnut-size='90' data-color='#3CB371' data-value='<?php echo round($project->hours->progress);?>' data-width='24' data-height='24' data-back-color='#e8edf3'>
+              <div class='progress-info'><?php echo round($project->hours->progress);?></div>
             </div>
           </td>
         </tr>

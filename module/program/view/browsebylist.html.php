@@ -1,5 +1,5 @@
 <?php $canOrder = (common::hasPriv('program', 'updateOrder') and strpos($orderBy, 'order') !== false)?>
-<form class='main-table' id='programForm' method='post' data-ride='table' data-nested='true' data-expand-nest-child='false' data-checkable='false' data-enable-empty-nested-row='true' data-replace-id='programTableList'>
+<form class='main-table' id='programForm' method='post' data-ride='table' data-nested='true' data-expand-nest-child='false' data-checkable='false' data-enable-empty-nested-row='true' data-replace-id='programTableList' data-preserve-nested='true'>
   <table class='table has-sort-head table-fixed table-nested' id='programList'>
     <?php $vars = "status=$status&orderBy=%s";?>
     <thead>
@@ -49,7 +49,7 @@
       ?>
 
       <tr <?php echo $trAttrs;?>>
-        <td class='c-name text-left <?php if($canOrder) echo 'sort-handler';?>' title='<?php echo $program->name?>'>
+        <td class='c-name text-left <?php if($canOrder) echo 'sort-handler';?> has-prefix has-suffix' title='<?php echo $program->name?>'>
           <?php
           $icon = '';
           if($program->type == 'program') $icon = ' icon-program';
@@ -60,7 +60,14 @@
           <?php if($program->type == 'program'):?>
           <?php echo strpos(",{$app->user->view->programs},", ",$program->id,") !== false ? html::a($this->createLink('program', 'product', "programID=$program->id"), $program->name) : $program->name;?>
           <?php else:?>
-          <?php echo html::a($this->createLink('project', 'index', "projectID=$program->id", '', '', $program->id), $program->name);?>
+          <?php echo html::a($this->createLink('project', 'index', "projectID=$program->id", '', '', $program->id), $program->name, '', 'class="text-ellipsis text-primary"');?>
+          <?php
+          if($program->status != 'done' and $program->status != 'closed' and $program->status != 'suspended')
+          {
+              $delay = helper::diffDate(helper::today(), $program->end);
+              if($delay > 0) echo "<span class='label label-danger label-badge'>{$lang->project->statusList['delay']}</span>";
+          }
+          ?>
           <?php endif;?>
         </td>
         <td class='c-status'><span class="status-program status-<?php echo $program->status?>"><?php echo zget($lang->project->statusList, $program->status, '');?></span></td>
@@ -78,68 +85,21 @@
         <td><?php echo $program->end == LONG_TIME ? $lang->program->longTime : $program->end;?></td>
         <td>
           <?php if(isset($progressList[$program->id])):?>
-          <div class='progress-pie' data-doughnut-size='85' data-color='#00DA88' data-value='<?php echo $progressList[$program->id]?>' data-width='26' data-height='26' data-back-color='#e8edf3'>
-            <div class='progress-info'><?php echo $progressList[$program->id];?></div>
+          <div class='progress-pie' data-doughnut-size='85' data-color='#00DA88' data-value='<?php echo round($progressList[$program->id])?>' data-width='26' data-height='26' data-back-color='#e8edf3'>
+            <div class='progress-info'><?php echo round($progressList[$program->id]);?></div>
           </div>
           <?php endif;?>
         </td>
         <?php foreach($extendFields as $extendField) echo "<td>" . $this->loadModel('flow')->getFieldValue($extendField, $program) . "</td>";?>
         <td class='c-actions'>
-          <?php if($program->type == 'program' and strpos(",{$app->user->view->programs},", ",$program->id,") !== false):?>
-          <?php if($program->status == 'wait' || $program->status == 'suspended') common::printIcon('program', 'start', "programID=$program->id", $program, 'list', 'play', '', 'iframe', true, '', $this->lang->program->start);?>
-          <?php if($program->status == 'doing')  common::printIcon('program', 'close',    "programID=$program->id", $program, 'list', 'off',   '', 'iframe', true);?>
-          <?php if($program->status == 'closed') common::printIcon('program', 'activate', "programID=$program->id", $program, 'list', 'magic', '', 'iframe', true);?>
-
-          <?php if(common::hasPriv('program', 'suspend') || (common::hasPriv('program', 'close') && $program->status != 'doing') || (common::hasPriv('program', 'activate') && $program->status != 'closed')):?>
-          <div class='btn-group'>
-            <button type='button' class='btn icon-caret-down dropdown-toggle' data-toggle='dropdown' title="<?php echo $this->lang->more;?>" style="width: 16px; padding-left: 0px;"></button>
-            <ul class='dropdown-menu pull-right text-center' role='menu' style="min-width:auto; padding: 5px 10px;">
-              <?php common::printIcon('program', 'suspend', "programID=$program->id", $program, 'list', 'pause', '', 'iframe', true, '', $this->lang->program->suspend);?>
-              <?php if($program->status != 'doing')  common::printIcon('program', 'close',    "programID=$program->id", $program, 'list', 'off', '',   'iframe', true);?>
-              <?php if($program->status != 'closed') common::printIcon('program', 'activate', "programID=$program->id", $program, 'list', 'magic', '', 'iframe', true);?>
-            </ul>
-          </div>
-          <?php endif;?>
-          <?php common::printIcon('program', 'edit',   "programID=$program->id", '', 'list', 'edit');?>
-          <?php common::printIcon('program', 'create', "programID=$program->id", '', 'list', 'split', '', '', '', $program->status == 'closed' ? 'disabled' : '', $this->lang->program->children);?>
-          <?php if(common::hasPriv('program', 'delete')) echo html::a($this->createLink("program", "delete", "programID=$program->id"), "<i class='icon-trash'></i>", 'hiddenwin', "class='btn' title='{$this->lang->program->delete}'");?>
-
-          <?php elseif($program->type == 'project'):?>
-          <?php if($program->status == 'wait' || $program->status == 'suspended') common::printIcon('project', 'start', "projectID=$program->id", $program, 'list', 'play', '', 'iframe', true);?>
-          <?php if($program->status == 'doing')  common::printIcon('project', 'close',    "projectID=$program->id", $program, 'list', 'off', '',   'iframe', true);?>
-          <?php if($program->status == 'closed') common::printIcon('project', 'activate', "projectID=$program->id", $program, 'list', 'magic', '', 'iframe', true);?>
-          <?php if(common::hasPriv('project', 'suspend') || (common::hasPriv('project', 'close') && $program->status != 'doing') || (common::hasPriv('project', 'activate') && $program->status != 'closed')):?>
-          <div class='btn-group'>
-            <button type='button' class='btn icon-caret-down dropdown-toggle' data-toggle='dropdown' title="<?php echo $this->lang->more;?>" style="width: 16px; padding-left: 0px;"></button>
-            <ul class='dropdown-menu pull-right text-center' role='menu' style="min-width:auto; padding: 5px 10px;">
-              <?php common::printIcon('project', 'suspend', "projectID=$program->id", $program, 'list', 'pause', '', 'iframe', true);?>
-              <?php if($program->status != 'doing')  common::printIcon('project', 'close',    "projectID=$program->id", $program, 'list', 'off',   '', 'iframe', true);?>
-              <?php if($program->status != 'closed') common::printIcon('project', 'activate', "projectID=$program->id", $program, 'list', 'magic', '', 'iframe', true);?>
-            </ul>
-          </div>
-          <?php endif;?>
-          <?php $class = $program->model == 'kanban' ? 'disabled' : '';?>
-          <?php common::printIcon('project', 'edit',  "projectID=$program->id", $program, 'list', 'edit',  '', 'iframe', true);?>
-          <?php common::printIcon('project', 'team',  "projectID=$program->id", $program, 'list', 'group', '', "$class", '', 'data-app="project"');?>
-          <?php common::printIcon('project', 'group', "projectID=$program->id", $program, 'list', 'lock',  '', "$class", '', 'data-app="project"');?>
-          <?php if(common::hasPriv('project', 'manageProducts') || common::hasPriv('project', 'whitelist') || common::hasPriv('project', 'delete')):?>
-          <div class='btn-group'>
-            <button type='button' class='btn dropdown-toggle' data-toggle='dropdown' title="<?php echo $this->lang->more;?>"><i class='icon-more-alt'></i></button>
-            <ul class='dropdown-menu pull-right text-center' role='menu'>
-              <?php common::printIcon('project', 'manageProducts', "projectID=$program->id&from=browse", $program, 'list', 'link', '', "$class", '', "data-app={$this->app->tab}");?>
-              <?php common::printIcon('project', 'whitelist',      "projectID=$program->id&module=project&from=browse", $program, 'list', 'shield-check', '', "$class", '', "data-app='project'");?>
-              <?php if(common::hasPriv('project','delete')) echo html::a($this->createLink("project", "delete", "projectID=$program->id"), "<i class='icon-trash'></i>", 'hiddenwin', "class='btn' title='{$this->lang->delete}' data-group='program'");?>
-            </ul>
-          </div>
-          <?php endif;?>
-          <?php endif;?>
+          <?php echo $this->program->buildOperateMenu($program, 'browse');?>
         </td>
       </tr>
       <?php endforeach;?>
     </tbody>
   </table>
   <div class='table-footer <?php if($status == 'bySearch') echo 'hide';?>'>
-    <div class="table-statistic"><?php echo $summary;?></div>
+    <div id="programSummary" class="table-statistic">&nbsp;<?php echo $summary;?></div>
     <?php if($status != 'bySearch') $pager->show('right', 'pagerjs');?>
   </div>
 </form>
@@ -173,6 +133,10 @@ $(function()
         selector: 'tr',
         dragCssClass: 'drag-row',
         trigger: $list.find('.sort-handler').length ? '.sort-handler' : null,
+        before: function(e)
+        {
+            if($(e.event.target).closest('a,.btn').length) return false;
+        },
         canMoveHere: function($ele, $target)
         {
             return $ele.data('parent') === $target.data('parent');

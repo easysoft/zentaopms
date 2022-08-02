@@ -1,7 +1,7 @@
 body {margin-bottom: 0px !important;}
 td .task-toggle {pointer-events: auto !important;}
 #mainMenu, #sidebar, .dropdown, .table-footer > .table-actions, .table-footer > .table-statistic, .pager > li > .pager-size-menu {display: none;}
-#main {min-width: unset; overflow-y: overlay;}
+#main {min-width: unset; overflow-y: overlay; position: unset !important;}
 #main > .container {width: 100% !important;}
 #mainContent > .main-col {margin-top: 0px;}
 #xx-title {background-color: #F2F2F2; padding-left: 15px; line-height: 36px;}

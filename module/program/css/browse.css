@@ -1,9 +1,18 @@
 #mainMenu .pull-left .checkbox-primary {display: inline-block; margin-left: 10px;}
+#projectsSummary {padding-left: 10px;}
 .main-table tbody>tr>td:first-child, .main-table thead>tr>th:first-child {padding-left: 8px;}
 .table tbody>tr>td .dropdown {display: inline-block; line-height: 1;}
 tbody.sortable > tr > td.sort-handler .table-nest-toggle:before {cursor: pointer !important;}
 .table .avatar {display: inline-block; top: 6px;}
 
-label[for^="projectIdList"]:before {top: 1px; width:14px; height:14px;}
 label[for^="projectIdList"]:after {width: 14px; height:14px;}
 tbody.sortable > tr > td.sort-handler {color: #3c4353 !important;}
+
+.has-prefix {position: relative; display: flex; align-items: center;}
+.has-prefix > span {flex: none;}
+.has-prefix > a {padding-left: 5px;}
+
+.has-suffix > a {max-width: calc(100% - 100px); padding-right: 5px; color: #0c60e1; display: inline-block; max-width: calc(100% - 50px);}
+
+div.checkbox-primary + span.table-nest-icon {margin-left:0px !important;}
+#checkAll + label.hover:after {border-width: 0px;}

@@ -3,7 +3,7 @@
  * The execution block view file of block module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Yidong Wang <yidong@cnezsoft.com>
  * @package     block
  * @version     $Id$
@@ -41,6 +41,8 @@
       <?php $id = 0; ?>
       <?php foreach($executionStats as $execution):?>
       <?php
+      if(!empty($execution->children)) continue;
+
       $appid    = isset($_GET['entry']) ? "class='app-btn text-center' data-id='{$this->get->entry}'" : "class='text-center'";
       $viewLink = $this->createLink('execution', 'task', 'executionID=' . $execution->id);
       if($config->systemMode == 'new') $execution->name = zget($projectPairs, $execution->project, '') . ' / ' . $execution->name;

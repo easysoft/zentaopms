@@ -3,7 +3,7 @@
  * The report view file of task module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      wenjie<wenjie@cnezsoft.com>
  * @package     execution
  * @version     $Id: report.html.php 1594 2011-04-10 11:00:00Z wj $
@@ -62,7 +62,7 @@
                 <tr>
                   <th class='chart-label' colspan='2'><?php echo $lang->task->report->$chartType->item;?></th>
                   <th class='w-60px text-right'><?php echo $lang->task->report->value;?></th>
-                  <th class='w-60px'><?php echo $lang->report->percent;?></th>
+                  <th class='w-60px text-right'><?php echo $lang->report->percent;?></th>
                 </tr>
               </thead>
               <tbody>
@@ -71,7 +71,9 @@
                 <td class='chart-color w-20px'><i class='chart-color-dot'></i></td>
                 <td class='chart-label text-left'><?php echo $data->name;?></td>
                 <td class='chart-value text-right'><?php echo $data->value;?></td>
-                <td class='text-right'><?php echo ($data->percent * 100) . '%';?></td>
+                <?php $percent = $data->percent * 100;?>
+                <?php $percent = sprintf("%.2f", $percent);?>
+                <td class='text-right'><?php echo $percent . '%';?></td>
               </tr>
               <?php endforeach;?>
               </tbody>

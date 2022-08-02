@@ -3,7 +3,7 @@
  * The profile view file of user module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     user
  * @version     $Id: profile.html.php 4976 2013-07-02 08:15:31Z wyd621@gmail.com $
@@ -12,18 +12,27 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/tablesorter.html.php';?>
-<?php include './featurebar.html.php';?>
 <?php if(!isonlybody()):?>
-<style>#mainContent{width: 60%; margin-left: 20%;}</style>
+<?php include './featurebar.html.php';?>
+<style>
+#mainContent {width: 60%; margin-left: 20%;}
+.cell .avatar {left: 45% !important;}
+.user-name, .user-role {padding-left: 47% !important;}
+</style>
+<?php endif;?>
+<?php if(!zget($lang->user->roleList, $user->role, '')):?>
+<style>.user-name {line-height: 40px;}</style>
 <?php endif;?>
 <div id='mainContent'>
   <div class='cell'>
     <div class='main-header text-center'>
-      <span class="avatar avatar bg-secondary avatar-circle">
-      <?php echo $user->avatar ? html::image($user->avatar) : strtoupper($user->account[0]);?>
-      </span>
-      <span class='user-name'><?php echo $user->realname;?></span>
-      <span class='user-role'><?php echo zget($lang->user->roleList, $user->role, '');?></span>
+      <div class="avatar avatar bg-secondary avatar-circle">
+        <?php echo $user->avatar ? html::image($user->avatar) : strtoupper($user->account[0]);?>
+      </div>
+      <div class='user-name'><?php echo $user->realname;?></div>
+      <?php if(zget($lang->user->roleList, $user->role, '')):?>
+      <div class='user-role'><?php echo zget($lang->user->roleList, $user->role, '');?></div>
+      <?php endif;?>
     </div>
     <div class='row'>
       <table>
@@ -61,9 +70,9 @@
           <td><?php echo zget($lang->user->roleList, $user->role, '');?></td>
         </tr>
         <tr>
-          <th><?php echo $lang->user->join;?></th>
+          <th><?php echo $lang->user->joinAB;?></th>
           <td><?php echo formatTime($user->join);?></td>
-          <th><?php echo $lang->group->priv;?></th>
+          <th><?php echo $lang->user->priv;?></th>
           <td><?php foreach($groups as $group) echo $group->name . ' ';?></td>
         </tr>
       </table>
@@ -84,7 +93,7 @@
         <tr>
           <th><?php echo $lang->user->zipcode;?></th>
           <td><?php echo $user->zipcode;?></td>
-          <th><?php echo $lang->user->address;?></th>
+          <th><?php echo $lang->user->addressAB;?></th>
           <td title='<?php echo $user->address;?>'><?php echo $user->address;?></td>
         </tr>
       </table>

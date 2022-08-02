@@ -3,7 +3,7 @@
  * The en file of block module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Yidong Wang <yidong@cnezsoft.com>
  * @package     block
  * @version     $Id$
@@ -38,12 +38,15 @@ $lang->block->lblBlock     = 'Block';
 $lang->block->lblNum       = 'Number';
 $lang->block->lblHtml      = 'HTML';
 $lang->block->dynamic      = 'Dynamics';
-$lang->block->assignToMe   = 'Todo';
+$lang->block->assignToMe   = 'Work';
+$lang->block->wait         = 'Wait';
+$lang->block->doing        = 'Doing';
 $lang->block->done         = 'Done';
 $lang->block->lblFlowchart = 'Flowchart';
 $lang->block->welcome      = 'Welcome';
 $lang->block->lblTesttask  = 'Test Request Detail';
 $lang->block->contribute   = 'Personal Contribution';
+$lang->block->finish       = 'Finish';
 
 $lang->block->leftToday           = 'Remained Work';
 $lang->block->myTask              = 'My Tasks';
@@ -77,6 +80,7 @@ $lang->block->month               = 'Month';
 $lang->block->selectProduct       = 'Product selection';
 $lang->block->of                  = ' of ';
 $lang->block->remain              = 'Left';
+$lang->block->allStories          = 'All';
 
 $lang->block->createBlock        = 'Add Block';
 $lang->block->editBlock          = 'Edit Block';
@@ -90,8 +94,8 @@ $lang->block->remove             = 'Remove';
 $lang->block->refresh            = 'Refresh';
 $lang->block->nbsp               = ' ';
 $lang->block->hidden             = 'Hide';
-$lang->block->dynamicInfo        = "<span class='timeline-tag'>%s</span> <span class='timeline-text'>%s <em>%s</em> %s <a href='%s' title='%s'>%s</a></span>";
-$lang->block->noLinkDynamic      = "<span class='timeline-tag'>%s</span> <span class='timeline-text' title='%s'>%s <em>%s</em> %s %s</span>";
+$lang->block->dynamicInfo        = "<span class='timeline-tag'>%s</span> <span class='timeline-text'>%s<em class='label-action'>%s</em>%s<a href='%s' title='%s'>%s</a></span>";
+$lang->block->noLinkDynamic      = "<span class='timeline-tag'>%s</span> <span class='timeline-text' title='%s'>%s<em class='label-action'>%s</em>%s<span class='label-name'>%s</span></span>";
 $lang->block->cannotPlaceInLeft  = 'Cannot place the block at left side.';
 $lang->block->cannotPlaceInRight = 'Cannot place the block at right side.';
 
@@ -102,7 +106,7 @@ $lang->block->totalRelease = 'Release The Number';
 $lang->block->totalTask    = 'The Total ' . $lang->task->common;
 
 $lang->block->totalInvestment = 'Total investment';
-$lang->block->totalPeople     = 'Total number';
+$lang->block->totalPeople     = 'Total';
 $lang->block->spent           = 'Has Been Spent';
 $lang->block->budget          = 'Budget';
 $lang->block->left            = 'Remain';
@@ -353,6 +357,7 @@ $lang->block->availableBlocks->testtask    = 'Requests';
 $lang->block->availableBlocks->risk        = 'Risks';
 $lang->block->availableBlocks->issue       = 'Issues';
 $lang->block->availableBlocks->meeting     = 'Meetings';
+$lang->block->availableBlocks->feedback    = 'My Feedbacks';
 
 if($config->systemMode == 'new') $lang->block->moduleList['project'] = 'Project';
 $lang->block->moduleList['product']   = $lang->productCommon;
@@ -465,13 +470,14 @@ $lang->block->orderByList->story['status_desc'] = 'Story Status DESC';
 $lang->block->orderByList->story['stage_asc']   = 'Story Phase ASC';
 $lang->block->orderByList->story['stage_desc']  = 'Story Phase DESC';
 
-$lang->block->todoCount    = 'Todo';
-$lang->block->taskCount    = 'Task';
-$lang->block->bugCount     = 'Bug';
-$lang->block->riskCount    = 'Risk';
-$lang->block->issueCount   = 'Issues';
-$lang->block->storyCount   = 'Stories';
-$lang->block->meetingCount = 'Meetings';
+$lang->block->todoCount     = 'Todo';
+$lang->block->taskCount     = 'Task';
+$lang->block->bugCount      = 'Bug';
+$lang->block->riskCount     = 'Risk';
+$lang->block->issueCount    = 'Issues';
+$lang->block->storyCount    = 'Stories';
+$lang->block->meetingCount  = 'Meetings';
+$lang->block->feedbackCount = 'Feedbacks';
 
 $lang->block->typeList = new stdclass();
 

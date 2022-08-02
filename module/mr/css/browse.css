@@ -1,0 +1,21 @@
+#repoList .tree li {padding: 0 0 0 10px;}
+#repoList .hide-in-search .hidden {display: block !important; visibility: inherit !important;}
+#dropMenuRepo > div.table-row > div > div > ul > li > div {padding-left: 20px;}
+#repoList li > a.selected {color: #3123ae !important; background: #f2eafc !important; line-height: 20px; border-radius: 5px;}
+#repoList .tree li.has-list.open:before {border-left: 0px;}
+#repoList ul.tree-angles {margin-bottom: 0;}
+#repoList {margin: 0;}
+#repoList .tree > li {padding: 2px;}
+#repoList a:focus, #repoList a:hover {color: #0c64eb; text-decoration: none;}
+#repoList > ul > li > ul > li > a:hover {color: white; background-color: #0c64eb; text-decoration: none;}
+#repoList .tree li > a {max-width: 100%;}
+#repoList .hide-in-search .hidden {display: block !important; visibility: inherit !important;}
+#repoList .tree li > a {line-height: 20px; border-radius: 2px;}
+
+.c-id {width: 60px;}
+.c-title {width: 150px;}
+.c-branch {width: 200px;}
+.c-status {width: 120px;}
+.c-author {width: 80px;}
+.c-date {width: 100px;}
+[lang^='zh-'] .c-status {width: 100px;}

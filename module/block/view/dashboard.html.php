@@ -3,7 +3,7 @@
  * The dashboard view file of block module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Yidong Wang <yidong@cnezsoft.com>
  * @package     block
  * @version     $Id$
@@ -108,6 +108,14 @@ config.cannotPlaceInRight = '<?php echo $lang->block->cannotPlaceInRight; ?>';
 
 var module   = '<?php echo $module?>';
 var useGuest = <?php echo $useGuest ? 'true' : 'false';?>;
+
+<?php $remind = $this->loadModel('misc')->getPluginRemind();?>
+<?php if(!empty($remind)):?>
+var myModalTrigger = new $.zui.ModalTrigger({title:'<?php echo $lang->misc->expiredTipsTitle;?>', custom: function(){return <?php echo json_encode($remind);?>}, width:'600px'});
+var result = myModalTrigger.show();
+$('#pluginButton').click(function(){myModalTrigger.close()});
+$('#cancelButton').click(function(){myModalTrigger.close()});
+<?php endif;?>
 
 <?php /* Check annual remind */ ?>
 $(function()

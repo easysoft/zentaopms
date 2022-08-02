@@ -3,7 +3,7 @@
  * The view file of case module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     case
  * @version     $Id: view.html.php 4141 2013-01-18 06:15:13Z zhujinyonging@gmail.com $
@@ -15,7 +15,7 @@
 <?php $browseLink = $this->session->testtaskList ? $this->session->testtaskList : $this->createLink('testtask', 'browse', "productID=$task->product");?>
 <div id='mainMenu' class='clearfix'>
   <div class='btn-toolbar pull-left'>
-    <?php echo html::backButton('<i class="icon icon-back icon-sm"></i> ' . $lang->goback, '', 'btn btn-secondary');?>
+    <?php echo html::backButton('<i class="icon icon-back icon-sm"></i> ' . $lang->goback, "data-app='{$app->tab}'", 'btn btn-secondary');?>
     <div class='divider'></div>
     <div class='page-title'>
       <span class='label label-id'><?php echo $task->id;?></span>
@@ -97,7 +97,7 @@
             </tr>
             <tr>
               <th><?php echo $lang->testtask->pri;?></th>
-              <td><?php echo $task->pri;?></td>
+              <td><?php echo zget($lang->testtask->priList, $task->pri);?></td>
             </tr>
             <tr>
               <th><?php echo $lang->testtask->begin;?></th>

@@ -185,11 +185,11 @@ $(function()
                   <table class='status-count'>
                     <tr>
                       <td class='text-right'><?php echo $lang->bug->allBugs;?> :</td>
-                      <td class='text-left'><?php echo empty($execution->totalBugs) ? 0 : html::a($this->createLink('execution', 'bug', "executionID={$execution->id}&orderBy=status,id_desc&build=0&type=all"), $execution->totalBugs);?></td>
+                      <td class='text-left'><?php echo empty($execution->totalBugs) ? 0 : html::a($this->createLink('execution', 'bug', "executionID={$execution->id}&productID=0&branch=0&orderBy=status,id_desc&build=0&type=all"), $execution->totalBugs);?></td>
                     </tr>
                     <tr>
                       <td class='text-right'><?php echo $lang->bug->unResolved;?> :</td>
-                      <td class='text-left'><?php echo empty($execution->activeBugs) ? 0 : html::a($this->createLink('execution', 'bug', "executionID={$execution->id}&orderBy=status,id_desc&build=0&type=unresolved"), $execution->activeBugs);?></td>
+                      <td class='text-left'><?php echo empty($execution->activeBugs) ? 0 : html::a($this->createLink('execution', 'bug', "executionID={$execution->id}&productID=0&branch=0&orderBy=status,id_desc&build=0&type=unresolved"), $execution->activeBugs);?></td>
                     </tr>
                   </table>
                 </div>

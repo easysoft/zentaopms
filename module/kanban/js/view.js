@@ -20,6 +20,22 @@ function loadMore(type, regionID)
 }
 
 /**
+ * Hide kanban actions.
+ *
+ * @access public
+ * @return void
+ */
+function hideAllAction()
+{
+    $('.actions').hide();
+    $('.action').hide();
+    $('.kanban-group-header').hide();
+    $(".title").attr("disabled", true).css("pointer-events", "none");
+    $('.kanban-col.kanban-header-col').css('padding', '0px 0px 0px 0px');
+    window.sortableDisabled = true;
+}
+
+/**
  * Display the kanban in full screen.
  *
  * @access public
@@ -36,12 +52,7 @@ function fullScreen()
         {
             $('#kanbanContainer').addClass('fullscreen')
                 .on('scroll', tryUpdateKanbanAffix);
-            $('.actions').hide();
-            $('.action').hide();
-            $('.kanban-group-header').hide();
-            $(".title").attr("disabled", true).css("pointer-events", "none");
-            $('.kanban-col.kanban-header-col').css('padding', '0px 0px 0px 0px');
-            window.sortableDisabled = true;
+            hideAllAction();
             $.cookie('isFullScreen', 1);
         };
 
@@ -151,7 +162,7 @@ function renderHeaderCol($column, column, $header, kanbanData)
         }
 
         var moreAction = ' <button class="btn btn-link action"  title="' + kanbanLang.moreAction + '" data-contextmenu="column" data-column="' + column.id + '"><i class="icon icon-ellipsis-v"></i></button>';
-        $actions.html(addItemBtn + moreAction);
+        if(CRKanban || kanban.status != 'closed') $actions.html(addItemBtn + moreAction);
 
     }
     if(columnPrivs.includes('sortColumn'))
@@ -163,6 +174,18 @@ function renderHeaderCol($column, column, $header, kanbanData)
         else
         {
           $column.addClass('sort');
+        }
+    }
+
+    if(alignment == 'left')
+    {
+        if($column.hasClass('kanban-header-parent-col'))
+        {
+            $column.children('.kanban-header-col').addClass('left');
+        }
+        else
+        {
+            $column.addClass('left');
         }
     }
 }
@@ -186,17 +209,19 @@ function renderCount($count, count, column)
 
     if(column.limit != -1 && column.limit < count)
     {
-        $count.parents('.title').parent('.kanban-header-col').css('background-color', '#F6A1A1');
+        $count.parents('.title').parent('.kanban-header-col').css('background-color', 'transparent');
         $count.parents('.title').find('.text').css('max-width', $count.parents('.title').width() - 200);
-        $count.css('color', '#E33030');
-        if(!$count.parent().find('.error').length) $count.parent().find('.include-last').after("<span class='error text-grey'><icon class='icon icon-help' title='" + kanbanLang.limitExceeded + "'></icon></span>");
+        $count.css({'color': '#FF5D5D', 'opacity': '1'});
+        if(!$count.parent().find('.error').length) $count.parent().find('.include-last').after("<span class='error text-grey'><icon class='icon icon-exclamation-sign' data-toggle='tooltip' data-original-title='" + kanbanLang.limitExceeded + "'></icon></span>");
+        $count.parents('.title').find('.text-grey').css({'color': '#FF5D5D', 'opacity': '1'});
     }
     else
     {
         $count.parents('.title').parent('.kanban-header-col').css('background-color', 'transparent');
         $count.parents('.title').find('.text').css('max-width', $count.parents('.title').width() - 120);
-        $count.css('color', '#8B91A2');
+        $count.css({'color': '#8b91a2', 'opacity': '0.5'});
         $count.parent().find('.error').remove();
+        $count.parents('.title').find('.text-grey').css({'color': '#8b91a2', 'opacity': '0.5'});
     }
 }
 
@@ -213,13 +238,14 @@ function renderCount($count, count, column)
  */
 function renderLaneName($lane, lane, $kanban, columns, kanban)
 {
-    var canSet    = lane.actions.includes('setLane');
-    var canSort   = lane.actions.includes('sortLane') && kanban.lanes.length > 1;
-    var canDelete = lane.actions.includes('deleteLane');
+    var canEditLaneColor = lane.actions.includes('editLaneColor');
+    var canEditLaneName  = lane.actions.includes('editLaneName');
+    var canSort          = lane.actions.includes('sortLane') && kanban.lanes.length > 1;
+    var canDelete        = lane.actions.includes('deleteLane');
 
     $lane.parent().toggleClass('sort', canSort);
 
-    if(!$lane.children('.actions').length && (canSet || canDelete))
+    if(!$lane.children('.actions').length && (canEditLaneColor || canEditLaneName || canDelete) && (CRKanban || kanbanInfo.status != 'closed'))
     {
         $([
           '<div class="actions" title="' + kanbanLang.more + '">',
@@ -229,6 +255,7 @@ function renderLaneName($lane, lane, $kanban, columns, kanban)
           '</div>'
         ].join('')).appendTo($lane);
     }
+    if($.cookie('isFullScreen') == 1) hideAllAction();
 }
 
 /**
@@ -286,7 +313,7 @@ function renderKanbanItem(item, $item)
     var printMoreBtn = (privs.includes('editCard') || privs.includes('archiveCard') || privs.includes('copyCard') || privs.includes('deleteCard') || privs.includes('moveCard') || privs.includes('setCardColor'));
     var $actions     = $item.children('.actions');
     var $title       = $item.children('.title');
-    if(printMoreBtn && !$actions.length)
+    if(printMoreBtn && !$actions.length && (CRKanban || kanban.status != 'closed'))
     {
         $(
         [
@@ -414,6 +441,7 @@ function renderKanbanItem(item, $item)
         $title.css('color', '');
         $title.children('.label-finish').hide();
     }
+    if($.cookie('isFullScreen') == 1) hideAllAction();
 }
 
 /**
@@ -783,6 +811,7 @@ function moveCard(cardID, fromColID, toColID, fromLaneID, toLaneID, kanbanID, re
                 $('.kanban-group-header').hide();
                 $(".title").attr("disabled", true).css("pointer-events", "none");
             }
+            setToolTip();
         },
         error: function(xhr, status, error)
         {
@@ -868,6 +897,59 @@ function updateRegion(regionID, regionData)
     $region.data('zui.kanban').render(regionData.groups);
     resetRegionHeight('open');
     return true;
+}
+
+/**
+ * Update region name.
+ *
+ * @param  int    $regionID
+ * @param  string $name
+ * @access public
+ * @return void
+ */
+function updateRegionName(regionID, name)
+{
+    $('.region[data-id="' + regionID + '"] > .region-header > strong:first').text(name);
+}
+
+/**
+ * Update lane name.
+ *
+ * @param  int    $laneID
+ * @param  string $name
+ * @access public
+ * @return void
+ */
+function updateLaneName(laneID, name)
+{
+    $('.kanban-lane[data-id="' + laneID + '"] > .kanban-lane-name > span').text(name).attr('title', name);
+}
+
+/**
+ * Update lane color.
+ *
+ * @param  int    $laneID
+ * @param  string $color
+ * @access public
+ * @return void
+ */
+function updateLaneColor(laneID, color)
+{
+    $('.kanban-lane[data-id="' + laneID + '"] > .kanban-lane-name').css('background-color', color);
+}
+
+/**
+ * Update column name.
+ *
+ * @param  int    $columnID
+ * @param  string $name
+ * @param  string $color
+ * @access public
+ * @return void
+ */
+function updateColumnName(columnID, name, color)
+{
+    $('.kanban-col[data-id="' + columnID + '"] > div.title > span:first').text(name).attr('title', name).css('color', color);
 }
 
 /**
@@ -962,7 +1044,7 @@ function findDropColumns($element, $root)
 
     return $root.find('.kanban-lane-col:not([data-type="EMPTY"],[data-type=""])').filter(function()
     {
-        if($.cookie('isFullScreen') == 1 || (!CRKanban && kanban.status == 'closed')) return false;
+        if($.cookie('isFullScreen') == 1 || (!CRKanban && kanbanInfo.status == 'closed')) return false;
         var $newCol = $(this);
         var newCol = $newCol.data();
         var $newLane = $newCol.closest('.kanban-lane');
@@ -1079,9 +1161,12 @@ function createLaneMenu(options)
     var privs = lane.actions;
     if(!privs.length) return [];
 
-    var items = [];
-    if(privs.includes('setLane')) items.push({label: kanbanLang.setLane, icon: 'edit', url: createLink('kanban', 'setLane', 'laneID=' + lane.id + '&executionID=0&from=kanban'), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width': '635px'}});
-    if(privs.includes('deleteLane')) items.push({label: kanbanLang.deleteLane, icon: 'trash', url: createLink('kanban', 'deleteLane', 'lane=' + lane.id), attrs: {'target': 'hiddenwin'}});
+    var items    = [];
+    var regionID = lane.$kanbanData.region;
+    var kanbanID = lane.$kanbanData.kanban;
+    if(privs.includes('editLaneName')) items.push({label: kanbanLang.editLaneName, icon: 'edit', url: createLink('kanban', 'editLaneName', 'laneID=' + lane.id + '&executionID=0&from=kanban'), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width': '635px'}});
+    if(privs.includes('editLaneColor')) items.push({label: kanbanLang.editLaneColor, icon: 'color', url: createLink('kanban', 'editLaneColor', 'laneID=' + lane.id + '&executionID=0&from=kanban'), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width': '635px'}});
+    if(privs.includes('deleteLane')) items.push({label: kanbanLang.deleteLane, icon: 'trash', url: createLink('kanban', 'deleteLane', 'regionID=' + regionID + '&kanbanID=' + kanbanID + '&lane=' + lane.id), attrs: {'target': 'hiddenwin'}});
 
     var bounds = options.$trigger[0].getBoundingClientRect();
     items.$options = {x: bounds.right, y: bounds.top};
@@ -1103,7 +1188,8 @@ function createCardMenu(options)
 
     var items = [];
     if(privs.includes('editCard') && card.fromType == '') items.push({label: kanbanLang.editCard, icon: 'edit', url: createLink('kanban', 'editCard', 'cardID=' + card.id, '', 'true'), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width': '80%'}});
-    if(privs.includes('performable') && kanban.performable == 1)
+    if(privs.includes('deleteCard')) items.push({label: card.fromType == '' ? kanbanLang.deleteCard : kanbanLang.removeCard, icon: card.fromType == '' ? 'trash' : 'unlink', url: createLink('kanban', 'deleteCard', 'cardID=' + card.id), attrs: {'target': 'hiddenwin'}});
+    if(kanban.performable == 1)
     {
         if(card.status == 'done')
         {
@@ -1114,6 +1200,25 @@ function createCardMenu(options)
             items.push({label: kanbanLang.finishCard, icon: 'checked', onClick: function(){finishCard(card.id, card.kanban, card.region);}});
         }
     }
+    if(privs.includes('archiveCard') && kanban.archived == '1') items.push({label: kanbanLang.archiveCard, icon: 'card-archive', url: createLink('kanban', 'archiveCard', 'cardID=' + card.id), attrs: {'target': 'hiddenwin'}});
+
+    var editCardAction    = (privs.includes('editCard') && card.fromType == '') ? true : false;
+    var deleteCardAction  = privs.includes('deleteCard');
+    var archiveCardAction = (privs.includes('archiveCard') && kanban.archived == '1') ? true : false;
+
+    var performable  = kanban.performable == 1 ? true : false;
+
+    var moveCardAction     = privs.includes('moveCard');
+    var setCardColorAction = privs.includes('setCardColor');
+
+    var basicActions = (editCardAction || deleteCardAction || archiveCardAction) ? true : false;
+    var otherActions = (moveCardAction || setCardColorAction) ? true : false;
+
+    if((performable || basicActions) && otherActions)
+    {
+        items.push({type: 'divider'});
+    }
+
     if(privs.includes('moveCard'))
     {
         var moveCardItems = [];
@@ -1137,7 +1242,7 @@ function createCardMenu(options)
         moveCardItems = moveCardItems.reverse();
         items.push({label: kanbanLang.moveCard, icon: 'move', items: moveCardItems});
     }
-    if(privs.includes('archiveCard') && kanban.archived == '1') items.push({label: kanbanLang.archiveCard, icon: 'card-archive', url: createLink('kanban', 'archiveCard', 'cardID=' + card.id), attrs: {'target': 'hiddenwin'}});
+
     if(privs.includes('setCardColor'))
     {
         var cardColoritems = [];
@@ -1151,7 +1256,6 @@ function createCardMenu(options)
         };
         items.push({label: kanbanLang.cardColor, icon: 'color', items: cardColoritems});
     }
-    if(privs.includes('deleteCard')) items.push({label: card.fromType == '' ? kanbanLang.deleteCard : kanbanLang.removeCard, icon: card.fromType == '' ? 'trash' : 'unlink', url: createLink('kanban', 'deleteCard', 'cardID=' + card.id), attrs: {'target': 'hiddenwin'}});
 
     var bounds = options.$trigger[0].getBoundingClientRect();
     items.$options = {x: bounds.right, y: bounds.top};
@@ -1167,6 +1271,15 @@ function createColumnMenu(options)
     var items = [];
     if(privs.includes('setColumn')) items.push({label: kanbanLang.editColumn, icon: 'edit', url: createLink('kanban', 'setColumn', 'columnID=' + column.id, '', 'true'), className: 'iframe', attrs: {'data-toggle': 'modal'}});
     if(privs.includes('setWIP')) items.push({label: kanbanLang.setWIP, icon: 'alert', url: createLink('kanban', 'setWIP', 'columnID=' + column.id), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width' : '500px'}});
+
+    var basicActions  = (privs.includes('setColumn') || privs.includes('setWIP')) ? true : false;
+    var columnActions = (privs.includes('splitColumn') || privs.includes('createColumn') || privs.includes('copyColumn')) ? true : false;
+
+    if(basicActions && columnActions)
+    {
+        items.push({type: 'divider'});
+    }
+
     if(privs.includes('splitColumn')) items.push({label: kanbanLang.splitColumn, icon: 'col-split', url: createLink('kanban', 'splitColumn', 'columnID=' + column.id, '', true), className: 'iframe', attrs: {'data-toggle': 'modal'}});
     if(privs.includes('createColumn'))
     {
@@ -1174,6 +1287,10 @@ function createColumnMenu(options)
         items.push({label: kanbanLang.createColumnOnRight, icon: 'col-add-right', url: createLink('kanban', 'createColumn', 'columnID=' + column.id + '&position=right'), className: 'iframe', attrs: {'data-toggle': 'modal'}});
     }
     if(privs.includes('copyColumn')) items.push({label: kanbanLang.copyColumn, icon: 'copy', url: createLink('kanban', 'copyColumn', 'columnID=' + column.id), className: 'iframe', attrs: {'data-toggle': 'modal'}});
+
+    var otherActions = ((privs.includes('archiveColumn') && kanban.archived == '1') || privs.includes('deleteColumn')) ? true : false;
+    if(columnActions && otherActions) items.push({type: 'divider'});
+
     if(privs.includes('archiveColumn') && kanban.archived == '1') items.push({label: kanbanLang.archiveColumn, icon: 'card-archive', url: createLink('kanban', 'archiveColumn', 'columnID=' + column.id), attrs: {'target': 'hiddenwin'}});
     if(privs.includes('deleteColumn')) items.push({label: kanbanLang.deleteColumn, icon: 'trash', url: createLink('kanban', 'deleteColumn', 'columnID=' + column.id), attrs: {'target': 'hiddenwin'}});
 
@@ -1201,9 +1318,9 @@ function createColumnCreateMenu(options)
 
     if(privs.includes('createCard')) items.push({label: kanbanLang.createCard, url: $.createLink('kanban', 'createCard', 'kanbanID=' + kanbanID + '&regionID=' + regionID + '&groupID=' + groupID + '&columnID=' + columnID, '', true), className: 'iframe', attrs: {'data-toggle': 'modal'}});
     if(privs.includes('batchCreateCard')) items.push({label: kanbanLang.batchCreateCard, url: $.createLink('kanban', 'batchCreateCard', 'kanbanID=' + kanbanID + '&regionID=' + regionID + '&groupID=' + groupID + '&laneID=' + laneID + '&columnID=' + columnID), attrs: {'data-width': '80%'}});
-    if(privs.includes('import') && kanban.object.indexOf('cards') != -1) items.push({label: kanbanLang.importCard, url: $.createLink('kanban', 'importCard', 'kanbanID=' + kanbanID + '&regionID=' + regionID + '&groupID=' + groupID + '&columnID=' + columnID), className: 'iframe', attrs: {'data-toggle': 'modal'}});
-    if(privs.includes('import') && kanban.object && kanban.object != 'cards' && vision != 'lite') items.push({className: 'parentDivider'});
-    if(privs.includes('import') && kanban.object && kanban.object != 'cards' && vision != 'lite') items.push({label: kanbanLang.importAB, className: 'import'});
+    if(kanban.object.indexOf('cards') != -1) items.push({label: kanbanLang.importCard, url: $.createLink('kanban', 'importCard', 'kanbanID=' + kanbanID + '&regionID=' + regionID + '&groupID=' + groupID + '&columnID=' + columnID), className: 'iframe', attrs: {'data-toggle': 'modal'}});
+    if(kanban.object && kanban.object != 'cards' && vision != 'lite') items.push({className: 'parentDivider'});
+    if(kanban.object && kanban.object != 'cards' && vision != 'lite') items.push({label: kanbanLang.importAB, className: 'import'});
 
     return items;
 }
@@ -1215,7 +1332,11 @@ function calcColHeight(col, lane, colCards, colHeight, kanban)
 
     var options = kanban.options;
 
-    if(!options.displayCards) return 0;
+    var fontSize        = 13;
+    var moreLabelHeight = 20;
+    var laneNameHeight  = lane.name.length * fontSize;
+
+    if(!options.displayCards) return laneNameHeight > colHeight ? laneNameHeight + 2 * moreLabelHeight : colHeight;
     var displayCards = +(options.displayCards || 2);
 
     if (typeof displayCards !== 'number' || displayCards < 2) displayCards = 2;
@@ -1227,10 +1348,15 @@ function handleSortCards(event)
 {
     var newLaneID = event.element.closest('.kanban-lane').data('id');
     var newColID  = event.element.closest('.kanban-col').data('id');
-    var orders = [];
-    event.list.each(function(_, item){orders.push(item.item.data('id'));});
-    var url = createLink('kanban', 'sortCard', 'kanbanID=' + kanbanID + '&laneID=' + newLaneID + '&columnID=' + newColID + '&cards=' + orders.join(','));
+    var cards     = event.element.closest('.kanban-lane-items').data('cards');
+    var orders    = cards.map(function(card){return card.id});
+    var fromID    = String(event.element.data('id'));
+    var toID      = String(event.target.data('id'));
 
+    orders.splice(orders.indexOf(fromID), 1);
+    orders.splice(orders.indexOf(toID) + (event.insert === 'before' ?  0 : 1), 0, fromID);
+
+    var url = createLink('kanban', 'sortCard', 'kanbanID=' + kanbanID + '&laneID=' + newLaneID + '&columnID=' + newColID + '&cards=' + orders.join(','));
     $.getJSON(url, function(response)
     {
         if(response.result === 'fail')
@@ -1258,29 +1384,33 @@ window.menuCreators =
  */
 function initKanban($kanban)
 {
-    var id           = $kanban.data('id');
-    var region       = regions[id];
-    var displayCards = window.displayCards == 'undefined' ? 2 : window.displayCards;
+    var id         = $kanban.data('id');
+    var region     = regions[id];
+    var cardHeight = kanbanInfo.performable == 1 ? 87 : 60;
 
     $kanban.kanban(
     {
-        data:              region.groups,
-        maxColHeight:      510,
-        calcColHeight:     calcColHeight,
-        fluidBoardWidth:   fluidBoard,
-        minColWidth:       285,
-        maxColWidth:       285,
-        cardHeight:        60,
-        displayCards:      displayCards,
-        createColumnText:  kanbanLang.createColumn,
-        addItemText:       '',
-        itemRender:        renderKanbanItem,
-        onAction:          handleKanbanAction,
-        onRenderKanban:    adjustAddBtnPosition,
-        onRenderLaneName:  renderLaneName,
-        onRenderHeaderCol: renderHeaderCol,
-        onRenderCount:     renderCount,
-        sortable:          handleSortCards,
+        data:                  region.groups,
+        maxColHeight:          510,
+        calcColHeight:         calcColHeight,
+        fluidBoardWidth:       fluidBoard,
+        minColWidth:           285,
+        maxColWidth:           285,
+        cardHeight:            cardHeight,
+        displayCards:          typeof window.displayCards === 'number' ? window.displayCards : 2,
+        createColumnText:      kanbanLang.createColumn,
+        addItemText:           '',
+        itemRender:            renderKanbanItem,
+        onAction:              handleKanbanAction,
+        onRenderKanban:        adjustAddBtnPosition,
+        onRenderLaneName:      renderLaneName,
+        onRenderHeaderCol:     renderHeaderCol,
+        onRenderCount:         renderCount,
+        showCount:             kanban.showWIP == '1' ? true : false,
+        sortable:              handleSortCards,
+        virtualize:            true,
+        virtualRenderOptions:  {container: $(window).add($('#kanbanContainer'))},
+        virtualCardList:       true,
         droppable:
         {
             target:       findDropColumns,
@@ -1302,6 +1432,8 @@ $(function()
 {
     window.isMultiLanes = laneCount > 1;
 
+    $.cookie('isFullScreen', 0);
+
     /* Init first kanban */
     $('.kanban').each(function()
     {
@@ -1310,12 +1442,12 @@ $(function()
 
     if(navigator.userAgent.toLowerCase().indexOf("qqbrowser") > -1) $('.region .kanban-header-col > .actions').css('top', '30%');
 
-    $('.icon-chevron-double-up,.icon-chevron-double-down').on('click', function()
+    $('.icon-angle-top,.icon-angle-down').on('click', function()
     {
-        $(this).toggleClass('icon-chevron-double-up icon-chevron-double-down');
+        $(this).toggleClass('icon-angle-top icon-angle-down');
         $(this).parents('.region').find('.kanban').toggle();
         hideKanbanAction();
-        resetRegionHeight($(this).hasClass('icon-chevron-double-up') ? 'open' : 'close');
+        resetRegionHeight($(this).hasClass('icon-angle-top') ? 'open' : 'close');
     });
 
     $('.region-header').on('click', '.action', hideKanbanAction);
@@ -1412,20 +1544,16 @@ $(function()
     initSortable();
 
     resetRegionHeight('open');
+    if(!CRKanban && kanbanInfo.status == 'closed') $('.kanban-col.kanban-header-col').css('padding', '0px 0px 0px 0px');
 
-    if(!CRKanban && kanban.status == "closed")
-    {
-        fullScreen();
-        $.cookie('isFullScreen', 0);
-        $('.region-actions > div > .action').show();
-        $(".title").attr("disabled", false).css("pointer-events", "auto");
-    }
+    setToolTip();
 });
 
 function initSortable()
 {
     var sortType  = '';
     var $cards    = null;
+    if(!CRKanban && kanbanInfo.status == 'closed') return;
     $('#kanban').sortable(
     {
         selector: '.region, .kanban-board, .kanban-lane, .kanban-col',
@@ -1476,10 +1604,10 @@ function initSortable()
             if(sortType == 'region')
             {
                 showRegionIdList = '';
-                $('.icon-chevron-double-up').each(function()
+                $('.icon-angle-top').each(function()
                 {
                     showRegionIdList += $(this).attr('data-id') + ',';
-                    $(this).attr('class', 'icon-chevron-double-down');
+                    $(this).attr('class', 'icon-angle-down');
                 });
 
                 $('.region').find('.kanban').hide();
@@ -1510,7 +1638,7 @@ function initSortable()
                 {
                     if(showRegionIdList.includes($(this).attr('data-id')))
                     {
-                        $(this).find('.icon-chevron-double-down').attr('class', 'icon-chevron-double-up');
+                        $(this).find('.icon-angle-down').attr('class', 'icon-angle-top');
                         $(this).find('.kanban').show();
                     }
                 })
@@ -1625,7 +1753,7 @@ function resetRegionHeight(fold)
         var regionPadding = $('.kanban').css('padding-bottom');
         var columnHeight  = $('.kanban-header').outerHeight();
 
-        $('.region').css('height', height);
+        $('.region').css('min-height', height);
         $('.kanban-lane').css('height', height - regionHeaderHeight - parseInt(regionPadding) - columnHeight);
     }
     else
@@ -1638,3 +1766,14 @@ $(document).on('click', '.dropdown-menu', function()
 {
     $.zui.ContextMenu.hide();
 });
+
+/**
+ * Alerts for exceeding the limit.
+ *
+ * @access public
+ * @return void
+ */
+function setToolTip()
+{
+    $('[data-toggle="tooltip"]').tooltip({container: 'body'});
+}

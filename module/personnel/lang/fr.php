@@ -1,7 +1,7 @@
 <?php
 $lang->personnel->common     = 'Program Personnel';
 $lang->personnel->accessible = 'Acess List';
-$lang->personnel->invest    = 'Input Resource';
+$lang->personnel->invest     = 'Input Resource';
 $lang->personnel->department = 'Department';
 $lang->personnel->realName   = 'Name';
 $lang->personnel->userName   = 'Account';
@@ -21,7 +21,7 @@ $lang->personnel->bug           = 'Bug';
 $lang->personnel->createStories = 'Story';
 $lang->personnel->risk          = 'Risk';
 $lang->personnel->issue         = 'Issue';
-$lang->personnel->invest       = 'Input';
+$lang->personnel->invest       = 'Input Resource';
 $lang->personnel->left          = 'Remained';
 $lang->personnel->created       = 'Created';
 $lang->personnel->finished      = 'Finished';
@@ -38,3 +38,4 @@ $lang->personnel->copy            = 'Copy Whitelist';
 
 $lang->personnel->openedPGMTip     = 'The program is public and can be accessed by users with Program privileges.';
 $lang->personnel->selectObjectTips = 'Select %s to copy its whitelist';
+$lang->personnel->countTip         = ' (%s member)';

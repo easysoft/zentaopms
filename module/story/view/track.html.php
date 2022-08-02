@@ -17,13 +17,13 @@
       </p>
     </div>
     <?php else:?>
-    <?php $style  = $this->app->rawModule == 'projectstory' ? "style='overflow: unset; text-align: left'" : '';?>
+    <?php $style  = $this->app->rawModule == 'projectstory' ? "style='overflow: overflow; text-align: left'" : '';?>
     <?php $tab    = $this->app->rawModule == 'projectstory' ? 'project' : 'product';?>
     <?php $module = $this->app->rawModule == 'projectstory' ? 'projectstory' : 'story';?>
     <div class='main-table' data-ride="table">
       <table class='table table-bordered' id="trackList">
         <thead>
-          <tr class='text-center'>
+          <tr class='text-left'>
             <?php if($config->URAndSR):?>
             <th <?php echo $style;?>>
               <?php if($this->app->rawModule == 'projectstory'): ?>

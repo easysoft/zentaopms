@@ -3,7 +3,7 @@
  * The edit view of program module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     program
  * @version     $Id: create.html.php 4728 2013-05-03 06:14:34Z chencongzhi520@gmail.com $
@@ -69,7 +69,7 @@
           </td>
         </tr>
         <tr>
-          <th><?php echo $lang->project->dateRange;?></th>
+          <th id="dateRange"><?php echo $lang->project->dateRange;?></th>
           <td>
             <div class='input-group'>
               <?php echo html::input('begin', $program->begin, "class='form-control form-date' placeholder='" . $lang->project->begin . "' required");?>
@@ -81,12 +81,13 @@
             </div>
           </td>
           <?php $endValue = $program->end == LONG_TIME ? 999 : (strtotime($program->end) - strtotime($program->begin)) / 3600 / 24 + 1;?>
-          <td colspan='2'><?php echo html::radio('delta', $lang->program->endList , $endValue, "onclick='computeEndDate(this.value)'");?></td>
+          <td id="endList" colspan='2'><?php echo html::radio('delta', $lang->program->endList , $endValue, "onclick='computeEndDate(this.value)'");?></td>
         </tr>
         <tr>
           <th><?php echo $lang->project->realBegan;?></th>
           <td><?php echo html::input('realBegan', helper::isZeroDate($program->realBegan) ? '' : $program->realBegan, "class='form-control form-date'");?></td>
         </tr>
+        <?php $this->printExtendFields($program, 'table');?>
         <tr>
           <th><?php echo $lang->program->desc;?></th>
           <td colspan='3'>
@@ -101,7 +102,7 @@
           <th><?php echo $lang->whitelist;?></th>
           <td colspan='2'>
             <div class='input-group'>
-              <?php echo html::select('whitelist[]', $users, $program->whitelist, 'class="form-control chosen" multiple data-drop_direction="up"');?>
+              <?php echo html::select('whitelist[]', $users, $program->whitelist, 'class="form-control picker-select" multiple data-dropDirection="top"');?>
               <?php echo $this->fetch('my', 'buildContactLists', "dropdownName=whitelist");?>
             </div>
           </td>

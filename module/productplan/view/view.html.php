@@ -3,7 +3,7 @@
  * The view of productplan module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     productplan
  * @version     $Id: view.html.php 5096 2013-07-11 07:02:43Z chencongzhi520@gmail.com $
@@ -45,11 +45,6 @@
   <div class='tabs' id='tabsNav'>
     <?php if($this->app->getViewType() == 'xhtml'):?>
     <div class="plan-title"><?php echo $product->name . ' ' . $plan->title ?></div>
-    <div class="linkButton" onclick="handleLinkButtonClick()">
-      <span title="<?php echo $lang->viewDetails;?>">
-        <i class="icon icon-import icon-rotate-270"></i>
-      </span>
-    </div>
     <div class='tab-btn-container'>
     <?php endif;?>
     <ul class='nav nav-tabs'>
@@ -88,7 +83,7 @@
               $createMisc = common::hasPriv('story', 'create') ? 'btn btn-secondary' : " btn btn-secondary disabled";
               echo html::a($createLink, "<i class='icon icon-plus'></i><span class='text'>" . $lang->story->create . "</span><span class='caret'>", '', "class='$createMisc'");
               ?>
-              <ul class='dropdown-menu'>
+              <ul class='dropdown-menu pull-right'>
                 <?php $disabled = common::hasPriv('story', 'batchCreate') ? '' : "class='disabled'";?>
                 <li <?php echo $disabled?>>
                   <?php
@@ -607,12 +602,6 @@
 <?php js::set('type', $type)?>
 <?php if($this->app->getViewType() == 'xhtml'):?>
 <script>
-function handleLinkButtonClick()
-{
-    var xxcUrl = "xxc:openInApp/zentao-integrated/" + encodeURIComponent(window.location.href.replace(/.display=card/, '').replace(/\.xhtml/, '.html'));
-    window.open(xxcUrl, '_blank');
-}
-
 $(function()
 {
     function handleClientReady()

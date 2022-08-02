@@ -210,7 +210,7 @@ function setImageSize(image, maxWidth, maxHeight)
     setTimeout(function()
     {
         maxHeightStyle = $image.height() > 0 ? 'max-height:' + maxHeight + 'px' : '';
-        if($image.width() > 0 && $image.width() > maxWidth) $image.attr('width', maxWidth);
+        if(!document.getElementsByClassName('xxc-embed').length && $image.width() > 0 && $image.width() > maxWidth) $image.attr('width', maxWidth);
         $image.wrap('<a href="' + $image.attr('src') + '" style="display:inline-block;position:relative;overflow:hidden;' + maxHeightStyle + '" target="_blank"></a>');
         if($image.height() > 0 && $image.height() > maxHeight) $image.closest('a').append("<a href='###' class='showMoreImage' onclick='showMoreImage(this)'>" + lang.expand + " <i class='icon-angle-down'></i></a>");
     }, 50);
@@ -243,9 +243,12 @@ function setMailto(mailto, contactListID)
     link = createLink('user', 'ajaxGetContactUsers', 'listID=' + contactListID + '&dropdownName=' + mailto + '&oldUsers=' + oldUsers);
     $.get(link, function(users)
     {
+        var picker = $('#' + mailto).data('zui.picker');
+        if(picker) picker.destroy();
+
         $('#' + mailto).replaceWith(users);
         $('#' + mailto + '_chosen').remove();
-        $('.picker').remove();
+        $('#' + mailto).siblings('.picker').remove();
 
         if($("[data-pickertype='remote']").length == 0 && $('.picker-select').length == 0)
         {
@@ -970,6 +973,18 @@ function limitIframeLevel()
     }
 }
 
+/**
+ * Remove html tag.
+ *
+ * @param  str $str
+ * @access public
+ * @return void
+ */
+function removeHtmlTag(str)
+{
+    return str.replace(/<[^>]+>/g,"");
+}
+
 /* Ping the server every some minutes to keep the session. */
 needPing = true;
 
@@ -1017,3 +1032,288 @@ $(document).ready(function()
         $(this).removeClass('dropdown-hover');
     });
 });
+
+/**
+ * Make the selected product non clickable.
+ *
+ * @return void
+ */
+function disableSelectedProduct()
+{
+    $("select[id^='products'] option[disabled='disabled']").removeAttr('disabled');
+
+    var selectedVal = [];
+    $("select[id^='products']").each(function()
+    {
+        var selectedProduct = $(this).val();
+        if(selectedProduct != 0 && $.inArray(selectedProduct, selectedVal) < 0 && !multiBranchProducts[selectedProduct]) selectedVal.push(selectedProduct);
+        if(multiBranchProducts[selectedProduct])
+        {
+            var isDisabled = checkMultiProducts(this);
+            if(isDisabled) selectedVal.push(selectedProduct);
+        }
+    })
+
+    $("select[id^='products']").each(function()
+    {
+        var selectedProduct = $(this).val();
+        $(this).find('option').each(function()
+        {
+            var optionVal = $(this).attr('value');
+            if(optionVal != selectedProduct && $.inArray(optionVal, selectedVal) >= 0) $(this).attr('disabled', 'disabled');
+        })
+    })
+
+    $("select[id^=products]").trigger('chosen:updated');
+}
+
+/**
+ * Make the selected branch non clickable.
+ *
+ * @return void
+ */
+function disableSelectedBranch()
+{
+    var relatedProduct = $(this).siblings("select[id^='products']").val();
+
+    /* Get the products control of the same value and their branch control. */
+    var sameProductControl       = [];
+    var sameProductBranchControl = [];
+    $("select[id^='products']").each(function()
+    {
+        if($(this).val() == relatedProduct)
+        {
+            $(this).siblings("select[id^='branch']").find("option[disabled='disabled']").removeAttr('disabled');
+
+            sameProductControl.push(this);
+            sameProductBranchControl.push($(this).siblings("select[id^='branch']"));
+        }
+    });
+
+    /* Get the selected branch of the related product. */
+    var preSelectedVal = [];
+    $.each(sameProductControl, function()
+    {
+        var selectedBranch = $(this).siblings("select[id^='branch']").val();
+        if($.inArray(selectedBranch, preSelectedVal) < 0) preSelectedVal.push(selectedBranch);
+    });
+
+    var selectedVal = [];
+    $.each(sameProductControl, function()
+    {
+        var selectedBranch = $(this).siblings("select[id^='branch']").val();
+        if($.inArray(selectedBranch, selectedVal) >= 0)
+        {
+            $(this).siblings("select[id^='branch']").find('option').removeAttr('selected');
+            for(i in preSelectedVal) $(this).siblings("select[id^='branch']").find('option[value=' + preSelectedVal[i] + ']').attr('disabled', 'disabled');
+
+            $(this).siblings("select[id^='branch']").find('option').not('[disabled=disabled]').eq(0).attr('selected', 'selected');
+            var selectedBranch = $(this).siblings("select[id^='branch']").val();
+        }
+        if($.inArray(selectedBranch, selectedVal) < 0) selectedVal.push(selectedBranch);
+    });
+
+    /* Make the selected value disabled. */
+    $.each(sameProductBranchControl, function()
+    {
+        var selectedBranch = $(this).val();
+        $(this).find('option').each(function()
+        {
+            var optionVal = $(this).attr('value');
+
+            if(optionVal != selectedBranch && $.inArray(optionVal, selectedVal) >= 0) $(this).attr('disabled', 'disabled');
+        })
+    })
+
+    $("select[id^=branch]").trigger('chosen:updated');
+}
+
+/**
+ * Determine whether multi-branch products should be disabled.
+ *
+ * @param  object  product
+ * @return bool
+ */
+function checkMultiProducts(product)
+{
+    var disabledBranchList = [];
+    var optionLength       = $(product).siblings("select[id^='branch']").find('option').length;
+    $(product).siblings("select[id^='branch']").find("option[disabled='disabled']").each(function()
+    {
+        disabledBranchList.push($(this).attr('value'));
+    });
+
+    if(optionLength - disabledBranchList.length == 1) return true;
+
+    return false;
+}
+
+/**
+ * Add row.
+ *
+ * @param  object $obj
+ * @access public
+ * @return void
+ */
+function addRow(obj)
+{
+    var row = $('#addRow').html().replace(/%i%/g, rowIndex + 1);
+    $('<tr class="addedRow">' + row  + '</tr>').insertAfter($(obj).closest('tr'));
+
+    var $row = $(obj).closest('tr').next();
+
+    $row.find(".form-date").datepicker();
+    $row.find("input[name^=color]").colorPicker();
+    $row.find('div[id$=_chosen]').remove();
+    $row.find('.picker').remove();
+    $row.find('.chosen').chosen();
+    $row.find('.picker-select').picker();
+
+    rowIndex ++;
+}
+
+/**
+ * Delete row.
+ *
+ * @param  object $obj
+ * @access public
+ * @return void
+ */
+function deleteRow(obj)
+{
+    $(obj).closest('tr').remove();
+}
+
+/**
+ * Show checked fields.
+ *
+ * @param  string fields
+ * @access public
+ * @return void
+ */
+function showCheckedFields(fields)
+{
+    var fieldList = ',' + fields + ',';
+    $('#formSettingForm > .checkboxes > .checkbox-primary > input').each(function()
+    {
+        var field     = ',' + $(this).val() + ',';
+        var $field    = config.currentMethod == 'create' ? $('#' + $(this).val()) : $('[name^=' + $(this).val() + ']');
+        var $fieldBox = $('.' + $(this).val() + 'Box' );
+
+        var required  = '';
+        if(typeof requiredFields != 'undefined') var required = ',' + requiredFields + ',';
+        if(fieldList.indexOf(field) >= 0 || (required && required.indexOf(field) >= 0))
+        {
+            $fieldBox.removeClass('hidden');
+            $field.removeAttr('disabled');
+        }
+        else if(!$fieldBox.hasClass('hidden'))
+        {
+            $fieldBox.addClass('hidden');
+            $field.attr('disabled', true);
+        }
+
+        if(config.currentModule == 'story' && $(this).val() == 'source')
+        {
+            var $sourceNote = config.currentMethod == 'create' ? $('#sourceNote') : $('[name^=sourceNote]');
+            $sourceNote.attr('disabled', $fieldBox.hasClass('hidden'));
+        }
+    });
+
+
+    if(config.currentModule == 'task' && config.currentMethod == 'create');
+    {
+        if(fieldList.indexOf(',estStarted,') >= 0 && fieldList.indexOf(',deadline,') >= 0)
+        {
+            $('.borderBox').removeClass('hidden');
+        }
+        else if(fieldList.indexOf(',estStarted,') >= 0 || fieldList.indexOf(',deadline,') >= 0)
+        {
+            $('.datePlanBox').removeClass('hidden');
+            if(!$('.borderBox').hasClass('hidden')) $('.borderBox').addClass('hidden');
+        }
+        else
+        {
+            if(!$('.borderBox').hasClass('hidden')) $('.borderBox').addClass('hidden');
+            if(!$('.datePlanBox').hasClass('hidden')) $('.datePlanBox').addClass('hidden');
+        }
+
+        if(typeof lifetime != 'undefined' && lifetime == 'ops') $('.storyBox').addClass('hidden');
+    }
+}
+
+/**
+ * Hidden require field.
+ *
+ * @access public
+ * @return void
+ */
+function hiddenRequireFields()
+{
+    $('#formSettingForm > .checkboxes > .checkbox-primary > input').each(function()
+    {
+        var field    = ',' + $(this).val() + ',';
+        var required = ',' + requiredFields + ',';
+        if(required.indexOf(field) >= 0) $(this).closest('div').addClass('hidden');
+    });
+}
+
+/**
+ * Save custom fields.
+ *
+ * @param  stirng $key
+ * @param  int    $maxFieldCount
+ * @param  object $name
+ * @param  int    $nameMinWidth
+ * @access public
+ * @return void
+ */
+function saveCustomFields(key, maxFieldCount, $name, nameMinWidth)
+{
+    var fields = '';
+    $('#formSettingForm > .checkboxes > .checkbox-primary > input:checked').each(function()
+    {
+        fields += ',' + $(this).val();
+    });
+
+    var module = config.currentModule;
+    var link   = createLink('custom', 'ajaxSaveCustomFields', 'module=' + module + '&section=custom&key=' + key);
+    $.post(link, {'fields' : fields}, function()
+    {
+        showFields = fields;
+
+        showCheckedFields(fields);
+        $('#formSetting').parent().removeClass('open');
+
+        if(key == 'batchCreateFields') setCustomFieldsStyle(maxFieldCount, $name, nameMinWidth);
+    });
+}
+
+/**
+ * Set custom fields style.
+ *
+ * @param  int    $maxFieldCount
+ * @param  object $name
+ * @param  int    $nameMinWidth
+ * @access public
+ * @return void
+ */
+function setCustomFieldsStyle(maxFieldCount, $name, nameMinWidth)
+{
+    var fieldCount = $('#batchCreateForm .table thead>tr>th:visible').length;
+    $('.form-actions').attr('colspan', fieldCount);
+
+    var $table = $('#batchCreateForm > .table-responsive');
+    if(fieldCount > maxFieldCount)
+    {
+        $table.removeClass('scroll-none');
+        $table.css('overflow', 'auto');
+    }
+    else
+    {
+        $table.addClass('scroll-none');
+        $table.css('overflow', 'visible');
+    }
+
+    if($name.width() < nameMinWidth) $name.width(200);
+}

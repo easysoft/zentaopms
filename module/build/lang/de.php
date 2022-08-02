@@ -3,7 +3,7 @@
  * The build module English file of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     build
  * @version     $Id: en.php 4129 2013-01-18 01:58:14Z wwccss $
@@ -27,26 +27,30 @@ $lang->build->confirmUnlinkBug   = "Möchten Sie die Verknüpfung zum Bug aufheb
 
 $lang->build->basicInfo = 'Basis Info';
 
-$lang->build->id            = 'ID';
-$lang->build->product       = $lang->productCommon;
-$lang->build->branch        = 'Platform/Branch';
-$lang->build->execution     = $lang->executionCommon;
-$lang->build->name          = 'Name';
-$lang->build->date          = 'Datum';
-$lang->build->builder       = 'Builder';
-$lang->build->scmPath       = 'SCM Pfad';
-$lang->build->filePath      = 'Dateipfad';
-$lang->build->desc          = 'Beschreibung';
-$lang->build->files         = 'Datei Upload';
-$lang->build->last          = 'Letztes Build';
-$lang->build->packageType   = 'Package Typ';
-$lang->build->unlinkStory   = "{$lang->SRCommon} Verknüpgung aufheben";
-$lang->build->unlinkBug     = 'Bug Verknüpgung aufheben';
-$lang->build->stories       = "Abgeschlossene {$lang->SRCommon}";
-$lang->build->bugs          = 'Gelöster Bug';
-$lang->build->generatedBugs = 'Left Bug';
-$lang->build->noProduct     = " <span id='noProduct' style='color:red'>Dieses {$lang->executionCommon} ist nicht mit einem {$lang->productCommon} verknüpft, daher kann das Build nicht erstellt werden. Bitte erst <a href='%s' data-app='%s' data-toggle='modal' data-type='iframe'> {$lang->productCommon} verknüpfen.</a></span>";
-$lang->build->noBuild       = 'Keine Builds. ';
+$lang->build->id             = 'ID';
+$lang->build->product        = $lang->productCommon;
+$lang->build->project        = 'Project';
+$lang->build->branch         = 'Platform/Branch';
+$lang->build->branchName     = '%s';
+$lang->build->execution      = $lang->executionCommon;
+$lang->build->name           = 'Name';
+$lang->build->date           = 'Datum';
+$lang->build->builder        = 'Builder';
+$lang->build->scmPath        = 'SCM Pfad';
+$lang->build->filePath       = 'Dateipfad';
+$lang->build->desc           = 'Beschreibung';
+$lang->build->mailto         = 'Mailto';
+$lang->build->files          = 'Datei Upload';
+$lang->build->last           = 'Letztes Build';
+$lang->build->packageType    = 'Package Typ';
+$lang->build->unlinkStory    = "{$lang->SRCommon} Verknüpgung aufheben";
+$lang->build->unlinkBug      = 'Bug Verknüpgung aufheben';
+$lang->build->stories        = "Abgeschlossene {$lang->SRCommon}";
+$lang->build->bugs           = 'Gelöster Bug';
+$lang->build->generatedBugs  = 'Left Bug';
+$lang->build->noProduct      = " <span id='noProduct' style='color:red'>Dieses {$lang->executionCommon} ist nicht mit einem {$lang->productCommon} verknüpft, daher kann das Build nicht erstellt werden. Bitte erst <a href='%s' data-app='%s' data-toggle='modal' data-type='iframe'> {$lang->productCommon} verknüpfen.</a></span>";
+$lang->build->noBuild        = 'Keine Builds. ';
+$lang->build->emptyExecution =  $lang->executionCommon . 'should be not empty.';
 
 $lang->build->notice = new stdclass();
 $lang->build->notice->changeProduct   = "The {$lang->SRCommon}, bug, or the version of the submitted test order has been linked, and its {$lang->productCommon} cannot be modified";

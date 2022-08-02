@@ -3,7 +3,7 @@
  * The batch create view of task module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Yangyang Shi <shiyangyang@cnezsoft.com>
  * @package     task
  * @version     $Id$
@@ -55,7 +55,7 @@
   }
   $colspan = count($visibleFields) + 3;
   ?>
-  <form method='post' class='load-indicator batch-actions-form form-ajax' enctype='multipart/form-data' id="batchCreateForm">
+  <form method='post' class='batch-actions-form' target='hiddenwin' enctype='multipart/form-data' id="batchCreateForm">
     <div class="table-responsive">
       <table class="table table-form" id="tableBody">
         <thead>
@@ -114,7 +114,7 @@
               <div class='input-group'>
                 <?php echo html::select("story[$i]", $stories, $currentStory, "class='form-control chosen' onchange='setStoryRelated($i)'");?>
                 <span class='input-group-btn'>
-                  <a id='preview<?php echo $i;?>' href='#' class='btn iframe btn-link btn-icon btn-copy' disabled='disabled' title='<?php echo $lang->preview; ?>'><i class='icon-search'></i></a>
+                  <a id='preview<?php echo $i;?>' href='#' class='btn iframe btn-link btn-icon btn-copy' disabled='disabled' title='<?php echo $lang->preview; ?>'><i class='icon-eye'></i></a>
                   <a href='javascript:copyStoryTitle(<?php echo $i;?>)' class='btn btn-link btn-icon btn-copy' title='<?php echo $lang->task->copyStoryTitle; ?>'><i class='icon-arrow-right'></i></a>
                   <?php echo html::hidden("storyEstimate$i") . html::hidden("storyDesc$i") . html::hidden("storyPri$i");?>
                 </span>
@@ -184,7 +184,7 @@
         <div class='input-group'>
           <?php echo html::select("story[%s]", $stories, $currentStory, "class='form-control chosen' onchange='setStoryRelated(\"%s\")'");?>
           <span class='input-group-btn'>
-            <a id="preview%s" href='#' class='btn iframe btn-link btn-icon btn-copy' disabled='disabled' title='<?php echo $lang->preview; ?>'><i class='icon-search'></i></a>
+            <a id="preview%s" href='#' class='btn iframe btn-link btn-icon btn-copy' disabled='disabled' title='<?php echo $lang->preview; ?>'><i class='icon-eye'></i></a>
             <a href='javascript:copyStoryTitle("%s")' class='btn btn-link btn-icon btn-copy' title='<?php echo $lang->task->copyStoryTitle; ?>'><i class='icon-arrow-right'></i></a>
           </span>
         </div>

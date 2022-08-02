@@ -617,6 +617,23 @@ class baseRouter
      */
     public function setSuperVars()
     {
+        if(isset($_SERVER['REQUEST_URI']))
+        {
+            $URI = $_SERVER['REQUEST_URI'];
+            if(strpos($URI, '?') !== false)
+            {
+                $parsedURL = parse_url($URI);
+                if(isset($parsedURL['query']))
+                {
+                    parse_str($parsedURL['query'], $parsedQuery);
+                    foreach($parsedQuery as $key => $value)
+                    {
+                        if(!isset($_GET[$key])) $_GET[$key] = $value;
+                    }
+                }
+            }
+        }
+
         $this->post    = new super('post');
         $this->get     = new super('get');
         $this->server  = new super('server');
@@ -641,6 +658,20 @@ class baseRouter
         $_POST   = validater::filterSuper($_POST);
         $_GET    = validater::filterSuper($_GET);
         $_COOKIE = validater::filterSuper($_COOKIE);
+
+        /* Filter common get and cookie vars. */
+        if($this->config->framework->filterParam == 2)
+        {
+            global $filter;
+            foreach($filter->default->get as $key => $rules)
+            {
+                if(isset($_GET[$key]) and !validater::checkByRule($_GET[$key], $rules)) unset($_GET[$key]);
+            }
+            foreach($filter->default->cookie as $key => $rules)
+            {
+                if(isset($_COOKIE[$key]) and !validater::checkByRule($_COOKIE[$key], $rules)) unset($_COOKIE[$key]);
+            }
+        }
     }
 
     /**
@@ -697,7 +728,7 @@ class baseRouter
         if(empty($account) and isset($_GET['account']))  $account = $_GET['account'];
 
         $vision = '';
-        if($this->config->installed)
+        if($this->config->installed and validater::checkAccount($account))
         {
             $sql     = new sql();
             $account = $sql->quote($account);
@@ -724,7 +755,7 @@ class baseRouter
      */
     public function getInstalledVersion()
     {
-        $version = $this->dbh->query("SELECT value FROM " . TABLE_CONFIG . " WHERE owner = 'system' AND `key` = 'version' LIMIT 1")->fetch();
+        $version = $this->dbh->query("SELECT value FROM " . TABLE_CONFIG . " WHERE `owner` = 'system' AND `key` = 'version' AND `module` = 'common' AND `section` = 'global' LIMIT 1")->fetch();
         $version = $version ? $version->value : '0.3.beta';                  // No version, set as 0.3.beta.
         if($version == '3.0.stable') $version = '3.0';    // convert 3.0.stable to 3.0.
         return $version;
@@ -987,7 +1018,11 @@ class baseRouter
 
         $this->sessionID = isset($ztSessionHandler) ? $ztSessionHandler->getSessionID() : session_id();
 
-        if(isset($_GET[$this->config->sessionVar])) helper::restartSession($_GET[$this->config->sessionVar]);
+        if(isset($_GET[$this->config->sessionVar]))
+        {
+            helper::restartSession($_GET[$this->config->sessionVar]);
+            $this->sessionID = isset($ztSessionHandler) ? $ztSessionHandler->getSessionID() : session_id();
+        }
 
         define('SESSION_STARTED', true);
     }
@@ -1490,14 +1525,16 @@ class baseRouter
      * 检查模块中某一个变量必须为英文字母和数字组合。Check module a variable must be ascii.
      *
      * @param  string    $var
+     * @param  bool      $exit
      * @access public
      * @return bool
      */
-    public function checkModuleName($var)
+    public function checkModuleName($var, $exit = true)
     {
         global $filter;
         $rule = $filter->default->moduleName;
         if(validater::checkByRule($var, $rule)) return true;
+        if(!$exit) return false;
         $this->triggerError("'$var' illegal. ", __FILE__, __LINE__, $exit = true);
     }
 
@@ -1505,16 +1542,18 @@ class baseRouter
      * 检查方法中某一个变量必须为英文字母和数字组合。Check method a variable must be ascii.
      *
      * @param  string    $var
+     * @param  bool      $exit
      * @access public
      * @return bool
      */
-    public function checkMethodName($var)
+    public function checkMethodName($var, $exit = true)
     {
         global $filter;
         $rule = $filter->default->methodName;
         if($this->config->framework->filterParam == 2 and isset($filter->{$this->moduleName}->methodName)) $rule = $filter->{$this->moduleName}->methodName;
 
         if(validater::checkByRule($var, $rule)) return true;
+        if(!$exit) return false;
         $this->triggerError("'$var' illegal. ", __FILE__, __LINE__, $exit = true);
     }
 
@@ -2057,6 +2096,19 @@ class baseRouter
                 $defaultParams[$name] = $default;
             }
 
+            /**
+             * 根据PATH_INFO或者GET方式设置请求的参数。
+             * Set params according PATH_INFO or GET.
+             */
+            if($this->config->requestType != 'GET')
+            {
+                $this->setParamsByPathInfo($defaultParams);
+            }
+            else
+            {
+                $this->setParamsByGET($defaultParams);
+            }
+
             if ('cli' === PHP_SAPI)
             {
                 if ($this->params)
@@ -2070,19 +2122,6 @@ class baseRouter
             }
             else
             {
-                /**
-                 * 根据PATH_INFO或者GET方式设置请求的参数。
-                 * Set params according PATH_INFO or GET.
-                 */
-                if($this->config->requestType != 'GET')
-                {
-                    $this->setParamsByPathInfo($defaultParams);
-                }
-                else
-                {
-                    $this->setParamsByGET($defaultParams);
-                }
-
                 if($this->config->framework->filterParam == 2)
                 {
                     $_GET     = validater::filterParam($_GET, 'get');
@@ -2475,13 +2514,16 @@ class baseRouter
         $modulePath = $this->getExtensionRoot() . 'saas' . DS;
         if(file_exists($modulePath . $path)) return $modulePath . $path;
 
-        /* 1. 如果通用版本里有此模块，优先使用。 If module is in the open edition, use it. */
-        $modulePath = $this->getModuleRoot($appName);
+        /* 1. 最后尝试在定制开发中寻找。 Finally, try to find the module in the custom dir. */
+        $modulePath = $this->getExtensionRoot() . 'custom' . DS;
         if(file_exists($modulePath . $path)) return $modulePath . $path;
 
-        /* 2. 尝试查找喧喧是否有此模块。 Try to find the module in other editon. */
-        $modulePath = $this->getExtensionRoot() . 'xuan' . DS;
-        if(file_exists($modulePath . $path)) return $modulePath . $path;
+        /* 2. 如果设置过vision，尝试在vision中查找。 If vision is set, try to find the module in the vision. */
+        if($this->config->vision != 'rnd')
+        {
+            $modulePath = $this->getExtensionRoot() . $this->config->vision . DS;
+            if(file_exists($modulePath . $path)) return $modulePath . $path;
+        }
 
         /* 3. 尝试查找商业版本是否有此模块。 Try to find the module in other editon. */
         if($this->config->edition != 'open')
@@ -2490,15 +2532,12 @@ class baseRouter
             if(file_exists($modulePath . $path)) return $modulePath . $path;
         }
 
-        /* 4. 如果设置过vision，尝试在vision中查找。 If vision is set, try to find the module in the vision. */
-        if($this->config->vision != 'rnd')
-        {
-            $modulePath = $this->getExtensionRoot() . $this->config->vision . DS;
-            if(file_exists($modulePath . $path)) return $modulePath . $path;
-        }
+        /* 4. 尝试查找喧喧是否有此模块。 Try to find the module in other editon. */
+        $modulePath = $this->getExtensionRoot() . 'xuan' . DS;
+        if(file_exists($modulePath . $path)) return $modulePath . $path;
 
-        /* 5. 最后尝试在定制开发中寻找。 Finally, try to find the module in the custom dir. */
-        $modulePath = $this->getExtensionRoot() . 'custom' . DS;
+        /* 5. 如果通用版本里有此模块，优先使用。 If module is in the open edition, use it. */
+        $modulePath = $this->getModuleRoot($appName);
         if(file_exists($modulePath . $path)) return $modulePath . $path;
 
         return '';
@@ -2805,6 +2844,17 @@ class baseRouter
         foreach(dao::$querys as $query) fwrite($fh, "  $query\n");
         fwrite($fh, "\n");
         fclose($fh);
+    }
+
+    /**
+     * Check app if it is run in a container.
+     *
+     * @access public
+     * @return bool
+     */
+    public function isContainer()
+    {
+        return strtolower(getenv('IS_CONTAINER')) == 'true';
     }
 }
 
@@ -3153,9 +3203,7 @@ class ztSessionHandler
             ($this->tagID and file_exists($this->rawFile)) ? copy($this->rawFile, $sessFile) : touch($sessFile);
         }
 
-        $sessContent = (string) file_get_contents($sessFile);
-        if(!file_exists($this->rawFile) and strpos($sessContent, 'user|') !== false) copy($sessFile, $this->rawFile);
-        return $sessContent;
+        return (string) file_get_contents($sessFile);
     }
 
     /**
@@ -3169,7 +3217,23 @@ class ztSessionHandler
     public function write($id, $sessData)
     {
         $sessFile = $this->getSessionFile($id);
-        if(file_put_contents($sessFile, $sessData)) return true;
+        if(file_put_contents($sessFile, $sessData))
+        {
+            if(strpos($sessData, 'user|') !== false)
+            {
+                if(file_exists($this->rawFile))
+                {
+                    $rawSessContent = (string) file_get_contents($this->rawFile);
+                    if(strpos($rawSessContent, 'user|') === false) copy($sessFile, $this->rawFile);
+                }
+                else
+                {
+                    copy($sessFile, $this->rawFile);
+                }
+            }
+
+            return true;
+        }
         return false;
     }
 
@@ -3183,7 +3247,8 @@ class ztSessionHandler
     public function destroy($id)
     {
         $sessFile = $this->getSessionFile($id);
-        @unlink($sessFile);
+        unlink($sessFile);
+        unlink($this->rawFile);
         touch($sessFile);
         return true;
     }

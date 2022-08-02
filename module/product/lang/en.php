@@ -3,36 +3,38 @@
  * The product module English file of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     product
  * @version     $Id: en.php 5091 2013-07-10 06:06:46Z chencongzhi520@gmail.com $
  * @link        http://www.zentao.net
  */
-$lang->product->index           = $lang->productCommon . ' Home';
-$lang->product->browse          = 'Story List';
-$lang->product->dynamic         = 'Dynamics';
-$lang->product->view            = "{$lang->productCommon} Detail";
-$lang->product->edit            = "Edit {$lang->productCommon}";
-$lang->product->batchEdit       = 'Batch Edit';
-$lang->product->create          = "Create {$lang->productCommon}";
-$lang->product->delete          = "Delete {$lang->productCommon}";
-$lang->product->deleted         = 'Deleted';
-$lang->product->close           = "Close";
-$lang->product->select          = "Select {$lang->productCommon}";
-$lang->product->mine            = 'Mine';
-$lang->product->other           = 'Others';
-$lang->product->closed          = 'Closed';
-$lang->product->closedProduct   = 'Closed Product';
-$lang->product->updateOrder     = 'Order';
-$lang->product->all             = "{$lang->productCommon} List";
-$lang->product->manageLine      = "Manage {$lang->productCommon} Line";
-$lang->product->newLine         = "Create {$lang->productCommon} Line";
-$lang->product->export          = 'Export';
-$lang->product->dashboard       = "Dashboard";
-$lang->product->changeProgram   = "{$lang->productCommon} confirmation of the scope of influence of adjustment of the program set";
-$lang->product->addWhitelist    = 'Add Whitelist';
-$lang->product->unbindWhitelist = 'Unbind Whitelist';
+$lang->product->index            = $lang->productCommon . ' Home';
+$lang->product->browse           = 'Story List';
+$lang->product->dynamic          = 'Dynamics';
+$lang->product->view             = "{$lang->productCommon} Detail";
+$lang->product->edit             = "Edit {$lang->productCommon}";
+$lang->product->batchEdit        = 'Batch Edit';
+$lang->product->create           = "Create {$lang->productCommon}";
+$lang->product->delete           = "Delete {$lang->productCommon}";
+$lang->product->deleted          = 'Deleted';
+$lang->product->close            = "Close";
+$lang->product->select           = "Select {$lang->productCommon}";
+$lang->product->mine             = 'Mine';
+$lang->product->other            = 'Others';
+$lang->product->closed           = 'Closed';
+$lang->product->closedProduct    = 'Closed Product';
+$lang->product->updateOrder      = 'Order';
+$lang->product->all              = "{$lang->productCommon} List";
+$lang->product->manageLine       = "Manage {$lang->productCommon} Line";
+$lang->product->newLine          = "Create {$lang->productCommon} Line";
+$lang->product->export           = 'Export';
+$lang->product->dashboard        = "Dashboard";
+$lang->product->changeProgram    = "{$lang->productCommon} confirmation of the scope of influence of adjustment of the program set";
+$lang->product->changeProgramTip = "%s > Change Program";
+$lang->product->addWhitelist     = 'Add Whitelist';
+$lang->product->unbindWhitelist  = 'Unbind Whitelist';
+$lang->product->checkedProducts  = '%s products selected';
 
 $lang->product->indexAction  = "All {$lang->productCommon}";
 $lang->product->closeAction  = "Close {$lang->productCommon}";
@@ -86,9 +88,10 @@ $lang->product->confirmDelete        = " Do you want to delete the {$lang->produ
 $lang->product->errorNoProduct       = "No {$lang->productCommon} is created yet!";
 $lang->product->accessDenied         = "You have no access to the {$lang->productCommon}.";
 $lang->product->programChangeTip     = "The projects linked with this {$lang->productCommon}: %s will be transferred to the modified program set together.";
-$lang->product->notChangeProgramTip  = "The {$lang->SRCommon} of {$lang->productCommon} has been linked to the following projects, please cancel the link before proceeding";
+$lang->product->notChangeProgramTip  = "The {$lang->SRCommon} of {$lang->productCommon} has been linked to the following projects, please click the project name to enter the {$lang->SRCommon} list to cancel the link before proceeding";
 $lang->product->confirmChangeProgram = "The projects linked with this {$lang->productCommon}: %s is also linked with other products, whether to transfer projects to the modified program set.";
 $lang->product->changeProgramError   = "The {$lang->SRCommon} of this {$lang->productCommon} has been linked to the project, please unlink it before proceeding";
+$lang->product->changeLineError      = "Products already exist under the product line, so the program within them cannot be modified.";
 $lang->product->programEmpty         = 'Program should not be empty!';
 $lang->product->nameIsDuplicate      = "『%s』 product line already exists, please reset!";
 $lang->product->nameIsDuplicated     = "Product Line『%s』 exists. Go to Admin->System->Data->Recycle Bin to restore it, if you are sure it is deleted.";

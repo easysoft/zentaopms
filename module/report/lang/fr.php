@@ -3,11 +3,11 @@
  * The report module English file of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     report
  * @version     $Id: en.php 5080 2013-07-10 00:46:59Z wyd621@gmail.com $
- * @link        https://www.zentao.pm
+ * @link        http://www.zentao.net
  */
 $lang->report->index     = 'Accueil Rapports';
 $lang->report->list      = 'Rapports';
@@ -18,19 +18,20 @@ $lang->report->undefined = 'N/D';
 $lang->report->query     = 'Requête';
 $lang->report->annual    = 'Résumé Annuel';
 $lang->report->project   = 'Project';
+$lang->report->PO        = 'PO';
 
 $lang->report->colors[]   = 'AFD8F8';
-$lang->report->colors[]   = 'F6BD0F';
-$lang->report->colors[]   = '8BBA00';
-$lang->report->colors[]   = 'FF8E46';
-$lang->report->colors[]   = '008E8E';
-$lang->report->colors[]   = 'D64646';
-$lang->report->colors[]   = '8E468E';
-$lang->report->colors[]   = '588526';
-$lang->report->colors[]   = 'B3AA00';
-$lang->report->colors[]   = '008ED6';
-$lang->report->colors[]   = '9D080D';
-$lang->report->colors[]   = 'A186BE';
+$lang->report->colors[]   = 'AFD8F8';
+$lang->report->colors[]   = 'AFD8F8';
+$lang->report->colors[]   = 'AFD8F8';
+$lang->report->colors[]   = 'AFD8F8';
+$lang->report->colors[]   = 'AFD8F8';
+$lang->report->colors[]   = 'AFD8F8';
+$lang->report->colors[]   = 'AFD8F8';
+$lang->report->colors[]   = 'AFD8F8';
+$lang->report->colors[]   = 'AFD8F8';
+$lang->report->colors[]   = 'AFD8F8';
+$lang->report->colors[]   = 'AFD8F8';
 
 $lang->report->assign['noassign'] = 'Non affecté';
 $lang->report->assign['assign']   = 'Affecté';
@@ -110,6 +111,8 @@ $lang->report->mailTitle->testTask = " Recettes (%s),";
 $lang->report->deviationDesc = 'According to the Closed Execution Deviation Rate = ((Total Cost - Total Estimate) / Total Estimate), the Deviation Rate is n/a when the Total Estimate is 0.';
 $lang->report->proVersion    = '<a href="https://www.zentao.pm/page/vs.html" target="_blank">Essayez ZenTao Pro pour en savoir plus !</a>';
 $lang->report->proVersionEn  = '<a href="https://www.zentao.pm/page/vs.html" target="_blank">Try ZenTao Pro for more!</a>';
+$lang->report->workloadDesc  = 'Workload = the total left hours of all tasks of the user / selected days * hours per day.
+For example: the begin and end date is January 1st to January 7th, and the total work days is 5 days, 8 hours per day. The Work load is all unfinished tasks assigned to this user to be finished in 5 days, 8 hours per day.';
 
 $lang->report->annualData = new stdclass();
 $lang->report->annualData->title            = "%s work summary in %s";
@@ -165,8 +168,8 @@ if(!empty($config->URAndSR))
 {
     $lang->report->annualData->productFields['requirement'] = "Created requirements";
 }
-$lang->report->annualData->productFields['story']    = "Created stories";
-$lang->report->annualData->productFields['finished'] = "Finished stories";
+$lang->report->annualData->productFields['story']  = "Created stories";
+$lang->report->annualData->productFields['closed'] = "Closed stories";
 
 $lang->report->annualData->objectTypeList['product']     = $lang->productCommon;
 $lang->report->annualData->objectTypeList['story']       = $lang->SRCommon;
@@ -193,6 +196,9 @@ $lang->report->annualData->actionList['assign']    = 'Assigned';
 $lang->report->annualData->actionList['activate']  = 'Activated';
 $lang->report->annualData->actionList['resolve']   = 'Resolved';
 $lang->report->annualData->actionList['run']       = 'Execute';
+$lang->report->annualData->actionList['stop']      = 'Stop Maintenance';
+$lang->report->annualData->actionList['putoff']    = 'Postponed ';
+$lang->report->annualData->actionList['suspend']   = 'Suspended';
 $lang->report->annualData->actionList['change']    = 'Changed';
 $lang->report->annualData->actionList['pause']     = 'Paused';
 $lang->report->annualData->actionList['cancel']    = 'Canceled';

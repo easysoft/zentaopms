@@ -3,7 +3,7 @@
  * The browse view file of testtask module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     testtask
  * @version     $Id: browse.html.php 1914 2011-06-24 10:11:25Z yidong@cnezsoft.com $
@@ -94,7 +94,7 @@
                 common::printIcon('testtask', 'linkCase', "taskID=$task->id", $task, 'list', 'link');
                 if(common::hasPriv('execution', 'testreport') and $project->model == 'scrum')
                 {
-                    echo html::a($this->createLink('execution', 'testreport', "executionID=$task->execution&objectType=execution&extra=$task->id"), '<i class="icon-testreport-browse icon-flag"></i>', '', 'class="btn " title="' . $lang->testreport->browse . '" data-app="project"');
+                    echo html::a($this->createLink('execution', 'testreport', "executionID=$task->execution&objectType=execution&extra=$task->id"), '<i class="icon-testreport-browse icon-summary"></i>', '', 'class="btn " title="' . $lang->testreport->browse . '" data-app="project"');
                 }
                 common::printIcon('testtask', 'edit',   "taskID=$task->id", $task, 'list');
                 common::printIcon('testtask', 'delete', "taskID=$task->id", $task, 'list', 'trash', 'hiddenwin');

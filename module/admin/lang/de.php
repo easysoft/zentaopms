@@ -3,29 +3,31 @@
  * The admin module English file of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     admin
  * @version     $Id: en.php 4460 2013-02-26 02:28:02Z chencongzhi520@gmail.com $
  * @link        http://www.zentao.net
  */
-$lang->admin->index         = 'Admin Home';
-$lang->admin->checkDB       = 'Datenbank prüfen';
-$lang->admin->sso           = 'SSO';
-$lang->admin->ssoAction     = 'Link Zdoo';
-$lang->admin->safeIndex     = 'Sicherheit';
-$lang->admin->checkWeak     = 'Schwache Passwörter prüfen';
-$lang->admin->certifyMobile = 'Prüfen Sie die Mobilnummer';
-$lang->admin->certifyEmail  = 'Prüfen Sie die Emailadresse';
-$lang->admin->ztCompany     = 'Prüfen Sie das Unternehmen';
-$lang->admin->captcha       = 'Bestätigungscode';
-$lang->admin->getCaptcha    = 'Bestätigungscode anfordern';
-$lang->admin->register      = 'Register';
+$lang->admin->index           = 'Admin Home';
+$lang->admin->checkDB         = 'Datenbank prüfen';
+$lang->admin->sso             = 'SSO';
+$lang->admin->ssoAction       = 'Link Zdoo';
+$lang->admin->safeIndex       = 'Sicherheit';
+$lang->admin->checkWeak       = 'Schwache Passwörter prüfen';
+$lang->admin->certifyMobile   = 'Prüfen Sie die Mobilnummer';
+$lang->admin->certifyEmail    = 'Prüfen Sie die Emailadresse';
+$lang->admin->ztCompany       = 'Prüfen Sie das Unternehmen';
+$lang->admin->captcha         = 'Bestätigungscode';
+$lang->admin->getCaptcha      = 'Bestätigungscode anfordern';
+$lang->admin->register        = 'Register';
+$lang->admin->resetPWDSetting = 'Reset password Setting';
 
-$lang->admin->api     = 'API';
-$lang->admin->log     = 'Log';
-$lang->admin->setting = 'Einstellungen';
-$lang->admin->days    = 'Gültige Tage';
+$lang->admin->api            = 'API';
+$lang->admin->log            = 'Log';
+$lang->admin->setting        = 'Einstellungen';
+$lang->admin->days           = 'Gültige Tage';
+$lang->admin->resetPWDByMail = 'Reset the password via the email';
 
 $lang->admin->info = new stdclass();
 $lang->admin->info->version = 'Aktuelle Version ist %s. ';
@@ -53,14 +55,14 @@ $lang->admin->bind->caption = 'Konto verknüpfen';
 $lang->admin->bind->success = "Konto wurde verknüpft!";
 
 $lang->admin->safe = new stdclass();
-$lang->admin->safe->common     = 'Sicherheits-Regeln';
-$lang->admin->safe->set        = 'PasswortStärke';
-$lang->admin->safe->password   = 'Passwort Stärke';
-$lang->admin->safe->weak       = 'Schwache Passwörter';
-$lang->admin->safe->reason     = 'Typ';
-$lang->admin->safe->checkWeak  = 'Schwache Passwörter prüfen';
-$lang->admin->safe->changeWeak = 'Ihr Passwort ist schwach. Bitte ändern.';
-$lang->admin->safe->loginCaptcha = 'Login using CAPTCHA';
+$lang->admin->safe->common                   = 'Sicherheits-Regeln';
+$lang->admin->safe->set                      = 'PasswortStärke';
+$lang->admin->safe->password                 = 'Passwort Stärke';
+$lang->admin->safe->weak                     = 'Schwache Passwörter';
+$lang->admin->safe->reason                   = 'Typ';
+$lang->admin->safe->checkWeak                = 'Schwache Passwörter prüfen';
+$lang->admin->safe->changeWeak               = 'Ihr Passwort ist schwach. Bitte ändern.';
+$lang->admin->safe->loginCaptcha             = 'Login using CAPTCHA';
 $lang->admin->safe->modifyPasswordFirstLogin = 'Passwort nach der ersten Anmeldung ändern';
 
 $lang->admin->safe->modeList[0] = 'N/A';
@@ -81,6 +83,9 @@ $lang->admin->safe->modifyPasswordList[0] = 'Nein';
 
 $lang->admin->safe->loginCaptchaList[1] = 'Ja';
 $lang->admin->safe->loginCaptchaList[0] = 'Nein';
+
+$lang->admin->safe->resetPWDList[1] = 'ON';
+$lang->admin->safe->resetPWDList[0] = 'Off';
 
 $lang->admin->safe->noticeMode   = 'Password will be checked when a user logs in, or a user is added or edited.';
 $lang->admin->safe->noticeStrong = '';

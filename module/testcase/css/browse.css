@@ -24,3 +24,6 @@ tbody > tr > td > .btn-icon {margin-right: 3px;}
 tbody > tr > td   .icon-share {font-size: 9px;}
 
 .table td.c-title > a:first-child {display: inline-block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;}
+
+#importToLib .select-lib {width: 100px; text-align: right;}
+#subHeader #currentBranch + #dropMenu .col-left {padding-bottom: 30px;}

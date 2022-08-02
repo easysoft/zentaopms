@@ -3,7 +3,7 @@
  * The batch edit view of todo module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Congzhi Chen <congzhi@cnezsoft.com>
  * @package     todo
  * @version     $Id: create.html.php 2741 2012-04-07 07:24:21Z areyou123456 $
@@ -13,6 +13,8 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/datepicker.html.php';?>
 <?php js::set('moduleList', $config->todo->moduleList)?>
+<?php js::set('noOptions', $lang->todo->noOptions);?>
+<?php js::set('chosenType', $lang->todo->typeList);?>
 <?php js::set('objectsMethod', $config->todo->getUserObjectsMethod)?>
 <div id="mainContent" class="main-content">
   <div class="main-header">
@@ -30,19 +32,19 @@
   {
       if($field)$visibleFields[$field] = '';
   }
-  $columns = count($visibleFields) + 4;
+  $columns = count($visibleFields) + 5;
   ?>
   <form method='post' target='hiddenwin' action='<?php echo $this->inlink('batchEdit', "from=todoBatchEdit");?>'>
     <table class='table table-form'>
       <thead>
         <tr class='text-center'>
-          <th class='c-id'>   <?php echo $lang->idAB;?></th>
-          <th class='c-date'>  <?php echo $lang->todo->date;?></th>
-          <th class='c-type'>  <?php echo $lang->todo->type;?></th>
+          <th class='c-id'><?php echo $lang->idAB;?></th>
+          <th class='c-date'><?php echo $lang->todo->date;?></th>
+          <th class='c-type'><?php echo $lang->todo->type;?></th>
           <th class='c-pri<?php echo zget($visibleFields, 'pri', ' hidden')?>'>   <?php echo $lang->todo->pri;?></th>
-          <th><?php echo $lang->todo->name;?></th>
-          <th <?php echo zget($visibleFields, 'desc', "class='hidden'")?>><?php echo $lang->todo->desc;?></th>
-          <th class='c-date<?php echo zget($visibleFields, 'beginAndEnd', ' hidden')?>'><?php echo $lang->todo->beginAndEnd;?></th>
+          <th class='c-name'><?php echo $lang->todo->name;?></th>
+          <th class='c-assignedTo'><?php echo $lang->todo->assignedTo;?></th>
+          <th class='c-beginAndEnd<?php echo zget($visibleFields, 'beginAndEnd', ' hidden')?>'><?php echo $lang->todo->beginAndEnd;?></th>
           <th class='c-status<?php echo zget($visibleFields, 'status', ' hidden')?>'>   <?php echo $lang->todo->status;?></th>
         </tr>
       </thead>
@@ -64,8 +66,8 @@
           }
           ?>
         </td>
-        <td style='overflow:visible' <?php echo zget($visibleFields, 'pri', "class='hidden'")?>><?php echo html::select("pris[$todo->id]", $lang->todo->priList, $todo->pri, "class='form-control chosen'");?></td>
-        <td style='overflow:visible'>
+        <td class="visible <?php echo zget($visibleFields, 'pri', 'hidden')?>"><?php echo html::select("pris[$todo->id]", $lang->todo->priList, $todo->pri, "class='form-control chosen'");?></td>
+        <td class='visible'>
           <div id='<?php echo "nameBox" . $todo->id;?>' class='hidden'><?php echo html::input("names[$todo->id]", $todo->name, "class='text-left form-control hiddenwin'"); ?></div>
           <div class='<?php echo "nameBox" . $todo->id;?> text-left'>
           <?php
@@ -112,8 +114,8 @@
           ?>
           </div>
         </td>
-        <td <?php echo zget($visibleFields, 'desc', "class='hidden'")?>><?php echo html::textarea("descs[$todo->id]", $todo->desc, "rows='1' class='form-control'");?></td>
-        <td <?php echo zget($visibleFields, 'beginAndEnd', "class='hidden'")?> style='overflow:visible'>
+        <td class='visible'><?php echo html::select("assignedTos[$todo->id]", $users, $todo->assignedTo, "class='form-control chosen'");?></td>
+        <td class="visible <?php echo zget($visibleFields, 'beginAndEnd', 'hidden')?>">
           <div class='input-group'>
             <?php
             echo html::select("begins[$todo->id]", $times, substr($todo->begin, 0, 2) . substr($todo->begin, 3, 2), "onchange=\"setBeginsAndEnds($todo->id, 'begin');\" class='form-control chosen control-time-begin'" . ((isset($visibleFields['beginAndEnd']) && $todo->begin != '') ? '' : " disabled"));
@@ -128,7 +130,7 @@
             </span>
           </div>
         </td>
-        <td <?php echo zget($visibleFields, 'status', "class='hidden'")?> style='overflow:visible'><?php echo html::select("status[$todo->id]", $lang->todo->statusList, $todo->status, "class='form-control chosen'");?></td>
+        <td class="visible <?php echo zget($visibleFields, 'status', 'hidden')?>"><?php echo html::select("status[$todo->id]", $lang->todo->statusList, $todo->status, "class='form-control chosen'");?></td>
       </tr>
       <?php endforeach;?>
       </tbody>

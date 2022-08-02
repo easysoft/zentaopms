@@ -3,7 +3,7 @@
  * The action module zh-tw file of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青島易軟天創網絡科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Chunsheng Wang <chunsheng@cnezsoft.com>
  * @package     action
  * @version     $Id: zh-tw.php 4955 2013-07-02 01:47:21Z chencongzhi520@gmail.com $
@@ -127,12 +127,14 @@ $lang->action->objectTypes['gitlabgroup']      = 'GitLab群組';
 $lang->action->objectTypes['gitlabbranch']     = 'GitLab分支';
 $lang->action->objectTypes['gitlabbranchpriv'] = 'GitLab保護分支';
 $lang->action->objectTypes['gitlabtag']        = 'GitLab標籤';
+$lang->action->objectTypes['giteauser']        = 'Gitea用戶';
 $lang->action->objectTypes['kanbanspace']      = '看板空間';
 $lang->action->objectTypes['kanban']           = '看板';
 $lang->action->objectTypes['kanbanregion']     = '看板區域';
 $lang->action->objectTypes['kanbanlane']       = '看板泳道';
 $lang->action->objectTypes['kanbancolumn']     = '看板列';
 $lang->action->objectTypes['kanbancard']       = '看板卡片';
+$lang->action->objectTypes['repo']             = '代码库';
 
 /* 用來描述操作歷史記錄。*/
 $lang->action->desc = new stdclass();

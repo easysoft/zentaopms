@@ -75,17 +75,39 @@ class productplanModel extends model
      * @param  object $pager
      * @param  string $orderBy
      * @param  string $param skipparent
+     * @param  int    $queryID
      * @access public
      * @return object
      */
-    public function getList($product = 0, $branch = 0, $browseType = 'undone', $pager = null, $orderBy = 'begin_desc', $param = '')
+    public function getList($product = 0, $branch = 0, $browseType = 'undone', $pager = null, $orderBy = 'begin_desc', $param = '', $queryID = 0)
     {
+        if(!empty($queryID))
+        {
+            $query = $this->loadModel('search')->getQuery($queryID);
+            if($query)
+            {
+                $this->session->set('productplanQuery', $query->sql);
+                $this->session->set('productplanForm', $query->form);
+            }
+            else
+            {
+                $this->session->set('productplanQuery', ' 1 = 1');
+            }
+        }
+        else
+        {
+            if($this->session->productplanQuery == false) $this->session->set('productplanQuery', ' 1 = 1');
+        }
+
+        $productplanQuery = $this->session->productplanQuery;
+
         $date  = date('Y-m-d');
         $plans = $this->dao->select('*')->from(TABLE_PRODUCTPLAN)->where('product')->eq($product)
             ->andWhere('deleted')->eq(0)
             ->beginIF(!empty($branch) and $branch != 'all')->andWhere('branch')->eq($branch)->fi()
-            ->beginIF(strpos(',all,undone,', ",$browseType,") === false)->andWhere('status')->eq($browseType)->fi()
+            ->beginIF(strpos(',all,undone,bySearch,', ",$browseType,") === false)->andWhere('status')->eq($browseType)->fi()
             ->beginIF($browseType == 'undone')->andWhere('status')->in('wait,doing')->fi()
+            ->beginIF($browseType == 'bySearch')->andWhere($productplanQuery)->fi()
             ->beginIF(strpos($param, 'skipparent') !== false)->andWhere('parent')->ne(-1)->fi()
             ->orderBy($orderBy)
             ->page($pager)
@@ -99,6 +121,7 @@ class productplanModel extends model
             $planProjects = $this->dao->select('t1.*,t2.type')->from(TABLE_PROJECTPRODUCT)->alias('t1')
                 ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')
                 ->where('t1.product')->eq($product)
+                ->andWhere('t2.deleted')->eq(0)
                 ->andWhere('t1.plan')->in(array_keys($plans))
                 ->andWhere('t2.type')->in('sprint,stage,kanban')
                 ->fetchPairs('plan', 'project');
@@ -193,6 +216,7 @@ class productplanModel extends model
             ->beginIF($branch !== '')->andWhere('branch')->eq($branch)->fi()
             ->andWhere('parent')->le(0)
             ->andWhere('deleted')->eq(0)
+            ->orderBy('id_desc')
             ->fetchPairs();
 
         if($exclude) unset($planPairs[$exclude]);
@@ -224,18 +248,13 @@ class productplanModel extends model
             ->orderBy('t1.begin desc')
             ->fetchAll('id');
 
-        $plans       = $this->reorder4Children($plans);
-        $planPairs   = array();
-        $parentTitle = array();
+        $plans     = $this->reorder4Children($plans);
+        $planPairs = array();
         $this->app->loadLang('branch');
         foreach($plans as $plan)
         {
-            if($plan->parent == '-1')
-            {
-                $parentTitle[$plan->id] = $plan->title;
-                if($skipParent) continue;
-            }
-            if($plan->parent > 0 and isset($parentTitle[$plan->parent])) $plan->title = $parentTitle[$plan->parent] . ' /' . $plan->title;
+            if($skipParent and $plan->parent == '-1') continue;
+            if($plan->parent > 0 and isset($plans[$plan->parent])) $plan->title = $plans[$plan->parent]->title . ' /' . $plan->title;
             $planPairs[$plan->id] = $plan->title . " [{$plan->begin} ~ {$plan->end}]";
             if($plan->begin == $this->config->productplan->future and $plan->end == $this->config->productplan->future) $planPairs[$plan->id] = $plan->title . ' ' . $this->lang->productplan->future;
             if($plan->productType != 'normal') $planPairs[$plan->id] = ($plan->branchName ? $plan->branchName : $this->lang->branch->main) . ' / ' . $planPairs[$plan->id];
@@ -328,7 +347,6 @@ class productplanModel extends model
         $plans = $this->dao->select('*')->from(TABLE_PRODUCTPLAN)
             ->where('deleted')->eq(0)
             ->beginIF($products)->andWhere('product')->in($products)->fi()
-            ->beginIF(strpos($param, 'skipparent') !== false)->andWhere('parent')->ne(-1)->fi()
             ->beginIF(strpos($param, 'unexpired') !== false)->andWhere('end')->ge($date)->fi()
             ->orderBy($orderBy)
             ->fetchAll('id');
@@ -343,8 +361,8 @@ class productplanModel extends model
 
             if($field == 'name')
             {
-                if($plan->parent == '-1') $parentTitle[$plan->id] = $plan->title;
-                if($plan->parent > 0 and isset($parentTitle[$plan->parent])) $plan->title = $parentTitle[$plan->parent] . ' /' . $plan->title;
+                if($plan->parent == '-1' and strpos($param, 'skipparent') !== false) continue;
+                if($plan->parent > 0 and isset($plans[$plan->parent])) $plan->title = $plans[$plan->parent]->title . ' /' . $plan->title;
                 $planGroup[$plan->product][$plan->branch][$plan->id] = $plan->title . " [{$plan->begin} ~ {$plan->end}]";
                 if($plan->begin == $this->config->productplan->future and $plan->end == $this->config->productplan->future) $planGroup[$plan->product][$plan->branch][$plan->id] = $plan->title . ' ' . $this->lang->productplan->future;
             }
@@ -396,16 +414,19 @@ class productplanModel extends model
      */
     public function getBranchPlanPairs($productID, $branches = '', $skipParent = false)
     {
-        $plans = $this->dao->select('branch,id,title,begin,end')->from(TABLE_PRODUCTPLAN)
+        $plans = $this->dao->select('parent,branch,id,title,begin,end')->from(TABLE_PRODUCTPLAN)
             ->where('product')->eq($productID)
             ->andWhere('deleted')->eq(0)
             ->beginIF($branches != '')->andWhere('branch')->in($branches)->fi()
-            ->beginIF($skipParent)->andWhere('parent')->ne(-1)->fi()
+            ->orderBy('begin desc')
             ->fetchAll('id');
 
         $planPairs = array();
         foreach($plans as $planID => $plan)
         {
+            if($skipParent and $plan->parent == '-1') continue;
+
+            if($plan->parent > 0 and isset($plans[$plan->parent])) $plan->title = $plans[$plan->parent]->title . ' /' . $plan->title;
             $planPairs[$plan->branch][$planID] = $plan->title . ' [' . $plan->begin . '~' . $plan->end . ']';
         }
         return $planPairs;
@@ -515,19 +536,20 @@ class productplanModel extends model
                 if($plan->end !== $this->config->productplan->future and $plan->end > $parentPlan->end) dao::$errors['end'] = sprintf($this->lang->productplan->endGreaterParent, $parentPlan->end);
             }
         }
-        elseif($parentPlan and $plan->begin != $this->config->productplan->future)
+        elseif($oldPlan->parent == -1 and $plan->begin != $this->config->productplan->future)
         {
-            $childPlans = $this->getChildren($parentPlan->id);
-            $minBegin   = $plan->begin;
-            $maxEnd     = $plan->end;
+            $plan->parent = -1;
+            $childPlans   = $this->getChildren($planID);
+            $minBegin     = $plan->begin;
+            $maxEnd       = $plan->end;
             foreach($childPlans as $childID => $childPlan)
             {
                 $childPlan = isset($plans[$childID]) ? $plans[$childID] : $childPlan;
                 if($childPlan->begin < $minBegin) $minBegin = $childPlan->begin;
                 if($childPlan->end > $maxEnd) $maxEnd = $childPlan->end;
             }
-            if($minBegin < $plan->begin and $minBegin != $this->config->productplan->future) dao::$errors['begin'] = sprintf($this->lang->productplan->beginGreaterChildTip, $planID, $plan->begin, $minBegin);
-            if($maxEnd > $plan->end and $maxEnd != $this->config->productplan->future) dao::$errors['end'] = sprintf($this->lang->productplan->endLetterChildTip, $planID, $plan->end, $maxEnd);
+            if($minBegin < $plan->begin and $minBegin != $this->config->productplan->future) dao::$errors['begin'] = sprintf($this->lang->productplan->beginGreaterChildTip, $oldPlan->title, $plan->begin, $minBegin);
+            if($maxEnd > $plan->end and $maxEnd != $this->config->productplan->future) dao::$errors['end'] = sprintf($this->lang->productplan->endLetterChildTip, $oldPlan->title, $plan->end, $maxEnd);
         }
 
         if(dao::isError()) return false;
@@ -615,6 +637,9 @@ class productplanModel extends model
     {
         $parent      = $this->getByID($parentID);
         $childStatus = $this->dao->select('status')->from(TABLE_PRODUCTPLAN)->where('parent')->eq($parentID)->andWhere('deleted')->eq(0)->fetchPairs();
+
+        /* If the subplan is empty, update the plan. */
+        if(empty($childStatus)) $this->dao->update(TABLE_PRODUCTPLAN)->set('parent')->eq(0)->where('id')->eq($parentID)->exec();
 
         if(count($childStatus) == 1 and isset($childStatus['wait']))
         {
@@ -1167,10 +1192,35 @@ class productplanModel extends model
 
         if($type == 'view')
         {
-            if(common::hasPriv('productplan', 'edit', $plan)) $menu .= html::a(helper::createLink('productplan', 'edit', $params), "<i class='icon-common-edit icon-edit'></i> " . $this->lang->edit, '', "class='btn btn-link' title='{$this->lang->edit}'");
-            if($plan->parent >= 0 && common::hasPriv('productplan', 'delete', $plan)) $menu .= html::a(helper::createLink('productplan', 'delete', $params), "<i class='icon-common-delete icon-trash'></i> " . $this->lang->delete, '', "class='btn btn-link' title='{$this->lang->delete}' target='hiddenwin'");
+            $menu .= "<div class='divider'></div>";
+            $menu .= $this->buildFlowMenu('productplan', $plan, $type, 'direct');
+            $menu .= "<div class='divider'></div>";
+
+            $editClickable   = $this->buildMenu('productplan', 'edit',   $params, $plan, $type, '', '', '', '', '', '', false);
+            $deleteClickable = $this->buildMenu('productplan', 'delete', $params, $plan, $type, '', '', '', '', '', '', false);
+            if(common::hasPriv('productplan', 'edit')   and $editClickable)   $menu .= html::a(helper::createLink('productplan', 'edit', $params), "<i class='icon-common-edit icon-edit'></i> " . $this->lang->edit, '', "class='btn btn-link' title='{$this->lang->edit}'");
+            if(common::hasPriv('productplan', 'delete') and $deleteClickable) $menu .= html::a(helper::createLink('productplan', 'delete', $params), "<i class='icon-common-delete icon-trash'></i> " . $this->lang->delete, '', "class='btn btn-link' title='{$this->lang->delete}' target='hiddenwin'");
         }
 
         return $menu;
+    }
+
+    /**
+     * Build search form.
+     *
+     * @param  int    $queryID
+     * @param  string $actionURL
+     * @param  object $product
+     * @access public
+     * @return void
+     */
+    public function buildSearchForm($queryID, $actionURL, $product)
+    {
+        $this->config->productplan->search['actionURL'] = $actionURL;
+        $this->config->productplan->search['queryID']   = $queryID;
+
+        if($product->type != 'normal') $this->config->productplan->search['params']['branch']['values']  = array('' => '', '0' => $this->lang->branch->main) + $this->loadModel('branch')->getPairs($product->id, 'noempty');
+        if($product->type == 'normal') unset($this->config->productplan->search['fields']['branch']);
+        $this->loadModel('search')->setSearchParams($this->config->productplan->search);
     }
 }

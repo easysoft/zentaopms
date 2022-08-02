@@ -3,7 +3,7 @@
  * The report block view file of block module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2018 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
- * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @license     ZPL(http://zpl.pub/page/zplv12.html) or AGPL(https://www.gnu.org/licenses/agpl-3.0.en.html)
  * @author      Gang Liu <liugang@cnezsoft.com>
  * @package     block
  * @version     $Id$
@@ -127,10 +127,10 @@ $(function()
               <div class="tile-title"><?php echo $lang->SRCommon;?></div>
               <?php if($product->stories):?>
               <div class="tile-amount"><?php echo array_sum($product->stories);?></div>
-              <?php common::printLink('product', 'browse', "productID={$product->id}&branch=&type=allstory", $lang->story->viewAll . '<span class="label label-badge label-icon"><i class="icon icon-arrow-right"></i></span>', '', 'class="btn btn-primary btn-circle btn-icon-right btn-sm"');?>
+              <?php common::printLink('product', 'browse', "productID={$product->id}&branch=&type=allstory", $lang->story->viewAll . '<span class="label label-badge label-icon"><i class="icon icon-arrow-right"></i></span>', '', 'class="btn btn-primary btn-circle btn-icon-right btn-sm" data-app="product"');?>
               <?php else:?>
               <div class="tile-amount">0</div>
-              <?php common::printLink('story', 'create', "productID={$product->id}", '<span class="label label-badge label-icon"><i class="icon icon-plus"></i></span>' . $lang->story->create, '', 'class="btn btn-primary btn-circle btn-icon-left btn-sm"');?>
+              <?php common::printLink('story', 'create', "productID={$product->id}", '<span class="label label-badge label-icon"><i class="icon icon-plus"></i></span>' . $lang->story->create, '', 'class="btn btn-primary btn-circle btn-icon-left btn-sm" data-app="product"');?>
               <?php endif;?>
             </div>
             <ul class="types-line">
@@ -157,7 +157,7 @@ $(function()
               </div>
               <?php else:?>
               <div class="actions">
-                <?php common::printLink('productplan', 'create', "productID={$product->id}", "<i class='icon icon-plus'></i> " . $lang->productplan->create, '', "class='btn btn-info'");?>
+                <?php common::printLink('productplan', 'create', "productID={$product->id}", "<i class='icon icon-plus'></i> " . $lang->productplan->create, '', "class='btn btn-info' data-app='product'");?>
               </div>
               <?php endif;?>
               <div class="type-info">
@@ -190,7 +190,7 @@ $(function()
               </div>
               <?php else:?>
               <div class="actions">
-                <?php common::printLink('release', 'create', "productID={$product->id}", "<i class='icon icon-plus'></i> " . $lang->release->create, '', "class='btn btn-info'");?>
+                <?php common::printLink('release', 'create', "productID={$product->id}", "<i class='icon icon-plus'></i> " . $lang->release->create, '', "class='btn btn-info' data-app='product'");?>
               </div>
               <?php endif;?>
               <div class="type-info">

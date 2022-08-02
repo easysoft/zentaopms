@@ -20,7 +20,7 @@ $config->testcase->export->listFields   = array('type', 'stage', 'pri', 'status'
 $config->testcase->exportFields = '
     id, product, branch, module, story,
     title, precondition, stepDesc, stepExpect, real, keywords,
-    pri, type, stage, status, bugsAB, resultsAB, stepNumberAB, lastRunResult, openedBy, openedDate,
+    pri, type, stage, status, bugsAB, resultsAB, stepNumberAB, lastRunner, lastRunDate, lastRunResult, openedBy, openedDate,
     lastEditedBy, lastEditedDate, version, linkCase, files';
 
 $config->testcase->customCreateFields      = 'story,stage,pri,keywords';
@@ -75,6 +75,7 @@ $config->testcase->search['params']['lastRunDate']    = array('operator' => '=',
 $config->testcase->search['params']['openedDate']     = array('operator' => '=', 'control' => 'input', 'values' => '', 'class' => 'date');
 $config->testcase->search['params']['lastEditedDate'] = array('operator' => '=', 'control' => 'input', 'values' => '', 'class' => 'date');
 
+global $app;
 $config->testcase->datatable = new stdclass();
 $config->testcase->datatable->defaultField = array('id', 'pri', 'title', 'type', 'openedBy', 'lastRunner', 'lastRunDate', 'lastRunResult', 'status', 'bugs', 'results', 'stepNumber', 'actions');
 
@@ -159,9 +160,17 @@ $config->testcase->datatable->fieldList['lastRunResult']['fixed']    = 'no';
 $config->testcase->datatable->fieldList['lastRunResult']['width']    = '70';
 $config->testcase->datatable->fieldList['lastRunResult']['required'] = 'no';
 
-$config->testcase->datatable->fieldList['status']['title']    = 'statusAB';
+if($app->rawMethod == 'cases')
+{
+    $config->testcase->datatable->fieldList['status']['title'] = 'executionStatus';
+    $config->testcase->datatable->fieldList['status']['width'] = '90';
+}
+else
+{
+    $config->testcase->datatable->fieldList['status']['title'] = 'statusAB';
+    $config->testcase->datatable->fieldList['status']['width'] = '70';
+}
 $config->testcase->datatable->fieldList['status']['fixed']    = 'no';
-$config->testcase->datatable->fieldList['status']['width']    = '70';
 $config->testcase->datatable->fieldList['status']['required'] = 'no';
 
 $config->testcase->datatable->fieldList['lastEditedBy']['title']    = 'lastEditedBy';
@@ -186,21 +195,21 @@ $config->testcase->datatable->fieldList['story']['required'] = 'no';
 
 $config->testcase->datatable->fieldList['bugs']['title']    = 'B';
 $config->testcase->datatable->fieldList['bugs']['fixed']    = 'no';
-$config->testcase->datatable->fieldList['bugs']['width']    = '30';
+$config->testcase->datatable->fieldList['bugs']['width']    = '32';
 $config->testcase->datatable->fieldList['bugs']['required'] = 'no';
 $config->testcase->datatable->fieldList['bugs']['sort']     = 'no';
 $config->testcase->datatable->fieldList['bugs']['name']     = $lang->testcase->bugs;
 
 $config->testcase->datatable->fieldList['results']['title']    = 'R';
 $config->testcase->datatable->fieldList['results']['fixed']    = 'no';
-$config->testcase->datatable->fieldList['results']['width']    = '30';
+$config->testcase->datatable->fieldList['results']['width']    = '32';
 $config->testcase->datatable->fieldList['results']['required'] = 'no';
 $config->testcase->datatable->fieldList['results']['sort']     = 'no';
 $config->testcase->datatable->fieldList['results']['name']     = $lang->testcase->results;
 
 $config->testcase->datatable->fieldList['stepNumber']['title']    = 'S';
 $config->testcase->datatable->fieldList['stepNumber']['fixed']    = 'no';
-$config->testcase->datatable->fieldList['stepNumber']['width']    = '30';
+$config->testcase->datatable->fieldList['stepNumber']['width']    = '32';
 $config->testcase->datatable->fieldList['stepNumber']['required'] = 'no';
 $config->testcase->datatable->fieldList['stepNumber']['sort']     = 'no';
 $config->testcase->datatable->fieldList['stepNumber']['name']     = $lang->testcase->stepNumber;
