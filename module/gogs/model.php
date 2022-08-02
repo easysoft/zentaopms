@@ -260,8 +260,19 @@ class gogsModel extends model
         $url      = sprintf($apiRoot, "/user");
         $httpData = commonModel::httpWithHeader($url);
         $user     = json_decode($httpData['body']);
-        if(empty($user)) return false;
-        if(isset($users->message) or isset($users->error)) return null;
+        if(empty($httpData['header'])) return false;
+        if(empty($user)) return null;
+
+        /* Check whether the token belongs to the administrator by edit user. */
+        $editUserUrl = sprintf($apiRoot, "/admin/users/" . $user->username);
+        $data        = new stdclass();
+        $data->login_name = $user->login;
+        $data->email      = $user->email;
+
+        $result = commonModel::http($editUserUrl, $data, array(), array(), 'data', 'PATCH');
+        $user   = json_decode($result);
+        if(empty($user)) return null;
+
         return true;
     }
 
