@@ -28,8 +28,11 @@ class Gitea
             $project = $app->control->loadModel('gitea')->apiGetSingleProject($repo->serviceHost, $repo->serviceProject);
             if(isset($project->tokenCloneUrl))
             {
-                $cmd = 'git clone --progress -v "' . $project->tokenCloneUrl . '" "' . $this->root . '"';
+                $cmd = 'git clone --progress -v "' . $project->tokenCloneUrl . '" "' . $this->root . '"  > "' . $app->getTmpRoot() . "log/clone.progress." . strtolower($repo->SCM) . ".{$repo->name}.log\" 2>&1 &";
+                if(PHP_OS == 'WINNT') $cmd = "start /b $cmd";
                 exec($cmd);
+
+                return $app->control->locate($app->control->createLink('repo', 'showSyncCommit', "repoID={$repo->id}"));
             }
         }
 
@@ -551,7 +554,7 @@ class Gitea
     {
         if(!scm::checkRevision($revision)) return array();
 
-        if($revision == 'HEAD' and $branch) $revision = $branch;
+        if($revision == 'HEAD' and $branch) $revision = 'origin/' . $branch;
         $revision = is_numeric($revision) ? "--skip=$revision $branch" : $revision;
         $count    = $count == 0 ? '' : "-n $count";
 

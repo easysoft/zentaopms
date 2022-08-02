@@ -1,5 +1,5 @@
 <?php
-class GitRepo
+class Gogs
 {
     public $client;
     public $root;
@@ -22,6 +22,19 @@ class GitRepo
 
         $this->client = $client;
         $this->root   = rtrim($root, DIRECTORY_SEPARATOR);
+        if(!realpath($this->root) and !empty($repo))
+        {
+            global $app;
+            $project = $app->control->loadModel('gogs')->apiGetSingleProject($repo->serviceHost, $repo->serviceProject);
+            if(isset($project->tokenCloneUrl))
+            {
+                $cmd = 'git clone --progress -v "' . $project->tokenCloneUrl . '" "' . $this->root . '"  > "' . $app->getTmpRoot() . "log/clone.progress." . strtolower($repo->SCM) . ".{$repo->name}.log\" 2>&1 &";
+                if(PHP_OS == 'WINNT') $cmd = "start /b $cmd";
+                exec($cmd);
+
+                return $app->control->locate($app->control->createLink('repo', 'showSyncCommit', "repoID={$repo->id}"));
+            }
+        }
 
         $branch = isset($_COOKIE['repoBranch']) ? $_COOKIE['repoBranch'] : '';
         if($branch)
@@ -52,7 +65,8 @@ class GitRepo
         chdir($this->root);
         if(!empty($path)) $sub = ":$path";
         if(!empty($this->branch))$revision = $this->branch;
-        $cmd = escapeCmd("$this->client ls-tree -l $revision$sub");
+        execCmd(escapeCmd("$this->client pull"));
+        $cmd  = escapeCmd("$this->client ls-tree -l $revision$sub");
         $list = execCmd($cmd . ' 2>&1', 'array', $result);
         if($result) return array();
 
@@ -540,12 +554,15 @@ class GitRepo
     {
         if(!scm::checkRevision($revision)) return array();
 
-        if($revision == 'HEAD' and $branch) $revision = 'origin/' . $branch;
-        $revision = is_numeric($revision) ? "--skip=$revision $branch" : $revision;
-        $count    = $count == 0 ? '' : "-n $count";
+        if($revision == 'HEAD' and $branch) $revision = $branch;
+        $count = $count == 0 ? '' : "-n $count";
 
         chdir($this->root);
-        if($branch) execCmd(escapeCmd("$this->client checkout $branch"), 'array');
+        if($branch)
+        {
+            execCmd(escapeCmd("$this->client checkout $branch"));
+            execCmd(escapeCmd("$this->client pull"));
+        }
 
         $list    = execCmd(escapeCmd("$this->client log $count $revision -- ./"), 'array');
         $commits = $this->parseLog($list);
@@ -603,8 +620,7 @@ class GitRepo
     {
         $url      = new stdclass();
         $remote   = execCmd(escapeCmd("$this->client remote -v"), 'array');
-        if(strpos($remote[0], 'oauth2:')) $remote[0] = preg_replace('/oauth2.*@/', '', $remote[0]);
-        $pregHttp = '/http(s)?:\/\/(www\.)?[a-zA-Z0-9][-a-zA-Z0-9]{0,62}(\.[a-zA-Z0-9][-a-zA-Z0-9]{0,62})+(:\d+)*(\/\w+)*(\.git)?/';
+        $pregHttp = '/http(s)?:\/\/(www\.)?[a-zA-Z0-9][-a-zA-Z0-9]{0,62}(\.[a-zA-Z0-9][-a-zA-Z0-9]{0,62})+(:\d+)*(\/\w+)*\.git/';
         $pregSSH  = '/ssh:\/\/git@[a-zA-Z0-9][-a-zA-Z0-9]{0,62}(\.[a-zA-Z0-9][-a-zA-Z0-9]{0,62})+(:\d+)*(\/\w+)*\.git/';
 
         if(preg_match($pregHttp, $remote[0], $matches)) $url->http = $matches[0];

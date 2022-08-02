@@ -53,7 +53,7 @@ if(isset($entry)) $pathInfo .= '&type=file';
     <?php if(common::hasPriv('repo', 'diff')) echo html::submitButton($lang->repo->diff, '', count($revisions) < 2 ? 'disabled btn btn-primary' : 'btn btn-primary')?>
     <?php echo html::a($this->repo->createLink('log', "repoID=$repoID&objectID=$objectID&entry=" . $this->repo->encodePath($path) . "&revision=HEAD&type=$logType"), $lang->repo->allLog, '', "class='allLogs' data-app='{$this->app->tab}'");?>
     <div class='pull-right'>
-        <ul id="repoPageSize" class="pager" data-ride="pager" data-elements="size_menu" data-rec-total="<?php echo $pager->recTotal;?>" data-rec-per-page="<?php echo $pager->recPerPage;?>" data-page="<?php echo $pager->pageID;?>"></ul>
+      <ul id="repoPageSize" class="pager" data-ride="pager" data-elements="size_menu" data-rec-total="<?php echo $pager->recTotal;?>" data-rec-per-page="<?php echo $pager->recPerPage;?>" data-page="<?php echo $pager->pageID;?>"></ul>
       <div class='btn-group'>
         <?php
         $prePage  = $pager->pageID == 1 ? 1 : $pager->pageID - 1;

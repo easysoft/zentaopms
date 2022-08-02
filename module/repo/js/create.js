@@ -54,7 +54,7 @@ $(function()
  */
 function scmChanged(scm)
 {
-    if(scm == 'Git' || scm == 'Gitea')
+    if(scm == 'Git' || scm == 'Gitea' || scm == 'Gogs')
     {
         $('.account-fields').addClass('hidden');
 
@@ -76,11 +76,12 @@ function scmChanged(scm)
     }
     else
     {
+        $('.tips').addClass('hidden');
         $('tr.service').toggle(true);
-        if(scm == 'Gitea')
+        if(scm == 'Gitea' || scm == 'Gogs')
         {
-            $('tr.hide-service:not(".hide-gitea")').toggle(true);
-            $('tr.hide-gitea').toggle(false);
+            $('tr.hide-service:not(".hide-git")').toggle(true);
+            $('tr.hide-git').toggle(false);
         }
         else
         {

@@ -13,7 +13,7 @@
 <?php include '../../common/view/header.html.php';?>
 <div id="mainMenu" class="clearfix">
   <div class="btn-toolbar pull-left">
-    <?php echo html::a($this->createLink('repo', 'browse'), "<span class='text'>{$lang->repo->maintain}</span>", '', "class='btn btn-link btn-active-text'");?>
+    <?php echo html::a($this->createLink('repo', 'maintain'), "<span class='text'>{$lang->repo->maintain}</span>", '', "class='btn btn-link btn-active-text'");?>
   </div>
   <div class='btn-toolbar pull-right'>
     <?php if(common::hasPriv('repo', 'create')) echo html::a(helper::createLink('repo', 'create'), "<i class='icon icon-plus'></i> " . $this->lang->repo->create, '', "class='btn btn-primary'");?>
@@ -30,7 +30,7 @@
           <th class='c-name text-left'><?php common::printOrderLink('name', $orderBy, $vars, $lang->repo->name); ?></th>
           <th class='c-product text-left'><?php common::printOrderLink('product', $orderBy, $vars, $lang->repo->product); ?></th>
           <th class='text-left'><?php echo $lang->repo->path; ?></th>
-          <th class='c-actions-3'><?php echo $lang->actions; ?></th>
+          <th class='c-actions-4 text-center'><?php echo $lang->actions; ?></th>
         </tr>
       </thead>
       <tbody>
@@ -56,12 +56,18 @@
           <td class='text-left c-actions'>
             <?php
             common::printIcon('repo', 'edit', "repoID=$repo->id&objectID=$objectID", '', 'list', 'edit');
+
+            $jobID       = 0;
+            $execClass   = 'disabled';
+            $reportClass = 'disabled';
             if(isset($sonarRepoList[$repo->id]))
             {
-                $jobID = $sonarRepoList[$repo->id]->id;
-                common::printIcon('sonarqube', 'execJob', "jobID=$jobID", '', 'list', 'sonarqube', 'hiddenwin');
-                if(in_array($jobID, $successJobs)) common::printIcon('sonarqube', 'reportView', "jobID=$jobID", '', 'list', 'audit', '', 'iframe', true);
+                $execClass = '';
+                $jobId = $sonarRepoList[$repo->id]->id;
+                if(in_array($jobID, $successJobs)) $reportClass = '';
             }
+            common::printIcon('sonarqube', 'execJob', "jobID=$jobID", '', 'list', 'sonarqube', 'hiddenwin', $execClass);
+            common::printIcon('sonarqube', 'reportView', "jobID=$jobID", '', 'list', 'audit', '', "iframe $reportClass", true);
             common::printIcon('repo', 'delete', "repoID=$repo->id&objectID=$objectID", '', 'list', 'trash', 'hiddenwin');
             ?>
           </td>

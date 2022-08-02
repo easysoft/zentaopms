@@ -436,17 +436,22 @@ class repoModel extends model
                 $repo = str_replace('[gitlab]', '', $repo);
                 $repos['Gitlab'][$id] = $repo;
             }
-            if(strpos($repo, '[gitea]') !== false)
+            elseif(strpos($repo, '[gogs]') !== false)
+            {
+                $repo = str_replace('[gogs]', '', $repo);
+                $repos['Gogs'][$id] = $repo;
+            }
+            elseif(strpos($repo, '[gitea]') !== false)
             {
                 $repo = str_replace('[gitea]', '', $repo);
                 $repos['Gitea'][$id] = $repo;
             }
-            if(strpos($repo, '[svn]') !== false)
+            elseif(strpos($repo, '[svn]') !== false)
             {
                 $repo = str_replace('[svn]', '', $repo);
                 $repos['SVN'][$id] = $repo;
             }
-            if(strpos($repo, '[git]') !== false)
+            elseif(strpos($repo, '[git]') !== false)
             {
                 $repo = str_replace('[git]', '', $repo);
                 $repos['Git'][$id] = $repo;
@@ -1415,17 +1420,19 @@ class repoModel extends model
                 return false;
             }
         }
-        elseif($scm == 'Gitea')
+        elseif(in_array($scm, array('Gitea', 'Gogs')))
         {
             if($this->post->name != '' and $this->post->serviceProject != '')
             {
-                $project = $this->loadModel('gitea')->apiGetSingleProject($this->post->serviceHost, $this->post->serviceProject);
+                $module  = strtolower($scm);
+                $project = $this->loadModel($module)->apiGetSingleProject($this->post->serviceHost, $this->post->serviceProject);
                 if(isset($project->tokenCloneUrl))
                 {
-                    $path = dirname(dirname(dirname(__FILE__))) . '/tmp/repo/' . $this->post->name . '_gitea';
+                    $path = $this->app->getAppRoot() . 'www/data/repo/' . $this->post->name . '_' . $module;
                     if(!realpath($path))
                     {
-                        $cmd = 'git clone --progress -v "' . $project->tokenCloneUrl . '" "' . $path . '"';
+                        $cmd = 'git clone --progress -v "' . $project->tokenCloneUrl . '" "' . $path . '"  > "' . $this->app->getTmpRoot() . "log/clone.progress.$module.{$this->post->name}.log\" 2>&1 &";
+                        if(PHP_OS == 'WINNT') $cmd = "start /b $cmd";
                         exec($cmd);
                     }
                     $_POST['path'] = $path;
@@ -2073,7 +2080,7 @@ class repoModel extends model
             $repo->password = $service ? $service->token : '';
             $repo->codePath = $project ? $project->web_url : $repo->path;
         }
-        elseif($repo->SCM == 'Gitea')
+        elseif(in_array($repo->SCM, array('Gitea', 'Gogs')))
         {
             $repo->codePath = $service ? "{$service->url}/{$repo->serviceProject}" : $repo->path;
         }
@@ -2208,6 +2215,15 @@ class repoModel extends model
         elseif($repo->SCM == 'Gitea')
         {
             $project = $this->loadModel('gitea')->apiGetSingleProject($repo->gitService, $repo->project);
+            if(isset($project->id))
+            {
+                $url->http = $project->clone_url;
+                $url->ssh  = $project->ssh_url;
+            }
+        }
+        elseif($repo->SCM == 'Gogs')
+        {
+            $project = $this->loadModel('gogs')->apiGetSingleProject($repo->gitService, $repo->project);
             if(isset($project->id))
             {
                 $url->http = $project->clone_url;

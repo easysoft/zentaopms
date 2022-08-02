@@ -127,6 +127,19 @@ class mrModel extends model
     }
 
     /**
+     * Get gogs projects.
+     *
+     * @param  int    $hostID
+     * @access public
+     * @return array
+     */
+    public function getGogsProjects($hostID = 0)
+    {
+        $projects = $this->loadModel('gogs')->apiGetProjects($hostID);
+        return array($hostID => array_column($projects, null, 'full_name'));
+    }
+
+    /**
      * Get gitlab projects.
      *
      * @param  int    $hostID
@@ -657,7 +670,7 @@ class mrModel extends model
             }
             return json_decode(commonModel::http($url, $MRObject));
         }
-        else
+        elseif($host->type == 'gitea')
         {
             $url = sprintf($this->loadModel('gitea')->getApiRoot($hostID), "/repos/$projectID/pulls");
 
@@ -679,6 +692,14 @@ class mrModel extends model
             }
             if(isset($mergeResult->state) and $mergeResult->state == 'open') $mergeResult->state = 'opened';
             if(isset($mergeResult->merged) and $mergeResult->merged) $mergeResult->state = 'merged';
+            return $mergeResult;
+        }
+        elseif($host->type == 'gogs')
+        {
+            $mergeResult = new stdClass();
+            $mergeResult->iid          = 0;
+            $mergeResult->merge_status = 'can_be_merged';
+            $mergeResult->state        = 'opened';
             return $mergeResult;
         }
     }
