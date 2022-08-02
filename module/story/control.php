@@ -2174,6 +2174,66 @@ class story extends control
     }
 
     /**
+     * Link related stories.
+     *
+     * @param  int    $storyID
+     * @param  string $browseType
+     * @param  string $excludeStories
+     * @param  int    $param
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
+     * @access public
+     * @return void
+     */
+    public function linkStories($storyID, $browseType = '', $excludeStories = '', $param = 0, $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    {
+        /* Load pager. */
+        $this->app->loadClass('pager', $static = true);
+        $pager = new pager($recTotal, $recPerPage, $pageID);
+
+        /* Get story, product, products, and queryID. */
+        $story    = $this->story->getById($storyID);
+        $products = $this->product->getPairs();
+        $queryID  = ($browseType == 'bySearch') ? (int)$param : 0;
+
+        /* Build search form. */
+        $actionURL = $this->createLink('story', 'linkStories', "storyID=$storyID&browseType=bySearch&excludeStories=$excludeStories&queryID=myQueryID", '', true);
+        $this->product->buildSearchForm($story->product, $products, $queryID, $actionURL);
+
+        $this->view->story        = $story;
+        $this->view->stories2Link = $this->story->getStories2Link($storyID, 'linkRelateSR', $browseType, $queryID, $story->type, $pager, $excludeStories);
+        $this->view->products     = $products;
+        $this->view->users        = $this->loadModel('user')->getPairs('noletter');
+        $this->view->pager        = $pager;
+
+        $this->display();
+    }
+
+    /**
+     * Link related requirements.
+     *
+     * @param  int    $storyID
+     * @param  string $browseType
+     * @param  string $excludeStories
+     * @param  int    $param
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
+     * @access public
+     * @return void
+     */
+    public function linkRequirements($storyID, $browseType = '', $excludeStories = '', $param = 0, $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    {
+        $this->lang->story->title  = str_replace($this->lang->SRCommon, $this->lang->URCommon, $this->lang->story->title);
+        $this->config->product->search['fields']['title'] = $this->lang->story->title;
+        unset($this->config->product->search['fields']['plan']);
+        unset($this->config->product->search['fields']['stage']);
+
+        echo $this->fetch('story', 'linkStories', "storyID=$storyID&browseType=$browseType&excludeStories=$excludeStories&param=$param&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID");
+    }
+
+    /**
      * Process story change.
      *
      * @param  int    $storyID

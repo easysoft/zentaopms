@@ -72,6 +72,9 @@ class storyModel extends model
         $extraStories = array_unique($extraStories);
         if(!empty($extraStories)) $story->extraStories = $this->dao->select('id,title')->from(TABLE_STORY)->where('id')->in($extraStories)->fetchPairs();
 
+        $linkStoryField = $story->type == 'story' ? 'linkStories' : 'linkRequirements';
+        if($story->{$linkStoryField}) $story->linkStoryTitles = $this->dao->select('id,title')->from(TABLE_STORY)->where('id')->in($story->{$linkStoryField})->fetchPairs();
+
         $story->children = array();
         if($story->parent == '-1') $story->children = $this->dao->select('*')->from(TABLE_STORY)->where('parent')->eq($storyID)->andWhere('deleted')->eq(0)->fetchAll('id');
 
@@ -801,9 +804,13 @@ class storyModel extends model
             ->join('reviewedBy', ',')
             ->join('mailto', ',')
             ->join('linkStories', ',')
+            ->join('linkRequirements', ',')
             ->join('childStories', ',')
             ->remove('files,labels,comment,contactListMenu,stages,reviewer')
             ->get();
+
+        if($oldStory->type == 'story' and !isset($story->linkStories)) $story->linkStories = '';
+        if($oldStory->type == 'requirement' and !isset($story->linkRequirements)) $story->linkRequirements = '';
 
         if(isset($story->plan) and is_array($story->plan)) $story->plan = trim(join(',', $story->plan), ',');
         if(isset($_POST['branch']) and $_POST['branch'] == 0) $story->branch = 0;
@@ -947,7 +954,7 @@ class storyModel extends model
                 if(empty($oldStory->plan) or empty($story->plan)) $this->setStage($storyID); // Set new stage for this story.
             }
 
-            if($oldStory->stage != $story->stage)
+            if(isset($story->stage) and $oldStory->stage != $story->stage)
             {
                 $executionIdList = $this->dao->select('t1.project')->from(TABLE_PROJECTSTORY)->alias('t1')
                     ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
@@ -963,6 +970,25 @@ class storyModel extends model
             unset($oldStory->parent);
             unset($story->parent);
             if(($this->config->edition == 'biz' || $this->config->edition == 'max') && $oldStory->feedback) $this->loadModel('feedback')->updateStatus('story', $oldStory->feedback, $story->status, $oldStory->status);
+
+            $linkStoryField = $oldStory->type == 'story' ? 'linkStories' : 'linkRequirements';
+            $linkStories    = explode(',', $story->{$linkStoryField});
+            $oldLinkStories = explode(',', $oldStory->{$linkStoryField});
+            $addStories     = array_diff($linkStories, $oldLinkStories);
+            $removeStories  = array_diff($oldLinkStories, $linkStories);
+            $changeStories  = array_merge($addStories, $removeStories);
+            $changeStories  = $this->dao->select("id,$linkStoryField")->from(TABLE_STORY)->where('id')->in(array_filter($changeStories))->fetchPairs();
+            foreach($changeStories as $changeStoryID => $changeStory)
+            {
+                if(in_array($changeStoryID, $addStories) and empty($changeStory))  $this->dao->update(TABLE_STORY)->set($linkStoryField)->eq($storyID)->where('id')->eq((int)$changeStoryID)->exec();
+                if(in_array($changeStoryID, $addStories) and !empty($changeStory)) $this->dao->update(TABLE_STORY)->set($linkStoryField)->eq("$changeStory,$storyID")->where('id')->eq((int)$changeStoryID)->exec();
+                if(in_array($changeStoryID, $removeStories))
+                {
+                    $linkStories = explode(',', $changeStory);
+                    unset($linkStories[array_search($storyID, $linkStories)]);
+                    $this->dao->update(TABLE_STORY)->set($linkStoryField)->eq(implode(',', $linkStories))->where('id')->eq((int)$changeStoryID)->exec();
+                }
+            }
             return common::createChanges($oldStory, $story);
         }
     }
@@ -2329,39 +2355,58 @@ class storyModel extends model
      * Get stories to link.
      *
      * @param  int     $storyID
-     * @param  string  $type
+     * @param  string  $type linkStories|linkRelateSR|linkRelateUR
      * @param  string  $browseType
      * @param  int     $queryID
-     * @param  varchar $storyType
+     * @param  string  $storyType
+     * @param  object  $pager
+     * @param  string  $excludeStories
      * @access public
      * @return array
      */
-    public function getStories2Link($storyID, $type = 'linkStories', $browseType = 'bySearch', $queryID = 0, $storyType = 'story')
+    public function getStories2Link($storyID, $type = 'linkStories', $browseType = 'bySearch', $queryID = 0, $storyType = 'story', $pager = null, $excludeStories = '')
     {
         $story         = $this->getById($storyID);
-        $linkedStories = $this->getRelation($storyID, $story->type);
-        $linkedStories = empty($linkedStories) ? array() : $linkedStories;
         $tmpStoryType  = $storyType == 'story' ? 'requirement' : 'story';
-
-        if($browseType == 'bySearch')
+        $stories2Link  = array();
+        if($type == 'linkRelateSR' or $type == 'linkRelateUR')
         {
-            $stories2Link = $this->getBySearch($story->product, $story->branch, $queryID, 'id', '', $tmpStoryType);
-            foreach($stories2Link as $key => $story2Link)
-            {
-                if($story2Link->id == $storyID) unset($stories2Link[$key]);
-                if(in_array($story2Link->id, explode(',', $story->$type))) unset($stories2Link[$key]);
-            }
+            $tmpStoryType   = $story->type;
+            $linkStoryField = $story->type == 'story' ? 'linkStories' : 'linkRequirements';
+            $storyIDList    = $story->id . ',' . $excludeStories . ',' . $story->{$linkStoryField};
         }
         else
         {
-            $status = $storyType == 'story' ? 'active' : 'all';
-            $stories2Link = $this->getProductStories($story->product, $story->branch, 0, $status, $tmpStoryType, $orderBy = 'id_desc');
+            $linkedStories = $this->getRelation($storyID, $story->type);
+            $linkedStories = empty($linkedStories) ? array() : $linkedStories;
+            $storyIDList   = array_keys($linkedStories);
         }
 
-        foreach($stories2Link as $id => $story)
+        if($browseType == 'bySearch')
         {
-            if(in_array($story->id, array_keys($linkedStories))) unset($stories2Link[$id]);
-            if($storyType == 'story' && $story->status == 'draft') unset($stories2Link[$id]);
+            $stories2Link = $this->getBySearch($story->product, $story->branch, $queryID, 'id_desc', '', $tmpStoryType, $storyIDList, $pager);
+
+            if($type != 'linkRelateSR' and $type != 'linkRelateUR')
+            {
+                foreach($stories2Link as $key => $story2Link)
+                {
+                    if($story2Link->id == $storyID) unset($stories2Link[$key]);
+                    if(in_array($story2Link->id, explode(',', $story->$type))) unset($stories2Link[$key]);
+                }
+            }
+        }
+        elseif($type != 'linkRelateSR' and $type != 'linkRelateUR')
+        {
+            $status = $storyType == 'story' ? 'active' : 'all';
+            $stories2Link = $this->getProductStories($story->product, $story->branch, 0, $status, $tmpStoryType, $orderBy = 'id_desc', true, $storyIDList, $pager);
+        }
+
+        if($type != 'linkRelateSR' and $type != 'linkRelateUR')
+        {
+            foreach($stories2Link as $id => $story)
+            {
+                if($storyType == 'story' and $story->status == 'draft') unset($stories2Link[$id]);
+            }
         }
 
         return $stories2Link;

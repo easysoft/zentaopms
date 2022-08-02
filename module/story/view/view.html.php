@@ -516,6 +516,20 @@
                     </ul>
                   </td>
                 </tr>
+                <tr class='text-top'>
+                  <th class='w-90px'><?php echo $lang->story->linkStories;?></th>
+                  <td>
+                    <?php
+                    if(isset($story->linkStoryTitles))
+                    {
+                        foreach($story->linkStoryTitles as $linkStoryID => $linkStoryTitle)
+                        {
+                            echo '[S] ' . html::a($this->createLink('story', 'view', "storyID=$linkStoryID", '', true), "#$linkStoryID $linkStoryTitle", '', "class='iframe' data-width='80%' title='$linkStoryTitle'") . '<br />';
+                        }
+                    }
+                    ?>
+                  </td>
+                </tr>
                 <tr>
                   <th><?php echo $lang->story->linkMR;?></th>
                   <td class='pd-0'>

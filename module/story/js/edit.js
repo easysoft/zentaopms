@@ -32,4 +32,25 @@ $(function()
             $('.feedbackBox').addClass('hidden');
         }
     });
+
+    $('#linkStoriesLink').click(function()
+    {
+        var storyIdList = '';
+        $('#linkStoriesBox input').each(function()
+        {
+            storyIdList += $(this).val() + ',';
+        });
+
+        if(storyType == 'story')
+        {
+            var link = createLink('story', 'linkStories', 'storyID=' + storyID + '&browseType=&excludeStories=' + storyIdList, '', true);
+        }
+        else
+        {
+            var link = createLink('story', 'linkRequirements', 'storyID=' + storyID + '&browseType=&excludeStories=' + storyIdList, '', true);
+        }
+
+        var modalTrigger = new $.zui.ModalTrigger({type: 'iframe', width: '95%', url: link});
+        modalTrigger.show();
+    });
 })
