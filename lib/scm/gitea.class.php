@@ -162,7 +162,7 @@ class Gitea
         {
             $localBranch = trim($localBranch);
             if(substr($localBranch, 0, 19) == 'remotes/origin/HEAD') continue;
-            if(substr($localBranch, 0, 1) == '*') $localBranch = substr($localBranch, 1);
+            if(substr($localBranch, 0, 1) == '*') continue;
             if(substr($localBranch, 0, 15) == 'remotes/origin/') $localBranch = substr($localBranch, 15);
 
             $localBranch = trim($localBranch);
