@@ -196,7 +196,7 @@ $lang->project->unlinkExecutionMember  = "该用户参与了%s%s%s个{$lang->exe
 $lang->project->unlinkExecutionMembers = "移除的团队成员还参与了项目下的执行，是否同步从执行团队中移除？";
 $lang->project->productTip             = '点击新建产品后，项目将不会关联已选中的产品。';
 $lang->project->noDevStage             = '该项目下没有研发类型的阶段，或者您没有权限访问，暂时不支持创建版本。';
-$lang->project->budgetOverrun          = '项目的预算已超出父项目集的剩余预算。';
+$lang->project->budgetOverrun          = '项目的预算已超出父项目集的剩余预算：';
 
 $lang->project->tenThousand    = '万';
 $lang->project->hundredMillion = '亿';

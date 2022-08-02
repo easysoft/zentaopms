@@ -196,7 +196,7 @@ $lang->project->unlinkExecutionMember  = "The user participated in %s executions
 $lang->project->unlinkExecutionMembers = "The team members you are removing are also in the execution team of this project. Do you want to remove them from the execution team too?";
 $lang->project->productTip             = 'After clicking New Product, the project will not be linked to the selected product.';
 $lang->project->noDevStage             = 'There is no R&D stage under this project, or you do not have access permissions. The creation of builds is not supported at the moment.';
-$lang->project->budgetOverrun          = 'The budget of the project has exceeded the remaining budget of the parent project set.';
+$lang->project->budgetOverrun          = 'The budget of the project has exceeded the remaining budget of the parent project set:';
 
 $lang->project->tenThousand    = 'Ten Thousand';
 $lang->project->hundredMillion = 'Hundred Million';
