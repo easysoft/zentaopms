@@ -40,7 +40,11 @@ $(function()
         if(parseInt($('#maxImport').val())) $('#times').html(Math.ceil(parseInt($('#allCount').html()) / parseInt($('#maxImport').val())));
     });
 
-    $('#import').click(function(){location.href = createLink('testcase', 'showImport', "productID=<?php echo $productID;?>&branch=<?php echo $branch?>&pageID=1&maxImport=" + $('#maxImport').val())})
+    $('#import').click(function()
+    {
+        $.cookie('maxImport', $('#maxImport').val());
+        location.href = "<?php echo $this->app->getURI()?>";
+    })
 });
 </script>
 <?php else:?>
