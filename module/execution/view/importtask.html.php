@@ -71,7 +71,7 @@
             {
                 if(common::hasPriv('execution', 'storyView'))
                 {
-                    echo html::a($this->createLink('execution', 'storyView', "storyid=$task->storyID", '', true), $task->storyTitle, '', "class='preview'", true, isonlybody());
+                    echo html::a($this->createLink('execution', 'storyView', "storyid=$task->storyID", '', true), $task->storyTitle, '', "class='preview'");
                 }
                 else
                 {
