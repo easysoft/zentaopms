@@ -80,7 +80,7 @@
               <?php echo html::select('budgetUnit', $budgetUnitList, $config->project->defaultCurrency, "class='form-control'");?>
               <?php endif;?>
             </div>
-            <span id='programBudget' class='text-remind hidden'><?php echo $lang->program->budgetOverrun;?></span>
+            <span id='programBudget' class='text-remind hidden'><?php echo $lang->program->budgetOverrun . zget($lang->project->currencySymbol, $parentProgram->budgetUnit) . $budgetLeft;?></span>
           </td>
           <td class='futureBox'>
             <div class='checkbox-primary future w-70px'>

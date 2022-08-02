@@ -60,7 +60,7 @@
               <?php echo html::hidden('exchangeRate', '');?>
               <?php endif;?>
             </div>
-            <span id='programBudget' class='text-remind hidden'><?php echo $lang->program->budgetOverrun;?></span>
+            <span id='programBudget' class='text-remind hidden'><?php echo $lang->program->budgetOverrun . zget($lang->project->currencySymbol, $parentProgram->budgetUnit) . $availableBudget;?></span>
           </td>
           <td class='futureBox'>
             <div class='checkbox-primary future w-70px'>
