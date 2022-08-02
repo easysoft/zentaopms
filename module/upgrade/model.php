@@ -530,6 +530,8 @@ class upgradeModel extends model
                 break;
             case '17_3':
                 $this->processBugLinkBug();
+            case '17_4':
+                $this->processCreatedInfo();
         }
 
         $this->deletePatch();
@@ -980,6 +982,8 @@ class upgradeModel extends model
                 $confirmContent .= file_get_contents($this->getUpgradeFile('17.3'));
                 $xuanxuanSql     = $this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan6.0.1.sql';
                 $confirmContent .= file_get_contents($xuanxuanSql);
+            case '17_4':
+                $confirmContent .= file_get_contents($this->getUpgradeFile('17.4'));
         }
 
         return $confirmContent;
@@ -6731,6 +6735,29 @@ class upgradeModel extends model
         {
             $linkBugs = explode(',', $linkBugs);
             $this->dao->update(TABLE_BUG)->set("linkBug = TRIM(BOTH ',' from CONCAT(linkbug, ',$bugID'))")->where('id')->in($linkBugs)->andWhere('id')->ne($bugID)->andWhere("CONCAT(',', linkBug, ',')")->notlike("%,$bugID,%")->exec();
+        }
+
+        return !dao::isError();
+    }
+
+    /**
+     * Process created information.
+     *
+     * @access public
+     * @return void
+     */
+    public function processCreatedInfo()
+    {
+        $objectTypes = array('productplan', 'release', 'testtask');
+        $tables      = array('productplan' => TABLE_PRODUCTPLAN, 'release' => TABLE_RELEASE, 'testtask' => TABLE_TESTTASK);
+
+        $actions = $this->dao->select('objectType, objectID, actor, date')->from(TABLE_ACTION)->where('objectType')->in($objectTypes)->andWhere('action')->eq('opened')->fetchGroup('objectType');
+        foreach($actions as $objectType => $objectActions)
+        {
+            foreach($objectActions as $action)
+            {
+                $this->dao->update($tables[$objectType])->set('createdBy')->eq($action->actor)->set('createdDate')->eq($action->date)->where('id')->eq($action->objectID)->exec();
+            }
         }
 
         return !dao::isError();

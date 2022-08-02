@@ -31,6 +31,8 @@ class testtaskModel extends model
         $task = fixer::input('post')
             ->setDefault('build', '')
             ->setIF($this->config->systemMode == 'new', 'project', $projectID)
+            ->setDefault('createdBy', $this->app->user->account)
+            ->setDefault('createdDate', helper::now())
             ->stripTags($this->config->testtask->editor->create['id'], $this->config->allowedTags)
             ->join('mailto', ',')
             ->join('type', ',')

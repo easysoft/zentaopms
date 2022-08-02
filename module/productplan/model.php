@@ -443,6 +443,8 @@ class productplanModel extends model
         $plan = fixer::input('post')->stripTags($this->config->productplan->editor->create['id'], $this->config->allowedTags)
             ->setIF($this->post->future || empty($_POST['begin']), 'begin', $this->config->productplan->future)
             ->setIF($this->post->future || empty($_POST['end']), 'end', $this->config->productplan->future)
+            ->setDefault('createdBy', $this->app->user->account)
+            ->setDefault('createdDate', helper::now())
             ->remove('delta,uid,future')
             ->get();
 

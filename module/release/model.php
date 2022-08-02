@@ -143,6 +143,8 @@ class releaseModel extends model
             ->setIF($projectID, 'project', $projectID)
             ->setIF($this->post->build == false, 'build', 0)
             ->setDefault('stories', '')
+            ->setDefault('createdBy',   $this->app->user->account)
+            ->setDefault('createdDate', helper::now())
             ->join('stories', ',')
             ->join('bugs', ',')
             ->join('mailto', ',')
