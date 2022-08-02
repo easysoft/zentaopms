@@ -202,11 +202,11 @@ class gogsModel extends model
     public function checkTokenAccess($url = '', $token = '')
     {
         $apiRoot  = rtrim($url, '/') . '/api/v1%s' . "?token={$token}";
-        $url      = sprintf($apiRoot, "/admin/users") . "&limit=1";
+        $url      = sprintf($apiRoot, "/user");
         $httpData = commonModel::httpWithHeader($url);
-        $users    = json_decode($httpData['body']);
-        if(empty($users)) return false;
-        if(isset($users->message) or isset($users->error)) return null;
+        $user     = json_decode($httpData['body']);
+        if(empty($user)) return false;
+        if(isset($user->message) or isset($user->error)) return null;
         return true;
     }
 

@@ -373,6 +373,7 @@ $config->objectTables['kanbangroup']  = TABLE_KANBANGROUP;
 $config->objectTables['kanbancard']   = TABLE_KANBANCARD;
 $config->objectTables['sonarqube']    = TABLE_PIPELINE;
 $config->objectTables['gitea']        = TABLE_PIPELINE;
+$config->objectTables['gogs']         = TABLE_PIPELINE;
 $config->objectTables['gitlab']       = TABLE_PIPELINE;
 $config->objectTables['jebkins']      = TABLE_PIPELINE;
 $config->objectTables['stage']        = TABLE_STAGE;

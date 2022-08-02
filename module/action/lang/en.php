@@ -128,6 +128,7 @@ $lang->action->objectTypes['whitelist']        = 'Whitelist';
 $lang->action->objectTypes['pipeline']         = 'GitLab Server';
 $lang->action->objectTypes['gitlab']           = 'GitLab Server';
 $lang->action->objectTypes['gitea']            = 'Gitea Server';
+$lang->action->objectTypes['gogs']             = 'Gogs Server';
 $lang->action->objectTypes['jenkins']          = 'Jenkins';
 $lang->action->objectTypes['mr']               = 'Merge Request';
 $lang->action->objectTypes['gitlabproject']    = 'GitLab Project';
@@ -138,6 +139,7 @@ $lang->action->objectTypes['gitlabbranchpriv'] = 'GitLab Protected Branches';
 $lang->action->objectTypes['gitlabtag']        = 'GitLab Tag';
 $lang->action->objectTypes['gitlabtagpriv']    = 'GitLab Tag Protected';
 $lang->action->objectTypes['giteauser']        = 'Gitea User';
+$lang->action->objectTypes['gogsuser']         = 'Gogs User';
 $lang->action->objectTypes['kanbanspace']      = 'Kanban Space';
 $lang->action->objectTypes['kanban']           = 'Kanban';
 $lang->action->objectTypes['kanbanregion']     = 'Kanban Region';
@@ -648,6 +650,10 @@ $lang->action->dynamicAction->gitlab['deleted'] = 'Delete GitLab Server';
 $lang->action->dynamicAction->gitea['created'] = 'Create Gitea Server';
 $lang->action->dynamicAction->gitea['edited']  = 'Edit Gitea Server';
 $lang->action->dynamicAction->gitea['deleted'] = 'Delete Gitea Server';
+
+$lang->action->dynamicAction->gogs['created'] = 'Create Gogs Server';
+$lang->action->dynamicAction->gogs['edited']  = 'Edit Gogs Server';
+$lang->action->dynamicAction->gogs['deleted'] = 'Delete Gogs Server';
 
 /* Generate the corresponding object link. */
 $lang->action->label->product     = $lang->productCommon . '|product|view|productID=%s';
