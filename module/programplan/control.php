@@ -237,4 +237,29 @@ class programplan extends control
         $response['message'] = '';
         return $this->send($response);
     }
+
+    /**
+     * Save task drag action.
+     *
+     * @access public
+     * @return void
+     */
+    public function ajaxSaveTaskDrag()
+    {
+        if(!empty($_POST))
+        {
+            if($_POST['type'] == 'task')
+            {
+                $objectID = explode('-', $_POST['id'])[1];
+            }
+            else
+            {
+                $objectID =  $_POST['id'];
+            }
+
+            $this->loadModel('task')->saveTaskDrag($objectID, $_POST['type']);
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            return $this->send(array('result' => 'success'));
+        }
+    }
 }

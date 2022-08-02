@@ -3894,4 +3894,87 @@ class taskModel extends model
 
         return $menu;
     }
+
+    public function saveTaskDrag($objectID, $objectType)
+    {
+        $post = fixer::input('post')->get();
+        if($objectType == 'task')
+        {
+            $objectData = $this->dao->select('*')->from(TABLE_TASK)->where('id')->eq($objectID)->fetch();
+            $parent     = $objectData->parent;
+            $project    = $objectData->project;
+            $execution  = $objectData->execution;
+            $stage      = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($execution)->andWhere('project')->eq($project)->fetch();
+
+            if(empty($parent))
+            {
+                $parentData = $stage;
+
+                $start  = $parentData->realBegan ? $parentData->realBegan : $parentData->begin;
+                $end    = $parentData->realEnd ? $parentData->realEnd : $parentData->deadline;
+            }
+            else
+            {
+                $parentData = $this->dao->select('*')->from(TABLE_TASK)->where('id')->eq($parent)->fetch();
+
+                $estStart  = helper::isZeroDate($parentData->estStarted)  ? '' : $parentData->estStarted;
+                $estEnd    = helper::isZeroDate($parentData->deadline)    ? '' : $parentData->deadline;
+                $realBegan = helper::isZeroDate($parentData->realStarted) ? '' : $parentData->realStarted;
+                $realEnd   = helper::isZeroDate($parentData->finishedDate) ? '' : $parentData->finishedDate;
+                $start = $realBegan ? $realBegan : $estStart;
+                $end   = $realEnd   ? $realEnd   : $estEnd;
+                if(empty($start) and $stage) $start = $stage->begin;
+                if(empty($end)   and $stage) $end   = $stage->end;
+                if($start > $end) $end = $start;
+            }
+
+            if(helper::diffDate($start, $post->start_date) > 0)
+            {
+                $arg = !empty($parent) ? $this->lang->task->parent : $this->lang->project->stage;
+                return dao::$errors = sprintf($this->lang->task->overTime, $arg, $arg);
+            }
+
+        }
+        elseif($objectType == 'plan')
+        {
+            $objectData = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($objectID)->fetch();
+            $parent     = $objectData->parent;
+            $project    = $objectData->project;
+
+            if(empty($parent))
+            {
+                $parentData = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($project)->fetch();
+            }
+            else
+            {
+                $parentData = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($parent)->fetch();
+            }
+            $start      = helper::isZeroDate($parentData->begin) ? '' : $parentData->begin;
+            $end        = helper::isZeroDate($parentData->end)   ? '' : $parentData->end;
+            $realBegan  = helper::isZeroDate($parentData->realBegan) ? '' : $parentData->realBegan;
+            $realEnd    = helper::isZeroDate($parentData->realEnd)   ? '' : $parentData->realEnd;
+
+            $startDate = $realBegan ? $realBegan : $start;
+            $endDate   = $realEnd ? $realEnd : $end;
+
+            if(helper::diffDate($startDate, $post->start_date) > 0)
+            {
+                $arg = !empty($parent) ? $this->lang->programplan->parent : $this->lang->project->common;
+                return dao::$errors = sprintf($this->lang->task->overTime, $arg, $arg);
+            }
+        }
+        else
+        {
+            return false;
+        }
+
+        $this->dao->update(TABLE_TASK)
+            ->set('estStarted')->eq($post->start_date)
+            ->set('deadline')->eq($post->end_date)
+            ->set('lastEditedBy')->eq($this->app->user->account)
+            ->where('id')->eq($objectID)
+            ->exec();
+
+        return true;
+    }
 }

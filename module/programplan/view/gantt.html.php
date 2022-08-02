@@ -60,7 +60,6 @@ form {display: block; margin-top: 0em; margin-block-end: 1em;}
 #mainContent.loading #ganttContainer {padding: 40px;}
 #mainContent.loading .scrollVer_cell,
 #mainContent.loading .scrollVer_cell {display: none;}
-#
 .gantt-fullscreen #header,
 .gantt-fullscreen #mainMenu,
 .gantt-fullscreen #footer {display: none!important;}
@@ -380,6 +379,54 @@ function exitHandler()
         location.reload();
     }
 }
+function validateResources(id)
+{
+    var task = gantt.getTask(id);
+    var from = new Date(task.start_date),
+        to   = new Date(task.end_date);
+    var status = task.status;
+    var type   = task.type;
+    var statusLang = "<?php echo $lang->task->statusList['wait'];?>";
+    flag = true;
+
+    /* Check status. */
+    if(status !== statusLang)
+    {
+        new $.zui.Messager(status + '的任务不可以拖动', {
+            type: 'danger',
+            icon: 'exclamation-sign'
+        }).show();
+        gantt.refreshData();
+        return false;
+    }
+
+    /* Check data. */
+    var postData = {
+        'id'        : task.id,
+        'start_date': from.toLocaleDateString('en-CA'),
+        'end_date'  : to.toLocaleDateString('en-CA'),
+        'type'      : type
+    };
+    var link = createLink('programplan', 'ajaxSaveTaskDrag');
+    /* Sync Close. */
+    $.ajaxSettings.async = false;
+    $.post(link, postData, function(response)
+    {
+        response = JSON.parse(response);
+        if(response.result == 'fail' && response.message)
+        {
+            new $.zui.Messager(response.message, {
+                type: 'danger',
+                icon: 'exclamation-sign'
+            }).show();
+            flag = false;
+        }
+    })
+    /* Sync Open. */
+    $.ajaxSettings.async = true;
+
+    return flag;
+}
 
 $(function()
 {
@@ -409,40 +456,45 @@ $(function()
     ?>
     gantt.serverList("userList", <?php echo json_encode($userList);?>);
 
-    gantt.config.readonly          = true;
-    gantt.config.smart_rendering   = true;
-    gantt.config.smart_scales      = true;
-    gantt.config.static_background = true;
-    gantt.config.show_task_cells   = false;
-    gantt.config.row_height        = 25;
-    gantt.config.min_column_width  = 40;
-    gantt.config.details_on_create = false;
-    gantt.config.scales            = [{unit: "year", step: 1, format: "%Y"}, {unit: 'day', step: 1, format: '%m-%d'}];
-    gantt.config.scale_height      = 22 * gantt.config.scales.length;
-    gantt.config.duration_unit     = "day";
+    gantt.config.readonly            = false;
+    gantt.config.order_branch        = true;
+    gantt.config.details_on_dblclick = false;
+    gantt.config.drag_progress       = true;
+    gantt.config.drag_links          = false;
+    gantt.config.drag_resize         = false;
+    gantt.config.smart_rendering     = true;
+    gantt.config.smart_scales        = true;
+    gantt.config.static_background   = true;
+    gantt.config.show_task_cells     = false;
+    gantt.config.row_height          = 25;
+    gantt.config.min_column_width    = 40;
+    gantt.config.details_on_create   = false;
+    gantt.config.scales              = [{unit: "year", step: 1, format: "%Y"}, {unit: 'day', step: 1, format: '%m-%d'}];
+    gantt.config.scale_height        = 22 * gantt.config.scales.length;
+    gantt.config.duration_unit       = "day";
 
     gantt.config.columns = [
-    {name: 'text',     width: '*', tree: true, resize: true, width:200},
-    {name: 'status',   align: 'center', resize: true, width: 80},
-    {name: 'begin',    align: 'center', resize: true, width: 80},
-    {name: 'deadline', align: 'center', resize: true, width: 80},
-    {name: 'duration', align: 'center', resize: true, width: 60},
-    {name: 'percent',  align: 'center', resize: true, width:70, template: function(plan)
+    {name: 'text',       width: '*', tree: true, resize: true, width:200},
+    {name: 'status',     align: 'center', resize: true, width: 80},
+    {name: 'start_date', align: 'center', resize: true, width: 80},
+    {name: 'end_date',   align: 'center', resize: true, width: 80},
+    {name: 'duration',   align: 'center', resize: true, width: 60},
+    {name: 'percent',    align: 'center', resize: true, width:70, template: function(plan)
         {
             if(plan.percent) return Math.round(plan.percent) + '%';
         }
     },
     {name: 'taskProgress', align: 'center', resize: true, width: 60},
-    {name: 'realBegan',  align: 'center', resize: true, width: 80},
-    {name: 'realEnd', align: 'center', width: 80}
+    {name: 'realBegan',    align: 'center', resize: true, width: 80},
+    {name: 'realEnd',      align: 'center', width: 80}
     ];
 
     gantt.locale.labels.column_text         = "<?php echo $lang->programplan->name;?>";
     gantt.locale.labels.column_status       = "<?php echo $lang->statusAB;?>";
     gantt.locale.labels.column_percent      = "<?php echo $lang->programplan->percentAB;?>";
     gantt.locale.labels.column_taskProgress = "<?php echo $lang->programplan->taskProgress;?>";
-    gantt.locale.labels.column_begin        = "<?php echo $lang->programplan->begin;?>";
-    gantt.locale.labels.column_deadline     = "<?php echo $lang->programplan->end;?>";
+    gantt.locale.labels.column_start_date   = "<?php echo $lang->programplan->begin;?>";
+    gantt.locale.labels.column_end_date     = "<?php echo $lang->programplan->end;?>";
     gantt.locale.labels.column_realBegan    = "<?php echo $lang->programplan->realBegan;?>";
     gantt.locale.labels.column_realEnd      = "<?php echo $lang->programplan->realEnd;?>";
     gantt.locale.labels.column_duration     = "<?php echo $lang->programplan->duration;?>";
@@ -596,5 +648,13 @@ $(function()
     {
         setTimeout(function(){$('.gantt_tooltip').remove()}, 100);
     });
+
+    gantt.attachEvent("onBeforeTaskChanged", function(id, mode, task)
+    {
+        return validateResources(id);
+    });
+    // gantt.attachEvent("onAfterTaskDrag", function (id, mode)
+    // {
+	// });
 });
 </script>

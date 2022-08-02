@@ -352,3 +352,5 @@ $lang->task->report->finishedTasksPerDay->graph->xAxisName = 'Date';
 
 $lang->taskestimate = new stdclass();
 $lang->taskestimate->consumed = 'Estimates';
+
+$lang->task->overTime = 'The %s scheduled time has been exceeded, please modify the %s time first';
