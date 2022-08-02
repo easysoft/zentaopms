@@ -458,7 +458,7 @@ $(function()
 
     gantt.config.readonly            = false;
     gantt.config.details_on_dblclick = false;
-    gantt.config.order_branch        = true;
+    gantt.config.order_branch        = 'marker';
     gantt.config.details_on_dblclick = false;
     gantt.config.drag_progress       = true;
     gantt.config.drag_links          = false;
