@@ -287,6 +287,7 @@ $(function()
         if($(this).prop('checked'))
         {
             $('#budget').val('').attr('disabled', 'disabled');
+            budgetOverrunTips(budgetBalance);
         }
         else
         {
@@ -334,7 +335,7 @@ function setBudgetTipsAndAclList(programID)
 function budgetOverrunTips(budgetLeft)
 {
     var budget = $('#budget').val();
-    budget > budgetLeft ? $('#programBudget').removeClass('hidden') : $('#programBudget').addClass('hidden');
+    budget != 0 && budget !== null && budget > budgetLeft ? $('#programBudget').removeClass('hidden') : $('#programBudget').addClass('hidden');
 }
 
 $(document).on('change', "#plansBox select[name^='plans']", function()

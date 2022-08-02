@@ -30,6 +30,7 @@
 <?php $requiredFields = $config->project->edit->requiredFields;?>
 <?php js::set('requiredFields', $requiredFields);?>
 <?php js::set('budget', $project->budget);?>
+<?php js::set('budgetBalance', $availableBudget);?>
 <div id='mainContent' class='main-content'>
   <div class='center-block'>
     <div class='main-header'>
@@ -86,7 +87,7 @@
             </div>
             <span id='programBudget' class='text-remind hidden'><?php echo $lang->project->budgetOverrun;?></span>
           </td>
-          <td class='undetermined'>
+          <td class='futureBox'>
             <div class='checkbox-primary'>
               <input type='checkbox' id='future' name='future' value='1' <?php if($project->budget == 0) echo 'checked';?> />
               <label for='future'><?php echo $lang->project->future;?></label>

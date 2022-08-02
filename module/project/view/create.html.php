@@ -26,6 +26,7 @@
 <?php js::set('selectedBranchID', $branchID);?>
 <?php js::set('productName', $lang->product->name);?>
 <?php js::set('manageProducts', $lang->project->manageProducts);?>
+<?php js::set('budgetBalance', $availableBudget);?>
 <?php $requiredFields = $config->project->create->requiredFields;?>
 <?php js::set('requiredFields', $requiredFields);?>
 <div id='mainContent' class='main-content'>
@@ -80,7 +81,7 @@
             </div>
             <span id='programBudget' class='text-remind hidden'><?php echo $lang->project->budgetOverrun;?></span>
           </td>
-          <td class='undetermined'>
+          <td class='futureBox'>
             <div class="checkbox-primary c-future <?php echo strpos($requiredFields, 'budget') !== false ? 'hidden' : '';?>">
               <input type='checkbox' id='future' name='future' value='1' />
               <label for='future'><?php echo $lang->project->future;?></label>

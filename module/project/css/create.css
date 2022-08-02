@@ -22,5 +22,5 @@
 #plansBox .row {display: inline-table; width: 102%;}
 #plansBox .col-sm-4 {float: none; display: inline-block; padding-right: 5px;}
 #dataform th {vertical-align: top; padding-top: 13px;}
-.undetermined {vertical-align: top !important; padding-top: 13px !important;}
+.futureBox {vertical-align: top !important; padding-top: 13px !important;}
 #linkPlan {padding-top: 25px !important;}
