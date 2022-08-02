@@ -11,6 +11,8 @@
     $suhosinInfo    = $datas->suhosinInfo;
     $model          = $datas->model;
     $datas          = $datas->datas;
+    $appendFields   = $this->session->appendFields;
+    $notEmptyRule   = $this->session->notEmptyRule;
 ?>
 <style>
 form{overflow-x: scroll}
@@ -111,7 +113,10 @@ $(function()
           <?php foreach($fields as $field => $value):?>
 
           <?php if($value['control'] == 'select'):?>
-          <td><?php echo html::select("{$field}[$key]", $value['values'], !empty($object->$field) ? $object->$field : '', "class='form-control chosen'")?></td>
+          <?php $selected = !empty($object->$field) ? $object->$field : '';$list = array();?>
+          <?php if(!empty($value['values'][$selected])) $list = array($selected => $value['values'][$selected]);?>
+          <?php if(!empty($value['values'][$selected]) and isset($value['values'][0])) $list = array_slice($value['values'], 0, 1);?>
+          <td><?php echo html::select("{$field}[$key]", $list, $selected, "class='form-control picker-select' data-field='{$field}'")?></td>
 
           <?php elseif($value['control'] == 'multiple'):?>
           <?php if(!isset($value['values'][''])) $value['values'][''] = '';?>
@@ -214,6 +219,25 @@ $(function()
 </div>
 <?php endif;?>
 <script>
+$.ajaxSetup({async: false});
+
+$('#showData').on('mouseenter', '.picker', function(e){
+    var myPicker = $(this);
+    var field    = myPicker.prev().attr('data-field');
+    var id       = myPicker.prev().attr('id');
+    var name     = myPicker.prev().attr('name');
+    var index    = Number(name.replace(/[^\d]/g, " "));
+    var value    = myPicker.prev().val();
+
+    if($('#' + id).attr('isInit')) return;
+    $.get(createLink('port', 'ajaxGetOptions', 'model=<?php echo $model;?>&field=' + field + '&value=' + value + '&index=' + index), function(data)
+    {
+        $('#' + id).parent().html(data);
+        $('#' + id).picker({chosenMode: true});
+        $('#' + id).attr('isInit', true);
+    });
+})
+
 $(function()
 {
     $.fixedTableHead('#showData');

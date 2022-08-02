@@ -83,7 +83,6 @@ $(function()
         $insert  = true;
         $addID   = 1;
         $colspan = 1;
-
         ?>
         <?php foreach($datas as $key => $object):?>
         <tr class='text-top'>
