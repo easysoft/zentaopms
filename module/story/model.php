@@ -780,7 +780,7 @@ class storyModel extends model
             ->cleanFloat('estimate')
             ->setDefault('assignedDate', $oldStory->assignedDate)
             ->setDefault('lastEditedBy', $this->app->user->account)
-            ->setDefault('reviewedBy', '')
+            ->setDefault('reviewedBy', $oldStory->reviewedBy)
             ->setDefault('mailto', '')
             ->add('id', $storyID)
             ->add('lastEditedDate', $now)
