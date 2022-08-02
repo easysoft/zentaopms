@@ -239,7 +239,7 @@ class programplan extends control
     }
 
     /**
-     * Save task drag action.
+     * Save task drag position.
      *
      * @access public
      * @return void
@@ -261,5 +261,26 @@ class programplan extends control
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             return $this->send(array('result' => 'success'));
         }
+    }
+
+    /**
+     * Save task drag action.
+     *
+     * @access public
+     * @return void
+     */
+    public function ajaxSaveGanttMove()
+    {
+        if($_POST)
+        {
+            $data        = fixer::input('post')->get();
+            $IdList      = explode('-', $data->id);
+            $executionID = $IdList[0];
+            $taskID      = $IdList[1];
+
+            return 1231231;
+        }
+
+        return $this->send();
     }
 }
