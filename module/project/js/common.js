@@ -324,6 +324,13 @@ function setBudgetTipsAndAclList(programID)
     }
 }
 
+/**
+ * Append tips when the budget exceeds the parent project set.
+ *
+ * @param  int    $budgetLeft
+ * @access public
+ * @return void
+ */
 function budgetOverrunTips(budgetLeft)
 {
     var budget = $('#budget').val();
