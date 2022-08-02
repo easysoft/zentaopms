@@ -1,4 +1,5 @@
 #budget {border-right: 0px;}
 #budgetUnit {border-left: 0px;}
-#dateRange {vertical-align: top; padding-top: 13px;}
+#dateRange, .undetermined {vertical-align: top !important; padding-top: 13px !important;}
 #endList {vertical-align: top; padding-top: 13px;}
+#dataform th {vertical-align: top; padding-top: 13px;}
