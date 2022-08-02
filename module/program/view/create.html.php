@@ -39,6 +39,7 @@
 <?php js::set('PGMParentBudget', $lang->program->parentBudget);?>
 <?php js::set('future', $lang->project->future);?>
 <?php js::set('programList', $programList);?>
+<?php js::set('budgetBalance', $budgetLeft);?>
 <?php $aclList = $parentProgram ? $lang->program->subAclList : $lang->program->aclList;?>
 <?php $requiredFields = $config->program->create->requiredFields;?>
 <div id='mainContent' class='main-content'>
@@ -81,9 +82,9 @@
             </div>
             <span id='programBudget' class='text-remind hidden'><?php echo $lang->program->budgetOverrun;?></span>
           </td>
-          <td class='undetermined'>
+          <td class='futureBox'>
             <div class='checkbox-primary future w-70px'>
-              <input type='checkbox' id='future' name='future' value='1' />
+            <input type='checkbox' id='future' name='future' value='1' />
               <label for='future'><?php echo $lang->project->future;?></label>
             </div>
           </td>

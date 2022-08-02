@@ -62,7 +62,7 @@
             </div>
             <span id='programBudget' class='text-remind hidden'><?php echo $lang->program->budgetOverrun;?></span>
           </td>
-          <td class='undetermined'>
+          <td class='futureBox'>
             <div class='checkbox-primary future w-70px'>
               <input type='checkbox' id='future' name='future' value='1' <?php if($program->budget == 0) echo 'checked';?> />
               <label for='future'><?php echo $lang->project->future;?></label>
