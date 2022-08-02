@@ -68,3 +68,6 @@ $lang->build->action = new stdclass();
 $lang->build->action->buildopened = '$date, created by <strong>$actor</strong>, Build <strong>$extra</strong>.' . "\n";
 
 $lang->backhome = 'back';
+
+$lang->build->featureBar = array();
+$lang->build->featureBar['all'] = 'Build List';

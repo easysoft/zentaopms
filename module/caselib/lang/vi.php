@@ -39,3 +39,7 @@ $lang->caselib->legendDesc = 'Mô tả';
 
 $lang->caselib->libraryDelete = 'Bạn có muốn xóa thư viện này?';
 $lang->caselib->noModule      = '<div>Chưa có Module.</div><div>Quản lý ngay.</div>';
+
+$lang->caselib->featureBar = array();
+$lang->caselib->featureBar['all']  = 'All';
+$lang->caselib->featureBar['wait'] = 'Waiting';

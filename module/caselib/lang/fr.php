@@ -44,3 +44,7 @@ $lang->caselib->legendDesc = 'Description';
 
 $lang->caselib->libraryDelete = 'Voulez vous supprimer cette library ？';
 $lang->caselib->noModule      = "<div>Vous n'avez aucun modules.</div><div>Gérer les modules maintenant.</div>";
+
+$lang->caselib->featureBar = array();
+$lang->caselib->featureBar['all']  = 'All';
+$lang->caselib->featureBar['wait'] = 'Waiting';

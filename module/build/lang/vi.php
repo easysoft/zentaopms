@@ -64,3 +64,6 @@ $lang->build->action = new stdclass();
 $lang->build->action->buildopened = '$date, được tạo bởi <strong>$actor</strong>, Bản dựng <strong>$extra</strong>.' . "\n";
 
 $lang->backhome = 'Trở lại';
+
+$lang->build->featureBar = array();
+$lang->build->featureBar['all'] = 'Build List';

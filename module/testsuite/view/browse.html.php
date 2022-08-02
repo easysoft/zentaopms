@@ -15,10 +15,14 @@
 <?php js::set('flow', $config->global->flow);?>
 <div id="mainMenu" class='clearfix'>
   <div class="btn-toolbar pull-left">
-    <a href class='btn btn-link btn-active-text'>
-      <span class='text'><?php echo $lang->testsuite->browse?></span>
-      <span class='label label-light label-badge'><?php echo $pager->recTotal;?></span>
-    </a>
+    <?php
+    $type = 'all';
+    foreach($lang->testsuite->featureBar as $featureType => $label)
+    {
+        $activeClass = $type == $featureType ? 'btn-active-text' : '';
+        echo html::a(inlink('browse', "productID=$productID"), "<span class='text'>$label</span> <span class='label label-light label-badge'>{$pager->recTotal}</span>", '',"class='btn btn-link $activeClass'");
+    }
+    ?>
   </div>
   <?php if(common::canModify('product', $product)):?>
   <div class="btn-toolbar pull-right">

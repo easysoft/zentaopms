@@ -20,14 +20,11 @@
 <div id="mainMenu" class="clearfix table-row">
   <div class="btn-toolbar pull-left">
     <?php
-    $label  = "<span class='text'>{$lang->execution->build}</span>";
-    $active = '';
-    if($type == 'all')
+    foreach($lang->build->featureBar as $featureType => $label)
     {
-        $active = 'btn-active-text';
-        $label .= " <span class='label label-light label-badge'>{$buildsTotal}</span>";
+        $activeClass = $type == $featureType ? 'btn-active-text' : '';
+        echo html::a(inlink('build', "projectID=$projectID&type=$featureType"), "<span class='text'>$label</span> <span class='label label-light label-badge'>{$buildsTotal}</span>", '',"class='btn btn-link $activeClass' data-app={$app->tab} id=" . $featureType .'Tab');
     }
-    echo html::a(inlink('build', "projectID=$projectID&type=all"), $label, '', "class='btn btn-link $active' id='all'")
     ?>
     <div class="input-control space w-150px"><?php echo html::select('product', $products, $product, "onchange='changeProduct(this.value)' class='form-control chosen' data-placeholder='{$lang->productCommon}'");?></div>
     <a class="btn btn-link querybox-toggle" id="bysearchTab"><i class="icon icon-search muted"></i> <?php echo $lang->execution->byQuery;?></a>

@@ -15,11 +15,12 @@
 <?php js::set('confirmDelete', $lang->release->confirmDelete)?>
 <div id="mainMenu" class="clearfix">
   <div class="btn-toolbar pull-left">
-    <?php
-    echo html::a(inlink('browse', "productID={$product->id}&branch=$branch&type=all"), "<span class='text'>{$lang->release->all}</span>" . ($type == 'all' ? ' <span class="label label-light label-badge">' . $pager->recTotal . '</span>' : ''), '', "id='allTab' class='btn btn-link" . ('all' == $type ? ' btn-active-text' : '') . "'");
-    echo html::a(inlink('browse', "productID={$product->id}&branch=$branch&type=normal"), "<span class='text'>{$lang->release->statusList['normal']}</span>" . ($type == 'normal' ? ' <span class="label label-light label-badge">' . $pager->recTotal . '</span>' : ''), '', "id='normalTab' class='btn btn-link" . ('normal' == $type ? ' btn-active-text' : '') . "'");
-    echo html::a(inlink('browse', "productID={$product->id}&branch=$branch&type=terminate"), "<span class='text'>{$lang->release->statusList['terminate']}</span>" . ($type == 'terminate' ? ' <span class="label label-light label-badge">' . $pager->recTotal . '</span>' : ''), '', "id='terminateTab' class='btn btn-link" . ('terminate' == $type ? ' btn-active-text' : '') . "'");
-    ?>
+    <?php foreach($lang->release->featureBar as $featureType => $link):?>
+    <?php $count       = $type == $featureType ? '<span class="label label-light label-badge">' . $pager->recTotal . '</span>' : '';?>
+    <?php $activeClass = $type == $featureType ? 'btn-active-text' : '';?>
+    <?php list($label, $module, $method, $params) = explode('|', $link);?>
+    <?php echo html::a($this->createLink($module, $method, "productID={$product->id}&branch=$branch&$params"), "<span class='text'>{$label}</span> " . $count, '', "id='{$type}Tab' class='btn btn-link $activeClass'");?>
+    <?php endforeach;?>
   </div>
   <div class="btn-toolbar pull-right">
     <?php if(common::canModify('product', $product)):?>

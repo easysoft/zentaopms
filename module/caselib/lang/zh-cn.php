@@ -44,3 +44,7 @@ $lang->caselib->legendDesc = '描述';
 
 $lang->caselib->libraryDelete = '您确认要删除该用例库吗？';
 $lang->caselib->noModule      = '<div>您现在还没有模块信息</div><div>请维护用例库模块</div>';
+
+$lang->caselib->featureBar = array();
+$lang->caselib->featureBar['all']  = '所有';
+$lang->caselib->featureBar['wait'] = '待评审';

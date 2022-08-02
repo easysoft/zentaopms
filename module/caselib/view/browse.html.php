@@ -40,10 +40,11 @@ js::set('flow',          $config->global->flow);
   </div>
   <div class='btn-toolbar pull-left'>
     <?php
-    if(common::hasPriv('caselib', 'browse'))
+    if(!$config->testcase->needReview && empty($config->testcase->forceReview)) unset($lang->caselib->featureBar['wait']);
+    foreach($lang->caselib->featureBar as $featureType => $label)
     {
-        echo html::a($this->inlink('browse', "libID=$libID&browseType=all"), "<span class='text'>{$lang->testcase->allCases}</span>", '', "id='allTab' class='btn btn-link'");
-        if($config->testcase->needReview or !empty($config->testcase->forceReview)) echo html::a($this->inlink('browse', "libID=$libID&browseType=wait"), "<span class='text'>" . $lang->testcase->statusList['wait'] . "</span>", '', "id='waitTab' class='btn btn-link'");
+        $activeClass = $browseType == $featureType ? 'btn-active-text' : '';
+        echo html::a(inlink('browse', "libID=$libID&browseType=$featureType"), "<span class='text'>$label</span>", '',"class='btn btn-link $activeClass' data-app={$app->tab} id=" . $featureType .'Tab');
     }
     ?>
     <a class="btn btn-link querybox-toggle" id='bysearchTab'><i class="icon icon-search muted"></i> <?php echo $lang->testcase->bySearch;?></a>

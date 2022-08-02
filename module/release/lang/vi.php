@@ -84,3 +84,8 @@ $lang->release->notifyList['QD'] = 'QA Manager';
 $lang->release->notifyList['SC'] = 'Story Creator';
 $lang->release->notifyList['ET'] = "{$lang->execution->common} Team Members";
 $lang->release->notifyList['PT'] = "Project Team Members";
+
+$lang->release->featureBar = array();
+$lang->release->featureBar['all']       = 'All|release|browse|type=all';
+$lang->release->featureBar['normal']    = 'Active|release|browse|type=normal';
+$lang->release->featureBar['terminate'] = 'Terminated|release|browse|type=terminate';
