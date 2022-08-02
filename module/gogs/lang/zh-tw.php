@@ -1,5 +1,4 @@
 <?php
-$lang->gogs = new stdclass;
 $lang->gogs->common        = 'Gogs';
 $lang->gogs->browse        = '浏览Gogs';
 $lang->gogs->search        = '搜索';

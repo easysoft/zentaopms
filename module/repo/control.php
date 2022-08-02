@@ -300,7 +300,7 @@ class repo extends control
         }
 
         $this->app->loadClass('pager', $static = true);
-        $pager = new pager(0, 8, 1);
+        $pager = new pager(0, 10, 1);
 
         $logType   = 'file';
         $revisions = $this->repo->getCommits($repo, '/' . $entry, 'HEAD', $logType, $pager);
@@ -416,7 +416,7 @@ class repo extends control
 
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
-        $pager = new pager(0, 8, 1);
+        $pager = new pager(0, 10, 1);
 
         if($_POST)
         {
@@ -939,6 +939,28 @@ class repo extends control
         if(empty($repo)) return;
         if($repo->synced) return print('finish');
 
+        if(in_array($repo->SCM, array('Gitea', 'Gogs')))
+        {
+            $logFile = realPath($this->app->getTmpRoot() . "/log/clone.progress." . strtolower($repo->SCM) . ".{$repo->name}.log");
+            if($logFile)
+            {
+                $content  = file($logFile);
+                $lastLine = $content[count($content) - 1];
+                if(!strpos($lastLine, 'done'))
+                {
+                    return print(1);
+                }
+                elseif(strpos($lastLine, 'fatal') !== false)
+                {
+                    return print('finish');
+                }
+                else
+                {
+                    @unlink($logFile);
+                }
+            }
+        }
+
         $this->commonAction($repoID);
         $this->scm->setEngine($repo);
 
@@ -1079,7 +1101,7 @@ class repo extends control
      * @access public
      * @return void
      */
-    public function ajaxSideCommits($repoID, $path, $objectID = 0,  $type = 'dir', $recTotal = 0, $recPerPage = 8, $pageID = 1)
+    public function ajaxSideCommits($repoID, $path, $objectID = 0,  $type = 'dir', $recTotal = 0, $recPerPage = 10, $pageID = 1)
     {
         if($this->get->repoPath) $path = $this->get->repoPath;
         $this->app->loadClass('pager', $static = true);
