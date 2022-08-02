@@ -1431,7 +1431,6 @@ class repoModel extends model
                     $path = $this->app->getAppRoot() . 'www/data/repo/' . $this->post->name . '_' . $module;
                     if(!realpath($path))
                     {
-                        $project->tokenCloneUrl = 'https://oauth2:A1EVShVfuGo3PaQRuiQN@gitlab.zcorp.cc/easycorp/zentaopms.git';
                         $cmd = 'git clone --progress -v "' . $project->tokenCloneUrl . '" "' . $path . '"  > "' . $this->app->getTmpRoot() . "log/clone.progress.$module.{$this->post->name}.log\" 2>&1 &";
                         if(PHP_OS == 'WINNT') $cmd = "start /b $cmd";
                         exec($cmd);
