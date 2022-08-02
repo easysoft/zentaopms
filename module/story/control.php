@@ -1223,15 +1223,16 @@ class story extends control
 
         $this->story->replaceURLang($story->type);
 
-        $story->files = $this->loadModel('file')->getByObject($story->type, $storyID);
-        $product      = $this->dao->findById($story->product)->from(TABLE_PRODUCT)->fields('name, id, type, status')->fetch();
-        $plan         = $this->dao->findById($story->plan)->from(TABLE_PRODUCTPLAN)->fetch('title');
-        $bugs         = $this->dao->select('id,title,status,pri,severity')->from(TABLE_BUG)->where('story')->eq($storyID)->andWhere('deleted')->eq(0)->fetchAll();
-        $fromBug      = $this->dao->select('id,title')->from(TABLE_BUG)->where('toStory')->eq($storyID)->fetch();
-        $cases        = $this->dao->select('id,title,status,pri')->from(TABLE_CASE)->where('story')->eq($storyID)->andWhere('deleted')->eq(0)->fetchAll();
-        $linkedMRs    = $this->loadModel('mr')->getLinkedMRPairs($storyID, 'story');
-        $modulePath   = $this->tree->getParents($story->module);
-        $storyModule  = empty($story->module) ? '' : $this->tree->getById($story->module);
+        $story->files  = $this->loadModel('file')->getByObject($story->type, $storyID);
+        $product       = $this->dao->findById($story->product)->from(TABLE_PRODUCT)->fields('name, id, type, status')->fetch();
+        $plan          = $this->dao->findById($story->plan)->from(TABLE_PRODUCTPLAN)->fetch('title');
+        $bugs          = $this->dao->select('id,title,status,pri,severity')->from(TABLE_BUG)->where('story')->eq($storyID)->andWhere('deleted')->eq(0)->fetchAll();
+        $fromBug       = $this->dao->select('id,title')->from(TABLE_BUG)->where('toStory')->eq($storyID)->fetch();
+        $cases         = $this->dao->select('id,title,status,pri')->from(TABLE_CASE)->where('story')->eq($storyID)->andWhere('deleted')->eq(0)->fetchAll();
+        $linkedMRs     = $this->loadModel('mr')->getLinkedMRPairs($storyID, 'story');
+        $modulePath    = $this->tree->getParents($story->module);
+        $storyModule   = empty($story->module) ? '' : $this->tree->getById($story->module);
+        $storyProducts =  $this->dao->select('id,product')->from(TABLE_STORY)->where('id')->in(array_keys($story->linkStoryTitles))->fetchPairs();
 
         /* Set the menu. */
         $from = $this->app->tab;
@@ -1284,6 +1285,7 @@ class story extends control
         $this->view->actions            = $this->action->getList('story', $storyID);
         $this->view->storyModule        = $storyModule;
         $this->view->modulePath         = $modulePath;
+        $this->view->storyProducts      = $storyProducts;
         $this->view->version            = $version == 0 ? $story->version : $version;
         $this->view->preAndNext         = $this->loadModel('common')->getPreAndNextObject('story', $storyID);
         $this->view->from               = $from;
