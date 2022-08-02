@@ -191,8 +191,8 @@ class programplanModel extends model
             $data->status     = $this->processStatus('execution', $plan);
             $data->begin      = $start;
             $data->deadline   = $end;
-            $data->realBegan  = helper::isZeroDate($plan->realBegan) ? '' : substr($plan->realBegan, 0, 10);
-            $data->realEnd    = helper::isZeroDate($plan->realEnd)   ? '' : substr($plan->realEnd, 0, 10);
+            $data->realBegan  = helper::isZeroDate($plan->realBegan) ? '' : $plan->realBegan;
+            $data->realEnd    = helper::isZeroDate($plan->realEnd)   ? '' : $plan->realEnd;
             $data->parent     = $plan->grade == 1 ? 0 :$plan->parent;
             $data->open       = true;
             $data->start_date = $data->realBegan ? $data->realBegan : $data->begin;
@@ -242,8 +242,8 @@ class programplanModel extends model
 
             $estStart  = helper::isZeroDate($task->estStarted)  ? '' : $task->estStarted;
             $estEnd    = helper::isZeroDate($task->deadline)    ? '' : $task->deadline;
-            $realBegan = helper::isZeroDate($task->realStarted) ? '' : substr($task->realStarted, 0, 10);
-            $realEnd   = (in_array($task->status, array('done', 'closed')) and !helper::isZeroDate($task->finishedDate)) ? substr($task->finishedDate, 0, 10) : '';
+            $realBegan = helper::isZeroDate($task->realStarted) ? '' : $task->realStarted;
+            $realEnd   = (in_array($task->status, array('done', 'closed')) and !helper::isZeroDate($task->finishedDate)) ? $task->finishedDate : '';
 
             $start = $realBegan ? $realBegan : $estStart;
             $end   = $realEnd   ? $realEnd   : $estEnd;
