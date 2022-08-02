@@ -109,7 +109,11 @@ class port extends control
             $extension = $file['extension'];
 
             $fileName = $this->file->savePath . $shortName;
+
             move_uploaded_file($file['tmpname'], $fileName);
+
+            if($extension == 'xlsx' or $extension == 'xls') $this->port->cutFile($fileName);
+            die;
 
             $phpExcel  = $this->app->loadClass('phpexcel');
             $phpReader = new PHPExcel_Reader_Excel2007();
