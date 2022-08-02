@@ -567,35 +567,31 @@ class searchModel extends model
      *
      * @param  string    $keywords
      * @param  string    $type
+     * @param  object    $pager
      * @access public
      * @return array
      */
-    public function getList($keywords, $type)
+    public function getList($keywords, $type, $pager = null)
     {
         $spliter = $this->app->loadClass('spliter');
         $words   = explode(' ', self::unify($keywords, ' '));
 
-        $against = '';
-        $againstCond   = '';
-        $likeCondition = '';
+        $against     = '';
+        $againstCond = '';
+
         foreach($words as $word)
         {
             $splitedWords = $spliter->utf8Split($word);
-
             $trimedWord   = trim($splitedWords['words']);
             $against     .= '"' . $trimedWord . '" ';
-            $againstCond .= '+"' . $trimedWord . '" ';
+            $againstCond .= '(+"' . $trimedWord . '") ';
 
-            $likeWord = is_numeric($word) ? $word : $trimedWord;
-            if(is_numeric($word) and strpos($word, '.') === false and strlen($word) < 5) $likeWord = str_pad("|$likeWord|", 5, '_');
-            $condition = "OR title like '%{$likeWord}%' OR content like '%{$likeWord}%'";
-            if(is_numeric($word) and strpos($word, '.') === false and strlen($word) == 5)
-            {
-                $againstCond .= "-\" $word \" ";
-                $condition    = "OR title REGEXP '[^ ]{$likeWord}[^ ]' OR content REGEXP '[^ ]{$likeWord}[^ ]'";
-            }
-            $likeCondition .= $condition;
+            if(is_numeric($word) and strpos($word, '.') === false and strlen($word) == 5) $againstCond .= "(-\" $word \") ";
         }
+
+        $likeCondition = '';
+        /* Assisted lookup by like condition when only one word. */
+        if(count($words) == 1 and strpos($words[0], ' ') === false) $likeCondition = "OR title like '%{$words[0]}%' OR content like '%{$words[0]}%'";
 
         $words = str_replace('"', '', $against);
         $words = str_pad($words, 5, '_');
@@ -619,15 +615,61 @@ class searchModel extends model
             }
         }
 
-        $scoreColumn = "((1 * (MATCH(title) AGAINST('{$against}' IN BOOLEAN MODE))) + (0.6 * (MATCH(content) AGAINST('{$against}' IN BOOLEAN MODE))) )";
-        $results = $this->dao->select("*, {$scoreColumn} as score")
+        $scoreColumn = "(MATCH(title, content) AGAINST('{$againstCond}' IN BOOLEAN MODE))";
+        $stmt = $this->dao->select("*, {$scoreColumn} as score")
             ->from(TABLE_SEARCHINDEX)
-            ->where("(MATCH(title) AGAINST('{$againstCond}' IN BOOLEAN MODE) >= 1 or MATCH(content) AGAINST('{$againstCond}' IN BOOLEAN MODE) >= 1 $likeCondition)")
+            ->where("(MATCH(title,content) AGAINST('{$againstCond}' IN BOOLEAN MODE) >= 1 {$likeCondition})")
             ->andWhere('vision')->eq($this->config->vision)
             ->andWhere('objectType')->in($allowedObject)
             ->andWhere('addedDate')->le(helper::now())
             ->orderBy('score_desc, editedDate_desc')
-            ->fetchAll('id');
+            ->query();
+
+        $idListGroup = array();
+        $results     = array();
+        while($record = $stmt->fetch())
+        {
+            $module = $record->objectType == 'case' ? 'testcase' : $record->objectType;
+            $idListGroup[$module][$record->objectID] = $record->objectID;
+
+            $results[$record->id] = $record;
+        }
+
+        $results = $this->checkPriv($results, $idListGroup);
+        if(empty($results)) return $results;
+
+        /* Reset pager total and get this page data. */
+        $pager->setRecTotal(count($results));
+        $pager->setPageTotal();
+        $pager->setPageID($pager->pageID);
+        $results = array_chunk($results, $pager->recPerPage, true);
+        $results = $results[$pager->pageID - 1];
+
+        $idListGroup = array();
+        foreach($results as $record)
+        {
+            $module = $record->objectType == 'case' ? 'testcase' : $record->objectType;
+            $idListGroup[$module][$record->objectID] = $record->objectID;
+        }
+
+        $objectList = array();
+        $linkProjectModules = ',task,bug,testcase,build,release,testtask,testsuite,testreport,trainplan,';
+        foreach($idListGroup as $module => $idList)
+        {
+            if(!isset($this->config->objectTables[$module])) continue;
+            $table = $this->config->objectTables[$module];
+
+            $fields = '';
+            if($module == 'issue') $fields = $this->config->edition == 'max' ? 'id,project,owner,lib' : 'id,project,owner';
+            if($module == 'project') $fields = 'id,model';
+            if($module == 'execution')$fields = 'id,type,project';
+            if($module == 'story') $fields = $this->config->edition == 'max' ? 'id,type,lib' : 'id,type';
+            if(($module == 'risk' or $module == 'opportunity') and $this->config->edition == 'max') $fields = 'id,lib';
+            if($module == 'doc' and $this->config->edition == 'max') $fields = 'id,assetLib,assetLibType';
+            if(empty($fields)) continue;
+
+            $objectList[$module] = $this->dao->select($fields)->from($table)->where('id')->in($idList)->fetchAll('id');
+        }
 
         foreach($results as $record)
         {
@@ -644,17 +686,14 @@ class searchModel extends model
                 $method = 'viewstep';
             }
 
-            if(strpos(',task,bug,testcase,build,release,testtask,testsuite,testreport,trainplan,', ",$module,") !== false)
+            if(strpos($linkProjectModules, ",$module,") !== false)
             {
                 if(!isset($this->config->objectTables[$record->objectType])) continue;
-                $table       = $this->config->objectTables[$record->objectType];
-                $projectID   = $this->dao->select('project')->from($table)->where('id')->eq($record->objectID)->fetch('project');
                 $record->url = helper::createLink($module, $method, "id={$record->objectID}");
             }
             elseif($module == 'issue')
             {
-                $issueField = $this->config->edition == 'max' ? 'id,project,owner,lib' : 'id,project,owner';
-                $issue      = $this->dao->select($issueField)->from(TABLE_ISSUE)->where('id')->eq($record->objectID)->fetch();
+                $issue = $objectList['issue'][$record->objectID];
                 if(!empty($issue->lib))
                 {
                     $module = 'assetlib';
@@ -666,28 +705,27 @@ class searchModel extends model
             }
             elseif($module == 'project')
             {
-                $projectModel = $this->dao->select('model')->from(TABLE_PROJECT)->where('id')->eq($record->objectID)->fetch('model');
+                $projectModel = $objectList['project'][$record->objectID]->model;
                 $method       = $projectModel == 'kanban' ? 'index' : 'view';
                 $record->url  = helper::createLink('project', $method, "id={$record->objectID}");
             }
             elseif($module == 'execution')
             {
-                $execution         = $this->dao->select('id,type,project')->from(TABLE_EXECUTION)->where('id')->eq($record->objectID)->fetch();
+                $execution         = $objectList['execution'][$record->objectID];
                 $method            = $execution->type == 'kanban' ? 'kanban' : $method;
                 $record->url       = helper::createLink('execution', $method, "id={$record->objectID}");
                 $record->extraType = empty($execution->type) ? '' : $execution->type;
             }
             elseif($module == 'story')
             {
-                $storyField = $this->config->edition == 'max' ? 'id,type,lib' : 'id,type';
-                $story      = $this->dao->select($storyField)->from(TABLE_STORY)->where('id')->eq($record->objectID)->fetch();
+                $story = $objectList['story'][$record->objectID];
                 if(!empty($story->lib))
                 {
                     $module = 'assetlib';
                     $method = 'storyView';
                 }
 
-                $record->url       = helper::createLink($module, $method, "id={$record->objectID}", '', false, 0, true);
+                $record->url = helper::createLink($module, $method, "id={$record->objectID}", '', false, 0, true);
 
                 if($this->config->vision == 'lite') $record->url = helper::createLink('projectstory', $method, "storyID={$record->objectID}", '', false, 0, true);
 
@@ -695,8 +733,7 @@ class searchModel extends model
             }
             elseif(($module == 'risk' or $module == 'opportunity') and $this->config->edition == 'max')
             {
-                $table  = $this->config->objectTables[$module];
-                $object = $this->dao->select('id,lib')->from($table)->where('id')->eq($record->objectID)->fetch();
+                $object = $objectList[$module][$record->objectID];
                 if(!empty($object->lib))
                 {
                     $method = $module == 'risk' ? 'riskView' : 'opportunityView';
@@ -707,7 +744,7 @@ class searchModel extends model
             }
             elseif($module == 'doc' and $this->config->edition == 'max')
             {
-                $doc = $this->dao->select('id,assetLib,assetLibType')->from(TABLE_DOC)->where('id')->eq($record->objectID)->fetch();
+                $doc = $objectList['doc'][$record->objectID];
                 if(!empty($doc->assetLib))
                 {
                     $module = 'assetlib';
@@ -722,7 +759,7 @@ class searchModel extends model
             }
         }
 
-        return $this->checkPriv($results);
+        return $results;
     }
 
     /**
@@ -855,10 +892,11 @@ class searchModel extends model
      * Check product and project priv.
      *
      * @param  array    $results
+     * @param  array    $objectPairs
      * @access public
      * @return array
      */
-    public function checkPriv($results)
+    public function checkPriv($results, $objectPairs = array())
     {
         if($this->app->user->admin) return $results;
 
@@ -870,7 +908,10 @@ class searchModel extends model
 
         $objectPairs = array();
         $total       = count($results);
-        foreach($results as $record) $objectPairs[$record->objectType][$record->objectID] = $record->id;
+        if(empty($objectPairs))
+        {
+            foreach($results as $record) $objectPairs[$record->objectType][$record->objectID] = $record->id;
+        }
 
         foreach($objectPairs as $objectType => $objectIdList)
         {
@@ -878,7 +919,7 @@ class searchModel extends model
             $objectExecutions = array();
             if(!isset($this->config->objectTables[$objectType])) continue;
             $table = $this->config->objectTables[$objectType];
-            if(strpos(',bug,case,productplan,release,story,testtask,', ",$objectType,") !== false)
+            if(strpos(',bug,case,testcase,productplan,release,story,testtask,', ",$objectType,") !== false)
             {
                $objectProducts = $this->dao->select('id,product')->from($table)->where('id')->in(array_keys($objectIdList))->fetchGroup('product', 'id');
             }

@@ -265,7 +265,11 @@ class storyModel extends model
             $this->file->updateObjectID($this->post->uid, $storyID, $story->type);
             $this->file->saveUpload($story->type, $storyID, $extra = 1);
 
-            if(!empty($story->plan)) $this->updateStoryOrderOfPlan($storyID, $story->plan); // Set story order in this plan.
+            if(!empty($story->plan))
+            {
+                $this->updateStoryOrderOfPlan($storyID, $story->plan); // Set story order in this plan.
+                $this->loadModel('action')->create('productplan', $story->plan, 'linkstory', '', $storyID);
+            }
 
             $data          = new stdclass();
             $data->story   = $storyID;
@@ -537,8 +541,7 @@ class storyModel extends model
             $data[$i] = $story;
         }
 
-        $planStories = array();
-
+        $link2Plans = array();
         foreach($data as $i => $story)
         {
             $this->dao->insert(TABLE_STORY)->data($story)->autoCheck()->checkFlow()->exec();
@@ -552,7 +555,11 @@ class storyModel extends model
             $this->setStage($storyID);
 
             /* Update product plan stories order. */
-            if($story->plan) $this->updateStoryOrderOfPlan($storyID, $story->plan);
+            if($story->plan)
+            {
+                $this->updateStoryOrderOfPlan($storyID, $story->plan);
+                $link2Plans[$story->plan] = empty($link2Plans[$story->plan]) ? $storyID : "{$link2Plans[$story->plan]},$storyID";
+            }
 
             $specData = new stdclass();
             $specData->story   = $storyID;
@@ -629,7 +636,11 @@ class storyModel extends model
             if(is_dir($realPath)) $classFile->removeDir($realPath);
             unset($_SESSION['storyImagesFile']);
         }
-        if(!dao::isError())  $this->loadModel('score')->create('ajax', 'batchCreate');
+        if(!dao::isError())
+        {
+            $this->loadModel('score')->create('ajax', 'batchCreate');
+            foreach($link2Plans as $planID => $stories) $this->action->create('productplan', $planID, 'linkstory', '', $stories);
+        }
         return $mails;
     }
 
@@ -890,6 +901,13 @@ class storyModel extends model
             }
 
             $this->loadModel('action');
+
+            if($story->plan != $oldStory->plan)
+            {
+                if(!empty($oldStory->plan)) $this->action->create('productplan', $oldStory->plan, 'unlinkstory', '', $storyID);
+                if(!empty($story->plan)) $this->action->create('productplan', $story->plan, 'linkstory', '', $storyID);
+            }
+
             $changed = $story->parent != $oldStory->parent;
             if($oldStory->parent > 0)
             {
@@ -1189,6 +1207,8 @@ class storyModel extends model
         $now         = helper::now();
         $data        = fixer::input('post')->get();
         $storyIdList = $this->post->storyIdList ? $this->post->storyIdList : array();
+        $unlinkPlans = array();
+        $link2Plans  = array();
 
         /* Init $stories. */
         if(!empty($storyIdList))
@@ -1254,6 +1274,13 @@ class storyModel extends model
                 if($story->closedBy     != false  or  $story->closedReason != false) $story->status     = 'closed';
                 if($story->closedReason != false  and $story->closedBy     == false) $story->closedBy   = $this->app->user->account;
 
+                if($story->plan != $oldStory->plan)
+                {
+                    if($story->plan != $oldStory->plan and !empty($oldStory->plan)) $unlinkPlans[$oldStory->plan] = empty($unlinkPlans[$oldStory->plan]) ? $storyID : "{$unlinkPlans[$oldStory->plan]},$storyID";
+                    if($story->plan != $oldStory->plan and !empty($story->plan))    $link2Plans[$story->plan]  = empty($link2Plans[$story->plan]) ? $storyID : "{$link2Plans[$story->plan]},$storyID";
+                }
+
+
                 foreach($extendFields as $extendField)
                 {
                     $story->{$extendField->field} = $this->post->{$extendField->field}[$storyID];
@@ -1310,7 +1337,15 @@ class storyModel extends model
                 }
             }
         }
-        if(!dao::isError()) $this->loadModel('score')->create('ajax', 'batchEdit');
+        if(!dao::isError())
+        {
+            $this->loadModel('score')->create('ajax', 'batchEdit');
+
+            $this->loadModel('action');
+            foreach($unlinkPlans as $planID => $stories) $this->action->create('productplan', $planID, 'unlinkstory', '', $stories);
+            foreach($link2Plans as $planID => $stories) $this->action->create('productplan', $planID, 'linkstory', '', $stories);
+
+        }
         return $allChanges;
     }
 
@@ -1745,6 +1780,8 @@ class storyModel extends model
         $oldStories     = $this->getByList($storyIdList);
         $plan           = $this->loadModel('productplan')->getById($planID);
         $oldStoryStages = $this->dao->select('*')->from(TABLE_STORYSTAGE)->where('story')->in($storyIdList)->fetchGroup('story', 'branch');
+        $unlinkPlans    = array();
+        $link2Plans     = array();
 
         /* Cycle every story and process it's plan and stage. */
         foreach($storyIdList as $storyID)
@@ -1808,8 +1845,21 @@ class storyModel extends model
 
             if(!$planID) $this->setStage($storyID);
 
-            if(!dao::isError()) $allChanges[$storyID] = common::createChanges($oldStory, $story);
+            if(!dao::isError())
+            {
+                $allChanges[$storyID] = common::createChanges($oldStory, $story);
+                if($story->plan != $oldStory->plan and !empty($oldStory->plan)) $unlinkPlans[$oldStory->plan] = empty($unlinkPlans[$oldStory->plan]) ? $storyID : "{$unlinkPlans[$oldStory->plan]},$storyID";
+                if($story->plan != $oldStory->plan and !empty($story->plan))    $link2Plans[$story->plan]  = empty($link2Plans[$story->plan]) ? $storyID : "{$link2Plans[$story->plan]},$storyID";
+            }
         }
+
+        if(!dao::isError())
+        {
+            $this->loadModel('action');
+            foreach($unlinkPlans as $planID => $stories) $this->action->create('productplan', $planID, 'unlinkstory', '', $stories);
+            foreach($link2Plans as $planID => $stories) $this->action->create('productplan', $planID, 'linkstory', '', $stories);
+        }
+
         return $allChanges;
     }
 
