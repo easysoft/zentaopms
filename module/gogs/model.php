@@ -261,7 +261,7 @@ class gogsModel extends model
         $httpData = commonModel::httpWithHeader($url);
         $user     = json_decode($httpData['body']);
         if(empty($user)) return false;
-        if(isset($users->message) or isset($users->error)) return null;
+        if(isset($user->message) or isset($user->error)) return null;
         return true;
     }
 
