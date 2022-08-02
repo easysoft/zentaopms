@@ -676,6 +676,9 @@ class upgradeModel extends model
             case 'biz7.0':
                 $this->processFlowPosition();
                 break;
+            case 'biz7.3':
+                $this->updateApproval();
+                break;
         }
     }
 
@@ -6758,6 +6761,54 @@ class upgradeModel extends model
             {
                 $this->dao->update($tables[$objectType])->set('createdBy')->eq($action->actor)->set('createdDate')->eq($action->date)->where('id')->eq($action->objectID)->exec();
             }
+        }
+
+        return !dao::isError();
+    }
+
+    /**
+     * Update approval process in Workflow.
+     *
+     * @access public
+     * @return void
+     */
+    public function updateApproval()
+    {
+        /* Judge whether the action has opened the approval process before. */
+        /* 判断动作 看之前是否开启过审批流 */
+        $actions = $this->dao->select('id, module, action, createdDate')->from(TABLE_WORKFLOWACTION)
+            ->where('role')->eq('approval')
+            ->andWhere('action')->in('submit, cancel, review')
+            ->fetchAll('id');
+
+        foreach($actions as $id => $action)
+        {
+            $module     = $action->module;
+            $actionCode = $action->action;
+
+            $this->dao->update(TABLE_WORKFLOWACTION)->set('action')->eq('approval' . $action->action)->where('id')->eq($id)->exec();
+            /* Change the approval action of the module that has already enabled the approval function */
+            /* 改原来已经开启过审批功能的模块的审批动作 */
+            if(isset($this->config->upgrade->recoveryActions->{$module}->{$actionCode}))
+            {
+                $data = array_merge($this->config->upgrade->defaultActions, $this->config->upgrade->recoveryActions->{$module}->{$actionCode});
+                if(isset($data['hasLite']))
+                {
+                    unset($data['hasLite']);
+                    $liteData = $data;
+                    $liteData['vision'] = 'lite';
+                    $this->dao->insert(TABLE_WORKFLOWACTION)->data($liteData)->exec();
+                }
+                $this->dao->insert(TABLE_WORKFLOWACTION)->data($data)->exec();
+            }
+
+            /* Change history */
+            /* 改历史记录 */
+            $this->dao->update(TABLE_ACTION)->set('action')->eq('approval' . $action->action)->where('objectType')->eq($module)->andWhere('action')->eq($action->action)->andWhere('date')->gt($action->createdDate)->exec();
+
+            /* Change the action field of the workflowlayout table */
+            /* 改workflowlayout表的action字段 */
+            $this->dao->update(TABLE_WORKFLOWLAYOUT)->set('action')->eq('approval' . $action->action)->where('module')->eq($module)->andWhere('action')->eq($action->action)->exec();
         }
 
         return !dao::isError();
