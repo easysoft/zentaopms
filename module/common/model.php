@@ -1966,7 +1966,7 @@ EOD;
             }
         }
 
-        $changes    = array();
+        $changes = array();
         foreach($new as $key => $value)
         {
             if(is_object($value) or is_array($value)) continue;
@@ -1983,6 +1983,7 @@ EOD;
             if(strtolower($key) == 'activateddate' and $value == '')    continue;
             if(strtolower($key) == 'closeddate'   and $value == '')     continue;
             if(strtolower($key) == 'actualcloseddate' and $value == '') continue;
+            if(strtolower($key) == 'reviewedby' and $value == '')       continue;
 
             if(isset($old->$key) and $value != stripslashes($old->$key))
             {
