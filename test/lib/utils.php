@@ -99,7 +99,7 @@ function zdRun()
         $tmpCommonPath = RUNTIME_ROOT . 'tmp/common';
         if(file_exists($tmpCommonPath)) system("rm -rf $tmpCommonPath");
         system("cp -r {$zdRoot}common $tmpCommonPath");
-        system("rm {$zdRoot}sql/*");
+        system("find {$zdRoot}sql/ -type f -delete");
 
         /* Generate SQL files. */
         $tables = array();
