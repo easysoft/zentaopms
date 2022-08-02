@@ -218,11 +218,11 @@ $lang->kanban->error->childLimitEmpty   = 'Please set the WIP quantity of the su
 
 $lang->kanban->orderList['pri_asc']    = 'Story Priorité Ascendante';
 $lang->kanban->orderList['pri_desc']   = 'Story Priorité Descendante';
-$lang->kanban->orderList['id_asc']     = 'Story ID Ascending';
-$lang->kanban->orderList['id_desc']    = 'Story ID Descending';
-$lang->kanban->orderList['stage_asc']  = 'Story Stage Ascending';
-$lang->kanban->orderList['stage_desc'] = 'Story Stage Descending';
-$lang->kanban->orderList['assignedTo'] = 'Assigned To';
+$lang->kanban->orderList['id_asc']     = 'Story ID Ascendante';
+$lang->kanban->orderList['id_desc']    = 'Story ID Descendante';
+$lang->kanban->orderList['stage_asc']  = 'Story Phase Ascendante';
+$lang->kanban->orderList['stage_desc'] = 'Story Phase Descendante';
+$lang->kanban->orderList['assignedTo'] = 'Assigné à';
 
 $lang->kanban->importList = array();
 $lang->kanban->importList['off'] = 'Import is not enabled';
