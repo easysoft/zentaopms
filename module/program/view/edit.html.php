@@ -50,7 +50,7 @@
           <td>
             <div class='input-group'>
               <?php $placeholder = ($parentProgram and $parentProgram->budget != 0) ? 'placeholder=' . $lang->program->parentBudget . zget($lang->project->currencySymbol, $parentProgram->budgetUnit) . $availableBudget : '';?>
-              <?php echo html::input('budget', $program->budget != 0 ? $program->budget : '', "class='form-control' maxlength='10' " . (strpos($requiredFields, 'budget') !== false ? 'required ' : '') . ($program->budget == 0 ? 'disabled ' : '') . $placeholder);?>
+              <?php echo html::input('budget', $program->budget != 0 ? $program->budget : '', "class='form-control' onchange='budgetOverrunTips($availableBudget)' maxlength='10' " . (strpos($requiredFields, 'budget') !== false ? 'required ' : '') . ($program->budget == 0 ? 'disabled ' : '') . $placeholder);?>
               <?php if($parentProgram):?>
               <span class='input-group-addon'><?php echo zget($budgetUnitList, $program->budgetUnit);?></span>
               <?php else:?>
@@ -60,6 +60,7 @@
               <?php echo html::hidden('exchangeRate', '');?>
               <?php endif;?>
             </div>
+            <span id='programBudget' class='text-remind hidden'><?php echo $lang->program->budgetOverrun;?></span>
           </td>
           <td>
             <div class='checkbox-primary future w-70px'>

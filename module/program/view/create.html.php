@@ -70,8 +70,8 @@
           <th><?php echo $lang->program->budget;?></th>
           <td>
             <div class='input-group'>
-              <?php $placeholder = $parentProgram ? 'placeholder=' . $lang->program->parentBudget . zget($lang->project->currencySymbol, $parentProgram->budgetUnit) . $budgetLeft : '';?>
-              <?php echo html::input('budget', '', "class='form-control' maxlength='10' " . (strpos($requiredFields, 'budget') !== false ? 'required ' : '') . $placeholder);?>
+              <?php $placeholder = $parentProgram ? 'placeholder="' . $lang->program->parentBudget . zget($lang->project->currencySymbol, $parentProgram->budgetUnit) . $budgetLeft . '"' : '';?>
+              <?php echo html::input('budget', '', "class='form-control' onchange='budgetOverrunTips($budgetLeft)' maxlength='10' " . (strpos($requiredFields, 'budget') !== false ? 'required ' : '') . $placeholder);?>
               <?php if($parentProgram):?>
               <span class='input-group-addon fix-border'><?php echo zget($budgetUnitList, $parentProgram->budgetUnit);?></span>
               <?php else:?>
@@ -79,8 +79,9 @@
               <?php echo html::select('budgetUnit', $budgetUnitList, $config->project->defaultCurrency, "class='form-control'");?>
               <?php endif;?>
             </div>
+            <span id='programBudget' class='text-remind hidden'><?php echo $lang->program->budgetOverrun;?></span>
           </td>
-          <td>
+          <td class='undetermined'>
             <div class='checkbox-primary future w-70px'>
               <input type='checkbox' id='future' name='future' value='1' />
               <label for='future'><?php echo $lang->project->future;?></label>
