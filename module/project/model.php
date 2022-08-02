@@ -1106,6 +1106,8 @@ class projectModel extends model
         $program = new stdClass();
         if($project->parent)
         {
+            $program = $this->dao->select('*')->from(TABLE_PROGRAM)->where('id')->eq($project->parent)->fetch();
+
             /* Judge products not empty. */
             if(empty($linkedProductsCount) and !isset($_POST['newProduct']))
             {
