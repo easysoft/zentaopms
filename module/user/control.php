@@ -877,7 +877,11 @@ class user extends control
 
             $user = $this->user->identify($account, $password);
 
-            if($user)
+            if(is_array($user) and isset($user['result']))
+            {
+                return $this->send($user);
+            }
+            elseif($user)
             {
                 /* Set user group, rights, view and aword login score. */
                 $user = $this->user->login($user);
