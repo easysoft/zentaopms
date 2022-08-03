@@ -1393,7 +1393,7 @@ class kanbanModel extends model
      * @access public
      * @return array
      */
-    public function getExecutionKanban($executionID, $browseType = 'all', $groupBy = 'default', $searchValue = '', $orderBy = 'pri_asc')
+    public function getExecutionKanban($executionID, $browseType = 'all', $groupBy = 'default', $searchValue = '', $orderBy = 'id_asc')
     {
         if($groupBy != 'default') return $this->getKanban4Group($executionID, $browseType, $groupBy, $searchValue, $orderBy);
 
@@ -1521,7 +1521,7 @@ class kanbanModel extends model
      * @access public
      * @return array
      */
-    public function getKanban4Group($executionID, $browseType, $groupBy, $searchValue = '', $orderBy = 'pri_asc')
+    public function getKanban4Group($executionID, $browseType, $groupBy, $searchValue = '', $orderBy = 'id_asc')
     {
         /* Get card  data. */
         $cardList = array();
@@ -1547,7 +1547,7 @@ class kanbanModel extends model
         if($browseType == 'bug')   $bugCardMenu   = $this->getKanbanCardMenu($executionID, $cardList, 'bug');
         if($browseType == 'task')  $taskCardMenu  = $this->getKanbanCardMenu($executionID, $cardList, 'task');
 
-        if($groupBy == 'story' and $browseType == 'task' and !isset($this->lang->kanban->orderList[$orderBy])) $orderBy = 'pri_asc';
+        if($groupBy == 'story' and $browseType == 'task' and !isset($this->lang->kanban->orderList[$orderBy])) $orderBy = 'id_asc';
         $lanes = $this->getLanes4Group($executionID, $browseType, $groupBy, $cardList, $orderBy);
         if(empty($lanes)) return array();
 
@@ -1720,7 +1720,7 @@ class kanbanModel extends model
      *
      * @return array
      */
-    public function getLanes4Group($executionID, $browseType, $groupBy, $cardList, $orderBy = 'pri_asc')
+    public function getLanes4Group($executionID, $browseType, $groupBy, $cardList, $orderBy = 'id_asc')
     {
         $lanes       = array();
         $groupByList = array();
@@ -2238,7 +2238,7 @@ class kanbanModel extends model
             if(isset($_POST['team']) or isset($_POST['whitelist']))
             {
                 $type = isset($_POST['team']) ? 'team' : 'whitelist';
-                $kanbanMembers = empty($kanban->{$type}) ? array() : explode(',', $kanban->{$type}); 
+                $kanbanMembers = empty($kanban->{$type}) ? array() : explode(',', $kanban->{$type});
                 $this->addSpaceMembers($kanban->space, $type, $kanbanMembers);
             }
 
@@ -2293,7 +2293,7 @@ class kanbanModel extends model
             if(isset($_POST['team']) or isset($_POST['whitelist']))
             {
                 $type = isset($_POST['team']) ? 'team' : 'whitelist';
-                $kanbanMembers = empty($kanban->{$type}) ? array() : explode(',', $kanban->{$type}); 
+                $kanbanMembers = empty($kanban->{$type}) ? array() : explode(',', $kanban->{$type});
                 $this->addSpaceMembers($kanban->space, $type, $kanbanMembers);
             }
 
@@ -2595,7 +2595,7 @@ class kanbanModel extends model
         {
             $addMembers = implode(',', $addMembers);
             $members   .= ',' . trim($addMembers, ',');
-            $this->dao->update(TABLE_KANBANSPACE)->set($type)->eq($members)->where('id')->eq($spaceID)->exec(); 
+            $this->dao->update(TABLE_KANBANSPACE)->set($type)->eq($members)->where('id')->eq($spaceID)->exec();
         }
     }
 

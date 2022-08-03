@@ -877,11 +877,7 @@ class user extends control
 
             $user = $this->user->identify($account, $password);
 
-            if(is_array($user) and isset($user['result']))
-            {
-                return $this->send($user);
-            }
-            elseif($user)
+            if($user)
             {
                 /* Set user group, rights, view and aword login score. */
                 $user = $this->user->login($user);
@@ -968,6 +964,7 @@ class user extends control
                 }
 
                 $response['message'] = $this->lang->user->loginFailed;
+                if(dao::isError() and !empty(dao::getError()[0])) $response['message'] = dao::getError()[0];
                 return $this->send($response);
             }
         }
