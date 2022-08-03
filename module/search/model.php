@@ -32,7 +32,9 @@ class searchModel extends model
             if($module == 'projectBug') $flowModule = 'bug';
 
             $buildin = false;
-            $this->app->loadModuleConfig('workflow');
+
+            $this->app->loadLang('workflow');
+            $this->app->loadConfig('workflow');
             if(!empty($this->config->workflow->buildin))
             {
                 foreach($this->config->workflow->buildin->modules as $appName => $appModules)
