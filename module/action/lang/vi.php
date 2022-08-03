@@ -495,23 +495,32 @@ $lang->action->dynamicAction->job['executed']  = 'Execute Job';
 $lang->action->dynamicAction->job['deleted']   = 'Delete Job';
 $lang->action->dynamicAction->job['undeleted'] = 'Undelete Job';
 
-$lang->action->dynamicAction->sonarqube['created'] = 'Create SonarQube Server';
-$lang->action->dynamicAction->sonarqube['edited']  = 'Edit SonarQube Server';
-$lang->action->dynamicAction->sonarqube['deleted'] = 'Delete SonarQube Server';
+$lang->action->dynamicAction->sonarqube['created']   = 'Create SonarQube Server';
+$lang->action->dynamicAction->sonarqube['edited']    = 'Edit SonarQube Server';
+$lang->action->dynamicAction->sonarqube['deleted']   = 'Delete SonarQube Server';
+$lang->action->dynamicAction->sonarqube['undeleted'] = 'Undelete SonarQube Server';
 
 $lang->action->dynamicAction->sonarqubeproject['deleted'] = 'Delete SonarQube Project';
 
-$lang->action->dynamicAction->gitlab['created'] = 'Create GitLab Server';
-$lang->action->dynamicAction->gitlab['edited']  = 'Edit GitLab Server';
-$lang->action->dynamicAction->gitlab['deleted'] = 'Delete GitLab Server';
+$lang->action->dynamicAction->gitlab['created']   = 'Create GitLab Server';
+$lang->action->dynamicAction->gitlab['edited']    = 'Edit GitLab Server';
+$lang->action->dynamicAction->gitlab['deleted']   = 'Delete GitLab Server';
+$lang->action->dynamicAction->gitlab['undeleted'] = 'Undelete GitLab Server';
 
-$lang->action->dynamicAction->gitea['created'] = 'Create Gitea Server';
-$lang->action->dynamicAction->gitea['edited']  = 'Edit Gitea Server';
-$lang->action->dynamicAction->gitea['deleted'] = 'Delete Gitea Server';
+$lang->action->dynamicAction->gitea['created']   = 'Create Gitea Server';
+$lang->action->dynamicAction->gitea['edited']    = 'Edit Gitea Server';
+$lang->action->dynamicAction->gitea['deleted']   = 'Delete Gitea Server';
+$lang->action->dynamicAction->gitea['undeleted'] = 'Undelete Gitea Server';
 
-$lang->action->dynamicAction->gogs['created'] = 'Create Gogs Server';
-$lang->action->dynamicAction->gogs['edited']  = 'Edit Gogs Server';
-$lang->action->dynamicAction->gogs['deleted'] = 'Delete Gogs Server';
+$lang->action->dynamicAction->gogs['created']   = 'Create Gogs Server';
+$lang->action->dynamicAction->gogs['edited']    = 'Edit Gogs Server';
+$lang->action->dynamicAction->gogs['deleted']   = 'Delete Gogs Server';
+$lang->action->dynamicAction->gogs['undeleted'] = 'Undelete Gogs Server';
+
+$lang->action->dynamicAction->repo['created']   = 'Create Repo';
+$lang->action->dynamicAction->repo['edited']    = 'Edit Repo';
+$lang->action->dynamicAction->repo['deleted']   = 'Delete Repo';
+$lang->action->dynamicAction->repo['undeleted'] = 'Undelete Repo';
 
 /* Generate the corresponding object link. */
 global $config;

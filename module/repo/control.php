@@ -129,6 +129,7 @@ class repo extends control
 
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
+            $actionID = $this->loadModel('action')->create('repo', $repoID, 'created');
             if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $repoID));
             $link = $this->repo->createLink('showSyncCommit', "repoID=$repoID&objectID=$objectID", '', false) . '#app=' . $this->app->tab;
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $link));
@@ -172,6 +173,10 @@ class repo extends control
             $noNeedSync = $this->repo->update($repoID);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
+            $newRepo  = $this->repo->getRepoByID($repoID);
+            $actionID = $this->loadModel('action')->create('repo', $repoID, 'edited');
+            $changes  = common::createChanges($repo, $newRepo);
+            $this->action->logHistory($actionID, $changes);
             if(!$noNeedSync)
             {
                 $link = $this->repo->createLink('showSyncCommit', "repoID=$repoID");
@@ -240,7 +245,7 @@ class repo extends control
 
         $this->repo->delete(TABLE_REPO, $repoID);
         if(dao::isError()) return print(js::error(dao::getError()));
-        echo js::reload('parent');
+        return print(js::reload('parent'));
     }
 
     /**

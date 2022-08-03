@@ -554,7 +554,14 @@ class Gogs
     {
         if(!scm::checkRevision($revision)) return array();
 
-        if($revision == 'HEAD' and $branch) $revision = $branch;
+        if($revision == 'HEAD' and $branch)
+        {
+            $revision = $branch;
+        }
+        elseif(is_numeric($revision))
+        {
+            $revision = "--skip=$revision $branch";
+        }
         $count = $count == 0 ? '' : "-n $count";
 
         chdir($this->root);

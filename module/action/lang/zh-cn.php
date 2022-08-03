@@ -637,23 +637,32 @@ $lang->action->dynamicAction->job['executed']  = '执行构建任务';
 $lang->action->dynamicAction->job['deleted']   = '删除构建任务';
 $lang->action->dynamicAction->job['undeleted'] = '还原构建任务';
 
-$lang->action->dynamicAction->sonarqube['created'] = '创建SonarQube服务器';
-$lang->action->dynamicAction->sonarqube['edited']  = '设置SonarQube服务器';
-$lang->action->dynamicAction->sonarqube['deleted'] = '删除SonarQube服务器';
+$lang->action->dynamicAction->sonarqube['created']   = '创建SonarQube服务器';
+$lang->action->dynamicAction->sonarqube['edited']    = '设置SonarQube服务器';
+$lang->action->dynamicAction->sonarqube['deleted']   = '删除SonarQube服务器';
+$lang->action->dynamicAction->sonarqube['undeleted'] = '还原SonarQube服务器';
 
 $lang->action->dynamicAction->sonarqubeproject['deleted'] = '删除SonarQube项目';
 
-$lang->action->dynamicAction->gitlab['created'] = '创建GitLab服务器';
-$lang->action->dynamicAction->gitlab['edited']  = '编辑GitLab服务器';
-$lang->action->dynamicAction->gitlab['deleted'] = '删除GitLab服务器';
+$lang->action->dynamicAction->gitlab['created']   = '创建GitLab服务器';
+$lang->action->dynamicAction->gitlab['edited']    = '编辑GitLab服务器';
+$lang->action->dynamicAction->gitlab['deleted']   = '删除GitLab服务器';
+$lang->action->dynamicAction->gitlab['undeleted'] = '还原GitLab服务器';
 
-$lang->action->dynamicAction->gitea['created'] = '创建Gitea服务器';
-$lang->action->dynamicAction->gitea['edited']  = '编辑Gitea服务器';
-$lang->action->dynamicAction->gitea['deleted'] = '删除Gitea服务器';
+$lang->action->dynamicAction->gitea['created']   = '创建Gitea服务器';
+$lang->action->dynamicAction->gitea['edited']    = '编辑Gitea服务器';
+$lang->action->dynamicAction->gitea['deleted']   = '删除Gitea服务器';
+$lang->action->dynamicAction->gitea['undeleted'] = '还原Gitea服务器';
 
-$lang->action->dynamicAction->gogs['created'] = '创建Gogs服务器';
-$lang->action->dynamicAction->gogs['edited']  = '编辑Gogs服务器';
-$lang->action->dynamicAction->gogs['deleted'] = '删除Gogs服务器';
+$lang->action->dynamicAction->gogs['created']   = '创建Gogs服务器';
+$lang->action->dynamicAction->gogs['edited']    = '编辑Gogs服务器';
+$lang->action->dynamicAction->gogs['deleted']   = '删除Gogs服务器';
+$lang->action->dynamicAction->gogs['undeleted'] = '还原Gogs服务器';
+
+$lang->action->dynamicAction->repo['created']   = '创建代码库';
+$lang->action->dynamicAction->repo['edited']    = '编辑代码库';
+$lang->action->dynamicAction->repo['deleted']   = '删除代码库';
+$lang->action->dynamicAction->repo['undeleted'] = '还原代码库';
 
 /* 用来生成相应对象的链接。*/
 $lang->action->label->product     = $lang->productCommon . '|product|view|productID=%s';

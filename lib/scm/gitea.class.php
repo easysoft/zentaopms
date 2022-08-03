@@ -554,9 +554,15 @@ class Gitea
     {
         if(!scm::checkRevision($revision)) return array();
 
-        if($revision == 'HEAD' and $branch) $revision = 'origin/' . $branch;
-        $revision = is_numeric($revision) ? "--skip=$revision $branch" : $revision;
-        $count    = $count == 0 ? '' : "-n $count";
+        if($revision == 'HEAD' and $branch)
+        {
+            $revision = $branch;
+        }
+        elseif(is_numeric($revision))
+        {
+            $revision = "--skip=$revision $branch";
+        }
+        $count = $count == 0 ? '' : "-n $count";
 
         chdir($this->root);
         if($branch)
@@ -601,11 +607,11 @@ class Gitea
                 list($action, $path) = $file;
 
                 $parsedFile = new stdclass();
-                $parsedFile->revision = $hash;
-                $parsedFile->path     = '/' . trim($path);
-                $parsedFile->type     = 'file';
-                $parsedFile->action   = $action;
-                $logs['files'][$hash][]  = $parsedFile;
+                $parsedFile->revision   = $hash;
+                $parsedFile->path       = '/' . trim($path);
+                $parsedFile->type       = 'file';
+                $parsedFile->action     = $action;
+                $logs['files'][$hash][] = $parsedFile;
             }
         }
         return $logs;

@@ -188,12 +188,6 @@ class repoModel extends model
         if(!$this->checkConnection()) return false;
 
         $isPipelineServer = in_array(strtolower($this->post->SCM), $this->config->repo->gitServiceList) ? true : false;
-        if($isPipelineServer)
-        {
-            if($this->post->serviceHost == '')    dao::$errors['serviceHost']    = sprintf($this->lang->error->notempty, $this->lang->repo->serviceHost);
-            if($this->post->serviceProject == '') dao::$errors['serviceProject'] = sprintf($this->lang->error->notempty, $this->lang->repo->serviceProject);
-            if(dao::isError()) return false;
-        }
 
         $data = fixer::input('post')
             ->setIf($isPipelineServer, 'password', $this->post->serviceToken)
@@ -208,19 +202,7 @@ class repoModel extends model
             ->join('product', ',')
             ->get();
 
-        if($isPipelineServer)
-        {
-            $repo = $this->dao->select('id')->from(TABLE_REPO)
-                ->where('SCM')->eq($this->post->SCM)
-                ->andWhere('serviceHost')->eq($data->client)
-                ->andWhere('serviceProject')->eq($data->path)
-                ->fetch();
-            if(!empty($repo)) dao::$errors['serviceProject'] = sprintf($this->lang->error->unique, $this->lang->repo->serviceProject, $repo->name);
-            if(dao::isError()) return false;
-        }
-
         $data->acl = empty($data->acl) ? '' : json_encode($data->acl);
-
         if($data->SCM == 'Subversion')
         {
             $scm = $this->app->loadClass('scm');
@@ -234,12 +216,11 @@ class repoModel extends model
         if($data->encrypt == 'base64') $data->password = base64_encode($data->password);
         $this->dao->insert(TABLE_REPO)->data($data, $skip = 'serviceToken')
             ->batchCheck($this->config->repo->create->requiredFields, 'notempty')
-            ->checkIF($data->SCM != 'Gitlab', 'path,client', 'notempty')
-            ->checkIF($isPipelineServer, 'serviceHost,serviceProject', 'notempty')
-            ->checkIF($data->SCM == 'Subversion', $this->config->repo->svn->requiredFields, 'notempty')
-            ->checkIF($data->SCM == 'Gitea', $this->config->repo->gitea->requiredFields, 'notempty')
-            ->checkIF($data->SCM == 'Git', 'path', 'unique', "`SCM` = 'Git'")
-            ->checkIF($data->SCM == 'Subversion', 'path', 'unique', "`SCM` = 'Subversion'")
+            ->batchCheckIF($data->SCM != 'Gitlab', 'path,client', 'notempty')
+            ->batchCheckIF($isPipelineServer, 'serviceHost,serviceProject', 'notempty')
+            ->batchCheckIF($data->SCM == 'Subversion', $this->config->repo->svn->requiredFields, 'notempty')
+            ->checkIF($isPipelineServer, 'serviceProject', 'unique', "`SCM` = '{$data->SCM}'")
+            ->checkIF(!$isPipelineServer, 'path', 'unique', "`SCM` = '{$data->SCM}'")
             ->autoCheck()
             ->exec();
 
@@ -271,16 +252,11 @@ class repoModel extends model
         $repo = $this->getRepoByID($id);
 
         $isPipelineServer = in_array(strtolower($this->post->SCM), $this->config->repo->gitServiceList) ? true : false;
-        if($isPipelineServer)
-        {
-            if($this->post->serviceHost == '')    dao::$errors['serviceHost']    = sprintf($this->lang->error->notempty, $this->lang->repo->serviceHost);
-            if($this->post->serviceProject == '') dao::$errors['serviceProject'] = sprintf($this->lang->error->notempty, $this->lang->repo->serviceProject);
-        }
 
         $data = fixer::input('post')
             ->setIf($isPipelineServer, 'password', $this->post->serviceToken)
-            ->setIf($isPipelineServer and $this->post->SCM == 'Gitlab', 'path', '')
-            ->setIf($isPipelineServer and $this->post->SCM == 'Gitlab', 'client', '')
+            ->setIf($this->post->SCM == 'Gitlab', 'path', '')
+            ->setIf($this->post->SCM == 'Gitlab', 'client', '')
             ->setIf($isPipelineServer, 'extra', $this->post->serviceProject)
             ->setDefault('prefix', $repo->prefix)
             ->setIf($this->post->SCM == 'Gitlab', 'prefix', '')
@@ -308,29 +284,17 @@ class repoModel extends model
             $data->prefix = '';
         }
 
-        if($isPipelineServer)
-        {
-            $repo = $this->dao->select('id')->from(TABLE_REPO)
-                ->where('SCM')->eq($this->post->SCM)
-                ->andWhere('serviceHost')->eq($data->client)
-                ->andWhere('serviceProject')->eq($data->path)
-                ->andWhere('id')->ne($id)
-                ->fetch();
-            if(!empty($repo)) dao::$errors['serviceProject'] = sprintf($this->lang->error->unique, $this->lang->repo->serviceProject, $repo->name);
-            if(dao::isError()) return false;
-        }
-
         if($data->client != $repo->client and !$this->checkClient()) return false;
         if(!$this->checkConnection()) return false;
 
         if($data->encrypt == 'base64') $data->password = base64_encode($data->password);
         $this->dao->update(TABLE_REPO)->data($data, $skip = 'serviceToken')
             ->batchCheck($this->config->repo->edit->requiredFields, 'notempty')
-            ->checkIF($data->SCM != 'Gitlab', 'path,client', 'notempty')
-            ->checkIF($data->SCM == 'Subversion', $this->config->repo->svn->requiredFields, 'notempty')
-            ->checkIF($data->SCM == 'Gitlab', 'extra', 'notempty')
-            ->checkIF($data->SCM == 'Git', 'path', 'unique', "`SCM` = 'Git' and `id` <> $id")
-            ->checkIF($data->SCM == 'Subversion', 'path', 'unique', "`SCM` = 'Subversion' and `id` <> $id")
+            ->batchCheckIF($data->SCM != 'Gitlab', 'path,client', 'notempty')
+            ->batchCheckIF($isPipelineServer, 'serviceHost,serviceProject', 'notempty')
+            ->batchCheckIF($data->SCM == 'Subversion', $this->config->repo->svn->requiredFields, 'notempty')
+            ->checkIF($isPipelineServer, 'serviceProject', 'unique', "`SCM` = '{$data->SCM}' and `id` <> $id")
+            ->checkIF(!$isPipelineServer, 'path', 'unique', "`SCM` = '{$data->SCM}'  and `id` <> $id")
             ->autoCheck()
             ->where('id')->eq($id)->exec();
 
