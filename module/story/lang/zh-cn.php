@@ -442,6 +442,5 @@ $lang->story->subDivideTip['planned']   = '该需求已计划，无法进行细�
 $lang->story->subDivideTip['projected'] = '该需求已立项，无法进行细分操作';
 $lang->story->subDivideTip['notActive'] = '需求不是激活状态，无法进行细分操作';
 
-$lang->story->featureBar = array();
 $lang->story->featureBar['browse']['all']      = $lang->all;
 $lang->story->featureBar['browse']['unclosed'] = $lang->story->unclosed;

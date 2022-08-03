@@ -55,5 +55,4 @@ $lang->testsuite->lblUnlinkCase = '移除用例';
 $lang->testsuite->authorList['private'] = '私有';
 $lang->testsuite->authorList['public']  = '公开';
 
-$lang->testsuite->featureBar = array();
 $lang->testsuite->featureBar['browse']['all'] = '套件列表';

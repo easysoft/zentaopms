@@ -16,13 +16,13 @@
 <div id="mainMenu" class='clearfix'>
   <div class="btn-toolbar pull-left">
     <?php
-    $type = 'all';
+    common::sortFeatureMenu();
     foreach($lang->testsuite->featureBar['browse'] as $featureType => $label)
     {
         $activeClass = $type == $featureType ? 'btn-active-text' : '';
         $label       = "<span class='text'>$label</span>";
         if($type == $featureType) $label .= " <span class='label label-light label-badge'>{$pager->recTotal}</span>";
-        echo html::a(inlink('browse', "productID=$productID"), $label, '',"class='btn btn-link $activeClass'");
+        echo html::a(inlink('browse', "productID=$productID&type=$featureType"), $label, '',"class='btn btn-link $activeClass'");
     }
     ?>
   </div>
@@ -45,7 +45,7 @@
   <?php else:?>
   <table class='table has-sort-head' id='suiteList'>
     <thead>
-    <?php $vars = "productID=$productID&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"; ?>
+    <?php $vars = "productID=$productID&type=$type&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"; ?>
       <tr>
         <th class='c-id text-left'><?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?></th>
         <th class='c-name text-left'><?php common::printOrderLink('name', $orderBy, $vars, $lang->testsuite->name);?></th>

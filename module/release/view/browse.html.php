@@ -16,6 +16,7 @@
 <div id="mainMenu" class="clearfix">
   <div class="btn-toolbar pull-left">
   <?php 
+  common::sortFeature();
   foreach($lang->release->featureBar['browse'] as $featureType => $label)
   {
       $active = $type == $featureType ? 'btn-active-text' : '';

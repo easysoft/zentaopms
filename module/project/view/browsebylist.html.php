@@ -33,6 +33,7 @@
   </div>
   <?php endif;?>
   <div class="btn-toolBar pull-left">
+    <?php common::sortFeatureMenu();?>
     <?php foreach($lang->project->featureBar['browse'] as $key => $label):?>
     <?php $active = $browseType == $key ? 'btn-active-text' : '';?>
     <?php $label = "<span class='text'>$label</span>";?>

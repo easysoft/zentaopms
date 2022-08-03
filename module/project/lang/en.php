@@ -248,6 +248,8 @@ $lang->project->featureBar['browse']['doing']     = 'Doing';
 $lang->project->featureBar['browse']['suspended'] = 'Suspended';
 $lang->project->featureBar['browse']['closed']    = 'Closed';
 
+$lang->project->featureBar['build']['all'] = 'Build List';
+
 $lang->project->aclList['private'] = 'Private (For the project leader, team members and stakeholders only)';
 $lang->project->aclList['open']    = "Open (accessible with project view permissions)";
 

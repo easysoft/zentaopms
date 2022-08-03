@@ -23,6 +23,7 @@
 <?php endif;?>
 <div id='mainMenu' class='clearfix'>
   <div class="btn-toolBar pull-left">
+    <?php common::sortFeatureMenu();?>
     <?php foreach($lang->program->featureBar['browse'] as $key => $label):?>
     <?php $active = $status == $key ? 'btn-active-text' : '';?>
     <?php $label = "<span class='text'>$label</span>";?>

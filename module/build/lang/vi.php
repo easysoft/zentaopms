@@ -65,5 +65,4 @@ $lang->build->action->buildopened = '$date, được tạo bởi <strong>$actor<
 
 $lang->backhome = 'Trở lại';
 
-$lang->build->featureBar = array();
 $lang->build->featureBar['browse']['all'] = 'Build List';

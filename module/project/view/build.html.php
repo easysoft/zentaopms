@@ -20,7 +20,8 @@
 <div id="mainMenu" class="clearfix table-row">
   <div class="btn-toolbar pull-left">
     <?php
-    foreach($lang->build->featureBar['browse'] as $featureType => $label)
+    common::sortFeatureMenu();
+    foreach($lang->project->featureBar['build'] as $featureType => $label)
     {
         $activeClass = $type == $featureType ? 'btn-active-text' : '';
         $label       = "<span class='text'>$label</span>";

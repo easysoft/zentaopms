@@ -248,6 +248,8 @@ $lang->project->featureBar['browse']['doing']     = '进行中';
 $lang->project->featureBar['browse']['suspended'] = '已挂起';
 $lang->project->featureBar['browse']['closed']    = '已关闭';
 
+$lang->project->featureBar['build']['all'] = '所有版本';
+
 $lang->project->aclList['private'] = "私有 (只有项目负责人、团队成员和干系人可访问)";
 $lang->project->aclList['open']    = "公开 (有项目视图权限即可访问)";
 

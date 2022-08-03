@@ -68,6 +68,3 @@ $lang->build->action = new stdclass();
 $lang->build->action->buildopened = '$date, 由 <strong>$actor</strong> 创建版本 <strong>$extra</strong>。' . "\n";
 
 $lang->backhome = '返回';
-
-$lang->build->featureBar = array();
-$lang->build->featureBar['browse']['all'] = '所有版本';

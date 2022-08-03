@@ -69,5 +69,4 @@ $lang->build->action->buildopened = '$date, Build <strong>$extra</strong> créé
 
 $lang->backhome = 'Retour';
 
-$lang->build->featureBar = array();
 $lang->build->featureBar['browse']['all'] = 'Build List';

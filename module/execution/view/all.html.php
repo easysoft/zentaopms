@@ -48,6 +48,7 @@ js::set('isCNLang', !$this->loadModel('common')->checkNotCN())
       </ul>
     </div>
     <?php endif;?>
+    <?php common::sortFeatureMenu();?>
     <?php foreach($lang->execution->featureBar['all'] as $key => $label):?>
     <?php $label = "<span class='text'>$label</span>";?>
     <?php if($status == $key) $label .= " <span class='label label-light label-badge'>{$pager->recTotal}</span>";?>

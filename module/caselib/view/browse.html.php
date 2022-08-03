@@ -40,7 +40,8 @@ js::set('flow',          $config->global->flow);
   </div>
   <div class='btn-toolbar pull-left'>
     <?php
-    if(!$config->testcase->needReview && empty($config->testcase->forceReview)) unset($lang->caselib->featureBar['wait']);
+    common::sortFeatureMenu();
+    if(!$config->testcase->needReview && empty($config->testcase->forceReview)) unset($lang->caselib->featureBar['browse']['wait']);
     foreach($lang->caselib->featureBar['browse'] as $featureType => $label)
     {
         $activeClass = $browseType == $featureType ? 'btn-active-text' : '';

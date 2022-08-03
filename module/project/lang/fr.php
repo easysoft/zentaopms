@@ -248,6 +248,8 @@ $lang->project->featureBar['browse']['doing']     = 'En Cours';
 $lang->project->featureBar['browse']['suspended'] = 'Suspendues';
 $lang->project->featureBar['browse']['closed']    = 'Fermées';
 
+$lang->project->featureBar['build']['all'] = 'Build List';
+
 $lang->project->aclList['private'] = 'Private (For team members and stakeholders only)';
 $lang->project->aclList['open']    = "Open (accessible with project view permissions)";
 
