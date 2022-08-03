@@ -280,7 +280,10 @@ class productModel extends model
             ->orWhere('t1.createdBy')->eq($this->app->user->account)
             ->markRight(1)
             ->fi()
-            ->beginIF($status == 'review')->andWhere("FIND_IN_SET('{$this->app->user->account}', t1.reviewers)")->fi()
+            ->beginIF($status == 'review')
+            ->andWhere("FIND_IN_SET('{$this->app->user->account}', t1.reviewers)")
+            ->andWhere('t1.reviewStatus')->eq('doing')
+            ->fi()
             ->orderBy('t2.order_asc, t1.line_desc, t1.order_asc')
             ->beginIF($limit > 0)->limit($limit)->fi()
             ->fetchAll('id');
