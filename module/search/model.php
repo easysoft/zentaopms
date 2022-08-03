@@ -24,45 +24,65 @@ class searchModel extends model
     public function setSearchParams($searchConfig)
     {
         $module = $searchConfig['module'];
+
         if($this->config->edition != 'open')
         {
             $flowModule = $module;
-            if($module == 'projectStory') $flowModule = 'story';
-            if($module == 'projectBug')   $flowModule = 'bug';
+            if($module == 'projectStory' || $module == 'executionStory') $flowModule = 'story';
+            if($module == 'projectBug') $flowModule = 'bug';
 
-            $fields   = $this->loadModel('workflowfield')->getList($flowModule);
-            $maxCount = $this->config->maxCount;
-            $this->config->maxCount = 0;
-
-            foreach($fields as $field)
+            $buildin = false;
+            $this->app->loadModuleConfig('workflow');
+            if(!empty($this->config->workflow->buildin))
             {
-                if($field->canSearch == 0) continue;
-
-                /* The built-in modules and user defined modules all have the subStatus field, so set its configuration first. */
-                if($field->field == 'subStatus')
+                foreach($this->config->workflow->buildin->modules as $appName => $appModules)
                 {
-                    $field = $this->workflowfield->getByField($flowModule, 'subStatus');
-                    if(!isset($field->options[''])) $field->options[''] = '';
+                    if(isset($appModules->$flowModule))
+                    {
+                        $buildin = true;
+                        break;
+                    }
+                }
+            }
 
-                    $searchConfig['fields'][$field->field] = $field->name;
-                    $searchConfig['params'][$field->field] = array('operator' => '=', 'control' => 'select', 'values' => $field->options);
+            if($buildin)
+            {
+                $fields   = $this->loadModel('workflowfield')->getList($flowModule, 'searchOrder, `order`, id');
+                $maxCount = $this->config->maxCount;
+                $this->config->maxCount = 0;
 
-                    continue;
+                $fieldValues = array();
+                $formName    = $module . 'Form';
+                if($this->session->$formName)
+                {
+                    foreach($this->session->$formName as $formKey => $formField)
+                    {
+                        if(strpos($formKey, 'field') !== false)
+                        {
+                            $fieldNO      = substr($formKey, 5);
+                            $fieldNO      = "value" . $fieldNO;
+                            $formNameList = $this->session->$formName;
+                            $fieldValue   = $formNameList[$fieldNO];
+
+                            if($fieldValue) $fieldValues[$formField][$fieldValue] = $fieldValue;
+                        }
+                    }
                 }
 
-                /* The other built-in fields do not need to set their configuration. */
-                if($field->buildin) continue;
+                foreach($fields as $field)
+                {
+                    if($field->canSearch == 0 || $field->buildin) continue;
 
-                /* Set configuration for user defined fields. */
-                $operator = ($field->control == 'input' or $field->control == 'textarea') ? 'include' : '=';
-                $control  = ($field->control == 'select' or $field->control == 'multi-select' or $field->control == 'radio' or $field->control == 'checkbox') ? 'select' : 'input';
-                $options  = $this->workflowfield->getFieldOptions($field);
-                $class    = ($field->control == 'date' or $field->control == 'datetime') ? 'date' : ''; // Set date zui for date and datetime control.
+                    if(in_array($field->control, $this->config->workflowfield->optionControls))
+                    {
+                        $field->options = $this->workflowfield->getFieldOptions($field, true, zget($fieldValues, $field->field, ''), '', $this->config->flowLimit);
+                    }
 
-                $searchConfig['fields'][$field->field] = $field->name;
-                $searchConfig['params'][$field->field] = array('operator' => $operator, 'control' => $control,  'values' => $options, 'class' => $class);
+                    $searchConfig['fields'][$field->field] = $field->name;
+                    $searchConfig['params'][$field->field] = $this->loadModel('flow', 'sys')->processSearchParams($field->control, $field->options);
+                }
+                $this->config->maxCount = $maxCount;
             }
-            $this->config->maxCount = $maxCount;
         }
 
         $searchParams['module']       = $searchConfig['module'];
