@@ -383,9 +383,7 @@ $config->upgrade->defaultActions['buildin']       = 1;
 $config->upgrade->defaultActions['role']          = 'buildin';
 $config->upgrade->defaultActions['virtual']       = 0;
 $config->upgrade->defaultActions['status']        = 'enable';
-$config->upgrade->defaultActions['createdBy']     = 'admin';
 $config->upgrade->defaultActions['vision']        = 'rnd';
-$config->upgrade->defaultActions['hasLite']       = false;
 
 $config->upgrade->recoveryActions = new stdclass();
 $config->upgrade->recoveryActions->feedback = new stdclass();
@@ -397,3 +395,31 @@ $config->upgrade->recoveryActions->feedback->review['method']   = 'operate';
 $config->upgrade->recoveryActions->feedback->review['open']     = 'modal';
 $config->upgrade->recoveryActions->feedback->review['position'] = 'browseandview';
 $config->upgrade->recoveryActions->feedback->review['hasLite']  = true;
+
+$config->upgrade->recoveryActions->task = new stdclass();
+$config->upgrade->recoveryActions->task->review = array();
+$config->upgrade->recoveryActions->task->review['action']   = 'cancel';
+$config->upgrade->recoveryActions->task->review['module']   = 'task';
+$config->upgrade->recoveryActions->task->review['name']     = $lang->upgrade->recoveryActions->cancel;
+$config->upgrade->recoveryActions->task->review['method']   = 'operate';
+$config->upgrade->recoveryActions->task->review['open']     = 'modal';
+$config->upgrade->recoveryActions->task->review['position'] = 'view';
+$config->upgrade->recoveryActions->task->review['hasLite']  = true;
+
+$config->upgrade->recoveryActions->story = new stdclass();
+$config->upgrade->recoveryActions->story->review = array();
+$config->upgrade->recoveryActions->story->review['action']   = 'review';
+$config->upgrade->recoveryActions->story->review['module']   = 'story';
+$config->upgrade->recoveryActions->story->review['name']     = $lang->upgrade->recoveryActions->review;
+$config->upgrade->recoveryActions->story->review['method']   = 'operate';
+$config->upgrade->recoveryActions->story->review['open']     = 'normal';
+$config->upgrade->recoveryActions->story->review['position'] = 'browseandview';
+
+$config->upgrade->recoveryActions->testcase = new stdclass();
+$config->upgrade->recoveryActions->testcase->review = array();
+$config->upgrade->recoveryActions->testcase->review['action']   = 'review';
+$config->upgrade->recoveryActions->testcase->review['module']   = 'testcase';
+$config->upgrade->recoveryActions->testcase->review['name']     = $lang->upgrade->recoveryActions->review;
+$config->upgrade->recoveryActions->testcase->review['method']   = 'operate';
+$config->upgrade->recoveryActions->testcase->review['open']     = 'normal';
+$config->upgrade->recoveryActions->testcase->review['position'] = 'browseandview';

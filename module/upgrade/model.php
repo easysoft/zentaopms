@@ -6792,7 +6792,7 @@ class upgradeModel extends model
             if(isset($this->config->upgrade->recoveryActions->{$module}->{$actionCode}))
             {
                 $data = array_merge($this->config->upgrade->defaultActions, $this->config->upgrade->recoveryActions->{$module}->{$actionCode});
-                if(isset($data['hasLite']))
+                if(isset($data['hasLite']) && $data['hasLite'] === true)
                 {
                     unset($data['hasLite']);
                     $liteData = $data;
