@@ -15,16 +15,16 @@
 <?php js::set('confirmDelete', $lang->release->confirmDelete)?>
 <div id="mainMenu" class="clearfix">
   <div class="btn-toolbar pull-left">
-  <?php 
-  common::sortFeatureMenu();
-  foreach($lang->release->featureBar['browse'] as $featureType => $label)
-  {
-      $active = $type == $featureType ? 'btn-active-text' : '';
-      $label  = "<span class='text'>$label</span>";
-      if($type == $featureType) $label .= " <span class='label label-light label-badge'>{$pager->recTotal}</span>";
-      echo html::a(inlink('browse', "productID={$product->id}&branch=$branch&type=$featureType"), $label, '', "id='{$featureType}Tab' class='btn btn-link $active'");
-  }
-  ?>
+    <?php
+    common::sortFeatureMenu();
+    foreach($lang->release->featureBar['browse'] as $featureType => $label)
+    {
+        $active = $type == $featureType ? 'btn-active-text' : '';
+        $label  = "<span class='text'>$label</span>";
+        if($type == $featureType) $label .= " <span class='label label-light label-badge'>{$pager->recTotal}</span>";
+        echo html::a(inlink('browse', "productID={$product->id}&branch=$branch&type=$featureType"), $label, '', "id='{$featureType}Tab' class='btn btn-link $active'");
+    }
+    ?>
   </div>
   <div class="btn-toolbar pull-right">
     <?php if(common::canModify('product', $product)):?>
