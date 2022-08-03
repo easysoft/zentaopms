@@ -740,6 +740,13 @@ class bugModel extends model
                 $this->linkBugToBuild($bugID, $bug->resolvedBuild);
             }
 
+            if($bug->plan != $oldBug->plan)
+            {
+                $this->loadModel('action');
+                if(!empty($oldBug->plan)) $this->action->create('productplan', $oldBug->plan, 'unlinkbug', '', $bugID);
+                if(!empty($bug->plan)) $this->action->create('productplan', $bug->plan, 'linkbug', '', $bugID);
+            }
+
             $linkBugs    = explode(',', $bug->linkBug);
             $oldLinkBugs = explode(',', $oldBug->linkBug);
             $addBugs     = array_diff($linkBugs, $oldLinkBugs);
@@ -777,11 +784,13 @@ class bugModel extends model
      */
     public function batchUpdate()
     {
-        $bugs       = array();
-        $allChanges = array();
-        $now        = helper::now();
-        $data       = fixer::input('post')->get();
-        $bugIDList  = $this->post->bugIDList ? $this->post->bugIDList : array();
+        $bugs        = array();
+        $allChanges  = array();
+        $now         = helper::now();
+        $data        = fixer::input('post')->get();
+        $bugIDList   = $this->post->bugIDList ? $this->post->bugIDList : array();
+        $unlinkPlans = array();
+        $link2Plans  = array();
 
         if(!empty($bugIDList))
         {
@@ -861,6 +870,12 @@ class bugModel extends model
                     $bug->{$extendField->field} = htmlSpecialString($bug->{$extendField->field});
                 }
 
+                if($bug->plan != $oldBug->plan)
+                {
+                    if($bug->plan != $oldBug->plan and !empty($oldBug->plan)) $unlinkPlans[$oldBug->plan] = empty($unlinkPlans[$oldBug->plan]) ? $bugID : "{$unlinkPlans[$oldBug->plan]},$bugID";
+                    if($bug->plan != $oldBug->plan and !empty($bug->plan))    $link2Plans[$bug->plan]  = empty($link2Plans[$bug->plan]) ? $bugID : "{$link2Plans[$bug->plan]},$bugID";
+                }
+
                 $bugs[$bugID] = $bug;
                 unset($bug);
             }
@@ -902,7 +917,14 @@ class bugModel extends model
                 }
             }
         }
-        if(!dao::isError()) $this->loadModel('score')->create('ajax', 'batchEdit');
+        if(!dao::isError())
+        {
+            $this->loadModel('score')->create('ajax', 'batchEdit');
+
+            $this->loadModel('action');
+            foreach($unlinkPlans as $planID => $bugs) $this->action->create('productplan', $planID, 'unlinkbug', '', $bugs);
+            foreach($link2Plans as $planID => $bugs) $this->action->create('productplan', $planID, 'linkbug', '', $bugs);
+        }
         return $allChanges;
     }
 
