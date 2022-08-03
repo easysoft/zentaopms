@@ -540,9 +540,16 @@ class GitRepo
     {
         if(!scm::checkRevision($revision)) return array();
 
-        if($revision == 'HEAD' and $branch) $revision = 'origin/' . $branch;
-        $revision = is_numeric($revision) ? "--skip=$revision $branch" : $revision;
-        $count    = $count == 0 ? '' : "-n $count";
+        if($revision == 'HEAD' and $branch)
+        {
+            $revision = $branch;
+        }
+        elseif(is_numeric($revision))
+        {
+            $revision = "--skip=$revision $branch";
+        }
+        $count = $count == 0 ? '' : "-n $count";
+
 
         chdir($this->root);
         if($branch) execCmd(escapeCmd("$this->client checkout $branch"), 'array');
