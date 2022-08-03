@@ -64,7 +64,7 @@ h3 {font-size: 16px;}
 
 /* Pre row */
 .repoCode table > tbody > tr.over > td {background: #f8eec7;}
-.repoCode table > tbody > tr.over > th {background: #cdcdcd; color: #333;}
+.repoCode table > tbody > tr.over > th {background: #cdcdcd !important; color: #333 !important;}
 
 /* Comment-btn */
 .comment-btn {position: relative; margin: 0; padding: 0; display: none;}
