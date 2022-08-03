@@ -21,6 +21,7 @@
   <div class='center-block'>
     <div class='main-header'>
       <h2><?php echo html::a(inlink('view', "id=$plan->id"), $plan->title, '', "title='$plan->title'");?></strong></h2>
+      <input type="hidden" class="colorpicker" id="color" name="color" value="<?php echo $story->color ?>" data-icon="color" data-wrapper="input-control-icon-right" data-update-color=".story-title"  data-provide="colorpicker">
     </div>
     <form class='load-indicator main-form form-ajax' method='post' target='hiddenwin' id='dataform'>
       <table class='table table-form'>
