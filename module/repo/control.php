@@ -1053,7 +1053,7 @@ class repo extends control
         $repo = $this->repo->getRepoByID($repoID);
         if(empty($repo)) return;
         if(!in_array($repo->SCM, $this->config->repo->gitTypeList)) return print('finish');
-        if($branch) $branch = base64_decode($branch);
+        if($branch) $branch = base64_decode(helper::safe64Decode($branch));
 
         $this->scm->setEngine($repo);
 
