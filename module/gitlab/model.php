@@ -986,7 +986,7 @@ class gitlabModel extends model
      */
     public function apiGetSingleProject($gitlabID, $projectID)
     {
-        $url = sprintf($this->getApiRoot($gitlabID), "/projects/$projectID");
+        $url = sprintf($this->getApiRoot($gitlabID, false), "/projects/$projectID");
         return json_decode(commonModel::http($url));
     }
 
