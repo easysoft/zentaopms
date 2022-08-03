@@ -217,10 +217,10 @@ class repoModel extends model
         $this->dao->insert(TABLE_REPO)->data($data, $skip = 'serviceToken')
             ->batchCheck($this->config->repo->create->requiredFields, 'notempty')
             ->batchCheckIF($data->SCM != 'Gitlab', 'path,client', 'notempty')
-            ->batchCheckIF(in_array($data->SCM, array('Gitea', 'Gogs')), 'serviceHost,serviceProject', 'notempty')
+            ->batchCheckIF($isPipelineServer, 'serviceHost,serviceProject', 'notempty')
             ->batchCheckIF($data->SCM == 'Subversion', $this->config->repo->svn->requiredFields, 'notempty')
-            ->checkIF(in_array($data->SCM, array('Gitea', 'Gogs')), 'serviceProject', 'unique', "`SCM` = '{$data->SCM}'")
-            ->checkIF(in_array($data->SCM, array('Git', 'Subversion')), 'path', 'unique', "`SCM` = '{$data->SCM}'")
+            ->checkIF($isPipelineServer, 'serviceProject', 'unique', "`SCM` = '{$data->SCM}'")
+            ->checkIF(!$isPipelineServer, 'path', 'unique', "`SCM` = '{$data->SCM}'")
             ->autoCheck()
             ->exec();
 
@@ -291,10 +291,10 @@ class repoModel extends model
         $this->dao->update(TABLE_REPO)->data($data, $skip = 'serviceToken')
             ->batchCheck($this->config->repo->edit->requiredFields, 'notempty')
             ->batchCheckIF($data->SCM != 'Gitlab', 'path,client', 'notempty')
-            ->batchCheckIF(in_array($data->SCM, array('Gitea', 'Gogs')), 'serviceHost,serviceProject', 'notempty')
+            ->batchCheckIF($isPipelineServer, 'serviceHost,serviceProject', 'notempty')
             ->batchCheckIF($data->SCM == 'Subversion', $this->config->repo->svn->requiredFields, 'notempty')
-            ->checkIF(in_array($data->SCM, array('Gitea', 'Gogs')), 'serviceProject', 'unique', "`SCM` = '{$data->SCM}' and `id` <> $id")
-            ->checkIF(in_array($data->SCM, array('Git', 'Subversion')), 'path', 'unique', "`SCM` = '{$data->SCM}'  and `id` <> $id")
+            ->checkIF($isPipelineServer, 'serviceProject', 'unique', "`SCM` = '{$data->SCM}' and `id` <> $id")
+            ->checkIF(!$isPipelineServer, 'path', 'unique', "`SCM` = '{$data->SCM}'  and `id` <> $id")
             ->autoCheck()
             ->where('id')->eq($id)->exec();
 
