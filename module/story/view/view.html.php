@@ -524,7 +524,7 @@
                     {
                         foreach($story->linkStoryTitles as $linkStoryID => $linkStoryTitle)
                         {
-                            if($app->user->admin or strpos(",{$app->user->view->products},", $storyProducts[$linkStoryID]) !== false)
+                            if($app->user->admin or strpos(",{$app->user->view->products},", ",{$storyProducts[$linkStoryID]},") !== false)
                             {
                                 echo '[S] ' . html::a($this->createLink('story', 'view', "storyID=$linkStoryID", '', true), "#$linkStoryID $linkStoryTitle", '', "class='iframe' data-width='80%' title='$linkStoryTitle'") . '<br />';
                             }

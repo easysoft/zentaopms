@@ -980,12 +980,15 @@ class storyModel extends model
             $changeStories  = $this->dao->select("id,$linkStoryField")->from(TABLE_STORY)->where('id')->in(array_filter($changeStories))->fetchPairs();
             foreach($changeStories as $changeStoryID => $changeStory)
             {
-                if(in_array($changeStoryID, $addStories) and empty($changeStory))  $this->dao->update(TABLE_STORY)->set($linkStoryField)->eq($storyID)->where('id')->eq((int)$changeStoryID)->exec();
-                if(in_array($changeStoryID, $addStories) and !empty($changeStory)) $this->dao->update(TABLE_STORY)->set($linkStoryField)->eq("$changeStory,$storyID")->where('id')->eq((int)$changeStoryID)->exec();
+                if(in_array($changeStoryID, $addStories))
+                {
+                    $stories = empty($changeStory) ? $storyID : $changeStory . ',' . $storyID;
+                    $this->dao->update(TABLE_STORY)->set($linkStoryField)->eq($stories)->where('id')->eq((int)$changeStoryID)->exec();
+                }
+
                 if(in_array($changeStoryID, $removeStories))
                 {
-                    $linkStories = explode(',', $changeStory);
-                    unset($linkStories[array_search($storyID, $linkStories)]);
+                    $linkStories = str_replace(",$storyID,", ',', $changeStory);
                     $this->dao->update(TABLE_STORY)->set($linkStoryField)->eq(implode(',', $linkStories))->where('id')->eq((int)$changeStoryID)->exec();
                 }
             }
@@ -2385,15 +2388,6 @@ class storyModel extends model
         if($browseType == 'bySearch')
         {
             $stories2Link = $this->getBySearch($story->product, $story->branch, $queryID, 'id_desc', '', $tmpStoryType, $storyIDList, $pager);
-
-            if($type != 'linkRelateSR' and $type != 'linkRelateUR')
-            {
-                foreach($stories2Link as $key => $story2Link)
-                {
-                    if($story2Link->id == $storyID) unset($stories2Link[$key]);
-                    if(in_array($story2Link->id, explode(',', $story->$type))) unset($stories2Link[$key]);
-                }
-            }
         }
         elseif($type != 'linkRelateSR' and $type != 'linkRelateUR')
         {
