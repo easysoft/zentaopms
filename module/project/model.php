@@ -2369,7 +2369,7 @@ class projectModel extends model
 
                 if(strpos($query, $allProject) !== false) $query = str_replace($allProject, '1', $query);
 
-                $query = str_replace(array('`id`', '`name`', '`status`', '`project`', '`PM`', '`openedBy`', '`openedDate`', '`begin`', '`end`', '`realBegan`', '`realEnd`', '`closedBy`', '`lastEditedDate`', '`closedDate`'), array('t1.`id`', 't1.`name`', 't1.`status`', 't1.`project`', 't1.`PM`', 't1.`openedBy`', 't1.`openedDate`', 't1.`begin`', 't1.`end`', 't1.`realBegan`', 't1.`realEnd`', 't1.`closedBy`', 't1.`lastEditedDate`', 't1.`closedDate`'), $query);
+                $query = preg_replace('/(`\w*`)/', 't1.$1',$query);
             }
 
             if($status == 'involved')
