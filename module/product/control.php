@@ -1262,7 +1262,6 @@ class product extends control
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
-
         /* Process product structure. */
         if($this->config->systemMode == 'classic' and $orderBy == 'program_asc') $orderBy = 'order_asc';
         $productStats     = $this->product->getStats($orderBy, $pager, $browseType, '', 'story', '', $queryID);
