@@ -63,7 +63,7 @@
             if(isset($sonarRepoList[$repo->id]))
             {
                 $execClass = '';
-                $jobId = $sonarRepoList[$repo->id]->id;
+                $jobID = $sonarRepoList[$repo->id]->id;
                 if(in_array($jobID, $successJobs)) $reportClass = '';
             }
             common::printIcon('sonarqube', 'execJob', "jobID=$jobID", '', 'list', 'sonarqube', 'hiddenwin', $execClass);
