@@ -480,7 +480,7 @@ class repo extends control
         $revisions = $this->repo->getCommits($repo, $path, $revision, $logType, $pager);
 
         /* Synchronous commit only in root path. */
-        if(in_array($repo->SCM, $this->config->repo->gitTypeList) and empty($path) and $infos and empty($revisions)) $this->locate($this->repo->createLink('showSyncCommit', "repoID=$repoID&objectID=$objectID&branch=" . base64_encode($this->cookie->repoBranch)));
+        if(in_array($repo->SCM, $this->config->repo->gitTypeList) and empty($path) and $infos and empty($revisions)) $this->locate($this->repo->createLink('showSyncCommit', "repoID=$repoID&objectID=$objectID&branch=" . helper::safe64Encode(base64_encode($this->cookie->repoBranch))));
 
         $this->view->title           = $this->lang->repo->common;
         $this->view->repo            = $repo;
@@ -910,7 +910,7 @@ class repo extends control
         $this->commonAction($repoID, $objectID);
 
         if($repoID == 0) $repoID = $this->session->repoID;
-        if($branch) $branch = base64_decode($branch);
+        if($branch) $branch = base64_decode(helper::safe64Decode($branch));
 
         $this->view->title      = $this->lang->repo->common . $this->lang->colon . $this->lang->repo->showSyncCommit;
         $this->view->position[] = $this->lang->repo->showSyncCommit;
