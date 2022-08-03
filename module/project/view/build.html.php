@@ -20,10 +20,12 @@
 <div id="mainMenu" class="clearfix table-row">
   <div class="btn-toolbar pull-left">
     <?php
-    foreach($lang->build->featureBar as $featureType => $label)
+    foreach($lang->build->featureBar['browse'] as $featureType => $label)
     {
         $activeClass = $type == $featureType ? 'btn-active-text' : '';
-        echo html::a(inlink('build', "projectID=$projectID&type=$featureType"), "<span class='text'>$label</span> <span class='label label-light label-badge'>{$buildsTotal}</span>", '',"class='btn btn-link $activeClass' data-app={$app->tab} id=" . $featureType .'Tab');
+        $label       = "<span class='text'>$label</span>";
+        if($type == $featureType) $label .= " <span class='label label-light label-badge'>{$buildsTotal}</span>";
+        echo html::a(inlink('build', "projectID=$projectID&type=$featureType"), $label, '',"class='btn btn-link $activeClass' data-app={$app->tab} id=" . $featureType .'Tab');
     }
     ?>
     <div class="input-control space w-150px"><?php echo html::select('product', $products, $product, "onchange='changeProduct(this.value)' class='form-control chosen' data-placeholder='{$lang->productCommon}'");?></div>

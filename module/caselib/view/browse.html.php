@@ -41,7 +41,7 @@ js::set('flow',          $config->global->flow);
   <div class='btn-toolbar pull-left'>
     <?php
     if(!$config->testcase->needReview && empty($config->testcase->forceReview)) unset($lang->caselib->featureBar['wait']);
-    foreach($lang->caselib->featureBar as $featureType => $label)
+    foreach($lang->caselib->featureBar['browse'] as $featureType => $label)
     {
         $activeClass = $browseType == $featureType ? 'btn-active-text' : '';
         echo html::a(inlink('browse', "libID=$libID&browseType=$featureType"), "<span class='text'>$label</span>", '',"class='btn btn-link $activeClass' data-app={$app->tab} id=" . $featureType .'Tab');

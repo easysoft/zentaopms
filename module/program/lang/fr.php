@@ -139,12 +139,12 @@ $lang->program->statusList['doing']     = 'Doing';
 $lang->program->statusList['suspended'] = 'Suspended';
 $lang->program->statusList['closed']    = 'Closed';
 
-$lang->program->featureBar['all']       = 'All';
-$lang->program->featureBar['unclosed']  = 'Unclosed';
-$lang->program->featureBar['wait']      = 'En Attente';
-$lang->program->featureBar['doing']     = 'En Cours';
-$lang->program->featureBar['suspended'] = 'Suspendues';
-$lang->program->featureBar['closed']    = 'Fermées';
+$lang->program->featureBar['browse']['all']       = 'All';
+$lang->program->featureBar['browse']['unclosed']  = 'Unclosed';
+$lang->program->featureBar['browse']['wait']      = 'En Attente';
+$lang->program->featureBar['browse']['doing']     = 'En Cours';
+$lang->program->featureBar['browse']['suspended'] = 'Suspendues';
+$lang->program->featureBar['browse']['closed']    = 'Fermées';
 
 $lang->program->kanban = new stdclass();
 $lang->program->kanban->common             = 'Program Kanban';

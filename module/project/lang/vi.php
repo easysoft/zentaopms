@@ -160,11 +160,11 @@ $lang->project->currencySymbol['SGD'] = 'S$';
 $lang->project->modelList['scrum']     = "Scrum";
 $lang->project->modelList['waterfall'] = "CMMI";
 
-$lang->project->featureBar['all']       = 'All';
-$lang->project->featureBar['doing']     = 'Doing';
-$lang->project->featureBar['wait']      = 'Waiting';
-$lang->project->featureBar['suspended'] = 'Suspended';
-$lang->project->featureBar['closed']    = 'Closed';
+$lang->project->featureBar['browse']['all']       = 'All';
+$lang->project->featureBar['browse']['doing']     = 'Doing';
+$lang->project->featureBar['browse']['wait']      = 'Waiting';
+$lang->project->featureBar['browse']['suspended'] = 'Suspended';
+$lang->project->featureBar['browse']['closed']    = 'Closed';
 
 $lang->project->aclList['private'] = 'Private (For team members and stakeholders only)';
 $lang->project->aclList['open']    = "Open (accessible with project view permissions)";

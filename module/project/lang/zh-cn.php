@@ -241,12 +241,12 @@ $lang->project->modelList['scrum']     = "Scrum";
 $lang->project->modelList['waterfall'] = "瀑布";
 $lang->project->modelList['kanban']    = "看板";
 
-$lang->project->featureBar['all']       = '所有';
-$lang->project->featureBar['undone']    = '未完成';
-$lang->project->featureBar['wait']      = '未开始';
-$lang->project->featureBar['doing']     = '进行中';
-$lang->project->featureBar['suspended'] = '已挂起';
-$lang->project->featureBar['closed']    = '已关闭';
+$lang->project->featureBar['browse']['all']       = '所有';
+$lang->project->featureBar['browse']['undone']    = '未完成';
+$lang->project->featureBar['browse']['wait']      = '未开始';
+$lang->project->featureBar['browse']['doing']     = '进行中';
+$lang->project->featureBar['browse']['suspended'] = '已挂起';
+$lang->project->featureBar['browse']['closed']    = '已关闭';
 
 $lang->project->aclList['private'] = "私有 (只有项目负责人、团队成员和干系人可访问)";
 $lang->project->aclList['open']    = "公开 (有项目视图权限即可访问)";

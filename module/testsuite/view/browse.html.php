@@ -17,10 +17,12 @@
   <div class="btn-toolbar pull-left">
     <?php
     $type = 'all';
-    foreach($lang->testsuite->featureBar as $featureType => $label)
+    foreach($lang->testsuite->featureBar['browse'] as $featureType => $label)
     {
         $activeClass = $type == $featureType ? 'btn-active-text' : '';
-        echo html::a(inlink('browse', "productID=$productID"), "<span class='text'>$label</span> <span class='label label-light label-badge'>{$pager->recTotal}</span>", '',"class='btn btn-link $activeClass'");
+        $label       = "<span class='text'>$label</span>";
+        if($type == $featureType) $label .= " <span class='label label-light label-badge'>{$pager->recTotal}</span>";
+        echo html::a(inlink('browse', "productID=$productID"), $label, '',"class='btn btn-link $activeClass'");
     }
     ?>
   </div>

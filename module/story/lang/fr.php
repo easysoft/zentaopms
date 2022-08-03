@@ -441,3 +441,7 @@ $lang->story->subDivideTip['subStory']  = 'Les sous-stories ne peuvent pas être
 $lang->story->subDivideTip['planned']   = 'Cette Story est planifiée et ne peut être subdivisée.';
 $lang->story->subDivideTip['projected'] = 'Cette Story a été créée et ne peut être subdivisée.';
 $lang->story->subDivideTip['notActive'] = "Cette Story n'est pas active et ne peut être subdivisée.";
+
+$lang->story->featureBar = array();
+$lang->story->featureBar['browse']['all']      = $lang->all;
+$lang->story->featureBar['browse']['unclosed'] = $lang->story->unclosed;

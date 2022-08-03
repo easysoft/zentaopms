@@ -56,4 +56,4 @@ $lang->testsuite->authorList['private'] = 'Private';
 $lang->testsuite->authorList['public']  = 'Public';
 
 $lang->testsuite->featureBar = array();
-$lang->testsuite->featureBar['all'] = 'Suite List';
+$lang->testsuite->featureBar['browse']['all'] = 'Suite List';

@@ -53,4 +53,4 @@ $lang->testsuite->authorList['private'] = 'Riêng tư';
 $lang->testsuite->authorList['public']  = 'Công khai';
 
 $lang->testsuite->featureBar = array();
-$lang->testsuite->featureBar['all'] = 'Suite List';
+$lang->testsuite->featureBar['browse']['all'] = 'Suite List';

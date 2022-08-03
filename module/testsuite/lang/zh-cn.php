@@ -56,4 +56,4 @@ $lang->testsuite->authorList['private'] = '私有';
 $lang->testsuite->authorList['public']  = '公开';
 
 $lang->testsuite->featureBar = array();
-$lang->testsuite->featureBar['all'] = '套件列表';
+$lang->testsuite->featureBar['browse']['all'] = '套件列表';

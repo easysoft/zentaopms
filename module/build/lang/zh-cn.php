@@ -70,4 +70,4 @@ $lang->build->action->buildopened = '$date, 由 <strong>$actor</strong> 创建�
 $lang->backhome = '返回';
 
 $lang->build->featureBar = array();
-$lang->build->featureBar['all'] = '所有版本';
+$lang->build->featureBar['browse']['all'] = '所有版本';

@@ -46,5 +46,5 @@ $lang->caselib->libraryDelete = 'Do you want to delete this library？';
 $lang->caselib->noModule      = '<div>You have no modules.</div><div>Manage it now.</div>';
 
 $lang->caselib->featureBar = array();
-$lang->caselib->featureBar['all']  = 'All';
-$lang->caselib->featureBar['wait'] = 'Waiting';
+$lang->caselib->featureBar['browse']['all']  = 'All';
+$lang->caselib->featureBar['browse']['wait'] = 'Waiting';
