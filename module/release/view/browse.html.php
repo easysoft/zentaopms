@@ -15,12 +15,15 @@
 <?php js::set('confirmDelete', $lang->release->confirmDelete)?>
 <div id="mainMenu" class="clearfix">
   <div class="btn-toolbar pull-left">
-    <?php foreach($lang->release->featureBar as $featureType => $link):?>
-    <?php $count       = $type == $featureType ? '<span class="label label-light label-badge">' . $pager->recTotal . '</span>' : '';?>
-    <?php $activeClass = $type == $featureType ? 'btn-active-text' : '';?>
-    <?php list($label, $module, $method, $params) = explode('|', $link);?>
-    <?php echo html::a($this->createLink($module, $method, "productID={$product->id}&branch=$branch&$params"), "<span class='text'>{$label}</span> " . $count, '', "id='{$type}Tab' class='btn btn-link $activeClass'");?>
-    <?php endforeach;?>
+  <?php 
+  foreach($lang->release->featureBar['browse'] as $featureType => $label)
+  {
+      $active = $type == $featureType ? 'btn-active-text' : '';
+      $label  = "<span class='text'>$label</span>";
+      if($type == $featureType) $label .= " <span class='label label-light label-badge'>{$pager->recTotal}</span>";
+      echo html::a(inlink('browse', "productID={$product->id}&branch=$branch&type=$featureType"), $label, '', "id='{$featureType}Tab' class='btn btn-link $active'");
+  }
+  ?>
   </div>
   <div class="btn-toolbar pull-right">
     <?php if(common::canModify('product', $product)):?>

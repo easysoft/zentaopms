@@ -86,6 +86,6 @@ $lang->release->notifyList['ET'] = "{$lang->execution->common} Team Members";
 $lang->release->notifyList['PT'] = "Project Team Members";
 
 $lang->release->featureBar = array();
-$lang->release->featureBar['all']       = 'All|release|browse|type=all';
-$lang->release->featureBar['normal']    = 'Active|release|browse|type=normal';
-$lang->release->featureBar['terminate'] = 'Terminated|release|browse|type=terminate';
+$lang->release->featureBar['browse']['all']       = $lang->release->all;
+$lang->release->featureBar['browse']['normal']    = $lang->release->statusList['normal'];
+$lang->release->featureBar['browse']['terminate'] = $lang->release->statusList['terminate'];

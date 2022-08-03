@@ -92,6 +92,6 @@ $lang->release->notifyList['PT'] = "所在项目团队成员";
 $lang->release->notifyList['CT'] = "抄送给";
 
 $lang->release->featureBar = array();
-$lang->release->featureBar['all']       = '所有|release|browse|type=all';
-$lang->release->featureBar['normal']    = '正常|release|browse|type=normal';
-$lang->release->featureBar['terminate'] = '停止维护|release|browse|type=terminate';
+$lang->release->featureBar['browse']['all']       = $lang->release->all;
+$lang->release->featureBar['browse']['normal']    = $lang->release->statusList['normal'];
+$lang->release->featureBar['browse']['terminate'] = $lang->release->statusList['terminate'];
