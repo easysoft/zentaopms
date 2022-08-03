@@ -833,6 +833,7 @@ class productModel extends model
 
         $unlinkProducts = array();
         $linkProducts   = array();
+        $this->lang->error->unique = $this->lang->error->repeat;
         foreach($products as $productID => $product)
         {
             $oldProduct = $oldProducts[$productID];
@@ -842,7 +843,7 @@ class productModel extends model
                 ->data($product)
                 ->autoCheck()
                 ->batchCheck($this->config->product->edit->requiredFields , 'notempty')
-                ->checkIF((!empty($product->name) and $this->config->systemMode == 'new'), 'name', 'unique', "id != $productID and `program` = $programID")
+                ->checkIF((!empty($product->name) and $this->config->systemMode == 'new'), 'name', 'unique', "id != $productID and `program` = $programID and `deleted` = '0'")
                 ->checkFlow()
                 ->where('id')->eq($productID)
                 ->exec();
