@@ -63,6 +63,7 @@ class taskModel extends model
             $requiredFields = str_replace(",story,", ',', "$requiredFields");
             $requiredFields = str_replace(",estStarted,", ',', "$requiredFields");
             $requiredFields = str_replace(",deadline,", ',', "$requiredFields");
+            $requiredFields = str_replace(",deadline,", ',', "$requiredFields");
         }
 
         $this->loadModel('file');
