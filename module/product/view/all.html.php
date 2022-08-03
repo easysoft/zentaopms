@@ -131,7 +131,7 @@
           <?php endif;?>
 
           <?php foreach($program as $lineID => $line):?>
-          <?php if(isset($line['lineName']) and isset($line['products']) and is_array($line['products'])):?>
+          <?php if(isset($line['lineName'])):?>
           <?php $lineNames[] = $line['lineName'];?>
           <?php
           if($this->config->systemMode == 'new' and $programID)
