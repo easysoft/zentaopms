@@ -58,7 +58,6 @@
 #backBtn i {font-size: 20px;}
 
 .modal-title {font-size: 14px !important; font-weight: 700 !important;}
-#modalBasicInfo .modal-dialog {width: 720px;}
 </style>
 <?php $backLink = $this->createLink('doc', 'objectlibs', "type=$type&objectID=$objectID&libID={$lib->id}&docID={$doc->id}");?>
 <div id="mainContent" class="main-content">

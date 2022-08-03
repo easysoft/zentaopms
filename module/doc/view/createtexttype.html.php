@@ -55,7 +55,6 @@
 #backBtn i {font-size: 20px;}
 
 .modal-title {font-size: 14px !important; font-weight: 700 !important;}
-#modalBasicInfo .modal-dialog {width: 720px;}
 </style>
 <?php if($objectType == 'custom' and empty($libs)):?>
 <?php echo html::a(helper::createLink('doc', 'createLib', "type=custom&objectID=$objectID"), '<i class="icon icon-plus"></i> ' . $lang->doc->createLib, '', 'class="iframe hidden createCustomLib"');?>
