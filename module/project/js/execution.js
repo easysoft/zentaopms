@@ -180,7 +180,7 @@ function showEditCheckbox(show)
         executionID = $tr.attr('data-id');
         if(show)
         {
-            var marginLeft = $tr.find('td:first').find('span.table-nest-icon').css('margin-left');
+            var marginLeft = '7px';
 
             $tr.find('td:first').prepend("<div class='checkbox-primary'><input type='checkbox' name='executionIDList[]' value='" + executionID + "' id='executionIDList" + executionID + "'/><label for='executionIDList" + executionID + "'></lable></div>");
             $tr.find('td:first').find('.checkbox-primary').css('margin-left', marginLeft).css('width', '14');
