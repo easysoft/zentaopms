@@ -53,7 +53,7 @@ $(function()
   <div class="main-header clearfix">
     <h2><?php echo $lang->task->import;?></h2>
   </div>
-  <form class='main-form' target='hiddenwin' method='post'>
+  <form class='main-form' target='hiddenwin' method='post' id='portform'>
     <table class='table table-form' id='showData'>
       <thead>
         <tr>
@@ -98,101 +98,6 @@ $(function()
         $addID       = 1;
         $hasMultiple = false;
         ?>
-        <?php foreach($datas as $key => $object):?>
-        <tr class='text-top'>
-          <td>
-            <?php
-            if(!empty($object->id))
-            {
-                echo $object->id . html::hidden("id[$key]", $object->id);
-                $insert = false;
-            }
-            else
-            {
-                $sub = (strpos($object->title, '>') === 0) ? " <sub style='vertical-align:sub;color:red'>{$lang->port->children}</sub>" : " <sub style='vertical-align:sub;color:gray'>{$lang->task->new}</sub>";
-                echo $addID++ . $sub;
-            }
-            ?>
-          </td>
-          <?php foreach($fields as $field => $value):?>
-
-          <?php if($value['control'] == 'select'):?>
-          <?php $selected = !empty($object->$field) ? $object->$field : '';$list = array();?>
-          <?php if(!empty($value['values'][$selected])) $list = array($selected => $value['values'][$selected]);?>
-          <?php if(!empty($value['values'][$selected]) and isset($value['values'][0])) $list = array_slice($value['values'], 0, 1);?>
-          <td><?php echo html::select("{$field}[$key]", $list, $selected, "class='form-control picker-select' data-field='{$field}'")?></td>
-
-          <?php elseif($value['control'] == 'multiple'):?>
-          <?php if(!isset($value['values'][''])) $value['values'][''] = '';?>
-          <td><?php echo html::select("{$field}[$key][]", $value['values'], !empty($object->$field) ? $object->$field : '', "multiple class='form-control chosen'")?></td>
-
-          <?php elseif($value['control'] == 'date'):?>
-          <?php $dateMatch = $this->config->port->dateMatch;?>
-          <?php if(!preg_match($dateMatch, $object->$field)) $object->$field = ''; ?>
-          <td><?php echo html::input("{$field}[$key]", !empty($object->$field) ? $object->$field : '', "class='form-control form-date autocomplete='off'")?></td>
-
-          <?php elseif($value['control'] == 'datetime'):?>
-          <td><?php echo html::input("{$field}[$key]", !empty($object->$field) ? $object->$field : '', "class='form-control form-datetime autocomplete='off'")?></td>
-
-          <?php elseif($value['control'] == 'hidden'):?>
-          <?php echo html::hidden("{$field}[$key]", $object->$field)?>
-
-          <?php elseif($value['control'] == 'textarea'):?>
-          <td><?php echo html::textarea("{$field}[$key]", $object->$field, "class='form-control' cols='50' rows='1'")?></td>
-
-          <?php elseif($field == 'stepDesc' or $field == 'stepExpect'):?>
-          <?php if($field == 'stepExpect') continue;?>
-          <td>
-              <?php if(isset($stepData[$key]['desc'])):?>
-              <table class='w-p100 bd-0'>
-              <?php $hasStep = false;?>
-              <?php foreach($stepData[$key]['desc'] as $id => $desc):?>
-              <?php if(empty($desc['content'])) continue;?>
-                <tr class='step'>
-                  <?php $hasStep = true;?>
-                  <td><?php echo $id . html::hidden("stepType[$key][$id]", $desc['type'])?></td>
-                  <td><?php echo html::textarea("desc[$key][$id]", htmlSpecialString($desc['content']), "class='form-control'")?></td>
-                  <td><?php if($desc['type'] != 'group') echo html::textarea("expect[$key][$id]", isset($stepData[$key]['expect'][$id]['content']) ? htmlSpecialString($stepData[$key]['expect'][$id]['content']) : '', "class='form-control'")?></td>
-                </tr>
-              <?php endforeach;?>
-              <?php if(!$hasStep):?>
-                <tr class='step'>
-                  <td><?php echo '1' . html::hidden("stepType[$key][1]", 'step')?></td>
-                  <td><?php echo html::textarea("desc[$key][1]", '', "class='form-control'")?></td>
-                  <td><?php echo html::textarea("expect[$key][1]", '', "class='form-control'")?></td>
-                </tr>
-              <?php endif;?>
-              </table>
-              <?php else:?>
-              <table class='w-p100 bd-0'>
-                <tr class='step'>
-                  <td><?php echo '1' . html::hidden("stepType[$key][1]", 'step')?></td>
-                  <td><?php echo html::textarea("desc[$key][1]", '', "class='form-control'")?></td>
-                  <td><?php echo html::textarea("expect[$key][1]", '', "class='form-control'")?></td>
-                </tr>
-              </table>
-              <?php endif;?>
-          </td>
-
-          <?php else:?>
-          <td><?php echo html::input("{$field}[$key]", !empty($object->$field) ? $object->$field : '', "class='form-control autocomplete='off'")?></td>
-          <?php endif;?>
-
-          <?php endforeach;?>
-          <?php
-          if(!empty($appendFields))
-          {
-              $this->loadModel('flow');
-              foreach($appendFields as $field)
-              {
-                  if(!$field->show) continue;
-                  $value = $field->defaultValue ? $field->defaultValue : zget($task, $field->field, '');
-                  echo '<td>' . $this->flow->buildControl($field, $value, "$field->field[$key]", true) . '</td>';
-              }
-          }
-          ?>
-        </tr>
-        <?php endforeach;?>
       </tbody>
       <tfoot>
         <tr>
@@ -224,6 +129,78 @@ $(function()
 <?php endif;?>
 <script>
 $.ajaxSetup({async: false});
+
+window.addEventListener('scroll', this.handleScroll);
+function handleScroll(e)
+{
+    var relative = 200; // 相对距离
+    $('tr.showmore').each(function()
+    {
+        var $showmore = $(this);
+        var offsetTop = $showmore[0].offsetTop;
+        if(offsetTop == 0) return true;
+
+        if(getScrollTop() + getWindowHeight() >= offsetTop - relative)
+        {
+            throttle(loadData($showmore), 150)
+        }
+    })
+}
+
+function loadData($showmore)
+{
+    $showmore.removeClass('showmore');
+
+    $.get(createLink('port', 'ajaxGetTbody','model=<?php echo $model;?>&pagerID=<?php echo $pagerID;?>'), function(data)
+    {
+        $showmore.after(data);
+    })
+}
+
+function throttle(fn, threshhold)
+{
+    var last;
+    var timer;
+    threshhold || (threshhold = 250);
+
+    return function()
+    {
+        var context = this;
+        var args = arguments;
+
+        var now = +new Date()
+
+        if (last && now < last + threshhold)
+        {
+            clearTimeout(timer);
+            timer = setTimeout(function ()
+            {
+                last = now
+                fn.apply(context, args)
+            }, threshhold)
+        }
+        else
+        {
+            last = now
+            fn.apply(context, args)
+        }
+    }
+}
+
+function getScrollTop()
+{
+    return scrollTop = document.body.scrollTop + document.documentElement.scrollTop
+}
+
+function getWindowHeight()
+{
+    return document.compatMode == "CSS1Compat" ? windowHeight = document.documentElement.clientHeight : windowHeight = document.body.clientHeight
+}
+
+$.get(createLink('port', 'ajaxGetTbody','model=<?php echo $model;?>&pagerID=<?php echo $pagerID;?>'), function(data)
+{
+    $('#showData > tbody').append(data);
+})
 
 $('#showData').on('mouseenter', '.picker', function(e){
     var myPicker = $(this);

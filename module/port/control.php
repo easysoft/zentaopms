@@ -131,6 +131,17 @@ class port extends control
         $this->display();
     }
 
+    public function ajaxGetTbody($model = '', $pagerID)
+    {
+        $this->loadModel($model);
+        $importFields = $this->config->$model->templateFields;
+        $fields       = $this->port->initFieldList($model, $importFields, false);
+        $formatDatas  = $this->port->format($model);
+        $datas        = $this->port->getPageDatas($formatDatas, $pagerID);
+        $html = $this->port->buildNextList($datas->datas, $fields);
+        die($html);
+    }
+
     /**
      * Ajax Get Options.
      *

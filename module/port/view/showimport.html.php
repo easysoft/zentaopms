@@ -196,6 +196,8 @@ $('#showData').on('mouseenter', '.picker', function(e){
     });
 })
 
+$.get(createLink('port', 'ajaxGetTbody','model=<?php echo $model;?>&pagerID=<?php echo $pagerID;?>'))
+
 $(function()
 {
     $.fixedTableHead('#showData');

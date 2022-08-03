@@ -1302,4 +1302,99 @@ class portModel extends model
 
         return $datas;
     }
+
+    /**
+     * buildNextList
+     *
+     * @param  array  $list
+     * @param  string $fields
+     * @access public
+     * @return void
+     */
+    public function buildNextList($list = array(), $fields = '')
+    {
+        $html = '';
+        foreach($list as $row => $object)
+        {
+            $trClass = '';
+            if(!isset($list[$row+1])) $trClass = 'showmore';
+            $html .= "<tr class='text-top $trClass'>";
+            $html .= '<td>';
+            $html .= $object->id;
+            $html .= html::hidden("id[$row]", $object->id);
+            $html .= "</td>";
+
+            foreach($fields as $field => $value)
+            {
+                $control  = $value['control'];
+                $values   = $value['values'];
+                $name     = "{$field}[$row]";
+                $selected = !empty($object->$field) ? $object->$field : '';
+
+                if($control == 'select')       $html .= '<td>' . html::select("$name", $values, $selected, "class='form-control picker-select' data-field='{$field}'") . '</td>';
+
+                elseif($control == 'multiple') $html .= '<td>' . html::select("{$name}[]", $values, $selected, "multiple class='form-control picker-select'") . '</td>';
+
+                elseif($control == 'date')     $html .= '<td>' . html::input("$name", $selected, "class='form-control form-date autocomplete='off'") . '</td>';
+
+                elseif($control == 'datetime') $html .= '<td>' . html::input("$name", $selected, "class='form-control form-datetime autocomplete='off'") . '</td>';
+
+                elseif($control == 'hidden')   $html .= html::hidden("$name", $selected);
+
+                elseif($control == 'textarea') $html .= '<td>' . html::textarea("$name", $selected, "class='form-control' cols='50' rows='1'") . '</td>';
+
+                elseif($field == 'stepDesc' or $field == 'stepExpect') $html .= '<td>' . $this->process4Testcase($field, $list, $row) . '</td>';
+
+                else $html .= '<td>' . html::input("$name", $selected, "class='form-control autocomplete='off'") . '</td>';
+            }
+            $html .= '</tr>' . "\n";
+        }
+
+        return $html;
+    }
+
+    public function process4Testcase($field, $datas, $key = 0)
+    {
+        $stepData = $this->testcase->processDatas($datas);
+
+        $html = '';
+        if($field == 'stepExpect') return $html;
+        if(isset($stepData[$key]['desc']))
+        {
+            $html = "<table class='w-p100 bd-0'>";
+            $hasStep = false;
+            foreach($stepData[$key]['desc'] as $id => $desc)
+            {
+                if(empty($desc['content'])) continue;
+                $html .= "<tr class='step'>";
+                $hasStep = true;
+                $html .= '<td>' . $id . html::hidden("stepType[$key][$id]", $desc['type']) . '</td>';
+                $html .= '<td>' . html::textarea("desc[$key][$id]", htmlSpecialString($desc['content']), "class='form-control'") . '</td>';
+                if($desc['type'] != 'group') $html .= '<td>' . html::textarea("expect[$key][$id]", isset($stepData[$key]['expect'][$id]['content']) ? htmlSpecialString($stepData[$key]['expect'][$id]['content']) : '', "class='form-control'") . '</td>';
+                $html .= "</tr>";
+            }
+
+            if(!$hasStep)
+            {
+                $html .= "<tr class='step'>";
+                $html .= "<td>1" . html::hidden("stepType[$key][1]", 'step') . " </td>";
+                $html .= "<td>" . html::textarea("desc[$key][1]", '', "class='form-control'") . "</td>";
+                $html .= "<td>" . html::textarea("expect[$key][1]", '', "class='form-control'") . "</td>";
+                $html .= "</tr>";
+            }
+            $html .= "</table>";
+        }
+        else
+        {
+            $html = "<table class='w-p100 bd-0'>";
+            $html .= "<tr class='step'>";
+            $html .= "<td>1" . html::hidden("stepType[$key][1]", 'step') . " </td>";
+            $html .= "<td>" . html::textarea("desc[$key][1]", '', "class='form-control'") . "</td>";
+            $html .= "<td>" . html::textarea("expect[$key][1]", '', "class='form-control'") . "</td>";
+            $html .= "</tr>";
+            $html .= "</table>";
+        }
+
+        return $html;
+    }
 }

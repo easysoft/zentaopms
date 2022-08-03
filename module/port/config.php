@@ -23,3 +23,5 @@ $config->port->import = new stdClass();
 $config->port->dateMatch = '/[1-9]\d{3}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])/';
 
 $config->port->hasChildDataFields = explode(',', 'task,story');
+
+$config->port->showImportCount = 20;
