@@ -93,7 +93,7 @@ $(function()
 
     $(document).on('change', "select[id^='branch']", disableSelectedBranch);
 
-    if(copyProjectID > 0)
+    if(copyProjectID > 0 && copyType != 'previous')
     {
         $('#name').addClass('has-info')
         $('#name').after('<div id="nameLabelInfo" class="text-info">' + nameTips + '</div>')
