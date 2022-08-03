@@ -3377,6 +3377,8 @@ EOD;
     /**
      * Sort featureBar.
      *
+     * @param  string $module
+     * @param  string $method
      * @static
      * @access public
      * @return bool
