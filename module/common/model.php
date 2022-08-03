@@ -3399,7 +3399,10 @@ EOD;
                 {
                     if($key == $currentKey) continue;
                     $featureBar[$method][$key] = $label;
-                    if($key == $afterKey) $featureBar[$method][$currentKey] = $lang->$module->featureBar[$method][$currentKey];
+                    if($key == $afterKey && !empty($lang->$module->featureBar[$method][$currentKey]))
+                    {
+                        $featureBar[$method][$currentKey] = $lang->$module->featureBar[$method][$currentKey];
+                    }
                 }
             }
             $lang->$module->featureBar = $featureBar;
