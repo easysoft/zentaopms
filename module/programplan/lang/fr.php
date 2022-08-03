@@ -84,3 +84,4 @@ $lang->programplan->error->createdTask     = 'The task has been decomposed. Sub 
 $lang->programplan->error->parentWorkload  = 'The sum of the workload of the child phase cannot be greater than that of the parent phase: %s.';
 $lang->programplan->error->parentDuration  = 'The planned start and planned completion of the child phase cannot exceed the parent phase.';
 $lang->programplan->error->sameName        = 'Stage name cannot be the same!';
+$lang->programplan->error->taskDrag        = 'The %s task cannot be dragged';

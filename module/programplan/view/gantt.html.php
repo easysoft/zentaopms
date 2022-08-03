@@ -390,9 +390,9 @@ function validateResources(id)
     flag = true;
 
     /* Check status. */
-    if(status !== statusLang)
+    if(status !== statusLang && type === 'task')
     {
-        new $.zui.Messager(status + '的任务不可以拖动', {
+        new $.zui.Messager("<?php echo $lang->programplan->error->taskDrag;?>".replace('%s', status), {
             type: 'danger',
             icon: 'exclamation-sign'
         }).show();
@@ -459,7 +459,7 @@ $(function()
     gantt.config.readonly            = false;
     gantt.config.order_branch        = true;
     gantt.config.details_on_dblclick = false;
-    gantt.config.drag_progress       = true;
+    gantt.config.drag_progress       = false;
     gantt.config.drag_links          = false;
     gantt.config.drag_resize         = false;
     gantt.config.smart_rendering     = true;
