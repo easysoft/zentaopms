@@ -220,6 +220,40 @@ class project extends control
     }
 
     /**
+     * Ajax get available budget.
+     *
+     * @param  int    $programID
+     * @param  int    $parentProgramID
+     * @param  int    $budget
+     * @access public
+     * @return void
+     */
+    public function ajaxGetAvailableBudget($projectID, $parentProgramID, $budget)
+    {
+        if(!empty($projectID))
+        {
+            $project         = $this->project->getByID($projectID);
+            $parentProgram   = $this->loadModel('program')->getByID($parentProgramID);
+            $budgetLeft      = $this->program->getBudgetLeft($parentProgram);
+            $availableBudget = $project->parent == $parentProgramID ? $budgetLeft + $project->budget : $budgetLeft;
+        }
+        else
+        {
+            $parentProgram   = $this->loadModel('program')->getByID($parentProgramID);
+            $availableBudget = $this->program->getBudgetLeft($parentProgram);
+        }
+
+        $tip = '';
+        if($budget != 0 && $budget !== null && $budget > $availableBudget) $tip = "<span id='projectBudget' class='text-remind'>" . $this->lang->project->budgetOverrun . zget($this->lang->project->currencySymbol, $parentProgram->budgetUnit) . $availableBudget . "</span>";
+
+        $placeholder = '';
+        if($parentProgram and $parentProgram->budget != 0) $placeholder = $this->lang->project->parentBudget . zget($this->lang->project->currencySymbol, $parentProgram->budgetUnit) . $availableBudget;
+
+        $tipList = array('tip' => $tip, 'placeholder' => $placeholder);
+        echo json_encode($tipList);
+    }
+
+    /**
      * Project index view.
      *
      * @param  int    $projectID

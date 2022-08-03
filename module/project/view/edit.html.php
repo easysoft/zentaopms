@@ -29,8 +29,6 @@
 <?php $aclList = $project->parent ? $lang->project->subAclList : $lang->project->aclList;?>
 <?php $requiredFields = $config->project->edit->requiredFields;?>
 <?php js::set('requiredFields', $requiredFields);?>
-<?php js::set('budget', $project->budget);?>
-<?php js::set('budgetBalance', $availableBudget);?>
 <div id='mainContent' class='main-content'>
   <div class='center-block'>
     <div class='main-header'>
@@ -55,7 +53,7 @@
               $programList = array($project->parent => $program->name);
           }
           ?>
-          <td><?php echo html::select('parent', $programList, $project->parent, "class='form-control chosen' $attr");?></td>
+          <td><?php echo html::select('parent', $programList, $project->parent, "class='form-control chosen' onchange='budgetOverrunTips($project->id)' $attr");?></td>
           <td colspan='2'></td>
         </tr>
         <tr>
@@ -75,9 +73,8 @@
         <tr>
           <th><?php echo $lang->project->budget;?></th>
           <td>
-            <div class='input-group'>
-              <?php $placeholder = ($parentProgram and $parentProgram->budget != 0) ? 'placeholder="' . $lang->project->parentBudget . zget($lang->project->currencySymbol, $parentProgram->budgetUnit) . $availableBudget . '"' : '';?>
-              <?php echo html::input('budget', $project->budget != 0 ? $project->budget : '', "class='form-control' onchange='budgetOverrunTips($availableBudget)' maxlength='10' " . (strpos($requiredFields, 'budget') !== false ? 'required ' : '') . ($project->budget == 0 ? 'disabled ' : '') . $placeholder);?>
+            <div id='budgetBox' class='input-group'>
+              <?php echo html::input('budget', $project->budget != 0 ? $project->budget : '', "class='form-control' onchange='budgetOverrunTips($project->id)' maxlength='10' " . (strpos($requiredFields, 'budget') !== false ? 'required ' : '') . ($project->budget == 0 ? 'disabled ' : ''));?>
               <?php if($parentProgram):?>
               <span class='input-group-addon'><?php echo zget($budgetUnitList, $project->budgetUnit);?></span>
               <?php else:?>
@@ -85,7 +82,6 @@
               <?php echo html::select('budgetUnit', $budgetUnitList, $project->budgetUnit, "class='form-control'");?>
               <?php endif;?>
             </div>
-            <span id='programBudget' class='text-remind hidden'><?php echo $lang->project->budgetOverrun . zget($lang->project->currencySymbol, $parentProgram->budgetUnit) . $availableBudget;?></span>
           </td>
           <td class='futureBox'>
             <div class='checkbox-primary'>

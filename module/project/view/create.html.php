@@ -26,7 +26,6 @@
 <?php js::set('selectedBranchID', $branchID);?>
 <?php js::set('productName', $lang->product->name);?>
 <?php js::set('manageProducts', $lang->project->manageProducts);?>
-<?php js::set('budgetBalance', $availableBudget);?>
 <?php $requiredFields = $config->project->create->requiredFields;?>
 <?php js::set('requiredFields', $requiredFields);?>
 <div id='mainContent' class='main-content'>
@@ -69,9 +68,9 @@
         <tr>
           <th><?php echo $lang->project->budget;?></th>
           <td>
-            <div class='input-group'>
+            <div id='budgetBox' class='input-group'>
               <?php $placeholder = ($parentProgram and $parentProgram->budget != 0) ? 'placeholder="' . $lang->program->parentBudget . zget($lang->project->currencySymbol, $parentProgram->budgetUnit) . $availableBudget . '"' : '';?>
-              <?php echo html::input('budget', '', "class='form-control' onchange='budgetOverrunTips($availableBudget)' maxlength='10' " . (strpos($requiredFields, 'budget') !== false ? 'required ' : '') . $placeholder);?>
+              <?php echo html::input('budget', '', "class='form-control' onchange='budgetOverrunTips()' maxlength='10' " . (strpos($requiredFields, 'budget') !== false ? 'required ' : '') . $placeholder);?>
               <?php if($parentProgram):?>
               <span class='input-group-addon'><?php echo zget($budgetUnitList, $parentProgram->budgetUnit);?></span>
               <?php else:?>
@@ -79,7 +78,6 @@
               <?php echo html::select('budgetUnit', $budgetUnitList, $config->project->defaultCurrency, "class='form-control'");?>
               <?php endif;?>
             </div>
-            <span id='programBudget' class='text-remind hidden'><?php echo $lang->project->budgetOverrun . zget($lang->project->currencySymbol, $parentProgram->budgetUnit) . $availableBudget;?></span>
           </td>
           <td class='futureBox'>
             <div class="checkbox-primary c-future <?php echo strpos($requiredFields, 'budget') !== false ? 'hidden' : '';?>">
