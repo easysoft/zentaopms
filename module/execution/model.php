@@ -100,7 +100,7 @@ class executionModel extends model
             include $this->app->getModulePath('', 'execution') . 'lang/' . $this->app->getClientLang() . '.php';
         }
 
-        if($execution->acl != 'private') unset($this->lang->execution->menu->settings['subMenu']->whitelist);
+        if(isset($execution->cal) and $execution->acl != 'private') unset($this->lang->execution->menu->settings['subMenu']->whitelist);
 
         if($execution and $execution->lifetime == 'ops')
         {
