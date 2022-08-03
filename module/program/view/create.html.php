@@ -39,7 +39,7 @@
 <?php js::set('PGMParentBudget', $lang->program->parentBudget);?>
 <?php js::set('future', $lang->project->future);?>
 <?php js::set('programList', $programList);?>
-<?php js::set('budgetBalance', $budgetLeft);?>
+<?php js::set('editedProgramID', '');?>
 <?php $aclList = $parentProgram ? $lang->program->subAclList : $lang->program->aclList;?>
 <?php $requiredFields = $config->program->create->requiredFields;?>
 <div id='mainContent' class='main-content'>
@@ -70,9 +70,9 @@
         <tr>
           <th><?php echo $lang->program->budget;?></th>
           <td>
-            <div class='input-group'>
+            <div id='budgetBox' class='input-group'>
               <?php $placeholder = $parentProgram ? 'placeholder="' . $lang->program->parentBudget . zget($lang->project->currencySymbol, $parentProgram->budgetUnit) . $budgetLeft . '"' : '';?>
-              <?php echo html::input('budget', '', "class='form-control' onchange='budgetOverrunTips($budgetLeft)' maxlength='10' " . (strpos($requiredFields, 'budget') !== false ? 'required ' : '') . $placeholder);?>
+              <?php echo html::input('budget', '', "class='form-control' onchange='budgetOverrunTips()' maxlength='10' " . (strpos($requiredFields, 'budget') !== false ? 'required ' : '') . $placeholder);?>
               <?php if($parentProgram):?>
               <span class='input-group-addon fix-border'><?php echo zget($budgetUnitList, $parentProgram->budgetUnit);?></span>
               <?php else:?>
@@ -80,7 +80,6 @@
               <?php echo html::select('budgetUnit', $budgetUnitList, $config->project->defaultCurrency, "class='form-control'");?>
               <?php endif;?>
             </div>
-            <span id='programBudget' class='text-remind hidden'><?php echo $lang->program->budgetOverrun . zget($lang->project->currencySymbol, $parentProgram->budgetUnit) . $budgetLeft;?></span>
           </td>
           <td class='futureBox'>
             <div class='checkbox-primary future w-70px'>
@@ -144,4 +143,5 @@
   <?php echo nl2br(html::radio('acl', $lang->program->subAclList, 'private', "onclick='setWhite(this.value);'", 'block'));?>
 </div>
 <?php js::set('parentProgramID', isset($parentProgram->id) ? $parentProgram->id : 0);?>
+<?php js::set('budgetUnit', $parentProgram ? zget($lang->project->currencySymbol, $parentProgram->budgetUnit) : '');?>
 <?php include '../../common/view/footer.html.php';?>

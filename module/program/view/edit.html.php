@@ -15,6 +15,7 @@
 <?php js::set('weekend', $config->execution->weekend);?>
 <?php js::set('longTime', $lang->program->longTime);?>
 <?php js::set('currencySymbol', $lang->project->currencySymbol);?>
+<?php js::set('PGMParentBudget', $lang->program->parentBudget);?>
 <?php js::set('parentBudget', $lang->program->parentBudget);?>
 <?php js::set('future', $lang->project->future);?>
 <?php js::set('programList', $programList);?>
@@ -23,7 +24,7 @@
 <?php js::set('exRateNotEmpty', sprintf($lang->error->notempty, $lang->program->exchangeRate));?>
 <?php js::set('exRateNum', sprintf($lang->error->float, $lang->program->exchangeRate));?>
 <?php js::set('exRateNotNegative', $lang->program->exRateNotNegative);?>
-<?php js::set('budgetBalance', $availableBudget);?>
+<?php js::set('editedProgramID', $program->id);?>
 <?php $aclList = $program->parent ? $lang->program->subAclList : $lang->program->aclList;?>
 <?php $requiredFields = $config->program->edit->requiredFields;?>
 <div id='mainContent' class='main-content'>
@@ -49,9 +50,9 @@
         <tr>
           <th><?php echo $lang->program->budget;?></th>
           <td>
-            <div class='input-group'>
+            <div id='budgetBox' class='input-group'>
               <?php $placeholder = ($parentProgram and $parentProgram->budget != 0) ? 'placeholder="' . $lang->program->parentBudget . zget($lang->project->currencySymbol, $parentProgram->budgetUnit) . $availableBudget . '"' : '';?>
-              <?php echo html::input('budget', $program->budget != 0 ? $program->budget : '', "class='form-control' onchange='budgetOverrunTips($availableBudget)' maxlength='10' " . (strpos($requiredFields, 'budget') !== false ? 'required ' : '') . ($program->budget == 0 ? 'disabled ' : '') . $placeholder);?>
+              <?php echo html::input('budget', $program->budget != 0 ? $program->budget : '', "class='form-control' onchange='budgetOverrunTips($program->id)' maxlength='10' " . (strpos($requiredFields, 'budget') !== false ? 'required ' : '') . ($program->budget == 0 ? 'disabled ' : '') . $placeholder);?>
               <?php if($parentProgram):?>
               <span class='input-group-addon'><?php echo zget($budgetUnitList, $program->budgetUnit);?></span>
               <?php else:?>
@@ -61,7 +62,8 @@
               <?php echo html::hidden('exchangeRate', '');?>
               <?php endif;?>
             </div>
-            <span id='programBudget' class='text-remind hidden'><?php echo $lang->program->budgetOverrun . zget($lang->project->currencySymbol, $parentProgram->budgetUnit) . $availableBudget;?></span>
+            <?php if($parentProgram):?>
+            <?php endif;?>
           </td>
           <td class='futureBox'>
             <div class='checkbox-primary future w-70px'>

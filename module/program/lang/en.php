@@ -113,7 +113,7 @@ $lang->program->readjustTime       = 'Change the program begin&end date.';
 $lang->program->accessDenied       = 'You have no access to the program.';
 $lang->program->beyondParentBudget = 'The remaining budget of the owned program has been exceeded.';
 $lang->program->checkedProjects    = 'Seleted %s items';
-$lang->program->budgetOverrun      = 'The budget of the project set has exceeded the remaining budget of the parent project set:';
+$lang->program->budgetOverrun      = "The program's budget has exceeded the remaining budget of the parent program:";
 
 $lang->program->endList[31]  = 'One month';
 $lang->program->endList[93]  = 'Trimester';

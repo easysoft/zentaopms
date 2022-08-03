@@ -719,6 +719,35 @@ class program extends control
     }
 
     /**
+     * Ajax get available budget.
+     *
+     * @param  int    $programID
+     * @param  int    $parentProgramID
+     * @param  int    $budget
+     * @access public
+     * @return void
+     */
+    public function ajaxGetAvailableBudget($programID, $parentProgramID, $budget)
+    {
+        if(!empty($programID))
+        {
+            $program         = $this->program->getByID($programID);
+            $parentProgram   = $this->program->getByID($parentProgramID);
+            $budgetLeft      = $this->program->getBudgetLeft($parentProgram);
+            $availableBudget = $program->parent == $parentProgramID ? $budgetLeft + $program->budget : $budgetLeft;
+        }
+        else
+        {
+            $parentProgram   = $this->program->getByID($parentProgramID);
+            $availableBudget = $this->program->getBudgetLeft($parentProgram);
+        }
+
+        $tips = '';
+        if($budget != 0 && $budget !== null && $budget > $availableBudget) $tips = "<span id='programBudget' class='text-remind'>" . $this->lang->program->budgetOverrun . zget($this->lang->project->currencySymbol, $parentProgram->budgetUnit) . $availableBudget . "</span>";
+        echo json_encode($tips);
+    }
+
+    /**
      * Update program order.
      *
      * @access public
