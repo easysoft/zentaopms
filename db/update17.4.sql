@@ -1,3 +1,5 @@
+ALTER TABLE `zt_story` ADD COLUMN `linkRequirements` varchar(255) NOT NULL AFTER `linkStories`;
+
 ALTER TABLE `zt_acl` ENGINE='InnoDB';
 ALTER TABLE `zt_action` ENGINE='InnoDB';
 ALTER TABLE `zt_api_lib_release` ENGINE='InnoDB';

@@ -513,6 +513,9 @@ $lang->resource->story->batchChangeModule  = 'batchChangeModule';
 $lang->resource->story->batchToTask        = 'batchToTask';
 $lang->resource->story->track              = 'trackAB';
 $lang->resource->story->processStoryChange = 'processStoryChange';
+$lang->resource->story->linkStories        = 'linkStoriesAB';
+
+if($config->URAndSR) $lang->resource->story->linkRequirements = 'linkRequirementsAB';
 
 $lang->story->methodOrder[5]   = 'create';
 $lang->story->methodOrder[10]  = 'batchCreate';
@@ -542,6 +545,9 @@ $lang->story->methodOrder[125] = 'batchChangeModule';
 $lang->story->methodOrder[130] = 'batchToTask';
 $lang->story->methodOrder[135] = 'track';
 $lang->story->methodOrder[140] = 'processStoryChange';
+$lang->story->methodOrder[145] = 'linkStories';
+
+if($config->URAndSR) $lang->story->methodOrder[150] = 'linkRequirements';
 
 /* Product plan. */
 $lang->resource->productplan = new stdclass();

@@ -1583,6 +1583,7 @@ class projectModel extends model
         }
         if(dao::isError()) return false;
 
+        $this->lang->error->unique = $this->lang->error->repeat;
         foreach($projects as $projectID => $project)
         {
             $oldProject = $oldProjects[$projectID];
@@ -1594,8 +1595,8 @@ class projectModel extends model
                 ->checkIF($project->begin != '', 'begin', 'date')
                 ->checkIF($project->end != '', 'end', 'date')
                 ->checkIF($project->end != '', 'end', 'gt', $project->begin)
-                ->checkIF(!empty($project->name), 'name', 'unique', "id != $projectID and `type`='project' and `parent` = $parentID and `model` = '{$project->model}'")
-                ->checkIF(!empty($project->code), 'code', 'unique', "id != $projectID and `type`='project' and `model` = '{$project->model}'")
+                ->checkIF(!empty($project->name), 'name', 'unique', "id != $projectID and `type`='project' and `parent` = $parentID and `model` = '{$project->model}' and `deleted` = '0'")
+                ->checkIF(!empty($project->code), 'code', 'unique', "id != $projectID and `type`='project' and `model` = '{$project->model}' and `deleted` = '0'")
                 ->checkFlow()
                 ->where('id')->eq($projectID)
                 ->exec();
