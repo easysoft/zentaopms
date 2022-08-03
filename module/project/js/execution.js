@@ -4,8 +4,7 @@ $(function()
     {
         var show = $(this).is(':checked') ? 1 : 0;
         $.cookie('showTask', show, {expires:config.cookieLife, path:config.webRoot});
-        if(show == 1) $('input#editExecution1').prop('disabled', true);
-        if(show == 0) $('input#editExecution1').prop('disabled', false);
+        $('input#editExecution1').prop('disabled', show);
         window.location.reload();
     });
     if($.cookie('showTask') == 1) $('input#editExecution1').prop('disabled', true);
@@ -14,8 +13,7 @@ $(function()
     {
         var editExecution = $(this).is(':checked') ? 1 : 0;
         $.cookie('editExecution', editExecution, {expires:config.cookieLife, path:config.webRoot});
-        if(editExecution == 1) $('input[name^="showTask"]').prop('disabled', true);
-        if(editExecution == 0) $('input[name^="showTask"]').prop('disabled', false);
+        $('input[name^="showTask"]').prop('disabled', editExecution);
 
         showEditCheckbox(editExecution);
     });
@@ -166,12 +164,19 @@ function getWindowHeight()
     return document.compatMode == "CSS1Compat" ? windowHeight = document.documentElement.clientHeight : windowHeight = document.body.clientHeight
 }
 
+/**
+ * Show edit executions checkbox.
+ *
+ * @param int $show
+ * @access public
+ * @return void
+ */
 function showEditCheckbox(show)
 {
     $('.project-type-label').each(function()
     {
-        $this     = $(this);
-        $tr       = $(this).closest('tr');
+        $this       = $(this);
+        $tr         = $(this).closest('tr');
         executionID = $tr.attr('data-id');
         if(show)
         {
