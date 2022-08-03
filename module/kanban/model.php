@@ -1207,6 +1207,10 @@ class kanbanModel extends model
                     ->andWhere('action')->eq('opened')
                     ->fetchPairs();
             }
+            elseif($fromType == 'execution')
+            {
+                $executionProgress = $this->loadModel('project')->computerProgress($objects);
+            }
 
             /* Data for constructing the card. */
             foreach($objectCards as $objectID => $cardsInfo)
@@ -1231,6 +1235,7 @@ class kanbanModel extends model
                             if($delay > 0) $objectCard->delay = $delay;
                         }
                         $objectCard->execType = $object->type;
+                        $objectCard->progress = isset($executionProgress[$objectID]->progress) ? $executionProgress[$objectID]->progress : 0;
                     }
 
                     $objectCard->desc         = strip_tags(htmlspecialchars_decode($object->desc));

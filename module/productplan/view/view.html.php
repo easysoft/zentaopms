@@ -189,7 +189,7 @@
                 <td class='text-left nobr' title='<?php echo $story->title?>'>
                   <?php
                   if($story->parent > 0) echo "<span class='label label-badge label-light' title={$lang->story->children}>{$lang->story->childrenAB}</span>";
-                  echo html::a($viewLink , $story->title);
+                  echo html::a($viewLink , $story->title, '', "style='color: $story->color'");
                   ?>
                 </td>
                 <td><?php echo zget($users, $story->openedBy);?></td>

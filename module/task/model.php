@@ -63,6 +63,7 @@ class taskModel extends model
             $requiredFields = str_replace(",story,", ',', "$requiredFields");
             $requiredFields = str_replace(",estStarted,", ',', "$requiredFields");
             $requiredFields = str_replace(",deadline,", ',', "$requiredFields");
+            $requiredFields = str_replace(",module,", ',', "$requiredFields");
         }
 
         $this->loadModel('file');
@@ -3626,6 +3627,18 @@ class taskModel extends model
     public function printAssignedHtml($task, $users)
     {
         $btnTextClass   = '';
+        if(!empty($task->team) and $task->mode == 'multi' and $task->status != 'closed')
+        {
+            $assignedToText = $this->lang->task->team;
+
+            $teamMembers = array();
+            foreach($task->team as $teamMember) $teamMembers[] = zget($users, $teamMember->account);
+            $assignedToTitle = implode($this->lang->comma, $teamMembers);
+        }
+        else
+        {
+            $assignedToText = $assignedToTitle = zget($users, $task->assignedTo);
+        }
         $assignedToText = (!empty($task->team) and $task->mode == 'multi' and $task->status != 'closed') ? $this->lang->task->team : zget($users, $task->assignedTo);
 
         if(empty($task->assignedTo))
@@ -3638,7 +3651,7 @@ class taskModel extends model
         $btnClass     = $task->assignedTo == 'closed' ? ' disabled' : '';
         $btnClass     = "iframe btn btn-icon-left btn-sm {$btnClass}";
         $assignToLink = $task->assignedTo == 'closed' ? '#' : helper::createLink('task', 'assignTo', "executionID=$task->execution&taskID=$task->id", '', true);
-        $assignToHtml = html::a($assignToLink, "<i class='icon icon-hand-right'></i> <span title='" . zget($users, $task->assignedTo) . "' class='{$btnTextClass}'>{$assignedToText}</span>", '', "class='$btnClass'");
+        $assignToHtml = html::a($assignToLink, "<i class='icon icon-hand-right'></i> <span title='" . $assignedToTitle . "' class='{$btnTextClass}'>{$assignedToText}</span>", '', "class='$btnClass'");
 
         echo !common::hasPriv('task', 'assignTo', $task) ? "<span style='padding-left: 21px' class='{$btnTextClass}'>{$assignedToText}</span>" : $assignToHtml;
     }

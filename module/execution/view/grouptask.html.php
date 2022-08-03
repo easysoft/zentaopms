@@ -226,6 +226,7 @@
         <td colspan='13'>
           <div class="table-row segments-list">
           <?php if($groupBy == 'assignedTo' and isset($members[$task->assignedTo])) printf($lang->execution->memberHours, zget($users, $task->assignedTo), $members[$task->assignedTo]->totalHours);?>
+          <?php if($groupBy == 'assignedTo' and $task->assignedTo and !isset($members[$task->assignedTo])) printf($lang->execution->memberHours, zget($users, $task->assignedTo), '0.0');?>
           <?php if($groupBy == 'assignedTo' and empty($task->assignedTo)):?>
             <div class="table-col">
               <div class="clearfix segments">
