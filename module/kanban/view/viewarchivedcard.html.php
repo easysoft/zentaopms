@@ -47,7 +47,12 @@
 #archivedCards .card-item .has-color .info > .label-pri {border-color: #FFFFFF;}
 #archivedCards .card-item .has-color .progress-box > .progress-number {color: #FFFFFF;}
 #archivedCards .progress-box {width: 97%;}
-#performable {padding: 25px 10px !important;}
+#archivedCards .no-progress {padding: 7px 10px !important;}
+#archivedCards .has-progress {padding: 21px 10px !important;}
+#archivedCards .has-desc.has-progress {padding: 26px 10px !important;}
+#archivedCards .has-desc.no-progress {padding: 19px 10px !important;}
+#archivedCards .has-avatar.has-progress {padding: 24px 10px !important;}
+#archivedCards .has-avatar.no-progress {padding: 9px 10px !important;}
 </style>
 <?php
 $app->loadLang('execution');
@@ -71,6 +76,7 @@ js::set('systemMode', $this->config->systemMode);
     <div class='card-item' data-card='<?php echo $card->id;?>'>
       <div class='col-xs-10'>
         <?php
+        $class = '';
         $color = '';
         if($card->color == '#b10b0b') $color = 'has-color red';
         if($card->color == '#cfa227') $color = 'has-color yellow';
@@ -98,7 +104,11 @@ js::set('systemMode', $this->config->systemMode);
         $name = isset($card->title) ? $card->title : $card->name;
         if(common::hasPriv($card->fromType, 'view')) echo html::a($this->createLink($card->fromType, 'view', "id=$card->fromID"), $name, '', "class='cardName' title='$name'");
         if(!common::hasPriv($card->fromType, 'view')) echo "<div class='cardName' title='$name'>$name</div>";
-        if($card->fromType == 'productplan' or $card->fromType == 'build') echo "<div class='desc' title='$card->desc'>$card->desc</div>";
+        if($card->fromType == 'productplan' or $card->fromType == 'build')
+        {
+            echo "<div class='desc' title='$card->desc'>$card->desc</div>";
+            if(!empty($card->desc)) $class .= ' has-desc';
+        }
         echo "<div class='info $card->fromType'>";
         if(isset($lang->{$card->fromType}->statusList[$card->objectStatus])) echo "<span class='label label-$card->objectStatus'>" . $lang->{$card->fromType}->statusList[$card->objectStatus] . '</span>';
         if(isset($card->date) and !helper::isZeroDate($card->date)) echo "<span class='time label label-light'>" . date("Y-m-d", strtotime($card->date)) . "</span>"
@@ -147,6 +157,7 @@ js::set('systemMode', $this->config->systemMode);
                   if($count > 2) continue;
                   echo html::smallAvatar(array('avatar' => $usersAvatar[$account], 'account' => $account, 'name' => $users[$account]), 'avatar-circle');
                   $count ++;
+                  $class .= ' has-avatar';
               }
               ?>
               <?php if($count > 2) echo "<span>...</span>";?>
@@ -159,11 +170,12 @@ js::set('systemMode', $this->config->systemMode);
                   echo "<div class='users pull-right' title='" . $users[$assignedToList] . "'>";
                   echo html::smallAvatar(array('avatar' => $usersAvatar[$assignedToList], 'account' => $assignedToList, 'name' => $users[$assignedToList]), 'avatar-circle');
                   echo "</div>";
+                  $class .= ' has-avatar';
               }
               ?>
             <?php endif;?>
           </div>
-          <?php if($kanban->performable):?>
+          <?php if($kanban->performable and ($card->fromType == 'execution' or empty($card->fromType))):?>
           <div class='progress-box'>
             <div class='progress'>
               <div class="progress-bar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: <?php echo round($card->progress, 2) . '%';?>"></div>
@@ -173,7 +185,8 @@ js::set('systemMode', $this->config->systemMode);
           <?php endif;?>
         </div>
       </div>
-      <div class='col-xs-2 card-actions' <?php if($kanban->performable) echo "id='performable'";?>>
+      <?php $class .= (!empty($kanban->performable) and ($card->fromType == 'execution' or empty($card->fromType))) ? ' has-progress' : ' no-progress';?>
+      <div class='col-xs-2 card-actions<?php echo $class;?>'>
         <?php
         $CRKanban   = !(isset($this->config->CRKanban) and $this->config->CRKanban == '0' and $kanban->status == 'closed');
         $canRestore = (commonModel::hasPriv('kanban', 'restoreCard') and $CRKanban);
