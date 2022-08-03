@@ -200,3 +200,5 @@ ALTER TABLE `zt_sqlview` ENGINE='InnoDB';
 ALTER TABLE `zt_searchindex` ADD FULLTEXT `title_content` (`title`, `content`);
 ALTER TABLE `zt_searchindex` DROP INDEX `title`;
 ALTER TABLE `zt_searchindex` DROP INDEX `content`;
+
+UPDATE `zt_project` SET `closedDate`='' AND `closedBy`='' WHERE `status` != 'closed';
