@@ -988,7 +988,8 @@ class storyModel extends model
 
                 if(in_array($changeStoryID, $removeStories))
                 {
-                    $linkStories = str_replace(",$storyID,", ',', $changeStory);
+                    $linkStories = str_replace(",$storyID,", ',', ",$changeStory,");
+                    $linkStories = trim($linkStories, ',');
                     $this->dao->update(TABLE_STORY)->set($linkStoryField)->eq(implode(',', $linkStories))->where('id')->eq((int)$changeStoryID)->exec();
                 }
             }
