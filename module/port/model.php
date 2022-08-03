@@ -80,8 +80,11 @@ class portModel extends model
      */
     public function checkSuhosinInfo($datas = array())
     {
+        if(empty($datas)) return;
+        $current = (array)current($datas);
+
         /* Judge whether the editedTasks is too large and set session. */
-        $countInputVars  = count($datas) * 11; // Count all post datas
+        $countInputVars  = count($datas) * count($current); // Count all post datas
         $showSuhosinInfo = common::judgeSuhosinSetting($countInputVars);
         if($showSuhosinInfo) return extension_loaded('suhosin') ? sprintf($this->lang->suhosinInfo, $countInputVars) : sprintf($this->lang->maxVarsInfo, $countInputVars);
         return '';
@@ -164,11 +167,32 @@ class portModel extends model
                 file_put_contents($sheet2xmlPath, $xml);
                 file_put_contents($sheet2reslPath, $resl);
                 file_put_contents($sheet2wookbookPath, $wookbook);
-                unlink($sheet2Path);
+                @unlink($sheet2Path);
             }
 
             $result = $zip->create($tmpPath,PCLZIP_OPT_REMOVE_PATH,$tmpPath);
+            $this->deleteDir($tmpPath);
         }
+    }
+
+    /**
+     * Delete directory.
+     *
+     * @param string $dir
+     */
+    public function deleteDir($dir)
+    {
+        foreach (scandir($dir) as $file) {
+            if ($file === '.' || $file === '..') {
+                continue;
+            } elseif (is_file($dir . '/' . $file)) {
+                unlink($dir . '/' . $file);
+            } elseif (is_dir($dir . '/' . $file)) {
+                $this->deleteDir($dir . '/' . $file);
+            }
+        }
+
+        rmdir($dir);
     }
 
     /**
@@ -354,7 +378,7 @@ class portModel extends model
         if(empty($values))
         {
             if(strpos($this->modelConfig->sysLangFields, $field) and !empty($this->modelLang->{$field.'List'})) return $this->modelLang->{$field.'List'};
-            if(strpos($this->modelConfig->sysDataFields, $field) and !empty($this->portConfig->sysDataList[$values])) return $this->portConfig->sysDataList[$values];
+            if(strpos($this->modelConfig->sysDataFields, $field) and !empty($this->portConfig->sysDataList[$field])) return $this->portConfig->sysDataList[$field];
         }
 
         if(is_array($values) and $withKey)
