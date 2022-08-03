@@ -191,5 +191,6 @@ $(function()
 })
 </script>
 <?php js::set('docType', $docType);?>
+<?php js::set('fromGlobal', $fromGlobal);?>
 <?php js::set('noticeAcl', $lang->doc->noticeAcl['doc']);?>
 <?php include '../../common/view/footer.html.php';?>
