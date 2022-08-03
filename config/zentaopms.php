@@ -382,7 +382,7 @@ $config->objectTables['repo']         = TABLE_REPO;
 
 $config->newFeatures = array('introduction', 'tutorial', 'youngBlueTheme', 'visions');
 
-$config->pipelineTypeList = array('gitlab', 'sonarqube', 'jenkins', 'gitea');
+$config->pipelineTypeList = array('gitlab', 'gogs', 'gitea', 'jenkins', 'sonarqube');
 
 /* Program privs.*/
 $config->programPriv = new stdclass();
