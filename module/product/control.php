@@ -1281,7 +1281,7 @@ class product extends control
         $this->view->title        = $this->lang->product->common;
         $this->view->position[]   = $this->lang->product->common;
 
-        $this->view->recTotal         = count($productStats);
+        $this->view->recTotal         = $pager->recTotal;
         $this->view->productStats     = $productStats;
         $this->view->productStructure = $productStructure;
         $this->view->productLines     = $productLines;
