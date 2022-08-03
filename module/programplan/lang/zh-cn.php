@@ -12,6 +12,7 @@
 $lang->programplan->common        = '项目阶段';
 $lang->programplan->browse        = '浏览甘特图';
 $lang->programplan->gantt         = '甘特图';
+$lang->programplan->ganttEdit     = '甘特图编辑';
 $lang->programplan->list          = '阶段列表';
 $lang->programplan->create        = '设置阶段';
 $lang->programplan->edit          = '编辑';
