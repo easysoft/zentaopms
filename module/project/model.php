@@ -2368,7 +2368,6 @@ class projectModel extends model
                 $allProject = "`project` = 'all'";
 
                 if(strpos($query, $allProject) !== false) $query = str_replace($allProject, '1', $query);
-
                 $query = preg_replace('/(`\w*`)/', 't1.$1',$query);
             }
 
