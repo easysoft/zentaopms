@@ -361,6 +361,7 @@ function hideKanbanAction()
     $('.contextmenu').removeClass('contextmenu-show');
     $('.contextmenu .contextmenu-menu').removeClass('open').removeClass('in');
     $('#moreTasks, #moreColumns').animate({right: -400}, 500);
+    $('.storyColumn').parent().removeClass('open');
 }
 
 /**
@@ -764,7 +765,7 @@ function renderCount($count, count, column)
             + '  <span class="text">' + (kanbanLang.orderList[orderBy] == undefined ? kanbanLang.orderList['pri_asc'] : kanbanLang.orderList[orderBy]) + '</span><span class="caret"></span>'
             + '</button>'
             + '<ul class="dropdown-menu">';
-        for(var order in kanbanLang.orderList) orderButton += '<li><a href="###" onclick="searchCards(rdSearchValue, \'' + order + '\')">' + kanbanLang.orderList[order] + '</a></li>';
+        for(var order in kanbanLang.orderList) orderButton += '<li class="' + (order == orderBy ? 'active' : '') + '"><a href="###" onclick="searchCards(rdSearchValue, \'' + order + '\')">' + kanbanLang.orderList[order] + '</a></li>';
         orderButton += '</ul>';
 
         $count.prev().replaceWith(orderButton);
@@ -1595,6 +1596,11 @@ $(function()
     {
         $('.color0 .cardcolor').css('border', '1px solid #fff');
     });
+
+    document.addEventListener('scroll', function()
+    {
+        hideKanbanAction();
+    }, true);
 
     /* Init sortable */
     var sortType = '';

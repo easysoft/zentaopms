@@ -216,10 +216,10 @@ $lang->kanban->error->childLimitNote    = '子列在制品数量之和不能大�
 $lang->kanban->error->importObjNotEmpty = '请至少选择一个导入对象';
 $lang->kanban->error->childLimitEmpty   = '请先设置子列的在制品数量后再操作';
 
-$lang->kanban->orderList['pri_asc']    = '需求优先级正序';
-$lang->kanban->orderList['pri_desc']   = '需求优先级倒序';
 $lang->kanban->orderList['id_asc']     = '需求ID正序';
 $lang->kanban->orderList['id_desc']    = '需求ID倒序';
+$lang->kanban->orderList['pri_asc']    = '需求优先级正序';
+$lang->kanban->orderList['pri_desc']   = '需求优先级倒序';
 $lang->kanban->orderList['stage_asc']  = '需求阶段正序';
 $lang->kanban->orderList['stage_desc'] = '需求阶段倒序';
 $lang->kanban->orderList['assignedTo'] = '指派给';

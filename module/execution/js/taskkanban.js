@@ -345,7 +345,7 @@ function renderColumnCount($count, count, col)
             + '  <span class="text">' + (kanbanLang.orderList[orderBy] == undefined ? kanbanLang.orderList['pri_asc'] : kanbanLang.orderList[orderBy]) + '</span><span class="caret"></span>'
             + '</button>'
             + '<ul class="dropdown-menu">';
-        for(var order in kanbanLang.orderList) orderButton += '<li><a href="###" onclick="searchCards(searchValue, \'' + order + '\')">' + kanbanLang.orderList[order] + '</a></li>';
+        for(var order in kanbanLang.orderList) orderButton += '<li class="' + (order == orderBy ? 'active' : '') + '"><a href="###" onclick="searchCards(searchValue, \'' + order + '\')">' + kanbanLang.orderList[order] + '</a></li>';
         orderButton += '</ul>';
 
         $count.siblings('.storyColumn').remove();
@@ -1332,6 +1332,11 @@ $(function()
             $('#batchCreateBugButton').attr('href', link);
         }
     });
+
+    document.addEventListener('scroll', function()
+    {
+        $('.storyColumn').parent().removeClass('open');
+    }, true);
 
     $('#type_chosen .chosen-single span').prepend('<i class="icon-kanban"></i>');
     $('#group_chosen .chosen-single span').prepend(kanbanLang.laneGroup + ': ');

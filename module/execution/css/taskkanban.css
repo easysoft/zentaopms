@@ -29,6 +29,7 @@
 .kanban-affixed .kanban-header-col > .title > .text,
 .kanban-affixed .kanban-header-col > .title > .count {color: #fff!important;}
 .kanban-header-col > .title > .text {max-width: 110px !important;}
+.kanban-header-col > .title > .storyColumn .text {font-weight: 700; color:rgb(51, 51, 51);}
 .kanban-header-col > .title > .storyColumn + .dropdown-menu {top: 45px; left: auto;}
 
 #kanbanContainer {margin: 0;}
@@ -68,3 +69,7 @@
 #teskKanbanSearchInput {width: 150px;}
 #searchBox {display: none; width: 150px;}
 .btn-link.querybox-toggle {background-color: rgba(0,0,0,0);}
+
+#kanbans .kanban-affixed .kanban-header-col .title.action-dbc {pointer-events: none;}
+#kanbans .kanban-affixed .kanban-header-col .title.action-dbc .storyColumn .text {color: #fff;}
+#kanbans .kanban-affixed .kanban-header-col .title.action-dbc .storyColumn .caret {display: none;}

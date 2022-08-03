@@ -216,10 +216,10 @@ $lang->kanban->error->childLimitNote    = 'The sum of products in the child colu
 $lang->kanban->error->importObjNotEmpty = 'Please select at least one import object.';
 $lang->kanban->error->childLimitEmpty   = 'Please set the WIP quantity of the sub column before operation.';
 
-$lang->kanban->orderList['pri_asc']    = 'Story Priority Ascending';
-$lang->kanban->orderList['pri_desc']   = 'Story Priority Descending';
 $lang->kanban->orderList['id_asc']     = 'Story ID Ascending';
 $lang->kanban->orderList['id_desc']    = 'Story ID Descending';
+$lang->kanban->orderList['pri_asc']    = 'Story Priority Ascending';
+$lang->kanban->orderList['pri_desc']   = 'Story Priority Descending';
 $lang->kanban->orderList['stage_asc']  = 'Story Stage Ascending';
 $lang->kanban->orderList['stage_desc'] = 'Story Stage Descending';
 $lang->kanban->orderList['assignedTo'] = 'Assigned To';
