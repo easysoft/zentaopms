@@ -530,6 +530,8 @@ class upgradeModel extends model
                 break;
             case '17_3':
                 $this->processBugLinkBug();
+            case '17_4':
+                $this->changeSearchTableEngine();
         }
 
         $this->deletePatch();
@@ -6277,7 +6279,7 @@ class upgradeModel extends model
         {
             if(!empty($story->assignedTo))
             {
-                $story->reviewer = $story->assingnedTo;
+                $story->reviewer = $story->assignedTo;
             }
             elseif(!empty($story->PO))
             {
@@ -6734,5 +6736,18 @@ class upgradeModel extends model
         }
 
         return !dao::isError();
+    }
+
+    /**
+     * Change search table engine.
+     *
+     * @access public
+     * @return void
+     */
+    public function changeSearchTableEngine()
+    {
+        $mysqlVersion = $this->loadModel('install')->getMysqlVersion();
+        if($mysqlVersion >= 5.6) $this->dao->exec("ALTER TABLE " . TABLE_SEARCHINDEX . " ENGINE='InnoDB'");
+        return true;
     }
 }
