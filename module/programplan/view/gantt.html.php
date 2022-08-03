@@ -457,7 +457,8 @@ $(function()
     gantt.serverList("userList", <?php echo json_encode($userList);?>);
 
     gantt.config.readonly            = false;
-    gantt.config.order_branch        = true;
+    gantt.config.details_on_dblclick = false;
+    gantt.config.order_branch        = 'marker';
     gantt.config.details_on_dblclick = false;
     gantt.config.drag_progress       = false;
     gantt.config.drag_links          = false;
@@ -540,7 +541,7 @@ $(function()
         {
             if(module == 'review' && method == 'assess')
             {
-	        	gantt.config.layout = layout;
+                gantt.config.layout = layout;
                 gantt.init('ganttView');
             }
             gantt.expand();
@@ -612,6 +613,28 @@ $(function()
         var taskID = parseInt(id.substring(position + 1));
 
         if(!isNaN(taskID) && taskID > 0) taskModalTrigger.show({url: createLink('task', 'view', 'taskID=' + taskID, 'html', true)});
+    });
+
+    gantt.attachEvent("onBeforeRowDragEnd", function(id, parent, tindex)
+    {
+        var task = gantt.getTask(id);
+        var link = createLink('programplan', 'ajaxSaveGanttMove');
+
+        //prevent moving to another position.
+        if(task.parent != parent || id.indexOf('-') == -1) return false;
+
+        $.ajax({
+            url: link,
+            dataType: "json",
+            data: {id: id, type: task.type, order: tindex},
+            type: "post",
+            success: function(result)
+            {
+                var target = result;
+            }
+        });
+
+        return true;
     });
 
     // Make folder can open or close by click
