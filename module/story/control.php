@@ -1232,7 +1232,8 @@ class story extends control
         $linkedMRs     = $this->loadModel('mr')->getLinkedMRPairs($storyID, 'story');
         $modulePath    = $this->tree->getParents($story->module);
         $storyModule   = empty($story->module) ? '' : $this->tree->getById($story->module);
-        $storyProducts =  $this->dao->select('id,product')->from(TABLE_STORY)->where('id')->in(array_keys($story->linkStoryTitles))->fetchPairs();
+        $linkedStories = isset($story->linkStoryTitles) ? array_keys($story->linkStoryTitles) : array();
+        $storyProducts = $this->dao->select('id,product')->from(TABLE_STORY)->where('id')->in($linkedStories)->fetchPairs();
 
         /* Set the menu. */
         $from = $this->app->tab;
@@ -2198,13 +2199,14 @@ class story extends control
         $story    = $this->story->getById($storyID);
         $products = $this->product->getPairs();
         $queryID  = ($browseType == 'bySearch') ? (int)$param : 0;
+        $type     = $story->type == 'story' ? 'linkRelateSR' : 'linkRelateUR';
 
         /* Build search form. */
         $actionURL = $this->createLink('story', 'linkStories', "storyID=$storyID&browseType=bySearch&excludeStories=$excludeStories&queryID=myQueryID", '', true);
         $this->product->buildSearchForm($story->product, $products, $queryID, $actionURL);
 
         $this->view->story        = $story;
-        $this->view->stories2Link = $this->story->getStories2Link($storyID, 'linkRelateSR', $browseType, $queryID, $story->type, $pager, $excludeStories);
+        $this->view->stories2Link = $this->story->getStories2Link($storyID, $type, $browseType, $queryID, $story->type, $pager, $excludeStories);
         $this->view->products     = $products;
         $this->view->users        = $this->loadModel('user')->getPairs('noletter');
         $this->view->pager        = $pager;

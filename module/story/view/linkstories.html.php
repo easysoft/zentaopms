@@ -67,7 +67,6 @@
     <div class='table-footer'>
       <div class="checkbox-primary check-all"><label><?php echo $lang->selectAll?></label></div>
       <div class="table-actions btn-toolbar"><?php if($storyCount) echo html::submitButton('', '', 'btn btn-default');?></div>
-      <?php echo html::hidden('story', $story->id);?>
       <?php $pager->show('right', 'pagerjs');?>
     </div>
   </form>
@@ -82,7 +81,8 @@ $(function()
     setTimeout(function(){$('#linkStoriesForm .table-footer').removeClass('fixed-footer');}, 100);
     <?php endif;?>
 
-    $('#submit').click(function(){
+    $('#submit').click(function()
+    {
         var output = '';
         $('#linkStoriesForm').find('tr.checked').each(function(){
             var storyID        = $(this).find('td.c-id').find('div.checkbox-primary input').attr('value');
@@ -92,6 +92,7 @@ $(function()
 
             output += checkbox;
         });
+
         $.closeModal();
         parent.$('#linkStoriesBox').append(output);
         return false;
