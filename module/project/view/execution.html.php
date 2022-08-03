@@ -1,5 +1,9 @@
 <?php include '../../common/view/header.html.php';?>
 <?php js::set('projectID', $projectID);?>
+<?php js::set('edit', $lang->edit);?>
+<?php js::set('selectAll', $lang->selectAll);?>
+<?php js::set('checkedExecutions', $lang->execution->checkedExecutions);?>
+<?php js::set('cilentLang', $this->app->getClientLang());?>
 <div id='mainMenu' class='clearfix'>
   <div class='btn-toolbar pull-left'>
     <div class='btn-group'>
@@ -23,7 +27,8 @@
     <?php if($status == $key) $label .= " <span class='label label-light label-badge'>{$pager->recTotal}</span>";?>
     <?php echo html::a($this->createLink('project', 'execution', "status=$key&projectID=$projectID&orderBy=$orderBy&productID=$productID"), $label, '', "class='btn btn-link' id='{$key}Tab'");?>
     <?php endforeach;?>
-    <?php echo html::checkbox('showTask', array('1' => $lang->programplan->stageCustom->task), '', $this->cookie->showTask ? 'checked=checked' : '');?>
+    <?php if(common::hasPriv('execution', 'batchEdit') and !empty($executionStats)) echo html::checkbox('editExecution', array('1' => $lang->edit . $lang->executionCommon), '', $this->cookie->editExecution ? 'checked=checked' : '');?>
+    <?php if(common::hasPriv('execution', 'task')) echo html::checkbox('showTask', array('1' => $lang->programplan->stageCustom->task), '', $this->cookie->showTask ? 'checked=checked' : '');?>
   </div>
   <div class='btn-toolbar pull-right'>
     <?php common::printLink('execution', 'export', "status=$status&productID=$productID&orderBy=$orderBy&from=project", "<i class='icon-export muted'> </i> " . $lang->export, '', "class='btn btn-link export'")?>

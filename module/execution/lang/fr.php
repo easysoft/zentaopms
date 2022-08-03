@@ -412,6 +412,7 @@ $lang->execution->storyDragError              = "The {$lang->SRCommon} is still 
 $lang->execution->countTip                    = ' (%s member)';
 $lang->execution->pleaseInput                 = "Enter";
 $lang->execution->week                        = 'week';
+$lang->execution->checkedExecutions           = "Pour s électionner l'élément%s";
 
 /* Statistics. */
 $lang->execution->charts = new stdclass();
