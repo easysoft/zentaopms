@@ -23,6 +23,7 @@
 <?php js::set('exRateNotEmpty', sprintf($lang->error->notempty, $lang->program->exchangeRate));?>
 <?php js::set('exRateNum', sprintf($lang->error->float, $lang->program->exchangeRate));?>
 <?php js::set('exRateNotNegative', $lang->program->exRateNotNegative);?>
+<?php js::set('budgetBalance', $availableBudget);?>
 <?php $aclList = $program->parent ? $lang->program->subAclList : $lang->program->aclList;?>
 <?php $requiredFields = $config->program->edit->requiredFields;?>
 <div id='mainContent' class='main-content'>

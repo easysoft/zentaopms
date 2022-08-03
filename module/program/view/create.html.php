@@ -84,7 +84,7 @@
           </td>
           <td class='futureBox'>
             <div class='checkbox-primary future w-70px'>
-            <input type='checkbox' id='future' name='future' value='1' />
+              <input type='checkbox' id='future' name='future' value='1' />
               <label for='future'><?php echo $lang->project->future;?></label>
             </div>
           </td>
