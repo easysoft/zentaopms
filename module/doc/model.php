@@ -1649,7 +1649,7 @@ class docModel extends model
             if(!$this->checkPrivDoc($doc)) unset($docs[$id]);
         }
 
-        $bugIdList = $testReportIdList = $caseIdList = $storyIdList = $planIdList = $releaseIdList = $executionIdList = $taskIdList = $buildIdList = $issueIdList = $meetingIdList = $designIdList = 0;
+        $bugIdList = $testReportIdList = $caseIdList = $storyIdList = $planIdList = $releaseIdList = $executionIdList = $taskIdList = $buildIdList = $issueIdList = $meetingIdList = $designIdList = $reviewIdList = 0;
 
         $userView = $this->app->user->view->products;
         if($type == 'project') $userView = $this->app->user->view->projects;
@@ -1685,9 +1685,10 @@ class docModel extends model
             {
                 $issueIdList   = $this->dao->select('id')->from(TABLE_ISSUE)->where('project')->eq($objectID)->andWhere('deleted')->eq('0')->andWhere('project')->in($this->app->user->view->projects)->get();
                 $meetingIdList = $this->dao->select('id')->from(TABLE_MEETING)->where('project')->eq($objectID)->andWhere('deleted')->eq('0')->andWhere('project')->in($this->app->user->view->projects)->get();
+                $reviewIdList  = $this->dao->select('id')->from(TABLE_REVIEW)->where('project')->eq($objectID)->andWhere('deleted')->eq('0')->andWhere('project')->in($this->app->user->view->projects)->get();
             }
 
-            $designIdList  = $this->dao->select('id')->from(TABLE_DESIGN)->where('project')->eq($objectID)->andWhere('deleted')->eq('0')->andWhere('project')->in($this->app->user->view->projects)->get();
+            $designIdList    = $this->dao->select('id')->from(TABLE_DESIGN)->where('project')->eq($objectID)->andWhere('deleted')->eq('0')->andWhere('project')->in($this->app->user->view->projects)->get();
             $executionIdList = $this->loadModel('execution')->getIdList($objectID);
             $taskPairs       = $this->dao->select('id')->from(TABLE_TASK)->where('execution')->in($executionIdList)->andWhere('deleted')->eq('0')->andWhere('execution')->in($this->app->user->view->sprints)->fetchPairs('id');
             if(!empty($taskPairs)) $taskIdList = implode(',', $taskPairs);
@@ -1720,6 +1721,7 @@ class docModel extends model
             ->beginIF($type == 'project')
             ->orWhere("(objectType = 'execution' and objectID in ('$executionIdList'))")
             ->orWhere("(objectType = 'issue' and objectID in ($issueIdList))")
+            ->orWhere("(objectType = 'review' and objectID in ($reviewIdList))")
             ->orWhere("(objectType = 'meeting' and objectID in ($meetingIdList))")
             ->orWhere("(objectType = 'design' and objectID in ($designIdList))")
             ->fi()
@@ -1761,11 +1763,14 @@ class docModel extends model
             $sourceList[$file->objectType][$file->objectID] = $file->objectID;
         }
 
+        $this->app->loadConfig('action');
         foreach($sourceList as $type => $idList)
         {
-            $table              = $this->config->objectTables[$type];
-            $title              = in_array($type, array('story', 'bug', 'issue', 'case', 'testcase', 'testreport', 'doc', 'requirement')) ? 'title' : 'name';
-            $name               = $this->dao->select('id,' . $title)->from($table)->where('id')->in($idList)->fetchPairs('id');
+            $table = zget($this->config->objectTables, $type, '');
+            $field = zget($this->config->action->objectNameFields, $type, '');
+            if(empty($table) or empty($field)) continue;
+
+            $name = $this->dao->select('id,' . $field)->from($table)->where('id')->in($idList)->fetchPairs('id', $field);
             $sourcePairs[$type] = $name;
         }
 
