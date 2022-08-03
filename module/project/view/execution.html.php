@@ -18,6 +18,7 @@
         ?>
       </ul>
     </div>
+    <?php common::sortFeatureMenu('execution', 'all');?>
     <?php foreach($lang->execution->featureBar['all'] as $key => $label):?>
     <?php $label = "<span class='text'>$label</span>";?>
     <?php if($status == $key) $label .= " <span class='label label-light label-badge'>{$pager->recTotal}</span>";?>

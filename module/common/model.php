@@ -3381,12 +3381,12 @@ EOD;
      * @access public
      * @return bool
      */
-    public static function sortFeatureMenu()
+    public static function sortFeatureMenu($module = '', $method = '')
     {
         global $lang, $app;
 
-        $module = $app->rawModule;
-        $method = $app->rawMethod;
+        $module = $module ? $module : $app->rawModule;
+        $method = $method ? $method : $app->rawMethod;
 
         /* It will be sorted according to the workflow in the future */
         if(!empty($lang->featureBarSort[$module][$method]))
