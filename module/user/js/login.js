@@ -39,9 +39,9 @@ $(document).ready(function()
 
         clearTimeout(timeoutID);
         timeoutID = setTimeout(function()
-                    {
-                        if(timeout) alert(loginTimeoutTip);
-                    }, 4000);
+        {
+            if(timeout) alert(loginTimeoutTip);
+        }, 4000);
 
         $.get(createLink('user', 'refreshRandom'), function(data)
         {
