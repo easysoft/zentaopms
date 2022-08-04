@@ -4,7 +4,7 @@ $(function()
     {
         var programID = $(this).val();
         setAclList(programID);
-        budgetOverrunTips(projectID);
+        budgetOverrunTips();
 
         /* Determine whether the project can change the project set. */
         link = createLink('project', 'ajaxCheckProduct', 'programID=' + programID + '&projectID=' + projectID);

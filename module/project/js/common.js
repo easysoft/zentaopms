@@ -352,7 +352,7 @@ $(document).on('change', "#plansBox select[name^='plans']", function()
  * @access public
  * @return void
  */
-function budgetOverrunTips(projectID = 0)
+function budgetOverrunTips()
 {
     var selectedProgramID = $('#parent').val();
     var budget            = $('#budget').val();
@@ -363,6 +363,7 @@ function budgetOverrunTips(projectID = 0)
         return false;
     }
 
+    if(typeof(projectIDi) == 'undefined') projectID = 0;
     $.get(createLink('project', 'ajaxGetAvailableBudget', 'projectID=' + projectID + "&selectedProgramID=" + selectedProgramID + "&budget=" + budget), function(data)
     {
         var data = JSON.parse(data);
