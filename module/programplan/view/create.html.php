@@ -31,8 +31,8 @@
           $class = '';
           foreach($productList as $key => $product)
           {
-            $class = $productID == $key ? 'class="active"' : '';
-            echo "<li $class>" . html::a($this->createLink('programplan', 'create', "projectID=$project->id&productID=$key"), $product) . "</li>";
+                $class = $productID == $key ? 'class="active"' : '';
+                echo "<li $class>" . html::a($this->createLink('programplan', 'create', "projectID=$project->id&productID=$key"), $product) . "</li>";
           }
         ?>
       </ul>
