@@ -29,6 +29,7 @@
 <?php $aclList = $project->parent ? $lang->project->subAclList : $lang->project->aclList;?>
 <?php $requiredFields = $config->project->edit->requiredFields;?>
 <?php js::set('requiredFields', $requiredFields);?>
+<?php js::set('budget', $project->budget);?>
 <div id='mainContent' class='main-content'>
   <div class='center-block'>
     <div class='main-header'>

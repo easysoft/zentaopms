@@ -233,21 +233,21 @@ class project extends control
         if(!empty($projectID))
         {
             $project         = $this->project->getByID($projectID);
-            $parentProgram   = $this->loadModel('program')->getByID($selectedProgramID);
-            $budgetLeft      = $this->program->getBudgetLeft($parentProgram);
+            $selectedProgram = $this->loadModel('program')->getByID($selectedProgramID);
+            $budgetLeft      = $this->program->getBudgetLeft($selectedProgram);
             $availableBudget = $project->parent == $selectedProgramID ? $budgetLeft + $project->budget : $budgetLeft;
         }
         else
         {
-            $parentProgram   = $this->loadModel('program')->getByID($selectedProgramID);
-            $availableBudget = $this->program->getBudgetLeft($parentProgram);
+            $selectedProgram = $this->loadModel('program')->getByID($selectedProgramID);
+            $availableBudget = $this->program->getBudgetLeft($selectedProgram);
         }
 
         $tip = '';
-        if($budget != 0 && $budget !== null && $budget > $availableBudget) $tip = "<span id='beyondBudgetTip' class='text-remind'>" . $this->lang->project->budgetOverrun . zget($this->lang->project->currencySymbol, $parentProgram->budgetUnit) . $availableBudget . "</span>";
+        if($budget != 0 && $budget !== null && $budget > $availableBudget) $tip = "<span id='beyondBudgetTip' class='text-remind'>" . $this->lang->project->budgetOverrun . zget($this->lang->project->currencySymbol, $selectedProgram->budgetUnit) . $availableBudget . "</span>";
 
         $placeholder = '';
-        if($parentProgram and $parentProgram->budget != 0) $placeholder = $this->lang->project->parentBudget . zget($this->lang->project->currencySymbol, $parentProgram->budgetUnit) . $availableBudget;
+        if($selectedProgram and $selectedProgram->budget != 0) $placeholder = $this->lang->project->parentBudget . zget($this->lang->project->currencySymbol, $selectedProgram->budgetUnit) . $availableBudget;
 
         $tipList = array('tip' => $tip, 'placeholder' => $placeholder);
         echo json_encode($tipList);
