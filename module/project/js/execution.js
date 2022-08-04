@@ -30,12 +30,13 @@ $(function()
         var checkedLength    = $(":checkbox[name^='executionIDList']:checked").length;
 
         if(checkedLength > 0) $('#executionForm').addClass('has-row-checked');
-        if(notCheckedLength == 0) $('.table-footer #checkAll').prop('checked', true);
+        if(notCheckedLength == 0) $('#executionForm .checkAll').prop('checked', true);
         if(checkedLength == 0)
         {
-            $('.table-footer #checkAll').prop('checked', false);
+            $('#executionForm .checkAll').prop('checked', false);
             $('#executionForm').removeClass('has-row-checked');
         }
+        if(notCheckedLength > 0) $('#executionForm .checkAll').prop('checked', false);
 
         var summary = checkedExecutions.replace('%s', checkedLength);
         if(cilentLang == "en" && checkedLength < 2) summary = summary.replace('items', 'item');
@@ -54,11 +55,12 @@ $(function()
 
     });
 
-    $(document).on('click', ".table-footer #checkAll", function()
+    $(document).on('click', "#executionForm .checkAll", function()
     {
         if($(this).prop('checked'))
         {
             $(":checkbox[name^='executionIDList']").prop('checked', true);
+            $("#executionForm .checkAll").prop('checked', true);
             $('#executionForm').addClass('has-row-checked');
             var checkedLength = $(":checkbox[name^='executionIDList']:checked").length;
             var summary = checkedExecutions.replace('%s', checkedLength);
@@ -72,6 +74,7 @@ $(function()
         else
         {
             $(":checkbox[name^='executionIDList']").prop('checked', false);
+            $("#executionForm .checkAll").prop('checked', false);
             $('#executionForm').removeClass('has-row-checked');
             $('#executionSummary').removeClass('hidden');
             $('#executionsSummary').addClass('hidden');
@@ -86,7 +89,7 @@ $(function()
         {
             $(this).prop('checked', false);
         });
-        $('.table-footer #checkAll').prop('checked', false);
+        $('#executionsForm .checkAll').prop('checked', false);
     }, 10);
 })
 
@@ -195,13 +198,15 @@ function showEditCheckbox(show)
     });
     if(show)
     {
-        var tableFooter = "<div class='editCheckbox'><div class='checkbox-primary check-all'><input type='checkbox' id='checkAll' /><label>" + selectAll + "</label></div><div class='table-actions btn-toolbar'><button type='submit' class='btn'>" + edit + "</button></div></div>";
+        $('.table-nest-title').prepend("<div class='checkbox-primary check-all'><input type='checkbox' class='checkAll' /><label></label></div>").addClass('table-nest-title-edit');
+        var tableFooter = "<div class='editCheckbox'><div class='checkbox-primary check-all'><input type='checkbox' id='checkAll' class='checkAll' /><label>" + selectAll + "</label></div><div class='table-actions btn-toolbar'><button type='submit' class='btn'>" + edit + "</button></div></div>";
         $('#executionForm').attr('action', createLink('execution', 'batchEdit'));
         $('.table-footer').prepend(tableFooter).show();
         $('body').scroll();
     }
     else
     {
+        $('.table-nest-title').removeClass('table-nest-title-edit').find('.check-all').remove();
         $('#executionForm').find('.editCheckbox').remove();
         if($('#executionForm .pager').length == 0) $('.table-footer').hide();
         $('#executionForm').removeAttr('action');
