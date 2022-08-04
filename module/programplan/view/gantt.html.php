@@ -69,6 +69,7 @@ form {display: block; margin-top: 0em; margin-block-end: 1em;}
 <?php js::set('dateDetails', $dateDetails);?>
 <?php js::set('module', $app->rawModule);?>
 <?php js::set('method', $app->rawMethod);?>
+<?php js::set('canGanttEdit', common::hasPriv('programplan', 'ganttEdit'));?>
 <div id='mainContent' class='main-content load-indicator' data-loading='<?php echo $lang->programplan->exporting;?>'>
   <form class="main-form form-ajax not-watch">
     <div class="example">
@@ -390,9 +391,9 @@ function validateResources(id)
     flag = true;
 
     /* Check status. */
-    if(status !== statusLang)
+    if(status !== statusLang && type === 'task')
     {
-        new $.zui.Messager(status + '的任务不可以拖动', {
+        new $.zui.Messager("<?php echo $lang->programplan->error->taskDrag;?>".replace('%s', status), {
             type: 'danger',
             icon: 'exclamation-sign'
         }).show();
@@ -456,7 +457,7 @@ $(function()
     ?>
     gantt.serverList("userList", <?php echo json_encode($userList);?>);
 
-    gantt.config.readonly            = false;
+    gantt.config.readonly            = canGanttEdit ? true : false;
     gantt.config.details_on_dblclick = false;
     gantt.config.order_branch        = 'marker';
     gantt.config.drag_progress       = false;

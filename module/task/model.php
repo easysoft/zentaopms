@@ -3934,6 +3934,14 @@ class taskModel extends model
                 return dao::$errors = sprintf($this->lang->task->overTime, $arg, $arg);
             }
 
+            $updateStartArg = !empty($objectData->realStarted) ? 'realStarted' : 'estStarted';
+            $updateEndArg   = !empty($objectData->finishedDate) ? 'finishedDate' : 'deadline';
+            $this->dao->update(TABLE_TASK)
+                ->set($updateStartArg)->eq($post->start_date)
+                ->set($updateEndArg)->eq($post->end_date)
+                ->set('lastEditedBy')->eq($this->app->user->account)
+                ->where('id')->eq($objectID)
+                ->exec();
         }
         elseif($objectType == 'plan')
         {
@@ -3962,18 +3970,20 @@ class taskModel extends model
                 $arg = !empty($parent) ? $this->lang->programplan->parent : $this->lang->project->common;
                 return dao::$errors = sprintf($this->lang->task->overTime, $arg, $arg);
             }
+
+            $updateStartArg = !empty($objectData->realBegan) ? 'realBegan' : 'begin';
+            $updateEndArg   = !empty($objectData->realEnd)   ? 'realEnd'   : 'end';
+            $this->dao->update(TABLE_PROJECT)
+                ->set($updateStartArg)->eq($post->start_date)
+                ->set($updateEndArg)->eq($post->end_date)
+                ->set('lastEditedBy')->eq($this->app->user->account)
+                ->where('id')->eq($objectID)
+                ->exec();
         }
         else
         {
             return false;
         }
-
-        $this->dao->update(TABLE_TASK)
-            ->set('estStarted')->eq($post->start_date)
-            ->set('deadline')->eq($post->end_date)
-            ->set('lastEditedBy')->eq($this->app->user->account)
-            ->where('id')->eq($objectID)
-            ->exec();
 
         return true;
     }
