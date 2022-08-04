@@ -3999,14 +3999,12 @@ class taskModel extends model
     public function saveTaskMove($productID = 0)
     {
         $data         = fixer::input('post')->get();
-        $targetTaskID = explode('-', $data->dropTarget)[1];
         $IdList       = explode('-', $data->id);
         $executionID  = $IdList[0];
         $taskID       = $IdList[1];
         $index        = (int)$data->index;
 
         $oldTask      = $this->loadModel('task')->getByID($taskID);
-        $targetTask   = $this->loadModel('task')->getByID($targetTaskID);
         $execution    = $this->loadModel('execution')->getByID($executionID);
         $tasks        = $this->dao->select('id')->from(TABLE_TASK)
             ->where('execution')->eq($executionID)
