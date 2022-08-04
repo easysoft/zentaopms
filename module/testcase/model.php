@@ -1050,15 +1050,15 @@ class testcaseModel extends model
             if($data->pris[$caseID]    == 'ditto') $data->pris[$caseID]    = isset($prev['pri'])    ? $prev['pri']    : 3;
             if($data->modules[$caseID] == 'ditto') $data->modules[$caseID] = isset($prev['module']) ? $prev['module'] : 0;
             if($data->types[$caseID]   == 'ditto') $data->types[$caseID]   = isset($prev['type'])   ? $prev['type']   : '';
-            if($data->story[$caseID]  == '') $data->story[$caseID] = 0;
+            if($data->story[$caseID]   == '') $data->story[$caseID] = 0;
+            if($data->story[$caseID]   == 'ditto') $data->story[$caseID] = isset($prev['story']) ? $prev['story'] : 0;
             if(isset($data->branches[$caseID]) and $data->branches[$caseID] == 'ditto') $data->branches[$caseID] = isset($prev['branch']) ? $prev['branch'] : 0;
-            if($data->story[$caseID] == 'ditto') $data->story[$caseID] = isset($prev['story']) ? $prev['story'] : 0;
 
             $prev['pri']    = $data->pris[$caseID];
             $prev['type']   = $data->types[$caseID];
             $prev['story']  = $data->story[$caseID];
-            $prev['branch'] = $data->branches[$caseID];
             $prev['module'] = $data->modules[$caseID];
+            if(isset($data->branches)) $prev['branch'] = $data->branches[$caseID];
         }
 
         /* Initialize cases from the post data.*/
@@ -1070,7 +1070,6 @@ class testcaseModel extends model
             $case->lastEditedBy   = $this->app->user->account;
             $case->lastEditedDate = $now;
             $case->pri            = $data->pris[$caseID];
-            $case->branch         = $data->branches[$caseID];
             $case->module         = $data->modules[$caseID];
             $case->status         = $data->statuses[$caseID];
             $case->story          = $data->story[$caseID];
@@ -1080,6 +1079,7 @@ class testcaseModel extends model
             $case->keywords       = $data->keywords[$caseID];
             $case->type           = $data->types[$caseID];
             $case->stage          = empty($data->stages[$caseID]) ? '' : implode(',', $data->stages[$caseID]);
+            if(isset($data->branches[$caseID])) $case->branch = $data->branches[$caseID];
 
             foreach($extendFields as $extendField)
             {
@@ -1122,7 +1122,7 @@ class testcaseModel extends model
                 unset($oldCase->steps);
                 $allChanges[$caseID] = common::createChanges($oldCase, $case);
 
-                if($case->branch and isset($testtasks[$caseID]))
+                if(!empty($case->branch) and isset($testtasks[$caseID]))
                 {
                     foreach($testtasks[$caseID] as $taskID => $testtask)
                     {
