@@ -3806,8 +3806,16 @@ class taskModel extends model
         $list .= '<td>' . zget($users, $task->assignedTo, '') . '</td>';
         $list .= "<td class='status-{$task->status}'>" . $this->processStatus('task', $task) . '</td>';
         $list .= '<td></td>';
-        $list .= '<td>' . $task->estStarted . '</td>';
-        $list .= '<td>' . $task->deadline . '</td>';
+        $list .= helper::isZeroDate($task->estStarted) ? '<td></td>' : '<td>' . $task->estStarted . '</td>';
+        if(!helper::isZeroDate($task->deadline))
+        {
+            $today = helper::today();
+            $list .= strtotime($today) > strtotime($task->deadline) ? '<td class="delayed">' . $task->deadline . '</td>' : '<td>' . $task->deadline . '</td>';
+        }
+        else
+        {
+            $list .= '<td></td>';
+        }
         $list .= '<td>' . $task->estimate . $this->lang->execution->workHourUnit . '</td>';
         $list .= '<td>' . $task->consumed . $this->lang->execution->workHourUnit . '</td>';
         $list .= '<td>' . $task->left . $this->lang->execution->workHourUnit . '</td>';
