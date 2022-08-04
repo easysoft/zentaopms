@@ -6757,7 +6757,15 @@ class upgradeModel extends model
     public function changeTableEngine()
     {
         $mysqlVersion = $this->loadModel('install')->getMysqlVersion();
-        if($mysqlVersion >= 5.6) $this->dao->exec("ALTER TABLE " . TABLE_SEARCHINDEX . " ENGINE='InnoDB'");
+        $tables = $this->dao->query("SHOW TABLE STATUS WHERE `Engine` is not null AND `Engine` = 'MyISAM'")->fetchAll();
+        foreach($tables as $table)
+        {
+            $tableName = $table->Name;
+            $sql = "ALTER TABLE `$tableName` ENGINE='InnoDB'";
+
+            if(stripos($tableName, 'searchindex') !== false and $mysqlVersion < 5.6) continue;
+            $this->dao->exec($sql);
+        }
         return true;
     }
 
