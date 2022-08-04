@@ -630,6 +630,7 @@ $lang->resource->kanban->activateSpace      = 'activateSpace';
 $lang->resource->kanban->sortSpace          = 'sortSpace';
 $lang->resource->kanban->create             = 'create';
 $lang->resource->kanban->edit               = 'edit';
+$lang->resource->kanban->setting            = 'setting';
 $lang->resource->kanban->view               = 'view';
 $lang->resource->kanban->activate           = 'activate';
 $lang->resource->kanban->close              = 'close';
