@@ -1704,11 +1704,10 @@ class block extends control
 
         foreach($executions as $index => $execution)
         {
-            if(!empty($execution->children))
-            {
-                foreach($execution->children as $child) $executions[] = $child;
-                unset($executions[$index]);
-            }
+            if(empty($execution->children)) continue;
+
+            foreach($execution->children as $child) $executions[] = $child;
+            unset($executions[$index]);
         }
 
         $this->view->executionStats = $executions;
