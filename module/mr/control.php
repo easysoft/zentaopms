@@ -115,7 +115,7 @@ class mr extends control
             if(empty($project) or !$project->allow_merge_commits) $repo = array();
         }
 
-        $hosts  = $this->loadModel('pipeline')->getList(array('gitea', 'gitlab'));
+        $hosts = $this->loadModel('pipeline')->getList(array('gitea', 'gitlab'));
         if(!$this->app->user->admin)
         {
             $gitlabUsers = $this->loadModel('gitlab')->getGitLabListByAccount();
