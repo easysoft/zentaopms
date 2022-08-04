@@ -75,7 +75,7 @@ class testsuite extends control
         $sort = common::appendOrder($orderBy);
 
         $productName = isset($this->products[$productID]) ? $this->products[$productID] : '';
-        $suites      = $this->testsuite->getSuites($productID, $sort, $pager);
+        $suites      = $this->testsuite->getSuites($productID, $sort, $pager, $type);
         if(empty($suites) and $pageID > 1)
         {
             $pager  = pager::init(0, $recPerPage, 1);
