@@ -312,7 +312,9 @@ function setBudgetTipsAndAclList(parentID)
         $('#budget').removeAttr('placeholder');
         $('.aclBox').html($('#PGMAcl').html());
     }
-    budgetOverrunTips(typeof(programID) == 'undefind' ? 0 : programID);
+
+    if(typeof(programID) == 'undefined') programID = 0;
+    budgetOverrunTips(programID);
 }
 
 /**
@@ -331,7 +333,7 @@ function budgetOverrunTips()
         return false;
     }
 
-    var programID = typeof(programID) == 'undefind' ? 0 : programID;
+    if(typeof(programID) == 'undefined') programID = 0;
     $.get(createLink('program', 'ajaxGetAvailableBudget', 'programID=' + programID + "&selectedProgramID=" + selectedProgramID + "&budget=" + budget), function(data)
     {
         var data = JSON.parse(data);
