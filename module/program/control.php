@@ -722,28 +722,28 @@ class program extends control
      * Ajax get available budget.
      *
      * @param  int    $programID
-     * @param  int    $parentProgramID
+     * @param  int    $selectedProgramID
      * @param  int    $budget
      * @access public
      * @return void
      */
-    public function ajaxGetAvailableBudget($programID, $parentProgramID, $budget)
+    public function ajaxGetAvailableBudget($programID, $selectedProgramID, $budget)
     {
         if(!empty($programID))
         {
             $program         = $this->program->getByID($programID);
-            $parentProgram   = $this->program->getByID($parentProgramID);
-            $budgetLeft      = $this->program->getBudgetLeft($parentProgram);
-            $availableBudget = $program->parent == $parentProgramID ? $budgetLeft + $program->budget : $budgetLeft;
+            $selectedProgram = $this->program->getByID($selectedProgramID);
+            $budgetLeft      = $this->program->getBudgetLeft($selectedProgram);
+            $availableBudget = $program->parent == $selectedProgramID ? $budgetLeft + $program->budget : $budgetLeft;
         }
         else
         {
-            $parentProgram   = $this->program->getByID($parentProgramID);
-            $availableBudget = $this->program->getBudgetLeft($parentProgram);
+            $selectedProgram = $this->program->getByID($selectedProgramID);
+            $availableBudget = $this->program->getBudgetLeft($selectedProgram);
         }
 
         $tips = '';
-        if($budget != 0 && $budget !== null && $budget > $availableBudget) $tips = "<span id='programBudget' class='text-remind'>" . $this->lang->program->budgetOverrun . zget($this->lang->project->currencySymbol, $parentProgram->budgetUnit) . $availableBudget . "</span>";
+        if($budget != 0 && $budget !== null && $budget > $availableBudget) $tips = "<span id='beyondBudgetTip' class='text-remind'>" . $this->lang->program->budgetOverrun . zget($this->lang->project->currencySymbol, $selectedProgram->budgetUnit) . $availableBudget . "</span>";
         echo json_encode($tips);
     }
 
