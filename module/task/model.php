@@ -3907,39 +3907,30 @@ class taskModel extends model
             $execution  = $objectData->execution;
             $stage      = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($execution)->andWhere('project')->eq($project)->fetch();
 
-            if(empty($parent))
+            if($parent <= 0)
             {
                 $parentData = $stage;
 
-                $start  = $parentData->realBegan ? $parentData->realBegan : $parentData->begin;
-                $end    = $parentData->realEnd ? $parentData->realEnd : $parentData->deadline;
+                $start = $parentData->begin;
+                $end   = $parentData->end;
             }
             else
             {
                 $parentData = $this->dao->select('*')->from(TABLE_TASK)->where('id')->eq($parent)->fetch();
 
-                $estStart  = helper::isZeroDate($parentData->estStarted)  ? '' : $parentData->estStarted;
-                $estEnd    = helper::isZeroDate($parentData->deadline)    ? '' : $parentData->deadline;
-                $realBegan = helper::isZeroDate($parentData->realStarted) ? '' : $parentData->realStarted;
-                $realEnd   = helper::isZeroDate($parentData->finishedDate) ? '' : $parentData->finishedDate;
-                $start = $realBegan ? $realBegan : $estStart;
-                $end   = $realEnd   ? $realEnd   : $estEnd;
-                if(empty($start) and $stage) $start = $stage->begin;
-                if(empty($end)   and $stage) $end   = $stage->end;
-                if($start > $end) $end = $start;
+                $start = helper::isZeroDate($parentData->estStarted)  ? '' : $parentData->estStarted;
+                $end   = helper::isZeroDate($parentData->deadline)    ? '' : $parentData->deadline;
             }
 
-            if(helper::diffDate($start, $post->start_date) > 0)
+            if(helper::diffDate($start, $post->start_date) >= 0)
             {
                 $arg = !empty($parent) ? $this->lang->task->parent : $this->lang->project->stage;
                 return dao::$errors = sprintf($this->lang->task->overTime, $arg, $arg);
             }
 
-            $updateStartArg = !empty($objectData->realStarted) ? 'realStarted' : 'estStarted';
-            $updateEndArg   = (!empty($objectData->finishedDate) and in_array($objectData->status, array('done', 'closed'))) ? 'finishedDate' : 'deadline';
             $this->dao->update(TABLE_TASK)
-                ->set($updateStartArg)->eq($post->start_date)
-                ->set($updateEndArg)->eq($post->end_date)
+                ->set('estStarted')->eq($post->start_date)
+                ->set('deadline')->eq($post->end_date)
                 ->set('lastEditedBy')->eq($this->app->user->account)
                 ->where('id')->eq($objectID)
                 ->exec();
@@ -3958,25 +3949,19 @@ class taskModel extends model
             {
                 $parentData = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($parent)->fetch();
             }
+
             $start      = helper::isZeroDate($parentData->begin) ? '' : $parentData->begin;
             $end        = helper::isZeroDate($parentData->end)   ? '' : $parentData->end;
-            $realBegan  = helper::isZeroDate($parentData->realBegan) ? '' : $parentData->realBegan;
-            $realEnd    = helper::isZeroDate($parentData->realEnd)   ? '' : $parentData->realEnd;
 
-            $startDate = $realBegan ? $realBegan : $start;
-            $endDate   = $realEnd ? $realEnd : $end;
-
-            if(helper::diffDate($startDate, $post->start_date) > 0)
+            if(helper::diffDate($start, $post->start_date) >= 0)
             {
                 $arg = !empty($parent) ? $this->lang->programplan->parent : $this->lang->project->common;
                 return dao::$errors = sprintf($this->lang->task->overTime, $arg, $arg);
             }
 
-            $updateStartArg = !empty($objectData->realBegan) ? 'realBegan' : 'begin';
-            $updateEndArg   = !empty($objectData->realEnd)   ? 'realEnd'   : 'end';
             $this->dao->update(TABLE_PROJECT)
-                ->set($updateStartArg)->eq($post->start_date)
-                ->set($updateEndArg)->eq($post->end_date)
+                ->set('begin')->eq($post->start_date)
+                ->set('end')->eq($post->end_date)
                 ->set('lastEditedBy')->eq($this->app->user->account)
                 ->where('id')->eq($objectID)
                 ->exec();

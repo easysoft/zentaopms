@@ -404,9 +404,17 @@ function validateResources(id)
     flag = true;
 
     /* Check status. */
-    if(status !== statusLang && type === 'task')
+    if(status !== statusLang)
     {
-        new $.zui.Messager("<?php echo $lang->programplan->error->taskDrag;?>".replace('%s', status), {
+        if(type == 'task')
+        {
+            tipMsg = "<?php echo $lang->programplan->error->taskDrag;?>";
+        }
+        else
+        {
+            tipMsg = "<?php echo $lang->programplan->error->planDrag;?>";
+        }
+        new $.zui.Messager(tipMsg.replace('%s', status), {
             type: 'danger',
             icon: 'exclamation-sign'
         }).show();

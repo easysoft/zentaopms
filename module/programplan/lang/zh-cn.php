@@ -86,6 +86,7 @@ $lang->programplan->error->parentWorkload  = '子阶段的工作量之和不能�
 $lang->programplan->error->parentDuration  = '子阶段计划开始、计划完成不能超过父阶段';
 $lang->programplan->error->sameName        = '阶段名称不能相同！';
 $lang->programplan->error->taskDrag        = '%s的任务不可以拖动';
+$lang->programplan->error->planDrag        = '%s的阶段不可以拖动';
 
 
 $lang->programplan->ganttBrowseType['gantt']       = '按阶段分组';
