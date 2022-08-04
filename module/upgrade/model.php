@@ -532,8 +532,8 @@ class upgradeModel extends model
                 $this->processBugLinkBug();
             case '17_4':
                 $this->processCreatedInfo();
-                $this->updateApproval();
                 $this->processCreatedBy();
+                $this->updateApproval();
         }
 
         $this->deletePatch();
