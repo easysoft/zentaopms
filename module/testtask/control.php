@@ -1232,7 +1232,7 @@ class testtask extends control
                 /* set cookie for ajax load caselist when close colorbox. */
                 setcookie('selfClose', 1, 0, $this->config->webRoot, '', $this->config->cookieSecure, false);
 
-                if($preAndNext->next)
+                if($preAndNext->next and $this->app->tab != 'my')
                 {
                     $nextRunID   = $runID ? $preAndNext->next->id : 0;
                     $nextCaseID  = $runID ? $preAndNext->next->case : $preAndNext->next->id;
@@ -1255,13 +1255,13 @@ class testtask extends control
 
         $preCase  = array();
         $nextCase = array();
-        if($preAndNext->pre)
+        if($preAndNext->pre and $this->app->tab != 'my')
         {
             $preCase['runID']   = $runID ? $preAndNext->pre->id : 0;
             $preCase['caseID']  = $runID ? $preAndNext->pre->case : $preAndNext->pre->id;
             $preCase['version'] = $preAndNext->pre->version;
         }
-        if($preAndNext->next)
+        if($preAndNext->next and $this->app->tab != 'my')
         {
             $nextCase['runID']   = $runID ? $preAndNext->next->id : 0;
             $nextCase['caseID']  = $runID ? $preAndNext->next->case : $preAndNext->next->id;
@@ -1327,19 +1327,23 @@ class testtask extends control
             if($this->app->tab == 'project')
             {
                 $this->loadModel('project')->setMenu($this->session->project);
+                $cases = $this->dao->select('t1.*,t2.id as runID')->from(TABLE_CASE)->alias('t1')
+                    ->leftJoin(TABLE_TESTRUN)->alias('t2')->on('t1.id = t2.case')
+                    ->where('t2.id')->in($caseIDList)
+                    ->fetchAll('id');
             }
             else
             {
                 $this->lang->testtask->menu = $this->lang->my->menu->work;
                 $this->lang->my->menu->work['subModule'] = 'testtask';
+
+                $cases = $this->dao->select('t1.*,t2.id as runID')->from(TABLE_CASE)->alias('t1')
+                    ->leftJoin(TABLE_TESTRUN)->alias('t2')->on('t1.id = t2.case')
+                    ->where('t1.id')->in($caseIDList)
+                    ->fetchAll('id');
             }
 
             $this->view->title = $this->lang->testtask->batchRun;
-
-            $cases = $this->dao->select('t1.*,t2.id as runID')->from(TABLE_CASE)->alias('t1')
-                ->leftJoin(TABLE_TESTRUN)->alias('t2')->on('t1.id = t2.case')
-                ->where('t2.id')->in($caseIDList)
-                ->fetchAll('id');
         }
 
         /* Set modules. */

@@ -264,7 +264,6 @@ if($config->systemMode == 'new')
     $lang->resource->project->testreport          = 'testreport';
     $lang->resource->project->execution           = 'execution';
     $lang->resource->project->export              = 'export';
-    $lang->resource->project->createGuide         = 'createGuide';
     $lang->resource->project->updateOrder         = 'updateOrder';
     $lang->resource->project->team                = 'teamAction';
     $lang->resource->project->unlinkMember        = 'unlinkMember';
@@ -304,10 +303,9 @@ if($config->systemMode == 'new')
     $lang->project->methodOrder[160] = 'testreport';
     $lang->project->methodOrder[165] = 'execution';
     $lang->project->methodOrder[170] = 'export';
-    $lang->project->methodOrder[175] = 'createGuide';
-    $lang->project->methodOrder[180] = 'updateOrder';
-    $lang->project->methodOrder[185] = 'team';
-    $lang->project->methodOrder[190] = 'unlinkMember';
+    $lang->project->methodOrder[175] = 'updateOrder';
+    $lang->project->methodOrder[180] = 'team';
+    $lang->project->methodOrder[185] = 'unlinkMember';
 
     $lang->resource->projectbuild = new stdclass();
     $lang->resource->projectbuild->browse = 'browse';
