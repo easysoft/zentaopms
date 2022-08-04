@@ -9,6 +9,7 @@
  * @version     $Id: gantt.html.php 4903 2013-06-26 05:32:59Z wyd621@gmail.com $
  * @link        http://www.zentao.net
  */
+
 ?>
 <?php chdir(__DIR__);?>
 <?php include '../../common/view/gantt.html.php';?>
@@ -64,6 +65,8 @@ form {display: block; margin-top: 0em; margin-block-end: 1em;}
 .gantt-fullscreen #mainMenu,
 .gantt-fullscreen #footer {display: none!important;}
 .gantt-fullscreen #mainContent {position: fixed; top: 0; right: 0; bottom: 0; left: 0}
+.gantt_grid_head_cell.gantt_grid_head_text{overflow:visible;}
+
 </style>
 <?php js::set('customUrl', $this->createLink('programplan', 'ajaxCustom'));?>
 <?php js::set('dateDetails', $dateDetails);?>
@@ -93,6 +96,16 @@ form {display: block; margin-top: 0em; margin-block-end: 1em;}
   </div>
   <?php $fileName = "gantt-export-{$projectID}";?>
   <a id='ganttDownload' target='hiddenwin' download='<?php echo "{$fileName}.png";?>'></a>
+  <?php
+  $typeHtml  = '<div class="btn-group">';
+  $typeHtml .= '<button class="btn btn-link" data-toggle="dropdown"><span class="text">' . $lang->programplan->ganttBrowseType[$ganttType] . '</span> <span class="caret"></span></button>';
+  $typeHtml .= '<ul class="dropdown-menu">';
+  foreach($lang->programplan->ganttBrowseType as $browseType => $typeName)
+  {
+      $typeHtml .= '<li ' . ($ganttType == $browseType ? "class='active'" : '') . '>' . html::a($this->createLink('programplan', 'browse', "projectID=$projectID&productID=$productID&type=$browseType"), $typeName) . '</li>';
+  }
+  $typeHtml .= '</ul></div>';
+  ?>
 </div>
 <script>
 var scriptLoadedMap   = {};
@@ -403,7 +416,7 @@ function validateResources(id)
 
     /* Check data. */
     var postData = {
-        'id'        : task.id,
+        'id'        : type == 'task' ? task.id.split("-")[1] : task.id,
         'start_date': from.toLocaleDateString('en-CA'),
         'end_date'  : to.toLocaleDateString('en-CA'),
         'type'      : type
@@ -489,7 +502,7 @@ $(function()
     {name: 'realEnd',      align: 'center', width: 80}
     ];
 
-    gantt.locale.labels.column_text         = "<?php echo $lang->programplan->name;?>";
+    gantt.locale.labels.column_text         = <?php echo json_encode($typeHtml);?>;
     gantt.locale.labels.column_status       = "<?php echo $lang->statusAB;?>";
     gantt.locale.labels.column_percent      = "<?php echo $lang->programplan->percentAB;?>";
     gantt.locale.labels.column_taskProgress = "<?php echo $lang->programplan->taskProgress;?>";

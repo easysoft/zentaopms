@@ -86,6 +86,18 @@ class programplan extends control
             $plans = $this->programplan->getDataForGantt($projectID, $this->productID, $baselineID, $selectCustom, false);
         }
 
+        if($type == 'assignedTo')
+        {
+            $owner        = $this->app->user->account;
+            $module       = 'programplan';
+            $section      = 'browse';
+            $object       = 'stageCustom';
+            $selectCustom = $this->loadModel('setting')->getItem("owner={$owner}&module={$module}&section={$section}&key={$object}");
+            if(strpos($selectCustom, 'date') !== false) $dateDetails = 0;
+
+            $plans = $this->programplan->getDataForGanttGroupByAssignedTo($projectID, $this->productID, $baselineID, $selectCustom, false);
+        }
+
         if($type == 'lists')
         {
             $sort  = common::appendOrder($orderBy);
@@ -103,6 +115,7 @@ class programplan extends control
         $this->view->selectCustom = $selectCustom;
         $this->view->dateDetails  = $dateDetails;
         $this->view->users        = $this->loadModel('user')->getPairs('noletter');
+        $this->view->ganttType    = $type;
 
         $this->display();
     }
@@ -248,14 +261,8 @@ class programplan extends control
     {
         if(!empty($_POST))
         {
-            if($_POST['type'] == 'task')
-            {
-                $objectID = explode('-', $_POST['id'])[1];
-            }
-            else
-            {
-                $objectID =  $_POST['id'];
-            }
+            if(!isset($_POST['id']) or empty($_POST['id'])) return $this->send(array('result' => 'fail', 'message' => ''));
+            $objectID =  $_POST['id'];
 
             $this->loadModel('task')->saveTaskDrag($objectID, $_POST['type']);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
