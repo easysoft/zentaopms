@@ -64,7 +64,7 @@ class searchModel extends model
                             $fieldNO      = substr($formKey, 5);
                             $fieldNO      = "value" . $fieldNO;
                             $formNameList = $this->session->$formName;
-                            $fieldValue   = $formNameList[$fieldNO];
+                            $fieldValue   = zget($formNameList, $fieldNO, '');
 
                             if($fieldValue) $fieldValues[$formField][$fieldValue] = $fieldValue;
                         }
