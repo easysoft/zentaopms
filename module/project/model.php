@@ -259,7 +259,7 @@ class projectModel extends model
     {
         if($project->parent == 0) return '';
 
-        $parentName = $this->dao->select('id,name')->from(TABLE_PROGRAM)->where('id')->in(trim($project->path, ','))->andWhere('grade')->lt($project->grade)->fetchPairs();
+        $parentName = $this->dao->select('id,name')->from(TABLE_PROGRAM)->where('id')->in(trim($project->path, ','))->andWhere('grade')->lt($project->grade)->orderBy('grade asc')->fetchPairs();
 
         $parentProgram = '';
         foreach($parentName as $name) $parentProgram .= $name . '/';
