@@ -137,6 +137,7 @@ class buildModel extends model
             ->beginIF($executionID)->andWhere('t1.execution')->eq((int)$executionID)->fi()
             ->beginIF($type == 'product' and $param)->andWhere('t1.product')->eq($param)->fi()
             ->beginIF($type == 'bysearch')->andWhere($param)->fi()
+            ->beginIF($type == 'review')->andWhere("FIND_IN_SET('{$this->app->user->account}', t1.reviewers)")->fi()
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id');
