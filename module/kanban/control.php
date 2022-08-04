@@ -277,8 +277,7 @@ class kanban extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
         }
 
-        $kanban       = $this->kanban->getByID($kanbanID);
-        $kanban->desc = strip_tags(htmlspecialchars_decode($kanban->desc));
+        $kanban = $this->kanban->getByID($kanbanID);
 
         $space      = $this->kanban->getSpaceById($kanban->space);
         $spaceUsers = trim($space->owner) . ',' . trim($space->team);
@@ -315,8 +314,7 @@ class kanban extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
         }
 
-        $kanban       = $this->kanban->getByID($kanbanID);
-        $kanban->desc = strip_tags(htmlspecialchars_decode($kanban->desc));
+        $kanban = $this->kanban->getByID($kanbanID);
 
         $this->view->kanban        = $kanban;
         $this->view->laneCount     = $this->kanban->getLaneCount($kanbanID);
