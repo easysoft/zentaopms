@@ -431,7 +431,6 @@ function validateResources(id)
         type: "post",
         success: function(response)
         {
-            response = JSON.parse(response);
             if(response.result == 'fail' && response.message)
             {
                 new $.zui.Messager(response.message, {
@@ -476,9 +475,11 @@ $(function()
 
     gantt.config.readonly            = canGanttEdit ? false : true;
     gantt.config.details_on_dblclick = false;
-    gantt.config.order_branch        = 'marker';
+    gantt.config.order_branch        = ganttType == 'assignedTo' ? false : 'marker';
     gantt.config.drag_progress       = false;
     gantt.config.drag_links          = false;
+    gantt.config.drag_move           = ganttType == 'assignedTo' ? false : true;
+    gantt.config.drag_resize         = ganttType == 'assignedTo' ? false : true;
     gantt.config.smart_rendering     = true;
     gantt.config.smart_scales        = true;
     gantt.config.static_background   = true;
