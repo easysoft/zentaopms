@@ -1111,7 +1111,7 @@ class projectModel extends model
             /* Judge products not empty. */
             if(empty($linkedProductsCount) and !isset($_POST['newProduct']))
             {
-                dao::$errors[] = $this->lang->project->productNotEmpty;
+                dao::$errors['products0'] = $this->lang->project->productNotEmpty;
                 return false;
             }
         }

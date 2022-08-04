@@ -287,6 +287,7 @@ $(function()
         if($(this).prop('checked'))
         {
             $('#budget').val('').attr('disabled', 'disabled');
+            if($('#beyondBudgetTip').length > 0) $('#beyondBudgetTip').remove();
         }
         else
         {
@@ -343,3 +344,33 @@ $(document).on('change', "#plansBox select[name^='plans']", function()
         }
     });
 });
+
+/**
+ * Append prompt when the budget exceeds the parent project set.
+ *
+ * @param  int    $projectID
+ * @access public
+ * @return void
+ */
+function budgetOverrunTips(projectID = 0)
+{
+    var selectedProgramID = $('#parent').val();
+    var budget            = $('#budget').val();
+
+    if(selectedProgramID == 0)
+    {
+        if($('#beyondBudgetTip').length > 0) $('#beyondBudgetTip').remove();
+        return false;
+    }
+
+    $.get(createLink('project', 'ajaxGetAvailableBudget', 'projectID=' + projectID + "&selectedProgramID=" + selectedProgramID + "&budget=" + budget), function(data)
+    {
+        var data = JSON.parse(data);
+
+        if($('#beyondBudgetTip').length > 0) $('#beyondBudgetTip').remove();
+        $('#budgetBox').after(data.tip);
+
+        if($('#budget').attr('placeholder')) $('#budget').removeAttr('placeholder')
+        $('#budget').attr('placeholder', data.placeholder);
+    });
+}
