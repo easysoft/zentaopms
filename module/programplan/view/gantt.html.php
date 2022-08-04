@@ -459,10 +459,8 @@ $(function()
     gantt.config.readonly            = false;
     gantt.config.details_on_dblclick = false;
     gantt.config.order_branch        = 'marker';
-    gantt.config.details_on_dblclick = false;
-    gantt.config.drag_progress       = true;
+    gantt.config.drag_progress       = false;
     gantt.config.drag_links          = false;
-    gantt.config.drag_resize         = false;
     gantt.config.smart_rendering     = true;
     gantt.config.smart_scales        = true;
     gantt.config.static_background   = true;
@@ -621,18 +619,20 @@ $(function()
         var link = createLink('programplan', 'ajaxSaveGanttMove');
 
         //prevent moving to another position.
-        if(task.parent != parent || id.indexOf('-') == -1) return false;
-
-        $.ajax({
+        if(task.parent != parent || id.indexOf('-') == -1)
+        {
+            return false;
+        }
+        else
+        {
+            $.ajax({
             url: link,
-            dataType: "json",
-            data: {id: id, type: task.type, order: tindex},
-            type: "post",
-            success: function(result)
-            {
-                var target = result;
-            }
-        });
+                dataType: "json",
+                data: {id: id, type: task.type, index: tindex},
+                type: "post",
+                success: function(result){}
+            });
+        }
 
         return true;
     });
