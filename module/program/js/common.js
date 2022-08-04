@@ -276,7 +276,7 @@ $(function()
         if($(this).prop('checked'))
         {
             $('#budget').val('').attr('disabled', 'disabled');
-            budgetOverrunTips();
+            if($('#beyondBudgetTip').length > 0) $('#beyondBudgetTip').remove();
         }
         else
         {
@@ -292,13 +292,13 @@ $(function()
  * @access public
  * @return void
  */
-function setBudgetTipsAndAclList(programID)
+function setBudgetTipsAndAclList(parentProgramID)
 {
-    if(programID != 0)
+    if(parentProgramID != 0)
     {
-        $.get(createLink('program', 'ajaxGetBudgetLeft', "ProgramID=" + programID), function(budgetLeft)
+        $.get(createLink('program', 'ajaxGetBudgetLeft', "ProgramID=" + parentProgramID), function(budgetLeft)
         {
-            parentProgram = programList[programID];
+            parentProgram = programList[parentProgramID];
             programBudget = parentProgram.budget;
             PGMBudgetUnit = currencySymbol[parentProgram.budgetUnit];
 
@@ -312,7 +312,7 @@ function setBudgetTipsAndAclList(programID)
         $('#budget').removeAttr('placeholder');
         $('.aclBox').html($('#PGMAcl').html());
     }
-    budgetOverrunTips(editedProgramID);
+    budgetOverrunTips(typeof(programID) == 'undefind' ? 0 : programID);
 }
 
 /**
