@@ -1,5 +1,7 @@
 $(function()
 {
+    config.onlybody = 'no';
+
     toggleAcl($('input[name="acl"]:checked').val(), 'doc');
 
     if($(".createCustomLib").length == 1) $(".createCustomLib").click(); // Fix bug #15139.
@@ -7,12 +9,7 @@ $(function()
     $('#saveBtn').click(function()
     {
         var params = $('#dataform').serializeArray();
-
-        var files = [];
-        $("input[name^='file']").each(function()
-        {
-            files.push($(this).val());
-        });
+        var files  = $('#uploader').data('zui.uploader').getFiles();
 
         sessionStorage.setItem('docBasicInfo', JSON.stringify(params));
         sessionStorage.setItem('docFiles', JSON.stringify(files));

@@ -176,16 +176,42 @@ $(function()
     setTimeout(function(){$('.ke-edit-iframe, .ke-edit').height(contentHeight);}, 100);
     setTimeout(function(){$('.CodeMirror').height(contentHeight);}, 100);
 
-    //basicInfoContent = '';
-    //$('#basicInfoLink').click(function()
-    //{
-    //    basicInfoContent = $('#basicInfoBox').html();
-    //});
+    initialLibID     = 0;
+    initialModuleID  = 0;
+    initialKeywords  = '';
+    initialAcl       = '';
+    initialFilesName = [];
+    initialFilesPath = [];
+    initialMailto    = [];
+    initialGroups    = [];
+    initialUsers     = [];
 
-    //$('#modalBasicInfo .modal-header .close').click(function()
-    //{
-    //    $('#basicInfoBox').html(basicInfoContent);
-    //});
+    $('#basicInfoLink').click(function()
+    {
+        initialLibID    = $('#modalBasicInfo #lib').val();
+        initialModuleID = $('#modalBasicInfo #module').val();
+        initialKeywords = $('#modalBasicInfo #keywords').val();
+        initialAcl      = $('#modalBasicInfo input[name=acl]:checked').val();
+        initialMailto   = $('#modalBasicInfo #mailto').data('zui.picker').getValue();
+        initialGroups   = $('#modalBasicInfo #groups').data('zui.picker').getValue();
+        initialUsers    = $('#modalBasicInfo #users').data('zui.picker').getValue();
+
+        $("input[name^='file']").each(function(){initialFilesPath.push($(this).val());});
+        $("input[name^='label']").each(function(){initialFilesName.push($(this).val());});
+    });
+
+    $('#modalBasicInfo .modal-header .close').click(function()
+    {
+        $('#modalBasicInfo #lib').val(initialLibID).trigger('chosen:updated');
+        $('#modalBasicInfo #lib').trigger('change');
+        $('#modalBasicInfo #module').val(initialModuleID).trigger('chosen:updated');
+        $('#modalBasicInfo #keywords').val(initialKeywords);
+        $('#modalBasicInfo input:radio[value='+ initialAcl +']').attr('checked', 'checked');
+        toggleAcl($('input[name="acl"]:checked').val(), 'doc');
+        $('#modalBasicInfo #mailto').data('zui.picker').setValue(initialMailto);
+        setTimeout(function(){$('#modalBasicInfo #groups').data('zui.picker').setValue(initialGroups)}, 1000);
+        setTimeout(function(){$('#modalBasicInfo #users').data('zui.picker').setValue(initialUsers)}, 1000);
+    });
 
     $(document).on('click', '#modalBasicInfo tfoot .btn', function() {$('#modalBasicInfo').modal('hide');});
 })

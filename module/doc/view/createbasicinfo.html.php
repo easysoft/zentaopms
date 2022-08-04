@@ -11,6 +11,8 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
+<?php js::import($jsRoot . 'uploader/min.js');?>
+<?php css::import($jsRoot . 'uploader/min.css');?>
 <?php js::set('holders', $lang->doc->placeholder);?>
 <?php js::set('type', 'doc');?>
 <div id="mainContent" class="main-content">
@@ -36,7 +38,7 @@
           </tr>
           <tr>
             <th><?php echo $lang->doc->title;?></th>
-            <td colspan='2'><?php echo html::input('title', '', "class='form-control' required");?></td>
+            <td colspan='2'><?php echo html::input('title', '', "class='form-control'");?></td>
           </tr>
           <tr>
             <th><?php echo $lang->doc->keywords;?></th>
@@ -52,7 +54,19 @@
           </tr>
           <tr id='fileBox'>
             <th><?php echo $lang->doc->files;?></th>
-            <td colspan='2'><?php echo $this->fetch('file', 'buildform');?></td>
+            <td colspan='2'>
+              <div id='uploader' class="uploader" data-ride="uploader" data-url="<?php echo $this->createLink('file', 'ajaxUpload', "uid=" . uniqid());?>">
+                <div class="uploader-message text-center">
+                  <div class="content"></div>
+                  <button type="button" class="close">×</button>
+                </div>
+                <div class="uploader-files file-list file-list-lg" data-drag-placeholder="请拖拽文件到此处"></div>
+                <div class="uploader-actions">
+                  <div class="uploader-status pull-right text-muted"></div>
+                  <button type="button" class="btn btn-link uploader-btn-browse"><i class="icon icon-plus"></i> 选择文件</button>
+                </div>
+              </div>
+            </td>
           </tr>
           <tr>
             <th><?php echo $lang->doc->mailto;?></th>
@@ -102,4 +116,12 @@
 <?php js::set('objectID', $objectID);?>
 <?php js::set('docType', $docType);?>
 <?php js::set('noticeAcl', $lang->doc->noticeAcl['doc']);?>
+<script>
+$(function()
+{
+    $('#uploaderExample').uploader({
+        autoUpload: true
+    });
+})
+</script>
 <?php include '../../common/view/footer.html.php';?>

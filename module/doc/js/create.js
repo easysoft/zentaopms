@@ -64,12 +64,6 @@ $(function()
 
     if(!fromGlobal)
     {
-        var basicInfo   = JSON.parse(sessionStorage.getItem('docBasicInfo'));
-        var docFiles    = JSON.parse(sessionStorage.getItem('docFiles'));
-        var fileNames   = [];
-        var mailto      = [];
-        var groups      = [];
-        var users       = [];
         var libID       = 0;
         var moduleID    = 0;
         var title       = '';
@@ -77,6 +71,13 @@ $(function()
         var type        = '';
         var acl         = '';
         var contentType = '';
+        var fileNames   = [];
+        var mailto      = [];
+        var groups      = [];
+        var users       = [];
+        var basicInfo   = JSON.parse(sessionStorage.getItem('docBasicInfo'));
+        var docFiles    = JSON.parse(sessionStorage.getItem('docFiles'));
+        console.log(docFiles);
 
         $.each(basicInfo, function(index, value)
         {
@@ -103,9 +104,6 @@ $(function()
                 case 'contentType':
                     contentType = value.value;
                     break;
-                case 'labels[]':
-                    fileNames.push(value.value);
-                    break;
                 case 'mailto[]':
                     mailto.push(value.value);
                     break;
@@ -118,12 +116,21 @@ $(function()
             }
         })
 
+        $('#title').val(title);
         $('#modalBasicInfo #keywords').val(keywords);
         $('#modalBasicInfo #mailto').data('zui.picker').setValue(mailto);
         $('#modalBasicInfo input:radio[value='+ acl +']').attr('checked', 'checked');
         toggleAcl($('input[name="acl"]:checked').val(), 'doc');
         setTimeout(function(){$('#modalBasicInfo #groups').data('zui.picker').setValue(groups)}, 1000);
         setTimeout(function(){$('#modalBasicInfo #users').data('zui.picker').setValue(users)}, 1000);
+
+        $('#uploader').uploader({
+            autoUpload: true,
+            deleteActionOnDone: function(file, doRemoveFile) {
+                doRemoveFile();
+            },
+            staticFiles: docFiles
+        });
     }
 })
 
