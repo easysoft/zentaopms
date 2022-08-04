@@ -59,6 +59,7 @@ js::set('isCNLang', !$this->loadModel('common')->checkNotCN())
       <?php echo html::select('project', $projects, $projectID, "class='form-control chosen' data-placeholder='{$lang->execution->selectProject}'");?>
     </div>
     <?php endif;?>
+    <a class="btn btn-link querybox-toggle" id='bysearchTab'><i class="icon icon-search muted"></i> <?php echo $lang->execution->byQuery;?></a>
   </div>
   <div class='btn-toolbar pull-right'>
     <?php common::printLink('execution', 'export', "status=$status&productID=$productID&orderBy=$orderBy&from=$from", "<i class='icon-export muted'> </i> " . $lang->export, '', "class='btn btn-link export'")?>
@@ -70,6 +71,7 @@ js::set('isCNLang', !$this->loadModel('common')->checkNotCN())
   </div>
 </div>
 <div id='mainContent' class="main-row fade">
+  <div class="cell<?php if($status == 'bySearch') echo ' show';?>" id="queryBox" data-module='execution'></div>
   <?php if(empty($executionStats)):?>
   <div class="table-empty-tip">
     <p>
@@ -92,7 +94,7 @@ js::set('isCNLang', !$this->loadModel('common')->checkNotCN())
       <nav class="btn-toolbar pull-right setting"></nav>
     </div>
     <?php
-    $vars = "status=$status&projectID=$projectID&orderBy=%s&productID=$productID&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}";
+    $vars = "status=$status&projectID=$projectID&orderBy=%s&productID=$productID&param=$param&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}";
     if($useDatatable) include '../../common/view/datatable.html.php';
     else              include '../../common/view/tablesorter.html.php';
 

@@ -137,6 +137,7 @@ $lang->execution->batchCreateTask     = '批量建任务';
 $lang->execution->kanbanNoLinkProduct = "看板没有关联{$lang->productCommon}";
 $lang->execution->myTask              = "我的任务";
 $lang->execution->list                = '列表';
+$lang->execution->allProject          = '全部项目';
 
 /* Fields of zt_team. */
 $lang->execution->root     = '源ID';

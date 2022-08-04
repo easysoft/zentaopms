@@ -137,6 +137,7 @@ $lang->execution->batchCreateTask     = 'Batch create task';
 $lang->execution->kanbanNoLinkProduct = "Kanban not linked {$lang->productCommon}";
 $lang->execution->myTask              = "My Task";
 $lang->execution->list                = "{$lang->executionCommon} List";
+$lang->execution->allProject          = 'Tous';
 
 /* Fields of zt_team. */
 $lang->execution->root     = 'Root';

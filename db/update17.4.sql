@@ -217,3 +217,5 @@ INSERT IGNORE INTO `zt_workflowfield` (`module`, `field`, `type`, `length`, `nam
 ('productplan',	'createdDate',	'datetime',	'',	'创建时间',	'datetime',	'',	'',	'',	'',	'',	12,	0,	0,	'0',	'0',	'0',	'1',	1,	'buildin',      '',	'',	'2022-08-02 14:49',	'',	'0000-00-00 00:00:00'),
 ('release',	'createdBy',	'varchar',	'30',	'由谁创建',	'select',	'',	'user',	'',	'',	'',	14,	0,	0,	'0',	'0',	'0',	'1',	1,	'buildin',      '',	'',	'2022-08-02 14:49',	'',	'0000-00-00 00:00:00'),
 ('release',	'createdDate',	'datetime',	'',	'创建时间',	'datetime',	'',	'',	'',	'',	'',	15,	0,	0,	'0',	'0',	'0',	'1',	1,	'buildin',      '',	'',	'2022-08-02 14:49',	'',	'0000-00-00 00:00:00');
+
+UPDATE `zt_project` SET `closedDate`='' AND `closedBy`='' WHERE `status` != 'closed';

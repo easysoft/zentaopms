@@ -59,7 +59,7 @@ $useGuest = $this->app->user->account == 'guest';
         <?php if($hasHeading):?>
         </div>
         <?php endif;?>
-        <?php echo $this->fetch('block', 'printBlock', "id=$block->id&module=$module")?>
+        <div class='panel-body scrollbar-hover'></div>
       </div>
       <?php endforeach;?>
     </div>
@@ -94,7 +94,7 @@ $useGuest = $this->app->user->account == 'guest';
         <?php if($hasHeading):?>
         </div>
         <?php endif;?>
-        <?php echo $this->fetch('block', 'printBlock', "id=$block->id&module=$module")?>
+        <div class='panel-body scrollbar-hover'></div>
       </div>
       <?php endforeach;?>
     </div>
@@ -136,6 +136,11 @@ $(function()
         });
     }
     setTimeout(checkRemind, 1000);
+
+    $('#dashboard .row .panel').each(function()
+    {
+        refreshBlock($(this));
+    })
 });
 </script>
 <?php if($extView = $this->getExtViewFile(__FILE__)){include $extView; return helper::cd();}?>

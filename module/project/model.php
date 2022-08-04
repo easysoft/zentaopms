@@ -259,7 +259,7 @@ class projectModel extends model
     {
         if($project->parent == 0) return '';
 
-        $parentName = $this->dao->select('id,name')->from(TABLE_PROGRAM)->where('id')->in(trim($project->path, ','))->andWhere('grade')->lt($project->grade)->fetchPairs();
+        $parentName = $this->dao->select('id,name')->from(TABLE_PROGRAM)->where('id')->in(trim($project->path, ','))->andWhere('grade')->lt($project->grade)->orderBy('grade asc')->fetchPairs();
 
         $parentProgram = '';
         foreach($parentName as $name) $parentProgram .= $name . '/';
@@ -2329,17 +2329,48 @@ class projectModel extends model
      * @param  int     $projectID
      * @param  string  $status
      * @param  int     $productID
+     * @param  int     $branch
      * @param  int     $itemCounts
      * @param  string  $orderBy
      * @param  object  $pager
+     * @param  bool    $withTasks
+     * @param  int     $queryID
      * @access public
      * @return array
      */
-    public function getStats($projectID = 0, $status = 'undone', $productID = 0, $branch = 0, $itemCounts = 30, $orderBy = 'id_asc', $pager = null, $withTasks = false)
+    public function getStats($projectID = 0, $status = 'undone', $productID = 0, $branch = 0, $itemCounts = 30, $orderBy = 'id_asc', $pager = null, $withTasks = false, $queryID = 0)
     {
         if(empty($productID))
         {
             $myExecutionIDList = array();
+            $query             = '';
+            if($status == 'bySearch')
+            {
+                $status = 'all';
+                if($queryID)
+                {
+                    $query = $this->loadModel('search')->getQuery($queryID);
+                    if($query)
+                    {
+                        $this->session->set('executionQuery', $query->sql);
+                        $this->session->set('executionForm', $query->form);
+                    }
+                    else
+                    {
+                        $this->session->set('executionQuery', ' 1 = 1');
+                    }
+                }
+                else
+                {
+                    if($this->session->executionQuery == false) $this->session->set('executionQuery', ' 1 = 1');
+                }
+                $query      = $this->session->executionQuery;
+                $allProject = "`project` = 'all'";
+
+                if(strpos($query, $allProject) !== false) $query = str_replace($allProject, '1', $query);
+                $query = preg_replace('/(`\w*`)/', 't1.$1',$query);
+            }
+
             if($status == 'involved')
             {
                 $myExecutionIDList = $this->dao->select('root')->from(TABLE_TEAM)
@@ -2351,6 +2382,7 @@ class projectModel extends model
             $executions = $this->dao->select('t1.*,t2.name projectName, t2.model as projectModel')->from(TABLE_EXECUTION)->alias('t1')
                 ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
                 ->where('t1.type')->in('sprint,stage,kanban')
+                ->beginIF(!empty($query))->andWhere($query)->fi()
                 ->beginIF($projectID != 0)->andWhere('t1.project')->eq($projectID)->fi()
                 ->beginIF($projectID == 0 and $this->config->vision)->andWhere('t1.vision')->eq($this->config->vision)->fi()
                 ->beginIF(!empty($myExecutionIDList))->andWhere('t1.id')->in(array_keys($myExecutionIDList))->fi()

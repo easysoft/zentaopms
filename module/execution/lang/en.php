@@ -137,11 +137,12 @@ $lang->execution->batchCreateTask     = 'Batch create task';
 $lang->execution->kanbanNoLinkProduct = "Kanban not linked {$lang->productCommon}";
 $lang->execution->myTask              = "My Task";
 $lang->execution->list                = 'List';
+$lang->execution->allProject          = 'All';
 
 /* Fields of zt_team. */
 $lang->execution->root     = 'Root';
-$lang->execution->estimate = 'estimate';
-$lang->execution->consumed = 'consumed';
+$lang->execution->estimate = 'Estimate';
+$lang->execution->consumed = 'Consumed';
 $lang->execution->left     = 'Left';
 
 if($this->config->systemMode == 'new')     $lang->execution->copyTeamTip = "copy Project/{$lang->execution->common} team members";
