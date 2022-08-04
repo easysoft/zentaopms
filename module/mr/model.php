@@ -694,14 +694,6 @@ class mrModel extends model
             if(isset($mergeResult->merged) and $mergeResult->merged) $mergeResult->state = 'merged';
             return $mergeResult;
         }
-        elseif($host->type == 'gogs')
-        {
-            $mergeResult = new stdClass();
-            $mergeResult->iid          = 0;
-            $mergeResult->merge_status = 'can_be_merged';
-            $mergeResult->state        = 'opened';
-            return $mergeResult;
-        }
     }
 
     /**
