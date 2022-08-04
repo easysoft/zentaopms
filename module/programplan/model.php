@@ -144,7 +144,6 @@ class programplanModel extends model
      * @param  int     $baselineID
      * @param  string  $selectCustom
      * @param  bool    $returnJson
-     * @param  string  $type
      * @access public
      * @return string
      */
@@ -334,6 +333,17 @@ class programplanModel extends model
         return $returnJson ? json_encode($datas) : $datas;
     }
 
+    /**
+     * Get gantt data group by assigned.
+     *
+     * @param  int     $executionID
+     * @param  int     $productID
+     * @param  int     $baselineID
+     * @param  string  $selectCustom
+     * @param  bool    $returnJson
+     * @access public
+     * @return string
+     */
     public function getDataForGanttGroupByAssignedTo($executionID, $productID, $baselineID = 0, $selectCustom = '', $returnJson = true)
     {
         $plans = $this->getStage($executionID, $productID);
@@ -413,7 +423,7 @@ class programplanModel extends model
             //TODO
             $dataGroup->start_date = '03-11-2021';
             $dataGroup->endDate    = '2021-12-01';
-            $dataGroup->duration   = 1;
+            $dataGroup->duration   = 0;
             //TODO
             $dataGroup->taskProgress = '';
 
