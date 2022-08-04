@@ -9,7 +9,6 @@
  * @version     $Id: gantt.html.php 4903 2013-06-26 05:32:59Z wyd621@gmail.com $
  * @link        http://www.zentao.net
  */
-
 ?>
 <?php chdir(__DIR__);?>
 <?php include '../../common/view/gantt.html.php';?>
@@ -72,6 +71,7 @@ form {display: block; margin-top: 0em; margin-block-end: 1em;}
 <?php js::set('dateDetails', $dateDetails);?>
 <?php js::set('module', $app->rawModule);?>
 <?php js::set('method', $app->rawMethod);?>
+<?php js::set('ganttType', $ganttType);?>
 <?php js::set('canGanttEdit', common::hasPriv('programplan', 'ganttEdit'));?>
 <div id='mainContent' class='main-content load-indicator' data-loading='<?php echo $lang->programplan->exporting;?>'>
   <form class="main-form form-ajax not-watch">
@@ -423,21 +423,25 @@ function validateResources(id)
     };
     var link = createLink('programplan', 'ajaxSaveTaskDrag');
     /* Sync Close. */
-    $.ajaxSettings.async = false;
-    $.post(link, postData, function(response)
-    {
-        response = JSON.parse(response);
-        if(response.result == 'fail' && response.message)
+    $.ajax({
+        url: link,
+        dataType: "json",
+        async: false,
+        data: postData,
+        type: "post",
+        success: function(response)
         {
-            new $.zui.Messager(response.message, {
-                type: 'danger',
-                icon: 'exclamation-sign'
-            }).show();
-            flag = false;
+            response = JSON.parse(response);
+            if(response.result == 'fail' && response.message)
+            {
+                new $.zui.Messager(response.message, {
+                    type: 'danger',
+                    icon: 'exclamation-sign'
+                }).show();
+                flag = false;
+            }
         }
-    })
-    /* Sync Open. */
-    $.ajaxSettings.async = true;
+    });
 
     return flag;
 }
@@ -498,8 +502,8 @@ $(function()
         }
     },
     {name: 'taskProgress', align: 'center', resize: true, width: 60},
-    {name: 'realBegan',    align: 'center', resize: true, width: 80},
-    {name: 'realEnd',      align: 'center', width: 80}
+    {name: 'realBegan',    align: 'center', resize: true, width: 150},
+    {name: 'realEnd',      align: 'center', width: 150}
     ];
 
     gantt.locale.labels.column_text         = <?php echo json_encode($typeHtml);?>;
@@ -617,12 +621,17 @@ $(function()
     gantt.attachEvent('onTaskClick', function(id, e)
     {
         if($(e.srcElement).hasClass('gantt_close') || $(e.srcElement).hasClass('gantt_open')) return false;
-
-        /* The id of task item is like executionID-taskID. e.g. 1507-37829, 37829 is task id. */
-        var position = id.indexOf('-');
-        if(position < 0) return;
-
-        var taskID = parseInt(id.substring(position + 1));
+        if(ganttType == 'assignedTo')
+        {
+            taskID = id;
+        }
+        else
+        {
+            /* The id of task item is like executionID-taskID. e.g. 1507-37829, 37829 is task id. */
+            var position = id.indexOf('-');
+            if(position < 0) return;
+            var taskID = parseInt(id.substring(position + 1));
+        }
 
         if(!isNaN(taskID) && taskID > 0) taskModalTrigger.show({url: createLink('task', 'view', 'taskID=' + taskID, 'html', true)});
     });

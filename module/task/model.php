@@ -3898,6 +3898,7 @@ class taskModel extends model
     public function saveTaskDrag($objectID, $objectType)
     {
         $post = fixer::input('post')->get();
+        $post->end_date = date('Y-m-d', strtotime('-1 day', strtotime($post->end_date)));
         if($objectType == 'task')
         {
             $objectData = $this->dao->select('*')->from(TABLE_TASK)->where('id')->eq($objectID)->fetch();
@@ -3935,7 +3936,7 @@ class taskModel extends model
             }
 
             $updateStartArg = !empty($objectData->realStarted) ? 'realStarted' : 'estStarted';
-            $updateEndArg   = strpos($objectData->status, 'closed, done') !== false ? 'finishedDate' : 'deadline';
+            $updateEndArg   = (!empty($objectData->finishedDate) and in_array($objectData->status, array('done', 'closed'))) ? 'finishedDate' : 'deadline';
             $this->dao->update(TABLE_TASK)
                 ->set($updateStartArg)->eq($post->start_date)
                 ->set($updateEndArg)->eq($post->end_date)
