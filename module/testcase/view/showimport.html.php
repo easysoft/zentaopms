@@ -49,6 +49,7 @@ $(function()
 </script>
 <?php else:?>
 <?php js::set('requiredFields', $requiredFields);?>
+<?php js::set('allCount', $allCount);?>
 <div id="mainContent" class="main-content">
   <div class="main-header clearfix">
     <h2><?php echo $lang->task->import;?></h2>
@@ -99,7 +100,8 @@ $(function()
         $hasMultiple = false;
         ?>
       </tbody>
-      <tfoot>
+
+      <tfoot class='hidden'>
         <tr>
           <td colspan='10' class='text-center form-actions'>
             <?php
@@ -128,12 +130,18 @@ $(function()
 </div>
 <?php endif;?>
 <script>
-$.ajaxSetup({async: false});
+
+$.get(createLink('port', 'ajaxGetTbody','model=<?php echo $model;?>&lastID=0&pagerID=<?php echo $pagerID;?>'), function(data)
+{
+    $('#showData > tbody').append(data);
+    if($('#showData tbody').find('tr').hasClass('showmore') === false) $('#showData tfoot').removeClass('hidden');
+    $('#showData tbody').find('.picker-select').picker({chosenMode: true});
+})
 
 window.addEventListener('scroll', this.handleScroll);
 function handleScroll(e)
 {
-    var relative = 200; // 相对距离
+    var relative = 500; // 相对距离
     $('tr.showmore').each(function()
     {
         var $showmore = $(this);
@@ -142,7 +150,7 @@ function handleScroll(e)
 
         if(getScrollTop() + getWindowHeight() >= offsetTop - relative)
         {
-            throttle(loadData($showmore), 150)
+            throttle(loadData($showmore), 250)
         }
     })
 }
@@ -150,10 +158,13 @@ function handleScroll(e)
 function loadData($showmore)
 {
     $showmore.removeClass('showmore');
-
-    $.get(createLink('port', 'ajaxGetTbody','model=<?php echo $model;?>&pagerID=<?php echo $pagerID;?>'), function(data)
+    var lastID = $showmore.attr('data-id');
+    var url    = createLink('port', 'ajaxGetTbody','model=<?php echo $model;?>&lastID=' + lastID + '&pagerID=<?php echo $pagerID;?>');
+    $.get(url, function(data)
     {
         $showmore.after(data);
+        if($('#showData tbody').find('tr').hasClass('showmore') === false) $('#showData tfoot').removeClass('hidden');
+        $('#showData tbody').find('.picker-select.nopicker').picker({chosenMode: true}).removeClass('nopicker');
     })
 }
 
@@ -197,11 +208,6 @@ function getWindowHeight()
     return document.compatMode == "CSS1Compat" ? windowHeight = document.documentElement.clientHeight : windowHeight = document.body.clientHeight
 }
 
-$.get(createLink('port', 'ajaxGetTbody','model=<?php echo $model;?>&pagerID=<?php echo $pagerID;?>'), function(data)
-{
-    $('#showData > tbody').append(data);
-})
-
 $('#showData').on('mouseenter', '.picker', function(e){
     var myPicker = $(this);
     var field    = myPicker.prev().attr('data-field');
@@ -211,12 +217,15 @@ $('#showData').on('mouseenter', '.picker', function(e){
     var value    = myPicker.prev().val();
 
     if($('#' + id).attr('isInit')) return;
+
+    $.ajaxSettings.async = false;
     $.get(createLink('port', 'ajaxGetOptions', 'model=<?php echo $model;?>&field=' + field + '&value=' + value + '&index=' + index), function(data)
     {
         $('#' + id).parent().html(data);
         $('#' + id).picker({chosenMode: true});
         $('#' + id).attr('isInit', true);
     });
+    $.ajaxSettings.async = true;
 })
 
 $(function()

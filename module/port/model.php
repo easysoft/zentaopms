@@ -1304,21 +1304,30 @@ class portModel extends model
     }
 
     /**
-     * buildNextList
+     * Build NextList.
      *
      * @param  array  $list
+     * @param  int    $lastID
      * @param  string $fields
      * @access public
      * @return void
      */
-    public function buildNextList($list = array(), $fields = '')
+    public function buildNextList($list = array(), $lastID = 0, $fields = '', $pagerID = 1)
     {
         $html = '';
+        $key  = key($list);
+        $showImportCount = $this->config->port->showImportCount;
+        $lastRow = $lastID + $key + $showImportCount;
+
         foreach($list as $row => $object)
         {
+            if($row <= $lastID) continue;
+            if($row > $lastRow) break;
+
+            $tmpList[$row] = $object;
             $trClass = '';
-            if(!isset($list[$row+1])) $trClass = 'showmore';
-            $html .= "<tr class='text-top $trClass'>";
+            if($row == $lastRow) $trClass = 'showmore';
+            $html .= "<tr class='text-top $trClass' data-id=$row>";
             $html .= '<td>';
             $html .= $object->id;
             $html .= html::hidden("id[$row]", $object->id);
@@ -1331,9 +1340,16 @@ class portModel extends model
                 $name     = "{$field}[$row]";
                 $selected = !empty($object->$field) ? $object->$field : '';
 
-                if($control == 'select')       $html .= '<td>' . html::select("$name", $values, $selected, "class='form-control picker-select' data-field='{$field}'") . '</td>';
+                $options = array();
+                if($control == 'select' or $control == 'multiple')
+                {
+                    if(!empty($values[$selected])) $options = array($selected => $values[$selected]);
+                    if(!empty($values[$selected]) and isset($values[0])) $options = array_slice($values, 0, 1);
+                }
 
-                elseif($control == 'multiple') $html .= '<td>' . html::select("{$name}[]", $values, $selected, "multiple class='form-control picker-select'") . '</td>';
+                if($control == 'select')       $html .= '<td>' . html::select("$name", $options, $selected, "class='form-control picker-select nopicker' data-field='{$field}'") . '</td>';
+
+                elseif($control == 'multiple') $html .= '<td>' . html::select($name . "[]", $options, $selected, "multiple class='form-control picker-select nopicker' data-field='{$field}'") . '</td>';
 
                 elseif($control == 'date')     $html .= '<td>' . html::input("$name", $selected, "class='form-control form-date autocomplete='off'") . '</td>';
 
@@ -1343,7 +1359,11 @@ class portModel extends model
 
                 elseif($control == 'textarea') $html .= '<td>' . html::textarea("$name", $selected, "class='form-control' cols='50' rows='1'") . '</td>';
 
-                elseif($field == 'stepDesc' or $field == 'stepExpect') $html .= '<td>' . $this->process4Testcase($field, $list, $row) . '</td>';
+                elseif($field == 'stepDesc' or $field == 'stepExpect')
+                {
+                    $stepDesc = $this->process4Testcase($field, $tmpList, $row);
+                    if($stepDesc) $html .= '<td>' . $stepDesc . '</td>';
+                }
 
                 else $html .= '<td>' . html::input("$name", $selected, "class='form-control autocomplete='off'") . '</td>';
             }
