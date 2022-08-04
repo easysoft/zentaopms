@@ -457,7 +457,7 @@ $(function()
     ?>
     gantt.serverList("userList", <?php echo json_encode($userList);?>);
 
-    gantt.config.readonly            = canGanttEdit ? true : false;
+    gantt.config.readonly            = canGanttEdit ? false : true;
     gantt.config.details_on_dblclick = false;
     gantt.config.order_branch        = 'marker';
     gantt.config.drag_progress       = false;
