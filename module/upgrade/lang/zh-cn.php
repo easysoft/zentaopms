@@ -156,3 +156,7 @@ $lang->upgrade->createExecutionTip = <<<EOT
 EOT;
 
 include dirname(__FILE__) . '/version.php';
+
+$lang->upgrade->recoveryActions = new stdclass();
+$lang->upgrade->recoveryActions->cancel = '取消';
+$lang->upgrade->recoveryActions->review = '评审';

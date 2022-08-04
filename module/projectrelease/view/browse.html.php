@@ -16,9 +16,14 @@
 <div id="mainMenu" class="clearfix">
   <div class="btn-toolbar pull-left">
     <?php
-    echo html::a(inlink('browse', "projectID=$projectID&executionID=$executionID&type=all"), "<span class='text'>{$lang->release->all}</span>" . ($type == 'all' ? ' <span class="label label-light label-badge">' . count($releases) . '</span>' : ''), '', "id='allTab' class='btn btn-link" . ('all' == $type ? ' btn-active-text' : '') . "' data-app='$from'");
-    echo html::a(inlink('browse', "projectID=$projectID&executionID=$executionID&type=normal"), "<span class='text'>{$lang->release->statusList['normal']}</span>" . ($type == 'normal' ? ' <span class="label label-light label-badge">' . count($releases) . '</span>' : ''), '', "id='normalTab' class='btn btn-link" . ('normal' == $type ? ' btn-active-text' : '') . "' data-app='$from'");
-    echo html::a(inlink('browse', "projectID=$projectID&executionID=$executionID&type=terminate"), "<span class='text'>{$lang->release->statusList['terminate']}</span>" . ($type == 'terminate' ? ' <span class="label label-light label-badge">' . count($releases) . '</span>' : ''), '', "id='terminateTab' class='btn btn-link" . ('terminate' == $type ? ' btn-active-text' : '') . "' data-app='$from'");
+    common::sortFeatureMenu();
+    foreach($lang->projectrelease->featureBar['browse'] as $featureType => $label)
+    {
+        $active = $type == $featureType ? 'btn-active-text' : '';
+        $label  = "<span class='text'>$label</span>";
+        if($type == $featureType) $label .= " <span class='label label-light label-badge'>" . count($releases) . "</span>";
+        echo html::a(inlink('browse', "projectID={$projectID}&executionID=$executionID&type=$featureType"), $label, '', "id='{$featureType}Tab' data-app='$from' class='btn btn-link $active'");
+    }
     ?>
   </div>
   <div class="btn-toolbar pull-right">

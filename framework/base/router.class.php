@@ -996,14 +996,7 @@ class baseRouter
             if($writable)
             {
                 $ztSessionHandler = new ztSessionHandler($_GET['tid']);
-                session_set_save_handler(
-                    array($ztSessionHandler, "open"),
-                    array($ztSessionHandler, "close"),
-                    array($ztSessionHandler, "read"),
-                    array($ztSessionHandler, "write"),
-                    array($ztSessionHandler, "destroy"),
-                    array($ztSessionHandler, "gc")
-                );
+                session_set_save_handler($ztSessionHandler, true);
             }
         }
 
@@ -3107,7 +3100,7 @@ class EndResponseException extends \Exception
  *
  * @package framework
  */
-class ztSessionHandler
+class ztSessionHandler implements SessionHandlerInterface
 {
     public $sessSavePath;
     public $tagID;
