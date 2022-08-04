@@ -192,7 +192,7 @@ class projectModel extends model
 
         $project = $this->dao->select('*')->from(TABLE_PROJECT)
             ->where('id')->eq($projectID)
-            ->beginIF($this->config->system == 'new')->andWhere('`type`')->in($type)->fi()
+            ->beginIF($this->config->systemMode == 'new')->andWhere('`type`')->in($type)->fi()
             ->fetch();
 
         if(!$project) return false;
