@@ -1537,6 +1537,7 @@ CREATE TABLE IF NOT EXISTS `zt_task` (
   KEY `story` (`story`),
   KEY `parent` (`parent`),
   KEY `assignedTo` (`assignedTo`)
+  KEY `order` (`order`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_taskestimate`;
 CREATE TABLE IF NOT EXISTS `zt_taskestimate` (

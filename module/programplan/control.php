@@ -273,21 +273,19 @@ class programplan extends control
     /**
      * Save task drag action.
      *
+     * @param  int    $productID
+     *
+     * @access public
      * @access public
      * @return void
      */
-    public function ajaxSaveGanttMove()
+    public function ajaxSaveGanttMove($productID = 0)
     {
-        if($_POST)
+        if(!empty($_POST))
         {
-            $data        = fixer::input('post')->get();
-            $IdList      = explode('-', $data->id);
-            $executionID = $IdList[0];
-            $taskID      = $IdList[1];
-
-            return 1231231;
+            $this->loadModel('task')->saveTaskMove($productID);
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            return $this->send(array('result' => 'success'));
         }
-
-        return $this->send();
     }
 }
