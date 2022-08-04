@@ -292,13 +292,13 @@ $(function()
  * @access public
  * @return void
  */
-function setBudgetTipsAndAclList(parentProgramID)
+function setBudgetTipsAndAclList(parentID)
 {
-    if(parentProgramID != 0)
+    if(parentID != 0)
     {
-        $.get(createLink('program', 'ajaxGetBudgetLeft', "ProgramID=" + parentProgramID), function(budgetLeft)
+        $.get(createLink('program', 'ajaxGetBudgetLeft', "ProgramID=" + parentID), function(budgetLeft)
         {
-            parentProgram = programList[parentProgramID];
+            parentProgram = programList[parentID];
             programBudget = parentProgram.budget;
             PGMBudgetUnit = currencySymbol[parentProgram.budgetUnit];
 
@@ -331,7 +331,7 @@ function budgetOverrunTips()
         return false;
     }
 
-    typeof(programID) == 'undefind' ? 0 : programID;
+    var programID = typeof(programID) == 'undefind' ? 0 : programID;
     $.get(createLink('program', 'ajaxGetAvailableBudget', 'programID=' + programID + "&selectedProgramID=" + selectedProgramID + "&budget=" + budget), function(data)
     {
         var data = JSON.parse(data);
