@@ -330,14 +330,14 @@ class programplanModel extends model
         }
 
         $datas['data'] = isset($datas['data']) ? array_values($datas['data']) : array();
-// a($datas['data']);exit;
+
         return $returnJson ? json_encode($datas) : $datas;
     }
 
     public function getDataForGanttGroupByAssignedTo($executionID, $productID, $baselineID = 0, $selectCustom = '', $returnJson = true)
     {
         $plans = $this->getStage($executionID, $productID);
-        
+
         $datas       = array();
         $planIdList  = array();
         $isMilestone = "<icon class='icon icon-flag icon-sm red'></icon> ";
@@ -361,6 +361,7 @@ class programplanModel extends model
         $tasksGroup = $this->dao->select('*')->from(TABLE_TASK)->where('deleted')->eq(0)->andWhere('execution')->in($planIdList)->fetchGroup('assignedTo','id');
         $users      = $this->loadModel('user')->getPairs('noletter');
 
+        $tasksMap = array();
         foreach($tasksGroup as $group => $tasks)
         {
             foreach($tasks as $id => $task)
@@ -382,6 +383,8 @@ class programplanModel extends model
                         $taskGroups[$account][$id]->realname   = $member->realname;
                     }
                 }
+
+                $tasksMap[$task->id] = $task;
             }
         }
 
@@ -407,23 +410,20 @@ class programplanModel extends model
             $dataGroup->parent     = 0;
             $dataGroup->open       = true;
             $dataGroup->progress   = '';
-            $dataGroup->start_date = '';
-            $dataGroup->endDate    = '';
-            $dataGroup->duration   = 0;
+            //TODO
+            $dataGroup->start_date = '03-11-2021';
+            $dataGroup->endDate    = '2021-12-01';
+            $dataGroup->duration   = 1;
+            //TODO
+            $dataGroup->taskProgress = '';
 
             $groupKey = $groupID . $group;
             $datas['data'][$groupKey] = $dataGroup;
 
-            foreach($tasks as $taskID => $task) 
+            foreach($tasks as $taskID => $task)
             {
-                // if($task->parent > 0 and $task->assignedTo)
-                // {
-                //     $a = $task->parent;
-                //     a($tasksGroup[$task->assignedTo]);
-                //     a($task->parent);exit;
-                // }
                 $execution = zget($plans, $task->execution, array());
-            
+
                 $priIcon   = sprintf($taskPri, $task->pri, $task->pri, $task->pri);
 
                 $estStart  = helper::isZeroDate($task->estStarted)  ? '' : $task->estStarted;
@@ -451,7 +451,7 @@ class programplanModel extends model
                 $data->realBegan    = $realBegan;
                 $data->realEnd      = $realEnd;
                 $data->pri          = $task->pri;
-                $data->parent       = ($task->parent > 0 and $task->assignedTo != '') ? $task->parent : $groupID;
+                $data->parent       = ($task->parent > 0 and $task->assignedTo != '' and !empty($tasksMap[$task->parent]->assignedTo)) ? $task->parent : $groupID;
                 $data->open         = true;
                 $progress           = $task->consumed ? round($task->consumed / ($task->left + $task->consumed), 3) : 0;
                 $data->progress     = $progress;
@@ -460,35 +460,21 @@ class programplanModel extends model
                 $data->endDate      = $end;
                 $data->duration     = 0;
 
-                /* If multi task then show the teams. */
-                // if($task->mode == 'multi' and !empty($taskTeams[$task->id]))
-                // {
-                //     $teams     = array_keys($taskTeams[$task->id]);
-                //     $assigneds = array();
-                //     foreach($teams as $assignedTo) $assigneds[] = zget($users, $assignedTo);
-                //     $data->owner_id = join(',', $assigneds);
-                // }
-
                 if($data->endDate > $data->start_date) $data->duration = helper::diffDate($data->endDate, $data->start_date) + 1;
                 if($data->start_date) $data->start_date = date('d-m-Y', strtotime($data->start_date));
                 if($data->start_date == '' or $data->endDate == '') $data->duration = 0;
 
                 if(strpos($selectCustom, 'task') !== false) $datas['data'][$data->id] = $data;
 
-                foreach($stageIndex as $index => $stage)
+                if(isset($stageIndex[$groupKey]['totalConsumed']))
                 {
-                    if($stage['planID'] == $task->execution)
-                    {
-                        $stageIndex[$index]['progress']['totalConsumed'] += $task->consumed;
-                        $stageIndex[$index]['progress']['totalReal']     += ($task->left + $task->consumed);
-
-                        $parent = $stage['parent'];
-                        if(isset($stageIndex[$parent]))
-                        {
-                            $stageIndex[$parent]['progress']['totalConsumed'] += $task->consumed;
-                            $stageIndex[$parent]['progress']['totalReal']     += ($task->left + $task->consumed);
-                        }
-                    }
+                    $stageIndex[$groupKey]['totalConsumed'] += $task->consumed;
+                    $stageIndex[$groupKey]['totalReal']     += $task->left + $task->consumed;
+                }
+                else
+                {
+                    $stageIndex[$groupKey]['totalConsumed'] = $task->consumed;
+                    $stageIndex[$groupKey]['totalReal']     = $task->left + $task->consumed;
                 }
             }
         }
@@ -496,7 +482,7 @@ class programplanModel extends model
         /* Calculate the progress of the phase. */
         foreach($stageIndex as $index => $stage)
         {
-            $progress  = empty($stage['progress']['totalConsumed']) ? 0 : round($stage['progress']['totalConsumed'] / $stage['progress']['totalReal'], 3);
+            $progress  = empty($stage['totalReal']) ? 0 : round($stage['totalConsumed'] / $stage['totalReal'], 3);
             $datas['data'][$index]->progress = $progress;
 
             $progress = ($progress * 100) . '%';
