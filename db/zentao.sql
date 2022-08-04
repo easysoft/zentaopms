@@ -1352,8 +1352,7 @@ CREATE TABLE IF NOT EXISTS `zt_searchindex` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `object` (`objectType`,`objectID`),
   KEY `addedDate` (`addedDate`),
-  FULLTEXT KEY `content` (`content`),
-  FULLTEXT KEY `title` (`title`)
+  FULLTEXT KEY `title_content` (`title`, `content`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_stage`;
 CREATE TABLE IF NOT EXISTS `zt_stage` (
