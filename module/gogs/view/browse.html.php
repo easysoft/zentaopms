@@ -56,7 +56,6 @@
           <td class='c-actions'>
             <?php
             common::printIcon('gogs', 'edit', "gogsID=$id", '', 'list', 'edit');
-            echo common::buildIconButton('gogs', 'bindUser', "gogsID=$id", '', 'list', 'link', '', '', false, '', '', 0, $gogs->isBindUser);
             common::printIcon('gogs', 'delete', "gogsID=$id", '', 'list', 'trash', 'hiddenwin');
             ?>
           </td>
