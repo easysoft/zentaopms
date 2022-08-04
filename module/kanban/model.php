@@ -1943,6 +1943,7 @@ class kanbanModel extends model
             ->join('whitelist', ',')
             ->join('team', ',')
             ->trim('name')
+            ->stripTags($this->config->kanban->editor->createspace['id'], $this->config->allowedTags)
             ->remove('uid,contactListMenu')
             ->get();
 
@@ -1986,6 +1987,7 @@ class kanbanModel extends model
             ->join('whitelist', ',')
             ->join('team', ',')
             ->trim('name')
+            ->stripTags($this->config->kanban->editor->editspace['id'], $this->config->allowedTags)
             ->remove('uid,contactListMenu')
             ->get();
 
@@ -2198,7 +2200,8 @@ class kanbanModel extends model
             ->join('whitelist', ',')
             ->join('team', ',')
             ->trim('name')
-            ->remove('contactListMenu,type,import,importObjectList,copyKanbanID,copyRegion')
+            ->stripTags($this->config->kanban->editor->create['id'], $this->config->allowedTags)
+            ->remove('contactListMenu,type,import,importObjectList,uid,copyKanbanID,copyRegion')
             ->get();
 
         if($this->post->import == 'on') $kanban->object = implode(',', $this->post->importObjectList);
@@ -2266,23 +2269,14 @@ class kanbanModel extends model
         $kanban    = fixer::input('post')
             ->setDefault('lastEditedBy', $account)
             ->setDefault('lastEditedDate', helper::now())
-            ->setDefault('displayCards', 0)
             ->setDefault('whitelist', '')
             ->setDefault('team', '')
-            ->setIF($this->post->import == 'off', 'object', '')
-            ->setIF($this->post->heightType == 'auto', 'displayCards', 0)
             ->join('whitelist', ',')
             ->join('team', ',')
             ->trim('name')
-            ->remove('uid,contactListMenu,import,importObjectList,heightType')
+            ->stripTags($this->config->kanban->editor->edit['id'], $this->config->allowedTags)
+            ->remove('uid,contactListMenu')
             ->get();
-
-        if($this->post->import == 'on') $kanban->object = implode(',', $this->post->importObjectList);
-
-        if(isset($_POST['heightType']) and $this->post->heightType == 'custom')
-        {
-            if(!$this->checkDisplayCards($kanban->displayCards)) return;
-        }
 
         $this->dao->update(TABLE_KANBAN)->data($kanban)
             ->autoCheck()
@@ -2304,6 +2298,48 @@ class kanbanModel extends model
 
             return common::createChanges($oldKanban, $kanban);
         }
+    }
+
+    /**
+     * Setting kanban.
+     *
+     * @param  int    $kanbanID
+     * @access public
+     * @return void
+     */
+    public function setting($kanbanID)
+    {
+        $kanbanID  = (int)$kanbanID;
+        $account   = $this->app->user->account;
+        $oldKanban = $this->getByID($kanbanID);
+        $kanban    = fixer::input('post')
+            ->setDefault('lastEditedBy', $account)
+            ->setDefault('lastEditedDate', helper::now())
+            ->setDefault('displayCards', 0)
+            ->setIF($this->post->import == 'off', 'object', '')
+            ->setIF($this->post->heightType == 'auto', 'displayCards', 0)
+            ->remove('import,importObjectList,heightType')
+            ->get();
+
+        if($this->post->import == 'on') $kanban->object = implode(',', $this->post->importObjectList);
+
+        if(isset($_POST['heightType']) and $this->post->heightType == 'custom')
+        {
+            if(!$this->checkDisplayCards($kanban->displayCards)) return;
+        }
+
+        $this->dao->update(TABLE_KANBAN)->data($kanban)
+            ->autoCheck()
+            ->batchCheck($this->config->kanban->edit->requiredFields, 'notempty')
+            ->where('id')->eq($kanbanID)
+            ->exec();
+
+        if(!dao::isError())
+        {
+            return common::createChanges($oldKanban, $kanban);
+        }
+
+        return false;
     }
 
     /**
@@ -3224,7 +3260,8 @@ class kanbanModel extends model
             $actions .= $commonActions;
 
             $kanbanActions = '';
-            if(common::hasPriv('kanban', 'edit'))  $kanbanActions .= '<li>' . html::a(helper::createLink('kanban', 'edit', "kanbanID=$kanban->id", '', true), '<i class="icon icon-edit"></i>' . $this->lang->kanban->edit, '', "class='iframe btn btn-link' data-width='75%'") . '</li>';
+            if(common::hasPriv('kanban', 'edit'))    $kanbanActions .= '<li>' . html::a(helper::createLink('kanban', 'edit', "kanbanID=$kanban->id", '', true), '<i class="icon icon-edit"></i>' . $this->lang->kanban->edit, '', "class='iframe btn btn-link' data-width='75%'") . '</li>';
+            if(common::hasPriv('kanban', 'setting')) $kanbanActions .= '<li>' . html::a(helper::createLink('kanban', 'setting', "kanbanID=$kanban->id", '', true), '<i class="icon icon-cog-outline"></i>' . $this->lang->kanban->settingKanban, '', "class='iframe btn btn-link' data-width='60%'") . '</li>';
             if(common::hasPriv('kanban', 'close') and $kanban->status == 'active') $kanbanActions .= '<li>' . html::a(helper::createLink('kanban', 'close', "kanbanID=$kanban->id", '', true), '<i class="icon icon-off"></i>' . $this->lang->kanban->close, '', "class='iframe btn btn-link'") . '</li>';
             if(common::hasPriv('kanban', 'activate') and $kanban->status == 'closed') $kanbanActions .= '<li>' . html::a(helper::createLink('kanban', 'activate', "kanbanID=$kanban->id", '', true), '<i class="icon icon-magic"></i>' . $this->lang->kanban->activate, '', "class='iframe btn btn-link'") . '</li>';
             if(common::hasPriv('kanban', 'delete')) $kanbanActions .= '<li>' . html::a(helper::createLink('kanban', 'delete', "kanbanID=$kanban->id"), '<i class="icon icon-trash"></i>' . $this->lang->kanban->delete, 'hiddenwin', "class='btn btn-link'") . '</li>';

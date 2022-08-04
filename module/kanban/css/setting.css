@@ -1,0 +1,7 @@
+#mainContent .objectBox {padding-top: 2px;}
+#mainContent .objectBox .checkbox-primary {display: inline-block;}
+#mainContent .objectBox .checkbox-primary:not(:first-child) {margin-left: 10px;}
+#mainContent .objectBox .checkbox-primary>label:not(:first-child) {padding-left: 20px;}
+#mainContent .laneHeightBox .tip {color: #999;}
+#mainContent .objectBox .checkbox-primary>label:before {top: 2px; left: 0px;}
+#mainContent .objectBox .checkbox-primary>label:after {width: 14px; height: 14px;}
