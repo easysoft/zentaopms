@@ -75,7 +75,7 @@
         <?php foreach($cases as $case):?>
         <?php
         $caseID       = $type == 'assigntome' ? $case->case : $case->id;
-        $runID        = $type == 'assigntome' ? $case->id   : 0;
+        $runID        = $type == 'assigntome' ? $case->run  : 0;
         $canBeChanged = common::canBeChanged('testcase', $case);
         ?>
         <tr>
@@ -108,8 +108,8 @@
                 $disabled =  $case->status == 'wait' ? 'disabled' : '';
                 common::printIcon('testcase', 'createBug', "product=$case->product&branch=$case->branch&extra=caseID=$caseID,version=$case->version,runID=$runID", $case, 'list', 'bug', '', 'iframe', 'true', "data-app='qa' data-toggle=''");
                 common::printIcon('testcase', 'create',  "productID=$case->product&branch=$case->branch&moduleID=$case->module&from={$app->rawMethod}&param=$caseID", $case, 'list', 'copy', '', 'iframe', true, "data-width='95%'");
-                common::printIcon('testtask', 'runCase', "runID=0&caseID=$caseID&version=$case->version", '', 'list', 'play', '', "iframe $disabled", true, "data-width='95%'", '', $case->project);
-                common::printIcon('testtask', 'results', "runID=0&caseID=$caseID", '', 'list', 'list-alt', '', 'iframe', true, "data-width='95%'", '', $case->project);
+                common::printIcon('testtask', 'runCase', "runID=$runID&caseID=$caseID&version=$case->version", '', 'list', 'play', '', "iframe $disabled", true, "data-width='95%'", '', $case->project);
+                common::printIcon('testtask', 'results', "runID=$runID&caseID=$caseID", '', 'list', 'list-alt', '', 'iframe', true, "data-width='95%'", '', $case->project);
                 common::printIcon('testcase', 'edit',    "caseID=$caseID", $case, 'list', 'edit', '', 'iframe', true, "data-width='95%'", '', $case->project);
             }
             ?>
