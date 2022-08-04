@@ -9,6 +9,7 @@ class Subversion
     public $remote;
     public $encoding;
     public $svnVersion;
+    public $repo;
 
     /**
      * Construct
@@ -29,6 +30,7 @@ class Subversion
         $this->account  = $account;
         $this->password = $password;
         $this->encoding = $encoding;
+        $this->repo     = $repo;
         $this->ssh      = (stripos($this->root, 'svn') === 0 or stripos($this->root, 'https') === 0) ? true : false;
         $this->remote   = !(stripos($this->root, 'file') === 0);
         $this->client   = $this->remote ? $client . " --username @account@ --password @password@" : $client;
@@ -681,5 +683,33 @@ class Subversion
         if($versionResult) return false;
 
         return end($versionOutput);
+    }
+
+    /**
+     * Get download url.
+     *
+     * @param  string $branch
+     * @param  string $savePath
+     * @param  string $ext
+     * @access public
+     * @return string
+     */
+    public function getDownloadUrl($branch = '', $savePath = '', $ext = 'zip')
+    {
+        global $app, $config;
+
+        /* Get repo name. */
+        $pathList = explode('/', trim($this->root, '/'));
+        $repoDir  = $savePath . DS . end($pathList);
+        execCmd(escapeCmd("$this->client export $this->root $repoDir"));
+
+        $fileName = $savePath . DS . "{$this->repo->name}.zip";
+        $app->loadClass('pclzip', true);
+        $zip = new pclzip($fileName);
+        $zip->create($repoDir, PCLZIP_OPT_REMOVE_PATH, $repoDir);
+
+        $zfile = $app->loadClass('zfile');
+        $zfile->removeDir($repoDir);
+        return $config->webRoot . $app->getAppName() . 'data' . DS . 'repo' . DS . $this->repo->name . '.zip';
     }
 }
