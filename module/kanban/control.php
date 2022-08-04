@@ -90,7 +90,6 @@ class kanban extends control
         }
 
         $space = $this->kanban->getSpaceById($spaceID);
-        $space->desc = strip_tags(htmlspecialchars_decode($space->desc));
 
         $typeList = $this->lang->kanbanspace->typeList;
         if($space->type == 'cooperation' or $space->type == 'public') unset($typeList['private']);
