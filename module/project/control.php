@@ -223,28 +223,28 @@ class project extends control
      * Ajax get available budget.
      *
      * @param  int    $programID
-     * @param  int    $parentProgramID
+     * @param  int    $selectedProgramID
      * @param  int    $budget
      * @access public
      * @return void
      */
-    public function ajaxGetAvailableBudget($projectID, $parentProgramID, $budget)
+    public function ajaxGetAvailableBudget($projectID, $selectedProgramID, $budget)
     {
         if(!empty($projectID))
         {
             $project         = $this->project->getByID($projectID);
-            $parentProgram   = $this->loadModel('program')->getByID($parentProgramID);
+            $parentProgram   = $this->loadModel('program')->getByID($selectedProgramID);
             $budgetLeft      = $this->program->getBudgetLeft($parentProgram);
-            $availableBudget = $project->parent == $parentProgramID ? $budgetLeft + $project->budget : $budgetLeft;
+            $availableBudget = $project->parent == $selectedProgramID ? $budgetLeft + $project->budget : $budgetLeft;
         }
         else
         {
-            $parentProgram   = $this->loadModel('program')->getByID($parentProgramID);
+            $parentProgram   = $this->loadModel('program')->getByID($selectedProgramID);
             $availableBudget = $this->program->getBudgetLeft($parentProgram);
         }
 
         $tip = '';
-        if($budget != 0 && $budget !== null && $budget > $availableBudget) $tip = "<span id='projectBudget' class='text-remind'>" . $this->lang->project->budgetOverrun . zget($this->lang->project->currencySymbol, $parentProgram->budgetUnit) . $availableBudget . "</span>";
+        if($budget != 0 && $budget !== null && $budget > $availableBudget) $tip = "<span id='beyondBudgetTip' class='text-remind'>" . $this->lang->project->budgetOverrun . zget($this->lang->project->currencySymbol, $parentProgram->budgetUnit) . $availableBudget . "</span>";
 
         $placeholder = '';
         if($parentProgram and $parentProgram->budget != 0) $placeholder = $this->lang->project->parentBudget . zget($this->lang->project->currencySymbol, $parentProgram->budgetUnit) . $availableBudget;

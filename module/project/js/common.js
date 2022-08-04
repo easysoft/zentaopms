@@ -287,7 +287,7 @@ $(function()
         if($(this).prop('checked'))
         {
             $('#budget').val('').attr('disabled', 'disabled');
-            if($('#projectBudget').length > 0) $('#projectBudget').remove();
+            if($('#beyondBudgetTip').length > 0) $('#beyondBudgetTip').remove();
         }
         else
         {
@@ -354,20 +354,20 @@ $(document).on('change', "#plansBox select[name^='plans']", function()
  */
 function budgetOverrunTips(projectID = 0)
 {
-    var parentProgramID = $('#parent').val();
+    var selectedProgramID = $('#parent').val();
     var budget          = $('#budget').val();
 
-    if(parentProgramID == 0)
+    if(selectedProgramID == 0)
     {
-        if($('#projectBudget').length > 0) $('#projectBudget').remove();
+        if($('#beyondBudgetTip').length > 0) $('#beyondBudgetTip').remove();
         return false;
     }
 
-    $.get(createLink('project', 'ajaxGetAvailableBudget', 'projectID=' + projectID + "&parentProgramID=" + parentProgramID + "&budget=" + budget), function(data)
+    $.get(createLink('project', 'ajaxGetAvailableBudget', 'projectID=' + projectID + "&selectedProgramID=" + selectedProgramID + "&budget=" + budget), function(data)
     {
         var data = JSON.parse(data);
 
-        if($('#projectBudget').length > 0) $('#projectBudget').remove();
+        if($('#beyondBudgetTip').length > 0) $('#beyondBudgetTip').remove();
         $('#budgetBox').after(data.tip);
 
         if($('#budget').attr('placeholder')) $('#budget').removeAttr('placeholder')

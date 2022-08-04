@@ -53,7 +53,7 @@
               $programList = array($project->parent => $program->name);
           }
           ?>
-          <td><?php echo html::select('parent', $programList, $project->parent, "class='form-control chosen' onchange='budgetOverrunTips($project->id)' $attr");?></td>
+          <td><?php echo html::select('parent', $programList, $project->parent, "class='form-control chosen' $attr");?></td>
           <td colspan='2'></td>
         </tr>
         <tr>
