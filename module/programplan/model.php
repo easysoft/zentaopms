@@ -420,16 +420,14 @@ class programplanModel extends model
             $dataGroup->parent     = 0;
             $dataGroup->open       = true;
             $dataGroup->progress   = '';
-            //TODO
-            $dataGroup->start_date = '03-11-2021';
-            $dataGroup->endDate    = '2021-12-01';
-            $dataGroup->duration   = 0;
-            //TODO
             $dataGroup->taskProgress = '';
 
             $groupKey = $groupID . $group;
             $datas['data'][$groupKey] = $dataGroup;
 
+            $realStartDate = array();
+            $realEndDate   = array();
+            $totalTask = count($tasks);
             foreach($tasks as $taskID => $task)
             {
                 $execution = zget($plans, $task->execution, array());
@@ -471,10 +469,14 @@ class programplanModel extends model
                 $data->duration     = 0;
 
                 if($data->endDate > $data->start_date) $data->duration = helper::diffDate($data->endDate, $data->start_date) + 1;
+
                 if($data->start_date) $data->start_date = date('d-m-Y', strtotime($data->start_date));
                 if($data->start_date == '' or $data->endDate == '') $data->duration = 0;
 
                 if(strpos($selectCustom, 'task') !== false) $datas['data'][$data->id] = $data;
+
+                if(!empty($start)) $realStartDate[] = strtotime($start);
+                if(!empty($end)) $realEndDate[] = strtotime($end);
 
                 if(isset($stageIndex[$groupKey]['totalConsumed']))
                 {
@@ -487,6 +489,10 @@ class programplanModel extends model
                     $stageIndex[$groupKey]['totalReal']     = $task->left + $task->consumed;
                 }
             }
+
+            /* Calculate group realBegan and realEnd. */
+            if(!empty($realStartDate)) $datas['data'][$groupKey]->realBegan = date('Y-m-d H:i:s', min($realStartDate));
+            if(!empty($realEndDate) and (count($realEndDate) == $totalTask)) $datas['data'][$groupKey]->realEnd = date('Y-m-d H:i:s', max($realEndDate));
         }
 
         /* Calculate the progress of the phase. */
