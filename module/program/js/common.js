@@ -318,11 +318,10 @@ function setBudgetTipsAndAclList(parentProgramID)
 /**
  * Append prompt when the budget exceeds the parent project set.
  *
- * @param  int    $programID
  * @access public
  * @return void
  */
-function budgetOverrunTips(programID = 0)
+function budgetOverrunTips()
 {
     var selectedProgramID = $('#parent').val();
     var budget            = $('#budget').val();
@@ -332,6 +331,7 @@ function budgetOverrunTips(programID = 0)
         return false;
     }
 
+    typeof(programID) == 'undefind' ? 0 : programID;
     $.get(createLink('program', 'ajaxGetAvailableBudget', 'programID=' + programID + "&selectedProgramID=" + selectedProgramID + "&budget=" + budget), function(data)
     {
         var data = JSON.parse(data);

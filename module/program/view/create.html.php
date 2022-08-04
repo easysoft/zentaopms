@@ -142,5 +142,4 @@
   <?php echo nl2br(html::radio('acl', $lang->program->subAclList, 'private', "onclick='setWhite(this.value);'", 'block'));?>
 </div>
 <?php js::set('parentProgramID', isset($parentProgram->id) ? $parentProgram->id : 0);?>
-<?php js::set('budgetUnit', $parentProgram ? zget($lang->project->currencySymbol, $parentProgram->budgetUnit) : '');?>
 <?php include '../../common/view/footer.html.php';?>
