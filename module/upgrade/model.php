@@ -530,11 +530,13 @@ class upgradeModel extends model
                 break;
             case '17_3':
                 $this->processBugLinkBug();
+                break;
             case '17_4':
-                $this->changeSearchTableEngine();
+                $this->changeTableEngine();
                 $this->processCreatedInfo();
                 $this->updateApproval();
                 $this->processCreatedBy();
+                break;
         }
 
         $this->deletePatch();
@@ -6752,7 +6754,7 @@ class upgradeModel extends model
      * @access public
      * @return void
      */
-    public function changeSearchTableEngine()
+    public function changeTableEngine()
     {
         $mysqlVersion = $this->loadModel('install')->getMysqlVersion();
         if($mysqlVersion >= 5.6) $this->dao->exec("ALTER TABLE " . TABLE_SEARCHINDEX . " ENGINE='InnoDB'");
