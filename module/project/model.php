@@ -259,7 +259,7 @@ class projectModel extends model
     {
         if($project->parent == 0) return '';
 
-        $parentName = $this->dao->select('id,name')->from(TABLE_PROGRAM)->where('id')->in(trim($project->path, ','))->andWhere('grade')->lt($project->grade)->fetchPairs();
+        $parentName = $this->dao->select('id,name')->from(TABLE_PROGRAM)->where('id')->in(trim($project->path, ','))->andWhere('grade')->lt($project->grade)->orderBy('grade asc')->fetchPairs();
 
         $parentProgram = '';
         foreach($parentName as $name) $parentProgram .= $name . '/';
@@ -1107,29 +1107,11 @@ class projectModel extends model
         if($project->parent)
         {
             $program = $this->dao->select('*')->from(TABLE_PROGRAM)->where('id')->eq($project->parent)->fetch();
-            if($program)
-            {
-                /* Child project begin cannot less than parent. */
-                if(!empty($project->name) and $project->begin < $program->begin) dao::$errors['begin'] = sprintf($this->lang->project->beginGreateChild, $program->begin);
-
-                /* When parent set end then child project end cannot greater than parent. */
-                if(!empty($project->name) and $program->end != '0000-00-00' and $project->end > $program->end) dao::$errors['end'] = sprintf($this->lang->project->endLetterChild, $program->end);
-
-                if(dao::isError()) return false;
-            }
-
-            /* The budget of a child project cannot beyond the remaining budget of the parent program. */
-            $project->budgetUnit = $program->budgetUnit;
-            if(isset($project->budget) and $program->budget != 0)
-            {
-                $availableBudget = $this->loadModel('program')->getBudgetLeft($program);
-                if($availableBudget > 0 and $project->budget > $availableBudget) dao::$errors['budget'] = $this->lang->program->beyondParentBudget;
-            }
 
             /* Judge products not empty. */
             if(empty($linkedProductsCount) and !isset($_POST['newProduct']))
             {
-                dao::$errors[] = $this->lang->project->productNotEmpty;
+                dao::$errors['products0'] = $this->lang->project->productNotEmpty;
                 return false;
             }
         }
@@ -1369,30 +1351,6 @@ class projectModel extends model
             ->remove('products,branch,plans,delta,future,contactListMenu,teamMembers')
             ->get();
 
-        if($project->parent)
-        {
-            $program = $this->dao->select('*')->from(TABLE_PROGRAM)->where('id')->eq($project->parent)->fetch();
-
-            if($program)
-            {
-                /* Child project begin cannot less than parent. */
-                if(!empty($project->name) and $project->begin < $program->begin) dao::$errors['begin'] = sprintf($this->lang->project->beginGreateChild, $program->begin);
-
-                /* When parent set end then child project end cannot greater than parent. */
-                if(!empty($project->name) and $program->end != '0000-00-00' and $project->end > $program->end) dao::$errors['end'] = sprintf($this->lang->project->endLetterChild, $program->end);
-
-                if(dao::isError()) return false;
-            }
-
-            /* The budget of a child project cannot beyond the remaining budget of the parent project. */
-            $project->budgetUnit = $program->budgetUnit;
-            if($project->budget != 0 and $program->budget != 0)
-            {
-                $availableBudget = $this->loadModel('program')->getBudgetLeft($program);
-                if($project->budget > $availableBudget + $oldProject->budget) dao::$errors['budget'] = $this->lang->program->beyondParentBudget;
-            }
-        }
-
         $executionsCount = $this->dao->select('COUNT(*) as count')->from(TABLE_PROJECT)
             ->where('project')->eq($project->id)
             ->andWhere('deleted')->eq('0')
@@ -1553,25 +1511,6 @@ class projectModel extends model
             $projects[$projectID]->lastEditedDate = helper::now();
 
             if(isset($data->codes)) $projects[$projectID]->code = $projectCode;
-            if($projects[$projectID]->parent)
-            {
-                $parentProject = $this->dao->select('*')->from(TABLE_PROGRAM)->where('id')->eq($projects[$projectID]->parent)->fetch();
-
-                if($parentProject)
-                {
-                    /* Child project begin cannot less than parent. */
-                    if(!empty($projects[$projectID]->name) and $projects[$projectID]->begin < $parentProject->begin)
-                    {
-                        dao::$errors[] = "ID {$projects[$projectID]->id}" . sprintf($this->lang->project->beginGreateChild, $parentProject->begin) . "\n";
-                    }
-
-                    /* When parent set end then child project end cannot greater than parent. */
-                    if(!empty($projects[$projectID]->name) and $parentProject->end != '0000-00-00' and $projects[$projectID]->end > $parentProject->end)
-                    {
-                        dao::$errors[] = "ID {$projects[$projectID]->id}" . sprintf($this->lang->project->endLetterChild, $parentProject->end) . "\n";
-                    }
-                }
-            }
 
             foreach($extendFields as $extendField)
             {
@@ -2387,7 +2326,11 @@ class projectModel extends model
                 ->beginIF($projectID == 0 and $this->config->vision)->andWhere('t1.vision')->eq($this->config->vision)->fi()
                 ->beginIF(!empty($myExecutionIDList))->andWhere('t1.id')->in(array_keys($myExecutionIDList))->fi()
                 ->beginIF($status == 'undone')->andWhere('t1.status')->notIN('done,closed')->fi()
-                ->beginIF($status != 'all' and $status != 'undone' and $status != 'involved')->andWhere('t1.status')->eq($status)->fi()
+                ->beginIF(!in_array($status, array('all', 'undone', 'involved', 'review'), true))->andWhere('t1.status')->eq($status)->fi()
+                ->beginIF($status == 'review')
+                ->andWhere("FIND_IN_SET('{$this->app->user->account}', t1.reviewers)")
+                ->andWhere('t1.reviewStatus')->eq('doing')
+                ->fi()
                 ->beginIF(!$this->app->user->admin)->andWhere('t1.id')->in($this->app->user->view->sprints)->fi()
                 ->andWhere('t1.vision')->eq($this->config->vision)
                 ->andWhere('t1.deleted')->eq('0')

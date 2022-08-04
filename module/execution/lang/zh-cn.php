@@ -514,6 +514,8 @@ $lang->execution->featureBar['all']['doing']     = $lang->execution->statusList[
 $lang->execution->featureBar['all']['suspended'] = $lang->execution->statusList['suspended'];
 $lang->execution->featureBar['all']['closed']    = $lang->execution->statusList['closed'];
 
+$lang->execution->featureBar['build']['all'] = '所有版本';
+
 $lang->execution->myExecutions = '我参与的';
 $lang->execution->doingProject = '进行中的项目';
 

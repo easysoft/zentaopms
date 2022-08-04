@@ -599,7 +599,7 @@ class block extends control
     {
         $limit = ($this->viewType == 'json' or !isset($this->params->count)) ? 0 : (int)$this->params->count;
         $todos = $this->loadModel('todo')->getList('all', $this->app->user->account, 'wait, doing', $limit, $pager = null, $orderBy = 'date, begin');
-        $uri   = $this->app->getURI(true);
+        $uri   = $this->createLink('my', 'index');
 
         $this->session->set('todoList',     $uri, 'my');
         $this->session->set('bugList',      $uri, 'qa');
@@ -629,7 +629,7 @@ class block extends control
      */
     public function printTaskBlock()
     {
-        $this->session->set('taskList',  $this->app->getURI(true), 'execution');
+        $this->session->set('taskList',  $this->createLink('my', 'index'), 'execution');
         if(preg_match('/[^a-zA-Z0-9_]/', $this->params->type)) return;
 
         $account = $this->app->user->account;
@@ -647,7 +647,7 @@ class block extends control
      */
     public function printBugBlock()
     {
-        $this->session->set('bugList', $this->app->getURI(true), 'qa');
+        $this->session->set('bugList', $this->createLink('my', 'index'), 'qa');
         if(preg_match('/[^a-zA-Z0-9_]/', $this->params->type)) return;
 
         $projectID = $this->lang->navGroup->qa  == 'project' ? $this->session->project : 0;
@@ -663,7 +663,7 @@ class block extends control
      */
     public function printCaseBlock()
     {
-        $this->session->set('caseList', $this->app->getURI(true), 'qa');
+        $this->session->set('caseList', $this->createLink('my', 'index'), 'qa');
         $this->app->loadLang('testcase');
         $this->app->loadLang('testtask');
 
@@ -708,9 +708,10 @@ class block extends control
     {
         $this->app->loadLang('testtask');
 
-        $this->session->set('productList',  $this->app->getURI(true), 'product');
-        $this->session->set('testtaskList', $this->app->getURI(true), 'qa');
-        $this->session->set('buildList',    $this->app->getURI(true), 'execution');
+        $uri = $this->createLink('my', 'index');
+        $this->session->set('productList',  $uri, 'product');
+        $this->session->set('testtaskList', $uri, 'qa');
+        $this->session->set('buildList',    $uri, 'execution');
         if(preg_match('/[^a-zA-Z0-9_]/', $this->params->type)) return;
 
         $this->view->testtasks = $this->dao->select('distinct t1.*,t2.name as productName,t3.name as buildName,t4.name as projectName')->from(TABLE_TESTTASK)->alias('t1')
@@ -736,7 +737,7 @@ class block extends control
      */
     public function printStoryBlock()
     {
-        $this->session->set('storyList', $this->app->getURI(true), 'product');
+        $this->session->set('storyList', $this->createLink('my', 'index'), 'product');
         if(preg_match('/[^a-zA-Z0-9_]/', $this->params->type)) return;
 
         $this->app->loadClass('pager', $static = true);

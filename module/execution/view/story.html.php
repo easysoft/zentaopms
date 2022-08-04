@@ -49,13 +49,12 @@
     </div>
   </div>
   <div class="btn-toolbar pull-left">
-    <?php
-    if(common::hasPriv('execution', 'story'))
-    {
-        echo html::a($this->createLink('execution', 'story', "executionID=$execution->id&orderBy=order_desc&type=all"), "<span class='text'>{$lang->all}</span>" . ($type == 'all' ? " <span class='label label-light label-badge'>{$pager->recTotal}</span>" : ''), '', "class='btn btn-link" . ($type == 'all' ? " btn-active-text" : '') . "'");
-        echo html::a($this->createLink('execution', 'story', "executionID=$execution->id&orderBy=order_desc&type=unclosed"), "<span class='text'>{$lang->story->unclosed}</span>" . ($type == 'unclosed' ? " <span class='label label-light label-badge'>{$pager->recTotal}</span>" : ''), '', "class='btn btn-link" . ($type == 'unclosed' ? " btn-active-text" : '') . "'");
-    }
-    ?>
+    <?php foreach($lang->story->featureBar['browse'] as $featureType => $label):?>
+    <?php $active = $type == $featureType ? 'btn-active-text' : '';?>
+    <?php $label  = "<span class='text'>$label</span>";?>
+    <?php if($type == $featureType) $label .= " <span class='label label-light label-badge'>{$pager->recTotal}</span>";?>
+    <?php echo html::a(inlink('story', "executionID=$execution->id&orderBy=order_desc&type=$featureType"), $label, '', "class='btn btn-link $active'");?>
+    <?php endforeach;?>
     <a class="btn btn-link querybox-toggle" id='bysearchTab'><i class="icon icon-search muted"></i> <?php echo $lang->product->searchStory;?></a>
   </div>
   <div class="btn-toolbar pull-right">

@@ -3373,6 +3373,45 @@ EOD;
 
         return $Parsedown->text($markdown);
     }
+
+    /**
+     * Sort featureBar.
+     *
+     * @param  string $module
+     * @param  string $method
+     * @static
+     * @access public
+     * @return bool
+     */
+    public static function sortFeatureMenu($module = '', $method = '')
+    {
+        global $lang, $app;
+
+        $module = $module ? $module : $app->rawModule;
+        $method = $method ? $method : $app->rawMethod;
+
+        /* It will be sorted according to the workflow in the future */
+        if(!empty($lang->featureBarSort[$module][$method]))
+        {
+            $featureBar = array();
+            if(empty($lang->$module->featureBar[$method])) return false;
+            foreach($lang->$module->featureBar[$method] as $key => $label)
+            {
+                foreach($lang->featureBarSort[$module][$method] as $currentKey => $afterKey)
+                {
+                    if($key == $currentKey) continue;
+                    $featureBar[$method][$key] = $label;
+                    if($key == $afterKey && !empty($lang->$module->featureBar[$method][$currentKey]))
+                    {
+                        $featureBar[$method][$currentKey] = $lang->$module->featureBar[$method][$currentKey];
+                    }
+                }
+            }
+            $lang->$module->featureBar = $featureBar;
+        }
+
+        return true;
+    }
 }
 
 class common extends commonModel
