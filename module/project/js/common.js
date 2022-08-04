@@ -363,7 +363,7 @@ function budgetOverrunTips()
         return false;
     }
 
-    if(typeof(projectIDi) == 'undefined') projectID = 0;
+    if(typeof(projectID) == 'undefined') projectID = 0;
     $.get(createLink('project', 'ajaxGetAvailableBudget', 'projectID=' + projectID + "&selectedProgramID=" + selectedProgramID + "&budget=" + budget), function(data)
     {
         var data = JSON.parse(data);

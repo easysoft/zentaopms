@@ -314,7 +314,7 @@ function setBudgetTipsAndAclList(parentID)
     }
 
     if(typeof(programID) == 'undefined') programID = 0;
-    budgetOverrunTips(programID);
+    budgetOverrunTips();
 }
 
 /**
