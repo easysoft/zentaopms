@@ -28,12 +28,12 @@
       <a href='javascript:;' class='btn btn-link btn-limit' data-toggle='dropdown'><span class='text' title='<?php echo $viewName;?>'><?php echo $viewName;?></span> <span class='caret'></span></a>
       <ul class='dropdown-menu' style='max-height:240px; max-width: 300px; overflow-y:auto'>
         <?php
-          $class = '';
-          foreach($productList as $key => $product)
-          {
-                $class = $productID == $key ? 'class="active"' : '';
-                echo "<li $class>" . html::a($this->createLink('programplan', 'create', "projectID=$project->id&productID=$key"), $product) . "</li>";
-          }
+        $class = '';
+        foreach($productList as $key => $product)
+        {
+            $class = $productID == $key ? 'class="active"' : '';
+            echo "<li $class>" . html::a($this->createLink('programplan', 'create', "projectID=$project->id&productID=$key"), $product) . "</li>";
+        }
         ?>
       </ul>
     </div>
