@@ -701,8 +701,7 @@ class Subversion
         /* Get repo name. */
         $pathList = explode('/', trim($this->root, '/'));
         $repoDir  = $savePath . DS . end($pathList);
-        execCmd(escapeCmd("$this->client export $this->root $repoDir"));
-
+        $res = execCmd($this->replaceAuth(escapeCmd("$this->client export $this->root $repoDir")));
         $fileName = $savePath . DS . "{$this->repo->name}.zip";
         $app->loadClass('pclzip', true);
         $zip = new pclzip($fileName);

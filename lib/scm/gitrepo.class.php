@@ -702,7 +702,6 @@ class GitRepo
         $files  = '';
         foreach($gitDir as $path)
         {
-            if(strpos(helper::getOS(), 'windows') !== false) $path = iconv("UTF-8", "GB2312", $path);
             if(!in_array($path, array('.', '..', '.git'))) $files .= $this->root . DS . "$path,";
         }
 

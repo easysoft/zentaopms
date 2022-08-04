@@ -721,10 +721,8 @@ class Gogs
         $files  = '';
         foreach($gitDir as $path)
         {
-            if(strpos(helper::getOS(), 'Windows') !== false) $path = mb_convert_encoding($path, "GB2312", 'UTF-8');
             if(!in_array($path, array('.', '..', '.git'))) $files .= $this->root . DS . "$path,";
         }
-        //a(explode(',', $files)); die;
 
         $app->loadClass('pclzip', true);
         $fileName = $savePath . DS . "{$this->repo->name}_$branch.zip";
