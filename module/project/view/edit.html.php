@@ -75,7 +75,8 @@
           <th><?php echo $lang->project->budget;?></th>
           <td>
             <div id='budgetBox' class='input-group'>
-              <?php echo html::input('budget', $project->budget != 0 ? $project->budget : '', "class='form-control' onchange='budgetOverrunTips($project->id)' maxlength='10' " . (strpos($requiredFields, 'budget') !== false ? 'required ' : '') . ($project->budget == 0 ? 'disabled ' : ''));?>
+               <?php $placeholder = ($parentProgram and $parentProgram->budget != 0) ? 'placeholder=' . $lang->project->parentBudget . zget($lang->project->currencySymbol, $parentProgram->budgetUnit) . $availableBudget : '';?>
+              <?php echo html::input('budget', $project->budget != 0 ? $project->budget : '', "class='form-control' onchange='budgetOverrunTips($project->id)' maxlength='10' " . (strpos($requiredFields, 'budget') !== false ? 'required ' : '') . ($project->budget == 0 ? 'disabled ' : '') . $placeholder);?>
               <?php if($parentProgram):?>
               <span class='input-group-addon'><?php echo zget($budgetUnitList, $project->budgetUnit);?></span>
               <?php else:?>

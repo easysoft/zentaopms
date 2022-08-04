@@ -355,7 +355,7 @@ $(document).on('change', "#plansBox select[name^='plans']", function()
 function budgetOverrunTips(projectID = 0)
 {
     var selectedProgramID = $('#parent').val();
-    var budget          = $('#budget').val();
+    var budget            = $('#budget').val();
 
     if(selectedProgramID == 0)
     {
