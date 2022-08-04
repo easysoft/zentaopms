@@ -97,8 +97,8 @@ class testcaseModel extends model
                 $step->parent  = ($step->type == 'item') ? $parentStepID : 0;
                 $step->case    = $caseID;
                 $step->version = 1;
-                $step->desc    = htmlSpecialString($stepDesc);
-                $step->expect  = $step->type == 'group' ? '' : htmlSpecialString($data->expects[$stepID]);
+                $step->desc    = rtrim(htmlSpecialString($stepDesc));
+                $step->expect  = $step->type == 'group' ? '' : rtrim(htmlSpecialString($data->expects[$stepID]));
                 $this->dao->insert(TABLE_CASESTEP)->data($step)->autoCheck()->exec();
                 if($step->type == 'group') $parentStepID = $this->dao->lastInsertID();
                 if($step->type == 'step')  $parentStepID = 0;
@@ -826,8 +826,8 @@ class testcaseModel extends model
                         $step->parent  = ($step->type == 'item') ? $parentStepID : 0;
                         $step->case    = $caseID;
                         $step->version = $version;
-                        $step->desc    = htmlSpecialString($stepDesc);
-                        $step->expect  = $step->type == 'group' ? '' : htmlSpecialString($data->expects[$stepID]);
+                        $step->desc    = rtrim(htmlSpecialString($stepDesc));
+                        $step->expect  = $step->type == 'group' ? '' : rtrim(htmlSpecialString($data->expects[$stepID]));
                         $this->dao->insert(TABLE_CASESTEP)->data($step)->autoCheck()->exec();
                         if($step->type == 'group') $parentStepID = $this->dao->lastInsertID();
                         if($step->type == 'step')  $parentStepID = 0;
