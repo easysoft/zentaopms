@@ -3935,7 +3935,7 @@ class taskModel extends model
             }
 
             $updateStartArg = !empty($objectData->realStarted) ? 'realStarted' : 'estStarted';
-            $updateEndArg   = !empty($objectData->finishedDate) ? 'finishedDate' : 'deadline';
+            $updateEndArg   = strpos($objectData->status, 'closed, done') !== false ? 'finishedDate' : 'deadline';
             $this->dao->update(TABLE_TASK)
                 ->set($updateStartArg)->eq($post->start_date)
                 ->set($updateEndArg)->eq($post->end_date)

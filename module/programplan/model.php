@@ -337,7 +337,7 @@ class programplanModel extends model
     public function getDataForGanttGroupByAssignedTo($executionID, $productID, $baselineID = 0, $selectCustom = '', $returnJson = true)
     {
         $plans = $this->getStage($executionID, $productID);
-        
+
         $datas       = array();
         $planIdList  = array();
         $isMilestone = "<icon class='icon icon-flag icon-sm red'></icon> ";
@@ -414,7 +414,7 @@ class programplanModel extends model
             $groupKey = $groupID . $group;
             $datas['data'][$groupKey] = $dataGroup;
 
-            foreach($tasks as $taskID => $task) 
+            foreach($tasks as $taskID => $task)
             {
                 // if($task->parent > 0 and $task->assignedTo)
                 // {
@@ -423,7 +423,7 @@ class programplanModel extends model
                 //     a($task->parent);exit;
                 // }
                 $execution = zget($plans, $task->execution, array());
-            
+
                 $priIcon   = sprintf($taskPri, $task->pri, $task->pri, $task->pri);
 
                 $estStart  = helper::isZeroDate($task->estStarted)  ? '' : $task->estStarted;
