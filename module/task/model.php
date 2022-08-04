@@ -4019,7 +4019,7 @@ class taskModel extends model
             $oldOrder = (int)$oldTask->order;
             if($order > $oldOrder)
             {
-                $this->dao->update(TABLE_TASK)->set('`order`')->eq('`order`-1')
+                $this->dao->update(TABLE_TASK)->set('`order`=`order`-1')
                     ->where('execution')->eq($executionID)
                     ->andWhere('`order`')->le($order)
                     ->andWhere('`order`')->gt($oldOrder)
