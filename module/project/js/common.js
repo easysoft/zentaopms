@@ -112,9 +112,9 @@ function computeEndDate(delta)
     delta     = parseInt(delta);
     if(delta == 999)
     {
-        $('#end').val(longTime);
+        $('#end').val(longTime).trigger('mousedown');
         $('#daysBox').addClass('hidden');
-        $('#days').val(0);
+        $('#days').val(0).trigger('mousedown');
         return false;
     }
     $('#daysBox').removeClass('hidden');
@@ -125,8 +125,9 @@ function computeEndDate(delta)
     }
 
     endDate = $.zui.formatDate(beginDate.addDays(delta - 1), 'yyyy-MM-dd');
-    $('#end').val(endDate).datetimepicker('update');
+    $('#end').val(endDate).datetimepicker('update').trigger('mousedown');
     computeWorkDays();
+    $('#days').trigger('mousedown');
 }
 
 /**
