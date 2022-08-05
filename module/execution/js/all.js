@@ -11,7 +11,7 @@ $(function()
     if(isCNLang && nameWidth < 150 && !useDatatable) $('#executionsForm thead th.c-name').css('width', '150px');
     if(!isCNLang && nameWidth < 200 && !useDatatable) $('#executionsForm thead th.c-name').css('width', '200px');
 
-    toggleFold('#executionsForm', unfoldExecutions, projectID, 'execution');
+    toggleFold('#executionsForm', unfoldExecutions, 0, 'execution');
 
     $('.table td.has-child > .plan-toggle').each(function()
     {
