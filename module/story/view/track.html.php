@@ -66,7 +66,7 @@
             </td>
             <?php endif;?>
             <?php if(count($track) != 0):?>
-            <?php $i = 1;?>
+            <?php $i = 0;?>
             <?php foreach($track as $storyID => $story):?>
             <?php if($i != 1) echo '<tr>';?>
               <td>
