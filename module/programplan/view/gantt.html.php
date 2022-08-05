@@ -427,11 +427,11 @@ function validateResources(id)
     /* Check data. */
     var postData = {
         'id'        : type == 'task' ? task.id.split("-")[1] : task.id,
-        'start_date': from.toLocaleDateString('en-CA'),
-        'end_date'  : to.toLocaleDateString('en-CA'),
+        'startDate' : from.toLocaleDateString('en-CA'),
+        'endDate'   : to.toLocaleDateString('en-CA'),
         'type'      : type
     };
-    var link = createLink('programplan', 'ajaxSaveTaskDrag');
+    var link = createLink('programplan', 'ajaxResponseGanttDragEvent');
     /* Sync Close. */
     $.ajax({
         url: link,
@@ -650,7 +650,7 @@ $(function()
     gantt.attachEvent("onBeforeRowDragEnd", function(id, parent, tindex)
     {
         var task = gantt.getTask(id);
-        var link = createLink('programplan', 'ajaxSaveGanttMove');
+        var link = createLink('programplan', 'ajaxResponseGanttMoveEvent');
 
         //prevent moving to another position.
         if(task.parent != parent || id.indexOf('-') == -1)
