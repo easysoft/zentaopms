@@ -3782,6 +3782,7 @@ class taskModel extends model
      */
     public function buildNestedList($execution, $task, $isChild = false, $showmore = false, $users = array())
     {
+        $this->app->loadLang('execution');
         $today = helper::today();
         $showmore = $showmore ? 'showmore' : '';
         $trAttrs  = "data-id='t$task->id'";
@@ -3812,7 +3813,7 @@ class taskModel extends model
         {
             if($task->status != 'done')
             {
-                $list .= strtotime($today) > strtotime($task->deadline) ? '<td class="delayed" title="已延期">' . $task->deadline . '</td>' : '<td>' . $task->deadline . '</td>';
+                $list .= strtotime($today) > strtotime($task->deadline) ? '<td class="delayed" ' . 'title="' . $this->lang->execution->delayed . '">' . $task->deadline . '</td>' : '<td>' . $task->deadline . '</td>';
             }
             else
             {

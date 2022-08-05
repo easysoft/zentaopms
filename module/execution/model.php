@@ -4392,7 +4392,7 @@ class executionModel extends model
         {
             if($execution->status != 'closed')
             {
-                echo strtotime($today) > strtotime($execution->end) ? '<td class="delayed" title="已延期">' . $execution->end . '</td>' : '<td>' . $execution->end . '</td>';
+                echo strtotime($today) > strtotime($execution->end) ? '<td class="delayed" title="' . $this->lang->execution->delayed . '">' . $execution->end . '</td>' : '<td>' . $execution->end . '</td>';
             }
             else
             {
