@@ -3783,7 +3783,8 @@ class taskModel extends model
     public function buildNestedList($execution, $task, $isChild = false, $showmore = false, $users = array())
     {
         $this->app->loadLang('execution');
-        $today = helper::today();
+
+        $today    = helper::today();
         $showmore = $showmore ? 'showmore' : '';
         $trAttrs  = "data-id='t$task->id'";
         if(!$isChild)
