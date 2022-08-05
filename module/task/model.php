@@ -3913,6 +3913,13 @@ class taskModel extends model
         return $menu;
     }
 
+    /**
+     * Save Task Drag.
+     *
+     * @param  int     $objectID
+     * @param  string  $objectType
+     * @access public
+     */
     public function saveTaskDrag($objectID, $objectType)
     {
         $post = fixer::input('post')->get();

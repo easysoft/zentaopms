@@ -393,6 +393,8 @@ function exitHandler()
         location.reload();
     }
 }
+
+/* Validate task drag. */
 function validateResources(id)
 {
     var task = gantt.getTask(id);
@@ -704,12 +706,10 @@ $(function()
         setTimeout(function(){$('.gantt_tooltip').remove()}, 100);
     });
 
+    /* Link attachEvent onAfterTaskDrag */
     gantt.attachEvent("onBeforeTaskChanged", function(id, mode, task)
     {
         return validateResources(id);
     });
-    // gantt.attachEvent("onAfterTaskDrag", function (id, mode)
-    // {
-	// });
 });
 </script>
