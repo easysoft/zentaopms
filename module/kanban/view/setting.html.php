@@ -21,7 +21,7 @@
   <form class='form-indicator main-form form-ajax' method='post' enctype='multipart/form-data' id='dataform'>
     <table class='table table-form'>
       <tr>
-        <th><?php echo $lang->kanban->WIPCount;?></th>
+        <th class='w-120px'><?php echo $lang->kanban->WIPCount;?></th>
         <td><?php echo html::radio('showWIP', $lang->kanban->showWIPList, $kanban->showWIP);?></td>
         <td></td>
       </tr>
