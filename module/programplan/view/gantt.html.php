@@ -60,16 +60,19 @@ form {display: block; margin-top: 0em; margin-block-end: 1em;}
 #mainContent.loading #ganttContainer {padding: 40px;}
 #mainContent.loading .scrollVer_cell,
 #mainContent.loading .scrollVer_cell {display: none;}
-#
 .gantt-fullscreen #header,
 .gantt-fullscreen #mainMenu,
 .gantt-fullscreen #footer {display: none!important;}
 .gantt-fullscreen #mainContent {position: fixed; top: 0; right: 0; bottom: 0; left: 0}
+.gantt_grid_head_cell.gantt_grid_head_text{overflow:visible;}
+
 </style>
 <?php js::set('customUrl', $this->createLink('programplan', 'ajaxCustom'));?>
 <?php js::set('dateDetails', $dateDetails);?>
 <?php js::set('module', $app->rawModule);?>
 <?php js::set('method', $app->rawMethod);?>
+<?php js::set('ganttType', $ganttType);?>
+<?php js::set('canGanttEdit', common::hasPriv('programplan', 'ganttEdit'));?>
 <div id='mainContent' class='main-content load-indicator' data-loading='<?php echo $lang->programplan->exporting;?>'>
   <form class="main-form form-ajax not-watch">
     <div class="example">
@@ -93,6 +96,16 @@ form {display: block; margin-top: 0em; margin-block-end: 1em;}
   </div>
   <?php $fileName = "gantt-export-{$projectID}";?>
   <a id='ganttDownload' target='hiddenwin' download='<?php echo "{$fileName}.png";?>'></a>
+  <?php
+  $typeHtml  = '<div class="btn-group">';
+  $typeHtml .= '<button class="btn btn-link" data-toggle="dropdown"><span class="text">' . $lang->programplan->ganttBrowseType[$ganttType] . '</span> <span class="caret"></span></button>';
+  $typeHtml .= '<ul class="dropdown-menu">';
+  foreach($lang->programplan->ganttBrowseType as $browseType => $typeName)
+  {
+      $typeHtml .= '<li ' . ($ganttType == $browseType ? "class='active'" : '') . '>' . html::a($this->createLink('programplan', 'browse', "projectID=$projectID&productID=$productID&type=$browseType"), $typeName) . '</li>';
+  }
+  $typeHtml .= '</ul></div>';
+  ?>
 </div>
 <script>
 var scriptLoadedMap   = {};
@@ -381,6 +394,67 @@ function exitHandler()
     }
 }
 
+/* Validate task drag. */
+function validateResources(id)
+{
+    var task = gantt.getTask(id);
+    var from = new Date(task.start_date),
+        to   = new Date(task.end_date);
+    var status = task.status;
+    var type   = task.type;
+    var statusLang = "<?php echo $lang->task->statusList['wait'];?>";
+    flag = true;
+
+    /* Check status. */
+    if(status !== statusLang)
+    {
+        if(type == 'task')
+        {
+            tipMsg = "<?php echo $lang->programplan->error->taskDrag;?>";
+        }
+        else
+        {
+            tipMsg = "<?php echo $lang->programplan->error->planDrag;?>";
+        }
+        new $.zui.Messager(tipMsg.replace('%s', status), {
+            type: 'danger',
+            icon: 'exclamation-sign'
+        }).show();
+        gantt.refreshData();
+        return false;
+    }
+
+    /* Check data. */
+    var postData = {
+        'id'        : type == 'task' ? task.id.split("-")[1] : task.id,
+        'start_date': from.toLocaleDateString('en-CA'),
+        'end_date'  : to.toLocaleDateString('en-CA'),
+        'type'      : type
+    };
+    var link = createLink('programplan', 'ajaxSaveTaskDrag');
+    /* Sync Close. */
+    $.ajax({
+        url: link,
+        dataType: "json",
+        async: false,
+        data: postData,
+        type: "post",
+        success: function(response)
+        {
+            if(response.result == 'fail' && response.message)
+            {
+                new $.zui.Messager(response.message, {
+                    type: 'danger',
+                    icon: 'exclamation-sign'
+                }).show();
+                flag = false;
+            }
+        }
+    });
+
+    return flag;
+}
+
 $(function()
 {
     document.addEventListener('fullscreenchange', exitHandler);
@@ -409,40 +483,46 @@ $(function()
     ?>
     gantt.serverList("userList", <?php echo json_encode($userList);?>);
 
-    gantt.config.readonly          = true;
-    gantt.config.smart_rendering   = true;
-    gantt.config.smart_scales      = true;
-    gantt.config.static_background = true;
-    gantt.config.show_task_cells   = false;
-    gantt.config.row_height        = 25;
-    gantt.config.min_column_width  = 40;
-    gantt.config.details_on_create = false;
-    gantt.config.scales            = [{unit: "year", step: 1, format: "%Y"}, {unit: 'day', step: 1, format: '%m-%d'}];
-    gantt.config.scale_height      = 22 * gantt.config.scales.length;
-    gantt.config.duration_unit     = "day";
+    gantt.config.readonly            = canGanttEdit ? false : true;
+    gantt.config.details_on_dblclick = false;
+    gantt.config.order_branch        = ganttType == 'assignedTo' ? false : 'marker';
+    gantt.config.drag_progress       = false;
+    gantt.config.drag_links          = false;
+    gantt.config.drag_move           = ganttType == 'assignedTo' ? false : true;
+    gantt.config.drag_resize         = ganttType == 'assignedTo' ? false : true;
+    gantt.config.smart_rendering     = true;
+    gantt.config.smart_scales        = true;
+    gantt.config.static_background   = true;
+    gantt.config.show_task_cells     = false;
+    gantt.config.row_height          = 25;
+    gantt.config.min_column_width    = 40;
+    gantt.config.details_on_create   = false;
+    gantt.config.scales              = [{unit: "year", step: 1, format: "%Y"}, {unit: 'day', step: 1, format: '%m-%d'}];
+    gantt.config.scale_height        = 22 * gantt.config.scales.length;
+    gantt.config.duration_unit       = "day";
 
     gantt.config.columns = [
-    {name: 'text',     width: '*', tree: true, resize: true, width:200},
-    {name: 'status',   align: 'center', resize: true, width: 80},
-    {name: 'begin',    align: 'center', resize: true, width: 80},
-    {name: 'deadline', align: 'center', resize: true, width: 80},
-    {name: 'duration', align: 'center', resize: true, width: 60},
-    {name: 'percent',  align: 'center', resize: true, width:70, template: function(plan)
+    {name: 'text',       width: '*', tree: true, resize: true, width:200},
+    {name: 'status',     align: 'center', resize: true, width: 80},
+    {name: 'start_date', align: 'center', resize: true, width: 80},
+    {name: 'end_date',   align: 'center', resize: true, width: 80},
+    {name: 'duration',   align: 'center', resize: true, width: 60},
+    {name: 'percent',    align: 'center', resize: true, width:70, template: function(plan)
         {
             if(plan.percent) return Math.round(plan.percent) + '%';
         }
     },
     {name: 'taskProgress', align: 'center', resize: true, width: 60},
-    {name: 'realBegan',  align: 'center', resize: true, width: 80},
-    {name: 'realEnd', align: 'center', width: 80}
+    {name: 'realBegan',    align: 'center', resize: true, width: 150},
+    {name: 'realEnd',      align: 'center', width: 150}
     ];
 
-    gantt.locale.labels.column_text         = "<?php echo $lang->programplan->name;?>";
+    gantt.locale.labels.column_text         = <?php echo json_encode($typeHtml);?>;
     gantt.locale.labels.column_status       = "<?php echo $lang->statusAB;?>";
     gantt.locale.labels.column_percent      = "<?php echo $lang->programplan->percentAB;?>";
     gantt.locale.labels.column_taskProgress = "<?php echo $lang->programplan->taskProgress;?>";
-    gantt.locale.labels.column_begin        = "<?php echo $lang->programplan->begin;?>";
-    gantt.locale.labels.column_deadline     = "<?php echo $lang->programplan->end;?>";
+    gantt.locale.labels.column_start_date   = "<?php echo $lang->programplan->begin;?>";
+    gantt.locale.labels.column_end_date     = "<?php echo $lang->programplan->end;?>";
     gantt.locale.labels.column_realBegan    = "<?php echo $lang->programplan->realBegan;?>";
     gantt.locale.labels.column_realEnd      = "<?php echo $lang->programplan->realEnd;?>";
     gantt.locale.labels.column_duration     = "<?php echo $lang->programplan->duration;?>";
@@ -488,7 +568,7 @@ $(function()
         {
             if(module == 'review' && method == 'assess')
             {
-	        	gantt.config.layout = layout;
+                gantt.config.layout = layout;
                 gantt.init('ganttView');
             }
             gantt.expand();
@@ -552,14 +632,43 @@ $(function()
     gantt.attachEvent('onTaskClick', function(id, e)
     {
         if($(e.srcElement).hasClass('gantt_close') || $(e.srcElement).hasClass('gantt_open')) return false;
-
-        /* The id of task item is like executionID-taskID. e.g. 1507-37829, 37829 is task id. */
-        var position = id.indexOf('-');
-        if(position < 0) return;
-
-        var taskID = parseInt(id.substring(position + 1));
+        if(ganttType == 'assignedTo')
+        {
+            taskID = id;
+        }
+        else
+        {
+            /* The id of task item is like executionID-taskID. e.g. 1507-37829, 37829 is task id. */
+            var position = id.indexOf('-');
+            if(position < 0) return;
+            var taskID = parseInt(id.substring(position + 1));
+        }
 
         if(!isNaN(taskID) && taskID > 0) taskModalTrigger.show({url: createLink('task', 'view', 'taskID=' + taskID, 'html', true)});
+    });
+
+    gantt.attachEvent("onBeforeRowDragEnd", function(id, parent, tindex)
+    {
+        var task = gantt.getTask(id);
+        var link = createLink('programplan', 'ajaxSaveGanttMove');
+
+        //prevent moving to another position.
+        if(task.parent != parent || id.indexOf('-') == -1)
+        {
+            return false;
+        }
+        else
+        {
+            $.ajax({
+            url: link,
+                dataType: "json",
+                data: {id: id, type: task.type, index: tindex},
+                type: "post",
+                success: function(result){}
+            });
+        }
+
+        return true;
     });
 
     // Make folder can open or close by click
@@ -595,6 +704,12 @@ $(function()
     $('#ganttContainer').mouseleave(function()
     {
         setTimeout(function(){$('.gantt_tooltip').remove()}, 100);
+    });
+
+    /* Link attachEvent onAfterTaskDrag */
+    gantt.attachEvent("onBeforeTaskChanged", function(id, mode, task)
+    {
+        return validateResources(id);
     });
 });
 </script>

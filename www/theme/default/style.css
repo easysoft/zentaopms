@@ -82,13 +82,14 @@ a.showMoreImage:hover {opacity: 1;}
 
 .fixed-head-table{z-index:1000;}
 
-#headerActions {position: absolute; top: 9px; right: 230px; border-right: 2px solid rgba(255, 255, 255, 0.3);}
+#headerActions {position: absolute; top: 9px; right: 175px; border-right: 2px solid rgba(255, 255, 255, 0.3);}
 #headerActions .btn-group > .btn{ color: #fff; margin-right: 8px; border-radius: 4px !important;}
 #headerActions .btn-group > .btn.active, #headerActions .btn:active, #headerActions .open .dropdown-toggle.btn {background: rgba(0,0,0,0.15) !important;}
 #headerActions #kanbanActionMenu {left: 55px}
 #headerActions .setting {border-color: transparent;}
 #headerActions .dropdown-menu {top: 35px; z-index: 2000;}
 #headerActions .dropdown-menu:before, #headerActions .dropdown-menu:hover:before {position: absolute; top: -9px; right: 50%; width: 0; height: 0; content: ' '; border-color: transparent transparent #fff transparent; border-style: solid; border-width: 0 10px 10px 10px;}
+[lang^='zh'] #headerActions {right: 230px;}
 
 .icon-size-width:before {content: "\e9c5"; transform: rotate(90deg); -ms-transform: rotate(90deg); -moz-transform: rotate(90deg); -webkit-transform: rotate(90deg); -o-transform: rotate(90deg);}
 .checkbox-primary > label{overflow: hidden;}

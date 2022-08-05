@@ -349,6 +349,8 @@ function toggleSelectTestStory()
         $('#testStoryBox').removeClass('hidden');
         $('#copyButton').addClass('hidden');
         $('.colorpicker').css('right', '0');
+        $('#dataform .table-form>tbody>tr>th').css('width', '130px');
+        $('[lang^="zh-"] #dataform .table-form>tbody>tr>th').css('width', '120px');
     }
     else
     {
@@ -358,6 +360,7 @@ function toggleSelectTestStory()
         $('#estStarted').closest('tr').removeClass('hidden');
         $('#estimate').closest('.table-col').removeClass('hidden');
         $('#testStoryBox').addClass('hidden');
+        $('#dataform .table-form>tbody>tr>th').css('width', '100px');
     }
 }
 

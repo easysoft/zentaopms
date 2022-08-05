@@ -78,8 +78,8 @@
             <?php if($type != 'finishedBy'): ?>
             <th class='c-user'><?php common::printOrderLink('finishedBy', $orderBy, $vars, $lang->task->finishedBy);?></th>
             <?php endif;?>
-            <th class='c-hours'><?php common::printOrderLink('estimate', $orderBy, $vars, $lang->task->estimateAB);?></th>
-            <th class='c-hours'><?php common::printOrderLink('consumed', $orderBy, $vars, $lang->task->consumedAB);?></th>
+            <th class='c-hours estimate'><?php common::printOrderLink('estimate', $orderBy, $vars, $lang->task->estimateAB);?></th>
+            <th class='c-hours consumed'><?php common::printOrderLink('consumed', $orderBy, $vars, $lang->task->consumedAB);?></th>
             <th class='c-hours'><?php common::printOrderLink('left',     $orderBy, $vars, $lang->task->leftAB);?></th>
             <th class='c-status'><?php common::printOrderLink('status',  $orderBy, $vars, $lang->statusAB);?></th>
             <th class="c-actions-6 text-center"><?php echo $lang->actions;?></th>
