@@ -3345,7 +3345,7 @@ class kanbanModel extends model
     {
         $groupBy = ($this->session->execGroupBy and ($this->app->tab == 'execution' or $this->config->vision == 'lite')) ? $this->session->execGroupBy : '';
 
-        $fromCell = $this->dao->select('cards, lane')->from(TABLE_KANBANCELL)
+        $fromCell = $this->dao->select('id,cards,lane')->from(TABLE_KANBANCELL)
             ->where('`column`')->eq($fromColID)
             ->beginIF(!$groupBy or $groupBy == 'default')->andWhere('lane')->eq($fromLaneID)->fi()
             ->beginIF($groupBy and $groupBy != 'default')
@@ -3355,20 +3355,31 @@ class kanbanModel extends model
             ->fetch();
 
         if($groupBy and $groupBy != 'default') $fromLaneID = $toLaneID = $fromCell->lane;
+        $fromCells[$fromCell->id] = $fromCell;
 
-        $fromCellCards = $fromCell->cards;
-        $toCell        = $this->dao->select('*')->from(TABLE_KANBANCELL)->where('lane')->eq($toLaneID)->andWhere('`column`')->eq($toColID)->fetch();
-        $toCellCards   = $this->dao->select('cards')->from(TABLE_KANBANCELL)->where('lane')->eq($toLaneID)->andWhere('`column`')->eq($toColID)->fetch('cards');
+        $fromLane   = $this->getLaneById($fromLaneID);
+        $fromCells += $this->dao->select('id,cards,lane')->from(TABLE_KANBANCELL)
+            ->where('type')->eq($fromLane->type)
+            ->andWhere('id')->ne($fromCell->id)
+            ->andWhere('cards')->like("%,$cardID,%")
+            ->fetchAll('id');
 
-        $kanbanID = $kanbanID == 0 ? $toCell->kanban : $kanbanID;
+        foreach($fromCells as $fromCell)
+        {
+            $fromCellCards = explode(',', $fromCell->cards);
+            $fromCellCards = array_unique($fromCellCards);
+            $fromCellCards = implode(',', $fromCellCards) . ',';
+            $fromCardList  = str_replace(",$cardID,", ',', $fromCellCards);
+            if($fromCardList == ',') $fromCardList = '';
+            $this->dao->update(TABLE_KANBANCELL)->set('cards')->eq($fromCardList)->where('id')->eq($fromCell->id)->exec();
+        }
 
+        $toCell      = $this->dao->select('*')->from(TABLE_KANBANCELL)->where('lane')->eq($toLaneID)->andWhere('`column`')->eq($toColID)->fetch();
+        $toCellCards = $this->dao->select('cards')->from(TABLE_KANBANCELL)->where('lane')->eq($toLaneID)->andWhere('`column`')->eq($toColID)->fetch('cards');
+        $kanbanID    = $kanbanID == 0 ? $toCell->kanban : $kanbanID;
         if(!$toCell) $this->addKanbanCell($kanbanID, $toLaneID, $toColID, 'common');
 
-        $fromCardList = str_replace(",$cardID,", ',', $fromCellCards);
-        $toCardList   = rtrim($toCellCards, ',') . ",$cardID,";
-
-        if($fromCardList == ',') $fromCardList = '';
-        $this->dao->update(TABLE_KANBANCELL)->set('cards')->eq($fromCardList)->where('`column`')->eq($fromColID)->andWhere('lane')->eq($fromLaneID)->exec();
+        $toCardList = rtrim($toCellCards, ',') . ",$cardID,";
         $this->dao->update(TABLE_KANBANCELL)->set('cards')->eq($toCardList)->where('`column`')->eq($toColID)->andWhere('lane')->eq($toLaneID)->exec();
     }
 
