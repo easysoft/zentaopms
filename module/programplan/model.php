@@ -353,10 +353,7 @@ class programplanModel extends model
         $isMilestone = "<icon class='icon icon-flag icon-sm red'></icon> ";
         $stageIndex  = array();
 
-        foreach($plans as $plan)
-        {
-            $planIdList[$plan->id] = $plan->id;
-        }
+        foreach($plans as $plan) $planIdList[$plan->id] = $plan->id;
 
         $taskSign = "<span class='task-label'>[ T ] </span>";
         $taskPri  = "<span class='label-pri label-pri-%s' title='%s'>%s</span> ";
