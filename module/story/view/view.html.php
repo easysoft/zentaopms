@@ -533,7 +533,7 @@
                               {
                                   $storyLink = "[S] #$linkStoryID $linkStoryTitle";
                               }
-                              echo "<li title='$linkStoryTitle'>$storyLink</li>";
+                              echo "<li title='$linkStoryTitle' class='linkStoryTitle'>$storyLink</li>";
                           }
                       }
                       ?>
