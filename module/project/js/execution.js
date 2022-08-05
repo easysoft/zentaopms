@@ -4,16 +4,16 @@ $(function()
     {
         var show = $(this).is(':checked') ? 1 : 0;
         $.cookie('showTask', show, {expires:config.cookieLife, path:config.webRoot});
-        $('input#editExecution1').prop('disabled', show);
+        $('input#editExecution1').prop('disabled', show).attr('title', show == 1 ? disabledExecutionTip : defaultExecutionTip);
         window.location.reload();
     });
-    if($.cookie('showTask') == 1) $('input#editExecution1').prop('disabled', true);
+    if($.cookie('showTask') == 1) $('input#editExecution1').prop('disabled', true).attr('title', disabledExecutionTip);
 
     $('input#editExecution1').click(function()
     {
         var editExecution = $(this).is(':checked') ? 1 : 0;
         $.cookie('editExecution', editExecution, {expires:config.cookieLife, path:config.webRoot});
-        $('input[name^="showTask"]').prop('disabled', editExecution);
+        $('input[name^="showTask"]').prop('disabled', editExecution).attr('title', editExecution == 1 ? disabledTaskTip : defaultTaskTip);
 
         showEditCheckbox(editExecution);
     });
@@ -21,7 +21,7 @@ $(function()
     {
       $('input#editExecution1').prop('checked', 'true');
       showEditCheckbox(true);
-      $('input[name^="showTask"]').prop('disabled', true);
+      $('input[name^="showTask"]').prop('disabled', true).attr('title', disabledTaskTip);
     }
 
     $(document).on('click', ":checkbox[name^='executionIDList']", function()

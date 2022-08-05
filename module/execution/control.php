@@ -943,6 +943,7 @@ class execution extends control
 
         /* Save session. */
         $this->session->set('bugList', $this->app->getURI(true), 'execution');
+        $this->session->set('buildList', $this->app->getURI(true), 'execution');
 
         $type        = strtolower($type);
         $queryID     = ($type == 'bysearch') ? (int)$param : 0;
