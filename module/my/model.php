@@ -550,7 +550,7 @@ class myModel extends model
         $taskIDList = array();
         if($moduleName == 'contributeTask')
         {
-            $tasksAssignedByMe = $this->getAssignedByMe($account, 0, $pager, $orderBy, 0, 'task');
+            $tasksAssignedByMe = $this->getAssignedByMe($account, 0, '', $orderBy, 0, 'task');
             foreach($tasksAssignedByMe as $taskID => $task)
             {
                 $taskIDList[$taskID] = $taskID;
@@ -822,7 +822,7 @@ class myModel extends model
         $storyIDList = array();
         if($type == 'contribute')
         {
-            $storiesAssignedByMe = $this->getAssignedByMe($this->app->user->account, '', $pager, $orderBy, '', 'story');
+            $storiesAssignedByMe = $this->getAssignedByMe($this->app->user->account, '', '', $orderBy, '', 'story');
             foreach($storiesAssignedByMe as $storyID => $story)
             {
                 $storyIDList[$storyID] = $storyID;
