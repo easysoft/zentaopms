@@ -4009,62 +4009,65 @@ class taskModel extends model
      */
     public function saveTaskMove($productID = 0)
     {
-        $data         = fixer::input('post')->get();
-        $IdList       = explode('-', $data->id);
-        $executionID  = $IdList[0];
-        $taskID       = $IdList[1];
-        $index        = (int)$data->index;
+        $data        = fixer::input('post')->get();
+        $IdList      = explode('-', $data->id);
+        $executionID = $IdList[0];
+        $taskID      = $IdList[1];
+        $oldTask     = $this->loadModel('task')->getByID($taskID);
+        $index       = (int)$data->index;
 
-        $oldTask      = $this->loadModel('task')->getByID($taskID);
-        $execution    = $this->loadModel('execution')->getByID($executionID);
-        $tasks        = $this->dao->select('id')->from(TABLE_TASK)
-            ->where('execution')->eq($executionID)
-            ->andWhere('deleted')->eq(0)
-            ->beginIF($oldTask->parent <= 0)->andWhere('parent')->le(0)
-            ->beginIF($oldTask->parent > 0)->andWhere('parent')->eq($oldTask->parent)
-            ->fetchPairs('id');
-        $taskOrderSum = $this->dao->select('SUM(`order`) as sum')->from(TABLE_TASK)
+        $hasZeroOrder = $this->dao->select('id')->from(TABLE_TASK)
             ->where('deleted')->eq(0)
             ->andWhere('execution')->eq($executionID)
-            ->beginIF($oldTask->parent <= 0)->andWhere('parent')->le(0)
-            ->beginIF($oldTask->parent > 0)->andWhere('parent')->eq($oldTask->parent)
-            ->fetch('sum');
+            ->andWhere('`order`')->eq(0)
+            ->beginIF($oldTask->parent <= 0)->andWhere('parent')->le(0)->fi()
+            ->beginIF($oldTask->parent > 0)->andWhere('parent')->eq($oldTask->parent)->fi()
+            ->limit(1)
+            ->fetch('id');
 
-        if(!$taskOrderSum)
+        if($hasZeroOrder)
         {
+            $tasks = $this->dao->select('id')->from(TABLE_TASK)
+                ->where('execution')->eq($executionID)
+                ->andWhere('deleted')->eq(0)
+                ->beginIF($oldTask->parent <= 0)->andWhere('parent')->le(0)->fi()
+                ->beginIF($oldTask->parent > 0)->andWhere('parent')->eq($oldTask->parent)->fi()
+                ->orderBy('order_asc, id_desc')
+                ->fetchPairs('id');
+
             $order = 1;
             foreach($tasks as $task)
             {
                 $this->dao->update(TABLE_TASK)->set('`order`')->eq($order)->where('id')->eq($task)->exec();
                 $order ++;
             }
-        }
-        else
-        {
-            $order    = ++ $index;
-            $oldOrder = (int)$oldTask->order;
-            if($order > $oldOrder)
-            {
-                $this->dao->update(TABLE_TASK)->set('`order`=`order`-1')
-                    ->where('execution')->eq($executionID)
-                    ->andWhere('`order`')->le($order)
-                    ->andWhere('`order`')->gt($oldOrder)
-                    ->beginIF($oldTask->parent <= 0)->andWhere('parent')->le(0)
-                    ->beginIF($oldTask->parent > 0)->andWhere('parent')->eq($oldTask->parent)
-                    ->exec();
-            }
-            else if($order < $oldOrder)
-            {
-                $this->dao->update(TABLE_TASK)->set('`order`=`order`+1')
-                    ->where('execution')->eq($executionID)
-                    ->andWhere('`order`')->lt($oldOrder)
-                    ->andWhere('`order`')->ge($order)
-                    ->beginIF($oldTask->parent <= 0)->andWhere('parent')->le(0)
-                    ->beginIF($oldTask->parent > 0)->andWhere('parent')->eq($oldTask->parent)
-                    ->exec();
-            }
 
-            $this->dao->update(TABLE_TASK)->set('`order`')->eq($order)->where('id')->eq($taskID)->exec();
+            $oldTask  = $this->loadModel('task')->getByID($taskID);
         }
+
+        $order    = ++ $index;
+        $oldOrder = (int)$oldTask->order;
+        if($order > $oldOrder)
+        {
+            $this->dao->update(TABLE_TASK)->set('`order`=`order`-1')
+                ->where('execution')->eq($executionID)
+                ->andWhere('`order`')->le($order)
+                ->andWhere('`order`')->gt($oldOrder)
+                ->beginIF($oldTask->parent <= 0)->andWhere('parent')->le(0)->fi()
+                ->beginIF($oldTask->parent > 0)->andWhere('parent')->eq($oldTask->parent)->fi()
+                ->exec();
+        }
+        else if($order < $oldOrder)
+        {
+            $this->dao->update(TABLE_TASK)->set('`order`=`order`+1')
+                ->where('execution')->eq($executionID)
+                ->andWhere('`order`')->lt($oldOrder)
+                ->andWhere('`order`')->ge($order)
+                ->beginIF($oldTask->parent <= 0)->andWhere('parent')->le(0)->fi()
+                ->beginIF($oldTask->parent > 0)->andWhere('parent')->eq($oldTask->parent)->fi()
+                ->exec();
+        }
+
+        $this->dao->update(TABLE_TASK)->set('`order`')->eq($order)->where('id')->eq($taskID)->exec();
     }
 }
