@@ -341,12 +341,10 @@ class file extends control
 
             /* Update test case version for test case synchronization. */
             if($file->objectType == 'testcase' and $file->title != $fileName) $this->file->updateTestcaseVersion($file);
+            $newFile = $this->file->getByID($fileID);
 
-            return print(js::reload('parent.parent'));
+            echo json_encode($newFile);
         }
-
-        $this->view->file = $this->file->getById($fileID);
-        $this->display();
     }
 
     /**

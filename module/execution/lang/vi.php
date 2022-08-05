@@ -418,6 +418,8 @@ $lang->execution->featureBar['all']['doing']     = $lang->execution->statusList[
 $lang->execution->featureBar['all']['suspended'] = $lang->execution->statusList['suspended'];
 $lang->execution->featureBar['all']['closed']    = $lang->execution->statusList['closed'];
 
+$lang->execution->featureBar['build']['all'] = 'Build List';
+
 $lang->execution->myExecutions = 'Tôi tham gia';
 $lang->execution->doingProject = 'Hiện trường';
 

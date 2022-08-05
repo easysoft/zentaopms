@@ -1364,11 +1364,16 @@ class repo extends control
         }
 
         $repo = $this->repo->getRepoByID($repoID);
-        if(in_array(strtolower($repo->SCM), $this->config->repo->gitServiceList))
+        if($repo->SCM == 'Gitlab')
         {
             $this->scm = $this->app->loadClass('scm');
             $this->scm->setEngine($repo);
             $url = $this->scm->getDownloadUrl($branch);
+        }
+        elseif($repo->SCM == 'Gitea')
+        {
+            $api = $this->loadModel('gitea')->getApiRoot($repo->serviceHost);
+            $url = sprintf($api, "/repos/{$repo->serviceProject}/archive/{$branch}.zip");
         }
         elseif($repo->SCM == 'Git')
         {

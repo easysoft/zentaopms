@@ -63,6 +63,7 @@ class taskModel extends model
             $requiredFields = str_replace(",story,", ',', "$requiredFields");
             $requiredFields = str_replace(",estStarted,", ',', "$requiredFields");
             $requiredFields = str_replace(",deadline,", ',', "$requiredFields");
+            $requiredFields = str_replace(",module,", ',', "$requiredFields");
         }
 
         $this->loadModel('file');
@@ -180,7 +181,7 @@ class taskModel extends model
                     {
                         if($storyID) $testStoryIdList[$storyID] = $storyID;
                     }
-                    $testStories = $this->dao->select('id,title,version')->from(TABLE_STORY)->where('id')->in($testStoryIdList)->fetchAll('id');
+                    $testStories = $this->dao->select('id,title,version,module')->from(TABLE_STORY)->where('id')->in($testStoryIdList)->fetchAll('id');
                     foreach($this->post->testStory as $i => $storyID)
                     {
                         if(!isset($testStories[$storyID])) continue;
@@ -195,6 +196,7 @@ class taskModel extends model
                         $task->assignedTo   = $this->post->testAssignedTo[$i];
                         $task->estimate     = $this->post->testEstimate[$i];
                         $task->left         = $this->post->testEstimate[$i];
+                        $task->module       = $testStories[$storyID]->module;
                         $this->dao->insert(TABLE_TASK)->data($task)->exec();
 
                         $childTaskID = $this->dao->lastInsertID();
@@ -2384,9 +2386,13 @@ class taskModel extends model
             ->markRight(1)
             ->fi()
             ->beginIF($type == 'delayed')->andWhere('t1.deadline')->gt('1970-1-1')->andWhere('t1.deadline')->lt(date(DT_DATE1))->andWhere('t1.status')->in('wait,doing')->fi()
-            ->beginIF(is_array($type) or strpos(',all,undone,needconfirm,assignedtome,delayed,finishedbyme,myinvolved,assignedbyme,', ",$type,") === false)->andWhere('t1.status')->in($type)->fi()
+            ->beginIF(is_array($type) or strpos(',all,undone,needconfirm,assignedtome,delayed,finishedbyme,myinvolved,assignedbyme,review,', ",$type,") === false)->andWhere('t1.status')->in($type)->fi()
             ->beginIF($modules)->andWhere('t1.module')->in($modules)->fi()
             ->beginIF($type == 'assignedbyme')->andWhere('t1.id')->in($actionIDList)->andWhere('t1.status')->ne('closed')->fi()
+            ->beginIF($type == 'review')
+            ->andWhere("FIND_IN_SET('{$this->app->user->account}', t1.reviewers)")
+            ->andWhere('t1.reviewStatus')->eq('doing')
+            ->fi()
             ->andWhere('t1.deleted')->eq(0)
             ->orderBy($orderBy)
             ->page($pager, 't1.id')
@@ -2517,7 +2523,7 @@ class taskModel extends model
             ->beginIF($type == 'assignedTo' and ($this->app->rawModule == 'my' or $this->app->rawModule == 'block'))->andWhere('t2.status', true)->ne('suspended')->orWhere('t4.status')->ne('suspended')->markRight(1)->fi()
             ->beginIF($type != 'all' and $type != 'finishedBy' and $type != 'assignedTo')->andWhere("t1.`$type`")->eq($account)->fi()
             ->beginIF($type == 'assignedTo')->andWhere("(t1.assignedTo = '{$account}' or (t1.mode = 'multi' and t5.`account` = '{$account}') )")->fi()
-            ->beginIF($type == 'assignedTo' and $this->app->rawModule == 'my' and $this->app->rawMethod == 'work')->andWhere('t1.status')->ne('closed')->fi()
+            ->beginIF($type == 'assignedTo' and $this->app->rawModule == 'my' and $this->app->rawMethod == 'work')->andWhere('t1.status')->notin('closed,cancel,pause')->fi()
             ->orderBy($orderBy)
             ->beginIF($limit > 0)->limit($limit)->fi()
             ->page($pager)
@@ -3625,6 +3631,18 @@ class taskModel extends model
     public function printAssignedHtml($task, $users)
     {
         $btnTextClass   = '';
+        if(!empty($task->team) and $task->mode == 'multi' and $task->status != 'closed')
+        {
+            $assignedToText = $this->lang->task->team;
+
+            $teamMembers = array();
+            foreach($task->team as $teamMember) $teamMembers[] = zget($users, $teamMember->account);
+            $assignedToTitle = implode($this->lang->comma, $teamMembers);
+        }
+        else
+        {
+            $assignedToText = $assignedToTitle = zget($users, $task->assignedTo);
+        }
         $assignedToText = (!empty($task->team) and $task->mode == 'multi' and $task->status != 'closed') ? $this->lang->task->team : zget($users, $task->assignedTo);
 
         if(empty($task->assignedTo))
@@ -3637,7 +3655,7 @@ class taskModel extends model
         $btnClass     = $task->assignedTo == 'closed' ? ' disabled' : '';
         $btnClass     = "iframe btn btn-icon-left btn-sm {$btnClass}";
         $assignToLink = $task->assignedTo == 'closed' ? '#' : helper::createLink('task', 'assignTo', "executionID=$task->execution&taskID=$task->id", '', true);
-        $assignToHtml = html::a($assignToLink, "<i class='icon icon-hand-right'></i> <span title='" . zget($users, $task->assignedTo) . "' class='{$btnTextClass}'>{$assignedToText}</span>", '', "class='$btnClass'");
+        $assignToHtml = html::a($assignToLink, "<i class='icon icon-hand-right'></i> <span title='" . $assignedToTitle . "' class='{$btnTextClass}'>{$assignedToText}</span>", '', "class='$btnClass'");
 
         echo !common::hasPriv('task', 'assignTo', $task) ? "<span style='padding-left: 21px' class='{$btnTextClass}'>{$assignedToText}</span>" : $assignToHtml;
     }

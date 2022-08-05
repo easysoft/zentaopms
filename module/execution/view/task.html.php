@@ -59,6 +59,7 @@ body {margin-bottom: 25px;}
   </div>
   <div class="btn-toolbar pull-left">
     <?php
+    common::sortFeatureMenu();
     foreach(customModel::getFeatureMenu('execution', 'task') as $menuItem)
     {
         if($execution->type == 'ops' && $menuItem->name == 'needconfirm') continue;

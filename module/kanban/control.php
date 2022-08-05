@@ -90,7 +90,6 @@ class kanban extends control
         }
 
         $space = $this->kanban->getSpaceById($spaceID);
-        $space->desc = strip_tags(htmlspecialchars_decode($space->desc));
 
         $typeList = $this->lang->kanbanspace->typeList;
         if($space->type == 'cooperation' or $space->type == 'public') unset($typeList['private']);
@@ -277,8 +276,7 @@ class kanban extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
         }
 
-        $kanban       = $this->kanban->getByID($kanbanID);
-        $kanban->desc = strip_tags(htmlspecialchars_decode($kanban->desc));
+        $kanban = $this->kanban->getByID($kanbanID);
 
         $space      = $this->kanban->getSpaceById($kanban->space);
         $spaceUsers = trim($space->owner) . ',' . trim($space->team);
@@ -291,6 +289,33 @@ class kanban extends control
         $this->view->kanban     = $kanban;
         $this->view->type       = $space->type;
 
+        $this->display();
+    }
+
+    /**
+     * Setting kanban.
+     *
+     * @param  int    $kanbanID
+     * @access public
+     * @return void
+     */
+    public function setting($kanbanID = 0)
+    {
+        if(!empty($_POST))
+        {
+            $changes = $this->kanban->setting($kanbanID);
+
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+            $actionID = $this->loadModel('action')->create('kanban', $kanbanID, 'edited');
+            $this->action->logHistory($actionID, $changes);
+
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
+        }
+
+        $kanban = $this->kanban->getByID($kanbanID);
+
+        $this->view->kanban        = $kanban;
         $this->view->laneCount     = $this->kanban->getLaneCount($kanbanID);
         $this->view->heightType    = $kanban->displayCards > 2 ? 'custom' : 'auto';
         $this->view->displayCards  = $kanban->displayCards ? $kanban->displayCards : '';

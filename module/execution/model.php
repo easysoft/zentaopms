@@ -100,7 +100,7 @@ class executionModel extends model
             include $this->app->getModulePath('', 'execution') . 'lang/' . $this->app->getClientLang() . '.php';
         }
 
-        if($execution->acl != 'private') unset($this->lang->execution->menu->settings['subMenu']->whitelist);
+        if(isset($execution->cal) and $execution->acl != 'private') unset($this->lang->execution->menu->settings['subMenu']->whitelist);
 
         if($execution and $execution->lifetime == 'ops')
         {
@@ -391,6 +391,7 @@ class executionModel extends model
             $this->lang->project->code = $this->lang->execution->execCode;
         }
 
+        $this->lang->error->unique = $this->lang->error->repeat;
         $sprintProject = isset($sprint->project) ? $sprint->project : '0';
         $this->dao->insert(TABLE_EXECUTION)->data($sprint)
             ->autoCheck($skipFields = 'begin,end')
@@ -540,6 +541,7 @@ class executionModel extends model
         }
 
         /* Update data. */
+        $this->lang->error->unique = $this->lang->error->repeat;
         $executionProject = isset($execution->project) ? $execution->project : '0';
         $this->dao->update(TABLE_EXECUTION)->data($execution)
             ->autoCheck($skipFields = 'begin,end')
@@ -668,6 +670,7 @@ class executionModel extends model
             }
         }
 
+        $this->lang->error->unique = $this->lang->error->repeat;
         $extendFields = $this->getFlowExtendFields();
         foreach($data->executionIDList as $executionID)
         {
@@ -786,8 +789,8 @@ class executionModel extends model
                 ->checkIF($execution->begin != '', 'begin', 'date')
                 ->checkIF($execution->end != '', 'end', 'date')
                 ->checkIF($execution->end != '', 'end', 'ge', $execution->begin)
-                ->checkIF((!empty($execution->name) and $this->config->systemMode == 'new'), 'name', 'unique', "id != $executionID and type in ('sprint','stage') and `project` = $projectID")
-                ->checkIF(!empty($execution->code), 'code', 'unique', "id != $executionID and type in ('sprint','stage')")
+                ->checkIF((!empty($execution->name) and $this->config->systemMode == 'new'), 'name', 'unique', "id != $executionID and type in ('sprint','stage','kanban') and `project` = $projectID and `deleted` = '0'")
+                ->checkIF(!empty($execution->code), 'code', 'unique', "id != $executionID and type in ('sprint','stage','kanban') and `deleted` = '0'")
                 ->checkFlow()
                 ->where('id')->eq($executionID)
                 ->limit(1)
@@ -946,6 +949,8 @@ class executionModel extends model
             ->setDefault('status', 'doing')
             ->setDefault('lastEditedBy', $this->app->user->account)
             ->setDefault('lastEditedDate', $now)
+            ->setDefault('closedBy', '')
+            ->setDefault('closedDate', '')
             ->stripTags($this->config->execution->editor->activate['id'], $this->config->allowedTags)
             ->remove('comment,readjustTime,readjustTask')
             ->get();
@@ -2611,9 +2616,13 @@ class executionModel extends model
             }
         }
 
-        $projectID = $this->dao->select('project')->from(TABLE_EXECUTION)->where('id')->eq($executionID)->fetch('project');
+        if($this->config->systemMode == 'new')
+        {
+            $projectID = $this->dao->select('project')->from(TABLE_EXECUTION)->where('id')->eq($executionID)->fetch('project');
+            $this->session->set('project', $projectID);
+            $this->linkStory($projectID, $planStories, $planProducts);
+        }
         $this->linkStory($executionID, $planStories, $planProducts);
-        if($this->config->systemMode == 'new') $this->linkStory($projectID, $planStories, $planProducts);
     }
 
     /**
@@ -4714,5 +4723,24 @@ class executionModel extends model
             }
             echo '</td>';
         }
+    }
+
+    /*
+     * Build search form
+     *
+     * @param int     $queryID
+     * @param string  $actionURL
+     * @return void
+     * */
+    public function buildSearchFrom($queryID, $actionURL)
+    {
+        $this->config->execution->all->search['queryID']   = $queryID;
+        $this->config->execution->all->search['actionURL'] = $actionURL;
+
+        $projectPairs  = array(0 => '');
+        $projectPairs += $this->loadModel('project')->getPairsByProgram();
+        $this->config->execution->all->search['params']['project']['values'] = $projectPairs + array('all' => $this->lang->execution->allProject);
+
+        $this->loadModel('search')->setSearchParams($this->config->execution->all->search);
     }
 }

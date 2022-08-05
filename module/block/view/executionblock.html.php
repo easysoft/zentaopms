@@ -41,11 +41,9 @@
       <?php $id = 0; ?>
       <?php foreach($executionStats as $execution):?>
       <?php
-      if(!empty($execution->children)) continue;
-
       $appid    = isset($_GET['entry']) ? "class='app-btn text-center' data-id='{$this->get->entry}'" : "class='text-center'";
       $viewLink = $this->createLink('execution', 'task', 'executionID=' . $execution->id);
-      if($config->systemMode == 'new') $execution->name = zget($projectPairs, $execution->project, '') . ' / ' . $execution->name;
+      if($config->systemMode == 'new' and isset($projectPairs[$execution->project])) $execution->name = zget($projectPairs, $execution->project, '') . ' / ' . $execution->name;
       ?>
       <tr <?php echo $appid?>>
         <td class='c-name text-left' title='<?php echo $execution->name;?>'><nobr><?php echo html::a($viewLink, $execution->name, '', "title='$execution->name'");?></nobr></td>

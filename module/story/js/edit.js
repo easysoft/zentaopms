@@ -32,4 +32,26 @@ $(function()
             $('.feedbackBox').addClass('hidden');
         }
     });
+
+    $('#linkStoriesLink').click(function()
+    {
+        var storyIdList = '';
+        $('#linkStoriesBox input').each(function()
+        {
+            storyIdList += $(this).val() + ',';
+        });
+
+        var link = '';
+        if(storyType == 'story')
+        {
+            link = createLink('story', 'linkStories', 'storyID=' + storyID + '&browseType=&excludeStories=' + storyIdList, '', true);
+        }
+        else
+        {
+            link = createLink('story', 'linkRequirements', 'storyID=' + storyID + '&browseType=&excludeStories=' + storyIdList, '', true);
+        }
+
+        var modalTrigger = new $.zui.ModalTrigger({type: 'iframe', width: '95%', url: link});
+        modalTrigger.show();
+    });
 })

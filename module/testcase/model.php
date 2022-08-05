@@ -97,8 +97,8 @@ class testcaseModel extends model
                 $step->parent  = ($step->type == 'item') ? $parentStepID : 0;
                 $step->case    = $caseID;
                 $step->version = 1;
-                $step->desc    = htmlSpecialString($stepDesc);
-                $step->expect  = $step->type == 'group' ? '' : htmlSpecialString($data->expects[$stepID]);
+                $step->desc    = rtrim(htmlSpecialString($stepDesc));
+                $step->expect  = $step->type == 'group' ? '' : rtrim(htmlSpecialString($data->expects[$stepID]));
                 $this->dao->insert(TABLE_CASESTEP)->data($step)->autoCheck()->exec();
                 if($step->type == 'group') $parentStepID = $this->dao->lastInsertID();
                 if($step->type == 'step')  $parentStepID = 0;
@@ -620,16 +620,16 @@ class testcaseModel extends model
      */
     public function getByAssignedTo($account, $orderBy = 'id_desc', $pager = null, $auto = 'no')
     {
-        return $this->dao->select('t1.task,t1.case,t1.version,t1.assignedTo,t1.lastRunner,t1.lastRunDate,t1.lastRunResult,t1.status,t2.id as id,t2.project,t2.pri,t2.title,t2.type,t2.openedBy,t2.color,t2.product,t2.branch,t2.module,t2.status,t3.name as taskName')->from(TABLE_TESTRUN)->alias('t1')
+        return $this->dao->select('t1.id as run, t1.task,t1.case,t1.version,t1.assignedTo,t1.lastRunner,t1.lastRunDate,t1.lastRunResult,t1.status,t2.id as id,t2.project,t2.pri,t2.title,t2.type,t2.openedBy,t2.color,t2.product,t2.branch,t2.module,t2.status,t3.name as taskName')->from(TABLE_TESTRUN)->alias('t1')
             ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case = t2.id')
             ->leftJoin(TABLE_TESTTASK)->alias('t3')->on('t1.task = t3.id')
             ->where('t1.assignedTo')->eq($account)
             ->andWhere('t3.deleted')->eq(0)
             ->andWhere('t2.deleted')->eq(0)
             ->andWhere('t3.status')->ne('done')
-            ->beginIF($auto != 'skip' and $auto != 'unit')->andWhere('t2.auto')->ne('unit')->fi()
+            ->beginIF(strpos($auto, 'skip') === false and $auto != 'unit')->andWhere('t2.auto')->ne('unit')->fi()
             ->beginIF($auto == 'unit')->andWhere('t2.auto')->eq('unit')->fi()
-            ->orderBy($orderBy)->page($pager)->fetchAll('id');
+            ->orderBy($orderBy)->page($pager)->fetchAll(strpos($auto, 'run') !== false? 'run' : 'id');
     }
 
     /**
@@ -826,8 +826,8 @@ class testcaseModel extends model
                         $step->parent  = ($step->type == 'item') ? $parentStepID : 0;
                         $step->case    = $caseID;
                         $step->version = $version;
-                        $step->desc    = htmlSpecialString($stepDesc);
-                        $step->expect  = $step->type == 'group' ? '' : htmlSpecialString($data->expects[$stepID]);
+                        $step->desc    = rtrim(htmlSpecialString($stepDesc));
+                        $step->expect  = $step->type == 'group' ? '' : rtrim(htmlSpecialString($data->expects[$stepID]));
                         $this->dao->insert(TABLE_CASESTEP)->data($step)->autoCheck()->exec();
                         if($step->type == 'group') $parentStepID = $this->dao->lastInsertID();
                         if($step->type == 'step')  $parentStepID = 0;
@@ -1050,15 +1050,15 @@ class testcaseModel extends model
             if($data->pris[$caseID]    == 'ditto') $data->pris[$caseID]    = isset($prev['pri'])    ? $prev['pri']    : 3;
             if($data->modules[$caseID] == 'ditto') $data->modules[$caseID] = isset($prev['module']) ? $prev['module'] : 0;
             if($data->types[$caseID]   == 'ditto') $data->types[$caseID]   = isset($prev['type'])   ? $prev['type']   : '';
-            if($data->story[$caseID]  == '') $data->story[$caseID] = 0;
+            if($data->story[$caseID]   == '') $data->story[$caseID] = 0;
+            if($data->story[$caseID]   == 'ditto') $data->story[$caseID] = isset($prev['story']) ? $prev['story'] : 0;
             if(isset($data->branches[$caseID]) and $data->branches[$caseID] == 'ditto') $data->branches[$caseID] = isset($prev['branch']) ? $prev['branch'] : 0;
-            if($data->story[$caseID] == 'ditto') $data->story[$caseID] = isset($prev['story']) ? $prev['story'] : 0;
 
             $prev['pri']    = $data->pris[$caseID];
             $prev['type']   = $data->types[$caseID];
             $prev['story']  = $data->story[$caseID];
-            $prev['branch'] = $data->branches[$caseID];
             $prev['module'] = $data->modules[$caseID];
+            if(isset($data->branches)) $prev['branch'] = $data->branches[$caseID];
         }
 
         /* Initialize cases from the post data.*/
@@ -1070,7 +1070,6 @@ class testcaseModel extends model
             $case->lastEditedBy   = $this->app->user->account;
             $case->lastEditedDate = $now;
             $case->pri            = $data->pris[$caseID];
-            $case->branch         = $data->branches[$caseID];
             $case->module         = $data->modules[$caseID];
             $case->status         = $data->statuses[$caseID];
             $case->story          = $data->story[$caseID];
@@ -1080,6 +1079,7 @@ class testcaseModel extends model
             $case->keywords       = $data->keywords[$caseID];
             $case->type           = $data->types[$caseID];
             $case->stage          = empty($data->stages[$caseID]) ? '' : implode(',', $data->stages[$caseID]);
+            if(isset($data->branches[$caseID])) $case->branch = $data->branches[$caseID];
 
             foreach($extendFields as $extendField)
             {
@@ -1122,7 +1122,7 @@ class testcaseModel extends model
                 unset($oldCase->steps);
                 $allChanges[$caseID] = common::createChanges($oldCase, $case);
 
-                if($case->branch and isset($testtasks[$caseID]))
+                if(!empty($case->branch) and isset($testtasks[$caseID]))
                 {
                     foreach($testtasks[$caseID] as $taskID => $testtask)
                     {

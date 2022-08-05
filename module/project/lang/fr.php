@@ -196,6 +196,7 @@ $lang->project->unlinkExecutionMember  = "The user participated in %s executions
 $lang->project->unlinkExecutionMembers = "The team members you are removing are also in the execution team of this project. Do you want to remove them from the execution team too?";
 $lang->project->productTip             = 'After clicking New Product, the project will not be linked to the selected product.';
 $lang->project->noDevStage             = "Il n'y a pas de phase R&D dans ce projet, ou vous n'avez pas la permission d'accès. La version ne peut pas être créée pour le moment.";
+$lang->project->budgetOverrun          = "Le budget du projet a dépassé le budget restant du programme parent:";
 
 $lang->project->tenThousand    = '';
 $lang->project->hundredMillion = 'Hundred Million';
@@ -241,12 +242,14 @@ $lang->project->modelList['scrum']     = "Scrum";
 $lang->project->modelList['waterfall'] = "CMMI";
 $lang->project->modelList['kanban']    = "Kanban";
 
-$lang->project->featureBar['all']       = 'All';
-$lang->project->featureBar['undone']    = 'Non Terminées';
-$lang->project->featureBar['wait']      = 'En Attente';
-$lang->project->featureBar['doing']     = 'En Cours';
-$lang->project->featureBar['suspended'] = 'Suspendues';
-$lang->project->featureBar['closed']    = 'Fermées';
+$lang->project->featureBar['browse']['all']       = 'All';
+$lang->project->featureBar['browse']['undone']    = 'Non Terminées';
+$lang->project->featureBar['browse']['wait']      = 'En Attente';
+$lang->project->featureBar['browse']['doing']     = 'En Cours';
+$lang->project->featureBar['browse']['suspended'] = 'Suspendues';
+$lang->project->featureBar['browse']['closed']    = 'Fermées';
+
+$lang->project->featureBar['build']['all'] = 'Build List';
 
 $lang->project->aclList['private'] = 'Private (For team members and stakeholders only)';
 $lang->project->aclList['open']    = "Open (accessible with project view permissions)";

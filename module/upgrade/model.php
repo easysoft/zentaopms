@@ -530,6 +530,13 @@ class upgradeModel extends model
                 break;
             case '17_3':
                 $this->processBugLinkBug();
+                break;
+            case '17_4':
+                $this->changeTableEngine();
+                $this->processCreatedInfo();
+                $this->updateApproval();
+                $this->processCreatedBy();
+                break;
         }
 
         $this->deletePatch();
@@ -673,6 +680,9 @@ class upgradeModel extends model
                 break;
             case 'biz7.0':
                 $this->processFlowPosition();
+                break;
+            case 'biz7.3':
+                $this->updateApproval();
                 break;
         }
     }
@@ -980,6 +990,8 @@ class upgradeModel extends model
                 $confirmContent .= file_get_contents($this->getUpgradeFile('17.3'));
                 $xuanxuanSql     = $this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan6.0.1.sql';
                 $confirmContent .= file_get_contents($xuanxuanSql);
+            case '17_4':
+                $confirmContent .= file_get_contents($this->getUpgradeFile('17.4'));
         }
 
         return $confirmContent;
@@ -6277,7 +6289,7 @@ class upgradeModel extends model
         {
             if(!empty($story->assignedTo))
             {
-                $story->reviewer = $story->assingnedTo;
+                $story->reviewer = $story->assignedTo;
             }
             elseif(!empty($story->PO))
             {
@@ -6731,6 +6743,132 @@ class upgradeModel extends model
         {
             $linkBugs = explode(',', $linkBugs);
             $this->dao->update(TABLE_BUG)->set("linkBug = TRIM(BOTH ',' from CONCAT(linkbug, ',$bugID'))")->where('id')->in($linkBugs)->andWhere('id')->ne($bugID)->andWhere("CONCAT(',', linkBug, ',')")->notlike("%,$bugID,%")->exec();
+        }
+
+        return !dao::isError();
+    }
+
+    /**
+     * Change search table engine.
+     *
+     * @access public
+     * @return void
+     */
+    public function changeTableEngine()
+    {
+        $mysqlVersion = $this->loadModel('install')->getMysqlVersion();
+        $tables = $this->dao->query("SHOW TABLE STATUS WHERE `Engine` is not null AND `Engine` = 'MyISAM'")->fetchAll();
+        foreach($tables as $table)
+        {
+            $tableName = $table->Name;
+            $sql = "ALTER TABLE `$tableName` ENGINE='InnoDB'";
+
+            if(stripos($tableName, 'searchindex') !== false and $mysqlVersion < 5.6) continue;
+            $this->dao->exec($sql);
+        }
+        return true;
+    }
+
+    /**
+     * Process created information.
+     *
+     * @access public
+     * @return void
+     */
+    public function processCreatedInfo()
+    {
+        $objectTypes = array('productplan', 'release', 'testtask');
+        $tables      = array('productplan' => TABLE_PRODUCTPLAN, 'release' => TABLE_RELEASE, 'testtask' => TABLE_TESTTASK);
+
+        $actions = $this->dao->select('objectType, objectID, actor, date')->from(TABLE_ACTION)->where('objectType')->in($objectTypes)->andWhere('action')->eq('opened')->fetchGroup('objectType');
+        foreach($actions as $objectType => $objectActions)
+        {
+            foreach($objectActions as $action)
+            {
+                $this->dao->update($tables[$objectType])->set('createdBy')->eq($action->actor)->set('createdDate')->eq($action->date)->where('id')->eq($action->objectID)->exec();
+            }
+        }
+
+        return !dao::isError();
+    }
+
+    /**
+     * Update approval process in Workflow.
+     *
+     * @access public
+     * @return void
+     */
+    public function updateApproval()
+    {
+        /* Judge whether the action has opened the approval process before. */
+        /* 判断动作 看之前是否开启过审批流 */
+        $actions = $this->dao->select('id, module, action, createdDate')->from(TABLE_WORKFLOWACTION)
+            ->where('role')->eq('approval')
+            ->andWhere('action')->in('submit, cancel, review')
+            ->fetchAll('id');
+
+        foreach($actions as $id => $action)
+        {
+            $module     = $action->module;
+            $actionCode = $action->action;
+
+            $this->dao->update(TABLE_WORKFLOWACTION)->set('action')->eq('approval' . $action->action)->where('id')->eq($id)->exec();
+            /* Change the approval action of the module that has already enabled the approval function */
+            /* 改原来已经开启过审批功能的模块的审批动作 */
+            if(isset($this->config->upgrade->recoveryActions->{$module}->{$actionCode}))
+            {
+                $data = array_merge($this->config->upgrade->defaultActions, $this->config->upgrade->recoveryActions->{$module}->{$actionCode});
+                if(isset($data['hasLite']) && $data['hasLite'] === true)
+                {
+                    unset($data['hasLite']);
+                    $liteData = $data;
+                    $liteData['vision'] = 'lite';
+                    $this->dao->insert(TABLE_WORKFLOWACTION)->data($liteData)->exec();
+                }
+                $this->dao->insert(TABLE_WORKFLOWACTION)->data($data)->exec();
+            }
+
+            /* Change history */
+            /* 改历史记录 */
+            $this->dao->update(TABLE_ACTION)->set('action')->eq('approval' . $action->action)->where('objectType')->eq($module)->andWhere('action')->eq($action->action)->andWhere('date')->gt($action->createdDate)->exec();
+
+            /* Change the action field of the workflowlayout table */
+            /* 改workflowlayout表的action字段 */
+            $this->dao->update(TABLE_WORKFLOWLAYOUT)->set('action')->eq('approval' . $action->action)->where('module')->eq($module)->andWhere('action')->eq($action->action)->exec();
+        }
+
+        return !dao::isError();
+    }
+
+    /**
+     * Process createdBy of conditions.
+     *
+     * @access public
+     * @return bool
+     */
+    public function processCreatedBy()
+    {
+        $this->app->loadLang('workflow');
+        $this->app->loadModuleConfig('workflow');
+
+        $modules = $this->dao->select('module')->from(TABLE_WORKFLOW)->where('buildin')->eq('1')->andWhere('approval')->eq('enabled')->andWhere('module')->in(array_keys($this->config->workflow->buildin->createdBy))->fetchPairs();
+        $actions = $this->dao->select('id, module, conditions')->from(TABLE_WORKFLOWACTION)->where('module')->in($modules)->andWhere('action')->in('submit, cancel, edit, delete')->fetchAll('id');
+
+        foreach($actions as $id => $action)
+        {
+            $conditions = json_decode($action->conditions);
+            if(empty($conditions)) continue;
+
+            foreach($conditions as $index => $condition)
+            {
+                foreach($condition->fields as $field)
+                {
+                    if($field->field == 'createdBy' && zget($this->config->workflow->buildin->createdBy, $action->module, '')) $field->field = zget($this->config->workflow->buildin->createdBy, $action->module);
+                }
+                $conditions[$index] = $condition;
+            }
+
+            $this->dao->update(TABLE_WORKFLOWACTION)->set('conditions')->eq(json_encode($conditions))->where('id')->eq($id)->exec();
         }
 
         return !dao::isError();

@@ -494,7 +494,7 @@
                     foreach($builds as $build)
                     {
                         $link = common::hasPriv('build', 'view') ? html::a($this->createLink('build', 'view', "buildID=$build->id"), "#$build->id $build->name", '', "data-app='{$tab}'") : "#$build->id $build->name";
-                        echo "<li title='$build->id $build->name'>$link</li>";
+                        echo "<li title='$build->name'>$link</li>";
                     }
                     ?>
                     </ul>
@@ -510,9 +510,33 @@
                     foreach($releases as $release)
                     {
                         $link = common::hasPriv($releaseModule, 'view') ? html::a($this->createLink($releaseModule, 'view', "release=$release->id"), "#$release->id $release->name", '', "data-app='{$tab}'") : "#$release->id $release->name";
-                        echo "<li title='$release->id $release->name'>$link</li>";
+                        echo "<li title='$release->name'>$link</li>";
                     }
                     ?>
+                    </ul>
+                  </td>
+                </tr>
+                <tr class='text-top'>
+                  <th class='w-90px'><?php echo $lang->story->linkStories;?></th>
+                  <td>
+                    <ul class='list-unstyled'>
+                      <?php
+                      if(isset($story->linkStoryTitles))
+                      {
+                          foreach($story->linkStoryTitles as $linkStoryID => $linkStoryTitle)
+                          {
+                              if($app->user->admin or strpos(",{$app->user->view->products},", ",{$storyProducts[$linkStoryID]},") !== false)
+                              {
+                                  $storyLink = html::a($this->createLink('story', 'view', "storyID=$linkStoryID", '', true), "[S] #$linkStoryID $linkStoryTitle", '', "class='iframe' data-width='80%' title='$linkStoryTitle'") . '<br />';
+                              }
+                              else
+                              {
+                                  $storyLink = "[S] #$linkStoryID $linkStoryTitle";
+                              }
+                              echo "<li title='$linkStoryTitle'>$storyLink</li>";
+                          }
+                      }
+                      ?>
                     </ul>
                   </td>
                 </tr>

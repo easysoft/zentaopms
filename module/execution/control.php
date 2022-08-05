@@ -241,7 +241,7 @@ class execution extends control
         $this->view->moduleID     = $moduleID;
         $this->view->moduleTree   = $this->tree->getTaskTreeMenu($executionID, $productID, $startModuleID = 0, array('treeModel', 'createTaskLink'), $extra);
         $this->view->memberPairs  = $memberPairs;
-        $this->view->branchGroups = $this->loadModel('branch')->getByProducts(array_keys($products), 'noempty');
+        $this->view->branchGroups = $this->loadModel('branch')->getByProducts(array_keys($products));
         $this->view->setModule    = true;
         $this->view->canBeChanged = common::canModify('execution', $execution); // Determines whether an object is editable.
         $this->view->showBranch   = $showBranch;
@@ -2473,7 +2473,7 @@ class execution extends control
             unset($this->lang->kanban->type['all']);
         }
 
-        if($groupBy == 'story' and $browseType == 'task' and !isset($this->lang->kanban->orderList[$orderBy])) $orderBy = 'pri_asc';
+        if($groupBy == 'story' and $browseType == 'task' and !isset($this->lang->kanban->orderList[$orderBy])) $orderBy = 'id_asc';
         $kanbanGroup = $this->kanban->getExecutionKanban($executionID, $browseType, $groupBy, '', $orderBy);
         if(empty($kanbanGroup))
         {
@@ -3678,13 +3678,14 @@ class execution extends control
      * @param  int    $projectID
      * @param  string $orderBy
      * @param  int    $productID
+     * @param  string $param
      * @param  int    $recTotal
      * @param  int    $recPerPage
      * @param  int    $pageID
      * @access public
      * @return void
      */
-    public function all($status = 'undone', $projectID = 0, $orderBy = 'order_asc', $productID = 0, $recTotal = 0, $recPerPage = 100, $pageID = 1)
+    public function all($status = 'undone', $projectID = 0, $orderBy = 'order_asc', $productID = 0, $param = '', $recTotal = 0, $recPerPage = 100, $pageID = 1)
     {
         $this->app->loadLang('my');
         $this->app->loadLang('product');
@@ -3714,10 +3715,14 @@ class execution extends control
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
+        $queryID   = ($status == 'bySearch') ? (int)$param : 0;
+        $actionURL = $this->createLink('execution', 'all', "status=bySearch&projectID=$projectID&orderBy=$orderBy&productID=$productID&param=myQueryID");
+        $this->execution->buildSearchFrom($queryID, $actionURL);
+
         $this->view->title      = $this->lang->execution->allExecutions;
         $this->view->position[] = $this->lang->execution->allExecutions;
 
-        $executionStats = $this->project->getStats($projectID, $status, $productID, 0, 30, $orderBy, $pager);
+        $executionStats = $this->project->getStats($projectID, $status, $productID, 0, 30, $orderBy, $pager, false, $queryID);
 
         $parentIdList = array();
         foreach($executionStats as $execution)
@@ -3742,6 +3747,7 @@ class execution extends control
         $this->view->users          = $this->loadModel('user')->getPairs('noletter');
         $this->view->status         = $status;
         $this->view->from           = $from;
+        $this->view->param          = $param;
         $this->view->isStage        = (isset($project->model) and $project->model == 'waterfall') ? true : false;
 
         $this->display();

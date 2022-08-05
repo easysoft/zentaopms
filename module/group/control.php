@@ -91,6 +91,7 @@ class group extends control
        if(!empty($_POST))
         {
             $this->group->update($groupID);
+            if(dao::isError()) return print(js::error(dao::getError()));
             if(isonlybody()) return print(js::closeModal('parent.parent', 'this'));
             return print(js::locate($this->createLink('group', 'browse'), 'parent'));
         }

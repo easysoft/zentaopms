@@ -53,7 +53,7 @@
             <th></th>
             <td colspan='2'>
               <i class="icon icon-exclamation-sign"></i>
-              <span style='color:#5E626D;font-weight:bold;font-size:13px;'><i class="icon icon-exclamation-sign"></i><?php echo $lang->admin->safe->modeRuleList[2] . $lang->admin->safe->noticeStrong;?></span>
+              <span style='color:#5E626D;font-weight:bold;font-size:13px;'><?php echo $lang->admin->safe->modeRuleList[2] . $lang->admin->safe->noticeStrong;?></span>
             </td>
           </tr>
           <tr>

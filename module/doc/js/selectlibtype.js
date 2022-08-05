@@ -34,6 +34,15 @@ function loadDocLibs(type)
         $('#lib').replaceWith(data);
         $('#lib_chosen').remove();
         $('#lib').chosen();
+
+        if($('#lib').find('option').length == 0)
+        {
+            $('#submit').attr('disabled', 'disabled');
+        }
+        else
+        {
+            $('#submit').removeAttr('disabled');
+        }
     })
 
     $('#docType').toggleClass('hidden', type == 'api');

@@ -401,6 +401,7 @@ class bugModel extends model
         elseif($browseType == 'bysearch')      $bugs = $this->getBySearch($productIDList, $branch, $queryID, $sort, '', $pager, $projectID);
         elseif($browseType == 'overduebugs')   $bugs = $this->getOverdueBugs($productIDList, $branch, $modules, $executions, $sort, $pager, $projectID);
         elseif($browseType == 'assignedbyme')  $bugs = $this->getByAssignedbyme($productIDList, $branch, $modules, $executions, $sort, $pager, $projectID);
+        elseif($browseType == 'review')        $bugs = $this->getReviewBugs($productIDList, $branch, $modules, $executions, $sort, $pager, $projectID);
 
         return $this->checkDelayedBugs($bugs);
     }
@@ -740,6 +741,13 @@ class bugModel extends model
                 $this->linkBugToBuild($bugID, $bug->resolvedBuild);
             }
 
+            if($bug->plan != $oldBug->plan)
+            {
+                $this->loadModel('action');
+                if(!empty($oldBug->plan)) $this->action->create('productplan', $oldBug->plan, 'unlinkbug', '', $bugID);
+                if(!empty($bug->plan)) $this->action->create('productplan', $bug->plan, 'linkbug', '', $bugID);
+            }
+
             $linkBugs    = explode(',', $bug->linkBug);
             $oldLinkBugs = explode(',', $oldBug->linkBug);
             $addBugs     = array_diff($linkBugs, $oldLinkBugs);
@@ -777,11 +785,13 @@ class bugModel extends model
      */
     public function batchUpdate()
     {
-        $bugs       = array();
-        $allChanges = array();
-        $now        = helper::now();
-        $data       = fixer::input('post')->get();
-        $bugIDList  = $this->post->bugIDList ? $this->post->bugIDList : array();
+        $bugs        = array();
+        $allChanges  = array();
+        $now         = helper::now();
+        $data        = fixer::input('post')->get();
+        $bugIDList   = $this->post->bugIDList ? $this->post->bugIDList : array();
+        $unlinkPlans = array();
+        $link2Plans  = array();
 
         if(!empty($bugIDList))
         {
@@ -861,6 +871,12 @@ class bugModel extends model
                     $bug->{$extendField->field} = htmlSpecialString($bug->{$extendField->field});
                 }
 
+                if($bug->plan != $oldBug->plan)
+                {
+                    if($bug->plan != $oldBug->plan and !empty($oldBug->plan)) $unlinkPlans[$oldBug->plan] = empty($unlinkPlans[$oldBug->plan]) ? $bugID : "{$unlinkPlans[$oldBug->plan]},$bugID";
+                    if($bug->plan != $oldBug->plan and !empty($bug->plan))    $link2Plans[$bug->plan]  = empty($link2Plans[$bug->plan]) ? $bugID : "{$link2Plans[$bug->plan]},$bugID";
+                }
+
                 $bugs[$bugID] = $bug;
                 unset($bug);
             }
@@ -902,7 +918,14 @@ class bugModel extends model
                 }
             }
         }
-        if(!dao::isError()) $this->loadModel('score')->create('ajax', 'batchEdit');
+        if(!dao::isError())
+        {
+            $this->loadModel('score')->create('ajax', 'batchEdit');
+
+            $this->loadModel('action');
+            foreach($unlinkPlans as $planID => $bugs) $this->action->create('productplan', $planID, 'unlinkbug', '', $bugs);
+            foreach($link2Plans as $planID => $bugs) $this->action->create('productplan', $planID, 'linkbug', '', $bugs);
+        }
         return $allChanges;
     }
 
@@ -1697,8 +1720,8 @@ class bugModel extends model
             ->beginIF($type != 'closedBy' and $this->app->moduleName == 'block')->andWhere('t1.status')->ne('closed')->fi()
             ->beginIF($type != 'all' and $type != 'bySearch')->andWhere("t1.`$type`")->eq($account)->fi()
             ->beginIF($type == 'bySearch' and $moduleName == 'workBug')->andWhere("t1.assignedTo")->eq($account)->fi()
-            ->beginIF($type == 'bySearch' and $moduleName == 'contributeBug')
             ->beginIF($type == 'assignedTo' and $moduleName == 'workBug')->andWhere('t1.status')->ne('closed')->fi()
+            ->beginIF($type == 'bySearch' and $moduleName == 'contributeBug')
             ->andWhere('t1.openedBy', 1)->eq($account)
             ->orWhere('t1.closedBy')->eq($account)
             ->orWhere('t1.resolvedBy')->eq($account)
@@ -2877,6 +2900,38 @@ class bugModel extends model
             ->andWhere('deleted')->eq(0)
             ->beginIF(!$this->app->user->admin)->andWhere('project')->in('0,' . $this->app->user->view->projects)->fi()
             ->orderBy($orderBy)->page($pager)->fetchAll();
+        return $bugs;
+    }
+
+    /**
+     * Get bugs to review.
+     *
+     * @param  array       $productIDList
+     * @param  int|string  $branch
+     * @param  array       $modules
+     * @param  array       $executions
+     * @param  string      $orderBy
+     * @param  object      $pager
+     * @param  int         $projectID
+     * @access public
+     * @return array
+     */
+    public function getReviewBugs($productIDList, $branch, $modules, $executions, $orderBy, $pager = null, $projectID = 0)
+    {
+        $bugs = $this->dao->select('t1.*, t2.title as planTitle')->from(TABLE_BUG)->alias('t1')
+            ->leftJoin(TABLE_PRODUCTPLAN)->alias('t2')->on('t1.plan = t2.id')
+            ->where('t1.product')->in($productIDList)
+            ->andWhere('t1.execution')->in(array_keys($executions))
+            ->beginIF($branch !== 'all')->andWhere('t1.branch')->eq($branch)->fi()
+            ->beginIF($modules)->andWhere('t1.module')->in($modules)->fi()
+            ->beginIF($projectID)->andWhere('t1.project')->eq($projectID)->fi()
+            ->andWhere('t1.deleted')->eq(0)
+            ->andWhere("FIND_IN_SET('{$this->app->user->account}', t1.reviewers)")
+            ->beginIF(!$this->app->user->admin)->andWhere('t1.project')->in('0,' . $this->app->user->view->projects)->fi()
+            ->orderBy($orderBy)->page($pager)->fetchAll();
+
+        $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'bug');
+
         return $bugs;
     }
 

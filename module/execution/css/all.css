@@ -1,10 +1,9 @@
 body {margin-bottom: 25px;}
+.main-table tbody>tr>td {border-bottom: 0px solid #eee;}
 .table-responsive {overflow-y: hidden !important;}
 #product_chosen .chosen-single {width: 180px;}
 
 .table-children {border-left: 2px solid #cbd0db; border-right: 2px solid #cbd0db;}
-.table tbody > tr.table-children.table-child-top {border-top: 2px solid #cbd0db;}
-.table tbody > tr.table-children.table-child-bottom {border-bottom: 2px solid #cbd0db;}
 .table td.has-child > a:not(.plan-toggle) {max-width: 90%; max-width: calc(100% - 30px); display: inline-block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;}
 .table td.has-child > .plan-toggle {color: #838a9d; position: relative; top: 1px;overflow: initial !important;}
 .table td.has-child > .plan-toggle:hover {color: #006af1; cursor: pointer;}
@@ -14,7 +13,7 @@ body {margin-bottom: 25px;}
 .table th.hours {padding-right: 8px !important;}
 .main-table tbody > tr.table-children > td:first-child::before {width: 3px;}
 td.hours {text-align: right; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;}
-td.flex {display: flex; flex-flow: row nowrap; justify-content: flex-start; align-items: center; margin-bottom: -1px;}
+td.flex {display: flex; flex-flow: row nowrap; justify-content: flex-start; align-items: center; margin-bottom: 0px;}
 td.datatable-cell.flex {margin-bottom: -2px;}
 td.flex span.label-badge {margin-left: 5px; min-width: 50px;}
 td.flex span.label-badge.label-light {min-width: 22px;}
@@ -32,6 +31,7 @@ td.flex span.project-type-label {min-width: 40px;}
 
 .c-project{text-overflow: unset !important;}
 canvas {height: 28px;}
-.parent.has-child.c-name.flex, .table-child-bottom > .c-name.flex {border-bottom: 1px solid #cbd0db !important;}
+.parent.has-child.c-name.flex, .table-child-bottom > .c-name.flex {border-bottom: 0px solid #cbd0db !important;}
 .parent.has-child.c-name.flex {margin-bottom: -2px !important;}
 #tableCustomBtn {padding-bottom: 5px;}
+#bysearchTab {margin-left: 5px;}

@@ -32,7 +32,10 @@
 #archivedCards .info > .users > span:before {left: -4px; content: ''; display: block; position: absolute; width: 2px; height: 2px; background-color: #8990a2; top: 0px; border-radius: 50%;}
 #archivedCards .info > .users > span:after {right: -4px; content: ''; display: block; position: absolute; width: 2px; height: 2px; background-color: #8990a2; top: 0px; border-radius: 50%;}
 #archivedCards .info > .users .avatar {display: inline-block; position: relative; border-radius: 50%; top: -5px; margin:  5px; right: -7px; margin-left: -4px;}
-#archivedCards .cardName {word-wrap: break-word;}
+#archivedCards .cardName {word-wrap: break-word; word-break: break-all;}
+#archivedCards .executionName {display: flex; width: 100%;}
+#archivedCards .executionName a, #archivedCards .executionName div {overflow: hidden; margin-right: 5px; overflow: hidden; white-space: nowrap;}
+#archivedCards .executionName .delayed {flex: none;}
 #archivedCards .card-item .icon {margin-right:2px;}
 #archivedCards .card-item .red {background-color: #b10b0b;}
 #archivedCards .card-item .yellow {background-color: #cfa227;}
@@ -47,7 +50,12 @@
 #archivedCards .card-item .has-color .info > .label-pri {border-color: #FFFFFF;}
 #archivedCards .card-item .has-color .progress-box > .progress-number {color: #FFFFFF;}
 #archivedCards .progress-box {width: 97%;}
-#performable {padding: 25px 10px !important;}
+#archivedCards .no-progress {padding: 7px 10px !important;}
+#archivedCards .has-progress {padding: 21px 10px !important;}
+#archivedCards .has-desc.has-progress {padding: 26px 10px !important;}
+#archivedCards .has-desc.no-progress {padding: 19px 10px !important;}
+#archivedCards .has-avatar.has-progress {padding: 24px 10px !important;}
+#archivedCards .has-avatar.no-progress {padding: 9px 10px !important;}
 </style>
 <?php
 $app->loadLang('execution');
@@ -71,6 +79,7 @@ js::set('systemMode', $this->config->systemMode);
     <div class='card-item' data-card='<?php echo $card->id;?>'>
       <div class='col-xs-10'>
         <?php
+        $class = '';
         $color = '';
         if($card->color == '#b10b0b') $color = 'has-color red';
         if($card->color == '#cfa227') $color = 'has-color yellow';
@@ -83,22 +92,25 @@ js::set('systemMode', $this->config->systemMode);
         <?php
         $labelColor = 'background-color: #2a5f29';
         if($card->color == '#2a5f29') $labelColor = 'background-color: #FFFFFF; color: #2a5f29';
+        $finishLabel = $card->status == 'done' ? "<div class='label' style='$labelColor'>{$lang->kanban->finished}</div>" : '';
         ?>
         <div class="kanban-item <?php echo $nameColor;?> <?php echo $color;?>" data-id="<?php echo $card->id;?>">
-        <?php if($card->status == 'done'):?>
-        <div class="label" style="<?php echo $labelColor;?>"><?php echo $lang->kanban->finished;?></div>
-        <?php endif;?>
         <?php if(empty($card->fromType)):?>
-          <?php echo html::a($this->createLink('kanban', 'viewCard', "cardID=$card->id", '', true), $card->name, '', "class='cardName iframe' data-toggle='modal' data-width='80%' title='$card->name'");?>
+          <?php echo "<div class='cardName'>" . html::a($this->createLink('kanban', 'viewCard', "cardID=$card->id", '', true), $finishLabel . $card->name, '', "class='iframe' data-toggle='modal' data-width='80%' title='$card->name'") . '</div>';?>
           <div class="info">
             <span class="pri label-pri label-pri-<?php echo $card->pri;?>"><?php echo $card->pri;?></span>
             <?php if($card->estimate and $card->estimate != 0) echo "<span class='text-gray'>{$card->estimate}h</span>";?>
         <?php else:?>
         <?php
         $name = isset($card->title) ? $card->title : $card->name;
-        if(common::hasPriv($card->fromType, 'view')) echo html::a($this->createLink($card->fromType, 'view', "id=$card->fromID"), $name, '', "class='cardName' title='$name'");
-        if(!common::hasPriv($card->fromType, 'view')) echo "<div class='cardName' title='$name'>$name</div>";
-        if($card->fromType == 'productplan' or $card->fromType == 'build') echo "<div class='desc' title='$card->desc'>$card->desc</div>";
+        $delayed = ($card->fromType == 'execution' and !empty($card->delay)) ? "<span class='delayed label label-danger label-badge'>{$lang->execution->delayed}</span>" : '';
+        if(common::hasPriv($card->fromType, 'view')) echo "<div class='cardName {$card->fromType}Name'>" . html::a($this->createLink($card->fromType, 'view', "id=$card->fromID"), $name, '', " title='$name'") . "$delayed</div>";
+        if(!common::hasPriv($card->fromType, 'view')) echo "<div class='cardName {$card->fromType}Name'><div title='$name'>$name</div>$delayed</div>";
+        if($card->fromType == 'productplan' or $card->fromType == 'build')
+        {
+            echo "<div class='desc' title='$card->desc'>$card->desc</div>";
+            if(!empty($card->desc)) $class .= ' has-desc';
+        }
         echo "<div class='info $card->fromType'>";
         if(isset($lang->{$card->fromType}->statusList[$card->objectStatus])) echo "<span class='label label-$card->objectStatus'>" . $lang->{$card->fromType}->statusList[$card->objectStatus] . '</span>';
         if(isset($card->date) and !helper::isZeroDate($card->date)) echo "<span class='time label label-light'>" . date("Y-m-d", strtotime($card->date)) . "</span>"
@@ -147,6 +159,7 @@ js::set('systemMode', $this->config->systemMode);
                   if($count > 2) continue;
                   echo html::smallAvatar(array('avatar' => $usersAvatar[$account], 'account' => $account, 'name' => $users[$account]), 'avatar-circle');
                   $count ++;
+                  $class .= ' has-avatar';
               }
               ?>
               <?php if($count > 2) echo "<span>...</span>";?>
@@ -159,11 +172,12 @@ js::set('systemMode', $this->config->systemMode);
                   echo "<div class='users pull-right' title='" . $users[$assignedToList] . "'>";
                   echo html::smallAvatar(array('avatar' => $usersAvatar[$assignedToList], 'account' => $assignedToList, 'name' => $users[$assignedToList]), 'avatar-circle');
                   echo "</div>";
+                  $class .= ' has-avatar';
               }
               ?>
             <?php endif;?>
           </div>
-          <?php if($kanban->performable):?>
+          <?php if($kanban->performable and ($card->fromType == 'execution' or empty($card->fromType))):?>
           <div class='progress-box'>
             <div class='progress'>
               <div class="progress-bar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: <?php echo round($card->progress, 2) . '%';?>"></div>
@@ -173,7 +187,8 @@ js::set('systemMode', $this->config->systemMode);
           <?php endif;?>
         </div>
       </div>
-      <div class='col-xs-2 card-actions' <?php if($kanban->performable) echo "id='performable'";?>>
+      <?php $class .= (!empty($kanban->performable) and ($card->fromType == 'execution' or empty($card->fromType))) ? ' has-progress' : ' no-progress';?>
+      <div class='col-xs-2 card-actions<?php echo $class;?>'>
         <?php
         $CRKanban   = !(isset($this->config->CRKanban) and $this->config->CRKanban == '0' and $kanban->status == 'closed');
         $canRestore = (commonModel::hasPriv('kanban', 'restoreCard') and $CRKanban);
