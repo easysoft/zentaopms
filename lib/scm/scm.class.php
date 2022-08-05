@@ -249,13 +249,14 @@ class scm
      * Get download url.
      *
      * @param  string $branch
+     * @param  string $savePath
      * @param  string $ext
      * @access public
      * @return string
      */
-    public function getDownloadUrl($branch = '', $ext = 'zip')
+    public function getDownloadUrl($branch = '', $savePath = '', $ext = 'zip')
     {
-        return $this->engine->getDownloadUrl($branch, $ext);
+        return $this->engine->getDownloadUrl($branch, $savePath, $ext);
     }
 }
 

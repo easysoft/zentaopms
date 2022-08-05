@@ -106,7 +106,7 @@ h3 {font-size: 16px;}
 .repoCode .comment-cell {background: #eee; white-space: normal;}
 .repoCode .comment-cell .panel {margin: 10px; border-color: #bbb;}
 .repoCode .comment-cell .panel-body {padding: 6px 10px;}
-.repoCode .comment-cell .panel-actions.pull-right {margin-right: 0; margin-top: 0;}
+.repoCode .comment-cell .panel-actions.pull-right {margin-right: 0; margin-top: -25px; position: unset;}
 .repoCode .comment-cell .editing .panel-body, .repoCode .comment-cell .commentContainer.show-form .panel-body {display: none;}
 .repoCode .comment-cell .bug-edit-form,  {padding: 10px; display: none;}
 .repoCode .comment-cell .editing .bug-edit-form, .repoCode .comment-cell .commentContainer.show-form .comment-edit-form {display: block;}

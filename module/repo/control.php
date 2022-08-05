@@ -1403,7 +1403,6 @@ class repo extends control
     {
         $repo     = $this->repo->getRepoByID($repoID);
         $savePath = $this->app->getDataRoot() . 'repo';
-        $fileName = $savePath . DS . $repo->name . '.zip';
         if(!is_dir($savePath))
         {
             if(!is_writable($this->app->getDataRoot())) return print(js::alert(sprintf($this->lang->repo->error->noWritable, dirname($savePath))) . js::close());
@@ -1411,50 +1410,9 @@ class repo extends control
         }
 
         $repo = $this->repo->getRepoByID($repoID);
-        if($repo->SCM == 'Gitlab')
-        {
-            $this->scm = $this->app->loadClass('scm');
-            $this->scm->setEngine($repo);
-            $url = $this->scm->getDownloadUrl($branch);
-        }
-        elseif($repo->SCM == 'Gitea')
-        {
-            $api = $this->loadModel('gitea')->getApiRoot($repo->serviceHost);
-            $url = sprintf($api, "/repos/{$repo->serviceProject}/archive/{$branch}.zip");
-        }
-        elseif($repo->SCM == 'Subversion')
-        {
-            /* Checkout repo. */
-            chdir($savePath);
-            $this->scm = $this->app->loadClass('scm');
-            $this->scm->setEngine($repo);
-            $this->scm->exec('export ' . $repo->path);
-
-            /* Get repo name. */
-            $pathList = explode('/', trim($repo->path, '/'));
-            $repoDir  = end($pathList);
-
-            $this->app->loadClass('pclzip', true);
-            $zip = new pclzip($fileName);
-            if($zip->create($repoDir, PCLZIP_OPT_REMOVE_PATH, $repoDir) === 0) return print(js::alert($zip->errorInfo()) . js::close());
-
-            $url = $this->config->webRoot . $this->app->getAppName() . 'data' . DS . 'repo' . DS . $repo->name . '.zip';
-        }
-        else
-        {
-            $gitDir = scandir($repo->path);
-            $files  = '';
-            foreach($gitDir as $path)
-            {
-                if(!in_array($path, array('.', '..', '.git'))) $files .= $repo->path . DS . "$path,";
-            }
-
-            $this->app->loadClass('pclzip', true);
-            $zip = new pclzip($fileName);
-            if($zip->create($files, PCLZIP_OPT_REMOVE_PATH, $repo->path) === 0) return print(js::alert($zip->errorInfo()) . js::close());
-
-            $url = $this->config->webRoot . $this->app->getAppName() . 'data' . DS . 'repo' . DS . $repo->name . '.zip';
-        }
+        $this->scm = $this->app->loadClass('scm');
+        $this->scm->setEngine($repo);
+        $url = $this->scm->getDownloadUrl($branch, $savePath);
 
         $this->locate($url);
     }
