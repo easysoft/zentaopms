@@ -1542,7 +1542,7 @@ CREATE TABLE IF NOT EXISTS `zt_task` (
   KEY `execution` (`execution`),
   KEY `story` (`story`),
   KEY `parent` (`parent`),
-  KEY `assignedTo` (`assignedTo`)
+  KEY `assignedTo` (`assignedTo`),
   KEY `order` (`order`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_taskestimate`;
