@@ -244,7 +244,7 @@ class project extends control
             $availableBudget = $this->program->getBudgetLeft($selectedProgram);
         }
 
-        $data = array('selectedProgramBegin' => $selectedProgram->begin, 'selectedProgramEnd' => $selectedProgram->end, 'availableBudget' => $availableBudget, 'budgetUnit' => $selectedProgram->budgetUnit);
+        $data = array('selectedProgramBegin' => $selectedProgram->begin, 'selectedProgramEnd' => $selectedProgram->end, 'availableBudget' => number_format($availableBudget, 2), 'budgetUnit' => $selectedProgram->budgetUnit);
         echo json_encode($data);
     }
 
