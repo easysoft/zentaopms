@@ -3919,6 +3919,7 @@ class taskModel extends model
      * @param  int     $objectID
      * @param  string  $objectType
      * @access public
+     * @return bool
      */
     public function saveTaskDrag($objectID, $objectType)
     {
