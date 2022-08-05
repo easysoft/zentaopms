@@ -725,7 +725,7 @@ class myModel extends model
 
         if($type == 'contribute')
         {
-            $assignedByMe = $this->getAssignedByMe($this->app->user->account, '', $pager, $orderBy, 'risk');
+            $assignedByMe = $this->getAssignedByMe($this->app->user->account, '', '', $orderBy, 'risk');
 
             $risks = $this->dao->select('*')->from(TABLE_RISK)
                 ->where($riskQuery)
@@ -941,7 +941,7 @@ class myModel extends model
         $requirementIDList = array();
         if($type == 'contribute')
         {
-            $requirementsAssignedByMe = $this->getAssignedByMe($this->app->user->account, '', $pager, $orderBy, 'requirement');
+            $requirementsAssignedByMe = $this->getAssignedByMe($this->app->user->account, '', '', $orderBy, 'requirement');
             foreach($requirementsAssignedByMe as $requirementID => $requirement)
             {
                 $requirementIDList[$requirementID] = $requirementID;
