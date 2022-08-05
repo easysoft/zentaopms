@@ -534,8 +534,8 @@ class upgradeModel extends model
             case '17_4':
                 $this->changeTableEngine();
                 $this->processCreatedInfo();
-                $this->updateApproval();
                 $this->processCreatedBy();
+                $this->updateApproval();
                 break;
         }
 
@@ -6777,8 +6777,8 @@ class upgradeModel extends model
      */
     public function processCreatedInfo()
     {
-        $objectTypes = array('productplan', 'release', 'testtask');
-        $tables      = array('productplan' => TABLE_PRODUCTPLAN, 'release' => TABLE_RELEASE, 'testtask' => TABLE_TESTTASK);
+        $objectTypes = array('productplan', 'release', 'testtask', 'build');
+        $tables      = array('productplan' => TABLE_PRODUCTPLAN, 'release' => TABLE_RELEASE, 'testtask' => TABLE_TESTTASK, 'build' => TABLE_BUILD);
 
         $actions = $this->dao->select('objectType, objectID, actor, date')->from(TABLE_ACTION)->where('objectType')->in($objectTypes)->andWhere('action')->eq('opened')->fetchGroup('objectType');
         foreach($actions as $objectType => $objectActions)

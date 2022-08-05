@@ -3675,7 +3675,6 @@ class execution extends control
      * All execution.
      *
      * @param  string $status
-     * @param  int    $projectID
      * @param  string $orderBy
      * @param  int    $productID
      * @param  string $param
@@ -3685,7 +3684,7 @@ class execution extends control
      * @access public
      * @return void
      */
-    public function all($status = 'undone', $projectID = 0, $orderBy = 'order_asc', $productID = 0, $param = '', $recTotal = 0, $recPerPage = 100, $pageID = 1)
+    public function all($status = 'undone', $orderBy = 'order_asc', $productID = 0, $param = '', $recTotal = 0, $recPerPage = 100, $pageID = 1)
     {
         $this->app->loadLang('my');
         $this->app->loadLang('product');
@@ -3698,17 +3697,8 @@ class execution extends control
 
         if($this->app->viewType == 'mhtml')
         {
-            if($this->app->rawModule == 'project' and $this->app->rawMethod == 'execution')
-            {
-                $projects  = $this->project->getPairsByProgram();
-                $projectID = $this->project->saveState($projectID, $projects);
-                $this->project->setMenu($projectID);
-            }
-            else
-            {
-                $executionID = $this->execution->saveState(0, $this->executions);
-                $this->execution->setMenu($executionID);
-            }
+            $executionID = $this->execution->saveState(0, $this->executions);
+            $this->execution->setMenu($executionID);
         }
 
         /* Load pager and get tasks. */
@@ -3716,13 +3706,13 @@ class execution extends control
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
         $queryID   = ($status == 'bySearch') ? (int)$param : 0;
-        $actionURL = $this->createLink('execution', 'all', "status=bySearch&projectID=$projectID&orderBy=$orderBy&productID=$productID&param=myQueryID");
+        $actionURL = $this->createLink('execution', 'all', "status=bySearch&orderBy=$orderBy&productID=$productID&param=myQueryID");
         $this->execution->buildSearchFrom($queryID, $actionURL);
 
         $this->view->title      = $this->lang->execution->allExecutions;
         $this->view->position[] = $this->lang->execution->allExecutions;
 
-        $executionStats = $this->project->getStats($projectID, $status, $productID, 0, 30, $orderBy, $pager, false, $queryID);
+        $executionStats = $this->project->getStats(0, $status, $productID, 0, 30, $orderBy, $pager, false, $queryID);
 
         $parentIdList = array();
         foreach($executionStats as $execution)
@@ -3733,15 +3723,13 @@ class execution extends control
         $parents = array();
         if($parentIdList) $parents = $this->execution->getByIdList($parentIdList);
 
-        $allExecutionsNum = $this->project->getStats($projectID, 'all');
+        $allExecutionsNum = $this->project->getStats(0, 'all');
         $this->view->allExecutionsNum = count($allExecutionsNum);
 
         $this->view->executionStats = $executionStats;
-        $this->view->productList    = $this->loadModel('product')->getProductPairsByProject($projectID);
+        $this->view->productList    = $this->loadModel('product')->getProductPairsByProject(0);
         $this->view->productID      = $productID;
-        $this->view->projectID      = $projectID;
         $this->view->parents        = $parents;
-        $this->view->projects       = array('') + $this->project->getPairsByProgram();
         $this->view->pager          = $pager;
         $this->view->orderBy        = $orderBy;
         $this->view->users          = $this->loadModel('user')->getPairs('noletter');

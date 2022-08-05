@@ -336,7 +336,7 @@ EOF;
 
         if($type == 'assignedBy')
         {
-            $stories = $this->loadModel('my')->getAssignedByMe($this->app->user->account, '', $pager, $orderBy, '', 'story');
+            $stories = $this->loadModel('my')->getAssignedByMe($this->app->user->account, '', $pager, $orderBy, 'story');
         }
         elseif($type == 'bysearch')
         {
@@ -400,7 +400,7 @@ EOF;
 
         if($type == 'assignedBy')
         {
-            $stories = $this->loadModel('my')->getAssignedByMe($this->app->user->account, '', $pager, $orderBy, '', 'requirement');
+            $stories = $this->loadModel('my')->getAssignedByMe($this->app->user->account, '', $pager, $orderBy, 'requirement');
         }
         elseif($type == 'bysearch')
         {
@@ -468,7 +468,7 @@ EOF;
         /* Get tasks. */
         if($type == 'assignedBy')
         {
-            $tasks = $this->my->getAssignedByMe($this->app->user->account, 0, $pager, $sort, 0, 'task');
+            $tasks = $this->my->getAssignedByMe($this->app->user->account, 0, $pager, $sort, 'task');
         }
         elseif($type == 'bySearch')
         {
@@ -571,7 +571,7 @@ EOF;
         $sort = common::appendOrder($orderBy);
         if($type == 'assignedBy')
         {
-            $bugs = $this->loadModel('my')->getAssignedByMe($this->app->user->account, '', $pager, $orderBy, '', 'bug');
+            $bugs = $this->loadModel('my')->getAssignedByMe($this->app->user->account, '', $pager, $orderBy, 'bug');
         }
         else
         {
@@ -877,7 +877,7 @@ EOF;
         $this->view->pager      = $pager;
         $this->view->type       = $type;
         $this->view->param      = $param;
-        $this->view->issues     = $type == 'assignedBy' ? $this->loadModel('my')->getAssignedByMe($this->app->user->account, '', $pager,  $orderBy, '', 'issue') : $this->loadModel('issue')->getUserIssues($type, $queryID, $this->app->user->account, $orderBy, $pager);
+        $this->view->issues     = $type == 'assignedBy' ? $this->loadModel('my')->getAssignedByMe($this->app->user->account, '', $pager,  $orderBy, 'issue') : $this->loadModel('issue')->getUserIssues($type, $queryID, $this->app->user->account, $orderBy, $pager);
 
         $this->view->projectList = $this->loadModel('project')->getPairsByProgram();
 
@@ -911,7 +911,7 @@ EOF;
         /* Get risks by type*/
         if($type == 'assignedBy')
         {
-            $risks = $this->my->getAssignedByMe($this->app->user->account, '', $pager, $orderBy, '', 'risk');
+            $risks = $this->my->getAssignedByMe($this->app->user->account, '', $pager, $orderBy, 'risk');
         }
         else
         {
@@ -1002,7 +1002,7 @@ EOF;
         $this->app->loadClass('pager', $static = true);
         if($this->app->getViewType() == 'mhtml') $recPerPage = 10;
         $pager  = pager::init($recTotal, $recPerPage, $pageID);
-        $ncList = $browseType == 'assignedBy' ? $this->loadModel('my')->getAssignedByMe($this->app->user->account, '', $pager, $orderBy, '', 'nc') : $this->my->getNcList($browseType, $orderBy, $pager, 'active');
+        $ncList = $browseType == 'assignedBy' ? $this->loadModel('my')->getAssignedByMe($this->app->user->account, '', $pager, $orderBy, 'nc') : $this->my->getNcList($browseType, $orderBy, $pager, 'active');
 
         foreach($ncList as $nc) $ncIdList[] = $nc->id;
         $this->session->set('ncIdList', isset($ncIdList) ? $ncIdList : '');

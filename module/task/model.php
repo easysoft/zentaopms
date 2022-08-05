@@ -3782,6 +3782,9 @@ class taskModel extends model
      */
     public function buildNestedList($execution, $task, $isChild = false, $showmore = false, $users = array())
     {
+        $this->app->loadLang('execution');
+
+        $today    = helper::today();
         $showmore = $showmore ? 'showmore' : '';
         $trAttrs  = "data-id='t$task->id'";
         if(!$isChild)
@@ -3806,8 +3809,22 @@ class taskModel extends model
         $list .= '<td>' . zget($users, $task->assignedTo, '') . '</td>';
         $list .= "<td class='status-{$task->status}'>" . $this->processStatus('task', $task) . '</td>';
         $list .= '<td></td>';
-        $list .= '<td>' . $task->estStarted . '</td>';
-        $list .= '<td>' . $task->deadline . '</td>';
+        $list .= helper::isZeroDate($task->estStarted) ? '<td></td>' : '<td>' . $task->estStarted . '</td>';
+        if(!helper::isZeroDate($task->deadline))
+        {
+            if($task->status != 'done')
+            {
+                $list .= strtotime($today) > strtotime($task->deadline) ? '<td class="delayed" ' . 'title="' . $this->lang->execution->delayed . '">' . $task->deadline . '</td>' : '<td>' . $task->deadline . '</td>';
+            }
+            else
+            {
+                $list .= '<td>' . $task->deadline . '</td>';
+            }
+        }
+        else
+        {
+            $list .= '<td></td>';
+        }
         $list .= '<td>' . $task->estimate . $this->lang->execution->workHourUnit . '</td>';
         $list .= '<td>' . $task->consumed . $this->lang->execution->workHourUnit . '</td>';
         $list .= '<td>' . $task->left . $this->lang->execution->workHourUnit . '</td>';
@@ -3911,5 +3928,163 @@ class taskModel extends model
         }
 
         return $menu;
+    }
+
+    /**
+     * Save Task Drag.
+     *
+     * @param  int     $objectID
+     * @param  string  $objectType
+     * @access public
+     * @return bool
+     */
+    public function saveTaskDrag($objectID, $objectType)
+    {
+        $post = fixer::input('post')->get();
+        $post->end_date = date('Y-m-d', strtotime('-1 day', strtotime($post->end_date)));
+        if($objectType == 'task')
+        {
+            $objectData = $this->dao->select('*')->from(TABLE_TASK)->where('id')->eq($objectID)->fetch();
+            $parent     = $objectData->parent;
+            $project    = $objectData->project;
+            $execution  = $objectData->execution;
+            $stage      = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($execution)->andWhere('project')->eq($project)->fetch();
+
+            if($parent <= 0)
+            {
+                $parentData = $stage;
+
+                $start = $parentData->begin;
+                $end   = $parentData->end;
+            }
+            else
+            {
+                $parentData = $this->dao->select('*')->from(TABLE_TASK)->where('id')->eq($parent)->fetch();
+
+                $start = helper::isZeroDate($parentData->estStarted)  ? '' : $parentData->estStarted;
+                $end   = helper::isZeroDate($parentData->deadline)    ? '' : $parentData->deadline;
+            }
+
+            if(helper::diffDate($start, $post->start_date) > 0)
+            {
+                $arg = !empty($parent) ? $this->lang->task->parent : $this->lang->project->stage;
+                return dao::$errors = sprintf($this->lang->task->overTime, $arg, $arg);
+            }
+
+            $this->dao->update(TABLE_TASK)
+                ->set('estStarted')->eq($post->start_date)
+                ->set('deadline')->eq($post->end_date)
+                ->set('lastEditedBy')->eq($this->app->user->account)
+                ->where('id')->eq($objectID)
+                ->exec();
+        }
+        elseif($objectType == 'plan')
+        {
+            $objectData = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($objectID)->fetch();
+            $parent     = $objectData->parent;
+            $project    = $objectData->project;
+
+            if(empty($parent))
+            {
+                $parentData = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($project)->fetch();
+            }
+            else
+            {
+                $parentData = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($parent)->fetch();
+            }
+
+            $start      = helper::isZeroDate($parentData->begin) ? '' : $parentData->begin;
+            $end        = helper::isZeroDate($parentData->end)   ? '' : $parentData->end;
+
+            if(helper::diffDate($start, $post->start_date) > 0)
+            {
+                $arg = !empty($parent) ? $this->lang->programplan->parent : $this->lang->project->common;
+                return dao::$errors = sprintf($this->lang->task->overTime, $arg, $arg);
+            }
+
+            $this->dao->update(TABLE_PROJECT)
+                ->set('begin')->eq($post->start_date)
+                ->set('end')->eq($post->end_date)
+                ->set('lastEditedBy')->eq($this->app->user->account)
+                ->where('id')->eq($objectID)
+                ->exec();
+        }
+        else
+        {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Save task order.
+     *
+     * @param int     $productID
+     * @access public
+     * @return void
+     */
+    public function saveTaskMove($productID = 0)
+    {
+        $data        = fixer::input('post')->get();
+        $IdList      = explode('-', $data->id);
+        $executionID = $IdList[0];
+        $taskID      = $IdList[1];
+        $oldTask     = $this->loadModel('task')->getByID($taskID);
+        $index       = (int)$data->index;
+
+        $hasZeroOrder = $this->dao->select('id')->from(TABLE_TASK)
+            ->where('deleted')->eq(0)
+            ->andWhere('execution')->eq($executionID)
+            ->andWhere('`order`')->eq(0)
+            ->beginIF($oldTask->parent <= 0)->andWhere('parent')->le(0)->fi()
+            ->beginIF($oldTask->parent > 0)->andWhere('parent')->eq($oldTask->parent)->fi()
+            ->limit(1)
+            ->fetch('id');
+
+        if($hasZeroOrder)
+        {
+            $tasks = $this->dao->select('id')->from(TABLE_TASK)
+                ->where('execution')->eq($executionID)
+                ->andWhere('deleted')->eq(0)
+                ->beginIF($oldTask->parent <= 0)->andWhere('parent')->le(0)->fi()
+                ->beginIF($oldTask->parent > 0)->andWhere('parent')->eq($oldTask->parent)->fi()
+                ->orderBy('order_asc, id_desc')
+                ->fetchPairs('id');
+
+            $order = 1;
+            foreach($tasks as $task)
+            {
+                $this->dao->update(TABLE_TASK)->set('`order`')->eq($order)->where('id')->eq($task)->exec();
+                $order ++;
+            }
+
+            $oldTask  = $this->loadModel('task')->getByID($taskID);
+        }
+
+        $order    = ++ $index;
+        $oldOrder = (int)$oldTask->order;
+        if($order > $oldOrder)
+        {
+            $this->dao->update(TABLE_TASK)->set('`order`=`order`-1')
+                ->where('execution')->eq($executionID)
+                ->andWhere('`order`')->le($order)
+                ->andWhere('`order`')->gt($oldOrder)
+                ->beginIF($oldTask->parent <= 0)->andWhere('parent')->le(0)->fi()
+                ->beginIF($oldTask->parent > 0)->andWhere('parent')->eq($oldTask->parent)->fi()
+                ->exec();
+        }
+        else if($order < $oldOrder)
+        {
+            $this->dao->update(TABLE_TASK)->set('`order`=`order`+1')
+                ->where('execution')->eq($executionID)
+                ->andWhere('`order`')->lt($oldOrder)
+                ->andWhere('`order`')->ge($order)
+                ->beginIF($oldTask->parent <= 0)->andWhere('parent')->le(0)->fi()
+                ->beginIF($oldTask->parent > 0)->andWhere('parent')->eq($oldTask->parent)->fi()
+                ->exec();
+        }
+
+        $this->dao->update(TABLE_TASK)->set('`order`')->eq($order)->where('id')->eq($taskID)->exec();
     }
 }

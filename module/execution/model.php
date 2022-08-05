@@ -4361,6 +4361,8 @@ class executionModel extends model
         $this->loadModel('execution');
         $this->loadModel('programplan');
 
+        $today = helper::today();
+
         if(!$isChild)
         {
             $trClass = 'is-top-level table-nest-child-hide';
@@ -4385,8 +4387,22 @@ class executionModel extends model
         echo '<td>' . zget($users, $execution->PM) . '</td>';
         echo "<td class='status-{$execution->status}'>" . zget($this->lang->project->statusList, $execution->status) . '</td>';
         echo '<td>' . html::ring($execution->hours->progress) . '</td>';
-        echo '<td>' . $execution->begin . '</td>';
-        echo '<td>' . $execution->end . '</td>';
+        echo helper::isZeroDate($execution->begin) ? '<td></td>' : '<td>' . $execution->begin . '</td>';
+        if(!helper::isZeroDate($execution->end))
+        {
+            if($execution->status != 'closed')
+            {
+                echo strtotime($today) > strtotime($execution->end) ? '<td class="delayed" title="' . $this->lang->execution->delayed . '">' . $execution->end . '</td>' : '<td>' . $execution->end . '</td>';
+            }
+            else
+            {
+                echo '<td>' . $execution->end . '</td>';
+            }
+        }
+        else
+        {
+            echo '<td></td>';
+        }
         echo "<td class='hours' title='{$execution->hours->totalEstimate}{$this->lang->execution->workHour}'>" . $execution->hours->totalEstimate . $this->lang->execution->workHourUnit . '</td>';
         echo "<td class='hours' title='{$execution->hours->totalConsumed}{$this->lang->execution->workHour}'>" . $execution->hours->totalConsumed . $this->lang->execution->workHourUnit . '</td>';
         echo "<td class='hours' title='{$execution->hours->totalLeft}{$this->lang->execution->workHour}'>" . $execution->hours->totalLeft . $this->lang->execution->workHourUnit . '</td>';

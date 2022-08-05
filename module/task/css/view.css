@@ -19,4 +19,4 @@
 .c-leftAB {width: 60px;}
 .c-actions {width: 175px;}
 
-#mainContent .main-actions .btn-toolbar .btn {padding-left: 7px; padding-right: 6px;}
+[lang^='de'] #mainContent .main-actions .btn-toolbar .btn {padding-left: 3px; padding-right: 3px;}

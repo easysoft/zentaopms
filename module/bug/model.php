@@ -1146,13 +1146,15 @@ class bugModel extends model
             if(dao::isError()) return false;
 
             $buildData = new stdclass();
-            $buildData->product   = (int)$oldBug->product;
-            $buildData->branch    = (int)$oldBug->branch;
-            $buildData->project   = $this->dao->select('project')->from(TABLE_EXECUTION)->where('id')->eq($bug->buildExecution)->fetch('project');
-            $buildData->execution = $bug->buildExecution;
-            $buildData->name      = $bug->buildName;
-            $buildData->date      = date('Y-m-d');
-            $buildData->builder   = $this->app->user->account;
+            $buildData->product     = (int)$oldBug->product;
+            $buildData->branch      = (int)$oldBug->branch;
+            $buildData->project     = $this->dao->select('project')->from(TABLE_EXECUTION)->where('id')->eq($bug->buildExecution)->fetch('project');
+            $buildData->execution   = $bug->buildExecution;
+            $buildData->name        = $bug->buildName;
+            $buildData->date        = date('Y-m-d');
+            $buildData->builder     = $this->app->user->account;
+            $buildData->createdBy   = $this->app->user->account;
+            $buildData->createdDate = helper::now();
             $this->dao->insert(TABLE_BUILD)->data($buildData)->autoCheck()
                 ->check('name', 'unique', "product = {$buildData->product} AND branch = {$buildData->branch} AND deleted = '0'")
                 ->exec();
@@ -1686,7 +1688,7 @@ class bugModel extends model
         $bugIDList = array();
         if($moduleName == 'contributeBug')
         {
-            $bugsAssignedByMe = $this->loadModel('my')->getAssignedByMe($account, 0, $pager, $orderBy, 0, 'bug');
+            $bugsAssignedByMe = $this->loadModel('my')->getAssignedByMe($account, 0, '', $orderBy, 'bug');
             foreach($bugsAssignedByMe as $bugID => $bug) $bugIDList[$bugID] = $bugID;
         }
 

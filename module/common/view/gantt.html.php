@@ -11,14 +11,18 @@
  */
 css::import($jsRoot . 'dhtmlxgantt/min.css');
 js::import($jsRoot . 'dhtmlxgantt/min.js');
-js::import($jsRoot . 'dhtmlxgantt/ext/dhtmlxgantt_critical_path.js');
-js::import($jsRoot . 'dhtmlxgantt/ext/dhtmlxgantt_fullscreen.js');
-js::import($jsRoot . 'dhtmlxgantt/ext/dhtmlxgantt_smart_rendering.js');
-js::import($jsRoot . 'dhtmlxgantt/ext/dhtmlxgantt_marker.js');
-js::import($jsRoot . 'dhtmlxgantt/ext/dhtmlxgantt_tooltip.js');
 $currentLang = $app->getClientLang();
 if($currentLang != 'en') js::import($jsRoot . 'dhtmlxgantt/lang/' . $currentLang . '.js');
 ?>
 <style>
 .gantt_message_area{display:none;}
 </style>
+<script>
+gantt.plugins({
+    marker: true,
+    critical_path: true,
+    fullscreen: true,
+    tooltip: true,
+    click_drag: true
+});
+</script>

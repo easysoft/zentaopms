@@ -91,7 +91,7 @@
           <th><?php echo $lang->execution->days;?></th>
           <td>
             <div class='input-group'>
-              <?php echo html::input('days', (isset($plan) && !empty($plan->begin) ? helper::workDays($plan->begin, $plan->end) : ''), "class='form-control'");?>
+              <?php echo html::input('days', (isset($plan) && !empty($plan->begin) ? (helper::workDays($plan->begin, $plan->end) + 1) : ''), "class='form-control'");?>
               <span class='input-group-addon'><?php echo $lang->execution->day;?></span>
             </div>
           </td><td></td><td></td>
