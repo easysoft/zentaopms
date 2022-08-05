@@ -3782,6 +3782,7 @@ class taskModel extends model
      */
     public function buildNestedList($execution, $task, $isChild = false, $showmore = false, $users = array())
     {
+        $today = helper::today();
         $showmore = $showmore ? 'showmore' : '';
         $trAttrs  = "data-id='t$task->id'";
         if(!$isChild)
@@ -3809,8 +3810,14 @@ class taskModel extends model
         $list .= helper::isZeroDate($task->estStarted) ? '<td></td>' : '<td>' . $task->estStarted . '</td>';
         if(!helper::isZeroDate($task->deadline))
         {
-            $today = helper::today();
-            $list .= strtotime($today) > strtotime($task->deadline) ? '<td class="delayed">' . $task->deadline . '</td>' : '<td>' . $task->deadline . '</td>';
+            if($task->status != 'done')
+            {
+                $list .= strtotime($today) > strtotime($task->deadline) ? '<td class="delayed" title="已延期">' . $task->deadline . '</td>' : '<td>' . $task->deadline . '</td>';
+            }
+            else
+            {
+                $list .= '<td>' . $task->deadline . '</td>';
+            }
         }
         else
         {

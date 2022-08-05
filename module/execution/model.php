@@ -4361,6 +4361,8 @@ class executionModel extends model
         $this->loadModel('execution');
         $this->loadModel('programplan');
 
+        $today = helper::today();
+
         if(!$isChild)
         {
             $trClass = 'is-top-level table-nest-child-hide';
@@ -4388,8 +4390,14 @@ class executionModel extends model
         echo helper::isZeroDate($execution->begin) ? '<td></td>' : '<td>' . $execution->begin . '</td>';
         if(!helper::isZeroDate($execution->end))
         {
-            $today = helper::today();
-            echo strtotime($today) > strtotime($execution->end) ? '<td class="delayed">' . $execution->end . '</td>' : '<td>' . $execution->end . '</td>';
+            if($execution->status != 'closed')
+            {
+                echo strtotime($today) > strtotime($execution->end) ? '<td class="delayed" title="已延期">' . $execution->end . '</td>' : '<td>' . $execution->end . '</td>';
+            }
+            else
+            {
+                echo '<td>' . $execution->end . '</td>';
+            }
         }
         else
         {
