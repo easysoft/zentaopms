@@ -437,7 +437,7 @@ class projectModel extends model
             $progressList[$projectID] = $progress;
         }
 
-        return is_numeric($projectIDList) ? $progressList[$projectIDList] : $progressList;
+        return is_numeric($projectIDList) ? (empty($progressList) ? 0 : $progressList[$projectIDList]) : $progressList;
     }
 
     /**
