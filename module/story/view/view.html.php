@@ -412,7 +412,7 @@
               ?>
               <?php $linkLang = ($story->type == 'story') ? $lang->story->requirement : $lang->story->story;?>
               <li><?php echo html::a($this->createLink('story', 'linkStory', "storyID=$story->id", '', true), $lang->story->link . $linkLang, '', "class='btn btn-info iframe' data-width='95%' id='linkButton'");?>
-              <?php if(!empty($relations)) echo html::a('javascript:void(0)', $lang->story->unlink . $linkLang, '', "class='btn btn-info' id='unlinkStory'");?></li>
+              <?php if(!empty($relations)) echo html::a('javascript:void(0)', $lang->story->unlink, '', "class='btn btn-info' id='unlinkStory'");?></li>
             </ul>
           </div>
           <?php endif;?>
@@ -620,7 +620,7 @@ js::set('productID', $story->product);
 js::set('branch', $story->branch);
 js::set('moduleID', $story->module);
 js::set('storyType', $story->type);
-js::set('unlink', $lang->story->unlink . $linkLang);
+js::set('unlink', $lang->story->unlink);
 js::set('cancel', $lang->cancel);
 js::set('rawModule', $this->app->rawModule);
 ?>
