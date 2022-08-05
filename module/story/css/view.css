@@ -7,3 +7,5 @@
 #legendStories .list-unstyled li a {padding: 6px;}
 [lang^='zh'] #legendStories .list-unstyled li a {padding: 6px 12px;}
 .linkStoryTitle {white-space: nowrap; text-overflow: ellipsis; overflow: hidden;}
+.linkStoryTr > th {width: 90px;}
+.linkStoryTr > td {padding-left: 0px !important;}
