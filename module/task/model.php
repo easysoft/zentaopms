@@ -3782,6 +3782,9 @@ class taskModel extends model
      */
     public function buildNestedList($execution, $task, $isChild = false, $showmore = false, $users = array())
     {
+        $this->app->loadLang('execution');
+
+        $today    = helper::today();
         $showmore = $showmore ? 'showmore' : '';
         $trAttrs  = "data-id='t$task->id'";
         if(!$isChild)
@@ -3806,8 +3809,22 @@ class taskModel extends model
         $list .= '<td>' . zget($users, $task->assignedTo, '') . '</td>';
         $list .= "<td class='status-{$task->status}'>" . $this->processStatus('task', $task) . '</td>';
         $list .= '<td></td>';
-        $list .= '<td>' . $task->estStarted . '</td>';
-        $list .= '<td>' . $task->deadline . '</td>';
+        $list .= helper::isZeroDate($task->estStarted) ? '<td></td>' : '<td>' . $task->estStarted . '</td>';
+        if(!helper::isZeroDate($task->deadline))
+        {
+            if($task->status != 'done')
+            {
+                $list .= strtotime($today) > strtotime($task->deadline) ? '<td class="delayed" ' . 'title="' . $this->lang->execution->delayed . '">' . $task->deadline . '</td>' : '<td>' . $task->deadline . '</td>';
+            }
+            else
+            {
+                $list .= '<td>' . $task->deadline . '</td>';
+            }
+        }
+        else
+        {
+            $list .= '<td></td>';
+        }
         $list .= '<td>' . $task->estimate . $this->lang->execution->workHourUnit . '</td>';
         $list .= '<td>' . $task->consumed . $this->lang->execution->workHourUnit . '</td>';
         $list .= '<td>' . $task->left . $this->lang->execution->workHourUnit . '</td>';
