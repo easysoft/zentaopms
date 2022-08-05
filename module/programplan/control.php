@@ -86,6 +86,18 @@ class programplan extends control
             $plans = $this->programplan->getDataForGantt($projectID, $this->productID, $baselineID, $selectCustom, false);
         }
 
+        if($type == 'assignedTo')
+        {
+            $owner        = $this->app->user->account;
+            $module       = 'programplan';
+            $section      = 'browse';
+            $object       = 'stageCustom';
+            $selectCustom = $this->loadModel('setting')->getItem("owner={$owner}&module={$module}&section={$section}&key={$object}");
+            if(strpos($selectCustom, 'date') !== false) $dateDetails = 0;
+
+            $plans = $this->programplan->getDataForGanttGroupByAssignedTo($projectID, $this->productID, $baselineID, $selectCustom, false);
+        }
+
         if($type == 'lists')
         {
             $sort  = common::appendOrder($orderBy);
@@ -103,6 +115,7 @@ class programplan extends control
         $this->view->selectCustom = $selectCustom;
         $this->view->dateDetails  = $dateDetails;
         $this->view->users        = $this->loadModel('user')->getPairs('noletter');
+        $this->view->ganttType    = $type;
 
         $this->display();
     }
@@ -236,5 +249,43 @@ class programplan extends control
         $response['result']  = 'success';
         $response['message'] = '';
         return $this->send($response);
+    }
+
+    /**
+     * Save task drag position.
+     *
+     * @access public
+     * @return void
+     */
+    public function ajaxSaveTaskDrag()
+    {
+        if(!empty($_POST))
+        {
+            if(!isset($_POST['id']) or empty($_POST['id'])) return $this->send(array('result' => 'fail', 'message' => ''));
+            $objectID =  $_POST['id'];
+
+            $this->loadModel('task')->saveTaskDrag($objectID, $_POST['type']);
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            return $this->send(array('result' => 'success'));
+        }
+    }
+
+    /**
+     * Save task drag action.
+     *
+     * @param  int    $productID
+     *
+     * @access public
+     * @access public
+     * @return void
+     */
+    public function ajaxSaveGanttMove($productID = 0)
+    {
+        if(!empty($_POST))
+        {
+            $this->loadModel('task')->saveTaskMove($productID);
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            return $this->send(array('result' => 'success'));
+        }
     }
 }

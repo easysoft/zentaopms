@@ -12,6 +12,7 @@
 $lang->programplan->common        = 'Program Plan';
 $lang->programplan->browse        = 'Program Plan';
 $lang->programplan->gantt         = 'Gantt Chart';
+$lang->programplan->ganttEdit     = 'Gantt Edit';
 $lang->programplan->list          = 'Stage List';
 $lang->programplan->create        = 'Create';
 $lang->programplan->edit          = 'Edit';
@@ -84,3 +85,4 @@ $lang->programplan->error->createdTask     = 'The task has been decomposed. Sub 
 $lang->programplan->error->parentWorkload  = 'The sum of the workload of the child phase cannot be greater than that of the parent phase: %s.';
 $lang->programplan->error->parentDuration  = 'The planned start and planned completion of the child phase cannot exceed the parent phase.';
 $lang->programplan->error->sameName        = 'Stage name cannot be the same!';
+$lang->programplan->error->taskDrag        = 'The %s task cannot be dragged';

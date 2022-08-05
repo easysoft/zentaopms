@@ -1529,6 +1529,7 @@ CREATE TABLE IF NOT EXISTS `zt_task` (
   `lastEditedBy` varchar(30) NOT NULL,
   `lastEditedDate` datetime NOT NULL,
   `activatedDate` datetime NOT NULL,
+  `order` mediumint(8) unsigned NOT NULL,
   `repo` mediumint(8) unsigned NOT NULL,
   `mr` mediumint(8) unsigned NOT NULL,
   `entry` varchar(255) NOT NULL,
@@ -1542,6 +1543,7 @@ CREATE TABLE IF NOT EXISTS `zt_task` (
   KEY `story` (`story`),
   KEY `parent` (`parent`),
   KEY `assignedTo` (`assignedTo`)
+  KEY `order` (`order`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_taskestimate`;
 CREATE TABLE IF NOT EXISTS `zt_taskestimate` (
