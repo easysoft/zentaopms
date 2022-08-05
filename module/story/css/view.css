@@ -4,3 +4,5 @@
 .main-actions .btn-toolbar .btn {padding-right: 6px; padding-left: 6px;}
 .btn-edit-comment {z-index: 100;}
 #legendRelated .table-data tbody>tr>th {width: 90px;}
+#legendStories .list-unstyled li a {padding: 6px;}
+[lang^='zh'] #legendStories .list-unstyled li a {padding: 6px 12px;}
