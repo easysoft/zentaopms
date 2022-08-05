@@ -485,7 +485,7 @@ $(function()
 
     gantt.config.readonly            = canGanttEdit ? false : true;
     gantt.config.details_on_dblclick = false;
-    gantt.config.order_branch        = ganttType == 'assignedTo' ? false : 'marker';
+    gantt.config.order_branch        = ganttType == 'assignedTo' ? false : true;
     gantt.config.drag_progress       = false;
     gantt.config.drag_links          = false;
     gantt.config.drag_move           = ganttType == 'assignedTo' ? false : true;
@@ -649,6 +649,7 @@ $(function()
 
     gantt.attachEvent("onBeforeRowDragEnd", function(id, parent, tindex)
     {
+        console.log(gantt.getChildren(gantt.getTask(id).parent))
         var task = gantt.getTask(id);
         var link = createLink('programplan', 'ajaxResponseGanttMoveEvent');
 
@@ -670,6 +671,7 @@ $(function()
 
         return true;
     });
+
 
     // Make folder can open or close by click
     $('#ganttView').on('click', '.gantt_close,.gantt_open', function()
