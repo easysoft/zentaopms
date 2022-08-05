@@ -340,12 +340,12 @@ function budgetOverrunTips()
         var data = JSON.parse(data);
 
         var tip = "";
-        if(budget !=0 && budget !== null && budget > data.availableBudget) var tip = "<span id='beyondBudgetTip' class='text-remind'>" + budgetOverrun + currencySymbol[data.budgetUnit] + data.availableBudget + "</span>"
+        if(budget !=0 && budget !== null && budget > data.availableBudget) tip = "<span id='beyondBudgetTip' class='text-remind'>" + budgetOverrun + currencySymbol[data.budgetUnit] + data.availableBudget + "</span>"
         if($('#beyondBudgetTip').length > 0) $('#beyondBudgetTip').remove();
         $('#budgetBox').after(tip);
 
         var placeholder = '';
-        if(selectedProgramID && data.availableBudget != 0) var placeholder = parentBudget + currencySymbol[data.budgetUnit] + data.availableBudget;
+        if(selectedProgramID) placeholder = parentBudget + currencySymbol[data.budgetUnit] + data.availableBudget;
         if($('#budget').attr('placeholder')) $('#budget').removeAttr('placeholder')
         $('#budget').attr('placeholder', placeholder);
     });
