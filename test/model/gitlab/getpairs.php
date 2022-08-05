@@ -10,7 +10,7 @@ title=测试gitlabModel->gitPairs();
 cid=1
 pid=1
 
-获取GitLab   >> 3
+获取GitLab   >> 1
 
 */
 

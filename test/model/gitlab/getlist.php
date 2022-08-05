@@ -10,7 +10,7 @@ title=测试gitlabModel->gitList();
 cid=1
 pid=1
 
-获取GiLlab列表   >> 3
+获取GiLlab列表   >> 1
 
 */
 
