@@ -313,6 +313,8 @@ class buildModel extends model
             ->setDefault('branch', 0)
             ->cleanInt('product,branch')
             ->add('execution', (int)$executionID)
+            ->add('createdBy', $this->app->user->account)
+            ->add('createdDate', helper::now())
             ->stripTags($this->config->build->editor->create['id'], $this->config->allowedTags)
             ->remove('resolvedBy,allchecker,files,labels,uid')
             ->get();

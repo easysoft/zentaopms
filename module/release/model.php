@@ -169,14 +169,16 @@ class releaseModel extends model
             else
             {
                 $build = new stdclass();
-                $build->project   = $projectID;
-                $build->product   = (int)$productID;
-                $build->branch    = (int)$branch;
-                $build->name      = $release->name;
-                $build->date      = $release->date;
-                $build->builder   = $this->app->user->account;
-                $build->desc      = $release->desc;
-                $build->execution = 0;
+                $build->project     = $projectID;
+                $build->product     = (int)$productID;
+                $build->branch      = (int)$branch;
+                $build->name        = $release->name;
+                $build->date        = $release->date;
+                $build->builder     = $this->app->user->account;
+                $build->desc        = $release->desc;
+                $build->execution   = 0;
+                $build->createdBy   = $this->app->user->account;
+                $build->createdDate = helper::now();
 
                 $build = $this->loadModel('file')->processImgURL($build, $this->config->release->editor->create['id']);
                 $this->app->loadLang('build');

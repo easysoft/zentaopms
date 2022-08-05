@@ -331,6 +331,8 @@ CREATE TABLE IF NOT EXISTS `zt_build` (
   `bugs` text NOT NULL,
   `builder` char(30) NOT NULL default '',
   `desc` mediumtext NOT NULL,
+  `createdBy` varchar(30) NOT NULL,
+  `createdDate` datetime NOT NULL,
   `deleted` enum('0','1') NOT NULL default '0',
   PRIMARY KEY (`id`),
   KEY `product` (`product`),
