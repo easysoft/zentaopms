@@ -1966,7 +1966,7 @@ EOD;
             }
         }
 
-        $changes    = array();
+        $changes = array();
         foreach($new as $key => $value)
         {
             if(is_object($value) or is_array($value)) continue;
