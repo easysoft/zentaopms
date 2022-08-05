@@ -3357,23 +3357,28 @@ class kanbanModel extends model
         if($groupBy and $groupBy != 'default') $fromLaneID = $toLaneID = $fromCell->lane;
         $fromCells[$fromCell->id] = $fromCell;
 
+        /* Remove all cells with cardID in fromCell. */
         $fromLane   = $this->getLaneById($fromLaneID);
-        $fromCells += $this->dao->select('id,cards,lane')->from(TABLE_KANBANCELL)
-            ->where('type')->eq($fromLane->type)
-            ->andWhere('id')->ne($fromCell->id)
-            ->andWhere('cards')->like("%,$cardID,%")
+        $fromCells += $this->dao->select('t1.id as id,t1.cards,t1.lane')->from(TABLE_KANBANCELL)->alias('t1')
+            ->leftJoin(TABLE_KANBANLANE)->alias('t2')->on('t1.lane=t2.id')
+            ->where('t1.type')->eq($fromLane->type)
+            ->andWhere('t1.id')->ne($fromCell->id)
+            ->andWhere('t2.region')->eq($fromLane->region)
+            ->andWhere('t1.cards')->like("%,$cardID,%")
             ->fetchAll('id');
 
         foreach($fromCells as $fromCell)
         {
             $fromCellCards = explode(',', $fromCell->cards);
             $fromCellCards = array_unique($fromCellCards);
-            $fromCellCards = implode(',', $fromCellCards) . ',';
-            $fromCardList  = str_replace(",$cardID,", ',', $fromCellCards);
+            $fromCellCards = array_filter($fromCellCards);
+            $fromCellCards = implode(',', $fromCellCards);
+            $fromCardList  = str_replace(",$cardID,", ',', ",$fromCellCards,");
             if($fromCardList == ',') $fromCardList = '';
             $this->dao->update(TABLE_KANBANCELL)->set('cards')->eq($fromCardList)->where('id')->eq($fromCell->id)->exec();
         }
 
+        /* Add cardID to toCell. */
         $toCell      = $this->dao->select('*')->from(TABLE_KANBANCELL)->where('lane')->eq($toLaneID)->andWhere('`column`')->eq($toColID)->fetch();
         $toCellCards = $this->dao->select('cards')->from(TABLE_KANBANCELL)->where('lane')->eq($toLaneID)->andWhere('`column`')->eq($toColID)->fetch('cards');
         $kanbanID    = $kanbanID == 0 ? $toCell->kanban : $kanbanID;
