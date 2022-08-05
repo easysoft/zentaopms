@@ -9,7 +9,7 @@ $config->port->fieldList['control']  = 'input';
 $config->port->fieldList['values']   = '';
 $config->port->fieldList['class']    = '';
 $config->port->fieldList['sort']     = '';
-$config->port->fieldList['dataSource'] = array('module' => '', 'method' => '', 'params' => '', 'pairs' => '', 'sql' => '', 'lang' => '');
+$config->port->fieldList['dataSource'] = array('module' => '', 'method' => '', 'params' => '', 'pairs' => '', 'lang' => '');
 
 $config->port->initFunction   = 'title,control,required,';
 $config->port->dateFeilds     = 'estStarted,realStarted,deadline,openedDate,assignedDate,finishedDate,canceledDate,closedDate,lastEditedDate,';

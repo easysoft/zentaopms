@@ -17,7 +17,7 @@
 ?>
 <style>
 form{overflow-x: scroll}
-#showData th {width:100px}
+.c-pri{width:100px}
 .c-estimate, .c-severity, .c-openedBuild, .c-title{width:150px !important;}
 .c-story{width:150px;}
 .c-team {width:100px; padding:0px 0px 8px 0px !important;}

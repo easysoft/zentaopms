@@ -40,7 +40,9 @@
       </thead>
       <tbody>
       </tbody>
-      <?php include $app->getModuleRoot() . 'port/view/tfoot.html.php';?>
+      <tfoot class='hidden'>
+        <?php include $app->getModuleRoot() . 'port/view/tfoot.html.php';?>
+      </tfoot>
     </table>
     <?php if(!$insert and $dataInsert === '') include $app->getModuleRoot() . 'common/view/noticeimport.html.php';?>
   </form>

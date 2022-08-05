@@ -365,10 +365,6 @@ class portModel extends model
             $pairs  = !empty($pairs)  ? $pairs : '';
             $values = $this->getSourceByModuleMethod($model, $module, $method, $params, $pairs);
         }
-        elseif(!empty($sql))
-        {
-            $values = $this->getSourceBySql();
-        }
         elseif(!empty($lang))
         {
             $values = $this->getSourceByLang($lang);
@@ -580,18 +576,6 @@ class portModel extends model
         }
 
         return $values;
-    }
-
-    /**
-     * Get field values by sql .
-     *
-     * @access public
-     * @return void
-     */
-    public function getSourceBySql($sql = '')
-    {
-
-        return '';
     }
 
     /**
@@ -1392,6 +1376,15 @@ class portModel extends model
         return $html;
     }
 
+    /**
+     * Process stepExpect and stepDesc for testcase .
+     *
+     * @param  int    $field
+     * @param  int    $datas
+     * @param  int    $key
+     * @access public
+     * @return void
+     */
     public function process4Testcase($field, $datas, $key = 0)
     {
         $stepData = $this->testcase->processDatas($datas);
