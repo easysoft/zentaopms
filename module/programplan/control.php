@@ -266,7 +266,7 @@ class programplan extends control
 
             $this->loadModel('task')->updateEsDateByGantt($objectID, $_POST['type']);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-            $this->loadModel('action')->create('task', $objectID, 'ganttDrag', json_encode($_POST), $this->app->user->account);
+//            $this->loadModel('action')->create('task', $objectID, 'ganttDrag', '', $this->app->user->account);
             return $this->send(array('result' => 'success'));
         }
     }
