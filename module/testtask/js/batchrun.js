@@ -1,4 +1,5 @@
-$(function(){
+$(function()
+{
     if(from == 'testcase')
     {
         $("#navbar li[data-id='testtask']").toggleClass('active');
