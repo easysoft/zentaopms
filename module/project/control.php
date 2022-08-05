@@ -225,11 +225,10 @@ class project extends control
      * @param  str    $objectType
      * @param  int    $objectID
      * @param  int    $selectedProgramID
-     * @param  int    $budget
      * @access public
      * @return void
      */
-    public function ajaxGetProgramInformation($objectType, $objectID, $selectedProgramID, $budget)
+    public function ajaxGetParentInfor($objectType, $objectID, $selectedProgramID)
     {
         if(!empty($objectID))
         {
@@ -244,7 +243,7 @@ class project extends control
             $availableBudget = $this->program->getBudgetLeft($selectedProgram);
         }
 
-        $data = array('selectedProgramBegin' => $selectedProgram->begin, 'selectedProgramEnd' => $selectedProgram->end, 'availableBudget' => number_format($availableBudget, 2), 'budgetUnit' => $selectedProgram->budgetUnit);
+        $data = array('selectedProgramBegin' => $selectedProgram->begin, 'selectedProgramEnd' => $selectedProgram->end, 'availableBudget' => $availableBudget, 'budgetUnit' => $selectedProgram->budgetUnit);
         echo json_encode($data);
     }
 

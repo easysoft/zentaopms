@@ -335,17 +335,17 @@ function budgetOverrunTips()
     }
 
     if(typeof(projectID) == 'undefined') projectID = 0;
-    $.get(createLink('project', 'ajaxGetProgramInformation', 'objectType=project&objectID=' + projectID + "&selectedProgramID=" + selectedProgramID + "&budget=" + budget), function(data)
+    $.get(createLink('project', 'ajaxGetParentInfor', 'objectType=project&objectID=' + projectID + "&selectedProgramID=" + selectedProgramID), function(data)
     {
         var data = JSON.parse(data);
 
         var tip = "";
-        if(budget !=0 && budget !== null && budget > data.availableBudget) tip = "<span id='beyondBudgetTip' class='text-remind'>" + budgetOverrun + currencySymbol[data.budgetUnit] + data.availableBudget + "</span>"
+        if(budget != 0 && budget !== null && budget > data.availableBudget) tip = "<span id='beyondBudgetTip' class='text-remind'>" + budgetOverrun + currencySymbol[data.budgetUnit] + data.availableBudget.toFixed(2) + "</span>"
         if($('#beyondBudgetTip').length > 0) $('#beyondBudgetTip').remove();
         $('#budgetBox').after(tip);
 
         var placeholder = '';
-        if(selectedProgramID) placeholder = parentBudget + currencySymbol[data.budgetUnit] + data.availableBudget;
+        if(selectedProgramID) placeholder = parentBudget + currencySymbol[data.budgetUnit] + data.availableBudget.toFixed(2);
         if($('#budget').attr('placeholder')) $('#budget').removeAttr('placeholder')
         $('#budget').attr('placeholder', placeholder);
     });

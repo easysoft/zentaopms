@@ -295,11 +295,10 @@ $(function()
 function setBudgetTipsAndAclList(parentID)
 {
     var selectedProgramID = $('#parent').val();
-    var budget            = $('#budget').val();
 
     if(parentID != 0)
     {
-        $.get(createLink('project', 'ajaxGetProgramInformation', "objectType=program&objectID=" + parentID + "&selectedProgramID=" + selectedProgramID + "&budget=" + budget), function(data)
+        $.get(createLink('project', 'ajaxGetParentInfor', "objectType=program&objectID=" + parentID + "&selectedProgramID=" + selectedProgramID), function(data)
         {
             var data      = JSON.parse(data);
             parentProgram = programList[parentID];
@@ -338,7 +337,7 @@ function budgetOverrunTips()
     }
 
     if(typeof(programID) == 'undefined') programID = 0;
-    $.get(createLink('project', 'ajaxGetProgramInformation', 'objectType=program&objectID=' + programID + "&selectedProgramID=" + selectedProgramID + "&budget=" + budget), function(data)
+    $.get(createLink('project', 'ajaxGetParentInfor', 'objectType=program&objectID=' + programID + "&selectedProgramID=" + selectedProgramID), function(data)
     {
         var data = JSON.parse(data);
 
