@@ -1009,35 +1009,6 @@ class portModel extends model
     }
 
     /**
-     * Get view datas.
-     *
-     * @param  string $model
-     * @param  string $datas
-     * @param  string $title
-     * @param  int    $pagerID
-     * @access public
-     * @return void
-     */
-    public function getViewDatas($model = '', $datas = '', $pagerID = 1, $insert)
-    {
-        $suhosinInfo = $this->checkSuhosinInfo($datas->datas);
-
-        $fields      = $this->config->$model->templateFields;
-
-        $datas->requiredFields = $this->config->$model->create->requiredFields;
-        $datas->allPager       = isset($datas->allPager) ? $datas->allPager : 1;
-        $datas->pagerID        = $pagerID;
-        $datas->isEndPage      = $pagerID >= $datas->allPager;
-        $datas->maxImport      = $this->maxImport;
-        $datas->dataInsert     = $insert;
-        $datas->fields         = $this->initFieldList($model, $fields, false);
-        $datas->suhosinInfo    = $suhosinInfo;
-        $datas->model          = $model;
-
-        return $datas;
-    }
-
-    /**
      * Update children datas.
      *
      * @param  int    $datas
@@ -1329,7 +1300,16 @@ class portModel extends model
             if($row == $lastRow) $trClass = 'showmore';
             $html .= "<tr class='text-top $trClass' data-id=$row>";
             $html .= '<td>';
-            $html .= $object->id;
+
+            if(!empty($object->id))
+            {
+                $html .= $object->id . html::hidden("id[$row]", $object->id);
+                $this->session->set('insert', false);
+            }
+            else
+            {
+                $html .= $addID++ . " <sub style='vertical-align:sub;color:gray'>{$lang->port->new}</sub>";
+            }
             $html .= html::hidden("id[$row]", $object->id);
             $html .= "</td>";
 

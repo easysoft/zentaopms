@@ -13,6 +13,7 @@
     $datas          = $datas->datas;
     $appendFields   = $this->session->appendFields;
     $notEmptyRule   = $this->session->notEmptyRule;
+    $insert         = $this->session->insert;
 ?>
 <style>
 form{overflow-x: scroll}
@@ -94,11 +95,6 @@ $(function()
         </tr>
       </thead>
       <tbody>
-        <?php
-        $insert      = true;
-        $addID       = 1;
-        $hasMultiple = false;
-        ?>
       </tbody>
 
       <tfoot class='hidden'>
@@ -136,6 +132,7 @@ $.get(createLink('port', 'ajaxGetTbody','model=<?php echo $model;?>&lastID=0&pag
     $('#showData > tbody').append(data);
     if($('#showData tbody').find('tr').hasClass('showmore') === false) $('#showData tfoot').removeClass('hidden');
     $('#showData tbody').find('.picker-select').picker({chosenMode: true});
+    $("input[name^='product']").val(<?php echo $productID?>);
 })
 
 window.addEventListener('scroll', this.handleScroll);
@@ -165,6 +162,7 @@ function loadData($showmore)
         $showmore.after(data);
         if($('#showData tbody').find('tr').hasClass('showmore') === false) $('#showData tfoot').removeClass('hidden');
         $('#showData tbody').find('.picker-select.nopicker').picker({chosenMode: true}).removeClass('nopicker');
+        $("input[name^='product']").val(<?php echo $productID?>);
     })
 }
 
@@ -224,16 +222,25 @@ $('#showData').on('mouseenter', '.picker', function(e){
         $('#' + id).parent().html(data);
         $('#' + id).picker({chosenMode: true});
         $('#' + id).attr('isInit', true);
+        $('#' + id).attr('data-field', field);
     });
     $.ajaxSettings.async = true;
 })
 
+$('#showData').on('change', '.picker-select', function(e)
+{
+    var id = $(this).attr('id');
+    var field = $(this).attr('data-field');
+
+    if(field === 'module')
+    {
+        console.log(123);
+    }
+});
+
 $(function()
 {
     $.fixedTableHead('#showData');
-    <?php if($hasMultiple):?>
-    $('th.estimate').addClass('text-center w-250px');
-    <?php endif;?>
     $("#showData th").each(function()
     {
         if(requiredFields.indexOf(this.id) !== -1) $("#" + this.id).addClass('required');
