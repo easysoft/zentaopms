@@ -42,18 +42,22 @@ class git extends control
             if(!empty($repo->path) and strpos($path, $repo->path) === 0) $oneRepo = $repo;
         }
 
-        if(common::hasPriv('repo', 'diff'))
+        if($oneRepo and common::hasPriv('repo', 'diff'))
         {
             $entry       = $this->repo->encodePath(str_replace($oneRepo->path, '', $path));
             $oldRevision = "$revision^";
             return $this->locate($this->repo->createLink('diff', "repoID=$oneRepo->id&objectID=0&entry=$entry&oldRevision=$oldRevision&revision=$revision", 'html', 'true'));
         }
 
-        $scm = $this->app->loadClass('scm');
-        $scm->setEngine($oneRepo);
+        if($oneRepo)
+        {
+            $scm = $this->app->loadClass('scm');
+            $scm->setEngine($oneRepo);
+        }
+
         $this->view->path     = $path;
         $this->view->revision = $revision;
-        $this->view->diff     = $scm->diff($path, $revision);
+        $this->view->diff     = $oneRepo ? $scm->diff($path, $revision) : '';
 
         $this->display();
     }
@@ -78,17 +82,20 @@ class git extends control
             if(!empty($repo->path) and strpos($path, $repo->path) === 0) $oneRepo = $repo;
         }
 
-        if(common::hasPriv('repo', 'view'))
+        if($oneRepo and common::hasPriv('repo', 'view'))
         {
             $entry = $this->repo->encodePath(str_replace($oneRepo->path, '', $path));
             return $this->locate($this->repo->createLink('view', "repoID=$oneRepo->id&objectID=0&entry=$entry&revision=$revision", 'html', true));
         }
 
-        $scm = $this->app->loadClass('scm');
-        $scm->setEngine($oneRepo);
+        if($oneRepo)
+        {
+            $scm = $this->app->loadClass('scm');
+            $scm->setEngine($oneRepo);
+        }
         $this->view->path     = $path;
         $this->view->revision = $revision;
-        $this->view->code     = $scm->cat($path, $revision);
+        $this->view->code     = $oneRepo ? $scm->cat($path, $revision) : '';
 
        $this->display();
     }
