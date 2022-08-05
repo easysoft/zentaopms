@@ -1377,6 +1377,7 @@ class testtask extends control
         $this->view->title      = $this->lang->testtask->batchRun;
         $this->view->position[] = $this->lang->testtask->common;
         $this->view->position[] = $this->lang->testtask->batchRun;
+        $this->view->from       = $from;
         $this->display();
     }
 
