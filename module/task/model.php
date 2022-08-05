@@ -3947,7 +3947,7 @@ class taskModel extends model
                 $end   = helper::isZeroDate($parentData->deadline)    ? '' : $parentData->deadline;
             }
 
-            if(helper::diffDate($start, $post->start_date) = 0)
+            if(helper::diffDate($start, $post->start_date) > 0)
             {
                 $arg = !empty($parent) ? $this->lang->task->parent : $this->lang->project->stage;
                 return dao::$errors = sprintf($this->lang->task->overTime, $arg, $arg);
