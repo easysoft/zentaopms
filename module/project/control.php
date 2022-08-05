@@ -228,7 +228,7 @@ class project extends control
      * @access public
      * @return void
      */
-    public function ajaxGetParentInfor($objectType, $objectID, $selectedProgramID)
+    public function ajaxGetParentInfo($objectType, $objectID, $selectedProgramID)
     {
         if(!empty($objectID))
         {
