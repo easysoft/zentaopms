@@ -320,6 +320,40 @@ function setBudgetTipsAndAclList(parentID)
     budgetOverrunTips();
 }
 
+function outOfDataTips()
+{
+    $('#dataBox').on('change', 'input', function(){
+        var end   = new Date($('#end').val());
+        var begin = new Date($('#begin').val());
+        if(end.length > 0 && begin.length > 0)
+        {
+            var selectedProgramID = $('#parent').val();
+            var budget            = $('#budget').val();
+
+            if(selectedProgramID == 0)
+            {
+                if($('#dateTip').length > 0) $('#dateTip').remove();
+                return false;
+            }
+
+            if(typeof(programID) == 'undefined') programID = 0;
+            $.get(createLink('project', 'ajaxGetProgramInformation', 'objectType=program&objectID=' + programID + "&selectedProgramID=" + selectedProgramID + "&budget=" + budget), function(data)
+            {
+                var data        = JOSN.parse(data);
+                var parentEnd   = new Date(data.selectedProgramEnd);
+                var parentBegin = new Date(data.selectedProgramBegin);
+
+                var dateTip = "";
+                if(begin < parentBegin && end > parentEnd) dateTip = "<span id='dateTip' class='text-remind'>" + dataExceedParent + parentBegin + "~" + parentEnd + "</span>";
+                if(begin < parentBegin && end <= parentEnd) dateTip = "<span id='dateTip' class='text-remind'>" + beginLetterParent + parentBegin + "</span>";
+                if(begin >= parentBegin && end > parentEnd) dateTip = "<span id='dateTip' class='text-remind'>" + endGreaterParent + parentEnd + "</span>";
+                if($('#dateTip').length > 0) $('#dateTip').remove();
+                $('#dataBox').after(dateTip);
+            });
+        }
+    });
+}
+
 /**
  * Append prompt when the budget exceeds the parent project set.
  *

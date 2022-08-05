@@ -42,6 +42,9 @@
 <?php js::set('budgetOverrun', $lang->project->budgetOverrun);?>
 <?php js::set('currencySymbol', $lang->project->currencySymbol)?>
 <?php js::set('parentBudget', $lang->program->parentBudget);?>
+<?php js::set('beginLetterParent', $lang->program->beginLetterParent);?>
+<?php js::set('endGreaterParent', $lang->program->endGreaterParent);?>
+<?php js::set('dataExceedParent', $lang->program->dataExceedParent);?>
 <?php $aclList = $parentProgram ? $lang->program->subAclList : $lang->program->aclList;?>
 <?php $requiredFields = $config->program->create->requiredFields;?>
 <div id='mainContent' class='main-content'>
@@ -93,7 +96,7 @@
         <tr>
           <th id="dateRange"><?php echo $lang->project->dateRange;?></th>
           <td>
-            <div class='input-group'>
+            <div id='dataBox' class='input-group' onchange="outOfDataTips()">
               <?php echo html::input('begin', date('Y-m-d'), "class='form-control form-date' onchange='computeWorkDays();' placeholder='" . $lang->project->begin . "' required");?>
               <span class='input-group-addon'><?php echo $lang->project->to;?></span>
               <?php echo html::input('end', '', "class='form-control form-date' placeholder='" . $lang->project->end . "' required");?>

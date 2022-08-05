@@ -28,6 +28,9 @@
 <?php js::set('budgetOverrun', $lang->project->budgetOverrun);?>
 <?php js::set('currencySymbol', $lang->project->currencySymbol)?>
 <?php js::set('parentBudget', $lang->program->parentBudget);?>
+<?php js::set('beginLetterParent', $lang->program->beginLetterParent);?>
+<?php js::set('endGreaterParent', $lang->program->endGreaterParent);?>
+<?php js::set('dataExceedParent', $lang->program->dataExceedParent);?>
 <?php $aclList = $program->parent ? $lang->program->subAclList : $lang->program->aclList;?>
 <?php $requiredFields = $config->program->edit->requiredFields;?>
 <div id='mainContent' class='main-content'>
