@@ -964,7 +964,7 @@ class user extends control
                 }
 
                 $response['message'] = $this->lang->user->loginFailed;
-                if(dao::isError() and !empty(dao::getError()[0])) $response['message'] = dao::getError()[0];
+                if(dao::isError()) $response['message'] = dao::getError();
                 return $this->send($response);
             }
         }
