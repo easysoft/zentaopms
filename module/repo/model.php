@@ -58,7 +58,7 @@ class repoModel extends model
             }
 
             if(!in_array(strtolower($repo->SCM), $this->config->repo->gitServiceList)) unset($this->lang->devops->menu->mr);
-            $this->lang->switcherMenu = $this->getSwitcher($repoID);
+            if(count($repos) > 1) $this->lang->switcherMenu = $this->getSwitcher($repoID);
         }
 
         common::setMenuVars('devops', $repoID);

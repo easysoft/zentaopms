@@ -228,11 +228,10 @@ class gitlab extends control
     {
         if($confirm != 'yes') return print(js::confirm($this->lang->gitlab->confirmDelete, inlink('delete', "id=$id&confirm=yes")));
 
-        $oldGitLab = $this->gitlab->getByID($id);
-        $this->loadModel('action');
-        $this->gitlab->delete(TABLE_PIPELINE, $id);
+        $oldGitea = $this->loadModel('pipeline')->getByID($id);
+        $actionID = $this->pipeline->delete($id, 'gitlab');
+        if(!$actionID) return print(js::error($this->lang->pipeline->delError));
 
-        $actionID = $this->dao->lastInsertID();
         $gitLab   = $this->gitlab->getByID($id);
         $changes  = common::createChanges($oldGitLab, $gitLab);
         $this->action->logHistory($actionID, $changes);

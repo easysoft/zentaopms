@@ -31,7 +31,9 @@ class ciModel extends model
             $repo = $this->loadModel('repo')->getRepoByID($this->session->repoID);
             if(!empty($repo) and !in_array(strtolower($repo->SCM), $this->config->repo->gitServiceList)) unset($this->lang->devops->menu->mr);
 
-            $this->lang->switcherMenu = $this->loadModel('repo')->getSwitcher($this->session->repoID);
+            $tab   = $this->app->tab;
+            $repos = $this->repo->getRepoPairs($tab);
+            if(count($repos) > 1) $this->lang->switcherMenu = $this->loadModel('repo')->getSwitcher($this->session->repoID);
         }
     }
 

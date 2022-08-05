@@ -131,10 +131,28 @@ class pipelineModel extends model
      * @param  string $id     the id to be deleted
      * @param  string $object the action object
      * @access public
-     * @return int
+     * @return int|bool
      */
     public function delete($id, $object = 'gitlab')
     {
+        if(in_array($object, array('gitlab', 'gitea', 'gogs')))
+        {
+            $repo = $this->dao->select('*')->from(TABLE_REPO)
+                ->where('deleted')->eq('0')
+                ->andWhere('SCM')->eq(ucfirst($object))
+                ->andWhere('serviceHost')->eq($id)
+                ->fetch();
+            if($repo) return false;
+        }
+        elseif($object == 'sonarqube')
+        {
+            $job = $this->dao->select('id,name,repo,deleted')->from(TABLE_JOB)
+                ->where('frame')->eq('sonarqube')
+                ->andWhere('server')->eq($id)
+                ->andWhere('deleted')->eq('0')
+                ->fetch();
+            if($job) return false;
+        }
         $this->dao->update(TABLE_PIPELINE)->set('deleted')->eq(1)->where('id')->eq($id)->exec();
         $this->loadModel('action')->create($object, $id, 'deleted', '', ACTIONMODEL::CAN_UNDELETED);
 
