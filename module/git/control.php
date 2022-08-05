@@ -34,24 +34,26 @@ class git extends control
     {
         if(isset($_GET['repoUrl'])) $path = $this->get->repoUrl;
 
-        $path = helper::safe64Decode($path);
-        if(common::hasPriv('repo', 'diff'))
+        $path    = helper::safe64Decode($path);
+        $repos   = $this->loadModel('repo')->getListBySCM('Git,Gitlab,Gogs,Gitea', 'haspriv');
+        $oneRepo = null;
+        foreach($repos as $repo)
         {
-            $repos = $this->loadModel('repo')->getListBySCM('Git,Gitlab', 'haspriv');
-            foreach($repos as $repo)
-            {
-                if(strpos($path, $repo->path) === 0)
-                {
-                    $entry = $this->repo->encodePath(str_replace($repo->path, '', $path));
-                    $oldRevision = "$revision^";
-                    $this->locate($this->repo->createLink('diff', "repoID=$repo->id&objectID=0&entry=$entry&oldRevision=$oldRevision&revision=$revision", 'html', 'true'));
-                }
-            }
+            if(!empty($repo->path) and strpos($path, $repo->path) === 0) $oneRepo = $repo;
         }
 
+        if(common::hasPriv('repo', 'diff'))
+        {
+            $entry       = $this->repo->encodePath(str_replace($oneRepo->path, '', $path));
+            $oldRevision = "$revision^";
+            return $this->locate($this->repo->createLink('diff', "repoID=$oneRepo->id&objectID=0&entry=$entry&oldRevision=$oldRevision&revision=$revision", 'html', 'true'));
+        }
+
+        $scm = $this->app->loadClass('scm');
+        $scm->setEngine($oneRepo);
         $this->view->path     = $path;
         $this->view->revision = $revision;
-        $this->view->diff     = $this->git->diff($path, $revision);
+        $this->view->diff     = $scm->diff($path, $revision);
 
         $this->display();
     }
@@ -68,23 +70,25 @@ class git extends control
     {
         if(isset($_GET['repoUrl'])) $path = $this->get->repoUrl;
 
-        $path = helper::safe64Decode($path);
-        if(common::hasPriv('repo', 'view'))
+        $path    = helper::safe64Decode($path);
+        $repos   = $this->loadModel('repo')->getListBySCM('Git,Gitlab,Gogs,Gitea', 'haspriv');
+        $oneRepo = null;
+        foreach($repos as $repo)
         {
-            $repos = $this->loadModel('repo')->getListBySCM('Git,Gitlab', 'haspriv');
-            foreach($repos as $repo)
-            {
-                if(strpos($path, $repo->path) === 0)
-                {
-                    $entry = $this->repo->encodePath(str_replace($repo->path, '', $path));
-                    $this->locate($this->repo->createLink('view', "repoID=$repo->id&objectID=0&entry=$entry&revision=$revision", 'html', true));
-                }
-            }
+            if(!empty($repo->path) and strpos($path, $repo->path) === 0) $oneRepo = $repo;
         }
 
+        if(common::hasPriv('repo', 'view'))
+        {
+            $entry = $this->repo->encodePath(str_replace($oneRepo->path, '', $path));
+            return $this->locate($this->repo->createLink('view', "repoID=$oneRepo->id&objectID=0&entry=$entry&revision=$revision", 'html', true));
+        }
+
+        $scm = $this->app->loadClass('scm');
+        $scm->setEngine($oneRepo);
         $this->view->path     = $path;
         $this->view->revision = $revision;
-        $this->view->code     = $this->git->cat($path, $revision);
+        $this->view->code     = $scm->cat($path, $revision);
 
        $this->display();
     }

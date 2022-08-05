@@ -722,7 +722,7 @@ class gitlab extends control
         $gitlab    = $this->gitlab->getByID($gitlabID);
         $repos     = $this->loadModel('repo')->getRepoListByClient($gitlabID);
         $repoPairs = array();
-        foreach($repos as $repo) $repoPairs[$repo->path] = $repo->id;
+        foreach($repos as $repo) $repoPairs[$repo->serviceProject] = $repo->id;
 
         $this->view->gitlab            = $gitlab;
         $this->view->keyword           = urldecode(urldecode($keyword));
