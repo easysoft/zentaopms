@@ -322,7 +322,7 @@ class myModel extends model
      * @access public
      * @return array
      */
-    public function getAssignedByMe($account, $limit = 0, $pager = null, $orderBy = "id_desc", $projectID = 0, $objectType = '')
+    public function getAssignedByMe($account, $limit = 0, $pager = null, $orderBy = "id_desc", $objectType = '')
     {
         $module = $objectType == 'requirement' ? 'story' : $objectType;
         $this->loadModel($module);
@@ -550,7 +550,7 @@ class myModel extends model
         $taskIDList = array();
         if($moduleName == 'contributeTask')
         {
-            $tasksAssignedByMe = $this->getAssignedByMe($account, 0, $pager, $orderBy, 0, 'task');
+            $tasksAssignedByMe = $this->getAssignedByMe($account, 0, '', $orderBy, 'task');
             foreach($tasksAssignedByMe as $taskID => $task)
             {
                 $taskIDList[$taskID] = $taskID;
@@ -725,7 +725,7 @@ class myModel extends model
 
         if($type == 'contribute')
         {
-            $assignedByMe = $this->getAssignedByMe($this->app->user->account, '', $pager, $orderBy, '', 'risk');
+            $assignedByMe = $this->getAssignedByMe($this->app->user->account, '', $pager, $orderBy, 'risk');
 
             $risks = $this->dao->select('*')->from(TABLE_RISK)
                 ->where($riskQuery)
@@ -822,7 +822,7 @@ class myModel extends model
         $storyIDList = array();
         if($type == 'contribute')
         {
-            $storiesAssignedByMe = $this->getAssignedByMe($this->app->user->account, '', $pager, $orderBy, '', 'story');
+            $storiesAssignedByMe = $this->getAssignedByMe($this->app->user->account, '', '', $orderBy, 'story');
             foreach($storiesAssignedByMe as $storyID => $story)
             {
                 $storyIDList[$storyID] = $storyID;
@@ -941,7 +941,7 @@ class myModel extends model
         $requirementIDList = array();
         if($type == 'contribute')
         {
-            $requirementsAssignedByMe = $this->getAssignedByMe($this->app->user->account, '', $pager, $orderBy, '', 'requirement');
+            $requirementsAssignedByMe = $this->getAssignedByMe($this->app->user->account, '', $pager, $orderBy, 'requirement');
             foreach($requirementsAssignedByMe as $requirementID => $requirement)
             {
                 $requirementIDList[$requirementID] = $requirementID;
