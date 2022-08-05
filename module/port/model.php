@@ -1287,8 +1287,10 @@ class portModel extends model
     {
         $html = '';
         $key  = key($list);
-        $showImportCount = $this->config->port->showImportCount;
-        $lastRow = $lastID + $key + $showImportCount;
+
+        $appendFields    = $this->session->appendFields;
+        $showImportCount = $this->config->port->lazyLoading ? $this->config->port->showImportCount : $this->maxImport;
+        $lastRow         = $lastID + $key + $showImportCount;
 
         foreach($list as $row => $object)
         {
@@ -1346,6 +1348,17 @@ class portModel extends model
                 }
 
                 else $html .= '<td>' . html::input("$name", $selected, "class='form-control autocomplete='off'") . '</td>';
+            }
+
+            if(!empty($appendFields))
+            {
+                $this->loadModel('flow');
+                foreach($appendFields as $field)
+                {
+                    if(!$field->show) continue;
+                    $value = $field->defaultValue ? $field->defaultValue : zget($object, $field->field, '');
+                    $html .='<td>' . $this->flow->buildControl($field, $value, "$field->field[$key]", true) . '</td>';
+                }
             }
             $html .= '</tr>' . "\n";
         }
