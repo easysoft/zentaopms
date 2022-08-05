@@ -5,7 +5,6 @@ $.get(createLink('port', 'ajaxGetTbody','model=<?php echo $model;?>&lastID=0&pag
     $('#showData > tbody').append(data);
     if($('#showData tbody').find('tr').hasClass('showmore') === false) $('#showData tfoot').removeClass('hidden');
     $('#showData tbody').find('.picker-select').picker({chosenMode: true});
-    $("input[name^='product']").val(<?php echo $productID?>);
 })
 
 window.addEventListener('scroll', this.handleScroll);
@@ -35,7 +34,6 @@ function loadData($showmore)
         $showmore.after(data);
         if($('#showData tbody').find('tr').hasClass('showmore') === false) $('#showData tfoot').removeClass('hidden');
         $('#showData tbody').find('.picker-select').picker({chosenMode: true}).removeClass('nopicker');
-        $("input[name^='product']").val(<?php echo $productID?>);
     })
 }
 function throttle(fn, threshhold)

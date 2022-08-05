@@ -147,7 +147,7 @@ class port extends control
         $formatDatas  = $this->port->format($model);
         $datas        = $this->port->getPageDatas($formatDatas, $pagerID);
 
-        $html = $this->port->buildNextList($datas->datas, $lastID, $fields, $pagerID);
+        $html = $this->port->buildNextList($datas->datas, $lastID, $fields, $pagerID, $model);
         die($html);
     }
 

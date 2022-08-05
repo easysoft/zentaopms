@@ -1,4 +1,3 @@
-      <tfoot class='hidden'>
         <tr>
           <td colspan='10' class='text-center form-actions'>
             <?php
@@ -20,5 +19,3 @@
             ?>
           </td>
         </tr>
-      </tfoot>
-

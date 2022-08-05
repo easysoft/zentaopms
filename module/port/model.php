@@ -957,6 +957,7 @@ class portModel extends model
             $datas = array_slice($datas, ($pagerID - 1) * $maxImport, $maxImport, true);
         }
 
+        if(!$maxImport)  $this->maxImport   = $result->allCount;
         $result->maxImport = $maxImport;
         $result->isEndPage = $pagerID >= $result->allPager;
         $result->datas     = $datas;
@@ -1280,13 +1281,16 @@ class portModel extends model
      * @param  array  $list
      * @param  int    $lastID
      * @param  string $fields
+     * @param  int    $pagerID
+     * @param  string $model
      * @access public
      * @return void
      */
-    public function buildNextList($list = array(), $lastID = 0, $fields = '', $pagerID = 1)
+    public function buildNextList($list = array(), $lastID = 0, $fields = '', $pagerID = 1, $model = '')
     {
-        $html = '';
-        $key  = key($list);
+        $html  = '';
+        $key   = key($list);
+        $addID = 1;
 
         $appendFields    = $this->session->appendFields;
         $showImportCount = $this->config->port->lazyLoading ? $this->config->port->showImportCount : $this->maxImport;
@@ -1310,9 +1314,10 @@ class portModel extends model
             }
             else
             {
-                $html .= $addID++ . " <sub style='vertical-align:sub;color:gray'>{$lang->port->new}</sub>";
+                $sub = " <sub style='vertical-align:sub;color:gray'>{$this->lang->port->new}</sub>";
+                if($model == 'task') $sub = (strpos($object->name, '>') === 0) ? " <sub style='vertical-align:sub;color:red'>{$this->lang->task->children}</sub>" : $sub;
+                $html .= $addID++ . $sub;
             }
-            $html .= html::hidden("id[$row]", $object->id);
             $html .= "</td>";
 
             foreach($fields as $field => $value)
@@ -1345,6 +1350,27 @@ class portModel extends model
                 {
                     $stepDesc = $this->process4Testcase($field, $tmpList, $row);
                     if($stepDesc) $html .= '<td>' . $stepDesc . '</td>';
+                }
+                elseif($field == 'estimate')
+                {
+                    $html .= '<td>';
+                    if(is_array($object->estimate))
+                    {
+                        $html .= "<table class='table-borderless'>";
+                        foreach($object->estimate as $account => $estimate)
+                        {
+                            $html .= '<tr>';
+                            $html .= '<td class="c-team">' . html::select("team[$row][]", $members, $account, "class='form-control chosen'") . '</td>';
+                            $html .= '<td class="c-estimate-1">' . html::input("estimate[$row][]", $estimate, "class='form-control' autocomplete='off'")  . '</td>';
+                            $html .= '</tr>';
+                        }
+                        $html .= "</table>";
+                    }
+                    else
+                    {
+                        $html .= html::input("estimate[$row]", !empty($object->estimate) ? $object->estimate : '', "class='form-control'");
+                    }
+                    $html .= '</td>';
                 }
 
                 else $html .= '<td>' . html::input("$name", $selected, "class='form-control autocomplete='off'") . '</td>';
