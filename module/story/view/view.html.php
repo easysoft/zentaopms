@@ -620,7 +620,7 @@ js::set('productID', $story->product);
 js::set('branch', $story->branch);
 js::set('moduleID', $story->module);
 js::set('storyType', $story->type);
-js::set('unlink', $lang->story->unlink);
+js::set('unlink', $lang->story->unlink . $linkLang);
 js::set('cancel', $lang->cancel);
 js::set('rawModule', $this->app->rawModule);
 ?>
