@@ -294,15 +294,19 @@ $(function()
  */
 function setBudgetTipsAndAclList(parentID)
 {
+    var selectedProgramID = $('#parent').val();
+    var budget            = $('#budget').val();
+
     if(parentID != 0)
     {
-        $.get(createLink('program', 'ajaxGetBudgetLeft', "ProgramID=" + parentID), function(budgetLeft)
+        $.get(createLink('project', 'ajaxGetProgramInformation', "objectType=program&objectID=" + parentID + "&selectedProgramID=" + selectedProgramID + "&budget=" + budget), function(data)
         {
+            var data      = JSON.parse(data);
             parentProgram = programList[parentID];
             programBudget = parentProgram.budget;
             PGMBudgetUnit = currencySymbol[parentProgram.budgetUnit];
 
-            budgetNotes = programBudget != 0 ? (PGMParentBudget + PGMBudgetUnit + budgetLeft) : '';
+            budgetNotes = programBudget != 0 ? (PGMParentBudget + PGMBudgetUnit + data.availableBudget) : '';
             $('#budget').attr('placeholder', budgetNotes);
         });
         $('.aclBox').html($('#subPGMAcl').html());
@@ -334,11 +338,13 @@ function budgetOverrunTips()
     }
 
     if(typeof(programID) == 'undefined') programID = 0;
-    $.get(createLink('program', 'ajaxGetAvailableBudget', 'programID=' + programID + "&selectedProgramID=" + selectedProgramID + "&budget=" + budget), function(data)
+    $.get(createLink('project', 'ajaxGetProgramInformation', 'objectType=program&objectID=' + programID + "&selectedProgramID=" + selectedProgramID + "&budget=" + budget), function(data)
     {
         var data = JSON.parse(data);
 
+        var tip = "";
+        if(budget !=0 && budget !== null && budget > data.availableBudget) var tip = "<span id='beyondBudgetTip' class='text-remind'>" + budgetOverrun + currencySymbol[data.budgetUnit] + data.availableBudget + "</span>"
         if($('#beyondBudgetTip').length > 0) $('#beyondBudgetTip').remove();
-        $('#budgetBox').after(data);
+        $('#budgetBox').after(tip);
     });
 }

@@ -39,6 +39,9 @@
 <?php js::set('PGMParentBudget', $lang->program->parentBudget);?>
 <?php js::set('future', $lang->project->future);?>
 <?php js::set('programList', $programList);?>
+<?php js::set('budgetOverrun', $lang->project->budgetOverrun);?>
+<?php js::set('currencySymbol', $lang->project->currencySymbol)?>
+<?php js::set('parentBudget', $lang->program->parentBudget);?>
 <?php $aclList = $parentProgram ? $lang->program->subAclList : $lang->program->aclList;?>
 <?php $requiredFields = $config->program->create->requiredFields;?>
 <div id='mainContent' class='main-content'>

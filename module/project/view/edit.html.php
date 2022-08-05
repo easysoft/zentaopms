@@ -30,6 +30,9 @@
 <?php $requiredFields = $config->project->edit->requiredFields;?>
 <?php js::set('requiredFields', $requiredFields);?>
 <?php js::set('budget', $project->budget);?>
+<?php js::set('budgetOverrun', $lang->project->budgetOverrun);?>
+<?php js::set('currencySymbol', $lang->project->currencySymbol)?>
+<?php js::set('parentBudget', $lang->project->parentBudget);?>
 <div id='mainContent' class='main-content'>
   <div class='center-block'>
     <div class='main-header'>

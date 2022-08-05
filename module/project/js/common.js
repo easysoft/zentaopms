@@ -296,35 +296,6 @@ $(function()
     });
 })
 
-/**
- * Set budget tips and acl list.
- *
- * @param  int    $parentProgramID
- * @access public
- * @return void
- */
-function setBudgetTipsAndAclList(programID)
-{
-    if(programID != 0)
-    {
-        $.get(createLink('project', 'ajaxGetBudgetLeft', "programID=" + programID), function(budgetLeft)
-        {
-            parentProgram = PGMList[programID];
-            projectBudget = parentProgram.budget;
-            PGMBudgetUnit = currencySymbol[parentProgram.budgetUnit];
-
-            budgetNotes = projectBudget != 0 ? (PGMParentBudget + PGMBudgetUnit + budgetLeft) : '';
-            $('#budget').attr('placeholder', budgetNotes);
-        });
-        $('.aclBox').html($('#subPGMAcl').html());
-    }
-    else
-    {
-        $('#budget').removeAttr('placeholder');
-        $('.aclBox').html($('#PGMAcl').html());
-    }
-}
-
 $(document).on('change', "#plansBox select[name^='plans']", function()
 {
     var $plan = $(this);
@@ -364,14 +335,18 @@ function budgetOverrunTips()
     }
 
     if(typeof(projectID) == 'undefined') projectID = 0;
-    $.get(createLink('project', 'ajaxGetAvailableBudget', 'projectID=' + projectID + "&selectedProgramID=" + selectedProgramID + "&budget=" + budget), function(data)
+    $.get(createLink('project', 'ajaxGetProgramInformation', 'objectType=project&objectID=' + projectID + "&selectedProgramID=" + selectedProgramID + "&budget=" + budget), function(data)
     {
         var data = JSON.parse(data);
 
+        var tip = "";
+        if(budget !=0 && budget !== null && budget > data.availableBudget) var tip = "<span id='beyondBudgetTip' class='text-remind'>" + budgetOverrun + currencySymbol[data.budgetUnit] + data.availableBudget + "</span>"
         if($('#beyondBudgetTip').length > 0) $('#beyondBudgetTip').remove();
-        $('#budgetBox').after(data.tip);
+        $('#budgetBox').after(tip);
 
+        var placeholder = '';
+        if(selectedProgramID && data.availableBudget != 0) var placeholder = parentBudget + currencySymbol[data.budgetUnit] + data.availableBudget;
         if($('#budget').attr('placeholder')) $('#budget').removeAttr('placeholder')
-        $('#budget').attr('placeholder', data.placeholder);
+        $('#budget').attr('placeholder', placeholder);
     });
 }

@@ -26,6 +26,9 @@
 <?php js::set('selectedBranchID', $branchID);?>
 <?php js::set('productName', $lang->product->name);?>
 <?php js::set('manageProducts', $lang->project->manageProducts);?>
+<?php js::set('budgetOverrun', $lang->project->budgetOverrun);?>
+<?php js::set('currencySymbol', $lang->project->currencySymbol)?>
+<?php js::set('parentBudget', $lang->project->parentBudget);?>
 <?php $requiredFields = $config->project->create->requiredFields;?>
 <?php js::set('requiredFields', $requiredFields);?>
 <div id='mainContent' class='main-content'>

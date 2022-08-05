@@ -220,22 +220,23 @@ class project extends control
     }
 
     /**
-     * Ajax get available budget.
+     * Ajax get selected program's information.
      *
-     * @param  int    $programID
+     * @param  str    $objectType
+     * @param  int    $objectID
      * @param  int    $selectedProgramID
      * @param  int    $budget
      * @access public
      * @return void
      */
-    public function ajaxGetAvailableBudget($projectID, $selectedProgramID, $budget)
+    public function ajaxGetProgramInformation($objectType, $objectID, $selectedProgramID, $budget)
     {
-        if(!empty($projectID))
+        if(!empty($objectID))
         {
-            $project         = $this->project->getByID($projectID);
+            $object          = $objectType == 'project' ? $this->project->getByID($objectID) : $this->loadModel('program')->getByID($objectID);
             $selectedProgram = $this->loadModel('program')->getByID($selectedProgramID);
             $budgetLeft      = $this->program->getBudgetLeft($selectedProgram);
-            $availableBudget = $project->parent == $selectedProgramID ? $budgetLeft + $project->budget : $budgetLeft;
+            $availableBudget = $object->parent == $selectedProgramID ? $budgetLeft + $object->budget : $budgetLeft;
         }
         else
         {
@@ -243,14 +244,8 @@ class project extends control
             $availableBudget = $this->program->getBudgetLeft($selectedProgram);
         }
 
-        $tip = '';
-        if($budget != 0 && $budget !== null && $budget > $availableBudget) $tip = "<span id='beyondBudgetTip' class='text-remind'>" . $this->lang->project->budgetOverrun . zget($this->lang->project->currencySymbol, $selectedProgram->budgetUnit) . $availableBudget . "</span>";
-
-        $placeholder = '';
-        if($selectedProgram and $selectedProgram->budget != 0) $placeholder = $this->lang->project->parentBudget . zget($this->lang->project->currencySymbol, $selectedProgram->budgetUnit) . $availableBudget;
-
-        $tipList = array('tip' => $tip, 'placeholder' => $placeholder);
-        echo json_encode($tipList);
+        $data = array('selectedProgramBegin' => $selectedProgram->begin, 'selectedProgramEnd' => $selectedProgram->end, 'availableBudget' => $availableBudget, 'budgetUnit' => $selectedProgram->budgetUnit);
+        echo json_encode($data);
     }
 
     /**
