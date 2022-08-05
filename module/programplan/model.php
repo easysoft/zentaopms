@@ -197,11 +197,11 @@ class programplanModel extends model
             $data->open       = true;
             $data->start_date = $data->realBegan ? $data->realBegan : $data->begin;
             $data->endDate    = $data->realEnd ? $data->realEnd : $data->deadline;
-            $data->duration   = 0;
+            $data->duration   = 1;
 
             if($data->endDate > $data->start_date) $data->duration = helper::diffDate($data->endDate, $data->start_date) + 1;
             if($data->start_date) $data->start_date = date('d-m-Y', strtotime($data->start_date));
-            if($data->start_date == '' or $data->endDate == '') $data->duration = 0;
+            if($data->start_date == '' or $data->endDate == '') $data->duration = 1;
 
             $datas['data'][$plan->id] = $data;
             $stageIndex[$plan->id]    = array('planID' => $plan->id, 'parent' => $plan->parent, 'progress' => array('totalConsumed' => 0, 'totalReal' => 0));
@@ -272,7 +272,7 @@ class programplanModel extends model
             $data->taskProgress = ($progress * 100) . '%';
             $data->start_date   = $start;
             $data->endDate      = $end;
-            $data->duration     = 0;
+            $data->duration     = 1;
 
             /* If multi task then show the teams. */
             if($task->mode == 'multi' and !empty($taskTeams[$task->id]))
@@ -285,7 +285,7 @@ class programplanModel extends model
 
             if($data->endDate > $data->start_date) $data->duration = helper::diffDate($data->endDate, $data->start_date) + 1;
             if($data->start_date) $data->start_date = date('d-m-Y', strtotime($data->start_date));
-            if($data->start_date == '' or $data->endDate == '') $data->duration = 0;
+            if($data->start_date == '' or $data->endDate == '') $data->duration = 1;
 
             if(strpos($selectCustom, 'task') !== false) $datas['data'][$data->id] = $data;
             foreach($stageIndex as $index => $stage)
@@ -463,12 +463,12 @@ class programplanModel extends model
                 $data->taskProgress = ($progress * 100) . '%';
                 $data->start_date   = $start;
                 $data->endDate      = $end;
-                $data->duration     = 0;
+                $data->duration     = 1;
 
                 if($data->endDate > $data->start_date) $data->duration = helper::diffDate($data->endDate, $data->start_date) + 1;
 
                 if($data->start_date) $data->start_date = date('d-m-Y', strtotime($data->start_date));
-                if($data->start_date == '' or $data->endDate == '') $data->duration = 0;
+                if($data->start_date == '' or $data->endDate == '') $data->duration = 1;
 
                 if(strpos($selectCustom, 'task') !== false) $datas['data'][$data->id] = $data;
 
