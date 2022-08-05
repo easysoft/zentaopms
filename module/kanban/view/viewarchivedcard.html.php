@@ -32,7 +32,10 @@
 #archivedCards .info > .users > span:before {left: -4px; content: ''; display: block; position: absolute; width: 2px; height: 2px; background-color: #8990a2; top: 0px; border-radius: 50%;}
 #archivedCards .info > .users > span:after {right: -4px; content: ''; display: block; position: absolute; width: 2px; height: 2px; background-color: #8990a2; top: 0px; border-radius: 50%;}
 #archivedCards .info > .users .avatar {display: inline-block; position: relative; border-radius: 50%; top: -5px; margin:  5px; right: -7px; margin-left: -4px;}
-#archivedCards .cardName {word-wrap: break-word;}
+#archivedCards .cardName {word-wrap: break-word; word-break: break-all;}
+#archivedCards .executionName {display: flex; width: 100%;}
+#archivedCards .executionName a, #archivedCards .executionName div {overflow: hidden; margin-right: 5px; overflow: hidden; white-space: nowrap;}
+#archivedCards .executionName .delayed {flex: none;}
 #archivedCards .card-item .icon {margin-right:2px;}
 #archivedCards .card-item .red {background-color: #b10b0b;}
 #archivedCards .card-item .yellow {background-color: #cfa227;}
@@ -89,21 +92,20 @@ js::set('systemMode', $this->config->systemMode);
         <?php
         $labelColor = 'background-color: #2a5f29';
         if($card->color == '#2a5f29') $labelColor = 'background-color: #FFFFFF; color: #2a5f29';
+        $finishLabel = $card->status == 'done' ? "<div class='label' style='$labelColor'>{$lang->kanban->finished}</div>" : '';
         ?>
         <div class="kanban-item <?php echo $nameColor;?> <?php echo $color;?>" data-id="<?php echo $card->id;?>">
-        <?php if($card->status == 'done'):?>
-        <div class="label" style="<?php echo $labelColor;?>"><?php echo $lang->kanban->finished;?></div>
-        <?php endif;?>
         <?php if(empty($card->fromType)):?>
-          <?php echo html::a($this->createLink('kanban', 'viewCard', "cardID=$card->id", '', true), $card->name, '', "class='cardName iframe' data-toggle='modal' data-width='80%' title='$card->name'");?>
+          <?php echo "<div class='cardName'>" . html::a($this->createLink('kanban', 'viewCard', "cardID=$card->id", '', true), $finishLabel . $card->name, '', "class='iframe' data-toggle='modal' data-width='80%' title='$card->name'") . '</div>';?>
           <div class="info">
             <span class="pri label-pri label-pri-<?php echo $card->pri;?>"><?php echo $card->pri;?></span>
             <?php if($card->estimate and $card->estimate != 0) echo "<span class='text-gray'>{$card->estimate}h</span>";?>
         <?php else:?>
         <?php
         $name = isset($card->title) ? $card->title : $card->name;
-        if(common::hasPriv($card->fromType, 'view')) echo html::a($this->createLink($card->fromType, 'view', "id=$card->fromID"), $name, '', "class='cardName' title='$name'");
-        if(!common::hasPriv($card->fromType, 'view')) echo "<div class='cardName' title='$name'>$name</div>";
+        $delayed = ($card->fromType == 'execution' and !empty($card->delay)) ? "<span class='delayed label label-danger label-badge'>{$lang->execution->delayed}</span>" : '';
+        if(common::hasPriv($card->fromType, 'view')) echo "<div class='cardName {$card->fromType}Name'>" . html::a($this->createLink($card->fromType, 'view', "id=$card->fromID"), $name, '', " title='$name'") . "$delayed</div>";
+        if(!common::hasPriv($card->fromType, 'view')) echo "<div class='cardName {$card->fromType}Name'><div title='$name'>$name</div>$delayed</div>";
         if($card->fromType == 'productplan' or $card->fromType == 'build')
         {
             echo "<div class='desc' title='$card->desc'>$card->desc</div>";
