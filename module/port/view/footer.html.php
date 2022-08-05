@@ -36,6 +36,7 @@ function loadData($showmore)
         $('#showData tbody').find('.picker-select').picker({chosenMode: true}).removeClass('nopicker');
     })
 }
+
 function throttle(fn, threshhold)
 {
     var last;

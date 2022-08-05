@@ -87,7 +87,7 @@ class portModel extends model
         $countInputVars  = count($datas) * count($current); // Count all post datas
         $showSuhosinInfo = common::judgeSuhosinSetting($countInputVars);
         if($showSuhosinInfo) return extension_loaded('suhosin') ? sprintf($this->lang->suhosinInfo, $countInputVars) : sprintf($this->lang->maxVarsInfo, $countInputVars);
-        return '';
+        return;
     }
 
     /**
@@ -1275,6 +1275,7 @@ class portModel extends model
         $html  = '';
         $key   = key($list);
         $addID = 1;
+        $members = $this->loadModel('user')->getTeamMemberPairs($this->session->taskPortParams['executionID'], 'execution');
 
         $appendFields    = $this->session->appendFields;
         $showImportCount = $this->config->port->lazyLoading ? $this->config->port->showImportCount : $this->maxImport;

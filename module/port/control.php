@@ -141,11 +141,16 @@ class port extends control
      */
     public function ajaxGetTbody($model = '', $lastID = 0, $pagerID = 1)
     {
+        $filter = '';
+        if($model == 'task') $filter = 'estimate';
+
         $this->loadModel($model);
         $importFields = $this->config->$model->templateFields;
         $fields       = $this->port->initFieldList($model, $importFields, false);
-        $formatDatas  = $this->port->format($model);
+        $formatDatas  = $this->port->format($model, $filter);
         $datas        = $this->port->getPageDatas($formatDatas, $pagerID);
+
+        if($model == 'task') $datas = $this->task->processDatas4Task($datas);
 
         $html = $this->port->buildNextList($datas->datas, $lastID, $fields, $pagerID, $model);
         die($html);
