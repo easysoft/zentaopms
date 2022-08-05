@@ -1,2 +1,3 @@
 #product_chosen .chosen-single{border-right-width:1px}
 .linkStoryTitle {white-space: nowrap; text-overflow: ellipsis;}
+.linkStoryTd > ul {margin-top: -10px;}
