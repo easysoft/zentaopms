@@ -2062,8 +2062,10 @@ class repoModel extends model
      */
     public function getRepoListByClient($gitlabID, $projectID = 0)
     {
+        $server = $this->loadModel('pipeline')->getByID($gitlabID);
         return $this->dao->select('*')->from(TABLE_REPO)->where('deleted')->eq('0')
             ->andWhere('synced')->eq(1)
+            ->beginIF($server)->andWhere('SCM')->eq(ucfirst($server->type))->fi()
             ->andWhere('serviceHost')->eq($gitlabID)
             ->beginIF($projectID)->andWhere('serviceProject')->eq($projectID)->fi()
             ->fetchAll();
