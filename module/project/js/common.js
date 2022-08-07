@@ -95,6 +95,7 @@ function computeWorkDays(currentID)
     {
         computeEndDate();
     }
+    outOfDateTip();
 }
 
 /**
@@ -349,4 +350,45 @@ function budgetOverrunTips()
         if($('#budget').attr('placeholder')) $('#budget').removeAttr('placeholder')
         $('#budget').attr('placeholder', placeholder);
     });
+}
+
+/**
+ *The date is out of the range of the parent project set, and a prompt is given.
+ *
+ * @access public
+ * @return void
+ */
+function outOfDateTip()
+{
+        var end   = $('#end').val();
+        var begin = $('#begin').val();
+        if(end.length > 0 && begin.length > 0)
+        {
+            var selectedProgramID = $('#parent').val();
+            var budget            = $('#budget').val();
+
+            if(selectedProgramID == 0)
+            {
+                if($('#dateTip').length > 0) $('#dateTip').remove();
+                return false;
+            }
+
+            if(typeof(projectID) == 'undefined') projectID = 0;
+            $.get(createLink('project', 'ajaxGetParentInfo', 'objectType=project&objectID=' + projectID + "&selectedProgramID=" + selectedProgramID), function(data)
+            {
+                var data        = JSON.parse(data);
+                var parentEnd   = new Date(data.selectedProgramEnd);
+                var parentBegin = new Date(data.selectedProgramBegin);
+                var objectEnd   = new Date(end);
+                var objectBegin = new Date(begin);
+
+                var dateTip = "";
+                if(objectBegin < parentBegin && objectEnd <= parentEnd) dateTip = "<span id='dateTip' class='text-remind'>" + beginLetterParent + data.selectedProgramBegin + "</span>";
+                if(objectBegin >= parentBegin && objectEnd > parentEnd) dateTip = "<span id='dateTip' class='text-remind'>" + endGreaterParent + data.selectedProgramEnd + "</span>";
+                if((objectBegin < parentBegin && objectEnd > parentEnd) || (objectEnd <= parentBegin && objectBegin <= parentBegin) || (objectBegin >= parentEnd && objectEnd >= parentEnd)) dateTip = "<span id='dateTip' class='text-remind'>" + dataExceedParent + data.selectedProgramBegin + "~" + data.selectedProgramEnd + "</span>";
+                if($('#dateTip').length > 0) $('#dateTip').remove();
+                console.log(dateTip);
+                $('#dateBox').after(dateTip);
+            });
+        }
 }

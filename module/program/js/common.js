@@ -322,6 +322,12 @@ function setBudgetTipsAndAclList(parentID)
     outOfDateTip();
 }
 
+/**
+ * The date is out of the range of the parent project set, and a prompt is given.
+ *
+ * @access public
+ * @return void
+ */
 function outOfDateTip()
 {
         var end   = $('#end').val();
