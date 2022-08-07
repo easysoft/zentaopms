@@ -79,12 +79,12 @@
         <tr>
           <th id="dateRange"><?php echo $lang->project->dateRange;?></th>
           <td>
-            <div class='input-group'>
+            <div id='dateBox' class='input-group'>
               <?php echo html::input('begin', $program->begin, "class='form-control form-date' placeholder='" . $lang->project->begin . "' required");?>
               <span class='input-group-addon'><?php echo $lang->project->to;?></span>
               <?php
                 $end = $program->end == LONG_TIME ? $lang->program->longTime : $program->end;
-                echo html::input('end', $end, "class='form-control form-date' placeholder='" . $lang->project->end . "' required");
+                echo html::input('end', $end, "class='form-control form-date' onchange='outOfDateTip();' placeholder='" . $lang->project->end . "' required");
               ?>
             </div>
           </td>

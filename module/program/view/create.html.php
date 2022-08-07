@@ -96,10 +96,10 @@
         <tr>
           <th id="dateRange"><?php echo $lang->project->dateRange;?></th>
           <td>
-            <div id='dataBox' class='input-group' onchange="outOfDataTips()">
+            <div id='dateBox' class='input-group'>
               <?php echo html::input('begin', date('Y-m-d'), "class='form-control form-date' onchange='computeWorkDays();' placeholder='" . $lang->project->begin . "' required");?>
               <span class='input-group-addon'><?php echo $lang->project->to;?></span>
-              <?php echo html::input('end', '', "class='form-control form-date' placeholder='" . $lang->project->end . "' required");?>
+              <?php echo html::input('end', '', "class='form-control form-date' onchange='outOfDateTip();' placeholder='" . $lang->project->end . "' required");?>
             </div>
           </td>
           <td id="endList" colspan='2'><?php echo html::radio('delta', $lang->program->endList, '', "onclick='computeEndDate(this.value)'");?></td>

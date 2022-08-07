@@ -93,6 +93,7 @@ function computeWorkDays(currentID)
     {
         computeEndDate();
     }
+    outOfDateTip();
 }
 
 /**
@@ -318,13 +319,13 @@ function setBudgetTipsAndAclList(parentID)
 
     if(typeof(programID) == 'undefined') programID = 0;
     budgetOverrunTips();
+    outOfDateTip();
 }
 
-function outOfDataTips()
+function outOfDateTip()
 {
-    $('#dataBox').on('change', 'input', function(){
-        var end   = new Date($('#end').val());
-        var begin = new Date($('#begin').val());
+        var end   = $('#end').val();
+        var begin = $('#begin').val();
         if(end.length > 0 && begin.length > 0)
         {
             var selectedProgramID = $('#parent').val();
@@ -337,21 +338,23 @@ function outOfDataTips()
             }
 
             if(typeof(programID) == 'undefined') programID = 0;
-            $.get(createLink('project', 'ajaxGetProgramInformation', 'objectType=program&objectID=' + programID + "&selectedProgramID=" + selectedProgramID + "&budget=" + budget), function(data)
+            $.get(createLink('project', 'ajaxGetParentInfo', 'objectType=program&objectID=' + programID + "&selectedProgramID=" + selectedProgramID), function(data)
             {
-                var data        = JOSN.parse(data);
+                var data        = JSON.parse(data);
                 var parentEnd   = new Date(data.selectedProgramEnd);
                 var parentBegin = new Date(data.selectedProgramBegin);
+                var objectEnd   = new Date(end);
+                var objectBegin = new Date(begin);
 
                 var dateTip = "";
-                if(begin < parentBegin && end > parentEnd) dateTip = "<span id='dateTip' class='text-remind'>" + dataExceedParent + parentBegin + "~" + parentEnd + "</span>";
-                if(begin < parentBegin && end <= parentEnd) dateTip = "<span id='dateTip' class='text-remind'>" + beginLetterParent + parentBegin + "</span>";
-                if(begin >= parentBegin && end > parentEnd) dateTip = "<span id='dateTip' class='text-remind'>" + endGreaterParent + parentEnd + "</span>";
+                if(objectBegin < parentBegin && objectEnd <= parentEnd) dateTip = "<span id='dateTip' class='text-remind'>" + beginLetterParent + data.selectedProgramBegin + "</span>";
+                if(objectBegin >= parentBegin && objectEnd > parentEnd) dateTip = "<span id='dateTip' class='text-remind'>" + endGreaterParent + data.selectedProgramEnd + "</span>";
+                if((objectBegin < parentBegin && objectEnd > parentEnd) || (objectEnd <= parentBegin && objectBegin <= parentBegin) || (objectBegin >= parentEnd && objectEnd >= parentEnd)) dateTip = "<span id='dateTip' class='text-remind'>" + dataExceedParent + data.selectedProgramBegin + "~" + data.selectedProgramEnd + "</span>";
                 if($('#dateTip').length > 0) $('#dateTip').remove();
-                $('#dataBox').after(dateTip);
+                console.log(dateTip);
+                $('#dateBox').after(dateTip);
             });
         }
-    });
 }
 
 /**
