@@ -1605,7 +1605,7 @@ class kanbanModel extends model
             {
                 $columnData[0]['id']         = 0;
                 $columnData[0]['type']       = 'story';
-                $columnData[0]['name']       = zget($this->lang->kanban->orderList, $orderBy, '');
+                $columnData[0]['name']       = $this->lang->SRCommon;
                 $columnData[0]['color']      = '#333';
                 $columnData[0]['limit']      = '-1';
                 $columnData[0]['laneType']   = $browseType;

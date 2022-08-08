@@ -341,15 +341,15 @@ function renderColumnCount($count, count, col)
 {
     if(groupBy == 'story' && col.type == 'story')
     {
-        var orderButton = '<button class="btn btn-link action storyColumn" type="button" data-toggle="dropdown">'
-            + '  <span class="text">' + (kanbanLang.orderList[orderBy] == undefined ? kanbanLang.orderList['pri_asc'] : kanbanLang.orderList[orderBy]) + '</span><span class="caret"></span>'
-            + '</button>'
+        var orderButton = '<a class="btn btn-link action storyColumn ' + (changeOrder ? 'text-primary' : '') + '" type="button" data-toggle="dropdown">'
+            + "<i class='icon icon-swap'></i>"
+            + '</a>'
             + '<ul class="dropdown-menu">';
         for(var order in kanbanLang.orderList) orderButton += '<li class="' + (order == orderBy ? 'active' : '') + '"><a href="###" onclick="searchCards(searchValue, \'' + order + '\')">' + kanbanLang.orderList[order] + '</a></li>';
         orderButton += '</ul>';
 
-        $count.siblings('.storyColumn').remove();
-        $count.prev().replaceWith(orderButton);
+        $count.parent().next().html(orderButton);
+        $count.parent().next().addClass('createButton');
         $count.hide();
         return;
     }
@@ -1227,6 +1227,7 @@ $(function()
     $('#kanbanScaleControl .btn[data-type="+"]').attr('disabled', window.kanbanScaleSize >= 4 ? 'disabled' : null);
     $('#kanbanScaleControl .btn[data-type="-"]').attr('disabled', window.kanbanScaleSize <= 1 ? 'disabled' : null);
 
+    changeOrder = false;
     /* Common options */　
     var commonOptions =
     {
@@ -1484,6 +1485,7 @@ function searchCards(value, order = '')
 {
     searchValue = value;
     orderBy     = order == '' ? orderBy : order;
+    if(order != '') changeOrder = true;
     $.get(createLink('execution', 'ajaxUpdateKanban', "executionID=" + executionID + "&entertime=0&browseType=" + browseType + "&groupBy=" + groupBy + '&from=execution&searchValue=' + value + '&orderBy=' + orderBy), function(data)
     {
         lastUpdateData = data;
