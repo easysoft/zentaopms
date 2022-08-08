@@ -161,7 +161,7 @@ $lang->task->recordEstimateAction = 'Record Estimate';
 
 $lang->task->ditto             = 'Ditto';
 $lang->task->dittoNotice       = "This Task is not linked to %s like the last one!";
-$lang->task->selectTestStory   = 'Select Story Testd';
+$lang->task->selectTestStory   = 'Select Story Tested';
 $lang->task->selectAllUser     = 'All Users';
 $lang->task->noStory           = 'No Story Linked';
 $lang->task->noAssigned        = 'Unassigned';
