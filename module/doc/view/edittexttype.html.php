@@ -39,10 +39,9 @@
 .ke-toolbar {padding-left: 20px; width: 100%; height: 30px;}
 .ke-edit {border-top: 1px solid rgb(220, 220, 220)}
 .ke-edit, .CodeMirror {margin: 8px 200px 0 200px; background: #fff;}
-.kindeditor-ph {padding-left: 20px !important;}
+.kindeditor-ph {padding: 20px 20px 0 20px !important;}
 .editor-toolbar {background: #fff; padding-left: 20px; border-right: unset; border-top: unset; height: 30px;}
-.hide-sidebar .ke-edit {padding-right: 20px;}
-.hide-sidebar .CodeMirror {padding-right: 50px;}
+.CodeMirror {padding: 20px 20px 0 20px;}
 .CodeMirror.CodeMirror-wrap {border-left: 0; border-right: 0; border-bottom: 0;}
 .ke-statusbar {display: none;}
 
@@ -100,9 +99,6 @@
       <div class='modal-dialog'>
         <div class='modal-content with-padding'>
           <div class='modal-header'>
-            <button type='button' class='close' data-dismiss='modal'>
-              <i class="icon icon-close"></i>
-            </button>
             <h2 class='modal-title'><?php echo $lang->doc->basicInfo;?></h2>
           </div>
           <div class='modal-body'>
@@ -159,7 +155,7 @@
               </tr>
               <tfoot>
                 <tr>
-                  <td colspan='3' class='text-center'><?php echo html::a('javascript:void(0)', $lang->save, '', "class='btn btn-primary btn-wide'");?></td>
+                  <td colspan='3' class='text-center'><?php echo html::a('javascript:void(0)', $lang->close, '', "class='btn btn-primary btn-wide'");?></td>
                 </tr>
               </tfoot>
             </table>
@@ -176,44 +172,9 @@ $(function()
     setTimeout(function(){$('.ke-edit-iframe, .ke-edit').height(contentHeight);}, 100);
     setTimeout(function(){$('.CodeMirror').height(contentHeight);}, 100);
 
-    initialLibID     = 0;
-    initialModuleID  = 0;
-    initialKeywords  = '';
-    initialAcl       = '';
-    initialFilesName = [];
-    initialFilesPath = [];
-    initialMailto    = [];
-    initialGroups    = [];
-    initialUsers     = [];
-
-    $('#basicInfoLink').click(function()
-    {
-        initialLibID    = $('#modalBasicInfo #lib').val();
-        initialModuleID = $('#modalBasicInfo #module').val();
-        initialKeywords = $('#modalBasicInfo #keywords').val();
-        initialAcl      = $('#modalBasicInfo input[name=acl]:checked').val();
-        initialMailto   = $('#modalBasicInfo #mailto').data('zui.picker').getValue();
-        initialGroups   = $('#modalBasicInfo #groups').data('zui.picker').getValue();
-        initialUsers    = $('#modalBasicInfo #users').data('zui.picker').getValue();
-
-        $("input[name^='file']").each(function(){initialFilesPath.push($(this).val());});
-        $("input[name^='label']").each(function(){initialFilesName.push($(this).val());});
-    });
-
-    $('#modalBasicInfo .modal-header .close').click(function()
-    {
-        $('#modalBasicInfo #lib').val(initialLibID).trigger('chosen:updated');
-        $('#modalBasicInfo #lib').trigger('change');
-        $('#modalBasicInfo #module').val(initialModuleID).trigger('chosen:updated');
-        $('#modalBasicInfo #keywords').val(initialKeywords);
-        $('#modalBasicInfo input:radio[value='+ initialAcl +']').attr('checked', 'checked');
-        toggleAcl($('input[name="acl"]:checked').val(), 'doc');
-        $('#modalBasicInfo #mailto').data('zui.picker').setValue(initialMailto);
-        setTimeout(function(){$('#modalBasicInfo #groups').data('zui.picker').setValue(initialGroups)}, 1000);
-        setTimeout(function(){$('#modalBasicInfo #users').data('zui.picker').setValue(initialUsers)}, 1000);
-    });
-
     $(document).on('click', '#modalBasicInfo tfoot .btn', function() {$('#modalBasicInfo').modal('hide');});
+
+    $('iframe.ke-edit-iframe').contents().find('.article-content').css('padding', '20px 20px 0 20px');
 })
 </script>
 <?php js::set('noticeAcl', $lang->doc->noticeAcl['doc']);?>

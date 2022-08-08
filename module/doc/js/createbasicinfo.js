@@ -9,10 +9,8 @@ $(function()
     $('#saveBtn').click(function()
     {
         var params = $('#dataform').serializeArray();
-        var files  = $('#uploader').data('zui.uploader').getFiles();
 
         sessionStorage.setItem('docBasicInfo', JSON.stringify(params));
-        sessionStorage.setItem('docFiles', JSON.stringify(files));
 
         var libID    = $('#lib').val();
         var moduleID = $('#module').val();

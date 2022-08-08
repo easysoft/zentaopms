@@ -37,10 +37,9 @@
 .ke-toolbar {padding-left: 20px; width: 100%; height: 30px;}
 .ke-edit {border-top: 1px solid rgb(220, 220, 220)}
 .ke-edit, .CodeMirror {margin: 8px 200px 0 200px; background: #fff;}
-.kindeditor-ph {padding-left: 20px !important;}
+.kindeditor-ph {padding: 20px 20px 0 20px !important;}
 .editor-toolbar {background: #fff; padding-left: 20px; border-right: unset; border-top: unset; height: 30px;}
-.hide-sidebar .ke-edit {padding-right: 20px;}
-.hide-sidebar .CodeMirror {padding-right: 50px;}
+.CodeMirror {padding: 20px 20px 0 20px;}
 .CodeMirror.CodeMirror-wrap {border-left: 0; border-right: 0; border-bottom: 0;}
 .ke-statusbar {display: none;}
 .contentmarkdown {background: #efefef;}
@@ -98,9 +97,6 @@
       <div class='modal-dialog'>
         <div class='modal-content with-padding'>
           <div class='modal-header'>
-            <button type='button' class='close' data-dismiss='modal'>
-              <i class="icon icon-close"></i>
-            </button>
             <h2 class='modal-title'><?php echo $lang->doc->basicInfo;?></h2>
           </div>
           <div class='modal-body'>
@@ -122,19 +118,7 @@
                 </tr>
                 <tr id='fileBox'>
                   <th><?php echo $lang->doc->files;?></th>
-                  <td colspan='2'>
-                    <div id='uploader' class="uploader" data-ride="uploader" data-url="<?php echo $this->createLink('file', 'ajaxUpload', "uid=" . uniqid());?>">
-                      <div class="uploader-message text-center">
-                        <div class="content"></div>
-                        <button type="button" class="close">×</button>
-                      </div>
-                      <div class="uploader-files file-list file-list-lg" data-drag-placeholder="请拖拽文件到此处"></div>
-                      <div class="uploader-actions">
-                        <div class="uploader-status pull-right text-muted"></div>
-                        <button type="button" class="btn btn-link uploader-btn-browse"><i class="icon icon-plus"></i> 选择文件</button>
-                      </div>
-                    </div>
-                  </td>
+                  <td colspan='2'><?php echo $this->fetch('file', 'buildform');?></td>
                 </tr>
                 <tr>
                   <th><?php echo $lang->doc->mailto;?></th>
@@ -172,7 +156,7 @@
               </tbody>
               <tfoot>
                 <tr>
-                  <td colspan='3' class='text-center'><?php echo html::a('javascript:void(0)', $lang->save, '', "class='btn btn-primary btn-wide'");?></td>
+                  <td colspan='3' class='text-center'><?php echo html::a('javascript:void(0)', $lang->close, '', "class='btn btn-primary btn-wide'");?></td>
                 </tr>
               </tfoot>
             </table>
@@ -227,6 +211,8 @@ $(function()
     });
 
     $(document).on('click', '#modalBasicInfo tfoot .btn', function() {$('#modalBasicInfo').modal('hide');});
+
+    $('iframe.ke-edit-iframe').contents().find('.article-content').css('padding', '20px 20px 0 20px');
 })
 </script>
 <?php js::set('docType', $docType);?>

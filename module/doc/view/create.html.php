@@ -10,7 +10,7 @@
  * @link        http://www.zentao.net
  */
 ?>
-<?php if(strpos($config->doc->textTypes, $docType) !== false):?>
+<?php if(strpos($config->doc->textTypes, $docType) !== false and $from == 'doc'):?>
 <?php include 'createtexttype.html.php';?>
 <?php else:?>
 <?php if($docType != '' and strpos($config->doc->officeTypes, $docType) !== false):?>

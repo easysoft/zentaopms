@@ -64,6 +64,8 @@ $(function()
 
     if(!fromGlobal)
     {
+        var basicInfo = JSON.parse(sessionStorage.getItem('docBasicInfo'));
+
         var libID       = 0;
         var moduleID    = 0;
         var title       = '';
@@ -75,9 +77,6 @@ $(function()
         var mailto      = [];
         var groups      = [];
         var users       = [];
-        var basicInfo   = JSON.parse(sessionStorage.getItem('docBasicInfo'));
-        var docFiles    = JSON.parse(sessionStorage.getItem('docFiles'));
-        console.log(docFiles);
 
         $.each(basicInfo, function(index, value)
         {
@@ -123,14 +122,6 @@ $(function()
         toggleAcl($('input[name="acl"]:checked').val(), 'doc');
         setTimeout(function(){$('#modalBasicInfo #groups').data('zui.picker').setValue(groups)}, 1000);
         setTimeout(function(){$('#modalBasicInfo #users').data('zui.picker').setValue(users)}, 1000);
-
-        $('#uploader').uploader({
-            autoUpload: true,
-            deleteActionOnDone: function(file, doRemoveFile) {
-                doRemoveFile();
-            },
-            staticFiles: docFiles
-        });
     }
 })
 
