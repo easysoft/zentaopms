@@ -4026,7 +4026,8 @@ class taskModel extends model
         $order = 1;
         foreach($data->tasks as $task)
         {
-            $taskID = explode('-', $task)[1];
+            $idList = explode('-', $task);
+            $taskID = $idList[1];
             $this->dao->update(TABLE_TASK)->set('`order`')->eq($order)->where('id')->eq($taskID)->exec();
             $order ++;
         }
