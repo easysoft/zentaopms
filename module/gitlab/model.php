@@ -2671,7 +2671,10 @@ class gitlabModel extends model
             $priv->name                = $name;
             $priv->create_access_level = $createLevels[$key];
             $response = $this->apiCreateTagPriv($gitlabID, $projectID, $priv);
-            if(isset($response->message) and substr($response->message, 0, 2) != '20') $failure[] = $name;
+            if(isset($response->message))
+            {
+                if(is_array($response->message) or (is_string($response->message) and substr($response->message, 0, 2) != '20')) $failure[] = $name;
+            }
         }
         return array_unique($failure);
     }
