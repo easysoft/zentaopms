@@ -39,7 +39,7 @@
         <?php endif;?>
         <th class='c-date'><?php echo $lang->execution->begin;?></th>
         <th class='c-date'><?php echo $lang->execution->end;?></th>
-        <th class='c-status text-center' style='padding-right: 8px'><?php echo $lang->statusAB;?></th>
+        <th class='c-status text-center'><?php echo $lang->statusAB;?></th>
         <th class='c-user'><?php echo $lang->team->role;?></th>
         <th class='c-date'><?php echo $lang->team->join;?></th>
         <th class='c-hours'><?php echo $lang->my->hours;?></th>
