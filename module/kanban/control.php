@@ -220,8 +220,8 @@ class kanban extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
         }
 
-        $enableImport  = 'off';
-        $importObjects = array();
+        $enableImport  = 'on';
+        $importObjects = array_keys($this->lang->kanban->importObjectList);
         if($copyKanbanID)
         {
             $copyKanban    = $this->kanban->getByID($copyKanbanID);

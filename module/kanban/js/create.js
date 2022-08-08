@@ -1,6 +1,10 @@
 $(function()
 {
-    if(enableImport == 'off') $("input[name^='importObjectList']").attr('disabled', 'disabled');
+    if(enableImport == 'off')
+    {
+        $("input[name^='importObjectList']").attr('disabled', 'disabled');
+        $('td.objectBox').hide();
+    }
     $("input[id='copyContentbasicInfo']").click(function(){return false;})
 
     copyRegion = $("input[id='copyContentregion']").prop('checked');
@@ -15,10 +19,12 @@ $(function()
         if($(this).val() == 'off')
         {
             $("input[name^='importObjectList']").attr('disabled', 'disabled');
+            $('td.objectBox').hide();
         }
         else
         {
             $("input[name^='importObjectList']").removeAttr('disabled');
+            $('td.objectBox').show();
         }
     })
 

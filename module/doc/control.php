@@ -983,7 +983,6 @@ class doc extends control
 
         $this->lang->TRActions = $this->doc->buildCollectButton4Doc();
         $this->lang->TRActions .= $this->doc->buildBrowseSwitch($type, $objectID, $viewType, $orderBy, $recTotal, $recPerPage, $pageID, $searchTitle);
-        if($this->app->tab == 'doc') $this->app->rawMethod = $type;
 
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
