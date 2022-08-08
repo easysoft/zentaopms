@@ -431,6 +431,7 @@ $lang->colorPicker->errorTip = '不是有效的颜色值';
 $lang->downNotify     = "下载桌面提醒";
 $lang->clientName     = "客户端";
 $lang->downloadClient = "下载客户端";
+$lang->downloadMobile = "下载移动端";
 $lang->clientHelp     = "客户端使用说明";
 $lang->clientHelpLink = "http://www.zentao.net/book/zentaopmshelp/302.html#2";
 $lang->website        = "https://www.zentao.net";

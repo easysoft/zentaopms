@@ -1,6 +1,6 @@
 $(function()
 {
-    $("input[name=objectType]").trigger('change');
+    loadDocLibs('product');
 })
 
 /**

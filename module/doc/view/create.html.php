@@ -143,6 +143,7 @@ $("a[href^='###']").click(function()
     </form>
   </div>
 </div>
+<?php js::set('textType', $config->doc->textTypes);?>
 <?php js::set('docType', $docType);?>
 <?php js::set('fromGlobal', $fromGlobal);?>
 <?php js::set('noticeAcl', $lang->doc->noticeAcl['doc']);?>

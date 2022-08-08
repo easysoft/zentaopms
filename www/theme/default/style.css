@@ -104,3 +104,8 @@ body.xxc-embed.m-productplan-view,body.xxc-embed.m-bug-browse,body.xxc-embed.m-p
 .xxc-embed #headerActions {right: 310px!important;}
 .xxc-embed.body-modal #mainContent {padding-top: 13px !important;}
 .xxc-embed .modal-iframe .modal-header .close {font-size: 28px !important;}
+
+#downloadMobile .dropdown-menu {top: -31px !important; min-width: 130px; padding: 0;}
+#downloadMobile .dropdown-menu .mobile-qrcode {padding: 15px 5px 0 5px;}
+#downloadMobile .dropdown-menu .mobile-version {text-align: center;}
+#downloadMobile .dropdown-menu .mobile-version span {color: #0c64eb; font-size: 12px; font-weight: 700;}
