@@ -141,9 +141,9 @@ class gogs extends control
     {
         if($confirm != 'yes') return print(js::confirm($this->lang->gogs->confirmDelete, inlink('delete', "id=$gogsID&confirm=yes")));
 
-
         $oldGogs  = $this->loadModel('pipeline')->getByID($gogsID);
         $actionID = $this->pipeline->delete($gogsID, 'gogs');
+        if(!$actionID) return print(js::error($this->lang->pipeline->delError));
 
         $gogs    = $this->pipeline->getByID($gogsID);
         $changes = common::createChanges($oldGogs, $gogs);

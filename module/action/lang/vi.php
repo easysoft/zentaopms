@@ -30,13 +30,16 @@ $lang->action->editComment = 'Sửa nhận xét';
 $lang->action->create      = 'Thêm nhận xét';
 $lang->action->comment     = 'Nhận xét';
 
-$lang->action->trashTips      = 'Ghi chú: Xóa trong ZenTao là hợp lệ.';
-$lang->action->textDiff       = 'Định dạng văn bản';
-$lang->action->original       = 'Định dạng gốc';
-$lang->action->confirmHideAll = 'Bạn có muốn ẩn tất cả ghi nhận này?';
-$lang->action->needEdit       = '%s mà bạn muốn khôi phục. Vui lòng edit it.';
-$lang->action->historyEdit    = 'Lịch sử người cập nhật không thể trống.';
-$lang->action->noDynamic      = 'Không có lịch sử. ';
+$lang->action->trashTips          = 'Ghi chú: Xóa trong ZenTao là hợp lệ.';
+$lang->action->textDiff           = 'Định dạng văn bản';
+$lang->action->original           = 'Định dạng gốc';
+$lang->action->confirmHideAll     = 'Bạn có muốn ẩn tất cả ghi nhận này?';
+$lang->action->needEdit           = '%s mà bạn muốn khôi phục. Vui lòng edit it.';
+$lang->action->historyEdit        = 'Lịch sử người cập nhật không thể trống.';
+$lang->action->noDynamic          = 'Không có lịch sử. ';
+$lang->action->undeletedTips      = 'This data did not participate in the merging process during the version upgrade process, so restore is not supported.';
+$lang->action->executionNoProject = 'The execution does not belong to a project,please restore the project first';
+$lang->action->repoNoServer       = 'The repo does not belong to a server,please restore the server first';
 
 $lang->action->history = new stdclass();
 $lang->action->history->action = 'Liên kết';
