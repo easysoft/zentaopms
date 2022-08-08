@@ -35,7 +35,11 @@
       <h2><?php echo $createTitle;?></h2>
       <?php if(!commonModel::isTutorialMode()): ?>
       <div class="pull-right btn-toolbar">
+      <?php if($config->edition != 'max' || $model == 'kanban'):?>
         <button type='button' class='btn btn-link' data-toggle='modal' data-target='#copyProjectModal'><?php echo html::icon($lang->icons['copy'], 'muted') . ' ' . $lang->project->copy;?></button>
+      <?php else: ?>
+        <button type='button' class='btn btn-link' data-toggle='modal' data-target='#maxCopyProjectModal'><?php echo html::icon($lang->icons['copy'], 'muted') . ' ' . $lang->project->copy;?></button>
+      <?php endif; ?> 
       </div>
       <?php endif; ?>
     </div>
@@ -225,12 +229,7 @@
       <?php foreach ($copyProjects as $id => $name):?>
         <?php $active = ($copyProjectID == $id) ? ' active' : '';?>
         <div class='col-md-4 col-sm-6'>
-        <?php if($config->edition != 'max' || $model == 'kanban'):?>
         <a href='javascript:;' data-id='<?php echo $id;?>' class='nobr <?php echo $active;?>'><?php echo html::icon($lang->icons['project'], 'text-muted') . ' ' . $name;?></a>
-        <?php else: ?>
-        <a data-id='<?php echo $id;?>' class='nobr <?php echo $active;?>' data-toggle='modal' data-target='#copyProjectConfirmModal'><?php echo html::icon($lang->icons['project'], 'text-muted') . ' ' . $name;?></a>
-        <?php echo html::hidden('copyProjectID', 0); ?>
-        <?php endif; ?>
         </div>
       <?php endforeach;?>
       </div>
