@@ -155,16 +155,7 @@ class project extends control
         foreach($projects as $id => $name)
         {
             $active = $data->cpoyProjectID == $id ? 'active' : '';
-            $html .= "<div class='col-md-4 col-sm-6'>";
-            if($this->config->edition !='max' || $data->model == 'kanban')
-            {
-                $html .= "<a href='javascript:;' data-id=$id class='nobr $active'>" . html::icon($this->lang->icons['project'], 'text-muted') . $name;
-            }
-            else
-            {
-                $html .= "<a data-id=$id class='nobr $active' data-toggle='modal' data-target='#copyProjectConfirmModal'>" . html::icon($this->lang->icons['project'], 'text-muted') . $name;
-            }
-            $html .= "</a></div>";
+            $html .= "<div class='col-md-4 col-sm-6'><a href='javascript:;' data-id=$id class='nobr $active'>" . html::icon($this->lang->icons['project'], 'text-muted') . $name . "</a></div>";
         }
         echo $html;
     }
