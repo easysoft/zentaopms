@@ -427,11 +427,11 @@ function validateResources(id)
     /* Check data. */
     var postData = {
         'id'        : type == 'task' ? task.id.split("-")[1] : task.id,
-        'start_date': from.toLocaleDateString('en-CA'),
-        'end_date'  : to.toLocaleDateString('en-CA'),
+        'startDate' : from.toLocaleDateString('en-CA'),
+        'endDate'   : to.toLocaleDateString('en-CA'),
         'type'      : type
     };
-    var link = createLink('programplan', 'ajaxSaveTaskDrag');
+    var link = createLink('programplan', 'ajaxResponseGanttDragEvent');
     /* Sync Close. */
     $.ajax({
         url: link,
@@ -485,7 +485,7 @@ $(function()
 
     gantt.config.readonly            = canGanttEdit ? false : true;
     gantt.config.details_on_dblclick = false;
-    gantt.config.order_branch        = ganttType == 'assignedTo' ? false : 'marker';
+    gantt.config.order_branch        = ganttType == 'assignedTo' ? false : true;
     gantt.config.drag_progress       = false;
     gantt.config.drag_links          = false;
     gantt.config.drag_move           = ganttType == 'assignedTo' ? false : true;
@@ -649,8 +649,9 @@ $(function()
 
     gantt.attachEvent("onBeforeRowDragEnd", function(id, parent, tindex)
     {
-        var task = gantt.getTask(id);
-        var link = createLink('programplan', 'ajaxSaveGanttMove');
+        var tasks = gantt.getChildren(parent);
+        var task  = gantt.getTask(id);
+        var link  = createLink('programplan', 'ajaxResponseGanttMoveEvent');
 
         //prevent moving to another position.
         if(task.parent != parent || id.indexOf('-') == -1)
@@ -662,7 +663,7 @@ $(function()
             $.ajax({
             url: link,
                 dataType: "json",
-                data: {id: id, type: task.type, index: tindex},
+                data: {id: id, tasks: tasks},
                 type: "post",
                 success: function(result){}
             });
@@ -670,6 +671,7 @@ $(function()
 
         return true;
     });
+
 
     // Make folder can open or close by click
     $('#ganttView').on('click', '.gantt_close,.gantt_open', function()

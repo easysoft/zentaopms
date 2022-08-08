@@ -252,39 +252,43 @@ class programplan extends control
     }
 
     /**
-     * Save task drag position.
+     * Response gantt drag event.
      *
      * @access public
      * @return void
      */
-    public function ajaxSaveTaskDrag()
+    public function ajaxResponseGanttDragEvent()
     {
         if(!empty($_POST))
         {
             if(!isset($_POST['id']) or empty($_POST['id'])) return $this->send(array('result' => 'fail', 'message' => ''));
             $objectID =  $_POST['id'];
 
-            $this->loadModel('task')->saveTaskDrag($objectID, $_POST['type']);
+            $this->loadModel('task')->updateEsDateByGantt($objectID, $_POST['type']);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+//            $this->loadModel('action')->create('task', $objectID, 'ganttDrag', '', $this->app->user->account);
             return $this->send(array('result' => 'success'));
         }
     }
 
     /**
-     * Save task drag action.
-     *
-     * @param  int    $productID
+     * Response gantt move event.
      *
      * @access public
      * @access public
      * @return void
      */
-    public function ajaxSaveGanttMove($productID = 0)
+    public function ajaxResponseGanttMoveEvent()
     {
         if(!empty($_POST))
         {
-            $this->loadModel('task')->saveTaskMove($productID);
+            $idList = explode('-', $_POST['id']);
+            $taskID = $idList[1];
+
+            $this->loadModel('task')->updateOrderByGantt();
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            $this->loadModel('action')->create('task', $taskID, 'ganttMove', '', $this->app->user->account);
+
             return $this->send(array('result' => 'success'));
         }
     }
