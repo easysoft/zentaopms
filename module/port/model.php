@@ -438,9 +438,9 @@ class portModel extends model
     public function initTmpFile($created = true)
     {
         $taskLang = $this->lang->task;
-        $file    = $this->session->fileImportFileName;
-        $tmpPath = $this->loadModel('file')->getPathOfImportedFile();
-        $tmpFile = $tmpPath . DS . md5(basename($file));
+        $file     = $this->session->fileImportFileName;
+        $tmpPath  = $this->loadModel('file')->getPathOfImportedFile();
+        $tmpFile  = $tmpPath . DS . md5(basename($file));
 
         if(file_exists($tmpFile)) return $tmpFile;
 
@@ -600,7 +600,7 @@ class portModel extends model
      */
     public function getExportDatas($fieldList, $rows = array())
     {
-        $exportDatas = array();
+        $exportDatas    = array();
         $dataSourceList = array();
 
         foreach ($fieldList as $key => $field)
@@ -608,8 +608,8 @@ class portModel extends model
             $exportDatas['fields'][$key] = $field['title'];
             if($field['values'])
             {
-                $exportDatas[$key]   = $field['values'];
-                $dataSourceList[] = $key;
+                $exportDatas[$key] = $field['values'];
+                $dataSourceList[]  = $key;
             }
         }
 
@@ -670,7 +670,7 @@ class portModel extends model
             {
                 foreach($relatedFiles[$data->id] as $file)
                 {
-                    $fileURL = common::getSysURL() . helper::createLink('file', 'download', "fileID={$file->id}");
+                    $fileURL      = common::getSysURL() . helper::createLink('file', 'download', "fileID={$file->id}");
                     $data->files .= html::a($fileURL, $file->title, '_blank') . '<br />';
                 }
             }
@@ -735,7 +735,7 @@ class portModel extends model
         {
             $fieldList     = $field . 'List';
             $linkFieldList = $linkFiled . 'List';
-            $tmpFieldList = array();
+            $tmpFieldList  = array();
             if(!empty($lists[$fieldList]) and !empty($lists[$linkFieldList]))
             {
                 $table = zget($this->config->objectTables, $field);
@@ -743,8 +743,7 @@ class portModel extends model
 
                 $fieldIDList     = array_keys($lists[$fieldList]);
                 $linkFieldIDList = array_keys($lists[$linkFieldList]);
-
-                $fieldDatas = $this->dao->select("id, $linkFiled")->from($table)->where('id')->in($fieldIDList)->fetchPairs();
+                $fieldDatas      = $this->dao->select("id, $linkFiled")->from($table)->where('id')->in($fieldIDList)->fetchPairs();
 
                 if(empty($fieldDatas)) continue;
                 foreach($fieldDatas as $id => $linkFieldID)
@@ -1399,8 +1398,9 @@ class portModel extends model
             foreach($stepData[$key]['desc'] as $id => $desc)
             {
                 if(empty($desc['content'])) continue;
-                $html .= "<tr class='step'>";
                 $hasStep = true;
+
+                $html .= "<tr class='step'>";
                 $html .= '<td>' . $id . html::hidden("stepType[$key][$id]", $desc['type']) . '</td>';
                 $html .= '<td>' . html::textarea("desc[$key][$id]", htmlSpecialString($desc['content']), "class='form-control'") . '</td>';
                 if($desc['type'] != 'group') $html .= '<td>' . html::textarea("expect[$key][$id]", isset($stepData[$key]['expect'][$id]['content']) ? htmlSpecialString($stepData[$key]['expect'][$id]['content']) : '', "class='form-control'") . '</td>';
@@ -1419,7 +1419,7 @@ class portModel extends model
         }
         else
         {
-            $html = "<table class='w-p100 bd-0'>";
+            $html  = "<table class='w-p100 bd-0'>";
             $html .= "<tr class='step'>";
             $html .= "<td>1" . html::hidden("stepType[$key][1]", 'step') . " </td>";
             $html .= "<td>" . html::textarea("desc[$key][1]", '', "class='form-control'") . "</td>";
