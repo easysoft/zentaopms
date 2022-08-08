@@ -100,12 +100,4 @@
 <?php js::set('objectID', $objectID);?>
 <?php js::set('docType', $docType);?>
 <?php js::set('noticeAcl', $lang->doc->noticeAcl['doc']);?>
-<script>
-$(function()
-{
-    $('#uploaderExample').uploader({
-        autoUpload: true
-    });
-})
-</script>
 <?php include '../../common/view/footer.html.php';?>
