@@ -3387,19 +3387,19 @@ EOD;
      */
     public static function sortFeatureMenu($module = '', $method = '')
     {
-        global $lang, $app;
+        global $lang, $config, $app;
 
         $module = $module ? $module : $app->rawModule;
         $method = $method ? $method : $app->rawMethod;
 
         /* It will be sorted according to the workflow in the future */
-        if(!empty($lang->featureBarSort[$module][$method]))
+        if(!empty($config->featureBarSort[$module][$method]))
         {
             $featureBar = array();
             if(empty($lang->$module->featureBar[$method])) return false;
             foreach($lang->$module->featureBar[$method] as $key => $label)
             {
-                foreach($lang->featureBarSort[$module][$method] as $currentKey => $afterKey)
+                foreach($config->featureBarSort[$module][$method] as $currentKey => $afterKey)
                 {
                     if($key == $currentKey) continue;
                     $featureBar[$method][$key] = $label;

@@ -163,12 +163,11 @@ class model extends baseModel
         if($type == 'view' && !empty($this->config->openedApproval) && commonModel::hasPriv('approval', 'progress'))
         {
             $flow = $this->loadModel('workflow', 'flow')->getByModule($moduleName);
-            if($flow->approval == 'enabled')
+            if($flow->approval == 'enabled' && !empty($data->approval))
             {
-                $approvalID = isset($data->approval) ? $data->approval : 0;
                 $extraClass = strpos(',testsuite,build,release,productplan,', ",{$moduleName},") !== false ? 'btn-link' : '';
                 $approvalProgressMenu .= "<div class='divider'></div>";
-                $approvalProgressMenu .= baseHTML::a(helper::createLink('approval', 'progress', "approvalID={$approvalID}", '', true), $this->lang->flow->approvalProgress, "class='btn {$extraClass} iframe'");
+                $approvalProgressMenu .= baseHTML::a(helper::createLink('approval', 'progress', "approvalID={$data->approval}", '', true), $this->lang->flow->approvalProgress, "class='btn {$extraClass} iframe'");
             }
         }
 

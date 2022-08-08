@@ -2092,14 +2092,15 @@ class testcaseModel extends model
     /**
      * Append bugs and results.
      *
-     * @param  array    $cases
-     * @param  string   $type
+     * @param  int    $cases
+     * @param  string $type
+     * @param  array  $caseIdlist
      * @access public
-     * @return array
+     * @return void
      */
-    public function appendData($cases, $type = 'case')
+    public function appendData($cases, $type = 'case', $caseIdlist = array())
     {
-        $caseIdList = array_keys($cases);
+        if(empty($caseIdlist)) $caseIdList = array_keys($cases);
         if($type == 'case')
         {
             $caseBugs   = $this->dao->select('count(*) as count, `case`')->from(TABLE_BUG)->where('`case`')->in($caseIdList)->andWhere('deleted')->eq(0)->groupBy('`case`')->fetchPairs('case', 'count');
@@ -2496,5 +2497,98 @@ class testcaseModel extends model
         $menu .= $this->buildMenu('testcase', 'create',  "productID=$case->product&branch=$case->branch&moduleID=$case->module&from=testcase&param=$case->id", $case, 'browse', 'copy');
 
         return $menu;
+    }
+
+    /**
+     * processDatas
+     *
+     * @param  array  $datas
+     * @access public
+     * @return void
+     */
+    public function processDatas($datas)
+    {
+        if(isset($datas->datas)) $datas = $datas->datas;
+        $columnKey  = array();
+        $caseData   = array();
+        $stepData   = array();
+        $stepVars   = 0;
+
+        foreach($datas as $row => $cellValue)
+        {
+            foreach($cellValue as $field => $value)
+            {
+                if($field != 'stepDesc' and $field != 'stepExpect') continue;
+                if($field == 'stepDesc' or $field == 'stepExpect')
+                {
+                    $steps = $value;
+                    if(strpos($value, "\n"))
+                    {
+                        $steps = explode("\n", $value);
+                    }
+                    elseif(strpos($value, "\r"))
+                    {
+                        $steps = explode("\r", $value);
+                    }
+                    if(is_string($steps)) $steps = explode("\n", $steps);
+
+                    $stepKey  = str_replace('step', '', strtolower($field));
+
+                    $caseStep = array();
+                    foreach($steps as $step)
+                    {
+                        $trimedStep = trim($step);
+                        if(empty($trimedStep)) continue;
+                        if(preg_match('/^(([0-9]+)\.[0-9]+)([.、]{1})/U', $step, $out) and ($field == 'stepDesc' or ($field == 'stepExpect' and isset($stepData[$row]['desc'][$out[1]]))))
+                        {
+                            $num     = $out[1];
+                            $parent  = $out[2];
+                            $sign    = $out[3];
+                            $signbit = $sign == '.' ? 1 : 3;
+                            $step    = trim(substr($step, strlen($num) + $signbit));
+                            if(!empty($step)) $caseStep[$num]['content'] = $step;
+                            $caseStep[$num]['type']    = 'item';
+                            $caseStep[$parent]['type'] = 'group';
+                        }
+                        elseif(preg_match('/^([0-9]+)([.、]{1})/U', $step, $out) and ($field == 'stepDesc' or ($field == 'stepExpect' and isset($stepData[$row]['desc'][$out[1]]))))
+                        {
+                            $num     = $out[1];
+                            $sign    = $out[2];
+                            $signbit = $sign == '.' ? 1 : 3;
+                            $step    = trim(substr($step, strpos($step, $sign) + $signbit));
+                            if(!empty($step)) $caseStep[$num]['content'] = $step;
+                            $caseStep[$num]['type'] = 'step';
+                        }
+                        elseif(isset($num))
+                        {
+                            if(!isset($caseStep[$num]['content'])) $caseStep[$num]['content'] = '';
+                            if(!isset($caseStep[$num]['type']))    $caseStep[$num]['type']    = 'step';
+                            $caseStep[$num]['content'] .= "\n" . $step;
+                        }
+                        else
+                        {
+                            if($field == 'stepDesc')
+                            {
+                                $num = 1;
+                                $caseStep[$num]['content'] = $step;
+                                $caseStep[$num]['type']    = 'step';
+                            }
+                            if($field == 'stepExpect' and isset($stepData[$row]['desc']))
+                            {
+                                end($stepData[$row]['desc']);
+                                $num = key($stepData[$row]['desc']); $caseStep[$num]['content'] = $step;
+                            }
+                        }
+                    }
+
+                    unset($num);
+                    unset($sign);
+                    $stepVars += count($caseStep, COUNT_RECURSIVE) - count($caseStep);
+                    $stepData[$row][$stepKey] = $caseStep;
+                }
+
+            }
+        }
+        return $stepData;
     }
 }
