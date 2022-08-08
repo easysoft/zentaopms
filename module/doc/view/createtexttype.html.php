@@ -176,6 +176,7 @@ $(function()
     $('iframe.ke-edit-iframe').contents().find('.article-content').css('padding', '20px 20px 0 20px');
 })
 </script>
+<?php js::set('textType', $config->doc->textTypes);?>
 <?php js::set('docType', $docType);?>
 <?php js::set('fromGlobal', $fromGlobal);?>
 <?php js::set('noticeAcl', $lang->doc->noticeAcl['doc']);?>
