@@ -246,8 +246,8 @@ $lang->action->desc->unlinkstory = '$date, 由 <strong>$actor</strong> 从计划
 $lang->action->desc->unlinkbug   = '$date, 由 <strong>$actor</strong> 从计划移除BUG <strong>$extra</strong>。' . "\n";
 
 /* 用来描述gantt chat相关操作记录。 */
-$lang->action->desc->ganttdrag = '$date, 由 <strong>$actor</strong> 拖动了任务 <strong>$extra</strong>';
-$lang->action->desc->ganttmove = '$date, 由 <strong>$actor</strong> 排序了任务 <strong>$extra</strong>';
+$lang->action->desc->ganttdrag = '$date, 由 <strong>$actor</strong> 拖动了任务 <strong>$extra</strong>。' . "\n";
+$lang->action->desc->ganttmove = '$date, 由 <strong>$actor</strong> 排序了任务 <strong>$extra</strong>。' . "\n";
 
 /* 用来显示动态信息。*/
 $lang->action->label                        = new stdclass();

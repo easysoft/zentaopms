@@ -245,6 +245,9 @@ $lang->action->desc->linkbug     = '$date, <strong>$actor</strong> link bugs <st
 $lang->action->desc->unlinkstory = '$date, <strong>$actor</strong> remove stories <strong>$extra</strong> from plan.' . "\n";
 $lang->action->desc->unlinkbug   = '$date, <strong>$actor</strong> remove bugs <strong>$extra</strong> from plan.' . "\n";
 
+/* Used to describe the historical operation records of gantt. */
+$lang->action->desc->ganttmove = '$date, <strong>$actor</strong> tasks sorted <strong>$extra</strong>.' . "\n";
+
 /* Used to display dynamic information. */
 $lang->action->label                        = new stdclass();
 $lang->action->label->install               = 'install ';
