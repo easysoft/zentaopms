@@ -141,7 +141,7 @@ class portModel extends model
     {
         if(file_exists($filePath))
         {
-            $tmpPath = $this->app->getAppRoot() . 'tmp/import/excel';
+            $tmpPath = $this->app->getAppRoot() . 'tmp/import/excel' . $this->app->user->account . time();
             $this->app->loadClass('pclzip', true);
             $zip   = new pclzip($filePath);
             $zip->extract(PCLZIP_OPT_PATH, $tmpPath);
@@ -171,28 +171,9 @@ class portModel extends model
             }
 
             $result = $zip->create($tmpPath,PCLZIP_OPT_REMOVE_PATH,$tmpPath);
-            $this->deleteDir($tmpPath);
+            $zfile  = $this->app->loadClass('zfile');
+            $zfile->removeDir($tmpPath);
         }
-    }
-
-    /**
-     * Delete directory.
-     *
-     * @param string $dir
-     */
-    public function deleteDir($dir)
-    {
-        foreach (scandir($dir) as $file) {
-            if ($file === '.' || $file === '..') {
-                continue;
-            } elseif (is_file($dir . '/' . $file)) {
-                unlink($dir . '/' . $file);
-            } elseif (is_dir($dir . '/' . $file)) {
-                $this->deleteDir($dir . '/' . $file);
-            }
-        }
-
-        rmdir($dir);
     }
 
     /**
@@ -225,6 +206,7 @@ class portModel extends model
     /**
      * Init postFields.
      *
+     * @param  string $model
      * @access public
      * @return void
      */
@@ -412,7 +394,7 @@ class portModel extends model
      * Init system datafields list.
      *
      * @access public
-     * @return void
+     * @return array
      */
     public function initSysDataFields()
     {
@@ -478,7 +460,7 @@ class portModel extends model
      * @param  string $model
      * @param  string $filter
      * @access public
-     * @return void
+     * @return array
      */
     public function format($model = '', $filter = '')
     {
@@ -903,6 +885,7 @@ class portModel extends model
     /**
      * Get datas by file.
      *
+     * @param  int    $file
      * @access public
      * @return void
      */

@@ -22,6 +22,8 @@ class port extends control
     /**
      * Export Template.
      *
+     * @param  int    $model
+     * @param  string $params
      * @access public
      * @return void
      */
@@ -91,6 +93,8 @@ class port extends control
     /**
      * Import.
      *
+     * @param  int    $model
+     * @param  string $locate
      * @access public
      * @return void
      */
@@ -135,6 +139,7 @@ class port extends control
      * Ajax get Tbody .
      *
      * @param  string $model
+     * @param  int    $lastID
      * @param  int    $pagerID
      * @access public
      * @return void
@@ -162,7 +167,7 @@ class port extends control
      * @param  string $model
      * @param  string $field
      * @param  string $value
-     * @param  string $id
+     * @param  string $index
      * @access public
      * @return void
      */

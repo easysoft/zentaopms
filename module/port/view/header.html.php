@@ -1,19 +1,19 @@
 <?php include $app->getModuleRoot() . 'common/view/header.html.php';?>
 <?php
-    $requiredFields = $datas->requiredFields;
-    $allCount       = $datas->allCount;
-    $allPager       = $datas->allPager;
-    $pagerID        = $datas->pagerID;
-    $isEndPage      = $datas->isEndPage;
-    $maxImport      = $datas->maxImport;
-    $dataInsert     = $datas->dataInsert;
-    $fields         = $datas->fields;
-    $suhosinInfo    = $datas->suhosinInfo;
-    $model          = $datas->model;
-    $datas          = $datas->datas;
-    $appendFields   = $this->session->appendFields;
-    $notEmptyRule   = $this->session->notEmptyRule;
-    $insert         = $this->session->insert;
+$requiredFields = $datas->requiredFields;
+$allCount       = $datas->allCount;
+$allPager       = $datas->allPager;
+$pagerID        = $datas->pagerID;
+$isEndPage      = $datas->isEndPage;
+$maxImport      = $datas->maxImport;
+$dataInsert     = $datas->dataInsert;
+$fields         = $datas->fields;
+$suhosinInfo    = $datas->suhosinInfo;
+$model          = $datas->model;
+$datas          = $datas->datas;
+$appendFields   = $this->session->appendFields;
+$notEmptyRule   = $this->session->notEmptyRule;
+$insert         = $this->session->insert;
 ?>
 <style>
 form{overflow-x: scroll}
@@ -28,7 +28,7 @@ form{overflow-x: scroll}
 <?php elseif(empty($maxImport) and $allCount > $this->config->file->maxImport):?>
 <div id="mainContent" class="main-content">
   <div class="main-header">
-    <h2><?php echo $lang->task->import;?></h2>
+    <h2><?php echo $lang->port->import;?></h2>
   </div>
   <p><?php echo sprintf($lang->file->importSummary, $allCount, html::input('maxImport', $config->file->maxImport, "style='width:50px'"), ceil($allCount / $config->file->maxImport));?></p>
   <p><?php echo html::commonButton($lang->import, "id='import'", 'btn btn-primary');?></p>

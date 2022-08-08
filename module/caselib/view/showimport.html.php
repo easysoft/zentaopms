@@ -1,16 +1,16 @@
 <?php include $app->getModuleRoot() . 'common/view/header.html.php';?>
 <?php
-    $requiredFields = $datas->requiredFields;
-    $allCount       = $datas->allCount;
-    $allPager       = $datas->allPager;
-    $pagerID        = $datas->pagerID;
-    $isEndPage      = $datas->isEndPage;
-    $maxImport      = $datas->maxImport;
-    $dataInsert     = $datas->dataInsert;
-    $fields         = $datas->fields;
-    $suhosinInfo    = $datas->suhosinInfo;
-    $model          = $datas->model;
-    $datas          = $datas->datas;
+$requiredFields = $datas->requiredFields;
+$allCount       = $datas->allCount;
+$allPager       = $datas->allPager;
+$pagerID        = $datas->pagerID;
+$isEndPage      = $datas->isEndPage;
+$maxImport      = $datas->maxImport;
+$dataInsert     = $datas->dataInsert;
+$fields         = $datas->fields;
+$suhosinInfo    = $datas->suhosinInfo;
+$model          = $datas->model;
+$datas          = $datas->datas;
 ?>
 <style>
 form{overflow-x: scroll}
@@ -25,7 +25,7 @@ form{overflow-x: scroll}
 <?php elseif(empty($maxImport) and $allCount > $this->config->file->maxImport):?>
 <div id="mainContent" class="main-content">
   <div class="main-header">
-    <h2><?php echo $lang->task->import;?></h2>
+    <h2><?php echo $lang->port->import;?></h2>
   </div>
   <p><?php echo sprintf($lang->file->importSummary, $allCount, html::input('maxImport', $config->file->maxImport, "style='width:50px'"), ceil($allCount / $config->file->maxImport));?></p>
   <p><?php echo html::commonButton($lang->import, "id='import'", 'btn btn-primary');?></p>
@@ -44,13 +44,13 @@ $(function()
 <?php js::set('requiredFields', $requiredFields);?>
 <div id="mainContent" class="main-content">
   <div class="main-header clearfix">
-    <h2><?php echo $lang->task->import;?></h2>
+    <h2><?php echo $lang->port->import;?></h2>
   </div>
   <form class='main-form' target='hiddenwin' method='post'>
     <table class='table table-form' id='showData'>
       <thead>
         <tr>
-          <th class='w-70px'> <?php echo $lang->task->id?></th>
+          <th class='w-70px'> <?php echo $lang->port->id?></th>
 
           <?php foreach($fields as $key => $value):?>
 
@@ -102,7 +102,7 @@ $(function()
             }
             else
             {
-                $sub = (strpos($object->title, '>') === 0) ? " <sub style='vertical-align:sub;color:red'>{$lang->port->children}</sub>" : " <sub style='vertical-align:sub;color:gray'>{$lang->task->new}</sub>";
+                $sub = (strpos($object->title, '>') === 0) ? " <sub style='vertical-align:sub;color:red'>{$lang->port->children}</sub>" : " <sub style='vertical-align:sub;color:gray'>{$lang->port->new}</sub>";
                 echo $addID++ . $sub;
             }
             echo html::hidden("lib[$key]", $libID);
@@ -177,7 +177,7 @@ $(function()
               foreach($appendFields as $field)
               {
                   if(!$field->show) continue;
-                  $value = $field->defaultValue ? $field->defaultValue : zget($task, $field->field, '');
+                  $value = $field->defaultValue ? $field->defaultValue : zget($datas, $field->field, '');
                   echo '<td>' . $this->flow->buildControl($field, $value, "$field->field[$key]", true) . '</td>';
               }
           }
